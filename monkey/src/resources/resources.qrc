@@ -1,0 +1,102 @@
+<RCC>
+    <qresource prefix="/application" >
+        <file>icons/application/addtab.png</file>
+        <file>icons/application/background.png</file>
+        <file>icons/application/closetab.png</file>
+        <file>icons/application/monkey2.gif</file>
+        <file>icons/application/monkey2.icns</file>
+        <file>icons/application/monkey2.ico</file>
+        <file>icons/application/monkey2.png</file>
+        <file>icons/application/splashscreen.png</file>
+    </qresource>
+    <qresource prefix="/edit" >
+        <file>icons/edit/abbreviation.png</file>
+        <file>icons/edit/close.png</file>
+        <file>icons/edit/copy.png</file>
+        <file>icons/edit/cut.png</file>
+        <file>icons/edit/goto.png</file>
+        <file>icons/edit/next.png</file>
+        <file>icons/edit/paste.png</file>
+        <file>icons/edit/previous.png</file>
+        <file>icons/edit/redo.png</file>
+        <file>icons/edit/replace.png</file>
+        <file>icons/edit/search.png</file>
+        <file>icons/edit/settings.png</file>
+        <file>icons/edit/shortcuts.png</file>
+        <file>icons/edit/undo.png</file>
+    </qresource>
+    <qresource prefix="/file" >
+        <file>icons/file/clear.png</file>
+        <file>icons/file/close.png</file>
+        <file>icons/file/closeall.png</file>
+        <file>icons/file/new.png</file>
+        <file>icons/file/open.png</file>
+        <file>icons/file/print.png</file>
+        <file>icons/file/quickprint.png</file>
+        <file>icons/file/quit.png</file>
+        <file>icons/file/recents.png</file>
+        <file>icons/file/restore.png</file>
+        <file>icons/file/save.png</file>
+        <file>icons/file/saveall.png</file>
+        <file>icons/file/saveas.png</file>
+        <file>icons/file/session.png</file>
+    </qresource>
+    <qresource prefix="/help" >
+        <file>icons/help/assistant.png</file>
+        <file>icons/help/keyword.png</file>
+        <file>icons/help/qt.png</file>
+    </qresource>
+    <qresource prefix="/licenses" >
+        <file>texts/license.gpl</file>
+    </qresource>
+    <qresource prefix="/project" >
+        <file>icons/project/new.png</file>
+    </qresource>
+    <qresource prefix="/temp" >
+        <file>icons/temp/kcmsystem.png</file>
+        <file>icons/temp/kpf.png</file>
+        <file>icons/temp/kwin.png</file>
+        <file>icons/temp/package_applications.png</file>
+        <file>icons/temp/package_development.png</file>
+        <file>icons/temp/package_system.png</file>
+    </qresource>
+    <qresource prefix="/templates" >
+        <file>icons/templates/console.png</file>
+        <file>icons/templates/empty.png</file>
+        <file>icons/templates/misc.png</file>
+        <file>icons/templates/namespace.png</file>
+        <file>icons/templates/qdialog.png</file>
+        <file>icons/templates/qmainwindow.png</file>
+        <file>icons/templates/qobject.png</file>
+        <file>icons/templates/qt_console.png</file>
+        <file>icons/templates/qt_dll.png</file>
+        <file>icons/templates/qt_form.png</file>
+        <file>icons/templates/qt_gui.png</file>
+        <file>icons/templates/qt_static_lib.png</file>
+        <file>icons/templates/qwidget.png</file>
+    </qresource>
+    <qresource prefix="/tools" >
+        <file>icons/tools/add.png</file>
+        <file>icons/tools/desktop.png</file>
+        <file>icons/tools/down.png</file>
+        <file>icons/tools/edit.png</file>
+        <file>icons/tools/file.png</file>
+        <file>icons/tools/folder.png</file>
+        <file>icons/tools/help.png</file>
+        <file>icons/tools/icon.png</file>
+        <file>icons/tools/remove.png</file>
+        <file>icons/tools/up.png</file>
+        <file>icons/tools/update.png</file>
+        <file>icons/tools/user.png</file>
+    </qresource>
+    <qresource prefix="/translation" >
+        <file>icons/translation/folder.png</file>
+        <file>icons/translation/translation.png</file>
+        <file>icons/translation/update.png</file>
+    </qresource>
+    <qresource prefix="/view" >
+        <file>icons/view/next.png</file>
+        <file>icons/view/previous.png</file>
+        <file>icons/view/style.png</file>
+    </qresource>
+</RCC>

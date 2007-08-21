@@ -1,0 +1,172 @@
+<ui version="4.0" >
+ <class>UIAbout</class>
+ <widget class="QDialog" name="UIAbout" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>423</width>
+    <height>322</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>About : %1</string>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>5</number>
+   </property>
+   <property name="spacing" >
+    <number>3</number>
+   </property>
+   <item row="2" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>321</width>
+       <height>27</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="1" >
+    <widget class="QPushButton" name="pbOK" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>0</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string>OK</string>
+     </property>
+     <property name="icon" >
+      <iconset/>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="2" >
+    <widget class="QTabWidget" name="twAbout" >
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
+     <widget class="QLabel" name="lLogo" >
+      <property name="pixmap" >
+       <pixmap resource="../../resources/resources.qrc" >:/application/icons/application/splashscreen.png</pixmap>
+      </property>
+      <property name="alignment" >
+       <set>Qt::AlignCenter</set>
+      </property>
+      <attribute name="title" >
+       <string>About</string>
+      </attribute>
+     </widget>
+     <widget class="QTextBrowser" name="tbTeam" >
+      <property name="horizontalScrollBarPolicy" >
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <attribute name="title" >
+       <string>Team</string>
+      </attribute>
+     </widget>
+     <widget class="QTextBrowser" name="tbLicense" >
+      <property name="font" >
+       <font>
+        <family>Monospace</family>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+      <property name="verticalScrollBarPolicy" >
+       <enum>Qt::ScrollBarAlwaysOn</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy" >
+       <enum>Qt::ScrollBarAlwaysOn</enum>
+      </property>
+      <property name="lineWrapMode" >
+       <enum>QTextEdit::NoWrap</enum>
+      </property>
+      <property name="tabStopWidth" >
+       <number>20</number>
+      </property>
+      <property name="acceptRichText" >
+       <bool>false</bool>
+      </property>
+      <attribute name="title" >
+       <string>License</string>
+      </attribute>
+     </widget>
+     <widget class="QTextBrowser" name="tbDonations" >
+      <property name="horizontalScrollBarPolicy" >
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <attribute name="title" >
+       <string>Donations</string>
+      </attribute>
+     </widget>
+     <widget class="QTextBrowser" name="tbLinks" >
+      <property name="horizontalScrollBarPolicy" >
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <attribute name="title" >
+       <string>Links</string>
+      </attribute>
+     </widget>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2" >
+    <widget class="QLabel" name="lInformations" >
+     <property name="font" >
+      <font>
+       <pointsize>9</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+       <strikeout>false</strikeout>
+       <kerning>true</kerning>
+      </font>
+     </property>
+     <property name="autoFillBackground" >
+      <bool>true</bool>
+     </property>
+     <property name="frameShape" >
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="text" >
+      <string>Informations</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="openExternalLinks" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../resources/resources.qrc" />
+ </resources>
+ <connections>
+  <connection>
+   <sender>pbOK</sender>
+   <signal>clicked()</signal>
+   <receiver>UIAbout</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>477</x>
+     <y>270</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>237</x>
+     <y>275</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
