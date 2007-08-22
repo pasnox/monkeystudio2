@@ -1,71 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1">
+<!DOCTYPE TS><TS version="1.1" language="fr">
+<defaultcodec></defaultcodec>
 <context>
     <name>ConsoleManager</name>
     <message>
         <location filename="../consolemanager/ConsoleManager.cpp" line="59"/>
         <source>The process failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Le démarrage du programme a echoué. Soit le programme est manquant, ou vous n&apos;avez pas les droits suffisants pour le lancer.</translation>
     </message>
     <message>
         <location filename="../consolemanager/ConsoleManager.cpp" line="62"/>
         <source>The process crashed some time after starting successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Le programme a planté au bout d&apos;un certains temps alors qu&apos;il avait été lancé avec succès.</translation>
     </message>
     <message>
         <location filename="../consolemanager/ConsoleManager.cpp" line="65"/>
         <source>The last waitFor...() function timed out. The state of QProcess is unchanged, and you can try calling waitFor...() again.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Le dernier appel de la fonction waitFor() ???. L&apos;état de QProcess reste inchangé, vous pouvez appeller waitFor() de nouveau.</translation>
     </message>
     <message>
         <location filename="../consolemanager/ConsoleManager.cpp" line="68"/>
         <source>An error occurred when attempting to write to the process. For example, the process may not be running, or it may have closed its input channel.</source>
-        <translation type="unfinished"></translation>
+        <translation>Une erreur est survenue lors d&apos;une écriture vers le processus. Par exemple, le processus n&apos;est plus exécuté, ou il a peut être fermé son canal d&apos;écriture.</translation>
     </message>
     <message>
         <location filename="../consolemanager/ConsoleManager.cpp" line="71"/>
         <source>An error occurred when attempting to read from the process. For example, the process may not be running.</source>
-        <translation type="unfinished"></translation>
+        <translation>Une erreur est survenue lors d&apos;une lecture à partir du processus. Par exemple, le processus n&apos;est plus lancé.</translation>
     </message>
     <message>
         <location filename="../consolemanager/ConsoleManager.cpp" line="75"/>
         <source>An unknown error occurred. This is the default return value of error().</source>
-        <translation type="unfinished"></translation>
+        <translation>Une erreur est survenue. C&apos;est la valeur de retour par défaut de error().</translation>
     </message>
     <message>
         <location filename="../consolemanager/ConsoleManager.cpp" line="86"/>
         <source>The process exited normally.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le processus s&apos;est terminé normalement.</translation>
     </message>
     <message>
         <location filename="../consolemanager/ConsoleManager.cpp" line="89"/>
         <source>The process crashed.</source>
-        <translation type="unfinished"></translation>
+        <translation>La processus a planté.</translation>
     </message>
     <message>
         <location filename="../consolemanager/ConsoleManager.cpp" line="92"/>
         <source>An unknown error occurred.</source>
-        <translation type="unfinished"></translation>
+        <translation>Une erreur est survenue.</translation>
     </message>
     <message>
         <location filename="../consolemanager/ConsoleManager.cpp" line="105"/>
         <source>Running...</source>
-        <translation type="unfinished"></translation>
+        <translation>En cours d&apos;exécution ...</translation>
     </message>
     <message>
         <location filename="../consolemanager/ConsoleManager.cpp" line="114"/>
         <source>The process is not running.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le processus n&apos;est pas lancé.</translation>
     </message>
     <message>
         <location filename="../consolemanager/ConsoleManager.cpp" line="117"/>
         <source>The process is starting, but the program has not yet been invoked.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le processus est démarré, mais le programme n&apos;a pas encore etait lancé.</translation>
     </message>
     <message>
         <location filename="../consolemanager/ConsoleManager.cpp" line="120"/>
         <source>The process is running and is ready for reading and writing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le processus est lancé et prêt pour la lecture et l&apos;ecriture.</translation>
     </message>
 </context>
 <context>
@@ -73,62 +74,62 @@
     <message>
         <location filename="../main.cpp" line="38"/>
         <source>Initializing Application...</source>
-        <translation type="unfinished"></translation>
+        <translation>Chargement de l&apos;application ...</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="47"/>
         <source>Initializing Translation...</source>
-        <translation type="unfinished"></translation>
+        <translation>Chargement de la traduction ...</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="82"/>
         <source>Initializing Main Window...</source>
-        <translation type="unfinished"></translation>
+        <translation>Chargement de Main Window ...</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="83"/>
         <source>%1 v%2 - %3, The Monkey Studio Team</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 v%2 - %3, L&apos;équipe de Monkey Studio</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="100"/>
         <source>%1 v%2 Ready !</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 v%2 Prêt !</translation>
     </message>
     <message>
         <location filename="../maininterface/ui/UIAbout.cpp" line="36"/>
         <source>France</source>
-        <translation type="unfinished"></translation>
+        <translation>France</translation>
     </message>
     <message>
         <location filename="../maininterface/ui/UIAbout.cpp" line="27"/>
         <source>Creator &amp; Principal Developer</source>
-        <translation type="unfinished"></translation>
+        <translation>Créateur &amp; Développeur Principal</translation>
     </message>
     <message>
         <location filename="../maininterface/ui/UIAbout.cpp" line="28"/>
         <source>Germany</source>
-        <translation type="unfinished"></translation>
+        <translation>Allemagne</translation>
     </message>
     <message>
         <location filename="../maininterface/ui/UIAbout.cpp" line="28"/>
         <source>Web Developer &amp; Web Designer</source>
-        <translation type="unfinished"></translation>
+        <translation>Développeur Web &amp; Designer Web</translation>
     </message>
     <message>
         <location filename="../maininterface/ui/UIAbout.cpp" line="29"/>
         <source>GDB Driver Integration</source>
-        <translation type="unfinished"></translation>
+        <translation>Intégration du pilote GDB</translation>
     </message>
     <message>
         <location filename="../maininterface/ui/UIAbout.cpp" line="30"/>
         <source>Splashscreen &amp; Icons Designer</source>
-        <translation type="unfinished"></translation>
+        <translation>Ecran de démarrage &amp; Designer des icônes</translation>
     </message>
     <message>
         <location filename="../maininterface/ui/UIAbout.cpp" line="31"/>
         <source>Russia</source>
-        <translation type="unfinished"></translation>
+        <translation>Russie</translation>
     </message>
     <message>
         <location filename="../maininterface/ui/UIAbout.cpp" line="31"/>
@@ -153,17 +154,17 @@
     <message>
         <location filename="../maininterface/ui/UIAbout.cpp" line="36"/>
         <source>No donations for now, you can use this &lt;a href=&quot;http://sourceforge.net/project/project_donations.php?group_id=163493&quot;&gt;link&lt;/a&gt; to make donation. Donations will help paying host/domain, and relatives things about the projects ( may need a mac book for better mac version :p ).</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas de don pour le moment, vous pouvez utiliser ceci &lt;a href=&quot;http://sourceforge.net/project/project_donations.php?group_id=163493&quot;&gt;liens&lt;/a&gt; pour faire un don. Les dons nous aident à payer l&apos;hébergement et le domaine et toutes les choses relatives aux projets ( comme acheter un macbook pour améliorer la version mac :p ).</translation>
     </message>
     <message>
         <location filename="../maininterface/ui/UIAbout.cpp" line="45"/>
         <source>Location</source>
-        <translation type="unfinished"></translation>
+        <translation>Localisation</translation>
     </message>
     <message>
         <location filename="../maininterface/ui/UIAbout.cpp" line="39"/>
         <source>Trolltech&apos;s Qt homepage.</source>
-        <translation type="unfinished"></translation>
+        <translation>Site officiel de Trolltech.</translation>
     </message>
     <message>
         <location filename="../maininterface/ui/UIAbout.cpp" line="40"/>
@@ -178,62 +179,62 @@
     <message>
         <location filename="../maininterface/ui/UIAbout.cpp" line="42"/>
         <source>You can send bug/patch/ideas/what ever you want to our tracker.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vous pouvez envoyez vos contributions</translation>
     </message>
     <message>
         <location filename="../maininterface/ui/UIAbout.cpp" line="43"/>
         <source>A forum is at your disposition.</source>
-        <translation type="unfinished"></translation>
+        <translation>Un forum est à votre disposition.</translation>
     </message>
     <message>
         <location filename="../maininterface/ui/UIAbout.cpp" line="44"/>
         <source>Get the latest news using the rss feed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Obtenez les derniers nouvelles avec le flux RSS.</translation>
     </message>
     <message>
         <location filename="../maininterface/ui/UIAbout.cpp" line="45"/>
         <source>Meet the Monkeys ( All team including testers ).</source>
-        <translation type="unfinished"></translation>
+        <translation>Rencontrez les Singes ( Toute l&apos;équipe dont les testeurs ).</translation>
     </message>
     <message>
         <location filename="../pMonkeyStudio.cpp" line="137"/>
         <source>%1 Files (*.%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Fichiers (*.%2)</translation>
     </message>
     <message>
         <location filename="../pMonkeyStudio.cpp" line="140"/>
         <source>All Image Files (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Toutes les images (%1)</translation>
     </message>
     <message>
         <location filename="../pMonkeyStudio.cpp" line="142"/>
         <source>Select image(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Choisissez le(s) image(s)</translation>
     </message>
     <message>
         <location filename="../pMonkeyStudio.cpp" line="173"/>
         <source>Select files(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Choissisez le(s) fichier(s)</translation>
     </message>
     <message>
         <location filename="../templatesmanager/pTemplatesManager.h" line="46"/>
         <source>Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichiers</translation>
     </message>
     <message>
         <location filename="../templatesmanager/pTemplatesManager.h" line="48"/>
         <source>Extras</source>
-        <translation type="unfinished"></translation>
+        <translation>Extras</translation>
     </message>
     <message>
         <location filename="../templatesmanager/pTemplatesManager.h" line="50"/>
         <source>Projects</source>
-        <translation type="unfinished"></translation>
+        <translation>Projets</translation>
     </message>
     <message>
         <location filename="../toolsmanager/ui/UIDesktopTools.cpp" line="92"/>
         <source>No available comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas de commentaire disponible</translation>
     </message>
 </context>
 <context>
@@ -241,12 +242,12 @@
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscicommandset.cpp" line="49"/>
         <source>Move down one line</source>
-        <translation type="unfinished"></translation>
+        <translation>Descendre d&apos;une ligne</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscicommandset.cpp" line="56"/>
         <source>Extend selection down one line</source>
-        <translation type="unfinished"></translation>
+        <translation>Etendre la selection à la ligne suivante</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscicommandset.cpp" line="63"/>
@@ -496,77 +497,77 @@
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscicommandset.cpp" line="406"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>Coller</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscicommandset.cpp" line="413"/>
         <source>Copy selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Copier la selection</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscicommandset.cpp" line="420"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Annuler</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscicommandset.cpp" line="427"/>
         <source>Delete previous character</source>
-        <translation type="unfinished"></translation>
+        <translation>Effacer le caractère précédent</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscicommandset.cpp" line="434"/>
         <source>Delete word to left</source>
-        <translation type="unfinished"></translation>
+        <translation>Effacer le mot de gauche</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscicommandset.cpp" line="441"/>
         <source>Undo the last command</source>
-        <translation type="unfinished"></translation>
+        <translation>Annuler la dernière commande</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscicommandset.cpp" line="448"/>
         <source>Delete line to left</source>
-        <translation type="unfinished"></translation>
+        <translation>Effacer le début de la ligne</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscicommandset.cpp" line="455"/>
         <source>Redo last command</source>
-        <translation type="unfinished"></translation>
+        <translation>Rejouer la dernière commande</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscicommandset.cpp" line="462"/>
         <source>Select all text</source>
-        <translation type="unfinished"></translation>
+        <translation>Selectionner tous le texte</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscicommandset.cpp" line="469"/>
         <source>Indent one level</source>
-        <translation type="unfinished"></translation>
+        <translation>Indenter une fois</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscicommandset.cpp" line="476"/>
         <source>Move back one indentation level</source>
-        <translation type="unfinished"></translation>
+        <translation>Désindenter une fois</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscicommandset.cpp" line="483"/>
         <source>Insert new line</source>
-        <translation type="unfinished"></translation>
+        <translation>Insérer une nouvelle ligne</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscicommandset.cpp" line="490"/>
         <source>Zoom in</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoom avant</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscicommandset.cpp" line="497"/>
         <source>Zoom out</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoom arrière</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscicommandset.cpp" line="504"/>
         <source>Set zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Régler le zoom</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscicommandset.cpp" line="511"/>
@@ -576,37 +577,37 @@
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscicommandset.cpp" line="518"/>
         <source>Cut current line</source>
-        <translation type="unfinished"></translation>
+        <translation>Couper la ligne courante</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscicommandset.cpp" line="525"/>
         <source>Delete current line</source>
-        <translation type="unfinished"></translation>
+        <translation>Effacer la ligne courante</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscicommandset.cpp" line="532"/>
         <source>Copy current line</source>
-        <translation type="unfinished"></translation>
+        <translation>Copier la ligne courante</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscicommandset.cpp" line="539"/>
         <source>Swap current and previous lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Inverser la ligne courante avec la précédente</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscicommandset.cpp" line="546"/>
         <source>Duplicate selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Dupliquer la selection</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscicommandset.cpp" line="553"/>
         <source>Convert selection to lower case</source>
-        <translation type="unfinished"></translation>
+        <translation>Convertir la selection en miniscule</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscicommandset.cpp" line="560"/>
         <source>Convert selection to upper case</source>
-        <translation type="unfinished"></translation>
+        <translation>Convertir la selection en majuscules</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscicommandset.cpp" line="567"/>
@@ -619,27 +620,27 @@
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscilexerbash.cpp" line="201"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Défaut</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscilexerbash.cpp" line="204"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscilexerbash.cpp" line="207"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Commentaire</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscilexerbash.cpp" line="210"/>
         <source>Number</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscilexerbash.cpp" line="213"/>
         <source>Keyword</source>
-        <translation type="unfinished"></translation>
+        <translation>Mot-clé</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscilexerbash.cpp" line="216"/>
@@ -654,7 +655,7 @@
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscilexerbash.cpp" line="222"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
+        <translation>Opérateur</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscilexerbash.cpp" line="225"/>
@@ -664,7 +665,7 @@
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscilexerbash.cpp" line="228"/>
         <source>Scalar</source>
-        <translation type="unfinished"></translation>
+        <translation>Scalaire</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscilexerbash.cpp" line="231"/>
@@ -692,17 +693,17 @@
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscilexerbatch.cpp" line="172"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Défaut</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscilexerbatch.cpp" line="175"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Commentaire</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscilexerbatch.cpp" line="178"/>
         <source>Keyword</source>
-        <translation type="unfinished"></translation>
+        <translation>Mot-clé</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscilexerbatch.cpp" line="181"/>
@@ -717,17 +718,17 @@
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscilexerbatch.cpp" line="187"/>
         <source>External command</source>
-        <translation type="unfinished"></translation>
+        <translation>Commande externe</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscilexerbatch.cpp" line="190"/>
         <source>Variable</source>
-        <translation type="unfinished"></translation>
+        <translation>Variable</translation>
     </message>
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscilexerbatch.cpp" line="193"/>
         <source>Operator</source>
-        <translation type="unfinished"></translation>
+        <translation>Opérateur</translation>
     </message>
 </context>
 <context>
@@ -1671,7 +1672,7 @@
     <message>
         <location filename="../../../qscintilla/QScintilla-gpl-2-snapshot-20070722/Qt4/qscilexeridl.cpp" line="99"/>
         <source>UUID</source>
-        <translation type="unfinished"></translation>
+        <translation>UUID</translation>
     </message>
 </context>
 <context>
@@ -4610,22 +4611,22 @@
     <message>
         <location filename="../maininterface/ui/UITranslator.ui" line="13"/>
         <source>Translation...</source>
-        <translation type="unfinished"></translation>
+        <translation>Traduction ...</translation>
     </message>
     <message>
         <location filename="../maininterface/ui/UITranslator.ui" line="28"/>
         <source>Select your language. You can push the buttons to locate/reload the translations list.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Choisissez votre lanhue. </translation>
     </message>
     <message>
         <location filename="../maininterface/ui/UITranslator.ui" line="55"/>
         <source>Reload the translations list</source>
-        <translation type="unfinished"></translation>
+        <translation>Rechargez la liste des tracductions</translation>
     </message>
     <message>
         <location filename="../maininterface/ui/UITranslator.ui" line="65"/>
         <source>Locate the translations</source>
-        <translation type="unfinished"></translation>
+        <translation>Définer ou se trouvent les traductions</translation>
     </message>
 </context>
 <context>
@@ -4668,7 +4669,7 @@
     <message>
         <location filename="../recentsmanager/pRecentsManager.cpp" line="157"/>
         <source>&amp;Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Effacer</translation>
     </message>
 </context>
 <context>
@@ -4676,27 +4677,27 @@
     <message>
         <location filename="../qscintillamanager/ui/pSearch.cpp" line="171"/>
         <source>Information...</source>
-        <translation type="unfinished"></translation>
+        <translation>Information ...</translation>
     </message>
     <message>
         <location filename="../qscintillamanager/ui/pSearch.cpp" line="171"/>
         <source>%1 occurences replaced</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 occurence remplacée</translation>
     </message>
     <message>
         <location filename="../qscintillamanager/ui/pSearch.ui" line="26"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Fermer</translation>
     </message>
     <message>
         <location filename="../qscintillamanager/ui/pSearch.ui" line="55"/>
         <source>Replace All</source>
-        <translation type="unfinished"></translation>
+        <translation>Tout remplacer</translation>
     </message>
     <message>
         <location filename="../qscintillamanager/ui/pSearch.ui" line="71"/>
         <source>Replace</source>
-        <translation type="unfinished"></translation>
+        <translation>Remplacer</translation>
     </message>
     <message>
         <location filename="../qscintillamanager/ui/pSearch.ui" line="87"/>
@@ -4769,13 +4770,14 @@
     <message>
         <location filename="../toolsmanager/pToolsManager.cpp" line="103"/>
         <source>Tools Error...</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur Outils ...</translation>
     </message>
     <message>
         <location filename="../toolsmanager/pToolsManager.cpp" line="103"/>
         <source>Error trying to start tools:
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;erreur tente de démarrer les outis:
+%1</translation>
     </message>
 </context>
 <context>
@@ -4783,7 +4785,7 @@
     <message>
         <location filename="../workspace/pWorkspace.cpp" line="151"/>
         <source>Choose the file(s) to open</source>
-        <translation type="unfinished"></translation>
+        <translation>Choisissez le(s) fichier(s) à ouvrir</translation>
     </message>
 </context>
 </TS>
