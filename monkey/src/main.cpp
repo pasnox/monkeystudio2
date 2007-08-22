@@ -10,6 +10,8 @@
 #include "UIMain.h"
 #include "pSettings.h"
 
+#include "ConsoleManager.h"
+
 void showMessage( QSplashScreen* s, const QString& m )
 {
 	s->showMessage( m, Qt::AlignRight | Qt::AlignTop, Qt::red );
@@ -37,6 +39,10 @@ int main( int argc, char** argv )
 	a.setApplicationName( PROGRAM_NAME );
 	a.setOrganizationName( PROGRAM_NAME );
 	a.setOrganizationDomain( PROGRAM_DOMAIN );
+	
+	// start console manager
+	showMessage( &splash, QObject::tr( "Starting Console Manager..." ) );
+	ConsoleManager::instance()->start();
 
 	// restore application style
 	a.setStyle( pSettings::instance()->value( "MainWindow/Style", "plastique" ).toString() );
@@ -109,7 +115,14 @@ int main( int argc, char** argv )
 
 	// connection
 	QObject::connect( &a, SIGNAL( lastWindowClosed() ), &a, SLOT( quit() ) );
-
+	
 	// start application
-	return a.exec();
+	int i = a.exec();
+	
+	// stop console manager
+	ConsoleManager::instance()->terminate();
+	ConsoleManager::instance()->wait();
+	
+	// return application result
+	return i;
 }

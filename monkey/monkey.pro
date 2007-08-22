@@ -80,7 +80,7 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/toolsmanager/pDesktopApplications.h \
 	src/toolsmanager/ui/UIDesktopTools.h \
 	src/toolsmanager/ui/UIToolsEdit.h \
-#	src/consolemanager/ConsoleManager.h \
+	src/consolemanager/ConsoleManager.h \
 	src/toolsmanager/pToolsManager.h
 
 SOURCES	*= src/maininterface/ui/UITranslator.cpp \
@@ -105,7 +105,7 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/toolsmanager/ui/UIDesktopTools.cpp \
 	src/toolsmanager/ui/UIToolsEdit.cpp \
 	src/toolsmanager/pToolsManager.cpp \
-#	src/consolemanager/ConsoleManager.cpp \
+	src/consolemanager/ConsoleManager.cpp \
 	src/main.cpp
 
 unix:SOURCES	*= src/toolsmanager/pDesktopApplications_unix.cpp
