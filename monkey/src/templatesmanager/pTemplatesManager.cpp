@@ -179,7 +179,7 @@ const QString pTemplatesManager::processContent( pTemplateContent tc )
 				l[0] = tc.Name;
 			// date
 			else if ( v == "date" )
-				l[0] = QDateTime::currentDateTime().toString();
+				l[0] = QDateTime::currentDateTime().toString( Qt::ISODate );
 			// license
 			else if ( v == "license" )
 				l[0] = tc.License;
