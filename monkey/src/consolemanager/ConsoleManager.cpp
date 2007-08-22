@@ -23,6 +23,7 @@ ConsoleManager::ConsoleManager( QObject* o )
 
 ConsoleManager::~ConsoleManager()
 {
+	mProcess->kill();
 	delete mProcess;
 }
 
@@ -34,6 +35,7 @@ void ConsoleManager::run()
 	// mixe channels
 	mProcess->setReadChannelMode( QProcess::MergedChannels );
 	
+	// register process type for queued connection
 	qRegisterMetaType<QProcess::ProcessError>( "QProcess::ProcessError" ); 
 	qRegisterMetaType<QProcess::ExitStatus>( "QProcess::ExitStatus" ); 
 	qRegisterMetaType<QProcess::ProcessState>( "QProcess::ProcessState" ); 
