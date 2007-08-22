@@ -43,7 +43,7 @@ linux-g++:LIBS	*= -rdynamic
 win32-msvc:LIBS	*= /IMPLIB:$${BUILD_PATH}/monkey.lib
 win32-g++:LIBS	*= -Wl,--out-implib,$${BUILD_PATH}/libmonkey.a
 
-INCLUDEPATH	*= . src src/maininterface src/maininterface/ui src/workspace src/recentsmanager src/qscintillamanager src/qscintillamanager/ui src/templatesmanager src/templatesmanager/ui src/abbreviationsmanager src/abbreviationsmanager/ui src/toolsmanager src/toolsmanager/ui
+INCLUDEPATH	*= . src src/maininterface src/maininterface/ui src/workspace src/recentsmanager src/qscintillamanager src/qscintillamanager/ui src/templatesmanager src/templatesmanager/ui src/abbreviationsmanager src/abbreviationsmanager/ui src/toolsmanager src/toolsmanager/ui src/consolemanager src/consolemanager/ui
 
 # include fresh framework
 include( ../fresh/fresh.pro )
@@ -80,6 +80,7 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/toolsmanager/pDesktopApplications.h \
 	src/toolsmanager/ui/UIDesktopTools.h \
 	src/toolsmanager/ui/UIToolsEdit.h \
+#	src/consolemanager/ConsoleManager.h \
 	src/toolsmanager/pToolsManager.h
 
 SOURCES	*= src/maininterface/ui/UITranslator.cpp \
@@ -104,8 +105,11 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/toolsmanager/ui/UIDesktopTools.cpp \
 	src/toolsmanager/ui/UIToolsEdit.cpp \
 	src/toolsmanager/pToolsManager.cpp \
+#	src/consolemanager/ConsoleManager.cpp \
 	src/main.cpp
 
 unix:SOURCES	*= src/toolsmanager/pDesktopApplications_unix.cpp
 mac:SOURCES	*= src/toolsmanager/pDesktopApplications_mac.cpp
 win32:SOURCES	*= src/toolsmanager/pDesktopApplications_win32.cpp
+
+TRANSLATIONS	= src/translations/monkey_french.ts
