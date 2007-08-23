@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 **
 ** 		Created using Monkey Studio v1.7.0
 ** Author    : Nox P@sNox <pasnox@gmail.com>
@@ -50,12 +50,14 @@ void ConsoleManager::run()
 	// tracking commands
 	forever
 	{
+		/*
 		if ( !mProcess || mProcess->state() != QProcess::NotRunning )
 			continue;
 		qWarning( "executing command" );
 		// get task
 		mProcess->start( "konsole" );
 		exec();
+		*/
 	}
 }
 

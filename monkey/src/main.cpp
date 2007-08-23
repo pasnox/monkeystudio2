@@ -9,7 +9,6 @@
 #include "UISettings.h"
 #include "UIMain.h"
 #include "pSettings.h"
-
 #include "ConsoleManager.h"
 
 void showMessage( QSplashScreen* s, const QString& m )
