@@ -1,10 +1,10 @@
-﻿/****************************************************************************
+/****************************************************************************
 **
 ** 		Created using Monkey Studio v1.7.0
 ** Author    : Nox P@sNox <pasnox@gmail.com>
 ** Project   : ConsoleManager
 ** FileName  : ConsoleManager.cpp
-** Date      : mar. août 21 20:52:27 2007
+** Date      : mar. ao�t 21 20:52:27 2007
 ** License   : GPL
 ** Comment   : Your comment here
 **
