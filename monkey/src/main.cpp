@@ -42,6 +42,7 @@ int main( int argc, char** argv )
 	// start console manager
 	showMessage( &splash, QObject::tr( "Starting Console Manager..." ) );
 	ConsoleManager::instance()->start();
+	ConsoleManager::instance()->sendRawData( "pouet to nimporte nawak" );
 
 	// restore application style
 	a.setStyle( pSettings::instance()->value( "MainWindow/Style", "plastique" ).toString() );

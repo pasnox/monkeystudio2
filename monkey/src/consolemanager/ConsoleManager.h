@@ -32,9 +32,16 @@ public:
 	ConsoleManager( QObject* = QApplication::instance() );
 	~ConsoleManager();
 
+	void sendRawData( const QByteArray& );
+	void addCommand( const pCommand& );
+	void addCommands( const QCommandList& );
+	void removeCommand( const pCommand& );
+	void removeCommands( const QCommandList& );
+
 protected:
 	bool mRunning;
 	QProcess* mProcess;
+	QCommandList mCommands;
 	virtual void run();
 
 public slots:

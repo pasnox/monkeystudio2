@@ -146,3 +146,35 @@ void ConsoleManager::stateChanged( QProcess::ProcessState e )
 			break;
 	}
 }
+#include "pMonkeyStudio.h"
+void ConsoleManager::sendRawData( const QByteArray& a )
+{
+	if ( mProcess && mProcess->state() != QProcess::NotRunning )
+	{
+		// wait process to fully started
+		while ( mProcess->state() == QProcess::Starting )
+		{}
+		
+		// send raw command to process
+		pMonkeyStudio::warning( "", tr( "raw bytes writen: %1" ).arg( mProcess->write( a ) ) );
+	}
+	else
+		qWarning( "Can't send raw data to console" );
+}
+
+void ConsoleManager::addCommand( const pCommand& )
+{
+}
+
+void ConsoleManager::addCommands( const QCommandList& )
+{
+}
+
+void ConsoleManager::removeCommand( const pCommand& )
+{
+}
+
+void ConsoleManager::removeCommands( const QCommandList& )
+{
+}
+
