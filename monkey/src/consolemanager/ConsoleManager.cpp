@@ -18,12 +18,6 @@
 
 ConsoleManager::ConsoleManager( QObject* o )
 	: QThread( o ), mRunning( false ), mProcess( 0L )
-{}
-
-ConsoleManager::~ConsoleManager()
-{ delete mProcess; }
-
-void ConsoleManager::run()
 {
 	// create process
 	mProcess = new QProcess;
@@ -42,20 +36,37 @@ void ConsoleManager::run()
 	connect( mProcess, SIGNAL( readyRead() ), this, SLOT( readyRead() ) );
 	connect( mProcess, SIGNAL( started() ), this, SLOT( started() ) );
 	connect( mProcess, SIGNAL( stateChanged( QProcess::ProcessState ) ), this, SLOT( stateChanged( QProcess::ProcessState ) ) );
-	
+	connect( this, SIGNAL( executeProcessRequire() ), this, SLOT( internalExecuteProcess() ) );
+}
+
+ConsoleManager::~ConsoleManager()
+{ delete mProcess; }
+
+void ConsoleManager::run()
+{
 	// set thread running
 	mRunning = true;
 	
 	// tracking commands
 	forever
 	{
+		// exit thread needed
 		if ( !mRunning )
 			break;
+		
+		// if running continue
 		if ( !mProcess || mProcess->state() != QProcess::NotRunning )
 			continue;
-		// get task
-		mProcess->start( "calc" );
-		exec();
+		
+		// execute next task is available
+		if ( !mCommands.isEmpty() )
+		{
+			emit executeProcessRequire();
+			exec();
+		}
+		// wait 100 milliseconds before checking again
+		else
+			msleep( 100 );
 	}
 	
 	// set thread not running
@@ -71,7 +82,7 @@ void ConsoleManager::terminate()
 	if ( mProcess )
 		mProcess->kill();
 	
-	// stop event loop
+	// quit event loop
 	quit();
 	
 	// wait for thread finish
@@ -102,31 +113,60 @@ void ConsoleManager::error( QProcess::ProcessError e )
 			emit error( e, tr( "An unknown error occurred. This is the default return value of error()." ) );
 			break;
 	}
+	
+	// remove command from list
+	removeCommand( currentCommand() );
+	
+	// quit event loop
+	quit();
+	
+	qWarning( "error" );
 }
 
 void ConsoleManager::finished( int i, QProcess::ExitStatus e )
 {
+	// finished message
 	switch ( e )
 	{
 		case QProcess::NormalExit:
-			emit finished( i, e, tr( "The process exited normally." ) );
+			emit finished( i, e, tr( "%1, the process exited normally." ).arg( currentCommand()->text() ) );
 			break;
 		case QProcess::CrashExit:
-			emit finished( i, e, tr( "The process crashed." ) );
+			emit finished( i, e, tr( "%1, the process crashed." ).arg( currentCommand()->text() ) );
 			break;
 		default:
-			emit finished( i, e, tr( "An unknown error occurred." ) );
+			emit finished( i, e, tr( "%1, an unknown error occurred." ).arg( currentCommand()->text() ) );
 	}
+	
+	// remove command from list
+	removeCommand( currentCommand() );
+	
+	qWarning( "finished" );
 }
 
 void ConsoleManager::readyRead()
 {
-	emit readyRead( mProcess->readAllStandardOutput() );
+	// get datas
+	const QByteArray a = mProcess->readAllStandardOutput();
+	
+	// get current command
+	pCommand* c = currentCommand();
+	
+	// append data to parser if available
+	if ( c && c->parser() )
+		c->parser()->addContents( a );
+	
+	// emit data
+	emit readyRead( a );
+	
+	qWarning( "readyread" );
 }
 
 void ConsoleManager::started()
 {
-	emit started( tr( "Running..." ) );
+	emit started( currentCommand()->text() );
+	
+	qWarning( "started" );
 }
 
 void ConsoleManager::stateChanged( QProcess::ProcessState e )
@@ -135,7 +175,7 @@ void ConsoleManager::stateChanged( QProcess::ProcessState e )
 	{
 		case QProcess::NotRunning:
 			emit stateChanged( e, tr( "The process is not running." ) );
-			// stop event loop
+			// quit event loop
 			quit();
 			break;
 		case QProcess::Starting:
@@ -145,36 +185,62 @@ void ConsoleManager::stateChanged( QProcess::ProcessState e )
 			emit stateChanged( e, tr( "The process is running and is ready for reading and writing." ) );
 			break;
 	}
+	
+	qWarning( "state changed" );
 }
-#include "pMonkeyStudio.h"
+
 void ConsoleManager::sendRawData( const QByteArray& a )
 {
 	if ( mProcess && mProcess->state() != QProcess::NotRunning )
 	{
-		// wait process to fully started
-		while ( mProcess->state() == QProcess::Starting )
-		{}
-		
 		// send raw command to process
-		pMonkeyStudio::warning( "", tr( "raw bytes writen: %1" ).arg( mProcess->write( a ) ) );
+		qWarning( "raw bytes writen: %d", mProcess->write( a ) );
 	}
 	else
 		qWarning( "Can't send raw data to console" );
 }
 
-void ConsoleManager::addCommand( const pCommand& )
+void ConsoleManager::addCommand( pCommand* c )
 {
+	if ( !mCommands.contains( c ) )
+		mCommands << c;
 }
 
-void ConsoleManager::addCommands( const QCommandList& )
+void ConsoleManager::addCommands( const QCommandList& l )
 {
+	foreach ( pCommand* c, l )
+		addCommand( c );
 }
 
-void ConsoleManager::removeCommand( const pCommand& )
+void ConsoleManager::removeCommand( pCommand* c )
 {
+	if ( mCommands.contains( c ) )
+		delete mCommands.takeAt( mCommands.indexOf( c ) );
 }
 
-void ConsoleManager::removeCommands( const QCommandList& )
+void ConsoleManager::removeCommands( const QCommandList& l )
 {
+	foreach ( pCommand* c, l )
+		removeCommand( c );
+}
+
+void ConsoleManager::internalExecuteProcess()
+{
+	foreach ( pCommand* c, mCommands )
+	{
+		// if last was error, cancel this one if it want to
+		if ( c->skipOnError() && mProcess->error() != QProcess::UnknownError )
+		{
+			removeCommand( c );
+			continue;
+		}
+		
+		// execute command
+		mProcess->setWorkingDirectory( c->workingDirectory() );
+		mProcess->start( c->command(), c->arguments() );
+		
+		// exit
+		return;
+	}
 }
 

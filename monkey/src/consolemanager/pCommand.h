@@ -31,17 +31,23 @@ public:
 	QString text() const { return mText; }
 	QString command() const { return mCommand; }
 	QStringList arguments() const { return mArguments; }
+	QString workingDirectory() const { return mWorkingDirectory; }
 	pCommandParser* parser() const { return mParser; }
+	bool skipOnError() const { return mSkipOnError; }
 
 	void setText( const QString& s ) { mText = s; }
 	void setCommand( const QString& s ) { mCommand = s; }
 	void setArguments( const QStringList& l ) { mArguments = l; }
+	void setWorkingDirectory( const QString& s ) { mWorkingDirectory = s; }
 	void setParser( pCommandParser* p ) { mParser = p; }
+	void setSkipOnError( bool b ) { mSkipOnError = b; }
 
 protected:
 	QString mText;
 	QString mCommand;
 	QStringList mArguments;
+	QString mWorkingDirectory;
+	bool mSkipOnError;
 	QPointer<pCommandParser> mParser;
 
 };

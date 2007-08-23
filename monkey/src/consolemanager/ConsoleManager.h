@@ -32,11 +32,7 @@ public:
 	ConsoleManager( QObject* = QApplication::instance() );
 	~ConsoleManager();
 
-	void sendRawData( const QByteArray& );
-	void addCommand( const pCommand& );
-	void addCommands( const QCommandList& );
-	void removeCommand( const pCommand& );
-	void removeCommands( const QCommandList& );
+	pCommand* currentCommand() const { return mCommands.value( 0 ); }
 
 protected:
 	bool mRunning;
@@ -46,6 +42,12 @@ protected:
 
 public slots:
 	void terminate();
+	void internalExecuteProcess();
+	void sendRawData( const QByteArray& );
+	void addCommand( pCommand* );
+	void addCommands( const QCommandList& );
+	void removeCommand( pCommand* );
+	void removeCommands( const QCommandList& );
 
 private slots:
 	void error( QProcess::ProcessError );
@@ -55,6 +57,7 @@ private slots:
 	void stateChanged( QProcess::ProcessState );
 
 signals:
+	void executeProcessRequire();
 	void error( QProcess::ProcessError, const QString& );
 	void finished( int, QProcess::ExitStatus, const QString& );
 	void readyRead( const QString& );
