@@ -17,12 +17,11 @@
 
 #include "MonkeyExport.h"
 #include "QSingleton.h"
+#include "pCommand.h"
 
 #include <QThread>
 #include <QApplication>
 #include <QProcess>
-
-class QTimer;
 
 class ConsoleManager : public QThread, public QSingleton<ConsoleManager>
 {
@@ -34,8 +33,12 @@ public:
 	~ConsoleManager();
 
 protected:
+	bool mRunning;
 	QProcess* mProcess;
 	virtual void run();
+
+public slots:
+	void terminate();
 
 private slots:
 	void error( QProcess::ProcessError );

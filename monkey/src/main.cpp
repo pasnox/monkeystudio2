@@ -120,7 +120,6 @@ int main( int argc, char** argv )
 	
 	// stop console manager
 	ConsoleManager::instance()->terminate();
-	ConsoleManager::instance()->wait();
 	
 	// return application result
 	return i;

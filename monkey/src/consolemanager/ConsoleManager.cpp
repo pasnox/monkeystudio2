@@ -4,7 +4,7 @@
 ** Author    : Nox P@sNox <pasnox@gmail.com>
 ** Project   : ConsoleManager
 ** FileName  : ConsoleManager.cpp
-** Date      : mar. août 21 20:52:27 2007
+** Date      : mar. aoï¿½t 21 20:52:27 2007
 ** License   : GPL
 ** Comment   : Your comment here
 **
@@ -17,15 +17,11 @@
 #include <QMetaType>
 
 ConsoleManager::ConsoleManager( QObject* o )
-	: QThread( o ), mProcess( 0L )
-{
-}
+	: QThread( o ), mRunning( false ), mProcess( 0L )
+{}
 
 ConsoleManager::~ConsoleManager()
-{
-	mProcess->kill();
-	delete mProcess;
-}
+{ delete mProcess; }
 
 void ConsoleManager::run()
 {
@@ -47,18 +43,39 @@ void ConsoleManager::run()
 	connect( mProcess, SIGNAL( started() ), this, SLOT( started() ) );
 	connect( mProcess, SIGNAL( stateChanged( QProcess::ProcessState ) ), this, SLOT( stateChanged( QProcess::ProcessState ) ) );
 	
+	// set thread running
+	mRunning = true;
+	
 	// tracking commands
 	forever
 	{
-		/*
+		if ( !mRunning )
+			break;
 		if ( !mProcess || mProcess->state() != QProcess::NotRunning )
 			continue;
-		qWarning( "executing command" );
 		// get task
-		mProcess->start( "konsole" );
+		mProcess->start( "calc" );
 		exec();
-		*/
 	}
+	
+	// set thread not running
+	mRunning = false;
+}
+
+void ConsoleManager::terminate()
+{
+	// force loop to return
+	mRunning = false;
+	
+	// if process actif kill the current process
+	if ( mProcess )
+		mProcess->kill();
+	
+	// stop event loop
+	quit();
+	
+	// wait for thread finish
+	wait();
 }
 
 void ConsoleManager::error( QProcess::ProcessError e )
@@ -85,7 +102,6 @@ void ConsoleManager::error( QProcess::ProcessError e )
 			emit error( e, tr( "An unknown error occurred. This is the default return value of error()." ) );
 			break;
 	}
-	qWarning( "error" );
 }
 
 void ConsoleManager::finished( int i, QProcess::ExitStatus e )
@@ -101,19 +117,16 @@ void ConsoleManager::finished( int i, QProcess::ExitStatus e )
 		default:
 			emit finished( i, e, tr( "An unknown error occurred." ) );
 	}
-	qWarning( "finished" );
 }
 
 void ConsoleManager::readyRead()
 {
 	emit readyRead( mProcess->readAllStandardOutput() );
-	qWarning( "readyread" );
 }
 
 void ConsoleManager::started()
 {
 	emit started( tr( "Running..." ) );
-	qWarning( "started" );
 }
 
 void ConsoleManager::stateChanged( QProcess::ProcessState e )
@@ -122,6 +135,7 @@ void ConsoleManager::stateChanged( QProcess::ProcessState e )
 	{
 		case QProcess::NotRunning:
 			emit stateChanged( e, tr( "The process is not running." ) );
+			// stop event loop
 			quit();
 			break;
 		case QProcess::Starting:
@@ -131,5 +145,4 @@ void ConsoleManager::stateChanged( QProcess::ProcessState e )
 			emit stateChanged( e, tr( "The process is running and is ready for reading and writing." ) );
 			break;
 	}
-	qWarning( "state change" );
 }
