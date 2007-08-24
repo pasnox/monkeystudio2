@@ -33,28 +33,19 @@ pConsoleManager::pConsoleManager( QObject* o )
 	mTimerId = startTimer( 100 );
 	
 	// testing console :)
-	pCommandList l;
 	pCommand* c;
-	
 	c = new pCommand;
-	c->setText( "Executing calc..." );
-	c->setCommand( "calcg" );
+	
+	c->setText( "Listing current directory" );
+#ifdef Q_WS_WIN
+	c->setCommand( "cmd" );
+	c->setArguments( QStringList() << "/k" << "dir" << "&&" << "exit" );
+#else
+	c->setCommand( "ls" );
+#endif
 	c->setSkipOnError( false );
-	l << c;
 	
-	c = new pCommand;
-	c->setText( "Executing assistant..." );
-	c->setCommand( "assistant" );
-	c->setSkipOnError( true );
-	l << c;
-	
-	c = new pCommand;
-	c->setText( "Executing konqueror..." );
-	c->setCommand( "explorer" );
-	c->setSkipOnError( false );
-	l << c;
-	
-	addCommands( l );
+	addCommand( c );
 }
 
 pConsoleManager::~pConsoleManager()
@@ -110,9 +101,6 @@ void pConsoleManager::error( QProcess::ProcessError e )
 	
 	// emit signal error
 	emit commandError( currentCommand(), e );
-	
-	// remove command from list
-	removeCommand( currentCommand() );
 }
 
 void pConsoleManager::finished( int i, QProcess::ExitStatus e )
@@ -153,7 +141,7 @@ void pConsoleManager::readyRead()
 		c->parser()->addContents( a );
 	
 	// warning
-	qWarning( "Datas available: %s", a );
+	qWarning( "Datas available: %s", a.constData() );
 	
 	// emit signal
 	emit commandReadyRead( c, a );
@@ -189,6 +177,10 @@ void pConsoleManager::stateChanged( QProcess::ProcessState e )
 	
 	// emit signal state changed
 	emit commandStateChanged( currentCommand(), e );
+	
+	// if process crash remove command
+	if ( e == QProcess::NotRunning && ( QProcess::error() == QProcess::FailedToStart || QProcess::error() == QProcess::Crashed ) )
+		removeCommand( currentCommand() );
 }
 
 void pConsoleManager::sendRawData( const QByteArray& a )
@@ -221,7 +213,7 @@ void pConsoleManager::addCommands( const pCommandList& l )
 void pConsoleManager::removeCommand( pCommand* c )
 {
 	if ( mCommands.contains( c ) )
-		delete mCommands.takeAt( mCommands.indexOf( c ) );
+		mCommands.takeAt( mCommands.indexOf( c ) )->deleteLater();
 }
 
 void pConsoleManager::removeCommands( const pCommandList& l )
