@@ -52,6 +52,6 @@ protected:
 
 };
 
-typedef QList<pCommand*> QCommandList;
+typedef QList<pCommand*> pCommandList;
 
 #endif // PCOMMAND_H
