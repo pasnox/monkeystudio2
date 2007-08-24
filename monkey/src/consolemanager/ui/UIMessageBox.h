@@ -10,8 +10,15 @@ class UIMessageBox : public QDockWidget, public Ui::UIMessageBox, public QSingle
 	Q_OBJECT
 	friend class QSingleton<UIMessageBox>;
 	
+public:
+	QString colourText( const QString&, const QColor& = Qt::black );
+	
 private:
 	UIMessageBox();
+
+public slots:
+	void append( const QString& );
+	void appendInBox( const QString&, const QColor& = Qt::red );
 
 private slots:
 	void commandError( pCommand*, QProcess::ProcessError );

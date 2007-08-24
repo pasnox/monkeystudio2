@@ -33,10 +33,11 @@ pConsoleManager::pConsoleManager( QObject* o )
 	mTimerId = startTimer( 100 );
 	
 	// testing console :)
+	pCommandList l;
 	pCommand* c;
-	c = new pCommand;
 	
-	c->setText( "Listing current directory" );
+	c = new pCommand;
+	c->setText( "Listing current directory (working)" );
 #ifdef Q_WS_WIN
 	c->setCommand( "cmd" );
 	c->setArguments( QStringList() << "/k" << "dir" << "&&" << "exit" );
@@ -44,8 +45,20 @@ pConsoleManager::pConsoleManager( QObject* o )
 	c->setCommand( "ls" );
 #endif
 	c->setSkipOnError( false );
+	l << c;
 	
-	addCommand( c );
+	c = new pCommand;
+	c->setText( "Listing current directory (not working)" );
+#ifdef Q_WS_WIN
+	c->setCommand( "cmddfdf" );
+	c->setArguments( QStringList() << "/k" << "dir" << "&&" << "exit" );
+#else
+	c->setCommand( "lsdfdf" );
+#endif
+	c->setSkipOnError( false );
+	l << c;
+	
+	addCommands( l );
 }
 
 pConsoleManager::~pConsoleManager()
@@ -59,8 +72,7 @@ void pConsoleManager::timerEvent( QTimerEvent* e )
 {
 	if ( e->timerId() == mTimerId )
 	{
-		
-	// if running continue
+		// if running continue
 		if ( state() != QProcess::NotRunning )
 			return;
 		
@@ -71,56 +83,13 @@ void pConsoleManager::timerEvent( QTimerEvent* e )
 }
 
 void pConsoleManager::error( QProcess::ProcessError e )
-{
-	QString s;
-	switch ( e )
-	{
-		case QProcess::FailedToStart:
-			s = tr( "Error#: %1, %2\nThe process failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program." );
-			break;
-		case QProcess::Crashed:
-			s = tr( "Error#: %1, %2\nThe process crashed some time after starting successfully." );
-			break;
-		case QProcess::Timedout:
-			s = tr( "Error#: %1, %2\nThe last waitFor...() function timed out. The state of QProcess is unchanged, and you can try calling waitFor...() again." );
-			break;
-		case QProcess::WriteError:
-			s = tr( "Error#: %1, %2\nAn error occurred when attempting to write to the process. For example, the process may not be running, or it may have closed its input channel." );
-			break;
-		case QProcess::ReadError:
-			s = tr( "Error#: %1, %2\nAn error occurred when attempting to read from the process. For example, the process may not be running." );
-			break;
-		case QProcess::UnknownError:
-		default:
-			s = tr( "Error#: %1, %2\nAn unknown error occurred. This is the default return value of error()." );
-			break;
-	}
-	
-	// show warning
-	qWarning( qPrintable( s.arg( e ).arg( currentCommand()->text() ) ) );
-	
+{	
 	// emit signal error
 	emit commandError( currentCommand(), e );
 }
 
 void pConsoleManager::finished( int i, QProcess::ExitStatus e )
 {
-	QString s;
-	switch ( e )
-	{
-		case QProcess::NormalExit:
-			s = tr( "Finished#: %1, Status Code: %2, %3\nThe process exited normally." );
-			break;
-		case QProcess::CrashExit:
-			s = tr( "Finished#: %1, Status Code: %2, %3\nThe process crashed." );
-			break;
-		default:
-			s = tr( "Finished#: %1, Status Code: %2, %3\nAn unknown error occurred." );
-	}
-	
-	// show warning
-	qWarning( qPrintable( s.arg( i ).arg( e ).arg( currentCommand()->text() ) ) );
-	
 	// emit signal finished
 	emit commandFinished( currentCommand(), i, e );
 	
@@ -140,41 +109,18 @@ void pConsoleManager::readyRead()
 	if ( c && c->parser() )
 		c->parser()->addContents( a );
 	
-	// warning
-	qWarning( "Datas available: %s", a.constData() );
-	
 	// emit signal
 	emit commandReadyRead( c, a );
 }
 
 void pConsoleManager::started()
 {
-	// warning
-	qWarning( "Process Started: %s", qPrintable( currentCommand()->text() ) );
-	
 	// emit signal
 	emit commandStarted( currentCommand() );
 }
 
 void pConsoleManager::stateChanged( QProcess::ProcessState e )
 {
-	QString s;
-	switch ( e )
-	{
-		case QProcess::NotRunning:
-			s = tr( "State Changed#: %1, %2\nThe process is not running." );
-			break;
-		case QProcess::Starting:
-			s = tr( "State Changed#: %1, %2\nThe process is starting, but the program has not yet been invoked." );
-			break;
-		case QProcess::Running:
-			s = tr( "State Changed#: %1, %2\nThe process is running and is ready for reading and writing." );
-			break;
-	}
-	
-	// show warning
-	qWarning( qPrintable( s.arg( e ).arg( currentCommand()->text() ) ) );
-	
 	// emit signal state changed
 	emit commandStateChanged( currentCommand(), e );
 	
