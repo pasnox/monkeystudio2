@@ -9,7 +9,7 @@
 #include "UISettings.h"
 #include "UIMain.h"
 #include "pSettings.h"
-#include "ConsoleManager.h"
+#include "pConsoleManager.h"
 
 void showMessage( QSplashScreen* s, const QString& m )
 {
@@ -41,7 +41,7 @@ int main( int argc, char** argv )
 	
 	// start console manager
 	showMessage( &splash, QObject::tr( "Starting Console Manager..." ) );
-	ConsoleManager::instance()->start();
+	pConsoleManager::instance();
 
 	// restore application style
 	a.setStyle( pSettings::instance()->value( "MainWindow/Style", "plastique" ).toString() );
@@ -115,36 +115,6 @@ int main( int argc, char** argv )
 	// connection
 	QObject::connect( &a, SIGNAL( lastWindowClosed() ), &a, SLOT( quit() ) );
 	
-	QCommandList l;
-	
-	pCommand* c;
-	
-	c = new pCommand;
-	c->setText( "Executing kcalc..." );
-	c->setCommand( "kcal" );
-	c->setSkipOnError( true );
-	l << c;
-	
-	c = new pCommand;
-	c->setText( "Executing assistant..." );
-	c->setCommand( "assistant" );
-	c->setSkipOnError( true );
-	l << c;
-	
-	c = new pCommand;
-	c->setText( "Executing konqueror..." );
-	c->setCommand( "konquero" );
-	c->setSkipOnError( true );
-	l << c;
-	
-	ConsoleManager::instance()->addCommands( l );
-	
 	// start application
-	int i = a.exec();
-	
-	// stop console manager
-	ConsoleManager::instance()->terminate();
-	
-	// return application result
-	return i;
+	return a.exec();
 }
