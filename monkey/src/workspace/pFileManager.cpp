@@ -17,6 +17,21 @@ pAbstractChild* pFileManager::openFile( const QString& s, const QPoint& p )
 	// if it not exists
 	if ( !QFile::exists( s ) )
 		return 0;
+	
+	// check if file is already opened
+	QFileInfo f( s );
+	foreach ( pAbstractChild* c, pWorkspace::instance()->children() )
+	{
+		foreach ( QFileInfo fi, c->files() )
+		{
+			if ( fi.canonicalFilePath() == f.canonicalFilePath() )
+			{
+				pWorkspace::instance()->setCurrentDocument( c );
+				c->goTo( s, p );
+				return c;
+			}
+		}
+	}
 
 	// open file
 /*
