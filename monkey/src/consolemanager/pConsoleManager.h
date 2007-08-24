@@ -12,44 +12,42 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ****************************************************************************/
-#ifndef CONSOLEMANAGER_H
-#define CONSOLEMANAGER_H
+#ifndef PCONSOLEMANAGER_H
+#define PCONSOLEMANAGER_H
 
 #include "MonkeyExport.h"
 #include "QSingleton.h"
 #include "pCommand.h"
 
-#include <QThread>
 #include <QApplication>
 #include <QProcess>
 
-class ConsoleManager : public QThread, public QSingleton<ConsoleManager>
+class pConsoleManager : public QProcess, public QSingleton<pConsoleManager>
 {
 	Q_OBJECT
-	friend class QSingleton<ConsoleManager>;
-
+	friend class QSingleton<pConsoleManager>;
+	
 public:
-	ConsoleManager( QObject* = QApplication::instance() );
-	~ConsoleManager();
-
 	pCommand* currentCommand() const { return mCommands.value( 0 ); }
 
 protected:
-	bool mRunning;
-	QProcess* mProcess;
-	QCommandList mCommands;
-	virtual void run();
+	int mTimerId;
+	pCommandList mCommands;
+	void timerEvent( QTimerEvent* );
+
+private:
+	pConsoleManager( QObject* = QApplication::instance() );
+	~pConsoleManager();
 
 public slots:
-	void terminate();
-	void internalExecuteProcess();
 	void sendRawData( const QByteArray& );
 	void addCommand( pCommand* );
-	void addCommands( const QCommandList& );
+	void addCommands( const pCommandList& );
 	void removeCommand( pCommand* );
-	void removeCommands( const QCommandList& );
+	void removeCommands( const pCommandList& );
 
 private slots:
+	void executeProcess();
 	void error( QProcess::ProcessError );
 	void finished( int, QProcess::ExitStatus );
 	void readyRead();
@@ -57,13 +55,12 @@ private slots:
 	void stateChanged( QProcess::ProcessState );
 
 signals:
-	void executeProcessRequire();
-	void error( QProcess::ProcessError, const QString& );
-	void finished( int, QProcess::ExitStatus, const QString& );
-	void readyRead( const QString& );
-	void started( const QString& );
-	void stateChanged( QProcess::ProcessState, const QString& );
+	void commandError( pCommand*, QProcess::ProcessError );
+	void commandFinished( pCommand*, int, QProcess::ExitStatus );
+	void commandReadyRead( pCommand*, const QByteArray& );
+	void commandStarted( pCommand* );
+	void commandStateChanged( pCommand*, QProcess::ProcessState );
 
 };
 
-#endif // CONSOLEMANAGER_H
+#endif // PCONSOLEMANAGER_H
