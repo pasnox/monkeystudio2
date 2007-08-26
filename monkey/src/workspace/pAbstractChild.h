@@ -123,6 +123,8 @@ public slots:
 	virtual void goTo( const QString&, const QPoint&, bool = false ) = 0;
 	// ask to save file
 	virtual void saveFile( const QString& ) = 0;
+	// ask to backup current file
+	virtual void backupCurrentFile( const QString& ) = 0;
 	// ask to save the current file
 	virtual void saveCurrentFile()
 	{ saveFile( currentFile() ); }

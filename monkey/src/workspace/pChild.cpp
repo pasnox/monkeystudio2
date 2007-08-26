@@ -43,14 +43,10 @@ pChild::pChild()
 }
 
 pChild::~pChild()
-{
-	closeFiles();
-}
+{ closeFiles(); }
 
 void pChild::cursorPositionChanged()
-{
-	emit pAbstractChild::cursorPositionChanged( cursorPosition() );
-}
+{ emit pAbstractChild::cursorPositionChanged( cursorPosition() ); }
 
 QString pChild::language() const
 {
@@ -63,67 +59,43 @@ QString pChild::language() const
 }
 
 QPoint pChild::cursorPosition() const
-{
-	return mEditor->cursorPosition();
-}
+{ return mEditor->cursorPosition(); }
 
 void pChild::showFile( const QString& )
 {}
 
 QString pChild::currentFile() const
-{
-	return mFiles.value( 0 );
-}
+{ return mFiles.value( 0 ); }
 
 QString pChild::currentFileName() const
-{
-	return QFileInfo( currentFile() ).fileName();
-}
+{ return QFileInfo( currentFile() ).fileName(); }
 
 pEditor* pChild::currentEditor() const
-{
-	return mEditor;
-}
+{ return mEditor; }
 
 bool pChild::isModified() const
-{
-	return mEditor->isModified();
-}
+{ return mEditor->isModified(); }
 
 bool pChild::isUndoAvailable() const
-{
-	return mEditor->isUndoAvailable();
-}
+{ return mEditor->isUndoAvailable(); }
 
 void pChild::undo()
-{
-	mEditor->undo();
-}
+{ mEditor->undo(); }
 
 bool pChild::isRedoAvailable() const
-{
-	return mEditor->isRedoAvailable();
-}
+{ return mEditor->isRedoAvailable(); }
 
 void pChild::redo()
-{
-	mEditor->redo();
-}
+{ mEditor->redo(); }
 
 void pChild::cut()
-{
-	mEditor->cut();
-}
+{ mEditor->cut(); }
 
 void pChild::copy()
-{
-	mEditor->copy();
-}
+{ mEditor->copy(); }
 
 void pChild::paste()
-{
-	mEditor->paste();
-}
+{ mEditor->paste(); }
 
 void pChild::searchReplace()
 {
@@ -144,9 +116,7 @@ void pChild::searchNext()
 }
 
 void pChild::goTo()
-{
-	mEditor->invokeGoToLine();
-}
+{ mEditor->invokeGoToLine(); }
 
 void pChild::goTo( const QString& s, const QPoint& p, bool b )
 {
@@ -154,39 +124,26 @@ void pChild::goTo( const QString& s, const QPoint& p, bool b )
 	if ( !mFiles.contains( s ) )
 		return;
 
-
 	mEditor->setCursorPosition( p.y(), p.x() );
 }
 
 bool pChild::isCopyAvailable() const
-{
-	return mEditor->copyAvailable();
-}
+{ return mEditor->copyAvailable(); }
 
 bool pChild::isPasteAvailable() const
-{
-	return mEditor->canPaste();
-}
+{ return mEditor->canPaste(); }
 
 bool pChild::isSearchReplaceAvailable() const
-{
-	return true;
-}
+{ return true; }
 
 bool pChild::isGoToAvailable() const
-{
-	return true;
-}
+{ return true; }
 
 bool pChild::isModified( const QString& ) const
-{
-	return isModified();
-}
+{ return isModified(); }
 
 bool pChild::isPrintAvailable() const
-{
-	return true;
-}
+{ return true; }
 
 void pChild::saveFile( const QString& s )
 {
@@ -196,6 +153,9 @@ void pChild::saveFile( const QString& s )
 
 	mEditor->saveFile( s );
 }
+
+void pChild::backupCurrentFile( const QString& s )
+{ mEditor->saveBackup( s ); }
 
 void pChild::saveFiles()
 { saveCurrentFile(); }

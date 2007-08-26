@@ -78,7 +78,7 @@ void pWorkspace::internal_currentChanged( int i )
 	pMenuBar::instance()->action( "mFile/mSave/aAll" )->setEnabled( ic );
 	pMenuBar::instance()->action( "mFile/mClose/aCurrent" )->setEnabled( ic );
 	pMenuBar::instance()->action( "mFile/mClose/aAll" )->setEnabled( ic );
-	//pMenuBar::instance()->action( "mFile/aSaveAsTemplate" )->setEnabled( false );
+	pMenuBar::instance()->action( "mFile/aSaveAsBackup" )->setEnabled( ic );
 	pMenuBar::instance()->action( "mFile/aQuickPrint" )->setEnabled( print );
 	pMenuBar::instance()->action( "mFile/aPrint" )->setEnabled( print );
 
@@ -205,9 +205,16 @@ void pWorkspace::fileCloseAll_triggered( bool b )
 	closeAllTabs( b );
 }
 
-void pWorkspace::fileSaveAsTemplate_triggered()
+void pWorkspace::fileSaveAsBackup_triggered()
 {
-	qWarning( "Not yet implemented." );
+	pAbstractChild* c = currentChild();
+	if ( c )
+	{
+		const QString s = pMonkeyStudio::getSaveFileName( tr( "Choose a filename to backup your file" ), QString::null, QString::null, this );
+	
+		if ( !s.isEmpty() )
+			c->backupCurrentFile( s );
+	}
 }
 
 void pWorkspace::fileQuickPrint_triggered()

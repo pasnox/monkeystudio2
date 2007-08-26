@@ -105,6 +105,9 @@ public:
 
 	// ask to save all files
 	virtual void saveFiles();
+	
+	// ask to backup the current file
+	void backupCurrentFile( const QString& );
 
 	// ask to load file
 	virtual void openFile( const QString&, const QPoint& = QPoint(), QTextCodec* = 0 );
