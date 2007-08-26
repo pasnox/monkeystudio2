@@ -86,6 +86,12 @@ void pConsoleManager::error( QProcess::ProcessError e )
 {	
 	// emit signal error
 	emit commandError( currentCommand(), e );
+	
+#ifndef Q_WS_WIN
+	// if process failed/crash remove command
+	if ( e == QProcess::FailedToStart || e == QProcess::Crashed )
+		removeCommand( currentCommand() );
+#endif
 }
 
 void pConsoleManager::finished( int i, QProcess::ExitStatus e )
@@ -124,9 +130,11 @@ void pConsoleManager::stateChanged( QProcess::ProcessState e )
 	// emit signal state changed
 	emit commandStateChanged( currentCommand(), e );
 	
+#ifdef Q_WS_WIN
 	// if process crash remove command
 	if ( e == QProcess::NotRunning && ( QProcess::error() == QProcess::FailedToStart || QProcess::error() == QProcess::Crashed ) )
 		removeCommand( currentCommand() );
+#endif
 }
 
 void pConsoleManager::sendRawData( const QByteArray& a )

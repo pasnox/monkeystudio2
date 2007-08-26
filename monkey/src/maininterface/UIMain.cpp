@@ -50,8 +50,8 @@ void UIMain::closeEvent( QCloseEvent* )
 	if ( pMonkeyStudio::saveSessionOnClose() )
 		workspace()->fileSessionSave_triggered();
 
-	// close all documents
-	workspace()->fileCloseAll_triggered();
+	// force to close all documents
+	workspace()->fileCloseAll_triggered( true );
 }
 
 pFileManager* UIMain::fileManager()

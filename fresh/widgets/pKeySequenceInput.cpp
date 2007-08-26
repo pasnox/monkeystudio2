@@ -13,78 +13,80 @@
 
 pKeySequenceInput::pKeySequenceInput( QWidget* w )
 	: QLineEdit( w )
-{
-	controlPressed = false;
-	altPressed = false;
-	winPressed = false;
-	shiftPressed = false;
-	installEventFilter( this );
+{}
+
+void pKeySequenceInput::keyPressEvent( QKeyEvent* e )
+{	
+	// return if auto repeat
+	if ( e->isAutoRepeat() )
+		return;
+	
+	// if user press something, sequence is not finished
+	setProperty( "Finished", false );
+	
+	// show current sequence
+	setText( checkKeyEvent( e, true ) );
 }
 
-bool pKeySequenceInput::eventFilter( QObject* o, QEvent* e )
+void pKeySequenceInput::keyReleaseEvent( QKeyEvent* e )
 {
-	// get type
-	int i = e->type();
+	// return if auto repeat
+	if ( e->isAutoRepeat() )
+		return;
+	
+	// check if sequence is finished or not
+	if ( property( "Finished" ).toBool() )
+		return;
+	
+	// show current sequence
+	setText( checkKeyEvent( e, false ) );
+}
 
-	// if keypress
-	if ( i == QEvent::KeyPress )
+QString pKeySequenceInput::checkKeyEvent( QKeyEvent* e, bool b )
+{
+	// or-ed keys
+	int mKeys = 0;
+	
+	// check modifiers pressed
+	if ( e->modifiers() & Qt::ControlModifier )
+		mKeys |= Qt::ControlModifier;
+	if ( e->modifiers() & Qt::AltModifier )
+		mKeys |= Qt::AltModifier;
+	if ( e->modifiers() & Qt::ShiftModifier )
+		mKeys |= Qt::ShiftModifier;
+	if ( e->modifiers() & Qt::MetaModifier )
+		mKeys |= Qt::MetaModifier;
+	
+	// if key press event
+	if ( b )
 	{
-		QKeyEvent* ke = static_cast<QKeyEvent*>( e );
-		switch ( ke->key() )
+		// get press key
+		switch( e->key() )
 		{
-		case Qt::Key_Control:
-			controlPressed = true;
-			break;
-		case Qt::Key_Alt:
-			altPressed = true;
-			break;
-		case Qt::Key_Shift:
-			shiftPressed = true;
-			break;
-		case Qt::Key_Super_R:
-			winPressed = true;
-			break;
-		case Qt::Key_Super_L:
-			winPressed = true;
-			break;
-		default:
-			QString s;
-			if ( shiftPressed )
-				s += "Shift+";
-			if ( controlPressed )
-				s += "Ctrl+";
-			if ( altPressed )
-				s +="Alt+";
-			if ( winPressed )
-				s +="Win+";
-			s += QKeySequence( ke->key() ).toString( QKeySequence::PortableText );
-			setText( s );
+			// this keys can't be used
+			case Qt::Key_Shift:
+			case Qt::Key_Control:
+			case Qt::Key_Meta:
+			case Qt::Key_Alt:
+			case Qt::Key_AltGr:
+			case Qt::Key_Super_L:
+			case Qt::Key_Super_R:
+			case Qt::Key_Menu:
+			case Qt::Key_Hyper_L:
+			case Qt::Key_Hyper_R:
+			case Qt::Key_Help:
+			case Qt::Key_Direction_L:
+			case Qt::Key_Direction_R:
+				break;
+			default:
+				// add pressed key
+				mKeys |= e->key();
+				
+				// set sequence finished
+				setProperty( "Finished", true );
+				break;
 		}
 	}
-	// if keyrelease
-	else if ( i == QEvent::KeyRelease )
-	{
-		QKeyEvent* ke = static_cast<QKeyEvent*>( e );
-		switch ( ke->key() )
-		{
-		case Qt::Key_Control:
-			controlPressed = false;
-			break;
-		case Qt::Key_Alt:
-			altPressed = false;
-			break;
-		case Qt::Key_Shift:
-			shiftPressed = false;
-			break;
-		case Qt::Key_Super_R:
-			winPressed = false;
-			break;
-		case Qt::Key_Super_L:
-			winPressed = false;
-			break;
-		}
-	}
-
-	// standard event processing
-	return QLineEdit::eventFilter( o, e );
+	
+	return QKeySequence( mKeys ).toString();
 }

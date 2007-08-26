@@ -200,9 +200,9 @@ void pWorkspace::fileCloseCurrent_triggered()
 	closeCurrentTab();
 }
 
-void pWorkspace::fileCloseAll_triggered()
+void pWorkspace::fileCloseAll_triggered( bool b )
 {
-	closeAllTabs();
+	closeAllTabs( b );
 }
 
 void pWorkspace::fileSaveAsTemplate_triggered()

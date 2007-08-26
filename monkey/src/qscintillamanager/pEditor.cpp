@@ -6,7 +6,6 @@
 
 #include <QApplication>
 #include <QClipboard>
-#include <QMessageBox>
 #include <QFileInfo>
 #include <QTextStream>
 #include <QInputDialog>
@@ -132,7 +131,7 @@ bool pEditor::openFile( const QString& s )
 	QFile f( s );
 	if ( !f.open( QFile::ReadOnly ) )
 	{
-		QMessageBox::warning( this, tr( "Open file..." ), tr( "Cannot read file %1:\n%2." ).arg( s ).arg( f.errorString() ) );
+		pMonkeyStudio::warning( tr( "Open file..." ), tr( "Cannot read file %1:\n%2." ).arg( s ).arg( f.errorString() ), this );
 		return false;
 	}
 
@@ -195,7 +194,7 @@ bool pEditor::saveFile( const QString& s )
 	// try open file to write in
 	if ( !f.open( QFile::WriteOnly ) )
 	{
-		QMessageBox::warning( this, tr( "Save file..." ), tr( "Cannot write file %1:\n%2." ).arg( fn ).arg( f.errorString() ) );
+		pMonkeyStudio::warning( tr( "Save file..." ), tr( "Cannot write file %1:\n%2." ).arg( fn ).arg( f.errorString() ), this );
 		return false;
 	}
 
@@ -234,6 +233,13 @@ void pEditor::print( bool b )
 	// if quick print
 	if ( b )
 	{
+		// check if default printer is set
+		if ( p.printerName().isEmpty() )
+		{
+			pMonkeyStudio::warning( tr( "Quick Print..." ), tr( "There is no defaullt printer, please set one before trying quick print" ), this );
+			return;
+		}
+		
 		// print and return
 		p.printRange( this );
 		return;

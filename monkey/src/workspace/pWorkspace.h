@@ -41,7 +41,7 @@ public slots:
 	void fileSaveCurrent_triggered();
 	void fileSaveAll_triggered();
 	void fileCloseCurrent_triggered();
-	void fileCloseAll_triggered();
+	void fileCloseAll_triggered( bool = false );
 	void fileSaveAsTemplate_triggered();
 	void fileQuickPrint_triggered();
 	void filePrint_triggered();

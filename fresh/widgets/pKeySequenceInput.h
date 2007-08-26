@@ -6,8 +6,8 @@
  * LICENSE      : GPL
  * COMMENTARY   : This class allow to track shortcut and write them
  ********************************************************************************************************/
-#ifndef KEYSEQUENCEINPUT_H
-#define KEYSEQUENCEINPUT_H
+#ifndef PKEYSEQUENCEINPUT_H
+#define PKEYSEQUENCEINPUT_H
 
 #include "MonkeyExport.h"
 
@@ -15,18 +15,14 @@
 
 class Q_MONKEY_EXPORT pKeySequenceInput : public QLineEdit
 {
-private:
-	bool controlPressed;
-	bool altPressed;
-	bool winPressed;
-	bool shiftPressed;
-
 public:
 	pKeySequenceInput( QWidget* );
 
 protected:
-	bool eventFilter( QObject*, QEvent* );
+	QString checkKeyEvent( QKeyEvent*, bool );
+	void keyPressEvent( QKeyEvent* );
+	void keyReleaseEvent( QKeyEvent* );
 
 };
 
-#endif // KEYSEQUENCEINPUT_H
+#endif // PKEYSEQUENCEINPUT_H
