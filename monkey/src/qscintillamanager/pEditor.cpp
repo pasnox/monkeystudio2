@@ -213,6 +213,50 @@ bool pEditor::saveFile( const QString& s )
 	return true;
 }
 
+bool pEditor::saveBackup( const QString& s )
+{
+	// if not filename, cancel
+	if ( s.isEmpty() )
+		return false;
+	
+	// check if file exists
+	if ( QFile::exists( s ) && !pMonkeyStudio::question( tr( "Save backup..." ), tr( "The file already exists, are you sure you want to overwrite it ?" ) ) )
+		return false;
+	
+	// get path
+	QString fp = QFileInfo( s ).path();
+
+	// file
+	QFile f( s );
+	
+	// filename dir
+	QDir d;
+	// create bak folder
+	if ( !d.exists( fp ) )
+		if ( !d.mkpath( fp ) )
+			return false;
+
+	// set correct path
+	d.setPath( fp );
+		
+	// try open file to write in
+	if ( !f.open( QFile::WriteOnly ) )
+	{
+		pMonkeyStudio::warning( tr( "Save backup..." ), tr( "Cannot write file %1:\n%2." ).arg( s ).arg( f.errorString() ), this );
+		return false;
+	}
+
+	// writing file
+	QApplication::setOverrideCursor( Qt::WaitCursor );
+	QTextStream o( &f );
+	if ( o.codec()->name() != qPrintable( pMonkeyStudio::defaultEncoding() ) )
+		o.setCodec( qPrintable( pMonkeyStudio::defaultEncoding() ) );
+	o << text();
+	QApplication::restoreOverrideCursor();
+
+	return true;
+}
+
 void pEditor::closeFile()
 {
 	clear();
