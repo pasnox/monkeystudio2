@@ -40,6 +40,8 @@ namespace pMonkeyStudio
 
 	const QStringList getOpenFileNames( const QString&, const QString&, const QString& = QString(), QWidget* = QApplication::activeWindow() );
 	const QString getOpenFileName( const QString&, const QString&, const QString& = QString(), QWidget* = QApplication::activeWindow() );
+	
+	const QString getSaveFileName( const QString&, const QString&, const QString& = QString(), QWidget* = QApplication::activeWindow() );
 
 	const QString getExistingDirectory( const QString&, const QString&, QWidget* = QApplication::activeWindow() );
 

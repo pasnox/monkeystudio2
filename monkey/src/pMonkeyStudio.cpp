@@ -110,12 +110,12 @@ const QFileInfoList pMonkeyStudio::getFiles( QDir d, const QString& s, bool b )
 	return l;
 }
 
-QFileDialog* getOpenDialog( QFileDialog::FileMode fm, const QString& c, const QString& fn, const QString& f, QWidget* w  )
+QFileDialog* getOpenDialog( QFileDialog::FileMode fm, const QString& c, const QString& fn, const QString& f, QWidget* w, QFileDialog::AcceptMode m =  QFileDialog::AcceptOpen )
 {
 	// create dialg
 	QFileDialog* d = new QFileDialog( w, c, fn, f );
 	// set file accept mode
-	d->setAcceptMode( QFileDialog::AcceptOpen );
+	d->setAcceptMode( m );
 	// set file mode
 	d->setFileMode( fm );
 
@@ -196,6 +196,32 @@ const QStringList pMonkeyStudio::getOpenFileNames( const QString& c, const QStri
 const QString pMonkeyStudio::getOpenFileName( const QString& c, const QString& fn, const QString& f, QWidget* w )
 {
 	return getOpenFileNames( c, fn, f, w ).value( 0 );
+}
+
+const QString pMonkeyStudio::getSaveFileName( const QString& c, const QString& fn, const QString& f, QWidget* w )
+{
+	// create dialg
+	QFileDialog* d = getOpenDialog( QFileDialog::AnyFile, c.isEmpty() ? QObject::tr( "Choose a filename" ) : c, fn, f, w, QFileDialog::AcceptSave );
+	// choose last used filter if available
+	if ( !f.isEmpty() )
+		d->selectFilter( pSettings::instance()->value( "Recents/FileFilter" ).toString() );
+	// execute dialog
+	if ( d->exec() )
+	{
+		// remember last filter if available
+		if ( !f.isEmpty() )
+			pSettings::instance()->setValue( "Recents/FileFilter", d->selectedFilter() );
+		// remember selected files
+		QStringList l = d->selectedFiles();
+		// delete dialog
+		delete d;
+		// return selected files
+		return l.value( 0 );
+	}
+	// delete dialog
+	delete d;
+	// return empty list
+	return QString();
 }
 
 const QString pMonkeyStudio::getExistingDirectory( const QString& c, const QString& f, QWidget* w )
