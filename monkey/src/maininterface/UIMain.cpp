@@ -87,7 +87,7 @@ void UIMain::initMenuBar()
 		mb->action( "mClose/aCurrent", tr( "&Current" ), QIcon( ":/file/icons/file/close.png" ), tr( "Ctrl+W" ), tr( "Close the current file" ) )->setEnabled( false );
 		mb->action( "mClose/aAll", tr( "&All" ), QIcon( ":/file/icons/file/closeall.png" ), QString::null, tr( "Close all files" ) )->setEnabled( false );
 		mb->action( "aSeparator3" );
-		//mb->action( "aSaveAsTemplate", tr( "Save As &Template" ), QIcon( ":/Icons/Icons/filesaveastemplate.png" ), tr( "Ctrl+T" ), tr( "Save the current file as template" ) )->setEnabled( false );
+		mb->action( "aSaveAsBackup", tr( "Save As &Backup" ), QIcon( ":/file/icons/file/backup.png" ), tr( "Ctrl+B" ), tr( "Save a backup of the current file" ) )->setEnabled( false );
 		mb->action( "aSeparator4" );
 		mb->action( "aQuickPrint", tr( "Quic&k Print" ), QIcon( ":/file/icons/file/quickprint.png" ), QString::null, tr( "Quick print the current file" ) )->setEnabled( false );
 		mb->action( "aPrint", tr( "&Print..." ), QIcon( ":/file/icons/file/print.png" ), tr( "Ctrl+P" ), tr( "Print the current file" ) )->setEnabled( false );
@@ -269,7 +269,7 @@ void UIMain::initConnections()
 	connect( menuBar()->action( "mFile/mSave/aAll" ), SIGNAL( triggered() ), workspace(), SLOT( fileSaveAll_triggered() ) );
 	connect( menuBar()->action( "mFile/mClose/aCurrent" ), SIGNAL( triggered() ), workspace(), SLOT( fileCloseCurrent_triggered() ) );
 	connect( menuBar()->action( "mFile/mClose/aAll" ), SIGNAL( triggered() ), workspace(), SLOT( fileCloseAll_triggered() ) );
-	//connect( menuBar()->action( "mFile/aSaveAsTemplate" ), SIGNAL( triggered() ), workspace(), SLOT( fileSaveAsTemplate_triggered() ) );
+	connect( menuBar()->action( "mFile/aSaveAsBackup" ), SIGNAL( triggered() ), workspace(), SLOT( fileSaveAsBackup_triggered() ) );
 	connect( menuBar()->action( "mFile/aQuickPrint" ), SIGNAL( triggered() ), workspace(), SLOT( fileQuickPrint_triggered() ) );
 	connect( menuBar()->action( "mFile/aPrint" ), SIGNAL( triggered() ), workspace(), SLOT( filePrint_triggered() ) );
 	connect( menuBar()->action( "mFile/aQuit" ), SIGNAL( triggered() ), workspace(), SLOT( fileExit_triggered() ) );
