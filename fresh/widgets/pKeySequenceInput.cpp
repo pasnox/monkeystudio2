@@ -88,5 +88,6 @@ QString pKeySequenceInput::checkKeyEvent( QKeyEvent* e, bool b )
 		}
 	}
 	
+	// return human readable key sequence
 	return QKeySequence( mKeys ).toString();
 }
