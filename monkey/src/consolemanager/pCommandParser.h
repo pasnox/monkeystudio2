@@ -15,9 +15,11 @@
 #ifndef PCOMMANDPARSER_H
 #define PCOMMANDPARSER_H
 
+#include "MonkeyExport.h"
+
 #include <QObject>
 
-class pCommandParser : public QObject
+class Q_MONKEY_EXPORT pCommandParser : public QObject
 {
 	Q_OBJECT
 

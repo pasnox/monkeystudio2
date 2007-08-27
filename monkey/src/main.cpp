@@ -9,6 +9,7 @@
 #include "UISettings.h"
 #include "UIMain.h"
 #include "pSettings.h"
+#include "PluginsManager.h"
 #include "pConsoleManager.h"
 
 void showMessage( QSplashScreen* s, const QString& m )
@@ -93,12 +94,12 @@ int main( int argc, char** argv )
 	// init recents
 	showMessage( &splash, tr( "Initializing Recents Manager..." ) );
 	RecentsManager::self( UIMain::self() );
-
-	// init pluginsmanager
-	showMessage( &splash, tr( "Initializing Plugins Manager..." ) );
-	addLibraryPath( "plugins" );
-	PluginsManager::self( UIMain::self() )->loadsPlugins();
 */
+	// init pluginsmanager
+	showMessage( &splash, QObject::tr( "Initializing Plugins Manager..." ) );
+	a.addLibraryPath( "plugins" );
+	PluginsManager::instance( UIMain::instance() )->loadsPlugins();
+
 	// ready
 	showMessage( &splash, QObject::tr( "%1 v%2 Ready !" ).arg( PROGRAM_NAME, PROGRAM_VERSION ) );
 	//StatusBar::self()->setText( StatusBar::tStatusTip, tr( "%1 v%2 Ready !" ).arg( PROGRAM_NAME, PROGRAM_VERSION ), 15000 );

@@ -15,18 +15,20 @@
 #ifndef PCOMMAND_H
 #define PCOMMAND_H
 
+#include "MonkeyExport.h"
+#include "pCommandParser.h"
+
 #include <QObject>
 #include <QStringList>
 #include <QPointer>
-#include <pCommandParser.h>
 
-class pCommand : public QObject
+class Q_MONKEY_EXPORT pCommand : public QObject
 {
 	Q_OBJECT
 
 public:
-	pCommand( QObject* = 0 );
-	~pCommand();
+	pCommand( QObject* o = 0 )	: QObject( o ) {}
+	~pCommand() { if ( mParser ) mParser->deleteLater(); }
 
 	QString text() const { return mText; }
 	QString command() const { return mCommand; }

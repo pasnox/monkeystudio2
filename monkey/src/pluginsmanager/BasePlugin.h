@@ -1,32 +1,32 @@
 #ifndef BASEPLUGIN_H
 #define BASEPLUGIN_H
-//
+
+#include "MonkeyExport.h"
+
 #include <QtPlugin>
 #include <QLabel>
+
 #ifdef __COVERAGESCANNER__
 #include <QCoreApplication>
 #include <QDir>
 #endif
-//
-#include "Workspace.h"
-#include "MonkeyExport.h"
-//
+
 class Q_MONKEY_EXPORT BasePlugin : public QObject
 {
 	Q_OBJECT
 	Q_ENUMS( Type )
-	//
+	
 public:
 	// plugin type enums
 	enum Type
 	{	iAll = -1,
 		iBase,
 		iChild,
-		iWorkspace,
 		iCompiler,
 		iDebugger,
 		iProject,
 		iLast };
+		
 	// plugin info structure
 	struct Q_MONKEY_EXPORT PluginInfos
 	{
@@ -35,58 +35,56 @@ public:
 		BasePlugin::Type Type; // the plugin type
 		QString Name; // the plugin name for version control
 		QString Version; // the plugin version for version control
-		bool Installed; // to know if this plugin is installed
+		bool Enabled; // to know if this plugin is enabled
 	};
-	//
+	
 	BasePlugin()
-	{ mPluginInfos.Installed = false; mWorkspace = 0; }
+	{ mPluginInfos.Enabled = false; }
 	virtual ~BasePlugin() {}
-	//
-	virtual void initialize( Workspace* w )
-	{ Q_ASSERT( w != 0 ); mWorkspace = w; }
-	//
+	
 	virtual PluginInfos infos() const
 	{ return mPluginInfos; }
-	//
+	
 	virtual QWidget* settingsWidget()
 	{ return new QLabel( QObject::tr( "This plugin can't be configured" ) ); }
-	//
-	virtual bool isInstalled() const
-	{ return mPluginInfos.Installed; }
+	
+	virtual bool isEnabled() const
+	{ return mPluginInfos.Enabled; }
+	
 	// coverage support members
 #ifdef __COVERAGESCANNER__
 	virtual void saveCodeCoverage( const QString& n, const QString& s )
 	{
-		__coveragescanner_filename( codeCoverageFile().toAscii() );
-		__coveragescanner_teststate( s.toAscii() );
-		__coveragescanner_testname( QString( "%1/%2" ).arg( n, infos().Name ).toAscii() );
-		__coveragescanner_save();
-	}
-	//
-	static QString codeCoverageFile()
-	{
-#ifdef Q_OS_WIN
+		// set path
 		QString s = QCoreApplication::applicationDirPath();
-#else
-		QString s = QDir::homePath();
+#ifndef Q_OS_WIN
+		s = QDir::homePath();
 #endif
 		s.append( "/monkeystudio_tests" );
+		
+		// create path if it not exists
 		QDir d( s );
 		if ( !d.exists() )
 			d.mkdir( s );
-		return QDir::toNativeSeparators( s.append( "/monkey_cov" ) ); 
+		
+		// set os specific filename
+		s = QDir::toNativeSeparators( s.append( "/monkey_cov" ) ); 
+		
+		// deal with coverage meter
+		__coveragescanner_filename( qPrintable( s ) );
+		__coveragescanner_teststate( qPrintable( s ) );
+		__coveragescanner_testname( qPrintable( QString( "%1/%2" ).arg( n, infos().Name ) ) );
+		__coveragescanner_save();
 	}
 #endif
-	// NEED REIMPLEMENTATION
-	virtual bool install() = 0;
-	virtual bool uninstall() = 0;
-	//
+	
+	virtual bool setEnabled( bool ) = 0;
+	
 protected:
 	PluginInfos mPluginInfos;
-	Workspace* mWorkspace;
-	//
+	
 };
-//
+
 Q_DECLARE_INTERFACE( BasePlugin, "org.monkeystudio.MonkeyStudio.BasePlugin/1.0" )
-//
+
 #endif // BASEPLUGIN_H

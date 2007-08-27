@@ -22,7 +22,7 @@
 #include <QApplication>
 #include <QProcess>
 
-class pConsoleManager : public QProcess, public QSingleton<pConsoleManager>
+class Q_MONKEY_EXPORT pConsoleManager : public QProcess, public QSingleton<pConsoleManager>
 {
 	Q_OBJECT
 	friend class QSingleton<pConsoleManager>;

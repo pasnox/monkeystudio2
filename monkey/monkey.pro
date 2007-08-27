@@ -43,7 +43,7 @@ linux-g++:LIBS	*= -rdynamic
 win32-msvc:LIBS	*= /IMPLIB:$${BUILD_PATH}/monkey.lib
 win32-g++:LIBS	*= -Wl,--out-implib,$${BUILD_PATH}/libmonkey.a
 
-INCLUDEPATH	*= . src src/maininterface src/maininterface/ui src/workspace src/recentsmanager src/qscintillamanager src/qscintillamanager/ui src/templatesmanager src/templatesmanager/ui src/abbreviationsmanager src/abbreviationsmanager/ui src/toolsmanager src/toolsmanager/ui src/consolemanager src/consolemanager/ui
+include( monkey.pri )
 
 # include fresh framework
 include( ../fresh/fresh.pro )
@@ -85,7 +85,9 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/consolemanager/pConsoleManager.h \
 	src/consolemanager/pCommand.h \
 	src/consolemanager/pCommandParser.h \
-	src/toolsmanager/pToolsManager.h
+	src/toolsmanager/pToolsManager.h \
+	src/pluginsmanager/BasePlugin.h \
+	src/pluginsmanager/PluginsManager.h
 
 SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/maininterface/ui/UIAbout.cpp \
@@ -111,7 +113,7 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/toolsmanager/pToolsManager.cpp \
 	src/consolemanager/ui/UIMessageBox.cpp \
 	src/consolemanager/pConsoleManager.cpp \
-	src/consolemanager/pCommand.cpp \
+	src/pluginsmanager/PluginsManager.cpp \
 	src/main.cpp
 
 unix:SOURCES	*= src/toolsmanager/pDesktopApplications_unix.cpp
