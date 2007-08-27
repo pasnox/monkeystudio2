@@ -4,7 +4,7 @@
 ** Author    : Nox P@sNox <pasnox@gmail.com>
 ** Project   : pConsoleManager
 ** FileName  : pConsoleManager.cpp
-** Date      : mar. ao�t 21 20:52:27 2007
+** Date      : mar. aout 21 20:52:27 2007
 ** License   : GPL
 ** Comment   : Your comment here
 **
@@ -32,6 +32,7 @@ pConsoleManager::pConsoleManager( QObject* o )
 	// start timerEvent
 	mTimerId = startTimer( 100 );
 	
+#ifndef QT_NO_DEBUG
 	// testing console :)
 	pCommandList l;
 	pCommand* c;
@@ -59,6 +60,7 @@ pConsoleManager::pConsoleManager( QObject* o )
 	l << c;
 	
 	addCommands( l );
+#endif
 }
 
 pConsoleManager::~pConsoleManager()
