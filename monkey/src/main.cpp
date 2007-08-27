@@ -102,10 +102,10 @@ int main( int argc, char** argv )
 	// ready
 	showMessage( &splash, QObject::tr( "%1 v%2 Ready !" ).arg( PROGRAM_NAME, PROGRAM_VERSION ) );
 	//StatusBar::self()->setText( StatusBar::tStatusTip, tr( "%1 v%2 Ready !" ).arg( PROGRAM_NAME, PROGRAM_VERSION ), 15000 );
-
+	
 	// restore window state
 	UIMain::instance()->restoreState();
-
+	
 	// show main window
 	UIMain::instance()->show();
 

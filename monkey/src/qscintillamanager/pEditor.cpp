@@ -220,8 +220,10 @@ bool pEditor::saveBackup( const QString& s )
 		return false;
 	
 	// check if file exists
+	/*
 	if ( QFile::exists( s ) && !pMonkeyStudio::question( tr( "Save backup..." ), tr( "The file already exists, are you sure you want to overwrite it ?" ) ) )
 		return false;
+	*/
 	
 	// get path
 	QString fp = QFileInfo( s ).path();

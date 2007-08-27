@@ -39,7 +39,7 @@ void pSettings::restoreState( QMainWindow* w )
 {
 	if ( !w )
 		return;
-
+	w->restoreState( value( "MainWindow/State" ).toByteArray() );
 	QPoint p = value( "MainWindow/Position" ).toPoint();
 	QSize s = value( "MainWindow/Size" ).toSize();
 	if ( !p.isNull() && !s.isNull() )
@@ -49,7 +49,6 @@ void pSettings::restoreState( QMainWindow* w )
 	}
 	if ( value( "MainWindow/Maximized", true ).toBool() )
 		w->showMaximized();
-	w->restoreState( value( "MainWindow/State" ).toByteArray() );
 }
 
 void pSettings::saveState( QMainWindow* w )

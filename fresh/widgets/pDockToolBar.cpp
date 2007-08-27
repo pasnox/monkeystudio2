@@ -269,7 +269,6 @@ void pDockToolBar::setExclusive( bool b )
 				dw->hide();
 		}
 	}
-
 }
 
 int pDockToolBar::id( QDockWidget* d ) const

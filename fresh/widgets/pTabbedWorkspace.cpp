@@ -322,7 +322,9 @@ QWidget* pTabbedWorkspace::currentDocument() const
 		case tmTopLevel:
 			return QApplication::activeWindow();
 		default:
+#ifdef Q_CC_GNU
 			Q_ASSERT_X( 0, __func__, "not right tab mode" );
+#endif
 	}
 	return 0;
 }

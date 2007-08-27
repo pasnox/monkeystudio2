@@ -210,7 +210,7 @@ void pWorkspace::fileSaveAsBackup_triggered()
 	pAbstractChild* c = currentChild();
 	if ( c )
 	{
-		const QString s = pMonkeyStudio::getSaveFileName( tr( "Choose a filename to backup your file" ), QString::null, QString::null, this );
+		const QString s = pMonkeyStudio::getSaveFileName( tr( "Choose a filename to backup your file" ), QFileInfo( c->currentFile() ).fileName(), QString::null, this );
 	
 		if ( !s.isEmpty() )
 			c->backupCurrentFile( s );
