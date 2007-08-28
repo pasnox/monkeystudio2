@@ -1,4 +1,4 @@
 qmake
-mingw32-make -f Makefile.Debug distclean
+mingw32-make -f Makefile distclean
 qmake "CONFIG*=debug console"
-mingw32-make -f Makefile.Debug
+mingw32-make -f Makefile
