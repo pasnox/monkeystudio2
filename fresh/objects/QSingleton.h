@@ -26,14 +26,12 @@
 #ifndef QSINGLETON_H
 #define QSINGLETON_H
 
-#include "MonkeyExport.h"
-
 #include <QApplication>
 #include <QWidget>
 #include <QPointer>
 
 template <class T>
-class Q_MONKEY_EXPORT QSingleton
+class QSingleton
 {
 protected:
 	QSingleton() {};

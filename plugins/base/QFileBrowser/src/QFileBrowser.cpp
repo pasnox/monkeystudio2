@@ -26,7 +26,10 @@ bool QFileBrowser::setEnabled( bool b )
 {
 	if ( b && !isEnabled() )
 	{
-		UIMain::instance()->dockToolBar( Qt::RightToolBarArea )->addDock( pFileBrowser::instance(), infos().Caption, QIcon( ":/icons/browser.png" ) );
+		qWarning( "UIMain plugin: %d", UIMain::instance() );
+		qWarning( "Workspace plugin: %d", UIMain::instance()->centralWidget() );
+		
+		UIMain::instance()->dockToolBar( Qt::LeftToolBarArea )->addDock( new QDockWidget, infos().Caption, QIcon( ":/icons/browser.png" ) );
 		mPluginInfos.Enabled = true;
 	}
 	else if ( !b && isEnabled() )

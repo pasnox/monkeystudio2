@@ -3,7 +3,7 @@
 
 #include "BasePlugin.h"
 
-class Q_MONKEY_EXPORT QFileBrowser : public BasePlugin
+class QFileBrowser : public BasePlugin
 {
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin )

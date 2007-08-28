@@ -63,7 +63,7 @@ void PluginsManager::loadsPlugins( const QString& s )
 			
 			// if can t load it, check next
 			if ( !addPlugin( l.instance() ) )			
-				qWarning( qPrintable( tr( "Failed to load plugin ( %1 ): Error: %2" ).arg( s, l.errorString() ) ) );
+				qWarning( qPrintable( tr( "Failed to load plugin ( %1 ): Error: %2" ).arg( f.absoluteFilePath(), l.errorString() ) ) );
 		}
 	}
 		
@@ -104,9 +104,9 @@ void PluginsManager::enableUserPlugins()
 		else if ( !bp->isEnabled() )
 		{
 			if ( bp->setEnabled( true ) )
-				qWarning( qPrintable( tr( "Successfully installed plugin: %1" ).arg( bp->infos().Name ) ) );
+				qWarning( qPrintable( tr( "Successfully enabled plugin: %1" ).arg( bp->infos().Name ) ) );
 			else
-				qWarning( qPrintable( tr( "Unsuccessfully installed plugin: %1" ).arg( bp->infos().Name ) ) );
+				qWarning( qPrintable( tr( "Unsuccessfully enabled plugin: %1" ).arg( bp->infos().Name ) ) );
 		}
 		else
 			qWarning( qPrintable( tr( "Already enabled plugin: %1" ).arg( bp->infos().Name ) ) );

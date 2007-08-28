@@ -26,7 +26,7 @@
 
 UIMain::UIMain( QWidget* p )
 	: pMainWindow( p )
-{
+{	
 	// create menubar
 	initMenuBar();
 
@@ -299,6 +299,7 @@ void UIMain::initConnections()
 	connect( menuBar()->action( "mProject/mClose/aAll" ), SIGNAL( triggered() ), workspace(), SLOT( projectCloseAll_triggered() ) );
 	connect( menuBar()->action( "mProject/aSettings" ), SIGNAL( triggered() ), workspace(), SLOT( projectSettings_triggered() ) );
 	connect( pRecentsManager::instance(), SIGNAL( openProjectRequested( const QString& ) ), fileManager(), SLOT( openProject( const QString& ) ) );
+	qWarning( "pouet" );
 	// plugins menu
 	//connect( menuBar()->action( "mPlugins/aManage" ), SIGNAL( triggered() ), pluginsManager(), SLOT( manageRequested() ) );
 	// help menu

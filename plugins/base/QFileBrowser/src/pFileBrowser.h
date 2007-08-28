@@ -15,7 +15,6 @@
 #ifndef PFILEBROWSER_H
 #define PFILEBROWSER_H
 
-#include "MonkeyExport.h"
 #include "QSingleton.h"
 
 #include <QDockWidget>
@@ -25,7 +24,7 @@ class QComboBox;
 class QListView;
 class QDirModel;
 
-class Q_MONKEY_EXPORT pFileBrowser : public QDockWidget, public QSingleton<pFileBrowser>
+class pFileBrowser : public QDockWidget, public QSingleton<pFileBrowser>
 {
 	Q_OBJECT
 	friend class QSingleton<pFileBrowser>;
