@@ -7,6 +7,7 @@ HEADER	+= MonkeyExport.h
 # objects
 # QSingleton
 HEADERS	+= QSingleton.h
+SOURCES	+= QSingleton.cpp
 # psettings
 HEADERS	+= pSettings.h
 SOURCES	+= pSettings.cpp
