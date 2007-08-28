@@ -34,9 +34,6 @@
 #include <QWidget>
 #include <QPointer>
 
-template <class T>
-class QSingleton;
-
 class Q_MONKEY_EXPORT QSingletonExpose
 {
 public:
