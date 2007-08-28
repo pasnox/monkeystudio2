@@ -1,1 +1,1 @@
-gdb ..\bin\monkey.exe
+gdb bin\monkey.exe
