@@ -16,6 +16,7 @@
 class QActionGroup;
 class pFileManager;
 class pWorkspace;
+class PluginsManager;
 
 class Q_MONKEY_EXPORT UIMain : public pMainWindow, public QSingleton<UIMain>
 {
@@ -23,6 +24,7 @@ class Q_MONKEY_EXPORT UIMain : public pMainWindow, public QSingleton<UIMain>
 	friend class QSingleton<UIMain>;
 
 public:
+	PluginsManager* pluginsManager();
 	pFileManager* fileManager();
 	pWorkspace* workspace();
 

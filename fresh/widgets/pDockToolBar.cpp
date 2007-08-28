@@ -119,7 +119,7 @@ void pDockToolBar::addActions( QList<QAction*> a, bool b )
 }
 
 int pDockToolBar::addDock( QDockWidget* d, const QString& s, const QIcon& i )
-{
+{	
 	// cancel if no dock or dock already managed
 	if ( !d || id( d ) != -1 )
 		return -1;
@@ -209,13 +209,13 @@ void pDockToolBar::removeDock( QDockWidget* d )
 	// cancel if dock is not acutally own by this toolbar
 	if ( i == -1 )
 		return;
+	
+	// remove filter event
+	d->removeEventFilter( this );
 
 	// disconnect
 	disconnect( d->toggleViewAction(), SIGNAL( changed() ), this, SLOT( internal_dockChanged() ) );
 	disconnect( d, SIGNAL( destroyed( QObject* ) ), this, SLOT( internal_dockDestroyed( QObject* ) ) );
-
-	// remove filter event
-	d->removeEventFilter( this );
 
 	// delete button
 	QAbstractButton* b = button( d );
@@ -377,7 +377,28 @@ void pDockToolBar::internal_dockChanged()
 
 void pDockToolBar::internal_dockDestroyed( QObject* o )
 {
-	removeDock( qobject_cast<QDockWidget*>( o ) );
+	QDockWidget* d = reinterpret_cast<QDockWidget*>( o ); // qobject_cast<QDockWidget*>( o ); qobject_cast don't work with QDockWidget in destroyed emits :|
+	
+	// get dock id
+	int i = id( d );
+
+	// cancel if dock is not acutally own by this toolbar
+	if ( i == -1 )
+		return;
+	
+	// remove filter event
+	d->removeEventFilter( this );
+
+	// delete button
+	QAbstractButton* b = button( d );
+	mButtons.remove( i );
+	b->deleteLater();
+
+	// remove dock from list
+	mDocks.remove( i );
+
+	// check if we need to hide/show the toolbar
+	internal_checkVisibility();
 }
 
 void pDockToolBar::internal_buttonClicked( bool b )

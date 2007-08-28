@@ -17,6 +17,7 @@
 #include "pDockToolBar.h"
 #include "pSearch.h"
 #include "pMonkeyStudio.h"
+#include "PluginsManager.h"
 
 #include "UIMessageBox.h" // remvoe me at end, this not core and only there for testing ConsoleManager
 
@@ -52,6 +53,11 @@ void UIMain::closeEvent( QCloseEvent* )
 
 	// force to close all documents
 	workspace()->fileCloseAll_triggered( true );
+}
+
+PluginsManager* UIMain::pluginsManager()
+{
+	return PluginsManager::instance( this );
 }
 
 pFileManager* UIMain::fileManager()
@@ -300,7 +306,7 @@ void UIMain::initConnections()
 	connect( menuBar()->action( "mProject/aSettings" ), SIGNAL( triggered() ), workspace(), SLOT( projectSettings_triggered() ) );
 	connect( pRecentsManager::instance(), SIGNAL( openProjectRequested( const QString& ) ), fileManager(), SLOT( openProject( const QString& ) ) );
 	// plugins menu
-	//connect( menuBar()->action( "mPlugins/aManage" ), SIGNAL( triggered() ), pluginsManager(), SLOT( manageRequested() ) );
+	connect( menuBar()->action( "mPlugins/aManage" ), SIGNAL( triggered() ), pluginsManager(), SLOT( manageRequested() ) );
 	// help menu
 	connect( menuBar()->action( "mHelp/aAbout" ), SIGNAL( triggered() ), workspace(), SLOT( helpAboutApplication_triggered() ) );
 	connect( menuBar()->action( "mHelp/aAboutQt" ), SIGNAL( triggered() ), workspace(), SLOT( helpAboutQt_triggered() ) );

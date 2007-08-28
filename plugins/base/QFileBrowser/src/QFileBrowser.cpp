@@ -26,13 +26,16 @@ bool QFileBrowser::setEnabled( bool b )
 {
 	if ( b && !isEnabled() )
 	{
+		// add dock to dock toolbar entry
 		UIMain::instance()->dockToolBar( Qt::LeftToolBarArea )->addDock( pFileBrowser::instance(), infos().Caption, QIcon( ":/icons/browser.png" ) );
+		// set plugin enabled
 		mPluginInfos.Enabled = true;
 	}
 	else if ( !b && isEnabled() )
 	{
-		UIMain::instance()->dockToolBar( Qt::RightToolBarArea )->removeDock( pFileBrowser::instance() );
+		// it will remove itself from dock toolbar when deleted
 		pFileBrowser::instance()->deleteLater();
+		// set plugin disabled
 		mPluginInfos.Enabled = false;
 	}
 	

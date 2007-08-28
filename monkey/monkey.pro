@@ -30,10 +30,6 @@ win32:RC_FILE	*= monkey.rc
 RESOURCES	*= src/resources/resources.qrc
 
 CONFIG	*= qt warn_on app_bundle thread x11 windows
-!contains( CONFIG, release ) {
-	CONFIG	*= console
-	VERSION = ${VERSION}svn
-}
 QT	*= gui core
 
 DEFINES	*= MONKEY_CORE_BUILD "PROGRAM_NAME=\"\\\"$${PROGRAM_NAME}\\\"\"" "PROGRAM_VERSION=\"\\\"$${VERSION}\\\"\"" "PROGRAM_DOMAIN=\"\\\"$${DOMAIN}\\\"\"" "PROGRAM_COPYRIGHTS=\"\\\"$${COPYRIGHTS}\\\"\""
@@ -43,10 +39,11 @@ linux-g++:LIBS	*= -rdynamic
 win32-msvc:LIBS	*= /IMPLIB:$${BUILD_PATH}/monkey.lib
 win32-g++:LIBS	*= -Wl,--out-implib,$${BUILD_PATH}/libmonkey.a
 
-include( monkey.pri )
-
 # include fresh framework
 include( ../fresh/fresh.pro )
+
+#include monkey framework
+include( monkey.pri )
 
 FORMS	*= src/maininterface/ui/UITranslator.ui \
 	src/maininterface/ui/UIAbout.ui \
@@ -57,7 +54,8 @@ FORMS	*= src/maininterface/ui/UITranslator.ui \
 	src/templatesmanager/ui/UITemplatesWizard.ui \
 	src/toolsmanager/ui/UIDesktopTools.ui \
 	src/consolemanager/ui/UIMessageBox.ui \
-	src/toolsmanager/ui/UIToolsEdit.ui
+	src/toolsmanager/ui/UIToolsEdit.ui \
+	src/pluginsmanager/ui/UIPluginsSettings.ui
 
 HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/maininterface/ui/UIAbout.h \
@@ -87,7 +85,8 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/consolemanager/pCommandParser.h \
 	src/toolsmanager/pToolsManager.h \
 	src/pluginsmanager/BasePlugin.h \
-	src/pluginsmanager/PluginsManager.h
+	src/pluginsmanager/PluginsManager.h \
+	src/pluginsmanager/ui/UIPluginsSettings.h
 
 SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/maininterface/ui/UIAbout.cpp \
@@ -114,6 +113,7 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/consolemanager/ui/UIMessageBox.cpp \
 	src/consolemanager/pConsoleManager.cpp \
 	src/pluginsmanager/PluginsManager.cpp \
+	src/pluginsmanager/ui/UIPluginsSettings.cpp \
 	src/main.cpp
 
 unix:SOURCES	*= src/toolsmanager/pDesktopApplications_unix.cpp

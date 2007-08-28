@@ -46,7 +46,10 @@ class QSingleton
 protected:
 	QSingleton() {};
 	virtual ~QSingleton()
-	{ QSingletonExpose::mInstances.remove( &T::staticMetaObject ); }
+	{
+		if ( QSingletonExpose::mInstances.contains( &T::staticMetaObject ) )
+			QSingletonExpose::mInstances.remove( &T::staticMetaObject );
+	}
 
 public:
 	template <typename P>

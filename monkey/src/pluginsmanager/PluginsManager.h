@@ -31,10 +31,9 @@ private:
 	bool addPlugin( QObject* );
 	void enableUserPlugins();
 	
-/*
 public slots:
 	void manageRequested();
-*/
+
 };
 
 #endif // PLUGINSMANAGER_H

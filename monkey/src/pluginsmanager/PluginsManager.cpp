@@ -1,6 +1,7 @@
 #include "PluginsManager.h"
 #include "pMonkeyStudio.h"
 #include "pSettings.h"
+#include "UIPluginsSettings.h"
 
 #include <QPluginLoader>
 
@@ -93,10 +94,7 @@ bool PluginsManager::addPlugin( QObject* o )
 void PluginsManager::enableUserPlugins()
 {
 	foreach ( BasePlugin* bp, mPlugins )
-	{
-		bp->setEnabled( true );
-		continue;
-		
+	{		
 		// check in settings if we must install this plugin
 		if ( !pSettings::instance()->value( QString( "Plugins/%1" ).arg( bp->infos().Name ), true ).toBool() )
 			qWarning( qPrintable( tr( "User wantn't to intall plugin: %1" ).arg( bp->infos().Name ) ) );
@@ -111,6 +109,11 @@ void PluginsManager::enableUserPlugins()
 		else
 			qWarning( qPrintable( tr( "Already enabled plugin: %1" ).arg( bp->infos().Name ) ) );
 	}
+}
+
+void PluginsManager::manageRequested()
+{
+	UIPluginsSettings::instance()->exec(); 
 }
 
 /*
@@ -144,8 +147,5 @@ QStringList PluginsManager::childsFilters() const
 	return l;
 }
 //
-void PluginsManager::manageRequested()
-{
-	UIPluginsSettings::self( this, qApp->activeWindow() )->exec(); 
-}
+
 */
