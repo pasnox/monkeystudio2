@@ -96,15 +96,10 @@ int main( int argc, char** argv )
 	RecentsManager::self( UIMain::self() );
 */
 	
-	qWarning( "UIMain1: %d", UIMain::instance() );
-	qWarning( "Workspace1: %d", UIMain::instance()->centralWidget() );
-	
 	// init pluginsmanager
 	showMessage( &splash, QObject::tr( "Initializing Plugins Manager..." ) );
 	a.addLibraryPath( "plugins" );
-	qWarning( "debut chargement plugin" );
 	PluginsManager::instance()->loadsPlugins();
-	qWarning( "fin chargement plugin" );
 
 	// ready
 	showMessage( &splash, QObject::tr( "%1 v%2 Ready !" ).arg( PROGRAM_NAME, PROGRAM_VERSION ) );
@@ -115,9 +110,6 @@ int main( int argc, char** argv )
 	
 	// show main window
 	UIMain::instance()->show();
-	
-	qWarning( "UIMain2: %d", UIMain::instance() );
-	qWarning( "Workspace2: %d", UIMain::instance()->centralWidget() );
 
 	// finish splashscreen
 	splash.finish( UIMain::instance() );

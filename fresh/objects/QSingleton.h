@@ -30,6 +30,12 @@
 #include <QWidget>
 #include <QPointer>
 
+class Q_MONKEY_EXPORT Base
+{
+protected:
+	static QMap<QMetaObject, QObject*> mInstances;
+};
+
 template <class T>
 class QSingleton
 {
@@ -54,17 +60,23 @@ template <class T>
 template <typename P>
 T* QSingleton<T>::instance( P* p )
 {
-	if ( !mInstance )
-		mInstance = new T( p );
-	return mInstance;
+	if ( !mInstances.contains( *T::staticMetaObject )
+	{
+		T *t = new T( P );
+		map[*T::staticMetaObject] = t;
+	}
+	return mInstances[*T::staticMetaObject];
 }
 
 template <class T>
 T* QSingleton<T>::instance()
 {
-	if ( !mInstance )
-		mInstance = new T;
-	return mInstance;
+	if ( !mInstances.contains( *T::staticMetaObject )
+	{
+		T *t = new T;
+		map[*T::staticMetaObject] = t;
+	}
+	return mInstances[*T::staticMetaObject];
 }
 
 #endif // QSINGLETON_H
