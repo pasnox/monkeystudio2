@@ -14,4 +14,4 @@
 ****************************************************************************/
 #include "QSingleton.h"
 
-QMap<const QMetaObject*, QObject*> QSingletonExpose::mInstances;
+QHash<const QMetaObject*, QObject*> QSingletonExpose::mInstances;

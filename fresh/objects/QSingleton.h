@@ -28,7 +28,7 @@
 
 #include "MonkeyExport.h"
 
-#include <QMap>
+#include <QHash>
 #include <QMetaObject>
 #include <QApplication>
 #include <QWidget>
@@ -36,20 +36,17 @@
 
 class Q_MONKEY_EXPORT QSingletonExpose
 {
-public:
-	static QMap<const QMetaObject*, QObject*> mInstances;
+protected:
+	static QHash<const QMetaObject*, QObject*> mInstances;
 };
 
 template <class T>
-class QSingleton
+class QSingleton : public QSingletonExpose
 {
 protected:
 	QSingleton() {};
 	virtual ~QSingleton()
-	{
-		if ( QSingletonExpose::mInstances.contains( &T::staticMetaObject ) )
-			QSingletonExpose::mInstances.remove( &T::staticMetaObject );
-	}
+	{ mInstances.remove( &T::staticMetaObject ); }
 
 public:
 	template <typename P>
@@ -62,18 +59,18 @@ template <class T>
 template <typename P>
 T* QSingleton<T>::instance( P* p )
 {
-	T* t = qobject_cast<T*>( QSingletonExpose::mInstances.value( &T::staticMetaObject ) );
+	T* t = qobject_cast<T*>( mInstances.value( &T::staticMetaObject ) );
 	if ( !t )
-		QSingletonExpose::mInstances[&T::staticMetaObject] = ( t = new T( p ) );
+		mInstances[&T::staticMetaObject] = ( t = new T( p ) );
 	return t;
 }
 
 template <class T>
 T* QSingleton<T>::instance()
 {
-	T* t = qobject_cast<T*>( QSingletonExpose::mInstances.value( &T::staticMetaObject ) );
+	T* t = qobject_cast<T*>( mInstances.value( &T::staticMetaObject ) );
 	if ( !t )
-		QSingletonExpose::mInstances[&T::staticMetaObject] = ( t = new T );
+		mInstances[&T::staticMetaObject] = ( t = new T );
 	return t;
 }
 
