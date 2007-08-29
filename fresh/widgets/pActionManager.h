@@ -13,6 +13,7 @@
 #include "QSingleton.h"
 
 #include <QHash>
+#include <QKeySequence>
 
 class QAction;
 class pKeySequenceInput;

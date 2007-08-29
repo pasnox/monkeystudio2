@@ -31,8 +31,6 @@
 #include <QHash>
 #include <QMetaObject>
 #include <QApplication>
-#include <QWidget>
-#include <QPointer>
 
 class Q_MONKEY_EXPORT QSingletonExpose
 {
