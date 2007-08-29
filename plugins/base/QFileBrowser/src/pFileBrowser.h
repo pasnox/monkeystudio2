@@ -44,7 +44,7 @@ protected:
 	QListView* mListView;
 	QDirModel* mDirModel;
 	void showEvent( QShowEvent* );
-	void closeEvent( QCloseEvent* );
+	void hideEvent( QHideEvent* );
 
 private:
 	pFileBrowser( QWidget* = 0 );

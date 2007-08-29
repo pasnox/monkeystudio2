@@ -99,10 +99,10 @@ void pFileBrowser::showEvent( QShowEvent* e )
 	}
 }
 
-void pFileBrowser::closeEvent( QCloseEvent* e )
+void pFileBrowser::hideEvent( QHideEvent* e )
 {
 	// default event
-	QDockWidget::closeEvent( e );
+	QDockWidget::hideEvent( e );
 	// save drive and path
 	if ( mShown )
 		emit saveSettings();
