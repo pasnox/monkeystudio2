@@ -28,6 +28,9 @@ bool QFileBrowser::setEnabled( bool b )
 	{
 		// add dock to dock toolbar entry
 		UIMain::instance()->dockToolBar( Qt::LeftToolBarArea )->addDock( pFileBrowser::instance(), infos().Caption, QIcon( ":/icons/browser.png" ) );
+		// connect signals so we will be able to save/restore state of dock settings
+		connect( pFileBrowser::instance(), SIGNAL( saveSettings() ), this, SLOT( saveSettings() ) );
+		connect( pFileBrowser::instance(), SIGNAL( restoreSettings() ), this, SLOT( restoreSettings() ) );
 		// set plugin enabled
 		mPluginInfos.Enabled = true;
 	}
@@ -41,6 +44,26 @@ bool QFileBrowser::setEnabled( bool b )
 	
 	// return default value
 	return true;
+}
+
+void QFileBrowser::saveSettings()
+{
+	// save current drive and path
+	setSettingsValue( "Drive", pFileBrowser::instance()->currentDrive() );
+	setSettingsValue( "Path", pFileBrowser::instance()->currentPath() );
+}
+
+void QFileBrowser::restoreSettings()
+{
+	QString s;
+	// restore last drive if available
+	s = settingsValue( "Drive" ).toString();
+	if ( !s.isEmpty() )
+		pFileBrowser::instance()->setCurrentDrive( s );
+	// restore last path if available
+	s = settingsValue( "Path" ).toString();
+	if ( !s.isEmpty() )
+		pFileBrowser::instance()->setCurrentPath( s );
 }
 
 Q_EXPORT_PLUGIN2( BaseQFileBrowser, QFileBrowser )

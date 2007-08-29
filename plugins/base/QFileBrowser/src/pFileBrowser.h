@@ -32,17 +32,31 @@ class pFileBrowser : public QDockWidget, public QSingleton<pFileBrowser>
 public:
 	~pFileBrowser();
 
+	QString currentDrive() const;
+	void setCurrentDrive( const QString& );
+
+	QString currentPath() const;
+	void setCurrentPath( const QString& );
+
 protected:
+	bool mShown;
 	QComboBox* mComboBox;
 	QListView* mListView;
 	QDirModel* mDirModel;
+	void showEvent( QShowEvent* );
+	void closeEvent( QCloseEvent* );
 
 private:
 	pFileBrowser( QWidget* = 0 );
 
 private slots:
+	void tb_clicked();
 	void lv_doubleClicked( const QModelIndex& );
 	void cb_currentIndexChanged( const QString& );
+
+signals:
+	void saveSettings();
+	void restoreSettings();
 
 };
 

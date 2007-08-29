@@ -15,13 +15,15 @@
 #include "pFileBrowser.h"
 #include "pFileManager.h"
 
+#include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QToolButton>
 #include <QComboBox>
 #include <QListView>
 #include <QDirModel>
 
 pFileBrowser::pFileBrowser( QWidget* w )
-	: QDockWidget( w )
+	: QDockWidget( w ), mShown( false )
 {
 	// restrict areas
 	setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
@@ -31,21 +33,34 @@ pFileBrowser::pFileBrowser( QWidget* w )
 	setWidget( c );
 	
 	// vertical layout
-	QVBoxLayout* l = new QVBoxLayout( c );
-	l->setMargin( 5 );
-	l->setSpacing( 3 );
+	QVBoxLayout* v = new QVBoxLayout( c );
+	v->setMargin( 0 );
+	v->setSpacing( 3 );
+	
+	// horizontal layout for toolbutton && combobox
+	QHBoxLayout* h = new QHBoxLayout;
+	h->setMargin( 0 );
+	h->setSpacing( 3 );
+	
+	// toolbutton
+	QToolButton* tb = new QToolButton;
+	tb->setIcon( QIcon( ":/icons/up.png" ) );
+	h->addWidget( tb );
 	
 	// combo drive
 	mComboBox = new QComboBox;
-	l->addWidget( mComboBox );
+	h->addWidget( mComboBox );
+	
+	// add horizontal layout into vertical one
+	v->addLayout( h );
 	
 	// files/folders view
 	mListView = new QListView;
-	l->addWidget( mListView );
+	v->addWidget( mListView );
 	
 	// dir model
 	mDirModel = new QDirModel;
-	mDirModel->setFilter( QDir::AllEntries | QDir::Readable | QDir::Hidden | QDir::CaseSensitive );
+	mDirModel->setFilter( QDir::AllEntries | QDir::Readable | QDir::Hidden | QDir::CaseSensitive | QDir::NoDotAndDotDot );
 	mDirModel->setSorting( QDir::DirsFirst | QDir::Name );
 	
 	// assign model to views
@@ -55,18 +70,47 @@ pFileBrowser::pFileBrowser( QWidget* w )
 	// if only one drive, hide it and root it ( linux/mac )
 	if ( mComboBox->count() == 1 )
 	{
-		mComboBox->hide();
+		mComboBox->setEnabled( false );
 		mListView->setRootIndex( mDirModel->index( 0, 0 ) );
 	}
 	
 	// connections
+	connect( tb, SIGNAL( clicked() ), this, SLOT( tb_clicked() ) );
 	connect( mComboBox, SIGNAL( currentIndexChanged( const QString& ) ), this, SLOT( cb_currentIndexChanged( const QString& ) ) );
 	connect( mListView, SIGNAL( doubleClicked( const QModelIndex& ) ), this, SLOT( lv_doubleClicked( const QModelIndex& ) ) );
 }
 
 pFileBrowser::~pFileBrowser()
 {
+	// delete model
 	delete mDirModel;
+}
+
+void pFileBrowser::showEvent( QShowEvent* e )
+{
+	// default event
+	QDockWidget::showEvent( e );
+	// check if first showEvent
+	if ( !mShown )
+	{
+		mShown = true;
+		// restore drive and path
+		emit restoreSettings();
+	}
+}
+
+void pFileBrowser::closeEvent( QCloseEvent* e )
+{
+	// default event
+	QDockWidget::closeEvent( e );
+	// save drive and path
+	if ( mShown )
+		emit saveSettings();
+}
+
+void pFileBrowser::tb_clicked()
+{
+	mListView->setRootIndex( mListView->rootIndex().parent() );
 }
 
 void pFileBrowser::lv_doubleClicked( const QModelIndex& i )
@@ -88,3 +132,24 @@ void pFileBrowser::cb_currentIndexChanged( const QString& s )
 	// set correct drive in list view
 	mListView->setRootIndex( mDirModel->index( s ) );
 }
+
+QString pFileBrowser::currentDrive() const
+{
+	return mComboBox->currentText();
+}
+
+void pFileBrowser::setCurrentDrive( const QString& s )
+{
+	mComboBox->setEditText( s );
+}
+
+QString pFileBrowser::currentPath() const
+{
+	return mDirModel->filePath( mListView->rootIndex() );
+}
+
+void pFileBrowser::setCurrentPath( const QString& s )
+{
+	mListView->setRootIndex( mDirModel->index( s ) );
+}
+

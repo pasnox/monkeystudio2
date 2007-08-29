@@ -13,6 +13,10 @@ public:
 	virtual ~QFileBrowser();
 	virtual bool setEnabled( bool );
 
+protected slots:
+	void saveSettings();
+	void restoreSettings();
+
 };
 
 #endif

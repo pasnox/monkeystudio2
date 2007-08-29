@@ -2,6 +2,7 @@
 #define BASEPLUGIN_H
 
 #include "MonkeyExport.h"
+#include "pSettings.h"
 
 #include <QtPlugin>
 #include <QLabel>
@@ -50,6 +51,12 @@ public:
 	
 	virtual bool isEnabled() const
 	{ return mPluginInfos.Enabled; }
+	
+	virtual QVariant settingsValue( const QString& k, const QVariant& v = QVariant() ) const
+	{ return pSettings::instance()->value( QString( "Plugins/%1/%2" ).arg( mPluginInfos.Name ).arg(  k ), v ); }
+	
+	virtual void setSettingsValue( const QString& k, const QVariant& v ) const
+	{ pSettings::instance()->setValue( QString( "Plugins/%1/%2" ).arg( mPluginInfos.Name ).arg( k ), v ); }
 	
 	// coverage support members
 #ifdef __COVERAGESCANNER__
