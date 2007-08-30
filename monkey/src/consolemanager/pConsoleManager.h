@@ -40,7 +40,9 @@ private:
 	~pConsoleManager();
 
 public slots:
+	void sendRawCommand( const QString& );
 	void sendRawData( const QByteArray& );
+	void stopCurrentCommand( bool = false );
 	void addCommand( pCommand* );
 	void addCommands( const pCommandList& );
 	void removeCommand( pCommand* );
@@ -60,6 +62,7 @@ signals:
 	void commandReadyRead( pCommand*, const QByteArray& );
 	void commandStarted( pCommand* );
 	void commandStateChanged( pCommand*, QProcess::ProcessState );
+	void commandSkipped( pCommand* );
 
 };
 
