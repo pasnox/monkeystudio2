@@ -1,2 +1,3 @@
 TEMPLATE = subdirs
-SUBDIRS	= QFileBrowser
+SUBDIRS	= FileBrowser \
+	MessageBox
