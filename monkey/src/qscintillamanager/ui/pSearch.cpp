@@ -9,8 +9,8 @@ pSearch::pSearch( QsciScintilla* p )
 	// setup dock
 	setupUi( this );
 
-	// set maximum height
-	setMaximumHeight( minimumSizeHint().height() );
+	// set fixed height
+	setFixedHeight( minimumSizeHint().height() );
 
 	// set current editor manage for search
 	setEditor( p );

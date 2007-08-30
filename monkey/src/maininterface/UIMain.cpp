@@ -327,7 +327,7 @@ void UIMain::initGui()
 	setCentralWidget( workspace() );
 	
 	// add qscintilla search dock
-	dockToolBar( Qt::BottomToolBarArea )->addDock( pSearch::instance(), tr( "Search - Replace" ), QIcon( ":/edit/icons/edit/search.png" ) );
+	addDockWidget( Qt::BottomDockWidgetArea, pSearch::instance() );
 	
 	// add messagebox dock
 	dockToolBar( Qt::BottomToolBarArea )->addDock( UIMessageBox::instance(), tr( "Console Manager" ), QIcon( ":/templates/icons/templates/console.png" ) );

@@ -33,6 +33,7 @@ public:
 	{
 		QString Caption; // the string to show as caption
 		QString Description; // the plugin description
+		QString Author; // the plugin author
 		BasePlugin::Type Type; // the plugin type
 		QString Name; // the plugin name for version control
 		QString Version; // the plugin version for version control

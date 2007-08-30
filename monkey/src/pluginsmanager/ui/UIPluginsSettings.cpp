@@ -34,6 +34,7 @@ void UIPluginsSettings::clearInfos()
 	leName->clear();
 	leVersion->clear();
 	leType->clear();
+	leAuthor->clear();
 	teDescription->clear();
 	cbEnableUponStart->setChecked( false );
 	cbEnabled->setChecked( false );
@@ -70,10 +71,11 @@ void UIPluginsSettings::on_cbType_currentIndexChanged( int i )
 		int pt = it->data( Qt::UserRole +2 ).toInt(); // get item plugin type
 		int ct = cbType->itemData( i ).toInt(); // get current visible type
 		it->setHidden( ( ct != BasePlugin::iAll && ct != pt ) ? true : false ); // show or hide the plugin
+		it->setSelected( false );
 	}
 	
 	// select the first visible item if current is hidden
-	if ( lwNames->count() && lwNames->currentItem()->isHidden() )
+	if ( lwNames->count() )
 	{
 		for ( int j = 0; j < lwNames->count(); j++ )
 		{
@@ -105,6 +107,7 @@ void UIPluginsSettings::on_lwNames_itemSelectionChanged()
 	leName->setText( pi.Name );
 	leVersion->setText( pi.Version );
 	leType->setText( QString::number( pi.Type ) );
+	leAuthor->setText( pi.Author );
 	teDescription->setPlainText( pi.Description );
 	cbEnableUponStart->setChecked( i->data( Qt::UserRole +3 ).toBool() );
 	cbEnabled->setChecked( pi.Enabled );
@@ -131,10 +134,8 @@ void UIPluginsSettings::on_cbEnabled_clicked( bool b )
 	{
 		// get plugin
 		BasePlugin* bp = mPluginsManager->plugins().at( lwNames->row( it ) );
-		
 		// enable it according to b
 		bp->setEnabled( b );
-		
 		// update check state
 		cbEnabled->setChecked( bp->isEnabled() );
 	}

@@ -53,7 +53,6 @@ FORMS	*= src/maininterface/ui/UITranslator.ui \
 	src/templatesmanager/ui/UIEditTemplate.ui \
 	src/templatesmanager/ui/UITemplatesWizard.ui \
 	src/toolsmanager/ui/UIDesktopTools.ui \
-	src/consolemanager/ui/UIMessageBox.ui \
 	src/toolsmanager/ui/UIToolsEdit.ui \
 	src/pluginsmanager/ui/UIPluginsSettings.ui
 
@@ -79,7 +78,6 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/toolsmanager/pDesktopApplications.h \
 	src/toolsmanager/ui/UIDesktopTools.h \
 	src/toolsmanager/ui/UIToolsEdit.h \
-	src/consolemanager/ui/UIMessageBox.h \
 	src/consolemanager/pConsoleManager.h \
 	src/consolemanager/pCommand.h \
 	src/consolemanager/pCommandParser.h \
@@ -110,7 +108,6 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/toolsmanager/ui/UIDesktopTools.cpp \
 	src/toolsmanager/ui/UIToolsEdit.cpp \
 	src/toolsmanager/pToolsManager.cpp \
-	src/consolemanager/ui/UIMessageBox.cpp \
 	src/consolemanager/pConsoleManager.cpp \
 	src/pluginsmanager/PluginsManager.cpp \
 	src/pluginsmanager/ui/UIPluginsSettings.cpp \

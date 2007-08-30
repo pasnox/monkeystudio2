@@ -13,18 +13,28 @@
    <string>Plugins Settings</string>
   </property>
   <layout class="QGridLayout" >
-   <property name="margin" >
+   <property name="leftMargin" >
     <number>5</number>
    </property>
-   <property name="spacing" >
+   <property name="topMargin" >
+    <number>5</number>
+   </property>
+   <property name="rightMargin" >
+    <number>5</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>5</number>
+   </property>
+   <property name="horizontalSpacing" >
+    <number>3</number>
+   </property>
+   <property name="verticalSpacing" >
     <number>3</number>
    </property>
    <item row="0" column="1" colspan="2" >
     <widget class="QGroupBox" name="gbInformations" >
      <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>7</hsizetype>
-       <vsizetype>4</vsizetype>
+      <sizepolicy vsizetype="Maximum" hsizetype="Expanding" >
        <horstretch>0</horstretch>
        <verstretch>1</verstretch>
       </sizepolicy>
@@ -33,34 +43,46 @@
       <string>Informations</string>
      </property>
      <layout class="QGridLayout" >
-      <property name="margin" >
+      <property name="leftMargin" >
        <number>5</number>
       </property>
-      <property name="spacing" >
+      <property name="topMargin" >
+       <number>5</number>
+      </property>
+      <property name="rightMargin" >
+       <number>5</number>
+      </property>
+      <property name="bottomMargin" >
+       <number>5</number>
+      </property>
+      <property name="horizontalSpacing" >
        <number>3</number>
       </property>
-      <item row="4" column="0" colspan="4" >
+      <property name="verticalSpacing" >
+       <number>3</number>
+      </property>
+      <item row="5" column="0" colspan="4" >
        <widget class="QTextEdit" name="teDescription" >
         <property name="readOnly" >
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="3" column="0" colspan="4" >
+      <item row="4" column="0" colspan="4" >
        <widget class="QLabel" name="lDescription" >
         <property name="text" >
          <string>Description :</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="2" colspan="2" >
+      <item row="3" column="2" colspan="2" >
        <widget class="QCheckBox" name="cbEnabled" >
         <property name="text" >
          <string>Enabled</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="0" colspan="2" >
+      <item row="3" column="0" colspan="2" >
        <widget class="QCheckBox" name="cbEnableUponStart" >
         <property name="text" >
          <string>Enable upon start</string>
@@ -123,6 +145,20 @@
         </property>
        </widget>
       </item>
+      <item row="2" column="1" colspan="3" >
+       <widget class="QLineEdit" name="leAuthor" >
+        <property name="readOnly" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QLabel" name="lAuthor" >
+        <property name="text" >
+         <string>Author :</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -142,9 +178,7 @@
    <item row="1" column="1" colspan="2" >
     <widget class="QStackedWidget" name="swWidgets" >
      <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>7</hsizetype>
-       <vsizetype>7</vsizetype>
+      <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
        <horstretch>0</horstretch>
        <verstretch>99</verstretch>
       </sizepolicy>
@@ -157,9 +191,7 @@
    <item row="2" column="2" >
     <widget class="QPushButton" name="pbClose" >
      <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>0</hsizetype>
-       <vsizetype>0</vsizetype>
+      <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -171,11 +203,20 @@
    </item>
    <item rowspan="2" row="0" column="0" >
     <layout class="QVBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
      <property name="spacing" >
       <number>3</number>
+     </property>
+     <property name="leftMargin" >
+      <number>0</number>
+     </property>
+     <property name="topMargin" >
+      <number>0</number>
+     </property>
+     <property name="rightMargin" >
+      <number>0</number>
+     </property>
+     <property name="bottomMargin" >
+      <number>0</number>
      </property>
      <item>
       <widget class="QLabel" name="lType1" >
@@ -197,9 +238,7 @@
      <item>
       <widget class="QListWidget" name="lwNames" >
        <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>4</hsizetype>
-         <vsizetype>7</vsizetype>
+        <sizepolicy vsizetype="Expanding" hsizetype="Maximum" >
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
