@@ -19,8 +19,6 @@
 #include "pMonkeyStudio.h"
 #include "PluginsManager.h"
 
-#include "UIMessageBox.h" // remvoe me at end, this not core and only there for testing ConsoleManager
-
 #include <QActionGroup>
 #include <QStyleFactory>
 #include <QStatusBar>
@@ -319,19 +317,12 @@ void UIMain::initGui()
 {
 	// window icon
 	setWindowIcon( menuBar()->action( "mHelp/aAbout" )->icon() );
-
 	// set icon size for toolbar
 	setIconSize( QSize( 16, 16 ) );
-
 	// set central widget
 	setCentralWidget( workspace() );
-	
 	// add qscintilla search dock
 	addDockWidget( Qt::BottomDockWidgetArea, pSearch::instance() );
-	
-	// add messagebox dock
-	dockToolBar( Qt::BottomToolBarArea )->addDock( UIMessageBox::instance(), tr( "Console Manager" ), QIcon( ":/templates/icons/templates/console.png" ) );
-
 	// create statusbar
 	statusBar()->show();
 }
