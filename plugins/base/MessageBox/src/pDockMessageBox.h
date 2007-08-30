@@ -20,6 +20,9 @@
 
 #include <QDockWidget>
 
+class QLabel;
+class QLineEdit;
+class QToolButton;
 class QTabWidget;
 class QListWidget;
 class QTextBrowser;
@@ -28,14 +31,21 @@ class pDockMessageBox : public QDockWidget, public QSingleton<pDockMessageBox>
 {
 	Q_OBJECT
 	friend class QSingleton<pDockMessageBox>;
+	friend class MessageBox;
 	
 public:
 	QString colourText( const QString&, const QColor& = Qt::black );
 
 protected:
+	bool mShown;
+	QLabel* lRawCommand;
+	QLineEdit* leRawCommand;
+	QToolButton* tbStopCommand;
 	QTabWidget* twMessageBox;
 	QListWidget* lwErrors;
 	QTextBrowser* tbMessages;
+	void showEvent( QShowEvent* );
+	void hideEvent( QHideEvent* );
 
 private:
 	pDockMessageBox( QWidget* = 0 );
@@ -44,13 +54,18 @@ private:
 public slots:
 	void append( const QString& );
 	void appendInBox( const QString&, const QColor& = Qt::red );
+	void showErrors();
+	void showMessages();
 
 private slots:
+	void leRawCommand_returnPressed();
+	void tbStopCommand_clicked();
 	void commandError( pCommand*, QProcess::ProcessError );
 	void commandFinished( pCommand*, int, QProcess::ExitStatus );
 	void commandReadyRead( pCommand*, const QByteArray& );
 	void commandStarted( pCommand* );
 	void commandStateChanged( pCommand*, QProcess::ProcessState );
+	void commandSkipped( pCommand* );
 
 signals:
 	void saveSettings();
