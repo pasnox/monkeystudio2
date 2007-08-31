@@ -17,6 +17,10 @@ UI_DIR	= $${BUILD_PATH}/.ui
 MOC_DIR	= $${BUILD_PATH}/.moc/plugins
 RCC_DIR	= $${BUILD_PATH}/.rcc/plugins
 
+TEMPLATE 	= lib
+LANGUAGE	= C++
+CONFIG	*= warn_on lib_bundle thread x11 dll plugin
+
 MONKEY_PLUGINS_DIR	= ../../../bin/plugins
 #DEFINES	= __COVERAGESCANNER__
 LIBS	= -L$${BUILD_PATH}
