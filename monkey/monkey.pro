@@ -29,6 +29,7 @@ PROGRAM_NAME	= "Monkey Studio"
 win32:RC_FILE	*= monkey.rc
 RESOURCES	*= src/resources/resources.qrc
 
+CONFIG -= release
 CONFIG	*= qt warn_on app_bundle thread x11 windows
 QT	*= gui core
 
@@ -36,7 +37,7 @@ DEFINES	*= MONKEY_CORE_BUILD "PROGRAM_NAME=\"\\\"$${PROGRAM_NAME}\\\"\"" "PROGRA
 
 LIBS	*= -L$${BUILD_PATH}
 linux-g++:LIBS	*= -rdynamic
-win32-msvc:LIBS	*= /IMPLIB:$${BUILD_PATH}/monkey.lib
+win32-msvc*:LIBS	*= /IMPLIB:$${BUILD_PATH}/monkey.lib -lshell32
 win32-g++:LIBS	*= -Wl,--out-implib,$${BUILD_PATH}/libmonkey.a
 
 # include fresh framework
@@ -79,8 +80,8 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/toolsmanager/ui/UIDesktopTools.h \
 	src/toolsmanager/ui/UIToolsEdit.h \
 	src/consolemanager/pConsoleManager.h \
-	src/consolemanager/pCommand.h \
 	src/consolemanager/pCommandParser.h \
+	src/consolemanager/pCommand.h \
 	src/toolsmanager/pToolsManager.h \
 	src/pluginsmanager/BasePlugin.h \
 	src/pluginsmanager/PluginsManager.h \
