@@ -324,7 +324,10 @@ QWidget* pTabbedWorkspace::currentDocument() const
 		default:
 #ifdef Q_CC_GNU
 			Q_ASSERT_X( 0, __func__, "not right tab mode" );
+#else
+			Q_ASSERT( 0 );
 #endif
+			break;
 	}
 	return 0;
 }
