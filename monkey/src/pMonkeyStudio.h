@@ -10,6 +10,8 @@
 #ifndef PMONKEYSTUDIO_H
 #define PMONKEYSTUDIO_H
 
+#include "MonkeyExport.h"
+
 #include <QApplication>
 #include <QMessageBox>
 #include <QDir>
@@ -18,193 +20,193 @@
 
 class QsciLexer;
 class QsciAPIs;
-	class pEditor;
+class pEditor;
 
 namespace pMonkeyStudio
 {
 	enum UIDesignerMode { uidmEmbedded = 0, uidmExternal };
 	enum ExternalChangesMode { ecmNothing = 0, ecmAlert, ecmReload };
 
-	void warning( const QString&, const QString&, QWidget* = QApplication::activeWindow() );
-	void information( const QString&, const QString&, QWidget* = QApplication::activeWindow() );
-	bool question( const QString&, const QString&, QWidget* = QApplication::activeWindow(), QMessageBox::StandardButtons = QMessageBox::Yes | QMessageBox::No, QMessageBox::StandardButton = QMessageBox::No );
+	void Q_MONKEY_EXPORT warning( const QString&, const QString&, QWidget* = QApplication::activeWindow() );
+	void Q_MONKEY_EXPORT information( const QString&, const QString&, QWidget* = QApplication::activeWindow() );
+	bool Q_MONKEY_EXPORT question( const QString&, const QString&, QWidget* = QApplication::activeWindow(), QMessageBox::StandardButtons = QMessageBox::Yes | QMessageBox::No, QMessageBox::StandardButton = QMessageBox::No );
 
-	const QStringList availableTextCodecs();
-	const QStringList availableImageFormats();
-	const QStringList availableLanguages();
+	const QStringList Q_MONKEY_EXPORT availableTextCodecs();
+	const QStringList Q_MONKEY_EXPORT availableImageFormats();
+	const QStringList Q_MONKEY_EXPORT availableLanguages();
 
-	const QFileInfoList getFiles( QDir d, const QString& = QString::null, bool = true );
+	const QFileInfoList Q_MONKEY_EXPORT getFiles( QDir d, const QString& = QString::null, bool = true );
 
-	const QStringList getImageFileNames( const QString&, const QString&, QWidget* = QApplication::activeWindow() );
-	const QString getImageFileName( const QString&, const QString&, QWidget* = QApplication::activeWindow() );
+	const QStringList Q_MONKEY_EXPORT getImageFileNames( const QString&, const QString&, QWidget* = QApplication::activeWindow() );
+	const QString Q_MONKEY_EXPORT getImageFileName( const QString&, const QString&, QWidget* = QApplication::activeWindow() );
 
-	const QStringList getOpenFileNames( const QString&, const QString&, const QString& = QString(), QWidget* = QApplication::activeWindow() );
-	const QString getOpenFileName( const QString&, const QString&, const QString& = QString(), QWidget* = QApplication::activeWindow() );
+	const QStringList Q_MONKEY_EXPORT getOpenFileNames( const QString&, const QString&, const QString& = QString(), QWidget* = QApplication::activeWindow() );
+	const QString Q_MONKEY_EXPORT getOpenFileName( const QString&, const QString&, const QString& = QString(), QWidget* = QApplication::activeWindow() );
 	
-	const QString getSaveFileName( const QString&, const QString&, const QString& = QString(), QWidget* = QApplication::activeWindow() );
+	const QString Q_MONKEY_EXPORT getSaveFileName( const QString&, const QString&, const QString& = QString(), QWidget* = QApplication::activeWindow() );
 
-	const QString getExistingDirectory( const QString&, const QString&, QWidget* = QApplication::activeWindow() );
+	const QString Q_MONKEY_EXPORT getExistingDirectory( const QString&, const QString&, QWidget* = QApplication::activeWindow() );
 
-	const QString tokenizeHome( const QString& );
-	const QString unTokenizeHome( const QString& );
+	const QString Q_MONKEY_EXPORT tokenizeHome( const QString& );
+	const QString Q_MONKEY_EXPORT unTokenizeHome( const QString& );
 
-	const QHash<QString, QStringList> defaultSuffixes();
-	const QHash<QString, QStringList> availableSuffixes();
-	const QString availableLanguagesFilters();
+	const QHash<QString, QStringList> Q_MONKEY_EXPORT defaultSuffixes();
+	const QHash<QString, QStringList> Q_MONKEY_EXPORT availableSuffixes();
+	const QString Q_MONKEY_EXPORT availableLanguagesFilters();
 
-	const QString settingsPath();
-	const QString scintillaSettingsPath();
-	QsciAPIs* apisForLexer( QsciLexer* );
-	QsciLexer* lexerForFilename( const QString& );
-	QsciLexer* lexerForLanguage( const QString& );
-	bool setLexerProperty( const QString&, QsciLexer*, const QVariant& );
-	const QVariant lexerProperty( const QString&, QsciLexer* );
-	void resetLexer( QsciLexer* l );
-	void applyProperties();
-	void setEditorProperties( pEditor* );
+	const QString Q_MONKEY_EXPORT settingsPath();
+	const QString Q_MONKEY_EXPORT scintillaSettingsPath();
+	QsciAPIs* Q_MONKEY_EXPORT apisForLexer( QsciLexer* );
+	QsciLexer* Q_MONKEY_EXPORT lexerForFilename( const QString& );
+	QsciLexer* Q_MONKEY_EXPORT lexerForLanguage( const QString& );
+	bool Q_MONKEY_EXPORT setLexerProperty( const QString&, QsciLexer*, const QVariant& );
+	const QVariant Q_MONKEY_EXPORT lexerProperty( const QString&, QsciLexer* );
+	void Q_MONKEY_EXPORT resetLexer( QsciLexer* l );
+	void Q_MONKEY_EXPORT applyProperties();
+	void Q_MONKEY_EXPORT setEditorProperties( pEditor* );
 	
 	/***** GENERAL *****/
-	void setRestoreProjectsOnStartup( bool );
-	const bool restoreProjectsOnStartup();
-	void setDefaultProjectsDirectory( const QString& );
-	const QString defaultProjectsDirectory();
-	void setUIDesignerMode( pMonkeyStudio::UIDesignerMode );
-	const  pMonkeyStudio::UIDesignerMode uiDesignerMode();
-	void setExternalChanges( pMonkeyStudio::ExternalChangesMode );
-	const pMonkeyStudio::ExternalChangesMode externalchanges();
-	void setSaveSessionOnClose( bool );
-	const bool saveSessionOnClose();
-	void setRestoreSessionOnStartup( bool );
-	const bool restoreSessionOnStartup();
+	void Q_MONKEY_EXPORT setRestoreProjectsOnStartup( bool );
+	const bool Q_MONKEY_EXPORT restoreProjectsOnStartup();
+	void Q_MONKEY_EXPORT setDefaultProjectsDirectory( const QString& );
+	const QString Q_MONKEY_EXPORT defaultProjectsDirectory();
+	void Q_MONKEY_EXPORT setUIDesignerMode( pMonkeyStudio::UIDesignerMode );
+	const  pMonkeyStudio::UIDesignerMode Q_MONKEY_EXPORT uiDesignerMode();
+	void Q_MONKEY_EXPORT setExternalChanges( pMonkeyStudio::ExternalChangesMode );
+	const pMonkeyStudio::ExternalChangesMode Q_MONKEY_EXPORT externalchanges();
+	void Q_MONKEY_EXPORT setSaveSessionOnClose( bool );
+	const bool Q_MONKEY_EXPORT saveSessionOnClose();
+	void Q_MONKEY_EXPORT setRestoreSessionOnStartup( bool );
+	const bool Q_MONKEY_EXPORT restoreSessionOnStartup();
 	
 	/******	EDITOR ******/
 	// General
-	void setAutoSyntaxCheck( bool );
-	const bool autoSyntaxCheck();
-	void setConvertTabsUponOpen( bool );
-	const bool convertTabsUponOpen();
-	void setCreateBackupUponOpen( bool );
-	const bool createBackupUponOpen();
-	void setAutoEolConversion( bool );
-	const bool autoEolConversion();
-	void setDefaultEncoding( const QString& );
-	const QString defaultEncoding();
-	void setSelectionBackgroundColor( const QColor& );
-	const QColor selectionBackgroundColor();
-	void setSelectionForegroundColor( const QColor& );
-	const QColor selectionForegroundColor();
-	void setDefaultDocumentColours( bool );
-	const bool defaultDocumentColours();
-	void setDefaultDocumentPen( const QColor& );
-	const QColor defaultDocumentPen();
-	void setDefaultDocumentPaper( const QColor& );
-	const QColor defaultDocumentPaper();
+	void Q_MONKEY_EXPORT setAutoSyntaxCheck( bool );
+	const bool Q_MONKEY_EXPORT autoSyntaxCheck();
+	void Q_MONKEY_EXPORT setConvertTabsUponOpen( bool );
+	const bool Q_MONKEY_EXPORT convertTabsUponOpen();
+	void Q_MONKEY_EXPORT setCreateBackupUponOpen( bool );
+	const bool Q_MONKEY_EXPORT createBackupUponOpen();
+	void Q_MONKEY_EXPORT setAutoEolConversion( bool );
+	const bool Q_MONKEY_EXPORT autoEolConversion();
+	void Q_MONKEY_EXPORT setDefaultEncoding( const QString& );
+	const QString Q_MONKEY_EXPORT defaultEncoding();
+	void Q_MONKEY_EXPORT setSelectionBackgroundColor( const QColor& );
+	const QColor Q_MONKEY_EXPORT selectionBackgroundColor();
+	void Q_MONKEY_EXPORT setSelectionForegroundColor( const QColor& );
+	const QColor Q_MONKEY_EXPORT selectionForegroundColor();
+	void Q_MONKEY_EXPORT setDefaultDocumentColours( bool );
+	const bool Q_MONKEY_EXPORT defaultDocumentColours();
+	void Q_MONKEY_EXPORT setDefaultDocumentPen( const QColor& );
+	const QColor Q_MONKEY_EXPORT defaultDocumentPen();
+	void Q_MONKEY_EXPORT setDefaultDocumentPaper( const QColor& );
+	const QColor Q_MONKEY_EXPORT defaultDocumentPaper();
 	// Auto Completion
-	void setAutoCompletionCaseSensitivity( bool );
-	const bool autoCompletionCaseSensitivity();
-	void setAutoCompletionReplaceWord( bool );
-	const bool autoCompletionReplaceWord();
-	void setAutoCompletionShowSingle( bool );
-	const bool autoCompletionShowSingle();
-	void setAutoCompletionSource( QsciScintilla::AutoCompletionSource );
-	const QsciScintilla::AutoCompletionSource autoCompletionSource();
-	void setAutoCompletionThreshold( int );
-	const int autoCompletionThreshold();
+	void Q_MONKEY_EXPORT setAutoCompletionCaseSensitivity( bool );
+	const bool Q_MONKEY_EXPORT autoCompletionCaseSensitivity();
+	void Q_MONKEY_EXPORT setAutoCompletionReplaceWord( bool );
+	const bool Q_MONKEY_EXPORT autoCompletionReplaceWord();
+	void Q_MONKEY_EXPORT setAutoCompletionShowSingle( bool );
+	const bool Q_MONKEY_EXPORT autoCompletionShowSingle();
+	void Q_MONKEY_EXPORT setAutoCompletionSource( QsciScintilla::AutoCompletionSource );
+	const QsciScintilla::AutoCompletionSource Q_MONKEY_EXPORT autoCompletionSource();
+	void Q_MONKEY_EXPORT setAutoCompletionThreshold( int );
+	const int Q_MONKEY_EXPORT autoCompletionThreshold();
 	// CallTips
-	void setCallTipsBackgroundColor( const QColor& );
-	const QColor callTipsBackgroundColor();
-	void setCallTipsForegroundColor( const QColor& );
-	const QColor callTipsForegroundColor();
-	void setCallTipsHighlightColor( const QColor& );
-	const QColor callTipsHighlightColor();
-	void setCallTipsStyle( QsciScintilla::CallTipsStyle );
-	const QsciScintilla::CallTipsStyle callTipsStyle();
-	void setCallTipsVisible( int );
-	const int callTipsVisible();
+	void Q_MONKEY_EXPORT setCallTipsBackgroundColor( const QColor& );
+	const QColor Q_MONKEY_EXPORT callTipsBackgroundColor();
+	void Q_MONKEY_EXPORT setCallTipsForegroundColor( const QColor& );
+	const QColor Q_MONKEY_EXPORT callTipsForegroundColor();
+	void Q_MONKEY_EXPORT setCallTipsHighlightColor( const QColor& );
+	const QColor Q_MONKEY_EXPORT callTipsHighlightColor();
+	void Q_MONKEY_EXPORT setCallTipsStyle( QsciScintilla::CallTipsStyle );
+	const QsciScintilla::CallTipsStyle Q_MONKEY_EXPORT callTipsStyle();
+	void Q_MONKEY_EXPORT setCallTipsVisible( int );
+	const int Q_MONKEY_EXPORT callTipsVisible();
 	// Indentation
-	void setAutoIndent( bool );
-	const bool autoIndent();
-	void setBackspaceUnindents( bool );
-	const bool backspaceUnindents();
-	void setIndentationGuides( bool );
-	const bool indentationGuides();
-	void setIndentationsUseTabs( bool );
-	const bool indentationsUseTabs();
-	void setIndentationWidth( int );
-	const int indentationWidth();
-	void setTabIndents( bool );
-	const bool tabIndents();
-	void setTabWidth( int );
-	const int tabWidth();
-	void setIndentationGuidesBackgroundColor( const QColor& );
-	const QColor indentationGuidesBackgroundColor();
-	void setIndentationGuidesForegroundColor( const QColor& );
-	const QColor indentationGuidesForegroundColor();
+	void Q_MONKEY_EXPORT setAutoIndent( bool );
+	const bool Q_MONKEY_EXPORT autoIndent();
+	void Q_MONKEY_EXPORT setBackspaceUnindents( bool );
+	const bool Q_MONKEY_EXPORT backspaceUnindents();
+	void Q_MONKEY_EXPORT setIndentationGuides( bool );
+	const bool Q_MONKEY_EXPORT indentationGuides();
+	void Q_MONKEY_EXPORT setIndentationsUseTabs( bool );
+	const bool Q_MONKEY_EXPORT indentationsUseTabs();
+	void Q_MONKEY_EXPORT setIndentationWidth( int );
+	const int Q_MONKEY_EXPORT indentationWidth();
+	void Q_MONKEY_EXPORT setTabIndents( bool );
+	const bool Q_MONKEY_EXPORT tabIndents();
+	void Q_MONKEY_EXPORT setTabWidth( int );
+	const int Q_MONKEY_EXPORT tabWidth();
+	void Q_MONKEY_EXPORT setIndentationGuidesBackgroundColor( const QColor& );
+	const QColor Q_MONKEY_EXPORT indentationGuidesBackgroundColor();
+	void Q_MONKEY_EXPORT setIndentationGuidesForegroundColor( const QColor& );
+	const QColor Q_MONKEY_EXPORT indentationGuidesForegroundColor();
 	// Brace Matching
-	void setBraceMatching( QsciScintilla::BraceMatch );
-	const QsciScintilla::BraceMatch braceMatching();
-	void setMatchedBraceBackgroundColor( const QColor& );
-	const QColor matchedBraceBackgroundColor();
-	void setMatchedBraceForegroundColor( const QColor& );
-	const QColor matchedBraceForegroundColor();
-	void setUnmatchedBraceBackgroundColor( const QColor& );
-	const QColor unmatchedBraceBackgroundColor();
-	void setUnmatchedBraceForegroundColor( const QColor& );
-	const QColor unmatchedBraceForegroundColor();
+	void Q_MONKEY_EXPORT setBraceMatching( QsciScintilla::BraceMatch );
+	const QsciScintilla::BraceMatch Q_MONKEY_EXPORT braceMatching();
+	void Q_MONKEY_EXPORT setMatchedBraceBackgroundColor( const QColor& );
+	const QColor Q_MONKEY_EXPORT matchedBraceBackgroundColor();
+	void Q_MONKEY_EXPORT setMatchedBraceForegroundColor( const QColor& );
+	const QColor Q_MONKEY_EXPORT matchedBraceForegroundColor();
+	void Q_MONKEY_EXPORT setUnmatchedBraceBackgroundColor( const QColor& );
+	const QColor Q_MONKEY_EXPORT unmatchedBraceBackgroundColor();
+	void Q_MONKEY_EXPORT setUnmatchedBraceForegroundColor( const QColor& );
+	const QColor Q_MONKEY_EXPORT unmatchedBraceForegroundColor();
 	// Edge Mode
-	void setEdgeMode( QsciScintilla::EdgeMode );
-	const QsciScintilla::EdgeMode edgeMode();
-	void setEdgeColor( const QColor& );
-	const QColor edgeColor();
-	void setEdgeColumn( int );
-	const int edgeColumn();
+	void Q_MONKEY_EXPORT setEdgeMode( QsciScintilla::EdgeMode );
+	const QsciScintilla::EdgeMode Q_MONKEY_EXPORT edgeMode();
+	void Q_MONKEY_EXPORT setEdgeColor( const QColor& );
+	const QColor Q_MONKEY_EXPORT edgeColor();
+	void Q_MONKEY_EXPORT setEdgeColumn( int );
+	const int Q_MONKEY_EXPORT edgeColumn();
 	// Caret
-	void setCaretLineVisible( bool );
-	const bool caretLineVisible();
-	void setCaretLineBackgroundColor( const QColor& );
-	const QColor caretLineBackgroundColor();
-	void setCaretForegroundColor( const QColor& );
-	const QColor caretForegroundColor();
-	void setCaretWidth( int );
-	const int caretWidth();
+	void Q_MONKEY_EXPORT setCaretLineVisible( bool );
+	const bool Q_MONKEY_EXPORT caretLineVisible();
+	void Q_MONKEY_EXPORT setCaretLineBackgroundColor( const QColor& );
+	const QColor Q_MONKEY_EXPORT caretLineBackgroundColor();
+	void Q_MONKEY_EXPORT setCaretForegroundColor( const QColor& );
+	const QColor Q_MONKEY_EXPORT caretForegroundColor();
+	void Q_MONKEY_EXPORT setCaretWidth( int );
+	const int Q_MONKEY_EXPORT caretWidth();
 	// Margins
-	void setLineNumbersMarginEnabled( bool );
-	const bool lineNumbersMarginEnabled();
-	void setLineNumbersMarginWidth( int );
-	const int lineNumbersMarginWidth();
-	void setLineNumbersMarginAutoWidth( bool );
-	const bool lineNumbersMarginAutoWidth();
-	void setFolding( QsciScintilla::FoldStyle );
-	const QsciScintilla::FoldStyle folding();
-	void setFoldMarginBackgroundColor( const QColor& );
-	const QColor foldMarginBackgroundColor();
-	void setFoldMarginForegroundColor( const QColor& );
-	const QColor foldMarginForegroundColor();
-	void setMarginsEnabled( bool );
-	const bool marginsEnabled();
-	void setMarginsBackgroundColor( const QColor& );
-	const QColor marginsBackgroundColor();
-	void setMarginsForegroundColor( const QColor& );
-	const QColor marginsForegroundColor();
-	void setMarginsFont( const QFont& );
-	const QFont marginsFont();
+	void Q_MONKEY_EXPORT setLineNumbersMarginEnabled( bool );
+	const bool Q_MONKEY_EXPORT lineNumbersMarginEnabled();
+	void Q_MONKEY_EXPORT setLineNumbersMarginWidth( int );
+	const int Q_MONKEY_EXPORT lineNumbersMarginWidth();
+	void Q_MONKEY_EXPORT setLineNumbersMarginAutoWidth( bool );
+	const bool Q_MONKEY_EXPORT lineNumbersMarginAutoWidth();
+	void Q_MONKEY_EXPORT setFolding( QsciScintilla::FoldStyle );
+	const QsciScintilla::FoldStyle Q_MONKEY_EXPORT folding();
+	void Q_MONKEY_EXPORT setFoldMarginBackgroundColor( const QColor& );
+	const QColor Q_MONKEY_EXPORT foldMarginBackgroundColor();
+	void Q_MONKEY_EXPORT setFoldMarginForegroundColor( const QColor& );
+	const QColor Q_MONKEY_EXPORT foldMarginForegroundColor();
+	void Q_MONKEY_EXPORT setMarginsEnabled( bool );
+	const bool Q_MONKEY_EXPORT marginsEnabled();
+	void Q_MONKEY_EXPORT setMarginsBackgroundColor( const QColor& );
+	const QColor Q_MONKEY_EXPORT marginsBackgroundColor();
+	void Q_MONKEY_EXPORT setMarginsForegroundColor( const QColor& );
+	const QColor Q_MONKEY_EXPORT marginsForegroundColor();
+	void Q_MONKEY_EXPORT setMarginsFont( const QFont& );
+	const QFont Q_MONKEY_EXPORT marginsFont();
 	// Special Characters
-	void setEolMode( QsciScintilla::EolMode );
-	const QsciScintilla::EolMode eolMode();
-	void setEolVisibility( bool );
-	const bool eolVisibility();
-	void setWhitespaceVisibility( QsciScintilla::WhitespaceVisibility );
-	const QsciScintilla::WhitespaceVisibility whitespaceVisibility();
-	void setWrapMode( QsciScintilla::WrapMode );
-	const QsciScintilla::WrapMode wrapMode();
-	void setWrapVisualFlagsEnabled( bool );
-	const bool wrapVisualFlagsEnabled();
-	void setStartWrapVisualFlag( QsciScintilla::WrapVisualFlag );
-	const QsciScintilla::WrapVisualFlag startWrapVisualFlag();
-	void setEndWrapVisualFlag( QsciScintilla::WrapVisualFlag );
-	const QsciScintilla::WrapVisualFlag endWrapVisualFlag();
-	void setWrappedLineIndentWidth( int );
-	const int wrappedLineIndentWidth();
+	void Q_MONKEY_EXPORT setEolMode( QsciScintilla::EolMode );
+	const QsciScintilla::EolMode Q_MONKEY_EXPORT eolMode();
+	void Q_MONKEY_EXPORT setEolVisibility( bool );
+	const bool Q_MONKEY_EXPORT eolVisibility();
+	void Q_MONKEY_EXPORT setWhitespaceVisibility( QsciScintilla::WhitespaceVisibility );
+	const QsciScintilla::WhitespaceVisibility Q_MONKEY_EXPORT whitespaceVisibility();
+	void Q_MONKEY_EXPORT setWrapMode( QsciScintilla::WrapMode );
+	const QsciScintilla::WrapMode Q_MONKEY_EXPORT wrapMode();
+	void Q_MONKEY_EXPORT setWrapVisualFlagsEnabled( bool );
+	const bool Q_MONKEY_EXPORT wrapVisualFlagsEnabled();
+	void Q_MONKEY_EXPORT setStartWrapVisualFlag( QsciScintilla::WrapVisualFlag );
+	const QsciScintilla::WrapVisualFlag Q_MONKEY_EXPORT startWrapVisualFlag();
+	void Q_MONKEY_EXPORT setEndWrapVisualFlag( QsciScintilla::WrapVisualFlag );
+	const QsciScintilla::WrapVisualFlag Q_MONKEY_EXPORT endWrapVisualFlag();
+	void Q_MONKEY_EXPORT setWrappedLineIndentWidth( int );
+	const int Q_MONKEY_EXPORT wrappedLineIndentWidth();
 
 };
 

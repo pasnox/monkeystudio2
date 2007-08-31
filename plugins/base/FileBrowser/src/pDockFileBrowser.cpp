@@ -14,6 +14,7 @@
 ****************************************************************************/
 #include "pDockFileBrowser.h"
 #include "pFileManager.h"
+#include "pMonkeyStudio.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -58,32 +59,39 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	mListView = new QListView;
 	v->addWidget( mListView );
 	
-	// dir model
-	mDirModel = new QDirModel;
-	mDirModel->setFilter( QDir::AllEntries | QDir::Readable | QDir::Hidden | QDir::CaseSensitive | QDir::NoDotAndDotDot );
-	mDirModel->setSorting( QDir::DirsFirst | QDir::Name );
+	// combo dir model
+	mComboDirModel = new QDirModel;
+	mComboDirModel->setFilter( QDir::Dirs | QDir::Readable | QDir::Hidden | QDir::CaseSensitive | QDir::NoDotAndDotDot );
+	mComboDirModel->setSorting( QDir::Name );
+	
+	// list dir model
+	mListDirModel = new QDirModel;
+	mListDirModel->setFilter( QDir::AllEntries | QDir::Readable | QDir::Hidden | QDir::CaseSensitive | QDir::NoDotAndDotDot );
+	mListDirModel->setSorting( QDir::DirsFirst | QDir::Name );
 	
 	// assign model to views
-	mComboBox->setModel( mDirModel );
-	mListView->setModel( mDirModel );
+	mComboBox->setModel( mComboDirModel );
+	mListView->setModel( mListDirModel );
 	
-	// if only one drive, hide it and root it ( linux/mac )
+	// if only one drive, disable it and root it ( linux/mac )
 	if ( mComboBox->count() == 1 )
-	{
 		mComboBox->setEnabled( false );
-		mListView->setRootIndex( mDirModel->index( 0, 0 ) );
-	}
+	
+	// set root index
+	mComboBox->setRootModelIndex( QModelIndex() );
+	mListView->setRootIndex( mListDirModel->index( mComboDirModel->fileName( mComboBox->rootModelIndex() ).append( mComboBox->currentText() ) ) );
 	
 	// connections
 	connect( tb, SIGNAL( clicked() ), this, SLOT( tb_clicked() ) );
-	connect( mComboBox, SIGNAL( currentIndexChanged( const QString& ) ), this, SLOT( cb_currentIndexChanged( const QString& ) ) );
+	connect( mComboBox->view(), SIGNAL( clicked( const QModelIndex& ) ), this, SLOT( cb_clicked( const QModelIndex& ) ) );
 	connect( mListView, SIGNAL( doubleClicked( const QModelIndex& ) ), this, SLOT( lv_doubleClicked( const QModelIndex& ) ) );
 }
 
 pDockFileBrowser::~pDockFileBrowser()
 {
-	// delete model
-	delete mDirModel;
+	// delete models
+	delete mComboDirModel;
+	delete mListDirModel;
 }
 
 void pDockFileBrowser::showEvent( QShowEvent* e )
@@ -94,8 +102,8 @@ void pDockFileBrowser::showEvent( QShowEvent* e )
 	if ( !mShown )
 	{
 		mShown = true;
-		// restore drive and path
-		emit restoreSettings();
+		// restore settings
+		//emit restoreSettings();
 	}
 }
 
@@ -103,18 +111,22 @@ void pDockFileBrowser::hideEvent( QHideEvent* e )
 {
 	// default event
 	QDockWidget::hideEvent( e );
-	// save drive and path
-	if ( mShown )
-		emit saveSettings();
+	// save settings
+	//if ( mShown )
+		//emit saveSettings();
 }
 
 void pDockFileBrowser::tb_clicked()
 {
-	mListView->setRootIndex( mListView->rootIndex().parent() );
+	//const QString p = mComboDirModel->filePath( mComboBox->rootModelIndex() );
+	//pMonkeyStudio::warning( "", p );
+	mComboBox->setRootModelIndex( mComboBox->rootModelIndex().parent() );
+	//mListView->setRootIndex( mListDirModel->index( p ) );
 }
 
 void pDockFileBrowser::lv_doubleClicked( const QModelIndex& i )
 {
+	/*
 	// if dir, set root index to it
 	if ( mDirModel->isDir( i ) )
 		mListView->setRootIndex( i );
@@ -125,12 +137,14 @@ void pDockFileBrowser::lv_doubleClicked( const QModelIndex& i )
 	// select correct drive in combo if needed
 	if ( QDir::drives().contains( mDirModel->fileName( i ) ) )
 		mComboBox->setCurrentIndex( mComboBox->findText( mDirModel->fileName( i ).remove( -1, 1 ) ) );
+	*/
 }
 
-void pDockFileBrowser::cb_currentIndexChanged( const QString& s )
+void pDockFileBrowser::cb_clicked( const QModelIndex& i )
 {
-	// set correct drive in list view
-	mListView->setRootIndex( mDirModel->index( s ) );
+	pMonkeyStudio::warning( "", mComboDirModel->filePath( i ) );
+	mComboBox->setRootModelIndex( i );
+	mListView->setRootIndex( mListDirModel->index( mComboDirModel->filePath( i ) ) );
 }
 
 QString pDockFileBrowser::currentDrive() const
@@ -140,16 +154,16 @@ QString pDockFileBrowser::currentDrive() const
 
 void pDockFileBrowser::setCurrentDrive( const QString& s )
 {
-	mComboBox->setEditText( s );
+	//mComboBox->setRootModelIndex( mDirModel->index( s ) );
 }
 
 QString pDockFileBrowser::currentPath() const
 {
-	return mDirModel->filePath( mListView->rootIndex() );
+	return mListDirModel->filePath( mListView->rootIndex() );
 }
 
 void pDockFileBrowser::setCurrentPath( const QString& s )
 {
-	mListView->setRootIndex( mDirModel->index( s ) );
+	//mListView->setRootIndex( mDirModel->index( s ) );
 }
 

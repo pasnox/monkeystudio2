@@ -8,7 +8,7 @@ QPRO_PWD   = $$PWD
 INCLUDEPATH	*= $${QPRO_PWD}
 
 # default
-INCLUDEPATH	*= . src
+INCLUDEPATH	*= $${QPRO_PWD}/. $${QPRO_PWD}/src/. . src
 
 # Main Interface
 INCLUDEPATH	*= $${QPRO_PWD}/src/maininterface $${QPRO_PWD}/src/maininterface/ui

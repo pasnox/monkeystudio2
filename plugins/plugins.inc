@@ -1,5 +1,8 @@
 #This is the include file to add to your plugins project
 
+# include scintilla framework
+include( ../../../qscintilla/qscintilla.pri )
+
 # include fresh framework
 include( ../../../fresh/fresh.pri )
 

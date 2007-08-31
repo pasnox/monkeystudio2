@@ -42,7 +42,8 @@ protected:
 	bool mShown;
 	QComboBox* mComboBox;
 	QListView* mListView;
-	QDirModel* mDirModel;
+	QDirModel* mComboDirModel;
+	QDirModel* mListDirModel;
 	void showEvent( QShowEvent* );
 	void hideEvent( QHideEvent* );
 
@@ -52,7 +53,7 @@ private:
 private slots:
 	void tb_clicked();
 	void lv_doubleClicked( const QModelIndex& );
-	void cb_currentIndexChanged( const QString& );
+	void cb_clicked( const QModelIndex& );
 
 signals:
 	void saveSettings();
