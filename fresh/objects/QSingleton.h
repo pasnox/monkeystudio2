@@ -68,7 +68,11 @@ T* QSingleton<T>::instance()
 {
 	T* t = qobject_cast<T*>( mInstances.value( &T::staticMetaObject ) );
 	if ( !t )
+#ifdef Q_CC_GNU
 		mInstances[&T::staticMetaObject] = ( t = new T );
+#else
+		mInstances[&T::staticMetaObject] = ( t = new T( 0 ) );
+#endif
 	return t;
 }
 
