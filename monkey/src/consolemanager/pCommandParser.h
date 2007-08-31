@@ -24,7 +24,7 @@ class Q_MONKEY_EXPORT pCommandParser : public QObject
 	Q_OBJECT
 
 public:
-	pCommandParser( QObject* = 0 );
+	pCommandParser( QObject* = 0 ) {}
 	virtual ~pCommandParser() {}
 
 	virtual QByteArray contents() const = 0;
