@@ -51,7 +51,15 @@
         <file>texts/license.gpl</file>
     </qresource>
     <qresource prefix="/project" >
+        <file>icons/project/close.png</file>
+        <file>icons/project/closeall.png</file>
+        <file>icons/project/filtered.png</file>
         <file>icons/project/new.png</file>
+        <file>icons/project/open.png</file>
+        <file>icons/project/recents.png</file>
+        <file>icons/project/save.png</file>
+        <file>icons/project/saveall.png</file>
+        <file>icons/project/settings.png</file>
     </qresource>
     <qresource prefix="/temp" >
         <file>icons/temp/kcmsystem.png</file>
