@@ -21,6 +21,7 @@
 #include <QModelIndex>
 
 class QComboBox;
+class QLineEdit;
 class QListView;
 class QDirModel;
 
@@ -41,9 +42,9 @@ public:
 protected:
 	bool mShown;
 	QComboBox* mComboBox;
+	QLineEdit* mLineEdit;
 	QListView* mListView;
-	QDirModel* mComboDirModel;
-	QDirModel* mListDirModel;
+	QDirModel* mDirModel;
 	void showEvent( QShowEvent* );
 	void hideEvent( QHideEvent* );
 
@@ -51,9 +52,10 @@ private:
 	pDockFileBrowser( QWidget* = 0 );
 
 private slots:
-	void tb_clicked();
+	void tbUp_clicked();
+	void tbRefresh_clicked();
 	void lv_doubleClicked( const QModelIndex& );
-	void cb_clicked( const QModelIndex& );
+	void cb_currentIndexChanged( const QString& );
 
 signals:
 	void saveSettings();

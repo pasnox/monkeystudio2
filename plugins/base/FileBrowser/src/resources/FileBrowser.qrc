@@ -2,5 +2,6 @@
 	<qresource>
 		<file>icons/browser.png</file>
 		<file>icons/up.png</file>
+		<file>icons/reload.png</file>
 	</qresource>
 </RCC>
