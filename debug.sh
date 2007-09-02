@@ -1,3 +1,3 @@
 #! /bin/sh
 
-gdb bin/monkey
+gdb bin/monkey 
