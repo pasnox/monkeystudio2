@@ -9,9 +9,6 @@
     <height>386</height>
    </rect>
   </property>
-  <property name="allowedAreas" >
-   <set>Qt::BottomDockWidgetArea|Qt::NoDockWidgetArea|Qt::TopDockWidgetArea</set>
-  </property>
   <property name="windowTitle" >
    <string>Search - Replace</string>
   </property>
