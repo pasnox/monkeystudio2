@@ -18,6 +18,7 @@
 #include "pSearch.h"
 #include "pMonkeyStudio.h"
 #include "PluginsManager.h"
+#include "UIProjectsManager.h"
 
 #include <QActionGroup>
 #include <QStyleFactory>
@@ -66,6 +67,11 @@ pFileManager* UIMain::fileManager()
 pWorkspace* UIMain::workspace()
 {
 	return pWorkspace::instance( this );
+}
+
+UIProjectsManager* UIMain::projectsManager()
+{
+	return UIProjectsManager::instance( this );
 }
 
 void UIMain::initMenuBar()
@@ -123,23 +129,23 @@ void UIMain::initMenuBar()
 		mb->menu( "mStyle", tr( "&Style" ), QIcon( ":/view/icons/view/style.png" ) );
 		mb->action( "aNext", tr( "&Next Tab" ), QIcon( ":/view/icons/view/next.png" ), tr( "Alt+Right" ), tr( "Active the next tab" ) )->setEnabled( false );
 		mb->action( "aPrevious", tr( "&Previous Tab" ), QIcon( ":/view/icons/view/previous.png" ), tr( "Alt+Left" ), tr( "Active the previous tab" ) )->setEnabled( false );
-		//mb->action( "aFilteredView", tr( "&Filtered view" ), QIcon( "" ), tr( "" ), tr( "Filtered project view" ) )->setEnabled( false );	
+		mb->action( "aFiltered", tr( "&Filtered Projects" ), QIcon( "view/icons/view/filtered.png" ), tr( "" ), tr( "Filtered project view" ) )->setEnabled( false );
 	mb->endGroup();
 	mb->menu( "mProject", tr( "&Project" ) );
 	mb->beginGroup( "mProject" );
-		mb->action( "aNew", tr( "&New" ), QIcon( ":/Icons/Icons/projectnew.png" ), tr( "Ctrl+Shift+N" ), tr( "New project..." ) );
-		mb->action( "aOpen", tr( "&Open" ), QIcon( ":/Icons/Icons/projectopen.png" ), tr( "Ctrl+Shift+O" ), tr( "Open a project..." ) );
-		mb->menu( "mSave", tr( "&Save" ), QIcon( ":/Icons/Icons/projectsave.png" ) );
-		mb->action( "mSave/aCurrent", tr( "&Current" ), QIcon( ":/Icons/Icons/projectsave.png" ), QString::null, tr( "Save the current project" ) );
-		mb->action( "mSave/aAll", tr( "&All" ), QIcon( ":/Icons/Icons/projectsaveall.png" ), QString::null, tr( "Save all projects" ) );
-		mb->menu( "mClose", tr( "&Close" ), QIcon( ":/Icons/Icons/projectclose.png" ) );
-		mb->action( "mClose/aCurrent", tr( "&Current" ), QIcon( ":/Icons/Icons/projectclose.png" ), QString::null, tr( "Close the current project" ) );
-		mb->action( "mClose/aAll", tr( "&All" ), QIcon( ":/Icons/Icons/projectcloseall.png" ), QString::null, tr( "Close all projects" ) );
+		mb->action( "aNew", tr( "&New" ), QIcon( ":/project/icons/project/new.png" ), tr( "Ctrl+Shift+N" ), tr( "New project..." ) );
+		mb->action( "aOpen", tr( "&Open" ), QIcon( ":/project/icons/project/open.png" ), tr( "Ctrl+Shift+O" ), tr( "Open a project..." ) );
+		mb->menu( "mSave", tr( "&Save" ), QIcon( ":/project/icons/project/save.png" ) );
+		mb->action( "mSave/aCurrent", tr( "&Current" ), QIcon( ":/project/icons/project/save.png" ), QString::null, tr( "Save the current project" ) )->setEnabled( false );
+		mb->action( "mSave/aAll", tr( "&All" ), QIcon( ":/project/icons/project/saveall.png" ), QString::null, tr( "Save all projects" ) )->setEnabled( false );
+		mb->menu( "mClose", tr( "&Close" ), QIcon( ":/project/icons/project/close.png" ) );
+		mb->action( "mClose/aCurrent", tr( "&Current" ), QIcon( ":/project/icons/project/close.png" ), QString::null, tr( "Close the current project" ) )->setEnabled( false );
+		mb->action( "mClose/aAll", tr( "&All" ), QIcon( ":/project/icons/project/closeall.png" ), QString::null, tr( "Close all projects" ) )->setEnabled( false );
 		mb->action( "aSeparator2" );
-		mb->action( "aSettings", tr( "Set&tings..." ), QIcon( ":/Icons/Icons/projectsettings.png" ), QString::null, tr( "Project settings" ) );
+		mb->action( "aSettings", tr( "Set&tings..." ), QIcon( ":/project/icons/project/settings.png" ), QString::null, tr( "Project settings" ) )->setEnabled( false );
 		mb->action( "aSeparator3" );
-		mb->menu( "mRecents", tr( "&Recents" ), QIcon( ":/Icons/Icons/recentsprojects.png" ) );
-		mb->action( "mRecents/aClear", tr( "&Clear" ), QIcon( ":/Icons/Icons/filecloseall.png" ), QString::null, tr( "Clear the recents projects list" ) );
+		mb->menu( "mRecents", tr( "&Recents" ), QIcon( ":/project/icons/project/recents.png" ) );
+		mb->action( "mRecents/aClear", tr( "&Clear" ), QIcon( ":/project/icons/project/clear.png" ), QString::null, tr( "Clear the recents projects list" ) );
 		mb->action( "mRecents/aSeparator1" );
 	mb->endGroup();
 	mb->menu( "mBuild", tr( "&Build" ) );
@@ -295,14 +301,14 @@ void UIMain::initConnections()
 	connect( menuBar()->action( "mView/aNext" ), SIGNAL( triggered() ), workspace(), SLOT( activateNextDocument() ) );
 	connect( menuBar()->action( "mView/aPrevious" ), SIGNAL( triggered() ), workspace(), SLOT( activatePreviousDocument() ) );
 	// project connection
-	connect( menuBar()->action( "mProject/aNew" ), SIGNAL( triggered() ), workspace(), SLOT( projectNew_triggered() ) );
-	connect( menuBar()->action( "mProject/aOpen" ), SIGNAL( triggered() ), workspace(), SLOT( projectOpen_triggered() ) );
-	connect( menuBar()->action( "mProject/mSave/aCurrent" ), SIGNAL( triggered() ), workspace(), SLOT( projectSaveCurrent_triggered() ) );
-	connect( menuBar()->action( "mProject/mSave/aAll" ), SIGNAL( triggered() ), workspace(), SLOT( projectSaveAll_triggered() ) );
-	connect( menuBar()->action( "mProject/mClose/aCurrent" ), SIGNAL( triggered() ), workspace(), SLOT( projectCloseCurrent_triggered() ) );
-	connect( menuBar()->action( "mProject/mClose/aAll" ), SIGNAL( triggered() ), workspace(), SLOT( projectCloseAll_triggered() ) );
-	connect( menuBar()->action( "mProject/aSettings" ), SIGNAL( triggered() ), workspace(), SLOT( projectSettings_triggered() ) );
-	connect( pRecentsManager::instance(), SIGNAL( openProjectRequested( const QString& ) ), fileManager(), SLOT( openProject( const QString& ) ) );
+	connect( menuBar()->action( "mProject/aNew" ), SIGNAL( triggered() ), projectsManager(), SLOT( projectNew_triggered() ) );
+	connect( menuBar()->action( "mProject/aOpen" ), SIGNAL( triggered() ), projectsManager(), SLOT( projectOpen_triggered() ) );
+	connect( menuBar()->action( "mProject/mSave/aCurrent" ), SIGNAL( triggered() ), projectsManager(), SLOT( projectSaveCurrent_triggered() ) );
+	connect( menuBar()->action( "mProject/mSave/aAll" ), SIGNAL( triggered() ), projectsManager(), SLOT( projectSaveAll_triggered() ) );
+	connect( menuBar()->action( "mProject/mClose/aCurrent" ), SIGNAL( triggered() ), projectsManager(), SLOT( projectCloseCurrent_triggered() ) );
+	connect( menuBar()->action( "mProject/mClose/aAll" ), SIGNAL( triggered() ), projectsManager(), SLOT( projectCloseAll_triggered() ) );
+	connect( menuBar()->action( "mProject/aSettings" ), SIGNAL( triggered() ), projectsManager(), SLOT( projectSettings_triggered() ) );
+	connect( pRecentsManager::instance(), SIGNAL( openProjectRequested( const QString& ) ), projectsManager(), SLOT( openProject( const QString& ) ) );
 	// plugins menu
 	connect( menuBar()->action( "mPlugins/aManage" ), SIGNAL( triggered() ), pluginsManager(), SLOT( manageRequested() ) );
 	// help menu
@@ -321,6 +327,8 @@ void UIMain::initGui()
 	setIconSize( QSize( 16, 16 ) );
 	// set central widget
 	setCentralWidget( workspace() );
+	// add project manager
+	dockToolBar( Qt::LeftToolBarArea )->addDock( UIProjectsManager::instance(), UIProjectsManager::instance()->windowTitle(), QIcon( ":/project/icons/project/project.png" ) );
 	// add qscintilla search dock
 	addDockWidget( Qt::RightDockWidgetArea, pSearch::instance() );
 	// create statusbar
