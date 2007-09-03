@@ -322,7 +322,7 @@ void UIMain::initGui()
 	// set central widget
 	setCentralWidget( workspace() );
 	// add qscintilla search dock
-	addDockWidget( Qt::BottomDockWidgetArea, pSearch::instance() );
+	addDockWidget( Qt::RightDockWidgetArea, pSearch::instance() );
 	// create statusbar
 	statusBar()->show();
 }
