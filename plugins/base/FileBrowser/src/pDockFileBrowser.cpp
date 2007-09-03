@@ -178,7 +178,7 @@ QString pDockFileBrowser::currentDrive() const
 void pDockFileBrowser::setCurrentDrive( const QString& s )
 {
 	// set current drive
-	mComboBox->setRootModelIndex( mDirModel->index( s ) );
+	mComboBox->setCurrentIndex( mComboBox->findText( s ) );
 	// set lineedit path
 	mLineEdit->setText( mDirModel->filePath( mListView->rootIndex() ) );
 	mLineEdit->setToolTip( mLineEdit->text() );
