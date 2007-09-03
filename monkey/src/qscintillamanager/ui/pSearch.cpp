@@ -1,7 +1,6 @@
 #include "pSearch.h"
 
 #include <qsciscintilla.h>
-#include <QMessageBox>
 
 pSearch::pSearch( QsciScintilla* p )
 	: QDockWidget( p )
@@ -11,6 +10,9 @@ pSearch::pSearch( QsciScintilla* p )
 
 	// set fixed height
 	setFixedHeight( minimumSizeHint().height() );
+	
+	// clear informations edit
+	lInformations->clear();
 
 	// set current editor manage for search
 	setEditor( p );
@@ -35,6 +37,7 @@ void pSearch::setEditor( QsciScintilla* e )
 {
 	mEditor = e;
 	checkEditor();
+	lInformations->clear();
 };
 
 bool pSearch::on_tbPrevious_clicked()
@@ -65,6 +68,9 @@ bool pSearch::on_tbPrevious_clicked()
 	QPalette p = leSearch->palette();
 	p.setColor( leSearch->backgroundRole(), b ? Qt::white : Qt::red );
 	leSearch->setPalette( p );
+	
+	// show message if needed
+	lInformations->setText( b ? QString::null : tr( "Not Found" ) );
 
 	// return found state
 	return b;
@@ -98,6 +104,9 @@ bool pSearch::on_tbNext_clicked()
 	QPalette p = leSearch->palette();
 	p.setColor( leSearch->backgroundRole(), b ? Qt::white : Qt::red );
 	leSearch->setPalette( p );
+	
+	// show message if needed
+	lInformations->setText( b ? QString::null : tr( "Not Found" ) );
 
 	// return found state
 	return b;
@@ -150,6 +159,9 @@ bool pSearch::on_tbReplace_clicked()
 			on_tbNext_clicked();
 		}
 	}
+	
+	// show message if needed
+	lInformations->setText( b ? QString::null : tr( "Nothing To Repalce" ) );
 
 	// return replace state
 	return b;
@@ -167,6 +179,5 @@ void pSearch::on_tbReplaceAll_clicked()
 		i++;
 
 	// show occurence number replaced
-	if ( i )
-		QMessageBox::information( this, tr( "Information..." ), tr( "%1 occurences replaced" ).arg( i ) );
+	lInformations->setText( i ? tr( "%1 occurences replaced" ).arg( i ) : tr( "Nothing To Repalce" ) );
 }
