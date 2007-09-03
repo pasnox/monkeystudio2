@@ -55,9 +55,14 @@ void pConsoleManager::error( QProcess::ProcessError e )
 {
 	// emit signal error
 	emit commandError( currentCommand(), e );
-	// need emulate state 0 and finished
+	// need emulate state 0 for linux
+#ifndef Q_WS_WIN
+	stateChanged( QProcess::NotRunning );
+	/*
 	if ( e == QProcess::FailedToStart )
 		removeCommand( currentCommand() );
+	*/
+#endif
 }
 
 void pConsoleManager::finished( int i, QProcess::ExitStatus e )
@@ -91,6 +96,9 @@ void pConsoleManager::stateChanged( QProcess::ProcessState e )
 {
 	// emit signal state changed
 	emit commandStateChanged( currentCommand(), e );
+	// remove command if crashed and state 0
+	if ( QProcess::error() == QProcess::FailedToStart && e == QProcess::NotRunning )
+		removeCommand( currentCommand() );
 }
 
 void pConsoleManager::sendRawCommand( const QString& s )
