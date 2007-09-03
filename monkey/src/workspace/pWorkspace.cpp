@@ -320,42 +320,6 @@ void pWorkspace::agStyles_triggered( QAction* a )
 	pSettings::instance()->setValue( "MainWindow/Style", a->text() );
 }
 
-// project menu
-void pWorkspace::projectNew_triggered()
-{
-	//projectsManager()->newProject();
-}
-
-void pWorkspace::projectOpen_triggered()
-{
-	//projectsManager()->openProject();
-}
-
-void pWorkspace::projectSaveCurrent_triggered()
-{
-	//projectsManager()->saveCurrent();
-}
-
-void pWorkspace::projectSaveAll_triggered()
-{
-	//projectsManager()->saveAll();
-}
-
-void pWorkspace::projectCloseCurrent_triggered()
-{
-	//projectsManager()->closeCurrent();
-}
-
-void pWorkspace::projectCloseAll_triggered()
-{
-	//projectsManager()->closeAll();
-}
-
-void pWorkspace::projectSettings_triggered()
-{
-	//projectsManager()->projectSettings();
-}
-
 // help menu
 void pWorkspace::helpAboutApplication_triggered()
 {

@@ -63,15 +63,6 @@ public slots:
 	// view menu
 	void agStyles_triggered( QAction* );
 
-	// project menu
-	void projectNew_triggered();
-	void projectOpen_triggered();
-	void projectSaveCurrent_triggered();
-	void projectSaveAll_triggered();
-	void projectCloseCurrent_triggered();
-	void projectCloseAll_triggered();
-	void projectSettings_triggered();
-
 	// help menu
 	void helpAboutApplication_triggered();
 	void helpAboutQt_triggered();
