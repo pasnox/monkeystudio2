@@ -32,8 +32,9 @@ bool MessageBox::setEnabled( bool b )
 		// add dock to dock toolbar entry
 		UIMain::instance()->dockToolBar( Qt::BottomToolBarArea )->addDock( pDockMessageBox::instance(), infos().Caption, QIcon( ":/icons/console.png" ) );
 		// connect signals so we will be able to save/restore state of dock settings
-		connect( pMenuBar::instance()->action( "mView/aShowErrors", tr( "Show Errors" ), QIcon( ":/icons/taberror.png" ) ), SIGNAL( triggered() ), pDockMessageBox::instance(), SLOT( showErrors() ) );
-		connect( pMenuBar::instance()->action( "mView/aShowMessages", tr( "Show Messages" ), QIcon( ":/icons/tabmessage.png" ) ), SIGNAL( triggered() ), pDockMessageBox::instance(), SLOT( showMessages() ) );
+		connect( pMenuBar::instance()->action( "mView/aShowBuild", tr( "Show Build" ), QIcon( ":/icons/tabbuild.png" ) ), SIGNAL( triggered() ), pDockMessageBox::instance(), SLOT( showBuild() ) );
+		connect( pMenuBar::instance()->action( "mView/aShowOutput", tr( "Show Output" ), QIcon( ":/icons/taboutput.png" ) ), SIGNAL( triggered() ), pDockMessageBox::instance(), SLOT( showOutput() ) );
+		connect( pMenuBar::instance()->action( "mView/aShowLog", tr( "Show Log" ), QIcon( ":/icons/tablog.png" ) ), SIGNAL( triggered() ), pDockMessageBox::instance(), SLOT( showLog() ) );
 		connect( pDockMessageBox::instance(), SIGNAL( saveSettings() ), this, SLOT( saveSettings() ) );
 		connect( pDockMessageBox::instance(), SIGNAL( restoreSettings() ), this, SLOT( restoreSettings() ) );
 		// set plugin enabled
@@ -41,8 +42,9 @@ bool MessageBox::setEnabled( bool b )
 	}
 	else if ( !b && isEnabled() )
 	{
-		delete pMenuBar::instance()->action( "mView/aShowErrors" );
-		delete pMenuBar::instance()->action( "mView/aShowMessages" );
+		delete pMenuBar::instance()->action( "mView/aShowBuild" );
+		delete pMenuBar::instance()->action( "mView/aShowOutput" );
+		delete pMenuBar::instance()->action( "mView/aShowLog" );
 		// it will remove itself from dock toolbar when deleted
 		pDockMessageBox::instance()->deleteLater();
 		// set plugin disabled

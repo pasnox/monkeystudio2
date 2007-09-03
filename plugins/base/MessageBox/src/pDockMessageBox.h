@@ -26,6 +26,7 @@ class QToolButton;
 class QTabWidget;
 class QListWidget;
 class QTextBrowser;
+class QTextEdit;
 
 class pDockMessageBox : public QDockWidget, public QSingleton<pDockMessageBox>
 {
@@ -42,8 +43,9 @@ protected:
 	QLineEdit* leRawCommand;
 	QToolButton* tbStopCommand;
 	QTabWidget* twMessageBox;
-	QListWidget* lwErrors;
-	QTextBrowser* tbMessages;
+	QListWidget* lwBuildSteps;
+	QTextBrowser* tbOutput;
+	QTextEdit* teLog;
 	void showEvent( QShowEvent* );
 	void hideEvent( QHideEvent* );
 
@@ -52,10 +54,12 @@ private:
 	~pDockMessageBox();
 
 public slots:
-	void append( const QString& );
+	void appendOutput( const QString& );
+	void appendLog( const QString& );
 	void appendInBox( const QString&, const QColor& = Qt::red );
-	void showErrors();
-	void showMessages();
+	void showBuild();
+	void showOutput();
+	void showLog();
 
 private slots:
 	void leRawCommand_returnPressed();

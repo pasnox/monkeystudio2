@@ -59,19 +59,25 @@ pDockMessageBox::pDockMessageBox( QWidget* w )
 	twMessageBox->setMinimumHeight( 80 );
 	twMessageBox->setTabPosition( QTabWidget::East );
 	// create listwidget
-	lwErrors = new QListWidget;
-	//lwErrors->setMinimumHeight( 1 );
-	lwErrors->setFrameShape( QFrame::NoFrame );
+	lwBuildSteps = new QListWidget;
+	//lwBuildSteps->setMinimumHeight( 1 );
+	lwBuildSteps->setFrameShape( QFrame::NoFrame );
 	// create textbrowser
-	tbMessages = new QTextBrowser;
-	//tbMessages->setMinimumHeight( 1 );
-	tbMessages->setFrameShape( QFrame::NoFrame );
-	tbMessages->setLineWrapMode( QTextEdit::NoWrap );
-	tbMessages->setTabStopWidth( 40 );
-	tbMessages->setOpenExternalLinks( true );
+	tbOutput = new QTextBrowser;
+	tbOutput->setFrameShape( QFrame::NoFrame );
+	tbOutput->setLineWrapMode( QTextEdit::NoWrap );
+	tbOutput->setTabStopWidth( 40 );
+	tbOutput->setOpenExternalLinks( true );
+	// create textedit
+	teLog = new QTextEdit;
+	teLog->setReadOnly( true );
+	teLog->setFrameShape( QFrame::NoFrame );
+	teLog->setLineWrapMode( QTextEdit::NoWrap );
+	teLog->setTabStopWidth( 40 );
 	// add widget to tabwidget
-	twMessageBox->addTab( lwErrors, QIcon( ":/icons/taberror.png" ), "" );
-	twMessageBox->addTab( tbMessages, QIcon( ":/icons/tabmessage.png" ), "" );
+	twMessageBox->addTab( lwBuildSteps, QIcon( ":/icons/tabbuild.png" ), "" );
+	twMessageBox->addTab( tbOutput, QIcon( ":/icons/taboutput.png" ), "" );
+	twMessageBox->addTab( teLog, QIcon( ":/icons/tablog.png" ), "" );
 	// add tab widget into vlayout
 	vl->addWidget( twMessageBox );
 	// set central widget to w
@@ -115,43 +121,65 @@ void pDockMessageBox::hideEvent( QHideEvent* e )
 QString pDockMessageBox::colourText( const QString& s, const QColor& c )
 { return QString( "<font color=\"%1\">%2</font>" ).arg( c.name() ).arg( s ); }
 
-void pDockMessageBox::append( const QString& s )
+void pDockMessageBox::appendOutput( const QString& s )
 {
 	// we check if the scroll bar is at maximum
-	int p = tbMessages->verticalScrollBar()->value();
-	bool b = p == tbMessages->verticalScrollBar()->maximum();
-	// append text
-	tbMessages->moveCursor( QTextCursor::End );
-	tbMessages->insertHtml( s +"<br />" );
+	int p = tbOutput->verticalScrollBar()->value();
+	bool b = p == tbOutput->verticalScrollBar()->maximum();
+	// appendOutput text
+	tbOutput->moveCursor( QTextCursor::End );
+	tbOutput->insertHtml( s +"<br />" );
 	// if scrollbar is at maximum, increase it
-	tbMessages->verticalScrollBar()->setValue( b ? tbMessages->verticalScrollBar()->maximum() : p );
+	tbOutput->verticalScrollBar()->setValue( b ? tbOutput->verticalScrollBar()->maximum() : p );
+}
+
+void pDockMessageBox::appendLog( const QString& s )
+{
+	// we check if the scroll bar is at maximum
+	int p = teLog->verticalScrollBar()->value();
+	bool b = p == teLog->verticalScrollBar()->maximum();
+	// appendOutput text
+	teLog->moveCursor( QTextCursor::End );
+	teLog->insertHtml( s +"<br />" );
+	// if scrollbar is at maximum, increase it
+	teLog->verticalScrollBar()->setValue( b ? teLog->verticalScrollBar()->maximum() : p );
 }
 
 void pDockMessageBox::appendInBox( const QString& s, const QColor& c )
 {
-	append( colourText( "********************************************************************************", c ) );
-	append( s );
-	append( colourText( "********************************************************************************", c ) );
+	appendLog( colourText( "********************************************************************************", c ) );
+	appendLog( s );
+	appendLog( colourText( "********************************************************************************", c ) );
 }
 
-void pDockMessageBox::showErrors()
+void pDockMessageBox::showBuild()
 {
 	// show it if need
 	if ( !isVisible() )
 		show();
 	// show correct tab if needed
-	if ( twMessageBox->currentWidget() != lwErrors )
-		twMessageBox->setCurrentWidget( lwErrors );
+	if ( twMessageBox->currentWidget() != lwBuildSteps )
+		twMessageBox->setCurrentWidget( lwBuildSteps );
 }
 
-void pDockMessageBox::showMessages()
+void pDockMessageBox::showOutput()
 {
 	// show it if need
 	if ( !isVisible() )
 		show();
 	// show correct tab if needed
-	if ( twMessageBox->currentWidget() != tbMessages )
-		twMessageBox->setCurrentWidget( tbMessages );
+	if ( twMessageBox->currentWidget() != tbOutput )
+		twMessageBox->setCurrentWidget( tbOutput );
+}
+
+void pDockMessageBox::showLog()
+{
+	// show it if need
+	if ( !isVisible() )
+		show();
+	// show correct tab if needed
+	if ( twMessageBox->currentWidget() != teLog )
+		twMessageBox->setCurrentWidget( teLog );
 }
 
 void pDockMessageBox::leRawCommand_returnPressed()
@@ -197,7 +225,7 @@ void pDockMessageBox::commandError( pCommand* c, QProcess::ProcessError e )
 			s.append( colourText( tr( "An unknown error occurred. This is the default return value of error()." ), Qt::darkGreen ) );
 			break;
 	}
-	// append to console log
+	// appendOutput to console log
 	appendInBox( colourText( s, Qt::blue ), Qt::red );
 }
 
@@ -218,7 +246,7 @@ void pDockMessageBox::commandFinished( pCommand* c, int i, QProcess::ExitStatus 
 		default:
 			s.append( colourText( tr( "An unknown error occurred." ), Qt::darkGreen ) );
 	}
-	// append to console log
+	// appendOutput to console log
 	appendInBox( colourText( s, Qt::blue ), Qt::red );
 	// disable stop button
 	tbStopCommand->setEnabled( false );
@@ -227,13 +255,13 @@ void pDockMessageBox::commandFinished( pCommand* c, int i, QProcess::ExitStatus 
 void pDockMessageBox::commandReadyRead( pCommand*, const QByteArray& a )
 {
 	// we check if the scroll bar is at maximum
-	int p = tbMessages->verticalScrollBar()->value();
-	bool b = p == tbMessages->verticalScrollBar()->maximum();
-	// append log
-	tbMessages->moveCursor( QTextCursor::End );
-	tbMessages->insertPlainText( a );
+	int p = teLog->verticalScrollBar()->value();
+	bool b = p == teLog->verticalScrollBar()->maximum();
+	// appendOutput log
+	teLog->moveCursor( QTextCursor::End );
+	teLog->insertPlainText( a );
 	// if scrollbar is at maximum, increase it, else restore last position
-	tbMessages->verticalScrollBar()->setValue( b ? tbMessages->verticalScrollBar()->maximum() : p );
+	teLog->verticalScrollBar()->setValue( b ? teLog->verticalScrollBar()->maximum() : p );
 }
 
 void pDockMessageBox::commandStarted( pCommand* c )
@@ -242,7 +270,7 @@ void pDockMessageBox::commandStarted( pCommand* c )
 	s.append( tr( "* Command          : %1<br />" ).arg( colourText( c->command() ) ) );
 	s.append( tr( "* Arguments        : %1<br />" ).arg( colourText( c->arguments().join( " " )  )) );
 	s.append( tr( "* Working Directory: %1" ).arg( colourText( c->workingDirectory() ) ) );
-	// append to console log
+	// appendOutput to console log
 	appendInBox( colourText( s, Qt::blue ), Qt::red );
 }
 
@@ -262,8 +290,9 @@ void pDockMessageBox::commandStateChanged( pCommand* c, QProcess::ProcessState s
 			ss = tr( "Running" );
 			break;
 	}
-	// append to console log
-	append( colourText( tr( "*** State changed to #%1 (%2) for command: '%3'" ).arg( s ).arg( ss ).arg( c->text() ), Qt::gray ) );
+	// appendOutput to console log
+	appendOutput( colourText( tr( "*** State changed to %1" ).arg( ss ), Qt::gray ) );
+	appendLog( colourText( tr( "*** State changed to #%1 (%2) for command: '%3'" ).arg( s ).arg( ss ).arg( c->text() ), Qt::gray ) );
 }
 
 void pDockMessageBox::commandSkipped( pCommand* c )
@@ -273,6 +302,6 @@ void pDockMessageBox::commandSkipped( pCommand* c )
 	s.append( tr( "* Arguments        : %1<br />" ).arg( colourText( c->arguments().join( " " )  )) );
 	s.append( tr( "* Working Directory: %1" ).arg( colourText( c->workingDirectory() ) ) );
 	s.append( colourText( tr( "The command has been skipped due to previous error." ), Qt::darkGreen ) );
-	// append to console log
+	// appendOutput to console log
 	appendInBox( colourText( s, Qt::blue ), Qt::red );
 }
