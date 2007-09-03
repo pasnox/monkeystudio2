@@ -23,8 +23,7 @@ bool pSearch::checkEditor()
 	// enable/disable dock accoding to editor
 	QList<QWidget*> l = wCentral->findChildren<QWidget*>();
 	foreach ( QWidget* w, l )
-		if ( w != tbClose )
-			w->setEnabled( mEditor );
+		w->setEnabled( mEditor );
 	return mEditor;
 }
 
