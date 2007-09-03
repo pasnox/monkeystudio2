@@ -57,7 +57,6 @@ pDockMessageBox::pDockMessageBox( QWidget* w )
 	// create tabwidget
 	twMessageBox = new QTabWidget;
 	twMessageBox->setMinimumHeight( 80 );
-	twMessageBox->setTabPosition( QTabWidget::East );
 	// create listwidget
 	lwBuildSteps = new QListWidget;
 	//lwBuildSteps->setMinimumHeight( 1 );
@@ -75,9 +74,9 @@ pDockMessageBox::pDockMessageBox( QWidget* w )
 	teLog->setLineWrapMode( QTextEdit::NoWrap );
 	teLog->setTabStopWidth( 40 );
 	// add widget to tabwidget
-	twMessageBox->addTab( lwBuildSteps, QIcon( ":/icons/tabbuild.png" ), "" );
-	twMessageBox->addTab( tbOutput, QIcon( ":/icons/taboutput.png" ), "" );
-	twMessageBox->addTab( teLog, QIcon( ":/icons/tablog.png" ), "" );
+	twMessageBox->addTab( lwBuildSteps, QIcon( ":/icons/tabbuild.png" ), tr( "Build Step" ) );
+	twMessageBox->addTab( tbOutput, QIcon( ":/icons/taboutput.png" ), tr( "Program Output" ) );
+	twMessageBox->addTab( teLog, QIcon( ":/icons/tablog.png" ), tr( "Commands Log" ) );
 	// add tab widget into vlayout
 	vl->addWidget( twMessageBox );
 	// set central widget to w
@@ -255,13 +254,13 @@ void pDockMessageBox::commandFinished( pCommand* c, int i, QProcess::ExitStatus 
 void pDockMessageBox::commandReadyRead( pCommand*, const QByteArray& a )
 {
 	// we check if the scroll bar is at maximum
-	int p = teLog->verticalScrollBar()->value();
-	bool b = p == teLog->verticalScrollBar()->maximum();
+	int p = tbOutput->verticalScrollBar()->value();
+	bool b = p == tbOutput->verticalScrollBar()->maximum();
 	// appendOutput log
-	teLog->moveCursor( QTextCursor::End );
-	teLog->insertPlainText( a );
+	tbOutput->moveCursor( QTextCursor::End );
+	tbOutput->insertPlainText( a );
 	// if scrollbar is at maximum, increase it, else restore last position
-	teLog->verticalScrollBar()->setValue( b ? teLog->verticalScrollBar()->maximum() : p );
+	tbOutput->verticalScrollBar()->setValue( b ? tbOutput->verticalScrollBar()->maximum() : p );
 }
 
 void pDockMessageBox::commandStarted( pCommand* c )
@@ -284,6 +283,11 @@ void pDockMessageBox::commandStateChanged( pCommand* c, QProcess::ProcessState s
 			break;
 		case QProcess::Starting:
 			ss = tr( "Starting" );
+			// clear all tabs
+			lwBuildSteps->clear();
+			tbOutput->clear();
+			teLog->clear();
+			// enable stop button
 			tbStopCommand->setEnabled( true );
 			break;
 		case QProcess::Running:
