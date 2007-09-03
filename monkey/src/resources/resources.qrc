@@ -51,11 +51,12 @@
         <file>texts/license.gpl</file>
     </qresource>
     <qresource prefix="/project" >
+        <file>icons/project/clear.png</file>
         <file>icons/project/close.png</file>
         <file>icons/project/closeall.png</file>
-        <file>icons/project/filtered.png</file>
         <file>icons/project/new.png</file>
         <file>icons/project/open.png</file>
+        <file>icons/project/project.png</file>
         <file>icons/project/recents.png</file>
         <file>icons/project/save.png</file>
         <file>icons/project/saveall.png</file>
@@ -107,5 +108,6 @@
         <file>icons/view/next.png</file>
         <file>icons/view/previous.png</file>
         <file>icons/view/style.png</file>
+        <file>icons/view/filtered.png</file>
     </qresource>
 </RCC>
