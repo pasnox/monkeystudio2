@@ -160,7 +160,7 @@ bool pSearch::on_tbReplace_clicked()
 	}
 	
 	// show message if needed
-	lInformations->setText( b ? QString::null : tr( "Nothing To Repalce" ) );
+	lInformations->setText( b ? QString::null : tr( "Nothing To Replace" ) );
 
 	// return replace state
 	return b;
