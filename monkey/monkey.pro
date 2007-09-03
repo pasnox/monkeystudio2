@@ -55,7 +55,8 @@ FORMS	*= src/maininterface/ui/UITranslator.ui \
 	src/templatesmanager/ui/UITemplatesWizard.ui \
 	src/toolsmanager/ui/UIDesktopTools.ui \
 	src/toolsmanager/ui/UIToolsEdit.ui \
-	src/pluginsmanager/ui/UIPluginsSettings.ui
+	src/pluginsmanager/ui/UIPluginsSettings.ui \
+	src/projectsmanager/ui/UIProjectsManager.ui
 
 HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/maininterface/ui/UIAbout.h \
@@ -86,7 +87,9 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/pluginsmanager/BasePlugin.h \
 	src/pluginsmanager/ProjectPlugin.h \
 	src/pluginsmanager/PluginsManager.h \
-	src/pluginsmanager/ui/UIPluginsSettings.h
+	src/pluginsmanager/ui/UIPluginsSettings.h \
+	src/projectsmanager/ui/UIProjectsManager.h \
+	src/projectsmanager/ProjectsModel.h
 
 SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/maininterface/ui/UIAbout.cpp \
@@ -113,6 +116,8 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/consolemanager/pConsoleManager.cpp \
 	src/pluginsmanager/PluginsManager.cpp \
 	src/pluginsmanager/ui/UIPluginsSettings.cpp \
+	src/projectsmanager/ui/UIProjectsManager.cpp \
+	src/projectsmanager/ProjectsModel.cpp \
 	src/main.cpp
 
 unix:SOURCES	*= src/toolsmanager/pDesktopApplications_unix.cpp

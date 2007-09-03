@@ -36,3 +36,6 @@ INCLUDEPATH	*= $${QPRO_PWD}/src/consolemanager $${QPRO_PWD}/src/consolemanager/u
 
 # Plugins Manager
 INCLUDEPATH	*= $${QPRO_PWD}/src/pluginsmanager $${QPRO_PWD}/src/pluginsmanager/ui
+
+# Projects Manager
+INCLUDEPATH	*= $${QPRO_PWD}/src/projectsmanager $${QPRO_PWD}/src/projectsmanager/ui
