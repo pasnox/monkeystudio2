@@ -20,179 +20,61 @@
     <property name="spacing" >
      <number>3</number>
     </property>
-    <item row="3" column="0" >
-     <widget class="QCheckBox" name="cbFromStart" >
-      <property name="text" >
-       <string>From Start</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0" colspan="4" >
-     <widget class="QLineEdit" name="leReplace" >
-      <property name="toolTip" >
-       <string>Replace the current selection with this string</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0" colspan="4" >
-     <widget class="QLineEdit" name="leSearch" >
-      <property name="toolTip" >
-       <string>Enter the string or regular expression to find.</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="3" >
-     <spacer>
-      <property name="orientation" >
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeType" >
-       <enum>QSizePolicy::Ignored</enum>
-      </property>
-      <property name="sizeHint" >
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="4" column="0" >
-     <widget class="QCheckBox" name="cbWrap" >
-      <property name="toolTip" >
-       <string>If it's checked then the search wraps around the end of the text.</string>
-      </property>
-      <property name="text" >
-       <string>Wrap</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0" colspan="4" >
+    <item row="4" column="0" colspan="4" >
      <widget class="Line" name="line_2" >
       <property name="orientation" >
        <enum>Qt::Horizontal</enum>
       </property>
      </widget>
     </item>
-    <item row="5" column="0" colspan="4" >
-     <widget class="Line" name="line" >
+    <item row="0" column="0" colspan="4" >
+     <widget class="QLabel" name="lSearchText" >
+      <property name="text" >
+       <string>Search Text :</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0" colspan="4" >
+     <widget class="QLabel" name="lReplaceText" >
+      <property name="text" >
+       <string>Replace Text :</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0" colspan="4" >
+     <widget class="QLineEdit" name="leSearch" >
+      <property name="toolTip" >
+       <string>Enter the string or regular expression to find.</string>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="0" colspan="4" >
+     <spacer>
       <property name="orientation" >
-       <enum>Qt::Horizontal</enum>
+       <enum>Qt::Vertical</enum>
       </property>
-     </widget>
+      <property name="sizeHint" >
+       <size>
+        <width>236</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
     </item>
-    <item row="3" column="3" >
-     <widget class="QCheckBox" name="cbRegExp" >
-      <property name="toolTip" >
-       <string>If it's checked then expr is interpreted as a regular expression rather than a simple string.</string>
+    <item row="10" column="0" colspan="4" >
+     <widget class="QLabel" name="lInformations" >
+      <property name="frameShape" >
+       <enum>QFrame::StyledPanel</enum>
       </property>
       <property name="text" >
-       <string>RegExp</string>
+       <string>Informations</string>
+      </property>
+      <property name="textFormat" >
+       <enum>Qt::PlainText</enum>
       </property>
      </widget>
     </item>
-    <item row="4" column="1" colspan="2" >
-     <widget class="QCheckBox" name="cbWholeWords" >
-      <property name="toolTip" >
-       <string>If it's checked then the search looks for whole word matches only, otherwise it searches for any matching text.</string>
-      </property>
-      <property name="text" >
-       <string>Whole Words</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1" colspan="2" >
-     <widget class="QCheckBox" name="cbCaseSensitive" >
-      <property name="toolTip" >
-       <string>If it's checked then the search is case sensitive.</string>
-      </property>
-      <property name="text" >
-       <string>Case Sensitive</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="0" colspan="2" >
-     <widget class="QToolButton" name="tbPrevious" >
-      <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>7</hsizetype>
-        <vsizetype>0</vsizetype>
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="toolTip" >
-       <string>Search Previous</string>
-      </property>
-      <property name="text" >
-       <string>Search Previous</string>
-      </property>
-      <property name="icon" >
-       <iconset resource="../../resources/resources.qrc" >:/edit/icons/edit/previous.png</iconset>
-      </property>
-      <property name="toolButtonStyle" >
-       <enum>Qt::ToolButtonTextBesideIcon</enum>
-      </property>
-      <property name="autoRaise" >
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="2" colspan="2" >
-     <widget class="QToolButton" name="tbNext" >
-      <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>7</hsizetype>
-        <vsizetype>0</vsizetype>
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="toolTip" >
-       <string>Search Next</string>
-      </property>
-      <property name="text" >
-       <string>Search Next</string>
-      </property>
-      <property name="icon" >
-       <iconset resource="../../resources/resources.qrc" >:/edit/icons/edit/next.png</iconset>
-      </property>
-      <property name="toolButtonStyle" >
-       <enum>Qt::ToolButtonTextBesideIcon</enum>
-      </property>
-      <property name="autoRaise" >
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="0" colspan="2" >
-     <widget class="QToolButton" name="tbReplace" >
-      <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>7</hsizetype>
-        <vsizetype>0</vsizetype>
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="toolTip" >
-       <string>Replace</string>
-      </property>
-      <property name="text" >
-       <string>Replace</string>
-      </property>
-      <property name="icon" >
-       <iconset resource="../../resources/resources.qrc" >:/edit/icons/edit/search.png</iconset>
-      </property>
-      <property name="toolButtonStyle" >
-       <enum>Qt::ToolButtonTextBesideIcon</enum>
-      </property>
-      <property name="autoRaise" >
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="2" colspan="2" >
+    <item row="9" column="2" colspan="2" >
      <widget class="QToolButton" name="tbReplaceAll" >
       <property name="sizePolicy" >
        <sizepolicy>
@@ -219,29 +101,161 @@
       </property>
      </widget>
     </item>
-    <item row="9" column="0" colspan="4" >
+    <item row="9" column="0" colspan="2" >
+     <widget class="QToolButton" name="tbReplace" >
+      <property name="sizePolicy" >
+       <sizepolicy>
+        <hsizetype>7</hsizetype>
+        <vsizetype>0</vsizetype>
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="toolTip" >
+       <string>Replace</string>
+      </property>
+      <property name="text" >
+       <string>Replace</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="../../resources/resources.qrc" >:/edit/icons/edit/search.png</iconset>
+      </property>
+      <property name="toolButtonStyle" >
+       <enum>Qt::ToolButtonTextBesideIcon</enum>
+      </property>
+      <property name="autoRaise" >
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="2" colspan="2" >
+     <widget class="QToolButton" name="tbNext" >
+      <property name="sizePolicy" >
+       <sizepolicy>
+        <hsizetype>7</hsizetype>
+        <vsizetype>0</vsizetype>
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="toolTip" >
+       <string>Search Next</string>
+      </property>
+      <property name="text" >
+       <string>Search Next</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="../../resources/resources.qrc" >:/edit/icons/edit/next.png</iconset>
+      </property>
+      <property name="toolButtonStyle" >
+       <enum>Qt::ToolButtonTextBesideIcon</enum>
+      </property>
+      <property name="autoRaise" >
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0" colspan="2" >
+     <widget class="QToolButton" name="tbPrevious" >
+      <property name="sizePolicy" >
+       <sizepolicy>
+        <hsizetype>7</hsizetype>
+        <vsizetype>0</vsizetype>
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="toolTip" >
+       <string>Search Previous</string>
+      </property>
+      <property name="text" >
+       <string>Search Previous</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="../../resources/resources.qrc" >:/edit/icons/edit/previous.png</iconset>
+      </property>
+      <property name="toolButtonStyle" >
+       <enum>Qt::ToolButtonTextBesideIcon</enum>
+      </property>
+      <property name="autoRaise" >
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1" colspan="2" >
+     <widget class="QCheckBox" name="cbCaseSensitive" >
+      <property name="toolTip" >
+       <string>If it's checked then the search is case sensitive.</string>
+      </property>
+      <property name="text" >
+       <string>Case Sensitive</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1" colspan="2" >
+     <widget class="QCheckBox" name="cbWholeWords" >
+      <property name="toolTip" >
+       <string>If it's checked then the search looks for whole word matches only, otherwise it searches for any matching text.</string>
+      </property>
+      <property name="text" >
+       <string>Whole Words</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="3" >
+     <widget class="QCheckBox" name="cbRegExp" >
+      <property name="toolTip" >
+       <string>If it's checked then expr is interpreted as a regular expression rather than a simple string.</string>
+      </property>
+      <property name="text" >
+       <string>RegExp</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0" colspan="4" >
+     <widget class="Line" name="line" >
+      <property name="orientation" >
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0" >
+     <widget class="QCheckBox" name="cbWrap" >
+      <property name="toolTip" >
+       <string>If it's checked then the search wraps around the end of the text.</string>
+      </property>
+      <property name="text" >
+       <string>Wrap</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="3" >
      <spacer>
       <property name="orientation" >
-       <enum>Qt::Vertical</enum>
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeType" >
+       <enum>QSizePolicy::Ignored</enum>
       </property>
       <property name="sizeHint" >
        <size>
-        <width>236</width>
-        <height>40</height>
+        <width>40</width>
+        <height>20</height>
        </size>
       </property>
      </spacer>
     </item>
-    <item row="8" column="0" colspan="4" >
-     <widget class="QLabel" name="lInformations" >
-      <property name="frameShape" >
-       <enum>QFrame::StyledPanel</enum>
+    <item row="3" column="0" colspan="4" >
+     <widget class="QLineEdit" name="leReplace" >
+      <property name="toolTip" >
+       <string>Replace the current selection with this string</string>
       </property>
+     </widget>
+    </item>
+    <item row="5" column="0" >
+     <widget class="QCheckBox" name="cbFromStart" >
       <property name="text" >
-       <string>Informations</string>
-      </property>
-      <property name="textFormat" >
-       <enum>Qt::PlainText</enum>
+       <string>From Start</string>
       </property>
      </widget>
     </item>
