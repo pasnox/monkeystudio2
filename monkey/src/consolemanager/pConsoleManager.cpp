@@ -57,11 +57,8 @@ void pConsoleManager::error( QProcess::ProcessError e )
 	emit commandError( currentCommand(), e );
 	// need emulate state 0 for linux
 #ifndef Q_WS_WIN
-	stateChanged( QProcess::NotRunning );
-	/*
 	if ( e == QProcess::FailedToStart )
-		removeCommand( currentCommand() );
-	*/
+		stateChanged( QProcess::NotRunning );
 #endif
 }
 
@@ -181,7 +178,7 @@ void pConsoleManager::executeProcess()
 		}
 		// execute command
 		setWorkingDirectory( c->workingDirectory() );
-		start( c->command(), c->arguments() );
+		start( QString( "%1 %2" ).arg( c->command() ).arg( c->arguments().join( " " ) ) );
 		// exit
 		return;
 	}
