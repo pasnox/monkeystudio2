@@ -129,7 +129,7 @@
       <property name="orientation" >
        <enum>Qt::Vertical</enum>
       </property>
-      <widget class="QWidget" name="layoutWidget" >
+      <widget class="QWidget" name="layoutWidget1" >
        <layout class="QVBoxLayout" >
         <property name="spacing" >
          <number>3</number>
@@ -146,7 +146,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="layoutWidget" >
+      <widget class="QWidget" name="layoutWidget2" >
        <layout class="QVBoxLayout" >
         <property name="spacing" >
          <number>3</number>
