@@ -95,6 +95,24 @@ void ProjectItem::setFilePath( const QString& s )
 
 QString ProjectItem::getFilePath() const
 { return data( ProjectsModel::FilePathRole ).toString(); }
+
+void ProjectItem::appendRow( ProjectItem* i )
+{
+	insertRow( rowCount(), i );
+}
+
+void ProjectItem::insertRow( int r, ProjectItem* i )
+{
+	// check scope & function item
+	ProjectItem* it = reinterpret_cast<ProjectItem*>( i );
+	if ( it && ( getType() == ProjectsModel::NestedScopeType || getType() == ProjectsModel::ScopeType || getType() == ProjectsModel::FunctionType ) && it->getType() != ProjectsModel::ScopeEndType )
+		r--;
+	
+	// default insert
+	QStandardItem::insertRow( r, i );
+}
+
+
 /*
 void ProjectItem::appendRow( const QList<ProjectItem*>& l )
 { QStandardItem::appendRow( projectToStandardItemList( l ) ); }

@@ -47,6 +47,10 @@ public:
 
 	virtual void setFilePath( const QString& );
 	virtual QString getFilePath() const;
+	
+	void appendRow( ProjectItem* );
+	void insertRow( int, ProjectItem* );
+	
 	/*
 	virtual void appendRow( const QList<ProjectItem*>& );
 	virtual void appendRow( ProjectItem* );
