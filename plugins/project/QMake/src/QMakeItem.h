@@ -46,35 +46,6 @@ public:
 
 	void setFilePath( const QString& );
 	QString getFilePath() const;
-	/*
-	void appendRow( const QList<QMakeItem*>& );
-	void appendRow( QMakeItem* );
-	void appendRows( const QList<QMakeItem*>& );
-	
-	void insertColumn( int, const QList<QMakeItem*>& );
-	void insertColumns( int, int );
-	void insertRow( int, const QList<QMakeItem*>& );
-	void insertRow( int, QMakeItem* );
-	void insertRows( int, const QList<QMakeItem*>& );
-	void insertRows( int, int );
-	
-	void removeColumn( int );
-	void removeColumns( int, int );
-	void removeRow( int );
-	void removeRows( int, int );
-	
-	QMakeItem* child( int, int = 0 ) const;
-	virtual QMakeItem* clone() const;
-	
-	QMakeItem* parent() const;
-	
-	void setChild( int, int, QMakeItem* );
-	void setChild( int, QMakeItem* );
-	
-	QMakeItem* takeChild( int, int = 0 );
-	QList<QMakeItem*> takeColumn( int );
-	QList<QMakeItem*> takeRow( int );
-	*/
 
 };
 
