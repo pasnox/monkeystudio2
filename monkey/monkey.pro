@@ -89,7 +89,8 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/pluginsmanager/PluginsManager.h \
 	src/pluginsmanager/ui/UIPluginsSettings.h \
 	src/projectsmanager/ui/UIProjectsManager.h \
-	src/projectsmanager/ProjectsModel.h
+	src/projectsmanager/ProjectsModel.h \
+	src/projectsmanager/ProjectItem.h
 
 SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/maininterface/ui/UIAbout.cpp \
@@ -118,6 +119,7 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/pluginsmanager/ui/UIPluginsSettings.cpp \
 	src/projectsmanager/ui/UIProjectsManager.cpp \
 	src/projectsmanager/ProjectsModel.cpp \
+	src/projectsmanager/ProjectItem.cpp \
 	src/main.cpp
 
 unix:SOURCES	*= src/toolsmanager/pDesktopApplications_unix.cpp

@@ -2,8 +2,8 @@
 **
 ** 		Created using Monkey Studio v1.7.0
 ** Author    : Nox P@sNox aka Azevedo Filipe <pasnox@gmail.com>
-** Project   : QMakeItem
-** FileName  : QMakeItem.h
+** Project   : ProjectItem
+** FileName  : ProjectItem.h
 ** Date      : 2007-09-04T15:07:31
 ** License   : GPL
 ** Comment   : Your comment here
@@ -12,72 +12,70 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ****************************************************************************/
-#ifndef QMAKEITEM_H
-#define QMAKEITEM_H
+#ifndef PROJECTITEM_H
+#define PROJECTITEM_H
 
 #include <QStandardItem>
 
 #include "ProjectsModel.h"
 
-class QMakeItem : public QStandardItem
+class ProjectItem : public QStandardItem
 {
-
 public:
-	QMakeItem( ProjectsModel::NodeType = ProjectsModel::ProjectType, QMakeItem* = 0 );
+	ProjectItem( ProjectsModel::NodeType = ProjectsModel::ProjectType, ProjectItem* = 0 );
 
-	void setType( ProjectsModel::NodeType );
-	ProjectsModel::NodeType getType();
+	virtual void setType( ProjectsModel::NodeType );
+	virtual ProjectsModel::NodeType getType();
 
-	void setOperator( const QString& );
-	QString getOperator() const;
+	virtual void setOperator( const QString& );
+	virtual QString getOperator() const;
 
-	void setValue( const QString& );
-	QString getValue() const;
+	virtual void setValue( const QString& );
+	virtual QString getValue() const;
 
-	void setMultiLine( bool );
-	bool getMultiLine() const;
+	virtual void setMultiLine( bool );
+	virtual bool getMultiLine() const;
 
-	void setModified( bool );
-	bool getModified() const;
+	virtual void setModified( bool );
+	virtual bool getModified() const;
 
-	void setReadOnly( bool );
-	bool getReadOnly() const;
+	virtual void setReadOnly( bool );
+	virtual bool getReadOnly() const;
 
-	void setComment( const QString& );
-	QString getComment() const;
+	virtual void setComment( const QString& );
+	virtual QString getComment() const;
 
-	void setFilePath( const QString& );
-	QString getFilePath() const;
+	virtual void setFilePath( const QString& );
+	virtual QString getFilePath() const;
 	/*
-	void appendRow( const QList<QMakeItem*>& );
-	void appendRow( QMakeItem* );
-	void appendRows( const QList<QMakeItem*>& );
+	virtual void appendRow( const QList<ProjectItem*>& );
+	virtual void appendRow( ProjectItem* );
+	virtual void appendRows( const QList<ProjectItem*>& );
 	
-	void insertColumn( int, const QList<QMakeItem*>& );
-	void insertColumns( int, int );
-	void insertRow( int, const QList<QMakeItem*>& );
-	void insertRow( int, QMakeItem* );
-	void insertRows( int, const QList<QMakeItem*>& );
-	void insertRows( int, int );
+	virtual void insertColumn( int, const QList<ProjectItem*>& );
+	virtual void insertColumns( int, int );
+	virtual void insertRow( int, const QList<ProjectItem*>& );
+	virtual void insertRow( int, ProjectItem* );
+	virtual void insertRows( int, const QList<ProjectItem*>& );
+	virtual void insertRows( int, int );
 	
-	void removeColumn( int );
-	void removeColumns( int, int );
-	void removeRow( int );
-	void removeRows( int, int );
+	virtual void removeColumn( int );
+	virtual void removeColumns( int, int );
+	virtual void removeRow( int );
+	virtual void removeRows( int, int );
 	
-	QMakeItem* child( int, int = 0 ) const;
-	virtual QMakeItem* clone() const;
+	template <class T> T child( int, int = 0 ) const;
+	template <class T> T clone() const;
 	
-	QMakeItem* parent() const;
+	template <class T> T parent() const;
 	
-	void setChild( int, int, QMakeItem* );
-	void setChild( int, QMakeItem* );
+	virtual void setChild( int, int, ProjectItem* );
+	virtual void setChild( int, ProjectItem* );
 	
-	QMakeItem* takeChild( int, int = 0 );
-	QList<QMakeItem*> takeColumn( int );
-	QList<QMakeItem*> takeRow( int );
+	template <class T> T takeChild( int, int = 0 );
+	template <class T> QList<T> takeColumn( int );
+	template <class T> QList<T> takeRow( int );
 	*/
-
 };
 
-#endif // QMAKEITEM_H
+#endif // PROJECTITEM_H

@@ -2,8 +2,8 @@
 **
 ** 		Created using Monkey Studio v1.7.0
 ** Author    : Nox P@sNox aka Azevedo Filipe <pasnox@gmail.com>
-** Project   : QMakeItem
-** FileName  : QMakeItem.cpp
+** Project   : ProjectItem
+** FileName  : ProjectItem.cpp
 ** Date      : 2007-09-04T15:07:31
 ** License   : GPL
 ** Comment   : Your comment here
@@ -12,9 +12,9 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ****************************************************************************/
-#include "QMakeItem.h"
+#include "ProjectItem.h"
 
-QMakeItem::QMakeItem( ProjectsModel::NodeType t, QMakeItem* i )
+ProjectItem::ProjectItem( ProjectsModel::NodeType t, ProjectItem* i )
 {
 	// set type
 	setType( t );
@@ -40,168 +40,123 @@ QMakeItem::QMakeItem( ProjectsModel::NodeType t, QMakeItem* i )
 	*/
 }
 
-void QMakeItem::setType( ProjectsModel::NodeType t )
+QList<QStandardItem*> projectToStandardItemList( const QList<ProjectItem*> l )
 {
-	setData( t, ProjectsModel::TypeRole );
+	QList<QStandardItem*> ll;
+	foreach ( ProjectItem* it, l )
+		ll << reinterpret_cast<QStandardItem*>( it );
+	return ll;
 }
 
-ProjectsModel::NodeType QMakeItem::getType()
-{
-	return (ProjectsModel::NodeType)data( ProjectsModel::TypeRole ).toInt();
-}
+void ProjectItem::setType( ProjectsModel::NodeType t )
+{ setData( t, ProjectsModel::TypeRole ); }
 
-void QMakeItem::setOperator( const QString& s )
-{
-	setData( s, ProjectsModel::OperatorRole );
-}
+ProjectsModel::NodeType ProjectItem::getType()
+{ return (ProjectsModel::NodeType)data( ProjectsModel::TypeRole ).toInt(); }
 
-QString QMakeItem::getOperator() const
-{
-	return data( ProjectsModel::OperatorRole ).toString();
-}
+void ProjectItem::setOperator( const QString& s )
+{ setData( s, ProjectsModel::OperatorRole ); }
 
-void QMakeItem::setValue( const QString& s )
-{
-	setData( s, ProjectsModel::ValueRole );
-	setText( s );
-}
+QString ProjectItem::getOperator() const
+{ return data( ProjectsModel::OperatorRole ).toString(); }
 
-QString QMakeItem::getValue() const
-{
-	return data( ProjectsModel::ValueRole ).toString();
-}
+void ProjectItem::setValue( const QString& s )
+{ setData( s, ProjectsModel::ValueRole ); }
 
-void QMakeItem::setMultiLine( bool b )
-{
-	setData( b, ProjectsModel::MultiLineRole );
-}
+QString ProjectItem::getValue() const
+{ return data( ProjectsModel::ValueRole ).toString(); }
 
-bool QMakeItem::getMultiLine() const
-{
-	return data( ProjectsModel::MultiLineRole ).toBool();
-}
+void ProjectItem::setMultiLine( bool b )
+{ setData( b, ProjectsModel::MultiLineRole ); }
 
-void QMakeItem::setModified( bool b )
-{
-	setData( b, ProjectsModel::ModifiedRole );
-}
+bool ProjectItem::getMultiLine() const
+{ return data( ProjectsModel::MultiLineRole ).toBool(); }
 
-bool QMakeItem::getModified() const
-{
-	return data( ProjectsModel::ModifiedRole ).toBool();
-}
+void ProjectItem::setModified( bool b )
+{ setData( b, ProjectsModel::ModifiedRole ); }
 
-void QMakeItem::setReadOnly( bool b )
-{
-	setData( b, ProjectsModel::ReadOnlyRole );
-}
+bool ProjectItem::getModified() const
+{ return data( ProjectsModel::ModifiedRole ).toBool(); }
 
-bool QMakeItem::getReadOnly() const
-{
-	return data( ProjectsModel::ReadOnlyRole ).toBool();
-}
+void ProjectItem::setReadOnly( bool b )
+{ setData( b, ProjectsModel::ReadOnlyRole ); }
 
-void QMakeItem::setComment( const QString& s )
-{
-	setData( s, ProjectsModel::CommentRole );
-}
+bool ProjectItem::getReadOnly() const
+{ return data( ProjectsModel::ReadOnlyRole ).toBool(); }
 
-QString QMakeItem::getComment() const
-{
-	return data( ProjectsModel::CommentRole ).toString();
-}
+void ProjectItem::setComment( const QString& s )
+{ setData( s, ProjectsModel::CommentRole ); }
 
-void QMakeItem::setFilePath( const QString& s )
-{
-	setData( s, ProjectsModel::FilePathRole );
-}
+QString ProjectItem::getComment() const
+{ return data( ProjectsModel::CommentRole ).toString(); }
 
-QString QMakeItem::getFilePath() const
-{
-	return data( ProjectsModel::FilePathRole ).toString();
-}
+void ProjectItem::setFilePath( const QString& s )
+{ setData( s, ProjectsModel::FilePathRole ); }
+
+QString ProjectItem::getFilePath() const
+{ return data( ProjectsModel::FilePathRole ).toString(); }
 /*
-void QMakeItem::appendRow( const QList<QMakeItem*>& )
-{
-}
+void ProjectItem::appendRow( const QList<ProjectItem*>& l )
+{ QStandardItem::appendRow( projectToStandardItemList( l ) ); }
 
-void QMakeItem::appendRow( QMakeItem* )
-{
-}
+void ProjectItem::appendRow( ProjectItem* i )
+{ QStandardItem::appendRow( i ); }
 
-void QMakeItem::appendRows( const QList<QMakeItem*>& )
-{
-}
+void ProjectItem::appendRows( const QList<ProjectItem*>& l )
+{ QStandardItem::appendRows( projectToStandardItemList( l ) ); }
 
-void QMakeItem::insertColumn( int, const QList<QMakeItem*>& )
-{
-}
+void ProjectItem::insertColumn( int i, const QList<ProjectItem*>& l )
+{ QStandardItem::insertColumn( i, projectToStandardItemList( l ) ); }
 
-void QMakeItem::insertColumns( int, int )
-{
-}
+void ProjectItem::insertColumns( int i, int c )
+{ QStandardItem::insertColumns( i, c ); }
 
-void QMakeItem::insertRow( int, const QList<QMakeItem*>& )
-{
-}
+void ProjectItem::insertRow( int i, const QList<ProjectItem*>& l )
+{ QStandardItem::insertRow( i, projectToStandardItemList( l ) ); }
 
-void QMakeItem::insertRow( int, QMakeItem* )
-{
-}
+void ProjectItem::insertRow( int r, ProjectItem* i )
+{ QStandardItem::insertRow( r, i ); }
 
-void QMakeItem::insertRows( int, const QList<QMakeItem*>& )
-{
-}
+void ProjectItem::insertRows( int i, const QList<ProjectItem*>& l )
+{ QStandardItem::insertRows( i, projectToStandardItemList( l ) ); }
 
-void QMakeItem::insertRows( int, int )
-{
-}
+void ProjectItem::insertRows( int r, int c )
+{ QStandardItem::insertRows( r, c ); }
 
-void QMakeItem::removeColumn( int )
-{
-}
+void ProjectItem::removeColumn( int i )
+{ QStandardItem::removeColumn( i ); }
 
-void QMakeItem::removeColumns( int, int )
-{
-}
+void ProjectItem::removeColumns( int i, int c )
+{ QStandardItem::removeColumns( i, c ); }
 
-void QMakeItem::removeRow( int )
-{
-}
+void ProjectItem::removeRow( int i )
+{ QStandardItem::removeRow( i ); }
 
-void QMakeItem::removeRows( int, int )
-{
-}
+void ProjectItem::removeRows( int r, int c )
+{ QStandardItem::removeRows( r, c ); }
 
-QMakeItem* QMakeItem::child( int, int ) const
-{
-}
+template <class T> T ProjectItem::child( int r, int c ) const
+{ return reinterpret_cast<T>( QStandardItem::child( r, c ) ); }
 
-QMakeItem* QMakeItem::clone() const
-{
-}
+template <class T> T ProjectItem::clone() const
+{ return reinterpret_cast<T>( QStandardItem::clone() ); }
 
-QMakeItem* QMakeItem::parent() const
-{
-}
+template <class T> T ProjectItem::parent() const
+{ return reinterpret_cast<T>( QStandardItem::parent() ); }
 
-void QMakeItem::setChild( int, int, QMakeItem* )
-{
-}
+void ProjectItem::setChild( int r, int c, ProjectItem* i )
+{ QStandardItem::setChild( r, c, i ); }
 
-void QMakeItem::setChild( int, QMakeItem* )
-{
-}
+void ProjectItem::setChild( int r, ProjectItem* i )
+{ QStandardItem::setChild( r, i ); }
 
-QMakeItem* QMakeItem::takeChild( int, int )
-{
-}
+template <class T> T ProjectItem::takeChild( int r, int c )
+{ return reinterQStandardItem::takeChild( r, c ); }
 
-QList<QMakeItem*> QMakeItem::takeColumn( int )
-{
-}
+template <class T> QList<T> ProjectItem::takeColumn( int i )
+{ return QStandardItem::takeColumn( i ); }
 
-QList<QMakeItem*> QMakeItem::takeRow( int )
-{
-}
+template <class T> QList<T> ProjectItem::takeRow( int i )
+{ return QStandardItem::takeRow( i ); }
 */
+
