@@ -42,7 +42,49 @@ QMakeItem::QMakeItem( ProjectsModel::NodeType t, QMakeItem* i )
 
 void QMakeItem::setType( ProjectsModel::NodeType t )
 {
+	// set data
 	setData( t, ProjectsModel::TypeRole );
+	
+	// update icon
+	switch( t )
+	{
+		case ProjectsModel::EmptyType:
+			setIcon( QIcon( ":/icons/icons/line.png" ) );
+			break;
+		case ProjectsModel::FileType:
+			setIcon( QIcon( ":/icons/icons/file.png" ) );
+			break;
+		case ProjectsModel::CommentType:
+			setIcon( QIcon( ":/icons/icons/comment.png" ) );
+			break;
+		case ProjectsModel::NestedScopeType:
+			setIcon( QIcon( ":/icons/icons/scope.png" ) );
+			break;
+		case ProjectsModel::ScopeType:
+			setIcon( QIcon( ":/icons/icons/scope.png" ) );
+			break;
+		case ProjectsModel::ScopeEndType:
+			setIcon( QIcon( ":/icons/icons/scope_end.png" ) );
+			break;
+		case ProjectsModel::VariableType:
+			setIcon( QIcon( ":/icons/icons/variable.png" ) );
+			break;
+		case ProjectsModel::ValueType:
+			setIcon( QIcon( ":/icons/icons/value.png" ) );
+			break;
+		case ProjectsModel::FunctionType:
+			setIcon( QIcon( ":/icons/icons/function.png" ) );
+			break;
+		case ProjectsModel::IncludeType:
+			setIcon( QIcon( ":/icons/icons/include.png" ) );
+			break;
+		case ProjectsModel::ProjectType:
+			setIcon( QIcon( ":/icons/icons/project.png" ) );
+			break;
+		default:
+			setIcon( QIcon() );
+			break;
+	}
 }
 
 ProjectsModel::NodeType QMakeItem::getType()
