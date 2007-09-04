@@ -4,21 +4,20 @@
 #include "MonkeyExport.h"
 #include "BasePlugin.h"
 
+#include <QHash>
 #include <QStringList>
+#include <QStandardItem>
 
 class Q_MONKEY_EXPORT ProjectPlugin : public BasePlugin
 {
 	Q_OBJECT
 	
 public:
-	// the extensions this project can manage
-	virtual QStringList extensions() const
-	{ return mExtensions; }
-	// the filters list to give to openfile dialog
-	virtual QStringList filters() const
-	{ return QStringList(); }
+	// the suffixes this project can manage
+	virtual QHash<QString, QStringList> suffixes() const
+	{ return mSuffixes; }
 	// the function that open a project
-	virtual bool openProject( const QString& ) = 0;
+	virtual QStandardItem* openProject( const QString&, QStandardItem* = 0 ) = 0;
 	// the compiler this project use
 	virtual QString compiler() const
 	{ return QString::null; }
@@ -30,7 +29,7 @@ public:
 	{ return QString::null; }
 	
 protected:
-	QStringList mExtensions;
+	QHash<QString, QStringList> mSuffixes;
 	
 };
 

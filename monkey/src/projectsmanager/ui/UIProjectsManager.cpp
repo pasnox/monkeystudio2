@@ -14,23 +14,34 @@
 ****************************************************************************/
 #include "UIProjectsManager.h"
 #include "pMenuBar.h"
+#include "PluginsManager.h"
+#include "pMonkeyStudio.h"
+#include "pRecentsManager.h"
 
 UIProjectsManager::UIProjectsManager( QWidget* w )
 	: QDockWidget( w ), mProjects( new ProjectsModel( this ) )
 {
 	setupUi( this );
+	// set icons size
+	tbButtons->setIconSize( QSize( 10, 10 ) );
+	// set layout margin & spacing
+	tbButtons->layout()->setMargin( 0 );
+	tbButtons->layout()->setSpacing( 0 );
 	// get menubar
 	pMenuBar* mb = pMenuBar::instance();
 	// set buttons action
-	tbFiltered->setDefaultAction( mb->action( "mView/aFiltered" ) );
-	tbNew->setDefaultAction( mb->action( "mProject/aNew" ) );
-	tbOpen->setDefaultAction( mb->action( "mProject/aOpen" ) );
-	tbOpen->setMenu( mb->menu( "mProject/mRecents" ) );
-	tbSave->setDefaultAction( mb->action( "mProject/mSave/aCurrent" ) );
-	tbSaveAll->setDefaultAction( mb->action( "mProject/mSave/aAll" ) );
-	tbClose->setDefaultAction( mb->action( "mProject/mClose/aCurrent" ) );
-	tbCloseAll->setDefaultAction( mb->action( "mProject/mClose/aAll" ) );
-	tbSettings->setDefaultAction( mb->action( "mProject/aSettings" ) );
+	tbButtons->addAction( mb->action( "mView/aFiltered" ) );
+	tbButtons->addSeparator();
+	tbButtons->addAction( mb->action( "mProject/aNew" ) );
+	tbButtons->addAction( mb->action( "mProject/aOpen" ) );
+	tbButtons->addSeparator();
+	tbButtons->addAction( mb->action( "mProject/mSave/aCurrent" ) );
+	tbButtons->addAction( mb->action( "mProject/mSave/aAll" ) );
+	tbButtons->addSeparator();
+	tbButtons->addAction( mb->action( "mProject/mClose/aCurrent" ) );
+	tbButtons->addAction( mb->action( "mProject/mClose/aAll" ) );
+	tbButtons->addSeparator();
+	tbButtons->addAction( mb->action( "mProject/aSettings" ) );
 	// set projects model
 	tvProjects->setModel( mProjects );
 }
@@ -39,9 +50,26 @@ UIProjectsManager::~UIProjectsManager()
 {
 }
 
-void UIProjectsManager::openProject( const QString& )
+bool UIProjectsManager::openProject( const QString& s )
 {
-	qWarning( "open project" );
+	// looking plugins that can open this suffixe
+	ProjectPlugin* pp = PluginsManager::instance()->projectPluginForFileName( s );
+	// project root item
+	QStandardItem* it = 0;
+	// try opening project
+	if ( pp )
+	{
+		// parse project
+		it = pp->openProject( s );
+		if ( it )
+			mProjects->appendRow( it );
+		else
+			pMonkeyStudio::warning( tr( "Open Project" ), tr( "An error occur while opening this project:\n[%1]" ).arg( s ) );
+	}
+	else
+		pMonkeyStudio::warning( tr( "Open Project..." ), tr( "There is no plugin that can manage this kind of project.\n[%1]" ).arg( s ) );
+	// return it
+	return it;
 }
 
 void UIProjectsManager::projectNew_triggered()
@@ -51,7 +79,38 @@ void UIProjectsManager::projectNew_triggered()
 
 void UIProjectsManager::projectOpen_triggered()
 {
-	qWarning( "open" );
+	// get last file open path
+	const QString mPath = pRecentsManager::instance()->recentProjectOpenPath();
+
+	// get available filters
+	QString mFilters = pMonkeyStudio::availableProjectsFilters();
+
+	// prepend a all in one filter
+	if ( !mFilters.isEmpty() )
+	{
+		QString s;
+		foreach ( QStringList l, pMonkeyStudio::availableProjectsSuffixes().values() )
+			s.append( l.join( " " ).append( " " ) );
+		mFilters.prepend( QString( "All Supported Projects (%1);;" ).arg( s.trimmed() ) );
+	}
+
+	// open open file dialog
+	QStringList l = pMonkeyStudio::getOpenFileNames( tr( "Choose the project(s) to open" ), mPath, mFilters, window() );
+
+	// for each entry, open file
+	foreach ( QString s, l )
+	{
+		if ( openProject( s ) )
+			// append file to recents
+			pRecentsManager::instance()->addRecentProject( s );
+		else
+			// remove it from recents files
+			pRecentsManager::instance()->removeRecentProject( s );
+	}
+
+	// store file open path
+	if ( !l.isEmpty() )
+		pRecentsManager::instance()->setRecentProjectOpenPath( QFileInfo( l.at( 0 ) ).canonicalPath() );
 }
 
 void UIProjectsManager::projectSaveCurrent_triggered()

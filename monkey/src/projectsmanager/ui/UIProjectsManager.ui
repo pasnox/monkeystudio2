@@ -14,112 +14,41 @@
   </property>
   <widget class="QWidget" name="wCentral" >
    <layout class="QVBoxLayout" >
+    <property name="margin" >
+     <number>5</number>
+    </property>
     <property name="spacing" >
      <number>3</number>
     </property>
-    <property name="leftMargin" >
-     <number>5</number>
-    </property>
-    <property name="topMargin" >
-     <number>5</number>
-    </property>
-    <property name="rightMargin" >
-     <number>5</number>
-    </property>
-    <property name="bottomMargin" >
-     <number>5</number>
-    </property>
     <item>
      <widget class="QFrame" name="fButtons" >
-      <property name="minimumSize" >
-       <size>
-        <width>16</width>
-        <height>25</height>
-       </size>
+      <property name="sizePolicy" >
+       <sizepolicy>
+        <hsizetype>7</hsizetype>
+        <vsizetype>5</vsizetype>
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
       <property name="frameShape" >
-       <enum>QFrame::NoFrame</enum>
-      </property>
-      <property name="frameShadow" >
-       <enum>QFrame::Raised</enum>
+       <enum>QFrame::StyledPanel</enum>
       </property>
       <layout class="QHBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
        <property name="spacing" >
         <number>0</number>
        </property>
-       <property name="leftMargin" >
-        <number>0</number>
-       </property>
-       <property name="topMargin" >
-        <number>0</number>
-       </property>
-       <property name="rightMargin" >
-        <number>0</number>
-       </property>
-       <property name="bottomMargin" >
-        <number>0</number>
-       </property>
        <item>
-        <spacer>
+        <widget class="QToolBar" name="tbButtons" >
+         <property name="styleSheet" >
+          <string>.QToolBar { border : none }</string>
+         </property>
          <property name="orientation" >
           <enum>Qt::Horizontal</enum>
          </property>
-         <property name="sizeHint" >
-          <size>
-           <width>23</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QToolButton" name="tbFiltered" />
-       </item>
-       <item>
-        <widget class="QToolButton" name="tbNew" />
-       </item>
-       <item>
-        <widget class="QToolButton" name="tbOpen" >
-         <property name="popupMode" >
-          <enum>QToolButton::MenuButtonPopup</enum>
-         </property>
         </widget>
-       </item>
-       <item>
-        <widget class="Line" name="l1" >
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="tbSave" />
-       </item>
-       <item>
-        <widget class="QToolButton" name="tbSaveAll" />
-       </item>
-       <item>
-        <widget class="Line" name="l2" >
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="tbClose" />
-       </item>
-       <item>
-        <widget class="QToolButton" name="tbCloseAll" />
-       </item>
-       <item>
-        <widget class="Line" name="l3" >
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="tbSettings" />
        </item>
       </layout>
      </widget>
@@ -131,6 +60,9 @@
       </property>
       <widget class="QWidget" name="layoutWidget1" >
        <layout class="QVBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
         <property name="spacing" >
          <number>3</number>
         </property>
@@ -148,6 +80,9 @@
       </widget>
       <widget class="QWidget" name="layoutWidget2" >
        <layout class="QVBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
         <property name="spacing" >
          <number>3</number>
         </property>

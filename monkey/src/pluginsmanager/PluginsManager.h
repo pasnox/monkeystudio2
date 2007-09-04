@@ -4,6 +4,7 @@
 #include "MonkeyExport.h"
 #include "QSingleton.h"
 #include "BasePlugin.h"
+#include "ProjectPlugin.h"
 
 #include <QApplication>
 
@@ -17,14 +18,12 @@ class Q_MONKEY_EXPORT PluginsManager : public QObject, public QSingleton<Plugins
 public:
 	void loadsPlugins( const QString& = QString() );
 	QList<BasePlugin*> plugins() const;
-	BasePlugin* plugin( const QString&, BasePlugin::Type = BasePlugin::iAll,  const QString& = QString::null );
+	template <class T>
+	QList<T> plugins( const QString&, BasePlugin::Type = BasePlugin::iAll,  const QString& = QString::null );
+	template <class T>
+	T plugin( const QString&, BasePlugin::Type = BasePlugin::iAll,  const QString& = QString::null );
+	ProjectPlugin* projectPluginForFileName( const QString& );
 	
-/*
-	// loading files using childs plugins
-	bool childPluginOpenFile( const QString&, AbstractProjectProxy* = 0 );
-	QStringList childsFilters() const;
-*/
-
 private:
 	QList<BasePlugin*> mPlugins;
 	PluginsManager( QObject* = QApplication::instance() );

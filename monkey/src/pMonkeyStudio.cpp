@@ -9,6 +9,8 @@
 *****************************************************/
 #include "pMonkeyStudio.h"
 #include "pSettings.h"
+#include "PluginsManager.h"
+#include "ProjectPlugin.h"
 
 #include "pWorkspace.h"
 #include "pAbstractChild.h"
@@ -354,6 +356,18 @@ const QHash<QString, QStringList> pMonkeyStudio::availableSuffixes()
 	return l;
 }
 
+const QHash<QString, QStringList> pMonkeyStudio::availableProjectsSuffixes()
+{
+	// temporary hash
+	QHash<QString, QStringList> mSuffixes;
+	// get all hash
+	foreach ( BasePlugin* bp, PluginsManager::instance()->plugins() )
+		if ( bp->isEnabled() && bp->infos().Type == BasePlugin::iProject )
+			mSuffixes.unite( qobject_cast<ProjectPlugin*>( bp )->suffixes() );
+	// return suffixes
+	return mSuffixes;
+}
+
 const QString pMonkeyStudio::availableLanguagesFilters()
 {
 	QString f;
@@ -362,6 +376,21 @@ const QString pMonkeyStudio::availableLanguagesFilters()
 	//
 	foreach ( QString k, sl.keys() )
 		f += QString( "%1 Files ( %2 );;" ).arg( k ).arg( sl.value( k ).join( " " ) );
+	// remove trailing ;;
+	if ( f.endsWith( ";;" ) )
+		f.chop( 2 );
+	// return filters list
+	return f;
+}
+
+const QString pMonkeyStudio::availableProjectsFilters()
+{
+	QString f;
+	// get suffixes
+	QHash<QString, QStringList> sl = availableProjectsSuffixes();
+	//
+	foreach ( QString k, sl.keys() )
+		f += QString( "%1 ( %2 );;" ).arg( k ).arg( sl.value( k ).join( " " ) );
 	// remove trailing ;;
 	if ( f.endsWith( ";;" ) )
 		f.chop( 2 );
@@ -407,7 +436,7 @@ QsciLexer* pMonkeyStudio::lexerForFilename( const QString& s )
 	const QString sf = QFileInfo( s ).suffix().prepend( "*." );
 	const QString f = QFileInfo( s ).fileName();
 	bool b = false;
-	// basic setup need change for makefile and cmake
+	// checking suffix
 	foreach ( QString k, l.keys() )
 	{
 		// check normal extension: ie *.ext

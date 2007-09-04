@@ -12,17 +12,59 @@ PluginsManager::PluginsManager( QObject* p )
 QList<BasePlugin*> PluginsManager::plugins() const
 { return mPlugins; }
 
-BasePlugin* PluginsManager::plugin( const QString& n, BasePlugin::Type t, const QString& v )
+template <class T>
+QList<T> PluginsManager::plugins( const QString& n, BasePlugin::Type t, const QString& v )
 {
+	// temporary list
+	QList<T> l;
 	// for each plugin
 	foreach ( BasePlugin* bp, mPlugins )
-		// good name
-		if ( bp->infos().Name == n )
-			// good type or type = iAll
-			if ( t == BasePlugin::iAll || bp->infos().Type == t )
-				// no version or good version
-				if ( v.isNull() || bp->infos().Version == v )
-					return bp;
+		// plugin must be enabled
+		if ( bp->isEnabled() )
+			// empty or good name
+			if ( n.isEmpty() || bp->infos().Name == n )
+				// good type or type = iAll
+				if ( t == BasePlugin::iAll || bp->infos().Type == t )
+					// no version or good version
+					if ( v.isEmpty() || bp->infos().Version == v )
+						if ( qobject_cast<T>( bp ) )
+							l << qobject_cast<T>( bp );
+	// return list
+	return l;
+}
+
+template <class T>
+T PluginsManager::plugin( const QString& n, BasePlugin::Type t, const QString& v )
+{
+	return plugins<T>( n, t, v ).value( 0 );
+}
+
+ProjectPlugin* PluginsManager::projectPluginForFileName( const QString& s )
+{
+	foreach ( ProjectPlugin* pp, plugins<ProjectPlugin*>( "", BasePlugin::iProject ) )
+	{
+		// get plugin suffixes
+		QHash<QString, QStringList> l = pp->suffixes();
+		// file suffixe
+		const QString sf = QFileInfo( s ).suffix().prepend( "*." );
+		const QString f = QFileInfo( s ).fileName();
+		bool b = false;
+		// check all suffixes
+		foreach ( QString k, l.keys() )
+		{
+			// check normal extension: ie *.ext
+			b = l.value( k ).contains( sf, Qt::CaseInsensitive );
+			// if not found try regexp expression: ie *makefile or Makefile*
+			if ( !b )
+				foreach ( QString sx, l.value( k ) )
+					if ( ( b = QRegExp( sx, Qt::CaseInsensitive, QRegExp::Wildcard ).exactMatch( f ) ) )
+						break;
+			// if suffixe match
+			if ( b )
+				return pp;
+		}
+	}
+	// not found
 	return 0;
 }
 
@@ -115,37 +157,3 @@ void PluginsManager::manageRequested()
 {
 	UIPluginsSettings::instance()->exec(); 
 }
-
-/*
-bool PluginsManager::childPluginOpenFile( const QString& s, AbstractProjectProxy* p )
-{
-	QString mExtension = QFileInfo( s ).completeSuffix();
-	foreach ( BasePlugin* bp, mPlugins )
-	{
-		if ( bp->infos().Type == BasePlugin::iChild )
-		{
-			ChildPlugin* cp = (ChildPlugin*)bp;
-			if ( cp && cp->infos().Installed && cp->extensions().contains( mExtension, Qt::CaseInsensitive ) )
-				return cp->openFile( s, p );
-		}
-	}
-	return QDesktopServices::openUrl( s );
-}
-
-QStringList PluginsManager::childsFilters() const
-{
-	QStringList l;
-	foreach ( BasePlugin* bp, mPlugins )
-	{
-		if ( bp->infos().Type == BasePlugin::iChild )
-		{
-			ChildPlugin* cp = (ChildPlugin*)bp;
-			if ( cp && cp->infos().Installed )
-				l << cp->filters();
-		}
-	}
-	return l;
-}
-//
-
-*/

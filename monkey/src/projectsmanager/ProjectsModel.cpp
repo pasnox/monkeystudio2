@@ -1,11 +1,8 @@
 #include "ProjectsModel.h"
 
-#include <QFileInfo>
-
 ProjectsModel::ProjectsModel( QObject* o )
 	: QStandardItemModel( o )
 {
-	appendRow( new QStandardItem( "Root" ) );
 }
 
 ProjectsModel::~ProjectsModel()

@@ -34,7 +34,7 @@ private:
 	~UIProjectsManager();
 
 public slots:
-	void openProject( const QString& );
+	bool openProject( const QString& );
 	void projectNew_triggered();
 	void projectOpen_triggered();
 	void projectSaveCurrent_triggered();

@@ -34,6 +34,7 @@ namespace pMonkeyStudio
 	Q_MONKEY_EXPORT const QStringList availableTextCodecs();
 	Q_MONKEY_EXPORT const QStringList availableImageFormats();
 	Q_MONKEY_EXPORT const QStringList availableLanguages();
+	Q_MONKEY_EXPORT const QStringList availableProjects();
 
 	Q_MONKEY_EXPORT const QFileInfoList getFiles( QDir d, const QString& = QString::null, bool = true );
 
@@ -52,7 +53,9 @@ namespace pMonkeyStudio
 
 	Q_MONKEY_EXPORT const QHash<QString, QStringList> defaultSuffixes();
 	Q_MONKEY_EXPORT const QHash<QString, QStringList> availableSuffixes();
+	Q_MONKEY_EXPORT const QHash<QString, QStringList> availableProjectsSuffixes();
 	Q_MONKEY_EXPORT const QString availableLanguagesFilters();
+	Q_MONKEY_EXPORT const QString availableProjectsFilters();
 
 	Q_MONKEY_EXPORT const QString settingsPath();
 	Q_MONKEY_EXPORT const QString scintillaSettingsPath();
