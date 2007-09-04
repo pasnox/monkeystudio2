@@ -1,2 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS	= base
+SUBDIRS	= base project
