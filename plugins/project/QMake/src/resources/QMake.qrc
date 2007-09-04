@@ -1,7 +1,25 @@
 <RCC>
-	<qresource>
-		<file>icons/browser.png</file>
-		<file>icons/up.png</file>
-		<file>icons/reload.png</file>
-	</qresource>
+    <qresource prefix="/Icons" >
+        <file>icons/advanced.png</file>
+        <file>icons/application.png</file>
+        <file>icons/codec.png</file>
+        <file>icons/comment.png</file>
+        <file>icons/define.png</file>
+        <file>icons/form.png</file>
+        <file>icons/function.png</file>
+        <file>icons/header.png</file>
+        <file>icons/library.png</file>
+        <file>icons/line.png</file>
+        <file>icons/project.png</file>
+        <file>icons/qt.png</file>
+        <file>icons/resource.png</file>
+        <file>icons/scope.png</file>
+        <file>icons/scope_end.png</file>
+        <file>icons/setting.png</file>
+        <file>icons/source.png</file>
+        <file>icons/translation.png</file>
+        <file>icons/unknow.png</file>
+        <file>icons/value.png</file>
+        <file>icons/variable.png</file>
+    </qresource>
 </RCC>
