@@ -45,19 +45,9 @@ void QMakeItem::setType( ProjectsModel::NodeType t )
 	setData( t, ProjectsModel::TypeRole );
 }
 
-ProjectsModel::NodeType QMakeItem::type()
+ProjectsModel::NodeType QMakeItem::getType()
 {
-	return (ProjectsModel::NodeType)data( QMakeItem::TypeRole ).toInt();
-}
-
-void QMakeItem::setCaption( const QString& s )
-{
-	setData( s, ProjectsModel::CaptionRole );
-}
-
-QString QMakeItem::caption() const
-{
-	return data( QMakeItem::CaptionRole ).toString();
+	return (ProjectsModel::NodeType)data( ProjectsModel::TypeRole ).toInt();
 }
 
 void QMakeItem::setOperator( const QString& s )
@@ -65,19 +55,20 @@ void QMakeItem::setOperator( const QString& s )
 	setData( s, ProjectsModel::OperatorRole );
 }
 
-QString QMakeItem::operator() const
+QString QMakeItem::getOperator() const
 {
-	return data( QMakeItem::OperatorRole ).toString();
+	return data( ProjectsModel::OperatorRole ).toString();
 }
 
 void QMakeItem::setValue( const QString& s )
 {
 	setData( s, ProjectsModel::ValueRole );
+	setText( s );
 }
 
-QString QMakeItem::value() const
+QString QMakeItem::getValue() const
 {
-	return data( QMakeItem::ValueRole ).toString();
+	return data( ProjectsModel::ValueRole ).toString();
 }
 
 void QMakeItem::setMultiLine( bool b )
@@ -85,9 +76,29 @@ void QMakeItem::setMultiLine( bool b )
 	setData( b, ProjectsModel::MultiLineRole );
 }
 
-bool QMakeItem::multiLine() const
+bool QMakeItem::getMultiLine() const
 {
-	return data( QMakeItem::MultiLineRole ).toBool();
+	return data( ProjectsModel::MultiLineRole ).toBool();
+}
+
+void QMakeItem::setModified( bool b )
+{
+	setData( b, ProjectsModel::ModifiedRole );
+}
+
+bool QMakeItem::getModified() const
+{
+	return data( ProjectsModel::ModifiedRole ).toBool();
+}
+
+void QMakeItem::setReadOnly( bool b )
+{
+	setData( b, ProjectsModel::ReadOnlyRole );
+}
+
+bool QMakeItem::getReadOnly() const
+{
+	return data( ProjectsModel::ReadOnlyRole ).toBool();
 }
 
 void QMakeItem::setComment( const QString& s )
@@ -95,9 +106,9 @@ void QMakeItem::setComment( const QString& s )
 	setData( s, ProjectsModel::CommentRole );
 }
 
-QString QMakeItem::comment() const
+QString QMakeItem::getComment() const
 {
-	return data( QMakeItem::CommentRole ).toString();
+	return data( ProjectsModel::CommentRole ).toString();
 }
 
 void QMakeItem::setFilePath( const QString& s )
@@ -105,11 +116,11 @@ void QMakeItem::setFilePath( const QString& s )
 	setData( s, ProjectsModel::FilePathRole );
 }
 
-QString QMakeItem::filePath() const
+QString QMakeItem::getFilePath() const
 {
-	return data( QMakeItem::FilePathRole ).toString();
+	return data( ProjectsModel::FilePathRole ).toString();
 }
-
+/*
 void QMakeItem::appendRow( const QList<QMakeItem*>& )
 {
 }
@@ -162,7 +173,7 @@ void QMakeItem::removeRows( int, int )
 {
 }
 
-QMakeItem* QMakeItem::child( int, int = 0 ) const
+QMakeItem* QMakeItem::child( int, int ) const
 {
 }
 
@@ -182,7 +193,7 @@ void QMakeItem::setChild( int, QMakeItem* )
 {
 }
 
-QMakeItem* QMakeItem::takeChild( int, int = 0 )
+QMakeItem* QMakeItem::takeChild( int, int )
 {
 }
 
@@ -193,4 +204,4 @@ QList<QMakeItem*> QMakeItem::takeColumn( int )
 QList<QMakeItem*> QMakeItem::takeRow( int )
 {
 }
-
+*/

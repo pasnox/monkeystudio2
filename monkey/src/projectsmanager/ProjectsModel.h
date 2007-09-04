@@ -15,11 +15,12 @@ public:
 	{
 		FirstRole = Qt::UserRole, // first role
 		TypeRole, // the item type
-		CaptionRole, // visible text
 		OperatorRole, // the item operator
 		ValueRole, // the item value
 		MultiLineRole, // bool telling if variable content is single ou multi line
 		CommentRole, // the item comment
+		ModifiedRole, // tell if item/file is modified
+		ReadOnlyRole, // tell if item/file is readonly
 		FilePathRole, // the filepath of the current value if it s a file/path
 		LastRole // last role
 	};

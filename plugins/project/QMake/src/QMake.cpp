@@ -1,4 +1,6 @@
 #include "QMake.h"
+#include "QMakeItem.h"
+#include "QMakeParser.h"
 
 QMake::QMake()
 {
@@ -40,7 +42,9 @@ bool QMake::setEnabled( bool b )
 
 QStandardItem* QMake::openProject( const QString& s, QStandardItem* pi )
 {
-	return new QStandardItem( s );
+	QMakeItem* it =  new QMakeItem;
+	QMakeParser p( s, it );
+	return it;
 }
 
 void QMake::saveSettings()

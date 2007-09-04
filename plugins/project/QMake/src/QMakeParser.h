@@ -1,17 +1,15 @@
 #ifndef QMAKEPARSER_H
 #define QMAKEPARSER_H
 
-#include <QObject>
+#include <QString>
 
 class QMakeItem;
 
-class QMakeProjectParser : public QObject
+class QMakeParser
 {
-	Q_OBJECT
-	
 public:
-	QMakeProjectParser( const QString&, QMakeItem* );
-	~QMakeProjectParser();
+	QMakeParser( const QString&, QMakeItem* );
+	~QMakeParser();
 	
 	bool isOpen() const;
 	

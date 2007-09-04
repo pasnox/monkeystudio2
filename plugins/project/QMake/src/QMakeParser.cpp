@@ -27,7 +27,7 @@ static QRegExp splitCommands( "(\\([^;]*\\));?|(\\$\\(\\w+\\)[^;]*);?" );
 static QRegExp encoding( "[ \\t]*ENCODING[ \\t]*=[ \\t]*([^ ]+)[ \\t]*(?:#.*)?", Qt::CaseInsensitive );
 
 QMakeParser::QMakeParser( const QString& s, QMakeItem* i )
-	: QObject( i ), mIsOpen( false ), mRoot( i )
+	: mIsOpen( false ), mRoot( i )
 {
 	loadFile( s, mRoot );
 }
@@ -53,8 +53,10 @@ bool QMakeParser::loadFile( const QString& s, QMakeItem* it )
 	QTextCodec* c = 0;
 	if ( encoding.indexIn( f.readAll() ) != -1 )
 		c = QTextCodec::codecForName( encoding.capturedTexts().at( 1 ).trimmed().toAscii() );
+	/*
 	if ( !c )
 		c = mModel->defaultCodec();
+	*/
 	// reset file
 	f.reset();
 	// get decoded stream
@@ -64,27 +66,31 @@ bool QMakeParser::loadFile( const QString& s, QMakeItem* it )
 	while ( !t.atEnd() )
 		content += t.readLine().trimmed();
 	// set project data
-	it->setType( AbstractProjectModel::ProjectType );
-	it->setData( QFileInfo( s ).completeBaseName() );
-	it->setData( s, AbstractProjectModel::AbsoluteFilePathRole );
-	it->setData( false, AbstractProjectModel::ProjectModifiedRole );
+	it->setType( ProjectsModel::ProjectType );
+	it->setText( QFileInfo( s ).completeBaseName() );
+	it->setFilePath( s );
+	it->setModified( false );
 	// parse buffer
 	mIsOpen = parseBuffer( 0, it );
 	// open subdirs project
 	if ( mIsOpen )
+	{
+		/*
 		foreach ( QModelIndex i, mModel->getIndexListValues( "subdirs", it->index(), "" ) )
 		{
 			// get subproject filepath and stock it
-			QString sp  = i.data( AbstractProjectModel::ValueRole ).toString();
+			QString sp  = i.data( ProjectsModel::ValueRole ).toString();
 			sp = QString( "%1/%2.pro" ).arg( mModel->filePath( sp, i ) ).arg( QFileInfo( sp ).fileName() );
 			if ( QFile::exists( sp ) )
 			{
-				mModel->setData( i, sp, AbstractProjectModel::AbsoluteFilePathRole );
-				loadFile( sp, new QMakeItem( AbstractProjectModel::ProjectType, it ) );
+				mModel->setData( i, sp, ProjectsModel::AbsoluteFilePathRole );
+				loadFile( sp, new QMakeItem( ProjectsModel::ProjectType, it ) );
 			}
 			else
 				qWarning( "Can't open subproject: %s", qPrintable( sp ) );
 		}
+		*/
+	}
 	return mIsOpen;
 }
 // parser file
@@ -101,7 +107,7 @@ int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 			QMakeItem* i = processNested( liste[1], it );
 			i = addFunction( liste[2].trimmed(), "", i );
 			if ( i )
-				i->setData( liste[3].trimmed(), AbstractProjectModel::CommentRole );
+				i->setComment( liste[3].trimmed() );
 		}
 		// scope (nested compris)
 		// "truc(params) {" ou "xml:truc(params) {" ("{" facultatif)
@@ -122,7 +128,7 @@ int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 			QMakeItem* i = processNested( liste[2], it );
 			i = addScope( liste[3].trimmed(), "", false, i );
 			if ( i )
-				i->setData( liste[5].trimmed(), AbstractProjectModel::CommentRole );
+				i->setComment( liste[5].trimmed() );
 			//
 			prof++;
 			// parse block giving parent scope
@@ -140,10 +146,10 @@ int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 			QStringList liste = variable.capturedTexts();
 			QMakeItem *i, *v = processNested( liste[1], it );
 			v = addVariable( liste[2], liste[3], v );
-			v->setData( liste[5].trimmed() == "\\", AbstractProjectModel::MultiLineRole );
+			v->setMultiLine( liste[5].trimmed() == "\\" );
 			i = processValues( liste[4], v );
 			if ( i )
-				i->setData( liste[6].trimmed(), AbstractProjectModel::CommentRole );
+				i->setComment( liste[6].trimmed() );
 			// if last char is \ read next lines
 			if ( liste[5] == "\\" )
 			{
@@ -155,14 +161,14 @@ int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 					liste = varLine.capturedTexts();
 					i = processValues( liste[1], v );
 					if ( i )
-						i->setData( liste[2].trimmed(), AbstractProjectModel::CommentRole );
+						i->setComment( liste[2].trimmed() );
 					ligne++;
 				}
 				// last line , optionnally with comment
 				liste = content[ligne].split( "#" );
 				i = processValues( liste[0], v );
 				if ( i && liste.count() > 1 )
-					i->setData( liste[1], AbstractProjectModel::CommentRole );
+					i->setComment( liste[1] );
 			}
 		}
 		// single line comment
@@ -210,47 +216,47 @@ QMakeItem* QMakeParser::processValues( const QString& s, QMakeItem* i )
 // 100%
 QMakeItem* QMakeParser::addScope( const QString& v, const QString& o, bool b, QMakeItem* i )
 {
-	QMakeItem* s = new QMakeItem( b ? AbstractProjectModel::NestedScopeType : AbstractProjectModel::ScopeType, i );
-	s->setData( v.trimmed(), AbstractProjectModel::ValueRole );
-	s->setData( o.trimmed(), AbstractProjectModel::OperatorRole );
-	(void) new QMakeItem( AbstractProjectModel::ScopeEndType, s );
+	QMakeItem* s = new QMakeItem( b ? ProjectsModel::NestedScopeType : ProjectsModel::ScopeType, i );
+	s->setValue( v.trimmed() );
+	s->setOperator( o.trimmed() );
+	(void) new QMakeItem( ProjectsModel::ScopeEndType, s );
 	return s;
 }
 // 100%
 QMakeItem* QMakeParser::addFunction( const QString& s, const QString& o, QMakeItem* i )
 {
-	QMakeItem* f = new QMakeItem( AbstractProjectModel::FunctionType, i );
-	f->setData( s.trimmed(), AbstractProjectModel::ValueRole );
-	f->setData( o.trimmed(), AbstractProjectModel::OperatorRole );
+	QMakeItem* f = new QMakeItem( ProjectsModel::FunctionType, i );
+	f->setValue( s.trimmed() );
+	f->setOperator( o.trimmed() );
 	return f;
 }
 // 100%
 QMakeItem* QMakeParser::addVariable( const QString& s, const QString& o, QMakeItem* i )
 {
-	QMakeItem* v = new QMakeItem( AbstractProjectModel::VariableType, i );
-	v->setData( s.trimmed(), AbstractProjectModel::ValueRole );
-	v->setData( o.trimmed(), AbstractProjectModel::OperatorRole );
+	QMakeItem* v = new QMakeItem( ProjectsModel::VariableType, i );
+	v->setValue( s.trimmed() );
+	v->setOperator( o.trimmed() );
 	mParseCommands = s.trimmed().endsWith( ".commands", Qt::CaseInsensitive );
 	return v;
 }
 // 100%
 QMakeItem* QMakeParser::addValue( const QString& s, QMakeItem* i )
 {
-	QMakeItem* v = new QMakeItem( AbstractProjectModel::ValueType, i );
-	v->setData( s.trimmed(), AbstractProjectModel::ValueRole );
+	QMakeItem* v = new QMakeItem( ProjectsModel::ValueType, i );
+	v->setValue( s.trimmed() );
 	return v;
 }
 // 100%
 QMakeItem* QMakeParser::addComment( const QString& s, QMakeItem* i )
 {
-	QMakeItem* c = new QMakeItem( AbstractProjectModel::CommentType, i );
-	c->setData( s.trimmed(), AbstractProjectModel::ValueRole );
+	QMakeItem* c = new QMakeItem( ProjectsModel::CommentType, i );
+	c->setValue( s.trimmed() );
 	return c;
 }
 // 100%
 QMakeItem* QMakeParser::addEmpty( QMakeItem* i )
 {
-	QMakeItem* e = new QMakeItem( AbstractProjectModel::EmptyType, i );
-	e->setData( "", AbstractProjectModel::ValueRole );
+	QMakeItem* e = new QMakeItem( ProjectsModel::EmptyType, i );
+	e->setValue( "" );
 	return e;
 }

@@ -23,29 +23,32 @@ class QMakeItem : public QStandardItem
 {
 
 public:
-	QMakeItem( ProjectsModel::NodeType, QMakeItem* = 0 );
+	QMakeItem( ProjectsModel::NodeType = ProjectsModel::ProjectType, QMakeItem* = 0 );
 
 	void setType( ProjectsModel::NodeType );
-	ProjectsModel::NodeType type();
-
-	void setCaption( const QString& );
-	QString caption() const;
+	ProjectsModel::NodeType getType();
 
 	void setOperator( const QString& );
-	QString operator() const;
+	QString getOperator() const;
 
 	void setValue( const QString& );
-	QString value() const;
+	QString getValue() const;
 
 	void setMultiLine( bool );
-	bool multiLine() const;
+	bool getMultiLine() const;
+
+	void setModified( bool );
+	bool getModified() const;
+
+	void setReadOnly( bool );
+	bool getReadOnly() const;
 
 	void setComment( const QString& );
-	QString comment() const;
+	QString getComment() const;
 
 	void setFilePath( const QString& );
-	QString filePath() const;
-	
+	QString getFilePath() const;
+	/*
 	void appendRow( const QList<QMakeItem*>& );
 	void appendRow( QMakeItem* );
 	void appendRows( const QList<QMakeItem*>& );
@@ -73,6 +76,7 @@ public:
 	QMakeItem* takeChild( int, int = 0 );
 	QList<QMakeItem*> takeColumn( int );
 	QList<QMakeItem*> takeRow( int );
+	*/
 
 };
 
