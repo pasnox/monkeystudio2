@@ -15,11 +15,12 @@
 #ifndef PROJECTITEM_H
 #define PROJECTITEM_H
 
-#include <QStandardItem>
-
+#include "MonkeyExport.h"
 #include "ProjectsModel.h"
 
-class ProjectItem : public QStandardItem
+#include <QStandardItem>
+
+class Q_MONKEY_EXPORT ProjectItem : public QStandardItem
 {
 public:
 	ProjectItem( ProjectsModel::NodeType = ProjectsModel::ProjectType, ProjectItem* = 0 );
