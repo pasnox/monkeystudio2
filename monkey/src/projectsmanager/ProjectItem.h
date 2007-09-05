@@ -52,35 +52,15 @@ public:
 	void appendRow( ProjectItem* );
 	void insertRow( int, ProjectItem* );
 	
-	/*
-	virtual void appendRow( const QList<ProjectItem*>& );
-	virtual void appendRow( ProjectItem* );
-	virtual void appendRows( const QList<ProjectItem*>& );
+	ProjectItem* parent() const;
 	
-	virtual void insertColumn( int, const QList<ProjectItem*>& );
-	virtual void insertColumns( int, int );
-	virtual void insertRow( int, const QList<ProjectItem*>& );
-	virtual void insertRow( int, ProjectItem* );
-	virtual void insertRows( int, const QList<ProjectItem*>& );
-	virtual void insertRows( int, int );
+	QString canonicalFilePath() const;
+	QString canonicalFilePath( const QString& ) const;
+	QString canonicalPath() const;
 	
-	virtual void removeColumn( int );
-	virtual void removeColumns( int, int );
-	virtual void removeRow( int );
-	virtual void removeRows( int, int );
-	
-	template <class T> T child( int, int = 0 ) const;
-	template <class T> T clone() const;
-	
-	template <class T> T parent() const;
-	
-	virtual void setChild( int, int, ProjectItem* );
-	virtual void setChild( int, ProjectItem* );
-	
-	template <class T> T takeChild( int, int = 0 );
-	template <class T> QList<T> takeColumn( int );
-	template <class T> QList<T> takeRow( int );
-	*/
+	QString fileName( const QString& );
+	QString completeBaseName( const QString& );
+
 };
 
 #endif // PROJECTITEM_H

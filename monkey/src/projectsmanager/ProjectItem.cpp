@@ -14,6 +14,8 @@
 ****************************************************************************/
 #include "ProjectItem.h"
 
+#include <QFileInfo>
+
 ProjectItem::ProjectItem( ProjectsModel::NodeType t, ProjectItem* i )
 {
 	// set type
@@ -22,30 +24,6 @@ ProjectItem::ProjectItem( ProjectsModel::NodeType t, ProjectItem* i )
 	// append to parent if needed
 	if ( i )
 		i->appendRow( this );
-	
-	/*
-	FirstType = 0, // first type
-	EmptyType, // empty line
-	FileType, // a file
-	CommentType, // comment line
-	NestedScopeType, // single line scope
-	ScopeType, // multi line scope
-	ScopeEndType, // end of a multi scope line
-	VariableType, // variable
-	ValueType, // value
-	FunctionType, // function
-	IncludeType, // include
-	ProjectType, // project
-	LastType // last type
-	*/
-}
-
-QList<QStandardItem*> projectToStandardItemList( const QList<ProjectItem*> l )
-{
-	QList<QStandardItem*> ll;
-	foreach ( ProjectItem* it, l )
-		ll << reinterpret_cast<QStandardItem*>( it );
-	return ll;
 }
 
 void ProjectItem::setType( ProjectsModel::NodeType t )
@@ -97,13 +75,11 @@ QString ProjectItem::getFilePath() const
 { return data( ProjectsModel::FilePathRole ).toString(); }
 
 void ProjectItem::appendRow( ProjectItem* i )
-{
-	insertRow( rowCount(), i );
-}
+{ insertRow( rowCount(), i ); }
 
 void ProjectItem::insertRow( int r, ProjectItem* i )
 {
-	// check scope & function item
+	// check scope & function item for not be able to append items after scope end
 	ProjectItem* it = reinterpret_cast<ProjectItem*>( i );
 	if ( it && ( getType() == ProjectsModel::NestedScopeType || getType() == ProjectsModel::ScopeType || getType() == ProjectsModel::FunctionType ) && it->getType() != ProjectsModel::ScopeEndType )
 		r--;
@@ -112,69 +88,48 @@ void ProjectItem::insertRow( int r, ProjectItem* i )
 	QStandardItem::insertRow( r, i );
 }
 
+ProjectItem* ProjectItem::parent() const
+{ return reinterpret_cast<ProjectItem*>( QStandardItem::parent() ); }
 
-/*
-void ProjectItem::appendRow( const QList<ProjectItem*>& l )
-{ QStandardItem::appendRow( projectToStandardItemList( l ) ); }
+QString ProjectItem::canonicalFilePath() const
+{
+	// get project item
+	ProjectItem* it = const_cast<ProjectItem*>( this );
+	
+	// check reucursively parent if needed
+	while ( it && it->getType() != ProjectsModel::ProjectType )
+		it = it->parent();
+	
+	// return project absolutepath
+	if ( it )
+		return it->getFilePath();
+	
+	// return nothing
+	return QString();
+}
 
-void ProjectItem::appendRow( ProjectItem* i )
-{ QStandardItem::appendRow( i ); }
+QString ProjectItem::canonicalFilePath( const QString& s ) const
+{
+	// file path
+	QString fp = s;
+	
+	// check if relative or absolute
+	if ( QFileInfo( s ).isRelative() )
+		fp = canonicalPath().append( "/" ).append( s );
+	
+	// return canonical file path if file exists, exists
+	if ( QFile::exists( fp ) )
+		return QFileInfo( fp ).canonicalFilePath();
+	
+	// else return absolute file path, may be not exists
+	return QFileInfo( fp ).absoluteFilePath();
+}
 
-void ProjectItem::appendRows( const QList<ProjectItem*>& l )
-{ QStandardItem::appendRows( projectToStandardItemList( l ) ); }
+QString ProjectItem::canonicalPath() const
+{ return QFileInfo( canonicalFilePath() ).absolutePath(); }
 
-void ProjectItem::insertColumn( int i, const QList<ProjectItem*>& l )
-{ QStandardItem::insertColumn( i, projectToStandardItemList( l ) ); }
+QString ProjectItem::fileName( const QString& s )
+{ return QFileInfo( s ).fileName(); }
 
-void ProjectItem::insertColumns( int i, int c )
-{ QStandardItem::insertColumns( i, c ); }
-
-void ProjectItem::insertRow( int i, const QList<ProjectItem*>& l )
-{ QStandardItem::insertRow( i, projectToStandardItemList( l ) ); }
-
-void ProjectItem::insertRow( int r, ProjectItem* i )
-{ QStandardItem::insertRow( r, i ); }
-
-void ProjectItem::insertRows( int i, const QList<ProjectItem*>& l )
-{ QStandardItem::insertRows( i, projectToStandardItemList( l ) ); }
-
-void ProjectItem::insertRows( int r, int c )
-{ QStandardItem::insertRows( r, c ); }
-
-void ProjectItem::removeColumn( int i )
-{ QStandardItem::removeColumn( i ); }
-
-void ProjectItem::removeColumns( int i, int c )
-{ QStandardItem::removeColumns( i, c ); }
-
-void ProjectItem::removeRow( int i )
-{ QStandardItem::removeRow( i ); }
-
-void ProjectItem::removeRows( int r, int c )
-{ QStandardItem::removeRows( r, c ); }
-
-template <class T> T ProjectItem::child( int r, int c ) const
-{ return reinterpret_cast<T>( QStandardItem::child( r, c ) ); }
-
-template <class T> T ProjectItem::clone() const
-{ return reinterpret_cast<T>( QStandardItem::clone() ); }
-
-template <class T> T ProjectItem::parent() const
-{ return reinterpret_cast<T>( QStandardItem::parent() ); }
-
-void ProjectItem::setChild( int r, int c, ProjectItem* i )
-{ QStandardItem::setChild( r, c, i ); }
-
-void ProjectItem::setChild( int r, ProjectItem* i )
-{ QStandardItem::setChild( r, i ); }
-
-template <class T> T ProjectItem::takeChild( int r, int c )
-{ return reinterQStandardItem::takeChild( r, c ); }
-
-template <class T> QList<T> ProjectItem::takeColumn( int i )
-{ return QStandardItem::takeColumn( i ); }
-
-template <class T> QList<T> ProjectItem::takeRow( int i )
-{ return QStandardItem::takeRow( i ); }
-*/
-
+QString ProjectItem::completeBaseName( const QString& s )
+{ return QFileInfo( s ).completeBaseName(); }
