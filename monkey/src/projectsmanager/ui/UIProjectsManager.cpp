@@ -18,6 +18,8 @@
 #include "pMonkeyStudio.h"
 #include "pRecentsManager.h"
 
+#include <QHeaderView>
+
 UIProjectsManager::UIProjectsManager( QWidget* w )
 	: QDockWidget( w ), mProjects( new ProjectsModel( this ) )
 {
@@ -42,7 +44,8 @@ UIProjectsManager::UIProjectsManager( QWidget* w )
 	tbButtons->addAction( mb->action( "mProject/mClose/aAll" ) );
 	tbButtons->addSeparator();
 	tbButtons->addAction( mb->action( "mProject/aSettings" ) );
-	// set projects model
+	// set projects properties
+	tvProjects->header()->hide();
 	tvProjects->setModel( mProjects );
 }
 
