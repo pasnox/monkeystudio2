@@ -3,6 +3,7 @@
 #include <QLibraryInfo>
 #include <QTranslator>
 #include <QLocale>
+#include <QFile>
 #include <QErrorMessage>
 
 #include "UITranslator.h"
@@ -26,10 +27,10 @@ int main( int argc, char** argv )
 	QSplashScreen splash( QPixmap( ":/application/application/splashscreen.png" ) );
 
 	// change splashscreen font
-	QFont f( splash.font() );
-	f.setPointSize( 12 );
-	f.setBold( true );
-	splash.setFont( f );
+	QFont ft( splash.font() );
+	ft.setPointSize( 12 );
+	ft.setBold( true );
+	splash.setFont( ft );
 
 	// show splash screen
 	splash.show();
@@ -45,7 +46,15 @@ int main( int argc, char** argv )
 	pConsoleManager::instance();
 
 	// restore application style
+	showMessage( &splash, QObject::tr( "Setting Style..." ) );
 	a.setStyle( pSettings::instance()->value( "MainWindow/Style", "plastique" ).toString() );
+	
+	// assign style sheet
+	showMessage( &splash, QObject::tr( "Loading Style Sheet..." ) );
+	QFile fs( ":/stylesheets/stylesheets/default.css" );
+	fs.open( QFile::ReadOnly );
+	a.setStyleSheet( fs.readAll() );
+	fs.close();
 	
 	// init translation
 	showMessage( &splash, QObject::tr( "Initializing Translation..." ) );
