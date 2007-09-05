@@ -110,4 +110,7 @@
         <file>icons/view/style.png</file>
         <file>icons/view/filtered.png</file>
     </qresource>
+    <qresource prefix="/stylesheets" >
+        <file>stylesheets/default.css</file>
+    </qresource>
 </RCC>
