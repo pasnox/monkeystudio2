@@ -129,7 +129,7 @@ void UIMain::initMenuBar()
 		mb->menu( "mStyle", tr( "&Style" ), QIcon( ":/view/icons/view/style.png" ) );
 		mb->action( "aNext", tr( "&Next Tab" ), QIcon( ":/view/icons/view/next.png" ), tr( "Alt+Right" ), tr( "Active the next tab" ) )->setEnabled( false );
 		mb->action( "aPrevious", tr( "&Previous Tab" ), QIcon( ":/view/icons/view/previous.png" ), tr( "Alt+Left" ), tr( "Active the previous tab" ) )->setEnabled( false );
-		mb->action( "aFiltered", tr( "&Filtered Projects" ), QIcon( "view/icons/view/filtered.png" ), tr( "" ), tr( "Filtered project view" ) )->setEnabled( false );
+		mb->action( "aFiltered", tr( "&Filtered Projects" ), QIcon( ":/view/icons/view/filtered.png" ), tr( "" ), tr( "Filtered project view" ) )->setEnabled( false );
 	mb->endGroup();
 	mb->menu( "mProject", tr( "&Project" ) );
 	mb->beginGroup( "mProject" );
