@@ -1,6 +1,7 @@
 #include "QMake.h"
 #include "QMakeItem.h"
 #include "QMakeParser.h"
+#include "UISettingsQMake.h"
 
 QMake::QMake()
 {
@@ -38,6 +39,11 @@ bool QMake::setEnabled( bool b )
 	}
 	// return default value
 	return true;
+}
+
+QWidget* QMake::settingsWidget()
+{
+	return UISettingsQMake::instance();
 }
 
 QStandardItem* QMake::openProject( const QString& s, QStandardItem* pi )

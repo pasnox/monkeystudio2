@@ -12,6 +12,7 @@ public:
 	QMake();
 	virtual ~QMake();
 	virtual bool setEnabled( bool );
+	virtual QWidget* settingsWidget();
 
 	// the function that open a project
 	virtual QStandardItem* openProject( const QString&, QStandardItem* = 0 );

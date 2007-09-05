@@ -15,5 +15,12 @@
         <file>icons/source.png</file>
         <file>icons/value.png</file>
         <file>icons/variable.png</file>
+        <file>icons/down.png</file>
+        <file>icons/up.png</file>
+        <file>icons/add.png</file>
+        <file>icons/remove.png</file>
+        <file>icons/clear.png</file>
+        <file>icons/folder.png</file>
+        <file>icons/misc.png</file>
     </qresource>
 </RCC>
