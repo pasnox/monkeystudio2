@@ -16,10 +16,6 @@ public:
 	// the function that open a project
 	virtual QStandardItem* openProject( const QString&, QStandardItem* = 0 );
 
-protected slots:
-	void saveSettings();
-	void restoreSettings();
-
 };
 
 #endif // QMAKE_H

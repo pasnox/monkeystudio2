@@ -42,33 +42,15 @@ bool QMake::setEnabled( bool b )
 
 QStandardItem* QMake::openProject( const QString& s, QStandardItem* pi )
 {
+	// don t open project if plugin is not enabled
+	if ( !isEnabled() )
+		return 0;
+	// crete root project item
 	QMakeItem* it =  new QMakeItem;
+	// parse project
 	QMakeParser p( s, it );
+	// return root item
 	return it;
-}
-
-void QMake::saveSettings()
-{
-	/*
-	// save current drive and path
-	setSettingsValue( "Drive", pDockQMake::instance()->currentDrive() );
-	setSettingsValue( "Path", pDockQMake::instance()->currentPath() );
-	*/
-}
-
-void QMake::restoreSettings()
-{
-	/*
-	QString s;
-	// restore last drive if available
-	s = settingsValue( "Drive" ).toString();
-	if ( !s.isEmpty() )
-		pDockQMake::instance()->setCurrentDrive( s );
-	// restore last path if available
-	s = settingsValue( "Path" ).toString();
-	if ( !s.isEmpty() )
-		pDockQMake::instance()->setCurrentPath( s );
-	*/
 }
 
 Q_EXPORT_PLUGIN2( ProjectQMake, QMake )

@@ -15,6 +15,7 @@
 #include "QMakeItem.h"
 
 QMakeItem::QMakeItem( ProjectsModel::NodeType t, QMakeItem* i )
+	: ProjectItem()
 {
 	// set type
 	setType( t );
@@ -44,6 +45,9 @@ void QMakeItem::setType( ProjectsModel::NodeType t )
 {
 	// set data
 	setData( t, ProjectsModel::TypeRole );
+	
+	// no modified
+	setModified( false );
 	
 	// update icon
 	switch( t )
@@ -104,8 +108,36 @@ QString QMakeItem::getOperator() const
 
 void QMakeItem::setValue( const QString& s )
 {
+	// set data
 	setData( s, ProjectsModel::ValueRole );
+	
+	// set text
 	setText( s );
+	
+	// variables name to changes
+	QStringList l1 = QStringList() << "FORMS" << "HEADERS" << "SOURCES" << "TRANSLATIONS" << "RESOURCES";
+	QStringList l2 = QStringList() << "Form Files" << "Header Files" << "Source Files" << "Translation Files" << "Resource Files";
+	
+	// update text
+	switch( getType() )
+	{
+		case ProjectsModel::VariableType:
+			if ( l1.contains( getValue(), Qt::CaseInsensitive ) )
+				setText( l2.at( l1.indexOf( getValue(), Qt::CaseInsensitive ) ) );
+			break;
+		case ProjectsModel::ValueType:
+			if ( l1.contains( parent() ? parent()->getValue() : "", Qt::CaseInsensitive ) )
+				setFilePath( s );
+			break;
+		case ProjectsModel::IncludeType:
+			setFilePath( "" );
+			break;
+		case ProjectsModel::ProjectType:
+			setFilePath( s );
+			break;
+		default:
+			break;
+	}
 }
 
 QString QMakeItem::getValue() const
@@ -155,7 +187,23 @@ QString QMakeItem::getComment() const
 
 void QMakeItem::setFilePath( const QString& s )
 {
-	setData( s, ProjectsModel::FilePathRole );
+	// set data
+	setData( canonicalFilePath( s ), ProjectsModel::FilePathRole );
+	
+	// set text
+	switch( getType() )
+	{
+		case ProjectsModel::ValueType:
+			setText( fileName( s ) );
+			setToolTip( getFilePath() );
+			break;
+		case ProjectsModel::ProjectType:
+			setText( completeBaseName( s ) );
+			setToolTip( getFilePath() );
+			break;
+		default:
+			break;
+	}
 }
 
 QString QMakeItem::getFilePath() const

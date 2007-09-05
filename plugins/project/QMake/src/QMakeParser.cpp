@@ -67,11 +67,10 @@ bool QMakeParser::loadFile( const QString& s, QMakeItem* it )
 		content += t.readLine().trimmed();
 	// set project data
 	it->setType( ProjectsModel::ProjectType );
-	it->setText( QFileInfo( s ).completeBaseName() );
-	it->setFilePath( s );
-	it->setModified( false );
+	it->setValue( s );
 	// parse buffer
 	mIsOpen = parseBuffer( 0, it );
+	
 	// open subdirs project
 	if ( mIsOpen )
 	{
@@ -91,6 +90,10 @@ bool QMakeParser::loadFile( const QString& s, QMakeItem* it )
 		}
 		*/
 	}
+	
+	// set all items not modified
+	it->setModified( false );
+	
 	return mIsOpen;
 }
 // parser file
