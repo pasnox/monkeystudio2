@@ -25,6 +25,7 @@ public:
 		iChild,
 		iCompiler,
 		iDebugger,
+		iInterpreter,
 		iProject,
 		iLast };
 		

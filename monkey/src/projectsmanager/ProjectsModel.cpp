@@ -1,4 +1,5 @@
 #include "ProjectsModel.h"
+#include "ProjectItem.h"
 
 ProjectsModel::ProjectsModel( QObject* o )
 	: QStandardItemModel( o )
@@ -8,6 +9,9 @@ ProjectsModel::ProjectsModel( QObject* o )
 ProjectsModel::~ProjectsModel()
 {
 }
+
+ProjectItem* ProjectsModel::itemFromIndex( const QModelIndex& i )
+{ return reinterpret_cast<ProjectItem*>( QStandardItemModel::itemFromIndex( i ) ); }
 
 /*
 int ProjectsModel::id() const

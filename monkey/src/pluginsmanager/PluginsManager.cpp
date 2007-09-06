@@ -12,33 +12,6 @@ PluginsManager::PluginsManager( QObject* p )
 QList<BasePlugin*> PluginsManager::plugins() const
 { return mPlugins; }
 
-template <class T>
-QList<T> PluginsManager::plugins( const QString& n, BasePlugin::Type t, const QString& v )
-{
-	// temporary list
-	QList<T> l;
-	// for each plugin
-	foreach ( BasePlugin* bp, mPlugins )
-		// plugin must be enabled
-		if ( bp->isEnabled() )
-			// empty or good name
-			if ( n.isEmpty() || bp->infos().Name == n )
-				// good type or type = iAll
-				if ( t == BasePlugin::iAll || bp->infos().Type == t )
-					// no version or good version
-					if ( v.isEmpty() || bp->infos().Version == v )
-						if ( qobject_cast<T>( bp ) )
-							l << qobject_cast<T>( bp );
-	// return list
-	return l;
-}
-
-template <class T>
-T PluginsManager::plugin( const QString& n, BasePlugin::Type t, const QString& v )
-{
-	return plugins<T>( n, t, v ).value( 0 );
-}
-
 ProjectPlugin* PluginsManager::projectPluginForFileName( const QString& s )
 {
 	foreach ( ProjectPlugin* pp, plugins<ProjectPlugin*>( "", BasePlugin::iProject ) )
@@ -151,6 +124,54 @@ void PluginsManager::enableUserPlugins()
 		else
 			qWarning( qPrintable( tr( "Already enabled plugin: %1" ).arg( bp->infos().Name ) ) );
 	}
+}
+
+void PluginsManager::setCurrentCompiler( const QString& s )
+{
+	foreach ( BasePlugin* bp, plugins<BasePlugin*>( s, BasePlugin::iCompiler ) )
+		bp->setEnabled( false );
+	if ( BasePlugin* bp = plugin<BasePlugin*>( s, BasePlugin::iCompiler ) )
+		bp->setEnabled( true );
+}
+
+const QString PluginsManager::currentCompiler()
+{
+	foreach ( BasePlugin* bp, plugins<BasePlugin*>( QString::null, BasePlugin::iCompiler ) )
+		if ( bp->isEnabled() )
+			return bp->infos().Name;
+	return QString();
+}
+	
+void PluginsManager::setCurrentDebugger( const QString& s )
+{
+	foreach ( BasePlugin* bp, plugins<BasePlugin*>( s, BasePlugin::iDebugger ) )
+		bp->setEnabled( false );
+	if ( BasePlugin* bp = plugin<BasePlugin*>( s, BasePlugin::iDebugger ) )
+		bp->setEnabled( true );
+}
+
+const QString PluginsManager::currentDebugger()
+{
+	foreach ( BasePlugin* bp, plugins<BasePlugin*>( QString::null, BasePlugin::iDebugger ) )
+		if ( bp->isEnabled() )
+			return bp->infos().Name;
+	return QString();
+}
+	
+void PluginsManager::setCurrentInterpreter( const QString& s )
+{
+	foreach ( BasePlugin* bp, plugins<BasePlugin*>( s, BasePlugin::iInterpreter ) )
+		bp->setEnabled( false );
+	if ( BasePlugin* bp = plugin<BasePlugin*>( s, BasePlugin::iInterpreter ) )
+		bp->setEnabled( true );
+}
+
+const QString PluginsManager::currentInterpreter()
+{
+	foreach ( BasePlugin* bp, plugins<BasePlugin*>( QString::null, BasePlugin::iInterpreter ) )
+		if ( bp->isEnabled() )
+			return bp->infos().Name;
+	return QString();
 }
 
 void PluginsManager::manageRequested()

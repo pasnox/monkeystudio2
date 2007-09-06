@@ -148,7 +148,9 @@ void UIMain::initMenuBar()
 		mb->action( "mRecents/aClear", tr( "&Clear" ), QIcon( ":/project/icons/project/clear.png" ), QString::null, tr( "Clear the recents projects list" ) );
 		mb->action( "mRecents/aSeparator1" );
 	mb->endGroup();
-	mb->menu( "mBuild", tr( "&Build" ) );
+	mb->menu( "mBuild", tr( "&Build" ) )->setEnabled( false );
+	mb->menu( "mDebugger", tr( "&Debugger" ) )->setEnabled( false );
+	mb->menu( "mInterpreter", tr( "&Interpreter" ) )->setEnabled( false );
 /* Need to be plugin that instore its actions
 	mb->beginGroup( "mBuild" );
 		mb->menu( "mBuild", tr( "&Build" ), QIcon( ":/Icons/Icons/buildbuild.png" ) );

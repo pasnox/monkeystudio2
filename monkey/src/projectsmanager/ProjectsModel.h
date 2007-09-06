@@ -5,6 +5,8 @@
 
 #include <QStandardItemModel>
 
+class ProjectItem;
+
 class Q_MONKEY_EXPORT ProjectsModel : public QStandardItemModel
 {
 	Q_OBJECT
@@ -44,6 +46,8 @@ public:
 	
 	ProjectsModel( QObject* = 0 );
 	virtual ~ProjectsModel();
+	
+	ProjectItem* itemFromIndex( const QModelIndex& );
 	
 };
 

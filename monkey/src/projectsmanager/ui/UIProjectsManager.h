@@ -26,12 +26,20 @@ class Q_MONKEY_EXPORT UIProjectsManager : public QDockWidget, public Ui::UIProje
 {
 	Q_OBJECT
 	friend class QSingleton<UIProjectsManager>;
+	
+public:
+	ProjectItem* currentProject() const;
 
 private:
 	ProjectsModel* mProjects;
 
 	UIProjectsManager( QWidget* = 0 );
 	~UIProjectsManager();
+
+	void initializeProject( ProjectItem* );
+
+private slots:
+	void tvProjects_currentChanged( const QModelIndex&, const QModelIndex& );
 
 public slots:
 	bool openProject( const QString& );
