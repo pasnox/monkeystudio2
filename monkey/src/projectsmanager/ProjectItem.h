@@ -22,6 +22,9 @@
 
 class QTextCodec;
 
+class ProjectItem;
+typedef QList<ProjectItem*> ProjectItemList;
+
 class Q_MONKEY_EXPORT ProjectItem : public QStandardItem
 {
 public:
@@ -59,11 +62,17 @@ public:
 	virtual void setFilePath( const QString& );
 	virtual QString getFilePath() const;
 	
+	// item
+	ProjectItem* itemFromIndex( const QModelIndex& ) const;
+	
 	// item model
 	ProjectsModel* model() const;
 	
 	// item parent
 	ProjectItem* parent() const;
+	
+	// child item
+	ProjectItem* child( int, int = 0 ) const;
 	
 	// insert/append items to model
 	void appendRow( ProjectItem* );
@@ -81,11 +90,31 @@ public:
 	QString canonicalFilePath( const QString& ) const;
 	// canonical project path
 	QString canonicalPath() const;
-	
 	// filename of filepath
 	QString fileName( const QString& );
 	// complete basename of filename
 	QString completeBaseName( const QString& );
+	
+	// check scope
+	virtual QString checkScope( const QString& ) const;
+	// check equals scope
+	virtual bool isEqualScope( const QString&, const QString& ) const;
+	// scope of item
+	virtual QString scope() const;
+	// get all items matching
+	virtual ProjectItemList getItemList( ProjectsModel::NodeType, const QString&, const QString&, const QString& ) const;
+	// get item scope, creating it if needed
+	virtual ProjectItem* getItemScope( const QString&, bool ) const;
+	// get all variable content as modelindex list for project index
+	ProjectItemList getItemListValues( const QString&, const QString&, const QString& ) const;
+	// get a variable index
+	ProjectItem* getItemVariable( const QString&, const QString&, const QString& ) const;
+	// get variable content as stringlist for project index
+	virtual QStringList getListValues( const QString&, const QString& = "=", const QString& = QString::null ) const;
+	// get variable content as string for project index
+	virtual QString getStringValues( const QString&, const QString& = "=", const QString& = QString::null ) const;
+	
+	
 	
 	// get all index matching
 	virtual QModelIndexList getIndexList( const QModelIndex&, ProjectsModel::NodeType, const QString&, const QString&, const QString& ) const;
@@ -93,10 +122,6 @@ public:
 	virtual QModelIndex getScope( const QModelIndex&, const QString&, bool ) const;
 	// get item scope, creating it if not exists
 	virtual QString scopeOf( const QModelIndex& ) const;
-	// check scope
-	virtual QString checkScope( const QString& ) const;
-	// check equals scope
-	virtual bool isEqualScope( const QString&, const QString& ) const;
 	// get all variable content as modelindex list for project index
 	virtual QModelIndexList getIndexListValues( const QString&, const QModelIndex& = QModelIndex(), const QString& = "=", const QString& = QString::null ) const;
 	// get a variable index
@@ -105,6 +130,7 @@ public:
 	virtual QStringList getListValues( const QString&, const QModelIndex& = QModelIndex(), const QString& = "=", const QString& = QString::null ) const;
 	// get variable content as string for project index
 	virtual QString getStringValues( const QString&, const QModelIndex& = QModelIndex(), const QString& = "=", const QString& = QString::null ) const;
+	
 	// set variable content as stringlist for project index
 	virtual void setListValues( const QStringList&, const QString&, const QModelIndex& = QModelIndex(), const QString& = "=", const QString& = QString::null );
 	// get variable content as string for project index

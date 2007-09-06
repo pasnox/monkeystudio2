@@ -75,11 +75,17 @@ void ProjectItem::setFilePath( const QString& s )
 QString ProjectItem::getFilePath() const
 { return data( ProjectsModel::FilePathRole ).toString(); }
 
+ProjectItem* ProjectItem::itemFromIndex( const QModelIndex& i ) const
+{ return model()->itemFromIndex( i ); }
+
 ProjectsModel* ProjectItem::model() const
 { return reinterpret_cast<ProjectsModel*>( QStandardItem::model() ); }
 
 ProjectItem* ProjectItem::parent() const
 { return reinterpret_cast<ProjectItem*>( QStandardItem::parent() ); }
+
+ProjectItem* ProjectItem::child( int i, int j ) const
+{ return reinterpret_cast<ProjectItem*>( QStandardItem::child( i, j ) ); }
 
 void ProjectItem::appendRow( ProjectItem* i )
 { insertRow( rowCount(), i ); }
@@ -146,6 +152,157 @@ QString ProjectItem::fileName( const QString& s )
 
 QString ProjectItem::completeBaseName( const QString& s )
 { return QFileInfo( s ).completeBaseName(); }
+
+QString ProjectItem::checkScope( const QString& s ) const
+{
+	// remove trailing : as it s the default operator
+	QString ss = s.trimmed();
+	if ( ss.endsWith( ':' ) )
+		ss.chop( 1 );
+	return ss;
+}
+
+bool ProjectItem::isEqualScope( const QString& s1, const QString& s2 ) const
+{
+	if ( s2 == "*" )
+		return true;
+	QString ss1( s1.toLower() ), ss2( s2.toLower() );
+	ss1.replace( '/', ':' );
+	ss2.replace( '/', ':' );
+	return checkScope( ss1 ) == checkScope( ss2 );
+}
+
+QString ProjectItem::scope() const
+{
+	QString s;
+	ProjectItem* j = const_cast<ProjectItem*>( this );
+	ProjectItem* p = project();
+	while ( j && j != p )
+	{
+		if ( j->getType() == ProjectsModel::ScopeType || j->getType() == ProjectsModel::NestedScopeType )
+			s.prepend( QString( "%1%2" ).arg( j->getValue(), j->getOperator().isEmpty() ? ":" : j->getOperator() ) );
+		j = j->parent();
+	}
+	return s;
+}
+
+ProjectItemList ProjectItem::getItemList( ProjectsModel::NodeType t, const QString& v, const QString& o, const QString& s ) const
+{
+	// project item
+	ProjectItem* p = project();
+	
+	// temp list
+	ProjectItemList l;
+	foreach ( QModelIndex i, model()->match( p->index().child( 0, 0 ), ProjectsModel::ValueRole, v, -1, Qt::MatchFixedString | Qt::MatchRecursive ) )
+	{
+		// get item
+		ProjectItem* it = const_cast<ProjectItem*>( itemFromIndex( i ) );
+		// check same project
+		if ( it->project() == p )
+			// check same scope
+			if ( isEqualScope( it->scope(), s ) )
+				// check operator
+				if ( ( !o.isEmpty() && it->getOperator() == o ) || o.isEmpty() )
+					// check type
+					if ( it->getType() == t )
+						// add to list
+						l << it;
+	}
+	
+	// return list
+	return l;
+}
+
+ProjectItem* ProjectItem::getItemScope( const QString& s, bool c ) const
+{
+	// get project item
+	ProjectItem* sItem = project();
+	
+	// it there is scope
+	if ( !s.trimmed().isEmpty() )
+	{
+		// get item scope and separeted operator
+		static QRegExp r( "([^:|]+)(\\:|\\|)?" );
+		int pos = 0;
+		QString cScope = checkScope( s );
+		// create scope is there are not existing
+		while ( ( pos = r.indexIn( cScope, pos ) ) != -1 )
+		{
+			QStringList l = r.capturedTexts();
+			QString s1 = l.at( 1 );
+			QString s2 = l.at( 2 );
+			QString sScope = cScope.left( pos ).append( s1 );
+			// search existing scope
+			ProjectItem* fItem = ( sItem->getItemList( ProjectsModel::ScopeType, s1, s2, sScope ) << sItem->getItemList( ProjectsModel::NestedScopeType, s1, s2, sScope ) ).value( 0 );
+			// create scope
+			if ( ( !fItem || fItem->project() != sItem ) )
+			{
+				if ( c )
+				{
+					sItem = new ProjectItem( l.at( 2 ).trimmed().isEmpty() ? ProjectsModel::ScopeType : ProjectsModel::NestedScopeType, sItem );
+					sItem->setValue( s1 );
+					sItem->setOperator( s2 );
+					(void) new ProjectItem( ProjectsModel::ScopeEndType, sItem );
+				}
+				else
+					return sItem;
+			}
+			else
+				sItem = fItem;
+			pos += r.matchedLength();
+		}
+		// if scope is nested, made it ScopeType
+		if ( sItem && sItem->getType() == ProjectsModel::NestedScopeType )
+		{
+			sItem->setType( ProjectsModel::ScopeType );
+			sItem->setOperator( QString::null );
+		}
+	}
+	
+	// return scope item
+	return sItem;
+}
+
+ProjectItemList ProjectItem::getItemListValues( const QString& v, const QString& o, const QString& s ) const
+{
+	ProjectItemList l = getItemList( ProjectsModel::VariableType, v, o, s );
+	ProjectItemList ll;
+	foreach ( ProjectItem* it, l )
+		for ( int i = 0; i < it->rowCount(); i++ )
+			if ( it->child( i, 0 )->getType() == ProjectsModel::ValueType )
+				ll << it->child( i, 0 );
+	return ll;
+}
+
+ProjectItem* ProjectItem::getItemVariable( const QString& v, const QString& o, const QString& s ) const
+{ return getItemList( ProjectsModel::VariableType, v, o, s ).value ( 0 ); }
+
+QStringList ProjectItem::getListValues( const QString& v, const QString& o, const QString& s ) const
+{
+	QStringList l;
+	foreach ( ProjectItem* it, getItemList( ProjectsModel::VariableType, v, o, s ) )
+		for ( int i = 0; i < it->rowCount(); i++ )
+			if ( it->child( i, 0 )->getType() == ProjectsModel::ValueType )
+				l << it->child( i, 0 )->getValue();
+	return l;
+}
+
+QString ProjectItem::getStringValues( const QString& v, const QString& o, const QString& s ) const
+{
+	return getListValues( v, o, s ).join( " " );
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 QModelIndexList ProjectItem::getIndexList( const QModelIndex& i, ProjectsModel::NodeType t, const QString& v, const QString& o, const QString& s ) const
 {
@@ -223,25 +380,6 @@ QString ProjectItem::scopeOf( const QModelIndex& i ) const
 	return s;
 }
 
-QString ProjectItem::checkScope( const QString& s ) const
-{
-	// remove trailing : as it s the default operator
-	QString ss = s.trimmed();
-	if ( !ss.isEmpty() && ss.endsWith( ':' ) )
-		ss.chop( 1 );
-	return ss;
-}
-
-bool ProjectItem::isEqualScope( const QString& s1, const QString& s2 ) const
-{
-	if ( s2 == "*" )
-		return true;
-	QString ss1( s1.toLower() ), ss2( s2.toLower() );
-	ss1.replace( '/', ':' );
-	ss2.replace( '/', ':' );
-	return checkScope( ss1 ) == checkScope( ss2 );
-}
-
 QModelIndexList ProjectItem::getIndexListValues( const QString& v, const QModelIndex& i, const QString& o, const QString& s ) const
 {
 	QModelIndexList l = getIndexList( i, ProjectsModel::VariableType, v, o, s );
@@ -272,6 +410,11 @@ QString ProjectItem::getStringValues( const QString& v, const QModelIndex& i, co
 {
 	return getListValues( v, i, o, s ).join( " " );
 }
+
+
+
+
+
 
 void ProjectItem::setListValues( const QStringList& vl, const QString& v, const QModelIndex& i, const QString& o, const QString& s )
 {
