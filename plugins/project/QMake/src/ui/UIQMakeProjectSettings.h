@@ -1,26 +1,25 @@
 #ifndef UIQMAKEPROJECTSETTINGS_H
 #define UIQMAKEPROJECTSETTINGS_H
-//
+
+#include "QSingleton.h"
 #include "ui_UIQMakeProjectSettings.h"
 #include "UISettingsQMake.h"
-//
+
 #include <QApplication>
 #include <QHash>
-//
-class QMakeProjectProxy;
-class QMakeProjectModel;
-class QMakeProjectItem;
+
+class ProjectsModel;
+class ProjectItem;
 class QDirModel;
-//
+
 typedef QHash<QString, QStringList> QtSettings; // scope|operator|variable, values
-//
-class UIQMakeProjectSettings : public QDialog, public Ui::UIQMakeProjectSettings
+
+class UIQMakeProjectSettings : public QDialog, public Ui::UIQMakeProjectSettings, public QSingleton<UIQMakeProjectSettings>
 {
 	Q_OBJECT
-	//
+	friend class QSingleton<UIQMakeProjectSettings>;
+	
 public:
-	static void execute( QMakeProjectItem*, QWidget* = QApplication::activeWindow() );
-	~UIQMakeProjectSettings();
 	QModelIndex currentIndex();
 	void setCurrentIndex( const QModelIndex& );
 	QString projectName() const;
@@ -31,23 +30,19 @@ public:
 	QStringList getListValues( const QString&, const QString& = "=", const QString& = QString::null ) const;
 	void setListValues( const QStringList&, const QString&, const QString& = "=", const QString& = QString::null );
 	void setStringValues( const QString&, const QString&, const QString& = "=", const QString& = QString::null );
-	//
-protected:
-	UIQMakeProjectSettings( QMakeProjectItem*, QWidget* = 0 );
+	
+private:
+	UIQMakeProjectSettings( ProjectItem*, QWidget* = QApplication::activeWindow() );
 	void closeEvent( QCloseEvent* );
-	//
+	
 	bool mReady;
-	QMakeProjectProxy* mScopesProxy;
-	QMakeProjectProxy* mContentProxy;
-	//
-	QMakeProjectModel* mModel;
-	QMakeProjectItem* mProject;
-	QModelIndex mProjectIndex;
+	ProjectsModel* mModel;
+	ProjectItem* mProject;
 	QtItemList mModules;
 	QtItemList mConfigs;
 	QtSettings mSettings;
 	QDirModel* mDirs;
-	//
+	
 protected slots:
 	void loadEncodings();
 	void loadModules();
@@ -85,7 +80,7 @@ protected slots:
 	void on_dbbButtons_helpRequested();
 	void accept();
 	void reject();
-	//
+	
 };
-//
+
 #endif // UIQMAKEPROJECTSETTINGS_H

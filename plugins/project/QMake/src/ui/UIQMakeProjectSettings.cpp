@@ -1,9 +1,8 @@
 #include "UIQMakeProjectSettings.h"
-#include "QMakeProjectModel.h"
-#include "QMakeProjectProxy.h"
-#include "QMakeProjectItem.h"
+#include "ProjectsModel.h"
+#include "ProjectItem.h"
 #include "UIItemSettings.h"
-//
+
 #include <QCompleter>
 #include <QDirModel>
 #include <QHeaderView>
@@ -16,13 +15,14 @@
 #include <QCloseEvent>
 #include <QDebug>
 #include <QWhatsThis>
-//
+
 QString mTranslationMask = "$$TRANSLATIONS_PATH/%2_%3.ts";
-//
-UIQMakeProjectSettings::UIQMakeProjectSettings( QMakeProjectItem* m, QWidget* p )
-	: QDialog( p ), mReady( false ), mModel( m->model() ), mProject( m ), mProjectIndex( m->index() ), mDirs( new QDirModel( this ) )
+
+UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
+	: QDialog( p ), mReady( false ), mModel( m->model() ), mProject( m ), mDirs( new QDirModel( this ) )
 {
 	setupUi( this );
+	return;
 	setWindowTitle( QString( "Project Settings - %1" ).arg( projectName() ) );
 	dbbButtons->button( QDialogButtonBox::Ok )->setIcon( QPixmap( ":/Icons/Icons/buttonok.png" ) );
 	dbbButtons->button( QDialogButtonBox::Cancel )->setIcon( QPixmap( ":/Icons/Icons/buttoncancel.png" ) );
@@ -38,6 +38,7 @@ UIQMakeProjectSettings::UIQMakeProjectSettings( QMakeProjectItem* m, QWidget* p 
 	lvDirs->setRootIndex( mDirs->index( "/" ) );
 #endif
 	//
+	/*
 	setDir( mDirs->index( projectPath() ) );
 	// scopes
 	mScopesProxy = new QMakeProjectProxy( mModel, false, mProjectIndex );
@@ -78,40 +79,30 @@ UIQMakeProjectSettings::UIQMakeProjectSettings( QMakeProjectItem* m, QWidget* p 
 	mReady = true;
 	// settings
 	on_cbOperators_currentIndexChanged( cbOperators->currentText() );
+	*/
 }
-//
-UIQMakeProjectSettings::~UIQMakeProjectSettings()
-{
-	delete mScopesProxy;
-	delete mContentProxy;
-}
-//
+
 void UIQMakeProjectSettings::closeEvent( QCloseEvent* e )
 {
 	if ( result() == QDialog::Rejected && QMessageBox::question( this, tr( "Cancel..." ), tr( "Are you sure ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::No )
 		e->ignore();
 }
-//
-void UIQMakeProjectSettings::execute( QMakeProjectItem* m, QWidget* p )
-{
-	if ( !m )
-		return;
-	UIQMakeProjectSettings d( m, p );
-	d.exec();
-}
-//
+
 QModelIndex UIQMakeProjectSettings::currentIndex()
 {
+	/*
 	QModelIndex i;
 	if ( lvContents->selectionModel()->selectedIndexes().count() )
 		i = mContentProxy->mapToSource( lvContents->selectionModel()->selectedIndexes().at( 0 ) );
 	if ( !i.isValid() && tvScopes->selectionModel()->selectedIndexes().count() )
 		i = mScopesProxy->mapToSource( tvScopes->selectionModel()->selectedIndexes().at( 0 ) );
 	return i;
+	*/
 }
-//
+
 void UIQMakeProjectSettings::setCurrentIndex( const QModelIndex& i )
 {
+	/*
 	// TODO : need fix ( Qt Bug ?! ) calling setRootIndex on a index that have no child show all model
 	// clear selection
 	tvScopes->clearSelection();
@@ -130,51 +121,54 @@ void UIQMakeProjectSettings::setCurrentIndex( const QModelIndex& i )
 		tvScopes->setCurrentIndex( mScopesProxy->mapFromSource( i ) );
 		lvContents->setRootIndex( mContentProxy->mapFromSource( i ) );
 	}
+	*/
 }
-//
+
 QString UIQMakeProjectSettings::projectName() const
 {
-	return mModel->name( mProjectIndex );
+	//return mModel->name( mProjectIndex );
 }
-//
+
 QString UIQMakeProjectSettings::projectPath() const
 {
-	return mModel->path( mProjectIndex );
+	//return mModel->path( mProjectIndex );
 }
-//
+
 QString UIQMakeProjectSettings::getFilePath( const QString& s )
 {
+	/*
 	QString f = mModel->filePath( s, mProjectIndex );
 	if ( !QFile::exists( f ) )
 		f = projectPath();
 	return f;
+	*/
 }
-//
+
 QString UIQMakeProjectSettings::getRelativeFilePath( const QString& s )
 {
-	return mModel->relativeFilePath( s, mProjectIndex );
+	//return mModel->relativeFilePath( s, mProjectIndex );
 }
-//
+
 QString UIQMakeProjectSettings::getStringValues( const QString& v, const QString& o, const QString& s ) const
 {
-	return mModel->getStringValues( v, mProjectIndex, o, s );
+	//return mModel->getStringValues( v, mProjectIndex, o, s );
 }
-//
+
 QStringList UIQMakeProjectSettings::getListValues( const QString& v, const QString& o, const QString& s ) const
 {
-	return mModel->getListValues( v, mProjectIndex, o, s );
+	//return mModel->getListValues( v, mProjectIndex, o, s );
 }
-//
+
 void UIQMakeProjectSettings::setStringValues( const QString& sv, const QString& v, const QString& o, const QString& s )
 {
-	mModel->setStringValues( sv, v, mProjectIndex, o, s );
+	//mModel->setStringValues( sv, v, mProjectIndex, o, s );
 }
-//
+
 void UIQMakeProjectSettings::setListValues( const QStringList& lv, const QString& v, const QString& o, const QString& s )
 {
-	mModel->setListValues( lv, v, mProjectIndex, o, s );
+	//mModel->setListValues( lv, v, mProjectIndex, o, s );
 }
-//
+
 void UIQMakeProjectSettings::loadEncodings()
 {
 	QStringList l;
@@ -183,7 +177,7 @@ void UIQMakeProjectSettings::loadEncodings()
 	l.sort();
 	cbEncodings->addItems( l );
 }
-//
+
 void UIQMakeProjectSettings::loadModules()
 {
 	// load modules informations
@@ -201,7 +195,7 @@ void UIQMakeProjectSettings::loadModules()
 	qDeleteAll( mModules );
 	mModules.clear();
 }
-//
+
 void UIQMakeProjectSettings::loadConfigs()
 {
 	// load configs informations
@@ -231,9 +225,10 @@ void UIQMakeProjectSettings::loadConfigs()
 	qDeleteAll( mConfigs );
 	mConfigs.clear();
 }
-//
+
 void UIQMakeProjectSettings::loadSettings()
 {
+	/*
 	// load configs informations
 	cbScopes->addItems( UISettingsQMake::readScopes() );
 	cbOperators->addItems( UISettingsQMake::readOperators() );
@@ -329,10 +324,12 @@ void UIQMakeProjectSettings::loadSettings()
 		c.remove( it->data( QtItem::ValueRole ).toString(), Qt::CaseInsensitive );
 	}
 	leConfig->setText( c.simplified() );
+	*/
 }
-//
+
 void UIQMakeProjectSettings::loadLanguages()
 {
+	/*
 	leTranslationsPath->setText( getStringValues( "TRANSLATIONS_PATH" ) );
 	leTranslationsPath->setModified( false );
 	QStringList t = getListValues( "TRANSLATIONS" );
@@ -347,14 +344,15 @@ void UIQMakeProjectSettings::loadLanguages()
 		if ( !b )
 			b = it->checkState() == Qt::Checked;
 	}
+	*/
 }
-//
+
 void UIQMakeProjectSettings::setDir( const QString& s )
 {
 	if ( QFile::exists( s ) )
 		setDir( mDirs->index( s ) );
 }
-//
+
 void UIQMakeProjectSettings::setDir( const QModelIndex& i )
 {
 	QString p = QDir( mDirs->filePath( i ) ).canonicalPath();
@@ -371,9 +369,10 @@ void UIQMakeProjectSettings::setDir( const QModelIndex& i )
 			lwFiles->addItem( new QListWidgetItem( mDirs->iconProvider()->icon( QFileIconProvider::File ), s ) );
 	}
 }
-//
+
 void UIQMakeProjectSettings::addValue( const QString& s )
 {
+	/*
 	// check if value already exists
 	if ( lwValues->findItems( s, Qt::MatchFixedString | Qt::MatchRecursive ).count() )
 		return;
@@ -394,10 +393,12 @@ void UIQMakeProjectSettings::addValue( const QString& s )
 	}
 	// add item
 	lwValues->addItem( s );
+	*/
 }
-//
+
 void UIQMakeProjectSettings::editValue( const QString& s )
 {
+	/*
 	// got item to edit, else return
 	QListWidgetItem* it = lwValues->currentItem();
 	if ( !it )
@@ -434,10 +435,12 @@ void UIQMakeProjectSettings::editValue( const QString& s )
 	}
 	// edit item
 	it->setText( s );
+	*/
 }
-//
+
 void UIQMakeProjectSettings::removeValue( const QString& s )
 {
+	/*
 	// got item to delete, else return
 	QListWidgetItem* cit = s.isEmpty() ? lwValues->currentItem() : lwValues->findItems( s, Qt::MatchFixedString | Qt::MatchRecursive ).value( 0 );
 	if ( !cit )
@@ -458,10 +461,12 @@ void UIQMakeProjectSettings::removeValue( const QString& s )
 	}
 	// delete item
 	delete cit;
+	*/
 }
-//
+
 void UIQMakeProjectSettings::tb_clicked()
 {
+	/*
 	QToolButton* tb = qobject_cast<QToolButton*>( sender() );
 	if ( !tb )
 		return;
@@ -504,13 +509,14 @@ void UIQMakeProjectSettings::tb_clicked()
 			leTranslationsPath->setModified( true );
 		}
 	}
+	*/
 }
-//
+
 void UIQMakeProjectSettings::sb_valueChanged( int )
 {
 	sbBuild->setValue( 0 );
 }
-//
+
 void UIQMakeProjectSettings::on_cbTemplate_currentIndexChanged( const QString& s )
 {
 	// enable / disable widget according to template == subdirs
@@ -529,13 +535,13 @@ void UIQMakeProjectSettings::on_cbTemplate_currentIndexChanged( const QString& s
 	wSettings->setDisabled( b );
 	wTranslations->setDisabled( b );
 }
-//
+
 void UIQMakeProjectSettings::lw_currentItemChanged( QListWidgetItem* it, QListWidgetItem* )
 {
 	if ( it )
 		tbInformations->setHtml( it->data( QtItem::HelpRole ).toString() );
 }
-//
+
 void UIQMakeProjectSettings::cb_highlighted( int )
 {
 	QString k = QString( "%1|%2" ).arg( cbScopes->currentText(), cbOperators->currentText() );
@@ -548,13 +554,13 @@ void UIQMakeProjectSettings::cb_highlighted( int )
 		l << it->text();
 	mSettings[ QString( "%1|%2" ).arg( k, cbVariables->currentText() ) ] = l;
 }
-//
+
 void UIQMakeProjectSettings::on_cbScopes_currentIndexChanged( const QString& )
 {
 	if ( mReady )
 		on_cbOperators_currentIndexChanged( cbOperators->currentText() );
 }
-//
+
 void UIQMakeProjectSettings::on_cbOperators_currentIndexChanged( const QString& s )
 {
 	if ( !mReady )
@@ -575,9 +581,10 @@ void UIQMakeProjectSettings::on_cbOperators_currentIndexChanged( const QString& 
 	// load variables values
 	on_cbVariables_currentIndexChanged( cbVariables->currentText() );
 }
-//
+
 void UIQMakeProjectSettings::on_lwFiles_itemDoubleClicked( QListWidgetItem* i )
 {
+	/*
 	if ( !i )
 		return;
 	QFileInfo f( leDir->text().append( "/" ).append( i->text() ) );
@@ -608,8 +615,9 @@ void UIQMakeProjectSettings::on_lwFiles_itemDoubleClicked( QListWidgetItem* i )
 		addValue( getRelativeFilePath( f.path() ) );
 	else if ( ( v == "translations" && s == "ts" ) || ( v == "resources" && s == "qrc" ) || ( v == "def_file" && s == "def" ) || ( v == "rc_file" && s == "rc" ) || ( v == "res_file" && s == "res" ) )
 		addValue( getRelativeFilePath( f.filePath() ) );
+	*/
 }
-//
+
 void UIQMakeProjectSettings::on_cbVariables_currentIndexChanged( const QString& s )
 {
 	if ( !mReady )
@@ -621,7 +629,7 @@ void UIQMakeProjectSettings::on_cbVariables_currentIndexChanged( const QString& 
 	else
 		lwValues->addItems( getListValues( s, cbOperators->currentText(), cbScopes->currentText() ) );
 }
-//
+
 void UIQMakeProjectSettings::on_pbAddValue_clicked()
 {
 	bool b;
@@ -629,7 +637,7 @@ void UIQMakeProjectSettings::on_pbAddValue_clicked()
 	if ( b && !s.isEmpty() )
 		addValue( s );
 }
-//
+
 void UIQMakeProjectSettings::on_pbEditValue_clicked()
 {
 	QListWidgetItem* it = lwValues->currentItem();
@@ -640,12 +648,12 @@ void UIQMakeProjectSettings::on_pbEditValue_clicked()
 	if ( b && !s.isEmpty() )
 		editValue( s );
 }
-//
+
 void UIQMakeProjectSettings::on_pbRemoveValue_clicked()
 {
 	removeValue();
 }
-//
+
 void UIQMakeProjectSettings::on_pbClearValues_clicked()
 {
 	if ( cbVariables->currentText().toLower() == "translations" && cbScopes->currentText().isEmpty() && cbOperators->currentText() == "=" )
@@ -654,7 +662,7 @@ void UIQMakeProjectSettings::on_pbClearValues_clicked()
 	else
 		lwValues->clear();
 }
-//
+
 void UIQMakeProjectSettings::on_lwTranslations_itemChanged( QListWidgetItem* it )
 {
 	if ( !it )
@@ -699,47 +707,54 @@ void UIQMakeProjectSettings::on_lwTranslations_itemChanged( QListWidgetItem* it 
 			break;
 	}
 }
-//
+
 void UIQMakeProjectSettings::on_tvScopes_clicked( const QModelIndex& i )
 {
 	// TODO : Fix me
-	setCurrentIndex( mScopesProxy->mapToSource( i ) );
+	//setCurrentIndex( mScopesProxy->mapToSource( i ) );
 }
-//
+
 void UIQMakeProjectSettings::on_tvScopes_doubleClicked( const QModelIndex& i )
 {
+	/*
 	if ( i.isValid() )
 		UIItemSettings::edit( mModel, mModel->itemFromIndex( mScopesProxy->mapToSource( i ) ), this )->exec();
+	*/
 }
-//
+
 void UIQMakeProjectSettings::on_lvContents_doubleClicked( const QModelIndex& i )
 {
+	/*
 	if ( i.isValid() )
 		UIItemSettings::edit( mModel, mModel->itemFromIndex( mContentProxy->mapToSource( i ) ), this )->exec();
+	*/
 }
-//
+
 void UIQMakeProjectSettings::on_tbAdd_clicked()
 {
 	UIItemSettings::edit( mModel, 0, this )->exec();
 }
-//
+
 void UIQMakeProjectSettings::on_tbEdit_clicked()
 {
 	QModelIndex i = currentIndex();
 	if ( i.isValid() )
 		UIItemSettings::edit( mModel, mModel->itemFromIndex( i ), this )->exec();
 }
-//
+
 void UIQMakeProjectSettings::on_tbRemove_clicked()
 {
+	/*
 	// TODO : use pointer
 	QModelIndex i = currentIndex();
 	if ( i.isValid() )
 		mModel->QAbstractItemModel::removeRow( i.row(), i.parent() );
+	*/
 }
-//
+
 void UIQMakeProjectSettings::on_tbClear_clicked()
 {
+	/*
 	// TODO : use pointer
 	QModelIndex i = currentIndex();
 	if ( i.isValid() )
@@ -748,28 +763,33 @@ void UIQMakeProjectSettings::on_tbClear_clicked()
 		while ( mModel->rowCount( i ) )
 			mModel->QAbstractItemModel::removeRow( 0, i );
 	}
+	*/
 }
-//
+
 void UIQMakeProjectSettings::on_tbUp_clicked()
 {
+	/*
 	// got index to move
 	QModelIndex i = currentIndex();
 	// check if valid to move
 	if ( i.isValid() )
 		if ( mModel->itemFromIndex( i )->moveUp() )
 			setCurrentIndex( i.sibling( i.row() -1, i.column() ) );
+	*/
 }
-//
+
 void UIQMakeProjectSettings::on_tbDown_clicked()
 {
+	/*
 	// got index to move
 	QModelIndex i = currentIndex();
 	// check if valid to move
 	if ( i.isValid() )
 		if ( mModel->itemFromIndex( i )->moveDown() )
 			setCurrentIndex( i.sibling( i.row() +1, i.column() ) );
+	*/
 }
-//
+
 void UIQMakeProjectSettings::on_dbbButtons_helpRequested()
 {
 	QString s;
@@ -794,9 +814,10 @@ void UIQMakeProjectSettings::on_dbbButtons_helpRequested()
 	if ( !s.isEmpty() )
 		QWhatsThis::showText( dbbButtons->button( QDialogButtonBox::Help )->mapToGlobal( QPoint( 0, 0 ) ), s );
 }
-//
+
 void UIQMakeProjectSettings::accept()
 {
+	/*
 	// backup current settings state
 	cb_highlighted( 0 );
 	// applications
@@ -882,9 +903,10 @@ void UIQMakeProjectSettings::accept()
 		setListValues( mSettings.value( v ), l.at( 2 ), l.at( 1 ), l.at( 0 ) );
 	}
 	// close dialog
+	*/
 	QDialog::accept();
 }
-//
+
 void UIQMakeProjectSettings::reject()
 {
 	setResult( QDialog::Rejected );

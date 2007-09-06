@@ -13,9 +13,8 @@ public:
 	virtual ~QMake();
 	virtual bool setEnabled( bool );
 	virtual QWidget* settingsWidget();
-
-	// the function that open a project
-	virtual QStandardItem* openProject( const QString&, QStandardItem* = 0 );
+	virtual ProjectItem* openProject( const QString&, ProjectItem* = 0 );
+	virtual void editSettings( ProjectItem* );
 
 };
 

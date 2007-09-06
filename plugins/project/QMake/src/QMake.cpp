@@ -2,6 +2,7 @@
 #include "QMakeItem.h"
 #include "QMakeParser.h"
 #include "UISettingsQMake.h"
+#include "UIQMakeProjectSettings.h"
 
 QMake::QMake()
 {
@@ -46,7 +47,7 @@ QWidget* QMake::settingsWidget()
 	return UISettingsQMake::instance();
 }
 
-QStandardItem* QMake::openProject( const QString& s, QStandardItem* pi )
+ProjectItem* QMake::openProject( const QString& s, ProjectItem* pi )
 {
 	// don t open project if plugin is not enabled
 	if ( !isEnabled() )
@@ -57,6 +58,12 @@ QStandardItem* QMake::openProject( const QString& s, QStandardItem* pi )
 	QMakeParser p( s, it );
 	// return root item
 	return it;
+}
+
+void QMake::editSettings( ProjectItem* it )
+{
+	if ( it )
+		UIQMakeProjectSettings::instance( it )->exec();
 }
 
 Q_EXPORT_PLUGIN2( ProjectQMake, QMake )

@@ -23,6 +23,8 @@ class QMakeItem : public ProjectItem
 public:
 	QMakeItem( ProjectsModel::NodeType = ProjectsModel::ProjectType, QMakeItem* = 0 );
 
+	QString pluginName() const { return "QMake"; }
+
 	void setType( ProjectsModel::NodeType );
 	ProjectsModel::NodeType getType();
 
