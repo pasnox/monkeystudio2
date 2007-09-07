@@ -22,7 +22,7 @@ UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
 	: QDialog( p ), mReady( false ), mModel( m->model() ), mProject( m ), mDirs( new QDirModel( this ) )
 {
 	setupUi( this );
-	return;
+	setAttribute( Qt::WA_DeleteOnClose );
 	setWindowTitle( QString( "Project Settings - %1" ).arg( projectName() ) );
 	dbbButtons->button( QDialogButtonBox::Ok )->setIcon( QPixmap( ":/Icons/Icons/buttonok.png" ) );
 	dbbButtons->button( QDialogButtonBox::Cancel )->setIcon( QPixmap( ":/Icons/Icons/buttoncancel.png" ) );
@@ -38,9 +38,9 @@ UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
 	lvDirs->setRootIndex( mDirs->index( "/" ) );
 #endif
 	//
-	/*
 	setDir( mDirs->index( projectPath() ) );
 	// scopes
+	/*
 	mScopesProxy = new QMakeProjectProxy( mModel, false, mProjectIndex );
 	mScopesProxy->setFilterRoles( QList<int>() << AbstractProjectModel::ValueType );
 	mScopesProxy->setFiltering( true );
@@ -55,6 +55,7 @@ UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
 	lvContents->setModel( mContentProxy );
 	// set currentindex
 	setCurrentIndex( mProjectIndex.child( 0, 0 ) );
+	*/
 	// loading...
 	loadEncodings();
 	loadModules();
@@ -79,7 +80,6 @@ UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
 	mReady = true;
 	// settings
 	on_cbOperators_currentIndexChanged( cbOperators->currentText() );
-	*/
 }
 
 void UIQMakeProjectSettings::closeEvent( QCloseEvent* e )
@@ -98,6 +98,7 @@ QModelIndex UIQMakeProjectSettings::currentIndex()
 		i = mScopesProxy->mapToSource( tvScopes->selectionModel()->selectedIndexes().at( 0 ) );
 	return i;
 	*/
+	return QModelIndex();
 }
 
 void UIQMakeProjectSettings::setCurrentIndex( const QModelIndex& i )
@@ -125,49 +126,28 @@ void UIQMakeProjectSettings::setCurrentIndex( const QModelIndex& i )
 }
 
 QString UIQMakeProjectSettings::projectName() const
-{
-	//return mModel->name( mProjectIndex );
-}
+{ return mProject->name(); }
 
 QString UIQMakeProjectSettings::projectPath() const
-{
-	//return mModel->path( mProjectIndex );
-}
+{ return mProject->canonicalPath(); }
 
 QString UIQMakeProjectSettings::getFilePath( const QString& s )
-{
-	/*
-	QString f = mModel->filePath( s, mProjectIndex );
-	if ( !QFile::exists( f ) )
-		f = projectPath();
-	return f;
-	*/
-}
+{ return QFile::exists( mProject->canonicalFilePath( s ) ) ? mProject->canonicalFilePath( s ) : mProject->canonicalPath(); }
 
 QString UIQMakeProjectSettings::getRelativeFilePath( const QString& s )
-{
-	//return mModel->relativeFilePath( s, mProjectIndex );
-}
+{ return mProject->relativeFilePath( s ); }
 
 QString UIQMakeProjectSettings::getStringValues( const QString& v, const QString& o, const QString& s ) const
-{
-	//return mModel->getStringValues( v, mProjectIndex, o, s );
-}
+{ return mProject->getStringValues( v, o, s ); }
 
 QStringList UIQMakeProjectSettings::getListValues( const QString& v, const QString& o, const QString& s ) const
-{
-	//return mModel->getListValues( v, mProjectIndex, o, s );
-}
+{ return mProject->getListValues( v, o, s ); }
 
 void UIQMakeProjectSettings::setStringValues( const QString& sv, const QString& v, const QString& o, const QString& s )
-{
-	//mModel->setStringValues( sv, v, mProjectIndex, o, s );
-}
+{ mProject->setStringValues( sv, v, o, s ); }
 
 void UIQMakeProjectSettings::setListValues( const QStringList& lv, const QString& v, const QString& o, const QString& s )
-{
-	//mModel->setListValues( lv, v, mProjectIndex, o, s );
-}
+{ mProject->setListValues( lv, v, o, s ); }
 
 void UIQMakeProjectSettings::loadEncodings()
 {
@@ -228,7 +208,6 @@ void UIQMakeProjectSettings::loadConfigs()
 
 void UIQMakeProjectSettings::loadSettings()
 {
-	/*
 	// load configs informations
 	cbScopes->addItems( UISettingsQMake::readScopes() );
 	cbOperators->addItems( UISettingsQMake::readOperators() );
@@ -324,12 +303,10 @@ void UIQMakeProjectSettings::loadSettings()
 		c.remove( it->data( QtItem::ValueRole ).toString(), Qt::CaseInsensitive );
 	}
 	leConfig->setText( c.simplified() );
-	*/
 }
 
 void UIQMakeProjectSettings::loadLanguages()
 {
-	/*
 	leTranslationsPath->setText( getStringValues( "TRANSLATIONS_PATH" ) );
 	leTranslationsPath->setModified( false );
 	QStringList t = getListValues( "TRANSLATIONS" );
@@ -344,7 +321,6 @@ void UIQMakeProjectSettings::loadLanguages()
 		if ( !b )
 			b = it->checkState() == Qt::Checked;
 	}
-	*/
 }
 
 void UIQMakeProjectSettings::setDir( const QString& s )
@@ -372,7 +348,6 @@ void UIQMakeProjectSettings::setDir( const QModelIndex& i )
 
 void UIQMakeProjectSettings::addValue( const QString& s )
 {
-	/*
 	// check if value already exists
 	if ( lwValues->findItems( s, Qt::MatchFixedString | Qt::MatchRecursive ).count() )
 		return;
@@ -393,12 +368,10 @@ void UIQMakeProjectSettings::addValue( const QString& s )
 	}
 	// add item
 	lwValues->addItem( s );
-	*/
 }
 
 void UIQMakeProjectSettings::editValue( const QString& s )
 {
-	/*
 	// got item to edit, else return
 	QListWidgetItem* it = lwValues->currentItem();
 	if ( !it )
@@ -435,12 +408,10 @@ void UIQMakeProjectSettings::editValue( const QString& s )
 	}
 	// edit item
 	it->setText( s );
-	*/
 }
 
 void UIQMakeProjectSettings::removeValue( const QString& s )
 {
-	/*
 	// got item to delete, else return
 	QListWidgetItem* cit = s.isEmpty() ? lwValues->currentItem() : lwValues->findItems( s, Qt::MatchFixedString | Qt::MatchRecursive ).value( 0 );
 	if ( !cit )
@@ -461,12 +432,10 @@ void UIQMakeProjectSettings::removeValue( const QString& s )
 	}
 	// delete item
 	delete cit;
-	*/
 }
 
 void UIQMakeProjectSettings::tb_clicked()
 {
-	/*
 	QToolButton* tb = qobject_cast<QToolButton*>( sender() );
 	if ( !tb )
 		return;
@@ -509,7 +478,6 @@ void UIQMakeProjectSettings::tb_clicked()
 			leTranslationsPath->setModified( true );
 		}
 	}
-	*/
 }
 
 void UIQMakeProjectSettings::sb_valueChanged( int )
@@ -584,7 +552,6 @@ void UIQMakeProjectSettings::on_cbOperators_currentIndexChanged( const QString& 
 
 void UIQMakeProjectSettings::on_lwFiles_itemDoubleClicked( QListWidgetItem* i )
 {
-	/*
 	if ( !i )
 		return;
 	QFileInfo f( leDir->text().append( "/" ).append( i->text() ) );
@@ -615,7 +582,6 @@ void UIQMakeProjectSettings::on_lwFiles_itemDoubleClicked( QListWidgetItem* i )
 		addValue( getRelativeFilePath( f.path() ) );
 	else if ( ( v == "translations" && s == "ts" ) || ( v == "resources" && s == "qrc" ) || ( v == "def_file" && s == "def" ) || ( v == "rc_file" && s == "rc" ) || ( v == "res_file" && s == "res" ) )
 		addValue( getRelativeFilePath( f.filePath() ) );
-	*/
 }
 
 void UIQMakeProjectSettings::on_cbVariables_currentIndexChanged( const QString& s )
@@ -817,7 +783,6 @@ void UIQMakeProjectSettings::on_dbbButtons_helpRequested()
 
 void UIQMakeProjectSettings::accept()
 {
-	/*
 	// backup current settings state
 	cb_highlighted( 0 );
 	// applications
@@ -903,7 +868,6 @@ void UIQMakeProjectSettings::accept()
 		setListValues( mSettings.value( v ), l.at( 2 ), l.at( 1 ), l.at( 0 ) );
 	}
 	// close dialog
-	*/
 	QDialog::accept();
 }
 

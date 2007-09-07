@@ -41,6 +41,9 @@ QMakeItem::QMakeItem( ProjectsModel::NodeType t, QMakeItem* i )
 	*/
 }
 
+ProjectItem* QMakeItem::clone( ProjectsModel::NodeType t, ProjectItem* p ) const
+{ return new QMakeItem( t, reinterpret_cast<QMakeItem*>( p ) ); }
+
 void QMakeItem::setType( ProjectsModel::NodeType t )
 {
 	// set data

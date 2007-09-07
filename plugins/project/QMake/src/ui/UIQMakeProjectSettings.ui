@@ -13,18 +13,28 @@
    <string>Settings</string>
   </property>
   <layout class="QGridLayout" >
-   <property name="margin" >
+   <property name="leftMargin" >
     <number>5</number>
    </property>
-   <property name="spacing" >
+   <property name="topMargin" >
+    <number>5</number>
+   </property>
+   <property name="rightMargin" >
+    <number>5</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>5</number>
+   </property>
+   <property name="horizontalSpacing" >
+    <number>3</number>
+   </property>
+   <property name="verticalSpacing" >
     <number>3</number>
    </property>
    <item row="1" column="1" >
     <widget class="QStackedWidget" name="swMenu" >
      <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>7</hsizetype>
-       <vsizetype>7</vsizetype>
+      <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -34,18 +44,25 @@
      </property>
      <widget class="QWidget" name="wApplication" >
       <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
        <property name="spacing" >
         <number>3</number>
+       </property>
+       <property name="leftMargin" >
+        <number>0</number>
+       </property>
+       <property name="topMargin" >
+        <number>0</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
        </property>
        <item>
         <widget class="QGroupBox" name="gbApplication" >
          <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>5</hsizetype>
-           <vsizetype>0</vsizetype>
+          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -54,10 +71,22 @@
           <string>Application Settings</string>
          </property>
          <layout class="QGridLayout" >
-          <property name="margin" >
+          <property name="leftMargin" >
            <number>5</number>
           </property>
-          <property name="spacing" >
+          <property name="topMargin" >
+           <number>5</number>
+          </property>
+          <property name="rightMargin" >
+           <number>5</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>5</number>
+          </property>
+          <property name="horizontalSpacing" >
+           <number>3</number>
+          </property>
+          <property name="verticalSpacing" >
            <number>3</number>
           </property>
           <item row="0" column="0" >
@@ -89,7 +118,7 @@
           <item row="2" column="3" >
            <widget class="QToolButton" name="tbHelpFile" >
             <property name="icon" >
-             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/Icons/Icons/fileopen.png</iconset>
+             <iconset resource="../resources/QMake.qrc" >:/icons/icons/filefolder.png</iconset>
             </property>
            </widget>
           </item>
@@ -134,7 +163,7 @@
           <item row="1" column="3" >
            <widget class="QToolButton" name="tbIcon" >
             <property name="icon" >
-             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/Icons/Icons/fileopen.png</iconset>
+             <iconset resource="../resources/QMake.qrc" >:/icons/icons/filefolder.png</iconset>
             </property>
            </widget>
           </item>
@@ -157,9 +186,7 @@
        <item>
         <widget class="QGroupBox" name="gbVersion" >
          <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>5</hsizetype>
-           <vsizetype>0</vsizetype>
+          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -174,10 +201,22 @@
           <bool>false</bool>
          </property>
          <layout class="QGridLayout" >
-          <property name="margin" >
+          <property name="leftMargin" >
            <number>5</number>
           </property>
-          <property name="spacing" >
+          <property name="topMargin" >
+           <number>5</number>
+          </property>
+          <property name="rightMargin" >
+           <number>5</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>5</number>
+          </property>
+          <property name="horizontalSpacing" >
+           <number>3</number>
+          </property>
+          <property name="verticalSpacing" >
            <number>3</number>
           </property>
           <item row="2" column="0" colspan="4" >
@@ -261,9 +300,7 @@
        <item>
         <widget class="QGroupBox" name="gbBuild" >
          <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>5</hsizetype>
-           <vsizetype>0</vsizetype>
+          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -272,19 +309,40 @@
           <string>Build &amp;Settings</string>
          </property>
          <layout class="QGridLayout" >
-          <property name="margin" >
+          <property name="leftMargin" >
            <number>5</number>
           </property>
-          <property name="spacing" >
+          <property name="topMargin" >
+           <number>5</number>
+          </property>
+          <property name="rightMargin" >
+           <number>5</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>5</number>
+          </property>
+          <property name="horizontalSpacing" >
+           <number>3</number>
+          </property>
+          <property name="verticalSpacing" >
            <number>3</number>
           </property>
           <item row="0" column="0" colspan="3" >
            <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
             <property name="spacing" >
              <number>3</number>
+            </property>
+            <property name="leftMargin" >
+             <number>0</number>
+            </property>
+            <property name="topMargin" >
+             <number>0</number>
+            </property>
+            <property name="rightMargin" >
+             <number>0</number>
+            </property>
+            <property name="bottomMargin" >
+             <number>0</number>
             </property>
             <item>
              <widget class="QLabel" name="lTemplate" >
@@ -303,7 +361,7 @@
                 <string>app</string>
                </property>
                <property name="icon" >
-                <iconset resource="../resources/qmake_resources.qrc" >:/Icons/icons/form.png</iconset>
+                <iconset resource="../resources/QMake.qrc" >:/icons/icons/form.png</iconset>
                </property>
               </item>
               <item>
@@ -311,7 +369,7 @@
                 <string>lib</string>
                </property>
                <property name="icon" >
-                <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/Icons/Icons/misc.png</iconset>
+                <iconset resource="../resources/QMake.qrc" >:/icons/icons/misc.png</iconset>
                </property>
               </item>
               <item>
@@ -319,7 +377,7 @@
                 <string>vcapp</string>
                </property>
                <property name="icon" >
-                <iconset resource="../resources/qmake_resources.qrc" >:/Icons/icons/form.png</iconset>
+                <iconset resource="../resources/QMake.qrc" >:/icons/icons/form.png</iconset>
                </property>
               </item>
               <item>
@@ -327,7 +385,7 @@
                 <string>vclib</string>
                </property>
                <property name="icon" >
-                <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/Icons/Icons/misc.png</iconset>
+                <iconset resource="../resources/QMake.qrc" >:/icons/icons/misc.png</iconset>
                </property>
               </item>
               <item>
@@ -335,7 +393,7 @@
                 <string>subdirs</string>
                </property>
                <property name="icon" >
-                <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/Icons/Icons/fileopen.png</iconset>
+                <iconset resource="../resources/QMake.qrc" >:/icons/icons/folder.png</iconset>
                </property>
               </item>
              </widget>
@@ -357,7 +415,7 @@
                 <string>C++</string>
                </property>
                <property name="icon" >
-                <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/Icons/Icons/misc.png</iconset>
+                <iconset resource="../resources/QMake.qrc" >:/icons/icons/misc.png</iconset>
                </property>
               </item>
               <item>
@@ -365,7 +423,7 @@
                 <string>Qt4/C++</string>
                </property>
                <property name="icon" >
-                <iconset resource="../resources/qmake_resources.qrc" >:/Icons/icons/qt.png</iconset>
+                <iconset resource="../resources/QMake.qrc" >:/icons/icons/qt.png</iconset>
                </property>
               </item>
               <item>
@@ -373,7 +431,7 @@
                 <string>Qt3/C++</string>
                </property>
                <property name="icon" >
-                <iconset resource="../resources/qmake_resources.qrc" >:/Icons/icons/qt.png</iconset>
+                <iconset resource="../resources/QMake.qrc" >:/icons/icons/qt.png</iconset>
                </property>
               </item>
              </widget>
@@ -383,9 +441,7 @@
           <item row="1" column="1" >
            <widget class="QFrame" name="fWarn" >
             <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>4</hsizetype>
-              <vsizetype>5</vsizetype>
+             <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -394,10 +450,19 @@
              <enum>QFrame::StyledPanel</enum>
             </property>
             <layout class="QVBoxLayout" >
-             <property name="margin" >
+             <property name="spacing" >
               <number>3</number>
              </property>
-             <property name="spacing" >
+             <property name="leftMargin" >
+              <number>3</number>
+             </property>
+             <property name="topMargin" >
+              <number>3</number>
+             </property>
+             <property name="rightMargin" >
+              <number>3</number>
+             </property>
+             <property name="bottomMargin" >
               <number>3</number>
              </property>
              <item>
@@ -433,9 +498,7 @@
           <item row="1" column="2" >
            <widget class="QFrame" name="fBuildAll" >
             <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>4</hsizetype>
-              <vsizetype>5</vsizetype>
+             <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -444,10 +507,19 @@
              <enum>QFrame::StyledPanel</enum>
             </property>
             <layout class="QVBoxLayout" >
-             <property name="margin" >
+             <property name="spacing" >
               <number>3</number>
              </property>
-             <property name="spacing" >
+             <property name="leftMargin" >
+              <number>3</number>
+             </property>
+             <property name="topMargin" >
+              <number>3</number>
+             </property>
+             <property name="rightMargin" >
+              <number>3</number>
+             </property>
+             <property name="bottomMargin" >
               <number>3</number>
              </property>
              <item>
@@ -489,9 +561,7 @@
           <item row="1" column="0" >
            <widget class="QFrame" name="fBuildType" >
             <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>5</hsizetype>
-              <vsizetype>5</vsizetype>
+             <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -500,10 +570,19 @@
              <enum>QFrame::StyledPanel</enum>
             </property>
             <layout class="QVBoxLayout" >
-             <property name="margin" >
+             <property name="spacing" >
               <number>3</number>
              </property>
-             <property name="spacing" >
+             <property name="leftMargin" >
+              <number>3</number>
+             </property>
+             <property name="topMargin" >
+              <number>3</number>
+             </property>
+             <property name="rightMargin" >
+              <number>3</number>
+             </property>
+             <property name="bottomMargin" >
               <number>3</number>
              </property>
              <item>
@@ -552,11 +631,20 @@
           <string>Files Encoding</string>
          </property>
          <layout class="QHBoxLayout" >
-          <property name="margin" >
-           <number>5</number>
-          </property>
           <property name="spacing" >
            <number>3</number>
+          </property>
+          <property name="leftMargin" >
+           <number>5</number>
+          </property>
+          <property name="topMargin" >
+           <number>5</number>
+          </property>
+          <property name="rightMargin" >
+           <number>5</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>5</number>
           </property>
           <item>
            <widget class="QLabel" name="lEncoding" >
@@ -594,19 +682,40 @@
      </widget>
      <widget class="QWidget" name="wLibraries" >
       <layout class="QGridLayout" >
-       <property name="margin" >
+       <property name="leftMargin" >
         <number>0</number>
        </property>
-       <property name="spacing" >
+       <property name="topMargin" >
+        <number>0</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
+       </property>
+       <property name="horizontalSpacing" >
+        <number>3</number>
+       </property>
+       <property name="verticalSpacing" >
         <number>3</number>
        </property>
        <item row="1" column="0" colspan="2" >
         <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
          <property name="spacing" >
           <number>3</number>
+         </property>
+         <property name="leftMargin" >
+          <number>0</number>
+         </property>
+         <property name="topMargin" >
+          <number>0</number>
+         </property>
+         <property name="rightMargin" >
+          <number>0</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>0</number>
          </property>
          <item>
           <widget class="QLabel" name="lConfig" >
@@ -629,11 +738,20 @@
           <string>&amp;Qt Modules</string>
          </property>
          <layout class="QVBoxLayout" >
-          <property name="margin" >
-           <number>5</number>
-          </property>
           <property name="spacing" >
            <number>3</number>
+          </property>
+          <property name="leftMargin" >
+           <number>5</number>
+          </property>
+          <property name="topMargin" >
+           <number>5</number>
+          </property>
+          <property name="rightMargin" >
+           <number>5</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>5</number>
           </property>
           <item>
            <widget class="QListWidget" name="lwQtModules" />
@@ -647,11 +765,20 @@
           <string>&amp;Compiler/Library Flags</string>
          </property>
          <layout class="QVBoxLayout" >
-          <property name="margin" >
-           <number>5</number>
-          </property>
           <property name="spacing" >
            <number>3</number>
+          </property>
+          <property name="leftMargin" >
+           <number>5</number>
+          </property>
+          <property name="topMargin" >
+           <number>5</number>
+          </property>
+          <property name="rightMargin" >
+           <number>5</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>5</number>
           </property>
           <item>
            <widget class="QListWidget" name="lwCompilerFlags" />
@@ -662,9 +789,7 @@
        <item row="2" column="0" colspan="2" >
         <widget class="QGroupBox" name="gbInformations" >
          <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>7</hsizetype>
-           <vsizetype>7</vsizetype>
+          <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
            <horstretch>99</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -673,11 +798,20 @@
           <string>&amp;Informations</string>
          </property>
          <layout class="QVBoxLayout" >
-          <property name="margin" >
-           <number>5</number>
-          </property>
           <property name="spacing" >
            <number>3</number>
+          </property>
+          <property name="leftMargin" >
+           <number>5</number>
+          </property>
+          <property name="topMargin" >
+           <number>5</number>
+          </property>
+          <property name="rightMargin" >
+           <number>5</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>5</number>
           </property>
           <item>
            <widget class="QTextBrowser" name="tbInformations" />
@@ -689,18 +823,28 @@
      </widget>
      <widget class="QWidget" name="wSettings" >
       <layout class="QGridLayout" >
-       <property name="margin" >
+       <property name="leftMargin" >
         <number>0</number>
        </property>
-       <property name="spacing" >
+       <property name="topMargin" >
+        <number>0</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
+       </property>
+       <property name="horizontalSpacing" >
+        <number>3</number>
+       </property>
+       <property name="verticalSpacing" >
         <number>3</number>
        </property>
        <item row="0" column="0" colspan="2" >
         <widget class="QGroupBox" name="gbSettings" >
          <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>5</hsizetype>
-           <vsizetype>0</vsizetype>
+          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -709,10 +853,22 @@
           <string>Scope Settings</string>
          </property>
          <layout class="QGridLayout" >
-          <property name="margin" >
+          <property name="leftMargin" >
            <number>5</number>
           </property>
-          <property name="spacing" >
+          <property name="topMargin" >
+           <number>5</number>
+          </property>
+          <property name="rightMargin" >
+           <number>5</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>5</number>
+          </property>
+          <property name="horizontalSpacing" >
+           <number>3</number>
+          </property>
+          <property name="verticalSpacing" >
            <number>3</number>
           </property>
           <item row="0" column="1" >
@@ -728,9 +884,7 @@
           <item row="0" column="2" >
            <widget class="QComboBox" name="cbScopes" >
             <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>0</hsizetype>
-              <vsizetype>0</vsizetype>
+             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -766,9 +920,7 @@
           <item row="2" column="0" >
            <widget class="QLabel" name="lOutputName" >
             <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>0</hsizetype>
-              <vsizetype>5</vsizetype>
+             <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -784,7 +936,7 @@
           <item row="1" column="6" >
            <widget class="QToolButton" name="tbOutputPath" >
             <property name="icon" >
-             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/Icons/Icons/folder_blue.png</iconset>
+             <iconset resource="../resources/QMake.qrc" >:/icons/icons/folder.png</iconset>
             </property>
            </widget>
           </item>
@@ -804,9 +956,7 @@
           <item row="0" column="5" colspan="2" >
            <widget class="QComboBox" name="cbOperators" >
             <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>0</hsizetype>
-              <vsizetype>0</vsizetype>
+             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -831,9 +981,7 @@
        <item row="3" column="1" >
         <widget class="QFrame" name="lVariables" >
          <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>5</hsizetype>
-           <vsizetype>0</vsizetype>
+          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -842,11 +990,20 @@
           <enum>QFrame::StyledPanel</enum>
          </property>
          <layout class="QVBoxLayout" >
-          <property name="margin" >
-           <number>5</number>
-          </property>
           <property name="spacing" >
            <number>3</number>
+          </property>
+          <property name="leftMargin" >
+           <number>5</number>
+          </property>
+          <property name="topMargin" >
+           <number>5</number>
+          </property>
+          <property name="rightMargin" >
+           <number>5</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>5</number>
           </property>
           <item>
            <widget class="QComboBox" name="cbVariables" >
@@ -855,7 +1012,7 @@
               <string>LIBS</string>
              </property>
              <property name="icon" >
-              <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/Icons/Icons/misc.png</iconset>
+              <iconset resource="../resources/QMake.qrc" >:/icons/icons/misc.png</iconset>
              </property>
             </item>
             <item>
@@ -863,7 +1020,7 @@
               <string>DEFINES</string>
              </property>
              <property name="icon" >
-              <iconset resource="../resources/qmake_resources.qrc" >:/Icons/icons/define.png</iconset>
+              <iconset resource="../resources/QMake.qrc" >:/icons/icons/include.png</iconset>
              </property>
             </item>
             <item>
@@ -871,7 +1028,7 @@
               <string>TRANSLATIONS</string>
              </property>
              <property name="icon" >
-              <iconset resource="../resources/qmake_resources.qrc" >:/Icons/icons/translation.png</iconset>
+              <iconset resource="../resources/QMake.qrc" >:/icons/icons/translations.png</iconset>
              </property>
             </item>
             <item>
@@ -879,7 +1036,7 @@
               <string>INCLUDEPATH</string>
              </property>
              <property name="icon" >
-              <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/Icons/Icons/folder_blue.png</iconset>
+              <iconset resource="../resources/QMake.qrc" >:/icons/icons/folder.png</iconset>
              </property>
             </item>
             <item>
@@ -887,7 +1044,7 @@
               <string>DEPENDPATH</string>
              </property>
              <property name="icon" >
-              <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/Icons/Icons/folder_blue.png</iconset>
+              <iconset resource="../resources/QMake.qrc" >:/icons/icons/folder.png</iconset>
              </property>
             </item>
             <item>
@@ -895,7 +1052,7 @@
               <string>VPATH</string>
              </property>
              <property name="icon" >
-              <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/Icons/Icons/folder_blue.png</iconset>
+              <iconset resource="../resources/QMake.qrc" >:/icons/icons/folder.png</iconset>
              </property>
             </item>
             <item>
@@ -903,7 +1060,7 @@
               <string>RESOURCES</string>
              </property>
              <property name="icon" >
-              <iconset resource="../resources/qmake_resources.qrc" >:/Icons/icons/resource.png</iconset>
+              <iconset resource="../resources/QMake.qrc" >:/icons/icons/resource.png</iconset>
              </property>
             </item>
             <item>
@@ -911,7 +1068,7 @@
               <string>DEF_FILE</string>
              </property>
              <property name="icon" >
-              <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/Icons/Icons/filenew.png</iconset>
+              <iconset resource="../resources/QMake.qrc" >:/icons/icons/file.png</iconset>
              </property>
             </item>
             <item>
@@ -919,7 +1076,7 @@
               <string>RC_FILE</string>
              </property>
              <property name="icon" >
-              <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/Icons/Icons/filenew.png</iconset>
+              <iconset resource="../resources/QMake.qrc" >:/icons/icons/file.png</iconset>
              </property>
             </item>
             <item>
@@ -927,7 +1084,7 @@
               <string>RES_FILE</string>
              </property>
              <property name="icon" >
-              <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/Icons/Icons/filenew.png</iconset>
+              <iconset resource="../resources/QMake.qrc" >:/icons/icons/file.png</iconset>
              </property>
             </item>
            </widget>
@@ -938,7 +1095,7 @@
              <string>&amp;Add</string>
             </property>
             <property name="icon" >
-             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/Icons/Icons/editadd.png</iconset>
+             <iconset resource="../resources/QMake.qrc" >:/icons/icons/add.png</iconset>
             </property>
            </widget>
           </item>
@@ -948,7 +1105,7 @@
              <string>&amp;Edit</string>
             </property>
             <property name="icon" >
-             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/Icons/Icons/edit.png</iconset>
+             <iconset resource="../resources/QMake.qrc" >:/icons/icons/edit.png</iconset>
             </property>
            </widget>
           </item>
@@ -958,7 +1115,7 @@
              <string>&amp;Remove</string>
             </property>
             <property name="icon" >
-             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/Icons/Icons/editremove.png</iconset>
+             <iconset resource="../resources/QMake.qrc" >:/icons/icons/remove.png</iconset>
             </property>
            </widget>
           </item>
@@ -968,7 +1125,7 @@
              <string>&amp;Clear</string>
             </property>
             <property name="icon" >
-             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/Icons/Icons/editclear.png</iconset>
+             <iconset resource="../resources/QMake.qrc" >:/icons/icons/clear.png</iconset>
             </property>
            </widget>
           </item>
@@ -978,9 +1135,7 @@
        <item row="3" column="0" >
         <widget class="QListWidget" name="lwValues" >
          <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>7</hsizetype>
-           <vsizetype>13</vsizetype>
+          <sizepolicy vsizetype="Ignored" hsizetype="Expanding" >
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -991,11 +1146,20 @@
      </widget>
      <widget class="QWidget" name="wTranslations" >
       <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
        <property name="spacing" >
         <number>3</number>
+       </property>
+       <property name="leftMargin" >
+        <number>0</number>
+       </property>
+       <property name="topMargin" >
+        <number>0</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
        </property>
        <item>
         <widget class="QGroupBox" name="gbTranslations" >
@@ -1003,19 +1167,37 @@
           <string>Translations</string>
          </property>
          <layout class="QVBoxLayout" >
-          <property name="margin" >
-           <number>5</number>
-          </property>
           <property name="spacing" >
            <number>3</number>
           </property>
+          <property name="leftMargin" >
+           <number>5</number>
+          </property>
+          <property name="topMargin" >
+           <number>5</number>
+          </property>
+          <property name="rightMargin" >
+           <number>5</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>5</number>
+          </property>
           <item>
            <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
             <property name="spacing" >
              <number>6</number>
+            </property>
+            <property name="leftMargin" >
+             <number>0</number>
+            </property>
+            <property name="topMargin" >
+             <number>0</number>
+            </property>
+            <property name="rightMargin" >
+             <number>0</number>
+            </property>
+            <property name="bottomMargin" >
+             <number>0</number>
             </property>
             <item>
              <widget class="QLabel" name="lTranslationsPath" >
@@ -1033,7 +1215,7 @@
             <item>
              <widget class="QToolButton" name="tbTranslationsPath" >
               <property name="icon" >
-               <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/Icons/Icons/folder_blue.png</iconset>
+               <iconset resource="../resources/QMake.qrc" >:/icons/icons/folder.png</iconset>
               </property>
              </widget>
             </item>
@@ -1059,10 +1241,22 @@
      </widget>
      <widget class="QWidget" name="wAdvanced" >
       <layout class="QGridLayout" >
-       <property name="margin" >
+       <property name="leftMargin" >
         <number>0</number>
        </property>
-       <property name="spacing" >
+       <property name="topMargin" >
+        <number>0</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
+       </property>
+       <property name="horizontalSpacing" >
+        <number>3</number>
+       </property>
+       <property name="verticalSpacing" >
         <number>3</number>
        </property>
        <item row="2" column="0" >
@@ -1087,18 +1281,25 @@
        </item>
        <item rowspan="3" row="1" column="1" >
         <layout class="QVBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
          <property name="spacing" >
           <number>3</number>
+         </property>
+         <property name="leftMargin" >
+          <number>0</number>
+         </property>
+         <property name="topMargin" >
+          <number>0</number>
+         </property>
+         <property name="rightMargin" >
+          <number>0</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>0</number>
          </property>
          <item>
           <widget class="QToolButton" name="tbAdd" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>1</hsizetype>
-             <vsizetype>0</vsizetype>
+            <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -1107,7 +1308,7 @@
             <string>&amp;Add</string>
            </property>
            <property name="icon" >
-            <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/Icons/Icons/editadd.png</iconset>
+            <iconset resource="../resources/QMake.qrc" >:/icons/icons/add.png</iconset>
            </property>
            <property name="popupMode" >
             <enum>QToolButton::InstantPopup</enum>
@@ -1120,9 +1321,7 @@
          <item>
           <widget class="QToolButton" name="tbEdit" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>1</hsizetype>
-             <vsizetype>0</vsizetype>
+            <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -1131,7 +1330,7 @@
             <string>&amp;Edit</string>
            </property>
            <property name="icon" >
-            <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/Icons/Icons/edit.png</iconset>
+            <iconset resource="../resources/QMake.qrc" >:/icons/icons/edit.png</iconset>
            </property>
            <property name="popupMode" >
             <enum>QToolButton::InstantPopup</enum>
@@ -1144,9 +1343,7 @@
          <item>
           <widget class="QToolButton" name="tbRemove" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>1</hsizetype>
-             <vsizetype>0</vsizetype>
+            <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -1155,7 +1352,7 @@
             <string>&amp;Remove</string>
            </property>
            <property name="icon" >
-            <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/Icons/Icons/editremove.png</iconset>
+            <iconset resource="../resources/QMake.qrc" >:/icons/icons/remove.png</iconset>
            </property>
            <property name="toolButtonStyle" >
             <enum>Qt::ToolButtonTextUnderIcon</enum>
@@ -1165,9 +1362,7 @@
          <item>
           <widget class="QToolButton" name="tbClear" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>1</hsizetype>
-             <vsizetype>0</vsizetype>
+            <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -1176,7 +1371,7 @@
             <string>&amp;Clear</string>
            </property>
            <property name="icon" >
-            <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/Icons/Icons/editclear.png</iconset>
+            <iconset resource="../resources/QMake.qrc" >:/icons/icons/clear.png</iconset>
            </property>
            <property name="toolButtonStyle" >
             <enum>Qt::ToolButtonTextUnderIcon</enum>
@@ -1193,9 +1388,7 @@
          <item>
           <widget class="QToolButton" name="tbUp" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>1</hsizetype>
-             <vsizetype>0</vsizetype>
+            <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -1204,7 +1397,7 @@
             <string>&amp;Up</string>
            </property>
            <property name="icon" >
-            <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/Icons/Icons/buttonup.png</iconset>
+            <iconset resource="../resources/QMake.qrc" >:/icons/icons/up.png</iconset>
            </property>
            <property name="toolButtonStyle" >
             <enum>Qt::ToolButtonTextUnderIcon</enum>
@@ -1214,9 +1407,7 @@
          <item>
           <widget class="QToolButton" name="tbDown" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>1</hsizetype>
-             <vsizetype>0</vsizetype>
+            <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -1225,7 +1416,7 @@
             <string>&amp;Down</string>
            </property>
            <property name="icon" >
-            <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/Icons/Icons/buttondown.png</iconset>
+            <iconset resource="../resources/QMake.qrc" >:/icons/icons/down.png</iconset>
            </property>
            <property name="toolButtonStyle" >
             <enum>Qt::ToolButtonTextUnderIcon</enum>
@@ -1365,24 +1556,18 @@
     <widget class="QListWidget" name="lwMenu" >
      <property name="minimumSize" >
       <size>
-       <width>105</width>
+       <width>110</width>
        <height>0</height>
       </size>
      </property>
      <property name="maximumSize" >
       <size>
-       <width>70</width>
+       <width>110</width>
        <height>16777215</height>
       </size>
      </property>
-     <property name="verticalScrollBarPolicy" >
-      <enum>Qt::ScrollBarAlwaysOff</enum>
-     </property>
-     <property name="horizontalScrollBarPolicy" >
-      <enum>Qt::ScrollBarAlwaysOff</enum>
-     </property>
-     <property name="autoScroll" >
-      <bool>false</bool>
+     <property name="editTriggers" >
+      <set>QAbstractItemView::NoEditTriggers</set>
      </property>
      <property name="iconSize" >
       <size>
@@ -1393,27 +1578,12 @@
      <property name="textElideMode" >
       <enum>Qt::ElideNone</enum>
      </property>
-     <property name="movement" >
-      <enum>QListView::Static</enum>
-     </property>
-     <property name="flow" >
-      <enum>QListView::TopToBottom</enum>
-     </property>
-     <property name="isWrapping" stdset="0" >
-      <bool>false</bool>
-     </property>
-     <property name="viewMode" >
-      <enum>QListView::IconMode</enum>
-     </property>
-     <property name="currentRow" >
-      <number>0</number>
-     </property>
      <item>
       <property name="text" >
        <string>Application</string>
       </property>
       <property name="icon" >
-       <iconset resource="../resources/qmake_resources.qrc" >:/Icons/icons/application.png</iconset>
+       <iconset resource="../resources/QMake.qrc" >:/icons/icons/application.png</iconset>
       </property>
      </item>
      <item>
@@ -1421,7 +1591,7 @@
        <string>Libraries</string>
       </property>
       <property name="icon" >
-       <iconset resource="../resources/qmake_resources.qrc" >:/Icons/icons/library.png</iconset>
+       <iconset resource="../resources/QMake.qrc" >:/icons/icons/library.png</iconset>
       </property>
      </item>
      <item>
@@ -1429,7 +1599,7 @@
        <string>Settings</string>
       </property>
       <property name="icon" >
-       <iconset resource="../resources/qmake_resources.qrc" >:/Icons/icons/setting.png</iconset>
+       <iconset resource="../resources/QMake.qrc" >:/icons/icons/settings.png</iconset>
       </property>
      </item>
      <item>
@@ -1437,7 +1607,7 @@
        <string>Translations</string>
       </property>
       <property name="icon" >
-       <iconset resource="../resources/qmake_resources.qrc" >:/Icons/icons/translation.png</iconset>
+       <iconset resource="../resources/QMake.qrc" >:/icons/icons/translations.png</iconset>
       </property>
      </item>
      <item>
@@ -1445,7 +1615,7 @@
        <string>Advanced</string>
       </property>
       <property name="icon" >
-       <iconset resource="../resources/qmake_resources.qrc" >:/Icons/icons/advanced.png</iconset>
+       <iconset resource="../resources/QMake.qrc" >:/icons/icons/advanced.png</iconset>
       </property>
      </item>
     </widget>
@@ -1484,7 +1654,6 @@
   <tabstop>tbOutputPath</tabstop>
   <tabstop>leOutputName</tabstop>
   <tabstop>leDir</tabstop>
-  <tabstop>tvDirs</tabstop>
   <tabstop>lwFiles</tabstop>
   <tabstop>lwValues</tabstop>
   <tabstop>cbVariables</tabstop>
@@ -1506,7 +1675,7 @@
  </tabstops>
  <resources>
   <include location="../../../../../monkey/src/resources/resources.qrc" />
-  <include location="../resources/qmake_resources.qrc" />
+  <include location="../resources/QMake.qrc" />
  </resources>
  <connections>
   <connection>
