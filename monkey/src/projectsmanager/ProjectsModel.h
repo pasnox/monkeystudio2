@@ -49,6 +49,8 @@ public:
 	
 	ProjectItem* itemFromIndex( const QModelIndex& );
 	
+	ProjectItem* takeItem( int, int = 0 );
+	
 };
 
 /*

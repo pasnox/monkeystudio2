@@ -3,15 +3,16 @@
 
 ProjectsModel::ProjectsModel( QObject* o )
 	: QStandardItemModel( o )
-{
-}
+{}
 
 ProjectsModel::~ProjectsModel()
-{
-}
+{}
 
 ProjectItem* ProjectsModel::itemFromIndex( const QModelIndex& i )
 { return reinterpret_cast<ProjectItem*>( QStandardItemModel::itemFromIndex( i ) ); }
+
+ProjectItem* ProjectsModel::takeItem( int i, int j )
+{ return reinterpret_cast<ProjectItem*>( QStandardItemModel::takeItem( i, j ) ); }
 
 /*
 int ProjectsModel::id() const
