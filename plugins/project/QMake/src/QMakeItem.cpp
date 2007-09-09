@@ -13,6 +13,7 @@
 **
 ****************************************************************************/
 #include "QMakeItem.h"
+#include "UISettingsQMake.h"
 
 QMakeItem::QMakeItem( ProjectsModel::NodeType t, QMakeItem* i )
 	: ProjectItem()
@@ -20,25 +21,12 @@ QMakeItem::QMakeItem( ProjectsModel::NodeType t, QMakeItem* i )
 	// set type
 	setType( t );
 	
+	// set readonly
+	setReadOnly( false );
+	
 	// append to parent if needed
 	if ( i )
 		i->appendRow( this );
-	
-	/*
-	FirstType = 0, // first type
-	EmptyType, // empty line
-	FileType, // a file
-	CommentType, // comment line
-	NestedScopeType, // single line scope
-	ScopeType, // multi line scope
-	ScopeEndType, // end of a multi scope line
-	VariableType, // variable
-	ValueType, // value
-	FunctionType, // function
-	IncludeType, // include
-	ProjectType, // project
-	LastType // last type
-	*/
 }
 
 ProjectItem* QMakeItem::clone( ProjectsModel::NodeType t, ProjectItem* p ) const
@@ -95,19 +83,13 @@ void QMakeItem::setType( ProjectsModel::NodeType t )
 }
 
 ProjectsModel::NodeType QMakeItem::getType()
-{
-	return (ProjectsModel::NodeType)data( ProjectsModel::TypeRole ).toInt();
-}
+{ return (ProjectsModel::NodeType)data( ProjectsModel::TypeRole ).toInt(); }
 
 void QMakeItem::setOperator( const QString& s )
-{
-	setData( s, ProjectsModel::OperatorRole );
-}
+{ setData( s, ProjectsModel::OperatorRole ); }
 
 QString QMakeItem::getOperator() const
-{
-	return data( ProjectsModel::OperatorRole ).toString();
-}
+{ return data( ProjectsModel::OperatorRole ).toString(); }
 
 void QMakeItem::setValue( const QString& s )
 {
@@ -118,8 +100,9 @@ void QMakeItem::setValue( const QString& s )
 	setText( s );
 	
 	// variables name to changes
-	QStringList l1 = QStringList() << "FORMS" << "HEADERS" << "SOURCES" << "TRANSLATIONS" << "RESOURCES";
-	QStringList l2 = QStringList() << "Form Files" << "Header Files" << "Source Files" << "Translation Files" << "Resource Files";
+	QStringList l1 = UISettingsQMake::readFilters();
+	QStringList l2 = UISettingsQMake::readFiltersToolTips();
+	QStringList l3 = UISettingsQMake::readPathFiles();
 	
 	// update text
 	switch( getType() )
@@ -129,7 +112,7 @@ void QMakeItem::setValue( const QString& s )
 				setText( l2.at( l1.indexOf( getValue(), Qt::CaseInsensitive ) ) );
 			break;
 		case ProjectsModel::ValueType:
-			if ( l1.contains( parent() ? parent()->getValue() : "", Qt::CaseInsensitive ) )
+			if ( l3.contains( parent() ? parent()->getValue() : "", Qt::CaseInsensitive ) )
 				setFilePath( s );
 			break;
 		case ProjectsModel::IncludeType:
@@ -138,25 +121,28 @@ void QMakeItem::setValue( const QString& s )
 		case ProjectsModel::ProjectType:
 			setFilePath( s );
 			break;
+		case ProjectsModel::ScopeType:
+		case ProjectsModel::NestedScopeType:
+			if ( s.toLower() == "win32" )
+				setIcon( QIcon( ":/icons/icons/windows.png" ) );
+			else if ( s.toLower() == "unix" )
+				setIcon( QIcon( ":/icons/icons/unix.png" ) );
+			else if ( s.toLower() == "mac" )
+				setIcon( QIcon( ":/icons/icons/mac.png" ) );
+			break;
 		default:
 			break;
 	}
 }
 
 QString QMakeItem::getValue() const
-{
-	return data( ProjectsModel::ValueRole ).toString();
-}
+{ return data( ProjectsModel::ValueRole ).toString(); }
 
 void QMakeItem::setMultiLine( bool b )
-{
-	setData( b, ProjectsModel::MultiLineRole );
-}
+{ setData( b, ProjectsModel::MultiLineRole ); }
 
 bool QMakeItem::getMultiLine() const
-{
-	return data( ProjectsModel::MultiLineRole ).toBool();
-}
+{ return data( ProjectsModel::MultiLineRole ).toBool(); }
 
 void QMakeItem::setModified( bool b )
 {
@@ -164,29 +150,19 @@ void QMakeItem::setModified( bool b )
 }
 
 bool QMakeItem::getModified() const
-{
-	return data( ProjectsModel::ModifiedRole ).toBool();
-}
+{ return data( ProjectsModel::ModifiedRole ).toBool(); }
 
 void QMakeItem::setReadOnly( bool b )
-{
-	setData( b, ProjectsModel::ReadOnlyRole );
-}
+{ setData( b, ProjectsModel::ReadOnlyRole ); }
 
 bool QMakeItem::getReadOnly() const
-{
-	return data( ProjectsModel::ReadOnlyRole ).toBool();
-}
+{ return data( ProjectsModel::ReadOnlyRole ).toBool(); }
 
 void QMakeItem::setComment( const QString& s )
-{
-	setData( s, ProjectsModel::CommentRole );
-}
+{ setData( s, ProjectsModel::CommentRole ); }
 
 QString QMakeItem::getComment() const
-{
-	return data( ProjectsModel::CommentRole ).toString();
-}
+{ return data( ProjectsModel::CommentRole ).toString(); }
 
 void QMakeItem::setFilePath( const QString& s )
 {
@@ -210,6 +186,41 @@ void QMakeItem::setFilePath( const QString& s )
 }
 
 QString QMakeItem::getFilePath() const
+{ return data( ProjectsModel::FilePathRole ).toString(); }
+
+void QMakeItem::redoLayout( ProjectItem* it )
 {
-	return data( ProjectsModel::FilePathRole ).toString();
+	// get correct item
+	it = it ? it : project();
+	
+	// variables name to changes
+	QStringList l1 = UISettingsQMake::readFilters();
+	
+	// layout it child
+	for ( int i = 0; i < it->rowCount(); i++ )
+	{
+		// get child
+		ProjectItem* c = it->child( i );
+		
+		// chld value
+		int j = l1.indexOf( c->getValue(), Qt::CaseInsensitive );
+		
+		// change it s filter role if needed
+		if ( c->getType() == ProjectsModel::VariableType )
+		{
+			// set child filter
+			c->setFilteredView( j );
+			
+			// if it is scope/nestedscope change it s filter too
+			if ( it->getType() == ProjectsModel::ScopeType || it->getType() == ProjectsModel::NestedScopeType )
+				it->setFilteredView( j );
+		}
+		
+		// set original view
+		c->setOriginalView( i );
+		
+		// do child layout if needed
+		if ( c->rowCount() )
+			redoLayout( c );
+	}
 }

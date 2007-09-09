@@ -15,6 +15,7 @@ HEADERS = src/QMake.h \
 	src/QMakeItemDelegate.h \
 	src/ui/UISettingsQMake.h \
 	src/ui/UIItemSettings.h \
+	src/QMakeProxy.h \
 	src/ui/UIQMakeProjectSettings.h
 
 SOURCES	= src/QMake.cpp \
@@ -23,4 +24,5 @@ SOURCES	= src/QMake.cpp \
 	src/QMakeItemDelegate.cpp \
 	src/ui/UISettingsQMake.cpp \
 	src/ui/UIItemSettings.cpp \
+	src/QMakeProxy.cpp \
 	src/ui/UIQMakeProjectSettings.cpp

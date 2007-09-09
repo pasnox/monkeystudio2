@@ -25,31 +25,34 @@ public:
 
 	virtual ProjectItem* clone( ProjectsModel::NodeType = ProjectsModel::ProjectType, ProjectItem* = 0 ) const;
 
-	QString pluginName() const { return "QMake"; }
+	virtual QString pluginName() const { return "QMake"; }
 
-	void setType( ProjectsModel::NodeType );
-	ProjectsModel::NodeType getType();
+	virtual void setType( ProjectsModel::NodeType );
+	virtual ProjectsModel::NodeType getType();
 
-	void setOperator( const QString& );
-	QString getOperator() const;
+	virtual void setOperator( const QString& );
+	virtual QString getOperator() const;
 
-	void setValue( const QString& );
-	QString getValue() const;
+	virtual void setValue( const QString& );
+	virtual QString getValue() const;
 
-	void setMultiLine( bool );
-	bool getMultiLine() const;
+	virtual void setMultiLine( bool );
+	virtual bool getMultiLine() const;
 
-	void setModified( bool );
-	bool getModified() const;
+	virtual void setModified( bool );
+	virtual bool getModified() const;
 
-	void setReadOnly( bool );
-	bool getReadOnly() const;
+	virtual void setReadOnly( bool );
+	virtual bool getReadOnly() const;
 
-	void setComment( const QString& );
-	QString getComment() const;
+	virtual void setComment( const QString& );
+	virtual QString getComment() const;
 
-	void setFilePath( const QString& );
-	QString getFilePath() const;
+	virtual void setFilePath( const QString& );
+	virtual QString getFilePath() const;
+	
+protected:
+	virtual void redoLayout( ProjectItem* );
 
 };
 

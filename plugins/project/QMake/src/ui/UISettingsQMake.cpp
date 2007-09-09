@@ -8,6 +8,7 @@
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QWhatsThis>
+#include <QInputDialog>
 
 UISettingsQMake::UISettingsQMake( QWidget* p )
 	: QWidget( p )
@@ -100,13 +101,25 @@ QStringList UISettingsQMake::readOperators()
 QStringList UISettingsQMake::defaultFilters()
 {
 	return QStringList()
-	<< "FORMS" << "FORMS3" << "HEADERS" << "SOURCES" << "RESOURCES" << "IMAGES" << "TRANSLATIONS";
+	<< "FORMS" << "FORMS3" << "HEADERS" << "SOURCES" << "RESOURCES" << "IMAGES" << "TRANSLATIONS" << "TEXTS";
 }
 
 QStringList UISettingsQMake::readFilters()
 {
 	QStringList l = pSettings::instance()->value( "Plugins/QMake/Filters" ).toStringList();
 	return l.isEmpty() ? defaultFilters() : l;
+}
+
+QStringList UISettingsQMake::defaultFiltersToolTips()
+{
+	return QStringList()
+	<< "Forms Files" << "Forms 3 Files" << "Headers Files" << "Sources Files" << "Resources Files" << "Images Files" << "Translations Files" << "Texts Files";
+}
+
+QStringList UISettingsQMake::readFiltersToolTips()
+{
+	QStringList l = pSettings::instance()->value( "Plugins/QMake/FiltersToolTips" ).toStringList();
+	return l.isEmpty() ? defaultFiltersToolTips() : l;
 }
 
 QStringList UISettingsQMake::defaultScopes()
@@ -250,6 +263,11 @@ void UISettingsQMake::loadSettings()
 	lwFilters->addItems( readFilters() );
 	lwScopes->addItems( readScopes() );
 	lwPathFiles->addItems( readPathFiles() );
+	// set filters tooltips
+	QStringList ft = readFiltersToolTips();
+	for ( int i = 0; i < ft.count(); i++ )
+		if ( QListWidgetItem* it = lwFilters->item( i ) )
+			it->setToolTip( ft.at( i ) );
 	// set items editable
 	QList<QListWidgetItem*> items = QList<QListWidgetItem*> () 
 	<< lwOperators->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive )
@@ -511,6 +529,25 @@ void UISettingsQMake::tbDown_clicked()
 	lw->setCurrentItem( it );
 }
 
+void UISettingsQMake::on_tbToolTipFilter_clicked()
+{
+	// get current item
+	QListWidgetItem* it = lwFilters->currentItem();
+	
+	// update tooltip if needed
+	if ( it )
+	{
+		bool b;
+		QString s = QInputDialog::getText( window(), tr( "Filter ToolTip..." ), tr( "Enter a tooltip for filter '%1' :" ).arg( it->text() ), QLineEdit::Normal, it->toolTip(), &b );
+		if ( b )
+		{
+			if ( s.isEmpty() )
+				s = it->text();
+			it->setToolTip( s );
+		}
+	}
+}
+
 void UISettingsQMake::on_bbDialog_helpRequested()
 {
 	QString s;
@@ -533,7 +570,8 @@ void UISettingsQMake::on_bbDialog_helpRequested()
 			break;
 	}
 	if ( !s.isEmpty() )
-		QWhatsThis::showText( bbDialog->button( QDialogButtonBox::Help )->mapToGlobal( QPoint( 0, 0 ) ), s );
+		QWhatsThis::showText( mapToGlobal( geometry().center() ), s );
+	// bbDialog->button( QDialogButtonBox::Help )->mapToGlobal( QPoint( 0, 0 ) )
 }
 
 void UISettingsQMake::on_bbDialog_clicked( QAbstractButton* b )
@@ -560,6 +598,11 @@ void UISettingsQMake::on_bbDialog_clicked( QAbstractButton* b )
 	foreach ( QListWidgetItem* it, lwPathFiles->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
 		l << it->text();
 	pSettings::instance()->setValue( "Plugins/QMake/PathFiles", l );
+	// filters tooltips
+	l.clear();
+	foreach ( QListWidgetItem* it, lwFilters->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
+		l << it->toolTip();
+	pSettings::instance()->setValue( "Plugins/QMake/FiltersToolTips", l );
 	// qt modules
 	lw_currentItemChanged( 0, lwQtModules->currentItem() );
 	pSettings::instance()->beginWriteArray( "Plugins/QMake/QtModules" );

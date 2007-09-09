@@ -1,4 +1,5 @@
 #include "UIQMakeProjectSettings.h"
+#include "QMakeProxy.h"
 #include "ProjectsModel.h"
 #include "ProjectItem.h"
 #include "UIItemSettings.h"
@@ -40,22 +41,20 @@ UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
 	//
 	setDir( mDirs->index( projectPath() ) );
 	// scopes
-	/*
-	mScopesProxy = new QMakeProjectProxy( mModel, false, mProjectIndex );
-	mScopesProxy->setFilterRoles( QList<int>() << AbstractProjectModel::ValueType );
+	mScopesProxy = new QMakeProxy( mModel, false, mProject );
+	mScopesProxy->setFilterRoles( QList<int>() << ProjectsModel::ValueType );
 	mScopesProxy->setFiltering( true );
 	tvScopes->setModel( mScopesProxy );
 	tvScopes->header()->hide();
-	tvScopes->setRootIndex( mScopesProxy->mapFromSource( mProjectIndex == mModel->rootProject() ? QModelIndex() : mProjectIndex ) );
+	tvScopes->setRootIndex( mScopesProxy->mapFromSource( mProject->index() ) );
 	// scope content
-	mContentProxy = new QMakeProjectProxy( mModel, false, mProjectIndex );
-	mContentProxy->setFilterRoles( QList<int>() << AbstractProjectModel::ValueType );
+	mContentProxy = new QMakeProxy( mModel, false, mProject );
+	mContentProxy->setFilterRoles( QList<int>() << ProjectsModel::ValueType );
 	mContentProxy->setNegateFilter( false );
 	mContentProxy->setFiltering( true );
 	lvContents->setModel( mContentProxy );
 	// set currentindex
-	setCurrentIndex( mProjectIndex.child( 0, 0 ) );
-	*/
+	setCurrentIndex( mProject->child( 0, 0 )->index() );
 	// loading...
 	loadEncodings();
 	loadModules();
@@ -90,20 +89,17 @@ void UIQMakeProjectSettings::closeEvent( QCloseEvent* e )
 
 QModelIndex UIQMakeProjectSettings::currentIndex()
 {
-	/*
 	QModelIndex i;
 	if ( lvContents->selectionModel()->selectedIndexes().count() )
 		i = mContentProxy->mapToSource( lvContents->selectionModel()->selectedIndexes().at( 0 ) );
 	if ( !i.isValid() && tvScopes->selectionModel()->selectedIndexes().count() )
 		i = mScopesProxy->mapToSource( tvScopes->selectionModel()->selectedIndexes().at( 0 ) );
 	return i;
-	*/
 	return QModelIndex();
 }
 
 void UIQMakeProjectSettings::setCurrentIndex( const QModelIndex& i )
 {
-	/*
 	// TODO : need fix ( Qt Bug ?! ) calling setRootIndex on a index that have no child show all model
 	// clear selection
 	tvScopes->clearSelection();
@@ -111,7 +107,7 @@ void UIQMakeProjectSettings::setCurrentIndex( const QModelIndex& i )
 	// set/select current index
 	if ( !i.isValid() )
 		return;
-	else if ( i.data( AbstractProjectModel::TypeRole ).toInt() == AbstractProjectModel::ValueType )
+	else if ( i.data( ProjectsModel::TypeRole ).toInt() == ProjectsModel::ValueType )
 	{
 		tvScopes->setCurrentIndex( mScopesProxy->mapFromSource( i.parent() ) );
 		lvContents->setRootIndex( mContentProxy->mapFromSource( i.parent() ) );
@@ -122,7 +118,6 @@ void UIQMakeProjectSettings::setCurrentIndex( const QModelIndex& i )
 		tvScopes->setCurrentIndex( mScopesProxy->mapFromSource( i ) );
 		lvContents->setRootIndex( mContentProxy->mapFromSource( i ) );
 	}
-	*/
 }
 
 QString UIQMakeProjectSettings::projectName() const
@@ -677,23 +672,19 @@ void UIQMakeProjectSettings::on_lwTranslations_itemChanged( QListWidgetItem* it 
 void UIQMakeProjectSettings::on_tvScopes_clicked( const QModelIndex& i )
 {
 	// TODO : Fix me
-	//setCurrentIndex( mScopesProxy->mapToSource( i ) );
+	setCurrentIndex( mScopesProxy->mapToSource( i ) );
 }
 
 void UIQMakeProjectSettings::on_tvScopes_doubleClicked( const QModelIndex& i )
 {
-	/*
 	if ( i.isValid() )
 		UIItemSettings::edit( mModel, mModel->itemFromIndex( mScopesProxy->mapToSource( i ) ), this )->exec();
-	*/
 }
 
 void UIQMakeProjectSettings::on_lvContents_doubleClicked( const QModelIndex& i )
 {
-	/*
 	if ( i.isValid() )
 		UIItemSettings::edit( mModel, mModel->itemFromIndex( mContentProxy->mapToSource( i ) ), this )->exec();
-	*/
 }
 
 void UIQMakeProjectSettings::on_tbAdd_clicked()
@@ -710,50 +701,32 @@ void UIQMakeProjectSettings::on_tbEdit_clicked()
 
 void UIQMakeProjectSettings::on_tbRemove_clicked()
 {
-	/*
-	// TODO : use pointer
-	QModelIndex i = currentIndex();
-	if ( i.isValid() )
-		mModel->QAbstractItemModel::removeRow( i.row(), i.parent() );
-	*/
+	ProjectItem* it = mModel->itemFromIndex( currentIndex() );
+	if ( it )
+		it->remove();
 }
 
 void UIQMakeProjectSettings::on_tbClear_clicked()
-{
-	/*
-	// TODO : use pointer
-	QModelIndex i = currentIndex();
-	if ( i.isValid() )
-	{
-		i = i.parent();
-		while ( mModel->rowCount( i ) )
-			mModel->QAbstractItemModel::removeRow( 0, i );
-	}
-	*/
-}
+{ mProject->removeRows( 0, mProject->rowCount() ); }
 
 void UIQMakeProjectSettings::on_tbUp_clicked()
 {
-	/*
 	// got index to move
 	QModelIndex i = currentIndex();
 	// check if valid to move
 	if ( i.isValid() )
 		if ( mModel->itemFromIndex( i )->moveUp() )
 			setCurrentIndex( i.sibling( i.row() -1, i.column() ) );
-	*/
 }
 
 void UIQMakeProjectSettings::on_tbDown_clicked()
 {
-	/*
 	// got index to move
 	QModelIndex i = currentIndex();
 	// check if valid to move
 	if ( i.isValid() )
 		if ( mModel->itemFromIndex( i )->moveDown() )
 			setCurrentIndex( i.sibling( i.row() +1, i.column() ) );
-	*/
 }
 
 void UIQMakeProjectSettings::on_dbbButtons_helpRequested()

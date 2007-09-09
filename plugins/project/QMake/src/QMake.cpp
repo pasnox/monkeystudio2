@@ -3,6 +3,9 @@
 #include "QMakeParser.h"
 #include "UISettingsQMake.h"
 #include "UIQMakeProjectSettings.h"
+#include "UIProjectsManager.h"
+#include "UISettingsQMake.h"
+#include "ProjectsProxy.h"
 
 QMake::QMake()
 {
@@ -28,6 +31,8 @@ bool QMake::setEnabled( bool b )
 	{
 		// set usable suffixes
 		mSuffixes[tr( "Qt Projects" )] = QStringList() << "*.pro" << "*.pri" << "*.inc";
+		// set filtered items
+		UIProjectsManager::instance()->proxy()->addFilterValues( UISettingsQMake::readFilters() );
 		// set plugin enabled
 		mPluginInfos.Enabled = true;
 	}
@@ -35,6 +40,8 @@ bool QMake::setEnabled( bool b )
 	{
 		// clear suffixes
 		mSuffixes.clear();
+		// unset filtered items
+		UIProjectsManager::instance()->proxy()->removeFilterValues( UISettingsQMake::readFilters() );
 		// set plugin disabled
 		mPluginInfos.Enabled = false;
 	}

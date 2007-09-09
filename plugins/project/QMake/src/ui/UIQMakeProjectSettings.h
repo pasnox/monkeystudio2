@@ -9,6 +9,7 @@
 #include <QHash>
 
 class ProjectsModel;
+class QMakeProxy;
 class ProjectItem;
 class QDirModel;
 
@@ -36,6 +37,8 @@ private:
 	void closeEvent( QCloseEvent* );
 	
 	bool mReady;
+	QMakeProxy* mScopesProxy;
+	QMakeProxy* mContentProxy;
 	ProjectsModel* mModel;
 	ProjectItem* mProject;
 	QtItemList mModules;

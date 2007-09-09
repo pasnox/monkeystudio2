@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
+    <width>641</width>
     <height>500</height>
    </rect>
   </property>
@@ -31,7 +31,278 @@
    <property name="verticalSpacing" >
     <number>3</number>
    </property>
+   <item row="0" column="0" colspan="3" >
+    <widget class="QLabel" name="lInformations" >
+     <property name="palette" >
+      <palette>
+       <active>
+        <colorrole role="Base" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Window" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </active>
+       <inactive>
+        <colorrole role="Base" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Window" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </inactive>
+       <disabled>
+        <colorrole role="Base" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Window" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </disabled>
+      </palette>
+     </property>
+     <property name="font" >
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="autoFillBackground" >
+      <bool>true</bool>
+     </property>
+     <property name="frameShape" >
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="text" >
+      <string>Application</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item rowspan="2" row="1" column="0" >
+    <widget class="QListWidget" name="lwMenu" >
+     <property name="minimumSize" >
+      <size>
+       <width>130</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>130</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="editTriggers" >
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <property name="iconSize" >
+      <size>
+       <width>64</width>
+       <height>64</height>
+      </size>
+     </property>
+     <property name="textElideMode" >
+      <enum>Qt::ElideNone</enum>
+     </property>
+     <property name="currentRow" >
+      <number>0</number>
+     </property>
+     <item>
+      <property name="text" >
+       <string>Application</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="../resources/QMake.qrc" >:/icons/icons/application.png</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Libraries</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="../resources/QMake.qrc" >:/icons/icons/library.png</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Settings</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="../resources/QMake.qrc" >:/icons/icons/settings.png</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Translations</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="../resources/QMake.qrc" >:/icons/icons/translations.png</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Advanced</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="../resources/QMake.qrc" >:/icons/icons/advanced.png</iconset>
+      </property>
+     </item>
+    </widget>
+   </item>
    <item row="1" column="1" >
+    <widget class="QGroupBox" name="gbScopes" >
+     <property name="title" >
+      <string>Scopes</string>
+     </property>
+     <layout class="QHBoxLayout" >
+      <property name="spacing" >
+       <number>3</number>
+      </property>
+      <property name="leftMargin" >
+       <number>5</number>
+      </property>
+      <property name="topMargin" >
+       <number>5</number>
+      </property>
+      <property name="rightMargin" >
+       <number>5</number>
+      </property>
+      <property name="bottomMargin" >
+       <number>5</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="lScope" >
+        <property name="text" >
+         <string>&amp;Scope :</string>
+        </property>
+        <property name="buddy" >
+         <cstring>cbScopes</cstring>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="cbScopes" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="lOperator" >
+        <property name="text" >
+         <string>&amp;Operator :</string>
+        </property>
+        <property name="buddy" >
+         <cstring>cbOperators</cstring>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="cbOperators" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="2" >
+    <widget class="QGroupBox" name="gbEncoding" >
+     <property name="title" >
+      <string>Default Files Encoding</string>
+     </property>
+     <layout class="QHBoxLayout" >
+      <property name="spacing" >
+       <number>3</number>
+      </property>
+      <property name="leftMargin" >
+       <number>5</number>
+      </property>
+      <property name="topMargin" >
+       <number>5</number>
+      </property>
+      <property name="rightMargin" >
+       <number>5</number>
+      </property>
+      <property name="bottomMargin" >
+       <number>5</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="lEncoding" >
+        <property name="text" >
+         <string>En&amp;coding :</string>
+        </property>
+        <property name="buddy" >
+         <cstring>cbEncodings</cstring>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="cbEncodings" />
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="1" colspan="2" >
     <widget class="QStackedWidget" name="swMenu" >
      <property name="sizePolicy" >
       <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
@@ -626,43 +897,6 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="gbEncoding" >
-         <property name="title" >
-          <string>Files Encoding</string>
-         </property>
-         <layout class="QHBoxLayout" >
-          <property name="spacing" >
-           <number>3</number>
-          </property>
-          <property name="leftMargin" >
-           <number>5</number>
-          </property>
-          <property name="topMargin" >
-           <number>5</number>
-          </property>
-          <property name="rightMargin" >
-           <number>5</number>
-          </property>
-          <property name="bottomMargin" >
-           <number>5</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="lEncoding" >
-            <property name="text" >
-             <string>Default en&amp;coding :</string>
-            </property>
-            <property name="buddy" >
-             <cstring>cbEncodings</cstring>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QComboBox" name="cbEncodings" />
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
         <spacer>
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
@@ -842,7 +1076,7 @@
         <number>3</number>
        </property>
        <item row="0" column="0" colspan="2" >
-        <widget class="QGroupBox" name="gbSettings" >
+        <widget class="QGroupBox" name="gbOutput" >
          <property name="sizePolicy" >
           <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
            <horstretch>0</horstretch>
@@ -850,7 +1084,7 @@
           </sizepolicy>
          </property>
          <property name="title" >
-          <string>Scope Settings</string>
+          <string>Output</string>
          </property>
          <layout class="QGridLayout" >
           <property name="leftMargin" >
@@ -871,43 +1105,7 @@
           <property name="verticalSpacing" >
            <number>3</number>
           </property>
-          <item row="0" column="1" >
-           <widget class="QLabel" name="lScope" >
-            <property name="text" >
-             <string>&amp;Scope :</string>
-            </property>
-            <property name="buddy" >
-             <cstring>cbScopes</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2" >
-           <widget class="QComboBox" name="cbScopes" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3" >
-           <spacer>
-            <property name="orientation" >
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" >
-             <size>
-              <width>20</width>
-              <height>25</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="1" column="1" colspan="5" >
-           <widget class="QLineEdit" name="leOutputPath" />
-          </item>
-          <item row="1" column="0" >
+          <item row="0" column="0" >
            <widget class="QLabel" name="lOutputPath" >
             <property name="text" >
              <string>Output &amp;Path :</string>
@@ -917,7 +1115,17 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0" >
+          <item row="0" column="1" >
+           <widget class="QLineEdit" name="leOutputPath" />
+          </item>
+          <item row="0" column="2" >
+           <widget class="QToolButton" name="tbOutputPath" >
+            <property name="icon" >
+             <iconset resource="../resources/QMake.qrc" >:/icons/icons/folder.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" >
            <widget class="QLabel" name="lOutputName" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
@@ -933,35 +1141,8 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="6" >
-           <widget class="QToolButton" name="tbOutputPath" >
-            <property name="icon" >
-             <iconset resource="../resources/QMake.qrc" >:/icons/icons/folder.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1" colspan="6" >
+          <item row="1" column="1" colspan="2" >
            <widget class="QLineEdit" name="leOutputName" />
-          </item>
-          <item row="0" column="4" >
-           <widget class="QLabel" name="lOperator" >
-            <property name="text" >
-             <string>&amp;Operator :</string>
-            </property>
-            <property name="buddy" >
-             <cstring>cbOperators</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="5" colspan="2" >
-           <widget class="QComboBox" name="cbOperators" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
           </item>
          </layout>
         </widget>
@@ -1456,7 +1637,7 @@
      </widget>
     </widget>
    </item>
-   <item row="2" column="0" colspan="2" >
+   <item row="3" column="0" colspan="3" >
     <widget class="QDialogButtonBox" name="dbbButtons" >
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
@@ -1464,160 +1645,6 @@
      <property name="standardButtons" >
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
      </property>
-    </widget>
-   </item>
-   <item row="0" column="0" colspan="2" >
-    <widget class="QLabel" name="lInformations" >
-     <property name="palette" >
-      <palette>
-       <active>
-        <colorrole role="Base" >
-         <brush brushstyle="SolidPattern" >
-          <color alpha="255" >
-           <red>255</red>
-           <green>255</green>
-           <blue>255</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="Window" >
-         <brush brushstyle="SolidPattern" >
-          <color alpha="255" >
-           <red>255</red>
-           <green>255</green>
-           <blue>255</blue>
-          </color>
-         </brush>
-        </colorrole>
-       </active>
-       <inactive>
-        <colorrole role="Base" >
-         <brush brushstyle="SolidPattern" >
-          <color alpha="255" >
-           <red>255</red>
-           <green>255</green>
-           <blue>255</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="Window" >
-         <brush brushstyle="SolidPattern" >
-          <color alpha="255" >
-           <red>255</red>
-           <green>255</green>
-           <blue>255</blue>
-          </color>
-         </brush>
-        </colorrole>
-       </inactive>
-       <disabled>
-        <colorrole role="Base" >
-         <brush brushstyle="SolidPattern" >
-          <color alpha="255" >
-           <red>255</red>
-           <green>255</green>
-           <blue>255</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="Window" >
-         <brush brushstyle="SolidPattern" >
-          <color alpha="255" >
-           <red>255</red>
-           <green>255</green>
-           <blue>255</blue>
-          </color>
-         </brush>
-        </colorrole>
-       </disabled>
-      </palette>
-     </property>
-     <property name="font" >
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="autoFillBackground" >
-      <bool>true</bool>
-     </property>
-     <property name="frameShape" >
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="text" >
-      <string>Main</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" >
-    <widget class="QListWidget" name="lwMenu" >
-     <property name="minimumSize" >
-      <size>
-       <width>110</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="maximumSize" >
-      <size>
-       <width>110</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="editTriggers" >
-      <set>QAbstractItemView::NoEditTriggers</set>
-     </property>
-     <property name="iconSize" >
-      <size>
-       <width>64</width>
-       <height>64</height>
-      </size>
-     </property>
-     <property name="textElideMode" >
-      <enum>Qt::ElideNone</enum>
-     </property>
-     <item>
-      <property name="text" >
-       <string>Application</string>
-      </property>
-      <property name="icon" >
-       <iconset resource="../resources/QMake.qrc" >:/icons/icons/application.png</iconset>
-      </property>
-     </item>
-     <item>
-      <property name="text" >
-       <string>Libraries</string>
-      </property>
-      <property name="icon" >
-       <iconset resource="../resources/QMake.qrc" >:/icons/icons/library.png</iconset>
-      </property>
-     </item>
-     <item>
-      <property name="text" >
-       <string>Settings</string>
-      </property>
-      <property name="icon" >
-       <iconset resource="../resources/QMake.qrc" >:/icons/icons/settings.png</iconset>
-      </property>
-     </item>
-     <item>
-      <property name="text" >
-       <string>Translations</string>
-      </property>
-      <property name="icon" >
-       <iconset resource="../resources/QMake.qrc" >:/icons/icons/translations.png</iconset>
-      </property>
-     </item>
-     <item>
-      <property name="text" >
-       <string>Advanced</string>
-      </property>
-      <property name="icon" >
-       <iconset resource="../resources/QMake.qrc" >:/icons/icons/advanced.png</iconset>
-      </property>
-     </item>
     </widget>
    </item>
   </layout>
@@ -1643,13 +1670,10 @@
   <tabstop>rbWarnOn</tabstop>
   <tabstop>cbBuildAll</tabstop>
   <tabstop>cbOrdered</tabstop>
-  <tabstop>cbEncodings</tabstop>
   <tabstop>lwQtModules</tabstop>
   <tabstop>lwCompilerFlags</tabstop>
   <tabstop>leConfig</tabstop>
   <tabstop>tbInformations</tabstop>
-  <tabstop>cbScopes</tabstop>
-  <tabstop>cbOperators</tabstop>
   <tabstop>leOutputPath</tabstop>
   <tabstop>tbOutputPath</tabstop>
   <tabstop>leOutputName</tabstop>
@@ -1721,8 +1745,8 @@
      <y>64</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>342</x>
-     <y>54</y>
+     <x>480</x>
+     <y>141</y>
     </hint>
    </hints>
   </connection>
@@ -1749,12 +1773,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>424</x>
-     <y>388</y>
+     <x>449</x>
+     <y>447</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>622</x>
-     <y>359</y>
+     <x>623</x>
+     <y>402</y>
     </hint>
    </hints>
   </connection>
