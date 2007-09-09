@@ -23,14 +23,12 @@ ProjectItem::ProjectItem( ProjectsModel::NodeType t, ProjectItem* i )
 	// set type
 	setType( t );
 	
+	// set readonly
+	setReadOnly( false );
+	
 	// append to parent if needed
 	if ( i )
 		i->appendRow( this );
-}
-
-ProjectItem::~ProjectItem()
-{
-	
 }
 
 void ProjectItem::setType( ProjectsModel::NodeType t )
@@ -81,6 +79,18 @@ void ProjectItem::setFilePath( const QString& s )
 QString ProjectItem::getFilePath() const
 { return data( ProjectsModel::FilePathRole ).toString(); }
 
+void ProjectItem::setFilteredView( int i )
+{ setData( i, ProjectsModel::FilteredViewRole ); }
+
+int ProjectItem::getFilteredView() const
+{ return data( ProjectsModel::FilteredViewRole ).toInt(); }
+
+void ProjectItem::setOriginalView( int i )
+{ setData( i, ProjectsModel::OriginalViewRole ); }
+
+int ProjectItem::getOriginalView() const
+{ return data( ProjectsModel::OriginalViewRole ).toInt(); }
+
 ProjectItem* ProjectItem::itemFromIndex( const QModelIndex& i ) const
 { return model()->itemFromIndex( i ); }
 
@@ -108,6 +118,62 @@ void ProjectItem::insertRow( int r, ProjectItem* i )
 	// default insert
 	QStandardItem::insertRow( r, i );
 }
+
+void ProjectItem::remove()
+{
+	if ( parent() )
+		parent()->removeRow( row() );
+	else if ( model() )
+		model()->removeRow( row() );
+	else
+		delete this;
+}
+
+bool ProjectItem::swapRow( int i, int j )
+{
+	// temp row list
+	QList<QStandardItem*> ii;
+	QList<QStandardItem*> ij;
+	// if get the rows
+	if ( !( ii = takeRow( i ) ).isEmpty() && !( ij = takeRow( j ) ).isEmpty() )
+	{
+		// reinsert them
+		QStandardItem::insertRow( i, ij );
+		QStandardItem::insertRow( j, ii );
+	}
+	// return true if they are not empty
+	return !ii.isEmpty() && !ij.isEmpty();
+}
+
+bool ProjectItem::moveRowUp( int i )
+{
+	// we can't move up the scope end item
+	ProjectItem* it = child( i, 0 );
+	if ( !it || ( it && it->getType() == ProjectsModel::ScopeEndType ) )
+		return false;
+	// if valid, move it
+	if ( i > 0 )
+		QStandardItem::insertRow( i -1, takeRow( i ) );
+	return i > 0;
+}
+
+bool ProjectItem::moveRowDown( int i )
+{
+	// if in a scope we can t go to very last item as it s the scope end
+	ProjectItem* it = child( i +1, 0 );
+	if ( !it || ( it && it->getType() == ProjectsModel::ScopeEndType ) )
+		return false;
+	// if valid, move it
+	if ( i < rowCount() -1 )
+		QStandardItem::insertRow( i +1, takeRow( i ) );
+	return i < rowCount() -1;
+}
+
+bool ProjectItem::moveUp()
+{ return parent() ? parent()->moveRowUp( row() ) : false; }
+
+bool ProjectItem::moveDown()
+{ return parent()  ? parent()->moveRowDown( row() ) : false; }
 
 ProjectItem* ProjectItem::project( const QModelIndex& i ) const
 {

@@ -18,9 +18,12 @@
 #include "MonkeyExport.h"
 #include "QSingleton.h"
 #include "ui_UIProjectsManager.h"
-#include "ProjectsModel.h"
 
 #include <QDockWidget>
+
+class ProjectItem;
+class ProjectsProxy;
+class ProjectsModel;
 
 class Q_MONKEY_EXPORT UIProjectsManager : public QDockWidget, public Ui::UIProjectsManager, public QSingleton<UIProjectsManager>
 {
@@ -30,8 +33,12 @@ class Q_MONKEY_EXPORT UIProjectsManager : public QDockWidget, public Ui::UIProje
 public:
 	ProjectItem* currentProject() const;
 
+	inline ProjectsModel* model() const { return mProjects; }
+	inline ProjectsProxy* proxy() const { return mProxy; }
+
 private:
 	ProjectsModel* mProjects;
+	ProjectsProxy* mProxy;
 
 	UIProjectsManager( QWidget* = 0 );
 	~UIProjectsManager();

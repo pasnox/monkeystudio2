@@ -8,7 +8,7 @@ ProjectsModel::ProjectsModel( QObject* o )
 ProjectsModel::~ProjectsModel()
 {}
 
-ProjectItem* ProjectsModel::itemFromIndex( const QModelIndex& i )
+ProjectItem* ProjectsModel::itemFromIndex( const QModelIndex& i ) const
 { return reinterpret_cast<ProjectItem*>( QStandardItemModel::itemFromIndex( i ) ); }
 
 ProjectItem* ProjectsModel::takeItem( int i, int j )

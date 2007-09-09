@@ -23,6 +23,8 @@ public:
 		CommentRole, // the item comment
 		ModifiedRole, // tell if item/file is modified
 		ReadOnlyRole, // tell if item/file is readonly
+		FilteredViewRole, // filter role when filtering view
+		OriginalViewRole, // filter role when not filtering view
 		FilePathRole, // the filepath of the current value if it s a file/path
 		LastRole // last role
 	};
@@ -47,7 +49,7 @@ public:
 	ProjectsModel( QObject* = 0 );
 	virtual ~ProjectsModel();
 	
-	ProjectItem* itemFromIndex( const QModelIndex& );
+	ProjectItem* itemFromIndex( const QModelIndex& ) const;
 	
 	ProjectItem* takeItem( int, int = 0 );
 	

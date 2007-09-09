@@ -27,9 +27,10 @@ typedef QList<ProjectItem*> ProjectItemList;
 
 class Q_MONKEY_EXPORT ProjectItem : public QStandardItem
 {
+	friend class UIProjectsManager;
+	
 public:
 	ProjectItem( ProjectsModel::NodeType = ProjectsModel::ProjectType, ProjectItem* = 0 );
-	virtual ~ProjectItem();
 
 	// type of the item
 	virtual void setType( ProjectsModel::NodeType );
@@ -63,47 +64,65 @@ public:
 	virtual void setFilePath( const QString& );
 	virtual QString getFilePath() const;
 	
+	// filtered mode sort
+	virtual void setFilteredView( int );
+	virtual int getFilteredView() const;
+	
+	// original mode sort
+	virtual void setOriginalView( int );
+	virtual int getOriginalView() const;
+	
 	// item
-	ProjectItem* itemFromIndex( const QModelIndex& ) const;
+	virtual ProjectItem* itemFromIndex( const QModelIndex& ) const;
 	
 	// item model
-	ProjectsModel* model() const;
+	virtual ProjectsModel* model() const;
 	
 	// item parent
-	ProjectItem* parent() const;
+	virtual ProjectItem* parent() const;
 	
 	// child item
-	ProjectItem* child( int, int = 0 ) const;
+	virtual ProjectItem* child( int, int = 0 ) const;
 	
 	// return a new item of type of caller
 	virtual ProjectItem* clone( ProjectsModel::NodeType = ProjectsModel::ProjectType, ProjectItem* = 0 ) const;
 	
 	// insert/append items to model
-	void appendRow( ProjectItem* );
-	void insertRow( int, ProjectItem* );
+	virtual void appendRow( ProjectItem* );
+	virtual void insertRow( int, ProjectItem* );
+	
+	// remove itself
+	virtual void remove();
+	
+	// moving item
+	virtual bool swapRow( int, int );
+	virtual bool moveRowUp( int );
+	virtual bool moveRowDown( int );
+	virtual bool moveUp();
+	virtual bool moveDown();
 	
 	// the plugin this item come from
-	QString pluginName() const { return QString::null; }
+	virtual QString pluginName() const { return QString::null; }
 	
 	// the project item
-	ProjectItem* project( const QModelIndex& = QModelIndex() ) const;
+	virtual ProjectItem* project( const QModelIndex& = QModelIndex() ) const;
 	
 	// canonical project filepath
-	QString canonicalFilePath() const;
+	virtual QString canonicalFilePath() const;
 	// canonical file path according to project path
-	QString canonicalFilePath( const QString& ) const;
+	virtual QString canonicalFilePath( const QString& ) const;
 	// canonical project path
-	QString canonicalPath() const;
+	virtual QString canonicalPath() const;
 	// relative path according to project path
-	QString canonicalPath( const QString& ) const;
+	virtual QString canonicalPath( const QString& ) const;
 	// relative file path according to project path
-	QString relativeFilePath( const QString& ) const;
+	virtual QString relativeFilePath( const QString& ) const;
 	// filename of filepath
-	QString fileName( const QString& );
+	virtual QString fileName( const QString& );
 	// complete basename of filename
-	QString completeBaseName( const QString& );
+	virtual QString completeBaseName( const QString& );
 	// name of project
-	QString name() const;
+	virtual QString name() const;
 	
 	// check scope
 	virtual QString checkScope( const QString& ) const;
@@ -116,9 +135,9 @@ public:
 	// get item scope, creating it if needed
 	virtual ProjectItem* getItemScope( const QString&, bool ) const;
 	// get all variable content as modelindex list for project index
-	ProjectItemList getItemListValues( const QString&, const QString&, const QString& ) const;
+	virtual ProjectItemList getItemListValues( const QString&, const QString&, const QString& ) const;
 	// get a variable index
-	ProjectItem* getItemVariable( const QString&, const QString&, const QString& ) const;
+	virtual ProjectItem* getItemVariable( const QString&, const QString&, const QString& ) const;
 	// get variable content as stringlist for project index
 	virtual QStringList getListValues( const QString&, const QString& = "=", const QString& = QString::null ) const;
 	// get variable content as string for project index
@@ -131,6 +150,9 @@ public:
 	virtual void addListValues( const QStringList&, const QString&, const QString& = "=", const QString& = QString::null );
 	// add variable content as string for project index
 	virtual void addStringValues( const QString&, const QString&, const QString& = "=", const QString& = QString::null );
+	
+protected:
+	virtual void redoLayout( ProjectItem* = 0 ) {}
 
 };
 

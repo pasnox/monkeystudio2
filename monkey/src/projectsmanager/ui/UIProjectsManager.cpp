@@ -17,12 +17,14 @@
 #include "PluginsManager.h"
 #include "pMonkeyStudio.h"
 #include "pRecentsManager.h"
+#include "ProjectsProxy.h"
+#include "ProjectsModel.h"
 #include "ProjectItem.h"
 
 #include <QHeaderView>
 
 UIProjectsManager::UIProjectsManager( QWidget* w )
-	: QDockWidget( w ), mProjects( new ProjectsModel( this ) )
+	: QDockWidget( w ), mProjects( new ProjectsModel( this ) ), mProxy( new ProjectsProxy( mProjects ) )
 {
 	setupUi( this );
 	
@@ -51,20 +53,34 @@ UIProjectsManager::UIProjectsManager( QWidget* w )
 	
 	// set projects properties
 	tvProjects->header()->hide();
-	tvProjects->setModel( mProjects );
+	
+	// set proxy properties
+	// set types to filter
+	mProxy->setFilterRoles( QList<int>() << ProjectsModel::ValueType );
+	// filter are negate
+	mProxy->setNegateFilter( false );
+	// apply filtering
+	mProxy->setFiltering( true );
+	
+	// set view proxy
+	tvProjects->setModel( mProxy );
+	
+	// set filter filtering state
+	mb->action( "mView/aFiltered" )->setChecked( mProxy->isFiltering() );
 	
 	// connections
+	connect( mb->action( "mView/aFiltered" ), SIGNAL( triggered( bool ) ), mProxy, SLOT( setFiltering( bool ) ) );
+	connect( mProxy, SIGNAL( filteringChanged( bool ) ), mb->action( "mView/aFiltered" ), SLOT( setChecked( bool ) ) );
 	connect( tvProjects->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( tvProjects_currentChanged( const QModelIndex&, const QModelIndex& ) ) );
 }
 
 UIProjectsManager::~UIProjectsManager()
-{
-}
+{}
 
 ProjectItem* UIProjectsManager::currentProject() const
 {
 	// get current item
-	ProjectItem* it = mProjects->itemFromIndex( tvProjects->currentIndex() );
+	ProjectItem* it = mProjects->itemFromIndex( mProxy->mapToSource( tvProjects->currentIndex() ) );
 	
 	// return project item
 	if ( it )
@@ -82,8 +98,14 @@ void UIProjectsManager::initializeProject( ProjectItem* it )
 	// append project item
 	mProjects->appendRow( it );
 	
+	// sort project
+	it->redoLayout();
+	
+	// sort proxy
+	mProxy->sort( 0, Qt::AscendingOrder );
+	
 	// set current project
-	tvProjects->setCurrentIndex( it->index() );
+	tvProjects->setCurrentIndex( mProxy->mapFromSource( it->index() ) );
 }
 
 void UIProjectsManager::tvProjects_currentChanged( const QModelIndex& c, const QModelIndex& p )
@@ -97,7 +119,7 @@ void UIProjectsManager::tvProjects_currentChanged( const QModelIndex& c, const Q
 	if ( c.isValid() )
 	{
 		// get item
-		ProjectItem* it = mProjects->itemFromIndex( c );
+		ProjectItem* it = mProjects->itemFromIndex( mProxy->mapToSource( c ) );
 		// looking plugin that can manage this project
 		ProjectPlugin* pp = pm->plugin<ProjectPlugin*>( it->pluginName() );
 		
