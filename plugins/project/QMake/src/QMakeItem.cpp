@@ -15,6 +15,8 @@
 #include "QMakeItem.h"
 #include "UISettingsQMake.h"
 
+#include "pMonkeyStudio.h"
+
 QMakeItem::QMakeItem( ProjectsModel::NodeType t, QMakeItem* i )
 	: ProjectItem()
 {
@@ -36,9 +38,6 @@ void QMakeItem::setType( ProjectsModel::NodeType t )
 {
 	// set data
 	setData( t, ProjectsModel::TypeRole );
-	
-	// no modified
-	setModified( false );
 	
 	// update icon
 	switch( t )
@@ -82,15 +81,6 @@ void QMakeItem::setType( ProjectsModel::NodeType t )
 	}
 }
 
-ProjectsModel::NodeType QMakeItem::getType()
-{ return (ProjectsModel::NodeType)data( ProjectsModel::TypeRole ).toInt(); }
-
-void QMakeItem::setOperator( const QString& s )
-{ setData( s, ProjectsModel::OperatorRole ); }
-
-QString QMakeItem::getOperator() const
-{ return data( ProjectsModel::OperatorRole ).toString(); }
-
 void QMakeItem::setValue( const QString& s )
 {
 	// set data
@@ -112,9 +102,35 @@ void QMakeItem::setValue( const QString& s )
 				setText( l2.at( l1.indexOf( getValue(), Qt::CaseInsensitive ) ) );
 			break;
 		case ProjectsModel::ValueType:
-			if ( l3.contains( parent() ? parent()->getValue() : "", Qt::CaseInsensitive ) )
-				setFilePath( s );
+		{
+			// get parent value
+			QString v = parent() ? parent()->getValue() : QString::null;
+			// if file/path base variable
+			if ( l3.contains( v, Qt::CaseInsensitive ) )
+			{
+				// if special case subdirs
+				if ( v.toLower() == "subdirs" )
+				{
+					// get path to check in for pro
+					v = canonicalFilePath( s );
+					// get all pro file
+					foreach ( QFileInfo f, pMonkeyStudio::getFiles( QDir( v ), "pro", false ) )
+					{
+						// check that value = filename
+						if ( f.baseName().toLower() == s.toLower() )
+						{
+							// set full file path
+							setFilePath( v.append( "/" ).append( f.fileName() ) );
+							break;
+						}
+					}
+				}
+				// set full file path
+				else
+					setFilePath( s );
+			}
 			break;
+		}
 		case ProjectsModel::IncludeType:
 			setFilePath( "" );
 			break;
@@ -135,35 +151,6 @@ void QMakeItem::setValue( const QString& s )
 	}
 }
 
-QString QMakeItem::getValue() const
-{ return data( ProjectsModel::ValueRole ).toString(); }
-
-void QMakeItem::setMultiLine( bool b )
-{ setData( b, ProjectsModel::MultiLineRole ); }
-
-bool QMakeItem::getMultiLine() const
-{ return data( ProjectsModel::MultiLineRole ).toBool(); }
-
-void QMakeItem::setModified( bool b )
-{
-	setData( b, ProjectsModel::ModifiedRole );
-}
-
-bool QMakeItem::getModified() const
-{ return data( ProjectsModel::ModifiedRole ).toBool(); }
-
-void QMakeItem::setReadOnly( bool b )
-{ setData( b, ProjectsModel::ReadOnlyRole ); }
-
-bool QMakeItem::getReadOnly() const
-{ return data( ProjectsModel::ReadOnlyRole ).toBool(); }
-
-void QMakeItem::setComment( const QString& s )
-{ setData( s, ProjectsModel::CommentRole ); }
-
-QString QMakeItem::getComment() const
-{ return data( ProjectsModel::CommentRole ).toString(); }
-
 void QMakeItem::setFilePath( const QString& s )
 {
 	// set data
@@ -173,7 +160,8 @@ void QMakeItem::setFilePath( const QString& s )
 	switch( getType() )
 	{
 		case ProjectsModel::ValueType:
-			setText( fileName( s ) );
+			if ( parent() && parent()->getValue().toLower() != "subdirs" )
+				setText( fileName( s ) );
 			setToolTip( getFilePath() );
 			break;
 		case ProjectsModel::ProjectType:
@@ -184,9 +172,6 @@ void QMakeItem::setFilePath( const QString& s )
 			break;
 	}
 }
-
-QString QMakeItem::getFilePath() const
-{ return data( ProjectsModel::FilePathRole ).toString(); }
 
 void QMakeItem::redoLayout( ProjectItem* it )
 {

@@ -12,7 +12,7 @@ QMake::QMake()
 	// set plugin infos
 	mPluginInfos.Caption = tr( "QMake" );
 	mPluginInfos.Description = tr( "Plugin for managing QMake project" );
-	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>; Roper Alexander aka minirop <minirop@peyj.com>";
 	mPluginInfos.Type = BasePlugin::iProject;
 	mPluginInfos.Name = "QMake";
 	mPluginInfos.Version = "1.0.0";
@@ -63,6 +63,12 @@ ProjectItem* QMake::openProject( const QString& s, ProjectItem* pi )
 	QMakeItem* it =  new QMakeItem;
 	// parse project
 	QMakeParser p( s, it );
+	// delete object if not open
+	if ( !p.isOpen() )
+	{
+		delete it;
+		it = 0L;
+	}
 	// return root item
 	return it;
 }

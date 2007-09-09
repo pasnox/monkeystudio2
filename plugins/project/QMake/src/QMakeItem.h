@@ -22,34 +22,11 @@ class QMakeItem : public ProjectItem
 
 public:
 	QMakeItem( ProjectsModel::NodeType = ProjectsModel::ProjectType, QMakeItem* = 0 );
-
 	virtual ProjectItem* clone( ProjectsModel::NodeType = ProjectsModel::ProjectType, ProjectItem* = 0 ) const;
-
 	virtual QString pluginName() const { return "QMake"; }
-
 	virtual void setType( ProjectsModel::NodeType );
-	virtual ProjectsModel::NodeType getType();
-
-	virtual void setOperator( const QString& );
-	virtual QString getOperator() const;
-
 	virtual void setValue( const QString& );
-	virtual QString getValue() const;
-
-	virtual void setMultiLine( bool );
-	virtual bool getMultiLine() const;
-
-	virtual void setModified( bool );
-	virtual bool getModified() const;
-
-	virtual void setReadOnly( bool );
-	virtual bool getReadOnly() const;
-
-	virtual void setComment( const QString& );
-	virtual QString getComment() const;
-
 	virtual void setFilePath( const QString& );
-	virtual QString getFilePath() const;
 	
 protected:
 	virtual void redoLayout( ProjectItem* );

@@ -15,6 +15,7 @@ static int prof = 0; // profondeur courante
 static int this_prof = 0; // profondeur precedent
 
 static QVector<QString> content;
+QStringList file_variables;
 static bool mParseCommands = false;
 static QRegExp function_call("^((?:[a-zA-Z0-9\\.]+(?:\\((?:.*)\\))?(?:[ \\t]+)?[|:](?:[ \\t]+)?)+)?([a-zA-Z]+\\((.*)\\))[ \\t]*(#.*)?"); 
 static QRegExp bloc("^(\\})?[ \\t]*(?:((?:[-\\.a-zA-Z0-9*|_!+]+(?:\\((?:[^\\)]*)\\))?[:|])+)?([-a-zA-Z0-9*|_!+]+(?:\\((?:[^\\)]*)\\))?))[ \\t]*(\\{)[ \\t]*(#.*)?"); 
@@ -30,18 +31,18 @@ static QRegExp encoding( "[ \\t]*ENCODING[ \\t]*=[ \\t]*([^ ]+)[ \\t]*(?:#.*)?",
 QMakeParser::QMakeParser( const QString& s, QMakeItem* i )
 	: mIsOpen( false ), mRoot( i )
 {
+	// get file/path base variable
+	file_variables = UISettingsQMake::readPathFiles();
+	// parse file
 	loadFile( s, mRoot );
 }
-//
+
 QMakeParser::~QMakeParser()
-{
-}
-//
+{}
+
 bool QMakeParser::isOpen() const
-{
-	return mIsOpen;
-}
-//
+{ return mIsOpen; }
+
 bool QMakeParser::loadFile( const QString& s, QMakeItem* it )
 {
 	// clear vectors
@@ -74,34 +75,18 @@ bool QMakeParser::loadFile( const QString& s, QMakeItem* it )
 	
 	// open subdirs project
 	if ( mIsOpen )
-	{
-		/*
-		foreach ( QModelIndex i, mModel->getIndexListValues( "subdirs", it->index(), "" ) )
-		{
-			// get subproject filepath and stock it
-			QString sp  = i.data( ProjectsModel::ValueRole ).toString();
-			sp = QString( "%1/%2.pro" ).arg( mModel->filePath( sp, i ) ).arg( QFileInfo( sp ).fileName() );
-			if ( QFile::exists( sp ) )
-			{
-				mModel->setData( i, sp, ProjectsModel::AbsoluteFilePathRole );
-				loadFile( sp, new QMakeItem( ProjectsModel::ProjectType, it ) );
-			}
+		foreach ( ProjectItem* sit, it->getItemListValues( "subdirs", "", "" ) )
+			if ( QFile::exists( sit->getFilePath() ) )
+				loadFile( sit->getFilePath(), reinterpret_cast<QMakeItem*>( it->clone( ProjectsModel::ProjectType, it ) ) );
 			else
-				qWarning( "Can't open subproject: %s", qPrintable( sp ) );
-		}
-		*/
-	}
+				qWarning( "Can't open subproject: %s", qPrintable( sit->getFilePath() ) );
 	
-	// set all items not modified
-	it->setModified( false );
-	
+	// return root project is open
 	return mIsOpen;
 }
-// parser file
+
 int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 {
-	QStringList file_variables = UISettingsQMake::readPathFiles();
-	
 	while(ligne < content.size())
 	{
 		// function like :
@@ -154,10 +139,7 @@ int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 			QMakeItem *i, *v = processNested( liste[1], it );
 			v = addVariable( liste[2], liste[3], v );
 			v->setMultiLine( liste[5].trimmed() == "\\" );
-			if ( !extractValues )
-				i = addValue( liste[4], v );
-			else
-				i = processValues( liste[4], v );
+			i = !extractValues ? addValue( liste[4], v ) : processValues( liste[4], v );
 			if ( i )
 				i->setComment( liste[6].trimmed() );
 			// if last char is \ read next line
@@ -169,20 +151,14 @@ int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 				{
 					// ==================        5         ==================
 					liste = varLine.capturedTexts();
-					if ( !extractValues )
-						i = addValue( liste[1], v );
-					else
-						i = processValues( liste[1], v );
+					i = !extractValues ? addValue( liste[1], v ) : processValues( liste[1], v );
 					if ( i )
 						i->setComment( liste[2].trimmed() );
 					ligne++;
 				}
 				// last line , optionnally with comment
 				liste = content[ligne].split( "#" );
-				if ( !extractValues )
-					i = addValue( liste[0], v );
-				else
-					i = processValues( liste[0], v );
+				i = !extractValues ? addValue( liste[0], v ) : processValues( liste[0], v );
 				if ( i && liste.count() > 1 )
 					i->setComment( liste[1] );
 			}
@@ -200,7 +176,7 @@ int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 	}
 	return 1;
 }
-// 100%
+
 QMakeItem* QMakeParser::processNested( const QString& s, QMakeItem* i )
 {
 	QStringList l;
@@ -213,7 +189,7 @@ QMakeItem* QMakeParser::processNested( const QString& s, QMakeItem* i )
 	}
 	return i;
 }
-// 100%
+
 QMakeItem* QMakeParser::processValues( const QString& s, QMakeItem* i )
 {
 	QStringList l;
@@ -229,7 +205,7 @@ QMakeItem* QMakeParser::processValues( const QString& s, QMakeItem* i )
 	}
 	return v;
 }
-// 100%
+
 QMakeItem* QMakeParser::addScope( const QString& v, const QString& o, bool b, QMakeItem* i )
 {
 	QMakeItem* s = new QMakeItem( b ? ProjectsModel::NestedScopeType : ProjectsModel::ScopeType, i );
@@ -238,7 +214,7 @@ QMakeItem* QMakeParser::addScope( const QString& v, const QString& o, bool b, QM
 	(void) new QMakeItem( ProjectsModel::ScopeEndType, s );
 	return s;
 }
-// 100%
+
 QMakeItem* QMakeParser::addFunction( const QString& s, const QString& o, QMakeItem* i )
 {
 	QMakeItem* f = new QMakeItem( ProjectsModel::FunctionType, i );
@@ -246,7 +222,7 @@ QMakeItem* QMakeParser::addFunction( const QString& s, const QString& o, QMakeIt
 	f->setOperator( o.trimmed() );
 	return f;
 }
-// 100%
+
 QMakeItem* QMakeParser::addVariable( const QString& s, const QString& o, QMakeItem* i )
 {
 	QMakeItem* v = new QMakeItem( ProjectsModel::VariableType, i );
@@ -255,21 +231,21 @@ QMakeItem* QMakeParser::addVariable( const QString& s, const QString& o, QMakeIt
 	mParseCommands = s.trimmed().endsWith( ".commands", Qt::CaseInsensitive );
 	return v;
 }
-// 100%
+
 QMakeItem* QMakeParser::addValue( const QString& s, QMakeItem* i )
 {
 	QMakeItem* v = new QMakeItem( ProjectsModel::ValueType, i );
 	v->setValue( s.trimmed() );
 	return v;
 }
-// 100%
+
 QMakeItem* QMakeParser::addComment( const QString& s, QMakeItem* i )
 {
 	QMakeItem* c = new QMakeItem( ProjectsModel::CommentType, i );
 	c->setValue( s.trimmed() );
 	return c;
 }
-// 100%
+
 QMakeItem* QMakeParser::addEmpty( QMakeItem* i )
 {
 	QMakeItem* e = new QMakeItem( ProjectsModel::EmptyType, i );
