@@ -1,5 +1,6 @@
 #include "QMakeParser.h"
 #include "QMakeItem.h"
+#include "UISettingsQMake.h"
 
 #include <QFileInfo>
 #include <QTextStream>
@@ -10,7 +11,7 @@
 #include <QStringList>
 #include <QDebug>
 
-static int prof = 0; // profondeur courrante
+static int prof = 0; // profondeur courante
 static int this_prof = 0; // profondeur precedent
 
 static QVector<QString> content;
@@ -99,6 +100,8 @@ bool QMakeParser::loadFile( const QString& s, QMakeItem* it )
 // parser file
 int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 {
+	QStringList file_variables = UISettingsQMake::readPathFiles();
+	
 	while(ligne < content.size())
 	{
 		// function like :
@@ -147,29 +150,39 @@ int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 		{
 			// ==================        4         ==================
 			QStringList liste = variable.capturedTexts();
+			bool extractValues = file_variables.contains( liste[2] , Qt::CaseInsensitive );
 			QMakeItem *i, *v = processNested( liste[1], it );
 			v = addVariable( liste[2], liste[3], v );
 			v->setMultiLine( liste[5].trimmed() == "\\" );
-			i = processValues( liste[4], v );
+			if ( !extractValues )
+				i = addValue( liste[4], v );
+			else
+				i = processValues( liste[4], v );
 			if ( i )
 				i->setComment( liste[6].trimmed() );
-			// if last char is \ read next lines
+			// if last char is \ read next line
 			if ( liste[5] == "\\" )
 			{
 				ligne++;
-				// while last char of line is \ continue to read, be carrefull on comment
+				// while last char of line is \ continue to read, be carefull on comment
 				while( varLine.exactMatch( content[ligne] ) )
 				{
 					// ==================        5         ==================
 					liste = varLine.capturedTexts();
-					i = processValues( liste[1], v );
+					if ( !extractValues )
+						i = addValue( liste[1], v );
+					else
+						i = processValues( liste[1], v );
 					if ( i )
 						i->setComment( liste[2].trimmed() );
 					ligne++;
 				}
 				// last line , optionnally with comment
 				liste = content[ligne].split( "#" );
-				i = processValues( liste[0], v );
+				if ( !extractValues )
+					i = addValue( liste[0], v );
+				else
+					i = processValues( liste[0], v );
 				if ( i && liste.count() > 1 )
 					i->setComment( liste[1] );
 			}
