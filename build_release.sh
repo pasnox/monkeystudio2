@@ -1,4 +1,3 @@
 #! /bin/sh
-
-qmake-qt4 "CONFIG*=release"
-make -f Makefile
+qmake-qt4 "CONFIG += debug_and_release"
+make -f Makefile release
