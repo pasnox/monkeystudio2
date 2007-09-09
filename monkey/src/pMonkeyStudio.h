@@ -36,6 +36,7 @@ namespace pMonkeyStudio
 	Q_MONKEY_EXPORT const QStringList availableLanguages();
 	Q_MONKEY_EXPORT const QStringList availableProjects();
 
+	Q_MONKEY_EXPORT const QFileInfoList getFiles( QDir d, const QStringList&, bool = true );
 	Q_MONKEY_EXPORT const QFileInfoList getFiles( QDir d, const QString& = QString::null, bool = true );
 
 	Q_MONKEY_EXPORT const QStringList getImageFileNames( const QString&, const QString&, QWidget* = QApplication::activeWindow() );

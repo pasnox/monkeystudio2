@@ -72,6 +72,12 @@ public:
 	virtual void setOriginalView( int );
 	virtual int getOriginalView() const;
 	
+	// set data
+	virtual void setData( const QVariant&, int = Qt::UserRole +1 );
+	
+	// get index list
+	ProjectItemList match( ProjectItem*, int, const QVariant& ) const;
+	
 	// item
 	virtual ProjectItem* itemFromIndex( const QModelIndex& ) const;
 	

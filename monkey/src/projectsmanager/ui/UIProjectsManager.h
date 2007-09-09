@@ -47,6 +47,7 @@ private:
 
 private slots:
 	void tvProjects_currentChanged( const QModelIndex&, const QModelIndex& );
+	void on_tvProjects_doubleClicked( const QModelIndex& );
 
 public slots:
 	bool openProject( const QString& );

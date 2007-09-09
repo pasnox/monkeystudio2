@@ -95,22 +95,25 @@ const QStringList pMonkeyStudio::availableLanguages()
 	return l;
 }
 
-const QFileInfoList pMonkeyStudio::getFiles( QDir d, const QString& s, bool b )
+const QFileInfoList pMonkeyStudio::getFiles( QDir d, const QStringList& l, bool b )
 {
-	QFileInfoList l;
+	QFileInfoList ll;
 	foreach ( QFileInfo f, d.entryInfoList( QDir::AllEntries | QDir::NoDotAndDotDot, QDir::DirsFirst | QDir::Name ) )
 	{
-		if ( f.isFile() && ( s.isNull() || ( !s.isNull() && f.suffix() == s ) ) )
-			l << f;
+		if ( f.isFile() && ( l.isEmpty() || ( !l.isEmpty() && l.contains( f.suffix(), Qt::CaseInsensitive ) ) ) )
+			ll << f;
 		else if ( f.isDir() && b )
 		{
 			d.cd( f.filePath() );
-			l << getFiles( d, s );
+			ll << getFiles( d, l );
 			d.cdUp();
 		}
 	}
-	return l;
+	return ll;
 }
+
+const QFileInfoList pMonkeyStudio::getFiles( QDir d, const QString& s, bool b )
+{ return getFiles( d, s.isEmpty() ? QStringList() : QStringList( s ), b ); }
 
 QFileDialog* getOpenDialog( QFileDialog::FileMode fm, const QString& c, const QString& fn, const QString& f, QWidget* w, QFileDialog::AcceptMode m =  QFileDialog::AcceptOpen )
 {

@@ -20,6 +20,7 @@
 #include "ProjectsProxy.h"
 #include "ProjectsModel.h"
 #include "ProjectItem.h"
+#include "pFileManager.h"
 
 #include <QHeaderView>
 
@@ -158,6 +159,15 @@ void UIProjectsManager::tvProjects_currentChanged( const QModelIndex& c, const Q
 		mb->action( "mProject/mClose/aAll" )->setEnabled( false );
 		mb->action( "mProject/aSettings" )->setEnabled( false );
 	}
+}
+
+void UIProjectsManager::on_tvProjects_doubleClicked( const QModelIndex& i )
+{
+	// get item
+	ProjectItem* it = mProjects->itemFromIndex( mProxy->mapToSource( i ) );
+	// if item and file exists, open it
+	if ( it && QFile::exists( it->getFilePath() ) )
+		pFileManager::instance()->openFile( it->getFilePath() );
 }
 
 bool UIProjectsManager::openProject( const QString& s )

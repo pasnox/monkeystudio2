@@ -33,7 +33,7 @@ public:
 	{
 		FirstType = 0, // first type
 		EmptyType, // empty line
-		FileType, // a file
+		FolderType, // a folder container
 		CommentType, // comment line
 		NestedScopeType, // single line scope
 		ScopeType, // multi line scope
