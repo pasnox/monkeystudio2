@@ -29,7 +29,6 @@ PROGRAM_NAME	= "Monkey Studio"
 win32:RC_FILE	*= monkey.rc
 RESOURCES	*= src/resources/resources.qrc
 
-CONFIG -= release
 CONFIG	*= qt warn_on app_bundle thread x11 windows
 QT	*= gui core
 
@@ -90,6 +89,7 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/pluginsmanager/ui/UIPluginsSettings.h \
 	src/projectsmanager/ui/UIProjectsManager.h \
 	src/projectsmanager/ProjectsModel.h \
+	src/projectsmanager/ProjectsProxy.h \
 	src/projectsmanager/ProjectItem.h
 
 SOURCES	*= src/maininterface/ui/UITranslator.cpp \
@@ -119,6 +119,7 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/pluginsmanager/ui/UIPluginsSettings.cpp \
 	src/projectsmanager/ui/UIProjectsManager.cpp \
 	src/projectsmanager/ProjectsModel.cpp \
+	src/projectsmanager/ProjectsProxy.cpp \
 	src/projectsmanager/ProjectItem.cpp \
 	src/main.cpp
 
