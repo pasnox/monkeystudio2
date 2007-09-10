@@ -22,13 +22,29 @@ ProjectItem::ProjectItem( ProjectsModel::NodeType t, ProjectItem* i )
 {
 	// set type
 	setType( t );
-	
 	// set readonly
 	setReadOnly( false );
-	
 	// append to parent if needed
 	if ( i )
 		i->appendRow( this );
+}
+
+ProjectItem::~ProjectItem()
+{
+	if ( getType() == ProjectsModel::ProjectType )
+		save( true );
+}
+
+void ProjectItem::setData( const QVariant& v, int r )
+{
+	// check read only
+	if ( getReadOnly() )
+		return;
+	// set data
+	QStandardItem::setData( v, r );
+	// set modified state
+	if ( r != ProjectsModel::ModifiedRole )
+		setModified( true );
 }
 
 void ProjectItem::setType( ProjectsModel::NodeType t )
@@ -55,18 +71,6 @@ void ProjectItem::setMultiLine( bool b )
 bool ProjectItem::getMultiLine() const
 { return data( ProjectsModel::MultiLineRole ).toBool(); }
 
-void ProjectItem::setModified( bool b )
-{ setData( b, ProjectsModel::ModifiedRole ); }
-
-bool ProjectItem::getModified() const
-{ return data( ProjectsModel::ModifiedRole ).toBool(); }
-
-void ProjectItem::setReadOnly( bool b )
-{ setData( b, ProjectsModel::ReadOnlyRole ); }
-
-bool ProjectItem::getReadOnly() const
-{ return data( ProjectsModel::ReadOnlyRole ).toBool(); }
-
 void ProjectItem::setComment( const QString& s )
 { setData( s, ProjectsModel::CommentRole ); }
 
@@ -91,8 +95,37 @@ void ProjectItem::setOriginalView( int i )
 int ProjectItem::getOriginalView() const
 { return data( ProjectsModel::OriginalViewRole ).toInt(); }
 
-ProjectItem* ProjectItem::itemFromIndex( const QModelIndex& i ) const
-{ return model() ? model()->itemFromIndex( i ) : 0; }
+void ProjectItem::setModified( bool b )
+{
+	// if item project and not modified
+	if ( project() == this && !b )
+	{
+		// set unmodified to all items
+		foreach ( ProjectItem* it, projectItems() )
+			it->setModified( b );
+	}
+	else
+		setData( b, ProjectsModel::ModifiedRole );
+}
+
+bool ProjectItem::getModified() const
+{
+	// if project, modified is true if one of its items is modified
+	if ( project() == this )
+	{
+		foreach ( ProjectItem* it, projectItems() )
+			if ( it->getModified() )
+				return true;
+	}
+	// return default item value
+	return data( ProjectsModel::ModifiedRole ).toBool();
+}
+
+void ProjectItem::setReadOnly( bool b )
+{ setData( b, ProjectsModel::ReadOnlyRole ); }
+
+bool ProjectItem::getReadOnly() const
+{ return data( ProjectsModel::ReadOnlyRole ).toBool(); }
 
 ProjectsModel* ProjectItem::model() const
 { return reinterpret_cast<ProjectsModel*>( QStandardItem::model() ); }
@@ -102,6 +135,19 @@ ProjectItem* ProjectItem::parent() const
 
 ProjectItem* ProjectItem::child( int i, int j ) const
 { return reinterpret_cast<ProjectItem*>( QStandardItem::child( i, j ) ); }
+
+ProjectItemList ProjectItem::children( bool b ) const
+{
+	ProjectItemList l;
+	for ( int i = 0; i < rowCount(); i++ )
+	{
+		ProjectItem* ci = child( i, 0 );
+		l << ci;
+		if ( b && ci->rowCount() )
+			l << ci->children( true );
+	}
+	return l;
+}
 
 ProjectItem* ProjectItem::clone( ProjectsModel::NodeType t, ProjectItem* p ) const
 { return new ProjectItem( t, p ); }
@@ -117,16 +163,6 @@ void ProjectItem::insertRow( int r, ProjectItem* i )
 		r--;
 	// default insert
 	QStandardItem::insertRow( r, i );
-}
-
-void ProjectItem::remove()
-{
-	if ( parent() )
-		parent()->removeRow( row() );
-	else if ( model() )
-		model()->removeRow( row() );
-	else
-		delete this;
 }
 
 bool ProjectItem::swapRow( int i, int j )
@@ -175,10 +211,20 @@ bool ProjectItem::moveUp()
 bool ProjectItem::moveDown()
 { return parent()  ? parent()->moveRowDown( row() ) : false; }
 
-ProjectItem* ProjectItem::project( const QModelIndex& i ) const
+void ProjectItem::remove()
+{
+	if ( parent() )
+		parent()->removeRow( row() );
+	else if ( model() )
+		model()->removeRow( row() );
+	else
+		delete this;
+}
+
+ProjectItem* ProjectItem::project() const
 {
 	// get project item
-	ProjectItem* it = i.isValid() ? itemFromIndex( i ) : const_cast<ProjectItem*>( this );
+	ProjectItem* it = const_cast<ProjectItem*>( this );
 	// check reucursively parent if needed
 	while ( it && it->getType() != ProjectsModel::ProjectType )
 		it = it->parent();
@@ -186,45 +232,40 @@ ProjectItem* ProjectItem::project( const QModelIndex& i ) const
 	return it;
 }
 
-QString ProjectItem::canonicalFilePath() const
+ProjectItemList ProjectItem::projectItems() const
 {
-	// get project item
-	ProjectItem* it = project();
-	// return project absolutepath
-	return it ? it->getFilePath() : QString();
+	ProjectItem* p = project();
+	ProjectItemList l;
+	foreach ( ProjectItem* it, p->children( true ) )
+		if ( it->project() == p )
+			l << it;
+	return l;
 }
 
-QString ProjectItem::canonicalFilePath( const QString& s ) const
+ProjectItem* ProjectItem::parentProject() const
 {
-	// file path
-	QString fp = s;
-	// check if relative or absolute
-	if ( QFileInfo( fp ).isRelative() )
-		fp = canonicalPath().append( "/" ).append( fp );
-	// return canonical file path if file exists, exists
-	if ( QFile::exists( fp ) )
-		return QFileInfo( fp ).canonicalFilePath();
-	// else return absolute file path, may be not exists
-	return QFileInfo( fp ).absoluteFilePath();
+	ProjectItem* p = project();
+	return p && p->parent() ? p->parent()->project() : 0;
 }
 
-QString ProjectItem::canonicalPath() const
-{ return QFileInfo( canonicalFilePath() ).absolutePath(); }
+ProjectItemList ProjectItem::childrenProjects( bool b ) const
+{
+	ProjectItemList l;
+	foreach ( ProjectItem* it, children( b) )
+		if ( it->getType() == ProjectsModel::ProjectType )
+			l << it;
+	return l;
+}
 
-QString ProjectItem::canonicalPath( const QString& s ) const
-{ return canonicalFilePath( s ); }
-
-QString ProjectItem::relativeFilePath( const QString& s ) const
-{ return QDir( canonicalPath() ).relativeFilePath( s ); }
-
-QString ProjectItem::fileName( const QString& s )
-{ return QFileInfo( s ).fileName(); }
-
-QString ProjectItem::completeBaseName( const QString& s )
-{ return QFileInfo( s ).completeBaseName(); }
-
-QString ProjectItem::name() const
-{ return QFileInfo( canonicalFilePath() ).completeBaseName(); }
+ProjectItemList ProjectItem::match( ProjectItem* i, int r, const QVariant& v ) const
+{
+	ProjectItemList l;
+	const QString s = v.toString().toLower();
+	foreach ( ProjectItem* it, i->projectItems() )
+		if ( it->getValue().toLower() == s || s == "*" )
+			l << it;
+	return l;
+}
 
 QString ProjectItem::checkScope( const QString& s ) const
 {
@@ -257,62 +298,6 @@ QString ProjectItem::scope() const
 		j = j->parent();
 	}
 	return s;
-}
-
-void ProjectItem::setData( const QVariant& v, int r )
-{
-	// check read only
-	if ( getReadOnly() )
-		return;
-	
-	// set data
-	QStandardItem::setData( v, r );
-	
-	// set modified state
-	switch( r )
-	{
-		case ProjectsModel::TypeRole:
-		case ProjectsModel::OperatorRole:
-		case ProjectsModel::ValueRole:
-		case ProjectsModel::CommentRole:
-				setModified( model() && getModified() == false );
-			break;
-	}
-}
-
-ProjectItemList ProjectItem::match( ProjectItem* i, int r, const QVariant& v ) const
-{
-	// get proejct item
-	ProjectItem* p = i ? i : project();
-	
-	// temp list
-	ProjectItemList l;
-	
-	// get model match if available
-	if ( model() )
-	{
-		foreach ( QModelIndex i, model()->match( p->index().child( 0, 0 ), r, v, -1, Qt::MatchFixedString | Qt::MatchRecursive ) )
-			l << itemFromIndex( i );
-	}
-	else
-	{
-		const QString s = v.toString().toLower();
-		// manual search
-		for ( int j = 0; j < i->rowCount(); j++ )
-		{
-			// get child
-			ProjectItem* ci = i->child( j, 0 );
-			// add child to list if needed
-			if ( ci->getValue().toLower() == s )
-				l << ci;
-			// add child children if needed
-			if ( ci->rowCount() )
-				l << match( ci, r, v );
-		}
-	}
-	
-	// return items
-	return l;
 }
 
 ProjectItemList ProjectItem::getItemList( ProjectsModel::NodeType t, const QString& v, const QString& o, const QString& s ) const
@@ -508,3 +493,71 @@ void ProjectItem::addListValues( const QStringList& vl, const QString& v, const 
 
 void ProjectItem::addStringValues( const QString& val, const QString& v, const QString& o, const QString& s )
 { addListValues( QStringList( val ), v, o, s ); }
+
+QString ProjectItem::canonicalFilePath() const
+{
+	// get project item
+	ProjectItem* it = project();
+	// return project absolutepath
+	return it ? it->getFilePath() : QString();
+}
+
+QString ProjectItem::canonicalFilePath( const QString& s ) const
+{
+	// file path
+	QString fp = s;
+	// check if relative or absolute
+	if ( QFileInfo( fp ).isRelative() )
+		fp = canonicalPath().append( "/" ).append( fp );
+	// return canonical file path if file exists, exists
+	if ( QFile::exists( fp ) )
+		return QFileInfo( fp ).canonicalFilePath();
+	// else return absolute file path, may be not exists
+	return QFileInfo( fp ).absoluteFilePath();
+}
+
+QString ProjectItem::canonicalPath() const
+{ return QFileInfo( canonicalFilePath() ).absolutePath(); }
+
+QString ProjectItem::canonicalPath( const QString& s ) const
+{ return canonicalFilePath( s ); }
+
+QString ProjectItem::relativeFilePath( const QString& s ) const
+{ return QDir( canonicalPath() ).relativeFilePath( s ); }
+
+QString ProjectItem::fileName( const QString& s )
+{ return QFileInfo( s ).fileName(); }
+
+QString ProjectItem::completeBaseName( const QString& s )
+{ return QFileInfo( s ).completeBaseName(); }
+
+QString ProjectItem::name() const
+{ return QFileInfo( canonicalFilePath() ).completeBaseName(); }
+
+void ProjectItem::close()
+{ remove(); }
+
+void ProjectItem::save( bool b )
+{
+	// get project item
+	ProjectItem* p = project();
+	// if read only cancel
+	if ( p->getReadOnly() || !p->getModified() )
+		return;
+	//
+	qWarning( "fake save: %s", qPrintable( canonicalFilePath() ) );
+	//
+	p->setModified( false );
+}
+
+void ProjectItem::saveAll( bool b )
+{
+	// if read only cancel
+	if ( getReadOnly() )
+		return;
+	// save current project
+	save( b );
+	// save all children projects
+	foreach ( ProjectItem* it, childrenProjects() )
+		it->save( b );
+}
