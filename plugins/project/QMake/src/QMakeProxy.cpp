@@ -21,7 +21,9 @@ bool QMakeProxy::filterAcceptsRow( int r, const QModelIndex& i ) const
 	QModelIndex index = sourceModel()->index( r, 0, i );
 	if ( !mProjectViewMode )
 	{
-		ProjectItem* j = mProject->project( i );
+		ProjectItem* j = projectsModel()->itemFromIndex( i );
+		if ( j )
+			j = j->project();
 		bool b = ProjectsProxy::filterAcceptsRow( r, i );
 		if ( b && j != mProject && j != mParentProject )
 			b = false;
