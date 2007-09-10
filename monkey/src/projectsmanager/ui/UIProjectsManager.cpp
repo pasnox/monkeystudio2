@@ -82,29 +82,20 @@ ProjectItem* UIProjectsManager::currentProject() const
 {
 	// get current item
 	ProjectItem* it = mProjects->itemFromIndex( mProxy->mapToSource( tvProjects->currentIndex() ) );
-	
 	// return project item
-	if ( it )
-		return it->project();
-	
-	// return nothing
-	return 0;
+	return it ? it->project() : 0;
 }
 
 void UIProjectsManager::initializeProject( ProjectItem* it )
 {
 	// clear selected item
 	tvProjects->selectionModel()->clear();
-	
 	// append project item
 	mProjects->appendRow( it );
-	
 	// sort project
 	it->redoLayout();
-	
 	// sort proxy
 	mProxy->sort( 0, Qt::AscendingOrder );
-	
 	// set current project
 	tvProjects->setCurrentIndex( mProxy->mapFromSource( it->index() ) );
 }
@@ -115,7 +106,6 @@ void UIProjectsManager::tvProjects_currentChanged( const QModelIndex& c, const Q
 	pMenuBar* mb = pMenuBar::instance();
 	// get pluginsmanager
 	PluginsManager* pm = PluginsManager::instance();
-	
 	// if valid
 	if ( c.isValid() )
 	{
@@ -123,7 +113,7 @@ void UIProjectsManager::tvProjects_currentChanged( const QModelIndex& c, const Q
 		ProjectItem* it = mProjects->itemFromIndex( mProxy->mapToSource( c ) );
 		// looking plugin that can manage this project
 		ProjectPlugin* pp = pm->plugin<ProjectPlugin*>( it->pluginName() );
-		
+		//
 		if ( pp && pp->isEnabled() )
 		{
 			// desactive compiler, debugger and interpreter
@@ -172,24 +162,19 @@ void UIProjectsManager::on_tvProjects_doubleClicked( const QModelIndex& i )
 
 bool UIProjectsManager::openProject( const QString& s )
 {
-	// looking plugins that can manage this file
-	ProjectPlugin* pp = PluginsManager::instance()->projectPluginForFileName( s );
-	// project root item
-	ProjectItem* it = 0;
-	// try opening project
-	if ( pp )
+	if ( ProjectPlugin* pp = PluginsManager::instance()->projectPluginForFileName( s ) )
 	{
-		// parse project
-		it = pp->openProject( s );
-		if ( it )
+		if ( ProjectItem* it = pp->openProject( s ) )
+		{
 			initializeProject( it );
+			return true;
+		}
 		else
 			pMonkeyStudio::warning( tr( "Open Project" ), tr( "An error occur while opening this project:\n[%1]" ).arg( s ) );
 	}
 	else
 		pMonkeyStudio::warning( tr( "Open Project..." ), tr( "There is no plugin that can manage this kind of project.\n[%1]" ).arg( s ) );
-	// return it
-	return it;
+	return false;
 }
 
 void UIProjectsManager::projectNew_triggered()
@@ -201,10 +186,8 @@ void UIProjectsManager::projectOpen_triggered()
 {
 	// get last file open path
 	const QString mPath = pRecentsManager::instance()->recentProjectOpenPath();
-
 	// get available filters
 	QString mFilters = pMonkeyStudio::availableProjectsFilters();
-
 	// prepend a all in one filter
 	if ( !mFilters.isEmpty() )
 	{
@@ -213,10 +196,8 @@ void UIProjectsManager::projectOpen_triggered()
 			s.append( l.join( " " ).append( " " ) );
 		mFilters.prepend( QString( "All Supported Projects (%1);;" ).arg( s.trimmed() ) );
 	}
-
 	// open open file dialog
 	QStringList l = pMonkeyStudio::getOpenFileNames( tr( "Choose the project(s) to open" ), mPath, mFilters, window() );
-
 	// for each entry, open file
 	foreach ( QString s, l )
 	{
@@ -227,7 +208,6 @@ void UIProjectsManager::projectOpen_triggered()
 			// remove it from recents files
 			pRecentsManager::instance()->removeRecentProject( s );
 	}
-
 	// store file open path
 	if ( !l.isEmpty() )
 		pRecentsManager::instance()->setRecentProjectOpenPath( QFileInfo( l.at( 0 ) ).canonicalPath() );
@@ -245,21 +225,20 @@ void UIProjectsManager::projectSaveAll_triggered()
 
 void UIProjectsManager::projectCloseCurrent_triggered()
 {
-	qWarning( "closecurrent" );
+	ProjectItem* p = currentProject();
+	if ( p )
+		p->close();
 }
 
 void UIProjectsManager::projectCloseAll_triggered()
 {
-	qWarning( "closeall" );
+	while ( ProjectItem* p = currentProject() )
+		p->close();
 }
 
 void UIProjectsManager::projectSettings_triggered()
 {
-	// get current project
-	ProjectItem* it = currentProject();
-	
-	// if project, get it s plugin and edit
-	if ( it )
+	if ( ProjectItem* it = currentProject() )
 		PluginsManager::instance()->plugin<ProjectPlugin*>( it->pluginName() )->editSettings( it->project() );
 }
 
