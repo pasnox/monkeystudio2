@@ -1,2 +1,2 @@
-qmake "CONFIG*=debug console"
+qmake "CONFIG += debug_and_release console"
 nmake -f Makefile debug
