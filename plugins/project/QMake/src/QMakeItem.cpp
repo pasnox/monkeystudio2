@@ -45,8 +45,8 @@ void QMakeItem::setType( ProjectsModel::NodeType t )
 		case ProjectsModel::EmptyType:
 			setIcon( QIcon( ":/icons/icons/line.png" ) );
 			break;
-		case ProjectsModel::FileType:
-			setIcon( QIcon( ":/icons/icons/file.png" ) );
+		case ProjectsModel::FolderType:
+			setIcon( QIcon( ":/icons/icons/folder.png" ) );
 			break;
 		case ProjectsModel::CommentType:
 			setIcon( QIcon( ":/icons/icons/comment.png" ) );
