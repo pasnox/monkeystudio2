@@ -141,11 +141,9 @@ QString ProjectItem::getIndent() const
 	// count parent
 	ProjectItem* p = project();
 	ProjectItem* it = parent();
-	while ( it && it->parent() && it->parent()->project() == p )
-	{
-		it = it->parent();
-		i++;
-	}
+	while ( it && ( it = it->parent() ) )
+		if ( it->project() == p )
+			i++;
 	// return indent
 	return QString().fill( '\t', i );
 }
