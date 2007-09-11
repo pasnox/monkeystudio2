@@ -99,7 +99,10 @@ int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 			QMakeItem* i = processNested( liste[1], it );
 			i = addFunction( liste[2].trimmed(), "", i );
 			if ( i )
-				i->setComment( liste[3].trimmed() );
+			{
+				i->setFilePath( liste[3].trimmed() );
+				i->setComment( liste[4].trimmed() );
+			}
 		}
 		// scope (nested compris)
 		// "truc(params) {" ou "xml:truc(params) {" ("{" facultatif)
