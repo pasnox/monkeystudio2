@@ -31,10 +31,7 @@ ProjectItem::ProjectItem( ProjectsModel::NodeType t, ProjectItem* i )
 }
 
 ProjectItem::~ProjectItem()
-{
-	if ( getType() == ProjectsModel::ProjectType )
-		save( true );
-}
+{}
 
 void ProjectItem::setData( const QVariant& v, int r )
 {
@@ -137,10 +134,10 @@ QString ProjectItem::getIndent() const
 	if ( parent() && parent()->getType() == ProjectsModel::NestedScopeType )
 		return QString();
 	// default indent
-	int i = 0;
+	int i = -1;
 	// count parent
 	ProjectItem* p = project();
-	ProjectItem* it = parent();
+	ProjectItem* it = const_cast<ProjectItem*>( this );
 	while ( it && ( it = it->parent() ) )
 		if ( it->project() == p )
 			i++;
@@ -165,7 +162,7 @@ QString ProjectItem::getEol() const
 }
 
 bool ProjectItem::isFirst() const
-{ return row() == 0; }
+{ return parent() ? parent()->child( 0, 0 ) == this : true; }
 
 bool ProjectItem::isLast() const
 { return parent() ? parent()->rowCount() -1 == row() : true; }
@@ -578,7 +575,7 @@ QString ProjectItem::name() const
 { return QFileInfo( canonicalFilePath() ).completeBaseName(); }
 
 void ProjectItem::close()
-{ remove(); }
+{ saveAll( true ); remove(); }
 
 void ProjectItem::save( bool b )
 {
@@ -673,7 +670,10 @@ void ProjectItem::writeItem( ProjectItem* it )
 		}
 		case ProjectsModel::ValueType:
 		{
-			mBuffer.append( it->getIndent() ).append( it->getValue() ).append( it->parent()->getMultiLine() && !it->isLast() ? " \\" : "" ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
+			if ( it->parent()->getMultiLine() )
+				mBuffer.append( it->getIndent() ).append( it->getValue() ).append( !it->isLast() ? " \\" : "" ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
+			else
+				mBuffer.append( it->getValue() ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->isLast() ? it->getEol() : " " );
 			break;
 		}
 		case ProjectsModel::FunctionType:
