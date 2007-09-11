@@ -70,6 +70,10 @@ virtual ~ProjectItem();
 	// item read only, only project
 	virtual void setReadOnly( bool );
 	virtual bool getReadOnly() const;
+	// item indent
+	virtual QString getIndent() const;
+	// item eol
+	virtual QString getEol() const;
 	
 	// item model
 	virtual ProjectsModel* model() const;
@@ -103,7 +107,6 @@ virtual ~ProjectItem();
 	// get direct child project, or all according to bool
 	virtual ProjectItemList childrenProjects( bool = true ) const;
 	
-	
 	// get index list
 	virtual ProjectItemList match( ProjectItem*, int, const QVariant& ) const;
 	// check scope
@@ -133,8 +136,6 @@ virtual ~ProjectItem();
 	// add variable content as string for project index
 	virtual void addStringValues( const QString&, const QString&, const QString& = "=", const QString& = QString::null );
 	
-	
-	
 	// canonical project filepath
 	virtual QString canonicalFilePath() const;
 	// canonical file path according to project path
@@ -160,7 +161,10 @@ virtual ~ProjectItem();
 	virtual void saveAll( bool = true );
 	
 protected:
+	QString mBuffer;
 	virtual void redoLayout( ProjectItem* = 0 ) {}
+	virtual void writeProject();
+	virtual void writeItem( ProjectItem* );
 
 };
 

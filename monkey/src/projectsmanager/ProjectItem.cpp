@@ -127,6 +127,12 @@ void ProjectItem::setReadOnly( bool b )
 bool ProjectItem::getReadOnly() const
 { return data( ProjectsModel::ReadOnlyRole ).toBool(); }
 
+QString ProjectItem::getIndent() const
+{ return QString(); }
+
+QString ProjectItem::getEol() const
+{ return QString( "\r\n" ); }
+
 ProjectsModel* ProjectItem::model() const
 { return reinterpret_cast<ProjectsModel*>( QStandardItem::model() ); }
 
@@ -544,10 +550,8 @@ void ProjectItem::save( bool b )
 	// if read only cancel
 	if ( p->getReadOnly() || !p->getModified() )
 		return;
-	//
-	qWarning( "fake save: %s", qPrintable( canonicalFilePath() ) );
-	//
-	p->setModified( false );
+	// write project
+	writeProject();
 }
 
 void ProjectItem::saveAll( bool b )
@@ -560,4 +564,103 @@ void ProjectItem::saveAll( bool b )
 	// save all children projects
 	foreach ( ProjectItem* it, childrenProjects() )
 		it->save( b );
+}
+
+#include <QTextEdit>
+void ProjectItem::writeProject()
+{
+	// clear buffer
+	mBuffer.clear();
+	// make sure we got a project item
+	if ( ProjectItem* p = project() )
+	{
+		// write items
+		foreach ( ProjectItem* it, p->children() )
+			if ( it->project() == p )
+				writeItem( it );
+		// set project unmodified
+		p->setModified( false );
+		// append project file to buffer to check
+		mBuffer.prepend( canonicalFilePath() +"\n\n" );
+		
+		QTextEdit* l = new QTextEdit;
+		l->setPlainText( mBuffer );
+		l->show();
+	}
+	else
+		qWarning( qPrintable( "Can't write project: " +canonicalFilePath() ) );
+}
+
+void ProjectItem::writeItem( ProjectItem* it )
+{
+	// cancel if no item
+	if ( !it )
+		return;
+	
+	// write to buffer
+	switch ( it->getType() )
+	{
+		case ProjectsModel::EmptyType:
+		{
+			mBuffer.append( it->getEol() );
+			break;
+		}
+		case ProjectsModel::FolderType:
+		{
+			break;
+		}
+		case ProjectsModel::CommentType:
+		{
+			mBuffer.append( it->getValue() ).append( it->getEol() );
+			break;
+		}
+		case ProjectsModel::NestedScopeType:
+		{
+			mBuffer.append( it->getValue() ).append( it->getOperator() );
+			break;
+		}
+		case ProjectsModel::ScopeType:
+		{
+			mBuffer.append( it->getValue() ).append( " {" ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
+			break;
+		}
+		case ProjectsModel::ScopeEndType:
+		{
+			if ( parent()->getType() == ProjectsModel::ScopeType )
+				mBuffer.append( "}" ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
+			break;
+		}
+		case ProjectsModel::VariableType:
+		{
+			mBuffer.append( it->getValue() ).append( "\t" ).append( it->getOperator() ).append( " " );
+			break;
+		}
+		case ProjectsModel::ValueType:
+		{
+			mBuffer.append( it->getValue() ).append( it->parent()->getMultiLine() && it->parent()->rowCount() -1 != it->row() ? " \\" : "" ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
+			break;
+		}
+		case ProjectsModel::FunctionType:
+		{
+			mBuffer.append( it->getValue() ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
+			break;
+		}
+		case ProjectsModel::IncludeType:
+		{
+			mBuffer.append( it->getValue() ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
+			break;
+		}
+		case ProjectsModel::ProjectType:
+		{
+			break;
+		}
+		default:
+			break;
+	}
+	
+	// write children
+	ProjectItem* p = it->project();
+	foreach ( ProjectItem* cit, it->children() )
+		if ( cit->project() == p )
+			writeItem( cit );
 }
