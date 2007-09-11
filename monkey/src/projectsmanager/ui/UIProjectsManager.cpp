@@ -215,7 +215,9 @@ void UIProjectsManager::projectOpen_triggered()
 
 void UIProjectsManager::projectSaveCurrent_triggered()
 {
-	qWarning( "savecurrent" );
+	ProjectItem* p = currentProject();
+	if ( p )
+		p->save( false );
 }
 
 void UIProjectsManager::projectSaveAll_triggered()
