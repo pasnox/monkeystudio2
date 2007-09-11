@@ -74,6 +74,10 @@ virtual ~ProjectItem();
 	virtual QString getIndent() const;
 	// item eol
 	virtual QString getEol() const;
+	// tell if item is the first child of its parent
+	virtual bool isFirst() const;
+	// tell if item is the last child of its parent
+	virtual bool isLast() const;
 	
 	// item model
 	virtual ProjectsModel* model() const;

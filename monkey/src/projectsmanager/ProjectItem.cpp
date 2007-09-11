@@ -13,6 +13,7 @@
 **
 ****************************************************************************/
 #include "ProjectItem.h"
+#include "pMonkeyStudio.h"
 
 #include <QFileInfo>
 #include <QDir>
@@ -128,10 +129,48 @@ bool ProjectItem::getReadOnly() const
 { return data( ProjectsModel::ReadOnlyRole ).toBool(); }
 
 QString ProjectItem::getIndent() const
-{ return QString(); }
+{
+	// if first value of a variable, no indent
+	if ( const_cast<ProjectItem*>( this )->getType() == ProjectsModel::ValueType && isFirst() )
+		return QString();
+	// if not value, and parent is nestedscope, no indent
+	if ( parent() && parent()->getType() == ProjectsModel::NestedScopeType )
+		return QString();
+	// default indent
+	int i = 0;
+	// count parent
+	ProjectItem* p = project();
+	ProjectItem* it = parent();
+	while ( it && it->parent() && it->parent()->project() == p )
+	{
+		it = it->parent();
+		i++;
+	}
+	// return indent
+	return QString().fill( '\t', i );
+}
 
 QString ProjectItem::getEol() const
-{ return QString( "\r\n" ); }
+{
+	switch ( pMonkeyStudio::eolMode() )
+	{
+		case QsciScintilla::EolWindows:
+			return QString( "\r\n" );
+			break;
+		case QsciScintilla::EolUnix:
+			return QString( "\r" );
+			break;
+		case QsciScintilla::EolMac:
+			return QString( "\n" );
+			break;
+	}
+}
+
+bool ProjectItem::isFirst() const
+{ return row() == 0; }
+
+bool ProjectItem::isLast() const
+{ return parent() ? parent()->rowCount() -1 == row() : true; }
 
 ProjectsModel* ProjectItem::model() const
 { return reinterpret_cast<ProjectsModel*>( QStandardItem::model() ); }
@@ -596,13 +635,12 @@ void ProjectItem::writeItem( ProjectItem* it )
 	// cancel if no item
 	if ( !it )
 		return;
-	
 	// write to buffer
 	switch ( it->getType() )
 	{
 		case ProjectsModel::EmptyType:
 		{
-			mBuffer.append( it->getEol() );
+			mBuffer.append( it->getIndent() ).append( it->getEol() );
 			break;
 		}
 		case ProjectsModel::FolderType:
@@ -611,43 +649,43 @@ void ProjectItem::writeItem( ProjectItem* it )
 		}
 		case ProjectsModel::CommentType:
 		{
-			mBuffer.append( it->getValue() ).append( it->getEol() );
+			mBuffer.append( it->getIndent() ).append( it->getValue() ).append( it->getEol() );
 			break;
 		}
 		case ProjectsModel::NestedScopeType:
 		{
-			mBuffer.append( it->getValue() ).append( it->getOperator() );
+			mBuffer.append( it->getIndent() ).append( it->getValue() ).append( it->getOperator() );
 			break;
 		}
 		case ProjectsModel::ScopeType:
 		{
-			mBuffer.append( it->getValue() ).append( " {" ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
+			mBuffer.append( it->getIndent() ).append( it->getValue() ).append( " {" ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
 			break;
 		}
 		case ProjectsModel::ScopeEndType:
 		{
 			if ( parent()->getType() == ProjectsModel::ScopeType )
-				mBuffer.append( "}" ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
+				mBuffer.append( it->getIndent() ).append( "}" ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
 			break;
 		}
 		case ProjectsModel::VariableType:
 		{
-			mBuffer.append( it->getValue() ).append( "\t" ).append( it->getOperator() ).append( " " );
+			mBuffer.append( it->getIndent() ).append( it->getValue() ).append( "\t" ).append( it->getOperator() ).append( " " );
 			break;
 		}
 		case ProjectsModel::ValueType:
 		{
-			mBuffer.append( it->getValue() ).append( it->parent()->getMultiLine() && it->parent()->rowCount() -1 != it->row() ? " \\" : "" ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
+			mBuffer.append( it->getIndent() ).append( it->getValue() ).append( it->parent()->getMultiLine() && !it->isLast() ? " \\" : "" ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
 			break;
 		}
 		case ProjectsModel::FunctionType:
 		{
-			mBuffer.append( it->getValue() ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
+			mBuffer.append( it->getIndent() ).append( it->getValue() ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
 			break;
 		}
 		case ProjectsModel::IncludeType:
 		{
-			mBuffer.append( it->getValue() ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
+			mBuffer.append( it->getIndent() ).append( it->getValue() ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
 			break;
 		}
 		case ProjectsModel::ProjectType:
@@ -657,7 +695,6 @@ void ProjectItem::writeItem( ProjectItem* it )
 		default:
 			break;
 	}
-	
 	// write children
 	ProjectItem* p = it->project();
 	foreach ( ProjectItem* cit, it->children() )
