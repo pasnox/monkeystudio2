@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>641</width>
-    <height>500</height>
+    <width>670</width>
+    <height>450</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -31,7 +31,7 @@
    <property name="verticalSpacing" >
     <number>3</number>
    </property>
-   <item row="0" column="0" colspan="3" >
+   <item row="0" column="0" colspan="2" >
     <widget class="QLabel" name="lInformations" >
      <property name="palette" >
       <palette>
@@ -222,7 +222,7 @@
       <item>
        <widget class="QComboBox" name="cbScopes" >
         <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+         <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -233,6 +233,9 @@
        <spacer>
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType" >
+         <enum>QSizePolicy::Maximum</enum>
         </property>
         <property name="sizeHint" >
          <size>
@@ -253,56 +256,12 @@
        </widget>
       </item>
       <item>
-       <widget class="QComboBox" name="cbOperators" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
+       <widget class="QComboBox" name="cbOperators" />
       </item>
      </layout>
     </widget>
    </item>
-   <item row="1" column="2" >
-    <widget class="QGroupBox" name="gbEncoding" >
-     <property name="title" >
-      <string>Default Files Encoding</string>
-     </property>
-     <layout class="QHBoxLayout" >
-      <property name="spacing" >
-       <number>3</number>
-      </property>
-      <property name="leftMargin" >
-       <number>5</number>
-      </property>
-      <property name="topMargin" >
-       <number>5</number>
-      </property>
-      <property name="rightMargin" >
-       <number>5</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>5</number>
-      </property>
-      <item>
-       <widget class="QLabel" name="lEncoding" >
-        <property name="text" >
-         <string>En&amp;coding :</string>
-        </property>
-        <property name="buddy" >
-         <cstring>cbEncodings</cstring>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="cbEncodings" />
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="2" column="1" colspan="2" >
+   <item row="2" column="1" >
     <widget class="QStackedWidget" name="swMenu" >
      <property name="sizePolicy" >
       <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
@@ -455,443 +414,542 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="gbVersion" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+        <layout class="QGridLayout" >
+         <property name="horizontalSpacing" >
+          <number>3</number>
          </property>
-         <property name="title" >
-          <string>&amp;Version Informations</string>
+         <property name="verticalSpacing" >
+          <number>0</number>
          </property>
-         <property name="checkable" >
-          <bool>true</bool>
-         </property>
-         <property name="checked" >
-          <bool>false</bool>
-         </property>
-         <layout class="QGridLayout" >
-          <property name="leftMargin" >
-           <number>5</number>
-          </property>
-          <property name="topMargin" >
-           <number>5</number>
-          </property>
-          <property name="rightMargin" >
-           <number>5</number>
-          </property>
-          <property name="bottomMargin" >
-           <number>5</number>
-          </property>
-          <property name="horizontalSpacing" >
-           <number>3</number>
-          </property>
-          <property name="verticalSpacing" >
-           <number>3</number>
-          </property>
-          <item row="2" column="0" colspan="4" >
-           <widget class="QCheckBox" name="cbBuildAutoIncrement" >
-            <property name="text" >
-             <string>A&amp;uto increment the build number</string>
+         <item rowspan="2" row="0" column="0" >
+          <widget class="QGroupBox" name="gbBuild" >
+           <property name="title" >
+            <string>Build &amp;Settings</string>
+           </property>
+           <layout class="QGridLayout" >
+            <property name="leftMargin" >
+             <number>5</number>
             </property>
-           </widget>
-          </item>
-          <item row="0" column="3" >
-           <widget class="QLabel" name="lBuild" >
-            <property name="text" >
-             <string>&amp;Build</string>
+            <property name="topMargin" >
+             <number>5</number>
             </property>
-            <property name="buddy" >
-             <cstring>sbBuild</cstring>
+            <property name="rightMargin" >
+             <number>5</number>
             </property>
-           </widget>
-          </item>
-          <item row="1" column="3" >
-           <widget class="QSpinBox" name="sbBuild" >
-            <property name="maximum" >
-             <number>32767</number>
+            <property name="bottomMargin" >
+             <number>5</number>
             </property>
-           </widget>
-          </item>
-          <item row="1" column="2" >
-           <widget class="QSpinBox" name="sbRelease" >
-            <property name="maximum" >
-             <number>32767</number>
+            <property name="horizontalSpacing" >
+             <number>3</number>
             </property>
-           </widget>
-          </item>
-          <item row="1" column="1" >
-           <widget class="QSpinBox" name="sbMinor" >
-            <property name="maximum" >
-             <number>32767</number>
+            <property name="verticalSpacing" >
+             <number>3</number>
             </property>
-           </widget>
-          </item>
-          <item row="1" column="0" >
-           <widget class="QSpinBox" name="sbMajor" >
-            <property name="maximum" >
-             <number>32767</number>
+            <item row="0" column="0" colspan="3" >
+             <layout class="QHBoxLayout" >
+              <property name="spacing" >
+               <number>3</number>
+              </property>
+              <property name="leftMargin" >
+               <number>0</number>
+              </property>
+              <property name="topMargin" >
+               <number>0</number>
+              </property>
+              <property name="rightMargin" >
+               <number>0</number>
+              </property>
+              <property name="bottomMargin" >
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="lTemplate" >
+                <property name="text" >
+                 <string>Tem&amp;plate :</string>
+                </property>
+                <property name="buddy" >
+                 <cstring>cbTemplate</cstring>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="cbTemplate" >
+                <item>
+                 <property name="text" >
+                  <string>app</string>
+                 </property>
+                 <property name="icon" >
+                  <iconset resource="../resources/QMake.qrc" >:/icons/icons/form.png</iconset>
+                 </property>
+                </item>
+                <item>
+                 <property name="text" >
+                  <string>lib</string>
+                 </property>
+                 <property name="icon" >
+                  <iconset resource="../resources/QMake.qrc" >:/icons/icons/misc.png</iconset>
+                 </property>
+                </item>
+                <item>
+                 <property name="text" >
+                  <string>vcapp</string>
+                 </property>
+                 <property name="icon" >
+                  <iconset resource="../resources/QMake.qrc" >:/icons/icons/form.png</iconset>
+                 </property>
+                </item>
+                <item>
+                 <property name="text" >
+                  <string>vclib</string>
+                 </property>
+                 <property name="icon" >
+                  <iconset resource="../resources/QMake.qrc" >:/icons/icons/misc.png</iconset>
+                 </property>
+                </item>
+                <item>
+                 <property name="text" >
+                  <string>subdirs</string>
+                 </property>
+                 <property name="icon" >
+                  <iconset resource="../resources/QMake.qrc" >:/icons/icons/folder.png</iconset>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="lLanguage" >
+                <property name="text" >
+                 <string>&amp;Language :</string>
+                </property>
+                <property name="buddy" >
+                 <cstring>cbLanguage</cstring>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="cbLanguage" >
+                <item>
+                 <property name="text" >
+                  <string>C++</string>
+                 </property>
+                 <property name="icon" >
+                  <iconset resource="../resources/QMake.qrc" >:/icons/icons/misc.png</iconset>
+                 </property>
+                </item>
+                <item>
+                 <property name="text" >
+                  <string>Qt4/C++</string>
+                 </property>
+                 <property name="icon" >
+                  <iconset resource="../resources/QMake.qrc" >:/icons/icons/qt.png</iconset>
+                 </property>
+                </item>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="1" column="1" >
+             <widget class="QFrame" name="fWarn" >
+              <property name="sizePolicy" >
+               <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="frameShape" >
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <layout class="QVBoxLayout" >
+               <property name="spacing" >
+                <number>3</number>
+               </property>
+               <property name="leftMargin" >
+                <number>3</number>
+               </property>
+               <property name="topMargin" >
+                <number>3</number>
+               </property>
+               <property name="rightMargin" >
+                <number>3</number>
+               </property>
+               <property name="bottomMargin" >
+                <number>3</number>
+               </property>
+               <item>
+                <widget class="QRadioButton" name="rbWarnOff" >
+                 <property name="text" >
+                  <string>Warn Of&amp;f</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="rbWarnOn" >
+                 <property name="text" >
+                  <string>&amp;Warn On</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer>
+                 <property name="orientation" >
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" >
+                  <size>
+                   <width>20</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="1" column="2" >
+             <widget class="QFrame" name="fBuildAll" >
+              <property name="sizePolicy" >
+               <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="frameShape" >
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <layout class="QVBoxLayout" >
+               <property name="spacing" >
+                <number>3</number>
+               </property>
+               <property name="leftMargin" >
+                <number>3</number>
+               </property>
+               <property name="topMargin" >
+                <number>3</number>
+               </property>
+               <property name="rightMargin" >
+                <number>3</number>
+               </property>
+               <property name="bottomMargin" >
+                <number>3</number>
+               </property>
+               <item>
+                <widget class="QCheckBox" name="cbBuildAll" >
+                 <property name="enabled" >
+                  <bool>false</bool>
+                 </property>
+                 <property name="text" >
+                  <string>&amp;Build All</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="cbOrdered" >
+                 <property name="enabled" >
+                  <bool>false</bool>
+                 </property>
+                 <property name="text" >
+                  <string>&amp;Ordered</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer>
+                 <property name="orientation" >
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" >
+                  <size>
+                   <width>20</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="1" column="0" >
+             <widget class="QFrame" name="fBuildType" >
+              <property name="sizePolicy" >
+               <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="frameShape" >
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <layout class="QVBoxLayout" >
+               <property name="spacing" >
+                <number>3</number>
+               </property>
+               <property name="leftMargin" >
+                <number>3</number>
+               </property>
+               <property name="topMargin" >
+                <number>3</number>
+               </property>
+               <property name="rightMargin" >
+                <number>3</number>
+               </property>
+               <property name="bottomMargin" >
+                <number>3</number>
+               </property>
+               <item>
+                <widget class="QRadioButton" name="rbDebug" >
+                 <property name="text" >
+                  <string>&amp;Debug</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="rbRelease" >
+                 <property name="text" >
+                  <string>R&amp;elease</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="rbDebugRelease" >
+                 <property name="text" >
+                  <string>Debu&amp;g &amp;&amp; Release</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer>
+                 <property name="orientation" >
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" >
+                  <size>
+                   <width>20</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="0" column="1" >
+          <widget class="QGroupBox" name="gbVersion" >
+           <property name="title" >
+            <string>&amp;Version Informations</string>
+           </property>
+           <property name="checkable" >
+            <bool>true</bool>
+           </property>
+           <property name="checked" >
+            <bool>false</bool>
+           </property>
+           <layout class="QGridLayout" >
+            <property name="leftMargin" >
+             <number>5</number>
             </property>
-           </widget>
-          </item>
-          <item row="0" column="2" >
-           <widget class="QLabel" name="lRelease" >
-            <property name="text" >
-             <string>&amp;Release</string>
+            <property name="topMargin" >
+             <number>5</number>
             </property>
-            <property name="buddy" >
-             <cstring>sbRelease</cstring>
+            <property name="rightMargin" >
+             <number>5</number>
             </property>
-           </widget>
-          </item>
-          <item row="0" column="1" >
-           <widget class="QLabel" name="lMinor" >
-            <property name="text" >
-             <string>Mi&amp;nor</string>
+            <property name="bottomMargin" >
+             <number>5</number>
             </property>
-            <property name="buddy" >
-             <cstring>sbMinor</cstring>
+            <property name="horizontalSpacing" >
+             <number>3</number>
             </property>
-           </widget>
-          </item>
-          <item row="0" column="0" >
-           <widget class="QLabel" name="lMajor" >
-            <property name="text" >
-             <string>&amp;Major</string>
+            <property name="verticalSpacing" >
+             <number>3</number>
             </property>
-            <property name="buddy" >
-             <cstring>sbMajor</cstring>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="gbBuild" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="title" >
-          <string>Build &amp;Settings</string>
-         </property>
-         <layout class="QGridLayout" >
-          <property name="leftMargin" >
-           <number>5</number>
-          </property>
-          <property name="topMargin" >
-           <number>5</number>
-          </property>
-          <property name="rightMargin" >
-           <number>5</number>
-          </property>
-          <property name="bottomMargin" >
-           <number>5</number>
-          </property>
-          <property name="horizontalSpacing" >
-           <number>3</number>
-          </property>
-          <property name="verticalSpacing" >
-           <number>3</number>
-          </property>
-          <item row="0" column="0" colspan="3" >
+            <item row="2" column="0" colspan="4" >
+             <widget class="QCheckBox" name="cbBuildAutoIncrement" >
+              <property name="text" >
+               <string>A&amp;uto increment the build number</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="3" >
+             <widget class="QLabel" name="lBuild" >
+              <property name="text" >
+               <string>&amp;Build</string>
+              </property>
+              <property name="buddy" >
+               <cstring>sbBuild</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="3" >
+             <widget class="QSpinBox" name="sbBuild" >
+              <property name="maximum" >
+               <number>32767</number>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2" >
+             <widget class="QSpinBox" name="sbRelease" >
+              <property name="maximum" >
+               <number>32767</number>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1" >
+             <widget class="QSpinBox" name="sbMinor" >
+              <property name="maximum" >
+               <number>32767</number>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" >
+             <widget class="QSpinBox" name="sbMajor" >
+              <property name="maximum" >
+               <number>32767</number>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2" >
+             <widget class="QLabel" name="lRelease" >
+              <property name="text" >
+               <string>&amp;Release</string>
+              </property>
+              <property name="buddy" >
+               <cstring>sbRelease</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1" >
+             <widget class="QLabel" name="lMinor" >
+              <property name="text" >
+               <string>Mi&amp;nor</string>
+              </property>
+              <property name="buddy" >
+               <cstring>sbMinor</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0" >
+             <widget class="QLabel" name="lMajor" >
+              <property name="text" >
+               <string>&amp;Major</string>
+              </property>
+              <property name="buddy" >
+               <cstring>sbMajor</cstring>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="1" column="1" >
+          <widget class="QGroupBox" name="gbEncoding" >
+           <property name="title" >
+            <string>Default Files Encoding</string>
+           </property>
            <layout class="QHBoxLayout" >
             <property name="spacing" >
              <number>3</number>
             </property>
             <property name="leftMargin" >
-             <number>0</number>
+             <number>5</number>
             </property>
             <property name="topMargin" >
-             <number>0</number>
+             <number>5</number>
             </property>
             <property name="rightMargin" >
-             <number>0</number>
+             <number>5</number>
             </property>
             <property name="bottomMargin" >
-             <number>0</number>
+             <number>5</number>
             </property>
             <item>
-             <widget class="QLabel" name="lTemplate" >
+             <widget class="QLabel" name="lEncoding" >
               <property name="text" >
-               <string>Tem&amp;plate :</string>
+               <string>En&amp;coding :</string>
               </property>
               <property name="buddy" >
-               <cstring>cbTemplate</cstring>
+               <cstring>cbEncodings</cstring>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QComboBox" name="cbTemplate" >
-              <item>
-               <property name="text" >
-                <string>app</string>
-               </property>
-               <property name="icon" >
-                <iconset resource="../resources/QMake.qrc" >:/icons/icons/form.png</iconset>
-               </property>
-              </item>
-              <item>
-               <property name="text" >
-                <string>lib</string>
-               </property>
-               <property name="icon" >
-                <iconset resource="../resources/QMake.qrc" >:/icons/icons/misc.png</iconset>
-               </property>
-              </item>
-              <item>
-               <property name="text" >
-                <string>vcapp</string>
-               </property>
-               <property name="icon" >
-                <iconset resource="../resources/QMake.qrc" >:/icons/icons/form.png</iconset>
-               </property>
-              </item>
-              <item>
-               <property name="text" >
-                <string>vclib</string>
-               </property>
-               <property name="icon" >
-                <iconset resource="../resources/QMake.qrc" >:/icons/icons/misc.png</iconset>
-               </property>
-              </item>
-              <item>
-               <property name="text" >
-                <string>subdirs</string>
-               </property>
-               <property name="icon" >
-                <iconset resource="../resources/QMake.qrc" >:/icons/icons/folder.png</iconset>
-               </property>
-              </item>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="lLanguage" >
-              <property name="text" >
-               <string>&amp;Language :</string>
-              </property>
-              <property name="buddy" >
-               <cstring>cbLanguage</cstring>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QComboBox" name="cbLanguage" >
-              <item>
-               <property name="text" >
-                <string>C++</string>
-               </property>
-               <property name="icon" >
-                <iconset resource="../resources/QMake.qrc" >:/icons/icons/misc.png</iconset>
-               </property>
-              </item>
-              <item>
-               <property name="text" >
-                <string>Qt4/C++</string>
-               </property>
-               <property name="icon" >
-                <iconset resource="../resources/QMake.qrc" >:/icons/icons/qt.png</iconset>
-               </property>
-              </item>
-              <item>
-               <property name="text" >
-                <string>Qt3/C++</string>
-               </property>
-               <property name="icon" >
-                <iconset resource="../resources/QMake.qrc" >:/icons/icons/qt.png</iconset>
-               </property>
-              </item>
-             </widget>
+             <widget class="QComboBox" name="cbEncodings" />
             </item>
            </layout>
-          </item>
-          <item row="1" column="1" >
-           <widget class="QFrame" name="fWarn" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="gbOutput" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title" >
+          <string>Output</string>
+         </property>
+         <layout class="QGridLayout" >
+          <property name="leftMargin" >
+           <number>5</number>
+          </property>
+          <property name="topMargin" >
+           <number>5</number>
+          </property>
+          <property name="rightMargin" >
+           <number>5</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>5</number>
+          </property>
+          <property name="horizontalSpacing" >
+           <number>3</number>
+          </property>
+          <property name="verticalSpacing" >
+           <number>3</number>
+          </property>
+          <item row="0" column="0" >
+           <widget class="QLabel" name="lOutputPath" >
+            <property name="text" >
+             <string>Output &amp;Path :</string>
             </property>
-            <property name="frameShape" >
-             <enum>QFrame::StyledPanel</enum>
+            <property name="buddy" >
+             <cstring>tbOutputPath</cstring>
             </property>
-            <layout class="QVBoxLayout" >
-             <property name="spacing" >
-              <number>3</number>
-             </property>
-             <property name="leftMargin" >
-              <number>3</number>
-             </property>
-             <property name="topMargin" >
-              <number>3</number>
-             </property>
-             <property name="rightMargin" >
-              <number>3</number>
-             </property>
-             <property name="bottomMargin" >
-              <number>3</number>
-             </property>
-             <item>
-              <widget class="QRadioButton" name="rbWarnOff" >
-               <property name="text" >
-                <string>Warn Of&amp;f</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QRadioButton" name="rbWarnOn" >
-               <property name="text" >
-                <string>&amp;Warn On</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer>
-               <property name="orientation" >
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="sizeHint" >
-                <size>
-                 <width>20</width>
-                 <height>0</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
            </widget>
           </item>
-          <item row="1" column="2" >
-           <widget class="QFrame" name="fBuildAll" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
+          <item row="0" column="1" >
+           <widget class="QLineEdit" name="leOutputPath" />
+          </item>
+          <item row="0" column="2" >
+           <widget class="QToolButton" name="tbOutputPath" >
+            <property name="icon" >
+             <iconset resource="../resources/QMake.qrc" >:/icons/icons/folder.png</iconset>
             </property>
-            <property name="frameShape" >
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-            <layout class="QVBoxLayout" >
-             <property name="spacing" >
-              <number>3</number>
-             </property>
-             <property name="leftMargin" >
-              <number>3</number>
-             </property>
-             <property name="topMargin" >
-              <number>3</number>
-             </property>
-             <property name="rightMargin" >
-              <number>3</number>
-             </property>
-             <property name="bottomMargin" >
-              <number>3</number>
-             </property>
-             <item>
-              <widget class="QCheckBox" name="cbBuildAll" >
-               <property name="enabled" >
-                <bool>false</bool>
-               </property>
-               <property name="text" >
-                <string>&amp;Build All</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="cbOrdered" >
-               <property name="enabled" >
-                <bool>false</bool>
-               </property>
-               <property name="text" >
-                <string>&amp;Ordered</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer>
-               <property name="orientation" >
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="sizeHint" >
-                <size>
-                 <width>20</width>
-                 <height>0</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
            </widget>
           </item>
           <item row="1" column="0" >
-           <widget class="QFrame" name="fBuildType" >
+           <widget class="QLabel" name="lOutputName" >
             <property name="sizePolicy" >
-             <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+             <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="frameShape" >
-             <enum>QFrame::StyledPanel</enum>
+            <property name="text" >
+             <string>Output &amp;Name :</string>
             </property>
-            <layout class="QVBoxLayout" >
-             <property name="spacing" >
-              <number>3</number>
-             </property>
-             <property name="leftMargin" >
-              <number>3</number>
-             </property>
-             <property name="topMargin" >
-              <number>3</number>
-             </property>
-             <property name="rightMargin" >
-              <number>3</number>
-             </property>
-             <property name="bottomMargin" >
-              <number>3</number>
-             </property>
-             <item>
-              <widget class="QRadioButton" name="rbDebug" >
-               <property name="text" >
-                <string>&amp;Debug</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QRadioButton" name="rbRelease" >
-               <property name="text" >
-                <string>R&amp;elease</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QRadioButton" name="rbDebugRelease" >
-               <property name="text" >
-                <string>Debu&amp;g &amp;&amp; Release</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer>
-               <property name="orientation" >
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="sizeHint" >
-                <size>
-                 <width>20</width>
-                 <height>0</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
+            <property name="buddy" >
+             <cstring>leOutputName</cstring>
+            </property>
            </widget>
+          </item>
+          <item row="1" column="1" colspan="2" >
+           <widget class="QLineEdit" name="leOutputName" />
           </item>
          </layout>
         </widget>
@@ -906,8 +964,8 @@
          </property>
          <property name="sizeHint" >
           <size>
-           <width>20</width>
-           <height>0</height>
+           <width>521</width>
+           <height>20</height>
           </size>
          </property>
         </spacer>
@@ -1075,78 +1133,6 @@
        <property name="verticalSpacing" >
         <number>3</number>
        </property>
-       <item row="0" column="0" colspan="2" >
-        <widget class="QGroupBox" name="gbOutput" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="title" >
-          <string>Output</string>
-         </property>
-         <layout class="QGridLayout" >
-          <property name="leftMargin" >
-           <number>5</number>
-          </property>
-          <property name="topMargin" >
-           <number>5</number>
-          </property>
-          <property name="rightMargin" >
-           <number>5</number>
-          </property>
-          <property name="bottomMargin" >
-           <number>5</number>
-          </property>
-          <property name="horizontalSpacing" >
-           <number>3</number>
-          </property>
-          <property name="verticalSpacing" >
-           <number>3</number>
-          </property>
-          <item row="0" column="0" >
-           <widget class="QLabel" name="lOutputPath" >
-            <property name="text" >
-             <string>Output &amp;Path :</string>
-            </property>
-            <property name="buddy" >
-             <cstring>tbOutputPath</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1" >
-           <widget class="QLineEdit" name="leOutputPath" />
-          </item>
-          <item row="0" column="2" >
-           <widget class="QToolButton" name="tbOutputPath" >
-            <property name="icon" >
-             <iconset resource="../resources/QMake.qrc" >:/icons/icons/folder.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" >
-           <widget class="QLabel" name="lOutputName" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text" >
-             <string>Output &amp;Name :</string>
-            </property>
-            <property name="buddy" >
-             <cstring>leOutputName</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1" colspan="2" >
-           <widget class="QLineEdit" name="leOutputName" />
-          </item>
-         </layout>
-        </widget>
-       </item>
        <item row="2" column="0" colspan="2" >
         <widget class="QSplitter" name="sDirsFiles" >
          <property name="orientation" >
@@ -1637,7 +1623,7 @@
      </widget>
     </widget>
    </item>
-   <item row="3" column="0" colspan="3" >
+   <item row="3" column="0" colspan="2" >
     <widget class="QDialogButtonBox" name="dbbButtons" >
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
@@ -1674,9 +1660,6 @@
   <tabstop>lwCompilerFlags</tabstop>
   <tabstop>leConfig</tabstop>
   <tabstop>tbInformations</tabstop>
-  <tabstop>leOutputPath</tabstop>
-  <tabstop>tbOutputPath</tabstop>
-  <tabstop>leOutputName</tabstop>
   <tabstop>leDir</tabstop>
   <tabstop>lwFiles</tabstop>
   <tabstop>lwValues</tabstop>
