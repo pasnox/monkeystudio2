@@ -7,6 +7,7 @@
 #include <QTextCodec>
 
 #include <QVector>
+#include <QStack>
 #include <QRegExp>
 #include <QStringList>
 #include <QDebug>
@@ -19,8 +20,8 @@ QStringList file_variables;
 static bool mParseCommands = false;
 static QRegExp function_call("^((?:[a-zA-Z0-9\\.]+(?:\\((?:.*)\\))?(?:[ \\t]+)?[|:](?:[ \\t]+)?)+)?([a-zA-Z]+\\((.*)\\))[ \\t]*(#.*)?"); 
 static QRegExp bloc("^(\\})?[ \\t]*(?:((?:[-\\.a-zA-Z0-9*|_!+]+(?:\\((?:[^\\)]*)\\))?[:|])+)?([-a-zA-Z0-9*|_!+]+(?:\\((?:[^\\)]*)\\))?))[ \\t]*(\\{)[ \\t]*(#.*)?"); 
-//static QRegExp variable("^(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?(?:[ \\t]+)?[:|](?:[ \\t]+)?)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*([~*+-]?=)[ \\t]*((?:\\\"|\\\\\\\"|\\\\\"|[^\\\\#])+)?[ \\t]*(\\\\)?[ \t]*(#.*)?");
-static QRegExp variable("^(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?(?:[ \\t]+)?[:|](?:[ \\t]+)?)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*([~*+-]?=)[ \\t]*([^\\\\#]*)[ \\t]*(\\\\)?[ \t]*(#.*)?");
+static QRegExp variable("^(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?(?:[ \\t]+)?[:|](?:[ \\t]+)?)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*([~*+-]?=)[ \\t]*((?:\\\\\\\\\\\\\\\"|\\\\\\\"|[^\\\\#])+)?[ \\t]*(\\\\)?[ \t]*(#.*)?");
+//static QRegExp variable("^(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?(?:[ \\t]+)?[:|](?:[ \\t]+)?)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*([~*+-]?=)[ \\t]*([^\\\\#]*)[ \\t]*(\\\\)?[ \t]*(#.*)?");
 static QRegExp varLine("^[ \\t]*(.*)[ \\t]*\\\\[ \\t]*(#.*)?");
 static QRegExp end_bloc("^(\\})[ \t]*(#.*)?");
 static QRegExp comments("^\\s*#(.*)");
@@ -28,6 +29,7 @@ static QRegExp splitNested( "\\s*([^:|()]+|!?\\w+\\(.*\\))\\s*(:|\\|)" );
 static QRegExp splitValues( "([^\\s\"]+)|\\\"([^\"]+)\\\"|(\\${1,2}\\w+\\([^\\(\\)]+\\)[^\\s]+)" );
 static QRegExp splitCommands( "(\\([^;]*\\));?|(\\$\\(\\w+\\)[^;]*);?" );
 static QRegExp encoding( "[ \\t]*ENCODING[ \\t]*=[ \\t]*([^ ]+)[ \\t]*(?:#.*)?", Qt::CaseInsensitive );
+static QStack<QMakeItem*> pileNested;
 
 QMakeParser::QMakeParser( const QString& s, QMakeItem* i )
 	: mIsOpen( false ), mRoot( i )
@@ -183,25 +185,39 @@ int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 
 QMakeItem* QMakeParser::processNested( const QString& s, QMakeItem* i )
 {
-	// check first scope for else
-	QMakeItem* it = i;
-	if ( s.contains( "else", Qt::CaseInsensitive ) )
-	{
-		it = reinterpret_cast<QMakeItem*>( i->lastProjectScope() );
-		if ( it && it->parent() )
-			it = reinterpret_cast<QMakeItem*>( it->parent() );
-		else
-			it = i;
-	}
 	QStringList l;
 	int p = 0;
+	bool first = true;
 	while ( ( p = splitNested.indexIn( s, p ) ) != -1 )
 	{
 		l = splitNested.capturedTexts();
-		it = addScope( l.at( 1 ), l.at( 2 ), true, it );
+		if( l.at( 1 ) == "else" )
+		{
+			if( first == true )
+			{
+				if( !pileNested.isEmpty() )
+				{
+					i = pileNested.pop();
+				}
+				else
+				{
+					qWarning() << "error : \"else\" without scope";
+				}
+			}
+			else
+			{
+				qWarning() << "error : \"else\" should be the first scope";
+			}
+		}
+		else
+		{
+			pileNested.push(i);
+		}
+		i = addScope( l.at( 1 ), l.at( 2 ), true, i );
 		p += splitNested.matchedLength();
+		first = false;
 	}
-	return it;
+	return i;
 }
 
 QMakeItem* QMakeParser::processValues( const QString& s, QMakeItem* i )
