@@ -110,6 +110,10 @@ virtual ~ProjectItem();
 	virtual ProjectItem* parentProject() const;
 	// get direct child project, or all according to bool
 	virtual ProjectItemList childrenProjects( bool = true ) const;
+	// get last scope/nestedscope of this item
+	virtual ProjectItem* lastScope() const { return 0; }
+	// get very last project scope item
+	virtual ProjectItem* lastProjectScope() const { return 0; }
 	
 	// get index list
 	virtual ProjectItemList match( ProjectItem*, int, const QVariant& ) const;
@@ -158,17 +162,17 @@ virtual ~ProjectItem();
 	virtual QString name() const;
 	
 	// close the project
-	virtual void close();
+	virtual void close() {}
 	// save project, asking user according to bool
-	virtual void save( bool = true );
+	virtual void save( bool = true ) {}
 	// save project including all children projects
-	virtual void saveAll( bool = true );
+	virtual void saveAll( bool = true ) {}
 	
 protected:
 	QString mBuffer;
 	virtual void redoLayout( ProjectItem* = 0 ) {}
-	virtual void writeProject();
-	virtual void writeItem( ProjectItem* );
+	virtual void writeProject() {}
+	virtual void writeItem( ProjectItem* ) {}
 
 };
 

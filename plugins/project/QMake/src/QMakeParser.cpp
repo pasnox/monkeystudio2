@@ -183,15 +183,25 @@ int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 
 QMakeItem* QMakeParser::processNested( const QString& s, QMakeItem* i )
 {
+	// check first scope for else
+	QMakeItem* it = i;
+	if ( s.contains( "else", Qt::CaseInsensitive ) )
+	{
+		it = reinterpret_cast<QMakeItem*>( i->lastProjectScope() );
+		if ( it && it->parent() )
+			it = reinterpret_cast<QMakeItem*>( it->parent() );
+		else
+			it = i;
+	}
 	QStringList l;
 	int p = 0;
 	while ( ( p = splitNested.indexIn( s, p ) ) != -1 )
 	{
 		l = splitNested.capturedTexts();
-		i = addScope( l.at( 1 ), l.at( 2 ), true, i );
+		it = addScope( l.at( 1 ), l.at( 2 ), true, it );
 		p += splitNested.matchedLength();
 	}
-	return i;
+	return it;
 }
 
 QMakeItem* QMakeParser::processValues( const QString& s, QMakeItem* i )

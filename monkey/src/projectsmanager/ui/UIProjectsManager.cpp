@@ -61,7 +61,7 @@ UIProjectsManager::UIProjectsManager( QWidget* w )
 	// filter are negate
 	mProxy->setNegateFilter( false );
 	// apply filtering
-	mProxy->setFiltering( true );
+	//mProxy->setFiltering( true );
 	
 	// set view proxy
 	tvProjects->setModel( mProxy );

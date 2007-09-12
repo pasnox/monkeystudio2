@@ -28,8 +28,16 @@ public:
 	virtual void setValue( const QString& );
 	virtual void setFilePath( const QString& );
 	
+	virtual ProjectItem* lastScope() const;
+	virtual ProjectItem* lastProjectScope() const;
+	virtual void close();
+	virtual void save( bool = true );
+	virtual void saveAll( bool = true );
+	
 protected:
 	virtual void redoLayout( ProjectItem* );
+	virtual void writeProject();
+	virtual void writeItem( ProjectItem* );
 
 };
 
