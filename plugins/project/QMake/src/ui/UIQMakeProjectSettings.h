@@ -35,6 +35,8 @@ public:
 private:
 	UIQMakeProjectSettings( ProjectItem*, QWidget* = QApplication::activeWindow() );
 	void closeEvent( QCloseEvent* );
+	QStringList currentCONFIG() const;
+	QStringList currentQT() const;
 	
 	bool mReady;
 	QMakeProxy* mScopesProxy;
@@ -44,10 +46,11 @@ private:
 	QtItemList mModules;
 	QtItemList mConfigs;
 	QtSettings mSettings;
+	QtSettings mOriginalSettings;
 	QDirModel* mDirs;
 	
 protected slots:
-	void loadEncodings();
+	void querySettings();
 	void loadModules();
 	void loadConfigs();
 	void loadSettings();
