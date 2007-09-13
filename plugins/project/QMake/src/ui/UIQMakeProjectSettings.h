@@ -20,46 +20,40 @@ class UIQMakeProjectSettings : public QDialog, public Ui::UIQMakeProjectSettings
 	Q_OBJECT
 	friend class QSingleton<UIQMakeProjectSettings>;
 	
-public:
-	QModelIndex currentIndex();
-	void setCurrentIndex( const QModelIndex& );
-	QString projectName() const;
-	QString projectPath() const;
-	QString getFilePath( const QString& );
-	QString getRelativeFilePath( const QString& );
-	QString getStringValues( const QString&, const QString& = "=", const QString& = QString::null ) const;
-	QStringList getListValues( const QString&, const QString& = "=", const QString& = QString::null ) const;
-	void setListValues( const QStringList&, const QString&, const QString& = "=", const QString& = QString::null );
-	void setStringValues( const QString&, const QString&, const QString& = "=", const QString& = QString::null );
-	
-private:
-	UIQMakeProjectSettings( ProjectItem*, QWidget* = QApplication::activeWindow() );
-	void closeEvent( QCloseEvent* );
-	QStringList currentCONFIG() const;
-	QStringList currentQT() const;
-	
-	bool mReady;
-	QMakeProxy* mScopesProxy;
-	QMakeProxy* mContentProxy;
-	ProjectsModel* mModel;
+protected:
 	ProjectItem* mProject;
-	QtItemList mModules;
-	QtItemList mConfigs;
+	ProjectsModel* mModel;
 	QtSettings mSettings;
 	QtSettings mOriginalSettings;
 	QDirModel* mDirs;
+	QMakeProxy* mScopesProxy;
+	QMakeProxy* mContentProxy;
+
+	void showEvent( QShowEvent* );
+	void closeEvent( QCloseEvent* );
+	QStringList currentCONFIG() const;
+	void setCurrentCONFIG( const QString& );
+	QStringList currentQT() const;
+	void setCurrentQT( const QString& );
+	QModelIndex currentIndex();
+	void setCurrentIndex( const QModelIndex& );
+
+private:
+	UIQMakeProjectSettings( ProjectItem*, QWidget* = QApplication::activeWindow() );
+	
 	
 protected slots:
 	void querySettings();
 	void loadModules();
 	void loadConfigs();
-	void loadSettings();
 	void loadLanguages();
 	void setDir( const QString& );
 	void setDir( const QModelIndex& );
 	void addValue( const QString& );
 	void editValue( const QString& );
 	void removeValue( const QString& = QString::null );
+
+
 	void tb_clicked();
 	void sb_valueChanged( int );
 	void on_cbTemplate_currentIndexChanged( const QString& );

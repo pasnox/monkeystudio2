@@ -21,12 +21,13 @@
 QString mTranslationMask = "$$TRANSLATIONS_PATH/%2_%3.ts";
 
 UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
-	: QDialog( p ), mReady( false ), mModel( m->model() ), mProject( m ), mDirs( new QDirModel( this ) )
+	: QDialog( p ), mProject( m ), mModel( m->model() ), mDirs( new QDirModel( this ) )
 {
+	Q_ASSERT( mProject != 0 );
 	setupUi( this );
 	setAttribute( Qt::WA_DeleteOnClose );
 	// set window title
-	setWindowTitle( QString( "Project Settings - %1" ).arg( projectName() ) );
+	setWindowTitle( QString( "Project Settings - %1" ).arg( mProject->name() ) );
 	// load scopes
 	cbScopes->addItems( UISettingsQMake::readScopes() );
 	// load operators
@@ -51,7 +52,7 @@ UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
 	lvDirs->setRootIndex( mDirs->index( "/" ) );
 #endif
 	//
-	setDir( mDirs->index( projectPath() ) );
+	setDir( mDirs->index( mProject->canonicalPath() ) );
 	// scopes
 	mScopesProxy = new QMakeProxy( mModel, false, mProject );
 	mScopesProxy->setFilterRoles( QList<int>() << ProjectsModel::ValueType );
@@ -73,6 +74,7 @@ UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
 	// connections
 	connect( cbScopes, SIGNAL( highlighted( int ) ), this, SLOT( cb_highlighted( int ) ) );
 	connect( cbOperators, SIGNAL( highlighted( int ) ), this, SLOT( cb_highlighted( int ) ) );
+	connect( cbVariables, SIGNAL( highlighted( int ) ), this, SLOT( cb_highlighted( int ) ) );
 	/*
 	connect( tbIcon, SIGNAL( clicked() ), this, SLOT( tb_clicked() ) );
 	connect( tbHelpFile, SIGNAL( clicked() ), this, SLOT( tb_clicked() ) );
@@ -94,36 +96,87 @@ UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
 	on_cbOperators_currentIndexChanged( cbOperators->currentText() );
 }
 
+void UIQMakeProjectSettings::showEvent( QShowEvent* )
+{ QTimer::singleShot( 0, this, SLOT( querySettings() ) ); }
+
 void UIQMakeProjectSettings::closeEvent( QCloseEvent* e )
 {
-	if ( result() == QDialog::Rejected && QMessageBox::question( this, tr( "Cancel..." ), tr( "Are you sure ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::No )
+	if ( result() == QDialog::Rejected && mSettings != mOriginalSettings && QMessageBox::question( this, tr( "Cancel..." ), tr( "The project has been modified, are you sure ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::No )
 		e->ignore();
 }
 
 QStringList UIQMakeProjectSettings::currentCONFIG() const
 {
-	// vars
 	QStringList l;
-	// get values
+	if ( rbDebugRelease->isChecked() ) l << rbDebugRelease->statusTip();
+	if ( rbDebug->isChecked() ) l << rbDebug->statusTip();
+	if ( rbRelease->isChecked() ) l << rbRelease->statusTip();
+	if ( rbWarnOff->isChecked() ) l << rbWarnOff->statusTip();
+	if ( rbWarnOn->isChecked() ) l << rbWarnOn->statusTip();
+	if ( cbBuildAll->isChecked() ) l << cbBuildAll->statusTip();
+	if ( cbOrdered->isChecked() ) l << cbOrdered->statusTip();
+	if ( gbQtModules->isChecked() ) l << gbQtModules->statusTip();
 	foreach ( QListWidgetItem* it, lwQtModules->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) << lwCompilerFlags->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
 		if ( it->checkState() == Qt::Checked )
-			if ( it->data( QtItem::VariableRole ).toString().toLower() == "config" )
+			if ( it->data( QtItem::VariableRole ).toString().toUpper() == lwCompilerFlags->statusTip() )
 				l << it->data( QtItem::ValueRole ).toString();
-	// return values
-	return l;
+	l << leConfig->text();
+	return QStringList( l.join( " " ) );
+}
+
+void UIQMakeProjectSettings::setCurrentCONFIG( const QString& s )
+{
+	// uncheck all button, and remove autoexclusivity
+	foreach ( QRadioButton* rb, gbBuild->findChildren<QRadioButton*>() )
+	{
+		rb->setAutoExclusive( false );
+		rb->setChecked( false );
+	}
+	// applying config
+	QString c = s;
+	rbDebugRelease->setChecked( c.contains( rbDebugRelease->statusTip(), Qt::CaseInsensitive ) );
+	c.remove( rbDebugRelease->statusTip(), Qt::CaseInsensitive );
+	rbDebug->setChecked( c.contains( rbDebug->statusTip(), Qt::CaseInsensitive ) );
+	c.remove( rbDebug->statusTip(), Qt::CaseInsensitive );
+	rbRelease->setChecked( c.contains( rbRelease->statusTip(), Qt::CaseInsensitive ) );
+	c.remove( rbRelease->statusTip(), Qt::CaseInsensitive );
+	rbWarnOff->setChecked( c.contains( rbWarnOff->statusTip(), Qt::CaseInsensitive ) );
+	c.remove( rbWarnOff->statusTip(), Qt::CaseInsensitive );
+	rbWarnOn->setChecked( c.contains( rbWarnOn->statusTip(), Qt::CaseInsensitive ) );
+	c.remove( rbWarnOn->statusTip(), Qt::CaseInsensitive );
+	cbBuildAll->setChecked( c.contains( cbBuildAll->statusTip(), Qt::CaseInsensitive ) );
+	c.remove( cbBuildAll->statusTip(), Qt::CaseInsensitive );
+	cbOrdered->setChecked( c.contains( cbOrdered->statusTip(), Qt::CaseInsensitive ) );
+	c.remove( cbOrdered->statusTip(), Qt::CaseInsensitive );
+	gbQtModules->setChecked( c.contains( gbQtModules->statusTip(), Qt::CaseInsensitive ) );
+	c.remove( gbQtModules->statusTip(), Qt::CaseInsensitive );
+	foreach ( QListWidgetItem* it, lwQtModules->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) << lwCompilerFlags->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
+	{
+		if ( it->data( QtItem::VariableRole ).toString().toUpper() == lwCompilerFlags->statusTip() )
+			it->setCheckState( c.contains( it->data( QtItem::ValueRole ).toString(), Qt::CaseInsensitive ) ? Qt::Checked : Qt::Unchecked );
+		c.remove( it->data( QtItem::ValueRole ).toString(), Qt::CaseInsensitive );
+	}
+	leConfig->setText( c.simplified() );
+	// re active autoexclusivity
+	foreach ( QRadioButton* rb, gbBuild->findChildren<QRadioButton*>() )
+		rb->setAutoExclusive( true );
 }
 
 QStringList UIQMakeProjectSettings::currentQT() const
 {
-	// vars
 	QStringList l;
-	// get values
 	foreach ( QListWidgetItem* it, lwQtModules->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) << lwCompilerFlags->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
 		if ( it->checkState() == Qt::Checked )
-			if ( it->data( QtItem::VariableRole ).toString().toLower() == "qt" )
+			if ( it->data( QtItem::VariableRole ).toString().toUpper() == lwQtModules->statusTip() )
 				l << it->data( QtItem::ValueRole ).toString();
-	// return values
 	return l;
+}
+
+void UIQMakeProjectSettings::setCurrentQT( const QString& s )
+{
+	foreach ( QListWidgetItem* it, lwQtModules->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) << lwCompilerFlags->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
+		if ( it->data( QtItem::VariableRole ).toString().toUpper() == lwQtModules->statusTip() )
+			it->setCheckState( s.contains( it->data( QtItem::ValueRole ).toString(), Qt::CaseInsensitive ) ? Qt::Checked : Qt::Unchecked );
 }
 
 QModelIndex UIQMakeProjectSettings::currentIndex()
@@ -134,12 +187,10 @@ QModelIndex UIQMakeProjectSettings::currentIndex()
 	if ( !i.isValid() && tvScopes->selectionModel()->selectedIndexes().count() )
 		i = mScopesProxy->mapToSource( tvScopes->selectionModel()->selectedIndexes().at( 0 ) );
 	return i;
-	return QModelIndex();
 }
 
 void UIQMakeProjectSettings::setCurrentIndex( const QModelIndex& i )
 {
-	// TODO : need fix ( Qt Bug ?! ) calling setRootIndex on a index that have no child show all model
 	// clear selection
 	tvScopes->clearSelection();
 	lvContents->clearSelection();
@@ -159,32 +210,10 @@ void UIQMakeProjectSettings::setCurrentIndex( const QModelIndex& i )
 	}
 }
 
-QString UIQMakeProjectSettings::projectName() const
-{ return mProject->name(); }
-
-QString UIQMakeProjectSettings::projectPath() const
-{ return mProject->canonicalPath(); }
-
-QString UIQMakeProjectSettings::getFilePath( const QString& s )
-{ return QFile::exists( mProject->canonicalFilePath( s ) ) ? mProject->canonicalFilePath( s ) : mProject->canonicalPath(); }
-
-QString UIQMakeProjectSettings::getRelativeFilePath( const QString& s )
-{ return mProject->relativeFilePath( s ); }
-
-QString UIQMakeProjectSettings::getStringValues( const QString& v, const QString& o, const QString& s ) const
-{ return mProject->getStringValues( v, o, s ); }
-
-QStringList UIQMakeProjectSettings::getListValues( const QString& v, const QString& o, const QString& s ) const
-{ return mProject->getListValues( v, o, s ); }
-
-void UIQMakeProjectSettings::setStringValues( const QString& sv, const QString& v, const QString& o, const QString& s )
-{ mProject->setStringValues( sv, v, o, s ); }
-
-void UIQMakeProjectSettings::setListValues( const QStringList& lv, const QString& v, const QString& o, const QString& s )
-{ mProject->setListValues( lv, v, o, s ); }
-
 void UIQMakeProjectSettings::querySettings()
 {
+	// set maximum progressbar value
+	pbProgress->setMaximum( cbScopes->count() *cbOperators->count() );
 	// read all possible combinaison settings
 	for ( int sc = 0; sc < cbScopes->count(); sc++ )
 	{
@@ -192,43 +221,41 @@ void UIQMakeProjectSettings::querySettings()
 		for ( int oc = 0; oc < cbOperators->count(); oc++ )
 		{
 			const QString Operator = cbOperators->itemText( oc );
+			// set current scope in progressbar
+			pbProgress->setFormat( tr( "scanning scope %1, operator %2 : %p%" ).arg( Scope, Operator ) );
+			// process application event except user inputContext
+			QApplication::processEvents( QEventLoop::ExcludeUserInputEvents );
 			// set key
 			const QString key = QString( "%1|%2|%3" ).arg( Scope ).arg( Operator );
 			// check application page
-			mOriginalSettings[ key.arg( "APP_TITLE" ) ] = getListValues( "APP_TITLE", Operator, Scope );
-			mOriginalSettings[ key.arg( "APP_ICON" ) ] = getListValues( "APP_ICON", Operator, Scope );
-			mOriginalSettings[ key.arg( "APP_HELP_FILE" ) ] = getListValues( "APP_HELP_FILE", Operator, Scope );
-			mOriginalSettings[ key.arg( "APP_AUTHOR" ) ] = getListValues( "APP_AUTHOR", Operator, Scope );
-			mOriginalSettings[ key.arg( "TEMPLATE" ) ] = getListValues( "TEMPLATE", Operator, Scope );
-			mOriginalSettings[ key.arg( "LANGUAGE" ) ] = getListValues( "LANGUAGE", Operator, Scope );
-			mOriginalSettings[ key.arg( "CONFIG" ) ] = getListValues( "CONFIG", Operator, Scope );
-			mOriginalSettings[ key.arg( "QT" ) ] = getListValues( "QT", Operator, Scope );
-			mOriginalSettings[ key.arg( "VERSION" ) ] = getListValues( "VERSION", Operator, Scope );
-			mOriginalSettings[ key.arg( "APP_AUTO_INCREMENT" ) ] = getListValues( "APP_AUTO_INCREMENT", Operator, Scope );
-			mOriginalSettings[ key.arg( "ENCODING" ) ] = getListValues( "ENCODING", Operator, Scope );
-			mOriginalSettings[ key.arg( "DESTDIR" ) ] = getListValues( "DESTDIR", Operator, Scope );
-			mOriginalSettings[ key.arg( "TARGET" ) ] = getListValues( "TARGET", Operator, Scope );
-			mOriginalSettings[ key.arg( "LIBS" ) ] = getListValues( "LIBS", Operator, Scope );
-			mOriginalSettings[ key.arg( "DEFINES" ) ] = getListValues( "DEFINES", Operator, Scope );
-			mOriginalSettings[ key.arg( "INCLUDEPATH" ) ] = getListValues( "INCLUDEPATH", Operator, Scope );
-			mOriginalSettings[ key.arg( "DEPENDPATH" ) ] = getListValues( "DEPENDPATH", Operator, Scope );
-			mOriginalSettings[ key.arg( "VPATH" ) ] = getListValues( "VPATH", Operator, Scope );
-			mOriginalSettings[ key.arg( "RESOURCES" ) ] = getListValues( "RESOURCES", Operator, Scope );
-			mOriginalSettings[ key.arg( "DEF_FILE" ) ] = getListValues( "DEF_FILE", Operator, Scope );
-			mOriginalSettings[ key.arg( "RC_FILE" ) ] = getListValues( "RC_FILE", Operator, Scope );
-			mOriginalSettings[ key.arg( "RES_FILE" ) ] = getListValues( "RES_FILE", Operator, Scope );
-			mOriginalSettings[ key.arg( "TRANSLATIONS_PATH" ) ] = getListValues( "", Operator, Scope );
-			mOriginalSettings[ key.arg( "TRANSLATIONS" ) ] = getListValues( "TRANSLATIONS", Operator, Scope );
+			mOriginalSettings[ key.arg( leTitle->statusTip() ) ] = mProject->getListValues( leTitle->statusTip(), Operator, Scope );
+			mOriginalSettings[ key.arg( leIcon->statusTip() ) ] = mProject->getListValues( leIcon->statusTip(), Operator, Scope );
+			mOriginalSettings[ key.arg( leHelpFile->statusTip() ) ] = mProject->getListValues( leHelpFile->statusTip(), Operator, Scope );
+			mOriginalSettings[ key.arg( leAuthor->statusTip() ) ] = mProject->getListValues( leAuthor->statusTip(), Operator, Scope );
+			mOriginalSettings[ key.arg( cbTemplate->statusTip() ) ] = mProject->getListValues( cbTemplate->statusTip(), Operator, Scope );
+			mOriginalSettings[ key.arg( cbLanguage->statusTip() ) ] = mProject->getListValues( cbLanguage->statusTip(), Operator, Scope );
+			mOriginalSettings[ key.arg( lwCompilerFlags->statusTip() ) ] = mProject->getListValues( lwCompilerFlags->statusTip(), Operator, Scope );
+			mOriginalSettings[ key.arg( lwQtModules->statusTip() ) ] = mProject->getListValues( lwQtModules->statusTip(), Operator, Scope );
+			mOriginalSettings[ key.arg( gbVersion->statusTip() ) ] = mProject->getListValues( gbVersion->statusTip(), Operator, Scope );
+			mOriginalSettings[ key.arg( cbBuildAutoIncrement->statusTip() ) ] = mProject->getListValues( cbBuildAutoIncrement->statusTip(), Operator, Scope );
+			mOriginalSettings[ key.arg( cbEncodings->statusTip() ) ] = mProject->getListValues( cbEncodings->statusTip(), Operator, Scope );
+			mOriginalSettings[ key.arg( leOutputPath->statusTip() ) ] = mProject->getListValues( leOutputPath->statusTip(), Operator, Scope );
+			mOriginalSettings[ key.arg( leOutputName->statusTip() ) ] = mProject->getListValues( leOutputName->statusTip(), Operator, Scope );
+			mOriginalSettings[ key.arg( leTranslationsPath->statusTip() ) ] = mProject->getListValues( leTranslationsPath->statusTip(), Operator, Scope );
+			for ( int i = 0; i < cbVariables->count(); i++ )
+				mOriginalSettings[ key.arg( cbVariables->itemText( i ) ) ] = mProject->getListValues( cbVariables->itemText( i ), Operator, Scope );
 		}
 	}
 	// set settings original one
 	mSettings = mOriginalSettings;
+	// hide progressbar
+	pbProgress->hide();
 }
 
 void UIQMakeProjectSettings::loadModules()
 {
 	// load modules informations
-	mModules = UISettingsQMake::readQtModules();
+	QtItemList mModules = UISettingsQMake::readQtModules();
 	// fill lwQtModules
 	foreach ( QtItem* i, mModules )
 	{
@@ -240,16 +267,15 @@ void UIQMakeProjectSettings::loadModules()
 	}
 	// free memory
 	qDeleteAll( mModules );
-	mModules.clear();
 }
 
 void UIQMakeProjectSettings::loadConfigs()
 {
 	// load configs informations
-	mConfigs = UISettingsQMake::readSettings();
+	QtItemList mConfigs = UISettingsQMake::readSettings();
 	// fill lwCompilerFlags
 	QFont fo( lwCompilerFlags->font() );
-	fo.setPointSize( 8 );
+	fo.setPointSize( fo.pointSize() +2 );
 	fo.setBold( true );
 	foreach ( QtItem* i, mConfigs )
 	{
@@ -273,110 +299,12 @@ void UIQMakeProjectSettings::loadConfigs()
 	mConfigs.clear();
 }
 
-void UIQMakeProjectSettings::loadSettings()
-{
-	// load configs informations
-	cbScopes->addItems( UISettingsQMake::readScopes() );
-	cbOperators->addItems( UISettingsQMake::readOperators() );
-	//
-	QString c, s;
-	QStringList l;
-	// Application
-	leTitle->setText( getStringValues( "APP_TITLE" ) );
-	leTitle->setModified( false );
-	leIcon->setText( getStringValues( "APP_ICON" ) );
-	leIcon->setModified( false );
-	if ( !leIcon->text().isEmpty() )
-		lPixmap->setPixmap( QPixmap( QFileInfo( leIcon->text() ).isRelative() ? projectPath().append( "/" ).append( leIcon->text() ) : leIcon->text() ) );
-	leHelpFile->setText( getStringValues( "APP_HELP_FILE" ) );
-	leHelpFile->setModified( false );
-	leAuthor->setText( getStringValues( "APP_AUTHOR" ) );
-	leAuthor->setModified( false );
-	s = getStringValues( "VERSION" );
-	if ( !s.isEmpty() )
-	{
-		gbVersion->setChecked( true );
-		l = s.split( "." );
-		sbMajor->setValue( l.value( 0 ).toInt() );
-		sbMinor->setValue( l.value( 1 ).toInt() );
-		sbRelease->setValue( l.value( 2 ).toInt() );
-		sbBuild->setValue( l.value( 3 ).toInt() );
-		cbBuildAutoIncrement->setChecked( getStringValues( "APP_AUTO_INCREMENT" ).toInt() );
-	}
-	s = getStringValues( "TEMPLATE" );
-	if ( cbTemplate->findText( s, Qt::MatchExactly ) == -1 && !s.isEmpty() )
-		cbTemplate->addItem( s );
-	cbTemplate->setCurrentIndex( cbTemplate->findText( s, Qt::MatchExactly ) );
-	s = getStringValues( "LANGUAGE" );
-	if ( cbLanguage->findText( s, Qt::MatchExactly ) == -1 && !s.isEmpty() )
-		cbLanguage->addItem( s );
-	cbLanguage->setCurrentIndex( cbLanguage->findText( s, Qt::MatchExactly ) );
-	s = getStringValues( "ENCODING" );
-	if ( s.isEmpty() )
-		s = "UTF-8";
-	if ( cbEncodings->findText( s, Qt::MatchExactly ) == -1 && !s.isEmpty() )
-		cbEncodings->addItem( s );
-	cbEncodings->setCurrentIndex( cbEncodings->findText( s, Qt::MatchExactly ) );
-	c = getStringValues( "CONFIG", "+=" );
-	if ( c.indexOf( "debug_and_release", 0, Qt::CaseInsensitive ) != -1 )
-		rbDebugRelease->setChecked( true );
-	else if ( c.indexOf( "debug", 0, Qt::CaseInsensitive ) != -1 )
-		rbDebug->setChecked( true );
-	else if ( c.indexOf( "release", 0, Qt::CaseInsensitive ) != -1 )
-		rbRelease->setChecked( true );
-	else
-		rbRelease->setChecked( true );
-	if ( c.indexOf( "warn_off", 0, Qt::CaseInsensitive ) != -1 )
-		rbWarnOff->setChecked( true );
-	else if ( c.indexOf( "warn_on", 0, Qt::CaseInsensitive ) != -1 )
-		rbWarnOn->setChecked( true );
-	else
-		rbWarnOff->setChecked( true );
-	if ( c.indexOf( "build_all", 0, Qt::CaseInsensitive ) != -1 )
-		cbBuildAll->setChecked( true );
-	if ( c.indexOf( "ordered", 0, Qt::CaseInsensitive ) != -1 )
-		cbOrdered->setChecked( true );
-	// remove content from config to allow us later to set leConfig
-	c.remove( "debug_and_release", Qt::CaseInsensitive );
-	c.remove( "debug", Qt::CaseInsensitive );
-	c.remove( "release", Qt::CaseInsensitive );
-	c.remove( "warn_off", Qt::CaseInsensitive );
-	c.remove( "warn_on", Qt::CaseInsensitive );
-	c.remove( "build_all", Qt::CaseInsensitive );
-	c.remove( "ordered", Qt::CaseInsensitive );
-	// Libraries
-	// TODO
-	//gbQtModules->setChecked( c.contains( "qt", Qt::CaseInsensitive ) );
-	s = getStringValues( "QT" );
-	foreach ( QListWidgetItem* it, lwQtModules->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
-	{
-		if ( it->data( QtItem::VariableRole ).toString().toLower() == "config" )
-		{
-			if ( c.contains( it->data( QtItem::ValueRole ).toString(), Qt::CaseInsensitive ) )
-				it->setCheckState( Qt::Checked );
-		}
-		else if ( it->data( QtItem::VariableRole ).toString().toLower() == "qt" )
-		{
-			if ( s.contains( it->data( QtItem::ValueRole ).toString(), Qt::CaseInsensitive ) )
-				it->setCheckState( Qt::Checked );
-		}
-		c.remove( it->data( QtItem::ValueRole ).toString(), Qt::CaseInsensitive );
-	}
-	foreach ( QListWidgetItem* it, lwCompilerFlags->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
-	{
-		if ( it->data( QtItem::VariableRole ).toString().toLower() == "config" )
-			if ( c.contains( it->data( QtItem::ValueRole ).toString(), Qt::CaseInsensitive ) )
-				it->setCheckState( Qt::Checked );
-		c.remove( it->data( QtItem::ValueRole ).toString(), Qt::CaseInsensitive );
-	}
-	leConfig->setText( c.simplified() );
-}
-
 void UIQMakeProjectSettings::loadLanguages()
 {
+	/*
 	leTranslationsPath->setText( getStringValues( "TRANSLATIONS_PATH" ) );
 	leTranslationsPath->setModified( false );
-	QStringList t = getListValues( "TRANSLATIONS" );
+	QStringList t = mProject->getListValues( "TRANSLATIONS" );
 	QListWidgetItem*  it;
 	bool b = false;
 	for ( int i = QLocale::C +1; i < QLocale::Zulu +1; i++ )
@@ -388,16 +316,16 @@ void UIQMakeProjectSettings::loadLanguages()
 		if ( !b )
 			b = it->checkState() == Qt::Checked;
 	}
+	*/
 }
 
 void UIQMakeProjectSettings::setDir( const QString& s )
-{
-	if ( QFile::exists( s ) )
-		setDir( mDirs->index( s ) );
-}
+{ setDir( mDirs->index( s ) ); }
 
 void UIQMakeProjectSettings::setDir( const QModelIndex& i )
 {
+	if ( !i.isValid() )
+		return;
 	QString p = QDir( mDirs->filePath( i ) ).canonicalPath();
 	lvDirs->setRootIndex( mDirs->index( p ) );
 	QString s = leDir->text();
@@ -423,9 +351,9 @@ void UIQMakeProjectSettings::addValue( const QString& s )
 	{
 		// add project translation if needed
 		// got language
-		QString f = QFileInfo( s ).baseName().remove( projectName() +'_' );
+		QString f = QFileInfo( s ).baseName().remove( mProject->name() +'_' );
 		// look if it's a project translation
-		if ( s == mTranslationMask.arg( projectName() ).arg( f ) )
+		if ( s == mTranslationMask.arg( mProject->name() ).arg( f ) )
 		{
 			// find item to check and check it
 			QListWidgetItem* it = lwTranslations->findItems( f, Qt::MatchFixedString | Qt::MatchRecursive ).value( 0 );
@@ -452,9 +380,9 @@ void UIQMakeProjectSettings::editValue( const QString& s )
 		QString f;
 		// remove the edited translation if needed
 		// got language
-		f = QFileInfo( it->text() ).baseName().remove( projectName() +'_' );
+		f = QFileInfo( it->text() ).baseName().remove( mProject->name() +'_' );
 		// look if it's a project translation
-		if ( it->text() == mTranslationMask.arg( projectName() ).arg( f ) )
+		if ( it->text() == mTranslationMask.arg( mProject->name() ).arg( f ) )
 		{
 			// find item and uncheck it
 			QListWidgetItem* it = lwTranslations->findItems( f, Qt::MatchFixedString | Qt::MatchRecursive ).value( 0 );
@@ -463,9 +391,9 @@ void UIQMakeProjectSettings::editValue( const QString& s )
 		}
 		// add project translation if needed
 		// got language
-		f = QFileInfo( s ).baseName().remove( projectName() +'_' );
+		f = QFileInfo( s ).baseName().remove( mProject->name() +'_' );
 		// look if it's a project translation
-		if ( s == mTranslationMask.arg( projectName() ).arg( f ) )
+		if ( s == mTranslationMask.arg( mProject->name() ).arg( f ) )
 		{
 			// find item to check and check it
 			QListWidgetItem* it = lwTranslations->findItems( f, Qt::MatchFixedString | Qt::MatchRecursive ).value( 0 );
@@ -487,9 +415,9 @@ void UIQMakeProjectSettings::removeValue( const QString& s )
 	if ( cbVariables->currentText().toLower() == "translations" && cbScopes->currentText().isEmpty() && cbOperators->currentText() == "=" )
 	{
 		// got language
-		QString f = QFileInfo( cit->text() ).baseName().remove( projectName() +'_' );
+		QString f = QFileInfo( cit->text() ).baseName().remove( mProject->name() +'_' );
 		// look if it's a project translation
-		if ( cit->text() == mTranslationMask.arg( projectName() ).arg( f ) )
+		if ( cit->text() == mTranslationMask.arg( mProject->name() ).arg( f ) )
 		{
 			// find item and uncheck it
 			QListWidgetItem* it = lwTranslations->findItems( f, Qt::MatchFixedString | Qt::MatchRecursive ).value( 0 );
@@ -510,38 +438,38 @@ void UIQMakeProjectSettings::tb_clicked()
 	// Application
 	if ( tb == tbIcon )
 	{
-		s = QFileDialog::getOpenFileName( this, tr( "Choose your application icon" ), getFilePath( leIcon->text() ), tr( "Images (*.png *.xpm *.jpg *.ico)" ) );
+		s = QFileDialog::getOpenFileName( this, tr( "Choose your application icon" ), mProject->canonicalFilePath( leIcon->text() ), tr( "Images (*.png *.xpm *.jpg *.ico)" ) );
 		if ( !s.isEmpty() )
 		{
-			leIcon->setText( getRelativeFilePath( s ) );
+			leIcon->setText( mProject->relativeFilePath( s ) );
 			leIcon->setModified( true );
 			lPixmap->setPixmap( QPixmap( s ) );
 		}
 	}
 	else if ( tb == tbHelpFile )
 	{
-		s = QFileDialog::getOpenFileName( this, tr( "Choose your application help root file" ), getFilePath( leHelpFile->text() ), tr( "HTMLs (*.htm *.html);;PDFs (*.pdf);;Windows Help Files (*.chm *.hlp)" ) );
+		s = QFileDialog::getOpenFileName( this, tr( "Choose your application help root file" ), mProject->canonicalFilePath( leHelpFile->text() ), tr( "HTMLs (*.htm *.html);;PDFs (*.pdf);;Windows Help Files (*.chm *.hlp)" ) );
 		if ( !s.isEmpty() )
 		{
-			leHelpFile->setText( getRelativeFilePath( s ) );
+			leHelpFile->setText( mProject->relativeFilePath( s ) );
 			leHelpFile->setModified( true );
 		}
 	}
 	else if ( tb == tbOutputPath )
 	{
-		s = QFileDialog::getExistingDirectory( this, tr( "Choose your application output path" ), getFilePath( leOutputPath->text() ) );
+		s = QFileDialog::getExistingDirectory( this, tr( "Choose your application output path" ), mProject->canonicalFilePath( leOutputPath->text() ) );
 		if ( !s.isEmpty() )
 		{
-			leOutputPath->setText( getRelativeFilePath( s ) );
+			leOutputPath->setText( mProject->relativeFilePath( s ) );
 			leOutputPath->setModified( true );
 		}
 	}
 	else if ( tb == tbTranslationsPath )
 	{
-		s = QFileDialog::getExistingDirectory( this, tr( "Choose your translations path" ), getFilePath( tbTranslationsPath->text() ) );
+		s = QFileDialog::getExistingDirectory( this, tr( "Choose your translations path" ), mProject->canonicalFilePath( tbTranslationsPath->text() ) );
 		if ( !s.isEmpty() )
 		{
-			leTranslationsPath->setText( getRelativeFilePath( s ) );
+			leTranslationsPath->setText( mProject->relativeFilePath( s ) );
 			leTranslationsPath->setModified( true );
 		}
 	}
@@ -576,68 +504,55 @@ void UIQMakeProjectSettings::lw_currentItemChanged( QListWidgetItem* it, QListWi
 	tbInformations->setHtml( it ? it->data( QtItem::HelpRole ).toString() : "" );
 }
 
-#include <QDebug>
 void UIQMakeProjectSettings::cb_highlighted( int )
 {
 	// backup all datas for current scope , operator
-	QStringList l;
 	QString s;
-	// set key
+	QStringList l;
 	const QString key = QString( "%1|%2|%3" ).arg( cbScopes->currentText() ).arg( cbOperators->currentText() );
-	// check application page
-	if ( leTitle->text() != mSettings[ key.arg( "APP_TITLE" ) ].join( " " ) )
-		mSettings[ key.arg( "APP_TITLE" ) ] = QStringList( leTitle->text() );
-	if ( leIcon->text() != mSettings[ key.arg( "APP_ICON" ) ].join( " " ) )
-		mSettings[ key.arg( "APP_ICON" ) ] = QStringList( leIcon->text() );
-	if ( leHelpFile->text() != mSettings[ key.arg( "APP_HELP_FILE" ) ].join( " " ) )
-		mSettings[ key.arg( "APP_HELP_FILE" ) ] = QStringList( leHelpFile->text() );
-	if ( leAuthor->text() != mSettings[ key.arg( "APP_AUTHOR" ) ].join( " " ) )
-		mSettings[ key.arg( "APP_AUTHOR" ) ] = QStringList( leAuthor->text() );
-	if ( cbTemplate->currentText() != mSettings[ key.arg( "TEMPLATE" ) ].join( " " ) )
-		mSettings[ key.arg( "TEMPLATE" ) ] = QStringList( cbTemplate->currentText() );
-	if ( cbLanguage->currentText() != mSettings[ key.arg( "LANGUAGE" ) ].join( " " ) )
-		mSettings[ key.arg( "LANGUAGE" ) ] = QStringList( cbLanguage->currentText() );
+	
+	if ( leTitle->text() != mSettings[ key.arg( leTitle->statusTip() ) ].join( " " ) )
+		mSettings[ key.arg( leTitle->statusTip() ) ] = QStringList( leTitle->text() );
+	if ( leIcon->text() != mSettings[ key.arg( leIcon->statusTip() ) ].join( " " ) )
+		mSettings[ key.arg( leIcon->statusTip() ) ] = QStringList( leIcon->text() );
+	if ( leHelpFile->text() != mSettings[ key.arg( leHelpFile->statusTip() ) ].join( " " ) )
+		mSettings[ key.arg( leHelpFile->statusTip() ) ] = QStringList( leHelpFile->text() );
+	if ( leAuthor->text() != mSettings[ key.arg( leAuthor->statusTip() ) ].join( " " ) )
+		mSettings[ key.arg( leAuthor->statusTip() ) ] = QStringList( leAuthor->text() );
+	if ( cbTemplate->currentText() != mSettings[ key.arg( cbTemplate->statusTip() ) ].join( " " ) )
+		mSettings[ key.arg( cbTemplate->statusTip() ) ] = QStringList( cbTemplate->currentText() );
+	if ( cbLanguage->currentText() != mSettings[ key.arg( cbLanguage->statusTip() ) ].join( " " ) )
+		mSettings[ key.arg( cbLanguage->statusTip() ) ] = QStringList( cbLanguage->currentText() );
 	l = currentCONFIG();
-	qDebug() << l;
-	if ( l != mSettings[ key.arg( "CONFIG" ) ] )
-		mSettings[ key.arg( "CONFIG" ) ] = l;
+	if ( l != mSettings[ key.arg( lwCompilerFlags->statusTip() ) ] )
+		mSettings[ key.arg( lwCompilerFlags->statusTip() ) ] = l;
 	l = currentQT();
-	qDebug() << l;
-	if ( l != mSettings[ key.arg( "QT" ) ] )
-		mSettings[ key.arg( "QT" ) ] = l;
+	if ( l != mSettings[ key.arg( lwQtModules->statusTip() ) ] )
+		mSettings[ key.arg( lwQtModules->statusTip() ) ] = l;
 	s = QString( "%1.%2.%3.%4" ).arg( sbMajor->value() ).arg( sbMinor->value() ).arg( sbRelease->value() ).arg( sbBuild->value() );
 	if ( s == "0.0.0.0" )
 		s.clear();
-	if ( s != mSettings[ key.arg( "VERSION" ) ].join( " " ) )
-		mSettings[ key.arg( "VERSION" ) ] = QStringList( QString( "%1.%2.%3.%4" ).arg( sbMajor->value() ).arg( sbMinor->value() ).arg( sbRelease->value() ).arg( sbBuild->value() ) );
+	if ( s != mSettings[ key.arg( gbVersion->statusTip() ) ].join( " " ) )
+		mSettings[ key.arg( gbVersion->statusTip() ) ] = QStringList( QString( "%1.%2.%3.%4" ).arg( sbMajor->value() ).arg( sbMinor->value() ).arg( sbRelease->value() ).arg( sbBuild->value() ) );
 	if ( !gbVersion->isChecked() )
-		mSettings[ key.arg( "VERSION" ) ].clear();
-	if ( cbBuildAutoIncrement->isChecked() != mSettings[ key.arg( "APP_AUTO_INCREMENT" ) ].join( " " ).toInt() )
-		mSettings[ key.arg( "APP_AUTO_INCREMENT" ) ] = QStringList( QString::number( cbBuildAutoIncrement->isChecked() ) );
+		mSettings[ key.arg( gbVersion->statusTip() ) ].clear();
+	if ( cbBuildAutoIncrement->isChecked() != mSettings[ key.arg( cbBuildAutoIncrement->statusTip() ) ].join( " " ).toInt() )
+		mSettings[ key.arg( cbBuildAutoIncrement->statusTip() ) ] = QStringList( QString::number( cbBuildAutoIncrement->isChecked() ) );
 	if ( !gbVersion->isChecked() )
-		mSettings[ key.arg( "APP_AUTO_INCREMENT" ) ].clear();
-	if ( cbEncodings->currentText() != mSettings[ key.arg( "ENCODING" ) ].join( " " ) )
-		mSettings[ key.arg( "ENCODING" ) ] = QStringList( cbEncodings->currentText() );
-	if ( leOutputPath->text() != mSettings[ key.arg( "DESTDIR" ) ].join( " " ) )
-		mSettings[ key.arg( "DESTDIR" ) ] = QStringList( leOutputPath->text() );
-	if ( leOutputName->text() != mSettings[ key.arg( "TARGET" ) ].join( " " ) )
-		mSettings[ key.arg( "TARGET" ) ] = QStringList( leOutputName->text() );
-	// translation page
-	if ( leTranslationsPath->text() != mSettings[ key.arg( "TRANSLATIONS_PATH" ) ].join( " " ) )
-		mSettings[ key.arg( "TRANSLATIONS_PATH" ) ] = QStringList( leTranslationsPath->text() );
-	
-	/*
-	mSettings[ key.arg( "LIBS" ) ] = QStringList() << ;
-	mSettings[ key.arg( "DEFINES" ) ] = QStringList() << ;
-	mSettings[ key.arg( "INCLUDEPATH" ) ] = QStringList() << ;
-	mSettings[ key.arg( "DEPENDPATH" ) ] = QStringList() << ;
-	mSettings[ key.arg( "VPATH" ) ] = QStringList() << ;
-	mSettings[ key.arg( "RESOURCES" ) ] = QStringList() << ;
-	mSettings[ key.arg( "DEF_FILE" ) ] = QStringList() << ;
-	mSettings[ key.arg( "RC_FILE" ) ] = QStringList() << ;
-	mSettings[ key.arg( "RES_FILE" ) ] = QStringList() << ;
-	mSettings[ key.arg( "TRANSLATIONS" ) ] = QStringList() << ;
-	*/
+		mSettings[ key.arg( cbBuildAutoIncrement->statusTip() ) ].clear();
+	if ( cbEncodings->currentText() != mSettings[ key.arg( cbEncodings->statusTip() ) ].join( " " ) )
+		mSettings[ key.arg( cbEncodings->statusTip() ) ] = QStringList( cbEncodings->currentText() );
+	if ( leOutputPath->text() != mSettings[ key.arg( leOutputPath->statusTip() ) ].join( " " ) )
+		mSettings[ key.arg( leOutputPath->statusTip() ) ] = QStringList( leOutputPath->text() );
+	if ( leOutputName->text() != mSettings[ key.arg( leOutputName->statusTip() ) ].join( " " ) )
+		mSettings[ key.arg( leOutputName->statusTip() ) ] = QStringList( leOutputName->text() );
+	if ( leTranslationsPath->text() != mSettings[ key.arg( leTranslationsPath->statusTip() ) ].join( " " ) )
+		mSettings[ key.arg( leTranslationsPath->statusTip() ) ] = QStringList( leTranslationsPath->text() );
+	l.clear();
+	for ( int i = 0; i < lwValues->count(); i++ )
+		l << lwValues->item( i )->text();
+	if ( l != mSettings[ key.arg( cbVariables->currentText() ) ] )
+		mSettings[ key.arg( cbVariables->currentText() ) ] = l;
 }
 
 void UIQMakeProjectSettings::on_cbScopes_currentIndexChanged( const QString& )
@@ -645,26 +560,19 @@ void UIQMakeProjectSettings::on_cbScopes_currentIndexChanged( const QString& )
 
 void UIQMakeProjectSettings::on_cbOperators_currentIndexChanged( const QString& )
 {
-	// backup all datas for current scope , operator
 	QStringList l;
-	// set key
 	const QString key = QString( "%1|%2|%3" ).arg( cbScopes->currentText() ).arg( cbOperators->currentText() );
-	// check application page
-	leTitle->setText( mSettings[ key.arg( "APP_TITLE" ) ].join( " " ) );
-	leIcon->setText( mSettings[ key.arg( "APP_ICON" ) ].join( " " ) );
-	leHelpFile->setText( mSettings[ key.arg( "APP_HELP_FILE" ) ].join( " " ) );
-	leAuthor->setText( mSettings[ key.arg( "APP_AUTHOR" ) ].join( " " ) );
-	cbTemplate->setCurrentIndex( cbTemplate->findText( mSettings[ key.arg( "TEMPLATE" ) ].join( " " ) ) );
-	cbLanguage->setCurrentIndex( cbLanguage->findText( mSettings[ key.arg( "LANGUAGE" ) ].join( " " ) ) );
-	/*
-	l = currentCONFIG();
-	if ( l != mSettings[ key.arg( "CONFIG" ) ] )
-		mSettings[ key.arg( "CONFIG" ) ] = l;
-	l = currentQT();
-	if ( l != mSettings[ key.arg( "QT" ) ] )
-		mSettings[ key.arg( "QT" ) ] = l;
-	*/
-	l = mSettings[ key.arg( "VERSION" ) ];
+	//
+	leTitle->setText( mSettings[ key.arg( leTitle->statusTip() ) ].join( " " ) );
+	leIcon->setText( mSettings[ key.arg( leIcon->statusTip() ) ].join( " " ) );
+	lPixmap->setPixmap( QPixmap( mProject->canonicalFilePath( leIcon->text() ) ) );
+	leHelpFile->setText( mSettings[ key.arg( leHelpFile->statusTip() ) ].join( " " ) );
+	leAuthor->setText( mSettings[ key.arg( leAuthor->statusTip() ) ].join( " " ) );
+	cbTemplate->setCurrentIndex( cbTemplate->findText( mSettings[ key.arg( cbTemplate->statusTip() ) ].join( " " ) ) );
+	cbLanguage->setCurrentIndex( cbLanguage->findText( mSettings[ key.arg( cbLanguage->statusTip() ) ].join( " " ) ) );
+	setCurrentCONFIG( mSettings[ key.arg( lwCompilerFlags->statusTip() ) ].join( " " ) );
+	setCurrentQT( mSettings[ key.arg( lwQtModules->statusTip() ) ].join( " " ) );
+	l = mSettings[ key.arg( gbVersion->statusTip() ) ];
 	sbMajor->setValue( 0 );
 	sbMinor->setValue( 0 );
 	sbRelease->setValue( 0 );
@@ -678,12 +586,11 @@ void UIQMakeProjectSettings::on_cbOperators_currentIndexChanged( const QString& 
 		sbRelease->setValue( l.value( 2 ).toInt() );
 		sbBuild->setValue( l.value( 3 ).toInt() );
 	}
-	cbBuildAutoIncrement->setChecked( mSettings[ key.arg( "APP_AUTO_INCREMENT" ) ].join( " " ).toInt() );
-	cbEncodings->setCurrentIndex( cbEncodings->findText( mSettings[ key.arg( "ENCODING" ) ].join( " " ) ) );
-	leOutputPath->setText( mSettings[ key.arg( "DESTDIR" ) ].join( " " ) );
-	leOutputName->setText( mSettings[ key.arg( "TARGET" ) ].join( " " ) );
-	// translation page
-	leTranslationsPath->setText( mSettings[ key.arg( "TRANSLATIONS_PATH" ) ].join( " " ) );
+	cbBuildAutoIncrement->setChecked( mSettings[ key.arg( cbBuildAutoIncrement->statusTip() ) ].join( " " ).toInt() );
+	cbEncodings->setCurrentIndex( cbEncodings->findText( mSettings[ key.arg( cbEncodings->statusTip() ) ].join( " " ) ) );
+	leOutputPath->setText( mSettings[ key.arg( leOutputPath->statusTip() ) ].join( " " ) );
+	leOutputName->setText( mSettings[ key.arg( leOutputName->statusTip() ) ].join( " " ) );
+	leTranslationsPath->setText( mSettings[ key.arg( leTranslationsPath->statusTip() ) ].join( " " ) );
 	// load variables values
 	on_cbVariables_currentIndexChanged( cbVariables->currentText() );
 }
@@ -700,7 +607,7 @@ void UIQMakeProjectSettings::on_lwFiles_itemDoubleClicked( QListWidgetItem* i )
 	if ( v == "libs" && ( libraries.contains( s ) || s.startsWith( "so." ) ) )
 	{
 		// lib path
-		s = getRelativeFilePath( f.path() );
+		s = mProject->relativeFilePath( f.path() );
 		if ( s.contains( " " ) )
 			s.prepend( '"' ).append( '"' );
 		s.prepend( "-L" );
@@ -717,23 +624,16 @@ void UIQMakeProjectSettings::on_lwFiles_itemDoubleClicked( QListWidgetItem* i )
 	else if ( v == "defines" )
 		addValue( f.baseName().toUpper() );
 	else if ( v.contains( "path" ) )
-		addValue( getRelativeFilePath( f.path() ) );
+		addValue( mProject->relativeFilePath( f.path() ) );
 	else if ( ( v == "translations" && s == "ts" ) || ( v == "resources" && s == "qrc" ) || ( v == "def_file" && s == "def" ) || ( v == "rc_file" && s == "rc" ) || ( v == "res_file" && s == "res" ) )
-		addValue( getRelativeFilePath( f.filePath() ) );
+		addValue( mProject->relativeFilePath( f.filePath() ) );
 }
 
 void UIQMakeProjectSettings::on_cbVariables_currentIndexChanged( const QString& s )
 {
-	/*
-	if ( !mReady )
-		return;
-	QString k = QString( "%1|%2|%3" ).arg( cbScopes->currentText(), cbOperators->currentText(), s );
 	lwValues->clear();
-	if ( mSettings.contains( k ) )
-		lwValues->addItems( mSettings[ k ] );
-	else
-		lwValues->addItems( getListValues( s, cbOperators->currentText(), cbScopes->currentText() ) );
-	*/
+	QString k = QString( "%1|%2|%3" ).arg( cbScopes->currentText(), cbOperators->currentText(), s );
+	lwValues->addItems( mSettings[k] );
 }
 
 void UIQMakeProjectSettings::on_pbAddValue_clicked()
@@ -756,9 +656,7 @@ void UIQMakeProjectSettings::on_pbEditValue_clicked()
 }
 
 void UIQMakeProjectSettings::on_pbRemoveValue_clicked()
-{
-	removeValue();
-}
+{ removeValue(); }
 
 void UIQMakeProjectSettings::on_pbClearValues_clicked()
 {
@@ -782,7 +680,7 @@ void UIQMakeProjectSettings::on_lwTranslations_itemChanged( QListWidgetItem* it 
 	if ( !lwTranslations->isVisible() )
 		return;
 	// get translation file
-	QString s = mTranslationMask.arg( projectName() ).arg( it->text() );
+	QString s = mTranslationMask.arg( mProject->name() ).arg( it->text() );
 	QString k = "|=|TRANSLATIONS";
 	// check translation
 	switch ( it->checkState() )
@@ -793,7 +691,7 @@ void UIQMakeProjectSettings::on_lwTranslations_itemChanged( QListWidgetItem* it 
 			else
 			{
 				if ( !mSettings.contains( k ) )
-					mSettings[ k ] = getListValues( "TRANSLATIONS" );
+					mSettings[ k ] = mProject->getListValues( "TRANSLATIONS" );
 				if ( !mSettings.value( k ).contains( s, Qt::CaseInsensitive ) )
 					mSettings[ k ] << s;
 			}
@@ -804,7 +702,7 @@ void UIQMakeProjectSettings::on_lwTranslations_itemChanged( QListWidgetItem* it 
 			else
 			{
 				if ( !mSettings.contains( k ) )
-					mSettings[ k ] = getListValues( "TRANSLATIONS" );
+					mSettings[ k ] = mProject->getListValues( "TRANSLATIONS" );
 				if ( mSettings.value( k ).contains( s, Qt::CaseInsensitive ) )
 					mSettings[ k ].removeAll( s );
 			}
@@ -907,38 +805,38 @@ void UIQMakeProjectSettings::accept()
 	QStringList s, c;
 	// if subdirs only fill these and return
 	if ( !cbEncodings->currentText().isEmpty() )
-		setStringValues( cbEncodings->currentText(), "ENCODING" );
+		mProject->setStringValues( cbEncodings->currentText(), "ENCODING" );
 	if ( !cbTemplate->currentText().isEmpty() )
-		setStringValues( cbTemplate->currentText(), "TEMPLATE" );
+		mProject->setStringValues( cbTemplate->currentText(), "TEMPLATE" );
 	if ( !cbLanguage->currentText().isEmpty() )
-		setStringValues( cbLanguage->currentText(), "LANGUAGE" );
+		mProject->setStringValues( cbLanguage->currentText(), "LANGUAGE" );
 	if ( leAuthor->isModified() )
-		setStringValues( leAuthor->text(), "APP_AUTHOR" );
+		mProject->setStringValues( leAuthor->text(), "APP_AUTHOR" );
 	if ( cbTemplate->currentText().toLower() == "subdirs" )
 	{
 		if ( cbOrdered->isChecked() )
 			s << "ordered";
-		setListValues( s, "CONFIG", "+=" );
+		mProject->setListValues( s, "CONFIG", "+=" );
 		// close dialog
 		QDialog::accept();
 		return;
 	}
 	//
 	if ( leTitle->isModified() )
-		setStringValues( leTitle->text(), "APP_TITLE" );
+		mProject->setStringValues( leTitle->text(), "APP_TITLE" );
 	if ( leIcon->isModified() )
-		setStringValues( leIcon->text(), "APP_ICON" );
+		mProject->setStringValues( leIcon->text(), "APP_ICON" );
 	if ( leHelpFile->isModified() )
-		setStringValues( leHelpFile->text(), "APP_HELP_FILE" );
+		mProject->setStringValues( leHelpFile->text(), "APP_HELP_FILE" );
 	if ( gbVersion->isChecked() )
 	{
-		setStringValues( QString( "%1.%2.%3.%4" ).arg( sbMajor->value() ).arg( sbMinor->value() ).arg( sbRelease->value() ).arg( sbBuild->value() ), "VERSION" );
-		setStringValues( QString::number( cbBuildAutoIncrement->isChecked() ), "APP_AUTO_INCREMENT" );
+		mProject->setStringValues( QString( "%1.%2.%3.%4" ).arg( sbMajor->value() ).arg( sbMinor->value() ).arg( sbRelease->value() ).arg( sbBuild->value() ), "VERSION" );
+		mProject->setStringValues( QString::number( cbBuildAutoIncrement->isChecked() ), "APP_AUTO_INCREMENT" );
 	}
 	else
 	{
-		setStringValues( QString::null, "VERSION" );
-		setStringValues( QString::null, "APP_AUTO_INCREMENT" );
+		mProject->setStringValues( QString::null, "VERSION" );
+		mProject->setStringValues( QString::null, "APP_AUTO_INCREMENT" );
 	}
 	// reading config variable
 	if ( rbDebug->isChecked() )
@@ -972,18 +870,18 @@ void UIQMakeProjectSettings::accept()
 	// add other config
 	if ( !leConfig->text().isEmpty() )
 		s << leConfig->text().simplified().split( " " );
-	setListValues( s, "CONFIG", "+=" );
-	setListValues( c, "QT" );
+	mProject->setListValues( s, "CONFIG", "+=" );
+	mProject->setListValues( c, "QT" );
 	s.clear();
 	c.clear();
 	// translations
 	if ( leTranslationsPath->isModified() )
-		setStringValues( leTranslationsPath->text(), "TRANSLATIONS_PATH" );
+		mProject->setStringValues( leTranslationsPath->text(), "TRANSLATIONS_PATH" );
 	// settings
 	foreach ( QString v, mSettings.keys() )
 	{
 		QStringList l = v.split( "|" );
-		setListValues( mSettings.value( v ), l.at( 2 ), l.at( 1 ), l.at( 0 ) );
+		mProject->setListValues( mSettings.value( v ), l.at( 2 ), l.at( 1 ), l.at( 0 ) );
 	}
 	// close dialog
 	QDialog::accept();
