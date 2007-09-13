@@ -49,7 +49,7 @@ pAbstractChild* pFileManager::openFile( const QString& s, const QPoint& p )
 		// update file menu
 		connect( c, SIGNAL( modifiedChanged( bool ) ), pMenuBar::instance()->action( "mFile/mSave/aCurrent" ), SLOT( setEnabled( bool ) ) );
 		//update tab icon
-		connect( c, SIGNAL( modifiedChanged( bool ) ), pWorkspace::instance(), SLOT( markTabAsNotSaved( bool ) ) );
+		connect( c, SIGNAL( modifiedChanged( bool ) ), pWorkspace::instance(), SLOT( setCurrentTabModified( bool ) ) );
 		// update edit menu
 		connect( c, SIGNAL( undoAvailableChanged( bool ) ), pMenuBar::instance()->action( "mEdit/aUndo" ), SLOT( setEnabled( bool ) ) );
 		connect( c, SIGNAL( redoAvailableChanged( bool ) ), pMenuBar::instance()->action( "mEdit/aRedo" ), SLOT( setEnabled( bool ) ) );
