@@ -19,13 +19,13 @@ static QVector<QString> content;
 QStringList file_variables;
 static bool mParseCommands = false;
 static QRegExp function_call("^((?:[a-zA-Z0-9\\.]+(?:\\((?:.*)\\))?(?:[ \\t]+)?[|:](?:[ \\t]+)?)+)?([a-zA-Z]+\\((.*)\\))[ \\t]*(#.*)?"); 
-static QRegExp bloc("^(\\})?[ \\t]*(?:((?:[-\\.a-zA-Z0-9*|_!+]+(?:\\((?:[^\\)]*)\\))?[:|])+)?([-a-zA-Z0-9*|_!+]+(?:\\((?:[^\\)]*)\\))?))[ \\t]*(\\{)[ \\t]*(#.*)?"); 
+static QRegExp bloc("^(\\})?[ \\t]*((?:(?:[-\\.a-zA-Z0-9*|_!+]+(?:\\((?:[^\\)]*)\\))?[:|])+)?([-a-zA-Z0-9*|_!+]+(?:\\((?:[^\\)]*)\\))?))[ \\t]*(\\{)[ \\t]*(#.*)?"); 
 static QRegExp variable("^(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?(?:[ \\t]+)?[:|](?:[ \\t]+)?)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*([~*+-]?=)[ \\t]*((?:\\\\\\\\\\\\\\\"|\\\\\\\"|[^\\\\#])+)?[ \\t]*(\\\\)?[ \t]*(#.*)?");
 //static QRegExp variable("^(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?(?:[ \\t]+)?[:|](?:[ \\t]+)?)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*([~*+-]?=)[ \\t]*([^\\\\#]*)[ \\t]*(\\\\)?[ \t]*(#.*)?");
 static QRegExp varLine("^[ \\t]*(.*)[ \\t]*\\\\[ \\t]*(#.*)?");
 static QRegExp end_bloc("^(\\})[ \t]*(#.*)?");
 static QRegExp comments("^\\s*#(.*)");
-static QRegExp splitNested( "\\s*([^:|()]+|!?\\w+\\(.*\\))\\s*(:|\\|)" );
+//static QRegExp splitNested( "\\s*([^:|()]+|!?\\w+\\(.*\\))\\s*(:|\\|)" );
 static QRegExp splitValues( "([^\\s\"]+)|\\\"([^\"]+)\\\"|(\\${1,2}\\w+\\([^\\(\\)]+\\)[^\\s]+)" );
 static QRegExp splitCommands( "(\\([^;]*\\));?|(\\$\\(\\w+\\)[^;]*);?" );
 static QRegExp encoding( "[ \\t]*ENCODING[ \\t]*=[ \\t]*([^ ]+)[ \\t]*(?:#.*)?", Qt::CaseInsensitive );
@@ -48,13 +48,13 @@ bool QMakeParser::isOpen() const
 
 bool QMakeParser::loadFile( const QString& s, QMakeItem* it )
 {
-	// clear vectors
+	// clear  the vector
 	content.clear();
 	// open file
 	QFile f( s );
 	if ( !f.exists() || !f.open( QFile::ReadOnly | QFile::Text ) )
 		return false;
-	// loking for encoding
+	// looking for encoding
 	QTextCodec* c = 0;
 	if ( encoding.indexIn( f.readAll() ) != -1 )
 		c = QTextCodec::codecForName( encoding.capturedTexts().at( 1 ).trimmed().toAscii() );
@@ -107,7 +107,7 @@ int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 			}
 		}
 		// scope (nested compris)
-		// "truc(params) {" ou "xml:truc(params) {" ("{" facultatif)
+		// "truc(params) {" ou "xml:truc(params) {" ou "xml:debug {" ("{" facultatif)
 		else if ( bloc.exactMatch( content[ligne] ) )
 		{
 			// if end block and start new one
@@ -185,15 +185,18 @@ int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 
 QMakeItem* QMakeParser::processNested( const QString& s, QMakeItem* i )
 {
-	QStringList l;
-	int p = 0;
+	// if there's no scopes, skip.
+	if( s == "" )
+		return i;
+	int p = 0,end = 0;
 	bool first = true;
-	while ( ( p = splitNested.indexIn( s, p ) ) != -1 )
+	QString c = s;
+	c.replace( QRegExp("\\(([^|]+)\\|([^|]+)\\)"), "(\\1%%OR%%\\2)" );
+	while ( ( end = c.indexOf( QRegExp("[:|]"), p ) ) != -1 )
 	{
-		l = splitNested.capturedTexts();
-		if( l.at( 1 ) == "else" )
+		if( c.mid( p, end - p ) == "else" )
 		{
-			if( first == true )
+			if( first )
 			{
 				if( !pileNested.isEmpty() )
 				{
@@ -213,10 +216,11 @@ QMakeItem* QMakeParser::processNested( const QString& s, QMakeItem* i )
 		{
 			pileNested.push(i);
 		}
-		i = addScope( l.at( 1 ), l.at( 2 ), true, i );
-		p += splitNested.matchedLength();
+		i = addScope( c.mid( p, end - p ).replace( QRegExp("\\(([^|]+)%%OR%%([^|]+)\\)"), "(\\1|\\2)" ), c.mid( end, 1 ), true, i );
+		p = end + 1;
 		first = false;
 	}
+	
 	return i;
 }
 
