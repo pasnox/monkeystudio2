@@ -24,7 +24,7 @@
 
 TEMPLATE = lib
 TARGET = qscintilla2
-CONFIG += qt warn_off debug dll thread
+CONFIG += qt warn_off release dll thread
 INCLUDEPATH = . ../include ../src
 DEFINES = QSCINTILLA_MAKE_DLL QT SCI_LEXER
 
