@@ -68,8 +68,6 @@ UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
 	lvContents->setModel( mContentProxy );
 	// set currentindex
 	setCurrentIndex( mProject->child( 0, 0 )->index() );
-	// loading...
-	querySettings();
 	//loadLanguages();
 	// connections
 	connect( cbScopes, SIGNAL( highlighted( int ) ), this, SLOT( cb_highlighted( int ) ) );
@@ -223,6 +221,8 @@ void UIQMakeProjectSettings::querySettings()
 			const QString Operator = cbOperators->itemText( oc );
 			// set current scope in progressbar
 			pbProgress->setFormat( tr( "scanning scope %1, operator %2 : %p%" ).arg( Scope, Operator ) );
+			// update progress bar
+			pbProgress->setValue( pbProgress->value() +1 );
 			// process application event except user inputContext
 			QApplication::processEvents( QEventLoop::ExcludeUserInputEvents );
 			// set key
