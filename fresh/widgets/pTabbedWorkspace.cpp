@@ -20,12 +20,6 @@
 pTabbedWorkspace::pTabbedWorkspace( QWidget* p, pTabbedWorkspace::TabMode m )
 	: QWidget( p ), mTabsHaveShortcut( true )
 {
-	/*
-	QBoxLayout::LeftToRight
-	QBoxLayout::RightToLeft
-	QBoxLayout::TopToBottom
-	QBoxLayout::BottomToTop
-	*/
 	// tab widget
 	mTabLayout = new QBoxLayout( QBoxLayout::LeftToRight );
 	mTabLayout->setSpacing( 3 );
@@ -356,7 +350,7 @@ QList<QWidget*> pTabbedWorkspace::documents() const
 {
 	return mDocuments;
 }
-//
+
 pTabbedWorkspaceCorner* pTabbedWorkspace::cornerWidget( Qt::Corner c ) const
 {
 	// if only one it s tabbar, no need to check
@@ -649,12 +643,9 @@ void pTabbedWorkspace::setTabsHaveShortcut( bool b )
 	updateTabsNumber();
 }
 
-void pTabbedWorkspace::markTabAsNotSaved (bool notSaved)
+void pTabbedWorkspace::setCurrentTabModified( bool b )
 {
-    if ( notSaved )
-        mTabBar->setTabIcon (mTabBar->currentIndex(),QIcon( ":/project/icons/project/save.png" ));
-    else
-        mTabBar->setTabIcon (mTabBar->currentIndex(),QIcon());
+	mTabBar->setTabIcon( mTabBar->currentIndex(), b ? QIcon( ":/project/icons/project/save.png" ) : QIcon() );   
 }
 
 void pTabbedWorkspace::updateTabsNumber( int i )
