@@ -9,7 +9,6 @@
 #include <QDirModel>
 #include <QHeaderView>
 #include <QLocale>
-#include <QFileDialog>
 #include <QInputDialog>
 #include <QFileIconProvider>
 #include <QTextCodec>
@@ -17,6 +16,8 @@
 #include <QCloseEvent>
 #include <QDebug>
 #include <QWhatsThis>
+
+using namespace pMonkeyStudio;
 
 QString mTranslationMask = "$$TRANSLATIONS_PATH/%2_%3.ts";
 
@@ -33,7 +34,7 @@ UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
 	// load operators
 	cbOperators->addItems( UISettingsQMake::readOperators() );
 	// load text codec
-	cbEncodings->addItems( pMonkeyStudio::availableTextCodecs() );
+	cbEncodings->addItems( availableTextCodecs() );
 	// load modules & config
 	loadModules();
 	loadConfigs();
@@ -70,24 +71,26 @@ UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
 	setCurrentIndex( mProject->child( 0, 0 )->index() );
 	//loadLanguages();
 	// connections
+	// combox
 	connect( cbScopes, SIGNAL( highlighted( int ) ), this, SLOT( cb_highlighted( int ) ) );
 	connect( cbOperators, SIGNAL( highlighted( int ) ), this, SLOT( cb_highlighted( int ) ) );
 	connect( cbVariables, SIGNAL( highlighted( int ) ), this, SLOT( cb_highlighted( int ) ) );
-	/*
+	// buttons
 	connect( tbIcon, SIGNAL( clicked() ), this, SLOT( tb_clicked() ) );
 	connect( tbHelpFile, SIGNAL( clicked() ), this, SLOT( tb_clicked() ) );
-	foreach ( QSpinBox* sb, gbVersion->findChildren<QSpinBox*>() )
-		if ( sb != sbBuild )
-			connect( sb, SIGNAL( valueChanged( int ) ), this, SLOT( sb_valueChanged( int ) ) );
+	connect( tbOutputPath, SIGNAL( clicked() ), this, SLOT( tb_clicked() ) );
+	connect( tbTranslationsPath, SIGNAL( clicked() ), this, SLOT( tb_clicked() ) );
+	// spinbox
+	connect( sbMajor, SIGNAL( valueChanged( int ) ), this, SLOT( sb_valueChanged( int ) ) );
+	connect( sbMinor, SIGNAL( valueChanged( int ) ), this, SLOT( sb_valueChanged( int ) ) );
+	connect( sbRelease, SIGNAL( valueChanged( int ) ), this, SLOT( sb_valueChanged( int ) ) );
+	/*
 	connect( lwQtModules, SIGNAL( currentItemChanged( QListWidgetItem*, QListWidgetItem* ) ), this, SLOT( lw_currentItemChanged( QListWidgetItem*, QListWidgetItem* ) ) );
 	connect( lwCompilerFlags, SIGNAL( currentItemChanged( QListWidgetItem*, QListWidgetItem* ) ), this, SLOT( lw_currentItemChanged( QListWidgetItem*, QListWidgetItem* ) ) );
-	connect( cbScopes, SIGNAL( highlighted( int ) ), this, SLOT( cb_highlighted( int ) ) );
-	connect( cbOperators, SIGNAL( highlighted( int ) ), this, SLOT( cb_highlighted( int ) ) );
-	connect( tbOutputPath, SIGNAL( clicked() ), this, SLOT( tb_clicked() ) );
-	connect( cbVariables, SIGNAL( highlighted( int ) ), this, SLOT( cb_highlighted( int ) ) );
+	
 	connect( leDir, SIGNAL( textChanged( const QString& ) ), this, SLOT( setDir( const QString& ) ) );
 	connect( lvDirs, SIGNAL( doubleClicked( const QModelIndex& ) ), this, SLOT( setDir( const QModelIndex& ) ) );
-	connect( tbTranslationsPath, SIGNAL( clicked() ), this, SLOT( tb_clicked() ) );
+	
 	mReady = true;
 	*/
 	// settings
@@ -113,7 +116,6 @@ QStringList UIQMakeProjectSettings::currentCONFIG() const
 	if ( rbWarnOn->isChecked() ) l << rbWarnOn->statusTip();
 	if ( cbBuildAll->isChecked() ) l << cbBuildAll->statusTip();
 	if ( cbOrdered->isChecked() ) l << cbOrdered->statusTip();
-	if ( gbQtModules->isChecked() ) l << gbQtModules->statusTip();
 	foreach ( QListWidgetItem* it, lwQtModules->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) << lwCompilerFlags->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
 		if ( it->checkState() == Qt::Checked )
 			if ( it->data( QtItem::VariableRole ).toString().toUpper() == lwCompilerFlags->statusTip() )
@@ -146,8 +148,6 @@ void UIQMakeProjectSettings::setCurrentCONFIG( const QString& s )
 	c.remove( cbBuildAll->statusTip(), Qt::CaseInsensitive );
 	cbOrdered->setChecked( c.contains( cbOrdered->statusTip(), Qt::CaseInsensitive ) );
 	c.remove( cbOrdered->statusTip(), Qt::CaseInsensitive );
-	gbQtModules->setChecked( c.contains( gbQtModules->statusTip(), Qt::CaseInsensitive ) );
-	c.remove( gbQtModules->statusTip(), Qt::CaseInsensitive );
 	foreach ( QListWidgetItem* it, lwQtModules->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) << lwCompilerFlags->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
 	{
 		if ( it->data( QtItem::VariableRole ).toString().toUpper() == lwCompilerFlags->statusTip() )
@@ -185,6 +185,14 @@ QModelIndex UIQMakeProjectSettings::currentIndex()
 	if ( !i.isValid() && tvScopes->selectionModel()->selectedIndexes().count() )
 		i = mScopesProxy->mapToSource( tvScopes->selectionModel()->selectedIndexes().at( 0 ) );
 	return i;
+}
+
+void UIQMakeProjectSettings::setCurrentTRANSLATIONS( const QStringList& l )
+{
+	lwValues->clear();
+	const QString k = QString( "%1|%2|TRANSLATIONS" ).arg( cbScopes->currentText(), cbOperators->currentText() );
+	if ( mSettings.contains( k ) )
+		lwValues->addItems( mSettings[k] );
 }
 
 void UIQMakeProjectSettings::setCurrentIndex( const QModelIndex& i )
@@ -275,7 +283,7 @@ void UIQMakeProjectSettings::loadConfigs()
 	QtItemList mConfigs = UISettingsQMake::readSettings();
 	// fill lwCompilerFlags
 	QFont fo( lwCompilerFlags->font() );
-	fo.setPointSize( fo.pointSize() +2 );
+	fo.setPointSize( fo.pointSize() +1 );
 	fo.setBold( true );
 	foreach ( QtItem* i, mConfigs )
 	{
@@ -303,7 +311,6 @@ void UIQMakeProjectSettings::loadLanguages()
 {
 	/*
 	leTranslationsPath->setText( getStringValues( "TRANSLATIONS_PATH" ) );
-	leTranslationsPath->setModified( false );
 	QStringList t = mProject->getListValues( "TRANSLATIONS" );
 	QListWidgetItem*  it;
 	bool b = false;
@@ -429,80 +436,84 @@ void UIQMakeProjectSettings::removeValue( const QString& s )
 	delete cit;
 }
 
-void UIQMakeProjectSettings::tb_clicked()
+
+void UIQMakeProjectSettings::addValue( const QString& s, const QString& v )
 {
-	QToolButton* tb = qobject_cast<QToolButton*>( sender() );
-	if ( !tb )
+	// get key
+	const QString k = QString( "%1|%2|%3" ).arg( cbScopes->currentText() ).arg( cbOperators->currentText(), s );
+	// check if list and value are not empty
+	if ( mSettings.value( k ).contains( v ) )
 		return;
-	QString s;
-	// Application
-	if ( tb == tbIcon )
-	{
-		s = QFileDialog::getOpenFileName( this, tr( "Choose your application icon" ), mProject->canonicalFilePath( leIcon->text() ), tr( "Images (*.png *.xpm *.jpg *.ico)" ) );
-		if ( !s.isEmpty() )
-		{
-			leIcon->setText( mProject->relativeFilePath( s ) );
-			leIcon->setModified( true );
-			lPixmap->setPixmap( QPixmap( s ) );
-		}
-	}
-	else if ( tb == tbHelpFile )
-	{
-		s = QFileDialog::getOpenFileName( this, tr( "Choose your application help root file" ), mProject->canonicalFilePath( leHelpFile->text() ), tr( "HTMLs (*.htm *.html);;PDFs (*.pdf);;Windows Help Files (*.chm *.hlp)" ) );
-		if ( !s.isEmpty() )
-		{
-			leHelpFile->setText( mProject->relativeFilePath( s ) );
-			leHelpFile->setModified( true );
-		}
-	}
-	else if ( tb == tbOutputPath )
-	{
-		s = QFileDialog::getExistingDirectory( this, tr( "Choose your application output path" ), mProject->canonicalFilePath( leOutputPath->text() ) );
-		if ( !s.isEmpty() )
-		{
-			leOutputPath->setText( mProject->relativeFilePath( s ) );
-			leOutputPath->setModified( true );
-		}
-	}
-	else if ( tb == tbTranslationsPath )
-	{
-		s = QFileDialog::getExistingDirectory( this, tr( "Choose your translations path" ), mProject->canonicalFilePath( tbTranslationsPath->text() ) );
-		if ( !s.isEmpty() )
-		{
-			leTranslationsPath->setText( mProject->relativeFilePath( s ) );
-			leTranslationsPath->setModified( true );
-		}
-	}
+	// add value
+	mSettings[k] << v;
 }
 
-void UIQMakeProjectSettings::sb_valueChanged( int )
+void UIQMakeProjectSettings::addValues( const QString& s, const QStringList& v )
 {
-	sbBuild->setValue( 0 );
+	// get key
+	const QString k = QString( "%1|%2|%3" ).arg( cbScopes->currentText() ).arg( cbOperators->currentText(), s );
+	// add value if needed
+	foreach ( const QString c, v )
+		if ( !mSettings.value( k ).contains( c ) )
+			mSettings[k] << c;
 }
 
-void UIQMakeProjectSettings::on_cbTemplate_currentIndexChanged( const QString& s )
+void UIQMakeProjectSettings::setValue( const QString& s, const QString& v )
 {
-	// enable / disable widget according to template == subdirs
-	bool b = s.toLower() == "subdirs";
-	cbOrdered->setEnabled( b );
-	leTitle->setDisabled( b );
-	leIcon->setDisabled( b );
-	tbIcon->setDisabled( b );
-	leHelpFile->setDisabled( b );
-	tbHelpFile->setDisabled( b );
-	gbVersion->setDisabled( b );
-	fBuildType->setDisabled( b );
-	fWarn->setDisabled( b );
-	cbBuildAll->setDisabled( b ? b : !rbDebugRelease->isChecked() );
-	wLibraries->setDisabled( b );
-	wSettings->setDisabled( b );
-	wTranslations->setDisabled( b );
+	// get key
+	const QString k = QString( "%1|%2|%3" ).arg( cbScopes->currentText() ).arg( cbOperators->currentText(), s );
+	// check if list and value are not empty
+	if ( mSettings.value( k ).isEmpty() && v.isEmpty() )
+		return;
+	// set value
+	mSettings[k] = QStringList( v );
 }
 
-void UIQMakeProjectSettings::lw_currentItemChanged( QListWidgetItem* it, QListWidgetItem* )
+void UIQMakeProjectSettings::setValues( const QString& s, const QStringList& v )
 {
-	tbInformations->setHtml( it ? it->data( QtItem::HelpRole ).toString() : "" );
+	// get key
+	const QString k = QString( "%1|%2|%3" ).arg( cbScopes->currentText() ).arg( cbOperators->currentText(), s );
+	// check if list and value are not empty
+	if ( mSettings.value( k ).isEmpty() && v.isEmpty() )
+		return;
+	// set value
+	mSettings[k] = v;
 }
+
+void UIQMakeProjectSettings::removeValue( const QString& s, const QString& v )
+{
+	// get key
+	const QString k = QString( "%1|%2|%3" ).arg( cbScopes->currentText() ).arg( cbOperators->currentText(), s );
+	// if list don t contains value return
+	if ( !mSettings.value( k ).contains( v ) )
+		return;
+	// remove value from list
+	mSettings[k].removeAll( v );
+	// if list is empty, clear it
+	if ( mSettings[k].isEmpty() )
+		clearValues( s );
+}
+
+void UIQMakeProjectSettings::removeValues( const QString& s, const QStringList& v )
+{
+	// get key
+	const QString k = QString( "%1|%2|%3" ).arg( cbScopes->currentText() ).arg( cbOperators->currentText(), s ) ;
+	// if entry not exists, return
+	if ( !mSettings.contains( k ) )
+		return;
+	// for each value to remove, remove it from list
+	foreach ( const QString c, v )
+		mSettings[k].removeAll( c );
+	// if list is empty, clear it
+	if ( mSettings[k].isEmpty() )
+		clearValues( s );
+}
+
+void UIQMakeProjectSettings::clearValues( const QString& s )
+{ mSettings.remove( QString( "%1|%2|%3" ).arg( cbScopes->currentText() ).arg( cbOperators->currentText(), s )  ); }
+
+QStringList UIQMakeProjectSettings::values( const QString& s ) const
+{ return mSettings.value( QString( "%1|%2|%3" ).arg( cbScopes->currentText(), cbOperators->currentText(), s ) ); }
 
 void UIQMakeProjectSettings::cb_highlighted( int )
 {
@@ -555,6 +566,45 @@ void UIQMakeProjectSettings::cb_highlighted( int )
 		mSettings[ key.arg( cbVariables->currentText() ) ] = l;
 }
 
+void UIQMakeProjectSettings::tb_clicked()
+{
+	QToolButton* tb = qobject_cast<QToolButton*>( sender() );
+	if ( !tb )
+		return;
+	QString s;
+	
+	if ( tb == tbIcon )
+	{
+		s = getImageFileName( tr( "Choose your application icon" ), mProject->canonicalFilePath( leIcon->text() ), this );
+		if ( !s.isEmpty() )
+		{
+			leIcon->setText( mProject->relativeFilePath( s ) );
+			lPixmap->setPixmap( QPixmap( s ) );
+		}
+	}
+	else if ( tb == tbHelpFile )
+	{
+		s = getOpenFileName( tr( "Choose your application help root file" ), mProject->canonicalFilePath( leHelpFile->text() ), tr( "HTMLs (*.htm *.html);;PDFs (*.pdf);;Windows Help Files (*.chm *.hlp)" ), this );
+		if ( !s.isEmpty() )
+			leHelpFile->setText( mProject->relativeFilePath( s ) );
+	}
+	else if ( tb == tbOutputPath )
+	{
+		s = getExistingDirectory( tr( "Choose your application output path" ), mProject->canonicalFilePath( leOutputPath->text() ), this );
+		if ( !s.isEmpty() )
+			leOutputPath->setText( mProject->relativeFilePath( s ) );
+	}
+	else if ( tb == tbTranslationsPath )
+	{
+		s = getExistingDirectory( tr( "Choose your translations path" ), mProject->canonicalFilePath( tbTranslationsPath->text() ), this );
+		if ( !s.isEmpty() )
+			leTranslationsPath->setText( mProject->relativeFilePath( s ) );
+	}
+}
+
+void UIQMakeProjectSettings::sb_valueChanged( int )
+{ sbBuild->setValue( 0 ); }
+
 void UIQMakeProjectSettings::on_cbScopes_currentIndexChanged( const QString& )
 { on_cbOperators_currentIndexChanged( cbOperators->currentText() ); }
 
@@ -562,17 +612,17 @@ void UIQMakeProjectSettings::on_cbOperators_currentIndexChanged( const QString& 
 {
 	QStringList l;
 	const QString key = QString( "%1|%2|%3" ).arg( cbScopes->currentText() ).arg( cbOperators->currentText() );
-	//
-	leTitle->setText( mSettings[ key.arg( leTitle->statusTip() ) ].join( " " ) );
-	leIcon->setText( mSettings[ key.arg( leIcon->statusTip() ) ].join( " " ) );
+	
+	leTitle->setText( mSettings.value( key.arg( leTitle->statusTip() ) ).join( " " ) );
+	leIcon->setText( mSettings.value( key.arg( leIcon->statusTip() ) ).join( " " ) );
 	lPixmap->setPixmap( QPixmap( mProject->canonicalFilePath( leIcon->text() ) ) );
-	leHelpFile->setText( mSettings[ key.arg( leHelpFile->statusTip() ) ].join( " " ) );
-	leAuthor->setText( mSettings[ key.arg( leAuthor->statusTip() ) ].join( " " ) );
-	cbTemplate->setCurrentIndex( cbTemplate->findText( mSettings[ key.arg( cbTemplate->statusTip() ) ].join( " " ) ) );
-	cbLanguage->setCurrentIndex( cbLanguage->findText( mSettings[ key.arg( cbLanguage->statusTip() ) ].join( " " ) ) );
-	setCurrentCONFIG( mSettings[ key.arg( lwCompilerFlags->statusTip() ) ].join( " " ) );
-	setCurrentQT( mSettings[ key.arg( lwQtModules->statusTip() ) ].join( " " ) );
-	l = mSettings[ key.arg( gbVersion->statusTip() ) ];
+	leHelpFile->setText( mSettings.value( key.arg( leHelpFile->statusTip() ) ).join( " " ) );
+	leAuthor->setText( mSettings.value( key.arg( leAuthor->statusTip() ) ).join( " " ) );
+	cbTemplate->setCurrentIndex( cbTemplate->findText( mSettings.value( key.arg( cbTemplate->statusTip() ) ).join( " " ) ) );
+	cbLanguage->setCurrentIndex( cbLanguage->findText( mSettings.value( key.arg( cbLanguage->statusTip() ) ).join( " " ) ) );
+	setCurrentCONFIG( mSettings.value( key.arg( lwCompilerFlags->statusTip() ) ).join( " " ) );
+	setCurrentQT( mSettings.value( key.arg( lwQtModules->statusTip() ) ).join( " " ) );
+	l = mSettings.value( key.arg( gbVersion->statusTip() ) );
 	sbMajor->setValue( 0 );
 	sbMinor->setValue( 0 );
 	sbRelease->setValue( 0 );
@@ -586,14 +636,40 @@ void UIQMakeProjectSettings::on_cbOperators_currentIndexChanged( const QString& 
 		sbRelease->setValue( l.value( 2 ).toInt() );
 		sbBuild->setValue( l.value( 3 ).toInt() );
 	}
-	cbBuildAutoIncrement->setChecked( mSettings[ key.arg( cbBuildAutoIncrement->statusTip() ) ].join( " " ).toInt() );
-	cbEncodings->setCurrentIndex( cbEncodings->findText( mSettings[ key.arg( cbEncodings->statusTip() ) ].join( " " ) ) );
-	leOutputPath->setText( mSettings[ key.arg( leOutputPath->statusTip() ) ].join( " " ) );
-	leOutputName->setText( mSettings[ key.arg( leOutputName->statusTip() ) ].join( " " ) );
-	leTranslationsPath->setText( mSettings[ key.arg( leTranslationsPath->statusTip() ) ].join( " " ) );
-	// load variables values
+	cbBuildAutoIncrement->setChecked( mSettings.value( key.arg( cbBuildAutoIncrement->statusTip() ) ).join( " " ).toInt() );
+	cbEncodings->setCurrentIndex( cbEncodings->findText( mSettings.value( key.arg( cbEncodings->statusTip() ) ).join( " " ) ) );
+	leOutputPath->setText( mSettings.value( key.arg( leOutputPath->statusTip() ) ).join( " " ) );
+	leOutputName->setText( mSettings.value( key.arg( leOutputName->statusTip() ) ).join( " " ) );
+	leTranslationsPath->setText( mSettings.value( key.arg( leTranslationsPath->statusTip() ) ).join( " " ) );
+	
+	// update variable values
 	on_cbVariables_currentIndexChanged( cbVariables->currentText() );
+	
+	// update translations
+	setCurrentTRANSLATIONS( mSettings.value( key.arg( lwTranslations->statusTip() ) ) );
 }
+
+void UIQMakeProjectSettings::on_cbTemplate_currentIndexChanged( const QString& s )
+{
+	// enable / disable widget according to template == subdirs
+	bool b = s.toLower() == "subdirs";
+	cbOrdered->setEnabled( b );
+	leTitle->setDisabled( b );
+	leIcon->setDisabled( b );
+	tbIcon->setDisabled( b );
+	leHelpFile->setDisabled( b );
+	tbHelpFile->setDisabled( b );
+	gbVersion->setDisabled( b );
+	fBuildType->setDisabled( b );
+	fWarn->setDisabled( b );
+	cbBuildAll->setDisabled( b ? b : !rbDebugRelease->isChecked() );
+	wLibraries->setDisabled( b );
+	wSettings->setDisabled( b );
+	wTranslations->setDisabled( b );
+}
+
+void UIQMakeProjectSettings::lw_currentItemChanged( QListWidgetItem* it, QListWidgetItem* )
+{ tbInformations->setHtml( it ? it->data( QtItem::HelpRole ).toString() : "" ); }
 
 void UIQMakeProjectSettings::on_lwFiles_itemDoubleClicked( QListWidgetItem* i )
 {
@@ -633,7 +709,8 @@ void UIQMakeProjectSettings::on_cbVariables_currentIndexChanged( const QString& 
 {
 	lwValues->clear();
 	QString k = QString( "%1|%2|%3" ).arg( cbScopes->currentText(), cbOperators->currentText(), s );
-	lwValues->addItems( mSettings[k] );
+	if ( mSettings.contains( k ) )
+		lwValues->addItems( mSettings.value( k ) );
 }
 
 void UIQMakeProjectSettings::on_pbAddValue_clicked()
@@ -646,66 +723,50 @@ void UIQMakeProjectSettings::on_pbAddValue_clicked()
 
 void UIQMakeProjectSettings::on_pbEditValue_clicked()
 {
-	QListWidgetItem* it = lwValues->currentItem();
-	if ( !it )
-		return;
-	bool b;
-	QString s = QInputDialog::getText( this, tr( "Edit value..." ), tr( "Edit your value content :" ), QLineEdit::Normal, it->text(), &b );
-	if ( b && !s.isEmpty() )
-		editValue( s );
+	if ( QListWidgetItem* it = lwValues->selectedItems().value( 0 ) )
+	{
+		bool b;
+		QString s = QInputDialog::getText( this, tr( "Edit value..." ), tr( "Edit your value content :" ), QLineEdit::Normal, it->text(), &b );
+		if ( b && !s.isEmpty() && it->text() != s )
+			editValue( s );
+	}
 }
 
 void UIQMakeProjectSettings::on_pbRemoveValue_clicked()
 { removeValue(); }
 
 void UIQMakeProjectSettings::on_pbClearValues_clicked()
-{
-	if ( cbVariables->currentText().toLower() == "translations" && cbScopes->currentText().isEmpty() && cbOperators->currentText() == "=" )
-		while ( lwValues->count() )
-			removeValue( lwValues->item( 0 )->text() );
-	else
-		lwValues->clear();
-}
+{ lwValues->clear(); }
 
 void UIQMakeProjectSettings::on_lwTranslations_itemChanged( QListWidgetItem* it )
 {
 	if ( !it )
 		return;
+	
+	// get key
+	QString k = QString( "%1|%2|TRANSLATIONS" ).arg( cbScopes->currentText(), cbOperators->currentText() );
+	
 	// if translations checked and no translations path, set one
 	if ( leTranslationsPath->text().isEmpty() )
-	{
 		leTranslationsPath->setText( "translations" );
-		leTranslationsPath->setModified( true );
-	}
-	if ( !lwTranslations->isVisible() )
-		return;
+	
 	// get translation file
 	QString s = mTranslationMask.arg( mProject->name() ).arg( it->text() );
-	QString k = "|=|TRANSLATIONS";
+	
 	// check translation
 	switch ( it->checkState() )
 	{
 		case Qt::Checked:
-			if ( cbVariables->currentText().toLower() == "translations" && cbScopes->currentText().isEmpty() && cbOperators->currentText() == "=" )
-				lwValues->addItem( s );
-			else
-			{
-				if ( !mSettings.contains( k ) )
-					mSettings[ k ] = mProject->getListValues( "TRANSLATIONS" );
-				if ( !mSettings.value( k ).contains( s, Qt::CaseInsensitive ) )
-					mSettings[ k ] << s;
-			}
+			if ( cbVariables->currentText().toLower() == "translations" )
+				addValue( s );
+			else if ( !mSettings.contains( k ) || !mSettings[k].contains( s ) )
+				mSettings[k] << s;
 			break;
 		case Qt::Unchecked:
-			if ( cbVariables->currentText().toLower() == "translations" && cbScopes->currentText().isEmpty() && cbOperators->currentText() == "=" )
-				delete lwValues->findItems( s, Qt::MatchFixedString | Qt::MatchRecursive ).value( 0 );
-			else
-			{
-				if ( !mSettings.contains( k ) )
-					mSettings[ k ] = mProject->getListValues( "TRANSLATIONS" );
-				if ( mSettings.value( k ).contains( s, Qt::CaseInsensitive ) )
-					mSettings[ k ].removeAll( s );
-			}
+			if ( cbVariables->currentText().toLower() == "translations" )
+				removeValue( s );
+			else if ( mSettings.contains( k ) && mSettings[k].contains( s ) )
+				mSettings[k].removeAll( s );
 			break;
 		default:
 			break;

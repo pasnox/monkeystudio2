@@ -280,7 +280,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex" >
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="wApplication" >
       <layout class="QGridLayout" >
@@ -1090,17 +1090,8 @@
        </item>
        <item row="0" column="0" >
         <widget class="QGroupBox" name="gbQtModules" >
-         <property name="statusTip" >
-          <string>qt</string>
-         </property>
          <property name="title" >
           <string>&amp;Qt Modules</string>
-         </property>
-         <property name="checkable" >
-          <bool>true</bool>
-         </property>
-         <property name="checked" >
-          <bool>false</bool>
          </property>
          <layout class="QVBoxLayout" >
           <property name="spacing" >
@@ -1484,7 +1475,11 @@
            </widget>
           </item>
           <item>
-           <widget class="QListWidget" name="lwTranslations" />
+           <widget class="QListWidget" name="lwTranslations" >
+            <property name="statusTip" >
+             <string>TRANSLATIONS</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
