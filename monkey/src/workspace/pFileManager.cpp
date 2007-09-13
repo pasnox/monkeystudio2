@@ -48,6 +48,8 @@ pAbstractChild* pFileManager::openFile( const QString& s, const QPoint& p )
 		connect( c, SIGNAL( fileClosed( const QString& ) ), this, SIGNAL( fileClosed( const QString& ) ) );
 		// update file menu
 		connect( c, SIGNAL( modifiedChanged( bool ) ), pMenuBar::instance()->action( "mFile/mSave/aCurrent" ), SLOT( setEnabled( bool ) ) );
+        //update tab icon
+    connect( c, SIGNAL( modifiedChanged( bool ) ), pWorkspace::instance(), SLOT( markTabAsNotSaved(bool) ) );
 		// update edit menu
 		connect( c, SIGNAL( undoAvailableChanged( bool ) ), pMenuBar::instance()->action( "mEdit/aUndo" ), SLOT( setEnabled( bool ) ) );
 		connect( c, SIGNAL( redoAvailableChanged( bool ) ), pMenuBar::instance()->action( "mEdit/aRedo" ), SLOT( setEnabled( bool ) ) );
@@ -107,6 +109,7 @@ void pFileManager::goToLine( const QString& s, const QPoint& p, bool b )
 	if ( c )
 		c->goTo( s, p, b );
 }
+
 /*
 void pFileManager::setBreakPoint( const QString& s, int i, bool b, pAbstractProjectProxy* p )
 {

@@ -649,6 +649,14 @@ void pTabbedWorkspace::setTabsHaveShortcut( bool b )
 	updateTabsNumber();
 }
 
+void pTabbedWorkspace::markTabAsNotSaved (bool notSaved)
+{
+    if ( notSaved )
+        mTabBar->setTabIcon (mTabBar->currentIndex(),QIcon( ":/project/icons/project/save.png" ));
+    else
+        mTabBar->setTabIcon (mTabBar->currentIndex(),QIcon());
+}
+
 void pTabbedWorkspace::updateTabsNumber( int i )
 {
 	// fill i if i = -1 for complete update
