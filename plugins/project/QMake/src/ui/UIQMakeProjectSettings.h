@@ -13,7 +13,8 @@ class QMakeProxy;
 class ProjectItem;
 class QDirModel;
 
-typedef QHash<QString, QStringList> QtSettings; // scope|operator|variable, values
+typedef QStringList Key;
+typedef QHash<Key, QStringList> QtSettings; // scope|operator|variable, values
 
 class UIQMakeProjectSettings : public QDialog, public Ui::UIQMakeProjectSettings, public QSingleton<UIQMakeProjectSettings>
 {
@@ -21,6 +22,7 @@ class UIQMakeProjectSettings : public QDialog, public Ui::UIQMakeProjectSettings
 	friend class QSingleton<UIQMakeProjectSettings>;
 	
 protected:
+	bool mInit;
 	ProjectItem* mProject;
 	ProjectsModel* mModel;
 	QtSettings mSettings;
@@ -37,16 +39,16 @@ protected:
 	void setCurrentQT( const QString& );
 	void setCurrentTRANSLATIONS( const QStringList& );
 	const QString checkTranslationsPath();
-	QString currentKey( const QString& ) const;
-	void addValue( const QString& s, const QString& v );
-	void addValues( const QString& s, const QStringList& v );
-	void setValue( const QString& s, const QString& v );
-	void setValues( const QString& s, const QStringList& v );
-	void removeValue( const QString& s, const QString& v );
-	void removeValues( const QString& s, const QStringList& v );
-	void clearValues( const QString& s );
-	QStringList values( const QString& s ) const;
-	QString value( const QString& s ) const;
+	Key currentKey( const QString& ) const;
+	void addValue( const Key& s, const QString& v );
+	void addValues( const Key& s, const QStringList& v );
+	void setValue( const Key& s, const QString& v );
+	void setValues( const Key& s, const QStringList& v );
+	void removeValue( const Key& s, const QString& v );
+	void removeValues( const Key& s, const QStringList& v );
+	void clearValues( const Key& s );
+	QStringList values( const Key& s ) const;
+	QString value( const Key& s ) const;
 	QModelIndex currentIndex();
 	void setCurrentIndex( const QModelIndex& );
 

@@ -21,24 +21,22 @@ using namespace pMonkeyStudio;
 
 QString mTranslationMask = "$$TRANSLATIONS_PATH/%2_%3.ts";
 
+uint qHash( const Key& k )
+{
+	uint i = 0;
+	foreach ( const QString s, k )
+		i += qHash( s );
+	return i;
+}
+
 UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
-	: QDialog( p ), mProject( m ), mModel( m->model() ), mDirs( new QDirModel( this ) )
+	: QDialog( p ), mInit( false ), mProject( m ), mModel( m->model() ), mDirs( new QDirModel( this ) )
 {
 	Q_ASSERT( mProject != 0 );
 	setupUi( this );
 	setAttribute( Qt::WA_DeleteOnClose );
 	// set window title
 	setWindowTitle( QString( "Project Settings - %1" ).arg( mProject->name() ) );
-	// load scopes
-	cbScopes->addItems( UISettingsQMake::readScopes() );
-	// load operators
-	cbOperators->addItems( UISettingsQMake::readOperators() );
-	// load text codec
-	cbEncodings->addItems( availableTextCodecs() );
-	// load modules & config
-	loadModules();
-	loadConfigs();
-	loadLanguages();
 	// set button pixmap
 	dbbButtons->button( QDialogButtonBox::Ok )->setIcon( QPixmap( ":/Icons/Icons/buttonok.png" ) );
 	dbbButtons->button( QDialogButtonBox::Cancel )->setIcon( QPixmap( ":/Icons/Icons/buttoncancel.png" ) );
@@ -92,7 +90,13 @@ UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
 }
 
 void UIQMakeProjectSettings::showEvent( QShowEvent* )
-{ QTimer::singleShot( 0, this, SLOT( querySettings() ) ); }
+{
+	if ( !mInit )
+	{
+		mInit = true;
+		QTimer::singleShot( 0, this, SLOT( querySettings() ) );
+	}
+}
 
 void UIQMakeProjectSettings::closeEvent( QCloseEvent* e )
 {
@@ -181,7 +185,7 @@ void UIQMakeProjectSettings::setCurrentTRANSLATIONS( const QStringList& l )
 
 const QString UIQMakeProjectSettings::checkTranslationsPath()
 {
-	const QString k = "|=|TRANSLATIONS_PATH";
+	const Key k = Key() << "" << "=" << "TRANSLATIONS_PATH";
 	QString c = value( k );
 	if ( c.isEmpty() )
 	{
@@ -196,22 +200,22 @@ const QString UIQMakeProjectSettings::checkTranslationsPath()
 	return c;
 }
 
-QString UIQMakeProjectSettings::currentKey( const QString& s ) const
-{ return QString( "%1|%2|%3" ).arg( cbScopes->currentText(), cbOperators->currentText(), s ); }
+Key UIQMakeProjectSettings::currentKey( const QString& s ) const
+{ return Key() << cbScopes->currentText() << cbOperators->currentText() << s ; }
 
-void UIQMakeProjectSettings::addValue( const QString& k, const QString& v )
+void UIQMakeProjectSettings::addValue( const Key& k, const QString& v )
 {
 	if ( !mSettings.value( k ).contains( v ) && !v.isEmpty() )
 		mSettings[k] << v;
 }
 
-void UIQMakeProjectSettings::addValues( const QString& k, const QStringList& v )
+void UIQMakeProjectSettings::addValues( const Key& k, const QStringList& v )
 {
 	foreach ( const QString s, v )
 		addValue( k, s );
 }
 
-void UIQMakeProjectSettings::setValue( const QString& k, const QString& v )
+void UIQMakeProjectSettings::setValue( const Key& k, const QString& v )
 {
 	if ( mSettings.contains( k ) )
 	{
@@ -224,7 +228,7 @@ void UIQMakeProjectSettings::setValue( const QString& k, const QString& v )
 		mSettings[k] = QStringList( v );
 }
 
-void UIQMakeProjectSettings::setValues( const QString& k, const QStringList& v )
+void UIQMakeProjectSettings::setValues( const Key& k, const QStringList& v )
 {
 	if ( mSettings.contains( k ) )
 	{
@@ -237,7 +241,7 @@ void UIQMakeProjectSettings::setValues( const QString& k, const QStringList& v )
 		mSettings[k] = v;
 }
 
-void UIQMakeProjectSettings::removeValue( const QString& k, const QString& v )
+void UIQMakeProjectSettings::removeValue( const Key& k, const QString& v )
 {
 	if ( mSettings.value( k ).contains( v ) )
 		mSettings[k].removeAll( v );
@@ -245,19 +249,19 @@ void UIQMakeProjectSettings::removeValue( const QString& k, const QString& v )
 		clearValues( k );
 }
 
-void UIQMakeProjectSettings::removeValues( const QString& k, const QStringList& v )
+void UIQMakeProjectSettings::removeValues( const Key& k, const QStringList& v )
 {
 	foreach ( const QString& s, v )
 		removeValue( k, s );
 }
 
-void UIQMakeProjectSettings::clearValues( const QString& k )
+void UIQMakeProjectSettings::clearValues( const Key& k )
 { mSettings.remove( k  ); }
 
-QStringList UIQMakeProjectSettings::values( const QString& k ) const
+QStringList UIQMakeProjectSettings::values( const Key& k ) const
 { return mSettings.value( k ); }
 
-QString UIQMakeProjectSettings::value( const QString& k ) const
+QString UIQMakeProjectSettings::value( const Key& k ) const
 { return mSettings.value( k ).join( " " ); }
 
 QModelIndex UIQMakeProjectSettings::currentIndex()
@@ -293,46 +297,72 @@ void UIQMakeProjectSettings::setCurrentIndex( const QModelIndex& i )
 
 void UIQMakeProjectSettings::querySettings()
 {
+	// load user operators
+	cbOperators->addItems( UISettingsQMake::readOperators() );
+	
+	// get all scope of project
+	QStringList l = mProject->projectScopesList();
+	
 	// set maximum progressbar value
-	pbProgress->setMaximum( cbScopes->count() *cbOperators->count() );
-	// read all possible combinaison settings
-	for ( int sc = 0; sc < cbScopes->count(); sc++ )
+	pbProgress->setMaximum( l.count() *cbOperators->count() );
+	
+	// scan values scopes
+	foreach ( QString Scope, l )
 	{
-		const QString Scope = cbScopes->itemText( sc );
+		// add scope to scope list
+		if ( cbScopes->findText( Scope ) == -1 )
+			cbScopes->addItem( Scope );
+		
+		// set current scope in progressbar
+		pbProgress->setFormat( tr( "Reading project, scope %2 : %p%" ).arg( Scope ) );
+		
+		// process application event except user inputContext
+		QApplication::processEvents( QEventLoop::ExcludeUserInputEvents );
+		
+		// browse all possible operator for scope
 		for ( int oc = 0; oc < cbOperators->count(); oc++ )
 		{
 			const QString Operator = cbOperators->itemText( oc );
-			// set current scope in progressbar
-			pbProgress->setFormat( tr( "scanning scope %1, operator %2 : %p%" ).arg( Scope, Operator ) );
+			
 			// update progress bar
 			pbProgress->setValue( pbProgress->value() +1 );
-			// process application event except user inputContext
-			QApplication::processEvents( QEventLoop::ExcludeUserInputEvents );
+			
 			// set key
-			const QString key = QString( "%1|%2|%3" ).arg( Scope ).arg( Operator );
+			const Key k = Key() << Scope << Operator;
+			
 			// check application page
-			mOriginalSettings[ key.arg( leTitle->statusTip() ) ] = mProject->getListValues( leTitle->statusTip(), Operator, Scope );
-			mOriginalSettings[ key.arg( leIcon->statusTip() ) ] = mProject->getListValues( leIcon->statusTip(), Operator, Scope );
-			mOriginalSettings[ key.arg( leHelpFile->statusTip() ) ] = mProject->getListValues( leHelpFile->statusTip(), Operator, Scope );
-			mOriginalSettings[ key.arg( leAuthor->statusTip() ) ] = mProject->getListValues( leAuthor->statusTip(), Operator, Scope );
-			mOriginalSettings[ key.arg( cbTemplate->statusTip() ) ] = mProject->getListValues( cbTemplate->statusTip(), Operator, Scope );
-			mOriginalSettings[ key.arg( cbLanguage->statusTip() ) ] = mProject->getListValues( cbLanguage->statusTip(), Operator, Scope );
-			mOriginalSettings[ key.arg( lwCompilerFlags->statusTip() ) ] = mProject->getListValues( lwCompilerFlags->statusTip(), Operator, Scope );
-			mOriginalSettings[ key.arg( lwQtModules->statusTip() ) ] = mProject->getListValues( lwQtModules->statusTip(), Operator, Scope );
-			mOriginalSettings[ key.arg( gbVersion->statusTip() ) ] = mProject->getListValues( gbVersion->statusTip(), Operator, Scope );
-			mOriginalSettings[ key.arg( cbBuildAutoIncrement->statusTip() ) ] = mProject->getListValues( cbBuildAutoIncrement->statusTip(), Operator, Scope );
-			mOriginalSettings[ key.arg( cbEncodings->statusTip() ) ] = mProject->getListValues( cbEncodings->statusTip(), Operator, Scope );
-			mOriginalSettings[ key.arg( leOutputPath->statusTip() ) ] = mProject->getListValues( leOutputPath->statusTip(), Operator, Scope );
-			mOriginalSettings[ key.arg( leOutputName->statusTip() ) ] = mProject->getListValues( leOutputName->statusTip(), Operator, Scope );
-			mOriginalSettings[ key.arg( leTranslationsPath->statusTip() ) ] = mProject->getListValues( leTranslationsPath->statusTip(), Operator, Scope );
+			mOriginalSettings[ Key( k ) << leTitle->statusTip() ] = mProject->getListValues( leTitle->statusTip(), Operator, Scope );
+			mOriginalSettings[ Key( k ) << leIcon->statusTip() ] = mProject->getListValues( leIcon->statusTip(), Operator, Scope );
+			mOriginalSettings[ Key( k ) << leHelpFile->statusTip() ] = mProject->getListValues( leHelpFile->statusTip(), Operator, Scope );
+			mOriginalSettings[ Key( k ) << leAuthor->statusTip() ] = mProject->getListValues( leAuthor->statusTip(), Operator, Scope );
+			mOriginalSettings[ Key( k ) << cbTemplate->statusTip() ] = mProject->getListValues( cbTemplate->statusTip(), Operator, Scope );
+			mOriginalSettings[ Key( k ) << cbLanguage->statusTip() ] = mProject->getListValues( cbLanguage->statusTip(), Operator, Scope );
+			mOriginalSettings[ Key( k ) << lwCompilerFlags->statusTip() ] = mProject->getListValues( lwCompilerFlags->statusTip(), Operator, Scope );
+			mOriginalSettings[ Key( k ) << lwQtModules->statusTip() ] = mProject->getListValues( lwQtModules->statusTip(), Operator, Scope );
+			mOriginalSettings[ Key( k ) << gbVersion->statusTip() ] = mProject->getListValues( gbVersion->statusTip(), Operator, Scope );
+			mOriginalSettings[ Key( k ) << cbBuildAutoIncrement->statusTip() ] = mProject->getListValues( cbBuildAutoIncrement->statusTip(), Operator, Scope );
+			mOriginalSettings[ Key( k ) << cbEncodings->statusTip() ] = mProject->getListValues( cbEncodings->statusTip(), Operator, Scope );
+			mOriginalSettings[ Key( k ) << leOutputPath->statusTip() ] = mProject->getListValues( leOutputPath->statusTip(), Operator, Scope );
+			mOriginalSettings[ Key( k ) << leOutputName->statusTip() ] = mProject->getListValues( leOutputName->statusTip(), Operator, Scope );
+			mOriginalSettings[ Key( k ) << leTranslationsPath->statusTip() ] = mProject->getListValues( leTranslationsPath->statusTip(), Operator, Scope );
 			for ( int i = 0; i < cbVariables->count(); i++ )
-				mOriginalSettings[ key.arg( cbVariables->itemText( i ) ) ] = mProject->getListValues( cbVariables->itemText( i ), Operator, Scope );
+				mOriginalSettings[ Key( k ) << cbVariables->itemText( i ) ] = mProject->getListValues( cbVariables->itemText( i ), Operator, Scope );
 		}
 	}
+	
 	// set settings original one
 	mSettings = mOriginalSettings;
+	
+	// fill list & combo
+	cbScopes->addItems( UISettingsQMake::readScopes() );
+	cbEncodings->addItems( availableTextCodecs() );
+	loadModules();
+	loadConfigs();
+	loadLanguages();
+	
 	// hide progressbar
 	pbProgress->hide();
+	
 	// apply current settings
 	on_cbOperators_currentIndexChanged( cbOperators->currentText() );
 }
@@ -696,7 +726,7 @@ void UIQMakeProjectSettings::on_lwTranslations_itemChanged( QListWidgetItem* it 
 		return;
 	
 	// get key
-	QString k = currentKey( "TRANSLATIONS" );
+	const Key k = currentKey( "TRANSLATIONS" );
 	
 	// set default translatin path if needed
 	checkTranslationsPath();
@@ -753,8 +783,7 @@ void UIQMakeProjectSettings::on_tbEdit_clicked()
 
 void UIQMakeProjectSettings::on_tbRemove_clicked()
 {
-	ProjectItem* it = mModel->itemFromIndex( currentIndex() );
-	if ( it )
+	if ( ProjectItem* it = mModel->itemFromIndex( currentIndex() ) )
 		it->remove();
 }
 
@@ -810,88 +839,11 @@ void UIQMakeProjectSettings::accept()
 {
 	// backup current settings state
 	cb_highlighted( 0 );
-	// applications
-	QStringList s, c;
-	// if subdirs only fill these and return
-	if ( !cbEncodings->currentText().isEmpty() )
-		mProject->setStringValues( cbEncodings->currentText(), "ENCODING" );
-	if ( !cbTemplate->currentText().isEmpty() )
-		mProject->setStringValues( cbTemplate->currentText(), "TEMPLATE" );
-	if ( !cbLanguage->currentText().isEmpty() )
-		mProject->setStringValues( cbLanguage->currentText(), "LANGUAGE" );
-	if ( leAuthor->isModified() )
-		mProject->setStringValues( leAuthor->text(), "APP_AUTHOR" );
-	if ( cbTemplate->currentText().toLower() == "subdirs" )
-	{
-		if ( cbOrdered->isChecked() )
-			s << "ordered";
-		mProject->setListValues( s, "CONFIG", "+=" );
-		// close dialog
-		QDialog::accept();
-		return;
-	}
-	//
-	if ( leTitle->isModified() )
-		mProject->setStringValues( leTitle->text(), "APP_TITLE" );
-	if ( leIcon->isModified() )
-		mProject->setStringValues( leIcon->text(), "APP_ICON" );
-	if ( leHelpFile->isModified() )
-		mProject->setStringValues( leHelpFile->text(), "APP_HELP_FILE" );
-	if ( gbVersion->isChecked() )
-	{
-		mProject->setStringValues( QString( "%1.%2.%3.%4" ).arg( sbMajor->value() ).arg( sbMinor->value() ).arg( sbRelease->value() ).arg( sbBuild->value() ), "VERSION" );
-		mProject->setStringValues( QString::number( cbBuildAutoIncrement->isChecked() ), "APP_AUTO_INCREMENT" );
-	}
-	else
-	{
-		mProject->setStringValues( QString::null, "VERSION" );
-		mProject->setStringValues( QString::null, "APP_AUTO_INCREMENT" );
-	}
-	// reading config variable
-	if ( rbDebug->isChecked() )
-		s << "debug";
-	else if ( rbRelease->isChecked() )
-		s << "release";
-	else if ( rbDebugRelease->isChecked() )
-	{
-		s << "debug_and_release";
-		if ( cbBuildAll->isChecked() )
-			s << "build_all";
-	}
-	if ( rbWarnOff->isChecked() )
-		s << "warn_off";
-	else if ( rbWarnOn->isChecked() )
-		s << "warn_on";
-	// read qt modules / lwCompilerFlags
-	QList<QListWidgetItem*> l = lwQtModules->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive );
-	l << lwCompilerFlags->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive );
-	foreach ( QListWidgetItem* it, l )
-	{
-		QString v = it->data( QtItem::VariableRole ).toString().toLower();
-		if ( it->checkState() == Qt::Checked )
-		{
-			if ( v == "config" )
-				s << it->data( QtItem::ValueRole ).toString();
-			else if ( v == "qt" )
-				c << it->data( QtItem::ValueRole ).toString();
-		}		
-	}
-	// add other config
-	if ( !leConfig->text().isEmpty() )
-		s << leConfig->text().simplified().split( " " );
-	mProject->setListValues( s, "CONFIG", "+=" );
-	mProject->setListValues( c, "QT" );
-	s.clear();
-	c.clear();
-	// translations
-	if ( leTranslationsPath->isModified() )
-		mProject->setStringValues( leTranslationsPath->text(), "TRANSLATIONS_PATH" );
-	// settings
-	foreach ( QString v, mSettings.keys() )
-	{
-		QStringList l = v.split( "|" );
-		mProject->setListValues( mSettings.value( v ), l.at( 2 ), l.at( 1 ), l.at( 0 ) );
-	}
+	
+	// write each key
+	foreach ( const Key k, mSettings.keys() )
+		mProject->setListValues( mSettings[k], k.value( 2 ), k.value( 1 ), k.value( 0 ) );
+	
 	// close dialog
 	QDialog::accept();
 }
