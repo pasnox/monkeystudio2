@@ -86,18 +86,6 @@ void UISettingsQMake::generateApi( const QString& s1, const QString& s2 ) // qtv
 	mAPI->prepare();
 }
 
-QStringList UISettingsQMake::defaultOperators()
-{
-	return QStringList()
-	<< "=" << "-=" << "+=" << "*=" << "~=" << ":" << "|";
-}
-
-QStringList UISettingsQMake::readOperators()
-{
-	QStringList l = pSettings::instance()->value( "Plugins/QMake/Operators" ).toStringList();
-	return l.isEmpty() ? defaultOperators() : l;
-}
-
 QStringList UISettingsQMake::defaultFilters()
 {
 	return QStringList()
@@ -223,6 +211,30 @@ QtItemList UISettingsQMake::defaultSettings()
 	<< new QtItem( "qaxserver_no_postlink", "qaxserver_no_postlink", "CONFIG", "No help available" );
 }
 
+QStringList UISettingsQMake::defaultOperators()
+{
+	return QStringList()
+	<< "=" << "-=" << "+=" << "*=" << "~=" << ":" << "|";
+}
+
+QStringList UISettingsQMake::readOperators()
+{
+	QStringList l = pSettings::instance()->value( "Plugins/QMake/Operators" ).toStringList();
+	return l.isEmpty() ? defaultOperators() : l;
+}
+
+QStringList UISettingsQMake::defaultLibExtensions()
+{
+	return QStringList()
+	<< "lib" << "dll" << "a" << "la" << "so" << "dylib";
+}
+
+QStringList UISettingsQMake::readLibExtensions()
+{
+	QStringList l = pSettings::instance()->value( "Plugins/QMake/LibExtensions" ).toStringList();
+	return l.isEmpty() ? defaultLibExtensions() : l;
+}
+
 QtItemList UISettingsQMake::readSettings()
 {
 	QtItemList l;
@@ -258,7 +270,6 @@ void UISettingsQMake::loadSettings()
 		cbKeywords->setItemData( i, pSettings::instance()->value( QString( "Plugins/QMake/%1" ).arg( cbKeywords->itemText( i ) ) ).toString(), DataRole );
 	if ( cbKeywords->count() )
 		on_cbKeywords_currentIndexChanged( 0 );
-	lwOperators->addItems( readOperators() );
 	// filters & scopes
 	lwFilters->addItems( readFilters() );
 	lwScopes->addItems( readScopes() );
@@ -268,6 +279,9 @@ void UISettingsQMake::loadSettings()
 	for ( int i = 0; i < ft.count(); i++ )
 		if ( QListWidgetItem* it = lwFilters->item( i ) )
 			it->setToolTip( ft.at( i ) );
+	// operators && lib extension
+	lwOperators->addItems( readOperators() );
+	lwLibExtensions->addItems( readLibExtensions() );
 	// set items editable
 	QList<QListWidgetItem*> items = QList<QListWidgetItem*> () 
 	<< lwOperators->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive )
@@ -290,7 +304,7 @@ void UISettingsQMake::loadSettings()
 	}
 	qDeleteAll( l );
 	l.clear();
-	// settings
+	// configuration
 	l = readSettings();
 	foreach ( QtItem* i, l )
 	{
@@ -418,14 +432,16 @@ void UISettingsQMake::lw_currentItemChanged( QListWidgetItem* c, QListWidgetItem
 void UISettingsQMake::tbAdd_clicked()
 {
 	QListWidget* lw = 0;
-	if ( sender() == tbAddOperator )
-		lw = lwOperators;
-	else if ( sender() == tbAddFilter )
+	if ( sender() == tbAddFilter )
 		lw = lwFilters;
 	else if ( sender() == tbAddScope )
 		lw = lwScopes;
 	else if ( sender() == tbAddPathFile )
 		lw = lwPathFiles;
+	else if ( sender() == tbAddOperator )
+		lw = lwOperators;
+	else if ( sender() == tbAddLibExtension )
+		lw = lwLibExtensions;
 	else if ( sender() == tbAddQtModule )
 		lw = lwQtModules;
 	else if ( sender() == tbAddSetting )
@@ -441,14 +457,16 @@ void UISettingsQMake::tbAdd_clicked()
 
 void UISettingsQMake::tbRemove_clicked()
 {
-	if ( sender() == tbRemoveOperator )
-		delete lwOperators->currentItem();
-	else if ( sender() == tbRemoveFilter )
+	if ( sender() == tbRemoveFilter )
 		delete lwFilters->currentItem();
 	else if ( sender() == tbRemoveScope )
 		delete lwScopes->currentItem();
 	else if ( sender() == tbRemovePathFile )
 		delete lwPathFiles->currentItem();
+	else if ( sender() == tbRemoveOperator )
+		delete lwOperators->currentItem();
+	else if ( sender() == tbRemoveLibExtension )
+		delete lwLibExtensions->currentItem();
 	else if ( sender() == tbRemoveQtModule )
 		delete lwQtModules->currentItem();
 	else if ( sender() == tbRemoveSetting )
@@ -457,14 +475,16 @@ void UISettingsQMake::tbRemove_clicked()
 
 void UISettingsQMake::tbClear_clicked()
 {
-	if ( sender() == tbClearOperators )
-		lwOperators->clear();
-	else if ( sender() == tbClearFilters )
+	if ( sender() == tbClearFilters )
 		lwFilters->clear();
 	else if ( sender() == tbClearScopes )
 		lwScopes->clear();
 	else if ( sender() == tbClearPathFiles )
 		lwPathFiles->clear();
+	else if ( sender() == tbClearOperators )
+		lwOperators->clear();
+	else if ( sender() == tbClearLibExtensions )
+		lwLibExtensions->clear();
 	else if ( sender() == tbClearQtModules )
 		lwQtModules->clear();
 	else if ( sender() == tbClearSettings )
@@ -477,14 +497,16 @@ void UISettingsQMake::tbUp_clicked()
 	if ( !tb )
 		return;
 	QListWidget* lw = 0;
-	if ( tb == tbUpOperator )
-		lw = lwOperators;
-	else if ( tb == tbUpFilter )
+	if ( tb == tbUpFilter )
 		lw = lwFilters;
 	else if ( tb == tbUpScope )
 		lw = lwScopes;
 	else if ( tb == tbUpPathFile )
 		lw = lwPathFiles;
+	else if ( tb == tbUpOperator )
+		lw = lwOperators;
+	else if ( tb == tbUpLibExtension )
+		lw = lwLibExtensions;
 	else if ( tb == tbUpQtModule )
 		lw = lwQtModules;
 	else if ( tb == tbUpSetting )
@@ -506,14 +528,16 @@ void UISettingsQMake::tbDown_clicked()
 	if ( !tb )
 		return;
 	QListWidget* lw = 0;
-	if ( tb == tbDownOperator )
-		lw = lwOperators;
-	else if ( tb == tbDownFilter )
+	if ( tb == tbDownFilter )
 		lw = lwFilters;
 	else if ( tb == tbDownScope )
 		lw = lwScopes;
 	else if ( tb == tbDownPathFile )
 		lw = lwPathFiles;
+	else if ( tb == tbDownOperator )
+		lw = lwOperators;
+	else if ( tb == tbDownLibExtension )
+		lw = lwLibExtensions;
 	else if ( tb == tbDownQtModule )
 		lw = lwQtModules;
 	else if ( tb == tbDownSetting )
@@ -571,7 +595,6 @@ void UISettingsQMake::on_bbDialog_helpRequested()
 	}
 	if ( !s.isEmpty() )
 		QWhatsThis::showText( mapToGlobal( geometry().center() ), s );
-	// bbDialog->button( QDialogButtonBox::Help )->mapToGlobal( QPoint( 0, 0 ) )
 }
 
 void UISettingsQMake::on_bbDialog_clicked( QAbstractButton* b )
@@ -582,9 +605,6 @@ void UISettingsQMake::on_bbDialog_clicked( QAbstractButton* b )
 	// general
 	for ( int i = 0; i < cbKeywords->count(); i++ )
 		pSettings::instance()->setValue( QString( "Plugins/QMake/%1" ).arg( cbKeywords->itemText( i ) ), cbKeywords->itemData( i, DataRole ).toString() );
-	foreach ( QListWidgetItem* it, lwOperators->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
-		l << it->text();
-	pSettings::instance()->setValue( "Plugins/QMake/Operators", l );
 	// filters & scopes
 	l.clear();
 	foreach ( QListWidgetItem* it, lwFilters->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
@@ -603,6 +623,13 @@ void UISettingsQMake::on_bbDialog_clicked( QAbstractButton* b )
 	foreach ( QListWidgetItem* it, lwFilters->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
 		l << it->toolTip();
 	pSettings::instance()->setValue( "Plugins/QMake/FiltersToolTips", l );
+	// operators && lib extensions
+	foreach ( QListWidgetItem* it, lwOperators->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
+		l << it->text();
+	pSettings::instance()->setValue( "Plugins/QMake/Operators", l );
+	foreach ( QListWidgetItem* it, lwLibExtensions->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
+		l << it->text();
+	pSettings::instance()->setValue( "Plugins/QMake/LibExtensions", l );
 	// qt modules
 	lw_currentItemChanged( 0, lwQtModules->currentItem() );
 	pSettings::instance()->beginWriteArray( "Plugins/QMake/QtModules" );

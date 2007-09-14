@@ -36,6 +36,8 @@ protected:
 	QStringList currentQT() const;
 	void setCurrentQT( const QString& );
 	void setCurrentTRANSLATIONS( const QStringList& );
+	const QString checkTranslationsPath();
+	QString currentKey( const QString& ) const;
 	void addValue( const QString& s, const QString& v );
 	void addValues( const QString& s, const QStringList& v );
 	void setValue( const QString& s, const QString& v );
@@ -44,6 +46,7 @@ protected:
 	void removeValues( const QString& s, const QStringList& v );
 	void clearValues( const QString& s );
 	QStringList values( const QString& s ) const;
+	QString value( const QString& s ) const;
 	QModelIndex currentIndex();
 	void setCurrentIndex( const QModelIndex& );
 
@@ -55,12 +58,13 @@ protected slots:
 	void querySettings();
 	void loadModules();
 	void loadConfigs();
-	void loadLanguages(); //
-	void setDir( const QString& ); //
-	void setDir( const QModelIndex& ); //
-	void addValue( const QString& ); //
-	void editValue( const QString& ); //
-	void removeValue( const QString& = QString::null ); //
+	void loadLanguages();
+	void setDir( const QString& );
+	void setDir( const QModelIndex& );
+	void addValue( const QString& );
+	void editValue( const QString& );
+	void removeValue( const QString& = QString::null );
+	void on_tbUndo_clicked();
 	void cb_highlighted( int );
 	void tb_clicked();
 	void sb_valueChanged( int );
@@ -68,9 +72,9 @@ protected slots:
 	void on_cbOperators_currentIndexChanged( const QString& );
 	void on_cbTemplate_currentIndexChanged( const QString& );
 	void lw_currentItemChanged( QListWidgetItem*, QListWidgetItem* );
-	void on_lwFiles_itemDoubleClicked( QListWidgetItem* ); //
+	void on_lwFiles_itemDoubleClicked( QListWidgetItem* );
 	void on_cbVariables_currentIndexChanged( const QString& );
-	void on_pbAddValue_clicked();
+	void on_pbAddValue_clicked(); // ++
 	void on_pbEditValue_clicked();
 	void on_pbRemoveValue_clicked();
 	void on_pbClearValues_clicked();

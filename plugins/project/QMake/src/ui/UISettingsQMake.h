@@ -35,8 +35,6 @@ public:
 	
 	void recursiveFiles( QDir );
 	void generateApi( const QString&, const QString& );
-	static QStringList defaultOperators();
-	static QStringList readOperators();
 	static QStringList defaultFilters();
 	static QStringList readFilters();
 	static QStringList defaultFiltersToolTips();
@@ -45,6 +43,10 @@ public:
 	static QStringList readScopes();
 	static QStringList defaultPathFiles();
 	static QStringList readPathFiles();
+	static QStringList defaultOperators();
+	static QStringList readOperators();
+	static QStringList defaultLibExtensions();
+	static QStringList readLibExtensions();
 	static QtItemList defaultQtModules();
 	static QtItemList readQtModules();
 	static QtItemList defaultSettings();
