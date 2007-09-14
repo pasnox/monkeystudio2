@@ -47,6 +47,7 @@ pTabbedWorkspace::pTabbedWorkspace( QWidget* p, pTabbedWorkspace::TabMode m )
 	setAttribute( Qt::WA_DeleteOnClose );
 	mTabBar->setDrawBase( false );
 	mTabBar->setSizePolicy( QSizePolicy( QSizePolicy::Maximum, QSizePolicy::Maximum ) );
+	mTabBar->setElideMode (Qt::ElideMiddle);
 	setCornerWidget( pTabbedWorkspaceRightCorner::instance( this ) );
 	setTabMode( m );
 	setDocumentMode( pTabbedWorkspace::dmMaximized );
