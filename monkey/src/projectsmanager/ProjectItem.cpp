@@ -300,6 +300,30 @@ ProjectItemList ProjectItem::childrenProjects( bool b ) const
 	return l;
 }
 
+ProjectItemList ProjectItem::projectScopes() const
+{
+	ProjectItemList l;
+	foreach ( ProjectItem* it, projectItems() )
+		if ( it->getType() == ProjectsModel::ScopeType || it->getType() == ProjectsModel::NestedScopeType )
+			l << it;
+	return l;
+}
+
+QStringList ProjectItem::projectScopesList() const
+{
+	QStringList l( "" ); // root scope
+	foreach ( ProjectItem* it, projectItems() )
+	{
+		if ( it->getType() == ProjectsModel::ScopeType || it->getType() == ProjectsModel::NestedScopeType )
+		{
+			const QString s = it->scope();
+			if ( !l.contains( s ) )
+				l << s;
+		}
+	}
+	return l;
+}
+
 ProjectItemList ProjectItem::match( ProjectItem* i, int r, const QVariant& v ) const
 {
 	ProjectItemList l;
@@ -340,26 +364,23 @@ QString ProjectItem::scope() const
 			s.prepend( QString( "%1%2" ).arg( j->getValue(), j->getOperator().isEmpty() ? ":" : j->getOperator() ) );
 		j = j->parent();
 	}
+	s.chop( 1 ); // remove trailing operator
 	return s;
 }
 
 ProjectItemList ProjectItem::getItemList( ProjectsModel::NodeType t, const QString& v, const QString& o, const QString& s ) const
 {
-	// project item
-	//ProjectItem* p = project();
 	// temp list
 	ProjectItemList l;
 	foreach ( ProjectItem* it, match( project(), ProjectsModel::ValueRole, v ) )
-		// check same project
-		//if ( it->project() == p )
-			// check same scope
-			if ( isEqualScope( it->scope(), s ) )
-				// check operator
-				if ( ( !o.isEmpty() && it->getOperator() == o ) || o.isEmpty() )
-					// check type
-					if ( it->getType() == t )
-						// add to list
-						l << it;
+		// check same scope
+		if ( isEqualScope( it->scope(), s ) )
+			// check operator
+			if ( ( !o.isEmpty() && it->getOperator() == o ) || o.isEmpty() )
+				// check type
+				if ( it->getType() == t )
+					// add to list
+					l << it;
 	// return list
 	return l;
 }

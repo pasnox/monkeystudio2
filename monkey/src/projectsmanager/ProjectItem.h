@@ -110,6 +110,10 @@ virtual ~ProjectItem();
 	virtual ProjectItem* parentProject() const;
 	// get direct child project, or all according to bool
 	virtual ProjectItemList childrenProjects( bool = true ) const;
+	// get all scope from project
+	virtual ProjectItemList projectScopes() const;
+	// get all unique scope list from project
+	virtual QStringList projectScopesList() const;
 	// get last scope/nestedscope of this item
 	virtual ProjectItem* lastScope() const { return 0; }
 	// get very last project scope item
