@@ -284,10 +284,11 @@ void UISettingsQMake::loadSettings()
 	lwLibExtensions->addItems( readLibExtensions() );
 	// set items editable
 	QList<QListWidgetItem*> items = QList<QListWidgetItem*> () 
-	<< lwOperators->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive )
 	<< lwFilters->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive )
 	<< lwScopes->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive )
-	<< lwPathFiles->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive );
+	<< lwPathFiles->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive )
+	<< lwOperators->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive )
+	<< lwLibExtensions->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive );
 	foreach ( QListWidgetItem* it, items )
 		it->setFlags( it->flags() | Qt::ItemIsEditable );
 	items.clear();
@@ -624,9 +625,11 @@ void UISettingsQMake::on_bbDialog_clicked( QAbstractButton* b )
 		l << it->toolTip();
 	pSettings::instance()->setValue( "Plugins/QMake/FiltersToolTips", l );
 	// operators && lib extensions
+	l.clear();
 	foreach ( QListWidgetItem* it, lwOperators->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
 		l << it->text();
 	pSettings::instance()->setValue( "Plugins/QMake/Operators", l );
+	l.clear();
 	foreach ( QListWidgetItem* it, lwLibExtensions->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
 		l << it->text();
 	pSettings::instance()->setValue( "Plugins/QMake/LibExtensions", l );
