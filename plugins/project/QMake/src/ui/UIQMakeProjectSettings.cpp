@@ -840,9 +840,10 @@ void UIQMakeProjectSettings::accept()
 	// backup current settings state
 	cb_highlighted( 0 );
 	
-	// write each key
-	foreach ( const Key k, mSettings.keys() )
-		mProject->setListValues( mSettings[k], k.value( 2 ), k.value( 1 ), k.value( 0 ) );
+	// write each key if needed
+	if ( mSettings != mOriginalSettings )
+		foreach ( const Key k, mSettings.keys() )
+			mProject->setListValues( mSettings[k], k.value( 2 ), k.value( 1 ), k.value( 0 ) );
 	
 	// close dialog
 	QDialog::accept();

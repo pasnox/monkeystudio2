@@ -179,15 +179,19 @@ ProjectItem* ProjectItem::parent() const
 ProjectItem* ProjectItem::child( int i, int j ) const
 { return reinterpret_cast<ProjectItem*>( QStandardItem::child( i, j ) ); }
 
-ProjectItemList ProjectItem::children( bool b ) const
+ProjectItemList ProjectItem::children( bool r, bool s ) const
 {
+	ProjectItem* p = s ? project() : 0;
 	ProjectItemList l;
 	for ( int i = 0; i < rowCount(); i++ )
 	{
 		ProjectItem* ci = child( i, 0 );
-		l << ci;
-		if ( b && ci->rowCount() )
-			l << ci->children( true );
+		if ( !s || s && ci->project() == p )
+		{
+			l << ci;
+			if ( r && ci->rowCount() )
+				l << ci->children( r, s );
+		}
 	}
 	return l;
 }
@@ -254,12 +258,17 @@ bool ProjectItem::moveUp()
 bool ProjectItem::moveDown()
 { return parent()  ? parent()->moveRowDown( row() ) : false; }
 
+#include <QDebug>
 void ProjectItem::remove()
 {
-	if ( parent() )
+	qWarning( qPrintable( QString( "try removing: %1 (%2), %3-%4" ).arg( getValue() ).arg( getType() ).arg( row() ).arg( column() ) ) );
+	if ( model() )
+	{
+		qDebug() << (parent() ? parent()->index() : QModelIndex());
+		model()->removeRow( row(), parent() ? parent()->index() : QModelIndex() );
+	}
+	else if ( parent() )
 		parent()->removeRow( row() );
-	else if ( model() )
-		model()->removeRow( row() );
 	else
 		delete this;
 }
@@ -478,15 +487,14 @@ void ProjectItem::setListValues( const QStringList& vl, const QString& v, const 
 	// set values
 	QStringList l = vl;
 	// check all child of variable and remove from model/list unneeded index/value
-	for ( int j = it->rowCount() -1; j > -1; j-- )
+	foreach ( ProjectItem* c, it->children( false, true ) )
 	{
-		ProjectItem* c = it->child( j, 0 );
 		if ( c->getType() == ProjectsModel::ValueType )
 		{
 			if ( l.contains( c->getValue() ) )
 				l.removeAll( c->getValue() );
 			else
-				it->removeRow( c->row() );
+				c->remove();
 		}
 	}
 	// add require index
@@ -502,14 +510,7 @@ void ProjectItem::setListValues( const QStringList& vl, const QString& v, const 
 		}
 		// if variable is empty, remove it
 		if ( !it->rowCount() )
-		{
-			if ( it->parent() )
-				it->parent()->removeRow( it->row() );
-			else if ( it->model() )
-				model()->removeRow( it->row() );
-			else
-				delete it;
-		}
+			it->remove();
 	}
 }
 

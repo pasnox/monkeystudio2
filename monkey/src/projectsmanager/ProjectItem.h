@@ -85,8 +85,8 @@ virtual ~ProjectItem();
 	virtual ProjectItem* parent() const;
 	// child item
 	virtual ProjectItem* child( int, int = 0 ) const;
-	// get children, recursively according to bool
-	virtual ProjectItemList children( bool = false ) const;
+	// get children, recursively according to bool and same project according to bool
+	virtual ProjectItemList children( bool = false, bool = false ) const;
 	// return a new item of type of caller
 	virtual ProjectItem* clone( ProjectsModel::NodeType = ProjectsModel::ProjectType, ProjectItem* = 0 ) const;
 	// append item
