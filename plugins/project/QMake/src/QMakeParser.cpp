@@ -80,7 +80,7 @@ bool QMakeParser::loadFile( const QString& s, QMakeItem* it )
 	if ( mIsOpen )
 		foreach ( ProjectItem* sit, it->getItemListValues( "subdirs", "", "" ) )
 			if ( QFile::exists( sit->getFilePath() ) )
-				loadFile( sit->getFilePath(), reinterpret_cast<QMakeItem*>( it->clone( ProjectsModel::ProjectType, it ) ) );
+				loadFile( sit->getFilePath(), new QMakeItem( ProjectsModel::ProjectType, it ) );
 			else
 				qWarning( "Can't open subproject: %s", qPrintable( sit->getFilePath() ) );
 	

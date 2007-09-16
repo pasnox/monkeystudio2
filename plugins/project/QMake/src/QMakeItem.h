@@ -21,18 +21,42 @@ class QMakeItem : public ProjectItem
 {
 
 public:
-	QMakeItem( ProjectsModel::NodeType = ProjectsModel::ProjectType, QMakeItem* = 0 );
-	virtual ProjectItem* clone( ProjectsModel::NodeType = ProjectsModel::ProjectType, ProjectItem* = 0 ) const;
+	QMakeItem( ProjectsModel::NodeType = ProjectsModel::ProjectType, ProjectItem* = 0 );
+
 	virtual QString pluginName() const { return "QMake"; }
+	
 	virtual void setType( ProjectsModel::NodeType );
 	virtual void setValue( const QString& );
 	virtual void setFilePath( const QString& );
+	virtual QString getIndent() const;
+	virtual QString getEol() const;
+	virtual bool isFirst() const;
+	virtual bool isLast() const;
+	virtual QString scope() const;
+	virtual QString checkScope( const QString& ) const;
+	virtual bool isEqualScope( const QString&, const QString& ) const;
 	
-	virtual ProjectItem* lastScope() const;
-	virtual ProjectItem* lastProjectScope() const;
+	virtual void appendRow( ProjectItem* );
+	virtual void insertRow( int, ProjectItem* );
+	virtual bool swapRow( int, int );
+	virtual bool moveRowUp( int );
+	virtual bool moveRowDown( int );
+	virtual bool moveUp();
+	virtual bool moveDown();
+	virtual void remove();
+	
 	virtual void close();
 	virtual void save( bool = true );
 	virtual void saveAll( bool = true );
+	virtual void debug();
+	
+	virtual ProjectItem* getItemScope( const QString&, bool ) const;
+	virtual QStringList getListValues( const QString&, const QString& = "=", const QString& = QString::null ) const;
+	virtual QString getStringValues( const QString&, const QString& = "=", const QString& = QString::null ) const;
+	virtual void setListValues( const QStringList&, const QString&, const QString& = "=", const QString& = QString::null );
+	virtual void setStringValues( const QString&, const QString&, const QString& = "=", const QString& = QString::null );
+	virtual void addListValues( const QStringList&, const QString&, const QString& = "=", const QString& = QString::null );
+	virtual void addStringValues( const QString&, const QString&, const QString& = "=", const QString& = QString::null );
 	
 protected:
 	virtual void redoLayout( ProjectItem* );

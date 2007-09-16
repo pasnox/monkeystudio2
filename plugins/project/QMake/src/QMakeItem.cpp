@@ -14,25 +14,21 @@
 ****************************************************************************/
 #include "QMakeItem.h"
 #include "UISettingsQMake.h"
-
 #include "pMonkeyStudio.h"
 
-QMakeItem::QMakeItem( ProjectsModel::NodeType t, QMakeItem* i )
+#include <QObject>
+
+using namespace pMonkeyStudio;
+
+QMakeItem::QMakeItem( ProjectsModel::NodeType t, ProjectItem* i )
 	: ProjectItem()
 {
-	// set type
+	mBuffer.clear();
 	setType( t );
-	
-	// set readonly
 	setReadOnly( false );
-	
-	// append to parent if needed
 	if ( i )
 		i->appendRow( this );
 }
-
-ProjectItem* QMakeItem::clone( ProjectsModel::NodeType t, ProjectItem* p ) const
-{ return new QMakeItem( t, reinterpret_cast<QMakeItem*>( p ) ); }
 
 void QMakeItem::setType( ProjectsModel::NodeType t )
 {
@@ -99,7 +95,7 @@ void QMakeItem::setValue( const QString& s )
 	{
 		case ProjectsModel::VariableType:
 			if ( l1.contains( getValue(), Qt::CaseInsensitive ) )
-				setText( l2.at( l1.indexOf( getValue(), Qt::CaseInsensitive ) ) );
+				setText( l2.value( l1.indexOf( getValue(), Qt::CaseInsensitive ) ) );
 			break;
 		case ProjectsModel::ValueType:
 		{
@@ -173,54 +169,191 @@ void QMakeItem::setFilePath( const QString& s )
 	}
 }
 
-ProjectItem* QMakeItem::lastScope() const
+QString QMakeItem::getIndent() const //
 {
-	// scope item
-	ProjectItem* s = 0;
-	// check if current item is scope
+	return QString();
 	/*
-	if ( const_cast<ProjectItem*>( this )->getType() == ProjectsModel::ScopeType || const_cast<ProjectItem*>( this )->getType() == ProjectsModel::NestedScopeType )
-		s = const_cast<ProjectItem*>( this );
+	// if scope end, need take parent indent
+	if ( const_cast<ProjectItem*>( this )->getType() == ProjectsModel::ScopeEndType )
+		return parent()->getIndent();
+	// if first value of a variable, no indent
+	if ( const_cast<ProjectItem*>( this )->getType() == ProjectsModel::ValueType && isFirst() )
+		return QString();
+	// if not value, and parent is nestedscope, no indent
+	if ( parent() && parent()->getType() == ProjectsModel::NestedScopeType )
+		return QString();
+	// default indent
+	int i = -1;
+	// count parent
+	ProjectItem* p = project();
+	ProjectItem* it = const_cast<ProjectItem*>( this );
+	while ( it && ( it = it->parent() ) )
+		if ( it->project() == p )
+			i++;
+	// return indent
+	return QString().fill( '\t', i );
 	*/
-	// searhc in children
-	foreach ( ProjectItem* i, children( true ) )
-		if ( i->getType() == ProjectsModel::ScopeType || i->getType() == ProjectsModel::NestedScopeType )
-			s = i;
-	// return scope item
+}
+
+QString QMakeItem::getEol() const
+{
+	switch ( eolMode() )
+	{
+		case QsciScintilla::EolWindows:
+			return QString( "\r\n" );
+			break;
+		case QsciScintilla::EolUnix:
+			return QString( "\r" );
+			break;
+		case QsciScintilla::EolMac:
+			return QString( "\n" );
+			break;
+		default:
+			return QString( "\r\n" );
+	}
+}
+
+bool QMakeItem::isFirst() const
+{
+	return row() == 0;
+}
+
+bool QMakeItem::isLast() const
+{
+	if ( model() )
+		return model()->rowCount( index().parent() ) -1 == row();
+	else if ( parent() )
+		return parent()->rowCount() -1 == row();
+	Q_ASSERT( 0 );
+	return false;
+}
+
+QString QMakeItem::scope() const
+{
+	QString s;
+	ProjectItem* j = const_cast<QMakeItem*>( this );
+	ProjectItem* p = project();
+	while ( j && j != p )
+	{
+		if ( j->getType() == ProjectsModel::ScopeType || j->getType() == ProjectsModel::NestedScopeType )
+			s.prepend( QString( "%1%2" ).arg( j->getValue(), j->getOperator().isEmpty() ? ":" : j->getOperator() ) );
+		j = j->parent();
+	}
+	s.chop( 1 );
 	return s;
 }
 
-ProjectItem* QMakeItem::lastProjectScope() const
+QString QMakeItem::checkScope( const QString& s ) const
 {
-	// scope item
-	ProjectItem* s = 0;
-	// search in children
-	foreach ( ProjectItem* i, project()->children( true ) )
-		if ( i->getType() == ProjectsModel::ScopeType || i->getType() == ProjectsModel::NestedScopeType )
-			s = i;
-	// return scope item
-	return s;
+	QString ss = s.trimmed();
+	if ( ss.endsWith( ':' ) )
+		ss.chop( 1 );
+	return ss;
+}
+
+bool QMakeItem::isEqualScope( const QString& s1, const QString& s2 ) const
+{
+	if ( s2 == "*" )
+		return true;
+	return checkScope( QString( s1 ).replace( '/', ':' ) ) == checkScope( QString( s2 ).replace( '/', ':' ) );
+}
+
+void QMakeItem::appendRow( ProjectItem* i )
+{
+	insertRow( rowCount(), i );
+}
+
+void QMakeItem::insertRow( int r, ProjectItem* i ) //
+{
+	// check scope & function item for not be able to append items after scope end
+	ProjectItem* it = reinterpret_cast<ProjectItem*>( i );
+	if ( it && ( getType() == ProjectsModel::NestedScopeType || getType() == ProjectsModel::ScopeType || getType() == ProjectsModel::FunctionType ) && it->getType() != ProjectsModel::ScopeEndType )
+		r--;
+	// default insert
+	QStandardItem::insertRow( r, i );
+}
+
+bool QMakeItem::swapRow( int i, int j )
+{
+	if ( -1 < i < rowCount() && -1 < j < rowCount() && i != i )
+	{
+		QList<QStandardItem*> ii;
+		QList<QStandardItem*> ij;
+		
+		if ( i > j )
+		{
+			ii = takeRow( i );
+			ij = takeRow( j );
+		}
+		else
+		{
+			ij = takeRow( j );
+			ii = takeRow( i );
+		}
+
+		QStandardItem::insertRow( i, ij );
+		QStandardItem::insertRow( j, ii );
+
+		return true;
+	}
+	return false;
+}
+
+bool QMakeItem::moveRowUp( int i )
+{
+	ProjectItem* it = child( i );
+	bool b = it && it->getType() != ProjectsModel::ScopeEndType && i > 0;
+	if ( b )
+		QStandardItem::insertRow( i -1, takeRow( i ) );
+	return b;
+}
+
+bool QMakeItem::moveRowDown( int i )
+{
+	ProjectItem* it = child( i );
+	bool b = it && it->getType() != ProjectsModel::ScopeEndType && i < rowCount() -1;
+	if ( b )
+		QStandardItem::insertRow( i +1, takeRow( i ) );
+	return b;
+}
+
+bool QMakeItem::moveUp()
+{
+	return parent() ? parent()->moveRowUp( row() ) : false;
+}
+
+bool QMakeItem::moveDown()
+{
+	return parent()  ? parent()->moveRowDown( row() ) : false;
+}
+
+void QMakeItem::remove()
+{
+	if ( model() )
+		model()->removeRow( row(), index().parent() );
+	else if ( parent() )
+		parent()->removeRow( row() );
+	else
+		delete this;
 }
 
 void QMakeItem::close()
-{ saveAll( true ); remove(); }
+{
+	saveAll( true );
+	remove();
+}
 
 void QMakeItem::save( bool b )
 {
-	// get project item
 	ProjectItem* p = project();
-	// if read only cancel
 	if ( p->getReadOnly() || !p->getModified() )
 		return;
-	// write project
-	writeProject();
+	if ( !b || ( b && question( QObject::tr( "Save Project..." ), QObject::tr( "The project [%1] has been modified, save it ?" ).arg( name() ) ) ) )
+		writeProject();
 }
 
 void QMakeItem::saveAll( bool b )
 {
-	// if read only cancel
-	if ( getReadOnly() )
-		return;
 	// save current project
 	save( b );
 	// save all children projects
@@ -228,7 +361,173 @@ void QMakeItem::saveAll( bool b )
 		it->save( b );
 }
 
-void QMakeItem::redoLayout( ProjectItem* it )
+void QMakeItem::debug()
+{
+	QString s;
+	foreach ( ProjectItem* it, projectItems() )
+		s.append( QString( "%1(%2)%3%4%5" ).arg( QString().fill( ' ', it->parentCount() ) ).arg( it->getType() ).arg( it->getValue() ).arg( it->getOperator() ).arg( it->getEol() ) );
+	qWarning( qPrintable( s ) );
+}
+
+ProjectItem* QMakeItem::getItemScope( const QString& s, bool c ) const //
+{
+	// get project item
+	ProjectItem* sItem = project();
+	// it there is scope
+	if ( !s.trimmed().isEmpty() )
+	{
+		// get item scope and separeted operator
+		static QRegExp r( "([^:|]+)(\\:|\\|)?" );
+		int pos = 0;
+		QString cScope = checkScope( s );
+		// create scope is there are not existing
+		while ( ( pos = r.indexIn( cScope, pos ) ) != -1 )
+		{
+			QStringList l = r.capturedTexts();
+			QString s1 = l.at( 1 );
+			QString s2 = l.at( 2 );
+			QString sScope = cScope.left( pos ).append( s1 );
+			// search existing scope
+			ProjectItem* fItem = ( sItem->getItemList( ProjectsModel::ScopeType, s1, s2, sScope ) << sItem->getItemList( ProjectsModel::NestedScopeType, s1, s2, sScope ) ).value( 0 );
+			// create scope
+			if ( ( !fItem || fItem->project() != sItem ) )
+			{
+				if ( c )
+				{
+					sItem = new QMakeItem( l.at( 2 ).trimmed().isEmpty() ? ProjectsModel::ScopeType : ProjectsModel::NestedScopeType, sItem );
+					sItem->setValue( s1 );
+					sItem->setOperator( s2 );
+					(void) new QMakeItem( ProjectsModel::ScopeEndType, sItem );
+				}
+				else
+					return sItem;
+			}
+			else
+				sItem = fItem;
+			pos += r.matchedLength();
+		}
+		// if scope is nested, made it ScopeType
+		if ( sItem && sItem->getType() == ProjectsModel::NestedScopeType )
+		{
+			sItem->setType( ProjectsModel::ScopeType );
+			sItem->setOperator( QString::null );
+		}
+	}
+	// return scope item
+	return sItem;
+}
+
+QStringList QMakeItem::getListValues( const QString& v, const QString& o, const QString& s ) const
+{
+	QStringList l;
+	foreach ( ProjectItem* it, getItemListValues( v, o, s ) )
+		l << it->getValue();
+	return l;
+}
+
+QString QMakeItem::getStringValues( const QString& v, const QString& o, const QString& s ) const
+{
+	return getListValues( v, o, s ).join( " " );
+}
+
+void QMakeItem::setListValues( const QStringList& vl, const QString& v, const QString& o, const QString& s ) //
+{
+	ProjectItem* it = getItemVariable( v, o, s );
+	// create index if it not exists
+	if ( !it )
+	{
+		// if nothing to add, return
+		if ( vl.isEmpty() )
+			return;
+		// create variable
+		it = new QMakeItem( ProjectsModel::VariableType, getItemScope( s, true ) );
+		it->setValue( v );
+		it->setOperator( o );
+	}
+	// set values
+	QStringList l = vl;
+	// check all child of variable and remove from model/list unneeded index/value
+	foreach ( ProjectItem* c, it->children( false, true ) )
+	{
+		if ( c->getType() == ProjectsModel::ValueType )
+		{
+			if ( l.contains( c->getValue() ) )
+				l.removeAll( c->getValue() );
+			else
+			{
+				QModelIndex i = c->index();
+				if ( model() )
+					model()->removeRow( i.row(), i.parent() );
+				//c->remove();
+			}
+		}
+	}
+	// add require index
+	if ( it )
+	{
+		foreach ( QString e, l )
+		{
+			if ( !e.isEmpty() )
+			{
+				ProjectItem* cItem = new QMakeItem( ProjectsModel::ValueType, it );
+				cItem->setValue( e );
+			}
+		}
+		// if variable is empty, remove it
+		if ( !it->rowCount() )
+			it->remove();
+	}
+}
+
+void QMakeItem::setStringValues( const QString& val, const QString& v, const QString& o, const QString& s )
+{
+	setListValues( val.isEmpty() ? QStringList() : QStringList( val ), v, o, s );
+}
+
+void QMakeItem::addListValues( const QStringList& vl, const QString& v, const QString& o, const QString& s ) //
+{
+	ProjectItem* it = getItemVariable( v, o, s );
+	// create index if it not exists
+	if ( !it )
+	{
+		// if nothing to add, return
+		if ( vl.isEmpty() )
+			return;
+		// create variable
+		it = new QMakeItem( ProjectsModel::VariableType, getItemScope( s, true ) );
+		it->setValue( v );
+		it->setOperator( o );
+	}
+	// add values
+	QStringList l = vl;
+	// check all values of variable and remove from list already existing values
+	for ( int j = it->rowCount() -1; j > -1; j-- )
+	{
+		ProjectItem* c = it->child( j, 0 );
+		if ( c->getType() == ProjectsModel::ValueType )
+			if ( l.contains( c->getValue() ) )
+				l.removeAll( c->getValue() );
+	}
+	// add require values
+	if ( it )
+	{
+		foreach ( QString e, l )
+		{
+			if ( !e.isEmpty() )
+			{
+				ProjectItem* cItem = new QMakeItem( ProjectsModel::ValueType, it );
+				cItem->setValue( e );
+			}
+		}
+	}
+}
+
+void QMakeItem::addStringValues( const QString& val, const QString& v, const QString& o, const QString& s )
+{
+	addListValues( QStringList( val ), v, o, s );
+}
+
+void QMakeItem::redoLayout( ProjectItem* it ) //
 {
 	// get correct item
 	it = it ? it : project();
@@ -266,7 +565,7 @@ void QMakeItem::redoLayout( ProjectItem* it )
 }
 
 #include <QTextEdit>
-void QMakeItem::writeProject()
+void QMakeItem::writeProject() //
 {
 	// clear buffer
 	mBuffer.clear();
@@ -290,7 +589,7 @@ void QMakeItem::writeProject()
 		qWarning( qPrintable( "Can't write project: " +canonicalFilePath() ) );
 }
 
-void QMakeItem::writeItem( ProjectItem* it )
+void QMakeItem::writeItem( ProjectItem* it ) //
 {
 	// cancel if no item
 	if ( !it )
@@ -371,4 +670,3 @@ void QMakeItem::writeItem( ProjectItem* it )
 		if ( cit->project() == p )
 			writeItem( cit );
 }
-
