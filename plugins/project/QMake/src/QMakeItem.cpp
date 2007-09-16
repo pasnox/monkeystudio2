@@ -263,17 +263,17 @@ void QMakeItem::appendRow( ProjectItem* i )
 	insertRow( rowCount(), i );
 }
 
-void QMakeItem::insertRow( int r, ProjectItem* it ) //
+void QMakeItem::insertRow( int r, ProjectItem* it )
 {
 	// check scope & function item for not be able to append items after scope end
 	if ( it &&  it->getType() != ProjectsModel::ScopeEndType && ( getType() == ProjectsModel::NestedScopeType || getType() == ProjectsModel::ScopeType ) )
 		r--;
-	// if there is subproject, we need to create items beforesubproject
+	// if there is subproject, we need to create items before subproject
 	if ( hasChildren() )
 	{
 		ProjectItem* p = project();
 		ProjectItem* i = 0;
-		while ( ( i = child( r ) ) && i->project() != p )
+		while ( ( i = child( r -1 ) ) && i->project() != p )
 			r--;
 	}
 	// default insert
@@ -286,7 +286,6 @@ bool QMakeItem::swapRow( int i, int j )
 	{
 		QList<QStandardItem*> ii;
 		QList<QStandardItem*> ij;
-		
 		if ( i > j )
 		{
 			ii = takeRow( i );
@@ -297,10 +296,8 @@ bool QMakeItem::swapRow( int i, int j )
 			ij = takeRow( j );
 			ii = takeRow( i );
 		}
-
 		QStandardItem::insertRow( i, ij );
 		QStandardItem::insertRow( j, ii );
-
 		return true;
 	}
 	return false;
@@ -317,7 +314,7 @@ bool QMakeItem::moveRowUp( int i )
 
 bool QMakeItem::moveRowDown( int i )
 {
-	ProjectItem* it = child( i );
+	ProjectItem* it = child( i +1 );
 	bool b = it && it->getType() != ProjectsModel::ScopeEndType && i < rowCount() -1;
 	if ( b )
 		QStandardItem::insertRow( i +1, takeRow( i ) );
@@ -378,6 +375,64 @@ void QMakeItem::debug()
 
 ProjectItem* QMakeItem::getItemScope( const QString& s, bool c ) const //
 {
+	if ( s.isEmpty() )
+		return project();
+	ProjectItem* sit = 0;
+	foreach ( ProjectItem* it, projectScopes() )
+	{
+		if ( isEqualScope( it->scope(), s ) )
+		{
+			if ( it->getType() == ProjectsModel::NestedScopeType )
+			{
+				it->setType( ProjectsModel::ScopeType );
+				it->setOperator( QString::null );
+			}
+			return it;
+		}
+		else if  ( c && checkScope( s ).contains( it->scope() ) )
+		{
+			if ( !sit || ( sit && sit->scope().length() < it->scope().length() ) )
+				sit = it;
+		}
+	}
+	
+	if ( !c )
+		return 0;
+	
+	QString p = s;
+	if ( sit )
+		p.remove( sit->scope() );
+	
+	// remove trailing operator
+	if ( p.startsWith( ':' ) || p.startsWith( '|' ) )
+		p.remove( 0, 1 );
+	
+	QStringList l = p.split( ':', QString::SkipEmptyParts );
+	foreach ( QString scope, l )
+	{
+		ProjectItem* si = 0;
+		foreach ( si, sit ? sit->children() : project()->children() )
+		{
+			if ( si->getType() == ProjectsModel::ScopeType )
+			{
+				sit = si;
+				break;
+			}
+		}
+		if ( si )
+		{
+			
+		}
+		sit = new QMakeItem( ProjectsModel::NestedScopeType, sit ? sit : project() );
+		sit ->setValue( scope );
+		sit ->setOperator( ":" );
+		(void) new QMakeItem( ProjectsModel::ScopeEndType, sit );
+	}
+	
+	return sit;
+	
+	
+	/*
 	// get project item
 	ProjectItem* sItem = project();
 	// it there is scope
@@ -422,6 +477,7 @@ ProjectItem* QMakeItem::getItemScope( const QString& s, bool c ) const //
 	}
 	// return scope item
 	return sItem;
+	*/
 }
 
 QStringList QMakeItem::getListValues( const QString& v, const QString& o, const QString& s ) const
