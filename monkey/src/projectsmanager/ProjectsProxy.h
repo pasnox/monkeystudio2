@@ -7,6 +7,7 @@
 #include <QStringList>
 
 class ProjectsModel;
+class ProjectItem;
 
 class Q_MONKEY_EXPORT ProjectsProxy : public QSortFilterProxyModel
 {
@@ -20,6 +21,7 @@ public:
 	virtual bool isNegateFilter() const;
 	virtual QList<int> filterRoles() const;
 	virtual QStringList filterValues() const;
+	virtual void refresh( ProjectItem* = 0 );
 	
 protected:
 	virtual bool filterAcceptsRow( int, const QModelIndex& ) const;

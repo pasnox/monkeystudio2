@@ -162,6 +162,9 @@ ProjectItemList ProjectItem::children( bool r, bool s ) const
 	return l;
 }
 
+void ProjectItem::refresh()
+{ redoLayout(); }
+
 ProjectItem* ProjectItem::project() const
 {
 	ProjectItem* it = const_cast<ProjectItem*>( this );

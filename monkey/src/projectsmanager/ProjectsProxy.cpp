@@ -1,5 +1,6 @@
 #include "ProjectsProxy.h"
 #include "ProjectsModel.h"
+#include "ProjectItem.h"
 
 ProjectsProxy::ProjectsProxy( ProjectsModel* m )
 	: QSortFilterProxyModel( m ), mFiltering( false ), mNegateFilter( true )
@@ -12,9 +13,6 @@ ProjectsProxy::ProjectsProxy( ProjectsModel* m )
 	
 	// set sort filter
 	setSortRole( ProjectsModel::OriginalViewRole );
-	
-	// set dynamic filter allowed
-	setDynamicSortFilter( true );
 }
 
 ProjectsModel* ProjectsProxy::projectsModel() const
@@ -24,15 +22,15 @@ bool ProjectsProxy::filterAcceptsRow( int r, const QModelIndex& i ) const
 {
 	if ( !mFiltering )
 		return true;
-	QModelIndex index = sourceModel()->index( r, 0, i );
-	int f = index.data( filterRole() ).toInt();
-	QString s = index.data( ProjectsModel::ValueRole ).toString();
+	ProjectItem* it = projectsModel()->itemFromIndex( sourceModel()->index( r, 0, i ) );
+	int f = it->data( filterRole() ).toInt();
+	QString s = it->getValue();
 	// check role
 	bool b = mNegateFilter ? !mFilterRoles.contains( f ) : mFilterRoles.contains( f );
 	// check child visibility
 	if ( !b && !( !mFilterValues.isEmpty() && f == ProjectsModel::VariableType && !mFilterValues.contains( s, Qt::CaseInsensitive ) ) )
-		for ( int j = 0; j < sourceModel()->rowCount( index ); j++ )
-			if ( filterAcceptsRow( j, index ) )
+		for ( int j = 0; j < it->rowCount(); j++ )
+			if ( filterAcceptsRow( j, it->index() ) )
 				return true;
 
 	return b;
@@ -48,6 +46,7 @@ void ProjectsProxy::setFiltering( bool b )
 	mFiltering = b;
 	setSortRole( mFiltering ? ProjectsModel::FilteredViewRole : ProjectsModel::OriginalViewRole );
 	emit filteringChanged( mFiltering );
+	refresh();
 	invalidateFilter();
 }
 
@@ -158,4 +157,15 @@ void ProjectsProxy::removeFilterValues( const QStringList& v )
 			mFilterValues.removeAll( s );
 	if ( mFiltering )
 		invalidateFilter();
+}
+
+void ProjectsProxy::refresh( ProjectItem* it )
+{
+	if ( it )
+		it->refresh();
+	else
+		foreach ( it, projectsModel()->projects( true ) )
+			it->refresh();
+	sort( -1 );
+	sort( 0, Qt::AscendingOrder );
 }

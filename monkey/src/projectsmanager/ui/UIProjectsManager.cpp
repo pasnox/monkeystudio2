@@ -61,8 +61,7 @@ UIProjectsManager::UIProjectsManager( QWidget* w )
 	// filter are negate
 	mProxy->setNegateFilter( false );
 	// apply filtering
-	//mProxy->setFiltering( true );
-	
+	mProxy->setFiltering( true );
 	// set view proxy
 	tvProjects->setModel( mProxy );
 	
@@ -92,10 +91,8 @@ void UIProjectsManager::initializeProject( ProjectItem* it )
 	tvProjects->selectionModel()->clear();
 	// append project item
 	mProjects->appendRow( it );
-	// sort project
-	it->redoLayout();
-	// sort proxy
-	mProxy->sort( 0, Qt::AscendingOrder );
+	// refresh project
+	mProxy->refresh( it );
 	// set current project
 	tvProjects->setCurrentIndex( mProxy->mapFromSource( it->index() ) );
 }
@@ -241,6 +238,9 @@ void UIProjectsManager::projectCloseAll_triggered()
 void UIProjectsManager::projectSettings_triggered()
 {
 	if ( ProjectItem* it = currentProject() )
+	{
 		PluginsManager::instance()->plugin<ProjectPlugin*>( it->pluginName() )->editSettings( it->project() );
+		mProxy->refresh( it );
+	}
 }
 

@@ -105,6 +105,8 @@ public:
 	virtual bool moveDown() = 0;
 	// remove itself
 	virtual void remove() = 0;
+	// redo internal layout, to filter / sort items
+	virtual void refresh();
 	
 	// the project item
 	virtual ProjectItem* project() const;

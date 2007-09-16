@@ -6,6 +6,7 @@
 #include <QStandardItemModel>
 
 class ProjectItem;
+typedef QList<ProjectItem*> ProjectItemList;
 
 class Q_MONKEY_EXPORT ProjectsModel : public QStandardItemModel
 {
@@ -49,9 +50,10 @@ public:
 	ProjectsModel( QObject* = 0 );
 	virtual ~ProjectsModel();
 	
+	ProjectItem* item( int, int = 0 ) const;
 	ProjectItem* itemFromIndex( const QModelIndex& ) const;
-	
 	ProjectItem* takeItem( int, int = 0 );
+	ProjectItemList projects( bool = true );
 	
 };
 
