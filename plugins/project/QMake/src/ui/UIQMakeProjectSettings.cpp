@@ -54,14 +54,15 @@ UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
 	//
 	setDir( mDirs->index( mProject->canonicalPath() ) );
 	// scopes
-	mScopesProxy = new QMakeProxy( mModel, false, mProject );
+	mScopesProxy = new QMakeProxy( mModel, mProject );
 	mScopesProxy->setFilterRoles( QList<int>() << ProjectsModel::ValueType );
 	mScopesProxy->setFiltering( true );
 	tvScopes->setModel( mScopesProxy );
+	//
 	tvScopes->header()->hide();
 	tvScopes->setRootIndex( mScopesProxy->mapFromSource( mProject->index() ) );
 	// scope content
-	mContentProxy = new QMakeProxy( mModel, false, mProject );
+	mContentProxy = new QMakeProxy( mModel, mProject );
 	mContentProxy->setFilterRoles( QList<int>() << ProjectsModel::ValueType );
 	mContentProxy->setNegateFilter( false );
 	mContentProxy->setFiltering( true );

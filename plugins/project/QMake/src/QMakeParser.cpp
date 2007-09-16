@@ -78,7 +78,7 @@ bool QMakeParser::loadFile( const QString& s, QMakeItem* it )
 	
 	// open subdirs project
 	if ( mIsOpen )
-		foreach ( ProjectItem* sit, it->getItemListValues( "subdirs", "", "" ) )
+		foreach ( ProjectItem* sit, it->getItemListValues( "SUBDIRS", "", "" ) )
 			if ( QFile::exists( sit->getFilePath() ) )
 				loadFile( sit->getFilePath(), new QMakeItem( ProjectsModel::ProjectType, it ) );
 			else

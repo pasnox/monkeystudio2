@@ -263,14 +263,21 @@ void QMakeItem::appendRow( ProjectItem* i )
 	insertRow( rowCount(), i );
 }
 
-void QMakeItem::insertRow( int r, ProjectItem* i ) //
+void QMakeItem::insertRow( int r, ProjectItem* it ) //
 {
 	// check scope & function item for not be able to append items after scope end
-	ProjectItem* it = reinterpret_cast<ProjectItem*>( i );
-	if ( it && ( getType() == ProjectsModel::NestedScopeType || getType() == ProjectsModel::ScopeType || getType() == ProjectsModel::FunctionType ) && it->getType() != ProjectsModel::ScopeEndType )
+	if ( it &&  it->getType() != ProjectsModel::ScopeEndType && ( getType() == ProjectsModel::NestedScopeType || getType() == ProjectsModel::ScopeType ) )
 		r--;
+	// if there is subproject, we need to create items beforesubproject
+	if ( hasChildren() )
+	{
+		ProjectItem* p = project();
+		ProjectItem* i = 0;
+		while ( ( i = child( r ) ) && i->project() != p )
+			r--;
+	}
 	// default insert
-	QStandardItem::insertRow( r, i );
+	QStandardItem::insertRow( r, it );
 }
 
 bool QMakeItem::swapRow( int i, int j )

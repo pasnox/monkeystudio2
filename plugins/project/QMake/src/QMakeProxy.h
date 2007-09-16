@@ -11,13 +11,11 @@ class QMakeProxy : public ProjectsProxy
 	Q_OBJECT
 	
 public:
-	QMakeProxy( ProjectsModel*, bool = true, ProjectItem* = 0 );
+	QMakeProxy( ProjectsModel*, ProjectItem* );
 	
 protected:
 	bool filterAcceptsRow( int, const QModelIndex& ) const;
-	bool mProjectViewMode;
 	ProjectItem* mProject;
-	ProjectItem* mParentProject;
 	
 public slots:
 	virtual void setFiltering( bool );

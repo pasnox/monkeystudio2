@@ -4,81 +4,36 @@
 #include "UIQMakeProjectSettings.h"
 #include "UISettingsQMake.h"
 
-QMakeProxy::QMakeProxy( ProjectsModel* m, bool b, ProjectItem* i )
-	: ProjectsProxy( m ), mProjectViewMode( b ), mProject( i ), mParentProject( mProject->parent() ? mProject->parent()->project() : 0 )
+QMakeProxy::QMakeProxy( ProjectsModel* m, ProjectItem* i )
+	: ProjectsProxy( m )
 {
 	Q_ASSERT( i != 0 );
-	if ( b )
-	{
-		setFilterRoles( QList<int>() << ProjectsModel::ScopeType << ProjectsModel::NestedScopeType << ProjectsModel::ScopeEndType );
-		setNegateFilter( false );
-	}
-	setFiltering( true );
+	mProject = i;
 }
 
 bool QMakeProxy::filterAcceptsRow( int r, const QModelIndex& i ) const
 {
-	QModelIndex index = sourceModel()->index( r, 0, i );
-	if ( !mProjectViewMode )
-	{
-		ProjectItem* j = projectsModel()->itemFromIndex( i );
-		if ( j )
-			j = j->project();
-		bool b = ProjectsProxy::filterAcceptsRow( r, i );
-		if ( b && j != mProject && j != mParentProject )
-			b = false;
-		return b;
-	}
-	else
-	{
-		if ( !mFiltering )
-			return true;
-		int t = index.data( ProjectsModel::TypeRole ).toInt();
-		if ( t == ProjectsModel::ValueType )
-			return true;
-		else if ( t == ProjectsModel::ProjectType )
-			return true;
-		else if ( t == ProjectsModel::VariableType )
-		{
-			QStringList l = UISettingsQMake::readFilters();
-			if ( l.isEmpty() )
-				l = UISettingsQMake::defaultFilters();
-			QVariant v = index.data( ProjectsModel::ValueRole );
-			int i = l.indexOf( v.toString(), Qt::CaseInsensitive );
-			if ( i != -1 )
-			{
-				/*
-				if ( index.data( ProjectsModel::FilterRole ).toInt() != i )
-					sourceModel()->setData( index, i, ProjectsModel::FilterRole );
-				*/
+	if ( !mFiltering )
+		return true;
+	ProjectItem* it = projectsModel()->itemFromIndex( sourceModel()->index( r, 0, i ) );
+	int f = it->data( filterRole() ).toInt();
+	// check role
+	bool b = mNegateFilter ? !mFilterRoles.contains( f ) : mFilterRoles.contains( f );
+	// check child visibility
+	if ( !b )
+		for ( int j = 0; j < it->rowCount(); j++ )
+			if ( filterAcceptsRow( j, it->index() ) )
 				return true;
-			}
-		}
-		else if ( mFilterRoles.contains( t ) )
-		{
-			for ( int j = 0; j < sourceModel()->rowCount( index ); j++ )
-				if ( filterAcceptsRow( j, index ) )
-					return true;
-		}
-		return false;
-	}
+
+	return b & it->project() == mProject;
 }
-//
+
 void QMakeProxy::setFiltering( bool b )
 {
 	if ( b == mFiltering )
 		return;
 	mFiltering = b;
 	emit filteringChanged( mFiltering );
-	if ( mProjectViewMode )
-	{
-		if ( mFiltering )
-			sort( 0, Qt::AscendingOrder );
-		else
-		{
-			sort( -1 );
-			//reset();
-		}
-	}
-	filterChanged();
+	invalidateFilter();
 }
+
