@@ -55,9 +55,6 @@ public:
 	ProjectItem* takeItem( int, int = 0 );
 	ProjectItemList projects( bool = true );
 	
-	void beginRemoveRows( const QModelIndex&, int, int );
-	void endRemoveRows();
-	
 };
 
 /*

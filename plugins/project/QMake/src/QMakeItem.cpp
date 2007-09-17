@@ -338,17 +338,9 @@ void QMakeItem::remove()
 	if ( !( it && ( it->getType() == ProjectsModel::ScopeType || it->getType() == ProjectsModel::NestedScopeType ) && it->rowCount() == 2 ) )
 		it = this;
 	qWarning( qPrintable( QString( "Removing item: %1, %2, %3, %4 - %5, parent: %6" ).arg( it->getValue() ).arg( it->getType() ).arg( it->scope() ).arg( it->row() ).arg( it->column() ).arg( it->parent() ? it->parent()->getValue() : "no parent" ) ) );
-	//if ( model() )
-		//model()->beginRemoveRows( it->parent() ? it->parent()->index() : QModelIndex(), it->row(), it->row() );
 	//it->setModel( 0 );
 	if ( it->parent() )
 		it->parent()->removeRow( it->row() );
-	else if ( it->model() )
-		it->model()->removeRow( it->row(), it->index().parent() );
-	//else
-		//delete it;
-	//if ( model() )
-		//model()->endRemoveRows();
 }
 
 void QMakeItem::close()
