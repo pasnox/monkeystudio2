@@ -333,12 +333,15 @@ bool QMakeItem::moveDown()
 
 void QMakeItem::remove()
 {
-	if ( model() )
-		model()->removeRow( row(), index().parent() );
-	else if ( parent() )
-		parent()->removeRow( row() );
+	ProjectItem* it = parent();
+	if ( !( it && ( it->getType() == ProjectsModel::ScopeType || it->getType() == ProjectsModel::NestedScopeType ) && it->rowCount() == 2 ) )
+		it = this;
+	if ( it->parent() )
+		it->parent()->removeRow( it->row() );
+	else if ( it->model() )
+		it->model()->removeRow( it->row(), it->index().parent() );
 	else
-		delete this;
+		delete it;
 }
 
 void QMakeItem::close()
@@ -373,13 +376,14 @@ void QMakeItem::debug()
 	qWarning( qPrintable( s ) );
 }
 
-ProjectItem* QMakeItem::getItemScope( const QString& s, bool c ) const //
+ProjectItem* QMakeItem::getItemScope( const QString& s, bool c ) const
 {
 	if ( s.isEmpty() )
 		return project();
 	ProjectItem* sit = 0;
 	foreach ( ProjectItem* it, projectScopes() )
 	{
+		// good scope
 		if ( isEqualScope( it->scope(), s ) )
 		{
 			if ( it->getType() == ProjectsModel::NestedScopeType )
@@ -389,95 +393,42 @@ ProjectItem* QMakeItem::getItemScope( const QString& s, bool c ) const //
 			}
 			return it;
 		}
-		else if  ( c && checkScope( s ).contains( it->scope() ) )
+		// else try found nearest scope
+		else if  ( c && checkScope( s ).startsWith( it->scope() ) )
 		{
-			if ( !sit || ( sit && sit->scope().length() < it->scope().length() ) )
-				sit = it;
+			if ( it->getType() == ProjectsModel::ScopeType || ( it->getType() == ProjectsModel::NestedScopeType && s[it->scope().length()] == ':' ) )
+				if ( !sit || ( sit && sit->scope().length() < it->scope().length() ) )
+					sit = it;
 		}
 	}
 	
+	// not found and not want create
 	if ( !c )
 		return 0;
 	
+	// get nearest scope and remove it from full scope to create
 	QString p = s;
 	if ( sit )
 		p.remove( sit->scope() );
 	
 	// remove trailing operator
-	if ( p.startsWith( ':' ) || p.startsWith( '|' ) )
+	if ( p.startsWith( ':' ) )
 		p.remove( 0, 1 );
 	
+	// split nested : scope
 	QStringList l = p.split( ':', QString::SkipEmptyParts );
+	
+	// create each scope
 	foreach ( QString scope, l )
 	{
-		ProjectItem* si = 0;
-		foreach ( si, sit ? sit->children() : project()->children() )
-		{
-			if ( si->getType() == ProjectsModel::ScopeType )
-			{
-				sit = si;
-				break;
-			}
-		}
-		if ( si )
-		{
-			
-		}
 		sit = new QMakeItem( ProjectsModel::NestedScopeType, sit ? sit : project() );
 		sit ->setValue( scope );
 		sit ->setOperator( ":" );
 		(void) new QMakeItem( ProjectsModel::ScopeEndType, sit );
 	}
 	
+	// return full created scope
 	return sit;
-	
-	
-	/*
-	// get project item
-	ProjectItem* sItem = project();
-	// it there is scope
-	if ( !s.trimmed().isEmpty() )
-	{
-		// get item scope and separeted operator
-		static QRegExp r( "([^:|]+)(\\:|\\|)?" );
-		int pos = 0;
-		QString cScope = checkScope( s );
-		// create scope is there are not existing
-		while ( ( pos = r.indexIn( cScope, pos ) ) != -1 )
-		{
-			QStringList l = r.capturedTexts();
-			QString s1 = l.at( 1 );
-			QString s2 = l.at( 2 );
-			QString sScope = cScope.left( pos ).append( s1 );
-			// search existing scope
-			ProjectItem* fItem = ( sItem->getItemList( ProjectsModel::ScopeType, s1, s2, sScope ) << sItem->getItemList( ProjectsModel::NestedScopeType, s1, s2, sScope ) ).value( 0 );
-			// create scope
-			if ( ( !fItem || fItem->project() != sItem ) )
-			{
-				if ( c )
-				{
-					sItem = new QMakeItem( l.at( 2 ).trimmed().isEmpty() ? ProjectsModel::ScopeType : ProjectsModel::NestedScopeType, sItem );
-					sItem->setValue( s1 );
-					sItem->setOperator( s2 );
-					(void) new QMakeItem( ProjectsModel::ScopeEndType, sItem );
-				}
-				else
-					return sItem;
-			}
-			else
-				sItem = fItem;
-			pos += r.matchedLength();
-		}
-		// if scope is nested, made it ScopeType
-		if ( sItem && sItem->getType() == ProjectsModel::NestedScopeType )
-		{
-			sItem->setType( ProjectsModel::ScopeType );
-			sItem->setOperator( QString::null );
-		}
-	}
-	// return scope item
-	return sItem;
-	*/
 }
 
 QStringList QMakeItem::getListValues( const QString& v, const QString& o, const QString& s ) const
@@ -493,7 +444,7 @@ QString QMakeItem::getStringValues( const QString& v, const QString& o, const QS
 	return getListValues( v, o, s ).join( " " );
 }
 
-void QMakeItem::setListValues( const QStringList& vl, const QString& v, const QString& o, const QString& s ) //
+void QMakeItem::setListValues( const QStringList& vl, const QString& v, const QString& o, const QString& s )
 {
 	ProjectItem* it = getItemVariable( v, o, s );
 	// create index if it not exists
@@ -516,13 +467,13 @@ void QMakeItem::setListValues( const QStringList& vl, const QString& v, const QS
 		{
 			if ( l.contains( c->getValue() ) )
 				l.removeAll( c->getValue() );
-			else
+			else if ( !l.value( 0 ).isEmpty() )
 			{
-				QModelIndex i = c->index();
-				if ( model() )
-					model()->removeRow( i.row(), i.parent() );
-				//c->remove();
+				c->setValue( l.value( 0 ) );
+				l.removeFirst();
 			}
+			else
+				c->remove();
 		}
 	}
 	// add require index
@@ -547,7 +498,7 @@ void QMakeItem::setStringValues( const QString& val, const QString& v, const QSt
 	setListValues( val.isEmpty() ? QStringList() : QStringList( val ), v, o, s );
 }
 
-void QMakeItem::addListValues( const QStringList& vl, const QString& v, const QString& o, const QString& s ) //
+void QMakeItem::addListValues( const QStringList& vl, const QString& v, const QString& o, const QString& s )
 {
 	ProjectItem* it = getItemVariable( v, o, s );
 	// create index if it not exists
@@ -564,13 +515,10 @@ void QMakeItem::addListValues( const QStringList& vl, const QString& v, const QS
 	// add values
 	QStringList l = vl;
 	// check all values of variable and remove from list already existing values
-	for ( int j = it->rowCount() -1; j > -1; j-- )
-	{
-		ProjectItem* c = it->child( j, 0 );
+	foreach ( ProjectItem* c, it->children( false, true ) )
 		if ( c->getType() == ProjectsModel::ValueType )
 			if ( l.contains( c->getValue() ) )
 				l.removeAll( c->getValue() );
-	}
 	// add require values
 	if ( it )
 	{
