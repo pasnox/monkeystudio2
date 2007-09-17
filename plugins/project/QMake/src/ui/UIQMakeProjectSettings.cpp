@@ -199,36 +199,22 @@ void UIQMakeProjectSettings::addValues( const Key& k, const QStringList& v )
 
 void UIQMakeProjectSettings::setValue( const Key& k, const QString& v )
 {
-	if ( mSettings.contains( k ) )
-	{
-		if ( v.isEmpty() )
-			clearValues( k );
-		else
-			mSettings[k] = QStringList( v );
-	}
-	else if ( !v.isEmpty() )
-		mSettings[k] = QStringList( v );
+	if ( !mSettings.contains( k ) && v.isEmpty() )
+		return;
+	mSettings[k] = v.isEmpty() ? QStringList() : QStringList( v );
 }
 
 void UIQMakeProjectSettings::setValues( const Key& k, const QStringList& v )
 {
-	if ( mSettings.contains( k ) )
-	{
-		if ( v.isEmpty() )
-			clearValues( k );
-		else
-			mSettings[k] = v;
-	}
-	else if ( !v.isEmpty() )
-		mSettings[k] = v;
+	if ( !mSettings.contains( k ) && v.isEmpty() )
+		return;
+	mSettings[k] = v;
 }
 
 void UIQMakeProjectSettings::removeValue( const Key& k, const QString& v )
 {
 	if ( mSettings.value( k ).contains( v ) )
 		mSettings[k].removeAll( v );
-	if ( mSettings.value( k ).isEmpty() )
-		clearValues( k );
 }
 
 void UIQMakeProjectSettings::removeValues( const Key& k, const QStringList& v )
