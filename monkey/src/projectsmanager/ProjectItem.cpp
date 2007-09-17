@@ -212,6 +212,15 @@ QStringList ProjectItem::projectScopesList() const
 	return l;
 }
 
+ProjectItemList ProjectItem::childrenScopes( bool b ) const
+{
+	ProjectItemList l;
+	foreach ( ProjectItem* it, children( b, true ) )
+		if ( it->getType() == ProjectsModel::ScopeType || it->getType() == ProjectsModel::NestedScopeType )
+			l << it;
+	return l;
+}
+
 QString ProjectItem::canonicalFilePath() const
 { return project()->getFilePath(); }
 

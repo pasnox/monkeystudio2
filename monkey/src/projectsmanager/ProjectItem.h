@@ -120,6 +120,8 @@ public:
 	virtual ProjectItemList projectScopes() const;
 	// get all unique scope list from project
 	virtual QStringList projectScopesList() const;
+	// item direct scopes, or recursively according to bool
+	virtual ProjectItemList childrenScopes( bool = false) const;
 	// canonical project filepath
 	virtual QString canonicalFilePath() const;
 	// canonical file path according to project path
