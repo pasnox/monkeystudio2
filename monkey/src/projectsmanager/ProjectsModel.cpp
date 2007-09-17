@@ -29,3 +29,13 @@ ProjectItemList ProjectsModel::projects( bool b )
 	}
 	return l;
 }
+
+void ProjectsModel::beginRemoveRows( const QModelIndex& i, int f, int l )
+{
+	QStandardItemModel::beginRemoveRows( i, f, l );
+}
+
+void ProjectsModel::endRemoveRows()
+{
+	QStandardItemModel::endRemoveRows();
+}

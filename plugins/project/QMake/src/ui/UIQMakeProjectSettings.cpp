@@ -831,7 +831,8 @@ void UIQMakeProjectSettings::accept()
 	// write each key if needed
 	if ( mSettings != mOriginalSettings )
 		foreach ( const Key k, mSettings.keys() )
-			mProject->setListValues( mSettings[k], k.value( 2 ), k.value( 1 ), k.value( 0 ) );
+			if ( k.value( 2 ).toLower() != "config" )
+				mProject->setListValues( mSettings[k], k.value( 2 ), k.value( 1 ), k.value( 0 ) );
 	
 	// close dialog
 	QDialog::accept();

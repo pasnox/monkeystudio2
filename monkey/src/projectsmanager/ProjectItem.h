@@ -34,6 +34,8 @@ class Q_MONKEY_EXPORT ProjectItem : /*public QObject,*/ public QStandardItem
 public:
 	ProjectItem( ProjectsModel::NodeType = ProjectsModel::ProjectType, ProjectItem* = 0 );
 	
+	// item type
+	virtual int type() const;
 	// plugin name
 	virtual QString pluginName() const = 0;
 	// set data

@@ -31,6 +31,9 @@ ProjectItem::ProjectItem( ProjectsModel::NodeType t, ProjectItem* i )
 		i->appendRow( this );
 }
 
+int ProjectItem::type() const
+{ return QStandardItem::UserType; }
+
 void ProjectItem::setData( const QVariant& v, int r )
 {
 	// check read only
