@@ -1,7 +1,7 @@
 #include "UIQMakeProjectSettings.h"
 #include "QMakeProxy.h"
 #include "ProjectsModel.h"
-#include "ProjectItem.h"
+#include "QMakeItem.h"
 #include "UIItemSettings.h"
 #include "pMonkeyStudio.h"
 
@@ -163,6 +163,8 @@ void UIQMakeProjectSettings::setCurrentTRANSLATIONS( const QStringList& l )
 
 const QString UIQMakeProjectSettings::checkTranslationsPath()
 {
+	if ( cbTemplate->currentText() == "subdirs" )
+		return QString();
 	const Key k = Key() << "" << "=" << "TRANSLATIONS_PATH";
 	QString c = value( k );
 	if ( c.isEmpty() )
@@ -317,7 +319,10 @@ void UIQMakeProjectSettings::querySettings()
 	mOriginalSettings = mSettings;
 	
 	// fill list & combo
-	cbScopes->addItems( UISettingsQMake::readScopes() );
+	l = UISettingsQMake::readScopes();
+	foreach ( const QString s, l )
+		if ( cbScopes->findText( s ) == -1 )
+			cbScopes->addItem( s );
 	cbEncodings->addItems( availableTextCodecs() );
 	loadModules();
 	loadConfigs();
@@ -446,6 +451,49 @@ void UIQMakeProjectSettings::removeValue( const QString& s )
 
 void UIQMakeProjectSettings::on_tbUndo_clicked()
 { on_cbOperators_currentIndexChanged( cbOperators->currentText() ); }
+
+void UIQMakeProjectSettings::on_tbAddScope_clicked()
+{
+	// get existing scope so user can add scope to existing scope
+	QStringList l;
+	for ( int i = 0; i < cbScopes->count(); i++ )
+		l << cbScopes->itemText( i );
+	bool b;
+	// get new scope
+	QString s = QInputDialog::getItem( this, tr( "title" ), tr( "label" ), l, -1, true, &b  );
+	if ( b )
+	{
+		// check if item already exists and add it
+		if ( cbScopes->findText( s.trimmed() ) == -1 )
+			cbScopes->addItem( s.trimmed() );
+		// change current index to new scope
+		cbScopes->setCurrentIndex( cbScopes->findText( s.trimmed() ) );
+		// update datas
+		on_cbOperators_currentIndexChanged( cbOperators->currentText() );
+	}
+}
+
+void UIQMakeProjectSettings::on_tbRemoveScope_clicked()
+{
+	// user confirmation
+	if ( cbScopes->currentIndex() != -1 && question( tr( "Remove Scope..." ), tr( "Are you sure you want to delete this scope" ) ) )
+	{
+		// get scope to remove
+		const QString s = cbScopes->currentText();
+		// can t remove root scope
+		if ( s.isEmpty() )
+		{
+			warning( tr( "Remove Scope..." ), tr( "Can't remove root scope, aborting." ) );
+			return;
+		}
+		// remvoe each variable that have scope s
+		foreach ( const Key k, mSettings.keys() )
+			if ( k.value( 0 ) == s )
+				mSettings.remove( k );
+		// remove scope from combobox
+		cbScopes->removeItem( cbScopes->currentIndex() );
+	}
+}
 
 void UIQMakeProjectSettings::cb_highlighted( int )
 {
@@ -742,26 +790,46 @@ void UIQMakeProjectSettings::on_tvScopes_clicked( const QModelIndex& i )
 
 void UIQMakeProjectSettings::on_tvScopes_doubleClicked( const QModelIndex& i )
 {
-	if ( i.isValid() )
-		UIItemSettings::edit( mModel, mModel->itemFromIndex( mScopesProxy->mapToSource( i ) ), this )->exec();
+	ProjectItem* it = mModel->itemFromIndex( mScopesProxy->mapToSource( i ) );
+	if ( it )
+		UIItemSettings::edit( mModel, it, this );
 }
 
 void UIQMakeProjectSettings::on_lvContents_doubleClicked( const QModelIndex& i )
 {
-	if ( i.isValid() )
-		UIItemSettings::edit( mModel, mModel->itemFromIndex( mContentProxy->mapToSource( i ) ), this )->exec();
+	ProjectItem* it = mModel->itemFromIndex( mScopesProxy->mapToSource( i ) );
+	if ( it )
+		UIItemSettings::edit( mModel, it, this );
 }
 
 void UIQMakeProjectSettings::on_tbAdd_clicked()
 {
-	UIItemSettings::edit( mModel, 0, this )->exec();
+	QMakeItem* it = new QMakeItem( ProjectsModel::EmptyType );
+	if ( UIItemSettings::edit( mModel, it, this ) )
+	{
+		// append row
+		ProjectItem* ci = mModel->itemFromIndex( currentIndex() );
+		if ( !ci )
+			ci = mProject;
+		if ( question( tr( "New Item.." ), tr( "Create item as a child of the current item ?" ) ) )
+			ci->appendRow( it );
+		else
+			mProject->appendRow( it );
+		// if scope, add scope end
+		if ( it->getType() == ProjectsModel::ScopeType || it->getType() == ProjectsModel::NestedScopeType )
+			(void) new QMakeItem( ProjectsModel::ScopeEndType, it );
+		// select it
+		setCurrentIndex( it->index() );
+	}
+	else
+		delete it;
 }
 
 void UIQMakeProjectSettings::on_tbEdit_clicked()
 {
-	QModelIndex i = currentIndex();
-	if ( i.isValid() )
-		UIItemSettings::edit( mModel, mModel->itemFromIndex( i ), this )->exec();
+	ProjectItem* it = mModel->itemFromIndex( currentIndex() );
+	if ( it )
+		UIItemSettings::edit( mModel, it, this );
 }
 
 void UIQMakeProjectSettings::on_tbRemove_clicked()

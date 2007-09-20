@@ -67,6 +67,8 @@ protected slots:
 	void editValue( const QString& );
 	void removeValue( const QString& = QString::null );
 	void on_tbUndo_clicked();
+	void on_tbAddScope_clicked();
+	void on_tbRemoveScope_clicked();
 	void cb_highlighted( int );
 	void tb_clicked();
 	void sb_valueChanged( int );

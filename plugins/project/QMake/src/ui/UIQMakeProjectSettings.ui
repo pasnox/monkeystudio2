@@ -220,6 +220,26 @@
        </widget>
       </item>
       <item>
+       <widget class="QToolButton" name="tbAddScope" >
+        <property name="toolTip" >
+         <string>Add a new scope</string>
+        </property>
+        <property name="icon" >
+         <iconset resource="../resources/QMake.qrc" >:/icons/icons/add.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="tbRemoveScope" >
+        <property name="toolTip" >
+         <string>Remove the current scope</string>
+        </property>
+        <property name="icon" >
+         <iconset resource="../resources/QMake.qrc" >:/icons/icons/remove.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QLabel" name="lScope" >
         <property name="text" >
          <string>&amp;Scope :</string>
