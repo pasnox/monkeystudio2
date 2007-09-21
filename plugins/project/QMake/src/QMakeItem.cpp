@@ -149,6 +149,10 @@ void QMakeItem::setValue( const QString& s )
 
 void QMakeItem::setFilePath( const QString& s )
 {
+	// cancel is file not exists
+	if ( !QFile::exists( canonicalFilePath( s ) ) )
+		return;
+	
 	// set data
 	setData( canonicalFilePath( s ), ProjectsModel::FilePathRole );
 	

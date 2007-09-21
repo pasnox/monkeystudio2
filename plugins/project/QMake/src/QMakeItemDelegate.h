@@ -11,6 +11,12 @@
 #include <QFocusEvent>
 #include <QApplication>
 
+#include "UIItemSettings.h"
+#include "ProjectItem.h"
+#include "pMonkeyStudio.h"
+
+using namespace pMonkeyStudio;
+
 class QMakeItemDelegate : public QItemDelegate
 {
 	Q_OBJECT
@@ -26,6 +32,11 @@ class QValueFileFolderEdit : public QWidget
 {
 	Q_OBJECT
 	
+private:
+	QComboBox* cbValue;
+	QToolButton* tbFile;
+	QToolButton* tbFolder;
+	
 public:
 	QValueFileFolderEdit( QWidget* p, const QModelIndex& i )
 		: QWidget( p )
@@ -36,14 +47,17 @@ public:
 		hb->addWidget( ( cbValue = new QComboBox( this ) ), 100 );
 		hb->addWidget( ( tbFile = new QToolButton( this ) ) );
 		hb->addWidget( ( tbFolder = new QToolButton( this ) ) );
-		tbFile->setIcon( QPixmap( ":/Icons/Icons/fileopen.png" ) );
-		tbFolder->setIcon( QPixmap( ":/Icons/Icons/filesys-folder.png" ) );
+		tbFile->setIcon( QPixmap( ":/icons/icons/fileopen.png" ) );
+		tbFolder->setIcon( QPixmap( ":/icons/icons/folder.png" ) );
 		cbValue->setEditable( true );
 		setText( i.data().toString() );
 		
 		setFocusProxy( cbValue );
 		setFocusPolicy( Qt::ClickFocus );
 		cbValue->installEventFilter( this );
+		
+		connect( tbFile, SIGNAL( clicked() ), this, SLOT( tbClicked() ) );
+		connect( tbFolder, SIGNAL( clicked() ), this, SLOT( tbClicked() ) );
 	}
 	
 	bool eventFilter( QObject* o, QEvent* e )
@@ -62,14 +76,25 @@ public:
 	}
 	
 	QString text() const
-	{
-		return cbValue->currentText();
-	}
+	{ return cbValue->currentText(); }
 	
-private:
-	QComboBox* cbValue;
-	QToolButton* tbFile;
-	QToolButton* tbFolder;
+protected slots:
+	void tbClicked()
+	{
+		QToolButton* tb = qobject_cast<QToolButton*>( sender() );
+		if ( !tb )
+			return;
+		ProjectItem* it = UIItemSettings::instance( (ProjectItem*)0 )->mItem;
+		if ( !it )
+			return;
+		QString s;
+		if ( tb == tbFile )
+			s = getOpenFileName( QString::null, it->canonicalFilePath( text() ), QString::null, this );
+		else
+			s = getExistingDirectory( QString::null, it->canonicalFilePath( text() ), this );
+		if ( !s.isNull() )
+			setText( it->relativeFilePath( s ) );
+	}
 	
 };
 

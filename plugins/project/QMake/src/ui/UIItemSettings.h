@@ -2,22 +2,23 @@
 #define UIITEMSETTINGS_H
 
 #include "ui_UIItemSettings.h"
+#include "QSingleton.h"
 
 class ProjectItem;
-class ProjectsModel;
 
-class UIItemSettings : public QDialog, public Ui::UIItemSettings
+class UIItemSettings : public QDialog, public Ui::UIItemSettings, public QSingleton<UIItemSettings>
 {
 	Q_OBJECT
+	friend class QSingleton<UIItemSettings>;
+	friend class QValueFileFolderEdit;
 	
 public:
-	static bool edit( ProjectsModel*, ProjectItem*, QWidget* = 0 );
+	static bool edit( ProjectItem*, QWidget* = 0 );
 	
 protected:
-	UIItemSettings( ProjectsModel*, ProjectItem*, QWidget* = 0 );
+	UIItemSettings( ProjectItem* );
 	
 	ProjectItem* mItem;
-	ProjectsModel* mProject;
 	
 private slots:
 	void accept();

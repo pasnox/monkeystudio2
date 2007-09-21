@@ -33,5 +33,7 @@
         <file>icons/value.png</file>
         <file>icons/variable.png</file>
         <file>icons/windows.png</file>
+        <file>icons/ok.png</file>
+        <file>icons/cancel.png</file>
     </qresource>
 </RCC>

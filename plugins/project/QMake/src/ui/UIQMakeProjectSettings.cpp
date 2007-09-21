@@ -178,7 +178,7 @@ const QString UIQMakeProjectSettings::checkTranslationsPath()
 	// return translations path
 	return c;
 }
-#include <QDebug>
+
 Key UIQMakeProjectSettings::currentKey( const QString& s ) const
 { return Key() << cbScopes->currentText() << cbOperators->currentText() << s; }
 
@@ -792,44 +792,56 @@ void UIQMakeProjectSettings::on_tvScopes_doubleClicked( const QModelIndex& i )
 {
 	ProjectItem* it = mModel->itemFromIndex( mScopesProxy->mapToSource( i ) );
 	if ( it )
-		UIItemSettings::edit( mModel, it, this );
+		UIItemSettings::edit( it, this );
 }
 
 void UIQMakeProjectSettings::on_lvContents_doubleClicked( const QModelIndex& i )
 {
 	ProjectItem* it = mModel->itemFromIndex( mScopesProxy->mapToSource( i ) );
 	if ( it )
-		UIItemSettings::edit( mModel, it, this );
+		UIItemSettings::edit( it, this );
 }
 
 void UIQMakeProjectSettings::on_tbAdd_clicked()
 {
+	// new item
 	QMakeItem* it = new QMakeItem( ProjectsModel::EmptyType );
-	if ( UIItemSettings::edit( mModel, it, this ) )
+	
+	// get current item
+	ProjectItem* ci = mModel->itemFromIndex( currentIndex() );
+	
+	// ask user where to create item
+	if ( question( tr( "New Item.." ), tr( "Create item as a child of the current item ?" ) ) )
+		ci = ci ? ci : mProject;
+	else
+		ci = ci ? ci->parent() : mProject;
+	
+	// append item
+	ci->appendRow( it );
+	
+	// edit item
+	if ( UIItemSettings::edit( it, this ) )
 	{
-		// append row
-		ProjectItem* ci = mModel->itemFromIndex( currentIndex() );
-		if ( !ci )
-			ci = mProject;
-		if ( question( tr( "New Item.." ), tr( "Create item as a child of the current item ?" ) ) )
-			ci->appendRow( it );
-		else
-			mProject->appendRow( it );
 		// if scope, add scope end
 		if ( it->getType() == ProjectsModel::ScopeType || it->getType() == ProjectsModel::NestedScopeType )
 			(void) new QMakeItem( ProjectsModel::ScopeEndType, it );
+		
+		// redo layout
+		it->refresh();
+		
 		// select it
 		setCurrentIndex( it->index() );
 	}
+	// delete item
 	else
-		delete it;
+		it->remove();
 }
 
 void UIQMakeProjectSettings::on_tbEdit_clicked()
 {
 	ProjectItem* it = mModel->itemFromIndex( currentIndex() );
 	if ( it )
-		UIItemSettings::edit( mModel, it, this );
+		UIItemSettings::edit( it, this );
 }
 
 void UIQMakeProjectSettings::on_tbRemove_clicked()
