@@ -175,7 +175,7 @@ const QString pMonkeyStudio::getImageFileName( const QString& c, const QString& 
 const QStringList pMonkeyStudio::getOpenFileNames( const QString& c, const QString& fn, const QString& f, QWidget* w )
 {
 	// create dialg
-	QFileDialog* d = getOpenDialog( QFileDialog::ExistingFiles, c.isEmpty() ? QObject::tr( "Select files(s)" ) : c, fn, f, w );
+	QFileDialog* d = getOpenDialog( QFileDialog::ExistingFiles, c.isEmpty() ? QObject::tr( "Select file(s)" ) : c, fn, f, w );
 	// choose last used filter if available
 	if ( !f.isEmpty() )
 		d->selectFilter( pSettings::instance()->value( "Recents/FileFilter" ).toString() );
@@ -231,7 +231,7 @@ const QString pMonkeyStudio::getSaveFileName( const QString& c, const QString& f
 
 const QString pMonkeyStudio::getExistingDirectory( const QString& c, const QString& f, QWidget* w )
 {
-	return QFileDialog::getExistingDirectory( w, c, f );
+	return QFileDialog::getExistingDirectory( w, c.isEmpty() ? QObject::tr( "Select a folder" ) : c, f );
 }
 
 const QString pMonkeyStudio::tokenizeHome( const QString& s )
