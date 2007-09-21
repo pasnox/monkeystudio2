@@ -13,10 +13,18 @@
 ##
 ###########################################################################################
 
-TEMPLATE = lib
-LANGUAGE	= Qt4/C++
+TEMPLATE = app
+LANGUAGE	= C++
 TARGET	= $basename$
-CONFIG	+= debug_and_release dll
+
+CONFIG	-= qt
+CONFIG	+= debug_and_release
+
+QMAKE_CFLAGS_RELEASE -= -O2
+QMAKE_CXXFLAGS_RELEASE -= -O2
+QMAKE_CFLAGS_RELEASE += -O3
+QMAKE_CXXFLAGS_RELEASE += -O3
+
 BUILD_PATH	 = ./build
 
 CONFIG(debug, debug|release) {
