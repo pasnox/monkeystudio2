@@ -34,7 +34,10 @@ const QList<pTemplate> pTemplatesManager::defaultTemplates()
 	<< pTemplate( "C++", pTemplate::ttProjects, "Qt Console", "Simple Qt Console Application", ":/templates/icons/templates/qt_console.png", unTokenize( QStringList() << "$TEMPLATE_PATH$/C++/Projects/qt_console.pro" << "$TEMPLATE_PATH$/C++/Files/qt_console_main.cpp" ) ) 
 	<< pTemplate( "C++", pTemplate::ttProjects, "Qt GUI", "Simple Qt GUI Application", ":/templates/icons/templates/qt_gui.png", unTokenize( QStringList() << "$TEMPLATE_PATH$/C++/Projects/qt_gui.pro" << "$TEMPLATE_PATH$/C++/Files/qt_gui_main.cpp" ) ) 
 	<< pTemplate( "C++", pTemplate::ttProjects, "Qt Dll", "Simple Qt Dll", ":/templates/icons/templates/qt_dll.png", unTokenize( QStringList( "$TEMPLATE_PATH$/C++/Projects/qt_dll.pro" ) ) ) 
-	<< pTemplate( "C++", pTemplate::ttProjects, "Qt Static Lib", "Simple Qt Static Lib", ":/templates/icons/templates/qt_static_lib.png", unTokenize( QStringList( "$TEMPLATE_PATH$/C++/Projects/qt_gui.pro" ) ) );
+	<< pTemplate( "C++", pTemplate::ttProjects, "Qt Static Lib", "Simple Qt Static Lib", ":/templates/icons/templates/qt_static_lib.png", unTokenize( QStringList( "$TEMPLATE_PATH$/C++/Projects/qt_gui.pro" ) ) )	
+	<< pTemplate( "C++", pTemplate::ttProjects, "QMake C++ App", "QMake Based C++ Application", ":/templates/icons/templates/qt_console.png", unTokenize( QStringList( "$TEMPLATE_PATH$/C++/Projects/qt_cpp_app.pro" ) ) )
+	<< pTemplate( "C++", pTemplate::ttProjects, "QMake C++ Dll", "QMake Based C++ Dll", ":/templates/icons/templates/qt_dll.png", unTokenize( QStringList( "$TEMPLATE_PATH$/C++/Projects/qt_cpp_dll.pro" ) ) )
+	<< pTemplate( "C++", pTemplate::ttProjects, "QMake C++ Static Lib", "QMake Based C++ Static Lib", ":/templates/icons/templates/qt_static_lib.png", unTokenize( QStringList( "$TEMPLATE_PATH$/C++/Projects/qt_cpp_static_lib.pro" ) ) );
 }
 
 const QList<pTemplate> pTemplatesManager::availableTemplates()
