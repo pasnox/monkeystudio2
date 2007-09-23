@@ -47,7 +47,7 @@ public:
 		hb->addWidget( ( cbValue = new QComboBox( this ) ), 100 );
 		hb->addWidget( ( tbFile = new QToolButton( this ) ) );
 		hb->addWidget( ( tbFolder = new QToolButton( this ) ) );
-		tbFile->setIcon( QPixmap( ":/icons/icons/fileopen.png" ) );
+		tbFile->setIcon( QPixmap( ":/icons/icons/filefolder.png" ) );
 		tbFolder->setIcon( QPixmap( ":/icons/icons/folder.png" ) );
 		cbValue->setEditable( true );
 		setText( i.data().toString() );

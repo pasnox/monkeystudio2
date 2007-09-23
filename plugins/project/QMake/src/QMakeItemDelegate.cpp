@@ -20,7 +20,7 @@ QWidget* QMakeItemDelegate::createEditor( QWidget* w, const QStyleOptionViewItem
 			const QMetaObject mo = ProjectsModel::staticMetaObject;
 			QMetaEnum me = mo.enumerator( mo.indexOfEnumerator( "NodeType" ) );
 			for ( int j = 0; j < me.keyCount(); j++ )
-				if ( me.value( j ) > ProjectsModel::FirstRole && me.value( j ) < ProjectsModel::ModifiedRole )
+				if ( me.value( j ) > ProjectsModel::FirstType && me.value( j ) < ProjectsModel::LastType )
 					cb->addItem( me.key( j ), me.value( j ) );
 			cb->setCurrentIndex( cb->findData( i.data() ) );
 			return cb;

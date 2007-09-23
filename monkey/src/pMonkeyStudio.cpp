@@ -200,7 +200,28 @@ const QStringList pMonkeyStudio::getOpenFileNames( const QString& c, const QStri
 
 const QString pMonkeyStudio::getOpenFileName( const QString& c, const QString& fn, const QString& f, QWidget* w )
 {
-	return getOpenFileNames( c, fn, f, w ).value( 0 );
+	// create dialg
+	QFileDialog* d = getOpenDialog( QFileDialog::ExistingFile, c.isEmpty() ? QObject::tr( "Select file" ) : c, fn, f, w );
+	// choose last used filter if available
+	if ( !f.isEmpty() )
+		d->selectFilter( pSettings::instance()->value( "Recents/FileFilter" ).toString() );
+	// execute dialog
+	if ( d->exec() )
+	{
+		// remember last filter if available
+		if ( !f.isEmpty() )
+			pSettings::instance()->setValue( "Recents/FileFilter", d->selectedFilter() );
+		// remember selected files
+		QStringList l = d->selectedFiles();
+		// delete dialog
+		delete d;
+		// return selected files
+		return l.value( 0 );
+	}
+	// delete dialog
+	delete d;
+	// return empty list
+	return QString();
 }
 
 const QString pMonkeyStudio::getSaveFileName( const QString& c, const QString& fn, const QString& f, QWidget* w )
