@@ -6,6 +6,7 @@
 #include <QTextStream>
 #include <QTextCodec>
 
+#include <QMessageBox>
 #include <QVector>
 #include <QStack>
 #include <QRegExp>
@@ -23,13 +24,15 @@ static QRegExp bloc("^(\\})?[ \\t]*((?:(?:[-\\.a-zA-Z0-9*|_!+]+(?:\\((?:[^\\)]*)
 static QRegExp variable("^(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?(?:[ \\t]+)?[:|](?:[ \\t]+)?)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*([~*+-]?=)[ \\t]*((?:\\\\\\\\\\\\\\\"|\\\\\\\"|[^\\\\#])+)?[ \\t]*(\\\\)?[ \t]*(#.*)?");
 //static QRegExp variable("^(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?(?:[ \\t]+)?[:|](?:[ \\t]+)?)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*([~*+-]?=)[ \\t]*([^\\\\#]*)[ \\t]*(\\\\)?[ \t]*(#.*)?");
 static QRegExp varLine("^[ \\t]*(.*)[ \\t]*\\\\[ \\t]*(#.*)?");
-static QRegExp end_bloc("^(\\})[ \t]*(#.*)?");
+static QRegExp end_bloc("^[ \t]*(\\})[ \t]*(#.*)?");
 static QRegExp comments("^\\s*#(.*)");
 //static QRegExp splitNested( "\\s*([^:|()]+|!?\\w+\\(.*\\))\\s*(:|\\|)" );
 static QRegExp splitValues( "([^\\s\"]+)|\\\"([^\"]+)\\\"|(\\${1,2}\\w+\\([^\\(\\)]+\\)[^\\s]+)" );
 static QRegExp splitCommands( "(\\([^;]*\\));?|(\\$\\(\\w+\\)[^;]*);?" );
 static QRegExp encoding( "[ \\t]*ENCODING[ \\t]*=[ \\t]*([^ ]+)[ \\t]*(?:#.*)?", Qt::CaseInsensitive );
 static QStack<QMakeItem*> pileNested;
+static QMakeItem* s_root = 0;
+static bool isElse = false;
 
 QMakeParser::QMakeParser( const QString& s, QMakeItem* i )
 	: mIsOpen( false ), mRoot( i )
@@ -38,6 +41,7 @@ QMakeParser::QMakeParser( const QString& s, QMakeItem* i )
 	file_variables = UISettingsQMake::readPathFiles();
 	// parse file
 	loadFile( s, mRoot );
+	s_root = mRoot;
 }
 
 QMakeParser::~QMakeParser()
@@ -48,8 +52,10 @@ bool QMakeParser::isOpen() const
 
 bool QMakeParser::loadFile( const QString& s, QMakeItem* it )
 {
-	// clear  the vector
+	// clear  the vector and initialize the stack
 	content.clear();
+	pileNested.clear();
+	pileNested.push( it );
 	// open file
 	QFile f( s );
 	if ( !f.exists() || !f.open( QFile::ReadOnly | QFile::Text ) )
@@ -75,7 +81,6 @@ bool QMakeParser::loadFile( const QString& s, QMakeItem* it )
 	it->setValue( s );
 	// parse buffer
 	mIsOpen = parseBuffer( 0, it );
-	
 	// open subdirs project
 	if ( mIsOpen )
 		foreach ( ProjectItem* sit, it->getItemListValues( "SUBDIRS", "", "" ) )
@@ -92,6 +97,7 @@ int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 {
 	while(ligne < content.size())
 	{
+		isElse = false;
 		// function like :
 		// func_name(params), nested optionnally
 		if ( function_call.exactMatch( content[ligne] ) )
@@ -117,13 +123,32 @@ int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 				if(this_prof != prof)
 				{
 					this_prof = prof-1;
+					if( !pileNested.isEmpty() )
+					{
+						while( !pileNested.isEmpty() && pileNested.top()->getType() == ProjectsModel::NestedScopeType )
+						{
+							qWarning() << "popping33 : " << pileNested.pop()->getValue();
+						}
+						if( !pileNested.isEmpty() )
+							qWarning() << "popping44 : " << pileNested.pop()->getValue();
+						else
+							qWarning() << "OMG stack is empty 2";
+					}
 					return ligne-1;
 				}
 			}
 			// ==================        2         ==================
 			QStringList liste = bloc.capturedTexts();
+			if( !pileNested.isEmpty() )
+			{
+				it = pileNested.top();
+			}
+			
+			if( liste[3].trimmed() == "else" )
+				isElse = true;
 			QMakeItem* i = processNested( liste[2], it );
 			i = addScope( liste[3].trimmed(), "", false, i );
+			pileNested.push(i);
 			if ( i )
 				i->setComment( liste[5].trimmed() );
 			//
@@ -134,7 +159,24 @@ int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 		}
 		// end of block
 		else if ( end_bloc.exactMatch( content[ligne] ) )
+		{
+			if( !pileNested.isEmpty() )
+			{
+				while( !pileNested.isEmpty() && pileNested.top()->getType() == ProjectsModel::NestedScopeType )
+				{
+					qWarning() << "popping33 : " << pileNested.pop()->getValue();
+				}
+				if( !pileNested.isEmpty() )
+				{
+					qWarning() << "popping44 : " << pileNested.pop()->getValue();
+				}
+				else
+					qWarning() << "OMG stack is empty 2";
+			}
+			if( prof == 0 )
+				pileNested.clear();
 			return ligne;
+		}
 		// variable ( nested optionnaly)
 		// "HEADERS = ***" or "win32:HEADERS = ***" ("+=" and "-=" managed)
 		else if ( variable.exactMatch( content[ligne] ) )
@@ -174,7 +216,9 @@ int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 			addComment( content[ligne], it );
 		// empty lines
 		else if ( content[ligne].trimmed() == "" )
+		{
 			addEmpty( it );
+		}
 		// error
 		else
 			qWarning( "Error on line %d: %s", (ligne+1), qPrintable( content[ligne] ) );
@@ -187,12 +231,19 @@ QMakeItem* QMakeParser::processNested( const QString& s, QMakeItem* i )
 {
 	// if there's no scopes, skip.
 	if( s == "" )
+	{
+		if( !isElse )
+		{
+			pileNested.clear();
+			pileNested += s_root;
+		}
 		return i;
+	}
+	
 	int p = 0,end = 0;
 	bool first = true;
 	QString c = s;
-	c.replace( QRegExp("\\(([^|]+)\\|([^|]+)\\)"), "(\\1%%OR%%\\2)" );
-	while ( ( end = c.indexOf( QRegExp("[:|]"), p ) ) != -1 )
+	while ( ( end = c.indexOf( ':', p ) ) != -1 )
 	{
 		if( c.mid( p, end - p ) == "else" )
 		{
@@ -200,7 +251,12 @@ QMakeItem* QMakeParser::processNested( const QString& s, QMakeItem* i )
 			{
 				if( !pileNested.isEmpty() )
 				{
-					i = pileNested.pop();
+					QMakeItem* ik = pileNested.pop();
+					if(!pileNested.isEmpty())
+						i = pileNested.top();
+					else
+						qWarning() << "empty stack";
+					qWarning() << "pop : " << ik->getValue() << ", new top : " << i->getValue();
 				}
 				else
 				{
@@ -214,9 +270,22 @@ QMakeItem* QMakeParser::processNested( const QString& s, QMakeItem* i )
 		}
 		else
 		{
-			pileNested.push(i);
+			if( first && prof == 0 )
+			{
+				pileNested.clear();
+				qWarning() << "clearing stack : " << pileNested;
+			}
+			else
+			{
+				qWarning() << "can't clear ! it's not the first iter or you are in a block";
+				qWarning() << first << prof;
+			}
 		}
-		i = addScope( c.mid( p, end - p ).replace( QRegExp("\\(([^|]+)%%OR%%([^|]+)\\)"), "(\\1|\\2)" ), c.mid( end, 1 ), true, i );
+		
+		qWarning() << "adding : " << c.mid( p, end - p ) << " on " << i->getValue() << " prof = " << prof;
+		i = addScope( c.mid( p, end - p ), c.mid( end, 1 ), true, i );
+		if( s != "else:" )
+			pileNested.push( i );
 		p = end + 1;
 		first = false;
 	}
