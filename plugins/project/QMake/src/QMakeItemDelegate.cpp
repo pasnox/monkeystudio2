@@ -35,7 +35,7 @@ QWidget* QMakeItemDelegate::createEditor( QWidget* w, const QStyleOptionViewItem
 		case ProjectsModel::OperatorRole:
 		{
 			QComboBox* cb = new QComboBox( w );
-			cb->addItems( QStringList() << "" << UISettingsQMake::readOperators() );
+			cb->addItems( QStringList() << QString::null << UISettingsQMake::readOperators() );
 			cb->setCurrentIndex( cb->findText( i.data().toString() ) );
 			return cb;
 		}
