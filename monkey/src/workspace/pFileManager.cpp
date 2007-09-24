@@ -70,6 +70,9 @@ pAbstractChild* pFileManager::openFile( const QString& s, const QPoint& p )
 
 		// add child to workspace
 		pWorkspace::instance()->addTab( c, c->currentFileName() );
+		
+		// set modification state because file is open before put in worksapce so workspace can't know it
+		c->setWindowModified( c->isModified() );
 
 		return c;
 	}
