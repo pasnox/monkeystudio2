@@ -785,6 +785,43 @@ void UIQMakeProjectSettings::on_lwTranslations_itemChanged( QListWidgetItem* it 
 	}
 }
 
+void UIQMakeProjectSettings::on_tbOthersVariablesAdd_clicked()
+{
+}
+
+void UIQMakeProjectSettings::on_tbOthersVariablesEdit_clicked()
+{
+}
+
+void UIQMakeProjectSettings::on_tbOthersVariablesRemove_clicked()
+{
+}
+
+
+void UIQMakeProjectSettings::on_tbOthersValuesAdd_clicked()
+{
+}
+
+void UIQMakeProjectSettings::on_tbOthersValuesEdit_clicked()
+{
+}
+
+void UIQMakeProjectSettings::on_tbOthersValuesRemove_clicked()
+{
+}
+
+void UIQMakeProjectSettings::on_tbOthersValuesClear_clicked()
+{
+}
+
+void UIQMakeProjectSettings::on_tbOthersValuesUp_clicked()
+{
+}
+
+void UIQMakeProjectSettings::on_tbOthersValuesDown_clicked()
+{
+}
+
 void UIQMakeProjectSettings::on_tvScopes_clicked( const QModelIndex& i )
 { setCurrentIndex( mScopesProxy->mapToSource( i ) ); }
 

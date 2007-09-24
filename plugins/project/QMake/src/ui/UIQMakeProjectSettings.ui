@@ -144,7 +144,7 @@
       <enum>Qt::ElideNone</enum>
      </property>
      <property name="currentRow" >
-      <number>0</number>
+      <number>-1</number>
      </property>
      <item>
       <property name="text" >
@@ -176,6 +176,14 @@
       </property>
       <property name="icon" >
        <iconset resource="../resources/QMake.qrc" >:/icons/icons/translations.png</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Others Vars</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="../resources/QMake.qrc" >:/icons/icons/edit.png</iconset>
       </property>
      </item>
      <item>
@@ -300,7 +308,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex" >
-      <number>0</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="wApplication" >
       <layout class="QGridLayout" >
@@ -1503,6 +1511,143 @@
           </item>
          </layout>
         </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="wVariables" >
+      <layout class="QGridLayout" >
+       <property name="leftMargin" >
+        <number>0</number>
+       </property>
+       <property name="topMargin" >
+        <number>0</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
+       </property>
+       <property name="horizontalSpacing" >
+        <number>3</number>
+       </property>
+       <property name="verticalSpacing" >
+        <number>3</number>
+       </property>
+       <item row="0" column="0" >
+        <layout class="QHBoxLayout" >
+         <property name="spacing" >
+          <number>3</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="lOthersVariables" >
+           <property name="text" >
+            <string>Variables :</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbOthersVariablesAdd" >
+           <property name="icon" >
+            <iconset resource="../resources/QMake.qrc" >:/icons/icons/add.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbOthersVariablesEdit" >
+           <property name="icon" >
+            <iconset resource="../resources/QMake.qrc" >:/icons/icons/edit.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbOthersVariablesRemove" >
+           <property name="icon" >
+            <iconset resource="../resources/QMake.qrc" >:/icons/icons/remove.png</iconset>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="0" column="1" >
+        <layout class="QHBoxLayout" >
+         <property name="spacing" >
+          <number>3</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="lOthersValues" >
+           <property name="text" >
+            <string>Values :</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbOthersValuesAdd" >
+           <property name="text" >
+            <string>add</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../resources/QMake.qrc" >:/icons/icons/add.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbOthersValuesEdit" >
+           <property name="text" >
+            <string>edit</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../resources/QMake.qrc" >:/icons/icons/edit.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbOthersValuesRemove" >
+           <property name="text" >
+            <string>remove</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../resources/QMake.qrc" >:/icons/icons/remove.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbOthersValuesClear" >
+           <property name="text" >
+            <string>clear</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../resources/QMake.qrc" >:/icons/icons/clear.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbOthersValuesUp" >
+           <property name="text" >
+            <string>up</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../resources/QMake.qrc" >:/icons/icons/up.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbOthersValuesDown" >
+           <property name="text" >
+            <string>down</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../resources/QMake.qrc" >:/icons/icons/down.png</iconset>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QListWidget" name="lwOthersVariables" />
+       </item>
+       <item row="1" column="1" >
+        <widget class="QListWidget" name="lwOthersValues" />
        </item>
       </layout>
      </widget>

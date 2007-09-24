@@ -78,12 +78,20 @@ protected slots:
 	void lw_currentItemChanged( QListWidgetItem*, QListWidgetItem* );
 	void on_lwFiles_itemDoubleClicked( QListWidgetItem* );
 	void on_cbVariables_currentIndexChanged( const QString& );
-	void on_pbAddValue_clicked(); // ++
+	void on_pbAddValue_clicked();
 	void on_pbEditValue_clicked();
 	void on_pbRemoveValue_clicked();
 	void on_pbClearValues_clicked();
 	void on_lwTranslations_itemChanged( QListWidgetItem* );
-	
+	void on_tbOthersVariablesAdd_clicked();
+	void on_tbOthersVariablesEdit_clicked();
+	void on_tbOthersVariablesRemove_clicked();
+	void on_tbOthersValuesAdd_clicked();
+	void on_tbOthersValuesEdit_clicked();
+	void on_tbOthersValuesRemove_clicked();
+	void on_tbOthersValuesClear_clicked();
+	void on_tbOthersValuesUp_clicked();
+	void on_tbOthersValuesDown_clicked();
 	void on_tvScopes_clicked( const QModelIndex& );
 	void on_tvScopes_doubleClicked( const QModelIndex& );
 	void on_lvContents_doubleClicked( const QModelIndex& );
