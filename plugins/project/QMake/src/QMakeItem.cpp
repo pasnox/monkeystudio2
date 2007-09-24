@@ -647,7 +647,7 @@ void QMakeItem::writeItem( ProjectItem* it ) //
 			{
 				// parent sibling
 				ProjectItem* p = it->parent()->parent()->child( it->parent()->row() +1, 0 );
-				if ( p && !p->isScope() && p->getValue().toLower() != "else" )
+				if ( p && ( !p->isScope() || p->getValue().toLower() != "else" ) )
 					p = 0;
 				mBuffer.append( it->getIndent() ).append( "}" ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( p ? " " : it->getEol() );
 			}
