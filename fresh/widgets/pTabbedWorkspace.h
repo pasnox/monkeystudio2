@@ -68,7 +68,6 @@ public slots:
 	void activateNextDocument();
 	void activatePreviousDocument();
 	void setTabsHaveShortcut( bool );
-	void setCurrentTabModified( bool );
 
 protected:
 	void updateCorners();

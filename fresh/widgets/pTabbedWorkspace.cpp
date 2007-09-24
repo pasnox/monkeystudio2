@@ -73,9 +73,13 @@ bool pTabbedWorkspace::eventFilter( QObject* o, QEvent* e )
 
 	// get event type
 	QEvent::Type t = e->type();
+	
+	// child modified state
+	if ( t == QEvent::ModifiedChange )
+		mTabBar->setTabIcon( indexOf( td ), td->isWindowModified() ? QIcon( ":/project/icons/project/save.png" ) : QIcon() );   
 
 	// if mode is toplevel and event is activate, activate correct window if needed
-	if ( mTabMode == tmTopLevel && t == QEvent::WindowActivate )
+	else if ( mTabMode == tmTopLevel && t == QEvent::WindowActivate )
 	{
 		if ( td && td != currentDocument() )
 			setCurrentDocument( td );
@@ -642,11 +646,6 @@ void pTabbedWorkspace::setTabsHaveShortcut( bool b )
 
 	// update tabs text
 	updateTabsNumber();
-}
-
-void pTabbedWorkspace::setCurrentTabModified( bool b )
-{
-	mTabBar->setTabIcon( mTabBar->currentIndex(), b ? QIcon( ":/project/icons/project/save.png" ) : QIcon() );   
 }
 
 void pTabbedWorkspace::updateTabsNumber( int i )
