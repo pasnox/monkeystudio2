@@ -40,6 +40,7 @@ pChild::pChild()
 	connect( mEditor, SIGNAL( copyAvailable( bool ) ), this, SIGNAL( copyAvailableChanged( bool ) ) );
 	connect( mEditor, SIGNAL( pasteAvailable( bool ) ), this, SIGNAL( pasteAvailableChanged( bool ) ) );
 	connect( mEditor, SIGNAL( modificationChanged( bool ) ), this, SIGNAL( modifiedChanged( bool ) ) );
+	connect( this, SIGNAL( modifiedChanged( bool ) ), window(), SLOT( setWindowModified( bool ) ) );
 }
 
 pChild::~pChild()
