@@ -178,13 +178,13 @@ QString QMakeItem::getIndent() const //
 	return QString();
 	/*
 	// if scope end, need take parent indent
-	if ( const_cast<ProjectItem*>( this )->getType() == ProjectsModel::ScopeEndType )
+	if ( const_cast<ProjectItem*>( this )->isScopeEnd() )
 		return parent()->getIndent();
 	// if first value of a variable, no indent
-	if ( const_cast<ProjectItem*>( this )->getType() == ProjectsModel::ValueType && isFirst() )
+	if ( const_cast<ProjectItem*>( this )->isValue() && isFirst() )
 		return QString();
 	// if not value, and parent is nestedscope, no indent
-	if ( parent() && parent()->getType() == ProjectsModel::NestedScopeType )
+	if ( parent() && parent()->isNested() )
 		return QString();
 	// default indent
 	int i = -1;
@@ -239,7 +239,7 @@ QString QMakeItem::scope() const
 	ProjectItem* p = project();
 	while ( j && j != p )
 	{
-		if ( j->getType() == ProjectsModel::ScopeType || j->getType() == ProjectsModel::NestedScopeType )
+		if ( j->isScope() )
 			s.prepend( QString( "%1%2" ).arg( j->getValue(), j->getOperator().isEmpty() ? ":" : j->getOperator() ) );
 		j = j->parent();
 	}
@@ -270,7 +270,7 @@ void QMakeItem::appendRow( ProjectItem* i )
 void QMakeItem::insertRow( int r, ProjectItem* it )
 {
 	// check scope & function item for not be able to append items after scope end
-	if ( it &&  it->getType() != ProjectsModel::ScopeEndType && ( getType() == ProjectsModel::NestedScopeType || getType() == ProjectsModel::ScopeType ) )
+	if ( isScope() && it &&  !it->isScopeEnd() )
 		r--;
 	// if there is subproject, we need to create items before subproject
 	if ( hasChildren() )
@@ -310,7 +310,7 @@ bool QMakeItem::swapRow( int i, int j )
 bool QMakeItem::moveRowUp( int i )
 {
 	ProjectItem* it = child( i );
-	bool b = it && it->getType() != ProjectsModel::ScopeEndType && i > 0;
+	bool b = it && !it->isScopeEnd() && i > 0;
 	if ( b )
 		QStandardItem::insertRow( i -1, takeRow( i ) );
 	return b;
@@ -319,7 +319,7 @@ bool QMakeItem::moveRowUp( int i )
 bool QMakeItem::moveRowDown( int i )
 {
 	ProjectItem* it = child( i +1 );
-	bool b = it && it->getType() != ProjectsModel::ScopeEndType && i < rowCount() -1;
+	bool b = it && !it->isScopeEnd() && i < rowCount() -1;
 	if ( b )
 		QStandardItem::insertRow( i +1, takeRow( i ) );
 	return b;
@@ -338,7 +338,7 @@ bool QMakeItem::moveDown()
 void QMakeItem::remove()
 {
 	ProjectItem* it = parent();
-	if ( !( it && ( it->getType() == ProjectsModel::ScopeType || it->getType() == ProjectsModel::NestedScopeType ) && it->rowCount() == 2 ) )
+	if ( !( it && it->isScope() && it->rowCount() == 2 ) )
 		it = this;
 	if ( it->parent() )
 		it->parent()->removeRow( it->row() );
@@ -388,7 +388,7 @@ ProjectItem* QMakeItem::getItemScope( const QString& s, bool c ) const
 		// good scope
 		if ( isEqualScope( it->scope(), s ) )
 		{
-			if ( it->getType() == ProjectsModel::NestedScopeType )
+			if ( it->isNested() )
 			{
 				it->setType( ProjectsModel::ScopeType );
 				it->setOperator( QString::null );
@@ -398,7 +398,7 @@ ProjectItem* QMakeItem::getItemScope( const QString& s, bool c ) const
 		// else try found nearest scope
 		else if  ( c && checkScope( s ).startsWith( it->scope() ) )
 		{
-			if ( ( it->getType() == ProjectsModel::ScopeType || it->getType() == ProjectsModel::NestedScopeType ) && s[it->scope().length()] == ':' )
+			if ( ( it->isScope() ) && s[it->scope().length()] == ':' )
 				if ( !sit || ( sit && sit->scope().length() < it->scope().length() ) )
 					sit = it;
 		}
@@ -413,7 +413,7 @@ ProjectItem* QMakeItem::getItemScope( const QString& s, bool c ) const
 	if ( sit )
 	{
 		p.remove( sit->scope() );
-		if ( sit->getType() == ProjectsModel::NestedScopeType )
+		if ( sit->isScopeEnd() )
 		{
 			sit->setType( ProjectsModel::ScopeType );
 			sit->setOperator( QString::null );
@@ -472,7 +472,7 @@ void QMakeItem::setListValues( const QStringList& vl, const QString& v, const QS
 	// check all child of variable and remove from model/list unneeded index/value
 	foreach ( ProjectItem* c, it->children( false, true ) )
 	{
-		if ( c->getType() == ProjectsModel::ValueType )
+		if ( c->isValue() )
 		{
 			if ( l.contains( c->getValue() ) )
 				l.removeAll( c->getValue() );
@@ -525,7 +525,7 @@ void QMakeItem::addListValues( const QStringList& vl, const QString& v, const QS
 	QStringList l = vl;
 	// check all values of variable and remove from list already existing values
 	foreach ( ProjectItem* c, it->children( false, true ) )
-		if ( c->getType() == ProjectsModel::ValueType )
+		if ( c->isValue() )
 			if ( l.contains( c->getValue() ) )
 				l.removeAll( c->getValue() );
 	// add require values
@@ -565,13 +565,13 @@ void QMakeItem::redoLayout( ProjectItem* it ) //
 		int j = l1.indexOf( c->getValue(), Qt::CaseInsensitive );
 		
 		// change it s filter role if needed
-		if ( c->getType() == ProjectsModel::VariableType )
+		if ( c->isVariable() )
 		{
 			// set child filter
 			c->setFilteredView( j );
 			
 			// if it is scope/nestedscope change it s filter too
-			if ( it->getType() == ProjectsModel::ScopeType || it->getType() == ProjectsModel::NestedScopeType )
+			if ( it->isScope() )
 				it->setFilteredView( j );
 		}
 		
@@ -643,14 +643,13 @@ void QMakeItem::writeItem( ProjectItem* it ) //
 		}
 		case ProjectsModel::ScopeEndType:
 		{
-			if ( it->parent()->getType() == ProjectsModel::ScopeType )
+			if ( it->parent()->isScope( false ) )
 			{
 				// parent sibling
 				ProjectItem* p = it->parent()->parent()->child( it->parent()->row() +1, 0 );
-				if ( p && p->getType() != ProjectsModel::ScopeType && p->getType() != ProjectsModel::NestedScopeType && p->getValue().toLower() != "else" )
+				if ( p && !p->isScope() && p->getValue().toLower() != "else" )
 					p = 0;
 				mBuffer.append( it->getIndent() ).append( "}" ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( p ? " " : it->getEol() );
-				//mBuffer.append( it->getIndent() ).append( "}" ).append().append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
 			}
 			break;
 		}
