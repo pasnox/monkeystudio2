@@ -31,7 +31,6 @@ static QRegExp splitValues( "([^\\s\"]+)|\\\"([^\"]+)\\\"|(\\${1,2}\\w+\\([^\\(\
 static QRegExp splitCommands( "(\\([^;]*\\));?|(\\$\\(\\w+\\)[^;]*);?" );
 static QRegExp encoding( "[ \\t]*ENCODING[ \\t]*=[ \\t]*([^ ]+)[ \\t]*(?:#.*)?", Qt::CaseInsensitive );
 static QStack<QMakeItem*> pileNested;
-static QMakeItem* s_root = 0;
 static bool isElse = false;
 
 QMakeParser::QMakeParser( const QString& s, QMakeItem* i )
@@ -41,7 +40,6 @@ QMakeParser::QMakeParser( const QString& s, QMakeItem* i )
 	file_variables = UISettingsQMake::readPathFiles();
 	// parse file
 	loadFile( s, mRoot );
-	s_root = mRoot;
 }
 
 QMakeParser::~QMakeParser()
@@ -97,9 +95,8 @@ int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 {
 	while(ligne < content.size())
 	{
-		isElse = false;
 		// function like :
-		// func_name(params), nested optionnally
+		// func_name(params), nested optionnally	
 		if ( function_call.exactMatch( content[ligne] ) )
 		{
 			// ==================        1        ==================
@@ -116,6 +113,16 @@ int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 		// "truc(params) {" ou "xml:truc(params) {" ou "xml:debug {" ("{" facultatif)
 		else if ( bloc.exactMatch( content[ligne] ) )
 		{
+			// remove previous nested scopes
+			if( !pileNested.isEmpty() )
+			{
+				while( !pileNested.isEmpty() && pileNested.top()->getType() == ProjectsModel::NestedScopeType )
+				{
+					qWarning() << "popping11 : " << pileNested.pop()->getValue();
+				}
+				if( !pileNested.isEmpty() )
+					qWarning() << "popping22 : " << pileNested.pop()->getValue();
+			}
 			// if end block and start new one
 			if( content[ligne].left(1) == "}" )
 			{
@@ -123,17 +130,6 @@ int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 				if(this_prof != prof)
 				{
 					this_prof = prof-1;
-					if( !pileNested.isEmpty() )
-					{
-						while( !pileNested.isEmpty() && pileNested.top()->getType() == ProjectsModel::NestedScopeType )
-						{
-							qWarning() << "popping33 : " << pileNested.pop()->getValue();
-						}
-						if( !pileNested.isEmpty() )
-							qWarning() << "popping44 : " << pileNested.pop()->getValue();
-						else
-							qWarning() << "OMG stack is empty 2";
-					}
 					return ligne-1;
 				}
 			}
@@ -146,7 +142,10 @@ int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 			
 			if( liste[3].trimmed() == "else" )
 				isElse = true;
+			else
+				isElse = false;
 			QMakeItem* i = processNested( liste[2], it );
+			qWarning() << "adding : " << liste[3].trimmed() << " on " << i->getValue() << " prof = " << prof;
 			i = addScope( liste[3].trimmed(), "", false, i );
 			pileNested.push(i);
 			if ( i )
@@ -216,9 +215,7 @@ int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 			addComment( content[ligne], it );
 		// empty lines
 		else if ( content[ligne].trimmed() == "" )
-		{
 			addEmpty( it );
-		}
 		// error
 		else
 			qWarning( "Error on line %d: %s", (ligne+1), qPrintable( content[ligne] ) );
@@ -232,10 +229,10 @@ QMakeItem* QMakeParser::processNested( const QString& s, QMakeItem* i )
 	// if there's no scopes, skip.
 	if( s == "" )
 	{
-		if( !isElse )
+		if( !isElse && prof == 0 )
 		{
 			pileNested.clear();
-			pileNested += s_root;
+			qWarning() << "empty scope";
 		}
 		return i;
 	}
@@ -254,8 +251,6 @@ QMakeItem* QMakeParser::processNested( const QString& s, QMakeItem* i )
 					QMakeItem* ik = pileNested.pop();
 					if(!pileNested.isEmpty())
 						i = pileNested.top();
-					else
-						qWarning() << "empty stack";
 					qWarning() << "pop : " << ik->getValue() << ", new top : " << i->getValue();
 				}
 				else
@@ -274,11 +269,6 @@ QMakeItem* QMakeParser::processNested( const QString& s, QMakeItem* i )
 			{
 				pileNested.clear();
 				qWarning() << "clearing stack : " << pileNested;
-			}
-			else
-			{
-				qWarning() << "can't clear ! it's not the first iter or you are in a block";
-				qWarning() << first << prof;
 			}
 		}
 		
