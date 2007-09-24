@@ -117,11 +117,8 @@ void pWorkspace::internal_currentChanged( int i )
 
 void pWorkspace::internal_aboutToCloseTab( int i, QCloseEvent* e )
 {
-	// get child
-	pAbstractChild* c = child( i );
-
 	// check if need to save files
-	UISaveFiles::execute( c, e );
+	UISaveFiles::execute( child( i ), e );
 }
 
 // file menu
