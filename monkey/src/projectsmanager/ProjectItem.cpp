@@ -160,10 +160,10 @@ bool ProjectItem::isProject() const
 { return getType() == ProjectsModel::ProjectType; }
 
 ProjectsModel* ProjectItem::model() const
-{ return reinterpret_cast<ProjectsModel*>( QStandardItem::model() ); }
+{ return dynamic_cast<ProjectsModel*>( QStandardItem::model() ); }
 
 ProjectItem* ProjectItem::parent() const
-{ return reinterpret_cast<ProjectItem*>( QStandardItem::parent() ); }
+{ return dynamic_cast<ProjectItem*>( QStandardItem::parent() ); }
 
 int ProjectItem::parentCount() const
 {
@@ -179,7 +179,7 @@ int ProjectItem::parentCount() const
 }
 
 ProjectItem* ProjectItem::child( int i, int j ) const
-{ return reinterpret_cast<ProjectItem*>( QStandardItem::child( i, j ) ); }
+{ return dynamic_cast<ProjectItem*>( QStandardItem::child( i, j ) ); }
 
 ProjectItemList ProjectItem::children( bool r, bool s ) const
 {
@@ -204,7 +204,7 @@ void ProjectItem::refresh()
 ProjectItem* ProjectItem::project() const
 {
 	ProjectItem* it = const_cast<ProjectItem*>( this );
-	while ( it && it->getType() != ProjectsModel::ProjectType )
+	while ( it && !it->isProject() )
 		it = it->parent();
 	return it;
 }
@@ -219,7 +219,7 @@ ProjectItemList ProjectItem::childrenProjects( bool b ) const
 {
 	ProjectItemList l;
 	foreach ( ProjectItem* it, children( b ) )
-		if ( it->getType() == ProjectsModel::ProjectType )
+		if ( it->isProject() )
 			l << it;
 	return l;
 }
@@ -231,7 +231,7 @@ ProjectItemList ProjectItem::projectScopes() const
 {
 	ProjectItemList l;
 	foreach ( ProjectItem* it, projectItems() )
-		if ( it->getType() == ProjectsModel::ScopeType || it->getType() == ProjectsModel::NestedScopeType )
+		if ( it->isScope() )
 			l << it;
 	return l;
 }
@@ -252,7 +252,7 @@ ProjectItemList ProjectItem::childrenScopes( bool b ) const
 {
 	ProjectItemList l;
 	foreach ( ProjectItem* it, children( b, true ) )
-		if ( it->getType() == ProjectsModel::ScopeType || it->getType() == ProjectsModel::NestedScopeType )
+		if ( it->isScope() )
 			l << it;
 	return l;
 }
@@ -314,7 +314,7 @@ ProjectItemList ProjectItem::getItemListValues( const QString& v, const QString&
 	ProjectItemList l;
 	foreach ( ProjectItem* it, getItemList( ProjectsModel::VariableType, v, o, s ) )
 		for ( int i = 0; i < it->rowCount(); i++ )
-			if ( it->child( i, 0 )->getType() == ProjectsModel::ValueType )
+			if ( it->child( i, 0 )->isValue() )
 				l << it->child( i, 0 );
 	return l;
 }
