@@ -282,7 +282,6 @@ void QMakeItem::insertRow( int r, ProjectItem* it )
 	}
 	// default insert
 	QStandardItem::insertRow( r, it );
-	qWarning( qPrintable( QString( "Inserted item: %1, %2, %3, %4 - %5, parent: %6" ).arg( it->getValue() ).arg( it->getType() ).arg( it->scope() ).arg( it->row() ).arg( it->column() ).arg( getValue() ) ) );
 }
 
 bool QMakeItem::swapRow( int i, int j )
@@ -341,7 +340,6 @@ void QMakeItem::remove()
 	ProjectItem* it = parent();
 	if ( !( it && ( it->getType() == ProjectsModel::ScopeType || it->getType() == ProjectsModel::NestedScopeType ) && it->rowCount() == 2 ) )
 		it = this;
-	qWarning( qPrintable( QString( "Removing item: %1, %2, %3, %4 - %5, parent: %6" ).arg( it->getValue() ).arg( it->getType() ).arg( it->scope() ).arg( it->row() ).arg( it->column() ).arg( it->parent() ? it->parent()->getValue() : "no parent" ) ) );
 	if ( it->parent() )
 		it->parent()->removeRow( it->row() );
 	else if ( model() )
@@ -400,7 +398,7 @@ ProjectItem* QMakeItem::getItemScope( const QString& s, bool c ) const
 		// else try found nearest scope
 		else if  ( c && checkScope( s ).startsWith( it->scope() ) )
 		{
-			if ( it->getType() == ProjectsModel::ScopeType || ( it->getType() == ProjectsModel::NestedScopeType && s[it->scope().length()] == ':' ) )
+			if ( ( it->getType() == ProjectsModel::ScopeType || it->getType() == ProjectsModel::NestedScopeType ) && s[it->scope().length()] == ':' )
 				if ( !sit || ( sit && sit->scope().length() < it->scope().length() ) )
 					sit = it;
 		}
@@ -413,7 +411,14 @@ ProjectItem* QMakeItem::getItemScope( const QString& s, bool c ) const
 	// get nearest scope and remove it from full scope to create
 	QString p = s;
 	if ( sit )
+	{
 		p.remove( sit->scope() );
+		if ( sit->getType() == ProjectsModel::NestedScopeType )
+		{
+			sit->setType( ProjectsModel::ScopeType );
+			sit->setOperator( QString::null );
+		}
+	}
 	
 	// remove trailing operator
 	if ( p.startsWith( ':' ) )
