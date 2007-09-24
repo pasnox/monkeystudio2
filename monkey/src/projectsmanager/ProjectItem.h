@@ -42,7 +42,7 @@ public:
 	virtual void setData( const QVariant&, int = Qt::UserRole +1 );
 	// type of the item
 	virtual void setType( ProjectsModel::NodeType );
-	virtual ProjectsModel::NodeType getType();
+	virtual ProjectsModel::NodeType getType() const;
 	// item operator, only variable
 	virtual void setOperator( const QString& );
 	virtual QString getOperator() const;
@@ -70,6 +70,28 @@ public:
 	// item read only, only project
 	virtual void setReadOnly( bool );
 	virtual bool getReadOnly() const;
+	// tell if item is empty type
+	virtual bool isEmpty() const;
+	// tell if item is folder type
+	virtual bool isFolder() const;
+	// tell if item is comment type
+	virtual bool isComment() const;
+	// tell if item is a nested scope type
+	virtual bool isNested() const;
+	// tell if item is a scope type, accepting nested according to bool
+	virtual bool isScope( bool = true ) const;
+	// tell if item is a scope end type
+	virtual bool isScopeEnd() const;
+	// tell if item is a variable type
+	virtual bool isVariable() const;
+	// tell if item is a value type
+	virtual bool isValue() const;
+	// tell if item is a function type
+	virtual bool isFunction() const;
+	// tell if item is a include type
+	virtual bool isInclude() const;
+	// tell if item is a project type
+	virtual bool isProject() const;
 	// item indent
 	virtual QString getIndent() const = 0;
 	// item eol

@@ -49,7 +49,7 @@ void ProjectItem::setData( const QVariant& v, int r )
 void ProjectItem::setType( ProjectsModel::NodeType t )
 { setData( t, ProjectsModel::TypeRole ); }
 
-ProjectsModel::NodeType ProjectItem::getType()
+ProjectsModel::NodeType ProjectItem::getType() const
 { return (ProjectsModel::NodeType)data( ProjectsModel::TypeRole ).toInt(); }
 
 void ProjectItem::setOperator( const QString& s )
@@ -125,6 +125,39 @@ void ProjectItem::setReadOnly( bool b )
 
 bool ProjectItem::getReadOnly() const
 { return data( ProjectsModel::ReadOnlyRole ).toBool(); }
+
+bool ProjectItem::isEmpty() const
+{ return getType() == ProjectsModel::EmptyType; }
+
+bool ProjectItem::isFolder() const
+{ return getType() == ProjectsModel::FolderType; }
+
+bool ProjectItem::isComment() const
+{ return getType() == ProjectsModel::CommentType; }
+
+bool ProjectItem::isNested() const
+{ return getType() == ProjectsModel::NestedScopeType; }
+
+bool ProjectItem::isScope( bool b ) const
+{ return b ? getType() == ProjectsModel::ScopeType || getType() == ProjectsModel::NestedScopeType : getType() == ProjectsModel::ScopeType; }
+
+bool ProjectItem::isScopeEnd() const
+{ return getType() == ProjectsModel::ScopeEndType; }
+
+bool ProjectItem::isVariable() const
+{ return getType() == ProjectsModel::VariableType; }
+
+bool ProjectItem::isValue() const
+{ return getType() == ProjectsModel::ValueType; }
+
+bool ProjectItem::isFunction() const
+{ return getType() == ProjectsModel::FunctionType; }
+
+bool ProjectItem::isInclude() const
+{ return getType() == ProjectsModel::IncludeType; }
+
+bool ProjectItem::isProject() const
+{ return getType() == ProjectsModel::ProjectType; }
 
 ProjectsModel* ProjectItem::model() const
 { return reinterpret_cast<ProjectsModel*>( QStandardItem::model() ); }
