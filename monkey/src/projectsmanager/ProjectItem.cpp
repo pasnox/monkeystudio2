@@ -303,7 +303,7 @@ ProjectItemList ProjectItem::getItemList( ProjectsModel::NodeType t, const QStri
 	ProjectItemList l;
 	foreach ( ProjectItem* it, match( ProjectsModel::ValueRole, v ) )
 		if ( isEqualScope( it->scope(), s ) )
-			if ( ( !o.isEmpty() && it->getOperator() == o ) || o.isEmpty() )
+			if ( ( !o.isEmpty() && it->getOperator() == o ) || o == "*" )
 				if ( it->getType() == t )
 					l << it;
 	return l;
