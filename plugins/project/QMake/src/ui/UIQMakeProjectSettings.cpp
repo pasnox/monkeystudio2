@@ -33,9 +33,9 @@ UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
 	// set window title
 	setWindowTitle( QString( "Project Settings - %1" ).arg( mProject->name() ) );
 	// set button pixmap
-	dbbButtons->button( QDialogButtonBox::Ok )->setIcon( QPixmap( ":/Icons/Icons/buttonok.png" ) );
-	dbbButtons->button( QDialogButtonBox::Cancel )->setIcon( QPixmap( ":/Icons/Icons/buttoncancel.png" ) );
-	dbbButtons->button( QDialogButtonBox::Help )->setIcon( QPixmap( ":/Icons/Icons/helpkeyword.png" ) );
+	dbbButtons->button( QDialogButtonBox::Ok )->setIcon( QPixmap( ":/icons/icons/ok.png" ) );
+	dbbButtons->button( QDialogButtonBox::Cancel )->setIcon( QPixmap( ":/icons/icons/cancel.png" ) );
+	dbbButtons->button( QDialogButtonBox::Help )->setIcon( QPixmap( ":/icons/icons/help.png" ) );
 	//
 	mDirs->setReadOnly( true );
 	mDirs->setFilter( QDir::AllDirs );
@@ -179,6 +179,30 @@ const QString UIQMakeProjectSettings::checkTranslationsPath()
 	return c;
 }
 
+void UIQMakeProjectSettings::checkOthersVariables()
+{
+	// clear lists
+	lwOthersVariables->clear();
+	lwOthersValues->clear();
+	
+	// iterate other all variables
+	const Key ck = Key() << cbScopes->currentText() << cbOperators->currentText();
+	foreach ( const Key k, mSettings.keys() )
+	{
+		if ( k.at( 0 ) == ck.at( 0 ) && k.at( 1 ) == ck.at( 1 ) && !mBlackList.contains( k.at( 2 ) ) && !values( k ).isEmpty() )
+		{
+			QListWidgetItem* it = new QListWidgetItem( k.at( 2 ) );
+			it->setData( Qt::UserRole +1, k );
+			it->setData( Qt::UserRole +2, values( k ) );
+			lwOthersVariables->addItem( it );
+		}
+	}
+	
+	// show values of first variable
+	if ( lwOthersVariables->count() )
+		lwOthersVariables->setCurrentItem( lwOthersVariables->item( 0 ) );
+}
+
 Key UIQMakeProjectSettings::currentKey( const QString& s ) const
 { return Key() << cbScopes->currentText() << cbOperators->currentText() << s; }
 
@@ -221,7 +245,7 @@ void UIQMakeProjectSettings::removeValues( const Key& k, const QStringList& v )
 }
 
 void UIQMakeProjectSettings::clearValues( const Key& k )
-{ mSettings.remove( k  ); }
+{ mSettings.remove( k ); }
 
 QStringList UIQMakeProjectSettings::values( const Key& k ) const
 { return mSettings.value( k ); }
@@ -262,64 +286,51 @@ void UIQMakeProjectSettings::setCurrentIndex( const QModelIndex& i )
 
 void UIQMakeProjectSettings::querySettings()
 {
+	// get black list variables
+	foreach ( QWidget* w, findChildren<QWidget*>() )
+		if ( !w->statusTip().isEmpty() )
+			mBlackList << w->statusTip();
+	
 	// load user operators
 	cbOperators->addItems( UISettingsQMake::readOperators() );
 	
-	// get all scope of project
-	QStringList l = mProject->projectScopesList();
+	// get all variable of project
+	ProjectItemList il = mProject->getItemList( ProjectsModel::VariableType, "*", "*", "*" );
 	
 	// set maximum progressbar value
-	pbProgress->setMaximum( l.count() *cbOperators->count() );
+	pbProgress->setMaximum( il.count() );
 	
 	// inform reading project
-	pbProgress->setFormat( tr( "Reading project... %p%" ) );
+	pbProgress->setFormat( tr( "Reading project datas... %p%" ) );
 	
-	// scan values scopes
-	foreach ( QString Scope, l )
+	foreach ( ProjectItem* v, il )
 	{
-		// add scope to scope list
-		if ( cbScopes->findText( Scope ) == -1 )
-			cbScopes->addItem( Scope );
+		// update progress bar
+		pbProgress->setValue( pbProgress->value() +1 );
 		
 		// process application event except user inputContext
 		QApplication::processEvents( QEventLoop::ExcludeUserInputEvents );
 		
-		// browse all possible operator for scope
-		for ( int oc = 0; oc < cbOperators->count(); oc++ )
-		{
-			const QString Operator = cbOperators->itemText( oc );
-			
-			// update progress bar
-			pbProgress->setValue( pbProgress->value() +1 );
-			
-			// set key
-			const Key k = Key() << Scope << Operator;
-			
-			// check application page
-			setValues( Key( k ) << leTitle->statusTip(), mProject->getListValues( leTitle->statusTip(), Operator, Scope ) );
-			setValues( Key( k ) << leIcon->statusTip() , mProject->getListValues( leIcon->statusTip(), Operator, Scope ) );
-			setValues( Key( k ) << leHelpFile->statusTip() , mProject->getListValues( leHelpFile->statusTip(), Operator, Scope ) );
-			setValues( Key( k ) << leAuthor->statusTip() , mProject->getListValues( leAuthor->statusTip(), Operator, Scope ) );
-			setValues( Key( k ) << cbTemplate->statusTip() , mProject->getListValues( cbTemplate->statusTip(), Operator, Scope ) );
-			setValues( Key( k ) << cbLanguage->statusTip() , mProject->getListValues( cbLanguage->statusTip(), Operator, Scope ) );
-			setValues( Key( k ) << lwCompilerFlags->statusTip() , mProject->getListValues( lwCompilerFlags->statusTip(), Operator, Scope ) );
-			setValues( Key( k ) << lwQtModules->statusTip() , mProject->getListValues( lwQtModules->statusTip(), Operator, Scope ) );
-			setValues( Key( k ) << gbVersion->statusTip() , mProject->getListValues( gbVersion->statusTip(), Operator, Scope ) );
-			setValues( Key( k ) << cbBuildAutoIncrement->statusTip() , mProject->getListValues( cbBuildAutoIncrement->statusTip(), Operator, Scope ) );
-			setValues( Key( k ) << cbEncodings->statusTip() , mProject->getListValues( cbEncodings->statusTip(), Operator, Scope ) );
-			setValues( Key( k ) << leOutputPath->statusTip() , mProject->getListValues( leOutputPath->statusTip(), Operator, Scope ) );
-			setValues( Key( k ) << leOutputName->statusTip() , mProject->getListValues( leOutputName->statusTip(), Operator, Scope ) );
-			setValues( Key( k ) << leTranslationsPath->statusTip() , mProject->getListValues( leTranslationsPath->statusTip(), Operator, Scope ) );
-			for ( int i = 0; i < cbVariables->count(); i++ )
-				setValues( Key( k ) << cbVariables->itemText( i ) , mProject->getListValues( cbVariables->itemText( i ), Operator, Scope ) );
-		}
+		// get scope
+		const QString Scope = v->scope();
+		
+		// get key
+		const Key k = Key() << Scope << v->getOperator() << v->getValue();
+		
+		// add scope to scope list if it not exists
+		if ( cbScopes->findText( Scope ) == -1 )
+			cbScopes->addItem( Scope );
+		
+		// add values to key
+		foreach ( ProjectItem* it, v->children() )
+			addValue( k, it->getValue() );
 	}
 	
 	// set settings original one
 	mOriginalSettings = mSettings;
 	
 	// fill list & combo
-	l = UISettingsQMake::readScopes();
+	QStringList l = UISettingsQMake::readScopes();
 	foreach ( const QString s, l )
 		if ( cbScopes->findText( s ) == -1 )
 			cbScopes->addItem( s );
@@ -460,7 +471,7 @@ void UIQMakeProjectSettings::on_tbAddScope_clicked()
 		l << cbScopes->itemText( i );
 	bool b;
 	// get new scope
-	QString s = QInputDialog::getItem( this, tr( "title" ), tr( "label" ), l, -1, true, &b  );
+	QString s = QInputDialog::getItem( this, tr( "Add Scope..." ), tr( "Enter the scope name,\n( it can be full imbricated scope like:\nwin32:!vista|!win98|!win95:CONFIG( debug, debug|release ) ) :" ), l, -1, true, &b  );
 	if ( b )
 	{
 		// check if item already exists and add it
@@ -565,7 +576,11 @@ void UIQMakeProjectSettings::on_cbScopes_currentIndexChanged( const QString& )
 { on_cbOperators_currentIndexChanged( cbOperators->currentText() ); }
 
 void UIQMakeProjectSettings::on_cbOperators_currentIndexChanged( const QString& )
-{	
+{
+	// cancel if loading
+	if ( pbProgress->isVisible() )
+		return;
+	
 	leTitle->setText( value( currentKey( leTitle->statusTip() ) ) );
 	leIcon->setText( value( currentKey( leIcon->statusTip() ) ) );
 	lPixmap->setPixmap( QPixmap( mProject->canonicalFilePath( leIcon->text() ) ) );
@@ -599,6 +614,9 @@ void UIQMakeProjectSettings::on_cbOperators_currentIndexChanged( const QString& 
 	
 	// update translations
 	setCurrentTRANSLATIONS( values( currentKey( lwTranslations->statusTip() ) ) );
+	
+	// update others variables
+	checkOthersVariables();
 }
 
 void UIQMakeProjectSettings::on_cbTemplate_currentIndexChanged( const QString& s )
@@ -787,16 +805,66 @@ void UIQMakeProjectSettings::on_lwTranslations_itemChanged( QListWidgetItem* it 
 
 void UIQMakeProjectSettings::on_tbOthersVariablesAdd_clicked()
 {
+	bool b;
+	const QString s = QInputDialog::getText( this, tr( "Add Variable..." ), tr( "Enter the name of the new variable :" ), QLineEdit::Normal, QString::null, &b );
+	if ( b && !s.isEmpty() && !lwOthersVariables->findItems( s, Qt::MatchFixedString | Qt::MatchRecursive ).count() )
+	{
+		const Key k = currentKey( s );
+		QListWidgetItem* it = new QListWidgetItem( s );
+		it->setData( Qt::UserRole +1, k );
+		lwOthersVariables->addItem( it );
+		lwOthersVariables->setCurrentItem( it );
+	}
 }
 
 void UIQMakeProjectSettings::on_tbOthersVariablesEdit_clicked()
 {
+	if ( QListWidgetItem* it = lwOthersVariables->currentItem() )
+	{
+		bool b;
+		const QString s = QInputDialog::getText( this, tr( "Edit Variable..." ), tr( "Enter a new name for this variable :" ), QLineEdit::Normal, it->text(), &b );
+		if ( it && !lwOthersVariables->findItems( s, Qt::MatchFixedString | Qt::MatchRecursive ).count() )
+		{
+			const Key ck = currentKey( s );
+			const Key ok = currentKey( it->text() );
+			setValues( ck, values( ok ) );
+			setValue( ok, QString::null );
+			it->setText( s );
+			it->setData( Qt::UserRole +1, ck );
+		}
+	}
 }
 
 void UIQMakeProjectSettings::on_tbOthersVariablesRemove_clicked()
 {
+	if ( QListWidgetItem* it = lwOthersVariables->currentItem() )
+	{
+		setValue( currentKey( it->text() ), QString::null );
+		delete it;
+	}
 }
 
+void UIQMakeProjectSettings::on_lwOthersVariables_itemSelectionChanged()
+{
+	if ( lwOthersVariables->currentItem() != lwOthersVariables->selectedItems().value( 0 ) )
+		lwOthersVariables->setCurrentItem( lwOthersVariables->selectedItems().value( 0 ) );
+}
+
+void UIQMakeProjectSettings::on_lwOthersVariables_currentItemChanged( QListWidgetItem* c, QListWidgetItem* p )
+{
+	// save values of old variable
+	if ( p )
+	{
+		const Key k = p->data( Qt::UserRole +1 ).value<Key>();
+		QStringList l;
+		for ( int i = 0; i < lwOthersValues->count(); i++ )
+			l << lwOthersValues->item( i )->text();
+		setValues( k, l );
+	}
+	
+	// show variable values
+	lwOthersValues->addItems( c ? c->data( Qt::UserRole +2 ).toStringList() : QStringList() );
+}
 
 void UIQMakeProjectSettings::on_tbOthersValuesAdd_clicked()
 {

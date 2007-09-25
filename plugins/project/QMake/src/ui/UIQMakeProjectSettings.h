@@ -30,6 +30,7 @@ protected:
 	QDirModel* mDirs;
 	QMakeProxy* mScopesProxy;
 	QMakeProxy* mContentProxy;
+	QStringList mBlackList;
 
 	void showEvent( QShowEvent* );
 	void closeEvent( QCloseEvent* );
@@ -39,6 +40,7 @@ protected:
 	void setCurrentQT( const QString& );
 	void setCurrentTRANSLATIONS( const QStringList& );
 	const QString checkTranslationsPath();
+	void checkOthersVariables();
 	Key currentKey( const QString& ) const;
 	void addValue( const Key& s, const QString& v );
 	void addValues( const Key& s, const QStringList& v );
@@ -86,6 +88,10 @@ protected slots:
 	void on_tbOthersVariablesAdd_clicked();
 	void on_tbOthersVariablesEdit_clicked();
 	void on_tbOthersVariablesRemove_clicked();
+	
+	void on_lwOthersVariables_itemSelectionChanged();
+	void on_lwOthersVariables_currentItemChanged( QListWidgetItem*, QListWidgetItem* );
+	
 	void on_tbOthersValuesAdd_clicked();
 	void on_tbOthersValuesEdit_clicked();
 	void on_tbOthersValuesRemove_clicked();

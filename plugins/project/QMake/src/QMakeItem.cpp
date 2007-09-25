@@ -337,13 +337,10 @@ bool QMakeItem::moveDown()
 
 void QMakeItem::remove()
 {
-	ProjectItem* it = parent();
-	if ( !( it && it->isScope() && it->rowCount() == 2 ) )
-		it = this;
-	if ( it->parent() )
-		it->parent()->removeRow( it->row() );
+	if ( parent() )
+		parent()->removeRow( row() );
 	else if ( model() )
-		model()->removeRow( it->row(), it->index().parent() );
+		model()->removeRow( row(), index().parent() );
 }
 
 void QMakeItem::close()
