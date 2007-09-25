@@ -30,13 +30,15 @@ UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
 	Q_ASSERT( mProject != 0 );
 	setupUi( this );
 	setAttribute( Qt::WA_DeleteOnClose );
+	
 	// set window title
 	setWindowTitle( QString( "Project Settings - %1" ).arg( mProject->name() ) );
+	
 	// set button pixmap
 	dbbButtons->button( QDialogButtonBox::Ok )->setIcon( QPixmap( ":/icons/icons/ok.png" ) );
 	dbbButtons->button( QDialogButtonBox::Cancel )->setIcon( QPixmap( ":/icons/icons/cancel.png" ) );
 	dbbButtons->button( QDialogButtonBox::Help )->setIcon( QPixmap( ":/icons/icons/help.png" ) );
-	//
+	
 	mDirs->setReadOnly( true );
 	mDirs->setFilter( QDir::AllDirs );
 	mDirs->setSorting( QDir::Name );
@@ -46,22 +48,24 @@ UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
 	// all os except windows got only one root drive, so don't need to show root
 	lvDirs->setRootIndex( mDirs->index( "/" ) );
 #endif
-	//
 	setDir( mDirs->index( mProject->canonicalPath() ) );
+	
 	// scopes
 	mScopesProxy = new QMakeProxy( mModel, mProject );
 	mScopesProxy->setFilterRoles( QList<int>() << ProjectsModel::ValueType );
 	mScopesProxy->setFiltering( true );
 	tvScopes->setModel( mScopesProxy );
-	//
+	
 	tvScopes->header()->hide();
 	tvScopes->setRootIndex( mScopesProxy->mapFromSource( mProject->index() ) );
+	
 	// scope content
 	mContentProxy = new QMakeProxy( mModel, mProject );
 	mContentProxy->setFilterRoles( QList<int>() << ProjectsModel::ValueType );
 	mContentProxy->setNegateFilter( false );
 	mContentProxy->setFiltering( true );
 	lvContents->setModel( mContentProxy );
+	
 	// set currentindex
 	setCurrentIndex( mProject->child( 0, 0 )->index() );
 }
@@ -189,11 +193,11 @@ void UIQMakeProjectSettings::checkOthersVariables()
 	const Key ck = Key() << cbScopes->currentText() << cbOperators->currentText();
 	foreach ( const Key k, mSettings.keys() )
 	{
-		if ( k.at( 0 ) == ck.at( 0 ) && k.at( 1 ) == ck.at( 1 ) && !mBlackList.contains( k.at( 2 ) ) && !values( k ).isEmpty() )
+		if ( k.at( 0 ) == ck.at( 0 ) && k.at( 1 ) == ck.at( 1 ) && !mBlackList.contains( k.at( 2 ) ) )
 		{
 			QListWidgetItem* it = new QListWidgetItem( k.at( 2 ) );
-			it->setData( Qt::UserRole +1, k );
-			it->setData( Qt::UserRole +2, values( k ) );
+			it->setData( Qt::UserRole +1, values( k ) );
+			it->setHidden( values( k ).isEmpty() );
 			lwOthersVariables->addItem( it );
 		}
 	}
@@ -531,6 +535,11 @@ void UIQMakeProjectSettings::cb_highlighted( int )
 	for ( int i = 0; i < lwValues->count(); i++ )
 		l << lwValues->item( i )->text();
 	setValues( currentKey( cbVariables->currentText() ), l );
+	for ( int i = 0; i < lwOthersVariables->count(); i++ )
+	{
+		QListWidgetItem* it = lwOthersVariables->item( i );
+		setValues( currentKey( it->text() ), it->data( Qt::UserRole +1 ).toStringList() );
+	}
 }
 
 void UIQMakeProjectSettings::tb_clicked()
@@ -807,63 +816,62 @@ void UIQMakeProjectSettings::on_tbOthersVariablesAdd_clicked()
 {
 	bool b;
 	const QString s = QInputDialog::getText( this, tr( "Add Variable..." ), tr( "Enter the name of the new variable :" ), QLineEdit::Normal, QString::null, &b );
-	if ( b && !s.isEmpty() && !lwOthersVariables->findItems( s, Qt::MatchFixedString | Qt::MatchRecursive ).count() )
+	if ( b && !s.isEmpty() )
 	{
-		const Key k = currentKey( s );
-		QListWidgetItem* it = new QListWidgetItem( s );
-		it->setData( Qt::UserRole +1, k );
-		lwOthersVariables->addItem( it );
+		QListWidgetItem* it = lwOthersVariables->findItems( s, Qt::MatchFixedString | Qt::MatchRecursive ).value( 0 );
+		if ( it && it->isHidden() )
+			it->setHidden( false );
+		else if ( !it )
+			it = new QListWidgetItem( s, lwOthersVariables );
 		lwOthersVariables->setCurrentItem( it );
 	}
 }
 
 void UIQMakeProjectSettings::on_tbOthersVariablesEdit_clicked()
 {
-	if ( QListWidgetItem* it = lwOthersVariables->currentItem() )
+	if ( QListWidgetItem* it = lwOthersVariables->selectedItems().value( 0 ) )
 	{
 		bool b;
 		const QString s = QInputDialog::getText( this, tr( "Edit Variable..." ), tr( "Enter a new name for this variable :" ), QLineEdit::Normal, it->text(), &b );
-		if ( it && !lwOthersVariables->findItems( s, Qt::MatchFixedString | Qt::MatchRecursive ).count() )
+		if ( it )
 		{
-			const Key ck = currentKey( s );
-			const Key ok = currentKey( it->text() );
-			setValues( ck, values( ok ) );
-			setValue( ok, QString::null );
-			it->setText( s );
-			it->setData( Qt::UserRole +1, ck );
+			QListWidgetItem* eit = lwOthersVariables->findItems( s, Qt::MatchFixedString | Qt::MatchRecursive ).value( 0 );
+			if ( eit && eit->isHidden() )
+			{
+				// show item and assigna datas
+				eit->setData( Qt::UserRole +1, it->data( Qt::UserRole +1 ) );
+				eit->setHidden( false );
+				// clear data and hide item
+				it->setData( Qt::UserRole +1, QStringList() );
+				it->setHidden( true );
+			}
+			else
+			{
+				// create unvisible item with old name and no values
+				eit = new QListWidgetItem( it->text(), lwOthersVariables );
+				eit->setHidden( true );
+				// rename current item
+				it->setText( s );
+			}
 		}
 	}
 }
 
 void UIQMakeProjectSettings::on_tbOthersVariablesRemove_clicked()
 {
-	if ( QListWidgetItem* it = lwOthersVariables->currentItem() )
+	if ( QListWidgetItem* it = lwOthersVariables->selectedItems().value( 0 ) )
 	{
-		setValue( currentKey( it->text() ), QString::null );
-		delete it;
+		it->setData( Qt::UserRole +1, QStringList() );
+		it->setHidden( true );
 	}
 }
 
 void UIQMakeProjectSettings::on_lwOthersVariables_itemSelectionChanged()
 {
-	if ( lwOthersVariables->currentItem() != lwOthersVariables->selectedItems().value( 0 ) )
-		lwOthersVariables->setCurrentItem( lwOthersVariables->selectedItems().value( 0 ) );
-}
-
-void UIQMakeProjectSettings::on_lwOthersVariables_currentItemChanged( QListWidgetItem* c, QListWidgetItem* p )
-{
-	// save values of old variable
-	if ( p )
-	{
-		const Key k = p->data( Qt::UserRole +1 ).value<Key>();
-		QStringList l;
-		for ( int i = 0; i < lwOthersValues->count(); i++ )
-			l << lwOthersValues->item( i )->text();
-		setValues( k, l );
-	}
-	
-	// show variable values
-	lwOthersValues->addItems( c ? c->data( Qt::UserRole +2 ).toStringList() : QStringList() );
+	// clear values, and add item values
+	lwOthersValues->clear();
+	QListWidgetItem* it = lwOthersVariables->selectedItems().value( 0 );
+	lwOthersValues->addItems( it ? it->data( Qt::UserRole +1 ).toStringList() : QStringList() );
 }
 
 void UIQMakeProjectSettings::on_tbOthersValuesAdd_clicked()

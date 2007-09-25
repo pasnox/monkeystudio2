@@ -88,10 +88,7 @@ protected slots:
 	void on_tbOthersVariablesAdd_clicked();
 	void on_tbOthersVariablesEdit_clicked();
 	void on_tbOthersVariablesRemove_clicked();
-	
 	void on_lwOthersVariables_itemSelectionChanged();
-	void on_lwOthersVariables_currentItemChanged( QListWidgetItem*, QListWidgetItem* );
-	
 	void on_tbOthersValuesAdd_clicked();
 	void on_tbOthersValuesEdit_clicked();
 	void on_tbOthersValuesRemove_clicked();
