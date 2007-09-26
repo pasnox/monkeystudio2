@@ -24,6 +24,8 @@
 
 #include <QHeaderView>
 
+using namespace pMonkeyStudio;
+
 UIProjectsManager::UIProjectsManager( QWidget* w )
 	: QDockWidget( w ), mProjects( new ProjectsModel( this ) ), mProxy( new ProjectsProxy( mProjects ) )
 {
@@ -51,6 +53,8 @@ UIProjectsManager::UIProjectsManager( QWidget* w )
 	tbButtons->addAction( mb->action( "mProject/mClose/aAll" ) );
 	tbButtons->addSeparator();
 	tbButtons->addAction( mb->action( "mProject/aSettings" ) );
+	tbButtons->addSeparator();
+	tbButtons->addAction( mb->action( "mProject/aAddExistingFiles" ) );
 	
 	// set projects properties
 	tvProjects->header()->hide();
@@ -127,6 +131,7 @@ void UIProjectsManager::tvProjects_currentChanged( const QModelIndex& c, const Q
 			mb->action( "mProject/mClose/aCurrent" )->setEnabled( true );
 			mb->action( "mProject/mClose/aAll" )->setEnabled( true );
 			mb->action( "mProject/aSettings" )->setEnabled( true );
+			mb->action( "mProject/aAddExistingFiles" )->setEnabled( true );
 		}
 	}
 	else
@@ -145,6 +150,7 @@ void UIProjectsManager::tvProjects_currentChanged( const QModelIndex& c, const Q
 		mb->action( "mProject/mClose/aCurrent" )->setEnabled( false );
 		mb->action( "mProject/mClose/aAll" )->setEnabled( false );
 		mb->action( "mProject/aSettings" )->setEnabled( false );
+		mb->action( "mProject/aAddExistingFiles" )->setEnabled( false );
 	}
 }
 
@@ -167,10 +173,10 @@ bool UIProjectsManager::openProject( const QString& s )
 			return true;
 		}
 		else
-			pMonkeyStudio::warning( tr( "Open Project" ), tr( "An error occur while opening this project:\n[%1]" ).arg( s ) );
+			warning( tr( "Open Project" ), tr( "An error occur while opening this project:\n[%1]" ).arg( s ) );
 	}
 	else
-		pMonkeyStudio::warning( tr( "Open Project..." ), tr( "There is no plugin that can manage this kind of project.\n[%1]" ).arg( s ) );
+		warning( tr( "Open Project..." ), tr( "There is no plugin that can manage this kind of project.\n[%1]" ).arg( s ) );
 	return false;
 }
 
@@ -184,17 +190,17 @@ void UIProjectsManager::projectOpen_triggered()
 	// get last file open path
 	const QString mPath = pRecentsManager::instance()->recentProjectOpenPath();
 	// get available filters
-	QString mFilters = pMonkeyStudio::availableProjectsFilters();
+	QString mFilters = availableProjectsFilters();
 	// prepend a all in one filter
 	if ( !mFilters.isEmpty() )
 	{
 		QString s;
-		foreach ( QStringList l, pMonkeyStudio::availableProjectsSuffixes().values() )
+		foreach ( QStringList l, availableProjectsSuffixes().values() )
 			s.append( l.join( " " ).append( " " ) );
 		mFilters.prepend( QString( "All Supported Projects (%1);;" ).arg( s.trimmed() ) );
 	}
 	// open open file dialog
-	QStringList l = pMonkeyStudio::getOpenFileNames( tr( "Choose the project(s) to open" ), mPath, mFilters, window() );
+	QStringList l = getOpenFileNames( tr( "Choose the project(s) to open" ), mPath, mFilters, window() );
 	// for each entry, open file
 	foreach ( QString s, l )
 	{
@@ -241,6 +247,16 @@ void UIProjectsManager::projectSettings_triggered()
 	{
 		PluginsManager::instance()->plugin<ProjectPlugin*>( it->pluginName() )->editSettings( it->project() );
 		mProxy->refresh( it );
+	}
+}
+
+void UIProjectsManager::projectAddExistingFiles_triggered()
+{
+	if ( ProjectItem* it = currentProject() )
+	{
+		QStringList l = getOpenFileNames( tr( "Choose file(s) to add to your project" ), it->canonicalPath() );
+		if ( !l.isEmpty() )
+			it->addExistingFiles( l, it, "=" );
 	}
 }
 

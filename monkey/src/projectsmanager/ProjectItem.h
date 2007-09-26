@@ -168,6 +168,9 @@ public:
 	virtual void save( bool = true ) = 0;
 	// save project including all children projects
 	virtual void saveAll( bool = true ) = 0;
+	// add existing files to project scope / operator
+	virtual void addExistingFiles( const QStringList&, const QString&, const QString& = "=" ) = 0;
+	virtual void addExistingFiles( const QStringList&, ProjectItem*, const QString& = "=" ) = 0;
 	// show the content of items 
 	virtual void debug() = 0;
 	

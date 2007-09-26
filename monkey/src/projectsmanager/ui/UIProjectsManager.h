@@ -58,6 +58,7 @@ public slots:
 	void projectCloseCurrent_triggered();
 	void projectCloseAll_triggered();
 	void projectSettings_triggered();
+	void projectAddExistingFiles_triggered();
 
 };
 

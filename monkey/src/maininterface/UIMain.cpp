@@ -144,6 +144,8 @@ void UIMain::initMenuBar()
 		mb->action( "aSeparator2" );
 		mb->action( "aSettings", tr( "Set&tings..." ), QIcon( ":/project/icons/project/settings.png" ), QString::null, tr( "Project settings" ) )->setEnabled( false );
 		mb->action( "aSeparator3" );
+		mb->action( "aAddExistingFiles", tr( "&Add Existing Files..." ), QIcon( ":/project/icons/project/open.png" ), QString::null, tr( "Add existing files to the current project" ) )->setEnabled( false );
+		mb->action( "aSeparator4" );
 		mb->menu( "mRecents", tr( "&Recents" ), QIcon( ":/project/icons/project/recents.png" ) );
 		mb->action( "mRecents/aClear", tr( "&Clear" ), QIcon( ":/project/icons/project/clear.png" ), QString::null, tr( "Clear the recents projects list" ) );
 		mb->action( "mRecents/aSeparator1" );
@@ -310,6 +312,7 @@ void UIMain::initConnections()
 	connect( menuBar()->action( "mProject/mClose/aCurrent" ), SIGNAL( triggered() ), projectsManager(), SLOT( projectCloseCurrent_triggered() ) );
 	connect( menuBar()->action( "mProject/mClose/aAll" ), SIGNAL( triggered() ), projectsManager(), SLOT( projectCloseAll_triggered() ) );
 	connect( menuBar()->action( "mProject/aSettings" ), SIGNAL( triggered() ), projectsManager(), SLOT( projectSettings_triggered() ) );
+	connect( menuBar()->action( "mProject/aAddExistingFiles" ), SIGNAL( triggered() ), projectsManager(), SLOT( projectAddExistingFiles_triggered() ) );
 	connect( pRecentsManager::instance(), SIGNAL( openProjectRequested( const QString& ) ), projectsManager(), SLOT( openProject( const QString& ) ) );
 	// plugins menu
 	connect( menuBar()->action( "mPlugins/aManage" ), SIGNAL( triggered() ), pluginsManager(), SLOT( manageRequested() ) );
