@@ -43,7 +43,8 @@ public:
 	
 	BasePlugin()
 	{ mPluginInfos.Enabled = false; }
-	virtual ~BasePlugin() {}
+	virtual ~BasePlugin()
+	{ if ( isEnabled() ) setEnabled( false ); }
 	
 	virtual PluginInfos infos() const
 	{ return mPluginInfos; }
@@ -53,6 +54,9 @@ public:
 	
 	virtual bool isEnabled() const
 	{ return mPluginInfos.Enabled; }
+	
+	virtual bool setEnabled( bool )
+	{ return false; }
 	
 	virtual QVariant settingsValue( const QString& k, const QVariant& v = QVariant() ) const
 	{ return pSettings::instance()->value( QString( "Plugins/%1/%2" ).arg( mPluginInfos.Name ).arg(  k ), v ); }
@@ -86,8 +90,6 @@ public:
 		__coveragescanner_save();
 	}
 #endif
-	
-	virtual bool setEnabled( bool ) = 0;
 	
 protected:
 	PluginInfos mPluginInfos;

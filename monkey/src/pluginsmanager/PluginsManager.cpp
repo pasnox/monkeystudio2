@@ -1,43 +1,28 @@
 #include "PluginsManager.h"
 #include "pMonkeyStudio.h"
 #include "pSettings.h"
+#include "pMenuBar.h"
 #include "UIPluginsSettings.h"
 
 #include <QPluginLoader>
 
 PluginsManager::PluginsManager( QObject* p )
 	: QObject( p )
-{}
+{
+	mCompiler = 0L;
+	mDebugger = 0L;
+	mInterpreter = 0L;
+}
 
 QList<BasePlugin*> PluginsManager::plugins() const
 { return mPlugins; }
 
-ProjectPlugin* PluginsManager::projectPluginForFileName( const QString& s )
+ProjectItem* PluginsManager::projectItem( const QString& s )
 {
 	foreach ( ProjectPlugin* pp, plugins<ProjectPlugin*>( "", BasePlugin::iProject ) )
-	{
-		// get plugin suffixes
-		QHash<QString, QStringList> l = pp->suffixes();
-		// file suffixe
-		const QString sf = QFileInfo( s ).suffix().prepend( "*." );
-		const QString f = QFileInfo( s ).fileName();
-		bool b = false;
-		// check all suffixes
-		foreach ( QString k, l.keys() )
-		{
-			// check normal extension: ie *.ext
-			b = l.value( k ).contains( sf, Qt::CaseInsensitive );
-			// if not found try regexp expression: ie *makefile or Makefile*
-			if ( !b )
-				foreach ( QString sx, l.value( k ) )
-					if ( ( b = QRegExp( sx, Qt::CaseInsensitive, QRegExp::Wildcard ).exactMatch( f ) ) )
-						break;
-			// if suffixe match
-			if ( b )
-				return pp;
-		}
-	}
-	// not found
+		foreach ( QString k, pp->suffixes().keys() )
+			if ( QDir::match( pp->suffixes().value( k ), s ) )
+				return pp->getProjectItem( s );
 	return 0;
 }
 
@@ -126,28 +111,45 @@ void PluginsManager::enableUserPlugins()
 	}
 }
 
-void PluginsManager::setCurrentCompiler( const QString& s )
+void PluginsManager::setCurrentCompiler( CompilerPlugin* c )
 {
+	// if same cancel
+	if ( mCompiler == c )
+		return;
+	
+	// disabled all compiler
 	foreach ( BasePlugin* bp, plugins<BasePlugin*>( s, BasePlugin::iCompiler ) )
 		bp->setEnabled( false );
-	if ( BasePlugin* bp = plugin<BasePlugin*>( s, BasePlugin::iCompiler ) )
-		bp->setEnabled( true );
+	
+	// enabled the one we choose
+	mCompiler = c;
+	if ( mCompiler )
+		mCompiler->setEnabled( true );
+	
+	// enable menu according to current compiler
+	pMenuBar::instance()->menu( "mBuild" )->setEnabled( mCompiler );
 }
 
 const QString PluginsManager::currentCompiler()
-{
-	foreach ( BasePlugin* bp, plugins<BasePlugin*>( QString::null, BasePlugin::iCompiler ) )
-		if ( bp->isEnabled() )
-			return bp->infos().Name;
-	return QString();
-}
+{ return mCompiler; }
 	
-void PluginsManager::setCurrentDebugger( const QString& s )
+void PluginsManager::setCurrentDebugger( DebuggerPlugin* d )
 {
+	// if same cancel
+	if ( mDebugger == d )
+		return;
+	
+	// disabled all debugger
 	foreach ( BasePlugin* bp, plugins<BasePlugin*>( s, BasePlugin::iDebugger ) )
 		bp->setEnabled( false );
-	if ( BasePlugin* bp = plugin<BasePlugin*>( s, BasePlugin::iDebugger ) )
-		bp->setEnabled( true );
+	
+	// enabled the one we choose
+	mCompiler = c;
+	if ( mCompiler )
+		mCompiler->setEnabled( true );
+	
+	// enable menu according to current compiler
+	pMenuBar::instance()->menu( "mBuild" )->setEnabled( mCompiler );
 }
 
 const QString PluginsManager::currentDebugger()
@@ -164,6 +166,8 @@ void PluginsManager::setCurrentInterpreter( const QString& s )
 		bp->setEnabled( false );
 	if ( BasePlugin* bp = plugin<BasePlugin*>( s, BasePlugin::iInterpreter ) )
 		bp->setEnabled( true );
+	
+	mb->menu( "mInterpreter" )->setEnabled( !pm->currentInterpreter().isEmpty() );
 }
 
 const QString PluginsManager::currentInterpreter()

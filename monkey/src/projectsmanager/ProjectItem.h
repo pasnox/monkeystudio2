@@ -22,22 +22,25 @@
 #include <QStandardItem>
 
 class QTextCodec;
-
 class ProjectItem;
 typedef QList<ProjectItem*> ProjectItemList;
+class ProjectPlugin;
+class CompilerPlugin;
+class DebuggerPlugin;
+class InterpreterPlugin;
 
 class Q_MONKEY_EXPORT ProjectItem : /*public QObject,*/ public QStandardItem
 {
 	//Q_OBJECT
-	friend class UIProjectsManager;
 	
 public:
-	ProjectItem( ProjectsModel::NodeType = ProjectsModel::ProjectType, ProjectItem* = 0 );
+	//ProjectItem( ProjectsModel::NodeType = ProjectsModel::ProjectType, ProjectItem* = 0 );
 	
 	// item type
 	virtual int type() const;
-	// plugin name
-	virtual QString pluginName() const = 0;
+	// ProjectPlugin for item
+	virtual void setPlugin( ProjectPlugin* );
+	virtual ProjectPlugin* plugin() const;
 	// set data
 	virtual void setData( const QVariant&, int = Qt::UserRole +1 );
 	// type of the item
@@ -162,6 +165,12 @@ public:
 	virtual QString completeBaseName( const QString& );
 	// name of project
 	virtual QString name() const;
+	// tell if project is open
+	virtual bool isOpen() const = 0;
+	// open project based on filename in getValue()
+	virtual bool open() = 0;
+	// open project settings dialog
+	virtual void editSettings() = 0;
 	// close the project
 	virtual void close() = 0;
 	// save project, asking user according to bool
@@ -171,9 +180,20 @@ public:
 	// add existing files to project scope / operator
 	virtual void addExistingFiles( const QStringList&, const QString&, const QString& = "=" ) = 0;
 	virtual void addExistingFiles( const QStringList&, ProjectItem*, const QString& = "=" ) = 0;
+	// set compiler for this project
+	virtual void setCompiler( CompilerPlugin* ) = 0;
+	// compiler for this project
+	virtual CompilerPlugin* compiler() const = 0;
+	// set debugger for this project
+	virtual void setDebugger( DebuggerPlugin* ) = 0;
+	// debugger for this project
+	virtual DebuggerPlugin* debugger() const = 0;
+	// set interpreter for this project
+	virtual void setInterpreter( InterpreterPlugin* ) = 0;
+	// interpreter for this project
+	virtual InterpreterPlugin* interpreter() const = 0;
 	// show the content of items 
 	virtual void debug() = 0;
-	
 	
 	// get index list
 	virtual ProjectItemList match( int, const QVariant& ) const;
@@ -200,6 +220,11 @@ public:
 	virtual void addStringValues( const QString&, const QString&, const QString& = "=", const QString& = QString::null ) = 0;
 	
 protected:
+	ProjectPlugin* mPlugin;
+	CompilerPlugin* mCompiler;
+	DebuggerPlugin* mDebugger;
+	InterpreterPlugin* mInterpreter;
+	bool mIsOpen;
 	QString mBuffer;
 	virtual void redoLayout( ProjectItem* = 0 ) = 0;
 	virtual void writeProject() = 0;

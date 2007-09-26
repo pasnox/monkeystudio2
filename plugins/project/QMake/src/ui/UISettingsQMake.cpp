@@ -89,7 +89,7 @@ void UISettingsQMake::generateApi( const QString& s1, const QString& s2 ) // qtv
 QStringList UISettingsQMake::defaultFilters()
 {
 	return QStringList()
-	<< "FORMS" << "FORMS3" << "HEADERS" << "SOURCES" << "RESOURCES" << "IMAGES" << "TRANSLATIONS" << "TEXTS";
+	<< "FORMS" << "FORMS3" << "HEADERS" << "SOURCES" << "RESOURCES" << "IMAGES" << "TRANSLATIONS" << "TEXTS" << "UNKNOW_FILES" << "OPENED_FILES";
 }
 
 QStringList UISettingsQMake::readFilters()
@@ -101,7 +101,7 @@ QStringList UISettingsQMake::readFilters()
 QStringList UISettingsQMake::defaultFiltersToolTips()
 {
 	return QStringList()
-	<< "Forms Files" << "Forms 3 Files" << "Headers Files" << "Sources Files" << "Resources Files" << "Images Files" << "Translations Files" << "Texts Files";
+	<< tr( "Forms Files" ) << tr( "Forms 3 Files" ) << tr( "Headers Files" ) << tr( "Sources Files" ) << tr( "Resources Files" ) << tr( "Images Files" ) << tr( "Translations Files" ) << tr( "Texts Files" ) << tr( "Unknow Files" ) << tr( "Opened Files" );
 }
 
 QStringList UISettingsQMake::readFiltersToolTips()
@@ -138,7 +138,7 @@ QStringList UISettingsQMake::defaultPathFiles()
 	<< "FORMS" << "FORMS3" << "HEADERS" << "SOURCES" << "RESOURCES" << "IMAGES" << "TRANSLATIONS" << "DEF_FILE"
 	<< "DEPENDPATH" << "DESTDIR" << "DESTDIR_TARGET" << "DLLDESTDIR" << "DISTFILES" << "INCLUDEPATH" << "MOC_DIR"
 	<< "OBJECTS_DIR" << "RC_FILE" << "RCC_DIR" << "RES_FILE" << "TARGET" << "UI_DIR" << "VPATH" << "YACCSOURCES"
-	<< "LEXSOURCES" << "SUBDIRS";
+	<< "LEXSOURCES" << "SUBDIRS" << "UNKNOW_FILES" << "OPENED_FILES";
 }
 
 QStringList UISettingsQMake::readPathFiles()

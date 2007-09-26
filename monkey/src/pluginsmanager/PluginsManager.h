@@ -5,8 +5,13 @@
 #include "QSingleton.h"
 #include "BasePlugin.h"
 #include "ProjectPlugin.h"
+#include "CompilerPlugin.h"
+#include "DebuggerPlugin.h"
+#include "InterpreterPlugin.h"
 
 #include <QApplication>
+
+class ProjectItem;
 
 class Q_MONKEY_EXPORT PluginsManager : public QObject, public QSingleton<PluginsManager>
 {
@@ -44,19 +49,22 @@ public:
 	T plugin( const QString& n, BasePlugin::Type t = BasePlugin::iAll,  const QString& v = QString::null )
 	{ return plugins<T>( n, t, v ).value( 0 ); }
 	
-	ProjectPlugin* projectPluginForFileName( const QString& );
+	ProjectItem* projectItem( const QString& );
 	
-	void setCurrentCompiler( const QString& );
-	const QString currentCompiler();
+	void setCurrentCompiler( CompilerPlugin* );
+	const CompilerPlugin* currentCompiler();
 	
-	void setCurrentDebugger( const QString& );
-	const QString currentDebugger();
+	void setCurrentDebugger( DebuggerPlugin* );
+	const DebuggerPlugin* currentDebugger();
 	
-	void setCurrentInterpreter( const QString& );
-	const QString currentInterpreter();
+	void setCurrentInterpreter( InterpreterPlugin* );
+	const InterpreterPlugin* currentInterpreter();
 	
 private:
 	QList<BasePlugin*> mPlugins;
+	CompilerPlugin* mCompiler;
+	DebuggerPlugin* mDebugger;
+	InterpreterPlugin* mInterpreter;
 	PluginsManager( QObject* = QApplication::instance() );
 	bool addPlugin( QObject* );
 	void enableUserPlugins();

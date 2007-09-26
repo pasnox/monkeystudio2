@@ -17,7 +17,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QTextCodec>
-
+/*
 ProjectItem::ProjectItem( ProjectsModel::NodeType t, ProjectItem* i )
 {
 	// clear buffer
@@ -30,9 +30,20 @@ ProjectItem::ProjectItem( ProjectsModel::NodeType t, ProjectItem* i )
 	if ( i )
 		i->appendRow( this );
 }
-
+*/
 int ProjectItem::type() const
 { return QStandardItem::UserType; }
+
+void ProjectItem::setPlugin( ProjectPlugin* p )
+{
+	if ( isProject() )
+		mPlugin = p;
+	else
+		project()->setPlugin( p );
+}
+
+ProjectPlugin* ProjectItem::plugin() const
+{ return isProject() ? mPlugin : project()->plugin(); }
 
 void ProjectItem::setData( const QVariant& v, int r )
 {

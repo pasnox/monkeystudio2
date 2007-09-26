@@ -15,14 +15,16 @@
 #include "QMakeItem.h"
 #include "UISettingsQMake.h"
 #include "pMonkeyStudio.h"
+#include "QMakeParser.h"
+#include "UIQMakeProjectSettings.h"
 
-#include <QObject>
 
 using namespace pMonkeyStudio;
 
 QMakeItem::QMakeItem( ProjectsModel::NodeType t, ProjectItem* i )
 	: ProjectItem()
 {
+	mIsOpen = false;
 	mBuffer.clear();
 	setType( t );
 	setReadOnly( false );
@@ -343,6 +345,26 @@ void QMakeItem::remove()
 		model()->removeRow( row(), index().parent() );
 }
 
+bool QMakeItem::isOpen() const
+{ return isProject() ? mIsOpen : project()->isOpen(); }
+
+bool QMakeItem::open()
+{
+	if ( isProject() )
+	{
+		if ( mIsOpen || !QFile::exists( getValue() ) )
+			return false;
+		
+		QMakeParser p( getValue(), const_cast<QMakeItem*>( this ) );
+		mIsOpen = p.isOpen();
+		return mIsOpen;
+	}
+	return false;
+}
+
+void QMakeItem::editSettings()
+{ UIQMakeProjectSettings::instance( project() )->exec(); }
+
 void QMakeItem::close()
 {
 	saveAll( true );
@@ -428,6 +450,39 @@ void QMakeItem::addExistingFiles( const QStringList& l, ProjectItem* s, const QS
 		it->setValue( vn != "UNKNOW_FILES" ? relativeFilePath( f ) : f );
 	}
 }
+
+void QMakeItem::setCompiler( CompilerPlugin* c )
+{
+	if ( isProject() )
+		mCompiler = c;
+	else
+		project()->setCompiler( c );
+}
+
+CompilerPlugin* QMakeItem::compiler() const
+{ return isProject() ? mCompiler : project()->compiler(); }
+
+void QMakeItem::setDebugger( DebuggerPlugin* d )
+{
+	if ( isProject() )
+		mDebugger = d;
+	else
+		project()->setDebugger( d );
+}
+
+DebuggerPlugin* QMakeItem::debugger() const
+{ return isProject() ? mDebugger : project()->debugger(); }
+
+void QMakeItem::setInterpreter( InterpreterPlugin* i )
+{
+	if ( isProject() )
+		mInterpreter = i;
+	else
+		project()->setInterpreter( i );
+}
+
+InterpreterPlugin* QMakeItem::interpreter() const
+{ return isProject() ? mInterpreter : project()->interpreter(); }
 
 void QMakeItem::debug()
 {

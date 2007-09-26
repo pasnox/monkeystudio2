@@ -101,49 +101,34 @@ void UIProjectsManager::initializeProject( ProjectItem* it )
 	tvProjects->setCurrentIndex( mProxy->mapFromSource( it->index() ) );
 }
 
-void UIProjectsManager::tvProjects_currentChanged( const QModelIndex& c, const QModelIndex& p )
+void UIProjectsManager::tvProjects_currentChanged( const QModelIndex& /*c*/, const QModelIndex& /*p*/ )
 {
 	// get menubar
 	pMenuBar* mb = pMenuBar::instance();
 	// get pluginsmanager
 	PluginsManager* pm = PluginsManager::instance();
-	// if valid
-	if ( c.isValid() )
+	
+	// if current project
+	if ( ProjectItem* it = currentProject() )
 	{
-		// get item
-		ProjectItem* it = mProjects->itemFromIndex( mProxy->mapToSource( c ) );
-		// looking plugin that can manage this project
-		ProjectPlugin* pp = pm->plugin<ProjectPlugin*>( it->pluginName() );
-		//
-		if ( pp && pp->isEnabled() )
-		{
-			// desactive compiler, debugger and interpreter
-			pm->setCurrentCompiler( pp->compiler( currentProject() ) );
-			pm->setCurrentDebugger( pp->debugger( currentProject() ) );
-			pm->setCurrentInterpreter( pp->interpreter( currentProject() ) );
-			// desactive menu entries
-			mb->menu( "mBuild" )->setEnabled( !pm->currentCompiler().isEmpty() );
-			mb->menu( "mDebugger" )->setEnabled( !pm->currentDebugger().isEmpty() );
-			mb->menu( "mInterpreter" )->setEnabled( !pm->currentInterpreter().isEmpty() );
-			// desactive project action
-			mb->action( "mProject/mSave/aCurrent" )->setEnabled( true );
-			mb->action( "mProject/mSave/aAll" )->setEnabled( true );
-			mb->action( "mProject/mClose/aCurrent" )->setEnabled( true );
-			mb->action( "mProject/mClose/aAll" )->setEnabled( true );
-			mb->action( "mProject/aSettings" )->setEnabled( true );
-			mb->action( "mProject/aAddExistingFiles" )->setEnabled( true );
-		}
+		// set compiler, debugger and interpreter
+		pm->setCurrentCompiler( it->compiler() );
+		pm->setCurrentDebugger( it->debugger() );
+		pm->setCurrentInterpreter( it->interpreter() );
+		// desactive project action
+		mb->action( "mProject/mSave/aCurrent" )->setEnabled( true );
+		mb->action( "mProject/mSave/aAll" )->setEnabled( true );
+		mb->action( "mProject/mClose/aCurrent" )->setEnabled( true );
+		mb->action( "mProject/mClose/aAll" )->setEnabled( true );
+		mb->action( "mProject/aSettings" )->setEnabled( true );
+		mb->action( "mProject/aAddExistingFiles" )->setEnabled( true );
 	}
 	else
 	{
-		// desactive compiler, debugger and interpreter
-		pm->setCurrentCompiler( QString::null );
-		pm->setCurrentDebugger( QString::null );
-		pm->setCurrentInterpreter( QString::null );
-		// desactive menu entries
-		mb->menu( "mBuild" )->setEnabled( false );
-		mb->menu( "mDebugger" )->setEnabled( false );
-		mb->menu( "mInterpreter" )->setEnabled( false );
+		// set compiler, debugger and interpreter to null
+		pm->setCurrentCompiler( O );
+		pm->setCurrentDebugger( O );
+		pm->setCurrentInterpreter( 0 );
 		// desactive project action
 		mb->action( "mProject/mSave/aCurrent" )->setEnabled( false );
 		mb->action( "mProject/mSave/aAll" )->setEnabled( false );
@@ -165,18 +150,18 @@ void UIProjectsManager::on_tvProjects_doubleClicked( const QModelIndex& i )
 
 bool UIProjectsManager::openProject( const QString& s )
 {
-	if ( ProjectPlugin* pp = PluginsManager::instance()->projectPluginForFileName( s ) )
+	if ( ProjectItem* it = PluginsManager::instance()->projectItem( s ) )
 	{
-		if ( ProjectItem* it = pp->openProject( s ) )
+		if ( it->open() )
 		{
 			initializeProject( it );
 			return true;
 		}
 		else
-			warning( tr( "Open Project" ), tr( "An error occur while opening this project:\n[%1]" ).arg( s ) );
+			delete it;
 	}
 	else
-		warning( tr( "Open Project..." ), tr( "There is no plugin that can manage this kind of project.\n[%1]" ).arg( s ) );
+		warning( tr( "Open Project..." ), tr( "There is no plugin that can manage this project :\n[%1]" ).arg( s ) );
 	return false;
 }
 
@@ -244,10 +229,7 @@ void UIProjectsManager::projectCloseAll_triggered()
 void UIProjectsManager::projectSettings_triggered()
 {
 	if ( ProjectItem* it = currentProject() )
-	{
-		PluginsManager::instance()->plugin<ProjectPlugin*>( it->pluginName() )->editSettings( it->project() );
-		mProxy->refresh( it );
-	}
+		it->editSettings();
 }
 
 void UIProjectsManager::projectAddExistingFiles_triggered()

@@ -10,11 +10,9 @@ class QMake : public ProjectPlugin
 
 public:
 	QMake();
-	virtual ~QMake();
 	virtual bool setEnabled( bool );
 	virtual QWidget* settingsWidget();
-	virtual ProjectItem* openProject( const QString&, ProjectItem* = 0 );
-	virtual void editSettings( ProjectItem* );
+	virtual ProjectItem* getProjectItem( const QString& );
 
 };
 

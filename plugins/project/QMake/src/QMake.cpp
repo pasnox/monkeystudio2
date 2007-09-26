@@ -1,11 +1,8 @@
 #include "QMake.h"
 #include "QMakeItem.h"
-#include "QMakeParser.h"
-#include "UISettingsQMake.h"
-#include "UIQMakeProjectSettings.h"
 #include "UIProjectsManager.h"
-#include "UISettingsQMake.h"
 #include "ProjectsProxy.h"
+#include "UISettingsQMake.h"
 
 QMake::QMake()
 {
@@ -19,18 +16,12 @@ QMake::QMake()
 	mPluginInfos.Enabled = false;
 }
 
-QMake::~QMake()
-{
-	if ( isEnabled() )
-		setEnabled( false );
-}
-
 bool QMake::setEnabled( bool b )
 {
 	if ( b && !isEnabled() )
 	{
 		// set usable suffixes
-		mSuffixes[tr( "Qt Projects" )] = QStringList() << "*.pro" << "*.pri" << "*.inc";
+		mSuffixes[tr( "Qt Projects" )] = QStringList() << "*.pro" << "*.pri";
 		// set filtered items
 		UIProjectsManager::instance()->proxy()->addFilterValues( UISettingsQMake::readFilters() );
 		// set plugin enabled
@@ -50,33 +41,25 @@ bool QMake::setEnabled( bool b )
 }
 
 QWidget* QMake::settingsWidget()
-{
-	return UISettingsQMake::instance();
-}
+{ return UISettingsQMake::instance(); }
 
-ProjectItem* QMake::openProject( const QString& s, ProjectItem* pi )
+ProjectItem* QMake::getProjectItem( const QString& s )
 {
 	// don t open project if plugin is not enabled
 	if ( !isEnabled() )
 		return 0;
-	// crete root project item
-	QMakeItem* it =  new QMakeItem;
-	// parse project
-	QMakeParser p( s, it );
-	// delete object if not open
-	if ( !p.isOpen() )
-	{
-		delete it;
-		it = 0L;
-	}
-	// return root item
+	
+	// create project item
+	ProjectItem* it = new QMakeItem( ProjectsModel::ProjectType );
+	
+	// set project filename
+	it->setValue( s );
+	
+	// set item plugin
+	it->setPlugin( this );
+	
+	// return item
 	return it;
-}
-
-void QMake::editSettings( ProjectItem* it )
-{
-	if ( it )
-		UIQMakeProjectSettings::instance( it )->exec();
 }
 
 Q_EXPORT_PLUGIN2( ProjectQMake, QMake )

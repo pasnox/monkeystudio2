@@ -22,8 +22,6 @@ class QMakeItem : public ProjectItem
 
 public:
 	QMakeItem( ProjectsModel::NodeType = ProjectsModel::ProjectType, ProjectItem* = 0 );
-
-	virtual QString pluginName() const { return "QMake"; }
 	
 	virtual void setType( ProjectsModel::NodeType );
 	virtual void setValue( const QString& );
@@ -45,11 +43,20 @@ public:
 	virtual bool moveDown();
 	virtual void remove();
 	
+	virtual bool isOpen() const;
+	virtual bool open();
+	virtual void editSettings();
 	virtual void close();
 	virtual void save( bool = true );
 	virtual void saveAll( bool = true );
 	virtual void addExistingFiles( const QStringList&, const QString&, const QString& = "=" );
 	virtual void addExistingFiles( const QStringList&, ProjectItem*, const QString& = "=" );
+	virtual void setCompiler( CompilerPlugin* );
+	virtual CompilerPlugin* compiler() const;
+	virtual void setDebugger( DebuggerPlugin* );
+	virtual DebuggerPlugin* debugger() const;
+	virtual void setInterpreter( InterpreterPlugin* );
+	virtual InterpreterPlugin* interpreter() const;
 	virtual void debug();
 	
 	virtual ProjectItem* getItemScope( const QString&, bool ) const;

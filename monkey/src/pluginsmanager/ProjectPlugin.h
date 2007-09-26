@@ -16,19 +16,8 @@ public:
 	// the suffixes this project can manage
 	virtual QHash<QString, QStringList> suffixes() const
 	{ return mSuffixes; }
-	// the function that open a project
-	virtual ProjectItem* openProject( const QString&, ProjectItem* = 0 ) = 0;
-	// the compiler this project use
-	virtual QString compiler( ProjectItem* ) const
-	{ return "GNUMake"; }
-	// the debugger this project use
-	virtual QString debugger( ProjectItem* ) const
-	{ return "GNUDebugger"; }
-	// the interpreter this project use
-	virtual QString interpreter( ProjectItem* )
-	{ return QString::null; }
-	// edit the project settings
-	virtual void editSettings( ProjectItem* ) = 0;
+	// return a new project item of this type of project
+	virtual ProjectItem* getProjectItem( const QString& ) = 0;
 	
 protected:
 	QHash<QString, QStringList> mSuffixes;
