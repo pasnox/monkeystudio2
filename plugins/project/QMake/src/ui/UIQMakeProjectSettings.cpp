@@ -207,6 +207,17 @@ void UIQMakeProjectSettings::checkOthersVariables()
 		lwOthersVariables->setCurrentItem( lwOthersVariables->item( 0 ) );
 }
 
+void UIQMakeProjectSettings::updateOthersValues()
+{
+	if ( QListWidgetItem* vit = lwOthersVariables->selectedItems().value( 0 ) )
+	{
+		QStringList l;
+		foreach ( QListWidgetItem* it, lwOthersValues->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
+			l << it->text();
+		vit->setData( Qt::UserRole +1, l );
+	}
+}
+
 Key UIQMakeProjectSettings::currentKey( const QString& s ) const
 { return Key() << cbScopes->currentText() << cbOperators->currentText() << s; }
 
@@ -294,6 +305,13 @@ void UIQMakeProjectSettings::querySettings()
 	foreach ( QWidget* w, findChildren<QWidget*>() )
 		if ( !w->statusTip().isEmpty() )
 			mBlackList << w->statusTip();
+	// add variables list
+	for ( int i = 0; i < cbVariables->count(); i++ )
+		mBlackList << cbVariables->itemText( i );
+	// add to blacklist filtered items
+	foreach ( const QString s, UISettingsQMake::readFilters() )
+		if ( !mBlackList.contains( s ) )
+			mBlackList << s;
 	
 	// load user operators
 	cbOperators->addItems( UISettingsQMake::readOperators() );
@@ -501,7 +519,7 @@ void UIQMakeProjectSettings::on_tbRemoveScope_clicked()
 			warning( tr( "Remove Scope..." ), tr( "Can't remove root scope, aborting." ) );
 			return;
 		}
-		// remvoe each variable that have scope s
+		// remove each variable that have scope s
 		foreach ( const Key k, mSettings.keys() )
 			if ( k.value( 0 ) == s )
 				mSettings.remove( k );
@@ -833,26 +851,23 @@ void UIQMakeProjectSettings::on_tbOthersVariablesEdit_clicked()
 	{
 		bool b;
 		const QString s = QInputDialog::getText( this, tr( "Edit Variable..." ), tr( "Enter a new name for this variable :" ), QLineEdit::Normal, it->text(), &b );
-		if ( it )
+		QListWidgetItem* eit = lwOthersVariables->findItems( s, Qt::MatchFixedString | Qt::MatchRecursive ).value( 0 );
+		if ( eit && eit->isHidden() )
 		{
-			QListWidgetItem* eit = lwOthersVariables->findItems( s, Qt::MatchFixedString | Qt::MatchRecursive ).value( 0 );
-			if ( eit && eit->isHidden() )
-			{
-				// show item and assigna datas
-				eit->setData( Qt::UserRole +1, it->data( Qt::UserRole +1 ) );
-				eit->setHidden( false );
+			// show item and assigna datas
+			eit->setData( Qt::UserRole +1, it->data( Qt::UserRole +1 ) );
+			eit->setHidden( false );
 				// clear data and hide item
-				it->setData( Qt::UserRole +1, QStringList() );
-				it->setHidden( true );
-			}
-			else
-			{
-				// create unvisible item with old name and no values
-				eit = new QListWidgetItem( it->text(), lwOthersVariables );
-				eit->setHidden( true );
-				// rename current item
-				it->setText( s );
-			}
+			it->setData( Qt::UserRole +1, QStringList() );
+			it->setHidden( true );
+		}
+		else
+		{
+			// create unvisible item with old name and no values
+			eit = new QListWidgetItem( it->text(), lwOthersVariables );
+			eit->setHidden( true );
+			// rename current item
+			it->setText( s );
 		}
 	}
 }
@@ -876,26 +891,53 @@ void UIQMakeProjectSettings::on_lwOthersVariables_itemSelectionChanged()
 
 void UIQMakeProjectSettings::on_tbOthersValuesAdd_clicked()
 {
+	if ( lwOthersVariables->selectedItems().value( 0 ) )
+	{
+		bool b;
+		const QString s = QInputDialog::getText( this, tr( "Add Value..." ), tr( "Enter a value :" ), QLineEdit::Normal, QString::null, &b );
+		if ( b && !s.isEmpty() && !lwOthersValues->findItems( s, Qt::MatchFixedString | Qt::MatchRecursive ).count() )
+		{
+			lwOthersValues->addItem( s );
+			updateOthersValues();
+		}
+	}
 }
 
 void UIQMakeProjectSettings::on_tbOthersValuesEdit_clicked()
 {
+	if ( lwOthersVariables->selectedItems().value( 0 ) )
+		if ( QListWidgetItem* it = lwOthersValues->selectedItems().value( 0 ) )
+		{
+			bool b;
+			const QString s = QInputDialog::getText( this, tr( "Edit Value..." ), tr( "Edit the value :" ), QLineEdit::Normal, it->text(), &b );
+			if ( b && !s.isEmpty() && s != it->text() && !lwOthersValues->findItems( s, Qt::MatchFixedString | Qt::MatchRecursive ).count() )
+			{
+				it->setText( s );
+				updateOthersValues();
+			}
+		}
 }
 
 void UIQMakeProjectSettings::on_tbOthersValuesRemove_clicked()
 {
+	if ( lwOthersVariables->selectedItems().value( 0 ) )
+		if ( QListWidgetItem* it = lwOthersValues->selectedItems().value( 0 ) )
+		{
+			if ( question( tr( "Remove Value..." ), tr( "Remove value ?" ), this ) )
+			{
+				delete it;
+				updateOthersValues();
+			}
+		}
 }
 
 void UIQMakeProjectSettings::on_tbOthersValuesClear_clicked()
 {
-}
-
-void UIQMakeProjectSettings::on_tbOthersValuesUp_clicked()
-{
-}
-
-void UIQMakeProjectSettings::on_tbOthersValuesDown_clicked()
-{
+	if ( lwOthersVariables->selectedItems().value( 0 ) )
+	{
+		lwOthersValues->clear();
+		updateOthersValues();
+	}
 }
 
 void UIQMakeProjectSettings::on_tvScopes_clicked( const QModelIndex& i )
@@ -1004,6 +1046,9 @@ void UIQMakeProjectSettings::on_dbbButtons_helpRequested()
 			s = tr( "<b>Translations</b>: Here you can easily check the languages you want to provide for your project." );
 			break;
 		case 4:
+			s = tr( "<b>Others Variables</b>: Here you can modify variables values that GUI don't provide." );
+			break;
+		case 5:
 			s = tr( "<b>Advanced</b>: This is a direct access to the project model, be carrefull while editing items as you can break your project." );
 			break;
 	}

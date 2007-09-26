@@ -367,6 +367,68 @@ void QMakeItem::saveAll( bool b )
 		it->save( b );
 }
 
+ProjectItem* variable( ProjectItem* s, const QString& var, const QString& op )
+{
+	Q_ASSERT( s != 0 );
+	foreach ( ProjectItem* it, s->children( false, true ) )
+		if ( it->getValue() == var && it->getOperator() == op )
+			return it;
+	ProjectItem* it = new QMakeItem( ProjectsModel::VariableType, s );
+	it->setValue( var );
+	it->setOperator( op );
+	it->setMultiLine( true );
+	return it;
+}
+
+void QMakeItem::addExistingFiles( const QStringList& l, const QString& s, const QString& o )
+{ addExistingFiles( l, getItemScope( s, true ), o ); }
+
+void QMakeItem::addExistingFiles( const QStringList& l, ProjectItem* s, const QString& o )
+{
+	// C++ filters
+	const QStringList cf = availableSuffixes().value( "C++" );
+	// YACC filters
+	QStringList yf;
+	foreach ( QString s, cf )
+		if ( s.startsWith( "*.c", Qt::CaseInsensitive ) && !yf.contains( s.replace( "c", "y", Qt::CaseInsensitive ) ) )
+			yf << s;
+	// LEX filters
+	QStringList lf;
+	foreach ( QString s, cf )
+		if ( s.startsWith( "*.c", Qt::CaseInsensitive ) && !lf.contains( s.replace( "c", "l", Qt::CaseInsensitive ) ) )
+			yf << s;
+	// IMAGES FORMATS
+	const QStringList pf = availableImageFormats();
+	
+	foreach ( const QString& f, l )
+	{
+		QString vn = "UNKNOW_FILES";
+		if ( QDir::match( cf, f ) )
+		{
+			if ( QFileInfo( f ).suffix().startsWith( "h", Qt::CaseInsensitive ) )
+				vn = "HEADERS";
+			else
+				vn = "SOURCES";
+		}
+		else if ( QDir::match( lf, f ) )
+			vn = "LEXSOURCES";
+		else if ( QDir::match( yf, f ) )
+			vn = "YACCSOURCES";
+		else if ( QDir::match( pf, f ) )
+			vn = "IMAGES";
+		else if ( QDir::match( "*.ui", f ) )
+		{
+			vn = "FORMS";
+			if ( question( QObject::tr( "FORMS3 Files..." ), QObject::tr( "Do i need to add this form to FORMS3 variable ?" ) ) )
+				vn = "FORMS3";
+		}
+		
+		// create value for variable
+		ProjectItem* it = new QMakeItem( ProjectsModel::ValueType, variable( s, vn, o ) );
+		it->setValue( vn != "UNKNOW_FILES" ? relativeFilePath( f ) : f );
+	}
+}
+
 void QMakeItem::debug()
 {
 	QString s;

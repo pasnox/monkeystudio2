@@ -48,6 +48,8 @@ public:
 	virtual void close();
 	virtual void save( bool = true );
 	virtual void saveAll( bool = true );
+	virtual void addExistingFiles( const QStringList&, const QString&, const QString& = "=" );
+	virtual void addExistingFiles( const QStringList&, ProjectItem*, const QString& = "=" );
 	virtual void debug();
 	
 	virtual ProjectItem* getItemScope( const QString&, bool ) const;
