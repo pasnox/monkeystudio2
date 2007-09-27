@@ -148,9 +148,22 @@ bool UIProjectsManager::openProject( const QString& s )
 	return false;
 }
 
+bool UIProjectsManager::closeProject( const QString& s )
+{
+	foreach ( ProjectItem* p, mProjects->projects( true ) )
+		if ( p->canonicalFilePath() == QFileInfo( s ).canonicalFilePath() )
+		{
+			p->close();
+			return true;
+		}
+	return false;
+}
+
 void UIProjectsManager::projectNew_triggered()
 {
-	UITemplatesWizard::instance(  )->exec();
+	UITemplatesWizard* d = UITemplatesWizard::instance( this );
+	d->setType( pTemplate::ttProjects );
+	d->exec();
 }
 
 void UIProjectsManager::projectOpen_triggered()

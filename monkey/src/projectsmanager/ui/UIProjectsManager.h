@@ -51,6 +51,7 @@ private slots:
 
 public slots:
 	bool openProject( const QString& );
+	bool closeProject( const QString& );
 	void projectNew_triggered();
 	void projectOpen_triggered();
 	void projectSaveCurrent_triggered();

@@ -2,7 +2,6 @@
 #include "pTemplatePreviewer.h"
 #include "pEditor.h"
 #include "pFileManager.h"
-#include "pTemplatesManager.h"
 #include "pMonkeyStudio.h"
 #include "pSettings.h"
 
@@ -12,7 +11,7 @@
 
 using namespace pMonkeyStudio;
 
-UITemplatesWizard::UITemplatesWizard( pTemplate::TemplateType t, QWidget* w )
+UITemplatesWizard::UITemplatesWizard( QWidget* w )
 	: QDialog( w )
 {
 	setupUi( this );
@@ -26,12 +25,14 @@ UITemplatesWizard::UITemplatesWizard( pTemplate::TemplateType t, QWidget* w )
 	// restore infos
 	pSettings* s = pSettings::instance();
 	cbLanguages->setCurrentIndex( cbLanguages->findText( s->value( "Recents/FileWizard/Language", "C++" ).toString() ) );
-	cbTypes->setCurrentIndex( cbTypes->findData( t ) );
 	leDestination->setText( s->value( "Recents/FileWizard/Destination" ).toString() );
 	leAuthor->setText( s->value( "Recents/FileWizard/Author" ).toString() );
 	cbLicenses->setEditText( s->value( "Recents/FileWizard/License", "GPL" ).toString() );
 	cbOpen->setChecked( s->value( "Recents/FileWizard/Open", true ).toBool() );
 }
+
+void UITemplatesWizard::setType( pTemplate::TemplateType t )
+{ cbTypes->setCurrentIndex( cbTypes->findData( t ) ); }
 
 void UITemplatesWizard::on_cbLanguages_currentIndexChanged( const QString& s )
 {
@@ -189,6 +190,7 @@ void UITemplatesWizard::accept()
 			// if can save
 			if ( p->editor()->saveFile( s ) )
 			{
+				/*
 				// add to project if needed
 				if ( cbAddToProject->isChecked() && i == 0 && cbTypes->itemData( cbTypes->currentIndex() ).toInt() == pTemplate::ttProjects )
 				{
@@ -206,6 +208,7 @@ void UITemplatesWizard::accept()
 					else
 						pFileManager::instance()->openFile( QFileInfo( s ).canonicalFilePath() );
 				}
+				*/
 			}
 			else
 				warning( "Create File...", tr( "Can't create file:\n%1" ).arg( s ) );

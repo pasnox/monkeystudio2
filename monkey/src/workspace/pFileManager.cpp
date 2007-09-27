@@ -3,6 +3,7 @@
 #include "pRecentsManager.h"
 #include "pAbstractChild.h"
 #include "pMenuBar.h"
+#include "UIProjectsManager.h"
 
 #include "pChild.h"
 
@@ -113,20 +114,8 @@ void pFileManager::goToLine( const QString& s, const QPoint& p, bool b )
 		c->goTo( s, p, b );
 }
 
-/*
-void pFileManager::setBreakPoint( const QString& s, int i, bool b, pAbstractProjectProxy* p )
-{
-	emit breakPointChanged( s, i, b, 0 );
-}
-
 void pFileManager::openProject( const QString& s )
-{
-	emit projectOpened( s, 0 );
-}
+{ UIProjectsManager::instance()->openProject( s ); }
 
 void pFileManager::closeProject( const QString& s )
-{
-	emit projectClosed( s, 0 );
-	emit aboutToCloseProject( s, 0 );
-}
-*/
+{ UIProjectsManager::instance()->closeProject( s ); }

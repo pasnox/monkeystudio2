@@ -19,6 +19,7 @@
 #include "UITemplatesWizard.h"
 #include "pAbbreviationsManager.h"
 #include "pMonkeyStudio.h"
+#include "pTemplatesManager.h"
 
 #include "pChild.h"
 #include "pEditor.h"
@@ -42,14 +43,10 @@ pWorkspace::pWorkspace( QWidget* p )
 }
 
 pAbstractChild* pWorkspace::currentChild() const
-{
-	return qobject_cast<pAbstractChild*>( currentDocument() );
-}
+{ return qobject_cast<pAbstractChild*>( currentDocument() ); }
 
 pAbstractChild* pWorkspace::child( int i ) const
-{
-	return qobject_cast<pAbstractChild*>( document( i ) );
-}
+{ return qobject_cast<pAbstractChild*>( document( i ) ); }
 
 QList<pAbstractChild*> pWorkspace::children() const
 {
@@ -116,15 +113,14 @@ void pWorkspace::internal_currentChanged( int i )
 }
 
 void pWorkspace::internal_aboutToCloseTab( int i, QCloseEvent* e )
-{
-	// check if need to save files
-	UISaveFiles::execute( child( i ), e );
-}
+{ UISaveFiles::execute( child( i ), e ); }
 
 // file menu
 void pWorkspace::fileNew_triggered()
 {
-	UITemplatesWizard::instance( this )->exec();
+	UITemplatesWizard* d = UITemplatesWizard::instance( this );
+	d->setType( pTemplate::ttFiles );
+	d->exec();
 }
 
 void pWorkspace::fileOpen_triggered()
@@ -193,14 +189,10 @@ void pWorkspace::fileSaveAll_triggered()
 }
 
 void pWorkspace::fileCloseCurrent_triggered()
-{
-	closeCurrentTab();
-}
+{ closeCurrentTab(); }
 
 void pWorkspace::fileCloseAll_triggered( bool b )
-{
-	closeAllTabs( b );
-}
+{ closeAllTabs( b ); }
 
 void pWorkspace::fileSaveAsBackup_triggered()
 {
@@ -229,15 +221,11 @@ void pWorkspace::filePrint_triggered()
 }
 
 void pWorkspace::fileExit_triggered()
-{
-	window()->close();
-}
+{ window()->close(); }
 
 // edit menu
 void pWorkspace::editSettings_triggered()
-{
-	UISettings::instance( this )->exec();
-}
+{ UISettings::instance( this )->exec(); }
 
 void pWorkspace::editUndo_triggered()
 {
@@ -319,18 +307,12 @@ void pWorkspace::agStyles_triggered( QAction* a )
 
 // help menu
 void pWorkspace::helpAboutApplication_triggered()
-{
-	UIAbout::instance( this )->exec();
-}
+{ UIAbout::instance( this )->exec(); }
 
 void pWorkspace::helpAboutQt_triggered()
-{
-	qApp->aboutQt();
-}
+{ qApp->aboutQt(); }
 
 #ifdef __COVERAGESCANNER__
 void pWorkspace::helpTestReport_triggered()
-{
-	UITestReport::instance( this )->exec();
-}
+{ UITestReport::instance( this )->exec(); }
 #endif

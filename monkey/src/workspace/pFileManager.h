@@ -25,14 +25,10 @@ public slots:
 	void closeFile( const QString& );
 	// goto to position inside file, highlight line according to bool, opening it if needed
 	void goToLine( const QString&, const QPoint&, bool );
-/*
-	// set breakpoint to file for line, opening it if needed
-	void setBreakPoint( const QString&, int, bool );
 	// open a project
 	void openProject( const QString& );
 	// close a project
 	void closeProject( const QString& );
-*/
 
 signals:
 	// a file has been opened
