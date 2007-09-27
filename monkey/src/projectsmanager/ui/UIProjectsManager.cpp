@@ -73,7 +73,6 @@ UIProjectsManager::UIProjectsManager( QWidget* w )
 	mb->action( "mView/aFiltered" )->setChecked( mProxy->isFiltering() );
 	
 	// connections
-	connect( mb->action( "mView/aFiltered" ), SIGNAL( triggered( bool ) ), mProxy, SLOT( setFiltering( bool ) ) );
 	connect( mProxy, SIGNAL( filteringChanged( bool ) ), mb->action( "mView/aFiltered" ), SLOT( setChecked( bool ) ) );
 	connect( tvProjects->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( tvProjects_currentChanged( const QModelIndex&, const QModelIndex& ) ) );
 }
@@ -101,42 +100,26 @@ void UIProjectsManager::initializeProject( ProjectItem* it )
 	tvProjects->setCurrentIndex( mProxy->mapFromSource( it->index() ) );
 }
 
-void UIProjectsManager::tvProjects_currentChanged( const QModelIndex& /*c*/, const QModelIndex& /*p*/ )
+void UIProjectsManager::tvProjects_currentChanged( const QModelIndex& c, const QModelIndex& )
 {
 	// get menubar
 	pMenuBar* mb = pMenuBar::instance();
 	// get pluginsmanager
 	PluginsManager* pm = PluginsManager::instance();
-	
-	// if current project
-	if ( ProjectItem* it = currentProject() )
-	{
-		// set compiler, debugger and interpreter
-		pm->setCurrentCompiler( it->compiler() );
-		pm->setCurrentDebugger( it->debugger() );
-		pm->setCurrentInterpreter( it->interpreter() );
-		// desactive project action
-		mb->action( "mProject/mSave/aCurrent" )->setEnabled( true );
-		mb->action( "mProject/mSave/aAll" )->setEnabled( true );
-		mb->action( "mProject/mClose/aCurrent" )->setEnabled( true );
-		mb->action( "mProject/mClose/aAll" )->setEnabled( true );
-		mb->action( "mProject/aSettings" )->setEnabled( true );
-		mb->action( "mProject/aAddExistingFiles" )->setEnabled( true );
-	}
-	else
-	{
-		// set compiler, debugger and interpreter to null
-		pm->setCurrentCompiler( O );
-		pm->setCurrentDebugger( O );
-		pm->setCurrentInterpreter( 0 );
-		// desactive project action
-		mb->action( "mProject/mSave/aCurrent" )->setEnabled( false );
-		mb->action( "mProject/mSave/aAll" )->setEnabled( false );
-		mb->action( "mProject/mClose/aCurrent" )->setEnabled( false );
-		mb->action( "mProject/mClose/aAll" )->setEnabled( false );
-		mb->action( "mProject/aSettings" )->setEnabled( false );
-		mb->action( "mProject/aAddExistingFiles" )->setEnabled( false );
-	}
+	// get current project
+	ProjectItem* it = currentProject();
+	// set compiler, debugger and interpreter
+	pm->setCurrentCompiler( it ? it->compiler() : 0 );
+	pm->setCurrentDebugger( it ? it->debugger() : 0 );
+	pm->setCurrentInterpreter( it ? it->interpreter() : 0 );
+	// desactive project action
+	mb->action( "mProject/mSave/aCurrent" )->setEnabled( it );
+	mb->action( "mProject/mSave/aAll" )->setEnabled( it );
+	mb->action( "mProject/mClose/aCurrent" )->setEnabled( it );
+	mb->action( "mProject/mClose/aAll" )->setEnabled( it );
+	mb->action( "mProject/aSettings" )->setEnabled( it );
+	mb->action( "mProject/aAddExistingFiles" )->setEnabled( it );
+	warning( "", c.isValid() ? "valid" : " non valid " );
 }
 
 void UIProjectsManager::on_tvProjects_doubleClicked( const QModelIndex& i )
@@ -210,7 +193,8 @@ void UIProjectsManager::projectSaveCurrent_triggered()
 
 void UIProjectsManager::projectSaveAll_triggered()
 {
-	qWarning( "saveall" );
+	foreach ( ProjectItem* p, mProjects->projects( false ) )
+		p->saveAll( false );
 }
 
 void UIProjectsManager::projectCloseCurrent_triggered()

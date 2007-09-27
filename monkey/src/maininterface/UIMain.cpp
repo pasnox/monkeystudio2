@@ -19,6 +19,7 @@
 #include "pMonkeyStudio.h"
 #include "PluginsManager.h"
 #include "UIProjectsManager.h"
+#include "ProjectsProxy.h"
 
 #include <QActionGroup>
 #include <QStyleFactory>
@@ -304,6 +305,7 @@ void UIMain::initConnections()
 	connect( agStyles, SIGNAL( triggered( QAction* ) ), workspace(), SLOT( agStyles_triggered( QAction* ) ) );
 	connect( menuBar()->action( "mView/aNext" ), SIGNAL( triggered() ), workspace(), SLOT( activateNextDocument() ) );
 	connect( menuBar()->action( "mView/aPrevious" ), SIGNAL( triggered() ), workspace(), SLOT( activatePreviousDocument() ) );
+	connect( menuBar()->action( "mView/aFiltered" ), SIGNAL( triggered( bool ) ), projectsManager()->proxy(), SLOT( setFiltering( bool ) ) );
 	// project connection
 	connect( menuBar()->action( "mProject/aNew" ), SIGNAL( triggered() ), projectsManager(), SLOT( projectNew_triggered() ) );
 	connect( menuBar()->action( "mProject/aOpen" ), SIGNAL( triggered() ), projectsManager(), SLOT( projectOpen_triggered() ) );

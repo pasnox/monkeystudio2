@@ -17,20 +17,25 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QTextCodec>
-/*
+
+void ProjectItem::init()
+{
+	mIsOpen = false;
+	mCompiler = 0L;
+	mDebugger = 0L;
+	mInterpreter = 0L;
+	mBuffer.clear();
+	setReadOnly( false );
+}
+
 ProjectItem::ProjectItem( ProjectsModel::NodeType t, ProjectItem* i )
 {
-	// clear buffer
-	mBuffer.clear();
-	// set type
+	init();
 	setType( t );
-	// set readonly
-	setReadOnly( false );
-	// append to parent if needed
 	if ( i )
 		i->appendRow( this );
 }
-*/
+
 int ProjectItem::type() const
 { return QStandardItem::UserType; }
 

@@ -34,7 +34,7 @@ class Q_MONKEY_EXPORT ProjectItem : /*public QObject,*/ public QStandardItem
 	//Q_OBJECT
 	
 public:
-	//ProjectItem( ProjectsModel::NodeType = ProjectsModel::ProjectType, ProjectItem* = 0 );
+	ProjectItem( ProjectsModel::NodeType = ProjectsModel::ProjectType, ProjectItem* = 0 );
 	
 	// item type
 	virtual int type() const;
@@ -226,6 +226,7 @@ protected:
 	InterpreterPlugin* mInterpreter;
 	bool mIsOpen;
 	QString mBuffer;
+	virtual void init();
 	virtual void redoLayout( ProjectItem* = 0 ) = 0;
 	virtual void writeProject() = 0;
 	virtual void writeItem( ProjectItem* ) = 0;

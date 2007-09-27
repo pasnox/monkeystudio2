@@ -5,9 +5,6 @@ ProjectsModel::ProjectsModel( QObject* o )
 	: QStandardItemModel( o )
 {}
 
-ProjectsModel::~ProjectsModel()
-{}
-
 ProjectItem* ProjectsModel::item( int r, int c ) const
 { return reinterpret_cast<ProjectItem*>( QStandardItemModel::item( r, c ) ); }
 
@@ -21,11 +18,12 @@ ProjectItemList ProjectsModel::projects( bool b )
 {
 	ProjectItemList l;
 	for ( int i = 0; i < rowCount(); i++ )
-	{
-		ProjectItem* it = item( i );
-		l << it;
-		if ( b )
-			l << it->childrenProjects( true );
-	}
+		if ( ProjectItem* it = item( i ) )
+			if ( it->isProject() )
+			{
+				l << it;
+				if ( b )
+					l << it->childrenProjects( true );
+			}
 	return l;
 }

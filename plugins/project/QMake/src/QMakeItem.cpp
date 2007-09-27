@@ -22,12 +22,9 @@
 using namespace pMonkeyStudio;
 
 QMakeItem::QMakeItem( ProjectsModel::NodeType t, ProjectItem* i )
-	: ProjectItem()
 {
-	mIsOpen = false;
-	mBuffer.clear();
+	init();
 	setType( t );
-	setReadOnly( false );
 	if ( i )
 		i->appendRow( this );
 }
@@ -355,8 +352,15 @@ bool QMakeItem::open()
 		if ( mIsOpen || !QFile::exists( getValue() ) )
 			return false;
 		
+		// populate datas
 		QMakeParser p( getValue(), const_cast<QMakeItem*>( this ) );
+		
+		// return parse state
 		mIsOpen = p.isOpen();
+		
+		// set project unmodified
+		setModified( false );
+		
 		return mIsOpen;
 	}
 	return false;

@@ -33,7 +33,7 @@ class Q_MONKEY_EXPORT UIProjectsManager : public QDockWidget, public Ui::UIProje
 public:
 	ProjectItem* currentProject() const;
 
-	inline ProjectsModel* model() const { return mProjects; }
+	inline ProjectsModel* projects() const { return mProjects; }
 	inline ProjectsProxy* proxy() const { return mProxy; }
 
 private:

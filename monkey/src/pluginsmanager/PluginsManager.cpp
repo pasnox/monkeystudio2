@@ -118,8 +118,8 @@ void PluginsManager::setCurrentCompiler( CompilerPlugin* c )
 		return;
 	
 	// disabled all compiler
-	foreach ( BasePlugin* bp, plugins<BasePlugin*>( s, BasePlugin::iCompiler ) )
-		bp->setEnabled( false );
+	foreach ( CompilerPlugin* cp, plugins<CompilerPlugin*>( QString::null, BasePlugin::iCompiler ) )
+		cp->setEnabled( false );
 	
 	// enabled the one we choose
 	mCompiler = c;
@@ -130,7 +130,7 @@ void PluginsManager::setCurrentCompiler( CompilerPlugin* c )
 	pMenuBar::instance()->menu( "mBuild" )->setEnabled( mCompiler );
 }
 
-const QString PluginsManager::currentCompiler()
+CompilerPlugin* PluginsManager::currentCompiler()
 { return mCompiler; }
 	
 void PluginsManager::setCurrentDebugger( DebuggerPlugin* d )
@@ -140,45 +140,42 @@ void PluginsManager::setCurrentDebugger( DebuggerPlugin* d )
 		return;
 	
 	// disabled all debugger
-	foreach ( BasePlugin* bp, plugins<BasePlugin*>( s, BasePlugin::iDebugger ) )
-		bp->setEnabled( false );
+	foreach ( DebuggerPlugin* dp, plugins<DebuggerPlugin*>( QString::null, BasePlugin::iDebugger ) )
+		dp->setEnabled( false );
 	
 	// enabled the one we choose
-	mCompiler = c;
-	if ( mCompiler )
-		mCompiler->setEnabled( true );
+	mDebugger = d;
+	if ( mDebugger )
+		mDebugger->setEnabled( true );
 	
-	// enable menu according to current compiler
-	pMenuBar::instance()->menu( "mBuild" )->setEnabled( mCompiler );
+	// enable menu according to current debugger
+	pMenuBar::instance()->menu( "mDebugger" )->setEnabled( mDebugger );
 }
 
-const QString PluginsManager::currentDebugger()
-{
-	foreach ( BasePlugin* bp, plugins<BasePlugin*>( QString::null, BasePlugin::iDebugger ) )
-		if ( bp->isEnabled() )
-			return bp->infos().Name;
-	return QString();
-}
+DebuggerPlugin* PluginsManager::currentDebugger()
+{ return mDebugger; }
 	
-void PluginsManager::setCurrentInterpreter( const QString& s )
+void PluginsManager::setCurrentInterpreter( InterpreterPlugin* i )
 {
-	foreach ( BasePlugin* bp, plugins<BasePlugin*>( s, BasePlugin::iInterpreter ) )
-		bp->setEnabled( false );
-	if ( BasePlugin* bp = plugin<BasePlugin*>( s, BasePlugin::iInterpreter ) )
-		bp->setEnabled( true );
+	// if same cancel
+	if ( mInterpreter == i )
+		return;
 	
-	mb->menu( "mInterpreter" )->setEnabled( !pm->currentInterpreter().isEmpty() );
+	// disabled all debugger
+	foreach ( InterpreterPlugin* ip, plugins<InterpreterPlugin*>( QString::null, BasePlugin::iInterpreter ) )
+		ip->setEnabled( false );
+	
+	// enabled the one we choose
+	mInterpreter = i;
+	if ( mInterpreter )
+		mInterpreter->setEnabled( true );
+	
+	// enable menu according to current interpreter
+	pMenuBar::instance()->menu( "mInterpreter" )->setEnabled( mInterpreter );
 }
 
-const QString PluginsManager::currentInterpreter()
-{
-	foreach ( BasePlugin* bp, plugins<BasePlugin*>( QString::null, BasePlugin::iInterpreter ) )
-		if ( bp->isEnabled() )
-			return bp->infos().Name;
-	return QString();
-}
+InterpreterPlugin* PluginsManager::currentInterpreter()
+{ return mInterpreter; }
 
 void PluginsManager::manageRequested()
-{
-	UIPluginsSettings::instance()->exec(); 
-}
+{ UIPluginsSettings::instance()->exec(); }

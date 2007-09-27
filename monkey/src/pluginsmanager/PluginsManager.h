@@ -52,13 +52,13 @@ public:
 	ProjectItem* projectItem( const QString& );
 	
 	void setCurrentCompiler( CompilerPlugin* );
-	const CompilerPlugin* currentCompiler();
+	CompilerPlugin* currentCompiler();
 	
 	void setCurrentDebugger( DebuggerPlugin* );
-	const DebuggerPlugin* currentDebugger();
+	DebuggerPlugin* currentDebugger();
 	
 	void setCurrentInterpreter( InterpreterPlugin* );
-	const InterpreterPlugin* currentInterpreter();
+	InterpreterPlugin* currentInterpreter();
 	
 private:
 	QList<BasePlugin*> mPlugins;
