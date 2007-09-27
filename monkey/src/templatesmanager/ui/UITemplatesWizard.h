@@ -4,17 +4,15 @@
 #include "MonkeyExport.h"
 #include "QSingleton.h"
 #include "ui_UITemplatesWizard.h"
+#include "pTemplateManager.h"
 
 class Q_MONKEY_EXPORT UITemplatesWizard : public QDialog, public Ui::UITemplatesWizard, public QSingleton<UITemplatesWizard>
 {
 	Q_OBJECT
 	friend class QSingleton<UITemplatesWizard>;
 
-protected:
-	virtual ~UITemplatesWizard();
-
 private:
-	UITemplatesWizard( QWidget* = 0 );
+	UITemplatesWizard( pTemplate::TemplateType, QWidget* = 0 );
 
 private slots:
 	void on_cbLanguages_currentIndexChanged( const QString& );

@@ -10,13 +10,15 @@
 #include <QDir>
 #include <QDateTime>
 
-UITemplatesWizard::UITemplatesWizard( QWidget* w )
+using namespace pMonkeyStudio;
+
+UITemplatesWizard::UITemplatesWizard( pTemplate::TemplateType t, QWidget* w )
 	: QDialog( w )
 {
 	setupUi( this );
 	setAttribute( Qt::WA_DeleteOnClose );
 	// fill available languages
-	cbLanguages->addItems( pMonkeyStudio::availableLanguages() );
+	cbLanguages->addItems( availableLanguages() );
 	// fill type comboobox
 	pTemplate::fillComboBox( cbTypes );
 	// show correct page
@@ -24,15 +26,12 @@ UITemplatesWizard::UITemplatesWizard( QWidget* w )
 	// restore infos
 	pSettings* s = pSettings::instance();
 	cbLanguages->setCurrentIndex( cbLanguages->findText( s->value( "Recents/FileWizard/Language", "C++" ).toString() ) );
-	cbTypes->setCurrentIndex( cbTypes->findData( s->value( "Recents/FileWizard/Type", pTemplate::ttFiles ).toInt() ) );
+	cbTypes->setCurrentIndex( cbTypes->findData( t ) );
 	leDestination->setText( s->value( "Recents/FileWizard/Destination" ).toString() );
 	leAuthor->setText( s->value( "Recents/FileWizard/Author" ).toString() );
 	cbLicenses->setEditText( s->value( "Recents/FileWizard/License", "GPL" ).toString() );
 	cbOpen->setChecked( s->value( "Recents/FileWizard/Open", true ).toBool() );
 }
-
-UITemplatesWizard::~UITemplatesWizard()
-{}
 
 void UITemplatesWizard::on_cbLanguages_currentIndexChanged( const QString& s )
 {
@@ -59,9 +58,7 @@ void UITemplatesWizard::on_cbLanguages_currentIndexChanged( const QString& s )
 }
 
 void UITemplatesWizard::on_cbTypes_currentIndexChanged( const QString& )
-{
-	on_cbLanguages_currentIndexChanged( cbLanguages->currentText() );
-}
+{ on_cbLanguages_currentIndexChanged( cbLanguages->currentText() ); }
 
 void UITemplatesWizard::on_swPages_currentChanged( int i )
 {
@@ -84,26 +81,24 @@ void UITemplatesWizard::on_swPages_currentChanged( int i )
 
 void UITemplatesWizard::on_tbDestination_clicked()
 {
-	QString s = pMonkeyStudio::getExistingDirectory( tr( "Select the file(s) destination" ), leDestination->text(), window() );
+	QString s = getExistingDirectory( tr( "Select the file(s) destination" ), leDestination->text(), window() );
 	if ( !s.isNull() )
 		leDestination->setText( s );
 }
 
 void UITemplatesWizard::on_pbPrevious_clicked()
-{
-	swPages->setCurrentIndex( swPages->currentIndex() -1 );
-}
+{ swPages->setCurrentIndex( swPages->currentIndex() -1 ); }
 
 void UITemplatesWizard::on_pbNext_clicked()
 {
 	if ( !checkTemplates() )
 		return;
-	//
+	
 	int i = swPages->currentIndex();
-	//
+	
 	if ( i < swPages->count() -1 )
 		swPages->setCurrentIndex( i +1 );
-	//
+	
 	if ( i == swPages->count() -1 )
 		accept();
 }
@@ -112,22 +107,22 @@ bool UITemplatesWizard::checkTemplates()
 {
 	if ( !lwTemplates->selectedItems().count() )
 	{
-		pMonkeyStudio::information( tr( "Templates..." ), tr( "Choose a template to continue." ), this );
+		information( tr( "Templates..." ), tr( "Choose a template to continue." ), this );
 		return false;
 	}
-	//
+	
 	if ( leBaseName->text().isEmpty() )
 	{
-		pMonkeyStudio::information( tr( "Base Name..." ), tr( "Choose a base name for your file(s)." ), this );
+		information( tr( "Base Name..." ), tr( "Choose a base name for your file(s)." ), this );
 		return false;
 	}
-	//
+	
 	if ( leDestination->text().isEmpty() )
 	{
-		pMonkeyStudio::information( tr( "Destination..." ), tr( "Choose a destination for your file(s)." ), this );
+		information( tr( "Destination..." ), tr( "Choose a destination for your file(s)." ), this );
 		return false;
 	}
-	//
+	
 	return true;
 }
 
@@ -189,29 +184,31 @@ void UITemplatesWizard::accept()
 			// set filename
 			QString s = QDir::cleanPath( p->destination().append( "/" ).append( p->fileName() ) );
 			// check if file already existing
-			if ( QFile::exists( s ) && !pMonkeyStudio::question( tr( "Overwrite File..." ), tr( "The file '%1' already exists, do you want to continue ?" ).arg( p->fileName() ) ) )
+			if ( QFile::exists( s ) && !question( tr( "Overwrite File..." ), tr( "The file '%1' already exists, do you want to continue ?" ).arg( p->fileName() ) ) )
 				continue;
 			// if can save
 			if ( p->editor()->saveFile( s ) )
 			{
+				// add to project if needed
+				if ( cbAddToProject->isChecked() && i == 0 && cbTypes->itemData( cbTypes->currentIndex() ).toInt() == pTemplate::ttProjects )
+				{
+					ProjectItem* it = 0; // need get from comboview
+					if ( it->isProjectsContainer() )
+						it->addProject( QFileInfo( s ).canonicalFilePath(), cbOpen->isChecked() );
+					else
+						warning( tr( "Adding Project..." ), tr( "You can't add this project to selected project, because it's not a container." ) );
+				}
 				// open file in ide if needed
 				if ( cbOpen->isChecked() )
 				{
-					/*
 					if ( i == 0 && cbTypes->itemData( cbTypes->currentIndex() ).toInt() == pTemplate::ttProjects )
 						pFileManager::instance()->openProject( QFileInfo( s ).canonicalFilePath() );
 					else
-					*/
 						pFileManager::instance()->openFile( QFileInfo( s ).canonicalFilePath() );
-				}
-				// add to project if needed
-				if ( cbAddToProject->isChecked() )
-				{
-					//
 				}
 			}
 			else
-				pMonkeyStudio::warning( "Create File...", tr( "Can't create file:\n%1" ).arg( s ) );
+				warning( "Create File...", tr( "Can't create file:\n%1" ).arg( s ) );
 		}
 		// increase i
 		i++;
@@ -219,7 +216,6 @@ void UITemplatesWizard::accept()
 	// remember some infos
 	pSettings* s = pSettings::instance();
 	s->setValue( "Recents/FileWizard/Language", cbLanguages->currentText() );
-	s->setValue( "Recents/FileWizard/Type", cbTypes->itemData( cbTypes->currentIndex() ) );
 	s->setValue( "Recents/FileWizard/Destination", leDestination->text() );
 	s->setValue( "Recents/FileWizard/Author", leAuthor->text() );
 	s->setValue( "Recents/FileWizard/License", cbLicenses->currentText() );

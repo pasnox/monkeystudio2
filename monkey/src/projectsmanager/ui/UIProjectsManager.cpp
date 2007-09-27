@@ -21,6 +21,7 @@
 #include "ProjectsModel.h"
 #include "ProjectItem.h"
 #include "pFileManager.h"
+#include "UITemplatesWizard.h"
 
 #include <QHeaderView>
 
@@ -78,7 +79,7 @@ UIProjectsManager::UIProjectsManager( QWidget* w )
 }
 
 UIProjectsManager::~UIProjectsManager()
-{}
+{ projectCloseAll_triggered(); }
 
 ProjectItem* UIProjectsManager::currentProject() const
 {
@@ -119,7 +120,6 @@ void UIProjectsManager::tvProjects_currentChanged( const QModelIndex& c, const Q
 	mb->action( "mProject/mClose/aAll" )->setEnabled( it );
 	mb->action( "mProject/aSettings" )->setEnabled( it );
 	mb->action( "mProject/aAddExistingFiles" )->setEnabled( it );
-	warning( "", c.isValid() ? "valid" : " non valid " );
 }
 
 void UIProjectsManager::on_tvProjects_doubleClicked( const QModelIndex& i )
@@ -150,7 +150,7 @@ bool UIProjectsManager::openProject( const QString& s )
 
 void UIProjectsManager::projectNew_triggered()
 {
-	qWarning( "new" );
+	UITemplatesWizard::instance(  )->exec();
 }
 
 void UIProjectsManager::projectOpen_triggered()
@@ -201,13 +201,21 @@ void UIProjectsManager::projectCloseCurrent_triggered()
 {
 	ProjectItem* p = currentProject();
 	if ( p )
+	{
+		 // fucking Qt bug that not emit currentChange is current item is not toplevelitem
+		tvProjects->setCurrentIndex( mProxy->mapFromSource( p->index() ) );
 		p->close();
+	}
 }
 
 void UIProjectsManager::projectCloseAll_triggered()
 {
-	while ( ProjectItem* p = currentProject() )
+	foreach ( ProjectItem* p, mProjects->projects( false ) )
+	{
+		 // fucking Qt bug that not emit currentChange is current item is not toplevelitem
+		tvProjects->setCurrentIndex( mProxy->mapFromSource( p->index() ) );
 		p->close();
+	}
 }
 
 void UIProjectsManager::projectSettings_triggered()
