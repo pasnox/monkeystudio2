@@ -21,7 +21,7 @@
 pTreeComboBox::pTreeComboBox( QWidget* w )
 	: QComboBox( w ), mView( 0 ), mModel( 0 )
 {
-	addItem( "toto" );
+	addItem( QString::null );
 	setView( new QTreeView );
 	mView->header()->hide();
 	mView->resize( width(), 200 );
@@ -32,16 +32,22 @@ pTreeComboBox::~pTreeComboBox()
 
 void pTreeComboBox::hidePopup()
 {
-	if ( mView )
+	if ( mView && mView->isVisible() )
 		mView->hide();
 }
-
+#include <QDebug>
+#include <QApplication>
+#include <QDesktopWidget>
 void pTreeComboBox::showPopup()
 {
-	if ( mView )
+	if ( mView && !mView->isVisible() )
 	{
 		mView->expandAll();
-		mView->move( mapToGlobal( geometry().topLeft() ) );
+		QDesktopWidget* d = QApplication::desktop();
+		QPoint p = mapToGlobal( geometry().bottomLeft() );
+		int i = d->screenGeometry().height() -d->availableGeometry().height();
+		p.ry() -= i;
+		mView->move( p );
 		mView->resize( width(), mView->height() );
 		mView->show();
 	}
@@ -56,7 +62,7 @@ void pTreeComboBox::setView( QTreeView* t )
 		return;
 	delete mView;
 	mView = t;
-	//mView->setWindowFlags( Qt::Popup );
+	mView->setWindowFlags( Qt::Popup );
 	setModel( mModel );
 	connect( mView, SIGNAL( clicked( const QModelIndex& ) ), this, SLOT( internal_clicked( const QModelIndex& ) ) );
 }

@@ -79,7 +79,7 @@ UIProjectsManager::UIProjectsManager( QWidget* w )
 	
 	// connections
 	connect( mProxy, SIGNAL( filteringChanged( bool ) ), mb->action( "mView/aFiltered" ), SLOT( setChecked( bool ) ) );
-	connect( cbProjects, SIGNAL( selectedIndexChanged( const QModelIndex& ) ), this, SLOT( cbProjects_selectedIndexChanged( const QModelIndex& ) ) );
+	connect( cbProjects, SIGNAL( selected( const QModelIndex& ) ), this, SLOT( cbProjects_selected( const QModelIndex& ) ) );
 	connect( tvProjects->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( tvProjects_currentChanged( const QModelIndex&, const QModelIndex& ) ) );
 }
 
@@ -106,7 +106,7 @@ void UIProjectsManager::initializeProject( ProjectItem* it )
 	tvProjects->setCurrentIndex( mProxy->mapFromSource( it->index() ) );
 }
 
-void UIProjectsManager::cbProjects_selectedIndexChanged( const QModelIndex& i )
+void UIProjectsManager::cbProjects_selected( const QModelIndex& i )
 { tvProjects->setCurrentIndex( mProxy->mapFromSource( mProjects->projectsProxy()->mapToSource( i ) ) ); }
 
 void UIProjectsManager::tvProjects_currentChanged( const QModelIndex& c, const QModelIndex& )
