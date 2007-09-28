@@ -22,6 +22,7 @@
 #include "ProjectItem.h"
 #include "pFileManager.h"
 #include "UITemplatesWizard.h"
+#include "pTreeComboBox.h"
 
 #include <QHeaderView>
 
@@ -57,12 +58,15 @@ UIProjectsManager::UIProjectsManager( QWidget* w )
 	tbButtons->addSeparator();
 	tbButtons->addAction( mb->action( "mProject/aAddExistingFiles" ) );
 	
+	// set treeview view for combo list
+	cbProjects->setModel( mProjects->projectsProxy() );
+	
 	// set projects properties
 	tvProjects->header()->hide();
 	
 	// set proxy properties
 	// set types to filter
-	mProxy->setFilterRoles( QList<int>() << ProjectsModel::ValueType );
+	mProxy->setFilterRoles( QList<int>() << ProjectItem::ValueType );
 	// filter are negate
 	mProxy->setNegateFilter( false );
 	// apply filtering
@@ -75,6 +79,7 @@ UIProjectsManager::UIProjectsManager( QWidget* w )
 	
 	// connections
 	connect( mProxy, SIGNAL( filteringChanged( bool ) ), mb->action( "mView/aFiltered" ), SLOT( setChecked( bool ) ) );
+	connect( cbProjects, SIGNAL( selectedIndexChanged( const QModelIndex& ) ), this, SLOT( cbProjects_selectedIndexChanged( const QModelIndex& ) ) );
 	connect( tvProjects->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( tvProjects_currentChanged( const QModelIndex&, const QModelIndex& ) ) );
 }
 
@@ -100,6 +105,9 @@ void UIProjectsManager::initializeProject( ProjectItem* it )
 	// set current project
 	tvProjects->setCurrentIndex( mProxy->mapFromSource( it->index() ) );
 }
+
+void UIProjectsManager::cbProjects_selectedIndexChanged( const QModelIndex& i )
+{ tvProjects->setCurrentIndex( mProxy->mapFromSource( mProjects->projectsProxy()->mapToSource( i ) ) ); }
 
 void UIProjectsManager::tvProjects_currentChanged( const QModelIndex& c, const QModelIndex& )
 {

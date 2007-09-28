@@ -52,7 +52,7 @@ UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
 	
 	// scopes
 	mScopesProxy = new QMakeProxy( mModel, mProject );
-	mScopesProxy->setFilterRoles( QList<int>() << ProjectsModel::ValueType );
+	mScopesProxy->setFilterRoles( QList<int>() << ProjectItem::ValueType );
 	mScopesProxy->setFiltering( true );
 	tvScopes->setModel( mScopesProxy );
 	
@@ -61,7 +61,7 @@ UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
 	
 	// scope content
 	mContentProxy = new QMakeProxy( mModel, mProject );
-	mContentProxy->setFilterRoles( QList<int>() << ProjectsModel::ValueType );
+	mContentProxy->setFilterRoles( QList<int>() << ProjectItem::ValueType );
 	mContentProxy->setNegateFilter( false );
 	mContentProxy->setFiltering( true );
 	lvContents->setModel( mContentProxy );
@@ -286,7 +286,7 @@ void UIQMakeProjectSettings::setCurrentIndex( const QModelIndex& i )
 	// set/select current index
 	if ( !i.isValid() )
 		return;
-	else if ( i.data( ProjectsModel::TypeRole ).toInt() == ProjectsModel::ValueType )
+	else if ( i.data( ProjectItem::TypeRole ).toInt() == ProjectItem::ValueType )
 	{
 		tvScopes->setCurrentIndex( mScopesProxy->mapFromSource( i.parent() ) );
 		lvContents->setRootIndex( mContentProxy->mapFromSource( i.parent() ) );
@@ -317,7 +317,7 @@ void UIQMakeProjectSettings::querySettings()
 	cbOperators->addItems( UISettingsQMake::readOperators() );
 	
 	// get all variable of project
-	ProjectItemList il = mProject->getItemList( ProjectsModel::VariableType, "*", "*", "*" );
+	ProjectItemList il = mProject->getItemList( ProjectItem::VariableType, "*", "*", "*" );
 	
 	// set maximum progressbar value
 	pbProgress->setMaximum( il.count() );
@@ -960,7 +960,7 @@ void UIQMakeProjectSettings::on_lvContents_doubleClicked( const QModelIndex& i )
 void UIQMakeProjectSettings::on_tbAdd_clicked()
 {
 	// new item
-	QMakeItem* it = new QMakeItem( ProjectsModel::EmptyType );
+	QMakeItem* it = new QMakeItem( ProjectItem::EmptyType );
 	
 	// get current item
 	ProjectItem* ci = mModel->itemFromIndex( currentIndex() );
@@ -978,8 +978,8 @@ void UIQMakeProjectSettings::on_tbAdd_clicked()
 	if ( UIItemSettings::edit( it, this ) )
 	{
 		// if scope, add scope end
-		if ( it->getType() == ProjectsModel::ScopeType || it->getType() == ProjectsModel::NestedScopeType )
-			(void) new QMakeItem( ProjectsModel::ScopeEndType, it );
+		if ( it->getType() == ProjectItem::ScopeType || it->getType() == ProjectItem::NestedScopeType )
+			(void) new QMakeItem( ProjectItem::ScopeEndType, it );
 		
 		// redo layout
 		it->refresh();

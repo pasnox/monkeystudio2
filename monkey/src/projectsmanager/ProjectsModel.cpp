@@ -1,18 +1,14 @@
 #include "ProjectsModel.h"
-#include "ProjectItem.h"
+#include "ProjectsProxy.h"
 
 ProjectsModel::ProjectsModel( QObject* o )
 	: QStandardItemModel( o )
-{}
-
-ProjectItem* ProjectsModel::item( int r, int c ) const
-{ return reinterpret_cast<ProjectItem*>( QStandardItemModel::item( r, c ) ); }
-
-ProjectItem* ProjectsModel::itemFromIndex( const QModelIndex& i ) const
-{ return reinterpret_cast<ProjectItem*>( QStandardItemModel::itemFromIndex( i ) ); }
-
-ProjectItem* ProjectsModel::takeItem( int r, int c )
-{ return reinterpret_cast<ProjectItem*>( QStandardItemModel::takeItem( r, c ) ); }
+{
+	mProxy = new ProjectsProxy( this );
+	mProxy->setNegateFilter( false );
+	mProxy->addFilterRole( ProjectItem::ProjectType );
+	mProxy->setFiltering( true );
+}
 
 ProjectItemList ProjectsModel::projects( bool b )
 {

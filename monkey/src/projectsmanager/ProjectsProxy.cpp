@@ -9,10 +9,10 @@ ProjectsProxy::ProjectsProxy( ProjectsModel* m )
 	setSourceModel( m );
 	
 	// set role to filter on
-	setFilterRole( ProjectsModel::TypeRole );
+	setFilterRole( ProjectItem::TypeRole );
 	
 	// set sort filter
-	setSortRole( ProjectsModel::OriginalViewRole );
+	setSortRole( ProjectItem::OriginalViewRole );
 }
 
 ProjectsModel* ProjectsProxy::projectsModel() const
@@ -28,7 +28,7 @@ bool ProjectsProxy::filterAcceptsRow( int r, const QModelIndex& i ) const
 	// check role
 	bool b = mNegateFilter ? !mFilterRoles.contains( f ) : mFilterRoles.contains( f );
 	// check child visibility
-	if ( !b && !( !mFilterValues.isEmpty() && f == ProjectsModel::VariableType && !mFilterValues.contains( s, Qt::CaseInsensitive ) ) )
+	if ( !b && !( !mFilterValues.isEmpty() && f == ProjectItem::VariableType && !mFilterValues.contains( s, Qt::CaseInsensitive ) ) )
 		for ( int j = 0; j < it->rowCount(); j++ )
 			if ( filterAcceptsRow( j, it->index() ) )
 				return true;
@@ -44,7 +44,7 @@ void ProjectsProxy::setFiltering( bool b )
 	if ( b == mFiltering )
 		return;
 	mFiltering = b;
-	setSortRole( mFiltering ? ProjectsModel::FilteredViewRole : ProjectsModel::OriginalViewRole );
+	setSortRole( mFiltering ? ProjectItem::FilteredViewRole : ProjectItem::OriginalViewRole );
 	emit filteringChanged( mFiltering );
 	refresh();
 	invalidateFilter();

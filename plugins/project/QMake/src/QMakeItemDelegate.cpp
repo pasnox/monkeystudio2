@@ -1,5 +1,4 @@
 #include "QMakeItemDelegate.h"
-#include "ProjectsModel.h"
 #include "UISettingsQMake.h"
 
 #include <QMetaEnum>
@@ -14,25 +13,25 @@ QWidget* QMakeItemDelegate::createEditor( QWidget* w, const QStyleOptionViewItem
 		return 0;
 	switch ( i.sibling( i.row(), 0 ).data( Qt::UserRole +1 ).toInt() )
 	{
-		case ProjectsModel::TypeRole:
+		case ProjectItem::TypeRole:
 		{
 			QComboBox* cb = new QComboBox( w );
-			const QMetaObject mo = ProjectsModel::staticMetaObject;
+			const QMetaObject mo = ProjectItem::staticMetaObject;
 			QMetaEnum me = mo.enumerator( mo.indexOfEnumerator( "NodeType" ) );
 			for ( int j = 0; j < me.keyCount(); j++ )
-				if ( me.value( j ) > ProjectsModel::FirstType && me.value( j ) < ProjectsModel::LastType )
+				if ( me.value( j ) > ProjectItem::FirstType && me.value( j ) < ProjectItem::LastType )
 					cb->addItem( me.key( j ), me.value( j ) );
 			cb->setCurrentIndex( cb->findData( i.data() ) );
 			return cb;
 		}
-		case ProjectsModel::ValueRole:
-		case ProjectsModel::CommentRole:
+		case ProjectItem::ValueRole:
+		case ProjectItem::CommentRole:
 		{
 			QValueFileFolderEdit* vffe = new QValueFileFolderEdit( w, i );
 			vffe->setText( i.data().toString() );
 			return vffe;
 		}
-		case ProjectsModel::OperatorRole:
+		case ProjectItem::OperatorRole:
 		{
 			QComboBox* cb = new QComboBox( w );
 			cb->addItems( QStringList() << QString::null << UISettingsQMake::readOperators() );
@@ -49,20 +48,20 @@ void QMakeItemDelegate::setModelData( QWidget* w, QAbstractItemModel* m, const Q
 		return;
 	switch ( i.sibling( i.row(), 0 ).data( Qt::UserRole +1 ).toInt() )
 	{
-		case ProjectsModel::TypeRole:
+		case ProjectItem::TypeRole:
 		{
 			QComboBox* cb = qobject_cast<QComboBox*>( w );
 			m->setData( i, cb->itemData( cb->currentIndex() ), Qt::DisplayRole );
 			return;
 		}
-		case ProjectsModel::ValueRole:
-		case ProjectsModel::CommentRole:
+		case ProjectItem::ValueRole:
+		case ProjectItem::CommentRole:
 		{
 			QValueFileFolderEdit* vffe = qobject_cast<QValueFileFolderEdit*>( w );
 			m->setData( i, vffe->text(), Qt::DisplayRole );
 			return;
 		}
-		case ProjectsModel::OperatorRole:
+		case ProjectItem::OperatorRole:
 		{
 			QComboBox* cb = qobject_cast<QComboBox*>( w );
 			m->setData( i, cb->currentText(), Qt::DisplayRole );

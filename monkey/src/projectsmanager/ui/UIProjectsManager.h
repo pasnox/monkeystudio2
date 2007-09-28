@@ -46,6 +46,7 @@ private:
 	void initializeProject( ProjectItem* );
 
 private slots:
+	void cbProjects_selectedIndexChanged( const QModelIndex& );
 	void tvProjects_currentChanged( const QModelIndex&, const QModelIndex& );
 	void on_tvProjects_doubleClicked( const QModelIndex& );
 

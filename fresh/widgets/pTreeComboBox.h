@@ -16,6 +16,10 @@
 #define PTREECOMBOBOX_H
 
 #include <QComboBox>
+#include <QPointer>
+
+class QTreeView;
+class QAbstractItemModel;
 
 class pTreeComboBox : public QComboBox
 {
@@ -24,6 +28,30 @@ class pTreeComboBox : public QComboBox
 public:
 	pTreeComboBox( QWidget* = 0 );
 	~pTreeComboBox();
+
+	virtual void hidePopup();
+	virtual void showPopup();
+
+	QTreeView* view() const;
+	void setView( QTreeView* );
+
+	QAbstractItemModel* model() const;
+	void setModel( QAbstractItemModel* );
+
+	QModelIndex currentIndex() const;
+	void setCurrentIndex( const QModelIndex& );
+
+protected slots:
+	void internal_currentChanged( const QModelIndex&, const QModelIndex& );
+	void internal_clicked( const QModelIndex& );
+
+protected:
+	QPointer<QTreeView> mView;
+	QPointer<QAbstractItemModel> mModel;
+
+signals:
+	void selected( const QModelIndex& );
+	void clicked( const QModelIndex& );
 
 };
 

@@ -26,7 +26,7 @@ UIItemSettings::UIItemSettings( ProjectItem* i )
 	twValueRoles->setItemDelegate( new QMakeItemDelegate( twValueRoles ) );
 	
 	// fill list with node roles
-	const QMetaObject mo = ProjectsModel::staticMetaObject;
+	const QMetaObject mo = ProjectItem::staticMetaObject;
 	QMetaEnum me = mo.enumerator( mo.indexOfEnumerator( "NodeRole" ) );
 	QFontMetrics fm( twValueRoles->font() );
 	int pMax = 0;
@@ -34,7 +34,7 @@ UIItemSettings::UIItemSettings( ProjectItem* i )
 	for ( int i = 0; i < me.keyCount(); i++ )
 	{
 		// don t create item for these roles
-		if ( me.value( i ) > ProjectsModel::FirstRole && me.value( i ) < ProjectsModel::ModifiedRole )
+		if ( me.value( i ) > ProjectItem::FirstRole && me.value( i ) < ProjectItem::ModifiedRole )
 		{
 			// create item role
 			QTreeWidgetItem* it = new QTreeWidgetItem( twValueRoles );
@@ -60,19 +60,19 @@ void UIItemSettings::accept()
 	{
 		switch ( twValueRoles->topLevelItem( i )->data( 0, Qt::UserRole +1 ).toInt() )
 		{
-			case ProjectsModel::TypeRole:
-				mItem->setType( (ProjectsModel::NodeType)twValueRoles->topLevelItem( i )->text( 1 ).toInt() );
+			case ProjectItem::TypeRole:
+				mItem->setType( (ProjectItem::NodeType)twValueRoles->topLevelItem( i )->text( 1 ).toInt() );
 				break;
-			case ProjectsModel::OperatorRole:
+			case ProjectItem::OperatorRole:
 				mItem->setOperator( twValueRoles->topLevelItem( i )->text( 1 ) );
 				break;
-			case ProjectsModel::ValueRole:
+			case ProjectItem::ValueRole:
 				mItem->setValue( twValueRoles->topLevelItem( i )->text( 1 ) );
 				break;
-			case ProjectsModel::MultiLineRole:
+			case ProjectItem::MultiLineRole:
 				mItem->setMultiLine( twValueRoles->topLevelItem( i )->text( 1 ).toInt() );
 				break;
-			case ProjectsModel::CommentRole:
+			case ProjectItem::CommentRole:
 				mItem->setComment( twValueRoles->topLevelItem( i )->text( 1 ) );
 				break;
 		}

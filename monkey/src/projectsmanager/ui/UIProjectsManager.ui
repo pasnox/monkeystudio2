@@ -102,7 +102,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QComboBox" name="cbProjects" />
+     <widget class="pTreeComboBox" name="cbProjects" />
     </item>
     <item>
      <widget class="QTreeView" name="tvProjects" >
@@ -114,6 +114,13 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>pTreeComboBox</class>
+   <extends>QComboBox</extends>
+   <header>pTreeComboBox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../../resources/resources.qrc" />
  </resources>

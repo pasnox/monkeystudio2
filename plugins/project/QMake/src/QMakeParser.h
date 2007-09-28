@@ -28,7 +28,7 @@ protected:
 	
 	bool mIsOpen;
 	QMakeItem* mRoot;
-	
+
 };
 
 #endif // QMAKEPARSER_H

@@ -19,11 +19,12 @@
 
 class QMakeItem : public ProjectItem
 {
-
-public:
-	QMakeItem( ProjectsModel::NodeType = ProjectsModel::ProjectType, ProjectItem* = 0 );
+	Q_OBJECT
 	
-	virtual void setType( ProjectsModel::NodeType );
+public:
+	QMakeItem( ProjectItem::NodeType = ProjectItem::ProjectType, ProjectItem* = 0 );
+	
+	virtual void setType( ProjectItem::NodeType );
 	virtual void setValue( const QString& );
 	virtual void setFilePath( const QString& );
 	virtual QString getIndent() const;

@@ -13,6 +13,7 @@
 **
 ****************************************************************************/
 #include "QMakeItem.h"
+#include "ProjectsModel.h"
 #include "UISettingsQMake.h"
 #include "pMonkeyStudio.h"
 #include "QMakeParser.h"
@@ -21,7 +22,7 @@
 
 using namespace pMonkeyStudio;
 
-QMakeItem::QMakeItem( ProjectsModel::NodeType t, ProjectItem* i )
+QMakeItem::QMakeItem( ProjectItem::NodeType t, ProjectItem* i )
 {
 	init();
 	setType( t );
@@ -29,45 +30,45 @@ QMakeItem::QMakeItem( ProjectsModel::NodeType t, ProjectItem* i )
 		i->appendRow( this );
 }
 
-void QMakeItem::setType( ProjectsModel::NodeType t )
+void QMakeItem::setType( ProjectItem::NodeType t )
 {
 	// set data
-	setData( t, ProjectsModel::TypeRole );
+	setData( t, ProjectItem::TypeRole );
 	
 	// update icon
 	switch( t )
 	{
-		case ProjectsModel::EmptyType:
+		case ProjectItem::EmptyType:
 			setIcon( QIcon( ":/icons/icons/line.png" ) );
 			break;
-		case ProjectsModel::FolderType:
+		case ProjectItem::FolderType:
 			setIcon( QIcon( ":/icons/icons/folder.png" ) );
 			break;
-		case ProjectsModel::CommentType:
+		case ProjectItem::CommentType:
 			setIcon( QIcon( ":/icons/icons/comment.png" ) );
 			break;
-		case ProjectsModel::NestedScopeType:
+		case ProjectItem::NestedScopeType:
 			setIcon( QIcon( ":/icons/icons/scope.png" ) );
 			break;
-		case ProjectsModel::ScopeType:
+		case ProjectItem::ScopeType:
 			setIcon( QIcon( ":/icons/icons/scope.png" ) );
 			break;
-		case ProjectsModel::ScopeEndType:
+		case ProjectItem::ScopeEndType:
 			setIcon( QIcon( ":/icons/icons/scope_end.png" ) );
 			break;
-		case ProjectsModel::VariableType:
+		case ProjectItem::VariableType:
 			setIcon( QIcon( ":/icons/icons/variable.png" ) );
 			break;
-		case ProjectsModel::ValueType:
+		case ProjectItem::ValueType:
 			setIcon( QIcon( ":/icons/icons/value.png" ) );
 			break;
-		case ProjectsModel::FunctionType:
+		case ProjectItem::FunctionType:
 			setIcon( QIcon( ":/icons/icons/function.png" ) );
 			break;
-		case ProjectsModel::IncludeType:
+		case ProjectItem::IncludeType:
 			setIcon( QIcon( ":/icons/icons/include.png" ) );
 			break;
-		case ProjectsModel::ProjectType:
+		case ProjectItem::ProjectType:
 			setIcon( QIcon( ":/icons/icons/project.png" ) );
 			break;
 		default:
@@ -79,7 +80,7 @@ void QMakeItem::setType( ProjectsModel::NodeType t )
 void QMakeItem::setValue( const QString& s )
 {
 	// set data
-	setData( s, ProjectsModel::ValueRole );
+	setData( s, ProjectItem::ValueRole );
 	
 	// set text
 	setText( s );
@@ -92,11 +93,11 @@ void QMakeItem::setValue( const QString& s )
 	// update text
 	switch( getType() )
 	{
-		case ProjectsModel::VariableType:
+		case ProjectItem::VariableType:
 			if ( l1.contains( getValue(), Qt::CaseInsensitive ) )
 				setText( l2.value( l1.indexOf( getValue(), Qt::CaseInsensitive ) ) );
 			break;
-		case ProjectsModel::ValueType:
+		case ProjectItem::ValueType:
 		{
 			// get parent value
 			QString v = parent() ? parent()->getValue() : QString::null;
@@ -109,7 +110,7 @@ void QMakeItem::setValue( const QString& s )
 					// get path to check in for pro
 					v = canonicalFilePath( s );
 					// get all pro file
-					foreach ( QFileInfo f, pMonkeyStudio::getFiles( QDir( v ), "pro", false ) )
+					foreach ( QFileInfo f, getFiles( QDir( v ), "pro", false ) )
 					{
 						// check that value = filename
 						if ( f.baseName().toLower() == s.toLower() )
@@ -126,14 +127,14 @@ void QMakeItem::setValue( const QString& s )
 			}
 			break;
 		}
-		case ProjectsModel::IncludeType:
+		case ProjectItem::IncludeType:
 			setFilePath( "" );
 			break;
-		case ProjectsModel::ProjectType:
+		case ProjectItem::ProjectType:
 			setFilePath( s );
 			break;
-		case ProjectsModel::ScopeType:
-		case ProjectsModel::NestedScopeType:
+		case ProjectItem::ScopeType:
+		case ProjectItem::NestedScopeType:
 			if ( s.toLower() == "win32" )
 				setIcon( QIcon( ":/icons/icons/windows.png" ) );
 			else if ( s.toLower() == "unix" )
@@ -153,17 +154,17 @@ void QMakeItem::setFilePath( const QString& s )
 		return;
 	
 	// set data
-	setData( canonicalFilePath( s ), ProjectsModel::FilePathRole );
+	setData( canonicalFilePath( s ), ProjectItem::FilePathRole );
 	
 	// set text
 	switch( getType() )
 	{
-		case ProjectsModel::ValueType:
+		case ProjectItem::ValueType:
 			if ( parent() && parent()->getValue().toLower() != "subdirs" )
 				setText( fileName( s ) );
 			setToolTip( getFilePath() );
 			break;
-		case ProjectsModel::ProjectType:
+		case ProjectItem::ProjectType:
 			setText( completeBaseName( s ) );
 			setToolTip( getFilePath() );
 			break;
@@ -399,7 +400,7 @@ ProjectItem* variable( ProjectItem* s, const QString& var, const QString& op )
 	foreach ( ProjectItem* it, s->children( false, true ) )
 		if ( it->getValue() == var && it->getOperator() == op )
 			return it;
-	ProjectItem* it = new QMakeItem( ProjectsModel::VariableType, s );
+	ProjectItem* it = new QMakeItem( ProjectItem::VariableType, s );
 	it->setValue( var );
 	it->setOperator( op );
 	it->setMultiLine( true );
@@ -450,7 +451,7 @@ void QMakeItem::addExistingFiles( const QStringList& l, ProjectItem* s, const QS
 		}
 		
 		// create value for variable
-		ProjectItem* it = new QMakeItem( ProjectsModel::ValueType, variable( s, vn, o ) );
+		ProjectItem* it = new QMakeItem( ProjectItem::ValueType, variable( s, vn, o ) );
 		it->setValue( vn != "UNKNOW_FILES" ? relativeFilePath( f ) : f );
 	}
 }
@@ -508,7 +509,7 @@ ProjectItem* QMakeItem::getItemScope( const QString& s, bool c ) const
 		{
 			if ( it->isNested() )
 			{
-				it->setType( ProjectsModel::ScopeType );
+				it->setType( ProjectItem::ScopeType );
 				it->setOperator( QString::null );
 			}
 			return it;
@@ -533,7 +534,7 @@ ProjectItem* QMakeItem::getItemScope( const QString& s, bool c ) const
 		p.remove( sit->scope() );
 		if ( sit->isScopeEnd() )
 		{
-			sit->setType( ProjectsModel::ScopeType );
+			sit->setType( ProjectItem::ScopeType );
 			sit->setOperator( QString::null );
 		}
 	}
@@ -548,10 +549,10 @@ ProjectItem* QMakeItem::getItemScope( const QString& s, bool c ) const
 	// create each scope
 	foreach ( QString scope, l )
 	{
-		sit = new QMakeItem( ProjectsModel::NestedScopeType, sit ? sit : project() );
+		sit = new QMakeItem( ProjectItem::NestedScopeType, sit ? sit : project() );
 		sit ->setValue( scope );
 		sit ->setOperator( ":" );
-		(void) new QMakeItem( ProjectsModel::ScopeEndType, sit );
+		(void) new QMakeItem( ProjectItem::ScopeEndType, sit );
 	}
 	
 	// return full created scope
@@ -581,7 +582,7 @@ void QMakeItem::setListValues( const QStringList& vl, const QString& v, const QS
 		if ( vl.isEmpty() )
 			return;
 		// create variable
-		it = new QMakeItem( ProjectsModel::VariableType, getItemScope( s, true ) );
+		it = new QMakeItem( ProjectItem::VariableType, getItemScope( s, true ) );
 		it->setValue( v );
 		it->setOperator( o );
 	}
@@ -610,7 +611,7 @@ void QMakeItem::setListValues( const QStringList& vl, const QString& v, const QS
 		{
 			if ( !e.isEmpty() )
 			{
-				ProjectItem* cItem = new QMakeItem( ProjectsModel::ValueType, it );
+				ProjectItem* cItem = new QMakeItem( ProjectItem::ValueType, it );
 				cItem->setValue( e );
 			}
 		}
@@ -635,7 +636,7 @@ void QMakeItem::addListValues( const QStringList& vl, const QString& v, const QS
 		if ( vl.isEmpty() )
 			return;
 		// create variable
-		it = new QMakeItem( ProjectsModel::VariableType, getItemScope( s, true ) );
+		it = new QMakeItem( ProjectItem::VariableType, getItemScope( s, true ) );
 		it->setValue( v );
 		it->setOperator( o );
 	}
@@ -653,7 +654,7 @@ void QMakeItem::addListValues( const QStringList& vl, const QString& v, const QS
 		{
 			if ( !e.isEmpty() )
 			{
-				ProjectItem* cItem = new QMakeItem( ProjectsModel::ValueType, it );
+				ProjectItem* cItem = new QMakeItem( ProjectItem::ValueType, it );
 				cItem->setValue( e );
 			}
 		}
@@ -735,31 +736,31 @@ void QMakeItem::writeItem( ProjectItem* it ) //
 	// write to buffer
 	switch ( it->getType() )
 	{
-		case ProjectsModel::EmptyType:
+		case ProjectItem::EmptyType:
 		{
 			mBuffer.append( it->getIndent() ).append( it->getEol() );
 			break;
 		}
-		case ProjectsModel::FolderType:
+		case ProjectItem::FolderType:
 		{
 			break;
 		}
-		case ProjectsModel::CommentType:
+		case ProjectItem::CommentType:
 		{
 			mBuffer.append( it->getIndent() ).append( it->getValue() ).append( it->getEol() );
 			break;
 		}
-		case ProjectsModel::NestedScopeType:
+		case ProjectItem::NestedScopeType:
 		{
 			mBuffer.append( it->getIndent() ).append( it->getValue() ).append( it->getOperator() );
 			break;
 		}
-		case ProjectsModel::ScopeType:
+		case ProjectItem::ScopeType:
 		{
 			mBuffer.append( it->getIndent() ).append( it->getValue() ).append( " {" ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
 			break;
 		}
-		case ProjectsModel::ScopeEndType:
+		case ProjectItem::ScopeEndType:
 		{
 			if ( it->parent()->isScope( false ) )
 			{
@@ -771,12 +772,12 @@ void QMakeItem::writeItem( ProjectItem* it ) //
 			}
 			break;
 		}
-		case ProjectsModel::VariableType:
+		case ProjectItem::VariableType:
 		{
 			mBuffer.append( it->getIndent() ).append( it->getValue() ).append( "\t" ).append( it->getOperator() ).append( " " );
 			break;
 		}
-		case ProjectsModel::ValueType:
+		case ProjectItem::ValueType:
 		{
 			if ( it->parent()->getMultiLine() )
 				mBuffer.append( it->getIndent() ).append( it->getValue() ).append( !it->isLast() ? " \\" : "" ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
@@ -784,17 +785,17 @@ void QMakeItem::writeItem( ProjectItem* it ) //
 				mBuffer.append( it->getValue() ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->isLast() ? it->getEol() : " " );
 			break;
 		}
-		case ProjectsModel::FunctionType:
+		case ProjectItem::FunctionType:
 		{
 			mBuffer.append( it->getIndent() ).append( it->getValue() ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
 			break;
 		}
-		case ProjectsModel::IncludeType:
+		case ProjectItem::IncludeType:
 		{
 			mBuffer.append( it->getIndent() ).append( it->getValue() ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
 			break;
 		}
-		case ProjectsModel::ProjectType:
+		case ProjectItem::ProjectType:
 		{
 			break;
 		}

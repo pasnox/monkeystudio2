@@ -47,3 +47,6 @@ SOURCES	+= pMainWindow.cpp
 # pTabbedMainWindow
 HEADERS	+= pTabbedMainWindow.h
 SOURCES	+= pTabbedMainWindow.cpp
+# pTreeComboBox
+HEADERS	+= pTreeComboBox.h
+SOURCES	+= pTreeComboBox.cpp

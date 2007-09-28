@@ -75,7 +75,7 @@ bool QMakeParser::loadFile( const QString& s, QMakeItem* it )
 	while ( !t.atEnd() )
 		content += t.readLine().trimmed();
 	// set project data
-	it->setType( ProjectsModel::ProjectType );
+	it->setType( ProjectItem::ProjectType );
 	it->setValue( s );
 	// parse buffer
 	mIsOpen = parseBuffer( 0, it );
@@ -83,7 +83,7 @@ bool QMakeParser::loadFile( const QString& s, QMakeItem* it )
 	if ( mIsOpen )
 		foreach ( ProjectItem* sit, it->getItemListValues( "SUBDIRS", "*", "" ) )
 			if ( QFile::exists( sit->getFilePath() ) )
-				loadFile( sit->getFilePath(), new QMakeItem( ProjectsModel::ProjectType, it ) );
+				loadFile( sit->getFilePath(), new QMakeItem( ProjectItem::ProjectType, it ) );
 			else
 				qWarning( "Can't open subproject: %s", qPrintable( sit->getFilePath() ) );
 	
@@ -116,7 +116,7 @@ int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 			// remove previous nested scopes
 			if( !pileNested.isEmpty() )
 			{
-				while( !pileNested.isEmpty() && pileNested.top()->getType() == ProjectsModel::NestedScopeType )
+				while( !pileNested.isEmpty() && pileNested.top()->getType() == ProjectItem::NestedScopeType )
 				{
 					qWarning() << "popping11 : " << pileNested.pop()->getValue();
 				}
@@ -161,7 +161,7 @@ int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 		{
 			if( !pileNested.isEmpty() )
 			{
-				while( !pileNested.isEmpty() && pileNested.top()->getType() == ProjectsModel::NestedScopeType )
+				while( !pileNested.isEmpty() && pileNested.top()->getType() == ProjectItem::NestedScopeType )
 				{
 					qWarning() << "popping33 : " << pileNested.pop()->getValue();
 				}
@@ -301,16 +301,16 @@ QMakeItem* QMakeParser::processValues( const QString& s, QMakeItem* i )
 
 QMakeItem* QMakeParser::addScope( const QString& v, const QString& o, bool b, QMakeItem* i )
 {
-	QMakeItem* s = new QMakeItem( b ? ProjectsModel::NestedScopeType : ProjectsModel::ScopeType, i );
+	QMakeItem* s = new QMakeItem( b ? ProjectItem::NestedScopeType : ProjectItem::ScopeType, i );
 	s->setValue( v.trimmed() );
 	s->setOperator( o.trimmed() );
-	(void) new QMakeItem( ProjectsModel::ScopeEndType, s );
+	(void) new QMakeItem( ProjectItem::ScopeEndType, s );
 	return s;
 }
 
 QMakeItem* QMakeParser::addFunction( const QString& s, const QString& o, QMakeItem* i )
 {
-	QMakeItem* f = new QMakeItem( ProjectsModel::FunctionType, i );
+	QMakeItem* f = new QMakeItem( ProjectItem::FunctionType, i );
 	f->setValue( s.trimmed() );
 	f->setOperator( o.trimmed() );
 	return f;
@@ -318,7 +318,7 @@ QMakeItem* QMakeParser::addFunction( const QString& s, const QString& o, QMakeIt
 
 QMakeItem* QMakeParser::addVariable( const QString& s, const QString& o, QMakeItem* i )
 {
-	QMakeItem* v = new QMakeItem( ProjectsModel::VariableType, i );
+	QMakeItem* v = new QMakeItem( ProjectItem::VariableType, i );
 	v->setValue( s.trimmed() );
 	v->setOperator( o.trimmed() );
 	mParseCommands = s.trimmed().endsWith( ".commands", Qt::CaseInsensitive );
@@ -327,21 +327,21 @@ QMakeItem* QMakeParser::addVariable( const QString& s, const QString& o, QMakeIt
 
 QMakeItem* QMakeParser::addValue( const QString& s, QMakeItem* i )
 {
-	QMakeItem* v = new QMakeItem( ProjectsModel::ValueType, i );
+	QMakeItem* v = new QMakeItem( ProjectItem::ValueType, i );
 	v->setValue( s.trimmed() );
 	return v;
 }
 
 QMakeItem* QMakeParser::addComment( const QString& s, QMakeItem* i )
 {
-	QMakeItem* c = new QMakeItem( ProjectsModel::CommentType, i );
+	QMakeItem* c = new QMakeItem( ProjectItem::CommentType, i );
 	c->setValue( s.trimmed() );
 	return c;
 }
 
 QMakeItem* QMakeParser::addEmpty( QMakeItem* i )
 {
-	QMakeItem* e = new QMakeItem( ProjectsModel::EmptyType, i );
+	QMakeItem* e = new QMakeItem( ProjectItem::EmptyType, i );
 	e->setValue( "" );
 	return e;
 }

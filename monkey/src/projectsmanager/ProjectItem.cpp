@@ -13,6 +13,7 @@
 **
 ****************************************************************************/
 #include "ProjectItem.h"
+#include "ProjectsModel.h"
 
 #include <QFileInfo>
 #include <QDir>
@@ -28,7 +29,7 @@ void ProjectItem::init()
 	setReadOnly( false );
 }
 
-ProjectItem::ProjectItem( ProjectsModel::NodeType t, ProjectItem* i )
+ProjectItem::ProjectItem( ProjectItem::NodeType t, ProjectItem* i )
 {
 	init();
 	setType( t );
@@ -58,57 +59,57 @@ void ProjectItem::setData( const QVariant& v, int r )
 	// set data
 	QStandardItem::setData( v, r );
 	// set modified state
-	if ( r != ProjectsModel::ModifiedRole )
+	if ( r != ProjectItem::ModifiedRole )
 		setModified( true );
 }
 
-void ProjectItem::setType( ProjectsModel::NodeType t )
-{ setData( t, ProjectsModel::TypeRole ); }
+void ProjectItem::setType( ProjectItem::NodeType t )
+{ setData( t, ProjectItem::TypeRole ); }
 
-ProjectsModel::NodeType ProjectItem::getType() const
-{ return (ProjectsModel::NodeType)data( ProjectsModel::TypeRole ).toInt(); }
+ProjectItem::NodeType ProjectItem::getType() const
+{ return (ProjectItem::NodeType)data( ProjectItem::TypeRole ).toInt(); }
 
 void ProjectItem::setOperator( const QString& s )
-{ setData( s, ProjectsModel::OperatorRole ); }
+{ setData( s, ProjectItem::OperatorRole ); }
 
 QString ProjectItem::getOperator() const
-{ return data( ProjectsModel::OperatorRole ).toString(); }
+{ return data( ProjectItem::OperatorRole ).toString(); }
 
 void ProjectItem::setValue( const QString& s )
-{ setData( s, ProjectsModel::ValueRole ); }
+{ setData( s, ProjectItem::ValueRole ); }
 
 QString ProjectItem::getValue() const
-{ return data( ProjectsModel::ValueRole ).toString(); }
+{ return data( ProjectItem::ValueRole ).toString(); }
 
 void ProjectItem::setMultiLine( bool b )
-{ setData( b, ProjectsModel::MultiLineRole ); }
+{ setData( b, ProjectItem::MultiLineRole ); }
 
 bool ProjectItem::getMultiLine() const
-{ return data( ProjectsModel::MultiLineRole ).toBool(); }
+{ return data( ProjectItem::MultiLineRole ).toBool(); }
 
 void ProjectItem::setComment( const QString& s )
-{ setData( s, ProjectsModel::CommentRole ); }
+{ setData( s, ProjectItem::CommentRole ); }
 
 QString ProjectItem::getComment() const
-{ return data( ProjectsModel::CommentRole ).toString(); }
+{ return data( ProjectItem::CommentRole ).toString(); }
 
 void ProjectItem::setFilePath( const QString& s )
-{ setData( s, ProjectsModel::FilePathRole ); }
+{ setData( s, ProjectItem::FilePathRole ); }
 
 QString ProjectItem::getFilePath() const
-{ return data( ProjectsModel::FilePathRole ).toString(); }
+{ return data( ProjectItem::FilePathRole ).toString(); }
 
 void ProjectItem::setFilteredView( int i )
-{ setData( i, ProjectsModel::FilteredViewRole ); }
+{ setData( i, ProjectItem::FilteredViewRole ); }
 
 int ProjectItem::getFilteredView() const
-{ return data( ProjectsModel::FilteredViewRole ).toInt(); }
+{ return data( ProjectItem::FilteredViewRole ).toInt(); }
 
 void ProjectItem::setOriginalView( int i )
-{ setData( i, ProjectsModel::OriginalViewRole ); }
+{ setData( i, ProjectItem::OriginalViewRole ); }
 
 int ProjectItem::getOriginalView() const
-{ return data( ProjectsModel::OriginalViewRole ).toInt(); }
+{ return data( ProjectItem::OriginalViewRole ).toInt(); }
 
 void ProjectItem::setModified( bool b )
 {
@@ -120,7 +121,7 @@ void ProjectItem::setModified( bool b )
 			it->setModified( b );
 	}
 	else
-		setData( b, ProjectsModel::ModifiedRole );
+		setData( b, ProjectItem::ModifiedRole );
 }
 
 bool ProjectItem::getModified() const
@@ -133,47 +134,47 @@ bool ProjectItem::getModified() const
 				return true;
 	}
 	// return default item value
-	return data( ProjectsModel::ModifiedRole ).toBool();
+	return data( ProjectItem::ModifiedRole ).toBool();
 }
 
 void ProjectItem::setReadOnly( bool b )
-{ setData( b, ProjectsModel::ReadOnlyRole ); }
+{ setData( b, ProjectItem::ReadOnlyRole ); }
 
 bool ProjectItem::getReadOnly() const
-{ return data( ProjectsModel::ReadOnlyRole ).toBool(); }
+{ return data( ProjectItem::ReadOnlyRole ).toBool(); }
 
 bool ProjectItem::isEmpty() const
-{ return getType() == ProjectsModel::EmptyType; }
+{ return getType() == ProjectItem::EmptyType; }
 
 bool ProjectItem::isFolder() const
-{ return getType() == ProjectsModel::FolderType; }
+{ return getType() == ProjectItem::FolderType; }
 
 bool ProjectItem::isComment() const
-{ return getType() == ProjectsModel::CommentType; }
+{ return getType() == ProjectItem::CommentType; }
 
 bool ProjectItem::isNested() const
-{ return getType() == ProjectsModel::NestedScopeType; }
+{ return getType() == ProjectItem::NestedScopeType; }
 
 bool ProjectItem::isScope( bool b ) const
-{ return b ? getType() == ProjectsModel::ScopeType || getType() == ProjectsModel::NestedScopeType : getType() == ProjectsModel::ScopeType; }
+{ return b ? getType() == ProjectItem::ScopeType || getType() == ProjectItem::NestedScopeType : getType() == ProjectItem::ScopeType; }
 
 bool ProjectItem::isScopeEnd() const
-{ return getType() == ProjectsModel::ScopeEndType; }
+{ return getType() == ProjectItem::ScopeEndType; }
 
 bool ProjectItem::isVariable() const
-{ return getType() == ProjectsModel::VariableType; }
+{ return getType() == ProjectItem::VariableType; }
 
 bool ProjectItem::isValue() const
-{ return getType() == ProjectsModel::ValueType; }
+{ return getType() == ProjectItem::ValueType; }
 
 bool ProjectItem::isFunction() const
-{ return getType() == ProjectsModel::FunctionType; }
+{ return getType() == ProjectItem::FunctionType; }
 
 bool ProjectItem::isInclude() const
-{ return getType() == ProjectsModel::IncludeType; }
+{ return getType() == ProjectItem::IncludeType; }
 
 bool ProjectItem::isProject() const
-{ return getType() == ProjectsModel::ProjectType; }
+{ return getType() == ProjectItem::ProjectType; }
 
 ProjectsModel* ProjectItem::model() const
 { return dynamic_cast<ProjectsModel*>( QStandardItem::model() ); }
@@ -314,10 +315,10 @@ ProjectItemList ProjectItem::match( int r, const QVariant& v ) const
 	return l;
 }
 
-ProjectItemList ProjectItem::getItemList( ProjectsModel::NodeType t, const QString& v, const QString& o, const QString& s ) const
+ProjectItemList ProjectItem::getItemList( ProjectItem::NodeType t, const QString& v, const QString& o, const QString& s ) const
 {
 	ProjectItemList l;
-	foreach ( ProjectItem* it, match( ProjectsModel::ValueRole, v ) )
+	foreach ( ProjectItem* it, match( ProjectItem::ValueRole, v ) )
 		if ( isEqualScope( it->scope(), s ) )
 			if ( ( !o.isEmpty() && it->getOperator() == o ) || o == "*" )
 				if ( it->getType() == t )
@@ -328,7 +329,7 @@ ProjectItemList ProjectItem::getItemList( ProjectsModel::NodeType t, const QStri
 ProjectItemList ProjectItem::getItemListValues( const QString& v, const QString& o, const QString& s ) const
 {
 	ProjectItemList l;
-	foreach ( ProjectItem* it, getItemList( ProjectsModel::VariableType, v, o, s ) )
+	foreach ( ProjectItem* it, getItemList( ProjectItem::VariableType, v, o, s ) )
 		for ( int i = 0; i < it->rowCount(); i++ )
 			if ( it->child( i, 0 )->isValue() )
 				l << it->child( i, 0 );
@@ -336,4 +337,4 @@ ProjectItemList ProjectItem::getItemListValues( const QString& v, const QString&
 }
 
 ProjectItem* ProjectItem::getItemVariable( const QString& v, const QString& o, const QString& s ) const
-{ return getItemList( ProjectsModel::VariableType, v, o, s ).value ( 0 ); }
+{ return getItemList( ProjectItem::VariableType, v, o, s ).value ( 0 ); }

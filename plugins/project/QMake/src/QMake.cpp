@@ -50,7 +50,7 @@ ProjectItem* QMake::getProjectItem( const QString& s )
 		return 0;
 	
 	// create project item
-	ProjectItem* it = new QMakeItem( ProjectsModel::ProjectType );
+	ProjectItem* it = new QMakeItem( ProjectItem::ProjectType );
 	
 	// set project filename
 	it->setValue( s );
