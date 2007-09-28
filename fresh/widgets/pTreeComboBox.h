@@ -21,13 +21,20 @@
 class QTreeView;
 class QAbstractItemModel;
 
-class pTreeComboBox : public QComboBox
+class pTreeComboBox : public QWidget //QComboBox
 {
 	Q_OBJECT
 
 public:
 	pTreeComboBox( QWidget* = 0 );
 	~pTreeComboBox();
+
+	bool eventFilter( QObject*, QEvent* );
+
+	virtual QSize sizeHint() const;
+
+	virtual QSize iconSize() const;
+	virtual void setIconSize( const QSize& );
 
 	virtual void hidePopup();
 	virtual void showPopup();
@@ -42,16 +49,25 @@ public:
 	void setCurrentIndex( const QModelIndex& );
 
 protected slots:
-	void internal_currentChanged( const QModelIndex&, const QModelIndex& );
+	void internal_activated( const QModelIndex& );
 	void internal_clicked( const QModelIndex& );
+	void internal_currentChanged( const QModelIndex&, const QModelIndex& );
 
 protected:
+	QSize mIconSize;
 	QPointer<QTreeView> mView;
 	QPointer<QAbstractItemModel> mModel;
 
+	void paintEvent( QPaintEvent* );
+	void hideEvent( QHideEvent* );
+	void enterEvent( QEvent* );
+	void leaveEvent( QEvent* );
+	void mousePressEvent( QMouseEvent* );
+
 signals:
-	void selected( const QModelIndex& );
+	void activated( const QModelIndex& );
 	void clicked( const QModelIndex& );
+	void selected( const QModelIndex& );
 
 };
 
