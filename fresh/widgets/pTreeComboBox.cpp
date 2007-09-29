@@ -19,7 +19,7 @@
 #include <QHeaderView>
 #include <QStyleOptionComboBox>
 #include <QStylePainter>
-#include <QEvent>
+#include <QMouseEvent>
 
 pTreeComboBox::pTreeComboBox( QWidget* w )
 	: QWidget( w ), mView( 0 ), mModel( 0 )
@@ -37,17 +37,22 @@ pTreeComboBox::~pTreeComboBox()
 bool pTreeComboBox::eventFilter( QObject* o, QEvent* e )
 {
 	QEvent::Type t = e->type();
-	if ( t == QEvent::Enter )
+	if ( t == QEvent::Leave )
+		hidePopup();
+	else if ( t == QEvent::Hide )
 	{
-		qWarning( "focus in" );
-		e->accept();
-		return true;
+		if ( currentIndex() != mIndex )
+			mView->setCurrentIndex( mIndex );
+		update();
 	}
-	else if ( t == QEvent::Leave )
+	else if ( t == QEvent::MouseMove )
 	{
-		qWarning( "focus out" );
-		e->accept();
-		return true;
+		if ( QMouseEvent* me = dynamic_cast<QMouseEvent*>( e ) )
+		{
+			QModelIndex i = mView->indexAt( mView->mapFromGlobal( me->globalPos() ) );
+			mView->clearSelection();
+			mView->setCurrentIndex( i );
+		}
 	}
 	return QWidget::eventFilter( o, e );
 }
@@ -79,14 +84,15 @@ void pTreeComboBox::paintEvent( QPaintEvent* )
 	o.subControls = QStyle::SC_ComboBoxEditField | QStyle::SC_ComboBoxArrow | QStyle::SC_ComboBoxFrame;
 
 	// QStyleOptionComboBox
-	o.currentIcon = currentIndex().data( Qt::DecorationRole ).value<QIcon>();
-	o.iconSize = iconSize();
-	o.currentText = currentIndex().data( Qt::DisplayRole ).toString();
+	QModelIndex i = mView && mView->isVisible() ? mIndex : currentIndex();
+	o.currentIcon = i.data( Qt::DecorationRole ).value<QIcon>();
+	o.iconSize = mView && mView->iconSize() != QSize( -1, -1 ) ? mView->iconSize() : iconSize();
+	o.currentText = i.data( Qt::DisplayRole ).toString();
 	o.editable = false;
 	o.frame = true;
 	o.popupRect = QRect();
 	
-	if ( !mView || ( mView && !mView->isVisible() && rect().contains( mapFromGlobal( QCursor::pos() ) ) ) )
+	if ( ( !mView || ( mView && !mView->isVisible() ) ) && rect().contains( mapFromGlobal( QCursor::pos() ) ) )
 		o.state |= QStyle::State_MouseOver;
 	
 	if ( mView && mView->isVisible() )
@@ -98,10 +104,7 @@ void pTreeComboBox::paintEvent( QPaintEvent* )
 }
 
 void pTreeComboBox::hideEvent( QHideEvent* )
-{
-	if ( mView && mView->isVisible() )
-		hidePopup();
-}
+{ hidePopup(); }
 
 void pTreeComboBox::enterEvent( QEvent* )
 { update(); }
@@ -113,26 +116,20 @@ void pTreeComboBox::mousePressEvent( QMouseEvent* )
 {
 	if ( !mView )
 		return;
-	
-	if ( mView->isVisible() )
-		hidePopup();
-	else
-		showPopup();
+	mView->isVisible() ? hidePopup() : showPopup();
 }
 
 void pTreeComboBox::hidePopup()
 {
-	if ( mView )
-	{
+	if ( mView && mView->isVisible() )
 		mView->hide();
-		update();
-	}
 }
 
 void pTreeComboBox::showPopup()
 {
-	if ( mView )
+	if ( mView && !mView->isVisible() )
 	{
+		mIndex = currentIndex();
 		mView->expandAll();
 		mView->move( mapToGlobal( rect().bottomLeft() ) );
 		mView->resize( width(), mView->height() );
@@ -152,7 +149,9 @@ void pTreeComboBox::setView( QTreeView* t )
 	mView = t;
 	if ( mView )
 	{
-		mView->window()->setWindowFlags( Qt::Popup );
+		mView->setWindowFlags( Qt::Popup );
+		mView->setEditTriggers( QAbstractItemView::NoEditTriggers );
+		mView->setMouseTracking( true );
 		mView->viewport()->installEventFilter( this );
 		setModel( mModel );
 		connect( mView, SIGNAL( activated( const QModelIndex& ) ), this, SLOT( internal_activated( const QModelIndex& ) ) );
@@ -165,9 +164,10 @@ QAbstractItemModel* pTreeComboBox::model() const
 
 void pTreeComboBox::setModel( QAbstractItemModel* m )
 {
-	if ( mView && mView->model() != m )
-	{
+	if ( mModel != m )
 		mModel = m;
+	if ( mView && mView->model() != mModel )
+	{
 		mView->setModel( mModel );
 		connect( mView->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( internal_currentChanged( const QModelIndex&, const QModelIndex& ) ) );
 	}
@@ -178,21 +178,27 @@ QModelIndex pTreeComboBox::currentIndex() const
 
 void pTreeComboBox::setCurrentIndex( const QModelIndex& i )
 {
-	if ( mView )
+	if ( mView && ( currentIndex() != i || !i.isValid() ) )
+	{
 		mView->setCurrentIndex( i );
+		mIndex = i;
+		update();
+	}
 }
 
 void pTreeComboBox::internal_activated( const QModelIndex& i )
 {
+	mIndex = i;
 	emit activated( i );
 	hidePopup();
 }
 
 void pTreeComboBox::internal_clicked( const QModelIndex& i )
 {
+	mIndex = i;
 	emit clicked( i );
 	hidePopup();
 }
 
 void pTreeComboBox::internal_currentChanged( const QModelIndex& c, const QModelIndex& )
-{ emit selected( c ); }
+{ emit currentChanged( c ); }

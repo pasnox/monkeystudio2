@@ -57,6 +57,7 @@ protected:
 	QSize mIconSize;
 	QPointer<QTreeView> mView;
 	QPointer<QAbstractItemModel> mModel;
+	QModelIndex mIndex;
 
 	void paintEvent( QPaintEvent* );
 	void hideEvent( QHideEvent* );
@@ -67,7 +68,7 @@ protected:
 signals:
 	void activated( const QModelIndex& );
 	void clicked( const QModelIndex& );
-	void selected( const QModelIndex& );
+	void currentChanged( const QModelIndex& );
 
 };
 
