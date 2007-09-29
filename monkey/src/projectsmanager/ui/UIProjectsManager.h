@@ -32,6 +32,7 @@ class Q_MONKEY_EXPORT UIProjectsManager : public QDockWidget, public Ui::UIProje
 	
 public:
 	ProjectItem* currentProject() const;
+	void setCurrentProject( ProjectItem* );
 
 	inline ProjectsModel* model() const { return mProjects; }
 	inline ProjectsProxy* proxy() const { return mProxy; }
@@ -50,6 +51,10 @@ private slots:
 	void tvProjects_currentChanged( const QModelIndex&, const QModelIndex& );
 	void on_tvProjects_doubleClicked( const QModelIndex& );
 
+	void internal_aboutToClose();
+	void internal_closed();
+	void internal_modifiedChanged( bool );
+
 public slots:
 	bool openProject( const QString& );
 	bool closeProject( const QString& );
@@ -61,6 +66,11 @@ public slots:
 	void projectCloseAll_triggered();
 	void projectSettings_triggered();
 	void projectAddExistingFiles_triggered();
+
+signals:
+	void aboutToClose( ProjectItem* );
+	void closed( ProjectItem* );
+	void modifiedChanged( ProjectItem*, bool );
 
 };
 

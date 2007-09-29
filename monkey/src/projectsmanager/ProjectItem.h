@@ -177,7 +177,7 @@ public:
 	// get direct child project, or all according to bool
 	virtual ProjectItemList childrenProjects( bool = true ) const;
 	// get all project items
-	virtual ProjectItemList projectItems() const;
+	virtual ProjectItemList projectItems( bool = true ) const;
 	// get all scope from project
 	virtual ProjectItemList projectScopes() const;
 	// get all unique scope list from project
@@ -200,8 +200,6 @@ public:
 	virtual QString completeBaseName( const QString& );
 	// name of project
 	virtual QString name() const;
-	// tell if project is open
-	virtual bool isOpen() const = 0;
 	// open project based on filename in getValue()
 	virtual bool open() = 0;
 	// open project settings dialog
@@ -231,7 +229,7 @@ public:
 	virtual void debug() = 0;
 	
 	// get index list
-	virtual ProjectItemList match( int, const QVariant& ) const;
+	virtual ProjectItemList match( int, const QVariant&, bool = true ) const;
 	// get all items matching
 	virtual ProjectItemList getItemList( ProjectItem::NodeType, const QString&, const QString&, const QString& ) const;
 	// get item scope, creating it if needed
@@ -259,12 +257,16 @@ protected:
 	CompilerPlugin* mCompiler;
 	DebuggerPlugin* mDebugger;
 	InterpreterPlugin* mInterpreter;
-	bool mIsOpen;
 	QString mBuffer;
 	virtual void init();
 	virtual void redoLayout( ProjectItem* = 0 ) = 0;
 	virtual void writeProject() = 0;
 	virtual void writeItem( ProjectItem* ) = 0;
+
+signals:
+	void aboutToClose();
+	void closed();
+	void modifiedChanged( bool );
 
 };
 

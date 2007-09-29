@@ -90,10 +90,13 @@ UIProjectsManager::~UIProjectsManager()
 ProjectItem* UIProjectsManager::currentProject() const
 {
 	// get current item
-	ProjectItem* it = mProjects->itemFromIndex( mProxy->mapToSource( tvProjects->currentIndex() ) );
+	ProjectItem* p = mProjects->itemFromIndex( mProxy->mapToSource( tvProjects->currentIndex() ) );
 	// return project item
-	return it ? it->project() : 0;
+	return p ? p->project() : 0;
 }
+
+void UIProjectsManager::setCurrentProject( ProjectItem* p )
+{ tvProjects->setCurrentIndex( p ? mProxy->mapFromSource( p->index() ) : QModelIndex() ); }
 
 void UIProjectsManager::initializeProject( ProjectItem* it )
 {
@@ -105,6 +108,17 @@ void UIProjectsManager::initializeProject( ProjectItem* it )
 	mProxy->refresh( it );
 	// set current project
 	tvProjects->setCurrentIndex( mProxy->mapFromSource( it->index() ) );
+	// connections
+	connect( it, SIGNAL( aboutToClose() ), this, SLOT( internal_aboutToClose() ) );
+	connect( it, SIGNAL( closed() ), this, SLOT( internal_closed() ) );
+	connect( it, SIGNAL( modifiedChanged( bool ) ), this, SLOT( internal_modifiedChanged( bool ) ) );
+	// subproject connections
+	foreach ( ProjectItem* p, it->childrenProjects() )
+	{
+		connect( p, SIGNAL( aboutToClose() ), this, SLOT( internal_aboutToClose() ) );
+		connect( p, SIGNAL( closed() ), this, SLOT( internal_closed() ) );
+		connect( p, SIGNAL( modifiedChanged( bool ) ), this, SLOT( internal_modifiedChanged( bool ) ) );
+	}
 }
 
 void UIProjectsManager::cbProjects_activated( const QModelIndex& i )
@@ -123,7 +137,7 @@ void UIProjectsManager::tvProjects_currentChanged( const QModelIndex& c, const Q
 	pm->setCurrentDebugger( it ? it->debugger() : 0 );
 	pm->setCurrentInterpreter( it ? it->interpreter() : 0 );
 	// desactive project action
-	mb->action( "mProject/mSave/aCurrent" )->setEnabled( it );
+	mb->action( "mProject/mSave/aCurrent" )->setEnabled( it ? it->getModified() : false );
 	mb->action( "mProject/mSave/aAll" )->setEnabled( it );
 	mb->action( "mProject/mClose/aCurrent" )->setEnabled( it );
 	mb->action( "mProject/mClose/aAll" )->setEnabled( it );
@@ -140,6 +154,27 @@ void UIProjectsManager::on_tvProjects_doubleClicked( const QModelIndex& i )
 	// if item and file exists, open it
 	if ( it && QFile::exists( it->getFilePath() ) )
 		pFileManager::instance()->openFile( it->getFilePath() );
+}
+
+void UIProjectsManager::internal_aboutToClose()
+{
+	emit aboutToClose( qobject_cast<ProjectItem*>( sender() ) );
+	qWarning( "aboutToclose: %s", qPrintable( qobject_cast<ProjectItem*>( sender() )->getValue() ) );
+}
+
+void UIProjectsManager::internal_closed()
+{
+	emit closed( qobject_cast<ProjectItem*>( sender() ) );
+	qWarning( "closed: %s", qPrintable( qobject_cast<ProjectItem*>( sender() )->getValue() ) );
+}
+
+void UIProjectsManager::internal_modifiedChanged( bool b )
+{
+	ProjectItem* p = qobject_cast<ProjectItem*>( sender() );
+	if ( p && currentProject() == p )
+		pMenuBar::instance()->action( "mProject/mSave/aCurrent" )->setEnabled( p->getModified() );
+	emit modifiedChanged( p, b );
+	qWarning( "modifiedChanged: %s, %d", qPrintable( p->getValue() ), b );
 }
 
 bool UIProjectsManager::openProject( const QString& s )
@@ -223,11 +258,9 @@ void UIProjectsManager::projectSaveAll_triggered()
 
 void UIProjectsManager::projectCloseCurrent_triggered()
 {
-	ProjectItem* p = currentProject();
-	if ( p )
+	if ( ProjectItem* p = currentProject() )
 	{
-		 // fucking Qt bug that not emit currentChange is current item is not toplevelitem
-		tvProjects->setCurrentIndex( mProxy->mapFromSource( p->index() ) );
+		setCurrentProject( p );
 		p->close();
 	}
 }
@@ -236,8 +269,7 @@ void UIProjectsManager::projectCloseAll_triggered()
 {
 	foreach ( ProjectItem* p, mProjects->projects( false ) )
 	{
-		 // fucking Qt bug that not emit currentChange is current item is not toplevelitem
-		tvProjects->setCurrentIndex( mProxy->mapFromSource( p->index() ) );
+		setCurrentProject( p );
 		p->close();
 	}
 }

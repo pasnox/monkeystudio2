@@ -32,10 +32,7 @@ QMakeItem::QMakeItem( ProjectItem::NodeType t, ProjectItem* i )
 
 void QMakeItem::setType( ProjectItem::NodeType t )
 {
-	// set data
-	setData( t, ProjectItem::TypeRole );
-	
-	// update icon
+	ProjectItem::setType( t );
 	switch( t )
 	{
 		case ProjectItem::EmptyType:
@@ -80,7 +77,7 @@ void QMakeItem::setType( ProjectItem::NodeType t )
 void QMakeItem::setValue( const QString& s )
 {
 	// set data
-	setData( s, ProjectItem::ValueRole );
+	ProjectItem::setValue( s );
 	
 	// set text
 	setText( s );
@@ -154,7 +151,7 @@ void QMakeItem::setFilePath( const QString& s )
 		return;
 	
 	// set data
-	setData( canonicalFilePath( s ), ProjectItem::FilePathRole );
+	ProjectItem::setFilePath( canonicalFilePath( s ) );
 	
 	// set text
 	switch( getType() )
@@ -218,9 +215,7 @@ QString QMakeItem::getEol() const
 }
 
 bool QMakeItem::isFirst() const
-{
-	return row() == 0;
-}
+{ return row() == 0; }
 
 bool QMakeItem::isLast() const
 {
@@ -232,7 +227,7 @@ bool QMakeItem::isLast() const
 	return false;
 }
 
-QString QMakeItem::scope() const
+QString QMakeItem::scope() const // --
 {
 	QString s;
 	ProjectItem* j = const_cast<QMakeItem*>( this );
@@ -263,9 +258,7 @@ bool QMakeItem::isEqualScope( const QString& s1, const QString& s2 ) const
 }
 
 void QMakeItem::appendRow( ProjectItem* i )
-{
-	insertRow( rowCount(), i );
-}
+{ insertRow( rowCount(), i ); }
 
 void QMakeItem::insertRow( int r, ProjectItem* it )
 {
@@ -282,6 +275,9 @@ void QMakeItem::insertRow( int r, ProjectItem* it )
 	}
 	// default insert
 	QStandardItem::insertRow( r, it );
+	
+	// set project modified
+	project()->setModified( true );
 }
 
 bool QMakeItem::swapRow( int i, int j )
@@ -326,14 +322,10 @@ bool QMakeItem::moveRowDown( int i )
 }
 
 bool QMakeItem::moveUp()
-{
-	return parent() ? parent()->moveRowUp( row() ) : false;
-}
+{ return parent() ? parent()->moveRowUp( row() ) : false; }
 
 bool QMakeItem::moveDown()
-{
-	return parent()  ? parent()->moveRowDown( row() ) : false;
-}
+{ return parent()  ? parent()->moveRowDown( row() ) : false; }
 
 void QMakeItem::remove()
 {
@@ -341,46 +333,73 @@ void QMakeItem::remove()
 		parent()->removeRow( row() );
 	else if ( model() )
 		model()->removeRow( row(), index().parent() );
+	else
+		Q_ASSERT( 0 );
 }
-
-bool QMakeItem::isOpen() const
-{ return isProject() ? mIsOpen : project()->isOpen(); }
 
 bool QMakeItem::open()
 {
 	if ( isProject() )
 	{
-		if ( mIsOpen || !QFile::exists( getValue() ) )
+		if ( !QFile::exists( getValue() ) )
 			return false;
 		
 		// populate datas
 		QMakeParser p( getValue(), const_cast<QMakeItem*>( this ) );
 		
-		// return parse state
-		mIsOpen = p.isOpen();
+		// set proejct writable
+		setReadOnly( false );
 		
 		// set project unmodified
 		setModified( false );
 		
-		return mIsOpen;
+		// same for childproject
+		foreach ( ProjectItem* p, childrenProjects( true ) )
+		{
+			p->setReadOnly( false );
+			p->setModified( false );
+		}
+		
+		return p.isOpen();
 	}
 	return false;
 }
 
 void QMakeItem::editSettings()
-{ UIQMakeProjectSettings::instance( project() )->exec(); }
+{ if ( isProject() ) UIQMakeProjectSettings::instance( this )->exec(); }
 
 void QMakeItem::close()
 {
-	saveAll( true );
+	// only project item can call this
+	if ( !isProject() )
+		return;
+	
+	// close subprojects first
+	while ( ProjectItem* p = childrenProjects( false ).value( 0 ) )
+		p->close();
+	
+	// tell we will close the project
+	emit aboutToClose();
+	
+	// ask to save project if needed
+	save( true );
+	
+	// tell project is closed
+	emit closed();
+	
+	// remove it from model
 	remove();
 }
 
 void QMakeItem::save( bool b )
 {
-	ProjectItem* p = project();
-	if ( p->getReadOnly() || !p->getModified() )
+	// only project item can call this
+	if ( !isProject() )
 		return;
+	
+	if ( getReadOnly() || !getModified() )
+		return;
+	
 	if ( !b || ( b && question( QObject::tr( "Save Project..." ), QObject::tr( "The project [%1] has been modified, save it ?" ).arg( name() ) ) ) )
 		writeProject();
 }
@@ -568,9 +587,7 @@ QStringList QMakeItem::getListValues( const QString& v, const QString& o, const 
 }
 
 QString QMakeItem::getStringValues( const QString& v, const QString& o, const QString& s ) const
-{
-	return getListValues( v, o, s ).join( " " );
-}
+{ return getListValues( v, o, s ).join( " " ); }
 
 void QMakeItem::setListValues( const QStringList& vl, const QString& v, const QString& o, const QString& s )
 {
@@ -622,9 +639,7 @@ void QMakeItem::setListValues( const QStringList& vl, const QString& v, const QS
 }
 
 void QMakeItem::setStringValues( const QString& val, const QString& v, const QString& o, const QString& s )
-{
-	setListValues( val.isEmpty() ? QStringList() : QStringList( val ), v, o, s );
-}
+{ setListValues( val.isEmpty() ? QStringList() : QStringList( val ), v, o, s ); }
 
 void QMakeItem::addListValues( const QStringList& vl, const QString& v, const QString& o, const QString& s )
 {
@@ -662,9 +677,7 @@ void QMakeItem::addListValues( const QStringList& vl, const QString& v, const QS
 }
 
 void QMakeItem::addStringValues( const QString& val, const QString& v, const QString& o, const QString& s )
-{
-	addListValues( QStringList( val ), v, o, s );
-}
+{ addListValues( QStringList( val ), v, o, s ); }
 
 void QMakeItem::redoLayout( ProjectItem* it ) //
 {

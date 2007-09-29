@@ -34,7 +34,7 @@ UIItemSettings::UIItemSettings( ProjectItem* i )
 	for ( int i = 0; i < me.keyCount(); i++ )
 	{
 		// don t create item for these roles
-		if ( me.value( i ) > ProjectItem::FirstRole && me.value( i ) < ProjectItem::ModifiedRole )
+		if ( me.value( i ) > ProjectItem::FirstRole && me.value( i ) < ProjectItem::LastRole )
 		{
 			// create item role
 			QTreeWidgetItem* it = new QTreeWidgetItem( twValueRoles );

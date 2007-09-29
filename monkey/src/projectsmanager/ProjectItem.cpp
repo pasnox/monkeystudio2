@@ -21,12 +21,10 @@
 
 void ProjectItem::init()
 {
-	mIsOpen = false;
 	mCompiler = 0L;
 	mDebugger = 0L;
 	mInterpreter = 0L;
 	mBuffer.clear();
-	setReadOnly( false );
 }
 
 ProjectItem::ProjectItem( ProjectItem::NodeType t, ProjectItem* i )
@@ -44,22 +42,20 @@ void ProjectItem::setPlugin( ProjectPlugin* p )
 {
 	if ( isProject() )
 		mPlugin = p;
-	else
-		project()->setPlugin( p );
 }
 
 ProjectPlugin* ProjectItem::plugin() const
-{ return isProject() ? mPlugin : project()->plugin(); }
+{ return isProject() ? mPlugin : 0; }
 
 void ProjectItem::setData( const QVariant& v, int r )
 {
 	// check read only
-	if ( getReadOnly() )
+	if ( parent() && getReadOnly() )
 		return;
 	// set data
 	QStandardItem::setData( v, r );
 	// set modified state
-	if ( r != ProjectItem::ModifiedRole )
+	if ( r != ProjectItem::ModifiedRole && r != ProjectItem::ReadOnlyRole && r != ProjectItem::FilteredViewRole && r != ProjectItem::OriginalViewRole && r != ProjectItem::FilePathRole )
 		setModified( true );
 }
 
@@ -113,35 +109,41 @@ int ProjectItem::getOriginalView() const
 
 void ProjectItem::setModified( bool b )
 {
-	// if item project and not modified
-	if ( project() == this && !b )
-	{
-		// set unmodified to all items
+	// if project, and want set no modified, need update all items of the project
+	if ( isProject() && !b )
 		foreach ( ProjectItem* it, projectItems() )
-			it->setModified( b );
-	}
-	else
-		setData( b, ProjectItem::ModifiedRole );
+			it->setModified( false );
+
+	setData( b, ProjectItem::ModifiedRole );
+	emit modifiedChanged( b );
 }
 
 bool ProjectItem::getModified() const
 {
 	// if project, modified is true if one of its items is modified
-	if ( project() == this )
-	{
+	if ( isProject() )
 		foreach ( ProjectItem* it, projectItems() )
 			if ( it->getModified() )
 				return true;
-	}
 	// return default item value
 	return data( ProjectItem::ModifiedRole ).toBool();
 }
 
 void ProjectItem::setReadOnly( bool b )
-{ setData( b, ProjectItem::ReadOnlyRole ); }
+{
+	if ( isProject() )
+		foreach ( ProjectItem* it, projectItems() )
+			it->setReadOnly( b );
+	if ( isProject() || !project()->getReadOnly() )
+		setData( b, ProjectItem::ReadOnlyRole );
+}
 
 bool ProjectItem::getReadOnly() const
-{ return data( ProjectItem::ReadOnlyRole ).toBool(); }
+{
+	if ( !isProject() && project()->getReadOnly() )
+		return true;
+	return data( ProjectItem::ReadOnlyRole ).toBool();
+}
 
 bool ProjectItem::isEmpty() const
 { return getType() == ProjectItem::EmptyType; }
@@ -184,13 +186,16 @@ ProjectItem* ProjectItem::parent() const
 
 int ProjectItem::parentCount() const
 {
-	ProjectItem* p = project();
-	ProjectItem* it = const_cast<ProjectItem*>( this );
-	int i = 0;
-	while ( it && it != p )
+	if ( isProject() || !parent() )
+		return 0;
+	int i = 1;
+	ProjectItem* it = parent();
+	while ( it->parent() )
 	{
-		i++;
 		it = it->parent();
+		i++;
+		if ( it->isProject() )
+			return i;
 	}
 	return i;
 }
@@ -200,12 +205,11 @@ ProjectItem* ProjectItem::child( int i, int j ) const
 
 ProjectItemList ProjectItem::children( bool r, bool s ) const
 {
-	ProjectItem* p = s ? project() : 0;
 	ProjectItemList l;
 	for ( int i = 0; i < rowCount(); i++ )
 	{
 		ProjectItem* ci = child( i, 0 );
-		if ( !s || s && ci->project() == p )
+		if ( !s || !ci->isProject() )
 		{
 			l << ci;
 			if ( r && ci->rowCount() )
@@ -220,9 +224,12 @@ void ProjectItem::refresh()
 
 ProjectItem* ProjectItem::project() const
 {
-	ProjectItem* it = const_cast<ProjectItem*>( this );
+	if ( isProject() )
+		return const_cast<ProjectItem*>( this );
+	ProjectItem* it = parent();
 	while ( it && !it->isProject() )
 		it = it->parent();
+	Q_ASSERT( it && it->isProject() );
 	return it;
 }
 
@@ -233,20 +240,15 @@ ProjectItem* ProjectItem::parentProject() const
 }
 
 ProjectItemList ProjectItem::childrenProjects( bool b ) const
-{
-	ProjectItemList l;
-	foreach ( ProjectItem* it, children( b ) )
-		if ( it->isProject() )
-			l << it;
-	return l;
-}
+{ return match( ProjectItem::ProjectType, "*", false ); }
 
-ProjectItemList ProjectItem::projectItems() const
-{ return project()->children( true, true ); }
+ProjectItemList ProjectItem::projectItems( bool b ) const
+{ return project()->children( true, b ); }
 
 ProjectItemList ProjectItem::projectScopes() const
 {
 	ProjectItemList l;
+	l << project();
 	foreach ( ProjectItem* it, projectItems() )
 		if ( it->isScope() )
 			l << it;
@@ -255,7 +257,7 @@ ProjectItemList ProjectItem::projectScopes() const
 
 QStringList ProjectItem::projectScopesList() const
 {
-	QStringList l( "" );
+	QStringList l;
 	foreach ( ProjectItem* it, projectScopes() )
 	{
 		const QString s = it->scope();
@@ -305,24 +307,24 @@ QString ProjectItem::completeBaseName( const QString& s )
 QString ProjectItem::name() const
 { return QFileInfo( canonicalFilePath() ).completeBaseName(); }
 
-ProjectItemList ProjectItem::match( int r, const QVariant& v ) const
+ProjectItemList ProjectItem::match( int r, const QVariant& v, bool b ) const
 {
 	ProjectItemList l;
 	const QString s = v.toString();
-	foreach ( ProjectItem* it, projectItems() )
-		if ( it->getValue() == s || s == "*" )
-			l << it;
+	foreach ( ProjectItem* it, projectItems( b ) )
+		if ( it->getType() == r )
+			if ( it->getValue() == s || s == "*" )
+				l << it;
 	return l;
 }
 
 ProjectItemList ProjectItem::getItemList( ProjectItem::NodeType t, const QString& v, const QString& o, const QString& s ) const
 {
 	ProjectItemList l;
-	foreach ( ProjectItem* it, match( ProjectItem::ValueRole, v ) )
+	foreach ( ProjectItem* it, match( t, v ) )
 		if ( isEqualScope( it->scope(), s ) )
 			if ( ( !o.isEmpty() && it->getOperator() == o ) || o == "*" )
-				if ( it->getType() == t )
-					l << it;
+				l << it;
 	return l;
 }
 

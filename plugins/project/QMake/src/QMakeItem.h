@@ -44,7 +44,6 @@ public:
 	virtual bool moveDown();
 	virtual void remove();
 	
-	virtual bool isOpen() const;
 	virtual bool open();
 	virtual void editSettings();
 	virtual void close();
