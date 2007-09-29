@@ -66,7 +66,7 @@ UIProjectsManager::UIProjectsManager( QWidget* w )
 	
 	// set proxy properties
 	// set types to filter
-	mProxy->setFilterRoles( QList<int>() << ProjectItem::ValueType );
+	mProxy->setFilterRoles( QList<int>() << ProjectItem::ProjectType << ProjectItem::ValueType );
 	// filter are negate
 	mProxy->setNegateFilter( false );
 	// apply filtering
@@ -79,7 +79,8 @@ UIProjectsManager::UIProjectsManager( QWidget* w )
 	
 	// connections
 	connect( mProxy, SIGNAL( filteringChanged( bool ) ), mb->action( "mView/aFiltered" ), SLOT( setChecked( bool ) ) );
-	connect( cbProjects, SIGNAL( selected( const QModelIndex& ) ), this, SLOT( cbProjects_selected( const QModelIndex& ) ) );
+	connect( cbProjects, SIGNAL( activated( const QModelIndex& ) ), this, SLOT( cbProjects_activated( const QModelIndex& ) ) );
+	connect( cbProjects, SIGNAL( clicked( const QModelIndex& ) ), this, SLOT( cbProjects_activated( const QModelIndex& ) ) );
 	connect( tvProjects->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( tvProjects_currentChanged( const QModelIndex&, const QModelIndex& ) ) );
 }
 
@@ -106,7 +107,7 @@ void UIProjectsManager::initializeProject( ProjectItem* it )
 	tvProjects->setCurrentIndex( mProxy->mapFromSource( it->index() ) );
 }
 
-void UIProjectsManager::cbProjects_selected( const QModelIndex& i )
+void UIProjectsManager::cbProjects_activated( const QModelIndex& i )
 { tvProjects->setCurrentIndex( mProxy->mapFromSource( mProjects->projectsProxy()->mapToSource( i ) ) ); }
 
 void UIProjectsManager::tvProjects_currentChanged( const QModelIndex& c, const QModelIndex& )
@@ -128,6 +129,8 @@ void UIProjectsManager::tvProjects_currentChanged( const QModelIndex& c, const Q
 	mb->action( "mProject/mClose/aAll" )->setEnabled( it );
 	mb->action( "mProject/aSettings" )->setEnabled( it );
 	mb->action( "mProject/aAddExistingFiles" )->setEnabled( it );
+	// select correct project in combobox
+	cbProjects->setCurrentIndex( it ? mProjects->projectsProxy()->mapFromSource( it->index() ) : QModelIndex() );
 }
 
 void UIProjectsManager::on_tvProjects_doubleClicked( const QModelIndex& i )
