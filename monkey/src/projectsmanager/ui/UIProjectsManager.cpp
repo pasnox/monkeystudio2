@@ -104,8 +104,6 @@ void UIProjectsManager::initializeProject( ProjectItem* it )
 	tvProjects->selectionModel()->clear();
 	// append project item
 	mProjects->appendRow( it );
-	// refresh project
-	mProxy->refresh( it );
 	// set current project
 	tvProjects->setCurrentIndex( mProxy->mapFromSource( it->index() ) );
 	// connections
@@ -145,6 +143,8 @@ void UIProjectsManager::tvProjects_currentChanged( const QModelIndex& c, const Q
 	mb->action( "mProject/aAddExistingFiles" )->setEnabled( it );
 	// select correct project in combobox
 	cbProjects->setCurrentIndex( it ? mProjects->projectsProxy()->mapFromSource( it->index() ) : QModelIndex() );
+	// emit currentChanged
+	emit currentChanged( it );
 }
 
 void UIProjectsManager::on_tvProjects_doubleClicked( const QModelIndex& i )
@@ -157,16 +157,10 @@ void UIProjectsManager::on_tvProjects_doubleClicked( const QModelIndex& i )
 }
 
 void UIProjectsManager::internal_aboutToClose()
-{
-	emit aboutToClose( qobject_cast<ProjectItem*>( sender() ) );
-	qWarning( "aboutToclose: %s", qPrintable( qobject_cast<ProjectItem*>( sender() )->getValue() ) );
-}
+{ emit aboutToClose( qobject_cast<ProjectItem*>( sender() ) ); }
 
 void UIProjectsManager::internal_closed()
-{
-	emit closed( qobject_cast<ProjectItem*>( sender() ) );
-	qWarning( "closed: %s", qPrintable( qobject_cast<ProjectItem*>( sender() )->getValue() ) );
-}
+{ emit closed( qobject_cast<ProjectItem*>( sender() ) ); }
 
 void UIProjectsManager::internal_modifiedChanged( bool b )
 {
@@ -174,7 +168,6 @@ void UIProjectsManager::internal_modifiedChanged( bool b )
 	if ( p && currentProject() == p )
 		pMenuBar::instance()->action( "mProject/mSave/aCurrent" )->setEnabled( p->getModified() );
 	emit modifiedChanged( p, b );
-	qWarning( "modifiedChanged: %s, %d", qPrintable( p->getValue() ), b );
 }
 
 bool UIProjectsManager::openProject( const QString& s )
@@ -240,7 +233,7 @@ void UIProjectsManager::projectOpen_triggered()
 	}
 	// store file open path
 	if ( !l.isEmpty() )
-		pRecentsManager::instance()->setRecentProjectOpenPath( QFileInfo( l.at( 0 ) ).canonicalPath() );
+		pRecentsManager::instance()->setRecentProjectOpenPath( QFileInfo( l.at( 0 ) ).path() );
 }
 
 void UIProjectsManager::projectSaveCurrent_triggered()

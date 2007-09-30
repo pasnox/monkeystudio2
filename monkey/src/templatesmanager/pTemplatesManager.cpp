@@ -10,6 +10,7 @@
 #include "pTemplatesManager.h"
 #include "pMonkeyStudio.h"
 #include "pSettings.h"
+#include "ProjectItem.h"
 
 #include <QDir>
 #include <QHash>
@@ -194,7 +195,7 @@ const QString pTemplatesManager::processContent( pTemplateContent tc )
 				l[0] = tc.Author;
 			// project
 			else if ( v == "project" )
-				l[0] = tc.Project;
+				l[0] = tc.Project ? tc.Project->name() : QString();
 			else
 				l[0] = "";
 			// process function

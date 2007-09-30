@@ -71,6 +71,7 @@ signals:
 	void aboutToClose( ProjectItem* );
 	void closed( ProjectItem* );
 	void modifiedChanged( ProjectItem*, bool );
+	void currentChanged( ProjectItem* );
 
 };
 

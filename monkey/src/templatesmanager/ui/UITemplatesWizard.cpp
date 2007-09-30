@@ -5,6 +5,10 @@
 #include "pMonkeyStudio.h"
 #include "pSettings.h"
 
+#include "ProjectsModel.h"
+#include "ProjectsProxy.h"
+#include "UIProjectsManager.h"
+
 #include <QFileInfo>
 #include <QDir>
 #include <QDateTime>
@@ -20,6 +24,11 @@ UITemplatesWizard::UITemplatesWizard( QWidget* w )
 	cbLanguages->addItems( availableLanguages() );
 	// fill type comboobox
 	pTemplate::fillComboBox( cbTypes );
+	// assign projects combobox
+	mProjects = UIProjectsManager::instance()->model();
+	cbProjects->setModel( mProjects->projectsProxy() );
+	ProjectItem* p = UIProjectsManager::instance()->currentProject();
+	cbProjects->setCurrentIndex( mProjects->projectsProxy()->mapFromSource( p ? p->index() : QModelIndex() ) );
 	// show correct page
 	on_swPages_currentChanged( 0 );
 	// restore infos
@@ -159,7 +168,9 @@ void UITemplatesWizard::generatePreview()
 			tc.Name = leBaseName->text();
 			tc.Author = leAuthor->text();
 			tc.License = cbLicenses->currentText();
-			tc.Project = cbProjects->currentText();
+			tc.Project = mProjects->itemFromIndex( mProjects->projectsProxy()->mapToSource( cbProjects->currentIndex() ) );
+			if ( !cbAddToProject->isChecked() )
+				tc.Project = 0;
 			tc.FileName = p->fileName();
 			tc.Comment = tr( "Your comment here" );
 			tc.Content = p->editor()->text();
@@ -175,6 +186,10 @@ void UITemplatesWizard::generatePreview()
 
 void UITemplatesWizard::accept()
 {
+	// get current template type
+	pTemplate::TemplateType t = (pTemplate::TemplateType)cbTypes->itemData( cbTypes->currentIndex() ).toInt();
+	// get project item
+	ProjectItem* it = mProjects->itemFromIndex( mProjects->projectsProxy()->mapToSource( cbProjects->currentIndex() ) );
 	int i = 0;
 	// create files
 	foreach ( pTemplatePreviewer* p, sView->findChildren<pTemplatePreviewer*>() )
@@ -190,25 +205,29 @@ void UITemplatesWizard::accept()
 			// if can save
 			if ( p->editor()->saveFile( s ) )
 			{
-				/*
-				// add to project if needed
-				if ( cbAddToProject->isChecked() && i == 0 && cbTypes->itemData( cbTypes->currentIndex() ).toInt() == pTemplate::ttProjects )
+				if ( cbAddToProject->isChecked() && it )
 				{
-					ProjectItem* it = 0; // need get from comboview
-					if ( it->isProjectsContainer() )
-						it->addProject( QFileInfo( s ).canonicalFilePath(), cbOpen->isChecked() );
-					else
-						warning( tr( "Adding Project..." ), tr( "You can't add this project to selected project, because it's not a container." ) );
+					if ( i == 0 && t == pTemplate::ttProjects )
+					{
+						if ( it->isProjectsContainer() )
+							it->addProject( s );
+						else
+							warning( tr( "Adding Project..." ), tr( "You can't add this project to selected project, because it's not a projects container." ) );
+					}
+					else if ( t != pTemplate::ttProjects )
+					{
+						it->addExistingFile( s, "", "=" );
+						if ( cbOpen->isChecked() )
+							pFileManager::instance()->openFile( s );
+					}
 				}
-				// open file in ide if needed
-				if ( cbOpen->isChecked() )
+				else if ( cbOpen->isChecked() )
 				{
-					if ( i == 0 && cbTypes->itemData( cbTypes->currentIndex() ).toInt() == pTemplate::ttProjects )
-						pFileManager::instance()->openProject( QFileInfo( s ).canonicalFilePath() );
+					if ( i == 0 && t == pTemplate::ttProjects )
+						pFileManager::instance()->openProject( s );
 					else
-						pFileManager::instance()->openFile( QFileInfo( s ).canonicalFilePath() );
+						pFileManager::instance()->openFile( s );
 				}
-				*/
 			}
 			else
 				warning( "Create File...", tr( "Can't create file:\n%1" ).arg( s ) );

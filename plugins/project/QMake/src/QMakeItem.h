@@ -34,6 +34,7 @@ public:
 	virtual QString scope() const;
 	virtual QString checkScope( const QString& ) const;
 	virtual bool isEqualScope( const QString&, const QString& ) const;
+	virtual bool isProjectsContainer() const;
 	
 	virtual void appendRow( ProjectItem* );
 	virtual void insertRow( int, ProjectItem* );
@@ -45,10 +46,13 @@ public:
 	virtual void remove();
 	
 	virtual bool open();
+	virtual bool addProject( const QString& );
 	virtual void editSettings();
 	virtual void close();
 	virtual void save( bool = true );
 	virtual void saveAll( bool = true );
+	virtual void addExistingFile( const QString&, const QString&, const QString& = "=" );
+	virtual void addExistingFile( const QString&, ProjectItem*, const QString& = "=" );
 	virtual void addExistingFiles( const QStringList&, const QString&, const QString& = "=" );
 	virtual void addExistingFiles( const QStringList&, ProjectItem*, const QString& = "=" );
 	virtual void setCompiler( CompilerPlugin* );

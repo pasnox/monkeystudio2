@@ -6,6 +6,8 @@
 #include "ui_UITemplatesWizard.h"
 #include "pTemplatesManager.h"
 
+class ProjectsModel;
+
 class Q_MONKEY_EXPORT UITemplatesWizard : public QDialog, public Ui::UITemplatesWizard, public QSingleton<UITemplatesWizard>
 {
 	Q_OBJECT
@@ -15,6 +17,7 @@ public:
 	void setType( pTemplate::TemplateType );
 
 private:
+	ProjectsModel* mProjects;
 	UITemplatesWizard( QWidget* = 0 );
 
 private slots:

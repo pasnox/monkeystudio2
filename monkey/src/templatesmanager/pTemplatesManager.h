@@ -18,6 +18,7 @@
 
 class UITemplatesWizard;
 class pTemplatePreviewer;
+class ProjectItem;
 
 struct Q_MONKEY_EXPORT pTemplate
 {
@@ -66,7 +67,7 @@ struct Q_MONKEY_EXPORT pTemplateContent
 	QString Name;
 	QString Author;
 	QString License;
-	QString Project;
+	ProjectItem* Project;
 	QString FileName;
 	QString Comment;
 	QString Content;

@@ -18,7 +18,7 @@
 #include "pMonkeyStudio.h"
 #include "QMakeParser.h"
 #include "UIQMakeProjectSettings.h"
-
+#include "QMake.h"
 
 using namespace pMonkeyStudio;
 
@@ -257,6 +257,9 @@ bool QMakeItem::isEqualScope( const QString& s1, const QString& s2 ) const
 	return checkScope( QString( s1 ).replace( '/', ':' ) ) == checkScope( QString( s2 ).replace( '/', ':' ) );
 }
 
+bool QMakeItem::isProjectsContainer() const
+{ return isProject() ? getStringValues( "TEMPLATE" ).toLower() == "subdirs" : false; }
+
 void QMakeItem::appendRow( ProjectItem* i )
 { insertRow( rowCount(), i ); }
 
@@ -353,15 +356,44 @@ bool QMakeItem::open()
 		// set project unmodified
 		setModified( false );
 		
+		// refresh project
+		refresh();
+		
 		// same for childproject
 		foreach ( ProjectItem* p, childrenProjects( true ) )
 		{
 			p->setReadOnly( false );
 			p->setModified( false );
+			p->refresh();
 		}
 		
 		return p.isOpen();
 	}
+	return false;
+}
+#include <QDebug>
+bool QMakeItem::addProject( const QString& s )
+{
+	if ( !isProject() )
+		return false;
+	
+	foreach ( ProjectItem* p, childrenProjects( false ) )
+		if ( QFileInfo( p->getValue() ) == QFileInfo( s ) )
+			return true;
+	
+	// create project item
+	if ( ProjectItem* it = plugin()->getProjectItem( s ) )
+	{
+		if ( it->open() )
+		{
+			addStringValues( relativePath( s ), "SUBDIRS", "*=", "" );
+			it->setModified( true );
+			appendRow( it );
+			return true;
+		}
+		delete it;
+	}
+	
 	return false;
 }
 
@@ -474,6 +506,12 @@ void QMakeItem::addExistingFiles( const QStringList& l, ProjectItem* s, const QS
 		it->setValue( vn != "UNKNOW_FILES" ? relativeFilePath( f ) : f );
 	}
 }
+
+void QMakeItem::addExistingFile( const QString& f, ProjectItem* s, const QString& o )
+{ addExistingFiles( QStringList( f ), s, o ); }
+
+void QMakeItem::addExistingFile( const QString& f, const QString& s, const QString& o )
+{ addExistingFile( f, getItemScope( s, true ), o ); }
 
 void QMakeItem::setCompiler( CompilerPlugin* c )
 {

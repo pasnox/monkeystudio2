@@ -25,6 +25,7 @@ void ProjectItem::init()
 	mDebugger = 0L;
 	mInterpreter = 0L;
 	mBuffer.clear();
+	setReadOnly( false );
 }
 
 ProjectItem::ProjectItem( ProjectItem::NodeType t, ProjectItem* i )
@@ -114,36 +115,37 @@ void ProjectItem::setModified( bool b )
 		foreach ( ProjectItem* it, projectItems() )
 			it->setModified( false );
 
+	// set modified state if needed
+	if ( getModified() == b )
+		return;
 	setData( b, ProjectItem::ModifiedRole );
-	emit modifiedChanged( b );
+	
+	if ( isProject() )
+		emit modifiedChanged( b );
+	else if ( ProjectItem* p  = project() )
+		if ( b && !p->getModified() )
+			p->setModified( true );
 }
 
 bool ProjectItem::getModified() const
-{
-	// if project, modified is true if one of its items is modified
-	if ( isProject() )
-		foreach ( ProjectItem* it, projectItems() )
-			if ( it->getModified() )
-				return true;
-	// return default item value
-	return data( ProjectItem::ModifiedRole ).toBool();
-}
+{ return data( ProjectItem::ModifiedRole ).toBool(); }
 
 void ProjectItem::setReadOnly( bool b )
 {
 	if ( isProject() )
 		foreach ( ProjectItem* it, projectItems() )
 			it->setReadOnly( b );
-	if ( isProject() || !project()->getReadOnly() )
-		setData( b, ProjectItem::ReadOnlyRole );
+	
+	setData( b, ProjectItem::ReadOnlyRole );
+	
+	if ( !isProject() )
+		if ( ProjectItem* p  = project() )
+			if ( !b && p->getReadOnly() )
+				p->setReadOnly( false );
 }
 
 bool ProjectItem::getReadOnly() const
-{
-	if ( !isProject() && project()->getReadOnly() )
-		return true;
-	return data( ProjectItem::ReadOnlyRole ).toBool();
-}
+{ return data( ProjectItem::ReadOnlyRole ).toBool(); }
 
 bool ProjectItem::isEmpty() const
 { return getType() == ProjectItem::EmptyType; }
@@ -229,7 +231,6 @@ ProjectItem* ProjectItem::project() const
 	ProjectItem* it = parent();
 	while ( it && !it->isProject() )
 		it = it->parent();
-	Q_ASSERT( it && it->isProject() );
 	return it;
 }
 
@@ -293,10 +294,13 @@ QString ProjectItem::canonicalPath() const
 { return QFileInfo( canonicalFilePath() ).absolutePath(); }
 
 QString ProjectItem::canonicalPath( const QString& s ) const
-{ return canonicalFilePath( s ); }
+{ return QFileInfo( canonicalFilePath( s ) ).path(); }
 
 QString ProjectItem::relativeFilePath( const QString& s ) const
 { return QDir( canonicalPath() ).relativeFilePath( s ); }
+
+QString ProjectItem::relativePath( const QString& s ) const
+{ return QDir( relativeFilePath( s ) ).path(); }
 
 QString ProjectItem::fileName( const QString& s )
 { return QFileInfo( s ).fileName(); }

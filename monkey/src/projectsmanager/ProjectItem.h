@@ -144,6 +144,8 @@ public:
 	virtual QString checkScope( const QString& ) const = 0;
 	// check equals scope
 	virtual bool isEqualScope( const QString&, const QString& ) const = 0;
+	// tell if this proejct is a container, ie it can contains subprojects
+	virtual bool isProjectsContainer() const = 0;
 	
 	// item model
 	virtual ProjectsModel* model() const;
@@ -190,10 +192,12 @@ public:
 	virtual QString canonicalFilePath( const QString& ) const;
 	// canonical project path
 	virtual QString canonicalPath() const;
-	// relative path according to project path
+	// canonical path according to project path
 	virtual QString canonicalPath( const QString& ) const;
 	// relative file path according to project path
 	virtual QString relativeFilePath( const QString& ) const;
+	// relative path according to project path
+	virtual QString relativePath( const QString& ) const;
 	// filename of filepath
 	virtual QString fileName( const QString& );
 	// complete basename of filename
@@ -202,6 +206,8 @@ public:
 	virtual QString name() const;
 	// open project based on filename in getValue()
 	virtual bool open() = 0;
+	// add a subproject to this projects container
+	virtual bool addProject( const QString& ) = 0;
 	// open project settings dialog
 	virtual void editSettings() = 0;
 	// close the project
@@ -213,6 +219,8 @@ public:
 	// add existing files to project scope / operator
 	virtual void addExistingFiles( const QStringList&, const QString&, const QString& = "=" ) = 0;
 	virtual void addExistingFiles( const QStringList&, ProjectItem*, const QString& = "=" ) = 0;
+	virtual void addExistingFile( const QString&, const QString&, const QString& = "=" ) = 0;
+	virtual void addExistingFile( const QString&, ProjectItem*, const QString& = "=" ) = 0;
 	// set compiler for this project
 	virtual void setCompiler( CompilerPlugin* ) = 0;
 	// compiler for this project
