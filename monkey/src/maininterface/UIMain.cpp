@@ -145,7 +145,7 @@ void UIMain::initMenuBar()
 		mb->action( "aSeparator2" );
 		mb->action( "aSettings", tr( "Set&tings..." ), QIcon( ":/project/icons/project/settings.png" ), QString::null, tr( "Project settings" ) )->setEnabled( false );
 		mb->action( "aSeparator3" );
-		mb->action( "aAddExistingFiles", tr( "&Add Existing Files..." ), QIcon( ":/project/icons/project/open.png" ), QString::null, tr( "Add existing files to the current project" ) )->setEnabled( false );
+		mb->action( "aAddExistingFiles", tr( "&Add Existing Files/Projects..." ), QIcon( ":/project/icons/project/open.png" ), QString::null, tr( "Add existing files/projects to the current project" ) )->setEnabled( false );
 		mb->action( "aSeparator4" );
 		mb->menu( "mRecents", tr( "&Recents" ), QIcon( ":/project/icons/project/recents.png" ) );
 		mb->action( "mRecents/aClear", tr( "&Clear" ), QIcon( ":/project/icons/project/clear.png" ), QString::null, tr( "Clear the recents projects list" ) );

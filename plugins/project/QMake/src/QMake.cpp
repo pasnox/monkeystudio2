@@ -46,7 +46,7 @@ QWidget* QMake::settingsWidget()
 ProjectItem* QMake::getProjectItem( const QString& s )
 {
 	// don t open project if plugin is not enabled
-	if ( !isEnabled() )
+	if ( !isEnabled() || !QDir::match( mSuffixes[tr( "Qt Projects" )], s ) )
 		return 0;
 	
 	// create project item

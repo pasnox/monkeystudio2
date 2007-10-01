@@ -139,12 +139,12 @@ bool UITemplatesWizard::checkTemplates()
 	{
 		if ( !it )
 		{
-			information( tr( "Add To Project..." ), tr( "You need to select a project to add to" ), this );
+			information( tr( "Add To Project..." ), tr( "You need to select a project to add to." ), this );
 			return false;
 		}
 		else if ( !it->isProjectsContainer() )
 		{
-			information( tr( "Add To Project..." ), tr( "The project you select is not a projects container" ), this );
+			information( tr( "Add To Project..." ), tr( "The project you select is not a projects container." ), this );
 			return false;
 		}
 	}
@@ -225,7 +225,10 @@ void UITemplatesWizard::accept()
 				if ( cbAddToProject->isChecked() )
 				{
 					if ( t == pTemplate::ttProjects && i == 0 )
-						it->addProject( s );
+					{
+						if ( !it->addProject( s ) )
+							warning( "Adding Project...", tr( "Can't add project:\n%1" ).arg( s ) );
+					}
 					else if ( t != pTemplate::ttProjects )
 					{
 						it->addExistingFile( s, "", "+=" );

@@ -300,7 +300,7 @@ QString ProjectItem::relativeFilePath( const QString& s ) const
 { return QDir( canonicalPath() ).relativeFilePath( s ); }
 
 QString ProjectItem::relativePath( const QString& s ) const
-{ return QDir( relativeFilePath( s ) ).path(); }
+{ return QFileInfo( relativeFilePath( s ) ).path(); }
 
 QString ProjectItem::fileName( const QString& s )
 { return QFileInfo( s ).fileName(); }

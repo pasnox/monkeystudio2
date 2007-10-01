@@ -277,7 +277,7 @@ void UIProjectsManager::projectAddExistingFiles_triggered()
 {
 	if ( ProjectItem* it = currentProject() )
 	{
-		QStringList l = getOpenFileNames( tr( "Choose file(s) to add to your project" ), it->canonicalPath() );
+		QStringList l = getOpenFileNames( tr( "Choose file(s)/project(s) to add to your project" ), it->canonicalPath() );
 		if ( !l.isEmpty() )
 			it->addExistingFiles( l, it, "=" );
 	}

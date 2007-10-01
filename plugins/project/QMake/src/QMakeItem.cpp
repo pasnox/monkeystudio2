@@ -73,7 +73,7 @@ void QMakeItem::setType( ProjectItem::NodeType t )
 			break;
 	}
 }
-#include <QDebug>
+
 void QMakeItem::setValue( const QString& s )
 {
 	// set data
@@ -126,9 +126,6 @@ void QMakeItem::setValue( const QString& s )
 			}
 			break;
 		}
-		case ProjectItem::IncludeType:
-			setFilePath( "" );
-			break;
 		case ProjectItem::ProjectType:
 			setFilePath( s );
 			break;
@@ -369,10 +366,10 @@ bool QMakeItem::open()
 	}
 	return false;
 }
-#include <QDebug>
+
 bool QMakeItem::addProject( const QString& s )
 {
-	if ( !isProject() )
+	if ( !isProjectsContainer() )
 		return false;
 	
 	foreach ( ProjectItem* p, childrenProjects( false ) )
@@ -384,9 +381,9 @@ bool QMakeItem::addProject( const QString& s )
 	{
 		if ( it->open() )
 		{
-			addStringValues( relativePath( s ), "SUBDIRS", "*=", "" );
-			it->setModified( true );
+			addStringValues( relativePath( s ), "SUBDIRS", "+=", "" );
 			appendRow( it );
+			it->setModified( false );
 			return true;
 		}
 		delete it;
@@ -461,6 +458,9 @@ void QMakeItem::addExistingFiles( const QStringList& l, const QString& s, const 
 
 void QMakeItem::addExistingFiles( const QStringList& l, ProjectItem* s, const QString& o )
 {
+	if ( !isProject() )
+		return;
+	
 	// C++ filters
 	const QStringList cf = availableSuffixes().value( "C++" );
 	// YACC filters
@@ -473,8 +473,10 @@ void QMakeItem::addExistingFiles( const QStringList& l, ProjectItem* s, const QS
 	foreach ( QString s, cf )
 		if ( s.startsWith( "*.c", Qt::CaseInsensitive ) && !lf.contains( s.replace( "c", "l", Qt::CaseInsensitive ) ) )
 			yf << s;
-	// IMAGES FORMATS
+	// IMAGES filters
 	const QStringList pf = availableImageFormats();
+	// PROJECT filters
+	const QStringList pjf = plugin()->suffixes().values().value( 0 );
 	
 	foreach ( const QString& f, l )
 	{
@@ -497,6 +499,14 @@ void QMakeItem::addExistingFiles( const QStringList& l, ProjectItem* s, const QS
 			vn = "FORMS";
 			if ( question( QObject::tr( "FORMS3 Files..." ), QObject::tr( "Do i need to add this form to FORMS3 variable ?" ) ) )
 				vn = "FORMS3";
+		}
+		else if ( QDir::match( pjf, f ) )
+		{
+			if ( !isProjectsContainer() )
+				warning( QObject::tr( "Add Existing Files..." ), QObject::tr( "This project is not a projects container, cancel adding project:\n%1" ).arg( f ) );
+			else if( !addProject( f ) )
+				warning( QObject::tr( "Add Existing Files..." ), QObject::tr( "A selected file is a project that i can't open:\n%1" ).arg( f ) );
+			continue;
 		}
 		
 		// create value for variable
