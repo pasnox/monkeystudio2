@@ -133,6 +133,22 @@ bool UITemplatesWizard::checkTemplates()
 		return false;
 	}
 	
+	ProjectItem* it = mProjects->itemFromIndex( mProjects->projectsProxy()->mapToSource( cbProjects->currentIndex() ) );
+	
+	if ( cbAddToProject->isChecked() )
+	{
+		if ( !it )
+		{
+			information( tr( "Add To Project..." ), tr( "You need to select a project to add to" ), this );
+			return false;
+		}
+		else if ( !it->isProjectsContainer() )
+		{
+			information( tr( "Add To Project..." ), tr( "The project you select is not a projects container" ), this );
+			return false;
+		}
+	}
+	
 	return true;
 }
 
@@ -190,6 +206,7 @@ void UITemplatesWizard::accept()
 	pTemplate::TemplateType t = (pTemplate::TemplateType)cbTypes->itemData( cbTypes->currentIndex() ).toInt();
 	// get project item
 	ProjectItem* it = mProjects->itemFromIndex( mProjects->projectsProxy()->mapToSource( cbProjects->currentIndex() ) );
+	//
 	int i = 0;
 	// create files
 	foreach ( pTemplatePreviewer* p, sView->findChildren<pTemplatePreviewer*>() )
@@ -205,32 +222,30 @@ void UITemplatesWizard::accept()
 			// if can save
 			if ( p->editor()->saveFile( s ) )
 			{
-				if ( cbAddToProject->isChecked() && it )
+				if ( cbAddToProject->isChecked() )
 				{
-					if ( i == 0 && t == pTemplate::ttProjects )
-					{
-						if ( it->isProjectsContainer() )
-							it->addProject( s );
-						else
-							warning( tr( "Adding Project..." ), tr( "You can't add this project to selected project, because it's not a projects container." ) );
-					}
+					if ( t == pTemplate::ttProjects && i == 0 )
+						it->addProject( s );
 					else if ( t != pTemplate::ttProjects )
 					{
-						it->addExistingFile( s, "", "=" );
+						it->addExistingFile( s, "", "+=" );
 						if ( cbOpen->isChecked() )
 							pFileManager::instance()->openFile( s );
 					}
 				}
 				else if ( cbOpen->isChecked() )
 				{
-					if ( i == 0 && t == pTemplate::ttProjects )
+					if ( t == pTemplate::ttProjects && i == 0 )
 						pFileManager::instance()->openProject( s );
 					else
 						pFileManager::instance()->openFile( s );
 				}
 			}
 			else
-				warning( "Create File...", tr( "Can't create file:\n%1" ).arg( s ) );
+			{
+				warning( "Create File...", tr( "Can't create file:\n%1\nAborting." ).arg( s ) );
+				return;
+			}
 		}
 		// increase i
 		i++;
