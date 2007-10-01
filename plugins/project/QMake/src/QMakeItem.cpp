@@ -73,7 +73,7 @@ void QMakeItem::setType( ProjectItem::NodeType t )
 			break;
 	}
 }
-
+#include <QDebug>
 void QMakeItem::setValue( const QString& s )
 {
 	// set data
@@ -106,11 +106,13 @@ void QMakeItem::setValue( const QString& s )
 				{
 					// get path to check in for pro
 					v = canonicalFilePath( s );
+					// get last part of path
+					QString c = s.section( '/', -1 ).toLower();
 					// get all pro file
 					foreach ( QFileInfo f, getFiles( QDir( v ), "pro", false ) )
 					{
 						// check that value = filename
-						if ( f.baseName().toLower() == s.toLower() )
+						if ( f.baseName().toLower() == c )
 						{
 							// set full file path
 							setFilePath( v.append( "/" ).append( f.fileName() ) );
@@ -146,10 +148,6 @@ void QMakeItem::setValue( const QString& s )
 
 void QMakeItem::setFilePath( const QString& s )
 {
-	// cancel is file not exists
-	if ( !QFile::exists( canonicalFilePath( s ) ) )
-		return;
-	
 	// set data
 	ProjectItem::setFilePath( canonicalFilePath( s ) );
 	
