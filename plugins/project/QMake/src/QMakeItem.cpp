@@ -167,28 +167,11 @@ void QMakeItem::setFilePath( const QString& s )
 
 QString QMakeItem::getIndent() const //
 {
-	return QString();
-	/*
-	// if scope end, need take parent indent
-	if ( const_cast<ProjectItem*>( this )->isScopeEnd() )
+	if ( !parent() || parent()->isNested() || ( isValue() && isFirst() ) )
+		return QString();
+	else if ( isScopeEnd() )
 		return parent()->getIndent();
-	// if first value of a variable, no indent
-	if ( const_cast<ProjectItem*>( this )->isValue() && isFirst() )
-		return QString();
-	// if not value, and parent is nestedscope, no indent
-	if ( parent() && parent()->isNested() )
-		return QString();
-	// default indent
-	int i = -1;
-	// count parent
-	ProjectItem* p = project();
-	ProjectItem* it = const_cast<ProjectItem*>( this );
-	while ( it && ( it = it->parent() ) )
-		if ( it->project() == p )
-			i++;
-	// return indent
-	return QString().fill( '\t', i );
-	*/
+	return QString().fill( '\t', parentCount() -1 );
 }
 
 QString QMakeItem::getEol() const
