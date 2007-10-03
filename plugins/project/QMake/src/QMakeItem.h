@@ -27,7 +27,7 @@ public:
 	virtual void setType( ProjectItem::NodeType );
 	virtual void setValue( const QString& );
 	virtual void setFilePath( const QString& );
-	virtual QString getIndent() const;
+	virtual QString getIndent( bool = false ) const;
 	virtual QString getEol() const;
 	virtual bool isFirst() const;
 	virtual bool isLast() const;
@@ -73,7 +73,7 @@ public:
 	
 protected:
 	virtual void redoLayout( ProjectItem* );
-	virtual void writeProject();
+	virtual bool writeProject();
 	virtual void writeItem( ProjectItem* );
 
 };

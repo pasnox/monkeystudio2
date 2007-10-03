@@ -165,12 +165,17 @@ void QMakeItem::setFilePath( const QString& s )
 	}
 }
 
-QString QMakeItem::getIndent() const //
+QString QMakeItem::getIndent( bool b ) const
 {
-	if ( !parent() || parent()->isNested() || ( isValue() && isFirst() ) )
-		return QString();
-	else if ( isScopeEnd() )
-		return parent()->getIndent();
+	//if ( !b )
+	{
+		if ( !parent() || parent()->isNested() || ( isValue() && isFirst() ) || ( isScope() && getValue().toLower() == "else" ) )
+			return QString();
+		else if ( isScopeEnd() )
+			return parent()->getIndent( true );
+	}
+	//if ( isScope() && getValue().toLower() == "else" )
+		//return QString().fill( '\t', parentCount() -1 -scope().count( "else", Qt::CaseInsensitive ) );
 	return QString().fill( '\t', parentCount() -1 );
 }
 
@@ -205,7 +210,7 @@ bool QMakeItem::isLast() const
 	return false;
 }
 
-QString QMakeItem::scope() const // --
+QString QMakeItem::scope() const
 {
 	QString s;
 	ProjectItem* j = const_cast<QMakeItem*>( this );
@@ -745,29 +750,33 @@ void QMakeItem::redoLayout( ProjectItem* it ) //
 	}
 }
 
-#include <QTextEdit>
-void QMakeItem::writeProject() //
+bool QMakeItem::writeProject()
 {
+	// only project item can call this
+	if ( !isProject() )
+		return false;
+	
 	// clear buffer
 	mBuffer.clear();
-	// make sure we got a project item
-	if ( ProjectItem* p = project() )
+
+	// write items
+	foreach ( ProjectItem* it, children() )
+		if ( it->project() == this )
+			writeItem( it );
+	
+	// write file
+	QFile f( getValue() );
+	if ( f.open( QFile::WriteOnly ) && f.resize( 0 ) && f.write( mBuffer ) != -1 )
 	{
-		// write items
-		foreach ( ProjectItem* it, p->children() )
-			if ( it->project() == p )
-				writeItem( it );
 		// set project unmodified
-		p->setModified( false );
-		// append project file to buffer to check
-		mBuffer.prepend( canonicalFilePath() +"\n\n" );
+		setModified( false );
 		
-		QTextEdit* l = new QTextEdit;
-		l->setPlainText( mBuffer );
-		l->show();
+		// return success
+		return true;
 	}
-	else
-		qWarning( qPrintable( "Can't write project: " +canonicalFilePath() ) );
+	
+	// default return value
+	return false;
 }
 
 void QMakeItem::writeItem( ProjectItem* it ) //
