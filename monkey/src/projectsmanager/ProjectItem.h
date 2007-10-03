@@ -130,8 +130,8 @@ public:
 	virtual bool isInclude() const;
 	// tell if item is a project type
 	virtual bool isProject() const;
-	// item indent
-	virtual QString getIndent() const = 0;
+	// item indent, true indent according to bool
+	virtual QString getIndent( bool = false ) const = 0;
 	// item eol
 	virtual QString getEol() const = 0;
 	// tell if item is the first child of its parent
@@ -265,10 +265,10 @@ protected:
 	CompilerPlugin* mCompiler;
 	DebuggerPlugin* mDebugger;
 	InterpreterPlugin* mInterpreter;
-	QString mBuffer;
+	QByteArray mBuffer;
 	virtual void init();
 	virtual void redoLayout( ProjectItem* = 0 ) = 0;
-	virtual void writeProject() = 0;
+	virtual bool writeProject() = 0;
 	virtual void writeItem( ProjectItem* ) = 0;
 
 signals:
