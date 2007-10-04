@@ -165,17 +165,20 @@ void QMakeItem::setFilePath( const QString& s )
 	}
 }
 
-QString QMakeItem::getIndent( bool b ) const
+QString QMakeItem::getIndent() const
 {
-	//if ( !b )
+	if ( !parent() || parent()->isNested() || ( isValue() && isFirst() ) || ( isScope( false ) && getValue().toLower() == "else" ) )
+		return QString();
+	else if ( isScopeEnd() )
 	{
-		if ( !parent() || parent()->isNested() || ( isValue() && isFirst() ) || ( isScope() && getValue().toLower() == "else" ) )
-			return QString();
-		else if ( isScopeEnd() )
-			return parent()->getIndent( true );
+		if ( !( parent()->isScope( false ) && parent()->getValue().toLower() == "else" ) )
+			return parent()->getIndent();
+		else
+		{
+			ProjectItem* p = parent()->parent()->child( parent()->row() -1 );
+			return p->child( p->rowCount() -1 )->getIndent();
+		}
 	}
-	//if ( isScope() && getValue().toLower() == "else" )
-		//return QString().fill( '\t', parentCount() -1 -scope().count( "else", Qt::CaseInsensitive ) );
 	return QString().fill( '\t', parentCount() -1 );
 }
 
@@ -513,8 +516,6 @@ void QMakeItem::setCompiler( CompilerPlugin* c )
 {
 	if ( isProject() )
 		mCompiler = c;
-	else
-		project()->setCompiler( c );
 }
 
 CompilerPlugin* QMakeItem::compiler() const
@@ -524,8 +525,6 @@ void QMakeItem::setDebugger( DebuggerPlugin* d )
 {
 	if ( isProject() )
 		mDebugger = d;
-	else
-		project()->setDebugger( d );
 }
 
 DebuggerPlugin* QMakeItem::debugger() const
@@ -535,8 +534,6 @@ void QMakeItem::setInterpreter( InterpreterPlugin* i )
 {
 	if ( isProject() )
 		mInterpreter = i;
-	else
-		project()->setInterpreter( i );
 }
 
 InterpreterPlugin* QMakeItem::interpreter() const
@@ -760,9 +757,8 @@ bool QMakeItem::writeProject()
 	mBuffer.clear();
 
 	// write items
-	foreach ( ProjectItem* it, children() )
-		if ( it->project() == this )
-			writeItem( it );
+	foreach ( ProjectItem* it, children( false, true) )
+		writeItem( it );
 	
 	// write file
 	QFile f( getValue() );
@@ -779,11 +775,12 @@ bool QMakeItem::writeProject()
 	return false;
 }
 
-void QMakeItem::writeItem( ProjectItem* it ) //
+void QMakeItem::writeItem( ProjectItem* it )
 {
 	// cancel if no item
 	if ( !it )
 		return;
+	
 	// write to buffer
 	switch ( it->getType() )
 	{
@@ -853,9 +850,9 @@ void QMakeItem::writeItem( ProjectItem* it ) //
 		default:
 			break;
 	}
+	
 	// write children
 	ProjectItem* p = it->project();
-	foreach ( ProjectItem* cit, it->children() )
-		if ( cit->project() == p )
-			writeItem( cit );
+	foreach ( ProjectItem* cit, it->children( false, true ) )
+		writeItem( cit );
 }

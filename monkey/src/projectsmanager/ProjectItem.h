@@ -130,8 +130,8 @@ public:
 	virtual bool isInclude() const;
 	// tell if item is a project type
 	virtual bool isProject() const;
-	// item indent, true indent according to bool
-	virtual QString getIndent( bool = false ) const = 0;
+	// item indent
+	virtual QString getIndent() const = 0;
 	// item eol
 	virtual QString getEol() const = 0;
 	// tell if item is the first child of its parent
