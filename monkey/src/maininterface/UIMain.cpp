@@ -39,10 +39,6 @@ UIMain::UIMain( QWidget* p )
 
 	// init connections
 	initConnections();
-
-	// restore session if needed
-	if ( pMonkeyStudio::restoreSessionOnStartup() )
-		workspace()->fileSessionRestore_triggered();
 }
 
 void UIMain::closeEvent( QCloseEvent* )
@@ -50,6 +46,9 @@ void UIMain::closeEvent( QCloseEvent* )
 	// save session if needed
 	if ( pMonkeyStudio::saveSessionOnClose() )
 		workspace()->fileSessionSave_triggered();
+	
+	// force to close all projects
+	projectsManager()->projectCloseAll_triggered();
 
 	// force to close all documents
 	workspace()->fileCloseAll_triggered( true );
