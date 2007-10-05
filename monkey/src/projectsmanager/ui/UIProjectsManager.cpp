@@ -19,7 +19,6 @@
 #include "pRecentsManager.h"
 #include "ProjectsProxy.h"
 #include "ProjectsModel.h"
-#include "ProjectItem.h"
 #include "pFileManager.h"
 #include "UITemplatesWizard.h"
 #include "pTreeComboBox.h"
@@ -84,9 +83,6 @@ UIProjectsManager::UIProjectsManager( QWidget* w )
 	connect( tvProjects->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( tvProjects_currentChanged( const QModelIndex&, const QModelIndex& ) ) );
 }
 
-UIProjectsManager::~UIProjectsManager()
-{ projectCloseAll_triggered(); }
-
 ProjectItem* UIProjectsManager::currentProject() const
 {
 	// get current item
@@ -98,8 +94,14 @@ ProjectItem* UIProjectsManager::currentProject() const
 void UIProjectsManager::setCurrentProject( ProjectItem* p )
 { tvProjects->setCurrentIndex( p ? mProxy->mapFromSource( p->index() ) : QModelIndex() ); }
 
+ProjectItemList UIProjectsManager::rootProjects() const
+{ return mProjects->projects( false ); }
+
 void UIProjectsManager::initializeProject( ProjectItem* it )
 {
+	// cancel if no item
+	if ( !it )
+		return;
 	// clear selected item
 	tvProjects->selectionModel()->clear();
 	// append project item
@@ -110,12 +112,16 @@ void UIProjectsManager::initializeProject( ProjectItem* it )
 	connect( it, SIGNAL( aboutToClose() ), this, SLOT( internal_aboutToClose() ) );
 	connect( it, SIGNAL( closed() ), this, SLOT( internal_closed() ) );
 	connect( it, SIGNAL( modifiedChanged( bool ) ), this, SLOT( internal_modifiedChanged( bool ) ) );
+	// emit project open
+	emit opened( it );
 	// subproject connections
 	foreach ( ProjectItem* p, it->childrenProjects() )
 	{
 		connect( p, SIGNAL( aboutToClose() ), this, SLOT( internal_aboutToClose() ) );
 		connect( p, SIGNAL( closed() ), this, SLOT( internal_closed() ) );
 		connect( p, SIGNAL( modifiedChanged( bool ) ), this, SLOT( internal_modifiedChanged( bool ) ) );
+		// emit opend signal
+		emit opened( p );
 	}
 }
 
@@ -172,6 +178,16 @@ void UIProjectsManager::internal_modifiedChanged( bool b )
 
 bool UIProjectsManager::openProject( const QString& s )
 {
+	// look if project is already opened
+	foreach ( ProjectItem* p, mProjects->projects( true ) )
+	{
+		if ( isSameFile( p->getValue(), s ) )
+		{
+			setCurrentProject( p );
+			return true;
+		}
+	}
+	// open project
 	if ( ProjectItem* it = PluginsManager::instance()->projectItem( s ) )
 	{
 		if ( it->open() )
@@ -190,11 +206,13 @@ bool UIProjectsManager::openProject( const QString& s )
 bool UIProjectsManager::closeProject( const QString& s )
 {
 	foreach ( ProjectItem* p, mProjects->projects( true ) )
-		if ( p->canonicalFilePath() == QFileInfo( s ).canonicalFilePath() )
+	{
+		if ( isSameFile( p->getValue(), s ) )
 		{
 			p->close();
 			return true;
 		}
+	}
 	return false;
 }
 

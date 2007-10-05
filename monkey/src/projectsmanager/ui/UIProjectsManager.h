@@ -18,10 +18,10 @@
 #include "MonkeyExport.h"
 #include "QSingleton.h"
 #include "ui_UIProjectsManager.h"
+#include "ProjectItem.h"
 
 #include <QDockWidget>
 
-class ProjectItem;
 class ProjectsProxy;
 class ProjectsModel;
 
@@ -33,6 +33,7 @@ class Q_MONKEY_EXPORT UIProjectsManager : public QDockWidget, public Ui::UIProje
 public:
 	ProjectItem* currentProject() const;
 	void setCurrentProject( ProjectItem* );
+	ProjectItemList rootProjects() const;
 
 	inline ProjectsModel* model() const { return mProjects; }
 	inline ProjectsProxy* proxy() const { return mProxy; }
@@ -42,7 +43,6 @@ private:
 	ProjectsProxy* mProxy;
 
 	UIProjectsManager( QWidget* = 0 );
-	~UIProjectsManager();
 
 	void initializeProject( ProjectItem* );
 
@@ -72,6 +72,7 @@ signals:
 	void closed( ProjectItem* );
 	void modifiedChanged( ProjectItem*, bool );
 	void currentChanged( ProjectItem* );
+	void opened( ProjectItem* );
 
 };
 
