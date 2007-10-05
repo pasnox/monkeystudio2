@@ -91,10 +91,6 @@ protected:
 	QWorkspace* mWorkspaceWidget;
 
 protected slots:
-	/*
-	Handler of currentChanged( int ) signal of QTabWidget.	Function executed when tab was switched (by user or by code). 
-	Will switch active document and 	emit sitnal currentChanged(i)
-	*/
 	void internal_currentChanged( int );
 	void workspaceWidget_windowActivated( QWidget* );
 	void removeDocument( QObject* );
