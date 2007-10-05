@@ -278,7 +278,7 @@ ProjectItemList ProjectItem::childrenScopes( bool b ) const
 }
 
 QString ProjectItem::canonicalFilePath() const
-{ return project()->getFilePath(); }
+{ return QFileInfo( project()->getValue() ).canonicalFilePath(); }
 
 QString ProjectItem::canonicalFilePath( const QString& s ) const
 {
