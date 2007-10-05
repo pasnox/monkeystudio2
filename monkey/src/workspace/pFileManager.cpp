@@ -1,116 +1,30 @@
 #include "pFileManager.h"
 #include "pWorkspace.h"
-#include "pRecentsManager.h"
-#include "pAbstractChild.h"
-#include "pMenuBar.h"
 #include "UIProjectsManager.h"
-
-#include "pChild.h"
-
-#include <QFileInfo>
 
 pFileManager::pFileManager( QObject* o )
 	: QObject( o )
-{}
+{
+	// files
+	connect( pWorkspace::instance(), SIGNAL( fileOpened( const QString& ) ), this, SIGNAL( fileOpened( const QString& ) ) );
+	connect( pWorkspace::instance(), SIGNAL( fileClosed( const QString& ) ), this, SIGNAL( fileClosed( const QString& ) ) );
+	connect( pWorkspace::instance(), SIGNAL( currentFileChanged( const QString& ) ), this, SIGNAL( currentFileChanged( const QString& ) ) );
+	// projects
+	connect( UIProjectsManager::instance(), SIGNAL( aboutToClose( ProjectItem* ) ), this, SIGNAL( aboutToClose( ProjectItem* ) ) );
+	connect( UIProjectsManager::instance(), SIGNAL( closed( ProjectItem* ) ), this, SIGNAL( closed( ProjectItem* ) ) );
+	connect( UIProjectsManager::instance(), SIGNAL( modifiedChanged( ProjectItem*, bool ) ), this, SIGNAL( modifiedChanged( ProjectItem*, bool ) ) );
+	connect( UIProjectsManager::instance(), SIGNAL( currentChanged( ProjectItem* ) ), this, SIGNAL( currentChanged( ProjectItem* ) ) );
+	connect( UIProjectsManager::instance(), SIGNAL( opened( ProjectItem* ) ), this, SIGNAL( opened( ProjectItem* ) ) );
+}
 
 pAbstractChild* pFileManager::openFile( const QString& s, const QPoint& p )
-{
-	// if it not exists
-	if ( !QFile::exists( s ) )
-		return 0;
-	
-	// check if file is already opened
-	QFileInfo f( s );
-	foreach ( pAbstractChild* c, pWorkspace::instance()->children() )
-	{
-		foreach ( QFileInfo fi, c->files() )
-		{
-			if ( fi.canonicalFilePath() == f.canonicalFilePath() )
-			{
-				pWorkspace::instance()->setCurrentDocument( c );
-				c->goTo( s, p );
-				return c;
-			}
-		}
-	}
-
-	// open file
-/*
-	if ( pluginsManager()->childPluginOpenFile( s, p ) )
-	{}
-	else
-*/
-	{
-		// create child
-		pAbstractChild* c = new pChild;
-
-		// opened/closed file
-		connect( c, SIGNAL( fileOpened( const QString& ) ), this, SIGNAL( fileOpened( const QString& ) ) );
-		connect( c, SIGNAL( fileClosed( const QString& ) ), this, SIGNAL( fileClosed( const QString& ) ) );
-		// update file menu
-		connect( c, SIGNAL( modifiedChanged( bool ) ), pMenuBar::instance()->action( "mFile/mSave/aCurrent" ), SLOT( setEnabled( bool ) ) );
-		// update edit menu
-		connect( c, SIGNAL( undoAvailableChanged( bool ) ), pMenuBar::instance()->action( "mEdit/aUndo" ), SLOT( setEnabled( bool ) ) );
-		connect( c, SIGNAL( redoAvailableChanged( bool ) ), pMenuBar::instance()->action( "mEdit/aRedo" ), SLOT( setEnabled( bool ) ) );
-		connect( c, SIGNAL( copyAvailableChanged( bool ) ), pMenuBar::instance()->action( "mEdit/aCut" ), SLOT( setEnabled( bool ) ) );
-		connect( c, SIGNAL( copyAvailableChanged( bool ) ), pMenuBar::instance()->action( "mEdit/aCopy" ), SLOT( setEnabled( bool ) ) );
-		connect( c, SIGNAL( pasteAvailableChanged( bool ) ), pMenuBar::instance()->action( "mEdit/aPaste" ), SLOT( setEnabled( bool ) ) );
-		//connect( c, SIGNAL( searchReplaceAvailableChanged( bool ) ), pMenuBar::instance()->action( "mEdit/aSearchReplace" ), SLOT( setEnabled( bool ) ) );
-		//connect( c, SIGNAL( goToAvailableChanged( bool ) ), pMenuBar::instance()->action( "mEdit/aGoTo" ), SLOT( setEnabled( bool ) ) );
-		// update status bar
-		//connect( c, SIGNAL( cursorPositionChanged( const QPoint& ) ), statusBar(), SLOT( setCursorPosition( const QPoint& ) ) );
-		//connect( c, SIGNAL( modifiedChanged( bool ) ), statusBar(), SLOT( setModified( bool ) ) );
-		//connect( c, SIGNAL( documentModeChanged( AbstractChild::DocumentMode ) ), statusBar(), SLOT( setDocumentMode( AbstractChild::DocumentMode ) ) );
-		//connect( c, SIGNAL( layoutModeChanged( AbstractChild::LayoutMode ) ), statusBar(), SLOT( setLayoutMode( AbstractChild::LayoutMode ) ) );
-		//connect( c, SIGNAL( currentFileChanged( const QString& ) ), statusBar(), SLOT( setFileName( const QString& ) ) );
-
-		// open file
-		c->openFile( s, p );
-
-		// add child to workspace
-		pWorkspace::instance()->addTab( c, c->currentFileName() );
-		
-		// set modification state because file is open before put in worksapce so workspace can't know it
-		c->setWindowModified( c->isModified() );
-
-		return c;
-	}
-
-	return 0;
-}
+{ return pWorkspace::instance()->openFile( s, p ); }
 
 void pFileManager::closeFile( const QString& s )
-{
-	// search child for this file
-	foreach ( pAbstractChild* c, pWorkspace::instance()->children() )
-	{
-		if ( c->files().contains( s ) )
-		{
-			c->closeFile( s );
-			return;
-		}
-	}
-}
+{ pWorkspace::instance()->closeFile( s ); }
 
 void pFileManager::goToLine( const QString& s, const QPoint& p, bool b )
-{
-	// search child for this file
-	foreach ( pAbstractChild* c, pWorkspace::instance()->children() )
-	{
-		if ( c->files().contains( s ) )
-		{
-			c->goTo( s, p, b );
-			return;
-		}
-	}
-
-	// open file
-	pAbstractChild* c = openFile( s, p );
-
-	// goto line
-	if ( c )
-		c->goTo( s, p, b );
-}
+{ pWorkspace::instance()->goToLine( s, p, b ); }
 
 void pFileManager::openProject( const QString& s )
 { UIProjectsManager::instance()->openProject( s ); }

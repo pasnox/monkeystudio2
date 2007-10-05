@@ -20,6 +20,7 @@
 #include "pAbbreviationsManager.h"
 #include "pMonkeyStudio.h"
 #include "pTemplatesManager.h"
+#include "UIProjectsManager.h"
 
 #include "pChild.h"
 #include "pEditor.h"
@@ -27,6 +28,8 @@
 
 #include <QToolButton>
 #include <QCloseEvent>
+
+using namespace pMonkeyStudio;
 
 pWorkspace::pWorkspace( QWidget* p )
 	: pTabbedWorkspace( p )
@@ -54,6 +57,107 @@ QList<pAbstractChild*> pWorkspace::children() const
 	foreach ( QWidget* w, documents() )
 		l << qobject_cast<pAbstractChild*>( w );
 	return l;
+}
+
+pAbstractChild* pWorkspace::openFile( const QString& s, const QPoint& p )
+{
+	// if it not exists
+	if ( !QFile::exists( s ) )
+		return 0;
+	
+	// check if file is already opened
+	foreach ( pAbstractChild* c, children() )
+	{
+		foreach ( QString f, c->files() )
+		{
+			if ( isSameFile( f, s ) )
+			{
+				setCurrentDocument( c );
+				c->goTo( f, p );
+				return c;
+			}
+		}
+	}
+
+	// open file
+/*
+	if ( pluginsManager()->childPluginOpenFile( s, p ) )
+	{}
+	else
+*/
+	{
+		// create child
+		pAbstractChild* c = new pChild;
+
+		// opened/closed file
+		connect( c, SIGNAL( fileOpened( const QString& ) ), this, SIGNAL( fileOpened( const QString& ) ) );
+		connect( c, SIGNAL( fileClosed( const QString& ) ), this, SIGNAL( fileClosed( const QString& ) ) );
+		// update file menu
+		connect( c, SIGNAL( modifiedChanged( bool ) ), pMenuBar::instance()->action( "mFile/mSave/aCurrent" ), SLOT( setEnabled( bool ) ) );
+		// update edit menu
+		connect( c, SIGNAL( undoAvailableChanged( bool ) ), pMenuBar::instance()->action( "mEdit/aUndo" ), SLOT( setEnabled( bool ) ) );
+		connect( c, SIGNAL( redoAvailableChanged( bool ) ), pMenuBar::instance()->action( "mEdit/aRedo" ), SLOT( setEnabled( bool ) ) );
+		connect( c, SIGNAL( copyAvailableChanged( bool ) ), pMenuBar::instance()->action( "mEdit/aCut" ), SLOT( setEnabled( bool ) ) );
+		connect( c, SIGNAL( copyAvailableChanged( bool ) ), pMenuBar::instance()->action( "mEdit/aCopy" ), SLOT( setEnabled( bool ) ) );
+		connect( c, SIGNAL( pasteAvailableChanged( bool ) ), pMenuBar::instance()->action( "mEdit/aPaste" ), SLOT( setEnabled( bool ) ) );
+		//connect( c, SIGNAL( searchReplaceAvailableChanged( bool ) ), pMenuBar::instance()->action( "mEdit/aSearchReplace" ), SLOT( setEnabled( bool ) ) );
+		//connect( c, SIGNAL( goToAvailableChanged( bool ) ), pMenuBar::instance()->action( "mEdit/aGoTo" ), SLOT( setEnabled( bool ) ) );
+		// update status bar
+		//connect( c, SIGNAL( cursorPositionChanged( const QPoint& ) ), statusBar(), SLOT( setCursorPosition( const QPoint& ) ) );
+		//connect( c, SIGNAL( modifiedChanged( bool ) ), statusBar(), SLOT( setModified( bool ) ) );
+		//connect( c, SIGNAL( documentModeChanged( AbstractChild::DocumentMode ) ), statusBar(), SLOT( setDocumentMode( AbstractChild::DocumentMode ) ) );
+		//connect( c, SIGNAL( layoutModeChanged( AbstractChild::LayoutMode ) ), statusBar(), SLOT( setLayoutMode( AbstractChild::LayoutMode ) ) );
+		//connect( c, SIGNAL( currentFileChanged( const QString& ) ), statusBar(), SLOT( setFileName( const QString& ) ) );
+
+		// open file
+		c->openFile( s, p );
+
+		// add child to workspace
+		pWorkspace::instance()->addTab( c, c->currentFileName() );
+		
+		// set modification state because file is open before put in worksapce so workspace can't know it
+		c->setWindowModified( c->isModified() );
+
+		return c;
+	}
+
+	return 0;
+}
+
+void pWorkspace::closeFile( const QString& s )
+{
+	foreach ( pAbstractChild* c, children() )
+	{
+		foreach ( QString f, c->files() )
+		{
+			if ( isSameFile( f, s ) )
+			{
+				c->closeFile( f );
+				return;
+			}
+		}
+	}
+}
+
+void pWorkspace::goToLine( const QString& s, const QPoint& p, bool b )
+{
+	if ( b )
+		openFile( s, p );
+	else
+	{
+		foreach ( pAbstractChild* c, children() )
+		{
+			foreach ( QString f, c->files() )
+			{
+				if ( isSameFile( f, s ) )
+				{
+					setCurrentDocument( c );
+					c->goTo( s, p, b );
+					return;
+				}
+			}
+		}
+	}
 }
 
 void pWorkspace::internal_currentChanged( int i )
@@ -109,7 +213,7 @@ void pWorkspace::internal_currentChanged( int i )
 	pSearch::instance()->setEditor( ic ? c->currentEditor() : 0 );
 	
 	// emit file changed
-	emit pFileManager::instance()->currentFileChanged( ic ? c->currentFile() : QString() );
+	emit currentFileChanged( ic ? c->currentFile() : QString() );
 }
 
 void pWorkspace::internal_aboutToCloseTab( int i, QCloseEvent* e )
@@ -126,27 +230,27 @@ void pWorkspace::fileNew_triggered()
 void pWorkspace::fileOpen_triggered()
 {
 	// get last file open path
-	const QString mPath = pRecentsManager::instance()->recentFileOpenPath();
+	const QString mPath = currentChild() ? currentChild()->currentFile() : pRecentsManager::instance()->recentFileOpenPath();
 
 	// get available filters
-	QString mFilters = pMonkeyStudio::availableLanguagesFilters();
+	QString mFilters = availableLanguagesFilters();
 
 	// prepend a all in one filter
 	if ( !mFilters.isEmpty() )
 	{
 		QString s;
-		foreach ( QStringList l, pMonkeyStudio::availableSuffixes().values() )
+		foreach ( QStringList l, availableSuffixes().values() )
 			s.append( l.join( " " ).append( " " ) );
 		mFilters.prepend( QString( "All Supported Files (%1);;" ).arg( s.trimmed() ) );
 	}
 
 	// open open file dialog
-	QStringList l = pMonkeyStudio::getOpenFileNames( tr( "Choose the file(s) to open" ), mPath, mFilters, window() );
+	QStringList l = getOpenFileNames( tr( "Choose the file(s) to open" ), mPath, mFilters, window() );
 
 	// for each entry, open file
 	foreach ( QString s, l )
 	{
-		if ( pFileManager::instance()->openFile( s ) )
+		if ( openFile( s ) )
 			// append file to recents
 			pRecentsManager::instance()->addRecentFile( s );
 		else
@@ -162,17 +266,27 @@ void pWorkspace::fileOpen_triggered()
 void pWorkspace::fileSessionSave_triggered()
 {
 	QStringList l;
+	// saves opened files
 	foreach ( pAbstractChild* c, children() )
 		l << c->files();
-
-	pSettings::instance()->setValue( "Session", l );
+	pSettings::instance()->setValue( "Session/Files", l );
+	// saves opened projects
+	l.clear();
+	foreach ( ProjectItem* p, UIProjectsManager::instance()->rootProjects() )
+		l << p->canonicalFilePath();
+	pSettings::instance()->setValue( "Session/Projects", l );
 }
 
 void pWorkspace::fileSessionRestore_triggered()
 {
-	foreach ( QString s, pSettings::instance()->value( "Session", QStringList() ).toStringList() )
-		if ( !pFileManager::instance()->openFile( s ) ) // remove it from recents files
+	// restore files
+	foreach ( QString s, pSettings::instance()->value( "Session/Files", QStringList() ).toStringList() )
+		if ( !openFile( s ) ) // remove it from recents files
 			pRecentsManager::instance()->removeRecentFile( s );
+	// restore projects
+	foreach ( QString s, pSettings::instance()->value( "Session/Projects", QStringList() ).toStringList() )
+		if ( !UIProjectsManager::instance()->openProject( s ) ) // remove it from recents projects
+			pRecentsManager::instance()->removeRecentProject( s );
 }
 
 void pWorkspace::fileSaveCurrent_triggered()
@@ -199,7 +313,7 @@ void pWorkspace::fileSaveAsBackup_triggered()
 	pAbstractChild* c = currentChild();
 	if ( c )
 	{
-		const QString s = pMonkeyStudio::getSaveFileName( tr( "Choose a filename to backup your file" ), QFileInfo( c->currentFile() ).fileName(), QString::null, this );
+		const QString s = getSaveFileName( tr( "Choose a filename to backup your file" ), QFileInfo( c->currentFile() ).fileName(), QString::null, this );
 	
 		if ( !s.isEmpty() )
 			c->backupCurrentFile( s );

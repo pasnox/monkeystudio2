@@ -25,6 +25,13 @@ public:
 	pAbstractChild* child( int ) const;
 	QList<pAbstractChild*> children() const;
 
+	// open a file and set cursor to position
+	pAbstractChild* openFile( const QString&, const QPoint& = QPoint() );
+	// close the file
+	void closeFile( const QString& );
+	// goto to position inside file, highlight line according to bool, opening it if needed
+	void goToLine( const QString&, const QPoint&, bool );
+
 private:
 	pWorkspace( QWidget* = 0 );
 
@@ -69,6 +76,14 @@ public slots:
 #ifdef __COVERAGESCANNER__
 	void helpTestReport_triggered();
 #endif
+
+signals:
+	// a file has been opened
+	void fileOpened( const QString& );
+	// a file has been closed
+	void fileClosed( const QString& );
+	// current file changed
+	void currentFileChanged( const QString& );
 
 };
 
