@@ -66,6 +66,26 @@ bool pMonkeyStudio::question( const QString& c, const QString& s, QWidget* w, QM
 	return false;
 }
 
+bool pMonkeyStudio::isSameFile( const QString& f, const QString& o )
+{
+	// get file info
+	QFileInfo fif( f );
+	QFileInfo fio( o );
+	
+	// check files exists
+	if ( fif.exists() != fio.exists() )
+		return false;
+	
+	// check simlink
+	if ( fif.isSymLink() )
+		fif.setFile( fif.symLinkTarget() );
+	if ( fio.isSymLink() )
+		fio.setFile( fio.symLinkTarget() );
+	
+	// check canonical file path
+	return fif.canonicalFilePath() == fio.canonicalFilePath();
+}
+
 const QStringList pMonkeyStudio::availableTextCodecs()
 {
 	static QStringList l;

@@ -30,6 +30,8 @@ namespace pMonkeyStudio
 	Q_MONKEY_EXPORT void warning( const QString&, const QString&, QWidget* = QApplication::activeWindow() );
 	Q_MONKEY_EXPORT void information( const QString&, const QString&, QWidget* = QApplication::activeWindow() );
 	Q_MONKEY_EXPORT bool question( const QString&, const QString&, QWidget* = QApplication::activeWindow(), QMessageBox::StandardButtons = QMessageBox::Yes | QMessageBox::No, QMessageBox::StandardButton = QMessageBox::No );
+	
+	Q_MONKEY_EXPORT bool isSameFile( const QString&, const QString& );
 
 	Q_MONKEY_EXPORT const QStringList availableTextCodecs();
 	Q_MONKEY_EXPORT const QStringList availableImageFormats();
