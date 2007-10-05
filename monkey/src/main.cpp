@@ -9,9 +9,11 @@
 #include "UITranslator.h"
 #include "UISettings.h"
 #include "UIMain.h"
+#include "pWorkspace.h"
 #include "pSettings.h"
 #include "PluginsManager.h"
 #include "pConsoleManager.h"
+#include "pMonkeyStudio.h"
 
 void showMessage( QSplashScreen* s, const QString& m )
 {
@@ -94,31 +96,26 @@ int main( int argc, char** argv )
 	// init main window
 	showMessage( &splash, QObject::tr( "Initializing Main Window..." ) );
 	UIMain::instance()->setWindowTitle( QObject::tr( "%1 v%2 - %3, The Monkey Studio Team" ).arg( PROGRAM_NAME, PROGRAM_VERSION, PROGRAM_COPYRIGHTS ) );
-
-/*
-	// menu tools
-	showMessage( &splash, tr( "Initializing Tools Manager..." ) );
-	ToolsManager::self( UIMain::self() );
-
-	// init recents
-	showMessage( &splash, tr( "Initializing Recents Manager..." ) );
-	RecentsManager::self( UIMain::self() );
-*/
 	
 	// init pluginsmanager
 	showMessage( &splash, QObject::tr( "Initializing Plugins Manager..." ) );
 	a.addLibraryPath( "plugins" );
 	PluginsManager::instance()->loadsPlugins();
-
-	// ready
-	showMessage( &splash, QObject::tr( "%1 v%2 Ready !" ).arg( PROGRAM_NAME, PROGRAM_VERSION ) );
-	//StatusBar::self()->setText( StatusBar::tStatusTip, tr( "%1 v%2 Ready !" ).arg( PROGRAM_NAME, PROGRAM_VERSION ), 15000 );
 	
 	// restore window state
 	UIMain::instance()->restoreState();
 	
 	// show main window
 	UIMain::instance()->show();
+	
+	// restore session
+	showMessage( &splash, QObject::tr( "Restoring Session..." ) );
+	if ( pMonkeyStudio::restoreSessionOnStartup() )
+		UIMain::instance()->workspace()->fileSessionRestore_triggered();
+
+	// ready
+	showMessage( &splash, QObject::tr( "%1 v%2 Ready !" ).arg( PROGRAM_NAME, PROGRAM_VERSION ) );
+	//StatusBar::self()->setText( StatusBar::tStatusTip, tr( "%1 v%2 Ready !" ).arg( PROGRAM_NAME, PROGRAM_VERSION ), 15000 );
 
 	// finish splashscreen
 	splash.finish( UIMain::instance() );
