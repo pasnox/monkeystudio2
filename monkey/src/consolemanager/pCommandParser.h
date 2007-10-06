@@ -16,6 +16,7 @@
 #define PCOMMANDPARSER_H
 
 #include "MonkeyExport.h"
+#include "pConsoleManager.h"
 
 #include <QObject>
 
@@ -23,15 +24,20 @@ class Q_MONKEY_EXPORT pCommandParser : public QObject
 {
 	Q_OBJECT
 
+protected:
+	QString mName;
+
 public:
-	pCommandParser( QObject* = 0 ) {}
+	pCommandParser( QObject* o = 0 ) : QObject( o ) {}
 	virtual ~pCommandParser() {}
 
-	virtual QByteArray contents() const = 0;
+	virtual QString name() const { return mName; }
 
 public slots:
-	virtual void addContents( const QByteArray& ) = 0;
-	virtual void processParsing() = 0;
+	virtual bool processParsing( const QByteArray& ) = 0;
+
+signals:
+	void newStepAvailable( const pConsoleManager::Step );
 
 };
 

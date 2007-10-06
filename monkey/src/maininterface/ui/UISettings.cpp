@@ -504,7 +504,11 @@ void UISettings::saveSettings()
 	}
 	//  Lexers Highlighting
 	foreach ( QsciLexer* l, mLexers )
+	{
+		l->setDefaultPaper( iconBackgroundColor( tbDefaultDocumentPaper->icon() ) );
+		l->setDefaultColor( iconBackgroundColor( tbDefaultDocumentPen->icon() ) );
 		l->writeSettings( *pSettings::instance(), qPrintable( pMonkeyStudio::scintillaSettingsPath() ) );
+	}
 
 	//  Abbreviations
 	sp = "Abbreviations";

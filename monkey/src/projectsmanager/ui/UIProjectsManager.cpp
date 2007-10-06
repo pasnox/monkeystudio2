@@ -140,6 +140,9 @@ void UIProjectsManager::tvProjects_currentChanged( const QModelIndex& c, const Q
 	pm->setCurrentCompiler( it ? it->compiler() : 0 );
 	pm->setCurrentDebugger( it ? it->debugger() : 0 );
 	pm->setCurrentInterpreter( it ? it->interpreter() : 0 );
+	// anstall project self own commands
+	if ( it )
+		it->installCommands();
 	// desactive project action
 	mb->action( "mProject/mSave/aCurrent" )->setEnabled( it ? it->getModified() : false );
 	mb->action( "mProject/mSave/aAll" )->setEnabled( it );

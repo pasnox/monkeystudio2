@@ -233,6 +233,8 @@ public:
 	virtual void setInterpreter( InterpreterPlugin* ) = 0;
 	// interpreter for this project
 	virtual InterpreterPlugin* interpreter() const = 0;
+	// install own command for compiler/debugger/interpreter to correct menu
+	virtual void installCommands() = 0;
 	// show the content of items 
 	virtual void debug() = 0;
 	

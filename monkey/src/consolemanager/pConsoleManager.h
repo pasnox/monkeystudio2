@@ -22,22 +22,41 @@
 #include <QApplication>
 #include <QProcess>
 
+class pCommandParser;
+
 class Q_MONKEY_EXPORT pConsoleManager : public QProcess, public QSingleton<pConsoleManager>
 {
 	Q_OBJECT
 	friend class QSingleton<pConsoleManager>;
 	
 public:
+	enum StepType { stUnknown = -1, stError, stWarning, stGood, stBad, stCompiling, stState };
+	
+	struct Step
+	{
+		QString mFileName;
+		QPoint mPosition;
+		StepType mType;
+		QString mText;
+		QString mFullText;
+	};
+	
 	pCommand* currentCommand() const { return mCommands.value( 0 ); }
 
 protected:
 	int mTimerId;
 	pCommandList mCommands;
+	QHash<QString, pCommandParser*> mParsers;
 	void timerEvent( QTimerEvent* );
 
 private:
 	pConsoleManager( QObject* = QApplication::instance() );
 	~pConsoleManager();
+
+public:
+	void addParser( pCommandParser* );
+	void removeParser( pCommandParser* );
+	void removeParser( const QString& );
 
 public slots:
 	void sendRawCommand( const QString& );
@@ -63,6 +82,7 @@ signals:
 	void commandStarted( pCommand* );
 	void commandStateChanged( pCommand*, QProcess::ProcessState );
 	void commandSkipped( pCommand* );
+	void newStepAvailable( const pConsoleManager::Step );
 
 };
 

@@ -16,11 +16,9 @@
 #define PCOMMAND_H
 
 #include "MonkeyExport.h"
-#include "pCommandParser.h"
 
 #include <QObject>
 #include <QStringList>
-#include <QPointer>
 
 class Q_MONKEY_EXPORT pCommand : public QObject
 {
@@ -28,21 +26,29 @@ class Q_MONKEY_EXPORT pCommand : public QObject
 
 public:
 	pCommand( QObject* o = 0 )	: QObject( o ) {}
-	~pCommand() { if ( mParser ) mParser->deleteLater(); }
+	~pCommand() {}
 
 	QString text() const { return mText; }
 	QString command() const { return mCommand; }
 	QStringList arguments() const { return mArguments; }
 	QString workingDirectory() const { return mWorkingDirectory; }
-	pCommandParser* parser() const { return mParser; }
+	QStringList parsers() const { return mParsers; }
 	bool skipOnError() const { return mSkipOnError; }
+	bool tryAllParsers() const { return mTryAllParsers; }
+	// add by hlamer
+	QString tool() const { return mTool; }
+	QString defaultCommand() const { return mTool; }
 
 	void setText( const QString& s ) { mText = s; }
 	void setCommand( const QString& s ) { mCommand = s; }
 	void setArguments( const QStringList& l ) { mArguments = l; }
 	void setWorkingDirectory( const QString& s ) { mWorkingDirectory = s; }
-	void setParser( pCommandParser* p ) { mParser = p; }
+	void setParsers( const QStringList& p ) { mParsers = p; }
 	void setSkipOnError( bool b ) { mSkipOnError = b; }
+	void setTryAllParsers( bool b ) { mTryAllParsers = b; }
+	// add by hlamer
+	void setTool( const QString& s ) { mTool = s; }
+	void setDefaultCommand( const QString& s ) { mTool = s; }
 
 protected:
 	QString mText;
@@ -50,7 +56,12 @@ protected:
 	QStringList mArguments;
 	QString mWorkingDirectory;
 	bool mSkipOnError;
-	QPointer<pCommandParser> mParser;
+	QStringList mParsers;
+	bool mTryAllParsers;
+
+	// add by hlamer
+	QString mTool;
+	QString mDefaultCommand;
 
 };
 

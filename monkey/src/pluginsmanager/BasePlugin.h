@@ -23,6 +23,7 @@ public:
 	{	iAll = -1,
 		iBase,
 		iChild,
+		iCLITool,
 		iCompiler,
 		iDebugger,
 		iInterpreter,

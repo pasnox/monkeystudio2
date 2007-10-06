@@ -13,8 +13,12 @@
 **
 ****************************************************************************/
 #include "pConsoleManager.h"
+#include "pCommandParser.h"
+#include "pMonkeyStudio.h"
 
 #include <QTimer>
+
+using namespace pMonkeyStudio;
 
 pConsoleManager::pConsoleManager( QObject* o )
 	: QProcess( o )
@@ -37,6 +41,27 @@ pConsoleManager::~pConsoleManager()
 	waitForFinished();
 	kill();
 }
+
+void pConsoleManager::addParser( pCommandParser* p )
+{
+	if ( p && !mParsers.contains( p->name() ) )
+	{
+		mParsers[p->name()] = p;
+		connect( p, SIGNAL( newStepAvailable( pConsoleManager::Step ) ), this, SIGNAL( newStepAvailable( pConsoleManager::Step ) ) );
+	}
+}
+
+void pConsoleManager::removeParser( pCommandParser* p )
+{
+	if ( p && mParsers.contains( p->name() ) )
+	{
+		disconnect( p, SIGNAL( newStepAvailable( pConsoleManager::Step ) ), this, SIGNAL( newStepAvailable( pConsoleManager::Step ) ) );
+		mParsers.remove( p->name() );
+	}
+}
+
+void pConsoleManager::removeParser( const QString& s )
+{ removeParser( mParsers.value( s ) ); }
 
 void pConsoleManager::timerEvent( QTimerEvent* e )
 {
@@ -73,12 +98,25 @@ void pConsoleManager::finished( int i, QProcess::ExitStatus e )
 void pConsoleManager::readyRead()
 {
 	// get datas
-	const QByteArray a = readAllStandardOutput();
+	QByteArray a;
+	// read complete lines
+	while ( canReadLine() )
+		a.append( readLine() );
 	// get current command
 	pCommand* c = currentCommand();
 	// append data to parser if available
-	if ( c && c->parser() )
-		c->parser()->addContents( a );
+	if ( c )
+	{
+		// from P@sNox : i think it s not good to give all output to same parser, normally each line need test each parsers ?!
+		foreach ( QString s, c->parsers() )
+		{
+			if ( pCommandParser* p = mParsers.value( s ) )
+			{
+				if ( p->processParsing( a ) )
+					break;
+			}
+		}
+	}
 	// emit signal
 	emit commandReadyRead( c, a );
 }
@@ -123,7 +161,7 @@ void pConsoleManager::sendRawData( const QByteArray& a )
 		qWarning( "sendRawData bytes written: %d", write( a ) );
 	}
 	else
-		qWarning( "Can't send raw data to console" );
+		warning( tr( "sendRawData..." ), tr( "Can't send raw data to console" ) );
 }
 
 void pConsoleManager::stopCurrentCommand( bool b )
