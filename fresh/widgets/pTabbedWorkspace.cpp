@@ -8,6 +8,7 @@
  ********************************************************************************************************/
 #include "pTabbedWorkspace.h"
 #include "pTabbedWorkspaceRightCorner.h"
+#include "pAction.h"
 
 #include <QBoxLayout>
 #include <QStackedLayout>
@@ -18,7 +19,7 @@
 #include <QFile>
 
 pTabbedWorkspace::pTabbedWorkspace( QWidget* p, pTabbedWorkspace::TabMode m )
-	: QWidget( p ), mTabsHaveShortcut( true )
+	: QWidget( p ), aTabbedTabsHaveShortcut( 0 ), aTabbedTabsElided( 0 )
 {
 	// tab widget
 	mTabLayout = new QBoxLayout( QBoxLayout::LeftToRight );
@@ -39,6 +40,13 @@ pTabbedWorkspace::pTabbedWorkspace( QWidget* p, pTabbedWorkspace::TabMode m )
 	mLayout->setMargin( 0 );
 	mLayout->addLayout( mTabLayout );
 	mLayout->addLayout( mStackedLayout );
+	
+	// create actions for right tab
+	aTabbedTabsHaveShortcut = new pAction( "aTabbedTabsHaveShortcut", tr( "&Tabs Have Shortcut" ), QKeySequence(), tr( "Tabbed Workspace" ) );
+	aTabbedTabsHaveShortcut->setCheckable( true );
+	
+	aTabbedTabsElided = new pAction( "aTabbedTabsElided", tr( "&Tabs Are Elided" ), QKeySequence(), tr( "Tabbed Workspace" ) );
+	aTabbedTabsElided->setCheckable( true );
 
 	// connections
 	connect( mTabBar, SIGNAL( currentChanged( int ) ), this, SLOT( internal_currentChanged( int ) ) );
@@ -47,10 +55,13 @@ pTabbedWorkspace::pTabbedWorkspace( QWidget* p, pTabbedWorkspace::TabMode m )
 	setAttribute( Qt::WA_DeleteOnClose );
 	mTabBar->setDrawBase( false );
 	mTabBar->setSizePolicy( QSizePolicy( QSizePolicy::Maximum, QSizePolicy::Maximum ) );
-	mTabBar->setElideMode (Qt::ElideMiddle);
+	setTabsHaveShortcut( true );
+	setTabsElided( false );
 	setCornerWidget( pTabbedWorkspaceRightCorner::instance( this ) );
 	setTabMode( m );
 	setDocumentMode( pTabbedWorkspace::dmMaximized );
+	connect( aTabbedTabsHaveShortcut, SIGNAL( toggled( bool ) ), this, SLOT( setTabsHaveShortcut( bool ) ) );
+	connect( aTabbedTabsElided, SIGNAL( toggled( bool ) ), this, SLOT( setTabsElided( bool ) ) );
 }
 
 pTabbedWorkspace::~pTabbedWorkspace()
@@ -549,7 +560,7 @@ int pTabbedWorkspace::insertTab( int j, QWidget* td, const QIcon& i, const QStri
 		mTabBar->setTabIcon( j, i );
 
 	// set chortcut if needed
-	if ( mTabsHaveShortcut )
+	if ( tabsHaveShortcut() )
 		updateTabsNumber( j );
 
 	// return true index of the new document
@@ -583,7 +594,7 @@ void pTabbedWorkspace::removeDocument( QWidget* td )
 		updateCorners();
 
 		// set chortcut if needed
-		if ( mTabsHaveShortcut )
+		if ( tabsHaveShortcut() )
 			updateTabsNumber( i );
 
 		emit tabRemoved( i );
@@ -632,20 +643,28 @@ void pTabbedWorkspace::activatePreviousDocument()
 
 bool pTabbedWorkspace::tabsHaveShortcut() const
 {
-	return mTabsHaveShortcut;
+	return aTabbedTabsHaveShortcut ? aTabbedTabsHaveShortcut->isChecked() : false;
 }
 
 void pTabbedWorkspace::setTabsHaveShortcut( bool b )
 {
-	// if same state, cancel
-	if ( mTabsHaveShortcut == b )
-		return;
-
-	// store tabs have shortcut
-	mTabsHaveShortcut = b;
-
+	// update action
+	aTabbedTabsHaveShortcut->setChecked( b );
 	// update tabs text
 	updateTabsNumber();
+}
+
+bool pTabbedWorkspace::tabsElided() const
+{
+	return aTabbedTabsElided ? aTabbedTabsElided->isChecked() : false;
+}
+
+void pTabbedWorkspace::setTabsElided( bool b )
+{
+	// set new state
+	aTabbedTabsElided->setChecked( b );
+	// update elided mode
+	mTabBar->setElideMode( tabsElided() ? Qt::ElideMiddle : Qt::ElideNone );
 }
 
 void pTabbedWorkspace::updateTabsNumber( int i )
@@ -668,7 +687,7 @@ void pTabbedWorkspace::updateTabsNumber( int i )
 		int k = s.indexOf( ":" );
 
 		// set new tab caption
-		if ( mTabsHaveShortcut )
+		if ( tabsHaveShortcut() )
 			mTabBar->setTabText( j, QString( "&%1: %2" ).arg( j ).arg( s.mid( k != -1 ? k +2 : 0 ) ) );
 		else
 			mTabBar->setTabText( j, s.mid( k != -1 ? k +2 : 0 ) );

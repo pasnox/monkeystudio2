@@ -20,11 +20,13 @@ class QStackedLayout;
 class QStackedWidget;
 class QWorkspace;
 class pTabbedWorkspaceCorner;
+class pAction;
 
 class Q_MONKEY_EXPORT pTabbedWorkspace : public QWidget
 {
 	Q_OBJECT
 	Q_ENUMS( TabMode DocumentMode )
+	friend class pTabbedWorkspaceRightCorner;
 	
 public:
 	enum TabMode { tmSDI = 0, tmMDI, tmTopLevel };
@@ -51,6 +53,7 @@ public:
 	int insertTab( int, QWidget*, const QString& );
 	int insertTab( int, QWidget*, const QIcon&, const QString& );
 	bool tabsHaveShortcut() const;
+	bool tabsElided() const;
 
 public slots:
 	void setBackground( const QPixmap& );
@@ -68,6 +71,7 @@ public slots:
 	void activateNextDocument();
 	void activatePreviousDocument();
 	void setTabsHaveShortcut( bool );
+	void setTabsElided( bool );
 
 protected:
 	void updateCorners();
@@ -75,7 +79,9 @@ protected:
 	void addDocument( QWidget* d, int = -1 );
 
 	// tell if tabs have shortcuts
-	bool mTabsHaveShortcut;
+	pAction* aTabbedTabsHaveShortcut;
+	// tell if tabs are elided
+	pAction* aTabbedTabsElided;
 	// workspace properties
 	pTabbedWorkspace::TabMode mTabMode;
 	pTabbedWorkspace::DocumentMode mDocumentMode;
