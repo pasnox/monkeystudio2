@@ -61,6 +61,7 @@ public:
 	virtual DebuggerPlugin* debugger() const;
 	virtual void setInterpreter( InterpreterPlugin* );
 	virtual InterpreterPlugin* interpreter() const;
+	virtual void installCommands() {}
 	virtual void debug();
 	
 	virtual ProjectItem* getItemScope( const QString&, bool ) const;

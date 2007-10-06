@@ -852,7 +852,6 @@ void QMakeItem::writeItem( ProjectItem* it )
 	}
 	
 	// write children
-	ProjectItem* p = it->project();
 	foreach ( ProjectItem* cit, it->children( false, true ) )
 		writeItem( cit );
 }

@@ -1,2 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS	= base project
+SUBDIRS	= base cli project
