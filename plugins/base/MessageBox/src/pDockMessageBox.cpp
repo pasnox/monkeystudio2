@@ -84,12 +84,12 @@ pDockMessageBox::pDockMessageBox( QWidget* w )
 	// connections
 	connect( leRawCommand, SIGNAL( returnPressed() ), this, SLOT( leRawCommand_returnPressed() ) );
 	connect( tbStopCommand, SIGNAL( clicked() ), this, SLOT( tbStopCommand_clicked() ) );
-	connect( pConsoleManager::instance(), SIGNAL( commandError( pCommand*, QProcess::ProcessError ) ), this, SLOT( commandError( pCommand*, QProcess::ProcessError ) ) );
-	connect( pConsoleManager::instance(), SIGNAL( commandFinished( pCommand*, int, QProcess::ExitStatus ) ), this, SLOT( commandFinished( pCommand*, int, QProcess::ExitStatus ) ) );
-	connect( pConsoleManager::instance(), SIGNAL( commandReadyRead( pCommand*, const QByteArray& ) ), this, SLOT( commandReadyRead( pCommand*, const QByteArray& ) ) );
-	connect( pConsoleManager::instance(), SIGNAL( commandStarted( pCommand* ) ), this, SLOT( commandStarted( pCommand* ) ) );
-	connect( pConsoleManager::instance(), SIGNAL( commandStateChanged( pCommand*, QProcess::ProcessState ) ), this, SLOT( commandStateChanged( pCommand*, QProcess::ProcessState ) ) );
-	connect( pConsoleManager::instance(), SIGNAL( commandSkipped( pCommand* ) ), this, SLOT( commandSkipped( pCommand* ) ) );
+	connect( pConsoleManager::instance(), SIGNAL( commandError( const pCommand&, QProcess::ProcessError ) ), this, SLOT( commandError( const pCommand&, QProcess::ProcessError ) ) );
+	connect( pConsoleManager::instance(), SIGNAL( commandFinished( const pCommand&, int, QProcess::ExitStatus ) ), this, SLOT( commandFinished( const pCommand&, int, QProcess::ExitStatus ) ) );
+	connect( pConsoleManager::instance(), SIGNAL( commandReadyRead( const pCommand&, const QByteArray& ) ), this, SLOT( commandReadyRead( const pCommand&, const QByteArray& ) ) );
+	connect( pConsoleManager::instance(), SIGNAL( commandStarted( const pCommand& ) ), this, SLOT( commandStarted( const pCommand& ) ) );
+	connect( pConsoleManager::instance(), SIGNAL( commandStateChanged( const pCommand&, QProcess::ProcessState ) ), this, SLOT( commandStateChanged( const pCommand&, QProcess::ProcessState ) ) );
+	connect( pConsoleManager::instance(), SIGNAL( commandSkipped( const pCommand& ) ), this, SLOT( commandSkipped( const pCommand& ) ) );
 }
 
 pDockMessageBox::~pDockMessageBox()
@@ -192,12 +192,12 @@ void pDockMessageBox::leRawCommand_returnPressed()
 void pDockMessageBox::tbStopCommand_clicked()
 { pConsoleManager::instance()->stopCurrentCommand(); }
 
-void pDockMessageBox::commandError( pCommand* c, QProcess::ProcessError e )
+void pDockMessageBox::commandError( const pCommand& c, QProcess::ProcessError e )
 {
-	QString s( tr( "* Error            : '%1'<br />" ).arg( colourText( c->text() ) ) );
-	s.append( tr( "* Command          : %1<br />" ).arg( colourText( c->command() ) ) );
-	s.append( tr( "* Arguments        : %1<br />" ).arg( colourText( c->arguments().join( " " )  )) );
-	s.append( tr( "* Working Directory: %1<br />" ).arg( colourText( c->workingDirectory() ) ) );
+	QString s( tr( "* Error            : '%1'<br />" ).arg( colourText( c.text() ) ) );
+	s.append( tr( "* Command          : %1<br />" ).arg( colourText( c.command() ) ) );
+	s.append( tr( "* Arguments        : %1<br />" ).arg( colourText( c.arguments() ) ) );
+	s.append( tr( "* Working Directory: %1<br />" ).arg( colourText( c.workingDirectory() ) ) );
 	s.append( tr( "* Error            : #%1<br />" ).arg( colourText( QString::number( e ) ) ) );
 	//
 	switch ( e )
@@ -228,9 +228,9 @@ void pDockMessageBox::commandError( pCommand* c, QProcess::ProcessError e )
 	appendInBox( colourText( s, Qt::blue ), Qt::red );
 }
 
-void pDockMessageBox::commandFinished( pCommand* c, int i, QProcess::ExitStatus e )
+void pDockMessageBox::commandFinished( const pCommand& c, int i, QProcess::ExitStatus e )
 {
-	QString s( tr( "* Finished   : '%1'<br />" ).arg( colourText( c->text() ) ) );
+	QString s( tr( "* Finished   : '%1'<br />" ).arg( colourText( c.text() ) ) );
 	s.append( tr( "* Exit Code  : #%1<br />" ).arg( colourText( QString::number( i ) ) ) );
 	s.append( tr( "* Status Code: #%1<br />" ).arg( colourText( QString::number( e ) ) ) );
 	//
@@ -251,7 +251,7 @@ void pDockMessageBox::commandFinished( pCommand* c, int i, QProcess::ExitStatus 
 	tbStopCommand->setEnabled( false );
 }
 
-void pDockMessageBox::commandReadyRead( pCommand*, const QByteArray& a )
+void pDockMessageBox::commandReadyRead( const pCommand&, const QByteArray& a )
 {
 	// we check if the scroll bar is at maximum
 	int p = tbOutput->verticalScrollBar()->value();
@@ -263,17 +263,17 @@ void pDockMessageBox::commandReadyRead( pCommand*, const QByteArray& a )
 	tbOutput->verticalScrollBar()->setValue( b ? tbOutput->verticalScrollBar()->maximum() : p );
 }
 
-void pDockMessageBox::commandStarted( pCommand* c )
+void pDockMessageBox::commandStarted( const pCommand& c )
 {
-	QString s( tr( "* Started          : '%1'<br />" ).arg( colourText( c->text() ) ) );
-	s.append( tr( "* Command          : %1<br />" ).arg( colourText( c->command() ) ) );
-	s.append( tr( "* Arguments        : %1<br />" ).arg( colourText( c->arguments().join( " " )  )) );
-	s.append( tr( "* Working Directory: %1" ).arg( colourText( c->workingDirectory() ) ) );
+	QString s( tr( "* Started          : '%1'<br />" ).arg( colourText( c.text() ) ) );
+	s.append( tr( "* Command          : %1<br />" ).arg( colourText( c.command() ) ) );
+	s.append( tr( "* Arguments        : %1<br />" ).arg( colourText( c.arguments() ) ) );
+	s.append( tr( "* Working Directory: %1" ).arg( colourText( c.workingDirectory() ) ) );
 	// appendOutput to console log
 	appendInBox( colourText( s, Qt::blue ), Qt::red );
 }
 
-void pDockMessageBox::commandStateChanged( pCommand* c, QProcess::ProcessState s )
+void pDockMessageBox::commandStateChanged( const pCommand& c, QProcess::ProcessState s )
 {
 	QString ss;
 	switch ( s )
@@ -296,15 +296,15 @@ void pDockMessageBox::commandStateChanged( pCommand* c, QProcess::ProcessState s
 	}
 	// appendOutput to console log
 	appendOutput( colourText( tr( "*** State changed to %1" ).arg( ss ), Qt::gray ) );
-	appendLog( colourText( tr( "*** State changed to #%1 (%2) for command: '%3'" ).arg( s ).arg( ss ).arg( c->text() ), Qt::gray ) );
+	appendLog( colourText( tr( "*** State changed to #%1 (%2) for command: '%3'" ).arg( s ).arg( ss ).arg( c.text() ), Qt::gray ) );
 }
 
-void pDockMessageBox::commandSkipped( pCommand* c )
+void pDockMessageBox::commandSkipped( const pCommand& c )
 {
-	QString s( tr( "* Skipped          : '%1'<br />" ).arg( colourText( c->text() ) ) );
-	s.append( tr( "* Command          : %1<br />" ).arg( colourText( c->command() ) ) );
-	s.append( tr( "* Arguments        : %1<br />" ).arg( colourText( c->arguments().join( " " )  )) );
-	s.append( tr( "* Working Directory: %1" ).arg( colourText( c->workingDirectory() ) ) );
+	QString s( tr( "* Skipped          : '%1'<br />" ).arg( colourText( c.text() ) ) );
+	s.append( tr( "* Command          : %1<br />" ).arg( colourText( c.command() ) ) );
+	s.append( tr( "* Arguments        : %1<br />" ).arg( colourText( c.arguments() ) ) );
+	s.append( tr( "* Working Directory: %1" ).arg( colourText( c.workingDirectory() ) ) );
 	s.append( colourText( tr( "The command has been skipped due to previous error." ), Qt::darkGreen ) );
 	// appendOutput to console log
 	appendInBox( colourText( s, Qt::blue ), Qt::red );

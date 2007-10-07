@@ -64,12 +64,12 @@ public slots:
 private slots:
 	void leRawCommand_returnPressed();
 	void tbStopCommand_clicked();
-	void commandError( pCommand*, QProcess::ProcessError );
-	void commandFinished( pCommand*, int, QProcess::ExitStatus );
-	void commandReadyRead( pCommand*, const QByteArray& );
-	void commandStarted( pCommand* );
-	void commandStateChanged( pCommand*, QProcess::ProcessState );
-	void commandSkipped( pCommand* );
+	void commandError( const pCommand&, QProcess::ProcessError );
+	void commandFinished( const pCommand&, int, QProcess::ExitStatus );
+	void commandReadyRead( const pCommand&, const QByteArray& );
+	void commandStarted( const pCommand& );
+	void commandStateChanged( const pCommand&, QProcess::ProcessState );
+	void commandSkipped( const pCommand& );
 
 signals:
 	void saveSettings();

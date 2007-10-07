@@ -23,10 +23,11 @@ class Q_MONKEY_EXPORT pCommand
 {
 public:
 	pCommand() {}
-	pCommand( const QString& t, const QString& c, bool b = false, const QStringList& p = QStringList() )
+	pCommand( const QString& t, const QString& c, const QString& a, bool b = false, const QStringList& p = QStringList() )
 	{
 		mText = t;
 		mCommand = c;
+		mArguments = a;
 		mSkipOnError = b;
 		mParsers = p;
 	}

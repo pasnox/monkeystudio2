@@ -37,7 +37,7 @@ public slots:
 	virtual bool processParsing( const QByteArray& ) = 0;
 
 signals:
-	void newStepAvailable( const pConsoleManager::Step );
+	void newStepAvailable( const pConsoleManager::Step& );
 
 };
 

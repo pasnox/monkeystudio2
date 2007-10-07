@@ -63,9 +63,9 @@ public slots:
 	void sendRawCommand( const QString& );
 	void sendRawData( const QByteArray& );
 	void stopCurrentCommand( bool = false );
-	void addCommand( pCommand );
+	void addCommand( const pCommand& );
 	void addCommands( const pCommandList& );
-	void removeCommand( pCommand );
+	void removeCommand( const pCommand& );
 	void removeCommands( const pCommandList& );
 
 private slots:
@@ -77,13 +77,13 @@ private slots:
 	void stateChanged( QProcess::ProcessState );
 
 signals:
-	void commandError( pCommand, QProcess::ProcessError );
-	void commandFinished( pCommand, int, QProcess::ExitStatus );
-	void commandReadyRead( pCommand, const QByteArray& );
-	void commandStarted( pCommand );
-	void commandStateChanged( pCommand, QProcess::ProcessState );
-	void commandSkipped( pCommand );
-	void newStepAvailable( const pConsoleManager::Step );
+	void commandError( const pCommand&, QProcess::ProcessError );
+	void commandFinished( const pCommand&, int, QProcess::ExitStatus );
+	void commandReadyRead( const pCommand&, const QByteArray& );
+	void commandStarted( const pCommand& );
+	void commandStateChanged( const pCommand&, QProcess::ProcessState );
+	void commandSkipped( const pCommand& );
+	void newStepAvailable( const pConsoleManager::Step& );
 
 };
 

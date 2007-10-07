@@ -29,11 +29,11 @@ bool GNUMake::setEnabled( bool b)
 pCommandList GNUMake::globalCommands() const
 {
 	return pCommandList()
-		<< pCommand( "Build", "make", false, QStringList( mPluginInfos.Name ) )
-		<< pCommand( "Build Release", "make release", false, QStringList( mPluginInfos.Name ) )
-		<< pCommand( "Build Debug", "make debug", false, QStringList( mPluginInfos.Name ) )
-		<< pCommand( "Clean", "make clean", false, QStringList( mPluginInfos.Name ) )
-		<< pCommand( "Distclean", "make distclean", false, QStringList( mPluginInfos.Name ) ); 
+		<< pCommand( "Build", "make", QString::null, false, QStringList( mPluginInfos.Name ) )
+		<< pCommand( "Build Release", "make", "release", false, QStringList( mPluginInfos.Name ) )
+		<< pCommand( "Build Debug", "make", "debug", false, QStringList( mPluginInfos.Name ) )
+		<< pCommand( "Clean", "make", "clean", false, QStringList( mPluginInfos.Name ) )
+		<< pCommand( "Distclean", "make", "distclean", false, QStringList( mPluginInfos.Name ) ); 
 }
 
 pCommandList GNUMake::userCommands() const
@@ -50,7 +50,7 @@ pCommandList GNUMake::userCommands() const
 		pCommand c;
 		c.setText( s->value( "Text" ).toString() );
 		c.setCommand( s->value( "Command" ).toString() );
-		c.setArguments( s->value( "Arguments" ).toStringList() );
+		c.setArguments( s->value( "Arguments" ).toString() );
 		c.setWorkingDirectory( s->value( "WorkingDirectory" ).toString() );
 		c.setParsers( s->value( "Parsers" ).toStringList() );
 		l << c;

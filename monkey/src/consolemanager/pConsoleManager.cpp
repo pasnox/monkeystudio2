@@ -47,7 +47,7 @@ void pConsoleManager::addParser( pCommandParser* p )
 	if ( p && !mParsers.contains( p->name() ) )
 	{
 		mParsers[p->name()] = p;
-		connect( p, SIGNAL( newStepAvailable( pConsoleManager::Step ) ), this, SIGNAL( newStepAvailable( pConsoleManager::Step ) ) );
+		connect( p, SIGNAL( newStepAvailable( const pConsoleManager::Step& ) ), this, SIGNAL( newStepAvailable( const pConsoleManager::Step& ) ) );
 	}
 }
 
@@ -55,7 +55,7 @@ void pConsoleManager::removeParser( pCommandParser* p )
 {
 	if ( p && mParsers.contains( p->name() ) )
 	{
-		disconnect( p, SIGNAL( newStepAvailable( pConsoleManager::Step ) ), this, SIGNAL( newStepAvailable( pConsoleManager::Step ) ) );
+		disconnect( p, SIGNAL( newStepAvailable( const pConsoleManager::Step& ) ), this, SIGNAL( const newStepAvailable( pConsoleManager::Step& ) ) );
 		mParsers.remove( p->name() );
 	}
 }
@@ -131,7 +131,7 @@ void pConsoleManager::stateChanged( QProcess::ProcessState e )
 }
 
 void pConsoleManager::sendRawCommand( const QString& s )
-{ addCommand( pCommand( tr( "User Raw Command" ), s, false ) ); }
+{ addCommand( pCommand( tr( "User Raw Command" ), s, QString::null, false ) ); }
 
 void pConsoleManager::sendRawData( const QByteArray& a )
 {
@@ -159,7 +159,7 @@ void pConsoleManager::stopCurrentCommand( bool b )
 	}
 }
 
-void pConsoleManager::addCommand( pCommand c )
+void pConsoleManager::addCommand( const pCommand& c )
 {
 	if ( !mCommands.contains( c ) )
 		mCommands << c;
@@ -171,7 +171,7 @@ void pConsoleManager::addCommands( const pCommandList& l )
 		addCommand( c );
 }
 
-void pConsoleManager::removeCommand( pCommand c )
+void pConsoleManager::removeCommand( const pCommand& c )
 {
 	if ( mCommands.contains( c ) )
 		mCommands.removeAll( c );
