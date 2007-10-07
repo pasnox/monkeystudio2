@@ -1,5 +1,3 @@
-#include <QDebug>
-
 #include "GNUMakeParser.h"
 
 GNUMakeParser::GNUMakeParser()
@@ -37,7 +35,7 @@ GNUMakeParser::~GNUMakeParser()
 {
 }
 
-bool GNUMakeParser::processParsing(const QByteArray& arr)
+bool GNUMakeParser::processParsing( const QByteArray& arr )
 {
 	QStringList l = QString(arr).split( '\n' );
 	foreach (QString s, l)
@@ -48,7 +46,7 @@ bool GNUMakeParser::processParsing(const QByteArray& arr)
 			{
 				pConsoleManager::Step m;
 				m.mFileName = replaceWithMatch(p.regExp,p.FileName);
-				m.mPosition = QPoint( replaceWithMatch(p.regExp,p.row).toInt(),replaceWithMatch(p.regExp,p.col).toInt());
+				m.mPosition = QPoint( replaceWithMatch(p.regExp,p.col).toInt(), replaceWithMatch(p.regExp,p.row).toInt());
 				m.mType = p.Type;
 				m.mText = replaceWithMatch(p.regExp,p.Text);
 				m.mFullText = replaceWithMatch(p.regExp,p.FullText);
@@ -64,7 +62,7 @@ return false;
 
 QString GNUMakeParser::name() const
 {
-	return QString ("GNUMake");
+	return "GNUMake";
 }
 
 QString GNUMakeParser::replaceWithMatch(QRegExp rex, QString s)

@@ -1,6 +1,9 @@
 #include "GNUMake.h"
 #include "GNUMakeParser.h"
+#include "GccParser.h"
 #include "pConsoleManager.h"
+#include "UIProjectsManager.h"
+#include "pMenuBar.h"
 
 GNUMake::GNUMake ()
 {
@@ -20,20 +23,45 @@ bool GNUMake::setEnabled( bool b)
 		return true;
 	mPluginInfos.Enabled = b;
  	if ( b )
- 		pConsoleManager::instance()->addParser( new GNUMakeParser() );
+	{
+		foreach ( QString s, availableParsers() )
+			pConsoleManager::instance()->addParser( getParser( s ) );
+		
+		pMenuBar* mb = pMenuBar::instance();
+		foreach ( pCommand c, userCommands() )
+		{
+			QAction* a = mb->action( QString( "mBuild/%1" ).arg( c.text() ), c.text() );
+			a->setData( mPluginInfos.Name );
+			a->setStatusTip( c.text() );
+			connect( a, SIGNAL( triggered() ), this, SLOT( commandTriggered() ) );
+		}
+	}
  	else
- 		pConsoleManager::instance()->removeParser( mPluginInfos.Name );
+	{
+		foreach ( QString s, availableParsers() )
+			pConsoleManager::instance()->removeParser( s );
+		
+		pMenuBar* mb = pMenuBar::instance();
+		foreach ( QAction* a, mb->menu( "mBuild" )->actions() )
+			if ( a->data().toString() == mPluginInfos.Name )
+				delete a;
+	}
 	return true;
 }
 
 pCommandList GNUMake::globalCommands() const
 {
+#ifdef Q_OS_WIN
+	const QString mMake = "mingw32-make";
+#else
+	const QString mMake = "make";
+#endif
 	return pCommandList()
-		<< pCommand( "Build", "make", QString::null, false, QStringList( mPluginInfos.Name ) )
-		<< pCommand( "Build Release", "make", "release", false, QStringList( mPluginInfos.Name ) )
-		<< pCommand( "Build Debug", "make", "debug", false, QStringList( mPluginInfos.Name ) )
-		<< pCommand( "Clean", "make", "clean", false, QStringList( mPluginInfos.Name ) )
-		<< pCommand( "Distclean", "make", "distclean", false, QStringList( mPluginInfos.Name ) ); 
+		<< pCommand( "Build", mMake, QString::null, false, availableParsers(), "$cpp$" )
+		<< pCommand( "Build Release", mMake, "release", false, availableParsers(), "$cpp$" )
+		<< pCommand( "Build Debug", mMake, "debug", false, availableParsers(), "$cpp$" )
+		<< pCommand( "Clean", mMake, "clean", false, availableParsers(), "$cpp$" )
+		<< pCommand( "Distclean", mMake, "distclean", false, availableParsers(), "$cpp$" ); 
 }
 
 pCommandList GNUMake::userCommands() const
@@ -84,17 +112,34 @@ void GNUMake::setUserCommands( const pCommandList& l ) const
 	s->endArray();
 }
 
-QString GNUMake::name()
-{ return mPluginInfos.Name; }
+QStringList GNUMake::availableParsers() const
+{ return QStringList() << "GNUMake" << "Gcc"; }
 
-QString GNUMake::getCommand ()
-{ return QString ("make");  }
+pCommandParser* GNUMake::getParser( const QString& s )
+{
+	if ( s == "GNUMake" )
+		return new GNUMakeParser;
+	else if ( s == "Gcc" )
+		return new GccParser;
+	return 0;
+}
 
-QString GNUMake::getSwitches( QString s )
-{ return s; }
-
-pCommandParser* GNUMake::getParser()
-{ return new GNUMakeParser(); }
+void GNUMake::commandTriggered()
+{
+	if ( QAction* a = qobject_cast<QAction*>( sender() ) )
+	{
+		foreach ( pCommand c, userCommands() )
+		{
+			if ( c.text() == a->statusTip() )
+			{
+				if ( c.workingDirectory().contains( "$cpp$" ) )
+					c.setWorkingDirectory( c.workingDirectory().replace( "$cpp$", UIProjectsManager::instance()->currentProject()->canonicalPath() ) );
+				pConsoleManager::instance()->addCommand( c );
+				return;
+			}
+		}
+	}
+}
 
 Q_EXPORT_PLUGIN2( CompilerGNUMake, GNUMake )
 

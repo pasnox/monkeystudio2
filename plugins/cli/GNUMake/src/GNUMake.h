@@ -13,16 +13,18 @@ public:
 	GNUMake ();
 	// BasePlugin
 	virtual bool setEnabled( bool );
-	// CompilerPlugin
+	virtual QWidget* settingsWidget()
+	{ return commandsEditorWidget( this ); }
+	// CLIToolPlugin
 	virtual pCommandList globalCommands() const;
 	virtual pCommandList userCommands() const;
 	virtual void setUserCommands( const pCommandList& ) const;
-	// CLIToolPlugin
-	virtual QString name();
-	virtual QString getCommand ();
-	virtual QString getSwitches (QString oldSwitches = QString::null);
-	virtual pCommandParser* getParser();
-
+	virtual QStringList availableParsers() const;
+	virtual pCommandParser* getParser( const QString& );
+	
+public slots:
+	virtual void commandTriggered();
+	
 };
 
 #endif //GNUMAKE_H
