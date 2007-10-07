@@ -63,8 +63,25 @@ pCommandList GNUMake::userCommands() const
 	return l;
 }
 
-void GNUMake::setUserCommands( const pCommandList& ) const
+void GNUMake::setUserCommands( const pCommandList& l ) const
 {
+	// get settings object
+	QSettings* s = settingsObject();
+	// remove old key
+	s->remove( settingsKey( "Commands" ) );
+	// write user commands for this plugin
+	s->beginWriteArray( settingsKey( "Commands" ) );
+	for ( int i = 0; i < l.count(); i++ )
+	{
+		s->setArrayIndex( i );
+		const pCommand& c = l[i];
+		s->setValue( "Text", c.text() );
+		s->setValue( "Command", c.command() );
+		s->setValue( "Arguments", c.arguments() );
+		s->setValue( "WorkingDirectory", c.workingDirectory() );
+		s->setValue( "Parsers", c.parsers() );
+	}
+	s->endArray();
 }
 
 QString GNUMake::name()

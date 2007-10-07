@@ -20,24 +20,37 @@
 
 #include <QWidget>
 
+class CompilerPlugin;
+
 class UICommandsEditor : public QWidget, public Ui::UICommandsEditor
 {
 	Q_OBJECT
 	
 protected:
 	pCommandList mDefaults;
+	pCommandList mReset;
 	pCommandList mCommands;
+	CompilerPlugin* mPlugin;
+	bool mUpdating;
 
 public:
-	UICommandsEditor( const pCommandList&, const pCommandList&, QWidget* = 0 );
-	~UICommandsEditor();
+	UICommandsEditor( CompilerPlugin*, const pCommandList&, const pCommandList&, QWidget* = 0 );
 
-	void loadCommands();
+	void updateCommands();
+	void restoreDefaults();
+	void reset();
+	void save();
 
 protected slots:
 	void on_lwCommands_itemSelectionChanged();
+	void on_lwCommands_currentItemChanged( QListWidgetItem*, QListWidgetItem* );
 	void on_pbCommandAdd_clicked();
 	void on_pbCommandRemove_clicked();
+	void on_pbCommandUp_clicked();
+	void on_pbCommandDown_clicked();
+	void on_tbCommandCommand_clicked();
+	void on_tbCommandWorkingDirectory_clicked();
+	void on_dbbButtons_clicked( QAbstractButton* );
 
 };
 

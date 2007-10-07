@@ -14,7 +14,7 @@ public:
 	virtual pCommandList globalCommands() const = 0;
 	virtual pCommandList userCommands() const = 0;
 	virtual void setUserCommands( const pCommandList& ) const = 0;
-	virtual QWidget* settingsWidget() { return new UICommandsEditor( globalCommands(), userCommands(), QApplication::activeWindow() ); };
+	virtual QWidget* settingsWidget() { return new UICommandsEditor( this, globalCommands(), userCommands(), QApplication::activeWindow() ); };
 
 };
 

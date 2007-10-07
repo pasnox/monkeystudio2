@@ -128,8 +128,12 @@ void UIProjectsManager::initializeProject( ProjectItem* it )
 void UIProjectsManager::cbProjects_activated( const QModelIndex& i )
 { tvProjects->setCurrentIndex( mProxy->mapFromSource( mProjects->projectsProxy()->mapToSource( i ) ) ); }
 
-void UIProjectsManager::tvProjects_currentChanged( const QModelIndex& c, const QModelIndex& )
+void UIProjectsManager::tvProjects_currentChanged( const QModelIndex& c, const QModelIndex& p )
 {
+	// removing old project commands is needed
+	ProjectItem* op = p.isValid() ? mProjects->itemFromIndex( mProxy->mapToSource( p ) ) : 0;
+	if ( op )
+		op->uninstallCommands();
 	// get menubar
 	pMenuBar* mb = pMenuBar::instance();
 	// get pluginsmanager

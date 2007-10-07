@@ -234,7 +234,9 @@ public:
 	// interpreter for this project
 	virtual InterpreterPlugin* interpreter() const = 0;
 	// install own command for compiler/debugger/interpreter to correct menu
-	virtual void installCommands() = 0;
+	virtual void installCommands() {};
+	// uninstall own command for compiler/debugger/interpreter to correct menu
+	virtual void uninstallCommands() {};
 	// show the content of items 
 	virtual void debug() = 0;
 	

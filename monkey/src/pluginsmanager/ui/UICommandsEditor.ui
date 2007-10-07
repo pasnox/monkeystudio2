@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>364</width>
+    <width>388</width>
     <height>386</height>
    </rect>
   </property>
@@ -49,7 +49,7 @@
        </property>
       </widget>
      </item>
-     <item rowspan="3" row="1" column="0" >
+     <item rowspan="5" row="1" column="0" >
       <widget class="QListWidget" name="lwCommands" />
      </item>
      <item row="1" column="1" >
@@ -78,7 +78,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1" >
+     <item row="5" column="1" >
       <spacer>
        <property name="orientation" >
         <enum>Qt::Vertical</enum>
@@ -91,6 +91,26 @@
        </property>
       </spacer>
      </item>
+     <item row="4" column="1" >
+      <widget class="QPushButton" name="pbCommandDown" >
+       <property name="text" >
+        <string>Down</string>
+       </property>
+       <property name="icon" >
+        <iconset resource="../../resources/resources.qrc" >:/tools/icons/tools/down.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1" >
+      <widget class="QPushButton" name="pbCommandUp" >
+       <property name="text" >
+        <string>Up</string>
+       </property>
+       <property name="icon" >
+        <iconset resource="../../resources/resources.qrc" >:/tools/icons/tools/up.png</iconset>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
@@ -100,13 +120,13 @@
      </property>
      <layout class="QHBoxLayout" >
       <property name="spacing" >
-       <number>10</number>
+       <number>8</number>
       </property>
       <property name="leftMargin" >
        <number>5</number>
       </property>
       <property name="topMargin" >
-       <number>5</number>
+       <number>0</number>
       </property>
       <property name="rightMargin" >
        <number>5</number>
