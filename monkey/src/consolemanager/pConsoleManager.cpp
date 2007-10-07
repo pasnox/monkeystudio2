@@ -199,7 +199,7 @@ void pConsoleManager::executeProcess()
 		}
 		// execute command
 		setWorkingDirectory( c.workingDirectory() );
-		start( QString( "%1 %2" ).arg( c.command() ).arg( c.arguments().join( " " ) ) );
+		start( QString( "%1 %2" ).arg( c.command() ).arg( c.arguments() ) );
 		// exit
 		return;
 	}

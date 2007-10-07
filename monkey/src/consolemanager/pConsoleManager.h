@@ -42,6 +42,12 @@ public:
 	};
 	
 	pCommand currentCommand() const { return mCommands.value( 0 ); }
+	QStringList parsersName() const
+	{ return mParsers.keys(); }
+	
+	void addParser( pCommandParser* );
+	void removeParser( pCommandParser* );
+	void removeParser( const QString& );
 
 protected:
 	int mTimerId;
@@ -52,11 +58,6 @@ protected:
 private:
 	pConsoleManager( QObject* = QApplication::instance() );
 	~pConsoleManager();
-
-public:
-	void addParser( pCommandParser* );
-	void removeParser( pCommandParser* );
-	void removeParser( const QString& );
 
 public slots:
 	void sendRawCommand( const QString& );

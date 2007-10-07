@@ -23,6 +23,10 @@
 class UICommandsEditor : public QWidget, public Ui::UICommandsEditor
 {
 	Q_OBJECT
+	
+protected:
+	pCommandList mDefaults;
+	pCommandList mCommands;
 
 public:
 	UICommandsEditor( const pCommandList&, const pCommandList&, QWidget* = 0 );
@@ -30,9 +34,8 @@ public:
 
 	void loadCommands();
 
-protected:
-	pCommandList mDefaults;
-	pCommandList mCommands;
+protected slots:
+	void on_lwCommands_itemSelectionChanged();
 
 };
 

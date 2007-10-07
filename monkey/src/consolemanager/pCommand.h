@@ -42,7 +42,7 @@ public:
 
 	QString text() const { return mText; }
 	QString command() const { return mCommand; }
-	QStringList arguments() const { return mArguments; }
+	QString arguments() const { return mArguments; }
 	QString workingDirectory() const { return mWorkingDirectory; }
 	QStringList parsers() const { return mParsers; }
 	bool skipOnError() const { return mSkipOnError; }
@@ -50,7 +50,7 @@ public:
 
 	void setText( const QString& s ) { mText = s; }
 	void setCommand( const QString& s ) { mCommand = s; }
-	void setArguments( const QStringList& l ) { mArguments = l; }
+	void setArguments( const QString& s ) { mArguments = s; }
 	void setWorkingDirectory( const QString& s ) { mWorkingDirectory = s; }
 	void setParsers( const QStringList& p ) { mParsers = p; }
 	void setSkipOnError( bool b ) { mSkipOnError = b; }
@@ -59,7 +59,7 @@ public:
 protected:
 	QString mText;
 	QString mCommand;
-	QStringList mArguments;
+	QString mArguments;
 	QString mWorkingDirectory;
 	bool mSkipOnError;
 	QStringList mParsers;
