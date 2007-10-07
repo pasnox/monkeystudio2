@@ -125,7 +125,9 @@ void pChild::goTo( const QString& s, const QPoint& p, bool b )
 	if ( !mFiles.contains( s ) )
 		return;
 
-	mEditor->setCursorPosition( p.y(), p.x() );
+	mEditor->setCursorPosition( p.y() -1, p.x() );
+	mEditor->ensureLineVisible( p.y() -1 );
+	mEditor->setFocus();
 }
 
 bool pChild::isCopyAvailable() const
@@ -161,7 +163,7 @@ void pChild::backupCurrentFile( const QString& s )
 void pChild::saveFiles()
 { saveCurrentFile(); }
 
-void pChild::openFile( const QString& s, const QPoint&, QTextCodec* c )
+void pChild::openFile( const QString& s, const QPoint& p, QTextCodec* c )
 {
 	// if already open file, cancel
 	if ( !currentFile().isNull() )
@@ -176,6 +178,9 @@ void pChild::openFile( const QString& s, const QPoint&, QTextCodec* c )
 
 	// change window title
 	setWindowTitle( s );
+	
+	// go to position
+	goTo( s, p );
 
 	emit fileOpened( s );
 }

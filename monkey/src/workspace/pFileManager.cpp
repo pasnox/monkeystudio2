@@ -17,6 +17,9 @@ pFileManager::pFileManager( QObject* o )
 	connect( UIProjectsManager::instance(), SIGNAL( opened( ProjectItem* ) ), this, SIGNAL( opened( ProjectItem* ) ) );
 }
 
+ProjectItem* pFileManager::currentProject()
+{ return UIProjectsManager::instance()->currentProject(); }
+
 pAbstractChild* pFileManager::openFile( const QString& s, const QPoint& p )
 { return pWorkspace::instance()->openFile( s, p ); }
 

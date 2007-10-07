@@ -55,7 +55,7 @@ void pConsoleManager::removeParser( pCommandParser* p )
 {
 	if ( p && mParsers.contains( p->name() ) )
 	{
-		disconnect( p, SIGNAL( newStepAvailable( const pConsoleManager::Step& ) ), this, SIGNAL( const newStepAvailable( pConsoleManager::Step& ) ) );
+		disconnect( p, SIGNAL( newStepAvailable( const pConsoleManager::Step& ) ), this, SIGNAL( newStepAvailable( const pConsoleManager::Step& ) ) );
 		mParsers.remove( p->name() );
 	}
 }

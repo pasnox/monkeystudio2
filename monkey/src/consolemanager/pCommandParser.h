@@ -20,6 +20,8 @@
 
 #include <QObject>
 
+class ProjectItem;
+
 class Q_MONKEY_EXPORT pCommandParser : public QObject
 {
 	Q_OBJECT
@@ -40,5 +42,7 @@ signals:
 	void newStepAvailable( const pConsoleManager::Step& );
 
 };
+
+typedef QList<pCommandParser*> pCommandParserList;
 
 #endif // PCOMMANDPARSER_H

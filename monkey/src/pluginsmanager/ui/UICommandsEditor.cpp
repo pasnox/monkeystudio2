@@ -16,12 +16,13 @@
 #include "CompilerPlugin.h"
 #include  "pConsoleManager.h"
 #include "pMonkeyStudio.h"
+#include "CLIToolPlugin.h"
 
 #include <QInputDialog>
 
 using namespace pMonkeyStudio;
 
-UICommandsEditor::UICommandsEditor( CompilerPlugin* p, const pCommandList& d, const pCommandList& c, QWidget* w )
+UICommandsEditor::UICommandsEditor( BasePlugin* p, const pCommandList& d, const pCommandList& c, QWidget* w )
 	: QWidget( w ), mPlugin( p ), mUpdating( false )
 {
 	Q_ASSERT( mPlugin );
@@ -73,7 +74,7 @@ void UICommandsEditor::reset()
 void UICommandsEditor::save()
 {
 	on_lwCommands_currentItemChanged( lwCommands->currentItem(), lwCommands->currentItem() );
-	mPlugin->setUserCommands( mCommands );
+	dynamic_cast<CLIToolPlugin*>( mPlugin )->setUserCommands( mCommands );
 }
 
 void UICommandsEditor::on_lwCommands_itemSelectionChanged()
@@ -81,10 +82,7 @@ void UICommandsEditor::on_lwCommands_itemSelectionChanged()
 
 void UICommandsEditor::on_lwCommands_currentItemChanged( QListWidgetItem* cit, QListWidgetItem* pit )
 {
-	if ( mUpdating )
-		return;
-	
-	if ( pit )
+	if ( pit && !mUpdating )
 	{
 		pCommand& c = mCommands[ lwCommands->row( pit ) ];
 		c.setText( leCommandText->text() );
@@ -125,8 +123,11 @@ void UICommandsEditor::on_pbCommandRemove_clicked()
 {
 	if ( QListWidgetItem* it = lwCommands->currentItem() )
 	{
-		mCommands.removeAt( lwCommands->row( it ) );
+		mUpdating = true;
+		int i = lwCommands->row( it );
 		delete it;
+		mCommands.removeAt( i );
+		mUpdating = false;
 	}
 }
 

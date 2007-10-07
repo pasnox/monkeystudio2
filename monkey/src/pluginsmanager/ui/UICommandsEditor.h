@@ -20,7 +20,7 @@
 
 #include <QWidget>
 
-class CompilerPlugin;
+class BasePlugin;
 
 class UICommandsEditor : public QWidget, public Ui::UICommandsEditor
 {
@@ -30,11 +30,11 @@ protected:
 	pCommandList mDefaults;
 	pCommandList mReset;
 	pCommandList mCommands;
-	CompilerPlugin* mPlugin;
+	BasePlugin* mPlugin;
 	bool mUpdating;
 
 public:
-	UICommandsEditor( CompilerPlugin*, const pCommandList&, const pCommandList&, QWidget* = 0 );
+	UICommandsEditor( BasePlugin*, const pCommandList&, const pCommandList&, QWidget* = 0 );
 
 	void updateCommands();
 	void restoreDefaults();

@@ -31,7 +31,7 @@ public:
 		// for each plugin
 		foreach ( BasePlugin* bp, mPlugins )
 			// plugin must be enabled
-			if ( bp->isEnabled() )
+			//if ( bp->isEnabled() )
 				// empty or good name
 				if ( n.isEmpty() || bp->infos().Name == n )
 					// good type or type = iAll
