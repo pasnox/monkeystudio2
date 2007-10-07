@@ -13,8 +13,8 @@
 **
 ****************************************************************************/
 
-#ifndef NOPROJECT_H
-#define NOPROJECT_H
+#ifndef MONKEYPROJECT_H
+#define MONKEYPROJECT_H
 
 #include "ProjectPlugin.h"
 
@@ -32,4 +32,4 @@ public:
 	bool setEnabled( bool b);
 };
 
-#endif // NOPROJECT_H
+#endif // MONKEYPROJECT_H

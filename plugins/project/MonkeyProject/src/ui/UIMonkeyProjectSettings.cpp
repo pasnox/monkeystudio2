@@ -24,7 +24,7 @@ UIMonkeyProjectSettings::UIMonkeyProjectSettings(MonkeyProjectItem* pproject): Q
 	setupUi( this );
 	setAttribute( Qt::WA_DeleteOnClose );
 	setWindowTitle( tr("Project Settings"));
-	projectName->setText (project->getValue());
+	projectName->setText (project->text());
 	projectPath->setText (project->projectPath);
 	targets = project->targets;
 	foreach (MonkeyProjectItem::Target t, targets)
@@ -41,11 +41,11 @@ UIMonkeyProjectSettings::UIMonkeyProjectSettings(MonkeyProjectItem* pproject): Q
 
 void UIMonkeyProjectSettings::accept()
 {
-	project->setValue(projectName->text());
+	project->setText(projectName->text());
 	project->projectPath = projectPath->text();
 	project->targets = targets;
-	project->removeSelfFromMenu ();
-	project->addSelfToMenu ();
+	project->uninstallCommands ();
+	project->installCommands ();
 	project->setModified (true);
 	QDialog::accept();
 }

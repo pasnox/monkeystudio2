@@ -28,13 +28,13 @@ MonkeyProject::MonkeyProject()
 	mPluginInfos.Name = "MonkeyProject";
 	mPluginInfos.Version = "0.0.1";
 	mPluginInfos.Enabled = false;
-	mSuffixes["No project"] = QStringList("*.noproject");
+	mSuffixes["MonkeyProject"] = QStringList("*.monkey");
 }
 
 ProjectItem* MonkeyProject::getProjectItem( const QString& s )
 {
 	// don t open project if plugin is not enabled
-	if ( !isEnabled() || !QDir::match( mSuffixes[tr( "No project" )], s ) )
+	if ( !isEnabled() || !QDir::match( mSuffixes[tr( "MonkeyProject" )], s ) )
 		return 0;
 	
 	// create project item

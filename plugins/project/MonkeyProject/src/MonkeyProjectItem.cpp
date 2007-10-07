@@ -12,17 +12,16 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ****************************************************************************/
-#include <QMenu>
 #include <QMessageBox>
 
 #include "MonkeyProjectItem.h"
 #include "ProjectPlugin.h"
+#include "ProjectsModel.h"
 #include "UIMonkeyProjectSettings.h"
 #include "pCommand.h"
 #include "pConsoleManager.h"
 #include "PluginsManager.h"
 #include "pMenuBar.h"
-
 
 MonkeyProjectItem::MonkeyProjectItem (  ProjectItem::NodeType t, ProjectItem* i )
 {
@@ -34,7 +33,7 @@ MonkeyProjectItem::MonkeyProjectItem (  ProjectItem::NodeType t, ProjectItem* i 
 
 MonkeyProjectItem::~MonkeyProjectItem ()
 {
-	removeSelfFromMenu ();
+	uninstallCommands ();
 }
 
 void MonkeyProjectItem::editSettings()
@@ -63,12 +62,18 @@ void MonkeyProjectItem::close()
 	
 	// remove it from model
 	remove();
+	delete this;
+}
+
+void MonkeyProjectItem::remove()
+{
+	model()->removeRow( row(), index().parent() );
 }
 
 void MonkeyProjectItem::save (bool)
 {
 	QSettings settings (getFilePath(), QSettings::IniFormat);
-	settings.setValue ("projectName", getValue());
+	settings.setValue ("projectName", text());
 	settings.setValue ("projectPath", projectPath);
 	settings.setValue ("targetsCount", targets.size());
 	for ( int i = 0; i < targets.size(); i++)
@@ -94,7 +99,7 @@ void MonkeyProjectItem::buildMenuTriggered ()
 		}
 };
 
-void MonkeyProjectItem::removeSelfFromMenu (QMenu* menu)
+void MonkeyProjectItem::uninstallCommands ()
 {
 	foreach ( Target t, targets)
 		if (t.action)
@@ -104,10 +109,9 @@ void MonkeyProjectItem::removeSelfFromMenu (QMenu* menu)
         }
 }
 
-void MonkeyProjectItem::addSelfToMenu (QMenu* menu)
+void MonkeyProjectItem::installCommands ()
 {
-	if ( !menu)
-		menu = pMenuBar::instance()->menu( "mBuild" );
+	QMenu* menu = pMenuBar::instance()->menu( "mBuild" );
 	menu->setEnabled (true);	
 	for (int i = 0; i < targets.size(); i++)
 	{
@@ -127,29 +131,22 @@ ProjectPlugin* MonkeyProjectItem::getParentPlugin ()
 	return PluginsManager::instance()->plugin<ProjectPlugin*>( "MonkeyProject" );
 }
 
-void MonkeyProjectItem::setValue (QString s)
+bool MonkeyProjectItem::open()
 {
-	ProjectItem::setValue (s);
-	setText (s);
-}
-
-bool MonkeyProjectItem::openProject( const QString& s)
-{
-	setFilePath (s);
-	QSettings settings (s, QSettings::IniFormat);
+	QSettings settings (getFilePath(), QSettings::IniFormat);
 	if ( settings.status() == QSettings::AccessError)
 	{
-		QMessageBox::warning (QApplication::activeWindow(),tr("Error"),tr("Access denided for a file %1").arg (s));
+		QMessageBox::warning (QApplication::activeWindow(),tr("Error"),tr("Access denided for a file %1").arg (getFilePath()));
 		return false;
 	}
 	else if ( settings.status() == QSettings::FormatError)
 	{
-		QMessageBox::warning (QApplication::activeWindow(),tr("Error"),tr("Wrong file %1").arg (s));
+		QMessageBox::warning (QApplication::activeWindow(),tr("Error"),tr("Wrong file %1").arg (getFilePath()));
 		return false;
 	}
 
-	setValue( settings.value ("projectName", "Project").toString());
-	projectPath = settings.value ("projectPath", canonicalFilePath()).toString();
+	setText( settings.value ("projectName", "Project").toString());
+	projectPath = settings.value ("projectPath", canonicalPath()).toString();
 
 	int targetsCount = settings.value ("targetsCount").toInt();
 	QString text, command;

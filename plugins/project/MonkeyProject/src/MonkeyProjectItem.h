@@ -24,6 +24,7 @@ class QMenu;
 
 class MonkeyProjectItem : public ProjectItem
 {
+Q_OBJECT
 struct Target
 {
 	QString text;
@@ -36,8 +37,9 @@ public:
 	MonkeyProjectItem (  ProjectItem::NodeType = ProjectItem::ProjectType, ProjectItem* = 0  );
 	~MonkeyProjectItem ();
 	
-	void setValue (QString);	
 	void close ();
+	void remove() ;
+	bool open();
 
 	virtual QString getIndent() const {}
 	virtual QString getEol() const {}
@@ -54,8 +56,6 @@ public:
 	virtual bool moveRowDown(int) {}
 	virtual bool moveUp() {}
 	virtual bool moveDown() {}
-	virtual void remove() {}
-	virtual bool open() {}
 	virtual bool addProject(const QString&) {}
 	virtual void saveAll(bool) {}
 	virtual void addExistingFiles(const QStringList&, const QString&, const QString&) {}
@@ -63,12 +63,11 @@ public:
 	virtual void addExistingFile(const QString&, const QString&, const QString&) {}
 	virtual void addExistingFile(const QString&, ProjectItem*, const QString&) {}
 	virtual void setCompiler(CompilerPlugin*) {}
-	virtual CompilerPlugin* compiler() const {}
+	virtual CompilerPlugin* compiler() const {return NULL;}
 	virtual void setDebugger(DebuggerPlugin*) {}
-	virtual DebuggerPlugin* debugger() const {}
+	virtual DebuggerPlugin* debugger() const {return NULL;}
 	virtual void setInterpreter(InterpreterPlugin*) {}
-	virtual InterpreterPlugin* interpreter() const {}
-	virtual void installCommands() {}
+	virtual InterpreterPlugin* interpreter() const {return NULL;}
 	virtual void debug() {}
 	virtual ProjectItem* getItemScope(const QString&, bool) const {}
 	virtual QStringList getListValues(const QString&, const QString&, const QString&) const {}
@@ -85,11 +84,10 @@ public:
 public slots:
 	void editSettings();
 	void buildMenuTriggered ();
-	void removeSelfFromMenu (QMenu* menu = NULL);
-	void addSelfToMenu (QMenu* menu = NULL);
+	void installCommands ();
+	void uninstallCommands ();
 	ProjectPlugin* getParentPlugin ();
 	void save( bool = true );
-	bool openProject( const QString&);
 
 private:
 	QList<Target> targets;
