@@ -59,11 +59,17 @@ public:
 	virtual bool setEnabled( bool )
 	{ return false; }
 	
+	virtual QString settingsKey( const QString& k ) const
+	{ return QString( "Plugins/%1/%2" ).arg( mPluginInfos.Name ).arg(  k ); }
+	
+	virtual QSettings* settingsObject() const
+	{ return pSettings::instance(); }
+	
 	virtual QVariant settingsValue( const QString& k, const QVariant& v = QVariant() ) const
-	{ return pSettings::instance()->value( QString( "Plugins/%1/%2" ).arg( mPluginInfos.Name ).arg(  k ), v ); }
+	{ return pSettings::instance()->value( settingsKey( k ), v ); }
 	
 	virtual void setSettingsValue( const QString& k, const QVariant& v ) const
-	{ pSettings::instance()->setValue( QString( "Plugins/%1/%2" ).arg( mPluginInfos.Name ).arg( k ), v ); }
+	{ pSettings::instance()->setValue( settingsKey( k ), v ); }
 	
 	// coverage support members
 #ifdef __COVERAGESCANNER__

@@ -19,13 +19,15 @@ UIPluginsSettings::UIPluginsSettings( QWidget* p )
 	QMetaEnum e = mo.enumerator( mo.indexOfEnumerator( "Type" ) );
 	for ( int i = 0; i < e.keyCount() -1; i++ )
 		cbType->addItem( e.key( i ), e.value( i ) );
-	
+	qWarning( "1" );
 	// update plugins list
-	updateList();
+	//updateList();
+	qWarning( "2" );
 	
 	// activate first plugin
 	if ( lwNames->count() )
 		lwNames->item( 0 )->setSelected( true );
+	qWarning( "3" );
 }
 
 void UIPluginsSettings::clearInfos()

@@ -10,11 +10,10 @@ class ProjectItem;
 
 class Q_MONKEY_EXPORT CompilerPlugin : public BasePlugin
 {
-	Q_OBJECT
-	
 public:
 	virtual pCommandList globalCommands() const = 0;
 	virtual pCommandList userCommands() const = 0;
+	virtual void setUserCommands( const pCommandList& ) const = 0;
 	virtual QWidget* settingsWidget() { return new UICommandsEditor( globalCommands(), userCommands(), QApplication::activeWindow() ); };
 
 };

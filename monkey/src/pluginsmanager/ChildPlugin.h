@@ -10,8 +10,6 @@ class AbstractProjectProxy;
 //
 class Q_MONKEY_EXPORT ChildPlugin : public BasePlugin
 {
-	Q_OBJECT
-	//
 public:
 	virtual QStringList extensions() const
 	{ return mExtensions; }

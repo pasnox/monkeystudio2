@@ -5,8 +5,6 @@
 
 class Q_MONKEY_EXPORT InterpreterPlugin : public BasePlugin
 {
-	Q_OBJECT
-	
 };
 
 Q_DECLARE_INTERFACE( InterpreterPlugin, "org.monkeystudio.MonkeyStudio.InterpreterPlugin/1.0" )
