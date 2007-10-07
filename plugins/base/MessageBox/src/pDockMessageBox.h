@@ -25,6 +25,7 @@ class QLineEdit;
 class QToolButton;
 class QTabWidget;
 class QListWidget;
+class QListWidgetItem;
 class QTextBrowser;
 class QTextEdit;
 
@@ -57,11 +58,13 @@ public slots:
 	void appendOutput( const QString& );
 	void appendLog( const QString& );
 	void appendInBox( const QString&, const QColor& = Qt::red );
+	void appendStep( const pConsoleManager::Step& );
 	void showBuild();
 	void showOutput();
 	void showLog();
 
 private slots:
+	void lwBuildSteps_itemDoubleClicked( QListWidgetItem* );
 	void leRawCommand_returnPressed();
 	void tbStopCommand_clicked();
 	void commandError( const pCommand&, QProcess::ProcessError );

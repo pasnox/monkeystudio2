@@ -13,6 +13,8 @@
 **
 ****************************************************************************/
 #include "pDockMessageBox.h"
+#include "pFileManager.h"
+#include "ProjectItem.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -82,6 +84,7 @@ pDockMessageBox::pDockMessageBox( QWidget* w )
 	// set central widget to w
 	setWidget( c );
 	// connections
+	connect( lwBuildSteps, SIGNAL( itemDoubleClicked( QListWidgetItem* ) ), this, SLOT( lwBuildSteps_itemDoubleClicked( QListWidgetItem* ) ) );
 	connect( leRawCommand, SIGNAL( returnPressed() ), this, SLOT( leRawCommand_returnPressed() ) );
 	connect( tbStopCommand, SIGNAL( clicked() ), this, SLOT( tbStopCommand_clicked() ) );
 	connect( pConsoleManager::instance(), SIGNAL( commandError( const pCommand&, QProcess::ProcessError ) ), this, SLOT( commandError( const pCommand&, QProcess::ProcessError ) ) );
@@ -90,6 +93,7 @@ pDockMessageBox::pDockMessageBox( QWidget* w )
 	connect( pConsoleManager::instance(), SIGNAL( commandStarted( const pCommand& ) ), this, SLOT( commandStarted( const pCommand& ) ) );
 	connect( pConsoleManager::instance(), SIGNAL( commandStateChanged( const pCommand&, QProcess::ProcessState ) ), this, SLOT( commandStateChanged( const pCommand&, QProcess::ProcessState ) ) );
 	connect( pConsoleManager::instance(), SIGNAL( commandSkipped( const pCommand& ) ), this, SLOT( commandSkipped( const pCommand& ) ) );
+	connect( pConsoleManager::instance(), SIGNAL( newStepAvailable( const pConsoleManager::Step& ) ), this, SLOT( appendStep( const pConsoleManager::Step& ) ) );
 }
 
 pDockMessageBox::~pDockMessageBox()
@@ -151,6 +155,68 @@ void pDockMessageBox::appendInBox( const QString& s, const QColor& c )
 	appendLog( colourText( "********************************************************************************", c ) );
 }
 
+void pDockMessageBox::appendStep( const pConsoleManager::Step& s )
+{
+	// get last type
+	pConsoleManager::StepType t = pConsoleManager::stUnknown;
+	QListWidgetItem* lastIt = lwBuildSteps->item( lwBuildSteps->count() -1 );
+	if ( lastIt )
+		t = ( pConsoleManager::StepType )lastIt->data( Qt::UserRole +1 ).toInt();
+	lastIt = 0;
+	
+	// create new/update item
+	QListWidgetItem* it;
+	if ( t == pConsoleManager::stCompiling )
+	{
+		if ( s.mType == pConsoleManager::stWarning )
+		{
+			lastIt = lwBuildSteps->takeItem( lwBuildSteps->count() -1 );
+			it = new QListWidgetItem( lwBuildSteps );
+		}
+		else
+			it = lwBuildSteps->item( lwBuildSteps->count() -1 );
+	}
+	else
+		it = new QListWidgetItem( lwBuildSteps );
+	if ( lastIt )
+		lwBuildSteps->addItem( lastIt );
+	
+	// set item infos
+	it->setText( s.mText );
+	it->setToolTip( s.mFullText );
+	it->setData( Qt::UserRole +1, s.mType ); // type
+	it->setData( Qt::UserRole +2, s.mFileName ); // filename
+	it->setData( Qt::UserRole +3, s.mPosition ); // position
+	
+	// set icon and color
+	switch ( s.mType )
+	{
+		case pConsoleManager::stError:
+			it->setIcon( QIcon( ":/icons/error.png" ) );
+			it->setBackground( QColor( 255, 0, 0, 20 ) );
+			break;
+		case pConsoleManager::stWarning:
+			it->setIcon( QIcon( ":/icons/warning.png" ) );
+			it->setBackground( QColor( 0, 255, 0, 20 ) );
+			break;
+		case pConsoleManager::stCompiling:
+			it->setIcon( QIcon( ":/icons/clock.png" ) );
+			it->setBackground( QColor( 0, 0, 255, 20 ) );
+			break;
+		case pConsoleManager::stGood:
+			it->setIcon( QIcon( ":/icons/warning.png" ) );
+			it->setBackground( QColor( 0, 255, 0, 90 ) );
+			break;
+		case pConsoleManager::stBad:
+			it->setIcon( QIcon( ":/icons/error.png" ) );
+			it->setBackground( QColor( 255, 0, 0, 90 ) );
+			break;
+		default:
+			it->setBackground( QColor( 125, 125, 125, 20 ) );
+			break;
+	}
+}
+
 void pDockMessageBox::showBuild()
 {
 	// show it if need
@@ -179,6 +245,16 @@ void pDockMessageBox::showLog()
 	// show correct tab if needed
 	if ( twMessageBox->currentWidget() != teLog )
 		twMessageBox->setCurrentWidget( teLog );
+}
+
+void pDockMessageBox::lwBuildSteps_itemDoubleClicked( QListWidgetItem* it )
+{
+	ProjectItem* pi = pFileManager::instance()->currentProject();
+	QString s = it->data( Qt::UserRole +2 ).toString();
+	if ( pi )
+		s = pi->canonicalFilePath( s );
+	const QPoint p = it->data( Qt::UserRole +3 ).toPoint();
+	pFileManager::instance()->goToLine( s, p, true );
 }
 
 void pDockMessageBox::leRawCommand_returnPressed()
