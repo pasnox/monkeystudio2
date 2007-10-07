@@ -20,6 +20,8 @@
 #include "UIQMakeProjectSettings.h"
 #include "QMake.h"
 
+#include "PluginsManager.h"
+
 using namespace pMonkeyStudio;
 
 QMakeItem::QMakeItem( ProjectItem::NodeType t, ProjectItem* i )
@@ -519,7 +521,11 @@ void QMakeItem::setCompiler( CompilerPlugin* c )
 }
 
 CompilerPlugin* QMakeItem::compiler() const
-{ return isProject() ? mCompiler : project()->compiler(); }
+{
+	qWarning( "QMakeItem::compiler() temporary hack returning gnumake" );
+	return PluginsManager::instance()->plugin<CompilerPlugin*>( "GNUMake" );
+	return isProject() ? mCompiler : project()->compiler();
+}
 
 void QMakeItem::setDebugger( DebuggerPlugin* d )
 {
