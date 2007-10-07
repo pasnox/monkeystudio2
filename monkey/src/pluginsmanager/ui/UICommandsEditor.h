@@ -36,6 +36,8 @@ public:
 
 protected slots:
 	void on_lwCommands_itemSelectionChanged();
+	void on_pbCommandAdd_clicked();
+	void on_pbCommandRemove_clicked();
 
 };
 

@@ -15,6 +15,8 @@
 #include "UICommandsEditor.h"
 #include  "pConsoleManager.h"
 
+#include <QInputDialog>
+
 UICommandsEditor::UICommandsEditor( const pCommandList& d, const pCommandList& c, QWidget* w )
 	: QWidget( w )
 {
@@ -60,4 +62,16 @@ void UICommandsEditor::on_lwCommands_itemSelectionChanged()
 		it = lwCommandParsers->item( i );
 		it->setCheckState( c.parsers().contains( it->text() ) ? Qt::Checked : Qt::Unchecked );
 	}
+}
+
+void UICommandsEditor::on_pbCommandAdd_clicked()
+{
+	pCommand c( tr( "New Command" ), "command", "arguments" );
+	mCommands << c;
+	lwCommands->addItem( c.text() );
+}
+
+void UICommandsEditor::on_pbCommandRemove_clicked()
+{
+	
 }
