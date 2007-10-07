@@ -103,20 +103,14 @@ void pConsoleManager::readyRead()
 	while ( canReadLine() )
 		a.append( readLine() );
 	// get current command
-	pCommand* c = currentCommand();
+	pCommand c = currentCommand();
 	// append data to parser if available
-	if ( c )
-	{
-		// from P@sNox : i think it s not good to give all output to same parser, normally each line need test each parsers ?!
-		foreach ( QString s, c->parsers() )
-		{
+	// from P@sNox : i think it s not good to give all output to same parser, normally each line need test each parsers ?!
+	if ( c.isValid() )
+		foreach ( QString s, c.parsers() )
 			if ( pCommandParser* p = mParsers.value( s ) )
-			{
 				if ( p->processParsing( a ) )
 					break;
-			}
-		}
-	}
 	// emit signal
 	emit commandReadyRead( c, a );
 }
@@ -137,18 +131,7 @@ void pConsoleManager::stateChanged( QProcess::ProcessState e )
 }
 
 void pConsoleManager::sendRawCommand( const QString& s )
-{
-	// create command
-	pCommand* c = new pCommand;
-	// assign text
-	c->setText( tr( "User Raw Command" ) );
-	// assign raw command
-	c->setCommand( s );
-	// set skip on error to false
-	c->setSkipOnError( false );
-	// add command to console
-	addCommand( c );
-}
+{ addCommand( pCommand( tr( "User Raw Command" ), s, false ) ); }
 
 void pConsoleManager::sendRawData( const QByteArray& a )
 {
@@ -176,7 +159,7 @@ void pConsoleManager::stopCurrentCommand( bool b )
 	}
 }
 
-void pConsoleManager::addCommand( pCommand* c )
+void pConsoleManager::addCommand( pCommand c )
 {
 	if ( !mCommands.contains( c ) )
 		mCommands << c;
@@ -184,28 +167,28 @@ void pConsoleManager::addCommand( pCommand* c )
 
 void pConsoleManager::addCommands( const pCommandList& l )
 {
-	foreach ( pCommand* c, l )
+	foreach ( pCommand c, l )
 		addCommand( c );
 }
 
-void pConsoleManager::removeCommand( pCommand* c )
+void pConsoleManager::removeCommand( pCommand c )
 {
 	if ( mCommands.contains( c ) )
-		mCommands.takeAt( mCommands.indexOf( c ) )->deleteLater();
+		mCommands.removeAll( c );
 }
 
 void pConsoleManager::removeCommands( const pCommandList& l )
 {
-	foreach ( pCommand* c, l )
+	foreach ( pCommand c, l )
 		removeCommand( c );
 }
 
 void pConsoleManager::executeProcess()
 {
-	foreach ( pCommand* c, mCommands )
+	foreach ( pCommand c, mCommands )
 	{
 		// if last was error, cancel this one if it want to
-		if ( c->skipOnError() && QProcess::error() != QProcess::UnknownError )
+		if ( c.skipOnError() && QProcess::error() != QProcess::UnknownError )
 		{
 			// emit command skipped
 			emit commandSkipped( c );
@@ -215,8 +198,8 @@ void pConsoleManager::executeProcess()
 			continue;
 		}
 		// execute command
-		setWorkingDirectory( c->workingDirectory() );
-		start( QString( "%1 %2" ).arg( c->command() ).arg( c->arguments().join( " " ) ) );
+		setWorkingDirectory( c.workingDirectory() );
+		start( QString( "%1 %2" ).arg( c.command() ).arg( c.arguments().join( " " ) ) );
 		// exit
 		return;
 	}

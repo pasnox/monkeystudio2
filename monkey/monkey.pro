@@ -55,6 +55,7 @@ FORMS	*= src/maininterface/ui/UITranslator.ui \
 	src/toolsmanager/ui/UIDesktopTools.ui \
 	src/toolsmanager/ui/UIToolsEdit.ui \
 	src/pluginsmanager/ui/UIPluginsSettings.ui \
+	src/pluginsmanager/ui/UICommandsEditor.ui \
 	src/projectsmanager/ui/UIProjectsManager.ui
 
 HEADERS	*= src/maininterface/ui/UITranslator.h \
@@ -88,6 +89,7 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/pluginsmanager/ProjectPlugin.h \
 	src/pluginsmanager/PluginsManager.h \
 	src/pluginsmanager/ui/UIPluginsSettings.h \
+	src/pluginsmanager/ui/UICommandsEditor.h \
 	src/projectsmanager/ui/UIProjectsManager.h \
 	src/projectsmanager/ProjectsModel.h \
 	src/projectsmanager/ProjectsProxy.h \
@@ -118,6 +120,7 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/consolemanager/pConsoleManager.cpp \
 	src/pluginsmanager/PluginsManager.cpp \
 	src/pluginsmanager/ui/UIPluginsSettings.cpp \
+	src/pluginsmanager/ui/UICommandsEditor.cpp \
 	src/projectsmanager/ui/UIProjectsManager.cpp \
 	src/projectsmanager/ProjectsModel.cpp \
 	src/projectsmanager/ProjectsProxy.cpp \

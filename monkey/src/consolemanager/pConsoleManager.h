@@ -41,7 +41,7 @@ public:
 		QString mFullText;
 	};
 	
-	pCommand* currentCommand() const { return mCommands.value( 0 ); }
+	pCommand currentCommand() const { return mCommands.value( 0 ); }
 
 protected:
 	int mTimerId;
@@ -62,9 +62,9 @@ public slots:
 	void sendRawCommand( const QString& );
 	void sendRawData( const QByteArray& );
 	void stopCurrentCommand( bool = false );
-	void addCommand( pCommand* );
+	void addCommand( pCommand );
 	void addCommands( const pCommandList& );
-	void removeCommand( pCommand* );
+	void removeCommand( pCommand );
 	void removeCommands( const pCommandList& );
 
 private slots:
@@ -76,12 +76,12 @@ private slots:
 	void stateChanged( QProcess::ProcessState );
 
 signals:
-	void commandError( pCommand*, QProcess::ProcessError );
-	void commandFinished( pCommand*, int, QProcess::ExitStatus );
-	void commandReadyRead( pCommand*, const QByteArray& );
-	void commandStarted( pCommand* );
-	void commandStateChanged( pCommand*, QProcess::ProcessState );
-	void commandSkipped( pCommand* );
+	void commandError( pCommand, QProcess::ProcessError );
+	void commandFinished( pCommand, int, QProcess::ExitStatus );
+	void commandReadyRead( pCommand, const QByteArray& );
+	void commandStarted( pCommand );
+	void commandStateChanged( pCommand, QProcess::ProcessState );
+	void commandSkipped( pCommand );
 	void newStepAvailable( const pConsoleManager::Step );
 
 };
