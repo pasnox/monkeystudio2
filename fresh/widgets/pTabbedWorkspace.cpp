@@ -555,8 +555,9 @@ int pTabbedWorkspace::insertTab( int j, QWidget* td, const QIcon& i, const QStri
 	j = mTabBar->insertTab( j, l );
 	addDocument( td, j );
 
-	// set icon if available
-	mTabBar->setTabIcon( j, i.isNull() ? QIcon( ":/file/icons/file/transparent.png" ) : i )
+	// set icon if not available
+	mTabBar->setTabIcon( j, i.isNull() ? QIcon( ":/file/icons/file/transparent.png" ) : i );
+
 	// set chortcut if needed
 	if ( tabsHaveShortcut() )
 		updateTabsNumber( j );
