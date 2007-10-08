@@ -161,7 +161,7 @@ void pConsoleManager::stopCurrentCommand( bool b )
 
 void pConsoleManager::addCommand( const pCommand& c )
 {
-	if ( !mCommands.contains( c ) )
+	if ( c.isValid() )
 		mCommands << c;
 }
 
@@ -174,7 +174,7 @@ void pConsoleManager::addCommands( const pCommandList& l )
 void pConsoleManager::removeCommand( const pCommand& c )
 {
 	if ( mCommands.contains( c ) )
-		mCommands.removeAll( c );
+		mCommands.removeAt( mCommands.indexOf ( c ) );
 }
 
 void pConsoleManager::removeCommands( const pCommandList& l )
