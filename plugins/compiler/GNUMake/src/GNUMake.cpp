@@ -124,21 +124,39 @@ pCommandParser* GNUMake::getParser( const QString& s )
 	return 0;
 }
 
+pCommand GNUMake::getCommand( const pCommandList& l, const QString& s )
+{
+	foreach ( pCommand c, l )
+		if ( c.text() == s )
+			return c;
+	return pCommand();
+}
+
+pCommandList GNUMake::recursiveCommandList( const pCommandList& l, pCommand c )
+{
+	pCommandList cl;
+	// check if chan command
+	QStringList lc = c.command().split( ";" );
+	if ( lc.count() > 1 )
+	{
+		foreach ( QString s, lc )
+			cl << recursiveCommandList( l, getCommand( l, s ) );
+	}
+	else
+	{
+		if ( c.workingDirectory().contains( "$cpp$" ) )
+			c.setWorkingDirectory( c.workingDirectory().replace( "$cpp$", UIProjectsManager::instance()->currentProject()->canonicalPath() ) );
+		cl << c;
+	}
+	// return list
+	return cl;
+}
+
 void GNUMake::commandTriggered()
 {
+	pCommandList l = userCommands();
 	if ( QAction* a = qobject_cast<QAction*>( sender() ) )
-	{
-		foreach ( pCommand c, userCommands() )
-		{
-			if ( c.text() == a->statusTip() )
-			{
-				if ( c.workingDirectory().contains( "$cpp$" ) )
-					c.setWorkingDirectory( c.workingDirectory().replace( "$cpp$", UIProjectsManager::instance()->currentProject()->canonicalPath() ) );
-				pConsoleManager::instance()->addCommand( c );
-				return;
-			}
-		}
-	}
+		pConsoleManager::instance()->addCommands( recursiveCommandList( l, getCommand( l, a->statusTip() ) ) );
 }
 
 Q_EXPORT_PLUGIN2( CompilerGNUMake, GNUMake )

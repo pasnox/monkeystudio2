@@ -22,6 +22,9 @@ public:
 	virtual QStringList availableParsers() const;
 	virtual pCommandParser* getParser( const QString& );
 	
+	pCommand getCommand( const pCommandList&, const QString& );
+	pCommandList recursiveCommandList( const pCommandList&, pCommand );
+	
 public slots:
 	virtual void commandTriggered();
 	

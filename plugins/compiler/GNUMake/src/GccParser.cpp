@@ -39,7 +39,7 @@ GccParser::GccParser()
 		{
 			QRegExp("^g\\+\\+.+\\-o\\s+([^\\s]+).+"), //reg exp
 			"Linking file", //desctiption
-			"%1", //file name
+			"0", //file name
 			"0", //column
 			"0", //row
 			pConsoleManager::stLinking, //type
