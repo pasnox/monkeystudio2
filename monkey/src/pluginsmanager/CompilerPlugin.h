@@ -1,8 +1,8 @@
 #ifndef COMPILERPLUGIN_H
 #define COMPILERPLUGIN_H
 
-#include "BasePlugin.h"
 #include "MonkeyExport.h"
+#include "BasePlugin.h"
 
 class Q_MONKEY_EXPORT CompilerPlugin : public BasePlugin
 {
