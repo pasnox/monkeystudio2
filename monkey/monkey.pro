@@ -127,8 +127,8 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/projectsmanager/ProjectItem.cpp \
 	src/main.cpp
 
-unix:SOURCES	*= src/toolsmanager/pDesktopApplications_unix.cpp
 mac:SOURCES	*= src/toolsmanager/pDesktopApplications_mac.cpp
+else:unix:SOURCES	*= src/toolsmanager/pDesktopApplications_unix.cpp
 win32:SOURCES	*= src/toolsmanager/pDesktopApplications_win32.cpp
 
 TRANSLATIONS	= ../translations/monkey_french.ts
