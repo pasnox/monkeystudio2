@@ -1,6 +1,6 @@
 include( ../../plugins.inc )
 
-DESTDIR	= $$MONKEY_PLUGINS_DIR/CLITool
+DESTDIR	= $$MONKEY_PLUGINS_DIR/compiler
 TARGET	= GNUMake
 
 HEADERS = src/GNUMake.h \
