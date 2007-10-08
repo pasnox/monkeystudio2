@@ -325,6 +325,13 @@ void pDockMessageBox::commandFinished( const pCommand& c, int i, QProcess::ExitS
 	appendInBox( colourText( s, Qt::blue ), Qt::red );
 	// disable stop button
 	tbStopCommand->setEnabled( false );
+	// get last type
+	pConsoleManager::StepType t = pConsoleManager::stUnknown;
+	QListWidgetItem* lastIt = lwBuildSteps->item( lwBuildSteps->count() -1 );
+	if ( lastIt )
+		t = (pConsoleManager::StepType)lastIt->data( Qt::UserRole +1 ).toInt();
+	if ( t == pConsoleManager::stCompiling)
+		delete lastIt;
 }
 
 void pDockMessageBox::commandReadyRead( const pCommand&, const QByteArray& a )
