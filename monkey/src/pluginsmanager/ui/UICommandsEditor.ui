@@ -247,7 +247,7 @@
    <item>
     <widget class="QDialogButtonBox" name="dbbButtons" >
      <property name="standardButtons" >
-      <set>QDialogButtonBox::NoButton|QDialogButtonBox::Reset|QDialogButtonBox::RestoreDefaults|QDialogButtonBox::Save</set>
+      <set>QDialogButtonBox::Help|QDialogButtonBox::NoButton|QDialogButtonBox::Reset|QDialogButtonBox::RestoreDefaults|QDialogButtonBox::Save</set>
      </property>
     </widget>
    </item>
