@@ -15,6 +15,7 @@
 #ifndef UICOMMANDSEDITOR_H
 #define UICOMMANDSEDITOR_H
 
+#include "MonkeyExport.h"
 #include "ui_UICommandsEditor.h"
 #include "pCommand.h"
 
@@ -22,7 +23,7 @@
 
 class BasePlugin;
 
-class UICommandsEditor : public QWidget, public Ui::UICommandsEditor
+class Q_MONKEY_EXPORT UICommandsEditor : public QWidget, public Ui::UICommandsEditor
 {
 	Q_OBJECT
 	
