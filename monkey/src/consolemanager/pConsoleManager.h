@@ -30,10 +30,12 @@ class Q_MONKEY_EXPORT pConsoleManager : public QProcess, public QSingleton<pCons
 	friend class QSingleton<pConsoleManager>;
 	
 public:
-	enum StepType { stUnknown = -1, stError, stWarning, stGood, stBad, stCompiling, stState };
+	enum StepType { stUnknown = -1, stError, stWarning, stCompiling, stLinking, stFinish, stGood, stBad }; // , stState
 	
 	struct Step
 	{
+		Step() {}
+		Step( pConsoleManager::StepType t ) { mType = t; }
 		QString mFileName;
 		QPoint mPosition;
 		StepType mType;

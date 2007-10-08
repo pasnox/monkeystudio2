@@ -27,13 +27,23 @@ GccParser::GccParser()
 			"%0" //full text
 		},
 		{
-			QRegExp("^g\\+\\+.+([^\\s]+\\.cpp)"), //reg exp
+			QRegExp("^g\\+\\+\\s+\\-c.+([^\\s]+\\.cpp)"), //reg exp
 			"Building file", //desctiption
 			"%1", //file name
 			"0", //column
 			"0", //row
 			pConsoleManager::stCompiling, //type
 			"Compiling %1...", //text
+			"%0" //full text
+		},
+		{
+			QRegExp("^g\\+\\+.+\\-o\\s+([^\\s]+).+"), //reg exp
+			"Linking file", //desctiption
+			"%1", //file name
+			"0", //column
+			"0", //row
+			pConsoleManager::stLinking, //type
+			"Linking %1...", //text
 			"%0" //full text
 		},
 		{

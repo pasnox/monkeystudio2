@@ -166,18 +166,22 @@ void pDockMessageBox::appendStep( const pConsoleManager::Step& s )
 	
 	// create new/update item
 	QListWidgetItem* it;
-	if ( t == pConsoleManager::stCompiling )
+	switch( t )
 	{
-		if ( s.mType == pConsoleManager::stWarning )
-		{
-			lastIt = lwBuildSteps->takeItem( lwBuildSteps->count() -1 );
+		case pConsoleManager::stCompiling:
+		case pConsoleManager::stLinking:
+			if ( s.mType == pConsoleManager::stWarning || s.mType == pConsoleManager::stError )
+			{
+				lastIt = lwBuildSteps->takeItem( lwBuildSteps->count() -1 );
+				it = new QListWidgetItem( lwBuildSteps );
+			}
+			else
+				it = lwBuildSteps->item( lwBuildSteps->count() -1 );
+			break;
+		default:
 			it = new QListWidgetItem( lwBuildSteps );
-		}
-		else
-			it = lwBuildSteps->item( lwBuildSteps->count() -1 );
+			break;
 	}
-	else
-		it = new QListWidgetItem( lwBuildSteps );
 	if ( lastIt )
 		lwBuildSteps->addItem( lastIt );
 	
@@ -188,8 +192,25 @@ void pDockMessageBox::appendStep( const pConsoleManager::Step& s )
 	it->setData( Qt::UserRole +2, s.mFileName ); // filename
 	it->setData( Qt::UserRole +3, s.mPosition ); // position
 	
+	// if item is finish, need calculate error, warning
+	if ( s.mType == pConsoleManager::stFinish )
+	{
+		// count error, warning
+		int e = 0, w = 0;
+		for ( int i = 0; i < lwBuildSteps->count() -1; i++ )
+		{
+			lastIt = lwBuildSteps->item( i );
+			if ( lastIt->data( Qt::UserRole +1 ).toInt() == pConsoleManager::stError )
+				e++;
+			if ( lastIt->data( Qt::UserRole +1 ).toInt() == pConsoleManager::stWarning )
+				w++;
+		}
+		it->setData( Qt::UserRole +1, e ? pConsoleManager::stBad : pConsoleManager::stGood );
+		it->setText( tr( "Command terminated, error(s): %1, warning(s): %2" ).arg( e ).arg( w ) );
+	}
+	
 	// set icon and color
-	switch ( s.mType )
+	switch ( it->data( Qt::UserRole +1 ).toInt() )
 	{
 		case pConsoleManager::stError:
 			it->setIcon( QIcon( ":/icons/error.png" ) );
@@ -203,6 +224,10 @@ void pDockMessageBox::appendStep( const pConsoleManager::Step& s )
 			it->setIcon( QIcon( ":/icons/clock.png" ) );
 			it->setBackground( QColor( 0, 0, 255, 20 ) );
 			break;
+		case pConsoleManager::stLinking:
+			it->setIcon( QIcon( ":/icons/clock.png" ) );
+			it->setBackground( QColor( 0, 0, 125, 20 ) );
+			break;
 		case pConsoleManager::stGood:
 			it->setIcon( QIcon( ":/icons/warning.png" ) );
 			it->setBackground( QColor( 0, 255, 0, 90 ) );
@@ -211,7 +236,11 @@ void pDockMessageBox::appendStep( const pConsoleManager::Step& s )
 			it->setIcon( QIcon( ":/icons/error.png" ) );
 			it->setBackground( QColor( 255, 0, 0, 90 ) );
 			break;
+		case pConsoleManager::stFinish:
+			it->setBackground( QColor( 65, 65, 65, 20 ) );
+			break;
 		default:
+			it->setIcon( QIcon() );
 			it->setBackground( QColor( 125, 125, 125, 20 ) );
 			break;
 	}
@@ -325,13 +354,8 @@ void pDockMessageBox::commandFinished( const pCommand& c, int i, QProcess::ExitS
 	appendInBox( colourText( s, Qt::blue ), Qt::red );
 	// disable stop button
 	tbStopCommand->setEnabled( false );
-	// get last type
-	pConsoleManager::StepType t = pConsoleManager::stUnknown;
-	QListWidgetItem* lastIt = lwBuildSteps->item( lwBuildSteps->count() -1 );
-	if ( lastIt )
-		t = (pConsoleManager::StepType)lastIt->data( Qt::UserRole +1 ).toInt();
-	if ( t == pConsoleManager::stCompiling)
-		delete lastIt;
+	// add finish step
+	appendStep( pConsoleManager::Step( pConsoleManager::stFinish ) );
 }
 
 void pDockMessageBox::commandReadyRead( const pCommand&, const QByteArray& a )
