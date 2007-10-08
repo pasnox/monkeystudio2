@@ -62,7 +62,7 @@ QList<pAbstractChild*> pWorkspace::children() const
 pAbstractChild* pWorkspace::openFile( const QString& s, const QPoint& p )
 {
 	// if it not exists
-	if ( !QFile::exists( s ) )
+	if ( !QFile::exists( s ) || !QFileInfo( s ).isFile() )
 		return 0;
 	
 	// check if file is already opened
