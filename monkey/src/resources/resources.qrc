@@ -41,6 +41,7 @@
         <file>icons/file/saveall.png</file>
         <file>icons/file/saveas.png</file>
         <file>icons/file/session.png</file>
+        <file>icons/file/transparent.png</file>
     </qresource>
     <qresource prefix="/help" >
         <file>icons/help/assistant.png</file>
