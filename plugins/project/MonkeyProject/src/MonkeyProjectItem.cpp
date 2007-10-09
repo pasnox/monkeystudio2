@@ -13,6 +13,7 @@
 **
 ****************************************************************************/
 #include <QMessageBox>
+#include <QDebug>
 
 #include "MonkeyProjectItem.h"
 #include "ProjectPlugin.h"
@@ -62,7 +63,6 @@ void MonkeyProjectItem::close()
 	
 	// remove it from model
 	remove();
-	delete this;
 }
 
 void MonkeyProjectItem::remove()
@@ -72,7 +72,7 @@ void MonkeyProjectItem::remove()
 
 void MonkeyProjectItem::save (bool)
 {
-	QSettings settings (getFilePath(), QSettings::IniFormat);
+	QSettings settings (getValue(), QSettings::IniFormat);
 	settings.setValue ("projectName", text());
 	settings.setValue ("projectPath", projectPath);
 	settings.setValue ("targetsCount", targets.size());
@@ -81,6 +81,7 @@ void MonkeyProjectItem::save (bool)
 		settings.setValue (QString ("target%1text").arg(i), targets[i].text);
 		settings.setValue (QString ("target%1command").arg(i), targets[i].command);
 	}
+	settings.sync();
 	setModified (false);
 }
 
@@ -133,7 +134,7 @@ ProjectPlugin* MonkeyProjectItem::getParentPlugin ()
 
 bool MonkeyProjectItem::open()
 {
-	QSettings settings (getFilePath(), QSettings::IniFormat);
+	QSettings settings (getValue(), QSettings::IniFormat);
 	if ( settings.status() == QSettings::AccessError)
 	{
 		QMessageBox::warning (QApplication::activeWindow(),tr("Error"),tr("Access denided for a file %1").arg (getFilePath()));
