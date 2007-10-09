@@ -91,6 +91,7 @@ void MonkeyProjectItem::buildMenuTriggered ()
 		if ( t.action == sender())
 		{
 				pCommand cmd;
+				cmd.setText (t.action->text());
 				cmd.setCommand (t.command);
 				cmd.setWorkingDirectory (projectPath);
                 cmd.setSkipOnError (false);
