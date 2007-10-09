@@ -35,7 +35,7 @@ QT	*= gui core
 DEFINES	*= MONKEY_CORE_BUILD "PROGRAM_NAME=\"\\\"$${PROGRAM_NAME}\\\"\"" "PROGRAM_VERSION=\"\\\"$${VERSION}\\\"\"" "PROGRAM_DOMAIN=\"\\\"$${DOMAIN}\\\"\"" "PROGRAM_COPYRIGHTS=\"\\\"$${COPYRIGHTS}\\\"\""
 
 LIBS	*= -L$${BUILD_PATH}
-linux-g++:LIBS	*= -rdynamic
+unix-g++:LIBS	*= -rdynamic
 win32-msvc*:LIBS	*= /IMPLIB:$${BUILD_PATH}/monkey.lib -lshell32
 win32-g++:LIBS	*= -Wl,--out-implib,$${BUILD_PATH}/libmonkey.a
 
