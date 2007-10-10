@@ -107,20 +107,10 @@ void pConsoleManager::readyRead()
 	// append data to parser if available
 	// from P@sNox : i think it s not good to give all output to same parser, normally each line need test each parsers ?!
 	if ( c.isValid() )
-	{
-		// parsers comamnd want to test/check
-		QStringList l = c.parsers();
-		// check if need tryall, and had all other parsers if needed at end
-		if ( c.tryAllParsers() )
-			foreach ( QString s, parsersName() )
-				if ( !l.contains( s ) )
-					l << s;
-		// now checking parsers
-		foreach ( QString s, l )
+		foreach ( QString s, mCurrentParsers )
 			if ( pCommandParser* p = mParsers.value( s ) )
 				if ( p->processParsing( a ) )
 					break;
-	}
 	// emit signal
 	emit commandReadyRead( c, a );
 }
@@ -207,6 +197,14 @@ void pConsoleManager::executeProcess()
 			// execute next
 			continue;
 		}
+		// set current parsers list
+		// parsers comamnd want to test/check
+		mCurrentParsers = c.parsers();
+		// check if need tryall, and had all other parsers if needed at end
+		if ( c.tryAllParsers() )
+			foreach ( QString s, parsersName() )
+				if ( !mCurrentParsers.contains( s ) )
+					mCurrentParsers << s;
 		// execute command
 		setWorkingDirectory( c.workingDirectory() );
 		start( QString( "%1 %2" ).arg( c.command() ).arg( c.arguments() ) );

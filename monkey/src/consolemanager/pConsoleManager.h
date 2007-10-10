@@ -54,6 +54,7 @@ public:
 protected:
 	int mTimerId;
 	pCommandList mCommands;
+	QStringList mCurrentParsers;
 	QHash<QString, pCommandParser*> mParsers;
 	void timerEvent( QTimerEvent* );
 
