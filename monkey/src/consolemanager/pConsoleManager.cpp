@@ -119,7 +119,6 @@ void pConsoleManager::readyRead()
 		foreach ( QString s, l )
 			if ( pCommandParser* p = mParsers.value( s ) )
 				if ( p->processParsing( a ) )
-					b = true;
 					break;
 	}
 	// emit signal
