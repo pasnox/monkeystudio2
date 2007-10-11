@@ -50,6 +50,9 @@ public:
 	void addParser( pCommandParser* );
 	void removeParser( pCommandParser* );
 	void removeParser( const QString& );
+	
+	pCommand getCommand( const pCommandList&, const QString& );
+	pCommandList recursiveCommandList( const pCommandList&, pCommand );
 
 protected:
 	int mTimerId;

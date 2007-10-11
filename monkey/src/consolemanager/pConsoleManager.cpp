@@ -15,6 +15,7 @@
 #include "pConsoleManager.h"
 #include "pCommandParser.h"
 #include "pMonkeyStudio.h"
+#include "UIProjectsManager.h"
 
 #include <QTimer>
 
@@ -62,6 +63,34 @@ void pConsoleManager::removeParser( pCommandParser* p )
 
 void pConsoleManager::removeParser( const QString& s )
 { removeParser( mParsers.value( s ) ); }
+
+pCommand pConsoleManager::getCommand( const pCommandList& l, const QString& s )
+{
+	foreach ( pCommand c, l )
+		if ( c.text() == s )
+			return c;
+	return pCommand();
+}
+
+pCommandList pConsoleManager::recursiveCommandList( const pCommandList& l, pCommand c )
+{
+	pCommandList cl;
+	// check if chan command
+	QStringList lc = c.command().split( ";" );
+	if ( lc.count() > 1 )
+	{
+		foreach ( QString s, lc )
+			cl << recursiveCommandList( l, getCommand( l, s ) );
+	}
+	else
+	{
+		if ( c.workingDirectory().contains( "$cpp$" ) )
+			c.setWorkingDirectory( c.workingDirectory().replace( "$cpp$", UIProjectsManager::instance()->currentProject()->canonicalPath() ) );
+		cl << c;
+	}
+	// return list
+	return cl;
+}
 
 void pConsoleManager::timerEvent( QTimerEvent* e )
 {
