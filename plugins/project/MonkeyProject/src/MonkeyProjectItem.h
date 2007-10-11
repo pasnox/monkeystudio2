@@ -41,6 +41,13 @@ public:
 	void remove() ;
 	bool open();
 
+    void addExistingFiles(const QStringList&, const QString&, const QString&);
+    void addExistingFiles(const QStringList&, ProjectItem*, const QString&);
+    void addExistingFile(const QString&, const QString&, const QString&);
+    void addExistingFile(const QString&, ProjectItem*, const QString&);
+    void appendRow(ProjectItem*);
+    void insertRow(int, ProjectItem*);
+
 	virtual QString getIndent() const {}
 	virtual QString getEol() const {}
 	virtual bool isFirst() const {}
@@ -49,8 +56,6 @@ public:
 	virtual QString checkScope(const QString&) const {}
 	virtual bool isEqualScope(const QString&, const QString&) const {}
 	virtual bool isProjectsContainer() const {}
-	virtual void appendRow(ProjectItem*) {}
-	virtual void insertRow(int, ProjectItem*) {}
 	virtual bool swapRow(int, int) {}
 	virtual bool moveRowUp(int) {}
 	virtual bool moveRowDown(int) {}
@@ -58,10 +63,6 @@ public:
 	virtual bool moveDown() {}
 	virtual bool addProject(const QString&) {}
 	virtual void saveAll(bool) {}
-	virtual void addExistingFiles(const QStringList&, const QString&, const QString&) {}
-	virtual void addExistingFiles(const QStringList&, ProjectItem*, const QString&) {}
-	virtual void addExistingFile(const QString&, const QString&, const QString&) {}
-	virtual void addExistingFile(const QString&, ProjectItem*, const QString&) {}
 	virtual void setCompiler(CompilerPlugin*) {}
 	virtual CompilerPlugin* compiler() const {return NULL;}
 	virtual void setDebugger(DebuggerPlugin*) {}

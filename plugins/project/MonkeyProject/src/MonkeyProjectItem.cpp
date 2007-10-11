@@ -13,6 +13,7 @@
 **
 ****************************************************************************/
 #include <QMessageBox>
+#include <QFileInfo>
 #include <QDebug>
 
 #include "MonkeyProjectItem.h"
@@ -160,4 +161,42 @@ bool MonkeyProjectItem::open()
 	}
 
 	return true;
+}
+
+void MonkeyProjectItem::addExistingFiles(const QStringList& files, const QString& scope, const QString&)
+{
+    qWarning ()<<"Function not implemented";
+
+}
+
+void MonkeyProjectItem::addExistingFiles(const QStringList& files, ProjectItem* item, const QString&)
+{
+    if ( !isProject() )
+        return;
+    foreach (QString file, files)
+    {
+        ProjectItem* it = new MonkeyProjectItem( ProjectItem::ValueType, this );
+        it->setValue (file);
+        it->setText (QFileInfo(file).filePath());
+    }
+}
+
+void MonkeyProjectItem::addExistingFile(const QString& file, const QString& scope, const QString&)
+{
+    qWarning ()<<"Function not implemented";
+}
+
+void MonkeyProjectItem::addExistingFile(const QString& file, ProjectItem* item, const QString&)
+{
+    qWarning ()<<"Function not implemented";
+}
+
+void MonkeyProjectItem::appendRow(ProjectItem* i)
+{ insertRow( rowCount(), i ); }
+
+void MonkeyProjectItem::insertRow(int i, ProjectItem* it)
+{
+    QStandardItem::insertRow(i, it);
+    // set project modified
+    project()->setModified( true );
 }
