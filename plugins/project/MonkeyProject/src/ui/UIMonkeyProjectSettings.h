@@ -30,7 +30,6 @@ public:
 	QList<MonkeyProjectItem::Target> targets;
 private slots:
 	void accept ();
-	void pathDialogRequested ();
 	void selectedRowChanged(int);
 	void actionNameEdited(QString name);
 	void addAction ();

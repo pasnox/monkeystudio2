@@ -25,12 +25,10 @@ UIMonkeyProjectSettings::UIMonkeyProjectSettings(MonkeyProjectItem* pproject): Q
 	setAttribute( Qt::WA_DeleteOnClose );
 	setWindowTitle( tr("Project Settings"));
 	projectName->setText (project->text());
-	projectPath->setText (project->projectPath);
 	targets = project->targets;
 	foreach (MonkeyProjectItem::Target t, targets)
 		actionsList->addItem (t.text);
 	connect (acceptBtn, SIGNAL (clicked()), this, SLOT (accept()));
-	connect (pathDialogBtn, SIGNAL (clicked()), this, SLOT (pathDialogRequested()));
 	connect (actionsList, SIGNAL (currentRowChanged(int)), this, SLOT(selectedRowChanged(int)));
 	connect (actionName, SIGNAL (textEdited(QString)), this, SLOT(actionNameEdited(QString)));
 	connect (addActionBtn, SIGNAL (clicked()), this, SLOT (addAction()));
@@ -42,19 +40,11 @@ UIMonkeyProjectSettings::UIMonkeyProjectSettings(MonkeyProjectItem* pproject): Q
 void UIMonkeyProjectSettings::accept()
 {
 	project->setText(projectName->text());
-	project->projectPath = projectPath->text();
 	project->targets = targets;
 	project->uninstallCommands ();
 	project->installCommands ();
 	project->setModified (true);
 	QDialog::accept();
-}
-
-void UIMonkeyProjectSettings::pathDialogRequested ()
-{
-	QString path = QFileDialog::getExistingDirectory(this,
-     tr("Select project path"), projectPath->text());
-	projectPath->setText (path);
 }
 
 void UIMonkeyProjectSettings::selectedRowChanged(int actionNum)

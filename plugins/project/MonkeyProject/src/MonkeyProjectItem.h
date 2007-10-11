@@ -41,10 +41,10 @@ public:
 	void remove() ;
 	bool open();
 
-    void addExistingFiles(const QStringList&, const QString&, const QString&);
-    void addExistingFiles(const QStringList&, ProjectItem*, const QString&);
-    void addExistingFile(const QString&, const QString&, const QString&);
-    void addExistingFile(const QString&, ProjectItem*, const QString&);
+    void addExistingFiles(const QStringList&, const QString&, const QString& ="");
+    void addExistingFiles(const QStringList&, ProjectItem*, const QString& ="");
+    void addExistingFile(const QString&, const QString&, const QString& ="");
+    void addExistingFile(const QString&, ProjectItem*, const QString& ="");
     void appendRow(ProjectItem*);
     void insertRow(int, ProjectItem*);
 
@@ -92,7 +92,6 @@ public slots:
 
 private:
 	QList<Target> targets;
-	QString projectPath;
 };
 
 #endif // NOPROJECTPROJECTITEM_H

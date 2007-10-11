@@ -75,15 +75,48 @@ void MonkeyProjectItem::save (bool)
 {
 	QSettings settings (getValue(), QSettings::IniFormat);
 	settings.setValue ("projectName", text());
-	settings.setValue ("projectPath", projectPath);
 	settings.setValue ("targetsCount", targets.size());
+	QStringList files;
+	for (int i = 0; i < rowCount(); i++)
+		files.append (child(i)->getFilePath());
+	settings.setValue ("files", files);
 	for ( int i = 0; i < targets.size(); i++)
 	{
 		settings.setValue (QString ("target%1text").arg(i), targets[i].text);
 		settings.setValue (QString ("target%1command").arg(i), targets[i].command);
 	}
-	settings.sync();
 	setModified (false);
+}
+
+bool MonkeyProjectItem::open()
+{
+	QSettings settings (getValue(), QSettings::IniFormat);
+	if ( settings.status() == QSettings::AccessError)
+	{
+		QMessageBox::warning (QApplication::activeWindow(),tr("Error"),tr("Access denided for a file %1").arg (getFilePath()));
+		return false;
+	}
+	else if ( settings.status() == QSettings::FormatError)
+	{
+		QMessageBox::warning (QApplication::activeWindow(),tr("Error"),tr("Wrong file %1").arg (getFilePath()));
+		return false;
+	}
+
+	setText( settings.value ("projectName", "Project").toString());
+	QStringList files = settings.value ("files").toStringList();
+	qDebug () <<files;
+	addExistingFiles(files,"");
+	int targetsCount = settings.value ("targetsCount").toInt();
+	QString text, command;
+	for ( int i = 0; i < targetsCount; i++)
+	{
+		text = settings.value (QString ("target%1text").arg(i),"").toString();
+		command = settings.value (QString ("target%1command").arg(i),"").toString();
+		targets.append ( (Target){text, command,NULL});
+	}
+	
+
+	return true;
 }
 
 void MonkeyProjectItem::buildMenuTriggered ()
@@ -94,7 +127,7 @@ void MonkeyProjectItem::buildMenuTriggered ()
 				pCommand cmd;
 				cmd.setText (t.action->text());
 				cmd.setCommand (t.command);
-				cmd.setWorkingDirectory (projectPath);
+				cmd.setWorkingDirectory (QFileInfo(getValue()).absolutePath());
                 cmd.setSkipOnError (false);
 				cmd.setTryAllParsers (true);
 				pConsoleManager::instance()->addCommand(cmd);
@@ -134,39 +167,11 @@ ProjectPlugin* MonkeyProjectItem::getParentPlugin ()
 	return PluginsManager::instance()->plugin<ProjectPlugin*>( "MonkeyProject" );
 }
 
-bool MonkeyProjectItem::open()
-{
-	QSettings settings (getValue(), QSettings::IniFormat);
-	if ( settings.status() == QSettings::AccessError)
-	{
-		QMessageBox::warning (QApplication::activeWindow(),tr("Error"),tr("Access denided for a file %1").arg (getFilePath()));
-		return false;
-	}
-	else if ( settings.status() == QSettings::FormatError)
-	{
-		QMessageBox::warning (QApplication::activeWindow(),tr("Error"),tr("Wrong file %1").arg (getFilePath()));
-		return false;
-	}
-
-	setText( settings.value ("projectName", "Project").toString());
-	projectPath = settings.value ("projectPath", canonicalPath()).toString();
-
-	int targetsCount = settings.value ("targetsCount").toInt();
-	QString text, command;
-	for ( int i = 0; i < targetsCount; i++)
-	{
-		text = settings.value (QString ("target%1text").arg(i),"").toString();
-		command = settings.value (QString ("target%1command").arg(i),"").toString();
-		targets.append ( (Target){text, command,NULL});
-	}
-
-	return true;
-}
-
 void MonkeyProjectItem::addExistingFiles(const QStringList& files, const QString& scope, const QString&)
 {
-    qWarning ()<<"Function not implemented";
-
+	if ( !isProject() )
+        return;
+	addExistingFiles (files, this);
 }
 
 void MonkeyProjectItem::addExistingFiles(const QStringList& files, ProjectItem* item, const QString&)
@@ -175,20 +180,21 @@ void MonkeyProjectItem::addExistingFiles(const QStringList& files, ProjectItem* 
         return;
     foreach (QString file, files)
     {
-        ProjectItem* it = new MonkeyProjectItem( ProjectItem::ValueType, this );
-        it->setValue (file);
-        it->setText (QFileInfo(file).filePath());
+		addExistingFile (file,this);
     }
 }
 
 void MonkeyProjectItem::addExistingFile(const QString& file, const QString& scope, const QString&)
 {
-    qWarning ()<<"Function not implemented";
+    addExistingFile (file, this);
 }
 
 void MonkeyProjectItem::addExistingFile(const QString& file, ProjectItem* item, const QString&)
 {
-    qWarning ()<<"Function not implemented";
+	ProjectItem* it = new MonkeyProjectItem( ProjectItem::ValueType, this );
+    it->setValue (file);
+	it->setFilePath (file);
+    it->setText (QFileInfo(file).fileName());
 }
 
 void MonkeyProjectItem::appendRow(ProjectItem* i)
