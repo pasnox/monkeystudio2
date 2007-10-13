@@ -1,2 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS = GNUMake
+SUBDIRS = Gcc Gpp
