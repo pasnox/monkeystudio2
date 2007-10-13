@@ -18,7 +18,12 @@ class Q_MONKEY_EXPORT pFileManager : public QObject, public QSingleton<pFileMana
 
 public:
 	pFileManager( QObject* = QApplication::instance() );
-	ProjectItem* currentProject();
+	ProjectItem* currentProject() const;
+	QString currentProjectFile() const;
+	QString currentProjectPath() const;
+	pAbstractChild* currentChild() const;
+	QString currentChildFile() const;
+	QString currentChildPath() const;
 
 public slots:
 	pAbstractChild* openFile( const QString&, const QPoint& = QPoint() );

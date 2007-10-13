@@ -1,6 +1,7 @@
 #include "pFileManager.h"
 #include "pWorkspace.h"
 #include "UIProjectsManager.h"
+#include "pAbstractChild.h"
 
 pFileManager::pFileManager( QObject* o )
 	: QObject( o )
@@ -17,8 +18,23 @@ pFileManager::pFileManager( QObject* o )
 	connect( UIProjectsManager::instance(), SIGNAL( opened( ProjectItem* ) ), this, SIGNAL( opened( ProjectItem* ) ) );
 }
 
-ProjectItem* pFileManager::currentProject()
+ProjectItem* pFileManager::currentProject() const
 { return UIProjectsManager::instance()->currentProject(); }
+
+QString pFileManager::currentProjectFile() const
+{ return currentProject() ? currentProject()->canonicalFilePath() : QString(); }
+
+QString pFileManager::currentProjectPath() const
+{ return currentProject() ? currentProject()->canonicalPath() : QString(); }
+
+pAbstractChild* pFileManager::currentChild() const
+{ return pFileManager::instance()->currentChild(); }
+
+QString pFileManager::currentChildFile() const
+{ return currentChild() ? currentChild()->currentFile() : QString(); }
+
+QString pFileManager::currentChildPath() const
+{ return QFileInfo( currentChildFile() ).path(); }
 
 pAbstractChild* pFileManager::openFile( const QString& s, const QPoint& p )
 { return pWorkspace::instance()->openFile( s, p ); }
