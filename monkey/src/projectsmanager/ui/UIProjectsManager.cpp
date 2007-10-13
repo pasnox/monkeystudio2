@@ -21,7 +21,7 @@
 #include "ProjectsModel.h"
 #include "pFileManager.h"
 #include "UITemplatesWizard.h"
-#include "pTreeComboBox.h"
+#include "UIAddExistingFiles.h"
 
 #include <QHeaderView>
 
@@ -141,7 +141,7 @@ void UIProjectsManager::tvProjects_currentChanged( const QModelIndex& c, const Q
 	// get current project
 	ProjectItem* it = currentProject();
 	// set compiler, debugger and interpreter
-	pm->setCurrentCompiler( it ? it->compiler() : 0 );
+	pm->setCurrentBuilder( it ? it->builder() : 0 );
 	pm->setCurrentDebugger( it ? it->debugger() : 0 );
 	pm->setCurrentInterpreter( it ? it->interpreter() : 0 );
 	// anstall project self own commands
@@ -302,9 +302,9 @@ void UIProjectsManager::projectAddExistingFiles_triggered()
 {
 	if ( ProjectItem* it = currentProject() )
 	{
-		QStringList l = getOpenFileNames( tr( "Choose file(s)/project(s) to add to your project" ), it->canonicalPath() );
-		if ( !l.isEmpty() )
-			it->addExistingFiles( l, it, "=" );
+		UIAddExistingFiles d( mProjects->scopesProxy(), it, QStringList() << "=" << "+=" << "-=" << "*=" << "~=", this );
+		if ( d.exec() && !d.selectedFiles().isEmpty() )
+			it->addExistingFiles( d.selectedFiles(), d.currentItem(), d.currentOperator() );
 	}
 }
 
