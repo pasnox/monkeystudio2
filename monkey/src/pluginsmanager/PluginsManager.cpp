@@ -9,9 +9,10 @@
 PluginsManager::PluginsManager( QObject* p )
 	: QObject( p )
 {
-	mCompiler = 0L;
-	mDebugger = 0L;
-	mInterpreter = 0L;
+	mBuilder = 0;
+	mCompiler = 0;
+	mDebugger = 0;
+	mInterpreter = 0;
 }
 
 QList<BasePlugin*> PluginsManager::plugins() const
@@ -111,13 +112,35 @@ void PluginsManager::enableUserPlugins()
 	}
 }
 
+void PluginsManager::setCurrentBuilder( BuilderPlugin* b )
+{
+	// if same cancel
+	if ( mBuilder == b )
+		return;
+	
+	// disabled all builder
+	foreach ( BuilderPlugin* bp, plugins<BuilderPlugin*>( QString::null, BasePlugin::iBuilder ) )
+		bp->setEnabled( false );
+	
+	// enabled the one we choose
+	mBuilder = b;
+	if ( mBuilder )
+		mBuilder->setEnabled( true );
+	
+	// enable menu according to current builder
+	pMenuBar::instance()->menu( "mBuild" )->setEnabled( mBuilder || mCompiler );
+}
+
+BuilderPlugin* PluginsManager::currentBuilder()
+{ return mBuilder; }
+
 void PluginsManager::setCurrentCompiler( CompilerPlugin* c )
 {
 	// if same cancel
 	if ( mCompiler == c )
 		return;
 	
-	// disabled all compiler
+	// disabled all builder
 	foreach ( CompilerPlugin* cp, plugins<CompilerPlugin*>( QString::null, BasePlugin::iCompiler ) )
 		cp->setEnabled( false );
 	
@@ -127,12 +150,12 @@ void PluginsManager::setCurrentCompiler( CompilerPlugin* c )
 		mCompiler->setEnabled( true );
 	
 	// enable menu according to current compiler
-	pMenuBar::instance()->menu( "mBuild" )->setEnabled( mCompiler );
+	pMenuBar::instance()->menu( "mBuild" )->setEnabled( mCompiler || mBuilder );
 }
 
 CompilerPlugin* PluginsManager::currentCompiler()
 { return mCompiler; }
-	
+
 void PluginsManager::setCurrentDebugger( DebuggerPlugin* d )
 {
 	// if same cancel

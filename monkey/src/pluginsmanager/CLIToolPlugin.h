@@ -4,21 +4,21 @@
 #include "MonkeyExport.h"
 #include "pCommand.h"
 #include "BasePlugin.h"
-#include "UICommandsEditor.h"
+#include "UICLIToolSettings.h"
 #include "pCommandParser.h"
 
 class Q_MONKEY_EXPORT CLIToolPlugin
 {
 public:
 	virtual ~CLIToolPlugin() {}
-	virtual pCommandList globalCommands() const { return pCommandList(); }
-	virtual pCommandList userCommands() const { return pCommandList(); }
-	virtual void setUserCommands( const pCommandList& ) const {}
-	virtual QWidget* commandsEditorWidget( BasePlugin* p )
-	{ return new UICommandsEditor( p, globalCommands(), userCommands(), QApplication::activeWindow() ); }
-	virtual QStringList availableParsers() const { return QStringList(); }
+	virtual pCommandList defaultCommands() const = 0;
+	virtual pCommandList userCommands() const = 0;
+	virtual void setUserCommands( const pCommandList& ) const = 0;
+	virtual QWidget* cliToolSettingsWidget( BasePlugin* p )
+	{ return new UICLIToolSettings( p, defaultCommands(), userCommands(), QApplication::activeWindow() ); }
+	virtual QStringList availableParsers() const = 0;
 	virtual pCommandParser* getParser( const QString& ) = 0;	
-	virtual void commandTriggered() {}
+	virtual void commandTriggered() = 0;
 	
 };
 

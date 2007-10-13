@@ -5,6 +5,7 @@
 #include "QSingleton.h"
 #include "BasePlugin.h"
 #include "ProjectPlugin.h"
+#include "BuilderPlugin.h"
 #include "CompilerPlugin.h"
 #include "DebuggerPlugin.h"
 #include "InterpreterPlugin.h"
@@ -51,6 +52,9 @@ public:
 	
 	ProjectItem* projectItem( const QString& );
 	
+	void setCurrentBuilder( BuilderPlugin* );
+	BuilderPlugin* currentBuilder();
+	
 	void setCurrentCompiler( CompilerPlugin* );
 	CompilerPlugin* currentCompiler();
 	
@@ -62,6 +66,7 @@ public:
 	
 private:
 	QList<BasePlugin*> mPlugins;
+	BuilderPlugin* mBuilder;
 	CompilerPlugin* mCompiler;
 	DebuggerPlugin* mDebugger;
 	InterpreterPlugin* mInterpreter;

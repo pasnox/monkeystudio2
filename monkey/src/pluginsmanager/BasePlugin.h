@@ -24,6 +24,7 @@ public:
 		iBase,
 		iChild,
 		iCLITool,
+		iBuilder,
 		iCompiler,
 		iDebugger,
 		iInterpreter,
@@ -62,7 +63,7 @@ public:
 	virtual QString settingsKey( const QString& k ) const
 	{ return QString( "Plugins/%1/%2" ).arg( mPluginInfos.Name ).arg(  k ); }
 	
-	virtual QSettings* settingsObject() const
+	virtual QSettings* settings() const
 	{ return pSettings::instance(); }
 	
 	virtual QVariant settingsValue( const QString& k, const QVariant& v = QVariant() ) const

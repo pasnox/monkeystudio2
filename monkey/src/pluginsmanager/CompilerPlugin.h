@@ -7,6 +7,8 @@
 class Q_MONKEY_EXPORT CompilerPlugin : public BasePlugin
 {
 public:
+	// initialize compiler configuration getting parameter, and sending string configuration
+	virtual QString setUp( const QString& ) const = 0;
 
 };
 
