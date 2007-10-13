@@ -15,7 +15,7 @@
 #include "pConsoleManager.h"
 #include "pCommandParser.h"
 #include "pMonkeyStudio.h"
-#include "UIProjectsManager.h"
+#include "pFileManager.h"
 
 #include <QTimer>
 
@@ -85,7 +85,13 @@ pCommandList pConsoleManager::recursiveCommandList( const pCommandList& l, pComm
 	else
 	{
 		if ( c.workingDirectory().contains( "$cpp$" ) )
-			c.setWorkingDirectory( c.workingDirectory().replace( "$cpp$", UIProjectsManager::instance()->currentProject()->canonicalPath() ) );
+			c.setWorkingDirectory( c.workingDirectory().replace( "$cpp$", pFileManager::instance()->currentProjectPath() ) );
+		if ( c.workingDirectory().contains( "$cp$" ) )
+			c.setWorkingDirectory( c.workingDirectory().replace( "$cp$", pFileManager::instance()->currentProjectFile() ) );
+		if ( c.workingDirectory().contains( "$cfp$" ) )
+			c.setWorkingDirectory( c.workingDirectory().replace( "$cfp$", pFileManager::instance()->currentChildPath() ) );
+		if ( c.workingDirectory().contains( "$cf$" ) )
+			c.setWorkingDirectory( c.workingDirectory().replace( "$cf$", pFileManager::instance()->currentChildFile() ) );
 		cl << c;
 	}
 	// return list
