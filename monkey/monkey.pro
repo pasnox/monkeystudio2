@@ -35,7 +35,7 @@ QT	*= gui core
 DEFINES	*= MONKEY_CORE_BUILD "PROGRAM_NAME=\"\\\"$${PROGRAM_NAME}\\\"\"" "PROGRAM_VERSION=\"\\\"$${VERSION}\\\"\"" "PROGRAM_DOMAIN=\"\\\"$${DOMAIN}\\\"\"" "PROGRAM_COPYRIGHTS=\"\\\"$${COPYRIGHTS}\\\"\""
 
 LIBS	*= -L$${BUILD_PATH}
-unix-g++:LIBS	*= -rdynamic
+unix:g++:LIBS	*= -rdynamic
 win32-msvc*:LIBS	*= /IMPLIB:$${BUILD_PATH}/monkey.lib -lshell32
 win32-g++:LIBS	*= -Wl,--out-implib,$${BUILD_PATH}/libmonkey.a
 
@@ -55,7 +55,8 @@ FORMS	*= src/maininterface/ui/UITranslator.ui \
 	src/toolsmanager/ui/UIDesktopTools.ui \
 	src/toolsmanager/ui/UIToolsEdit.ui \
 	src/pluginsmanager/ui/UIPluginsSettings.ui \
-	src/pluginsmanager/ui/UICommandsEditor.ui \
+	src/pluginsmanager/ui/UICLIToolSettings.ui \
+	src/pluginsmanager/ui/UIBuilderSettings.ui \
 	src/projectsmanager/ui/UIProjectsManager.ui
 
 HEADERS	*= src/maininterface/ui/UITranslator.h \
@@ -87,9 +88,12 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/pluginsmanager/BasePlugin.h \
 	src/pluginsmanager/CLIToolPlugin.h \
 	src/pluginsmanager/ProjectPlugin.h \
+	src/pluginsmanager/BuilderPlugin.h \
+	src/pluginsmanager/CompilerPlugin.h \
 	src/pluginsmanager/PluginsManager.h \
 	src/pluginsmanager/ui/UIPluginsSettings.h \
-	src/pluginsmanager/ui/UICommandsEditor.h \
+	src/pluginsmanager/ui/UICLIToolSettings.h \
+	src/pluginsmanager/ui/UIBuilderSettings.h \
 	src/projectsmanager/ui/UIProjectsManager.h \
 	src/projectsmanager/ProjectsModel.h \
 	src/projectsmanager/ProjectsProxy.h \
@@ -120,7 +124,8 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/consolemanager/pConsoleManager.cpp \
 	src/pluginsmanager/PluginsManager.cpp \
 	src/pluginsmanager/ui/UIPluginsSettings.cpp \
-	src/pluginsmanager/ui/UICommandsEditor.cpp \
+	src/pluginsmanager/ui/UICLIToolSettings.cpp \
+	src/pluginsmanager/ui/UIBuilderSettings.cpp \
 	src/projectsmanager/ui/UIProjectsManager.cpp \
 	src/projectsmanager/ProjectsModel.cpp \
 	src/projectsmanager/ProjectsProxy.cpp \
