@@ -514,6 +514,19 @@ void QMakeItem::addExistingFile( const QString& f, ProjectItem* s, const QString
 void QMakeItem::addExistingFile( const QString& f, const QString& s, const QString& o )
 { addExistingFile( f, getItemScope( s, true ), o ); }
 
+void QMakeItem::setBuilder( BuilderPlugin* b )
+{
+	if ( isProject() )
+		mBuilder = b;
+}
+
+BuilderPlugin* QMakeItem::builder() const
+{
+	qWarning( "QMakeItem::builder() temporary hack returning gnumake" );
+	return PluginsManager::instance()->plugin<BuilderPlugin*>( "GNUMake" );
+	return isProject() ? mBuilder : project()->builder();
+}
+
 void QMakeItem::setCompiler( CompilerPlugin* c )
 {
 	if ( isProject() )
@@ -522,8 +535,8 @@ void QMakeItem::setCompiler( CompilerPlugin* c )
 
 CompilerPlugin* QMakeItem::compiler() const
 {
-	qWarning( "QMakeItem::compiler() temporary hack returning gnumake" );
-	return PluginsManager::instance()->plugin<CompilerPlugin*>( "GNUMake" );
+	qWarning( "QMakeItem::compiler() temporary hack returning g++" );
+	return PluginsManager::instance()->plugin<CompilerPlugin*>( "G++" );
 	return isProject() ? mCompiler : project()->compiler();
 }
 
@@ -534,16 +547,11 @@ void QMakeItem::setDebugger( DebuggerPlugin* d )
 }
 
 DebuggerPlugin* QMakeItem::debugger() const
-{ return isProject() ? mDebugger : project()->debugger(); }
-
-void QMakeItem::setInterpreter( InterpreterPlugin* i )
 {
-	if ( isProject() )
-		mInterpreter = i;
+	qWarning( "QMakeItem::debugger() temporary hack returning gdb" );
+	return PluginsManager::instance()->plugin<DebuggerPlugin*>( "GNUDebugger" );
+	return isProject() ? mDebugger : project()->debugger();
 }
-
-InterpreterPlugin* QMakeItem::interpreter() const
-{ return isProject() ? mInterpreter : project()->interpreter(); }
 
 void QMakeItem::debug()
 {

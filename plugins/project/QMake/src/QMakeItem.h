@@ -55,12 +55,12 @@ public:
 	virtual void addExistingFile( const QString&, ProjectItem*, const QString& = "=" );
 	virtual void addExistingFiles( const QStringList&, const QString&, const QString& = "=" );
 	virtual void addExistingFiles( const QStringList&, ProjectItem*, const QString& = "=" );
+	virtual void setBuilder( BuilderPlugin* );
+	virtual BuilderPlugin* builder() const;
 	virtual void setCompiler( CompilerPlugin* );
 	virtual CompilerPlugin* compiler() const;
 	virtual void setDebugger( DebuggerPlugin* );
 	virtual DebuggerPlugin* debugger() const;
-	virtual void setInterpreter( InterpreterPlugin* );
-	virtual InterpreterPlugin* interpreter() const;
 	virtual void installCommands() {}
 	virtual void debug();
 	

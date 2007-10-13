@@ -1,2 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS	= MonkeyProject QMake
+SUBDIRS	= QMake #MonkeyProject
