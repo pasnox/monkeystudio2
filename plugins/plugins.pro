@@ -1,2 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS	= base cli compiler project
+SUBDIRS	= base builder compiler cli project
