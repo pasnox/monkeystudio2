@@ -35,7 +35,7 @@ QT	*= gui core
 DEFINES	*= MONKEY_CORE_BUILD "PROGRAM_NAME=\"\\\"$${PROGRAM_NAME}\\\"\"" "PROGRAM_VERSION=\"\\\"$${VERSION}\\\"\"" "PROGRAM_DOMAIN=\"\\\"$${DOMAIN}\\\"\"" "PROGRAM_COPYRIGHTS=\"\\\"$${COPYRIGHTS}\\\"\""
 
 LIBS	*= -L$${BUILD_PATH}
-unix:g++:LIBS	*= -rdynamic
+unix:*-g++:LIBS	*= -rdynamic
 win32-msvc*:LIBS	*= /IMPLIB:$${BUILD_PATH}/monkey.lib -lshell32
 win32-g++:LIBS	*= -Wl,--out-implib,$${BUILD_PATH}/libmonkey.a
 
@@ -95,6 +95,7 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/pluginsmanager/ui/UICLIToolSettings.h \
 	src/pluginsmanager/ui/UIBuilderSettings.h \
 	src/projectsmanager/ui/UIProjectsManager.h \
+	src/projectsmanager/ui/UIAddExistingFiles.h \
 	src/projectsmanager/ProjectsModel.h \
 	src/projectsmanager/ProjectsProxy.h \
 	src/projectsmanager/ProjectItem.h
@@ -127,6 +128,7 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/pluginsmanager/ui/UICLIToolSettings.cpp \
 	src/pluginsmanager/ui/UIBuilderSettings.cpp \
 	src/projectsmanager/ui/UIProjectsManager.cpp \
+	src/projectsmanager/ui/UIAddExistingFiles.cpp \
 	src/projectsmanager/ProjectsModel.cpp \
 	src/projectsmanager/ProjectsProxy.cpp \
 	src/projectsmanager/ProjectItem.cpp \
