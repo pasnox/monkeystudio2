@@ -23,6 +23,7 @@
 class ProjectsModel;
 class QTextCodec;
 class ProjectPlugin;
+class BuilderPlugin;
 class CompilerPlugin;
 class DebuggerPlugin;
 class InterpreterPlugin;
@@ -221,21 +222,25 @@ public:
 	virtual void addExistingFiles( const QStringList&, ProjectItem*, const QString& = "=" ) = 0;
 	virtual void addExistingFile( const QString&, const QString&, const QString& = "=" ) = 0;
 	virtual void addExistingFile( const QString&, ProjectItem*, const QString& = "=" ) = 0;
+	// set builder for this project
+	virtual void setBuilder( BuilderPlugin* ) {}
+	// builder for this project
+	virtual BuilderPlugin* builder() const { return mBuilder; }
 	// set compiler for this project
-	virtual void setCompiler( CompilerPlugin* ) = 0;
+	virtual void setCompiler( CompilerPlugin* ) {}
 	// compiler for this project
-	virtual CompilerPlugin* compiler() const = 0;
+	virtual CompilerPlugin* compiler() const { return mCompiler; }
 	// set debugger for this project
-	virtual void setDebugger( DebuggerPlugin* ) = 0;
+	virtual void setDebugger( DebuggerPlugin* ) {}
 	// debugger for this project
-	virtual DebuggerPlugin* debugger() const = 0;
+	virtual DebuggerPlugin* debugger() const { return mDebugger; }
 	// set interpreter for this project
-	virtual void setInterpreter( InterpreterPlugin* ) = 0;
+	virtual void setInterpreter( InterpreterPlugin* ) {}
 	// interpreter for this project
-	virtual InterpreterPlugin* interpreter() const = 0;
-	// install own command for compiler/debugger/interpreter to correct menu
+	virtual InterpreterPlugin* interpreter() const { return mInterpreter; }
+	// install own command for builder/compiler/debugger/interpreter to correct menu
 	virtual void installCommands() {};
-	// uninstall own command for compiler/debugger/interpreter to correct menu
+	// uninstall own command for builder/debugger/interpreter to correct menu
 	virtual void uninstallCommands() {};
 	// show the content of items 
 	virtual void debug() = 0;
@@ -266,6 +271,7 @@ public:
 	
 protected:
 	ProjectPlugin* mPlugin;
+	BuilderPlugin* mBuilder;
 	CompilerPlugin* mCompiler;
 	DebuggerPlugin* mDebugger;
 	InterpreterPlugin* mInterpreter;

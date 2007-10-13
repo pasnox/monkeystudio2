@@ -21,9 +21,10 @@
 
 void ProjectItem::init()
 {
-	mCompiler = 0L;
-	mDebugger = 0L;
-	mInterpreter = 0L;
+	mBuilder = 0;
+	mCompiler = 0;
+	mDebugger = 0;
+	mInterpreter = 0;
 	mBuffer.clear();
 	setReadOnly( false );
 }
