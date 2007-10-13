@@ -4,10 +4,18 @@
 ProjectsModel::ProjectsModel( QObject* o )
 	: QStandardItemModel( o )
 {
-	mProxy = new ProjectsProxy( this );
-	mProxy->setNegateFilter( false );
-	mProxy->addFilterRole( ProjectItem::ProjectType );
-	mProxy->setFiltering( true );
+	// proxy for only show projects
+	mProjects = new ProjectsProxy( this );
+	mProjects->setNegateFilter( false );
+	mProjects->addFilterRole( ProjectItem::ProjectType );
+	mProjects->setFiltering( true );
+	// proxy for only show projects/scopes
+	mScopes = new ProjectsProxy( this );
+	mScopes->setNegateFilter( false );
+	mScopes->addFilterRole( ProjectItem::ProjectType );
+	mScopes->addFilterRole( ProjectItem::ScopeType );
+	mScopes->addFilterRole( ProjectItem::NestedScopeType );
+	mScopes->setFiltering( true );
 }
 
 ProjectItemList ProjectsModel::projects( bool b )

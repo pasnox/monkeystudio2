@@ -23,10 +23,13 @@ public:
 	inline ProjectItem* takeItem( int r, int c = 0 )
 	{ return dynamic_cast<ProjectItem*>( QStandardItemModel::takeItem( r, c ) ); }
 	inline ProjectsProxy* projectsProxy() const
-	{ return mProxy; }
+	{ return mProjects; }
+	inline ProjectsProxy* scopesProxy() const
+	{ return mScopes; }
 	
 private:
-	ProjectsProxy* mProxy;
+	ProjectsProxy* mProjects;
+	ProjectsProxy* mScopes;
 	
 };
 
