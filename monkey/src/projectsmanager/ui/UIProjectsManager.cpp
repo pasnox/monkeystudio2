@@ -302,6 +302,7 @@ void UIProjectsManager::projectAddExistingFiles_triggered()
 {
 	if ( ProjectItem* it = currentProject() )
 	{
+		qWarning( "UIProjectsManager::projectAddExistingFiles_triggered() make getting scope options" );
 		UIAddExistingFiles d( mProjects->scopesProxy(), it, QStringList() << "=" << "+=" << "-=" << "*=" << "~=", this );
 		if ( d.exec() && !d.selectedFiles().isEmpty() )
 			it->addExistingFiles( d.selectedFiles(), d.currentItem(), d.currentOperator() );
