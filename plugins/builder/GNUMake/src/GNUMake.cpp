@@ -156,7 +156,7 @@ void GNUMake::setBuildCommand( const pCommand& c )
 void GNUMake::commandTriggered()
 {
 	pConsoleManager* cm = pConsoleManager::instance();
-	pCommandList l = userCommands();
+	pCommandList l = userCommands() << buildCommand();
 	if ( QAction* a = qobject_cast<QAction*>( sender() ) )
 		cm->addCommands( cm->recursiveCommandList( l, cm->getCommand( l, a->statusTip() ) ) );
 }
