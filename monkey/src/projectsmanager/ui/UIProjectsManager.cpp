@@ -305,7 +305,7 @@ void UIProjectsManager::projectAddExistingFiles_triggered()
 		qWarning( "UIProjectsManager::projectAddExistingFiles_triggered() make getting operators options" );
 		UIAddExistingFiles d( mProjects->scopesProxy(), it, QStringList() << "=" << "+=" << "-=" << "*=" << "~=", this );
 		if ( d.exec() && !d.selectedFiles().isEmpty() )
-			it->addExistingFiles( d.selectedFiles(), d.currentItem(), d.currentOperator() );
+			d.currentItem()->project()->addExistingFiles( d.selectedFiles(), d.currentItem(), d.currentOperator() );
 	}
 }
 
