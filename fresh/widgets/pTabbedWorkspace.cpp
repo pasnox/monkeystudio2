@@ -664,6 +664,8 @@ void pTabbedWorkspace::setTabsElided( bool b )
 	aTabbedTabsElided->setChecked( b );
 	// update elided mode
 	mTabBar->setElideMode( tabsElided() ? Qt::ElideMiddle : Qt::ElideNone );
+	// workaround for tabs update
+	mTabBar->setTabText( 0, mTabBar->tabText( 0 ) );
 }
 
 void pTabbedWorkspace::updateTabsNumber( int i )
