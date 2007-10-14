@@ -37,7 +37,7 @@ UIAddExistingFiles::UIAddExistingFiles( ProjectsProxy* p, ProjectItem* it, const
 	gb1->setTitle( tr( "Scopes" ) );
 	// set groupbox layout
 	QHBoxLayout* hl1 = new QHBoxLayout( gb1 );
-	hl1->setMargin( 0 );
+	hl1->setMargin( 5 );
 	hl1->setSpacing( 0 );
 	// create projects/scopes treecombobox
 	tcbProjects = new pTreeComboBox;
@@ -50,6 +50,8 @@ UIAddExistingFiles::UIAddExistingFiles( ProjectsProxy* p, ProjectItem* it, const
 	gb2->setTitle( tr( "Operators" ) );
 	// set groupbox layout
 	QHBoxLayout* hl2 = new QHBoxLayout( gb2 );
+	hl2->setMargin( 5 );
+	hl2->setSpacing( 0 );
 	// create operators combobox
 	cbOperators = new QComboBox;
 	cbOperators->addItems( l );
