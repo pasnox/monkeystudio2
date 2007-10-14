@@ -51,9 +51,7 @@ public:
 	virtual void close();
 	virtual void save( bool = true );
 	virtual void saveAll( bool = true );
-	virtual void addExistingFile( const QString&, const QString&, const QString& = "=" );
 	virtual void addExistingFile( const QString&, ProjectItem*, const QString& = "=" );
-	virtual void addExistingFiles( const QStringList&, const QString&, const QString& = "=" );
 	virtual void addExistingFiles( const QStringList&, ProjectItem*, const QString& = "=" );
 	virtual void setBuilder( BuilderPlugin* );
 	virtual BuilderPlugin* builder() const;
@@ -62,7 +60,6 @@ public:
 	virtual void setDebugger( DebuggerPlugin* );
 	virtual DebuggerPlugin* debugger() const;
 	virtual void installCommands() {}
-	virtual void debug();
 	
 	virtual ProjectItem* getItemScope( const QString&, bool ) const;
 	virtual QStringList getListValues( const QString&, const QString& = "=", const QString& = QString::null ) const;

@@ -267,6 +267,10 @@ void QMakeItem::insertRow( int r, ProjectItem* it )
 	// default insert
 	QStandardItem::insertRow( r, it );
 	
+	// if project get parent plugin
+	if ( it->isProject() )
+		it->setPlugin( project()->plugin() );
+	
 	// set project modified
 	project()->setModified( true );
 }
@@ -446,9 +450,6 @@ ProjectItem* variable( ProjectItem* s, const QString& var, const QString& op )
 	return it;
 }
 
-void QMakeItem::addExistingFiles( const QStringList& l, const QString& s, const QString& o )
-{ addExistingFiles( l, getItemScope( s, true ), o ); }
-
 void QMakeItem::addExistingFiles( const QStringList& l, ProjectItem* s, const QString& o )
 {
 	if ( !isProject() )
@@ -511,9 +512,6 @@ void QMakeItem::addExistingFiles( const QStringList& l, ProjectItem* s, const QS
 void QMakeItem::addExistingFile( const QString& f, ProjectItem* s, const QString& o )
 { addExistingFiles( QStringList( f ), s, o ); }
 
-void QMakeItem::addExistingFile( const QString& f, const QString& s, const QString& o )
-{ addExistingFile( f, getItemScope( s, true ), o ); }
-
 void QMakeItem::setBuilder( BuilderPlugin* b )
 {
 	if ( isProject() )
@@ -551,14 +549,6 @@ DebuggerPlugin* QMakeItem::debugger() const
 	qWarning( "QMakeItem::debugger() temporary hack returning gdb" );
 	return PluginsManager::instance()->plugin<DebuggerPlugin*>( "GNUDebugger" );
 	return isProject() ? mDebugger : project()->debugger();
-}
-
-void QMakeItem::debug()
-{
-	QString s;
-	foreach ( ProjectItem* it, projectItems() )
-		s.append( QString( "%1(%2)%3%4%5" ).arg( QString().fill( ' ', it->parentCount() ) ).arg( it->getType() ).arg( it->getValue() ).arg( it->getOperator() ).arg( it->getEol() ) );
-	qWarning( qPrintable( s ) );
 }
 
 ProjectItem* QMakeItem::getItemScope( const QString& s, bool c ) const
@@ -841,10 +831,13 @@ void QMakeItem::writeItem( ProjectItem* it )
 		}
 		case ProjectItem::ValueType:
 		{
+			QString s = it->getValue();
+			if ( UISettingsQMake::readPathFiles().contains( it->parent()->getValue() ) )
+				s = quotedString( s );
 			if ( it->parent()->getMultiLine() )
-				mBuffer.append( it->getIndent() ).append( it->getValue() ).append( !it->isLast() ? " \\" : "" ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
+				mBuffer.append( it->getIndent() ).append( s ).append( !it->isLast() ? " \\" : "" ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
 			else
-				mBuffer.append( it->getValue() ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->isLast() ? it->getEol() : " " );
+				mBuffer.append( s ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->isLast() ? it->getEol() : " " );
 			break;
 		}
 		case ProjectItem::FunctionType:
