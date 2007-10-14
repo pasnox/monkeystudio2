@@ -131,6 +131,8 @@ public:
 	virtual bool isInclude() const;
 	// tell if item is a project type
 	virtual bool isProject() const;
+	// get a quoted string if neede, ie file starting and finishing by " is string contains spacePressed
+	virtual QString quotedString( const QString& ) const;
 	// item indent
 	virtual QString getIndent() const = 0;
 	// item eol
@@ -218,9 +220,7 @@ public:
 	// save project including all children projects
 	virtual void saveAll( bool = true ) = 0;
 	// add existing files to project scope / operator
-	virtual void addExistingFiles( const QStringList&, const QString&, const QString& = "=" ) = 0;
 	virtual void addExistingFiles( const QStringList&, ProjectItem*, const QString& = "=" ) = 0;
-	virtual void addExistingFile( const QString&, const QString&, const QString& = "=" ) = 0;
 	virtual void addExistingFile( const QString&, ProjectItem*, const QString& = "=" ) = 0;
 	// set builder for this project
 	virtual void setBuilder( BuilderPlugin* ) {}
@@ -242,8 +242,6 @@ public:
 	virtual void installCommands() {};
 	// uninstall own command for builder/debugger/interpreter to correct menu
 	virtual void uninstallCommands() {};
-	// show the content of items 
-	virtual void debug() = 0;
 	
 	// get index list
 	virtual ProjectItemList match( int, const QVariant&, bool = true ) const;

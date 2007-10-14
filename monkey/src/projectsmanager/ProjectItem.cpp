@@ -181,6 +181,9 @@ bool ProjectItem::isInclude() const
 bool ProjectItem::isProject() const
 { return getType() == ProjectItem::ProjectType; }
 
+QString ProjectItem::quotedString( const QString& s ) const
+{ return s.contains( ' ' ) && !s.startsWith( '"' ) && !s.endsWith( '"' ) ? QString( "\"%1\"" ).arg( s ) : s; }
+
 ProjectsModel* ProjectItem::model() const
 { return dynamic_cast<ProjectsModel*>( QStandardItem::model() ); }
 
