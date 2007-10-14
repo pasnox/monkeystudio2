@@ -454,7 +454,6 @@ void QMakeItem::addExistingFiles( const QStringList& l, ProjectItem* s, const QS
 {
 	if ( !isProject() )
 		return;
-	
 	// C++ filters
 	const QStringList cf = availableSuffixes().value( "C++" );
 	// YACC filters
@@ -471,9 +470,21 @@ void QMakeItem::addExistingFiles( const QStringList& l, ProjectItem* s, const QS
 	const QStringList pf = availableImageFormats();
 	// PROJECT filters
 	const QStringList pjf = plugin()->suffixes().values().value( 0 );
-	
+	// iterate each file
 	foreach ( const QString& f, l )
 	{
+		// project
+		if ( QDir::match( pjf, f ) )
+		{
+			if ( !isProjectsContainer() )
+				warning( QObject::tr( "Add Existing Files..." ), QObject::tr( "This project is not a projects container, cancel adding project:\n%1" ).arg( f ) );
+			else if( !addProject( f ) )
+				warning( QObject::tr( "Add Existing Files..." ), QObject::tr( "A selected file is a project that i can't open:\n%1" ).arg( f ) );
+			continue;
+		}
+		else if ( isProjectsContainer() )
+			continue;
+		// files
 		QString vn = "UNKNOW_FILES";
 		if ( QDir::match( cf, f ) )
 		{
@@ -494,15 +505,16 @@ void QMakeItem::addExistingFiles( const QStringList& l, ProjectItem* s, const QS
 			if ( question( QObject::tr( "FORMS3 Files..." ), QObject::tr( "Do i need to add this form to FORMS3 variable ?" ) ) )
 				vn = "FORMS3";
 		}
-		else if ( QDir::match( pjf, f ) )
-		{
-			if ( !isProjectsContainer() )
-				warning( QObject::tr( "Add Existing Files..." ), QObject::tr( "This project is not a projects container, cancel adding project:\n%1" ).arg( f ) );
-			else if( !addProject( f ) )
-				warning( QObject::tr( "Add Existing Files..." ), QObject::tr( "A selected file is a project that i can't open:\n%1" ).arg( f ) );
-			continue;
-		}
-		
+		else if ( QDir::match( "*.ts", f ) )
+			  vn = "TRANSLATIONS";
+		else if ( QDir::match( "*.qrc", f ) )
+			  vn = "RESOURCES";
+		else if ( QDir::match( "*.def", f ) )
+			  vn = "DEF_FILE";
+		else if ( QDir::match( "*.rc", f ) )
+			vn = "RC_FILE";
+		else if ( QDir::match( "*.res", f ) )
+			vn = "RES_FILE";
 		// create value for variable
 		ProjectItem* it = new QMakeItem( ProjectItem::ValueType, variable( s, vn, o ) );
 		it->setValue( vn != "UNKNOW_FILES" ? relativeFilePath( f ) : f );
