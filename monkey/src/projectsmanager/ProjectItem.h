@@ -210,7 +210,7 @@ public:
 	// open project based on filename in getValue()
 	virtual bool open() = 0;
 	// add a subproject to this projects container
-	virtual bool addProject( const QString& ) = 0;
+	virtual bool addProject( const QString&, ProjectItem*, const QString& = "=" ) = 0;
 	// open project settings dialog
 	virtual void editSettings() = 0;
 	// close the project
@@ -239,9 +239,9 @@ public:
 	// interpreter for this project
 	virtual InterpreterPlugin* interpreter() const { return mInterpreter; }
 	// install own command for builder/compiler/debugger/interpreter to correct menu
-	virtual void installCommands() {};
+	virtual void installCommands() {}
 	// uninstall own command for builder/debugger/interpreter to correct menu
-	virtual void uninstallCommands() {};
+	virtual void uninstallCommands() {}
 	
 	// get index list
 	virtual ProjectItemList match( int, const QVariant&, bool = true ) const;
