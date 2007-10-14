@@ -142,6 +142,7 @@ void UIProjectsManager::tvProjects_currentChanged( const QModelIndex& c, const Q
 	ProjectItem* it = currentProject();
 	// set compiler, debugger and interpreter
 	pm->setCurrentBuilder( it ? it->builder() : 0 );
+	pm->setCurrentCompiler( it ? it->compiler() : 0 );
 	pm->setCurrentDebugger( it ? it->debugger() : 0 );
 	pm->setCurrentInterpreter( it ? it->interpreter() : 0 );
 	// anstall project self own commands
