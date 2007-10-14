@@ -24,7 +24,7 @@ public:
 	virtual pCommand buildCommand() const;
 	virtual void setBuildCommand( const pCommand& );
 
-public slots:
+private slots:
 	virtual void commandTriggered();
 	
 };
