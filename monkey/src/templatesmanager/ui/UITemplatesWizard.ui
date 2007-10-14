@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>363</width>
+    <width>432</width>
     <height>393</height>
    </rect>
   </property>
@@ -165,7 +165,7 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1" colspan="2" >
+          <item row="0" column="1" >
            <widget class="QLineEdit" name="leBaseName" >
             <property name="toolTip" >
              <string>Base File/Class Name</string>
@@ -180,21 +180,25 @@
            </widget>
           </item>
           <item row="1" column="1" >
-           <widget class="QLineEdit" name="leDestination" >
-            <property name="toolTip" >
-             <string>File Destination</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2" >
-           <widget class="QToolButton" name="tbDestination" >
-            <property name="toolTip" >
-             <string>Click to select a folder for your file(s)</string>
-            </property>
-            <property name="text" >
-             <string>...</string>
-            </property>
-           </widget>
+           <layout class="QHBoxLayout" >
+            <item>
+             <widget class="QLineEdit" name="leDestination" >
+              <property name="toolTip" >
+               <string>File Destination</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="tbDestination" >
+              <property name="toolTip" >
+               <string>Click to select a folder for your file(s)</string>
+              </property>
+              <property name="text" >
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item row="2" column="0" >
            <widget class="QLabel" name="lAuthor" >
@@ -203,7 +207,7 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="1" colspan="2" >
+          <item row="2" column="1" >
            <widget class="QLineEdit" name="leAuthor" >
             <property name="toolTip" >
              <string>Author(s), like : Nox P@sNox &lt;pasnox@gmail.com></string>
@@ -217,7 +221,7 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="1" colspan="2" >
+          <item row="3" column="1" >
            <widget class="QComboBox" name="cbLicenses" >
             <property name="toolTip" >
              <string>Choose a license for your file(s)</string>
@@ -254,14 +258,34 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="1" colspan="2" >
-           <widget class="pTreeComboBox" name="cbProjects" >
-            <property name="toolTip" >
-             <string>Choose the project in witch you want to add file(s)</string>
-            </property>
-           </widget>
+          <item row="4" column="1" >
+           <layout class="QHBoxLayout" >
+            <item>
+             <widget class="pTreeComboBox" name="cbProjects" >
+              <property name="sizePolicy" >
+               <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="toolTip" >
+               <string>Choose the project in witch you want to add file(s)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="lOperators" >
+              <property name="text" >
+               <string>Operator :</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="cbOperators" />
+            </item>
+           </layout>
           </item>
-          <item row="5" column="1" colspan="2" >
+          <item row="5" column="1" >
            <layout class="QHBoxLayout" >
             <property name="spacing" >
              <number>3</number>

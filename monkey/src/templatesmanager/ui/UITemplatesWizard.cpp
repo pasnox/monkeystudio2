@@ -26,9 +26,9 @@ UITemplatesWizard::UITemplatesWizard( QWidget* w )
 	pTemplate::fillComboBox( cbTypes );
 	// assign projects combobox
 	mProjects = UIProjectsManager::instance()->model();
-	cbProjects->setModel( mProjects->projectsProxy() );
+	cbProjects->setModel( mProjects->scopesProxy() );
 	ProjectItem* p = UIProjectsManager::instance()->currentProject();
-	cbProjects->setCurrentIndex( mProjects->projectsProxy()->mapFromSource( p ? p->index() : QModelIndex() ) );
+	cbProjects->setCurrentIndex( mProjects->scopesProxy()->mapFromSource( p ? p->index() : QModelIndex() ) );
 	// show correct page
 	on_swPages_currentChanged( 0 );
 	// restore infos
@@ -38,6 +38,9 @@ UITemplatesWizard::UITemplatesWizard( QWidget* w )
 	leAuthor->setText( s->value( "Recents/FileWizard/Author" ).toString() );
 	cbLicenses->setEditText( s->value( "Recents/FileWizard/License", "GPL" ).toString() );
 	cbOpen->setChecked( s->value( "Recents/FileWizard/Open", true ).toBool() );
+	//
+	qWarning( "UITemplatesWizard::UITemplatesWizard( QWidget* w ) make getting operators options" );
+	cbOperators->addItems( QStringList() << "=" << "+=" << "-=" << "*=" << "~=" );
 }
 
 void UITemplatesWizard::setType( pTemplate::TemplateType t )
@@ -133,7 +136,7 @@ bool UITemplatesWizard::checkTemplates()
 		return false;
 	}
 	
-	ProjectItem* it = mProjects->itemFromIndex( mProjects->projectsProxy()->mapToSource( cbProjects->currentIndex() ) );
+	ProjectItem* it = mProjects->itemFromIndex( mProjects->scopesProxy()->mapToSource( cbProjects->currentIndex() ) );
 	
 	if ( cbAddToProject->isChecked() )
 	{
@@ -142,7 +145,7 @@ bool UITemplatesWizard::checkTemplates()
 			information( tr( "Add To Project..." ), tr( "You need to select a project to add to." ), this );
 			return false;
 		}
-		else if ( !it->isProjectsContainer() )
+		else if ( cbTypes->itemData( cbTypes->currentIndex() ).toInt() == pTemplate::ttProjects && !it->isProjectsContainer() )
 		{
 			information( tr( "Add To Project..." ), tr( "The project you select is not a projects container." ), this );
 			return false;
@@ -184,7 +187,7 @@ void UITemplatesWizard::generatePreview()
 			tc.Name = leBaseName->text();
 			tc.Author = leAuthor->text();
 			tc.License = cbLicenses->currentText();
-			tc.Project = mProjects->itemFromIndex( mProjects->projectsProxy()->mapToSource( cbProjects->currentIndex() ) );
+			tc.Project = mProjects->itemFromIndex( mProjects->scopesProxy()->mapToSource( cbProjects->currentIndex() ) );
 			if ( !cbAddToProject->isChecked() )
 				tc.Project = 0;
 			tc.FileName = p->fileName();
@@ -205,7 +208,7 @@ void UITemplatesWizard::accept()
 	// get current template type
 	pTemplate::TemplateType t = (pTemplate::TemplateType)cbTypes->itemData( cbTypes->currentIndex() ).toInt();
 	// get project item
-	ProjectItem* it = mProjects->itemFromIndex( mProjects->projectsProxy()->mapToSource( cbProjects->currentIndex() ) );
+	ProjectItem* it = mProjects->itemFromIndex( mProjects->scopesProxy()->mapToSource( cbProjects->currentIndex() ) );
 	//
 	int i = 0;
 	// create files
@@ -231,7 +234,7 @@ void UITemplatesWizard::accept()
 					}
 					else if ( t != pTemplate::ttProjects )
 					{
-						it->addExistingFile( s, "", "+=" );
+						it->project()->addExistingFile( s, it, cbOperators->currentText() );
 						if ( cbOpen->isChecked() )
 							pFileManager::instance()->openFile( s );
 					}
