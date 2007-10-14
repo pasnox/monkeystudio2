@@ -46,7 +46,7 @@ public:
 	virtual void remove();
 	
 	virtual bool open();
-	virtual bool addProject( const QString& );
+	virtual bool addProject( const QString&, ProjectItem*, const QString& = "=" );
 	virtual void editSettings();
 	virtual void close();
 	virtual void save( bool = true );
@@ -59,7 +59,8 @@ public:
 	virtual CompilerPlugin* compiler() const;
 	virtual void setDebugger( DebuggerPlugin* );
 	virtual DebuggerPlugin* debugger() const;
-	virtual void installCommands() {}
+	virtual void installCommands();
+	virtual void uninstallCommands();
 	
 	virtual ProjectItem* getItemScope( const QString&, bool ) const;
 	virtual QStringList getListValues( const QString&, const QString& = "=", const QString& = QString::null ) const;

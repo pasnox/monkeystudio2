@@ -19,10 +19,24 @@
 #include "QMakeParser.h"
 #include "UIQMakeProjectSettings.h"
 #include "QMake.h"
+#include "pMenuBar.h"
 
 #include "PluginsManager.h"
 
 using namespace pMonkeyStudio;
+
+ProjectItem* variable( ProjectItem* s, const QString& v, const QString& o )
+{
+	Q_ASSERT( s != 0 );
+	foreach ( ProjectItem* it, s->children( false, true ) )
+		if ( it->getValue() == v && it->getOperator() == o )
+			return it;
+	ProjectItem* it = new QMakeItem( ProjectItem::VariableType, s );
+	it->setValue( v );
+	it->setOperator( o );
+	it->setMultiLine( true );
+	return it;
+}
 
 QMakeItem::QMakeItem( ProjectItem::NodeType t, ProjectItem* i )
 {
@@ -364,28 +378,35 @@ bool QMakeItem::open()
 	return false;
 }
 
-bool QMakeItem::addProject( const QString& s )
+bool QMakeItem::addProject( const QString& f, ProjectItem* s, const QString& o )
 {
 	if ( !isProjectsContainer() )
 		return false;
-	
-	foreach ( ProjectItem* p, childrenProjects( false ) )
-		if ( QFileInfo( p->getValue() ) == QFileInfo( s ) )
+	// check if already present value
+	ProjectItem* v = variable( s, "SUBDIRS", o );
+	foreach ( ProjectItem* cit, v->children( false ) )
+		if ( isSameFile( cit->getFilePath(), f ) )
 			return true;
-	
+	// add value to subdirs
+	ProjectItem* it = new QMakeItem( ProjectItem::ValueType, v );
+	it->setValue( relativePath( f ) );
+	// if project already open as a subproject, don't reopen it
+	foreach ( ProjectItem* it, childrenProjects( false ) )
+		if ( isSameFile( it->getFilePath(), f ) )
+			return true;
 	// create project item
-	if ( ProjectItem* it = plugin()->getProjectItem( s ) )
+	if ( ProjectItem* pit = plugin()->getProjectItem( f ) )
 	{
-		if ( it->open() )
+		if ( pit->open() )
 		{
-			addStringValues( relativePath( s ), "SUBDIRS", "+=", "" );
-			appendRow( it );
-			it->setModified( false );
+			// add project
+			appendRow( pit );
+			pit->setModified( false );
 			return true;
 		}
-		delete it;
+		delete pit;
 	}
-	
+	// not added
 	return false;
 }
 
@@ -437,19 +458,6 @@ void QMakeItem::saveAll( bool b )
 		it->save( b );
 }
 
-ProjectItem* variable( ProjectItem* s, const QString& var, const QString& op )
-{
-	Q_ASSERT( s != 0 );
-	foreach ( ProjectItem* it, s->children( false, true ) )
-		if ( it->getValue() == var && it->getOperator() == op )
-			return it;
-	ProjectItem* it = new QMakeItem( ProjectItem::VariableType, s );
-	it->setValue( var );
-	it->setOperator( op );
-	it->setMultiLine( true );
-	return it;
-}
-
 void QMakeItem::addExistingFiles( const QStringList& l, ProjectItem* s, const QString& o )
 {
 	if ( !isProject() )
@@ -478,7 +486,7 @@ void QMakeItem::addExistingFiles( const QStringList& l, ProjectItem* s, const QS
 		{
 			if ( !isProjectsContainer() )
 				warning( QObject::tr( "Add Existing Files..." ), QObject::tr( "This project is not a projects container, cancel adding project:\n%1" ).arg( f ) );
-			else if( !addProject( f ) )
+			else if( !addProject( f, s, o ) )
 				warning( QObject::tr( "Add Existing Files..." ), QObject::tr( "A selected file is a project that i can't open:\n%1" ).arg( f ) );
 			continue;
 		}
@@ -516,7 +524,21 @@ void QMakeItem::addExistingFiles( const QStringList& l, ProjectItem* s, const QS
 		else if ( QDir::match( "*.res", f ) )
 			vn = "RES_FILE";
 		// create value for variable
-		ProjectItem* it = new QMakeItem( ProjectItem::ValueType, variable( s, vn, o ) );
+		ProjectItem* v = variable( s, vn, o );
+		bool b = false;
+		foreach ( ProjectItem* cit, v->children( false ) )
+		{
+			if ( isSameFile( cit->getFilePath(), f ) )
+			{
+				b = true;
+				break;
+			}
+		}
+		if ( b )
+			continue;
+		// create item value
+		ProjectItem* it = new QMakeItem( ProjectItem::ValueType, v );
+		// check already added files
 		it->setValue( vn != "UNKNOW_FILES" ? relativeFilePath( f ) : f );
 	}
 }
@@ -556,11 +578,51 @@ void QMakeItem::setDebugger( DebuggerPlugin* d )
 		mDebugger = d;
 }
 
+QString interprate( const QString s, ProjectItem* it )
+{
+	Q_ASSERT( it );
+	return QString();
+}
+
 DebuggerPlugin* QMakeItem::debugger() const
 {
 	qWarning( "QMakeItem::debugger() temporary hack returning gdb" );
 	return PluginsManager::instance()->plugin<DebuggerPlugin*>( "GNUDebugger" );
 	return isProject() ? mDebugger : project()->debugger();
+}
+#include "pCommand.h"
+void QMakeItem::installCommands()
+{
+	// cancel if not a project
+	if ( !isProject() )
+		return;
+	// get menu bar pointer
+	pMenuBar* mb = pMenuBar::instance();
+	// builder/compiler
+	if ( builder() )
+	{
+		const pCommand  bc = builder()->buildCommand();
+		QString s = interprate( "CONFIG", this );
+		/*
+		foreach ( pCommand c, builder()->() )
+		{
+			QAction* a = mb->action( QString( "mBuild/%1" ).arg( c.text() ), c.text() );
+			a->setData( mPluginInfos.Name );
+			a->setStatusTip( c.text() );
+			connect( a, SIGNAL( triggered() ), this, SLOT( commandTriggered() ) );
+		}
+		*/
+	}
+}
+
+void QMakeItem::uninstallCommands()
+{
+	/*
+	pMenuBar* mb = pMenuBar::instance();
+	foreach ( QAction* a, mb->menu( "mBuild" )->actions() )
+		if ( a->data().toString() == mPluginInfos.Name )
+			delete a;
+	*/
 }
 
 ProjectItem* QMakeItem::getItemScope( const QString& s, bool c ) const
