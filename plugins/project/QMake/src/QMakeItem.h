@@ -16,6 +16,7 @@
 #define QMAKEITEM_H
 
 #include "ProjectItem.h"
+#include "pCommand.h"
 
 class QMakeItem : public ProjectItem
 {
@@ -74,6 +75,11 @@ protected:
 	virtual void redoLayout( ProjectItem* );
 	virtual bool writeProject();
 	virtual void writeItem( ProjectItem* );
+
+	pCommandList mBuilderCommands;
+
+private slots:
+	virtual void commandTriggered();
 
 };
 

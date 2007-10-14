@@ -20,6 +20,7 @@
 #include "UIQMakeProjectSettings.h"
 #include "QMake.h"
 #include "pMenuBar.h"
+#include "pConsoleManager.h"
 
 #include "PluginsManager.h"
 
@@ -578,19 +579,57 @@ void QMakeItem::setDebugger( DebuggerPlugin* d )
 		mDebugger = d;
 }
 
-QString interprate( const QString s, ProjectItem* it )
-{
-	Q_ASSERT( it );
-	return QString();
-}
-
 DebuggerPlugin* QMakeItem::debugger() const
 {
 	qWarning( "QMakeItem::debugger() temporary hack returning gdb" );
 	return PluginsManager::instance()->plugin<DebuggerPlugin*>( "GNUDebugger" );
 	return isProject() ? mDebugger : project()->debugger();
 }
-#include "pCommand.h"
+
+QString evaluate( const QString s, ProjectItem* p )
+{
+	Q_ASSERT( p );
+	QString v;
+	foreach ( ProjectItem* it, p->match( ProjectItem::VariableType, s ) )
+	{
+		const QString o = it->getOperator();
+		foreach ( ProjectItem* cit, it->children() )
+		{
+			if ( o == "=" )
+				v = cit->getValue();
+			else if ( o == "+=" )
+				v.append( cit->getValue().prepend( " " ) );
+			else if ( o == "-=" )
+			{
+				foreach ( const QString s, cit->getValue().split( " " ) )
+					v.remove( s );
+			}
+			else if ( o == "*=" )
+			{
+				QStringList l = v.split( " " );
+				foreach ( QString s, cit->getValue().split( " " ) )
+					if ( !l.contains( s ) )
+						v.append( s.prepend( " " ) );
+			}
+			else if ( o == "~=" )
+			{
+				qWarning( "QString evaluate( const QString s, ProjectItem* p ): Need Implementation" );
+				/*
+				QRegExp rx( 
+				QStringList l = v.split( " " );
+				foreach ( QString s, cit->getValue().split( " " ) )
+					if ( !l.contains( s ) )
+						v.append( s.prepend( " " ) );
+					
+					DEFINES ~= s/QT_[DT].+/QT
+				*/
+			}
+		}
+	}
+	// return value
+	return v.trimmed();
+}
+
 void QMakeItem::installCommands()
 {
 	// cancel if not a project
@@ -598,31 +637,61 @@ void QMakeItem::installCommands()
 		return;
 	// get menu bar pointer
 	pMenuBar* mb = pMenuBar::instance();
+	// command
+	pCommand c;
 	// builder/compiler
 	if ( builder() )
 	{
+		mBuilderCommands.clear();
 		const pCommand  bc = builder()->buildCommand();
-		QString s = interprate( "CONFIG", this );
-		/*
-		foreach ( pCommand c, builder()->() )
+		QString s = evaluate( "CONFIG", this );
+		if ( s.contains( "debug_and_release" ) )
+		{
+			// build all
+			c = bc;
+			c.setText( tr( "Build All" ) );
+			c.setArguments( "all" );
+			mBuilderCommands << c;
+			// build debug
+			c = bc;
+			c.setText( tr( "Build Debug" ) );
+			c.setArguments( "debug" );
+			mBuilderCommands << c;
+			// build release
+			c = bc;
+			c.setText( tr( "Build Release" ) );
+			c.setArguments( "release" );
+			mBuilderCommands << c;
+		}
+		// qmake command
+		c = pCommand();
+		c.setText( "QMake" );
+#ifdef Q_OS_MAC
+		c.setCommand( "qmake" );
+#elif defined Q_OS_UNIX
+		c.setCommand( "qmake-qt4" );
+#else 
+		c.setCommand( "qmake" );
+#endif
+		c.setWorkingDirectory( "$cpp$" );
+		mBuilderCommands << c;
+		// create actions
+		foreach ( pCommand c, mBuilderCommands )
 		{
 			QAction* a = mb->action( QString( "mBuild/%1" ).arg( c.text() ), c.text() );
-			a->setData( mPluginInfos.Name );
+			a->setData( "QMake" );
 			a->setStatusTip( c.text() );
 			connect( a, SIGNAL( triggered() ), this, SLOT( commandTriggered() ) );
 		}
-		*/
 	}
 }
 
 void QMakeItem::uninstallCommands()
 {
-	/*
 	pMenuBar* mb = pMenuBar::instance();
 	foreach ( QAction* a, mb->menu( "mBuild" )->actions() )
-		if ( a->data().toString() == mPluginInfos.Name )
+		if ( a->data().toString() == "QMake" )
 			delete a;
-	*/
 }
 
 ProjectItem* QMakeItem::getItemScope( const QString& s, bool c ) const
@@ -935,4 +1004,12 @@ void QMakeItem::writeItem( ProjectItem* it )
 	// write children
 	foreach ( ProjectItem* cit, it->children( false, true ) )
 		writeItem( cit );
+}
+
+void QMakeItem::commandTriggered()
+{
+	pConsoleManager* cm = pConsoleManager::instance();
+	pCommandList l = mBuilderCommands;
+	if ( QAction* a = qobject_cast<QAction*>( sender() ) )
+		cm->addCommands( cm->recursiveCommandList( l, cm->getCommand( l, a->statusTip() ) ) );
 }
