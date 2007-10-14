@@ -229,7 +229,7 @@ void UITemplatesWizard::accept()
 				{
 					if ( t == pTemplate::ttProjects && i == 0 )
 					{
-						if ( !it->addProject( s ) )
+						if ( !it->project()->addProject( s ) )
 							warning( "Adding Project...", tr( "Can't add project:\n%1" ).arg( s ) );
 					}
 					else if ( t != pTemplate::ttProjects )
