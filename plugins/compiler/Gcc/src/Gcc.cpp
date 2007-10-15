@@ -27,7 +27,7 @@ bool Gcc::setEnabled( bool b)
 		pMenuBar* mb = pMenuBar::instance();
 		foreach ( pCommand c, userCommands() )
 		{
-			QAction* a = mb->action( QString( "mBuild/%1" ).arg( c.text() ), c.text() );
+			QAction* a = mb->action( QString( "mBuilder/mUserCommands/%1" ).arg( c.text() ), c.text() );
 			a->setData( mPluginInfos.Name );
 			a->setStatusTip( c.text() );
 			connect( a, SIGNAL( triggered() ), this, SLOT( commandTriggered() ) );
@@ -39,7 +39,7 @@ bool Gcc::setEnabled( bool b)
 			pConsoleManager::instance()->removeParser( s );
 		
 		pMenuBar* mb = pMenuBar::instance();
-		foreach ( QAction* a, mb->menu( "mBuild" )->actions() )
+		foreach ( QAction* a, mb->menu( "mBuilder/mUserCommands" )->actions() )
 			if ( a->data().toString() == mPluginInfos.Name )
 				delete a;
 	}
