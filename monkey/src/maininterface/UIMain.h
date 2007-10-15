@@ -33,6 +33,9 @@ public:
 protected:
 	void closeEvent( QCloseEvent* );
 
+protected slots:
+	void menu_aboutToShow();
+
 private:
 	UIMain( QWidget* = 0 );
 	void initMenuBar();

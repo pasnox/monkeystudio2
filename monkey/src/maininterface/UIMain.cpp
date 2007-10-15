@@ -150,34 +150,17 @@ void UIMain::initMenuBar()
 		mb->action( "mRecents/aClear", tr( "&Clear" ), QIcon( ":/project/icons/project/clear.png" ), QString::null, tr( "Clear the recents projects list" ) );
 		mb->action( "mRecents/aSeparator1" );
 	mb->endGroup();
-	mb->menu( "mBuild", tr( "&Build" ) )->setEnabled( false );
+	mb->menu( "mBuilder", tr( "&Build" ) )->setEnabled( false );
+	mb->beginGroup( "mBuilder" );
+		mb->menu( "mBuild", tr( "&Build" ), QIcon( ":/build/icons/build/build.png" ) );
+		mb->menu( "mRebuild", tr( "&Rebuild" ), QIcon( ":/build/icons/build/rebuild.png" ) );
+		mb->menu( "mClean", tr( "&Clean" ), QIcon( ":/build/icons/build/clean.png" ) );
+		mb->menu( "mExecute", tr( "&Execute" ), QIcon( ":/build/icons/build/execute.png" ) );
+		mb->menu( "mUserCommands", tr( "&User Commands" ), QIcon( ":/build/icons/build/misc.png" ) );
+		mb->action( "aSeparator1" );
+	mb->endGroup();
 	mb->menu( "mDebugger", tr( "&Debugger" ) )->setEnabled( false );
 	mb->menu( "mInterpreter", tr( "&Interpreter" ) )->setEnabled( false );
-/* Need to be plugin that instore its actions
-	mb->beginGroup( "mBuild" );
-		mb->menu( "mBuild", tr( "&Build" ), QIcon( ":/Icons/Icons/buildbuild.png" ) );
-		mb->action( "mBuild/aCurrent", tr( "&Current" ), QIcon( ":/Icons/Icons/buildbuild.png" ), QString::null, tr( "Build current" ) );
-		mb->action( "mBuild/aAll", tr( "&All" ), QIcon( ":/Icons/Icons/buildbuild.png" ), QString::null, tr( "Build all" ) );
-		mb->menu( "mRebuild", tr( "&Rebuild" ), QIcon( ":/Icons/Icons/buildrebuild.png" ) );
-		mb->action( "mRebuild/aCurrent", tr( "&Current" ), QIcon( ":/Icons/Icons/buildrebuild.png" ), QString::null, tr( "Rebuild current" ) );
-		mb->action( "mRebuild/aAll", tr( "&All" ), QIcon( ":/Icons/Icons/buildrebuild.png" ), QString::null, tr( "Rebuild all" ) );
-		mb->action( "aSeparator1" );
-		mb->action( "aStop", tr( "&Stop" ), QIcon( ":/Icons/Icons/buildstop.png" ), QString::null, tr( "Stop current" ) );
-		mb->action( "aSeparator2" );
-		mb->menu( "mClean", tr( "&Clean" ), QIcon( ":/Icons/Icons/buildclean.png" ) );
-		mb->action( "mClean/aCurrent", tr( "&Current" ), QIcon( ":/Icons/Icons/buildclean.png" ), QString::null, tr( "Clean current" ) );
-		mb->action( "mClean/aAll", tr( "&All" ), QIcon( ":/Icons/Icons/buildclean.png" ), QString::null, tr( "Clean all" ) );
-		mb->menu( "mDistClean", tr( "&Dist Clean" ), QIcon( ":/Icons/Icons/builddistclean.png" ) );
-		mb->action( "mDistClean/aCurrent", tr( "&Current" ), QIcon( ":/Icons/Icons/builddistclean.png" ), QString::null, tr( "Dist clean current" ) );
-		mb->action( "mDistClean/aAll", tr( "&All" ), QIcon( ":/Icons/Icons/builddistclean.png" ), QString::null, tr( "Dist clean all" ) );
-		mb->action( "aSeparator3" );
-		mb->action( "aExecute", tr( "&Execute" ), QIcon( ":/Icons/Icons/buildexecute.png" ), QString::null, tr( "Execute current" ) );
-		mb->action( "aExecuteWithParameters", tr( "Execute with &parameters..." ), QIcon( ":/Icons/Icons/buildexecute.png" ), QString::null, tr( "Execute current with parameters..." ) );
-		mb->action( "aSeparator4" );
-		mb->action( "aBuildExecute", tr( "Build, Execu&te" ), QIcon( ":/Icons/Icons/buildmisc.png" ), QString::null, tr( "Build and execute current" ) );
-		mb->action( "aDistCleanBuildExecute", tr( "Dist Clean, Build, E&xecute" ), QIcon( ":/Icons/Icons/buildmisc.png" ), QString::null, tr( "Dist clean, build and execute current" ) );
-	mb->endGroup();
-*/
 	mb->menu( "mTools", tr( "&Tools" ) );
 	mb->beginGroup( "mTools" );
 		mb->action( "aEditUser", tr( "&Edit User Tools..." ), QIcon( ":/tools/icons/tools/edit.png" ), QString::null, tr( "Edit tools..." ) );
@@ -257,16 +240,6 @@ void UIMain::initToolBar()
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mEdit/aGoTo" ) );
 	dockToolBar( Qt::TopToolBarArea )->addAction();
 
-	// build action
-/*
-	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mBuild/aDistCleanBuildExecute" ) );
-	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mBuild/aBuildExecute" ) );
-	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mBuild/mBuild/aCurrent" ) );
-	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mBuild/aExecute" ) );
-	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mBuild/aStop" ) );
-	dockToolBar( Qt::TopToolBarArea )->addAction();
-*/
-
 	// help action
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mHelp/aAbout" ) );
 }
@@ -315,6 +288,10 @@ void UIMain::initConnections()
 	connect( menuBar()->action( "mProject/aSettings" ), SIGNAL( triggered() ), projectsManager(), SLOT( projectSettings_triggered() ) );
 	connect( menuBar()->action( "mProject/aAddExistingFiles" ), SIGNAL( triggered() ), projectsManager(), SLOT( projectAddExistingFiles_triggered() ) );
 	connect( pRecentsManager::instance(), SIGNAL( openProjectRequested( const QString& ) ), projectsManager(), SLOT( openProject( const QString& ) ) );
+	// builder debugger interpreter menu
+	connect( menuBar()->menu( "mBuilder" ), SIGNAL( aboutToShow() ), this, SLOT( menu_aboutToShow() ) );
+	connect( menuBar()->menu( "mDebugger" ), SIGNAL( aboutToShow() ), this, SLOT( menu_aboutToShow() ) );
+	connect( menuBar()->menu( "mInterpreter" ), SIGNAL( aboutToShow() ), this, SLOT( menu_aboutToShow() ) );
 	// plugins menu
 	connect( menuBar()->action( "mPlugins/aManage" ), SIGNAL( triggered() ), pluginsManager(), SLOT( manageRequested() ) );
 	// help menu
@@ -339,4 +316,12 @@ void UIMain::initGui()
 	addDockWidget( Qt::RightDockWidgetArea, pSearch::instance() );
 	// create statusbar
 	statusBar()->show();
+}
+
+void UIMain::menu_aboutToShow()
+{
+	if ( QMenu* m = qobject_cast<QMenu*>( sender() ) )
+		foreach ( QAction* a, m->actions() )
+			if ( a->menu() )
+				a->menu()->menuAction()->setVisible( a->menu()->actions().count() );
 }

@@ -9,6 +9,13 @@
         <file>icons/application/monkey2.png</file>
         <file>icons/application/splashscreen.png</file>
     </qresource>
+    <qresource prefix="/build" >
+        <file>icons/build/build.png</file>
+        <file>icons/build/clean.png</file>
+        <file>icons/build/execute.png</file>
+        <file>icons/build/misc.png</file>
+        <file>icons/build/rebuild.png</file>
+    </qresource>
     <qresource prefix="/edit" >
         <file>icons/edit/abbreviation.png</file>
         <file>icons/edit/close.png</file>
@@ -63,6 +70,9 @@
         <file>icons/project/saveall.png</file>
         <file>icons/project/settings.png</file>
     </qresource>
+    <qresource prefix="/stylesheets" >
+        <file>stylesheets/default.css</file>
+    </qresource>
     <qresource prefix="/temp" >
         <file>icons/temp/kcmsystem.png</file>
         <file>icons/temp/kpf.png</file>
@@ -106,12 +116,9 @@
         <file>icons/translation/update.png</file>
     </qresource>
     <qresource prefix="/view" >
+        <file>icons/view/filtered.png</file>
         <file>icons/view/next.png</file>
         <file>icons/view/previous.png</file>
         <file>icons/view/style.png</file>
-        <file>icons/view/filtered.png</file>
-    </qresource>
-    <qresource prefix="/stylesheets" >
-        <file>stylesheets/default.css</file>
     </qresource>
 </RCC>
