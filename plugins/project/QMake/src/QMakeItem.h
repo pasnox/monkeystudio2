@@ -60,6 +60,7 @@ public:
 	virtual CompilerPlugin* compiler() const;
 	virtual void setDebugger( DebuggerPlugin* );
 	virtual DebuggerPlugin* debugger() const;
+	virtual void addCommand( const pCommand&, const QString& );
 	virtual void installCommands();
 	virtual void uninstallCommands();
 	
@@ -76,7 +77,7 @@ protected:
 	virtual bool writeProject();
 	virtual void writeItem( ProjectItem* );
 
-	pCommandList mBuilderCommands;
+	pCommandList mCommands;
 
 private slots:
 	virtual void commandTriggered();

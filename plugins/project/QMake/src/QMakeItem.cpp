@@ -630,20 +630,35 @@ QString evaluate( const QString s, ProjectItem* p )
 	return v.trimmed();
 }
 
+void QMakeItem::addCommand( const pCommand& c, const QString& s )
+{
+	// check validity
+	if ( !c.isValid() )
+		return;
+	// get menu bar pointer
+	pMenuBar* mb = pMenuBar::instance();
+	// create action
+	QAction* a = mb->action( QString( "%1/%2" ).arg( s, c.text() ) , c.text() );
+	a->setData( "QMake" );
+	a->setStatusTip( c.text() );
+	connect( a, SIGNAL( triggered() ), this, SLOT( commandTriggered() ) );
+	// add command to command list
+	mCommands << c;
+}
+
 void QMakeItem::installCommands()
 {
 	// cancel if not a project
 	if ( !isProject() )
 		return;
-	// get menu bar pointer
-	pMenuBar* mb = pMenuBar::instance();
 	// command
 	pCommand c;
 	// builder/compiler
 	if ( builder() )
 	{
-		mBuilderCommands.clear();
-		const pCommand  bc = builder()->buildCommand();
+		mCommands.clear();
+		const pCommand bc = builder()->buildCommand();
+		addCommand( bc, "mBuilder/mBuild" );
 		QString s = evaluate( "CONFIG", this );
 		if ( s.contains( "debug_and_release" ) )
 		{
@@ -651,18 +666,28 @@ void QMakeItem::installCommands()
 			c = bc;
 			c.setText( tr( "Build All" ) );
 			c.setArguments( "all" );
-			mBuilderCommands << c;
+			addCommand( c, "mBuilder/mBuild" );
 			// build debug
 			c = bc;
 			c.setText( tr( "Build Debug" ) );
 			c.setArguments( "debug" );
-			mBuilderCommands << c;
+			addCommand( c, "mBuilder/mBuild" );
 			// build release
 			c = bc;
 			c.setText( tr( "Build Release" ) );
 			c.setArguments( "release" );
-			mBuilderCommands << c;
+			addCommand( c, "mBuilder/mBuild" );
 		}
+		// clean
+		c = bc;
+		c.setText( tr( "Clean" ) );
+		c.setArguments( "clean" );
+		addCommand( c, "mBuilder/mClean" );
+		// distclean
+		c = bc;
+		c.setText( tr( "Distclean" ) );
+		c.setArguments( "distclean" );
+		addCommand( c, "mBuilder/mClean" );
 		// qmake command
 		c = pCommand();
 		c.setText( "QMake" );
@@ -674,25 +699,51 @@ void QMakeItem::installCommands()
 		c.setCommand( "qmake" );
 #endif
 		c.setWorkingDirectory( "$cpp$" );
-		mBuilderCommands << c;
-		// create actions
-		foreach ( pCommand c, mBuilderCommands )
+		addCommand( c, "mBuilder" );
+		// rebuild
+		c = bc;
+		c.setText( tr( "Rebuild" ) );
+		c.setCommand( QStringList( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build" ) ).join( ";" ) );
+		c.setArguments( QString::null );
+		addCommand( c, "mBuilder/mRebuild" );
+		if ( s.contains( "debug_and_release" ) )
 		{
-			QAction* a = mb->action( QString( "mBuild/%1" ).arg( c.text() ), c.text() );
-			a->setData( "QMake" );
-			a->setStatusTip( c.text() );
-			connect( a, SIGNAL( triggered() ), this, SLOT( commandTriggered() ) );
+			// rebuild all
+			c = bc;
+			c.setText( tr( "Rebuild All" ) );
+			c.setCommand( QStringList( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build All" ) ).join( ";" ) );
+			c.setArguments( QString::null );
+			addCommand( c, "mBuilder/mRebuild" );
+			// rebuild debug
+			c = bc;
+			c.setText( tr( "Rebuild Debug" ) );
+			c.setCommand( QStringList( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build Debug" ) ).join( ";" ) );
+			c.setArguments( QString::null );
+			addCommand( c, "mBuilder/mRebuild" );
+			// rebuild release
+			c = bc;
+			c.setText( tr( "Rebuild Release" ) );
+			c.setCommand( QStringList( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build Release" ) ).join( ";" ) );
+			c.setArguments( QString::null );
+			addCommand( c, "mBuilder/mRebuild" );
 		}
 	}
 }
 
-void QMakeItem::uninstallCommands()
+void recursiveRemoveCommands( QMenu* m )
 {
-	pMenuBar* mb = pMenuBar::instance();
-	foreach ( QAction* a, mb->menu( "mBuild" )->actions() )
-		if ( a->data().toString() == "QMake" )
+	Q_ASSERT( m );
+	foreach ( QAction* a, m->actions() )
+	{
+		if ( a->menu() )
+			recursiveRemoveCommands( a->menu() );
+		else if ( !a->isSeparator() && a->data().toString() == "QMake" )
 			delete a;
+	}
 }
+
+void QMakeItem::uninstallCommands()
+{ recursiveRemoveCommands( pMenuBar::instance()->menu( "mBuilder" ) ); }
 
 ProjectItem* QMakeItem::getItemScope( const QString& s, bool c ) const
 {
@@ -1009,7 +1060,7 @@ void QMakeItem::writeItem( ProjectItem* it )
 void QMakeItem::commandTriggered()
 {
 	pConsoleManager* cm = pConsoleManager::instance();
-	pCommandList l = mBuilderCommands;
+	pCommandList l = mCommands;
 	if ( QAction* a = qobject_cast<QAction*>( sender() ) )
 		cm->addCommands( cm->recursiveCommandList( l, cm->getCommand( l, a->statusTip() ) ) );
 }
