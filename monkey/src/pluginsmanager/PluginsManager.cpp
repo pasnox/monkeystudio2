@@ -128,7 +128,7 @@ void PluginsManager::setCurrentBuilder( BuilderPlugin* b )
 		mBuilder->setEnabled( true );
 	
 	// enable menu according to current builder
-	pMenuBar::instance()->menu( "mBuild" )->setEnabled( mBuilder || mCompiler );
+	pMenuBar::instance()->menu( "mBuilder" )->setEnabled( mBuilder || mCompiler );
 }
 
 BuilderPlugin* PluginsManager::currentBuilder()
