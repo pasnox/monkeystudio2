@@ -22,6 +22,7 @@ class Q_MONKEY_EXPORT pAction : public QAction
 public:
 	pAction( const QString&, const QString&, const QKeySequence&, const QString& = pActionManager::globalGroup() );
 	pAction( const QString&, const QIcon&, const QString&, const QKeySequence&, const QString& = pActionManager::globalGroup() );
+	~pAction();
 
 	static QString fixedString( const QString& );
 

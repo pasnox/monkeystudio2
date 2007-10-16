@@ -36,6 +36,7 @@ public:
 	static void reloadSettings();
 
 	static QAction* addAction( const QString&, QAction* );
+	static void removeAction( const QString&, QAction* );
 	static pHashActionList actions();
 
 	static QString globalGroup();

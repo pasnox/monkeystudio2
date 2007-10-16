@@ -52,7 +52,7 @@ QAction* pActionManager::addAction( const QString& g, QAction* a )
 	Q_ASSERT( !g.isEmpty() );
 
 	// need action
-	Q_ASSERT( a != 0 );
+	Q_ASSERT( a );
 
 	// action name is require
 	Q_ASSERT( !a->objectName().isEmpty() );
@@ -66,6 +66,22 @@ QAction* pActionManager::addAction( const QString& g, QAction* a )
 
 	// return action
 	return a;
+}
+
+void pActionManager::removeAction( const QString& g, QAction* a )
+{
+	// need group
+	Q_ASSERT( !g.isEmpty() );
+
+	// need action
+	Q_ASSERT( a );
+
+	// action name is require
+	Q_ASSERT( !a->objectName().isEmpty() );
+
+	// addactions to group if it donesn't contains already
+	if ( actions()[g].contains( a ) )
+		instance()->mActions[g].removeAll( a );
 }
 
 pHashActionList pActionManager::actions()

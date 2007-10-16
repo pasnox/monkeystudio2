@@ -52,6 +52,12 @@ pAction::pAction( const QString& n, const QIcon& i, const QString& s, const QKey
 	setShortcut( pActionManager::getShortcut( cg, this, sc ) );
 }
 
+pAction::~pAction()
+{
+	// remove from group
+	pActionManager::removeAction( property( _GROUP_PROPERTY_ ).toString(), this );
+}
+
 QString pAction::fixedString( const QString& s )
 {
 	QString p = s;
