@@ -20,6 +20,7 @@
 #include "PluginsManager.h"
 #include "UIProjectsManager.h"
 #include "ProjectsProxy.h"
+#include "pConsoleManager.h"
 
 #include <QActionGroup>
 #include <QStyleFactory>
@@ -55,24 +56,19 @@ void UIMain::closeEvent( QCloseEvent* )
 }
 
 PluginsManager* UIMain::pluginsManager()
-{
-	return PluginsManager::instance( this );
-}
+{ return PluginsManager::instance( this ); }
 
 pFileManager* UIMain::fileManager()
-{
-	return pFileManager::instance( this );
-}
+{ return pFileManager::instance( this ); }
 
 pWorkspace* UIMain::workspace()
-{
-	return pWorkspace::instance( this );
-}
+{ return pWorkspace::instance( this ); }
 
 UIProjectsManager* UIMain::projectsManager()
-{
-	return UIProjectsManager::instance( this );
-}
+{ return UIProjectsManager::instance( this ); }
+
+pConsoleManager* UIMain::consoleManager()
+{ return pConsoleManager::instance( this ); }
 
 void UIMain::initMenuBar()
 {
@@ -242,6 +238,10 @@ void UIMain::initToolBar()
 
 	// help action
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mHelp/aAbout" ) );
+	dockToolBar( Qt::TopToolBarArea )->addAction();
+	
+	// console action
+	dockToolBar( Qt::TopToolBarArea )->addAction( consoleManager()->stopAction() );
 }
 
 void UIMain::initConnections()

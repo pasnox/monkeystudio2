@@ -18,6 +18,7 @@ class pFileManager;
 class pWorkspace;
 class PluginsManager;
 class UIProjectsManager;
+class pConsoleManager;
 
 class Q_MONKEY_EXPORT UIMain : public pMainWindow, public QSingleton<UIMain>
 {
@@ -29,6 +30,7 @@ public:
 	pFileManager* fileManager();
 	pWorkspace* workspace();
 	UIProjectsManager* projectsManager();
+	pConsoleManager* consoleManager();
 
 protected:
 	void closeEvent( QCloseEvent* );
