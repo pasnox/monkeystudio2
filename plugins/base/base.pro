@@ -1,3 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS	= FileBrowser \
-	MessageBox
+SUBDIRS	= FileBrowser MessageBox AStyle
