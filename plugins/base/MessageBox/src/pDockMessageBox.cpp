@@ -47,9 +47,7 @@ pDockMessageBox::pDockMessageBox( QWidget* w )
 	leRawCommand->setToolTip( tr( "You can enter here a command and press return to execute it." ) );
 	// create toolbutton
 	tbStopCommand = new QToolButton;
-	tbStopCommand->setToolTip( tr( "Stop the current command." ) );
-	tbStopCommand->setIcon( QIcon( ":/icons/stop.png" ) );
-	tbStopCommand->setEnabled( false );
+	tbStopCommand->setDefaultAction( pConsoleManager::instance()->stopAction() );
 	// add widget to hlayout
 	hl->addWidget( lRawCommand );
 	hl->addWidget( leRawCommand );
@@ -86,7 +84,6 @@ pDockMessageBox::pDockMessageBox( QWidget* w )
 	// connections
 	connect( lwBuildSteps, SIGNAL( itemDoubleClicked( QListWidgetItem* ) ), this, SLOT( lwBuildSteps_itemDoubleClicked( QListWidgetItem* ) ) );
 	connect( leRawCommand, SIGNAL( returnPressed() ), this, SLOT( leRawCommand_returnPressed() ) );
-	connect( tbStopCommand, SIGNAL( clicked() ), this, SLOT( tbStopCommand_clicked() ) );
 	connect( pConsoleManager::instance(), SIGNAL( commandError( const pCommand&, QProcess::ProcessError ) ), this, SLOT( commandError( const pCommand&, QProcess::ProcessError ) ) );
 	connect( pConsoleManager::instance(), SIGNAL( commandFinished( const pCommand&, int, QProcess::ExitStatus ) ), this, SLOT( commandFinished( const pCommand&, int, QProcess::ExitStatus ) ) );
 	connect( pConsoleManager::instance(), SIGNAL( commandReadyRead( const pCommand&, const QByteArray& ) ), this, SLOT( commandReadyRead( const pCommand&, const QByteArray& ) ) );
@@ -294,9 +291,6 @@ void pDockMessageBox::leRawCommand_returnPressed()
 	leRawCommand->clear();
 }
 
-void pDockMessageBox::tbStopCommand_clicked()
-{ pConsoleManager::instance()->stopCurrentCommand(); }
-
 void pDockMessageBox::commandError( const pCommand& c, QProcess::ProcessError e )
 {
 	QString s( tr( "* Error            : '%1'<br />" ).arg( colourText( c.text() ) ) );
@@ -309,8 +303,6 @@ void pDockMessageBox::commandError( const pCommand& c, QProcess::ProcessError e 
 	{
 		case QProcess::FailedToStart:
 			s.append( colourText( tr( "The process failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program." ), Qt::darkGreen ) );
-			// disable stop button
-			tbStopCommand->setEnabled( false );
 			break;
 		case QProcess::Crashed:
 			s.append( colourText( tr( "The process crashed some time after starting successfully." ), Qt::darkGreen ) );
@@ -352,8 +344,6 @@ void pDockMessageBox::commandFinished( const pCommand& c, int i, QProcess::ExitS
 	}
 	// appendOutput to console log
 	appendInBox( colourText( s, Qt::blue ), Qt::red );
-	// disable stop button
-	tbStopCommand->setEnabled( false );
 	// add finish step
 	appendStep( pConsoleManager::Step( pConsoleManager::stFinish ) );
 }
@@ -394,8 +384,6 @@ void pDockMessageBox::commandStateChanged( const pCommand& c, QProcess::ProcessS
 			lwBuildSteps->clear();
 			tbOutput->clear();
 			teLog->clear();
-			// enable stop button
-			tbStopCommand->setEnabled( true );
 			break;
 		case QProcess::Running:
 			ss = tr( "Running" );

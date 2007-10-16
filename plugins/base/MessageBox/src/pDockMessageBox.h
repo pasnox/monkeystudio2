@@ -66,7 +66,6 @@ public slots:
 private slots:
 	void lwBuildSteps_itemDoubleClicked( QListWidgetItem* );
 	void leRawCommand_returnPressed();
-	void tbStopCommand_clicked();
 	void commandError( const pCommand&, QProcess::ProcessError );
 	void commandFinished( const pCommand&, int, QProcess::ExitStatus );
 	void commandReadyRead( const pCommand&, const QByteArray& );
