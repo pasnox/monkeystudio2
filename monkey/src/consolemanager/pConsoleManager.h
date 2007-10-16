@@ -23,6 +23,7 @@
 #include <QProcess>
 
 class pCommandParser;
+class QAction;
 
 class Q_MONKEY_EXPORT pConsoleManager : public QProcess, public QSingleton<pConsoleManager>
 {
@@ -43,9 +44,11 @@ public:
 		QString mFullText;
 	};
 	
-	pCommand currentCommand() const { return mCommands.value( 0 ); }
+	inline pCommand currentCommand() const { return mCommands.value( 0 ); }
 	QStringList parsersName() const
 	{ return mParsers.keys(); }
+	
+	inline QAction* stopAction() const { return mStopAction; }
 	
 	void addParser( pCommandParser* );
 	void removeParser( pCommandParser* );
@@ -59,6 +62,7 @@ protected:
 	pCommandList mCommands;
 	QStringList mCurrentParsers;
 	QHash<QString, pCommandParser*> mParsers;
+	QAction* mStopAction;
 	void timerEvent( QTimerEvent* );
 
 private:

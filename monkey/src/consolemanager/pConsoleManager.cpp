@@ -16,13 +16,14 @@
 #include "pCommandParser.h"
 #include "pMonkeyStudio.h"
 #include "pFileManager.h"
+#include "pAction.h"
 
 #include <QTimer>
 
 using namespace pMonkeyStudio;
 
 pConsoleManager::pConsoleManager( QObject* o )
-	: QProcess( o )
+	: QProcess( o ), mStopAction( new pAction( "aStopAction", QIcon( ":/console/icons/console/stop.png" ), tr( "Stop" ), tr( "Ctrl+End" ), tr( "Console Manager" ) ) )
 {
 	// mixe channels
 	setReadChannelMode( QProcess::MergedChannels );
@@ -32,6 +33,7 @@ pConsoleManager::pConsoleManager( QObject* o )
 	connect( this, SIGNAL( readyRead() ), this, SLOT( readyRead() ) );
 	connect( this, SIGNAL( started() ), this, SLOT( started() ) );
 	connect( this, SIGNAL( stateChanged( QProcess::ProcessState ) ), this, SLOT( stateChanged( QProcess::ProcessState ) ) );
+	connect( mStopAction, SIGNAL( triggered() ), this, SLOT( stopCurrentCommand() ) );
 	// start timerEvent
 	mTimerId = startTimer( 100 );
 }
