@@ -690,7 +690,7 @@ void QMakeItem::installCommands()
 		addCommand( c, "mBuilder/mClean" );
 		// qmake command
 		c = pCommand();
-		c.setText( "QMake" );
+		c.setText( tr( "QMake" ) );
 #ifdef Q_OS_MAC
 		c.setCommand( "qmake" );
 #elif defined Q_OS_UNIX
@@ -698,6 +698,32 @@ void QMakeItem::installCommands()
 #else 
 		c.setCommand( "qmake" );
 #endif
+		c.setWorkingDirectory( "$cpp$" );
+		addCommand( c, "mBuilder" );
+		// lupdate command
+		c = pCommand();
+		c.setText( tr( "lupdate" ) );
+#ifdef Q_OS_MAC
+		c.setCommand( "lupdate" );
+#elif defined Q_OS_UNIX
+		c.setCommand( "lupdate-qt4" );
+#else 
+		c.setCommand( "lupdate" );
+#endif
+		c.setArguments( "$cp$" );
+		c.setWorkingDirectory( "$cpp$" );
+		addCommand( c, "mBuilder" );
+		// lrelease command
+		c = pCommand();
+		c.setText( tr( "lrelease" ) );
+#ifdef Q_OS_MAC
+		c.setCommand( "lrelease" );
+#elif defined Q_OS_UNIX
+		c.setCommand( "lrelease-qt4" );
+#else 
+		c.setCommand( "lrelease" );
+#endif
+		c.setArguments( "$cp$" );
 		c.setWorkingDirectory( "$cpp$" );
 		addCommand( c, "mBuilder" );
 		// rebuild
