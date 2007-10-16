@@ -84,6 +84,16 @@ pCommandList pConsoleManager::recursiveCommandList( const pCommandList& l, pComm
 	}
 	else
 	{
+		// check arguments variables
+		if ( c.arguments().contains( "$cpp$" ) )
+			c.setArguments( c.arguments().replace( "$cpp$", pFileManager::instance()->currentProjectPath() ) );
+		if ( c.arguments().contains( "$cp$" ) )
+			c.setArguments( c.arguments().replace( "$cp$", pFileManager::instance()->currentProjectFile() ) );
+		if ( c.arguments().contains( "$cfp$" ) )
+			c.setArguments( c.arguments().replace( "$cfp$", pFileManager::instance()->currentChildPath() ) );
+		if ( c.arguments().contains( "$cf$" ) )
+			c.setArguments( c.arguments().replace( "$cf$", pFileManager::instance()->currentChildFile() ) );
+		// check working directory variables
 		if ( c.workingDirectory().contains( "$cpp$" ) )
 			c.setWorkingDirectory( c.workingDirectory().replace( "$cpp$", pFileManager::instance()->currentProjectPath() ) );
 		if ( c.workingDirectory().contains( "$cp$" ) )
