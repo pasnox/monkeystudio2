@@ -20,7 +20,6 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
-#include <QToolButton>
 #include <QTabWidget>
 #include <QListWidget>
 #include <QTextBrowser>
@@ -33,7 +32,7 @@ pDockMessageBox::pDockMessageBox( QWidget* w )
 	QWidget* c = new QWidget;
 	// create vlayout
 	QVBoxLayout* vl = new QVBoxLayout( c );
-	vl->setMargin( 0 );
+	vl->setMargin( 3 );
 	vl->setSpacing( 3 );
 	// create hlayout
 	QHBoxLayout* hl = new QHBoxLayout;
@@ -45,18 +44,15 @@ pDockMessageBox::pDockMessageBox( QWidget* w )
 	// create lineedit
 	leRawCommand = new QLineEdit;
 	leRawCommand->setToolTip( tr( "You can enter here a command and press return to execute it." ) );
-	// create toolbutton
-	tbStopCommand = new QToolButton;
-	tbStopCommand->setDefaultAction( pConsoleManager::instance()->stopAction() );
 	// add widget to hlayout
 	hl->addWidget( lRawCommand );
 	hl->addWidget( leRawCommand );
-	hl->addWidget( tbStopCommand );
 	// add hlayout into vlayout
 	vl->addLayout( hl );
 	// create tabwidget
 	twMessageBox = new QTabWidget;
-	twMessageBox->setMinimumHeight( 80 );
+	twMessageBox->setTabPosition( QTabWidget::East );
+	twMessageBox->setMinimumHeight( 120 );
 	// create listwidget
 	lwBuildSteps = new QListWidget;
 	//lwBuildSteps->setMinimumHeight( 1 );
@@ -74,9 +70,13 @@ pDockMessageBox::pDockMessageBox( QWidget* w )
 	teLog->setLineWrapMode( QTextEdit::NoWrap );
 	teLog->setTabStopWidth( 40 );
 	// add widget to tabwidget
-	twMessageBox->addTab( lwBuildSteps, QIcon( ":/icons/tabbuild.png" ), tr( "Build Step" ) );
-	twMessageBox->addTab( tbOutput, QIcon( ":/icons/taboutput.png" ), tr( "Program Output" ) );
-	twMessageBox->addTab( teLog, QIcon( ":/icons/tablog.png" ), tr( "Commands Log" ) );
+	twMessageBox->addTab( lwBuildSteps, QIcon( ":/icons/tabbuild.png" ), QString::null );
+	twMessageBox->addTab( tbOutput, QIcon( ":/icons/taboutput.png" ), QString::null );
+	twMessageBox->addTab( teLog, QIcon( ":/icons/tablog.png" ), QString::null );
+	// set tabs tooltip
+	twMessageBox->setTabToolTip( 0, tr( "Build Step" ) );
+	twMessageBox->setTabToolTip( 1, tr( "Program Output" ) );
+	twMessageBox->setTabToolTip( 2, tr( "Commands Log" ) );
 	// add tab widget into vlayout
 	vl->addWidget( twMessageBox );
 	// set central widget to w

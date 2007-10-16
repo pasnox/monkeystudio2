@@ -22,7 +22,6 @@
 
 class QLabel;
 class QLineEdit;
-class QToolButton;
 class QTabWidget;
 class QListWidget;
 class QListWidgetItem;
@@ -42,7 +41,6 @@ protected:
 	bool mShown;
 	QLabel* lRawCommand;
 	QLineEdit* leRawCommand;
-	QToolButton* tbStopCommand;
 	QTabWidget* twMessageBox;
 	QListWidget* lwBuildSteps;
 	QTextBrowser* tbOutput;
