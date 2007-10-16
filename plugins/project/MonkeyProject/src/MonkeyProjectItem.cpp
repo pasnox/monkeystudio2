@@ -24,6 +24,7 @@
 #include "pConsoleManager.h"
 #include "PluginsManager.h"
 #include "pMenuBar.h"
+#include "pAction.h"
 
 MonkeyProjectItem::MonkeyProjectItem (  ProjectItem::NodeType t, ProjectItem* i )
 {
@@ -90,6 +91,11 @@ void MonkeyProjectItem::save (bool)
 
 bool MonkeyProjectItem::open()
 {
+	if (!isProject())
+	{
+		qWarning ("<%s>:%i Trying to open something for not a project item",__func__,__LINE__);
+		return false;
+	}
 	QSettings settings (getValue(), QSettings::IniFormat);
 	if ( settings.status() == QSettings::AccessError)
 	{
@@ -115,7 +121,7 @@ bool MonkeyProjectItem::open()
 		targets.append ( (Target){text, command,NULL});
 	}
 	
-
+	setModified (false);
 	return true;
 }
 
@@ -141,7 +147,6 @@ void MonkeyProjectItem::uninstallCommands ()
 		if (t.action)
         {
 			t.action->setVisible (false);
-            t.action = NULL;
         }
 }
 
@@ -154,7 +159,9 @@ void MonkeyProjectItem::installCommands ()
 		if (targets[i].action)
 			targets[i].action->setVisible (true);
 		else
-        {	targets[i].action = pMenuBar::instance()->action(QString("mBuild/aAction%1").arg(i),targets[i].text);  // !!! I can not see    way to delete action from menu, so, deleting it and creating again. hlamer
+        {
+			//FIXME remove (pAction*)  some time
+			targets[i].action = (pAction*)pMenuBar::instance()->action(QString("mBuild/aAction%1").arg(i),targets[i].text);
 			connect ( targets[i].action, SIGNAL (triggered()), this, SLOT (buildMenuTriggered()));
 		}
 	targets[i].action->setEnabled ( !targets[i].command.isEmpty() );

@@ -19,7 +19,7 @@
 
 //class ProjectPlugin;
 class UIMonkeyProjectSettings;
-class QAction;
+class pAction;
 class QMenu;
 
 class MonkeyProjectItem : public ProjectItem
@@ -29,7 +29,7 @@ struct Target
 {
 	QString text;
 	QString command;
-	QAction* action;  //may be NULL or valid pointer
+	pAction* action;  //may be NULL or valid pointer
 };
 	friend class UIMonkeyProjectSettings;
 	
@@ -45,6 +45,7 @@ public:
     void addExistingFiles(const QStringList&, ProjectItem*, const QString& ="");
     void addExistingFile(const QString&, const QString&, const QString& ="");
     void addExistingFile(const QString&, ProjectItem*, const QString& ="");
+
     void appendRow(ProjectItem*);
     void insertRow(int, ProjectItem*);
 
@@ -80,7 +81,8 @@ public:
 	virtual void redoLayout(ProjectItem*) {}
 	virtual bool writeProject() {}
 	virtual void writeItem(ProjectItem*) {}
-
+	virtual bool addProject(const QString&, ProjectItem*, const QString&) {}
+	
 	
 public slots:
 	void editSettings();
