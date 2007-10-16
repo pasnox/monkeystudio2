@@ -16,6 +16,9 @@
         <file>icons/build/misc.png</file>
         <file>icons/build/rebuild.png</file>
     </qresource>
+    <qresource prefix="/console" >
+        <file>icons/console/stop.png</file>
+    </qresource>
     <qresource prefix="/edit" >
         <file>icons/edit/abbreviation.png</file>
         <file>icons/edit/close.png</file>
