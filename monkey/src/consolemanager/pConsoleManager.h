@@ -21,6 +21,7 @@
 
 #include <QApplication>
 #include <QProcess>
+#include <QBuffer>
 
 class pCommandParser;
 class QAction;
@@ -57,6 +58,7 @@ public:
 
 protected:
 	int mTimerId;
+	QBuffer mBuffer;
 	pCommandList mCommands;
 	QStringList mCurrentParsers;
 	QHash<QString, pCommandParser*> mParsers;

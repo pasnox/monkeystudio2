@@ -37,6 +37,7 @@ pConsoleManager::pConsoleManager( QObject* o )
 	connect( this, SIGNAL( stateChanged( QProcess::ProcessState ) ), this, SLOT( stateChanged( QProcess::ProcessState ) ) );
 	connect( mStopAction, SIGNAL( triggered() ), this, SLOT( stopCurrentCommand() ) );
 	// start timerEvent
+	mBuffer.open( QBuffer::ReadOnly );
 	mTimerId = startTimer( 100 );
 }
 
@@ -148,22 +149,27 @@ void pConsoleManager::finished( int i, QProcess::ExitStatus e )
 
 void pConsoleManager::readyRead()
 {
-	// get datas
-	QByteArray a;
-	// read complete lines
-	while ( canReadLine() )
-		a.append( readLine() );
+	// get data
+	QByteArray d = readAll();
+	// append data to buffer to parse
+	mBuffer.buffer().append( d );
 	// get current command
 	pCommand c = currentCommand();
-	// append data to parser if available
-	// from P@sNox : i think it s not good to give all output to same parser, normally each line need test each parsers ?!
+	// try parse output
 	if ( c.isValid() )
-		foreach ( QString s, mCurrentParsers )
-			if ( pCommandParser* p = mParsers.value( s ) )
-				if ( p->processParsing( a ) )
-					break;
+	{
+		// read complete lines
+		while ( mBuffer.canReadLine() )
+		{
+			QByteArray a = mBuffer.readLine();
+			foreach ( QString s, mCurrentParsers )
+				if ( pCommandParser* p = mParsers.value( s ) )
+					if ( p->processParsing( a ) )
+						break;
+		}
+	}
 	// emit signal
-	emit commandReadyRead( c, a );
+	emit commandReadyRead( c, d );
 }
 
 void pConsoleManager::started()
@@ -258,6 +264,8 @@ void pConsoleManager::executeProcess()
 			foreach ( QString s, parsersName() )
 				if ( !mCurrentParsers.contains( s ) )
 					mCurrentParsers << s;
+		// clear buffer
+		mBuffer.buffer().clear();
 		// execute command
 		setWorkingDirectory( c.workingDirectory() );
 		start( QString( "%1 %2" ).arg( c.command() ).arg( c.arguments() ) );
