@@ -23,8 +23,10 @@
 using namespace pMonkeyStudio;
 
 pConsoleManager::pConsoleManager( QObject* o )
-	: QProcess( o ), mStopAction( new pAction( "aStopAction", QIcon( ":/console/icons/console/stop.png" ), tr( "Stop" ), tr( "Ctrl+End" ), tr( "Console Manager" ) ) )
+	: QProcess( o ), mStopAction( new pAction( "aStopAction", QIcon( ":/console/icons/console/stop.png" ), tr( "Stop current command" ), tr( "Ctrl+End" ), tr( "Console Manager" ) ) )
 {
+	// set status tip for
+	mStopAction->setStatusTip( tr( "Stop the currently running command" ) );
 	// mixe channels
 	setReadChannelMode( QProcess::MergedChannels );
 	// connections
@@ -140,6 +142,8 @@ void pConsoleManager::finished( int i, QProcess::ExitStatus e )
 	emit commandFinished( currentCommand(), i, e );
 	// remove command from list
 	removeCommand( currentCommand() );
+	// disable stop action
+	mStopAction->setEnabled( false );
 }
 
 void pConsoleManager::readyRead()
@@ -164,6 +168,8 @@ void pConsoleManager::readyRead()
 
 void pConsoleManager::started()
 {
+	// disable stop action
+	mStopAction->setEnabled( true );
 	// emit signal
 	emit commandStarted( currentCommand() );
 }

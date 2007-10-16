@@ -45,9 +45,7 @@ public:
 	};
 	
 	inline pCommand currentCommand() const { return mCommands.value( 0 ); }
-	QStringList parsersName() const
-	{ return mParsers.keys(); }
-	
+	inline QStringList parsersName() const { return mParsers.keys(); }
 	inline QAction* stopAction() const { return mStopAction; }
 	
 	void addParser( pCommandParser* );
