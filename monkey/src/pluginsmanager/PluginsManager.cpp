@@ -150,7 +150,7 @@ void PluginsManager::setCurrentCompiler( CompilerPlugin* c )
 		mCompiler->setEnabled( true );
 	
 	// enable menu according to current compiler
-	pMenuBar::instance()->menu( "mBuild" )->setEnabled( mCompiler || mBuilder );
+	pMenuBar::instance()->menu( "mBuilder" )->setEnabled( mCompiler || mBuilder );
 }
 
 CompilerPlugin* PluginsManager::currentCompiler()
