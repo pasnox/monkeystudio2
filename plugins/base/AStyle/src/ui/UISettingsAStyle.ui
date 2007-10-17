@@ -13,27 +13,51 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>AStyle configuration</string>
+   <string>AStyle Settings</string>
   </property>
   <layout class="QGridLayout" >
-   <property name="margin" >
+   <property name="leftMargin" >
     <number>5</number>
    </property>
-   <property name="spacing" >
+   <property name="topMargin" >
+    <number>5</number>
+   </property>
+   <property name="rightMargin" >
+    <number>5</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>5</number>
+   </property>
+   <property name="horizontalSpacing" >
+    <number>3</number>
+   </property>
+   <property name="verticalSpacing" >
     <number>3</number>
    </property>
    <item row="0" column="0" >
     <widget class="QTabWidget" name="tabWidget" >
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
      <widget class="QWidget" name="tabStyle" >
       <attribute name="title" >
        <string>Style</string>
       </attribute>
       <layout class="QHBoxLayout" >
-       <property name="margin" >
-        <number>5</number>
-       </property>
        <property name="spacing" >
         <number>3</number>
+       </property>
+       <property name="leftMargin" >
+        <number>5</number>
+       </property>
+       <property name="topMargin" >
+        <number>5</number>
+       </property>
+       <property name="rightMargin" >
+        <number>5</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>5</number>
        </property>
        <item>
         <widget class="QGroupBox" name="gbStyles" >
@@ -41,10 +65,19 @@
           <string>Styles</string>
          </property>
          <layout class="QVBoxLayout" >
-          <property name="margin" >
-           <number>5</number>
-          </property>
           <property name="spacing" >
+           <number>3</number>
+          </property>
+          <property name="leftMargin" >
+           <number>3</number>
+          </property>
+          <property name="topMargin" >
+           <number>0</number>
+          </property>
+          <property name="rightMargin" >
+           <number>3</number>
+          </property>
+          <property name="bottomMargin" >
            <number>3</number>
           </property>
           <item>
@@ -111,9 +144,7 @@
        <item>
         <widget class="QGroupBox" name="gbExample" >
          <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>5</hsizetype>
-           <vsizetype>5</vsizetype>
+          <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
            <horstretch>1</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -122,10 +153,19 @@
           <string>Sample</string>
          </property>
          <layout class="QVBoxLayout" >
-          <property name="margin" >
-           <number>5</number>
-          </property>
           <property name="spacing" >
+           <number>3</number>
+          </property>
+          <property name="leftMargin" >
+           <number>3</number>
+          </property>
+          <property name="topMargin" >
+           <number>0</number>
+          </property>
+          <property name="rightMargin" >
+           <number>3</number>
+          </property>
+          <property name="bottomMargin" >
            <number>3</number>
           </property>
           <item>
@@ -145,7 +185,7 @@
             <property name="html" >
              <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;">
 &lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:8pt;">&lt;/p>&lt;/body>&lt;/html></string>
             </property>
            </widget>
@@ -160,19 +200,37 @@ p, li { white-space: pre-wrap; }
        <string>Indentation</string>
       </attribute>
       <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>5</number>
-       </property>
        <property name="spacing" >
         <number>3</number>
        </property>
+       <property name="leftMargin" >
+        <number>5</number>
+       </property>
+       <property name="topMargin" >
+        <number>5</number>
+       </property>
+       <property name="rightMargin" >
+        <number>5</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>5</number>
+       </property>
        <item>
         <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
          <property name="spacing" >
           <number>6</number>
+         </property>
+         <property name="leftMargin" >
+          <number>0</number>
+         </property>
+         <property name="topMargin" >
+          <number>0</number>
+         </property>
+         <property name="rightMargin" >
+          <number>0</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>0</number>
          </property>
          <item>
           <widget class="QLabel" name="labIndentSize" >
@@ -310,19 +368,37 @@ p, li { white-space: pre-wrap; }
        <string>Formatting</string>
       </attribute>
       <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>5</number>
-       </property>
        <property name="spacing" >
         <number>3</number>
        </property>
+       <property name="leftMargin" >
+        <number>5</number>
+       </property>
+       <property name="topMargin" >
+        <number>5</number>
+       </property>
+       <property name="rightMargin" >
+        <number>5</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>5</number>
+       </property>
        <item>
         <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
          <property name="spacing" >
           <number>6</number>
+         </property>
+         <property name="leftMargin" >
+          <number>0</number>
+         </property>
+         <property name="topMargin" >
+          <number>0</number>
+         </property>
+         <property name="rightMargin" >
+          <number>0</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>0</number>
          </property>
          <item>
           <widget class="QLabel" name="labBreakType" >
@@ -431,11 +507,20 @@ p, li { white-space: pre-wrap; }
    </item>
    <item row="1" column="0" >
     <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
      <property name="spacing" >
       <number>6</number>
+     </property>
+     <property name="leftMargin" >
+      <number>0</number>
+     </property>
+     <property name="topMargin" >
+      <number>0</number>
+     </property>
+     <property name="rightMargin" >
+      <number>0</number>
+     </property>
+     <property name="bottomMargin" >
+      <number>0</number>
      </property>
      <item>
       <spacer>
