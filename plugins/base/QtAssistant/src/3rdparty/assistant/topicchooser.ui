@@ -1,0 +1,150 @@
+<UI version="4.0" stdsetdef="1" >
+ <class>TopicChooser</class>
+ <comment>*********************************************************************
+**
+** Copyright (C) 1992-2006 Trolltech ASA. All rights reserved.
+**
+** This file is part of the Qt Assistant of the Qt Toolkit.
+**
+** This file may be used under the terms of the GNU General Public
+** License version 2.0 as published by the Free Software Foundation
+** and appearing in the file LICENSE.GPL included in the packaging of
+** this file.  Please review the following information to ensure GNU
+** General Public Licensing requirements will be met:
+** http://www.trolltech.com/products/qt/opensource.html
+**
+** If you are unsure which license is appropriate for your use, please
+** review the following information:
+** http://www.trolltech.com/products/qt/licensing.html or contact the
+** sales department at sales@trolltech.com.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+*********************************************************************</comment>
+ <widget class="QDialog" name="TopicChooser" >
+  <property name="objectName" >
+   <string notr="true">TopicChooser</string>
+  </property>
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>391</width>
+    <height>223</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Choose Topic</string>
+  </property>
+  <property name="sizeGripEnabled" >
+   <bool>true</bool>
+  </property>
+  <property name="whatsThis" stdset="0" >
+   <string>Select a topic from the list and click the &lt;b>Display&lt;/b>-button to open the online help.</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="objectName" >
+    <string notr="true">unnamed</string>
+   </property>
+   <property name="margin" >
+    <number>11</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item>
+    <widget class="QLabel" name="label" >
+     <property name="objectName" >
+      <string notr="true">label</string>
+     </property>
+     <property name="text" >
+      <string>&amp;Topics</string>
+     </property>
+     <property name="buddy" stdset="0" >
+      <cstring>listbox</cstring>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QListWidget" name="listbox" >
+     <property name="objectName" >
+      <string notr="true">listbox</string>
+     </property>
+     <property name="whatsThis" stdset="0" >
+      <string>Displays a list of available help topics for the keyword.</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="Layout16" >
+     <property name="objectName" >
+      <string notr="true">Layout16</string>
+     </property>
+     <layout class="QHBoxLayout" >
+      <property name="objectName" >
+       <string notr="true">unnamed</string>
+      </property>
+      <property name="margin" >
+       <number>0</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item>
+       <spacer name="Horizontal Spacing2" >
+        <property name="sizeHint" >
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="sizeType" >
+         <enum>Expanding</enum>
+        </property>
+        <property name="orientation" >
+         <enum>Horizontal</enum>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="buttonDisplay" >
+        <property name="objectName" >
+         <string notr="true">buttonDisplay</string>
+        </property>
+        <property name="text" >
+         <string>&amp;Display</string>
+        </property>
+        <property name="autoDefault" >
+         <bool>true</bool>
+        </property>
+        <property name="default" >
+         <bool>true</bool>
+        </property>
+        <property name="whatsThis" stdset="0" >
+         <string>Open the topic selected in the list.</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="buttonCancel" >
+        <property name="objectName" >
+         <string notr="true">buttonCancel</string>
+        </property>
+        <property name="text" >
+         <string>&amp;Close</string>
+        </property>
+        <property name="autoDefault" >
+         <bool>true</bool>
+        </property>
+        <property name="whatsThis" stdset="0" >
+         <string>Close the Dialog.</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+</UI>
