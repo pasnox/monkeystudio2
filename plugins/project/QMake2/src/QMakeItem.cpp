@@ -230,41 +230,8 @@ bool QMakeItem::isLast() const
 	return false;
 }
 
-QString QMakeItem::scope() const
-{
-	QString s;
-	ProjectItem* j = const_cast<QMakeItem*>( this );
-	ProjectItem* p = project();
-	while ( j && j != p )
-	{
-		if ( j->isScope() )
-			s.prepend( QString( "%1%2" ).arg( j->getValue(), j->getOperator().isEmpty() ? ":" : j->getOperator() ) );
-		j = j->parent();
-	}
-	s.chop( 1 );
-	return s;
-}
-
-QString QMakeItem::checkScope( const QString& s ) const
-{
-	QString ss = s.trimmed();
-	if ( ss.endsWith( ':' ) )
-		ss.chop( 1 );
-	return ss;
-}
-
-bool QMakeItem::isEqualScope( const QString& s1, const QString& s2 ) const
-{
-	if ( s2 == "*" )
-		return true;
-	return checkScope( QString( s1 ).replace( '/', ':' ) ) == checkScope( QString( s2 ).replace( '/', ':' ) );
-}
-
 bool QMakeItem::isProjectsContainer() const
-{ return isProject() ? getStringValues( "TEMPLATE" ).toLower() == "subdirs" : false; }
-
-void QMakeItem::appendRow( ProjectItem* i )
-{ insertRow( rowCount(), i ); }
+{ return false; /*return isProject() ? getStringValues( "TEMPLATE" ).toLower() == "subdirs" : false;*/ }
 
 void QMakeItem::insertRow( int r, ProjectItem* it )
 {
@@ -288,63 +255,6 @@ void QMakeItem::insertRow( int r, ProjectItem* it )
 	
 	// set project modified
 	project()->setModified( true );
-}
-
-bool QMakeItem::swapRow( int i, int j )
-{
-	if ( -1 < i < rowCount() && -1 < j < rowCount() && i != i )
-	{
-		QList<QStandardItem*> ii;
-		QList<QStandardItem*> ij;
-		if ( i > j )
-		{
-			ii = takeRow( i );
-			ij = takeRow( j );
-		}
-		else
-		{
-			ij = takeRow( j );
-			ii = takeRow( i );
-		}
-		QStandardItem::insertRow( i, ij );
-		QStandardItem::insertRow( j, ii );
-		return true;
-	}
-	return false;
-}
-
-bool QMakeItem::moveRowUp( int i )
-{
-	ProjectItem* it = child( i );
-	bool b = it && !it->isScopeEnd() && i > 0;
-	if ( b )
-		QStandardItem::insertRow( i -1, takeRow( i ) );
-	return b;
-}
-
-bool QMakeItem::moveRowDown( int i )
-{
-	ProjectItem* it = child( i +1 );
-	bool b = it && !it->isScopeEnd() && i < rowCount() -1;
-	if ( b )
-		QStandardItem::insertRow( i +1, takeRow( i ) );
-	return b;
-}
-
-bool QMakeItem::moveUp()
-{ return parent() ? parent()->moveRowUp( row() ) : false; }
-
-bool QMakeItem::moveDown()
-{ return parent()  ? parent()->moveRowDown( row() ) : false; }
-
-void QMakeItem::remove()
-{
-	if ( parent() )
-		parent()->removeRow( row() );
-	else if ( model() )
-		model()->removeRow( row(), index().parent() );
-	else
-		Q_ASSERT( 0 );
 }
 
 bool QMakeItem::open()
@@ -414,29 +324,6 @@ bool QMakeItem::addProject( const QString& f, ProjectItem* s, const QString& o )
 void QMakeItem::editSettings()
 { if ( isProject() ) UIQMakeProjectSettings::instance( this )->exec(); }
 
-void QMakeItem::close()
-{
-	// only project item can call this
-	if ( !isProject() )
-		return;
-	
-	// close subprojects first
-	while ( ProjectItem* p = childrenProjects( false ).value( 0 ) )
-		p->close();
-	
-	// tell we will close the project
-	emit aboutToClose();
-	
-	// ask to save project if needed
-	save( true );
-	
-	// tell project is closed
-	emit closed();
-	
-	// remove it from model
-	remove();
-}
-
 void QMakeItem::save( bool b )
 {
 	// only project item can call this
@@ -448,15 +335,6 @@ void QMakeItem::save( bool b )
 	
 	if ( !b || ( b && question( QObject::tr( "Save Project..." ), QObject::tr( "The project [%1] has been modified, save it ?" ).arg( name() ) ) ) )
 		writeProject();
-}
-
-void QMakeItem::saveAll( bool b )
-{
-	// save current project
-	save( b );
-	// save all children projects
-	foreach ( ProjectItem* it, childrenProjects() )
-		it->save( b );
 }
 
 void QMakeItem::addExistingFiles( const QStringList& l, ProjectItem* s, const QString& o )
@@ -543,9 +421,6 @@ void QMakeItem::addExistingFiles( const QStringList& l, ProjectItem* s, const QS
 		it->setValue( vn != "UNKNOW_FILES" ? relativeFilePath( f ) : f );
 	}
 }
-
-void QMakeItem::addExistingFile( const QString& f, ProjectItem* s, const QString& o )
-{ addExistingFiles( QStringList( f ), s, o ); }
 
 void QMakeItem::setBuilder( BuilderPlugin* b )
 {
@@ -770,169 +645,6 @@ void recursiveRemoveCommands( QMenu* m )
 
 void QMakeItem::uninstallCommands()
 { recursiveRemoveCommands( pMenuBar::instance()->menu( "mBuilder" ) ); }
-
-ProjectItem* QMakeItem::getItemScope( const QString& s, bool c ) const
-{
-	if ( s.isEmpty() )
-		return project();
-	ProjectItem* sit = 0;
-	foreach ( ProjectItem* it, projectScopes() )
-	{
-		// good scope
-		if ( isEqualScope( it->scope(), s ) )
-		{
-			if ( it->isNested() )
-			{
-				it->setType( ProjectItem::ScopeType );
-				it->setOperator( QString::null );
-			}
-			return it;
-		}
-		// else try found nearest scope
-		else if  ( c && checkScope( s ).startsWith( it->scope() ) )
-		{
-			if ( ( it->isScope() ) && s[it->scope().length()] == ':' )
-				if ( !sit || ( sit && sit->scope().length() < it->scope().length() ) )
-					sit = it;
-		}
-	}
-	
-	// not found and not want create
-	if ( !c )
-		return 0;
-	
-	// get nearest scope and remove it from full scope to create
-	QString p = s;
-	if ( sit )
-	{
-		p.remove( sit->scope() );
-		if ( sit->isScopeEnd() )
-		{
-			sit->setType( ProjectItem::ScopeType );
-			sit->setOperator( QString::null );
-		}
-	}
-	
-	// remove trailing operator
-	if ( p.startsWith( ':' ) )
-		p.remove( 0, 1 );
-	
-	// split nested : scope
-	QStringList l = p.split( ':', QString::SkipEmptyParts );
-	
-	// create each scope
-	foreach ( QString scope, l )
-	{
-		sit = new QMakeItem( ProjectItem::NestedScopeType, sit ? sit : project() );
-		sit ->setValue( scope );
-		sit ->setOperator( ":" );
-		(void) new QMakeItem( ProjectItem::ScopeEndType, sit );
-	}
-	
-	// return full created scope
-	return sit;
-}
-
-QStringList QMakeItem::getListValues( const QString& v, const QString& o, const QString& s ) const
-{
-	QStringList l;
-	foreach ( ProjectItem* it, getItemListValues( v, o, s ) )
-		l << it->getValue();
-	return l;
-}
-
-QString QMakeItem::getStringValues( const QString& v, const QString& o, const QString& s ) const
-{ return getListValues( v, o, s ).join( " " ); }
-
-void QMakeItem::setListValues( const QStringList& vl, const QString& v, const QString& o, const QString& s )
-{
-	ProjectItem* it = getItemVariable( v, o, s );
-	// create index if it not exists
-	if ( !it )
-	{
-		// if nothing to add, return
-		if ( vl.isEmpty() )
-			return;
-		// create variable
-		it = new QMakeItem( ProjectItem::VariableType, getItemScope( s, true ) );
-		it->setValue( v );
-		it->setOperator( o );
-	}
-	// set values
-	QStringList l = vl;
-	// check all child of variable and remove from model/list unneeded index/value
-	foreach ( ProjectItem* c, it->children( false, true ) )
-	{
-		if ( c->isValue() )
-		{
-			if ( l.contains( c->getValue() ) )
-				l.removeAll( c->getValue() );
-			else if ( !l.value( 0 ).isEmpty() )
-			{
-				c->setValue( l.value( 0 ) );
-				l.removeFirst();
-			}
-			else
-				c->remove();
-		}
-	}
-	// add require index
-	if ( it )
-	{
-		foreach ( QString e, l )
-		{
-			if ( !e.isEmpty() )
-			{
-				ProjectItem* cItem = new QMakeItem( ProjectItem::ValueType, it );
-				cItem->setValue( e );
-			}
-		}
-		// if variable is empty, remove it
-		if ( !it->rowCount() )
-			it->remove();
-	}
-}
-
-void QMakeItem::setStringValues( const QString& val, const QString& v, const QString& o, const QString& s )
-{ setListValues( val.isEmpty() ? QStringList() : QStringList( val ), v, o, s ); }
-
-void QMakeItem::addListValues( const QStringList& vl, const QString& v, const QString& o, const QString& s )
-{
-	ProjectItem* it = getItemVariable( v, o, s );
-	// create index if it not exists
-	if ( !it )
-	{
-		// if nothing to add, return
-		if ( vl.isEmpty() )
-			return;
-		// create variable
-		it = new QMakeItem( ProjectItem::VariableType, getItemScope( s, true ) );
-		it->setValue( v );
-		it->setOperator( o );
-	}
-	// add values
-	QStringList l = vl;
-	// check all values of variable and remove from list already existing values
-	foreach ( ProjectItem* c, it->children( false, true ) )
-		if ( c->isValue() )
-			if ( l.contains( c->getValue() ) )
-				l.removeAll( c->getValue() );
-	// add require values
-	if ( it )
-	{
-		foreach ( QString e, l )
-		{
-			if ( !e.isEmpty() )
-			{
-				ProjectItem* cItem = new QMakeItem( ProjectItem::ValueType, it );
-				cItem->setValue( e );
-			}
-		}
-	}
-}
-
-void QMakeItem::addStringValues( const QString& val, const QString& v, const QString& o, const QString& s )
-{ addListValues( QStringList( val ), v, o, s ); }
 
 void QMakeItem::redoLayout( ProjectItem* it ) //
 {

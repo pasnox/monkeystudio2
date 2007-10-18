@@ -225,6 +225,101 @@ ProjectItemList ProjectItem::children( bool r, bool s ) const
 	return l;
 }
 
+void ProjectItem::appendRow( ProjectItem* i )
+{ insertRow( rowCount(), i ); }
+
+bool ProjectItem::swapRow( int i, int j )
+{
+	if ( -1 < i < rowCount() && -1 < j < rowCount() && i != i )
+	{
+		QList<QStandardItem*> ii;
+		QList<QStandardItem*> ij;
+		if ( i > j )
+		{
+			ii = takeRow( i );
+			ij = takeRow( j );
+		}
+		else
+		{
+			ij = takeRow( j );
+			ii = takeRow( i );
+		}
+		QStandardItem::insertRow( i, ij );
+		QStandardItem::insertRow( j, ii );
+		return true;
+	}
+	return false;
+}
+
+bool ProjectItem::moveRowUp( int i )
+{
+	ProjectItem* it = child( i );
+	bool b = it && !it->isScopeEnd() && i > 0;
+	if ( b )
+		QStandardItem::insertRow( i -1, takeRow( i ) );
+	return b;
+}
+
+bool ProjectItem::moveRowDown( int i )
+{
+	ProjectItem* it = child( i +1 );
+	bool b = it && !it->isScopeEnd() && i < rowCount() -1;
+	if ( b )
+		QStandardItem::insertRow( i +1, takeRow( i ) );
+	return b;
+}
+
+bool ProjectItem::moveUp()
+{ return parent() ? parent()->moveRowUp( row() ) : false; }
+
+bool ProjectItem::moveDown()
+{ return parent()  ? parent()->moveRowDown( row() ) : false; }
+
+void ProjectItem::remove()
+{
+	if ( parent() )
+		parent()->removeRow( row() );
+	else if ( model() )
+		model()->removeRow( row(), index().parent() );
+	else
+		Q_ASSERT( 0 );
+}
+
+void ProjectItem::close()
+{
+	// only project item can call this
+	if ( !isProject() )
+		return;
+	
+	// close subprojects first
+	while ( ProjectItem* p = childrenProjects( false ).value( 0 ) )
+		p->close();
+	
+	// tell we will close the project
+	emit aboutToClose();
+	
+	// ask to save project if needed
+	save( true );
+	
+	// tell project is closed
+	emit closed();
+	
+	// remove it from model
+	remove();
+}
+
+void ProjectItem::saveAll( bool b )
+{
+	// save current project
+	save( b );
+	// save all children projects
+	foreach ( ProjectItem* it, childrenProjects() )
+		it->save( b );
+}
+
+void ProjectItem::addExistingFile( const QString& f, ProjectItem* s, const QString& o )
+{ addExistingFiles( QStringList( f ), s, o ); }
+
 void ProjectItem::refresh()
 { redoLayout(); }
 
@@ -249,37 +344,6 @@ ProjectItemList ProjectItem::childrenProjects( bool b ) const
 
 ProjectItemList ProjectItem::projectItems( bool b ) const
 { return project()->children( true, b ); }
-
-ProjectItemList ProjectItem::projectScopes() const
-{
-	ProjectItemList l;
-	l << project();
-	foreach ( ProjectItem* it, projectItems() )
-		if ( it->isScope() )
-			l << it;
-	return l;
-}
-
-QStringList ProjectItem::projectScopesList() const
-{
-	QStringList l;
-	foreach ( ProjectItem* it, projectScopes() )
-	{
-		const QString s = it->scope();
-		if ( !l.contains( s ) )
-			l << s;
-	}
-	return l;
-}
-
-ProjectItemList ProjectItem::childrenScopes( bool b ) const
-{
-	ProjectItemList l;
-	foreach ( ProjectItem* it, children( b, true ) )
-		if ( it->isScope() )
-			l << it;
-	return l;
-}
 
 QString ProjectItem::canonicalFilePath() const
 { return QFileInfo( project()->getValue() ).canonicalFilePath(); }
@@ -325,26 +389,3 @@ ProjectItemList ProjectItem::match( int r, const QVariant& v, bool b ) const
 				l << it;
 	return l;
 }
-
-ProjectItemList ProjectItem::getItemList( ProjectItem::NodeType t, const QString& v, const QString& o, const QString& s ) const
-{
-	ProjectItemList l;
-	foreach ( ProjectItem* it, match( t, v ) )
-		if ( isEqualScope( it->scope(), s ) )
-			if ( ( !o.isEmpty() && it->getOperator() == o ) || o == "*" )
-				l << it;
-	return l;
-}
-
-ProjectItemList ProjectItem::getItemListValues( const QString& v, const QString& o, const QString& s ) const
-{
-	ProjectItemList l;
-	foreach ( ProjectItem* it, getItemList( ProjectItem::VariableType, v, o, s ) )
-		for ( int i = 0; i < it->rowCount(); i++ )
-			if ( it->child( i, 0 )->isValue() )
-				l << it->child( i, 0 );
-	return l;
-}
-
-ProjectItem* ProjectItem::getItemVariable( const QString& v, const QString& o, const QString& s ) const
-{ return getItemList( ProjectItem::VariableType, v, o, s ).value ( 0 ); }

@@ -80,12 +80,14 @@ bool QMakeParser::loadFile( const QString& s, QMakeItem* it )
 	// parse buffer
 	mIsOpen = parseBuffer( 0, it );
 	// open subdirs projects of project
+	/* FIXME
 	if ( mIsOpen )
 		foreach ( ProjectItem* sit, it->getItemListValues( "SUBDIRS", "*", "" ) )
 			if ( QFile::exists( sit->getFilePath() ) )
 				loadFile( sit->getFilePath(), new QMakeItem( ProjectItem::ProjectType, it ) );
 			else
 				qWarning( "Can't open subproject: %s", qPrintable( sit->getFilePath() ) );
+	*/
 	
 	// return root project is open
 	return mIsOpen;

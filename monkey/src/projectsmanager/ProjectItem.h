@@ -132,21 +132,15 @@ public:
 	// tell if item is a project type
 	virtual bool isProject() const;
 	// get a quoted string if neede, ie file starting and finishing by " is string contains spacePressed
-	virtual QString quotedString( const QString& ) const;
+	virtual QString quotedString( const QString& ) const; // MOVEME to pMonkeyStudio
 	// item indent
-	virtual QString getIndent() const = 0;
+	virtual QString getIndent() const { return QString(); }
 	// item eol
-	virtual QString getEol() const = 0;
+	virtual QString getEol() const { return QString(); }
 	// tell if item is the first child of its parent
 	virtual bool isFirst() const = 0;
 	// tell if item is the last child of its parent
 	virtual bool isLast() const = 0;
-	// scope of item
-	virtual QString scope() const = 0;
-	// check scope
-	virtual QString checkScope( const QString& ) const = 0;
-	// check equals scope
-	virtual bool isEqualScope( const QString&, const QString& ) const = 0;
 	// tell if this proejct is a container, ie it can contains subprojects
 	virtual bool isProjectsContainer() const = 0;
 	
@@ -161,17 +155,17 @@ public:
 	// get children, recursively according to bool and same project according to bool
 	virtual ProjectItemList children( bool = false, bool = false ) const;
 	// append item
-	virtual void appendRow( ProjectItem* ) = 0;
+	virtual void appendRow( ProjectItem* i );
 	// insert item
 	virtual void insertRow( int, ProjectItem* ) = 0;
 	// moving item
-	virtual bool swapRow( int, int ) = 0;
-	virtual bool moveRowUp( int ) = 0;
-	virtual bool moveRowDown( int ) = 0;
-	virtual bool moveUp() = 0;
-	virtual bool moveDown() = 0;
+	virtual bool swapRow( int, int );
+	virtual bool moveRowUp( int );
+	virtual bool moveRowDown( int );
+	virtual bool moveUp();
+	virtual bool moveDown();
 	// remove itself
-	virtual void remove() = 0;
+	virtual void remove();
 	// redo internal layout, to filter / sort items
 	virtual void refresh();
 	
@@ -183,12 +177,6 @@ public:
 	virtual ProjectItemList childrenProjects( bool = true ) const;
 	// get all project items
 	virtual ProjectItemList projectItems( bool = true ) const;
-	// get all scope from project
-	virtual ProjectItemList projectScopes() const;
-	// get all unique scope list from project
-	virtual QStringList projectScopesList() const;
-	// item direct scopes, or recursively according to bool
-	virtual ProjectItemList childrenScopes( bool = false) const;
 	// canonical project filepath
 	virtual QString canonicalFilePath() const;
 	// canonical file path according to project path
@@ -214,14 +202,14 @@ public:
 	// open project settings dialog
 	virtual void editSettings() = 0;
 	// close the project
-	virtual void close() = 0;
+	virtual void close();
 	// save project, asking user according to bool
 	virtual void save( bool = true ) = 0;
 	// save project including all children projects
-	virtual void saveAll( bool = true ) = 0;
+	virtual void saveAll( bool = true );
 	// add existing files to project scope / operator
 	virtual void addExistingFiles( const QStringList&, ProjectItem*, const QString& = "=" ) = 0;
-	virtual void addExistingFile( const QString&, ProjectItem*, const QString& = "=" ) = 0;
+	virtual void addExistingFile( const QString&, ProjectItem*, const QString& = "=" );
 	// set builder for this project
 	virtual void setBuilder( BuilderPlugin* ) {}
 	// builder for this project
@@ -245,27 +233,6 @@ public:
 	
 	// get index list
 	virtual ProjectItemList match( int, const QVariant&, bool = true ) const;
-	// get all items matching
-	virtual ProjectItemList getItemList( ProjectItem::NodeType, const QString&, const QString&, const QString& ) const;
-	// get item scope, creating it if needed
-	virtual ProjectItem* getItemScope( const QString&, bool ) const = 0;
-	// get all variable content as modelindex list for project index
-	virtual ProjectItemList getItemListValues( const QString&, const QString&, const QString& ) const;
-	// get a variable index
-	virtual ProjectItem* getItemVariable( const QString&, const QString&, const QString& ) const;
-	
-	// get variable content as stringlist for project index
-	virtual QStringList getListValues( const QString&, const QString& = "=", const QString& = QString::null ) const = 0;
-	// get variable content as string for project index
-	virtual QString getStringValues( const QString&, const QString& = "=", const QString& = QString::null ) const = 0;
-	// set variable content as stringlist for project index
-	virtual void setListValues( const QStringList&, const QString&, const QString& = "=", const QString& = QString::null ) = 0;
-	// get variable content as string for project index
-	virtual void setStringValues( const QString&, const QString&, const QString& = "=", const QString& = QString::null ) = 0;
-	// add variable content as stringlist for project index
-	virtual void addListValues( const QStringList&, const QString&, const QString& = "=", const QString& = QString::null ) = 0;
-	// add variable content as string for project index
-	virtual void addStringValues( const QString&, const QString&, const QString& = "=", const QString& = QString::null ) = 0;
 	
 protected:
 	ProjectPlugin* mPlugin;
