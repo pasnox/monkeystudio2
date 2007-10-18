@@ -21,8 +21,8 @@ using namespace pMonkeyStudio;
 
 QString mTranslationMask = "$$TRANSLATIONS_PATH/%2_%3.ts";
 
-uint qHash( const Key& k )
-{ return qHash( k.join( QString::null ) ); }
+uint qHash( const ProjectKey& k )
+{ return qHash( QStringList( QStringList() << k.getScope()->scope() << k.getVariable() << k.getOperator() ).join( QString::null ) ); }
 
 UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
 	: QDialog( p ), mInit( false ), mProject( m ), mModel( m->model() ), mDirs( new QDirModel( this ) )
@@ -169,7 +169,7 @@ const QString UIQMakeProjectSettings::checkTranslationsPath()
 {
 	if ( cbTemplate->currentText() == "subdirs" )
 		return QString();
-	const Key k = Key() << "" << "=" << "TRANSLATIONS_PATH";
+	const ProjectKey k = ProjectKey( mProject, ProjectVariable( "TRANSLATIONS_PATH", "=" ) );
 	QString c = value( k );
 	if ( c.isEmpty() )
 	{
@@ -190,12 +190,15 @@ void UIQMakeProjectSettings::checkOthersVariables()
 	lwOthersValues->clear();
 	
 	// iterate other all variables
-	const Key ck = Key() << cbScopes->currentText() << cbOperators->currentText();
-	foreach ( const Key k, mSettings.keys() )
+	ProjectKey ck;
+	// FIXME ck.mScope = cbScopes->currentText();
+	ck.setOperator( cbOperators->currentText() );
+	foreach ( const ProjectKey k, mSettings.keys() )
 	{
-		if ( k.at( 0 ) == ck.at( 0 ) && k.at( 1 ) == ck.at( 1 ) && !mBlackList.contains( k.at( 2 ) ) )
+		// scope, operator
+		if ( k.mScope == ck.getScope() && k.getOperator() == ck.getOperator() && !mBlackList.contains( k.getVariable() ) )
 		{
-			QListWidgetItem* it = new QListWidgetItem( k.at( 2 ) );
+			QListWidgetItem* it = new QListWidgetItem( k.getVariable() );
 			it->setData( Qt::UserRole +1, values( k ) );
 			it->setHidden( values( k ).isEmpty() );
 			lwOthersVariables->addItem( it );
@@ -218,54 +221,54 @@ void UIQMakeProjectSettings::updateOthersValues()
 	}
 }
 
-Key UIQMakeProjectSettings::currentKey( const QString& s ) const
-{ return Key() << cbScopes->currentText() << cbOperators->currentText() << s; }
+ProjectKey UIQMakeProjectSettings::currentKey( const QString& s ) const
+{ return ProjectKey( 0, ProjectVariable( s, cbOperators->currentText() ) ); }
 
-void UIQMakeProjectSettings::addValue( const Key& k, const QString& v )
+void UIQMakeProjectSettings::addValue( const ProjectKey& k, const QString& v )
 {
 	if ( !mSettings.value( k ).contains( v ) && !v.isEmpty() )
 		mSettings[k] << v;
 }
 
-void UIQMakeProjectSettings::addValues( const Key& k, const QStringList& v )
+void UIQMakeProjectSettings::addValues( const ProjectKey& k, const QStringList& v )
 {
 	foreach ( const QString s, v )
 		addValue( k, s );
 }
 
-void UIQMakeProjectSettings::setValue( const Key& k, const QString& v )
+void UIQMakeProjectSettings::setValue( const ProjectKey& k, const QString& v )
 {
 	if ( !mSettings.contains( k ) && v.isEmpty() )
 		return;
 	mSettings[k] = v.isEmpty() ? QStringList() : QStringList( v );
 }
 
-void UIQMakeProjectSettings::setValues( const Key& k, const QStringList& v )
+void UIQMakeProjectSettings::setValues( const ProjectKey& k, const QStringList& v )
 {
 	if ( !mSettings.contains( k ) && v.isEmpty() )
 		return;
 	mSettings[k] = v;
 }
 
-void UIQMakeProjectSettings::removeValue( const Key& k, const QString& v )
+void UIQMakeProjectSettings::removeValue( const ProjectKey& k, const QString& v )
 {
 	if ( mSettings.value( k ).contains( v ) )
 		mSettings[k].removeAll( v );
 }
 
-void UIQMakeProjectSettings::removeValues( const Key& k, const QStringList& v )
+void UIQMakeProjectSettings::removeValues( const ProjectKey& k, const QStringList& v )
 {
 	foreach ( const QString& s, v )
 		removeValue( k, s );
 }
 
-void UIQMakeProjectSettings::clearValues( const Key& k )
+void UIQMakeProjectSettings::clearValues( const ProjectKey& k )
 { mSettings.remove( k ); }
 
-QStringList UIQMakeProjectSettings::values( const Key& k ) const
+QStringList UIQMakeProjectSettings::values( const ProjectKey& k ) const
 { return mSettings.value( k ); }
 
-QString UIQMakeProjectSettings::value( const Key& k ) const
+QString UIQMakeProjectSettings::value( const ProjectKey& k ) const
 { return mSettings.value( k ).join( " " ); }
 
 QModelIndex UIQMakeProjectSettings::currentIndex()
@@ -334,14 +337,17 @@ void UIQMakeProjectSettings::querySettings()
 		QApplication::processEvents( QEventLoop::ExcludeUserInputEvents );
 		
 		// get scope
-		const QString Scope = v->scope();
+		// FIXME const QString Scope = v->scope();
+		ProjectItem* Scope = mProject;
 		
 		// get key
-		const Key k = Key() << Scope << v->getOperator() << v->getValue();
+		ProjectKey k = ProjectKey( Scope, ProjectVariable( v->getValue(), v->getOperator() ) );
 		
 		// add scope to scope list if it not exists
+		/* FIXME
 		if ( cbScopes->findText( Scope ) == -1 )
 			cbScopes->addItem( Scope );
+		*/
 		
 		// add values to key
 		foreach ( ProjectItem* it, v->children() )
@@ -508,6 +514,7 @@ void UIQMakeProjectSettings::on_tbAddScope_clicked()
 
 void UIQMakeProjectSettings::on_tbRemoveScope_clicked()
 {
+	/* FIXME
 	// user confirmation
 	if ( cbScopes->currentIndex() != -1 && question( tr( "Remove Scope..." ), tr( "Are you sure you want to delete this scope" ) ) )
 	{
@@ -520,12 +527,13 @@ void UIQMakeProjectSettings::on_tbRemoveScope_clicked()
 			return;
 		}
 		// remove each variable that have scope s
-		foreach ( const Key k, mSettings.keys() )
-			if ( k.value( 0 ) == s )
+		foreach ( const ProjectKey k, mSettings.keys() )
+			if ( k.getScope() == s )
 				mSettings.remove( k );
 		// remove scope from combobox
 		cbScopes->removeItem( cbScopes->currentIndex() );
 	}
+	*/
 }
 
 void UIQMakeProjectSettings::cb_highlighted( int )
@@ -802,7 +810,7 @@ void UIQMakeProjectSettings::on_lwTranslations_itemChanged( QListWidgetItem* it 
 		return;
 	
 	// get key
-	const Key k = currentKey( "TRANSLATIONS" );
+	const ProjectKey k = currentKey( "TRANSLATIONS" );
 	
 	// set default translatin path if needed
 	checkTranslationsPath();
@@ -1063,8 +1071,8 @@ void UIQMakeProjectSettings::accept()
 	
 	// write each key if needed
 	if ( mSettings != mOriginalSettings )
-		foreach ( const Key k, mSettings.keys() )
-				mProject->setListValues( mSettings[k], k.value( 2 ), k.value( 1 ), k.value( 0 ) );
+		foreach ( const ProjectKey k, mSettings.keys() )
+				mProject->setListValues( mSettings[k], k.getVariable(), k.getOperator(), k.getScope()->scope() /* FIXME Scope*/ );
 	
 	// close dialog
 	QDialog::accept();
