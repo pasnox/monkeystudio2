@@ -233,6 +233,13 @@ public:
 	
 	// get index list
 	virtual ProjectItemList match( int, const QVariant&, bool = true ) const;
+	// set values for scope, variable and operator
+	virtual void setValues( ProjectItem*, const QString&, const QString&, const QStringList& ) = 0;
+	// get valueslist as items
+	virtual ProjectItemList getValues( ProjectItem*, const QString&, const QString& ) = 0;
+	// get first value for variable, operator
+	virtual ProjectItem* getFirstValue( ProjectItem* s, const QString& v, const QString& o )
+	{ return getValues( s, v, o ).first(); }
 	
 protected:
 	ProjectPlugin* mPlugin;

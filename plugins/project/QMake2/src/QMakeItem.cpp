@@ -231,7 +231,12 @@ bool QMakeItem::isLast() const
 }
 
 bool QMakeItem::isProjectsContainer() const
-{ return false; /*return isProject() ? getStringValues( "TEMPLATE" ).toLower() == "subdirs" : false;*/ }
+{
+	if ( !isProject() )
+		return false;
+	ProjectItem* it = getFirstValue( 0, "TEMPLATE", "=" );
+	return it ? it->getValue().toLower() == "subdirs" : false;
+}
 
 void QMakeItem::insertRow( int r, ProjectItem* it )
 {
@@ -645,6 +650,59 @@ void recursiveRemoveCommands( QMenu* m )
 
 void QMakeItem::uninstallCommands()
 { recursiveRemoveCommands( pMenuBar::instance()->menu( "mBuilder" ) ); }
+
+void QMakeItem::setValues( ProjectItem* it, const QString& v, const QString& o, const QStringList& l )
+{
+	// need item
+	Q_ASSERT( it );
+	// search variable item
+	ProjectItem* vi = 0;
+	foreach ( ProjectItem* cit, it->children( false, true ) )
+	{
+		if ( cit->getValue() == v && cit->getOperator() == o )
+		{
+			vi = cit;
+			break;
+		}
+	}
+	// if no variable found, and values is empty return
+	if ( !vi && l.isEmpty() )
+		return;
+	// if values is empty delete item
+	else if ( vi && l.isEmpty() )
+		vi->remove();
+	else
+	{
+		// update / create items
+		for ( int i = 0; i < l.count(); i++ )
+		{
+			const QString s = l.at( i );
+			ProjectItem* cvi = vi->child( i );
+			if ( cvi && !l.contains( cvi->getValue() ) )
+				cvi->setValue( s );
+			else if ( !cvi || ( cvi && cvi->getValue() != s ) )
+			{
+				cvi = new QMakeItem( ProjectItem::ValueType );
+				cvi->setValue( s );
+				vi->insertRow( i, cvi );
+			}
+		}
+		// remove no longer need items
+		while ( ProjectItem* cvi = vi->child( l.count() ) )
+			cvi->remove();
+	}
+}
+
+ProjectItemList QMakeItem::getValues( ProjectItem* s, const QString& v, const QString& o )
+{
+	Q_ASSERT( s );
+	ProjectItemList l;
+	foreach ( ProjectItem* it, s->children( false, true ) )
+		if ( it->getValue() == v && it->getOperator() == o )
+			foreach ( ProjectItem* cit, it->children() )
+				l << cit;
+	return l;
+}
 
 void QMakeItem::redoLayout( ProjectItem* it ) //
 {

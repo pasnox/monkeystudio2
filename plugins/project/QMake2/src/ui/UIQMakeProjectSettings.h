@@ -17,17 +17,13 @@ struct ProjectVariable
 {
 	ProjectVariable() {}
 	ProjectVariable( const QString& v, const QString& o )
-	{ mVariable = v; mOperator = o; }
+	{ setVariable( v ); setOperator( o ); }
 	
-	bool operator== ( const ProjectVariable& v )
-	{ return mVariable == v.getVariable() && mOperator == v.getOperator(); }
-	
-	
-	bool operator!= ( const ProjectVariable& v )
-	{ return mVariable != v.getVariable() || mOperator != v.getOperator(); }
+	bool operator== ( const ProjectVariable& v ) const
+	{ return getVariable() == v.getVariable() && getOperator() == v.getOperator(); }
 	
 	ProjectVariable& operator=( const ProjectVariable& o )
-	{ mVariable = o.getVariable(); mOperator = o.getOperator(); return *this; }
+	{ setVariable( o.getVariable() ); setOperator( o.getOperator() ); return *this; }
 	
 	QString getVariable() const
 	{ return mVariable; }
@@ -47,16 +43,13 @@ struct ProjectKey
 {
 	ProjectKey() {}
 	ProjectKey( ProjectItem* s, const ProjectVariable& v )
-	{ mScope = s; mVariable = v; }
+	{ setScope( s ); setProjectVariable( v ); }
 	
-	bool operator== ( const ProjectKey& v )
-	{ return mScope == v.getScope() && mVariable == v.getProjectVariable(); }
-	
-	bool operator!= ( const ProjectKey& v )
-	{ return mScope != v.getScope() || mVariable != v.getProjectVariable(); }
+	bool operator== ( const ProjectKey& v ) const
+	{ return getScope() == v.getScope() && getProjectVariable() == v.getProjectVariable(); }
 	
 	ProjectKey& operator=( const ProjectKey& o )
-	{ mScope = o.getScope(); mVariable = o.getProjectVariable(); return *this; }
+	{ setScope( o.getScope() ); setProjectVariable( o.getProjectVariable() ); return *this; }
 	
 	ProjectItem* getScope() const
 	{ return mScope; }
@@ -64,12 +57,12 @@ struct ProjectKey
 	{ mScope = s; }
 	
 	QString getVariable() const
-	{ return mVariable.mVariable; }
+	{ return mVariable.getVariable(); }
 	void setVariable( const QString& s )
 	{ mVariable.setVariable( s ); }
 	
 	QString getOperator() const
-	{ return mVariable.mOperator; }
+	{ return mVariable.getOperator(); }
 	void setOperator( const QString& s )
 	{ mVariable.setOperator( s ); }
 	

@@ -50,6 +50,8 @@ public:
 	virtual void addCommand( const pCommand&, const QString& );
 	virtual void installCommands();
 	virtual void uninstallCommands();
+	virtual void setValues( ProjectItem*, const QString&, const QString&, const QStringList& );
+	virtual ProjectItemList getValues( ProjectItem*, const QString&, const QString& );
 	
 protected:
 	virtual void redoLayout( ProjectItem* );
