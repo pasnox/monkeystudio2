@@ -15,13 +15,16 @@
 #ifndef PTREECOMBOBOX_H
 #define PTREECOMBOBOX_H
 
-#include <QComboBox>
+#include "MonkeyExport.h"
+
+#include <QWidget>
+#include <QModelIndex>
 #include <QPointer>
 
 class QTreeView;
 class QAbstractItemModel;
 
-class pTreeComboBox : public QWidget //QComboBox
+class Q_MONKEY_EXPORT pTreeComboBox : public QWidget
 {
 	Q_OBJECT
 
