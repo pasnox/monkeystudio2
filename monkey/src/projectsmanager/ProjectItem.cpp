@@ -389,3 +389,13 @@ ProjectItemList ProjectItem::match( int r, const QVariant& v, bool b ) const
 				l << it;
 	return l;
 }
+
+ProjectItemList ProjectItem::getItemList( ProjectItem* s, ProjectItem::NodeType t, const QString& v, const QString& o ) const
+{
+	ProjectItemList l;
+	foreach ( ProjectItem* it, match( t, v, true ) )
+		if ( it->parent() == s )
+			if ( it->getOperator() == o || o == "*" )
+				l << it;
+	return l;
+}

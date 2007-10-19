@@ -236,10 +236,12 @@ public:
 	// set values for scope, variable and operator
 	virtual void setValues( ProjectItem*, const QString&, const QString&, const QStringList& ) = 0;
 	// get valueslist as items
-	virtual ProjectItemList getValues( ProjectItem*, const QString&, const QString& ) = 0;
+	virtual ProjectItemList getValues( ProjectItem*, const QString&, const QString& ) const = 0;
 	// get first value for variable, operator
-	virtual ProjectItem* getFirstValue( ProjectItem* s, const QString& v, const QString& o )
+	virtual ProjectItem* getFirstValue( ProjectItem* s, const QString& v, const QString& o ) const
 	{ return getValues( s, v, o ).first(); }
+	// get items by for scope by type, name, operator
+	virtual ProjectItemList getItemList( ProjectItem*, ProjectItem::NodeType, const QString&, const QString& ) const;
 	
 protected:
 	ProjectPlugin* mPlugin;
