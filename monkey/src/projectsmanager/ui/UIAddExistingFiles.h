@@ -22,6 +22,7 @@
 #include "ProjectsProxy.h"
 #include "ProjectItem.h"
 #include "pTreeComboBox.h"
+#include <QComboBox>
 
 class UIAddExistingFiles : public QFileDialog
 {
