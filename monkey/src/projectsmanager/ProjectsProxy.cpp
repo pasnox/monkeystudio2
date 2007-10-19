@@ -13,6 +13,9 @@ ProjectsProxy::ProjectsProxy( ProjectsModel* m )
 	
 	// set sort filter
 	setSortRole( ProjectItem::OriginalViewRole );
+	
+	// dynamic sort/filter items
+	setDynamicSortFilter( true );
 }
 
 ProjectsModel* ProjectsProxy::projectsModel() const
