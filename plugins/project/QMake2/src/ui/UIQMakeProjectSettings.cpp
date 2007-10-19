@@ -22,7 +22,7 @@ using namespace pMonkeyStudio;
 QString mTranslationMask = "$$TRANSLATIONS_PATH/%2_%3.ts";
 
 uint qHash( const ProjectKey& k )
-{ return qHash( QStringList( QStringList() << k.getScope()->getValue() << k.getVariable() << k.getOperator() ).join( QString::null ) ); }
+{ return qHash( (QStringList() << ( k.getScope() ? k.getScope()->getValue() : QString::null ) << k.getVariable() << k.getOperator() ).join( QString::null ) ); }
 
 UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
 	: QDialog( p ), mInit( false ), mProject( m ), mModel( m->model() ), mDirs( new QDirModel( this ) )
@@ -39,6 +39,14 @@ UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
 	dbbButtons->button( QDialogButtonBox::Cancel )->setIcon( QPixmap( ":/icons/icons/cancel.png" ) );
 	dbbButtons->button( QDialogButtonBox::Help )->setIcon( QPixmap( ":/icons/icons/help.png" ) );
 	
+	// scopes proxy
+	mScopesProxy = new QMakeProxy( mModel, mProject );
+	mScopesProxy->setFilterRoles( QList<int>() << ProjectItem::ProjectType << ProjectItem::ScopeType << ProjectItem::NestedScopeType );
+	mScopesProxy->setNegateFilter( false );
+	mScopesProxy->setFiltering( true );
+	cbScopes->setModel( mScopesProxy );
+	cbScopes->setCurrentIndex( mScopesProxy->mapFromSource( mProject->index() ) );
+	
 	mDirs->setReadOnly( true );
 	mDirs->setFilter( QDir::AllDirs );
 	mDirs->setSorting( QDir::Name );
@@ -50,14 +58,14 @@ UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
 #endif
 	setDir( mDirs->index( mProject->canonicalPath() ) );
 	
-	// scopes
-	mScopesProxy = new QMakeProxy( mModel, mProject );
-	mScopesProxy->setFilterRoles( QList<int>() << ProjectItem::ValueType );
-	mScopesProxy->setFiltering( true );
-	tvScopes->setModel( mScopesProxy );
+	// advanced page
+	mVariablesProxy = new QMakeProxy( mModel, mProject );
+	mVariablesProxy->setFilterRoles( QList<int>() << ProjectItem::ValueType );
+	mVariablesProxy->setFiltering( true );
+	tvScopes->setModel( mVariablesProxy );
 	
 	tvScopes->header()->hide();
-	tvScopes->setRootIndex( mScopesProxy->mapFromSource( mProject->index() ) );
+	tvScopes->setRootIndex( mVariablesProxy->mapFromSource( mProject->index() ) );
 	
 	// scope content
 	mContentProxy = new QMakeProxy( mModel, mProject );
@@ -68,9 +76,6 @@ UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
 	
 	// set currentindex
 	setCurrentIndex( mProject->child( 0, 0 )->index() );
-	
-	const ProjectKey k( 0, ProjectVariable( "", "" ) );
-	mSettings[k] = QStringList();
 }
 
 void UIQMakeProjectSettings::showEvent( QShowEvent* )
@@ -193,9 +198,9 @@ void UIQMakeProjectSettings::checkOthersVariables()
 	lwOthersValues->clear();
 	
 	// iterate other all variables
-	ProjectKey ck;
-	// FIXME ck.mScope = cbScopes->currentText();
-	ck.setOperator( cbOperators->currentText() );
+	ProjectKey ck = currentKey( QString::null );
+	// FIXME ? ck.setScope( mModel->itemFromIndex( mScopesProxy->mapToSource( cbScopes->currentText() ) ) );
+	// FIXME ? ck.setOperator( cbOperators->currentText() );
 	foreach ( ProjectKey k, mSettings.keys() )
 	{
 		// scope, operator
@@ -225,7 +230,7 @@ void UIQMakeProjectSettings::updateOthersValues()
 }
 
 ProjectKey UIQMakeProjectSettings::currentKey( const QString& s ) const
-{ return ProjectKey( 0, ProjectVariable( s, cbOperators->currentText() ) ); }
+{ return ProjectKey( mModel->itemFromIndex( mScopesProxy->mapToSource( cbScopes->currentIndex() ) ), ProjectVariable( s, cbOperators->currentText() ) ); }
 
 void UIQMakeProjectSettings::addValue( const ProjectKey& k, const QString& v )
 {
@@ -280,7 +285,7 @@ QModelIndex UIQMakeProjectSettings::currentIndex()
 	if ( lvContents->selectionModel()->selectedIndexes().count() )
 		i = mContentProxy->mapToSource( lvContents->selectionModel()->selectedIndexes().at( 0 ) );
 	if ( !i.isValid() && tvScopes->selectionModel()->selectedIndexes().count() )
-		i = mScopesProxy->mapToSource( tvScopes->selectionModel()->selectedIndexes().at( 0 ) );
+		i = mVariablesProxy->mapToSource( tvScopes->selectionModel()->selectedIndexes().at( 0 ) );
 	return i;
 }
 
@@ -294,13 +299,13 @@ void UIQMakeProjectSettings::setCurrentIndex( const QModelIndex& i )
 		return;
 	else if ( i.data( ProjectItem::TypeRole ).toInt() == ProjectItem::ValueType )
 	{
-		tvScopes->setCurrentIndex( mScopesProxy->mapFromSource( i.parent() ) );
+		tvScopes->setCurrentIndex( mVariablesProxy->mapFromSource( i.parent() ) );
 		lvContents->setRootIndex( mContentProxy->mapFromSource( i.parent() ) );
 		lvContents->setCurrentIndex( mContentProxy->mapFromSource( i ) );
 	}
 	else
 	{
-		tvScopes->setCurrentIndex( mScopesProxy->mapFromSource( i ) );
+		tvScopes->setCurrentIndex( mVariablesProxy->mapFromSource( i ) );
 		lvContents->setRootIndex( mContentProxy->mapFromSource( i ) );
 	}
 }
@@ -323,52 +328,39 @@ void UIQMakeProjectSettings::querySettings()
 	cbOperators->addItems( UISettingsQMake::readOperators() );
 	
 	// get all variable of project
-	ProjectItemList il; // FIXME = mProject->getItemList( ProjectItem::VariableType, "*", "*", "*" );
+	ProjectItemList il = mProject->getItemList( mProject, ProjectItem::VariableType, "*", "*" );
 	
 	// set maximum progressbar value
-	pbProgress->setMaximum( il.count() );
+	pbProgress->setMaximum( il.count() -1 );
 	
 	// inform reading project
 	pbProgress->setFormat( tr( "Reading project datas... %p%" ) );
+	pbProgress->setValue( 0 );
 	
 	foreach ( ProjectItem* v, il )
 	{
-		// update progress bar
-		pbProgress->setValue( pbProgress->value() +1 );
-		
 		// process application event except user inputContext
 		QApplication::processEvents( QEventLoop::ExcludeUserInputEvents );
 		
-		// get scope
-		// FIXME const QString Scope = v->scope();
-		ProjectItem* Scope = mProject;
-		
 		// get key
-		ProjectKey k = ProjectKey( Scope, ProjectVariable( v->getValue(), v->getOperator() ) );
-		
-		// add scope to scope list if it not exists
-		/* FIXME
-		if ( cbScopes->findText( Scope ) == -1 )
-			cbScopes->addItem( Scope );
-		*/
+		ProjectKey k = ProjectKey( v->parent(), ProjectVariable( v->getValue(), v->getOperator() ) );
 		
 		// add values to key
 		foreach ( ProjectItem* it, v->children() )
 			addValue( k, it->getValue() );
+		
+		// update progress bar
+		pbProgress->setValue( pbProgress->value() +1 );
 	}
 	
 	// set settings original one
 	mOriginalSettings = mSettings;
 	
-	// fill list & combo
-	QStringList l = UISettingsQMake::readScopes();
-	foreach ( const QString s, l )
-		if ( cbScopes->findText( s ) == -1 )
-			cbScopes->addItem( s );
+	// set some ui settings
 	cbEncodings->addItems( availableTextCodecs() );
 	loadModules();
 	loadConfigs();
-	loadLanguages();
+	loadLanguages(); // bug
 	
 	// hide progressbar
 	pbProgress->hide();
@@ -496,20 +488,42 @@ void UIQMakeProjectSettings::on_tbUndo_clicked()
 
 void UIQMakeProjectSettings::on_tbAddScope_clicked()
 {
-	// get existing scope so user can add scope to existing scope
-	QStringList l;
-	for ( int i = 0; i < cbScopes->count(); i++ )
-		l << cbScopes->itemText( i );
 	bool b;
 	// get new scope
-	QString s = QInputDialog::getItem( this, tr( "Add Scope..." ), tr( "Enter the scope name,\n( it can be full imbricated scope like:\nwin32:!vista|!win98|!win95:CONFIG( debug, debug|release ) ) :" ), l, -1, true, &b  );
-	if ( b )
+	QString s = QInputDialog::getItem( this, tr( "Add Scope..." ), tr( "Enter the scope name :" ), UISettingsQMake::readScopes(), -1, true, &b );
+	if ( b && !s.trimmed().isEmpty() )
 	{
-		// check if item already exists and add it
-		if ( cbScopes->findText( s.trimmed() ) == -1 )
-			cbScopes->addItem( s.trimmed() );
+		// get current projectitem
+		ProjectItem* cit = currentKey( QString::null ).getScope();
+		
+		// ask where to add item
+		QMessageBox mb( QMessageBox::Question, tr( "Add Scope..." ), tr( "According to current item, where i need to create scope ?" ), QMessageBox::NoButton, this );
+		QPushButton* bChild = mb.addButton( tr( "&Child" ), QMessageBox::AcceptRole );
+		QPushButton* bUnder = mb.addButton( tr( "&Under" ), QMessageBox::AcceptRole );
+		QPushButton* bEnd = mb.addButton( tr( "&End" ), QMessageBox::AcceptRole );
+		bUnder->setEnabled( cit != mProject );
+		bEnd->setEnabled( cit != mProject );
+		mb.addButton( QMessageBox::Cancel );
+		
+		// execute dialog
+		mb.exec();
+		
+		// create scope
+		ProjectItem* sit = new QMakeItem( ProjectItem::NestedScopeType );
+		sit->setValue( s.trimmed() );
+		
+		// add scope to correct place
+		if ( mb.clickedButton() == bChild )
+			cit->appendRow( sit );
+		else if ( mb.clickedButton() == bUnder )
+			cit->parent()->insertRow( cit->row() +1, sit );
+		else if ( mb.clickedButton() == bEnd )
+			cit->parent()->appendRow( sit );
+		else
+			return;
+		
 		// change current index to new scope
-		cbScopes->setCurrentIndex( cbScopes->findText( s.trimmed() ) );
+		cbScopes->setCurrentIndex( mScopesProxy->mapFromSource( sit->index() ) );
 		// update datas
 		on_cbOperators_currentIndexChanged( cbOperators->currentText() );
 	}
@@ -610,7 +624,7 @@ void UIQMakeProjectSettings::tb_clicked()
 void UIQMakeProjectSettings::sb_valueChanged( int )
 { sbBuild->setValue( 0 ); }
 
-void UIQMakeProjectSettings::on_cbScopes_currentIndexChanged( const QString& )
+void UIQMakeProjectSettings::on_cbScopes_currentChanged( const QModelIndex& )
 { on_cbOperators_currentIndexChanged( cbOperators->currentText() ); }
 
 void UIQMakeProjectSettings::on_cbOperators_currentIndexChanged( const QString& )
@@ -811,16 +825,12 @@ void UIQMakeProjectSettings::on_lwTranslations_itemChanged( QListWidgetItem* it 
 {
 	if ( !it )
 		return;
-	
 	// get key
 	const ProjectKey k = currentKey( "TRANSLATIONS" );
-	
 	// set default translatin path if needed
 	checkTranslationsPath();
-	
 	// get translation file
 	QString s = mTranslationMask.arg( mProject->name() ).arg( it->text() );
-	
 	// check translation
 	switch ( it->checkState() )
 	{
@@ -952,18 +962,18 @@ void UIQMakeProjectSettings::on_tbOthersValuesClear_clicked()
 }
 
 void UIQMakeProjectSettings::on_tvScopes_clicked( const QModelIndex& i )
-{ setCurrentIndex( mScopesProxy->mapToSource( i ) ); }
+{ setCurrentIndex( mVariablesProxy->mapToSource( i ) ); }
 
 void UIQMakeProjectSettings::on_tvScopes_doubleClicked( const QModelIndex& i )
 {
-	ProjectItem* it = mModel->itemFromIndex( mScopesProxy->mapToSource( i ) );
+	ProjectItem* it = mModel->itemFromIndex( mVariablesProxy->mapToSource( i ) );
 	if ( it )
 		UIItemSettings::edit( it, this );
 }
 
 void UIQMakeProjectSettings::on_lvContents_doubleClicked( const QModelIndex& i )
 {
-	ProjectItem* it = mModel->itemFromIndex( mScopesProxy->mapToSource( i ) );
+	ProjectItem* it = mModel->itemFromIndex( mVariablesProxy->mapToSource( i ) );
 	if ( it )
 		UIItemSettings::edit( it, this );
 }

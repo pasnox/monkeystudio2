@@ -25,7 +25,7 @@ bool QMakeProxy::filterAcceptsRow( int r, const QModelIndex& i ) const
 			if ( filterAcceptsRow( j, it->index() ) )
 				return true;
 
-	return b & it->project() == mProject;
+	return b && it->project() == mProject;
 }
 
 void QMakeProxy::setFiltering( bool b )

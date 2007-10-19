@@ -258,7 +258,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QComboBox" name="cbScopes" >
+       <widget class="pTreeComboBox" name="cbScopes" >
         <property name="sizePolicy" >
          <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
           <horstretch>0</horstretch>
@@ -1897,6 +1897,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>pTreeComboBox</class>
+   <extends>QComboBox</extends>
+   <header>pTreeComboBox.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>leTitle</tabstop>
   <tabstop>leIcon</tabstop>

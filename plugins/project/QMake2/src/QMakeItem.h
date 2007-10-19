@@ -51,7 +51,7 @@ public:
 	virtual void installCommands();
 	virtual void uninstallCommands();
 	virtual void setValues( ProjectItem*, const QString&, const QString&, const QStringList& );
-	virtual ProjectItemList getValues( ProjectItem*, const QString&, const QString& );
+	virtual ProjectItemList getValues( ProjectItem*, const QString&, const QString& ) const;
 	
 protected:
 	virtual void redoLayout( ProjectItem* );

@@ -693,7 +693,7 @@ void QMakeItem::setValues( ProjectItem* it, const QString& v, const QString& o, 
 	}
 }
 
-ProjectItemList QMakeItem::getValues( ProjectItem* s, const QString& v, const QString& o )
+ProjectItemList QMakeItem::getValues( ProjectItem* s, const QString& v, const QString& o ) const
 {
 	Q_ASSERT( s );
 	ProjectItemList l;

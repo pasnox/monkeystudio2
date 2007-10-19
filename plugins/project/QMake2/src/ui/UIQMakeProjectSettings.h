@@ -90,6 +90,7 @@ protected:
 	QtSettings mOriginalSettings;
 	QDirModel* mDirs;
 	QMakeProxy* mScopesProxy;
+	QMakeProxy* mVariablesProxy;
 	QMakeProxy* mContentProxy;
 	QStringList mBlackList;
 
@@ -136,7 +137,7 @@ protected slots:
 	void cb_highlighted( int );
 	void tb_clicked();
 	void sb_valueChanged( int );
-	void on_cbScopes_currentIndexChanged( const QString& );
+	void on_cbScopes_currentChanged( const QModelIndex& );
 	void on_cbOperators_currentIndexChanged( const QString& );
 	void on_cbTemplate_currentIndexChanged( const QString& );
 	void lw_currentItemChanged( QListWidgetItem*, QListWidgetItem* );
