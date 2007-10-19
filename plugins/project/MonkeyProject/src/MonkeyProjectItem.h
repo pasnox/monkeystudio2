@@ -83,6 +83,10 @@ public:
 	virtual void writeItem(ProjectItem*) {}
 	virtual bool addProject(const QString&, ProjectItem*, const QString&) {}
 	
+	// P@sNox, Fix complete build
+	virtual void setValues(ProjectItem*, const QString&, const QString&, const QStringList&) {}
+	virtual ProjectItemList getValues(ProjectItem*, const QString&, const QString&) const { return ProjectItemList(); }
+	
 	
 public slots:
 	void editSettings();
