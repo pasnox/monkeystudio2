@@ -24,6 +24,7 @@
 #include <QListWidget>
 #include <QTextBrowser>
 #include <QScrollBar>
+#include <QTextCodec>
 
 pDockMessageBox::pDockMessageBox( QWidget* w )
 	: QDockWidget( w ), mShown( false )
@@ -355,7 +356,7 @@ void pDockMessageBox::commandReadyRead( const pCommand&, const QByteArray& a )
 	bool b = p == tbOutput->verticalScrollBar()->maximum();
 	// appendOutput log
 	tbOutput->moveCursor( QTextCursor::End );
-	tbOutput->insertPlainText( a );
+	tbOutput->insertPlainText( QTextCodec::codecForLocale()->toUnicode( a ) );
 	// if scrollbar is at maximum, increase it, else restore last position
 	tbOutput->verticalScrollBar()->setValue( b ? tbOutput->verticalScrollBar()->maximum() : p );
 }
