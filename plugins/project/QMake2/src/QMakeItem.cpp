@@ -39,6 +39,50 @@ ProjectItem* variable( ProjectItem* s, const QString& v, const QString& o )
 	return it;
 }
 
+QString evaluate( const QString s, ProjectItem* p )
+{
+	Q_ASSERT( p );
+	QString v;
+	foreach ( ProjectItem* it, p->match( ProjectItem::VariableType, s ) )
+	{
+		const QString o = it->getOperator();
+		foreach ( ProjectItem* cit, it->children() )
+		{
+			if ( o == "=" )
+				v = cit->getValue();
+			else if ( o == "+=" )
+				v.append( cit->getValue().prepend( " " ) );
+			else if ( o == "-=" )
+			{
+				foreach ( const QString s, cit->getValue().split( " " ) )
+					v.remove( s );
+			}
+			else if ( o == "*=" )
+			{
+				QStringList l = v.split( " " );
+				foreach ( QString s, cit->getValue().split( " " ) )
+					if ( !l.contains( s ) )
+						v.append( s.prepend( " " ) );
+			}
+			else if ( o == "~=" )
+			{
+				qWarning( "QString evaluate( const QString s, ProjectItem* p ): Need Implementation" );
+				/*
+				QRegExp rx( 
+				QStringList l = v.split( " " );
+				foreach ( QString s, cit->getValue().split( " " ) )
+					if ( !l.contains( s ) )
+						v.append( s.prepend( " " ) );
+					
+					DEFINES ~= s/QT_[DT].+/QT
+				*/
+			}
+		}
+	}
+	// return value
+	return v.trimmed();
+}
+
 QMakeItem::QMakeItem( ProjectItem::NodeType t, ProjectItem* i )
 {
 	init();
@@ -231,12 +275,7 @@ bool QMakeItem::isLast() const
 }
 
 bool QMakeItem::isProjectsContainer() const
-{
-	if ( !isProject() )
-		return false;
-	ProjectItem* it = getFirstValue( 0, "TEMPLATE", "=" );
-	return it ? it->getValue().toLower() == "subdirs" : false;
-}
+{ return isProject() ? evaluate( "TEMPLATE", const_cast<QMakeItem*>( this ) ).toLower() == "subdirs" : false; }
 
 void QMakeItem::insertRow( int r, ProjectItem* it )
 {
@@ -466,50 +505,6 @@ DebuggerPlugin* QMakeItem::debugger() const
 	return isProject() ? mDebugger : project()->debugger();
 }
 
-QString evaluate( const QString s, ProjectItem* p )
-{
-	Q_ASSERT( p );
-	QString v;
-	foreach ( ProjectItem* it, p->match( ProjectItem::VariableType, s ) )
-	{
-		const QString o = it->getOperator();
-		foreach ( ProjectItem* cit, it->children() )
-		{
-			if ( o == "=" )
-				v = cit->getValue();
-			else if ( o == "+=" )
-				v.append( cit->getValue().prepend( " " ) );
-			else if ( o == "-=" )
-			{
-				foreach ( const QString s, cit->getValue().split( " " ) )
-					v.remove( s );
-			}
-			else if ( o == "*=" )
-			{
-				QStringList l = v.split( " " );
-				foreach ( QString s, cit->getValue().split( " " ) )
-					if ( !l.contains( s ) )
-						v.append( s.prepend( " " ) );
-			}
-			else if ( o == "~=" )
-			{
-				qWarning( "QString evaluate( const QString s, ProjectItem* p ): Need Implementation" );
-				/*
-				QRegExp rx( 
-				QStringList l = v.split( " " );
-				foreach ( QString s, cit->getValue().split( " " ) )
-					if ( !l.contains( s ) )
-						v.append( s.prepend( " " ) );
-					
-					DEFINES ~= s/QT_[DT].+/QT
-				*/
-			}
-		}
-	}
-	// return value
-	return v.trimmed();
-}
-
 void QMakeItem::addCommand( const pCommand& c, const QString& s )
 {
 	// check validity
@@ -673,6 +668,13 @@ void QMakeItem::setValues( ProjectItem* it, const QString& v, const QString& o, 
 		vi->remove();
 	else
 	{
+		// create variable if needed
+		if ( !vi )
+		{
+			vi = new QMakeItem( ProjectItem::VariableType, it );
+			vi->setValue( v );
+			vi->setOperator( o );
+		}
 		// update / create items
 		for ( int i = 0; i < l.count(); i++ )
 		{
