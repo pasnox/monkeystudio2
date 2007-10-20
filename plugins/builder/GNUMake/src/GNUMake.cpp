@@ -77,6 +77,7 @@ pCommandList GNUMake::userCommands() const
 		c.setWorkingDirectory( s->value( "WorkingDirectory" ).toString() );
 		c.setParsers( s->value( "Parsers" ).toStringList() );
 		c.setTryAllParsers( s->value( "TryAll" ).toBool() );
+		c.setSkipOnError( s->value( "SkipOnError" ).toBool() );
 		l << c;
 	}
 	s->endArray();
@@ -105,6 +106,7 @@ void GNUMake::setUserCommands( const pCommandList& l ) const
 		s->setValue( "WorkingDirectory", c.workingDirectory() );
 		s->setValue( "Parsers", c.parsers() );
 		s->setValue( "TryAll", c.tryAllParsers() );
+		s->setValue( "SkipOnError", c.skipOnError() );
 	}
 	s->endArray();
 }
@@ -136,6 +138,7 @@ pCommand GNUMake::buildCommand() const
 	c.setWorkingDirectory( s->value( "BuildCommand/WorkingDirectory" ).toString() );
 	c.setParsers( s->value( "BuildCommand/Parsers" ).toStringList() );
 	c.setTryAllParsers( s->value( "BuildCommand/TryAll" ).toBool() );
+	c.setSkipOnError( s->value( "BuildCommand/SkipOnError", false ).toBool() );
 	// if no user commands get global ones
 	if ( !c.isValid() )
 		c = defaultBuildCommand();
@@ -151,6 +154,7 @@ void GNUMake::setBuildCommand( const pCommand& c )
 	s->setValue( "BuildCommand/WorkingDirectory", c.workingDirectory() );
 	s->setValue( "BuildCommand/Parsers", c.parsers() );
 	s->setValue( "BuildCommand/TryAll", c.tryAllParsers() );
+	s->setValue( "BuildCommand/SkipOnError", c.skipOnError() );
 }
 
 void GNUMake::commandTriggered()
