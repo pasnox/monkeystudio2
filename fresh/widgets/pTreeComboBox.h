@@ -21,6 +21,7 @@
 #include <QModelIndex>
 #include <QPointer>
 
+class QFrame;
 class QTreeView;
 class QAbstractItemModel;
 
@@ -35,6 +36,7 @@ public:
 	bool eventFilter( QObject*, QEvent* );
 
 	virtual QSize sizeHint() const;
+	int count() const;
 
 	virtual QSize iconSize() const;
 	virtual void setIconSize( const QSize& );
@@ -58,9 +60,11 @@ protected slots:
 
 protected:
 	QSize mIconSize;
+	QFrame* mFrame;
 	QPointer<QTreeView> mView;
 	QPointer<QAbstractItemModel> mModel;
 	QModelIndex mIndex;
+	bool mForce;
 
 	void paintEvent( QPaintEvent* );
 	void hideEvent( QHideEvent* );
@@ -68,10 +72,13 @@ protected:
 	void leaveEvent( QEvent* );
 	void mousePressEvent( QMouseEvent* );
 
+	void calculPopupGeometry();
+
 signals:
 	void activated( const QModelIndex& );
 	void clicked( const QModelIndex& );
 	void currentChanged( const QModelIndex& );
+	void highlighted( const QModelIndex& );
 
 };
 
