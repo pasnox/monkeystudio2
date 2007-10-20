@@ -326,7 +326,7 @@ void UIQMakeProjectSettings::querySettings()
 	cbOperators->addItems( UISettingsQMake::readOperators() );
 	
 	// get all variable of project
-	ProjectItemList il = mProject->getItemList( mProject, ProjectItem::VariableType, "*", "*" );
+	ProjectItemList il = mProject->getAllItemList( ProjectItem::VariableType, "*", "*" );
 	
 	// set maximum progressbar value
 	pbProgress->setMaximum( il.count() -1 );
@@ -508,6 +508,7 @@ void UIQMakeProjectSettings::on_tbAddScope_clicked()
 		// create scope
 		ProjectItem* sit = new QMakeItem( ProjectItem::NestedScopeType );
 		sit->setValue( s.trimmed() );
+		sit->setOperator( ":" );
 		
 		// add scope to correct place
 		if ( mb.clickedButton() == bChild )
@@ -517,7 +518,20 @@ void UIQMakeProjectSettings::on_tbAddScope_clicked()
 		else if ( mb.clickedButton() == bEnd )
 			cit->parent()->appendRow( sit );
 		else
+		{
+			delete sit;
 			return;
+		}
+		
+		// create end scope item
+		(void) new QMakeItem( ProjectItem::ScopeEndType, sit );
+		
+		// transform parent nested scope to simple scope
+		if ( !sit->parent()->isProject() && sit->parent()->isNested() )
+		{
+			sit->parent()->setType( ProjectItem::ScopeType );
+			sit->parent()->setOperator( QString::null );
+		}
 		
 		// change current index to new scope
 		cbScopes->setCurrentIndex( mScopesProxy->mapFromSource( sit->index() ) );
