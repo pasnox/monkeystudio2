@@ -1,5 +1,7 @@
 #include "GccParser.h"
 
+#include <QTextCodec>
+
 GccParser::GccParser()
 {
 	Pattern ps[] = 
@@ -71,7 +73,7 @@ GccParser::~GccParser()
 
 bool GccParser::processParsing(const QByteArray& arr)
 {
-	QStringList l = QString(arr).split( '\n' );
+	QStringList l = QTextCodec::codecForLocale()->toUnicode( arr ).split( '\n' );
 	foreach (QString s, l)
 	{
 		foreach ( Pattern p, patterns)

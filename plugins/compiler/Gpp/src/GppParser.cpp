@@ -1,5 +1,7 @@
 #include "GppParser.h"
 
+#include <QTextCodec>
+
 GppParser::GppParser()
 {
 	Pattern ps[] = 
@@ -71,7 +73,7 @@ GppParser::~GppParser()
 
 bool GppParser::processParsing(const QByteArray& arr)
 {
-	QStringList l = QString(arr).split( '\n' );
+	QStringList l = QTextCodec::codecForLocale()->toUnicode( arr ).split( '\n' );
 	foreach (QString s, l)
 	{
 		foreach ( Pattern p, patterns)

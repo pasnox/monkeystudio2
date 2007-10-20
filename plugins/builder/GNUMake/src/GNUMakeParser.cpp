@@ -1,5 +1,7 @@
 #include "GNUMakeParser.h"
 
+#include <QTextCodec>
+
 GNUMakeParser::GNUMakeParser()
 {
 	Pattern ps[] = 
@@ -37,7 +39,7 @@ GNUMakeParser::~GNUMakeParser()
 
 bool GNUMakeParser::processParsing( const QByteArray& arr )
 {
-	QStringList l = QString(arr).split( '\n' );
+	QStringList l = QTextCodec::codecForLocale()->toUnicode( arr ).split( '\n' );
 	foreach (QString s, l)
 	{
 		foreach ( Pattern p, patterns)

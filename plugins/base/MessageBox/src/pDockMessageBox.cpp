@@ -56,7 +56,6 @@ pDockMessageBox::pDockMessageBox( QWidget* w )
 	twMessageBox->setMinimumHeight( 120 );
 	// create listwidget
 	lwBuildSteps = new QListWidget;
-	//lwBuildSteps->setMinimumHeight( 1 );
 	lwBuildSteps->setFrameShape( QFrame::NoFrame );
 	// create textbrowser
 	tbOutput = new QTextBrowser;
