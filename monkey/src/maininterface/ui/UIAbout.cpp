@@ -8,7 +8,7 @@ const QString mInformations =
 "<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"font-size:small;\">"
 "	<tr>"
 "		<td align=\"center\"><br /><img src=\":/application/icons/application/monkey2.png\" width=\"32\" height=\"32\"></td>"
-"		<td>%2 v%3<br />%4<br />The Monkey Studio Team<br /><a href=\"%6\">Home page</a></td>"
+"		<td>%2 v%3<br />%4<br />The Monkey Studio Team<br /><a href=\"http://%6\">Home page</a></td>"
 "	</tr>"
 "</table>";
 
