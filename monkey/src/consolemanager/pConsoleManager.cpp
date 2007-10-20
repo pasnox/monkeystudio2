@@ -27,6 +27,7 @@ pConsoleManager::pConsoleManager( QObject* o )
 {
 	// set status tip for
 	mStopAction->setStatusTip( tr( "Stop the currently running command" ) );
+	mStopAction->setEnabled( false );
 	// mixe channels
 	setReadChannelMode( QProcess::MergedChannels );
 	// connections
