@@ -89,6 +89,7 @@ void UICLIToolSettings::on_lwCommands_currentItemChanged( QListWidgetItem* cit, 
 		c.setCommand( leCommandCommand->text() );
 		c.setArguments( leCommandArguments->text() );
 		c.setWorkingDirectory( leCommandWorkingDirectory->text() );
+		c.setSkipOnError( cbCommandSkipOnError->isChecked() );
 		QStringList l;
 		for ( int i = 0; i < lwCommandParsers->count(); i++ )
 		{
@@ -105,6 +106,7 @@ void UICLIToolSettings::on_lwCommands_currentItemChanged( QListWidgetItem* cit, 
 	leCommandCommand->setText( c.command() );
 	leCommandArguments->setText( c.arguments() );
 	leCommandWorkingDirectory->setText( c.workingDirectory() );
+	cbCommandSkipOnError->setChecked( c.skipOnError() );
 	for ( int i = 0; i < lwCommandParsers->count(); i++ )
 	{
 		cit = lwCommandParsers->item( i );

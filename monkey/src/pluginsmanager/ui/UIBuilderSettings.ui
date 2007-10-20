@@ -123,6 +123,13 @@
           </property>
          </widget>
         </item>
+        <item row="8" column="0" colspan="2" >
+         <widget class="QCheckBox" name="cbBuildCommandSkipOnError" >
+          <property name="text" >
+           <string>Skip On Error</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
       <item>

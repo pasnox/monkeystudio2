@@ -51,6 +51,7 @@ void UIBuilderSettings::updateCommand()
 	leBuildCommandCommand->setText( mCommand.command() );
 	leBuildCommandArguments->setText( mCommand.arguments() );
 	leBuildCommandWorkingDirectory->setText( mCommand.workingDirectory() );
+	cbBuildCommandSkipOnError->setChecked( mCommand.skipOnError() );
 	for ( int i = 0; i < lwBuildCommandParsers->count(); i++ )
 	{
 		QListWidgetItem* it = lwBuildCommandParsers->item( i );
@@ -77,6 +78,7 @@ void UIBuilderSettings::save()
 	mCommand.setCommand( leBuildCommandCommand->text() );
 	mCommand.setArguments( leBuildCommandArguments->text() );
 	mCommand.setWorkingDirectory( leBuildCommandWorkingDirectory->text() );
+	mCommand.setSkipOnError( cbBuildCommandSkipOnError->isChecked() );
 	QStringList l;
 	for ( int i = 0; i < lwBuildCommandParsers->count(); i++ )
 	{
