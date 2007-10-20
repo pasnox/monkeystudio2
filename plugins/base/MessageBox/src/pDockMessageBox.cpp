@@ -368,6 +368,9 @@ void pDockMessageBox::commandStarted( const pCommand& c )
 	s.append( tr( "* Working Directory: %1" ).arg( colourText( c.workingDirectory() ) ) );
 	// appendOutput to console log
 	appendInBox( colourText( s, Qt::blue ), Qt::red );
+	// show dock if needed
+	if ( !isVisible() )
+		setVisible( true );
 }
 
 void pDockMessageBox::commandStateChanged( const pCommand& c, QProcess::ProcessState s )
