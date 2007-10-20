@@ -37,7 +37,6 @@ pConsoleManager::pConsoleManager( QObject* o )
 	connect( this, SIGNAL( stateChanged( QProcess::ProcessState ) ), this, SLOT( stateChanged( QProcess::ProcessState ) ) );
 	connect( mStopAction, SIGNAL( triggered() ), this, SLOT( stopCurrentCommand() ) );
 	// start timerEvent
-	mBuffer.open( QBuffer::ReadOnly );
 	mTimerId = startTimer( 100 );
 }
 
@@ -266,6 +265,7 @@ void pConsoleManager::executeProcess()
 					mCurrentParsers << s;
 		// clear buffer
 		mBuffer.buffer().clear();
+		mBuffer.open( QBuffer::ReadOnly );
 		// execute command
 		setWorkingDirectory( c.workingDirectory() );
 		start( QString( "%1 %2" ).arg( c.command() ).arg( c.arguments() ) );
