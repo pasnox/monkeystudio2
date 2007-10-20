@@ -70,6 +70,7 @@ pCommandList Gpp::userCommands() const
 		c.setWorkingDirectory( s->value( "WorkingDirectory" ).toString() );
 		c.setParsers( s->value( "Parsers" ).toStringList() );
 		c.setTryAllParsers( s->value( "TryAll" ).toBool() );
+		c.setSkipOnError( s->value( "SkipOnError" ).toBool() );
 		l << c;
 	}
 	s->endArray();
@@ -98,6 +99,7 @@ void Gpp::setUserCommands( const pCommandList& l ) const
 		s->setValue( "WorkingDirectory", c.workingDirectory() );
 		s->setValue( "Parsers", c.parsers() );
 		s->setValue( "TryAll", c.tryAllParsers() );
+		s->setValue( "SkipOnError", c.skipOnError() );
 	}
 	s->endArray();
 }
