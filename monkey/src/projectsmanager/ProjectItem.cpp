@@ -399,3 +399,12 @@ ProjectItemList ProjectItem::getItemList( ProjectItem* s, ProjectItem::NodeType 
 				l << it;
 	return l;
 }
+
+ProjectItemList ProjectItem::getAllItemList( ProjectItem::NodeType t, const QString& v, const QString& o ) const
+{
+	ProjectItemList l;
+	foreach ( ProjectItem* it, match( t, v, true ) )
+		if ( it->getOperator() == o || o == "*" )
+			l << it;
+	return l;
+}

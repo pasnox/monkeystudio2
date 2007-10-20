@@ -240,8 +240,10 @@ public:
 	// get first value for variable, operator
 	virtual ProjectItem* getFirstValue( ProjectItem* s, const QString& v, const QString& o ) const
 	{ return getValues( s, v, o ).first(); }
-	// get items by for scope by type, name, operator
+	// get items for scope by type, name, operator
 	virtual ProjectItemList getItemList( ProjectItem*, ProjectItem::NodeType, const QString&, const QString& ) const;
+	// get all items for type, name, operator
+	virtual ProjectItemList getAllItemList( ProjectItem::NodeType, const QString&, const QString& ) const;
 	
 protected:
 	ProjectPlugin* mPlugin;
