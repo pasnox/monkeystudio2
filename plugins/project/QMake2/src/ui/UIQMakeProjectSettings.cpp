@@ -370,7 +370,6 @@ void UIQMakeProjectSettings::querySettings()
 	
 	// connections
 	// combox
-	connect( cbScopes, SIGNAL( highlighted( int ) ), this, SLOT( cb_highlighted( int ) ) );
 	connect( cbOperators, SIGNAL( highlighted( int ) ), this, SLOT( cb_highlighted( int ) ) );
 	connect( cbVariables, SIGNAL( highlighted( int ) ), this, SLOT( cb_highlighted( int ) ) );
 	// buttons
@@ -623,6 +622,9 @@ void UIQMakeProjectSettings::tb_clicked()
 
 void UIQMakeProjectSettings::sb_valueChanged( int )
 { sbBuild->setValue( 0 ); }
+
+void UIQMakeProjectSettings::on_cbScopes_highlighted( const QModelIndex& )
+{ cb_highlighted( 0 ); }
 
 void UIQMakeProjectSettings::on_cbScopes_currentChanged( const QModelIndex& )
 { on_cbOperators_currentIndexChanged( cbOperators->currentText() ); }
