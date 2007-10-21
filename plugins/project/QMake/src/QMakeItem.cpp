@@ -699,12 +699,51 @@ void QMakeItem::setValues( ProjectItem* it, const QString& v, const QString& o, 
 	}
 }
 
+void QMakeItem::addValue( ProjectItem* it, const QString& v, const QString& o, const QString& vl )
+{
+	// need item
+	Q_ASSERT( it );
+	// search variable item
+	ProjectItem* vi = 0;
+	foreach ( ProjectItem* cit, it->children( false, true ) )
+	{
+		if ( cit->getValue() == v && cit->getOperator() == o )
+		{
+			vi = cit;
+			break;
+		}
+	}
+	// if no variable found, and values is empty return
+	if ( !vi && vl.isEmpty() )
+		return;
+	// if values is empty delete item
+	else if ( vi && vl.isEmpty() )
+		vi->remove();
+	else
+	{
+		// create variable if needed
+		if ( !vi )
+		{
+			vi = new QMakeItem( ProjectItem::VariableType, it );
+			vi->setValue( v );
+			vi->setOperator( o );
+		}
+		// check values
+		foreach ( ProjectItem* cit, vi->children() )
+			if ( ( vi->getMultiLine() && cit->getValue() == vl ) || ( !vi->getMultiLine() && cit->getValue().contains( QRegExp( QString( "(^|\\b)%1(\\b|$)" ).arg( QRegExp::escape( vl ) ) ) ) ) )
+				return;
+		// if there, value don t exists, create it
+		ProjectItem* cvi = new QMakeItem( ProjectItem::ValueType, vi );
+		cvi->setValue( vl );
+	}
+}
+
 ProjectItemList QMakeItem::getValues( ProjectItem* s, const QString& v, const QString& o ) const
 {
 	Q_ASSERT( s );
 	ProjectItemList l;
 	foreach ( ProjectItem* it, s->children( false, true ) )
-		if ( it->getValue() == v && it->getOperator() == o )
+		if ( it->isVariable() && it->getValue() == v && it->getOperator() == o )
 			foreach ( ProjectItem* cit, it->children() )
 				l << cit;
 	return l;
@@ -864,5 +903,33 @@ void QMakeItem::commandTriggered()
 	pConsoleManager* cm = pConsoleManager::instance();
 	pCommandList l = mCommands;
 	if ( QAction* a = qobject_cast<QAction*>( sender() ) )
+	{
+		// if build/rebuild action
+		if ( a->text().contains( "build", Qt::CaseInsensitive ) )
+		{
+			ProjectItemList l;
+			// if auto increment build version
+			l = getValues( this, "APP_AUTO_INCREMENT", "=" );
+			if ( l.count() && l.at( 0 )->getValue() == "1" )
+			{
+				// update version
+				l = getValues( this, "VERSION", "=" );
+				if ( l.count() )
+				{
+					QStringList v = l.at( 0 )->getValue().split( "." );
+					while ( v.count() < 4 )
+						v.append( "0" );
+					int b = v.at( 3 ).toInt();
+					b++;
+					v[3] = QString::number( b );
+					setValues( this, "VERSION", "=", QStringList( v.join( "." ) ) );
+					// update define
+					addValue( this, "DEFINES", "+=", "\"PROGRAM_VERSION=\\\"\\\\\\\"$${VERSION}\\\\\\\"\\\"\"" );
+				}
+			}
+			// save project if user request
+			save();
+		}
 		cm->addCommands( cm->recursiveCommandList( l, cm->getCommand( l, a->statusTip() ) ) );
+	}
 }
