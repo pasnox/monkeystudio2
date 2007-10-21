@@ -28,14 +28,20 @@ using namespace pMonkeyStudio;
 
 ProjectItem* variable( ProjectItem* s, const QString& v, const QString& o )
 {
-	Q_ASSERT( s != 0 );
+	Q_ASSERT( s );
+	QStringList l = UISettingsQMake::readPathFiles();
 	foreach ( ProjectItem* it, s->children( false, true ) )
+	{
 		if ( it->getValue() == v && it->getOperator() == o )
+		{
+			it->setMultiLine( l.contains( v ) && !v.contains( "path", Qt::CaseInsensitive ) );
 			return it;
+		}
+	}
 	ProjectItem* it = new QMakeItem( ProjectItem::VariableType, s );
 	it->setValue( v );
 	it->setOperator( o );
-	it->setMultiLine( true );
+	it->setMultiLine( l.contains( v ) && !v.contains( "path", Qt::CaseInsensitive ) );
 	return it;
 }
 
@@ -461,7 +467,6 @@ void QMakeItem::addExistingFiles( const QStringList& l, ProjectItem* s, const QS
 			continue;
 		// create item value
 		ProjectItem* it = new QMakeItem( ProjectItem::ValueType, v );
-		// check already added files
 		it->setValue( vn != "UNKNOW_FILES" ? relativeFilePath( f ) : f );
 	}
 }
@@ -684,9 +689,8 @@ void QMakeItem::setValues( ProjectItem* it, const QString& v, const QString& o, 
 				cvi->setValue( s );
 			else if ( !cvi || ( cvi && cvi->getValue() != s ) )
 			{
-				cvi = new QMakeItem( ProjectItem::ValueType );
+				cvi = new QMakeItem( ProjectItem::ValueType, vi );
 				cvi->setValue( s );
-				vi->insertRow( i, cvi );
 			}
 		}
 		// remove no longer need items
