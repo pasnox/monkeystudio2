@@ -85,6 +85,7 @@ public:
 	
 	// P@sNox, Fix complete build
 	virtual void setValues(ProjectItem*, const QString&, const QString&, const QStringList&) {}
+	virtual void addValue( ProjectItem*, const QString&, const QString&, const QString& ) {}
 	virtual ProjectItemList getValues(ProjectItem*, const QString&, const QString&) const { return ProjectItemList(); }
 	
 	
