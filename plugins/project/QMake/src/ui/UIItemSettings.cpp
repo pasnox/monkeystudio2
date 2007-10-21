@@ -7,7 +7,7 @@
 #include <QFontMetrics>
 #include <QPushButton>
 
-bool UIItemSettings::edit( ProjectItem* i, QWidget* w )
+bool UIItemSettings::edit( ProjectItem* i, QWidget* )
 {
 	UIItemSettings* d = instance( i );
 	d->mItem = i;
