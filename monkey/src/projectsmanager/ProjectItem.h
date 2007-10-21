@@ -235,8 +235,18 @@ public:
 	virtual ProjectItemList match( int, const QVariant&, bool = true ) const;
 	// set values for scope, variable and operator
 	virtual void setValues( ProjectItem*, const QString&, const QString&, const QStringList& ) = 0;
+	// add value for scope, variable and operator
+	virtual void addValue( ProjectItem*, const QString&, const QString&, const QString& ) = 0;
 	// get valueslist as items
 	virtual ProjectItemList getValues( ProjectItem*, const QString&, const QString& ) const = 0;
+	// get valueslist as stringlist
+	virtual QStringList getStringValues( ProjectItem* s, const QString& v, const QString& o ) const
+	{
+		QStringList l;
+		foreach ( ProjectItem* it, getValues( s, v, o ) )
+			l << it->getValue();
+		return l;
+	}
 	// get first value for variable, operator
 	virtual ProjectItem* getFirstValue( ProjectItem* s, const QString& v, const QString& o ) const
 	{ return getValues( s, v, o ).value( 0 ); }
