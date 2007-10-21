@@ -199,8 +199,6 @@ void UIQMakeProjectSettings::checkOthersVariables()
 	
 	// iterate other all variables
 	ProjectKey ck = currentKey( QString::null );
-	// FIXME ? ck.setScope( mModel->itemFromIndex( mScopesProxy->mapToSource( cbScopes->currentText() ) ) );
-	// FIXME ? ck.setOperator( cbOperators->currentText() );
 	foreach ( ProjectKey k, mSettings.keys() )
 	{
 		// scope, operator
@@ -328,7 +326,7 @@ void UIQMakeProjectSettings::querySettings()
 	cbOperators->addItems( UISettingsQMake::readOperators() );
 	
 	// get all variable of project
-	ProjectItemList il = mProject->getItemList( mProject, ProjectItem::VariableType, "*", "*" );
+	ProjectItemList il = mProject->getAllItemList( ProjectItem::VariableType, "*", "*" );
 	
 	// set maximum progressbar value
 	pbProgress->setMaximum( il.count() -1 );
@@ -510,6 +508,7 @@ void UIQMakeProjectSettings::on_tbAddScope_clicked()
 		// create scope
 		ProjectItem* sit = new QMakeItem( ProjectItem::NestedScopeType );
 		sit->setValue( s.trimmed() );
+		sit->setOperator( ":" );
 		
 		// add scope to correct place
 		if ( mb.clickedButton() == bChild )
@@ -519,7 +518,20 @@ void UIQMakeProjectSettings::on_tbAddScope_clicked()
 		else if ( mb.clickedButton() == bEnd )
 			cit->parent()->appendRow( sit );
 		else
+		{
+			delete sit;
 			return;
+		}
+		
+		// create end scope item
+		(void) new QMakeItem( ProjectItem::ScopeEndType, sit );
+		
+		// transform parent nested scope to simple scope
+		if ( !sit->parent()->isProject() && sit->parent()->isNested() )
+		{
+			sit->parent()->setType( ProjectItem::ScopeType );
+			sit->parent()->setOperator( QString::null );
+		}
 		
 		// change current index to new scope
 		cbScopes->setCurrentIndex( mScopesProxy->mapFromSource( sit->index() ) );
@@ -530,26 +542,24 @@ void UIQMakeProjectSettings::on_tbAddScope_clicked()
 
 void UIQMakeProjectSettings::on_tbRemoveScope_clicked()
 {
-	/* FIXME
 	// user confirmation
-	if ( cbScopes->currentIndex() != -1 && question( tr( "Remove Scope..." ), tr( "Are you sure you want to delete this scope" ) ) )
+	if ( question( tr( "Remove Scope..." ), tr( "Are you sure you want to delete this scope" ) ) )
 	{
 		// get scope to remove
-		const QString s = cbScopes->currentText();
+		ProjectItem* cs = currentKey( QString::null ).getScope();
 		// can t remove root scope
-		if ( s.isEmpty() )
+		if ( cs == mProject )
 		{
 			warning( tr( "Remove Scope..." ), tr( "Can't remove root scope, aborting." ) );
 			return;
 		}
 		// remove each variable that have scope s
 		foreach ( const ProjectKey k, mSettings.keys() )
-			if ( k.getScope() == s )
-				mSettings.remove( k );
-		// remove scope from combobox
-		cbScopes->removeItem( cbScopes->currentIndex() );
+			if ( k.getScope() == cs )
+				clearValues( k );
+		// hide scope from combobox tree
+		cbScopes->view()->setRowHidden( cbScopes->currentIndex().row(), cbScopes->currentIndex().parent(), true );
 	}
-	*/
 }
 
 void UIQMakeProjectSettings::cb_highlighted( int )
@@ -1054,7 +1064,7 @@ void UIQMakeProjectSettings::on_tbDown_clicked()
 void UIQMakeProjectSettings::on_dbbButtons_helpRequested()
 {
 	QString s;
-	switch ( lwMenu->currentRow() )
+	switch ( swMenu->currentIndex() )
 	{
 		case 0:
 			s = tr( "<b>Application</b>: Here you can configure global project settings." );
@@ -1076,7 +1086,7 @@ void UIQMakeProjectSettings::on_dbbButtons_helpRequested()
 			break;
 	}
 	if ( !s.isEmpty() )
-		QWhatsThis::showText( mapToGlobal( geometry().center() ), s );
+		QWhatsThis::showText( mapToGlobal( rect().center() ), s );
 }
 
 void UIQMakeProjectSettings::accept()
