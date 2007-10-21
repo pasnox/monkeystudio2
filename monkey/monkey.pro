@@ -23,7 +23,7 @@ TARGET	= monkey
 
 COPYRIGHTS	= "(c) 2005 - 2007 Azevedo Filipe"
 DOMAIN	= "www.monkeystudio.org"
-VERSION	= "1.7.0"
+VERSION	= 1.8.0.0
 PROGRAM_NAME	= "Monkey Studio"
 
 win32:RC_FILE	*= monkey.rc
