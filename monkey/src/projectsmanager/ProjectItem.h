@@ -239,7 +239,7 @@ public:
 	virtual ProjectItemList getValues( ProjectItem*, const QString&, const QString& ) const = 0;
 	// get first value for variable, operator
 	virtual ProjectItem* getFirstValue( ProjectItem* s, const QString& v, const QString& o ) const
-	{ return getValues( s, v, o ).first(); }
+	{ return getValues( s, v, o ).value( 0 ); }
 	// get items for scope by type, name, operator
 	virtual ProjectItemList getItemList( ProjectItem*, ProjectItem::NodeType, const QString&, const QString& ) const;
 	// get all items for type, name, operator

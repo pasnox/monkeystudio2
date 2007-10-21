@@ -651,6 +651,16 @@ void recursiveRemoveCommands( QMenu* m )
 void QMakeItem::uninstallCommands()
 { recursiveRemoveCommands( pMenuBar::instance()->menu( "mBuilder" ) ); }
 
+ProjectItem* vi = 0;
+	foreach ( ProjectItem* cit, it->children( false, true ) )
+	{
+		if ( cit->getValue() == v && cit->getOperator() == o )
+		{
+			vi = cit;
+			break;
+		}
+	}
+
 void QMakeItem::setValues( ProjectItem* it, const QString& v, const QString& o, const QStringList& l )
 {
 	// need item
@@ -695,12 +705,14 @@ void QMakeItem::setValues( ProjectItem* it, const QString& v, const QString& o, 
 
 ProjectItemList QMakeItem::getValues( ProjectItem* s, const QString& v, const QString& o ) const
 {
+	qWarning( "begin getValues" );
 	Q_ASSERT( s );
 	ProjectItemList l;
 	foreach ( ProjectItem* it, s->children( false, true ) )
 		if ( it->getValue() == v && it->getOperator() == o )
 			foreach ( ProjectItem* cit, it->children() )
 				l << cit;
+	qWarning( "end getValues" );
 	return l;
 }
 
