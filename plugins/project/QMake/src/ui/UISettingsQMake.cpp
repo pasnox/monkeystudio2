@@ -138,7 +138,7 @@ QStringList UISettingsQMake::defaultPathFiles()
 	<< "FORMS" << "FORMS3" << "HEADERS" << "SOURCES" << "RESOURCES" << "IMAGES" << "TRANSLATIONS" << "DEF_FILE"
 	<< "DEPENDPATH" << "DESTDIR" << "DESTDIR_TARGET" << "DLLDESTDIR" << "DISTFILES" << "INCLUDEPATH" << "MOC_DIR"
 	<< "OBJECTS_DIR" << "RC_FILE" << "RCC_DIR" << "RES_FILE" << "TARGET" << "UI_DIR" << "VPATH" << "YACCSOURCES"
-	<< "LEXSOURCES" << "SUBDIRS" << "UNKNOW_FILES" << "OPENED_FILES";
+	<< "LEXSOURCES" << "SUBDIRS" << "UNKNOW_FILES" << "OPENED_FILES" << "APP_ICON" << "APP_HELP_FILE";
 }
 
 QStringList UISettingsQMake::readPathFiles()

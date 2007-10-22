@@ -884,6 +884,8 @@ void UIQMakeProjectSettings::on_tbOthersVariablesEdit_clicked()
 	{
 		bool b;
 		const QString s = QInputDialog::getText( this, tr( "Edit Variable..." ), tr( "Enter a new name for this variable :" ), QLineEdit::Normal, it->text(), &b );
+		if ( !b )
+			return;
 		QListWidgetItem* eit = lwOthersVariables->findItems( s, Qt::MatchFixedString | Qt::MatchRecursive ).value( 0 );
 		if ( eit && eit->isHidden() )
 		{
