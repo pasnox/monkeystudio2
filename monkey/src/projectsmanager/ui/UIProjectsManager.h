@@ -31,6 +31,7 @@ class Q_MONKEY_EXPORT UIProjectsManager : public QDockWidget, public Ui::UIProje
 	friend class QSingleton<UIProjectsManager>;
 	
 public:
+	ProjectItem* currentItem() const;
 	ProjectItem* currentProject() const;
 	void setCurrentProject( ProjectItem* );
 	ProjectItemList rootProjects() const;

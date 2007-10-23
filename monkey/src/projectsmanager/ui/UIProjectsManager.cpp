@@ -83,10 +83,13 @@ UIProjectsManager::UIProjectsManager( QWidget* w )
 	connect( tvProjects->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( tvProjects_currentChanged( const QModelIndex&, const QModelIndex& ) ) );
 }
 
+ProjectItem* UIProjectsManager::currentItem() const
+{ return mProjects->itemFromIndex( mProxy->mapToSource( tvProjects->currentIndex() ) ); }
+
 ProjectItem* UIProjectsManager::currentProject() const
 {
 	// get current item
-	ProjectItem* p = mProjects->itemFromIndex( mProxy->mapToSource( tvProjects->currentIndex() ) );
+	ProjectItem* p = currentItem();
 	// return project item
 	return p ? p->project() : 0;
 }
