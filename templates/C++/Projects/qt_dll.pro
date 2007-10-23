@@ -1,5 +1,5 @@
 ###########################################################################################
-##		Created using $editor_version_string$\n"
+##		Created using $editor_version_string$"
 ##
 ##	Author    : $author$
 ##	Project   : $name$
