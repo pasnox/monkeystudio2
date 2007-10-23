@@ -526,110 +526,134 @@ void QMakeItem::addCommand( const pCommand& c, const QString& s )
 	mCommands << c;
 }
 
+QString getFile( const QString& s )
+{
+	return s;
+}
+
 void QMakeItem::installCommands()
 {
-	// cancel if not a project
-	if ( !isProject() )
-		return;
-	// command
-	pCommand c;
 	// builder/compiler
-	if ( builder() )
+	if ( isProject() && builder() )
 	{
+		// temp command
+		pCommand c;
+		
+		// clear commands
 		mCommands.clear();
+		
+		// get builder commnd
 		const pCommand bc = builder()->buildCommand();
-		addCommand( bc, "mBuilder/mBuild" );
-		QString s = evaluate( "CONFIG", this );
-		if ( s.contains( "debug_and_release" ) )
+		
+		// evaluate some var
+		QString temp = evaluate( "TEMPLATE", this );
+		QString target = evaluate( "TARGET", this );
+		QString destdir = evaluate( "DESTDIR", this );
+		if ( destdir.isEmpty() )
+			destdir = evaluate( "DLLDESTDIR", this );
+		
+		// build commands...
+		if ( temp.contains( "app" ) )
 		{
-			// build all
-			c = bc;
-			c.setText( tr( "Build All" ) );
-			c.setArguments( "all" );
-			addCommand( c, "mBuilder/mBuild" );
 			// build debug
 			c = bc;
 			c.setText( tr( "Build Debug" ) );
 			c.setArguments( "debug" );
 			addCommand( c, "mBuilder/mBuild" );
+			
 			// build release
 			c = bc;
 			c.setText( tr( "Build Release" ) );
 			c.setArguments( "release" );
 			addCommand( c, "mBuilder/mBuild" );
+			
+			// build all
+			c = bc;
+			c.setText( tr( "Build All" ) );
+			c.setArguments( "all" );
+			addCommand( c, "mBuilder/mBuild" );
 		}
+		else
+			addCommand( bc, "mBuilder/mBuild" );
+		
 		// clean
 		c = bc;
 		c.setText( tr( "Clean" ) );
 		c.setArguments( "clean" );
 		addCommand( c, "mBuilder/mClean" );
+		
 		// distclean
 		c = bc;
 		c.setText( tr( "Distclean" ) );
 		c.setArguments( "distclean" );
 		addCommand( c, "mBuilder/mClean" );
+		
 		// qmake command
 		c = pCommand();
 		c.setText( tr( "QMake" ) );
-#ifdef Q_OS_MAC
-		c.setCommand( "qmake" );
-#elif defined Q_OS_UNIX
-		c.setCommand( "qmake-qt4" );
-#else 
-		c.setCommand( "qmake" );
-#endif
+		c.setCommand( getQMake() );
 		c.setWorkingDirectory( "$cpp$" );
 		addCommand( c, "mBuilder" );
+		
 		// lupdate command
 		c = pCommand();
 		c.setText( tr( "lupdate" ) );
-#ifdef Q_OS_MAC
-		c.setCommand( "lupdate" );
-#elif defined Q_OS_UNIX
-		c.setCommand( "lupdate-qt4" );
-#else 
-		c.setCommand( "lupdate" );
-#endif
+		c.setCommand( getlupdate() );
 		c.setArguments( "$cp$" );
 		c.setWorkingDirectory( "$cpp$" );
 		addCommand( c, "mBuilder" );
+		
 		// lrelease command
 		c = pCommand();
 		c.setText( tr( "lrelease" ) );
-#ifdef Q_OS_MAC
-		c.setCommand( "lrelease" );
-#elif defined Q_OS_UNIX
-		c.setCommand( "lrelease-qt4" );
-#else 
-		c.setCommand( "lrelease" );
-#endif
+		c.setCommand( getlrelease() );
 		c.setArguments( "$cp$" );
 		c.setWorkingDirectory( "$cpp$" );
 		addCommand( c, "mBuilder" );
-		// rebuild
+		
+		// execute debug
 		c = bc;
-		c.setText( tr( "Rebuild" ) );
-		c.setCommand( QStringList( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build" ) ).join( ";" ) );
+		c.setText( tr( "Execute Debug" ) );
+		c.setCommand( QString( "$cpp$/%1/%2" ).arg( destdir.isEmpty() ? "debug" : destdir ).arg( target.isEmpty() ? name() : target ) );
 		c.setArguments( QString::null );
-		addCommand( c, "mBuilder/mRebuild" );
-		if ( s.contains( "debug_and_release" ) )
+		addCommand( c, "mBuilder/mExecute" );
+		
+		// execute release
+		c = bc;
+		c.setText( tr( "Execute Release" ) );
+		c.setCommand( QString( "$cpp$/%1/%2" ).arg( destdir.isEmpty() ? "release" : destdir ).arg( target.isEmpty() ? name() : target ) );
+		c.setArguments( QString::null );
+		addCommand( c, "mBuilder/mExecute" );
+
+		// rebuild
+		if ( temp.contains( "app" ) )
 		{
-			// rebuild all
-			c = bc;
-			c.setText( tr( "Rebuild All" ) );
-			c.setCommand( QStringList( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build All" ) ).join( ";" ) );
-			c.setArguments( QString::null );
-			addCommand( c, "mBuilder/mRebuild" );
 			// rebuild debug
 			c = bc;
 			c.setText( tr( "Rebuild Debug" ) );
 			c.setCommand( QStringList( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build Debug" ) ).join( ";" ) );
 			c.setArguments( QString::null );
 			addCommand( c, "mBuilder/mRebuild" );
+			
 			// rebuild release
 			c = bc;
 			c.setText( tr( "Rebuild Release" ) );
 			c.setCommand( QStringList( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build Release" ) ).join( ";" ) );
+			c.setArguments( QString::null );
+			addCommand( c, "mBuilder/mRebuild" );
+			
+			// rebuild all
+			c = bc;
+			c.setText( tr( "Rebuild All" ) );
+			c.setCommand( QStringList( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build All" ) ).join( ";" ) );
+			c.setArguments( QString::null );
+			addCommand( c, "mBuilder/mRebuild" );
+		}
+		else
+		{
+			c = bc;
+			c.setText( tr( "Rebuild" ) );
+			c.setCommand( QStringList( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build" ) ).join( ";" ) );
 			c.setArguments( QString::null );
 			addCommand( c, "mBuilder/mRebuild" );
 		}
@@ -747,6 +771,39 @@ ProjectItemList QMakeItem::getValues( ProjectItem* s, const QString& v, const QS
 			foreach ( ProjectItem* cit, it->children() )
 				l << cit;
 	return l;
+}
+
+QString QMakeItem::getQMake() const
+{
+#ifdef Q_OS_MAC
+	return "qmake";
+#elif defined Q_OS_UNIX
+	return "qmake-qt4";
+#else 
+	return "qmake";
+#endif
+}
+
+QString QMakeItem::getlupdate() const
+{
+#ifdef Q_OS_MAC
+	return "lupdate";
+#elif defined Q_OS_UNIX
+	return "lupdate-qt4";
+#else 
+	return "lupdate";
+#endif
+}
+
+QString QMakeItem::getlrelease() const
+{
+#ifdef Q_OS_MAC
+	return "lrelease";
+#elif defined Q_OS_UNIX
+	return "lrelease-qt4";
+#else 
+	return "lrelease";
+#endif
 }
 
 void QMakeItem::redoLayout( ProjectItem* it ) //
