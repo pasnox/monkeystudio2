@@ -165,11 +165,12 @@ void UIToolsEdit::on_pbDown_clicked()
 void UIToolsEdit::on_tbHelp_clicked()
 {
 	QString s = tr( "<b>Tools Editor</b> give you the possibility to use variables<br><br>"
-		"<b>%pn</b> : Current project name<br>"
-		"<b>%pp</b> : Current project path<br>"
-		"<b>%pfp</b> : Current project file path<br>"
-		"<b>%sfp</b> : Selected file path ( In Project Box )<br>"
-		"<b>%sffp</b> : Selected file file path ( In Project Box )" );
+		"<b>$cpp$</b> : Current project path<br>"
+		"<b>$cp$</b> : Current project filepath<br>"
+		"<b>$cfp$</b> : Current tab path<br>"
+		"<b>$cf$</b> : Current tab filepath<br>"
+		"<b>$cip$</b> : Current item path<br>"
+		"<b>$ci$</b> : Current item filepath" );
 	QWhatsThis::showText( tbHelp->mapToGlobal( QPoint( 0, 0 ) ), s );
 }
 
