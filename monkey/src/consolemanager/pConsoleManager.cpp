@@ -69,6 +69,16 @@ void pConsoleManager::removeParser( pCommandParser* p )
 void pConsoleManager::removeParser( const QString& s )
 { removeParser( mParsers.value( s ) ); }
 
+QString pConsoleManager::processInternalVariables( const QString& s )
+{
+	QString v = s;
+	v.replace( "$cpp$", pFileManager::instance()->currentProjectPath() );
+	v.replace( "$cp$", pFileManager::instance()->currentProjectFile() );
+	v.replace( "$cfp$", pFileManager::instance()->currentChildPath() );
+	v.replace( "$cf$", pFileManager::instance()->currentChildFile() );
+	return v;
+}
+
 pCommand pConsoleManager::getCommand( const pCommandList& l, const QString& s )
 {
 	foreach ( pCommand c, l )
@@ -89,24 +99,10 @@ pCommandList pConsoleManager::recursiveCommandList( const pCommandList& l, pComm
 	}
 	else
 	{
-		// check arguments variables
-		if ( c.arguments().contains( "$cpp$" ) )
-			c.setArguments( c.arguments().replace( "$cpp$", pFileManager::instance()->currentProjectPath() ) );
-		if ( c.arguments().contains( "$cp$" ) )
-			c.setArguments( c.arguments().replace( "$cp$", pFileManager::instance()->currentProjectFile() ) );
-		if ( c.arguments().contains( "$cfp$" ) )
-			c.setArguments( c.arguments().replace( "$cfp$", pFileManager::instance()->currentChildPath() ) );
-		if ( c.arguments().contains( "$cf$" ) )
-			c.setArguments( c.arguments().replace( "$cf$", pFileManager::instance()->currentChildFile() ) );
-		// check working directory variables
-		if ( c.workingDirectory().contains( "$cpp$" ) )
-			c.setWorkingDirectory( c.workingDirectory().replace( "$cpp$", pFileManager::instance()->currentProjectPath() ) );
-		if ( c.workingDirectory().contains( "$cp$" ) )
-			c.setWorkingDirectory( c.workingDirectory().replace( "$cp$", pFileManager::instance()->currentProjectFile() ) );
-		if ( c.workingDirectory().contains( "$cfp$" ) )
-			c.setWorkingDirectory( c.workingDirectory().replace( "$cfp$", pFileManager::instance()->currentChildPath() ) );
-		if ( c.workingDirectory().contains( "$cf$" ) )
-			c.setWorkingDirectory( c.workingDirectory().replace( "$cf$", pFileManager::instance()->currentChildFile() ) );
+		// process internal variables
+		c.setCommand( processInternalVariables( c.command() ) );
+		c.setArguments( processInternalVariables( c.arguments() ) );
+		c.setWorkingDirectory( processInternalVariables( c.workingDirectory() ) );
 		cl << c;
 	}
 	// return list
