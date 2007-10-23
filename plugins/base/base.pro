@@ -1,2 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS	= FileBrowser MessageBox AStyle QtAssistant
+SUBDIRS	= FileBrowser MessageBox AStyle QtAssistant Ctags2Api
