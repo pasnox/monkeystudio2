@@ -28,13 +28,22 @@ QString pFileManager::currentProjectPath() const
 { return currentProject() ? currentProject()->canonicalPath() : QString(); }
 
 pAbstractChild* pFileManager::currentChild() const
-{ return pFileManager::instance()->currentChild(); }
+{ return pWorkspace::instance()->currentChild(); }
 
 QString pFileManager::currentChildFile() const
 { return currentChild() ? currentChild()->currentFile() : QString(); }
 
 QString pFileManager::currentChildPath() const
 { return QFileInfo( currentChildFile() ).path(); }
+
+ProjectItem* pFileManager::currentItem() const
+{ return UIProjectsManager::instance()->currentItem(); }
+
+QString pFileManager::currentItemFile() const
+{ return currentItem() ? currentItem()->getFilePath() : QString(); }
+
+QString pFileManager::currentItemPath() const
+{ return QFileInfo( currentItemFile() ).path(); }
 
 pAbstractChild* pFileManager::openFile( const QString& s, const QPoint& p )
 { return pWorkspace::instance()->openFile( s, p ); }

@@ -24,6 +24,9 @@ public:
 	pAbstractChild* currentChild() const;
 	QString currentChildFile() const;
 	QString currentChildPath() const;
+	ProjectItem* currentItem() const;
+	QString currentItemFile() const;
+	QString currentItemPath() const;
 
 public slots:
 	pAbstractChild* openFile( const QString&, const QPoint& = QPoint() );
