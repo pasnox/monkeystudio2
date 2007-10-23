@@ -4,12 +4,15 @@
 #include "UIToolsEdit.h"
 #include "UIDesktopTools.h"
 #include "pMonkeyStudio.h"
+#include "pConsoleManager.h"
 
 #include <QProcess>
 #include <QDesktopServices>
 #include <QUrl>
 #include <QFile>
 #include <QTimer>
+
+using namespace pMonkeyStudio;
 
 QFileIconProvider* pToolsManager::mIconProvider = 0L;
 
@@ -86,19 +89,22 @@ void pToolsManager::editTools_triggered()
 
 void pToolsManager::toolsMenu_triggered( QAction* a )
 {
+	pConsoleManager* cm = pConsoleManager::instance();
+	QString t = cm->processInternalVariables( a->statusTip() );
+	QString w = cm->processInternalVariables( a->data().toString() );
 	bool b = false;
-	if ( a->data().toString().isEmpty() && QFile::exists( a->statusTip() ) )
-		b = QDesktopServices::openUrl( QUrl::fromLocalFile( a->statusTip() ) );
-	else if ( a->data().toString().isEmpty() )
-		b = QProcess::startDetached( a->statusTip() );
+	if ( w.isEmpty() && QFile::exists( t ) )
+		b = QDesktopServices::openUrl( QUrl::fromLocalFile( t ) );
+	else if ( w.isEmpty() )
+		b = QProcess::startDetached( t );
 	else
 	{
 		QProcess* p = new QProcess( this );
 		connect( p, SIGNAL( finished( int ) ), p, SLOT( deleteLater() ) );
-		p->setWorkingDirectory( a->data().toString() );
-		p->start( a->statusTip() );
+		p->setWorkingDirectory( w );
+		p->start( t );
 		b = p->waitForStarted();
 	}
 	if ( !b )
-		pMonkeyStudio::warning( tr( "Tools Error..." ), tr( "Error trying to start tools:\n%1" ).arg( a->statusTip() ) );
+		warning( tr( "Tools Error..." ), tr( "Error trying to start tool :\n%1" ).arg( t ) );
 }
