@@ -411,6 +411,9 @@ void pWorkspace::editExpandAbbreviation_triggered()
 		pAbbreviationsManager::expandAbbreviation( c->currentEditor() );
 }
 
+void pWorkspace::editPrepareAPIs_triggered()
+{ prepareAPIs(); }
+
 // view menu
 void pWorkspace::agStyles_triggered( QAction* a )
 {

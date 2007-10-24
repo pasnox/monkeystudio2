@@ -66,6 +66,7 @@ public slots:
 	void editSearchNext_triggered();
 	void editGoTo_triggered();
 	void editExpandAbbreviation_triggered();
+	void editPrepareAPIs_triggered();
 
 	// view menu
 	void agStyles_triggered( QAction* );

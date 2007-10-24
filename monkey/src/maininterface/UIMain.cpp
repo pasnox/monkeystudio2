@@ -119,6 +119,7 @@ void UIMain::initMenuBar()
 		mb->action( "aGoTo", tr( "&Go To..." ), QIcon( ":/edit/icons/edit/goto.png" ), tr( "Ctrl+G" ), tr( "Go To..." ) )->setEnabled( false );
 		mb->action( "aSeparator5" );
 		mb->action( "aExpandAbbreviation", tr( "Expand Abbreviation" ), QIcon( ":/edit/icons/edit/abbreviation.png" ), tr( "Ctrl+L" ), tr( "Expand Abbreviation" ) )->setEnabled( false );
+		mb->action( "aPrepareAPIs", tr( "Prepare APIs" ), QIcon( ":/edit/icons/edit/prepareapis.png" ), tr( "Ctrl+Alt+P" ), tr( "Prepare the APIs files for auto completion / calltips" ) );
 	mb->endGroup();
 	mb->menu( "mView", tr( "&View" ) );
 	mb->beginGroup( "mView" );
@@ -273,6 +274,7 @@ void UIMain::initConnections()
 	connect( menuBar()->action( "mEdit/aSearchNext" ), SIGNAL( triggered() ), workspace(), SLOT( editSearchNext_triggered() ) );
 	connect( menuBar()->action( "mEdit/aGoTo" ), SIGNAL( triggered() ), workspace(), SLOT( editGoTo_triggered() ) );
 	connect( menuBar()->action( "mEdit/aExpandAbbreviation" ), SIGNAL( triggered() ), workspace(), SLOT( editExpandAbbreviation_triggered() ) );
+	connect( menuBar()->action( "mEdit/aPrepareAPIs" ), SIGNAL( triggered() ), workspace(), SLOT( editPrepareAPIs_triggered() ) );
 	// view connection
 	connect( agStyles, SIGNAL( triggered( QAction* ) ), workspace(), SLOT( agStyles_triggered( QAction* ) ) );
 	connect( menuBar()->action( "mView/aNext" ), SIGNAL( triggered() ), workspace(), SLOT( activateNextDocument() ) );

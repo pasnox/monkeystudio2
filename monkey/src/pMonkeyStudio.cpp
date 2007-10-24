@@ -452,6 +452,35 @@ const QString pMonkeyStudio::scintillaSettingsPath()
 	return "/Scintilla";
 }
 
+void pMonkeyStudio::prepareAPIs()
+{
+	// check lexers & apis
+	if ( mGlobalsLexers.isEmpty() || mGlobalsAPIs.isEmpty() )
+	{
+		// free hashes
+		qDeleteAll( mGlobalsLexers );
+		mGlobalsLexers.clear();
+		qDeleteAll( mGlobalsAPIs );
+		mGlobalsAPIs.clear();
+	}
+	//
+	foreach ( QString ln, availableLanguages() )
+	{
+		QsciLexer* l = lexerForLanguage( ln );
+		QsciAPIs* a = apisForLexer( l );
+		// clear raw api
+		a->clear();
+		// load prepared files
+		foreach ( QString f, pSettings::instance()->value( QString( "SourceAPIs/" ).append( ln ) ).toStringList() )
+		{
+			if ( !a->load( f ) )
+				warning( QObject::tr( "Loaging Api File..." ), QObject::tr( "An error occured when loading api file:\n%1" ).arg( f ) );
+		}
+		// start prepare for apis
+		a->prepare();
+	}
+}
+
 QsciAPIs* pMonkeyStudio::apisForLexer( QsciLexer* l )
 {
 	// cancel if no lexer
@@ -462,9 +491,6 @@ QsciAPIs* pMonkeyStudio::apisForLexer( QsciLexer* l )
 	{
 		// create apis
 		QsciAPIs* a = new QsciAPIs( l );
-		// load prepared files
-		foreach ( QString s, pSettings::instance()->value( QString( "SourceAPIs/" ).append( +l->language() ) ).toStringList() )
-			a->loadPrepared( s );
 		// store global apis
 		mGlobalsAPIs[l->language()] = a;
 	}
@@ -472,7 +498,7 @@ QsciAPIs* pMonkeyStudio::apisForLexer( QsciLexer* l )
 	return mGlobalsAPIs.value( l->language() );
 }
 
-QsciLexer* pMonkeyStudio::lexerForFilename( const QString& s )
+QsciLexer* pMonkeyStudio::lexerForFilename( const QString& s ) // FIXME use QDir::match
 {
 	// get suffixes
 	QHash<QString, QStringList> l = availableSuffixes();
@@ -490,17 +516,9 @@ QsciLexer* pMonkeyStudio::lexerForFilename( const QString& s )
 			foreach ( QString sx, l.value( k ) )
 				if ( ( b = QRegExp( sx, Qt::CaseInsensitive, QRegExp::Wildcard ).exactMatch( f ) ) )
 					break;
-		// if suffixe match
+		// if suffixe match, return lexer
 		if ( b )
-		{
-			// return existing global lexer
-			if ( mGlobalsLexers.keys().contains( k ) )
-				return mGlobalsLexers[k];
-			// create global lexer, store and return it
-			mGlobalsLexers[k] = lexerForLanguage( k );
-			// return lexer
-			return mGlobalsLexers[k];
-		}
+			return lexerForLanguage( k );
 	}
 	// return no lexer if not found
 	return 0;
@@ -508,6 +526,8 @@ QsciLexer* pMonkeyStudio::lexerForFilename( const QString& s )
 
 QsciLexer* pMonkeyStudio::lexerForLanguage( const QString& s )
 {
+	if ( mGlobalsLexers.keys().contains( s ) )
+		return mGlobalsLexers.value( s );
 	// get language
 	const QString ln = s.toLower();
 	// lexer
@@ -560,6 +580,8 @@ QsciLexer* pMonkeyStudio::lexerForLanguage( const QString& s )
 	// init lexer settings
 	if ( l )
 	{
+		// add lexer to global lexers hash
+		mGlobalsLexers[l->language()] = l;
 		// read settings
 		l->readSettings( *pSettings::instance(), qPrintable( scintillaSettingsPath() ) );
 		// set apis
