@@ -303,12 +303,10 @@ bool UICtags2Api::processCtags( const QString& s )
 {
 	// create process
 	QProcess p;
+	p.setProcessChannelMode( QProcess::MergedChannels );
 	p.setWorkingDirectory( s );
 	// start process
-	p.start( QString( "%1 -f - -R -u -n --c-types=pcdgstue ./" ).arg( leCtagsBinary->text() ), QIODevice::ReadOnly );
-	// wait for process start
-	if ( !p.waitForStarted( -1 ) )
-		return false;
+	p.start( QString( "%1 -f - -R -u -n --c-types=pcdgstue ./" ).arg( leCtagsBinary->text() ), QIODevice::ReadOnly | QIODevice::Text );
 	// wait process end
 	if ( !p.waitForFinished( -1 ) )
 		return false;
