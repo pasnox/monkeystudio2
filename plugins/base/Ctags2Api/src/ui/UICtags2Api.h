@@ -17,6 +17,9 @@
 
 #include "ui_UICtags2Api.h"
 
+#include <QHash>
+#include <QByteArray>
+
 struct CtagsEntity
 {
 	CtagsEntity( const QString& s ) { mList = s.split( '\t' ); }
@@ -30,7 +33,7 @@ struct CtagsEntity
 		if ( mList.count() == 3 || s.isEmpty() )
 			return QString();
 		
-		for ( int i = 2; i < mList.count(); i++ )
+		for ( int i = 3; i < mList.count(); i++ )
 		{
 			QString f = mList.at( i );
 			// special case kind
@@ -99,6 +102,11 @@ class UICtags2Api : public QDialog, public Ui::UICtags2Api
 public:
 	UICtags2Api( QWidget* = 0 );
 	~UICtags2Api();
+
+	QList<QByteArray> getFileContent( const QString& );
+
+protected:
+	QHash<QString, QList<QByteArray> > mFileCache;
 
 protected slots:
 	void on_tbCtagsBinary_clicked();

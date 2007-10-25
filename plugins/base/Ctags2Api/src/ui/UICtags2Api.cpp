@@ -17,10 +17,9 @@
 
 #include <QRegExp>
 #include <QFile>
-#include <QByteArray>
 #include <QBuffer>
 #include <QTextCodec>
-#include <QHash>
+#include <QProcess>
 
 using namespace pMonkeyStudio;
 
@@ -32,7 +31,25 @@ UICtags2Api::UICtags2Api( QWidget* w )
 }
 
 UICtags2Api::~UICtags2Api()
-{}
+{
+	// clear cached files
+	mFileCache.clear();
+}
+
+QList<QByteArray> UICtags2Api::getFileContent( const QString& s )
+{
+	if ( mFileCache.contains( s ) )
+		return mFileCache[s];
+	// create caching file
+	QFile f( s );
+	if ( !f.open( QFile::ReadOnly | QFile::Text ) )
+		return QList<QByteArray>();
+	// read lines
+	while ( !f.atEnd() )
+		mFileCache[s] << f.readLine();
+	// return content
+	return mFileCache[s];
+}
 
 void UICtags2Api::on_tbCtagsBinary_clicked()
 {
@@ -60,7 +77,7 @@ void UICtags2Api::on_tbBrowse_clicked()
 		leLabel->setText( s );
 }
 
-int bracesDiff( const QString& s )
+int bracesDiff( const QByteArray& s )
 {
 	int diff = 0;
 	int mode = 0; // 0 <=> default, 1 <=> comment, 2 <=> string
@@ -68,6 +85,16 @@ int bracesDiff( const QString& s )
 	{
 		if ( mode == 0 ) // default
 		{
+			if ( s[i] == '(' )
+				diff++;
+			else if ( s[i] == ')' )
+				diff--;
+			else if ( s[i] == '"' )
+				mode = 2;
+			else if ( i > 0 && s[i -1] == '/' && s[i] == '/' )
+				return diff;
+			else if ( i > 0 && s[i -1] == '/' && s[i] == '*' )
+				mode = 1;
 		}
 		else if ( mode == 1 ) //  comment
 		{
@@ -85,6 +112,8 @@ int bracesDiff( const QString& s )
 
 bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
 {
+	qWarning( a );
+	
 	if ( a.isEmpty() )
 		return false;
 	
@@ -93,19 +122,19 @@ bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
 	if ( !b.open( QBuffer::ReadOnly | QFile::Text ) )
 		return false;
 	
-	// output buffer
-	QList<QByteArray> lb;
-	
 	// set progress bar
 	pbLoading->setVisible( true );
 	pbLoading->setValue( 0 );
 	pbLoading->setMaximum( a.split( '\n' ).count() -1 );
 	
 	// process buffer
-	QString s, c, rt;
+	QList<QByteArray> lb, contents;
+	QByteArray curDef, rt;
+	QString c;
 	bool removePrivate = true;
 	bool winMode = true;
 	QString include = "A";
+	int braces = 0, curLineNo = 0;
 	
 	while ( b.canReadLine() )
 	{
@@ -113,28 +142,44 @@ bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
 		const QString l = QTextCodec::codecForLocale()->toUnicode( b.readLine() );
 		
 		// if no comment line
-		if ( l[0] != '!' )
+		if ( l.split( '\t' ).count() > 3 && l[0] != '!' )
 		{
 			// create ctags entity
 			CtagsEntity e( l );
-			
+			// get line in file
+			c = e.getAddress();
+			curLineNo = c.left( c.length() -2 ).toInt() -1; // -1 because line numbers in tags file start at 1.
+			// cache file
+			contents = getFileContent( e.getFile().prepend( QFileInfo( leLabel->text() ).isDir() ? leLabel->text() : QFileInfo( leLabel->text() ).path() ).append( "/" ) );
 			// checking entity
 			if ( ( !removePrivate || e.getName()[0] != '_' ) && !e.getName().startsWith( "operator " ) )
 			{
+				// get kind value
 				c = e.getKindValue();
+				// kind...
 				if ( c == "p" || c == "f" )
 				{
-					QString curDef = e.getAddress();
-					// remove regexp begin
-					curDef.replace( "/^", "" );
-					// Remove trailing semicolon and quote.
-					curDef.replace( ";\"", "" );
-					// remove regexp end
-					curDef.replace( "$/", "" );
+					curDef = contents[curLineNo];
+					braces = bracesDiff( curDef );
+					while ( braces > 0 ) // search end of prototype.
+					{
+						curLineNo++;
+						braces = braces +bracesDiff( contents[curLineNo] );
+						curDef = curDef +contents[curLineNo];
+					}
 					// Replace whitespace sequences with a single space character.
 					curDef = curDef.simplified();
+					// Qt slot
+					if ( QString( curDef ).contains( QRegExp( "Q_.*_SLOT" ) ) )
+					{
+						// cancel because internal member
+						curDef.clear();
+						//qWarning( QString( curDef ).replace( QRegExp( "^Q_PRIVATE_SLOT\\(.*,(.*)\\)" ), "\\1" ).toAscii() );
+					}
 					// Remove space around the '('.
 					curDef.replace( " (", "(" ).replace( "( ", "(" );
+					// Remove trailing semicolon.
+					curDef.replace( ";", "" );
 					// Remove implementation if present.
 					if ( curDef.contains( "{" ) )
 					{
@@ -150,13 +195,18 @@ bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
 							curDef.remove( curDef.lastIndexOf( "{" ), 1 );
 						}
 					}
-					// remove constructor implementation
-					if ( curDef.contains( ":" ) )
-						curDef.remove( curDef.mid( curDef.indexOf( ":" ) ) );
 					// get return type.
-					rt = curDef.mid( 0, curDef.lastIndexOf( e.getName() ) ).simplified();
+					rt = curDef.mid( 0, curDef.indexOf( e.getName() ) ).simplified();
 					// remove return type.
-					curDef = curDef.mid( curDef.lastIndexOf( e.getName() ) );
+					curDef = curDef.mid( curDef.indexOf( e.getName() ) ).trimmed();
+					// remove final comment
+					if ( curDef.contains( "//" ) )
+					{
+						int cs = curDef.indexOf( "//" );
+						int bs = curDef.indexOf( ")" );
+						if ( cs > bs )
+							curDef = curDef.left( cs ).trimmed();
+					}
 					// Remove virtual indicator.
 					if ( curDef.trimmed().replace( " ", "" ).endsWith( ")=0" ) )
 					{
@@ -173,47 +223,40 @@ bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
 						else if ( curDef.contains( "W(" ) && include == "W" )
 							curDef.replace( "W(", "(" );
 					}
-					s = curDef;
 				}
 				else if ( c == "d" )
 				{
 					if ( !winMode || ( !e.getName().endsWith( "A" ) && !e.getName().endsWith( "W" ) ) )
-						s = e.getName();
+						curDef = e.getName().toAscii();
 				}
 				else
-					s = e.getName();
-				
+					curDef = e.getName().toAscii();
 				// prepend context if available
 				if ( !e.getFieldValue( "class" ).isEmpty() )
-					s.prepend( e.getFieldValue( "class" ).append( "::" ) );
+					curDef.prepend( e.getFieldValue( "class" ).append( "::" ).toAscii() );
 				else if ( !e.getFieldValue( "struct" ).isEmpty() )
-					s.prepend( e.getFieldValue( "struct" ).append( "::" ) );
+					curDef.prepend( e.getFieldValue( "struct" ).append( "::" ).toAscii() );
 				else if ( !e.getFieldValue( "namespace" ).isEmpty() )
-					s.prepend( e.getFieldValue( "namespace" ).append( "::" ) );
+					curDef.prepend( e.getFieldValue( "namespace" ).append( "::" ).toAscii() );
 				else if ( !e.getFieldValue( "enum" ).isEmpty() )
-					s.prepend( e.getFieldValue( "enum" ).append( "::" ) );
-				
+					curDef.prepend( e.getFieldValue( "enum" ).append( "::" ).toAscii() );
 				// check return type
 				if ( !rt.isEmpty() )
 				{
-					if ( !e.getFieldValue( "class" ).isEmpty() )
-						rt.remove( QRegExp( e.getFieldValue( "class" ).append( "(<.*>)?::" ) ) );
-					else if ( !e.getFieldValue( "struct" ).isEmpty() )
-						rt.remove( QRegExp( e.getFieldValue( "struct" ).append( "(<.*>)?::" ) ) );
-					else if ( !e.getFieldValue( "namespace" ).isEmpty() )
-						rt.remove( QRegExp( e.getFieldValue( "namespace" ).append( "(<.*>)?::" ) ) );
-					else if ( !e.getFieldValue( "enum" ).isEmpty() )
-						rt.remove( QRegExp( e.getFieldValue( "enum" ).append( "(<.*>)?::" ) ) );
-					rt = rt.trimmed();
-					if ( !rt.isEmpty() )
-						s.append( " " +rt );
+					// remove Qt export macro
+					rt = QString( rt ).replace( QRegExp( "Q_.*_EXPORT" ), "" ).trimmed().toAscii();
+					curDef.append( " (" +rt +")" );
 				}
 				
 				// append to buffer if needed
-				if ( !s.isEmpty() && !lb.contains( qPrintable( s ) ) )
-					lb << qPrintable( s );
+				if ( !curDef.isEmpty() && !lb.contains( curDef ) )
+					lb << curDef;
 			}
 		}
+		
+		// clear bytearrays
+		curDef.clear();
+		rt.clear();
 		
 		// increase progressbar
 		pbLoading->setValue( pbLoading->value() +1 );
@@ -227,7 +270,7 @@ bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
 	}
 	
 	// get save filename
-	s = getSaveFileName( tr( "Save api file" ), QString::null, tr( "Api Files (*.api)" ), this );
+	QString s = getSaveFileName( tr( "Save api file" ), QString::null, tr( "Api Files (*.api)" ), this );
 	if ( s.isEmpty() )
 	{
 		pbLoading->setVisible( false );
@@ -256,9 +299,22 @@ bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
 	return true;
 }
 
-bool UICtags2Api::processCtags( const QString& )
+bool UICtags2Api::processCtags( const QString& s )
 {
-	return false;
+	// create process
+	QProcess p;
+	p.setWorkingDirectory( s );
+	// start process
+	p.start( QString( "%1 -f - -R -u -n --c-types=pcdgstue ./" ).arg( leCtagsBinary->text() ), QIODevice::ReadOnly );
+	// wait for process start
+	if ( !p.waitForStarted( -1 ) )
+		return false;
+	// wait process end
+	if ( !p.waitForFinished( -1 ) )
+		return false;
+	// process buffer
+	QByteArray a = p.readAll();
+	return processCtagsBuffer( a );
 }
 
 bool UICtags2Api::processApi( const QString& s )
