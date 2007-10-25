@@ -60,6 +60,29 @@ void UICtags2Api::on_tbBrowse_clicked()
 		leLabel->setText( s );
 }
 
+int bracesDiff( const QString& s )
+{
+	int diff = 0;
+	int mode = 0; // 0 <=> default, 1 <=> comment, 2 <=> string
+	for ( int i = 0; i < s.count(); i++ )
+	{
+		if ( mode == 0 ) // default
+		{
+		}
+		else if ( mode == 1 ) //  comment
+		{
+			if ( i > 0 && s[i -1] == '*' && s[i] == '/' )
+				mode = 0;
+		}
+		else if ( mode == 2 ) // string
+		{
+			if ( s[i] == '"' )
+				mode = 0;
+		}
+	}
+	return diff;
+}
+
 bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
 {
 	if ( a.isEmpty() )
@@ -71,113 +94,23 @@ bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
 		return false;
 	
 	// output buffer
-	QByteArray ob;
+	QList<QByteArray> lb;
 	
 	// set progress bar
 	pbLoading->setVisible( true );
 	pbLoading->setValue( 0 );
 	pbLoading->setMaximum( a.split( '\n' ).count() -1 );
 	
-	//
-	/*
-	QStringList contents;
-	QHash<QString, QStringList> mCache;
-	*/
 	// process buffer
-	QString s, c;
+	QString s, c, rt;
 	bool removePrivate = true;
 	bool winMode = true;
 	QString include = "A";
-	int curLineNo;
 	
 	while ( b.canReadLine() )
 	{
 		// get line
 		const QString l = QTextCodec::codecForLocale()->toUnicode( b.readLine() );
-		/*
-		// if no comment line
-		if ( l[0] != '!' )
-		{
-			// create ctags entity
-			CtagsEntity e( l );
-			curLineNo = e.getAddress().toInt() -1; // ctags file start at 1
-			c = e.getFile().prepend( "/home/pasnox/Desktop/qt/src/" ).replace( "\\", "/" );
-			if ( !mCache.keys().contains( c ) )
-			{
-				QFile f( c );
-				if ( !f.open( QFile::ReadOnly | QFile::Text ) )
-				{
-					//warning( tr( "Open File..." ), tr( "Can't open file :\n%1" ).arg( e.getFile().prepend( "/home/pasnox/Desktop/qt/src/" ).replace( "\\", "/" ) ) );
-					continue;
-				}
-				mCache[c] = QTextCodec::codecForLocale()->toUnicode( f.readAll() ).split( '\n' );
-			}
-			contents = mCache[c];
-			
-			if ( ( !removePrivate || e.getName()[0] != '_' ) && !e.getName().startsWith( "operator " ) )
-			{
-				c = e.getKindValue();
-				if ( c == "p" || s == "f" )
-				{
-					
-					try:
-					braces = bracesDiff(contents[curLineNo])
-					curDef = contents[curLineNo]
-					while braces > 0:	# Search for end of prototype.
-						curLineNo = curLineNo + 1
-						braces = braces + bracesDiff(contents[curLineNo])
-						curDef = curDef + contents[curLineNo]
-					# Normalise the appearance of the prototype.
-					curDef = string.strip(curDef)
-					# Replace whitespace sequences with a single space character.
-					curDef = string.join(string.split(curDef))
-					# Remove space around the '('.
-					curDef = string.replace(string.replace(curDef, " (", '('), "( ", '(')
-					# Remove trailing semicolon.
-					curDef = string.replace(curDef, ";", '')
-					# Remove implementation if present.
-					if "{" in curDef and "}" in curDef:
-						startImpl = curDef.find("{")
-						endImpl = curDef.find("}")
-						curDef = curDef[:startImpl] + curDef[endImpl+1:]
-					else:
-						# Remove trailing brace.
-						curDef = curDef.rstrip("{")
-					# Remove return type.
-					curDef = curDef[string.find(curDef, entityName):]
-					# Remove virtual indicator.
-					if curDef.replace(" ", "").endswith(")=0"):
-						curDef = curDef.rstrip("0 ")
-						curDef = curDef.rstrip("= ")
-					# Remove trailing space.
-					curDef = curDef.rstrip()
-					if winMode:
-						if string.find(curDef, "A(") >= 0:
-							if "A" in include:
-								apis.add(string.replace(curDef, "A(", '('))
-						elif string.find(curDef, "W(") >= 0:
-							if "W" in include:
-								apis.add(string.replace(curDef, "W(", '('))
-						else:	# A character set independent function.
-							apis.add(curDef)
-					else:
-						apis.add(curDef)
-				except IndexError:
-					pass
-					
-				}
-				else if ( c == "d" )
-				{
-					QString curDef = contents[curLineNo];
-					if ( !winMode || ( !curDef.endsWith( "A" ) && !curDef.endsWith( "W" ) ) )
-						s = e.getName();
-				}
-				else
-					s = e.getName();
-			}
-		}
-		*/
-		
 		
 		// if no comment line
 		if ( l[0] != '!' )
@@ -191,8 +124,56 @@ bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
 				c = e.getKindValue();
 				if ( c == "p" || c == "f" )
 				{
-					s = e.getAddress();
-					s.replace( "/^", "" ).replace( "$/", "" ).replace( ";\"", "" );
+					QString curDef = e.getAddress();
+					// remove regexp begin
+					curDef.replace( "/^", "" );
+					// Remove trailing semicolon and quote.
+					curDef.replace( ";\"", "" );
+					// remove regexp end
+					curDef.replace( "$/", "" );
+					// Replace whitespace sequences with a single space character.
+					curDef = curDef.simplified();
+					// Remove space around the '('.
+					curDef.replace( " (", "(" ).replace( "( ", "(" );
+					// Remove implementation if present.
+					if ( curDef.contains( "{" ) )
+					{
+						if ( curDef.contains( "}" ) )
+						{
+							int startImpl = curDef.indexOf( "{" );
+							int endImpl = curDef.indexOf( "}" );
+							curDef.remove( startImpl, endImpl -startImpl +1 );
+						}
+						else
+						{
+							// Remove trailing brace.
+							curDef.remove( curDef.lastIndexOf( "{" ), 1 );
+						}
+					}
+					// remove constructor implementation
+					if ( curDef.contains( ":" ) )
+						curDef.remove( curDef.mid( curDef.indexOf( ":" ) ) );
+					// get return type.
+					rt = curDef.mid( 0, curDef.lastIndexOf( e.getName() ) ).simplified();
+					// remove return type.
+					curDef = curDef.mid( curDef.lastIndexOf( e.getName() ) );
+					// Remove virtual indicator.
+					if ( curDef.trimmed().replace( " ", "" ).endsWith( ")=0" ) )
+					{
+						curDef.remove( curDef.lastIndexOf( "0" ), 1 );
+						curDef.remove( curDef.lastIndexOf( "=" ), 1 );
+					}
+					// Remove trailing space.
+					curDef = curDef.trimmed();
+					// winmode
+					if ( winMode )
+					{
+						if ( curDef.contains( "A(" ) && include == "A" )
+							curDef.replace( "A(", "(" );
+						else if ( curDef.contains( "W(" ) && include == "W" )
+							curDef.replace( "W(", "(" );
+					}
+					s = curDef;
 				}
 				else if ( c == "d" )
 				{
@@ -201,22 +182,48 @@ bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
 				}
 				else
 					s = e.getName();
+				
+				// prepend context if available
+				if ( !e.getFieldValue( "class" ).isEmpty() )
+					s.prepend( e.getFieldValue( "class" ).append( "::" ) );
+				else if ( !e.getFieldValue( "struct" ).isEmpty() )
+					s.prepend( e.getFieldValue( "struct" ).append( "::" ) );
+				else if ( !e.getFieldValue( "namespace" ).isEmpty() )
+					s.prepend( e.getFieldValue( "namespace" ).append( "::" ) );
+				else if ( !e.getFieldValue( "enum" ).isEmpty() )
+					s.prepend( e.getFieldValue( "enum" ).append( "::" ) );
+				
+				// check return type
+				if ( !rt.isEmpty() )
+				{
+					if ( !e.getFieldValue( "class" ).isEmpty() )
+						rt.remove( QRegExp( e.getFieldValue( "class" ).append( "(<.*>)?::" ) ) );
+					else if ( !e.getFieldValue( "struct" ).isEmpty() )
+						rt.remove( QRegExp( e.getFieldValue( "struct" ).append( "(<.*>)?::" ) ) );
+					else if ( !e.getFieldValue( "namespace" ).isEmpty() )
+						rt.remove( QRegExp( e.getFieldValue( "namespace" ).append( "(<.*>)?::" ) ) );
+					else if ( !e.getFieldValue( "enum" ).isEmpty() )
+						rt.remove( QRegExp( e.getFieldValue( "enum" ).append( "(<.*>)?::" ) ) );
+					rt = rt.trimmed();
+					if ( !rt.isEmpty() )
+						s.append( " " +rt );
+				}
+				
+				// append to buffer if needed
+				if ( !s.isEmpty() && !lb.contains( qPrintable( s ) ) )
+					lb << qPrintable( s );
 			}
 		}
-		/*
-		// check class / struct
-		if ( !( c = e.getFieldValue( "class" ) ).isEmpty() )
-			s = QString( "%1::%2" ).arg( c ).arg( e.getName() );
-		else if ( !( c = e.getFieldValue( "struct" ) ).isEmpty() )
-			s = QString( "%1::%2" ).arg( c ).arg( e.getName() );
-		*/
-		// append to buffer
-		if ( !s.isEmpty() )
-			ob.append( qPrintable( s +"\n" ) );
 		
 		// increase progressbar
 		pbLoading->setValue( pbLoading->value() +1 );
 		QApplication::processEvents();
+	}
+	
+	if ( lb.isEmpty() )
+	{
+		pbLoading->setVisible( false );
+		return false;
 	}
 	
 	// get save filename
@@ -232,7 +239,9 @@ bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
 	if ( f.open( QFile::WriteOnly ) )
 	{
 		f.resize( 0 );
-		f.write( ob );
+		qSort( lb );
+		foreach ( QByteArray ba, lb )
+			f.write( ba +'\n' );
 	}
 	else
 	{
