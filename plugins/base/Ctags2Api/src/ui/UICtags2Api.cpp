@@ -38,17 +38,18 @@ UICtags2Api::~UICtags2Api()
 
 QList<QByteArray> UICtags2Api::getFileContent( const QString& s )
 {
-	if ( mFileCache.contains( s ) )
-		return mFileCache[s];
+	QString fn = QDir::toNativeSeparators( s );
+	if ( mFileCache.contains( fn ) )
+		return mFileCache[fn];
 	// create caching file
-	QFile f( s );
+	QFile f( fn );
 	if ( !f.open( QFile::ReadOnly | QFile::Text ) )
 		return QList<QByteArray>();
 	// read lines
 	while ( !f.atEnd() )
-		mFileCache[s] << f.readLine();
+		mFileCache[fn] << f.readLine();
 	// return content
-	return mFileCache[s];
+	return mFileCache[fn];
 }
 
 void UICtags2Api::on_tbCtagsBinary_clicked()
@@ -112,8 +113,6 @@ int bracesDiff( const QByteArray& s )
 
 bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
 {
-	qWarning( a );
-	
 	if ( a.isEmpty() )
 		return false;
 	
@@ -140,7 +139,6 @@ bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
 	{
 		// get line
 		const QString l = QTextCodec::codecForLocale()->toUnicode( b.readLine() );
-		
 		// if no comment line
 		if ( l.split( '\t' ).count() > 3 && l[0] != '!' )
 		{
@@ -150,9 +148,9 @@ bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
 			c = e.getAddress();
 			curLineNo = c.left( c.length() -2 ).toInt() -1; // -1 because line numbers in tags file start at 1.
 			// cache file
-			contents = getFileContent( e.getFile().prepend( QFileInfo( leLabel->text() ).isDir() ? leLabel->text() : QFileInfo( leLabel->text() ).path() ).append( "/" ) );
+			contents = getFileContent( e.getFile().prepend( "/" ).prepend( QFileInfo( leLabel->text() ).isDir() ? leLabel->text() : QFileInfo( leLabel->text() ).absolutePath() ) );
 			// checking entity
-			if ( ( !removePrivate || e.getName()[0] != '_' ) && !e.getName().startsWith( "operator " ) )
+			if ( !contents.isEmpty() && ( !removePrivate || e.getName()[0] != '_' ) && !e.getName().startsWith( "operator " ) )
 			{
 				// get kind value
 				c = e.getKindValue();
@@ -178,6 +176,8 @@ bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
 					}
 					// Remove space around the '('.
 					curDef.replace( " (", "(" ).replace( "( ", "(" );
+					// Remove space around the ')'.
+					curDef.replace( " )", ")" ).replace( ") ", ")" );
 					// Remove trailing semicolon.
 					curDef.replace( ";", "" );
 					// Remove implementation if present.
@@ -303,16 +303,14 @@ bool UICtags2Api::processCtags( const QString& s )
 {
 	// create process
 	QProcess p;
-	p.setProcessChannelMode( QProcess::MergedChannels );
 	p.setWorkingDirectory( s );
 	// start process
-	p.start( QString( "%1 -f - -R -u -n --c-types=pcdgstue ./" ).arg( leCtagsBinary->text() ), QIODevice::ReadOnly | QIODevice::Text );
+	p.start( QString( "%1 -f \"%2\" -R -u -n --c-types=pcdgstue ." ).arg( leCtagsBinary->text() ).arg( QDir::tempPath().append( "/temp.tags" ) ), QIODevice::ReadOnly | QIODevice::Text );
 	// wait process end
 	if ( !p.waitForFinished( -1 ) )
 		return false;
-	// process buffer
-	QByteArray a = p.readAll();
-	return processCtagsBuffer( a );
+	// process temp file
+	return processCtags2Api( QDir::tempPath().append( "/temp.tags" ) );
 }
 
 bool UICtags2Api::processApi( const QString& s )
