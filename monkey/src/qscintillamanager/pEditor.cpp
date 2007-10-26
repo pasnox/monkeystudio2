@@ -4,6 +4,7 @@
 
 #include "qsciprinter.h"
 
+#include <QKeyEvent>
 #include <QApplication>
 #include <QClipboard>
 #include <QFileInfo>
@@ -39,7 +40,14 @@ pEditor::pEditor( QWidget* p )
 }
 
 pEditor::~pEditor()
+{}
+
+void pEditor::keyPressEvent( QKeyEvent* e )
 {
+	if ( !e->isAutoRepeat() && e->modifiers() & Qt::ControlModifier && e->key() == Qt::Key_Space )
+	{
+		switch (  )
+	}
 }
 
 bool pEditor::lineNumbersMarginEnabled() const

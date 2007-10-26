@@ -10,6 +10,8 @@ class Q_MONKEY_EXPORT pEditor : public QsciScintilla
 	Q_OBJECT
 
 protected:
+	void keyPressEvent( QKeyEvent* );
+
 	bool mCopyAvailable;
 	static bool mPasteAvailableInit;
 	static bool mPasteAvailable;
