@@ -1,7 +1,7 @@
 # Monkey Studio 2.0.0 QScintilla Project file
 
 # define where is the official qscintilla folder
-QSCINTILLAVERSION	= QScintilla-gpl-2-snapshot-20071014
+QSCINTILLAVERSION	= QScintilla-gpl-2-snapshot-20071024
 
 # get relative path
 QPRO_PWD   = $$PWD
