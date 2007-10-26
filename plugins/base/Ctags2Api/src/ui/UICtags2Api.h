@@ -110,10 +110,11 @@ protected:
 
 protected slots:
 	void on_tbCtagsBinary_clicked();
+	void on_cbGenerateFrom_currentIndexChanged( int );
 	void on_tbBrowse_clicked();
+	void on_tbSrcPathBrowse_clicked();
 	bool processCtagsBuffer( const QByteArray& );
 	bool processCtags( const QString& );
-	bool processApi( const QString& );
 	bool processCtags2Api( const QString& );
 	void accept();
 

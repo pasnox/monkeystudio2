@@ -11,7 +11,6 @@ class Ctags2Api : public BasePlugin
 public:
 	Ctags2Api();
 	~Ctags2Api();
-	virtual QWidget* settingsWidget();
 	virtual bool setEnabled( bool );
 
 protected slots:

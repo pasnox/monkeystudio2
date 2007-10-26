@@ -15,6 +15,7 @@
 #include "UICtags2Api.h"
 #include "pMonkeyStudio.h"
 
+#include <QPushButton>
 #include <QRegExp>
 #include <QFile>
 #include <QBuffer>
@@ -22,61 +23,6 @@
 #include <QProcess>
 
 using namespace pMonkeyStudio;
-
-UICtags2Api::UICtags2Api( QWidget* w )
-	: QDialog( w )
-{
-	setupUi( this );
-	pbLoading->setVisible( false );
-}
-
-UICtags2Api::~UICtags2Api()
-{
-	// clear cached files
-	mFileCache.clear();
-}
-
-QList<QByteArray> UICtags2Api::getFileContent( const QString& s )
-{
-	QString fn = QDir::toNativeSeparators( s );
-	if ( mFileCache.contains( fn ) )
-		return mFileCache[fn];
-	// create caching file
-	QFile f( fn );
-	if ( !f.open( QFile::ReadOnly | QFile::Text ) )
-		return QList<QByteArray>();
-	// read lines
-	while ( !f.atEnd() )
-		mFileCache[fn] << f.readLine();
-	// return content
-	return mFileCache[fn];
-}
-
-void UICtags2Api::on_tbCtagsBinary_clicked()
-{
-	QString s = getOpenFileName( tr( "Select the ctags binary file" ), leCtagsBinary->text(), QString::null, this );
-	if ( !s.isNull() )
-		leCtagsBinary->setText( s );
-}
-
-void UICtags2Api::on_tbBrowse_clicked()
-{
-	QString c, s;
-	switch( cbGenerateFrom->currentIndex() )
-	{
-		case 0: // include
-			s = getExistingDirectory( tr( "Select the include path to scan" ), leLabel->text(), this );
-			break;
-		case 1: // api
-			s = getOpenFileName( tr( "Select the api file to prepare" ), leLabel->text(), tr( "Api Files (*.api)" ), this );
-			break;
-		case 2: // ctags
-			s = getOpenFileName( tr( "Select the tags file to convert" ), leLabel->text(), tr( "Ctags File (tags *.tags)" ), this );
-			break;
-	}
-	if ( !s.isNull() )
-		leLabel->setText( s );
-}
 
 int bracesDiff( const QByteArray& s )
 {
@@ -111,11 +57,81 @@ int bracesDiff( const QByteArray& s )
 	return diff;
 }
 
+UICtags2Api::UICtags2Api( QWidget* w )
+	: QDialog( w )
+{
+	setupUi( this );
+	cbGenerateFrom->setCurrentIndex( 0 );
+	pbLoading->setVisible( false );
+	dbbButtons->button( QDialogButtonBox::Ok )->setIcon( QPixmap( ":/icons/icons/ok.png" ) );
+	dbbButtons->button( QDialogButtonBox::Close )->setIcon( QPixmap( ":/icons/icons/cancel.png" ) );
+}
+
+UICtags2Api::~UICtags2Api()
+{
+	// clear cached files
+	mFileCache.clear();
+}
+
+QList<QByteArray> UICtags2Api::getFileContent( const QString& s )
+{
+	QString fn = QDir::toNativeSeparators( s );
+	if ( mFileCache.contains( fn ) )
+		return mFileCache[fn];
+	// create caching file
+	QFile f( fn );
+	if ( !f.open( QFile::ReadOnly | QFile::Text ) )
+		return QList<QByteArray>();
+	// read lines
+	while ( !f.atEnd() )
+		mFileCache[fn] << f.readLine();
+	// return content
+	return mFileCache[fn];
+}
+
+void UICtags2Api::on_tbCtagsBinary_clicked()
+{
+	QString s = getOpenFileName( tr( "Select the ctags binary file" ), leCtagsBinary->text(), QString::null, this );
+	if ( !s.isNull() )
+		leCtagsBinary->setText( s );
+}
+
+void UICtags2Api::on_cbGenerateFrom_currentIndexChanged( int i )
+{
+	leSrcPath->setEnabled( i == 1 );
+	tbSrcPathBrowse->setEnabled( i == 1 );
+}
+
+void UICtags2Api::on_tbBrowse_clicked()
+{
+	QString c, s;
+	switch( cbGenerateFrom->currentIndex() )
+	{
+		case 0: // include
+			s = getExistingDirectory( tr( "Select the include path to scan" ), leLabel->text(), this );
+			break;
+		case 1: // ctags
+			s = getOpenFileName( tr( "Select the tags file to convert" ), leLabel->text(), tr( "Ctags File (tags *.tags)" ), this );
+			break;
+	}
+	if ( !s.isNull() )
+		leLabel->setText( s );
+}
+
+void UICtags2Api::on_tbSrcPathBrowse_clicked()
+{
+	QString s = getExistingDirectory( tr( "Select the directory from witch you generated this tags file" ), leSrcPath->text(), this );
+	if ( !s.isNull() )
+		leSrcPath->setText( s );
+}
+
 bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
 {
+	// cancel if no buffer
 	if ( a.isEmpty() )
 		return false;
 	
+	// create io buffer
 	QBuffer b;
 	b.setData( a );
 	if ( !b.open( QBuffer::ReadOnly | QFile::Text ) )
@@ -130,11 +146,9 @@ bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
 	QList<QByteArray> lb, contents;
 	QByteArray curDef, rt;
 	QString c;
-	bool removePrivate = true;
-	bool winMode = true;
-	QString include = "A";
 	int braces = 0, curLineNo = 0;
 	
+	// check each line
 	while ( b.canReadLine() )
 	{
 		// get line
@@ -147,10 +161,14 @@ bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
 			// get line in file
 			c = e.getAddress();
 			curLineNo = c.left( c.length() -2 ).toInt() -1; // -1 because line numbers in tags file start at 1.
+			// get correct path
+			QString d = QFileInfo( leLabel->text() ).isDir() ? leLabel->text() : QFileInfo( leLabel->text() ).absolutePath();
+			if ( cbGenerateFrom->currentIndex() == 1 && !leSrcPath->text().isEmpty() )
+				d = leSrcPath->text();
 			// cache file
-			contents = getFileContent( e.getFile().prepend( "/" ).prepend( QFileInfo( leLabel->text() ).isDir() ? leLabel->text() : QFileInfo( leLabel->text() ).absolutePath() ) );
+			contents = getFileContent( e.getFile().prepend( "/" ).prepend( d ) );
 			// checking entity
-			if ( !contents.isEmpty() && ( !removePrivate || e.getName()[0] != '_' ) && !e.getName().startsWith( "operator " ) )
+			if ( !contents.isEmpty() && ( !cbRemovePrivate->isChecked() || e.getName()[0] != '_' ) && !e.getName().startsWith( "operator " ) )
 			{
 				// get kind value
 				c = e.getKindValue();
@@ -168,7 +186,7 @@ bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
 					// Replace whitespace sequences with a single space character.
 					curDef = curDef.simplified();
 					// Qt slot
-					if ( QString( curDef ).contains( QRegExp( "Q_.*_SLOT" ) ) )
+					if ( QString( curDef ).contains( QRegExp( "Q_.*_SLOT" ) ) || QString( curDef ).contains( QRegExp( "QT_.*" ) ) )
 					{
 						// cancel because internal member
 						curDef.clear();
@@ -177,7 +195,7 @@ bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
 					// Remove space around the '('.
 					curDef.replace( " (", "(" ).replace( "( ", "(" );
 					// Remove space around the ')'.
-					curDef.replace( " )", ")" ).replace( ") ", ")" );
+					curDef.replace( " )", ")" );
 					// Remove trailing semicolon.
 					curDef.replace( ";", "" );
 					// Remove implementation if present.
@@ -216,17 +234,17 @@ bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
 					// Remove trailing space.
 					curDef = curDef.trimmed();
 					// winmode
-					if ( winMode )
+					if ( cbWindowsMode->isChecked() )
 					{
-						if ( curDef.contains( "A(" ) && include == "A" )
+						if ( curDef.contains( "A(" ) && cbLetter->currentText() == "A" )
 							curDef.replace( "A(", "(" );
-						else if ( curDef.contains( "W(" ) && include == "W" )
+						else if ( curDef.contains( "W(" ) && cbLetter->currentText() == "W" )
 							curDef.replace( "W(", "(" );
 					}
 				}
 				else if ( c == "d" )
 				{
-					if ( !winMode || ( !e.getName().endsWith( "A" ) && !e.getName().endsWith( "W" ) ) )
+					if ( !cbWindowsMode->isChecked() || ( !e.getName().endsWith( "A" ) && !e.getName().endsWith( "W" ) ) )
 						curDef = e.getName().toAscii();
 				}
 				else
@@ -244,7 +262,8 @@ bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
 				if ( !rt.isEmpty() )
 				{
 					// remove Qt export macro
-					rt = QString( rt ).replace( QRegExp( "Q_.*_EXPORT" ), "" ).trimmed().toAscii();
+					rt = QString( rt ).replace( QRegExp( "Q_.*_EXPORT" ), "" ).replace( QRegExp( "QT_.*" ), "" ).trimmed().toAscii();
+					// append return type
 					curDef.append( " (" +rt +")" );
 				}
 				
@@ -263,6 +282,7 @@ bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
 		QApplication::processEvents();
 	}
 	
+	// return if buffer is empty
 	if ( lb.isEmpty() )
 	{
 		pbLoading->setVisible( false );
@@ -281,8 +301,11 @@ bool UICtags2Api::processCtagsBuffer( const QByteArray& a )
 	QFile f( s );
 	if ( f.open( QFile::WriteOnly ) )
 	{
+		// erase file
 		f.resize( 0 );
+		// sort list
 		qSort( lb );
+		// save each line of buffer
 		foreach ( QByteArray ba, lb )
 			f.write( ba +'\n' );
 	}
@@ -313,13 +336,6 @@ bool UICtags2Api::processCtags( const QString& s )
 	return processCtags2Api( QDir::tempPath().append( "/temp.tags" ) );
 }
 
-bool UICtags2Api::processApi( const QString& s )
-{
-	if ( !QFile::exists( s ) )
-		return false;
-	return false;
-}
-
 bool UICtags2Api::processCtags2Api( const QString& s )
 {
 	QFile f( s );
@@ -330,21 +346,25 @@ bool UICtags2Api::processCtags2Api( const QString& s )
 
 void UICtags2Api::accept()
 {
+	// deactivated window
 	setEnabled( false );
+	
+	// process convertion
 	bool b = false;
 	switch( cbGenerateFrom->currentIndex() )
 	{
-		case 0: // include
+		case 0: // src folder
 			b = processCtags( leLabel->text() );
 			break;
-		case 1: // api
-			b = processApi( leLabel->text() );
-			break;
-		case 2: // ctags
+		case 1: // ctags file
 			b = processCtags2Api( leLabel->text() );
 			break;
 	}
+	
+	// reactivate window
 	setEnabled( true );
+	
+	// if ok close dialog
 	if ( b )
 		QDialog::accept();
 }

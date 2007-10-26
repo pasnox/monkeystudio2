@@ -20,9 +20,6 @@ Ctags2Api::~Ctags2Api()
 		setEnabled( false );
 }
 
-QWidget* Ctags2Api::settingsWidget()
-{ return BasePlugin::settingsWidget(); }
-
 bool Ctags2Api::setEnabled( bool b )
 {
 	if ( b && !isEnabled() )
@@ -47,8 +44,21 @@ bool Ctags2Api::setEnabled( bool b )
 
 void Ctags2Api::UICtags2Api_show()
 {
+	// create dialog
 	UICtags2Api w;
-	w.exec();
+	// restore settings
+	w.leCtagsBinary->setText( settingsValue( "CtagsBinary", w.leCtagsBinary->text() ).toString() );
+	w.cbRemovePrivate->setChecked( settingsValue( "RemovePrivate", w.cbRemovePrivate->isChecked() ).toBool() );
+	w.cbWindowsMode->setChecked( settingsValue( "WindowsMode", w.cbWindowsMode->isChecked() ).toBool() );
+	w.cbLetter->setCurrentIndex( w.cbLetter->findText( settingsValue( "Letter", w.cbLetter->currentText() ).toString() ) );
+	if ( w.exec() )
+	{
+		// save ctags file and options
+		setSettingsValue( "CtagsBinary", w.leCtagsBinary->text() );
+		setSettingsValue( "RemovePrivate", w.cbRemovePrivate->isChecked() );
+		setSettingsValue( "WindowsMode", w.cbWindowsMode->isChecked() );
+		setSettingsValue( "Letter", w.cbLetter->currentText() );
+	}
 }
 
 Q_EXPORT_PLUGIN2( BaseCtags2Api, Ctags2Api )
