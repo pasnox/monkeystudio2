@@ -51,14 +51,12 @@ void Ctags2Api::UICtags2Api_show()
 	w.cbRemovePrivate->setChecked( settingsValue( "RemovePrivate", w.cbRemovePrivate->isChecked() ).toBool() );
 	w.cbWindowsMode->setChecked( settingsValue( "WindowsMode", w.cbWindowsMode->isChecked() ).toBool() );
 	w.cbLetter->setCurrentIndex( w.cbLetter->findText( settingsValue( "Letter", w.cbLetter->currentText() ).toString() ) );
-	if ( w.exec() )
-	{
-		// save ctags file and options
-		setSettingsValue( "CtagsBinary", w.leCtagsBinary->text() );
-		setSettingsValue( "RemovePrivate", w.cbRemovePrivate->isChecked() );
-		setSettingsValue( "WindowsMode", w.cbWindowsMode->isChecked() );
-		setSettingsValue( "Letter", w.cbLetter->currentText() );
-	}
+	w.exec();
+	// save ctags file and options
+	setSettingsValue( "CtagsBinary", w.leCtagsBinary->text() );
+	setSettingsValue( "RemovePrivate", w.cbRemovePrivate->isChecked() );
+	setSettingsValue( "WindowsMode", w.cbWindowsMode->isChecked() );
+	setSettingsValue( "Letter", w.cbLetter->currentText() );
 }
 
 Q_EXPORT_PLUGIN2( BaseCtags2Api, Ctags2Api )
