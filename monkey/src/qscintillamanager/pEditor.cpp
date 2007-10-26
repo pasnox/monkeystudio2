@@ -46,8 +46,21 @@ void pEditor::keyPressEvent( QKeyEvent* e )
 {
 	if ( !e->isAutoRepeat() && e->modifiers() & Qt::ControlModifier && e->key() == Qt::Key_Space )
 	{
-		switch (  )
+		switch ( autoCompletionSource() )
+		{
+			case QsciScintilla::AcsAll:
+				autoCompleteFromAll();
+				break;
+			case QsciScintilla::AcsAPIs:
+				autoCompleteFromAPIs();
+				break;
+			case QsciScintilla::AcsDocument:
+				autoCompleteFromDocument();
+				break;
+		}
+		return;
 	}
+	QsciScintilla::keyPressEvent( e );
 }
 
 bool pEditor::lineNumbersMarginEnabled() const
