@@ -5,21 +5,16 @@ BUILD_PATH	 = ../build
 # include qscintilla framework
 include( ../qscintilla/qscintilla.pro )
 
-unix:OBJECTS_DIR	= $${BUILD_PATH}/.o/unix
-win32:OBJECTS_DIR	= $${BUILD_PATH}/.o/win32
-mac:OBJECTS_DIR	= $${BUILD_PATH}/.o/mac
-UI_DIR	= $${BUILD_PATH}/.ui
-MOC_DIR	= $${BUILD_PATH}/.moc
-RCC_DIR	= $${BUILD_PATH}/.rcc
+TEMPLATE = app
+LANGUAGE	= Qt4/C++
+TARGET	= monkey
+DESTDIR	= ../bin
+CONFIG	*= qt warn_on app_bundle thread x11 windows debug_and_release
+QT	*= gui core
 
 unix:ICON	= src/resources/icons/application/monkey2.png
 mac:ICON	= src/resources/icons/application/monkey2.icns
 win32:ICON	= src/resources/icons/application/monkey2.ico
-
-TEMPLATE	= app
-LANGUAGE	= C++
-DESTDIR	= ../bin
-TARGET	= monkey
 
 COPYRIGHTS	= "(c) 2005 - 2007 Azevedo Filipe"
 DOMAIN	= "www.monkeystudio.org"
@@ -29,15 +24,33 @@ PROGRAM_NAME	= "Monkey Studio"
 win32:RC_FILE	*= monkey.rc
 RESOURCES	*= src/resources/resources.qrc
 
-CONFIG	*= qt warn_on app_bundle thread x11 windows
-QT	*= gui core
-
 DEFINES	*= MONKEY_CORE_BUILD "PROGRAM_NAME=\"\\\"$${PROGRAM_NAME}\\\"\"" "PROGRAM_VERSION=\"\\\"$${VERSION}\\\"\"" "PROGRAM_DOMAIN=\"\\\"$${DOMAIN}\\\"\"" "PROGRAM_COPYRIGHTS=\"\\\"$${COPYRIGHTS}\\\"\""
 
 LIBS	*= -L$${BUILD_PATH}
 unix:*-g++:LIBS	*= -rdynamic
 win32-msvc*:LIBS	*= /IMPLIB:$${BUILD_PATH}/monkey.lib -lshell32
 win32-g++:LIBS	*= -Wl,--out-implib,$${BUILD_PATH}/libmonkey.a
+
+CONFIG(debug, debug|release) {
+	#Debug
+	CONFIG	+= console
+	unix:TARGET	= $$join(TARGET,,,_debug)
+	else:TARGET	= $$join(TARGET,,,d)
+	unix:OBJECTS_DIR	= $${BUILD_PATH}/debug/.obj/unix
+	win32:OBJECTS_DIR	= $${BUILD_PATH}/debug/.obj/win32
+	mac:OBJECTS_DIR	= $${BUILD_PATH}/debug/.obj/mac
+	UI_DIR	= $${BUILD_PATH}/debug/.ui
+	MOC_DIR	= $${BUILD_PATH}/debug/.moc
+	RCC_DIR	= $${BUILD_PATH}/debug/.rcc
+} else {
+	#Release
+	unix:OBJECTS_DIR	= $${BUILD_PATH}/release/.obj/unix
+	win32:OBJECTS_DIR	= $${BUILD_PATH}/release/.obj/win32
+	mac:OBJECTS_DIR	= $${BUILD_PATH}/release/.obj/mac
+	UI_DIR	= $${BUILD_PATH}/release/.ui
+	MOC_DIR	= $${BUILD_PATH}/release/.moc
+	RCC_DIR	= $${BUILD_PATH}/release/.rcc
+}
 
 # include fresh framework
 include( ../fresh/fresh.pro )

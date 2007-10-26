@@ -13,16 +13,10 @@ include( ../../../monkey/monkey.pri )
 DEFINES	-= MONKEY_CORE_BUILD
 
 BUILD_PATH	= ../../../build
-unix:OBJECTS_DIR	= $${BUILD_PATH}/.o/unix/plugins
-win32:OBJECTS_DIR	= $${BUILD_PATH}/.o/win32/plugins
-mac:OBJECTS_DIR	= $${BUILD_PATH}/.o/mac/plugins
-UI_DIR	= $${BUILD_PATH}/.ui
-MOC_DIR	= $${BUILD_PATH}/.moc/plugins
-RCC_DIR	= $${BUILD_PATH}/.rcc/plugins
 
 TEMPLATE 	= lib
-LANGUAGE	= C++
-CONFIG	*= warn_on lib_bundle thread x11 dll plugin
+LANGUAGE	= Qt4/C++
+CONFIG	*= warn_on lib_bundle thread x11 dll plugin debug_and_release
 
 MONKEY_PLUGINS_DIR	= ../../../bin/plugins
 #DEFINES	= __COVERAGESCANNER__
@@ -35,4 +29,25 @@ contains( DEFINES, __COVERAGESCANNER__ ) {
 	QMAKE_CXX = cs$$QMAKE_CXX
 	QMAKE_LINK = cs$$QMAKE_LINK
 	QMAKE_CC = cs$$QMAKE_CC
+}
+
+CONFIG(debug, debug|release) {
+	#Debug
+	CONFIG	+= console
+	unix:TARGET	= $$join(TARGET,,,_debug)
+	else:TARGET	= $$join(TARGET,,,d)
+	unix:OBJECTS_DIR	= $${BUILD_PATH}/debug/.obj/unix
+	win32:OBJECTS_DIR	= $${BUILD_PATH}/debug/.obj/win32
+	mac:OBJECTS_DIR	= $${BUILD_PATH}/debug/.obj/mac
+	UI_DIR	= $${BUILD_PATH}/debug/.ui
+	MOC_DIR	= $${BUILD_PATH}/debug/.moc
+	RCC_DIR	= $${BUILD_PATH}/debug/.rcc
+} else {
+	#Release
+	unix:OBJECTS_DIR	= $${BUILD_PATH}/release/.obj/unix
+	win32:OBJECTS_DIR	= $${BUILD_PATH}/release/.obj/win32
+	mac:OBJECTS_DIR	= $${BUILD_PATH}/release/.obj/mac
+	UI_DIR	= $${BUILD_PATH}/release/.ui
+	MOC_DIR	= $${BUILD_PATH}/release/.moc
+	RCC_DIR	= $${BUILD_PATH}/release/.rcc
 }
