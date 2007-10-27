@@ -9,17 +9,11 @@ class Q_MONKEY_EXPORT pEditor : public QsciScintilla
 {
 	Q_OBJECT
 
-protected:
-	void keyPressEvent( QKeyEvent* );
-
-	bool mCopyAvailable;
-	static bool mPasteAvailableInit;
-	static bool mPasteAvailable;
-	QPoint mCursorPosition;
-
 public:
 	pEditor( QWidget* = 0 );
 	virtual ~pEditor();
+
+	enum RegisterImageType { riClass = 0, riEnum, riFunction, riMember, riNamespace, riStruct, riTypedef, riVariable };
 
 	bool lineNumbersMarginEnabled() const;
 	int lineNumbersMarginWidth() const;
@@ -27,6 +21,14 @@ public:
 	bool copyAvailable();
 	bool canPaste();
 	QPoint cursorPosition() const;
+
+protected:
+	void keyPressEvent( QKeyEvent* );
+
+	bool mCopyAvailable;
+	static bool mPasteAvailableInit;
+	static bool mPasteAvailable;
+	QPoint mCursorPosition;
 
 protected slots:
 	void linesChanged();

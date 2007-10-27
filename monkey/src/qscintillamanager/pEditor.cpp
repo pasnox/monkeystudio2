@@ -21,6 +21,16 @@ bool pEditor::mPasteAvailable = false;
 pEditor::pEditor( QWidget* p )
 	: QsciScintilla( p )
 {
+	// register image for auto completion
+	registerImage( riClass, QPixmap( ":/editor/icons/editor/class.png" ) );
+	registerImage( riEnum, QPixmap( ":/editor/icons/editor/enum.png" ) );
+	registerImage( riFunction, QPixmap( ":/editor/icons/editor/function.png" ) );
+	registerImage( riMember, QPixmap( ":/editor/icons/editor/member.png" ) );
+	registerImage( riNamespace, QPixmap( ":/editor/icons/editor/namespace.png" ) );
+	registerImage( riStruct, QPixmap( ":/editor/icons/editor/struct.png" ) );
+	registerImage( riTypedef, QPixmap( ":/editor/icons/editor/typedef.png" ) );
+	registerImage( riVariable, QPixmap( ":/editor/icons/editor/variable.png" ) );
+	
 	// deal with utf8
 	setUtf8( true );
 

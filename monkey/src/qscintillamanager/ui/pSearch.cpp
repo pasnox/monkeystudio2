@@ -21,9 +21,7 @@ pSearch::pSearch( QsciScintilla* p )
 bool pSearch::checkEditor()
 {
 	// enable/disable dock accoding to editor
-	QList<QWidget*> l = wCentral->findChildren<QWidget*>();
-	foreach ( QWidget* w, l )
-		w->setEnabled( mEditor );
+	wCentral->setEnabled( mEditor );
 	return mEditor;
 }
 
@@ -125,15 +123,11 @@ bool pSearch::on_tbReplace_clicked()
 	if ( !checkEditor() )
 		return false;
 
-	// cancel if no replace text
-	if ( leReplace->text().isEmpty() )
-		return false;
-
 	// if no selection and not found cancel
 	if ( mEditor->selectedText().isEmpty()	&& !on_tbNext_clicked() )
 		return false;
 
-	//
+	// get selected text
 	QString mSelection = mEditor->selectedText();
 	QString mSearch = leSearch->text();
 	bool b = false;
@@ -179,11 +173,17 @@ void pSearch::on_tbReplaceAll_clicked()
 	// cancel if no editor
 	if ( !checkEditor() )
 		return;
+	
+	// begin undo global action
+	mEditor->beginUndoAction();
 
 	// while o, repalce
 	int i = 0;
 	while ( on_tbReplace_clicked() )
 		i++;
+	
+	// end undo global action
+	mEditor->endUndoAction();
 
 	// show occurence number replaced
 	lInformations->setText( i ? tr( "%1 occurences replaced" ).arg( i ) : tr( "Nothing To Repalce" ) );
