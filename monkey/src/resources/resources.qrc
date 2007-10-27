@@ -35,6 +35,15 @@
         <file>icons/edit/shortcuts.png</file>
         <file>icons/edit/undo.png</file>
     </qresource>
+    <qresource prefix="/editor" >
+        <file>icons/editor/class.png</file>
+        <file>icons/editor/enum.png</file>
+        <file>icons/editor/function.png</file>
+        <file>icons/editor/member.png</file>
+        <file>icons/editor/namespace.png</file>
+        <file>icons/editor/struct.png</file>
+        <file>icons/editor/typedef.png</file>
+    </qresource>
     <qresource prefix="/file" >
         <file>icons/file/backup.png</file>
         <file>icons/file/clear.png</file>
