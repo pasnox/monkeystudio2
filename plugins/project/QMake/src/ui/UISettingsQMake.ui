@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>561</width>
-    <height>279</height>
+    <width>536</width>
+    <height>335</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -33,9 +33,9 @@
      <property name="currentIndex" >
       <number>0</number>
      </property>
-     <widget class="QWidget" name="wGeneral" >
+     <widget class="QWidget" name="wQtVersion" >
       <attribute name="title" >
-       <string>&amp;General</string>
+       <string>Qt &amp;Version</string>
       </attribute>
       <layout class="QGridLayout" >
        <property name="leftMargin" >
@@ -56,18 +56,104 @@
        <property name="verticalSpacing" >
         <number>3</number>
        </property>
-       <item row="0" column="0" colspan="2" >
-        <widget class="QComboBox" name="cbKeywords" />
-       </item>
-       <item row="1" column="0" >
-        <widget class="QLineEdit" name="lePath" >
-         <property name="toolTip" >
-          <string>Enter the path or file path of the current keywords</string>
+       <item row="0" column="0" >
+        <widget class="QToolButton" name="tbQtVersionAdd" >
+         <property name="text" >
+          <string>Add</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../resources/QMake.qrc" >:/icons/icons/add.png</iconset>
          </property>
         </widget>
        </item>
-       <item row="1" column="1" >
-        <widget class="QToolButton" name="tbBrowse" >
+       <item row="0" column="1" >
+        <widget class="QToolButton" name="tbQtVersionRemove" >
+         <property name="text" >
+          <string>Remove</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../resources/QMake.qrc" >:/icons/icons/remove.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2" >
+        <widget class="QToolButton" name="tbQtVersionClear" >
+         <property name="text" >
+          <string>Clear</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../resources/QMake.qrc" >:/icons/icons/clear.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3" >
+        <widget class="QToolButton" name="tbQtVersionUp" >
+         <property name="text" >
+          <string>Up</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../resources/QMake.qrc" >:/icons/icons/up.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="4" >
+        <widget class="QToolButton" name="tbQtVersionDown" >
+         <property name="text" >
+          <string>Down</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../resources/QMake.qrc" >:/icons/icons/down.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="6" colspan="4" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType" >
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>351</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item rowspan="7" row="1" column="0" colspan="6" >
+        <widget class="QListWidget" name="lwQtVersion" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Expanding" hsizetype="Maximum" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="7" >
+        <widget class="QLabel" name="lQtVersionVersion" >
+         <property name="text" >
+          <string>Version :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="8" colspan="2" >
+        <widget class="QLineEdit" name="leQtVersionVersion" />
+       </item>
+       <item row="2" column="7" >
+        <widget class="QLabel" name="lQtVersionPath" >
+         <property name="text" >
+          <string>Path :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="8" >
+        <widget class="QLineEdit" name="leQtVersionPath" />
+       </item>
+       <item row="2" column="9" >
+        <widget class="QToolButton" name="tbQtVersionPath" >
          <property name="cursor" >
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
@@ -82,101 +168,135 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0" colspan="2" >
-        <widget class="QGroupBox" name="gbApi" >
-         <property name="title" >
-          <string>Generate Qt &amp;Api files</string>
+       <item row="3" column="7" >
+        <widget class="QLabel" name="lQtVersionQMake" >
+         <property name="text" >
+          <string>QMake :</string>
          </property>
-         <layout class="QGridLayout" >
-          <property name="leftMargin" >
-           <number>5</number>
-          </property>
-          <property name="topMargin" >
-           <number>5</number>
-          </property>
-          <property name="rightMargin" >
-           <number>5</number>
-          </property>
-          <property name="bottomMargin" >
-           <number>5</number>
-          </property>
-          <property name="horizontalSpacing" >
-           <number>3</number>
-          </property>
-          <property name="verticalSpacing" >
-           <number>3</number>
-          </property>
-          <item row="0" column="0" >
-           <widget class="QCheckBox" name="cbQt4" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text" >
-             <string>Qt&amp;4</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0" colspan="2" >
-           <widget class="QProgressBar" name="pbProgress" >
-            <property name="minimumSize" >
-             <size>
-              <width>1</width>
-              <height>1</height>
-             </size>
-            </property>
-            <property name="maximum" >
-             <number>0</number>
-            </property>
-            <property name="alignment" >
-             <set>Qt::AlignHCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" colspan="2" >
-           <widget class="QCheckBox" name="cbQt3" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text" >
-             <string>Qt&amp;3</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1" >
-           <widget class="QPushButton" name="pbGenerate" >
-            <property name="text" >
-             <string>Genera&amp;te</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0" colspan="2" >
-           <widget class="QLabel" name="lInformations" >
-            <property name="frameShape" >
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
         </widget>
        </item>
-       <item row="3" column="0" colspan="2" >
+       <item row="3" column="8" >
+        <widget class="QLineEdit" name="leQtVersionQMake" />
+       </item>
+       <item row="3" column="9" >
+        <widget class="QToolButton" name="tbQtVersionQMake" >
+         <property name="cursor" >
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="toolTip" >
+          <string>Locate path or file</string>
+         </property>
+         <property name="text" >
+          <string>...</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../resources/QMake.qrc" >:/icons/icons/folder.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="7" >
+        <widget class="QLabel" name="lQtVersionlupdate" >
+         <property name="text" >
+          <string>lupdate :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="8" >
+        <widget class="QLineEdit" name="leQtVersionlupdate" />
+       </item>
+       <item row="4" column="9" >
+        <widget class="QToolButton" name="tbQtVersionlupdate" >
+         <property name="cursor" >
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="toolTip" >
+          <string>Locate path or file</string>
+         </property>
+         <property name="text" >
+          <string>...</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../resources/QMake.qrc" >:/icons/icons/folder.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="7" >
+        <widget class="QLabel" name="lQtVersionlrelease" >
+         <property name="text" >
+          <string>lrelease :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="8" >
+        <widget class="QLineEdit" name="leQtVersionlrelease" />
+       </item>
+       <item row="5" column="9" >
+        <widget class="QToolButton" name="tbQtVersionlrelease" >
+         <property name="cursor" >
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="toolTip" >
+          <string>Locate path or file</string>
+         </property>
+         <property name="text" >
+          <string>...</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../resources/QMake.qrc" >:/icons/icons/folder.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="7" >
+        <widget class="QLabel" name="lQtVersionDocsPath" >
+         <property name="text" >
+          <string>Docs Path :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="8" >
+        <widget class="QLineEdit" name="leQtVersionDocsPath" />
+       </item>
+       <item row="6" column="9" >
+        <widget class="QToolButton" name="tbQtVersionDocsPath" >
+         <property name="cursor" >
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="toolTip" >
+          <string>Locate path or file</string>
+         </property>
+         <property name="text" >
+          <string>...</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../resources/QMake.qrc" >:/icons/icons/folder.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="7" colspan="3" >
         <spacer>
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
          </property>
+         <property name="sizeType" >
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
          <property name="sizeHint" >
           <size>
-           <width>529</width>
-           <height>31</height>
+           <width>271</width>
+           <height>20</height>
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="0" column="5" >
+        <widget class="QToolButton" name="tbQtVersionDefault" >
+         <property name="text" >
+          <string>Default</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../resources/QMake.qrc" >:/icons/icons/ok.png</iconset>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -506,228 +626,6 @@
              </size>
             </property>
            </spacer>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="wOperatorsLibExtensions" >
-      <attribute name="title" >
-       <string>&amp;Operators &amp;&amp; Librairies Extensions</string>
-      </attribute>
-      <layout class="QHBoxLayout" >
-       <property name="spacing" >
-        <number>3</number>
-       </property>
-       <property name="leftMargin" >
-        <number>5</number>
-       </property>
-       <property name="topMargin" >
-        <number>5</number>
-       </property>
-       <property name="rightMargin" >
-        <number>5</number>
-       </property>
-       <property name="bottomMargin" >
-        <number>5</number>
-       </property>
-       <item>
-        <widget class="QGroupBox" name="gbOperators" >
-         <property name="title" >
-          <string>&amp;Operators</string>
-         </property>
-         <layout class="QGridLayout" >
-          <property name="leftMargin" >
-           <number>5</number>
-          </property>
-          <property name="topMargin" >
-           <number>5</number>
-          </property>
-          <property name="rightMargin" >
-           <number>5</number>
-          </property>
-          <property name="bottomMargin" >
-           <number>5</number>
-          </property>
-          <property name="horizontalSpacing" >
-           <number>3</number>
-          </property>
-          <property name="verticalSpacing" >
-           <number>3</number>
-          </property>
-          <item row="0" column="5" >
-           <spacer>
-            <property name="orientation" >
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" >
-             <size>
-              <width>331</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="0" column="3" >
-           <widget class="QToolButton" name="tbUpOperator" >
-            <property name="text" >
-             <string>Up</string>
-            </property>
-            <property name="icon" >
-             <iconset resource="../resources/QMake.qrc" >:/icons/icons/up.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="4" >
-           <widget class="QToolButton" name="tbDownOperator" >
-            <property name="text" >
-             <string>Down</string>
-            </property>
-            <property name="icon" >
-             <iconset resource="../resources/QMake.qrc" >:/icons/icons/down.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1" >
-           <widget class="QToolButton" name="tbRemoveOperator" >
-            <property name="text" >
-             <string>Remove</string>
-            </property>
-            <property name="icon" >
-             <iconset resource="../resources/QMake.qrc" >:/icons/icons/remove.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0" >
-           <widget class="QToolButton" name="tbAddOperator" >
-            <property name="text" >
-             <string>Add</string>
-            </property>
-            <property name="icon" >
-             <iconset resource="../resources/QMake.qrc" >:/icons/icons/add.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2" >
-           <widget class="QToolButton" name="tbClearOperators" >
-            <property name="text" >
-             <string>Clear</string>
-            </property>
-            <property name="icon" >
-             <iconset resource="../resources/QMake.qrc" >:/icons/icons/clear.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" colspan="6" >
-           <widget class="QListWidget" name="lwOperators" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Expanding" hsizetype="Ignored" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="gbLibrairies" >
-         <property name="title" >
-          <string>&amp;Librairies Extensions</string>
-         </property>
-         <layout class="QGridLayout" >
-          <property name="leftMargin" >
-           <number>5</number>
-          </property>
-          <property name="topMargin" >
-           <number>5</number>
-          </property>
-          <property name="rightMargin" >
-           <number>5</number>
-          </property>
-          <property name="bottomMargin" >
-           <number>5</number>
-          </property>
-          <property name="horizontalSpacing" >
-           <number>3</number>
-          </property>
-          <property name="verticalSpacing" >
-           <number>3</number>
-          </property>
-          <item row="0" column="5" >
-           <spacer>
-            <property name="orientation" >
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" >
-             <size>
-              <width>331</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="0" column="3" >
-           <widget class="QToolButton" name="tbUpLibExtension" >
-            <property name="text" >
-             <string>Up</string>
-            </property>
-            <property name="icon" >
-             <iconset resource="../resources/QMake.qrc" >:/icons/icons/up.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="4" >
-           <widget class="QToolButton" name="tbDownLibExtension" >
-            <property name="text" >
-             <string>Down</string>
-            </property>
-            <property name="icon" >
-             <iconset resource="../resources/QMake.qrc" >:/icons/icons/down.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1" >
-           <widget class="QToolButton" name="tbRemoveLibExtension" >
-            <property name="text" >
-             <string>Remove</string>
-            </property>
-            <property name="icon" >
-             <iconset resource="../resources/QMake.qrc" >:/icons/icons/remove.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0" >
-           <widget class="QToolButton" name="tbAddLibExtension" >
-            <property name="text" >
-             <string>Add</string>
-            </property>
-            <property name="icon" >
-             <iconset resource="../resources/QMake.qrc" >:/icons/icons/add.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2" >
-           <widget class="QToolButton" name="tbClearLibExtensions" >
-            <property name="text" >
-             <string>Clear</string>
-            </property>
-            <property name="icon" >
-             <iconset resource="../resources/QMake.qrc" >:/icons/icons/clear.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" colspan="6" >
-           <widget class="QListWidget" name="lwLibExtensions" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Expanding" hsizetype="Ignored" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
           </item>
          </layout>
         </widget>
@@ -1109,7 +1007,7 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons" >
-      <set>QDialogButtonBox::Apply|QDialogButtonBox::Help|QDialogButtonBox::NoButton</set>
+      <set>QDialogButtonBox::Help|QDialogButtonBox::NoButton|QDialogButtonBox::Save</set>
      </property>
     </widget>
    </item>
@@ -1117,12 +1015,7 @@
  </widget>
  <tabstops>
   <tabstop>twQMake</tabstop>
-  <tabstop>cbKeywords</tabstop>
-  <tabstop>lePath</tabstop>
-  <tabstop>tbBrowse</tabstop>
-  <tabstop>cbQt4</tabstop>
-  <tabstop>cbQt3</tabstop>
-  <tabstop>pbGenerate</tabstop>
+  <tabstop>tbQtVersionPath</tabstop>
   <tabstop>tbAddQtModule</tabstop>
   <tabstop>tbRemoveQtModule</tabstop>
   <tabstop>tbClearQtModules</tabstop>

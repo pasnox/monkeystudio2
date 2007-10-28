@@ -1,33 +1,16 @@
 #include "UISettingsQMake.h"
 #include "pSettings.h"
 
-// qscintilla include
-#include <qscilexercpp.h>
-#include <qsciapis.h>
-
-#include <QFileDialog>
-#include <QFileInfo>
 #include <QWhatsThis>
 #include <QInputDialog>
 
 UISettingsQMake::UISettingsQMake( QWidget* p )
 	: QWidget( p )
 {
+	// set up dialog
 	setupUi( this );
+	// set audo delete
 	setAttribute( Qt::WA_DeleteOnClose );
-	pbProgress->hide();
-	
-	// create items
-	// qt4
-	cbKeywords->addItem( QIcon( ":/icons/icons/folder.png" ), "Qt4 Path", PathType );
-	cbKeywords->addItem( QIcon( ":/icons/icons/misc.png" ), "QMake4", BinaryType );
-	cbKeywords->addItem( QIcon( ":/icons/icons/misc.png" ), "lupdate4", BinaryType );
-	cbKeywords->addItem( QIcon( ":/icons/icons/misc.png" ), "lrelease4", BinaryType );
-	// qt3
-	cbKeywords->addItem( QIcon( ":/icons/icons/folder.png" ), "Qt3 Path", PathType );
-	cbKeywords->addItem( QIcon( ":/icons/icons/misc.png" ), "QMake3", BinaryType );
-	cbKeywords->addItem( QIcon( ":/icons/icons/misc.png" ), "lupdate3", BinaryType );
-	cbKeywords->addItem( QIcon( ":/icons/icons/misc.png" ), "lrelease3", BinaryType );
 	// load settings
 	loadSettings();
 	// connect
@@ -45,51 +28,11 @@ UISettingsQMake::UISettingsQMake( QWidget* p )
 		connect( tb, SIGNAL( clicked() ), this, SLOT( tbDown_clicked() ) );
 }
 
-void UISettingsQMake::recursiveFiles( QDir d )
-{
-	// looking fodlers to load
-	foreach ( QString s, d.entryList( QDir::Dirs | QDir::NoDotAndDotDot ) )
-	{
-		d.cd( s );
-		recursiveFiles( d );
-		d.cdUp();
-	}
-	// looking files to load
-	foreach ( QString s, d.entryList( QDir::Files ) )
-	{
-		lInformations->setText( tr( "Loading file to prepare: %1" ).arg( s ) );
-		qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
-		mAPI->load( d.absoluteFilePath( s ) );
-	}
-}
-
-void UISettingsQMake::generateApi( const QString& s1, const QString& s2 ) // qtversion, include path
-{
-	// disable window
-	window()->setEnabled( false );
-	// show progress bar
-	pbProgress->show();
-	pbProgress->setValue( 0 );
-	// create api objects
-	mLexer = new QsciLexerCPP( this );
-	mAPI = new QsciAPIs( mLexer );
-	// load prepared files
-	mFile = s1 +".api";
-	if ( mAPI->isPrepared( mFile ) )
-		QFile::remove( mFile );
-	// add header files to apis
-	recursiveFiles( QDir( s2 ) );
-	// connect
-	connect( mAPI, SIGNAL( apiPreparationFinished() ), this, SLOT( generationFinished() ) );
-	// prepare apis files
-	lInformations->setText( tr( "Preparing files, please wait..." ) );
-	mAPI->prepare();
-}
-
 QStringList UISettingsQMake::defaultFilters()
 {
-	return QStringList()
-	<< "FORMS" << "FORMS3" << "HEADERS" << "SOURCES" << "RESOURCES" << "IMAGES" << "TRANSLATIONS" << "TEXTS" << "UNKNOW_FILES" << "OPENED_FILES";
+	return QStringList() 
+	<< "FORMS" << "FORMS3" << "HEADERS" << "SOURCES" << "RESOURCES" << "IMAGES" << "TRANSLATIONS"
+	<< "TEXTS" << "UNKNOW_FILES" << "OPENED_FILES";
 }
 
 QStringList UISettingsQMake::readFilters()
@@ -101,7 +44,8 @@ QStringList UISettingsQMake::readFilters()
 QStringList UISettingsQMake::defaultFiltersToolTips()
 {
 	return QStringList()
-	<< tr( "Forms Files" ) << tr( "Forms 3 Files" ) << tr( "Headers Files" ) << tr( "Sources Files" ) << tr( "Resources Files" ) << tr( "Images Files" ) << tr( "Translations Files" ) << tr( "Texts Files" ) << tr( "Unknow Files" ) << tr( "Opened Files" );
+	<< tr( "Forms Files" ) << tr( "Forms 3 Files" ) << tr( "Headers Files" ) << tr( "Sources Files" ) << tr( "Resources Files" ) 
+	<< tr( "Images Files" ) << tr( "Translations Files" ) << tr( "Texts Files" ) << tr( "Unknow Files" ) << tr( "Opened Files" );
 }
 
 QStringList UISettingsQMake::readFiltersToolTips()
@@ -211,30 +155,6 @@ QtItemList UISettingsQMake::defaultSettings()
 	<< new QtItem( "qaxserver_no_postlink", "qaxserver_no_postlink", "CONFIG", "No help available" );
 }
 
-QStringList UISettingsQMake::defaultOperators()
-{
-	return QStringList()
-	<< "=" << "-=" << "+=" << "*=" << "~=" << ":" << "|";
-}
-
-QStringList UISettingsQMake::readOperators()
-{
-	QStringList l = pSettings::instance()->value( "Plugins/QMake/Operators" ).toStringList();
-	return l.isEmpty() ? defaultOperators() : l;
-}
-
-QStringList UISettingsQMake::defaultLibExtensions()
-{
-	return QStringList()
-	<< "lib" << "dll" << "a" << "la" << "so" << "dylib";
-}
-
-QStringList UISettingsQMake::readLibExtensions()
-{
-	QStringList l = pSettings::instance()->value( "Plugins/QMake/LibExtensions" ).toStringList();
-	return l.isEmpty() ? defaultLibExtensions() : l;
-}
-
 QtItemList UISettingsQMake::readSettings()
 {
 	QtItemList l;
@@ -248,28 +168,44 @@ QtItemList UISettingsQMake::readSettings()
 	return l.isEmpty() ? defaultSettings() : l;
 }
 
-void UISettingsQMake::generationFinished()
+
+QString UISettingsQMake::defaultQMake()
 {
-	// save prepared files
-	mAPI->savePrepared( mFile );
-	// delete api objects
-	delete mLexer;
-	// hide progress bar
-	pbProgress->setValue( -1 );
-	pbProgress->hide();
-	// finish message
-	lInformations->setText( tr( "Prepared files finished." ) );
-	// enable window
-	window()->setEnabled( true );
+#ifdef Q_OS_MAC
+	return "qmake";
+#elif defined Q_OS_UNIX
+	return "qmake-qt4";
+#else 
+	return "qmake";
+#endif
+}
+
+QString UISettingsQMake::defaultlupdate()
+{
+#ifdef Q_OS_MAC
+	return "lupdate";
+#elif defined Q_OS_UNIX
+	return "lupdate-qt4";
+#else 
+	return "lupdate";
+#endif
+}
+
+QString UISettingsQMake::defaultlrelease()
+{
+#ifdef Q_OS_MAC
+	return "lrelease";
+#elif defined Q_OS_UNIX
+	return "lrelease-qt4";
+#else 
+	return "lrelease";
+#endif
 }
 
 void UISettingsQMake::loadSettings()
 {
 	// general
-	for ( int i = 0; i < cbKeywords->count(); i++ )
-		cbKeywords->setItemData( i, pSettings::instance()->value( QString( "Plugins/QMake/%1" ).arg( cbKeywords->itemText( i ) ) ).toString(), DataRole );
-	if ( cbKeywords->count() )
-		on_cbKeywords_currentIndexChanged( 0 );
+	
 	// filters & scopes
 	lwFilters->addItems( readFilters() );
 	lwScopes->addItems( readScopes() );
@@ -279,16 +215,11 @@ void UISettingsQMake::loadSettings()
 	for ( int i = 0; i < ft.count(); i++ )
 		if ( QListWidgetItem* it = lwFilters->item( i ) )
 			it->setToolTip( ft.at( i ) );
-	// operators && lib extension
-	lwOperators->addItems( readOperators() );
-	lwLibExtensions->addItems( readLibExtensions() );
 	// set items editable
 	QList<QListWidgetItem*> items = QList<QListWidgetItem*> () 
 	<< lwFilters->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive )
 	<< lwScopes->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive )
-	<< lwPathFiles->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive )
-	<< lwOperators->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive )
-	<< lwLibExtensions->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive );
+	<< lwPathFiles->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive );
 	foreach ( QListWidgetItem* it, items )
 		it->setFlags( it->flags() | Qt::ItemIsEditable );
 	items.clear();
@@ -316,66 +247,6 @@ void UISettingsQMake::loadSettings()
 	}
 	qDeleteAll( l );
 	l.clear();
-}
-
-void UISettingsQMake::on_cbKeywords_currentIndexChanged( int i )
-{
-	lePath->setText( cbKeywords->itemData( i, DataRole ).toString() );
-}
-
-void UISettingsQMake::on_lePath_editingFinished()
-{
-	cbKeywords->setItemData( cbKeywords->currentIndex(), lePath->text(), DataRole );
-}
-
-void UISettingsQMake::on_tbBrowse_clicked()
-{
-	QString s = cbKeywords->currentText();
-	switch ( cbKeywords->itemData( cbKeywords->currentIndex(), TypeRole ).toInt() )
-	{
-	case BinaryType:
-		s = QFileDialog::getOpenFileName( this, tr( "Choose your tool binary" ), s );
-		if ( !s.isNull() )
-			lePath->setText( s );
-		break;
-	case PathType:
-		s = QFileDialog::getExistingDirectory( this, tr( "Locate your tool path" ), s );
-		if ( !s.isNull() )
-			lePath->setText( s );
-		break;
-	}
-}
-
-void UISettingsQMake::on_pbGenerate_clicked()
-{
-	// apply settings in case of user set path but not yet click on apply
-	on_bbDialog_clicked( bbDialog->button( QDialogButtonBox::Apply ) );
-	// clear label
-	lInformations->clear();
-	// if no checked box cancel
-	if ( !cbQt4->isChecked() && !cbQt3->isChecked() )
-	{
-		lInformations->setText( tr( "You need to check the boxes for the Qt version you want to generate api." ) );
-		return;
-	}
-	//
-	QString s;
-	// if qt4 and no qt4 path configured
-	if ( cbQt4->isChecked() )
-	{
-		s = pSettings::instance()->value( "Plugins/QMake/Qt4 Path" ).toString().append( "/include" );
-		s = QFileDialog::getExistingDirectory( this, tr( "Locate your Qt4 include path" ), s );
-		if ( !s.isNull() )
-			generateApi( "Qt4", s );
-	}
-	// if qt3 and no qt3 path configured
-	if ( cbQt3->isChecked() )
-	{
-		s = pSettings::instance()->value( "Plugins/QMake/Qt3 Path" ).toString().append( "/include" );
-		s = QFileDialog::getExistingDirectory( this, tr( "Locate your Qt3 include path" ), s );
-		if ( !s.isNull() )
-			generateApi( "Qt3", s );
-	}
 }
 
 void UISettingsQMake::lw_currentItemChanged( QListWidgetItem* c, QListWidgetItem* p )
@@ -439,10 +310,6 @@ void UISettingsQMake::tbAdd_clicked()
 		lw = lwScopes;
 	else if ( sender() == tbAddPathFile )
 		lw = lwPathFiles;
-	else if ( sender() == tbAddOperator )
-		lw = lwOperators;
-	else if ( sender() == tbAddLibExtension )
-		lw = lwLibExtensions;
 	else if ( sender() == tbAddQtModule )
 		lw = lwQtModules;
 	else if ( sender() == tbAddSetting )
@@ -464,10 +331,6 @@ void UISettingsQMake::tbRemove_clicked()
 		delete lwScopes->currentItem();
 	else if ( sender() == tbRemovePathFile )
 		delete lwPathFiles->currentItem();
-	else if ( sender() == tbRemoveOperator )
-		delete lwOperators->currentItem();
-	else if ( sender() == tbRemoveLibExtension )
-		delete lwLibExtensions->currentItem();
 	else if ( sender() == tbRemoveQtModule )
 		delete lwQtModules->currentItem();
 	else if ( sender() == tbRemoveSetting )
@@ -482,10 +345,6 @@ void UISettingsQMake::tbClear_clicked()
 		lwScopes->clear();
 	else if ( sender() == tbClearPathFiles )
 		lwPathFiles->clear();
-	else if ( sender() == tbClearOperators )
-		lwOperators->clear();
-	else if ( sender() == tbClearLibExtensions )
-		lwLibExtensions->clear();
 	else if ( sender() == tbClearQtModules )
 		lwQtModules->clear();
 	else if ( sender() == tbClearSettings )
@@ -504,10 +363,6 @@ void UISettingsQMake::tbUp_clicked()
 		lw = lwScopes;
 	else if ( tb == tbUpPathFile )
 		lw = lwPathFiles;
-	else if ( tb == tbUpOperator )
-		lw = lwOperators;
-	else if ( tb == tbUpLibExtension )
-		lw = lwLibExtensions;
 	else if ( tb == tbUpQtModule )
 		lw = lwQtModules;
 	else if ( tb == tbUpSetting )
@@ -535,10 +390,6 @@ void UISettingsQMake::tbDown_clicked()
 		lw = lwScopes;
 	else if ( tb == tbDownPathFile )
 		lw = lwPathFiles;
-	else if ( tb == tbDownOperator )
-		lw = lwOperators;
-	else if ( tb == tbDownLibExtension )
-		lw = lwLibExtensions;
 	else if ( tb == tbDownQtModule )
 		lw = lwQtModules;
 	else if ( tb == tbDownSetting )
@@ -604,8 +455,7 @@ void UISettingsQMake::on_bbDialog_clicked( QAbstractButton* b )
 		return;
 	QStringList l;
 	// general
-	for ( int i = 0; i < cbKeywords->count(); i++ )
-		pSettings::instance()->setValue( QString( "Plugins/QMake/%1" ).arg( cbKeywords->itemText( i ) ), cbKeywords->itemData( i, DataRole ).toString() );
+	
 	// filters & scopes
 	l.clear();
 	foreach ( QListWidgetItem* it, lwFilters->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
@@ -624,15 +474,6 @@ void UISettingsQMake::on_bbDialog_clicked( QAbstractButton* b )
 	foreach ( QListWidgetItem* it, lwFilters->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
 		l << it->toolTip();
 	pSettings::instance()->setValue( "Plugins/QMake/FiltersToolTips", l );
-	// operators && lib extensions
-	l.clear();
-	foreach ( QListWidgetItem* it, lwOperators->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
-		l << it->text();
-	pSettings::instance()->setValue( "Plugins/QMake/Operators", l );
-	l.clear();
-	foreach ( QListWidgetItem* it, lwLibExtensions->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
-		l << it->text();
-	pSettings::instance()->setValue( "Plugins/QMake/LibExtensions", l );
 	// qt modules
 	lw_currentItemChanged( 0, lwQtModules->currentItem() );
 	pSettings::instance()->beginWriteArray( "Plugins/QMake/QtModules" );
