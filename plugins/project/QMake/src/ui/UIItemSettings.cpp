@@ -21,16 +21,14 @@ UIItemSettings::UIItemSettings( ProjectItem* i )
 	setAttribute( Qt::WA_DeleteOnClose );
 	dbbButtons->button( QDialogButtonBox::Ok )->setIcon( QPixmap( ":/icons/icons/ok.png" ) );
 	dbbButtons->button( QDialogButtonBox::Cancel )->setIcon( QPixmap( ":/icons/icons/cancel.png" ) );
-	
 	// crete tree delegate
 	twValueRoles->setItemDelegate( new QMakeItemDelegate( twValueRoles ) );
-	
 	// fill list with node roles
 	const QMetaObject mo = ProjectItem::staticMetaObject;
 	QMetaEnum me = mo.enumerator( mo.indexOfEnumerator( "NodeRole" ) );
 	QFontMetrics fm( twValueRoles->font() );
 	int pMax = 0;
-	
+	//
 	for ( int i = 0; i < me.keyCount(); i++ )
 	{
 		// don t create item for these roles
@@ -48,7 +46,6 @@ UIItemSettings::UIItemSettings( ProjectItem* i )
 				pMax = fm.width( it->text( 0 ) );
 		}
 	}
-	
 	// resize first column so we can see the caption
 	twValueRoles->setColumnWidth( 0, pMax +10 );
 }
@@ -77,7 +74,6 @@ void UIItemSettings::accept()
 				break;
 		}
 	}
-	
 	// close dialog
 	QDialog::accept();
 }
