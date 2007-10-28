@@ -39,6 +39,11 @@ public slots:
 private slots:
 	void on_twMenu_itemSelectionChanged();
 	void on_tbDefaultProjectsDirectory_clicked();
+	void on_tbAddOperator_clicked();
+	void on_tbRemoveOperator_clicked();
+	void on_tbClearOperators_clicked();
+	void on_tbUpOperator_clicked();
+	void on_tbDownOperator_clicked();
 	void on_tbTemplatesPath_clicked();
 	void on_pbAddTemplateType_clicked();
 	void on_pbEditTemplateType_clicked();
