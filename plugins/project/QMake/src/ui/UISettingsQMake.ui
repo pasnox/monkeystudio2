@@ -57,7 +57,7 @@
         <number>3</number>
        </property>
        <item row="0" column="0" >
-        <widget class="QToolButton" name="tbQtVersionAdd" >
+        <widget class="QToolButton" name="tbAddQtVersion" >
          <property name="text" >
           <string>Add</string>
          </property>
@@ -67,7 +67,7 @@
         </widget>
        </item>
        <item row="0" column="1" >
-        <widget class="QToolButton" name="tbQtVersionRemove" >
+        <widget class="QToolButton" name="tbRemoveQtVersion" >
          <property name="text" >
           <string>Remove</string>
          </property>
@@ -77,7 +77,7 @@
         </widget>
        </item>
        <item row="0" column="2" >
-        <widget class="QToolButton" name="tbQtVersionClear" >
+        <widget class="QToolButton" name="tbClearQtVersions" >
          <property name="text" >
           <string>Clear</string>
          </property>
@@ -87,7 +87,7 @@
         </widget>
        </item>
        <item row="0" column="3" >
-        <widget class="QToolButton" name="tbQtVersionUp" >
+        <widget class="QToolButton" name="tbUpQtVersion" >
          <property name="text" >
           <string>Up</string>
          </property>
@@ -97,7 +97,7 @@
         </widget>
        </item>
        <item row="0" column="4" >
-        <widget class="QToolButton" name="tbQtVersionDown" >
+        <widget class="QToolButton" name="tbDownQtVersion" >
          <property name="text" >
           <string>Down</string>
          </property>
@@ -123,14 +123,7 @@
         </spacer>
        </item>
        <item rowspan="7" row="1" column="0" colspan="6" >
-        <widget class="QListWidget" name="lwQtVersion" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Expanding" hsizetype="Maximum" >
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
+        <widget class="QListWidget" name="lwQtVersions" />
        </item>
        <item row="1" column="7" >
         <widget class="QLabel" name="lQtVersionVersion" >
@@ -157,12 +150,6 @@
          <property name="cursor" >
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
-         <property name="toolTip" >
-          <string>Locate path or file</string>
-         </property>
-         <property name="text" >
-          <string>...</string>
-         </property>
          <property name="icon" >
           <iconset resource="../resources/QMake.qrc" >:/icons/icons/folder.png</iconset>
          </property>
@@ -183,14 +170,8 @@
          <property name="cursor" >
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
-         <property name="toolTip" >
-          <string>Locate path or file</string>
-         </property>
-         <property name="text" >
-          <string>...</string>
-         </property>
          <property name="icon" >
-          <iconset resource="../resources/QMake.qrc" >:/icons/icons/folder.png</iconset>
+          <iconset resource="../resources/QMake.qrc" >:/icons/icons/filefolder.png</iconset>
          </property>
         </widget>
        </item>
@@ -209,14 +190,8 @@
          <property name="cursor" >
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
-         <property name="toolTip" >
-          <string>Locate path or file</string>
-         </property>
-         <property name="text" >
-          <string>...</string>
-         </property>
          <property name="icon" >
-          <iconset resource="../resources/QMake.qrc" >:/icons/icons/folder.png</iconset>
+          <iconset resource="../resources/QMake.qrc" >:/icons/icons/filefolder.png</iconset>
          </property>
         </widget>
        </item>
@@ -235,14 +210,8 @@
          <property name="cursor" >
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
-         <property name="toolTip" >
-          <string>Locate path or file</string>
-         </property>
-         <property name="text" >
-          <string>...</string>
-         </property>
          <property name="icon" >
-          <iconset resource="../resources/QMake.qrc" >:/icons/icons/folder.png</iconset>
+          <iconset resource="../resources/QMake.qrc" >:/icons/icons/filefolder.png</iconset>
          </property>
         </widget>
        </item>
@@ -261,12 +230,6 @@
          <property name="cursor" >
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
-         <property name="toolTip" >
-          <string>Locate path or file</string>
-         </property>
-         <property name="text" >
-          <string>...</string>
-         </property>
          <property name="icon" >
           <iconset resource="../resources/QMake.qrc" >:/icons/icons/folder.png</iconset>
          </property>
@@ -282,14 +245,14 @@
          </property>
          <property name="sizeHint" >
           <size>
-           <width>271</width>
+           <width>300</width>
            <height>20</height>
           </size>
          </property>
         </spacer>
        </item>
        <item row="0" column="5" >
-        <widget class="QToolButton" name="tbQtVersionDefault" >
+        <widget class="QToolButton" name="tbDefaultQtVersion" >
          <property name="text" >
           <string>Default</string>
          </property>
@@ -993,18 +956,9 @@
     </widget>
    </item>
    <item>
-    <widget class="QDialogButtonBox" name="bbDialog" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
+    <widget class="QDialogButtonBox" name="dbbButtons" >
      <property name="cursor" >
       <cursorShape>PointingHandCursor</cursorShape>
-     </property>
-     <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons" >
       <set>QDialogButtonBox::Help|QDialogButtonBox::NoButton|QDialogButtonBox::Save</set>
@@ -1032,7 +986,7 @@
   <tabstop>leValueSetting</tabstop>
   <tabstop>leVariableSetting</tabstop>
   <tabstop>teHelpSetting</tabstop>
-  <tabstop>bbDialog</tabstop>
+  <tabstop>dbbButtons</tabstop>
  </tabstops>
  <resources>
   <include location="../resources/QMake.qrc" />

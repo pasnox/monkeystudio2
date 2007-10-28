@@ -16,7 +16,24 @@ struct QtItem
 	QString Variable;
 	QString Help;
 };
-typedef QList<QtItem*> QtItemList;
+typedef QList<QtItem> QtItemList;
+
+struct QtVersion
+{
+	enum Roles { PathRole = Qt::UserRole, QMakeRole, lupdateRole, lreleaseRole, DocsPathRole, DefaultRole };
+	QtVersion() {}
+	QtVersion( const QString& t, const QString& p, const QString& q, const QString& u, const QString& r, const QString& d, bool df )
+		: Text( t ), Path( p ), QMake( q ), lupdate( u ), lrelease( r ), DocsPath( d ), Default( df )
+	{}
+	QString Text;
+	QString Path;
+	QString QMake;
+	QString lupdate;
+	QString lrelease;
+	QString DocsPath;
+	bool Default;
+};
+typedef QList<QtVersion> QtVersionList;
 
 class UISettingsQMake : public QWidget, public Ui::UISettingsQMake
 {
@@ -39,21 +56,23 @@ public:
 	static QtItemList readQtModules();
 	static QtItemList defaultSettings();
 	static QtItemList readSettings();
-	static QString defaultQMake();
-	static QString defaultlupdate();
-	static QString defaultlrelease();
+	static QtVersionList defaultVersions();
+	static QtVersionList readVersions();
+	static QtVersion defaultVersion( const QString& = QString::null );
 	
 private slots:
 	void loadSettings();
 	void lw_currentItemChanged( QListWidgetItem*, QListWidgetItem* );
+	void tbQtVersion_clicked();
 	void tbAdd_clicked();
 	void tbRemove_clicked();
 	void tbClear_clicked();
 	void tbUp_clicked();
 	void tbDown_clicked();
+	void on_tbDefaultQtVersion_clicked();
 	void on_tbToolTipFilter_clicked();
-	void on_bbDialog_helpRequested();
-	void on_bbDialog_clicked( QAbstractButton* );
+	void on_dbbButtons_helpRequested();
+	void on_dbbButtons_clicked( QAbstractButton* );
 	
 };
 

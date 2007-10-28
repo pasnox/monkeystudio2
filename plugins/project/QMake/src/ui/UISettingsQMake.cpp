@@ -1,19 +1,26 @@
 #include "UISettingsQMake.h"
 #include "pSettings.h"
+#include "pMonkeyStudio.h"
 
+#include <QPushButton>
 #include <QWhatsThis>
 #include <QInputDialog>
+
+using namespace pMonkeyStudio;
 
 UISettingsQMake::UISettingsQMake( QWidget* p )
 	: QWidget( p )
 {
 	// set up dialog
 	setupUi( this );
+	dbbButtons->button( QDialogButtonBox::Help )->setIcon( QIcon( ":/help/icons/help/keyword.png" ) );
+	dbbButtons->button( QDialogButtonBox::Save )->setIcon( QIcon( ":/file/icons/file/save.png" ) );
 	// set audo delete
 	setAttribute( Qt::WA_DeleteOnClose );
 	// load settings
 	loadSettings();
 	// connect
+	connect( lwQtVersions, SIGNAL( currentItemChanged( QListWidgetItem*, QListWidgetItem* ) ), this, SLOT( lw_currentItemChanged( QListWidgetItem*, QListWidgetItem* ) ) );
 	connect( lwQtModules, SIGNAL( currentItemChanged( QListWidgetItem*, QListWidgetItem* ) ), this, SLOT( lw_currentItemChanged( QListWidgetItem*, QListWidgetItem* ) ) );
 	connect( lwSettings, SIGNAL( currentItemChanged( QListWidgetItem*, QListWidgetItem* ) ), this, SLOT( lw_currentItemChanged( QListWidgetItem*, QListWidgetItem* ) ) );
 	foreach ( QToolButton* tb, findChildren<QToolButton*>( QRegExp( "tbAdd*" ) ) )
@@ -26,6 +33,8 @@ UISettingsQMake::UISettingsQMake( QWidget* p )
 		connect( tb, SIGNAL( clicked() ), this, SLOT( tbUp_clicked() ) );
 	foreach ( QToolButton* tb, findChildren<QToolButton*>( QRegExp( "tbDown*" ) ) )
 		connect( tb, SIGNAL( clicked() ), this, SLOT( tbDown_clicked() ) );
+	foreach ( QToolButton* tb, findChildren<QToolButton*>( QRegExp( "tbQtVersion*" ) ) )
+		connect( tb, SIGNAL( clicked() ), this, SLOT( tbQtVersion_clicked() ) );
 }
 
 QStringList UISettingsQMake::defaultFilters()
@@ -37,7 +46,7 @@ QStringList UISettingsQMake::defaultFilters()
 
 QStringList UISettingsQMake::readFilters()
 {
-	QStringList l = pSettings::instance()->value( "Plugins/QMake/Filters" ).toStringList();
+	QStringList l = pSettings::instance()->value( QString( "Plugins/%1/Filters" ).arg( PLUGIN_NAME ) ).toStringList();
 	return l.isEmpty() ? defaultFilters() : l;
 }
 
@@ -50,7 +59,7 @@ QStringList UISettingsQMake::defaultFiltersToolTips()
 
 QStringList UISettingsQMake::readFiltersToolTips()
 {
-	QStringList l = pSettings::instance()->value( "Plugins/QMake/FiltersToolTips" ).toStringList();
+	QStringList l = pSettings::instance()->value( QString( "Plugins/%1/FiltersToolTips" ).arg( PLUGIN_NAME ) ).toStringList();
 	return l.isEmpty() ? defaultFiltersToolTips() : l;
 }
 
@@ -72,7 +81,7 @@ QStringList UISettingsQMake::defaultScopes()
 
 QStringList UISettingsQMake::readScopes()
 {
-	QStringList l = pSettings::instance()->value( "Plugins/QMake/Scopes" ).toStringList();
+	QStringList l = pSettings::instance()->value( QString( "Plugins/%1/Scopes" ).arg( PLUGIN_NAME ) ).toStringList();
 	return l.isEmpty() ? defaultScopes() : l;
 }
 
@@ -87,125 +96,151 @@ QStringList UISettingsQMake::defaultPathFiles()
 
 QStringList UISettingsQMake::readPathFiles()
 {
-	QStringList l = pSettings::instance()->value( "Plugins/QMake/PathFiles" ).toStringList();
+	QStringList l = pSettings::instance()->value( QString( "Plugins/%1/PathFiles" ).arg( PLUGIN_NAME ) ).toStringList();
 	return l.isEmpty() ? defaultPathFiles() : l;
 }
 
 QtItemList UISettingsQMake::defaultQtModules()
 {
 	return QtItemList()
-	<< new QtItem( "QtCore", "core", "QT", "Add support for Qt Core classes" )
-	<< new QtItem( "QtGui", "gui", "QT", "Add support for Qt Gui classes" )
-	<< new QtItem( "QtNetwork", "network", "QT", "Add support for Qt Network classes" )
-	<< new QtItem( "QtOpenGL", "opengl", "QT", "Add support for Qt OpenGL classes" )
-	<< new QtItem( "QtSql", "sql", "QT", "Add support for Qt Sql classes" )
-	<< new QtItem( "QtSvg", "svg", "QT", "Add support for Qt Svg classes" )
-	<< new QtItem( "QtXml", "xml", "QT", "Add support for Qt Xml classes" )
-	<< new QtItem( "Qt3Support", "qt3support", "QT", "Add support for Qt Qt3Support classes" )
-	<< new QtItem( "QtDesigner", "designer", "CONFIG", "Add support for Qt Designer classes" )
-	<< new QtItem( "QtUiTools", "uitools", "CONFIG", "Add support for Qt UiTools classes" )
-	<< new QtItem( "QtAssistant", "assistant", "CONFIG", "Add support for Qt Assistant classes" )
-	<< new QtItem( "QtTest", "qtestlib", "CONFIG", "Add support for Qt Test classes" )
-	<< new QtItem( "QAxContainer", "qaxcontainer", "CONFIG", "Add support for QAxContainer classes" )
-	<< new QtItem( "QAxServer", "qaxserver", "CONFIG", "Add support for QAxServer classes" )
-	<< new QtItem( "QtDBus", "qdbus", "CONFIG", "Add support for Qt DBus classes" );
+	<< QtItem( "QtCore", "core", "QT", "Add support for Qt Core classes" )
+	<< QtItem( "QtGui", "gui", "QT", "Add support for Qt Gui classes" )
+	<< QtItem( "QtNetwork", "network", "QT", "Add support for Qt Network classes" )
+	<< QtItem( "QtOpenGL", "opengl", "QT", "Add support for Qt OpenGL classes" )
+	<< QtItem( "QtSql", "sql", "QT", "Add support for Qt Sql classes" )
+	<< QtItem( "QtSvg", "svg", "QT", "Add support for Qt Svg classes" )
+	<< QtItem( "QtXml", "xml", "QT", "Add support for Qt Xml classes" )
+	<< QtItem( "Qt3Support", "qt3support", "QT", "Add support for Qt Qt3Support classes" )
+	<< QtItem( "QtDesigner", "designer", "CONFIG", "Add support for Qt Designer classes" )
+	<< QtItem( "QtUiTools", "uitools", "CONFIG", "Add support for Qt UiTools classes" )
+	<< QtItem( "QtAssistant", "assistant", "CONFIG", "Add support for Qt Assistant classes" )
+	<< QtItem( "QtTest", "qtestlib", "CONFIG", "Add support for Qt Test classes" )
+	<< QtItem( "QAxContainer", "qaxcontainer", "CONFIG", "Add support for QAxContainer classes" )
+	<< QtItem( "QAxServer", "qaxserver", "CONFIG", "Add support for QAxServer classes" )
+	<< QtItem( "QtDBus", "qdbus", "CONFIG", "Add support for Qt DBus classes" );
 }
 
 QtItemList UISettingsQMake::readQtModules()
 {
 	QtItemList l;
-	int s = pSettings::instance()->beginReadArray( "Plugins/QMake/QtModules" );
+	pSettings* ps = pSettings::instance();
+	int s = ps->beginReadArray( QString( "Plugins/%1/QtModules" ).arg( PLUGIN_NAME ) );
 	for ( int i = 0; i < s; i++ )
 	{
-		pSettings::instance()->setArrayIndex( i );
-		l << new QtItem( pSettings::instance()->value( "Text" ).toString(), pSettings::instance()->value( "Value" ).toString(), pSettings::instance()->value( "Variable" ).toString(), pSettings::instance()->value( "Help" ).toString() );
+		ps->setArrayIndex( i );
+		l << QtItem( ps->value( "Text" ).toString(), ps->value( "Value" ).toString(), ps->value( "Variable" ).toString(), ps->value( "Help" ).toString() );
 	}
-	pSettings::instance()->endArray();
+	ps->endArray();
 	return l.isEmpty() ? defaultQtModules() : l;
 }
 
 QtItemList UISettingsQMake::defaultSettings()
 {
 	return QtItemList()
-	<< new QtItem( "rtti", "rtti", "CONFIG", "RTTI support is enabled." )
-	<< new QtItem( "stl", "stl", "CONFIG", "STL support is enabled." )
-	<< new QtItem( "exceptions", "execptions", "CONFIG", "Exception support is enabled." )
-	<< new QtItem( "thread", "thread", "CONFIG", "The target is a multi-threaded application or library. The proper defines and compiler flags will automatically be added to the project." )
-	<< new QtItem( "no_lflags_merge", "no_lflags_merge", "CONFIG", "Ensures that the list of libraries stored in the LIBS variable is not reduced to a list of unique values before it is used." )
-	<< new QtItem( "qt", "qt", "CONFIG", "The target is a Qt application/library and requires the Qt library and header files. The proper include and library paths for the Qt library will automatically be added to the project. This is defined by default, and can be fine-tuned with the \\l{#qt}{QT} variable." )
-	<< new QtItem( "resources", "resources", "CONFIG", "Configures qmake to run rcc on the content of RESOURCES if defined." )
-	<< new QtItem( "uic3", "uic3", "CONFIG", "Configures qmake to run uic3 on the content of FORMS3 if defined; otherwise the contents of FORMS will be processed instead." )
-	<< new QtItem( "LIB ONLY", QString::null, QString::null, "Options for LIB template only" )
-	<< new QtItem( "dll", "dll", "CONFIG", "The target is a shared object/DLL.The proper include paths, compiler flags and libraries will automatically be added to the project." )
-	<< new QtItem( "staticlib", "staticlib", "CONFIG", "The target is a static library (lib only). The proper compiler flags will automatically be added to the project." )
-	<< new QtItem( "plugin", "plugin", "CONFIG", "The target is a plugin (lib only). This enables dll as well." )
-	<< new QtItem( "X11 ONLY", QString::null, QString::null, "Options for X11 only" )
-	<< new QtItem( "x11", "x11", "CONFIG", "The target is a X11 application or library. The proper include paths and libraries will automatically be added to the project." )
-	<< new QtItem( "MAC OS X ONLY", QString::null, QString::null, "Options for Mac OS X only" )
-	<< new QtItem( "ppc", "ppc", "CONFIG", "Builds a PowerPC binary." )
-	<< new QtItem( "x86", "x86", "CONFIG", "Builds an i386 compatible binary." )
-	<< new QtItem( "app_bundle", "app_bundle", "CONFIG", "Puts the executable into a bundle (this is the default)." )
-	<< new QtItem( "lib_bundle", "lib_bundle", "CONFIG", "Puts the library into a library bundle." )
-	<< new QtItem( "WINDOWS ONLY", QString::null, QString::null, "Options for Windows only" )
-	<< new QtItem( "windows", "windows", "CONFIG", "The target is a Win32 window application (app only). The proper include paths,compiler flags and libraries will automatically be added to the project." )
-	<< new QtItem( "console", "console", "CONFIG", "The target is a Win32 console application (app only). The proper include paths, compiler flags and libraries will automatically be added to the project." )
-	<< new QtItem( "flat", "flat", "CONFIG", "When using the vcapp template this will put all the source files into the source group and the header files into the header group regardless of what directory they reside in. Turning this option off will group the files within the source/header group depending on the directory they reside. This is turned on by default." )
-	<< new QtItem( "embed_manifest_dll", "embed_manifest_dll", "CONFIG", "Embeds a manifest file in the DLL created as part of an application/library project." )
-	<< new QtItem( "ACTIVEQT ONLY", QString::null, QString::null, "Option for Windows/Active Qt only" )
-	<< new QtItem( "qaxserver_no_postlink", "qaxserver_no_postlink", "CONFIG", "No help available" );
+	<< QtItem( "rtti", "rtti", "CONFIG", "RTTI support is enabled." )
+	<< QtItem( "stl", "stl", "CONFIG", "STL support is enabled." )
+	<< QtItem( "exceptions", "execptions", "CONFIG", "Exception support is enabled." )
+	<< QtItem( "thread", "thread", "CONFIG", "The target is a multi-threaded application or library. The proper defines and compiler flags will automatically be added to the project." )
+	<< QtItem( "no_lflags_merge", "no_lflags_merge", "CONFIG", "Ensures that the list of libraries stored in the LIBS variable is not reduced to a list of unique values before it is used." )
+	<< QtItem( "qt", "qt", "CONFIG", "The target is a Qt application/library and requires the Qt library and header files. The proper include and library paths for the Qt library will automatically be added to the project. This is defined by default, and can be fine-tuned with the \\l{#qt}{QT} variable." )
+	<< QtItem( "resources", "resources", "CONFIG", "Configures qmake to run rcc on the content of RESOURCES if defined." )
+	<< QtItem( "uic3", "uic3", "CONFIG", "Configures qmake to run uic3 on the content of FORMS3 if defined; otherwise the contents of FORMS will be processed instead." )
+	<< QtItem( "LIB ONLY", QString::null, QString::null, "Options for LIB template only" )
+	<< QtItem( "dll", "dll", "CONFIG", "The target is a shared object/DLL.The proper include paths, compiler flags and libraries will automatically be added to the project." )
+	<< QtItem( "staticlib", "staticlib", "CONFIG", "The target is a static library (lib only). The proper compiler flags will automatically be added to the project." )
+	<< QtItem( "plugin", "plugin", "CONFIG", "The target is a plugin (lib only). This enables dll as well." )
+	<< QtItem( "X11 ONLY", QString::null, QString::null, "Options for X11 only" )
+	<< QtItem( "x11", "x11", "CONFIG", "The target is a X11 application or library. The proper include paths and libraries will automatically be added to the project." )
+	<< QtItem( "MAC OS X ONLY", QString::null, QString::null, "Options for Mac OS X only" )
+	<< QtItem( "ppc", "ppc", "CONFIG", "Builds a PowerPC binary." )
+	<< QtItem( "x86", "x86", "CONFIG", "Builds an i386 compatible binary." )
+	<< QtItem( "app_bundle", "app_bundle", "CONFIG", "Puts the executable into a bundle (this is the default)." )
+	<< QtItem( "lib_bundle", "lib_bundle", "CONFIG", "Puts the library into a library bundle." )
+	<< QtItem( "WINDOWS ONLY", QString::null, QString::null, "Options for Windows only" )
+	<< QtItem( "windows", "windows", "CONFIG", "The target is a Win32 window application (app only). The proper include paths,compiler flags and libraries will automatically be added to the project." )
+	<< QtItem( "console", "console", "CONFIG", "The target is a Win32 console application (app only). The proper include paths, compiler flags and libraries will automatically be added to the project." )
+	<< QtItem( "flat", "flat", "CONFIG", "When using the vcapp template this will put all the source files into the source group and the header files into the header group regardless of what directory they reside in. Turning this option off will group the files within the source/header group depending on the directory they reside. This is turned on by default." )
+	<< QtItem( "embed_manifest_dll", "embed_manifest_dll", "CONFIG", "Embeds a manifest file in the DLL created as part of an application/library project." )
+	<< QtItem( "ACTIVEQT ONLY", QString::null, QString::null, "Option for Windows/Active Qt only" )
+	<< QtItem( "qaxserver_no_postlink", "qaxserver_no_postlink", "CONFIG", "No help available" );
 }
 
 QtItemList UISettingsQMake::readSettings()
 {
 	QtItemList l;
-	int s = pSettings::instance()->beginReadArray( "Plugins/QMake/Settings" );
+	pSettings* ps = pSettings::instance();
+	int s = ps->beginReadArray( QString( "Plugins/%1/Settings" ).arg( PLUGIN_NAME ) );
 	for ( int i = 0; i < s; i++ )
 	{
-		pSettings::instance()->setArrayIndex( i );
-		l << new QtItem( pSettings::instance()->value( "Text" ).toString(), pSettings::instance()->value( "Value" ).toString(), pSettings::instance()->value( "Variable" ).toString(), pSettings::instance()->value( "Help" ).toString() );
+		ps->setArrayIndex( i );
+		l << QtItem( ps->value( "Text" ).toString(), ps->value( "Value" ).toString(), ps->value( "Variable" ).toString(), ps->value( "Help" ).toString() );
 	}
-	pSettings::instance()->endArray();
+	ps->endArray();
 	return l.isEmpty() ? defaultSettings() : l;
 }
 
-
-QString UISettingsQMake::defaultQMake()
+QtVersionList UISettingsQMake::defaultVersions()
 {
+	return QtVersionList()
 #ifdef Q_OS_MAC
-	return "qmake";
-#elif defined Q_OS_UNIX
-	return "qmake-qt4";
-#else 
-	return "qmake";
+	<< QtVersion( "Qt 4", "/usr/local/Trolltech/Qt-4.3.2", "qmake", "lupdate", "lrelease", "/usr/local/Trolltech/Qt-4.3.2/doc/html", true )
+	<< QtVersion( "Qt 3", "/Developer/qt", "qmake", "lupdate", "lrelease", "/Developer/qt/doc/html", false );
+#elif defined Q_OS_WIN
+	<< QtVersion( "Qt 4", "C:\\Qt\4.3.2", "qmake", "lupdate", "lrelease", "C:\\Qt\4.3.2\\doc\\html", true )
+	<< QtVersion( "Qt 3", "C:\\Qt\3.3.7", "qmake", "lupdate", "lrelease", "C:\\Qt\3.3.7\\doc\\html", false );
+#else
+	<< QtVersion( "Qt 4", "/usr/share/qt4", "qmake-qt4", "lupdate-qt4", "lrelease-qt4", "/usr/share/qt4/doc/html", true )
+	<< QtVersion( "Qt 3", "/usr/share/qt3", "qmake-qt3", "lupdate-qt3", "lrelease-qt3", "/usr/share/qt3/doc/html", false );
 #endif
 }
 
-QString UISettingsQMake::defaultlupdate()
+QtVersionList UISettingsQMake::readVersions()
 {
-#ifdef Q_OS_MAC
-	return "lupdate";
-#elif defined Q_OS_UNIX
-	return "lupdate-qt4";
-#else 
-	return "lupdate";
-#endif
+	QtVersionList l;
+	pSettings* ps = pSettings::instance();
+	int s = ps->beginReadArray( QString( "Plugins/%1/Versions" ).arg( PLUGIN_NAME ) );
+	for ( int i = 0; i < s; i++ )
+	{
+		ps->setArrayIndex( i );
+		l << QtVersion( ps->value( "Text" ).toString(), ps->value( "Path" ).toString(), ps->value( "QMake" ).toString(), ps->value( "lupdate" ).toString(), ps->value( "lrelease" ).toString(), ps->value( "DocsPath" ).toString(), ps->value( "Default" ).toBool() );
+	}
+	ps->endArray();
+	return l.isEmpty() ? defaultVersions() : l;
 }
 
-QString UISettingsQMake::defaultlrelease()
+QtVersion UISettingsQMake::defaultVersion( const QString& s )
 {
-#ifdef Q_OS_MAC
-	return "lrelease";
-#elif defined Q_OS_UNIX
-	return "lrelease-qt4";
-#else 
-	return "lrelease";
-#endif
+	// return default qmake
+	foreach ( QtVersion v, readVersions() )
+	{
+		if ( s.isEmpty() && v.Default )
+			return v;
+		else if ( !s.isEmpty() && v.Text == s )
+			return v;
+	}
+	// return hard coded if no version are default
+	foreach ( QtVersion v, defaultVersions() )
+		if ( v.Default )
+			return v;
+	// return null version
+	return QtVersion();
 }
 
 void UISettingsQMake::loadSettings()
 {
 	// general
-	
+	foreach ( QtVersion v, readVersions() )
+	{
+		QListWidgetItem* it = new QListWidgetItem( v.Text, lwQtVersions );
+		it->setData( QtVersion::PathRole, v.Path );
+		it->setData( QtVersion::QMakeRole, v.QMake );
+		it->setData( QtVersion::lupdateRole, v.lupdate );
+		it->setData( QtVersion::lreleaseRole, v.lrelease );
+		it->setData( QtVersion::DocsPathRole, v.DocsPath );
+		it->setData( QtVersion::DefaultRole, v.Default );
+		if ( v.Default )
+			it->setBackground( QBrush( Qt::red ) );
+	}
 	// filters & scopes
 	lwFilters->addItems( readFilters() );
 	lwScopes->addItems( readScopes() );
@@ -223,37 +258,38 @@ void UISettingsQMake::loadSettings()
 	foreach ( QListWidgetItem* it, items )
 		it->setFlags( it->flags() | Qt::ItemIsEditable );
 	items.clear();
-	//
-	QtItemList l;
 	// qt modules
-	l = readQtModules();
-	foreach ( QtItem* i, l )
+	foreach ( QtItem i, readQtModules() )
 	{
-		QListWidgetItem* it = new QListWidgetItem( i->Text, lwQtModules );
-		it->setData( QtItem::ValueRole, i->Value );
-		it->setData( QtItem::VariableRole, i->Variable );
-		it->setData( QtItem::HelpRole, i->Help );
+		QListWidgetItem* it = new QListWidgetItem( i.Text, lwQtModules );
+		it->setData( QtItem::ValueRole, i.Value );
+		it->setData( QtItem::VariableRole, i.Variable );
+		it->setData( QtItem::HelpRole, i.Help );
 	}
-	qDeleteAll( l );
-	l.clear();
 	// configuration
-	l = readSettings();
-	foreach ( QtItem* i, l )
+	foreach ( QtItem i, readSettings() )
 	{
-		QListWidgetItem* it = new QListWidgetItem( i->Text, lwSettings );
-		it->setData( QtItem::ValueRole, i->Value );
-		it->setData( QtItem::VariableRole, i->Variable );
-		it->setData( QtItem::HelpRole, i->Help );
+		QListWidgetItem* it = new QListWidgetItem( i.Text, lwSettings );
+		it->setData( QtItem::ValueRole, i.Value );
+		it->setData( QtItem::VariableRole, i.Variable );
+		it->setData( QtItem::HelpRole, i.Help );
 	}
-	qDeleteAll( l );
-	l.clear();
 }
 
 void UISettingsQMake::lw_currentItemChanged( QListWidgetItem* c, QListWidgetItem* p )
 {
 	if ( p )
 	{
-		if ( p->listWidget() == lwQtModules )
+		if ( p->listWidget() == lwQtVersions )
+		{
+			p->setText( leQtVersionVersion->text() );
+			p->setData( QtVersion::PathRole, leQtVersionPath->text() );
+			p->setData( QtVersion::QMakeRole, leQtVersionQMake->text() );
+			p->setData( QtVersion::lupdateRole, leQtVersionlupdate->text() );
+			p->setData( QtVersion::lreleaseRole, leQtVersionlrelease->text() );
+			p->setData( QtVersion::DocsPathRole, leQtVersionDocsPath->text() );
+		}
+		else if ( p->listWidget() == lwQtModules )
 		{
 			p->setText( leCaptionQtModule->text() );
 			p->setData( QtItem::ValueRole, leValueQtModule->text() );
@@ -270,7 +306,16 @@ void UISettingsQMake::lw_currentItemChanged( QListWidgetItem* c, QListWidgetItem
 	}
 	if ( c )
 	{
-		if ( c->listWidget() == lwQtModules )
+		if ( c->listWidget() == lwQtVersions )
+		{
+			leQtVersionVersion->setText( c->text() );
+			leQtVersionPath->setText( c->data( QtVersion::PathRole ).toString() );
+			leQtVersionQMake->setText( c->data( QtVersion::QMakeRole ).toString() );
+			leQtVersionlupdate->setText( c->data( QtVersion::lupdateRole ).toString() );
+			leQtVersionlrelease->setText( c->data( QtVersion::lreleaseRole ).toString() );
+			leQtVersionDocsPath->setText( c->data( QtVersion::DocsPathRole ).toString() );
+		}
+		else if ( c->listWidget() == lwQtModules )
 		{
 			leCaptionQtModule->setText( c->text() );
 			leValueQtModule->setText( c->data( QtItem::ValueRole ).toString() );
@@ -284,6 +329,15 @@ void UISettingsQMake::lw_currentItemChanged( QListWidgetItem* c, QListWidgetItem
 			leVariableSetting->setText( c->data( QtItem::VariableRole ).toString() );
 			teHelpSetting->setPlainText( c->data( QtItem::HelpRole ).toString() );
 		}
+	}
+	else if ( sender() == lwQtVersions )
+	{
+		leQtVersionVersion->clear();
+		leQtVersionPath->clear();
+		leQtVersionQMake->clear();
+		leQtVersionlupdate->clear();
+		leQtVersionlrelease->clear();
+		leQtVersionDocsPath->clear();
 	}
 	else if ( sender() == lwQtModules )
 	{
@@ -301,10 +355,53 @@ void UISettingsQMake::lw_currentItemChanged( QListWidgetItem* c, QListWidgetItem
 	}
 }
 
+void UISettingsQMake::tbQtVersion_clicked()
+{
+	// need path
+	bool b = sender() == tbQtVersionPath || sender() == tbQtVersionDocsPath;
+	// get dialog text
+	QString s;
+	QLineEdit* le = 0;
+	if ( sender() == tbQtVersionPath )
+	{
+		s = tr( "Locate your qt installation directory" );
+		le = leQtVersionPath;
+	}
+	else if ( sender() == tbQtVersionQMake )
+	{
+		s = tr( "Locate the QMake tool associated with this version of qt" );
+		le = leQtVersionQMake;
+	}
+	else if ( sender() == tbQtVersionlupdate )
+	{
+		s = tr( "Locate the lupdate tool associated with this version of qt" );
+		le = leQtVersionlupdate;
+	}
+	else if ( sender() == tbQtVersionlrelease )
+	{
+		s = tr( "Locate the lrelease tool associated with this version of qt" );
+		le = leQtVersionlrelease;
+	}
+	else if ( sender() == tbQtVersionDocsPath )
+	{
+		s = tr( "Locate the doc/html directory associated this with version of qt" );
+		le = leQtVersionDocsPath;
+	}
+	else
+		return;
+	// get path/file
+	const QString f = b ? getExistingDirectory( s, le->text(), window() ) : getOpenFileName( s, le->text(), QString::null, window() );
+	// update dialog if needed
+	if ( !f.isNull() )
+		le->setText( f );
+}
+
 void UISettingsQMake::tbAdd_clicked()
 {
 	QListWidget* lw = 0;
-	if ( sender() == tbAddFilter )
+	if ( sender() == tbAddQtVersion )
+		lw = lwQtVersions;
+	else if ( sender() == tbAddFilter )
 		lw = lwFilters;
 	else if ( sender() == tbAddScope )
 		lw = lwScopes;
@@ -325,21 +422,25 @@ void UISettingsQMake::tbAdd_clicked()
 
 void UISettingsQMake::tbRemove_clicked()
 {
-	if ( sender() == tbRemoveFilter )
-		delete lwFilters->currentItem();
+	if ( sender() == tbRemoveQtVersion )
+		delete lwQtVersions->selectedItems().value( 0 );
+	else if ( sender() == tbRemoveFilter )
+		delete lwFilters->selectedItems().value( 0 );
 	else if ( sender() == tbRemoveScope )
-		delete lwScopes->currentItem();
+		delete lwScopes->selectedItems().value( 0 );
 	else if ( sender() == tbRemovePathFile )
-		delete lwPathFiles->currentItem();
+		delete lwPathFiles->selectedItems().value( 0 );
 	else if ( sender() == tbRemoveQtModule )
-		delete lwQtModules->currentItem();
+		delete lwQtModules->selectedItems().value( 0 );
 	else if ( sender() == tbRemoveSetting )
-		delete lwSettings->currentItem();
+		delete lwSettings->selectedItems().value( 0 );
 }
 
 void UISettingsQMake::tbClear_clicked()
 {
-	if ( sender() == tbClearFilters )
+	if ( sender() == tbClearQtVersions )
+		lwQtVersions->clear();
+	else if ( sender() == tbClearFilters )
 		lwFilters->clear();
 	else if ( sender() == tbClearScopes )
 		lwScopes->clear();
@@ -357,7 +458,9 @@ void UISettingsQMake::tbUp_clicked()
 	if ( !tb )
 		return;
 	QListWidget* lw = 0;
-	if ( tb == tbUpFilter )
+	if ( tb == tbUpQtVersion )
+		lw = lwQtVersions;
+	else if ( tb == tbUpFilter )
 		lw = lwFilters;
 	else if ( tb == tbUpScope )
 		lw = lwScopes;
@@ -369,13 +472,13 @@ void UISettingsQMake::tbUp_clicked()
 		lw = lwSettings;
 	if ( !lw )
 		return;
-	QListWidgetItem* it = lw->currentItem();
-	int i = lw->row( it );
-	if ( !it )
-		return;
-	if ( i != 0 )
-		lw->insertItem( i -1, lw->takeItem( i ) );
-	lw->setCurrentItem( it );
+	if ( QListWidgetItem* it = lw->selectedItems().value( 0 ) )
+	{
+		int i = lw->row( it );
+		if ( i != 0 )
+			lw->insertItem( i -1, lw->takeItem( i ) );
+		lw->setCurrentItem( it );
+	}
 }
 
 void UISettingsQMake::tbDown_clicked()
@@ -384,7 +487,9 @@ void UISettingsQMake::tbDown_clicked()
 	if ( !tb )
 		return;
 	QListWidget* lw = 0;
-	if ( tb == tbDownFilter )
+	if ( tb == tbDownQtVersion )
+		lw = lwQtVersions;
+	else if ( tb == tbDownFilter )
 		lw = lwFilters;
 	else if ( tb == tbDownScope )
 		lw = lwScopes;
@@ -396,20 +501,34 @@ void UISettingsQMake::tbDown_clicked()
 		lw = lwSettings;
 	if ( !lw )
 		return;
-	QListWidgetItem* it = lw->currentItem();
-	int i = lw->row( it );
-	if ( !it )
-		return;
-	if ( i != lw->count() -1 )
-		lw->insertItem( i +1, lw->takeItem( i ) );
-	lw->setCurrentItem( it );
+	if ( QListWidgetItem* it = lw->selectedItems().value( 0 ) )
+	{
+		int i = lw->row( it );
+		if ( i != lw->count() -1 )
+			lw->insertItem( i +1, lw->takeItem( i ) );
+		lw->setCurrentItem( it );
+	}
+}
+
+void UISettingsQMake::on_tbDefaultQtVersion_clicked()
+{
+	if ( QListWidgetItem* it = lwQtVersions->selectedItems().value( 0 ) )
+	{
+		for ( int i = 0; i < lwQtVersions->count(); i++ )
+		{
+			QListWidgetItem* cit = lwQtVersions->item( i );
+			cit->setData( QtVersion::DefaultRole, false );
+			cit->setBackground( QBrush( Qt::transparent ) );
+		}
+		it->setData( QtVersion::DefaultRole, true );
+		it->setBackground( QBrush( Qt::red ) );
+	}
 }
 
 void UISettingsQMake::on_tbToolTipFilter_clicked()
 {
 	// get current item
 	QListWidgetItem* it = lwFilters->currentItem();
-	
 	// update tooltip if needed
 	if ( it )
 	{
@@ -424,14 +543,13 @@ void UISettingsQMake::on_tbToolTipFilter_clicked()
 	}
 }
 
-void UISettingsQMake::on_bbDialog_helpRequested()
+void UISettingsQMake::on_dbbButtons_helpRequested()
 {
 	QString s;
 	switch ( twQMake->currentIndex() )
 	{
 		case 0:
-			s = tr( "Here you can configure the path/filename for the differents Qt tools, generate Qt api for auto completion.<br>"
-				"<b>Operators</b>: The operators are used in project settings, so you can easily configure your project with differents operators." );
+			s = tr( "Here you can configure the path/filename for the differents Qt tools, generate Qt api for auto completion." );
 			break;
 		case 1:
 			s = tr( "<b>Filters</b>: Are the variables names that are shown when the project view is filtered.<br/>"
@@ -446,58 +564,75 @@ void UISettingsQMake::on_bbDialog_helpRequested()
 			break;
 	}
 	if ( !s.isEmpty() )
-		QWhatsThis::showText( mapToGlobal( geometry().center() ), s );
+		QWhatsThis::showText( mapToGlobal( rect().center() ), s );
 }
 
-void UISettingsQMake::on_bbDialog_clicked( QAbstractButton* b )
+void UISettingsQMake::on_dbbButtons_clicked( QAbstractButton* b )
 {
-	if ( bbDialog->standardButton( b )  != QDialogButtonBox::Apply )
+	if ( dbbButtons->standardButton( b )  != QDialogButtonBox::Save )
 		return;
 	QStringList l;
+	pSettings* ps = pSettings::instance();
 	// general
-	
-	// filters & scopes
+	lw_currentItemChanged( 0, lwQtVersions->selectedItems().value( 0 ) );
+	ps->beginWriteArray( QString( "Plugins/%1/Versions" ).arg( PLUGIN_NAME ) );
+	for ( int i = 0; i < lwQtVersions->count(); i++ )
+	{
+		QListWidgetItem* it = lwQtVersions->item( i );
+		ps->setArrayIndex( i );
+		ps->setValue( "Text", it->text() );
+		ps->setValue( "Path", it->data( QtVersion::PathRole ).toString() );
+		ps->setValue( "QMake", it->data( QtVersion::QMakeRole ).toString() );
+		ps->setValue( "lupdate", it->data( QtVersion::lupdateRole ).toString() );
+		ps->setValue( "lrelease", it->data( QtVersion::lreleaseRole ).toString() );
+		ps->setValue( "DocsPath", it->data( QtVersion::DocsPathRole ).toString() );
+		ps->setValue( "Default", it->data( QtVersion::DefaultRole ).toBool() );
+	}
+	ps->endArray();
+	// filters
 	l.clear();
 	foreach ( QListWidgetItem* it, lwFilters->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
 		l << it->text();
-	pSettings::instance()->setValue( "Plugins/QMake/Filters", l );
+	ps->setValue( QString( "Plugins/%1/Filters" ).arg( PLUGIN_NAME ), l );
+	// scopes
 	l.clear();
 	foreach ( QListWidgetItem* it, lwScopes->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
 		l << it->text();
-	pSettings::instance()->setValue( "Plugins/QMake/Scopes", l );
+	ps->setValue( QString( "Plugins/%1/Scopes" ).arg( PLUGIN_NAME ), l );
+	// pathfiles
 	l.clear();
 	foreach ( QListWidgetItem* it, lwPathFiles->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
 		l << it->text();
-	pSettings::instance()->setValue( "Plugins/QMake/PathFiles", l );
+	ps->setValue( QString( "Plugins/%1/PathFiles" ).arg( PLUGIN_NAME ), l );
 	// filters tooltips
 	l.clear();
 	foreach ( QListWidgetItem* it, lwFilters->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
 		l << it->toolTip();
-	pSettings::instance()->setValue( "Plugins/QMake/FiltersToolTips", l );
+	ps->setValue( QString( "Plugins/%1/FiltersToolTips" ).arg( PLUGIN_NAME ), l );
 	// qt modules
-	lw_currentItemChanged( 0, lwQtModules->currentItem() );
-	pSettings::instance()->beginWriteArray( "Plugins/QMake/QtModules" );
+	lw_currentItemChanged( 0, lwQtModules->selectedItems().value( 0 ) );
+	ps->beginWriteArray( QString( "Plugins/%1/QtModules" ).arg( PLUGIN_NAME ) );
 	for ( int i = 0; i < lwQtModules->count(); i++ )
 	{
 		QListWidgetItem* it = lwQtModules->item( i );
-		pSettings::instance()->setArrayIndex( i );
-		pSettings::instance()->setValue( "Text", it->text() );
-		pSettings::instance()->setValue( "Value", it->data( QtItem::ValueRole ).toString() );
-		pSettings::instance()->setValue( "Variable", it->data( QtItem::VariableRole ).toString() );
-		pSettings::instance()->setValue( "Help", it->data( QtItem::HelpRole ).toString() );
+		ps->setArrayIndex( i );
+		ps->setValue( "Text", it->text() );
+		ps->setValue( "Value", it->data( QtItem::ValueRole ).toString() );
+		ps->setValue( "Variable", it->data( QtItem::VariableRole ).toString() );
+		ps->setValue( "Help", it->data( QtItem::HelpRole ).toString() );
 	}
-	pSettings::instance()->endArray();
+	ps->endArray();
 	// qt modules
-	lw_currentItemChanged( 0, lwSettings->currentItem() );
-	pSettings::instance()->beginWriteArray( "Plugins/QMake/Settings" );
+	lw_currentItemChanged( 0, lwSettings->selectedItems().value( 0 ) );
+	ps->beginWriteArray( QString( "Plugins/%1/Settings" ).arg( PLUGIN_NAME ) );
 	for ( int i = 0; i < lwSettings->count(); i++ )
 	{
 		QListWidgetItem* it = lwSettings->item( i );
-		pSettings::instance()->setArrayIndex( i );
-		pSettings::instance()->setValue( "Text", it->text() );
-		pSettings::instance()->setValue( "Value", it->data( QtItem::ValueRole ).toString() );
-		pSettings::instance()->setValue( "Variable", it->data( QtItem::VariableRole ).toString() );
-		pSettings::instance()->setValue( "Help", it->data( QtItem::HelpRole ).toString() );
+		ps->setArrayIndex( i );
+		ps->setValue( "Text", it->text() );
+		ps->setValue( "Value", it->data( QtItem::ValueRole ).toString() );
+		ps->setValue( "Variable", it->data( QtItem::VariableRole ).toString() );
+		ps->setValue( "Help", it->data( QtItem::HelpRole ).toString() );
 	}
-	pSettings::instance()->endArray();
+	ps->endArray();
 }
