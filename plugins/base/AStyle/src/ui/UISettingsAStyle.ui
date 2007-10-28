@@ -1,9 +1,6 @@
 <ui version="4.0" >
  <class>UISettingsAStyle</class>
  <widget class="QWidget" name="UISettingsAStyle" >
-  <property name="modal" stdset="0" >
-   <bool>false</bool>
-  </property>
   <property name="geometry" >
    <rect>
     <x>0</x>
