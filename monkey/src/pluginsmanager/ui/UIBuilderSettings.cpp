@@ -27,6 +27,7 @@ UIBuilderSettings::UIBuilderSettings( BuilderPlugin* p, QWidget* w )
 	Q_ASSERT( mPlugin );
 	setupUi( this );
 	// set button icons
+	dbbButtons->button( QDialogButtonBox::Help )->setIcon( QIcon( ":/help/icons/help/keyword.png" ) );
 	dbbButtons->button( QDialogButtonBox::Reset )->setIcon( QIcon( ":/tools/icons/tools/update.png" ) );
 	dbbButtons->button( QDialogButtonBox::RestoreDefaults )->setIcon( QIcon( ":/file/icons/file/backup.png" ) );
 	dbbButtons->button( QDialogButtonBox::Save )->setIcon( QIcon( ":/file/icons/file/save.png" ) );
