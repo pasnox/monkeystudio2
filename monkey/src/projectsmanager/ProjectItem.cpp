@@ -230,22 +230,13 @@ void ProjectItem::appendRow( ProjectItem* i )
 
 bool ProjectItem::swapRow( int i, int j )
 {
-	if ( -1 < i < rowCount() && -1 < j < rowCount() && i != i )
+	if ( -1 < i < rowCount() && -1 < j < rowCount() && i != j )
 	{
-		QList<QStandardItem*> ii;
-		QList<QStandardItem*> ij;
-		if ( i > j )
-		{
-			ii = takeRow( i );
-			ij = takeRow( j );
-		}
-		else
-		{
-			ij = takeRow( j );
-			ii = takeRow( i );
-		}
-		QStandardItem::insertRow( i, ij );
-		QStandardItem::insertRow( j, ii );
+		QList<QStandardItem*> ii = takeRow( qMax( i, j ) );
+		QList<QStandardItem*> ij = takeRow( qMin( i, j ) );
+		QStandardItem::insertRow( qMin( i, j ), ii );
+		QStandardItem::insertRow( qMax( i, j ), ij );
+		setModified( true );
 		return true;
 	}
 	return false;
