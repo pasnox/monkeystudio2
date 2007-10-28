@@ -145,15 +145,12 @@ void QMakeItem::setValue( const QString& s )
 {
 	// set data
 	ProjectItem::setValue( s );
-	
 	// set text
 	setText( s );
-	
 	// variables name to changes
 	QStringList l1 = UISettingsQMake::readFilters();
 	QStringList l2 = UISettingsQMake::readFiltersToolTips();
 	QStringList l3 = UISettingsQMake::readPathFiles();
-	
 	// update text
 	switch( getType() )
 	{
@@ -214,7 +211,6 @@ void QMakeItem::setFilePath( const QString& s )
 {
 	// set data
 	ProjectItem::setFilePath( canonicalFilePath( s ) );
-	
 	// set text
 	switch( getType() )
 	{
@@ -234,7 +230,7 @@ void QMakeItem::setFilePath( const QString& s )
 
 QString QMakeItem::getIndent() const
 {
-	if ( !parent() || parent()->isNested() || ( isValue() && isFirst() ) || ( isScope( false ) && getValue().toLower() == "else" ) )
+	if ( !parent() || parent()->isProject() || parent()->isNested() || ( isValue() && isFirst() ) || ( isScope( false ) && getValue().toLower() == "else" ) )
 		return QString();
 	else if ( isScopeEnd() )
 	{
@@ -298,11 +294,9 @@ void QMakeItem::insertRow( int r, ProjectItem* it )
 	}
 	// default insert
 	QStandardItem::insertRow( r, it );
-	
 	// if project get parent plugin
 	if ( it->isProject() )
 		it->setPlugin( project()->plugin() );
-	
 	// set project modified
 	project()->setModified( true );
 }
@@ -313,19 +307,14 @@ bool QMakeItem::open()
 	{
 		if ( !QFile::exists( getValue() ) )
 			return false;
-		
 		// populate datas
 		QMakeParser p( getValue(), const_cast<QMakeItem*>( this ) );
-		
 		// set proejct writable
 		setReadOnly( false );
-		
 		// set project unmodified
 		setModified( false );
-		
 		// refresh project
 		refresh();
-		
 		// same for childproject
 		foreach ( ProjectItem* p, childrenProjects( true ) )
 		{
@@ -333,7 +322,7 @@ bool QMakeItem::open()
 			p->setModified( false );
 			p->refresh();
 		}
-		
+		// return state
 		return p.isOpen();
 	}
 	return false;
@@ -341,7 +330,7 @@ bool QMakeItem::open()
 
 bool QMakeItem::addProject( const QString& f, ProjectItem* s, const QString& o )
 {
-	if ( !isProjectsContainer() )
+	if ( !isProjectsContainer() || getReadOnly() )
 		return false;
 	// check if already present value
 	ProjectItem* v = variable( s, "SUBDIRS", o );
@@ -376,14 +365,11 @@ void QMakeItem::editSettings()
 
 void QMakeItem::save( bool b )
 {
-	// only project item can call this
-	if ( !isProject() )
+	// only project item can call this and must be not read only and modified
+	if ( !isProject() || getReadOnly() || !getModified() )
 		return;
-	
-	if ( getReadOnly() || !getModified() )
-		return;
-	
-	if ( !b || ( b && question( QObject::tr( "Save Project..." ), QObject::tr( "The project [%1] has been modified, save it ?" ).arg( name() ) ) ) )
+	// ask user to save if needed
+	if ( !b || ( b && question( tr( "Save Project..." ), tr( "The project [%1] has been modified, save it ?" ).arg( name() ) ) ) )
 		writeProject();
 }
 
@@ -414,9 +400,9 @@ void QMakeItem::addExistingFiles( const QStringList& l, ProjectItem* s, const QS
 		if ( QDir::match( pjf, f ) )
 		{
 			if ( !isProjectsContainer() )
-				warning( QObject::tr( "Add Existing Files..." ), QObject::tr( "This project is not a projects container, cancel adding project:\n%1" ).arg( f ) );
+				warning( tr( "Add Existing Files..." ), tr( "This project is not a projects container, cancel adding project:\n%1" ).arg( f ) );
 			else if( !addProject( f, s, o ) )
-				warning( QObject::tr( "Add Existing Files..." ), QObject::tr( "A selected file is a project that i can't open:\n%1" ).arg( f ) );
+				warning( tr( "Add Existing Files..." ), tr( "A selected file is a project that i can't open:\n%1" ).arg( f ) );
 			continue;
 		}
 		else if ( isProjectsContainer() )
@@ -439,7 +425,7 @@ void QMakeItem::addExistingFiles( const QStringList& l, ProjectItem* s, const QS
 		else if ( QDir::match( "*.ui", f ) )
 		{
 			vn = "FORMS";
-			if ( question( QObject::tr( "FORMS3 Files..." ), QObject::tr( "Do i need to add this form to FORMS3 variable ?" ) ) )
+			if ( question( tr( "FORMS3 Files..." ), tr( "Do i need to add this form to FORMS3 variable ?" ) ) )
 				vn = "FORMS3";
 		}
 		else if ( QDir::match( "*.ts", f ) )
@@ -519,16 +505,11 @@ void QMakeItem::addCommand( const pCommand& c, const QString& s )
 	pMenuBar* mb = pMenuBar::instance();
 	// create action
 	QAction* a = mb->action( QString( "%1/%2" ).arg( s, c.text() ) , c.text() );
-	a->setData( "QMake" );
+	a->setData( PLUGIN_NAME );
 	a->setStatusTip( c.text() );
 	connect( a, SIGNAL( triggered() ), this, SLOT( commandTriggered() ) );
 	// add command to command list
 	mCommands << c;
-}
-
-QString getFile( const QString& s )
-{
-	return s;
 }
 
 void QMakeItem::installCommands()
@@ -538,125 +519,98 @@ void QMakeItem::installCommands()
 	{
 		// temp command
 		pCommand c;
-		
 		// clear commands
 		mCommands.clear();
-		
 		// get builder commnd
 		const pCommand bc = builder()->buildCommand();
-		
 		// evaluate some var
-		QString temp = evaluate( "TEMPLATE", this );
 		QString target = evaluate( "TARGET", this );
 		QString destdir = evaluate( "DESTDIR", this );
 		if ( destdir.isEmpty() )
 			destdir = evaluate( "DLLDESTDIR", this );
-		
-		// build commands...
-		if ( temp.contains( "app" ) )
-		{
-			// build debug
-			c = bc;
-			c.setText( tr( "Build Debug" ) );
-			c.setArguments( "debug" );
-			addCommand( c, "mBuilder/mBuild" );
-			
-			// build release
-			c = bc;
-			c.setText( tr( "Build Release" ) );
-			c.setArguments( "release" );
-			addCommand( c, "mBuilder/mBuild" );
-			
-			// build all
-			c = bc;
-			c.setText( tr( "Build All" ) );
-			c.setArguments( "all" );
-			addCommand( c, "mBuilder/mBuild" );
-		}
-		else
-			addCommand( bc, "mBuilder/mBuild" );
-		
+		// build debug
+		c = bc;
+		c.setText( tr( "Build Debug" ) );
+		c.setArguments( "debug" );
+		addCommand( c, "mBuilder/mBuild" );
+		// build release
+		c = bc;
+		c.setText( tr( "Build Release" ) );
+		c.setArguments( "release" );
+		addCommand( c, "mBuilder/mBuild" );
+		// build all
+		c = bc;
+		c.setText( tr( "Build All" ) );
+		c.setArguments( "all" );
+		addCommand( c, "mBuilder/mBuild" );
+		// simple build call
+		addCommand( bc, "mBuilder/mBuild" );
 		// clean
 		c = bc;
 		c.setText( tr( "Clean" ) );
 		c.setArguments( "clean" );
 		addCommand( c, "mBuilder/mClean" );
-		
 		// distclean
 		c = bc;
 		c.setText( tr( "Distclean" ) );
 		c.setArguments( "distclean" );
 		addCommand( c, "mBuilder/mClean" );
-		
 		// qmake command
 		c = pCommand();
 		c.setText( tr( "QMake" ) );
-		c.setCommand( getQMake() );
+		c.setCommand( UISettingsQMake::defaultQMake() );
 		c.setWorkingDirectory( "$cpp$" );
 		addCommand( c, "mBuilder" );
-		
 		// lupdate command
 		c = pCommand();
 		c.setText( tr( "lupdate" ) );
-		c.setCommand( getlupdate() );
+		c.setCommand( UISettingsQMake::defaultlupdate() );
 		c.setArguments( "$cp$" );
 		c.setWorkingDirectory( "$cpp$" );
 		addCommand( c, "mBuilder" );
-		
 		// lrelease command
 		c = pCommand();
 		c.setText( tr( "lrelease" ) );
-		c.setCommand( getlrelease() );
+		c.setCommand( UISettingsQMake::defaultlrelease() );
 		c.setArguments( "$cp$" );
 		c.setWorkingDirectory( "$cpp$" );
 		addCommand( c, "mBuilder" );
-		
 		// execute debug
 		c = bc;
 		c.setText( tr( "Execute Debug" ) );
 		c.setCommand( QString( "$cpp$/%1/%2" ).arg( destdir.isEmpty() ? "debug" : destdir ).arg( target.isEmpty() ? name() : target ) );
 		c.setArguments( QString::null );
 		addCommand( c, "mBuilder/mExecute" );
-		
 		// execute release
 		c = bc;
 		c.setText( tr( "Execute Release" ) );
 		c.setCommand( QString( "$cpp$/%1/%2" ).arg( destdir.isEmpty() ? "release" : destdir ).arg( target.isEmpty() ? name() : target ) );
 		c.setArguments( QString::null );
 		addCommand( c, "mBuilder/mExecute" );
-
-		// rebuild
-		if ( temp.contains( "app" ) )
-		{
-			// rebuild debug
-			c = bc;
-			c.setText( tr( "Rebuild Debug" ) );
-			c.setCommand( QStringList( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build Debug" ) ).join( ";" ) );
-			c.setArguments( QString::null );
-			addCommand( c, "mBuilder/mRebuild" );
-			
-			// rebuild release
-			c = bc;
-			c.setText( tr( "Rebuild Release" ) );
-			c.setCommand( QStringList( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build Release" ) ).join( ";" ) );
-			c.setArguments( QString::null );
-			addCommand( c, "mBuilder/mRebuild" );
-			
-			// rebuild all
-			c = bc;
-			c.setText( tr( "Rebuild All" ) );
-			c.setCommand( QStringList( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build All" ) ).join( ";" ) );
-			c.setArguments( QString::null );
-			addCommand( c, "mBuilder/mRebuild" );
-		}
-		else
-		{
-			c = bc;
-			c.setText( tr( "Rebuild" ) );
-			c.setCommand( QStringList( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build" ) ).join( ";" ) );
-			c.setArguments( QString::null );
-			addCommand( c, "mBuilder/mRebuild" );
-		}
+		// rebuild debug
+		c = bc;
+		c.setText( tr( "Rebuild Debug" ) );
+		c.setCommand( QStringList( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build Debug" ) ).join( ";" ) );
+		c.setArguments( QString::null );
+		addCommand( c, "mBuilder/mRebuild" );
+		// rebuild release
+		c = bc;
+		c.setText( tr( "Rebuild Release" ) );
+		c.setCommand( QStringList( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build Release" ) ).join( ";" ) );
+		c.setArguments( QString::null );
+		addCommand( c, "mBuilder/mRebuild" );
+		// rebuild all
+		c = bc;
+		c.setText( tr( "Rebuild All" ) );
+		c.setCommand( QStringList( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build All" ) ).join( ";" ) );
+		c.setArguments( QString::null );
+		addCommand( c, "mBuilder/mRebuild" );
+		// simple rebuild call
+		c = bc;
+		c.setText( tr( "Rebuild" ) );
+		c.setCommand( QStringList( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build" ) ).join( ";" ) );
+		c.setArguments( QString::null );
+		addCommand( c, "mBuilder/mRebuild" );
 	}
 }
 
@@ -667,7 +621,7 @@ void recursiveRemoveCommands( QMenu* m )
 	{
 		if ( a->menu() )
 			recursiveRemoveCommands( a->menu() );
-		else if ( !a->isSeparator() && a->data().toString() == "QMake" )
+		else if ( !a->isSeparator() && a->data().toString() == PLUGIN_NAME )
 			delete a;
 	}
 }
@@ -709,8 +663,27 @@ void QMakeItem::setValues( ProjectItem* it, const QString& v, const QString& o, 
 		{
 			const QString s = l.at( i );
 			ProjectItem* cvi = vi->child( i );
+			// update no longer needed value
 			if ( cvi && !l.contains( cvi->getValue() ) )
 				cvi->setValue( s );
+			// swap existing value if needed to contrains ordered values
+			else if ( cvi && l.contains( cvi->getValue() ) )
+			{
+				if ( s != cvi->getValue() )
+				{
+					foreach ( ProjectItem* cit, vi->children() )
+					{
+						if ( cit->getValue() == s )
+						{
+							bool b = model()->blockSignals( true );
+							vi->swapRow( cit->row(), i );
+							model()->blockSignals( b );
+							break;
+						}
+					}
+				}
+			}
+			// create require item value
 			else if ( !cvi || ( cvi && cvi->getValue() != s ) )
 			{
 				cvi = new QMakeItem( ProjectItem::ValueType, vi );
@@ -771,39 +744,6 @@ ProjectItemList QMakeItem::getValues( ProjectItem* s, const QString& v, const QS
 			foreach ( ProjectItem* cit, it->children() )
 				l << cit;
 	return l;
-}
-
-QString QMakeItem::getQMake() const
-{
-#ifdef Q_OS_MAC
-	return "qmake";
-#elif defined Q_OS_UNIX
-	return "qmake-qt4";
-#else 
-	return "qmake";
-#endif
-}
-
-QString QMakeItem::getlupdate() const
-{
-#ifdef Q_OS_MAC
-	return "lupdate";
-#elif defined Q_OS_UNIX
-	return "lupdate-qt4";
-#else 
-	return "lupdate";
-#endif
-}
-
-QString QMakeItem::getlrelease() const
-{
-#ifdef Q_OS_MAC
-	return "lrelease";
-#elif defined Q_OS_UNIX
-	return "lrelease-qt4";
-#else 
-	return "lrelease";
-#endif
 }
 
 void QMakeItem::redoLayout( ProjectItem* it ) //

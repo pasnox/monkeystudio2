@@ -54,10 +54,6 @@ public:
 	virtual void addValue( ProjectItem*, const QString&, const QString&, const QString& );
 	virtual ProjectItemList getValues( ProjectItem*, const QString&, const QString& ) const;
 	
-	QString getQMake() const;
-	QString getlupdate() const;
-	QString getlrelease() const;
-	
 protected:
 	virtual void redoLayout( ProjectItem* );
 	virtual bool writeProject();
