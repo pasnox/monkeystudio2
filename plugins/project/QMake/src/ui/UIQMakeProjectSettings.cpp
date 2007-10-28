@@ -25,55 +25,55 @@ uint qHash( const ProjectKey& k )
 { return qHash( (QStringList() << ( k.getScope() ? k.getScope()->getValue() : QString::null ) << k.getVariable() << k.getOperator() ).join( QString::null ) ); }
 
 UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
-	: QDialog( p ), mInit( false ), mProject( m ), mModel( m->model() ), mDirs( new QDirModel( this ) )
+	: QDialog( p )
 {
-	Q_ASSERT( mProject != 0 );
+	Q_ASSERT( m );
+	mInit = false;
+	mProject = m;
+	mModel = m->model();
+	mDirs = new QDirModel( this );
+	//
 	setupUi( this );
 	setAttribute( Qt::WA_DeleteOnClose );
-	
 	// set window title
 	setWindowTitle( QString( "Project Settings - %1" ).arg( mProject->name() ) );
-	
 	// set button pixmap
 	dbbButtons->button( QDialogButtonBox::Ok )->setIcon( QPixmap( ":/icons/icons/ok.png" ) );
 	dbbButtons->button( QDialogButtonBox::Cancel )->setIcon( QPixmap( ":/icons/icons/cancel.png" ) );
 	dbbButtons->button( QDialogButtonBox::Help )->setIcon( QPixmap( ":/icons/icons/help.png" ) );
-	
 	// scopes proxy
 	mScopesProxy = new QMakeProxy( mModel, mProject );
 	mScopesProxy->setFilterRoles( QList<int>() << ProjectItem::ProjectType << ProjectItem::ScopeType << ProjectItem::NestedScopeType );
 	mScopesProxy->setNegateFilter( false );
 	mScopesProxy->setFiltering( true );
 	cbScopes->setModel( mScopesProxy );
+	cbScopes->view()->setRootIndex( mScopesProxy->mapFromSource( mProject->index().parent() ) );
 	cbScopes->setCurrentIndex( mScopesProxy->mapFromSource( mProject->index() ) );
-	
+	//
 	mDirs->setReadOnly( true );
 	mDirs->setFilter( QDir::AllDirs );
 	mDirs->setSorting( QDir::Name );
 	leDir->setCompleter( new QCompleter( mDirs, leDir ) );
 	lvDirs->setModel( mDirs );
-#ifndef Q_WS_WIN
+#ifndef Q_OS_WIN
 	// all os except windows got only one root drive, so don't need to show root
 	lvDirs->setRootIndex( mDirs->index( "/" ) );
 #endif
 	setDir( mDirs->index( mProject->canonicalPath() ) );
-	
 	// advanced page
 	mVariablesProxy = new QMakeProxy( mModel, mProject );
 	mVariablesProxy->setFilterRoles( QList<int>() << ProjectItem::ValueType );
 	mVariablesProxy->setFiltering( true );
 	tvScopes->setModel( mVariablesProxy );
-	
+	//
 	tvScopes->header()->hide();
 	tvScopes->setRootIndex( mVariablesProxy->mapFromSource( mProject->index() ) );
-	
 	// scope content
 	mContentProxy = new QMakeProxy( mModel, mProject );
 	mContentProxy->setFilterRoles( QList<int>() << ProjectItem::ValueType );
 	mContentProxy->setNegateFilter( false );
 	mContentProxy->setFiltering( true );
 	lvContents->setModel( mContentProxy );
-	
 	// set currentindex
 	setCurrentIndex( mProject->child( 0, 0 )->index() );
 }
@@ -120,7 +120,6 @@ void UIQMakeProjectSettings::setCurrentCONFIG( const QString& s )
 		rb->setAutoExclusive( false );
 		rb->setChecked( false );
 	}
-	
 	// applying config
 	QString c = s;
 	rbDebugRelease->setChecked( c.contains( rbDebugRelease->statusTip(), Qt::CaseInsensitive ) );
@@ -144,7 +143,6 @@ void UIQMakeProjectSettings::setCurrentCONFIG( const QString& s )
 		c.remove( it->data( QtItem::ValueRole ).toString(), Qt::CaseInsensitive );
 	}
 	leConfig->setText( c.simplified() );
-	
 	// re active autoexclusivity
 	foreach ( QRadioButton* rb, gbBuild->findChildren<QRadioButton*>() )
 		rb->setAutoExclusive( true );
@@ -196,7 +194,6 @@ void UIQMakeProjectSettings::checkOthersVariables()
 	// clear lists
 	lwOthersVariables->clear();
 	lwOthersValues->clear();
-	
 	// iterate other all variables
 	ProjectKey ck = currentKey( QString::null );
 	foreach ( ProjectKey k, mSettings.keys() )
@@ -210,7 +207,6 @@ void UIQMakeProjectSettings::checkOthersVariables()
 			lwOthersVariables->addItem( it );
 		}
 	}
-	
 	// show values of first variable
 	if ( lwOthersVariables->count() )
 		lwOthersVariables->setCurrentItem( lwOthersVariables->item( 0 ) );
@@ -321,51 +317,39 @@ void UIQMakeProjectSettings::querySettings()
 	foreach ( const QString s, UISettingsQMake::readFilters() )
 		if ( !mBlackList.contains( s ) )
 			mBlackList << s;
-	
-	// load user operators
-	cbOperators->addItems( UISettingsQMake::readOperators() );
-	
+	// load global operators
+	cbOperators->addItems( availableOperators() );
 	// get all variable of project
 	ProjectItemList il = mProject->getAllItemList( ProjectItem::VariableType, "*", "*" );
-	
 	// set maximum progressbar value
 	pbProgress->setMaximum( il.count() -1 );
-	
 	// inform reading project
 	pbProgress->setFormat( tr( "Reading project datas... %p%" ) );
 	pbProgress->setValue( 0 );
-	
+	//
 	foreach ( ProjectItem* v, il )
 	{
 		// process application event except user inputContext
 		QApplication::processEvents( QEventLoop::ExcludeUserInputEvents );
-		
 		// get key
 		ProjectKey k = ProjectKey( v->parent(), ProjectVariable( v->getValue(), v->getOperator() ) );
-		
 		// add values to key
 		foreach ( ProjectItem* it, v->children() )
 			addValue( k, it->getValue() );
-		
 		// update progress bar
 		pbProgress->setValue( pbProgress->value() +1 );
 	}
-	
 	// set settings original one
 	mOriginalSettings = mSettings;
-	
 	// set some ui settings
 	cbEncodings->addItems( availableTextCodecs() );
 	loadModules();
 	loadConfigs();
-	loadLanguages(); // bug
-	
+	loadLanguages();
 	// hide progressbar
 	pbProgress->hide();
-	
 	// apply current settings
 	on_cbOperators_currentIndexChanged( cbOperators->currentText() );
-	
 	// connections
 	// combox
 	connect( cbOperators, SIGNAL( highlighted( int ) ), this, SLOT( cb_highlighted( int ) ) );
@@ -492,24 +476,20 @@ void UIQMakeProjectSettings::on_tbAddScope_clicked()
 	{
 		// get current projectitem
 		ProjectItem* cit = currentKey( QString::null ).getScope();
-		
 		// ask where to add item
-		QMessageBox mb( QMessageBox::Question, tr( "Add Scope..." ), tr( "According to current item, where i need to create scope ?" ), QMessageBox::NoButton, this );
+		QMessageBox mb( QMessageBox::Question, tr( "Add Scope..." ), tr( "According to current scope, where i need to create scope ?" ), QMessageBox::NoButton, this );
 		QPushButton* bChild = mb.addButton( tr( "&Child" ), QMessageBox::AcceptRole );
 		QPushButton* bUnder = mb.addButton( tr( "&Under" ), QMessageBox::AcceptRole );
 		QPushButton* bEnd = mb.addButton( tr( "&End" ), QMessageBox::AcceptRole );
 		bUnder->setEnabled( cit != mProject );
 		bEnd->setEnabled( cit != mProject );
 		mb.addButton( QMessageBox::Cancel );
-		
 		// execute dialog
 		mb.exec();
-		
 		// create scope
 		ProjectItem* sit = new QMakeItem( ProjectItem::NestedScopeType );
 		sit->setValue( s.trimmed() );
 		sit->setOperator( ":" );
-		
 		// add scope to correct place
 		if ( mb.clickedButton() == bChild )
 			cit->appendRow( sit );
@@ -522,17 +502,14 @@ void UIQMakeProjectSettings::on_tbAddScope_clicked()
 			delete sit;
 			return;
 		}
-		
 		// create end scope item
 		(void) new QMakeItem( ProjectItem::ScopeEndType, sit );
-		
 		// transform parent nested scope to simple scope
 		if ( !sit->parent()->isProject() && sit->parent()->isNested() )
 		{
 			sit->parent()->setType( ProjectItem::ScopeType );
 			sit->parent()->setOperator( QString::null );
 		}
-		
 		// change current index to new scope
 		cbScopes->setCurrentIndex( mScopesProxy->mapFromSource( sit->index() ) );
 		// update datas
@@ -600,7 +577,7 @@ void UIQMakeProjectSettings::tb_clicked()
 	if ( !tb )
 		return;
 	QString s;
-	
+	//
 	if ( tb == tbIcon )
 	{
 		s = getImageFileName( tr( "Choose your application icon" ), mProject->canonicalFilePath( leIcon->text() ), this );
@@ -644,7 +621,7 @@ void UIQMakeProjectSettings::on_cbOperators_currentIndexChanged( const QString& 
 	// cancel if loading
 	if ( pbProgress->isVisible() )
 		return;
-	
+	//
 	leTitle->setText( value( currentKey( leTitle->statusTip() ) ) );
 	leIcon->setText( value( currentKey( leIcon->statusTip() ) ) );
 	lPixmap->setPixmap( QPixmap( mProject->canonicalFilePath( leIcon->text() ) ) );
@@ -672,13 +649,10 @@ void UIQMakeProjectSettings::on_cbOperators_currentIndexChanged( const QString& 
 	leOutputPath->setText( value( currentKey( leOutputPath->statusTip() ) ) );
 	leOutputName->setText( value( currentKey( leOutputName->statusTip() ) ) );
 	leTranslationsPath->setText( value( currentKey( leTranslationsPath->statusTip() ) ) );
-	
 	// update variable values
 	on_cbVariables_currentIndexChanged( cbVariables->currentText() );
-	
 	// update translations
 	setCurrentTRANSLATIONS( values( currentKey( lwTranslations->statusTip() ) ) );
-	
 	// update others variables
 	checkOthersVariables();
 }
@@ -694,9 +668,6 @@ void UIQMakeProjectSettings::on_cbTemplate_currentIndexChanged( const QString& s
 	leHelpFile->setDisabled( b );
 	tbHelpFile->setDisabled( b );
 	gbVersion->setDisabled( b );
-	fBuildType->setDisabled( b );
-	fWarn->setDisabled( b );
-	cbBuildAll->setDisabled( b ? b : !rbDebugRelease->isChecked() );
 	wLibraries->setDisabled( b );
 	wSettings->setDisabled( b );
 	wTranslations->setDisabled( b );
@@ -709,22 +680,16 @@ void UIQMakeProjectSettings::on_lwFiles_itemDoubleClicked( QListWidgetItem* i )
 {
 	if ( !i )
 		return;
-	
 	// get fileinfo
 	QFileInfo f( leDir->text().append( "/" ).append( i->text() ) );
-	
 	// get file suffix
 	QString s = f.completeSuffix().toLower();
-	
 	// get librairies extension
-	QStringList libraries = UISettingsQMake::readLibExtensions();
-	
+	QStringList libraries =  QStringList() << "lib" << "dll" << "a" << "la" << "so" << "dylib";
 	// get current variable
 	QString v = cbVariables->currentText().toLower();
-	
 	// for stocking values to add
 	QStringList l;
-	
 	// switch extension
 	if ( libraries.contains( s ) || s.startsWith( "so." ) )
 	{
@@ -734,7 +699,6 @@ void UIQMakeProjectSettings::on_lwFiles_itemDoubleClicked( QListWidgetItem* i )
 			s.prepend( '"' ).append( '"' );
 		s.prepend( "-L" );
 		l << s;
-		
 		// file
 		s = f.baseName();
 		if ( s.startsWith( "lib", Qt::CaseInsensitive ) )
@@ -743,7 +707,6 @@ void UIQMakeProjectSettings::on_lwFiles_itemDoubleClicked( QListWidgetItem* i )
 			s.prepend( '"' ).append( '"' );
 		s.prepend( "-l" );
 		l << s;
-		
 		if ( v != "libs" )
 			addValues( currentKey( "LIBS" ), l );
 		else
@@ -764,7 +727,7 @@ void UIQMakeProjectSettings::on_lwFiles_itemDoubleClicked( QListWidgetItem* i )
 				s.chop( 0 );
 			s.prepend( "$$TRANSLATIONS_PATH/" );
 		}
-		
+		// add values
 		if ( v == "translations" )
 			addValue( s );
 		else
@@ -892,7 +855,7 @@ void UIQMakeProjectSettings::on_tbOthersVariablesEdit_clicked()
 			// show item and assigna datas
 			eit->setData( Qt::UserRole +1, it->data( Qt::UserRole +1 ) );
 			eit->setHidden( false );
-				// clear data and hide item
+			// clear data and hide item
 			it->setData( Qt::UserRole +1, QStringList() );
 			it->setHidden( true );
 		}
@@ -975,20 +938,42 @@ void UIQMakeProjectSettings::on_tbOthersValuesClear_clicked()
 	}
 }
 
+void UIQMakeProjectSettings::on_tbOthersValuesUp_clicked()
+{
+	if ( QListWidgetItem* it = lwOthersValues->selectedItems().value( 0 ) )
+	{
+		int i = lwOthersValues->row( it );
+		if ( i != 0 )
+			lwOthersValues->insertItem( i -1, lwOthersValues->takeItem( i ) );
+		lwOthersValues->setCurrentItem( it );
+		updateOthersValues();
+	}
+}
+
+void UIQMakeProjectSettings::on_tbOthersValuesDown_clicked()
+{
+	if ( QListWidgetItem* it = lwOthersValues->selectedItems().value( 0 ) )
+	{
+		int i = lwOthersValues->row( it );
+		if ( i != lwOthersValues->count() -1 )
+			lwOthersValues->insertItem( i +1, lwOthersValues->takeItem( i ) );
+		lwOthersValues->setCurrentItem( it );
+		updateOthersValues();
+	}
+}
+
 void UIQMakeProjectSettings::on_tvScopes_clicked( const QModelIndex& i )
 { setCurrentIndex( mVariablesProxy->mapToSource( i ) ); }
 
 void UIQMakeProjectSettings::on_tvScopes_doubleClicked( const QModelIndex& i )
 {
-	ProjectItem* it = mModel->itemFromIndex( mVariablesProxy->mapToSource( i ) );
-	if ( it )
+	if ( ProjectItem* it = mModel->itemFromIndex( mVariablesProxy->mapToSource( i ) ) )
 		UIItemSettings::edit( it, this );
 }
 
 void UIQMakeProjectSettings::on_lvContents_doubleClicked( const QModelIndex& i )
 {
-	ProjectItem* it = mModel->itemFromIndex( mVariablesProxy->mapToSource( i ) );
-	if ( it )
+	if ( ProjectItem* it = mModel->itemFromIndex( mVariablesProxy->mapToSource( i ) ) )
 		UIItemSettings::edit( it, this );
 }
 
@@ -996,29 +981,23 @@ void UIQMakeProjectSettings::on_tbAdd_clicked()
 {
 	// new item
 	QMakeItem* it = new QMakeItem( ProjectItem::EmptyType );
-	
 	// get current item
 	ProjectItem* ci = mModel->itemFromIndex( currentIndex() );
-	
 	// ask user where to create item
 	if ( question( tr( "New Item.." ), tr( "Create item as a child of the current item ?" ) ) )
 		ci = ci ? ci : mProject;
 	else
 		ci = ci ? ci->parent() : mProject;
-	
 	// append item
 	ci->appendRow( it );
-	
 	// edit item
 	if ( UIItemSettings::edit( it, this ) )
 	{
 		// if scope, add scope end
 		if ( it->getType() == ProjectItem::ScopeType || it->getType() == ProjectItem::NestedScopeType )
 			(void) new QMakeItem( ProjectItem::ScopeEndType, it );
-		
 		// redo layout
 		it->refresh();
-		
 		// select it
 		setCurrentIndex( it->index() );
 	}
@@ -1095,12 +1074,10 @@ void UIQMakeProjectSettings::accept()
 {
 	// backup current settings state
 	cb_highlighted( 0 );
-	
 	// write each key if needed
 	if ( mSettings != mOriginalSettings )
 		foreach ( const ProjectKey k, mSettings.keys() )
 				mProject->setValues( k.getScope(), k.getVariable(), k.getOperator(), mSettings[k] );
-	
 	// close dialog
 	QDialog::accept();
 }

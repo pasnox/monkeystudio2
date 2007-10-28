@@ -157,6 +157,8 @@ protected slots:
 	void on_tbOthersValuesEdit_clicked();
 	void on_tbOthersValuesRemove_clicked();
 	void on_tbOthersValuesClear_clicked();
+	void on_tbOthersValuesUp_clicked();
+	void on_tbOthersValuesDown_clicked();
 	void on_tvScopes_clicked( const QModelIndex& );
 	void on_tvScopes_doubleClicked( const QModelIndex& );
 	void on_lvContents_doubleClicked( const QModelIndex& );
