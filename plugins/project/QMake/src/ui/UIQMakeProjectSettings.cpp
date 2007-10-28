@@ -372,34 +372,28 @@ void UIQMakeProjectSettings::querySettings()
 
 void UIQMakeProjectSettings::loadModules()
 {
-	// load modules informations
-	QtItemList mModules = UISettingsQMake::readQtModules();
 	// fill lwQtModules
-	foreach ( QtItem* i, mModules )
+	foreach ( QtItem i, UISettingsQMake::readQtModules() )
 	{
-		QListWidgetItem* it = new QListWidgetItem( i->Text, lwQtModules );
-		it->setData( QtItem::ValueRole, i->Value );
-		it->setData( QtItem::VariableRole, i->Variable );
-		it->setData( QtItem::HelpRole, i->Help );
+		QListWidgetItem* it = new QListWidgetItem( i.Text, lwQtModules );
+		it->setData( QtItem::ValueRole, i.Value );
+		it->setData( QtItem::VariableRole, i.Variable );
+		it->setData( QtItem::HelpRole, i.Help );
 		it->setCheckState( Qt::Unchecked );
 	}
-	// free memory
-	qDeleteAll( mModules );
 }
 
 void UIQMakeProjectSettings::loadConfigs()
 {
-	// load configs informations
-	QtItemList mConfigs = UISettingsQMake::readSettings();
 	// fill lwCompilerFlags
 	QFont fo( lwCompilerFlags->font() );
 	fo.setBold( true );
-	foreach ( QtItem* i, mConfigs )
+	foreach ( QtItem i, UISettingsQMake::readSettings() )
 	{
-		QListWidgetItem* it = new QListWidgetItem( i->Text, lwCompilerFlags );
-		it->setData( QtItem::ValueRole, i->Value );
-		it->setData( QtItem::VariableRole, i->Variable );
-		it->setData( QtItem::HelpRole, i->Help );
+		QListWidgetItem* it = new QListWidgetItem( i.Text, lwCompilerFlags );
+		it->setData( QtItem::ValueRole, i.Value );
+		it->setData( QtItem::VariableRole, i.Variable );
+		it->setData( QtItem::HelpRole, i.Help );
 		if ( it->text().toLower().contains( "only" ) )
 		{
 			it->setFlags( 0 );
@@ -411,8 +405,6 @@ void UIQMakeProjectSettings::loadConfigs()
 		else
 			it->setCheckState( Qt::Unchecked );
 	}
-	// free memory
-	qDeleteAll( mConfigs );
 }
 
 void UIQMakeProjectSettings::loadLanguages()
