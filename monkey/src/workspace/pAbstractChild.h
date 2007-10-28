@@ -9,7 +9,7 @@
 #ifndef PABSTRACTCHILD_H
 #define PABSTRACTCHILD_H
 
-#include <QWidget>
+#include <QFrame>
 #include <QFileInfo>
 #include <QTextCodec>
 
@@ -17,7 +17,7 @@
 
 class pEditor;
 
-class Q_MONKEY_EXPORT pAbstractChild : public QWidget
+class Q_MONKEY_EXPORT pAbstractChild : public QFrame
 {
 	Q_OBJECT
 	Q_ENUMS( DocumentMode LayoutMode )
