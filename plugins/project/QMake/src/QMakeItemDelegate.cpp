@@ -1,5 +1,6 @@
 #include "QMakeItemDelegate.h"
 #include "UISettingsQMake.h"
+#include "pMonkeyStudio.h"
 
 #include <QMetaEnum>
 
@@ -34,7 +35,7 @@ QWidget* QMakeItemDelegate::createEditor( QWidget* w, const QStyleOptionViewItem
 		case ProjectItem::OperatorRole:
 		{
 			QComboBox* cb = new QComboBox( w );
-			cb->addItems( QStringList() << QString::null << UISettingsQMake::readOperators() );
+			cb->addItems( QStringList() << QString::null << pMonkeyStudio::availableOperators() );
 			cb->setCurrentIndex( cb->findText( i.data().toString() ) );
 			return cb;
 		}
