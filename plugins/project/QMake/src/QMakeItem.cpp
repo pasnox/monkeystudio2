@@ -517,6 +517,8 @@ void QMakeItem::installCommands()
 	// builder/compiler
 	if ( isProject() && builder() )
 	{
+		// get current qt version
+		QtVersion qv = UISettingsQMake::defaultVersion();
 		// temp command
 		pCommand c;
 		// clear commands
@@ -558,20 +560,20 @@ void QMakeItem::installCommands()
 		// qmake command
 		c = pCommand();
 		c.setText( tr( "QMake" ) );
-		c.setCommand( UISettingsQMake::defaultQMake() );
+		c.setCommand( qv.QMake );
 		c.setWorkingDirectory( "$cpp$" );
 		addCommand( c, "mBuilder" );
 		// lupdate command
 		c = pCommand();
 		c.setText( tr( "lupdate" ) );
-		c.setCommand( UISettingsQMake::defaultlupdate() );
+		c.setCommand( qv.lupdate );
 		c.setArguments( "$cp$" );
 		c.setWorkingDirectory( "$cpp$" );
 		addCommand( c, "mBuilder" );
 		// lrelease command
 		c = pCommand();
 		c.setText( tr( "lrelease" ) );
-		c.setCommand( UISettingsQMake::defaultlrelease() );
+		c.setCommand( qv.lrelease );
 		c.setArguments( "$cp$" );
 		c.setWorkingDirectory( "$cpp$" );
 		addCommand( c, "mBuilder" );
