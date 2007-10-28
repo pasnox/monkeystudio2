@@ -11,6 +11,21 @@ QMakeProxy::QMakeProxy( ProjectsModel* m, ProjectItem* i )
 	mProject = i;
 }
 
+bool isDirectParent( ProjectItem* it, ProjectItem* pit )
+{
+	bool b = false;
+	for ( int i = 0; i < it->rowCount(); i++ )
+	{
+		ProjectItem* cit = it->child( i );
+		b = cit == pit;
+		if ( !b && cit->hasChildren() )
+			b = isDirectParent( cit, pit );
+		if ( b )
+			return true;
+	}
+	return b;
+}
+
 bool QMakeProxy::filterAcceptsRow( int r, const QModelIndex& i ) const
 {
 	if ( !mFiltering )
@@ -24,8 +39,8 @@ bool QMakeProxy::filterAcceptsRow( int r, const QModelIndex& i ) const
 		for ( int j = 0; j < it->rowCount(); j++ )
 			if ( filterAcceptsRow( j, it->index() ) )
 				return true;
-
-	return b && it->project() == mProject;
+	// return state
+	return it->project() == mProject ? b : isDirectParent( it, mProject );
 }
 
 void QMakeProxy::setFiltering( bool b )
