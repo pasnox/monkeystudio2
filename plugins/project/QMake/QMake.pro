@@ -2,8 +2,9 @@ include( ../../plugins.inc )
 
 DESTDIR	= $$MONKEY_PLUGINS_DIR/project
 TARGET	= QMake
+DEFINES	*= "PLUGIN_NAME=\"\\\"$${TARGET}\\\"\""
+INCLUDEPATH	*= src/ui
 RESOURCES	= src/resources/QMake.qrc
-INCLUDEPATH	+= src/ui
 
 FORMS	= src/ui/UISettingsQMake.ui \
 	src/ui/UIItemSettings.ui \
