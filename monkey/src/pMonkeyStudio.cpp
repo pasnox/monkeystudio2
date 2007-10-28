@@ -100,9 +100,13 @@ const QStringList pMonkeyStudio::availableTextCodecs()
 
 const QStringList pMonkeyStudio::availableImageFormats()
 {
-	QStringList l;
-	foreach ( QByteArray a, QImageReader::supportedImageFormats() )
-		l << a;
+	static QStringList l;
+	if ( l.isEmpty() )
+	{
+		foreach ( QByteArray a, QImageReader::supportedImageFormats() )
+			l << a;
+		l.sort();
+	}
 	return l;
 }
 
@@ -114,6 +118,18 @@ const QStringList pMonkeyStudio::availableLanguages()
 		<< "SQL" << "TeX" << "VHDL";
 	return l;
 }
+
+QStringList pMonkeyStudio::defaultOperators()
+{ return QStringList() << "=" << "-=" << "+=" << "*=" << "~=" << ":" << "|"; }
+
+const QStringList pMonkeyStudio::availableOperators()
+{
+	QStringList l = pSettings::instance()->value( settingsPath() +"/Operators" ).toStringList();
+	return l.isEmpty() ? defaultOperators() : l;
+}
+
+void pMonkeyStudio::setAvailableOperators( const QStringList& l )
+{ pSettings::instance()->setValue( settingsPath() +"/Operators", l ); }
 
 const QFileInfoList pMonkeyStudio::getFiles( QDir d, const QStringList& l, bool b )
 {
@@ -757,12 +773,12 @@ void pMonkeyStudio::resetLexer( QsciLexer* l )
 	// cancel if no lexer
 	if ( !l )
 		return;
-	// get language
-	const QString s = l->language();
-	// reset lexer
-	pSettings::instance()->remove( QString( "%1/%2" ).arg( scintillaSettingsPath() ).arg( s ) );
-	delete l;
-	l = lexerForLanguage( s );
+	// reset lexer settings
+	pSettings::instance()->remove( QString( "%1/%2" ).arg( scintillaSettingsPath() ).arg( l->language() ) );
+	// read default settings
+	l->readSettings( *pSettings::instance(), qPrintable( scintillaSettingsPath() ) );
+	// emit changes
+	l->refreshProperties();
 }
 
 void pMonkeyStudio::applyProperties()
