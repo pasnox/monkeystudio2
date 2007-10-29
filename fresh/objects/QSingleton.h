@@ -50,6 +50,10 @@ public:
 	template <typename P>
 	static T* instance( P* );
 	static T* instance();
+	static bool instanceAvailable()
+	{ return mInstances.contains( &T::staticMetaObject ); }
+	static void cleanInstance()
+	{ if ( instanceAvailable() ) delete mInstances[ &T::staticMetaObject ]; }
 
 };
 
