@@ -171,7 +171,7 @@ void MonkeyProjectItem::installCommands ()
 
 ProjectPlugin* MonkeyProjectItem::getParentPlugin ()
 {
-	return PluginsManager::instance()->plugin<ProjectPlugin*>( "MonkeyProject" );
+	return PluginsManager::instance()->plugin<ProjectPlugin*>( PluginsManager::stAll, "MonkeyProject" );
 }
 
 void MonkeyProjectItem::addExistingFiles(const QStringList& files, const QString& scope, const QString&)

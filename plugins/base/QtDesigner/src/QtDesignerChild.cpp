@@ -46,6 +46,8 @@ QtDesignerChild::QtDesignerChild()
 	
 	// create mdiarea
 	vl->addWidget( mArea = new QMdiArea );
+	mArea->setVerticalScrollBarPolicy( Qt::ScrollBarAsNeeded );
+	mArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
 	
 	// set auto destroy
 	setAttribute( Qt::WA_DeleteOnClose );
@@ -141,7 +143,7 @@ QtDesignerChild::QtDesignerChild()
 	connect( aEditWidgets, SIGNAL( triggered() ), this, SLOT( editWidgets() ) );
 	
 	// add itself to first tab
-	UIMain::instance()->workspace()->insertTab( 0, this, QIcon( ":/icons/designer" ), tr( "Qt Designer" ) );
+	//UIMain::instance()->workspace()->insertTab( 0, this, QIcon( ":/icons/designer" ), tr( "Qt Designer" ) );
 }
 
 QtDesignerChild::~QtDesignerChild()
@@ -234,7 +236,10 @@ void QtDesignerChild::openFile( const QString& s, const QPoint&, QTextCodec* )
 	}
 	
 	// add to mdi area
-	mArea->addSubWindow( w );
+	mArea->addSubWindow( w, Qt::SubWindow | Qt::WindowShadeButtonHint );
+	
+	// set it visible
+	w->setVisible( true );
 }
 
 

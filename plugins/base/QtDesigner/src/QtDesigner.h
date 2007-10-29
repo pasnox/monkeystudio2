@@ -13,7 +13,7 @@ public:
 	virtual ~QtDesigner();
 	virtual QWidget* settingsWidget();
 	virtual bool setEnabled( bool );
-	virtual bool openFile( const QString&, const QPoint& = QPoint() );
+	virtual pAbstractChild* openFile( const QString&, const QPoint& = QPoint() );
 	
 };
 

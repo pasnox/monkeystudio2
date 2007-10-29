@@ -44,12 +44,11 @@ bool QtDesigner::setEnabled( bool b )
 	return true;
 }
 
-bool QtDesigner::openFile( const QString& s, const QPoint& )
+pAbstractChild* QtDesigner::openFile( const QString& s, const QPoint& )
 {
-	if ( !canOpen( s ) )
-		return false;
+	qWarning( "requesting opening form" );
 	QtDesignerChild::instance()->openFile( s );
-	return true;
+	return QtDesignerChild::instance();
 }
 
 Q_EXPORT_PLUGIN2( BaseQtDesigner, QtDesigner )

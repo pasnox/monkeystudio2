@@ -466,7 +466,7 @@ void QMakeItem::setBuilder( BuilderPlugin* b )
 BuilderPlugin* QMakeItem::builder() const
 {
 	qWarning( "QMakeItem::builder() temporary hack returning gnumake" );
-	return PluginsManager::instance()->plugin<BuilderPlugin*>( "GNUMake" );
+	return PluginsManager::instance()->plugin<BuilderPlugin*>( PluginsManager::stAll, "GNUMake" );
 	return isProject() ? mBuilder : project()->builder();
 }
 
@@ -479,7 +479,7 @@ void QMakeItem::setCompiler( CompilerPlugin* c )
 CompilerPlugin* QMakeItem::compiler() const
 {
 	qWarning( "QMakeItem::compiler() temporary hack returning g++" );
-	return PluginsManager::instance()->plugin<CompilerPlugin*>( "G++" );
+	return PluginsManager::instance()->plugin<CompilerPlugin*>( PluginsManager::stAll, "G++" );
 	return isProject() ? mCompiler : project()->compiler();
 }
 
@@ -492,7 +492,7 @@ void QMakeItem::setDebugger( DebuggerPlugin* d )
 DebuggerPlugin* QMakeItem::debugger() const
 {
 	qWarning( "QMakeItem::debugger() temporary hack returning gdb" );
-	return PluginsManager::instance()->plugin<DebuggerPlugin*>( "GNUDebugger" );
+	return PluginsManager::instance()->plugin<DebuggerPlugin*>( PluginsManager::stAll, "GNUDebugger" );
 	return isProject() ? mDebugger : project()->debugger();
 }
 
