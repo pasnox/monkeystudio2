@@ -1,7 +1,14 @@
 #include "QtDesignerChild.h"
 #include "UIMain.h"
-#include "pDockToolBar.h"
+#include "pWorkspace.h"
 #include "pDockToolBarManager.h"
+#include "pDockToolBar.h"
+
+#include "QDesignerWidgetBox.h"
+#include "QDesignerActionEditor.h"
+#include "QDesignerPropertyEditor.h"
+#include "QDesignerObjectInspector.h"
+#include "QDesignerSignalSlotEditor.h"
 
 #include <QVBoxLayout>
 #include <QToolBar>
@@ -18,12 +25,6 @@
 
 #include "pluginmanager_p.h"
 #include "qdesigner_integration_p.h"
-
-#include "qdesignerwidgetbox.h"
-#include "qdesigneractioneditor.h"
-#include "qdesignerpropertyeditor.h"
-#include "qdesignerobjectinspector.h"
-#include "qdesignersignalsloteditor.h"
 
 QtDesignerChild::QtDesignerChild()
 	: pAbstractChild()
@@ -139,8 +140,8 @@ QtDesignerChild::QtDesignerChild()
 	connect( mArea, SIGNAL( subWindowActivated( QMdiSubWindow* ) ), this, SLOT( formActivated( QMdiSubWindow* ) ) );
 	connect( aEditWidgets, SIGNAL( triggered() ), this, SLOT( editWidgets() ) );
 	
-	// dummy open file test
-	openFile( "/home/pasnox/Documents/Development/Qt4/monkeyrepos/v2/trunk/plugins/base/Ctags2Api/src/ui/UICtags2Api.ui" );
+	// add itself to first tab
+	UIMain::instance()->workspace()->insertTab( 0, this, QIcon( ":/icons/designer" ), tr( "Qt Designer" ) );
 }
 
 QtDesignerChild::~QtDesignerChild()
@@ -211,13 +212,26 @@ void QtDesignerChild::openFile( const QString& s, const QPoint&, QTextCodec* )
 	// create form
 	QDesignerFormWindowInterface* w = createForm();
 	
-	// assign file content
-	w->setFileName( s );
-	QFile f( s );
-	w->setContents( &f );
+	// set window title
+	w->setWindowTitle( s );
 	
-	// set clean
-	w->setDirty( false );
+	// assign file name
+	w->setFileName( s );
+	
+	if ( QFile::exists( s ) )
+	{
+		// set content
+		QFile f( s );
+		w->setContents( &f );
+		
+		// set clean
+		w->setDirty( false );
+	}
+	else
+	{
+		w->setMainContainer( new QWidget() );
+		w->setDirty( true );
+	}
 	
 	// add to mdi area
 	mArea->addSubWindow( w );

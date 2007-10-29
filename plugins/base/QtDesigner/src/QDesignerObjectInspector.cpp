@@ -1,0 +1,33 @@
+#include "QDesignerObjectInspector.h"
+#include "QtDesignerChild.h"
+
+#include <QDesignerComponents>
+#include <QDesignerObjectInspectorInterface>
+#include <QDesignerFormEditorInterface>
+#include <QDesignerFormWindowManagerInterface>
+#include <QDesignerFormWindowInterface>
+
+QDesignerObjectInspector::QDesignerObjectInspector( QtDesignerChild* p )
+ : QDockWidget( 0 )
+{
+	// need core
+	Q_ASSERT( p && p->core() );
+	
+	// dock title
+	setWindowTitle( tr( "Object Inspector" ) );
+	
+	// object name
+	setObjectName( "x-designer/objectinspector" );
+	
+	// create interface
+	mInterface = QDesignerComponents::createObjectInspector( p->core(), this );
+	
+	// track window changed
+	connect( p->core()->formWindowManager(), SIGNAL( activeFormWindowChanged( QDesignerFormWindowInterface* ) ), mInterface, SLOT( setFormWindow( QDesignerFormWindowInterface* ) ) );
+	
+	// set dock widget
+	setWidget( mInterface );
+	
+	// assign object inspector to core
+	p->core()->setObjectInspector( mInterface );
+}

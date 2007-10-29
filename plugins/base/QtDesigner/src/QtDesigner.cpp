@@ -1,13 +1,5 @@
 #include "QtDesigner.h"
-#include "UIMain.h"
-#include "pWorkspace.h"
-
-#include "pMonkeyStudio.h"
-
-#include "pDockToolBar.h"
 #include "QtDesignerChild.h"
-
-using namespace pMonkeyStudio;
 
 QtDesigner::QtDesigner()
 {
@@ -15,7 +7,7 @@ QtDesigner::QtDesigner()
 	mPluginInfos.Caption = tr( "Qt Designer" );
 	mPluginInfos.Description = tr( "This plugin embeds Qt Designer" );
 	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, Luc Bruant aka fullmetalcoder <fullmetalcoder@hotmail.fr>";
-	mPluginInfos.Type = BasePlugin::iBase;
+	mPluginInfos.Type = BasePlugin::iChild;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "1.0.0";
 	mPluginInfos.Enabled = false;
@@ -34,18 +26,29 @@ bool QtDesigner::setEnabled( bool b )
 {
 	if ( b && !isEnabled() )
 	{
-		// add designer to main window
-		UIMain::instance()->workspace()->insertTab( 0, QtDesignerChild::instance(), QIcon( ":/icons/designer.png" ), tr( "Qt Designer" ) );
+		// set usable suffixes
+		mSuffixes[tr( "Qt Forms" )] = QStringList() << "*.ui";
 		// set plugin enabled
 		mPluginInfos.Enabled = true;
 	}
 	else if ( !b && isEnabled() )
 	{
-		QtDesignerChild::instance()->close();
+		// clear suffixes
+		mSuffixes.clear();
+		// clear designer instance
+		QtDesignerChild::cleanInstance();
 		// set plugin disabled
 		mPluginInfos.Enabled = false;
 	}
 	// return default value
+	return true;
+}
+
+bool QtDesigner::openFile( const QString& s, const QPoint& )
+{
+	if ( !canOpen( s ) )
+		return false;
+	QtDesignerChild::instance()->openFile( s );
 	return true;
 }
 

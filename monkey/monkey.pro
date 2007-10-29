@@ -99,6 +99,7 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/consolemanager/pCommand.h \
 	src/toolsmanager/pToolsManager.h \
 	src/pluginsmanager/BasePlugin.h \
+	src/pluginsmanager/ChildPlugin.h \
 	src/pluginsmanager/CLIToolPlugin.h \
 	src/pluginsmanager/ProjectPlugin.h \
 	src/pluginsmanager/BuilderPlugin.h \
