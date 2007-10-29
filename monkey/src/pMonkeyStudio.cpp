@@ -435,7 +435,7 @@ const QString pMonkeyStudio::availableLanguagesFilters()
 	QHash<QString, QStringList> sl = availableSuffixes();
 	//
 	foreach ( QString k, sl.keys() )
-		f += QString( "%1 Files ( %2 );;" ).arg( k ).arg( sl.value( k ).join( " " ) );
+		f += QString( "%1 Files (%2);;" ).arg( k ).arg( sl.value( k ).join( " " ) );
 	// remove trailing ;;
 	if ( f.endsWith( ";;" ) )
 		f.chop( 2 );

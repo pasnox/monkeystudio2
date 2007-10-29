@@ -4,6 +4,7 @@
 #include "MonkeyExport.h"
 #include "QSingleton.h"
 #include "BasePlugin.h"
+#include "ChildPlugin.h"
 #include "ProjectPlugin.h"
 #include "BuilderPlugin.h"
 #include "CompilerPlugin.h"
@@ -13,6 +14,7 @@
 #include <QApplication>
 
 class ProjectItem;
+class pAbstractChild;
 
 class Q_MONKEY_EXPORT PluginsManager : public QObject, public QSingleton<PluginsManager>
 {
@@ -20,35 +22,36 @@ class Q_MONKEY_EXPORT PluginsManager : public QObject, public QSingleton<Plugins
 	friend class QSingleton<PluginsManager>;
 	
 public:
+	enum StateType { stAll = -1, stDisabled, stEnabled };
+
 	void loadsPlugins( const QString& = QString() );
-
+	
 	QList<BasePlugin*> plugins() const;
-
 	template <class T>
-	QList<T> plugins( const QString& n, BasePlugin::Type t = BasePlugin::iAll,  const QString& v = QString::null )
+	QList<T> plugins( PluginsManager::StateType t, const QString& n = QString::null, const QString& v = QString::null )
 	{
 		// temporary list
 		QList<T> l;
 		// for each plugin
 		foreach ( BasePlugin* bp, mPlugins )
-			// plugin must be enabled
-			//if ( bp->isEnabled() )
+			// plugin state
+			if ( t == stAll || ( !bp->isEnabled() && t == stDisabled ) || ( bp->isEnabled() && t == stEnabled ) )
 				// empty or good name
 				if ( n.isEmpty() || bp->infos().Name == n )
-					// good type or type = iAll
-					if ( t == BasePlugin::iAll || bp->infos().Type == t )
-						// no version or good version
-						if ( v.isEmpty() || bp->infos().Version == v )
-							// good cast
-							if ( T p = qobject_cast<T>( bp ) )
-								l << p;
+					// no version or good version
+					if ( v.isEmpty() || bp->infos().Version == v )
+						// good cast
+						if ( T p = qobject_cast<T>( bp ) )
+							l << p;
 		// return list
 		return l;
 	}
-	
 	template <class T>
-	T plugin( const QString& n, BasePlugin::Type t = BasePlugin::iAll,  const QString& v = QString::null )
-	{ return plugins<T>( n, t, v ).value( 0 ); }
+	T plugin( PluginsManager::StateType t, const QString& n = QString::null,  const QString& v = QString::null )
+	{ return plugins<T>( t, n, v ).value( 0 ); }
+	
+	pAbstractChild* openChildFile( const QString&, const QPoint& );
+	QString childFilters() const;
 	
 	ProjectItem* projectItem( const QString& );
 	

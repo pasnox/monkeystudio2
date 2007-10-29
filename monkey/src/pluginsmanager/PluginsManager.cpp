@@ -18,15 +18,6 @@ PluginsManager::PluginsManager( QObject* p )
 QList<BasePlugin*> PluginsManager::plugins() const
 { return mPlugins; }
 
-ProjectItem* PluginsManager::projectItem( const QString& s )
-{
-	foreach ( ProjectPlugin* pp, plugins<ProjectPlugin*>( "", BasePlugin::iProject ) )
-		foreach ( QString k, pp->suffixes().keys() )
-			if ( QDir::match( pp->suffixes().value( k ), s ) )
-				return pp->getProjectItem( s );
-	return 0;
-}
-
 void PluginsManager::loadsPlugins( const QString& s )
 {
 	// get application path
@@ -112,6 +103,32 @@ void PluginsManager::enableUserPlugins()
 	}
 }
 
+ProjectItem* PluginsManager::projectItem( const QString& s )
+{
+	foreach ( ProjectPlugin* pp, plugins<ProjectPlugin*>( PluginsManager::stEnabled ) )
+		foreach ( QString k, pp->suffixes().keys() )
+			if ( QDir::match( pp->suffixes().value( k ), s ) )
+				return pp->getProjectItem( s );
+	return 0;
+}
+
+pAbstractChild* PluginsManager::openChildFile( const QString& s, const QPoint& p )
+{
+	foreach ( ChildPlugin* cp, plugins<ChildPlugin*>( PluginsManager::stEnabled ) )
+		if ( cp->canOpen( s ) )
+			return cp->openFile( s, p );
+	return 0;
+}
+
+QString PluginsManager::childFilters() const
+{
+	QString f;
+	foreach ( ChildPlugin* cp, const_cast<PluginsManager*>( this )->plugins<ChildPlugin*>( PluginsManager::stEnabled ) )
+		foreach ( QString k, cp->suffixes().keys() )
+			f.append( QString( "%1 (%2);;" ).arg( k ).arg( cp->suffixes().value( k ).join( " " ) ) );
+	return f;
+}
+
 void PluginsManager::setCurrentBuilder( BuilderPlugin* b )
 {
 	// if same cancel
@@ -119,7 +136,7 @@ void PluginsManager::setCurrentBuilder( BuilderPlugin* b )
 		return;
 	
 	// disabled all builder
-	foreach ( BuilderPlugin* bp, plugins<BuilderPlugin*>( QString::null, BasePlugin::iBuilder ) )
+	foreach ( BuilderPlugin* bp, plugins<BuilderPlugin*>( PluginsManager::stAll ) )
 		bp->setEnabled( false );
 	
 	// enabled the one we choose
@@ -141,7 +158,7 @@ void PluginsManager::setCurrentCompiler( CompilerPlugin* c )
 		return;
 	
 	// disabled all builder
-	foreach ( CompilerPlugin* cp, plugins<CompilerPlugin*>( QString::null, BasePlugin::iCompiler ) )
+	foreach ( CompilerPlugin* cp, plugins<CompilerPlugin*>( PluginsManager::stAll ) )
 		cp->setEnabled( false );
 	
 	// enabled the one we choose
@@ -163,7 +180,7 @@ void PluginsManager::setCurrentDebugger( DebuggerPlugin* d )
 		return;
 	
 	// disabled all debugger
-	foreach ( DebuggerPlugin* dp, plugins<DebuggerPlugin*>( QString::null, BasePlugin::iDebugger ) )
+	foreach ( DebuggerPlugin* dp, plugins<DebuggerPlugin*>( PluginsManager::stAll ) )
 		dp->setEnabled( false );
 	
 	// enabled the one we choose
@@ -185,7 +202,7 @@ void PluginsManager::setCurrentInterpreter( InterpreterPlugin* i )
 		return;
 	
 	// disabled all debugger
-	foreach ( InterpreterPlugin* ip, plugins<InterpreterPlugin*>( QString::null, BasePlugin::iInterpreter ) )
+	foreach ( InterpreterPlugin* ip, plugins<InterpreterPlugin*>( PluginsManager::stAll ) )
 		ip->setEnabled( false );
 	
 	// enabled the one we choose

@@ -8,6 +8,8 @@
 #include <QStringList>
 #include <QDir>
 
+class pAbstractChild;
+
 class Q_MONKEY_EXPORT ChildPlugin : public BasePlugin
 {
 public:
@@ -24,8 +26,7 @@ public:
 		return false;
 	}
 	// try opening this file
-	virtual bool openFile( const QString&, const QPoint& = QPoint() ) = 0;
-	
+	virtual pAbstractChild* openFile( const QString&, const QPoint& = QPoint() ) = 0;
 	
 protected:
 	QHash<QString, QStringList> mSuffixes;

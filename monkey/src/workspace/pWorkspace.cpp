@@ -21,6 +21,7 @@
 #include "pMonkeyStudio.h"
 #include "pTemplatesManager.h"
 #include "UIProjectsManager.h"
+#include "PluginsManager.h"
 
 #include "pChild.h"
 #include "pEditor.h"
@@ -79,16 +80,22 @@ pAbstractChild* pWorkspace::openFile( const QString& s, const QPoint& p )
 		}
 	}
 
-	// open file
-/*
-	if ( pluginsManager()->childPluginOpenFile( s, p ) )
-	{}
-	else
-*/
+	// try opening file with child plugins
+	pAbstractChild* c = PluginsManager::instance()->openChildFile( s, p );
+	
+	// open it with pChild instance if no c
+	if ( !c )
 	{
 		// create child
-		pAbstractChild* c = new pChild;
-
+		c = new pChild;
+		
+		// open file
+		c->openFile( s, p );
+	}
+	
+	// made connection if worksapce don t contains this child
+	if ( !children().contains( c ) )
+	{
 		// opened/closed file
 		connect( c, SIGNAL( fileOpened( const QString& ) ), this, SIGNAL( fileOpened( const QString& ) ) );
 		connect( c, SIGNAL( fileClosed( const QString& ) ), this, SIGNAL( fileClosed( const QString& ) ) );
@@ -109,19 +116,15 @@ pAbstractChild* pWorkspace::openFile( const QString& s, const QPoint& p )
 		//connect( c, SIGNAL( layoutModeChanged( AbstractChild::LayoutMode ) ), statusBar(), SLOT( setLayoutMode( AbstractChild::LayoutMode ) ) );
 		//connect( c, SIGNAL( currentFileChanged( const QString& ) ), statusBar(), SLOT( setFileName( const QString& ) ) );
 
-		// open file
-		c->openFile( s, p );
-
 		// add child to workspace
 		pWorkspace::instance()->addTab( c, c->currentFileName() );
 		
 		// set modification state because file is open before put in worksapce so workspace can't know it
 		c->setWindowModified( c->isModified() );
-
-		return c;
 	}
 
-	return 0;
+	// return child instance
+	return c;
 }
 
 void pWorkspace::closeFile( const QString& s )
@@ -234,6 +237,7 @@ void pWorkspace::fileOpen_triggered()
 
 	// get available filters
 	QString mFilters = availableLanguagesFilters();
+	mFilters.append( ";;" ).append( PluginsManager::instance()->childFilters() );
 
 	// prepend a all in one filter
 	if ( !mFilters.isEmpty() )
