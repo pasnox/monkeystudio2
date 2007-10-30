@@ -333,7 +333,7 @@ void UISettings::loadSettings()
 	if ( cbSourceAPIsLanguages->count() > 0 )
 		cbSourceAPIsLanguages->setCurrentIndex( 0 );
 	//  Lexers Associations
-	QHash<QString, QStringList> l = availableSuffixes();
+	QHash<QString, QStringList> l = availableLanguagesSuffixes();
 	foreach ( QString k, l.keys() )
 	{
 		foreach ( QString e, l.value( k ) )
