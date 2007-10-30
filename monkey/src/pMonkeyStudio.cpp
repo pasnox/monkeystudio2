@@ -301,7 +301,7 @@ const QString pMonkeyStudio::unTokenizeHome( const QString& s )
 	return QString( s ).replace( "$HOME$", QDir::homePath() );
 }
 
-const QHash<QString, QStringList> pMonkeyStudio::defaultSuffixes()
+const QHash<QString, QStringList> pMonkeyStudio::defaultLanguagesSuffixes()
 {
 	// suffixes list
 	QHash<QString, QStringList> l;
@@ -398,7 +398,7 @@ const QHash<QString, QStringList> pMonkeyStudio::defaultSuffixes()
 	return l;
 }
 
-const QHash<QString, QStringList> pMonkeyStudio::availableSuffixes()
+const QHash<QString, QStringList> pMonkeyStudio::availableLanguagesSuffixes()
 {
 	// suffixes list
 	QHash<QString, QStringList> l;
@@ -411,7 +411,21 @@ const QHash<QString, QStringList> pMonkeyStudio::availableSuffixes()
 	s->endGroup();
 	// if empty get default suffixes
 	if ( l.isEmpty() )
-		l = defaultSuffixes();
+		l = defaultLanguagesSuffixes();
+	// return list
+	return l;
+}
+
+const QHash<QString, QStringList> pMonkeyStudio::availableFilesSuffixes()
+{
+	// get language suffixes
+	QHash<QString, QStringList> l = availableLanguagesSuffixes();
+	// add child plugins suffixes
+	QHash<QString, QStringList> ps = PluginsManager::instance()->childSuffixes();
+	foreach ( QString k, ps.keys() )
+		foreach ( QString s, ps[k] )
+			if ( !l[k].contains( s ) )
+				l[k] << s;
 	// return list
 	return l;
 }
@@ -421,9 +435,8 @@ const QHash<QString, QStringList> pMonkeyStudio::availableProjectsSuffixes()
 	// temporary hash
 	QHash<QString, QStringList> mSuffixes;
 	// get all hash
-	foreach ( BasePlugin* bp, PluginsManager::instance()->plugins() )
-		if ( bp->isEnabled() && bp->infos().Type == BasePlugin::iProject )
-			mSuffixes.unite( qobject_cast<ProjectPlugin*>( bp )->suffixes() );
+	foreach ( ProjectPlugin* pp, PluginsManager::instance()->plugins<ProjectPlugin*>( PluginsManager::stEnabled ) )
+		mSuffixes.unite( pp->suffixes() );
 	// return suffixes
 	return mSuffixes;
 }
@@ -432,7 +445,22 @@ const QString pMonkeyStudio::availableLanguagesFilters()
 {
 	QString f;
 	// get suffixes
-	QHash<QString, QStringList> sl = availableSuffixes();
+	QHash<QString, QStringList> sl = availableLanguagesSuffixes();
+	//
+	foreach ( QString k, sl.keys() )
+		f += QString( "%1 Files (%2);;" ).arg( k ).arg( sl.value( k ).join( " " ) );
+	// remove trailing ;;
+	if ( f.endsWith( ";;" ) )
+		f.chop( 2 );
+	// return filters list
+	return f;
+}
+
+const QString pMonkeyStudio::availableFilesFilters()
+{
+	QString f;
+	// get suffixes
+	QHash<QString, QStringList> sl = availableFilesSuffixes();
 	//
 	foreach ( QString k, sl.keys() )
 		f += QString( "%1 Files (%2);;" ).arg( k ).arg( sl.value( k ).join( " " ) );
@@ -514,29 +542,14 @@ QsciAPIs* pMonkeyStudio::apisForLexer( QsciLexer* l )
 	return mGlobalsAPIs.value( l->language() );
 }
 
-QsciLexer* pMonkeyStudio::lexerForFilename( const QString& s ) // FIXME use QDir::match
+QsciLexer* pMonkeyStudio::lexerForFilename( const QString& s )
 {
 	// get suffixes
-	QHash<QString, QStringList> l = availableSuffixes();
-	// file suffixe
-	const QString sf = QFileInfo( s ).suffix().prepend( "*." );
-	const QString f = QFileInfo( s ).fileName();
-	bool b = false;
-	// checking suffix
+	QHash<QString, QStringList> l = availableFilesSuffixes();
+	// check suffixe
 	foreach ( QString k, l.keys() )
-	{
-		// check normal extension: ie *.ext
-		b = l.value( k ).contains( sf, Qt::CaseInsensitive );
-		// if not found try regexp expression: ie *makefile or Makefile*
-		if ( !b )
-			foreach ( QString sx, l.value( k ) )
-				if ( ( b = QRegExp( sx, Qt::CaseInsensitive, QRegExp::Wildcard ).exactMatch( f ) ) )
-					break;
-		// if suffixe match, return lexer
-		if ( b )
+		if ( QDir::match( l.value( k ), s ) )
 			return lexerForLanguage( k );
-	}
-	// return no lexer if not found
 	return 0;
 }
 

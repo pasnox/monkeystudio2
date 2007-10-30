@@ -36,7 +36,6 @@ namespace pMonkeyStudio
 	Q_MONKEY_EXPORT const QStringList availableTextCodecs();
 	Q_MONKEY_EXPORT const QStringList availableImageFormats();
 	Q_MONKEY_EXPORT const QStringList availableLanguages();
-	//Q_MONKEY_EXPORT const QStringList availableProjects();
 	
 	Q_MONKEY_EXPORT QStringList defaultOperators();
 	Q_MONKEY_EXPORT const QStringList availableOperators();
@@ -58,10 +57,12 @@ namespace pMonkeyStudio
 	Q_MONKEY_EXPORT const QString tokenizeHome( const QString& );
 	Q_MONKEY_EXPORT const QString unTokenizeHome( const QString& );
 
-	Q_MONKEY_EXPORT const QHash<QString, QStringList> defaultSuffixes();
-	Q_MONKEY_EXPORT const QHash<QString, QStringList> availableSuffixes();
+	Q_MONKEY_EXPORT const QHash<QString, QStringList> defaultLanguagesSuffixes();
+	Q_MONKEY_EXPORT const QHash<QString, QStringList> availableLanguagesSuffixes();
+	Q_MONKEY_EXPORT const QHash<QString, QStringList> availableFilesSuffixes();
 	Q_MONKEY_EXPORT const QHash<QString, QStringList> availableProjectsSuffixes();
 	Q_MONKEY_EXPORT const QString availableLanguagesFilters();
+	Q_MONKEY_EXPORT const QString availableFilesFilters();
 	Q_MONKEY_EXPORT const QString availableProjectsFilters();
 
 	Q_MONKEY_EXPORT const QString settingsPath();
