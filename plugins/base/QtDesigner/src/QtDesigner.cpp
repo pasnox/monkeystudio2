@@ -27,7 +27,7 @@ bool QtDesigner::setEnabled( bool b )
 	if ( b && !isEnabled() )
 	{
 		// set usable suffixes
-		mSuffixes[tr( "Qt Forms" )] = QStringList() << "*.ui";
+		mSuffixes[tr( "Qt Forms" )] = QStringList( "*.ui" );
 		// set plugin enabled
 		mPluginInfos.Enabled = true;
 	}
@@ -46,7 +46,6 @@ bool QtDesigner::setEnabled( bool b )
 
 pAbstractChild* QtDesigner::openFile( const QString& s, const QPoint& )
 {
-	qWarning( "requesting opening form" );
 	QtDesignerChild::instance()->openFile( s );
 	return QtDesignerChild::instance();
 }

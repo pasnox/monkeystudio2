@@ -37,6 +37,7 @@ public:
 
 protected slots:
 	void formActivated( QMdiSubWindow* );
+	void formChanged();
 	void editWidgets();
 	
 public:
@@ -78,10 +79,10 @@ public slots:
 	virtual void searchPrevious() {}
 	virtual void searchNext() {}
 	virtual void goTo( const QString&, const QPoint&, bool = false ) {}
-	virtual void backupCurrentFile( const QString& ) {}
+	virtual void backupCurrentFile( const QString& );
 	virtual void openFile( const QString&, const QPoint& = QPoint(), QTextCodec* = 0 );
-	virtual void closeFile( const QString& ) {}
-	virtual void closeFiles() {}
+	virtual void closeFile( const QString& );
+	virtual void closeFiles();
 	
 };
 

@@ -36,6 +36,7 @@ private:
 	pWorkspace( QWidget* = 0 );
 
 private slots:
+	void currentFileChanged( const QString& );
 	void internal_currentChanged( int );
 	void internal_aboutToCloseTab( int, QCloseEvent* );
 
@@ -84,7 +85,7 @@ signals:
 	// a file has been closed
 	void fileClosed( const QString& );
 	// current file changed
-	void currentFileChanged( const QString& );
+	void currentFileChanged( pAbstractChild*, const QString& );
 
 };
 

@@ -96,6 +96,8 @@ pAbstractChild* pWorkspace::openFile( const QString& s, const QPoint& p )
 	// made connection if worksapce don t contains this child
 	if ( !children().contains( c ) )
 	{
+		//
+		connect( c, SIGNAL( currentFileChanged( const QString& ) ), this, SLOT( currentFileChanged( const QString& ) ) );
 		// opened/closed file
 		connect( c, SIGNAL( fileOpened( const QString& ) ), this, SIGNAL( fileOpened( const QString& ) ) );
 		connect( c, SIGNAL( fileClosed( const QString& ) ), this, SIGNAL( fileClosed( const QString& ) ) );
@@ -163,6 +165,9 @@ void pWorkspace::goToLine( const QString& s, const QPoint& p, bool b )
 	}
 }
 
+void pWorkspace::currentFileChanged( const QString& )
+{ internal_currentChanged( indexOf( qobject_cast<pAbstractChild*>( sender() ) ) ); }
+
 void pWorkspace::internal_currentChanged( int i )
 {
 	// get child
@@ -216,7 +221,7 @@ void pWorkspace::internal_currentChanged( int i )
 	pSearch::instance()->setEditor( ic ? c->currentEditor() : 0 );
 	
 	// emit file changed
-	emit currentFileChanged( ic ? c->currentFile() : QString() );
+	emit currentFileChanged( c, ic ? c->currentFile() : QString() );
 }
 
 void pWorkspace::internal_aboutToCloseTab( int i, QCloseEvent* e )
