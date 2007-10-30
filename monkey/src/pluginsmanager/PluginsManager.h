@@ -51,6 +51,7 @@ public:
 	{ return plugins<T>( t, n, v ).value( 0 ); }
 	
 	pAbstractChild* openChildFile( const QString&, const QPoint& );
+	QHash<QString, QStringList> childSuffixes() const;
 	QString childFilters() const;
 	
 	ProjectItem* projectItem( const QString& );

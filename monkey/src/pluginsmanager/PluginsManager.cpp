@@ -120,12 +120,23 @@ pAbstractChild* PluginsManager::openChildFile( const QString& s, const QPoint& p
 	return 0;
 }
 
+QHash<QString, QStringList> PluginsManager::childSuffixes() const
+{
+	QHash<QString, QStringList> l;
+	foreach ( ChildPlugin* cp, const_cast<PluginsManager*>( this )->plugins<ChildPlugin*>( PluginsManager::stEnabled ) )
+		foreach ( QString k, cp->suffixes().keys() )
+			l[k] << cp->suffixes().value( k );
+	return l;
+}
+
 QString PluginsManager::childFilters() const
 {
 	QString f;
-	foreach ( ChildPlugin* cp, const_cast<PluginsManager*>( this )->plugins<ChildPlugin*>( PluginsManager::stEnabled ) )
-		foreach ( QString k, cp->suffixes().keys() )
-			f.append( QString( "%1 (%2);;" ).arg( k ).arg( cp->suffixes().value( k ).join( " " ) ) );
+	QHash<QString, QStringList> l = childSuffixes();
+	foreach ( QString k, l.keys() )
+		f += QString( "%1 (%2);;" ).arg( k ).arg( l.value( k ).join( " " ) );
+	if ( f.endsWith( ";;" ) )
+		f.chop( 2 );
 	return f;
 }
 
