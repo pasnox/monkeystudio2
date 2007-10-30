@@ -378,7 +378,7 @@ void QMakeItem::addExistingFiles( const QStringList& l, ProjectItem* s, const QS
 	if ( !isProject() )
 		return;
 	// C++ filters
-	const QStringList cf = availableSuffixes().value( "C++" );
+	const QStringList cf = availableLanguagesSuffixes().value( "C++" );
 	// YACC filters
 	QStringList yf;
 	foreach ( QString s, cf )
