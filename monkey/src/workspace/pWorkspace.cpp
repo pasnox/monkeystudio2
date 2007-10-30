@@ -236,14 +236,13 @@ void pWorkspace::fileOpen_triggered()
 	const QString mPath = currentChild() ? currentChild()->currentFile() : pRecentsManager::instance()->recentFileOpenPath();
 
 	// get available filters
-	QString mFilters = availableLanguagesFilters();
-	mFilters.append( ";;" ).append( PluginsManager::instance()->childFilters() );
+	QString mFilters = availableFilesFilters();
 
 	// prepend a all in one filter
 	if ( !mFilters.isEmpty() )
 	{
 		QString s;
-		foreach ( QStringList l, availableSuffixes().values() )
+		foreach ( QStringList l, availableFilesSuffixes().values() )
 			s.append( l.join( " " ).append( " " ) );
 		mFilters.prepend( QString( "All Supported Files (%1);;" ).arg( s.trimmed() ) );
 	}
