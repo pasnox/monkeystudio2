@@ -10,6 +10,7 @@ class QDesignerWidgetBox : public QDockWidget
 {
 public:
 	QDesignerWidgetBox( QtDesignerChild* ) ;
+	inline QDesignerWidgetBoxInterface* interface() const { return mInterface; }
 	
 private:
 	QDesignerWidgetBoxInterface* mInterface;

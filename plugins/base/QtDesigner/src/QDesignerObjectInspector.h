@@ -10,6 +10,7 @@ class QDesignerObjectInspector : public QDockWidget
 {
 public:
 	QDesignerObjectInspector( QtDesignerChild* );
+	inline QDesignerObjectInspectorInterface* interface() const { return mInterface; }
 	
 private:
 	QDesignerObjectInspectorInterface* mInterface;

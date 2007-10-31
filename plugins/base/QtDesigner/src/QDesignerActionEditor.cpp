@@ -23,9 +23,6 @@ QDesignerActionEditor::QDesignerActionEditor( QtDesignerChild* p )
 	// create interface
 	mInterface = QDesignerComponents::createActionEditor( p->core(), this );
 	
-	// track window changed
-	connect( p->core()->formWindowManager(), SIGNAL( activeFormWindowChanged( QDesignerFormWindowInterface* ) ), mInterface, SLOT( setFormWindow( QDesignerFormWindowInterface* ) ) );
-	
 	// set dock widget
 	setWidget( mInterface );
 	

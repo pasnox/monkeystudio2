@@ -36,7 +36,10 @@ public:
 	QDesignerFormEditorInterface* core();
 
 protected slots:
-	void formActivated( QMdiSubWindow* );
+	void subWindowActivated( QMdiSubWindow* );
+	void activeFormWindowChanged( QDesignerFormWindowInterface* w );
+	void selectionChanged();
+	void geometryChanged();
 	void formChanged();
 	void editWidgets();
 	

@@ -9,6 +9,7 @@ class QDesignerSignalSlotEditor : public QDockWidget
 {
 public:
 	QDesignerSignalSlotEditor( QtDesignerChild* );
+	inline QWidget* interface() const { return mInterface; }
 	
 private:
 	QWidget* mInterface;

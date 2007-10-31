@@ -12,6 +12,7 @@ class QDesignerActionEditor : public QDockWidget
 
 public:
 	QDesignerActionEditor( QtDesignerChild* );
+	inline QDesignerActionEditorInterface* interface() const { return mInterface; }
 	
 private:
 	QDesignerActionEditorInterface* mInterface;

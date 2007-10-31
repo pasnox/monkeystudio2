@@ -23,6 +23,12 @@
 #include <QDesignerFormWindowInterface>
 #include <QDesignerFormWindowManagerInterface>
 #include <QDesignerFormEditorPluginInterface>
+#include <QDesignerObjectInspectorInterface>
+#include <QDesignerPropertyEditorInterface>
+#include <QDesignerActionEditorInterface>
+#include <QDesignerFormWindowCursorInterface>
+#include <QDesignerPropertySheetExtension>
+#include <QExtensionManager>
 
 #include "pluginmanager_p.h"
 #include "qdesigner_integration_p.h"
@@ -150,7 +156,8 @@ QtDesignerChild::QtDesignerChild()
 	mCore->setTopLevel( UIMain::instance() );
 	
 	// connection
-	connect( mArea, SIGNAL( subWindowActivated( QMdiSubWindow* ) ), this, SLOT( formActivated( QMdiSubWindow* ) ) );
+	connect( mArea, SIGNAL( subWindowActivated( QMdiSubWindow* ) ), this, SLOT( subWindowActivated( QMdiSubWindow* ) ) );
+	connect( mCore->formWindowManager(), SIGNAL( activeFormWindowChanged( QDesignerFormWindowInterface* ) ), this, SLOT( activeFormWindowChanged( QDesignerFormWindowInterface* ) ) );
 	connect( aEditWidgets, SIGNAL( triggered() ), this, SLOT( editWidgets() ) );
 }
 
@@ -179,24 +186,70 @@ QDesignerFormWindowInterface* QtDesignerChild::createForm()
 	return w;
 }
 
-void QtDesignerChild::formActivated( QMdiSubWindow* w )
+void QtDesignerChild::subWindowActivated( QMdiSubWindow* w )
+{ mCore->formWindowManager()->setActiveFormWindow( w ? qobject_cast<QDesignerFormWindowInterface*>( w->widget() ) : 0 ); }
+
+void QtDesignerChild::activeFormWindowChanged( QDesignerFormWindowInterface* w )
 {
-	// get form
-	QDesignerFormWindowInterface* i = w ? qobject_cast<QDesignerFormWindowInterface*>( w->widget() ) : 0;
-	// set it current for designer
-	mCore->formWindowManager()->setActiveFormWindow( i );
+	// disconnect form selection changed
+	if ( w )
+	{
+		disconnect( w, SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
+		disconnect( w, SIGNAL( changed() ), this, SLOT( formChanged() ) );
+		disconnect( w, SIGNAL( geometryChanged() ), this, SLOT( geometryChanged() ) );
+	}
+	
+	// inspector
+	pObjectInspector->interface()->setFormWindow( w );
+	
+	// set new object for property editor
+	pPropertyEditor->interface()->setObject( w );
+	
+	// set new object for action editor
+	pActionEditor->interface()->setFormWindow( w );
+	
+	// connect form selection changed
+	if ( w )
+	{
+		connect( w, SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
+		connect( w, SIGNAL( changed() ), this, SLOT( formChanged() ) );
+		connect( w, SIGNAL( geometryChanged() ), this, SLOT( geometryChanged() ) );
+	}
+	
+	// update window state
+	//setWindowTitle( tr( "Qt Designer" ).append( w ? QString( " [%1]" ).arg( QFileInfo( w->fileName() ).fileName() ) : QString::null ) );
+	//setWindowModified( w ? w->isDirty() : false );
+	
 	// emit signals
-	emit currentFileChanged( i ? i->fileName() : QString() );
+	emit currentFileChanged( w ? w->fileName() : QString() );
+}
+
+void QtDesignerChild::selectionChanged()
+{
+	// set current object for property editor
+	if ( QDesignerFormWindowInterface* w = mCore->formWindowManager()->activeFormWindow() )
+		pPropertyEditor->interface()->setObject( w->cursor()->hasSelection() ? w->cursor()->selectedWidget( 0 ) : w->mainContainer() );
+}
+
+void QtDesignerChild::geometryChanged()
+{
+	return;
+	// update widget property
+	if ( QDesignerFormWindowInterface* w = qobject_cast<QDesignerFormWindowInterface*>( sender() ) )
+		w->cursor()->setWidgetProperty( w->mainContainer(), "geometry", w->mainContainer()->geometry() );
 }
 
 void QtDesignerChild::formChanged()
 {
-	if ( QDesignerFormWindowInterface* i = qobject_cast<QDesignerFormWindowInterface*>( sender() ) )
+	if ( QDesignerFormWindowInterface* w = qobject_cast<QDesignerFormWindowInterface*>( sender() ) )
 	{
-		i->parentWidget()->setWindowModified( i->isDirty() );
-		if ( mArea->currentSubWindow() == i->parentWidget() )
+		// update window state
+		//setWindowModified( w->isDirty() );
+		
+		// hm create updateChildStateRequested ?!
+		if ( mArea->currentSubWindow() == w->parentWidget() )
 		{
-			emit modifiedChanged( i->isDirty() );
+			emit modifiedChanged( w->isDirty() );
 			emit undoAvailableChanged( isUndoAvailable() );
 			emit redoAvailableChanged( isRedoAvailable() );
 			emit pasteAvailableChanged( isPasteAvailable() );
@@ -217,16 +270,23 @@ void QtDesignerChild::openFile( const QString& s, const QPoint&, QTextCodec* )
 {
 	// create form
 	QDesignerFormWindowInterface* w = createForm();
+	
 	// assign file name
 	w->setFileName( s );
+	
 	// add filename to list
 	mFiles.append( s );
-	//
+	
+	QSize mainContainerSize( 400, 300 );
+	
+	// set contents
 	if ( QFile::exists( s ) )
 	{
 		// set content
 		QFile f( s );
 		w->setContents( &f );
+		mainContainerSize = w->mainContainer()->geometry().size();
+		
 		// set clean
 		w->setDirty( false );
 	}
@@ -235,16 +295,26 @@ void QtDesignerChild::openFile( const QString& s, const QPoint&, QTextCodec* )
 		w->setMainContainer( new QWidget() );
 		w->setDirty( true );
 	}
+	
 	// add to mdi area
 	mArea->addSubWindow( w, Qt::CustomizeWindowHint | Qt::SubWindow | Qt::WindowShadeButtonHint | Qt::WindowSystemMenuHint );
-	// set window title
-	w->parentWidget()->setWindowTitle( s +"[*]" );
+	
+	// resize to original container size
+	QMdiSubWindow* mw = qobject_cast<QMdiSubWindow*>( w->parentWidget() );
+	const QSize decorationSize = mw->size() -mw->contentsRect().size();
+    mw->resize( mainContainerSize +decorationSize );
+	
 	// set it visible
 	w->setVisible( true );
+	
+	// set window title
+	w->setWindowTitle( QFileInfo( s ).fileName() +"[*]" );
+	
+	// emit not modified state
+	//modifiedChanged( w->isDirty() );
+	
 	// emit file opened
 	emit fileOpened( s );
-	// connection
-	connect( w, SIGNAL( changed() ), this, SLOT( formChanged() ) );
 }
 
 void QtDesignerChild::closeFile( const QString& s )

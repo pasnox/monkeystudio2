@@ -13,13 +13,9 @@ class QDesignerPropertyEditor : public QDockWidget
 	
 public:
 	QDesignerPropertyEditor( QtDesignerChild* );
-	
-private slots:
-	void selectionChanged();
-	void activeFormWindowChanged( QDesignerFormWindowInterface* );
+	inline QDesignerPropertyEditorInterface* interface() const { return mInterface; }
 	
 private:
-	QDesignerFormWindowInterface* mForm;
 	QDesignerPropertyEditorInterface* mInterface;
 };
 
