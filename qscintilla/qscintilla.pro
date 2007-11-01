@@ -8,4 +8,4 @@ include( $$QSCINTILLAVERSION/Qt4/qscintilla.pro )
 include( qscintilla.pri )
 
 # overwrite some values to made no lib
-CONFIG	-= dll
+CONFIG	-= dll release
