@@ -21,7 +21,12 @@ CONFIG	*= warn_on lib_bundle thread x11 dll plugin debug_and_release
 MONKEY_PLUGINS_DIR	= ../../../bin/plugins
 #DEFINES	= __COVERAGESCANNER__
 LIBS	= -L$${BUILD_PATH}
-win32:LIBS += -lmonkey
+win32 {
+	CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
+		unix:LIBS += -lmonkey_debug
+		else:LIBS += -lmonkey_d
+	} else:LIBS += -lmonkey
+}
 
 win32:QMAKE_LIBDIR	+= ../../../bin
 contains( DEFINES, __COVERAGESCANNER__ ) {
@@ -31,7 +36,7 @@ contains( DEFINES, __COVERAGESCANNER__ ) {
 	QMAKE_CC = cs$$QMAKE_CC
 }
 
-CONFIG(debug, debug|release) {
+CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 	#Debug
 	CONFIG	+= console
 	unix:TARGET	= $$join(TARGET,,,_debug)
