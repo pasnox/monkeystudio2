@@ -29,8 +29,10 @@ protected:
 	QDesignerPropertyEditor* pPropertyEditor;
 	QDesignerObjectInspector* pObjectInspector;
 	QDesignerSignalSlotEditor* pSignalSlotEditor;
+	QDesignerFormWindowInterface* mOldForm;
 	
 	QDesignerFormWindowInterface* createForm();
+	bool eventFilter( QObject*, QEvent* );
 
 public:
 	QDesignerFormEditorInterface* core();
@@ -42,6 +44,11 @@ protected slots:
 	void geometryChanged();
 	void formChanged();
 	void editWidgets();
+	void setModified( QDesignerFormWindowInterface* );
+	void undo_triggered();
+	void redo_triggered();
+	void copy_triggered();
+	void paste_triggered();
 	
 public:
 	virtual QStringList files() const;
@@ -81,7 +88,7 @@ private:
 public slots:
 	virtual void searchPrevious() {}
 	virtual void searchNext() {}
-	virtual void goTo( const QString&, const QPoint&, bool = false ) {}
+	virtual void goTo( const QString&, const QPoint&, bool = false );
 	virtual void backupCurrentFile( const QString& );
 	virtual void openFile( const QString&, const QPoint& = QPoint(), QTextCodec* = 0 );
 	virtual void closeFile( const QString& );

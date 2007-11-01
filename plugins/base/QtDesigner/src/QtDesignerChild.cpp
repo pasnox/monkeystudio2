@@ -4,6 +4,7 @@
 #include "pDockToolBarManager.h"
 #include "pDockToolBar.h"
 #include "pMonkeyStudio.h"
+#include "pMenuBar.h"
 
 #include "QDesignerWidgetBox.h"
 #include "QDesignerActionEditor.h"
@@ -103,7 +104,9 @@ QtDesignerChild::QtDesignerChild()
 	QDesignerFormWindowManagerInterface* fwm = mCore->formWindowManager();
 	// edit
 	fwm->actionUndo()->setIcon( QIcon( ":/icons/undo.png" ) );
+	fwm->actionUndo()->setShortcut( pMenuBar::instance()->action( "mEdit/aUndo" )->shortcut() );
 	fwm->actionRedo()->setIcon( QIcon( ":/icons/redo.png" ) );
+	fwm->actionRedo()->setShortcut( pMenuBar::instance()->action( "mEdit/aRedo" )->shortcut() );
 	fwm->actionDelete()->setIcon( QIcon( ":/icons/delete.png" ) );
 	fwm->actionSelectAll()->setIcon( QIcon( ":/icons/selectall.png" ) );
 	mToolBar->addAction( fwm->actionUndo() );
@@ -151,6 +154,9 @@ QtDesignerChild::QtDesignerChild()
 	pSignalSlotEditor->setVisible( false );
 	UIMain::instance()->dockToolBar( Qt::TopToolBarArea )->addDock( pSignalSlotEditor, tr( "Signal/Slot Editor" ), QIcon( ":/icons/signal.png" ) );
 	
+	// old current form
+	mOldForm = 0;
+	
 	// perform integration
 	new qdesigner_internal::QDesignerIntegration( mCore, this );
 	mCore->setTopLevel( UIMain::instance() );
@@ -165,6 +171,7 @@ QtDesignerChild::~QtDesignerChild()
 {
 	// close all files
 	closeFiles();
+	
 	// delete designer docks
 	delete pWidgetBox;
 	delete pActionEditor;
@@ -180,10 +187,22 @@ QDesignerFormWindowInterface* QtDesignerChild::createForm()
 {
 	// create form instance
 	QDesignerFormWindowInterface* w = mCore->formWindowManager()->createFormWindow();
+	
 	// set form default features
 	w->setFeatures( QDesignerFormWindowInterface::DefaultFeature );
+	
 	// return form instance
 	return w;
+}
+
+bool QtDesignerChild::eventFilter( QObject* o, QEvent* e )
+{
+	if ( o && e->type() == QEvent::Close )
+		if ( QDesignerFormWindowInterface* w = qobject_cast<QDesignerFormWindowInterface*>( o ) )
+			if ( w->property( "askSave" ).toBool() && w->isDirty() )
+				if ( question( tr( "Form Modified..." ), tr( "The form has been modified, do you want to save it ?" ), window() ) )
+					saveFile( w->fileName() );
+	return pAbstractChild::eventFilter( o, e );
 }
 
 void QtDesignerChild::subWindowActivated( QMdiSubWindow* w )
@@ -192,11 +211,11 @@ void QtDesignerChild::subWindowActivated( QMdiSubWindow* w )
 void QtDesignerChild::activeFormWindowChanged( QDesignerFormWindowInterface* w )
 {
 	// disconnect form selection changed
-	if ( w )
+	if ( mOldForm )
 	{
-		disconnect( w, SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
-		disconnect( w, SIGNAL( changed() ), this, SLOT( formChanged() ) );
-		disconnect( w, SIGNAL( geometryChanged() ), this, SLOT( geometryChanged() ) );
+		disconnect( mOldForm, SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
+		disconnect( mOldForm, SIGNAL( changed() ), this, SLOT( formChanged() ) );
+		disconnect( mOldForm, SIGNAL( geometryChanged() ), this, SLOT( geometryChanged() ) );
 	}
 	
 	// inspector
@@ -216,9 +235,11 @@ void QtDesignerChild::activeFormWindowChanged( QDesignerFormWindowInterface* w )
 		connect( w, SIGNAL( geometryChanged() ), this, SLOT( geometryChanged() ) );
 	}
 	
+	// set old form
+	mOldForm = w;
+	
 	// update window state
-	//setWindowTitle( tr( "Qt Designer" ).append( w ? QString( " [%1]" ).arg( QFileInfo( w->fileName() ).fileName() ) : QString::null ) );
-	//setWindowModified( w ? w->isDirty() : false );
+	setModified( w );
 	
 	// emit signals
 	emit currentFileChanged( w ? w->fileName() : QString() );
@@ -233,10 +254,19 @@ void QtDesignerChild::selectionChanged()
 
 void QtDesignerChild::geometryChanged()
 {
-	return;
 	// update widget property
 	if ( QDesignerFormWindowInterface* w = qobject_cast<QDesignerFormWindowInterface*>( sender() ) )
+	{
+		// don t take care of first geometry changed
+		if ( w->property( "firstGeometryChanged" ).toBool() )
+		{
+			w->setProperty( "firstGeometryChanged", false );
+			return;
+		}
+		
+		// update property
 		w->cursor()->setWidgetProperty( w->mainContainer(), "geometry", w->mainContainer()->geometry() );
+	}
 }
 
 void QtDesignerChild::formChanged()
@@ -244,17 +274,10 @@ void QtDesignerChild::formChanged()
 	if ( QDesignerFormWindowInterface* w = qobject_cast<QDesignerFormWindowInterface*>( sender() ) )
 	{
 		// update window state
-		//setWindowModified( w->isDirty() );
+		setModified( w );
 		
-		// hm create updateChildStateRequested ?!
-		if ( mArea->currentSubWindow() == w->parentWidget() )
-		{
-			emit modifiedChanged( w->isDirty() );
-			emit undoAvailableChanged( isUndoAvailable() );
-			emit redoAvailableChanged( isRedoAvailable() );
-			emit pasteAvailableChanged( isPasteAvailable() );
-			emit copyAvailableChanged( isCopyAvailable() );
-		}
+		// emit modified state
+		emit modifiedChanged( w->isDirty() );
 	}
 }
 
@@ -266,17 +289,34 @@ void QtDesignerChild::editWidgets()
 			i->editWidgets();
 }
 
+void QtDesignerChild::setModified( QDesignerFormWindowInterface* w )
+{
+	// update designer title
+	setWindowTitle( tr( "Qt Designer" ).append( w ? QFileInfo( w->fileName() ).fileName().append( "]" ).prepend( " [" ) : QString::null ) );
+	
+	// update designer state
+	setWindowModified( w && mCore->formWindowManager()->activeFormWindow() == w ? w->isDirty() : false );
+	
+	// update form mdi state
+	if ( w )
+		w->parentWidget()->setWindowModified( w->isDirty() );
+}
+
 void QtDesignerChild::openFile( const QString& s, const QPoint&, QTextCodec* )
 {
 	// create form
 	QDesignerFormWindowInterface* w = createForm();
 	
+	// set property to tell ask to save in filter event
+	w->setProperty( "askSave", true );
+	
+	// track close event 
+	w->installEventFilter( this );
+	
 	// assign file name
 	w->setFileName( s );
 	
-	// add filename to list
-	mFiles.append( s );
-	
+	// set default size
 	QSize mainContainerSize( 400, 300 );
 	
 	// set contents
@@ -285,7 +325,12 @@ void QtDesignerChild::openFile( const QString& s, const QPoint&, QTextCodec* )
 		// set content
 		QFile f( s );
 		w->setContents( &f );
+		
+		// get original size
 		mainContainerSize = w->mainContainer()->geometry().size();
+		
+		// set temporary property
+		w->setProperty( "firstGeometryChanged", true );
 		
 		// set clean
 		w->setDirty( false );
@@ -302,16 +347,19 @@ void QtDesignerChild::openFile( const QString& s, const QPoint&, QTextCodec* )
 	// resize to original container size
 	QMdiSubWindow* mw = qobject_cast<QMdiSubWindow*>( w->parentWidget() );
 	const QSize decorationSize = mw->size() -mw->contentsRect().size();
-    mw->resize( mainContainerSize +decorationSize );
+	mw->resize( mainContainerSize +decorationSize );
 	
 	// set it visible
 	w->setVisible( true );
 	
 	// set window title
-	w->setWindowTitle( QFileInfo( s ).fileName() +"[*]" );
+	mw->setWindowTitle( QFileInfo( s ).fileName() +"[*]" );
+	
+	// set modified state
+	setModified( w );
 	
 	// emit not modified state
-	//modifiedChanged( w->isDirty() );
+	emit modifiedChanged( w->isDirty() );
 	
 	// emit file opened
 	emit fileOpened( s );
@@ -319,19 +367,19 @@ void QtDesignerChild::openFile( const QString& s, const QPoint&, QTextCodec* )
 
 void QtDesignerChild::closeFile( const QString& s )
 {
-	// if not exists cancel
-	if ( !mFiles.contains( s ) )
-		return;
+	// find file
 	foreach ( QMdiSubWindow* w, mArea->subWindowList() )
 	{
 		if ( QDesignerFormWindowInterface* i = qobject_cast<QDesignerFormWindowInterface*>( w->widget() ) )
 		{
 			if ( isSameFile( i->fileName(), s ) )
 			{
+				// set property to tell don t ask to save in filter event
+				i->setProperty( "askSave", false );
+				
 				// close form
 				w->close();
-				// remove from files list
-				mFiles.removeAll( s );
+				
 				// emit file closed
 				emit fileClosed( s );
 			}
@@ -347,10 +395,13 @@ void QtDesignerChild::closeFiles()
 		{
 			// get filename
 			const QString s = i->fileName();
+			
+			// set property to tell don t ask to save in filter event
+			i->setProperty( "askSave", false );
+			
 			// close form
 			w->close();
-			// remove from files list
-			mFiles.removeAll( s );
+			
 			// emit file closed
 			emit fileClosed( s );
 		}
@@ -404,21 +455,20 @@ bool QtDesignerChild::isModified() const
 }
 
 bool QtDesignerChild::isUndoAvailable() const
-{ return mCore->formWindowManager()->actionUndo()->isEnabled(); }
+{ return false; }
 
 bool QtDesignerChild::isRedoAvailable() const
-{ return mCore->formWindowManager()->actionRedo()->isEnabled(); }
+{ return false; }
 
 bool QtDesignerChild::isPasteAvailable() const
-{ return mCore->formWindowManager()->actionPaste()->isEnabled(); }
+{ return false; }
 
 bool QtDesignerChild::isCopyAvailable() const
-{ return mCore->formWindowManager()->actionCopy()->isEnabled(); }
+{ return false; }
 
 bool QtDesignerChild::isModified( const QString& s ) const
 {
-	if ( !mFiles.contains( s ) )
-		return false;
+	// find file
 	foreach ( QMdiSubWindow* w, mArea->subWindowList() )
 		if ( QDesignerFormWindowInterface* i = qobject_cast<QDesignerFormWindowInterface*>( w->widget() ) )
 			if ( isSameFile( i->fileName(), s ) )
@@ -434,8 +484,11 @@ void QtDesignerChild::saveFile( const QString& s )
 		{
 			if ( isSameFile( i->fileName(), s ) )
 			{
+				// cancel if not modified
 				if ( !i->isDirty() )
 					return;
+				
+				// write file
 				QFile f( i->fileName() );
 				if ( f.open( QIODevice::WriteOnly | QIODevice::Text ) )
 				{
@@ -443,6 +496,7 @@ void QtDesignerChild::saveFile( const QString& s )
 					f.write( qPrintable( i->contents() ) );
 					f.close();
 					i->setDirty( false );
+					setModified( i );
 					emit modifiedChanged( false );
 				}
 				else
@@ -459,8 +513,11 @@ void QtDesignerChild::saveFiles()
 	{
 		if ( QDesignerFormWindowInterface* i = qobject_cast<QDesignerFormWindowInterface*>( w->widget() ) )
 		{
+			// check next if not modified
 			if ( !i->isDirty() )
 				continue;
+			
+			// save file
 			QFile f( i->fileName() );
 			if ( f.open( QIODevice::WriteOnly | QIODevice::Text ) )
 			{
@@ -468,6 +525,7 @@ void QtDesignerChild::saveFiles()
 				f.write( qPrintable( i->contents() ) );
 				f.close();
 				i->setDirty( false );
+				setModified( i );
 				if ( mArea->currentSubWindow() == w )
 					emit modifiedChanged( false );
 			}
@@ -477,42 +535,36 @@ void QtDesignerChild::saveFiles()
 	}
 }
 
-void QtDesignerChild::printFile( const QString& )
-{}
+void QtDesignerChild::printFile( const QString& ) {}
 
-void QtDesignerChild::quickPrintFile( const QString& )
-{}
+void QtDesignerChild::quickPrintFile( const QString& ) {}
 
-void QtDesignerChild::undo()
-{ mCore->formWindowManager()->actionUndo()->trigger(); }
+void QtDesignerChild::undo() {}
 
-void QtDesignerChild::redo()
-{ mCore->formWindowManager()->actionRedo()->trigger(); }
+void QtDesignerChild::redo() {}
 
-void QtDesignerChild::cut()
-{ mCore->formWindowManager()->actionCut()->trigger(); }
+void QtDesignerChild::cut() {}
 
-void QtDesignerChild::copy()
-{ mCore->formWindowManager()->actionCopy()->trigger(); }
+void QtDesignerChild::copy() {}
 
-void QtDesignerChild::paste()
-{ mCore->formWindowManager()->actionPaste()->trigger(); }
+void QtDesignerChild::paste() {}
 
-void QtDesignerChild::searchReplace()
-{}
+void QtDesignerChild::searchReplace() {}
 
-void QtDesignerChild::goTo()
-{}
+void QtDesignerChild::goTo() {}
+
+void QtDesignerChild::goTo( const QString& s, const QPoint&, bool )
+{ showFile( s ); }
 
 void QtDesignerChild::backupCurrentFile( const QString& s )
 {
-	if ( QDesignerFormWindowInterface* i = qobject_cast<QDesignerFormWindowInterface*>( mArea->currentSubWindow()->widget() ) )
+	if ( QDesignerFormWindowInterface* w = qobject_cast<QDesignerFormWindowInterface*>( mArea->currentSubWindow()->widget() ) )
 	{
 		QFile f( s );
 		if ( f.open( QIODevice::WriteOnly | QIODevice::Text ) )
 		{
 			f.resize( 0 );
-			f.write( qPrintable( i->contents() ) );
+			f.write( qPrintable( w->contents() ) );
 			f.close();
 		}
 		else
