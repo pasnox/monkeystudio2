@@ -87,7 +87,7 @@ bool pTabbedWorkspace::eventFilter( QObject* o, QEvent* e )
 	
 	// child modified state
 	if ( t == QEvent::ModifiedChange )
-		mTabBar->setTabIcon( indexOf( td ), td->isWindowModified() ? QIcon( ":/file/icons/file/save.png" ) : QIcon( ":/file/icons/file/transparent.png" ) );   
+		mTabBar->setTabText( indexOf( td ), td->windowTitle().append( td->isWindowModified() ? QString( "*" ) : QString::null ) );
 
 	// if mode is toplevel and event is activate, activate correct window if needed
 	else if ( mTabMode == tmTopLevel && t == QEvent::WindowActivate )
@@ -556,7 +556,7 @@ int pTabbedWorkspace::insertTab( int j, QWidget* td, const QIcon& i, const QStri
 	addDocument( td, j );
 
 	// set icon if not available
-	mTabBar->setTabIcon( j, i.isNull() ? QIcon( ":/file/icons/file/transparent.png" ) : i );
+	mTabBar->setTabIcon( j, i );
 
 	// set chortcut if needed
 	if ( tabsHaveShortcut() )
