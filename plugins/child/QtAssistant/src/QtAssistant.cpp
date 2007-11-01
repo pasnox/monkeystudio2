@@ -15,7 +15,7 @@ QtAssistant::QtAssistant()
 	mPluginInfos.Caption = tr( "Qt Assistant" );
 	mPluginInfos.Description = tr( "This plugin embbeded the official Qt Asssitant" );
 	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
-	mPluginInfos.Type = BasePlugin::iBase;
+	mPluginInfos.Type = BasePlugin::iChild;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "1.0.0";
 	mPluginInfos.Enabled = false;
@@ -41,20 +41,18 @@ bool QtAssistant::setEnabled( bool b )
 		if ( !conf )
 			warning( tr( "Qt Assistant profile..." ), tr( "Can't load/create the default profile for Qt Assistant, aborting..." ) );
 		// install dock
-		UIMain::instance()->dockToolBar( Qt::RightToolBarArea )->addDock( QtAssistantChild::instance()->dock(), infos().Caption, QIcon( ":/icons/assistant.png" ) );
+		UIMain::instance()->dockToolBar( Qt::RightToolBarArea )->addDock( QtAssistantChild::instance()->dock(), infos().Caption, QIcon( ":/trolltech/assistant/images/assistant.png" ) );
 		// set plugin enabled
 		mPluginInfos.Enabled = true;
 	}
 	else if ( !b && isEnabled() )
 	{
-		//mWorkspace->tabToolBar()->bar( TabToolBar::Right )->removeTab( QtAssistantChild::self( mWorkspace )->dock() );
-		delete QtAssistantChild::instance();
+		QtAssistantChild::cleanInstance();
 		// set plugin disabled
 		mPluginInfos.Enabled = false;
 	}
-	
 	// return default value
 	return true;
 }
 
-Q_EXPORT_PLUGIN2( BaseQtAssistant, QtAssistant )
+Q_EXPORT_PLUGIN2( ChildQtAssistant, QtAssistant )

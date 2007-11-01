@@ -6,7 +6,7 @@
 #include "helpdialog.h"
 #include "tabbedbrowser.h"
 #include "helpwindow.h"
-//
+
 #include <QVBoxLayout>
 #include <QMenuBar>
 #include <QStatusBar>
@@ -29,7 +29,8 @@ QtAssistantChild::QtAssistantChild()
 	vl->setSpacing( 0 );
 	// connection
 	connect( mMain->helpDialog(), SIGNAL( showLink( const QString& ) ), this, SLOT( showLink( const QString& ) ) );
-	connect( mMain->browsers()->findChild<QTabWidget*>( "tab" ), SIGNAL( currentChanged( int ) ), this, SLOT( showLink() ) );
+	connect( mMain->browsers()->findChild<QTabWidget*>( "tab" ), SIGNAL( currentChanged( int ) ), this, SLOT( currentChanged( int ) ) );
+	connect( mMain->browsers()->currentBrowser(), SIGNAL( sourceChanged( const QUrl& ) ), this, SLOT( showLink( const QUrl& ) ) );
 	// add assistant as widget child
 	vl->addWidget( mMain );
 	setWindowTitle( mMain->windowTitle() );
@@ -41,13 +42,36 @@ QtAssistantChild::~QtAssistantChild()
 void QtAssistantChild::closeEvent( QCloseEvent* e )
 {
 	// don't destroy the child when we close it in workspace
-	//setAttribute( Qt::WA_DeleteOnClose, false );
+	setAttribute( Qt::WA_DeleteOnClose, false );
 	// call defaul closeevent of abstract child
 	pAbstractChild::closeEvent( e );
 }
 
 void QtAssistantChild::helpWindow_destroyed( QObject* )
 { emit currentFileChanged( currentFile() ); }
+
+void QtAssistantChild::currentChanged( int i )
+{
+	// disconnect signals
+	foreach ( HelpWindow* w, browsersList() )
+	{
+		disconnect( w, SIGNAL( sourceChanged( const QUrl& ) ), this, SLOT( showLink( const QUrl& ) ) );
+		disconnect( w, SIGNAL( destroyed( QObject* ) ), this, SLOT( helpWindow_destroyed( QObject* ) ) );
+		w->setAttribute( Qt::WA_DeleteOnClose );
+	}
+	
+	//connect signal for current browser
+	if ( HelpWindow* w = mMain->browsers()->currentBrowser() )
+	{
+		connect( w, SIGNAL( sourceChanged( const QUrl& ) ), this, SLOT( showLink( const QUrl& ) ) );
+		connect( w, SIGNAL( destroyed( QObject* ) ), this, SLOT( helpWindow_destroyed( QObject* ) ) );
+	}
+	
+	// set title
+	QString c = mMain->browsers()->findChild<QTabWidget*>( "tab" )->tabText( i );
+	setWindowTitle( tr( "Qt Assistant" ).append( c.isNull() ? QString::null : c.prepend( " [" ).append( "]" ) ) );
+	setWindowModified( false );
+}
 
 void QtAssistantChild::showLink( const QString& s )
 {
@@ -60,13 +84,8 @@ void QtAssistantChild::showLink( const QString& s )
 	else
 		w->addTab( this, tr( "Qt Assistant" ) );
 	
-	// check if the the current browser is already tracked
-	HelpWindow* hw = mMain->browsers()->currentBrowser();
-	hw->setAttribute( Qt::WA_DeleteOnClose );
-	disconnect( hw, SIGNAL( sourceChanged( const QUrl& ) ), this, SLOT( showLink( const QUrl& ) ) );
-	connect( hw, SIGNAL( sourceChanged( const QUrl& ) ), this, SLOT( showLink( const QUrl& ) ) );
-	disconnect( hw, SIGNAL( destroyed( QObject* ) ), this, SLOT( helpWindow_destroyed( QObject* ) ) );
-	connect( hw, SIGNAL( destroyed( QObject* ) ), this, SLOT( helpWindow_destroyed( QObject* ) ) );
+	// set title
+	currentChanged( mMain->browsers()->findChild<QTabWidget*>( "tab" )->currentIndex() );
 	
 	// tell filename has changed
 	emit currentFileChanged( !s.isEmpty() ? s : currentFile() );
@@ -125,38 +144,27 @@ bool QtAssistantChild::isCopyAvailable() const
 bool QtAssistantChild::isModified( const QString& ) const
 { return false; }
 
-void QtAssistantChild::saveFile( const QString& )
-{}
+void QtAssistantChild::saveFile( const QString& ) {}
 
-void QtAssistantChild::saveFiles()
-{}
+void QtAssistantChild::saveFiles() {}
 
-void QtAssistantChild::printFile( const QString& )
-{}
+void QtAssistantChild::printFile( const QString& ) {}
 
-void QtAssistantChild::quickPrintFile( const QString& )
-{}
+void QtAssistantChild::quickPrintFile( const QString& ) {}
 
-void QtAssistantChild::undo()
-{}
+void QtAssistantChild::undo() {}
 
-void QtAssistantChild::redo()
-{}
+void QtAssistantChild::redo() {}
 
-void QtAssistantChild::cut()
-{}
+void QtAssistantChild::cut() {}
 
-void QtAssistantChild::copy()
-{}
+void QtAssistantChild::copy() {}
 
-void QtAssistantChild::paste()
-{}
+void QtAssistantChild::paste() {}
 
-void QtAssistantChild::searchReplace()
-{}
+void QtAssistantChild::searchReplace() {}
 
-void QtAssistantChild::goTo()
-{}
+void QtAssistantChild::goTo() {}
 
 bool QtAssistantChild::isSearchReplaceAvailable() const
 { return false; }

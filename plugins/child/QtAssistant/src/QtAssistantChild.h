@@ -69,6 +69,7 @@ protected:
 	
 protected slots:
 	void helpWindow_destroyed( QObject* );
+	void currentChanged( int );
 	void showLink( const QString& = QString() );
 	void showLink( const QUrl& );
 	
