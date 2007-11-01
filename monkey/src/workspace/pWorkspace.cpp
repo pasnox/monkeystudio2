@@ -166,13 +166,7 @@ void pWorkspace::goToLine( const QString& s, const QPoint& p, bool b )
 }
 
 void pWorkspace::currentFileChanged( const QString& )
-{
-	pAbstractChild* c = qobject_cast<pAbstractChild*>( sender() );
-	int i = indexOf( c );
-	if ( c )
-		tabBar()->setTabText( i, c->windowTitle() );
-	internal_currentChanged( i );
-}
+{ internal_currentChanged( indexOf( qobject_cast<pAbstractChild*>( sender() ) ) ); }
 
 void pWorkspace::internal_currentChanged( int i )
 {
