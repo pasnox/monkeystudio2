@@ -9,6 +9,7 @@ TEMPLATE = app
 LANGUAGE	= Qt4/C++
 TARGET	= monkey
 DESTDIR	= ../bin
+CONFIG	-= release
 CONFIG	*= qt warn_on app_bundle thread x11 windows debug_and_release
 QT	*= gui core
 
@@ -42,6 +43,7 @@ CONFIG(debug, debug|release) {
 	UI_DIR	= $${BUILD_PATH}/debug/.ui
 	MOC_DIR	= $${BUILD_PATH}/debug/.moc
 	RCC_DIR	= $${BUILD_PATH}/debug/.rcc
+	warning( "Monkey Studio 2 Build Mode : Debug" )
 } else {
 	#Release
 	unix:OBJECTS_DIR	= $${BUILD_PATH}/release/.obj/unix
@@ -50,6 +52,7 @@ CONFIG(debug, debug|release) {
 	UI_DIR	= $${BUILD_PATH}/release/.ui
 	MOC_DIR	= $${BUILD_PATH}/release/.moc
 	RCC_DIR	= $${BUILD_PATH}/release/.rcc
+	warning( "Monkey Studio 2 Build Mode : Release" )
 }
 
 # include fresh framework
