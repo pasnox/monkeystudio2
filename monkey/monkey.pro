@@ -3,13 +3,12 @@
 BUILD_PATH	 = ../build
 
 # include qscintilla framework
-include( ../qscintilla/qscintilla.pro )
+include( ../qscintilla/qscintilla.pri )
 
 TEMPLATE = app
 LANGUAGE	= Qt4/C++
 TARGET	= monkey
 DESTDIR	= ../bin
-CONFIG	-= release
 CONFIG	*= qt warn_on app_bundle thread x11 windows debug_and_release
 QT	*= gui core
 
@@ -29,10 +28,20 @@ DEFINES	*= MONKEY_CORE_BUILD "PROGRAM_NAME=\"\\\"$${PROGRAM_NAME}\\\"\"" "PROGRA
 
 LIBS	*= -L$${BUILD_PATH}
 unix:*-g++:LIBS	*= -rdynamic
-win32-msvc*:LIBS	*= /IMPLIB:$${BUILD_PATH}/monkey.lib -lshell32
-win32-g++:LIBS	*= -Wl,--out-implib,$${BUILD_PATH}/libmonkey.a
+win32-msvc* {
+	CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
+		unix:LIBS	*= /IMPLIB:$${BUILD_PATH}/monkey_debug.lib -lshell32
+		else:LIBS	*= /IMPLIB:$${BUILD_PATH}/monkey_d.lib -lshell32
+	} else:LIBS	*= /IMPLIB:$${BUILD_PATH}/monkey.lib -lshell32
+}
+win32-g++ {
+	CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
+		unix:LIBS	*= -Wl,--out-implib,$${BUILD_PATH}/libmonkey_debug.a
+		else:LIBS	*= -Wl,--out-implib,$${BUILD_PATH}/libmonkey_d.a
+	} else:LIBS	*= -Wl,--out-implib,$${BUILD_PATH}/libmonkey.a
+}
 
-CONFIG(debug, debug|release) {
+CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 	#Debug
 	CONFIG	+= console
 	unix:TARGET	= $$join(TARGET,,,_debug)
@@ -43,7 +52,9 @@ CONFIG(debug, debug|release) {
 	UI_DIR	= $${BUILD_PATH}/debug/.ui
 	MOC_DIR	= $${BUILD_PATH}/debug/.moc
 	RCC_DIR	= $${BUILD_PATH}/debug/.rcc
-	warning( "Monkey Studio 2 Build Mode : Debug" )
+	unix:LIBS	*= -lqscintilla2_debug
+	else:LIBS	*= -lqscintilla2_d
+	
 } else {
 	#Release
 	unix:OBJECTS_DIR	= $${BUILD_PATH}/release/.obj/unix
@@ -52,7 +63,7 @@ CONFIG(debug, debug|release) {
 	UI_DIR	= $${BUILD_PATH}/release/.ui
 	MOC_DIR	= $${BUILD_PATH}/release/.moc
 	RCC_DIR	= $${BUILD_PATH}/release/.rcc
-	warning( "Monkey Studio 2 Build Mode : Release" )
+	LIBS	*= -lqscintilla2
 }
 
 # include fresh framework
