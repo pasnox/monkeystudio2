@@ -1,6 +1,7 @@
 #include "pEditor.h"
 #include "pSearch.h"
 #include "pMonkeyStudio.h"
+#include "qSciShortcutsManager.h"
 
 #include "qsciprinter.h"
 
@@ -47,6 +48,10 @@ pEditor::pEditor( QWidget* p )
 		mPasteAvailableInit = true;
 		mPasteAvailable = !QApplication::clipboard()->text().isEmpty();
 	}
+	
+	// init qscishortcutsmanager if needed
+	SendScintilla( QsciScintilla::SCI_CLEARALLCMDKEYS );
+	qSciShortcutsManager::instance();
 }
 
 pEditor::~pEditor()

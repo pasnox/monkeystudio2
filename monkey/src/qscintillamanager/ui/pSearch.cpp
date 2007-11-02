@@ -124,7 +124,7 @@ bool pSearch::on_tbReplace_clicked()
 		return false;
 
 	// if no selection and not found cancel
-	if ( mEditor->selectedText().isEmpty()	&& !on_tbNext_clicked() )
+	if ( mEditor->selectedText().isEmpty() && !on_tbNext_clicked() )
 		return false;
 
 	// get selected text
