@@ -45,10 +45,6 @@ protected slots:
 	void formChanged();
 	void editWidgets();
 	void setModified( QDesignerFormWindowInterface* );
-	void undo_triggered();
-	void redo_triggered();
-	void copy_triggered();
-	void paste_triggered();
 	
 public:
 	virtual QStringList files() const;
