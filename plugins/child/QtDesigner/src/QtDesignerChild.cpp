@@ -221,11 +221,11 @@ void QtDesignerChild::activeFormWindowChanged( QDesignerFormWindowInterface* w )
 	// inspector
 	pObjectInspector->interface()->setFormWindow( w );
 	
-	// set new object for property editor
-	pPropertyEditor->interface()->setObject( w );
-	
 	// set new object for action editor
 	pActionEditor->interface()->setFormWindow( w );
+
+	// set new object for property editor
+	pPropertyEditor->interface()->setObject( w ? ( w->cursor()->hasSelection() ? w->cursor()->selectedWidget( 0 ) : w->mainContainer() ) : 0 );
 	
 	// connect form selection changed
 	if ( w )
