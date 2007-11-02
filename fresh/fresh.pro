@@ -8,6 +8,9 @@ TEMPLATE = lib
 CONFIG	*= qt staticlib warn_on thread x11 windows debug_and_release
 DESTDIR	= $${BUILD_PATH}
 
+# make library exportable
+DEFINES	*= MONKEY_CORE_BUILD
+
 CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 	#Debug
 	CONFIG	+= console

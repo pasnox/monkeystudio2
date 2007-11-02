@@ -8,6 +8,9 @@ include( ../qscintilla/qscintilla.pri )
 # include fresh framework
 include( ../fresh/fresh.pri )
 
+# include ctags framework
+include( ../ctags/ctags.pri )
+
 #include monkey framework
 include( monkey.pri )
 
@@ -59,8 +62,8 @@ CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 	UI_DIR	= $${BUILD_PATH}/debug/.ui
 	MOC_DIR	= $${BUILD_PATH}/debug/.moc
 	RCC_DIR	= $${BUILD_PATH}/debug/.rcc
-	unix:LIBS	*= -lqscintilla2_debug -lfresh_debug
-	else:LIBS	*= -lqscintilla2_d -lfresh_d
+	unix:LIBS	*= -lqscintilla2_debug -lfresh_debug -lctags_debug
+	else:LIBS	*= -lqscintilla2_d -lfresh_d -lctags_d
 	
 } else {
 	#Release
@@ -70,7 +73,7 @@ CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 	UI_DIR	= $${BUILD_PATH}/release/.ui
 	MOC_DIR	= $${BUILD_PATH}/release/.moc
 	RCC_DIR	= $${BUILD_PATH}/release/.rcc
-	LIBS	*= -lqscintilla2 -lfresh
+	LIBS	*= -lqscintilla2 -lfresh -lctags
 }
 
 FORMS	*= src/maininterface/ui/UITranslator.ui \
