@@ -1,3 +1,3 @@
 TEMPLATE	= subdirs
 CONFIG	+= debug_and_release
-SUBDIRS	= qscintilla monkey plugins
+SUBDIRS	= qscintilla fresh monkey plugins
