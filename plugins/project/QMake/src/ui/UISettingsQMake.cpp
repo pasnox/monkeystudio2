@@ -186,8 +186,8 @@ QtVersionList UISettingsQMake::defaultVersions()
 	<< QtVersion( "Qt 4", "/usr/local/Trolltech/Qt-4.3.2", "qmake", "lupdate", "lrelease", "/usr/local/Trolltech/Qt-4.3.2/doc/html", true )
 	<< QtVersion( "Qt 3", "/Developer/qt", "qmake", "lupdate", "lrelease", "/Developer/qt/doc/html", false );
 #elif defined Q_OS_WIN
-	<< QtVersion( "Qt 4", "C:\\Qt\4.3.2", "qmake", "lupdate", "lrelease", "C:\\Qt\4.3.2\\doc\\html", true )
-	<< QtVersion( "Qt 3", "C:\\Qt\3.3.7", "qmake", "lupdate", "lrelease", "C:\\Qt\3.3.7\\doc\\html", false );
+	<< QtVersion( "Qt 4", "C:\\Qt\\4.3.2", "qmake", "lupdate", "lrelease", "C:\\Qt\\4.3.2\\doc\\html", true )
+	<< QtVersion( "Qt 3", "C:\\Qt\\3.3.7", "qmake", "lupdate", "lrelease", "C:\\Qt\\3.3.7\\doc\\html", false );
 #else
 	<< QtVersion( "Qt 4", "/usr/share/qt4", "qmake-qt4", "lupdate-qt4", "lrelease-qt4", "/usr/share/qt4/doc/html", true )
 	<< QtVersion( "Qt 3", "/usr/share/qt3", "qmake-qt3", "lupdate-qt3", "lrelease-qt3", "/usr/share/qt3/doc/html", false );
