@@ -227,7 +227,8 @@ void QtDesignerChild::geometryChanged()
 		}
 		
 		// update property
-		QDesignerPropertySheetExtension* s = qt_extension<QDesignerPropertySheetExtension*>( mCore->extensionManager(), w );
+		QDesignerPropertySheetExtension* s = qt_extension<QDesignerPropertySheetExtension*>( mCore->extensionManager(), w );
+
 		mCore->propertyEditor()->setPropertyValue( "geometry", s->property( s->indexOf( "geometry" ) ) );
 
 		// set modified state
