@@ -22,7 +22,6 @@ struct Pattern
 
 Q_OBJECT
 protected:
-	QRegExp rxErrWarn, rxBuild, rxUndefRef, rxNoRule;
 	QList <Pattern> patterns;
 	QString replaceWithMatch(QRegExp, QString);
 public:

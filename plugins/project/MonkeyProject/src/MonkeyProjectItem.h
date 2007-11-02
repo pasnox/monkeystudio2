@@ -16,8 +16,24 @@
 #define NOPROJECTPROJECTITEM_H
 
 #include "ProjectItem.h"
-
+#include "BuilderPlugin.h"
 //class ProjectPlugin;
+
+class GenericBuilder : public BuilderPlugin //fake builder, for build menu
+{
+	pCommand defaultBuildCommand() const {return pCommand();};
+	pCommand buildCommand() const {return pCommand();};
+	void setBuildCommand( const pCommand& ) {};
+	QWidget* builderSettingsWidget() {return NULL;};
+	pCommandList defaultCommands() const {return pCommandList();};
+	pCommandList userCommands() const {return pCommandList();};
+	void setUserCommands( const pCommandList& ) const {};
+	QWidget* cliToolSettingsWidget( BasePlugin* p ){ return NULL;}
+	QStringList availableParsers() const {return QStringList();};
+	pCommandParser* getParser( const QString& ) {return NULL;};
+	void commandTriggered() {};
+};
+
 class UIMonkeyProjectSettings;
 class pAction;
 class QMenu;

@@ -19,8 +19,11 @@ struct Q_MONKEY_EXPORT FileRecord {
 
 class Q_MONKEY_EXPORT Ctags: public QObject, public QSingleton<Ctags>
 {
-Q_OBJECT
+	Q_OBJECT
+	friend class QSingleton<Ctags>;
 private:
+	Ctags ();
+	~Ctags ();
 	/* ClassBrouser and other objects will use pointers to the "QString file" of FileRecord for economy of memory, 
 	*so, if record created it must NEVER be deleted while monkeyDS working.
 	If need free some memory, possible to free TagEntryList and set time to QDateTime::null
@@ -35,10 +38,8 @@ private:
 	//internal function for call exuberant ctags
 	sTagEntryListItem* get_tags ( QString file );
 	void freeTagEntryList (sTagEntryListItem*);
-public:
-	Ctags ();
-	~Ctags ();
 
+public:
 	FileRecord* GetTagsForFile (QString);
 //	RecordsList* GetTagsForAllFiles ();
  	//void checkForChanges ();   //not realised yet

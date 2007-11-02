@@ -11,6 +11,7 @@ class Gcc : public CompilerPlugin, public CLIToolPlugin
 
 public:
 	Gcc();
+	~Gcc();
 	// BasePlugin
 	virtual bool setEnabled( bool );
 	virtual QWidget* settingsWidget();

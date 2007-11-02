@@ -6,6 +6,9 @@ include( ../../../qscintilla/qscintilla.pri )
 # include fresh framework
 include( ../../../fresh/fresh.pri )
 
+# include ctags framework
+include( ../../../ctags/ctags.pri )
+
 # include monkey framework
 include( ../../../monkey/monkey.pri )
 

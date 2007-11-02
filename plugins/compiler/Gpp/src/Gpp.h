@@ -11,6 +11,7 @@ class Gpp : public CompilerPlugin, public CLIToolPlugin
 
 public:
 	Gpp();
+	~Gpp();
 	// BasePlugin
 	virtual bool setEnabled( bool );
 	virtual QWidget* settingsWidget();

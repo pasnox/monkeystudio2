@@ -12,6 +12,17 @@ Gpp::Gpp()
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.5.0";
 	mPluginInfos.Enabled = false;
+	
+	// install parsers
+	foreach ( QString s, availableParsers() )
+		pConsoleManager::instance()->addParser( getParser( s ) );
+}
+
+Gpp::~Gpp()
+{
+	// uninstall parsers
+	foreach ( QString s, availableParsers() )
+		pConsoleManager::instance()->removeParser( s );
 }
 
 bool Gpp::setEnabled( bool b)
@@ -21,9 +32,6 @@ bool Gpp::setEnabled( bool b)
 	mPluginInfos.Enabled = b;
  	if ( b )
 	{
-		foreach ( QString s, availableParsers() )
-			pConsoleManager::instance()->addParser( getParser( s ) );
-		
 		pMenuBar* mb = pMenuBar::instance();
 		foreach ( pCommand c, userCommands() )
 		{
@@ -35,9 +43,6 @@ bool Gpp::setEnabled( bool b)
 	}
  	else
 	{
-		foreach ( QString s, availableParsers() )
-			pConsoleManager::instance()->removeParser( s );
-		
 		pMenuBar* mb = pMenuBar::instance();
 		foreach ( QAction* a, mb->menu( "mBuilder/mUserCommands" )->actions() )
 			if ( a->data().toString() == mPluginInfos.Name )
