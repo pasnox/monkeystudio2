@@ -19,7 +19,7 @@ BUILD_PATH	= ../../../build
 
 TEMPLATE 	= lib
 LANGUAGE	= Qt4/C++
-CONFIG	*= warn_on lib_bundle thread x11 dll plugin debug_and_release
+CONFIG	*= warn_on thread x11 dll plugin debug_and_release
 
 MONKEY_PLUGINS_DIR	= ../../../bin/plugins
 #DEFINES	= __COVERAGESCANNER__

@@ -2,7 +2,6 @@
 #include <string>
 
 #include "Ctags.h"
-#include "entry.h"
 
 extern "C" void freeSTagEntryList ( sTagEntryListItem* tag );
 extern "C" sTagEntryListItem* parseFile ( const char* fileName, const char* langName);

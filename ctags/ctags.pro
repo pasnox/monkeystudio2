@@ -8,6 +8,7 @@ TEMPLATE = lib
 CONFIG	*= staticlib warn_on debug_and_release
 DESTDIR	= $${BUILD_PATH}
 DLL_DESTDIR	= $$DESTDIR
+unix:!mac:*-g++:LIBS	*= -rdynamic
 
 # make library exportable
 DEFINES	*= MONKEY_CORE_BUILD
