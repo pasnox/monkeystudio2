@@ -5,11 +5,17 @@ BUILD_PATH	 = ../build
 # include qscintilla framework
 include( ../qscintilla/qscintilla.pri )
 
+# include fresh framework
+include( ../fresh/fresh.pri )
+
+#include monkey framework
+include( monkey.pri )
+
 TEMPLATE = app
 LANGUAGE	= Qt4/C++
 TARGET	= monkey
 DESTDIR	= ../bin
-CONFIG	*= qt warn_on app_bundle thread x11 windows debug_and_release
+CONFIG	*= qt warn_on thread x11 windows debug_and_release
 QT	*= gui core
 
 unix:ICON	= src/resources/icons/application/monkey2.png
@@ -52,8 +58,8 @@ CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 	UI_DIR	= $${BUILD_PATH}/debug/.ui
 	MOC_DIR	= $${BUILD_PATH}/debug/.moc
 	RCC_DIR	= $${BUILD_PATH}/debug/.rcc
-	unix:LIBS	*= -lqscintilla2_debug
-	else:LIBS	*= -lqscintilla2_d
+	unix:LIBS	*= -lqscintilla2_debug -lfresh_debug
+	else:LIBS	*= -lqscintilla2_d -lfresh_d
 	
 } else {
 	#Release
@@ -63,14 +69,8 @@ CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 	UI_DIR	= $${BUILD_PATH}/release/.ui
 	MOC_DIR	= $${BUILD_PATH}/release/.moc
 	RCC_DIR	= $${BUILD_PATH}/release/.rcc
-	LIBS	*= -lqscintilla2
+	LIBS	*= -lqscintilla2 -lfresh
 }
-
-# include fresh framework
-include( ../fresh/fresh.pro )
-
-#include monkey framework
-include( monkey.pri )
 
 FORMS	*= src/maininterface/ui/UITranslator.ui \
 	src/maininterface/ui/UIAbout.ui \
