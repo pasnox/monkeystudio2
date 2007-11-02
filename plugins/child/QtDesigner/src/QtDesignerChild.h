@@ -29,7 +29,6 @@ protected:
 	QDesignerPropertyEditor* pPropertyEditor;
 	QDesignerObjectInspector* pObjectInspector;
 	QDesignerSignalSlotEditor* pSignalSlotEditor;
-	QDesignerFormWindowInterface* mOldForm;
 	
 	QDesignerFormWindowInterface* createForm();
 	bool eventFilter( QObject*, QEvent* );
@@ -40,7 +39,6 @@ public:
 protected slots:
 	void subWindowActivated( QMdiSubWindow* );
 	void activeFormWindowChanged( QDesignerFormWindowInterface* w );
-	void selectionChanged();
 	void geometryChanged();
 	void formChanged();
 	void editWidgets();

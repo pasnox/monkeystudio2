@@ -154,9 +154,6 @@ QtDesignerChild::QtDesignerChild()
 	pSignalSlotEditor->setVisible( false );
 	UIMain::instance()->dockToolBar( Qt::TopToolBarArea )->addDock( pSignalSlotEditor, tr( "Signal/Slot Editor" ), QIcon( ":/icons/signal.png" ) );
 	
-	// old current form
-	mOldForm = 0;
-	
 	// perform integration
 	new qdesigner_internal::QDesignerIntegration( mCore, this );
 	mCore->setTopLevel( UIMain::instance() );
@@ -210,46 +207,11 @@ void QtDesignerChild::subWindowActivated( QMdiSubWindow* w )
 
 void QtDesignerChild::activeFormWindowChanged( QDesignerFormWindowInterface* w )
 {
-	// disconnect form selection changed
-	if ( mOldForm )
-	{
-		disconnect( mOldForm, SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
-		disconnect( mOldForm, SIGNAL( changed() ), this, SLOT( formChanged() ) );
-		disconnect( mOldForm, SIGNAL( geometryChanged() ), this, SLOT( geometryChanged() ) );
-	}
-	
-	// inspector
-	pObjectInspector->interface()->setFormWindow( w );
-	
-	// set new object for action editor
-	pActionEditor->interface()->setFormWindow( w );
-
-	// set new object for property editor
-	pPropertyEditor->interface()->setObject( w ? ( w->cursor()->hasSelection() ? w->cursor()->selectedWidget( 0 ) : w->mainContainer() ) : 0 );
-	
-	// connect form selection changed
-	if ( w )
-	{
-		connect( w, SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
-		connect( w, SIGNAL( changed() ), this, SLOT( formChanged() ) );
-		connect( w, SIGNAL( geometryChanged() ), this, SLOT( geometryChanged() ) );
-	}
-	
-	// set old form
-	mOldForm = w;
-	
 	// update window state
 	setModified( w );
 	
 	// emit signals
 	emit currentFileChanged( w ? w->fileName() : QString() );
-}
-
-void QtDesignerChild::selectionChanged()
-{
-	// set current object for property editor
-	if ( QDesignerFormWindowInterface* w = mCore->formWindowManager()->activeFormWindow() )
-		pPropertyEditor->interface()->setObject( w->cursor()->hasSelection() ? w->cursor()->selectedWidget( 0 ) : w->mainContainer() );
 }
 
 void QtDesignerChild::geometryChanged()
@@ -265,7 +227,8 @@ void QtDesignerChild::geometryChanged()
 		}
 		
 		// update property
-		w->cursor()->setWidgetProperty( w->mainContainer(), "geometry", w->mainContainer()->geometry() );
+		QDesignerPropertySheetExtension* s = qt_extension<QDesignerPropertySheetExtension*>( mCore->extensionManager(), w );
+		mCore->propertyEditor()->setPropertyValue( "geometry", s->property( s->indexOf( "geometry" ) ) );
 	}
 }
 
@@ -351,6 +314,10 @@ void QtDesignerChild::openFile( const QString& s, const QPoint&, QTextCodec* )
 	
 	// set it visible
 	w->setVisible( true );
+
+	// track form changement
+	connect( w, SIGNAL( geometryChanged() ), this, SLOT( geometryChanged() ) );
+	connect( w, SIGNAL( changed() ), this, SLOT( formChanged() ) );
 	
 	// set window title
 	mw->setWindowTitle( QFileInfo( s ).fileName() +"[*]" );
