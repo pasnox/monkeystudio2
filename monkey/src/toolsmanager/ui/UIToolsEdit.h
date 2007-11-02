@@ -28,7 +28,7 @@ public slots:
 	void on_pbDelete_clicked();
 	void on_pbUp_clicked();
 	void on_pbDown_clicked();
-	void on_tbHelp_clicked();
+	void helpRequested();
 	void on_leCaption_editingFinished();
 	void on_tbFileIcon_clicked();
 	void on_leFilePath_editingFinished();

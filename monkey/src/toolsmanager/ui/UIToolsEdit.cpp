@@ -33,14 +33,16 @@ UIToolsEdit::UIToolsEdit( QWidget* p )
 		it->setIcon( QIcon( t.FileIcon ) );
 	}
 	setProperty( "Modified" , false );
+	// connection
+	connect( bbDialog, SIGNAL( helpRequested() ), this, SLOT( helpRequested() ) );
 }
-//
+
 void UIToolsEdit::closeEvent( QCloseEvent* e )
 {
 	if ( property( "Modified" ).toBool() && !pMonkeyStudio::question( tr( "Tools Editor..." ), tr( "You're about to discard all changes. Are you sure ?" ), this ) )
 		e->ignore();
 }
-//
+
 bool UIToolsEdit::eventFilter( QObject* o, QEvent* e )
 {
 	// accept drag enter event
@@ -162,7 +164,7 @@ void UIToolsEdit::on_pbDown_clicked()
 	setProperty( "Modified" , true );
 }
 
-void UIToolsEdit::on_tbHelp_clicked()
+void UIToolsEdit::helpRequested()
 {
 	QString s = tr( "<b>Tools Editor</b> give you the possibility to use variables<br><br>"
 		"<b>$cpp$</b> : Current project path<br>"
@@ -171,7 +173,7 @@ void UIToolsEdit::on_tbHelp_clicked()
 		"<b>$cf$</b> : Current tab filepath<br>"
 		"<b>$cip$</b> : Current item path<br>"
 		"<b>$ci$</b> : Current item filepath" );
-	QWhatsThis::showText( tbHelp->mapToGlobal( QPoint( 0, 0 ) ), s );
+	QWhatsThis::showText( mapToGlobal( rect().center() ), s );
 }
 
 void UIToolsEdit::on_leCaption_editingFinished()
