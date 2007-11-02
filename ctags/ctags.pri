@@ -2,4 +2,4 @@
 
 CTAGS_VERSION	= ctags
 
-INCLUDEPATH *= $${PWD}/src/3rdparty/$${CTAGS_VERSION} $${PWD}/src
+INCLUDEPATH *= $${PWD}/$${CTAGS_VERSION}

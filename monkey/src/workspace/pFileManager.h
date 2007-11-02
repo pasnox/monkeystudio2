@@ -39,7 +39,7 @@ signals:
 	// files
 	void fileOpened( const QString& );
 	void fileClosed( const QString& );
-	void currentFileChanged( const QString& );
+	void currentFileChanged( pAbstractChild*, const QString& );
 	// projects
 	void aboutToClose( ProjectItem* );
 	void closed( ProjectItem* );

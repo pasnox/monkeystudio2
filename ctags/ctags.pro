@@ -8,7 +8,6 @@ TEMPLATE = lib
 CONFIG	*= staticlib warn_on debug_and_release
 DESTDIR	= $${BUILD_PATH}
 DLL_DESTDIR	= $$DESTDIR
-unix:!mac:*-g++:LIBS	*= -rdynamic
 
 # make library exportable
 DEFINES	*= MONKEY_CORE_BUILD
@@ -35,7 +34,7 @@ CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 	RCC_DIR	= $${BUILD_PATH}/release/.rcc
 }
 
-CTAGS_PATH	= src/3rdparty/$${CTAGS_VERSION}
+CTAGS_PATH	= $${CTAGS_VERSION}
 INCLUDEPATH	*= ../fresh/objects
 
 # Input
@@ -50,8 +49,7 @@ HEADERS	= $${CTAGS_PATH}/exuberantCtags.h \
 	$${CTAGS_PATH}/read.h \
 	$${CTAGS_PATH}/routines.h \
 	$${CTAGS_PATH}/strlist.h \
-	$${CTAGS_PATH}/vstring.h \
-	src/Ctags.h
+	$${CTAGS_PATH}/vstring.h
 
 SOURCES	= $${CTAGS_PATH}/asm.c \
 	$${CTAGS_PATH}/asp.c \
@@ -93,5 +91,4 @@ SOURCES	= $${CTAGS_PATH}/asm.c \
 	$${CTAGS_PATH}/verilog.c \
 	$${CTAGS_PATH}/vim.c \
 	$${CTAGS_PATH}/vstring.c \
-	$${CTAGS_PATH}/yacc.c \
-	src/Ctags.cpp
+	$${CTAGS_PATH}/yacc.c

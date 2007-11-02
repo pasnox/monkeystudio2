@@ -64,6 +64,9 @@ pDockToolBar* pDockToolBarManager::bar( Qt::ToolBarArea a )
 
 		// add toolbar to mainwindow
 		mMain->addToolBar( a, mBars[a] );
+		
+		//
+		mBars[a]->setStyleSheet( ".QToolBar { border : none }" );
 
 		// hide
 		mBars[a]->hide();

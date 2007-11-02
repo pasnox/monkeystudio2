@@ -97,7 +97,7 @@ pAbstractChild* pWorkspace::openFile( const QString& s, const QPoint& p )
 	if ( !children().contains( c ) )
 	{
 		//
-		connect( c, SIGNAL( currentFileChanged( const QString& ) ), this, SLOT( currentFileChanged( const QString& ) ) );
+		connect( c, SIGNAL( currentFileChanged( const QString& ) ), this, SLOT( internal_currentFileChanged( const QString& ) ) );
 		// opened/closed file
 		connect( c, SIGNAL( fileOpened( const QString& ) ), this, SIGNAL( fileOpened( const QString& ) ) );
 		connect( c, SIGNAL( fileClosed( const QString& ) ), this, SIGNAL( fileClosed( const QString& ) ) );
@@ -165,7 +165,7 @@ void pWorkspace::goToLine( const QString& s, const QPoint& p, bool b )
 	}
 }
 
-void pWorkspace::currentFileChanged( const QString& )
+void pWorkspace::internal_currentFileChanged( const QString& )
 { internal_currentChanged( indexOf( qobject_cast<pAbstractChild*>( sender() ) ) ); }
 
 void pWorkspace::internal_currentChanged( int i )

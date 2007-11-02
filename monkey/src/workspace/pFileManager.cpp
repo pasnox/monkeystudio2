@@ -9,7 +9,7 @@ pFileManager::pFileManager( QObject* o )
 	// files
 	connect( pWorkspace::instance(), SIGNAL( fileOpened( const QString& ) ), this, SIGNAL( fileOpened( const QString& ) ) );
 	connect( pWorkspace::instance(), SIGNAL( fileClosed( const QString& ) ), this, SIGNAL( fileClosed( const QString& ) ) );
-	connect( pWorkspace::instance(), SIGNAL( currentFileChanged( const QString& ) ), this, SIGNAL( currentFileChanged( const QString& ) ) );
+	connect( pWorkspace::instance(), SIGNAL( currentFileChanged( pAbstractChild*, const QString& ) ), this, SIGNAL( currentFileChanged( pAbstractChild*, const QString& ) ) );
 	// projects
 	connect( UIProjectsManager::instance(), SIGNAL( aboutToClose( ProjectItem* ) ), this, SIGNAL( aboutToClose( ProjectItem* ) ) );
 	connect( UIProjectsManager::instance(), SIGNAL( closed( ProjectItem* ) ), this, SIGNAL( closed( ProjectItem* ) ) );

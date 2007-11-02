@@ -36,7 +36,7 @@ private:
 	pWorkspace( QWidget* = 0 );
 
 private slots:
-	void currentFileChanged( const QString& );
+	void internal_currentFileChanged( const QString& );
 	void internal_currentChanged( int );
 	void internal_aboutToCloseTab( int, QCloseEvent* );
 
