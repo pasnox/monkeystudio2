@@ -5,18 +5,30 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>423</width>
-    <height>322</height>
+    <width>425</width>
+    <height>313</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>About : %1</string>
   </property>
   <layout class="QGridLayout" >
-   <property name="margin" >
+   <property name="leftMargin" >
     <number>5</number>
    </property>
-   <property name="spacing" >
+   <property name="topMargin" >
+    <number>5</number>
+   </property>
+   <property name="rightMargin" >
+    <number>5</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>5</number>
+   </property>
+   <property name="horizontalSpacing" >
+    <number>3</number>
+   </property>
+   <property name="verticalSpacing" >
     <number>3</number>
    </property>
    <item row="2" column="0" >
@@ -35,9 +47,7 @@
    <item row="2" column="1" >
     <widget class="QPushButton" name="pbOK" >
      <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>0</hsizetype>
-       <vsizetype>0</vsizetype>
+      <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>

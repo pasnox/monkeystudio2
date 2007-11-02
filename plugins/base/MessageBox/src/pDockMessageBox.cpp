@@ -33,11 +33,11 @@ pDockMessageBox::pDockMessageBox( QWidget* w )
 	QWidget* c = new QWidget;
 	// create vlayout
 	QVBoxLayout* vl = new QVBoxLayout( c );
-	vl->setMargin( 3 );
+	vl->setMargin( 5 );
 	vl->setSpacing( 3 );
 	// create hlayout
 	QHBoxLayout* hl = new QHBoxLayout;
-	hl->setMargin( 3 );
+	hl->setMargin( 5 );
 	hl->setSpacing( 3 );
 	// create label
 	lRawCommand = new QLabel;

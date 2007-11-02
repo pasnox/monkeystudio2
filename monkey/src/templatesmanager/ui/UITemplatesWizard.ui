@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>432</width>
-    <height>393</height>
+    <width>400</width>
+    <height>350</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -181,6 +181,9 @@
           </item>
           <item row="1" column="1" >
            <layout class="QHBoxLayout" >
+            <property name="spacing" >
+             <number>3</number>
+            </property>
             <item>
              <widget class="QLineEdit" name="leDestination" >
               <property name="toolTip" >
@@ -260,6 +263,9 @@
           </item>
           <item row="4" column="1" >
            <layout class="QHBoxLayout" >
+            <property name="spacing" >
+             <number>3</number>
+            </property>
             <item>
              <widget class="pTreeComboBox" name="cbProjects" >
               <property name="sizePolicy" >

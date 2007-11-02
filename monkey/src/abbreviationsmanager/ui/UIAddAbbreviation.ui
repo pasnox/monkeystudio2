@@ -5,19 +5,31 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>530</width>
-    <height>139</height>
+    <width>320</width>
+    <height>104</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Add Code Template</string>
   </property>
   <layout class="QGridLayout" >
-   <property name="margin" >
+   <property name="leftMargin" >
     <number>5</number>
    </property>
-   <property name="spacing" >
-    <number>6</number>
+   <property name="topMargin" >
+    <number>5</number>
+   </property>
+   <property name="rightMargin" >
+    <number>5</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>5</number>
+   </property>
+   <property name="horizontalSpacing" >
+    <number>3</number>
+   </property>
+   <property name="verticalSpacing" >
+    <number>3</number>
    </property>
    <item row="2" column="1" >
     <widget class="QComboBox" name="cbLanguages" />

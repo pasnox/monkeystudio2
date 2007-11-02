@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>246</width>
-    <height>386</height>
+    <width>250</width>
+    <height>240</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -14,10 +14,22 @@
   </property>
   <widget class="QWidget" name="wCentral" >
    <layout class="QGridLayout" >
-    <property name="margin" >
+    <property name="leftMargin" >
      <number>5</number>
     </property>
-    <property name="spacing" >
+    <property name="topMargin" >
+     <number>5</number>
+    </property>
+    <property name="rightMargin" >
+     <number>5</number>
+    </property>
+    <property name="bottomMargin" >
+     <number>5</number>
+    </property>
+    <property name="horizontalSpacing" >
+     <number>3</number>
+    </property>
+    <property name="verticalSpacing" >
      <number>3</number>
     </property>
     <item row="4" column="0" colspan="4" >
@@ -77,9 +89,7 @@
     <item row="9" column="2" colspan="2" >
      <widget class="QToolButton" name="tbReplaceAll" >
       <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>7</hsizetype>
-        <vsizetype>0</vsizetype>
+       <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -104,9 +114,7 @@
     <item row="9" column="0" colspan="2" >
      <widget class="QToolButton" name="tbReplace" >
       <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>7</hsizetype>
-        <vsizetype>0</vsizetype>
+       <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -131,9 +139,7 @@
     <item row="8" column="2" colspan="2" >
      <widget class="QToolButton" name="tbNext" >
       <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>7</hsizetype>
-        <vsizetype>0</vsizetype>
+       <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -158,9 +164,7 @@
     <item row="8" column="0" colspan="2" >
      <widget class="QToolButton" name="tbPrevious" >
       <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>7</hsizetype>
-        <vsizetype>0</vsizetype>
+       <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>

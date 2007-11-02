@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>222</width>
-    <height>271</height>
+    <width>220</width>
+    <height>230</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -16,10 +16,22 @@
    <iconset resource="../../resources/resources.qrc" >:/translation/icons/translation/translation.png</iconset>
   </property>
   <layout class="QGridLayout" >
-   <property name="margin" >
+   <property name="leftMargin" >
     <number>5</number>
    </property>
-   <property name="spacing" >
+   <property name="topMargin" >
+    <number>5</number>
+   </property>
+   <property name="rightMargin" >
+    <number>5</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>5</number>
+   </property>
+   <property name="horizontalSpacing" >
+    <number>3</number>
+   </property>
+   <property name="verticalSpacing" >
     <number>3</number>
    </property>
    <item row="0" column="0" colspan="3" >
@@ -84,7 +96,6 @@
    </item>
   </layout>
  </widget>
- <includes/>
  <resources>
   <include location="../../resources/resources.qrc" />
  </resources>

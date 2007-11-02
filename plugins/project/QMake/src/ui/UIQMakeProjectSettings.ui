@@ -1452,7 +1452,7 @@
           <item>
            <layout class="QHBoxLayout" >
             <property name="spacing" >
-             <number>6</number>
+             <number>3</number>
             </property>
             <property name="leftMargin" >
              <number>0</number>
@@ -1870,6 +1870,9 @@
    </item>
    <item row="3" column="0" colspan="2" >
     <layout class="QHBoxLayout" >
+     <property name="spacing" >
+      <number>3</number>
+     </property>
      <item>
       <widget class="QProgressBar" name="pbProgress" >
        <property name="minimumSize" >

@@ -5,24 +5,45 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>251</height>
+    <width>380</width>
+    <height>215</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
-   <property name="margin" >
+   <property name="leftMargin" >
     <number>5</number>
    </property>
-   <property name="spacing" >
+   <property name="topMargin" >
+    <number>5</number>
+   </property>
+   <property name="rightMargin" >
+    <number>5</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>5</number>
+   </property>
+   <property name="horizontalSpacing" >
+    <number>3</number>
+   </property>
+   <property name="verticalSpacing" >
     <number>3</number>
    </property>
    <item row="0" column="0" colspan="3" >
     <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
      <property name="spacing" >
       <number>3</number>
+     </property>
+     <property name="leftMargin" >
+      <number>0</number>
+     </property>
+     <property name="topMargin" >
+      <number>0</number>
+     </property>
+     <property name="rightMargin" >
+      <number>0</number>
+     </property>
+     <property name="bottomMargin" >
+      <number>0</number>
      </property>
      <item>
       <widget class="QLabel" name="lLanguage" >
@@ -60,8 +81,14 @@
     <widget class="QToolButton" name="tbIcon" >
      <property name="minimumSize" >
       <size>
-       <width>64</width>
-       <height>64</height>
+       <width>46</width>
+       <height>46</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>46</width>
+       <height>46</height>
       </size>
      </property>
      <property name="iconSize" >
@@ -91,10 +118,22 @@
    </item>
    <item row="4" column="0" colspan="3" >
     <layout class="QGridLayout" >
-     <property name="margin" >
+     <property name="leftMargin" >
       <number>0</number>
      </property>
-     <property name="spacing" >
+     <property name="topMargin" >
+      <number>0</number>
+     </property>
+     <property name="rightMargin" >
+      <number>0</number>
+     </property>
+     <property name="bottomMargin" >
+      <number>0</number>
+     </property>
+     <property name="horizontalSpacing" >
+      <number>3</number>
+     </property>
+     <property name="verticalSpacing" >
       <number>3</number>
      </property>
      <item rowspan="4" row="0" column="0" >

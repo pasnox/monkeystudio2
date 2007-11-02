@@ -36,7 +36,7 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	
 	// vertical layout
 	QVBoxLayout* v = new QVBoxLayout( c );
-	v->setMargin( 0 );
+	v->setMargin( 5 );
 	v->setSpacing( 3 );
 	
 	// horizontal layout for toolbutton && combobox
