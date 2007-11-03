@@ -18,6 +18,9 @@
 #include <QMdiArea>
 #include <QMdiSubWindow>
 #include <QPluginLoader>
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QPainter>
 
 #include <QDesignerComponents>
 #include <QDesignerFormEditorInterface>
@@ -203,7 +206,11 @@ bool QtDesignerChild::eventFilter( QObject* o, QEvent* e )
 }
 
 void QtDesignerChild::subWindowActivated( QMdiSubWindow* w )
-{ mCore->formWindowManager()->setActiveFormWindow( w ? qobject_cast<QDesignerFormWindowInterface*>( w->widget() ) : 0 ); }
+{
+	// update current form
+	if ( w && mCore->formWindowManager()->activeFormWindow() != w->widget() )
+		mCore->formWindowManager()->setActiveFormWindow( qobject_cast<QDesignerFormWindowInterface*>( w->widget() ) );
+}
 
 void QtDesignerChild::activeFormWindowChanged( QDesignerFormWindowInterface* w )
 {
@@ -510,9 +517,54 @@ void QtDesignerChild::saveFiles()
 	}
 }
 
-void QtDesignerChild::printFile( const QString& ) {}
+void printForm( QMdiSubWindow* w, bool b )
+{
+	// get printer
+	QPrinter p;
 
-void QtDesignerChild::quickPrintFile( const QString& ) {}
+	// if quick print
+	if ( b )
+	{
+		// check if default printer is set
+		if ( p.printerName().isEmpty() )
+		{
+			warning( QObject::tr( "Quick Print..." ), QObject::tr( "There is no defaullt printer, please set one before trying quick print" ), w->window() );
+			return;
+		}
+		
+		// print and return
+		QPainter pr( &p );
+		pr.drawPixmap( 0, 0, QPixmap::grabWidget( w ) );
+		return;
+	}
+
+	// printer dialog
+	QPrintDialog d( &p );
+
+	// if ok
+	if ( d.exec() )
+	{
+		// print and return
+		QPainter pr( &p );
+		pr.drawPixmap( 0, 0, QPixmap::grabWidget( w ) );
+	}
+}
+
+void QtDesignerChild::printFile( const QString& s )
+{
+	foreach ( QMdiSubWindow* w, mArea->subWindowList() )
+		if ( QDesignerFormWindowInterface* i = qobject_cast<QDesignerFormWindowInterface*>( w->widget() ) )
+			if ( isSameFile( i->fileName(), s ) )
+				printForm( w, false );
+}
+
+void QtDesignerChild::quickPrintFile( const QString& s )
+{
+	foreach ( QMdiSubWindow* w, mArea->subWindowList() )
+		if ( QDesignerFormWindowInterface* i = qobject_cast<QDesignerFormWindowInterface*>( w->widget() ) )
+			if ( isSameFile( i->fileName(), s ) )
+				printForm( w, true );
+}
 
 void QtDesignerChild::undo() {}
 
@@ -554,4 +606,4 @@ bool QtDesignerChild::isGoToAvailable() const
 { return false; }
 
 bool QtDesignerChild::isPrintAvailable() const
-{ return false; }
+{ return mArea->subWindowList().count(); }
