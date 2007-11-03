@@ -16,6 +16,15 @@ ProjectsModel::ProjectsModel( QObject* o )
 	mScopes->addFilterRole( ProjectItem::ScopeType );
 	mScopes->addFilterRole( ProjectItem::NestedScopeType );
 	mScopes->setFiltering( true );
+	// connections
+	connect( this, SIGNAL( rowsInserted( const QModelIndex&, int, int ) ), this, SLOT( rowsChanged( const QModelIndex&, int, int ) ) );
+	connect( this, SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ), this, SLOT( rowsChanged( const QModelIndex&, int, int ) ) );
+}
+
+void ProjectsModel::rowsChanged( const QModelIndex& i, int, int )
+{
+	if ( ProjectItem* it = itemFromIndex( i ) )
+		it->project()->setModified( true );
 }
 
 ProjectItemList ProjectsModel::projects( bool b )
