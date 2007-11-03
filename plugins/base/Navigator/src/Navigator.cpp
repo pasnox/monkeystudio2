@@ -30,7 +30,7 @@ Navigator::Navigator ()
 	mPluginInfos.Version = "0.0.1";
 	mPluginInfos.Enabled = false;
 	displayMask = pSettings::instance()->value ("Plugins/Navigator/DisplayMask",65535).toInt();
-	expandMask = pSettings::instance()->value ("Plugins/Navigator/ExpandMask",3).toInt();
+	expandMask = pSettings::instance()->value ("Plugins/Navigator/ExpandMask",32771).toInt();
 }
 
 bool Navigator::setEnabled (bool e)
