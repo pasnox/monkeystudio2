@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>374</width>
-    <height>246</height>
+    <width>640</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -31,177 +31,7 @@
    <property name="verticalSpacing" >
     <number>3</number>
    </property>
-   <item row="0" column="1" colspan="2" >
-    <widget class="QGroupBox" name="gbInformations" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Maximum" hsizetype="Expanding" >
-       <horstretch>0</horstretch>
-       <verstretch>1</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="title" >
-      <string>Informations</string>
-     </property>
-     <layout class="QGridLayout" >
-      <property name="leftMargin" >
-       <number>5</number>
-      </property>
-      <property name="topMargin" >
-       <number>5</number>
-      </property>
-      <property name="rightMargin" >
-       <number>5</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>5</number>
-      </property>
-      <property name="horizontalSpacing" >
-       <number>3</number>
-      </property>
-      <property name="verticalSpacing" >
-       <number>3</number>
-      </property>
-      <item row="5" column="0" colspan="4" >
-       <widget class="QTextEdit" name="teDescription" >
-        <property name="readOnly" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0" colspan="4" >
-       <widget class="QLabel" name="lDescription" >
-        <property name="text" >
-         <string>Description :</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="2" colspan="2" >
-       <widget class="QCheckBox" name="cbEnabled" >
-        <property name="text" >
-         <string>Enabled</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0" colspan="2" >
-       <widget class="QCheckBox" name="cbEnableUponStart" >
-        <property name="text" >
-         <string>Enable upon start</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="3" >
-       <widget class="QLineEdit" name="leType" >
-        <property name="readOnly" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2" >
-       <widget class="QLabel" name="lType" >
-        <property name="text" >
-         <string>Type :</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1" >
-       <widget class="QLineEdit" name="leVersion" >
-        <property name="readOnly" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" >
-       <widget class="QLabel" name="lVersion" >
-        <property name="text" >
-         <string>Version :</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3" >
-       <widget class="QLineEdit" name="leName" >
-        <property name="readOnly" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2" >
-       <widget class="QLabel" name="lName" >
-        <property name="text" >
-         <string>Name :</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0" >
-       <widget class="QLabel" name="lCaption" >
-        <property name="text" >
-         <string>Caption :</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" >
-       <widget class="QLineEdit" name="leCaption" >
-        <property name="readOnly" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1" colspan="3" >
-       <widget class="QLineEdit" name="leAuthor" >
-        <property name="readOnly" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" >
-       <widget class="QLabel" name="lAuthor" >
-        <property name="text" >
-         <string>Author :</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="2" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>551</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="1" column="1" colspan="2" >
-    <widget class="QStackedWidget" name="swWidgets" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
-       <horstretch>0</horstretch>
-       <verstretch>99</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="frameShape" >
-      <enum>QFrame::Box</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="2" >
-    <widget class="QPushButton" name="pbClose" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text" >
-      <string>Close</string>
-     </property>
-    </widget>
-   </item>
-   <item rowspan="2" row="0" column="0" >
+   <item row="0" column="0" >
     <layout class="QVBoxLayout" >
      <property name="spacing" >
       <number>3</number>
@@ -259,6 +89,167 @@
      </item>
     </layout>
    </item>
+   <item row="0" column="1" colspan="2" >
+    <widget class="QTabWidget" name="twPlugin" >
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="wInformations" >
+      <attribute name="title" >
+       <string>Informations</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <property name="leftMargin" >
+        <number>5</number>
+       </property>
+       <property name="topMargin" >
+        <number>5</number>
+       </property>
+       <property name="rightMargin" >
+        <number>5</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>5</number>
+       </property>
+       <property name="horizontalSpacing" >
+        <number>3</number>
+       </property>
+       <property name="verticalSpacing" >
+        <number>3</number>
+       </property>
+       <item row="0" column="0" >
+        <widget class="QLabel" name="lCaption" >
+         <property name="text" >
+          <string>Caption :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" >
+        <widget class="QLineEdit" name="leCaption" >
+         <property name="readOnly" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2" >
+        <widget class="QLabel" name="lName" >
+         <property name="text" >
+          <string>Name :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3" >
+        <widget class="QLineEdit" name="leName" >
+         <property name="readOnly" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QLabel" name="lVersion" >
+         <property name="text" >
+          <string>Version :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" >
+        <widget class="QLineEdit" name="leVersion" >
+         <property name="readOnly" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2" >
+        <widget class="QLabel" name="lType" >
+         <property name="text" >
+          <string>Type :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3" >
+        <widget class="QLineEdit" name="leType" >
+         <property name="readOnly" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" >
+        <widget class="QLabel" name="lAuthor" >
+         <property name="text" >
+          <string>Author :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1" colspan="3" >
+        <widget class="QLineEdit" name="leAuthor" >
+         <property name="readOnly" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="2" >
+        <widget class="QCheckBox" name="cbEnableUponStart" >
+         <property name="text" >
+          <string>Enable upon start</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2" colspan="2" >
+        <widget class="QCheckBox" name="cbEnabled" >
+         <property name="text" >
+          <string>Enabled</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="4" >
+        <widget class="QLabel" name="lDescription" >
+         <property name="text" >
+          <string>Description :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="4" >
+        <widget class="QTextEdit" name="teDescription" >
+         <property name="readOnly" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QStackedWidget" name="swWidgets" >
+      <attribute name="title" >
+       <string>Configuration</string>
+      </attribute>
+     </widget>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="2" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>521</width>
+       <height>27</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="2" >
+    <widget class="QPushButton" name="pbClose" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string>Close</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources/>
@@ -270,8 +261,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>602</x>
-     <y>299</y>
+     <x>574</x>
+     <y>436</y>
     </hint>
     <hint type="destinationlabel" >
      <x>330</x>
