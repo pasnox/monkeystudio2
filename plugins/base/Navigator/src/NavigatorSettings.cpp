@@ -14,6 +14,7 @@ NavigatorSettings::NavigatorSettings ()
 	names <<"Typedefs"<<"Unions"<<"Variables"<<	"Uncknown";
 
 	QVBoxLayout* vbox = new QVBoxLayout (this);
+	
 	QHBoxLayout* settingsBox = new QHBoxLayout ();
 	QVBoxLayout* displayBox = new QVBoxLayout ();
 	QVBoxLayout* expandBox = new QVBoxLayout ();

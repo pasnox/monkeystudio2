@@ -12,7 +12,7 @@
 #include "UIProjectsManager.h"
 #include "ProjectsProxy.h"
 #include "NavigatorSettings.h"
-#include "pSettings.h"
+#include "pSettings.h"  
 #include "pWorkspace.h"
 #include "ProjectItem.h"
 #include "UIMain.h"
@@ -54,7 +54,7 @@ bool Navigator::setEnabled (bool e)
 		fileLock->setCheckable ( true );
 		fileBox->addWidget (fileLock);
 		dockwgt->setWidget (fileWidget);
-		UIMain::instance()->dockToolBar( Qt::RightToolBarArea )->addDock( dockwgt,  tr( "Navigator" ), QPixmap( ":/icons/Navigator.png" ) );
+		UIMain::instance()->dockToolBar( Qt::RightToolBarArea )->addDock( dockwgt,  tr( "Navigator" ), QPixmap( ":/icons/redo.png" ) );
 		connect ( pFileManager::instance(), SIGNAL (currentFileChanged( pAbstractChild*, const QString& )) , this, SLOT (currentFileChanged( pAbstractChild*, const QString )));
 	}
 	else
