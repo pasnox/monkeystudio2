@@ -3,9 +3,13 @@
         <file>icons/add.png</file>
         <file>icons/advanced.png</file>
         <file>icons/application.png</file>
+        <file>icons/builder.png</file>
+        <file>icons/cancel.png</file>
         <file>icons/clear.png</file>
         <file>icons/codec.png</file>
         <file>icons/comment.png</file>
+        <file>icons/compiler.png</file>
+        <file>icons/debugger.png</file>
         <file>icons/down.png</file>
         <file>icons/edit.png</file>
         <file>icons/file.png</file>
@@ -14,11 +18,15 @@
         <file>icons/form.png</file>
         <file>icons/function.png</file>
         <file>icons/header.png</file>
+        <file>icons/help.png</file>
         <file>icons/include.png</file>
+        <file>icons/interpreter.png</file>
         <file>icons/library.png</file>
         <file>icons/line.png</file>
         <file>icons/mac.png</file>
         <file>icons/misc.png</file>
+        <file>icons/ok.png</file>
+        <file>icons/othersvariables.png</file>
         <file>icons/project.png</file>
         <file>icons/qt.png</file>
         <file>icons/remove.png</file>
@@ -33,8 +41,5 @@
         <file>icons/value.png</file>
         <file>icons/variable.png</file>
         <file>icons/windows.png</file>
-        <file>icons/ok.png</file>
-        <file>icons/cancel.png</file>
-        <file>icons/help.png</file>
     </qresource>
 </RCC>

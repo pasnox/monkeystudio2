@@ -183,7 +183,7 @@
        <string>Others Vars</string>
       </property>
       <property name="icon" >
-       <iconset resource="../resources/QMake.qrc" >:/icons/icons/edit.png</iconset>
+       <iconset resource="../resources/QMake.qrc" >:/icons/icons/othersvariables.png</iconset>
       </property>
      </item>
      <item>
@@ -198,20 +198,32 @@
       <property name="text" >
        <string>Builder</string>
       </property>
+      <property name="icon" >
+       <iconset resource="../resources/QMake.qrc" >:/icons/icons/builder.png</iconset>
+      </property>
      </item>
      <item>
       <property name="text" >
        <string>Compiler</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="../resources/QMake.qrc" >:/icons/icons/compiler.png</iconset>
       </property>
      </item>
      <item>
       <property name="text" >
        <string>Debugger</string>
       </property>
+      <property name="icon" >
+       <iconset resource="../resources/QMake.qrc" >:/icons/icons/debugger.png</iconset>
+      </property>
      </item>
      <item>
       <property name="text" >
        <string>Interpreter</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="../resources/QMake.qrc" >:/icons/icons/interpreter.png</iconset>
       </property>
      </item>
     </widget>
