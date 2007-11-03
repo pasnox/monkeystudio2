@@ -21,6 +21,8 @@
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QPainter>
+#include <QBuffer>
+#include <QFormBuilder>
 
 #include <QDesignerComponents>
 #include <QDesignerFormEditorInterface>
@@ -86,6 +88,10 @@ QtDesignerChild::QtDesignerChild()
 	// add edit widget action to group
 	aModes->addAction( aEditWidgets );
 	
+	// preview action
+	aPreview = new QAction( this );
+	aPreview->setText( tr( "Preview Form" ) );
+	
 	// initialize designer plugins
 	foreach ( QObject* o, QPluginLoader::staticInstances() << mCore->pluginManager()->instances() )
 	{
@@ -134,6 +140,11 @@ QtDesignerChild::QtDesignerChild()
 	mToolBar->addAction( fwm->actionGridLayout() );
 	mToolBar->addAction( fwm->actionBreakLayout() );
 	mToolBar->addAction( fwm->actionAdjustSize() );
+	// preview
+	mToolBar->addSeparator();
+	aPreview->setIcon( QIcon( ":/icons/preview.png" ) );
+	aPreview->setShortcut( tr( "Ctrl+R" ));
+	mToolBar->addAction( aPreview );
 	
 	// initialize plugins
 	QDesignerComponents::initializePlugins( mCore );
@@ -166,6 +177,7 @@ QtDesignerChild::QtDesignerChild()
 	connect( mArea, SIGNAL( subWindowActivated( QMdiSubWindow* ) ), this, SLOT( subWindowActivated( QMdiSubWindow* ) ) );
 	connect( mCore->formWindowManager(), SIGNAL( activeFormWindowChanged( QDesignerFormWindowInterface* ) ), this, SLOT( activeFormWindowChanged( QDesignerFormWindowInterface* ) ) );
 	connect( aEditWidgets, SIGNAL( triggered() ), this, SLOT( editWidgets() ) );
+	connect( aPreview, SIGNAL( triggered() ), this, SLOT( previewCurrentForm() ) );
 }
 
 QtDesignerChild::~QtDesignerChild()
@@ -211,6 +223,9 @@ void QtDesignerChild::subWindowActivated( QMdiSubWindow* w )
 	// update current form
 	if ( w && mCore->formWindowManager()->activeFormWindow() != w->widget() )
 		mCore->formWindowManager()->setActiveFormWindow( qobject_cast<QDesignerFormWindowInterface*>( w->widget() ) );
+	
+	// update preview actino state
+	aPreview->setEnabled( w );
 }
 
 void QtDesignerChild::activeFormWindowChanged( QDesignerFormWindowInterface* w )
@@ -266,6 +281,43 @@ void QtDesignerChild::editWidgets()
 	foreach ( QMdiSubWindow* w, mArea->subWindowList() )
 		if ( QDesignerFormWindowInterface* i = qobject_cast<QDesignerFormWindowInterface*>( w->widget() ) )
 			i->editWidgets();
+}
+
+void QtDesignerChild::previewCurrentForm()
+{
+	QDesignerFormWindowInterface* w = mArea->activeSubWindow() ? qobject_cast<QDesignerFormWindowInterface*>( mArea->activeSubWindow()->widget() ) : 0;
+	if ( w )
+	{
+		// get buffer
+		QBuffer b;
+		b.setData( qPrintable( w->contents() ) );
+		
+		// create form
+		QWidget* f = QFormBuilder().load( &b );
+		
+		// set flags
+#ifdef Q_WS_WIN
+		Qt::WindowFlags wf = ( f->windowType() == Qt::Window ) ? Qt::Window | Qt::WindowMaximizeButtonHint : Qt::Dialog;
+#else
+		Qt::WindowFlags wf = Qt::Dialog;
+#endif
+		
+		// set parent
+		f->setParent( mArea->activeSubWindow(), wf );
+		
+		// macdialgo have no close button
+		f->setWindowModality( Qt::ApplicationModal );
+		
+		// set position
+		f->setAttribute( Qt::WA_DeleteOnClose );
+		f->move( w->mapToGlobal( QPoint( 10, 10) ) );
+		
+		// track escape key
+		f->installEventFilter( this );
+		
+		// show form
+		f->show();
+	}
 }
 
 void QtDesignerChild::setModified( QDesignerFormWindowInterface* w )

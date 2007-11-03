@@ -23,6 +23,7 @@ class QtDesignerChild : public pAbstractChild, public QSingleton<QtDesignerChild
 	friend class QSingleton<QtDesignerChild>;
 	
 protected:
+	QAction* aPreview;
 	QDesignerFormEditorInterface* mCore;
 	QDesignerWidgetBox* pWidgetBox;
 	QDesignerActionEditor* pActionEditor;
@@ -42,6 +43,7 @@ protected slots:
 	void geometryChanged();
 	void formChanged();
 	void editWidgets();
+	void previewCurrentForm();
 	void setModified( QDesignerFormWindowInterface* );
 	
 public:
