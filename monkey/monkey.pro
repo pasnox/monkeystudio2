@@ -52,10 +52,8 @@ CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 	RCC_DIR	= $${BUILD_PATH}/debug/.rcc
 	unix:LIBS	*= -lqscintilla2_debug -lfresh_debug -lctags_debug
 	else:LIBS	*= -lqscintilla2_d -lfresh_d -lctags_d
-	*-g++:unix:LIBS	*= -Wl,--out-implib,$${BUILD_PATH}/libmonkey_debug.a
-	else:LIBS	*= -Wl,--out-implib,$${BUILD_PATH}/libmonkey_d.a
-	win32-msvc*:unix:LIBS	*= /IMPLIB:$${BUILD_PATH}/monkey_debug.lib -lshell32
-	else:LIBS	*= /IMPLIB:$${BUILD_PATH}/monkey_d.lib -lshell32
+	win32-g++:LIBS	*= -Wl,--out-implib,$${BUILD_PATH}/lib$${TARGET}.a
+	win32-msvc*:LIBS	*= /IMPLIB:$${BUILD_PATH}/$${TARGET}.lib -lshell32
 } else {
 	#Release
 	unix:OBJECTS_DIR	= $${BUILD_PATH}/release/.obj/unix
