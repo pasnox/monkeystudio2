@@ -4,6 +4,7 @@
 #include "QMakeItem.h"
 #include "UIItemSettings.h"
 #include "pMonkeyStudio.h"
+#include "PluginsManager.h"
 
 #include <QCompleter>
 #include <QDirModel>
@@ -346,6 +347,7 @@ void UIQMakeProjectSettings::querySettings()
 	loadModules();
 	loadConfigs();
 	loadLanguages();
+	loadPlugins();
 	// hide progressbar
 	pbProgress->hide();
 	// apply current settings
@@ -416,6 +418,53 @@ void UIQMakeProjectSettings::loadLanguages()
 		it = new QListWidgetItem( s, lwTranslations );
 		it->setCheckState( Qt::Unchecked );
 	}
+}
+
+void UIQMakeProjectSettings::loadPlugins()
+{
+	// builders
+	foreach ( BuilderPlugin* bp, PluginsManager::instance()->plugins<BuilderPlugin*>( PluginsManager::stAll ) )
+	{
+		cbBuilders->addItem( bp->infos().Name );
+		swBuilders->addWidget( bp->settingsWidget() );
+	}
+	
+	// choose project builder
+	BuilderPlugin* bp = mProject->builder();
+	cbBuilders->setCurrentIndex( cbBuilders->findText( bp ? bp->infos().Name : QString() ) );
+	
+	// compilers
+	foreach ( CompilerPlugin* cp, PluginsManager::instance()->plugins<CompilerPlugin*>( PluginsManager::stAll ) )
+	{
+		cbCompilers->addItem( cp->infos().Name );
+		swCompilers->addWidget( cp->settingsWidget() );
+	}
+	
+	// choose project compiler
+	CompilerPlugin* cp = mProject->compiler();
+	cbCompilers->setCurrentIndex( cbCompilers->findText( cp ? cp->infos().Name : QString() ) );
+	
+	// debugger
+	foreach ( DebuggerPlugin* dp, PluginsManager::instance()->plugins<DebuggerPlugin*>( PluginsManager::stAll ) )
+	{
+		cbDebuggers->addItem( dp->infos().Name );
+		swDebuggers->addWidget( dp->settingsWidget() );
+	}
+	
+	// choose project debugger
+	DebuggerPlugin* dp = mProject->debugger();
+	cbDebuggers->setCurrentIndex( cbDebuggers->findText( dp ? dp->infos().Name : QString() ) );
+	
+	// interpreters
+	foreach ( InterpreterPlugin* ip, PluginsManager::instance()->plugins<InterpreterPlugin*>( PluginsManager::stAll ) )
+	{
+		cbInterpreters->addItem( ip->infos().Name );
+		swInterpreters->addWidget( ip->settingsWidget() );
+	}
+	
+	// choose project interpreter
+	InterpreterPlugin* ip = mProject->interpreter();
+	cbInterpreters->setCurrentIndex( cbInterpreters->findText( ip ? ip->infos().Name : QString() ) );
 }
 
 void UIQMakeProjectSettings::setDir( const QString& s )
@@ -1070,6 +1119,11 @@ void UIQMakeProjectSettings::accept()
 	if ( mSettings != mOriginalSettings )
 		foreach ( const ProjectKey k, mSettings.keys() )
 				mProject->setValues( k.getScope(), k.getVariable(), k.getOperator(), mSettings[k] );
+	// set plugins for projects
+	mProject->setBuilder( PluginsManager::instance()->plugin<BuilderPlugin*>( PluginsManager::stAll, cbBuilders->currentText() ) );
+	mProject->setCompiler( PluginsManager::instance()->plugin<CompilerPlugin*>( PluginsManager::stAll, cbCompilers->currentText() ) );
+	mProject->setDebugger( PluginsManager::instance()->plugin<DebuggerPlugin*>( PluginsManager::stAll, cbDebuggers->currentText() ) );
+	mProject->setInterpreter( PluginsManager::instance()->plugin<InterpreterPlugin*>( PluginsManager::stAll, cbInterpreters->currentText() ) );
 	// close dialog
 	QDialog::accept();
 }

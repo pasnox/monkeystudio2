@@ -194,6 +194,26 @@
        <iconset resource="../resources/QMake.qrc" >:/icons/icons/advanced.png</iconset>
       </property>
      </item>
+     <item>
+      <property name="text" >
+       <string>Builder</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Compiler</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Debugger</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Interpreter</string>
+      </property>
+     </item>
     </widget>
    </item>
    <item row="1" column="1" >
@@ -1866,6 +1886,214 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="wBuilders" >
+      <layout class="QGridLayout" >
+       <property name="leftMargin" >
+        <number>0</number>
+       </property>
+       <property name="topMargin" >
+        <number>0</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
+       </property>
+       <property name="horizontalSpacing" >
+        <number>3</number>
+       </property>
+       <property name="verticalSpacing" >
+        <number>3</number>
+       </property>
+       <item row="0" column="0" >
+        <widget class="QLabel" name="lBuilders" >
+         <property name="text" >
+          <string>Builders Available :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" >
+        <widget class="QComboBox" name="cbBuilders" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <item>
+          <property name="text" >
+           <string>None</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2" >
+        <widget class="QStackedWidget" name="swBuilders" >
+         <property name="currentIndex" >
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="wBuilderNone" />
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="wCompilers" >
+      <layout class="QGridLayout" >
+       <property name="leftMargin" >
+        <number>0</number>
+       </property>
+       <property name="topMargin" >
+        <number>0</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
+       </property>
+       <property name="horizontalSpacing" >
+        <number>3</number>
+       </property>
+       <property name="verticalSpacing" >
+        <number>3</number>
+       </property>
+       <item row="0" column="0" >
+        <widget class="QLabel" name="lCompilers" >
+         <property name="text" >
+          <string>Compilers Available :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" >
+        <widget class="QComboBox" name="cbCompilers" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <item>
+          <property name="text" >
+           <string>None</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2" >
+        <widget class="QStackedWidget" name="swCompilers" >
+         <property name="currentIndex" >
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="wCompilerNone" />
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="wDebuggers" >
+      <layout class="QGridLayout" >
+       <property name="leftMargin" >
+        <number>0</number>
+       </property>
+       <property name="topMargin" >
+        <number>0</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
+       </property>
+       <property name="horizontalSpacing" >
+        <number>3</number>
+       </property>
+       <property name="verticalSpacing" >
+        <number>3</number>
+       </property>
+       <item row="0" column="0" >
+        <widget class="QLabel" name="lDebuggers" >
+         <property name="text" >
+          <string>Debuggers Available :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" >
+        <widget class="QComboBox" name="cbDebuggers" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <item>
+          <property name="text" >
+           <string>None</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2" >
+        <widget class="QStackedWidget" name="swDebuggers" >
+         <property name="currentIndex" >
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="wDebuggerNone" />
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="wInterpreters" >
+      <layout class="QGridLayout" >
+       <property name="leftMargin" >
+        <number>0</number>
+       </property>
+       <property name="topMargin" >
+        <number>0</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
+       </property>
+       <property name="horizontalSpacing" >
+        <number>3</number>
+       </property>
+       <property name="verticalSpacing" >
+        <number>3</number>
+       </property>
+       <item row="0" column="0" >
+        <widget class="QLabel" name="lInterpreters" >
+         <property name="text" >
+          <string>Interpreters Available :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" >
+        <widget class="QComboBox" name="cbInterpreters" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <item>
+          <property name="text" >
+           <string>None</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2" >
+        <widget class="QStackedWidget" name="swInterpreters" >
+         <property name="currentIndex" >
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="wInterpreterNone" />
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
    <item row="3" column="0" colspan="2" >
@@ -1964,8 +2192,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>256</x>
-     <y>472</y>
+     <x>593</x>
+     <y>443</y>
     </hint>
     <hint type="destinationlabel" >
      <x>157</x>
@@ -1980,8 +2208,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>324</x>
-     <y>472</y>
+     <x>661</x>
+     <y>443</y>
     </hint>
     <hint type="destinationlabel" >
      <x>286</x>
@@ -2028,12 +2256,60 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>449</x>
-     <y>447</y>
+     <x>220</x>
+     <y>310</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>623</x>
-     <y>402</y>
+     <x>387</x>
+     <y>257</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbBuilders</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>swBuilders</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>399</x>
+     <y>110</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>344</x>
+     <y>195</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbCompilers</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>swCompilers</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>403</x>
+     <y>104</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>389</x>
+     <y>186</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbInterpreters</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>swInterpreters</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>398</x>
+     <y>107</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>390</x>
+     <y>203</y>
     </hint>
    </hints>
   </connection>

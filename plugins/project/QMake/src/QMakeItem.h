@@ -41,18 +41,21 @@ public:
 	virtual void editSettings();
 	virtual void save( bool = true );
 	virtual void addExistingFiles( const QStringList&, ProjectItem*, const QString& = "=" );
-	virtual void setBuilder( BuilderPlugin* );
-	virtual BuilderPlugin* builder() const;
-	virtual void setCompiler( CompilerPlugin* );
-	virtual CompilerPlugin* compiler() const;
-	virtual void setDebugger( DebuggerPlugin* );
-	virtual DebuggerPlugin* debugger() const;
 	virtual void addCommand( const pCommand&, const QString& );
 	virtual void installCommands();
 	virtual void uninstallCommands();
 	virtual void setValues( ProjectItem*, const QString&, const QString&, const QStringList& );
 	virtual void addValue( ProjectItem*, const QString&, const QString&, const QString& );
 	virtual ProjectItemList getValues( ProjectItem*, const QString&, const QString& ) const;
+	
+	virtual void setBuilder( BuilderPlugin* );
+	virtual BuilderPlugin* builder() const;
+	virtual void setCompiler( CompilerPlugin* );
+	virtual CompilerPlugin* compiler() const;
+	virtual void setDebugger( DebuggerPlugin* );
+	virtual DebuggerPlugin* debugger() const;
+	virtual void setInterpreter( InterpreterPlugin* );
+	virtual InterpreterPlugin* interpreter() const;
 	
 protected:
 	virtual void redoLayout( ProjectItem* );

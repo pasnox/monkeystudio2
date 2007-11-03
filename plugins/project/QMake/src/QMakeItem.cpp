@@ -45,7 +45,7 @@ ProjectItem* variable( ProjectItem* s, const QString& v, const QString& o )
 	return it;
 }
 
-QString evaluate( const QString s, ProjectItem* p )
+QString evaluate( const QString s, const ProjectItem* p )
 {
 	Q_ASSERT( p );
 	QString v;
@@ -297,8 +297,6 @@ void QMakeItem::insertRow( int r, ProjectItem* it )
 	// if project get parent plugin
 	if ( it->isProject() )
 		it->setPlugin( project()->plugin() );
-	// set project modified
-	project()->setModified( true );
 }
 
 bool QMakeItem::open()
@@ -455,45 +453,6 @@ void QMakeItem::addExistingFiles( const QStringList& l, ProjectItem* s, const QS
 		ProjectItem* it = new QMakeItem( ProjectItem::ValueType, v );
 		it->setValue( vn != "UNKNOW_FILES" ? relativeFilePath( f ) : f );
 	}
-}
-
-void QMakeItem::setBuilder( BuilderPlugin* b )
-{
-	if ( isProject() )
-		mBuilder = b;
-}
-
-BuilderPlugin* QMakeItem::builder() const
-{
-	qWarning( "QMakeItem::builder() temporary hack returning gnumake" );
-	return PluginsManager::instance()->plugin<BuilderPlugin*>( PluginsManager::stAll, "GNUMake" );
-	return isProject() ? mBuilder : project()->builder();
-}
-
-void QMakeItem::setCompiler( CompilerPlugin* c )
-{
-	if ( isProject() )
-		mCompiler = c;
-}
-
-CompilerPlugin* QMakeItem::compiler() const
-{
-	qWarning( "QMakeItem::compiler() temporary hack returning g++" );
-	return PluginsManager::instance()->plugin<CompilerPlugin*>( PluginsManager::stAll, "G++" );
-	return isProject() ? mCompiler : project()->compiler();
-}
-
-void QMakeItem::setDebugger( DebuggerPlugin* d )
-{
-	if ( isProject() )
-		mDebugger = d;
-}
-
-DebuggerPlugin* QMakeItem::debugger() const
-{
-	qWarning( "QMakeItem::debugger() temporary hack returning gdb" );
-	return PluginsManager::instance()->plugin<DebuggerPlugin*>( PluginsManager::stAll, "GNUDebugger" );
-	return isProject() ? mDebugger : project()->debugger();
 }
 
 void QMakeItem::addCommand( const pCommand& c, const QString& s )
@@ -931,4 +890,86 @@ void QMakeItem::commandTriggered()
 		}
 		cm->addCommands( cm->recursiveCommandList( l, cm->getCommand( l, a->statusTip() ) ) );
 	}
+}
+
+void QMakeItem::setBuilder( BuilderPlugin* b )
+{
+	if ( isProject() )
+		setValues( this, "BUILDER", "=", b ? QStringList( b->infos().Name ) : QStringList() );
+}
+
+BuilderPlugin* QMakeItem::builder() const
+{
+	if ( isProject() )
+	{
+		QString s = evaluate( "BUILDER", this );
+		if ( s.isEmpty() && parentProject() )
+			if ( BuilderPlugin* b = parentProject()->builder() )
+				s = b->infos().Name;
+		if ( s.isEmpty() )
+			s = "GNUMake";
+		return PluginsManager::instance()->plugin<BuilderPlugin*>( PluginsManager::stAll, s );
+	}
+	return 0;
+}
+
+void QMakeItem::setCompiler( CompilerPlugin* c )
+{
+	if ( isProject() )
+		setValues( this, "COMPILER", "=", c ? QStringList( c->infos().Name ) : QStringList() );
+}
+
+CompilerPlugin* QMakeItem::compiler() const
+{
+	if ( isProject() )
+	{
+		QString s = evaluate( "COMPILER", this );
+		if ( s.isEmpty() && parentProject() )
+			if ( CompilerPlugin* c = parentProject()->compiler() )
+				s = c->infos().Name;
+		if ( s.isEmpty() )
+			s = "G++";
+		return PluginsManager::instance()->plugin<CompilerPlugin*>( PluginsManager::stAll, s );
+	}
+	return 0;
+}
+
+void QMakeItem::setDebugger( DebuggerPlugin* d )
+{
+	if ( isProject() )
+		setValues( this, "DEBUGGER", "=", d ? QStringList( d->infos().Name ) : QStringList() );
+}
+
+DebuggerPlugin* QMakeItem::debugger() const
+{
+	if ( isProject() )
+	{
+		QString s = evaluate( "DEBUGGER", this );
+		if ( s.isEmpty() && parentProject() )
+			if ( DebuggerPlugin* d = parentProject()->debugger() )
+				s = d->infos().Name;
+		if ( s.isEmpty() )
+			s = "GNUDebugger";
+		return PluginsManager::instance()->plugin<DebuggerPlugin*>( PluginsManager::stAll, s );
+	}
+	return 0;
+}
+
+void QMakeItem::setInterpreter( InterpreterPlugin* i )
+{
+	if ( isProject() )
+		setValues( this, "INTERPRETER", "=", i ? QStringList( i->infos().Name ) : QStringList() );
+}
+
+InterpreterPlugin* QMakeItem::interpreter() const
+{
+	if ( isProject() )
+	{
+		QString s = evaluate( "INTERPRETER", this );
+		if ( s.isEmpty() && parentProject() )
+			if ( InterpreterPlugin* i = parentProject()->interpreter() )
+				s = i->infos().Name;
+		return PluginsManager::instance()->plugin<InterpreterPlugin*>( PluginsManager::stAll, s );
+	}
+	return 0;
 }

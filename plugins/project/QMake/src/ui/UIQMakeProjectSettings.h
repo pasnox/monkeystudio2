@@ -126,6 +126,7 @@ protected slots:
 	void loadModules();
 	void loadConfigs();
 	void loadLanguages();
+	void loadPlugins();
 	void setDir( const QString& );
 	void setDir( const QModelIndex& );
 	void addValue( const QString& );
