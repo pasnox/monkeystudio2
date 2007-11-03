@@ -353,10 +353,15 @@ void pEditor::selectNone()
 
 void pEditor::invokeSearchReplace()
 {
-	pSearch::instance()->leSearch->setFocus();
-	pSearch::instance()->leSearch->selectAll();
 	if ( !pSearch::instance()->isVisible() )
 		pSearch::instance()->setVisible( true );
+	while ( pSearch::instance()->isFloating() && QApplication::activeWindow() != pSearch::instance()->window() )
+	{
+		QApplication::processEvents();
+		pSearch::instance()->activateWindow();
+	}
+	pSearch::instance()->leSearch->setFocus();
+	pSearch::instance()->leSearch->selectAll();
 }
 
 void pEditor::invokeGoToLine()
