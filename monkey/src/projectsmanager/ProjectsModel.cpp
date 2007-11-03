@@ -24,7 +24,8 @@ ProjectsModel::ProjectsModel( QObject* o )
 void ProjectsModel::rowsChanged( const QModelIndex& i, int, int )
 {
 	if ( ProjectItem* it = itemFromIndex( i ) )
-		it->project()->setModified( true );
+		if ( !it->isProject() )
+			it->project()->setModified( true );
 }
 
 ProjectItemList ProjectsModel::projects( bool b )
