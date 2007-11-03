@@ -112,6 +112,7 @@ QtDesignerChild::QtDesignerChild()
 	fwm->actionRedo()->setShortcut( pMenuBar::instance()->action( "mEdit/aRedo" )->shortcut() );
 	fwm->actionDelete()->setIcon( QIcon( ":/icons/delete.png" ) );
 	fwm->actionSelectAll()->setIcon( QIcon( ":/icons/selectall.png" ) );
+	fwm->actionDelete()->setShortcut( tr( "Del" ) );
 	mToolBar->addAction( fwm->actionUndo() );
 	mToolBar->addAction( fwm->actionRedo() );
 	mToolBar->addAction( fwm->actionCut() );
@@ -528,25 +529,26 @@ void printForm( QMdiSubWindow* w, bool b )
 		// check if default printer is set
 		if ( p.printerName().isEmpty() )
 		{
-			warning( QObject::tr( "Quick Print..." ), QObject::tr( "There is no defaullt printer, please set one before trying quick print" ), w->window() );
+			warning( QObject::tr( "Quick Print..." ), QObject::tr( "There is no default printer, please set one before trying quick print" ), w->window() );
 			return;
 		}
 		
 		// print and return
 		QPainter pr( &p );
 		pr.drawPixmap( 0, 0, QPixmap::grabWidget( w ) );
-		return;
 	}
-
-	// printer dialog
-	QPrintDialog d( &p );
-
-	// if ok
-	if ( d.exec() )
+	else
 	{
-		// print and return
-		QPainter pr( &p );
-		pr.drawPixmap( 0, 0, QPixmap::grabWidget( w ) );
+		// printer dialog
+		QPrintDialog d( &p );
+
+		// if ok
+		if ( d.exec() )
+		{
+			// print and return
+			QPainter pr( &p );
+			pr.drawPixmap( 0, 0, QPixmap::grabWidget( w ) );
+		}
 	}
 }
 
