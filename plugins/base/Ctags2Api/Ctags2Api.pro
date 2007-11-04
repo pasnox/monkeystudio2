@@ -3,7 +3,7 @@ include( ../../plugins.inc )
 DESTDIR	= $$MONKEY_PLUGINS_DIR/base
 TARGET	= Ctags2Api
 DEFINES	*= "PLUGIN_NAME=\"\\\"$${TARGET}\\\"\""
-INCLUDEPATH	*= src src/ui
+INCLUDEPATH	*= src/ui
 RESOURCES	= src/resources/Ctags2Api.qrc
 
 FORMS = src/ui/UICtags2Api.ui
