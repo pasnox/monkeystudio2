@@ -1,4 +1,19 @@
-
+/****************************************************************************
+**
+** 		Created using Monkey Studio v1.8.0.0
+** Author    : Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, The Monkey Studio Team
+** Project   : Monkey Studio 2
+** FileName  : compiler_defines.h
+** Date      : 2007-11-04T22:50:28
+** License   : GPL
+** Comment   : Monkey Studio is a Free, Fast and lightweight crossplatform Qt RAD.
+It's extendable with a powerfull plugins system.
+** Home Page : http://www.monkeystudio.org
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+****************************************************************************/
 /*
  * Copyright (c) 1998,1999,2000,2001,2002 Tal Davidson. All rights reserved.
  *

@@ -1,12 +1,14 @@
 /****************************************************************************
 **
-** 		Created using Monkey Studio v1.7.0
-** Author    : Nox P@sNox aka Azevedo Filipe <pasnox@gmail.com>
-** Project   : QMakeItem
+** 		Created using Monkey Studio v1.8.0.0
+** Author    : Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, The Monkey Studio Team
+** Project   : Monkey Studio 2
 ** FileName  : QMakeItem.cpp
-** Date      : 2007-09-04T15:07:31
+** Date      : 2007-11-04T22:53:41
 ** License   : GPL
-** Comment   : Your comment here
+** Comment   : Monkey Studio is a Free, Fast and lightweight crossplatform Qt RAD.
+It's extendable with a powerfull plugins system.
+** Home Page : http://www.monkeystudio.org
 **
 ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -520,32 +522,32 @@ void QMakeItem::installCommands()
 		c = pCommand();
 		c.setText( tr( "QMake" ) );
 		c.setCommand( qv.QMake );
-		c.setWorkingDirectory( "$cpp$" );
+		c.setWorkingDirectory( "" );
 		addCommand( c, "mBuilder" );
 		// lupdate command
 		c = pCommand();
 		c.setText( tr( "lupdate" ) );
 		c.setCommand( qv.lupdate );
-		c.setArguments( "$cp$" );
-		c.setWorkingDirectory( "$cpp$" );
+		c.setArguments( "" );
+		c.setWorkingDirectory( "" );
 		addCommand( c, "mBuilder" );
 		// lrelease command
 		c = pCommand();
 		c.setText( tr( "lrelease" ) );
 		c.setCommand( qv.lrelease );
-		c.setArguments( "$cp$" );
-		c.setWorkingDirectory( "$cpp$" );
+		c.setArguments( "" );
+		c.setWorkingDirectory( "" );
 		addCommand( c, "mBuilder" );
 		// execute debug
 		c = bc;
 		c.setText( tr( "Execute Debug" ) );
-		c.setCommand( QString( "$cpp$/%1/%2" ).arg( destdir.isEmpty() ? "debug" : destdir ).arg( target.isEmpty() ? name() : target ) );
+		c.setCommand( QString( "/%1/%2" ).arg( destdir.isEmpty() ? "debug" : destdir ).arg( target.isEmpty() ? name() : target ) );
 		c.setArguments( QString::null );
 		addCommand( c, "mBuilder/mExecute" );
 		// execute release
 		c = bc;
 		c.setText( tr( "Execute Release" ) );
-		c.setCommand( QString( "$cpp$/%1/%2" ).arg( destdir.isEmpty() ? "release" : destdir ).arg( target.isEmpty() ? name() : target ) );
+		c.setCommand( QString( "/%1/%2" ).arg( destdir.isEmpty() ? "release" : destdir ).arg( target.isEmpty() ? name() : target ) );
 		c.setArguments( QString::null );
 		addCommand( c, "mBuilder/mExecute" );
 		// rebuild debug

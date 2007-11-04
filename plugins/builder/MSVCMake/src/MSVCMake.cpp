@@ -1,4 +1,19 @@
-#include <QTabWidget>
+/****************************************************************************
+**
+** 		Created using Monkey Studio v1.8.0.0
+** Author    : Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, The Monkey Studio Team
+** Project   : Monkey Studio 2
+** FileName  : MSVCMake.cpp
+** Date      : 2007-11-04T22:50:53
+** License   : GPL
+** Comment   : Monkey Studio is a Free, Fast and lightweight crossplatform Qt RAD.
+It's extendable with a powerfull plugins system.
+** Home Page : http://www.monkeystudio.org
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+****************************************************************************/#include <QTabWidget>
 #include "MSVCMake.h"
 #include "MSVCMakeParser.h"
 #include "pConsoleManager.h"
@@ -123,7 +138,7 @@ pCommandParser* MSVCMake::getParser( const QString& s )
 { return s == mPluginInfos.Name ? new MSVCMakeParser : 0; }
 
 pCommand MSVCMake::defaultBuildCommand() const
-{ return pCommand( "Build", "nmake", "", false, availableParsers(), "$cpp$" ); }
+{ return pCommand( "Build", "nmake", "", false, availableParsers(), "" ); }
 
 pCommand MSVCMake::buildCommand() const
 {

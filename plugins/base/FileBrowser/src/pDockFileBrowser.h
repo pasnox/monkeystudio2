@@ -1,12 +1,14 @@
 /****************************************************************************
 **
-** 		Created using Monkey Studio v1.7.0
-** Author    : Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>
-** Project   : FileBrowser Plugin
+** 		Created using Monkey Studio v1.8.0.0
+** Author    : Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, The Monkey Studio Team
+** Project   : Monkey Studio 2
 ** FileName  : pDockFileBrowser.h
-** Date      : 2007-08-27T23:00:25
+** Date      : 2007-11-04T22:50:37
 ** License   : GPL
-** Comment   : Your comment here
+** Comment   : Monkey Studio is a Free, Fast and lightweight crossplatform Qt RAD.
+It's extendable with a powerfull plugins system.
+** Home Page : http://www.monkeystudio.org
 **
 ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.

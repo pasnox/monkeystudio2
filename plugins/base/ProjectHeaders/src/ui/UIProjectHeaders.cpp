@@ -1,12 +1,14 @@
 /****************************************************************************
 **
 ** 		Created using Monkey Studio v1.8.0.0
-** Author    : Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>
-** Project   : UIProjectHeaders
+** Author    : Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, The Monkey Studio Team
+** Project   : Monkey Studio 2
 ** FileName  : UIProjectHeaders.cpp
-** Date      : 2007-11-04T02:21:34
+** Date      : 2007-11-04T22:50:46
 ** License   : GPL
-** Comment   : Your comment here
+** Comment   : Monkey Studio is a Free, Fast and lightweight crossplatform Qt RAD.
+It's extendable with a powerfull plugins system.
+** Home Page : http://www.monkeystudio.org
 **
 ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -74,7 +76,7 @@ void UIProjectHeaders::accept()
 					filters << e;
 	
 	// regexp
-	QRegExp rx( "^(/\\*.*\\*/).*$" );
+	QRegExp rx( "^(/\\*.*\\*/).*" );
 	rx.setMinimal( true );
 	
 	// get recursive files

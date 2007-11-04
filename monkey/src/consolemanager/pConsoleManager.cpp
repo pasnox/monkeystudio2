@@ -1,12 +1,14 @@
 /****************************************************************************
 **
-** 		Created using Monkey Studio v1.7.0
-** Author    : Nox P@sNox <pasnox@gmail.com>
-** Project   : pConsoleManager
+** 		Created using Monkey Studio v1.8.0.0
+** Author    : Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, The Monkey Studio Team
+** Project   : Monkey Studio 2
 ** FileName  : pConsoleManager.cpp
-** Date      : mar. aout 21 20:52:27 2007
+** Date      : 2007-11-04T22:45:05
 ** License   : GPL
-** Comment   : Your comment here
+** Comment   : Monkey Studio is a Free, Fast and lightweight crossplatform Qt RAD.
+It's extendable with a powerfull plugins system.
+** Home Page : http://www.monkeystudio.org
 **
 ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -72,12 +74,12 @@ void pConsoleManager::removeParser( const QString& s )
 QString pConsoleManager::processInternalVariables( const QString& s )
 {
 	QString v = s;
-	v.replace( "$cpp$", QDir::toNativeSeparators( pFileManager::instance()->currentProjectPath() ) );
-	v.replace( "$cp$", QDir::toNativeSeparators( pFileManager::instance()->currentProjectFile() ) );
-	v.replace( "$cfp$", QDir::toNativeSeparators( pFileManager::instance()->currentChildPath() ) );
-	v.replace( "$cf$", QDir::toNativeSeparators( pFileManager::instance()->currentChildFile() ) );
-	v.replace( "$cip$", QDir::toNativeSeparators( pFileManager::instance()->currentItemPath() ) );
-	v.replace( "$ci$", QDir::toNativeSeparators( pFileManager::instance()->currentItemFile() ) );
+	v.replace( "", QDir::toNativeSeparators( pFileManager::instance()->currentProjectPath() ) );
+	v.replace( "", QDir::toNativeSeparators( pFileManager::instance()->currentProjectFile() ) );
+	v.replace( "", QDir::toNativeSeparators( pFileManager::instance()->currentChildPath() ) );
+	v.replace( "", QDir::toNativeSeparators( pFileManager::instance()->currentChildFile() ) );
+	v.replace( "", QDir::toNativeSeparators( pFileManager::instance()->currentItemPath() ) );
+	v.replace( "", QDir::toNativeSeparators( pFileManager::instance()->currentItemFile() ) );
 	return v;
 }
 

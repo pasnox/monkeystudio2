@@ -1,4 +1,19 @@
-#include "UIToolsEdit.h"
+/****************************************************************************
+**
+** 		Created using Monkey Studio v1.8.0.0
+** Author    : Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, The Monkey Studio Team
+** Project   : Monkey Studio 2
+** FileName  : UIToolsEdit.cpp
+** Date      : 2007-11-04T22:46:48
+** License   : GPL
+** Comment   : Monkey Studio is a Free, Fast and lightweight crossplatform Qt RAD.
+It's extendable with a powerfull plugins system.
+** Home Page : http://www.monkeystudio.org
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+****************************************************************************/#include "UIToolsEdit.h"
 #include "pSettings.h"
 #include "pToolsManager.h"
 #include "pMonkeyStudio.h"
@@ -167,12 +182,12 @@ void UIToolsEdit::on_pbDown_clicked()
 void UIToolsEdit::helpRequested()
 {
 	QString s = tr( "<b>Tools Editor</b> give you the possibility to use variables<br><br>"
-		"<b>$cpp$</b> : Current project path<br>"
-		"<b>$cp$</b> : Current project filepath<br>"
-		"<b>$cfp$</b> : Current tab path<br>"
-		"<b>$cf$</b> : Current tab filepath<br>"
-		"<b>$cip$</b> : Current item path<br>"
-		"<b>$ci$</b> : Current item filepath" );
+		"<b></b> : Current project path<br>"
+		"<b></b> : Current project filepath<br>"
+		"<b></b> : Current tab path<br>"
+		"<b></b> : Current tab filepath<br>"
+		"<b></b> : Current item path<br>"
+		"<b></b> : Current item filepath" );
 	QWhatsThis::showText( mapToGlobal( rect().center() ), s );
 }
 

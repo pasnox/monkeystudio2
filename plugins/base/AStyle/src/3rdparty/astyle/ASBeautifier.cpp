@@ -1,4 +1,19 @@
-// $Id: ASBeautifier.cpp,v 1.4 2005/07/01 18:58:17 mandrav Exp $
+/****************************************************************************
+**
+** 		Created using Monkey Studio v1.8.0.0
+** Author    : Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, The Monkey Studio Team
+** Project   : Monkey Studio 2
+** FileName  : ASBeautifier.cpp
+** Date      : 2007-11-04T22:50:25
+** License   : GPL
+** Comment   : Monkey Studio is a Free, Fast and lightweight crossplatform Qt RAD.
+It's extendable with a powerfull plugins system.
+** Home Page : http://www.monkeystudio.org
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+****************************************************************************/// $Id: ASBeautifier.cpp,v 1.4 2005/07/01 18:58:17 mandrav Exp $
 // --------------------------------------------------------------------------
 //
 // Copyright (C) 1998,1999,2000,2001,2002 Tal Davidson.

@@ -1,4 +1,19 @@
-#include "Gcc.h"
+/****************************************************************************
+**
+** 		Created using Monkey Studio v1.8.0.0
+** Author    : Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, The Monkey Studio Team
+** Project   : Monkey Studio 2
+** FileName  : Gcc.cpp
+** Date      : 2007-11-04T22:53:24
+** License   : GPL
+** Comment   : Monkey Studio is a Free, Fast and lightweight crossplatform Qt RAD.
+It's extendable with a powerfull plugins system.
+** Home Page : http://www.monkeystudio.org
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+****************************************************************************/#include "Gcc.h"
 #include "GccParser.h"
 #include "pMenuBar.h"
 
@@ -55,7 +70,7 @@ QWidget* Gcc::settingsWidget()
 { return cliToolSettingsWidget( this ); }
 
 pCommandList Gcc::defaultCommands() const
-{ return pCommandList() << pCommand( "Build Current File", "gcc", "$cf$", false, availableParsers(), "$cfp$" ); }
+{ return pCommandList() << pCommand( "Build Current File", "gcc", "", false, availableParsers(), "" ); }
 
 pCommandList Gcc::userCommands() const
 {
