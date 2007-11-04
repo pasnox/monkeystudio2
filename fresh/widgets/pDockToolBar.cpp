@@ -17,9 +17,10 @@
 #include <QDockWidget>
 #include <QAction>
 #include <QMainWindow>
+#include <QKeyEvent>
 
 pDockToolBar::pDockToolBar( pDockToolBarManager* t, Qt::Orientation o )
-	: QToolBar(), mManager( t ), mUniqueId( 0 ), mExclusive( true )
+	: QToolBar(), mManager( t ), mUniqueId( 0 )
 {
 	// need docktoolbar manager
 	Q_ASSERT( t != 0 );
@@ -27,6 +28,11 @@ pDockToolBar::pDockToolBar( pDockToolBarManager* t, Qt::Orientation o )
 
 	// toolbar is not movable
 	setMovable( false );
+	
+	// toggle exclusive action
+	aToggleExclusive = new QAction( this );
+	aToggleExclusive->setCheckable( true );
+	aToggleExclusive->setChecked( true );
 
 	// change font
 	QFont f( font() );
@@ -62,29 +68,37 @@ bool pDockToolBar::eventFilter( QObject* o, QEvent* e )
 	QDockWidget* d = qobject_cast<QDockWidget*>( o );
 
 	// if it s a dock widget
-	if ( d && ( t == QEvent::Show || t == QEvent::Hide ) )
+	if ( d )
 	{
-		// if exclusive, hide all except this one
-		if ( t == QEvent::Show && mExclusive )
+		if ( t == QEvent::Show || t == QEvent::Hide )
 		{
-			foreach ( QDockWidget* dw, docks() )
+			// if exclusive, hide all except this one
+			if ( t == QEvent::Show && aToggleExclusive->isChecked() )
 			{
-				if ( dw != d && dw->isVisible() )
-					dw->hide();
+				foreach ( QDockWidget* dw, docks() )
+				{
+					if ( dw != d && dw->isVisible() )
+						dw->hide();
+				}
 			}
+
+			// get dock button
+			QAbstractButton* b = button( d );
+
+			// check the dock button
+			b->setChecked( t == QEvent::Show );
+
+			// check button text
+			internal_checkButtonText( b );
+
+			// check toolbar visibility
+			internal_checkVisibility();
 		}
-
-		// get dock button
-		QAbstractButton* b = button( d );
-
-		// check the dock button
-		b->setChecked( t == QEvent::Show );
-
-		// check button text
-		internal_checkButtonText( b );
-
-		// check toolbar visibility
-		internal_checkVisibility();
+		else if ( t == QEvent::KeyPress )
+		{
+			if ( static_cast<QKeyEvent*>( e )->key() == Qt::Key_Escape )
+				d->hide();
+		}
 	}
 
 	// deturn default event filter
@@ -162,7 +176,7 @@ int pDockToolBar::addDock( QDockWidget* d, const QString& s, const QIcon& i )
 		mManager->mainWindow()->addDockWidget( ta, d, orientation() );
 
 	// if exclusive, hide all dock except this one
-	if ( mExclusive && count() )
+	if ( aToggleExclusive->isChecked() && count() )
 	{
 		foreach ( QDockWidget* dw, docks() )
 		{
@@ -251,17 +265,17 @@ void pDockToolBar::setDockVisible( QDockWidget* d, bool b )
 
 bool pDockToolBar::exclusive() const
 {
-	return mExclusive;
+	return aToggleExclusive->isChecked();
 }
 
 void pDockToolBar::setExclusive( bool b )
 {
-	if ( mExclusive == b )
+	if ( aToggleExclusive->isChecked() == b )
 		return;
-	mExclusive = b;
+	aToggleExclusive->setChecked( b );
 
 	// if exclusive, hide all
-	if ( mExclusive && count() )
+	if ( aToggleExclusive->isChecked() && count() )
 	{
 		foreach ( QDockWidget* dw, docks() )
 		{
@@ -314,6 +328,13 @@ QList<QAbstractButton*> pDockToolBar::buttons() const
 int pDockToolBar::count() const
 {
 	return docks().count();
+}
+
+QAction* pDockToolBar::toggleExclusiveAction() const 
+{
+	// set action text
+	aToggleExclusive->setText( tr( "%1 - Exclusive" ).arg( windowTitle() ) );
+	return aToggleExclusive;
 }
 
 void pDockToolBar::internal_checkVisibility()
@@ -413,7 +434,7 @@ void pDockToolBar::internal_buttonClicked( bool b )
 	if ( !d )
 		return;
 
-	if ( mExclusive )
+	if ( aToggleExclusive->isChecked() )
 	{
 		foreach ( QDockWidget* dw, docks() )
 		{

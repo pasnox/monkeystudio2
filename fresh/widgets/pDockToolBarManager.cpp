@@ -13,6 +13,7 @@
 #include <QDockWidget>
 #include <QSettings>
 #include <QAbstractButton>
+#include <QAction>
 
 pDockToolBarManager::pDockToolBarManager( QMainWindow* w )
 	: QObject( w ), mMain( w )
@@ -195,8 +196,11 @@ void pDockToolBarManager::restoreState( pDockToolBar* p )
 		// if got bar
 		if ( p )
 		{
+			// restore exclusive state
+			p->setExclusive( mSettings->value( QString( "MainWindow/Docks/%1/Exclusive" ).arg( i ), true ).toInt() );
+			
 			// bar datas
-			QStringList mList = mSettings->value( QString( "MainWindow/Docks/%1" ).arg( i ), QStringList() ).toStringList();
+			QStringList mList = mSettings->value( QString( "MainWindow/Docks/%1/Widgets" ).arg( i ), QStringList() ).toStringList();
 
 			// for each entry
 			foreach ( QString e, mList )
@@ -212,6 +216,7 @@ void pDockToolBarManager::restoreState( pDockToolBar* p )
 	}
 }
 
+#include <QDebug>
 void pDockToolBarManager::saveState( pDockToolBar* p )
 {
 	// cancel if no settings
@@ -236,6 +241,7 @@ void pDockToolBarManager::saveState( pDockToolBar* p )
 			mList << d->objectName();
 
 		// write datas
-		mSettings->setValue( QString( "MainWindow/Docks/%1" ).arg( mMain->toolBarArea( tb ) ), mList );
+		mSettings->setValue( QString( "MainWindow/Docks/%1/Exclusive" ).arg( mMain->toolBarArea( tb ) ), tb->toggleExclusiveAction()->isChecked() );
+		mSettings->setValue( QString( "MainWindow/Docks/%1/Widgets" ).arg( mMain->toolBarArea( tb ) ), mList );
 	}
 }

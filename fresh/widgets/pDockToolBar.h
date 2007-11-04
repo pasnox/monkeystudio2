@@ -53,14 +53,16 @@ public:
 	QList<QAbstractButton*> buttons() const;
 
 	int count() const;
+	
+	QAction* toggleExclusiveAction() const;
 
 private:
 	pDockToolBarManager* mManager;
 	int mUniqueId;
-	bool mExclusive;
 	QFrame* mFrame;
 	QBoxLayout* mLayout;
 	QAction* aDockFrame;
+	QAction* aToggleExclusive;
 	QHash<int, QAbstractButton*> mButtons;
 	QHash<int, QDockWidget*> mDocks;
 
