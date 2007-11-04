@@ -26,6 +26,7 @@ public:
 	~UIProjectHeaders();
 
 protected slots:
+	void on_tbDirectory_clicked();
 	void accept();
 
 };

@@ -35,6 +35,13 @@ UIProjectHeaders::UIProjectHeaders( QWidget* p )
 UIProjectHeaders::~UIProjectHeaders()
 {}
 
+void UIProjectHeaders::on_tbDirectory_clicked()
+{
+	const QString s = getExistingDirectory( tr( "Choose the directory to scan" ), QString(), window() );
+	if ( !s.isEmpty() )
+		leDirectory->setText( s );
+}
+
 const QStringList getRecursiveFiles( QDir d, const QStringList& l )
 {
 	QStringList ll;
@@ -85,12 +92,12 @@ void UIProjectHeaders::accept()
 		
 		// create structure for parsing values
 		pTemplateContent t;
-		t.Name = "Monkey Studio"; // project name
-		t.Author = "Azevedo Filipe, Monkey Studio Team"; // authors
-		t.License = "GPL"; // license
+		t.Name = leProjectName->text();
+		t.Author = leAuthors->text();
+		t.License = cbLicenses->currentText();
 		t.Project = 0;
 		t.FileName = QFileInfo( fn ).fileName();
-		t.Comment = "Monkey Studio is a fast, free and lightweight crossplatform Qt RAD"; // comment
+		t.Comment = teComment->toPlainText();
 		t.Content = b;
 		
 		// get buffer
