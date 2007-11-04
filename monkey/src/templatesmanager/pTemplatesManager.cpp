@@ -15,6 +15,7 @@
 #include <QDir>
 #include <QHash>
 #include <QDateTime>
+#include <QApplication>
 
 const QList<pTemplate> pTemplatesManager::defaultTemplates()
 {
@@ -77,7 +78,8 @@ void pTemplatesManager::setTemplatesPath( const QString& s )
 
 const QString pTemplatesManager::templatesPath()
 {
-	return pMonkeyStudio::unTokenizeHome( pSettings::instance()->value( "Templates/DefaultDirectory", "$HOME$/.Monkey Studio/Templates" ).toString() );
+	return pMonkeyStudio::unTokenizeHome( pSettings::instance()->value( "Templates/DefaultDirectory", 
+		QApplication::applicationDirPath ()+"/../templates").toString() );
 }
 
 void pTemplatesManager::setTemplatesHeader( const QString& s )
