@@ -1,6 +1,8 @@
 #include "pSearch.h"
 
-#include <qsciscintilla.h>
+#include "qsciscintilla.h"
+
+#include <QKeyEvent>
 
 pSearch::pSearch( QsciScintilla* p )
 	: QDockWidget( p )
@@ -16,6 +18,13 @@ pSearch::pSearch( QsciScintilla* p )
 
 	// set current editor manage for search
 	setEditor( p );
+}
+
+void pSearch::keyPressEvent( QKeyEvent* e )
+{
+	if ( e->key() == Qt::Key_Escape )
+		hide();
+	QDockWidget::keyPressEvent( e );
 }
 
 bool pSearch::checkEditor()

@@ -27,6 +27,7 @@ public slots:
 protected:
 	pSearch( QsciScintilla* = 0 );
 	bool checkEditor();
+	void keyPressEvent( QKeyEvent* );
 
 	QPointer<QsciScintilla> mEditor;
 

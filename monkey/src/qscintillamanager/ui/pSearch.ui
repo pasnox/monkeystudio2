@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>286</width>
-    <height>269</height>
+    <width>250</width>
+    <height>240</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -270,14 +270,14 @@
   <tabstop>leSearch</tabstop>
   <tabstop>leReplace</tabstop>
   <tabstop>cbFromStart</tabstop>
-  <tabstop>cbCaseSensitive</tabstop>
-  <tabstop>cbRegExp</tabstop>
   <tabstop>cbWrap</tabstop>
+  <tabstop>cbCaseSensitive</tabstop>
   <tabstop>cbWholeWords</tabstop>
+  <tabstop>cbRegExp</tabstop>
   <tabstop>tbPrevious</tabstop>
-  <tabstop>tbReplaceAll</tabstop>
-  <tabstop>tbNext</tabstop>
   <tabstop>tbReplace</tabstop>
+  <tabstop>tbNext</tabstop>
+  <tabstop>tbReplaceAll</tabstop>
  </tabstops>
  <resources>
   <include location="../../resources/resources.qrc" />
@@ -290,12 +290,12 @@
    <slot>click()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>101</x>
-     <y>68</y>
+     <x>96</x>
+     <y>39</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>200</x>
-     <y>206</y>
+     <x>45</x>
+     <y>39</y>
     </hint>
    </hints>
   </connection>
@@ -306,12 +306,12 @@
    <slot>click()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>100</x>
-     <y>115</y>
+     <x>95</x>
+     <y>73</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>21</x>
-     <y>235</y>
+     <x>16</x>
+     <y>70</y>
     </hint>
    </hints>
   </connection>
