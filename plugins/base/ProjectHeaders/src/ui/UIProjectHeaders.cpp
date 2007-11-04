@@ -21,6 +21,7 @@
 #include <QTextCodec>
 #include <QHash>
 #include <QStringList>
+#include <QPushButton>
 
 using namespace pMonkeyStudio;
 
@@ -30,6 +31,8 @@ UIProjectHeaders::UIProjectHeaders( QWidget* p )
 	setupUi( this );
 	cbLanguages->addItems( availableLanguages() );
 	teLicensing->setPlainText( pTemplatesManager::templatesHeader() );
+	dbbButtons->button( QDialogButtonBox::Ok )->setIcon( QPixmap( ":/icons/icons/ok.png" ) );
+	dbbButtons->button( QDialogButtonBox::Cancel )->setIcon( QPixmap( ":/icons/icons/cancel.png" ) );
 }
 
 UIProjectHeaders::~UIProjectHeaders()

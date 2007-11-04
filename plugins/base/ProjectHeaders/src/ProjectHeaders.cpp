@@ -39,7 +39,7 @@ bool ProjectHeaders::setEnabled( bool b )
 	if ( b && !isEnabled() )
 	{
 		// add dock to dock toolbar entry
-		QAction* a = pMenuBar::instance()->action( "mEdit/aProjectHeaders" );
+		QAction* a = pMenuBar::instance()->action( "mEdit/aProjectHeaders", tr( "Project Licensing..." ), QIcon( ":/icons/licensing.png" ) );
 		connect( a, SIGNAL( triggered() ), this, SLOT( processLicensing() ) );
 		// set plugin enabled
 		mPluginInfos.Enabled = true;
