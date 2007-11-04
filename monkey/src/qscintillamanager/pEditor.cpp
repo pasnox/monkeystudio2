@@ -50,8 +50,12 @@ pEditor::pEditor( QWidget* p )
 	}
 	
 	// init qscishortcutsmanager if needed
-	//SendScintilla( QsciScintilla::SCI_CLEARALLCMDKEYS );
-	//qSciShortcutsManager::instance();
+	SendScintilla( QsciScintilla::SCI_CLEARALLCMDKEYS );
+	SendScintilla( QsciScintilla::SCI_ASSIGNCMDKEY, SCK_TAB, SCI_TAB);
+	SendScintilla( QsciScintilla::SCI_ASSIGNCMDKEY, SCK_ESCAPE, SCI_CANCEL);
+	SendScintilla( QsciScintilla::SCI_ASSIGNCMDKEY, SCK_RETURN, SCI_NEWLINE);
+	
+	qSciShortcutsManager::instance();
 }
 
 pEditor::~pEditor()
@@ -254,6 +258,12 @@ bool pEditor::saveBackup( const QString& s )
 	// if not filename, cancel
 	if ( s.isEmpty() )
 		return false;
+	
+	// check if file exists
+	/*
+	if ( QFile::exists( s ) && !pMonkeyStudio::question( tr( "Save backup..." ), tr( "The file already exists, are you sure you want to overwrite it ?" ) ) )
+		return false;
+	*/
 	
 	// get path
 	QString fp = QFileInfo( s ).path();

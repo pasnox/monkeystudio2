@@ -97,11 +97,8 @@ qSciShortcutsManager::qSciShortcutsManager ()
     sactions << (SciAction) { "mEdit/mAllCommands/SCI_LINEDUPLICATE", tr("Duplicate line"), QIcon(), QString(""), tr(""),QsciScintilla::SCI_LINEDUPLICATE};
     sactions << (SciAction) { "mEdit/mAllCommands/SCI_LOWERCASE", tr("Lower case"), QIcon(), QString("Ctrl+U"), tr(""),QsciScintilla::SCI_LOWERCASE};
     sactions << (SciAction) { "mEdit/mAllCommands/SCI_UPPERCASE", tr("Upper case"), QIcon(), QString("Shift+Ctrl+U"), tr(""),QsciScintilla::SCI_UPPERCASE};
-    sactions << (SciAction) { "mEdit/mAllCommands/SCI_CANCEL", tr("Cansel"), QIcon(), QString("Esc"), tr(""),QsciScintilla::SCI_CANCEL};
     sactions << (SciAction) { "mEdit/mAllCommands/SCI_EDITTOGGLEOVERTYPE", tr("Edit toggle over type"), QIcon(), QString("Ins"), tr(""),QsciScintilla::SCI_EDITTOGGLEOVERTYPE};
-    sactions << (SciAction) { "mEdit/mAllCommands/SCI_NEWLINE", tr("New line"), QIcon(), QString("Return"), tr(""),QsciScintilla::SCI_NEWLINE};
     sactions << (SciAction) { "mEdit/mAllCommands/SCI_FORMFEED", tr("Form feed"), QIcon(), QString(""), tr(""),QsciScintilla::SCI_FORMFEED};
-    sactions << (SciAction) { "mEdit/mAllCommands/SCI_TAB", tr("Tab"), QIcon(), QString("Tab"), tr(""),QsciScintilla::SCI_TAB};
     sactions << (SciAction) { "mEdit/mAllCommands/SCI_BACKTAB", tr("Back tab"), QIcon(), QString("Shift+Tab"), tr(""),QsciScintilla::SCI_BACKTAB};
     sactions << (SciAction) { "mEdit/mAllCommands/SCI_SELECTIONDUPLICATE", tr("Selection duplicate"), QIcon(), QString("Ctrl+D"), tr(""),QsciScintilla::SCI_SELECTIONDUPLICATE};
     sactions << (SciAction) { "mEdit/mAllCommands/SCI_CLEAR", tr("Delete"), QIcon(), QString("Del"), tr(""),QsciScintilla::SCI_CLEAR};
