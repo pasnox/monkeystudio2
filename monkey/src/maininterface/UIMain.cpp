@@ -55,6 +55,24 @@ void UIMain::closeEvent( QCloseEvent* )
 	workspace()->fileCloseAll_triggered( true );
 }
 
+QMenu* UIMain::createPopupMenu()
+{
+	// create default menu
+	QMenu* m = QMainWindow::createPopupMenu();
+	
+	// add exclusive action of pDockToolBar
+	QList<pDockToolBar*> l;
+	if ( ( l = findChildren<pDockToolBar*>() ).count() )
+	{
+		m->addSeparator();
+		foreach ( pDockToolBar* tb, l )
+			m->addAction( tb->toggleExclusiveAction() );
+	}
+	
+	// return menu
+	return m;
+}
+
 PluginsManager* UIMain::pluginsManager()
 { return PluginsManager::instance( this ); }
 

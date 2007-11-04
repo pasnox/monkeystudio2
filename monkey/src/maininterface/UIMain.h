@@ -26,6 +26,7 @@ class Q_MONKEY_EXPORT UIMain : public pMainWindow, public QSingleton<UIMain>
 	friend class QSingleton<UIMain>;
 
 public:
+	QMenu* createPopupMenu();
 	PluginsManager* pluginsManager();
 	pFileManager* fileManager();
 	pWorkspace* workspace();
