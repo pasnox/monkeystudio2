@@ -14,6 +14,7 @@
 ****************************************************************************/
 #include "UIProjectHeaders.h"
 #include "pMonkeyStudio.h"
+#include "pTemplatesManager.h"
 
 #include <QDir>
 #include <QFileInfoList>
@@ -28,6 +29,7 @@ UIProjectHeaders::UIProjectHeaders( QWidget* p )
 {
 	setupUi( this );
 	cbLanguages->addItems( availableLanguages() );
+	teLicensing->setPlainText( pTemplatesManager::templatesHeader() );
 }
 
 UIProjectHeaders::~UIProjectHeaders()
@@ -80,6 +82,19 @@ void UIProjectHeaders::accept()
 			b.remove( 0, rx.cap( 1 ).length() );
 		}
 		b.prepend( teLicensing->toPlainText().trimmed() );
+		
+		// create structure for parsing values
+		pTemplateContent t;
+		t.Name = "Monkey Studio"; // project name
+		t.Author = "Azevedo Filipe, Monkey Studio Team"; // authors
+		t.License = "GPL"; // license
+		t.Project = 0;
+		t.FileName = QFileInfo( fn ).fileName();
+		t.Comment = "Monkey Studio is a fast, free and lightweight crossplatform Qt RAD"; // comment
+		t.Content = b;
+		
+		// get buffer
+		b = pTemplatesManager::processContent( t );
 		
 		f.resize( 0 );
 		f.write( qPrintable( b ) );
