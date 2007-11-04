@@ -1,31 +1,38 @@
 #include <QTabWidget>
-#include "GNUMake.h"
-#include "GNUMakeParser.h"
+#include "MSVCMake.h"
+#include "MSVCMakeParser.h"
 #include "pConsoleManager.h"
 #include "pMenuBar.h"
 
-GNUMake::GNUMake ()
+MSVCMake::MSVCMake ()
 {
     // set plugin infos
-    mPluginInfos.Caption = tr( "GNUMake" );
-    mPluginInfos.Description = tr( "Plugin for execute GNU Make in console and parse it's output" );
-    mPluginInfos.Author = "Kopats Andrei aka hlamer <hlamer@tut.by>, Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+    mPluginInfos.Caption = tr( "MSVCMake" );
+    mPluginInfos.Description = tr( "Plugin for execute MSVC Make in console and parse it's output" );
+    mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
     mPluginInfos.Type = BasePlugin::iBuilder;
     mPluginInfos.Name = PLUGIN_NAME;
     mPluginInfos.Version = "0.5.0";
     mPluginInfos.Enabled = false;
+	// install parsers
+	foreach ( QString s, availableParsers() )
+		pConsoleManager::instance()->addParser( getParser( s ) );
 }
 
-bool GNUMake::setEnabled( bool b)
+MSVCMake::~MSVCMake ()
+{
+	// uninstall parsers
+	foreach ( QString s, availableParsers() )
+		pConsoleManager::instance()->removeParser( s );
+}
+
+bool MSVCMake::setEnabled( bool b)
 {
     if ( b == mPluginInfos.Enabled )
         return true;
     mPluginInfos.Enabled = b;
      if ( b )
     {
-        foreach ( QString s, availableParsers() )
-            pConsoleManager::instance()->addParser( getParser( s ) );
-        
         pMenuBar* mb = pMenuBar::instance();
         foreach ( pCommand c, pCommandList() << userCommands() )
         {
@@ -37,9 +44,6 @@ bool GNUMake::setEnabled( bool b)
     }
      else
     {
-        foreach ( QString s, availableParsers() )
-            pConsoleManager::instance()->removeParser( s );
-        
         pMenuBar* mb = pMenuBar::instance();
         foreach ( QAction* a, mb->menu( "mBuilder/mUserCommands" )->actions() )
             if ( a->data().toString() == mPluginInfos.Name )
@@ -48,7 +52,7 @@ bool GNUMake::setEnabled( bool b)
     return true;
 }
 
-QWidget* GNUMake::settingsWidget()
+QWidget* MSVCMake::settingsWidget()
 {
     QTabWidget* tw = new QTabWidget;
     tw->setAttribute( Qt::WA_DeleteOnClose );
@@ -57,10 +61,10 @@ QWidget* GNUMake::settingsWidget()
     return tw;
 }
 
-pCommandList GNUMake::defaultCommands() const
+pCommandList MSVCMake::defaultCommands() const
 { return pCommandList(); }
 
-pCommandList GNUMake::userCommands() const
+pCommandList MSVCMake::userCommands() const
 {
     // commands list
     pCommandList l;
@@ -89,7 +93,7 @@ pCommandList GNUMake::userCommands() const
     return l;
 }
 
-void GNUMake::setUserCommands( const pCommandList& l ) const
+void MSVCMake::setUserCommands( const pCommandList& l ) const
 {
     // get settings object
     QSettings* s = settings();
@@ -112,23 +116,16 @@ void GNUMake::setUserCommands( const pCommandList& l ) const
     s->endArray();
 }
 
-QStringList GNUMake::availableParsers() const
-{ return QStringList( mPluginInfos.Name ); }
+QStringList MSVCMake::availableParsers() const
+{ return QStringList( /*mPluginInfos.Name*/ ); }
 
-pCommandParser* GNUMake::getParser( const QString& s )
-{ return s == mPluginInfos.Name ? new GNUMakeParser : 0; }
+pCommandParser* MSVCMake::getParser( const QString& s )
+{ return s == mPluginInfos.Name ? new MSVCMakeParser : 0; }
 
-pCommand GNUMake::defaultBuildCommand() const
-{
-#ifdef Q_OS_WIN
-    const QString mMake = "mingw32-make";
-#else
-    const QString mMake = "make";
-#endif
-    return pCommand( "Build", mMake, "-w", false, availableParsers(), "$cpp$" );
-}
+pCommand MSVCMake::defaultBuildCommand() const
+{ return pCommand( "Build", "nmake", "", false, availableParsers(), "$cpp$" ); }
 
-pCommand GNUMake::buildCommand() const
+pCommand MSVCMake::buildCommand() const
 {
     // get settings object
     QSettings* s = settings();
@@ -146,7 +143,7 @@ pCommand GNUMake::buildCommand() const
     return c;
 }
 
-void GNUMake::setBuildCommand( const pCommand& c )
+void MSVCMake::setBuildCommand( const pCommand& c )
 {
     QSettings* s = settings();
     s->setValue( settingsKey( "BuildCommand/Text" ), c.text() );
@@ -158,7 +155,7 @@ void GNUMake::setBuildCommand( const pCommand& c )
     s->setValue( settingsKey( "BuildCommand/SkipOnError" ), c.skipOnError() );
 }
 
-void GNUMake::commandTriggered()
+void MSVCMake::commandTriggered()
 {
     pConsoleManager* cm = pConsoleManager::instance();
     pCommandList l = userCommands() << buildCommand();
@@ -166,5 +163,5 @@ void GNUMake::commandTriggered()
         cm->addCommands( cm->recursiveCommandList( l, cm->getCommand( l, a->statusTip() ) ) );
 }
 
-Q_EXPORT_PLUGIN2( BuilderGNUMake, GNUMake )
+Q_EXPORT_PLUGIN2( BuilderMSVCMake, MSVCMake )
 
