@@ -27,7 +27,7 @@ LIBS	= -L$${BUILD_PATH}
 win32 {
 	CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 		unix:LIBS += -lmonkey_debug
-		else:LIBS += -lmonkey_d
+		else:LIBS += -lmonkeyd
 	} else:LIBS += -lmonkey
 }
 

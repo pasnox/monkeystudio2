@@ -51,7 +51,7 @@ CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 	MOC_DIR	= $${BUILD_PATH}/debug/.moc
 	RCC_DIR	= $${BUILD_PATH}/debug/.rcc
 	unix:LIBS	*= -lqscintilla2_debug -lfresh_debug -lctags_debug
-	else:LIBS	*= -lqscintilla2_d -lfresh_d -lctags_d
+	else:LIBS	*= -lqscintilla2d -lfreshd -lctagsd
 	win32-g++:LIBS	*= -Wl,--out-implib,$${BUILD_PATH}/lib$${TARGET}.a
 	win32-msvc*:LIBS	*= /IMPLIB:$${BUILD_PATH}/$${TARGET}.lib -lshell32
 } else {
