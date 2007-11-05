@@ -82,22 +82,22 @@ struct Q_MONKEY_EXPORT pTemplateContent
 
 namespace pTemplatesManager
 {
-	const QList<pTemplate> defaultTemplates();
-	const QList<pTemplate> availableTemplates();
+	Q_MONKEY_EXPORT const QList<pTemplate> defaultTemplates();
+	Q_MONKEY_EXPORT const QList<pTemplate> availableTemplates();
 
-	void setTemplatesPath( const QString& );
-	const QString templatesPath();
+	Q_MONKEY_EXPORT void setTemplatesPath( const QString& );
+	Q_MONKEY_EXPORT const QString templatesPath();
 
-	void setTemplatesHeader( const QString& );
-	const QString templatesHeader();
+	Q_MONKEY_EXPORT void setTemplatesHeader( const QString& );
+	Q_MONKEY_EXPORT const QString templatesHeader();
 
-	const QString tokenize( QString );
-	const QString unTokenize( QString );
+	Q_MONKEY_EXPORT const QString tokenize( QString );
+	Q_MONKEY_EXPORT const QString unTokenize( QString );
 
-	const QStringList tokenize( QStringList );
-	const QStringList unTokenize( QStringList );
+	Q_MONKEY_EXPORT const QStringList tokenize( QStringList );
+	Q_MONKEY_EXPORT const QStringList unTokenize( QStringList );
 
-	const QString processContent( pTemplateContent );
+	Q_MONKEY_EXPORT const QString processContent( pTemplateContent );
 };
 
 #endif // PTEMPLATESMANAGER_H
