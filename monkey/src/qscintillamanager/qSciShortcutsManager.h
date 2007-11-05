@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** 		Created using Monkey Studio v1.8.0.0
+**         Created using Monkey Studio v1.8.0.0
 ** Author    : Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, The Monkey Studio Team
 ** Project   : Monkey Studio 2
 ** FileName  : qSciShortcutsManager.h
@@ -32,6 +32,9 @@ class pEditor;
 
 struct SciAction
 {
+    SciAction( const QString& n, const QString& t, const QIcon& i, const QString& d, const QString& tt, int m )
+      : name( n ), text( t ), icon( i ), defaultShortcut( d ), toolTip( tt ), messageCode( m )
+    {}
     QString name;
     QString text;
     QIcon icon;
@@ -44,8 +47,10 @@ struct SciAction
 class Q_MONKEY_EXPORT qSciShortcutsManager: public QObject, public QSingleton<qSciShortcutsManager>
 {
     Q_OBJECT
-public:
-    qSciShortcutsManager ();
+    friend class QSingleton<qSciShortcutsManager>;
+
+private:
+    qSciShortcutsManager( QObject* = QApplication::instance() );
 
 protected:
     QList<SciAction> sactions;
