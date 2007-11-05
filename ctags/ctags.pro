@@ -46,9 +46,9 @@ HEADERS	= $${CTAGS_PATH}/debug.h \
 	$${CTAGS_PATH}/strlist.h \
 	$${CTAGS_PATH}/vstring.h \
 	$${CTAGS_PATH}/readtags.h \
-    $${CTAGS_PATH}/sort.h \
+	$${CTAGS_PATH}/sort.h \
 	$${CTAGS_PATH}/args.h \
-    $${CTAGS_PATH}/ctags.h
+	$${CTAGS_PATH}/ctags.h
 #	src/exuberantCtags.h \
 
 win32-msvc*:HEADERS	*= $${CTAGS_PATH}/regex.h
