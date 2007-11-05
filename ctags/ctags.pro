@@ -8,9 +8,7 @@ TEMPLATE = lib
 CONFIG	*= staticlib warn_on debug_and_release
 DESTDIR	= $${BUILD_PATH}
 DLL_DESTDIR	= $$DESTDIR
-
-# make library exportable
-DEFINES	*= MONKEY_CORE_BUILD
+win32-msvc*:DEFINES	*= WIN32 HAVE_REGCOMP REGEX_MALLOC STDC_HEADERS=1
 
 CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 	#Debug
@@ -35,11 +33,8 @@ CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 }
 
 CTAGS_PATH	= $${CTAGS_VERSION}
-INCLUDEPATH	*= ../fresh/objects
 
-# Input
-HEADERS	= $${CTAGS_PATH}/exuberantCtags.h \
-	$${CTAGS_PATH}/debug.h \
+HEADERS	= $${CTAGS_PATH}/debug.h \
 	$${CTAGS_PATH}/entry.h \
 	$${CTAGS_PATH}/general.h \
 	$${CTAGS_PATH}/get.h \
@@ -49,7 +44,14 @@ HEADERS	= $${CTAGS_PATH}/exuberantCtags.h \
 	$${CTAGS_PATH}/read.h \
 	$${CTAGS_PATH}/routines.h \
 	$${CTAGS_PATH}/strlist.h \
-	$${CTAGS_PATH}/vstring.h
+	$${CTAGS_PATH}/vstring.h \
+	$${CTAGS_PATH}/readtags.h \
+    $${CTAGS_PATH}/sort.h \
+	$${CTAGS_PATH}/args.h \
+    $${CTAGS_PATH}/ctags.h
+#	src/exuberantCtags.h \
+
+win32-msvc*:HEADERS	*= $${CTAGS_PATH}/regex.h
 
 SOURCES	= $${CTAGS_PATH}/asm.c \
 	$${CTAGS_PATH}/asp.c \
@@ -58,8 +60,8 @@ SOURCES	= $${CTAGS_PATH}/asm.c \
 	$${CTAGS_PATH}/beta.c \
 	$${CTAGS_PATH}/c.c \
 	$${CTAGS_PATH}/cobol.c \
-	$${CTAGS_PATH}/exuberantCtags.c \
 	$${CTAGS_PATH}/eiffel.c \
+	$${CTAGS_PATH}/debug.c \
 	$${CTAGS_PATH}/entry.c \
 	$${CTAGS_PATH}/erlang.c \
 	$${CTAGS_PATH}/fortran.c \
@@ -91,4 +93,22 @@ SOURCES	= $${CTAGS_PATH}/asm.c \
 	$${CTAGS_PATH}/verilog.c \
 	$${CTAGS_PATH}/vim.c \
 	$${CTAGS_PATH}/vstring.c \
-	$${CTAGS_PATH}/yacc.c
+	$${CTAGS_PATH}/yacc.c \
+	$${CTAGS_PATH}/readtags.c \
+	$${CTAGS_PATH}/sort.c \
+	$${CTAGS_PATH}/args.c
+#	$${CTAGS_PATH}/argproc.c \
+#	$${CTAGS_PATH}/mac.c \
+#	$${CTAGS_PATH}/qdos.c \
+#	$${CTAGS_PATH}/e_amiga.h \
+#	$${CTAGS_PATH}/e_djgpp.h \
+#	$${CTAGS_PATH}/e_mac.h \
+#	$${CTAGS_PATH}/e_msoft.h \
+#	$${CTAGS_PATH}/e_os2.h \
+#	$${CTAGS_PATH}/e_qdos.h \
+#	$${CTAGS_PATH}/e_riscos.h \
+#	$${CTAGS_PATH}/e_vms.h \
+#	$${CTAGS_PATH}/main.c \
+#	src/exuberantCtags.c \
+
+win32-msvc*:SOURCES	*= $${CTAGS_PATH}/regex.c
