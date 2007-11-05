@@ -26,7 +26,7 @@ typedef struct sTagFields {
 
 /*  Information about the current tag candidate.
  */
-typedef struct sTagEntryInfo {
+typedef struct TagEntryInfo {
 	boolean     lineNumberEntry;  /* pattern or line number entry */
 	unsigned long lineNumber;     /* line number of tag */
 	fpos_t      filePosition;     /* file position of line containing tag */
