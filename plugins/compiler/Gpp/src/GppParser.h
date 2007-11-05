@@ -13,7 +13,8 @@ It's extendable with a powerfull plugins system.
 ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
-****************************************************************************/#ifndef GPPPARSER_H
+****************************************************************************/
+#ifndef GPPPARSER_H
 #define GPPPARSER_H
 
 #include "pCommandParser.h"

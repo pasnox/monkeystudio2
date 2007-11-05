@@ -14,7 +14,6 @@ It's extendable with a powerfull plugins system.
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ****************************************************************************/
-
 #include "MonkeyProject.h"
 #include "MonkeyProjectItem.h"
 
