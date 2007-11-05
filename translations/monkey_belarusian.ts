@@ -1,109 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1" language="fr">
-<context>
-    <name>ConsoleManager</name>
-    <message>
-        <location filename="../consolemanager/ConsoleManager.cpp" line="59"/>
-        <source>The process failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program.</source>
-        <translation type="obsolete">Le démarrage du programme a echoué. Soit le programme est manquant, ou vous n&apos;avez pas les droits suffisants pour le lancer.</translation>
-    </message>
-    <message>
-        <location filename="../consolemanager/ConsoleManager.cpp" line="62"/>
-        <source>The process crashed some time after starting successfully.</source>
-        <translation type="obsolete">Le programme a planté au bout d&apos;un certains temps alors qu&apos;il avait été lancé avec succès.</translation>
-    </message>
-    <message>
-        <location filename="../consolemanager/ConsoleManager.cpp" line="65"/>
-        <source>The last waitFor...() function timed out. The state of QProcess is unchanged, and you can try calling waitFor...() again.</source>
-        <translation type="obsolete">Le dernier appel de la fonction waitFor() ???. L&apos;état de QProcess reste inchangé, vous pouvez appeller waitFor() de nouveau.</translation>
-    </message>
-    <message>
-        <location filename="../consolemanager/ConsoleManager.cpp" line="68"/>
-        <source>An error occurred when attempting to write to the process. For example, the process may not be running, or it may have closed its input channel.</source>
-        <translation type="obsolete">Une erreur est survenue lors d&apos;une écriture vers le processus. Par exemple, le processus n&apos;est plus exécuté, ou il a peut être fermé son canal d&apos;écriture.</translation>
-    </message>
-    <message>
-        <location filename="../consolemanager/ConsoleManager.cpp" line="71"/>
-        <source>An error occurred when attempting to read from the process. For example, the process may not be running.</source>
-        <translation type="obsolete">Une erreur est survenue lors d&apos;une lecture à partir du processus. Par exemple, le processus n&apos;est plus lancé.</translation>
-    </message>
-    <message>
-        <location filename="../consolemanager/ConsoleManager.cpp" line="75"/>
-        <source>An unknown error occurred. This is the default return value of error().</source>
-        <translation type="obsolete">Une erreur est survenue. C&apos;est la valeur de retour par défaut de error().</translation>
-    </message>
-    <message>
-        <location filename="../consolemanager/ConsoleManager.cpp" line="86"/>
-        <source>The process exited normally.</source>
-        <translation type="obsolete">Le processus s&apos;est terminé normalement.</translation>
-    </message>
-    <message>
-        <location filename="../consolemanager/ConsoleManager.cpp" line="89"/>
-        <source>The process crashed.</source>
-        <translation type="obsolete">La processus a planté.</translation>
-    </message>
-    <message>
-        <location filename="../consolemanager/ConsoleManager.cpp" line="92"/>
-        <source>An unknown error occurred.</source>
-        <translation type="obsolete">Une erreur est survenue.</translation>
-    </message>
-    <message>
-        <location filename="../consolemanager/ConsoleManager.cpp" line="105"/>
-        <source>Running...</source>
-        <translation type="obsolete">En cours d&apos;exécution ...</translation>
-    </message>
-    <message>
-        <location filename="../consolemanager/ConsoleManager.cpp" line="114"/>
-        <source>The process is not running.</source>
-        <translation type="obsolete">Le processus n&apos;est pas lancé.</translation>
-    </message>
-    <message>
-        <location filename="../consolemanager/ConsoleManager.cpp" line="117"/>
-        <source>The process is starting, but the program has not yet been invoked.</source>
-        <translation type="obsolete">Le processus est démarré, mais le programme n&apos;a pas encore etait lancé.</translation>
-    </message>
-    <message>
-        <location filename="../consolemanager/ConsoleManager.cpp" line="120"/>
-        <source>The process is running and is ready for reading and writing.</source>
-        <translation type="obsolete">Le processus est lancé et prêt pour la lecture et l&apos;ecriture.</translation>
-    </message>
-</context>
+<!DOCTYPE TS><TS version="1.1" language="be">
+<defaultcodec></defaultcodec>
 <context>
     <name>PluginsManager</name>
     <message>
         <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="61"/>
         <source>Failed to load static plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Не магчыма загрузіць статычны плагін</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="75"/>
         <source>Failed to load plugin ( %1 ): Error: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Не магчыма загрузіць плагін  ( %1 ): Памылка: %2</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="93"/>
         <source>Found plugin: %1, type: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Знойдзены плугін: %1, тып: %2</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="108"/>
         <source>User wantn&apos;t to intall plugin: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Згодна канфігурацыі, не інсталюецца плугін: %1</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="113"/>
         <source>Successfully enabled plugin: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Паспяхова інсталяваны плагін: %1</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="115"/>
         <source>Unsuccessfully enabled plugin: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Памылка пры інсталяцыі плагіна: %1</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="118"/>
         <source>Already enabled plugin: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ужо інсталяваны плагін: %1</translation>
     </message>
 </context>
 <context>
@@ -111,187 +44,42 @@
     <message>
         <location filename="../monkey/src/main.cpp" line="57"/>
         <source>Initializing Application...</source>
-        <translation>Chargement de l&apos;application ...</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/main.cpp" line="78"/>
-        <source>Initializing Translation...</source>
-        <translation>Chargement de la traduction ...</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/main.cpp" line="113"/>
-        <source>Initializing Main Window...</source>
-        <translation>Chargement de Main Window ...</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/main.cpp" line="114"/>
-        <source>%1 v%2 - %3, The Monkey Studio Team</source>
-        <translation>%1 v%2 - %3, L&apos;équipe de Monkey Studio</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/main.cpp" line="133"/>
-        <source>%1 v%2 Ready !</source>
-        <translation>%1 v%2 Prêt !</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="52"/>
-        <source>France</source>
-        <translation>France</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="43"/>
-        <source>Creator &amp; Principal Developer</source>
-        <translation>Créateur &amp; Développeur Principal</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="44"/>
-        <source>Germany</source>
-        <translation>Allemagne</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="44"/>
-        <source>Web Developer &amp; Web Designer</source>
-        <translation>Développeur Web &amp; Designer Web</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="45"/>
-        <source>GDB Driver Integration</source>
-        <translation>Intégration du pilote GDB</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="46"/>
-        <source>Splashscreen &amp; Icons Designer</source>
-        <translation>Ecran de démarrage &amp; Designer des icônes</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="47"/>
-        <source>Russia</source>
-        <translation>Russie</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="47"/>
-        <source>Many shared code between our IDEs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="48"/>
-        <source>Belarus</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="48"/>
-        <source>Principal Developer, Class Browser</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="49"/>
-        <source>Qt Pro Parser, Some Features/Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="52"/>
-        <source>No donations for now, you can use this &lt;a href=&quot;http://sourceforge.net/project/project_donations.php?group_id=163493&quot;&gt;link&lt;/a&gt; to make donation. Donations will help paying host/domain, and relatives things about the projects ( may need a mac book for better mac version :p ).</source>
-        <translation>Pas de don pour le moment, vous pouvez utiliser ceci &lt;a href=&quot;http://sourceforge.net/project/project_donations.php?group_id=163493&quot;&gt;liens&lt;/a&gt; pour faire un don. Les dons nous aident à payer l&apos;hébergement et le domaine et toutes les choses relatives aux projets ( comme acheter un macbook pour améliorer la version mac :p ).</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="61"/>
-        <source>Location</source>
-        <translation>Localisation</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="55"/>
-        <source>Trolltech&apos;s Qt homepage.</source>
-        <translation>Site officiel de Trolltech.</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="56"/>
-        <source>Team collaboration across the Internet.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="57"/>
-        <source>Our webissues server ( login: anonymous, password: anonymous ).</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="58"/>
-        <source>You can send bug/patch/ideas/what ever you want to our tracker.</source>
-        <translation type="unfinished">Vous pouvez envoyez vos contributions</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="59"/>
-        <source>A forum is at your disposition.</source>
-        <translation>Un forum est à votre disposition.</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="60"/>
-        <source>Get the latest news using the rss feed.</source>
-        <translation>Obtenez les derniers nouvelles avec le flux RSS.</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="61"/>
-        <source>Meet the Monkeys ( All team including testers ).</source>
-        <translation>Rencontrez les Singes ( Toute l&apos;équipe dont les testeurs ).</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/pMonkeyStudio.cpp" line="185"/>
-        <source>%1 Files (*.%2)</source>
-        <translation>%1 Fichiers (*.%2)</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/pMonkeyStudio.cpp" line="188"/>
-        <source>All Image Files (%1)</source>
-        <translation>Toutes les images (%1)</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/pMonkeyStudio.cpp" line="190"/>
-        <source>Select image(s)</source>
-        <translation>Choisissez le(s) image(s)</translation>
-    </message>
-    <message>
-        <location filename="../pMonkeyStudio.cpp" line="173"/>
-        <source>Select files(s)</source>
-        <translation type="obsolete">Choissisez le(s) fichier(s)</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.h" line="54"/>
-        <source>Files</source>
-        <translation>Fichiers</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.h" line="56"/>
-        <source>Extras</source>
-        <translation>Extras</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.h" line="58"/>
-        <source>Projects</source>
-        <translation>Projets</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/toolsmanager/ui/UIDesktopTools.cpp" line="94"/>
-        <source>No available comment</source>
-        <translation>Pas de commentaire disponible</translation>
+        <translation>Іныціялізацыя прылады...</translation>
     </message>
     <message>
         <location filename="../monkey/src/main.cpp" line="63"/>
         <source>Starting Console Manager...</source>
-        <translation type="unfinished"></translation>
+        <translation>Запуск Мэнеджэра Кансолі...</translation>
     </message>
     <message>
         <location filename="../monkey/src/main.cpp" line="67"/>
         <source>Setting Style...</source>
-        <translation type="unfinished"></translation>
+        <translation>Улталёўка стыля...</translation>
     </message>
     <message>
         <location filename="../monkey/src/main.cpp" line="71"/>
         <source>Loading Style Sheet...</source>
-        <translation type="unfinished"></translation>
+        <translation>Загрузка табліцы стыляў...</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/main.cpp" line="78"/>
+        <source>Initializing Translation...</source>
+        <translation>Ініцыялізацыя пераклада...</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/main.cpp" line="113"/>
+        <source>Initializing Main Window...</source>
+        <translation>Ініцыялізацыя галоўнага вакна...</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/main.cpp" line="114"/>
+        <source>%1 v%2 - %3, The Monkey Studio Team</source>
+        <translation>%1 v%2 - %3, Каманда распрацоўкі Monkey Studio</translation>
     </message>
     <message>
         <location filename="../monkey/src/main.cpp" line="117"/>
         <source>Initializing Plugins Manager...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ініцыялізацыя Менеджэра плагінаў...</translation>
     </message>
     <message>
         <location filename="../monkey/src/main.cpp" line="128"/>
@@ -299,40 +87,181 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../monkey/src/main.cpp" line="133"/>
+        <source>%1 v%2 Ready !</source>
+        <translation>%1 v%2 Гатова !</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="52"/>
+        <source>France</source>
+        <translation>Францыя</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="43"/>
+        <source>Creator &amp; Principal Developer</source>
+        <translation>Стваральнік архітэктуры, распрацоўшчык</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="44"/>
+        <source>Germany</source>
+        <translation>Германія</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="44"/>
+        <source>Web Developer &amp; Web Designer</source>
+        <translation>Вэб-распрацоўшчык і дзізайнер</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="45"/>
+        <source>GDB Driver Integration</source>
+        <translation>Інтэграцыя GDB</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="46"/>
+        <source>Splashscreen &amp; Icons Designer</source>
+        <translation>Дзізайнер іконак і застаўкі</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="47"/>
+        <source>Russia</source>
+        <translation>Рассія</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="47"/>
+        <source>Many shared code between our IDEs</source>
+        <translation>Многа кода, якім мы мы абмяняліся</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="48"/>
+        <source>Belarus</source>
+        <translation>Беларусь</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="48"/>
+        <source>Principal Developer, Class Browser</source>
+        <translation>Распрацоўшчык архітэктуры, Навігатара, ..., гэтага перакладу</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="49"/>
+        <source>Qt Pro Parser, Some Features/Help</source>
+        <translation>Парсер Qt праектаў, дапамога</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="52"/>
+        <source>No donations for now, you can use this &lt;a href=&quot;http://sourceforge.net/project/project_donations.php?group_id=163493&quot;&gt;link&lt;/a&gt; to make donation. Donations will help paying host/domain, and relatives things about the projects ( may need a mac book for better mac version :p ).</source>
+        <translation>Яшчэ ніхто нічым не падзяліўся. Калі вы жадаеце, &lt;a href=&quot;http://sourceforge.net/project/project_donations.php?group_id=163493&quot;&gt;тут&lt;/a&gt; можаце дараваць нам грошай. Яны пойдуць, напрыклад, на аплату хосцінгу.</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="61"/>
+        <source>Location</source>
+        <translation>Месца знаходжання</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="55"/>
+        <source>Trolltech&apos;s Qt homepage.</source>
+        <translation>Афіцыйны сайт Trolltech.</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="56"/>
+        <source>Team collaboration across the Internet.</source>
+        <translation>Узаемадзеянне каманды цераз Інтэрнет.</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="57"/>
+        <source>Our webissues server ( login: anonymous, password: anonymous ).</source>
+        <translation>Наш webissues сервер ( login: anonymous, password: anonymous ).</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="58"/>
+        <source>You can send bug/patch/ideas/what ever you want to our tracker.</source>
+        <translation>Вы можаце дасылаць сваі ідэі, нашы багі, і яшчэ чаго пажадаеце на наш tracker.</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="59"/>
+        <source>A forum is at your disposition.</source>
+        <translation>Наш форум.</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="60"/>
+        <source>Get the latest news using the rss feed.</source>
+        <translation>Апошнія навіны вы можаце атрымоўваць з нашай rss-стужкі.</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="61"/>
+        <source>Meet the Monkeys ( All team including testers ).</source>
+        <translation>Малпы (Не блытаць з малпа-кодзерамі!!!) (Уся каманда, ўключаючы тесцераў).</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/pMonkeyStudio.cpp" line="185"/>
+        <source>%1 Files (*.%2)</source>
+        <translation>%1 Файлы (*.%2)</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/pMonkeyStudio.cpp" line="188"/>
+        <source>All Image Files (%1)</source>
+        <translation>Усе файлы выяў (%1)</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/pMonkeyStudio.cpp" line="190"/>
+        <source>Select image(s)</source>
+        <translation>Выберыце выяву(ы)</translation>
+    </message>
+    <message>
         <location filename="../monkey/src/pMonkeyStudio.cpp" line="221"/>
         <source>Select file(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберыце файл(ы)</translation>
     </message>
     <message>
         <location filename="../monkey/src/pMonkeyStudio.cpp" line="247"/>
         <source>Select file</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберыце файл</translation>
     </message>
     <message>
         <location filename="../monkey/src/pMonkeyStudio.cpp" line="273"/>
         <source>Choose a filename</source>
-        <translation type="unfinished"></translation>
+        <translation>Увядзіце імя файла</translation>
     </message>
     <message>
         <location filename="../monkey/src/pMonkeyStudio.cpp" line="298"/>
         <source>Select a folder</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/pluginsmanager/BasePlugin.h" line="71"/>
-        <source>This plugin can&apos;t be configured</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберыце тэчку</translation>
     </message>
     <message>
         <location filename="../monkey/src/pMonkeyStudio.cpp" line="528"/>
         <source>Loaging Api File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Загрузка API-файла...</translation>
     </message>
     <message>
         <location filename="../monkey/src/pMonkeyStudio.cpp" line="528"/>
         <source>An error occured when loading api file:
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Памылка пры загрузцы файла:
+%1</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/pluginsmanager/BasePlugin.h" line="71"/>
+        <source>This plugin can&apos;t be configured</source>
+        <translation>Плагін не мае наладак</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/templatesmanager/pTemplatesManager.h" line="54"/>
+        <source>Files</source>
+        <translation>Файлы</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/templatesmanager/pTemplatesManager.h" line="56"/>
+        <source>Extras</source>
+        <translation>Другое</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/templatesmanager/pTemplatesManager.h" line="58"/>
+        <source>Projects</source>
+        <translation>Праекты</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/toolsmanager/ui/UIDesktopTools.cpp" line="94"/>
+        <source>No available comment</source>
+        <translation>Няма каменту</translation>
     </message>
 </context>
 <context>
@@ -340,252 +269,252 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="49"/>
         <source>Move down one line</source>
-        <translation>Descendre d&apos;une ligne</translation>
+        <translation>Падвінуцца на адзін радок уніз</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="56"/>
         <source>Extend selection down one line</source>
-        <translation>Etendre la selection à la ligne suivante</translation>
+        <translation>Пашырыць выдзяленне на адзін радок уніз</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="63"/>
         <source>Scroll view down one line</source>
-        <translation type="unfinished"></translation>
+        <translation>Перамяціць scroll на адзін радок уніз</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="70"/>
         <source>Extend rectangular selection down one line</source>
-        <translation type="unfinished"></translation>
+        <translation>Пашырыць прамавугольнае выдзяленне на адзін радок уніз</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="77"/>
         <source>Move up one line</source>
-        <translation type="unfinished"></translation>
+        <translation>Перамясціць курсор на адзін радок уверх</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="84"/>
         <source>Extend selection up one line</source>
-        <translation type="unfinished"></translation>
+        <translation>Пашырыць выдзяленне на адзін радок уверх</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="91"/>
         <source>Scroll view up one line</source>
-        <translation type="unfinished"></translation>
+        <translation>Перамясціць scroll на адзін радок уверх</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="98"/>
         <source>Extend rectangular selection up one line</source>
-        <translation type="unfinished"></translation>
+        <translation>Пашырыць прамавыгольнае выдзяленне на адзін радок уверх</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="105"/>
         <source>Move up one paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Перамясціцца ўверх на адзін параграф</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="112"/>
         <source>Extend selection up one paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Пашырыць выдзяленне ўверх на адзін параграф</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="119"/>
         <source>Move down one paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Перамясціцца уніз на адзін параграф</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="126"/>
         <source>Extend selection down one paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Пашырыць выдзяленне ўніз на адзін параграф</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="133"/>
         <source>Move left one character</source>
-        <translation type="unfinished"></translation>
+        <translation>Перамясціцца ўлева на адзін сімвал</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="140"/>
         <source>Extend selection left one character</source>
-        <translation type="unfinished"></translation>
+        <translation>Пашырыць выдзяленне ўлева на адзін сімвал</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="147"/>
         <source>Move left one word</source>
-        <translation type="unfinished"></translation>
+        <translation>Перасясціцца ўлева на адно слова</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="154"/>
         <source>Extend selection left one word</source>
-        <translation type="unfinished"></translation>
+        <translation>Пашырыць выдзяленне ўлева на адно свова</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="161"/>
         <source>Extend rectangular selection left one character</source>
-        <translation type="unfinished"></translation>
+        <translation>Пашырыць прамавугольнае выдзяленне ўлева на адно слова</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="168"/>
         <source>Move right one character</source>
-        <translation type="unfinished"></translation>
+        <translation>Перамясціцца ўправа на адно слова</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="175"/>
         <source>Extend selection right one character</source>
-        <translation type="unfinished"></translation>
+        <translation>Пашырыць выдзяленне управа на адно слова</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="182"/>
         <source>Move right one word</source>
-        <translation type="unfinished"></translation>
+        <translation>Перамясціцца управа на адно слова</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="189"/>
         <source>Extend selection right one word</source>
-        <translation type="unfinished"></translation>
+        <translation>Пашырыць выдзяленне управа на адно слова</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="196"/>
         <source>Extend rectangular selection right one character</source>
-        <translation type="unfinished"></translation>
+        <translation>Пашырыць выдзяленне управа на адно слова</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="203"/>
         <source>Move left one word part</source>
-        <translation type="unfinished"></translation>
+        <translation>Перамясціцца улева на частку слова</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="210"/>
         <source>Extend selection left one word part</source>
-        <translation type="unfinished"></translation>
+        <translation>Пашырыць выдзяленне ўлева на частку слова</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="217"/>
         <source>Move right one word part</source>
-        <translation type="unfinished"></translation>
+        <translation>Перамясціцца управа на частку слова</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="224"/>
         <source>Extend selection right one word part</source>
-        <translation type="unfinished"></translation>
+        <translation>Пашырыць выдзяленне ўправа на частку слова</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="231"/>
         <source>Move to first visible character in line</source>
-        <translation type="unfinished"></translation>
+        <translation>Перамясціцца ўправа да першага бачнага сімлава ў радку</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="238"/>
         <source>Extend selection to first visible character in line</source>
-        <translation type="unfinished"></translation>
+        <translation>Пашырыць выдзяленне да першага бачнага сімвала ў радку</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="245"/>
         <source>Move to start of text</source>
-        <translation type="unfinished"></translation>
+        <translation>Перамясціцца ў пачатак тэксту</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="252"/>
         <source>Extend selection to start of text</source>
-        <translation type="unfinished"></translation>
+        <translation>Пашырыць выдзяленне да пачатку тэксту</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="259"/>
         <source>Move to start of displayed line</source>
-        <translation type="unfinished"></translation>
+        <translation>Перамясціцца у пачатак бачнай лініі</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="266"/>
         <source>Extend selection to start of line</source>
-        <translation type="unfinished"></translation>
+        <translation>Пашырыць выдзяленне да пачатку радка</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="273"/>
         <source>Extend rectangular selection to first visible character in line</source>
-        <translation type="unfinished"></translation>
+        <translation>Пашырыць прамавугольнае выдзяленне да першага бачнага сімвала ў радку</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="280"/>
         <source>Move to end of line</source>
-        <translation type="unfinished"></translation>
+        <translation>Перамясціцца у канец радка</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="287"/>
         <source>Extend selection to end of line</source>
-        <translation type="unfinished"></translation>
+        <translation>Пашырыць выдзяленне у канец радка</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="294"/>
         <source>Move to end of text</source>
-        <translation type="unfinished"></translation>
+        <translation>Перамясціцца у канец тэксту</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="301"/>
         <source>Extend selection to end of text</source>
-        <translation type="unfinished"></translation>
+        <translation>Пашырыць выдзяленне да канца тэксту</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="308"/>
         <source>Move to end of displayed line</source>
-        <translation type="unfinished"></translation>
+        <translation>Перамясціцца у канец радку</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="315"/>
         <source>Extend selection to end of displayed line</source>
-        <translation type="unfinished"></translation>
+        <translation>Пашырыць выдзяленне да канца радка</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="322"/>
         <source>Extend rectangular selection to end of line</source>
-        <translation type="unfinished"></translation>
+        <translation>Пашырыць выдзяленне да канца радка</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="329"/>
         <source>Move up one page</source>
-        <translation type="unfinished"></translation>
+        <translation>Перамясціцца ўверх на старонку</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="336"/>
         <source>Extend selection up one page</source>
-        <translation type="unfinished"></translation>
+        <translation>Пашырыць выдзяленне ўверх на старонку</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="343"/>
         <source>Extend rectangular selection up one page</source>
-        <translation type="unfinished"></translation>
+        <translation>Пашырыць выдзяленне на адну старонку ўверх</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="350"/>
         <source>Move down one page</source>
-        <translation type="unfinished"></translation>
+        <translation>Перамясціцца ўніз на адну старонку</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="357"/>
         <source>Extend selection down one page</source>
-        <translation type="unfinished"></translation>
+        <translation>Пашырыць выдзяленне на адну старонку ўніз</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="364"/>
         <source>Extend rectangular selection down one page</source>
-        <translation type="unfinished"></translation>
+        <translation>Пашырыць прамавугольнае выдзяленне на старонку ўніз</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="371"/>
         <source>Delete current character</source>
-        <translation type="unfinished"></translation>
+        <translation>Выдаліць сімвал</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="378"/>
         <source>Cut selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Выдаліць выдзеленны тэкс у буфер</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="385"/>
         <source>Delete word to right</source>
-        <translation type="unfinished"></translation>
+        <translation>Выдаліць слова зправа</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="392"/>
         <source>Delete line to right</source>
-        <translation type="unfinished"></translation>
+        <translation>Выдаліць да канца радка</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="399"/>
@@ -595,77 +524,77 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="406"/>
         <source>Paste</source>
-        <translation>Coller</translation>
+        <translation>Уставіць</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="413"/>
         <source>Copy selection</source>
-        <translation>Copier la selection</translation>
+        <translation>Скапіраваць</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="420"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation>Адмена</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="427"/>
         <source>Delete previous character</source>
-        <translation>Effacer le caractère précédent</translation>
+        <translation>Выдаліць сімвал перад курсорам</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="434"/>
         <source>Delete word to left</source>
-        <translation>Effacer le mot de gauche</translation>
+        <translation>Выдаліць слова ўлева</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="441"/>
         <source>Undo the last command</source>
-        <translation>Annuler la dernière commande</translation>
+        <translation>Адмена апошняй каманды</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="448"/>
         <source>Delete line to left</source>
-        <translation>Effacer le début de la ligne</translation>
+        <translation>Вылаліць на пачатку радка</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="455"/>
         <source>Redo last command</source>
-        <translation>Rejouer la dernière commande</translation>
+        <translation>Адмяніць адмену апошняй каманды</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="462"/>
         <source>Select all text</source>
-        <translation>Selectionner tous le texte</translation>
+        <translation>Выдзяліць увесь тэкст</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="469"/>
         <source>Indent one level</source>
-        <translation>Indenter une fois</translation>
+        <translation>Отступ</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="476"/>
         <source>Move back one indentation level</source>
-        <translation>Désindenter une fois</translation>
+        <translation>Выдаліць отступ</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="483"/>
         <source>Insert new line</source>
-        <translation>Insérer une nouvelle ligne</translation>
+        <translation>Уставіць новы радок</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="490"/>
         <source>Zoom in</source>
-        <translation>Zoom avant</translation>
+        <translation>Павялічыць маштаб</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="497"/>
         <source>Zoom out</source>
-        <translation>Zoom arrière</translation>
+        <translation>Паменшыць маштаб</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="504"/>
         <source>Set zoom</source>
-        <translation>Régler le zoom</translation>
+        <translation>Маштаб</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="511"/>
@@ -675,42 +604,42 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="518"/>
         <source>Cut current line</source>
-        <translation>Couper la ligne courante</translation>
+        <translation>Выдаліць радок у буфер</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="525"/>
         <source>Delete current line</source>
-        <translation>Effacer la ligne courante</translation>
+        <translation>Выдаліць радок</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="532"/>
         <source>Copy current line</source>
-        <translation>Copier la ligne courante</translation>
+        <translation>Скапіраваць радок</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="539"/>
         <source>Swap current and previous lines</source>
-        <translation>Inverser la ligne courante avec la précédente</translation>
+        <translation>Абмяняць месцамі бягучы радок і радок вышэй</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="546"/>
         <source>Duplicate selection</source>
-        <translation>Dupliquer la selection</translation>
+        <translation>Дубліраваць выдзялены тэкст</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="553"/>
         <source>Convert selection to lower case</source>
-        <translation>Convertir la selection en miniscule</translation>
+        <translation type="unfinished">Сканвертаваць выдзелены тэкст у малыя літары</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="560"/>
         <source>Convert selection to upper case</source>
-        <translation>Convertir la selection en majuscules</translation>
+        <translation>Сканвертаваць выдзелены тэкст у вялікія літары</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="567"/>
         <source>Delete previous character if not at line start</source>
-        <translation type="unfinished"></translation>
+        <translation>Выдаліць сімвал перад курсорам, калі гэта не пачатак радка</translation>
     </message>
 </context>
 <context>
@@ -718,27 +647,27 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerbash.cpp" line="201"/>
         <source>Default</source>
-        <translation>Défaut</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerbash.cpp" line="204"/>
         <source>Error</source>
-        <translation>Erreur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerbash.cpp" line="207"/>
         <source>Comment</source>
-        <translation>Commentaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerbash.cpp" line="210"/>
         <source>Number</source>
-        <translation>Nombre</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerbash.cpp" line="213"/>
         <source>Keyword</source>
-        <translation>Mot-clé</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerbash.cpp" line="216"/>
@@ -753,7 +682,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerbash.cpp" line="222"/>
         <source>Operator</source>
-        <translation>Opérateur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerbash.cpp" line="225"/>
@@ -763,7 +692,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerbash.cpp" line="228"/>
         <source>Scalar</source>
-        <translation>Scalaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerbash.cpp" line="231"/>
@@ -791,17 +720,17 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerbatch.cpp" line="172"/>
         <source>Default</source>
-        <translation>Défaut</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerbatch.cpp" line="175"/>
         <source>Comment</source>
-        <translation>Commentaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerbatch.cpp" line="178"/>
         <source>Keyword</source>
-        <translation>Mot-clé</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerbatch.cpp" line="181"/>
@@ -816,17 +745,17 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerbatch.cpp" line="187"/>
         <source>External command</source>
-        <translation>Commande externe</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerbatch.cpp" line="190"/>
         <source>Variable</source>
-        <translation>Variable</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerbatch.cpp" line="193"/>
         <source>Operator</source>
-        <translation>Opérateur</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -834,12 +763,12 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexercmake.cpp" line="191"/>
         <source>Default</source>
-        <translation type="unfinished">Défaut</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexercmake.cpp" line="194"/>
         <source>Comment</source>
-        <translation type="unfinished">Commentaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexercmake.cpp" line="197"/>
@@ -864,7 +793,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexercmake.cpp" line="209"/>
         <source>Variable</source>
-        <translation type="unfinished">Variable</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexercmake.cpp" line="212"/>
@@ -904,7 +833,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexercmake.cpp" line="233"/>
         <source>Number</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -912,7 +841,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexercpp.cpp" line="262"/>
         <source>Default</source>
-        <translation type="unfinished">Défaut</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexercpp.cpp" line="265"/>
@@ -932,12 +861,12 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexercpp.cpp" line="274"/>
         <source>Number</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexercpp.cpp" line="277"/>
         <source>Keyword</source>
-        <translation type="unfinished">Mot-clé</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexercpp.cpp" line="280"/>
@@ -957,7 +886,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexercpp.cpp" line="289"/>
         <source>Operator</source>
-        <translation type="unfinished">Opérateur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexercpp.cpp" line="292"/>
@@ -1000,7 +929,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexercss.cpp" line="230"/>
         <source>Default</source>
-        <translation type="unfinished">Défaut</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexercss.cpp" line="233"/>
@@ -1025,7 +954,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexercss.cpp" line="245"/>
         <source>Operator</source>
-        <translation type="unfinished">Opérateur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexercss.cpp" line="248"/>
@@ -1091,7 +1020,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerd.cpp" line="264"/>
         <source>Default</source>
-        <translation type="unfinished">Défaut</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerd.cpp" line="267"/>
@@ -1116,12 +1045,12 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerd.cpp" line="279"/>
         <source>Number</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerd.cpp" line="282"/>
         <source>Keyword</source>
-        <translation type="unfinished">Mot-clé</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerd.cpp" line="285"/>
@@ -1156,7 +1085,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerd.cpp" line="303"/>
         <source>Operator</source>
-        <translation type="unfinished">Opérateur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerd.cpp" line="306"/>
@@ -1184,12 +1113,12 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerdiff.cpp" line="101"/>
         <source>Default</source>
-        <translation type="unfinished">Défaut</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerdiff.cpp" line="104"/>
         <source>Comment</source>
-        <translation type="unfinished">Commentaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerdiff.cpp" line="107"/>
@@ -1770,7 +1699,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexeridl.cpp" line="99"/>
         <source>UUID</source>
-        <translation>UUID</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1786,12 +1715,12 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerlua.cpp" line="215"/>
         <source>Default</source>
-        <translation type="unfinished">Défaut</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerlua.cpp" line="218"/>
         <source>Comment</source>
-        <translation type="unfinished">Commentaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerlua.cpp" line="221"/>
@@ -1801,12 +1730,12 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerlua.cpp" line="224"/>
         <source>Number</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerlua.cpp" line="227"/>
         <source>Keyword</source>
-        <translation type="unfinished">Mot-clé</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerlua.cpp" line="230"/>
@@ -1831,7 +1760,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerlua.cpp" line="242"/>
         <source>Operator</source>
-        <translation type="unfinished">Opérateur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerlua.cpp" line="245"/>
@@ -1864,12 +1793,12 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexermakefile.cpp" line="126"/>
         <source>Default</source>
-        <translation type="unfinished">Défaut</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexermakefile.cpp" line="129"/>
         <source>Comment</source>
-        <translation type="unfinished">Commentaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexermakefile.cpp" line="132"/>
@@ -1879,12 +1808,12 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexermakefile.cpp" line="135"/>
         <source>Variable</source>
-        <translation type="unfinished">Variable</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexermakefile.cpp" line="138"/>
         <source>Operator</source>
-        <translation type="unfinished">Opérateur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexermakefile.cpp" line="141"/>
@@ -1894,7 +1823,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexermakefile.cpp" line="144"/>
         <source>Error</source>
-        <translation type="unfinished">Erreur</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1902,12 +1831,12 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerpov.cpp" line="275"/>
         <source>Default</source>
-        <translation type="unfinished">Défaut</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerpov.cpp" line="278"/>
         <source>Comment</source>
-        <translation type="unfinished">Commentaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerpov.cpp" line="281"/>
@@ -1917,12 +1846,12 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerpov.cpp" line="284"/>
         <source>Number</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerpov.cpp" line="287"/>
         <source>Operator</source>
-        <translation type="unfinished">Opérateur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerpov.cpp" line="290"/>
@@ -1990,17 +1919,17 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerperl.cpp" line="250"/>
         <source>Default</source>
-        <translation type="unfinished">Défaut</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerperl.cpp" line="253"/>
         <source>Error</source>
-        <translation type="unfinished">Erreur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerperl.cpp" line="256"/>
         <source>Comment</source>
-        <translation type="unfinished">Commentaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerperl.cpp" line="259"/>
@@ -2010,12 +1939,12 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerperl.cpp" line="262"/>
         <source>Number</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerperl.cpp" line="265"/>
         <source>Keyword</source>
-        <translation type="unfinished">Mot-clé</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerperl.cpp" line="268"/>
@@ -2030,7 +1959,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerperl.cpp" line="274"/>
         <source>Operator</source>
-        <translation type="unfinished">Opérateur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerperl.cpp" line="277"/>
@@ -2040,7 +1969,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerperl.cpp" line="280"/>
         <source>Scalar</source>
-        <translation type="unfinished">Scalaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerperl.cpp" line="283"/>
@@ -2133,12 +2062,12 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerproperties.cpp" line="121"/>
         <source>Default</source>
-        <translation type="unfinished">Défaut</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerproperties.cpp" line="124"/>
         <source>Comment</source>
-        <translation type="unfinished">Commentaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerproperties.cpp" line="127"/>
@@ -2161,17 +2090,17 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerpython.cpp" line="222"/>
         <source>Default</source>
-        <translation type="unfinished">Défaut</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerpython.cpp" line="225"/>
         <source>Comment</source>
-        <translation type="unfinished">Commentaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerpython.cpp" line="228"/>
         <source>Number</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerpython.cpp" line="231"/>
@@ -2186,7 +2115,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerpython.cpp" line="237"/>
         <source>Keyword</source>
-        <translation type="unfinished">Mot-clé</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerpython.cpp" line="240"/>
@@ -2211,7 +2140,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerpython.cpp" line="252"/>
         <source>Operator</source>
-        <translation type="unfinished">Opérateur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerpython.cpp" line="255"/>
@@ -2244,17 +2173,17 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerruby.cpp" line="245"/>
         <source>Default</source>
-        <translation type="unfinished">Défaut</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerruby.cpp" line="248"/>
         <source>Error</source>
-        <translation type="unfinished">Erreur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerruby.cpp" line="251"/>
         <source>Comment</source>
-        <translation type="unfinished">Commentaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerruby.cpp" line="254"/>
@@ -2264,12 +2193,12 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerruby.cpp" line="257"/>
         <source>Number</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerruby.cpp" line="260"/>
         <source>Keyword</source>
-        <translation type="unfinished">Mot-clé</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerruby.cpp" line="263"/>
@@ -2294,7 +2223,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerruby.cpp" line="275"/>
         <source>Operator</source>
-        <translation type="unfinished">Opérateur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerruby.cpp" line="278"/>
@@ -2402,12 +2331,12 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexersql.cpp" line="251"/>
         <source>Default</source>
-        <translation type="unfinished">Défaut</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexersql.cpp" line="254"/>
         <source>Comment</source>
-        <translation type="unfinished">Commentaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexersql.cpp" line="257"/>
@@ -2422,12 +2351,12 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexersql.cpp" line="263"/>
         <source>Number</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexersql.cpp" line="266"/>
         <source>Keyword</source>
-        <translation type="unfinished">Mot-clé</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexersql.cpp" line="269"/>
@@ -2452,7 +2381,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexersql.cpp" line="281"/>
         <source>Operator</source>
-        <translation type="unfinished">Opérateur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexersql.cpp" line="284"/>
@@ -2505,7 +2434,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexertex.cpp" line="186"/>
         <source>Default</source>
-        <translation type="unfinished">Défaut</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexertex.cpp" line="189"/>
@@ -2538,12 +2467,12 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexervhdl.cpp" line="207"/>
         <source>Default</source>
-        <translation type="unfinished">Défaut</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexervhdl.cpp" line="210"/>
         <source>Comment</source>
-        <translation type="unfinished">Commentaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexervhdl.cpp" line="213"/>
@@ -2553,7 +2482,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexervhdl.cpp" line="216"/>
         <source>Number</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexervhdl.cpp" line="219"/>
@@ -2563,7 +2492,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexervhdl.cpp" line="222"/>
         <source>Operator</source>
-        <translation type="unfinished">Opérateur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexervhdl.cpp" line="225"/>
@@ -2578,7 +2507,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexervhdl.cpp" line="231"/>
         <source>Keyword</source>
-        <translation type="unfinished">Mot-clé</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexervhdl.cpp" line="234"/>
@@ -2748,6 +2677,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../monkey/src/pluginsmanager/ui/UIBuilderSettings.ui" line="129"/>
+        <source>Skip On Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIBuilderSettings.ui" line="150"/>
         <source>Parsers :</source>
         <translation type="unfinished"></translation>
@@ -2755,11 +2689,6 @@
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIBuilderSettings.ui" line="167"/>
         <source>Try All</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/pluginsmanager/ui/UIBuilderSettings.ui" line="129"/>
-        <source>Skip On Error</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2841,6 +2770,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="214"/>
+        <source>Skip On Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="235"/>
         <source>Parsers :</source>
         <translation type="unfinished"></translation>
@@ -2848,11 +2782,6 @@
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="252"/>
         <source>Try All</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="214"/>
-        <source>Skip On Error</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3072,7 +3001,7 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="174"/>
         <source>&amp;Clear</source>
-        <translation type="unfinished">&amp;Effacer</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="108"/>
@@ -3152,6 +3081,21 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="120"/>
         <source>Close all files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="122"/>
+        <source>Save As &amp;Backup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="122"/>
+        <source>Ctrl+B</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="122"/>
+        <source>Save a backup of the current file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3297,7 +3241,7 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="139"/>
         <source>Paste</source>
-        <translation type="unfinished">Coller</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="141"/>
@@ -3350,6 +3294,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="146"/>
+        <source>&amp;All Commands</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="148"/>
         <source>Expand Abbreviation</source>
         <translation type="unfinished"></translation>
@@ -3357,6 +3306,21 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="148"/>
         <source>Ctrl+L</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="149"/>
+        <source>Prepare APIs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="149"/>
+        <source>Ctrl+Alt+P</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="149"/>
+        <source>Prepare the APIs files for auto completion / calltips</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3397,6 +3361,21 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="155"/>
         <source>Active the previous tab</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="156"/>
+        <source>&amp;Filtered Projects</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="156"/>
+        <source></source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="156"/>
+        <source>Filtered project view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3465,6 +3444,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="171"/>
+        <source>&amp;Add Existing Files/Projects...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="171"/>
+        <source>Add existing files/projects to the current project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="174"/>
         <source>Clear the recents projects list</source>
         <translation type="unfinished"></translation>
@@ -3472,6 +3461,36 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="179"/>
         <source>&amp;Build</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="180"/>
+        <source>&amp;Rebuild</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="181"/>
+        <source>&amp;Clean</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="182"/>
+        <source>&amp;Execute</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="183"/>
+        <source>&amp;User Commands</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="186"/>
+        <source>&amp;Debugger</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="187"/>
+        <source>&amp;Interpreter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3574,96 +3593,6 @@
         <source>Coverage Meter Test Report...</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="122"/>
-        <source>Save As &amp;Backup</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="122"/>
-        <source>Ctrl+B</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="122"/>
-        <source>Save a backup of the current file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="156"/>
-        <source>&amp;Filtered Projects</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="156"/>
-        <source>Filtered project view</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="171"/>
-        <source>&amp;Add Existing Files/Projects...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="171"/>
-        <source>Add existing files/projects to the current project</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="180"/>
-        <source>&amp;Rebuild</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="181"/>
-        <source>&amp;Clean</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="182"/>
-        <source>&amp;Execute</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="183"/>
-        <source>&amp;User Commands</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="186"/>
-        <source>&amp;Debugger</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="187"/>
-        <source>&amp;Interpreter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="146"/>
-        <source>&amp;All Commands</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="149"/>
-        <source>Prepare APIs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="149"/>
-        <source>Ctrl+Alt+P</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="149"/>
-        <source>Prepare the APIs files for auto completion / calltips</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="156"/>
-        <source></source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>UIPluginsSettings</name>
@@ -3671,56 +3600,6 @@
         <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="13"/>
         <source>Plugins Settings</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="99"/>
-        <source>Informations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="207"/>
-        <source>Description :</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="200"/>
-        <source>Enabled</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="193"/>
-        <source>Enable upon start</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="165"/>
-        <source>Type :</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="151"/>
-        <source>Version :</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="137"/>
-        <source>Name :</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="123"/>
-        <source>Caption :</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="179"/>
-        <source>Author :</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="249"/>
-        <source>Close</source>
-        <translation type="unfinished">Fermer</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="54"/>
@@ -3733,8 +3612,58 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="99"/>
+        <source>Informations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="123"/>
+        <source>Caption :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="137"/>
+        <source>Name :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="151"/>
+        <source>Version :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="165"/>
+        <source>Type :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="179"/>
+        <source>Author :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="193"/>
+        <source>Enable upon start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="200"/>
+        <source>Enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="207"/>
+        <source>Description :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="222"/>
         <source>Configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="249"/>
+        <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3818,6 +3747,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.cpp" line="601"/>
+        <source>New Operator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../monkey/src/maininterface/ui/UISettings.cpp" line="671"/>
         <source>Select default templates directory</source>
         <translation type="unfinished"></translation>
@@ -3835,6 +3769,91 @@
     <message>
         <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="13"/>
         <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="158"/>
+        <source>General</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="139"/>
+        <source>Properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="149"/>
+        <source>File Templates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="154"/>
+        <source>Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="163"/>
+        <source>Auto Completion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="168"/>
+        <source>CallTips</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1502"/>
+        <source>Indentation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="178"/>
+        <source>Brace Matching</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="183"/>
+        <source>Edge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="188"/>
+        <source>Caret</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="193"/>
+        <source>Margins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="198"/>
+        <source>Special Characters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="203"/>
+        <source>Source APIs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="208"/>
+        <source>Lexers Associations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="213"/>
+        <source>Lexers Highlighting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="219"/>
+        <source>Abbreviations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="255"/>
+        <source>&amp;Project Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3858,13 +3877,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="388"/>
-        <source>Use Monkey Studio&apos;s embedded designer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="395"/>
-        <source>Run Qt Designer</source>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="316"/>
+        <source>On External &amp;Changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3880,6 +3894,56 @@
     <message>
         <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="354"/>
         <source>Automatically reload the file if safe, alert the user if not</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="367"/>
+        <source>&amp;UI Designer Integration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="388"/>
+        <source>Use Monkey Studio&apos;s embedded designer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="395"/>
+        <source>Run Qt Designer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="408"/>
+        <source>&amp;Operators</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="445"/>
+        <source>Up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="455"/>
+        <source>Down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3598"/>
+        <source>Remove</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3070"/>
+        <source>Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="485"/>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="508"/>
+        <source>&amp;Session</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4080,11 +4144,6 @@
     <message>
         <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1394"/>
         <source>Highlight :</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1502"/>
-        <source>Indentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4358,11 +4417,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3070"/>
-        <source>Add</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3189"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
@@ -4583,11 +4637,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3598"/>
-        <source>Remove</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3624"/>
         <source>Template</source>
         <translation type="unfinished"></translation>
@@ -4600,126 +4649,6 @@
     <message>
         <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3664"/>
         <source>Code :</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="139"/>
-        <source>Properties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="158"/>
-        <source>General</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="149"/>
-        <source>File Templates</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="154"/>
-        <source>Editor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="163"/>
-        <source>Auto Completion</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="168"/>
-        <source>CallTips</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="178"/>
-        <source>Brace Matching</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="183"/>
-        <source>Edge</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="188"/>
-        <source>Caret</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="193"/>
-        <source>Margins</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="198"/>
-        <source>Special Characters</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="203"/>
-        <source>Source APIs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="208"/>
-        <source>Lexers Associations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="213"/>
-        <source>Lexers Highlighting</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="219"/>
-        <source>Abbreviations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.cpp" line="601"/>
-        <source>New Operator</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="255"/>
-        <source>&amp;Project Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="316"/>
-        <source>On External &amp;Changes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="367"/>
-        <source>&amp;UI Designer Integration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="408"/>
-        <source>&amp;Operators</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="445"/>
-        <source>Up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="455"/>
-        <source>Down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="485"/>
-        <source>Clear</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="508"/>
-        <source>&amp;Session</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4791,6 +4720,21 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="165"/>
+        <source>Add To Project...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="160"/>
+        <source>You need to select a project to add to.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="165"/>
+        <source>The project you select is not a projects container.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="209"/>
         <source>Your comment here</source>
         <translation type="unfinished"></translation>
@@ -4803,6 +4747,19 @@
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="238"/>
         <source>The file &apos;%1&apos; already exists, do you want to continue ?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="248"/>
+        <source>Can&apos;t add project:
+%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="267"/>
+        <source>Can&apos;t create file:
+%1
+Aborting.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4916,6 +4873,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="285"/>
+        <source>Operator :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="314"/>
         <source>If checked, file(s) will be add to the current selected project</source>
         <translation type="unfinished"></translation>
@@ -4938,44 +4900,11 @@
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="402"/>
         <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="409"/>
         <source>Previous</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="165"/>
-        <source>Add To Project...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="160"/>
-        <source>You need to select a project to add to.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="165"/>
-        <source>The project you select is not a projects container.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="248"/>
-        <source>Can&apos;t add project:
-%1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="267"/>
-        <source>Can&apos;t create file:
-%1
-Aborting.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="285"/>
-        <source>Operator :</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5007,6 +4936,11 @@ Aborting.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.cpp" line="191"/>
+        <source>&lt;b&gt;Tools Editor&lt;/b&gt; give you the possibility to use variables&lt;br&gt;&lt;br&gt;&lt;b&gt;&lt;/b&gt; : Current project path&lt;br&gt;&lt;b&gt;&lt;/b&gt; : Current project filepath&lt;br&gt;&lt;b&gt;&lt;/b&gt; : Current tab path&lt;br&gt;&lt;b&gt;&lt;/b&gt; : Current tab filepath&lt;br&gt;&lt;b&gt;&lt;/b&gt; : Current item path&lt;br&gt;&lt;b&gt;&lt;/b&gt; : Current item filepath</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.cpp" line="211"/>
         <source>Choose an icon for this tool</source>
         <translation type="unfinished"></translation>
@@ -5024,6 +4958,26 @@ Aborting.</source>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.ui" line="13"/>
         <source>Tools Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.ui" line="47"/>
+        <source>New</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.ui" line="60"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.ui" line="80"/>
+        <source>Up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.ui" line="93"/>
+        <source>Down</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5086,31 +5040,6 @@ Aborting.</source>
         <source>File Path</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.ui" line="47"/>
-        <source>New</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.ui" line="60"/>
-        <source>Delete</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.ui" line="80"/>
-        <source>Up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.ui" line="93"/>
-        <source>Down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.cpp" line="191"/>
-        <source>&lt;b&gt;Tools Editor&lt;/b&gt; give you the possibility to use variables&lt;br&gt;&lt;br&gt;&lt;b&gt;&lt;/b&gt; : Current project path&lt;br&gt;&lt;b&gt;&lt;/b&gt; : Current project filepath&lt;br&gt;&lt;b&gt;&lt;/b&gt; : Current tab path&lt;br&gt;&lt;b&gt;&lt;/b&gt; : Current tab filepath&lt;br&gt;&lt;b&gt;&lt;/b&gt; : Current item path&lt;br&gt;&lt;b&gt;&lt;/b&gt; : Current item filepath</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>UITranslator</name>
@@ -5122,22 +5051,22 @@ Aborting.</source>
     <message>
         <location filename="../monkey/src/maininterface/ui/UITranslator.ui" line="13"/>
         <source>Translation...</source>
-        <translation>Traduction ...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UITranslator.ui" line="40"/>
         <source>Select your language. You can push the buttons to locate/reload the translations list.</source>
-        <translation type="unfinished">Choisissez votre lanhue. </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UITranslator.ui" line="67"/>
         <source>Reload the translations list</source>
-        <translation>Rechargez la liste des tracductions</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UITranslator.ui" line="77"/>
         <source>Locate the translations</source>
-        <translation>Définer ou se trouvent les traductions</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5150,21 +5079,6 @@ Aborting.</source>
 </context>
 <context>
     <name>pConsoleManager</name>
-    <message>
-        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="193"/>
-        <source>User Raw Command</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="206"/>
-        <source>sendRawData...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="206"/>
-        <source>Can&apos;t send raw data to console</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="28"/>
         <source>Stop current command</source>
@@ -5183,6 +5097,21 @@ Aborting.</source>
     <message>
         <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="31"/>
         <source>Stop the currently running command</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="193"/>
+        <source>User Raw Command</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="206"/>
+        <source>sendRawData...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="206"/>
+        <source>Can&apos;t send raw data to console</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5242,16 +5171,6 @@ Aborting.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/qscintillamanager/pEditor.cpp" line="392"/>
-        <source>Go To Line...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/pEditor.cpp" line="392"/>
-        <source>Enter the line you want to go:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../monkey/src/qscintillamanager/pEditor.cpp" line="303"/>
         <source>Save backup...</source>
         <translation type="unfinished"></translation>
@@ -5264,6 +5183,16 @@ Aborting.</source>
     <message>
         <location filename="../monkey/src/qscintillamanager/pEditor.cpp" line="341"/>
         <source>There is no defaullt printer, please set one before trying quick print</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/qscintillamanager/pEditor.cpp" line="392"/>
+        <source>Go To Line...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/qscintillamanager/pEditor.cpp" line="392"/>
+        <source>Enter the line you want to go:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5285,101 +5214,11 @@ Aborting.</source>
     <message>
         <location filename="../monkey/src/recentsmanager/pRecentsManager.cpp" line="173"/>
         <source>&amp;Clear</source>
-        <translation>&amp;Effacer</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>pSearch</name>
-    <message>
-        <location filename="../qscintillamanager/ui/pSearch.cpp" line="171"/>
-        <source>Information...</source>
-        <translation type="obsolete">Information ...</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.cpp" line="214"/>
-        <source>%1 occurences replaced</source>
-        <translation>%1 occurence remplacée</translation>
-    </message>
-    <message>
-        <location filename="../qscintillamanager/ui/pSearch.ui" line="26"/>
-        <source>Close</source>
-        <translation type="obsolete">Fermer</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="101"/>
-        <source>Replace All</source>
-        <translation>Tout remplacer</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="126"/>
-        <source>Replace</source>
-        <translation>Remplacer</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="151"/>
-        <source>Search Next</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="176"/>
-        <source>Search Previous</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="255"/>
-        <source>Replace the current selection with this string</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="59"/>
-        <source>Enter the string or regular expression to find.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="192"/>
-        <source>If it&apos;s checked then the search is case sensitive.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="195"/>
-        <source>Case Sensitive</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="262"/>
-        <source>From Start</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="229"/>
-        <source>If it&apos;s checked then the search wraps around the end of the text.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="232"/>
-        <source>Wrap</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="202"/>
-        <source>If it&apos;s checked then the search looks for whole word matches only, otherwise it searches for any matching text.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="205"/>
-        <source>Whole Words</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="212"/>
-        <source>If it&apos;s checked then expr is interpreted as a regular expression rather than a simple string.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="215"/>
-        <source>RegExp</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.cpp" line="139"/>
         <source>Not Found</source>
@@ -5388,6 +5227,11 @@ Aborting.</source>
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.cpp" line="190"/>
         <source>Nothing To Replace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/qscintillamanager/ui/pSearch.cpp" line="214"/>
+        <source>%1 occurences replaced</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5411,8 +5255,83 @@ Aborting.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="59"/>
+        <source>Enter the string or regular expression to find.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="82"/>
         <source>Informations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="101"/>
+        <source>Replace All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="126"/>
+        <source>Replace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="151"/>
+        <source>Search Next</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="176"/>
+        <source>Search Previous</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="192"/>
+        <source>If it&apos;s checked then the search is case sensitive.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="195"/>
+        <source>Case Sensitive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="202"/>
+        <source>If it&apos;s checked then the search looks for whole word matches only, otherwise it searches for any matching text.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="205"/>
+        <source>Whole Words</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="212"/>
+        <source>If it&apos;s checked then expr is interpreted as a regular expression rather than a simple string.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="215"/>
+        <source>RegExp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="229"/>
+        <source>If it&apos;s checked then the search wraps around the end of the text.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="232"/>
+        <source>Wrap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="255"/>
+        <source>Replace the current selection with this string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="262"/>
+        <source>From Start</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5446,7 +5365,7 @@ Aborting.</source>
     <message>
         <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="166"/>
         <source>Error</source>
-        <translation type="unfinished">Erreur</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5515,14 +5434,7 @@ Aborting.</source>
     <message>
         <location filename="../monkey/src/toolsmanager/pToolsManager.cpp" line="125"/>
         <source>Tools Error...</source>
-        <translation>Erreur Outils ...</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/toolsmanager/pToolsManager.cpp" line="103"/>
-        <source>Error trying to start tools:
-%1</source>
-        <translation type="obsolete">L&apos;erreur tente de démarrer les outis:
-%1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/pToolsManager.cpp" line="125"/>
@@ -5536,7 +5448,7 @@ Aborting.</source>
     <message>
         <location filename="../monkey/src/workspace/pWorkspace.cpp" line="264"/>
         <source>Choose the file(s) to open</source>
-        <translation>Choisissez le(s) fichier(s) à ouvrir</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../monkey/src/workspace/pWorkspace.cpp" line="332"/>
@@ -5549,6 +5461,11 @@ Aborting.</source>
     <message>
         <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="27"/>
         <source>Move down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="111"/>
+        <source></source>
         <translation type="unfinished"></translation>
     </message>
     <message>

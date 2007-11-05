@@ -165,4 +165,5 @@ mac:SOURCES	*= src/toolsmanager/pDesktopApplications_mac.cpp
 else:unix:SOURCES	*= src/toolsmanager/pDesktopApplications_unix.cpp
 win32:SOURCES	*= src/toolsmanager/pDesktopApplications_win32.cpp
 
-TRANSLATIONS	= ../translations/monkey_french.ts
+TRANSLATIONS	= ../translations/monkey_french.ts \
+	../translations/monkey_belarusian.ts
