@@ -49,7 +49,7 @@ HEADERS	= $${CTAGS_PATH}/debug.h \
 #	$${CTAGS_PATH}/sort.h \
 #	$${CTAGS_PATH}/args.h \
 #	$${CTAGS_PATH}/ctags.h
-	src/exuberantCtags.h
+	$${CTAGS_PATH}//exuberantCtags.h
 
 win32-msvc*:HEADERS	*= $${CTAGS_PATH}/regex.h
 
@@ -109,6 +109,6 @@ SOURCES	= $${CTAGS_PATH}/asm.c \
 #	$${CTAGS_PATH}/e_riscos.h \
 #	$${CTAGS_PATH}/e_vms.h \
 #	$${CTAGS_PATH}/main.c \
-	src/exuberantCtags.c
+	$${CTAGS_PATH}/exuberantCtags.c
 
 win32-msvc*:SOURCES	*= $${CTAGS_PATH}/regex.c

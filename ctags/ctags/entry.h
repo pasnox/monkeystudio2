@@ -51,14 +51,14 @@ typedef struct TagEntryInfo {
 	} extensionFields;  /* list of extension fields*/
 } tagEntryInfo;
 
-typedef struct  sTagEntryListItem {
+typedef struct  TagEntryListItem {
 	tagEntryInfo tag;
-	struct sTagEntryListItem *next;
-	} TagEntryListItem;
+	struct TagEntryListItem *next;
+	} tagEntryListItem;
 
 //  Global pointers to entrys in the list
-extern TagEntryListItem* firstTagEntry ;  //for return it as result
-extern TagEntryListItem* lastTagEntry ;   //for adding entryes
+extern tagEntryListItem* firstTagEntry ;  //for return it as result
+extern tagEntryListItem* lastTagEntry ;   //for adding entryes
 
 /*
 *   FUNCTION PROTOTYPES

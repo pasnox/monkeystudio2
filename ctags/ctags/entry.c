@@ -43,9 +43,9 @@
 *   DATA DEFINITIONS
 */
 
-TagEntryListItem* firstTagEntry = NULL;  /*pointer to the first entry in the list
+tagEntryListItem* firstTagEntry = NULL;  /*pointer to the first entry in the list
 											for return it as result of parsing file */
-TagEntryListItem* lastTagEntry = NULL;   //for adding entryes
+tagEntryListItem* lastTagEntry = NULL;   //for adding entryes
 
 /*
 *   FUNCTION DEFINITIONS
@@ -54,7 +54,7 @@ TagEntryListItem* lastTagEntry = NULL;   //for adding entryes
 
 void addEntryToList (const tagEntryInfo *const tag) 
 {
-	TagEntryListItem* newEntry = calloc ( 1,sizeof (TagEntryListItem ));
+	tagEntryListItem* newEntry = calloc ( 1,sizeof (tagEntryListItem ));
 	// copying entry
 	memcpy ( &newEntry->tag, tag, sizeof (tagEntryInfo));
 	if ( tag->language )

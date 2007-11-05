@@ -3,7 +3,7 @@
 #include "parse.h"
 #include "read.h"
 
-extern TagEntryListItem* parseFile ( const char* fileName, const char* langName)
+extern tagEntryListItem* parseFile ( const char* fileName, const char* langName)
 {
 	firstTagEntry = NULL; // generate new list
 	langType lang; 
