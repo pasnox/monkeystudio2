@@ -73,11 +73,11 @@ void EntityContainer::deleteFileInfo ( QString file, QDateTime olderThan )
 
 void EntityContainer::addTagsFromRecord (QString fileName, FileRecord*  fileRecord)
 {
-    sTagEntryListItem* item = fileRecord->firstTagEntry;
+    tagEntryListItem* item = fileRecord->firstTagEntry;
     int displayMask = Navigator::instance()->getDisplayMask();
     while ( item != NULL )
     {
-        sTagEntryInfo* entry = &item->tag;    
+        tagEntryInfo* entry = &item->tag;    
         item = item->next ;
         EntityType entType = Entity::getEntityType (entry->kind);
         if ( not (entType & displayMask) )
@@ -174,7 +174,7 @@ Entity* EntityContainer::findEntityInEntity (Entity* where, EntityType type, QSt
     return NULL; //not finded
 }
 
-void EntityContainer::addChild ( Entity* parEnt,sTagEntryInfo* entry, QString fileName, QDateTime time )
+void EntityContainer::addChild ( Entity* parEnt,tagEntryInfo* entry, QString fileName, QDateTime time )
 {
     if (parEnt)
         addChildInEntity ( parEnt, entry, fileName, time );
@@ -184,7 +184,7 @@ void EntityContainer::addChild ( Entity* parEnt,sTagEntryInfo* entry, QString fi
 }
 
 
-void EntityContainer::addChildInContainer ( sTagEntryInfo* entry, QString fileName, QDateTime time )
+void EntityContainer::addChildInContainer ( tagEntryInfo* entry, QString fileName, QDateTime time )
 {
     Entity* existing = findEntityInContainer ( Entity::getEntityType ( entry->kind), entry->name);
     if ( not existing )
@@ -197,7 +197,7 @@ void EntityContainer::addChildInContainer ( sTagEntryInfo* entry, QString fileNa
         existing->updateSelf (entry, fileName, time);
 }
 
-void EntityContainer::addChildInEntity ( Entity* parEnt, sTagEntryInfo* entry, QString fileName, QDateTime time )
+void EntityContainer::addChildInEntity ( Entity* parEnt, tagEntryInfo* entry, QString fileName, QDateTime time )
 {
     Entity* existing = findEntityInEntity( parEnt,Entity::getEntityType ( entry->kind), entry->name);
     if ( not existing )

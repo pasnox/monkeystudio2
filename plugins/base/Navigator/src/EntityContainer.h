@@ -39,16 +39,16 @@ private:
 	Entity* getScopeEntity ( QString scope0, QString scope1);
 
 	//parEnt may be == NULL or Entity*.  result of findScopeEntity function;
-	void addChild ( Entity* parEnt,sTagEntryInfo* entry, QString fileName, QDateTime time );	
+	void addChild ( Entity* parEnt,tagEntryInfo* entry, QString fileName, QDateTime time );	
 
-	void addChildInEntity ( Entity* parEnt, sTagEntryInfo* entry, QString fileName, QDateTime time );
+	void addChildInEntity ( Entity* parEnt, tagEntryInfo* entry, QString fileName, QDateTime time );
 	//setting. If true - entity will allow to add to self only compex entityes and his members
 	bool complex_only;
 
 	Entity* findEntityInContainer ( EntityType type, QString name );
 	Entity* findEntityInEntity (Entity* where, EntityType type, QString name );
 
-	void addChildInContainer ( sTagEntryInfo* entry, QString fileName, QDateTime time );
+	void addChildInContainer ( tagEntryInfo* entry, QString fileName, QDateTime time );
 
 public slots:
 	void makeGoto ();

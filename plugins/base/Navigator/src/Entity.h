@@ -59,7 +59,7 @@ private:
     static QIcon iTYPEDEF;
     
 public:
-    Entity ( sTagEntryInfo* entry, QString fileName, QDateTime time);
+    Entity ( tagEntryInfo* entry, QString fileName, QDateTime time);
     Entity (EntityType ttype, QString tname);
     QDateTime updateTime ;
     QString name;
@@ -78,7 +78,7 @@ public:
     static EntityType getEntityType ( char kind );
     static void initIcons ();
     void deleteFileInfo ( QString file, QDateTime olderThan );
-    void updateSelf (sTagEntryInfo* entry, QString fileName, QDateTime time);
+    void updateSelf (tagEntryInfo* entry, QString fileName, QDateTime time);
     void updateGUI ();
 };
 

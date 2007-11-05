@@ -34,7 +34,7 @@ QIcon Entity::iMEMBER;
 QIcon Entity::iSTRUCT;
 QIcon Entity::iTYPEDEF;
 
-Entity::Entity ( sTagEntryInfo* entry, QString fileName, QDateTime time)
+Entity::Entity ( tagEntryInfo* entry, QString fileName, QDateTime time)
 {
     updateSelf (entry, fileName, time);
 }
@@ -153,7 +153,7 @@ void Entity::deleteFileInfo ( QString file, QDateTime olderThan )
     }
 }
 
-void Entity::updateSelf (sTagEntryInfo* entry, QString fileName, QDateTime time)
+void Entity::updateSelf (tagEntryInfo* entry, QString fileName, QDateTime time)
 {
     name = entry->name;  //  do possible make this assigmengs automaticaly ???
     file = fileName;
