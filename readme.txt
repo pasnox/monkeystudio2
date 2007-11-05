@@ -15,37 +15,37 @@ It's extendable with a powerfull plugins system.
 **
 ****************************************************************************/
 
-How to build Monkey Studio :
-============================
+How to build Monkey Studio:
+===========================
 
-With MinGW/Windows :
+With MinGW/Windows:
 
 * Open a console, and go to the sources directory.
-* tape : qmake && mingw32-make release
+* type: qmake && mingw32-make release
 
-With Linux/*Nix :
-
-* Open a shell, and go to the sources directory.
-* tape : qmake && make release // some distros use qmake-qt4 for qmake of Qt 4
-
-With Mac OS X :
+With Linux/*Nix:
 
 * Open a shell, and go to the sources directory.
-* tape : qmake -macx && make release
+* type: qmake && make release // some distros use qmake-qt4 for qmake of Qt 4
+
+With Mac OS X:
+
+* Open a shell, and go to the sources directory.
+* type: qmake -macx && make release
 
 
-How to execute Monkey Studio :
-==============================
+How to execute Monkey Studio:
+=============================
 
-* Once built, there is a bin directory, go in and execute "monkey" binary.
-* There is no install scripts for now, will be available at second beta.
+* Once it is built, there is a bin directoryr. Go in and execute the "monkey" binary.
+* There is no install script available now. We will provide one with a second beta.
 
-Know Problems :
+Known Problems:
 
 * Monkey Studio can't build plugins on mac os x, if you are able to fix it, please tell us.
 * For any problems, please contact us on the forums at : http://forums.monkeystudio.org
 
-WE ARE NEEDED MAC OS X USERS EXPERIENCED WITH Qt 4, THANKS
+WE NEED MAC OS X USERS WITH EXPERIENCE IN Qt 4, THANKS
 
 
 	Azevedo Filipe and The Monkey Studio Team,
