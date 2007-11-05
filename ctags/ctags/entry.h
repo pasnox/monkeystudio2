@@ -54,11 +54,11 @@ typedef struct sTagEntryInfo {
 typedef struct  sTagEntryListItem {
 	tagEntryInfo tag;
 	struct sTagEntryListItem *next;
-	} sTagEntryListItem ; 
+	} TagEntryListItem;
 
 //  Global pointers to entrys in the list
-extern sTagEntryListItem* firstTagEntry ;  //for return it as result
-extern sTagEntryListItem* lastTagEntry ;   //for adding entryes
+extern TagEntryListItem* firstTagEntry ;  //for return it as result
+extern TagEntryListItem* lastTagEntry ;   //for adding entryes
 
 /*
 *   FUNCTION PROTOTYPES
