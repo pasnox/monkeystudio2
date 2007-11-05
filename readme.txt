@@ -31,7 +31,7 @@ With Linux/*Nix:
 With Mac OS X:
 
 * Open a shell, and go to the sources directory.
-* type: qmake -macx && make release
+* type: qmake -spec macx-g++ && make release
 
 
 How to execute Monkey Studio:
