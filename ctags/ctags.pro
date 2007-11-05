@@ -45,10 +45,10 @@ HEADERS	= $${CTAGS_PATH}/debug.h \
 	$${CTAGS_PATH}/routines.h \
 	$${CTAGS_PATH}/strlist.h \
 	$${CTAGS_PATH}/vstring.h \
-	$${CTAGS_PATH}/readtags.h \
-	$${CTAGS_PATH}/sort.h \
-	$${CTAGS_PATH}/args.h \
-	$${CTAGS_PATH}/ctags.h
+#	$${CTAGS_PATH}/readtags.h \
+#	$${CTAGS_PATH}/sort.h \
+#	$${CTAGS_PATH}/args.h \
+#	$${CTAGS_PATH}/ctags.h
 #	src/exuberantCtags.h \
 
 win32-msvc*:HEADERS	*= $${CTAGS_PATH}/regex.h
@@ -61,7 +61,6 @@ SOURCES	= $${CTAGS_PATH}/asm.c \
 	$${CTAGS_PATH}/c.c \
 	$${CTAGS_PATH}/cobol.c \
 	$${CTAGS_PATH}/eiffel.c \
-	$${CTAGS_PATH}/debug.c \
 	$${CTAGS_PATH}/entry.c \
 	$${CTAGS_PATH}/erlang.c \
 	$${CTAGS_PATH}/fortran.c \
@@ -94,9 +93,10 @@ SOURCES	= $${CTAGS_PATH}/asm.c \
 	$${CTAGS_PATH}/vim.c \
 	$${CTAGS_PATH}/vstring.c \
 	$${CTAGS_PATH}/yacc.c \
-	$${CTAGS_PATH}/readtags.c \
-	$${CTAGS_PATH}/sort.c \
-	$${CTAGS_PATH}/args.c
+#	$${CTAGS_PATH}/readtags.c \
+#	$${CTAGS_PATH}/sort.c \
+#	$${CTAGS_PATH}/args.c
+#	$${CTAGS_PATH}/debug.c \
 #	$${CTAGS_PATH}/argproc.c \
 #	$${CTAGS_PATH}/mac.c \
 #	$${CTAGS_PATH}/qdos.c \
