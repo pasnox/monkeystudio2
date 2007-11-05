@@ -183,12 +183,12 @@ void UIToolsEdit::on_pbDown_clicked()
 void UIToolsEdit::helpRequested()
 {
 	QString s = tr( "<b>Tools Editor</b> give you the possibility to use variables<br><br>"
-		"<b></b> : Current project path<br>"
-		"<b></b> : Current project filepath<br>"
-		"<b></b> : Current tab path<br>"
-		"<b></b> : Current tab filepath<br>"
-		"<b></b> : Current item path<br>"
-		"<b></b> : Current item filepath" );
+		"<b>$cpp$</b> : Current project path<br>"
+		"<b>$cp$</b> : Current project filepath<br>"
+		"<b>$cfp$</b> : Current tab path<br>"
+		"<b>$cf$</b> : Current tab filepath<br>"
+		"<b>$cip$</b> : Current item path<br>"
+		"<b>$ci$</b> : Current item filepath" );
 	QWhatsThis::showText( mapToGlobal( rect().center() ), s );
 }
 

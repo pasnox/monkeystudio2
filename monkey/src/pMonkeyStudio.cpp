@@ -300,12 +300,12 @@ const QString pMonkeyStudio::getExistingDirectory( const QString& c, const QStri
 
 const QString pMonkeyStudio::tokenizeHome( const QString& s )
 {
-	return QString( s ).replace( QDir::homePath(), "" ); 
+	return QString( s ).replace( QDir::homePath(), "$HOME$" );
 }
 
 const QString pMonkeyStudio::unTokenizeHome( const QString& s )
 {
-	return QString( s ).replace( "", QDir::homePath() );
+	return QString( s ).replace( "$HOME$", QDir::homePath() );
 }
 
 const QHash<QString, QStringList> pMonkeyStudio::defaultLanguagesSuffixes()

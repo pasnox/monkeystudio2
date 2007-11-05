@@ -74,12 +74,12 @@ void pConsoleManager::removeParser( const QString& s )
 QString pConsoleManager::processInternalVariables( const QString& s )
 {
 	QString v = s;
-	v.replace( "", QDir::toNativeSeparators( pFileManager::instance()->currentProjectPath() ) );
-	v.replace( "", QDir::toNativeSeparators( pFileManager::instance()->currentProjectFile() ) );
-	v.replace( "", QDir::toNativeSeparators( pFileManager::instance()->currentChildPath() ) );
-	v.replace( "", QDir::toNativeSeparators( pFileManager::instance()->currentChildFile() ) );
-	v.replace( "", QDir::toNativeSeparators( pFileManager::instance()->currentItemPath() ) );
-	v.replace( "", QDir::toNativeSeparators( pFileManager::instance()->currentItemFile() ) );
+	v.replace( "$cpp$", QDir::toNativeSeparators( pFileManager::instance()->currentProjectPath() ) );
+	v.replace( "$cp$", QDir::toNativeSeparators( pFileManager::instance()->currentProjectFile() ) );
+	v.replace( "$cfp$", QDir::toNativeSeparators( pFileManager::instance()->currentChildPath() ) );
+	v.replace( "$cf$", QDir::toNativeSeparators( pFileManager::instance()->currentChildFile() ) );
+	v.replace( "$cip$", QDir::toNativeSeparators( pFileManager::instance()->currentItemPath() ) );
+	v.replace( "$ci$", QDir::toNativeSeparators( pFileManager::instance()->currentItemFile() ) );
 	return v;
 }
 
