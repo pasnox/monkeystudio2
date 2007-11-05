@@ -19,8 +19,8 @@ It's extendable with a powerfull plugins system.
 
 #include "Ctags.h"
 
-extern "C" void freeSTagEntryList ( sTagEntryListItem* tag );
-extern "C" sTagEntryListItem* parseFile ( const char* fileName, const char* langName);
+extern "C" void freeSTagEntryList ( tagEntryListItem* tag );
+extern "C" tagEntryListItem* parseFile ( const char* fileName, const char* langName);
 extern "C" void installLanguageMapDefaults (void);
 extern "C" void initializeParsing (void);
 extern "C" void freeParserResources (void);
@@ -69,7 +69,7 @@ FileRecord* Ctags::GetTagsForFile (QString file )
 	return result;
 }
 
-sTagEntryListItem* Ctags::get_tags ( QString file )
+tagEntryListItem* Ctags::get_tags ( QString file )
 {
 	return parseFile ( file.toStdString().c_str(), NULL);
 }
@@ -95,11 +95,11 @@ sTagEntryListItem* Ctags::get_tags ( QString file )
 //}
 
 
-void Ctags::freeTagEntryList (sTagEntryListItem* item)
+void Ctags::freeTagEntryList (tagEntryListItem* item)
 {
 	while ( item != NULL )
 	{
-		sTagEntryInfo* entry = &item->tag;
+		tagEntryInfo* entry = &item->tag;
 		if (entry->language)
 			free ( (void*)entry->language );
 		if ( entry->sourceFileName)
@@ -144,7 +144,7 @@ void Ctags::freeTagEntryList (sTagEntryListItem* item)
 		{
 			free ( (void*)entry->extensionFields.signature );
 		}
-		sTagEntryListItem* temp = item->next;
+		tagEntryListItem* temp = item->next;
 		delete item;
 		item = temp;
 	}

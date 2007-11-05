@@ -29,7 +29,7 @@ It's extendable with a powerfull plugins system.
 /*record in the table, in wich are file names and pointers to the tag list for it*/
 
 struct Q_MONKEY_EXPORT FileRecord {
-	sTagEntryListItem*  firstTagEntry;
+	tagEntryListItem*  firstTagEntry;
 	QDateTime time;
 };
 
@@ -52,8 +52,8 @@ private:
 	bool updateFileRecord (QString file);
 
 	//internal function for call exuberant ctags
-	sTagEntryListItem* get_tags ( QString file );
-	void freeTagEntryList (sTagEntryListItem*);
+	tagEntryListItem* get_tags ( QString file );
+	void freeTagEntryList (tagEntryListItem*);
 
 public:
 	FileRecord* GetTagsForFile (QString);

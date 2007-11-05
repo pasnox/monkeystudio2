@@ -85,7 +85,7 @@ void pTemplatesManager::setTemplatesPath( const QString& s )
 
 const QString pTemplatesManager::templatesPath()
 {
-	pSettings::instance()->value( "Templates/DefaultDirectory", pMonkeyStudio::unTokenizeHome( QApplication::applicationDirPath ().append( "/../templates" ) ) ).toString();
+	return pMonkeyStudio::unTokenizeHome( pSettings::instance()->value( "Templates/DefaultDirectory", QApplication::applicationDirPath().append( "/../templates/" ) ).toString() );
 }
 
 void pTemplatesManager::setTemplatesHeader( const QString& s )
