@@ -28,7 +28,7 @@ It's extendable with a powerfull plugins system.
 #include <QStatusBar>
 #include <QDockWidget>
 
-QtAssistantChild::QtAssistantChild()
+QtAssistantChild::QtAssistantChild( QWidget* )
 	: pAbstractChild()
 {
 	// init main window

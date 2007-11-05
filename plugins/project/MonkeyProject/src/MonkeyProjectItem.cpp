@@ -97,7 +97,9 @@ bool MonkeyProjectItem::open()
 {
     if (!isProject())
     {
+#ifdef Q_CC_GCC
         qWarning ("<%s>:%i Trying to open something for not a project item",__func__,__LINE__);
+#endif
         return false;
     }
     QSettings settings (getValue(), QSettings::IniFormat);
@@ -122,7 +124,7 @@ bool MonkeyProjectItem::open()
     {
         text = settings.value (QString ("target%1text").arg(i),"").toString();
         command = settings.value (QString ("target%1command").arg(i),"").toString();
-        targets.append ( (Target){text, command,NULL});
+        targets.append ( Target( text, command,NULL ));
     }
     
     setModified (false);

@@ -33,7 +33,6 @@ class QtAssistantChild : public pAbstractChild, public QSingleton<QtAssistantChi
 	friend class QSingleton<QtAssistantChild>;
 	
 public:
-	~QtAssistantChild();
 	QList<HelpWindow*> browsersList() const;
  
 	virtual QStringList files() const;
@@ -75,7 +74,8 @@ public slots:
 	virtual void closeFiles() {}
 	
 private:
-	QtAssistantChild();
+	QtAssistantChild( QWidget* = 0 );
+	~QtAssistantChild();
 	
 protected:
 	MainWindow* mMain;

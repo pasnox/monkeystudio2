@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 1992-2006 Trolltech AS. All rights reserved.
+** Copyright (C) 1992-2007 Trolltech ASA. All rights reserved.
 **
 ** This file is part of the Qt Designer of the Qt Toolkit.
 **
@@ -9,12 +9,27 @@
 ** and appearing in the file LICENSE.GPL included in the packaging of
 ** this file.  Please review the following information to ensure GNU
 ** General Public Licensing requirements will be met:
-** http://www.trolltech.com/products/qt/opensource.html
+** http://trolltech.com/products/qt/licenses/licensing/opensource/
 **
 ** If you are unsure which license is appropriate for your use, please
 ** review the following information:
-** http://www.trolltech.com/products/qt/licensing.html or contact the
-** sales department at sales@trolltech.com.
+** http://trolltech.com/products/qt/licenses/licensing/licensingoverview
+** or contact the sales department at sales@trolltech.com.
+**
+** In addition, as a special exception, Trolltech gives you certain
+** additional rights. These rights are described in the Trolltech GPL
+** Exception version 1.0, which can be found at
+** http://www.trolltech.com/products/qt/gplexception/ and in the file
+** GPL_EXCEPTION.txt in this package.
+**
+** In addition, as a special exception, Trolltech, as the sole copyright
+** holder for Qt Designer, grants users of the Qt/Eclipse Integration
+** plug-in the right for the Qt/Eclipse Integration to link to
+** functionality provided by Qt Designer and its related libraries.
+**
+** Trolltech reserves all rights not expressly granted herein.
+** 
+** Trolltech ASA (c) 2007
 **
 ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -37,6 +52,7 @@
 
 #include "shared_global_p.h"
 
+#include <QtCore/QMap>
 #include <QtCore/QStringList>
 #include <QtCore/QSettings>
 
@@ -64,8 +80,13 @@ public:
     QStringList disabledPlugins() const;
     void setDisabledPlugins(const QStringList &disabled_plugins);
 
+    QStringList failedPlugins() const;
+    QString failureReason(const QString &pluginName) const;
+
     QList<QObject*> instances() const;
     QList<QDesignerCustomWidgetInterface*> registeredCustomWidgets() const;
+
+    bool registerNewPlugins();
 
 public slots:
     bool syncSettings();
@@ -81,7 +102,12 @@ private:
     QStringList m_pluginPaths;
     QStringList m_registeredPlugins;
     QStringList m_disabledPlugins;
-    QList<QDesignerCustomWidgetInterface*> m_customWidgets;
+
+    typedef QMap<QString, QString> FailedPluginMap;
+    FailedPluginMap m_failedPlugins;
+
+    typedef QList<QDesignerCustomWidgetInterface*> CustomWidgetList;
+    CustomWidgetList m_customWidgets;
 
     QStringList defaultPluginPaths() const;
 };

@@ -45,6 +45,9 @@ class MonkeyProjectItem : public ProjectItem
 Q_OBJECT
 struct Target
 {
+	Target( const QString& t, const QString& c, pAction* a )
+		: text( t ), command( c ), action( a )
+	{}
 	QString text;
 	QString command;
 	pAction* action;  //may be NULL or valid pointer
@@ -67,20 +70,20 @@ public:
     void appendRow(ProjectItem*);
     void insertRow(int, ProjectItem*);
 
-	virtual QString getIndent() const {}
-	virtual QString getEol() const {}
-	virtual bool isFirst() const {}
-	virtual bool isLast() const {}
-	virtual QString scope() const {}
-	virtual QString checkScope(const QString&) const {}
-	virtual bool isEqualScope(const QString&, const QString&) const {}
-	virtual bool isProjectsContainer() const {}
-	virtual bool swapRow(int, int) {}
-	virtual bool moveRowUp(int) {}
-	virtual bool moveRowDown(int) {}
-	virtual bool moveUp() {}
-	virtual bool moveDown() {}
-	virtual bool addProject(const QString&) {}
+	virtual QString getIndent() const { return QString(); }
+	virtual QString getEol() const { return QString(); }
+	virtual bool isFirst() const { return false; }
+	virtual bool isLast() const { return false; }
+	virtual QString scope() const { return QString(); }
+	virtual QString checkScope(const QString& s) const { return s; }
+	virtual bool isEqualScope(const QString&, const QString&) const { return true;}
+	virtual bool isProjectsContainer() const { return false; }
+	virtual bool swapRow(int, int) { return true; }
+	virtual bool moveRowUp(int) { return true; }
+	virtual bool moveRowDown(int) { return true; }
+	virtual bool moveUp() { return true; }
+	virtual bool moveDown() { return true; }
+	virtual bool addProject(const QString&) { return false; }
 	virtual void saveAll(bool) {}
 	virtual void setCompiler(CompilerPlugin*) {}
 	virtual CompilerPlugin* compiler() const {return NULL;}
@@ -89,17 +92,17 @@ public:
 	virtual void setInterpreter(InterpreterPlugin*) {}
 	virtual InterpreterPlugin* interpreter() const {return NULL;}
 	virtual void debug() {}
-	virtual ProjectItem* getItemScope(const QString&, bool) const {}
-	virtual QStringList getListValues(const QString&, const QString&, const QString&) const {}
-	virtual QString getStringValues(const QString&, const QString&, const QString&) const {}
+	virtual ProjectItem* getItemScope(const QString&, bool) const { return 0; }
+	virtual QStringList getListValues(const QString&, const QString&, const QString&) const { return QStringList(); }
+	virtual QString getStringValues(const QString&, const QString&, const QString&) const { return QString(); }
 	virtual void setListValues(const QStringList&, const QString&, const QString&, const QString&) {}
 	virtual void setStringValues(const QString&, const QString&, const QString&, const QString&) {}
 	virtual void addListValues(const QStringList&, const QString&, const QString&, const QString&) {}
 	virtual void addStringValues(const QString&, const QString&, const QString&, const QString&) {}
 	virtual void redoLayout(ProjectItem*) {}
-	virtual bool writeProject() {}
+	virtual bool writeProject() { return true; }
 	virtual void writeItem(ProjectItem*) {}
-	virtual bool addProject(const QString&, ProjectItem*, const QString&) {}
+	virtual bool addProject(const QString&, ProjectItem*, const QString&) { return false; }
 	
 	// P@sNox, Fix complete build
 	virtual void setValues(ProjectItem*, const QString&, const QString&, const QStringList&) {}

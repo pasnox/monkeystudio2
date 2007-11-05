@@ -91,7 +91,7 @@ public:
 	virtual bool isPrintAvailable() const;
 
 private:
-	QtDesignerChild();
+	QtDesignerChild( QWidget* = 0 );
 	~QtDesignerChild();
 
 	QToolBar* mToolBar;

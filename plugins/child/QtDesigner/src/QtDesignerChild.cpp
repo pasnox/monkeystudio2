@@ -57,7 +57,7 @@ It's extendable with a powerfull plugins system.
 
 using namespace pMonkeyStudio;
 
-QtDesignerChild::QtDesignerChild()
+QtDesignerChild::QtDesignerChild( QWidget* )
 	: pAbstractChild()
 {
 	// set icon
