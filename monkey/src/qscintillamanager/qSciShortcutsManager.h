@@ -1,14 +1,12 @@
 /****************************************************************************
 **
-**         Created using Monkey Studio v1.8.0.0
-** Author    : Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, The Monkey Studio Team
-** Project   : Monkey Studio 2
-** FileName  : qSciShortcutsManager.h
-** Date      : 2007-11-04T22:46:12
+**         Created using Monkey Studio v1.7.0
+** Author    : Kopats Andrei aka hlamer <hlamer at tut by>
+** Project   : SciShortcutsManager
+** FileName  : SciShortcutsManager.h
+** Date      : 2007-10-27T10:52:20
 ** License   : GPL
-** Comment   : Monkey Studio is a Free, Fast and lightweight crossplatform Qt RAD.
-It's extendable with a powerfull plugins system.
-** Home Page : http://www.monkeystudio.org
+** Comment   : Your comment here
 **
 ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -32,9 +30,6 @@ class pEditor;
 
 struct SciAction
 {
-    SciAction( const QString& n, const QString& t, const QIcon& i, const QString& d, const QString& tt, int m )
-      : name( n ), text( t ), icon( i ), defaultShortcut( d ), toolTip( tt ), messageCode( m )
-    {}
     QString name;
     QString text;
     QIcon icon;
@@ -47,10 +42,8 @@ struct SciAction
 class Q_MONKEY_EXPORT qSciShortcutsManager: public QObject, public QSingleton<qSciShortcutsManager>
 {
     Q_OBJECT
-    friend class QSingleton<qSciShortcutsManager>;
-
-private:
-    qSciShortcutsManager( QObject* = QApplication::instance() );
+public:
+    qSciShortcutsManager ();
 
 protected:
     QList<SciAction> sactions;

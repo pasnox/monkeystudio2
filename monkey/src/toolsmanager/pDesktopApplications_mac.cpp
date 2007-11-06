@@ -1,14 +1,12 @@
 /****************************************************************************
 **
-** 		Created using Monkey Studio v1.8.0.0
-** Author    : Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, The Monkey Studio Team
-** Project   : Monkey Studio 2
+** 		Created using Monkey Studio v1.7.0
+** Author    : Nox P@sNox
+** Project   : pDesktopApplications
 ** FileName  : pDesktopApplications_mac.cpp
-** Date      : 2007-11-04T22:46:51
+** Date      : sam. août 18 19:54:58 2007
 ** License   : GPL
-** Comment   : Monkey Studio is a Free, Fast and lightweight crossplatform Qt RAD.
-It's extendable with a powerfull plugins system.
-** Home Page : http://www.monkeystudio.org
+** Comment   : Your comment here
 **
 ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.

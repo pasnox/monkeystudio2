@@ -1,14 +1,12 @@
 /****************************************************************************
 **
-** 		Created using Monkey Studio v1.8.0.0
-** Author    : Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, The Monkey Studio Team
-** Project   : Monkey Studio 2
+**      Created using kate
+** Author    : Kopats Andrei aka hlamer <hlamer@tut.by>
+** Project   : MonkeyProject project type 
 ** FileName  : MonkeyProjectItem.cpp
-** Date      : 2007-11-04T22:53:35
+** Date      : 2007-09-28
 ** License   : GPL
-** Comment   : Monkey Studio is a Free, Fast and lightweight crossplatform Qt RAD.
-It's extendable with a powerfull plugins system.
-** Home Page : http://www.monkeystudio.org
+** Comment   : MonkeyProject project class
 **
 ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -97,9 +95,7 @@ bool MonkeyProjectItem::open()
 {
     if (!isProject())
     {
-#ifdef Q_CC_GCC
         qWarning ("<%s>:%i Trying to open something for not a project item",__func__,__LINE__);
-#endif
         return false;
     }
     QSettings settings (getValue(), QSettings::IniFormat);
@@ -124,7 +120,7 @@ bool MonkeyProjectItem::open()
     {
         text = settings.value (QString ("target%1text").arg(i),"").toString();
         command = settings.value (QString ("target%1command").arg(i),"").toString();
-        targets.append ( Target( text, command,NULL ));
+        targets.append ( Target( text, command,NULL ) );
     }
     
     setModified (false);

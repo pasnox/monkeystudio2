@@ -15,6 +15,7 @@
 #include <QDir>
 #include <QHash>
 #include <QDateTime>
+#include <QApplication>
 
 const QList<pTemplate> pTemplatesManager::defaultTemplates()
 {
@@ -32,6 +33,7 @@ const QList<pTemplate> pTemplatesManager::defaultTemplates()
 	<< pTemplate( "C++", pTemplate::ttExtras, "QDialog", "Simple QDialog Class", ":/templates/icons/templates/qdialog.png", unTokenize( QStringList() << "$TEMPLATE_PATH$/C++/Files/qdialog_header.h" << "$TEMPLATE_PATH$/C++/Files/qdialog_source.cpp" ) ) 
 	<< pTemplate( "C++", pTemplate::ttExtras, "QMainWindow", "Simple QMainWindow Class", ":/templates/icons/templates/qmainwindow.png", unTokenize( QStringList() << "$TEMPLATE_PATH$/C++/Files/qmainwindow_header.h" << "$TEMPLATE_PATH$/C++/Files/qmainwindow_source.cpp" ) ) 
 	// C++ Projects
+    << pTemplate( "C++", pTemplate::ttProjects, "Monkey native project", "Use it for all non-qt projects", ":/templates/icons/templates/misc.png", unTokenize( QStringList( "$TEMPLATE_PATH$/C++/Projects/project.monkey" ) ) )
 	<< pTemplate( "C++", pTemplate::ttProjects, "Qt Console", "Simple Qt Console Application", ":/templates/icons/templates/qt_console.png", unTokenize( QStringList() << "$TEMPLATE_PATH$/C++/Projects/qt_console.pro" << "$TEMPLATE_PATH$/C++/Files/qt_console_main.cpp" ) ) 
 	<< pTemplate( "C++", pTemplate::ttProjects, "Qt GUI", "Simple Qt GUI Application", ":/templates/icons/templates/qt_gui.png", unTokenize( QStringList() << "$TEMPLATE_PATH$/C++/Projects/qt_gui.pro" << "$TEMPLATE_PATH$/C++/Files/qt_gui_main.cpp" ) ) 
 	<< pTemplate( "C++", pTemplate::ttProjects, "Qt Dll", "Simple Qt Dll", ":/templates/icons/templates/qt_dll.png", unTokenize( QStringList( "$TEMPLATE_PATH$/C++/Projects/qt_dll.pro" ) ) ) 
@@ -76,7 +78,7 @@ void pTemplatesManager::setTemplatesPath( const QString& s )
 
 const QString pTemplatesManager::templatesPath()
 {
-	return pMonkeyStudio::unTokenizeHome( pSettings::instance()->value( "Templates/DefaultDirectory", QApplication::applicationDirPath().append( "/../templates" )/*"$HOME$/.Monkey Studio/Templates"*/ ).toString() );
+	return pMonkeyStudio::unTokenizeHome( pSettings::instance()->value( "Templates/DefaultDirectory", QApplication::applicationDirPath().append( "/../templates" ) ).toString() );
 }
 
 void pTemplatesManager::setTemplatesHeader( const QString& s )

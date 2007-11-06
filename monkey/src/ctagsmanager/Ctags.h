@@ -15,7 +15,7 @@ It's extendable with a powerfull plugins system.
 **
 ****************************************************************************/
 #ifndef CTAGS_H
-#define CTAGS_H	
+#define CTAGS_H
 #include <QObject>
 #include <QDateTime>
 #include <QString>

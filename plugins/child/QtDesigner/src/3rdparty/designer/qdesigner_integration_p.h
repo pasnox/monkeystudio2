@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 1992-2007 Trolltech ASA. All rights reserved.
+** Copyright (C) 1992-2006 Trolltech AS. All rights reserved.
 **
 ** This file is part of the Qt Designer of the Qt Toolkit.
 **
@@ -9,27 +9,12 @@
 ** and appearing in the file LICENSE.GPL included in the packaging of
 ** this file.  Please review the following information to ensure GNU
 ** General Public Licensing requirements will be met:
-** http://trolltech.com/products/qt/licenses/licensing/opensource/
+** http://www.trolltech.com/products/qt/opensource.html
 **
 ** If you are unsure which license is appropriate for your use, please
 ** review the following information:
-** http://trolltech.com/products/qt/licenses/licensing/licensingoverview
-** or contact the sales department at sales@trolltech.com.
-**
-** In addition, as a special exception, Trolltech gives you certain
-** additional rights. These rights are described in the Trolltech GPL
-** Exception version 1.0, which can be found at
-** http://www.trolltech.com/products/qt/gplexception/ and in the file
-** GPL_EXCEPTION.txt in this package.
-**
-** In addition, as a special exception, Trolltech, as the sole copyright
-** holder for Qt Designer, grants users of the Qt/Eclipse Integration
-** plug-in the right for the Qt/Eclipse Integration to link to
-** functionality provided by Qt Designer and its related libraries.
-**
-** Trolltech reserves all rights not expressly granted herein.
-** 
-** Trolltech ASA (c) 2007
+** http://www.trolltech.com/products/qt/licensing.html or contact the
+** sales department at sales@trolltech.com.
 **
 ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -51,7 +36,6 @@
 #define QDESIGNER_INTEGRATION_H
 
 #include "shared_global_p.h"
-#include "abstractintegration.h"
 
 #include <QtCore/QObject>
 
@@ -64,49 +48,39 @@ class QWidget;
 
 namespace qdesigner_internal {
 
-struct Selection;
-
-class QDESIGNER_SHARED_EXPORT QDesignerIntegration: public QDesignerIntegrationInterface
+class QDESIGNER_SHARED_EXPORT QDesignerIntegration: public QObject
 {
     Q_OBJECT
 public:
     QDesignerIntegration(QDesignerFormEditorInterface *core, QObject *parent = 0);
     virtual ~QDesignerIntegration();
 
-    virtual QWidget *containerWindow(QWidget *widget) const;
-
-    // Load plugins into widget database and factory.
-    static void initializePlugins(QDesignerFormEditorInterface *formEditor);
-    void emitObjectNameChanged(QDesignerFormWindowInterface *formWindow, QObject *object, const QString &name);
+    inline QDesignerFormEditorInterface *core() const;
 
 signals:
     void propertyChanged(QDesignerFormWindowInterface *formWindow, const QString &name, const QVariant &value);
-    void objectNameChanged(QDesignerFormWindowInterface *formWindow, QObject *object, const QString &name);
 
 public slots:
     virtual void updateProperty(const QString &name, const QVariant &value);
-    // Additional signals of designer property editor
-    virtual void updatePropertyComment(const QString &name, const QString &value);
-    virtual void resetProperty(const QString &name);
-    virtual void addDynamicProperty(const QString &name, const QVariant &value);
-    virtual void removeDynamicProperty(const QString &name);
-
-
     virtual void updateActiveFormWindow(QDesignerFormWindowInterface *formWindow);
     virtual void setupFormWindow(QDesignerFormWindowInterface *formWindow);
     virtual void updateSelection();
     virtual void updateGeometry();
     virtual void activateWidget(QWidget *widget);
 
-    void updateCustomWidgetPlugins();
+protected:
+    virtual QWidget *containerWindow(QWidget *widget);
 
 private:
     void initialize();
-    void getSelection(Selection &s);
-    QObject *propertyEditorObject();
 
+private:
+    QDesignerFormEditorInterface *m_core;
     QDesignerFormWindowManagerInterface *m_formWindowManager;
 };
+
+inline QDesignerFormEditorInterface *QDesignerIntegration::core() const
+{ return m_core; }
 
 } // namespace qdesigner_internal
 

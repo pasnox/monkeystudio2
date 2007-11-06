@@ -1,19 +1,12 @@
-/****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.0.0
-** Author    : Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, The Monkey Studio Team
-** Project   : Monkey Studio 2
-** FileName  : pMonkeyStudio.cpp
-** Date      : 2007-11-04T22:47:10
-** License   : GPL
-** Comment   : Monkey Studio is a Free, Fast and lightweight crossplatform Qt RAD.
-It's extendable with a powerfull plugins system.
-** Home Page : http://www.monkeystudio.org
-**
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-****************************************************************************/
+/*****************************************************
+* AUTHOR   : Nox P@sNox <pasnox@gmail.com>
+* PROJECT  : 
+* FILENAME : pMonkeyStudio.cpp
+* DATE     : 2007/07/29
+* TIME     : 13:13
+* LICENSE  : GPL
+* COMMENT  : Your comment here
+*****************************************************/
 #include "pMonkeyStudio.h"
 #include "pSettings.h"
 #include "PluginsManager.h"
@@ -300,7 +293,7 @@ const QString pMonkeyStudio::getExistingDirectory( const QString& c, const QStri
 
 const QString pMonkeyStudio::tokenizeHome( const QString& s )
 {
-	return QString( s ).replace( QDir::homePath(), "$HOME$" );
+	return QString( s ).replace( QDir::homePath(), "$HOME$" ); 
 }
 
 const QString pMonkeyStudio::unTokenizeHome( const QString& s )
@@ -913,7 +906,7 @@ void pMonkeyStudio::setDefaultProjectsDirectory( const QString& s )
 
 const QString pMonkeyStudio::defaultProjectsDirectory()
 {
-	return pSettings::instance()->value( settingsPath() +"/DefaultProjectsDirectory", "/.Monkey Studio/Projects" ).toString();
+	return pSettings::instance()->value( settingsPath() +"/DefaultProjectsDirectory", "$HOME$/.Monkey Studio/Projects" ).toString();
 }
 
 void pMonkeyStudio::setUIDesignerMode( pMonkeyStudio::UIDesignerMode d )

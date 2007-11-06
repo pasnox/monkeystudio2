@@ -1,5 +1,5 @@
 /*
-*   $Id: routines.c,v 1.22 2006/05/30 04:37:12 darren Exp $
+*   $Id: routines.c 536 2007-06-02 06:09:00Z elliotth $
 *
 *   Copyright (c) 2002-2003, Darren Hiebert
 *
@@ -14,7 +14,9 @@
 */
 #include "general.h"  /* must always come first */
 
+#ifdef HAVE_STDLIB_H
 # include <stdlib.h>  /* to declare malloc (), realloc () */
+#endif
 #include <ctype.h>
 #include <string.h>
 #include <stdarg.h>
@@ -30,9 +32,20 @@
 
 /*  To declare "struct stat" and stat ().
  */
-
+#if defined (HAVE_SYS_TYPES_H)
 # include <sys/types.h>
-# include <sys/stat.h>  //possible root of problems on MS VC
+#else
+# if defined (HAVE_TYPES_H)
+#  include <types.h>
+# endif
+#endif
+#ifdef HAVE_SYS_STAT_H
+# include <sys/stat.h>
+#else
+# ifdef HAVE_STAT_H
+#  include <stat.h>
+# endif
+#endif
 
 #ifdef HAVE_DOS_H
 # include <dos.h>  /* to declare MAXPATH */
@@ -46,11 +59,8 @@
 #ifdef HAVE_IO_H
 # include <io.h>  /* to declare open() */
 #endif
+#include "debug.h"
 #include "routines.h"
-
-#ifdef TRAP_MEMORY_CALLS
-# include "safe_malloc.h"
-#endif
 
 /*
 *   MACROS
@@ -164,15 +174,12 @@ extern int lstat (const char *, struct stat *);
 # define lstat(fn,buf) stat(fn,buf)
 #endif
 
-#include "debug.h"
-#include "keyword.h"
 #include "options.h"
-#include "read.h"
-#include "routines.h"
 
 /*
 *   FUNCTION DEFINITIONS
 */
+
 structTotals Totals = { 0, 0, 0 };
 
 extern boolean isDestinationStdout (void)
@@ -201,9 +208,6 @@ extern void addTotals (
 	Totals.bytes += bytes;
 }
 
-
-
-
 extern void freeRoutineResources (void)
 {
 	if (CurrentDirectory != NULL)
@@ -227,6 +231,11 @@ extern void setExecutableName (const char *const path)
 extern const char *getExecutableName (void)
 {
 	return ExecutableName;
+}
+
+extern const char *getExecutablePath (void)
+{
+	return ExecutableProgram;
 }
 
 extern void error (
@@ -391,16 +400,58 @@ extern char* newUpperString (const char* str)
 /*
  * File system functions
  */
+
+extern void setCurrentDirectory (void)
+{
+#ifndef AMIGA
+	char* buf;
+#endif
+	if (CurrentDirectory == NULL)
+		CurrentDirectory = xMalloc ((size_t) (PATH_MAX + 1), char);
+#ifdef AMIGA
+	strcpy (CurrentDirectory, ".");
+#else
+	buf = getcwd (CurrentDirectory, PATH_MAX);
+	if (buf == NULL)
+		perror ("");
+#endif
+	if (CurrentDirectory [strlen (CurrentDirectory) - (size_t) 1] !=
+			PATH_SEPARATOR)
+	{
+		sprintf (CurrentDirectory + strlen (CurrentDirectory), "%c",
+				OUTPUT_PATH_SEPARATOR);
+	}
+}
+
+#ifdef AMIGA
+static boolean isAmigaDirectory (const char *const name)
+{
+	boolean result = FALSE;
+	struct FileInfoBlock *const fib = xMalloc (1, struct FileInfoBlock);
+	if (fib != NULL)
+	{
+		const BPTR flock = Lock ((UBYTE *) name, (long) ACCESS_READ);
+
+		if (flock != (BPTR) NULL)
+		{
+			if (Examine (flock, fib))
+				result = ((fib->fib_DirEntryType >= 0) ? TRUE : FALSE);
+			UnLock (flock);
+		}
+		eFree (fib);
+	}
+	return result;
+}
+#endif
+
 /* For caching of stat() calls */
-#include "sys/stat.h"
 extern fileStatus *eStat (const char *const fileName)
 {
 	struct stat status;
 	static fileStatus file;
 	if (file.name == NULL  ||  strcmp (fileName, file.name) != 0)
 	{
-		if (file.name != NULL)
-			eFree (file.name);
+		eStatFree (&file);
 		file.name = eStrdup (fileName);
 		if (lstat (file.name, &status) != 0)
 			file.exists = FALSE;
@@ -426,6 +477,15 @@ extern fileStatus *eStat (const char *const fileName)
 		}
 	}
 	return &file;
+}
+
+extern void eStatFree (fileStatus *status)
+{
+	if (status->name != NULL)
+	{
+		eFree (status->name);
+		status->name = NULL;
+	}
 }
 
 extern boolean doesFileExist (const char *const fileName)
@@ -458,6 +518,26 @@ extern boolean isRecursiveLink (const char* const dirName)
 	}
 	return result;
 }
+
+#ifndef HAVE_FGETPOS
+
+extern int fgetpos (FILE *stream, fpos_t *pos)
+{
+	int result = 0;
+
+	*pos = ftell (stream);
+	if (*pos == -1L)
+		result = -1;
+
+	return result;
+}
+
+extern int fsetpos (FILE *stream, fpos_t const *pos)
+{
+	return fseek (stream, *pos, SEEK_SET);
+}
+
+#endif
 
 /*
  *  Pathname manipulation (O/S dependent!!!)
@@ -796,6 +876,46 @@ extern char* relativeFilename (const char *file, const char *dir)
 	free (absdir);
 
 	return res;
+}
+
+extern FILE *tempFile (const char *const mode, char **const pName)
+{
+	char *name;
+	FILE *fp;
+	int fd;
+#if defined(HAVE_MKSTEMP)
+	const char *const pattern = "tags.XXXXXX";
+	const char *tmpdir = NULL;
+	fileStatus *file = eStat (ExecutableProgram);
+	if (! file->isSetuid)
+		tmpdir = getenv ("TMPDIR");
+	if (tmpdir == NULL)
+		tmpdir = TMPDIR;
+	name = xMalloc (strlen (tmpdir) + 1 + strlen (pattern) + 1, char);
+	sprintf (name, "%s%c%s", tmpdir, OUTPUT_PATH_SEPARATOR, pattern);
+	fd = mkstemp (name);
+	eStatFree (file);
+#elif defined(HAVE_TEMPNAM)
+	name = tempnam (TMPDIR, "tags");
+	if (name == NULL)
+		error (FATAL | PERROR, "cannot allocate temporary file name");
+	fd = open (name, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
+#else
+	name = xMalloc (L_tmpnam, char);
+	if (tmpnam (name) != name)
+		error (FATAL | PERROR, "cannot assign temporary file name");
+	fd = open (name, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
+#endif
+	if (fd == -1)
+		error (FATAL | PERROR, "cannot open temporary file");
+	fp = fdopen (fd, mode);
+	if (fp == NULL)
+		error (FATAL | PERROR, "cannot open temporary file");
+	DebugStatement (
+		debugPrintf (DEBUG_STATUS, "opened temporary file %s\n", name); )
+	Assert (*pName == NULL);
+	*pName = name;
+	return fp;
 }
 
 /* vi:set tabstop=4 shiftwidth=4: */

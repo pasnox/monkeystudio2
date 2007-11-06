@@ -1,7 +1,21 @@
+/*
+*   $Id: options.h 443 2006-05-30 04:37:13Z darren $
+*
+*   Copyright (c) 1998-2003, Darren Hiebert
+*
+*   This source code is released for free distribution under the terms of the
+*   GNU General Public License.
+*
+*   Defines external interface to option processing.
+*/
 #ifndef _OPTIONS_H
 #define _OPTIONS_H
 
-# define DEFAULT_FILE_FORMAT  2
+#if defined(OPTION_WRITE) || defined(VAXC)
+# define CONST_OPTION
+#else
+# define CONST_OPTION const
+#endif
 
 /*
 *   INCLUDE FILES
@@ -10,6 +24,7 @@
 
 #include <stdarg.h>
 
+#include "args.h"
 #include "parse.h"
 #include "strlist.h"
 #include "vstring.h"
@@ -19,6 +34,18 @@
 */
 
 typedef enum { OPTION_NONE, OPTION_SHORT, OPTION_LONG } optionType;
+
+typedef struct sCookedArgs {
+	/* private */
+	Arguments* args;
+	char *shortOptions;
+	char simple[2];
+	boolean isOption;
+	boolean longOption;
+	const char* parameter;
+	/* public */
+	char* item;
+} cookedArgs;
 
 typedef enum eLocate {
 	EX_MIX,      /* line numbers for defines, patterns otherwise */
@@ -88,15 +115,41 @@ typedef struct sOptionValues {
 	unsigned long breakLine;/* -b  source line at which to call lineBreak() */
 #endif
 } optionValues;
+
 /*
 *   GLOBAL VARIABLES
 */
-extern  optionValues		Option;
+extern CONST_OPTION optionValues		Option;
 
-extern void verbose (const char *const format, ...) ;
-extern boolean isIgnoreToken (const char *const name, boolean *const pIgnoreParens, const char **const replacement);
-extern boolean isIncludeFile (const char *const fileName);
+/*
+*   FUNCTION PROTOTYPES
+*/
+extern void verbose (const char *const format, ...) __printf__ (1, 2);
 extern void freeList (stringList** const pString);
+extern void setDefaultTagFileName (void);
+extern void checkOptions (void);
+extern boolean filesRequired (void);
+extern void testEtagsInvocation (void);
+
+extern cookedArgs* cArgNewFromString (const char* string);
+extern cookedArgs* cArgNewFromArgv (char* const* const argv);
+extern cookedArgs* cArgNewFromFile (FILE* const fp);
+extern cookedArgs* cArgNewFromLineFile (FILE* const fp);
+extern void cArgDelete (cookedArgs* const current);
+extern boolean cArgOff (cookedArgs* const current);
+extern boolean cArgIsOption (cookedArgs* const current);
+extern const char* cArgItem (cookedArgs* const current);
+extern void cArgForth (cookedArgs* const current);
+
+extern boolean isExcludedFile (const char* const name);
+extern boolean isIncludeFile (const char *const fileName);
+extern boolean isIgnoreToken (const char *const name, boolean *const pIgnoreParens, const char **const replacement);
+extern void parseOption (cookedArgs* const cargs);
+extern void parseOptions (cookedArgs* const cargs);
+extern void previewFirstOption (cookedArgs* const cargs);
+extern void readOptionConfiguration (void);
+extern void initOptions (void);
+extern void freeOptionResources (void);
 
 #endif  /* _OPTIONS_H */
 

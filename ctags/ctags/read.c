@@ -1,5 +1,5 @@
 /*
-*   $Id: read.c,v 1.7 2006/05/30 04:37:12 darren Exp $
+*   $Id: read.c 616 2007-09-05 03:17:50Z dhiebert $
 *
 *   Copyright (c) 1996-2002, Darren Hiebert
 *
@@ -20,10 +20,11 @@
 
 #define FILE_WRITE
 #include "read.h"
-#include "entry.h"
 #include "debug.h"
-#include "options.h"
+#include "entry.h"
+#include "main.h"
 #include "routines.h"
+#include "options.h"
 
 /*
 *   DATA DEFINITIONS
@@ -37,10 +38,16 @@ static fpos_t StartOfLine;  /* holds deferred position of start of line */
 
 extern void freeSourceFileResources (void)
 {
-	vStringDelete (File.name);
-	vStringDelete (File.path);
-	vStringDelete (File.source.name);
-	vStringDelete (File.line);
+	if (File.name != NULL)
+		vStringDelete (File.name);
+	if (File.path != NULL)
+		vStringDelete (File.path);
+	if (File.source.name != NULL)
+		vStringDelete (File.source.name);
+	if (File.source.tagPath != NULL)
+		eFree (File.source.tagPath);
+	if (File.line != NULL)
+		vStringDelete (File.line);
 }
 
 /*
@@ -76,6 +83,14 @@ static void setSourceFileParameters (vString *const fileName)
 
 	if (File.source.tagPath != NULL)
 		eFree (File.source.tagPath);
+	if (! Option.tagRelative || isAbsolutePath (vStringValue (fileName)))
+		File.source.tagPath = eStrdup (vStringValue (fileName));
+	else
+		File.source.tagPath =
+				relativeFilename (vStringValue (fileName), TagFile.directory);
+
+	if (vStringLength (fileName) > TagFile.max.file)
+		TagFile.max.file = vStringLength (fileName);
 
 	File.source.isHeader = isIncludeFile (vStringValue (fileName));
 	File.source.language = getFileLanguage (vStringValue (fileName));
@@ -164,6 +179,7 @@ static boolean parseLineDirective (void)
 	boolean result = FALSE;
 	int c = skipWhite ();
 	DebugStatement ( const char* lineStr = ""; )
+
 	if (isdigit (c))
 	{
 		ungetc (c, File.fp);
@@ -173,9 +189,9 @@ static boolean parseLineDirective (void)
 			 getc (File.fp) == 'n'  &&  getc (File.fp) == 'e')
 	{
 		c = getc (File.fp);
-		DebugStatement ( lineStr = "line"; )
 		if (c == ' '  ||  c == '\t')
 		{
+			DebugStatement ( lineStr = "line"; )
 			result = TRUE;
 		}
 	}
@@ -197,10 +213,9 @@ static boolean parseLineDirective (void)
 				File.source.lineNumber = lNum - 1;  /* applies to NEXT line */
 				DebugStatement ( debugPrintf (DEBUG_RAW, "#%s %ld \"%s\"",
 								lineStr, lNum, vStringValue (fileName)); )
-
 			}
 
-			if (Option.include.fileNames && vStringLength (fileName) > 0 && 
+			if (Option.include.fileNames && vStringLength (fileName) > 0 &&
 				lNum == 1)
 			{
 				tagEntryInfo tag;
@@ -322,7 +337,7 @@ readnext:
 	if (File.newLine  &&  c != EOF)
 	{
 		fileNewline ();
-		if (c == '#'  &&  Option.lineDirectives)  //possible bug
+		if (c == '#'  &&  Option.lineDirectives)
 		{
 			if (parseLineDirective ())
 				goto readnext;
@@ -343,18 +358,21 @@ readnext:
 	}
 	else if (c == CRETURN)
 	{
-		/*  Turn line breaks into a canonical form. The three commonly
-		 *  used forms if line breaks: LF (UNIX), CR (MacIntosh), and
-		 *  CR-LF (MS-DOS) are converted into a generic newline.
+		/* Turn line breaks into a canonical form. The three commonly
+		 * used forms if line breaks: LF (UNIX/Mac OS X), CR (Mac OS 9),
+		 * and CR-LF (MS-DOS) are converted into a generic newline.
 		 */
+#ifndef macintosh
 		const int next = getc (File.fp);  /* is CR followed by LF? */
-
 		if (next != NEWLINE)
 			ungetc (next, File.fp);
-
-		c = NEWLINE;  /* convert CR into newline */
-		File.newLine = TRUE;
-		fgetpos (File.fp, &StartOfLine);
+		else
+#endif
+		{
+			c = NEWLINE;  /* convert CR into newline */
+			File.newLine = TRUE;
+			fgetpos (File.fp, &StartOfLine);
+		}
 	}
 	DebugStatement ( debugPutc (DEBUG_RAW, c); )
 	return c;
@@ -380,6 +398,10 @@ static vString *iFileGetLine (void)
 		if (c == '\n'  ||  (c == EOF  &&  vStringLength (File.line) > 0))
 		{
 			vStringTerminate (File.line);
+#ifdef HAVE_REGEX
+			if (vStringLength (File.line) > 0)
+				matchRegex (File.line, File.source.language);
+#endif
 			result = File.line;
 			break;
 		}

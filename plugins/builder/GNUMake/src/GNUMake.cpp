@@ -1,19 +1,3 @@
-/****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.0.0
-** Author    : Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, The Monkey Studio Team
-** Project   : Monkey Studio 2
-** FileName  : GNUMake.cpp
-** Date      : 2007-11-04T22:50:50
-** License   : GPL
-** Comment   : Monkey Studio is a Free, Fast and lightweight crossplatform Qt RAD.
-It's extendable with a powerfull plugins system.
-** Home Page : http://www.monkeystudio.org
-**
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
-****************************************************************************/
 #include <QTabWidget>
 #include "GNUMake.h"
 #include "GNUMakeParser.h"
@@ -141,7 +125,7 @@ pCommand GNUMake::defaultBuildCommand() const
 #else
     const QString mMake = "make";
 #endif
-    return pCommand( "Build", mMake, "-w", false, availableParsers(), "" );
+    return pCommand( "Build", mMake, "-w", false, availableParsers(), "$cpp$" );
 }
 
 pCommand GNUMake::buildCommand() const

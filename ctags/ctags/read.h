@@ -1,10 +1,36 @@
-#ifndef  _READ_H
-#define  _READ_H
+/*
+*   $Id: read.h 443 2006-05-30 04:37:13Z darren $
+*
+*   Copyright (c) 1998-2002, Darren Hiebert
+*
+*   This source code is released for free distribution under the terms of the
+*   GNU General Public License.
+*
+*   External interface to read.c
+*/
+#ifndef _READ_H
+#define _READ_H
+
+#if defined(FILE_WRITE) || defined(VAXC)
+# define CONST_FILE
+#else
+# define CONST_FILE const
+#endif
+
+/*
+*   INCLUDE FILES
+*/
+#include "general.h"  /* must always come first */
 
 #include <stdio.h>
-#include "vstring.h"
-#include "parse.h"
+#include <ctype.h>
 
+#include "parse.h"
+#include "vstring.h"
+
+/*
+*   MACROS
+*/
 #define getInputLineNumber()     File.lineNumber
 #define getInputFileName()       vStringValue (File.source.name)
 #define getInputFilePosition()   File.filePosition
@@ -16,7 +42,30 @@
 #define isLanguage(lang)         (boolean)((lang) == File.source.language)
 #define isHeaderFile()           File.source.isHeader
 
+/*
+*   DATA DECLARATIONS
+*/
 
+enum eCharacters {
+	/* white space characters */
+	SPACE         = ' ',
+	NEWLINE       = '\n',
+	CRETURN       = '\r',
+	FORMFEED      = '\f',
+	TAB           = '\t',
+	VTAB          = '\v',
+
+	/* some hard to read characters */
+	DOUBLE_QUOTE  = '"',
+	SINGLE_QUOTE  = '\'',
+	BACKSLASH     = '\\',
+
+	STRING_SYMBOL = ('S' + 0x80),
+	CHAR_SYMBOL   = ('C' + 0x80)
+};
+
+/*  Maintains the state of the current source file.
+ */
 typedef struct sInputFile {
 	vString    *name;          /* name of input file */
 	vString    *path;          /* path of input file (if any) */
@@ -43,37 +92,24 @@ typedef struct sInputFile {
 	} source;
 } inputFile;
 
-enum eCharacters {
-	/* white space characters */
-	SPACE         = ' ',
-	NEWLINE       = '\n',
-	CRETURN       = '\r',
-	FORMFEED      = '\f',
-	TAB           = '\t',
-	VTAB          = '\v',
-
-	/* some hard to read characters */
-	DOUBLE_QUOTE  = '"',
-	SINGLE_QUOTE  = '\'',
-	BACKSLASH     = '\\',
-
-	STRING_SYMBOL = ('S' + 0x80),
-	CHAR_SYMBOL   = ('C' + 0x80)
-};
-
 /*
 *   GLOBAL VARIABLES
 */
-extern  inputFile File;
+extern CONST_FILE inputFile File;
 
-
-
-
-
-extern const unsigned char *fileReadLine (void);
+/*
+*   FUNCTION PROTOTYPES
+*/
+extern void freeSourceFileResources (void);
+extern boolean fileOpen (const char *const fileName, const langType language);
+extern boolean fileEOF (void);
+extern void fileClose (void);
 extern int fileGetc (void);
 extern void fileUngetc (int c);
+extern const unsigned char *fileReadLine (void);
 extern char *readLine (vString *const vLine, FILE *const fp);
-extern boolean fileOpen (const char *const fileName, const langType language);
+extern char *readSourceLine (vString *const vLine, fpos_t location, long *const pSeekValue);
 
 #endif  /* _READ_H */
+
+/* vi:set tabstop=4 shiftwidth=4: */
