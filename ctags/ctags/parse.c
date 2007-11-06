@@ -31,7 +31,7 @@
 *   DATA DEFINITIONS
 */
 static parserDefinitionFunc* BuiltInParsers[] = { PARSER_LIST };
-static parserDefinition** LanguageTable = NULL;
+/*static*/ parserDefinition** LanguageTable = NULL;
 static unsigned int LanguageCount = 0;
 
 /*
