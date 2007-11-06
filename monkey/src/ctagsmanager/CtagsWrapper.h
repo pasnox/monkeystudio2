@@ -33,7 +33,7 @@ struct Q_MONKEY_EXPORT FileRecord {
 	QDateTime time;
 };
 
-class Q_MONKEY_EXPORT CtagsWrapper: public QObject, public QSingleton<Ctags>
+class Q_MONKEY_EXPORT CtagsWrapper: public QObject, public QSingleton<CtagsWrapper>
 {
 	Q_OBJECT
 	friend class QSingleton<CtagsWrapper>;
