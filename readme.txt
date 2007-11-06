@@ -33,6 +33,8 @@ With Mac OS X:
 * Open a shell, and go to the sources directory.
 * type: qmake -spec macx-g++ && make release
 
+Windows/MinGW users can use batch files.
+
 
 How to execute Monkey Studio:
 =============================
