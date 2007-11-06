@@ -24,7 +24,7 @@ It's extendable with a powerfull plugins system.
 
 #include "Navigator.h"
 #include "pDockToolBar.h"
-#include "Ctags.h"
+#include "CtagsWrapper.h"
 #include "UIProjectsManager.h"
 #include "ProjectsProxy.h"
 #include "NavigatorSettings.h"
