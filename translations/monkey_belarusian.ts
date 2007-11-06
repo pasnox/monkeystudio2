@@ -84,7 +84,7 @@
     <message>
         <location filename="../monkey/src/main.cpp" line="128"/>
         <source>Restoring Session...</source>
-        <translation type="unfinished"></translation>
+        <translation>Аднаўленне сессі...</translation>
     </message>
     <message>
         <location filename="../monkey/src/main.cpp" line="133"/>
@@ -519,7 +519,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="399"/>
         <source>Toggle insert/overtype</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="406"/>
@@ -599,7 +599,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="511"/>
         <source>Formfeed</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="518"/>
@@ -629,7 +629,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="553"/>
         <source>Convert selection to lower case</source>
-        <translation type="unfinished">Сканвертаваць выдзелены тэкст у малыя літары</translation>
+        <translation>Сканвертаваць выдзелены тэкст у малыя літары</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="560"/>
@@ -1123,7 +1123,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerdiff.cpp" line="107"/>
         <source>Command</source>
-        <translation type="unfinished"></translation>
+        <translation>Каманда</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerdiff.cpp" line="110"/>
@@ -2454,7 +2454,7 @@
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexertex.cpp" line="198"/>
         <source>Command</source>
-        <translation type="unfinished"></translation>
+        <translation>Каманда</translation>
     </message>
     <message>
         <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexertex.cpp" line="201"/>
@@ -2545,42 +2545,42 @@
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.ui" line="13"/>
         <source>About : %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Аб: %1</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.ui" line="56"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.ui" line="76"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.ui" line="84"/>
         <source>Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Калектыў</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.ui" line="110"/>
         <source>License</source>
-        <translation type="unfinished"></translation>
+        <translation>Ліцэнзія</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.ui" line="118"/>
         <source>Donations</source>
-        <translation type="unfinished"></translation>
+        <translation>Дараванні</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.ui" line="126"/>
         <source>Links</source>
-        <translation type="unfinished"></translation>
+        <translation>Спалыска</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.ui" line="149"/>
         <source>Informations</source>
-        <translation type="unfinished"></translation>
+        <translation>Інфармацыя</translation>
     </message>
 </context>
 <context>
@@ -2588,32 +2588,32 @@
     <message>
         <location filename="../monkey/src/abbreviationsmanager/ui/UIAddAbbreviation.cpp" line="65"/>
         <source>Warning...</source>
-        <translation type="unfinished"></translation>
+        <translation>Засцяроджанне...</translation>
     </message>
     <message>
         <location filename="../monkey/src/abbreviationsmanager/ui/UIAddAbbreviation.cpp" line="65"/>
         <source>This template already exists for this language.</source>
-        <translation type="unfinished"></translation>
+        <translation>Гэты шаблон ужо існуе дзеля гэтай мовы.</translation>
     </message>
     <message>
         <location filename="../monkey/src/abbreviationsmanager/ui/UIAddAbbreviation.ui" line="13"/>
         <source>Add Code Template</source>
-        <translation type="unfinished"></translation>
+        <translation>Дадаць шаблон</translation>
     </message>
     <message>
         <location filename="../monkey/src/abbreviationsmanager/ui/UIAddAbbreviation.ui" line="40"/>
         <source>Language :</source>
-        <translation type="unfinished"></translation>
+        <translation>Мова:</translation>
     </message>
     <message>
         <location filename="../monkey/src/abbreviationsmanager/ui/UIAddAbbreviation.ui" line="47"/>
         <source>Description :</source>
-        <translation type="unfinished"></translation>
+        <translation>Апісанне:</translation>
     </message>
     <message>
         <location filename="../monkey/src/abbreviationsmanager/ui/UIAddAbbreviation.ui" line="60"/>
         <source>Template :</source>
-        <translation type="unfinished"></translation>
+        <translation>Шаблон:</translation>
     </message>
 </context>
 <context>
@@ -2621,17 +2621,17 @@
     <message>
         <location filename="../monkey/src/projectsmanager/ui/UIAddExistingFiles.cpp" line="24"/>
         <source>Choose file(s)/project(s) to add to your project</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберыце файлы/праекты, якія трэба дадаць да праекта</translation>
     </message>
     <message>
         <location filename="../monkey/src/projectsmanager/ui/UIAddExistingFiles.cpp" line="39"/>
         <source>Scopes</source>
-        <translation type="unfinished"></translation>
+        <translation>Прастора</translation>
     </message>
     <message>
         <location filename="../monkey/src/projectsmanager/ui/UIAddExistingFiles.cpp" line="52"/>
         <source>Operators</source>
-        <translation type="unfinished"></translation>
+        <translation>Аперацыі</translation>
     </message>
 </context>
 <context>
@@ -2639,57 +2639,57 @@
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIBuilderSettings.cpp" line="100"/>
         <source>Select an executable</source>
-        <translation type="unfinished"></translation>
+        <translation>Абярыце выканальны файл</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIBuilderSettings.cpp" line="107"/>
         <source>Select a folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Абярыце папку</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIBuilderSettings.ui" line="13"/>
         <source>Builder Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Налады Будаўніка</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIBuilderSettings.ui" line="40"/>
         <source>Build Command</source>
-        <translation type="unfinished"></translation>
+        <translation>Каманда на пабудовы</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIBuilderSettings.ui" line="75"/>
         <source>Text :</source>
-        <translation type="unfinished"></translation>
+        <translation>Тэкст:</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIBuilderSettings.ui" line="85"/>
         <source>Command :</source>
-        <translation type="unfinished"></translation>
+        <translation>Каманда:</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIBuilderSettings.ui" line="102"/>
         <source>Arguments :</source>
-        <translation type="unfinished"></translation>
+        <translation>Аргументы:</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIBuilderSettings.ui" line="112"/>
         <source>Working Directory :</source>
-        <translation type="unfinished"></translation>
+        <translation>Працоўная дырэкторыя:</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIBuilderSettings.ui" line="129"/>
         <source>Skip On Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Прапусціць пры памылцы</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIBuilderSettings.ui" line="150"/>
         <source>Parsers :</source>
-        <translation type="unfinished"></translation>
+        <translation>Парсеры:</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIBuilderSettings.ui" line="167"/>
         <source>Try All</source>
-        <translation type="unfinished"></translation>
+        <translation>Спрабаваць усе</translation>
     </message>
 </context>
 <context>
@@ -2697,92 +2697,92 @@
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UICLIToolSettings.cpp" line="123"/>
         <source>New Command</source>
-        <translation type="unfinished"></translation>
+        <translation>Новая каманда</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UICLIToolSettings.cpp" line="171"/>
         <source>Select an executable</source>
-        <translation type="unfinished"></translation>
+        <translation>Абярыце выканальны файл</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UICLIToolSettings.cpp" line="178"/>
         <source>Select a folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Абарысе папку</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="13"/>
         <source>Commands Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Рэдактар каманд</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="48"/>
         <source>Commands :</source>
-        <translation type="unfinished"></translation>
+        <translation>Каманды:</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="58"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Дадаць</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="71"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Выдаліць</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="97"/>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Уніз</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="107"/>
         <source>Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Уверх</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="119"/>
         <source>Command</source>
-        <translation type="unfinished"></translation>
+        <translation>Каманда</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="154"/>
         <source>Text :</source>
-        <translation type="unfinished"></translation>
+        <translation>Тэкст:</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="164"/>
         <source>Command :</source>
-        <translation type="unfinished"></translation>
+        <translation>Каманда:</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="204"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="184"/>
         <source>Arguments :</source>
-        <translation type="unfinished"></translation>
+        <translation>Аргументы:</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="194"/>
         <source>Working Directory :</source>
-        <translation type="unfinished"></translation>
+        <translation>Працоўная дырэкторыя:</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="214"/>
         <source>Skip On Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Прапусціць пры памылцы</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="235"/>
         <source>Parsers :</source>
-        <translation type="unfinished"></translation>
+        <translation>Парсеры:</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="252"/>
         <source>Try All</source>
-        <translation type="unfinished"></translation>
+        <translation>Спрабаваць усе</translation>
     </message>
 </context>
 <context>
@@ -2790,57 +2790,57 @@
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIDesktopTools.cpp" line="56"/>
         <source>Tools Editor...</source>
-        <translation type="unfinished"></translation>
+        <translation>Рэдактар прылад...</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIDesktopTools.cpp" line="56"/>
         <source>You&apos;re about to discard all changes. Are you sure ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы збіраецеся адхіліць усе змены. Вы перекананы?</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIDesktopTools.cpp" line="219"/>
         <source>Move Up...</source>
-        <translation type="unfinished"></translation>
+        <translation>Змясціць уверх...</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIDesktopTools.cpp" line="219"/>
         <source>Only one item can be move up, please select only one item.</source>
-        <translation type="unfinished"></translation>
+        <translation>Магчыма рухаць толькі адзін складальнік.</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIDesktopTools.cpp" line="238"/>
         <source>Move Down...</source>
-        <translation type="unfinished"></translation>
+        <translation>Змясціць уніз...</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIDesktopTools.cpp" line="238"/>
         <source>Only one item can be move down, please select only one item.</source>
-        <translation type="unfinished"></translation>
+        <translation>Магчыма рухаць толькі адзін складальнік.</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIDesktopTools.ui" line="13"/>
         <source>Desktop Applications</source>
-        <translation type="unfinished"></translation>
+        <translation>Прылады працоўнага стала</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIDesktopTools.ui" line="57"/>
         <source>&amp;Name Filter :</source>
-        <translation type="unfinished"></translation>
+        <translation>Фільтр іменаў:</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIDesktopTools.ui" line="67"/>
         <source>You can write there a filter for your application name</source>
-        <translation type="unfinished"></translation>
+        <translation>Тут вы можаце рэдагаваць фільтр для імені вашай прылады</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIDesktopTools.ui" line="74"/>
         <source>&amp;Categories Filters :</source>
-        <translation type="unfinished"></translation>
+        <translation>Катэгоыі фільтраў:</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIDesktopTools.ui" line="84"/>
         <source>You can search for application base on their desktop categories ( Qt, audio and more ), you need to separate each category by a semi colon ;</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы можаце шукаць прылады ў катэгорыях прылад (Гук, Офіс, ...), патрэбна раздзяляць катэгорыі сімвалам &quot;;&quot;</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIDesktopTools.ui" line="106"/>
@@ -2850,12 +2850,12 @@
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIDesktopTools.ui" line="140"/>
         <source>&amp;Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Уверх</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIDesktopTools.ui" line="150"/>
         <source>&amp;Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Уніз</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIDesktopTools.ui" line="160"/>
@@ -2880,7 +2880,7 @@
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIDesktopTools.ui" line="248"/>
         <source>Loading Applications... %p%</source>
-        <translation type="unfinished"></translation>
+        <translation>Загрузка прылад... %p%</translation>
     </message>
 </context>
 <context>
@@ -2888,72 +2888,72 @@
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UIEditTemplate.cpp" line="36"/>
         <source>Creating new template</source>
-        <translation type="unfinished"></translation>
+        <translation>Стварэнне новага шаблона</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UIEditTemplate.cpp" line="44"/>
         <source>Editing template - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Рэдагаванне шаблона - %1</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UIEditTemplate.cpp" line="74"/>
         <source>Select an icon for this template type</source>
-        <translation type="unfinished"></translation>
+        <translation>Абярыце іконку для шаблона</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UIEditTemplate.cpp" line="104"/>
         <source>Select a template file</source>
-        <translation type="unfinished"></translation>
+        <translation>Абярыце файл шаблона</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UIEditTemplate.cpp" line="146"/>
         <source>Warning...</source>
-        <translation type="unfinished"></translation>
+        <translation>Парярэджанне...</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UIEditTemplate.cpp" line="146"/>
         <source>This template name is already used.</source>
-        <translation type="unfinished"></translation>
+        <translation>Шаблон з такім іменем ужо існуе.</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UIEditTemplate.ui" line="51"/>
         <source>Language :</source>
-        <translation type="unfinished"></translation>
+        <translation>Мова:</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UIEditTemplate.ui" line="61"/>
         <source>Type :</source>
-        <translation type="unfinished"></translation>
+        <translation>Тып:</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UIEditTemplate.ui" line="73"/>
         <source>Name :</source>
-        <translation type="unfinished"></translation>
+        <translation>Імя:</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UIEditTemplate.ui" line="105"/>
         <source>Description :</source>
-        <translation type="unfinished"></translation>
+        <translation>Апісанне:</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UIEditTemplate.ui" line="115"/>
         <source>Template File(s) :</source>
-        <translation type="unfinished"></translation>
+        <translation>Файлы шаблона:</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UIEditTemplate.ui" line="149"/>
         <source>Add...</source>
-        <translation type="unfinished"></translation>
+        <translation>Дадаць...</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UIEditTemplate.ui" line="156"/>
         <source>Edit...</source>
-        <translation type="unfinished"></translation>
+        <translation>Рэдагаваць...</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UIEditTemplate.ui" line="163"/>
         <source>Remove...</source>
-        <translation type="unfinished"></translation>
+        <translation>Выдаліць...</translation>
     </message>
 </context>
 <context>
@@ -2961,12 +2961,12 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="103"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>Файл</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="105"/>
         <source>&amp;New...</source>
-        <translation type="unfinished"></translation>
+        <translation>Новы...</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="105"/>
@@ -2976,12 +2976,12 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="105"/>
         <source>Create a new file</source>
-        <translation type="unfinished"></translation>
+        <translation>Стварыць новы файл</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="106"/>
         <source>&amp;Open...</source>
-        <translation type="unfinished"></translation>
+        <translation>Адкрыць...</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="106"/>
@@ -2991,57 +2991,57 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="106"/>
         <source>Open a file</source>
-        <translation type="unfinished"></translation>
+        <translation>Адкрыць файл</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="173"/>
         <source>&amp;Recents</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Адкрытыя файлы</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="174"/>
         <source>&amp;Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Ачысціць</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="108"/>
         <source>Clear the recents files list</source>
-        <translation type="unfinished"></translation>
+        <translation>Ачысціць спіс адкрытых файлаў</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="111"/>
         <source>Session</source>
-        <translation type="unfinished"></translation>
+        <translation>Сессія</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="112"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Захаваць</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="112"/>
         <source>Save the current session files list</source>
-        <translation type="unfinished"></translation>
+        <translation>Захаваць спіс адкрытых файлаў</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="113"/>
         <source>Restore</source>
-        <translation type="unfinished"></translation>
+        <translation>Аднавіць</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="113"/>
         <source>Restore the current session files list</source>
-        <translation type="unfinished"></translation>
+        <translation>Адвіць захаваны спіс адкрытых файлаў</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="162"/>
         <source>&amp;Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Захаваць</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="166"/>
         <source>&amp;Current</source>
-        <translation type="unfinished"></translation>
+        <translation>Бягучую</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="116"/>
@@ -3051,22 +3051,22 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="116"/>
         <source>Save the current file</source>
-        <translation type="unfinished"></translation>
+        <translation>Захаваць бягучы файл</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="167"/>
         <source>&amp;All</source>
-        <translation type="unfinished"></translation>
+        <translation>Усе</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="117"/>
         <source>Save all files</source>
-        <translation type="unfinished"></translation>
+        <translation>Захаваць усе файлы</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="165"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Закрыць</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="119"/>
@@ -3076,17 +3076,17 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="119"/>
         <source>Close the current file</source>
-        <translation type="unfinished"></translation>
+        <translation>Захаваць цяперашні файл</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="120"/>
         <source>Close all files</source>
-        <translation type="unfinished"></translation>
+        <translation>Закрыць усе файлы</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="122"/>
         <source>Save As &amp;Backup</source>
-        <translation type="unfinished"></translation>
+        <translation>Захаваць копію</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="122"/>
@@ -3096,22 +3096,22 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="122"/>
         <source>Save a backup of the current file</source>
-        <translation type="unfinished"></translation>
+        <translation>Захаваць копію бягучага файла</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="124"/>
         <source>Quic&amp;k Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Хуткі друк</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="124"/>
         <source>Quick print the current file</source>
-        <translation type="unfinished"></translation>
+        <translation>Друкаваць бягучы файл</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="125"/>
         <source>&amp;Print...</source>
-        <translation type="unfinished"></translation>
+        <translation>Друк...</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="125"/>
@@ -3121,12 +3121,12 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="125"/>
         <source>Print the current file</source>
-        <translation type="unfinished"></translation>
+        <translation>Друкаваць бягучы файл</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="127"/>
         <source>&amp;Quit</source>
-        <translation type="unfinished"></translation>
+        <translation>Выхад</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="127"/>
@@ -3136,27 +3136,27 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="127"/>
         <source>Quit the application</source>
-        <translation type="unfinished"></translation>
+        <translation>Выхад з прылады</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="129"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Рэдагаванне</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="131"/>
         <source>Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Наладкі...</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="131"/>
         <source>Edit the application settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Рэдагаваць наладкі прылады</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="132"/>
         <source>Shortcuts Editor...</source>
-        <translation type="unfinished"></translation>
+        <translation>Рэдактар цэтлікаў...</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="132"/>
@@ -3166,12 +3166,12 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="132"/>
         <source>Edit the application shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Рэдагаваць цэтлікі прылады</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="134"/>
         <source>&amp;Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>Вярнуць</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="134"/>
@@ -3181,12 +3181,12 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="134"/>
         <source>Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>Вярнуць</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="135"/>
         <source>&amp;Redo</source>
-        <translation type="unfinished"></translation>
+        <translation>Адмяніць адмену</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="135"/>
@@ -3196,12 +3196,12 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="135"/>
         <source>Redo</source>
-        <translation type="unfinished"></translation>
+        <translation>Адмяніць адмену</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="137"/>
         <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Капіраваць</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="137"/>
@@ -3211,12 +3211,12 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="137"/>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Капіраваць</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="138"/>
         <source>Cu&amp;t</source>
-        <translation type="unfinished"></translation>
+        <translation>Выразаць</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="138"/>
@@ -3226,12 +3226,12 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="138"/>
         <source>Cut</source>
-        <translation type="unfinished"></translation>
+        <translation>Выразаць</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="139"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>Уставіць</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="139"/>
@@ -3241,12 +3241,12 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="139"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>Уставіць</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="141"/>
         <source>&amp;Search - Replace...</source>
-        <translation type="unfinished"></translation>
+        <translation>Знайсці - Замяніць...</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="141"/>
@@ -3256,12 +3256,12 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="141"/>
         <source>Search - Replace...</source>
-        <translation type="unfinished"></translation>
+        <translation>Знацсці - замяніць...</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="142"/>
         <source>Search Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>Знайсці папярэдняе</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="142"/>
@@ -3271,7 +3271,7 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="143"/>
         <source>Search Next</source>
-        <translation type="unfinished"></translation>
+        <translation>Знайсці наступнае</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="143"/>
@@ -3281,7 +3281,7 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="145"/>
         <source>&amp;Go To...</source>
-        <translation type="unfinished"></translation>
+        <translation>Перайсці на радок...</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="145"/>
@@ -3291,17 +3291,17 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="145"/>
         <source>Go To...</source>
-        <translation type="unfinished"></translation>
+        <translation>Перайсці на радок...</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="146"/>
         <source>&amp;All Commands</source>
-        <translation type="unfinished"></translation>
+        <translation>Усе каманды</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="148"/>
         <source>Expand Abbreviation</source>
-        <translation type="unfinished"></translation>
+        <translation>Разгарнуць скарачэнне</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="148"/>
@@ -3311,7 +3311,7 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="149"/>
         <source>Prepare APIs</source>
-        <translation type="unfinished"></translation>
+        <translation>Прыгатаваць API-файлы</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="149"/>
@@ -3321,22 +3321,22 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="149"/>
         <source>Prepare the APIs files for auto completion / calltips</source>
-        <translation type="unfinished"></translation>
+        <translation>Прыкатаваць API-файлы для аўтадапаўненя / Падказак</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="151"/>
         <source>&amp;View</source>
-        <translation type="unfinished"></translation>
+        <translation>Від</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="153"/>
         <source>&amp;Style</source>
-        <translation type="unfinished"></translation>
+        <translation>Стыль</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="154"/>
         <source>&amp;Next Tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Наступная ўкладка</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="154"/>
@@ -3346,12 +3346,12 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="154"/>
         <source>Active the next tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Паказаць наступную Ўкладку</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="155"/>
         <source>&amp;Previous Tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Папярэдняя ўкладка</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="155"/>
@@ -3361,12 +3361,12 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="155"/>
         <source>Active the previous tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Паказаць папярэднюю ўкладку</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="156"/>
         <source>&amp;Filtered Projects</source>
-        <translation type="unfinished"></translation>
+        <translation>Фільтрацыя дрэва праекта</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="156"/>
@@ -3376,17 +3376,17 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="156"/>
         <source>Filtered project view</source>
-        <translation type="unfinished"></translation>
+        <translation>Фільтрацыя дрэва праекта</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="158"/>
         <source>&amp;Project</source>
-        <translation type="unfinished"></translation>
+        <translation>Праект</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="160"/>
         <source>&amp;New</source>
-        <translation type="unfinished"></translation>
+        <translation>Новы</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="160"/>
@@ -3396,12 +3396,12 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="160"/>
         <source>New project...</source>
-        <translation type="unfinished"></translation>
+        <translation>Новы праект...</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="161"/>
         <source>&amp;Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Адкрыць</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="161"/>
@@ -3411,187 +3411,187 @@
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="161"/>
         <source>Open a project...</source>
-        <translation type="unfinished"></translation>
+        <translation>Адкрыць праект...</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="163"/>
         <source>Save the current project</source>
-        <translation type="unfinished"></translation>
+        <translation>Захаваць бягучы праект</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="164"/>
         <source>Save all projects</source>
-        <translation type="unfinished"></translation>
+        <translation>Захаваць усе праекты</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="166"/>
         <source>Close the current project</source>
-        <translation type="unfinished"></translation>
+        <translation>Закрыць бягучы праект</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="167"/>
         <source>Close all projects</source>
-        <translation type="unfinished"></translation>
+        <translation>Закрыць усе праекты</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="169"/>
         <source>Set&amp;tings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Наладкі...</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="169"/>
         <source>Project settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Наладкі праекта</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="171"/>
         <source>&amp;Add Existing Files/Projects...</source>
-        <translation type="unfinished"></translation>
+        <translation>Дадаць існуючыя файлы/праекты...</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="171"/>
         <source>Add existing files/projects to the current project</source>
-        <translation type="unfinished"></translation>
+        <translation>Дадаць існуючыя файлы/праекты у бягучы праект</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="174"/>
         <source>Clear the recents projects list</source>
-        <translation type="unfinished"></translation>
+        <translation>Ачысціць спіс нядаўна адкрытых праектаў</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="179"/>
         <source>&amp;Build</source>
-        <translation type="unfinished"></translation>
+        <translation>Пабудова</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="180"/>
         <source>&amp;Rebuild</source>
-        <translation type="unfinished"></translation>
+        <translation>Перабудаваць</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="181"/>
         <source>&amp;Clean</source>
-        <translation type="unfinished"></translation>
+        <translation>Ачысціць</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="182"/>
         <source>&amp;Execute</source>
-        <translation type="unfinished"></translation>
+        <translation>Выканаць</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="183"/>
         <source>&amp;User Commands</source>
-        <translation type="unfinished"></translation>
+        <translation>Каманды карыстальніка</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="186"/>
         <source>&amp;Debugger</source>
-        <translation type="unfinished"></translation>
+        <translation>Нададчык</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="187"/>
         <source>&amp;Interpreter</source>
-        <translation type="unfinished"></translation>
+        <translation>Інтэрпрэтатар</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="188"/>
         <source>&amp;Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Прылады</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="190"/>
         <source>&amp;Edit User Tools...</source>
-        <translation type="unfinished"></translation>
+        <translation>Рэдагаваць прылады...</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="190"/>
         <source>Edit tools...</source>
-        <translation type="unfinished"></translation>
+        <translation>Рэдагаваць прылады...</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="191"/>
         <source>Edit &amp;Desktop Tools...</source>
-        <translation type="unfinished"></translation>
+        <translation>Рэдагаваць прылады працоўнага стала...</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="191"/>
         <source>Edit desktop tools...</source>
-        <translation type="unfinished"></translation>
+        <translation>Рэдагаваць прылады працоўнага стала...</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="193"/>
         <source>&amp;User Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Прылады карыстальніка</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="194"/>
         <source>Desktop &amp;Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Прылады працоўнага стала</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="196"/>
         <source>Plu&amp;gins</source>
-        <translation type="unfinished"></translation>
+        <translation>Плагін</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="198"/>
         <source>&amp;Manage...</source>
-        <translation type="unfinished"></translation>
+        <translation>Наладкі...</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="198"/>
         <source>Manage plugins...</source>
-        <translation type="unfinished"></translation>
+        <translation>Наладкі плагінаў...</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="201"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Інфармацыя</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="203"/>
         <source>&amp;Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Кінаўніцства</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="203"/>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Кіраўніцства</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="205"/>
         <source>&amp;About...</source>
-        <translation type="unfinished"></translation>
+        <translation>Аб праграмме...</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="205"/>
         <source>About application...</source>
-        <translation type="unfinished"></translation>
+        <translation>Аб праграмме...</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="206"/>
         <source>About &amp;Qt...</source>
-        <translation type="unfinished"></translation>
+        <translation>Аб Qt...</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="206"/>
         <source>About Qt...</source>
-        <translation type="unfinished"></translation>
+        <translation>Аб Qt...</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="208"/>
         <source>&amp;Test Report</source>
-        <translation type="unfinished"></translation>
+        <translation>Паведамленне аб памылцы</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="208"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Пауза</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="208"/>
         <source>Coverage Meter Test Report...</source>
-        <translation type="unfinished"></translation>
+        <translation>Coverage Mete паведамленне...</translation>
     </message>
 </context>
 <context>
@@ -3599,72 +3599,72 @@
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="13"/>
         <source>Plugins Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Наладкі плагінаў</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="54"/>
         <source>Plugin Type :</source>
-        <translation type="unfinished"></translation>
+        <translation>Тып плагіна:</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="64"/>
         <source>Plugin Name :</source>
-        <translation type="unfinished"></translation>
+        <translation>Імя:</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="99"/>
         <source>Informations</source>
-        <translation type="unfinished"></translation>
+        <translation>Інфармацыя</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="123"/>
         <source>Caption :</source>
-        <translation type="unfinished"></translation>
+        <translation>Назва:</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="137"/>
         <source>Name :</source>
-        <translation type="unfinished"></translation>
+        <translation>Імя:</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="151"/>
         <source>Version :</source>
-        <translation type="unfinished"></translation>
+        <translation>Версія:</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="165"/>
         <source>Type :</source>
-        <translation type="unfinished"></translation>
+        <translation>Тып:</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="179"/>
         <source>Author :</source>
-        <translation type="unfinished"></translation>
+        <translation>Аўтар:</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="193"/>
         <source>Enable upon start</source>
-        <translation type="unfinished"></translation>
+        <translation>Інсталяваць пры старце</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="200"/>
         <source>Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Актыўны зараз</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="207"/>
         <source>Description :</source>
-        <translation type="unfinished"></translation>
+        <translation>Апісане:</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="222"/>
         <source>Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Наладкі</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettings.ui" line="249"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Закрыць</translation>
     </message>
 </context>
 <context>
@@ -3672,23 +3672,23 @@
     <message>
         <location filename="../monkey/src/projectsmanager/ui/UIProjectsManager.cpp" line="215"/>
         <source>Open Project...</source>
-        <translation type="unfinished"></translation>
+        <translation>Адкрыць праект...</translation>
     </message>
     <message>
         <location filename="../monkey/src/projectsmanager/ui/UIProjectsManager.cpp" line="215"/>
         <source>There is no plugin that can manage this project :
 [%1]</source>
-        <translation type="unfinished"></translation>
+        <translation>Няма плагіна для адкрыцця праекта :(new line)[%1]</translation>
     </message>
     <message>
         <location filename="../monkey/src/projectsmanager/ui/UIProjectsManager.cpp" line="254"/>
         <source>Choose the project(s) to open</source>
-        <translation type="unfinished"></translation>
+        <translation>Абярыце праект(ы), якія трэба адкрыць</translation>
     </message>
     <message>
         <location filename="../monkey/src/projectsmanager/ui/UIProjectsManager.ui" line="13"/>
         <source>Projects Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Мэнэджэр праектаў</translation>
     </message>
     <message>
         <location filename="../monkey/src/projectsmanager/ui/UIProjectsManager.ui" line="87"/>
@@ -3698,7 +3698,7 @@
     <message>
         <location filename="../monkey/src/projectsmanager/ui/UIProjectsManager.ui" line="100"/>
         <source>Projects :</source>
-        <translation type="unfinished"></translation>
+        <translation>Праекты:</translation>
     </message>
 </context>
 <context>
@@ -3706,12 +3706,12 @@
     <message>
         <location filename="../monkey/src/workspace/UISaveFiles.cpp" line="33"/>
         <source>Save File(s) ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Захаваць файл(ы)?</translation>
     </message>
     <message>
         <location filename="../monkey/src/workspace/UISaveFiles.cpp" line="44"/>
         <source>Check the files you want to save :</source>
-        <translation type="unfinished"></translation>
+        <translation>Абярыце файлы, якія вы жадаеце захаваць:</translation>
     </message>
 </context>
 <context>
@@ -3719,7 +3719,7 @@
     <message>
         <location filename="../monkey/src/maininterface/ui/UISettings.cpp" line="154"/>
         <source>No warning</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Няма </translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UISettings.cpp" line="155"/>
@@ -4657,165 +4657,168 @@
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="71"/>
         <source>Blank File</source>
-        <translation type="unfinished"></translation>
+        <translation>Чысты файл</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="189"/>
         <source>Blank</source>
-        <translation type="unfinished"></translation>
+        <translation>Чысты файл</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="96"/>
         <source>Templates</source>
-        <translation type="unfinished"></translation>
+        <translation>Шаблон</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="99"/>
         <source>Templates Preview</source>
-        <translation type="unfinished"></translation>
+        <translation>Перадрдагляд шаблонаў</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="416"/>
         <source>Next</source>
-        <translation type="unfinished"></translation>
+        <translation>Наступны крок</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="107"/>
         <source>Finish</source>
-        <translation type="unfinished"></translation>
+        <translation>Завяршэнне</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="112"/>
         <source>Select the file(s) destination</source>
-        <translation type="unfinished"></translation>
+        <translation>Абярыце папку прызначэння</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="138"/>
         <source>Templates...</source>
-        <translation type="unfinished"></translation>
+        <translation>Шаблоны...</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="138"/>
         <source>Choose a template to continue.</source>
-        <translation type="unfinished"></translation>
+        <translation>Абярыце шаблон дзеля працягу.</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="144"/>
         <source>Base Name...</source>
-        <translation type="unfinished"></translation>
+        <translation>Базавае імя файла...</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="144"/>
         <source>Choose a base name for your file(s).</source>
-        <translation type="unfinished"></translation>
+        <translation>Увядзіце базавае імя файла.</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="150"/>
         <source>Destination...</source>
-        <translation type="unfinished"></translation>
+        <translation>Прызначэнне...</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="150"/>
         <source>Choose a destination for your file(s).</source>
-        <translation type="unfinished"></translation>
+        <translation>Абярыце папку прызначэння.</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="165"/>
         <source>Add To Project...</source>
-        <translation type="unfinished"></translation>
+        <translation>Дадаць у праект...</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="160"/>
         <source>You need to select a project to add to.</source>
-        <translation type="unfinished"></translation>
+        <translation>Необходна абраць праект, у які трэба дадаць файл(ы).</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="165"/>
         <source>The project you select is not a projects container.</source>
-        <translation type="unfinished"></translation>
+        <translation>Праект, які  вы абралі, не можа змяшчаць дзіцячыя праекты.</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="209"/>
         <source>Your comment here</source>
-        <translation type="unfinished"></translation>
+        <translation>Каментар</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="238"/>
         <source>Overwrite File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Перезапісаць файл...</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="238"/>
         <source>The file &apos;%1&apos; already exists, do you want to continue ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Файл &apos;%1&apos; ужо існуе. Працягваць ?</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="248"/>
         <source>Can&apos;t add project:
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Не магчыма дадаць праект:
+%1</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="267"/>
         <source>Can&apos;t create file:
 %1
 Aborting.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не магчыма стварыць файл:
+%1.
+</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="13"/>
         <source>Templates Wizard</source>
-        <translation type="unfinished"></translation>
+        <translation>Майстар шаблонаў</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="86"/>
         <source>Language :</source>
-        <translation type="unfinished"></translation>
+        <translation>Мова:</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="93"/>
         <source>Choose the language in witch you want to pick templates</source>
-        <translation type="unfinished"></translation>
+        <translation>Абярыце мову, да якой вы жадаецце дадаць шаблон</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="100"/>
         <source>Type :</source>
-        <translation type="unfinished"></translation>
+        <translation>Тып:</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="112"/>
         <source>Choose a template</source>
-        <translation type="unfinished"></translation>
+        <translation>Абярыце шаблон</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="140"/>
         <source>Informations</source>
-        <translation type="unfinished"></translation>
+        <translation>Інфармацыя</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="164"/>
         <source>Base Name :</source>
-        <translation type="unfinished"></translation>
+        <translation>Базавае імя:</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="171"/>
         <source>Base File/Class Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Базавае імя/імя класса</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="178"/>
         <source>Destination :</source>
-        <translation type="unfinished"></translation>
+        <translation>Прызначэнне:</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="190"/>
         <source>File Destination</source>
-        <translation type="unfinished"></translation>
+        <translation>Прызначэнне файла</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="197"/>
         <source>Click to select a folder for your file(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Абярыце папку для файла(ў)</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="200"/>
@@ -4825,22 +4828,22 @@ Aborting.</source>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="209"/>
         <source>Author :</source>
-        <translation type="unfinished"></translation>
+        <translation>Аўтар:</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="216"/>
         <source>Author(s), like : Nox P@sNox &lt;pasnox@gmail.com&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Аўтар(ы), напрыклад : Kopats Andrei &lt;hlamer@tut.by&gt;</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="223"/>
         <source>License :</source>
-        <translation type="unfinished"></translation>
+        <translation>Ліцэнзія:</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="230"/>
         <source>Choose a license for your file(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Абярыце ліцэнзію вашага файла(файлаў)</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="237"/>
@@ -4865,47 +4868,47 @@ Aborting.</source>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="260"/>
         <source>Project :</source>
-        <translation type="unfinished"></translation>
+        <translation>Праект:</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="278"/>
         <source>Choose the project in witch you want to add file(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберце праект, у які необходна дадаць файл(ы)</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="285"/>
         <source>Operator :</source>
-        <translation type="unfinished"></translation>
+        <translation>Аператар:</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="314"/>
         <source>If checked, file(s) will be add to the current selected project</source>
-        <translation type="unfinished"></translation>
+        <translation>Дадаць файлы у  абраны праект</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="317"/>
         <source>Add to project</source>
-        <translation type="unfinished"></translation>
+        <translation>Дадаць у праект</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="324"/>
         <source>If checked the file(s) will be opened at the wizard end</source>
-        <translation type="unfinished"></translation>
+        <translation>Калі абрана, файлы будуць адкрыты на наступным кроку</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="327"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Адкрыць</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="402"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Адмена</translation>
     </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="409"/>
         <source>Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>Папярэдні крок</translation>
     </message>
 </context>
 <context>
@@ -4913,112 +4916,112 @@ Aborting.</source>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.cpp" line="58"/>
         <source>Tools Editor...</source>
-        <translation type="unfinished"></translation>
+        <translation>Рэдактар прылад...</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.cpp" line="58"/>
         <source>You&apos;re about to discard all changes. Are you sure ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы збіраецеся адхіліць усе змены. Вы перекананы?</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.cpp" line="77"/>
         <source>Adding...</source>
-        <translation type="unfinished"></translation>
+        <translation>Дадаць...</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.cpp" line="77"/>
         <source>There is no current tool, do you want to add a new one ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Няма прыдад. Дадаць новую?</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.cpp" line="134"/>
         <source>new Tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Новая прылада</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.cpp" line="191"/>
         <source>&lt;b&gt;Tools Editor&lt;/b&gt; give you the possibility to use variables&lt;br&gt;&lt;br&gt;&lt;b&gt;&lt;/b&gt; : Current project path&lt;br&gt;&lt;b&gt;&lt;/b&gt; : Current project filepath&lt;br&gt;&lt;b&gt;&lt;/b&gt; : Current tab path&lt;br&gt;&lt;b&gt;&lt;/b&gt; : Current tab filepath&lt;br&gt;&lt;b&gt;&lt;/b&gt; : Current item path&lt;br&gt;&lt;b&gt;&lt;/b&gt; : Current item filepath</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Рэдактар прылад&lt;/b&gt; мае магчымасць карыстацца зменнымі:&lt;br&gt;&lt;br&gt;&lt;b&gt;&lt;/b&gt; : Адрас бягучага праекта&lt;br&gt;&lt;b&gt;&lt;/b&gt; : Адрас файла бягучага праекта&lt;br&gt;&lt;b&gt;&lt;/b&gt; : Адрас папкі бягучага файла&lt;br&gt;&lt;b&gt;&lt;/b&gt; : Адрас бягучага файла&lt;br&gt;&lt;b&gt;&lt;/b&gt; : Адрас папкі бягучага элемента&lt;br&gt;&lt;b&gt;&lt;/b&gt; : Адрас бягучага элемента</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.cpp" line="211"/>
         <source>Choose an icon for this tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Абярыце іконку дзеля прылады</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.cpp" line="237"/>
         <source>Choose the file to execute for this tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Абярыце выканальны файл прылады</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.cpp" line="276"/>
         <source>Choose the working path for this tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Абярыце працоўную дырэкторыю прылады</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.ui" line="13"/>
         <source>Tools Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Рэдактар прылад</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.ui" line="47"/>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>Новая</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.ui" line="60"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Выдаліць</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.ui" line="80"/>
         <source>Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Угору</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.ui" line="93"/>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Уніз</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.ui" line="116"/>
         <source>Tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Прылада</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.ui" line="143"/>
         <source>Update working path according to file path</source>
-        <translation type="unfinished"></translation>
+        <translation>Змяніць працоўную папку адпаведна шляху файла</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.ui" line="156"/>
         <source>Browse for a file, it can be an executable file or a file registered with an application ( ie: html file )</source>
-        <translation type="unfinished"></translation>
+        <translation>Абраць файл (выканальны, або тып файла, які адкрываецца інсталяванай у сістэме прыладай)</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.ui" line="166"/>
         <source>Command to execute, it can be an executable file or a file registered with an application ( ie: html file )</source>
-        <translation type="unfinished"></translation>
+        <translation>Каманда, якая павінна быць выканана (або файл, які патрэбна адкрыць)</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.ui" line="176"/>
         <source>Browse for the tool working path</source>
-        <translation type="unfinished"></translation>
+        <translation>Абраць працоўную дырэкторыю</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.ui" line="186"/>
         <source>Tool working path</source>
-        <translation type="unfinished"></translation>
+        <translation>Працоўная дырэкторыя</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.ui" line="193"/>
         <source>Tool caption</source>
-        <translation type="unfinished"></translation>
+        <translation>Імя</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.ui" line="206"/>
         <source>Browse for an icon file</source>
-        <translation type="unfinished"></translation>
+        <translation>Абраць іконку</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.ui" line="209"/>
@@ -5028,17 +5031,17 @@ Aborting.</source>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.ui" line="219"/>
         <source>Working Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Працоўная дырэкторыя</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.ui" line="226"/>
         <source>Caption</source>
-        <translation type="unfinished"></translation>
+        <translation>Імя</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.ui" line="233"/>
         <source>File Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Адрас файла</translation>
     </message>
 </context>
 <context>
@@ -5046,27 +5049,27 @@ Aborting.</source>
     <message>
         <location filename="../monkey/src/maininterface/ui/UITranslator.cpp" line="44"/>
         <source>Choose the location of your translations</source>
-        <translation type="unfinished"></translation>
+        <translation>Абярыце месца знаходжання перакладаў</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UITranslator.ui" line="13"/>
         <source>Translation...</source>
-        <translation type="unfinished"></translation>
+        <translation>Пераклад...</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UITranslator.ui" line="40"/>
         <source>Select your language. You can push the buttons to locate/reload the translations list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Абярыце вашу мову.</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UITranslator.ui" line="67"/>
         <source>Reload the translations list</source>
-        <translation type="unfinished"></translation>
+        <translation>Перазагрузіць спіс перакладаў</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UITranslator.ui" line="77"/>
         <source>Locate the translations</source>
-        <translation type="unfinished"></translation>
+        <translation>Месца знаходжання перакладаў</translation>
     </message>
 </context>
 <context>
@@ -5074,7 +5077,7 @@ Aborting.</source>
     <message>
         <location filename="../fresh/widgets/pActionManager.cpp" line="124"/>
         <source>Key Sequence &apos;%1&apos; already assigned to the &apos;%2/%3&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Камбінацыя клавіш &apos;%1&apos; ужо прызначана для &apos;%2/%3&apos;</translation>
     </message>
 </context>
 <context>
@@ -5082,37 +5085,37 @@ Aborting.</source>
     <message>
         <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="28"/>
         <source>Stop current command</source>
-        <translation type="unfinished"></translation>
+        <translation>Перапыніць бягучую каманду</translation>
     </message>
     <message>
         <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="28"/>
         <source>Ctrl+End</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="28"/>
         <source>Console Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Мэнэджэр кансолі</translation>
     </message>
     <message>
         <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="31"/>
         <source>Stop the currently running command</source>
-        <translation type="unfinished"></translation>
+        <translation>Перапыніць бягучую каманду</translation>
     </message>
     <message>
         <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="193"/>
         <source>User Raw Command</source>
-        <translation type="unfinished"></translation>
+        <translation>Кансольная каманда</translation>
     </message>
     <message>
         <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="206"/>
         <source>sendRawData...</source>
-        <translation type="unfinished"></translation>
+        <translation>Даслаць дадзеныя...</translation>
     </message>
     <message>
         <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="206"/>
         <source>Can&apos;t send raw data to console</source>
-        <translation type="unfinished"></translation>
+        <translation>Немагчыма даслаць дадзеныя ў кансоль</translation>
     </message>
 </context>
 <context>
@@ -5120,7 +5123,7 @@ Aborting.</source>
     <message>
         <location filename="../fresh/widgets/pDockToolBar.cpp" line="336"/>
         <source>%1 - Exclusive</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 - Арыгінальны</translation>
     </message>
 </context>
 <context>
@@ -5128,22 +5131,22 @@ Aborting.</source>
     <message>
         <location filename="../fresh/widgets/pDockToolBarManager.cpp" line="44"/>
         <source>Top DockToolBar</source>
-        <translation type="unfinished"></translation>
+        <translation>Верхняя панэль</translation>
     </message>
     <message>
         <location filename="../fresh/widgets/pDockToolBarManager.cpp" line="49"/>
         <source>Bottom DockToolBar</source>
-        <translation type="unfinished"></translation>
+        <translation>Ніжняя панэль</translation>
     </message>
     <message>
         <location filename="../fresh/widgets/pDockToolBarManager.cpp" line="54"/>
         <source>Left DockToolBar</source>
-        <translation type="unfinished"></translation>
+        <translation>Лэвая панэль</translation>
     </message>
     <message>
         <location filename="../fresh/widgets/pDockToolBarManager.cpp" line="59"/>
         <source>Right DockToolBar</source>
-        <translation type="unfinished"></translation>
+        <translation>Правая панэль</translation>
     </message>
 </context>
 <context>
@@ -5151,49 +5154,49 @@ Aborting.</source>
     <message>
         <location filename="../monkey/src/qscintillamanager/pEditor.cpp" line="190"/>
         <source>Open file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Адкрыць файл...</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/pEditor.cpp" line="190"/>
         <source>Cannot read file %1:
 %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Немагчыма прачытаць файл %1:(new line)%2.</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/pEditor.cpp" line="253"/>
         <source>Save file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Захаваць файл...</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/pEditor.cpp" line="303"/>
         <source>Cannot write file %1:
 %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не магчыма запісаць файл %1:(new line)%2.</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/pEditor.cpp" line="303"/>
         <source>Save backup...</source>
-        <translation type="unfinished"></translation>
+        <translation>Захаваць копію...</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/pEditor.cpp" line="341"/>
         <source>Quick Print...</source>
-        <translation type="unfinished"></translation>
+        <translation>Хутка друкаваць...</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/pEditor.cpp" line="341"/>
         <source>There is no defaullt printer, please set one before trying quick print</source>
-        <translation type="unfinished"></translation>
+        <translation>У сістэме не усталявана прадвызначаннага прынтэру</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/pEditor.cpp" line="392"/>
         <source>Go To Line...</source>
-        <translation type="unfinished"></translation>
+        <translation>Пераход на радок...</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/pEditor.cpp" line="392"/>
         <source>Enter the line you want to go:</source>
-        <translation type="unfinished"></translation>
+        <translation>Нумар радка:</translation>
     </message>
 </context>
 <context>
@@ -5201,7 +5204,7 @@ Aborting.</source>
     <message>
         <location filename="../fresh/widgets/pMenuBar.cpp" line="20"/>
         <source>Main Menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Галоўнае меню</translation>
     </message>
     <message>
         <location filename="../fresh/widgets/pMenuBar.cpp" line="30"/>
@@ -5214,7 +5217,7 @@ Aborting.</source>
     <message>
         <location filename="../monkey/src/recentsmanager/pRecentsManager.cpp" line="173"/>
         <source>&amp;Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Ачысціць</translation>
     </message>
 </context>
 <context>
@@ -5222,117 +5225,117 @@ Aborting.</source>
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.cpp" line="139"/>
         <source>Not Found</source>
-        <translation type="unfinished"></translation>
+        <translation>Не знойдзена</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.cpp" line="190"/>
         <source>Nothing To Replace</source>
-        <translation type="unfinished"></translation>
+        <translation>Няма варыянтаў для замены</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.cpp" line="214"/>
         <source>%1 occurences replaced</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 кавалкаў заменена</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.cpp" line="214"/>
         <source>Nothing To Repalce</source>
-        <translation type="unfinished"></translation>
+        <translation>Няма варыянтаў для замены</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="13"/>
         <source>Search - Replace</source>
-        <translation type="unfinished"></translation>
+        <translation>Пошук - Замена</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="45"/>
         <source>Search Text :</source>
-        <translation type="unfinished"></translation>
+        <translation>Тэкст для пошука:</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="52"/>
         <source>Replace Text :</source>
-        <translation type="unfinished"></translation>
+        <translation>Тэкст для замены:</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="59"/>
         <source>Enter the string or regular expression to find.</source>
-        <translation type="unfinished"></translation>
+        <translation>Увядзіце радок або рэгулярнаы выраз.</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="82"/>
         <source>Informations</source>
-        <translation type="unfinished"></translation>
+        <translation>Сведкі</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="101"/>
         <source>Replace All</source>
-        <translation type="unfinished"></translation>
+        <translation>Замяніць усе</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="126"/>
         <source>Replace</source>
-        <translation type="unfinished"></translation>
+        <translation>Замяніць</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="151"/>
         <source>Search Next</source>
-        <translation type="unfinished"></translation>
+        <translation>Шукаць наступнае</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="176"/>
         <source>Search Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>Шукаць папярэдняе</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="192"/>
         <source>If it&apos;s checked then the search is case sensitive.</source>
-        <translation type="unfinished"></translation>
+        <translation>Калі абрана, пошук адчувальны да рэгістру.</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="195"/>
         <source>Case Sensitive</source>
-        <translation type="unfinished"></translation>
+        <translation>Адчувасьны да рэгістру</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="202"/>
         <source>If it&apos;s checked then the search looks for whole word matches only, otherwise it searches for any matching text.</source>
-        <translation type="unfinished"></translation>
+        <translation>Калі абрана, шукаецца толькі супадзенне ўсяго слова.</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="205"/>
         <source>Whole Words</source>
-        <translation type="unfinished"></translation>
+        <translation>Усе слова</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="212"/>
         <source>If it&apos;s checked then expr is interpreted as a regular expression rather than a simple string.</source>
-        <translation type="unfinished"></translation>
+        <translation>Калі абрана, радок буде выкарыстоўвацца як рэгулярны выраз.</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="215"/>
         <source>RegExp</source>
-        <translation type="unfinished"></translation>
+        <translation>Рэгулярны выраз</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="229"/>
         <source>If it&apos;s checked then the search wraps around the end of the text.</source>
-        <translation type="unfinished"></translation>
+        <translation>Калі абрана, пошук спініцца у канцы тэкста.</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="232"/>
         <source>Wrap</source>
-        <translation type="unfinished"></translation>
+        <translation>Да канца</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="255"/>
         <source>Replace the current selection with this string</source>
-        <translation type="unfinished"></translation>
+        <translation>Замяніць бягучае выдзяленне радком</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="262"/>
         <source>From Start</source>
-        <translation type="unfinished"></translation>
+        <translation>З пачатку</translation>
     </message>
 </context>
 <context>
@@ -5340,32 +5343,32 @@ Aborting.</source>
     <message>
         <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="25"/>
         <source>Shortcuts Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Рэдактар цэтлікаў</translation>
     </message>
     <message>
         <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="34"/>
         <source>&amp;Restore default</source>
-        <translation type="unfinished"></translation>
+        <translation>Аднавіць першапачатковы</translation>
     </message>
     <message>
         <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="38"/>
         <source>C&amp;lear</source>
-        <translation type="unfinished"></translation>
+        <translation>Ачысціць</translation>
     </message>
     <message>
         <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="46"/>
         <source>&amp;Set</source>
-        <translation type="unfinished"></translation>
+        <translation>Усталяваць</translation>
     </message>
     <message>
         <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="50"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Закрыць</translation>
     </message>
     <message>
         <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="166"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Памылка</translation>
     </message>
 </context>
 <context>
@@ -5373,17 +5376,17 @@ Aborting.</source>
     <message>
         <location filename="../fresh/widgets/pTabbedWorkspace.cpp" line="45"/>
         <source>&amp;Tabs Have Shortcut</source>
-        <translation type="unfinished"></translation>
+        <translation>Укладкі маюць цэтлік</translation>
     </message>
     <message>
         <location filename="../fresh/widgets/pTabbedWorkspace.cpp" line="48"/>
         <source>Tabbed Workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Працоўная прастора з укладкамі</translation>
     </message>
     <message>
         <location filename="../fresh/widgets/pTabbedWorkspace.cpp" line="48"/>
         <source>&amp;Tabs Are Elided</source>
-        <translation type="unfinished"></translation>
+        <translation>Рэжым &quot;ellided&quot; для Ўкладак</translation>
     </message>
 </context>
 <context>
@@ -5391,42 +5394,42 @@ Aborting.</source>
     <message>
         <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="38"/>
         <source>Tabbed Workspace/Shape Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Форма ўкладак</translation>
     </message>
     <message>
         <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="50"/>
         <source>Tabbed Workspace/Tab Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Рэжым укладак</translation>
     </message>
     <message>
         <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="62"/>
         <source>Tabbed Workspace/Document Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Рэжым дакументаў</translation>
     </message>
     <message>
         <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="67"/>
         <source>&amp;Close All</source>
-        <translation type="unfinished"></translation>
+        <translation>Закрыць усе</translation>
     </message>
     <message>
         <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="67"/>
         <source>Tabbed Workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Працоўная прастора</translation>
     </message>
     <message>
         <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="70"/>
         <source>Tab Shape</source>
-        <translation type="unfinished"></translation>
+        <translation>Форма укладак</translation>
     </message>
     <message>
         <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="71"/>
         <source>Tab Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Рэжым укладак</translation>
     </message>
     <message>
         <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="72"/>
         <source>Document Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Рэжым дакументаў</translation>
     </message>
 </context>
 <context>
@@ -5434,13 +5437,13 @@ Aborting.</source>
     <message>
         <location filename="../monkey/src/toolsmanager/pToolsManager.cpp" line="125"/>
         <source>Tools Error...</source>
-        <translation type="unfinished"></translation>
+        <translation>Рэдактар прыладаў...</translation>
     </message>
     <message>
         <location filename="../monkey/src/toolsmanager/pToolsManager.cpp" line="125"/>
         <source>Error trying to start tool :
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Памылка пры старце прылады :(new line)%1</translation>
     </message>
 </context>
 <context>
@@ -5448,12 +5451,12 @@ Aborting.</source>
     <message>
         <location filename="../monkey/src/workspace/pWorkspace.cpp" line="264"/>
         <source>Choose the file(s) to open</source>
-        <translation type="unfinished"></translation>
+        <translation>Абярыце файл(ы) для адкрыцця</translation>
     </message>
     <message>
         <location filename="../monkey/src/workspace/pWorkspace.cpp" line="332"/>
         <source>Choose a filename to backup your file</source>
-        <translation type="unfinished"></translation>
+        <translation>Увядзіце імя копіі файла</translation>
     </message>
 </context>
 <context>
