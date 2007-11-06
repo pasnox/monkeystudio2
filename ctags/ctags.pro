@@ -8,6 +8,7 @@ TEMPLATE = lib
 CONFIG	*= staticlib warn_on debug_and_release
 DESTDIR	= $${BUILD_PATH}
 win32-msvc*:DEFINES	*= WIN32 HAVE_REGCOMP REGEX_MALLOC STDC_HEADERS=1
+unix:DEFINES	*= HAVE_STDLIB_H HAVE_FGETPOS HAVE_SYS_STAT_H HAVE_FCNTL_H
 
 CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 	#Debug
