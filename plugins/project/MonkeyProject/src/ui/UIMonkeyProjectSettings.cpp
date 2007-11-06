@@ -69,7 +69,7 @@ void UIMonkeyProjectSettings::actionNameEdited(QString name)
 
 void UIMonkeyProjectSettings::addAction()
 {
-    targets.append ( (MonkeyProjectItem::Target){"","",NULL});
+    targets.append ( MonkeyProjectItem::Target( "","",NULL ));
     actionsList->addItem ("");
     actionsList->setCurrentRow (actionsList->count()-1);
     actionName->setFocus(Qt::OtherFocusReason);
