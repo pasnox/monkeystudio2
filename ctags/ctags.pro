@@ -34,7 +34,8 @@ CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 
 CTAGS_PATH	= $${CTAGS_VERSION}
 
-HEADERS	= $${CTAGS_PATH}/debug.h \
+HEADERS	= \
+#$${CTAGS_PATH}/debug.h \
 	$${CTAGS_PATH}/entry.h \
 	$${CTAGS_PATH}/general.h \
 	$${CTAGS_PATH}/get.h \
@@ -45,11 +46,11 @@ HEADERS	= $${CTAGS_PATH}/debug.h \
 	$${CTAGS_PATH}/routines.h \
 	$${CTAGS_PATH}/strlist.h \
 	$${CTAGS_PATH}/vstring.h \
-	$${CTAGS_PATH}/readtags.h \
-	$${CTAGS_PATH}/sort.h \
-	$${CTAGS_PATH}/args.h \
-	$${CTAGS_PATH}/ctags.h \
-	src/exuberantCtags.h
+#	$${CTAGS_PATH}/readtags.h \
+#	$${CTAGS_PATH}/sort.h \
+#	$${CTAGS_PATH}/args.h \
+#	$${CTAGS_PATH}/ctags.h \
+	$${CTAGS_PATH}/exuberantCtags.h
 
 win32-msvc*:HEADERS	*= $${CTAGS_PATH}/regex.h
 
@@ -61,7 +62,7 @@ SOURCES	= $${CTAGS_PATH}/asm.c \
 	$${CTAGS_PATH}/c.c \
 	$${CTAGS_PATH}/cobol.c \
 	$${CTAGS_PATH}/eiffel.c \
-	$${CTAGS_PATH}/debug.c \
+#	$${CTAGS_PATH}/debug.c \
 	$${CTAGS_PATH}/entry.c \
 	$${CTAGS_PATH}/erlang.c \
 	$${CTAGS_PATH}/fortran.c \
@@ -94,9 +95,9 @@ SOURCES	= $${CTAGS_PATH}/asm.c \
 	$${CTAGS_PATH}/vim.c \
 	$${CTAGS_PATH}/vstring.c \
 	$${CTAGS_PATH}/yacc.c \
-	$${CTAGS_PATH}/readtags.c \
-	$${CTAGS_PATH}/sort.c \
-	$${CTAGS_PATH}/args.c \
+#	$${CTAGS_PATH}/readtags.c \
+#	$${CTAGS_PATH}/sort.c \
+#	$${CTAGS_PATH}/args.c \
 #	$${CTAGS_PATH}/argproc.c \
 #	$${CTAGS_PATH}/mac.c \
 #	$${CTAGS_PATH}/qdos.c \
@@ -109,6 +110,6 @@ SOURCES	= $${CTAGS_PATH}/asm.c \
 #	$${CTAGS_PATH}/e_riscos.h \
 #	$${CTAGS_PATH}/e_vms.h \
 #	$${CTAGS_PATH}/main.c \
-	src/exuberantCtags.c
+	$${CTAGS_PATH}/exuberantCtags.c
 
 win32-msvc*:SOURCES	*= $${CTAGS_PATH}/regex.c
