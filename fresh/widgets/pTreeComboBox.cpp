@@ -161,8 +161,7 @@ void pTreeComboBox::hidePopup()
 
 void pTreeComboBox::calculPopupGeometry() // code copied from QComboBox  original class from Trolltech, arrange to feet my needs
 {
-	// QComboBox codec
-	int itemHeight = mView->sizeHintForIndex( mModel->index( 0, 0 ) ).height();
+	//int itemHeight = mView->sizeHintForIndex( mModel->index( 0, 0 ) ).height();
 	QRect listRect( rect() );
 	//listRect.setHeight(itemHeight * count() +( 2 *mFrame->layout()->spacing() ) +( 2 *mFrame->frameWidth() ) );
 	QRect screen = QApplication::desktop()->screenGeometry(this);
