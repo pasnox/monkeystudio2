@@ -183,10 +183,10 @@ void pDockToolBarManager::restoreState( pDockToolBar* p )
 	else
 	{
 		mSettings->beginGroup( "MainWindow/Docks" );
-		l = mSettings->childKeys();
+		l = mSettings->childGroups();
 		mSettings->endGroup();
 	}
-
+	
 	// for docktoolbar
 	foreach ( QString i, l )
 	{
@@ -197,7 +197,7 @@ void pDockToolBarManager::restoreState( pDockToolBar* p )
 		if ( p )
 		{
 			// restore exclusive state
-			p->setExclusive( mSettings->value( QString( "MainWindow/Docks/%1/Exclusive" ).arg( i ), true ).toInt() );
+			p->setExclusive( mSettings->value( QString( "MainWindow/Docks/%1/Exclusive" ).arg( i ), true ).toBool() );
 			
 			// bar datas
 			QStringList mList = mSettings->value( QString( "MainWindow/Docks/%1/Widgets" ).arg( i ), QStringList() ).toStringList();
@@ -216,7 +216,6 @@ void pDockToolBarManager::restoreState( pDockToolBar* p )
 	}
 }
 
-#include <QDebug>
 void pDockToolBarManager::saveState( pDockToolBar* p )
 {
 	// cancel if no settings
@@ -239,9 +238,9 @@ void pDockToolBarManager::saveState( pDockToolBar* p )
 		// for each dock in docktoolbar
 		foreach ( QDockWidget* d, tb->docks() )
 			mList << d->objectName();
-
+		
 		// write datas
-		mSettings->setValue( QString( "MainWindow/Docks/%1/Exclusive" ).arg( mMain->toolBarArea( tb ) ), tb->toggleExclusiveAction()->isChecked() );
+		mSettings->setValue( QString( "MainWindow/Docks/%1/Exclusive" ).arg( mMain->toolBarArea( tb ) ), tb->exclusive() );
 		mSettings->setValue( QString( "MainWindow/Docks/%1/Widgets" ).arg( mMain->toolBarArea( tb ) ), mList );
 	}
 }
