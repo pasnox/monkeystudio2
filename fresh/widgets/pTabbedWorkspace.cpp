@@ -17,6 +17,7 @@
 #include <QIcon>
 #include <QCloseEvent>
 #include <QFile>
+#include <QMenu>
 
 pTabbedWorkspace::pTabbedWorkspace( QWidget* p, pTabbedWorkspace::TabMode m )
 	: QWidget( p ), aTabbedTabsHaveShortcut( 0 ), aTabbedTabsElided( 0 )
@@ -47,6 +48,9 @@ pTabbedWorkspace::pTabbedWorkspace( QWidget* p, pTabbedWorkspace::TabMode m )
 	
 	aTabbedTabsElided = new pAction( "aTabbedTabsElided", tr( "&Tabs Are Elided" ), QKeySequence(), tr( "Tabbed Workspace" ) );
 	aTabbedTabsElided->setCheckable( true );
+
+	// install event filter on tabbar
+	mTabBar->installEventFilter( this );
 
 	// connections
 	connect( mTabBar, SIGNAL( currentChanged( int ) ), this, SLOT( internal_currentChanged( int ) ) );
@@ -79,11 +83,44 @@ pTabbedWorkspace::~pTabbedWorkspace()
 
 bool pTabbedWorkspace::eventFilter( QObject* o, QEvent* e )
 {
-	// get document
-	QWidget* td = qobject_cast<QWidget*>( o );
-
 	// get event type
 	QEvent::Type t = e->type();
+
+	// tabbar events
+	if ( o == mTabBar )
+	{
+		if ( t == QEvent::MouseButtonPress )
+		{
+			QMouseEvent* me = static_cast<QMouseEvent*>( e );
+			if ( me->button() == Qt::MidButton )
+			{
+				int i = mTabBar->tabAt( me->pos() );
+				if ( i != -1 )
+					document( i )->close();
+			}
+			else if ( me->button() == Qt::RightButton )
+			{
+				QMenu m( mTabBar );
+				QAction* ac = m.addAction( tr( "&Close" ) );
+				QAction* aca = m.addAction( tr( "Close &All" ) );
+				if ( QAction* a = m.exec( me->globalPos() ) )
+				{
+					if ( a == ac )
+					{
+						int i = mTabBar->tabAt( me->pos() );
+						if ( i != -1 )
+							document( i )->close();
+					}
+					else if ( a = aca )
+						closeAllTabs();
+				}
+			}
+		}
+	}
+
+	// documents event
+	// get document
+	QWidget* td = qobject_cast<QWidget*>( o );
 	
 	// child modified state
 	if ( t == QEvent::ModifiedChange )
