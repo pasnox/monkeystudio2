@@ -38,6 +38,7 @@ DEFINES	*= MONKEY_CORE_BUILD "PROGRAM_NAME=\"\\\"$${PROGRAM_NAME}\\\"\"" "PROGRA
 LIBS	*= -L$${BUILD_PATH}
 unix:!mac:*-g++:LIBS	*= -rdynamic
 mac:*-g++:LIBS	*= -dynamiclib
+PRE_TARGETDEPS	*= ../qscintilla ../fresh ../ctags
 
 CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 	#Debug
