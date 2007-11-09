@@ -111,7 +111,7 @@ bool pTabbedWorkspace::eventFilter( QObject* o, QEvent* e )
 						if ( i != -1 )
 							document( i )->close();
 					}
-					else if ( a = aca )
+					else if ( a == aca )
 						closeAllTabs();
 				}
 			}
