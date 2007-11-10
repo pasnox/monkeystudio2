@@ -26,7 +26,7 @@ pTabbedWorkspace::pTabbedWorkspace( QWidget* p, pTabbedWorkspace::TabMode m )
 	mTabLayout = new QBoxLayout( QBoxLayout::LeftToRight );
 	mTabLayout->setSpacing( 3 );
 	mTabLayout->setMargin( 0 );
-	mTabLayout->addWidget( ( mTabBar = new QTabBar ) );
+	mTabLayout->addWidget( ( mTabBar = new pTabBar ) );
 	mTabLayout->addStretch( 100 );
 
 	// document widget
@@ -49,12 +49,13 @@ pTabbedWorkspace::pTabbedWorkspace( QWidget* p, pTabbedWorkspace::TabMode m )
 	aTabbedTabsElided = new pAction( "aTabbedTabsElided", tr( "&Tabs Are Elided" ), QKeySequence(), tr( "Tabbed Workspace" ) );
 	aTabbedTabsElided->setCheckable( true );
 
-	// install event filter on tabbar
-	mTabBar->installEventFilter( this );
-
 	// connections
+	connect( mTabBar, SIGNAL( midButtonPressed( int, const QPoint& ) ), this, SLOT( internal_midButtonPressed( int, const QPoint& ) ) );
+	connect( mTabBar, SIGNAL( rightButtonPressed( int, const QPoint& ) ), this, SLOT( internal_rightButtonPressed( int, const QPoint& ) ) );
+	connect( mTabBar, SIGNAL( tabDropped( int, int ) ), this, SLOT( internal_tabDropped( int, int ) ) );
 	connect( mTabBar, SIGNAL( currentChanged( int ) ), this, SLOT( internal_currentChanged( int ) ) );
 	connect( mWorkspaceWidget, SIGNAL( windowActivated( QWidget* ) ), this, SLOT( workspaceWidget_windowActivated( QWidget* ) ) );
+	
 	// init view
 	setAttribute( Qt::WA_DeleteOnClose );
 	mTabBar->setDrawBase( false );
@@ -81,44 +82,14 @@ pTabbedWorkspace::~pTabbedWorkspace()
 	delete mWorkspaceWidget;
 }
 
+bool m_mightDrag;
+QPoint m_dragPos;
+
 bool pTabbedWorkspace::eventFilter( QObject* o, QEvent* e )
 {
 	// get event type
 	QEvent::Type t = e->type();
-
-	// tabbar events
-	if ( o == mTabBar )
-	{
-		if ( t == QEvent::MouseButtonPress )
-		{
-			QMouseEvent* me = static_cast<QMouseEvent*>( e );
-			if ( me->button() == Qt::MidButton )
-			{
-				int i = mTabBar->tabAt( me->pos() );
-				if ( i != -1 )
-					document( i )->close();
-			}
-			else if ( me->button() == Qt::RightButton )
-			{
-				QMenu m( mTabBar );
-				QAction* ac = m.addAction( tr( "&Close" ) );
-				QAction* aca = m.addAction( tr( "Close &All" ) );
-				if ( QAction* a = m.exec( me->globalPos() ) )
-				{
-					if ( a == ac )
-					{
-						int i = mTabBar->tabAt( me->pos() );
-						if ( i != -1 )
-							document( i )->close();
-					}
-					else if ( a == aca )
-						closeAllTabs();
-				}
-			}
-		}
-	}
-
-	// documents event
+	
 	// get document
 	QWidget* td = qobject_cast<QWidget*>( o );
 	
@@ -164,7 +135,7 @@ void pTabbedWorkspace::removeDocument( QObject* o )
 	removeDocument( qobject_cast<QWidget*>( o ) );
 }
 
-QTabBar* pTabbedWorkspace::tabBar() const
+pTabBar* pTabbedWorkspace::tabBar() const
 {
 	return mTabBar;
 }
@@ -326,6 +297,36 @@ void pTabbedWorkspace::setCurrentIndex( int i )
 		mTabBar->setCurrentIndex( i );
 	else if ( currentDocument() != document( i ) )
 		internal_currentChanged( i );
+}
+
+void pTabbedWorkspace::internal_midButtonPressed( int i, const QPoint& )
+{ document( i )->close(); }
+
+void pTabbedWorkspace::internal_rightButtonPressed( int i, const QPoint& p )
+{
+	// create menu
+	QMenu m( mTabBar );
+	
+	// create actions
+	QAction* ac = m.addAction( tr( "&Close" ) );
+	QAction* aca = m.addAction( tr( "Close &All" ) );
+	
+	// execute menu
+	if ( QAction* a = m.exec( p ) )
+	{
+		// if close
+		if ( a == ac )
+			document( i )->close();
+		// close all
+		else if ( a == aca )
+			closeAllTabs();
+	}
+}
+
+void pTabbedWorkspace::internal_tabDropped( int f, int t )
+{
+	// swap document
+	mDocuments.insert( t, mDocuments.takeAt( f ) );
 }
 
 void pTabbedWorkspace::internal_currentChanged( int i )

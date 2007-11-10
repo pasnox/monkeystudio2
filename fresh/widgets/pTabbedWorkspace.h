@@ -12,7 +12,7 @@
 #include "MonkeyExport.h"
 
 #include <QWidget>
-#include <QTabBar>
+#include "pTabBar.h"
 #include <QList>
 
 class QBoxLayout;
@@ -21,6 +21,7 @@ class QStackedWidget;
 class QWorkspace;
 class pTabbedWorkspaceCorner;
 class pAction;
+class pTabBar;
 
 class Q_MONKEY_EXPORT pTabbedWorkspace : public QWidget
 {
@@ -37,7 +38,7 @@ public:
 	
 	virtual bool eventFilter( QObject*, QEvent* );
 
-	QTabBar* tabBar() const;
+	pTabBar* tabBar() const;
 	QTabBar::Shape tabShape() const;
 	pTabbedWorkspace::TabMode tabMode() const;
 	pTabbedWorkspace::DocumentMode documentMode() const;
@@ -89,7 +90,7 @@ protected:
 	QBoxLayout* mLayout;
 	QList<QWidget*> mDocuments;
 	// tab widget
-	QTabBar* mTabBar;
+	pTabBar* mTabBar;
 	QBoxLayout* mTabLayout;
 	// document widget
 	QStackedLayout* mStackedLayout;
@@ -97,6 +98,9 @@ protected:
 	QWorkspace* mWorkspaceWidget;
 
 protected slots:
+	void internal_midButtonPressed( int, const QPoint& );
+	void internal_rightButtonPressed( int, const QPoint& );
+	void internal_tabDropped( int, int );
 	void internal_currentChanged( int );
 	void workspaceWidget_windowActivated( QWidget* );
 	void removeDocument( QObject* );
