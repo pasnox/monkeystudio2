@@ -36,14 +36,27 @@ pWorkspace::pWorkspace( QWidget* p )
 	: pTabbedWorkspace( p )
 {
 	// set background
-	setBackground( ":/application/icons/application/background.png" );
+	//setBackground( ":/application/icons/application/background.png" );
 
 	// set right corner button pixmap
 	cornerWidget()->findChild<QToolButton*>()->defaultAction()->setIcon( QPixmap( ":/application/icons/application/closetab.png" ) );
+	
+	// load settings
+	loadSettings();
 
 	// connections
 	connect( this, SIGNAL( currentChanged( int ) ), this, SLOT( internal_currentChanged( int ) ) );
 	connect( this, SIGNAL( aboutToCloseTab( int, QCloseEvent* ) ), this, SLOT( internal_aboutToCloseTab( int, QCloseEvent* ) ) );
+}
+
+void pWorkspace::loadSettings()
+{
+	// restore tabs settings
+	tabBar()->setTabsHaveCloseButton( tabsHaveCloseButton() );
+	tabBar()->setTabsHaveShortcut( tabsHaveShortcut() );
+	tabBar()->setTabsElided( tabsElided() );
+	tabBar()->setTabsColor( tabsTextColor() );
+	tabBar()->setCurrentTabColor( currentTabTextColor() );
 }
 
 pAbstractChild* pWorkspace::currentChild() const

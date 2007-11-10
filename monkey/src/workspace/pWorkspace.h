@@ -21,6 +21,7 @@ class Q_MONKEY_EXPORT pWorkspace : public pTabbedWorkspace, public QSingleton<pW
 	friend class QSingleton<pWorkspace>;
 
 public:
+	void loadSettings();
 	pAbstractChild* currentChild() const;
 	pAbstractChild* child( int ) const;
 	QList<pAbstractChild*> children() const;
