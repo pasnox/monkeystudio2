@@ -16,7 +16,7 @@ pTabbedWorkspaceRightCorner::pTabbedWorkspaceRightCorner( pTabbedWorkspace* p )
 	: pTabbedWorkspaceCorner( p )
 {
 	// need workspace
-	Q_ASSERT( p != 0 );
+	Q_ASSERT( p );
 
 	// create menu
 	QMenu* menu = new QMenu( this );
@@ -71,8 +71,9 @@ pTabbedWorkspaceRightCorner::pTabbedWorkspaceRightCorner( pTabbedWorkspace* p )
 	menu->addMenu( tr( "Tab Mode" ) )->addActions( agTabMode->actions() );
 	menu->addMenu( tr( "Document Mode" ) )->addActions( agDocumentMode->actions() );
 	menu->addSeparator();
-	menu->addAction( p->aTabbedTabsHaveShortcut );
-	menu->addAction( p->aTabbedTabsElided );
+	menu->addAction( p->tabBar()->toggleTabsHaveCloseButtonAction() );
+	menu->addAction( p->tabBar()->toggleTabsHaveShortcutAction() );
+	menu->addAction( p->tabBar()->toggleTabsElidedAction() );
 	menu->addAction( aTabbedCloseAll );
 
 	connect( menu->menuAction(), SIGNAL( triggered() ), p, SLOT( closeCurrentTab() ) );

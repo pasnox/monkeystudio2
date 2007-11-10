@@ -18,6 +18,9 @@
 
 #include <QTabBar>
 
+class QAction;
+class pAction;
+
 class pTabBar : public QTabBar
 {
 	Q_OBJECT
@@ -25,22 +28,56 @@ class pTabBar : public QTabBar
 public:
 	pTabBar( QWidget* = 0 );
 
+	QColor tabsColor() const;
+	QColor currentTabColor() const;
+	bool tabsHaveCloseButton() const;
+	bool tabsHaveShortcut() const;
+	bool tabsElided() const;
+	QAction* toggleTabsHaveCloseButtonAction() const;
+	QAction* toggleTabsHaveShortcutAction() const;
+	QAction* toggleTabsElidedAction() const;
+
+public slots:
+	void resetTabsColor();
+	void setTabsColor( const QColor& );
+	void setCurrentTabColor( const QColor& );
+	void setTabsHaveCloseButton( bool );
+	void setTabsHaveShortcut( bool );
+	void setTabsElided( bool );
+
 protected:
-	void mousePressEvent( QMouseEvent* e );
-	void mouseMoveEvent(QMouseEvent * e );
-	void dragEnterEvent( QDragEnterEvent* e );
-	void dropEvent( QDropEvent* e );
+	virtual void paintEvent( QPaintEvent* );
+	virtual void mousePressEvent( QMouseEvent* );
+	virtual void mouseReleaseEvent( QMouseEvent* );
+	virtual void mouseMoveEvent(QMouseEvent* );
+	virtual void dragEnterEvent( QDragEnterEvent* );
+	virtual void dropEvent( QDropEvent* );
+	virtual void tabInserted( int );
+	virtual void tabRemoved( int );
+	virtual QSize tabSizeHint( int ) const;
+	virtual QRect iconRectForTab( int );
+	virtual bool inCloseButtonRect( int, const QPoint& );
+	void updateTabsNumber( int = -1 );
 
 	QPoint dragStartPosition;
+	QColor mTabsColor;
+	QColor mCurrentTabColor;
 
-protected slots:
-	void clearTabsColor();
+	pAction* aToggleTabsHaveCloseButton;
+	pAction* aToggleTabsHaveShortcut;
+	pAction* aToggleTabsElided;
 
 signals:
 	void leftButtonPressed( int, const QPoint& );
 	void midButtonPressed( int, const QPoint& );
 	void rightButtonPressed( int, const QPoint& );
 	void tabDropped( int, int );
+	void tabsColorChanged( const QColor& );
+	void currentTabColorChanged( const QColor& );
+	void closeButtonClicked( int );
+	void tabsHaveCloseButtonChanged( bool );
+	void tabsHaveShortcutChanged( bool );
+	void tabsElidedChanged( bool );
 
 };
 

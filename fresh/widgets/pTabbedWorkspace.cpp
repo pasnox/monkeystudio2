@@ -8,7 +8,6 @@
  ********************************************************************************************************/
 #include "pTabbedWorkspace.h"
 #include "pTabbedWorkspaceRightCorner.h"
-#include "pAction.h"
 
 #include <QBoxLayout>
 #include <QStackedLayout>
@@ -20,7 +19,7 @@
 #include <QMenu>
 
 pTabbedWorkspace::pTabbedWorkspace( QWidget* p, pTabbedWorkspace::TabMode m )
-	: QWidget( p ), aTabbedTabsHaveShortcut( 0 ), aTabbedTabsElided( 0 )
+	: QWidget( p )
 {
 	// tab widget
 	mTabLayout = new QBoxLayout( QBoxLayout::LeftToRight );
@@ -41,16 +40,10 @@ pTabbedWorkspace::pTabbedWorkspace( QWidget* p, pTabbedWorkspace::TabMode m )
 	mLayout->setMargin( 0 );
 	mLayout->addLayout( mTabLayout );
 	mLayout->addLayout( mStackedLayout );
-	
-	// create actions for right tab
-	aTabbedTabsHaveShortcut = new pAction( "aTabbedTabsHaveShortcut", tr( "&Tabs Have Shortcut" ), QKeySequence(), tr( "Tabbed Workspace" ) );
-	aTabbedTabsHaveShortcut->setCheckable( true );
-	
-	aTabbedTabsElided = new pAction( "aTabbedTabsElided", tr( "&Tabs Are Elided" ), QKeySequence(), tr( "Tabbed Workspace" ) );
-	aTabbedTabsElided->setCheckable( true );
 
 	// connections
 	connect( mTabBar, SIGNAL( midButtonPressed( int, const QPoint& ) ), this, SLOT( internal_midButtonPressed( int, const QPoint& ) ) );
+	connect( mTabBar, SIGNAL( closeButtonClicked( int ) ), this, SLOT( internal_closeButtonClicked( int ) ) );
 	connect( mTabBar, SIGNAL( rightButtonPressed( int, const QPoint& ) ), this, SLOT( internal_rightButtonPressed( int, const QPoint& ) ) );
 	connect( mTabBar, SIGNAL( tabDropped( int, int ) ), this, SLOT( internal_tabDropped( int, int ) ) );
 	connect( mTabBar, SIGNAL( currentChanged( int ) ), this, SLOT( internal_currentChanged( int ) ) );
@@ -60,13 +53,9 @@ pTabbedWorkspace::pTabbedWorkspace( QWidget* p, pTabbedWorkspace::TabMode m )
 	setAttribute( Qt::WA_DeleteOnClose );
 	mTabBar->setDrawBase( false );
 	mTabBar->setSizePolicy( QSizePolicy( QSizePolicy::Maximum, QSizePolicy::Maximum ) );
-	setTabsHaveShortcut( true );
-	setTabsElided( false );
 	setCornerWidget( pTabbedWorkspaceRightCorner::instance( this ) );
 	setTabMode( m );
 	setDocumentMode( pTabbedWorkspace::dmMaximized );
-	connect( aTabbedTabsHaveShortcut, SIGNAL( toggled( bool ) ), this, SLOT( setTabsHaveShortcut( bool ) ) );
-	connect( aTabbedTabsElided, SIGNAL( toggled( bool ) ), this, SLOT( setTabsElided( bool ) ) );
 }
 
 pTabbedWorkspace::~pTabbedWorkspace()
@@ -81,9 +70,6 @@ pTabbedWorkspace::~pTabbedWorkspace()
 	delete mStackedWidget;
 	delete mWorkspaceWidget;
 }
-
-bool m_mightDrag;
-QPoint m_dragPos;
 
 bool pTabbedWorkspace::eventFilter( QObject* o, QEvent* e )
 {
@@ -126,46 +112,28 @@ bool pTabbedWorkspace::eventFilter( QObject* o, QEvent* e )
 }
 
 void pTabbedWorkspace::workspaceWidget_windowActivated( QWidget* w )
-{
-	setCurrentDocument( w );
-}
+{ setCurrentDocument( w ); }
 
 void pTabbedWorkspace::removeDocument( QObject* o )
-{
-	removeDocument( qobject_cast<QWidget*>( o ) );
-}
+{ removeDocument( qobject_cast<QWidget*>( o ) ); }
 
 pTabBar* pTabbedWorkspace::tabBar() const
-{
-	return mTabBar;
-}
+{ return mTabBar; }
 
 QTabBar::Shape pTabbedWorkspace::tabShape() const
-{
-	return mTabBar->shape();
-}
+{ return mTabBar->shape(); }
 
 pTabbedWorkspace::TabMode pTabbedWorkspace::tabMode() const
-{
-	return mTabMode;
-}
+{ return mTabMode; }
 
 pTabbedWorkspace::DocumentMode pTabbedWorkspace::documentMode() const
-{
-	return mDocumentMode;
-}
+{ return mDocumentMode; }
 
 void pTabbedWorkspace::setBackground( const QPixmap& p )
-{
-	if ( !p.isNull() )
-		mWorkspaceWidget->setBackground( QBrush( p ) );
-}
+{ mWorkspaceWidget->setBackground( QBrush( p ) ); }
 
 void pTabbedWorkspace::setBackground( const QString& s )
-{
-	if ( QFile::exists( s ) )
-		mWorkspaceWidget->setBackground( QBrush( QPixmap( s ) ) );
-}
+{ mWorkspaceWidget->setBackground( QBrush( QPixmap( s ) ) ); }
 
 void pTabbedWorkspace::setTabShape( QTabBar::Shape s )
 {
@@ -287,9 +255,7 @@ void pTabbedWorkspace::setDocumentMode( pTabbedWorkspace::DocumentMode d )
 }
 
 int pTabbedWorkspace::currentIndex() const
-{
-	return mTabBar->currentIndex();
-}
+{ return mTabBar->currentIndex(); }
 
 void pTabbedWorkspace::setCurrentIndex( int i )
 {
@@ -302,6 +268,9 @@ void pTabbedWorkspace::setCurrentIndex( int i )
 void pTabbedWorkspace::internal_midButtonPressed( int i, const QPoint& )
 { document( i )->close(); }
 
+void pTabbedWorkspace::internal_closeButtonClicked( int i )
+{ document( i )->close(); }
+
 void pTabbedWorkspace::internal_rightButtonPressed( int i, const QPoint& p )
 {
 	// create menu
@@ -310,6 +279,12 @@ void pTabbedWorkspace::internal_rightButtonPressed( int i, const QPoint& p )
 	// create actions
 	QAction* ac = m.addAction( tr( "&Close" ) );
 	QAction* aca = m.addAction( tr( "Close &All" ) );
+	
+	// add action from tabbar
+	m.addSeparator();
+	m.addAction( mTabBar->toggleTabsHaveCloseButtonAction() );
+	m.addAction( mTabBar->toggleTabsHaveShortcutAction() );
+	m.addAction( mTabBar->toggleTabsElidedAction() );
 	
 	// execute menu
 	if ( QAction* a = m.exec( p ) )
@@ -324,10 +299,7 @@ void pTabbedWorkspace::internal_rightButtonPressed( int i, const QPoint& p )
 }
 
 void pTabbedWorkspace::internal_tabDropped( int f, int t )
-{
-	// swap document
-	mDocuments.insert( t, mDocuments.takeAt( f ) );
-}
+{ mDocuments.insert( t, mDocuments.takeAt( f ) ); }
 
 void pTabbedWorkspace::internal_currentChanged( int i )
 {
@@ -381,29 +353,19 @@ QWidget* pTabbedWorkspace::currentDocument() const
 }
 
 void pTabbedWorkspace::setCurrentDocument( QWidget* d )
-{
-	setCurrentIndex( indexOf( d ) );
-}
+{ setCurrentIndex( indexOf( d ) ); }
 
 int pTabbedWorkspace::indexOf( QWidget* d ) const
-{
-	return mDocuments.indexOf( d );
-}
+{ return mDocuments.indexOf( d ); }
 
 QWidget* pTabbedWorkspace::document( int i ) const
-{
-	return mDocuments.value( i );
-}
+{ return mDocuments.value( i ); }
 
 int pTabbedWorkspace::count() const
-{
-	return mDocuments.count();
-}
+{ return mDocuments.count(); }
 
 QList<QWidget*> pTabbedWorkspace::documents() const
-{
-	return mDocuments;
-}
+{ return mDocuments; }
 
 pTabbedWorkspaceCorner* pTabbedWorkspace::cornerWidget( Qt::Corner c ) const
 {
@@ -568,20 +530,13 @@ void pTabbedWorkspace::addDocument( QWidget* td, int i )
 }
 
 int pTabbedWorkspace::addTab( QWidget* td, const QString& l )
-{
-	
-	return insertTab( count(), td, l );
-}
+{ return insertTab( count(), td, l ); }
 
 int pTabbedWorkspace::addTab( QWidget* td, const QIcon& i, const QString& l )
-{
-	return insertTab( count(), td, i, l );
-}
+{ return insertTab( count(), td, i, l ); }
 
 int pTabbedWorkspace::insertTab( int i, QWidget* td, const QString& l )
-{
-	return insertTab( i, td, QIcon(), l );
-}
+{ return insertTab( i, td, QIcon(), l ); }
 
 int pTabbedWorkspace::insertTab( int j, QWidget* td, const QIcon& i, const QString& l )
 {
@@ -596,18 +551,12 @@ int pTabbedWorkspace::insertTab( int j, QWidget* td, const QIcon& i, const QStri
 	// set icon if not available
 	mTabBar->setTabIcon( j, i );
 
-	// set chortcut if needed
-	if ( tabsHaveShortcut() )
-		updateTabsNumber( j );
-
 	// return true index of the new document
 	return j;
 }
 
 void pTabbedWorkspace::removeTab( int i )
-{
-	removeDocument( document( i ) );
-}
+{ removeDocument( document( i ) ); }
 
 void pTabbedWorkspace::removeDocument( QWidget* td )
 {
@@ -629,10 +578,6 @@ void pTabbedWorkspace::removeDocument( QWidget* td )
 	{
 		mTabBar->removeTab( i );
 		updateCorners();
-
-		// set chortcut if needed
-		if ( tabsHaveShortcut() )
-			updateTabsNumber( i );
 
 		emit tabRemoved( i );
 		setCurrentIndex( currentIndex() );
@@ -676,59 +621,4 @@ void pTabbedWorkspace::activatePreviousDocument()
 		setCurrentIndex( count() -1 );
 	else
 		setCurrentIndex( currIndex -1 );
-}
-
-bool pTabbedWorkspace::tabsHaveShortcut() const
-{
-	return aTabbedTabsHaveShortcut ? aTabbedTabsHaveShortcut->isChecked() : false;
-}
-
-void pTabbedWorkspace::setTabsHaveShortcut( bool b )
-{
-	// update action
-	aTabbedTabsHaveShortcut->setChecked( b );
-	// update tabs text
-	updateTabsNumber();
-}
-
-bool pTabbedWorkspace::tabsElided() const
-{
-	return aTabbedTabsElided ? aTabbedTabsElided->isChecked() : false;
-}
-
-void pTabbedWorkspace::setTabsElided( bool b )
-{
-	// set new state
-	aTabbedTabsElided->setChecked( b );
-	// update elided mode
-	mTabBar->setElideMode( tabsElided() ? Qt::ElideMiddle : Qt::ElideNone );
-	// workaround for tabs update
-	mTabBar->setTabText( 0, mTabBar->tabText( 0 ) );
-}
-
-void pTabbedWorkspace::updateTabsNumber( int i )
-{
-	// fill i if i = -1 for complete update
-	if ( i == -1 )
-		i = 0;
-
-	// loop documents starting at id i
-	for ( int j = i; j < count(); j++ )
-	{
-		// only 10 tabs can have shortcut
-		if ( j > 9 )
-			return;
-
-		// got tab text
-		QString s = mTabBar->tabText( j );
-
-		// look index of cut part
-		int k = s.indexOf( ":" );
-
-		// set new tab caption
-		if ( tabsHaveShortcut() )
-			mTabBar->setTabText( j, QString( "&%1: %2" ).arg( j ).arg( s.mid( k != -1 ? k +2 : 0 ) ) );
-		else
-			mTabBar->setTabText( j, s.mid( k != -1 ? k +2 : 0 ) );
-	}
 }

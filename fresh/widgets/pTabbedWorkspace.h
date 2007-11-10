@@ -27,7 +27,6 @@ class Q_MONKEY_EXPORT pTabbedWorkspace : public QWidget
 {
 	Q_OBJECT
 	Q_ENUMS( TabMode DocumentMode )
-	friend class pTabbedWorkspaceRightCorner;
 	
 public:
 	enum TabMode { tmSDI = 0, tmMDI, tmTopLevel };
@@ -53,8 +52,6 @@ public:
 	int addTab( QWidget*, const QIcon&, const QString& );
 	int insertTab( int, QWidget*, const QString& );
 	int insertTab( int, QWidget*, const QIcon&, const QString& );
-	bool tabsHaveShortcut() const;
-	bool tabsElided() const;
 
 public slots:
 	void setBackground( const QPixmap& );
@@ -71,18 +68,12 @@ public slots:
 	void closeAllTabs( bool = false );
 	void activateNextDocument();
 	void activatePreviousDocument();
-	void setTabsHaveShortcut( bool );
-	void setTabsElided( bool );
 
 protected:
 	void updateCorners();
 	void updateView( QWidget* = 0 );
 	void addDocument( QWidget* d, int = -1 );
 
-	// tell if tabs have shortcuts
-	pAction* aTabbedTabsHaveShortcut;
-	// tell if tabs are elided
-	pAction* aTabbedTabsElided;
 	// workspace properties
 	pTabbedWorkspace::TabMode mTabMode;
 	pTabbedWorkspace::DocumentMode mDocumentMode;
@@ -99,12 +90,12 @@ protected:
 
 protected slots:
 	void internal_midButtonPressed( int, const QPoint& );
+	void internal_closeButtonClicked( int );
 	void internal_rightButtonPressed( int, const QPoint& );
 	void internal_tabDropped( int, int );
 	void internal_currentChanged( int );
 	void workspaceWidget_windowActivated( QWidget* );
 	void removeDocument( QObject* );
-	void updateTabsNumber( int = -1 );
 
 signals:
 	void tabInserted( int );
