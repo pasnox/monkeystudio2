@@ -46,6 +46,9 @@ HEADERS	+= pSettings.h
 SOURCES	+= pSettings.cpp
 
 # widgets
+# pTabBar
+HEADERS	+= pTabBar.h
+SOURCES	+= pTabBar.cpp
 # pTabbedWorkspace
 HEADERS	+= pTabbedWorkspaceCorner.h \
 	pTabbedWorkspaceCornerButton.h \
