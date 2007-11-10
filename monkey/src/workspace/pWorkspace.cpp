@@ -36,7 +36,7 @@ pWorkspace::pWorkspace( QWidget* p )
 	: pTabbedWorkspace( p )
 {
 	// set background
-	//setBackground( ":/application/icons/application/background.png" );
+	setBackground( ":/application/icons/application/background.png" );
 
 	// set right corner button pixmap
 	cornerWidget()->findChild<QToolButton*>()->defaultAction()->setIcon( QPixmap( ":/application/icons/application/closetab.png" ) );

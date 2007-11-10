@@ -50,8 +50,8 @@ void EntityContainer::deleteFileInfo ( QString file, QDateTime olderThan )
     {
         chld = childEntity(i);
         chld->deleteFileInfo ( file, olderThan );
-        if ( chld->file == file and 
-            (  chld->updateTime < olderThan or olderThan.isNull() )) //need to delete this entity
+        if ( chld->file == file && 
+            (  chld->updateTime < olderThan || olderThan.isNull() )) //need to delete this entity
         {
             //if entity was have childs, that must be deleted, it's had deleted by chld->deleteFileInfo (... )
             //if entity have childs now, it must not be deleted.
@@ -80,7 +80,7 @@ void EntityContainer::addTagsFromRecord (QString fileName, FileRecord*  fileReco
         tagEntryInfo* entry = &item->tag;    
         item = item->next ;
         EntityType entType = Entity::getEntityType (entry->kind);
-        if ( not (entType & displayMask) )
+        if ( ! (entType & displayMask) )
              continue; // if mask not set for it's entity - ignore it 
         Entity* parEnt = getScopeEntity ( entry->extensionFields.scope[0], entry->extensionFields.scope[1]);
         addChild ( parEnt, entry,fileName,fileRecord->time );
@@ -97,7 +97,7 @@ void EntityContainer::updateFileInfo ( QString fileName )
 Entity*EntityContainer::getScopeEntity ( QString scope0, QString scope1)
 {
     //qDebug ( qPrintable ("trying to find scope| " + scope0 +"|"+ scope1 +"| in " ));
-    if    ( scope0 == NULL and scope1 == NULL )
+    if    ( scope0 == NULL && scope1 == NULL )
         return NULL;
     
     EntityType ttype = Entity::getScopeType ( scope0 );
@@ -152,8 +152,8 @@ Entity* EntityContainer::findEntityInContainer ( EntityType type, QString name )
 {
     for ( int i = 0; i < topLevelItemCount (); i++)
     {
-        if (  (childEntity (i)->type == type   or type == UNKNOWN ) 
-                and childEntity (i)->name == name )
+        if (  (childEntity (i)->type == type || type == UNKNOWN ) 
+                && childEntity (i)->name == name )
         {
             return childEntity (i);
         }
@@ -165,8 +165,8 @@ Entity* EntityContainer::findEntityInEntity (Entity* where, EntityType type, QSt
 {
     for ( int i = 0; i < where->childCount(); i++)
     {
-        if (  (where->child(i)->type == type   or type == UNKNOWN ) 
-                and where->child(i)->name == name )
+        if (  (where->child(i)->type == type || type == UNKNOWN ) 
+                && where->child(i)->name == name )
         {
             return where->child(i);
         }
@@ -187,7 +187,7 @@ void EntityContainer::addChild ( Entity* parEnt,tagEntryInfo* entry, QString fil
 void EntityContainer::addChildInContainer ( tagEntryInfo* entry, QString fileName, QDateTime time )
 {
     Entity* existing = findEntityInContainer ( Entity::getEntityType ( entry->kind), entry->name);
-    if ( not existing )
+    if ( ! existing )
     {
         Entity* entity = new Entity ( entry, fileName, time);
         addTopLevelItem (entity);
@@ -200,7 +200,7 @@ void EntityContainer::addChildInContainer ( tagEntryInfo* entry, QString fileNam
 void EntityContainer::addChildInEntity ( Entity* parEnt, tagEntryInfo* entry, QString fileName, QDateTime time )
 {
     Entity* existing = findEntityInEntity( parEnt,Entity::getEntityType ( entry->kind), entry->name);
-    if ( not existing )
+    if ( !existing )
     {
         Entity* entity = new Entity ( entry, fileName, time);
         parEnt->addChild (entity);

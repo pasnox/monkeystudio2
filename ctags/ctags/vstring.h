@@ -15,11 +15,9 @@
 *   INCLUDE FILES
 */
 #include "general.h"  /* must always come first */
-
-#if defined(HAVE_STDLIB_H)
 # include <stdlib.h>  /* to define size_t */
-#endif
 
+#define boolean int //Can't understand, why it's need there, but not building with msvc
 /*
 *   MACROS
 */
@@ -59,6 +57,7 @@ typedef struct sVString {
 /*
 *   FUNCTION PROTOTYPES
 */
+
 extern boolean vStringAutoResize (vString *const string);
 extern void vStringClear (vString *const string);
 extern vString *vStringNew (void);

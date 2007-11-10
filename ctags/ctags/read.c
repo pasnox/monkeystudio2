@@ -18,7 +18,6 @@
 #include <string.h>
 #include <ctype.h>
 
-#define FILE_WRITE
 #include "read.h"
 #include "entry.h"
 #include "debug.h"
@@ -230,11 +229,7 @@ static boolean parseLineDirective (void)
  */
 extern boolean fileOpen (const char *const fileName, const langType language)
 {
-#ifdef VMS
-	const char *const openMode = "r";
-#else
 	const char *const openMode = "rb";
-#endif
 	boolean opened = FALSE;
 
 	/*	If another file was already open, then close it.
@@ -272,23 +267,6 @@ extern boolean fileOpen (const char *const fileName, const langType language)
 				File.source.isHeader ? "include " : "");
 	}
 	return opened;
-}
-
-extern void fileClose (void)
-{
-	if (File.fp != NULL)
-	{
-		/*  The line count of the file is 1 too big, since it is one-based
-		 *  and is incremented upon each newline.
-		 */
-		if (Option.printTotals)
-		{
-			fileStatus *status = eStat (vStringValue (File.name));
-			addTotals (0, File.lineNumber - 1L, status->size);
-		}
-		fclose (File.fp);
-		File.fp = NULL;
-	}
 }
 
 extern boolean fileEOF (void)

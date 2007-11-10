@@ -132,8 +132,8 @@ void Entity::deleteFileInfo ( QString file, QDateTime olderThan )
     {
         chld = child (i);
         chld->deleteFileInfo ( file, olderThan );
-        if ( chld->file == file and 
-            (  chld->updateTime < olderThan or olderThan.isNull() )) //need to delete this entity
+        if ( chld->file == file && 
+            (  chld->updateTime < olderThan || olderThan.isNull() )) //need to delete this entity
         {
             //if entity was have childs, that must be deleted, it's had deleted by chld->deleteFileInfo (... )
             //if entity have childs now, it must not be deleted.

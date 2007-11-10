@@ -34,7 +34,7 @@ It's extendable with a powerfull plugins system.
 #include "pFileManager.h"
 #include "pSettings.h"
 
-Navigator::Navigator ()
+Navigator::Navigator (QObject* parent)
 {
 	// set plugin infos
 	mPluginInfos.Caption = tr( "Navigator" );

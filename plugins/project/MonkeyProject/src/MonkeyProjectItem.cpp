@@ -95,7 +95,7 @@ bool MonkeyProjectItem::open()
 {
     if (!isProject())
     {
-        qWarning ("<%s>:%i Trying to open something for not a project item",__func__,__LINE__);
+        qWarning ("Trying to open something for not a project item");
         return false;
     }
     QSettings settings (getValue(), QSettings::IniFormat);

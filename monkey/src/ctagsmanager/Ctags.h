@@ -20,7 +20,8 @@ It's extendable with a powerfull plugins system.
 #include <QDateTime>
 #include <QString>
 #include <QList>
-#include<QVector>
+#include <QVector>
+#include <QApplication>
 #include "MonkeyExport.h"
 #include "QSingleton.h"
 #include "entry.h"
@@ -38,7 +39,7 @@ class Q_MONKEY_EXPORT Ctags: public QObject, public QSingleton<Ctags>
 	Q_OBJECT
 	friend class QSingleton<Ctags>;
 private:
-	Ctags ();
+	Ctags (QObject* parent = QApplication::instance());
 	~Ctags ();
 	/* ClassBrouser and other objects will use pointers to the "QString file" of FileRecord for economy of memory, 
 	*so, if record created it must NEVER be deleted while monkeyDS working.

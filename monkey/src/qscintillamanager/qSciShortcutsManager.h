@@ -15,6 +15,8 @@
 #ifndef QSCISHORTCUTSMANAGER
 #define QSCISHORTCUTSMANAGER
 
+#include <QApplication>
+
 #include "QSingleton.h"
 #include "MonkeyExport.h"
 #include "pAction.h"
@@ -30,6 +32,8 @@ class pEditor;
 
 struct SciAction
 {
+	SciAction (QString _name, QString _text, QIcon _icon, QString _defaultShortcut, QString _toolTip, int _messageCode):
+		name (_name), text (_text), icon (_icon), defaultShortcut (_defaultShortcut), toolTip (_toolTip), messageCode (_messageCode){};
     QString name;
     QString text;
     QIcon icon;
@@ -42,8 +46,9 @@ struct SciAction
 class Q_MONKEY_EXPORT qSciShortcutsManager: public QObject, public QSingleton<qSciShortcutsManager>
 {
     Q_OBJECT
-public:
-    qSciShortcutsManager ();
+    friend class QSingleton<qSciShortcutsManager>;
+protected:
+	qSciShortcutsManager (QObject* parent = QApplication::instance());
 
 protected:
     QList<SciAction> sactions;

@@ -39,6 +39,7 @@ class Navigator : public BasePlugin, public QSingleton<Navigator>
 {
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin )
+	friend class QSingleton<Navigator>;
 	//
 private:
 	QHash <ProjectItem* , EntityContainer*> projectTrees;
@@ -52,7 +53,7 @@ private:
 	int expandMask;
 
 public:
-	Navigator ();
+	Navigator (QObject* parent = NULL);
 	bool setEnabled (bool e);
 	QWidget* settingsWidget ();
 

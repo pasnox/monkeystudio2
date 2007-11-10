@@ -25,7 +25,7 @@ extern "C" void installLanguageMapDefaults (void);
 extern "C" void initializeParsing (void);
 extern "C" void freeParserResources (void);
 
-Ctags::Ctags ()
+Ctags::Ctags (QObject* parent) :QObject (parent)
 {
 	initializeParsing ();
 	installLanguageMapDefaults ();	
@@ -57,7 +57,7 @@ bool Ctags::updateFileRecord (QString file) //reparse file if need, or parse fir
 FileRecord* Ctags::GetTagsForFile (QString file )
 {
 	FileRecord* result = fileRecords[file];
-	if ( not result )  //not parsed yet
+	if ( !result )  //not parsed yet
 	{
 		result = new FileRecord;
 		result->firstTagEntry = NULL;
