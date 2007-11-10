@@ -16,26 +16,53 @@
 #include "pMonkeyStudio.h"
 
 void showMessage( QSplashScreen* s, const QString& m )
-{
-	s->showMessage( m, Qt::AlignRight | Qt::AlignTop, Qt::red );
-}
+{ s->showMessage( m, Qt::AlignRight | Qt::AlignBottom, Qt::white ); }
 
 int main( int argc, char** argv )
 {
 	// create application
 	QApplication a( argc, argv );
-
+	
 	// create splashscreen
-	QSplashScreen splash( QPixmap( ":/application/application/splashscreen.png" ) );
+	QSplashScreen splash( QPixmap( ":/application/icons/application/splashscreen.png" ) );
 
 	// change splashscreen font
 	QFont ft( splash.font() );
-	ft.setPointSize( 12 );
+	ft.setPointSize( 8 );
 	ft.setBold( true );
 	splash.setFont( ft );
 
 	// show splash screen
 	splash.show();
+	
+	// init translation
+	showMessage( &splash, QObject::tr( "Initializing Translation..." ) );
+	// application translation
+	QString mLanguage = pSettings::instance()->value( "Language" ).toString();
+	if ( mLanguage.isEmpty() )
+		if ( !UITranslator::instance( &splash )->exec() )
+			mLanguage = "english";
+	if ( mLanguage != "english" )
+	{
+		QTranslator t;
+		if ( !t.load( QString( "%1/monkey_%2" ).arg( pSettings::instance()->value( "Paths/Translations" ).toString(), mLanguage ) ) )
+			qWarning( qPrintable( QObject::tr( "Failed to install translation file." ) ) );
+		a.installTranslator( &t );
+	}
+	// qt translation
+	QString resourceDir = QLibraryInfo::location( QLibraryInfo::TranslationsPath );
+	// setting qt translation
+	QTranslator qtTranslator;
+	qtTranslator.load( QString( "qt_" ) + QLocale::system().name(), resourceDir );
+	a.installTranslator( &qtTranslator );
+	// setting assistant translation
+	QTranslator assistantTranslator;
+	assistantTranslator.load( QString( "assistant_" ) + QLocale::system().name(), resourceDir );
+	a.installTranslator( &assistantTranslator );
+	// setting designer translation
+	QTranslator designerTranslator;
+	designerTranslator.load( QString( "designer_" ) + QLocale::system().name(), resourceDir );
+	a.installTranslator( &designerTranslator );
 
 	// init application
 	showMessage( &splash, QObject::tr( "Initializing Application..." ) );
@@ -57,36 +84,6 @@ int main( int argc, char** argv )
 	fs.open( QFile::ReadOnly );
 	a.setStyleSheet( fs.readAll() );
 	fs.close();
-	
-	// init translation
-	showMessage( &splash, QObject::tr( "Initializing Translation..." ) );
-	// qt translation
-	QString resourceDir = QLibraryInfo::location( QLibraryInfo::TranslationsPath );
-	// setting qt translation
-	QTranslator qtTranslator;
-	qtTranslator.load( QString( "qt_" ) + QLocale::system().name(), resourceDir );
-	a.installTranslator( &qtTranslator );
-	// setting assistant translation
-	QTranslator assistantTranslator;
-	assistantTranslator.load( QString( "assistant_" ) + QLocale::system().name(), resourceDir );
-	a.installTranslator( &assistantTranslator );
-	// setting designer translation
-	QTranslator designerTranslator;
-	designerTranslator.load( QString( "designer_" ) + QLocale::system().name(), resourceDir );
-	a.installTranslator( &designerTranslator );
-
-	QString mLanguage = pSettings::instance()->value( "Language" ).toString();
-
-	if ( mLanguage.isEmpty() )
-		if ( !UITranslator::instance( &splash )->exec() )
-			mLanguage = "english";
-
-	if ( mLanguage != "english" )
-	{
-		QTranslator t;
-		t.load( QString( "%1/monkey2_%3" ).arg( pSettings::instance()->value( "Paths/Translations" ).toString(), mLanguage ) );
-		a.installTranslator( &t );
-	}
 
 	// show settings dialog the first time user start program
 	if ( pSettings::instance()->value( "FirstTimeRunning", true ).toBool() )
@@ -103,6 +100,7 @@ int main( int argc, char** argv )
 	PluginsManager::instance()->loadsPlugins();
 	
 	// restore window state
+	showMessage( &splash, QObject::tr( "Restoring Workspace..." ) );
 	UIMain::instance()->restoreState();
 	
 	// show main window
