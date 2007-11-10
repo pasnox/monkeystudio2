@@ -23,7 +23,7 @@ It's extendable with a powerfull plugins system.
 #include <QDateTime>
 #include <QIcon>
 
-#include "CtagsWrapper.h"
+#include "Ctags.h"
 
 enum EntityType { 
     NAMESPACE = 0x0001,

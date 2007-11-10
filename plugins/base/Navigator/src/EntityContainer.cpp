@@ -21,7 +21,7 @@ It's extendable with a powerfull plugins system.
 
 #include "pFileManager.h"
 #include "EntityContainer.h"
-#include "CtagsWrapper.h"
+#include "Ctags.h"
 #include "Entity.h"
 #include "Navigator.h"
 

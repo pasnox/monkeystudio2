@@ -26,7 +26,6 @@ It's extendable with a powerfull plugins system.
 #include <QTreeWidget>
 
 #include "BasePlugin.h"
-#include "CtagsWrapper.h"
 #include "EntityContainer.h"
 #include "ProjectsModel.h"
 #include "pWorkspace.h"
