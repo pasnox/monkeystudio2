@@ -46,7 +46,7 @@ int main( int argc, char** argv )
 	{
 		QTranslator t;
 		if ( !t.load( QString( "%1/monkey_%2" ).arg( pSettings::instance()->value( "Paths/Translations" ).toString(), mLanguage ) ) )
-			qWarning( qPrintable( tr( "Failed to install translation file." ) ) );
+			qWarning( qPrintable( QObject::tr( "Failed to install translation file." ) ) );
 		a.installTranslator( &t );
 	}
 	// qt translation
