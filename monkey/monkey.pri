@@ -23,7 +23,7 @@ INCLUDEPATH	*= $${QPRO_PWD}/src/recentsmanager
 INCLUDEPATH	*= $${QPRO_PWD}/src/qscintillamanager $${QPRO_PWD}/src/qscintillamanager/ui
 
 # Ctags Manager
-INCLUDEPATH	*= $${QPRO_PWD}/src/ctags
+INCLUDEPATH	*= $${QPRO_PWD}/src/ctagsmanager
 
 # Templates Manager
 INCLUDEPATH	*= $${QPRO_PWD}/src/templatesmanager $${QPRO_PWD}/src/templatesmanager/ui
