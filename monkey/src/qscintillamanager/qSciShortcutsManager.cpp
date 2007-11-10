@@ -103,7 +103,7 @@ qSciShortcutsManager::qSciShortcutsManager (QObject* parent): QObject(parent)
     sactions << SciAction ( "mEdit/mAllCommands/SCI_BACKTAB", tr("Back tab"), QIcon(), QString("Shift+Tab"), tr(""),QsciScintilla::SCI_BACKTAB);
     sactions << SciAction ( "mEdit/mAllCommands/SCI_SELECTIONDUPLICATE", tr("Selection duplicate"), QIcon(), QString("Ctrl+D"), tr(""),QsciScintilla::SCI_SELECTIONDUPLICATE);
     sactions << SciAction ( "mEdit/mAllCommands/SCI_CLEAR", tr("Delete"), QIcon(), QString("Del"), tr(""),QsciScintilla::SCI_CLEAR);
-    sactions << SciAction ( "mEdit/mAllCommands/SCI_SELECTALL", tr("Select All"), QIcon(), QString("Ctrl+A"), tr(""),QsciScintilla::SCI_COPY); 
+    sactions << SciAction ( "mEdit/mAllCommands/SCI_SELECTALL", tr("Select All"), QIcon(), QString("Ctrl+A"), tr(""),QsciScintilla::SCI_SELECTALL); 
     sactions << SciAction ( "mEdit/mAllCommands/SCI_ZOOMIN", tr("Zoom In"), QIcon(), QString("Ctrl++"), tr(""),QsciScintilla::SCI_ZOOMIN); 
     sactions << SciAction ( "mEdit/mAllCommands/SCI_ZOOMOUT", tr("Zoom Out"), QIcon(), QString("Ctrl+-"), tr(""),QsciScintilla::SCI_ZOOMOUT); 
     sactions << SciAction ( "mEdit/mAllCommands/SCI_SETZOOM", tr("Set Zoom"), QIcon(), QString("Ctrl+/"), tr(""),QsciScintilla::SCI_SETZOOM); 

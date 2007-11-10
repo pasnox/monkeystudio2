@@ -57,5 +57,4 @@ protected slots:
     void keyBoardShortcutPressed ();
 };
 
-#endif QSCISHORTCUTSMANAGER
-    
+#endif //QSCISHORTCUTSMANAGER
