@@ -282,13 +282,72 @@ QRect pTabBar::iconRectForTab( int i )
 	QSize sh = tabSizeHint( i );
 	QRect tr = tabRect( i );
 	
-	// get y position
-	int y = ( sh.height() -iconSize().height() ) / 2;
-	if ( currentIndex() != i )
-		y++;
+	//
+	int x = 0, y = 0;
+	
+	switch ( shape() )
+	{
+		case QTabBar::RoundedNorth:
+		case QTabBar::TriangularNorth:
+			// calcul positions
+			x = sh.width() -iconSize().width();
+			y = ( sh.height() -iconSize().height() ) / 2;
+			if ( currentIndex() == i )
+			{
+				y++;
+				x -= 2;
+			}
+			else if ( currentIndex() != i )
+			{
+				y += 2;
+				x--;
+			}
+			break;
+		case QTabBar::RoundedSouth:
+		case QTabBar::TriangularSouth:
+			// calcul positions
+			x = sh.width() -iconSize().width();
+			y = ( sh.height() -iconSize().height() ) / 2;
+			if ( currentIndex() == i )
+				x -= 2;
+			else if ( currentIndex() != i )
+				x--;
+			break;
+		case QTabBar::RoundedWest:
+		case QTabBar::TriangularWest:
+			// calcul positions
+			x = ( sh.width() -iconSize().height() ) / 2;
+			if ( currentIndex() == i )
+			{
+				x++;
+				y += 2;
+			}
+			else if ( currentIndex() != i )
+			{
+				x += 2;
+				y += 2;
+			}
+			break;
+		case QTabBar::RoundedEast:
+		case QTabBar::TriangularEast:
+			// calcul positions
+			x = ( sh.width() -iconSize().height() ) / 2;
+			y = sh.height() -iconSize().width();
+			if ( currentIndex() == i )
+			{
+				x++;
+				y -= 2;
+			}
+			else if ( currentIndex() != i )
+			{
+				x--;
+				y -= 2;
+			}
+			break;
+	}
 	
 	// return icon rect
-	return QRect( tr.topLeft() +QPoint( 2, y ), iconSize() );
+	return QRect( tr.topLeft() +QPoint( x, y ), iconSize() );
 }
 
 bool pTabBar::inCloseButtonRect( int i, const QPoint& p )
