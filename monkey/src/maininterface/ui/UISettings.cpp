@@ -6,6 +6,7 @@
 #include "pTemplatesManager.h"
 #include "pAbbreviationsManager.h"
 #include "pMonkeyStudio.h"
+#include "pWorkspace.h"
 
 #include "qscilexerbash.h"
 #include "qscilexerbatch.h"
@@ -53,11 +54,6 @@ UISettings::UISettings( QWidget* p )
 
 	foreach ( QString s, availableLanguages() )
 		mLexers[s] = lexerForLanguage( s );
-
-	// designer
-	bgUIDesigner = new QButtonGroup( gbUIDesignerIntegration );
-	bgUIDesigner->addButton( rbUseEmbeddedUIDesigner, pMonkeyStudio::uidmEmbedded );
-	bgUIDesigner->addButton( rbRunQtDesigner, pMonkeyStudio::uidmExternal );
 
 	// externalchanges
 	bgExternalChanges = new QButtonGroup( gbOnExternalChanges );
@@ -150,6 +146,8 @@ UISettings::UISettings( QWidget* p )
 
 	// connections
 	// Colours Button
+	connect( tbTabsTextColor, SIGNAL( clicked() ), this, SLOT( tbColours_clicked() ) );
+	connect( tbCurrentTabTextColor, SIGNAL( clicked() ), this, SLOT( tbColours_clicked() ) );
 	connect( tbSelectionBackground, SIGNAL( clicked() ), this, SLOT( tbColours_clicked() ) );
 	connect( tbSelectionForeground, SIGNAL( clicked() ), this, SLOT( tbColours_clicked() ) );
 	connect( tbDefaultDocumentPen, SIGNAL( clicked() ), this, SLOT( tbColours_clicked() ) );
@@ -198,7 +196,13 @@ void UISettings::loadSettings()
 	// General
 	cbRestoreProjectsOnStartup->setChecked( restoreProjectsOnStartup() );
 	leDefaultProjectsDirectory->setText( defaultProjectsDirectory() );
-	bgUIDesigner->button( uiDesignerMode() )->setChecked( true );
+	cbTabsHaveCloseButton->setChecked( tabsHaveCloseButton() );
+	cbTabsHaveShortcut->setChecked( tabsHaveShortcut() );
+	cbTabsElided->setChecked( tabsElided() );
+	tbTabsTextColor->setIcon( colourizedPixmap( tabsTextColor() ) );
+	tbTabsTextColor->setToolTip( tabsTextColor().name() );
+	tbCurrentTabTextColor->setIcon( colourizedPixmap( currentTabTextColor() ) );
+	tbCurrentTabTextColor->setToolTip( currentTabTextColor().name() );
 	bgExternalChanges->button( externalchanges() )->setChecked( true );
 	cbSaveSession->setChecked( saveSessionOnClose() );
 	cbRestoreSession->setChecked( restoreSessionOnStartup() );
@@ -369,7 +373,11 @@ void UISettings::saveSettings()
 	// General
 	setRestoreProjectsOnStartup( cbRestoreProjectsOnStartup->isChecked() );
 	setDefaultProjectsDirectory( leDefaultProjectsDirectory->text() );
-	setUIDesignerMode( (pMonkeyStudio::UIDesignerMode)bgUIDesigner->checkedId() );
+	setTabsHaveCloseButton( cbTabsHaveCloseButton->isChecked() );
+	setTabsHaveShortcut( cbTabsHaveShortcut->isChecked() );
+	setTabsElided( cbTabsElided->isChecked() );
+	setTabsTextColor( iconBackgroundColor( tbTabsTextColor->icon() ) );
+	setCurrentTabTextColor( iconBackgroundColor( tbCurrentTabTextColor->icon() ) );
 	setExternalChanges( (pMonkeyStudio::ExternalChangesMode)bgExternalChanges->checkedId() );
 	setSaveSessionOnClose( cbSaveSession->isChecked() );
 	setRestoreSessionOnStartup( cbRestoreSession->isChecked() );
@@ -1081,4 +1089,5 @@ void UISettings::apply()
 {
 	saveSettings();
 	applyProperties();
+	pWorkspace::instance()->loadSettings();
 }

@@ -18,7 +18,6 @@ private:
 	void saveSettings();
 	QPixmap colourizedPixmap( const QColor& ) const;
 	QColor iconBackgroundColor( const QIcon& ) const;
-	QButtonGroup* bgUIDesigner;
 	QButtonGroup* bgExternalChanges;
 	QButtonGroup* bgAutoCompletionSource;
 	QButtonGroup* bgCallTipsStyle;

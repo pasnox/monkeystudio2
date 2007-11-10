@@ -359,17 +359,11 @@
         </widget>
        </item>
        <item row="2" column="0" >
-        <widget class="QGroupBox" name="gbUIDesignerIntegration" >
-         <property name="enabled" >
-          <bool>false</bool>
-         </property>
+        <widget class="QGroupBox" name="gbWorkspace" >
          <property name="title" >
-          <string>&amp;UI Designer Integration</string>
+          <string>&amp;Workspace</string>
          </property>
-         <layout class="QVBoxLayout" >
-          <property name="spacing" >
-           <number>3</number>
-          </property>
+         <layout class="QGridLayout" >
           <property name="leftMargin" >
            <number>5</number>
           </property>
@@ -382,20 +376,76 @@
           <property name="bottomMargin" >
            <number>5</number>
           </property>
-          <item>
-           <widget class="QRadioButton" name="rbUseEmbeddedUIDesigner" >
+          <property name="horizontalSpacing" >
+           <number>3</number>
+          </property>
+          <property name="verticalSpacing" >
+           <number>3</number>
+          </property>
+          <item row="0" column="0" colspan="3" >
+           <widget class="QCheckBox" name="cbTabsHaveCloseButton" >
             <property name="text" >
-             <string>Use Monkey Studio's embedded designer</string>
+             <string>Tabs Have Close Button</string>
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QRadioButton" name="rbRunQtDesigner" >
+          <item row="1" column="0" colspan="3" >
+           <widget class="QCheckBox" name="cbTabsHaveShortcut" >
             <property name="text" >
-             <string>Run Qt Designer</string>
+             <string>Tabs Have Shortcut</string>
             </property>
-            <property name="checked" >
-             <bool>true</bool>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="3" >
+           <widget class="QCheckBox" name="cbTabsElided" >
+            <property name="text" >
+             <string>Tabs Are Elided</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1" colspan="2" >
+           <widget class="QToolButton" name="tbTabsTextColor" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="iconSize" >
+             <size>
+              <width>48</width>
+              <height>16</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" >
+           <widget class="QLabel" name="lTabsTextColor" >
+            <property name="text" >
+             <string>Tabs Text Color :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0" >
+           <widget class="QLabel" name="lCurrentTabTextColor" >
+            <property name="text" >
+             <string>Current Tab Text Color :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1" colspan="2" >
+           <widget class="QToolButton" name="tbCurrentTabTextColor" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="iconSize" >
+             <size>
+              <width>48</width>
+              <height>16</height>
+             </size>
             </property>
            </widget>
           </item>
@@ -504,6 +554,12 @@
        </item>
        <item row="3" column="0" >
         <widget class="QGroupBox" name="gbSession" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Maximum" hsizetype="Preferred" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="title" >
           <string>&amp;Session</string>
          </property>
