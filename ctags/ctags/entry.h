@@ -26,7 +26,7 @@ typedef struct sTagFields {
 
 /*  Information about the current tag candidate.
  */
-typedef struct TagEntryInfo {
+typedef struct sTagEntryInfo {
     boolean     lineNumberEntry;  /* pattern or line number entry */
     unsigned long lineNumber;     /* line number of tag */
     fpos_t      filePosition;     /* file position of line containing tag */
@@ -51,14 +51,14 @@ typedef struct TagEntryInfo {
     } extensionFields;  /* list of extension fields*/
 } tagEntryInfo;
 
-typedef struct  TagEntryListItem {
+typedef struct  sTagEntryListItem {
     tagEntryInfo tag;
-    struct TagEntryListItem *next;
-    } tagEntryListItem ; 
+    struct sTagEntryListItem *next;
+} TagEntryListItem ; 
 
 //  Global pointers to entrys in the list
-extern tagEntryListItem* firstTagEntry ;  //for return it as result
-extern tagEntryListItem* lastTagEntry ;   //for adding entryes
+extern TagEntryListItem * firstTagEntry ;  //for return it as result
+extern TagEntryListItem * lastTagEntry ;   //for adding entryes
 
 /*
 *   FUNCTION PROTOTYPES

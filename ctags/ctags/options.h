@@ -1,8 +1,6 @@
 #ifndef _OPTIONS_H
 #define _OPTIONS_H
 
-# define DEFAULT_FILE_FORMAT  2
-
 /*
 *   INCLUDE FILES
 */

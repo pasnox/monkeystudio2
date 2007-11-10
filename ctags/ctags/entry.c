@@ -15,7 +15,6 @@
 */
 #include "general.h"  /* must always come first */
 
-#include <string.h>
 #include <ctype.h>        /* to define isspace () */
 #include <errno.h>
 #include <stdlib.h>
@@ -30,31 +29,24 @@
 #include "read.h"
 #include "debug.h"
 
-/*  Hack for rediculous practice of Microsoft Visual C++.
- */
-#if defined (WIN32) && defined (_MSC_VER)
-# define chsize         _chsize
-# define open           _open
-# define close          _close
-# define O_RDWR         _O_RDWR
-#endif
-
 /*
 *   DATA DEFINITIONS
 */
-
-tagEntryListItem* firstTagEntry = NULL;  /*pointer to the first entry in the list
+/*When scaning, items adding to the single-linked list. 
+  Here is pointers on it
+*/
+TagEntryListItem* firstTagEntry = NULL;  /*pointer to the first entry in the list
 											for return it as result of parsing file */
-tagEntryListItem* lastTagEntry = NULL;   //for adding entryes
+TagEntryListItem* lastTagEntry = NULL;   //for adding entryes
+
 
 /*
 *   FUNCTION DEFINITIONS
 */
 
-
 void addEntryToList (const tagEntryInfo *const tag) 
 {
-	tagEntryListItem* newEntry = calloc ( 1,sizeof (tagEntryListItem ));
+	TagEntryListItem* newEntry = calloc ( 1,sizeof (TagEntryListItem ));
 	// copying entry
 	memcpy ( &newEntry->tag, tag, sizeof (tagEntryInfo));
 	if ( tag->language )
@@ -133,7 +125,7 @@ void addEntryToList (const tagEntryInfo *const tag)
 
 extern void makeTagEntry (const tagEntryInfo *const tag)
 {
-addEntryToList (tag) ;
+	addEntryToList (tag) ;
 }
 
 extern void initTagEntry (tagEntryInfo *const e, const char *const name)

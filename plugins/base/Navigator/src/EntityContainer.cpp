@@ -73,7 +73,7 @@ void EntityContainer::deleteFileInfo ( QString file, QDateTime olderThan )
 
 void EntityContainer::addTagsFromRecord (QString fileName, FileRecord*  fileRecord)
 {
-    tagEntryListItem* item = fileRecord->firstTagEntry;
+    TagEntryListItem* item = fileRecord->firstTagEntry;
     int displayMask = Navigator::instance()->getDisplayMask();
     while ( item != NULL )
     {
@@ -89,7 +89,7 @@ void EntityContainer::addTagsFromRecord (QString fileName, FileRecord*  fileReco
 
 void EntityContainer::updateFileInfo ( QString fileName )
 {
-    FileRecord* rd = CtagsWrapper::instance()->GetTagsForFile (fileName); 
+    FileRecord* rd = Ctags::instance()->GetTagsForFile (fileName); 
     addTagsFromRecord(fileName, rd);//add of update existing entityes
     deleteFileInfo (fileName, rd->time);//deltete not updated  
 }

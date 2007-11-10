@@ -39,7 +39,7 @@ optionValues Option = {
 	NULL,       /* -o */
 	NULL,       /* -h */
 	NULL,       /* --etags-include */
-	DEFAULT_FILE_FORMAT,/* --format */
+	0,/* --format */
 	FALSE,      /* --if0 */
 	FALSE,      /* --kind-long */
 	LANG_AUTO,  /* --lang */

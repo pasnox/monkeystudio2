@@ -1,9 +1,9 @@
 /****************************************************************************
 **
 ** 		Created using Monkey Studio v1.8.0.0
-** Author    : Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, The Monkey Studio Team
+** Author    : Kopats Andrei aka hlamer <hlamer@tut.by>, The Monkey Studio Team
 ** Project   : Monkey Studio 2
-** FileName  : CtagsWrapper.cpp
+** FileName  : Ctags.cpp
 ** Date      : 2007-11-04T22:45:06
 ** License   : GPL
 ** Comment   : Monkey Studio is a Free, Fast and lightweight crossplatform Qt RAD.
@@ -19,25 +19,25 @@ It's extendable with a powerfull plugins system.
 
 #include "CtagsWrapper.h"
 
-extern "C" void freeSTagEntryList ( tagEntryListItem* tag );
-extern "C" tagEntryListItem* parseFile ( const char* fileName, const char* langName);
+extern "C" void freeSTagEntryList ( TagEntryListItem* tag );
+extern "C" TagEntryListItem* parseFile ( const char* fileName, const char* langName);
 extern "C" void installLanguageMapDefaults (void);
 extern "C" void initializeParsing (void);
 extern "C" void freeParserResources (void);
 
-CtagsWrapper::CtagsWrapper ()
+Ctags::Ctags ()
 {
 	initializeParsing ();
 	installLanguageMapDefaults ();	
 }
 
 
-CtagsWrapper::~CtagsWrapper ()
+Ctags::~Ctags ()
 {
 	freeParserResources ();
 }
 
-bool CtagsWrapper::updateFileRecord (QString file) //reparse file if need, or parse first time
+bool Ctags::updateFileRecord (QString file) //reparse file if need, or parse first time
 {
 	FileRecord* record = fileRecords[file];
 	Q_ASSERT (record); //just already existing record can be updated
@@ -54,7 +54,7 @@ bool CtagsWrapper::updateFileRecord (QString file) //reparse file if need, or pa
 	return true;
 }
 
-FileRecord* CtagsWrapper::GetTagsForFile (QString file )
+FileRecord* Ctags::GetTagsForFile (QString file )
 {
 	FileRecord* result = fileRecords[file];
 	if ( not result )  //not parsed yet
@@ -69,7 +69,7 @@ FileRecord* CtagsWrapper::GetTagsForFile (QString file )
 	return result;
 }
 
-tagEntryListItem* CtagsWrapper::get_tags ( QString file )
+TagEntryListItem* Ctags::get_tags ( QString file )
 {
 	return parseFile ( file.toStdString().c_str(), NULL);
 }
@@ -80,7 +80,7 @@ tagEntryListItem* CtagsWrapper::get_tags ( QString file )
 // 	return &records;
 //}
 
-//void CtagsWrapper::checkForChanges ()
+//void Ctags::checkForChanges ()
 //{
 // 	QVector<FileRecord*> updatedRecords;
 //  	for ( int i = 0; i< records.size(); i++)
@@ -95,7 +95,7 @@ tagEntryListItem* CtagsWrapper::get_tags ( QString file )
 //}
 
 
-void CtagsWrapper::freeTagEntryList (tagEntryListItem* item)
+void Ctags::freeTagEntryList (TagEntryListItem* item)
 {
 	while ( item != NULL )
 	{
@@ -144,7 +144,7 @@ void CtagsWrapper::freeTagEntryList (tagEntryListItem* item)
 		{
 			free ( (void*)entry->extensionFields.signature );
 		}
-		tagEntryListItem* temp = item->next;
+		TagEntryListItem* temp = item->next;
 		delete item;
 		item = temp;
 	}

@@ -1,3 +1,4 @@
+#include "general.h"
 #include "parse.h"
 #include "entry.h"
 #include "vstring.h"
