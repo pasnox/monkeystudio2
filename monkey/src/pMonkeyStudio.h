@@ -24,7 +24,6 @@ class pEditor;
 
 namespace pMonkeyStudio
 {
-	enum UIDesignerMode { uidmEmbedded = 0, uidmExternal };
 	enum ExternalChangesMode { ecmNothing = 0, ecmAlert, ecmReload };
 
 	Q_MONKEY_EXPORT void warning( const QString&, const QString&, QWidget* = QApplication::activeWindow() );
@@ -82,8 +81,16 @@ namespace pMonkeyStudio
 	Q_MONKEY_EXPORT const bool restoreProjectsOnStartup();
 	Q_MONKEY_EXPORT void setDefaultProjectsDirectory( const QString& );
 	Q_MONKEY_EXPORT const QString defaultProjectsDirectory();
-	Q_MONKEY_EXPORT void setUIDesignerMode( pMonkeyStudio::UIDesignerMode );
-	Q_MONKEY_EXPORT const  pMonkeyStudio::UIDesignerMode uiDesignerMode();
+	Q_MONKEY_EXPORT void setTabsHaveCloseButton( bool );
+	Q_MONKEY_EXPORT const bool tabsHaveCloseButton();
+	Q_MONKEY_EXPORT void setTabsHaveShortcut( bool );
+	Q_MONKEY_EXPORT const bool tabsHaveShortcut();
+	Q_MONKEY_EXPORT void setTabsElided( bool );
+	Q_MONKEY_EXPORT const bool tabsElided();
+	Q_MONKEY_EXPORT void setTabsTextColor( const QColor& );
+	Q_MONKEY_EXPORT const QColor tabsTextColor();
+	Q_MONKEY_EXPORT void setCurrentTabTextColor( const QColor& );
+	Q_MONKEY_EXPORT const QColor currentTabTextColor();
 	Q_MONKEY_EXPORT void setExternalChanges( pMonkeyStudio::ExternalChangesMode );
 	Q_MONKEY_EXPORT const pMonkeyStudio::ExternalChangesMode externalchanges();
 	Q_MONKEY_EXPORT void setSaveSessionOnClose( bool );
