@@ -75,7 +75,7 @@ public:
 	virtual bool isPrintAvailable() const;
 
 private:
-	QtDesignerChild();
+	QtDesignerChild( QObject* = 0 );
 	~QtDesignerChild();
 
 	QToolBar* mToolBar;

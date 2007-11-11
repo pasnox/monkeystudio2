@@ -41,7 +41,7 @@
 
 using namespace pMonkeyStudio;
 
-QtDesignerChild::QtDesignerChild()
+QtDesignerChild::QtDesignerChild( QObject* )
 	: pAbstractChild()
 {
 	// set icon
