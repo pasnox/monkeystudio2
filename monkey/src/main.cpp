@@ -78,13 +78,14 @@ int main( int argc, char** argv )
 	showMessage( &splash, QObject::tr( "Setting Style..." ) );
 	a.setStyle( pSettings::instance()->value( "MainWindow/Style", "plastique" ).toString() );
 	
+	/*
 	// assign style sheet
 	showMessage( &splash, QObject::tr( "Loading Style Sheet..." ) );
 	QFile fs( ":/stylesheets/stylesheets/default.css" );
 	fs.open( QFile::ReadOnly );
 	a.setStyleSheet( fs.readAll() );
 	fs.close();
-
+	*/
 	// show settings dialog the first time user start program
 	if ( pSettings::instance()->value( "FirstTimeRunning", true ).toBool() )
 		if ( UISettings::instance()->exec() )
