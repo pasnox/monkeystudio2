@@ -42,12 +42,12 @@ Source: bin\plugins\base\MessageBox.dll; DestDir: {app}; Flags: promptifolder; C
 Source: bin\plugins\base\Navigator.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Base
 Source: bin\plugins\base\ProjectHeaders.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Base
 Source: bin\plugins\builder\GNUMake.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Builder Qt_Plugins
-Source: bin\plugins\builder\MSVCMake.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Builder Qt_Plugins
+Source: bin\plugins\builder\MSVCMake.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Builder
 Source: bin\plugins\child\QtAssistant.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Child Qt_Plugins
 Source: bin\plugins\child\QtDesigner.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Child Qt_Plugins
 Source: bin\plugins\compiler\G++.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Compiler Qt_Plugins
 Source: bin\plugins\compiler\Gcc.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Compiler
-Source: bin\plugins\compiler\MSVCCompiler.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Compiler Qt_Plugins
+Source: bin\plugins\compiler\MSVCCompiler.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Compiler
 Source: bin\plugins\project\MonkeyProject.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Project
 Source: bin\plugins\project\QMake.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Project Qt_Plugins
 [Icons]
