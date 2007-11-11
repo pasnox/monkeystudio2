@@ -2,7 +2,7 @@
 InternalCompressLevel=ultra64
 OutputDir=setup
 SourceDir=D:\monkey\v2\trunk
-OutputBaseFilename=setup_monkeystudio
+OutputBaseFilename=setup_monkeystudio_mingw
 VersionInfoVersion=2.0.0.0
 VersionInfoCompany=Monkey Studio Team
 VersionInfoDescription=Free, Fast and Flexible Qt RAD
