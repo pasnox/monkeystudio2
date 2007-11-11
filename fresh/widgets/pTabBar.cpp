@@ -244,6 +244,55 @@ void pTabBar::tabRemoved( int i )
 
 QSize pTabBar::tabSizeHint( int i ) const
 {
+	/*
+	QFontMetrics fm = fontMetrics();
+	QSize ts;
+	bool ai = false;
+	ts.rheight() = fm.height();
+	
+	switch ( shape() )
+	{
+		case QTabBar::RoundedNorth:
+		case QTabBar::RoundedSouth:
+		case QTabBar::TriangularNorth:
+		case QTabBar::TriangularSouth:
+			ts.rwidth() = fm.width( tabText( i ) );
+			if ( aToggleTabsHaveCloseButton->isChecked() )
+				ts.rwidth() += iconSize().width();
+			ai = tabIcon( i ).isNull();
+			break;
+		case QTabBar::RoundedWest:
+		case QTabBar::RoundedEast:
+		case QTabBar::TriangularWest:
+		case QTabBar::TriangularEast:
+			// calcul max width
+			for ( int j = 0; j < count(); j++ )
+			{
+				if ( ts.width() < fm.width( tabText( j ) ) )
+					ts.rwidth() = fm.width( tabText( j ) );
+				if ( !ai && !tabIcon( j ).isNull() )
+					ai = true;
+			}
+			break;
+	}
+	
+	// add icon width if needed
+	if ( ai )
+		ts.rwidth() += iconSize().width();
+	
+	// check icon size
+	if ( ai && ts.height() < iconSize().height() )
+		ts.rheight() = iconSize().height();
+	
+	// add 4.4 pixel more
+	ts += QSize( 3, 3 );
+	
+	// return
+	return ts;
+	
+	*/
+	// good
+	
 	// get original sizehint
 	QSize s = QTabBar::tabSizeHint( i );
 	
@@ -279,12 +328,15 @@ QSize pTabBar::tabSizeHint( int i ) const
 QRect pTabBar::iconRectForTab( int i )
 {
 	// get tab infos
+	int x = 0, y = 0;
 	QSize sh = tabSizeHint( i );
 	QRect tr = tabRect( i );
 	
-	//
-	int x = 0, y = 0;
-	
+	// calcul positions
+	/*
+	x = 2;
+	y = ( sh.height() -iconSize().height() ) / 2;
+	*/
 	switch ( shape() )
 	{
 		case QTabBar::RoundedNorth:
