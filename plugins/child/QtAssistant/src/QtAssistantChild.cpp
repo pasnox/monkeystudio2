@@ -12,7 +12,7 @@
 #include <QStatusBar>
 #include <QDockWidget>
 
-QtAssistantChild::QtAssistantChild()
+QtAssistantChild::QtAssistantChild( QObject* )
 	: pAbstractChild()
 {
 	// init main window

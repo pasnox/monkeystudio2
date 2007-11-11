@@ -59,7 +59,7 @@ public slots:
 	virtual void closeFiles() {}
 	
 private:
-	QtAssistantChild();
+	QtAssistantChild( QObject* = 0 );
 	
 protected:
 	MainWindow* mMain;
