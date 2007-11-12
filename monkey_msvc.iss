@@ -50,6 +50,8 @@ Source: bin\plugins\compiler\Gcc.dll; DestDir: {app}; Flags: promptifolder; Comp
 Source: bin\plugins\compiler\MSVCCompiler.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Compiler Qt_Plugins
 Source: bin\plugins\project\MonkeyProject.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Project
 Source: bin\plugins\project\QMake.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Project Qt_Plugins
+Source: translations\monkey_*.qm; DestDir: {app}\translations; Flags: promptifolder; Components: Monkey_Studio
+Source: templates\*.*; DestDir: {app}\templates; Flags: promptifolder recursesubdirs createallsubdirs; Components: Monkey_Studio
 [Icons]
 Name: {group}\Monkey Studio RAD; Filename: {app}\monkey.exe; WorkingDir: {app}; IconFilename: {app}\monkey.exe; IconIndex: 0
 [Components]
