@@ -34,11 +34,16 @@ UISaveFiles::UISaveFiles( pAbstractChild* p, QCloseEvent* e )
 
 	// create buttons
 	dbbButtons = new QDialogButtonBox;
-	dbbButtons->setStandardButtons( QDialogButtonBox::Save | QDialogButtonBox::Close );
+	dbbButtons->setStandardButtons( QDialogButtonBox::Save | QDialogButtonBox::Discard );
+	dbbButtons->button( QDialogButtonBox::Save )->setText( tr( "Save Selected" ) );
+	dbbButtons->button( QDialogButtonBox::Discard )->setText( tr( "Discard All" ) );
 	
 	// if not forced, add cancel button
 	if ( !p->property( "ForceClose" ).toBool() )
+	{
 		dbbButtons->addButton( QDialogButtonBox::Cancel );
+		dbbButtons->button( QDialogButtonBox::Cancel )->setText( tr( "Cancel Close" ) );
+	}
 	
 	// add button to dialog
 	vl->addWidget( dbbButtons );
