@@ -100,6 +100,8 @@ void pEditor::keyPressEvent( QKeyEvent* e )
             case QsciScintilla::AcsDocument:
                 autoCompleteFromDocument();
                 break;
+			default:
+				break;
         }
         return;
     }
