@@ -23,6 +23,11 @@ With MinGW/Windows:
 * Open a console, and go to the sources directory.
 * type: qmake && mingw32-make release
 
+With MSVC/Windows:
+
+* Open a console, and go to the sources directory.
+* type: qmake && nmake release
+
 With Linux/*Nix:
 
 * Open a shell, and go to the sources directory.
