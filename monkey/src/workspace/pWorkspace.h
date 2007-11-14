@@ -40,6 +40,7 @@ private slots:
 	void internal_currentFileChanged( const QString& );
 	void internal_currentChanged( int );
 	void internal_aboutToCloseTab( int, QCloseEvent* );
+	void internal_urlsDropped( const QList<QUrl>& );
 
 public slots:
 	// file menu

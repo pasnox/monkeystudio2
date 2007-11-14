@@ -47,6 +47,8 @@ pWorkspace::pWorkspace( QWidget* p )
 	// connections
 	connect( this, SIGNAL( currentChanged( int ) ), this, SLOT( internal_currentChanged( int ) ) );
 	connect( this, SIGNAL( aboutToCloseTab( int, QCloseEvent* ) ), this, SLOT( internal_aboutToCloseTab( int, QCloseEvent* ) ) );
+	connect( this, SIGNAL( closeAllRequested() ), this, SLOT( fileCloseAll_triggered() ) );
+	connect( tabBar(), SIGNAL( urlsDropped( const QList<QUrl>& ) ), this, SLOT( internal_urlsDropped( const QList<QUrl>& ) ) );
 }
 
 void pWorkspace::loadSettings()
@@ -238,7 +240,37 @@ void pWorkspace::internal_currentChanged( int i )
 }
 
 void pWorkspace::internal_aboutToCloseTab( int i, QCloseEvent* e )
-{ UISaveFiles::execute( child( i ), e ); }
+{
+	if ( UISaveFiles::saveDocument( window(), child( i ), false ) == UISaveFiles::bCancelClose )
+		e->ignore();
+}
+
+void pWorkspace::internal_urlsDropped( const QList<QUrl>& l )
+{
+	// create menu
+	QMenu m( this );
+	QAction* aof = m.addAction( tr( "Open As &File" ) );
+	QAction* aop = m.addAction( tr( "Open As &Project" ) );
+	m.addSeparator();
+	m.addAction( tr( "Cancel" ) );
+	
+	// execute menu
+	QAction* a = m.exec( QCursor::pos() );
+	
+	// check triggered action
+	if ( a == aof )
+	{
+		foreach ( QUrl u, l )
+			if ( !u.toLocalFile().trimmed().isEmpty() )
+				openFile( u.toLocalFile() );
+	}
+	else if ( a == aop )
+	{
+		foreach ( QUrl u, l )
+			if ( !u.toLocalFile().trimmed().isEmpty() )
+				UIProjectsManager::instance()->openProject( u.toLocalFile() );
+	}
+}
 
 // file menu
 void pWorkspace::fileNew_triggered()
@@ -328,8 +360,6 @@ void pWorkspace::fileCloseCurrent_triggered()
 
 void pWorkspace::fileCloseAll_triggered( bool b )
 {
-	//closeAllTabs( b );
-	
 	// try save documents
 	UISaveFiles::Buttons cb = UISaveFiles::saveDocuments( window(), children(), b );
 	
@@ -337,18 +367,9 @@ void pWorkspace::fileCloseAll_triggered( bool b )
 	if ( !b && cb == UISaveFiles::bCancelClose )
 		return;
 	
+	// delete documents
 	qDeleteAll( mDocuments );
 	mDocuments.clear();
-	/*
-	
-	// close document if needed
-	foreach ( QWidget* td, mDocuments )
-	{
-		td->close();
-		if ( b )
-			td->deleteLater();
-	}
-	*/
 }
 
 void pWorkspace::fileSaveAsBackup_triggered()
