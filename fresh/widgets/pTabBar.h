@@ -17,6 +17,8 @@
 #define PTABBAR_H
 
 #include <QTabBar>
+#include <QList>
+#include <QUrl>
 
 class QAction;
 class pAction;
@@ -54,7 +56,6 @@ protected:
 	virtual void dropEvent( QDropEvent* );
 	virtual void tabInserted( int );
 	virtual void tabRemoved( int );
-	virtual QSize tabSizeHint( int ) const;
 	virtual QRect iconRectForTab( int );
 	virtual bool inCloseButtonRect( int, const QPoint& );
 	void updateTabsNumber( int = -1 );
@@ -78,6 +79,7 @@ signals:
 	void tabsHaveCloseButtonChanged( bool );
 	void tabsHaveShortcutChanged( bool );
 	void tabsElidedChanged( bool );
+	void urlsDropped( const QList<QUrl>& );
 
 };
 

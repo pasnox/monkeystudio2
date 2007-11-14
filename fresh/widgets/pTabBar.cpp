@@ -21,6 +21,8 @@
 #include <QIcon>
 #include <QPainter>
 
+#include <QDebug>
+
 pTabBar::pTabBar( QWidget* w )
 	: QTabBar( w )
 {
@@ -65,23 +67,20 @@ void pTabBar::paintEvent( QPaintEvent* e )
 	if ( !aToggleTabsHaveCloseButton->isChecked() )
 		return;
 	
-	// draw buttons
-	for ( int i = 0; i < count(); i++ )
+	// get tab
+	int i = tabAt( mapFromGlobal( QCursor::pos() ) );
+	if ( i != -1 )
 	{
-		// paint on this
-		QPainter p( this );
-		
-		// icon rect
+		// get close button rect
 		QRect ir = iconRectForTab( i );
 		
-		// get icon mode
-		QIcon::Mode m = ir.contains( mapFromGlobal( QCursor::pos() ) ) ? QIcon::Active : QIcon::Normal;
-		
-		// get icon file
-		QString s = m == QIcon::Active ? ":/file/icons/file/closeall.png" : ":/file/icons/file/close.png";
-		
-		// draw pixmap
-		p.drawPixmap( ir.topLeft(), QIcon( s ).pixmap( iconSize(), m, isTabEnabled( i ) ? QIcon::On : QIcon::Off ) );
+		// if mouse in close button rect
+		if ( ir.contains( mapFromGlobal( QCursor::pos() ) ) )
+		{
+			// draw button
+			QPainter p( this );
+			p.drawPixmap( ir.topLeft(), QIcon( ":/file/icons/file/closeall.png" ).pixmap( iconSize(), QIcon::Active, isTabEnabled( i ) ? QIcon::On : QIcon::Off ) );
+		}
 	}
 }
 
@@ -175,9 +174,9 @@ void pTabBar::mouseMoveEvent(QMouseEvent * e )
 void pTabBar::dragEnterEvent( QDragEnterEvent* e )
 {
 	// if correct mime and same tabbar
-	if ( e->mimeData()->hasFormat( "x-tabindex" ) && e->mimeData()->hasFormat( "x-tabbar" ) 
+	if ( ( e->mimeData()->hasFormat( "x-tabindex" ) && e->mimeData()->hasFormat( "x-tabbar" ) 
 		&& reinterpret_cast<pTabBar*>( QVariant( e->mimeData()->data( "x-tabbar" ) ).value<quintptr>() ) == this 
-		&& tabAt( e->pos() ) != -1 )
+		&& tabAt( e->pos() ) != -1 ) || e->mimeData()->hasUrls() )
 	{
 		// accept drag
 		e->acceptProposedAction();
@@ -189,40 +188,45 @@ void pTabBar::dragEnterEvent( QDragEnterEvent* e )
 
 void pTabBar::dropEvent( QDropEvent* e )
 {
-	// get drop tab
-	int ni = tabAt( e->pos() );
-	
-	// if get it
-	if ( ni != -1 )
+	if ( !e->mimeData()->hasUrls() )
 	{
-		// get original tab infos
-		int oi = e->mimeData()->data( "x-tabindex" ).toInt();
-		QVariant otd = tabData( oi );
-		QIcon oti = tabIcon( oi );
-		QString ott = tabText( oi );
-		QColor ottc = tabTextColor( oi );
-		QString ottt = tabToolTip( oi );
-		QString otwt = tabWhatsThis( oi );
+		// get drop tab
+		int ni = tabAt( e->pos() );
 		
-		// remove original tab
-		removeTab( oi );
-		
-		// insert new one with correct infos
-		int i = insertTab( ni, oti, ott );
-		setTabData( i, otd );
-		setTabTextColor( i, ottc );
-		setTabToolTip( i, ottt );
-		setTabWhatsThis( i, otwt );
-		
-		//accept
-		e->acceptProposedAction();
-		
-		// emit signal
-		emit tabDropped( oi, i );
-		
-		// set new current index
-		setCurrentIndex( i );
+		// if get it
+		if ( ni != -1 )
+		{
+			// get original tab infos
+			int oi = e->mimeData()->data( "x-tabindex" ).toInt();
+			QVariant otd = tabData( oi );
+			QIcon oti = tabIcon( oi );
+			QString ott = tabText( oi );
+			QColor ottc = tabTextColor( oi );
+			QString ottt = tabToolTip( oi );
+			QString otwt = tabWhatsThis( oi );
+			
+			// remove original tab
+			removeTab( oi );
+			
+			// insert new one with correct infos
+			int i = insertTab( ni, oti, ott );
+			setTabData( i, otd );
+			setTabTextColor( i, ottc );
+			setTabToolTip( i, ottt );
+			setTabWhatsThis( i, otwt );
+			
+			//accept
+			e->acceptProposedAction();
+			
+			// emit signal
+			emit tabDropped( oi, i );
+			
+			// set new current index
+			setCurrentIndex( i );
+		}
 	}
+	else
+		emit urlsDropped( e->mimeData()->urls () );
 	
 	// default event
 	QTabBar::dropEvent( e );
@@ -242,101 +246,13 @@ void pTabBar::tabRemoved( int i )
 		updateTabsNumber( i );
 }
 
-QSize pTabBar::tabSizeHint( int i ) const
-{
-	/*
-	QFontMetrics fm = fontMetrics();
-	QSize ts;
-	bool ai = false;
-	ts.rheight() = fm.height();
-	
-	switch ( shape() )
-	{
-		case QTabBar::RoundedNorth:
-		case QTabBar::RoundedSouth:
-		case QTabBar::TriangularNorth:
-		case QTabBar::TriangularSouth:
-			ts.rwidth() = fm.width( tabText( i ) );
-			if ( aToggleTabsHaveCloseButton->isChecked() )
-				ts.rwidth() += iconSize().width();
-			ai = tabIcon( i ).isNull();
-			break;
-		case QTabBar::RoundedWest:
-		case QTabBar::RoundedEast:
-		case QTabBar::TriangularWest:
-		case QTabBar::TriangularEast:
-			// calcul max width
-			for ( int j = 0; j < count(); j++ )
-			{
-				if ( ts.width() < fm.width( tabText( j ) ) )
-					ts.rwidth() = fm.width( tabText( j ) );
-				if ( !ai && !tabIcon( j ).isNull() )
-					ai = true;
-			}
-			break;
-	}
-	
-	// add icon width if needed
-	if ( ai )
-		ts.rwidth() += iconSize().width();
-	
-	// check icon size
-	if ( ai && ts.height() < iconSize().height() )
-		ts.rheight() = iconSize().height();
-	
-	// add 4.4 pixel more
-	ts += QSize( 3, 3 );
-	
-	// return
-	return ts;
-	
-	*/
-	// good
-	
-	// get original sizehint
-	QSize s = QTabBar::tabSizeHint( i );
-	
-	// add close button size if needed
-	if ( aToggleTabsHaveCloseButton->isChecked() )
-	{
-		// compute with icon size
-		switch ( shape() )
-		{
-			case QTabBar::RoundedNorth:
-			case QTabBar::RoundedSouth:
-			case QTabBar::TriangularNorth:
-			case QTabBar::TriangularSouth:
-				s.rwidth() += iconSize().width();
-				if ( iconSize().height() > s.height() )
-					s.rheight() = iconSize().height();
-				break;
-			case QTabBar::RoundedWest:
-			case QTabBar::RoundedEast:
-			case QTabBar::TriangularWest:
-			case QTabBar::TriangularEast:
-				s.rheight() += iconSize().width();
-				if ( iconSize().height() > s.width() )
-					s.rwidth() = iconSize().height();
-				break;
-		}
-	}
-	
-	// return size
-	return s;
-}
-
 QRect pTabBar::iconRectForTab( int i )
 {
 	// get tab infos
 	int x = 0, y = 0;
-	QSize sh = tabSizeHint( i );
 	QRect tr = tabRect( i );
+	QSize sh = tr.size();
 	
-	// calcul positions
-	/*
-	x = 2;
-	y = ( sh.height() -iconSize().height() ) / 2;
-	*/
 	switch ( shape() )
 	{
 		case QTabBar::RoundedNorth:
