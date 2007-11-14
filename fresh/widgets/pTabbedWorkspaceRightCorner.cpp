@@ -90,7 +90,7 @@ pTabbedWorkspaceRightCorner::pTabbedWorkspaceRightCorner( pTabbedWorkspace* p )
 	connect( p, SIGNAL( tabModeChanged( pTabbedWorkspace::TabMode ) ), this, SLOT( tabModeChanged( pTabbedWorkspace::TabMode ) ) );
 	connect( p, SIGNAL( documentModeChanged( pTabbedWorkspace::DocumentMode ) ), this, SLOT( documentModeChanged( pTabbedWorkspace::DocumentMode ) ) );
 
-	connect( aTabbedCloseAll, SIGNAL( triggered() ), p, SLOT( closeAllTabs() ) );
+	connect( aTabbedCloseAll, SIGNAL( triggered() ), p, SIGNAL( closeAllRequested() ) );
 
 	setActions( QList<QAction*>() << menu->menuAction() );
 }
