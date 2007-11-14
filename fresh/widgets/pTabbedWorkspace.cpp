@@ -598,7 +598,6 @@ void pTabbedWorkspace::closeAllTabs( bool b )
 {
 	foreach ( QWidget* td, mDocuments )
 	{
-		td->setProperty( "ForceClose", b );
 		td->close();
 		if ( b )
 			td->deleteLater();
