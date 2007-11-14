@@ -106,6 +106,7 @@ signals:
 	void tabShapeChanged( QTabBar::Shape );
 	void tabModeChanged( pTabbedWorkspace::TabMode );
 	void documentModeChanged( pTabbedWorkspace::DocumentMode );
+	void closeAllRequested();
 
 };
 

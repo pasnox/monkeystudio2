@@ -26,7 +26,6 @@ pTabbedWorkspace::pTabbedWorkspace( QWidget* p, pTabbedWorkspace::TabMode m )
 	mTabLayout->setSpacing( 3 );
 	mTabLayout->setMargin( 0 );
 	mTabLayout->addWidget( ( mTabBar = new pTabBar ) );
-	mTabLayout->addStretch( 100 );
 
 	// document widget
 	mStackedLayout = new QStackedLayout;
@@ -52,7 +51,7 @@ pTabbedWorkspace::pTabbedWorkspace( QWidget* p, pTabbedWorkspace::TabMode m )
 	// init view
 	setAttribute( Qt::WA_DeleteOnClose );
 	mTabBar->setDrawBase( false );
-	mTabBar->setSizePolicy( QSizePolicy( QSizePolicy::Maximum, QSizePolicy::Maximum ) );
+	mTabBar->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred ) );
 	setCornerWidget( pTabbedWorkspaceRightCorner::instance( this ) );
 	setTabMode( m );
 	setDocumentMode( pTabbedWorkspace::dmMaximized );
@@ -139,9 +138,9 @@ void pTabbedWorkspace::setTabShape( QTabBar::Shape s )
 {
 	if ( tabShape() != s )
 	{
-		// apply tab shape
-		mTabBar->setShape( s );
-	
+		// get sizepolicy
+		QSizePolicy sp = mTabBar->sizePolicy();
+		
 		// update view layout
 		switch ( s )
 		{
@@ -149,27 +148,41 @@ void pTabbedWorkspace::setTabShape( QTabBar::Shape s )
 		case QTabBar::TriangularNorth:
 			mTabLayout->setDirection( QBoxLayout::LeftToRight );
 			mLayout->setDirection( QBoxLayout::TopToBottom );
+			if ( tabShape() != QTabBar::RoundedSouth && tabShape() != QTabBar::TriangularSouth )
+				sp.transpose();
 			break;
 		case QTabBar::RoundedSouth:
 		case QTabBar::TriangularSouth:
 			mTabLayout->setDirection( QBoxLayout::LeftToRight );
 			mLayout->setDirection( QBoxLayout::BottomToTop );
+			if ( tabShape() != QTabBar::RoundedNorth && tabShape() != QTabBar::TriangularNorth )
+				sp.transpose();
 			break;
 		case QTabBar::RoundedWest:
 		case QTabBar::TriangularWest:
 			mTabLayout->setDirection( QBoxLayout::BottomToTop );
 			mLayout->setDirection( QBoxLayout::LeftToRight );
+			if ( tabShape() != QTabBar::RoundedEast && tabShape() != QTabBar::TriangularEast )
+				sp.transpose();
 			break;
 		case QTabBar::RoundedEast:
 		case QTabBar::TriangularEast:
 			mTabLayout->setDirection( QBoxLayout::TopToBottom );
 			mLayout->setDirection( QBoxLayout::RightToLeft );
+			if ( tabShape() != QTabBar::RoundedWest && tabShape() != QTabBar::TriangularWest )
+				sp.transpose();
 			break;
 		}
-	
+		
+		// set size policy
+		mTabBar->setSizePolicy( sp );
+		
+		// apply tab shape
+		mTabBar->setShape( s );
+		
 		// update corners
 		updateCorners();
-	
+		
 		// emit shape changed
 		emit tabShapeChanged( s );
 	}
@@ -294,7 +307,7 @@ void pTabbedWorkspace::internal_rightButtonPressed( int i, const QPoint& p )
 			document( i )->close();
 		// close all
 		else if ( a == aca )
-			closeAllTabs();
+			emit closeAllRequested();
 	}
 }
 
