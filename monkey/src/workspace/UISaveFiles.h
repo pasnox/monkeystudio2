@@ -15,13 +15,18 @@ class Q_MONKEY_EXPORT UISaveFiles : public QDialog
 	Q_OBJECT
 
 public:
-	static void execute( pAbstractChild*, QCloseEvent* );
+	enum Buttons { bSaveSelected = 0, bDiscardAll, bCancelClose };
+	static UISaveFiles::Buttons saveDocuments( QWidget*, QList<pAbstractChild*>, bool );
+
+	static void execute( pAbstractChild*, QCloseEvent* ); // derecated
 
 private:
-	UISaveFiles( pAbstractChild*, QCloseEvent* );
-	void addFile( const QString&, bool );
+	UISaveFiles( QWidget*, bool );
+	void addFile( const QString&, bool, pAbstractChild* );
 
-	pAbstractChild* mChild;
+	UISaveFiles( pAbstractChild*, QCloseEvent* ); // deprecated
+	void addFile( const QString&, bool ); // deprecated
+
 	QCloseEvent* mEvent;
 	QListWidget* lwFiles;
 	QDialogButtonBox* dbbButtons;

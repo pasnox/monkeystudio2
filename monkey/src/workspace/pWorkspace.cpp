@@ -327,7 +327,29 @@ void pWorkspace::fileCloseCurrent_triggered()
 { closeCurrentTab(); }
 
 void pWorkspace::fileCloseAll_triggered( bool b )
-{ closeAllTabs( b ); }
+{
+	//closeAllTabs( b );
+	
+	// try save documents
+	UISaveFiles::Buttons cb = UISaveFiles::saveDocuments( window(), children(), b );
+	
+	// don t close files if not forced and user press cancel close
+	if ( !b && cb == UISaveFiles::bCancelClose )
+		return;
+	
+	qDeleteAll( mDocuments );
+	mDocuments.clear();
+	/*
+	
+	// close document if needed
+	foreach ( QWidget* td, mDocuments )
+	{
+		td->close();
+		if ( b )
+			td->deleteLater();
+	}
+	*/
+}
 
 void pWorkspace::fileSaveAsBackup_triggered()
 {
