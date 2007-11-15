@@ -335,6 +335,8 @@ void UIMain::initGui()
 	dockToolBar( Qt::LeftToolBarArea )->addDock( UIProjectsManager::instance(), UIProjectsManager::instance()->windowTitle(), QIcon( ":/project/icons/project/project.png" ) );
 	// add qscintilla search dock
 	addDockWidget( Qt::RightDockWidgetArea, pSearch::instance() );
+	pSearch::instance()->setVisible( false );
+	pSearch::instance()->setFloating( true );
 	// create statusbar
 	statusBar()->show();
 }
