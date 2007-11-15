@@ -20,16 +20,11 @@ BUILD_PATH	= ../../../build
 TEMPLATE 	= lib
 LANGUAGE	= Qt4/C++
 CONFIG	*= warn_on thread x11 dll plugin debug_and_release
+PRE_TARGETDEPS	*= ../../../monkey
 
 MONKEY_PLUGINS_DIR	= ../../../bin/plugins
 #DEFINES	= __COVERAGESCANNER__
 LIBS	= -L$${BUILD_PATH}
-win32 {
-	CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
-		unix:LIBS += -lmonkey_debug
-		else:LIBS += -lmonkeyd
-	} else:LIBS += -lmonkey
-}
 
 win32:QMAKE_LIBDIR	+= ../../../bin
 contains( DEFINES, __COVERAGESCANNER__ ) {
@@ -50,6 +45,8 @@ CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 	UI_DIR	= $${BUILD_PATH}/debug/.ui
 	MOC_DIR	= $${BUILD_PATH}/debug/.moc
 	RCC_DIR	= $${BUILD_PATH}/debug/.rcc
+	unix:LIBS += -lmonkey_debug
+	else:LIBS += -lmonkeyd
 } else {
 	#Release
 	unix:OBJECTS_DIR	= $${BUILD_PATH}/release/.obj/unix
@@ -58,4 +55,5 @@ CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 	UI_DIR	= $${BUILD_PATH}/release/.ui
 	MOC_DIR	= $${BUILD_PATH}/release/.moc
 	RCC_DIR	= $${BUILD_PATH}/release/.rcc
+	LIBS += -lmonkey
 }
