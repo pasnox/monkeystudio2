@@ -94,15 +94,17 @@ bool pTabbedWorkspace::eventFilter( QObject* o, QEvent* e )
 	{
 		// get closeevent
 		QCloseEvent* ce = static_cast<QCloseEvent*>( e );
-
+		
 		// emit that document will be close, giving event so user can cancel it
 		emit aboutToCloseTab( indexOf( td ), ce );
 		emit aboutToCloseDocument( td, ce );
 		
 		// close document if accepted
-		if ( ce->isAccepted() )
+		if ( !ce->isAccepted() && td->property( "ForceClose" ).toBool() && !td->testAttribute( Qt::WA_DeleteOnClose ) )
 			td->deleteLater();
-		else // else cancel
+		else if ( ce->isAccepted() && !td->testAttribute( Qt::WA_DeleteOnClose ) )
+			removeDocument( td );
+		else
 			return true;
 	}
 
@@ -520,8 +522,11 @@ void pTabbedWorkspace::addDocument( QWidget* td, int i )
 	if ( i == -1 )
 		i = count();
 
-	// set auto delete false
-	td->setAttribute( Qt::WA_DeleteOnClose, false );
+	// set auto delete true
+	td->setAttribute( Qt::WA_DeleteOnClose, true );
+	
+	// no force close
+	td->setProperty( "ForceClose", false );
 
 	// auto remove itself on delete
 	connect( td, SIGNAL( destroyed( QObject* ) ), this, SLOT( removeDocument( QObject* ) ) );
@@ -607,14 +612,20 @@ void pTabbedWorkspace::closeCurrentTab()
 		td->close();
 }
 
-void pTabbedWorkspace::closeAllTabs( bool b )
+void pTabbedWorkspace::closeAllTabs( bool b, bool bb )
 {
+	// block signal if needed
+	bool bs = blockSignals( bb );
+	
+	// close all documents
 	foreach ( QWidget* td, mDocuments )
 	{
+		td->setProperty( "ForceClose", b );
 		td->close();
-		if ( b )
-			td->deleteLater();
 	}
+	
+	// restore previous block signals state
+	blockSignals( bs );
 }
 
 void pTabbedWorkspace::activateNextDocument()

@@ -65,7 +65,7 @@ public slots:
 	void removeTab( int );
 	void removeDocument( QWidget* );
 	void closeCurrentTab();
-	void closeAllTabs( bool = false );
+	void closeAllTabs( bool = false, bool = false );
 	void activateNextDocument();
 	void activatePreviousDocument();
 
