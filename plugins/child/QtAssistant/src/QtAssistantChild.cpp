@@ -39,14 +39,6 @@ QtAssistantChild::QtAssistantChild( QObject* )
 QtAssistantChild::~QtAssistantChild()
 { delete mDock; }
 
-void QtAssistantChild::closeEvent( QCloseEvent* e )
-{
-	// don't destroy the child when we close it in workspace
-	setAttribute( Qt::WA_DeleteOnClose, false );
-	// call defaul closeevent of abstract child
-	pAbstractChild::closeEvent( e );
-}
-
 void QtAssistantChild::helpWindow_destroyed( QObject* )
 { emit currentFileChanged( currentFile() ); }
 
@@ -82,7 +74,12 @@ void QtAssistantChild::showLink( const QString& s )
 	if ( w->indexOf( this ) != -1 )
 		w->setCurrentDocument( this );
 	else
+	{
 		w->addTab( this, tr( "Qt Assistant" ) );
+		setAttribute( Qt::WA_DeleteOnClose, false );
+		if ( !isVisible() )
+			setVisible( true );
+	}
 	
 	// set title
 	currentChanged( mMain->browsers()->findChild<QTabWidget*>( "tab" )->currentIndex() );

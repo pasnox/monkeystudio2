@@ -64,8 +64,6 @@ private:
 protected:
 	MainWindow* mMain;
 	QDockWidget* mDock;
-
-	virtual void closeEvent( QCloseEvent* );
 	
 protected slots:
 	void helpWindow_destroyed( QObject* );
