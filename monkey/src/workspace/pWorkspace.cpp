@@ -363,13 +363,9 @@ void pWorkspace::fileCloseAll_triggered( bool b )
 	// try save documents
 	UISaveFiles::Buttons cb = UISaveFiles::saveDocuments( window(), children(), b );
 	
-	// don t close files if not forced and user press cancel close
-	if ( !b && cb == UISaveFiles::bCancelClose )
-		return;
-	
-	// delete documents
-	qDeleteAll( mDocuments );
-	mDocuments.clear();
+	// close all object, disconnecting them
+	if ( cb != UISaveFiles::bCancelClose )
+		closeAllTabs( b, true );
 }
 
 void pWorkspace::fileSaveAsBackup_triggered()
