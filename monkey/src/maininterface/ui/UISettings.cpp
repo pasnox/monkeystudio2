@@ -48,7 +48,7 @@ UISettings::UISettings( QWidget* p )
 {
 	setupUi( this );
 	setAttribute( Qt::WA_DeleteOnClose );
-	twMenu->topLevelItem( 2 )->setExpanded( true );
+	twMenu->topLevelItem( 3 )->setExpanded( true );
 	twMenu->setCurrentItem( twMenu->topLevelItem( 0 ) );
 
 	QStringList l;
@@ -577,6 +577,7 @@ void UISettings::on_twMenu_itemSelectionChanged()
 				case 0:
 				case 1:
 				case 2:
+				case 3:
 					swPages->setCurrentIndex( i );
 					break;
 				default:
@@ -585,7 +586,7 @@ void UISettings::on_twMenu_itemSelectionChanged()
 			}
 		}
 		else
-			swPages->setCurrentIndex( it->parent()->indexOfChild( it ) +2 );
+			swPages->setCurrentIndex( it->parent()->indexOfChild( it ) +3 );
 	}
 }
 
