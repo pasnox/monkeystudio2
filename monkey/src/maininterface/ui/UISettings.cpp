@@ -39,6 +39,7 @@
 #include <QDir>
 
 using namespace pMonkeyStudio;
+using namespace pTemplatesManager;
 
 const QString SettingsPath = "Settings";
 
@@ -123,6 +124,7 @@ UISettings::UISettings( QWidget* p )
 	bgEndWrapVisualFlag->addButton( rbEndWrapFlagByBorder, QsciScintilla::WrapFlagByBorder );
 
 	// fill lexers combo
+	cbFileHeadersLanguages->addItems( availableLanguages() );
 	cbSourceAPIsLanguages->addItems( availableLanguages() );
 	cbLexersAssociationsLanguages->addItems( availableLanguages() );
 	cbLexersHighlightingLanguages->addItems( availableLanguages() );
@@ -211,8 +213,8 @@ void UISettings::loadSettings()
 		it->setFlags( it->flags() | Qt::ItemIsEditable );
 
 	// File Templates
-	leTemplatesPath->setText( pTemplatesManager::templatesPath() );
-	foreach ( pTemplate t, pTemplatesManager::availableTemplates() )
+	leTemplatesPath->setText( templatesPath() );
+	foreach ( pTemplate t, availableTemplates() )
 	{
 		QTreeWidgetItem* it = new QTreeWidgetItem( twTemplatesType );
 		it->setText( 0, t.Language );
@@ -224,7 +226,11 @@ void UISettings::loadSettings()
 		it->setText( 3, pTemplate::stringForType( t.Type ) );
 		it->setIcon( 0, QIcon( t.Icon ) );
 	}
-	teHeader->setPlainText( pTemplatesManager::templatesHeader() );
+	
+	// File Headers
+	for ( int i = 0; i < cbFileHeadersLanguages->count(); i++ )
+		cbFileHeadersLanguages->setItemData( i, templatesHeader( cbFileHeadersLanguages->itemText( i ) ) );
+	teFileHeader->setPlainText( cbFileHeadersLanguages->itemData( cbFileHeadersLanguages->currentIndex() ).toString() );
 
 	// Editor
 	//  General
@@ -390,13 +396,13 @@ void UISettings::saveSettings()
 	// remove key
 	s->remove( sp );
 	// default templates path
-	pTemplatesManager::setTemplatesPath( leTemplatesPath->text() );
+	setTemplatesPath( leTemplatesPath->text() );
 	// tokenize items, need do separate as qsettings is not thread safe
 	for ( int i = 0; i < twTemplatesType->topLevelItemCount(); i++ )
 	{
 		QTreeWidgetItem* it = twTemplatesType->topLevelItem( i );
-		it->setData( 0, Qt::UserRole, pTemplatesManager::tokenize( it->data( 0, Qt::UserRole ).toString() ) );
-		it->setData( 0, Qt::UserRole +1, pTemplatesManager::tokenize( it->data( 0, Qt::UserRole +1 ).toStringList() ) );
+		it->setData( 0, Qt::UserRole, tokenize( it->data( 0, Qt::UserRole ).toString() ) );
+		it->setData( 0, Qt::UserRole +1, tokenize( it->data( 0, Qt::UserRole +1 ).toStringList() ) );
 	}
 	// write new ones
 	s->beginWriteArray( sp );
@@ -412,8 +418,10 @@ void UISettings::saveSettings()
 		s->setValue( "Type", it->data( 0, Qt::UserRole +2 ).toInt() );
 	}
 	s->endArray();
+	
 	// templates header
-	pTemplatesManager::setTemplatesHeader( teHeader->toPlainText() );
+	for ( int i = 0; i < cbFileHeadersLanguages->count(); i++ )
+		setTemplatesHeader( cbFileHeadersLanguages->itemText( i ), cbFileHeadersLanguages->itemData( i ).toString() );
 
 	// Editor
 	//  General
@@ -678,19 +686,13 @@ void UISettings::on_tbTemplatesPath_clicked()
 }
 
 void UISettings::on_pbAddTemplateType_clicked()
-{
-	UIEditTemplate::edit( twTemplatesType, 0 );
-}
+{ UIEditTemplate::edit( twTemplatesType, 0 ); }
 
 void UISettings::on_pbEditTemplateType_clicked()
-{
-	UIEditTemplate::edit( twTemplatesType, twTemplatesType->selectedItems().value( 0 ) );
-}
+{ UIEditTemplate::edit( twTemplatesType, twTemplatesType->selectedItems().value( 0 ) ); }
 
 void UISettings::on_pbRemoveTemplateType_clicked()
-{
-	delete twTemplatesType->selectedItems().value( 0 );
-}
+{ delete twTemplatesType->selectedItems().value( 0 ); }
 
 void UISettings::on_pbEditTemplate_clicked()
 {
@@ -701,6 +703,12 @@ void UISettings::on_pbEditTemplate_clicked()
 		foreach ( QString s, it->data( 0, Qt::UserRole +1 ).toStringList() )
 			pFileManager::instance()->openFile( s );
 }
+
+void UISettings::on_cbFileHeadersLanguages_highlighted( int )
+{ cbFileHeadersLanguages->setItemData( cbFileHeadersLanguages->currentIndex(), teFileHeader->toPlainText() ); }
+
+void UISettings::on_cbFileHeadersLanguages_currentIndexChanged( int i )
+{ teFileHeader->setPlainText( cbFileHeadersLanguages->itemData( i ).toString() ); }
 
 void UISettings::tbColours_clicked()
 {
@@ -1061,9 +1069,7 @@ void UISettings::on_twAbbreviations_itemSelectionChanged()
 }
 
 void UISettings::on_pbAbbreviationsAdd_clicked()
-{
-	UIAddAbbreviation::edit( twAbbreviations );
-}
+{ UIAddAbbreviation::edit( twAbbreviations ); }
 
 void UISettings::on_pbAbbreviationsRemove_clicked()
 {

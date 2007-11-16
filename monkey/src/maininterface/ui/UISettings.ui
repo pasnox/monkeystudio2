@@ -151,6 +151,11 @@
      </item>
      <item>
       <property name="text" >
+       <string>File Headers</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
        <string>Editor</string>
       </property>
       <item>
@@ -634,7 +639,7 @@
        <property name="verticalSpacing" >
         <number>3</number>
        </property>
-       <item row="0" column="0" colspan="2" >
+       <item row="0" column="0" colspan="5" >
         <layout class="QHBoxLayout" >
          <property name="spacing" >
           <number>3</number>
@@ -674,7 +679,7 @@
          </item>
         </layout>
        </item>
-       <item rowspan="6" row="1" column="0" >
+       <item row="1" column="0" colspan="5" >
         <widget class="QTreeWidget" name="twTemplatesType" >
          <property name="editTriggers" >
           <set>QAbstractItemView::NoEditTriggers</set>
@@ -713,7 +718,7 @@
          </column>
         </widget>
        </item>
-       <item row="1" column="1" >
+       <item row="2" column="0" >
         <widget class="QPushButton" name="pbAddTemplateType" >
          <property name="text" >
           <string>New Type...</string>
@@ -727,69 +732,109 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1" >
+       <item row="2" column="2" >
         <widget class="QPushButton" name="pbRemoveTemplateType" >
          <property name="text" >
           <string>Remove Type</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="1" >
+       <item row="2" column="3" >
         <spacer>
          <property name="orientation" >
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Horizontal</enum>
          </property>
          <property name="sizeType" >
           <enum>QSizePolicy::Fixed</enum>
          </property>
          <property name="sizeHint" >
           <size>
-           <width>20</width>
-           <height>30</height>
+           <width>30</width>
+           <height>16</height>
           </size>
          </property>
         </spacer>
        </item>
-       <item row="5" column="1" >
+       <item row="2" column="4" >
         <widget class="QPushButton" name="pbEditTemplate" >
          <property name="text" >
           <string>Edit Template</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="1" >
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="pFileHeaders" >
+      <layout class="QVBoxLayout" >
+       <property name="spacing" >
+        <number>3</number>
+       </property>
+       <property name="leftMargin" >
+        <number>0</number>
+       </property>
+       <property name="topMargin" >
+        <number>0</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QGroupBox" name="gbFileHeaders" >
+         <property name="title" >
+          <string>File Headers</string>
          </property>
-         <property name="sizeHint" >
-          <size>
-           <width>92</width>
-           <height>171</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="7" column="0" colspan="2" >
-        <widget class="QLabel" name="lHeader" >
-         <property name="text" >
-          <string>Header :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0" colspan="2" >
-        <widget class="QTextEdit" name="teHeader" >
-         <property name="font" >
-          <font>
-           <family>Monospace</family>
-          </font>
-         </property>
-         <property name="lineWrapMode" >
-          <enum>QTextEdit::NoWrap</enum>
-         </property>
-         <property name="acceptRichText" >
-          <bool>false</bool>
-         </property>
+         <layout class="QGridLayout" >
+          <property name="leftMargin" >
+           <number>5</number>
+          </property>
+          <property name="topMargin" >
+           <number>5</number>
+          </property>
+          <property name="rightMargin" >
+           <number>5</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>5</number>
+          </property>
+          <property name="horizontalSpacing" >
+           <number>3</number>
+          </property>
+          <property name="verticalSpacing" >
+           <number>3</number>
+          </property>
+          <item row="0" column="0" >
+           <widget class="QLabel" name="lFileHeadersLanguage" >
+            <property name="text" >
+             <string>Language :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QComboBox" name="cbFileHeadersLanguages" >
+            <property name="toolTip" >
+             <string>Select language to be configured.</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2" >
+           <widget class="QTextEdit" name="teFileHeader" >
+            <property name="font" >
+             <font>
+              <family>Monospace</family>
+             </font>
+            </property>
+            <property name="lineWrapMode" >
+             <enum>QTextEdit::NoWrap</enum>
+            </property>
+            <property name="acceptRichText" >
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>

@@ -48,6 +48,8 @@ private slots:
 	void on_pbEditTemplateType_clicked();
 	void on_pbRemoveTemplateType_clicked();
 	void on_pbEditTemplate_clicked();
+	void on_cbFileHeadersLanguages_highlighted( int );
+	void on_cbFileHeadersLanguages_currentIndexChanged( int );
 	void tbColours_clicked();
 	void tbFonts_clicked();
 	void cbSourceAPIsLanguages_beforeChanged( int );
