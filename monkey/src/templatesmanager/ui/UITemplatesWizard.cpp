@@ -179,7 +179,7 @@ void UITemplatesWizard::generatePreview()
 				p->setFileName( leBaseName->text().append( QString( ".%1" ).arg( QFileInfo( s ).suffix() ) ) );
 				p->open( s );
 				if ( cbTypes->itemData( cbTypes->currentIndex() ).toInt() != pTemplate::ttProjects || ( i != 0 && cbTypes->itemData( cbTypes->currentIndex() ).toInt() == pTemplate::ttProjects ) )
-					p->editor()->insertAt( pTemplatesManager::templatesHeader(), 0, 0 );
+					p->editor()->insertAt( pTemplatesManager::templatesHeader( cbLanguages->currentText() ), 0, 0 );
 			}
 			p->setDestination( leDestination->text() );
 			// process content parsing

@@ -81,17 +81,22 @@ const QString pTemplatesManager::templatesPath()
 	return pMonkeyStudio::unTokenizeHome( pSettings::instance()->value( "Templates/DefaultDirectory", QApplication::applicationDirPath().append( "/../templates" ) ).toString() );
 }
 
-void pTemplatesManager::setTemplatesHeader( const QString& s )
+void pTemplatesManager::setTemplatesHeader( const QString& l, const QString& s )
 {
-	pSettings::instance()->setValue( "Templates/Header", s );
+	pSettings::instance()->setValue( QString( "Templates/Header/" ).append( l ), s );
 }
 
-const QString pTemplatesManager::templatesHeader()
+const QString pTemplatesManager::templatesHeader( const QString& l )
 {
-	QString s = pSettings::instance()->value( "Templates/Header", QString() ).toString();
+	QString s = pSettings::instance()->value( QString( "Templates/Header/" ).append( l ), QString() ).toString();
+	return s.isEmpty() ? defaultTemplatesHeader( l ) : s;
+}
 
-	if ( s.isEmpty() )
-		s = "/****************************************************************************\n"
+const QString pTemplatesManager::defaultTemplatesHeader( const QString& l )
+{
+	if ( l == "C++" )
+	{
+		return QString( "/****************************************************************************\n"
 			"**\n"
 			"** 		Created using $editor_version_string$\n"
 			"** Author    : $author$\n"
@@ -105,9 +110,31 @@ const QString pTemplatesManager::templatesHeader()
 			"** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE\n"
 			"** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.\n"
 			"**\n"
-			"****************************************************************************/\n";
-
-	return s;
+			"****************************************************************************/\n" );
+	}
+	else if ( l == "HTML" )
+	{
+		return QString( "<!--\n"
+			"/****************************************************************************\n"
+			"**\n"
+			"** 		Created using $editor_version_string$\n"
+			"** Author    : $author$\n"
+			"** Project   : $name$\n"
+			"** FileName  : $filename$\n"
+			"** Date      : $date$\n"
+			"** License   : $license$\n"
+			"** Comment   : $comment$\n"
+			"** Home Page : $homepage$\n"
+			"**\n"
+			"** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE\n"
+			"** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.\n"
+			"**\n"
+			"****************************************************************************/\n"
+			"-->\n" );
+	}
+	
+	// default
+	return QString();
 }
 
 const QString pTemplatesManager::tokenize( QString s )

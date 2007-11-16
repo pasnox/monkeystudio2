@@ -81,8 +81,9 @@ namespace pTemplatesManager
 	Q_MONKEY_EXPORT void setTemplatesPath( const QString& );
 	Q_MONKEY_EXPORT const QString templatesPath();
 
-	Q_MONKEY_EXPORT void setTemplatesHeader( const QString& );
-	Q_MONKEY_EXPORT const QString templatesHeader();
+	Q_MONKEY_EXPORT void setTemplatesHeader( const QString&, const QString& );
+	Q_MONKEY_EXPORT const QString templatesHeader( const QString& );
+	Q_MONKEY_EXPORT const QString defaultTemplatesHeader( const QString& );
 
 	Q_MONKEY_EXPORT const QString tokenize( QString );
 	Q_MONKEY_EXPORT const QString unTokenize( QString );
