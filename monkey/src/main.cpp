@@ -44,25 +44,25 @@ int main( int argc, char** argv )
 			mLanguage = "english";
 	if ( mLanguage != "english" )
 	{
-		QTranslator t;
-		if ( !t.load( QString( "%1/monkey_%2" ).arg( pSettings::instance()->value( "Paths/Translations" ).toString(), mLanguage ) ) )
+		QTranslator* t = new QTranslator( &a );
+		if ( !t->load( QString( "%1/monkey_%2" ).arg( pSettings::instance()->value( "Paths/Translations" ).toString(), mLanguage ) ) )
 			qWarning( qPrintable( QObject::tr( "Failed to install translation file." ) ) );
-		a.installTranslator( &t );
+		a.installTranslator( t );
 	}
 	// qt translation
 	QString resourceDir = QLibraryInfo::location( QLibraryInfo::TranslationsPath );
 	// setting qt translation
-	QTranslator qtTranslator;
-	qtTranslator.load( QString( "qt_" ) + QLocale::system().name(), resourceDir );
-	a.installTranslator( &qtTranslator );
+	QTranslator* qtTranslator = new QTranslator( &a );
+	qtTranslator->load( QString( "qt_" ) + QLocale::system().name(), resourceDir );
+	a.installTranslator( qtTranslator );
 	// setting assistant translation
-	QTranslator assistantTranslator;
-	assistantTranslator.load( QString( "assistant_" ) + QLocale::system().name(), resourceDir );
-	a.installTranslator( &assistantTranslator );
+	QTranslator* assistantTranslator = new QTranslator( &a );
+	assistantTranslator->load( QString( "assistant_" ) + QLocale::system().name(), resourceDir );
+	a.installTranslator( assistantTranslator );
 	// setting designer translation
-	QTranslator designerTranslator;
-	designerTranslator.load( QString( "designer_" ) + QLocale::system().name(), resourceDir );
-	a.installTranslator( &designerTranslator );
+	QTranslator* designerTranslator = new QTranslator( &a );
+	designerTranslator->load( QString( "designer_" ) + QLocale::system().name(), resourceDir );
+	a.installTranslator( designerTranslator );
 
 	// init application
 	showMessage( &splash, QObject::tr( "Initializing Application..." ) );
