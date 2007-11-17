@@ -1,5 +1,6 @@
 #include "UITranslator.h"
 #include "pSettings.h"
+#include "pMonkeyStudio.h"
 
 #include <QLibraryInfo>
 #include <QFileDialog>
@@ -9,7 +10,8 @@ UITranslator::UITranslator( QWidget* p )
 	: QDialog( p )
 {
 	setupUi( this );
-	mTranslationsPath = pSettings::instance()->value( "Paths/Translations", QLibraryInfo::location( QLibraryInfo::TranslationsPath ) ).toString();
+	setAttribute( Qt::WA_DeleteOnClose );
+	mTranslationsPath = pSettings::instance()->value( "Translations/Path", QLibraryInfo::location( QLibraryInfo::TranslationsPath ) ).toString();
 	on_tbReload_clicked();
 }
 
@@ -17,8 +19,11 @@ void UITranslator::accept()
 {
 	if ( lwTranslations->currentItem() )
 	{
-		pSettings::instance()->setValue( "Language", lwTranslations->currentItem()->text() );
-		pSettings::instance()->setValue( "Paths/Translations", mTranslationsPath );
+		pSettings::instance()->setValue( "Translations/Language", lwTranslations->currentItem()->text() );
+		pSettings::instance()->setValue( "Translations/Accepted", true );
+		pSettings::instance()->setValue( "Translations/Path", mTranslationsPath );
+		if ( parentWidget() )
+			pMonkeyStudio::warning( tr( "Changing Translations..." ), tr( "You need to restart %1 for the new translations be applied" ).arg( PROGRAM_NAME ), window() );
 		QDialog::accept();
 	}
 }
