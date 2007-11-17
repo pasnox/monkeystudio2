@@ -253,10 +253,10 @@ QString QMakeItem::getEol() const
 			return QString( "\r\n" );
 			break;
 		case QsciScintilla::EolUnix:
-			return QString( "\r" );
+			return QString( "\n" );
 			break;
 		case QsciScintilla::EolMac:
-			return QString( "\n" );
+			return QString( "\r" );
 			break;
 		default:
 			return QString( "\r\n" );
