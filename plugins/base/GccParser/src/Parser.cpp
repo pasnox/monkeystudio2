@@ -7,23 +7,23 @@ Parser::Parser()
 	Pattern ps[] = 
 	{
 		{
-			QRegExp("^(.*/)?([^:]+):(\\d+):(\\d+:)?\\serror:\\s(.+)$"), //reg exp
+			QRegExp("^((.*/)?([^:]+)):(\\d+):(\\d+:)?\\serror:\\s(.+)$"), //reg exp
 			"Error in the file/line", //desctiption
-			"%2", //file name
-			"%4", //column
-			"%3", //row
+			"%1", //file name
+			"%5", //column
+			"%6", //row
 			pConsoleManager::stError, //type
-			"%2:%3: %5", //text
+			"%3:%4: %6", //text
 			"%0", //full text
 		},
 		{
-			QRegExp("^(.*/)?([^:]+):(\\d+):(\\d+:)?\\swarning:\\s(.+)$"), //reg exp
+			QRegExp("^((.*/)?([^:]+)):(\\d+):(\\d+:)?\\swarning:\\s(.+)$"), //reg exp
 			"Warning in the file/line", //desctiption
-			"%2", //file name
-			"%4", //column
-			"%3", //row
+			"%1", //file name
+			"%5", //column
+			"%4", //row
 			pConsoleManager::stWarning, //type
-			"%2:%3: %5", //text
+			"%3:%4: %6", //text
 			"%0" //full text
 		},
 		{
