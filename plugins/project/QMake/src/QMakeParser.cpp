@@ -58,6 +58,7 @@ bool QMakeParser::loadFile( const QString& s, QMakeItem* it )
 	QFile f( s );
 	if ( !f.exists() || !f.open( QFile::ReadOnly | QFile::Text ) )
 		return false;
+	
 	// looking for encoding
 	QTextCodec* c = 0;
 	if ( encoding.indexIn( f.readAll() ) != -1 )
@@ -67,6 +68,12 @@ bool QMakeParser::loadFile( const QString& s, QMakeItem* it )
 		c = mModel->defaultCodec();
 	*/
 	// reset file
+	f.reset();
+	qWarning( "count r: %d", f.readAll().count( "\r" ) );
+	f.reset();
+	qWarning( "count n: %d", f.readAll().count( "\n" ) );
+	f.reset();
+	qWarning( "count rn: %d", f.readAll().count( "\r\n" ) );
 	f.reset();
 	// get decoded stream
 	QTextStream t( &f );
