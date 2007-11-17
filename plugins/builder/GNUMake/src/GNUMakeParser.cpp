@@ -30,6 +30,7 @@ GNUMakeParser::GNUMakeParser()
 	};
 	for ( int i = 0; !ps[i].regExp.isEmpty(); i++)
 		patterns.append (ps[i]);
+	mName = PLUGIN_NAME;
 
 }
 
