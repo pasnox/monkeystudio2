@@ -24,11 +24,11 @@ class Q_MONKEY_EXPORT pCommand
 public:
 	pCommand() 
 	{
-		mSkipOnError = true; //FIXME
-		mTryAllParsers = true; //FIXME
+		mSkipOnError = false;
+		mTryAllParsers = false;
 	}
 	
-	pCommand( const QString& t, const QString& c, const QString& a, bool b = false, const QStringList& p = QStringList(), const QString& d = QString::null )
+	pCommand( const QString& t, const QString& c, const QString& a, bool b = false, const QStringList& p = QStringList(), const QString& d = QString::null, bool bb = false )
 	{
 		mText = t;
 		mCommand = c;
@@ -36,7 +36,7 @@ public:
 		mSkipOnError = b;
 		mParsers = p;
 		mWorkingDirectory = d;
-		mTryAllParsers = true; //FIXME
+		mTryAllParsers = bb;
 	}
 	~pCommand() {}
 	
