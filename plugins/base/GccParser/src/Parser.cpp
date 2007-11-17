@@ -60,14 +60,17 @@ Parser::Parser()
 	};
 	for ( int i = 0; !ps[i].regExp.isEmpty(); i++)
 		patterns.append (ps[i]);
+	mName = PLUGIN_NAME;
 }
 
 Parser::~Parser()
 {
 }
 
+#include <QDebug>
 bool Parser::processParsing(const QByteArray& arr)
 {
+	qWarning () << arr;
 	QStringList l = QTextCodec::codecForLocale()->toUnicode( arr ).split( '\n' );
 	foreach (QString s, l)
 	{
