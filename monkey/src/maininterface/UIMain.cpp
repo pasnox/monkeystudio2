@@ -122,6 +122,7 @@ void UIMain::initMenuBar()
 	mb->beginGroup( "mEdit" );
 		mb->action( "aSettings", tr( "Settings..." ), QIcon( ":/edit/icons/edit/settings.png" ), "", tr( "Edit the application settings" ) );
 		mb->action( "aShortcutsEditor", tr( "Shortcuts Editor..." ), QIcon( ":/edit/icons/edit/shortcuts.png" ), tr( "Ctrl+E" ), tr( "Edit the application shortcuts" ) );
+		mb->action( "aTranslations", tr( "Translations..." ), QIcon( ":/edit/icons/edit/translations.png" ), tr( "Ctrl+T" ), tr( "Change the application translations files" ) );
 		mb->action( "aSeparator1" );
 		mb->action( "aUndo", tr( "&Undo" ), QIcon( ":/edit/icons/edit/undo.png" ), tr( "Ctrl+Z" ), tr( "Undo" ) )->setEnabled( false );
 		mb->action( "aRedo", tr( "&Redo" ), QIcon( ":/edit/icons/edit/redo.png" ), tr( "Ctrl+Y" ), tr( "Redo" ) )->setEnabled( false );
@@ -283,6 +284,7 @@ void UIMain::initConnections()
 	// edit connection
 	connect( menuBar()->action( "mEdit/aSettings" ), SIGNAL( triggered() ), workspace(), SLOT( editSettings_triggered() ) );
 	connect( menuBar()->action( "mEdit/aShortcutsEditor" ), SIGNAL( triggered() ), pActionManager::instance(), SLOT( showSettings() ) );
+	connect( menuBar()->action( "mEdit/aTranslations" ), SIGNAL( triggered() ), workspace(), SLOT( editTranslations_triggered() ) );
 	connect( menuBar()->action( "mEdit/aUndo" ), SIGNAL( triggered() ), workspace(), SLOT( editUndo_triggered() ) );
 	connect( menuBar()->action( "mEdit/aRedo" ), SIGNAL( triggered() ), workspace(), SLOT( editRedo_triggered() ) );
 	connect( menuBar()->action( "mEdit/aCut" ), SIGNAL( triggered() ), workspace(), SLOT( editCut_triggered() ) );
