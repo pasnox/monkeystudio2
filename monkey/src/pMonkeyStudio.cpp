@@ -8,6 +8,7 @@
 * COMMENT  : Your comment here
 *****************************************************/
 #include "pMonkeyStudio.h"
+#include "UITranslator.h"
 #include "pSettings.h"
 #include "PluginsManager.h"
 #include "ProjectPlugin.h"
@@ -21,6 +22,9 @@
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QHash>
+#include <QLibraryInfo>
+#include <QTranslator>
+#include <QLocale>
 
 #include "qsciapis.h"
 #include "qscilexerbash.h"
@@ -46,25 +50,62 @@
 #include "qscilexertex.h"
 #include "qscilexervhdl.h"
 
+QList<QTranslator*> mTranslators;
 QHash<QString,QsciLexer*> mGlobalsLexers;
 QHash<QString,QsciAPIs*> mGlobalsAPIs;
 
-void pMonkeyStudio::warning( const QString& c, const QString& s, QWidget* w )
+void pMonkeyStudio::addTranslator( QTranslator* t )
 {
-	QMessageBox::warning( w, c, s );
+	qApp->installTranslator( t );
+	if ( !mTranslators.contains( t ) )
+		mTranslators << t;
 }
+
+void pMonkeyStudio::loadTranslations()
+{
+	// clear all already installed translation
+	foreach ( QTranslator* t, mTranslators )
+		qApp->removeTranslator( t );
+	qDeleteAll( mTranslators );
+	mTranslators.clear();
+	
+	// get user translation setted
+	QString mLanguage = pSettings::instance()->value( "Translations/Language", "english" ).toString();
+	QLocale l( mLanguage );
+	// qt translation path
+	QString resourceDir = QLibraryInfo::location( QLibraryInfo::TranslationsPath );
+	
+	// setting qt translation
+	QTranslator* qtTranslator = new QTranslator( qApp );
+	if ( qtTranslator->load( QString( "qt_" ) + l.name(), resourceDir ) )
+		addTranslator( qtTranslator );
+	
+	// setting assistant translation
+	QTranslator* assistantTranslator = new QTranslator( qApp );
+	if ( assistantTranslator->load( QString( "assistant_" ) + l.name(), resourceDir ) )
+		addTranslator( assistantTranslator );
+	
+	// setting designer translation
+	QTranslator* designerTranslator = new QTranslator( qApp );
+	if ( designerTranslator->load( QString( "designer_" ) + l.name(), resourceDir ) )
+		addTranslator( designerTranslator );
+	
+	if ( mLanguage != "english" )
+	{
+		QTranslator* t = new QTranslator( qApp );
+		if ( t->load( QString( "%1/monkey_%2" ).arg( pSettings::instance()->value( "Translations/Path" ).toString(), mLanguage ) ) )
+			addTranslator( t );
+	}
+}
+
+void pMonkeyStudio::warning( const QString& c, const QString& s, QWidget* w )
+{ QMessageBox::warning( w, c, s ); }
 
 void pMonkeyStudio::information( const QString& c, const QString& s, QWidget* w )
-{
-	QMessageBox::information( w, c, s );
-}
+{ QMessageBox::information( w, c, s ); }
 
 bool pMonkeyStudio::question( const QString& c, const QString& s, QWidget* w, QMessageBox::StandardButtons b, QMessageBox::StandardButton d )
-{
-	if ( QMessageBox::question( w, c, s, b, d ) == QMessageBox::Yes )
-		return true;
-	return false;
-}
+{ return QMessageBox::question( w, c, s, b, d ) == QMessageBox::Yes; }
 
 bool pMonkeyStudio::isSameFile( const QString& f, const QString& o )
 {

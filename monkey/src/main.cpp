@@ -1,19 +1,18 @@
 #include <QApplication>
 #include <QSplashScreen>
-#include <QLibraryInfo>
-#include <QTranslator>
-#include <QLocale>
 #include <QFile>
 #include <QErrorMessage>
 
-#include "UITranslator.h"
-#include "UISettings.h"
 #include "UIMain.h"
+#include "UISettings.h"
+#include "UITranslator.h"
 #include "pWorkspace.h"
 #include "pSettings.h"
 #include "PluginsManager.h"
 #include "pConsoleManager.h"
 #include "pMonkeyStudio.h"
+
+using namespace pMonkeyStudio;
 
 void showMessage( QSplashScreen* s, const QString& m )
 { s->showMessage( m, Qt::AlignRight | Qt::AlignBottom, Qt::white ); }
@@ -37,32 +36,9 @@ int main( int argc, char** argv )
 	
 	// init translation
 	showMessage( &splash, QObject::tr( "Initializing Translation..." ) );
-	// application translation
-	QString mLanguage = pSettings::instance()->value( "Language" ).toString();
-	if ( mLanguage.isEmpty() )
-		if ( !UITranslator::instance( &splash )->exec() )
-			mLanguage = "english";
-	if ( mLanguage != "english" )
-	{
-		QTranslator* t = new QTranslator( &a );
-		if ( !t->load( QString( "%1/monkey_%2" ).arg( pSettings::instance()->value( "Paths/Translations" ).toString(), mLanguage ) ) )
-			qWarning( qPrintable( QObject::tr( "Failed to install translation file." ) ) );
-		a.installTranslator( t );
-	}
-	// qt translation
-	QString resourceDir = QLibraryInfo::location( QLibraryInfo::TranslationsPath );
-	// setting qt translation
-	QTranslator* qtTranslator = new QTranslator( &a );
-	qtTranslator->load( QString( "qt_" ) + QLocale::system().name(), resourceDir );
-	a.installTranslator( qtTranslator );
-	// setting assistant translation
-	QTranslator* assistantTranslator = new QTranslator( &a );
-	assistantTranslator->load( QString( "assistant_" ) + QLocale::system().name(), resourceDir );
-	a.installTranslator( assistantTranslator );
-	// setting designer translation
-	QTranslator* designerTranslator = new QTranslator( &a );
-	designerTranslator->load( QString( "designer_" ) + QLocale::system().name(), resourceDir );
-	a.installTranslator( designerTranslator );
+	if ( !pSettings::instance()->value( "Translations/Accepted" ).toBool() )
+		UITranslator::instance()->exec();
+	loadTranslations();
 
 	// init application
 	showMessage( &splash, QObject::tr( "Initializing Application..." ) );
@@ -109,7 +85,7 @@ int main( int argc, char** argv )
 	
 	// restore session
 	showMessage( &splash, QObject::tr( "Restoring Session..." ) );
-	if ( pMonkeyStudio::restoreSessionOnStartup() )
+	if ( restoreSessionOnStartup() )
 		UIMain::instance()->workspace()->fileSessionRestore_triggered();
 
 	// ready

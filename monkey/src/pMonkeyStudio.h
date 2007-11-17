@@ -18,6 +18,7 @@
 
 #include "qsciscintilla.h"
 
+class QTranslator;
 class QsciLexer;
 class QsciAPIs;
 class pEditor;
@@ -25,6 +26,9 @@ class pEditor;
 namespace pMonkeyStudio
 {
 	enum ExternalChangesMode { ecmNothing = 0, ecmAlert, ecmReload };
+	
+	Q_MONKEY_EXPORT void addTranslator( QTranslator* );
+	Q_MONKEY_EXPORT void loadTranslations();
 
 	Q_MONKEY_EXPORT void warning( const QString&, const QString&, QWidget* = QApplication::activeWindow() );
 	Q_MONKEY_EXPORT void information( const QString&, const QString&, QWidget* = QApplication::activeWindow() );
