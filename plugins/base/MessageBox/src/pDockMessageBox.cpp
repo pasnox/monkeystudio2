@@ -60,7 +60,7 @@ pDockMessageBox::pDockMessageBox( QWidget* w )
 	// create textbrowser
 	tbOutput = new QTextBrowser;
 	tbOutput->setFrameShape( QFrame::NoFrame );
-	tbOutput->setLineWrapMode( QTextEdit::NoWrap );
+	tbOutput->setLineWrapMode( QTextEdit::WidgetWidth );
 	tbOutput->setTabStopWidth( 40 );
 	tbOutput->setOpenExternalLinks( true );
 	// create textedit
