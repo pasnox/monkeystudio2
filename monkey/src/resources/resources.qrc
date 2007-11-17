@@ -69,6 +69,7 @@
     </qresource>
     <qresource prefix="/licenses" >
         <file>texts/license.gpl</file>
+		<file lang="ru" alias="texts/license.gpl">texts/license_ru.gpl</file>
     </qresource>
     <qresource prefix="/project" >
         <file>icons/project/clear.png</file>
