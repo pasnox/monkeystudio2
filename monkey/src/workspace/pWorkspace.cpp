@@ -14,6 +14,7 @@
 #include "pTabbedWorkspaceCorner.h"
 #include "pFileManager.h"
 #include "UISettings.h"
+#include "UITranslator.h"
 #include "UISaveFiles.h"
 #include "UIAbout.h"
 #include "UITemplatesWizard.h"
@@ -400,6 +401,12 @@ void pWorkspace::fileExit_triggered()
 // edit menu
 void pWorkspace::editSettings_triggered()
 { UISettings::instance( this )->exec(); }
+
+void pWorkspace::editTranslations_triggered()
+{
+	if ( UITranslator::instance( this )->exec() )
+		loadTranslations();
+}
 
 void pWorkspace::editUndo_triggered()
 {

@@ -59,6 +59,7 @@ public slots:
 
 	// edit menu
 	void editSettings_triggered();
+	void editTranslations_triggered();
 	void editUndo_triggered();
 	void editRedo_triggered();
 	void editCut_triggered();
