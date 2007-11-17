@@ -73,7 +73,7 @@ UIAbout::UIAbout( QWidget* p )
 	// license
 	QFile file( ":/licenses/texts/license.gpl" );
 	file.open( QFile::ReadOnly );
-	tbLicense->setPlainText( file.readAll() );
+	tbLicense->setPlainText( QString::fromUtf8( file.readAll() ) );
 	file.close();
 	tbLicense->moveCursor( QTextCursor::Start );
 
