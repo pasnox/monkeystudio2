@@ -62,10 +62,6 @@ bool pSearch::on_tbPrevious_clicked()
 		x = 0;
 		y = 0;
 	}
-	
-	// if no text to search, and selected text, set the selected text as search text
-	if ( leSearch->text().isEmpty() && !mEditor->selectedText().isEmpty() )
-		leSearch->setText( mEditor->selectedText() );
 
 	// search
 	bool b = mEditor->findFirst( leSearch->text(), cbRegExp->isChecked(), cbCaseSensitive->isChecked(), cbWholeWords->isChecked(), cbWrap->isChecked(), false, y, x -mEditor->selectedText().length() );
@@ -102,10 +98,6 @@ bool pSearch::on_tbNext_clicked()
 		x = 0;
 		y = 0;
 	}
-	
-	// if no text to search, and selected text, set the selected text as search text
-	if ( leSearch->text().isEmpty() && !mEditor->selectedText().isEmpty() )
-		leSearch->setText( mEditor->selectedText() );
 
 	// search
 	bool b = mEditor->findFirst( leSearch->text(), cbRegExp->isChecked(), cbCaseSensitive->isChecked(), cbWholeWords->isChecked(), cbWrap->isChecked(), true, y, x );

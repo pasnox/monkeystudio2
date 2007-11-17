@@ -383,15 +383,28 @@ void pEditor::selectNone()
 
 void pEditor::invokeSearchReplace()
 {
-    if ( !pSearch::instance()->isVisible() )
-        pSearch::instance()->setVisible( true );
-    while ( pSearch::instance()->isFloating() && QApplication::activeWindow() != pSearch::instance()->window() )
-    {
-        QApplication::processEvents();
-        pSearch::instance()->activateWindow();
+	// get pSearch instance
+	pSearch* psi = pSearch::instance();
+	
+	// set selected text the text to search
+	if ( !selectedText().isEmpty() )
+		psi->leSearch->setText( selectedText() );
+	
+	// made search dock visible
+    if ( !psi->isVisible() )
+        psi->setVisible( true );
+	
+	// some hack to wait window activate
+	if ( pSearch::instance()->isFloating() )
+	{
+		psi->activateWindow();
+		while ( QApplication::activeWindow() != psi->window() )
+			QApplication::processEvents();
     }
-    pSearch::instance()->leSearch->setFocus();
-    pSearch::instance()->leSearch->selectAll();
+	
+	// set focus and select search text in pSearch instance
+    psi->leSearch->setFocus();
+    psi->leSearch->selectAll();
 }
 
 void pEditor::invokeGoToLine()
