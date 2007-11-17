@@ -6,7 +6,7 @@ Gpp::Gpp()
 	// set plugin infos
 	mPluginInfos.Caption = tr( "Gpp" );
 	mPluginInfos.Description = tr( "Plugin for execute Gpp in console and parse it's output" );
-	mPluginInfos.Author = "Kopats Andrei aka hlamer <hlamer@tut.by>, Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
 	mPluginInfos.Type = BasePlugin::iCompiler;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.5.0";
