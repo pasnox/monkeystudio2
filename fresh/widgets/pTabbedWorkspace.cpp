@@ -296,10 +296,12 @@ void pTabbedWorkspace::internal_rightButtonPressed( int i, const QPoint& p )
 	QAction* aca = m.addAction( tr( "Close &All" ) );
 	
 	// add action from tabbar
+	/*
 	m.addSeparator();
 	m.addAction( mTabBar->toggleTabsHaveCloseButtonAction() );
 	m.addAction( mTabBar->toggleTabsHaveShortcutAction() );
 	m.addAction( mTabBar->toggleTabsElidedAction() );
+	*/
 	
 	// execute menu
 	if ( QAction* a = m.exec( p ) )
