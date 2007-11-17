@@ -1,9 +1,11 @@
 include( ../../plugins.inc )
 
 DESTDIR	= $$MONKEY_PLUGINS_DIR/compiler
-TARGET	= G++
+TARGET	= GccParser
 DEFINES	*= "PLUGIN_NAME=\"\\\"$${TARGET}\\\"\""
 
-HEADERS = src/Gpp.h 
+HEADERS = src/GccParser.h \
+	src/Parser.h
 
-SOURCES	= src/Gpp.cpp 
+SOURCES	= src/GccParser.cpp \
+	src/Parser.cpp

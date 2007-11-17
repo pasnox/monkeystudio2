@@ -1,29 +1,21 @@
 #include "Gcc.h"
-#include "GccParser.h"
 #include "pMenuBar.h"
 
 Gcc::Gcc()
 {
 	// set plugin infos
 	mPluginInfos.Caption = tr( "Gcc" );
-	mPluginInfos.Description = tr( "Plugin for execute Gcc in console and parse it's output" );
-	mPluginInfos.Author = "Kopats Andrei aka hlamer <hlamer@tut.by>, Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	mPluginInfos.Description = tr( "Plugin for execute Gcc in console" );
+	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
 	mPluginInfos.Type = BasePlugin::iCompiler;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.5.0";
 	mPluginInfos.Enabled = false;
 	
-	// install parsers
-	foreach ( QString s, availableParsers() )
-		pConsoleManager::instance()->addParser( getParser( s ) );
 }
 
 Gcc::~Gcc()
-{
-	// uninstall parsers
-	foreach ( QString s, availableParsers() )
-		pConsoleManager::instance()->removeParser( s );
-}
+{}
 
 bool Gcc::setEnabled( bool b)
 {
@@ -55,7 +47,7 @@ QWidget* Gcc::settingsWidget()
 { return cliToolSettingsWidget( this ); }
 
 pCommandList Gcc::defaultCommands() const
-{ return pCommandList() << pCommand( "Build Current File", "gcc", "$cf$", false, availableParsers(), "$cfp$" ); }
+{ return pCommandList() << pCommand( "Build Current File", "gcc", "$cf$", false, QStringList("GccParser"), "$cfp$" ); }
 
 pCommandList Gcc::userCommands() const
 {
@@ -109,12 +101,6 @@ void Gcc::setUserCommands( const pCommandList& l ) const
 	s->endArray();
 }
 
-QStringList Gcc::availableParsers() const
-{ return QStringList( mPluginInfos.Name ); }
-
-pCommandParser* Gcc::getParser( const QString& s )
-{ return s == mPluginInfos.Name ? new GccParser : 0; }
-
 void Gcc::commandTriggered()
 {
 	pConsoleManager* cm = pConsoleManager::instance();
@@ -124,4 +110,3 @@ void Gcc::commandTriggered()
 }
 
 Q_EXPORT_PLUGIN2( CompilerGcc, Gcc )
-

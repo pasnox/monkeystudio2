@@ -1,5 +1,4 @@
 #include "Gpp.h"
-#include "GppParser.h"
 #include "pMenuBar.h"
 
 Gpp::Gpp()
@@ -12,18 +11,10 @@ Gpp::Gpp()
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.5.0";
 	mPluginInfos.Enabled = false;
-	
-	// install parsers
-	foreach ( QString s, availableParsers() )
-		pConsoleManager::instance()->addParser( getParser( s ) );
 }
 
 Gpp::~Gpp()
-{
-	// uninstall parsers
-	foreach ( QString s, availableParsers() )
-		pConsoleManager::instance()->removeParser( s );
-}
+{}
 
 bool Gpp::setEnabled( bool b)
 {
@@ -55,7 +46,7 @@ QWidget* Gpp::settingsWidget()
 { return cliToolSettingsWidget( this ); }
 
 pCommandList Gpp::defaultCommands() const
-{ return pCommandList() << pCommand( "Build Current File", "g++", "$cf$", false, availableParsers(), "$cfp$" ); }
+{ return pCommandList() << pCommand( "Build Current File", "g++", "$cf$", false, QStringList("GccParser"), "$cfp$" ); }
 
 pCommandList Gpp::userCommands() const
 {
@@ -108,12 +99,6 @@ void Gpp::setUserCommands( const pCommandList& l ) const
 	}
 	s->endArray();
 }
-
-QStringList Gpp::availableParsers() const
-{ return QStringList( mPluginInfos.Name ); }
-
-pCommandParser* Gpp::getParser( const QString& s )
-{ return s == mPluginInfos.Name ? new GppParser : 0; }
 
 void Gpp::commandTriggered()
 {

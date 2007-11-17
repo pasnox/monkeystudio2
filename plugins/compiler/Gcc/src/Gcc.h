@@ -21,8 +21,6 @@ public:
 	virtual pCommandList defaultCommands() const;
 	virtual pCommandList userCommands() const;
 	virtual void setUserCommands( const pCommandList& ) const;
-	virtual QStringList availableParsers() const;
-	virtual pCommandParser* getParser( const QString& );
 	
 public slots:
 	virtual void commandTriggered();
