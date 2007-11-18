@@ -1,6 +1,6 @@
 # Monkey Studio 2 project file
 
-BUILD_PATH	 = ../build
+BUILD_PATH	= ../build
 
 # include qscintilla framework
 include( ../qscintilla/qscintilla.pri )
@@ -14,7 +14,7 @@ include( ../ctags/ctags.pri )
 #include monkey framework
 include( monkey.pri )
 
-TEMPLATE = app
+TEMPLATE	= app
 LANGUAGE	= Qt4/C++
 TARGET	= monkey
 DESTDIR	= ../bin
@@ -40,7 +40,7 @@ unix:!mac:*-g++:LIBS	*= -rdynamic
 mac:*-g++:LIBS	*= -dynamiclib
 PRE_TARGETDEPS	*= ../qscintilla ../fresh ../ctags
 
-CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
+CONFIG( DebugBuild )|CONFIG( debug, debug|release ) {
 	#Debug
 	CONFIG	+= console
 	unix:TARGET	= $$join(TARGET,,,_debug)
@@ -80,7 +80,8 @@ FORMS	*= src/maininterface/ui/UITranslator.ui \
 	src/pluginsmanager/ui/UIPluginsSettings.ui \
 	src/pluginsmanager/ui/UICLIToolSettings.ui \
 	src/pluginsmanager/ui/UIBuilderSettings.ui \
-	src/projectsmanager/ui/UIProjectsManager.ui
+	src/projectsmanager/ui/UIProjectsManager.ui \
+	src/pluginsmanager/ui/UICompilerSettings.ui
 
 HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/maininterface/ui/UIAbout.h \
@@ -124,7 +125,8 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/projectsmanager/ui/UIAddExistingFiles.h \
 	src/projectsmanager/ProjectsModel.h \
 	src/projectsmanager/ProjectsProxy.h \
-	src/projectsmanager/ProjectItem.h
+	src/projectsmanager/ProjectItem.h \
+	src/pluginsmanager/ui/UICompilerSettings.h
 
 SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/maininterface/ui/UIAbout.cpp \
@@ -160,7 +162,8 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/projectsmanager/ProjectsModel.cpp \
 	src/projectsmanager/ProjectsProxy.cpp \
 	src/projectsmanager/ProjectItem.cpp \
-	src/main.cpp
+	src/main.cpp \
+	src/pluginsmanager/ui/UICompilerSettings.cpp
 
 mac:SOURCES	*= src/toolsmanager/pDesktopApplications_mac.cpp
 else:unix:SOURCES	*= src/toolsmanager/pDesktopApplications_unix.cpp
