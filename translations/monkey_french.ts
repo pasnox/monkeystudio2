@@ -58,46 +58,46 @@
     <name>PluginsManager</name>
     <message>
         <source>Failed to load static plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de charger le plugin static</translation>
     </message>
     <message>
         <source>Failed to load plugin ( %1 ): Error: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de charger le plugin ( %1 ): Erreur: %2</translation>
     </message>
     <message>
         <source>Found plugin: %1, type: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugin trouvé: %1, Type: %2</translation>
     </message>
     <message>
         <source>User wantn&apos;t to intall plugin: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;utilisateur ne veut pas installer le plugin: %1</translation>
     </message>
     <message>
         <source>Successfully enabled plugin: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugin activé avec succés: %1</translation>
     </message>
     <message>
         <source>Unsuccessfully enabled plugin: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugin non activé avec succés: %1</translation>
     </message>
     <message>
         <source>Already enabled plugin: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugin déjà activé: %1</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Initializing Application...</source>
-        <translation>Chargement de l&apos;application ...</translation>
+        <translation>Initialisation de l&apos;application ...</translation>
     </message>
     <message>
         <source>Initializing Translation...</source>
-        <translation>Chargement de la traduction ...</translation>
+        <translation>Initialisation de la traduction ...</translation>
     </message>
     <message>
         <source>Initializing Main Window...</source>
-        <translation>Chargement de Main Window ...</translation>
+        <translation>Initialisation de Main Window ...</translation>
     </message>
     <message>
         <source>%1 v%2 - %3, The Monkey Studio Team</source>
@@ -137,19 +137,19 @@
     </message>
     <message>
         <source>Many shared code between our IDEs</source>
-        <translation type="unfinished"></translation>
+        <translation>Beaucoup de partage de code entre nos IDEs</translation>
     </message>
     <message>
         <source>Belarus</source>
-        <translation type="unfinished"></translation>
+        <translation>BeloRussie</translation>
     </message>
     <message>
         <source>Principal Developer, Class Browser</source>
-        <translation type="unfinished"></translation>
+        <translation>Developpeur Principal, Classe Browser</translation>
     </message>
     <message>
         <source>Qt Pro Parser, Some Features/Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Parseur Qt Pro, de l&apos;aide et des nouveautés</translation>
     </message>
     <message>
         <source>No donations for now, you can use this &lt;a href=&quot;http://sourceforge.net/project/project_donations.php?group_id=163493&quot;&gt;link&lt;/a&gt; to make donation. Donations will help paying host/domain, and relatives things about the projects ( may need a mac book for better mac version :p ).</source>
@@ -165,15 +165,15 @@
     </message>
     <message>
         <source>Team collaboration across the Internet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Collaboration d&apos;equipe sur l&apos;Internet.</translation>
     </message>
     <message>
         <source>Our webissues server ( login: anonymous, password: anonymous ).</source>
-        <translation type="unfinished"></translation>
+        <translation>Notre serveur WebIssues ( pseudo: anonymous, mot de passe: anonymous ).</translation>
     </message>
     <message>
         <source>You can send bug/patch/ideas/what ever you want to our tracker.</source>
-        <translation type="unfinished">Vous pouvez envoyez vos contributions</translation>
+        <translation>Vous pouvez envoyez vos contributions ou totu ce que vous voulez sur notre tracker.</translation>
     </message>
     <message>
         <source>A forum is at your disposition.</source>
@@ -221,54 +221,152 @@
     </message>
     <message>
         <source>Starting Console Manager...</source>
-        <translation type="unfinished"></translation>
+        <translation>Demarrage du Gestionnaire de Console...</translation>
     </message>
     <message>
         <source>Setting Style...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Loading Style Sheet...</source>
-        <translation type="unfinished"></translation>
+        <translation>Application du Style...</translation>
     </message>
     <message>
         <source>Initializing Plugins Manager...</source>
-        <translation type="unfinished"></translation>
+        <translation>Initialisation du Gestionnaire de Plugins...</translation>
     </message>
     <message>
         <source>Restoring Session...</source>
-        <translation type="unfinished"></translation>
+        <translation>Restauration de la Session...</translation>
     </message>
     <message>
         <source>Select file(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Choisissez un/des fichier(s)</translation>
     </message>
     <message>
         <source>Select file</source>
-        <translation type="unfinished"></translation>
+        <translation>Selectionnez un fichier</translation>
     </message>
     <message>
         <source>Choose a filename</source>
-        <translation type="unfinished"></translation>
+        <translation>Choisissez un nom de fichier</translation>
     </message>
     <message>
         <source>Select a folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Choisissez un dossier</translation>
     </message>
     <message>
         <source>This plugin can&apos;t be configured</source>
-        <translation type="unfinished"></translation>
+        <translation>Ce plugin ne peut être configuré</translation>
+    </message>
+    <message>
+        <source>Restoring Workspace...</source>
+        <translation>Restauration de l&apos;Espace de Travail...</translation>
+    </message>
+    <message>
+        <source>Loaging Api File...</source>
+        <translation>Chargement des fichiers API...</translation>
+    </message>
+    <message>
+        <source>An error occured when loading api file:
+%1</source>
+        <translation>Une erreur est survenue en chargeant l&apos;api:
+%1</translation>
     </message>
 </context>
 <context>
     <name>QsciCommand</name>
     <message>
         <source>Move down one line</source>
-        <translation>Descendre d&apos;une ligne</translation>
+        <translation type="unfinished">Descendre d&apos;une ligne</translation>
     </message>
     <message>
         <source>Extend selection down one line</source>
-        <translation>Etendre la selection à la ligne suivante</translation>
+        <translation type="unfinished">Etendre la selection à la ligne suivante</translation>
+    </message>
+    <message>
+        <source>Paste</source>
+        <translation type="unfinished">Coller</translation>
+    </message>
+    <message>
+        <source>Copy selection</source>
+        <translation type="unfinished">Copier la selection</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuler</translation>
+    </message>
+    <message>
+        <source>Delete previous character</source>
+        <translation type="unfinished">Effacer le caractère précédent</translation>
+    </message>
+    <message>
+        <source>Delete word to left</source>
+        <translation type="unfinished">Effacer le mot de gauche</translation>
+    </message>
+    <message>
+        <source>Undo the last command</source>
+        <translation type="unfinished">Annuler la dernière commande</translation>
+    </message>
+    <message>
+        <source>Delete line to left</source>
+        <translation type="unfinished">Effacer le début de la ligne</translation>
+    </message>
+    <message>
+        <source>Redo last command</source>
+        <translation type="unfinished">Rejouer la dernière commande</translation>
+    </message>
+    <message>
+        <source>Select all text</source>
+        <translation type="unfinished">Selectionner tous le texte</translation>
+    </message>
+    <message>
+        <source>Indent one level</source>
+        <translation type="unfinished">Indenter une fois</translation>
+    </message>
+    <message>
+        <source>Move back one indentation level</source>
+        <translation type="unfinished">Désindenter une fois</translation>
+    </message>
+    <message>
+        <source>Insert new line</source>
+        <translation type="unfinished">Insérer une nouvelle ligne</translation>
+    </message>
+    <message>
+        <source>Zoom in</source>
+        <translation type="unfinished">Zoom avant</translation>
+    </message>
+    <message>
+        <source>Zoom out</source>
+        <translation type="unfinished">Zoom arrière</translation>
+    </message>
+    <message>
+        <source>Set zoom</source>
+        <translation type="unfinished">Régler le zoom</translation>
+    </message>
+    <message>
+        <source>Cut current line</source>
+        <translation type="unfinished">Couper la ligne courante</translation>
+    </message>
+    <message>
+        <source>Delete current line</source>
+        <translation type="unfinished">Effacer la ligne courante</translation>
+    </message>
+    <message>
+        <source>Copy current line</source>
+        <translation type="unfinished">Copier la ligne courante</translation>
+    </message>
+    <message>
+        <source>Swap current and previous lines</source>
+        <translation type="unfinished">Inverser la ligne courante avec la précédente</translation>
+    </message>
+    <message>
+        <source>Duplicate selection</source>
+        <translation type="unfinished">Dupliquer la selection</translation>
+    </message>
+    <message>
+        <source>Convert selection to lower case</source>
+        <translation type="unfinished">Convertir la selection en miniscule</translation>
+    </message>
+    <message>
+        <source>Convert selection to upper case</source>
+        <translation type="unfinished">Convertir la selection en majuscules</translation>
     </message>
     <message>
         <source>Scroll view down one line</source>
@@ -467,96 +565,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Paste</source>
-        <translation>Coller</translation>
-    </message>
-    <message>
-        <source>Copy selection</source>
-        <translation>Copier la selection</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>Annuler</translation>
-    </message>
-    <message>
-        <source>Delete previous character</source>
-        <translation>Effacer le caractère précédent</translation>
-    </message>
-    <message>
-        <source>Delete word to left</source>
-        <translation>Effacer le mot de gauche</translation>
-    </message>
-    <message>
-        <source>Undo the last command</source>
-        <translation>Annuler la dernière commande</translation>
-    </message>
-    <message>
-        <source>Delete line to left</source>
-        <translation>Effacer le début de la ligne</translation>
-    </message>
-    <message>
-        <source>Redo last command</source>
-        <translation>Rejouer la dernière commande</translation>
-    </message>
-    <message>
-        <source>Select all text</source>
-        <translation>Selectionner tous le texte</translation>
-    </message>
-    <message>
-        <source>Indent one level</source>
-        <translation>Indenter une fois</translation>
-    </message>
-    <message>
-        <source>Move back one indentation level</source>
-        <translation>Désindenter une fois</translation>
-    </message>
-    <message>
-        <source>Insert new line</source>
-        <translation>Insérer une nouvelle ligne</translation>
-    </message>
-    <message>
-        <source>Zoom in</source>
-        <translation>Zoom avant</translation>
-    </message>
-    <message>
-        <source>Zoom out</source>
-        <translation>Zoom arrière</translation>
-    </message>
-    <message>
-        <source>Set zoom</source>
-        <translation>Régler le zoom</translation>
-    </message>
-    <message>
         <source>Formfeed</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cut current line</source>
-        <translation>Couper la ligne courante</translation>
-    </message>
-    <message>
-        <source>Delete current line</source>
-        <translation>Effacer la ligne courante</translation>
-    </message>
-    <message>
-        <source>Copy current line</source>
-        <translation>Copier la ligne courante</translation>
-    </message>
-    <message>
-        <source>Swap current and previous lines</source>
-        <translation>Inverser la ligne courante avec la précédente</translation>
-    </message>
-    <message>
-        <source>Duplicate selection</source>
-        <translation>Dupliquer la selection</translation>
-    </message>
-    <message>
-        <source>Convert selection to lower case</source>
-        <translation>Convertir la selection en miniscule</translation>
-    </message>
-    <message>
-        <source>Convert selection to upper case</source>
-        <translation>Convertir la selection en majuscules</translation>
     </message>
     <message>
         <source>Delete previous character if not at line start</source>
@@ -567,23 +577,31 @@
     <name>QsciLexerBash</name>
     <message>
         <source>Default</source>
-        <translation>Défaut</translation>
+        <translation type="unfinished">Défaut</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation>Erreur</translation>
+        <translation type="unfinished">Erreur</translation>
     </message>
     <message>
         <source>Comment</source>
-        <translation>Commentaire</translation>
+        <translation type="unfinished">Commentaire</translation>
     </message>
     <message>
         <source>Number</source>
-        <translation>Nombre</translation>
+        <translation type="unfinished">Nombre</translation>
     </message>
     <message>
         <source>Keyword</source>
-        <translation>Mot-clé</translation>
+        <translation type="unfinished">Mot-clé</translation>
+    </message>
+    <message>
+        <source>Operator</source>
+        <translation type="unfinished">Opérateur</translation>
+    </message>
+    <message>
+        <source>Scalar</source>
+        <translation type="unfinished">Scalaire</translation>
     </message>
     <message>
         <source>Double-quoted string</source>
@@ -594,16 +612,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Operator</source>
-        <translation>Opérateur</translation>
-    </message>
-    <message>
         <source>Identifier</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Scalar</source>
-        <translation>Scalaire</translation>
     </message>
     <message>
         <source>Parameter expansion</source>
@@ -626,15 +636,27 @@
     <name>QsciLexerBatch</name>
     <message>
         <source>Default</source>
-        <translation>Défaut</translation>
+        <translation type="unfinished">Défaut</translation>
     </message>
     <message>
         <source>Comment</source>
-        <translation>Commentaire</translation>
+        <translation type="unfinished">Commentaire</translation>
     </message>
     <message>
         <source>Keyword</source>
-        <translation>Mot-clé</translation>
+        <translation type="unfinished">Mot-clé</translation>
+    </message>
+    <message>
+        <source>External command</source>
+        <translation type="unfinished">Commande externe</translation>
+    </message>
+    <message>
+        <source>Variable</source>
+        <translation type="unfinished">Variable</translation>
+    </message>
+    <message>
+        <source>Operator</source>
+        <translation type="unfinished">Opérateur</translation>
     </message>
     <message>
         <source>Label</source>
@@ -643,18 +665,6 @@
     <message>
         <source>Hide command character</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>External command</source>
-        <translation>Commande externe</translation>
-    </message>
-    <message>
-        <source>Variable</source>
-        <translation>Variable</translation>
-    </message>
-    <message>
-        <source>Operator</source>
-        <translation>Opérateur</translation>
     </message>
 </context>
 <context>
@@ -666,6 +676,14 @@
     <message>
         <source>Comment</source>
         <translation type="unfinished">Commentaire</translation>
+    </message>
+    <message>
+        <source>Variable</source>
+        <translation type="unfinished">Variable</translation>
+    </message>
+    <message>
+        <source>Number</source>
+        <translation type="unfinished">Nombre</translation>
     </message>
     <message>
         <source>String</source>
@@ -682,10 +700,6 @@
     <message>
         <source>Function</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Variable</source>
-        <translation type="unfinished">Variable</translation>
     </message>
     <message>
         <source>Label</source>
@@ -715,16 +729,24 @@
         <source>Variable within a string</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Number</source>
-        <translation type="unfinished">Nombre</translation>
-    </message>
 </context>
 <context>
     <name>QsciLexerCPP</name>
     <message>
         <source>Default</source>
         <translation type="unfinished">Défaut</translation>
+    </message>
+    <message>
+        <source>Number</source>
+        <translation type="unfinished">Nombre</translation>
+    </message>
+    <message>
+        <source>Keyword</source>
+        <translation type="unfinished">Mot-clé</translation>
+    </message>
+    <message>
+        <source>Operator</source>
+        <translation type="unfinished">Opérateur</translation>
     </message>
     <message>
         <source>C comment</source>
@@ -739,14 +761,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Number</source>
-        <translation type="unfinished">Nombre</translation>
-    </message>
-    <message>
-        <source>Keyword</source>
-        <translation type="unfinished">Mot-clé</translation>
-    </message>
-    <message>
         <source>Double-quoted string</source>
         <translation type="unfinished"></translation>
     </message>
@@ -757,10 +771,6 @@
     <message>
         <source>Pre-processor block</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Operator</source>
-        <translation type="unfinished">Opérateur</translation>
     </message>
     <message>
         <source>Identifier</source>
@@ -798,6 +808,10 @@
         <translation type="unfinished">Défaut</translation>
     </message>
     <message>
+        <source>Operator</source>
+        <translation type="unfinished">Opérateur</translation>
+    </message>
+    <message>
         <source>Tag</source>
         <translation type="unfinished"></translation>
     </message>
@@ -812,10 +826,6 @@
     <message>
         <source>Unknown pseudo-class</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Operator</source>
-        <translation type="unfinished">Opérateur</translation>
     </message>
     <message>
         <source>CSS1 property</source>
@@ -872,6 +882,18 @@
         <translation type="unfinished">Défaut</translation>
     </message>
     <message>
+        <source>Number</source>
+        <translation type="unfinished">Nombre</translation>
+    </message>
+    <message>
+        <source>Keyword</source>
+        <translation type="unfinished">Mot-clé</translation>
+    </message>
+    <message>
+        <source>Operator</source>
+        <translation type="unfinished">Opérateur</translation>
+    </message>
+    <message>
         <source>Block comment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -886,14 +908,6 @@
     <message>
         <source>Nesting comment</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Number</source>
-        <translation type="unfinished">Nombre</translation>
-    </message>
-    <message>
-        <source>Keyword</source>
-        <translation type="unfinished">Mot-clé</translation>
     </message>
     <message>
         <source>Secondary keyword</source>
@@ -918,10 +932,6 @@
     <message>
         <source>Character</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Operator</source>
-        <translation type="unfinished">Opérateur</translation>
     </message>
     <message>
         <source>Identifier</source>
@@ -1414,7 +1424,7 @@
     <name>QsciLexerIDL</name>
     <message>
         <source>UUID</source>
-        <translation>UUID</translation>
+        <translation type="unfinished">UUID</translation>
     </message>
 </context>
 <context>
@@ -1435,16 +1445,20 @@
         <translation type="unfinished">Commentaire</translation>
     </message>
     <message>
-        <source>Line comment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Number</source>
         <translation type="unfinished">Nombre</translation>
     </message>
     <message>
         <source>Keyword</source>
         <translation type="unfinished">Mot-clé</translation>
+    </message>
+    <message>
+        <source>Operator</source>
+        <translation type="unfinished">Opérateur</translation>
+    </message>
+    <message>
+        <source>Line comment</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>String</source>
@@ -1461,10 +1475,6 @@
     <message>
         <source>Preprocessor</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Operator</source>
-        <translation type="unfinished">Opérateur</translation>
     </message>
     <message>
         <source>Identifier</source>
@@ -1498,10 +1508,6 @@
         <translation type="unfinished">Commentaire</translation>
     </message>
     <message>
-        <source>Preprocessor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Variable</source>
         <translation type="unfinished">Variable</translation>
     </message>
@@ -1510,12 +1516,16 @@
         <translation type="unfinished">Opérateur</translation>
     </message>
     <message>
-        <source>Target</source>
+        <source>Error</source>
+        <translation type="unfinished">Erreur</translation>
+    </message>
+    <message>
+        <source>Preprocessor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Error</source>
-        <translation type="unfinished">Erreur</translation>
+        <source>Target</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1529,16 +1539,16 @@
         <translation type="unfinished">Commentaire</translation>
     </message>
     <message>
-        <source>Comment line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Number</source>
         <translation type="unfinished">Nombre</translation>
     </message>
     <message>
         <source>Operator</source>
         <translation type="unfinished">Opérateur</translation>
+    </message>
+    <message>
+        <source>Comment line</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Identifier</source>
@@ -1604,16 +1614,24 @@
         <translation type="unfinished">Commentaire</translation>
     </message>
     <message>
-        <source>POD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Number</source>
         <translation type="unfinished">Nombre</translation>
     </message>
     <message>
         <source>Keyword</source>
         <translation type="unfinished">Mot-clé</translation>
+    </message>
+    <message>
+        <source>Operator</source>
+        <translation type="unfinished">Opérateur</translation>
+    </message>
+    <message>
+        <source>Scalar</source>
+        <translation type="unfinished">Scalaire</translation>
+    </message>
+    <message>
+        <source>POD</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Double-quoted string</source>
@@ -1624,16 +1642,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Operator</source>
-        <translation type="unfinished">Opérateur</translation>
-    </message>
-    <message>
         <source>Identifier</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Scalar</source>
-        <translation type="unfinished">Scalaire</translation>
     </message>
     <message>
         <source>Array</source>
@@ -1742,16 +1752,20 @@
         <translation type="unfinished">Nombre</translation>
     </message>
     <message>
+        <source>Keyword</source>
+        <translation type="unfinished">Mot-clé</translation>
+    </message>
+    <message>
+        <source>Operator</source>
+        <translation type="unfinished">Opérateur</translation>
+    </message>
+    <message>
         <source>Double-quoted string</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Single-quoted string</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Keyword</source>
-        <translation type="unfinished">Mot-clé</translation>
     </message>
     <message>
         <source>Triple single-quoted string</source>
@@ -1768,10 +1782,6 @@
     <message>
         <source>Function or method name</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Operator</source>
-        <translation type="unfinished">Opérateur</translation>
     </message>
     <message>
         <source>Identifier</source>
@@ -1809,16 +1819,20 @@
         <translation type="unfinished">Commentaire</translation>
     </message>
     <message>
-        <source>POD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Number</source>
         <translation type="unfinished">Nombre</translation>
     </message>
     <message>
         <source>Keyword</source>
         <translation type="unfinished">Mot-clé</translation>
+    </message>
+    <message>
+        <source>Operator</source>
+        <translation type="unfinished">Opérateur</translation>
+    </message>
+    <message>
+        <source>POD</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Double-quoted string</source>
@@ -1835,10 +1849,6 @@
     <message>
         <source>Function or method name</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Operator</source>
-        <translation type="unfinished">Opérateur</translation>
     </message>
     <message>
         <source>Identifier</source>
@@ -1932,20 +1942,24 @@
         <translation type="unfinished">Commentaire</translation>
     </message>
     <message>
-        <source>Comment line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>JavaDoc style comment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Number</source>
         <translation type="unfinished">Nombre</translation>
     </message>
     <message>
         <source>Keyword</source>
         <translation type="unfinished">Mot-clé</translation>
+    </message>
+    <message>
+        <source>Operator</source>
+        <translation type="unfinished">Opérateur</translation>
+    </message>
+    <message>
+        <source>Comment line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>JavaDoc style comment</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Double-quoted string</source>
@@ -1962,10 +1976,6 @@
     <message>
         <source>SQL*Plus prompt</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Operator</source>
-        <translation type="unfinished">Opérateur</translation>
     </message>
     <message>
         <source>Identifier</source>
@@ -2042,20 +2052,24 @@
         <translation type="unfinished">Commentaire</translation>
     </message>
     <message>
-        <source>Comment line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Number</source>
         <translation type="unfinished">Nombre</translation>
     </message>
     <message>
-        <source>String</source>
+        <source>Operator</source>
+        <translation type="unfinished">Opérateur</translation>
+    </message>
+    <message>
+        <source>Keyword</source>
+        <translation type="unfinished">Mot-clé</translation>
+    </message>
+    <message>
+        <source>Comment line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Operator</source>
-        <translation type="unfinished">Opérateur</translation>
+        <source>String</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Identifier</source>
@@ -2064,10 +2078,6 @@
     <message>
         <source>Unclosed string</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Keyword</source>
-        <translation type="unfinished">Mot-clé</translation>
     </message>
     <message>
         <source>Standard operator</source>
@@ -2179,7 +2189,7 @@
     </message>
     <message>
         <source>Select a folder</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Choisissez un dossier</translation>
     </message>
     <message>
         <source>Builder Settings</source>
@@ -2213,6 +2223,10 @@
         <source>Try All</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Skip On Error</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>UICLIToolSettings</name>
@@ -2226,7 +2240,7 @@
     </message>
     <message>
         <source>Select a folder</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Choisissez un dossier</translation>
     </message>
     <message>
         <source>Commands Editor</source>
@@ -2282,6 +2296,10 @@
     </message>
     <message>
         <source>Try All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Skip On Error</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2878,10 +2896,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source></source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Filtered project view</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2915,6 +2929,38 @@
     </message>
     <message>
         <source>&amp;Interpreter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Translations...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+T</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change the application translations files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;All Commands</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Prepare APIs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+Alt+P</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Prepare the APIs files for auto completion / calltips</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source></source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2972,6 +3018,10 @@
         <source>Plugin Name :</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>UIProjectsManager</name>
@@ -3009,6 +3059,18 @@
     </message>
     <message>
         <source>Check the files you want to save :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save Selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel Close</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3055,10 +3117,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Project Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Restore Projects On Startup</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3075,22 +3133,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>UI Designer Integration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use Monkey Studio&apos;s embedded designer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Run Qt Designer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>On External Changes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Do nothing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3100,10 +3142,6 @@
     </message>
     <message>
         <source>Automatically reload the file if safe, alert the user if not</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Session</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3152,10 +3190,6 @@
     </message>
     <message>
         <source>Edit Template</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Header :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3742,6 +3776,66 @@
         <source>Abbreviations</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>New Operator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File Headers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Project Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>On External &amp;Changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Workspace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tabs Have Close Button</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tabs Have Shortcut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tabs Are Elided</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tabs Text Color :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Current Tab Text Color :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Operators</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Session</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>UITemplatesWizard</name>
@@ -3972,10 +4066,6 @@ Aborting.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;b&gt;Tools Editor&lt;/b&gt; give you the possibility to use variables&lt;br&gt;&lt;br&gt;&lt;b&gt;%pn&lt;/b&gt; : Current project name&lt;br&gt;&lt;b&gt;%pp&lt;/b&gt; : Current project path&lt;br&gt;&lt;b&gt;%pfp&lt;/b&gt; : Current project file path&lt;br&gt;&lt;b&gt;%sfp&lt;/b&gt; : Selected file path ( In Project Box )&lt;br&gt;&lt;b&gt;%sffp&lt;/b&gt; : Selected file file path ( In Project Box )</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Choose an icon for this tool</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4055,6 +4145,10 @@ Aborting.</source>
         <source>Down</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&lt;b&gt;Tools Editor&lt;/b&gt; give you the possibility to use variables&lt;br&gt;&lt;br&gt;&lt;b&gt;$cpp$&lt;/b&gt; : Current project path&lt;br&gt;&lt;b&gt;$cp$&lt;/b&gt; : Current project filepath&lt;br&gt;&lt;b&gt;$cfp$&lt;/b&gt; : Current tab path&lt;br&gt;&lt;b&gt;$cf$&lt;/b&gt; : Current tab filepath&lt;br&gt;&lt;b&gt;$cip$&lt;/b&gt; : Current item path&lt;br&gt;&lt;b&gt;$ci$&lt;/b&gt; : Current item filepath</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>UITranslator</name>
@@ -4078,6 +4172,21 @@ Aborting.</source>
         <source>Locate the translations</source>
         <translation>Définer ou se trouvent les traductions</translation>
     </message>
+    <message>
+        <source>Changing Translations...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You need to restart %1 for the new translations be applied</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>pActionManager</name>
+    <message>
+        <source>Key Sequence &apos;%1&apos; already assigned to the &apos;%2/%3&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>pConsoleManager</name>
@@ -4091,6 +4200,48 @@ Aborting.</source>
     </message>
     <message>
         <source>Can&apos;t send raw data to console</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop current command</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+End</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Console Manager</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop the currently running command</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>pDockToolBar</name>
+    <message>
+        <source>%1 - Exclusive</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>pDockToolBarManager</name>
+    <message>
+        <source>Top DockToolBar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bottom DockToolBar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left DockToolBar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right DockToolBar</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4133,6 +4284,17 @@ Aborting.</source>
     <message>
         <source>There is no defaullt printer, please set one before trying quick print</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>pMenuBar</name>
+    <message>
+        <source>Main Menu</source>
+        <translation>Menu Principal</translation>
+    </message>
+    <message>
+        <source>^aseparator\d{1,2}$</source>
+        <translation>^aseparateur\d{1,2}$</translation>
     </message>
 </context>
 <context>
@@ -4246,6 +4408,98 @@ Aborting.</source>
     </message>
 </context>
 <context>
+    <name>pShortcutsEditor</name>
+    <message>
+        <source>Shortcuts Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Restore default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>C&amp;lear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>pTabBar</name>
+    <message>
+        <source>Tabs Have &amp;Close Button</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tabbed Workspace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tabs Have &amp;Shortcut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tabs Are &amp;Elided</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>pTabbedWorkspace</name>
+    <message>
+        <source>&amp;Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Close &amp;All</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>pTabbedWorkspaceRightCorner</name>
+    <message>
+        <source>Tabbed Workspace/Shape Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tabbed Workspace/Tab Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tabbed Workspace/Document Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Close All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tabbed Workspace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tab Shape</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tab Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Document Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>pToolsManager</name>
     <message>
         <source>Tools Error...</source>
@@ -4254,8 +4508,13 @@ Aborting.</source>
     <message>
         <source>Error trying to start tools:
 %1</source>
-        <translation>L&apos;erreur tente de démarrer les outis:
+        <translation type="obsolete">L&apos;erreur tente de démarrer les outis:
 %1</translation>
+    </message>
+    <message>
+        <source>Error trying to start tool :
+%1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4266,6 +4525,349 @@ Aborting.</source>
     </message>
     <message>
         <source>Choose a filename to backup your file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open As &amp;File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open As &amp;Project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuler</translation>
+    </message>
+</context>
+<context>
+    <name>qSciShortcutsManager</name>
+    <message>
+        <source>Move down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Line down rec text end</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scroll line down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Line up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Line up rec text end</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scroll line up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move on paragraph down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection on paragraph down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move on paragraph up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection on paragraph up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left rec text end</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection to right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right rec text end</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move on word left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection on word left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move word right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection on word right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move word left end</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move word part left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection word part </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move word part right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection on word part right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move to line start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection to line start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection rect to line start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move to display start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection to display start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Home wrap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Home wrap extend</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>VC Home</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection VC Home</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection rect VC Home</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>VC Home wrap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection VC Home wrap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move to end of line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection to end of line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection rect text end</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move to line end display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection to line end display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move to line end wrap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection to line end wrap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move to document start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection to document start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move to document end</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection to document end</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move page up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection on page up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection to end of rec text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move page down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection on page down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection on rec page down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stuttered page up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection on stuttered page up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stuttered page down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extend selection on stuttered page down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete back</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete back not a line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete word left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete word right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete line left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete line right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cut line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Transponse line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Duplicate line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lower case</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Upper case</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit toggle over type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Form feed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Back tab</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Selection duplicate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zoom In</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zoom Out</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Zoom</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
