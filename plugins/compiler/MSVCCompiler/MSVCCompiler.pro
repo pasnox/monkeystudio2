@@ -4,8 +4,6 @@ DESTDIR	= $$MONKEY_PLUGINS_DIR/compiler
 TARGET	= MSVCCompiler
 DEFINES	*= "PLUGIN_NAME=\"\\\"$${TARGET}\\\"\""
 
-HEADERS = src/MSVCCompiler.h \
-	src/MSVCCompilerParser.h
+HEADERS = src/MSVCCompiler.h
 
-SOURCES	= src/MSVCCompiler.cpp \
-	src/MSVCCompilerParser.cpp
+SOURCES	= src/MSVCCompiler.cpp
