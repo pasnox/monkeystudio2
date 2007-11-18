@@ -18,6 +18,7 @@
 #include "pMonkeyStudio.h"
 
 #include <QInputDialog>
+#include <QPushButton>
 
 using namespace pMonkeyStudio;
 
@@ -89,8 +90,7 @@ void UIBuilderSettings::save()
 	}
 	mCommand.setParsers( l );
 	mCommand.setTryAllParsers( cbBuildCommandTryAll->isChecked() );
-	dynamic_cast<BuilderPlugin*>( mPlugin )->setBuildCommand( mCommand );
-
+	mPlugin->setBuildCommand( mCommand );
 }
 
 void UIBuilderSettings::on_tbBuildCommandCommand_clicked()
