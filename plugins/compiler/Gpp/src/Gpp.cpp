@@ -1,5 +1,4 @@
 #include "Gpp.h"
-#include "GppParser.h"
 #include "pMenuBar.h"
 
 Gpp::Gpp()
