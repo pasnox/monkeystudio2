@@ -397,9 +397,11 @@ void pEditor::invokeSearchReplace()
 	// some hack to wait window activate
 	if ( pSearch::instance()->isFloating() )
 	{
-		psi->activateWindow();
 		while ( QApplication::activeWindow() != psi->window() )
+		{
+			psi->activateWindow();
 			QApplication::processEvents();
+		}
     }
 	
 	// set focus and select search text in pSearch instance
