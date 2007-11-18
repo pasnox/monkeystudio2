@@ -483,7 +483,10 @@ void QMakeItem::installCommands()
 		// clear commands
 		mCommands.clear();
 		// get builder commnd
-		const pCommand bc = builder()->buildCommand();
+		pCommand bcc = builder()->buildCommand();
+		if ( compiler() )
+			bcc.addParsers( compiler()->compileCommand().parsers() );
+		const pCommand bc = bcc;
 		// evaluate some var
 		QString target = evaluate( "TARGET", this );
 		QString destdir = evaluate( "DESTDIR", this );
