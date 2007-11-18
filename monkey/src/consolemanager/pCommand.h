@@ -60,7 +60,9 @@ public:
 	void setCommand( const QString& s ) { mCommand = s; }
 	void setArguments( const QString& s ) { mArguments = s; }
 	void setWorkingDirectory( const QString& s ) { mWorkingDirectory = s; }
+	void addParser( const QString& p ) { if ( !mParsers.contains( p ) ) mParsers << p; }
 	void setParsers( const QStringList& p ) { mParsers = p; }
+	void addParsers( const QStringList& p ) { foreach ( QString s, p ) addParser( s ); }
 	void setSkipOnError( bool b ) { mSkipOnError = b; }
 	void setTryAllParsers( bool b ) { mTryAllParsers = b; }
 
