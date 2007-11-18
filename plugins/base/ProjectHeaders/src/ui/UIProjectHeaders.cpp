@@ -30,13 +30,16 @@ UIProjectHeaders::UIProjectHeaders( QWidget* p )
 {
 	setupUi( this );
 	cbLanguages->addItems( availableLanguages() );
-	teLicensing->setPlainText( pTemplatesManager::templatesHeader() );
+	teLicensing->setPlainText( pTemplatesManager::templatesHeader( cbLanguages->currentText() ) );
 	dbbButtons->button( QDialogButtonBox::Ok )->setIcon( QPixmap( ":/icons/icons/ok.png" ) );
 	dbbButtons->button( QDialogButtonBox::Cancel )->setIcon( QPixmap( ":/icons/icons/cancel.png" ) );
 }
 
 UIProjectHeaders::~UIProjectHeaders()
 {}
+
+void UIProjectHeaders::on_cbLanguages_currentIndexChanged( const QString& s )
+{ teLicensing->setPlainText( pTemplatesManager::templatesHeader( s ) ); }
 
 void UIProjectHeaders::on_tbDirectory_clicked()
 {
