@@ -1,17 +1,17 @@
-#ifndef MSVCCOMPILER_H
-#define MSVCCOMPILER_H
+#ifndef MSVC_H
+#define MSVC_H
 
 #include "CompilerPlugin.h"
 #include "CLIToolPlugin.h"
 
-class MSVCCompiler : public CompilerPlugin, public CLIToolPlugin
+class MSVC : public CompilerPlugin, public CLIToolPlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin CompilerPlugin CLIToolPlugin )
 
 public:
-	MSVCCompiler();
-	~MSVCCompiler();
+	MSVC();
+	~MSVC();
 	// BasePlugin
 	virtual bool setEnabled( bool );
 	virtual QWidget* settingsWidget();
@@ -27,4 +27,4 @@ public slots:
 
 };
 
-#endif // MSVCCOMPILER_H
+#endif // MSVC_H

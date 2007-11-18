@@ -1,9 +1,10 @@
-#include "MSVCCompilerParser.h"
+#include "MSVCParser.h"
 
 #include <QTextCodec>
 
-MSVCCompilerParser::MSVCCompilerParser()
+MSVCParser::MSVCParser()
 {
+	mName = "MSVCParser";
 	Pattern ps[] = 
 	{
 		{
@@ -62,11 +63,10 @@ MSVCCompilerParser::MSVCCompilerParser()
 		patterns.append (ps[i]);
 }
 
-MSVCCompilerParser::~MSVCCompilerParser()
-{
-}
+MSVCParser::~MSVCParser()
+{}
 
-bool MSVCCompilerParser::processParsing(const QByteArray& arr)
+bool MSVCParser::processParsing( const QByteArray& arr )
 {
 	QStringList l = QTextCodec::codecForLocale()->toUnicode( arr ).split( '\n' );
 	foreach (QString s, l)
@@ -88,15 +88,10 @@ bool MSVCCompilerParser::processParsing(const QByteArray& arr)
 			
 		}
 	}
-return false;
+	return false;
 }
 
-QString MSVCCompilerParser::name() const
-{
-	return PLUGIN_NAME;
-}
-
-QString MSVCCompilerParser::replaceWithMatch(QRegExp rex, QString s)
+QString MSVCParser::replaceWithMatch( QRegExp rex, QString s )
 {
 	int i = 0;
 	while ( (i = s.indexOf("%")) != -1)

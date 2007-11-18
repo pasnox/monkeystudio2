@@ -1,11 +1,11 @@
-#include "MSVCCompiler.h"
+#include "MSVC.h"
 #include "pMenuBar.h"
 
-MSVCCompiler::MSVCCompiler()
+MSVC::MSVC()
 {
 	// set plugin infos
-	mPluginInfos.Caption = tr( "MSVC Compiler" );
-	mPluginInfos.Description = tr( "Plugin for execute MSVC Compiler in console" );
+	mPluginInfos.Caption = tr( "MSVC" );
+	mPluginInfos.Description = tr( "Plugin for execute MSVC in console" );
 	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
 	mPluginInfos.Type = BasePlugin::iCompiler;
 	mPluginInfos.Name = PLUGIN_NAME;
@@ -17,14 +17,14 @@ MSVCCompiler::MSVCCompiler()
 		pConsoleManager::instance()->addParser( getParser( s ) );
 }
 
-MSVCCompiler::~MSVCCompiler()
+MSVC::~MSVC()
 {
 	// uninstall parsers
 	foreach ( QString s, availableParsers() )
 		pConsoleManager::instance()->removeParser( s );
 }
 
-bool MSVCCompiler::setEnabled( bool b)
+bool MSVC::setEnabled( bool b)
 {
 	if ( b == mPluginInfos.Enabled )
 		return true;
@@ -50,13 +50,13 @@ bool MSVCCompiler::setEnabled( bool b)
 	return true;
 }
 
-QWidget* MSVCCompiler::settingsWidget()
+QWidget* MSVC::settingsWidget()
 { return cliToolSettingsWidget( this ); }
 
-pCommandList MSVCCompiler::defaultCommands() const
-{ return pCommandList() << pCommand( "Build Current File", "cl", "$cf$", false, QStringList( "MSVCCompilerParser" ), "$cfp$" ); }
+pCommandList MSVC::defaultCommands() const
+{ return pCommandList() << pCommand( "Build Current File", "cl", "$cf$", false, QStringList( "MSVCParser" ), "$cfp$" ); }
 
-pCommandList MSVCCompiler::userCommands() const
+pCommandList MSVC::userCommands() const
 {
 	// commands list
 	pCommandList l;
@@ -85,7 +85,7 @@ pCommandList MSVCCompiler::userCommands() const
 	return l;
 }
 
-void MSVCCompiler::setUserCommands( const pCommandList& l ) const
+void MSVC::setUserCommands( const pCommandList& l ) const
 {
 	// get settings object
 	QSettings* s = settings();
@@ -108,7 +108,7 @@ void MSVCCompiler::setUserCommands( const pCommandList& l ) const
 	s->endArray();
 }
 
-void MSVCCompiler::commandTriggered()
+void MSVC::commandTriggered()
 {
 	pConsoleManager* cm = pConsoleManager::instance();
 	pCommandList l = userCommands();
@@ -116,4 +116,4 @@ void MSVCCompiler::commandTriggered()
 		cm->addCommands( cm->recursiveCommandList( l, cm->getCommand( l, a->statusTip() ) ) );
 }
 
-Q_EXPORT_PLUGIN2( CompilerMSVCCompiler, MSVCCompiler )
+Q_EXPORT_PLUGIN2( CompilerMSVC, MSVC )
