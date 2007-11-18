@@ -1,8 +1,9 @@
-#include <QTabWidget>
 #include "GNUMake.h"
 #include "GNUMakeParser.h"
 #include "pConsoleManager.h"
 #include "pMenuBar.h"
+
+#include <QTabWidget>
 
 GNUMake::GNUMake ()
 {
