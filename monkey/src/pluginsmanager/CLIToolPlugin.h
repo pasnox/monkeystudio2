@@ -16,8 +16,8 @@ public:
 	virtual void setUserCommands( const pCommandList& ) const = 0;
 	virtual QWidget* cliToolSettingsWidget( BasePlugin* p )
 	{ return new UICLIToolSettings( p, defaultCommands(), userCommands(), QApplication::activeWindow() ); }
-	virtual QStringList availableParsers() const = 0;
-	virtual pCommandParser* getParser( const QString& ) = 0;
+	virtual QStringList availableParsers() const { return QStringList(); }
+	virtual pCommandParser* getParser( const QString& ) { return 0; }
 	virtual void commandTriggered() = 0;
 	
 };
