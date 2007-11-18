@@ -1,12 +1,11 @@
 #include "MSVCCompiler.h"
-#include "MSVCCompilerParser.h"
 #include "pMenuBar.h"
 
 MSVCCompiler::MSVCCompiler()
 {
 	// set plugin infos
 	mPluginInfos.Caption = tr( "MSVC Compiler" );
-	mPluginInfos.Description = tr( "Plugin for execute MSVC Compiler in console and parse it's output" );
+	mPluginInfos.Description = tr( "Plugin for execute MSVC Compiler in console" );
 	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
 	mPluginInfos.Type = BasePlugin::iCompiler;
 	mPluginInfos.Name = PLUGIN_NAME;
@@ -55,7 +54,7 @@ QWidget* MSVCCompiler::settingsWidget()
 { return cliToolSettingsWidget( this ); }
 
 pCommandList MSVCCompiler::defaultCommands() const
-{ return pCommandList() << pCommand( "Build Current File", "cl", "$cf$", false, availableParsers(), "$cfp$" ); }
+{ return pCommandList() << pCommand( "Build Current File", "cl", "$cf$", false, QStringList( "MSVCCompilerParser" ), "$cfp$" ); }
 
 pCommandList MSVCCompiler::userCommands() const
 {
@@ -109,12 +108,6 @@ void MSVCCompiler::setUserCommands( const pCommandList& l ) const
 	s->endArray();
 }
 
-QStringList MSVCCompiler::availableParsers() const
-{ return QStringList( /*mPluginInfos.Name*/ ); }
-
-pCommandParser* MSVCCompiler::getParser( const QString& s )
-{ return s == mPluginInfos.Name ? new MSVCCompilerParser : 0; }
-
 void MSVCCompiler::commandTriggered()
 {
 	pConsoleManager* cm = pConsoleManager::instance();
@@ -124,4 +117,3 @@ void MSVCCompiler::commandTriggered()
 }
 
 Q_EXPORT_PLUGIN2( CompilerMSVCCompiler, MSVCCompiler )
-
