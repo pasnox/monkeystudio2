@@ -254,6 +254,7 @@ void pConsoleManager::executeProcess()
 			// execute next
 			continue;
 		}
+		
 		// set current parsers list
 		// parsers comamnd want to test/check
 		mCurrentParsers = c.parsers();
