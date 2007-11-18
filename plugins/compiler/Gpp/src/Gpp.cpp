@@ -1,20 +1,29 @@
 #include "Gpp.h"
+#include "GppParser.h"
 #include "pMenuBar.h"
 
 Gpp::Gpp()
 {
 	// set plugin infos
 	mPluginInfos.Caption = tr( "Gpp" );
-	mPluginInfos.Description = tr( "Plugin for execute Gpp in console and parse it's output" );
-	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	mPluginInfos.Description = tr( "Plugin for execute Gpp in console" );
+	mPluginInfos.Author = "Kopats Andrei aka hlamer <hlamer@tut.by>, Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
 	mPluginInfos.Type = BasePlugin::iCompiler;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.5.0";
 	mPluginInfos.Enabled = false;
+	
+	// install parsers
+	foreach ( QString s, availableParsers() )
+		pConsoleManager::instance()->addParser( getParser( s ) );
 }
 
 Gpp::~Gpp()
-{}
+{
+	// uninstall parsers
+	foreach ( QString s, availableParsers() )
+		pConsoleManager::instance()->removeParser( s );
+}
 
 bool Gpp::setEnabled( bool b)
 {
@@ -46,7 +55,7 @@ QWidget* Gpp::settingsWidget()
 { return cliToolSettingsWidget( this ); }
 
 pCommandList Gpp::defaultCommands() const
-{ return pCommandList() << pCommand( "Build Current File", "g++", "$cf$", false, QStringList("GccParser"), "$cfp$" ); }
+{ return pCommandList() << pCommand( "Build Current File", "g++", "$cf$", false, QStringList( "GccParser" ), "$cfp$" ); }
 
 pCommandList Gpp::userCommands() const
 {
