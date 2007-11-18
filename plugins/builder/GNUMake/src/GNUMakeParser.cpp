@@ -4,6 +4,8 @@
 
 GNUMakeParser::GNUMakeParser()
 {
+	mName = PLUGIN_NAME;
+	
 	Pattern ps[] = 
 	{
 		{
@@ -28,15 +30,13 @@ GNUMakeParser::GNUMakeParser()
         },
 		{QRegExp(), "", "", "", "", pConsoleManager::stUnknown,"",""} //this item must be last
 	};
+	
 	for ( int i = 0; !ps[i].regExp.isEmpty(); i++)
 		patterns.append (ps[i]);
-	mName = PLUGIN_NAME;
-
 }
 
 GNUMakeParser::~GNUMakeParser()
-{
-}
+{}
 
 bool GNUMakeParser::processParsing( const QByteArray& arr )
 {
@@ -57,14 +57,10 @@ bool GNUMakeParser::processParsing( const QByteArray& arr )
 				emit newStepAvailable( m );
 				return true;
 			}
-			
 		}
 	}
-return false;
+	return false;
 }
-
-QString GNUMakeParser::name() const
-{ return PLUGIN_NAME; }
 
 QString GNUMakeParser::replaceWithMatch(QRegExp rex, QString s)
 {

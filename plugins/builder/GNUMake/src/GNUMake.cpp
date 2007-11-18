@@ -167,4 +167,3 @@ void GNUMake::commandTriggered()
 }
 
 Q_EXPORT_PLUGIN2( BuilderGNUMake, GNUMake )
-
