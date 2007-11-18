@@ -382,8 +382,8 @@ void UISettings::saveSettings()
 	setTabsHaveCloseButton( cbTabsHaveCloseButton->isChecked() );
 	setTabsHaveShortcut( cbTabsHaveShortcut->isChecked() );
 	setTabsElided( cbTabsElided->isChecked() );
-	setTabsTextColor( iconBackgroundColor( tbTabsTextColor->icon() ) );
-	setCurrentTabTextColor( iconBackgroundColor( tbCurrentTabTextColor->icon() ) );
+	setTabsTextColor( QColor( tbTabsTextColor->toolTip() ) );
+	setCurrentTabTextColor( QColor( tbCurrentTabTextColor->toolTip() ) );
 	setExternalChanges( (pMonkeyStudio::ExternalChangesMode)bgExternalChanges->checkedId() );
 	setSaveSessionOnClose( cbSaveSession->isChecked() );
 	setRestoreSessionOnStartup( cbRestoreSession->isChecked() );
@@ -430,11 +430,11 @@ void UISettings::saveSettings()
 	setCreateBackupUponOpen( cbCreateBackupUponOpen->isChecked() ) ;
 	setAutoEolConversion( cbAutoEolConversion->isChecked() );
 	setDefaultEncoding( cbDefaultEncoding->currentText() );
-	setSelectionBackgroundColor( iconBackgroundColor( tbSelectionBackground->icon() ) );
-	setSelectionForegroundColor( iconBackgroundColor( tbSelectionForeground->icon() ) );
+	setSelectionBackgroundColor( QColor( tbSelectionBackground->toolTip() ) );
+	setSelectionForegroundColor( QColor( tbSelectionForeground->toolTip() ) );
 	setDefaultDocumentColours( gbDefaultDocumentColours->isChecked() );
-	setDefaultDocumentPen( iconBackgroundColor( tbDefaultDocumentPen->icon() ) );
-	setDefaultDocumentPaper( iconBackgroundColor( tbDefaultDocumentPaper->icon() ) );
+	setDefaultDocumentPen( QColor( tbDefaultDocumentPen->toolTip() ) );
+	setDefaultDocumentPaper( QColor( tbDefaultDocumentPaper->toolTip() ) );
 	//  Auto Completion
 	setAutoCompletionSource( QsciScintilla::AcsNone );
 	if ( gbAutoCompletionEnabled->isChecked() )
@@ -448,9 +448,9 @@ void UISettings::saveSettings()
 	if ( gbCalltipsEnabled->isChecked() )
 		setCallTipsStyle( (QsciScintilla::CallTipsStyle)bgCallTipsStyle->checkedId() );
 	setCallTipsVisible( sCallTipsVisible->value() );
-	setCallTipsBackgroundColor( iconBackgroundColor( tbCalltipsBackground->icon() ) );
-	setCallTipsForegroundColor( iconBackgroundColor( tbCalltipsForeground->icon() ) );
-	setCallTipsHighlightColor( iconBackgroundColor( tbCalltipsHighlight->icon() ) );
+	setCallTipsBackgroundColor( QColor( tbCalltipsBackground->toolTip() ) );
+	setCallTipsForegroundColor( QColor( tbCalltipsForeground->toolTip() ) );
+	setCallTipsHighlightColor( QColor( tbCalltipsHighlight->toolTip() ) );
 	//  Indentation
 	setAutoIndent( cbAutoIndent->isChecked()  );
 	setBackspaceUnindents( cbBackspaceUnindents->isChecked() );
@@ -459,26 +459,26 @@ void UISettings::saveSettings()
 	setTabIndents( cbTabIndents->isChecked() );
 	setTabWidth( sIndentationTabWidth->value() );
 	setIndentationWidth( sIndentationWidth->value() );
-	setIndentationGuidesBackgroundColor( iconBackgroundColor( tbIndentationGuidesBackground->icon() ) );
-	setIndentationGuidesForegroundColor( iconBackgroundColor( tbIndentationGuidesForeground->icon() ) );
+	setIndentationGuidesBackgroundColor( QColor( tbIndentationGuidesBackground->toolTip() ) );
+	setIndentationGuidesForegroundColor( QColor( tbIndentationGuidesForeground->toolTip() ) );
 	//  Brace Matching
 	setBraceMatching( QsciScintilla::NoBraceMatch );
 	if ( gbBraceMatchingEnabled->isChecked() )
 		setBraceMatching( (QsciScintilla::BraceMatch)bgBraceMatch->checkedId() );
-	setMatchedBraceBackgroundColor( iconBackgroundColor( tbMatchedBraceBackground->icon() ) );
-	setMatchedBraceForegroundColor( iconBackgroundColor( tbMatchedBraceForeground->icon() ) );
-	setUnmatchedBraceBackgroundColor( iconBackgroundColor( tbUnmatchedBraceBackground->icon() ) );
-	setUnmatchedBraceForegroundColor( iconBackgroundColor( tbUnmatchedBraceForeground->icon() ) );
+	setMatchedBraceBackgroundColor( QColor( tbMatchedBraceBackground->toolTip() ) );
+	setMatchedBraceForegroundColor( QColor( tbMatchedBraceForeground->toolTip() ) );
+	setUnmatchedBraceBackgroundColor( QColor( tbUnmatchedBraceBackground->toolTip() ) );
+	setUnmatchedBraceForegroundColor( QColor( tbUnmatchedBraceForeground->toolTip() ) );
 	//  Edge Mode
 	setEdgeMode( QsciScintilla::EdgeNone );
 	if ( gbEdgeModeEnabled->isChecked() )
 		setEdgeMode( (QsciScintilla::EdgeMode)bgEdgeMode->checkedId() );
 	setEdgeColumn( sEdgeColumnNumber->value() );
-	setEdgeColor( iconBackgroundColor( tbEdgeColor->icon() ) );
+	setEdgeColor( QColor( tbEdgeColor->toolTip() ) );
 	//  Caret
 	setCaretLineVisible( gbCaretLineVisible->isChecked() );
-	setCaretLineBackgroundColor( iconBackgroundColor( tbCaretLineBackground->icon() ) );
-	setCaretForegroundColor( iconBackgroundColor( tbCaretForeground->icon() ) );
+	setCaretLineBackgroundColor( QColor( tbCaretLineBackground->toolTip() ) );
+	setCaretForegroundColor( QColor( tbCaretForeground->toolTip() ) );
 	setCaretWidth( sCaretWidth->value() );
 	//  Margins
 	setLineNumbersMarginEnabled( gbLineNumbersMarginEnabled->isChecked() );
@@ -487,11 +487,11 @@ void UISettings::saveSettings()
 	setFolding( QsciScintilla::NoFoldStyle );
 	if ( gbFoldMarginEnabled->isChecked() )
 		setFolding( (QsciScintilla::FoldStyle)bgFoldStyle->checkedId() );
-	setFoldMarginForegroundColor( iconBackgroundColor( tbFoldMarginForeground->icon() ) );
-	setFoldMarginBackgroundColor( iconBackgroundColor( tbFoldMarginBackground->icon() ) );
+	setFoldMarginForegroundColor( QColor( tbFoldMarginForeground->toolTip() ) );
+	setFoldMarginBackgroundColor( QColor( tbFoldMarginBackground->toolTip() ) );
 	setMarginsEnabled( gbMarginsEnabled->isChecked() );
-	setMarginsForegroundColor( iconBackgroundColor( tbMarginsForeground->icon() ) );
-	setMarginsBackgroundColor( iconBackgroundColor( tbMarginsBackground->icon() ) );
+	setMarginsForegroundColor( QColor( tbMarginsForeground->toolTip() ) );
+	setMarginsBackgroundColor( QColor( tbMarginsBackground->toolTip() ) );
 	setMarginsFont( tbMarginsFont->font() );
 	//  Special Characters
 	setEolMode( (QsciScintilla::EolMode)bgEolMode->checkedId() );
@@ -527,8 +527,8 @@ void UISettings::saveSettings()
 	//  Lexers Highlighting
 	foreach ( QsciLexer* l, mLexers )
 	{
-		l->setDefaultPaper( iconBackgroundColor( tbDefaultDocumentPaper->icon() ) );
-		l->setDefaultColor( iconBackgroundColor( tbDefaultDocumentPen->icon() ) );
+		l->setDefaultPaper( QColor( tbDefaultDocumentPaper->toolTip() ) );
+		l->setDefaultColor( QColor( tbDefaultDocumentPen->toolTip() ) );
 		l->writeSettings( *pSettings::instance(), qPrintable( scintillaSettingsPath() ) );
 	}
 
@@ -557,9 +557,6 @@ QPixmap UISettings::colourizedPixmap( const QColor& c ) const
 	p.fill( c );
 	return p;
 }
-
-QColor UISettings::iconBackgroundColor( const QIcon& i ) const
-{ return QColor( i.pixmap( QSize( 5, 5 ) ).toImage().pixel( QPoint( 0, 0 ) ) ); }
 
 void UISettings::on_twMenu_itemSelectionChanged()
 {
@@ -634,38 +631,6 @@ void UISettings::on_tbDownOperator_clicked()
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void UISettings::on_tbTemplatesPath_clicked()
 {
 	const QString d = unTokenizeHome( leTemplatesPath->text() );
@@ -714,7 +679,7 @@ void UISettings::on_cbFileHeadersLanguages_currentIndexChanged( int i )
 void UISettings::tbColours_clicked()
 {
 	QToolButton* tb = qobject_cast<QToolButton*>( sender() );
-	QColor c = QColorDialog::getColor( iconBackgroundColor( tb->icon() ), window() );
+	QColor c = QColorDialog::getColor( QColor( tb->toolTip() ) , window() );
 	if ( c.isValid() )
 	{
 		tb->setIcon( colourizedPixmap( c ) );
