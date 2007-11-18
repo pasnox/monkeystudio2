@@ -1,7 +1,7 @@
 include( ../../plugins.inc )
 
 DESTDIR	= $$MONKEY_PLUGINS_DIR/compiler
-TARGET	= MSVCCompiler
+TARGET	= MSVC
 DEFINES	*= "PLUGIN_NAME=\"\\\"$${TARGET}\\\"\""
 
 HEADERS = src/MSVC.h \
