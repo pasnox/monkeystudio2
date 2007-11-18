@@ -1,3 +1,3 @@
 TEMPLATE = subdirs
 CONFIG	+= debug_and_release
-SUBDIRS = Gcc Gpp MSVCCompiler
+SUBDIRS = Gcc Gpp GccParser MSVC MSVCParser
