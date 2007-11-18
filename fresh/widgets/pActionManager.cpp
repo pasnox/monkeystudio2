@@ -15,8 +15,7 @@
 
 pActionManager::pActionManager( QObject* o )
 	: QObject( o ), mSettings( 0L ), mError( QString() )
-{
-}
+{}
 
 void pActionManager::setSettings( QSettings* s, bool b )
 {
@@ -29,9 +28,7 @@ void pActionManager::setSettings( QSettings* s, bool b )
 }
 
 QSettings* pActionManager::settings()
-{
-	return instance()->mSettings;
-}
+{ return instance()->mSettings; }
 
 void pActionManager::reloadSettings()
 {
@@ -90,9 +87,7 @@ pHashActionList pActionManager::actions()
 }
 
 QString pActionManager::globalGroup()
-{
-	return ( "Global" );
-}
+{ return tr( "Global" ); }
 
 QKeySequence pActionManager::getShortcut( const QString& g, QAction* a, const QKeySequence& sc )
 {

@@ -27,7 +27,7 @@ QAction* pMenuBar::searchAction( QMenu* m, const QString& s )
 		if ( a->objectName().toLower() == s.toLower() )
 			return a;
 
-	if ( s.contains( QRegExp( tr( "^aseparator\\d{1,2}$" ), Qt::CaseInsensitive ) ) )
+	if ( s.contains( QRegExp( "^aseparator\\d{1,2}$", Qt::CaseInsensitive ) ) )
 		return m->addSeparator();
 
 	return 0;
