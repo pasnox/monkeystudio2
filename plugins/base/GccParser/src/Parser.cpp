@@ -7,8 +7,8 @@ Parser::Parser()
 	Pattern ps[] = 
 	{
 		{
+			//Error in the file/line
 			QRegExp("^((.*/)?([^:]+)):(\\d+):(\\d+:)?\\serror:\\s(.+)$"), //reg exp
-			"Error in the file/line", //desctiption
 			"%1", //file name
 			"%5", //column
 			"%6", //row
@@ -17,8 +17,8 @@ Parser::Parser()
 			"%0", //full text
 		},
 		{
+			//Warning in the file/line
 			QRegExp("^((.*/)?([^:]+)):(\\d+):(\\d+:)?\\swarning:\\s(.+)$"), //reg exp
-			"Warning in the file/line", //desctiption
 			"%1", //file name
 			"%5", //column
 			"%4", //row
@@ -27,8 +27,8 @@ Parser::Parser()
 			"%0" //full text
 		},
 		{
-			QRegExp("^g\\+\\+\\s+\\-c.+([^\\s]+\\.cpp)"), //reg exp
-			"Building file", //desctiption
+			//Building file
+			QRegExp("^g\\+\\+\\s+\\-c.+([^\\s]+\\.cpp)$"), //reg exp
 			"%1", //file name
 			"0", //column
 			"0", //row
@@ -37,8 +37,8 @@ Parser::Parser()
 			"%0" //full text
 		},
 		{
+			//Linking file
 			QRegExp("^g\\+\\+.+\\-o\\s+([^\\s]+).+"), //reg exp
-			"Linking file", //desctiption
 			"0", //file name
 			"0", //column
 			"0", //row
@@ -47,8 +47,8 @@ Parser::Parser()
 			"%0" //full text
 		},
 		{
+			//Undedined reference in the function
 			QRegExp("^.*(In\\sfunction\\s.*:.*:).+(\\sundefined\\sreference\\sto.+)$"), //reg exp
-			"Undedined reference", //desctiption
 			"", //file name
 			"0", //column
 			"0", //row
@@ -56,7 +56,17 @@ Parser::Parser()
 			"%1%2", //text
 			"%0" //full text
 		},
-		{QRegExp(), "", "", "", "", pConsoleManager::stUnknown,"",""} //this item must be last
+		{
+			//Undedined reference in the module
+			QRegExp("^(\\w+)\\.o:\\([^\\)]+\\): undefined reference to `(\\w+)'$"), //reg exp
+			"", //file name
+			"0", //column
+			"0", //row
+			pConsoleManager::stError, //type
+			"%0", //text
+			"%0" //full text
+		},
+		{QRegExp(), "", "", "", pConsoleManager::stUnknown,"",""} //this item must be last
 	};
 	for ( int i = 0; !ps[i].regExp.isEmpty(); i++)
 		patterns.append (ps[i]);
@@ -67,10 +77,8 @@ Parser::~Parser()
 {
 }
 
-#include <QDebug>
 bool Parser::processParsing(const QByteArray& arr)
 {
-	qWarning () << arr;
 	QStringList l = QTextCodec::codecForLocale()->toUnicode( arr ).split( '\n' );
 	foreach (QString s, l)
 	{

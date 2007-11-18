@@ -11,7 +11,6 @@ class Parser : public pCommandParser
 struct Pattern
 {
 	QRegExp regExp;
-	QString about;
 	QString FileName;
 	QString col;
 	QString row;
