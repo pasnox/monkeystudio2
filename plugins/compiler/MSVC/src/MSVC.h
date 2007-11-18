@@ -16,11 +16,16 @@ public:
 	virtual bool setEnabled( bool );
 	virtual QWidget* settingsWidget();
 	// CompilerPlugin
+	virtual pCommand defaultCompileCommand() const;
+	virtual pCommand compileCommand() const;
+	virtual void setCompileCommand( const pCommand& );
 	virtual QString setUp( const QString& ) const { return QString(); }
 	// CLIToolPlugin
 	virtual pCommandList defaultCommands() const;
 	virtual pCommandList userCommands() const;
 	virtual void setUserCommands( const pCommandList& ) const;
+	virtual QStringList availableParsers() const;
+	virtual pCommandParser* getParser( const QString& );
 	
 public slots:
 	virtual void commandTriggered();

@@ -1,7 +1,7 @@
 #ifndef GCCPARSER_H
 #define GCCPARSER_H
 
-#include "CLIToolPlugin.h"
+#include "BasePlugin.h"
 
 class GccParser : public BasePlugin
 {
@@ -16,4 +16,4 @@ public:
 
 };
 
-#endif //GCCPARSER_H
+#endif // GCCPARSER_H

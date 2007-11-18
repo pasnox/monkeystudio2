@@ -1,5 +1,5 @@
-#ifndef GNUMAKE_H
-#define GNUMAKE_H
+#ifndef GPP_H
+#define GPP_H
 
 #include "CompilerPlugin.h"
 #include "CLIToolPlugin.h"
@@ -16,6 +16,9 @@ public:
 	virtual bool setEnabled( bool );
 	virtual QWidget* settingsWidget();
 	// CompilerPlugin
+	virtual pCommand defaultCompileCommand() const;
+	virtual pCommand compileCommand() const;
+	virtual void setCompileCommand( const pCommand& );
 	virtual QString setUp( const QString& ) const { return QString(); }
 	// CLIToolPlugin
 	virtual pCommandList defaultCommands() const;
@@ -27,4 +30,4 @@ public slots:
 
 };
 
-#endif //GNUMAKE_H
+#endif // GPP_H

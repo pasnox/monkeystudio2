@@ -1,11 +1,13 @@
 #include "Gpp.h"
 #include "pMenuBar.h"
 
+#include <QTabWidget>
+
 Gpp::Gpp()
 {
 	// set plugin infos
-	mPluginInfos.Caption = tr( "Gpp" );
-	mPluginInfos.Description = tr( "Plugin for execute Gpp in console" );
+	mPluginInfos.Caption = tr( "G++" );
+	mPluginInfos.Description = tr( "Plugin for execute G++ in console" );
 	mPluginInfos.Author = "Kopats Andrei aka hlamer <hlamer@tut.by>, Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
 	mPluginInfos.Type = BasePlugin::iCompiler;
 	mPluginInfos.Name = PLUGIN_NAME;
@@ -32,6 +34,15 @@ bool Gpp::setEnabled( bool b)
  	if ( b )
 	{
 		pMenuBar* mb = pMenuBar::instance();
+		
+		// compile command
+		pCommand c = compileCommand();
+		QAction* a = mb->action( QString( "mBuilder/mBuild/%1" ).arg( c.text() ), c.text() );
+		a->setData( mPluginInfos.Name );
+		a->setStatusTip( c.text() );
+		connect( a, SIGNAL( triggered() ), this, SLOT( commandTriggered() ) );
+		
+		// user commands
 		foreach ( pCommand c, userCommands() )
 		{
 			QAction* a = mb->action( QString( "mBuilder/mUserCommands/%1" ).arg( c.text() ), c.text() );
@@ -43,7 +54,7 @@ bool Gpp::setEnabled( bool b)
  	else
 	{
 		pMenuBar* mb = pMenuBar::instance();
-		foreach ( QAction* a, mb->menu( "mBuilder/mUserCommands" )->actions() )
+		foreach ( QAction* a, mb->menu( "mBuilder/mUserCommands" )->actions() << mb->menu( "mBuilder/mBuild" )->actions() )
 			if ( a->data().toString() == mPluginInfos.Name )
 				delete a;
 	}
@@ -51,10 +62,49 @@ bool Gpp::setEnabled( bool b)
 }
 
 QWidget* Gpp::settingsWidget()
-{ return cliToolSettingsWidget( this ); }
+{
+    QTabWidget* tw = new QTabWidget;
+    tw->setAttribute( Qt::WA_DeleteOnClose );
+    tw->addTab( compilerSettingsWidget(), tr( "Compile Command" ) );
+    tw->addTab( cliToolSettingsWidget( this ), tr( "User Commands" ) );
+    return tw;
+}
+
+pCommand Gpp::defaultCompileCommand() const
+{ return pCommand( "Compile Current File", "g++", "-w $cf$", false, QStringList( "GccParser" ), "$cfp$" ); }
+
+pCommand Gpp::compileCommand() const
+{
+	// get settings object
+    QSettings* s = settings();
+    pCommand c;
+    c.setText( s->value( settingsKey( "CompileCommand/Text" ) ).toString() );
+    c.setCommand( s->value( settingsKey( "CompileCommand/Command" ) ).toString() );
+    c.setArguments( s->value( settingsKey( "CompileCommand/Arguments" ) ).toString() );
+    c.setWorkingDirectory( s->value( settingsKey( "CompileCommand/WorkingDirectory" ) ).toString() );
+    c.setParsers( s->value( settingsKey( "CompileCommand/Parsers" ) ).toStringList() );
+    c.setTryAllParsers( s->value( settingsKey( "CompileCommand/TryAll" ), false ).toBool() );
+    c.setSkipOnError( s->value( settingsKey( "CompileCommand/SkipOnError" ), false ).toBool() );
+    // if no user commands get global ones
+    if ( !c.isValid() )
+        c = defaultCompileCommand();
+    return c;
+}
+
+void Gpp::setCompileCommand( const pCommand& c )
+{
+	QSettings* s = settings();
+    s->setValue( settingsKey( "CompileCommand/Text" ), c.text() );
+    s->setValue( settingsKey( "CompileCommand/Command" ), c.command() );
+    s->setValue( settingsKey( "CompileCommand/Arguments" ), c.arguments() );
+    s->setValue( settingsKey( "CompileCommand/WorkingDirectory" ), c.workingDirectory() );
+    s->setValue( settingsKey( "CompileCommand/Parsers" ), c.parsers() );
+    s->setValue( settingsKey( "CompileCommand/TryAll" ), c.tryAllParsers() );
+    s->setValue( settingsKey( "CompileCommand/SkipOnError" ), c.skipOnError() );
+}
 
 pCommandList Gpp::defaultCommands() const
-{ return pCommandList() << pCommand( "Build Current File", "g++", "$cf$", false, QStringList( "GccParser" ), "$cfp$" ); }
+{ return pCommandList(); }
 
 pCommandList Gpp::userCommands() const
 {
@@ -117,4 +167,3 @@ void Gpp::commandTriggered()
 }
 
 Q_EXPORT_PLUGIN2( CompilerGpp, Gpp )
-

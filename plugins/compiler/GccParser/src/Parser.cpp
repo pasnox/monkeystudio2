@@ -4,6 +4,7 @@
 
 Parser::Parser()
 {
+	mName = PLUGIN_NAME;
 	Pattern ps[] = 
 	{
 		{
@@ -70,7 +71,6 @@ Parser::Parser()
 	};
 	for ( int i = 0; !ps[i].regExp.isEmpty(); i++)
 		patterns.append (ps[i]);
-	mName = PLUGIN_NAME;
 }
 
 Parser::~Parser()
@@ -99,7 +99,7 @@ bool Parser::processParsing(const QByteArray& arr)
 			
 		}
 	}
-return false;
+	return false;
 }
 
 QString Parser::name() const

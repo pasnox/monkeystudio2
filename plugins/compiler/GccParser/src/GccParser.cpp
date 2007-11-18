@@ -22,14 +22,10 @@ bool GccParser::setEnabled( bool b)
 {
 	mPluginInfos.Enabled = b;
  	if ( b )
-		pConsoleManager::instance()->addParser(new Parser);
+		pConsoleManager::instance()->addParser( new Parser );
  	else
-		pConsoleManager::instance()->removeParser(PLUGIN_NAME);
+		pConsoleManager::instance()->removeParser( PLUGIN_NAME );
 	return true;
 }
-
-// QWidget* GccParser::settingsWidget()
-// { return NULL; }
-
 
 Q_EXPORT_PLUGIN2( BaseGccParser, GccParser )
