@@ -1,5 +1,4 @@
 [Setup]
-InternalCompressLevel=ultra64
 OutputDir=setup
 SourceDir=./
 OutputBaseFilename=setup_monkeystudio_msvc
@@ -46,8 +45,9 @@ Source: bin\plugins\builder\MSVCMake.dll; DestDir: {app}; Flags: promptifolder; 
 Source: bin\plugins\child\QtAssistant.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Child Qt_Plugins
 Source: bin\plugins\child\QtDesigner.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Child Qt_Plugins
 Source: bin\plugins\compiler\G++.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Compiler
+Source: bin\plugins\compiler\GccParser.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Compiler
 Source: bin\plugins\compiler\Gcc.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Compiler
-Source: bin\plugins\compiler\MSVCCompiler.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Compiler Qt_Plugins
+Source: bin\plugins\compiler\MSVC.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Compiler Qt_Plugins
 Source: bin\plugins\project\MonkeyProject.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Project
 Source: bin\plugins\project\QMake.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Project Qt_Plugins
 Source: translations\monkey_*.qm; DestDir: {app}\translations; Flags: promptifolder; Components: Monkey_Studio
