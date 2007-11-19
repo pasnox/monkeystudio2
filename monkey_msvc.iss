@@ -54,6 +54,8 @@ Source: translations\monkey_*.qm; DestDir: {app}\translations; Flags: promptifol
 Source: templates\*.*; DestDir: {app}\templates; Flags: promptifolder recursesubdirs createallsubdirs; Components: Monkey_Studio
 [Icons]
 Name: {group}\Monkey Studio RAD; Filename: {app}\monkey.exe; WorkingDir: {app}; IconFilename: {app}\monkey.exe; IconIndex: 0
+Name: {group}\Home Page; Filename: {app}\Home Page.url; WorkingDir: {app}; Comment: Monkey Studio Home Page
+Name: {group}\Forums; Filename: {app}\Forums.url; WorkingDir: {app}; Comment: Monkey Studio Forums
 [Components]
 Name: Monkey_Studio; Description: Monkey Studio Application; Types: full custom compact; Flags: fixed
 Name: All_Plugins; Description: All Plugins; Types: full; Flags: exclusive
@@ -65,8 +67,8 @@ Name: Plugins\Child; Description: Child Plugins; Types: custom
 Name: Plugins\Compiler; Description: Compiler Plugins; Types: custom
 Name: Plugins\Project; Description: Project Plugins; Types: custom
 [INI]
-Filename: {app}\Home Page.url; Section: InternetShortcut; Key: URL; String: http://www.monkeystudio.org/
-Filename: {app}\Forums.url; Section: InternetShortcut; Key: URL; String: http://forums.monkeystudio.org/
+Filename: {app}\Home Page.url; Section: InternetShortcut; Key: URL; String: http://www.monkeystudio.org/; Flags: createkeyifdoesntexist uninsdeleteentry uninsdeletesectionifempty
+Filename: {app}\Forums.url; Section: InternetShortcut; Key: URL; String: http://forums.monkeystudio.org/; Flags: createkeyifdoesntexist uninsdeleteentry uninsdeletesectionifempty
 [UninstallDelete]
 Type: files; Name: {app}\Home Page.url; Components: 
 Type: files; Name: {app}\Forums.url
