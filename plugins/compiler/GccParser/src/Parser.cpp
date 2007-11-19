@@ -67,6 +67,16 @@ Parser::Parser()
 			"%0", //text
 			"%0" //full text
 		},
+		{
+			//LD has no permissions for write file.  Not tested with unix output.
+			QRegExp("^.*(ld(\\.exe)?)(: cannot open output file [^:]+: Permission denied)$"), //reg exp
+			"", //file name
+			"0", //column
+			"0", //row
+			pConsoleManager::stError, //type
+			"%1%3", //text
+			"%0" //full text
+		},
 		{QRegExp(), "", "", "", pConsoleManager::stUnknown,"",""} //this item must be last
 	};
 	for ( int i = 0; !ps[i].regExp.isEmpty(); i++)
