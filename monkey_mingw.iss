@@ -1,7 +1,7 @@
 [Setup]
 InternalCompressLevel=ultra64
 OutputDir=setup
-SourceDir=D:\monkey\v2\trunk
+SourceDir=./
 OutputBaseFilename=setup_monkeystudio_mingw
 VersionInfoVersion=2.0.0.0
 VersionInfoCompany=Monkey Studio Team
