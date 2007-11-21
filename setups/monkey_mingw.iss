@@ -1,6 +1,6 @@
 [Setup]
-OutputDir=setup
-SourceDir=./
+OutputDir=./
+SourceDir=../
 OutputBaseFilename=setup_monkeystudio_mingw
 VersionInfoVersion=2.0.0.0
 VersionInfoCompany=Monkey Studio Team
