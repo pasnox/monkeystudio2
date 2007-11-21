@@ -1,5 +1,5 @@
 [Setup]
-OutputDir=./
+OutputDir=setups
 SourceDir=../
 OutputBaseFilename=setup_monkeystudio_mingw
 VersionInfoVersion=2.0.0.0
