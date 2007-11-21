@@ -23,6 +23,8 @@ With MinGW/Windows:
 * Open a console, and go to the sources directory.
 * type: qmake && mingw32-make release
 
+Windows/MinGW users can use batch files to build Monkey Studio.
+
 With MSVC/Windows:
 
 * Open a console, and go to the sources directory.
@@ -35,10 +37,8 @@ With Linux/*Nix:
 
 With Mac OS X:
 
-* Open a shell, and go to the sources directory.
+* Open a terminal, and go to the sources directory.
 * type: qmake -spec macx-g++ && make release
-
-Windows/MinGW users can use batch files.
 
 
 How to execute Monkey Studio:
@@ -49,10 +49,8 @@ How to execute Monkey Studio:
 
 Known Problems:
 
-* Monkey Studio can't build plugins on mac os x, if you are able to fix it, please tell us.
+* MSVC 6 can't build Monkey Studio 2, and will probably never ( except if someone is able to send us a patch ).
 * For any problems, please contact us on the forums at : http://forums.monkeystudio.org
-
-WE NEED MAC OS X USERS WITH EXPERIENCE IN Qt 4, THANKS
 
 
 	Azevedo Filipe and The Monkey Studio Team,
