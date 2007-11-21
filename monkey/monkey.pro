@@ -36,8 +36,9 @@ RESOURCES	*= src/resources/resources.qrc
 DEFINES	*= MONKEY_CORE_BUILD "PROGRAM_NAME=\"\\\"$${PROGRAM_NAME}\\\"\"" "PROGRAM_VERSION=\"\\\"$${VERSION}\\\"\"" "PROGRAM_DOMAIN=\"\\\"$${DOMAIN}\\\"\"" "PROGRAM_COPYRIGHTS=\"\\\"$${COPYRIGHTS}\\\"\""
 
 LIBS	*= -L$${BUILD_PATH}
-unix:!mac:*-g++:LIBS	*= -rdynamic
-mac:*-g++:LIBS	*= -dynamiclib
+mac:*-g++:LIBS	*= -dynamic
+else:unix:*-g++:LIBS	*= -rdynamic
+
 PRE_TARGETDEPS	*= ../qscintilla ../fresh ../ctags
 
 CONFIG( DebugBuild )|CONFIG( debug, debug|release ) {

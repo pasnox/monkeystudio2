@@ -25,6 +25,7 @@ PRE_TARGETDEPS	*= ../../../monkey
 MONKEY_PLUGINS_DIR	= ../../../bin/plugins
 #DEFINES	= __COVERAGESCANNER__
 LIBS	= -L$${BUILD_PATH}
+mac:*-g++:LIBS	*= -Wl,-undefined,dynamic_lookup
 
 win32:QMAKE_LIBDIR	+= ../../../bin
 contains( DEFINES, __COVERAGESCANNER__ ) {
