@@ -216,6 +216,7 @@ namespace pMonkeyStudio
 	// Special Characters
 	Q_MONKEY_EXPORT void setEolMode( QsciScintilla::EolMode );
 	Q_MONKEY_EXPORT const QsciScintilla::EolMode eolMode();
+	Q_MONKEY_EXPORT QString getEol( QsciScintilla::EolMode = pMonkeyStudio::eolMode() );
 	Q_MONKEY_EXPORT void setEolVisibility( bool );
 	Q_MONKEY_EXPORT const bool eolVisibility();
 	Q_MONKEY_EXPORT void setWhitespaceVisibility( QsciScintilla::WhitespaceVisibility );

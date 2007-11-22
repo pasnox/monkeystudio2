@@ -1315,6 +1315,24 @@ const QsciScintilla::EolMode pMonkeyStudio::eolMode()
 	return (QsciScintilla::EolMode)pSettings::instance()->value( settingsPath() +"/EolMode", i ).toInt();
 }
 
+QString pMonkeyStudio::getEol( QsciScintilla::EolMode e )
+{
+	switch ( e )
+	{
+		case QsciScintilla::EolWindows:
+			return QString( "\r\n" );
+			break;
+		case QsciScintilla::EolUnix:
+			return QString( "\n" );
+			break;
+		case QsciScintilla::EolMac:
+			return QString( "\n" );
+			break;
+		default:
+			return QString( "\r\n" );
+	}
+}
+
 void pMonkeyStudio::setEolVisibility( bool b )
 { pSettings::instance()->setValue( settingsPath() +"/EolVisibility", b ); }
 

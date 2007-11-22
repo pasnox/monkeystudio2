@@ -245,24 +245,6 @@ QString QMakeItem::getIndent() const
 	return QString().fill( '\t', parentCount() -1 );
 }
 
-QString QMakeItem::getEol() const
-{
-	switch ( eolMode() )
-	{
-		case QsciScintilla::EolWindows:
-			return QString( "\r\n" );
-			break;
-		case QsciScintilla::EolUnix:
-			return QString( "\n" );
-			break;
-		case QsciScintilla::EolMac:
-			return QString( "\r" );
-			break;
-		default:
-			return QString( "\r\n" );
-	}
-}
-
 bool QMakeItem::isFirst() const
 { return row() == 0; }
 
@@ -523,6 +505,9 @@ void QMakeItem::installCommands()
 		c = pCommand();
 		c.setText( tr( "QMake" ) );
 		c.setCommand( qv.QMake );
+#ifdef Q_OS_MAC
+	c.setArguments( "-spec macx-g++" );
+#endif
 		c.setWorkingDirectory( "$cpp$" );
 		addCommand( c, "mBuilder" );
 		// lupdate command
@@ -786,7 +771,7 @@ void QMakeItem::writeItem( ProjectItem* it )
 	{
 		case ProjectItem::EmptyType:
 		{
-			mBuffer.append( it->getIndent() ).append( it->getEol() );
+			mBuffer.append( it->getIndent() ).append( getEol() );
 			break;
 		}
 		case ProjectItem::FolderType:
@@ -795,7 +780,7 @@ void QMakeItem::writeItem( ProjectItem* it )
 		}
 		case ProjectItem::CommentType:
 		{
-			mBuffer.append( it->getIndent() ).append( it->getValue() ).append( it->getEol() );
+			mBuffer.append( it->getIndent() ).append( it->getValue() ).append( getEol() );
 			break;
 		}
 		case ProjectItem::NestedScopeType:
@@ -805,7 +790,7 @@ void QMakeItem::writeItem( ProjectItem* it )
 		}
 		case ProjectItem::ScopeType:
 		{
-			mBuffer.append( it->getIndent() ).append( it->getValue() ).append( " {" ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
+			mBuffer.append( it->getIndent() ).append( it->getValue() ).append( " {" ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( getEol() );
 			break;
 		}
 		case ProjectItem::ScopeEndType:
@@ -816,7 +801,7 @@ void QMakeItem::writeItem( ProjectItem* it )
 				ProjectItem* p = it->parent()->parent()->child( it->parent()->row() +1, 0 );
 				if ( p && ( !p->isScope() || p->getValue().toLower() != "else" ) )
 					p = 0;
-				mBuffer.append( it->getIndent() ).append( "}" ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( p ? " " : it->getEol() );
+				mBuffer.append( it->getIndent() ).append( "}" ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( p ? " " : getEol() );
 			}
 			break;
 		}
@@ -831,19 +816,19 @@ void QMakeItem::writeItem( ProjectItem* it )
 			if ( UISettingsQMake::readPathFiles().contains( it->parent()->getValue() ) )
 				s = quotedString( s );
 			if ( it->parent()->getMultiLine() )
-				mBuffer.append( it->getIndent() ).append( s ).append( !it->isLast() ? " \\" : "" ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
+				mBuffer.append( it->getIndent() ).append( s ).append( !it->isLast() ? " \\" : "" ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( getEol() );
 			else
-				mBuffer.append( s ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->isLast() ? it->getEol() : " " );
+				mBuffer.append( s ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->isLast() ? getEol() : " " );
 			break;
 		}
 		case ProjectItem::FunctionType:
 		{
-			mBuffer.append( it->getIndent() ).append( it->getValue() ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
+			mBuffer.append( it->getIndent() ).append( it->getValue() ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( getEol() );
 			break;
 		}
 		case ProjectItem::IncludeType:
 		{
-			mBuffer.append( it->getIndent() ).append( it->getValue() ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( it->getEol() );
+			mBuffer.append( it->getIndent() ).append( it->getValue() ).append( it->getComment().isEmpty() ? "" : it->getComment().prepend( " " ) ).append( getEol() );
 			break;
 		}
 		case ProjectItem::ProjectType:

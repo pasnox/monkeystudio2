@@ -135,8 +135,6 @@ public:
 	virtual QString quotedString( const QString& ) const; // MOVEME to pMonkeyStudio
 	// item indent
 	virtual QString getIndent() const { return QString(); }
-	// item eol
-	virtual QString getEol() const { return QString(); }
 	// tell if item is the first child of its parent
 	virtual bool isFirst() const = 0;
 	// tell if item is the last child of its parent
