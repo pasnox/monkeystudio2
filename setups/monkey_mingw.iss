@@ -35,26 +35,28 @@ UseAbsolutePaths=false
 Source: bin\monkey.exe; DestDir: {app}; Flags: confirmoverwrite promptifolder; Components: Monkey_Studio
 Source: license.gpl; DestDir: {app}; Flags: confirmoverwrite promptifolder; Components: Monkey_Studio
 Source: dev-readme; DestDir: {app}; Flags: confirmoverwrite promptifolder; Components: Monkey_Studio
-Source: bin\plugins\base\AStyle.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Base
-Source: bin\plugins\base\Ctags2Api.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Base
-Source: bin\plugins\base\FileBrowser.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Base
-Source: bin\plugins\base\MessageBox.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Base Qt_Plugins
-Source: bin\plugins\base\Navigator.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Base
-Source: bin\plugins\base\ProjectHeaders.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Base
-Source: bin\plugins\builder\GNUMake.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Builder Qt_Plugins
-Source: bin\plugins\builder\MSVCMake.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Builder
-Source: bin\plugins\child\QtAssistant.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Child Qt_Plugins
-Source: bin\plugins\child\QtDesigner.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Child Qt_Plugins
-Source: bin\plugins\compiler\G++.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Compiler Qt_Plugins
-Source: bin\plugins\compiler\GccParser.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Compiler Qt_Plugins
-Source: bin\plugins\compiler\Gcc.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Compiler
-Source: bin\plugins\compiler\MSVC.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Compiler
-Source: bin\plugins\project\MonkeyProject.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Project
-Source: bin\plugins\project\QMake.dll; DestDir: {app}; Flags: promptifolder; Components: All_Plugins Plugins\Project Qt_Plugins
+Source: bin\plugins\base\AStyle.dll; DestDir: {app}\plugins; Flags: promptifolder; Components: All_Plugins Plugins\Base
+Source: bin\plugins\base\Ctags2Api.dll; DestDir: {app}\plugins; Flags: promptifolder; Components: All_Plugins Plugins\Base
+Source: bin\plugins\base\FileBrowser.dll; DestDir: {app}\plugins; Flags: promptifolder; Components: All_Plugins Plugins\Base
+Source: bin\plugins\base\MessageBox.dll; DestDir: {app}\plugins; Flags: promptifolder; Components: All_Plugins Plugins\Base Qt_Plugins
+Source: bin\plugins\base\Navigator.dll; DestDir: {app}\plugins; Flags: promptifolder; Components: All_Plugins Plugins\Base
+Source: bin\plugins\base\ProjectHeaders.dll; DestDir: {app}\plugins; Flags: promptifolder; Components: All_Plugins Plugins\Base
+Source: bin\plugins\builder\GNUMake.dll; DestDir: {app}\plugins; Flags: promptifolder; Components: All_Plugins Plugins\Builder Qt_Plugins
+Source: bin\plugins\builder\MSVCMake.dll; DestDir: {app}\plugins; Flags: promptifolder; Components: All_Plugins Plugins\Builder
+Source: bin\plugins\child\QtAssistant.dll; DestDir: {app}\plugins; Flags: promptifolder; Components: All_Plugins Plugins\Child Qt_Plugins
+Source: bin\plugins\child\QtDesigner.dll; DestDir: {app}\plugins; Flags: promptifolder; Components: All_Plugins Plugins\Child Qt_Plugins
+Source: bin\plugins\compiler\G++.dll; DestDir: {app}\plugins; Flags: promptifolder; Components: All_Plugins Plugins\Compiler Qt_Plugins
+Source: bin\plugins\compiler\GccParser.dll; DestDir: {app}\plugins; Flags: promptifolder; Components: All_Plugins Plugins\Compiler Qt_Plugins
+Source: bin\plugins\compiler\Gcc.dll; DestDir: {app}\plugins; Flags: promptifolder; Components: All_Plugins Plugins\Compiler
+Source: bin\plugins\compiler\MSVC.dll; DestDir: {app}\plugins; Flags: promptifolder; Components: All_Plugins Plugins\Compiler
+Source: bin\plugins\project\MonkeyProject.dll; DestDir: {app}\plugins; Flags: promptifolder; Components: All_Plugins Plugins\Project
+Source: bin\plugins\project\QMake.dll; DestDir: {app}\plugins; Flags: promptifolder; Components: All_Plugins Plugins\Project Qt_Plugins
 Source: translations\monkey_*.qm; DestDir: {app}\translations; Flags: promptifolder; Components: Monkey_Studio
 Source: templates\*.*; DestDir: {app}\templates; Flags: promptifolder recursesubdirs createallsubdirs; Components: Monkey_Studio
+Source: C:\Documents and Settings\LSI\.Monkey Studio\Monkey Studio.ini; DestDir: {userappdata}\..\.Monkey Studio; Flags: ignoreversion; Components: 
 [Icons]
 Name: {group}\Monkey Studio RAD; Filename: {app}\monkey.exe; WorkingDir: {app}; IconFilename: {app}\monkey.exe; IconIndex: 0
+Name: {userdesktop}\Monkey Studio RAD; Filename: {app}\monkey.exe; WorkingDir: {app}; IconFilename: {app}\monkey.exe; IconIndex: 0
 Name: {group}\Home Page; Filename: {app}\Home Page.url; WorkingDir: {app}; Comment: Monkey Studio Home Page
 Name: {group}\Forums; Filename: {app}\Forums.url; WorkingDir: {app}; Comment: Monkey Studio Forums
 [Components]
