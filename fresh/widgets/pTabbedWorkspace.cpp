@@ -316,7 +316,21 @@ void pTabbedWorkspace::internal_rightButtonPressed( int i, const QPoint& p )
 }
 
 void pTabbedWorkspace::internal_tabDropped( int f, int t )
-{ mDocuments.insert( t, mDocuments.takeAt( f ) ); }
+{
+	// swap documents
+	mDocuments.insert( t, mDocuments.takeAt( f ) );
+	
+	// reorder the stackedwidget widgets if needed
+	if ( mTabMode == pTabbedWorkspace::tmSDI )
+	{
+		// remove all widget from stacked
+		while ( mStackedWidget->count() )
+			mStackedWidget->removeWidget( mStackedWidget->widget( 0 ) );
+		// re inserts ordered to mDocuments
+		foreach ( QWidget* w, mDocuments )
+			mStackedWidget->addWidget( w );
+	}
+}
 
 void pTabbedWorkspace::internal_currentChanged( int i )
 {
