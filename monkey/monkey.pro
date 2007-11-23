@@ -28,12 +28,12 @@ win32:ICON	= src/resources/icons/application/monkey2.ico
 COPYRIGHTS	= "(c) 2005 - 2007 Azevedo Filipe"
 DOMAIN	= "www.monkeystudio.org"
 VERSION	= 1.8.0.0
-PROGRAM_NAME	= "Monkey Studio"
+NAME	= "Monkey Studio"
 
 win32:RC_FILE	*= monkey.rc
 RESOURCES	*= src/resources/resources.qrc
 
-DEFINES	*= MONKEY_CORE_BUILD "PROGRAM_NAME=\"\\\"$${PROGRAM_NAME}\\\"\"" "PROGRAM_VERSION=\"\\\"$${VERSION}\\\"\"" "PROGRAM_DOMAIN=\"\\\"$${DOMAIN}\\\"\"" "PROGRAM_COPYRIGHTS=\"\\\"$${COPYRIGHTS}\\\"\""
+DEFINES	*= MONKEY_CORE_BUILD "PROGRAM_NAME=\"\\\"$${NAME}\\\"\"" "PROGRAM_VERSION=\"\\\"$${VERSION}\\\"\"" "PROGRAM_DOMAIN=\"\\\"$${DOMAIN}\\\"\"" "PROGRAM_COPYRIGHTS=\"\\\"$${COPYRIGHTS}\\\"\""
 
 LIBS	*= -L$${BUILD_PATH}
 mac:*-g++:LIBS	*= -dynamic
