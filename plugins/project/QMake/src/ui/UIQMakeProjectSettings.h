@@ -84,6 +84,7 @@ class UIQMakeProjectSettings : public QDialog, public Ui::UIQMakeProjectSettings
 	
 protected:
 	bool mInit;
+	bool mAskTranslationsPath;
 	ProjectItem* mProject;
 	ProjectsModel* mModel;
 	QtSettings mSettings;

@@ -30,6 +30,7 @@ UIQMakeProjectSettings::UIQMakeProjectSettings( ProjectItem* m, QWidget* p )
 {
 	Q_ASSERT( m );
 	mInit = false;
+	mAskTranslationsPath = true;
 	mProject = m;
 	mModel = m->model();
 	mDirs = new QDirModel( this );
@@ -174,17 +175,30 @@ void UIQMakeProjectSettings::setCurrentTRANSLATIONS( const QStringList& l )
 
 const QString UIQMakeProjectSettings::checkTranslationsPath()
 {
+	if ( !mAskTranslationsPath )
+		return QString();
 	if ( cbTemplate->currentText() == "subdirs" )
 		return QString();
 	const ProjectKey k = ProjectKey( mProject, ProjectVariable( "TRANSLATIONS_PATH", "=" ) );
 	QString c = value( k );
 	if ( c.isEmpty() )
 	{
-		c = "translations";
-		if ( currentKey( "TRANSLATIONS_PATH" ) == k && leTranslationsPath->text().isEmpty() )
-			leTranslationsPath->setText( c );
-		else
-			setValue( k, c );
+		foreach ( ProjectKey pk, mSettings.keys() )
+		{
+			if ( pk.getVariable() == "TRANSLATIONS" )
+			{
+				mAskTranslationsPath = question( tr( "Translations Path..." ), tr( "%1 has found translations files in your project, do you want to set the translations path variable ?" ).arg( PROGRAM_NAME ), window() );
+				if ( mAskTranslationsPath )
+				{
+					c = "translations";
+					if ( currentKey( "TRANSLATIONS_PATH" ) == k && leTranslationsPath->text().isEmpty() )
+						leTranslationsPath->setText( c );
+					else
+						setValue( k, c );
+				}
+				break;
+			}
+		}
 	}
 	// return translations path
 	return c;
