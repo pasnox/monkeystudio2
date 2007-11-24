@@ -29,15 +29,23 @@
 pDockMessageBox::pDockMessageBox( QWidget* w )
 	: QDockWidget( w ), mShown( false )
 {
-	// create central widget
+	// create tabwidget
+	twMessageBox = new QTabWidget;
+	twMessageBox->setTabPosition( QTabWidget::East );
+	twMessageBox->setMinimumHeight( 120 );
+	// create listwidget
+	lwBuildSteps = new QListWidget;
+	lwBuildSteps->setFrameShape( QFrame::NoFrame );
+	// create textbrowser and raw command
+	// create widget background
 	QWidget* c = new QWidget;
 	// create vlayout
 	QVBoxLayout* vl = new QVBoxLayout( c );
-	vl->setMargin( 5 );
+	vl->setMargin( 0 );
 	vl->setSpacing( 3 );
 	// create hlayout
 	QHBoxLayout* hl = new QHBoxLayout;
-	hl->setMargin( 5 );
+	hl->setMargin( 3 );
 	hl->setSpacing( 3 );
 	// create label
 	lRawCommand = new QLabel;
@@ -50,19 +58,14 @@ pDockMessageBox::pDockMessageBox( QWidget* w )
 	hl->addWidget( leRawCommand );
 	// add hlayout into vlayout
 	vl->addLayout( hl );
-	// create tabwidget
-	twMessageBox = new QTabWidget;
-	twMessageBox->setTabPosition( QTabWidget::East );
-	twMessageBox->setMinimumHeight( 120 );
-	// create listwidget
-	lwBuildSteps = new QListWidget;
-	lwBuildSteps->setFrameShape( QFrame::NoFrame );
-	// create textbrowser
+	// text browser
 	tbOutput = new QTextBrowser;
 	tbOutput->setFrameShape( QFrame::NoFrame );
 	tbOutput->setLineWrapMode( QTextEdit::WidgetWidth );
 	tbOutput->setTabStopWidth( 40 );
 	tbOutput->setOpenExternalLinks( true );
+	// add it to layout
+	vl->addWidget( tbOutput );
 	// create textedit
 	teLog = new QTextEdit;
 	teLog->setReadOnly( true );
@@ -71,16 +74,14 @@ pDockMessageBox::pDockMessageBox( QWidget* w )
 	teLog->setTabStopWidth( 40 );
 	// add widget to tabwidget
 	twMessageBox->addTab( lwBuildSteps, QIcon( ":/icons/tabbuild.png" ), QString::null );
-	twMessageBox->addTab( tbOutput, QIcon( ":/icons/taboutput.png" ), QString::null );
+	twMessageBox->addTab( c, QIcon( ":/icons/taboutput.png" ), QString::null );
 	twMessageBox->addTab( teLog, QIcon( ":/icons/tablog.png" ), QString::null );
 	// set tabs tooltip
 	twMessageBox->setTabToolTip( 0, tr( "Build Step" ) );
 	twMessageBox->setTabToolTip( 1, tr( "Program Output" ) );
 	twMessageBox->setTabToolTip( 2, tr( "Commands Log" ) );
-	// add tab widget into vlayout
-	vl->addWidget( twMessageBox );
-	// set central widget to w
-	setWidget( c );
+	// set central widget to tabwidget
+	setWidget( twMessageBox );
 	// connections
 	connect( lwBuildSteps, SIGNAL( itemDoubleClicked( QListWidgetItem* ) ), this, SLOT( lwBuildSteps_itemDoubleClicked( QListWidgetItem* ) ) );
 	connect( leRawCommand, SIGNAL( returnPressed() ), this, SLOT( leRawCommand_returnPressed() ) );
