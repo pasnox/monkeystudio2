@@ -112,13 +112,7 @@ void UIProjectsManager::initializeProject( ProjectItem* it )
 	// set current project
 	tvProjects->setCurrentIndex( mProxy->mapFromSource( it->index() ) );
 	// connections
-	connect( it, SIGNAL( aboutToClose() ), this, SLOT( internal_aboutToClose() ) );
-	connect( it, SIGNAL( closed() ), this, SLOT( internal_closed() ) );
-	connect( it, SIGNAL( modifiedChanged( bool ) ), this, SLOT( internal_modifiedChanged( bool ) ) );
-	// emit project open
-	emit opened( it );
-	// subproject connections
-	foreach ( ProjectItem* p, it->childrenProjects() )
+	foreach ( ProjectItem* p, ProjectItemList() << it << it->childrenProjects() )
 	{
 		connect( p, SIGNAL( aboutToClose() ), this, SLOT( internal_aboutToClose() ) );
 		connect( p, SIGNAL( closed() ), this, SLOT( internal_closed() ) );
@@ -131,7 +125,7 @@ void UIProjectsManager::initializeProject( ProjectItem* it )
 void UIProjectsManager::cbProjects_activated( const QModelIndex& i )
 { tvProjects->setCurrentIndex( mProxy->mapFromSource( mProjects->projectsProxy()->mapToSource( i ) ) ); }
 
-void UIProjectsManager::tvProjects_currentChanged( const QModelIndex& c, const QModelIndex& p )
+void UIProjectsManager::tvProjects_currentChanged( const QModelIndex&, const QModelIndex& p )
 {
 	// removing old project commands is needed
 	ProjectItem* op = p.isValid() ? mProjects->itemFromIndex( mProxy->mapToSource( p ) ) : 0;
