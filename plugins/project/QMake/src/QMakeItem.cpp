@@ -288,7 +288,7 @@ bool QMakeItem::open()
 		if ( !QFile::exists( getValue() ) )
 			return false;
 		// populate datas
-		QMakeParser p( getValue(), const_cast<QMakeItem*>( this ) );
+		QMakeParser p( getValue(), this );
 		// set proejct writable
 		setReadOnly( false );
 		// set project unmodified
@@ -296,7 +296,7 @@ bool QMakeItem::open()
 		// refresh project
 		refresh();
 		// same for childproject
-		foreach ( ProjectItem* p, childrenProjects( true ) )
+		foreach ( ProjectItem* p, childrenProjects() )
 		{
 			p->setReadOnly( false );
 			p->setModified( false );
