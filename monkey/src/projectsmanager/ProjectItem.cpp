@@ -331,7 +331,7 @@ ProjectItem* ProjectItem::parentProject() const
 }
 
 ProjectItemList ProjectItem::childrenProjects( bool b ) const
-{ return match( ProjectItem::ProjectType, "*", false ); }
+{ return match( ProjectItem::ProjectType, "*", !b ); }
 
 ProjectItemList ProjectItem::projectItems( bool b ) const
 { return project()->children( true, b ); }
