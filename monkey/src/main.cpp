@@ -27,7 +27,7 @@ int main( int argc, char** argv )
 
 	// change splashscreen font
 	QFont ft( splash.font() );
-	ft.setPointSize( 8 );
+	ft.setPointSize( ft.pointSize() -2 );
 	ft.setBold( true );
 	splash.setFont( ft );
 
