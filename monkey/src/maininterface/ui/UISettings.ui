@@ -411,7 +411,7 @@
           <item row="3" column="1" colspan="2" >
            <widget class="QToolButton" name="tbTabsTextColor" >
             <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -441,7 +441,7 @@
           <item row="4" column="1" colspan="2" >
            <widget class="QToolButton" name="tbCurrentTabTextColor" >
             <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -451,6 +451,23 @@
               <width>48</width>
               <height>16</height>
              </size>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0" >
+           <widget class="QLabel" name="lTabMode" >
+            <property name="text" >
+             <string>Tab Mode :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1" colspan="2" >
+           <widget class="QComboBox" name="cbTabModes" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
            </widget>
           </item>

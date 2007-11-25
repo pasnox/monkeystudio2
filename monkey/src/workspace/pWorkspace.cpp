@@ -60,6 +60,7 @@ void pWorkspace::loadSettings()
 	tabBar()->setTabsElided( tabsElided() );
 	tabBar()->setTabsColor( tabsTextColor() );
 	tabBar()->setCurrentTabColor( currentTabTextColor() );
+	setTabMode( pMonkeyStudio::tabMode() );
 }
 
 pAbstractChild* pWorkspace::currentChild() const

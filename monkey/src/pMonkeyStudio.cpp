@@ -13,7 +13,6 @@
 #include "PluginsManager.h"
 #include "ProjectPlugin.h"
 
-#include "pWorkspace.h"
 #include "pAbstractChild.h"
 #include "pEditor.h"
 
@@ -971,6 +970,12 @@ void pMonkeyStudio::setCurrentTabTextColor( const QColor& c )
 
 const QColor pMonkeyStudio::currentTabTextColor()
 { return pSettings::instance()->value( settingsPath() +"/CurrentTabTextColor", QColor( Qt::blue ) ).value<QColor>(); }
+
+void pMonkeyStudio::setTabMode( pTabbedWorkspace::TabMode m )
+{ pSettings::instance()->setValue( settingsPath() +"/TabMode", m ); }
+
+const pTabbedWorkspace::TabMode pMonkeyStudio::tabMode()
+{ return (pTabbedWorkspace::TabMode)pSettings::instance()->value( settingsPath() +"/TabMode", pTabbedWorkspace::tmMDI ).toInt(); }
 
 void pMonkeyStudio::setExternalChanges( pMonkeyStudio::ExternalChangesMode e )
 { pSettings::instance()->setValue( settingsPath() +"/ExternalChanges", e ); }

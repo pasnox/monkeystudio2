@@ -61,6 +61,11 @@ UISettings::UISettings( QWidget* p )
 	bgExternalChanges->addButton( rbDoNothing, pMonkeyStudio::ecmNothing );
 	bgExternalChanges->addButton( rbAlertUser, pMonkeyStudio::ecmAlert );
 	bgExternalChanges->addButton( rbReloadAutomatically, pMonkeyStudio::ecmReload );
+	
+	// tab mode
+	cbTabModes->addItem( tr( "SDI" ), pTabbedWorkspace::tmSDI );
+	cbTabModes->addItem( tr( "MDI" ), pTabbedWorkspace::tmMDI );
+	cbTabModes->addItem( tr( "Top Level" ), pTabbedWorkspace::tmTopLevel );
 
 	// resize column
 	twTemplatesType->setColumnWidth( 0, 100 );
@@ -205,6 +210,7 @@ void UISettings::loadSettings()
 	tbTabsTextColor->setToolTip( tabsTextColor().name() );
 	tbCurrentTabTextColor->setIcon( colourizedPixmap( currentTabTextColor() ) );
 	tbCurrentTabTextColor->setToolTip( currentTabTextColor().name() );
+	cbTabModes->setCurrentIndex( cbTabModes->findData( tabMode() ) );
 	bgExternalChanges->button( externalchanges() )->setChecked( true );
 	cbSaveSession->setChecked( saveSessionOnClose() );
 	cbRestoreSession->setChecked( restoreSessionOnStartup() );
@@ -384,6 +390,7 @@ void UISettings::saveSettings()
 	setTabsElided( cbTabsElided->isChecked() );
 	setTabsTextColor( QColor( tbTabsTextColor->toolTip() ) );
 	setCurrentTabTextColor( QColor( tbCurrentTabTextColor->toolTip() ) );
+	setTabMode( (pTabbedWorkspace::TabMode)cbTabModes->itemData( cbTabModes->currentIndex() ).toInt() );
 	setExternalChanges( (pMonkeyStudio::ExternalChangesMode)bgExternalChanges->checkedId() );
 	setSaveSessionOnClose( cbSaveSession->isChecked() );
 	setRestoreSessionOnStartup( cbRestoreSession->isChecked() );
