@@ -19,6 +19,9 @@ void showMessage( QSplashScreen* s, const QString& m )
 
 int main( int argc, char** argv )
 {
+	// check qt version
+	QT_REQUIRE_VERSION( argc, argv, "4.3.2" );
+	
 	// create application
 	QApplication a( argc, argv );
 	
