@@ -338,7 +338,7 @@ void UIProjectsManager::projectRemove_triggered()
 	// create dialog
 	QMessageBox mb( QMessageBox::Question, tr( "Remove Item" ), tr( "Really remove item ?" ), QMessageBox::NoButton, window() );
 	// add buttons
-	QPushButton* r = mb.addButton( tr( "Remove Item" ), QMessageBox::AcceptRole );
+	mb.addButton( tr( "Remove Item" ), QMessageBox::AcceptRole );
 	QPushButton* rd = mb.addButton( tr( "Remove Item && Delete Associated File" ), QMessageBox::AcceptRole );
 	QPushButton* c = mb.addButton( QMessageBox::Cancel );
 	// execute dialog
