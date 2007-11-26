@@ -474,6 +474,15 @@ void QMakeItem::installCommands()
 		QString destdir = evaluate( "DESTDIR", this );
 		if ( destdir.isEmpty() )
 			destdir = evaluate( "DLLDESTDIR", this );
+#ifdef Q_OS_WIN
+		if ( !destdir.left( 2 ).endsWith( ':' ) )
+			destdir.prepend( "$cpp$/" );
+#else
+		if ( !destdir.startsWith( '/' ) )
+			destdir.prepend( "$cpp$/" );
+#endif
+		if ( destdir.endsWith( '/' ) )
+			destdir.chop( 1 );
 		// build debug
 		c = bc;
 		c.setText( tr( "Build Debug" ) );
@@ -506,7 +515,7 @@ void QMakeItem::installCommands()
 		c.setText( tr( "QMake" ) );
 		c.setCommand( qv.QMake );
 #ifdef Q_OS_MAC
-	c.setArguments( "-spec macx-g++" );
+		c.setArguments( "-spec macx-g++" );
 #endif
 		c.setWorkingDirectory( "$cpp$" );
 		addCommand( c, "mBuilder" );
@@ -527,14 +536,16 @@ void QMakeItem::installCommands()
 		// execute debug
 		c = bc;
 		c.setText( tr( "Execute Debug" ) );
-		c.setCommand( QString( "$cpp$/%1/%2" ).arg( destdir.isEmpty() ? "debug" : destdir ).arg( target.isEmpty() ? name() : target ) );
+		c.setCommand( target.isEmpty() ? name() : target );
 		c.setArguments( QString::null );
+		c.setWorkingDirectory( destdir != "$cpp$" ? destdir : destdir +"/debug" );
 		addCommand( c, "mBuilder/mExecute" );
 		// execute release
 		c = bc;
 		c.setText( tr( "Execute Release" ) );
-		c.setCommand( QString( "$cpp$/%1/%2" ).arg( destdir.isEmpty() ? "release" : destdir ).arg( target.isEmpty() ? name() : target ) );
+		c.setCommand( target.isEmpty() ? name() : target );
 		c.setArguments( QString::null );
+		c.setWorkingDirectory( destdir != "$cpp$" ? destdir : destdir +"/release" );
 		addCommand( c, "mBuilder/mExecute" );
 		// rebuild debug
 		c = bc;
@@ -873,9 +884,47 @@ void QMakeItem::commandTriggered()
 					addValue( this, "DEFINES", "+=", "\"PROGRAM_VERSION=\\\"\\\\\\\"$${VERSION}\\\\\\\"\\\"\"" );
 				}
 			}
-			// save project if user request
-			save();
+			// save projects if user request
+			saveAll();
 		}
+		else if ( a->text().contains( "execute", Qt::CaseInsensitive ) )
+		{
+			pCommand c = cm->processCommand( cm->getCommand( l, a->statusTip() ) );
+			const QString s = QString( "%1/%2" ).arg( c.workingDirectory() ).arg( c.command() );
+			if ( !QFile::exists( s ) )
+			{
+				if ( question( a->text().append( "..." ), tr( "The file %1 don't exists, do you want to choose a file ?" ).arg( s ) ) )
+				{
+					QFileInfo fi( getOpenFileName( a->text().append( "..." ), c.workingDirectory() ) );
+					if ( fi.exists() )
+					{
+						QString f = fi.fileName();
+						QString p = fi.absolutePath();
+						if ( p.endsWith( '/' ) )
+							p.chop( 1 );
+#ifdef Q_OS_MAC
+						/*
+						if ( p.endsWith( "/Contents/MacOS" ) )
+						{
+							f.append( ".app" );
+							p.chop( 15 +f.length() +1 );
+						*/
+							f.prepend( "open " );
+						//}
+#endif
+						// correct command
+						c.setCommand( f );
+						c.setWorkingDirectory( p );
+						// add command to console manager
+						cm->addCommand( c );
+					}
+				}
+			}
+			// return
+			return;
+		}
+		
+		// add commands to console
 		cm->addCommands( cm->recursiveCommandList( l, cm->getCommand( l, a->statusTip() ) ) );
 	}
 }
