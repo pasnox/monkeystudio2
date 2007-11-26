@@ -51,6 +51,7 @@ private slots:
 	void cbProjects_activated( const QModelIndex& );
 	void tvProjects_currentChanged( const QModelIndex&, const QModelIndex& );
 	void on_tvProjects_doubleClicked( const QModelIndex& );
+	void on_tvProjects_customContextMenuRequested( const QPoint& );
 
 	void internal_aboutToClose();
 	void internal_closed();
@@ -67,6 +68,7 @@ public slots:
 	void projectCloseAll_triggered();
 	void projectSettings_triggered();
 	void projectAddExistingFiles_triggered();
+	void projectRemove_triggered();
 
 signals:
 	void aboutToClose( ProjectItem* );

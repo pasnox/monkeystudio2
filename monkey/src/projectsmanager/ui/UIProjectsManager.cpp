@@ -56,6 +56,7 @@ UIProjectsManager::UIProjectsManager( QWidget* w )
 	tbButtons->addAction( mb->action( "mProject/aSettings" ) );
 	tbButtons->addSeparator();
 	tbButtons->addAction( mb->action( "mProject/aAddExistingFiles" ) );
+	tbButtons->addAction( mb->action( "mProject/aRemove" ) );
 	
 	// set treeview view for combo list
 	cbProjects->setModel( mProjects->projectsProxy() );
@@ -125,7 +126,7 @@ void UIProjectsManager::initializeProject( ProjectItem* it )
 void UIProjectsManager::cbProjects_activated( const QModelIndex& i )
 { tvProjects->setCurrentIndex( mProxy->mapFromSource( mProjects->projectsProxy()->mapToSource( i ) ) ); }
 
-void UIProjectsManager::tvProjects_currentChanged( const QModelIndex&, const QModelIndex& p )
+void UIProjectsManager::tvProjects_currentChanged( const QModelIndex& c, const QModelIndex& p )
 {
 	// removing old project commands is needed
 	ProjectItem* op = p.isValid() ? mProjects->itemFromIndex( mProxy->mapToSource( p ) ) : 0;
@@ -136,6 +137,7 @@ void UIProjectsManager::tvProjects_currentChanged( const QModelIndex&, const QMo
 	// get pluginsmanager
 	PluginsManager* pm = PluginsManager::instance();
 	// get current project
+	ProjectItem* cit = c.isValid() ? mProjects->itemFromIndex( mProxy->mapToSource( c ) ) : 0;
 	ProjectItem* it = currentProject();
 	// set compiler, debugger and interpreter
 	pm->setCurrentBuilder( it ? it->builder() : 0 );
@@ -152,6 +154,7 @@ void UIProjectsManager::tvProjects_currentChanged( const QModelIndex&, const QMo
 	mb->action( "mProject/mClose/aAll" )->setEnabled( it );
 	mb->action( "mProject/aSettings" )->setEnabled( it );
 	mb->action( "mProject/aAddExistingFiles" )->setEnabled( it );
+	mb->action( "mProject/aRemove" )->setEnabled( cit && ( cit->getType() == ProjectItem::VariableType || cit->getType() == ProjectItem::ValueType ) );
 	// select correct project in combobox
 	cbProjects->setCurrentIndex( it ? mProjects->projectsProxy()->mapFromSource( it->index() ) : QModelIndex() );
 	// emit currentChanged
@@ -165,6 +168,30 @@ void UIProjectsManager::on_tvProjects_doubleClicked( const QModelIndex& i )
 	// if item and file exists, open it
 	if ( it && QFile::exists( it->getFilePath() ) )
 		pFileManager::instance()->openFile( it->getFilePath() );
+}
+
+void UIProjectsManager::on_tvProjects_customContextMenuRequested( const QPoint& p )
+{
+	if ( currentProject() )
+	{
+		// get menubar
+		pMenuBar* mb = pMenuBar::instance();
+		
+		// create menu
+		QMenu m( this );
+		
+		// add menu commands
+		m.addActions( mb->menu( "mProject" )->actions() );
+		m.addSeparator();
+		m.addActions( mb->menu( "mBuilder" )->actions() );
+		m.addSeparator();
+		m.addActions( mb->menu( "mDebugger" )->actions() );
+		m.addSeparator();
+		m.addActions( mb->menu( "mInterpreter" )->actions() );
+		
+		// show menu
+		m.exec( tvProjects->mapToGlobal( p ) );
+	}
 }
 
 void UIProjectsManager::internal_aboutToClose()
@@ -306,3 +333,32 @@ void UIProjectsManager::projectAddExistingFiles_triggered()
 	}
 }
 
+void UIProjectsManager::projectRemove_triggered()
+{
+	// create dialog
+	QMessageBox mb( QMessageBox::Question, tr( "Remove Item" ), tr( "Really remove item ?" ), QMessageBox::NoButton, window() );
+	// add buttons
+	QPushButton* r = mb.addButton( tr( "Remove Item" ), QMessageBox::AcceptRole );
+	QPushButton* rd = mb.addButton( tr( "Remove Item && Delete Associated File" ), QMessageBox::AcceptRole );
+	QPushButton* c = mb.addButton( QMessageBox::Cancel );
+	// execute dialog
+	mb.exec();
+	// get button clicked
+	QAbstractButton* b = mb.clickedButton();
+	// do job
+	if ( b && b != c )
+	{
+		// get item
+		if ( ProjectItem* it = mProjects->itemFromIndex( mProxy->mapToSource( tvProjects->currentIndex() ) ) )
+		{
+			// get item associate file
+			QFileInfo fi( it->getFilePath() );
+			// remove item
+			it->remove();
+			// delete file if needed
+			if ( b == rd && fi.exists() && fi.isFile() )
+				if ( !QFile::remove( fi.absoluteFilePath() ) )
+					warning( tr( "Delete File..." ), tr( "Can't delete file:\n%1" ).arg( fi.absoluteFilePath() ), window() );
+		}
+	}
+}

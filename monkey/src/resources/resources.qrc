@@ -83,6 +83,8 @@
         <file>icons/project/save.png</file>
         <file>icons/project/saveall.png</file>
         <file>icons/project/settings.png</file>
+        <file>icons/project/add.png</file>
+        <file>icons/project/remove.png</file>
     </qresource>
     <qresource prefix="/stylesheets" >
         <file>stylesheets/default.css</file>
