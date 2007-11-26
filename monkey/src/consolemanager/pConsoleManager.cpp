@@ -81,6 +81,16 @@ QString pConsoleManager::processInternalVariables( const QString& s )
 	return v;
 }
 
+pCommand pConsoleManager::processCommand( pCommand c )
+{
+	// process variables
+	c.setCommand( processInternalVariables( c.command() ) );
+	c.setArguments( processInternalVariables( c.arguments() ) );
+	c.setWorkingDirectory( processInternalVariables( c.workingDirectory() ) );
+	// return command
+	return c;
+}
+
 pCommand pConsoleManager::getCommand( const pCommandList& l, const QString& s )
 {
 	foreach ( pCommand c, l )
@@ -99,14 +109,9 @@ pCommandList pConsoleManager::recursiveCommandList( const pCommandList& l, pComm
 		foreach ( QString s, lc )
 			cl << recursiveCommandList( l, getCommand( l, s ) );
 	}
+	// process variables
 	else
-	{
-		// process internal variables
-		c.setCommand( processInternalVariables( c.command() ) );
-		c.setArguments( processInternalVariables( c.arguments() ) );
-		c.setWorkingDirectory( processInternalVariables( c.workingDirectory() ) );
-		cl << c;
-	}
+		cl << processCommand( c );
 	// return list
 	return cl;
 }

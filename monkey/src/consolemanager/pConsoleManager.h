@@ -54,6 +54,7 @@ public:
 	void removeParser( const QString& );
 	
 	QString processInternalVariables( const QString& );
+	pCommand processCommand( pCommand );
 	pCommand getCommand( const pCommandList&, const QString& );
 	pCommandList recursiveCommandList( const pCommandList&, pCommand );
 
