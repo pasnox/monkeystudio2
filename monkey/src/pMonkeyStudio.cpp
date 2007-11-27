@@ -925,8 +925,8 @@ void pMonkeyStudio::setEditorProperties( pEditor* e )
 	e->setEolMode( eolMode() );
 	e->setEolVisibility( eolVisibility() );
 	e->setWhitespaceVisibility( whitespaceVisibility() );
-	e->setWrapMode( QsciScintilla::WrapWord);
-	e->setWrapVisualFlags( QsciScintilla::WrapFlagByText, QsciScintilla::WrapFlagByText, 4);
+	e->setWrapMode( wrapMode() );
+	e->setWrapVisualFlags( endWrapVisualFlag(), startWrapVisualFlag(), wrappedLineIndentWidth() );
 }
 
 void pMonkeyStudio::setRestoreProjectsOnStartup( bool b )
