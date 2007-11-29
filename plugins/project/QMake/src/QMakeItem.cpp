@@ -173,7 +173,7 @@ void QMakeItem::setValue( const QString& s )
 					// get last part of path
 					QString c = s.section( '/', -1 ).toLower();
 					// get all pro file
-					foreach ( QFileInfo f, getFiles( QDir( v ), "pro", false ) )
+					foreach ( QFileInfo f, getFiles( QDir( v ), "*.pro", false ) )
 					{
 						// check that value = filename
 						if ( f.baseName().toLower() == c )
