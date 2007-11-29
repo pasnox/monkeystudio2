@@ -32,7 +32,7 @@ public:
 	GNUMakeParser();
 	~GNUMakeParser();
 
-	bool processParsing( const QByteArray& );
+	bool processParsing(QString*);
 
 };
 

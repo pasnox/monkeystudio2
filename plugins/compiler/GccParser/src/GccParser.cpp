@@ -22,7 +22,7 @@ bool GccParser::setEnabled( bool b)
 {
 	mPluginInfos.Enabled = b;
  	if ( b )
-		pConsoleManager::instance()->addParser( new Parser );
+		pConsoleManager::instance()->addParser( new Parser(this) );
  	else
 		pConsoleManager::instance()->removeParser( PLUGIN_NAME );
 	return true;

@@ -120,7 +120,7 @@ QStringList MSVCMake::availableParsers() const
 { return QStringList( /*mPluginInfos.Name*/ ); }
 
 pCommandParser* MSVCMake::getParser( const QString& s )
-{ return s == mPluginInfos.Name ? new MSVCMakeParser : 0; }
+{ return NULL/*s == mPluginInfos.Name ? new MSVCMakeParser : 0*/; }
 
 pCommand MSVCMake::defaultBuildCommand() const
 { return pCommand( "Build", "nmake", "", false, availableParsers(), "$cpp$" ); }

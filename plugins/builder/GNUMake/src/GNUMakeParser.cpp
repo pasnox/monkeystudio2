@@ -38,9 +38,9 @@ GNUMakeParser::GNUMakeParser()
 GNUMakeParser::~GNUMakeParser()
 {}
 
-bool GNUMakeParser::processParsing( const QByteArray& arr )
+bool GNUMakeParser::processParsing(QString* buf)
 {
-	QStringList l = QTextCodec::codecForLocale()->toUnicode( arr ).split( '\n' );
+	QStringList l = (*buf).split( '\n' );
 	foreach (QString s, l)
 	{
 		foreach ( Pattern p, patterns)
@@ -55,6 +55,7 @@ bool GNUMakeParser::processParsing( const QByteArray& arr )
 				m.mFullText = replaceWithMatch(p.regExp,p.FullText);
 				// emit signal
 				emit newStepAvailable( m );
+                buf->remove (0, p.regExp.pos()+p.regExp.cap().size());
 				return true;
 			}
 		}

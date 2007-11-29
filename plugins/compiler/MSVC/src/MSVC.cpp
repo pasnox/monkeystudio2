@@ -160,12 +160,12 @@ void MSVC::setUserCommands( const pCommandList& l ) const
 }
 
 QStringList MSVC::availableParsers() const
-{ return QStringList( "MSVCParser" ); }
+{ return QStringList()/* "MSVCParser" )*/; }
 
 pCommandParser* MSVC::getParser( const QString& s )
 {
-	if ( s == "MSVCParser" )
-		return new MSVCParser;
+/*	if ( s == "MSVCParser" )
+		return new MSVCParser;*/
 	return 0;
 }
 

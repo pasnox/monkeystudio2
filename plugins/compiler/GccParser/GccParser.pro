@@ -7,5 +7,4 @@ DEFINES	*= "PLUGIN_NAME=\"\\\"$${TARGET}\\\"\""
 HEADERS = src/GccParser.h \
 	src/Parser.h
 
-SOURCES	= src/GccParser.cpp \
-	src/Parser.cpp
+SOURCES	= src/GccParser.cpp
