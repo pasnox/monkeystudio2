@@ -27,16 +27,29 @@ class Q_MONKEY_EXPORT pCommandParser : public QObject
 	Q_OBJECT
 
 protected:
+struct Pattern
+{
+	QRegExp regExp;
+	QString FileName;
+	QString col;
+	QString row;
+	pConsoleManager::StepType Type;
+	QString Text;
+	QString FullText;
+};
+
 	QString mName;
-
+	QList <Pattern> patterns;
+	
+	QString replaceWithMatch(QRegExp, QString);
 public:
-	pCommandParser( QObject* o = 0 ) : QObject( o ) {}
-	virtual ~pCommandParser() {}
+	pCommandParser (QObject* p) :QObject (p) {};
+	virtual ~pCommandParser();
 
-	virtual QString name() const { return mName; }
+	virtual QString name() const;
 
 public slots:
-	virtual bool processParsing( const QByteArray& ) = 0;
+	virtual bool processParsing(QString*);
 
 signals:
 	void newStepAvailable( const pConsoleManager::Step& );

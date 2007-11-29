@@ -61,6 +61,7 @@ public:
 protected:
 	int mTimerId;
 	QBuffer mBuffer;
+    QString mNotParsed;
 	pCommandList mCommands;
 	QStringList mCurrentParsers;
 	QHash<QString, pCommandParser*> mParsers;

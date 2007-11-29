@@ -150,6 +150,7 @@ void pConsoleManager::finished( int i, QProcess::ExitStatus e )
 	mStopAction->setEnabled( false );
 }
 
+#include <QDebug>
 void pConsoleManager::readyRead()
 {
 	// get data
@@ -164,10 +165,11 @@ void pConsoleManager::readyRead()
 		// read complete lines
 		while ( mBuffer.canReadLine() )
 		{
-			QByteArray a = mBuffer.readLine();
+			mNotParsed.append ( QString::fromLocal8Bit (mBuffer.readLine()));
+            qWarning () << "ConsoleManager: " << mNotParsed;
 			foreach ( QString s, mCurrentParsers )
 				if ( pCommandParser* p = mParsers.value( s ) )
-					if ( p->processParsing( a ) )
+					if ( p->processParsing(&mNotParsed) )
 						break;
 		}
 	}
