@@ -150,6 +150,7 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/toolsmanager/ui/UIDesktopTools.cpp \
 	src/toolsmanager/ui/UIToolsEdit.cpp \
 	src/toolsmanager/pToolsManager.cpp \
+	src/consolemanager/pCommandParser.cpp \
 	src/consolemanager/pConsoleManager.cpp \
 	src/pluginsmanager/PluginsManager.cpp \
 	src/pluginsmanager/ui/UIPluginsSettings.cpp \
