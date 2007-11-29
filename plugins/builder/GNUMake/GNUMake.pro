@@ -7,5 +7,4 @@ DEFINES	*= "PLUGIN_NAME=\"\\\"$${TARGET}\\\"\""
 HEADERS = src/GNUMake.h \
 	src/GNUMakeParser.h
 
-SOURCES	= src/GNUMake.cpp \
-	src/GNUMakeParser.cpp
+SOURCES	= src/GNUMake.cpp

@@ -1,39 +1,43 @@
 #ifndef GNUMAKEPARSER_H
 #define GNUMAKEPARSER_H
 
-#include <QProcess>
-#include <QList>
-#include <QRegExp>
-
 #include "pCommandParser.h"
 
 class GNUMakeParser : public pCommandParser
 {
-	Q_OBJECT
-	
-	struct Pattern
-	{
-		QRegExp regExp;
-		QString about;
-		QString FileName;
-		QString col;
-		QString row;
-		pConsoleManager::StepType Type;
-		QString Text;
-		QString FullText;
-	};
-
-protected:
-	QRegExp rxErrWarn, rxBuild, rxUndefRef, rxNoRule;
-	QList <Pattern> patterns;
-	QString replaceWithMatch(QRegExp, QString);
-
+Q_OBJECT
 public:
-	GNUMakeParser(QObject*);
-	~GNUMakeParser();
-
-	bool processParsing(QString*);
+	GNUMakeParser(QObject* parent ) :pCommandParser (parent)
+	{
+		mName = PLUGIN_NAME;
+		Pattern ps[] = 
+		{
+		{
+			QRegExp("make: \\*\\*\\* (No rule to make target `.+', needed by `.+')\\.  Stop\\.\n"), //reg exp
+			//No rule for make target
+			"", //file name
+			"0", //column
+			"0", //row
+			pConsoleManager::stError, //type
+			"%1", //text
+			"%0" //full text
+		},
+		{
+			QRegExp("make\\[\\d\\]: Entering directory\\s`([^\\n]*)'"), //reg exp
+			//Entering dirrectory,
+			"", //file name
+			"0", //column
+			"0", //row
+			pConsoleManager::stCompiling, //type
+			"make: Building %1", //text
+			"%0" //full text
+		},
+		{QRegExp(), "", "", "", pConsoleManager::stUnknown,"",""} //this item must be last
+		};
+		for ( int i = 0; !ps[i].regExp.isEmpty(); i++)
+			patterns.append (ps[i]);
+	};
 
 };
 
-#endif
+#endif // GNUMAKEPARSER_H
