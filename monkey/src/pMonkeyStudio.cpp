@@ -176,7 +176,8 @@ const QFileInfoList pMonkeyStudio::getFiles( QDir d, const QStringList& l, bool 
 	QFileInfoList ll;
 	foreach ( QFileInfo f, d.entryInfoList( QDir::AllEntries | QDir::NoDotAndDotDot, QDir::DirsFirst | QDir::Name ) )
 	{
-		if ( f.isFile() && ( l.isEmpty() || ( !l.isEmpty() && l.contains( f.suffix(), Qt::CaseInsensitive ) ) ) )
+		//if ( f.isFile() && ( l.isEmpty() || ( !l.isEmpty() && l.contains( f.suffix(), Qt::CaseInsensitive ) ) ) )
+		if ( f.isFile() && ( l.isEmpty() || QDir::match( l, f.fileName() ) ) )
 			ll << f;
 		else if ( f.isDir() && b )
 		{
@@ -327,19 +328,13 @@ const QString pMonkeyStudio::getSaveFileName( const QString& c, const QString& f
 }
 
 const QString pMonkeyStudio::getExistingDirectory( const QString& c, const QString& f, QWidget* w )
-{
-	return QFileDialog::getExistingDirectory( w, c.isEmpty() ? QObject::tr( "Select a folder" ) : c, f );
-}
+{ return QFileDialog::getExistingDirectory( w, c.isEmpty() ? QObject::tr( "Select a folder" ) : c, f ); }
 
 const QString pMonkeyStudio::tokenizeHome( const QString& s )
-{
-	return QString( s ).replace( QDir::homePath(), "$HOME$" ); 
-}
+{ return QString( s ).replace( QDir::homePath(), "$HOME$" ); }
 
 const QString pMonkeyStudio::unTokenizeHome( const QString& s )
-{
-	return QString( s ).replace( "$HOME$", QDir::homePath() );
-}
+{ return QString( s ).replace( "$HOME$", QDir::homePath() ); }
 
 const QHash<QString, QStringList> pMonkeyStudio::defaultLanguagesSuffixes()
 {
