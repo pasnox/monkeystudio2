@@ -25,6 +25,9 @@ INCLUDEPATH	*= $${QPRO_PWD}/src/qscintillamanager $${QPRO_PWD}/src/qscintillaman
 # Ctags Manager
 INCLUDEPATH	*= $${QPRO_PWD}/src/ctagsmanager
 
+# Variables Manager
+INCLUDEPATH	*= $${QPRO_PWD}/src/variablesmanager
+
 # Templates Manager
 INCLUDEPATH	*= $${QPRO_PWD}/src/templatesmanager $${QPRO_PWD}/src/templatesmanager/ui
 
