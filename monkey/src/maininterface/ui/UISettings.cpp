@@ -1,6 +1,5 @@
 #include "UISettings.h"
 #include "pSettings.h"
-#include "UIEditTemplate.h"
 #include "UIAddAbbreviation.h"
 #include "pFileManager.h"
 #include "pTemplatesManager.h"
@@ -39,7 +38,6 @@
 #include <QDir>
 
 using namespace pMonkeyStudio;
-using namespace pTemplatesManager;
 
 const QString SettingsPath = "Settings";
 
@@ -219,23 +217,12 @@ void UISettings::loadSettings()
 		it->setFlags( it->flags() | Qt::ItemIsEditable );
 
 	// File Templates
-	leTemplatesPath->setText( templatesPath() );
-	foreach ( pTemplate t, availableTemplates() )
-	{
-		QTreeWidgetItem* it = new QTreeWidgetItem( twTemplatesType );
-		it->setText( 0, t.Language );
-		it->setText( 1, t.Name );
-		it->setText( 2, t.Description );
-		it->setData( 0, Qt::UserRole, t.Icon );
-		it->setData( 0, Qt::UserRole +1, t.FileNames );
-		it->setData( 0, Qt::UserRole +2, t.Type );
-		it->setText( 3, pTemplate::stringForType( t.Type ) );
-		it->setIcon( 0, QIcon( t.Icon ) );
-	}
+	pTemplatesManager* tm = pTemplatesManager::instance();
+	leTemplatesPath->setText( tm->templatesPath().value( 0 ) );
 	
 	// File Headers
 	for ( int i = 0; i < cbFileHeadersLanguages->count(); i++ )
-		cbFileHeadersLanguages->setItemData( i, templatesHeader( cbFileHeadersLanguages->itemText( i ) ) );
+		cbFileHeadersLanguages->setItemData( i, tm->templatesHeader( cbFileHeadersLanguages->itemText( i ) ) );
 	teFileHeader->setPlainText( cbFileHeadersLanguages->itemData( cbFileHeadersLanguages->currentIndex() ).toString() );
 
 	// Editor
@@ -403,32 +390,12 @@ void UISettings::saveSettings()
 	// remove key
 	s->remove( sp );
 	// default templates path
-	setTemplatesPath( leTemplatesPath->text() );
-	// tokenize items, need do separate as qsettings is not thread safe
-	for ( int i = 0; i < twTemplatesType->topLevelItemCount(); i++ )
-	{
-		QTreeWidgetItem* it = twTemplatesType->topLevelItem( i );
-		it->setData( 0, Qt::UserRole, tokenize( it->data( 0, Qt::UserRole ).toString() ) );
-		it->setData( 0, Qt::UserRole +1, tokenize( it->data( 0, Qt::UserRole +1 ).toStringList() ) );
-	}
-	// write new ones
-	s->beginWriteArray( sp );
-	for ( int i = 0; i < twTemplatesType->topLevelItemCount(); i++ )
-	{
-		s->setArrayIndex( i );
-		QTreeWidgetItem* it = twTemplatesType->topLevelItem( i );
-		s->setValue( "Language", it->text( 0 ) );
-		s->setValue( "Name", it->text( 1 ) );
-		s->setValue( "Description", it->text( 2 ) );
-		s->setValue( "Icon", it->data( 0, Qt::UserRole ).toString() );
-		s->setValue( "FileNames", it->data( 0, Qt::UserRole +1 ).toStringList() );
-		s->setValue( "Type", it->data( 0, Qt::UserRole +2 ).toInt() );
-	}
-	s->endArray();
+	pTemplatesManager* tm = pTemplatesManager::instance();
+	tm->setTemplatesPath( QStringList( leTemplatesPath->text() ) );
 	
-	// templates header
+	// File Headers
 	for ( int i = 0; i < cbFileHeadersLanguages->count(); i++ )
-		setTemplatesHeader( cbFileHeadersLanguages->itemText( i ), cbFileHeadersLanguages->itemData( i ).toString() );
+		tm->setTemplatesHeader( cbFileHeadersLanguages->itemText( i ), cbFileHeadersLanguages->itemData( i ).toString() );
 
 	// Editor
 	//  General
@@ -659,10 +626,10 @@ void UISettings::on_tbTemplatesPath_clicked()
 }
 
 void UISettings::on_pbAddTemplateType_clicked()
-{ UIEditTemplate::edit( twTemplatesType, 0 ); }
+{ /*UIEditTemplate::edit( twTemplatesType, 0 );*/ }
 
 void UISettings::on_pbEditTemplateType_clicked()
-{ UIEditTemplate::edit( twTemplatesType, twTemplatesType->selectedItems().value( 0 ) ); }
+{ /*UIEditTemplate::edit( twTemplatesType, twTemplatesType->selectedItems().value( 0 ) );*/ }
 
 void UISettings::on_pbRemoveTemplateType_clicked()
 { delete twTemplatesType->selectedItems().value( 0 ); }
