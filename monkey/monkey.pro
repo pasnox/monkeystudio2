@@ -74,7 +74,6 @@ FORMS	*= src/maininterface/ui/UITranslator.ui \
 	src/maininterface/ui/UISettings.ui \
 	src/qscintillamanager/ui/pSearch.ui \
 	src/abbreviationsmanager/ui/UIAddAbbreviation.ui \
-	src/templatesmanager/ui/UIEditTemplate.ui \
 	src/templatesmanager/ui/UITemplatesWizard.ui \
 	src/toolsmanager/ui/UIDesktopTools.ui \
 	src/toolsmanager/ui/UIToolsEdit.ui \
@@ -100,9 +99,8 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/maininterface/UIMain.h \
 	src/abbreviationsmanager/pAbbreviationsManager.h \
 	src/abbreviationsmanager/ui/UIAddAbbreviation.h \
+	src/variablesmanager/VariablesManager.h \
 	src/templatesmanager/pTemplatesManager.h \
-	src/templatesmanager/pTemplatePreviewer.h \
-	src/templatesmanager/ui/UIEditTemplate.h \
 	src/templatesmanager/ui/UITemplatesWizard.h \
 	src/pMonkeyStudio.h \
 	src/toolsmanager/pDesktopApplications.h \
@@ -144,9 +142,8 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/maininterface/UIMain.cpp \
 	src/abbreviationsmanager/pAbbreviationsManager.cpp \
 	src/abbreviationsmanager/ui/UIAddAbbreviation.cpp \
+	src/variablesmanager/VariablesManager.cpp \
 	src/templatesmanager/pTemplatesManager.cpp \
-	src/templatesmanager/pTemplatePreviewer.cpp \
-	src/templatesmanager/ui/UIEditTemplate.cpp \
 	src/templatesmanager/ui/UITemplatesWizard.cpp \
 	src/pMonkeyStudio.cpp \
 	src/toolsmanager/pDesktopApplications.cpp \
@@ -154,7 +151,6 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/toolsmanager/ui/UIToolsEdit.cpp \
 	src/toolsmanager/pToolsManager.cpp \
 	src/consolemanager/pConsoleManager.cpp \
-	src/consolemanager/pCommandParser.cpp \
 	src/pluginsmanager/PluginsManager.cpp \
 	src/pluginsmanager/ui/UIPluginsSettings.cpp \
 	src/pluginsmanager/ui/UICLIToolSettings.cpp \
