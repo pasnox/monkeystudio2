@@ -285,7 +285,7 @@ void pWorkspace::internal_urlsDropped( const QList<QUrl>& l )
 void pWorkspace::fileNew_triggered()
 {
 	UITemplatesWizard* d = UITemplatesWizard::instance( this );
-	d->setType( pTemplate::ttFiles );
+	d->setType( tr( "Files" ) );
 	d->exec();
 }
 

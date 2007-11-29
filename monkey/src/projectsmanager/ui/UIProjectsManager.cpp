@@ -251,7 +251,7 @@ bool UIProjectsManager::closeProject( const QString& s )
 void UIProjectsManager::projectNew_triggered()
 {
 	UITemplatesWizard* d = UITemplatesWizard::instance( this );
-	d->setType( pTemplate::ttProjects );
+	d->setType( tr( "Projects" ) );
 	d->exec();
 }
 
