@@ -2,7 +2,7 @@
 
 #include <QTextCodec>
 
-GNUMakeParser::GNUMakeParser()
+GNUMakeParser::GNUMakeParser(QObject* p) : pCommandParser (p)
 {
 	mName = PLUGIN_NAME;
 	

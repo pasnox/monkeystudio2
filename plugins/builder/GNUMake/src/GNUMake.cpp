@@ -117,7 +117,7 @@ QStringList GNUMake::availableParsers() const
 { return QStringList( mPluginInfos.Name ); }
 
 pCommandParser* GNUMake::getParser( const QString& s )
-{ return s == mPluginInfos.Name ? new GNUMakeParser : 0; }
+{ return s == mPluginInfos.Name ? new GNUMakeParser(this) : 0; }
 
 pCommand GNUMake::defaultBuildCommand() const
 {

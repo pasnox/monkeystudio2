@@ -29,7 +29,7 @@ protected:
 	QString replaceWithMatch(QRegExp, QString);
 
 public:
-	GNUMakeParser();
+	GNUMakeParser(QObject*);
 	~GNUMakeParser();
 
 	bool processParsing(QString*);
