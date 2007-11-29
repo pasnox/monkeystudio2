@@ -30,7 +30,7 @@ UIProjectHeaders::UIProjectHeaders( QWidget* p )
 {
 	setupUi( this );
 	cbLanguages->addItems( availableLanguages() );
-	teLicensing->setPlainText( pTemplatesManager::templatesHeader( cbLanguages->currentText() ) );
+	teLicensing->setPlainText( pTemplatesManager::instance()->templatesHeader( cbLanguages->currentText() ) );
 	dbbButtons->button( QDialogButtonBox::Ok )->setIcon( QPixmap( ":/icons/icons/ok.png" ) );
 	dbbButtons->button( QDialogButtonBox::Cancel )->setIcon( QPixmap( ":/icons/icons/cancel.png" ) );
 }
@@ -39,7 +39,7 @@ UIProjectHeaders::~UIProjectHeaders()
 {}
 
 void UIProjectHeaders::on_cbLanguages_currentIndexChanged( const QString& s )
-{ teLicensing->setPlainText( pTemplatesManager::templatesHeader( s ) ); }
+{ teLicensing->setPlainText( pTemplatesManager::instance()->templatesHeader( s ) ); }
 
 void UIProjectHeaders::on_tbDirectory_clicked()
 {
@@ -50,6 +50,8 @@ void UIProjectHeaders::on_tbDirectory_clicked()
 
 const QStringList getRecursiveFiles( QDir d, const QStringList& l )
 {
+	warning( "", "broken, please report to authors" );
+	
 	QStringList ll;
 	foreach ( QFileInfo f, d.entryInfoList( QDir::AllEntries | QDir::NoDotAndDotDot, QDir::DirsFirst | QDir::Name ) )
 	{
@@ -97,6 +99,7 @@ void UIProjectHeaders::accept()
 		b.prepend( teLicensing->toPlainText().trimmed() );
 		
 		// create structure for parsing values
+		/*
 		pTemplateContent t;
 		t.Name = leProjectName->text();
 		t.Author = leAuthors->text();
@@ -112,5 +115,6 @@ void UIProjectHeaders::accept()
 		f.resize( 0 );
 		f.write( qPrintable( b ) );
 		f.close();
+		*/
 	}
 }
