@@ -1,5 +1,3 @@
-#include <QDir>
-
 #include "UITemplatesWizard.h"
 #include "pFileManager.h"
 #include "pMonkeyStudio.h"
@@ -9,6 +7,8 @@
 #include "ProjectsProxy.h"
 #include "UIProjectsManager.h"
 #include "VariablesManager.h"
+
+#include <QDir>
 
 using namespace pMonkeyStudio;
 
