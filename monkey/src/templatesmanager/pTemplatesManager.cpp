@@ -10,15 +10,9 @@
 #include "pTemplatesManager.h"
 #include "pSettings.h"
 #include "pMonkeyStudio.h"
-
-
-
-#include "ProjectItem.h"
 #include "pFileManager.h"
 
-#include <QHash>
-#include <QDebug>
-#include <QMessageBox>
+//#include <QHash>
 
 using namespace pMonkeyStudio;
 
@@ -109,7 +103,7 @@ TemplateList pTemplatesManager::getTemplates()
 {
 	TemplateList l;
 	foreach( QString p, templatesPath() )
-		foreach ( QFileInfo f, pMonkeyStudio::getFiles( QDir( unTokenizeHome( p ) ), QStringList( "template.ini" ), true ) )
+		foreach ( QFileInfo f, getFiles( QDir( unTokenizeHome( p ) ), QStringList( "template.ini" ), true ) )
 			l << getTemplate( f.absoluteFilePath() );
 	return l;
 }
