@@ -162,15 +162,24 @@ void pConsoleManager::readyRead()
 	// try parse output
 	if ( c.isValid() )
 	{
+		/*Alrorithm is not ideal, need fix, if will be problems with it
+		  Some text, that next parser possible to parse, can be removed
+		  And, possible, it's not idealy quick
+		*/
+		
 		// read complete lines
 		while ( mBuffer.canReadLine() )
 		{
 			mNotParsed.append ( QString::fromLocal8Bit (mBuffer.readLine()));
-            qWarning () << "ConsoleManager: " << mNotParsed;
 			foreach ( QString s, mCurrentParsers )
 				if ( pCommandParser* p = mParsers.value( s ) )
-					if ( p->processParsing(&mNotParsed) )
-						break;
+			{
+					qDebug () << "Will try parser " << p->name ();	
+					while ( p->processParsing(mNotParsed) && (! mNotParsed.isEmpty()))
+						{
+						qDebug () << "Loop";	
+						}
+			}
 		}
 	}
 	// emit signal
@@ -273,6 +282,7 @@ void pConsoleManager::executeProcess()
 		// clear buffer
 		mBuffer.buffer().clear();
 		mBuffer.open( QBuffer::ReadOnly );
+		mNotParsed.clear ();
 		// execute command
 		setWorkingDirectory( c.workingDirectory() );
 		start( QString( "%1 %2" ).arg( c.command() ).arg( c.arguments() ) );

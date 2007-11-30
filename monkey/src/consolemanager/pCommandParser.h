@@ -41,7 +41,7 @@ struct Pattern
 	QString mName;
 	QList <Pattern> patterns;
 	
-	QString replaceWithMatch(QRegExp, QString);
+	QString replaceWithMatch(QRegExp&, QString);
 public:
 	pCommandParser (QObject* p) :QObject (p) {};
 	virtual ~pCommandParser();
@@ -49,7 +49,7 @@ public:
 	virtual QString name() const;
 
 public slots:
-	virtual bool processParsing(QString*);
+	virtual bool processParsing(QString&);
 
 signals:
 	void newStepAvailable( const pConsoleManager::Step& );
