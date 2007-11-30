@@ -1,27 +1,28 @@
 #ifndef VARIABLESMANAGER_H
 #define VARIABLESMANAGER_H
 
-#include <QHash>
-
+#include "MonkeyExport.h"
 #include "QSingleton.h"
 
-class VariablesManager: public QObject, public QSingleton<VariablesManager>
+#include <QApplication>
+#include <QHash>
+
+class Q_MONKEY_EXPORT VariablesManager : public QObject, public QSingleton<VariablesManager>
 {
     Q_OBJECT
     friend class QSingleton<VariablesManager>;
-		
+	
 private:
-    VariablesManager ();
+    VariablesManager( QObject* = QApplication::instance() );
 
 public:
-	
-    typedef QHash <QString, QString> Dictionary;
+    typedef QHash<QString, QString> Dictionary;
     //Returns variable. 
     //Default value = QString::null used, if variable is not set
-    QString getVariable (QString name,  Dictionary locals); 
+    QString getVariable( QString name,  Dictionary locals ); 
 
     //Is variable set
-    bool isSet (QString name,  Dictionary& locals); 
+    bool isSet( QString name,  Dictionary& locals ); 
 
     //Will replace all variables in the string with values
     //If locals are presented, variables will be searched there too
@@ -30,5 +31,7 @@ public:
 private:
     //Hash for storing global constand variables. (Kernel version for example)
     Dictionary globals;
+
 };
+
 #endif //VARIABLESMANAGER_H

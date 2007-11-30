@@ -5,8 +5,9 @@
 #include <QRegExp>
 #include <QDateTime>
 
-VariablesManager::VariablesManager ()
-{};
+VariablesManager::VariablesManager( QObject* o )
+	: QObject( o )
+{}
 
 QString VariablesManager::getVariable (QString name, Dictionary locals)
 {
