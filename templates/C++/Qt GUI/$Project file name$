@@ -3,9 +3,9 @@
 ######################################################################
 
 TEMPLATE = app
-TARGET = 
-DEPENDPATH += .
-INCLUDEPATH += .
+TARGET = $Target name$
+DEPENDPATH += . src
+INCLUDEPATH += . src
 
 # Input
 SOURCES += $Main file name$
