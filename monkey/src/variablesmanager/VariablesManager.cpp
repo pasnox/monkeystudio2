@@ -43,7 +43,7 @@ QString VariablesManager::replaceAllVariables (QString text, Dictionary locals)
 {
     int p = 0;
     QString s;
-    QRegExp rex( "(\\$[^$]+\\$)" );
+    QRegExp rex( "(\\$[^$\\n]+\\$)" );
     // search and interpret values
     QList<QString> findedVariables;
     while ( ( p = rex.indexIn( text, p ) ) != -1 )
@@ -52,6 +52,7 @@ QString VariablesManager::replaceAllVariables (QString text, Dictionary locals)
         s = rex.capturedTexts().value( 1 );
         findedVariables.append (s);
         p += rex.matchedLength();
+		qWarning() << "var: " << s;
     }
     // replace occurences
     foreach ( QString s, findedVariables )
