@@ -1,0 +1,16 @@
+#include <$Application object$>
+
+int main( int argc, char** argv )
+{
+	// create application
+	$Application object$ app( argc, argv );
+
+	// init application
+	app.setApplicationName( "$Application name$" );
+
+	// connection
+	QObject::connect( &app, SIGNAL( lastWindowClosed() ), &app, SLOT( quit() ) );
+
+	// start application
+	return app.exec();
+}
