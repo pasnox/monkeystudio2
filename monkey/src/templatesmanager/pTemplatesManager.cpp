@@ -164,6 +164,17 @@ bool pTemplatesManager::realiseTemplate( const pTemplate& t, const VariablesMana
 		// get file name
 		QString s = QString( "%1%2" ).arg( dest, files[f] );
 		
+		// check file destination exists
+		QDir fd( QFileInfo( s ).path() );
+		if ( !fd.exists() )
+		{
+			if ( !fd.mkpath( fd.path() ) )
+			{
+				warning( tr( "Error..." ), tr( "Can't create destination '%1'" ).arg( fd.path() ) );
+				return false;
+			}
+		}
+		
 		// copy file
 		if ( !QFile::copy( QString( "%1%2" ).arg( t.DirPath, f ), s ) )
 		{

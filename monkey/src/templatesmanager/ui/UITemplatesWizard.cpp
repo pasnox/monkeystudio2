@@ -136,20 +136,6 @@ bool UITemplatesWizard::checkTemplate()
 		return false;
 	}
 	
-	// is empty ?
-	if ( leDestination->text().isEmpty() )
-	{
-		information( tr( "Destination..." ), tr( "Destination can't be empty." ), window() );
-		return false;
-	}
-	
-	// destination exists ?
-	if ( !QDir( leDestination->text() ).exists() )
-	{
-		information( tr( "Destination..." ), tr( "Destination doesn't exists." ), window() );
-		return false;
-	}
-	
 	// return default value
 	return true;
 }
