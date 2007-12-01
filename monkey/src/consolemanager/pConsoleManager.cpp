@@ -20,6 +20,8 @@
 
 #include <QTimer>
 
+static const int MAX_LENGTH = 2047;
+
 using namespace pMonkeyStudio;
 
 pConsoleManager::pConsoleManager( QObject* o )
@@ -39,6 +41,8 @@ pConsoleManager::pConsoleManager( QObject* o )
 	connect( mStopAction, SIGNAL( triggered() ), this, SLOT( stopCurrentCommand() ) );
 	// start timerEvent
 	mTimerId = startTimer( 100 );
+	mNotParsed = "\n"; // For perfomance issues
+	mNotParsed.reserve (MAX_LENGTH *2);
 }
 
 pConsoleManager::~pConsoleManager()
@@ -148,6 +152,9 @@ void pConsoleManager::finished( int i, QProcess::ExitStatus e )
 	removeCommand( currentCommand() );
 	// disable stop action
 	mStopAction->setEnabled( false );
+		// clear buffer
+	mBuffer.buffer().clear();
+	mNotParsed = "\n"; // For perfomance issues
 }
 
 #include <QDebug>
@@ -162,6 +169,7 @@ void pConsoleManager::readyRead()
 	// try parse output
 	if ( c.isValid() )
 	{
+		qDebug () << mCurrentParsers;
 		/*Alrorithm is not ideal, need fix, if will be problems with it
 		  Some text, that next parser possible to parse, can be removed
 		  And, possible, it's not idealy quick
@@ -170,16 +178,15 @@ void pConsoleManager::readyRead()
 		// read complete lines
 		while ( mBuffer.canReadLine() )
 		{
+			qDebug () << "Can read line";
 			mNotParsed.append ( QString::fromLocal8Bit (mBuffer.readLine()));
+			int size = mNotParsed.size();
+			if (size >MAX_LENGTH)
+				mNotParsed.remove (0, MAX_LENGTH-size);
 			foreach ( QString s, mCurrentParsers )
 				if ( pCommandParser* p = mParsers.value( s ) )
-			{
-					qDebug () << "Will try parser " << p->name ();	
 					while ( p->processParsing(mNotParsed) && (! mNotParsed.isEmpty()))
-						{
-						qDebug () << "Loop";	
-						}
-			}
+						{}
 		}
 	}
 	// emit signal
@@ -279,13 +286,11 @@ void pConsoleManager::executeProcess()
 			foreach ( QString s, parsersName() )
 				if ( !mCurrentParsers.contains( s ) )
 					mCurrentParsers << s;
-		// clear buffer
-		mBuffer.buffer().clear();
-		mBuffer.open( QBuffer::ReadOnly );
-		mNotParsed.clear ();
 		// execute command
 		setWorkingDirectory( c.workingDirectory() );
 		start( QString( "%1 %2" ).arg( c.command() ).arg( c.arguments() ) );
+
+		mBuffer.open( QBuffer::ReadOnly );
 		// exit
 		return;
 	}

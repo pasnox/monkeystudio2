@@ -14,7 +14,7 @@ public:
 		{
 			{
 				//Error in the file/line
-				QRegExp("((.*/)?([^:]+)):(\\d+):(\\d+:)?\\serror:\\s([^\n]+)\n"), //reg exp
+				QRegExp("\\n((\\w+/)?([\\w.]+)):(\\d+):(\\d+:)?\\serror:\\s([^\\n]+)\\n"), //reg exp
 				"%1", //file name
 				"%5", //column
 				"%6", //row
@@ -24,7 +24,7 @@ public:
 			},
 			{
 				//Warning in the file/line
-				QRegExp("((.*/)?([^:]+)):(\\d+):(\\d+:)?\\swarning:\\s([^\n]+)\n"), //reg exp
+				QRegExp("\\n((\\w+/)?([\\w.]+)):(\\d+):(\\d+:)?\\swarning:\\s([^\\n]+)\\n"), //reg exp
 				"%1", //file name
 				"%5", //column
 				"%4", //row
@@ -34,7 +34,7 @@ public:
 			},
 			{
 				//Building file
-				QRegExp("g\\+\\+\\s+\\-c.+([^\\s]+\\.cpp)\n"), //reg exp
+				QRegExp("\\ng\\+\\+\\s+\\-c\\s\\w+([^\\s]+\\.cpp)\\n"), //reg exp
 				"%1", //file name
 				"0", //column
 				"0", //row
@@ -44,7 +44,7 @@ public:
 			},
 			{
 				//Linking file
-				QRegExp("g\\+\\+.+\\-o\\s+([^\\s]+)[^\n]+\n"), //reg exp
+				QRegExp("\\ng\\+\\+\\w+\\-o\\s+([^\\s]+)[^\\n]+\\n"), //reg exp
 				"0", //file name
 				"0", //column
 				"0", //row
@@ -54,7 +54,7 @@ public:
 			},
 			{
 				//Undedined reference in the function
-				QRegExp(".*(In\\sfunction\\s.*:.*:).+(\\sundefined\\sreference\\sto[^\n]+)\n"), //reg exp
+				QRegExp("\\n\\w*(In\\sfunction\\s\\w*:\\w*:).+(\\sundefined\\sreference\\sto[^\\n]+)\\n"), //reg exp
 				"", //file name
 				"0", //column
 				"0", //row
@@ -64,7 +64,7 @@ public:
 			},
 			{
 				//Undedined reference in the module
-				QRegExp("(\\w+)\\.o:\\([^\\)]+\\): undefined reference to `(\\w+)'\n"), //reg exp
+				QRegExp("\\n(\\w+)\\.o:\\([^\\)]+\\): undefined reference to `(\\w+)'\\n"), //reg exp
 				"", //file name
 				"0", //column
 				"0", //row
@@ -74,7 +74,7 @@ public:
 			},
 			{
 				//LD has no permissions for write file.  Not tested with unix output.
-				QRegExp(".*(ld(\\.exe)?)(: cannot open output file [^:]+: Permission denied)\n"), //reg exp
+				QRegExp("\\n\\w*(ld(\\.exe)?)(: cannot open output file [^:]+: Permission denied)\\n"), //reg exp
 				"", //file name
 				"0", //column
 				"0", //row

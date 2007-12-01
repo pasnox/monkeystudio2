@@ -13,7 +13,7 @@ public:
 		Pattern ps[] = 
 		{
 		{
-			QRegExp("make: \\*\\*\\* (No rule to make target `.+', needed by `.+')\\.  Stop\\.\n"), //reg exp
+			QRegExp("\\nmake: \\*\\*\\* (No rule to make target `\\w+', needed by `\\w+')\\.  Stop\\.\n"), //reg exp
 			//No rule for make target
 			"", //file name
 			"0", //column
@@ -23,7 +23,7 @@ public:
 			"%0" //full text
 		},
 		{
-			QRegExp("make\\[\\d\\]: Entering directory\\s`([^\\n]*)'"), //reg exp
+			QRegExp("\\nmake\\[\\d\\]: Entering directory\\s`([^\\n]*)'"), //reg exp
 			//Entering dirrectory,
 			"", //file name
 			"0", //column
