@@ -70,9 +70,10 @@
     </qresource>
     <qresource prefix="/licenses" >
         <file>texts/license.gpl</file>
-		<file lang="ru" alias="texts/license.gpl">texts/license_ru.gpl</file>
+        <file alias="texts/license.gpl" >texts/license_ru.gpl</file>
     </qresource>
     <qresource prefix="/project" >
+        <file>icons/project/add.png</file>
         <file>icons/project/clear.png</file>
         <file>icons/project/close.png</file>
         <file>icons/project/closeall.png</file>
@@ -80,11 +81,20 @@
         <file>icons/project/open.png</file>
         <file>icons/project/project.png</file>
         <file>icons/project/recents.png</file>
+        <file>icons/project/remove.png</file>
         <file>icons/project/save.png</file>
         <file>icons/project/saveall.png</file>
         <file>icons/project/settings.png</file>
-        <file>icons/project/add.png</file>
-        <file>icons/project/remove.png</file>
+    </qresource>
+    <qresource prefix="/stringlisteditor" >
+        <file>icons/stringlisteditor/add.png</file>
+        <file>icons/stringlisteditor/clear.png</file>
+        <file>icons/stringlisteditor/down.png</file>
+        <file>icons/stringlisteditor/edit.png</file>
+        <file>icons/stringlisteditor/file.png</file>
+        <file>icons/stringlisteditor/folder.png</file>
+        <file>icons/stringlisteditor/remove.png</file>
+        <file>icons/stringlisteditor/up.png</file>
     </qresource>
     <qresource prefix="/stylesheets" >
         <file>stylesheets/default.css</file>
