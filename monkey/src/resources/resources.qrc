@@ -86,15 +86,15 @@
         <file>icons/project/saveall.png</file>
         <file>icons/project/settings.png</file>
     </qresource>
-    <qresource prefix="/stringlisteditor" >
-        <file>icons/stringlisteditor/add.png</file>
-        <file>icons/stringlisteditor/clear.png</file>
-        <file>icons/stringlisteditor/down.png</file>
-        <file>icons/stringlisteditor/edit.png</file>
-        <file>icons/stringlisteditor/file.png</file>
-        <file>icons/stringlisteditor/folder.png</file>
-        <file>icons/stringlisteditor/remove.png</file>
-        <file>icons/stringlisteditor/up.png</file>
+    <qresource prefix="/listeditor" >
+        <file>icons/listeditor/add.png</file>
+        <file>icons/listeditor/clear.png</file>
+        <file>icons/listeditor/down.png</file>
+        <file>icons/listeditor/edit.png</file>
+        <file>icons/listeditor/file.png</file>
+        <file>icons/listeditor/folder.png</file>
+        <file>icons/listeditor/remove.png</file>
+        <file>icons/listeditor/up.png</file>
     </qresource>
     <qresource prefix="/stylesheets" >
         <file>stylesheets/default.css</file>

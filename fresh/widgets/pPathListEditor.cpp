@@ -7,7 +7,7 @@
 
 pPathListEditor::pPathListEditor( QWidget* p, const QString& t, const QString& pa ):
 	pFileListEditor( p, t, pa, QString() )
-{ findChild<QToolBar*>()->actions().last()->setIcon( QIcon( ":/stringlisteditor/icons/stringlisteditor/folder.png" ) ); }
+{ findChild<QToolBar*>()->actions().last()->setIcon( QIcon( ":/listeditor/icons/listeditor/folder.png" ) ); }
 
 void pPathListEditor::onAddItem()
 {

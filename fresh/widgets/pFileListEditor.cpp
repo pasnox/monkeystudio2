@@ -7,7 +7,7 @@
 
 pFileListEditor::pFileListEditor( QWidget* p, const QString& t, const QString& pa, const QString& f ):
 	pStringListEditor( p, t ), mPath( pa ), mFilter( f )
-{ findChild<QToolBar*>()->actions().last()->setIcon( QIcon( ":/stringlisteditor/icons/stringlisteditor/file.png" ) ); }
+{ findChild<QToolBar*>()->actions().last()->setIcon( QIcon( ":/listeditor/icons/listeditor/file.png" ) ); }
 
 void pFileListEditor::onAddItem()
 {

@@ -40,12 +40,12 @@ pStringListEditor::pStringListEditor( QWidget* p, const QString& t )
     vbox->addWidget( mList );
 	
 	// create actions
-	QAction* aAdd = new QAction( QIcon( ":/stringlisteditor/icons/stringlisteditor/add.png" ), tr( "Add Item" ), tb );
-	QAction* aRemove = new QAction( QIcon( ":/stringlisteditor/icons/stringlisteditor/remove.png" ), tr( "Remove Item" ), tb );
-	QAction* aClear = new QAction( QIcon( ":/stringlisteditor/icons/stringlisteditor/clear.png" ), tr( "Clear Items" ), tb );
-	QAction* aUp = new QAction( QIcon( ":/stringlisteditor/icons/stringlisteditor/up.png" ), tr( "Move Item Up" ), tb );
-	QAction* aDown = new QAction( QIcon( ":/stringlisteditor/icons/stringlisteditor/down.png" ), tr( "Move Item Down" ), tb );
-	QAction* aEdit = new QAction( QIcon( ":/stringlisteditor/icons/stringlisteditor/edit.png" ), tr( "Edit Item" ), tb );
+	QAction* aAdd = new QAction( QIcon( ":/listeditor/icons/listeditor/add.png" ), tr( "Add Item" ), tb );
+	QAction* aRemove = new QAction( QIcon( ":/listeditor/icons/listeditor/remove.png" ), tr( "Remove Item" ), tb );
+	QAction* aClear = new QAction( QIcon( ":/listeditor/icons/listeditor/clear.png" ), tr( "Clear Items" ), tb );
+	QAction* aUp = new QAction( QIcon( ":/listeditor/icons/listeditor/up.png" ), tr( "Move Item Up" ), tb );
+	QAction* aDown = new QAction( QIcon( ":/listeditor/icons/listeditor/down.png" ), tr( "Move Item Down" ), tb );
+	QAction* aEdit = new QAction( QIcon( ":/listeditor/icons/listeditor/edit.png" ), tr( "Edit Item" ), tb );
 	
 	// add actions to toolbar
 	tb->addAction( aAdd );
