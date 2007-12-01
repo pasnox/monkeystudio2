@@ -146,12 +146,7 @@
      </item>
      <item>
       <property name="text" >
-       <string>File Templates</string>
-      </property>
-     </item>
-     <item>
-      <property name="text" >
-       <string>File Headers</string>
+       <string>Templates</string>
       </property>
      </item>
      <item>
@@ -200,7 +195,7 @@
       </item>
       <item>
        <property name="text" >
-        <string>Special Characters</string>
+        <string>Eol &amp; Wrap Mode</string>
        </property>
       </item>
       <item>
@@ -475,103 +470,10 @@
         </widget>
        </item>
        <item rowspan="2" row="2" column="1" >
-        <widget class="QGroupBox" name="gbOperators" >
+        <widget class="pStringListEditor" name="gbOperators" >
          <property name="title" >
           <string>&amp;Operators</string>
          </property>
-         <layout class="QGridLayout" >
-          <property name="leftMargin" >
-           <number>5</number>
-          </property>
-          <property name="topMargin" >
-           <number>5</number>
-          </property>
-          <property name="rightMargin" >
-           <number>5</number>
-          </property>
-          <property name="bottomMargin" >
-           <number>5</number>
-          </property>
-          <property name="horizontalSpacing" >
-           <number>3</number>
-          </property>
-          <property name="verticalSpacing" >
-           <number>3</number>
-          </property>
-          <item row="0" column="5" >
-           <spacer>
-            <property name="orientation" >
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" >
-             <size>
-              <width>331</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="0" column="3" >
-           <widget class="QToolButton" name="tbUpOperator" >
-            <property name="text" >
-             <string>Up</string>
-            </property>
-            <property name="icon" >
-             <iconset resource="../../resources/resources.qrc" >:/tools/icons/tools/up.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="4" >
-           <widget class="QToolButton" name="tbDownOperator" >
-            <property name="text" >
-             <string>Down</string>
-            </property>
-            <property name="icon" >
-             <iconset resource="../../resources/resources.qrc" >:/tools/icons/tools/down.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1" >
-           <widget class="QToolButton" name="tbRemoveOperator" >
-            <property name="text" >
-             <string>Remove</string>
-            </property>
-            <property name="icon" >
-             <iconset resource="../../resources/resources.qrc" >:/tools/icons/tools/remove.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0" >
-           <widget class="QToolButton" name="tbAddOperator" >
-            <property name="text" >
-             <string>Add</string>
-            </property>
-            <property name="icon" >
-             <iconset resource="../../resources/resources.qrc" >:/tools/icons/tools/add.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2" >
-           <widget class="QToolButton" name="tbClearOperators" >
-            <property name="text" >
-             <string>Clear</string>
-            </property>
-            <property name="icon" >
-             <iconset resource="../../resources/resources.qrc" >:/tools/icons/tools/update.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" colspan="6" >
-           <widget class="QListWidget" name="lwOperators" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Expanding" hsizetype="Ignored" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
-          </item>
-         </layout>
         </widget>
        </item>
        <item row="3" column="0" >
@@ -636,151 +538,6 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="pFileTemplates" >
-      <layout class="QGridLayout" >
-       <property name="leftMargin" >
-        <number>0</number>
-       </property>
-       <property name="topMargin" >
-        <number>0</number>
-       </property>
-       <property name="rightMargin" >
-        <number>0</number>
-       </property>
-       <property name="bottomMargin" >
-        <number>0</number>
-       </property>
-       <property name="horizontalSpacing" >
-        <number>3</number>
-       </property>
-       <property name="verticalSpacing" >
-        <number>3</number>
-       </property>
-       <item row="0" column="0" colspan="5" >
-        <layout class="QHBoxLayout" >
-         <property name="spacing" >
-          <number>3</number>
-         </property>
-         <property name="leftMargin" >
-          <number>0</number>
-         </property>
-         <property name="topMargin" >
-          <number>0</number>
-         </property>
-         <property name="rightMargin" >
-          <number>0</number>
-         </property>
-         <property name="bottomMargin" >
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="lTemplatesPath" >
-           <property name="text" >
-            <string>Templates path :</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="leTemplatesPath" >
-           <property name="text" >
-            <string>%HOME%/.Monkey Studio/Templates</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="tbTemplatesPath" >
-           <property name="text" >
-            <string>...</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="1" column="0" colspan="5" >
-        <widget class="QTreeWidget" name="twTemplatesType" >
-         <property name="editTriggers" >
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-         <property name="alternatingRowColors" >
-          <bool>true</bool>
-         </property>
-         <property name="rootIsDecorated" >
-          <bool>false</bool>
-         </property>
-         <property name="itemsExpandable" >
-          <bool>false</bool>
-         </property>
-         <property name="allColumnsShowFocus" >
-          <bool>true</bool>
-         </property>
-         <column>
-          <property name="text" >
-           <string>Language</string>
-          </property>
-         </column>
-         <column>
-          <property name="text" >
-           <string>Name</string>
-          </property>
-         </column>
-         <column>
-          <property name="text" >
-           <string>Description</string>
-          </property>
-         </column>
-         <column>
-          <property name="text" >
-           <string>Type</string>
-          </property>
-         </column>
-        </widget>
-       </item>
-       <item row="2" column="0" >
-        <widget class="QPushButton" name="pbAddTemplateType" >
-         <property name="text" >
-          <string>New Type...</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1" >
-        <widget class="QPushButton" name="pbEditTemplateType" >
-         <property name="text" >
-          <string>Edit Type...</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2" >
-        <widget class="QPushButton" name="pbRemoveTemplateType" >
-         <property name="text" >
-          <string>Remove Type</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="3" >
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType" >
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>30</width>
-           <height>16</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="2" column="4" >
-        <widget class="QPushButton" name="pbEditTemplate" >
-         <property name="text" >
-          <string>Edit Template</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
      <widget class="QWidget" name="pFileHeaders" >
       <layout class="QVBoxLayout" >
        <property name="spacing" >
@@ -799,9 +556,16 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QGroupBox" name="gbFileHeaders" >
+        <widget class="pPathListEditor" name="pleTemplatesPaths" >
          <property name="title" >
-          <string>File Headers</string>
+          <string>Templates Paths</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="gbTemplatesHeaders" >
+         <property name="title" >
+          <string>Templates Headers</string>
          </property>
          <layout class="QGridLayout" >
           <property name="leftMargin" >
@@ -3812,6 +3576,20 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>pPathListEditor</class>
+   <extends>QGroupBox</extends>
+   <header>pPathListEditor.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>pStringListEditor</class>
+   <extends>QGroupBox</extends>
+   <header>pStringListEditor.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>dbbButtons</tabstop>
  </tabstops>

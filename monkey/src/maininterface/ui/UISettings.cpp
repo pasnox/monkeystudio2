@@ -46,7 +46,7 @@ UISettings::UISettings( QWidget* p )
 {
 	setupUi( this );
 	setAttribute( Qt::WA_DeleteOnClose );
-	twMenu->topLevelItem( 3 )->setExpanded( true );
+	twMenu->topLevelItem( 2 )->setExpanded( true );
 	twMenu->setCurrentItem( twMenu->topLevelItem( 0 ) );
 
 	QStringList l;
@@ -64,10 +64,6 @@ UISettings::UISettings( QWidget* p )
 	cbTabModes->addItem( tr( "SDI" ), pTabbedWorkspace::tmSDI );
 	cbTabModes->addItem( tr( "MDI" ), pTabbedWorkspace::tmMDI );
 	cbTabModes->addItem( tr( "Top Level" ), pTabbedWorkspace::tmTopLevel );
-
-	// resize column
-	twTemplatesType->setColumnWidth( 0, 100 );
-	twTemplatesType->setColumnWidth( 1, 100 );
 
 	// loads text codecs
 	cbDefaultEncoding->addItems( availableTextCodecs() );
@@ -212,15 +208,12 @@ void UISettings::loadSettings()
 	bgExternalChanges->button( externalchanges() )->setChecked( true );
 	cbSaveSession->setChecked( saveSessionOnClose() );
 	cbRestoreSession->setChecked( restoreSessionOnStartup() );
-	lwOperators->addItems( availableOperators() );
-	foreach ( QListWidgetItem* it, lwOperators->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
-		it->setFlags( it->flags() | Qt::ItemIsEditable );
+	gbOperators->setValues( availableOperators() );
 
-	// File Templates
+	// Templates
 	pTemplatesManager* tm = pTemplatesManager::instance();
-	leTemplatesPath->setText( tm->templatesPath().value( 0 ) );
-	
-	// File Headers
+	pleTemplatesPaths->setValues( tm->templatesPath() );
+	// Headers
 	for ( int i = 0; i < cbFileHeadersLanguages->count(); i++ )
 		cbFileHeadersLanguages->setItemData( i, tm->templatesHeader( cbFileHeadersLanguages->itemText( i ) ) );
 	teFileHeader->setPlainText( cbFileHeadersLanguages->itemData( cbFileHeadersLanguages->currentIndex() ).toString() );
@@ -381,19 +374,14 @@ void UISettings::saveSettings()
 	setExternalChanges( (pMonkeyStudio::ExternalChangesMode)bgExternalChanges->checkedId() );
 	setSaveSessionOnClose( cbSaveSession->isChecked() );
 	setRestoreSessionOnStartup( cbRestoreSession->isChecked() );
-	foreach ( QListWidgetItem* it, lwOperators->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
-		sp.append( QString( "%1;" ).arg( it->text() ) );
-	setAvailableOperators( sp.split( ";", QString::SkipEmptyParts ) );
+	setAvailableOperators( gbOperators->values() );
 
-	// File Templates
+	// Templates
 	sp = "Templates";
-	// remove key
-	s->remove( sp );
 	// default templates path
 	pTemplatesManager* tm = pTemplatesManager::instance();
-	tm->setTemplatesPath( QStringList( leTemplatesPath->text() ) );
-	
-	// File Headers
+	tm->setTemplatesPath( pleTemplatesPaths->values() );
+	// Headers
 	for ( int i = 0; i < cbFileHeadersLanguages->count(); i++ )
 		tm->setTemplatesHeader( cbFileHeadersLanguages->itemText( i ), cbFileHeadersLanguages->itemData( i ).toString() );
 
@@ -548,7 +536,6 @@ void UISettings::on_twMenu_itemSelectionChanged()
 				case 0:
 				case 1:
 				case 2:
-				case 3:
 					swPages->setCurrentIndex( i );
 					break;
 				default:
@@ -557,7 +544,7 @@ void UISettings::on_twMenu_itemSelectionChanged()
 			}
 		}
 		else
-			swPages->setCurrentIndex( it->parent()->indexOfChild( it ) +3 );
+			swPages->setCurrentIndex( it->parent()->indexOfChild( it ) +2 );
 	}
 }
 
@@ -566,82 +553,6 @@ void UISettings::on_tbDefaultProjectsDirectory_clicked()
 	QString s = QFileDialog::getExistingDirectory( window(), tr( "Select default projects directory" ), leDefaultProjectsDirectory->text() );
 	if ( !s.isNull() )
 		leDefaultProjectsDirectory->setText( s );
-}
-
-void UISettings::on_tbAddOperator_clicked()
-{
-	lwOperators->addItem( tr( "New Operator" ) );
-	QListWidgetItem* it = lwOperators->item( lwOperators->count() -1 );
-	lwOperators->setCurrentItem( it );
-	lwOperators->scrollToItem( it );
-	it->setFlags( it->flags() | Qt::ItemIsEditable );
-}
-
-void UISettings::on_tbRemoveOperator_clicked()
-{ delete lwOperators->selectedItems().value( 0 ); }
-
-void UISettings::on_tbClearOperators_clicked()
-{ lwOperators->clear(); }
-
-void UISettings::on_tbUpOperator_clicked()
-{
-	if ( QListWidgetItem* it = lwOperators->selectedItems().value( 0 ) )
-	{
-		int i = lwOperators->row( it );
-		if ( i != 0 )
-			lwOperators->insertItem( i -1, lwOperators->takeItem( i ) );
-		lwOperators->setCurrentItem( it );
-	}
-}
-
-void UISettings::on_tbDownOperator_clicked()
-{
-	if ( QListWidgetItem* it = lwOperators->selectedItems().value( 0 ) )
-	{
-		int i = lwOperators->row( it );
-		if ( i != lwOperators->count() -1 )
-			lwOperators->insertItem( i +1, lwOperators->takeItem( i ) );
-		lwOperators->setCurrentItem( it );
-	}
-}
-
-void UISettings::on_tbTemplatesPath_clicked()
-{
-	const QString d = unTokenizeHome( leTemplatesPath->text() );
-	QString s = getExistingDirectory( tr( "Select default templates directory" ), d, window() );
-	if ( !s.isNull() )
-	{
-		if ( s.endsWith( "/" ) )
-			s.chop( 1 );
-		leTemplatesPath->setText( tokenizeHome( s ) );
-		// update existing items
-		for ( int i = 0; i < twTemplatesType->topLevelItemCount(); i++ )
-		{
-			QTreeWidgetItem* it = twTemplatesType->topLevelItem( i );
-			// icon file
-			it->setData( 0, Qt::UserRole, it->data( 0, Qt::UserRole ).toString().replace( d, s ) );
-			it->setData( 0, Qt::UserRole +1, it->data( 0, Qt::UserRole +1 ).toStringList().replaceInStrings( d, s ) );
-		}
-	}
-}
-
-void UISettings::on_pbAddTemplateType_clicked()
-{ /*UIEditTemplate::edit( twTemplatesType, 0 );*/ }
-
-void UISettings::on_pbEditTemplateType_clicked()
-{ /*UIEditTemplate::edit( twTemplatesType, twTemplatesType->selectedItems().value( 0 ) );*/ }
-
-void UISettings::on_pbRemoveTemplateType_clicked()
-{ delete twTemplatesType->selectedItems().value( 0 ); }
-
-void UISettings::on_pbEditTemplate_clicked()
-{
-	// get item
-	QTreeWidgetItem* it = twTemplatesType->selectedItems().value( 0 );
-	// open template file
-	if ( it )
-		foreach ( QString s, it->data( 0, Qt::UserRole +1 ).toStringList() )
-			pFileManager::instance()->openFile( s );
 }
 
 void UISettings::on_cbFileHeadersLanguages_highlighted( int )
