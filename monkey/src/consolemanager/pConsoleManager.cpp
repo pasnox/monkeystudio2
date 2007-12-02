@@ -157,7 +157,6 @@ void pConsoleManager::finished( int i, QProcess::ExitStatus e )
 	mNotParsed = "\n"; // For perfomance issues
 }
 
-#include <QDebug>
 void pConsoleManager::readyRead()
 {
 	// get data
@@ -169,16 +168,14 @@ void pConsoleManager::readyRead()
 	// try parse output
 	if ( c.isValid() )
 	{
-		qDebug () << mCurrentParsers;
 		/*Alrorithm is not ideal, need fix, if will be problems with it
 		  Some text, that next parser possible to parse, can be removed
-		  And, possible, it's not idealy quick
+		  And, possible, it's not idealy quick.   hlamer
 		*/
 		
 		// read complete lines
 		while ( mBuffer.canReadLine() )
 		{
-			qDebug () << "Can read line";
 			mNotParsed.append ( QString::fromLocal8Bit (mBuffer.readLine()));
 			int size = mNotParsed.size();
 			if (size >MAX_LENGTH)

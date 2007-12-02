@@ -14,27 +14,27 @@ public:
 		{
 			{
 				//Error in the file/line
-				QRegExp("\\n((\\w+/)?([\\w.]+)):(\\d+):(\\d+:)?\\serror:\\s([^\\n]+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
-				"%1", //file name
-				"%5", //column
-				"%6", //row
+				QRegExp("(\\n[\\w\\./]+\\.\\w+: In [\\w\\s]+ '.+':)?\\n(([[^\\n]]+/)?([\\w.]+)):(\\d+):(\\d+:)?\\serror:\\s([^\\n]+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				"%2", //file name
+				"%6", //column
+				"%7", //row
 				pConsoleManager::stError, //type
-				"%3:%4: %6", //text
+				"%4:%5: %7", //text
 				"%0", //full text
 			},
 			{
 				//Warning in the file/line
-				QRegExp("\\n((\\w+/)?([\\w.]+)):(\\d+):(\\d+:)?\\swarning:\\s([^\\n]+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
-				"%1", //file name
-				"%5", //column
-				"%4", //row
+				QRegExp("(\\n[\\w\\./]+\\.\\w+: In [\\w\\s]+ '.+':)?\\n(([^\\n]+/)?([\\w.]+)):(\\d+):(\\d+:)?\\swarning:\\s([^\\n]+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				"%2", //file name
+				"%6", //column
+				"%5", //row
 				pConsoleManager::stWarning, //type
-				"%3:%4: %6", //text
+				"%4:%5: %7", //text
 				"%0" //full text
 			},
 			{
 				//Building file
-				QRegExp("\\ng\\+\\+\\s+\\-c\\s\\w+([^\\s]+\\.cpp)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				QRegExp("\\n[gc]\\+\\+ .+ (.+\\.\\w+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
 				"%1", //file name
 				"0", //column
 				"0", //row
@@ -53,23 +53,13 @@ public:
 				"%0" //full text
 			},
 			{
-				//Undedined reference in the function
-				QRegExp("\\n\\w*(In\\sfunction\\s\\w*:\\w*:).+(\\sundefined\\sreference\\sto[^\\n]+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
-				"", //file name
-				"0", //column
+				//Undedined reference 
+				QRegExp("\\n[\\w\\./]+\\.o: (In function `.+':)\\n[\\w\\./]*/([\\w\\.]+):(\\d+): (undefined reference to `.+'\\n)", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				"%2", //file name
+				"%3", //column
 				"0", //row
 				pConsoleManager::stError, //type
-				"%1%2", //text
-				"%0" //full text
-			},
-			{
-				//Undedined reference in the module
-				QRegExp("\\n[\\w\\./]+\\.o: In function `.+':\\n([\\w\\.]+):(\\d+):\\s(undefined reference to `.+')", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
-				"%1", //file name
-				"%2", //column
-				"0", //row
-				pConsoleManager::stError, //type
-				"%3", //text
+				"%1 %4", //text
 				"%0" //full text
 			},
 			{

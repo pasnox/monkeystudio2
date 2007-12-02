@@ -1,6 +1,6 @@
 #include "pCommandParser.h"
 
-#define PARSERS_DEBUG 1
+#define PARSERS_DEBUG 0
 
 pCommandParser::~pCommandParser()
 {
@@ -41,10 +41,19 @@ bool pCommandParser::processParsing(QString& buf)
             m.mFullText = replaceWithMatch(p.regExp,p.FullText);
             // emit signal
             emit newStepAvailable( m );
-            buf.remove (0, p.regExp.pos()+p.regExp.cap().size());
+            buf.remove (0, p.regExp.pos()+p.regExp.cap().size()-1); // Not remove \n
+#if PARSERS_DEBUG
+			qDebug () << "Returning true";
+#endif
             return true;
         }
+#if PARSERS_DEBUG
+			qDebug () << "Not matching";
+#endif
 	}
+#if PARSERS_DEBUG
+	qDebug () << "Returning false";
+#endif
     return false;
 }
 
@@ -61,6 +70,8 @@ QString pCommandParser::replaceWithMatch(QRegExp& rex, QString s)
 		QString cap = rex.cap(QString(s[i+1]).toInt());
 		if (cap.startsWith ("\n"))
 			cap.remove (0,1);
+		if (cap.endsWith ("\n"))
+			cap.chop(1);
         s.replace (i,2,cap);
 	}
     return s;
