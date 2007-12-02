@@ -12,6 +12,7 @@
 #include "QDesignerObjectInspector.h"
 #include "QDesignerSignalSlotEditor.h"
 
+#include <QKeyEvent>
 #include <QVBoxLayout>
 #include <QToolBar>
 #include <QAction>
@@ -210,11 +211,19 @@ QDesignerFormWindowInterface* QtDesignerChild::createForm()
 
 bool QtDesignerChild::eventFilter( QObject* o, QEvent* e )
 {
-	if ( o && e->type() == QEvent::Close )
+	if ( o )
+	{
 		if ( QDesignerFormWindowInterface* w = qobject_cast<QDesignerFormWindowInterface*>( o ) )
-			if ( w->property( "askSave" ).toBool() && w->isDirty() )
-				if ( question( tr( "Form Modified..." ), tr( "The form has been modified, do you want to save it ?" ), window() ) )
-					saveFile( w->fileName() );
+		{
+			if ( e->type() == QEvent::Close )
+				if ( w->property( "askSave" ).toBool() && w->isDirty() )
+					if ( question( tr( "Form Modified..." ), tr( "The form has been modified, do you want to save it ?" ), window() ) )
+						saveFile( w->fileName() );
+		}
+		else if ( e->type() == QEvent::KeyPress )
+			if ( static_cast<QKeyEvent*>( e )->key() == Qt::Key_Escape )
+				qobject_cast<QWidget*>( o )->close();
+	}
 	return pAbstractChild::eventFilter( o, e );
 }
 
@@ -295,12 +304,16 @@ void QtDesignerChild::previewCurrentForm()
 		// create form
 		QWidget* f = QFormBuilder().load( &b );
 		
+		// delete on close
+		f->setAttribute( Qt::WA_DeleteOnClose );
+		
 		// set flags
-#ifdef Q_WS_WIN
-		Qt::WindowFlags wf = ( f->windowType() == Qt::Window ) ? Qt::Window | Qt::WindowMaximizeButtonHint : Qt::Dialog;
-#else
-		Qt::WindowFlags wf = Qt::Dialog;
-#endif
+		/*
+		Qt::WindowFlags wf = Qt::Window | Qt::WindowSystemMenuHint;
+		if ( f->windowType() == Qt::Window )
+			wf |= Qt::WindowMaximizeButtonHint;
+		*/
+#ifdef Q_WS_WIN		Qt::WindowFlags wf = ( f->windowType() == Qt::Window ) ? Qt::Window | Qt::WindowMaximizeButtonHint : Qt::Dialog;#else		Qt::WindowFlags wf = Qt::Dialog;#endif
 		
 		// set parent
 		f->setParent( mArea->activeSubWindow(), wf );
@@ -309,7 +322,6 @@ void QtDesignerChild::previewCurrentForm()
 		f->setWindowModality( Qt::ApplicationModal );
 		
 		// set position
-		f->setAttribute( Qt::WA_DeleteOnClose );
 		f->move( w->mapToGlobal( QPoint( 10, 10) ) );
 		
 		// track escape key
