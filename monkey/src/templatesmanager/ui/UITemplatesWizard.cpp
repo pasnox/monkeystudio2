@@ -65,6 +65,7 @@ void UITemplatesWizard::onFiltersChanged()
 	// get combobox text
 	QString t = cbTypes->currentText();
 	QString l = cbLanguages->currentText();
+	QString i;
 
 	// clear lwTemplates
 	lwTemplates->clear();
@@ -76,7 +77,15 @@ void UITemplatesWizard::onFiltersChanged()
 			( t == "All" || tp.Type == t || tp.Type == "All" ) )
 		{
 			QListWidgetItem* it = new QListWidgetItem( lwTemplates );
-			it->setIcon( QIcon( tp.Icon.isEmpty() ? ":/templates/icons/templates/empty.png" : ( tp.DirPath +tp.Icon ) ) );
+			i = ":/templates/icons/templates/empty.png";
+			if ( !tp.Icon.isEmpty() )
+			{
+				if ( QFile::exists( tp.DirPath +tp.Icon ) )
+					i = tp.DirPath +tp.Icon;
+				else if ( QFile::exists( ":/templates/icons/templates/" +tp.Icon ) )
+					i = ":/templates/icons/templates/" +tp.Icon;
+			}
+			it->setIcon( QIcon( i ) );
 			it->setToolTip( tp.Description );
 			it->setText( tp.Name );
 			it->setData( Qt::UserRole +1, mTemplates.indexOf( tp ) );
