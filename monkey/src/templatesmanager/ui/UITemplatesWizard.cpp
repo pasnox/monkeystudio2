@@ -178,8 +178,19 @@ void UITemplatesWizard::on_pbCreate_clicked()
         t.ProjectsToOpen.clear();
     }
 	
+	// check if need add files
+	if ( !cbAddToProject->isChecked() || !cbProjects->currentIndex().isValid() )
+		t.FilesToAdd.clear();
+	
+	// don t open project, because adding it to a parent will auto matically open it
+	if ( !t.FilesToAdd.isEmpty() )
+		t.ProjectsToOpen.clear();
+	
+	// get proejct to add
+	ProjectItem* si = t.FilesToAdd.isEmpty() ? 0 : mProjects->itemFromIndex( mProjects->scopesProxy()->mapToSource( cbProjects->currentIndex() ) );
+	
 	// process templates
-	if ( !pTemplatesManager::instance()->realiseTemplate( t, v ) )
+	if ( !pTemplatesManager::instance()->realiseTemplate( si, cbOperators->currentText(), t, v ) )
 		return;
 	
     // remember some infos

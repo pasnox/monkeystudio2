@@ -11,8 +11,7 @@
 #include "pSettings.h"
 #include "pMonkeyStudio.h"
 #include "pFileManager.h"
-
-//#include <QHash>
+#include "ProjectItem.h"
 
 using namespace pMonkeyStudio;
 
@@ -91,6 +90,7 @@ pTemplate pTemplatesManager::getTemplate( const QString& s )
 	t.Files = set.value( "Files" ).toStringList();
 	t.FilesToOpen = set.value( "FilesToOpen" ).toStringList();
 	t.ProjectsToOpen = set.value( "ProjectsToOpen" ).toStringList();
+	t.FilesToAdd = set.value( "FilesToAdd" ).toStringList();
 	t.Variables = VarList();
 	
 	// set template vars
@@ -110,7 +110,7 @@ TemplateList pTemplatesManager::getTemplates()
 	return l;
 }
 
-bool pTemplatesManager::realiseTemplate( const pTemplate& t, const VariablesManager::Dictionary& d )
+bool pTemplatesManager::realiseTemplate( ProjectItem* it, const QString& o, const pTemplate& t, const VariablesManager::Dictionary& d )
 {
 	// get destination
 	QString dest = d["Destination"];
@@ -137,11 +137,13 @@ bool pTemplatesManager::realiseTemplate( const pTemplate& t, const VariablesMana
 		dest.append( '/' );
 	
 	// replace values in files/projects to open
-	QStringList fo, po;
+	QStringList fo, po, fa;
 	for ( int i = 0; i < t.FilesToOpen.count(); i++ )
 		fo << VariablesManager::instance()->replaceAllVariables( t.FilesToOpen.at( i ), d );
 	for ( int i = 0; i < t.ProjectsToOpen.count(); i++ )
 		po << VariablesManager::instance()->replaceAllVariables( t.ProjectsToOpen.at( i ), d );
+	for ( int i = 0; i < t.FilesToAdd.count(); i++ )
+		fa << VariablesManager::instance()->replaceAllVariables( t.FilesToAdd.at( i ), d );
 	
 	// get files
 	QHash<QString, QString> files;
@@ -226,6 +228,10 @@ bool pTemplatesManager::realiseTemplate( const pTemplate& t, const VariablesMana
             pFileManager::instance()->openFile( s );
         if ( po.contains( files[f] ) )
             pFileManager::instance()->openProject( s );
+		
+		// add files to project if needed
+		if ( it )
+			it->project()->addExistingFile( s, it, o );
 	}
 	
 	// return process state

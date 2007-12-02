@@ -17,6 +17,8 @@
 #include <QApplication>
 #include <QStringList>
 
+class ProjectItem;
+
 typedef QHash <QString, QStringList> VarList;
 
 /*
@@ -35,13 +37,14 @@ struct Q_MONKEY_EXPORT pTemplate
     QStringList Files;
     QStringList FilesToOpen;
     QStringList ProjectsToOpen;
+	QStringList FilesToAdd;
     VarList Variables;
 	
 	bool operator==( const pTemplate& t )
 	{ return Name == t.Name && Language == t.Language && Type == t.Type &&
 			Description == t.Description && Icon == t.Icon && Script == t.Script &&
 			DirPath == t.DirPath && Files == t.Files && FilesToOpen == t.FilesToOpen &&
-			ProjectsToOpen == t.ProjectsToOpen && Variables == t.Variables; }
+			ProjectsToOpen == t.ProjectsToOpen && FilesToAdd == t.FilesToAdd && Variables == t.Variables; }
 
 };
 
@@ -66,7 +69,7 @@ public:
 	pTemplate getTemplate( const QString& );
 	TemplateList getTemplates();
 
-	bool realiseTemplate( const pTemplate&, const VariablesManager::Dictionary& = VariablesManager::Dictionary() );
+	bool realiseTemplate( ProjectItem*, const QString&, const pTemplate&, const VariablesManager::Dictionary& = VariablesManager::Dictionary() );
     
 };
 
