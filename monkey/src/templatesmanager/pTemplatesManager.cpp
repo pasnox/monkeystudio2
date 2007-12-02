@@ -60,12 +60,14 @@ QString pTemplatesManager::defaultTemplatesHeader( const QString& l ) const
 				"**\n"
 				"****************************************************************************/\n" );
 	
-	if ( l == "HTML" )
+	if ( l == "C++" )
+	{}
+	else if ( l == "HTML" )
 	{
 		s.prepend( "<!--\n" );
 		s.append( "-->\n" );
 	}
-	else if ( l != "C++" )
+	else
 		s.clear();
 	
 	// default
@@ -134,27 +136,47 @@ bool pTemplatesManager::realiseTemplate( const pTemplate& t, const VariablesMana
 	if ( !dest.endsWith( "/" ) )
 		dest.append( '/' );
 	
+	// replace values in files/projects to open
+	QStringList fo, po;
+	for ( int i = 0; i < t.FilesToOpen.count(); i++ )
+		fo << VariablesManager::instance()->replaceAllVariables( t.FilesToOpen.at( i ), d );
+	for ( int i = 0; i < t.ProjectsToOpen.count(); i++ )
+		po << VariablesManager::instance()->replaceAllVariables( t.ProjectsToOpen.at( i ), d );
+	
 	// get files
 	QHash<QString, QString> files;
 	foreach( QString f, t.Files )
 	{
+		// check if sources and destination are differents
+		QString sf, df;
+		sf = f;
+		df = f;
+		if ( f.contains( '|' ) )
+		{
+			sf = f.section( '|', 0, 0 );
+			df = f.section( '|', 1, 1 );
+		}
+		
 		// process variables
-		QString s = VariablesManager::instance()->replaceAllVariables( f, d );
+		QString s = VariablesManager::instance()->replaceAllVariables( df, d );
 		
 		// check value validity
 		if ( s.isEmpty() )
 		{
-			warning( tr( "Error..." ), tr( "Empty filename detected for file %1" ).arg( f ) );
+			warning( tr( "Error..." ), tr( "Empty filename detected for file %1" ).arg( sf ) );
 			return false;
 		}
 		
 		// append file to list
-		files[f] = s;
+		files[sf] = s;
 	}
 	
 	// create files
 	foreach( QString f, files.keys() )
 	{
+		// get source file
+		QString k = QFile::exists( QString( "%1%2" ).arg( t.DirPath, f ) ) ? f : VariablesManager::instance()->replaceAllVariables( f, d );
+		
 		// get file name
 		QString s = QString( "%1%2" ).arg( dest, files[f] );
 		
@@ -170,9 +192,9 @@ bool pTemplatesManager::realiseTemplate( const pTemplate& t, const VariablesMana
 		}
 		
 		// copy file
-		if ( !QFile::copy( QString( "%1%2" ).arg( t.DirPath, f ), s ) )
+		if ( !QFile::copy( QString( "%1%2" ).arg( t.DirPath, k ), s ) )
 		{
-			warning( tr( "Error..." ), tr( "Can't copy '%1%2' to '%3'" ).arg( t.DirPath, f, s ) );
+			warning( tr( "Error..." ), tr( "Can't copy '%1%2' to '%3'" ).arg( t.DirPath, k, s ) );
 			return false;
 		}
 		
@@ -188,7 +210,7 @@ bool pTemplatesManager::realiseTemplate( const pTemplate& t, const VariablesMana
 		QString c = QString::fromLocal8Bit( file.readAll() );
 		
 		// add header licensing
-		c.prepend( templatesHeader( t.Language ) );
+		//c.prepend( templatesHeader( t.Language ) );
 		
 		// reset file
 		file.resize( 0 );
@@ -200,9 +222,9 @@ bool pTemplatesManager::realiseTemplate( const pTemplate& t, const VariablesMana
 		file.close();
 		
 		// open files if needed
-        if ( t.FilesToOpen.contains( f ) )
+        if ( fo.contains( files[f] ) )
             pFileManager::instance()->openFile( s );
-        if ( t.ProjectsToOpen.contains( f ) )
+        if ( po.contains( files[f] ) )
             pFileManager::instance()->openProject( s );
 	}
 	
