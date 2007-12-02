@@ -109,6 +109,7 @@
     </qresource>
     <qresource prefix="/templates" >
         <file>icons/templates/console.png</file>
+        <file>icons/templates/dll.png</file>
         <file>icons/templates/empty.png</file>
         <file>icons/templates/misc.png</file>
         <file>icons/templates/namespace.png</file>
