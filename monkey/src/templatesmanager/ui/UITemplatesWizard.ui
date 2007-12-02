@@ -5,18 +5,18 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>497</width>
-    <height>474</height>
+    <width>640</width>
+    <height>480</height>
    </rect>
-  </property>
-  <property name="sizePolicy" >
-   <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
   </property>
   <property name="windowTitle" >
    <string>Templates Wizard</string>
+  </property>
+  <property name="windowIcon" >
+   <iconset resource="../../resources/resources.qrc" >:/file/icons/file/new.png</iconset>
+  </property>
+  <property name="sizeGripEnabled" >
+   <bool>false</bool>
   </property>
   <layout class="QVBoxLayout" >
    <property name="spacing" >
@@ -67,12 +67,6 @@
      </item>
      <item>
       <widget class="QComboBox" name="cbLanguages" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="toolTip" >
         <string>Choose the language in witch you want to pick templates</string>
        </property>
@@ -86,14 +80,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="cbTypes" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-      </widget>
+      <widget class="QComboBox" name="cbTypes" />
      </item>
     </layout>
    </item>

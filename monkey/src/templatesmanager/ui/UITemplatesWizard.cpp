@@ -93,6 +93,7 @@ void UITemplatesWizard::onFiltersChanged()
 	}
 
 	// disable groupbox
+	lInformations->setText( "No Template Selected" );
 	gbInformations->setEnabled( false );
 }
 
@@ -104,10 +105,14 @@ void UITemplatesWizard::on_lwTemplates_itemPressed( QListWidgetItem* it )
 	qDeleteAll( mCombos );
 	mCombos.clear();
 	
-	// create labels/combos
+	// get template
 	pTemplate t = mTemplates.value( it->data( Qt::UserRole +1 ).toInt() );
 	int r = 1;
 	
+	// set template informations
+	lInformations->setText( t.Description );
+	
+	// create labels/combos
 	foreach( QString v, t.Variables.keys() )
 	{
 		QComboBox* c = new QComboBox();
