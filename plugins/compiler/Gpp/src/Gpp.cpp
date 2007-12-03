@@ -71,7 +71,7 @@ QWidget* Gpp::settingsWidget()
 }
 
 pCommand Gpp::defaultCompileCommand() const
-{ return pCommand( "Compile Current File", "g++", "-w $cf$", false, QStringList( "GccParser" ), "$cfp$" ); }
+{ return pCommand( "Compile Current File", "g++", "-w \"$cf$\"", false, QStringList( "GccParser" ), "$cfp$" ); }
 
 pCommand Gpp::compileCommand() const
 {
@@ -161,7 +161,7 @@ void Gpp::setUserCommands( const pCommandList& l ) const
 void Gpp::commandTriggered()
 {
 	pConsoleManager* cm = pConsoleManager::instance();
-	pCommandList l = userCommands();
+	pCommandList l = userCommands() << compileCommand();
 	if ( QAction* a = qobject_cast<QAction*>( sender() ) )
 		cm->addCommands( cm->recursiveCommandList( l, cm->getCommand( l, a->statusTip() ) ) );
 }

@@ -71,7 +71,7 @@ QWidget* Gcc::settingsWidget()
 }
 
 pCommand Gcc::defaultCompileCommand() const
-{ return pCommand( "Compile Current File", "gcc", "-w $cf$", false, QStringList( "GccParser" ), "$cfp$" ); }
+{ return pCommand( "Compile Current File", "gcc", "-w \"$cf$\"", false, QStringList( "GccParser" ), "$cfp$" ); }
 
 pCommand Gcc::compileCommand() const
 {
@@ -161,7 +161,7 @@ void Gcc::setUserCommands( const pCommandList& l ) const
 void Gcc::commandTriggered()
 {
 	pConsoleManager* cm = pConsoleManager::instance();
-	pCommandList l = userCommands();
+	pCommandList l = userCommands() << compileCommand();
 	if ( QAction* a = qobject_cast<QAction*>( sender() ) )
 		cm->addCommands( cm->recursiveCommandList( l, cm->getCommand( l, a->statusTip() ) ) );
 }
