@@ -75,7 +75,7 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	
 	// dir model
 	mDirModel = new QDirModel;
-	mDirModel->setFilter( QDir::AllEntries | QDir::Readable | QDir::Hidden | QDir::CaseSensitive | QDir::NoDotAndDotDot );
+	mDirModel->setFilter( QDir::AllEntries | QDir::Readable | QDir::CaseSensitive | QDir::NoDotAndDotDot);
 	mDirModel->setSorting( QDir::DirsFirst | QDir::Name );
 	
 	// assign model to views
