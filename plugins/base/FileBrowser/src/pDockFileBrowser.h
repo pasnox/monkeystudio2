@@ -1,7 +1,7 @@
 /****************************************************************************
 **
 ** 		Created using Monkey Studio v1.7.0
-** Author    : Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>
+** Author    : Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, Kopats Andei aka hlamer <hlamer@tut.by>
 ** Project   : FileBrowser Plugin
 ** FileName  : pDockFileBrowser.h
 ** Date      : 2007-08-27T23:00:25
@@ -24,6 +24,7 @@ class QComboBox;
 class QLineEdit;
 class QListView;
 class QDirModel;
+class QTreeView;
 
 class pDockFileBrowser : public QDockWidget, public QSingleton<pDockFileBrowser>
 {
@@ -43,8 +44,10 @@ protected:
 	bool mShown;
 	QComboBox* mComboBox;
 	QLineEdit* mLineEdit;
-	QListView* mListView;
-	QDirModel* mDirModel;
+	QListView* mDirs;
+	QTreeView* mFiles;
+	QDirModel* mDirsModel;
+	QDirModel* mFilesModel;
 	void showEvent( QShowEvent* );
 	void hideEvent( QHideEvent* );
 
@@ -55,6 +58,7 @@ private slots:
 	void tbUp_clicked();
 	void tbRefresh_clicked();
 	void lv_doubleClicked( const QModelIndex& );
+	void tv_doubleClicked( const QModelIndex& );
 	void cb_currentIndexChanged( const QString& );
 
 signals:
