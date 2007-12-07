@@ -62,10 +62,6 @@ public:
 	void setTemplatesPath( const QStringList& );
 	QStringList templatesPath() const;
 
-	void setTemplatesHeader( const QString&, const QString& );
-	QString templatesHeader( const QString& ) const;
-	QString defaultTemplatesHeader( const QString& ) const;
-
 	pTemplate getTemplate( const QString& );
 	TemplateList getTemplates();
 

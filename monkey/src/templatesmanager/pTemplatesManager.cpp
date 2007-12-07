@@ -31,48 +31,6 @@ QStringList pTemplatesManager::templatesPath() const
 	return pSettings::instance()->value( "Templates/DefaultDirectories", QStringList( QApplication::applicationDirPath().append( s ) ) ).toStringList();
 }
 
-void pTemplatesManager::setTemplatesHeader( const QString& l, const QString& s )
-{ pSettings::instance()->setValue( QString( "Templates/Header/" ).append( l ), s ); }
-
-QString pTemplatesManager::templatesHeader( const QString& l ) const
-{
-	QString s = pSettings::instance()->value( QString( "Templates/Header/" ).append( l ), QString() ).toString();
-	return s.isEmpty() ? defaultTemplatesHeader( l ) : s;
-}
-
-QString pTemplatesManager::defaultTemplatesHeader( const QString& l ) const
-{
-	// default comment
-	QString s( "/****************************************************************************\n"
-				"**\n"
-				"** 		Created using $editor_version_string$\n"
-				"** Author    : $author$\n"
-				"** Project   : $name$\n"
-				"** FileName  : $filename$\n"
-				"** Date      : $date$\n"
-				"** License   : $license$\n"
-				"** Comment   : $comment$\n"
-				"** Home Page : $homepage$\n"
-				"**\n"
-				"** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE\n"
-				"** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.\n"
-				"**\n"
-				"****************************************************************************/\n" );
-	
-	if ( l == "C++" )
-	{}
-	else if ( l == "HTML" )
-	{
-		s.prepend( "<!--\n" );
-		s.append( "-->\n" );
-	}
-	else
-		s.clear();
-	
-	// default
-	return s;
-}
-
 pTemplate pTemplatesManager::getTemplate( const QString& s )
 {
 	// open ini file
@@ -210,9 +168,6 @@ bool pTemplatesManager::realiseTemplate( ProjectItem* it, const QString& o, cons
 		
 		// get contents
 		QString c = QString::fromLocal8Bit( file.readAll() );
-		
-		// add header licensing
-		//c.prepend( templatesHeader( t.Language ) );
 		
 		// reset file
 		file.resize( 0 );
