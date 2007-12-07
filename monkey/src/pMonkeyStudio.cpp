@@ -577,7 +577,13 @@ QsciAPIs* pMonkeyStudio::apisForLexer( QsciLexer* l )
 	return mGlobalsAPIs.value( l->language() );
 }
 
-QsciLexer* pMonkeyStudio::lexerForFilename( const QString& s )
+QString pMonkeyStudio::languageForFileName( const QString& s )
+{
+	QsciLexer* l = lexerForFileName( s );
+	return l ? QString( l->language() ) : QString();
+}
+
+QsciLexer* pMonkeyStudio::lexerForFileName( const QString& s )
 {
 	// get suffixes
 	QHash<QString, QStringList> l = availableFilesSuffixes();

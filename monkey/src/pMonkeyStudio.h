@@ -73,7 +73,8 @@ namespace pMonkeyStudio
 	Q_MONKEY_EXPORT const QString scintillaSettingsPath();
 	Q_MONKEY_EXPORT void prepareAPIs();
 	Q_MONKEY_EXPORT QsciAPIs* apisForLexer( QsciLexer* );
-	Q_MONKEY_EXPORT QsciLexer* lexerForFilename( const QString& );
+	Q_MONKEY_EXPORT QString languageForFileName( const QString& );
+	Q_MONKEY_EXPORT QsciLexer* lexerForFileName( const QString& );
 	Q_MONKEY_EXPORT QsciLexer* lexerForLanguage( const QString& );
 	Q_MONKEY_EXPORT bool setLexerProperty( const QString&, QsciLexer*, const QVariant& );
 	Q_MONKEY_EXPORT const QVariant lexerProperty( const QString&, QsciLexer* );
