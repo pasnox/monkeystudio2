@@ -260,8 +260,8 @@ void pDockMessageBox::showOutput()
 	if ( !isVisible() )
 		show();
 	// show correct tab if needed
-	if ( twMessageBox->currentWidget() != tbOutput )
-		twMessageBox->setCurrentWidget( tbOutput );
+	if ( twMessageBox->currentWidget() != tbOutput->parentWidget() )
+		twMessageBox->setCurrentWidget( tbOutput->parentWidget() );
 }
 
 void pDockMessageBox::showLog()
