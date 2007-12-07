@@ -329,6 +329,8 @@ void UIMain::initConnections()
 
 void UIMain::initGui()
 {
+	// unified window and title bar
+	// setUnifiedTitleAndToolBarOnMac( true );
 	// window icon
 	setWindowIcon( menuBar()->action( "mHelp/aAbout" )->icon() );
 	// set icon size for toolbar
