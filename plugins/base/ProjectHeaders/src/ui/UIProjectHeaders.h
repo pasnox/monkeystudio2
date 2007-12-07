@@ -17,17 +17,22 @@
 
 #include "ui_UIProjectHeaders.h"
 
+class ProjectHeaders;
+
 class UIProjectHeaders : public QDialog, public Ui::UIProjectHeaders
 {
 	Q_OBJECT
 	
 public:
-	UIProjectHeaders( QWidget* = 0 );
-	~UIProjectHeaders();
+	UIProjectHeaders( QWidget* = 0, ProjectHeaders* = 0 );
+
+protected:
+	ProjectHeaders* mPlugin;
 
 protected slots:
-	void on_cbLanguages_currentIndexChanged( const QString& );
 	void on_tbDirectory_clicked();
+	void on_cbLanguages_highlighted( int );
+	void on_cbLanguages_currentIndexChanged( int );
 	void accept();
 
 };
