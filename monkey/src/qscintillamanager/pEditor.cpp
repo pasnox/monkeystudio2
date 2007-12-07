@@ -205,7 +205,7 @@ bool pEditor::openFile( const QString& s )
     setProperty( "fileName", s );
 
     // set lexer and apis
-    setLexer( pMonkeyStudio::lexerForFilename( s ) );
+    setLexer( pMonkeyStudio::lexerForFileName( s ) );
 
     // set properties
     pMonkeyStudio::setEditorProperties( this );
