@@ -37,8 +37,6 @@ public slots:
 private slots:
 	void on_twMenu_itemSelectionChanged();
 	void on_tbDefaultProjectsDirectory_clicked();
-	void on_cbFileHeadersLanguages_highlighted( int );
-	void on_cbFileHeadersLanguages_currentIndexChanged( int );
 	void tbColours_clicked();
 	void tbFonts_clicked();
 	void cbSourceAPIsLanguages_beforeChanged( int );

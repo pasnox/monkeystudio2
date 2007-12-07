@@ -123,7 +123,6 @@ UISettings::UISettings( QWidget* p )
 	bgEndWrapVisualFlag->addButton( rbEndWrapFlagByBorder, QsciScintilla::WrapFlagByBorder );
 
 	// fill lexers combo
-	cbFileHeadersLanguages->addItems( availableLanguages() );
 	cbSourceAPIsLanguages->addItems( availableLanguages() );
 	cbLexersAssociationsLanguages->addItems( availableLanguages() );
 	cbLexersHighlightingLanguages->addItems( availableLanguages() );
@@ -211,12 +210,7 @@ void UISettings::loadSettings()
 	gbOperators->setValues( availableOperators() );
 
 	// Templates
-	pTemplatesManager* tm = pTemplatesManager::instance();
-	pleTemplatesPaths->setValues( tm->templatesPath() );
-	// Headers
-	for ( int i = 0; i < cbFileHeadersLanguages->count(); i++ )
-		cbFileHeadersLanguages->setItemData( i, tm->templatesHeader( cbFileHeadersLanguages->itemText( i ) ) );
-	teFileHeader->setPlainText( cbFileHeadersLanguages->itemData( cbFileHeadersLanguages->currentIndex() ).toString() );
+	pleTemplatesPaths->setValues( pTemplatesManager::instance()->templatesPath() );
 
 	// Editor
 	//  General
@@ -377,13 +371,7 @@ void UISettings::saveSettings()
 	setAvailableOperators( gbOperators->values() );
 
 	// Templates
-	sp = "Templates";
-	// default templates path
-	pTemplatesManager* tm = pTemplatesManager::instance();
-	tm->setTemplatesPath( pleTemplatesPaths->values() );
-	// Headers
-	for ( int i = 0; i < cbFileHeadersLanguages->count(); i++ )
-		tm->setTemplatesHeader( cbFileHeadersLanguages->itemText( i ), cbFileHeadersLanguages->itemData( i ).toString() );
+	pTemplatesManager::instance()->setTemplatesPath( pleTemplatesPaths->values() );
 
 	// Editor
 	//  General
@@ -554,12 +542,6 @@ void UISettings::on_tbDefaultProjectsDirectory_clicked()
 	if ( !s.isNull() )
 		leDefaultProjectsDirectory->setText( s );
 }
-
-void UISettings::on_cbFileHeadersLanguages_highlighted( int )
-{ cbFileHeadersLanguages->setItemData( cbFileHeadersLanguages->currentIndex(), teFileHeader->toPlainText() ); }
-
-void UISettings::on_cbFileHeadersLanguages_currentIndexChanged( int i )
-{ teFileHeader->setPlainText( cbFileHeadersLanguages->itemData( i ).toString() ); }
 
 void UISettings::tbColours_clicked()
 {

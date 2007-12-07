@@ -562,62 +562,6 @@
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QGroupBox" name="gbTemplatesHeaders" >
-         <property name="title" >
-          <string>Templates Headers</string>
-         </property>
-         <layout class="QGridLayout" >
-          <property name="leftMargin" >
-           <number>5</number>
-          </property>
-          <property name="topMargin" >
-           <number>5</number>
-          </property>
-          <property name="rightMargin" >
-           <number>5</number>
-          </property>
-          <property name="bottomMargin" >
-           <number>5</number>
-          </property>
-          <property name="horizontalSpacing" >
-           <number>3</number>
-          </property>
-          <property name="verticalSpacing" >
-           <number>3</number>
-          </property>
-          <item row="0" column="0" >
-           <widget class="QLabel" name="lFileHeadersLanguage" >
-            <property name="text" >
-             <string>Language :</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1" >
-           <widget class="QComboBox" name="cbFileHeadersLanguages" >
-            <property name="toolTip" >
-             <string>Select language to be configured.</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" colspan="2" >
-           <widget class="QTextEdit" name="teFileHeader" >
-            <property name="font" >
-             <font>
-              <family>Monospace</family>
-             </font>
-            </property>
-            <property name="lineWrapMode" >
-             <enum>QTextEdit::NoWrap</enum>
-            </property>
-            <property name="acceptRichText" >
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="pEditorGeneral" >
