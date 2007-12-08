@@ -176,7 +176,6 @@ const QFileInfoList pMonkeyStudio::getFiles( QDir d, const QStringList& l, bool 
 	QFileInfoList ll;
 	foreach ( QFileInfo f, d.entryInfoList( QDir::AllEntries | QDir::NoDotAndDotDot, QDir::DirsFirst | QDir::Name ) )
 	{
-		//if ( f.isFile() && ( l.isEmpty() || ( !l.isEmpty() && l.contains( f.suffix(), Qt::CaseInsensitive ) ) ) )
 		if ( f.isFile() && ( l.isEmpty() || QDir::match( l, f.fileName() ) ) )
 			ll << f;
 		else if ( f.isDir() && b )
