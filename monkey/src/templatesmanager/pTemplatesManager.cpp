@@ -83,11 +83,11 @@ bool pTemplatesManager::realiseTemplate( ProjectItem* it, const QString& o, cons
 	// check destination exists
 	if ( !QDir( dest ).exists() )
 	{
-        if ( !QDir().mkpath( dest ) )
-        {
-            warning( tr( "Error..." ), tr( "Can't create destination '%1'" ).arg( dest ) );
-            return false;
-        }
+		if ( !QDir().mkpath( dest ) )
+		{
+			warning( tr( "Error..." ), tr( "Can't create destination '%1'" ).arg( dest ) );
+			return false;
+		}
 	}
 	
 	// append final slashe
