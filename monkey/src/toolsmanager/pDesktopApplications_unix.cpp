@@ -277,7 +277,7 @@ void pDesktopApplications::populateApplications()
 	// check all applications path
 	foreach ( const QString fp, startMenuPaths() )
 	{
-		foreach ( QFileInfo f, pMonkeyStudio::getFiles( QDir( fp ), "desktop" ) )
+		foreach ( QFileInfo f, pMonkeyStudio::getFiles( QDir( fp ), "*.desktop" ) )
 		{
 			// get folder object
 			pDesktopFolder* df = &mStartMenu;
