@@ -118,8 +118,10 @@
         <file>icons/templates/qobject.png</file>
         <file>icons/templates/qt_console.png</file>
         <file>icons/templates/qt_dll.png</file>
+        <file>icons/templates/qt_plugin.png</file>
         <file>icons/templates/qt_form.png</file>
         <file>icons/templates/qt_gui.png</file>
+        <file>icons/templates/static_lib.png</file>
         <file>icons/templates/qt_static_lib.png</file>
         <file>icons/templates/qwidget.png</file>
     </qresource>
