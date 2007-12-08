@@ -10,7 +10,7 @@ FileBrowser::FileBrowser()
 	// set plugin infos
 	mPluginInfos.Caption = tr( "File Browser" );
 	mPluginInfos.Description = tr( "Plugin for browsing file outside the project" );
-	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, Kopats Andei aka hlamer <hlamer@tut.by>";
 	mPluginInfos.Type = BasePlugin::iBase;
 	mPluginInfos.Name = "FileBrowser";
 	mPluginInfos.Version = "1.0.0";

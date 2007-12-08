@@ -34,7 +34,10 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	// restrict areas
 	setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
 
-	QWidget* wdg = new QWidget (this);
+	// central widget
+	QWidget* wdg = new QWidget( this );
+	setWidget( wdg );
+	
 	// vertical layout
 	QVBoxLayout* v = new QVBoxLayout( wdg );
 	v->setMargin( 5 );
@@ -69,24 +72,34 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	mLineEdit = new QLineEdit;
 	mLineEdit->setReadOnly( true );
 	v->addWidget( mLineEdit );
-
-
-	// central widget
-	QTabWidget* tabs = new QTabWidget (this);
-	setWidget( tabs );
+	
+	// dir model
+	mDirsModel = new QDirModel( this );
+	mDirsModel->setFilter( QDir::AllEntries | QDir::Readable | QDir::CaseSensitive | QDir::NoDotAndDotDot );
+	mDirsModel->setSorting( QDir::DirsFirst | QDir::Name );
+	
+	// tabwidget
+	QTabWidget* tabs = new QTabWidget;
+	v->addWidget( tabs );
 	
 	// folders view
 	mDirs = new QListView;
-	tabs->addTab (mDirs, tr("Dirs"));
+	tabs->addTab( mDirs, tr( "Dirs" ) );
 	
-	// dir model
-	mDirsModel = new QDirModel;
-	mDirsModel->setFilter( QDir::AllEntries | QDir::Readable | QDir::CaseSensitive | QDir::NoDotAndDotDot );
-	mDirsModel->setSorting( QDir::DirsFirst | QDir::Name );
+	// files view
+	mFiles = new QTreeView;
+	tabs->addTab( mFiles, tr( "Files" ) );
 	
 	// assign model to views
 	mComboBox->setModel( mDirsModel );
 	mDirs->setModel( mDirsModel );
+	mFiles->setModel( mDirsModel );
+	
+	// custom view
+	mFiles->setColumnHidden( 1, true );
+	mFiles->setColumnHidden( 2, true );
+	mFiles->setColumnHidden( 3, true );
+	mFiles->header()->hide();
 	
 	// if only one drive, disable it and root it ( linux/mac )
 	if ( mComboBox->count() == 1 )
@@ -95,32 +108,14 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	// set root index
 	mComboBox->setRootModelIndex( QModelIndex() );
 	mDirs->setRootIndex( mDirsModel->index( mComboBox->currentText() ) );
+	mFiles->setRootIndex( mDirs->rootIndex() );
 	
 	// set lineedit path
 	mLineEdit->setText( mDirsModel->filePath( mDirs->rootIndex() ) );
 	mLineEdit->setToolTip( mLineEdit->text() );
 	
-	
-	// files view
-	mFiles = new QTreeView;
-	// file model
-	mFilesModel = new QDirModel;
-	mFilesModel->setFilter( QDir::AllEntries | QDir::Readable | QDir::CaseSensitive | QDir::NoDotAndDotDot );
-	mFilesModel->setSorting( QDir::DirsFirst | QDir::Name );
-	
-	// assign model to views
-	mFiles->setModel( mFilesModel );
-	lv_doubleClicked(mDirs->rootIndex ());
-	mFiles->setColumnHidden (1, true);
-	mFiles->setColumnHidden (2, true);
-	mFiles->setColumnHidden (3, true);
-	mFiles->header()->hide ();
-	tabs->addTab (mFiles, tr("Files"));
-	tabs->setCurrentIndex (1);
-	
-	v->addWidget (tabs);
-	
-	setWidget( wdg );
+	// set page 1 visible
+	tabs->setCurrentIndex( 1 );
 	
 	// connections
 	connect( tbUp, SIGNAL( clicked() ), this, SLOT( tbUp_clicked() ) );
@@ -128,12 +123,6 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	connect( mComboBox, SIGNAL( currentIndexChanged( const QString& ) ), this, SLOT( cb_currentIndexChanged( const QString& ) ) );
 	connect( mDirs, SIGNAL( doubleClicked( const QModelIndex& ) ), this, SLOT( lv_doubleClicked( const QModelIndex& ) ) );
 	connect( mFiles, SIGNAL( doubleClicked( const QModelIndex& ) ), this, SLOT( tv_doubleClicked( const QModelIndex& ) ) );
-}
-
-pDockFileBrowser::~pDockFileBrowser()
-{
-	// delete model
-	delete mDirsModel;
 }
 
 void pDockFileBrowser::showEvent( QShowEvent* e )
@@ -161,7 +150,7 @@ void pDockFileBrowser::hideEvent( QHideEvent* e )
 void pDockFileBrowser::tbUp_clicked()
 {
 	// cd up
-	setCurrentPath ( mDirsModel->filePath( mDirs->rootIndex().parent() ) );
+	setCurrentPath( mDirsModel->filePath( mDirs->rootIndex().parent() ) );
 }
 
 void pDockFileBrowser::tbRefresh_clicked()
@@ -172,32 +161,29 @@ void pDockFileBrowser::tbRefresh_clicked()
 
 void pDockFileBrowser::lv_doubleClicked( const QModelIndex& i )
 {
-	// if dir, set root index to it
-	setCurrentPath ( mDirsModel->filePath( i ) );
-
-	// open file
-	// set lineedit path
-	mLineEdit->setText( mDirsModel->filePath( mDirs->rootIndex() ) );
-	mLineEdit->setToolTip( mLineEdit->text() );
-	// select correct drive in combo if needed
-	if ( QDir::drives().contains( mDirsModel->fileName( i ) ) )
-		mComboBox->setCurrentIndex( mComboBox->findText( mDirsModel->fileName( i ).remove( -1, 1 ) ) );
+	if ( mDirsModel->isDir( i ) )
+	{
+		// if dir, set root index to it
+		setCurrentPath( mDirsModel->filePath( i ) );
+		// select correct drive in combo if needed
+		if ( QDir::drives().contains( mDirsModel->fileName( i ) ) )
+			mComboBox->setCurrentIndex( mComboBox->findText( mDirsModel->fileName( i ).remove( -1, 1 ) ) );
+	}
+	else
+		pFileManager::instance()->openFile( mDirsModel->filePath( i ) );
 }
 
 void pDockFileBrowser::tv_doubleClicked( const QModelIndex& i )
 {
-	// if dir, set root index to it
-	if ( ! mFilesModel->isDir( i ) ) //possible it's file
-		pFileManager::instance()->openFile( mFilesModel->filePath( i ) );
+	// open file
+	if ( !mDirsModel->isDir( i ) )
+		pFileManager::instance()->openFile( mDirsModel->filePath( i ) );
 }
 
 void pDockFileBrowser::cb_currentIndexChanged( const QString& s )
 {
-	// move drive
-	mDirs->setRootIndex( mDirsModel->index( s ) );
-	// set lineedit path
-	mLineEdit->setText( mDirsModel->filePath( mDirs->rootIndex() ) );
-	mLineEdit->setToolTip( mLineEdit->text() );
+	// set current path
+	setCurrentPath( s );
 }
 
 QString pDockFileBrowser::currentDrive() const
@@ -225,7 +211,7 @@ void pDockFileBrowser::setCurrentPath( const QString& s )
 {
 	// set current path
 	mDirs->setRootIndex( mDirsModel->index( s ) );
-	mFiles->setRootIndex( mFilesModel->index( s ) );
+	mFiles->setRootIndex( mDirsModel->index( s ) );
 	// set lineedit path
 	mLineEdit->setText( mDirsModel->filePath( mDirs->rootIndex() ) );
 	mLineEdit->setToolTip( mLineEdit->text() );

@@ -32,8 +32,6 @@ class pDockFileBrowser : public QDockWidget, public QSingleton<pDockFileBrowser>
 	friend class QSingleton<pDockFileBrowser>;
 
 public:
-	~pDockFileBrowser();
-
 	QString currentDrive() const;
 	void setCurrentDrive( const QString& );
 
@@ -47,7 +45,6 @@ protected:
 	QListView* mDirs;
 	QTreeView* mFiles;
 	QDirModel* mDirsModel;
-	QDirModel* mFilesModel;
 	void showEvent( QShowEvent* );
 	void hideEvent( QHideEvent* );
 
