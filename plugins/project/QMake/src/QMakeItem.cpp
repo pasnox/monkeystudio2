@@ -893,7 +893,7 @@ void QMakeItem::commandTriggered()
 			const QString s = QString( "%1/%2" ).arg( c.workingDirectory() ).arg( c.command() );
 			if ( !QFile::exists( s ) )
 			{
-				if ( question( a->text().append( "..." ), tr( "The file %1 don't exists, do you want to choose a file ?" ).arg( s ) ) )
+				if ( question( a->text().append( "..." ), tr( "The file %1 doesn't exist, do you want to choose a file ?" ).arg( s ) ) )
 				{
 					QFileInfo fi( getOpenFileName( a->text().append( "..." ), c.workingDirectory() ) );
 					if ( fi.exists() )
@@ -902,17 +902,22 @@ void QMakeItem::commandTriggered()
 						QString p = fi.absolutePath();
 						if ( p.endsWith( '/' ) )
 							p.chop( 1 );
+/*
 #ifdef Q_OS_MAC
-						/*
+						/
 						if ( p.endsWith( "/Contents/MacOS" ) )
 						{
 							f.append( ".app" );
 							p.chop( 15 +f.length() +1 );
-						*/
+						/
 							f.prepend( "open " );
 						//}
 #endif
+*/
 						// correct command
+#ifndef Q_OS_WIN
+						f.prepend( "./" );
+#endif
 						c.setCommand( f );
 						c.setWorkingDirectory( p );
 						// add command to console manager
