@@ -17,7 +17,7 @@
 TEMPLATE = app
 LANGUAGE	= Qt4/C++
 TARGET	= $Target Name$
-CONFIG	-= gui
+QT	-= gui
 CONFIG	+= debug_and_release
 BUILD_PATH	 =  $Build Path$
 
