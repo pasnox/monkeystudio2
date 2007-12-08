@@ -2,11 +2,12 @@
 ##		Created using $editor_version_string$
 ##
 ##	Author    : $Authors$
-##	Project   : $Target name$
-##	FileName  : $Project file name$
+##	Project   : $Target Name$
+##	FileName  : $Project File Name$
 ##	Date      : $date$
 ##	License   : $License$
 ##	Comment   : $Comment$
+##	Home Page   : $Home Page$
 ##
 ##	This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 ##	WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -14,11 +15,11 @@
 ###########################################################################################
 
 TEMPLATE = app
-LANGUAGE	= C++
-TARGET	= $Target name$
+LANGUAGE	= Qt4/C++
+TARGET	= $Target Name$
 CONFIG	-= qt
 CONFIG	+= debug_and_release
-BUILD_PATH	 =  $Build path$
+BUILD_PATH	 =  $Build Path$
 
 QMAKE_CFLAGS_RELEASE -= -O2
 QMAKE_CXXFLAGS_RELEASE -= -O2
@@ -46,4 +47,4 @@ CONFIG(debug, debug|release) {
 	RCC_DIR	= $${BUILD_PATH}/release/.rcc
 }
 
-SOURCES	+= $Main file name$
+SOURCES	+= $Main File Name$
