@@ -73,15 +73,26 @@ void pConsoleManager::removeParser( pCommandParser* p )
 void pConsoleManager::removeParser( const QString& s )
 { removeParser( mParsers.value( s ) ); }
 
+QString pConsoleManager::nativeSeparators( const QString& s )
+{ return QDir::toNativeSeparators( s ); }
+
+QString pConsoleManager::quotedString( const QString& s )
+{
+	QString t = s;
+	if ( t.contains( " " ) && !t.startsWith( '"' ) && !t.endsWith( '"' ) )
+		t.prepend( '"' ).append( '"' );
+	return t;
+}
+
 QString pConsoleManager::processInternalVariables( const QString& s )
 {
 	QString v = s;
-	v.replace( "$cpp$", QDir::toNativeSeparators( pFileManager::instance()->currentProjectPath() ) );
-	v.replace( "$cp$", QDir::toNativeSeparators( pFileManager::instance()->currentProjectFile() ) );
-	v.replace( "$cfp$", QDir::toNativeSeparators( pFileManager::instance()->currentChildPath() ) );
-	v.replace( "$cf$", QDir::toNativeSeparators( pFileManager::instance()->currentChildFile() ) );
-	v.replace( "$cip$", QDir::toNativeSeparators( pFileManager::instance()->currentItemPath() ) );
-	v.replace( "$ci$", QDir::toNativeSeparators( pFileManager::instance()->currentItemFile() ) );
+	v.replace( "$cpp$", nativeSeparators( pFileManager::instance()->currentProjectPath() ) );
+	v.replace( "$cp$", nativeSeparators( pFileManager::instance()->currentProjectFile() ) );
+	v.replace( "$cfp$", nativeSeparators( pFileManager::instance()->currentChildPath() ) );
+	v.replace( "$cf$", nativeSeparators( pFileManager::instance()->currentChildFile() ) );
+	v.replace( "$cip$", nativeSeparators( pFileManager::instance()->currentItemPath() ) );
+	v.replace( "$ci$", nativeSeparators( pFileManager::instance()->currentItemFile() ) );
 	return v;
 }
 

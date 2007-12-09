@@ -53,6 +53,8 @@ public:
 	void removeParser( pCommandParser* );
 	void removeParser( const QString& );
 	
+	QString nativeSeparators( const QString& );
+	QString quotedString( const QString& );
 	QString processInternalVariables( const QString& );
 	pCommand processCommand( pCommand );
 	pCommand getCommand( const pCommandList&, const QString& );
