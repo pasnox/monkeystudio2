@@ -898,7 +898,7 @@ void QMakeItem::commandTriggered()
 				if ( !s.isEmpty() )
 					s = canonicalFilePath( s );
 				// if not exists ask user to select one
-				if ( !QFile::exists( s ) && question( a->text().append( "..." ), tr( "The file %1 doesn't exist, do you want to choose a file ?" ).arg( s ) ) )
+				if ( !QFile::exists( s ) && question( a->text().append( "..." ), tr( "Can't find your executable file, do you want to choose the file ?" ).arg( s ) ) )
 					s = getOpenFileName( a->text().append( "..." ), c.workingDirectory() );
 				// if file exists execut it
 				if ( QFile::exists( s ) )
@@ -909,8 +909,8 @@ void QMakeItem::commandTriggered()
 					if ( p.endsWith( '/' ) )
 						p.chop( 1 );
 					// correct command
-					c.setCommand( f );
-					c.setWorkingDirectory( p );
+					c.setCommand( cm->quotedString( cm->nativeSeparators( s ) ) );
+					c.setWorkingDirectory( cm->nativeSeparators( p ) );
 					// add command to console manager
 					cm->addCommand( c );
 					// write in project
