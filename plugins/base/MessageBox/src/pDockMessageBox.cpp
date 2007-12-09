@@ -26,6 +26,11 @@
 #include <QScrollBar>
 #include <QTextCodec>
 
+#include <QInputDialog>
+#include <QFile>
+
+#include "pMonkeyStudio.h"
+
 pDockMessageBox::pDockMessageBox( QWidget* w )
 	: QDockWidget( w ), mShown( false )
 {
@@ -274,24 +279,42 @@ void pDockMessageBox::showLog()
 		twMessageBox->setCurrentWidget( teLog );
 }
 
-
-#include <QDebug>
 void pDockMessageBox::lwBuildSteps_itemDoubleClicked( QListWidgetItem* it )
 {
+	// get filename
 	QString s = it->data( Qt::UserRole +2 ).toString();
-	if (s.isNull ())
-		return; //file not set for step
-	ProjectItem* pi = pFileManager::instance()->currentProject();
 	
-	//TODO : Need to search file S reqursively in the projects, while first one will not be finded
-	foreach (ProjectItem* it, pi->children (true, true))
-		qDebug () << it->value ();
-
-	if ( pi )
-		s = pi->canonicalFilePath( s );
-
-	const QPoint p = it->data( Qt::UserRole +3 ).toPoint();
-	pFileManager::instance()->goToLine( s, p, true );
+	// cancel if no file
+	if ( s.isNull() )
+		return;
+	
+	// get current project
+	if ( ProjectItem* pi = pFileManager::instance()->currentProject() )
+	{
+		// get top project of current project
+		while ( ProjectItem* ppi = pi->parentProject() )
+			pi = ppi;
+		
+		// search file
+		QStringList l;
+		foreach ( ProjectItem* it, pi->childrenProjects() << pi )
+			if ( QFile::exists( it->canonicalFilePath( s ) ) )
+				l << it->canonicalFilePath( s );
+		
+		// cancel if no file
+		if ( l.isEmpty() )
+			return;
+		
+		// ask user to select file
+		bool b = true;
+		s = l.value( 0 );
+		if ( l.count() > 1 )
+			s = QInputDialog::getItem( window(), tr( "Choose a file..." ), tr( "Choose the file to open" ), l, 0, false, &b, Qt::Sheet );
+		
+		// open file if ok
+		if ( b && !s.isEmpty() )
+			pFileManager::instance()->goToLine( s, it->data( Qt::UserRole +3 ).toPoint(), true );
+	}
 }
 
 void pDockMessageBox::leRawCommand_returnPressed()
