@@ -14,7 +14,7 @@ public:
 		{
 			{
 				//Error in the file/line
-				QRegExp("(\\n[\\w\\./]+\\.\\w+: In [\\w\\s]+ '.+':)?\\n(([[^\\n]]+/)?([\\w.]+)):(\\d+):(\\d+:)?\\serror:\\s([^\\n]+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				QRegExp("(\\n[\\w\\./]+\\.\\w+: In [\\w\\s]+ '.+':)?\\n(([^\\n]+/)?([\\w.]+)):(\\d+):(\\d+:)?\\serror:\\s([^\\n]+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
 				"%2", //file name
 				"%6", //column
 				"%7", //row

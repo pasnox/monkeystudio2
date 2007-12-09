@@ -274,12 +274,22 @@ void pDockMessageBox::showLog()
 		twMessageBox->setCurrentWidget( teLog );
 }
 
+
+#include <QDebug>
 void pDockMessageBox::lwBuildSteps_itemDoubleClicked( QListWidgetItem* it )
 {
-	ProjectItem* pi = pFileManager::instance()->currentProject();
 	QString s = it->data( Qt::UserRole +2 ).toString();
+	if (s.isNull ())
+		return; //file not set for step
+	ProjectItem* pi = pFileManager::instance()->currentProject();
+	
+	//TODO : Need to search file S reqursively in the projects, while first one will not be finded
+	foreach (ProjectItem* it, pi->children (true, true))
+		qDebug () << it->value ();
+
 	if ( pi )
 		s = pi->canonicalFilePath( s );
+
 	const QPoint p = it->data( Qt::UserRole +3 ).toPoint();
 	pFileManager::instance()->goToLine( s, p, true );
 }

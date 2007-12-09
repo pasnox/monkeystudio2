@@ -35,7 +35,7 @@ bool pCommandParser::processParsing(QString& buf)
         {
             pConsoleManager::Step m;
             m.mFileName = replaceWithMatch(p.regExp,p.FileName);
-            m.mPosition = QPoint( replaceWithMatch(p.regExp,p.row).toInt(), replaceWithMatch(p.regExp,p.col).toInt());
+            m.mPosition = QPoint( replaceWithMatch(p.regExp,p.col).toInt(), replaceWithMatch(p.regExp,p.row).toInt());
             m.mType = p.Type;
             m.mText = replaceWithMatch(p.regExp,p.Text);
             m.mFullText = replaceWithMatch(p.regExp,p.FullText);
