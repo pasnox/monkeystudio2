@@ -890,39 +890,31 @@ void QMakeItem::commandTriggered()
 		else if ( a->text().contains( "execute", Qt::CaseInsensitive ) )
 		{
 			pCommand c = cm->processCommand( cm->getCommand( l, a->statusTip() ) );
-			const QString s = QString( "%1/%2" ).arg( c.workingDirectory() ).arg( c.command() );
+			QString s = QString( "%1/%2" ).arg( c.workingDirectory() ).arg( c.command() );
 			if ( !QFile::exists( s ) )
 			{
-				if ( question( a->text().append( "..." ), tr( "The file %1 doesn't exist, do you want to choose a file ?" ).arg( s ) ) )
+				// try reading already saved binary
+				s = getStringValues( this, a->text().replace( ' ', '_' ).toUpper(), "=" ).value( 0 );
+				if ( !s.isEmpty() )
+					s = canonicalFilePath( s );
+				// if not exists ask user to select one
+				if ( !QFile::exists( s ) && question( a->text().append( "..." ), tr( "The file %1 doesn't exist, do you want to choose a file ?" ).arg( s ) ) )
+					s = getOpenFileName( a->text().append( "..." ), c.workingDirectory() );
+				// if file exists execut it
+				if ( QFile::exists( s ) )
 				{
-					QFileInfo fi( getOpenFileName( a->text().append( "..." ), c.workingDirectory() ) );
-					if ( fi.exists() )
-					{
-						QString f = fi.fileName();
-						QString p = fi.absolutePath();
-						if ( p.endsWith( '/' ) )
-							p.chop( 1 );
-/*
-#ifdef Q_OS_MAC
-						/
-						if ( p.endsWith( "/Contents/MacOS" ) )
-						{
-							f.append( ".app" );
-							p.chop( 15 +f.length() +1 );
-						/
-							f.prepend( "open " );
-						//}
-#endif
-*/
-						// correct command
-#ifndef Q_OS_WIN
-						f.prepend( "./" );
-#endif
-						c.setCommand( f );
-						c.setWorkingDirectory( p );
-						// add command to console manager
-						cm->addCommand( c );
-					}
+					QFileInfo fi( s );
+					QString f = fi.fileName().prepend( "./" );
+					QString p = fi.absolutePath();
+					if ( p.endsWith( '/' ) )
+						p.chop( 1 );
+					// correct command
+					c.setCommand( f );
+					c.setWorkingDirectory( p );
+					// add command to console manager
+					cm->addCommand( c );
+					// write in project
+					setValues( this, a->text().replace( ' ', '_' ).toUpper(), "=", QStringList( relativeFilePath( s ) ) );
 				}
 			}
 			// return
