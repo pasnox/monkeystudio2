@@ -31,8 +31,11 @@ void PluginsManager::loadsPlugins( const QString& s )
 	if ( d.dirName() == "MacOS" )
 	{
 		d.cdUp();
-		d.cdUp();
-		d.cdUp();
+		if ( !d.exists( "plugins" ) )
+		{
+			d.cdUp();
+			d.cdUp();
+		}
 	}
 #endif
 	
@@ -59,7 +62,7 @@ void PluginsManager::loadsPlugins( const QString& s )
 				qWarning( qPrintable( tr( "Failed to load plugin ( %1 ): Error: %2" ).arg( f.absoluteFilePath(), l.errorString() ) ) );
 		}
 	}
-		
+	
 	// installs user requested plugins
 	enableUserPlugins();
 }
