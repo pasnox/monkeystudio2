@@ -205,9 +205,7 @@ void pTreeComboBox::showPopup()
 	if ( !mFrame->isVisible() && mView )
 	{
 		mIndex = currentIndex();
-		mView->expandAll();
 		calculPopupGeometry();
-		// end code
 		mFrame->show();
 		update();
 	}
@@ -254,6 +252,12 @@ void pTreeComboBox::setModel( QAbstractItemModel* m )
 	}
 }
 
+QModelIndex pTreeComboBox::rootIndex() const
+{ return mView ? mView->rootIndex() : QModelIndex(); }
+
+void pTreeComboBox::setRootIndex( const QModelIndex& i )
+{ if ( mView ) mView->setRootIndex( i ); }
+
 QModelIndex pTreeComboBox::currentIndex() const
 {
 	if ( mView )
@@ -273,6 +277,9 @@ void pTreeComboBox::setCurrentIndex( const QModelIndex& i )
 		update();
 	}
 }
+
+void pTreeComboBox::expandAll()
+{ if ( mView ) mView->expandAll(); }
 
 void pTreeComboBox::internal_activated( const QModelIndex& i )
 {

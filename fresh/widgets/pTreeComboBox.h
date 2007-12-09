@@ -50,8 +50,13 @@ public:
 	QAbstractItemModel* model() const;
 	void setModel( QAbstractItemModel* );
 
+	QModelIndex rootIndex() const;
+	void setRootIndex( const QModelIndex& );
+
 	QModelIndex currentIndex() const;
 	void setCurrentIndex( const QModelIndex& );
+	
+	void expandAll();
 
 protected slots:
 	void internal_activated( const QModelIndex& );
