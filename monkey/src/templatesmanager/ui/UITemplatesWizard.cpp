@@ -18,6 +18,14 @@ UITemplatesWizard::UITemplatesWizard( QWidget* w )
 	// init dialog
     setupUi( this );
 	setAttribute( Qt::WA_DeleteOnClose );
+	saWidgets->setWidgetResizable( true );
+	
+	// create scrollarea widget
+	QWidget* cw = new QWidget;
+	gridLayout = new QGridLayout( cw );
+	gridLayout->setMargin( 5 );
+	gridLayout->setSpacing( 3 );
+	saWidgets->setWidget( cw );
 	
 	// get templates
 	mTemplates = pTemplatesManager::instance()->getTemplates();
@@ -130,6 +138,8 @@ void UITemplatesWizard::on_lwTemplates_itemPressed( QListWidgetItem* it )
 		mCombos << c;
 	}
 	
+	//saWidgets->resize( saWidgets->widget()->sizeHint() );
+	
 	// enable groupbox
 	gbInformations->setEnabled( true );
 }
@@ -179,7 +189,7 @@ void UITemplatesWizard::on_pbCreate_clicked()
     }
 	
 	// check if need add files
-	if ( !cbAddToProject->isChecked() || !cbProjects->currentIndex().isValid() )
+	if ( !gbAddToProject->isChecked() || !cbProjects->currentIndex().isValid() )
 		t.FilesToAdd.clear();
 	
 	// don t open project, because adding it to a parent will auto matically open it

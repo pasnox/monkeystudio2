@@ -17,6 +17,7 @@ public:
 	void setType( const QString& );
     
 private:
+	QGridLayout* gridLayout;
 	QList<QLabel*> mLabels;
 	QList<QComboBox*> mCombos;
     TemplateList mTemplates;
