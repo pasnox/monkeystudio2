@@ -20,7 +20,7 @@
 #include <QDockWidget>
 #include <QModelIndex>
 
-class QComboBox;
+class pTreeComboBox;
 class QLineEdit;
 class QListView;
 class QDirModel;
@@ -32,18 +32,15 @@ class pDockFileBrowser : public QDockWidget, public QSingleton<pDockFileBrowser>
 	friend class QSingleton<pDockFileBrowser>;
 
 public:
-	QString currentDrive() const;
-	void setCurrentDrive( const QString& );
-
 	QString currentPath() const;
 	void setCurrentPath( const QString& );
 
 protected:
 	bool mShown;
-	QComboBox* mComboBox;
+	pTreeComboBox* mCombo;
 	QLineEdit* mLineEdit;
-	QListView* mDirs;
-	QTreeView* mFiles;
+	QListView* mList;
+	QTreeView* mTree;
 	QDirModel* mDirsModel;
 	void showEvent( QShowEvent* );
 	void hideEvent( QHideEvent* );
@@ -54,9 +51,9 @@ private:
 private slots:
 	void tbUp_clicked();
 	void tbRefresh_clicked();
+	void cb_currentChanged( const QModelIndex& );
 	void lv_doubleClicked( const QModelIndex& );
 	void tv_doubleClicked( const QModelIndex& );
-	void cb_currentIndexChanged( const QString& );
 
 signals:
 	void saveSettings();

@@ -49,20 +49,14 @@ bool FileBrowser::setEnabled( bool b )
 
 void FileBrowser::saveSettings()
 {
-	// save current drive and path
-	setSettingsValue( "Drive", pDockFileBrowser::instance()->currentDrive() );
+	// save current path
 	setSettingsValue( "Path", pDockFileBrowser::instance()->currentPath() );
 }
 
 void FileBrowser::restoreSettings()
 {
-	QString s;
-	// restore last drive if available
-	s = settingsValue( "Drive" ).toString();
-	if ( !s.isEmpty() )
-		pDockFileBrowser::instance()->setCurrentDrive( s );
-	// restore last path if available
-	s = settingsValue( "Path" ).toString();
+	// restore path
+	QString s = settingsValue( "Path" ).toString();
 	if ( !s.isEmpty() )
 		pDockFileBrowser::instance()->setCurrentPath( s );
 }
