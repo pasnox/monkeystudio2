@@ -60,6 +60,7 @@ protected slots:
 
 protected:
 	QSize mIconSize;
+	QSize mSizeHint;
 	QFrame* mFrame;
 	QPointer<QTreeView> mView;
 	QPointer<QAbstractItemModel> mModel;

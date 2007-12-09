@@ -17,12 +17,14 @@
 #include <QVBoxLayout>
 #include <QTreeView>
 #include <QAbstractItemModel>
+#include <QComboBox>
 #include <QHeaderView>
 #include <QStyleOptionComboBox>
 #include <QStylePainter>
 #include <QMouseEvent>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QSizeGrip>
 
 pTreeComboBox::pTreeComboBox( QWidget* w )
 	: QWidget( w ), mFrame( new QFrame ), mView( 0 ), mModel( 0 ), mForce( false )
@@ -33,6 +35,7 @@ pTreeComboBox::pTreeComboBox( QWidget* w )
 	vl->setMargin( 0 );
 	
 	mIconSize = QSize( 16, 16 );
+	mSizeHint = QComboBox().sizeHint();
 	setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) );
 	setView( new QTreeView );
 	mView->header()->hide();
@@ -75,7 +78,7 @@ bool pTreeComboBox::eventFilter( QObject* o, QEvent* e )
 }
 
 QSize pTreeComboBox::sizeHint() const
-{ return QSize( 79, 22 ); }
+{ return mSizeHint; }
 
 int recursiveCount( const QModelIndex& it )
 {
@@ -221,7 +224,13 @@ void pTreeComboBox::setView( QTreeView* t )
 	mView = t;
 	if ( mView )
 	{
-		mFrame->layout()->addWidget( mView );
+		if ( mFrame->layout()->count() )
+			qobject_cast<QVBoxLayout*>( mFrame->layout() )->insertWidget( 0, mView );
+		else
+		{
+			mFrame->layout()->addWidget( mView );
+			mFrame->layout()->addWidget( new QSizeGrip( mFrame ) );
+		}
 		mView->setEditTriggers( QAbstractItemView::NoEditTriggers );
 		mView->setMouseTracking( true );
 		mView->viewport()->installEventFilter( this );
