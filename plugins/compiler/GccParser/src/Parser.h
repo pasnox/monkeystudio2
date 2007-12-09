@@ -17,7 +17,7 @@ public:
 				QRegExp("(\\n[\\w\\./]+\\.\\w+: In [\\w\\s]+ '.+':)?\\n(([^\\n]+/)?([\\w.]+)):(\\d+):(\\d+:)?\\serror:\\s([^\\n]+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
 				"%2", //file name
 				"%6", //column
-				"%7", //row
+				"%5", //row
 				pConsoleManager::stError, //type
 				"%4:%5: %7", //text
 				"%0", //full text
