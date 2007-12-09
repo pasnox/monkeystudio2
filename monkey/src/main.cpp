@@ -30,7 +30,9 @@ int main( int argc, char** argv )
 
 	// change splashscreen font
 	QFont ft( splash.font() );
+#ifndef Q_OS_WIN
 	ft.setPointSize( ft.pointSize() -2 );
+#endif
 	ft.setBold( true );
 	splash.setFont( ft );
 
