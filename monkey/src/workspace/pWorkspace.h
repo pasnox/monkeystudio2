@@ -27,7 +27,7 @@ public:
 	QList<pAbstractChild*> children() const;
 
 	// open a file and set cursor to position
-	pAbstractChild* openFile( const QString&, const QPoint& = QPoint() );
+	pAbstractChild* openFile( const QString& );
 	// close the file
 	void closeFile( const QString& );
 	// goto to position inside file, highlight line according to bool, opening it if needed

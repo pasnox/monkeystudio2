@@ -77,7 +77,7 @@ QList<pAbstractChild*> pWorkspace::children() const
 	return l;
 }
 
-pAbstractChild* pWorkspace::openFile( const QString& s, const QPoint& p )
+pAbstractChild* pWorkspace::openFile( const QString& s )
 {
 	// if it not exists
 	if ( !QFile::exists( s ) || !QFileInfo( s ).isFile() )
@@ -91,14 +91,14 @@ pAbstractChild* pWorkspace::openFile( const QString& s, const QPoint& p )
 			if ( isSameFile( f, s ) )
 			{
 				setCurrentDocument( c );
-				c->goTo( f, p );
+				c->showFile( f );
 				return c;
 			}
 		}
 	}
 
 	// try opening file with child plugins
-	pAbstractChild* c = PluginsManager::instance()->openChildFile( s, p );
+	pAbstractChild* c = PluginsManager::instance()->openChildFile( s );
 	
 	// open it with pChild instance if no c
 	if ( !c )
@@ -107,7 +107,7 @@ pAbstractChild* pWorkspace::openFile( const QString& s, const QPoint& p )
 		c = new pChild;
 		
 		// open file
-		c->openFile( s, p );
+		c->openFile( s );
 	}
 	
 	// made connection if worksapce don t contains this child
@@ -146,7 +146,7 @@ pAbstractChild* pWorkspace::openFile( const QString& s, const QPoint& p )
 	if ( currentDocument() != c )
 	{
 		setCurrentDocument( c );
-		c->goTo( s, p );
+		c->showFile( s );
 	}
 
 	// return child instance
@@ -171,19 +171,16 @@ void pWorkspace::closeFile( const QString& s )
 void pWorkspace::goToLine( const QString& s, const QPoint& p, bool b )
 {
 	if ( b )
-		openFile( s, p );
-	else
+		openFile( s );
+	foreach ( pAbstractChild* c, children() )
 	{
-		foreach ( pAbstractChild* c, children() )
+		foreach ( QString f, c->files() )
 		{
-			foreach ( QString f, c->files() )
+			if ( isSameFile( f, s ) )
 			{
-				if ( isSameFile( f, s ) )
-				{
-					setCurrentDocument( c );
-					c->goTo( s, p, b );
-					return;
-				}
+				setCurrentDocument( c );
+				c->goTo( s, p, b );
+				return;
 			}
 		}
 	}

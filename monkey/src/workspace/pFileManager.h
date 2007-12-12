@@ -29,7 +29,7 @@ public:
 	QString currentItemPath() const;
 
 public slots:
-	pAbstractChild* openFile( const QString&, const QPoint& = QPoint() );
+	pAbstractChild* openFile( const QString& );
 	void closeFile( const QString& );
 	void goToLine( const QString&, const QPoint&, bool );
 	void openProject( const QString& );

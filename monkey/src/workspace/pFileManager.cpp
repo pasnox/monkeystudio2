@@ -45,8 +45,8 @@ QString pFileManager::currentItemFile() const
 QString pFileManager::currentItemPath() const
 { return QFileInfo( currentItemFile() ).path(); }
 
-pAbstractChild* pFileManager::openFile( const QString& s, const QPoint& p )
-{ return pWorkspace::instance()->openFile( s, p ); }
+pAbstractChild* pFileManager::openFile( const QString& s )
+{ return pWorkspace::instance()->openFile( s ); }
 
 void pFileManager::closeFile( const QString& s )
 { pWorkspace::instance()->closeFile( s ); }

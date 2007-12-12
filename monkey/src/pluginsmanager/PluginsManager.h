@@ -50,7 +50,7 @@ public:
 	T plugin( PluginsManager::StateType t, const QString& n = QString::null,  const QString& v = QString::null )
 	{ return plugins<T>( t, n, v ).value( 0 ); }
 	
-	pAbstractChild* openChildFile( const QString&, const QPoint& );
+	pAbstractChild* openChildFile( const QString& );
 	QHash<QString, QStringList> childSuffixes() const;
 	QString childFilters() const;
 	

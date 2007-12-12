@@ -115,11 +115,11 @@ ProjectItem* PluginsManager::projectItem( const QString& s )
 	return 0;
 }
 
-pAbstractChild* PluginsManager::openChildFile( const QString& s, const QPoint& p )
+pAbstractChild* PluginsManager::openChildFile( const QString& s )
 {
 	foreach ( ChildPlugin* cp, plugins<ChildPlugin*>( PluginsManager::stEnabled ) )
 		if ( cp->canOpen( s ) )
-			return cp->openFile( s, p );
+			return cp->openFile( s );
 	return 0;
 }
 
