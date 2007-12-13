@@ -313,7 +313,11 @@ void QtDesignerChild::previewCurrentForm()
 		if ( f->windowType() == Qt::Window )
 			wf |= Qt::WindowMaximizeButtonHint;
 		*/
-#ifdef Q_WS_WIN		Qt::WindowFlags wf = ( f->windowType() == Qt::Window ) ? Qt::Window | Qt::WindowMaximizeButtonHint : Qt::Dialog;#else		Qt::WindowFlags wf = Qt::Dialog;#endif
+#ifdef Q_WS_WIN
+		Qt::WindowFlags wf = ( f->windowType() == Qt::Window ) ? Qt::Window | Qt::WindowMaximizeButtonHint : Qt::Dialog;
+#else
+		Qt::WindowFlags wf = Qt::Dialog;
+#endif
 		
 		// set parent
 		f->setParent( mArea->activeSubWindow(), wf );
@@ -345,7 +349,7 @@ void QtDesignerChild::setModified( QDesignerFormWindowInterface* w )
 		w->parentWidget()->setWindowModified( w->isDirty() );
 }
 
-void QtDesignerChild::openFile( const QString& s, const QPoint&, QTextCodec* )
+void QtDesignerChild::openFile( const QString& s, QTextCodec* )
 {
 	// create form
 	QDesignerFormWindowInterface* w = createForm();
