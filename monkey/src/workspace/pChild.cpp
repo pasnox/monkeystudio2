@@ -163,7 +163,7 @@ void pChild::backupCurrentFile( const QString& s )
 void pChild::saveFiles()
 { saveCurrentFile(); }
 
-void pChild::openFile( const QString& s, const QPoint& p, QTextCodec* c )
+void pChild::openFile( const QString& s, QTextCodec* c )
 {
 	// if already open file, cancel
 	if ( !currentFile().isNull() )
@@ -178,9 +178,6 @@ void pChild::openFile( const QString& s, const QPoint& p, QTextCodec* c )
 
 	// change window title
 	setWindowTitle( s );
-	
-	// go to position
-	goTo( s, p );
 
 	emit fileOpened( s );
 }
