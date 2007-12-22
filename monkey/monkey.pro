@@ -41,7 +41,7 @@ else:unix:*-g++:LIBS	*= -rdynamic
 
 PRE_TARGETDEPS	*= ../qscintilla ../fresh ../ctags
 
-CONFIG( DebugBuild )|CONFIG( debug, debug|release ) {
+CONFIG( debug, debug|release ) {
 	#Debug
 	CONFIG	+= console
 	unix:TARGET	= $$join(TARGET,,,_debug)
@@ -49,11 +49,11 @@ CONFIG( DebugBuild )|CONFIG( debug, debug|release ) {
 	unix:OBJECTS_DIR	= $${BUILD_PATH}/debug/.obj/unix
 	win32:OBJECTS_DIR	= $${BUILD_PATH}/debug/.obj/win32
 	mac:OBJECTS_DIR	= $${BUILD_PATH}/debug/.obj/mac
+else:LIBS	*= -lqscintilla2_debug -lfresh_debug -lctags_debug
 	UI_DIR	= $${BUILD_PATH}/debug/.ui
 	MOC_DIR	= $${BUILD_PATH}/debug/.moc
 	RCC_DIR	= $${BUILD_PATH}/debug/.rcc
 	unix:LIBS	*= -lqscintilla2_debug -lfresh_debug -lctags_debug
-	else:LIBS	*= -lqscintilla2d -lfreshd -lctagsd
 	win32-g++:LIBS	*= -Wl,--out-implib,$${BUILD_PATH}/lib$${TARGET}.a
 	win32-msvc*:LIBS	*= /IMPLIB:$${BUILD_PATH}/$${TARGET}.lib -lshell32
 } else {
@@ -170,3 +170,4 @@ win32:SOURCES	*= src/toolsmanager/pDesktopApplications_win32.cpp
 
 TRANSLATIONS	= ../translations/monkey_french.ts \
 	../translations/monkey_belarusian.ts
+EXECUTE_DEBUG	= ../bin/monkey_debug
