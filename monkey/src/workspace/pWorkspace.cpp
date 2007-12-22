@@ -98,7 +98,7 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 	}
 
 	// try opening file with child plugins
-	pAbstractChild* c = PluginsManager::instance()->openChildFile( s );
+	pAbstractChild* c = PluginsManager::instance()->openChildFile( s ); // TODO: repalce by a childForFileName member witch will return a child that will open file
 	
 	// open it with pChild instance if no c
 	if ( !c )
@@ -128,16 +128,17 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 		//connect( c, SIGNAL( documentModeChanged( AbstractChild::DocumentMode ) ), statusBar(), SLOT( setDocumentMode( AbstractChild::DocumentMode ) ) );
 		//connect( c, SIGNAL( layoutModeChanged( AbstractChild::LayoutMode ) ), statusBar(), SLOT( setLayoutMode( AbstractChild::LayoutMode ) ) );
 		//connect( c, SIGNAL( currentFileChanged( const QString& ) ), statusBar(), SLOT( setFileName( const QString& ) ) );
-		
-		// open file
-		c->openFile( s );
-
-		// add child to workspace
+	}
+	
+	// open file
+	c->openFile( s );
+	
+	// add child to workspace if needed
+	if ( !children().contains( c ) )
 		pWorkspace::instance()->addTab( c, c->currentFileName() );
 		
-		// set modification state because file is open before put in worksapce so workspace can't know it
-		c->setWindowModified( c->isModified() );
-	}
+	// set modification state because file is open before put in worksapce so workspace can't know it
+	c->setWindowModified( c->isModified() );
 	
 	// set correct document if needed ( sdi hack )
 	if ( currentDocument() != c )
