@@ -102,13 +102,7 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 	
 	// open it with pChild instance if no c
 	if ( !c )
-	{
-		// create child
 		c = new pChild;
-		
-		// open file
-		c->openFile( s );
-	}
 	
 	// made connection if worksapce don t contains this child
 	if ( !children().contains( c ) )
@@ -134,6 +128,9 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 		//connect( c, SIGNAL( documentModeChanged( AbstractChild::DocumentMode ) ), statusBar(), SLOT( setDocumentMode( AbstractChild::DocumentMode ) ) );
 		//connect( c, SIGNAL( layoutModeChanged( AbstractChild::LayoutMode ) ), statusBar(), SLOT( setLayoutMode( AbstractChild::LayoutMode ) ) );
 		//connect( c, SIGNAL( currentFileChanged( const QString& ) ), statusBar(), SLOT( setFileName( const QString& ) ) );
+		
+		// open file
+		c->openFile( s );
 
 		// add child to workspace
 		pWorkspace::instance()->addTab( c, c->currentFileName() );
