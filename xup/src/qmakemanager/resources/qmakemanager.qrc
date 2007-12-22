@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/icons" >
+        <file>icons/def_file.png</file>
+        <file>icons/defines.png</file>
+        <file>icons/dependpath.png</file>
+        <file>icons/file.png</file>
+        <file>icons/folder.png</file>
+        <file>icons/form3.png</file>
+        <file>icons/forms.png</file>
+        <file>icons/headers.png</file>
+        <file>icons/includepath.png</file>
+        <file>icons/libs.png</file>
+        <file>icons/rc_file.png</file>
+        <file>icons/res_file.png</file>
+        <file>icons/resources.png</file>
+        <file>icons/sources.png</file>
+        <file>icons/translations.png</file>
+        <file>icons/vpath.png</file>
+    </qresource>
+</RCC>

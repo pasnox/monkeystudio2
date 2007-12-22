@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/icons" >
+        <file>icons/comment.png</file>
+        <file>icons/emptyline.png</file>
+        <file>icons/function.png</file>
+        <file>icons/project.png</file>
+        <file>icons/scope.png</file>
+        <file>icons/value.png</file>
+        <file>icons/variable.png</file>
+    </qresource>
+</RCC>

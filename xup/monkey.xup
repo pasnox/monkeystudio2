@@ -1,0 +1,331 @@
+<!DOCTYPE XUPProject>
+<project version="1.0.0" expanded="true" name="Monkey Studio" >
+ <comment># Monkey Studio 2 project file</comment>
+ <emptyline>1</emptyline>
+ <variable expanded="false" name="BUILD_PATH" >
+  <value>../build</value>
+ </variable>
+ <emptyline>1</emptyline>
+ <comment># include qscintilla framework</comment>
+ <function value="../qscintilla/qscintilla.pri" name="include" />
+ <emptyline>1</emptyline>
+ <comment># include fresh framework</comment>
+ <function value="../fresh/fresh.pri" name="include" />
+ <emptyline>1</emptyline>
+ <comment># include ctags framework</comment>
+ <function value="../ctags/ctags.pri" name="include" />
+ <emptyline>1</emptyline>
+ <comment>#include monkey framework</comment>
+ <function value="monkey.pri" name="include" />
+ <emptyline>1</emptyline>
+ <variable expanded="false" name="TEMPLATE" >
+  <value>app</value>
+ </variable>
+ <variable expanded="false" name="LANGUAGE" >
+  <value>Qt4/C++</value>
+ </variable>
+ <variable expanded="false" name="TARGET" >
+  <value>monkey</value>
+ </variable>
+ <variable name="DESTDIR" >
+  <value>../bin</value>
+ </variable>
+ <variable operator="*=" name="CONFIG" >
+  <value>qt warn_on thread x11 windows debug_and_release</value>
+ </variable>
+ <variable operator="*=" name="QT" >
+  <value>gui core</value>
+ </variable>
+ <emptyline>1</emptyline>
+ <scope nested="true" name="unix" >
+  <variable name="ICON" >
+   <value>src/resources/icons/application/monkey2.png</value>
+  </variable>
+ </scope>
+ <scope nested="true" name="mac" >
+  <variable name="ICON" >
+   <value>src/resources/icons/application/monkey2.icns</value>
+  </variable>
+ </scope>
+ <scope nested="true" name="win32" >
+  <variable name="ICON" >
+   <value>src/resources/icons/application/monkey2.ico</value>
+  </variable>
+ </scope>
+ <emptyline>1</emptyline>
+ <variable name="COPYRIGHTS" >
+  <value>"(c) 2005 - 2007 Azevedo Filipe"</value>
+ </variable>
+ <variable name="DOMAIN" >
+  <value>"www.monkeystudio.org"</value>
+ </variable>
+ <variable name="VERSION" >
+  <value>1.8.0.0</value>
+ </variable>
+ <variable expanded="false" name="NAME" >
+  <value>"Monkey Studio"</value>
+ </variable>
+ <emptyline>1</emptyline>
+ <scope nested="true" name="win32" >
+  <variable operator="*=" name="RC_FILE" >
+   <value>monkey.rc</value>
+  </variable>
+ </scope>
+ <variable operator="*=" name="RESOURCES" >
+  <value>src/resources/resources.qrc</value>
+ </variable>
+ <emptyline>1</emptyline>
+ <variable operator="*=" name="DEFINES" >
+  <value>MONKEY_CORE_BUILD "PROGRAM_NAME=\"\\\"$${NAME}\\\"\"" "PROGRAM_VERSION=\"\\\"$${VERSION}\\\"\"" "PROGRAM_DOMAIN=\"\\\"$${DOMAIN}\\\"\"" "PROGRAM_COPYRIGHTS=\"\\\"$${COPYRIGHTS}\\\"\""</value>
+ </variable>
+ <emptyline>1</emptyline>
+ <variable operator="*=" name="LIBS" >
+  <value>-L$${BUILD_PATH}</value>
+ </variable>
+ <scope nested="true" name="mac" >
+  <scope nested="true" name="*-g++" >
+   <variable operator="*=" name="LIBS" >
+    <value>-dynamic</value>
+   </variable>
+  </scope>
+ </scope>
+ <scope nested="true" name="else" >
+  <scope nested="true" name="unix" >
+   <scope nested="true" name="*-g++" >
+    <variable operator="*=" name="LIBS" >
+     <value>-rdynamic</value>
+    </variable>
+   </scope>
+  </scope>
+ </scope>
+ <emptyline>1</emptyline>
+ <variable operator="*=" name="PRE_TARGETDEPS" >
+  <value>../qscintilla ../fresh ../ctags</value>
+ </variable>
+ <emptyline>1</emptyline>
+ <scope name="CONFIG( DebugBuild )|CONFIG( debug, debug|release )" >
+  <comment>#Debug</comment>
+  <variable operator="+=" name="CONFIG" >
+   <value>console</value>
+  </variable>
+  <scope nested="true" name="unix" >
+   <variable name="TARGET" >
+    <value>$$join(TARGET,,,_debug)</value>
+   </variable>
+  </scope>
+  <scope nested="true" name="else" >
+   <variable name="TARGET" >
+    <value>$$join(TARGET,,,d)</value>
+   </variable>
+  </scope>
+  <scope nested="true" name="unix" >
+   <variable name="OBJECTS_DIR" >
+    <value>$${BUILD_PATH}/debug/.obj/unix</value>
+   </variable>
+  </scope>
+  <scope nested="true" name="win32" >
+   <variable name="OBJECTS_DIR" >
+    <value>$${BUILD_PATH}/debug/.obj/win32</value>
+   </variable>
+  </scope>
+  <scope nested="true" name="mac" >
+   <variable name="OBJECTS_DIR" >
+    <value>$${BUILD_PATH}/debug/.obj/mac</value>
+   </variable>
+  </scope>
+  <variable name="UI_DIR" >
+   <value>$${BUILD_PATH}/debug/.ui</value>
+  </variable>
+  <variable name="MOC_DIR" >
+   <value>$${BUILD_PATH}/debug/.moc</value>
+  </variable>
+  <variable name="RCC_DIR" >
+   <value>$${BUILD_PATH}/debug/.rcc</value>
+  </variable>
+  <scope nested="true" name="unix" >
+   <variable operator="*=" name="LIBS" >
+    <value>-lqscintilla2_debug -lfresh_debug -lctags_debug</value>
+   </variable>
+  </scope>
+  <scope nested="true" name="else" >
+   <variable operator="*=" name="LIBS" >
+    <value>-lqscintilla2d -lfreshd -lctagsd</value>
+   </variable>
+  </scope>
+  <scope nested="true" name="win32-g++" >
+   <variable operator="*=" name="LIBS" >
+    <value>-Wl,--out-implib,$${BUILD_PATH}/lib$${TARGET}.a</value>
+   </variable>
+  </scope>
+  <scope nested="true" name="win32-msvc*" >
+   <variable operator="*=" name="LIBS" >
+    <value>/IMPLIB:$${BUILD_PATH}/$${TARGET}.lib -lshell32</value>
+   </variable>
+  </scope>
+ </scope>
+ <scope expanded="false" name="else" >
+  <comment>#Release</comment>
+  <scope nested="true" name="unix" >
+   <variable name="OBJECTS_DIR" >
+    <value>$${BUILD_PATH}/release/.obj/unix</value>
+   </variable>
+  </scope>
+  <scope nested="true" name="win32" >
+   <variable name="OBJECTS_DIR" >
+    <value>$${BUILD_PATH}/release/.obj/win32</value>
+   </variable>
+  </scope>
+  <scope nested="true" name="mac" >
+   <variable name="OBJECTS_DIR" >
+    <value>$${BUILD_PATH}/release/.obj/mac</value>
+   </variable>
+  </scope>
+  <variable name="UI_DIR" >
+   <value>$${BUILD_PATH}/release/.ui</value>
+  </variable>
+  <variable name="MOC_DIR" >
+   <value>$${BUILD_PATH}/release/.moc</value>
+  </variable>
+  <variable name="RCC_DIR" >
+   <value>$${BUILD_PATH}/release/.rcc</value>
+  </variable>
+  <variable operator="*=" name="LIBS" >
+   <value>-lqscintilla2 -lfresh -lctags</value>
+  </variable>
+  <scope nested="true" name="win32-g++" >
+   <variable operator="*=" name="LIBS" >
+    <value>-Wl,--out-implib,$${BUILD_PATH}/libmonkey.a</value>
+   </variable>
+  </scope>
+  <scope nested="true" name="win32-msvc*" >
+   <variable operator="*=" name="LIBS" >
+    <value>/IMPLIB:$${BUILD_PATH}/monkey.lib -lshell32</value>
+   </variable>
+  </scope>
+ </scope>
+ <emptyline>1</emptyline>
+ <variable expanded="false" operator="*=" name="FORMS" multiline="true" >
+  <value>src/maininterface/ui/UITranslator.ui</value>
+  <value>src/maininterface/ui/UIAbout.ui</value>
+  <value>src/maininterface/ui/UISettings.ui</value>
+  <value>src/qscintillamanager/ui/pSearch.ui</value>
+  <value>src/abbreviationsmanager/ui/UIAddAbbreviation.ui</value>
+  <value>src/templatesmanager/ui/UITemplatesWizard.ui</value>
+  <value>src/toolsmanager/ui/UIDesktopTools.ui</value>
+  <value>src/toolsmanager/ui/UIToolsEdit.ui</value>
+  <value>src/pluginsmanager/ui/UIPluginsSettings.ui</value>
+  <value>src/pluginsmanager/ui/UICLIToolSettings.ui</value>
+  <value>src/pluginsmanager/ui/UIBuilderSettings.ui</value>
+  <value>src/projectsmanager/ui/UIProjectsManager.ui</value>
+  <value>src/pluginsmanager/ui/UICompilerSettings.ui</value>
+ </variable>
+ <emptyline>1</emptyline>
+ <variable expanded="true" operator="*=" name="HEADERS" multiline="true" >
+  <value>src/maininterface/ui/UITranslator.h</value>
+  <value>src/maininterface/ui/UIAbout.h</value>
+  <value>src/maininterface/ui/UISettings.h</value>
+  <value>src/recentsmanager/pRecentsManager.h</value>
+  <value>src/workspace/pAbstractChild.h</value>
+  <value>src/qscintillamanager/ui/pSearch.h</value>
+  <value>src/qscintillamanager/pEditor.h</value>
+  <value>src/qscintillamanager/qSciShortcutsManager.h</value>
+  <value>src/ctagsmanager/Ctags.h</value>
+  <value>src/workspace/pChild.h</value>
+  <value bookmarks="1,45,67" cursor="3,10" breakpoints="56,99" open="true" selection="0,15" folds="4,78,67" >src/workspace/UISaveFiles.h</value>
+  <value>src/workspace/pFileManager.h</value>
+  <value>src/workspace/pWorkspace.h</value>
+  <value>src/maininterface/UIMain.h</value>
+  <value>src/abbreviationsmanager/pAbbreviationsManager.h</value>
+  <value>src/abbreviationsmanager/ui/UIAddAbbreviation.h</value>
+  <value>src/variablesmanager/VariablesManager.h</value>
+  <value>src/templatesmanager/pTemplatesManager.h</value>
+  <value>src/templatesmanager/ui/UITemplatesWizard.h</value>
+  <value>src/pMonkeyStudio.h</value>
+  <value>src/toolsmanager/pDesktopApplications.h</value>
+  <value>src/toolsmanager/ui/UIDesktopTools.h</value>
+  <value>src/toolsmanager/ui/UIToolsEdit.h</value>
+  <value>src/consolemanager/pConsoleManager.h</value>
+  <value>src/consolemanager/pCommandParser.h</value>
+  <value>src/consolemanager/pCommand.h</value>
+  <value>src/toolsmanager/pToolsManager.h</value>
+  <value>src/pluginsmanager/BasePlugin.h</value>
+  <value>src/pluginsmanager/ChildPlugin.h</value>
+  <value>src/pluginsmanager/CLIToolPlugin.h</value>
+  <value>src/pluginsmanager/ProjectPlugin.h</value>
+  <value>src/pluginsmanager/BuilderPlugin.h</value>
+  <value>src/pluginsmanager/CompilerPlugin.h</value>
+  <value>src/pluginsmanager/PluginsManager.h</value>
+  <value>src/pluginsmanager/ui/UIPluginsSettings.h</value>
+  <value>src/pluginsmanager/ui/UICLIToolSettings.h</value>
+  <value>src/pluginsmanager/ui/UIBuilderSettings.h</value>
+  <value>src/projectsmanager/ui/UIProjectsManager.h</value>
+  <value>src/projectsmanager/ui/UIAddExistingFiles.h</value>
+  <value>src/projectsmanager/ProjectsModel.h</value>
+  <value>src/projectsmanager/ProjectsProxy.h</value>
+  <value>src/projectsmanager/ProjectItem.h</value>
+  <value>src/pluginsmanager/ui/UICompilerSettings.h</value>
+ </variable>
+ <emptyline>1</emptyline>
+ <variable grouped="true" expanded="true" operator="*=" name="SOURCES" multiline="true" >
+  <value>src/maininterface/ui/UITranslator.cpp</value>
+  <value>src/maininterface/ui/UIAbout.cpp</value>
+  <value>src/maininterface/ui/UISettings.cpp</value>
+  <value>src/recentsmanager/pRecentsManager.cpp</value>
+  <value>src/qscintillamanager/ui/pSearch.cpp</value>
+  <value>src/qscintillamanager/pEditor.cpp</value>
+  <value>src/qscintillamanager/qSciShortcutsManager.cpp</value>
+  <value>src/ctagsmanager/Ctags.cpp</value>
+  <value>src/workspace/pChild.cpp</value>
+  <value>src/workspace/UISaveFiles.cpp</value>
+  <value>src/workspace/pFileManager.cpp</value>
+  <value>src/workspace/pWorkspace.cpp</value>
+  <value>src/maininterface/UIMain.cpp</value>
+  <value>src/abbreviationsmanager/pAbbreviationsManager.cpp</value>
+  <value>src/abbreviationsmanager/ui/UIAddAbbreviation.cpp</value>
+  <value>src/variablesmanager/VariablesManager.cpp</value>
+  <value>src/templatesmanager/pTemplatesManager.cpp</value>
+  <value>src/templatesmanager/ui/UITemplatesWizard.cpp</value>
+  <value>src/pMonkeyStudio.cpp</value>
+  <value>src/toolsmanager/pDesktopApplications.cpp</value>
+  <value>src/toolsmanager/ui/UIDesktopTools.cpp</value>
+  <value>src/toolsmanager/ui/UIToolsEdit.cpp</value>
+  <value>src/toolsmanager/pToolsManager.cpp</value>
+  <value>src/consolemanager/pCommandParser.cpp</value>
+  <value>src/consolemanager/pConsoleManager.cpp</value>
+  <value>src/pluginsmanager/PluginsManager.cpp</value>
+  <value>src/pluginsmanager/ui/UIPluginsSettings.cpp</value>
+  <value>src/pluginsmanager/ui/UICLIToolSettings.cpp</value>
+  <value>src/pluginsmanager/ui/UIBuilderSettings.cpp</value>
+  <value>src/projectsmanager/ui/UIProjectsManager.cpp</value>
+  <value>src/projectsmanager/ui/UIAddExistingFiles.cpp</value>
+  <value>src/projectsmanager/ProjectsModel.cpp</value>
+  <value>src/projectsmanager/ProjectsProxy.cpp</value>
+  <value>src/projectsmanager/ProjectItem.cpp</value>
+  <value>src/main.cpp</value>
+  <value>src/pluginsmanager/ui/UICompilerSettings.cpp</value>
+ </variable>
+ <emptyline>1</emptyline>
+ <scope nested="true" name="mac" >
+  <variable operator="*=" name="SOURCES" >
+   <value>src/toolsmanager/pDesktopApplications_mac.cpp</value>
+  </variable>
+ </scope>
+ <scope nested="true" name="else" >
+  <scope nested="true" name="unix" >
+   <variable operator="*=" name="SOURCES" >
+    <value>src/toolsmanager/pDesktopApplications_unix.cpp</value>
+   </variable>
+  </scope>
+ </scope>
+ <scope nested="true" name="win32" >
+  <variable operator="*=" name="SOURCES" >
+   <value>src/toolsmanager/pDesktopApplications_win32.cpp</value>
+  </variable>
+ </scope>
+ <emptyline>1</emptyline>
+ <variable expanded="false" name="TRANSLATIONS" multiline="true" >
+  <value>../translations/monkey_french.ts</value>
+  <value>../translations/monkey_belarusian.ts</value>
+ </variable>
+ <emptyline>1</emptyline>
+</project>
