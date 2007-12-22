@@ -346,6 +346,7 @@ QString ProjectItem::canonicalFilePath( const QString& s ) const
 		fp = canonicalPath().append( "/" ).append( fp );
 	if ( QFile::exists( fp ) )
 		return QFileInfo( fp ).canonicalFilePath();
+	return QString();
 	return QFileInfo( fp ).absoluteFilePath();
 }
 
