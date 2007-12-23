@@ -26,45 +26,49 @@ public:
 	// return model
 	virtual ProjectItemModel* model() const;
 	// return copy of this item
-	virtual ProjectItem* clone() const;
+	virtual ProjectItem* clone( bool = true ) const;
 	// append row
 	virtual void appendRow( ProjectItem* );
 	// get project children items, recursively according to bool and same project according to bool
 	virtual QList<ProjectItem*> children( bool = true, bool = true ) const;
-	// check for sub proejct to open
-	virtual void checkChildrenProjects();
 
 	// set the item QDomElement
-	void setDomElement( const QDomElement& );
-	QDomElement domElement() const;
+	virtual void setDomElement( const QDomElement& );
+	virtual QDomElement domElement() const;
 	// return a QDomDocument about the current item and all its children
-	QDomDocument toDomDocument();
+	virtual QDomDocument toDomDocument();
 
+	// interpret a variable content based on it s name, search will end if ProjectItem parameter is encounteror until last item
+	virtual QString interpretedVariable( const QString&, const ProjectItem* = 0, const QString& = QString() ) const;
+	// get the item default value and interpret it s content, ie: the value return by valueName() attribute
+	virtual QString defaultInterpretedValue() const;
 	// return the item value name, ie: the name of the value to read to get the item value
-	QString valueName() const;
+	virtual QString valueName() const;
 	// set domelement attribute
-	void setValue( const QString&, const QString& );
+	virtual void setValue( const QString&, const QString& );
 	// get domelement attribute
-	QString value( const QString&, const QString& = QString() ) const;
+	virtual QString value( const QString&, const QString& = QString() ) const;
 	// get the item default value, ie: the value return by valueName() attribute
-	QString defaultValue( const QString& = QString() ) const;
+	virtual QString defaultValue( const QString& = QString() ) const;
 	
 	// return item modified state
-	bool modified() const;
+	virtual bool modified() const;
 	// set item modified state and emit modified signal according to second parameter
 	void setModified( bool, bool = true );
 
+	// check for sub project to open
+	virtual void checkChildrenProjects();
 	// open project
 	virtual bool loadProject( const QString& = QString(), const QString& = QString( "1.0.0" ) );
 	// save project
 	virtual bool saveProject( const QString& = QString(), const QString& = QString( "1.0.0" ) );
 
 	// return the project file path, ie the file u set when opening/saving the project
-	QString projectFilePath() const;
+	virtual QString projectFilePath() const;
 	// return the project path
-	QString projectPath() const;
+	virtual QString projectPath() const;
 	// if item is a value, and it s variable is file or path based, return the full file path of the value, else return a file path according to project path for parameter
-	QString filePath( const QString& = QString() );
+	virtual QString filePath( const QString& = QString() );
 	
 protected:
 	QDomElement mDomElement;
@@ -73,7 +77,6 @@ protected:
 
 signals:
 	void modifiedChanged( ProjectItem*, bool );
-
 };
 
 #endif // PROJECTITEM_H

@@ -4,6 +4,7 @@
 #include "XUPManager.h"
 
 #include <QFileDialog>
+#include <QTextEdit>
 
 using namespace XUPManager;
 
@@ -60,6 +61,9 @@ void UIProjectsManager::initializeProject( ProjectItem* pi )
 	setCurrentProject( pi );
 	// tell proejct is open
 	emit projectOpen( pi );
+	
+	// check interpret
+	qWarning( "Interpret: %s", qPrintable( pi->interpretedVariable( "QSCINTILLAVERSION" ) ) );
 }
 
 ProjectItem* UIProjectsManager::currentProject() const
@@ -134,6 +138,16 @@ void UIProjectsManager::on_tbSaveAs_clicked()
 
 void UIProjectsManager::on_tbSettings_clicked()
 {}
+
+void UIProjectsManager::on_tbSources_clicked()
+{
+	if ( ProjectItem* pi = currentProject() )
+	{
+		QTextEdit* te = new QTextEdit;
+		te->setPlainText( pi->toDomDocument().toString() );
+		te->show();
+	}
+}
 
 void UIProjectsManager::projectModified( ProjectItem* it, bool b )
 {

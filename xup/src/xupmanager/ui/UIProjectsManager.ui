@@ -89,6 +89,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QToolButton" name="tbSources" >
+         <property name="text" >
+          <string>Sources</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer>
          <property name="orientation" >
           <enum>Qt::Horizontal</enum>

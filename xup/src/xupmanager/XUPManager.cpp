@@ -73,7 +73,7 @@ void XUPManager::parseRoot( ProjectItem* p, QDomElement e )
 			// get child node
 			QDomElement de = l.at( i ).toElement();
 			// create item
-			ProjectItem* it = new ProjectItem;
+			ProjectItem* it = p->clone( false );
 			// append item to parent
 			p->appendRow( it );
 			// assign node

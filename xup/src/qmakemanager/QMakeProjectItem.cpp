@@ -1,4 +1,5 @@
 #include "QMakeProjectItem.h"
+#include "ProjectItemModel.h"
 #include "XUPManager.h"
 #include "QMake2XUP.h"
 
@@ -21,6 +22,7 @@ void QMakeProjectItem::registerItem()
 	registerFileVariables( "FORMS3" );
 	registerFileVariables( "HEADERS" );
 	registerFileVariables( "SOURCES" );
+	registerFileVariables( "OBJECTIVE_SOURCES" );
 	registerFileVariables( "TRANSLATIONS" );
 	registerFileVariables( "RESOURCES" );
 	registerFileVariables( "SUBDIRS" );
@@ -33,6 +35,7 @@ void QMakeProjectItem::registerItem()
 	registerVariableLabels( "FORMS3", tr( "Forms 3 Files" ) );
 	registerVariableLabels( "HEADERS", tr( "Headers Files" ) );
 	registerVariableLabels( "SOURCES", tr( "Sources Files" ) );
+	registerVariableLabels( "OBJECTIVE_SOURCES", tr( "Objective Sources Files" ) );
 	registerVariableLabels( "TRANSLATIONS", tr( "Translations Files" ) );
 	registerVariableLabels( "RESOURCES", tr( "Resources Files" ) );
 	registerVariableLabels( "SUBDIRS", tr( "Sub Projects" ) );
@@ -50,6 +53,7 @@ void QMakeProjectItem::registerItem()
 	registerVariableIcons( "FORMS3", getIcon( "forms3" ) );
 	registerVariableIcons( "HEADERS", getIcon( "headers" ) );
 	registerVariableIcons( "SOURCES", getIcon( "sources" ) );
+	registerVariableIcons( "OBJECTIVE_SOURCES", getIcon( "objective_sources" ) );
 	registerVariableIcons( "TRANSLATIONS", getIcon( "translations" ) );
 	registerVariableIcons( "RESOURCES", getIcon( "resources" ) );
 	registerVariableIcons( "SUBDIRS", getIcon( "project" ) );
@@ -66,11 +70,66 @@ void QMakeProjectItem::registerItem()
 	qWarning( qPrintable( tr( "QMakeProjectItem Registered" ) ) ); 
 }
 
-QMakeProjectItem* QMakeProjectItem::clone() const
-{ return new QMakeProjectItem( domElement(), projectFilePath(), modified() ); }
+QMakeProjectItem* QMakeProjectItem::clone( bool b ) const
+{ return b ? new QMakeProjectItem( domElement(), projectFilePath(), modified() ) : new QMakeProjectItem; }
 
 void QMakeProjectItem::appendRow( QMakeProjectItem* it )
 { ProjectItem::appendRow( it ); }
+
+QString QMakeProjectItem::interpretedVariable( const QString& s, const ProjectItem* it, const QString& ) const
+{
+	if ( !model() )
+		return QString();
+	qWarning( "test: %s", qPrintable( s ) );
+	move toplevel to item based members
+	QString v;
+	if ( ProjectItem* pi = model()->topLevelProject( this ) )
+	{
+		foreach ( ProjectItem* cit, pi->children( true, false ) )
+		{
+			if ( it && cit == it )
+				return v;
+			if ( model()->isType( cit, "variable" ) && cit->defaultValue() == s )
+			{
+				if ( cit->hasChildren() )
+				{
+					const QString o = cit->value( "operator", "=" );
+					const QString cv = cit->child( 0 )->defaultValue();
+					if ( o == "=" )
+						v = cv;
+					else if ( o == "-=" )
+						v.remove( cv );
+					else if ( o == "+=" )
+						v.append( " " +cv );
+					else if ( o == "*=" )
+					{
+						if ( !v.contains( cv ) )
+							v.append( " " +cv );
+					}
+					else if ( o == "~=" )
+					{
+						// don t know how to do ;)
+					}
+				}
+			}
+		}
+	}
+	return v;
+}
+
+QString QMakeProjectItem::defaultInterpretedValue() const
+{
+	QRegExp rx( "\\$\\$\\{?(\\w+)\\}?" );
+	QString v = defaultValue();
+	int p = 0;
+	while ( ( p = rx.indexIn( v, p ) ) != -1 )
+	{
+		QString g = interpretedVariable( rx.capturedTexts().value( 1 ), this );
+		qWarning( "%s: %s", qPrintable( rx.capturedTexts().value( 1 ) ), qPrintable( g ) );
+		p += rx.matchedLength();
+	}
+	return ProjectItem::defaultInterpretedValue();
+}
 
 void QMakeProjectItem::checkChildrenProjects()
 {
@@ -98,7 +157,7 @@ void QMakeProjectItem::checkChildrenProjects()
 		}
 		else if ( it->value( "type" ) == "function" && it->defaultValue().startsWith( "include" ) )
 		{
-			s = it->defaultValue();
+			s = it->defaultInterpretedValue();
 			s.remove( 0, s.indexOf( '(' ) +1 );
 			s.chop( s.length() -s.lastIndexOf( ')' ) );
 			s = it->filePath( s.trimmed() );

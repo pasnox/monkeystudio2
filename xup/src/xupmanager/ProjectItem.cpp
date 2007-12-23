@@ -18,8 +18,8 @@ ProjectItem* ProjectItem::parent() const
 ProjectItemModel* ProjectItem::model() const
 { return dynamic_cast<ProjectItemModel*>( QStandardItem::model() ); }
 
-ProjectItem* ProjectItem::clone() const
-{ return new ProjectItem( domElement(), projectFilePath(), modified() ); }
+ProjectItem* ProjectItem::clone( bool b ) const
+{ return b ? new ProjectItem( domElement(), projectFilePath(), modified() ) : new ProjectItem; }
 
 void ProjectItem::appendRow( ProjectItem* it )
 {
@@ -44,9 +44,6 @@ QList<ProjectItem*> ProjectItem::children( bool r, bool s ) const
 	return l;
 }
 
-void ProjectItem::checkChildrenProjects()
-{}
-
 void ProjectItem::setDomElement( const QDomElement& e )
 {
 	if ( mDomElement != e )
@@ -61,6 +58,12 @@ QDomElement ProjectItem::domElement() const
 
 QDomDocument ProjectItem::toDomDocument()
 { return XUPManager::toDomDocument( this ); }
+
+QString ProjectItem::interpretedVariable( const QString&, const ProjectItem*, const QString& s ) const
+{ return s; }
+
+QString ProjectItem::defaultInterpretedValue() const
+{ return defaultValue(); }
 
 QString ProjectItem::valueName() const
 { return XUPManager::valueName( value( "type" ) ); }
@@ -126,6 +129,9 @@ void ProjectItem::setModified( bool b, bool e )
 	}
 }
 
+void ProjectItem::checkChildrenProjects()
+{}
+
 bool ProjectItem::loadProject( const QString& s, const QString& v )
 {
 	if ( XUPManager::loadXUP( this, s, v ) )
@@ -164,9 +170,9 @@ QString ProjectItem::filePath( const QString& s )
 	if ( s.isEmpty() && model()->isType( this, "value" ) )
 	{
 		const QString v = parent()->defaultValue();
-		if ( XUPManager::fileVariables().contains( v ) || XUPManager::pathVariables().contains( v ) )
+		if ( ( XUPManager::fileVariables().contains( v ) || XUPManager::pathVariables().contains( v ) ) && !defaultValue().isEmpty() )
 		{
-			QFileInfo fi( projectPath().append( "/%1" ).arg( defaultValue() ) );
+			QFileInfo fi( projectPath().append( "/%1" ).arg( defaultInterpretedValue() ) );
 			return fi.exists() ? fi.canonicalFilePath() : fi.absoluteFilePath();
 		}
 	}

@@ -31,6 +31,7 @@ public slots:
 	void on_tbSave_clicked();
 	void on_tbSaveAs_clicked();
 	void on_tbSettings_clicked();
+	void on_tbSources_clicked();
 
 protected slots:
 	void projectModified( ProjectItem*, bool );
