@@ -14,10 +14,12 @@ class ProjectItem : public QObject, public QStandardItem
 	Q_OBJECT
 	
 public:
-	ProjectItem( const QDomElement& = QDomElement(), const QString& = QString(), bool = false );
+	ProjectItem( const QDomElement& = QDomElement(), const QString& = QString(), bool = false, ProjectItem* = 0 );
 
 	// register item specific infos
 	static void registerItem() { qWarning( qPrintable( tr( "ProjectItem Registered" ) ) ); }
+	// the visible variables in filtered view ordered by list order
+	virtual QStringList filteredVariables() const { return QStringList(); }
 
 	// return child item
 	virtual ProjectItem* child( int, int = 0 ) const;
@@ -50,11 +52,16 @@ public:
 	virtual QString value( const QString&, const QString& = QString() ) const;
 	// get the item default value, ie: the value return by valueName() attribute
 	virtual QString defaultValue( const QString& = QString() ) const;
-	
 	// return item modified state
 	virtual bool modified() const;
 	// set item modified state and emit modified signal according to second parameter
 	void setModified( bool, bool = true );
+	// return buddy item
+	virtual ProjectItem* buddy() const;
+	// set buddy item
+	virtual void setBuddy( ProjectItem* );
+	// return data, take care of buddy if need
+	virtual QVariant data( int = Qt::UserRole +1 ) const;
 
 	// check for sub project to open
 	virtual void checkChildrenProjects();
@@ -62,6 +69,8 @@ public:
 	virtual bool loadProject( const QString& = QString(), const QString& = QString( "1.0.0" ) );
 	// save project
 	virtual bool saveProject( const QString& = QString(), const QString& = QString( "1.0.0" ) );
+	// close project
+	virtual void closeProject();
 
 	// return the project file path, ie the file u set when opening/saving the project
 	virtual QString projectFilePath() const;
@@ -70,7 +79,17 @@ public:
 	// if item is a value, and it s variable is file or path based, return the full file path of the value, else return a file path according to project path for parameter
 	virtual QString filePath( const QString& = QString() );
 	
+	// tell if this item is a project
+	virtual bool isProject() const;
+	// tell if this item is type
+	virtual bool isType( const QString& ) const;
+	// return the project item of this item
+	virtual ProjectItem* project() const;
+	// return the top level project
+	virtual ProjectItem* topLevelProject() const;
+	
 protected:
+	ProjectItem* mBuddy;
 	QDomElement mDomElement;
 	QString mProjectFilePath;
 	bool mModified;

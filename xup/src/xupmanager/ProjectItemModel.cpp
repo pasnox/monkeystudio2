@@ -1,8 +1,9 @@
 #include "ProjectItemModel.h"
 #include "ProjectItem.h"
+#include "FilteredProjectItemModel.h"
 
 ProjectItemModel::ProjectItemModel( QObject* o )
-	: QStandardItemModel( o )
+	: QStandardItemModel( o ), mFilteredModel( 0 )
 { setItemPrototype( new ProjectItem() ); }
 
 ProjectItemModel::~ProjectItemModel()
@@ -17,46 +18,6 @@ ProjectItem* ProjectItemModel::itemFromIndex( const QModelIndex& i ) const
 void ProjectItemModel::appendRow( ProjectItem* it )
 { QStandardItemModel::appendRow( it ); }
 
-bool ProjectItemModel::isProject( const ProjectItem* it ) const
-{ return it ? it->value( "type" ) == "project" : false; }
-
-bool ProjectItemModel::isProject( const QModelIndex& i ) const
-{ return isProject( itemFromIndex( i ) ); }
-
-bool ProjectItemModel::isType( const ProjectItem* it, const QString& s ) const
-{ return it ? it->value( "type" ) == s : false; }
-
-bool ProjectItemModel::isType( const QModelIndex& i, const QString& s ) const
-{ return isType( itemFromIndex( i ), s ); }
-
-ProjectItem* ProjectItemModel::project( const ProjectItem* it ) const
-{
-	if ( it )
-	{
-		if ( isProject( it ) )
-			return const_cast<ProjectItem*>( it );
-		while ( it && ( it = it->parent() )  )
-			if ( isProject( it ) )
-				return const_cast<ProjectItem*>( it );
-	}
-	return 0;
-}
-
-ProjectItem* ProjectItemModel::project( const QModelIndex& i ) const
-{ return project( itemFromIndex( i ) ); }
-
-ProjectItem* ProjectItemModel::topLevelProject( const ProjectItem* it ) const
-{
-	it = project( it );
-	while ( it && it->parent() && ( it == project( it ) ) )
-		if ( isProject( it ) )
-			return const_cast<ProjectItem*>( it );
-	return const_cast<ProjectItem*>( it );
-}
-
-ProjectItem* ProjectItemModel::topLevelProject( const QModelIndex& i ) const
-{ return topLevelProject( itemFromIndex( i ) ); }
-
 QList<ProjectItem*> ProjectItemModel::topLevelProjects( int c ) const
 {
 	QList<ProjectItem*> l;
@@ -65,18 +26,9 @@ QList<ProjectItem*> ProjectItemModel::topLevelProjects( int c ) const
 	return l;
 }
 
-void ProjectItemModel::closeProject( const ProjectItem* it )
+FilteredProjectItemModel* ProjectItemModel::filteredModel()
 {
-	if ( it )
-	{
-		if ( it->parent() )
-			qDeleteAll( it->parent()->takeRow( it->row() ) );
-		else if ( it->model() )
-			qDeleteAll( it->model()->takeRow( it->row() ) );
-		else
-			delete it;
-	}
+	if ( !mFilteredModel )
+		mFilteredModel = new FilteredProjectItemModel( this );
+	return mFilteredModel;
 }
-
-void ProjectItemModel::closeProject( const QModelIndex& i )
-{ closeProject( itemFromIndex( i ) ); }

@@ -4,6 +4,7 @@
 #include <QStandardItemModel>
 
 class ProjectItem;
+class FilteredProjectItemModel;
 
 class ProjectItemModel : public QStandardItemModel
 {
@@ -19,26 +20,13 @@ public:
 	ProjectItem* itemFromIndex( const QModelIndex& ) const;
 	// append row item
 	void appendRow( ProjectItem* );
-
-	// tell if this item is a project
-	bool isProject( const ProjectItem* ) const;
-	bool isProject( const QModelIndex& ) const;
-	// tell if this item is type
-	bool isType( const ProjectItem*, const QString& ) const;
-	bool isType( const QModelIndex&, const QString& ) const;
-	// return the project item of this item
-	ProjectItem* project( const ProjectItem* ) const;
-	ProjectItem* project( const QModelIndex& ) const;
-	// return the top level project
-	ProjectItem* topLevelProject( const ProjectItem* ) const;
-	ProjectItem* topLevelProject( const QModelIndex& ) const;
 	// return all top level proejcts for column
 	QList<ProjectItem*> topLevelProjects( int = 0 ) const;
+	// return the filtered model
+	FilteredProjectItemModel* filteredModel();
 
-	// close project
-	void closeProject( const ProjectItem* );
-	void closeProject( const QModelIndex& );
-
+private:
+	FilteredProjectItemModel* mFilteredModel;
 };
 
 #endif // PROJECTITEMMODEL_H

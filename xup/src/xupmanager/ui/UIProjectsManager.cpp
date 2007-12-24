@@ -3,6 +3,8 @@
 #include "ProjectItemModel.h"
 #include "XUPManager.h"
 
+#include "FilteredProjectItemModel.h"
+
 #include <QFileDialog>
 #include <QTextEdit>
 
@@ -26,6 +28,11 @@ UIProjectsManager::UIProjectsManager( QWidget* w )
 	connect( tvProjects->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( currentChanged( const QModelIndex&, const QModelIndex& ) ) );
 	// set current proejct to null
 	setCurrentProject( 0 );
+	
+	QTreeView* tv = new QTreeView;
+	tv->setModel( mModel->filteredModel() );
+	tv->show();
+	
 }
 
 UIProjectsManager::~UIProjectsManager()
@@ -61,13 +68,14 @@ void UIProjectsManager::initializeProject( ProjectItem* pi )
 	setCurrentProject( pi );
 	// tell proejct is open
 	emit projectOpen( pi );
-	
-	// check interpret
-	qWarning( "Interpret: %s", qPrintable( pi->interpretedVariable( "QSCINTILLAVERSION" ) ) );
 }
 
 ProjectItem* UIProjectsManager::currentProject() const
-{ return mModel->project( tvProjects->currentIndex() ); }
+{
+	if ( ProjectItem* it = mModel->itemFromIndex( tvProjects->currentIndex() ) )
+		return it->project();
+	return 0;
+}
 
 void UIProjectsManager::setCurrentProject( const ProjectItem* pi )
 {
@@ -111,10 +119,10 @@ void UIProjectsManager::on_tbClose_clicked()
 {
 	if ( ProjectItem* it = currentProject() )
 	{
-		if ( !it->modified() || ( it->modified() && question( "Project modified, save it ?" ) ) )
+		if ( it->modified() && question( "Project modified, save it ?" ) )
 			if ( !saveProject( it, QString() ) )
 				warning( "An error occur while saving project" );
-		mModel->closeProject( it );
+		it->closeProject();
 		setCurrentProject( mModel->topLevelProjects().value( 0 ) );
 	}
 }
@@ -151,12 +159,15 @@ void UIProjectsManager::on_tbSources_clicked()
 
 void UIProjectsManager::projectModified( ProjectItem* it, bool b )
 {
-	if ( mModel->project( it ) == currentProject() )
+	if ( it->project() == currentProject() )
 		tbSave->setEnabled( b );
 }
 
 void UIProjectsManager::currentChanged( const QModelIndex& c, const QModelIndex& )
-{ setCurrentProject( mModel->project( c ) ); }
+{
+	if ( ProjectItem* it = mModel->itemFromIndex( c ) )
+		setCurrentProject( it->project() );
+}
 
 void UIProjectsManager::on_tvProjects_collapsed( const QModelIndex& i )
 {

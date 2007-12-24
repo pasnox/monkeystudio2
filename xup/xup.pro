@@ -25,7 +25,7 @@ INCLUDEPATH	= . src src/xupmanager src/xupmanager/ui src/qmakemanager
 
 BUILDER	= GNUMake
 COMPILER	= G++
-EXECUTE_RELEASE	= xup.app/Contents/MacOS/xup
+EXECUTE_RELEASE	= xup
 EXECUTE_DEBUG	= xup_debug.app/Contents/MacOS/xup_debug
 
 CONFIG(debug, debug|release) {
@@ -56,7 +56,8 @@ HEADERS	+= src/xupmanager/ProjectItemModel.h \
 	src/xupmanager/XUPManager.h \
 	src/xupmanager/ui/UIProjectsManager.h \
 	src/qmakemanager/QMakeProjectItem.h \
-	src/qmakemanager/QMake2XUP.h
+	src/qmakemanager/QMake2XUP.h \
+	src/xupmanager/FilteredProjectItemModel.h
 
 SOURCES	+= src/xupmanager/ProjectItemModel.cpp \
 	src/xupmanager/ProjectItem.cpp \
@@ -64,4 +65,5 @@ SOURCES	+= src/xupmanager/ProjectItemModel.cpp \
 	src/xupmanager/ui/UIProjectsManager.cpp \
 	src/main.cpp \
 	src/qmakemanager/QMakeProjectItem.cpp \
-	src/qmakemanager/QMake2XUP.cpp
+	src/qmakemanager/QMake2XUP.cpp \
+	src/xupmanager/FilteredProjectItemModel.cpp

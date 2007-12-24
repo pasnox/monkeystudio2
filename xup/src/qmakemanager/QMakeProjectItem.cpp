@@ -10,8 +10,8 @@ using namespace XUPManager;
 QIcon getIcon( const QString& s )
 { return QIcon( QString( ":/icons/icons/%1.png" ).arg( s ) ); }
 
-QMakeProjectItem::QMakeProjectItem( const QDomElement& e, const QString& s, bool b )
-	: ProjectItem( e, s, b )
+QMakeProjectItem::QMakeProjectItem( const QDomElement& e, const QString& s, bool b, ProjectItem* bit )
+	: ProjectItem( e, s, b, bit )
 {}
 
 void QMakeProjectItem::registerItem()
@@ -70,31 +70,30 @@ void QMakeProjectItem::registerItem()
 	qWarning( qPrintable( tr( "QMakeProjectItem Registered" ) ) ); 
 }
 
-QMakeProjectItem* QMakeProjectItem::clone( bool b ) const
-{ return b ? new QMakeProjectItem( domElement(), projectFilePath(), modified() ) : new QMakeProjectItem; }
+QStringList QMakeProjectItem::filteredVariables() const
+{
+	return QStringList() << "FORMS" << "FORMS3" << "HEADERS" << "SOURCES" << "OBJECTIVE_SOURCES" << "TRANSLATIONS"
+		<< "RESOURCES" << "INCLUDEPATH" << "DEPENDPATH" << "VPATH" << "LIBS" << "DEFINES" << "RC_FILE" << "RES_FILE" << "DEF_FILE";
+}
 
-void QMakeProjectItem::appendRow( QMakeProjectItem* it )
-{ ProjectItem::appendRow( it ); }
+QMakeProjectItem* QMakeProjectItem::clone( bool b ) const
+{ return b ? new QMakeProjectItem( domElement(), projectFilePath(), modified(), buddy() ) : new QMakeProjectItem; }
 
 QString QMakeProjectItem::interpretedVariable( const QString& s, const ProjectItem* it, const QString& ) const
 {
-	if ( !model() )
-		return QString();
-	qWarning( "test: %s", qPrintable( s ) );
-	move toplevel to item based members
 	QString v;
-	if ( ProjectItem* pi = model()->topLevelProject( this ) )
+	if ( ProjectItem* pi = topLevelProject() )
 	{
 		foreach ( ProjectItem* cit, pi->children( true, false ) )
 		{
 			if ( it && cit == it )
 				return v;
-			if ( model()->isType( cit, "variable" ) && cit->defaultValue() == s )
+			if ( cit->isType( "variable" ) && cit->defaultValue() == s )
 			{
 				if ( cit->hasChildren() )
 				{
 					const QString o = cit->value( "operator", "=" );
-					const QString cv = cit->child( 0 )->defaultValue();
+					const QString cv = cit->child( 0 )->defaultInterpretedValue();
 					if ( o == "=" )
 						v = cv;
 					else if ( o == "-=" )
@@ -119,16 +118,24 @@ QString QMakeProjectItem::interpretedVariable( const QString& s, const ProjectIt
 
 QString QMakeProjectItem::defaultInterpretedValue() const
 {
-	QRegExp rx( "\\$\\$\\{?(\\w+)\\}?" );
-	QString v = defaultValue();
+	/*
+		$$[QT_INSTALL_HEADERS]
+		$${QT_INSTALL_HEADERS}
+		$$(QT_INSTALL_HEADERS)
+		$$QT_INSTALL_HEADERS
+		$(QTDIR)
+		$$PWD
+	*/
+	QRegExp rx( "\\$\\$?[\\{\\(\\[]?(\\w+)[\\}\\)\\]]?" );
+	const QString dv = defaultValue();
+	QString v = dv;
 	int p = 0;
-	while ( ( p = rx.indexIn( v, p ) ) != -1 )
+	while ( ( p = rx.indexIn( dv, p ) ) != -1 )
 	{
-		QString g = interpretedVariable( rx.capturedTexts().value( 1 ), this );
-		qWarning( "%s: %s", qPrintable( rx.capturedTexts().value( 1 ) ), qPrintable( g ) );
+		v.replace( rx.capturedTexts().value( 0 ), interpretedVariable( rx.capturedTexts().value( 1 ), this ) );
 		p += rx.matchedLength();
 	}
-	return ProjectItem::defaultInterpretedValue();
+	return v;
 }
 
 void QMakeProjectItem::checkChildrenProjects()
@@ -168,7 +175,10 @@ void QMakeProjectItem::checkChildrenProjects()
 				if ( pi->loadProject( s ) )
 					it->appendRow( pi );
 				else
+				{
 					delete pi;
+					qWarning( "error loading include file: %s", qPrintable( s ) );
+				}
 			}
 		}
 	}

@@ -2,8 +2,9 @@
 #include "ProjectItemModel.h"
 #include "XUPManager.h"
 
-ProjectItem::ProjectItem( const QDomElement& e, const QString& s, bool b )
+ProjectItem::ProjectItem( const QDomElement& e, const QString& s, bool b, ProjectItem* bit )
 {
+	setBuddy( bit );
 	setDomElement( e );
 	loadProject( s );
 	setModified( b );
@@ -19,7 +20,7 @@ ProjectItemModel* ProjectItem::model() const
 { return dynamic_cast<ProjectItemModel*>( QStandardItem::model() ); }
 
 ProjectItem* ProjectItem::clone( bool b ) const
-{ return b ? new ProjectItem( domElement(), projectFilePath(), modified() ) : new ProjectItem; }
+{ return b ? new ProjectItem( domElement(), projectFilePath(), modified(), buddy() ) : new ProjectItem; }
 
 void ProjectItem::appendRow( ProjectItem* it )
 {
@@ -33,12 +34,14 @@ QList<ProjectItem*> ProjectItem::children( bool r, bool s ) const
 	QList<ProjectItem*> l;
 	for ( int i = 0; i < rowCount(); i++ )
 	{
-		ProjectItem* cit = child( i );
-		if ( !s || ( s && !model()->isProject( cit ) ) )
+		if ( ProjectItem* cit = child( i ) )
 		{
-			l << cit;
-			if ( r )
-				l << cit->children( r, s );
+			if ( !s || ( s && !cit->isProject() ) )
+			{
+				l << cit;
+				if ( r )
+					l << cit->children( r, s );
+			}
 		}
 	}
 	return l;
@@ -85,11 +88,12 @@ void ProjectItem::setValue( const QString& n, const QString& v )
 
 QString ProjectItem::value( const QString& n, const QString& v ) const
 {
+	const ProjectItem* it = mBuddy ? mBuddy : this;
 	if ( n == "text" )
-		return mDomElement.firstChild().toText().data();
+		return it->mDomElement.firstChild().toText().data();
 	else if ( n == "type" )
-		return mDomElement.tagName();
-	return mDomElement.attribute( n, v );
+		return it->mDomElement.tagName();
+	return it->mDomElement.attribute( n, v );
 }
 
 QString ProjectItem::defaultValue( const QString& v ) const
@@ -97,7 +101,7 @@ QString ProjectItem::defaultValue( const QString& v ) const
 
 bool ProjectItem::modified() const
 {
-	if ( model()->isProject( this ) )
+	if ( isProject() )
 		foreach ( ProjectItem* it, children( true, true ) )
 			if ( it->modified() )
 				return true;
@@ -106,13 +110,13 @@ bool ProjectItem::modified() const
 
 void ProjectItem::setModified( bool b, bool e )
 {
-	if ( model()->isProject( this ) && b && !modified() )
+	if ( isProject() && b && !modified() )
 	{
 		mModified = true;
 		if ( e )
 			emit modifiedChanged( this, true );
 	}
-	else if ( model()->isProject( this ) && !b && modified() )
+	else if ( isProject() && !b && modified() )
 	{
 		foreach ( ProjectItem* it, children( true, true ) )
 			if ( it->modified() )
@@ -128,6 +132,18 @@ void ProjectItem::setModified( bool b, bool e )
 			emit modifiedChanged( this, mModified );
 	}
 }
+
+ProjectItem* ProjectItem::buddy() const
+{ return mBuddy; }
+
+void ProjectItem::setBuddy( ProjectItem* it )
+{
+	if ( mBuddy != it )
+		mBuddy = it;
+}
+
+QVariant ProjectItem::data( int r ) const
+{ return mBuddy ? mBuddy->data( r ) : QStandardItem::data( r ); }
 
 void ProjectItem::checkChildrenProjects()
 {}
@@ -155,9 +171,17 @@ bool ProjectItem::saveProject( const QString& s, const QString& v )
 	return false;
 }
 
+void ProjectItem::closeProject()
+{
+	if ( model() )
+		model()->removeRow( row(), index().parent() );
+	else
+		deleteLater();
+}
+
 QString ProjectItem::projectFilePath() const
 {
-	if ( ProjectItem* pi = model()->project( this ) )
+	if ( ProjectItem* pi = project() )
 		return pi->mProjectFilePath;
 	return QString();
 }
@@ -167,7 +191,7 @@ QString ProjectItem::projectPath() const
 
 QString ProjectItem::filePath( const QString& s )
 {
-	if ( s.isEmpty() && model()->isType( this, "value" ) )
+	if ( s.isEmpty() && isType( "value" ) )
 	{
 		const QString v = parent()->defaultValue();
 		if ( ( XUPManager::fileVariables().contains( v ) || XUPManager::pathVariables().contains( v ) ) && !defaultValue().isEmpty() )
@@ -182,4 +206,30 @@ QString ProjectItem::filePath( const QString& s )
 		return fi.exists() ? fi.canonicalFilePath() : fi.absoluteFilePath();
 	}
 	return s;
+}
+
+bool ProjectItem::isProject() const
+{ return value( "type" ) == "project"; }
+
+bool ProjectItem::isType( const QString& s ) const
+{ return value( "type" ) == s; }
+
+ProjectItem* ProjectItem::project() const
+{
+	if ( isProject() )
+		return const_cast<ProjectItem*>( this );
+	ProjectItem* it = const_cast<ProjectItem*>( this );
+	while ( ( it = it->parent() )  )
+		if ( it->isProject() )
+			return const_cast<ProjectItem*>( it );
+	return 0;
+}
+
+ProjectItem* ProjectItem::topLevelProject() const
+{
+	ProjectItem* it = project();
+	while ( it && it->parent() && ( it == it->project() ) )
+		if ( it->isProject() )
+			return const_cast<ProjectItem*>( it );
+	return const_cast<ProjectItem*>( it );
 }

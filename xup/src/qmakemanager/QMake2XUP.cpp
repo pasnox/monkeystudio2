@@ -135,14 +135,14 @@ QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 			QString ajout;
 			for(int ku = 0;ku < tmpValues.size();ku++)
 			{
-				if(tmpValues.at(ku).at(0) == '"')
+				if(tmpValues.value(ku).startsWith('"') )
 					inStr = true;
 				if(inStr)
 				{
 					if(ajout != "")
 						ajout += " ";
-					ajout += tmpValues.at(ku);
-					if(tmpValues.at(ku).at(tmpValues.at(ku).length()-1) == '"')
+					ajout += tmpValues.value(ku);
+					if(tmpValues.value(ku).endsWith('"') )
 					{
 						multivalues += ajout;
 						ajout = "";
@@ -151,11 +151,11 @@ QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 				}
 				else
 				{
-					multivalues += tmpValues.at(ku);
+					multivalues += tmpValues.value(ku);
 				}
 			}
 			for(int ku = 0;ku < multivalues.size();ku++)
-				file.append("<value"+(liste[6].trimmed().toUtf8() != "" && ku+1 == multivalues.size() ? " comment=\""+liste[6].trimmed().toUtf8()+"\"" : "")+">"+multivalues.at(ku).toUtf8()+"</value>\n");
+				file.append("<value"+(liste[6].trimmed().toUtf8() != "" && ku+1 == multivalues.size() ? " comment=\""+liste[6].trimmed().toUtf8()+"\"" : "")+">"+multivalues.value(ku).toUtf8()+"</value>\n");
 			
 			if(isMulti == " multiline=\"true\"")
 			{
@@ -169,14 +169,14 @@ QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 					inStr = false;
 					for(int ku = 0;ku < tmpValues.size();ku++)
 					{
-						if(tmpValues.at(ku).at(0) == '"')
+						if(tmpValues.value(ku).startsWith('"') )
 							inStr = true;
 						if(inStr)
 						{
 							if(ajout != "")
 								ajout += " ";
-							ajout += tmpValues.at(ku);
-							if(tmpValues.at(ku).at(tmpValues.at(ku).length()-1) == '"')
+							ajout += tmpValues.value(ku);
+							if(tmpValues.value(ku).endsWith('"') )
 							{
 								multivalues += ajout;
 								ajout = "";
@@ -185,11 +185,11 @@ QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 						}
 						else
 						{
-							multivalues += tmpValues.at(ku);
+							multivalues += tmpValues.value(ku);
 						}
 					}
 					for(int ku = 0;ku < multivalues.size();ku++)
-						file.append("<value"+(liste[2].trimmed().toUtf8() != "" && ku+1 == multivalues.size() ? " comment=\""+liste[2].trimmed().toUtf8()+"\"" : "")+">"+multivalues.at(ku).toUtf8()+"</value>\n");
+						file.append("<value"+(liste[2].trimmed().toUtf8() != "" && ku+1 == multivalues.size() ? " comment=\""+liste[2].trimmed().toUtf8()+"\"" : "")+">"+multivalues.value(ku).toUtf8()+"</value>\n");
 					i++;
 				}
 				liste = v[i].split( "#" );
@@ -202,14 +202,14 @@ QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 				inStr = false;
 				for(int ku = 0;ku < tmpValues.size();ku++)
 				{
-					if(tmpValues.at(ku).at(0) == '"')
+					if(tmpValues.value(ku).startsWith('"') )
 						inStr = true;
 					if(inStr)
 					{
 						if(ajout != "")
 							ajout += " ";
-						ajout += tmpValues.at(ku);
-						if(tmpValues.at(ku).at(tmpValues.at(ku).length()-1) == '"')
+						ajout += tmpValues.value(ku);
+						if(tmpValues.value(ku).endsWith('"') )
 						{
 							multivalues += ajout;
 							ajout = "";
@@ -218,11 +218,11 @@ QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 					}
 					else
 					{
-						multivalues += tmpValues.at(ku);
+						multivalues += tmpValues.value(ku);
 					}
 				}
 				for(int ku = 0;ku < multivalues.size();ku++)
-					file.append("<value"+(comment.trimmed().toUtf8() != "" && ku+1 == multivalues.size() ? " comment=\""+comment.trimmed().toUtf8()+"\"" : "")+">"+multivalues.at(ku).toUtf8()+"</value>\n");
+					file.append("<value"+(comment.trimmed().toUtf8() != "" && ku+1 == multivalues.size() ? " comment=\""+comment.trimmed().toUtf8()+"\"" : "")+">"+multivalues.value(ku).toUtf8()+"</value>\n");
 			}
 			file.append("</variable>\n");
 		}
