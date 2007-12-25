@@ -93,3 +93,6 @@ SOURCES	+= pFileListEditor.cpp
 # pPathListEditor
 HEADERS	+= pPathListEditor.h
 SOURCES	+= pPathListEditor.cpp
+# pDockWidget
+HEADERS	+= pDockWidget.h
+SOURCES	+= pDockWidget.cpp
