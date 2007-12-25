@@ -9,7 +9,7 @@
 
 class QsciScintilla;
 
-class Q_MONKEY_EXPORT pSearch : public QDockWidget, public Ui::pSearch, public QSingleton<pSearch>
+class Q_MONKEY_EXPORT pSearch : public pDockWidget, public Ui::pSearch, public QSingleton<pSearch>
 {
 	Q_OBJECT
 	friend class QSingleton<pSearch>;

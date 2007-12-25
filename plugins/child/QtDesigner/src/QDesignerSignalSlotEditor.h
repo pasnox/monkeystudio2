@@ -1,11 +1,11 @@
 #ifndef QDESIGNERSIGNALSLOTEDITOR_H
 #define QDESIGNERSIGNALSLOTEDITOR_H
 
-#include <QDockWidget>
+#include "pDockWidget.h"
 
 class QtDesignerChild;
 
-class QDesignerSignalSlotEditor : public QDockWidget
+class QDesignerSignalSlotEditor : public pDockWidget
 {
 public:
 	QDesignerSignalSlotEditor( QtDesignerChild* );

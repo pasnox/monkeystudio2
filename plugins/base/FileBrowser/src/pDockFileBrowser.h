@@ -16,8 +16,8 @@
 #define PDOCKFILEBROWSER_H
 
 #include "QSingleton.h"
+#include "pDockWidget.h"
 
-#include <QDockWidget>
 #include <QModelIndex>
 
 class pTreeComboBox;
@@ -26,7 +26,7 @@ class QListView;
 class QDirModel;
 class QTreeView;
 
-class pDockFileBrowser : public QDockWidget, public QSingleton<pDockFileBrowser>
+class pDockFileBrowser : public pDockWidget, public QSingleton<pDockFileBrowser>
 {
 	Q_OBJECT
 	friend class QSingleton<pDockFileBrowser>;

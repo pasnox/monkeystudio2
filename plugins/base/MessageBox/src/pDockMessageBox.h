@@ -17,8 +17,7 @@
 
 #include "QSingleton.h"
 #include "pConsoleManager.h"
-
-#include <QDockWidget>
+#include "pDockWidget.h"
 
 class QLabel;
 class QLineEdit;
@@ -28,7 +27,7 @@ class QListWidgetItem;
 class QTextBrowser;
 class QTextEdit;
 
-class pDockMessageBox : public QDockWidget, public QSingleton<pDockMessageBox>
+class pDockMessageBox : public pDockWidget, public QSingleton<pDockMessageBox>
 {
 	Q_OBJECT
 	friend class QSingleton<pDockMessageBox>;

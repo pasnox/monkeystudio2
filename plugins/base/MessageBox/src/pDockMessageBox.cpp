@@ -32,7 +32,7 @@
 #include "pMonkeyStudio.h"
 
 pDockMessageBox::pDockMessageBox( QWidget* w )
-	: QDockWidget( w ), mShown( false )
+	: pDockWidget( w ), mShown( false )
 {
 	// create tabwidget
 	twMessageBox = new QTabWidget;

@@ -55,7 +55,7 @@ bool Navigator::setEnabled (bool e)
 	mPluginInfos.Enabled = e;
 	if (mPluginInfos.Enabled)
 	{
-		dockwgt = new QDockWidget( pWorkspace::instance());
+		dockwgt = new pDockWidget( pWorkspace::instance());
 		//dockwgt->hide ();
 		dockwgt->setMinimumWidth (100);
 		fileWidget = new QWidget (dockwgt);

@@ -7,7 +7,7 @@
 #include <QDesignerFormWindowManagerInterface>
 
 QDesignerSignalSlotEditor::QDesignerSignalSlotEditor( QtDesignerChild* p )
- : QDockWidget( 0 )
+ : pDockWidget( 0 )
 {
 	// need core
 	Q_ASSERT( p && p->core() );

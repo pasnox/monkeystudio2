@@ -1,12 +1,12 @@
 <ui version="4.0" >
  <class>pSearch</class>
- <widget class="QDockWidget" name="pSearch" >
+ <widget class="pDockWidget" name="pSearch" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>250</width>
-    <height>240</height>
+    <width>260</width>
+    <height>259</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -266,6 +266,13 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>pDockWidget</class>
+   <extends>QDockWidget</extends>
+   <header>pDockWidget.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>leSearch</tabstop>
   <tabstop>leReplace</tabstop>

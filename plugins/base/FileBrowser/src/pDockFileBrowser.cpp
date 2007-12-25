@@ -30,7 +30,7 @@
 #include <QHeaderView>
 
 pDockFileBrowser::pDockFileBrowser( QWidget* w )
-	: QDockWidget( w ), mShown( false )
+	: pDockWidget( w ), mShown( false )
 {
 	// restrict areas
 	setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );

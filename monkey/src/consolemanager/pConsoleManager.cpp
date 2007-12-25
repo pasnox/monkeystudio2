@@ -25,8 +25,12 @@ static const int MAX_LENGTH = 2047;
 using namespace pMonkeyStudio;
 
 pConsoleManager::pConsoleManager( QObject* o )
-	: QProcess( o ), mStopAction( new pAction( "aStopAction", QIcon( ":/console/icons/console/stop.png" ), tr( "Stop current command" ), tr( "Ctrl+End" ), tr( "Console Manager" ) ) )
+	: QProcess( o ), mStopAction( new pAction( "aStopAction", QIcon( ":/console/icons/console/stop.png" ), tr( "Stop current command" ), tr( "Break" ), tr( "Console Manager" ) ) )
 {
+	// change shortcut for mac
+#ifdef Q_OS_MAC
+	mStopAction->setShortcut( tr( "Ctrl+Backspace" ) );
+#endif
 	// set status tip for
 	mStopAction->setStatusTip( tr( "Stop the currently running command" ) );
 	mStopAction->setEnabled( false );
@@ -229,7 +233,7 @@ void pConsoleManager::sendRawData( const QByteArray& a )
 		while ( state() == QProcess::Starting )
 			QApplication::processEvents( QEventLoop::ExcludeUserInputEvents );
 		// send raw command to process
-		qWarning( "sendRawData bytes written: %d", write( a ) );
+		qWarning( "sendRawData bytes written: %i", (int)write( a ) );
 	}
 	else
 		warning( tr( "sendRawData..." ), tr( "Can't send raw data to console" ) );

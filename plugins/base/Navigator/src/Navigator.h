@@ -17,7 +17,6 @@ It's extendable with a powerfull plugins system.
 #ifndef NAVIGATOR_H
 #define NAVIGATOR_H
 //
-#include <QDockWidget>
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QHash>
@@ -30,6 +29,7 @@ It's extendable with a powerfull plugins system.
 #include "ProjectsModel.h"
 #include "pWorkspace.h"
 #include "QSingleton.h"
+#include "pDockWidget.h"
 
 class ProjectItem;
 class pAbstractChild;
@@ -44,7 +44,7 @@ class Navigator : public BasePlugin, public QSingleton<Navigator>
 private:
 	QHash <ProjectItem* , EntityContainer*> projectTrees;
 	QHash <QString , EntityContainer*> fileTrees;
-	QDockWidget* dockwgt;
+	pDockWidget* dockwgt;
 	QWidget* fileWidget ;
 	QVBoxLayout* fileBox;
 	EntityContainer* currFileTreew;

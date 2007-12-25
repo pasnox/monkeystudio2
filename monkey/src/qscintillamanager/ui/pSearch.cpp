@@ -5,7 +5,7 @@
 #include <QKeyEvent>
 
 pSearch::pSearch( QsciScintilla* p )
-	: QDockWidget( p )
+	: pDockWidget( p )
 {
 	// setup dock
 	setupUi( this );

@@ -1,12 +1,12 @@
 #ifndef QDESIGNERWIDGETBOX_H
 #define QDESIGNERWIDGETBOX_H
 
-#include <QDockWidget>
+#include "pDockWidget.h"
 
 class QtDesignerChild;
 class QDesignerWidgetBoxInterface;
 
-class QDesignerWidgetBox : public QDockWidget
+class QDesignerWidgetBox : public pDockWidget
 {
 public:
 	QDesignerWidgetBox( QtDesignerChild* ) ;

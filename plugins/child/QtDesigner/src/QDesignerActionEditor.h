@@ -1,12 +1,12 @@
 #ifndef QDESIGNERACTIONEDITOR_H
 #define QDESIGNERACTIONEDITOR_H
 
-#include <QDockWidget>
+#include "pDockWidget.h"
 
 class QtDesignerChild;
 class QDesignerActionEditorInterface;
 
-class QDesignerActionEditor : public QDockWidget
+class QDesignerActionEditor : public pDockWidget
 {
 	Q_OBJECT
 

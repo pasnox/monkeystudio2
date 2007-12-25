@@ -1,12 +1,12 @@
 #ifndef QDESIGNEROBJECTINSPECTOR_H
 #define QDESIGNEROBJECTINSPECTOR_H
 
-#include <QDockWidget>
+#include "pDockWidget.h"
 
 class QtDesignerChild;
 class QDesignerObjectInspectorInterface;
 
-class QDesignerObjectInspector : public QDockWidget
+class QDesignerObjectInspector : public pDockWidget
 {
 public:
 	QDesignerObjectInspector( QtDesignerChild* );
