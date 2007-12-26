@@ -15,6 +15,8 @@
 
 class Q_MONKEY_EXPORT pKeySequenceInput : public QLineEdit
 {
+	Q_OBJECT
+
 public:
 	pKeySequenceInput( QWidget* );
 

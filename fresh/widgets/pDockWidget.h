@@ -1,9 +1,11 @@
 #ifndef PDOCKWIDGET_H
 #define PDOCKWIDGET_H
 
+#include "MonkeyExport.h"
+
 #include <QDockWidget>
 
-class pDockWidget : public QDockWidget
+class Q_MONKEY_EXPORT pDockWidget : public QDockWidget
 {
 	Q_OBJECT
 	
