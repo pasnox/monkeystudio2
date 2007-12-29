@@ -351,6 +351,10 @@ void QtDesignerChild::setModified( QDesignerFormWindowInterface* w )
 
 void QtDesignerChild::openFile( const QString& s, QTextCodec* )
 {
+	foreach ( const QString f, files() )
+		if ( isSameFile( f, s ) )
+			return;
+	
 	// create form
 	QDesignerFormWindowInterface* w = createForm();
 	
