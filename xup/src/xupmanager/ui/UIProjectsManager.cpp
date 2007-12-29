@@ -1,12 +1,12 @@
 #include "UIProjectsManager.h"
 #include "QMakeProjectItem.h"
 #include "ProjectItemModel.h"
-#include "XUPManager.h"
-
 #include "FilteredProjectItemModel.h"
+#include "XUPManager.h"
 
 #include <QFileDialog>
 #include <QTextEdit>
+#include <QHeaderView>
 
 using namespace XUPManager;
 
@@ -24,15 +24,14 @@ UIProjectsManager::UIProjectsManager( QWidget* w )
 	setupUi( this );
 	// associate model
 	tvProjects->setModel( mModel );
+	tvProxiedProjects->setModel( mModel->filteredModel() );
+	// hide headers
+	tvProjects->header()->hide();
+	tvProxiedProjects->header()->hide();
 	// connection
-	connect( tvProjects->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( currentChanged( const QModelIndex&, const QModelIndex& ) ) );
+	//connect( tvProxiedProjects->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( currentChanged( const QModelIndex&, const QModelIndex& ) ) );
 	// set current proejct to null
 	setCurrentProject( 0 );
-	
-	QTreeView* tv = new QTreeView;
-	tv->setModel( mModel->filteredModel() );
-	tv->show();
-	
 }
 
 UIProjectsManager::~UIProjectsManager()
@@ -165,18 +164,37 @@ void UIProjectsManager::projectModified( ProjectItem* it, bool b )
 
 void UIProjectsManager::currentChanged( const QModelIndex& c, const QModelIndex& )
 {
-	if ( ProjectItem* it = mModel->itemFromIndex( c ) )
+	/*
+	if ( ProjectItem* it = mModel->filteredModel()->itemFromIndex( c ) )
 		setCurrentProject( it->project() );
+	*/
 }
 
-void UIProjectsManager::on_tvProjects_collapsed( const QModelIndex& i )
+void UIProjectsManager::on_tvProxiedProjects_collapsed( const QModelIndex& i )
 {
-	if ( ProjectItem* it = mModel->itemFromIndex( i ) )
+	/*
+	if ( ProjectItem* it = mModel->filteredModel()->itemFromIndex( i ) )
 		it->setValue( "expanded", "false" );
+	*/
 }
 
-void UIProjectsManager::on_tvProjects_expanded( const QModelIndex& i )
+void UIProjectsManager::on_tvProxiedProjects_expanded( const QModelIndex& i )
 {
-	if ( ProjectItem* it = mModel->itemFromIndex( i ) )
+	/*
+	if ( ProjectItem* it = mModel->filteredModel()->itemFromIndex( i ) )
 		it->setValue( "expanded", "true" );
+	*/
+}
+
+void UIProjectsManager::on_tvProxiedProjects_doubleClicked( const QModelIndex& i )
+{
+	if ( ProjectItem* it = dynamic_cast<ProjectItem*>( mModel->filteredModel()->itemFromIndex( i ) ) )
+	{
+		const QString t = it->value( "type" );
+		if ( t == "value" )
+		{
+			if ( XUPManager::fileVariables().contains( it->parent()->defaultValue() ) )
+				warning( QString( "Double click file: %1" ).arg( it->filePath() ) );
+		}
+	}
 }

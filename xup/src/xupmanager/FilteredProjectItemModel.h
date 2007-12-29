@@ -4,8 +4,37 @@
 #include <QStandardItemModel>
 #include <QHash>
 
+#include "ProjectItem.h"
+
 class ProjectItemModel;
-class ProjectItem;
+
+class FilteredProjectItem : public QStandardItem
+{
+public:
+	FilteredProjectItem( ProjectItem* it )
+	{
+		mItem = it;
+		Q_ASSERT( mItem );
+	}
+	
+	virtual QVariant data( int r = Qt::UserRole +1 ) const
+	{ return mItem->data( r ); }
+	
+	virtual FilteredProjectItem* child( int r, int c = 0 ) const
+	{ return dynamic_cast<FilteredProjectItem*>( QStandardItem::child( r, c ) ); }
+	
+	virtual void appendRow( FilteredProjectItem* it )
+	{ insertRow( rowCount(), it ); }
+	
+	virtual void insertRow( int i, FilteredProjectItem* it )
+	{ QStandardItem::insertRow( i, it ); }
+	
+	ProjectItem* item() const
+	{ return mItem; }
+	
+protected:
+	ProjectItem* mItem;
+};
 
 class FilteredProjectItemModel : public QStandardItemModel
 {
@@ -14,16 +43,26 @@ class FilteredProjectItemModel : public QStandardItemModel
 public:
 	FilteredProjectItemModel( ProjectItemModel* = 0 );
 	~FilteredProjectItemModel();
+
+	// return item for row / column
+	FilteredProjectItem* item( int, int = 0 ) const;
+	// return item from index
+	FilteredProjectItem* itemFromIndex( const QModelIndex& ) const;
+	// append row item
+	void appendRow( FilteredProjectItem* );
+
 	void setSourceModel( ProjectItemModel* );
 	ProjectItemModel* sourceModel() const;
 	QModelIndex mapFromSource( const QModelIndex& ) const;
 	QModelIndex mapToSource( const QModelIndex& ) const;
 
 private:
-	void addVariable( ProjectItem*, ProjectItem* );
-	void projectInserted( ProjectItem*, ProjectItem* = 0 );
+	FilteredProjectItem* getFolder( ProjectItem*, FilteredProjectItem* = 0 );
+	FilteredProjectItem* getVariable( ProjectItem* );
+	void addVariable( ProjectItem* );
+	void projectInserted( ProjectItem* );
 	ProjectItemModel* mSourceModel;
-	QHash<QModelIndex, ProjectItem*> mItems;
+	QHash<ProjectItem*, FilteredProjectItem*> mItems;
 
 private slots:
 	//void columnsAboutToBeInserted( const QModelIndex& parent, int start, int end );

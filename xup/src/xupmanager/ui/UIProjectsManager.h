@@ -36,8 +36,9 @@ public slots:
 protected slots:
 	void projectModified( ProjectItem*, bool );
 	void currentChanged( const QModelIndex&, const QModelIndex& );
-	void on_tvProjects_collapsed( const QModelIndex& );
-	void on_tvProjects_expanded( const QModelIndex& );
+	void on_tvProxiedProjects_collapsed( const QModelIndex& );
+	void on_tvProxiedProjects_expanded( const QModelIndex& );
+	void on_tvProxiedProjects_doubleClicked( const QModelIndex& );
 
 signals:
 	void projectOpen( ProjectItem* );

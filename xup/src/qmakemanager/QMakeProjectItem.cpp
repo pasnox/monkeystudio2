@@ -25,6 +25,9 @@ void QMakeProjectItem::registerItem()
 	registerFileVariables( "OBJECTIVE_SOURCES" );
 	registerFileVariables( "TRANSLATIONS" );
 	registerFileVariables( "RESOURCES" );
+	registerFileVariables( "RC_FILE" );
+	registerFileVariables( "RES_FILE" );
+	registerFileVariables( "DEF_FILE" );
 	registerFileVariables( "SUBDIRS" );
 	// variables based on paths
 	registerPathVariables( "INCLUDEPATH" );
@@ -36,18 +39,17 @@ void QMakeProjectItem::registerItem()
 	registerVariableLabels( "HEADERS", tr( "Headers Files" ) );
 	registerVariableLabels( "SOURCES", tr( "Sources Files" ) );
 	registerVariableLabels( "OBJECTIVE_SOURCES", tr( "Objective Sources Files" ) );
-	registerVariableLabels( "TRANSLATIONS", tr( "Translations Files" ) );
-	registerVariableLabels( "RESOURCES", tr( "Resources Files" ) );
+	registerVariableLabels( "TRANSLATIONS", tr( "Qt Translations Files" ) );
+	registerVariableLabels( "RESOURCES", tr( "Qt Resources Files" ) );
+	registerVariableLabels( "RC_FILE", tr( "Resources Files" ) );
+	registerVariableLabels( "RES_FILE", tr( "Compiled Resources Files" ) );
+	registerVariableLabels( "DEF_FILE", tr( "Definitions Files" ) );
 	registerVariableLabels( "SUBDIRS", tr( "Sub Projects" ) );
-	// variables labels
 	registerVariableLabels( "INCLUDEPATH", tr( "Includes Paths" ) );
 	registerVariableLabels( "DEPENDPATH", tr( "Depends Paths" ) );
 	registerVariableLabels( "VPATH", tr( "Virtuals Paths" ) );
 	registerVariableLabels( "LIBS", tr( "Libraries Files" ) );
 	registerVariableLabels( "DEFINES", tr( "Defines" ) );
-	registerVariableLabels( "RC_FILE", tr( "Resources Files" ) );
-	registerVariableLabels( "RES_FILE", tr( "Compiled Resources Files" ) );
-	registerVariableLabels( "DEF_FILE", tr( "Definitions Files" ) );
 	// variables icons
 	registerVariableIcons( "FORMS", getIcon( "forms" ) );
 	registerVariableIcons( "FORMS3", getIcon( "forms3" ) );
@@ -56,16 +58,15 @@ void QMakeProjectItem::registerItem()
 	registerVariableIcons( "OBJECTIVE_SOURCES", getIcon( "objective_sources" ) );
 	registerVariableIcons( "TRANSLATIONS", getIcon( "translations" ) );
 	registerVariableIcons( "RESOURCES", getIcon( "resources" ) );
+	registerVariableIcons( "RC_FILE", getIcon( "rc_file" ) );
+	registerVariableIcons( "RES_FILE", getIcon( "res_file" ) );
+	registerVariableIcons( "DEF_FILE", getIcon( "def_file" ) );
 	registerVariableIcons( "SUBDIRS", getIcon( "project" ) );
-	// variables icons
 	registerVariableIcons( "INCLUDEPATH", getIcon( "includepath" ) );
 	registerVariableIcons( "DEPENDPATH", getIcon( "dependpath" ) );
 	registerVariableIcons( "VPATH", getIcon( "vpath" ) );
 	registerVariableIcons( "LIBS", getIcon( "libs" ) );
 	registerVariableIcons( "DEFINES", getIcon( "defines" ) );
-	registerVariableIcons( "RC_FILE", getIcon( "rc_file" ) );
-	registerVariableIcons( "RES_FILE", getIcon( "res_file" ) );
-	registerVariableIcons( "DEF_FILE", getIcon( "def_file" ) );
 	//
 	qWarning( qPrintable( tr( "QMakeProjectItem Registered" ) ) ); 
 }
@@ -73,66 +74,76 @@ void QMakeProjectItem::registerItem()
 QStringList QMakeProjectItem::filteredVariables() const
 {
 	return QStringList() << "FORMS" << "FORMS3" << "HEADERS" << "SOURCES" << "OBJECTIVE_SOURCES" << "TRANSLATIONS"
-		<< "RESOURCES" << "INCLUDEPATH" << "DEPENDPATH" << "VPATH" << "LIBS" << "DEFINES" << "RC_FILE" << "RES_FILE" << "DEF_FILE";
+		<< "RESOURCES" << "RC_FILE" << "RES_FILE" << "DEF_FILE" << "INCLUDEPATH" << "DEPENDPATH" << "VPATH" << "LIBS" << "DEFINES";
 }
 
 QMakeProjectItem* QMakeProjectItem::clone( bool b ) const
-{ return b ? new QMakeProjectItem( domElement(), projectFilePath(), modified(), buddy() ) : new QMakeProjectItem; }
+{ return b ? new QMakeProjectItem( domElement(), projectFilePath(), modified()/*, buddy()*/ ) : new QMakeProjectItem; }
 
-QString QMakeProjectItem::interpretedVariable( const QString& s, const ProjectItem* it, const QString& ) const
+QString QMakeProjectItem::interpretedVariable( const QString& s, const ProjectItem* it, const QString& d ) const
 {
-	QString v;
-	if ( ProjectItem* pi = topLevelProject() )
+	/*
+		$$[QT_INSTALL_HEADERS] : read content from qt conf
+		$${QT_INSTALL_HEADERS} or $$QT_INSTALL_HEADERS : read content from var
+		$$(QT_INSTALL_HEADERS) : read from environment when qmake run
+		$(QTDIR) : read from generated makefile
+	*/
+	QString dv = QString( s ).replace( '$', "" ).replace( '{', "" ).replace( '}', "" ).replace( '[', "" ).replace( ']', "" ).replace( '(', "" ).replace( ')', "" );
+	// environment var
+	if ( s.startsWith( "$$(" ) || dv == QString( "PWD" ) )
+		return dv != QString( "PWD" ) ? qgetenv( qPrintable( dv ) ) : projectPath();
+	else if ( s.startsWith( "$(" ) )
+		qWarning() << "Don't know how to proceed: " << s;
+	else if ( s.startsWith( "$$[" ) )
+		qWarning() << "Don't know how to proceed: " << s;
+	else
 	{
-		foreach ( ProjectItem* cit, pi->children( true, false ) )
+		QString v;
+		if ( ProjectItem* pi = /* buddy() ? buddy()->topLevelProject() : */ topLevelProject() )
 		{
-			if ( it && cit == it )
-				return v;
-			if ( cit->isType( "variable" ) && cit->defaultValue() == s )
+			foreach ( ProjectItem* cit, pi->children( true, false ) )
 			{
-				if ( cit->hasChildren() )
+				if ( it && cit == it )
+					return v;
+				if ( cit->isType( "variable" ) && cit->defaultValue() == dv )
 				{
-					const QString o = cit->value( "operator", "=" );
-					const QString cv = cit->child( 0 )->defaultInterpretedValue();
-					if ( o == "=" )
-						v = cv;
-					else if ( o == "-=" )
-						v.remove( cv );
-					else if ( o == "+=" )
-						v.append( " " +cv );
-					else if ( o == "*=" )
+					if ( cit->hasChildren() )
 					{
-						if ( !v.contains( cv ) )
+						const QString o = cit->value( "operator", "=" );
+						const QString cv = cit->child( 0 )->defaultInterpretedValue();
+						if ( o == "=" )
+							v = cv;
+						else if ( o == "-=" )
+							v.remove( cv );
+						else if ( o == "+=" )
 							v.append( " " +cv );
-					}
-					else if ( o == "~=" )
-					{
-						// don t know how to do ;)
+						else if ( o == "*=" )
+						{
+							if ( !v.contains( cv ) )
+								v.append( " " +cv );
+						}
+						else if ( o == "~=" )
+						{
+							qWarning() << "Don't know how to interpretate ~= operator";
+						}
 					}
 				}
 			}
 		}
+		return v;
 	}
-	return v;
+	return ProjectItem::interpretedVariable( s, it, d );
 }
 
 QString QMakeProjectItem::defaultInterpretedValue() const
 {
-	/*
-		$$[QT_INSTALL_HEADERS]
-		$${QT_INSTALL_HEADERS}
-		$$(QT_INSTALL_HEADERS)
-		$$QT_INSTALL_HEADERS
-		$(QTDIR)
-		$$PWD
-	*/
 	QRegExp rx( "\\$\\$?[\\{\\(\\[]?(\\w+)[\\}\\)\\]]?" );
 	const QString dv = defaultValue();
 	QString v = dv;
 	int p = 0;
 	while ( ( p = rx.indexIn( dv, p ) ) != -1 )
 	{
-		v.replace( rx.capturedTexts().value( 0 ), interpretedVariable( rx.capturedTexts().value( 1 ), this ) );
+		v.replace( rx.capturedTexts().value( 0 ), interpretedVariable( rx.capturedTexts().value( 0 ), this ) );
 		p += rx.matchedLength();
 	}
 	return v;
@@ -143,7 +154,7 @@ void QMakeProjectItem::checkChildrenProjects()
 	foreach ( ProjectItem* it, children( true, true ) )
 	{
 		QString s;
-		if ( it->value( "type" ) == "variable" && it->value( "name" ) == "SUBDIRS" )
+		if ( it->isType( "variable" ) && it->defaultValue() == "SUBDIRS" )
 		{
 			foreach ( ProjectItem* cit, it->children( false, true ) )
 			{
@@ -162,7 +173,7 @@ void QMakeProjectItem::checkChildrenProjects()
 				}
 			}
 		}
-		else if ( it->value( "type" ) == "function" && it->defaultValue().startsWith( "include" ) )
+		else if ( it->isType( "function" ) && it->defaultValue().startsWith( "include" ) )
 		{
 			s = it->defaultInterpretedValue();
 			s.remove( 0, s.indexOf( '(' ) +1 );
@@ -205,4 +216,48 @@ bool QMakeProjectItem::saveProject( const QString& s, const QString& v )
 		return true;
 	}
 	return false;
+}
+
+QString QMakeProjectItem::filePath( const QString& s )
+{
+	if ( s.isEmpty() && isType( "value" ) )
+	{
+		const QString v = parent()->defaultValue();
+		if ( ( XUPManager::fileVariables().contains( v ) || XUPManager::pathVariables().contains( v ) ) && !defaultValue().isEmpty() )
+		{
+			const QString pp = projectPath().append( "/%1" );
+			const QString iv = defaultInterpretedValue();
+			if ( QFile::exists( pp.arg( iv ) ) )
+				return QFileInfo( pp.arg( iv ) ).canonicalFilePath();
+			
+			// looking in paths
+			QString ps = interpretedVariable( "INCLUDEPATH", this );
+			ps += " " +interpretedVariable( "DEPENDPATH", this );
+			ps += " " +interpretedVariable( "VPATH", this );
+			foreach ( QString p, splitFiles( ps.trimmed() ) )
+			{
+				p.replace( '\\', '/' );
+				qWarning() << QString( p ).append( "/%1" ).arg( iv );
+				qWarning() << pp.arg( p ).append( "/%1" ).arg( iv );
+				if ( ( p.startsWith( '/' ) || p.mid( 1, 2 ) == ":/" ) && QFile::exists( QString( p ).append( "/%1" ).arg( iv ) ) )
+					return QFileInfo( QString( p ).append( "/%1" ).arg( iv ) ).canonicalFilePath();
+				else if ( QFile::exists( pp.arg( p ).append( "/%1" ).arg( iv ) ) )
+					return QFileInfo( pp.arg( p ).append( "/%1" ).arg( iv ) ).canonicalFilePath();
+			}
+		}
+	}
+	return ProjectItem::filePath( s );
+}
+
+QStringList QMakeProjectItem::splitFiles( const QString& s ) const
+{
+	QStringList l;
+	QRegExp rx = QRegExp( "(?:\"[^\"]+\")|([^ \"]+)" );
+	int p = 0;
+	while ( ( p = rx.indexIn( s, p ) ) != -1 )
+	{
+		l << rx.capturedTexts().value( 0 ).replace( '"', "" ).trimmed();
+		p += rx.matchedLength();
+	}
+	return l;
 }

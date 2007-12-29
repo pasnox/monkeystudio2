@@ -4,7 +4,7 @@
 
 ProjectItem::ProjectItem( const QDomElement& e, const QString& s, bool b, ProjectItem* bit )
 {
-	setBuddy( bit );
+	//setBuddy( bit );
 	setDomElement( e );
 	loadProject( s );
 	setModified( b );
@@ -20,12 +20,15 @@ ProjectItemModel* ProjectItem::model() const
 { return dynamic_cast<ProjectItemModel*>( QStandardItem::model() ); }
 
 ProjectItem* ProjectItem::clone( bool b ) const
-{ return b ? new ProjectItem( domElement(), projectFilePath(), modified(), buddy() ) : new ProjectItem; }
+{ return b ? new ProjectItem( domElement(), projectFilePath(), modified()/*, buddy()*/ ) : new ProjectItem; }
 
 void ProjectItem::appendRow( ProjectItem* it )
+{ insertRow( rowCount(), it ); }
+
+void ProjectItem::insertRow( int i, ProjectItem* it )
 {
-	QStandardItem::appendRow( it );
-	if ( it->value( "type" ) != "project" )
+	QStandardItem::insertRow( i, it );
+	if ( !it->isProject() )
 		connect( it, SIGNAL( modifiedChanged( ProjectItem*, bool ) ), this, SIGNAL( modifiedChanged( ProjectItem*, bool ) ) );
 }
 
@@ -88,12 +91,12 @@ void ProjectItem::setValue( const QString& n, const QString& v )
 
 QString ProjectItem::value( const QString& n, const QString& v ) const
 {
-	const ProjectItem* it = mBuddy ? mBuddy : this;
+	//const ProjectItem* it = mBuddy ? mBuddy : this;
 	if ( n == "text" )
-		return it->mDomElement.firstChild().toText().data();
+		return /*it->*/mDomElement.firstChild().toText().data();
 	else if ( n == "type" )
-		return it->mDomElement.tagName();
-	return it->mDomElement.attribute( n, v );
+		return /*it->*/mDomElement.tagName();
+	return /*it->*/mDomElement.attribute( n, v );
 }
 
 QString ProjectItem::defaultValue( const QString& v ) const
@@ -132,7 +135,7 @@ void ProjectItem::setModified( bool b, bool e )
 			emit modifiedChanged( this, mModified );
 	}
 }
-
+/*
 ProjectItem* ProjectItem::buddy() const
 { return mBuddy; }
 
@@ -144,6 +147,7 @@ void ProjectItem::setBuddy( ProjectItem* it )
 
 QVariant ProjectItem::data( int r ) const
 { return mBuddy ? mBuddy->data( r ) : QStandardItem::data( r ); }
+*/
 
 void ProjectItem::checkChildrenProjects()
 {}

@@ -31,6 +31,8 @@ public:
 	virtual ProjectItem* clone( bool = true ) const;
 	// append row
 	virtual void appendRow( ProjectItem* );
+	// insert row
+	virtual void insertRow( int, ProjectItem* );
 	// get project children items, recursively according to bool and same project according to bool
 	virtual QList<ProjectItem*> children( bool = true, bool = true ) const;
 
@@ -56,12 +58,14 @@ public:
 	virtual bool modified() const;
 	// set item modified state and emit modified signal according to second parameter
 	void setModified( bool, bool = true );
+	/*
 	// return buddy item
 	virtual ProjectItem* buddy() const;
 	// set buddy item
 	virtual void setBuddy( ProjectItem* );
 	// return data, take care of buddy if need
 	virtual QVariant data( int = Qt::UserRole +1 ) const;
+	*/
 
 	// check for sub project to open
 	virtual void checkChildrenProjects();
@@ -89,7 +93,7 @@ public:
 	virtual ProjectItem* topLevelProject() const;
 	
 protected:
-	ProjectItem* mBuddy;
+	//ProjectItem* mBuddy;
 	QDomElement mDomElement;
 	QString mProjectFilePath;
 	bool mModified;

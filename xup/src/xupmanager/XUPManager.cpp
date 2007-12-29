@@ -204,4 +204,9 @@ void XUPManager::updateItem( ProjectItem* it )
 		// set ToolTip
 		it->setToolTip( QString( "<b>Scope</b><br />Name : %1<br />Nested : %2" ).arg( it->defaultValue() ).arg( QVariant( it->value( "nested", "false" ) ).toBool() ? "True" : "False" ) );
 	}
+	else if ( tn == "folder" )
+	{
+		// set ToolTip
+		it->setToolTip( QString( "<b>Folder</b><br />Name : %1" ).arg( it->defaultValue() ) );
+	}
 }

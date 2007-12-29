@@ -1,6 +1,9 @@
 #include "FilteredProjectItemModel.h"
 #include "ProjectItemModel.h"
 #include "ProjectItem.h"
+#include "XUPManager.h"
+
+#include <QFileInfo>
 
 FilteredProjectItemModel::FilteredProjectItemModel( ProjectItemModel* m )
 	: QStandardItemModel( m ), mSourceModel( 0 )
@@ -8,6 +11,15 @@ FilteredProjectItemModel::FilteredProjectItemModel( ProjectItemModel* m )
 
 FilteredProjectItemModel::~FilteredProjectItemModel()
 {}
+
+FilteredProjectItem* FilteredProjectItemModel::item( int r, int c ) const
+{ return dynamic_cast<FilteredProjectItem*>( QStandardItemModel::item( r, c ) ); }
+
+FilteredProjectItem* FilteredProjectItemModel::itemFromIndex( const QModelIndex& i ) const
+{ return dynamic_cast<FilteredProjectItem*>( QStandardItemModel::itemFromIndex( i ) ); }
+
+void FilteredProjectItemModel::appendRow( FilteredProjectItem* it )
+{ QStandardItemModel::appendRow( it ); }
 
 void FilteredProjectItemModel::setSourceModel( ProjectItemModel* m )
 {
@@ -38,70 +50,123 @@ ProjectItemModel* FilteredProjectItemModel::sourceModel() const
 QModelIndex FilteredProjectItemModel::mapFromSource( const QModelIndex& ) const
 {
 	qWarning( "mapFromSource" );
+	return QModelIndex();
 }
 
 QModelIndex FilteredProjectItemModel::mapToSource( const QModelIndex& ) const
 {
 	qWarning( "mapToSource" );
+	return QModelIndex();
 }
 
-void FilteredProjectItemModel::addVariable( ProjectItem* v, ProjectItem* p )
+FilteredProjectItem* FilteredProjectItemModel::getVariable( ProjectItem* it )
 {
+	// get project item
+	FilteredProjectItem* pit = mItems.value( it->project() );
+	Q_ASSERT( pit );
+	
 	// get variable name
-	const QString vn = v->defaultValue();
+	const QString vn = it->defaultValue();
+	
 	// find already existing variable item
-	ProjectItem* vit = 0;
-	foreach ( ProjectItem* cit, p->children( false, true ) )
+	for ( int i = 0; i < pit->rowCount(); i++ )
 	{
-		if ( cit->defaultValue() == vn )
-		{
-			vit = cit;
+		FilteredProjectItem* cit = pit->child( i );
+		if ( cit->item()->defaultValue() == vn )
+			return cit;
+	}
+	
+	// create item variable
+	FilteredProjectItem* vit = new FilteredProjectItem( it->clone() );
+	vit->item()->setValue( "operator", "-" );
+	vit->item()->setValue( "multiline", "-" );
+	
+	// calculate row to insert to
+	int r = it->filteredVariables().indexOf( vn );
+	int ri = -1;
+	for ( int i = 0; i < pit->rowCount(); i++ )
+	{
+		FilteredProjectItem* cit = pit->child( i );
+		const int ci = it->filteredVariables().indexOf( cit->item()->defaultValue() );
+		if ( ci < r )
+			ri = cit->row();
+		else
 			break;
-		}
 	}
-	// if not exist, create it
+	
+	// insert item
+	mItems[it->parent()->project()]->insertRow( ri +1, vit );
+	
+	return vit;
+}
+
+FilteredProjectItem* FilteredProjectItemModel::getFolder( ProjectItem* it, FilteredProjectItem* vit )
+{
 	if ( !vit )
+		vit = getVariable( it->parent() );
+	
+	// get variable path
+	const QString pn = QFileInfo( it->defaultInterpretedValue() ).path();
+	
+	// find already existing path item
+	for ( int i = 0; i < vit->rowCount(); i++ )
 	{
-		vit = v->clone();
-		vit->setValue( "operator", "-" );
-		p->appendRow( vit );
-		mItems[v->index()] = vit;
+		FilteredProjectItem* cit = vit->child( i );
+		if ( cit->item()->defaultValue() == pn )
+			return cit;
 	}
+	
+	// create item folder
+	FilteredProjectItem* fit = new FilteredProjectItem( it->clone() );
+	fit->item()->setValue( "type", "folder" );
+	fit->item()->setValue( "icon", "folder" );
+	fit->item()->setValue( "name", pn );
+	
+	// insert item
+	vit->appendRow( fit );
+	
+	return fit;
+}
+
+void FilteredProjectItemModel::addVariable( ProjectItem* it )
+{
+	// get variable item
+	FilteredProjectItem* vit = getVariable( it );
+	
+	bool b = XUPManager::fileVariables().contains( vit->item()->defaultValue() );
+	
 	// add values to vit
-	foreach ( ProjectItem* cit, v->children( false, true ) )
+	foreach ( ProjectItem* cit, it->children( false, true ) )
 	{
 		if ( !cit->defaultValue().isEmpty() )
 		{
-			ProjectItem* ccit = cit->clone( false );
-			ccit->setBuddy( cit->buddy() ? cit->buddy() : cit );
-			vit->appendRow( ccit );
-			mItems[cit->index()] = ccit;
+			FilteredProjectItem* ccit = new FilteredProjectItem( cit );
+			b ? getFolder( cit, vit )->appendRow( ccit ) : vit->appendRow( ccit );
+			//mItems[cit] = ccit;
 		}
 	}
 }
 
-void FilteredProjectItemModel::projectInserted( ProjectItem* it, ProjectItem* p )
+void FilteredProjectItemModel::projectInserted( ProjectItem* it )
 {
-	// clone project item
-	ProjectItem* pit = it->clone( false );
-	pit->setBuddy( it->buddy() ? it->buddy() : it );
-	if ( p )
-		p->appendRow( pit );
+	FilteredProjectItem* pit = new FilteredProjectItem( it );
+	if ( it->parent() )
+		mItems[it->parent()->project()]->appendRow( pit );
 	else
 		appendRow( pit );
-	mItems[it->index()] = pit;
+	mItems[it] = pit;
 	
 	bool b = it->filteredVariables().isEmpty();
 	foreach ( ProjectItem* cit, it->children( true, true ) )
 		if ( cit->isType( "variable" ) && ( b || ( !b && it->filteredVariables().contains( cit->defaultValue() ) ) ) )
-			addVariable( cit, pit );
+			addVariable( cit );
 	
 	foreach ( ProjectItem* cit, it->children( false, false ) )
 		if ( cit->isType( "project" ) )
-			projectInserted( cit, pit );
+			projectInserted( cit );
 }
 
-void FilteredProjectItemModel::headerDataChanged( Qt::Orientation orientation, int first, int last )
+void FilteredProjectItemModel::headerDataChanged( Qt::Orientation, int first, int last )
 {
 	qWarning( "headerDataChanged: %i, %i", first, last );
 }
@@ -143,10 +208,11 @@ void FilteredProjectItemModel::rowsAboutToBeRemoved( const QModelIndex& parent, 
 	for ( int i = start; i < end +1; i++ )
 	{
 		QModelIndex mi = mSourceModel->index( i, 0, parent );
-		if ( mItems.contains( mi ) )
+		ProjectItem* it = mSourceModel->itemFromIndex( mi );
+		if ( mItems.contains( it ) )
 		{
 			qWarning( "removing..." );
-			removeRow( mItems.value( mi )->row(), mItems.value( mi )->index().parent() );
+			removeRow( mItems.value( it )->row(), mItems.value( it )->index().parent() );
 		}
 	}
 }

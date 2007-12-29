@@ -18,6 +18,8 @@ public:
 	virtual void checkChildrenProjects();
 	virtual bool loadProject( const QString& = QString(), const QString& = QString( "1.0.0" ) );
 	virtual bool saveProject( const QString& = QString(), const QString& = QString( "1.0.0" ) );
+	virtual QString filePath( const QString& = QString() );
+	virtual QStringList splitFiles( const QString& ) const;
 };
 
 #endif // QMAKEPROJECTITEM_H

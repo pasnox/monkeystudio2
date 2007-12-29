@@ -112,10 +112,52 @@
      </widget>
     </item>
     <item>
-     <widget class="QTreeView" name="tvProjects" >
-      <property name="editTriggers" >
-       <set>QAbstractItemView::NoEditTriggers</set>
+     <widget class="QSplitter" name="splitter" >
+      <property name="orientation" >
+       <enum>Qt::Vertical</enum>
       </property>
+      <widget class="QWidget" name="" >
+       <layout class="QVBoxLayout" >
+        <item>
+         <widget class="QLabel" name="lTitleTop" >
+          <property name="text" >
+           <string>Full Model :</string>
+          </property>
+          <property name="buddy" >
+           <cstring>tvProjects</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTreeView" name="tvProjects" >
+          <property name="editTriggers" >
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="" >
+       <layout class="QVBoxLayout" >
+        <item>
+         <widget class="QLabel" name="lTitleMiddle" >
+          <property name="text" >
+           <string>Filtered Model :</string>
+          </property>
+          <property name="buddy" >
+           <cstring>tvProxiedProjects</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTreeView" name="tvProxiedProjects" >
+          <property name="editTriggers" >
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
