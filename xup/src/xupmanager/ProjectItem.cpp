@@ -2,7 +2,7 @@
 #include "ProjectItemModel.h"
 #include "XUPManager.h"
 
-ProjectItem::ProjectItem( const QDomElement& e, const QString& s, bool b, ProjectItem* bit )
+ProjectItem::ProjectItem( const QDomElement e, const QString& s, bool b, ProjectItem* bit )
 {
 	//setBuddy( bit );
 	setDomElement( e );
@@ -20,7 +20,7 @@ ProjectItemModel* ProjectItem::model() const
 { return dynamic_cast<ProjectItemModel*>( QStandardItem::model() ); }
 
 ProjectItem* ProjectItem::clone( bool b ) const
-{ return b ? new ProjectItem( domElement(), projectFilePath(), modified()/*, buddy()*/ ) : new ProjectItem; }
+{ return b ? new ProjectItem( domElement().cloneNode( false ).toElement(), projectFilePath(), modified()/*, buddy()*/ ) : new ProjectItem; }
 
 void ProjectItem::appendRow( ProjectItem* it )
 { insertRow( rowCount(), it ); }
@@ -28,7 +28,7 @@ void ProjectItem::appendRow( ProjectItem* it )
 void ProjectItem::insertRow( int i, ProjectItem* it )
 {
 	QStandardItem::insertRow( i, it );
-	if ( !it->isProject() )
+	if ( it->isProject() )
 		connect( it, SIGNAL( modifiedChanged( ProjectItem*, bool ) ), this, SIGNAL( modifiedChanged( ProjectItem*, bool ) ) );
 }
 
@@ -211,6 +211,9 @@ QString ProjectItem::filePath( const QString& s )
 	}
 	return s;
 }
+
+QString ProjectItem::relativeFilePath( const QString& s )
+{ return QDir( projectPath() ).relativeFilePath( filePath( s ) ); }
 
 bool ProjectItem::isProject() const
 { return value( "type" ) == "project"; }

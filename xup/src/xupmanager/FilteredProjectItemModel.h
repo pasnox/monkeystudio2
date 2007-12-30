@@ -29,8 +29,23 @@ public:
 	virtual void insertRow( int i, FilteredProjectItem* it )
 	{ QStandardItem::insertRow( i, it ); }
 	
+	virtual FilteredProjectItem* parent() const
+	{ return dynamic_cast<FilteredProjectItem*>( QStandardItem::parent() ); }
+	
 	ProjectItem* item() const
 	{ return mItem; }
+	
+	ProjectItem* project() const
+	{
+		if ( mItem->isProject() )
+			return mItem;
+		else if ( mItem->isType( "value" ) )
+			return mItem->project();
+		else if ( mItem->isType( "folder" ) )
+			return parent()->parent()->project();
+		else
+			return parent()->project();
+	}
 	
 protected:
 	ProjectItem* mItem;
@@ -44,11 +59,8 @@ public:
 	FilteredProjectItemModel( ProjectItemModel* = 0 );
 	~FilteredProjectItemModel();
 
-	// return item for row / column
 	FilteredProjectItem* item( int, int = 0 ) const;
-	// return item from index
 	FilteredProjectItem* itemFromIndex( const QModelIndex& ) const;
-	// append row item
 	void appendRow( FilteredProjectItem* );
 
 	void setSourceModel( ProjectItemModel* );

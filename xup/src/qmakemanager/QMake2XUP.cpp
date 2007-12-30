@@ -42,7 +42,7 @@ QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 	QRegExp comments("^#(.*)");
 	QRegExp varLine("^(.*)[ \\t]*\\\\[ \\t]*(#.*)?");
 	
-	file.append( QString( "<!DOCTYPE XUPProject>\n<project version=\"%1\" name=\"%2\">\n" ).arg( version ).arg( QFileInfo( s ).fileName() ) );
+	file.append( QString( "<!DOCTYPE XUPProject>\n<project version=\"%1\" name=\"%2\" expanded=\"true\">\n" ).arg( version ).arg( QFileInfo( s ).fileName() ) );
 	for(int i = 0;i < v.size();i++)
 	{
 		if(bloc.exactMatch(v[i]))

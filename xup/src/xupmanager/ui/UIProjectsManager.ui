@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>319</width>
-    <height>621</height>
+    <height>601</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -116,7 +116,7 @@
       <property name="orientation" >
        <enum>Qt::Vertical</enum>
       </property>
-      <widget class="QWidget" name="" >
+      <widget class="QWidget" name="layoutWidget1" >
        <layout class="QVBoxLayout" >
         <item>
          <widget class="QLabel" name="lTitleTop" >
@@ -137,7 +137,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="" >
+      <widget class="QWidget" name="layoutWidget2" >
        <layout class="QVBoxLayout" >
         <item>
          <widget class="QLabel" name="lTitleMiddle" >
@@ -159,6 +159,9 @@
        </layout>
       </widget>
      </widget>
+    </item>
+    <item>
+     <widget class="QTextEdit" name="teLog" />
     </item>
    </layout>
   </widget>

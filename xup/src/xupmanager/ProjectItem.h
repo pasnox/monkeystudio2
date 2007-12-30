@@ -14,7 +14,7 @@ class ProjectItem : public QObject, public QStandardItem
 	Q_OBJECT
 	
 public:
-	ProjectItem( const QDomElement& = QDomElement(), const QString& = QString(), bool = false, ProjectItem* = 0 );
+	ProjectItem( const QDomElement = QDomElement(), const QString& = QString(), bool = false, ProjectItem* = 0 );
 
 	// register item specific infos
 	static void registerItem() { qWarning( qPrintable( tr( "ProjectItem Registered" ) ) ); }
@@ -82,6 +82,8 @@ public:
 	virtual QString projectPath() const;
 	// if item is a value, and it s variable is file or path based, return the full file path of the value, else return a file path according to project path for parameter
 	virtual QString filePath( const QString& = QString() );
+	// return relative file path of filepath according to project filepath
+	virtual QString relativeFilePath( const QString& = QString() );
 	
 	// tell if this item is a project
 	virtual bool isProject() const;

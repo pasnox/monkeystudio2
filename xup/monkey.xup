@@ -1,40 +1,46 @@
 <!DOCTYPE XUPProject>
-<project version="1.0.0" expanded="true" name="Monkey Studio" >
+<project version="1.0.0" name="monkey.pro" >
  <comment># Monkey Studio 2 project file</comment>
  <emptyline>1</emptyline>
- <variable expanded="false" name="BUILD_PATH" >
+ <variable name="BUILD_PATH" >
   <value>../build</value>
  </variable>
  <emptyline>1</emptyline>
  <comment># include qscintilla framework</comment>
- <function value="../qscintilla/qscintilla.pri" name="include" />
+ <function>include( ../qscintilla/qscintilla.pri )</function>
  <emptyline>1</emptyline>
  <comment># include fresh framework</comment>
- <function value="../fresh/fresh.pri" name="include" />
+ <function>include( ../fresh/fresh.pri )</function>
  <emptyline>1</emptyline>
  <comment># include ctags framework</comment>
- <function value="../ctags/ctags.pri" name="include" />
+ <function>include( ../ctags/ctags.pri )</function>
  <emptyline>1</emptyline>
  <comment>#include monkey framework</comment>
- <function value="monkey.pri" name="include" />
+ <function>include( monkey.pri )</function>
  <emptyline>1</emptyline>
- <variable expanded="false" name="TEMPLATE" >
+ <variable name="TEMPLATE" >
   <value>app</value>
  </variable>
- <variable expanded="false" name="LANGUAGE" >
+ <variable name="LANGUAGE" >
   <value>Qt4/C++</value>
  </variable>
- <variable expanded="false" name="TARGET" >
+ <variable name="TARGET" >
   <value>monkey</value>
  </variable>
  <variable name="DESTDIR" >
   <value>../bin</value>
  </variable>
  <variable operator="*=" name="CONFIG" >
-  <value>qt warn_on thread x11 windows debug_and_release</value>
+  <value>qt</value>
+  <value>warn_on</value>
+  <value>thread</value>
+  <value>x11</value>
+  <value>windows</value>
+  <value>debug_and_release</value>
  </variable>
  <variable operator="*=" name="QT" >
-  <value>gui core</value>
+  <value>gui</value>
+  <value>core</value>
  </variable>
  <emptyline>1</emptyline>
  <scope nested="true" name="unix" >
@@ -62,24 +68,28 @@
  <variable name="VERSION" >
   <value>1.8.0.0</value>
  </variable>
- <variable expanded="false" name="NAME" >
+ <variable name="NAME" >
   <value>"Monkey Studio"</value>
  </variable>
  <emptyline>1</emptyline>
  <scope nested="true" name="win32" >
-  <variable operator="*=" name="RC_FILE" >
-   <value>monkey.rc</value>
+  <variable operator="-" name="RC_FILE" multiline="-" >
+   <folder icon="folder" name="." >monkey.rc</folder>
   </variable>
  </scope>
- <variable operator="*=" name="RESOURCES" >
-  <value>src/resources/resources.qrc</value>
+ <variable operator="-" name="RESOURCES" multiline="-" >
+  <folder icon="folder" name="src/resources" >src/resources/resources.qrc</folder>
  </variable>
  <emptyline>1</emptyline>
- <variable operator="*=" name="DEFINES" >
-  <value>MONKEY_CORE_BUILD "PROGRAM_NAME=\"\\\"$${NAME}\\\"\"" "PROGRAM_VERSION=\"\\\"$${VERSION}\\\"\"" "PROGRAM_DOMAIN=\"\\\"$${DOMAIN}\\\"\"" "PROGRAM_COPYRIGHTS=\"\\\"$${COPYRIGHTS}\\\"\""</value>
+ <variable operator="-" name="DEFINES" multiline="-" >
+  <value>MONKEY_CORE_BUILD</value>
+  <value>"PROGRAM_NAME=\"\\\"$${NAME}\\\"\""</value>
+  <value>"PROGRAM_VERSION=\"\\\"$${VERSION}\\\"\""</value>
+  <value>"PROGRAM_DOMAIN=\"\\\"$${DOMAIN}\\\"\""</value>
+  <value>"PROGRAM_COPYRIGHTS=\"\\\"$${COPYRIGHTS}\\\"\""</value>
  </variable>
  <emptyline>1</emptyline>
- <variable operator="*=" name="LIBS" >
+ <variable operator="-" name="LIBS" multiline="-" >
   <value>-L$${BUILD_PATH}</value>
  </variable>
  <scope nested="true" name="mac" >
@@ -100,7 +110,9 @@
  </scope>
  <emptyline>1</emptyline>
  <variable operator="*=" name="PRE_TARGETDEPS" >
-  <value>../qscintilla ../fresh ../ctags</value>
+  <value>../qscintilla</value>
+  <value>../fresh</value>
+  <value>../ctags</value>
  </variable>
  <emptyline>1</emptyline>
  <scope name="CONFIG( DebugBuild )|CONFIG( debug, debug|release )" >
@@ -144,12 +156,16 @@
   </variable>
   <scope nested="true" name="unix" >
    <variable operator="*=" name="LIBS" >
-    <value>-lqscintilla2_debug -lfresh_debug -lctags_debug</value>
+    <value>-lqscintilla2_debug</value>
+    <value>-lfresh_debug</value>
+    <value>-lctags_debug</value>
    </variable>
   </scope>
   <scope nested="true" name="else" >
    <variable operator="*=" name="LIBS" >
-    <value>-lqscintilla2d -lfreshd -lctagsd</value>
+    <value>-lqscintilla2d</value>
+    <value>-lfreshd</value>
+    <value>-lctagsd</value>
    </variable>
   </scope>
   <scope nested="true" name="win32-g++" >
@@ -159,11 +175,12 @@
   </scope>
   <scope nested="true" name="win32-msvc*" >
    <variable operator="*=" name="LIBS" >
-    <value>/IMPLIB:$${BUILD_PATH}/$${TARGET}.lib -lshell32</value>
+    <value>/IMPLIB:$${BUILD_PATH}/$${TARGET}.lib</value>
+    <value>-lshell32</value>
    </variable>
   </scope>
  </scope>
- <scope expanded="false" name="else" >
+ <scope name="else" >
   <comment>#Release</comment>
   <scope nested="true" name="unix" >
    <variable name="OBJECTS_DIR" >
@@ -190,115 +207,118 @@
    <value>$${BUILD_PATH}/release/.rcc</value>
   </variable>
   <variable operator="*=" name="LIBS" >
-   <value>-lqscintilla2 -lfresh -lctags</value>
+   <value>-lqscintilla2</value>
+   <value>-lfresh</value>
+   <value>-lctags</value>
   </variable>
   <scope nested="true" name="win32-g++" >
    <variable operator="*=" name="LIBS" >
-    <value>-Wl,--out-implib,$${BUILD_PATH}/libmonkey.a</value>
+    <value>-Wl,--out-implib,$${BUILD_PATH}/lib$${TARGET}.a</value>
    </variable>
   </scope>
   <scope nested="true" name="win32-msvc*" >
    <variable operator="*=" name="LIBS" >
-    <value>/IMPLIB:$${BUILD_PATH}/monkey.lib -lshell32</value>
+    <value>/IMPLIB:$${BUILD_PATH}/$${TARGET}.lib</value>
+    <value>-lshell32</value>
    </variable>
   </scope>
  </scope>
  <emptyline>1</emptyline>
- <variable expanded="false" operator="*=" name="FORMS" multiline="true" >
-  <value>src/maininterface/ui/UITranslator.ui</value>
+ <variable operator="-" name="FORMS" multiline="-" >
+  <folder icon="folder" name="src/maininterface/ui" >src/maininterface/ui/UITranslator.ui</folder>
   <value>src/maininterface/ui/UIAbout.ui</value>
   <value>src/maininterface/ui/UISettings.ui</value>
-  <value>src/qscintillamanager/ui/pSearch.ui</value>
-  <value>src/abbreviationsmanager/ui/UIAddAbbreviation.ui</value>
-  <value>src/templatesmanager/ui/UITemplatesWizard.ui</value>
-  <value>src/toolsmanager/ui/UIDesktopTools.ui</value>
+  <folder icon="folder" name="src/qscintillamanager/ui" >src/qscintillamanager/ui/pSearch.ui</folder>
+  <folder icon="folder" name="src/abbreviationsmanager/ui" >src/abbreviationsmanager/ui/UIAddAbbreviation.ui</folder>
+  <folder icon="folder" name="src/templatesmanager/ui" >src/templatesmanager/ui/UITemplatesWizard.ui</folder>
+  <folder icon="folder" name="src/toolsmanager/ui" >src/toolsmanager/ui/UIDesktopTools.ui</folder>
   <value>src/toolsmanager/ui/UIToolsEdit.ui</value>
-  <value>src/pluginsmanager/ui/UIPluginsSettings.ui</value>
+  <folder icon="folder" name="src/pluginsmanager/ui" >src/pluginsmanager/ui/UIPluginsSettings.ui</folder>
   <value>src/pluginsmanager/ui/UICLIToolSettings.ui</value>
   <value>src/pluginsmanager/ui/UIBuilderSettings.ui</value>
-  <value>src/projectsmanager/ui/UIProjectsManager.ui</value>
+  <folder icon="folder" name="src/projectsmanager/ui" >src/projectsmanager/ui/UIProjectsManager.ui</folder>
   <value>src/pluginsmanager/ui/UICompilerSettings.ui</value>
  </variable>
  <emptyline>1</emptyline>
- <variable expanded="true" operator="*=" name="HEADERS" multiline="true" >
-  <value>src/maininterface/ui/UITranslator.h</value>
+ <variable operator="-" name="HEADERS" multiline="-" >
+  <folder icon="folder" name="src/maininterface/ui" >src/maininterface/ui/UITranslator.h</folder>
   <value>src/maininterface/ui/UIAbout.h</value>
   <value>src/maininterface/ui/UISettings.h</value>
-  <value>src/recentsmanager/pRecentsManager.h</value>
-  <value>src/workspace/pAbstractChild.h</value>
-  <value>src/qscintillamanager/ui/pSearch.h</value>
-  <value>src/qscintillamanager/pEditor.h</value>
+  <folder icon="folder" name="src/recentsmanager" >src/recentsmanager/pRecentsManager.h</folder>
+  <folder icon="folder" name="src/workspace" >src/workspace/pAbstractChild.h</folder>
+  <folder icon="folder" name="src/qscintillamanager/ui" >src/qscintillamanager/ui/pSearch.h</folder>
+  <folder icon="folder" name="src/qscintillamanager" >src/qscintillamanager/pEditor.h</folder>
   <value>src/qscintillamanager/qSciShortcutsManager.h</value>
-  <value>src/ctagsmanager/Ctags.h</value>
+  <folder icon="folder" name="src/ctagsmanager" >src/ctagsmanager/Ctags.h</folder>
   <value>src/workspace/pChild.h</value>
-  <value bookmarks="1,45,67" cursor="3,10" breakpoints="56,99" open="true" selection="0,15" folds="4,78,67" >src/workspace/UISaveFiles.h</value>
+  <value>src/workspace/UISaveFiles.h</value>
   <value>src/workspace/pFileManager.h</value>
   <value>src/workspace/pWorkspace.h</value>
-  <value>src/maininterface/UIMain.h</value>
-  <value>src/abbreviationsmanager/pAbbreviationsManager.h</value>
-  <value>src/abbreviationsmanager/ui/UIAddAbbreviation.h</value>
-  <value>src/variablesmanager/VariablesManager.h</value>
-  <value>src/templatesmanager/pTemplatesManager.h</value>
-  <value>src/templatesmanager/ui/UITemplatesWizard.h</value>
-  <value>src/pMonkeyStudio.h</value>
-  <value>src/toolsmanager/pDesktopApplications.h</value>
-  <value>src/toolsmanager/ui/UIDesktopTools.h</value>
+  <folder icon="folder" name="src/maininterface" >src/maininterface/UIMain.h</folder>
+  <folder icon="folder" name="src/abbreviationsmanager" >src/abbreviationsmanager/pAbbreviationsManager.h</folder>
+  <folder icon="folder" name="src/abbreviationsmanager/ui" >src/abbreviationsmanager/ui/UIAddAbbreviation.h</folder>
+  <folder icon="folder" name="src/variablesmanager" >src/variablesmanager/VariablesManager.h</folder>
+  <folder icon="folder" name="src/templatesmanager" >src/templatesmanager/pTemplatesManager.h</folder>
+  <folder icon="folder" name="src/templatesmanager/ui" >src/templatesmanager/ui/UITemplatesWizard.h</folder>
+  <folder icon="folder" name="src" >src/pMonkeyStudio.h</folder>
+  <folder icon="folder" name="src/toolsmanager" >src/toolsmanager/pDesktopApplications.h</folder>
+  <folder icon="folder" name="src/toolsmanager/ui" >src/toolsmanager/ui/UIDesktopTools.h</folder>
   <value>src/toolsmanager/ui/UIToolsEdit.h</value>
-  <value>src/consolemanager/pConsoleManager.h</value>
+  <folder icon="folder" name="src/consolemanager" >src/consolemanager/pConsoleManager.h</folder>
   <value>src/consolemanager/pCommandParser.h</value>
   <value>src/consolemanager/pCommand.h</value>
   <value>src/toolsmanager/pToolsManager.h</value>
-  <value>src/pluginsmanager/BasePlugin.h</value>
+  <folder icon="folder" name="src/pluginsmanager" >src/pluginsmanager/BasePlugin.h</folder>
   <value>src/pluginsmanager/ChildPlugin.h</value>
   <value>src/pluginsmanager/CLIToolPlugin.h</value>
   <value>src/pluginsmanager/ProjectPlugin.h</value>
   <value>src/pluginsmanager/BuilderPlugin.h</value>
   <value>src/pluginsmanager/CompilerPlugin.h</value>
   <value>src/pluginsmanager/PluginsManager.h</value>
-  <value>src/pluginsmanager/ui/UIPluginsSettings.h</value>
+  <folder icon="folder" name="src/pluginsmanager/ui" >src/pluginsmanager/ui/UIPluginsSettings.h</folder>
   <value>src/pluginsmanager/ui/UICLIToolSettings.h</value>
   <value>src/pluginsmanager/ui/UIBuilderSettings.h</value>
-  <value>src/projectsmanager/ui/UIProjectsManager.h</value>
+  <folder icon="folder" name="src/projectsmanager/ui" >src/projectsmanager/ui/UIProjectsManager.h</folder>
   <value>src/projectsmanager/ui/UIAddExistingFiles.h</value>
-  <value>src/projectsmanager/ProjectsModel.h</value>
+  <folder icon="folder" name="src/projectsmanager" >src/projectsmanager/ProjectsModel.h</folder>
   <value>src/projectsmanager/ProjectsProxy.h</value>
   <value>src/projectsmanager/ProjectItem.h</value>
   <value>src/pluginsmanager/ui/UICompilerSettings.h</value>
  </variable>
  <emptyline>1</emptyline>
- <variable grouped="true" expanded="true" operator="*=" name="SOURCES" multiline="true" >
-  <value>src/maininterface/ui/UITranslator.cpp</value>
+ <variable operator="-" name="SOURCES" multiline="-" >
+  <folder icon="folder" name="src/maininterface/ui" >src/maininterface/ui/UITranslator.cpp</folder>
   <value>src/maininterface/ui/UIAbout.cpp</value>
   <value>src/maininterface/ui/UISettings.cpp</value>
-  <value>src/recentsmanager/pRecentsManager.cpp</value>
-  <value>src/qscintillamanager/ui/pSearch.cpp</value>
-  <value>src/qscintillamanager/pEditor.cpp</value>
+  <folder icon="folder" name="src/recentsmanager" >src/recentsmanager/pRecentsManager.cpp</folder>
+  <folder icon="folder" name="src/qscintillamanager/ui" >src/qscintillamanager/ui/pSearch.cpp</folder>
+  <folder icon="folder" name="src/qscintillamanager" >src/qscintillamanager/pEditor.cpp</folder>
   <value>src/qscintillamanager/qSciShortcutsManager.cpp</value>
-  <value>src/ctagsmanager/Ctags.cpp</value>
-  <value>src/workspace/pChild.cpp</value>
+  <folder icon="folder" name="src/ctagsmanager" >src/ctagsmanager/Ctags.cpp</folder>
+  <folder icon="folder" name="src/workspace" >src/workspace/pChild.cpp</folder>
   <value>src/workspace/UISaveFiles.cpp</value>
   <value>src/workspace/pFileManager.cpp</value>
   <value>src/workspace/pWorkspace.cpp</value>
-  <value>src/maininterface/UIMain.cpp</value>
-  <value>src/abbreviationsmanager/pAbbreviationsManager.cpp</value>
-  <value>src/abbreviationsmanager/ui/UIAddAbbreviation.cpp</value>
-  <value>src/variablesmanager/VariablesManager.cpp</value>
-  <value>src/templatesmanager/pTemplatesManager.cpp</value>
-  <value>src/templatesmanager/ui/UITemplatesWizard.cpp</value>
-  <value>src/pMonkeyStudio.cpp</value>
-  <value>src/toolsmanager/pDesktopApplications.cpp</value>
-  <value>src/toolsmanager/ui/UIDesktopTools.cpp</value>
+  <folder icon="folder" name="src/maininterface" >src/maininterface/UIMain.cpp</folder>
+  <folder icon="folder" name="src/abbreviationsmanager" >src/abbreviationsmanager/pAbbreviationsManager.cpp</folder>
+  <folder icon="folder" name="src/abbreviationsmanager/ui" >src/abbreviationsmanager/ui/UIAddAbbreviation.cpp</folder>
+  <folder icon="folder" name="src/variablesmanager" >src/variablesmanager/VariablesManager.cpp</folder>
+  <folder icon="folder" name="src/templatesmanager" >src/templatesmanager/pTemplatesManager.cpp</folder>
+  <folder icon="folder" name="src/templatesmanager/ui" >src/templatesmanager/ui/UITemplatesWizard.cpp</folder>
+  <folder icon="folder" name="src" >src/pMonkeyStudio.cpp</folder>
+  <folder icon="folder" name="src/toolsmanager" >src/toolsmanager/pDesktopApplications.cpp</folder>
+  <folder icon="folder" name="src/toolsmanager/ui" >src/toolsmanager/ui/UIDesktopTools.cpp</folder>
   <value>src/toolsmanager/ui/UIToolsEdit.cpp</value>
   <value>src/toolsmanager/pToolsManager.cpp</value>
+  <folder icon="folder" name="src/consolemanager" >src/consolemanager/pConsoleManager.cpp</folder>
   <value>src/consolemanager/pCommandParser.cpp</value>
-  <value>src/consolemanager/pConsoleManager.cpp</value>
-  <value>src/pluginsmanager/PluginsManager.cpp</value>
-  <value>src/pluginsmanager/ui/UIPluginsSettings.cpp</value>
+  <folder icon="folder" name="src/pluginsmanager" >src/pluginsmanager/PluginsManager.cpp</folder>
+  <folder icon="folder" name="src/pluginsmanager/ui" >src/pluginsmanager/ui/UIPluginsSettings.cpp</folder>
   <value>src/pluginsmanager/ui/UICLIToolSettings.cpp</value>
   <value>src/pluginsmanager/ui/UIBuilderSettings.cpp</value>
-  <value>src/projectsmanager/ui/UIProjectsManager.cpp</value>
+  <folder icon="folder" name="src/projectsmanager/ui" >src/projectsmanager/ui/UIProjectsManager.cpp</folder>
   <value>src/projectsmanager/ui/UIAddExistingFiles.cpp</value>
-  <value>src/projectsmanager/ProjectsModel.cpp</value>
+  <folder icon="folder" name="src/projectsmanager" >src/projectsmanager/ProjectsModel.cpp</folder>
   <value>src/projectsmanager/ProjectsProxy.cpp</value>
   <value>src/projectsmanager/ProjectItem.cpp</value>
   <value>src/main.cpp</value>
@@ -323,8 +343,8 @@
   </variable>
  </scope>
  <emptyline>1</emptyline>
- <variable expanded="false" name="TRANSLATIONS" multiline="true" >
-  <value>../translations/monkey_french.ts</value>
+ <variable operator="-" name="TRANSLATIONS" multiline="-" >
+  <folder icon="folder" name="../translations" >../translations/monkey_french.ts</folder>
   <value>../translations/monkey_belarusian.ts</value>
  </variable>
  <emptyline>1</emptyline>

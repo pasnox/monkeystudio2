@@ -78,7 +78,7 @@ QStringList QMakeProjectItem::filteredVariables() const
 }
 
 QMakeProjectItem* QMakeProjectItem::clone( bool b ) const
-{ return b ? new QMakeProjectItem( domElement(), projectFilePath(), modified()/*, buddy()*/ ) : new QMakeProjectItem; }
+{ return b ? new QMakeProjectItem( domElement().cloneNode( false ).toElement(), projectFilePath(), modified()/*, buddy()*/ ) : new QMakeProjectItem; }
 
 QString QMakeProjectItem::interpretedVariable( const QString& s, const ProjectItem* it, const QString& d ) const
 {
@@ -237,8 +237,6 @@ QString QMakeProjectItem::filePath( const QString& s )
 			foreach ( QString p, splitFiles( ps.trimmed() ) )
 			{
 				p.replace( '\\', '/' );
-				qWarning() << QString( p ).append( "/%1" ).arg( iv );
-				qWarning() << pp.arg( p ).append( "/%1" ).arg( iv );
 				if ( ( p.startsWith( '/' ) || p.mid( 1, 2 ) == ":/" ) && QFile::exists( QString( p ).append( "/%1" ).arg( iv ) ) )
 					return QFileInfo( QString( p ).append( "/%1" ).arg( iv ) ).canonicalFilePath();
 				else if ( QFile::exists( pp.arg( p ).append( "/%1" ).arg( iv ) ) )

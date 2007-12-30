@@ -47,15 +47,19 @@ void FilteredProjectItemModel::setSourceModel( ProjectItemModel* m )
 ProjectItemModel* FilteredProjectItemModel::sourceModel() const
 { return mSourceModel; }
 
-QModelIndex FilteredProjectItemModel::mapFromSource( const QModelIndex& ) const
+QModelIndex FilteredProjectItemModel::mapFromSource( const QModelIndex& i ) const
 {
-	qWarning( "mapFromSource" );
+	foreach ( ProjectItem* it, mItems.keys() )
+		if ( it->index() == i )
+			return mItems.value( it )->index();
 	return QModelIndex();
 }
 
-QModelIndex FilteredProjectItemModel::mapToSource( const QModelIndex& ) const
+QModelIndex FilteredProjectItemModel::mapToSource( const QModelIndex& i ) const
 {
-	qWarning( "mapToSource" );
+	foreach ( FilteredProjectItem* it, mItems.values() )
+		if ( it->index() == i )
+			return mItems.key( it )->index();
 	return QModelIndex();
 }
 
@@ -95,7 +99,7 @@ FilteredProjectItem* FilteredProjectItemModel::getVariable( ProjectItem* it )
 	}
 	
 	// insert item
-	mItems[it->parent()->project()]->insertRow( ri +1, vit );
+	mItems.value( it->parent()->project() )->insertRow( ri +1, vit );
 	
 	return vit;
 }
@@ -106,7 +110,11 @@ FilteredProjectItem* FilteredProjectItemModel::getFolder( ProjectItem* it, Filte
 		vit = getVariable( it->parent() );
 	
 	// get variable path
-	const QString pn = QFileInfo( it->defaultInterpretedValue() ).path();
+	const QString pn = QFileInfo( it->relativeFilePath() ).path();
+	
+	// if file is at root, don't create folder
+	if ( pn == "." )
+		return vit;
 	
 	// find already existing path item
 	for ( int i = 0; i < vit->rowCount(); i++ )
@@ -122,8 +130,23 @@ FilteredProjectItem* FilteredProjectItemModel::getFolder( ProjectItem* it, Filte
 	fit->item()->setValue( "icon", "folder" );
 	fit->item()->setValue( "name", pn );
 	
+	// calculate row to insert to
+	int ri = vit->rowCount();
+	for ( int i = 0; i < vit->rowCount(); i++ )
+	{
+		FilteredProjectItem* cit = vit->child( i );
+		int r = QString::localeAwareCompare( pn, cit->item()->defaultValue() );
+		if ( r < 0 )
+		{
+			ri = cit->row();
+			break;
+		}
+		else
+			ri = cit->row() +1;
+	}
+	
 	// insert item
-	vit->appendRow( fit );
+	vit->insertRow( ri, fit );
 	
 	return fit;
 }
@@ -142,7 +165,6 @@ void FilteredProjectItemModel::addVariable( ProjectItem* it )
 		{
 			FilteredProjectItem* ccit = new FilteredProjectItem( cit );
 			b ? getFolder( cit, vit )->appendRow( ccit ) : vit->appendRow( ccit );
-			//mItems[cit] = ccit;
 		}
 	}
 }
@@ -162,7 +184,7 @@ void FilteredProjectItemModel::projectInserted( ProjectItem* it )
 			addVariable( cit );
 	
 	foreach ( ProjectItem* cit, it->children( false, false ) )
-		if ( cit->isType( "project" ) )
+		if ( cit->isProject() )
 			projectInserted( cit );
 }
 

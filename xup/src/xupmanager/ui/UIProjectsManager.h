@@ -40,8 +40,20 @@ protected slots:
 	void on_tvProxiedProjects_expanded( const QModelIndex& );
 	void on_tvProxiedProjects_doubleClicked( const QModelIndex& );
 
+	void on_projectOpen( ProjectItem* );
+	void on_projectAboutToClose( ProjectItem* );
+	void on_projectModifiedChanged( ProjectItem*, bool );
+	void on_currentProjectChanged( ProjectItem* );
+	void on_projectDoubleClicked( ProjectItem* );
+	void on_fileDoubleClicked( ProjectItem*, const QString& );
+
 signals:
 	void projectOpen( ProjectItem* );
+	void projectAboutToClose( ProjectItem* );
+	void projectModifiedChanged( ProjectItem*, bool );
+	void currentProjectChanged( ProjectItem* );
+	void projectDoubleClicked( ProjectItem* );
+	void fileDoubleClicked( ProjectItem*, const QString& );
 
 };
 
