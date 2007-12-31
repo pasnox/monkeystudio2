@@ -15,6 +15,7 @@ class ProjectItem : public QObject, public QStandardItem
 	
 public:
 	ProjectItem( const QDomElement = QDomElement(), const QString& = QString(), bool = false, ProjectItem* = 0 );
+	~ProjectItem();
 
 	// register item specific infos
 	static void registerItem() { qWarning( qPrintable( tr( "ProjectItem Registered" ) ) ); }
@@ -102,6 +103,7 @@ protected:
 
 signals:
 	void modifiedChanged( ProjectItem*, bool );
+	void aboutToClose( ProjectItem* );
 };
 
 #endif // PROJECTITEM_H

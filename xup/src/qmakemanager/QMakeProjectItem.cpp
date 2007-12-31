@@ -230,7 +230,7 @@ QString QMakeProjectItem::filePath( const QString& s )
 			if ( QFile::exists( pp.arg( iv ) ) )
 				return QFileInfo( pp.arg( iv ) ).canonicalFilePath();
 			
-			// looking in paths
+			// looking in paths of project
 			QString ps = interpretedVariable( "INCLUDEPATH", this );
 			ps += " " +interpretedVariable( "DEPENDPATH", this );
 			ps += " " +interpretedVariable( "VPATH", this );
@@ -249,12 +249,13 @@ QString QMakeProjectItem::filePath( const QString& s )
 
 QStringList QMakeProjectItem::splitFiles( const QString& s ) const
 {
+	QString fs = QString( s ).replace( projectPath(), "$pp$" );
 	QStringList l;
 	QRegExp rx = QRegExp( "(?:\"[^\"]+\")|([^ \"]+)" );
 	int p = 0;
-	while ( ( p = rx.indexIn( s, p ) ) != -1 )
+	while ( ( p = rx.indexIn( fs, p ) ) != -1 )
 	{
-		l << rx.capturedTexts().value( 0 ).replace( '"', "" ).trimmed();
+		l << rx.capturedTexts().value( 0 ).replace( '"', "" ).trimmed().replace( "$pp$", projectPath() );
 		p += rx.matchedLength();
 	}
 	return l;

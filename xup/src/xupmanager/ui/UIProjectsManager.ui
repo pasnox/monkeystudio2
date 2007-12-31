@@ -54,59 +54,20 @@
         <number>5</number>
        </property>
        <item>
-        <widget class="QToolButton" name="tbOpen" >
-         <property name="text" >
-          <string>Open</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="tbClose" >
-         <property name="text" >
-          <string>Close</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="tbSave" >
-         <property name="text" >
-          <string>Save</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="tbSaveAs" >
-         <property name="text" >
-          <string>Save As</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="tbSettings" >
-         <property name="text" >
-          <string>Settings</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="tbSources" >
-         <property name="text" >
-          <string>Sources</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" >
+        <widget class="QToolBar" name="tbActions" >
+         <property name="iconSize" >
           <size>
-           <width>40</width>
-           <height>20</height>
+           <width>22</width>
+           <height>22</height>
           </size>
          </property>
-        </spacer>
+         <property name="toolButtonStyle" >
+          <enum>Qt::ToolButtonTextUnderIcon</enum>
+         </property>
+         <property name="floatable" >
+          <bool>false</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

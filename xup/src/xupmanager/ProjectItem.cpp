@@ -10,6 +10,10 @@ ProjectItem::ProjectItem( const QDomElement e, const QString& s, bool b, Project
 	setModified( b );
 }
 
+ProjectItem::~ProjectItem()
+{
+}
+
 ProjectItem* ProjectItem::child( int r, int c ) const
 { return dynamic_cast<ProjectItem*>( QStandardItem::child( r, c ) ); }
 
@@ -29,7 +33,10 @@ void ProjectItem::insertRow( int i, ProjectItem* it )
 {
 	QStandardItem::insertRow( i, it );
 	if ( it->isProject() )
+	{
 		connect( it, SIGNAL( modifiedChanged( ProjectItem*, bool ) ), this, SIGNAL( modifiedChanged( ProjectItem*, bool ) ) );
+		connect( it, SIGNAL( aboutToClose( ProjectItem* ) ), this, SIGNAL( aboutToClose( ProjectItem* ) ) );
+	}
 }
 
 QList<ProjectItem*> ProjectItem::children( bool r, bool s ) const
@@ -177,6 +184,14 @@ bool ProjectItem::saveProject( const QString& s, const QString& v )
 
 void ProjectItem::closeProject()
 {
+	// close child project
+	foreach ( ProjectItem* it, children( false, false ) )
+		if ( it->isProject() )
+			it->closeProject();
+	// tell we will close the proejct
+	emit aboutToClose( this );
+		qWarning( "closing project: %s", qPrintable( defaultValue() ) );
+	// remove it from model
 	if ( model() )
 		model()->removeRow( row(), index().parent() );
 	else
