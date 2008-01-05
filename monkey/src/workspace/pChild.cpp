@@ -44,7 +44,7 @@ pChild::pChild()
 }
 
 pChild::~pChild()
-{ closeFiles(); }
+{}
 
 void pChild::cursorPositionChanged()
 { emit pAbstractChild::cursorPositionChanged( cursorPosition() ); }
