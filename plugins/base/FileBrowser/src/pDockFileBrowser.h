@@ -19,6 +19,7 @@
 #include "pDockWidget.h"
 
 #include <QModelIndex>
+#include <QSortFilterProxyModel>
 
 class pTreeComboBox;
 class QLineEdit;
@@ -31,34 +32,51 @@ class pDockFileBrowser : public pDockWidget, public QSingleton<pDockFileBrowser>
 	Q_OBJECT
 	friend class QSingleton<pDockFileBrowser>;
 
+	class FilteredModel: public QSortFilterProxyModel
+	{
+		friend class pDockFileBrowser;
+			
+	protected:
+		QStringList mWildcards;
+	
+		bool filterAcceptsRow( int row, const QModelIndex& parent ) const;
+	
+	public:
+		FilteredModel( QObject* parent = 0 ) : QSortFilterProxyModel( parent ) {}
+	};
+	
 public:
 	QString currentPath() const;
-	void setCurrentPath( const QString& );
+	QStringList wildcards() const;
 
 protected:
 	bool mShown;
 	pTreeComboBox* mCombo;
 	QLineEdit* mLineEdit;
-	QListView* mList;
 	QTreeView* mTree;
 	QDirModel* mDirsModel;
+	FilteredModel* mFilteredModel;
+
 	void showEvent( QShowEvent* );
 	void hideEvent( QHideEvent* );
 
 private:
 	pDockFileBrowser( QWidget* = 0 );
 
+public slots:
+	void setCurrentPath( const QString& );
+	void setWildcards( const QStringList& );
+
 private slots:
 	void tbUp_clicked();
 	void tbRefresh_clicked();
+	void tbRoot_clicked();
 	void cb_currentChanged( const QModelIndex& );
-	void lv_doubleClicked( const QModelIndex& );
 	void tv_doubleClicked( const QModelIndex& );
 
 signals:
 	void saveSettings();
 	void restoreSettings();
-
 };
 
 #endif // PDOCKFILEBROWSER_H

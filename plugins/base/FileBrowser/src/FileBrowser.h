@@ -12,11 +12,11 @@ public:
 	FileBrowser();
 	virtual ~FileBrowser();
 	virtual bool setEnabled( bool );
+	virtual QWidget* settingsWidget();
 
 protected slots:
 	void saveSettings();
 	void restoreSettings();
-
 };
 
 #endif

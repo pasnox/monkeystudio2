@@ -16,6 +16,7 @@
 #include "pFileManager.h"
 #include "pMonkeyStudio.h"
 #include "pTreeComboBox.h"
+#include "pSettings.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -28,6 +29,16 @@
 #include <QTabWidget>
 #include <QTreeView>
 #include <QHeaderView>
+
+bool pDockFileBrowser::FilteredModel::filterAcceptsRow( int row, const QModelIndex& parent ) const
+{
+	if ( parent == QModelIndex() ) 
+		return true;
+	foreach ( const QString s, mWildcards )
+		if ( QRegExp( s, Qt::CaseSensitive, QRegExp::Wildcard ).exactMatch( parent.child( row, 0 ).data().toString() ) )
+				return false;
+	return true;
+}
 
 pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	: pDockWidget( w ), mShown( false )
@@ -66,6 +77,12 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	mCombo->setToolTip( tr( "Quick Navigation" ) );
 	h->addWidget( mCombo );
 	
+	// set current path button
+	QToolButton* tbRoot = new QToolButton;
+	tbRoot->setIcon( QIcon( ":/icons/goto.png" ) );
+	tbRoot->setToolTip( tr( "Set selected item as root" ) );
+	h->addWidget( tbRoot );
+	
 	// add horizontal layout into vertical one
 	v->addLayout( h );
 	
@@ -79,22 +96,16 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	mDirsModel->setFilter( QDir::AllEntries | QDir::Readable | QDir::CaseSensitive | QDir::NoDotAndDotDot );
 	mDirsModel->setSorting( QDir::DirsFirst | QDir::Name );
 	
-	// tabwidget
-	QTabWidget* tabs = new QTabWidget;
-	v->addWidget( tabs );
-	
-	// folders view
-	mList = new QListView;
-	tabs->addTab( mList, tr( "List View" ) );
+	mFilteredModel = new FilteredModel ( this );
+	mFilteredModel->setSourceModel( mDirsModel );
 	
 	// files view
 	mTree = new QTreeView;
-	tabs->addTab( mTree, tr( "Tree View" ) );
+	v->addWidget ( mTree );
 	
 	// assign model to views
 	mCombo->setModel( mDirsModel );
-	mList->setModel( mDirsModel );
-	mTree->setModel( mDirsModel );
+	mTree->setModel( mFilteredModel );
 	
 	// custom view
 	mCombo->view()->setColumnHidden( 1, true );
@@ -115,14 +126,11 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	// set lineedit path
 	setCurrentPath( mDirsModel->filePath( mCombo->rootIndex() ) );
 	
-	// set page 1 visible
-	tabs->setCurrentIndex( 1 );
-	
 	// connections
 	connect( tbUp, SIGNAL( clicked() ), this, SLOT( tbUp_clicked() ) );
 	connect( tbRefresh, SIGNAL( clicked() ), this, SLOT( tbRefresh_clicked() ) );
+	connect( tbRoot, SIGNAL( clicked() ), this, SLOT( tbRoot_clicked() ) );
 	connect( mCombo, SIGNAL( currentChanged( const QModelIndex& ) ), this, SLOT( cb_currentChanged( const QModelIndex& ) ) );
-	connect( mList, SIGNAL( doubleClicked( const QModelIndex& ) ), this, SLOT( lv_doubleClicked( const QModelIndex& ) ) );
 	connect( mTree, SIGNAL( doubleClicked( const QModelIndex& ) ), this, SLOT( tv_doubleClicked( const QModelIndex& ) ) );
 }
 
@@ -161,42 +169,53 @@ void pDockFileBrowser::tbRefresh_clicked()
 	mDirsModel->refresh( mCombo->currentIndex() );
 }
 
-void pDockFileBrowser::lv_doubleClicked( const QModelIndex& i )
+void pDockFileBrowser::tbRoot_clicked()
 {
-	if ( mDirsModel->isDir( i ) )
-		setCurrentPath( mDirsModel->filePath( i ) );
-	else
-		pFileManager::instance()->openFile( mDirsModel->filePath( i ) );
+	// seet root of model to path of selected item
+	QModelIndex index = mTree->selectionModel()->selectedIndexes().value( 0 );
+	if ( !index.isValid() )
+		return;
+	index = mFilteredModel->mapToSource( index );
+	if ( !mDirsModel->isDir( index ) )
+		index = index.parent();
+	setCurrentPath( mDirsModel->filePath( index ) );
 }
 
 void pDockFileBrowser::tv_doubleClicked( const QModelIndex& i )
 {
+	// open file corresponding to index
+	QModelIndex index = mFilteredModel->mapToSource( i );
 	// open file
-	if ( !mDirsModel->isDir( i ) )
-		pFileManager::instance()->openFile( mDirsModel->filePath( i ) );
+	if ( !mDirsModel->isDir( index ) )
+		pFileManager::instance()->openFile( mDirsModel->filePath( index ) );
 }
 
 void pDockFileBrowser::cb_currentChanged( const QModelIndex& i )
-{
-	// set current path
-	setCurrentPath( mDirsModel->filePath( i ) );
-}
+{ setCurrentPath( mDirsModel->filePath( i ) ); }
 
 QString pDockFileBrowser::currentPath() const
-{
-	// return current path
-	return mDirsModel->filePath( mCombo->currentIndex() );
-}
+{ return mDirsModel->filePath( mCombo->currentIndex() ); }
 
 void pDockFileBrowser::setCurrentPath( const QString& s )
 {
 	// get index
-	QModelIndex i = mDirsModel->index( s );
+	QModelIndex index = mDirsModel->index( s );
 	// set current path
-	mCombo->setCurrentIndex( i );
-	mList->setRootIndex( i );
-	mTree->setRootIndex( i );
+	mCombo->setCurrentIndex( index );
+	mFilteredModel->invalidate();
+	mTree->setRootIndex( mFilteredModel->mapFromSource( index ) );
 	// set lineedit path
-	mLineEdit->setText( mDirsModel->filePath( i ) );
+	mLineEdit->setText( mDirsModel->filePath( index ) );
 	mLineEdit->setToolTip( mLineEdit->text() );
+}
+
+QStringList pDockFileBrowser::wildcards() const
+{ return mFilteredModel->mWildcards; }
+
+void pDockFileBrowser::setWildcards( const QStringList& l )
+{
+	const QString s = currentPath();
+	mFilteredModel->mWildcards = l;
+	mFilteredModel->invalidate();
+	setCurrentPath( s );
 }

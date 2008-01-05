@@ -59,9 +59,10 @@ public slots:
 	void showBuild();
 	void showOutput();
 	void showLog();
+	void showNextError();
 
 private slots:
-	void lwBuildSteps_itemDoubleClicked( QListWidgetItem* );
+	void lwBuildSteps_itemPressed( QListWidgetItem* );
 	void leRawCommand_returnPressed();
 	void commandError( const pCommand&, QProcess::ProcessError );
 	void commandFinished( const pCommand&, int, QProcess::ExitStatus );

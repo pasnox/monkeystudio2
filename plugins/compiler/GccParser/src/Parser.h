@@ -14,7 +14,7 @@ public:
 		{
 			{
 				//Error in the file/line
-				QRegExp("(\\n[\\w\\./]+\\.\\w+: In [\\w\\s]+ '.+':)?\\n(([^\\n]+/)?([\\w.]+)):(\\d+):(\\d+:)?\\serror:\\s([^\\n]+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				QRegExp("^([\\w\\./]+\\.\\w+: In [\\w\\s]+ '.+':\\n)?(([^\\n]+/)?([\\w.]+)):(\\d+):(\\d+:)?\\serror:\\s([^\\n]+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
 				"%2", //file name
 				"%6", //column
 				"%5", //row
@@ -24,7 +24,7 @@ public:
 			},
 			{
 				//Warning in the file/line
-				QRegExp("(\\n[\\w\\./]+\\.\\w+: In [\\w\\s]+ '.+':)?\\n(([^\\n]+/)?([\\w.]+)):(\\d+):(\\d+:)?\\swarning:\\s([^\\n]+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				QRegExp("^([\\w\\./]+\\.\\w+: In [\\w\\s]+ '.+':\\n)?(([^\\n]+/)?([\\w.]+)):(\\d+):(\\d+:)?\\swarning:\\s([^\\n]+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
 				"%2", //file name
 				"%6", //column
 				"%5", //row
@@ -34,7 +34,7 @@ public:
 			},
 			{
 				//Building file
-				QRegExp("\\n[gc]\\+\\+ .+ (.+\\.\\w+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				QRegExp("^[gc]\\+\\+ [^\\n]+ ([^\\n]+\\.\\w+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
 				"%1", //file name
 				"0", //column
 				"0", //row
@@ -44,7 +44,7 @@ public:
 			},
 			{
 				//Linking file
-				QRegExp("\\n[gc]\\+\\+\\w+\\-o\\s+([^\\s]+)[^\\n]+\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				QRegExp("^[gc]\\+\\+\\w+\\-o\\s+([^\\s]+)[^\\n]+\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
 				"0", //file name
 				"0", //column
 				"0", //row
@@ -54,7 +54,7 @@ public:
 			},
 			{
 				//Undedined reference 
-				QRegExp("\\n[\\w\\./]+\\.o: (In function `.+':)\\n[\\w\\./]*/([\\w\\.]+):(\\d+): (undefined reference to `.+'\\n)", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				QRegExp("^[\\w\\./]+\\.o: (In function `.+':)\\n[\\w\\./]*/([\\w\\.]+):(\\d+): (undefined reference to `.+')\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
 				"%2", //file name
 				"%3", //column
 				"0", //row
@@ -63,13 +63,13 @@ public:
 				"%0" //full text
 			},
 			{
-				//LD has no permissions for write file.  Not tested with unix output.
-				QRegExp("\\n\\w*(ld(\\.exe)?)(: cannot open output file [^:]+: Permission denied)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				//Missing library
+				QRegExp("^/[\\w:/]+ld: cannot find -l(\\w+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
 				"", //file name
-				"0", //column
-				"0", //row
+				"", //column
+				"", //row
 				pConsoleManager::stError, //type
-				"%1%3", //text
+				"%1 library not finded", //text
 				"%0" //full text
 			},
 			{QRegExp(), "", "", "", pConsoleManager::stUnknown,"",""} //this item must be last

@@ -75,7 +75,7 @@ void QtAssistantChild::showLink( const QString& s )
 		w->setCurrentDocument( this );
 	else
 	{
-		w->addTab( this, tr( "Qt Assistant" ) );
+		w->addDocument( this, tr( "Qt Assistant" ) );
 		setAttribute( Qt::WA_DeleteOnClose, false );
 		if ( !isVisible() )
 			setVisible( true );

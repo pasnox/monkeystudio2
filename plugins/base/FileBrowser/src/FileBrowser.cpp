@@ -2,6 +2,7 @@
 #include "UIMain.h"
 #include "pDockToolBar.h"
 #include "pDockFileBrowser.h"
+#include "FileBrowserSettings.h"
 
 #include <QIcon>
 
@@ -42,23 +43,25 @@ bool FileBrowser::setEnabled( bool b )
 		// set plugin disabled
 		mPluginInfos.Enabled = false;
 	}
-	
 	// return default value
 	return true;
 }
 
+QWidget* FileBrowser::settingsWidget()
+{ return new FileBrowserSettings(); }
+
 void FileBrowser::saveSettings()
 {
-	// save current path
 	setSettingsValue( "Path", pDockFileBrowser::instance()->currentPath() );
+	setSettingsValue( "Wildcards", pDockFileBrowser::instance()->wildcards() );
 }
 
 void FileBrowser::restoreSettings()
 {
-	// restore path
 	QString s = settingsValue( "Path" ).toString();
 	if ( !s.isEmpty() )
 		pDockFileBrowser::instance()->setCurrentPath( s );
+	pDockFileBrowser::instance()->setWildcards( settingsValue( "Wildcards", QStringList() << "*~" << "*.o" << "*.pyc" << "*.bak" ).toStringList() );
 }
 
 Q_EXPORT_PLUGIN2( BaseFileBrowser, FileBrowser )
