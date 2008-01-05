@@ -96,3 +96,9 @@ SOURCES	+= pPathListEditor.cpp
 # pDockWidget
 HEADERS	+= pDockWidget.h
 SOURCES	+= pDockWidget.cpp
+# pExtendedWorkspace
+# pFilesList
+HEADERS	+= pFilesListWidget.h \
+	pExtendedWorkspace.h
+SOURCES	+= pFilesListWidget.cpp \
+	pExtendedWorkspace.cpp
