@@ -246,6 +246,10 @@ void pWorkspace::internal_currentChanged( int i )
 	// search dock
 	pSearch::instance()->setEditor( hasChild ? c->currentEditor() : 0 );
 	
+	// update item tooltip
+	if ( hasChild )
+		listWidget()->setItemToolTip( i, c->currentFile() );
+	
 	// emit file changed
 	emit currentFileChanged( c, hasChild ? c->currentFile() : QString() );
 }
