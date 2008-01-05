@@ -11,11 +11,12 @@
 
 #include "MonkeyExport.h"
 #include "QSingleton.h"
-#include "pTabbedWorkspace.h"
+#include "pExtendedWorkspace.h"
 
 class pAbstractChild;
+class QMainWindow;
 
-class Q_MONKEY_EXPORT pWorkspace : public pTabbedWorkspace, public QSingleton<pWorkspace>
+class Q_MONKEY_EXPORT pWorkspace : public pExtendedWorkspace, public QSingleton<pWorkspace>
 {
 	Q_OBJECT
 	friend class QSingleton<pWorkspace>;
@@ -33,14 +34,18 @@ public:
 	// goto to position inside file, highlight line according to bool, opening it if needed
 	void goToLine( const QString&, const QPoint&, bool );
 
+	void closeCurrentDocument();
+	bool closeAllDocuments();
+
 private:
-	pWorkspace( QWidget* = 0 );
+	pWorkspace( QMainWindow* = 0 );
 
 private slots:
 	void internal_currentFileChanged( const QString& );
 	void internal_currentChanged( int );
-	void internal_aboutToCloseTab( int, QCloseEvent* );
+	//void internal_aboutToCloseTab( int, QCloseEvent* );
 	void internal_urlsDropped( const QList<QUrl>& );
+	void internal_listWidget_customContextMenuRequested( const QPoint& );
 
 public slots:
 	// file menu
@@ -51,7 +56,7 @@ public slots:
 	void fileSaveCurrent_triggered();
 	void fileSaveAll_triggered();
 	void fileCloseCurrent_triggered();
-	void fileCloseAll_triggered( bool = false );
+	void fileCloseAll_triggered();
 	void fileSaveAsBackup_triggered();
 	void fileQuickPrint_triggered();
 	void filePrint_triggered();

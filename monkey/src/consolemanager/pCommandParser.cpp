@@ -11,25 +11,20 @@ pCommandParser::~pCommandParser()
  #include <QTime>
 #endif
 				 
-bool pCommandParser::processParsing(QString& buf)
+int pCommandParser::processParsing(QString* buf)
 {
 #if PARSERS_DEBUG
 	static int allTime;
 	static int total;
+	QTime time1;
+	time1.start();
 #endif
     foreach ( Pattern p, patterns)
 	{
+		int pos = p.regExp.indexIn(*buf);
 #if PARSERS_DEBUG
-		QTime time1;
-		time1.start();
-#endif
-		int pos = p.regExp.indexIn(buf);
-#if PARSERS_DEBUG
-		allTime += time1.elapsed ();
-		qDebug () << "All time" <<allTime;
-		qDebug () << "Total count" <<total++;
 		qDebug () << "parser " << name();
-		qDebug () << "parsing  " << buf << "with" << p.regExp.pattern();
+		qDebug () << "parsing  " << *buf << "with" << p.regExp.pattern();
 #endif
         if (pos != -1)
         {
@@ -41,20 +36,24 @@ bool pCommandParser::processParsing(QString& buf)
             m.mFullText = replaceWithMatch(p.regExp,p.FullText);
             // emit signal
             emit newStepAvailable( m );
-            buf.remove (0, p.regExp.pos()+p.regExp.cap().size()-1); // Not remove \n
 #if PARSERS_DEBUG
-			qDebug () << "Returning true";
+			qDebug () << "Capture :" << p.regExp.cap();
+			qDebug () << "Returning " << p.regExp.cap().count ('\n');
 #endif
-            return true;
+            return p.regExp.cap().count ('\n');
         }
 #if PARSERS_DEBUG
 			qDebug () << "Not matching";
 #endif
 	}
 #if PARSERS_DEBUG
+	allTime += time1.elapsed ();
+	qDebug () << "All time" <<allTime;
+	qDebug () << "Total count" <<total++;
+	
 	qDebug () << "Returning false";
 #endif
-    return false;
+    return 0;
 }
 
 QString pCommandParser::name() const

@@ -62,8 +62,9 @@ public:
 
 protected:
 	int mTimerId;
-	QBuffer mBuffer;
-    QString mNotParsed;
+	QBuffer mBuffer; //All output comming to this buffer
+    QString mStringBuffer; //... then by portions to this buffer
+	int mLinesInStringBuffer;
 	pCommandList mCommands;
 	QStringList mCurrentParsers;
 	QHash<QString, pCommandParser*> mParsers;
@@ -73,6 +74,11 @@ protected:
 private:
 	pConsoleManager( QObject* = QApplication::instance() );
 	~pConsoleManager();
+
+	/*
+	Parse output, that are in the mBuffer.   
+	*/
+	void parseOutput (bool commandFinished);
 
 public slots:
 	void sendRawCommand( const QString& );

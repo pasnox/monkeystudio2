@@ -25,6 +25,7 @@
 #include <QActionGroup>
 #include <QStyleFactory>
 #include <QStatusBar>
+#include <QCloseEvent>
 
 UIMain::UIMain( QWidget* p )
 	: pMainWindow( p )
@@ -42,17 +43,23 @@ UIMain::UIMain( QWidget* p )
 	initConnections();
 }
 
-void UIMain::closeEvent( QCloseEvent* )
+void UIMain::closeEvent( QCloseEvent* e )
 {
 	// save session if needed
 	if ( pMonkeyStudio::saveSessionOnClose() )
 		workspace()->fileSessionSave_triggered();
 	
+	if ( !workspace()->closeAllDocuments() )
+	{
+		e->ignore();
+		return;
+	}
+	
 	// force to close all projects
 	projectsManager()->projectCloseAll_triggered();
 
 	// force to close all documents
-	workspace()->fileCloseAll_triggered( true );
+	workspace()->fileCloseAll_triggered();
 }
 
 QMenu* UIMain::createPopupMenu()
@@ -105,11 +112,11 @@ void UIMain::initMenuBar()
 		mb->action( "mSession/aRestore", tr( "Restore" ), QIcon( ":/file/icons/file/restore.png" ), QString::null, tr( "Restore the current session files list" ) );
 		mb->action( "aSeparator2" );
 		mb->menu( "mSave", tr( "&Save" ), QIcon( ":/file/icons/file/save.png" ) );
-		mb->action( "mSave/aCurrent", tr( "&Current" ), QIcon( ":/file/icons/file/save.png" ), tr( "Ctrl+S" ), tr( "Save the current file" ) )->setEnabled( false );
-		mb->action( "mSave/aAll", tr( "&All" ), QIcon( ":/file/icons/file/saveall.png" ), QString::null, tr( "Save all files" ) )->setEnabled( false );
+		mb->action( "mSave/aCurrent", tr( "Save &Current" ), QIcon( ":/file/icons/file/save.png" ), tr( "Ctrl+S" ), tr( "Save the current file" ) )->setEnabled( false );
+		mb->action( "mSave/aAll", tr( "Save &All" ), QIcon( ":/file/icons/file/saveall.png" ), QString::null, tr( "Save all files" ) )->setEnabled( false );
 		mb->menu( "mClose", tr( "&Close" ), QIcon( ":/file/icons/file/close.png" ) );
-		mb->action( "mClose/aCurrent", tr( "&Current" ), QIcon( ":/file/icons/file/close.png" ), tr( "Ctrl+W" ), tr( "Close the current file" ) )->setEnabled( false );
-		mb->action( "mClose/aAll", tr( "&All" ), QIcon( ":/file/icons/file/closeall.png" ), QString::null, tr( "Close all files" ) )->setEnabled( false );
+		mb->action( "mClose/aCurrent", tr( "Close &Current" ), QIcon( ":/file/icons/file/close.png" ), tr( "Ctrl+W" ), tr( "Close the current file" ) )->setEnabled( false );
+		mb->action( "mClose/aAll", tr( "Close &All" ), QIcon( ":/file/icons/file/closeall.png" ), QString::null, tr( "Close all files" ) )->setEnabled( false );
 		mb->action( "aSeparator3" );
 		mb->action( "aSaveAsBackup", tr( "Save As &Backup" ), QIcon( ":/file/icons/file/backup.png" ), tr( "Ctrl+B" ), tr( "Save a backup of the current file" ) )->setEnabled( false );
 		mb->action( "aSeparator4" );
@@ -153,11 +160,11 @@ void UIMain::initMenuBar()
 		mb->action( "aNew", tr( "&New" ), QIcon( ":/project/icons/project/new.png" ), tr( "Ctrl+Shift+N" ), tr( "New project..." ) );
 		mb->action( "aOpen", tr( "&Open" ), QIcon( ":/project/icons/project/open.png" ), tr( "Ctrl+Shift+O" ), tr( "Open a project..." ) );
 		mb->menu( "mSave", tr( "&Save" ), QIcon( ":/project/icons/project/save.png" ) );
-		mb->action( "mSave/aCurrent", tr( "&Current" ), QIcon( ":/project/icons/project/save.png" ), QString::null, tr( "Save the current project" ) )->setEnabled( false );
-		mb->action( "mSave/aAll", tr( "&All" ), QIcon( ":/project/icons/project/saveall.png" ), QString::null, tr( "Save all projects" ) )->setEnabled( false );
+		mb->action( "mSave/aCurrent", tr( "Save &Current" ), QIcon( ":/project/icons/project/save.png" ), QString::null, tr( "Save the current project" ) )->setEnabled( false );
+		mb->action( "mSave/aAll", tr( "Save &All" ), QIcon( ":/project/icons/project/saveall.png" ), QString::null, tr( "Save all projects" ) )->setEnabled( false );
 		mb->menu( "mClose", tr( "&Close" ), QIcon( ":/project/icons/project/close.png" ) );
-		mb->action( "mClose/aCurrent", tr( "&Current" ), QIcon( ":/project/icons/project/close.png" ), QString::null, tr( "Close the current project" ) )->setEnabled( false );
-		mb->action( "mClose/aAll", tr( "&All" ), QIcon( ":/project/icons/project/closeall.png" ), QString::null, tr( "Close all projects" ) )->setEnabled( false );
+		mb->action( "mClose/aCurrent", tr( "Close &Current" ), QIcon( ":/project/icons/project/close.png" ), QString::null, tr( "Close the current project" ) )->setEnabled( false );
+		mb->action( "mClose/aAll", tr( "Close &All" ), QIcon( ":/project/icons/project/closeall.png" ), QString::null, tr( "Close all projects" ) )->setEnabled( false );
 		mb->action( "aSeparator2" );
 		mb->action( "aSettings", tr( "Set&tings..." ), QIcon( ":/project/icons/project/settings.png" ), QString::null, tr( "Project settings" ) )->setEnabled( false );
 		mb->action( "aSeparator3" );
@@ -192,6 +199,17 @@ void UIMain::initMenuBar()
 		mb->action( "aManage", tr( "&Manage..." ), QIcon( ":/Icons/Icons/toolsedit.png" ), QString::null, tr( "Manage plugins..." ) );
 		mb->action( "aSeparator1" );
 	mb->endGroup();
+	mb->menu( "mWindow", tr( "&Window" ) );
+	mb->beginGroup( "mWindow" );
+		mb->action( "aSDI", tr( "&Single Document Interface" ), QIcon( "" ), QString::null, tr( "Single Document Interface" ) );
+		mb->action( "aMDI", tr( "&Multiple Document Interface" ), QIcon( "" ), QString::null, tr( "Multiple Document Interface" ) );
+		mb->action( "aTopLevel", tr( "&Top Level Windows Interface" ), QIcon( "" ), QString::null, tr( "Top Level Windows Interface" ) );
+		mb->action( "aSeparator1" );
+		mb->action( "aCascase", tr( "&Cascade" ), QIcon( "" ), QString::null, tr( "Cascade" ) );
+		mb->action( "aTile", tr( "&Tile" ), QIcon( "" ), QString::null, tr( "Tile" ) );
+		mb->action( "aMinimize", tr( "&Minimize" ), QIcon( "" ), QString::null, tr( "Minimize" ) );
+		mb->action( "aRestore", tr( "&Restore" ), QIcon( "" ), QString::null, tr( "Restore normal size" ) );
+	mb->endGroup();
 	mb->menu( "mHelp", tr( "&Help" ) );
 	mb->beginGroup( "mHelp" );
 		mb->action( "aManual", tr( "&Manual" ), QIcon( ":/help/icons/help/assistant.png" ), QString::null, tr( "Manual" ) );
@@ -202,7 +220,6 @@ void UIMain::initMenuBar()
 		mb->action( "aTestReport", tr( "&Test Report" ), QIcon( ) , tr( "Pause" ), tr( "Coverage Meter Test Report..." ) );
 #endif
 	mb->endGroup();
-
 	// create action for styles
 	agStyles = new QActionGroup( menuBar()->menu( "mView/mStyle" ) );
 	foreach ( QString s, QStyleFactory::keys() )
@@ -212,13 +229,10 @@ void UIMain::initMenuBar()
 		if ( settings()->value( "MainWindow/Style" ).toString() == s )
 			a->setChecked( true );
 	}
-
 	// add styles action to menu
 	menuBar()->menu( "mView/mStyle" )->addActions( agStyles->actions() );
-
 	// init recents manager
 	pRecentsManager::instance( this );
-
 	// init tools manager
 	pToolsManager::instance( this );
 }
@@ -230,14 +244,12 @@ void UIMain::initToolBar()
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->menu( "mFile/mSession" )->menuAction() );
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->menu( "mProject/mRecents" )->menuAction() );
 	dockToolBar( Qt::TopToolBarArea )->addAction();
-
 	// settings, tools
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mEdit/aSettings" ) );
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mEdit/aShortcutsEditor" ) );
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mTools/aEditUser" ) );
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mTools/aEditDesktop" ) );
 	dockToolBar( Qt::TopToolBarArea )->addAction();
-
 	// file action
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mFile/aNew" ) );
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mFile/aOpen" ) );
@@ -245,7 +257,6 @@ void UIMain::initToolBar()
 	dockToolBar( Qt::TopToolBarArea )->addActions( menuBar()->menu( "mFile/mClose" )->actions() );
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mFile/aQuickPrint" ) );
 	dockToolBar( Qt::TopToolBarArea )->addAction();
-
 	// edit action
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mEdit/aUndo" ) );
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mEdit/aRedo" ) );
@@ -257,11 +268,9 @@ void UIMain::initToolBar()
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mEdit/aSearchReplace" ) );
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mEdit/aGoTo" ) );
 	dockToolBar( Qt::TopToolBarArea )->addAction();
-
 	// help action
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mHelp/aAbout" ) );
 	dockToolBar( Qt::TopToolBarArea )->addAction();
-	
 	// console action
 	dockToolBar( Qt::TopToolBarArea )->addAction( consoleManager()->stopAction() );
 }
@@ -319,6 +328,14 @@ void UIMain::initConnections()
 	connect( menuBar()->menu( "mInterpreter" ), SIGNAL( aboutToShow() ), this, SLOT( menu_aboutToShow() ) );
 	// plugins menu
 	connect( menuBar()->action( "mPlugins/aManage" ), SIGNAL( triggered() ), pluginsManager(), SLOT( manageRequested() ) );
+	// window menu
+	connect( menuBar()->action( "mWindow/aSDI" ), SIGNAL( triggered() ), workspace(), SLOT( setSDI() ) );
+	connect( menuBar()->action( "mWindow/aMDI" ), SIGNAL( triggered() ), workspace(), SLOT( setMDI() ) );
+	connect( menuBar()->action( "mWindow/aTopLevel" ), SIGNAL( triggered() ), workspace(), SLOT( setTopLevel() ) );
+	connect( menuBar()->action( "mWindow/aTile" ), SIGNAL( triggered() ), workspace(), SLOT( tile() ) );
+	connect( menuBar()->action( "mWindow/aCascase" ), SIGNAL( triggered() ), workspace(), SLOT( cascade() ) );
+	connect( menuBar()->action( "mWindow/aMinimize" ), SIGNAL( triggered() ), workspace(), SLOT( minimize() ) );
+	connect( menuBar()->action( "mWindow/aRestore" ), SIGNAL( triggered() ), workspace(), SLOT( restore() ) );
 	// help menu
 	connect( menuBar()->action( "mHelp/aAbout" ), SIGNAL( triggered() ), workspace(), SLOT( helpAboutApplication_triggered() ) );
 	connect( menuBar()->action( "mHelp/aAboutQt" ), SIGNAL( triggered() ), workspace(), SLOT( helpAboutQt_triggered() ) );

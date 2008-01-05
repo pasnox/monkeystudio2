@@ -67,14 +67,15 @@ int main( int argc, char** argv )
 	a.setStyleSheet( fs.readAll() );
 	fs.close();
 	*/
-	// show settings dialog the first time user start program
-	if ( pSettings::instance()->value( "FirstTimeRunning", true ).toBool() )
-		if ( UISettings::instance()->exec() )
-			pSettings::instance()->setValue( "FirstTimeRunning", false );
 
 	// init main window
 	showMessage( &splash, QObject::tr( "Initializing Main Window..." ) );
 	UIMain::instance()->setWindowTitle( QObject::tr( "%1 v%2 - %3, The Monkey Studio Team" ).arg( PROGRAM_NAME, PROGRAM_VERSION, PROGRAM_COPYRIGHTS ) );
+	
+	// show settings dialog the first time user start program
+	if ( pSettings::instance()->value( "FirstTimeRunning", true ).toBool() )
+		if ( UISettings::instance()->exec() )
+			pSettings::instance()->setValue( "FirstTimeRunning", false );
 	
 	// init pluginsmanager
 	showMessage( &splash, QObject::tr( "Initializing Plugins Manager..." ) );

@@ -48,8 +48,11 @@ public:
 
 	virtual QString name() const;
 
-public slots:
-	virtual bool processParsing(QString&);
+public :
+	/* returnting count of lines, that was successfully parsed 
+	   (and should be removed from buffer)
+	*/
+	virtual int processParsing(QString*);
 
 signals:
 	void newStepAvailable( const pConsoleManager::Step& );

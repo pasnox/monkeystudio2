@@ -11,7 +11,6 @@
 #include "pAbstractChild.h"
 #include "pMenuBar.h"
 #include "pRecentsManager.h"
-#include "pTabbedWorkspaceCorner.h"
 #include "pFileManager.h"
 #include "UISettings.h"
 #include "UITranslator.h"
@@ -23,6 +22,7 @@
 #include "pTemplatesManager.h"
 #include "UIProjectsManager.h"
 #include "PluginsManager.h"
+#include "pFilesListWidget.h"
 
 #include "pChild.h"
 #include "pEditor.h"
@@ -30,37 +30,47 @@
 
 #include <QToolButton>
 #include <QCloseEvent>
+#include <QMainWindow>
 
 using namespace pMonkeyStudio;
 
-pWorkspace::pWorkspace( QWidget* p )
-	: pTabbedWorkspace( p )
+pWorkspace::pWorkspace( QMainWindow* p )
+	: pExtendedWorkspace( p )
 {
+	Q_ASSERT( p );
+	// add dock to main window
+	p->addDockWidget( Qt::LeftDockWidgetArea, listWidget() );
 	// set background
 	//setBackground( ":/application/icons/application/background.png" );
 
 	// set right corner button pixmap
-	cornerWidget()->findChild<QToolButton*>()->defaultAction()->setIcon( QPixmap( ":/application/icons/application/closetab.png" ) );
+	//cornerWidget()->findChild<QToolButton*>()->defaultAction()->setIcon( QPixmap( ":/application/icons/application/closetab.png" ) );
 	
 	// load settings
 	loadSettings();
 
 	// connections
 	connect( this, SIGNAL( currentChanged( int ) ), this, SLOT( internal_currentChanged( int ) ) );
+	/*
 	connect( this, SIGNAL( aboutToCloseTab( int, QCloseEvent* ) ), this, SLOT( internal_aboutToCloseTab( int, QCloseEvent* ) ) );
 	connect( this, SIGNAL( closeAllRequested() ), this, SLOT( fileCloseAll_triggered() ) );
 	connect( tabBar(), SIGNAL( urlsDropped( const QList<QUrl>& ) ), this, SLOT( internal_urlsDropped( const QList<QUrl>& ) ) );
+	*/
+	connect( listWidget(), SIGNAL( urlsDropped( const QList<QUrl>& ) ), this, SLOT( internal_urlsDropped( const QList<QUrl>& ) ) );
+	connect( listWidget(), SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( internal_listWidget_customContextMenuRequested( const QPoint& ) ) );
 }
 
 void pWorkspace::loadSettings()
 {
 	// restore tabs settings
+	/*
 	tabBar()->setTabsHaveCloseButton( tabsHaveCloseButton() );
 	tabBar()->setTabsHaveShortcut( tabsHaveShortcut() );
 	tabBar()->setTabsElided( tabsElided() );
 	tabBar()->setTabsColor( tabsTextColor() );
 	tabBar()->setCurrentTabColor( currentTabTextColor() );
-	setTabMode( pMonkeyStudio::tabMode() );
+	*/
+	setDocMode( pMonkeyStudio::docMode() );
 }
 
 pAbstractChild* pWorkspace::currentChild() const
@@ -135,7 +145,7 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 	
 	// add child to workspace if needed
 	if ( !children().contains( c ) )
-		pWorkspace::instance()->addTab( c, c->currentFileName() );
+		pWorkspace::instance()->addDocument( c, c->currentFileName() );
 		
 	// set modification state because file is open before put in worksapce so workspace can't know it
 	c->setWindowModified( c->isModified() );
@@ -191,22 +201,22 @@ void pWorkspace::internal_currentChanged( int i )
 {
 	// get child
 	pAbstractChild* c = child( i );
-	bool ic = c;
-	bool modified = ic ? c->isModified() : false;
-	bool print = ic ? c->isPrintAvailable() : false;
-	bool undo = c ? c->isUndoAvailable() : false;
-	bool redo = c ? c->isRedoAvailable() : false;
-	bool copy = c ? c->isCopyAvailable() : false;
-	bool paste = c ? c->isPasteAvailable() : false;
-	bool search = c ? c->isSearchReplaceAvailable() : false;
-	bool go = c ? c->isGoToAvailable() : false;
+	bool hasChild = c;
+	bool modified = hasChild ? c->isModified() : false;
+	bool print = hasChild ? c->isPrintAvailable() : false;
+	bool undo = hasChild ? c->isUndoAvailable() : false;
+	bool redo = hasChild ? c->isRedoAvailable() : false;
+	bool copy = hasChild ? c->isCopyAvailable() : false;
+	bool paste = hasChild ? c->isPasteAvailable() : false;
+	bool search = hasChild ? c->isSearchReplaceAvailable() : false;
+	bool go = hasChild ? c->isGoToAvailable() : false;
 
 	// update file menu
 	pMenuBar::instance()->action( "mFile/mSave/aCurrent" )->setEnabled( modified );
-	pMenuBar::instance()->action( "mFile/mSave/aAll" )->setEnabled( ic );
-	pMenuBar::instance()->action( "mFile/mClose/aCurrent" )->setEnabled( ic );
-	pMenuBar::instance()->action( "mFile/mClose/aAll" )->setEnabled( ic );
-	pMenuBar::instance()->action( "mFile/aSaveAsBackup" )->setEnabled( ic );
+	pMenuBar::instance()->action( "mFile/mSave/aAll" )->setEnabled( hasChild );
+	pMenuBar::instance()->action( "mFile/mClose/aCurrent" )->setEnabled( hasChild );
+	pMenuBar::instance()->action( "mFile/mClose/aAll" )->setEnabled( hasChild );
+	pMenuBar::instance()->action( "mFile/aSaveAsBackup" )->setEnabled( hasChild );
 	pMenuBar::instance()->action( "mFile/aQuickPrint" )->setEnabled( print );
 	pMenuBar::instance()->action( "mFile/aPrint" )->setEnabled( print );
 
@@ -220,11 +230,11 @@ void pWorkspace::internal_currentChanged( int i )
 	pMenuBar::instance()->action( "mEdit/aSearchPrevious" )->setEnabled( search );
 	pMenuBar::instance()->action( "mEdit/aSearchNext" )->setEnabled( search );
 	pMenuBar::instance()->action( "mEdit/aGoTo" )->setEnabled( go );
-	pMenuBar::instance()->action( "mEdit/aExpandAbbreviation" )->setEnabled( ic );
+	pMenuBar::instance()->action( "mEdit/aExpandAbbreviation" )->setEnabled( hasChild );
 
 	// update view menu
-	pMenuBar::instance()->action( "mView/aNext" )->setEnabled( ic );
-	pMenuBar::instance()->action( "mView/aPrevious" )->setEnabled( ic );
+	pMenuBar::instance()->action( "mView/aNext" )->setEnabled( hasChild );
+	pMenuBar::instance()->action( "mView/aPrevious" )->setEnabled( hasChild );
 
 	// update status bar
 	//pMenuBar::instance()->setCursorPosition( c ? c->cursorPosition() : QPoint( -1, -1 ) );
@@ -233,22 +243,19 @@ void pWorkspace::internal_currentChanged( int i )
 	//pMenuBar::instance()->setLayoutMode( c ? c->layoutMode() : AbstractChild::lNone );
 	//pMenuBar::instance()->setFileName( c ? c->currentFile() : QString::null );
 
-	// left corner widget
-	//
-
 	// search dock
-	pSearch::instance()->setEditor( ic ? c->currentEditor() : 0 );
+	pSearch::instance()->setEditor( hasChild ? c->currentEditor() : 0 );
 	
 	// emit file changed
-	emit currentFileChanged( c, ic ? c->currentFile() : QString() );
+	emit currentFileChanged( c, hasChild ? c->currentFile() : QString() );
 }
-
+/*
 void pWorkspace::internal_aboutToCloseTab( int i, QCloseEvent* e )
 {
 	if ( UISaveFiles::saveDocument( window(), child( i ), false ) == UISaveFiles::bCancelClose )
 		e->ignore();
 }
-
+*/
 void pWorkspace::internal_urlsDropped( const QList<QUrl>& l )
 {
 	// create menu
@@ -274,6 +281,14 @@ void pWorkspace::internal_urlsDropped( const QList<QUrl>& l )
 			if ( !u.toLocalFile().trimmed().isEmpty() )
 				UIProjectsManager::instance()->openProject( u.toLocalFile() );
 	}
+}
+
+void pWorkspace::internal_listWidget_customContextMenuRequested( const QPoint& p )
+{
+	QMenu m;
+	m.addAction( pMenuBar::instance()->action( "mFile/mClose/aCurrent" ) );
+	m.addAction( pMenuBar::instance()->action( "mFile/mSave/aCurrent" ) );
+	m.exec( listWidget()->mapToGlobal( p ) );
 }
 
 // file menu
@@ -360,16 +375,19 @@ void pWorkspace::fileSaveAll_triggered()
 }
 
 void pWorkspace::fileCloseCurrent_triggered()
-{ closeCurrentTab(); }
+{ closeCurrentDocument(); }
 
-void pWorkspace::fileCloseAll_triggered( bool b )
+void pWorkspace::fileCloseAll_triggered()
 {
+	closeAllDocuments();
+	/*
 	// try save documents
 	UISaveFiles::Buttons cb = UISaveFiles::saveDocuments( window(), children(), b );
 	
 	// close all object, disconnecting them
 	if ( cb != UISaveFiles::bCancelClose )
 		closeAllTabs( b, true );
+	*/
 }
 
 void pWorkspace::fileSaveAsBackup_triggered()
@@ -503,3 +521,24 @@ void pWorkspace::helpAboutQt_triggered()
 void pWorkspace::helpTestReport_triggered()
 { UITestReport::instance( this )->exec(); }
 #endif
+
+void pWorkspace::closeCurrentDocument()
+{
+	if ( UISaveFiles::saveDocument( window(), currentChild(), false ) == UISaveFiles::bCancelClose )
+		return;
+	pExtendedWorkspace::closeCurrentDocument();
+}
+
+bool pWorkspace::closeAllDocuments()
+{
+	// try save documents
+	UISaveFiles::Buttons cb = UISaveFiles::saveDocuments( window(), children(), false );
+	// close all object, disconnecting them
+	if ( cb != UISaveFiles::bCancelClose )
+	{
+		pExtendedWorkspace::closeAllDocuments();
+		return true;
+	}
+	else
+		return false; //not close IDE
+}

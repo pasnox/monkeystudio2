@@ -119,7 +119,7 @@ void pChild::searchNext()
 void pChild::goTo()
 { mEditor->invokeGoToLine(); }
 
-void pChild::goTo( const QString& s, const QPoint& p, bool b )
+void pChild::goTo( const QString& s, const QPoint& p, bool )
 {
 	// if not exists cancel
 	if ( !mFiles.contains( s ) )
@@ -163,7 +163,7 @@ void pChild::backupCurrentFile( const QString& s )
 void pChild::saveFiles()
 { saveCurrentFile(); }
 
-void pChild::openFile( const QString& s, QTextCodec* c )
+void pChild::openFile( const QString& s, QTextCodec* )
 {
 	// if already open file, cancel
 	if ( !currentFile().isNull() )
@@ -179,7 +179,7 @@ void pChild::openFile( const QString& s, QTextCodec* c )
 	// change window title
 	setWindowTitle( s );
 
-	emit fileOpened( s );
+	emit fileOpened( s +"[*]" );
 }
 
 void pChild::closeFile( const QString& s )

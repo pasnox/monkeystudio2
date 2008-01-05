@@ -12,25 +12,30 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ****************************************************************************/
+
+#include <cstdlib> //For function 'unsetenv'
+#include <QTimer>
+
 #include "pConsoleManager.h"
 #include "pCommandParser.h"
 #include "pMonkeyStudio.h"
 #include "pFileManager.h"
 #include "pAction.h"
 
-#include <QTimer>
-
-static const int MAX_LENGTH = 2047;
+static const int MAX_LINES = 4; //Maximum lines count, that can be parsed by Monkey. Than less - than better perfomance
 
 using namespace pMonkeyStudio;
-
 pConsoleManager::pConsoleManager( QObject* o )
-	: QProcess( o ), mStopAction( new pAction( "aStopAction", QIcon( ":/console/icons/console/stop.png" ), tr( "Stop current command" ), tr( "Break" ), tr( "Console Manager" ) ) )
+	: QProcess( o ), mLinesInStringBuffer (0)
 {
-	// change shortcut for mac
-#ifdef Q_OS_MAC
-	mStopAction->setShortcut( tr( "Ctrl+Backspace" ) );
+#ifndef Q_OS_MAC
+	mStopAction = new pAction( "aStopAction", QIcon( ":/console/icons/console/stop.png" ), tr( "Stop current command" ), QString ("Pause"), tr( "Console Manager" ) ) ;
+#else
+	mStopAction = new pAction( "aStopAction", QIcon( ":/console/icons/console/stop.png" ), tr( "Stop current command" ), QString ("Alt+End"), tr( "Console Manager" ) ) ; // Mac has no pause key
 #endif
+	
+	unsetenv ("LANG"); //For compilers and others not print local messages
+	
 	// set status tip for
 	mStopAction->setStatusTip( tr( "Stop the currently running command" ) );
 	mStopAction->setEnabled( false );
@@ -45,8 +50,7 @@ pConsoleManager::pConsoleManager( QObject* o )
 	connect( mStopAction, SIGNAL( triggered() ), this, SLOT( stopCurrentCommand() ) );
 	// start timerEvent
 	mTimerId = startTimer( 100 );
-	mNotParsed = "\n"; // For perfomance issues
-	mNotParsed.reserve (MAX_LENGTH *2);
+	mStringBuffer.reserve (MAX_LINES *200);
 }
 
 pConsoleManager::~pConsoleManager()
@@ -161,6 +165,7 @@ void pConsoleManager::error( QProcess::ProcessError e )
 
 void pConsoleManager::finished( int i, QProcess::ExitStatus e )
 {
+	parseOutput (true);
 	// emit signal finished
 	emit commandFinished( currentCommand(), i, e );
 	// remove command from list
@@ -169,38 +174,28 @@ void pConsoleManager::finished( int i, QProcess::ExitStatus e )
 	mStopAction->setEnabled( false );
 		// clear buffer
 	mBuffer.buffer().clear();
-	mNotParsed = "\n"; // For perfomance issues
+	mStringBuffer.clear(); // For perfomance issues
+	mLinesInStringBuffer = 0;
 }
 
 void pConsoleManager::readyRead()
 {
-	// get data
-	QByteArray d = readAll();
 	// append data to buffer to parse
+	QByteArray d = readAll ();
 	mBuffer.buffer().append( d );
 	// get current command
 	pCommand c = currentCommand();
 	// try parse output
-	if ( c.isValid() )
-	{
-		/*Alrorithm is not ideal, need fix, if will be problems with it
-		  Some text, that next parser possible to parse, can be removed
-		  And, possible, it's not idealy quick.   hlamer
-		*/
+	if (! c.isValid() )
+		return;
+	
+	/*Alrorithm is not ideal, need fix, if will be problems with it
+	  Some text, that next parser possible to parse, can be removed
+	  And, possible, it's not idealy quick.   hlamer
+	*/
+	
+	parseOutput (false);
 		
-		// read complete lines
-		while ( mBuffer.canReadLine() )
-		{
-			mNotParsed.append ( QString::fromLocal8Bit (mBuffer.readLine()));
-			int size = mNotParsed.size();
-			if (size >MAX_LENGTH)
-				mNotParsed.remove (0, MAX_LENGTH-size);
-			foreach ( QString s, mCurrentParsers )
-				if ( pCommandParser* p = mParsers.value( s ) )
-					while ( p->processParsing(mNotParsed) && (! mNotParsed.isEmpty()))
-						{}
-		}
-	}
 	// emit signal
 	emit commandReadyRead( c, d );
 }
@@ -233,7 +228,7 @@ void pConsoleManager::sendRawData( const QByteArray& a )
 		while ( state() == QProcess::Starting )
 			QApplication::processEvents( QEventLoop::ExcludeUserInputEvents );
 		// send raw command to process
-		qWarning( "sendRawData bytes written: %i", (int)write( a ) );
+		qWarning( "sendRawData bytes written: %d", write( a ) );
 	}
 	else
 		warning( tr( "sendRawData..." ), tr( "Can't send raw data to console" ) );
@@ -307,3 +302,51 @@ void pConsoleManager::executeProcess()
 		return;
 	}
 }
+
+void pConsoleManager::parseOutput (bool commandFinished)
+{
+	bool finished;
+	do 
+	{
+		// Fill string buffer
+		while ( mBuffer.canReadLine() && mLinesInStringBuffer < MAX_LINES)
+		{
+			
+			mStringBuffer.append ( QString::fromLocal8Bit (mBuffer.readLine()));
+			mLinesInStringBuffer ++;
+		}
+		
+		if ( ! mLinesInStringBuffer )
+			return;
+		
+		finished = true;
+		int linesToRemove = 0;
+		//try all parsers
+		foreach ( QString s, mCurrentParsers )
+		{
+			pCommandParser* p = mParsers.value( s );
+			if ( ! p )
+				continue; //for
+			linesToRemove =  p->processParsing(&mStringBuffer);
+			if (linesToRemove)
+				break; //for
+		}
+		if (linesToRemove == 0 || commandFinished) //need to remove one
+			linesToRemove = 1;
+		
+		if ( ! linesToRemove )
+			continue; // do-while
+		
+		finished = false; //else one iteration of do-while after it
+		
+		//removing of lines
+		mLinesInStringBuffer -= linesToRemove;
+		int posEnd = 0;
+		while (linesToRemove --)
+			posEnd = mStringBuffer.indexOf ('\n', posEnd)+1;
+		mStringBuffer.remove (0, posEnd);
+
+	}
+	while (!finished && mLinesInStringBuffer);
+}
+
