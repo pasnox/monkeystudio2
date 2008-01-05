@@ -58,6 +58,10 @@ public:
 	int addDocument( QWidget*, const QString&,  const QIcon& = QIcon() );
 	int insertDocument( int, QWidget*, const QString&, const QIcon& = QIcon() );
 	
+	QWidget* takeDocument( int );
+	void removeDocument( int );
+	void moveDocument( int, int );
+	
 public slots:
 	void setDocMode( pExtendedWorkspace::DocumentMode );
 	void setTabShape( QTabBar::Shape );
@@ -105,10 +109,11 @@ protected:
 	QMdiArea* mMdiAreaWidget;
 
 protected slots:
-	void setCurrentDocument( QMdiSubWindow* );
+	void mdiArea_subWindowActivated( QMdiSubWindow* );
 
 signals:
 	void documentInserted( int, const QString&, const QIcon& );
+	void documentAboutToBeRemoved( int );
 	void documentAboutToClose( int );
 	// -1 if last file was closed
 	void currentChanged( int );
@@ -117,7 +122,6 @@ signals:
 	void modifiedChanged( int, bool );
 	void docTitleChanged( int, const QString& );
 	
-//	void aboutToCloseDocument (int, QCloseEvent*);
 //	void aboutToCloseAll ();
     
 };

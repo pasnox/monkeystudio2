@@ -54,7 +54,7 @@ pExtendedWorkspace::pExtendedWorkspace( QWidget* w, pExtendedWorkspace::Document
 	mDocMode = (DocumentMode) -1; //for avoid return on start method setDocMode (m)
 	setDocMode( m );
 	
-	connect( mMdiAreaWidget, SIGNAL( subWindowActivated( QMdiSubWindow* ) ), this, SLOT( setCurrentDocument( QMdiSubWindow* ) ) );
+	connect( mMdiAreaWidget, SIGNAL( subWindowActivated( QMdiSubWindow* ) ), this, SLOT( mdiArea_subWindowActivated( QMdiSubWindow* ) ) );
 }
 
 pExtendedWorkspace::~pExtendedWorkspace()
@@ -89,7 +89,7 @@ bool pExtendedWorkspace::eventFilter( QObject* o, QEvent* e )
 		break;
 	case QEvent::WindowActivate:
 		if ( mDocMode == dmTopLevel )
-			setCurrentDocument( td );
+			emit currentChanged( indexOf( td ) );
 		break;
 	case QEvent::WindowTitleChange:
 		emit docTitleChanged( indexOf( td ), td->windowTitle().replace( "[*]", QString() ) );
@@ -193,31 +193,42 @@ int pExtendedWorkspace::insertDocument(int pos, QWidget* td, const QString&,  co
 	return pos;
 }
 
-void pExtendedWorkspace::closeDocument(int i)
+QWidget* pExtendedWorkspace::takeDocument( int i )
 {
-
-	//signal must be processed while widget is exists for avoid crashs
-	emit documentAboutToClose( i );
-	
-	mDocuments[i]->removeEventFilter( this );
-	if (mDocMode == dmMDI)
-		foreach (QMdiSubWindow* sw, mMdiAreaWidget->subWindowList ())
-			if (sw->widget () == mDocuments[i])
-				delete (sw);
-	mDocuments[i]->setParent (NULL);
-	mDocuments[i]->close ();
-	
-	// remove document
-	mDocuments.removeAt(i);
-	
-			/*
-	if (i == currentIndex() && count() > 0 )
+	if ( QWidget* w = mDocuments.value( i ) )
 	{
-        setCurrentIndex (0);
+		emit documentAboutToBeRemoved( i );
+		mDocuments.removeAt( i );
+		w->removeEventFilter( this );
+		
+		if ( mDocMode == dmMDI )
+			foreach ( QMdiSubWindow* sw, mMdiAreaWidget->subWindowList() )
+				if ( sw == w->parent() )
+					sw->deleteLater();
+		
+		w->setParent( 0 );
+		w->close();
+		emit currentChanged( currentIndex() );
+		return w;
 	}
-	else if ( count() == 0 ) //last was closed 
-			*/
-	emit currentChanged( currentIndex() );
+	return 0;
+}
+
+void pExtendedWorkspace::removeDocument( int i )
+{ takeDocument( i ); }
+
+void pExtendedWorkspace::moveDocument( int s, int t )
+{
+	QWidget* w = mDocuments[s];
+	mDocuments.insert( t, mDocuments.takeAt( s ) );
+	if ( mDocMode == dmSDI )
+		mStackedWidget->insertWidget( t, w );
+}
+
+void pExtendedWorkspace::closeDocument( int i )
+{
+	emit documentAboutToClose( i );
+	removeDocument( i );
 }
 
 void pExtendedWorkspace::closeDocument( QWidget* td )
@@ -323,21 +334,26 @@ void pExtendedWorkspace::setTabShape( QTabBar::Shape )
 
 void pExtendedWorkspace::setCurrentIndex( int i )
 {
-	if ( currentIndex() == i || i < 0)
+	if ( currentIndex() == i )
 		return;
 	
+	// get document
+	QWidget* w = document( i );
+	
+	// update gui if needed
 	switch ( mDocMode )
 	{
 		case dmSDI:
-            mStackedWidget->setCurrentWidget (document( i ));
+            mStackedWidget->setCurrentWidget( w );
 		case dmMDI:
-			mMdiAreaWidget->setActiveSubWindow( qobject_cast<QMdiSubWindow*>(document( i )->parent() ));
+			mMdiAreaWidget->setActiveSubWindow( qobject_cast<QMdiSubWindow*>( w ? w->parent() : 0 ) );
 			break;
 		case dmTopLevel:
-			if (!document( i )->isActiveWindow ())
-				document( i )->activateWindow();
+			if ( w && !w->isActiveWindow() )
+				w->activateWindow();
 			break;
 	}
+	
 	// emit document change
 	emit currentChanged( i );
 }
@@ -345,11 +361,8 @@ void pExtendedWorkspace::setCurrentIndex( int i )
 void pExtendedWorkspace::setCurrentDocument( QWidget* d )
 { setCurrentIndex( indexOf( d ) ); }
 
-void pExtendedWorkspace::setCurrentDocument( QMdiSubWindow* d )
-{ 
-	if (d)
-		setCurrentIndex( indexOf( d->widget() ) ); 
-}
+void pExtendedWorkspace::mdiArea_subWindowActivated( QMdiSubWindow* w )
+{ emit currentChanged( w ? indexOf( w->widget() ) : -1 ); }
 
 void pExtendedWorkspace::activateNextDocument()
 {
