@@ -24,10 +24,14 @@ class pFilesListWidget : public QDockWidget
 public:
 	pFilesListWidget( const QString&, pExtendedWorkspace* );
 
+public slots:
+	void setItemToolTip( int, const QString& );
+
 protected:
 	QListWidget* mList;
     pExtendedWorkspace* mWorkspace;
 
+	bool eventFilter( QObject*, QEvent* );
 	void dragEnterEvent( QDragEnterEvent* );
 	void dropEvent( QDropEvent* );
 
