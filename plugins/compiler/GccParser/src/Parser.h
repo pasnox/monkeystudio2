@@ -72,6 +72,16 @@ public:
 				"%1 library not finded", //text
 				"%0" //full text
 			},
+			{  //FIXME It's moc's error
+				//Class declaration lacks Q_OBJECT macro.
+				QRegExp("^(\\w+\\.\\w){1,3}:(\\d+): Error: Class declarations lacks Q_OBJECT macro\\.\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				"%1", //file name
+				"", //column
+				"%2", //row
+				pConsoleManager::stError, //type
+				"%0", //text
+				"%0" //full text
+			},
 			{QRegExp(), "", "", "", pConsoleManager::stUnknown,"",""} //this item must be last
 		};
 		for ( int i = 0; !ps[i].regExp.isEmpty(); i++)

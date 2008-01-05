@@ -63,15 +63,18 @@ QString pCommandParser::name() const
 
 QString pCommandParser::replaceWithMatch(QRegExp& rex, QString s)
 {
+	int pos = 0; 
     int i = 0;
-    while ( (i = s.indexOf("%")) != -1)
+    while ( (i = s.indexOf("%", pos)) != -1)
 	{
-		QString cap = rex.cap(QString(s[i+1]).toInt());
-		if (cap.startsWith ("\n"))
-			cap.remove (0,1);
+		pos += i;
+		if ( ! s[i+1].isDigit () )
+			continue;
+		QString cap = rex.cap(s[i+1].digitValue ());
 		if (cap.endsWith ("\n"))
 			cap.chop(1);
         s.replace (i,2,cap);
+		pos += cap.size ();
 	}
     return s;
 }
