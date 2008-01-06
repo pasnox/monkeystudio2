@@ -76,15 +76,15 @@ pCommand Gpp::defaultCompileCommand() const
 pCommand Gpp::compileCommand() const
 {
 	// get settings object
-    QSettings* s = settings();
+    pSettings s;
     pCommand c;
-    c.setText( s->value( settingsKey( "CompileCommand/Text" ) ).toString() );
-    c.setCommand( s->value( settingsKey( "CompileCommand/Command" ) ).toString() );
-    c.setArguments( s->value( settingsKey( "CompileCommand/Arguments" ) ).toString() );
-    c.setWorkingDirectory( s->value( settingsKey( "CompileCommand/WorkingDirectory" ) ).toString() );
-    c.setParsers( s->value( settingsKey( "CompileCommand/Parsers" ) ).toStringList() );
-    c.setTryAllParsers( s->value( settingsKey( "CompileCommand/TryAll" ), false ).toBool() );
-    c.setSkipOnError( s->value( settingsKey( "CompileCommand/SkipOnError" ), false ).toBool() );
+    c.setText( s.value( settingsKey( "CompileCommand/Text" ) ).toString() );
+    c.setCommand( s.value( settingsKey( "CompileCommand/Command" ) ).toString() );
+    c.setArguments( s.value( settingsKey( "CompileCommand/Arguments" ) ).toString() );
+    c.setWorkingDirectory( s.value( settingsKey( "CompileCommand/WorkingDirectory" ) ).toString() );
+    c.setParsers( s.value( settingsKey( "CompileCommand/Parsers" ) ).toStringList() );
+    c.setTryAllParsers( s.value( settingsKey( "CompileCommand/TryAll" ), false ).toBool() );
+    c.setSkipOnError( s.value( settingsKey( "CompileCommand/SkipOnError" ), false ).toBool() );
     // if no user commands get global ones
     if ( !c.isValid() )
         c = defaultCompileCommand();
@@ -93,14 +93,14 @@ pCommand Gpp::compileCommand() const
 
 void Gpp::setCompileCommand( const pCommand& c )
 {
-	QSettings* s = settings();
-    s->setValue( settingsKey( "CompileCommand/Text" ), c.text() );
-    s->setValue( settingsKey( "CompileCommand/Command" ), c.command() );
-    s->setValue( settingsKey( "CompileCommand/Arguments" ), c.arguments() );
-    s->setValue( settingsKey( "CompileCommand/WorkingDirectory" ), c.workingDirectory() );
-    s->setValue( settingsKey( "CompileCommand/Parsers" ), c.parsers() );
-    s->setValue( settingsKey( "CompileCommand/TryAll" ), c.tryAllParsers() );
-    s->setValue( settingsKey( "CompileCommand/SkipOnError" ), c.skipOnError() );
+	pSettings s;
+    s.setValue( settingsKey( "CompileCommand/Text" ), c.text() );
+    s.setValue( settingsKey( "CompileCommand/Command" ), c.command() );
+    s.setValue( settingsKey( "CompileCommand/Arguments" ), c.arguments() );
+    s.setValue( settingsKey( "CompileCommand/WorkingDirectory" ), c.workingDirectory() );
+    s.setValue( settingsKey( "CompileCommand/Parsers" ), c.parsers() );
+    s.setValue( settingsKey( "CompileCommand/TryAll" ), c.tryAllParsers() );
+    s.setValue( settingsKey( "CompileCommand/SkipOnError" ), c.skipOnError() );
 }
 
 pCommandList Gpp::defaultCommands() const
@@ -111,23 +111,23 @@ pCommandList Gpp::userCommands() const
 	// commands list
 	pCommandList l;
 	// get settings object
-	QSettings* s = settings();
+	pSettings s;
 	// read user commands for this plugin
-	int size = s->beginReadArray( settingsKey( "Commands" ) );
+	int size = s.beginReadArray( settingsKey( "Commands" ) );
 	for ( int i = 0; i < size; i++ )
 	{
-		s->setArrayIndex( i );
+		s.setArrayIndex( i );
 		pCommand c;
-		c.setText( s->value( "Text" ).toString() );
-		c.setCommand( s->value( "Command" ).toString() );
-		c.setArguments( s->value( "Arguments" ).toString() );
-		c.setWorkingDirectory( s->value( "WorkingDirectory" ).toString() );
-		c.setParsers( s->value( "Parsers" ).toStringList() );
-		c.setTryAllParsers( s->value( "TryAll" ).toBool() );
-		c.setSkipOnError( s->value( "SkipOnError" ).toBool() );
+		c.setText( s.value( "Text" ).toString() );
+		c.setCommand( s.value( "Command" ).toString() );
+		c.setArguments( s.value( "Arguments" ).toString() );
+		c.setWorkingDirectory( s.value( "WorkingDirectory" ).toString() );
+		c.setParsers( s.value( "Parsers" ).toStringList() );
+		c.setTryAllParsers( s.value( "TryAll" ).toBool() );
+		c.setSkipOnError( s.value( "SkipOnError" ).toBool() );
 		l << c;
 	}
-	s->endArray();
+	s.endArray();
 	// if no user commands get global ones
 	if ( l.isEmpty() )
 		l << defaultCommands();
@@ -138,24 +138,24 @@ pCommandList Gpp::userCommands() const
 void Gpp::setUserCommands( const pCommandList& l ) const
 {
 	// get settings object
-	QSettings* s = settings();
+	pSettings s;
 	// remove old key
-	s->remove( settingsKey( "Commands" ) );
+	s.remove( settingsKey( "Commands" ) );
 	// write user commands for this plugin
-	s->beginWriteArray( settingsKey( "Commands" ) );
+	s.beginWriteArray( settingsKey( "Commands" ) );
 	for ( int i = 0; i < l.count(); i++ )
 	{
-		s->setArrayIndex( i );
+		s.setArrayIndex( i );
 		const pCommand& c = l[i];
-		s->setValue( "Text", c.text() );
-		s->setValue( "Command", c.command() );
-		s->setValue( "Arguments", c.arguments() );
-		s->setValue( "WorkingDirectory", c.workingDirectory() );
-		s->setValue( "Parsers", c.parsers() );
-		s->setValue( "TryAll", c.tryAllParsers() );
-		s->setValue( "SkipOnError", c.skipOnError() );
+		s.setValue( "Text", c.text() );
+		s.setValue( "Command", c.command() );
+		s.setValue( "Arguments", c.arguments() );
+		s.setValue( "WorkingDirectory", c.workingDirectory() );
+		s.setValue( "Parsers", c.parsers() );
+		s.setValue( "TryAll", c.tryAllParsers() );
+		s.setValue( "SkipOnError", c.skipOnError() );
 	}
-	s->endArray();
+	s.endArray();
 }
 
 void Gpp::commandTriggered()

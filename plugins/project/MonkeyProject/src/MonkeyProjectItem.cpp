@@ -167,14 +167,14 @@ ProjectPlugin* MonkeyProjectItem::getParentPlugin ()
     return PluginsManager::instance()->plugin<ProjectPlugin*>( PluginsManager::stAll, "MonkeyProject" );
 }
 
-void MonkeyProjectItem::addExistingFiles(const QStringList& files, const QString& scope, const QString&)
+void MonkeyProjectItem::addExistingFiles(const QStringList& files, const QString& /*scope*/, const QString&)
 {
     if ( !isProject() )
         return;
     addExistingFiles (files, this);
 }
 
-void MonkeyProjectItem::addExistingFiles(const QStringList& files, ProjectItem* item, const QString&)
+void MonkeyProjectItem::addExistingFiles(const QStringList& files, ProjectItem* /*item*/, const QString&)
 {
     if ( !isProject() )
         return;
@@ -184,12 +184,12 @@ void MonkeyProjectItem::addExistingFiles(const QStringList& files, ProjectItem* 
     }
 }
 
-void MonkeyProjectItem::addExistingFile(const QString& file, const QString& scope, const QString&)
+void MonkeyProjectItem::addExistingFile(const QString& file, const QString& /*scope*/, const QString&)
 {
     addExistingFile (file, this);
 }
 
-void MonkeyProjectItem::addExistingFile(const QString& file, ProjectItem* item, const QString&)
+void MonkeyProjectItem::addExistingFile(const QString& file, ProjectItem* /*item*/, const QString&)
 {
     ProjectItem* it = new MonkeyProjectItem( ProjectItem::ValueType, this );
     it->setValue (file);

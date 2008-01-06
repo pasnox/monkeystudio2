@@ -30,7 +30,7 @@ class GenericBuilder : public BuilderPlugin //fake builder, for build menu
 	pCommandList defaultCommands() const {return pCommandList();};
 	pCommandList userCommands() const {return pCommandList();};
 	void setUserCommands( const pCommandList& ) const {};
-	QWidget* cliToolSettingsWidget( BasePlugin* p ){ return NULL;}
+	QWidget* cliToolSettingsWidget( BasePlugin* ){ return NULL;}
 	QStringList availableParsers() const {return QStringList();};
 	pCommandParser* getParser( const QString& ) {return NULL;};
 	void commandTriggered() {};

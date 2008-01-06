@@ -34,7 +34,7 @@ It's extendable with a powerfull plugins system.
 #include "pFileManager.h"
 #include "pSettings.h"
 
-Navigator::Navigator (QObject* parent)
+Navigator::Navigator (QObject* )
 {
 	// set plugin infos
 	mPluginInfos.Caption = tr( "Navigator" );
@@ -44,8 +44,8 @@ Navigator::Navigator (QObject* parent)
 	mPluginInfos.Name =  "Navigator";
 	mPluginInfos.Version = "0.0.1";
 	mPluginInfos.Enabled = false;
-	displayMask = pSettings::instance()->value ("Plugins/Navigator/DisplayMask",65535).toInt();
-	expandMask = pSettings::instance()->value ("Plugins/Navigator/ExpandMask",32771).toInt();
+	displayMask = pSettings::value ("Plugins/Navigator/DisplayMask",65535).toInt();
+	expandMask = pSettings::value ("Plugins/Navigator/ExpandMask",32771).toInt();
 }
 
 bool Navigator::setEnabled (bool e)
@@ -88,7 +88,7 @@ QWidget* Navigator::settingsWidget ()
 void Navigator::setDisplayMask (int mask)
 {
 	displayMask = mask;
-	pSettings::instance()->setValue ("Plugins/Navigator/DisplayMask",QVariant(mask));
+	pSettings::setValue ("Plugins/Navigator/DisplayMask",QVariant(mask));
 }
 	
 int Navigator::getDisplayMask (void)
@@ -97,7 +97,7 @@ int Navigator::getDisplayMask (void)
 void Navigator::setExpandMask (int mask)
 {
 	expandMask = mask;
-	pSettings::instance()->setValue ("Plugins/Navigator/ExpandMask",QVariant(mask));	
+	pSettings::setValue ("Plugins/Navigator/ExpandMask",QVariant(mask));	
 }
 
 int Navigator::getExpandMask (void)

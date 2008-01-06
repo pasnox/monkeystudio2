@@ -46,7 +46,7 @@ QStringList UISettingsQMake::defaultFilters()
 
 QStringList UISettingsQMake::readFilters()
 {
-	QStringList l = pSettings::instance()->value( QString( "Plugins/%1/Filters" ).arg( PLUGIN_NAME ) ).toStringList();
+	QStringList l = pSettings::value( QString( "Plugins/%1/Filters" ).arg( PLUGIN_NAME ) ).toStringList();
 	return l.isEmpty() ? defaultFilters() : l;
 }
 
@@ -59,7 +59,7 @@ QStringList UISettingsQMake::defaultFiltersToolTips()
 
 QStringList UISettingsQMake::readFiltersToolTips()
 {
-	QStringList l = pSettings::instance()->value( QString( "Plugins/%1/FiltersToolTips" ).arg( PLUGIN_NAME ) ).toStringList();
+	QStringList l = pSettings::value( QString( "Plugins/%1/FiltersToolTips" ).arg( PLUGIN_NAME ) ).toStringList();
 	return l.isEmpty() ? defaultFiltersToolTips() : l;
 }
 
@@ -81,7 +81,7 @@ QStringList UISettingsQMake::defaultScopes()
 
 QStringList UISettingsQMake::readScopes()
 {
-	QStringList l = pSettings::instance()->value( QString( "Plugins/%1/Scopes" ).arg( PLUGIN_NAME ) ).toStringList();
+	QStringList l = pSettings::value( QString( "Plugins/%1/Scopes" ).arg( PLUGIN_NAME ) ).toStringList();
 	return l.isEmpty() ? defaultScopes() : l;
 }
 
@@ -96,7 +96,7 @@ QStringList UISettingsQMake::defaultPathFiles()
 
 QStringList UISettingsQMake::readPathFiles()
 {
-	QStringList l = pSettings::instance()->value( QString( "Plugins/%1/PathFiles" ).arg( PLUGIN_NAME ) ).toStringList();
+	QStringList l = pSettings::value( QString( "Plugins/%1/PathFiles" ).arg( PLUGIN_NAME ) ).toStringList();
 	return l.isEmpty() ? defaultPathFiles() : l;
 }
 
@@ -123,14 +123,14 @@ QtItemList UISettingsQMake::defaultQtModules()
 QtItemList UISettingsQMake::readQtModules()
 {
 	QtItemList l;
-	pSettings* ps = pSettings::instance();
-	int s = ps->beginReadArray( QString( "Plugins/%1/QtModules" ).arg( PLUGIN_NAME ) );
+	pSettings ps;
+	int s = ps.beginReadArray( QString( "Plugins/%1/QtModules" ).arg( PLUGIN_NAME ) );
 	for ( int i = 0; i < s; i++ )
 	{
-		ps->setArrayIndex( i );
-		l << QtItem( ps->value( "Text" ).toString(), ps->value( "Value" ).toString(), ps->value( "Variable" ).toString(), ps->value( "Help" ).toString() );
+		ps.setArrayIndex( i );
+		l << QtItem( ps.value( "Text" ).toString(), ps.value( "Value" ).toString(), ps.value( "Variable" ).toString(), ps.value( "Help" ).toString() );
 	}
-	ps->endArray();
+	ps.endArray();
 	return l.isEmpty() ? defaultQtModules() : l;
 }
 
@@ -168,14 +168,14 @@ QtItemList UISettingsQMake::defaultSettings()
 QtItemList UISettingsQMake::readSettings()
 {
 	QtItemList l;
-	pSettings* ps = pSettings::instance();
-	int s = ps->beginReadArray( QString( "Plugins/%1/Settings" ).arg( PLUGIN_NAME ) );
+	pSettings ps;
+	int s = ps.beginReadArray( QString( "Plugins/%1/Settings" ).arg( PLUGIN_NAME ) );
 	for ( int i = 0; i < s; i++ )
 	{
-		ps->setArrayIndex( i );
-		l << QtItem( ps->value( "Text" ).toString(), ps->value( "Value" ).toString(), ps->value( "Variable" ).toString(), ps->value( "Help" ).toString() );
+		ps.setArrayIndex( i );
+		l << QtItem( ps.value( "Text" ).toString(), ps.value( "Value" ).toString(), ps.value( "Variable" ).toString(), ps.value( "Help" ).toString() );
 	}
-	ps->endArray();
+	ps.endArray();
 	return l.isEmpty() ? defaultSettings() : l;
 }
 
@@ -197,14 +197,14 @@ QtVersionList UISettingsQMake::defaultVersions()
 QtVersionList UISettingsQMake::readVersions()
 {
 	QtVersionList l;
-	pSettings* ps = pSettings::instance();
-	int s = ps->beginReadArray( QString( "Plugins/%1/Versions" ).arg( PLUGIN_NAME ) );
+	pSettings ps;
+	int s = ps.beginReadArray( QString( "Plugins/%1/Versions" ).arg( PLUGIN_NAME ) );
 	for ( int i = 0; i < s; i++ )
 	{
-		ps->setArrayIndex( i );
-		l << QtVersion( ps->value( "Text" ).toString(), ps->value( "Path" ).toString(), ps->value( "QMake" ).toString(), ps->value( "lupdate" ).toString(), ps->value( "lrelease" ).toString(), ps->value( "DocsPath" ).toString(), ps->value( "Default" ).toBool() );
+		ps.setArrayIndex( i );
+		l << QtVersion( ps.value( "Text" ).toString(), ps.value( "Path" ).toString(), ps.value( "QMake" ).toString(), ps.value( "lupdate" ).toString(), ps.value( "lrelease" ).toString(), ps.value( "DocsPath" ).toString(), ps.value( "Default" ).toBool() );
 	}
-	ps->endArray();
+	ps.endArray();
 	return l.isEmpty() ? defaultVersions() : l;
 }
 
@@ -572,67 +572,67 @@ void UISettingsQMake::on_dbbButtons_clicked( QAbstractButton* b )
 	if ( dbbButtons->standardButton( b )  != QDialogButtonBox::Save )
 		return;
 	QStringList l;
-	pSettings* ps = pSettings::instance();
+	pSettings ps;
 	// general
 	lw_currentItemChanged( 0, lwQtVersions->selectedItems().value( 0 ) );
-	ps->beginWriteArray( QString( "Plugins/%1/Versions" ).arg( PLUGIN_NAME ) );
+	ps.beginWriteArray( QString( "Plugins/%1/Versions" ).arg( PLUGIN_NAME ) );
 	for ( int i = 0; i < lwQtVersions->count(); i++ )
 	{
 		QListWidgetItem* it = lwQtVersions->item( i );
-		ps->setArrayIndex( i );
-		ps->setValue( "Text", it->text() );
-		ps->setValue( "Path", it->data( QtVersion::PathRole ).toString() );
-		ps->setValue( "QMake", it->data( QtVersion::QMakeRole ).toString() );
-		ps->setValue( "lupdate", it->data( QtVersion::lupdateRole ).toString() );
-		ps->setValue( "lrelease", it->data( QtVersion::lreleaseRole ).toString() );
-		ps->setValue( "DocsPath", it->data( QtVersion::DocsPathRole ).toString() );
-		ps->setValue( "Default", it->data( QtVersion::DefaultRole ).toBool() );
+		ps.setArrayIndex( i );
+		ps.setValue( "Text", it->text() );
+		ps.setValue( "Path", it->data( QtVersion::PathRole ).toString() );
+		ps.setValue( "QMake", it->data( QtVersion::QMakeRole ).toString() );
+		ps.setValue( "lupdate", it->data( QtVersion::lupdateRole ).toString() );
+		ps.setValue( "lrelease", it->data( QtVersion::lreleaseRole ).toString() );
+		ps.setValue( "DocsPath", it->data( QtVersion::DocsPathRole ).toString() );
+		ps.setValue( "Default", it->data( QtVersion::DefaultRole ).toBool() );
 	}
-	ps->endArray();
+	ps.endArray();
 	// filters
 	l.clear();
 	foreach ( QListWidgetItem* it, lwFilters->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
 		l << it->text();
-	ps->setValue( QString( "Plugins/%1/Filters" ).arg( PLUGIN_NAME ), l );
+	ps.setValue( QString( "Plugins/%1/Filters" ).arg( PLUGIN_NAME ), l );
 	// scopes
 	l.clear();
 	foreach ( QListWidgetItem* it, lwScopes->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
 		l << it->text();
-	ps->setValue( QString( "Plugins/%1/Scopes" ).arg( PLUGIN_NAME ), l );
+	ps.setValue( QString( "Plugins/%1/Scopes" ).arg( PLUGIN_NAME ), l );
 	// pathfiles
 	l.clear();
 	foreach ( QListWidgetItem* it, lwPathFiles->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
 		l << it->text();
-	ps->setValue( QString( "Plugins/%1/PathFiles" ).arg( PLUGIN_NAME ), l );
+	ps.setValue( QString( "Plugins/%1/PathFiles" ).arg( PLUGIN_NAME ), l );
 	// filters tooltips
 	l.clear();
 	foreach ( QListWidgetItem* it, lwFilters->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
 		l << it->toolTip();
-	ps->setValue( QString( "Plugins/%1/FiltersToolTips" ).arg( PLUGIN_NAME ), l );
+	ps.setValue( QString( "Plugins/%1/FiltersToolTips" ).arg( PLUGIN_NAME ), l );
 	// qt modules
 	lw_currentItemChanged( 0, lwQtModules->selectedItems().value( 0 ) );
-	ps->beginWriteArray( QString( "Plugins/%1/QtModules" ).arg( PLUGIN_NAME ) );
+	ps.beginWriteArray( QString( "Plugins/%1/QtModules" ).arg( PLUGIN_NAME ) );
 	for ( int i = 0; i < lwQtModules->count(); i++ )
 	{
 		QListWidgetItem* it = lwQtModules->item( i );
-		ps->setArrayIndex( i );
-		ps->setValue( "Text", it->text() );
-		ps->setValue( "Value", it->data( QtItem::ValueRole ).toString() );
-		ps->setValue( "Variable", it->data( QtItem::VariableRole ).toString() );
-		ps->setValue( "Help", it->data( QtItem::HelpRole ).toString() );
+		ps.setArrayIndex( i );
+		ps.setValue( "Text", it->text() );
+		ps.setValue( "Value", it->data( QtItem::ValueRole ).toString() );
+		ps.setValue( "Variable", it->data( QtItem::VariableRole ).toString() );
+		ps.setValue( "Help", it->data( QtItem::HelpRole ).toString() );
 	}
-	ps->endArray();
+	ps.endArray();
 	// qt modules
 	lw_currentItemChanged( 0, lwSettings->selectedItems().value( 0 ) );
-	ps->beginWriteArray( QString( "Plugins/%1/Settings" ).arg( PLUGIN_NAME ) );
+	ps.beginWriteArray( QString( "Plugins/%1/Settings" ).arg( PLUGIN_NAME ) );
 	for ( int i = 0; i < lwSettings->count(); i++ )
 	{
 		QListWidgetItem* it = lwSettings->item( i );
-		ps->setArrayIndex( i );
-		ps->setValue( "Text", it->text() );
-		ps->setValue( "Value", it->data( QtItem::ValueRole ).toString() );
-		ps->setValue( "Variable", it->data( QtItem::VariableRole ).toString() );
-		ps->setValue( "Help", it->data( QtItem::HelpRole ).toString() );
+		ps.setArrayIndex( i );
+		ps.setValue( "Text", it->text() );
+		ps.setValue( "Value", it->data( QtItem::ValueRole ).toString() );
+		ps.setValue( "Variable", it->data( QtItem::VariableRole ).toString() );
+		ps.setValue( "Help", it->data( QtItem::HelpRole ).toString() );
 	}
-	ps->endArray();
+	ps.endArray();
 }
