@@ -258,18 +258,18 @@ QMakeItem* QMakeParser::processNested( const QString& s, QMakeItem* i )
 			{
 				if( !pileNested.isEmpty() )
 				{
-					QMakeItem* ik = pileNested.pop();
+					pileNested.pop();
 					if(!pileNested.isEmpty())
 						i = pileNested.top();
 				}
 				else
 				{
-					qWarning( "Error on line %d: \"else\" without scope", (ligne+1) );
+					qWarning( "Error : \"else\" without scope" );
 				}
 			}
 			else
 			{
-				qWarning( "Error on line %d: \"else\" should be the first scope", (ligne+1) );
+				qWarning( "Error : \"else\" should be the first scope" );
 			}
 		}
 		else
