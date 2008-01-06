@@ -2,9 +2,7 @@
 #define PTOOLSMANAGER_H
 
 #include "MonkeyExport.h"
-#include "QSingleton.h"
 
-#include <QApplication>
 #include <QFileIconProvider>
 
 class pSettings;
@@ -23,10 +21,10 @@ struct Q_MONKEY_EXPORT pTool
 	bool DesktopEntry;
 };
 
-class Q_MONKEY_EXPORT pToolsManager : public QObject, public QSingleton<pToolsManager>
+class Q_MONKEY_EXPORT pToolsManager : public QObject
 {
 	Q_OBJECT
-	friend class QSingleton<pToolsManager>;
+	friend class MonkeyCore;
 
 public:
 	enum ToolType { ttAll = -1, ttUserEntry, ttDesktopEntry };
@@ -38,8 +36,7 @@ public:
 protected:
 	static QFileIconProvider* mIconProvider;
 
-private:
-	pToolsManager( QObject* = QApplication::instance() );
+	pToolsManager( QObject* = 0 );
 	~pToolsManager();
 
 public slots:

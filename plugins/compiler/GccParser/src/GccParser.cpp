@@ -1,5 +1,6 @@
 #include "GccParser.h"
 #include "Parser.h"
+#include "MonkeyCore.h"
 
 GccParser::GccParser()
 {
@@ -22,9 +23,9 @@ bool GccParser::setEnabled( bool b)
 {
 	mPluginInfos.Enabled = b;
  	if ( b )
-		pConsoleManager::instance()->addParser( new Parser(this) );
+		MonkeyCore::consoleManager()->addParser( new Parser(this) );
  	else
-		pConsoleManager::instance()->removeParser( PLUGIN_NAME );
+		MonkeyCore::consoleManager()->removeParser( PLUGIN_NAME );
 	return true;
 }
 

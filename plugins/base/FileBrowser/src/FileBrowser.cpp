@@ -3,6 +3,7 @@
 #include "pDockToolBar.h"
 #include "pDockFileBrowser.h"
 #include "FileBrowserSettings.h"
+#include "MonkeyCore.h"
 
 #include <QIcon>
 
@@ -29,7 +30,7 @@ bool FileBrowser::setEnabled( bool b )
 	if ( b && !isEnabled() )
 	{
 		// add dock to dock toolbar entry
-		UIMain::instance()->dockToolBar( Qt::LeftToolBarArea )->addDock( pDockFileBrowser::instance(), infos().Caption, QIcon( ":/icons/browser.png" ) );
+		MonkeyCore::mainWindow()->dockToolBar( Qt::LeftToolBarArea )->addDock( pDockFileBrowser::instance(), infos().Caption, QIcon( ":/icons/browser.png" ) );
 		// connect signals so we will be able to save/restore state of dock settings
 		connect( pDockFileBrowser::instance(), SIGNAL( saveSettings() ), this, SLOT( saveSettings() ) );
 		connect( pDockFileBrowser::instance(), SIGNAL( restoreSettings() ), this, SLOT( restoreSettings() ) );

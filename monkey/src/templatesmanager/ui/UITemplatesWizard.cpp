@@ -2,6 +2,7 @@
 #include "pFileManager.h"
 #include "pMonkeyStudio.h"
 #include "pSettings.h"
+#include "MonkeyCore.h"
 
 #include "ProjectsModel.h"
 #include "ProjectsProxy.h"
@@ -46,9 +47,9 @@ UITemplatesWizard::UITemplatesWizard( QWidget* w )
 	cbOperators->addItems( availableOperators() );
 	
     // assign projects combobox
-    mProjects = UIProjectsManager::instance()->model();
+    mProjects = MonkeyCore::projectsManager()->model();
     cbProjects->setModel( mProjects->scopesProxy() );
-    ProjectItem* p = UIProjectsManager::instance()->currentProject();
+    ProjectItem* p = MonkeyCore::projectsManager()->currentProject();
     cbProjects->setCurrentIndex( mProjects->scopesProxy()->mapFromSource( p ? p->index() : QModelIndex() ) );
 	
     // restore infos

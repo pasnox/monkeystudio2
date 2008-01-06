@@ -1,4 +1,5 @@
 #include "MessageBox.h"
+#include "MonkeyCore.h"
 #include "UIMain.h"
 #include "pMenuBar.h"
 #include "pDockToolBar.h"
@@ -30,12 +31,12 @@ bool MessageBox::setEnabled( bool b )
 	if ( b && !isEnabled() )
 	{
 		// add dock to dock toolbar entry
-		UIMain::instance()->dockToolBar( Qt::BottomToolBarArea )->addDock( pDockMessageBox::instance(), infos().Caption, QIcon( ":/icons/console.png" ) );
+		MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( pDockMessageBox::instance(), infos().Caption, QIcon( ":/icons/console.png" ) );
 		// connect signals so we will be able to save/restore state of dock settings
-		connect( pMenuBar::instance()->action( "mView/aShowBuild", tr( "Show Build" ), QIcon( ":/icons/tabbuild.png" ), tr( "F10" ) ), SIGNAL( triggered() ), pDockMessageBox::instance(), SLOT( showBuild() ) );
-		connect( pMenuBar::instance()->action( "mView/aShowOutput", tr( "Show Output" ), QIcon( ":/icons/taboutput.png" ) , tr( "F11" )), SIGNAL( triggered() ), pDockMessageBox::instance(), SLOT( showOutput() ) );
-		connect( pMenuBar::instance()->action( "mView/aShowLog", tr( "Show Log" ), QIcon( ":/icons/tablog.png" ), tr( "F12" ) ), SIGNAL( triggered() ), pDockMessageBox::instance(), SLOT( showLog() ) );
-		connect( pMenuBar::instance()->action( "mView/aShowNextError", tr( "Show Next Error" ), QIcon( ":/icons/goto.png" ), "F9" ), SIGNAL( triggered() ), pDockMessageBox::instance(), SLOT( showNextError() ) );
+		connect( MonkeyCore::menuBar()->action( "mView/aShowBuild", tr( "Show Build" ), QIcon( ":/icons/tabbuild.png" ), tr( "F10" ) ), SIGNAL( triggered() ), pDockMessageBox::instance(), SLOT( showBuild() ) );
+		connect( MonkeyCore::menuBar()->action( "mView/aShowOutput", tr( "Show Output" ), QIcon( ":/icons/taboutput.png" ) , tr( "F11" )), SIGNAL( triggered() ), pDockMessageBox::instance(), SLOT( showOutput() ) );
+		connect( MonkeyCore::menuBar()->action( "mView/aShowLog", tr( "Show Log" ), QIcon( ":/icons/tablog.png" ), tr( "F12" ) ), SIGNAL( triggered() ), pDockMessageBox::instance(), SLOT( showLog() ) );
+		connect( MonkeyCore::menuBar()->action( "mView/aShowNextError", tr( "Show Next Error" ), QIcon( ":/icons/goto.png" ), "F9" ), SIGNAL( triggered() ), pDockMessageBox::instance(), SLOT( showNextError() ) );
 		connect( pDockMessageBox::instance(), SIGNAL( saveSettings() ), this, SLOT( saveSettings() ) );
 		connect( pDockMessageBox::instance(), SIGNAL( restoreSettings() ), this, SLOT( restoreSettings() ) );
 		// set plugin enabled
@@ -43,9 +44,9 @@ bool MessageBox::setEnabled( bool b )
 	}
 	else if ( !b && isEnabled() )
 	{
-		delete pMenuBar::instance()->action( "mView/aShowBuild" );
-		delete pMenuBar::instance()->action( "mView/aShowOutput" );
-		delete pMenuBar::instance()->action( "mView/aShowLog" );
+		delete MonkeyCore::menuBar()->action( "mView/aShowBuild" );
+		delete MonkeyCore::menuBar()->action( "mView/aShowOutput" );
+		delete MonkeyCore::menuBar()->action( "mView/aShowLog" );
 		// it will remove itself from dock toolbar when deleted
 		pDockMessageBox::instance()->deleteLater();
 		// set plugin disabled

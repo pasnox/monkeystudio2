@@ -3,6 +3,7 @@
 #include "UIProjectsManager.h"
 #include "ProjectsProxy.h"
 #include "UISettingsQMake.h"
+#include "MonkeyCore.h"
 
 #include <QDir>
 
@@ -25,7 +26,7 @@ bool QMake::setEnabled( bool b )
 		// set usable suffixes
 		mSuffixes[tr( "Qt Projects" )] = QStringList() << "*.pro";
 		// set filtered items
-		UIProjectsManager::instance()->proxy()->addFilterValues( UISettingsQMake::readFilters() );
+		MonkeyCore::projectsManager()->proxy()->addFilterValues( UISettingsQMake::readFilters() );
 		// set plugin enabled
 		mPluginInfos.Enabled = true;
 	}
@@ -34,7 +35,7 @@ bool QMake::setEnabled( bool b )
 		// clear suffixes
 		mSuffixes.clear();
 		// unset filtered items
-		UIProjectsManager::instance()->proxy()->removeFilterValues( UISettingsQMake::readFilters() );
+		MonkeyCore::projectsManager()->proxy()->removeFilterValues( UISettingsQMake::readFilters() );
 		// set plugin disabled
 		mPluginInfos.Enabled = false;
 	}

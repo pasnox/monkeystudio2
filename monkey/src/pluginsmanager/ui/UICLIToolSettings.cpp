@@ -17,6 +17,7 @@
 #include  "pConsoleManager.h"
 #include "pMonkeyStudio.h"
 #include "CLIToolPlugin.h"
+#include "MonkeyCore.h"
 
 #include <QInputDialog>
 
@@ -41,7 +42,7 @@ UICLIToolSettings::UICLIToolSettings( BasePlugin* p, const pCommandList& d, cons
 		mCommands = mDefaults;
 	mReset = mCommands;
 	// add parsers
-	lwCommandParsers->addItems( pConsoleManager::instance()->parsersName() );
+	lwCommandParsers->addItems( MonkeyCore::consoleManager()->parsersName() );
 	// set uncheck state for parser items
 	for ( int i = 0; i < lwCommandParsers->count(); i++ )
 		lwCommandParsers->item( i )->setCheckState( Qt::Unchecked );

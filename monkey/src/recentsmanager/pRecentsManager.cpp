@@ -1,4 +1,5 @@
 #include "pRecentsManager.h"
+#include "MonkeyCore.h"
 #include "pSettings.h"
 #include "pMenuBar.h"
 
@@ -17,8 +18,8 @@ pRecentsManager::pRecentsManager( QObject* p )
 	updateRecentProjects();
 
 	// connections
-	connect( pMenuBar::instance()->menu( "mFile/mRecents" ), SIGNAL( triggered( QAction* ) ), this, SLOT( recentFiles_triggered( QAction* ) ) );
-	connect( pMenuBar::instance()->menu( "mProject/mRecents" ), SIGNAL( triggered( QAction* ) ), this, SLOT( recentProjects_triggered( QAction* ) ) );
+	connect( MonkeyCore::menuBar()->menu( "mFile/mRecents" ), SIGNAL( triggered( QAction* ) ), this, SLOT( recentFiles_triggered( QAction* ) ) );
+	connect( MonkeyCore::menuBar()->menu( "mProject/mRecents" ), SIGNAL( triggered( QAction* ) ), this, SLOT( recentProjects_triggered( QAction* ) ) );
 }
 
 int pRecentsManager::maxRecentFiles() const
@@ -90,7 +91,7 @@ void pRecentsManager::updateRecentFiles()
 				a->setStatusTip( l.at( i ) );
 				mRecentFiles.append( a );
 				// add action
-				pMenuBar::instance()->menu( "mFile/mRecents" )->addAction( a );
+				MonkeyCore::menuBar()->menu( "mFile/mRecents" )->addAction( a );
 			}
 		}
 	}
@@ -160,7 +161,7 @@ void pRecentsManager::updateRecentProjects()
 				a->setStatusTip( l.at( i ) );
 				mRecentProjects.append( a );
 				// add action
-				pMenuBar::instance()->menu( "mProject/mRecents" )->addAction( a );
+				MonkeyCore::menuBar()->menu( "mProject/mRecents" )->addAction( a );
 			}
 		}
 	}

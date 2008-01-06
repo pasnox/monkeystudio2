@@ -18,6 +18,7 @@
 #include "pWorkspace.h"
 #include "pEditor.h"
 #include "pAbstractChild.h"
+#include "MonkeyCore.h"
 
 qSciShortcutsManager::qSciShortcutsManager (QObject* parent): QObject(parent)
 {
@@ -279,7 +280,7 @@ qSciShortcutsManager::qSciShortcutsManager (QObject* parent): QObject(parent)
     
 	foreach (SciAction sact, sactions)
     {
-        QAction* qact = pMenuBar::instance()->action( sact.name, sact.text, sact.icon, sact.defaultShortcut, sact.toolTip);
+        QAction* qact = MonkeyCore::menuBar()->action( sact.name, sact.text, sact.icon, sact.defaultShortcut, sact.toolTip);
         qact->setProperty ("messageCode", sact.messageCode);
         connect (qact, SIGNAL (triggered()), this, SLOT (keyBoardShortcutPressed ()));
     }
@@ -290,7 +291,7 @@ void qSciShortcutsManager::keyBoardShortcutPressed ()
     Q_ASSERT (sender());
     int messageCode = sender()->property("messageCode").toInt();
     Q_ASSERT (messageCode);
-    pAbstractChild* child = pWorkspace::instance()->currentChild();
+    pAbstractChild* child = MonkeyCore::workspace()->currentChild();
     if (child)
     {
         pEditor* editor = child->currentEditor ();

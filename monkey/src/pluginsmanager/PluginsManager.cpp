@@ -3,6 +3,7 @@
 #include "pSettings.h"
 #include "pMenuBar.h"
 #include "UIPluginsSettings.h"
+#include "MonkeyCore.h"
 
 #include <QPluginLoader>
 
@@ -51,10 +52,6 @@ void PluginsManager::loadsPlugins()
 		foreach ( QFileInfo f, pMonkeyStudio::getFiles( d ) )
 		{
 			QPluginLoader l( f.absoluteFilePath() );
-			if ( l.load() )
-				qWarning( "Loaded: %s", qPrintable( f.absoluteFilePath() ) );
-			else
-				qWarning( "not Loaded: %s", qPrintable( f.absoluteFilePath() ) );
 			if ( !addPlugin( l.instance() ) )
 			{
 				// try unload it and reload it in case of old one in memory
@@ -162,7 +159,7 @@ void PluginsManager::setCurrentBuilder( BuilderPlugin* b )
 		mBuilder->setEnabled( true );
 	
 	// enable menu according to current builder
-	pMenuBar::instance()->menu( "mBuilder" )->setEnabled( mBuilder || mCompiler );
+	MonkeyCore::menuBar()->menu( "mBuilder" )->setEnabled( mBuilder || mCompiler );
 }
 
 BuilderPlugin* PluginsManager::currentBuilder()
@@ -184,7 +181,7 @@ void PluginsManager::setCurrentCompiler( CompilerPlugin* c )
 		mCompiler->setEnabled( true );
 	
 	// enable menu according to current compiler
-	pMenuBar::instance()->menu( "mBuilder" )->setEnabled( mCompiler || mBuilder );
+	MonkeyCore::menuBar()->menu( "mBuilder" )->setEnabled( mCompiler || mBuilder );
 }
 
 CompilerPlugin* PluginsManager::currentCompiler()
@@ -206,7 +203,7 @@ void PluginsManager::setCurrentDebugger( DebuggerPlugin* d )
 		mDebugger->setEnabled( true );
 	
 	// enable menu according to current debugger
-	pMenuBar::instance()->menu( "mDebugger" )->setEnabled( mDebugger );
+	MonkeyCore::menuBar()->menu( "mDebugger" )->setEnabled( mDebugger );
 }
 
 DebuggerPlugin* PluginsManager::currentDebugger()
@@ -228,7 +225,7 @@ void PluginsManager::setCurrentInterpreter( InterpreterPlugin* i )
 		mInterpreter->setEnabled( true );
 	
 	// enable menu according to current interpreter
-	pMenuBar::instance()->menu( "mInterpreter" )->setEnabled( mInterpreter );
+	MonkeyCore::menuBar()->menu( "mInterpreter" )->setEnabled( mInterpreter );
 }
 
 InterpreterPlugin* PluginsManager::currentInterpreter()

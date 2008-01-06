@@ -6,6 +6,7 @@
 #include "pAbbreviationsManager.h"
 #include "pMonkeyStudio.h"
 #include "pWorkspace.h"
+#include "MonkeyCore.h"
 
 #include "qscilexerbash.h"
 #include "qscilexerbatch.h"
@@ -928,5 +929,5 @@ void UISettings::apply()
 {
 	saveSettings();
 	applyProperties();
-	pWorkspace::instance()->loadSettings();
+	MonkeyCore::workspace()->loadSettings();
 }

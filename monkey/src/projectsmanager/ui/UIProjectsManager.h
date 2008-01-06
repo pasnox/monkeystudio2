@@ -16,7 +16,6 @@
 #define UIPROJECTSMANAGER_H
 
 #include "MonkeyExport.h"
-#include "QSingleton.h"
 #include "ui_UIProjectsManager.h"
 #include "ProjectItem.h"
 
@@ -25,10 +24,10 @@
 class ProjectsProxy;
 class ProjectsModel;
 
-class Q_MONKEY_EXPORT UIProjectsManager : public QDockWidget, public Ui::UIProjectsManager, public QSingleton<UIProjectsManager>
+class Q_MONKEY_EXPORT UIProjectsManager : public QDockWidget, public Ui::UIProjectsManager
 {
 	Q_OBJECT
-	friend class QSingleton<UIProjectsManager>;
+	friend class MonkeyCore;
 	
 public:
 	ProjectItem* currentItem() const;
@@ -39,12 +38,11 @@ public:
 	inline ProjectsModel* model() const { return mProjects; }
 	inline ProjectsProxy* proxy() const { return mProxy; }
 
-private:
+protected:
 	ProjectsModel* mProjects;
 	ProjectsProxy* mProxy;
 
 	UIProjectsManager( QWidget* = 0 );
-
 	void initializeProject( ProjectItem* );
 
 private slots:

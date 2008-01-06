@@ -12,7 +12,6 @@
 #include "MonkeyExport.h"
 
 #include <QSettings>
-#include <QApplication>
 
 #ifndef PROGRAM_NAME
 #define PROGRAM_NAME "My Application"
@@ -30,7 +29,7 @@ class Q_MONKEY_EXPORT pSettings : public QSettings
 	Q_OBJECT
 
 public:
-	pSettings( QObject* = QApplication::instance() );
+	pSettings( QObject* = 0 );
 	~pSettings();
 	static void setIniInformations( const QString& = PROGRAM_NAME, const QString& = PROGRAM_VERSION );
 

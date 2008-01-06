@@ -41,7 +41,7 @@ UIProjectsManager::UIProjectsManager( QWidget* w )
 	tbButtons->layout()->setSpacing( 0 );
 	
 	// get menubar
-	pMenuBar* mb = pMenuBar::instance();
+	pMenuBar* mb = MonkeyCore::menuBar();
 	// set buttons action
 	tbButtons->addAction( mb->action( "mView/aFiltered" ) );
 	tbButtons->addSeparator();
@@ -134,7 +134,7 @@ void UIProjectsManager::tvProjects_currentChanged( const QModelIndex& c, const Q
 	if ( op )
 		op->uninstallCommands();
 	// get menubar
-	pMenuBar* mb = pMenuBar::instance();
+	pMenuBar* mb = MonkeyCore::menuBar();
 	// get pluginsmanager
 	PluginsManager* pm = MonkeyCore::pluginsManager();
 	// get current project
@@ -168,7 +168,7 @@ void UIProjectsManager::on_tvProjects_doubleClicked( const QModelIndex& i )
 	ProjectItem* it = mProjects->itemFromIndex( mProxy->mapToSource( i ) );
 	// if item and file exists, open it
 	if ( it && QFile::exists( it->getFilePath() ) )
-		pFileManager::instance()->openFile( it->getFilePath() );
+		MonkeyCore::fileManager()->openFile( it->getFilePath() );
 }
 
 void UIProjectsManager::on_tvProjects_customContextMenuRequested( const QPoint& p )
@@ -176,7 +176,7 @@ void UIProjectsManager::on_tvProjects_customContextMenuRequested( const QPoint& 
 	if ( currentProject() )
 	{
 		// get menubar
-		pMenuBar* mb = pMenuBar::instance();
+		pMenuBar* mb = MonkeyCore::menuBar();
 		
 		// create menu
 		QMenu m( this );
@@ -205,7 +205,7 @@ void UIProjectsManager::internal_modifiedChanged( bool b )
 {
 	ProjectItem* p = qobject_cast<ProjectItem*>( sender() );
 	if ( p && currentProject() == p )
-		pMenuBar::instance()->action( "mProject/mSave/aCurrent" )->setEnabled( p->getModified() );
+		MonkeyCore::menuBar()->action( "mProject/mSave/aCurrent" )->setEnabled( p->getModified() );
 	emit modifiedChanged( p, b );
 }
 
@@ -259,7 +259,7 @@ void UIProjectsManager::projectNew_triggered()
 void UIProjectsManager::projectOpen_triggered()
 {
 	// get last file open path
-	const QString mPath = pRecentsManager::instance()->recentProjectOpenPath();
+	const QString mPath = MonkeyCore::recentsManager()->recentProjectOpenPath();
 	// get available filters
 	QString mFilters = availableProjectsFilters();
 	// prepend a all in one filter
@@ -277,14 +277,14 @@ void UIProjectsManager::projectOpen_triggered()
 	{
 		if ( openProject( s ) )
 			// append file to recents
-			pRecentsManager::instance()->addRecentProject( s );
+			MonkeyCore::recentsManager()->addRecentProject( s );
 		else
 			// remove it from recents files
-			pRecentsManager::instance()->removeRecentProject( s );
+			MonkeyCore::recentsManager()->removeRecentProject( s );
 	}
 	// store file open path
 	if ( !l.isEmpty() )
-		pRecentsManager::instance()->setRecentProjectOpenPath( QFileInfo( l.at( 0 ) ).path() );
+		MonkeyCore::recentsManager()->setRecentProjectOpenPath( QFileInfo( l.at( 0 ) ).path() );
 }
 
 void UIProjectsManager::projectSaveCurrent_triggered()

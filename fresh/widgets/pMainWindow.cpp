@@ -16,9 +16,8 @@
 pMainWindow::pMainWindow( QWidget* w, Qt::WindowFlags f )
 	: QMainWindow( w, f )
 {
-	// init menubar
-	setMenuBar( menuBar() );
-
+	// set menu bar
+	setMenuBar( new pMenuBar( this ) );
 	// init toolbar
 	dockToolBar( Qt::TopToolBarArea );
 	dockToolBar( Qt::BottomToolBarArea );
@@ -30,7 +29,7 @@ void pMainWindow::hideEvent( QHideEvent* )
 { saveState(); }
 
 pMenuBar* pMainWindow::menuBar()
-{ return pMenuBar::instance( this ); }
+{ return qobject_cast<pMenuBar*>( QMainWindow::menuBar() ); }
 
 pDockToolBarManager* pMainWindow::dockToolBarManager()
 { return pDockToolBarManager::instance( this ); }

@@ -12,6 +12,7 @@
 #include "pMonkeyStudio.h"
 #include "pFileManager.h"
 #include "ProjectItem.h"
+#include "MonkeyCore.h"
 
 using namespace pMonkeyStudio;
 
@@ -180,9 +181,9 @@ bool pTemplatesManager::realiseTemplate( ProjectItem* it, const QString& o, cons
 		
 		// open files if needed
         if ( fo.contains( files[f] ) )
-            pFileManager::instance()->openFile( s );
+            MonkeyCore::fileManager()->openFile( s );
         if ( po.contains( files[f] ) )
-            pFileManager::instance()->openProject( s );
+            MonkeyCore::fileManager()->openProject( s );
 		
 		// add files to project if needed
 		if ( it )

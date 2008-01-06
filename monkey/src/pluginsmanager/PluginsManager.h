@@ -10,8 +10,6 @@
 #include "DebuggerPlugin.h"
 #include "InterpreterPlugin.h"
 
-#include <QApplication>
-
 class ProjectItem;
 class pAbstractChild;
 
@@ -74,7 +72,7 @@ protected:
 	DebuggerPlugin* mDebugger;
 	InterpreterPlugin* mInterpreter;
 
-	PluginsManager( QObject* = QApplication::instance() );
+	PluginsManager( QObject* = 0 );
 	bool addPlugin( QObject* );
 	void enableUserPlugins();
 	

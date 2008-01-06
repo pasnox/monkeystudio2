@@ -124,15 +124,15 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 		connect( c, SIGNAL( fileOpened( const QString& ) ), this, SIGNAL( fileOpened( const QString& ) ) );
 		connect( c, SIGNAL( fileClosed( const QString& ) ), this, SIGNAL( fileClosed( const QString& ) ) );
 		// update file menu
-		connect( c, SIGNAL( modifiedChanged( bool ) ), pMenuBar::instance()->action( "mFile/mSave/aCurrent" ), SLOT( setEnabled( bool ) ) );
+		connect( c, SIGNAL( modifiedChanged( bool ) ), MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" ), SLOT( setEnabled( bool ) ) );
 		// update edit menu
-		connect( c, SIGNAL( undoAvailableChanged( bool ) ), pMenuBar::instance()->action( "mEdit/aUndo" ), SLOT( setEnabled( bool ) ) );
-		connect( c, SIGNAL( redoAvailableChanged( bool ) ), pMenuBar::instance()->action( "mEdit/aRedo" ), SLOT( setEnabled( bool ) ) );
-		connect( c, SIGNAL( copyAvailableChanged( bool ) ), pMenuBar::instance()->action( "mEdit/aCut" ), SLOT( setEnabled( bool ) ) );
-		connect( c, SIGNAL( copyAvailableChanged( bool ) ), pMenuBar::instance()->action( "mEdit/aCopy" ), SLOT( setEnabled( bool ) ) );
-		connect( c, SIGNAL( pasteAvailableChanged( bool ) ), pMenuBar::instance()->action( "mEdit/aPaste" ), SLOT( setEnabled( bool ) ) );
-		//connect( c, SIGNAL( searchReplaceAvailableChanged( bool ) ), pMenuBar::instance()->action( "mEdit/aSearchReplace" ), SLOT( setEnabled( bool ) ) );
-		//connect( c, SIGNAL( goToAvailableChanged( bool ) ), pMenuBar::instance()->action( "mEdit/aGoTo" ), SLOT( setEnabled( bool ) ) );
+		connect( c, SIGNAL( undoAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aUndo" ), SLOT( setEnabled( bool ) ) );
+		connect( c, SIGNAL( redoAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aRedo" ), SLOT( setEnabled( bool ) ) );
+		connect( c, SIGNAL( copyAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aCut" ), SLOT( setEnabled( bool ) ) );
+		connect( c, SIGNAL( copyAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aCopy" ), SLOT( setEnabled( bool ) ) );
+		connect( c, SIGNAL( pasteAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aPaste" ), SLOT( setEnabled( bool ) ) );
+		//connect( c, SIGNAL( searchReplaceAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aSearchReplace" ), SLOT( setEnabled( bool ) ) );
+		//connect( c, SIGNAL( goToAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aGoTo" ), SLOT( setEnabled( bool ) ) );
 		// update status bar
 		//connect( c, SIGNAL( cursorPositionChanged( const QPoint& ) ), statusBar(), SLOT( setCursorPosition( const QPoint& ) ) );
 		//connect( c, SIGNAL( modifiedChanged( bool ) ), statusBar(), SLOT( setModified( bool ) ) );
@@ -146,7 +146,7 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 	
 	// add child to workspace if needed
 	if ( !children().contains( c ) )
-		pWorkspace::instance()->addDocument( c, c->currentFileName() );
+		MonkeyCore::workspace()->addDocument( c, c->currentFileName() );
 		
 	// set modification state because file is open before put in worksapce so workspace can't know it
 	c->setWindowModified( c->isModified() );
@@ -213,39 +213,39 @@ void pWorkspace::internal_currentChanged( int i )
 	bool go = hasChild ? c->isGoToAvailable() : false;
 
 	// update file menu
-	pMenuBar::instance()->action( "mFile/mSave/aCurrent" )->setEnabled( modified );
-	pMenuBar::instance()->action( "mFile/mSave/aAll" )->setEnabled( hasChild );
-	pMenuBar::instance()->action( "mFile/mClose/aCurrent" )->setEnabled( hasChild );
-	pMenuBar::instance()->action( "mFile/mClose/aAll" )->setEnabled( hasChild );
-	pMenuBar::instance()->action( "mFile/aSaveAsBackup" )->setEnabled( hasChild );
-	pMenuBar::instance()->action( "mFile/aQuickPrint" )->setEnabled( print );
-	pMenuBar::instance()->action( "mFile/aPrint" )->setEnabled( print );
+	MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" )->setEnabled( modified );
+	MonkeyCore::menuBar()->action( "mFile/mSave/aAll" )->setEnabled( hasChild );
+	MonkeyCore::menuBar()->action( "mFile/mClose/aCurrent" )->setEnabled( hasChild );
+	MonkeyCore::menuBar()->action( "mFile/mClose/aAll" )->setEnabled( hasChild );
+	MonkeyCore::menuBar()->action( "mFile/aSaveAsBackup" )->setEnabled( hasChild );
+	MonkeyCore::menuBar()->action( "mFile/aQuickPrint" )->setEnabled( print );
+	MonkeyCore::menuBar()->action( "mFile/aPrint" )->setEnabled( print );
 
 	// update edit menu
-	pMenuBar::instance()->action( "mEdit/aUndo" )->setEnabled( undo );
-	pMenuBar::instance()->action( "mEdit/aRedo" )->setEnabled( redo );
-	pMenuBar::instance()->action( "mEdit/aCut" )->setEnabled( copy );
-	pMenuBar::instance()->action( "mEdit/aCopy" )->setEnabled( copy );
-	pMenuBar::instance()->action( "mEdit/aPaste" )->setEnabled( paste );
-	pMenuBar::instance()->action( "mEdit/aSearchReplace" )->setEnabled( search );
-	pMenuBar::instance()->action( "mEdit/aSearchPrevious" )->setEnabled( search );
-	pMenuBar::instance()->action( "mEdit/aSearchNext" )->setEnabled( search );
-	pMenuBar::instance()->action( "mEdit/aGoTo" )->setEnabled( go );
-	pMenuBar::instance()->action( "mEdit/aExpandAbbreviation" )->setEnabled( hasChild );
+	MonkeyCore::menuBar()->action( "mEdit/aUndo" )->setEnabled( undo );
+	MonkeyCore::menuBar()->action( "mEdit/aRedo" )->setEnabled( redo );
+	MonkeyCore::menuBar()->action( "mEdit/aCut" )->setEnabled( copy );
+	MonkeyCore::menuBar()->action( "mEdit/aCopy" )->setEnabled( copy );
+	MonkeyCore::menuBar()->action( "mEdit/aPaste" )->setEnabled( paste );
+	MonkeyCore::menuBar()->action( "mEdit/aSearchReplace" )->setEnabled( search );
+	MonkeyCore::menuBar()->action( "mEdit/aSearchPrevious" )->setEnabled( search );
+	MonkeyCore::menuBar()->action( "mEdit/aSearchNext" )->setEnabled( search );
+	MonkeyCore::menuBar()->action( "mEdit/aGoTo" )->setEnabled( go );
+	MonkeyCore::menuBar()->action( "mEdit/aExpandAbbreviation" )->setEnabled( hasChild );
 
 	// update view menu
-	pMenuBar::instance()->action( "mView/aNext" )->setEnabled( hasChild );
-	pMenuBar::instance()->action( "mView/aPrevious" )->setEnabled( hasChild );
+	MonkeyCore::menuBar()->action( "mView/aNext" )->setEnabled( hasChild );
+	MonkeyCore::menuBar()->action( "mView/aPrevious" )->setEnabled( hasChild );
 
 	// update status bar
-	//pMenuBar::instance()->setCursorPosition( c ? c->cursorPosition() : QPoint( -1, -1 ) );
-	//pMenuBar::instance()->setModified( c ? c->isModified() : false );
-	//pMenuBar::instance()->setDocumentMode( c ? c->documentMode() : AbstractChild::mNone );
-	//pMenuBar::instance()->setLayoutMode( c ? c->layoutMode() : AbstractChild::lNone );
-	//pMenuBar::instance()->setFileName( c ? c->currentFile() : QString::null );
+	//MonkeyCore::menuBar()->setCursorPosition( c ? c->cursorPosition() : QPoint( -1, -1 ) );
+	//MonkeyCore::menuBar()->setModified( c ? c->isModified() : false );
+	//MonkeyCore::menuBar()->setDocumentMode( c ? c->documentMode() : AbstractChild::mNone );
+	//MonkeyCore::menuBar()->setLayoutMode( c ? c->layoutMode() : AbstractChild::lNone );
+	//MonkeyCore::menuBar()->setFileName( c ? c->currentFile() : QString::null );
 
 	// search dock
-	pSearch::instance()->setEditor( hasChild ? c->currentEditor() : 0 );
+	MonkeyCore::searchDock()->setEditor( hasChild ? c->currentEditor() : 0 );
 	
 	// update item tooltip
 	if ( hasChild )
@@ -284,15 +284,15 @@ void pWorkspace::internal_urlsDropped( const QList<QUrl>& l )
 	{
 		foreach ( QUrl u, l )
 			if ( !u.toLocalFile().trimmed().isEmpty() )
-				UIProjectsManager::instance()->openProject( u.toLocalFile() );
+				MonkeyCore::projectsManager()->openProject( u.toLocalFile() );
 	}
 }
 
 void pWorkspace::internal_listWidget_customContextMenuRequested( const QPoint& p )
 {
 	QMenu m;
-	m.addAction( pMenuBar::instance()->action( "mFile/mClose/aCurrent" ) );
-	m.addAction( pMenuBar::instance()->action( "mFile/mSave/aCurrent" ) );
+	m.addAction( MonkeyCore::menuBar()->action( "mFile/mClose/aCurrent" ) );
+	m.addAction( MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" ) );
 	m.exec( listWidget()->mapToGlobal( p ) );
 }
 
@@ -307,7 +307,7 @@ void pWorkspace::fileNew_triggered()
 void pWorkspace::fileOpen_triggered()
 {
 	// get last file open path
-	const QString mPath = currentChild() ? currentChild()->currentFile() : pRecentsManager::instance()->recentFileOpenPath();
+	const QString mPath = currentChild() ? currentChild()->currentFile() : MonkeyCore::recentsManager()->recentFileOpenPath();
 
 	// get available filters
 	QString mFilters = availableFilesFilters();
@@ -329,15 +329,15 @@ void pWorkspace::fileOpen_triggered()
 	{
 		if ( openFile( s ) )
 			// append file to recents
-			pRecentsManager::instance()->addRecentFile( s );
+			MonkeyCore::recentsManager()->addRecentFile( s );
 		else
 			// remove it from recents files
-			pRecentsManager::instance()->removeRecentFile( s );
+			MonkeyCore::recentsManager()->removeRecentFile( s );
 	}
 
 	// store file open path
 	if ( !l.isEmpty() )
-		pRecentsManager::instance()->setRecentFileOpenPath( QFileInfo( l.at( 0 ) ).canonicalPath() );
+		MonkeyCore::recentsManager()->setRecentFileOpenPath( QFileInfo( l.at( 0 ) ).canonicalPath() );
 }
 
 void pWorkspace::fileSessionSave_triggered()
@@ -349,7 +349,7 @@ void pWorkspace::fileSessionSave_triggered()
 	pSettings::setValue( "Session/Files", l );
 	// saves opened projects
 	l.clear();
-	foreach ( ProjectItem* p, UIProjectsManager::instance()->rootProjects() )
+	foreach ( ProjectItem* p, MonkeyCore::projectsManager()->rootProjects() )
 		l << p->canonicalFilePath();
 	pSettings::setValue( "Session/Projects", l );
 }
@@ -359,11 +359,11 @@ void pWorkspace::fileSessionRestore_triggered()
 	// restore files
 	foreach ( QString s, pSettings::value( "Session/Files", QStringList() ).toStringList() )
 		if ( !openFile( s ) ) // remove it from recents files
-			pRecentsManager::instance()->removeRecentFile( s );
+			MonkeyCore::recentsManager()->removeRecentFile( s );
 	// restore projects
 	foreach ( QString s, pSettings::value( "Session/Projects", QStringList() ).toStringList() )
-		if ( !UIProjectsManager::instance()->openProject( s ) ) // remove it from recents projects
-			pRecentsManager::instance()->removeRecentProject( s );
+		if ( !MonkeyCore::projectsManager()->openProject( s ) ) // remove it from recents projects
+			MonkeyCore::recentsManager()->removeRecentProject( s );
 }
 
 void pWorkspace::fileSaveCurrent_triggered()

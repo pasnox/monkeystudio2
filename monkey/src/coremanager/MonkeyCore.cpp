@@ -95,7 +95,7 @@ pSettings* MonkeyCore::settings()
 PluginsManager* MonkeyCore::pluginsManager()
 {
 	if ( !mInstances.contains( &PluginsManager::staticMetaObject ) )
-		mInstances[&PluginsManager::staticMetaObject] = new PluginsManager();
+		mInstances[&PluginsManager::staticMetaObject] = new PluginsManager( qApp );
 	return qobject_cast<PluginsManager*>( mInstances[&PluginsManager::staticMetaObject] );
 }
 
@@ -107,65 +107,61 @@ UIMain* MonkeyCore::mainWindow()
 }
 
 pMenuBar* MonkeyCore::menuBar()
-{
-	if ( !mInstances.contains( &pMenuBar::staticMetaObject ) )
-		mInstances[&pMenuBar::staticMetaObject] = pMenuBar::instance(); //new pMenuBar();
-	return qobject_cast<pMenuBar*>( mInstances[&pMenuBar::staticMetaObject] );
-}
+{ return mainWindow()->menuBar(); }
 
 pRecentsManager* MonkeyCore::recentsManager()
 {
 	if ( !mInstances.contains( &pRecentsManager::staticMetaObject ) )
-		mInstances[&pRecentsManager::staticMetaObject] = pRecentsManager::instance( mainWindow() ); //new pRecentsManager();
+		mInstances[&pRecentsManager::staticMetaObject] = new pRecentsManager( qApp );
 	return qobject_cast<pRecentsManager*>( mInstances[&pRecentsManager::staticMetaObject] );
 }
 
 pToolsManager* MonkeyCore::toolsManager()
 {
 	if ( !mInstances.contains( &pToolsManager::staticMetaObject ) )
-		mInstances[&pToolsManager::staticMetaObject] = pToolsManager::instance( mainWindow() ); //new pToolsManager();
+		mInstances[&pToolsManager::staticMetaObject] = new pToolsManager( qApp );
 	return qobject_cast<pToolsManager*>( mInstances[&pToolsManager::staticMetaObject] );
 }
 
 UIProjectsManager* MonkeyCore::projectsManager()
 {
 	if ( !mInstances.contains( &UIProjectsManager::staticMetaObject ) )
-		mInstances[&UIProjectsManager::staticMetaObject] = UIProjectsManager::instance( mainWindow() ); //new UIProjectsManager();
+		mInstances[&UIProjectsManager::staticMetaObject] = new UIProjectsManager( mainWindow() );
 	return qobject_cast<UIProjectsManager*>( mInstances[&UIProjectsManager::staticMetaObject] );
 }
 
 pFileManager* MonkeyCore::fileManager()
 {
 	if ( !mInstances.contains( &pFileManager::staticMetaObject ) )
-		mInstances[&pFileManager::staticMetaObject] = pFileManager::instance( qApp ); //new pFileManager();
+		mInstances[&pFileManager::staticMetaObject] = new pFileManager( qApp );
 	return qobject_cast<pFileManager*>( mInstances[&pFileManager::staticMetaObject] );
 }
 
 pWorkspace* MonkeyCore::workspace()
 {
 	if ( !mInstances.contains( &pWorkspace::staticMetaObject ) )
-		mInstances[&pWorkspace::staticMetaObject] = pWorkspace::instance( mainWindow() ); //new pWorkspace();
+		mInstances[&pWorkspace::staticMetaObject] = new pWorkspace( mainWindow() );
 	return qobject_cast<pWorkspace*>( mInstances[&pWorkspace::staticMetaObject] );
 }
 
 pConsoleManager* MonkeyCore::consoleManager()
 {
 	if ( !mInstances.contains( &pConsoleManager::staticMetaObject ) )
-		mInstances[&pConsoleManager::staticMetaObject] = pConsoleManager::instance( qApp ); //new pConsoleManager();
+		mInstances[&pConsoleManager::staticMetaObject] = new pConsoleManager( qApp );
 	return qobject_cast<pConsoleManager*>( mInstances[&pConsoleManager::staticMetaObject] );
 }
 
 pSearch* MonkeyCore::searchDock()
 {
 	if ( !mInstances.contains( &pSearch::staticMetaObject ) )
-		mInstances[&pSearch::staticMetaObject] = pSearch::instance(); //new pSearch();
+		mInstances[&pSearch::staticMetaObject] = new pSearch();
 	return qobject_cast<pSearch*>( mInstances[&pSearch::staticMetaObject] );
 }
 
 QStatusBar* MonkeyCore::statusBar()
 {
 	if ( !mInstances.contains( &QStatusBar::staticMetaObject ) )
-		mInstances[&QStatusBar::staticMetaObject] = new QStatusBar();
+		mInstances[&QStatusBar::staticMetaObject] = new QStatusBar( mainWindow() );
 	return qobject_cast<QStatusBar*>( mInstances[&QStatusBar::staticMetaObject] );
 	//StatusBar::self()->setText( StatusBar::tStatusTip, tr( "%1 v%2 Ready !" ).arg( PROGRAM_NAME, PROGRAM_VERSION ), 15000 );
 }

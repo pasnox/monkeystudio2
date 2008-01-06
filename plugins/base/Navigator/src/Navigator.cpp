@@ -33,6 +33,7 @@ It's extendable with a powerfull plugins system.
 #include "UIMain.h"
 #include "pFileManager.h"
 #include "pSettings.h"
+#include "MonkeyCore.h"
 
 Navigator::Navigator (QObject* )
 {
@@ -55,7 +56,7 @@ bool Navigator::setEnabled (bool e)
 	mPluginInfos.Enabled = e;
 	if (mPluginInfos.Enabled)
 	{
-		dockwgt = new pDockWidget( pWorkspace::instance());
+		dockwgt = new pDockWidget( MonkeyCore::workspace());
 		//dockwgt->hide ();
 		dockwgt->setMinimumWidth (100);
 		fileWidget = new QWidget (dockwgt);
@@ -69,12 +70,12 @@ bool Navigator::setEnabled (bool e)
 		fileLock->setCheckable ( true );
 		fileBox->addWidget (fileLock);
 		dockwgt->setWidget (fileWidget);
-		UIMain::instance()->dockToolBar( Qt::RightToolBarArea )->addDock( dockwgt,  tr( "Navigator" ), QPixmap( ":/icons/redo.png" ) );
-		connect ( pFileManager::instance(), SIGNAL (currentFileChanged( pAbstractChild*, const QString& )) , this, SLOT (currentFileChanged( pAbstractChild*, const QString )));
+		MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( dockwgt,  tr( "Navigator" ), QPixmap( ":/icons/redo.png" ) );
+		connect ( MonkeyCore::fileManager(), SIGNAL (currentFileChanged( pAbstractChild*, const QString& )) , this, SLOT (currentFileChanged( pAbstractChild*, const QString )));
 	}
 	else
 	{
-		disconnect ( pFileManager::instance(), SIGNAL (currentFileChanged( pAbstractChild*, const QString& )) , this, SLOT (currentFileChanged( pAbstractChild*, const QString& )));
+		disconnect ( MonkeyCore::fileManager(), SIGNAL (currentFileChanged( pAbstractChild*, const QString& )) , this, SLOT (currentFileChanged( pAbstractChild*, const QString& )));
 		delete dockwgt;
 	}
 	return true;

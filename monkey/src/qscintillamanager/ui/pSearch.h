@@ -3,16 +3,15 @@
 
 #include "MonkeyExport.h"
 #include "ui_pSearch.h"
-#include "QSingleton.h"
 
 #include <QPointer>
 
 class QsciScintilla;
 
-class Q_MONKEY_EXPORT pSearch : public pDockWidget, public Ui::pSearch, public QSingleton<pSearch>
+class Q_MONKEY_EXPORT pSearch : public pDockWidget, public Ui::pSearch
 {
 	Q_OBJECT
-	friend class QSingleton<pSearch>;
+	friend class MonkeyCore;
 
 public:
 	QsciScintilla* editor() const;

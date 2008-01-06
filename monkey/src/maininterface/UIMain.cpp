@@ -94,7 +94,7 @@ QMenu* UIMain::createPopupMenu()
 void UIMain::initMenuBar()
 {
 	// create menubar menus and actions
-	pMenuBar* mb = MonkeyCore::menuBar();
+	pMenuBar* mb = menuBar();
 	mb->menu( "mFile", tr( "&File" ) );
 	mb->beginGroup( "mFile" );
 		mb->action( "aNew", tr( "&New..." ), QIcon( ":/file/icons/file/new.png" ), tr( "Ctrl+N" ), tr( "Create a new file" ) );
@@ -227,8 +227,6 @@ void UIMain::initMenuBar()
 	}
 	// add styles action to menu
 	mb->menu( "mView/mStyle" )->addActions( agStyles->actions() );
-	// set menu
-	setMenuBar( mb );
 }
 
 void UIMain::initToolBar()

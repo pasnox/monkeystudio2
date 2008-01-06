@@ -9,6 +9,7 @@
 #include "pChild.h"
 #include "pEditor.h"
 #include "pSearch.h"
+#include "MonkeyCore.h"
 
 #include "qscilexer.h"
 
@@ -100,20 +101,20 @@ void pChild::paste()
 
 void pChild::searchReplace()
 {
-	pSearch::instance()->setEditor( mEditor );
+	MonkeyCore::searchDock()->setEditor( mEditor );
 	mEditor->invokeSearchReplace();
 }
 
 void pChild::searchPrevious()
 {
-	pSearch::instance()->setEditor( mEditor );
-	pSearch::instance()->on_tbPrevious_clicked();
+	MonkeyCore::searchDock()->setEditor( mEditor );
+	MonkeyCore::searchDock()->on_tbPrevious_clicked();
 }
 
 void pChild::searchNext()
 {
-	pSearch::instance()->setEditor( mEditor );
-	pSearch::instance()->on_tbNext_clicked();
+	MonkeyCore::searchDock()->setEditor( mEditor );
+	MonkeyCore::searchDock()->on_tbNext_clicked();
 }
 
 void pChild::goTo()

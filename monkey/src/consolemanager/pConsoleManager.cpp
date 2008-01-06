@@ -21,6 +21,7 @@
 #include "pMonkeyStudio.h"
 #include "pFileManager.h"
 #include "pAction.h"
+#include "MonkeyCore.h"
 
 static const int MAX_LINES = 4; //Maximum lines count, that can be parsed by Monkey. Than less - than better perfomance
 
@@ -95,12 +96,12 @@ QString pConsoleManager::quotedString( const QString& s )
 QString pConsoleManager::processInternalVariables( const QString& s )
 {
 	QString v = s;
-	v.replace( "$cpp$", nativeSeparators( pFileManager::instance()->currentProjectPath() ) );
-	v.replace( "$cp$", nativeSeparators( pFileManager::instance()->currentProjectFile() ) );
-	v.replace( "$cfp$", nativeSeparators( pFileManager::instance()->currentChildPath() ) );
-	v.replace( "$cf$", nativeSeparators( pFileManager::instance()->currentChildFile() ) );
-	v.replace( "$cip$", nativeSeparators( pFileManager::instance()->currentItemPath() ) );
-	v.replace( "$ci$", nativeSeparators( pFileManager::instance()->currentItemFile() ) );
+	v.replace( "$cpp$", nativeSeparators( MonkeyCore::fileManager()->currentProjectPath() ) );
+	v.replace( "$cp$", nativeSeparators( MonkeyCore::fileManager()->currentProjectFile() ) );
+	v.replace( "$cfp$", nativeSeparators( MonkeyCore::fileManager()->currentChildPath() ) );
+	v.replace( "$cf$", nativeSeparators( MonkeyCore::fileManager()->currentChildFile() ) );
+	v.replace( "$cip$", nativeSeparators( MonkeyCore::fileManager()->currentItemPath() ) );
+	v.replace( "$ci$", nativeSeparators( MonkeyCore::fileManager()->currentItemFile() ) );
 	return v;
 }
 

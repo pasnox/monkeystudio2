@@ -1,5 +1,6 @@
 #include "MSVC.h"
 #include "MSVCParser.h"
+#include "MonkeyCore.h"
 #include "pMenuBar.h"
 
 #include <QTabWidget>
@@ -17,14 +18,14 @@ MSVC::MSVC()
 	
 	// install parsers
 	foreach ( QString s, availableParsers() )
-		pConsoleManager::instance()->addParser( getParser( s ) );
+		MonkeyCore::consoleManager()->addParser( getParser( s ) );
 }
 
 MSVC::~MSVC()
 {
 	// uninstall parsers
 	foreach ( QString s, availableParsers() )
-		pConsoleManager::instance()->removeParser( s );
+		MonkeyCore::consoleManager()->removeParser( s );
 }
 
 bool MSVC::setEnabled( bool b)
@@ -34,7 +35,7 @@ bool MSVC::setEnabled( bool b)
 	mPluginInfos.Enabled = b;
  	if ( b )
 	{
-		pMenuBar* mb = pMenuBar::instance();
+		pMenuBar* mb = MonkeyCore::menuBar();
 		
 		// compile command
 		pCommand c = compileCommand();
@@ -54,7 +55,7 @@ bool MSVC::setEnabled( bool b)
 	}
  	else
 	{
-		pMenuBar* mb = pMenuBar::instance();
+		pMenuBar* mb = MonkeyCore::menuBar();
 		foreach ( QAction* a, mb->menu( "mBuilder/mUserCommands" )->actions() << mb->menu( "mBuilder/mBuild" )->actions() )
 			if ( a->data().toString() == mPluginInfos.Name )
 				delete a;
@@ -171,7 +172,7 @@ pCommandParser* MSVC::getParser( const QString& )
 
 void MSVC::commandTriggered()
 {
-	pConsoleManager* cm = pConsoleManager::instance();
+	pConsoleManager* cm = MonkeyCore::consoleManager();
 	pCommandList l = userCommands();
 	if ( QAction* a = qobject_cast<QAction*>( sender() ) )
 		cm->addCommands( cm->recursiveCommandList( l, cm->getCommand( l, a->statusTip() ) ) );

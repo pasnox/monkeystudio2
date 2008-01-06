@@ -1,5 +1,6 @@
 #include "pAStyle.h"
 #include "UISettingsAStyle.h"
+#include "MonkeyCore.h"
 #include "pMenuBar.h"
 #include "pAbstractChild.h"
 #include "pWorkspace.h"
@@ -33,7 +34,7 @@ bool pAStyle::setEnabled( bool b )
 	if ( b && !isEnabled() )
 	{
 		// create action
-		QAction* a = pMenuBar::instance()->action( "mEdit/aAStyle",  tr( "AStyle Formatter" ), QIcon( ":/icons/astyle.png" ), tr( "Ctrl+Alt+A" ), mPluginInfos.Description );
+		QAction* a = MonkeyCore::menuBar()->action( "mEdit/aAStyle",  tr( "AStyle Formatter" ), QIcon( ":/icons/astyle.png" ), tr( "Ctrl+Alt+A" ), mPluginInfos.Description );
 		connect( a, SIGNAL( triggered() ), this, SLOT( applyFormatter() ) );
 		// set plugin enabled
 		mPluginInfos.Enabled = true;
@@ -41,7 +42,7 @@ bool pAStyle::setEnabled( bool b )
 	else if ( !b && isEnabled() )
 	{
 		// delete action
-		delete pMenuBar::instance()->action( "mEdit/aAStyle" );
+		delete MonkeyCore::menuBar()->action( "mEdit/aAStyle" );
 		// set plugin disabled
 		mPluginInfos.Enabled = false;
 	}
@@ -52,7 +53,7 @@ bool pAStyle::setEnabled( bool b )
 
 void pAStyle::applyFormatter()
 {
-	if ( pAbstractChild* c = pWorkspace::instance()->currentChild() )
+	if ( pAbstractChild* c = MonkeyCore::workspace()->currentChild() )
 	{
 		if ( pEditor* e = c->currentEditor() )
 		{

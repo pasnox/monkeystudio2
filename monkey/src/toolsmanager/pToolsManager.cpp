@@ -5,6 +5,7 @@
 #include "UIDesktopTools.h"
 #include "pMonkeyStudio.h"
 #include "pConsoleManager.h"
+#include "MonkeyCore.h"
 
 #include <QProcess>
 #include <QDesktopServices>
@@ -22,10 +23,10 @@ pToolsManager::pToolsManager( QObject* p )
 	// initialise action
 	initializeTools();
 	// action connection
-	connect( pMenuBar::instance()->action( "mTools/aEditUser" ), SIGNAL( triggered() ), this, SLOT( editTools_triggered() ) );
-	connect( pMenuBar::instance()->action( "mTools/aEditDesktop" ), SIGNAL( triggered() ), this, SLOT( editTools_triggered() ) );
-	connect( pMenuBar::instance()->menu( "mTools/mUserTools" ), SIGNAL( triggered( QAction* ) ), this, SLOT( toolsMenu_triggered( QAction* ) ) );
-	connect( pMenuBar::instance()->menu( "mTools/mDesktopTools" ), SIGNAL( triggered( QAction* ) ), this, SLOT( toolsMenu_triggered( QAction* ) ) );
+	connect( MonkeyCore::menuBar()->action( "mTools/aEditUser" ), SIGNAL( triggered() ), this, SLOT( editTools_triggered() ) );
+	connect( MonkeyCore::menuBar()->action( "mTools/aEditDesktop" ), SIGNAL( triggered() ), this, SLOT( editTools_triggered() ) );
+	connect( MonkeyCore::menuBar()->menu( "mTools/mUserTools" ), SIGNAL( triggered( QAction* ) ), this, SLOT( toolsMenu_triggered( QAction* ) ) );
+	connect( MonkeyCore::menuBar()->menu( "mTools/mDesktopTools" ), SIGNAL( triggered( QAction* ) ), this, SLOT( toolsMenu_triggered( QAction* ) ) );
 }
 
 pToolsManager::~pToolsManager()
@@ -58,8 +59,8 @@ const QList<pTool> pToolsManager::tools( ToolType t )
 void pToolsManager::initializeTools()
 {
 	// got menu
-	QMenu* mu = pMenuBar::instance()->menu( "mTools/mUserTools" );
-	QMenu* md = pMenuBar::instance()->menu( "mTools/mDesktopTools" );
+	QMenu* mu = MonkeyCore::menuBar()->menu( "mTools/mUserTools" );
+	QMenu* md = MonkeyCore::menuBar()->menu( "mTools/mDesktopTools" );
 	// clear action
 	mu->clear();
 	md->clear();
@@ -83,13 +84,13 @@ void pToolsManager::initializeTools()
 void pToolsManager::editTools_triggered()
 {
 	QAction* a = qobject_cast<QAction*>( sender() );
-	if ( ( a == pMenuBar::instance()->action( "mTools/aEditUser" ) ? UIToolsEdit::instance()->exec() : UIDesktopTools::instance()->exec() ) )
+	if ( ( a == MonkeyCore::menuBar()->action( "mTools/aEditUser" ) ? UIToolsEdit::instance()->exec() : UIDesktopTools::instance()->exec() ) )
 		initializeTools();
 }
 
 void pToolsManager::toolsMenu_triggered( QAction* a )
 {
-	pConsoleManager* cm = pConsoleManager::instance();
+	pConsoleManager* cm = MonkeyCore::consoleManager();
 	QString t = cm->processInternalVariables( a->statusTip() );
 	QString w = cm->processInternalVariables( a->data().toString() );
 	bool b = false;

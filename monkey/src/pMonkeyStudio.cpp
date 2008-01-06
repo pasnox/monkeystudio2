@@ -840,7 +840,7 @@ void pMonkeyStudio::resetLexer( QsciLexer* l )
 void pMonkeyStudio::applyProperties()
 {
 	// apply editor properties
-	foreach ( pAbstractChild* c, pWorkspace::instance()->children() )
+	foreach ( pAbstractChild* c, MonkeyCore::workspace()->children() )
 		foreach ( pEditor* e, c->findChildren<pEditor*>() )
 			setEditorProperties( e );
 	// apply lexers properties

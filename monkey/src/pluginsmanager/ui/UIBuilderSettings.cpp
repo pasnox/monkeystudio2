@@ -16,6 +16,7 @@
 #include "BuilderPlugin.h"
 #include  "pConsoleManager.h"
 #include "pMonkeyStudio.h"
+#include "MonkeyCore.h"
 
 #include <QInputDialog>
 #include <QPushButton>
@@ -39,7 +40,7 @@ UIBuilderSettings::UIBuilderSettings( BuilderPlugin* p, QWidget* w )
 	mCommand = mPlugin->buildCommand();
 	mReset = mCommand;
 	// add parsers
-	lwBuildCommandParsers->addItems( pConsoleManager::instance()->parsersName() );
+	lwBuildCommandParsers->addItems( MonkeyCore::consoleManager()->parsersName() );
 	// set uncheck state for parser items
 	for ( int i = 0; i < lwBuildCommandParsers->count(); i++ )
 		lwBuildCommandParsers->item( i )->setCheckState( Qt::Unchecked );

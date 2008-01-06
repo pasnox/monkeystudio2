@@ -1,4 +1,5 @@
 #include "Gpp.h"
+#include "MonkeyCore.h"
 #include "pMenuBar.h"
 
 #include <QTabWidget>
@@ -16,14 +17,14 @@ Gpp::Gpp()
 	
 	// install parsers
 	foreach ( QString s, availableParsers() )
-		pConsoleManager::instance()->addParser( getParser( s ) );
+		MonkeyCore::consoleManager()->addParser( getParser( s ) );
 }
 
 Gpp::~Gpp()
 {
 	// uninstall parsers
 	foreach ( QString s, availableParsers() )
-		pConsoleManager::instance()->removeParser( s );
+		MonkeyCore::consoleManager()->removeParser( s );
 }
 
 bool Gpp::setEnabled( bool b)
@@ -33,7 +34,7 @@ bool Gpp::setEnabled( bool b)
 	mPluginInfos.Enabled = b;
  	if ( b )
 	{
-		pMenuBar* mb = pMenuBar::instance();
+		pMenuBar* mb = MonkeyCore::menuBar();
 		
 		// compile command
 		pCommand c = compileCommand();
@@ -53,7 +54,7 @@ bool Gpp::setEnabled( bool b)
 	}
  	else
 	{
-		pMenuBar* mb = pMenuBar::instance();
+		pMenuBar* mb = MonkeyCore::menuBar();
 		foreach ( QAction* a, mb->menu( "mBuilder/mUserCommands" )->actions() << mb->menu( "mBuilder/mBuild" )->actions() )
 			if ( a->data().toString() == mPluginInfos.Name )
 				delete a;
@@ -160,7 +161,7 @@ void Gpp::setUserCommands( const pCommandList& l ) const
 
 void Gpp::commandTriggered()
 {
-	pConsoleManager* cm = pConsoleManager::instance();
+	pConsoleManager* cm = MonkeyCore::consoleManager();
 	pCommandList l = userCommands() << compileCommand();
 	if ( QAction* a = qobject_cast<QAction*>( sender() ) )
 		cm->addCommands( cm->recursiveCommandList( l, cm->getCommand( l, a->statusTip() ) ) );

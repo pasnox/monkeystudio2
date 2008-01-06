@@ -34,6 +34,7 @@ public:
 	static pConsoleManager* consoleManager();
 	static pSearch* searchDock();
 	static QStatusBar* statusBar();
+// variablemaanger
 
 private:
 	static QHash<const QMetaObject*, QObject*> mInstances;

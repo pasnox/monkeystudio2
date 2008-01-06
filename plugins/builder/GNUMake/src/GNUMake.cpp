@@ -1,5 +1,6 @@
 #include "GNUMake.h"
 #include "GNUMakeParser.h"
+#include "MonkeyCore.h"
 #include "pConsoleManager.h"
 #include "pMenuBar.h"
 
@@ -25,9 +26,9 @@ bool GNUMake::setEnabled( bool b)
      if ( b )
     {
         foreach ( QString s, availableParsers() )
-            pConsoleManager::instance()->addParser( getParser( s ) );
+            MonkeyCore::consoleManager()->addParser( getParser( s ) );
         
-        pMenuBar* mb = pMenuBar::instance();
+        pMenuBar* mb = MonkeyCore::menuBar();
         foreach ( pCommand c, pCommandList() << userCommands() )
         {
             QAction* a = mb->action( QString( "mBuilder/mUserCommands/%1" ).arg( c.text() ), c.text() );
@@ -39,9 +40,9 @@ bool GNUMake::setEnabled( bool b)
      else
     {
         foreach ( QString s, availableParsers() )
-            pConsoleManager::instance()->removeParser( s );
+            MonkeyCore::consoleManager()->removeParser( s );
         
-        pMenuBar* mb = pMenuBar::instance();
+        pMenuBar* mb = MonkeyCore::menuBar();
         foreach ( QAction* a, mb->menu( "mBuilder/mUserCommands" )->actions() )
             if ( a->data().toString() == mPluginInfos.Name )
                 delete a;
@@ -161,7 +162,7 @@ void GNUMake::setBuildCommand( const pCommand& c )
 
 void GNUMake::commandTriggered()
 {
-    pConsoleManager* cm = pConsoleManager::instance();
+    pConsoleManager* cm = MonkeyCore::consoleManager();
     pCommandList l = userCommands() << buildCommand();
     if ( QAction* a = qobject_cast<QAction*>( sender() ) )
         cm->addCommands( cm->recursiveCommandList( l, cm->getCommand( l, a->statusTip() ) ) );

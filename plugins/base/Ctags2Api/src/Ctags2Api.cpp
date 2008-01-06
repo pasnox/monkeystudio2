@@ -1,4 +1,5 @@
 #include "Ctags2Api.h"
+#include "MonkeyCore.h"
 #include "pMenuBar.h"
 #include "UICtags2Api.h"
 
@@ -25,7 +26,7 @@ bool Ctags2Api::setEnabled( bool b )
 	if ( b && !isEnabled() )
 	{
 		// create action
-		QAction* a = pMenuBar::instance()->action( "mEdit/aCtags2Api",  tr( "Api File Generator" ), QIcon( ":/icons/Ctags2Api.png" ), tr( "Ctrl+Alt+G" ), mPluginInfos.Description );
+		QAction* a = MonkeyCore::menuBar()->action( "mEdit/aCtags2Api",  tr( "Api File Generator" ), QIcon( ":/icons/Ctags2Api.png" ), tr( "Ctrl+Alt+G" ), mPluginInfos.Description );
 		connect( a, SIGNAL( triggered() ), this, SLOT( UICtags2Api_show() ) );
 		// set plugin enabled
 		mPluginInfos.Enabled = true;
@@ -33,7 +34,7 @@ bool Ctags2Api::setEnabled( bool b )
 	else if ( !b && isEnabled() )
 	{
 		// delete action
-		delete pMenuBar::instance()->action( "mEdit/aCtags2Api" );
+		delete MonkeyCore::menuBar()->action( "mEdit/aCtags2Api" );
 		// set plugin disabled
 		mPluginInfos.Enabled = false;
 	}
