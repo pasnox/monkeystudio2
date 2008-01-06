@@ -13,7 +13,6 @@
 
 #include <QMainWindow>
 
-class pSettings;
 class pMenuBar;
 class pDockToolBarManager;
 class pDockToolBar;
@@ -25,7 +24,6 @@ class Q_MONKEY_EXPORT pMainWindow : public QMainWindow
 public:
 	pMainWindow( QWidget* = 0, Qt::WindowFlags = 0 );
 
-	pSettings* settings();
 	pMenuBar* menuBar();
 	pDockToolBarManager* dockToolBarManager();
 	pDockToolBar* dockToolBar( Qt::ToolBarArea );

@@ -10,7 +10,6 @@
 #define PSETTINGS_H
 
 #include "MonkeyExport.h"
-#include "QSingleton.h"
 
 #include <QSettings>
 #include <QApplication>
@@ -26,17 +25,21 @@
 
 class QMainWindow;
 
-class Q_MONKEY_EXPORT pSettings : public QSettings, public QSingleton<pSettings>
+class Q_MONKEY_EXPORT pSettings : public QSettings
 {
 	Q_OBJECT
-	friend class QSingleton<pSettings>;
 
 public:
-	pSettings( const QString& = PROGRAM_NAME, const QString& = PROGRAM_VERSION, QObject* = QApplication::instance() );
+	pSettings( QObject* = QApplication::instance() );
 	~pSettings();
+	static void setIniInformations( const QString& = PROGRAM_NAME, const QString& = PROGRAM_VERSION );
 
-	QString programName() const;
-	QString programVersion() const;
+	static void remove( const QString& key );
+	static void setValue( const QString& key, const QVariant& value );
+	static QVariant value( const QString& key, const QVariant& defaultValue = QVariant() );
+
+	static QString programName();
+	static QString programVersion();
 
 	virtual void restoreState( QMainWindow* );
 	virtual void saveState( QMainWindow* );
@@ -44,9 +47,8 @@ public:
 	virtual void setDefaultSettings() {};
 
 private:
-	QString mProgramName;
-	QString mProgramVersion;
-
+	static QString mProgramName;
+	static QString mProgramVersion;
 };
 
 #endif // PSETTINGS_H

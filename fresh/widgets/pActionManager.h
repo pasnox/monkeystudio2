@@ -19,7 +19,6 @@ class QAction;
 class pKeySequenceInput;
 class QTreeWidget;
 class QPushButton;
-class QSettings;
 
 typedef QList<QAction*> pActionList;
 typedef QHash<QString, pActionList> pHashActionList;
@@ -31,8 +30,6 @@ class Q_MONKEY_EXPORT pActionManager : public QObject, public QSingleton<pAction
 	friend class pShortcutsEditor;
 
 public:
-	static void setSettings( QSettings*, bool = true );
-	static QSettings* settings();
 	static void reloadSettings();
 
 	static QAction* addAction( const QString&, QAction* );
@@ -49,7 +46,6 @@ public:
 private:
 	pActionManager( QObject* = QApplication::instance() );
 
-	QSettings* mSettings;
 	pHashActionList mActions;
 	QString mError;
 

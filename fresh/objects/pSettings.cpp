@@ -8,32 +8,55 @@
  ********************************************************************************************************/
 #include "pSettings.h"
 
+#include <QApplication>
 #include <QDir>
 #include <QFile>
 #include <QMainWindow>
 
-pSettings::pSettings( const QString& pName, const QString& pVersion, QObject* o )
-	: QSettings( QDir::convertSeparators( QString( "%1/.%2/%3.ini" ).arg( QDir::homePath(), pName, pName ) ), QSettings::IniFormat, o )
+QString pSettings::mProgramName;
+QString pSettings::mProgramVersion;
+
+QString getIniFile( const QString& s )
+{
+#ifdef Q_OS_WIN
+	return QString( "%1/%2.ini" ).arg( QApplication::applicationDirPath() ).arg( s );
+#elif defined Q_OS_MAC
+	return QString( "%1/../%2.ini" ).arg( QApplication::applicationDirPath() ).arg( s );
+#elif defined Q_OS_UNIX
+	return QString( "%1/.%2/%2.ini" ).arg( QDir::homePath() ).arg( s );
+#else
+	qFatal( "Platform not yet supported, please contact the authors." );
+#endif
+	return QString();
+}
+
+pSettings::pSettings( QObject* o )
+	: QSettings( QDir::convertSeparators( getIniFile( mProgramName ) ), QSettings::IniFormat, o )
+{ beginGroup( mProgramVersion ); }
+
+pSettings::~pSettings()
+{ endGroup(); }
+
+void pSettings::setIniInformations( const QString& pName, const QString& pVersion )
 {
 	mProgramName = pName;
 	mProgramVersion = pVersion;
-	beginGroup( mProgramVersion );
 }
 
-pSettings::~pSettings()
-{
-	endGroup();
-}
+void pSettings::remove( const QString& key )
+{ pSettings().QSettings::remove( key ); }
 
-QString pSettings::programName() const
-{
-	return mProgramName;
-}
+void pSettings::setValue( const QString& key, const QVariant& value )
+{ pSettings().QSettings::setValue( key, value ); }
 
-QString pSettings::programVersion() const
-{
-	return mProgramVersion;
-}
+QVariant pSettings::value( const QString& key, const QVariant& defaultValue )
+{ return pSettings().QSettings::value( key, defaultValue ); }
+
+QString pSettings::programName()
+{ return mProgramName; }
+
+QString pSettings::programVersion()
+{ return mProgramVersion; }
 
 void pSettings::restoreState( QMainWindow* w )
 {
@@ -55,7 +78,6 @@ void pSettings::saveState( QMainWindow* w )
 {
 	if ( !w )
 		return;
-
 	setValue( "MainWindow/Maximized", w->isMaximized() );
 	setValue( "MainWindow/Position", w->pos() );
 	setValue( "MainWindow/Size", w->size() );

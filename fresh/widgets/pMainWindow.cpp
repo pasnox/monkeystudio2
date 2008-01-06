@@ -16,17 +16,8 @@
 pMainWindow::pMainWindow( QWidget* w, Qt::WindowFlags f )
 	: QMainWindow( w, f )
 {
-	// init settings
-	settings();
-
-	// init action manager
-	pActionManager::instance()->setSettings( settings(), false );
-
 	// init menubar
 	setMenuBar( menuBar() );
-
-	// init dock toolbar manager
-	dockToolBarManager()->setSettings( settings() );
 
 	// init toolbar
 	dockToolBar( Qt::TopToolBarArea );
@@ -36,38 +27,25 @@ pMainWindow::pMainWindow( QWidget* w, Qt::WindowFlags f )
 }
 
 void pMainWindow::hideEvent( QHideEvent* )
-{
-	saveState();
-}
-
-pSettings* pMainWindow::settings()
-{
-	return pSettings::instance();
-}
+{ saveState(); }
 
 pMenuBar* pMainWindow::menuBar()
-{
-	return pMenuBar::instance( this );
-}
+{ return pMenuBar::instance( this ); }
 
 pDockToolBarManager* pMainWindow::dockToolBarManager()
-{
-	return pDockToolBarManager::instance( this );
-}
+{ return pDockToolBarManager::instance( this ); }
 
 pDockToolBar* pMainWindow::dockToolBar( Qt::ToolBarArea a )
-{
-	return dockToolBarManager()->bar( a );
-}
+{ return dockToolBarManager()->bar( a ); }
 
 void pMainWindow::saveState()
 {
 	dockToolBarManager()->saveState();
-	settings()->saveState( this );
+	pSettings().saveState( this );
 }
 
 void pMainWindow::restoreState()
 {
 	dockToolBarManager()->restoreState();
-	settings()->restoreState( this );
+	pSettings().restoreState( this );
 }
