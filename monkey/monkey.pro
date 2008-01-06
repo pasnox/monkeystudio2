@@ -41,7 +41,7 @@ else:unix:*-g++:LIBS	*= -rdynamic
 
 PRE_TARGETDEPS	*= ../qscintilla ../fresh ../ctags
 
-CONFIG( DebugBuild )|CONFIG( debug, debug|release ) {
+CONFIG( debug, debug|release ) {
 	#Debug
 	CONFIG	+= console
 	unix:TARGET	= $$join(TARGET,,,_debug)
@@ -125,7 +125,8 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/projectsmanager/ProjectsModel.h \
 	src/projectsmanager/ProjectsProxy.h \
 	src/projectsmanager/ProjectItem.h \
-	src/pluginsmanager/ui/UICompilerSettings.h
+	src/pluginsmanager/ui/UICompilerSettings.h \
+	src/coremanager/MonkeyCore.h
 
 SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/maininterface/ui/UIAbout.cpp \
@@ -162,7 +163,8 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/projectsmanager/ProjectsProxy.cpp \
 	src/projectsmanager/ProjectItem.cpp \
 	src/main.cpp \
-	src/pluginsmanager/ui/UICompilerSettings.cpp
+	src/pluginsmanager/ui/UICompilerSettings.cpp \
+	src/coremanager/MonkeyCore.cpp
 
 mac:SOURCES	*= src/toolsmanager/pDesktopApplications_mac.cpp
 else:unix:SOURCES	*= src/toolsmanager/pDesktopApplications_unix.cpp

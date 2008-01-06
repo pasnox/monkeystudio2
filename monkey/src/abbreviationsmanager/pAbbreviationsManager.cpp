@@ -37,17 +37,17 @@ const QList<pAbbreviation> pAbbreviationsManager::defaultAbbreviations()
 const QList<pAbbreviation> pAbbreviationsManager::availableAbbreviations()
 {
 	// get settings
-	pSettings* s = pSettings::instance();
+	pSettings s;
 	// values list
 	QList<pAbbreviation> mAbbreviations;
 	// read abbreviations from settings
-	int size = s->beginReadArray( "Abbreviations" );
+	int size = s.beginReadArray( "Abbreviations" );
 	for ( int i = 0; i < size; i++ )
 	{
-		s->setArrayIndex( i );
-		mAbbreviations << pAbbreviation( s->value( "Template" ).toString(), s->value( "Description" ).toString(), s->value( "Language" ).toString(), s->value( "Code" ).toString() );
+		s.setArrayIndex( i );
+		mAbbreviations << pAbbreviation( s.value( "Template" ).toString(), s.value( "Description" ).toString(), s.value( "Language" ).toString(), s.value( "Code" ).toString() );
 	}
-	s->endArray();
+	s.endArray();
 	// get default abbreviations if needed
 	if ( mAbbreviations.isEmpty() )
 		mAbbreviations << defaultAbbreviations();

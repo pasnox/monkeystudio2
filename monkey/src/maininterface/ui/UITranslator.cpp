@@ -11,7 +11,7 @@ UITranslator::UITranslator( QWidget* p )
 {
 	setupUi( this );
 	setAttribute( Qt::WA_DeleteOnClose );
-	mTranslationsPath = pSettings::instance()->value( "Translations/Path", QLibraryInfo::location( QLibraryInfo::TranslationsPath ) ).toString();
+	mTranslationsPath = pSettings::value( "Translations/Path", QLibraryInfo::location( QLibraryInfo::TranslationsPath ) ).toString();
 	on_tbReload_clicked();
 }
 
@@ -19,9 +19,10 @@ void UITranslator::accept()
 {
 	if ( lwTranslations->currentItem() )
 	{
-		pSettings::instance()->setValue( "Translations/Language", lwTranslations->currentItem()->text() );
-		pSettings::instance()->setValue( "Translations/Accepted", true );
-		pSettings::instance()->setValue( "Translations/Path", mTranslationsPath );
+		pSettings s;
+		s.setValue( "Translations/Language", lwTranslations->currentItem()->text() );
+		s.setValue( "Translations/Accepted", true );
+		s.setValue( "Translations/Path", mTranslationsPath );
 		if ( parentWidget() )
 			pMonkeyStudio::warning( tr( "Changing Translations..." ), tr( "You need to restart %1 for the new translations be applied" ).arg( PROGRAM_NAME ), window() );
 		QDialog::accept();

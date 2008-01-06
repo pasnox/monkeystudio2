@@ -18,51 +18,54 @@ PluginsManager::PluginsManager( QObject* p )
 QList<BasePlugin*> PluginsManager::plugins() const
 { return mPlugins; }
 
-void PluginsManager::loadsPlugins( const QString& s )
+void PluginsManager::loadsPlugins()
 {
-	// get application path
-	QDir d( s.isEmpty() ? qApp->applicationDirPath() : s );
-#if defined( Q_OS_WIN )
-	// move up if in debug/release folder
-	if ( d.dirName().toLower() == "debug" || d.dirName().toLower() == "release" )
-		d.cdUp();
-#elif defined( Q_OS_MAC )
-	// move up 3 times if in MacOS folder
-	if ( d.dirName() == "MacOS" )
-	{
-		d.cdUp();
-		if ( !d.exists( "plugins" ) )
-		{
-			d.cdUp();
-			d.cdUp();
-		}
-	}
-#endif
-	
-	// go to plugins directory
-	d.cd( "plugins" );
-	
 	// loads static plugins
 	foreach ( QObject* o, QPluginLoader::staticInstances() )
 		if ( !addPlugin( o ) )
 			qWarning( qPrintable( tr( "Failed to load static plugin" ) ) );
 		
-	// load all plugins
-	foreach ( QFileInfo f, pMonkeyStudio::getFiles( d ) )
+	// add monkey studio plugins path
+	QDir d( qApp->applicationDirPath() );
+#ifdef Q_OS_WIN
+	// move up if in debug/release folder
+	if ( d.dirName().toLower() == "debug" || d.dirName().toLower() == "release" )
+		d.cdUp();
+#elif defined Q_OS_MAC
+	// if bundle move up one time
+	if ( d.dirName() == "MacOS" )
+		d.cdUp();
+#elif defined Q_OS_UNIX
+	d.setPath( "/usr/lib/monkeystudio" );
+#endif
+	d.cd( "plugins" );
+	
+	// plugins paths
+	QStringList l = QStringList() << d.path() << qApp->applicationDirPath().append( "/plugins" );
+	
+	// load dynamic plugins
+	foreach ( const QString s, l )
 	{
-		QPluginLoader l( f.absoluteFilePath() );
-		if ( !addPlugin( l.instance() ) )
+		d.setPath( s );
+		// load all plugins
+		foreach ( QFileInfo f, pMonkeyStudio::getFiles( d ) )
 		{
-			// try unload it and reload it in case of old one in memory
-			l.unload();
-			l.load();
-			
-			// if can t load it, check next
-			if ( !addPlugin( l.instance() ) )			
-				qWarning( qPrintable( tr( "Failed to load plugin ( %1 ): Error: %2" ).arg( f.absoluteFilePath(), l.errorString() ) ) );
+			QPluginLoader l( f.absoluteFilePath() );
+			if ( l.load() )
+				qWarning( "Loaded: %s", qPrintable( f.absoluteFilePath() ) );
+			else
+				qWarning( "not Loaded: %s", qPrintable( f.absoluteFilePath() ) );
+			if ( !addPlugin( l.instance() ) )
+			{
+				// try unload it and reload it in case of old one in memory
+				l.unload();
+				l.load();
+				// if can t load it, check next
+				if ( !addPlugin( l.instance() ) )			
+					qWarning( qPrintable( tr( "Failed to load plugin ( %1 ): Error: %2" ).arg( f.absoluteFilePath(), l.errorString() ) ) );
+			}
 		}
 	}
-	
 	// installs user requested plugins
 	enableUserPlugins();
 }
@@ -91,7 +94,7 @@ void PluginsManager::enableUserPlugins()
 	foreach ( BasePlugin* bp, mPlugins )
 	{		
 		// check in settings if we must install this plugin
-		if ( !pSettings::instance()->value( QString( "Plugins/%1" ).arg( bp->infos().Name ), true ).toBool() )
+		if ( !pSettings::value( QString( "Plugins/%1" ).arg( bp->infos().Name ), true ).toBool() )
 			qWarning( qPrintable( tr( "User wantn't to intall plugin: %1" ).arg( bp->infos().Name ) ) );
 		// if not enabled, enable it
 		else if ( !bp->isEnabled() )

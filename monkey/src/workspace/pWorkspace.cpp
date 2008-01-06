@@ -23,6 +23,7 @@
 #include "UIProjectsManager.h"
 #include "PluginsManager.h"
 #include "pFilesListWidget.h"
+#include "MonkeyCore.h"
 
 #include "pChild.h"
 #include "pEditor.h"
@@ -108,7 +109,7 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 	}
 
 	// try opening file with child plugins
-	pAbstractChild* c = PluginsManager::instance()->openChildFile( s ); // TODO: repalce by a childForFileName member witch will return a child that will open file
+	pAbstractChild* c = MonkeyCore::pluginsManager()->openChildFile( s ); // TODO: repalce by a childForFileName member witch will return a child that will open file
 	
 	// open it with pChild instance if no c
 	if ( !c )
@@ -345,22 +346,22 @@ void pWorkspace::fileSessionSave_triggered()
 	// saves opened files
 	foreach ( pAbstractChild* c, children() )
 		l << c->files();
-	pSettings::instance()->setValue( "Session/Files", l );
+	pSettings::setValue( "Session/Files", l );
 	// saves opened projects
 	l.clear();
 	foreach ( ProjectItem* p, UIProjectsManager::instance()->rootProjects() )
 		l << p->canonicalFilePath();
-	pSettings::instance()->setValue( "Session/Projects", l );
+	pSettings::setValue( "Session/Projects", l );
 }
 
 void pWorkspace::fileSessionRestore_triggered()
 {
 	// restore files
-	foreach ( QString s, pSettings::instance()->value( "Session/Files", QStringList() ).toStringList() )
+	foreach ( QString s, pSettings::value( "Session/Files", QStringList() ).toStringList() )
 		if ( !openFile( s ) ) // remove it from recents files
 			pRecentsManager::instance()->removeRecentFile( s );
 	// restore projects
-	foreach ( QString s, pSettings::instance()->value( "Session/Projects", QStringList() ).toStringList() )
+	foreach ( QString s, pSettings::value( "Session/Projects", QStringList() ).toStringList() )
 		if ( !UIProjectsManager::instance()->openProject( s ) ) // remove it from recents projects
 			pRecentsManager::instance()->removeRecentProject( s );
 }
@@ -511,7 +512,7 @@ void pWorkspace::agStyles_triggered( QAction* a )
 {
 	qApp->setStyle( a->text() );
 	qApp->setPalette( qApp->style()->standardPalette() );
-	pSettings::instance()->setValue( "MainWindow/Style", a->text() );
+	pSettings::setValue( "MainWindow/Style", a->text() );
 }
 
 // help menu

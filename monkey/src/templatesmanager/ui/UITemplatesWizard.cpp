@@ -52,10 +52,10 @@ UITemplatesWizard::UITemplatesWizard( QWidget* w )
     cbProjects->setCurrentIndex( mProjects->scopesProxy()->mapFromSource( p ? p->index() : QModelIndex() ) );
 	
     // restore infos
-    pSettings* s = pSettings::instance();
-    cbLanguages->setCurrentIndex( cbLanguages->findText( s->value( "Recents/FileWizard/Language", "C++" ).toString() ) );
-    leDestination->setText( s->value( "Recents/FileWizard/Destination" ).toString() );
-    cbOpen->setChecked( s->value( "Recents/FileWizard/Open", true ).toBool() );
+    pSettings s;
+    cbLanguages->setCurrentIndex( cbLanguages->findText( s.value( "Recents/FileWizard/Language", "C++" ).toString() ) );
+    leDestination->setText( s.value( "Recents/FileWizard/Destination" ).toString() );
+    cbOpen->setChecked( s.value( "Recents/FileWizard/Open", true ).toBool() );
 	
 	// connections
 	connect( cbLanguages, SIGNAL( currentIndexChanged( int ) ), this, SLOT( onFiltersChanged() ) );
@@ -204,10 +204,10 @@ void UITemplatesWizard::on_pbCreate_clicked()
 		return;
 	
     // remember some infos
-    pSettings* s = pSettings::instance();
-    s->setValue( "Recents/FileWizard/Language", cbLanguages->currentText() );
-    s->setValue( "Recents/FileWizard/Destination", leDestination->text() );
-    s->setValue( "Recents/FileWizard/Open", cbOpen->isChecked() );
+    pSettings s;
+    s.setValue( "Recents/FileWizard/Language", cbLanguages->currentText() );
+    s.setValue( "Recents/FileWizard/Destination", leDestination->text() );
+    s.setValue( "Recents/FileWizard/Open", cbOpen->isChecked() );
 	
     // close dialog
     QDialog::accept();	

@@ -228,7 +228,7 @@ void pConsoleManager::sendRawData( const QByteArray& a )
 		while ( state() == QProcess::Starting )
 			QApplication::processEvents( QEventLoop::ExcludeUserInputEvents );
 		// send raw command to process
-		qWarning( "sendRawData bytes written: %d", write( a ) );
+		qWarning( "sendRawData bytes written: %s", qPrintable( QString::number( write( a  ) ) ) );
 	}
 	else
 		warning( tr( "sendRawData..." ), tr( "Can't send raw data to console" ) );

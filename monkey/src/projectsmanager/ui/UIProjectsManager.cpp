@@ -22,6 +22,7 @@
 #include "pFileManager.h"
 #include "UITemplatesWizard.h"
 #include "UIAddExistingFiles.h"
+#include "MonkeyCore.h"
 
 #include <QHeaderView>
 
@@ -135,7 +136,7 @@ void UIProjectsManager::tvProjects_currentChanged( const QModelIndex& c, const Q
 	// get menubar
 	pMenuBar* mb = pMenuBar::instance();
 	// get pluginsmanager
-	PluginsManager* pm = PluginsManager::instance();
+	PluginsManager* pm = MonkeyCore::pluginsManager();
 	// get current project
 	ProjectItem* cit = c.isValid() ? mProjects->itemFromIndex( mProxy->mapToSource( c ) ) : 0;
 	ProjectItem* it = currentProject();
@@ -220,7 +221,7 @@ bool UIProjectsManager::openProject( const QString& s )
 		}
 	}
 	// open project
-	if ( ProjectItem* it = PluginsManager::instance()->projectItem( s ) )
+	if ( ProjectItem* it = MonkeyCore::pluginsManager()->projectItem( s ) )
 	{
 		if ( it->open() )
 		{
