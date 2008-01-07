@@ -21,7 +21,7 @@ pTemplatesManager::pTemplatesManager( QObject* o )
 {}
 
 void pTemplatesManager::setTemplatesPath( const QStringList& l )
-{ pSettings::setValue( "Templates/DefaultDirectories", l ); }
+{ MonkeyCore::settings()->setValue( "Templates/DefaultDirectories", l ); }
 
 QStringList pTemplatesManager::templatesPath() const
 {
@@ -29,7 +29,7 @@ QStringList pTemplatesManager::templatesPath() const
 #ifdef Q_OS_MAC
 	s.prepend( "/../.." );
 #endif
-	return pSettings::value( "Templates/DefaultDirectories", QStringList( QApplication::applicationDirPath().append( s ) ) ).toStringList();
+	return MonkeyCore::settings()->value( "Templates/DefaultDirectories", QStringList( QApplication::applicationDirPath().append( s ) ) ).toStringList();
 }
 
 pTemplate pTemplatesManager::getTemplate( const QString& s )

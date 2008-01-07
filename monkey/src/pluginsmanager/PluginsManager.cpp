@@ -91,7 +91,7 @@ void PluginsManager::enableUserPlugins()
 	foreach ( BasePlugin* bp, mPlugins )
 	{		
 		// check in settings if we must install this plugin
-		if ( !pSettings::value( QString( "Plugins/%1" ).arg( bp->infos().Name ), true ).toBool() )
+		if ( !MonkeyCore::settings()->value( QString( "Plugins/%1" ).arg( bp->infos().Name ), true ).toBool() )
 			qWarning( qPrintable( tr( "User wantn't to intall plugin: %1" ).arg( bp->infos().Name ) ) );
 		// if not enabled, enable it
 		else if ( !bp->isEnabled() )

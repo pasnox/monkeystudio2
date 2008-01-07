@@ -12,51 +12,49 @@ pRecentsManager::pRecentsManager( QObject* p )
 	// set maximum
 	setMaxRecentFiles( maxRecentFiles() );
 	setMaxRecentProjects( maxRecentProjects() );
-
 	// update actions
 	updateRecentFiles();
 	updateRecentProjects();
-
 	// connections
 	connect( MonkeyCore::menuBar()->menu( "mFile/mRecents" ), SIGNAL( triggered( QAction* ) ), this, SLOT( recentFiles_triggered( QAction* ) ) );
 	connect( MonkeyCore::menuBar()->menu( "mProject/mRecents" ), SIGNAL( triggered( QAction* ) ), this, SLOT( recentProjects_triggered( QAction* ) ) );
 }
 
 int pRecentsManager::maxRecentFiles() const
-{ return pSettings::value( "Recents/MaxFiles", 15 ).toInt(); }
+{ return MonkeyCore::settings()->value( "Recents/MaxFiles", 15 ).toInt(); }
 
 int pRecentsManager::maxRecentProjects() const
-{ return pSettings::value( "Recents/MaxProjects", 15 ).toInt(); }
+{ return MonkeyCore::settings()->value( "Recents/MaxProjects", 15 ).toInt(); }
 
 QString pRecentsManager::recentFileOpenPath() const
-{ return pSettings::value( "Recents/FileOpenPath" ).toString(); }
+{ return MonkeyCore::settings()->value( "Recents/FileOpenPath" ).toString(); }
 
 QString pRecentsManager::recentProjectOpenPath() const
-{ return pSettings::value( "Recents/ProjectOpenPath" ).toString(); }
+{ return MonkeyCore::settings()->value( "Recents/ProjectOpenPath" ).toString(); }
 
 void pRecentsManager::setMaxRecentFiles( int i )
 {
-	if ( i != pSettings::value( "Recents/MaxFiles" ).toInt() )
+	if ( i != MonkeyCore::settings()->value( "Recents/MaxFiles" ).toInt() )
 	{
-		pSettings::setValue( "Recents/MaxFiles", i );
+		MonkeyCore::settings()->setValue( "Recents/MaxFiles", i );
 		updateRecentFiles();
 	}
 }
 
 void pRecentsManager::setMaxRecentProjects( int i )
 {
-	if ( i != pSettings::value( "Recents/MaxProjects" ).toInt() )
+	if ( i != MonkeyCore::settings()->value( "Recents/MaxProjects" ).toInt() )
 	{
-		pSettings::setValue( "Recents/MaxProjects", i );
+		MonkeyCore::settings()->setValue( "Recents/MaxProjects", i );
 		updateRecentProjects();
 	}
 }
 
 void pRecentsManager::setRecentFileOpenPath( const QString& s )
-{ pSettings::setValue( "Recents/FileOpenPath", s ); }
+{ MonkeyCore::settings()->setValue( "Recents/FileOpenPath", s ); }
 
 void pRecentsManager::setRecentProjectOpenPath( const QString& s )
-{ pSettings::setValue( "Recents/ProjectOpenPath", s ); }
+{ MonkeyCore::settings()->setValue( "Recents/ProjectOpenPath", s ); }
 
 void pRecentsManager::recentFiles_triggered( QAction* a )
 {
@@ -64,7 +62,7 @@ void pRecentsManager::recentFiles_triggered( QAction* a )
 		emit openFileRequested( a->data().toString() );
 	else if ( a->text() == tr( "&Clear" ) )
 	{
-		pSettings::setValue( "Recents/Files", QStringList() );
+		MonkeyCore::settings()->setValue( "Recents/Files", QStringList() );
 		updateRecentFiles();
 	}
 }
@@ -76,7 +74,7 @@ void pRecentsManager::updateRecentFiles()
 		a->deleteLater();
 	mRecentFiles.clear();
 	// get recents files
-	QStringList l = pSettings::value( "Recents/Files" ).toStringList();
+	QStringList l = MonkeyCore::settings()->value( "Recents/Files" ).toStringList();
 	for ( int i = 0; i < maxRecentFiles(); i++ )
 	{
 		if ( i < l.count() )
@@ -100,7 +98,7 @@ void pRecentsManager::updateRecentFiles()
 void pRecentsManager::addRecentFile( const QString& s )
 {
 	// get recents files
-	QStringList f = pSettings::value( "Recents/Files" ).toStringList();
+	QStringList f = MonkeyCore::settings()->value( "Recents/Files" ).toStringList();
 	// remove s and prepend it
 	f.removeAll( s );
 	f.prepend( s );
@@ -108,7 +106,7 @@ void pRecentsManager::addRecentFile( const QString& s )
 	while ( f.size() > maxRecentFiles() )
 		f.removeLast();
 	// store recents files
-	pSettings::setValue( "Recents/Files", f );
+	MonkeyCore::settings()->setValue( "Recents/Files", f );
 	// update menu
 	updateRecentFiles();
 }
@@ -116,14 +114,14 @@ void pRecentsManager::addRecentFile( const QString& s )
 void pRecentsManager::removeRecentFile( const QString& s )
 {
 	// get recents files
-	QStringList f = pSettings::value( "Recents/Files" ).toStringList();
+	QStringList f = MonkeyCore::settings()->value( "Recents/Files" ).toStringList();
 	// remove s
 	f.removeAll( s );
 	// remove files > maxrecent files
 	while ( f.size() > maxRecentFiles() )
 		f.removeLast();
 	// store recents files
-	pSettings::setValue( "Recents/Files", f );
+	MonkeyCore::settings()->setValue( "Recents/Files", f );
 	// update menu
 	updateRecentFiles();
 }
@@ -134,7 +132,7 @@ void pRecentsManager::recentProjects_triggered( QAction* a )
 		emit openProjectRequested( a->data().toString() );
 	else if ( a->text() == tr( "&Clear" ) )
 	{
-		pSettings::setValue( "Recents/Projects", QStringList() );
+		MonkeyCore::settings()->setValue( "Recents/Projects", QStringList() );
 		updateRecentProjects();
 	}
 }
@@ -146,7 +144,7 @@ void pRecentsManager::updateRecentProjects()
 		a->deleteLater();
 	mRecentProjects.clear();
 	// get recents projects
-	QStringList l = pSettings::value( "Recents/Projects" ).toStringList();
+	QStringList l = MonkeyCore::settings()->value( "Recents/Projects" ).toStringList();
 	for ( int i = 0; i < maxRecentProjects(); i++ )
 	{
 		if ( i < l.count() )
@@ -170,7 +168,7 @@ void pRecentsManager::updateRecentProjects()
 void pRecentsManager::addRecentProject( const QString& s )
 {
 	// get recent proejcts
-	QStringList f = pSettings::value( "Recents/Projects" ).toStringList();
+	QStringList f = MonkeyCore::settings()->value( "Recents/Projects" ).toStringList();
 	// remove s and prepend it
 	f.removeAll( s );
 	f.prepend( s );
@@ -178,7 +176,7 @@ void pRecentsManager::addRecentProject( const QString& s )
 	while ( f.size() > maxRecentProjects() )
 		f.removeLast();
 	// store recents projects
-	pSettings::setValue( "Recents/Projects", f );
+	MonkeyCore::settings()->setValue( "Recents/Projects", f );
 	// update menu
 	updateRecentProjects();
 }
@@ -186,14 +184,14 @@ void pRecentsManager::addRecentProject( const QString& s )
 void pRecentsManager::removeRecentProject( const QString& s )
 {
 	// get recents projects
-	QStringList f = pSettings::value( "Recents/Projects" ).toStringList();
+	QStringList f = MonkeyCore::settings()->value( "Recents/Projects" ).toStringList();
 	// remove s
 	f.removeAll( s );
 	// remove files > maxrecentsproejcts
 	while ( f.size() > maxRecentProjects() )
 		f.removeLast();
 	// store recents proejcts
-	pSettings::setValue( "Recents/Projects", f );
+	MonkeyCore::settings()->setValue( "Recents/Projects", f );
 	// update menu
 	updateRecentProjects();
 }

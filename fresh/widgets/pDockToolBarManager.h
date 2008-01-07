@@ -18,6 +18,7 @@
 class QMainWindow;
 class pDockToolBar;
 class QDockWidget;
+class pSettings;
 
 class Q_MONKEY_EXPORT pDockToolBarManager : public QObject, public QSingleton<pDockToolBarManager>
 {
@@ -28,13 +29,17 @@ public:
 	QMainWindow* mainWindow() const;
 	pDockToolBar* bar( Qt::ToolBarArea );
 
+	void setSettings( pSettings* );
+	pSettings* settings();
+
 	static Qt::ToolBarArea dockWidgetAreaToToolBarArea( Qt::DockWidgetArea );
 	static Qt::DockWidgetArea toolBarAreaToDockWidgetArea( Qt::ToolBarArea );
 	static QBoxLayout::Direction toolBarAreaToBoxLayoutDirection( Qt::ToolBarArea );
 
-private:
+protected:
 	QMainWindow* mMain;
 	QHash<Qt::ToolBarArea, pDockToolBar*> mBars;
+	pSettings* mSettings;
 
 	pDockToolBarManager( QMainWindow* );
 

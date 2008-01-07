@@ -53,7 +53,7 @@ void UIPluginsSettings::updateList()
 		it->setData( Qt::UserRole, i ); // plugin index
 		it->setData( Qt::UserRole +1, swWidgets->addWidget( bp->settingsWidget() ) ); // settings widget index
 		it->setData( Qt::UserRole +2, bp->infos().Type ); // plugin type
-		it->setData( Qt::UserRole +3, pSettings::value( QString( "Plugins/%1" ).arg( bp->infos().Name ), true ).toBool() ); // plugin auto install
+		it->setData( Qt::UserRole +3, MonkeyCore::settings()->value( QString( "Plugins/%1" ).arg( bp->infos().Name ), true ).toBool() ); // plugin auto install
 	}
 }
 
@@ -142,7 +142,7 @@ void UIPluginsSettings::accept()
 	for ( int i = 0; i < lwNames->count(); i++ )
 	{
 		QListWidgetItem* it = lwNames->item( i );
-		pSettings::setValue( QString( "Plugins/%1" ).arg( it->text() ), it->data( Qt::UserRole +3 ).toBool() );
+		MonkeyCore::settings()->setValue( QString( "Plugins/%1" ).arg( it->text() ), it->data( Qt::UserRole +3 ).toBool() );
 	}
 	
 	// close dialog

@@ -42,16 +42,16 @@ const QList<pTool> pToolsManager::tools( ToolType t )
 	// tools list
 	QList<pTool> l;
 	// got settings
-	pSettings s;
+	pSettings* s = MonkeyCore::settings();
 	// create action
-	int n = s.beginReadArray( "Tools" );
+	int n = s->beginReadArray( "Tools" );
 	for ( int i = 0; i < n; i++ )
 	{
-		s.setArrayIndex( i );
-		if ( t == ttAll || ( t == ttUserEntry && !s.value( "DesktopEntry" ).toBool() ) || t == ttDesktopEntry && s.value( "DesktopEntry" ).toBool() )
-			l << pTool( s.value( "Caption" ).toString(), s.value( "FileIcon" ).toString(), s.value( "FilePath" ).toString(), s.value( "WorkingPath" ).toString(), s.value( "DesktopEntry" ).toBool() );
+		s->setArrayIndex( i );
+		if ( t == ttAll || ( t == ttUserEntry && !s->value( "DesktopEntry" ).toBool() ) || t == ttDesktopEntry && s->value( "DesktopEntry" ).toBool() )
+			l << pTool( s->value( "Caption" ).toString(), s->value( "FileIcon" ).toString(), s->value( "FilePath" ).toString(), s->value( "WorkingPath" ).toString(), s->value( "DesktopEntry" ).toBool() );
 	}
-	s.endArray();
+	s->endArray();
 	// return list
 	return l;
 }

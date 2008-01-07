@@ -191,7 +191,7 @@ UISettings::UISettings( QWidget* p )
 
 void UISettings::loadSettings()
 {
-	pSettings s;
+	pSettings* s = MonkeyCore::settings();
 	QString sp;
 	
 	// General
@@ -320,7 +320,7 @@ void UISettings::loadSettings()
 	sWrappedLineIndentWidth->setValue( wrappedLineIndentWidth() );
 	// Source APIs
 	for ( int i = 0; i < cbSourceAPIsLanguages->count(); i++ )
-		cbSourceAPIsLanguages->setItemData( i, s.value( "SourceAPIs/" +cbSourceAPIsLanguages->itemText( i ) ).toStringList() );
+		cbSourceAPIsLanguages->setItemData( i, s->value( "SourceAPIs/" +cbSourceAPIsLanguages->itemText( i ) ).toStringList() );
 	if ( cbSourceAPIsLanguages->count() > 0 )
 		cbSourceAPIsLanguages->setCurrentIndex( 0 );
 	//  Lexers Associations
@@ -336,7 +336,7 @@ void UISettings::loadSettings()
 	}
 	//  Lexers Highlighting
 	foreach ( QsciLexer* l, mLexers )
-		l->readSettings( s, qPrintable( scintillaSettingsPath() ) );
+		l->readSettings( *s, qPrintable( scintillaSettingsPath() ) );
 	
 	if ( cbLexersHighlightingLanguages->count() )
 		on_cbLexersHighlightingLanguages_currentIndexChanged( cbLexersHighlightingLanguages->itemText( 0 ) );
@@ -354,7 +354,7 @@ void UISettings::loadSettings()
 
 void UISettings::saveSettings()
 {
-	pSettings s;
+	pSettings* s = MonkeyCore::settings();
 	QString sp;
 
 	// General
@@ -464,42 +464,42 @@ void UISettings::saveSettings()
 	// Source APIs
 	sp = "SourceAPIs/";
 	for ( int i = 0; i < cbSourceAPIsLanguages->count(); i++ )
-		s.setValue( sp +cbSourceAPIsLanguages->itemText( i ), cbSourceAPIsLanguages->itemData( i ).toStringList() );
+		s->setValue( sp +cbSourceAPIsLanguages->itemText( i ), cbSourceAPIsLanguages->itemData( i ).toStringList() );
 	//  Lexers Associations
 	sp = "LexersAssociations/";
 	// remove old associations
-	s.remove( sp );
+	s->remove( sp );
 	// write new ones
 	for ( int i = 0; i < twLexersAssociations->topLevelItemCount(); i++ )
 	{
 		QTreeWidgetItem* it = twLexersAssociations->topLevelItem( i );
-		s.setValue( sp +it->text( 0 ), it->text( 1 ) );
+		s->setValue( sp +it->text( 0 ), it->text( 1 ) );
 	}
 	//  Lexers Highlighting
 	foreach ( QsciLexer* l, mLexers )
 	{
 		l->setDefaultPaper( QColor( tbDefaultDocumentPaper->toolTip() ) );
 		l->setDefaultColor( QColor( tbDefaultDocumentPen->toolTip() ) );
-		l->writeSettings( s, qPrintable( scintillaSettingsPath() ) );
+		l->writeSettings( *s, qPrintable( scintillaSettingsPath() ) );
 	}
 
 	//  Abbreviations
 	sp = "Abbreviations";
 	// remove key
-	s.remove( sp );
+	s->remove( sp );
 	// write new ones
-	s.beginWriteArray( sp );
+	s->beginWriteArray( sp );
 	for ( int i = 0; i < twAbbreviations->topLevelItemCount(); i++ )
 	{
-		s.setArrayIndex( i );
+		s->setArrayIndex( i );
 		QTreeWidgetItem* it = twAbbreviations->topLevelItem( i );
 
-		s.setValue( "Template", it->text( 0 ).trimmed() );
-		s.setValue( "Description", it->text( 1 ).trimmed() );
-		s.setValue( "Language", it->text( 2 ) );
-		s.setValue( "Code", it->data( 0, Qt::UserRole ).toString() );
+		s->setValue( "Template", it->text( 0 ).trimmed() );
+		s->setValue( "Description", it->text( 1 ).trimmed() );
+		s->setValue( "Language", it->text( 2 ) );
+		s->setValue( "Code", it->data( 0, Qt::UserRole ).toString() );
 	}
-	s.endArray();
+	s->endArray();
 }
 
 QPixmap UISettings::colourizedPixmap( const QColor& c ) const

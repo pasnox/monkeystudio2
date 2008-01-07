@@ -21,7 +21,6 @@
 #define PROGRAM_VERSION "1.0.0"
 #endif
 
-
 class QMainWindow;
 
 class Q_MONKEY_EXPORT pSettings : public QSettings
@@ -32,20 +31,14 @@ public:
 	pSettings( QObject* = 0 );
 	~pSettings();
 	static void setIniInformations( const QString& = PROGRAM_NAME, const QString& = PROGRAM_VERSION );
-
-	static void remove( const QString& key );
-	static void setValue( const QString& key, const QVariant& value );
-	static QVariant value( const QString& key, const QVariant& defaultValue = QVariant() );
-
 	static QString programName();
 	static QString programVersion();
 
 	virtual void restoreState( QMainWindow* );
 	virtual void saveState( QMainWindow* );
-
 	virtual void setDefaultSettings() {};
 
-private:
+protected:
 	static QString mProgramName;
 	static QString mProgramVersion;
 };

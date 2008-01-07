@@ -88,7 +88,7 @@ void MonkeyCore::init()
 pSettings* MonkeyCore::settings()
 {
 	if ( !mInstances.contains( &pSettings::staticMetaObject ) )
-		mInstances[&pSettings::staticMetaObject] = new pSettings();
+		mInstances[&pSettings::staticMetaObject] = new pSettings( qApp );
 	return qobject_cast<pSettings*>( mInstances[&pSettings::staticMetaObject] );
 }
 

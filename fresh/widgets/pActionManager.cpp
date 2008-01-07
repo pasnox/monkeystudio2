@@ -14,16 +14,31 @@
 #include <QApplication>
 
 pActionManager::pActionManager( QObject* o )
-	: QObject( o ), mError( QString() )
+	: QObject( o ), mError( QString() ), mSettings( 0 )
 {}
+
+void pActionManager::setSettings( pSettings* s )
+{
+	if ( instance()->mSettings != s )
+	{
+		instance()->mSettings = s;
+		instance()->reloadSettings();
+	}
+}
+
+pSettings* pActionManager::settings()
+{ return instance()->mSettings; }
 
 void pActionManager::reloadSettings()
 {
 	// restore shortcut for each action
-	foreach ( pActionList al, instance()->mActions )
+	if ( pSettings* s = instance()->settings() )
 	{
-		foreach ( QAction* a, al )
-			a->setShortcut( QKeySequence( pSettings::value( QString( "%1/%2/%3" ).arg( pAction::_SETTINGS_SCOPE_ ).arg( a->property( pAction::_GROUP_PROPERTY_ ).toString() ).arg( a->objectName() ), a->property( pAction::_DEFAULT_SHORTCUT_PROPERTY_ ) ).toString() ) );
+		foreach ( pActionList al, instance()->mActions )
+		{
+			foreach ( QAction* a, al )
+				a->setShortcut( QKeySequence( s->value( QString( "%1/%2/%3" ).arg( pAction::_SETTINGS_SCOPE_ ).arg( a->property( pAction::_GROUP_PROPERTY_ ).toString() ).arg( a->objectName() ), a->property( pAction::_DEFAULT_SHORTCUT_PROPERTY_ ) ).toString() ) );
+		}
 	}
 }
 
@@ -71,7 +86,8 @@ QKeySequence pActionManager::getShortcut( const QString& g, QAction* a, const QK
 	// need action
 	Q_ASSERT( a != 0 );
 	// return defined shortcuts or the default one
-	return QKeySequence( pSettings::value( QString( "%1/%2/%3" ).arg( pAction::_SETTINGS_SCOPE_ ).arg( g ).arg( a->objectName() ), sc ).toString() );
+	pSettings* s = instance()->settings();
+	return s ? QKeySequence( s->value( QString( "%1/%2/%3" ).arg( pAction::_SETTINGS_SCOPE_ ).arg( g ).arg( a->objectName() ), sc ).toString() ) : QKeySequence();
 }
 
 bool pActionManager::setShortcut( QAction* action, const QKeySequence& sc )
@@ -91,10 +107,13 @@ bool pActionManager::setShortcut( QAction* action, const QKeySequence& sc )
 		}
 	}
 	// remove old/set shortcut entry
-	if ( action->shortcut() == sc )
-		pSettings::remove( QString( "%1/%2/%3" ).arg( pAction::_SETTINGS_SCOPE_ ).arg( action->property( pAction::_GROUP_PROPERTY_ ).toString() ).arg( action->objectName() ) );
-	else
-		pSettings::setValue( QString( "%1/%2/%3" ).arg( pAction::_SETTINGS_SCOPE_ ).arg( action->property( pAction::_GROUP_PROPERTY_ ).toString() ).arg( action->objectName() ), sc.toString() );
+	if ( pSettings* s = instance()->settings() )
+	{
+		if ( action->shortcut() == sc )
+			s->remove( QString( "%1/%2/%3" ).arg( pAction::_SETTINGS_SCOPE_ ).arg( action->property( pAction::_GROUP_PROPERTY_ ).toString() ).arg( action->objectName() ) );
+		else
+			s->setValue( QString( "%1/%2/%3" ).arg( pAction::_SETTINGS_SCOPE_ ).arg( action->property( pAction::_GROUP_PROPERTY_ ).toString() ).arg( action->objectName() ), sc.toString() );
+	}
 	// set new shortcut to action
 	action->setShortcut( sc );
 	// return success

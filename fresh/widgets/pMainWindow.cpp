@@ -14,7 +14,7 @@
 #include "pDockToolBar.h"
 
 pMainWindow::pMainWindow( QWidget* w, Qt::WindowFlags f )
-	: QMainWindow( w, f )
+	: QMainWindow( w, f ), mSettings( 0 )
 {
 	// set menu bar
 	setMenuBar( new pMenuBar( this ) );
@@ -37,14 +37,32 @@ pDockToolBarManager* pMainWindow::dockToolBarManager()
 pDockToolBar* pMainWindow::dockToolBar( Qt::ToolBarArea a )
 { return dockToolBarManager()->bar( a ); }
 
+void pMainWindow::setSettings( pSettings* s )
+{
+	if ( mSettings != s )
+	{
+		mSettings = s;
+		restoreState();
+	}
+}
+
+pSettings* pMainWindow::settings()
+{ return mSettings; }
+
 void pMainWindow::saveState()
 {
-	dockToolBarManager()->saveState();
-	pSettings().saveState( this );
+	if ( settings() )
+	{
+		dockToolBarManager()->saveState();
+		settings()->saveState( this );
+	}
 }
 
 void pMainWindow::restoreState()
 {
-	dockToolBarManager()->restoreState();
-	pSettings().restoreState( this );
+	if ( settings() )
+	{
+		dockToolBarManager()->restoreState();
+		settings()->restoreState( this );
+	}
 }

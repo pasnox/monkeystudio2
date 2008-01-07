@@ -43,15 +43,6 @@ void pSettings::setIniInformations( const QString& pName, const QString& pVersio
 	mProgramVersion = pVersion;
 }
 
-void pSettings::remove( const QString& key )
-{ pSettings().QSettings::remove( key ); }
-
-void pSettings::setValue( const QString& key, const QVariant& value )
-{ pSettings().QSettings::setValue( key, value ); }
-
-QVariant pSettings::value( const QString& key, const QVariant& defaultValue )
-{ return pSettings().QSettings::value( key, defaultValue ); }
-
 QString pSettings::programName()
 { return mProgramName; }
 

@@ -1,4 +1,5 @@
 #include "UISettingsAStyle.h"
+#include "MonkeyCore.h"
 #include "pSettings.h"
 
 UISettingsAStyle::UISettingsAStyle( QWidget* p )
@@ -89,30 +90,30 @@ void UISettingsAStyle::onStyleChange()
 
 void UISettingsAStyle::loadSettings()
 {
-	pSettings s;
-	s.beginGroup( QString( "Plugins/%1" ).arg( PLUGIN_NAME ) );
-	int style = s.value( "style", 0 ).toInt();
-	spnIndentation->setValue( s.value( "indentation", 4 ).toInt() );
-	chkUseTab->setChecked( s.value( "use_tabs", false ).toBool() );
-	chkForceUseTabs->setChecked( s.value( "force_tabs", false ).toBool() );
-	chkConvertTabs->setChecked( s.value( "convert_tabs", false ).toBool() );
-	chkFillEmptyLines->setChecked( s.value( "fill_empty_lines", false ).toBool() );
-	chkIndentClasses->setChecked( s.value( "indent_classes", false ).toBool() );
-	chkIndentSwitches->setChecked( s.value( "indent_switches", false ).toBool() );
-	chkIndentCase->setChecked( s.value( "indent_case", false ).toBool() );
-	chkIndentBrackets->setChecked( s.value( "indent_brackets", false ).toBool() );
-	chkIndentBlocks->setChecked( s.value( "indent_blocks", false ).toBool() );
-	chkIndentNamespaces->setChecked( s.value( "indent_namespaces", false ).toBool() );
-	chkIndentLabels->setChecked( s.value( "indent_labels", false ).toBool() );
-	chkIndentPreprocessor->setChecked( s.value( "indent_preprocessor", false ).toBool() );
-	cmbBreakType->setCurrentIndex( s.value( "break_type", 0 ).toInt() );
-	chkBreakBlocks->setChecked( s.value( "break_blocks", false ).toBool() );
-	chkBreakElseIfs->setChecked( s.value( "break_elseifs", false ).toBool() );
-	chkPadOperators->setChecked( s.value( "pad_operators", false ).toBool() );
-	chkPadParens->setChecked( s.value( "pad_parentheses", false ).toBool() );
-	chkKeepComplex->setChecked( s.value( "keep_complex", false ).toBool() );
-	chkKeepBlocks->setChecked( s.value( "keep_blocks", false ).toBool() );
-	s.endGroup();
+	pSettings* s = MonkeyCore::settings();
+	s->beginGroup( QString( "Plugins/%1" ).arg( PLUGIN_NAME ) );
+	int style = s->value( "style", 0 ).toInt();
+	spnIndentation->setValue( s->value( "indentation", 4 ).toInt() );
+	chkUseTab->setChecked( s->value( "use_tabs", false ).toBool() );
+	chkForceUseTabs->setChecked( s->value( "force_tabs", false ).toBool() );
+	chkConvertTabs->setChecked( s->value( "convert_tabs", false ).toBool() );
+	chkFillEmptyLines->setChecked( s->value( "fill_empty_lines", false ).toBool() );
+	chkIndentClasses->setChecked( s->value( "indent_classes", false ).toBool() );
+	chkIndentSwitches->setChecked( s->value( "indent_switches", false ).toBool() );
+	chkIndentCase->setChecked( s->value( "indent_case", false ).toBool() );
+	chkIndentBrackets->setChecked( s->value( "indent_brackets", false ).toBool() );
+	chkIndentBlocks->setChecked( s->value( "indent_blocks", false ).toBool() );
+	chkIndentNamespaces->setChecked( s->value( "indent_namespaces", false ).toBool() );
+	chkIndentLabels->setChecked( s->value( "indent_labels", false ).toBool() );
+	chkIndentPreprocessor->setChecked( s->value( "indent_preprocessor", false ).toBool() );
+	cmbBreakType->setCurrentIndex( s->value( "break_type", 0 ).toInt() );
+	chkBreakBlocks->setChecked( s->value( "break_blocks", false ).toBool() );
+	chkBreakElseIfs->setChecked( s->value( "break_elseifs", false ).toBool() );
+	chkPadOperators->setChecked( s->value( "pad_operators", false ).toBool() );
+	chkPadParens->setChecked( s->value( "pad_parentheses", false ).toBool() );
+	chkKeepComplex->setChecked( s->value( "keep_complex", false ).toBool() );
+	chkKeepBlocks->setChecked( s->value( "keep_blocks", false ).toBool() );
+	s->endGroup();
 	setStyle( ( AStylePredefinedStyle )style );
 }
 
@@ -131,30 +132,30 @@ void UISettingsAStyle::saveSettings()
 		style = 4;
 	else if ( rbCustom->isChecked() )
 		style = 5;
-	pSettings s;
-	s.beginGroup( QString( "Plugins/%1" ).arg( PLUGIN_NAME ) );
-	s.setValue( "style", style );
-	s.setValue( "indentation", spnIndentation->value() );
-	s.setValue( "use_tabs", chkUseTab->isChecked() );
-	s.setValue( "force_tabs", chkForceUseTabs->isChecked() );
-	s.setValue( "convert_tabs", chkConvertTabs->isChecked() );
-	s.setValue( "fill_empty_lines", chkFillEmptyLines->isChecked() );
-	s.setValue( "indent_classes", chkIndentClasses->isChecked() );
-	s.setValue( "indent_switches", chkIndentSwitches->isChecked() );
-	s.setValue( "indent_case", chkIndentCase->isChecked() );
-	s.setValue( "indent_brackets", chkIndentBrackets->isChecked() );
-	s.setValue( "indent_blocks", chkIndentBlocks->isChecked() );
-	s.setValue( "indent_namespaces", chkIndentNamespaces->isChecked() );
-	s.setValue( "indent_labels", chkIndentLabels->isChecked() );
-	s.setValue( "indent_preprocessor", chkIndentPreprocessor->isChecked() );
-	s.setValue( "break_type",  cmbBreakType->currentIndex () );
-	s.setValue( "break_blocks", chkBreakBlocks->isChecked() );
-	s.setValue( "break_elseifs", chkBreakElseIfs->isChecked() );
-	s.setValue( "pad_operators", chkPadOperators->isChecked() );
-	s.setValue( "pad_parentheses", chkPadParens->isChecked() );
-	s.setValue( "keep_complex", chkKeepComplex->isChecked() );
-	s.setValue( "keep_blocks", chkKeepBlocks->isChecked() );
-	s.endGroup();
+	pSettings* s = MonkeyCore::settings();
+	s->beginGroup( QString( "Plugins/%1" ).arg( PLUGIN_NAME ) );
+	s->setValue( "style", style );
+	s->setValue( "indentation", spnIndentation->value() );
+	s->setValue( "use_tabs", chkUseTab->isChecked() );
+	s->setValue( "force_tabs", chkForceUseTabs->isChecked() );
+	s->setValue( "convert_tabs", chkConvertTabs->isChecked() );
+	s->setValue( "fill_empty_lines", chkFillEmptyLines->isChecked() );
+	s->setValue( "indent_classes", chkIndentClasses->isChecked() );
+	s->setValue( "indent_switches", chkIndentSwitches->isChecked() );
+	s->setValue( "indent_case", chkIndentCase->isChecked() );
+	s->setValue( "indent_brackets", chkIndentBrackets->isChecked() );
+	s->setValue( "indent_blocks", chkIndentBlocks->isChecked() );
+	s->setValue( "indent_namespaces", chkIndentNamespaces->isChecked() );
+	s->setValue( "indent_labels", chkIndentLabels->isChecked() );
+	s->setValue( "indent_preprocessor", chkIndentPreprocessor->isChecked() );
+	s->setValue( "break_type",  cmbBreakType->currentIndex () );
+	s->setValue( "break_blocks", chkBreakBlocks->isChecked() );
+	s->setValue( "break_elseifs", chkBreakElseIfs->isChecked() );
+	s->setValue( "pad_operators", chkPadOperators->isChecked() );
+	s->setValue( "pad_parentheses", chkPadParens->isChecked() );
+	s->setValue( "keep_complex", chkKeepComplex->isChecked() );
+	s->setValue( "keep_blocks", chkKeepBlocks->isChecked() );
+	s->endGroup();
 }
 
 void UISettingsAStyle::on_pbApply_clicked()

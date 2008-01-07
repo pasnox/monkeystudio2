@@ -16,11 +16,23 @@
 #include <QAction>
 
 pDockToolBarManager::pDockToolBarManager( QMainWindow* w )
-	: QObject( w ), mMain( w )
+	: QObject( w ), mMain( w ), mSettings( 0 )
 { Q_ASSERT( w != 0 ); }
 
 QMainWindow* pDockToolBarManager::mainWindow() const
 { return mMain; }
+
+void pDockToolBarManager::setSettings( pSettings* s )
+{
+	if ( mSettings != s )
+	{
+		mSettings = s;
+		restoreState();
+	}
+}
+
+pSettings* pDockToolBarManager::settings()
+{ return mSettings; }
 
 pDockToolBar* pDockToolBarManager::bar( Qt::ToolBarArea a )
 {
@@ -141,20 +153,20 @@ void pDockToolBarManager::dockWidgetAreaChanged( QDockWidget* d, pDockToolBar* f
 
 void pDockToolBarManager::restoreState( pDockToolBar* p )
 {
+	// need settings
+	if ( !settings() )
+		return;
 	// get the bar to restore
 	QStringList l;
 	if ( p )
 		l << QString::number( mMain->toolBarArea( p ) );
 	else
 	{
-		pSettings s;
-		s.beginGroup( "MainWindow/Docks" );
-		l = s.childGroups();
-		s.endGroup();
+		settings()->beginGroup( "MainWindow/Docks" );
+		l = settings()->childGroups();
+		settings()->endGroup();
 	}
 	// for docktoolbar
-	// get settings
-	pSettings s;
 	foreach ( QString i, l )
 	{
 		// get bar
@@ -163,9 +175,9 @@ void pDockToolBarManager::restoreState( pDockToolBar* p )
 		if ( p )
 		{
 			// restore exclusive state
-			p->setExclusive( s.value( QString( "MainWindow/Docks/%1/Exclusive" ).arg( i ), true ).toBool() );
+			p->setExclusive( settings()->value( QString( "MainWindow/Docks/%1/Exclusive" ).arg( i ), true ).toBool() );
 			// bar datas
-			QStringList mList = s.value( QString( "MainWindow/Docks/%1/Widgets" ).arg( i ), QStringList() ).toStringList();
+			QStringList mList = settings()->value( QString( "MainWindow/Docks/%1/Widgets" ).arg( i ), QStringList() ).toStringList();
 			// for each entry
 			foreach ( QString e, mList )
 			{
@@ -181,6 +193,9 @@ void pDockToolBarManager::restoreState( pDockToolBar* p )
 
 void pDockToolBarManager::saveState( pDockToolBar* p )
 {
+	// need settings
+	if ( !settings() )
+		return;
 	// get the bar to save
 	QList<pDockToolBar*> l;
 	if ( p )
@@ -188,8 +203,6 @@ void pDockToolBarManager::saveState( pDockToolBar* p )
 	else
 		l << mBars.values();
 	// for each docktoolbar
-	// get settings
-	pSettings s;
 	foreach ( pDockToolBar* tb, l )
 	{
 		// list to stock checked button
@@ -198,8 +211,7 @@ void pDockToolBarManager::saveState( pDockToolBar* p )
 		foreach ( QDockWidget* d, tb->docks() )
 			mList << d->objectName();
 		// write datas
-
-		s.setValue( QString( "MainWindow/Docks/%1/Exclusive" ).arg( mMain->toolBarArea( tb ) ), tb->exclusive() );
-		s.setValue( QString( "MainWindow/Docks/%1/Widgets" ).arg( mMain->toolBarArea( tb ) ), mList );
+		settings()->setValue( QString( "MainWindow/Docks/%1/Exclusive" ).arg( mMain->toolBarArea( tb ) ), tb->exclusive() );
+		settings()->setValue( QString( "MainWindow/Docks/%1/Widgets" ).arg( mMain->toolBarArea( tb ) ), mList );
 	}
 }

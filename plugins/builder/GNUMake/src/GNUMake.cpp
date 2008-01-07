@@ -67,23 +67,23 @@ pCommandList GNUMake::userCommands() const
     // commands list
     pCommandList l;
     // get settings object
-    pSettings s;
+    pSettings* s = MonkeyCore::settings();
     // read user commands for this plugin
-    int size = s.beginReadArray( settingsKey( "Commands" ) );
+    int size = s->beginReadArray( settingsKey( "Commands" ) );
     for ( int i = 0; i < size; i++ )
     {
-        s.setArrayIndex( i );
+        s->setArrayIndex( i );
         pCommand c;
-        c.setText( s.value( "Text" ).toString() );
-        c.setCommand( s.value( "Command" ).toString() );
-        c.setArguments( s.value( "Arguments" ).toString() );
-        c.setWorkingDirectory( s.value( "WorkingDirectory" ).toString() );
-        c.setParsers( s.value( "Parsers" ).toStringList() );
-        c.setTryAllParsers( s.value( "TryAll" ).toBool() );
-        c.setSkipOnError( s.value( "SkipOnError" ).toBool() );
+        c.setText( s->value( "Text" ).toString() );
+        c.setCommand( s->value( "Command" ).toString() );
+        c.setArguments( s->value( "Arguments" ).toString() );
+        c.setWorkingDirectory( s->value( "WorkingDirectory" ).toString() );
+        c.setParsers( s->value( "Parsers" ).toStringList() );
+        c.setTryAllParsers( s->value( "TryAll" ).toBool() );
+        c.setSkipOnError( s->value( "SkipOnError" ).toBool() );
         l << c;
     }
-    s.endArray();
+    s->endArray();
     // if no user commands get global ones
     if ( l.isEmpty() )
         l << defaultCommands();
@@ -94,24 +94,24 @@ pCommandList GNUMake::userCommands() const
 void GNUMake::setUserCommands( const pCommandList& l ) const
 {
     // get settings object
-    pSettings s;
+    pSettings* s = MonkeyCore::settings();
     // remove old key
-    s.remove( settingsKey( "Commands" ) );
+    s->remove( settingsKey( "Commands" ) );
     // write user commands for this plugin
-    s.beginWriteArray( settingsKey( "Commands" ) );
+    s->beginWriteArray( settingsKey( "Commands" ) );
     for ( int i = 0; i < l.count(); i++ )
     {
-        s.setArrayIndex( i );
+        s->setArrayIndex( i );
         const pCommand& c = l[i];
-        s.setValue( "Text", c.text() );
-        s.setValue( "Command", c.command() );
-        s.setValue( "Arguments", c.arguments() );
-        s.setValue( "WorkingDirectory", c.workingDirectory() );
-        s.setValue( "Parsers", c.parsers() );
-        s.setValue( "TryAll", c.tryAllParsers() );
-        s.setValue( "SkipOnError", c.skipOnError() );
+        s->setValue( "Text", c.text() );
+        s->setValue( "Command", c.command() );
+        s->setValue( "Arguments", c.arguments() );
+        s->setValue( "WorkingDirectory", c.workingDirectory() );
+        s->setValue( "Parsers", c.parsers() );
+        s->setValue( "TryAll", c.tryAllParsers() );
+        s->setValue( "SkipOnError", c.skipOnError() );
     }
-    s.endArray();
+    s->endArray();
 }
 
 QStringList GNUMake::availableParsers() const
@@ -133,15 +133,15 @@ pCommand GNUMake::defaultBuildCommand() const
 pCommand GNUMake::buildCommand() const
 {
     // get settings object
-    pSettings s;
+    pSettings* s = MonkeyCore::settings();
     pCommand c;
-    c.setText( s.value( settingsKey( "BuildCommand/Text" ) ).toString() );
-    c.setCommand( s.value( settingsKey( "BuildCommand/Command" ) ).toString() );
-    c.setArguments( s.value( settingsKey( "BuildCommand/Arguments" ) ).toString() );
-    c.setWorkingDirectory( s.value( settingsKey( "BuildCommand/WorkingDirectory" ) ).toString() );
-    c.setParsers( s.value( settingsKey( "BuildCommand/Parsers" ) ).toStringList() );
-    c.setTryAllParsers( s.value( settingsKey( "BuildCommand/TryAll" ), false ).toBool() );
-    c.setSkipOnError( s.value( settingsKey( "BuildCommand/SkipOnError" ), false ).toBool() );
+    c.setText( s->value( settingsKey( "BuildCommand/Text" ) ).toString() );
+    c.setCommand( s->value( settingsKey( "BuildCommand/Command" ) ).toString() );
+    c.setArguments( s->value( settingsKey( "BuildCommand/Arguments" ) ).toString() );
+    c.setWorkingDirectory( s->value( settingsKey( "BuildCommand/WorkingDirectory" ) ).toString() );
+    c.setParsers( s->value( settingsKey( "BuildCommand/Parsers" ) ).toStringList() );
+    c.setTryAllParsers( s->value( settingsKey( "BuildCommand/TryAll" ), false ).toBool() );
+    c.setSkipOnError( s->value( settingsKey( "BuildCommand/SkipOnError" ), false ).toBool() );
     // if no user commands get global ones
     if ( !c.isValid() )
         c = defaultBuildCommand();
@@ -150,14 +150,14 @@ pCommand GNUMake::buildCommand() const
 
 void GNUMake::setBuildCommand( const pCommand& c )
 {
-    pSettings s;
-    s.setValue( settingsKey( "BuildCommand/Text" ), c.text() );
-    s.setValue( settingsKey( "BuildCommand/Command" ), c.command() );
-    s.setValue( settingsKey( "BuildCommand/Arguments" ), c.arguments() );
-    s.setValue( settingsKey( "BuildCommand/WorkingDirectory" ), c.workingDirectory() );
-    s.setValue( settingsKey( "BuildCommand/Parsers" ), c.parsers() );
-    s.setValue( settingsKey( "BuildCommand/TryAll" ), c.tryAllParsers() );
-    s.setValue( settingsKey( "BuildCommand/SkipOnError" ), c.skipOnError() );
+    pSettings* s = MonkeyCore::settings();
+    s->setValue( settingsKey( "BuildCommand/Text" ), c.text() );
+    s->setValue( settingsKey( "BuildCommand/Command" ), c.command() );
+    s->setValue( settingsKey( "BuildCommand/Arguments" ), c.arguments() );
+    s->setValue( settingsKey( "BuildCommand/WorkingDirectory" ), c.workingDirectory() );
+    s->setValue( settingsKey( "BuildCommand/Parsers" ), c.parsers() );
+    s->setValue( settingsKey( "BuildCommand/TryAll" ), c.tryAllParsers() );
+    s->setValue( settingsKey( "BuildCommand/SkipOnError" ), c.skipOnError() );
 }
 
 void GNUMake::commandTriggered()

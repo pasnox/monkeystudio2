@@ -45,8 +45,8 @@ Navigator::Navigator (QObject* )
 	mPluginInfos.Name =  "Navigator";
 	mPluginInfos.Version = "0.0.1";
 	mPluginInfos.Enabled = false;
-	displayMask = pSettings::value ("Plugins/Navigator/DisplayMask",65535).toInt();
-	expandMask = pSettings::value ("Plugins/Navigator/ExpandMask",32771).toInt();
+	displayMask = settingsValue( "DisplayMask", 65535 ).toInt();
+	expandMask = settingsValue( "ExpandMask", 32771 ).toInt();
 }
 
 bool Navigator::setEnabled (bool e)
@@ -89,7 +89,7 @@ QWidget* Navigator::settingsWidget ()
 void Navigator::setDisplayMask (int mask)
 {
 	displayMask = mask;
-	pSettings::setValue ("Plugins/Navigator/DisplayMask",QVariant(mask));
+	setSettingsValue( "DisplayMask", QVariant( mask ) );
 }
 	
 int Navigator::getDisplayMask (void)
@@ -98,7 +98,7 @@ int Navigator::getDisplayMask (void)
 void Navigator::setExpandMask (int mask)
 {
 	expandMask = mask;
-	pSettings::setValue ("Plugins/Navigator/ExpandMask",QVariant(mask));	
+	setSettingsValue( "ExpandMask", QVariant( mask ) );	
 }
 
 int Navigator::getExpandMask (void)

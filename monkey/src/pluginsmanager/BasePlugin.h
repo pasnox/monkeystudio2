@@ -2,6 +2,7 @@
 #define BASEPLUGIN_H
 
 #include "MonkeyExport.h"
+#include "MonkeyCore.h"
 #include "pSettings.h"
 
 #include <QtPlugin>
@@ -64,10 +65,10 @@ public:
 	{ return QString( "Plugins/%1/%2" ).arg( mPluginInfos.Name ).arg(  k ); }
 	
 	virtual QVariant settingsValue( const QString& k, const QVariant& v = QVariant() ) const
-	{ return pSettings::value( settingsKey( k ), v ); }
+	{ return MonkeyCore::settings()->value( settingsKey( k ), v ); }
 	
 	virtual void setSettingsValue( const QString& k, const QVariant& v ) const
-	{ pSettings::setValue( settingsKey( k ), v ); }
+	{ MonkeyCore::settings()->setValue( settingsKey( k ), v ); }
 	
 	// coverage support members
 #ifdef __COVERAGESCANNER__

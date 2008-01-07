@@ -346,22 +346,22 @@ void pWorkspace::fileSessionSave_triggered()
 	// saves opened files
 	foreach ( pAbstractChild* c, children() )
 		l << c->files();
-	pSettings::setValue( "Session/Files", l );
+	MonkeyCore::settings()->setValue( "Session/Files", l );
 	// saves opened projects
 	l.clear();
 	foreach ( ProjectItem* p, MonkeyCore::projectsManager()->rootProjects() )
 		l << p->canonicalFilePath();
-	pSettings::setValue( "Session/Projects", l );
+	MonkeyCore::settings()->setValue( "Session/Projects", l );
 }
 
 void pWorkspace::fileSessionRestore_triggered()
 {
 	// restore files
-	foreach ( QString s, pSettings::value( "Session/Files", QStringList() ).toStringList() )
+	foreach ( QString s, MonkeyCore::settings()->value( "Session/Files", QStringList() ).toStringList() )
 		if ( !openFile( s ) ) // remove it from recents files
 			MonkeyCore::recentsManager()->removeRecentFile( s );
 	// restore projects
-	foreach ( QString s, pSettings::value( "Session/Projects", QStringList() ).toStringList() )
+	foreach ( QString s, MonkeyCore::settings()->value( "Session/Projects", QStringList() ).toStringList() )
 		if ( !MonkeyCore::projectsManager()->openProject( s ) ) // remove it from recents projects
 			MonkeyCore::recentsManager()->removeRecentProject( s );
 }
@@ -512,7 +512,7 @@ void pWorkspace::agStyles_triggered( QAction* a )
 {
 	qApp->setStyle( a->text() );
 	qApp->setPalette( qApp->style()->standardPalette() );
-	pSettings::setValue( "MainWindow/Style", a->text() );
+	MonkeyCore::settings()->setValue( "MainWindow/Style", a->text() );
 }
 
 // help menu

@@ -1,11 +1,12 @@
 #include "pFormatterSettings.h"
+#include "MonkeyCore.h"
 #include "pSettings.h"
 
 void pFormatterSettings::applyTo( astyle::ASFormatter& f )
 {
-	pSettings s;
-	s.beginGroup( QString( "Plugins/%1" ).arg( PLUGIN_NAME ) );
-	int style = s.value( "style", 0 ).toInt();
+	pSettings* s = MonkeyCore::settings();
+	s->beginGroup( QString( "Plugins/%1" ).arg( PLUGIN_NAME ) );
+	int style = s->value( "style", 0 ).toInt();
 	switch( style )
 	{
 	case 0: // ansi
@@ -99,34 +100,34 @@ void pFormatterSettings::applyTo( astyle::ASFormatter& f )
 		break;
 	default: // Custom
 		{
-			int spaceNum = s.value( "indentation", 4 ).toInt();
+			int spaceNum = s->value( "indentation", 4 ).toInt();
 			//
 			f.modeSetManually = false;
 			f.indentLength = spaceNum;
 			//
 			f.indentString = '\t';
-			if ( !s.value( "use_tabs", false ).toBool() )
+			if ( !s->value( "use_tabs", false ).toBool() )
 				f.indentString = string( spaceNum, ' ' );
 			//
 			f.forceTabIndent = false;
-			if ( s.value( "force_tabs", false ).toBool() )
+			if ( s->value( "force_tabs", false ).toBool() )
 			{
 				f.indentString = '\t';
 				f.forceTabIndent = true;
 			}
 			//
-			f.convertTabs2Space = s.value( "convert_tabs", false ).toBool();
-			f.emptyLineIndent = s.value( "fill_empty_lines", false ).toBool();
-			f.classIndent = s.value( "indent_classes", false ).toBool();
-			f.switchIndent = s.value( "indent_switches", false ).toBool();
-			f.caseIndent = s.value( "indent_case", false ).toBool();
-			f.bracketIndent = s.value( "indent_brackets", false ).toBool();
-			f.blockIndent = s.value( "indent_blocks", false ).toBool();
-			f.namespaceIndent = s.value( "indent_namespaces", false ).toBool();
-			f.labelIndent = s.value( "indent_labels", false ).toBool();
-			f.preprocessorIndent = s.value( "indent_preprocessor", false ).toBool();
+			f.convertTabs2Space = s->value( "convert_tabs", false ).toBool();
+			f.emptyLineIndent = s->value( "fill_empty_lines", false ).toBool();
+			f.classIndent = s->value( "indent_classes", false ).toBool();
+			f.switchIndent = s->value( "indent_switches", false ).toBool();
+			f.caseIndent = s->value( "indent_case", false ).toBool();
+			f.bracketIndent = s->value( "indent_brackets", false ).toBool();
+			f.blockIndent = s->value( "indent_blocks", false ).toBool();
+			f.namespaceIndent = s->value( "indent_namespaces", false ).toBool();
+			f.labelIndent = s->value( "indent_labels", false ).toBool();
+			f.preprocessorIndent = s->value( "indent_preprocessor", false ).toBool();
 			//
-			int breakType = s.value( "break_type", 0 ).toInt();
+			int breakType = s->value( "break_type", 0 ).toInt();
 			switch( breakType )
 			{
 			case 1: //break
@@ -143,14 +144,14 @@ void pFormatterSettings::applyTo( astyle::ASFormatter& f )
 				break;
 			}
 			//
-			f.breakBlocks = s.value( "break_blocks", false ).toBool();
-			f.breakElseIfs = s.value( "break_elseifs", false ).toBool();
-			f.padOperators = s.value( "pad_operators", false ).toBool();
-			f.padParen = s.value( "pad_parentheses", false ).toBool();
-			f.breakOneLineStatements = !s.value( "keep_complex", false ).toBool();
-			f.breakOneLineBlocks = !s.value( "keep_blocks", false ).toBool();
+			f.breakBlocks = s->value( "break_blocks", false ).toBool();
+			f.breakElseIfs = s->value( "break_elseifs", false ).toBool();
+			f.padOperators = s->value( "pad_operators", false ).toBool();
+			f.padParen = s->value( "pad_parentheses", false ).toBool();
+			f.breakOneLineStatements = !s->value( "keep_complex", false ).toBool();
+			f.breakOneLineBlocks = !s->value( "keep_blocks", false ).toBool();
 			break;
 		}
 	}
-	s.endGroup();
+	s->endGroup();
 }

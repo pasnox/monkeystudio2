@@ -16,6 +16,7 @@
 class pMenuBar;
 class pDockToolBarManager;
 class pDockToolBar;
+class pSettings;
 
 class Q_MONKEY_EXPORT pMainWindow : public QMainWindow
 {
@@ -28,7 +29,12 @@ public:
 	pDockToolBarManager* dockToolBarManager();
 	pDockToolBar* dockToolBar( Qt::ToolBarArea );
 
+	void setSettings( pSettings* );
+	pSettings* settings();
+
 protected:
+	pSettings* mSettings;
+
 	void hideEvent( QHideEvent* );
 
 public slots:
