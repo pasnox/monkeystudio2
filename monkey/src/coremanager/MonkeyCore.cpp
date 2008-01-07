@@ -12,6 +12,7 @@
 #include "pConsoleManager.h"
 #include "pSearch.h"
 #include <QStatusBar>
+#include "pActionManager.h"
 
 #include "pDockToolBar.h"
 #include "UISettings.h"
@@ -57,13 +58,17 @@ void MonkeyCore::init()
 	showMessage( &splash, tr( "Initializing Main Window..." ) );
 	mainWindow()->initGui();
 	
+	// init shortcuts editor
+	showMessage( &splash, tr( "Initializing Sjortcuts..." ) );
+	pActionManager::instance()->setSettings( settings() );
+	
 	// init pluginsmanager
 	showMessage( &splash, tr( "Initializing Plugins..." ) );
 	pluginsManager()->loadsPlugins();
 	
 	// restore window state
 	showMessage( &splash, tr( "Restoring Workspace..." ) );
-	mainWindow()->restoreState();
+	mainWindow()->setSettings( settings() );
 	
 	// show main window
 	mainWindow()->show();
