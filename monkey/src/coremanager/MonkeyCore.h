@@ -20,6 +20,8 @@ class pToolsManager;
 
 class Q_MONKEY_EXPORT MonkeyCore : public QObject
 {
+	Q_OBJECT
+	
 public:
 	static void init();
 	static pSettings* settings();
