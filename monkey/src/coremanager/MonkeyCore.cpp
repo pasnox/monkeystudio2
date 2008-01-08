@@ -42,7 +42,7 @@ void MonkeyCore::init()
 	
 	// restore application style
 	showMessage( &splash, tr( "Initializing Style..." ) );
-	qApp->setStyle( settings()->value( "MainWindow/Style", "plastique" ).toString() );
+	qApp->setStyle( settings()->value( "MainWindow/Style", "system" ).toString() );
 	
 	// init translation
 	showMessage( &splash, tr( "Initializing Translation..." ) );
