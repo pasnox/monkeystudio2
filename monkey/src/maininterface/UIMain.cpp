@@ -285,7 +285,7 @@ void UIMain::initConnections()
 	connect( menuBar()->action( "mFile/aQuit" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileExit_triggered() ) );
 	// edit connection
 	connect( menuBar()->action( "mEdit/aSettings" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editSettings_triggered() ) );
-	connect( menuBar()->action( "mEdit/aShortcutsEditor" ), SIGNAL( triggered() ), pActionManager::instance(), SLOT( showSettings() ) );
+	connect( menuBar()->action( "mEdit/aShortcutsEditor" ), SIGNAL( triggered() ), MonkeyCore::actionManager(), SLOT( showSettings() ) );
 	connect( menuBar()->action( "mEdit/aTranslations" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editTranslations_triggered() ) );
 	connect( menuBar()->action( "mEdit/aUndo" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editUndo_triggered() ) );
 	connect( menuBar()->action( "mEdit/aRedo" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editRedo_triggered() ) );
