@@ -8,7 +8,6 @@
  ********************************************************************************************************/
 #include "pMainWindow.h"
 #include "pSettings.h"
-#include "pActionManager.h"
 #include "pMenuBar.h"
 #include "pDockToolBarManager.h"
 #include "pDockToolBar.h"
@@ -42,6 +41,7 @@ void pMainWindow::setSettings( pSettings* s )
 	if ( mSettings != s )
 	{
 		mSettings = s;
+		dockToolBarManager()->setSettings( s );
 		restoreState();
 	}
 }
