@@ -25,10 +25,7 @@ QMainWindow* pDockToolBarManager::mainWindow() const
 void pDockToolBarManager::setSettings( pSettings* s )
 {
 	if ( mSettings != s )
-	{
 		mSettings = s;
-		restoreState();
-	}
 }
 
 pSettings* pDockToolBarManager::settings()
