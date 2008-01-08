@@ -9,14 +9,15 @@ class pSettings;
 class PluginsManager;
 class UIMain;
 class pMenuBar;
+class pRecentsManager;
+class pActionManager;
+class pToolsManager;
 class UIProjectsManager;
 class pFileManager;
 class pWorkspace;
 class pSearch;
 class QStatusBar;
 class pConsoleManager;
-class pRecentsManager;
-class pToolsManager;
 
 class Q_MONKEY_EXPORT MonkeyCore : public QObject
 {
@@ -29,6 +30,7 @@ public:
 	static UIMain* mainWindow();
 	static pMenuBar* menuBar();
 	static pRecentsManager* recentsManager();
+	static pActionManager* actionManager();
 	static pToolsManager* toolsManager();
 	static UIProjectsManager* projectsManager();
 	static pFileManager* fileManager();
