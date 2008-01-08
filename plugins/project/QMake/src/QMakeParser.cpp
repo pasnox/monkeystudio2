@@ -132,10 +132,10 @@ int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 			{
 				while( !pileNested.isEmpty() && pileNested.top()->getType() == ProjectItem::NestedScopeType )
 				{
-					qWarning() << "popping11 : " << pileNested.pop()->getValue();
+					pileNested.pop();
 				}
 				if( !pileNested.isEmpty() )
-					qWarning() << "popping22 : " << pileNested.pop()->getValue();
+					pileNested.pop();
 			}
 			// if end block and start new one
 			if( content[ligne].left(1) == "}" )
@@ -159,7 +159,6 @@ int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 			else
 				isElse = false;
 			QMakeItem* i = processNested( liste[2], it );
-			qWarning() << "adding : " << liste[3].trimmed() << " on " << i->getValue() << " prof = " << prof;
 			i = addScope( liste[3].trimmed(), "", false, i );
 			pileNested.push(i);
 			if ( i )
@@ -177,14 +176,12 @@ int QMakeParser::parseBuffer( int ligne, QMakeItem* it )
 			{
 				while( !pileNested.isEmpty() && pileNested.top()->getType() == ProjectItem::NestedScopeType )
 				{
-					qWarning() << "popping33 : " << pileNested.pop()->getValue();
+					pileNested.pop();
 				}
 				if( !pileNested.isEmpty() )
 				{
-					qWarning() << "popping44 : " << pileNested.pop()->getValue();
+					pileNested.pop();
 				}
-				else
-					qWarning() << "OMG stack is empty 2";
 			}
 			if( prof == 0 )
 				pileNested.clear();
@@ -246,7 +243,6 @@ QMakeItem* QMakeParser::processNested( const QString& s, QMakeItem* i )
 		if( !isElse && prof == 0 )
 		{
 			pileNested.clear();
-			qWarning() << "empty scope";
 		}
 		return i;
 	}
@@ -262,19 +258,18 @@ QMakeItem* QMakeParser::processNested( const QString& s, QMakeItem* i )
 			{
 				if( !pileNested.isEmpty() )
 				{
-					QMakeItem* ik = pileNested.pop();
+					pileNested.pop();
 					if(!pileNested.isEmpty())
 						i = pileNested.top();
-					qWarning() << "pop : " << ik->getValue() << ", new top : " << i->getValue();
 				}
 				else
 				{
-					qWarning() << "error : \"else\" without scope";
+					qWarning( "Error : \"else\" without scope" );
 				}
 			}
 			else
 			{
-				qWarning() << "error : \"else\" should be the first scope";
+				qWarning( "Error : \"else\" should be the first scope" );
 			}
 		}
 		else
@@ -282,11 +277,9 @@ QMakeItem* QMakeParser::processNested( const QString& s, QMakeItem* i )
 			if( first && prof == 0 )
 			{
 				pileNested.clear();
-				qWarning() << "clearing stack : " << pileNested;
 			}
 		}
 		
-		qWarning() << "adding : " << c.mid( p, end - p ) << " on " << i->getValue() << " prof = " << prof;
 		i = addScope( c.mid( p, end - p ), c.mid( end, 1 ), true, i );
 		if( s != "else:" )
 			pileNested.push( i );
