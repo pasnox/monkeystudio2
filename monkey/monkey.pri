@@ -10,6 +10,9 @@ INCLUDEPATH	*= $${QPRO_PWD}
 # default
 INCLUDEPATH	*= $${QPRO_PWD}/. $${QPRO_PWD}/src/. . src
 
+# Settings
+INCLUDEPATH	*= $${QPRO_PWD}/src/settingsmanager
+
 # Core
 INCLUDEPATH	*= $${QPRO_PWD}/src/coremanager
 

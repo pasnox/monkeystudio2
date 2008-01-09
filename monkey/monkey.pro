@@ -129,6 +129,7 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/projectsmanager/ProjectsProxy.h \
 	src/projectsmanager/ProjectItem.h \
 	src/pluginsmanager/ui/UICompilerSettings.h \
+	src/settingsmanager/Settings.h \
 	src/coremanager/MonkeyCore.h
 
 SOURCES	*= src/maininterface/ui/UITranslator.cpp \
@@ -167,6 +168,7 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/projectsmanager/ProjectItem.cpp \
 	src/main.cpp \
 	src/pluginsmanager/ui/UICompilerSettings.cpp \
+	src/settingsmanager/Settings.cpp \
 	src/coremanager/MonkeyCore.cpp
 
 mac:SOURCES	*= src/toolsmanager/pDesktopApplications_mac.cpp
