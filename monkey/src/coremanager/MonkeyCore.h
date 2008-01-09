@@ -39,6 +39,7 @@ public:
 	static pSearch* searchDock();
 	static QStatusBar* statusBar();
 // variablemaanger
+// templates manager
 
 private:
 	static QHash<const QMetaObject*, QObject*> mInstances;

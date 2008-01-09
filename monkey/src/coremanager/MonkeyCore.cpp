@@ -1,6 +1,6 @@
 #include "MonkeyCore.h"
 #include "pMonkeyStudio.h"
-#include "pSettings.h"
+#include "Settings.h"
 #include "PluginsManager.h"
 #include "UIMain.h"
 #include "pMenuBar.h"
@@ -86,15 +86,20 @@ void MonkeyCore::init()
 	
 	// show settings dialog the first time user start program
 	if ( settings()->value( "FirstTimeRunning", true ).toBool() )
+	{
+		// set some default settings
+		settings()->setDefaultSettings();
+		// execute settings dialog
 		if ( UISettings::instance()->exec() )
 			settings()->setValue( "FirstTimeRunning", false );
+	}
 }
 
 pSettings* MonkeyCore::settings()
 {
-	if ( !mInstances.contains( &pSettings::staticMetaObject ) )
-		mInstances[&pSettings::staticMetaObject] = new pSettings( qApp );
-	return qobject_cast<pSettings*>( mInstances[&pSettings::staticMetaObject] );
+	if ( !mInstances.contains( &Settings::staticMetaObject ) )
+		mInstances[&Settings::staticMetaObject] = new Settings( qApp );
+	return qobject_cast<Settings*>( mInstances[&Settings::staticMetaObject] );
 }
 
 PluginsManager* MonkeyCore::pluginsManager()
