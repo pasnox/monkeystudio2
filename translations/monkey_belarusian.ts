@@ -23,11 +23,6 @@
         <translation type="unfinished">Ініцыялізацыя галоўнага вакна...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="62"/>
-        <source>Initializing Sjortcuts...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="66"/>
         <source>Initializing Plugins...</source>
         <translation type="unfinished"></translation>
@@ -46,6 +41,11 @@
         <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="82"/>
         <source>%1 v%2 Ready !</source>
         <translation type="unfinished">%1 v%2 Гатова !</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="62"/>
+        <source>Initializing Shortcuts...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
