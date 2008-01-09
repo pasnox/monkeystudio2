@@ -1916,11 +1916,6 @@
         <source>Restore normal size</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="152"/>
-        <source></source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>UIPluginsSettings</name>
@@ -3812,47 +3807,47 @@ Aborting.</source>
 <context>
     <name>pTemplatesManager</name>
     <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="43"/>
+        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="37"/>
         <source>Other</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="44"/>
+        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="38"/>
         <source>Wrong template type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="45"/>
+        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="39"/>
         <source>No desctiption</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="166"/>
+        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="160"/>
         <source>Error...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="80"/>
+        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="74"/>
         <source>Destination not set.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="150"/>
+        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="144"/>
         <source>Can&apos;t create destination &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="127"/>
+        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="121"/>
         <source>Empty filename detected for file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="158"/>
+        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="152"/>
         <source>Can&apos;t copy &apos;%1%2&apos; to &apos;%3&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="166"/>
+        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="160"/>
         <source>Can&apos;t edit file %1: %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4325,11 +4320,6 @@ Aborting.</source>
         <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="263"/>
         <source>Duplicate selection</source>
         <translation type="unfinished">Дубліраваць выдзялены тэкст</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="279"/>
-        <source></source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
