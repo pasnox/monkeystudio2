@@ -22,8 +22,8 @@ LANGUAGE	= Qt4/C++
 CONFIG	*= warn_on thread x11 dll plugin debug_and_release
 PRE_TARGETDEPS	*= ../../../monkey
 
-win32:MONKEY_PLUGINS_DIR	= ../../../bin/plugins
 mac:MONKEY_PLUGINS_DIR	= ../../../bin/monkeystudio.app/Contents/plugins
+else:unix|win32:MONKEY_PLUGINS_DIR	= ../../../bin/plugins
 #DEFINES	= __COVERAGESCANNER__
 LIBS	= -L$${BUILD_PATH}
 mac:*-g++:LIBS	*= -Wl,-undefined,dynamic_lookup
