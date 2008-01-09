@@ -18,16 +18,11 @@ QString pSettings::mProgramVersion;
 
 QString getIniFile( const QString& s )
 {
-#ifdef Q_OS_WIN
-	return QString( "%1/%2.ini" ).arg( QApplication::applicationDirPath() ).arg( s );
-#elif defined Q_OS_MAC
+#ifdef Q_OS_MAC
 	return QString( "%1/../%2.ini" ).arg( QApplication::applicationDirPath() ).arg( s );
-#elif defined Q_OS_UNIX
-	return QString( "%1/.%2/%2.ini" ).arg( QDir::homePath() ).arg( s );
 #else
-	qFatal( "Platform not yet supported, please contact the authors." );
+	return QString( "%1/.%2/%2.ini" ).arg( QDir::homePath() ).arg( s );
 #endif
-	return QString();
 }
 
 pSettings::pSettings( QObject* o )
