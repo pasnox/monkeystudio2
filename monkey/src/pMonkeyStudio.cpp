@@ -552,7 +552,7 @@ void pMonkeyStudio::prepareAPIs()
 		// load prepared files
 		foreach ( QString f, MonkeyCore::settings()->value( QString( "SourceAPIs/" ).append( ln ) ).toStringList() )
 		{
-			if ( !a->load( f ) )
+			if ( !a->load( QDir::isRelativePath( f ) ? qApp->applicationDirPath().append( "/%1" ).arg( f ) : f ) )
 				warning( QObject::tr( "Loaging Api File..." ), QObject::tr( "An error occured when loading api file:\n%1" ).arg( f ) );
 		}
 		// start prepare for apis

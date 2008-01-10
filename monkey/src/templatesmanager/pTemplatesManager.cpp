@@ -58,7 +58,7 @@ TemplateList pTemplatesManager::getTemplates()
 {
 	TemplateList l;
 	foreach( QString p, templatesPath() )
-		foreach ( QFileInfo f, getFiles( QDir( unTokenizeHome( p ) ), QStringList( "template.ini" ), true ) )
+		foreach ( QFileInfo f, getFiles( QDir( unTokenizeHome( QDir::isRelativePath( p ) ? qApp->applicationDirPath().append( "/%1" ).arg( p ) : p ) ), QStringList( "template.ini" ), true ) )
 			l << getTemplate( f.absoluteFilePath() );
 	return l;
 }

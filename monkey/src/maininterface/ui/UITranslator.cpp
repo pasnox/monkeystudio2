@@ -49,7 +49,7 @@ void UITranslator::on_tbReload_clicked()
 	QStringList l;
 	foreach ( QString s, mTranslationsPath )
 	{
-		d.setPath( s );
+		d.setPath( QDir::isRelativePath( s ) ? qApp->applicationDirPath().append( "/%1" ).arg( s ) : s );
 		if ( !d.exists() )
 			continue;
 		foreach ( QString s, d.entryList( QStringList() << "monkey_*.qm", QDir::Files | QDir::Readable ) )
