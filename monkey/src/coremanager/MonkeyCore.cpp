@@ -44,6 +44,10 @@ void MonkeyCore::init()
 	showMessage( &splash, tr( "Initializing Style..." ) );
 	qApp->setStyle( settings()->value( "MainWindow/Style", "system" ).toString() );
 	
+	// set default settings if first time running
+	if ( settings()->value( "FirstTimeRunning", true ).toBool() )
+		settings()->setDefaultSettings();
+	
 	// init translation
 	showMessage( &splash, tr( "Initializing Translation..." ) );
 	if ( !settings()->value( "Translations/Accepted" ).toBool() )
@@ -87,8 +91,6 @@ void MonkeyCore::init()
 	// show settings dialog the first time user start program
 	if ( settings()->value( "FirstTimeRunning", true ).toBool() )
 	{
-		// set some default settings
-		settings()->setDefaultSettings();
 		// execute settings dialog
 		if ( UISettings::instance()->exec() )
 			settings()->setValue( "FirstTimeRunning", false );
