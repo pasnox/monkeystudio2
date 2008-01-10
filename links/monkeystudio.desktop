@@ -1,8 +1,8 @@
 [Desktop Entry]
 Categories=Qt;Development;
 Encoding=UTF-8
-Exec=/usr/local/bin/monkeystudio
-Name=Monkey Developer Studio
+Exec=monkeystudio
+Name=Monkey Studio IDE
 GenericName=IDE
 
 Terminal=false
