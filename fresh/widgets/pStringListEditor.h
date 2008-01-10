@@ -15,11 +15,13 @@
 #ifndef PSTRINGLISTEDITOR_H
 #define PSTRINGLISTEDITOR_H
 
+#include "MonkeyExport.h"
+
 #include <QGroupBox>
 
 class QListWidget;
 
-class pStringListEditor : public QGroupBox
+class Q_MONKEY_EXPORT pStringListEditor : public QGroupBox
 {
     Q_OBJECT
 	
