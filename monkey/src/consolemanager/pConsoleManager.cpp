@@ -34,8 +34,10 @@ pConsoleManager::pConsoleManager( QObject* o )
 #else
 	mStopAction = new pAction( "aStopAction", QIcon( ":/console/icons/console/stop.png" ), tr( "Stop current command" ), QString ("Alt+End"), tr( "Console Manager" ) ) ; // Mac has no pause key
 #endif
-	
-	unsetenv ("LANG"); //For compilers and others not print local messages
+
+#ifdef Q_CC_GNU
+	unsetenv( "LANG" ); //For compilers and others not print local messages
+#endif
 	
 	// set status tip for
 	mStopAction->setStatusTip( tr( "Stop the currently running command" ) );
