@@ -8,42 +8,42 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="48"/>
+        <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="52"/>
         <source>Initializing Translation...</source>
         <translation type="unfinished">Ініцыялізацыя пераклада...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="54"/>
+        <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="58"/>
         <source>Initializing Console...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="58"/>
+        <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="62"/>
         <source>Initializing Main Window...</source>
         <translation type="unfinished">Ініцыялізацыя галоўнага вакна...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="66"/>
+        <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="70"/>
         <source>Initializing Plugins...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="70"/>
+        <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="74"/>
         <source>Restoring Workspace...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="77"/>
+        <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="81"/>
         <source>Restoring Session...</source>
         <translation type="unfinished">Аднаўленне сессі...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="82"/>
+        <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="86"/>
         <source>%1 v%2 Ready !</source>
         <translation type="unfinished">%1 v%2 Гатова !</translation>
     </message>
     <message>
-        <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="62"/>
+        <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="66"/>
         <source>Initializing Shortcuts...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -56,32 +56,32 @@
         <translation>Не магчыма загрузіць статычны плагін</translation>
     </message>
     <message>
-        <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="62"/>
+        <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="44"/>
         <source>Failed to load plugin ( %1 ): Error: %2</source>
         <translation>Не магчыма загрузіць плагін  ( %1 ): Памылка: %2</translation>
     </message>
     <message>
-        <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="80"/>
+        <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="62"/>
         <source>Found plugin: %1, type: %2</source>
         <translation>Знойдзены плугін: %1, тып: %2</translation>
     </message>
     <message>
-        <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="95"/>
+        <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="77"/>
         <source>User wantn&apos;t to intall plugin: %1</source>
         <translation>Згодна канфігурацыі, не інсталюецца плугін: %1</translation>
     </message>
     <message>
-        <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="100"/>
+        <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="82"/>
         <source>Successfully enabled plugin: %1</source>
         <translation>Паспяхова інсталяваны плагін: %1</translation>
     </message>
     <message>
-        <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="102"/>
+        <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="84"/>
         <source>Unsuccessfully enabled plugin: %1</source>
         <translation>Памылка пры інсталяцыі плагіна: %1</translation>
     </message>
     <message>
-        <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="105"/>
+        <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="87"/>
         <source>Already enabled plugin: %1</source>
         <translation>Ужо інсталяваны плагін: %1</translation>
     </message>
@@ -1916,6 +1916,11 @@
         <source>Restore normal size</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="152"/>
+        <source></source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>UIPluginsSettings</name>
@@ -2111,17 +2116,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.cpp" line="542"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.cpp" line="546"/>
         <source>Select default projects directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.cpp" line="608"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.cpp" line="612"/>
         <source>Select API file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.cpp" line="608"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.cpp" line="612"/>
         <source>API Files (*.api);;All Files (*)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2156,7 +2161,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1328"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1342"/>
         <source>Indentation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2216,7 +2221,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2906"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2920"/>
         <source>...</source>
         <translation type="unfinished">...</translation>
     </message>
@@ -2256,12 +2261,12 @@
         <translation type="obsolete">Уніз</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3424"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3438"/>
         <source>Remove</source>
         <translation type="unfinished">Выдаліць</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2896"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2910"/>
         <source>Add</source>
         <translation type="unfinished">Дадаць</translation>
     </message>
@@ -2281,652 +2286,652 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3460"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3474"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3455"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3469"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="587"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="601"/>
         <source>Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="611"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="625"/>
         <source>Automatic Syntax Check</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="618"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="632"/>
         <source>Convert Tabs Upon Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="625"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="639"/>
         <source>Create Backup File Upon Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="632"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="646"/>
         <source>Automatic End of Line Conversion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="642"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="656"/>
         <source>Default encoding</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="675"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="689"/>
         <source>Selection Colours</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2471"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2485"/>
         <source>Background :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2454"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2468"/>
         <source>Foreground :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="745"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="759"/>
         <source>Default Document Colours</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="769"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="783"/>
         <source>Pen :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="792"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="806"/>
         <source>Paper :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="850"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="864"/>
         <source>Auto Completion Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="877"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="891"/>
         <source>Source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="898"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="912"/>
         <source>from Document</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="905"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="919"/>
         <source>from API file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="912"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="926"/>
         <source>from All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="922"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="936"/>
         <source>Case Sensitive</source>
         <translation type="unfinished">Адчувасьны да рэгістру</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="929"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="943"/>
         <source>Replace Word</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="936"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="950"/>
         <source>Show Single</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="960"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="974"/>
         <source>Threshold :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1045"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1059"/>
         <source>Calltips Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1086"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1100"/>
         <source>Visible Calltips :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1170"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1184"/>
         <source>No Context</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1177"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1191"/>
         <source>Context </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1184"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1198"/>
         <source>No Auto Completion Context</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1220"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1234"/>
         <source>Highlight :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1369"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1383"/>
         <source>Indentation Width :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1436"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1450"/>
         <source>Tab Width :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1486"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1500"/>
         <source>Indentation Guides Colours :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1493"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1507"/>
         <source>Backspace Unindents</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1500"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1514"/>
         <source>Tab Indents</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1507"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1521"/>
         <source>Indentation Guides</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1514"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1528"/>
         <source>Auto Indent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1521"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1535"/>
         <source>Indentation use Tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1628"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1642"/>
         <source>Brace Matching Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1691"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1705"/>
         <source>Unmatched Brace Foreground :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1698"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1712"/>
         <source>Matched Brace Background :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1705"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1719"/>
         <source>Unmatched Brace Background :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1728"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1742"/>
         <source>Matched Brace Foreground :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1769"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1783"/>
         <source>Strict Brace Match</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1776"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1790"/>
         <source>Sloppy Brace Match</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1818"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1832"/>
         <source>Edge Mode Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1862"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1876"/>
         <source>Color :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1904"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1918"/>
         <source>Column Number :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1948"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1962"/>
         <source>Edge Line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1955"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1969"/>
         <source>Edge Background</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1997"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2011"/>
         <source>Caret Line Visible</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2040"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2054"/>
         <source>Caret Line Background :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2047"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2061"/>
         <source>Caret Foreground :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2213"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2227"/>
         <source>Width :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2172"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2186"/>
         <source>Line Numbers Margin Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2257"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2271"/>
         <source>Auto Width</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2267"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2281"/>
         <source>Fold Margin Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2311"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2325"/>
         <source>Plain Fold Style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2318"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2332"/>
         <source>Circled Tree Fold Style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2325"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2339"/>
         <source>Circled Fold Style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2332"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2346"/>
         <source>Boxed Fold Style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2339"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2353"/>
         <source>Boxed Tree Fold Style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2398"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2412"/>
         <source>Global Margins Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2431"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2445"/>
         <source>12345</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2478"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2492"/>
         <source>Font :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2520"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2534"/>
         <source>Eol Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2544"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2558"/>
         <source>Eol Visibility</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2551"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2565"/>
         <source>Windows/DOS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2558"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2572"/>
         <source>Macintosh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2565"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2579"/>
         <source>Unix</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2575"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2589"/>
         <source>Whitespace Visibility Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2599"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2613"/>
         <source>Visible</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2606"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2620"/>
         <source>Visible After Indent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2616"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2630"/>
         <source>Wrap Mode Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2640"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2654"/>
         <source>Wrap Word</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2647"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2661"/>
         <source>Wrap Character</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2657"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2671"/>
         <source>Wrap Visual Flags Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2701"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2715"/>
         <source>Indent Width :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2799"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2813"/>
         <source>Flag By Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2806"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2820"/>
         <source>Flag By Border</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2816"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2830"/>
         <source>Start :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2823"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2837"/>
         <source>End :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2865"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2879"/>
         <source>APIs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2889"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2903"/>
         <source>List of API files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3015"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3029"/>
         <source>Delete</source>
         <translation type="unfinished">Выдаліць</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2991"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3005"/>
         <source>Language :</source>
         <translation type="unfinished">Мова:</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2927"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2941"/>
         <source>Select language to be configured.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2978"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2992"/>
         <source>Filename Pattern</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2983"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2997"/>
         <source>Lexer Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2998"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3012"/>
         <source>Filename Pattern :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3005"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3019"/>
         <source>Add/Change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3047"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3061"/>
         <source>Style Element</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3105"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3119"/>
         <source>Foreground Colour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3112"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3126"/>
         <source>Background Colour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3119"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3133"/>
         <source>Font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3126"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3140"/>
         <source>Fill to end of line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3142"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3156"/>
         <source>setFoldComments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3145"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3159"/>
         <source>Fold comments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3152"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3166"/>
         <source>setFoldCompact</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3155"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3169"/>
         <source>Fold compact</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3162"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3176"/>
         <source>setFoldQuotes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3165"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3179"/>
         <source>Fold quotes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3172"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3186"/>
         <source>setFoldDirectives</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3175"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3189"/>
         <source>Fold directives</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3182"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3196"/>
         <source>setFoldAtBegin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3185"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3199"/>
         <source>Fold at begin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3192"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3206"/>
         <source>setFoldAtParenthesis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3195"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3209"/>
         <source>Fold at parenthesis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3202"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3216"/>
         <source>setFoldAtElse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3205"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3219"/>
         <source>Fold at else</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3212"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3226"/>
         <source>setFoldPreprocessor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3215"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3229"/>
         <source>Fold preprocessor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3222"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3236"/>
         <source>setStylePreprocessor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3225"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3239"/>
         <source>Style preprocessor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3232"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3246"/>
         <source>Indent opening brace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3239"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3253"/>
         <source>Indent closing brace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3246"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3260"/>
         <source>setCaseSensitiveTags</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3249"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3263"/>
         <source>Case sensitive tags</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3256"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3270"/>
         <source>setBackslashEscapes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3259"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3273"/>
         <source>Backslash escapes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3266"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3280"/>
         <source>Indentation warning :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3273"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3287"/>
         <source>setIndentationWarning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3310"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3324"/>
         <source>All Foreground Colours</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3317"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3331"/>
         <source>All Background Colours</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3324"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3338"/>
         <source>All Fonts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3349"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3363"/>
         <source>Reset Current Lexer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3371"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3385"/>
         <source>Lexer Language :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3397"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3411"/>
         <source>Templates :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3450"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3464"/>
         <source>Template</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3468"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3482"/>
         <source>Add...</source>
         <translation type="unfinished">Дадаць...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3490"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3504"/>
         <source>Code :</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2978,7 +2983,7 @@
     <message>
         <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="149"/>
         <source>Templates</source>
-        <translation type="unfinished">Шаблон</translation>
+        <translation type="obsolete">Шаблон</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="198"/>
@@ -2993,6 +2998,21 @@
     <message>
         <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="561"/>
         <source>Templates Paths</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="149"/>
+        <source>Paths</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="568"/>
+        <source>Translations Paths</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="575"/>
+        <source>Plugins Paths</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3462,22 +3482,22 @@ Aborting.</source>
         <translation>Мэнэджэр кансолі</translation>
     </message>
     <message>
-        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="41"/>
+        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="43"/>
         <source>Stop the currently running command</source>
         <translation>Перапыніць бягучую каманду</translation>
     </message>
     <message>
-        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="222"/>
+        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="224"/>
         <source>User Raw Command</source>
         <translation>Кансольная каманда</translation>
     </message>
     <message>
-        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="235"/>
+        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="237"/>
         <source>sendRawData...</source>
         <translation>Даслаць дадзеныя...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="235"/>
+        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="237"/>
         <source>Can&apos;t send raw data to console</source>
         <translation>Немагчыма даслаць дадзеныя ў кансоль</translation>
     </message>
@@ -4320,6 +4340,11 @@ Aborting.</source>
         <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="263"/>
         <source>Duplicate selection</source>
         <translation type="unfinished">Дубліраваць выдзялены тэкст</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="279"/>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
