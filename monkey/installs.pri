@@ -1,18 +1,6 @@
 # Monkey Studio Install Project File
-
-# update & release translations
-update_ts {
-	unix:!mac {
-		system( lupdate-qt4 monkey.pro )
-		system( lrelease-qt4 monkey.pro )
-	} else {
-		system( lupdate monkey.pro )
-		system( lrelease monkey.pro )
-	}
-}
 	
-# install script
-
+# prefix and prefixdatas
 isEmpty( $$PREFIX ):PREFIX	= /usr/local
 mac:PREFIX	= $${DESTDIR}/$${TARGET}.app/Contents
 isEmpty( $$PREFIX_DATAS ):PREFIX_DATAS	= $${PREFIX}/lib/$${TARGET}
@@ -30,6 +18,8 @@ apis.files	= ../ctags/apis
 translations.path	= $$PREFIX_DATAS/translations
 translations.files	= ../translations/*.qm
 
+INSTALLS	+= apis templates translations
+
 unix:!mac {
 	# plugins
 	plugins.path	= $$PREFIX_DATAS
@@ -37,6 +27,6 @@ unix:!mac {
 	
 	# binary
 	target.path	= $${PREFIX}/bin
+	
+	INSTALLS	+= plugins target
 }
-
-INSTALLS	+= apis templates translations plugins target

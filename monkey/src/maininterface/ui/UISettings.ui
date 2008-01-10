@@ -146,7 +146,7 @@
      </item>
      <item>
       <property name="text" >
-       <string>Templates</string>
+       <string>Paths</string>
       </property>
      </item>
      <item>
@@ -538,7 +538,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="pFileHeaders" >
+     <widget class="QWidget" name="pPaths" >
       <layout class="QVBoxLayout" >
        <property name="spacing" >
         <number>3</number>
@@ -559,6 +559,20 @@
         <widget class="pPathListEditor" name="pleTemplatesPaths" >
          <property name="title" >
           <string>Templates Paths</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="pPathListEditor" name="pleTranslationsPaths" >
+         <property name="title" >
+          <string>Translations Paths</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="pPathListEditor" name="plePluginsPaths" >
+         <property name="title" >
+          <string>Plugins Paths</string>
          </property>
         </widget>
        </item>

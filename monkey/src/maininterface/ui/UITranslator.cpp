@@ -12,7 +12,7 @@ UITranslator::UITranslator( QWidget* p )
 {
 	setupUi( this );
 	setAttribute( Qt::WA_DeleteOnClose );
-	mTranslationsPath = MonkeyCore::settings()->value( "Translations/Path", QLibraryInfo::location( QLibraryInfo::TranslationsPath ) ).toString();
+	mTranslationsPath = MonkeyCore::settings()->value( "Translations/Path" ).toStringList();
 	on_tbReload_clicked();
 }
 
@@ -32,10 +32,11 @@ void UITranslator::accept()
 
 void UITranslator::on_tbLocate_clicked()
 {
-	QString s = QFileDialog::getExistingDirectory( this, tr( "Choose the location of your translations" ), mTranslationsPath );
+	QString s = QFileDialog::getExistingDirectory( this, tr( "Choose the location of your translations" ), mTranslationsPath.value( 0 ) );
 	if ( !s.isEmpty() )
 	{
-		mTranslationsPath = s;
+		if ( !mTranslationsPath.contains( s ) )
+			mTranslationsPath << s;
 		on_tbReload_clicked();
 	}
 }
@@ -43,13 +44,23 @@ void UITranslator::on_tbLocate_clicked()
 void UITranslator::on_tbReload_clicked()
 {
 	lwTranslations->clear();
-	QDir d( mTranslationsPath );
-	if ( !d.exists() )
-		return;
-	QStringList l = d.entryList( QStringList() << "monkey_*.qm", QDir::Files | QDir::Readable );
 	lwTranslations->addItem( "english" );
-	foreach ( QString s, l )
-		lwTranslations->addItem( s.remove( "monkey_" ).remove( ".qm" ) );
+	QDir d;
+	QStringList l;
+	foreach ( QString s, mTranslationsPath )
+	{
+		d.setPath( s );
+		if ( !d.exists() )
+			continue;
+		foreach ( QString s, d.entryList( QStringList() << "monkey_*.qm", QDir::Files | QDir::Readable ) )
+		{
+			if ( !l.contains( s ) )
+			{
+				l << s;
+				lwTranslations->addItem( s.remove( "monkey_" ).remove( ".qm" ) );
+			}
+		}
+	}
 	QList<QListWidgetItem*> li = lwTranslations->findItems( QLocale::languageToString( QLocale::system().language() ), Qt::MatchFixedString );
 	if ( li.count() )
 		lwTranslations->setCurrentItem( li.at( 0 ) );

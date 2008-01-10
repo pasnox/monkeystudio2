@@ -210,8 +210,10 @@ void UISettings::loadSettings()
 	cbRestoreSession->setChecked( restoreSessionOnStartup() );
 	gbOperators->setValues( availableOperators() );
 
-	// Templates
+	// Paths
 	pleTemplatesPaths->setValues( pTemplatesManager::instance()->templatesPath() );
+	pleTranslationsPaths->setValues( s->value( "Translations/Path" ).toStringList() );
+	plePluginsPaths->setValues( s->value( "Plugins/Path" ).toStringList() );
 
 	// Editor
 	//  General
@@ -371,8 +373,10 @@ void UISettings::saveSettings()
 	setRestoreSessionOnStartup( cbRestoreSession->isChecked() );
 	setAvailableOperators( gbOperators->values() );
 
-	// Templates
+	// Paths
 	pTemplatesManager::instance()->setTemplatesPath( pleTemplatesPaths->values() );
+	s->setValue( "Translations/Path", pleTranslationsPaths->values() );
+	s->setValue( "Plugins/Path", plePluginsPaths->values() );
 
 	// Editor
 	//  General

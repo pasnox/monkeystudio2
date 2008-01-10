@@ -25,32 +25,11 @@ void PluginsManager::loadsPlugins()
 	foreach ( QObject* o, QPluginLoader::staticInstances() )
 		if ( !addPlugin( o ) )
 			qWarning( qPrintable( tr( "Failed to load static plugin" ) ) );
-		
-	/*
-	// add monkey studio plugins path
-	QDir d( qApp->applicationDirPath() );
-#ifdef Q_OS_WIN
-	// move up if in debug/release folder
-	if ( d.dirName().toLower() == "debug" || d.dirName().toLower() == "release" )
-		d.cdUp();
-#elif defined Q_OS_MAC
-	// if bundle move up one time
-	if ( d.dirName() == "MacOS" )
-		d.cdUp();
-#elif defined Q_OS_UNIX
-	d.setPath( "/usr/lib/monkeystudio" );
-#endif
-	d.cd( "plugins" );
-	
-	// plugins paths
-	QStringList l = QStringList() << d.path() << qApp->applicationDirPath().append( "/plugins" );
-	*/
-	
 	// load dynamic plugins
 	QDir d;
 	foreach ( const QString s, MonkeyCore::settings()->value( "Plugins/Path" ).toStringList() )
 	{
-		d.setPath( s );
+		d.setPath( QDir::isRelativePath( s ) ? qApp->applicationDirPath().append( "/%1" ).arg( s ) : s );
 		// load all plugins
 		foreach ( QFileInfo f, pMonkeyStudio::getFiles( d ) )
 		{
