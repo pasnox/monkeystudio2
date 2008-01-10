@@ -26,6 +26,7 @@ void PluginsManager::loadsPlugins()
 		if ( !addPlugin( o ) )
 			qWarning( qPrintable( tr( "Failed to load static plugin" ) ) );
 		
+	/*
 	// add monkey studio plugins path
 	QDir d( qApp->applicationDirPath() );
 #ifdef Q_OS_WIN
@@ -43,9 +44,11 @@ void PluginsManager::loadsPlugins()
 	
 	// plugins paths
 	QStringList l = QStringList() << d.path() << qApp->applicationDirPath().append( "/plugins" );
+	*/
 	
 	// load dynamic plugins
-	foreach ( const QString s, l )
+	QDir d;
+	foreach ( const QString s, MonkeyCore::settings()->value( "Plugins/Path" ).toStringList() )
 	{
 		d.setPath( s );
 		// load all plugins
