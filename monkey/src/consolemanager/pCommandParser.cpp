@@ -67,7 +67,6 @@ QString pCommandParser::replaceWithMatch(QRegExp& rex, QString s)
     int i = 0;
     while ( (i = s.indexOf("%", pos)) != -1)
 	{
-		qWarning () << i;
 		pos = i;
 		if ( ! s[i+1].isDigit () )
 			continue;
