@@ -12,8 +12,9 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ****************************************************************************/
-
+#ifndef Q_OS_WIN
 #include <cstdlib> //For function 'unsetenv'
+#endif
 #include <QTimer>
 
 #include "pConsoleManager.h"
@@ -35,7 +36,7 @@ pConsoleManager::pConsoleManager( QObject* o )
 	mStopAction = new pAction( "aStopAction", QIcon( ":/console/icons/console/stop.png" ), tr( "Stop current command" ), QString ("Alt+End"), tr( "Console Manager" ) ) ; // Mac has no pause key
 #endif
 
-#ifdef Q_CC_GNU
+#ifndef Q_OS_WIN
 	unsetenv( "LANG" ); //For compilers and others not print local messages
 #endif
 	
