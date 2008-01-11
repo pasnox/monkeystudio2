@@ -3,7 +3,7 @@
 # prefix and prefixdatas
 isEmpty( $$PREFIX ):PREFIX	= /usr/local
 mac:PREFIX	= $${DESTDIR}/$${TARGET}.app/Contents
-isEmpty( $$PREFIX_DATAS ):PREFIX_DATAS	= $${PREFIX}/lib/$${TARGET}
+isEmpty( $$PREFIX_DATAS ):PREFIX_DATAS	= $${PREFIX}/$${TARGET}
 mac:PREFIX_DATAS	= $$PREFIX
 
 # templates
