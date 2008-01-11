@@ -16,6 +16,7 @@
 #include "pFileManager.h"
 #include "ProjectItem.h"
 #include "MonkeyCore.h"
+#include "pAbstractChild.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -305,8 +306,22 @@ void pDockMessageBox::lwBuildSteps_itemPressed( QListWidgetItem* it )
 	// cancel if no file
 	if ( s.isEmpty() )
 		return;
+
+	QStringList l;
+
+	//search in the opened files
+	foreach ( pAbstractChild* c, MonkeyCore::workspace()->children() )
+	{
+		foreach ( QString f, c->files() )
+		{
+			if ( f.endsWith(s) )
+			{
+				l << f;
+			}
+		}
+	}
 	
-	// get current project
+	// search in the current project
 	if ( ProjectItem* pi = MonkeyCore::fileManager()->currentProject() )
 	{
 		// get top project of current project
@@ -314,25 +329,29 @@ void pDockMessageBox::lwBuildSteps_itemPressed( QListWidgetItem* it )
 			pi = ppi;
 		
 		// search file
-		QStringList l;
+
 		foreach ( ProjectItem* it, pi->childrenProjects() << pi )
 			if ( QFile::exists( it->canonicalFilePath( s ) ) )
-				l << it->canonicalFilePath( s );
-		
-		// cancel if no file
-		if ( l.isEmpty() )
-			return;
-		
-		// ask user to select file
-		bool b = true;
-		s = l.value( 0 );
-		if ( l.count() > 1 )
-			s = QInputDialog::getItem( window(), tr( "Choose a file..." ), tr( "Choose the file to open" ), l, 0, false, &b, Qt::Sheet );
-		
-		// open file if ok
-		if ( b && !s.isEmpty() )
-			MonkeyCore::fileManager()->goToLine( s, it->data( Qt::UserRole +3 ).toPoint(), true );
+			{
+				QString path = it->canonicalFilePath( s );
+				if (! l.contains(path))
+					l << path;
+			}
 	}
+	
+	// cancel if no file
+	if ( l.isEmpty() )
+		return;
+	
+	// ask user to select file
+	bool b = true;
+	s = l.value( 0 );
+	if ( l.count() > 1 )
+		s = QInputDialog::getItem( window(), tr( "Choose a file..." ), tr( "Choose the file to open" ), l, 0, false, &b, Qt::Sheet );
+	
+	// open file if ok
+	if ( b && !s.isEmpty() )
+		MonkeyCore::fileManager()->goToLine( s, it->data( Qt::UserRole +3 ).toPoint(), true );
 }
 
 void pDockMessageBox::leRawCommand_returnPressed()
