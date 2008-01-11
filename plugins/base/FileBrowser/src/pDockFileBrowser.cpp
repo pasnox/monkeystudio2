@@ -17,6 +17,7 @@
 #include "pMonkeyStudio.h"
 #include "pTreeComboBox.h"
 #include "pSettings.h"
+#include "MonkeyCore.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -187,7 +188,7 @@ void pDockFileBrowser::tv_doubleClicked( const QModelIndex& i )
 	QModelIndex index = mFilteredModel->mapToSource( i );
 	// open file
 	if ( !mDirsModel->isDir( index ) )
-		pFileManager::instance()->openFile( mDirsModel->filePath( index ) );
+		MonkeyCore::fileManager()->openFile( mDirsModel->filePath( index ) );
 }
 
 void pDockFileBrowser::cb_currentChanged( const QModelIndex& i )

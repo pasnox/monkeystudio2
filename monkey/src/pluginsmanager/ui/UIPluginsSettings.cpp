@@ -1,15 +1,13 @@
 #include "UIPluginsSettings.h"
-#include "PluginsManager.h"
 #include "pSettings.h"
+#include "MonkeyCore.h"
+#include "PluginsManager.h"
 
 #include <QMetaEnum>
 
 UIPluginsSettings::UIPluginsSettings( QWidget* p )
-	: QDialog( p ), mPluginsManager( PluginsManager::instance() )
+	: QDialog( p ), mPluginsManager( MonkeyCore::pluginsManager() )
 {
-	// if no plugins manager break app
-	Q_ASSERT( mPluginsManager != 0 );
-	
 	// setup dialog
 	setupUi( this );
 	setAttribute( Qt::WA_DeleteOnClose );
@@ -55,7 +53,7 @@ void UIPluginsSettings::updateList()
 		it->setData( Qt::UserRole, i ); // plugin index
 		it->setData( Qt::UserRole +1, swWidgets->addWidget( bp->settingsWidget() ) ); // settings widget index
 		it->setData( Qt::UserRole +2, bp->infos().Type ); // plugin type
-		it->setData( Qt::UserRole +3, pSettings::instance()->value( QString( "Plugins/%1" ).arg( bp->infos().Name ), true ).toBool() ); // plugin auto install
+		it->setData( Qt::UserRole +3, MonkeyCore::settings()->value( QString( "Plugins/%1" ).arg( bp->infos().Name ), true ).toBool() ); // plugin auto install
 	}
 }
 
@@ -144,7 +142,7 @@ void UIPluginsSettings::accept()
 	for ( int i = 0; i < lwNames->count(); i++ )
 	{
 		QListWidgetItem* it = lwNames->item( i );
-		pSettings::instance()->setValue( QString( "Plugins/%1" ).arg( it->text() ), it->data( Qt::UserRole +3 ).toBool() );
+		MonkeyCore::settings()->setValue( QString( "Plugins/%1" ).arg( it->text() ), it->data( Qt::UserRole +3 ).toBool() );
 	}
 	
 	// close dialog

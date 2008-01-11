@@ -2,7 +2,6 @@
 #define PLUGINSMANAGER_H
 
 #include "MonkeyExport.h"
-#include "QSingleton.h"
 #include "BasePlugin.h"
 #include "ChildPlugin.h"
 #include "ProjectPlugin.h"
@@ -11,20 +10,18 @@
 #include "DebuggerPlugin.h"
 #include "InterpreterPlugin.h"
 
-#include <QApplication>
-
 class ProjectItem;
 class pAbstractChild;
 
-class Q_MONKEY_EXPORT PluginsManager : public QObject, public QSingleton<PluginsManager>
+class Q_MONKEY_EXPORT PluginsManager : public QObject
 {
 	Q_OBJECT
-	friend class QSingleton<PluginsManager>;
+	friend class MonkeyCore;
 	
 public:
 	enum StateType { stAll = -1, stDisabled, stEnabled };
 
-	void loadsPlugins( const QString& = QString() );
+	void loadsPlugins();
 	
 	QList<BasePlugin*> plugins() const;
 	template <class T>
@@ -68,19 +65,19 @@ public:
 	void setCurrentInterpreter( InterpreterPlugin* );
 	InterpreterPlugin* currentInterpreter();
 	
-private:
+protected:
 	QList<BasePlugin*> mPlugins;
 	BuilderPlugin* mBuilder;
 	CompilerPlugin* mCompiler;
 	DebuggerPlugin* mDebugger;
 	InterpreterPlugin* mInterpreter;
-	PluginsManager( QObject* = QApplication::instance() );
+
+	PluginsManager( QObject* = 0 );
 	bool addPlugin( QObject* );
 	void enableUserPlugins();
 	
 public slots:
 	void manageRequested();
-
 };
 
 #endif // PLUGINSMANAGER_H

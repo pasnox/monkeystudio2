@@ -28,8 +28,7 @@ int pDesktopApplications::count( pDesktopFolder* f )
 	// recursive count
 	int i = 0;
 	// Applications
-	foreach ( pDesktopApplication* a, f->Applications )
-		i++;
+	i = f->Applications.count();
 	// Folders
 	foreach ( pDesktopFolder* d, f->Folders )
 		i += count( d );

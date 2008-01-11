@@ -15,6 +15,7 @@
 #include "pAbbreviationsManager.h"
 #include "pSettings.h"
 #include "pEditor.h"
+#include "MonkeyCore.h"
 
 #include "qscilexer.h"
 
@@ -37,7 +38,7 @@ const QList<pAbbreviation> pAbbreviationsManager::defaultAbbreviations()
 const QList<pAbbreviation> pAbbreviationsManager::availableAbbreviations()
 {
 	// get settings
-	pSettings* s = pSettings::instance();
+	pSettings* s = MonkeyCore::settings();
 	// values list
 	QList<pAbbreviation> mAbbreviations;
 	// read abbreviations from settings

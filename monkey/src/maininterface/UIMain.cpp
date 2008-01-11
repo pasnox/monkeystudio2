@@ -7,66 +7,78 @@
  * COMMENTARY   : 
  ********************************************************************************************************/
 #include "UIMain.h"
-#include "pFileManager.h"
-#include "pWorkspace.h"
+#include "MonkeyCore.h"
+#include "pMonkeyStudio.h"
+#include "UIProjectsManager.h"
+#include "pDockToolBar.h"
 #include "pMenuBar.h"
 #include "pRecentsManager.h"
-#include "pActionManager.h"
 #include "pToolsManager.h"
 #include "pSettings.h"
-#include "pDockToolBar.h"
-#include "pSearch.h"
-#include "pMonkeyStudio.h"
-#include "PluginsManager.h"
-#include "UIProjectsManager.h"
-#include "ProjectsProxy.h"
 #include "pConsoleManager.h"
+#include "pRecentsManager.h"
+#include "pFileManager.h"
+#include "pActionManager.h"
+#include "ProjectsProxy.h"
+#include "PluginsManager.h"
+#include "pSearch.h"
 
-#include <QActionGroup>
-#include <QStyleFactory>
-#include <QStatusBar>
 #include <QCloseEvent>
+#include <QMenu>
+#include <QStyleFactory>
 
 UIMain::UIMain( QWidget* p )
 	: pMainWindow( p )
-{	
-	// create menubar
-	initMenuBar();
+{}
 
+void UIMain::initGui()
+{
+	// init menubar
+	initMenuBar();
+	// init recents manager
+	MonkeyCore::recentsManager();
+	// init tools manager
+	MonkeyCore::toolsManager();
 	// init toolbar
 	initToolBar();
-
-	// init gui
-	initGui();
-
-	// init connections
+	// init projects manager
+	dockToolBar( Qt::LeftToolBarArea )->addDock( MonkeyCore::projectsManager(), MonkeyCore::projectsManager()->windowTitle(), QIcon( ":/project/icons/project/project.png" ) );
+	// init workspace
+	setCentralWidget( MonkeyCore::workspace() );
+	// init search dock
+	addDockWidget( Qt::RightDockWidgetArea, MonkeyCore::searchDock() );
+	MonkeyCore::searchDock()->setVisible( false );
+	MonkeyCore::searchDock()->setFloating( true );
+	// init staus bar
+	setStatusBar( MonkeyCore::statusBar() );
+	// init connection
 	initConnections();
+	// init final gui
+	setWindowTitle( QObject::tr( "%1 v%2 - %3 & The Monkey Studio Team" ).arg( PROGRAM_NAME, PROGRAM_VERSION, PROGRAM_COPYRIGHTS ) );
+	setUnifiedTitleAndToolBarOnMac( true );
+	setWindowIcon( menuBar()->action( "mHelp/aAbout" )->icon() );
+	setIconSize( QSize( 16, 16 ) );
 }
 
 void UIMain::closeEvent( QCloseEvent* e )
 {
 	// save session if needed
 	if ( pMonkeyStudio::saveSessionOnClose() )
-		workspace()->fileSessionSave_triggered();
-	
-	if ( !workspace()->closeAllDocuments() )
+		MonkeyCore::workspace()->fileSessionSave_triggered();
+	// request close all documents
+	if ( !MonkeyCore::workspace()->closeAllDocuments() )
 	{
 		e->ignore();
 		return;
 	}
-	
 	// force to close all projects
-	projectsManager()->projectCloseAll_triggered();
-
-	// force to close all documents
-	workspace()->fileCloseAll_triggered();
+	MonkeyCore::projectsManager()->projectCloseAll_triggered();
 }
 
 QMenu* UIMain::createPopupMenu()
 {
 	// create default menu
 	QMenu* m = QMainWindow::createPopupMenu();
-	
 	// add exclusive action of pDockToolBar
 	QList<pDockToolBar*> l;
 	if ( ( l = findChildren<pDockToolBar*>() ).count() )
@@ -75,25 +87,9 @@ QMenu* UIMain::createPopupMenu()
 		foreach ( pDockToolBar* tb, l )
 			m->addAction( tb->toggleExclusiveAction() );
 	}
-	
 	// return menu
 	return m;
 }
-
-PluginsManager* UIMain::pluginsManager()
-{ return PluginsManager::instance( this ); }
-
-pFileManager* UIMain::fileManager()
-{ return pFileManager::instance( this ); }
-
-pWorkspace* UIMain::workspace()
-{ return pWorkspace::instance( this ); }
-
-UIProjectsManager* UIMain::projectsManager()
-{ return UIProjectsManager::instance( this ); }
-
-pConsoleManager* UIMain::consoleManager()
-{ return pConsoleManager::instance( this ); }
 
 void UIMain::initMenuBar()
 {
@@ -112,10 +108,10 @@ void UIMain::initMenuBar()
 		mb->action( "mSession/aRestore", tr( "Restore" ), QIcon( ":/file/icons/file/restore.png" ), QString::null, tr( "Restore the current session files list" ) );
 		mb->action( "aSeparator2" );
 		mb->menu( "mSave", tr( "&Save" ), QIcon( ":/file/icons/file/save.png" ) );
-		mb->action( "mSave/aCurrent", tr( "Save &Current" ), QIcon( ":/file/icons/file/save.png" ), tr( "Ctrl+S" ), tr( "Save the current file" ) )->setEnabled( false );
+		mb->action( "mSave/aCurrent", tr( "&Save" ), QIcon( ":/file/icons/file/save.png" ), tr( "Ctrl+S" ), tr( "Save the current file" ) )->setEnabled( false );
 		mb->action( "mSave/aAll", tr( "Save &All" ), QIcon( ":/file/icons/file/saveall.png" ), QString::null, tr( "Save all files" ) )->setEnabled( false );
 		mb->menu( "mClose", tr( "&Close" ), QIcon( ":/file/icons/file/close.png" ) );
-		mb->action( "mClose/aCurrent", tr( "Close &Current" ), QIcon( ":/file/icons/file/close.png" ), tr( "Ctrl+W" ), tr( "Close the current file" ) )->setEnabled( false );
+		mb->action( "mClose/aCurrent", tr( "&Close" ), QIcon( ":/file/icons/file/close.png" ), tr( "Ctrl+W" ), tr( "Close the current file" ) )->setEnabled( false );
 		mb->action( "mClose/aAll", tr( "Close &All" ), QIcon( ":/file/icons/file/closeall.png" ), QString::null, tr( "Close all files" ) )->setEnabled( false );
 		mb->action( "aSeparator3" );
 		mb->action( "aSaveAsBackup", tr( "Save As &Backup" ), QIcon( ":/file/icons/file/backup.png" ), tr( "Ctrl+B" ), tr( "Save a backup of the current file" ) )->setEnabled( false );
@@ -160,10 +156,10 @@ void UIMain::initMenuBar()
 		mb->action( "aNew", tr( "&New" ), QIcon( ":/project/icons/project/new.png" ), tr( "Ctrl+Shift+N" ), tr( "New project..." ) );
 		mb->action( "aOpen", tr( "&Open" ), QIcon( ":/project/icons/project/open.png" ), tr( "Ctrl+Shift+O" ), tr( "Open a project..." ) );
 		mb->menu( "mSave", tr( "&Save" ), QIcon( ":/project/icons/project/save.png" ) );
-		mb->action( "mSave/aCurrent", tr( "Save &Current" ), QIcon( ":/project/icons/project/save.png" ), QString::null, tr( "Save the current project" ) )->setEnabled( false );
+		mb->action( "mSave/aCurrent", tr( "&Save" ), QIcon( ":/project/icons/project/save.png" ), QString::null, tr( "Save the current project" ) )->setEnabled( false );
 		mb->action( "mSave/aAll", tr( "Save &All" ), QIcon( ":/project/icons/project/saveall.png" ), QString::null, tr( "Save all projects" ) )->setEnabled( false );
 		mb->menu( "mClose", tr( "&Close" ), QIcon( ":/project/icons/project/close.png" ) );
-		mb->action( "mClose/aCurrent", tr( "Close &Current" ), QIcon( ":/project/icons/project/close.png" ), QString::null, tr( "Close the current project" ) )->setEnabled( false );
+		mb->action( "mClose/aCurrent", tr( "&Close" ), QIcon( ":/project/icons/project/close.png" ), QString::null, tr( "Close the current project" ) )->setEnabled( false );
 		mb->action( "mClose/aAll", tr( "Close &All" ), QIcon( ":/project/icons/project/closeall.png" ), QString::null, tr( "Close all projects" ) )->setEnabled( false );
 		mb->action( "aSeparator2" );
 		mb->action( "aSettings", tr( "Set&tings..." ), QIcon( ":/project/icons/project/settings.png" ), QString::null, tr( "Project settings" ) )->setEnabled( false );
@@ -221,20 +217,16 @@ void UIMain::initMenuBar()
 #endif
 	mb->endGroup();
 	// create action for styles
-	agStyles = new QActionGroup( menuBar()->menu( "mView/mStyle" ) );
+	agStyles = new QActionGroup( mb->menu( "mView/mStyle" ) );
 	foreach ( QString s, QStyleFactory::keys() )
 	{
 		QAction* a = agStyles->addAction( s );
 		a->setCheckable( true );
-		if ( settings()->value( "MainWindow/Style" ).toString() == s )
+		if ( MonkeyCore::settings()->value( "MainWindow/Style" ).toString() == s )
 			a->setChecked( true );
 	}
 	// add styles action to menu
-	menuBar()->menu( "mView/mStyle" )->addActions( agStyles->actions() );
-	// init recents manager
-	pRecentsManager::instance( this );
-	// init tools manager
-	pToolsManager::instance( this );
+	mb->menu( "mView/mStyle" )->addActions( agStyles->actions() );
 }
 
 void UIMain::initToolBar()
@@ -272,96 +264,76 @@ void UIMain::initToolBar()
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mHelp/aAbout" ) );
 	dockToolBar( Qt::TopToolBarArea )->addAction();
 	// console action
-	dockToolBar( Qt::TopToolBarArea )->addAction( consoleManager()->stopAction() );
+	dockToolBar( Qt::TopToolBarArea )->addAction( MonkeyCore::consoleManager()->stopAction() );
 }
 
 void UIMain::initConnections()
 {
 	// file connection
-	connect( menuBar()->action( "mFile/aNew" ), SIGNAL( triggered() ), workspace(), SLOT( fileNew_triggered() ) );
-	connect( menuBar()->action( "mFile/aOpen" ), SIGNAL( triggered() ), workspace(), SLOT( fileOpen_triggered() ) );
-	connect( pRecentsManager::instance(), SIGNAL( openFileRequested( const QString& ) ), fileManager(), SLOT( openFile( const QString& ) ) );
-	connect( menuBar()->action( "mFile/mSession/aSave" ), SIGNAL( triggered() ), workspace(), SLOT( fileSessionSave_triggered() ) );
-	connect( menuBar()->action( "mFile/mSession/aRestore" ), SIGNAL( triggered() ), workspace(), SLOT( fileSessionRestore_triggered() ) );
-	connect( menuBar()->action( "mFile/mSave/aCurrent" ), SIGNAL( triggered() ), workspace(), SLOT( fileSaveCurrent_triggered() ) );
-	connect( menuBar()->action( "mFile/mSave/aAll" ), SIGNAL( triggered() ), workspace(), SLOT( fileSaveAll_triggered() ) );
-	connect( menuBar()->action( "mFile/mClose/aCurrent" ), SIGNAL( triggered() ), workspace(), SLOT( fileCloseCurrent_triggered() ) );
-	connect( menuBar()->action( "mFile/mClose/aAll" ), SIGNAL( triggered() ), workspace(), SLOT( fileCloseAll_triggered() ) );
-	connect( menuBar()->action( "mFile/aSaveAsBackup" ), SIGNAL( triggered() ), workspace(), SLOT( fileSaveAsBackup_triggered() ) );
-	connect( menuBar()->action( "mFile/aQuickPrint" ), SIGNAL( triggered() ), workspace(), SLOT( fileQuickPrint_triggered() ) );
-	connect( menuBar()->action( "mFile/aPrint" ), SIGNAL( triggered() ), workspace(), SLOT( filePrint_triggered() ) );
-	connect( menuBar()->action( "mFile/aQuit" ), SIGNAL( triggered() ), workspace(), SLOT( fileExit_triggered() ) );
+	connect( menuBar()->action( "mFile/aNew" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileNew_triggered() ) );
+	connect( menuBar()->action( "mFile/aOpen" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileOpen_triggered() ) );
+	connect( MonkeyCore::recentsManager(), SIGNAL( openFileRequested( const QString& ) ), MonkeyCore::fileManager(), SLOT( openFile( const QString& ) ) );
+	connect( menuBar()->action( "mFile/mSession/aSave" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileSessionSave_triggered() ) );
+	connect( menuBar()->action( "mFile/mSession/aRestore" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileSessionRestore_triggered() ) );
+	connect( menuBar()->action( "mFile/mSave/aCurrent" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileSaveCurrent_triggered() ) );
+	connect( menuBar()->action( "mFile/mSave/aAll" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileSaveAll_triggered() ) );
+	connect( menuBar()->action( "mFile/mClose/aCurrent" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileCloseCurrent_triggered() ) );
+	connect( menuBar()->action( "mFile/mClose/aAll" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileCloseAll_triggered() ) );
+	connect( menuBar()->action( "mFile/aSaveAsBackup" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileSaveAsBackup_triggered() ) );
+	connect( menuBar()->action( "mFile/aQuickPrint" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileQuickPrint_triggered() ) );
+	connect( menuBar()->action( "mFile/aPrint" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( filePrint_triggered() ) );
+	connect( menuBar()->action( "mFile/aQuit" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileExit_triggered() ) );
 	// edit connection
-	connect( menuBar()->action( "mEdit/aSettings" ), SIGNAL( triggered() ), workspace(), SLOT( editSettings_triggered() ) );
-	connect( menuBar()->action( "mEdit/aShortcutsEditor" ), SIGNAL( triggered() ), pActionManager::instance(), SLOT( showSettings() ) );
-	connect( menuBar()->action( "mEdit/aTranslations" ), SIGNAL( triggered() ), workspace(), SLOT( editTranslations_triggered() ) );
-	connect( menuBar()->action( "mEdit/aUndo" ), SIGNAL( triggered() ), workspace(), SLOT( editUndo_triggered() ) );
-	connect( menuBar()->action( "mEdit/aRedo" ), SIGNAL( triggered() ), workspace(), SLOT( editRedo_triggered() ) );
-	connect( menuBar()->action( "mEdit/aCut" ), SIGNAL( triggered() ), workspace(), SLOT( editCut_triggered() ) );
-	connect( menuBar()->action( "mEdit/aCopy" ), SIGNAL( triggered() ), workspace(), SLOT( editCopy_triggered() ) );
-	connect( menuBar()->action( "mEdit/aPaste" ), SIGNAL( triggered() ), workspace(), SLOT( editPaste_triggered() ) );
-	connect( menuBar()->action( "mEdit/aSearchReplace" ), SIGNAL( triggered() ), workspace(), SLOT( editSearchReplace_triggered() ) );
-	connect( menuBar()->action( "mEdit/aSearchPrevious" ), SIGNAL( triggered() ), workspace(), SLOT( editSearchPrevious_triggered() ) );
-	connect( menuBar()->action( "mEdit/aSearchNext" ), SIGNAL( triggered() ), workspace(), SLOT( editSearchNext_triggered() ) );
-	connect( menuBar()->action( "mEdit/aGoTo" ), SIGNAL( triggered() ), workspace(), SLOT( editGoTo_triggered() ) );
-	connect( menuBar()->action( "mEdit/aExpandAbbreviation" ), SIGNAL( triggered() ), workspace(), SLOT( editExpandAbbreviation_triggered() ) );
-	connect( menuBar()->action( "mEdit/aPrepareAPIs" ), SIGNAL( triggered() ), workspace(), SLOT( editPrepareAPIs_triggered() ) );
+	connect( menuBar()->action( "mEdit/aSettings" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editSettings_triggered() ) );
+	connect( menuBar()->action( "mEdit/aShortcutsEditor" ), SIGNAL( triggered() ), MonkeyCore::actionManager(), SLOT( showSettings() ) );
+	connect( menuBar()->action( "mEdit/aTranslations" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editTranslations_triggered() ) );
+	connect( menuBar()->action( "mEdit/aUndo" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editUndo_triggered() ) );
+	connect( menuBar()->action( "mEdit/aRedo" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editRedo_triggered() ) );
+	connect( menuBar()->action( "mEdit/aCut" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editCut_triggered() ) );
+	connect( menuBar()->action( "mEdit/aCopy" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editCopy_triggered() ) );
+	connect( menuBar()->action( "mEdit/aPaste" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editPaste_triggered() ) );
+	connect( menuBar()->action( "mEdit/aSearchReplace" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editSearchReplace_triggered() ) );
+	connect( menuBar()->action( "mEdit/aSearchPrevious" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editSearchPrevious_triggered() ) );
+	connect( menuBar()->action( "mEdit/aSearchNext" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editSearchNext_triggered() ) );
+	connect( menuBar()->action( "mEdit/aGoTo" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editGoTo_triggered() ) );
+	connect( menuBar()->action( "mEdit/aExpandAbbreviation" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editExpandAbbreviation_triggered() ) );
+	connect( menuBar()->action( "mEdit/aPrepareAPIs" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editPrepareAPIs_triggered() ) );
 	// view connection
-	connect( agStyles, SIGNAL( triggered( QAction* ) ), workspace(), SLOT( agStyles_triggered( QAction* ) ) );
-	connect( menuBar()->action( "mView/aNext" ), SIGNAL( triggered() ), workspace(), SLOT( activateNextDocument() ) );
-	connect( menuBar()->action( "mView/aPrevious" ), SIGNAL( triggered() ), workspace(), SLOT( activatePreviousDocument() ) );
-	connect( menuBar()->action( "mView/aFiltered" ), SIGNAL( triggered( bool ) ), projectsManager()->proxy(), SLOT( setFiltering( bool ) ) );
+	connect( agStyles, SIGNAL( triggered( QAction* ) ), MonkeyCore::workspace(), SLOT( agStyles_triggered( QAction* ) ) );
+	connect( menuBar()->action( "mView/aNext" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( activateNextDocument() ) );
+	connect( menuBar()->action( "mView/aPrevious" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( activatePreviousDocument() ) );
+	connect( menuBar()->action( "mView/aFiltered" ), SIGNAL( triggered( bool ) ), MonkeyCore::projectsManager()->proxy(), SLOT( setFiltering( bool ) ) );
 	// project connection
-	connect( menuBar()->action( "mProject/aNew" ), SIGNAL( triggered() ), projectsManager(), SLOT( projectNew_triggered() ) );
-	connect( menuBar()->action( "mProject/aOpen" ), SIGNAL( triggered() ), projectsManager(), SLOT( projectOpen_triggered() ) );
-	connect( menuBar()->action( "mProject/mSave/aCurrent" ), SIGNAL( triggered() ), projectsManager(), SLOT( projectSaveCurrent_triggered() ) );
-	connect( menuBar()->action( "mProject/mSave/aAll" ), SIGNAL( triggered() ), projectsManager(), SLOT( projectSaveAll_triggered() ) );
-	connect( menuBar()->action( "mProject/mClose/aCurrent" ), SIGNAL( triggered() ), projectsManager(), SLOT( projectCloseCurrent_triggered() ) );
-	connect( menuBar()->action( "mProject/mClose/aAll" ), SIGNAL( triggered() ), projectsManager(), SLOT( projectCloseAll_triggered() ) );
-	connect( menuBar()->action( "mProject/aSettings" ), SIGNAL( triggered() ), projectsManager(), SLOT( projectSettings_triggered() ) );
-	connect( menuBar()->action( "mProject/aAddExistingFiles" ), SIGNAL( triggered() ), projectsManager(), SLOT( projectAddExistingFiles_triggered() ) );
-	connect( menuBar()->action( "mProject/aRemove" ), SIGNAL( triggered() ), projectsManager(), SLOT( projectRemove_triggered() ) );
-	connect( pRecentsManager::instance(), SIGNAL( openProjectRequested( const QString& ) ), projectsManager(), SLOT( openProject( const QString& ) ) );
+	connect( menuBar()->action( "mProject/aNew" ), SIGNAL( triggered() ), MonkeyCore::projectsManager(), SLOT( projectNew_triggered() ) );
+	connect( menuBar()->action( "mProject/aOpen" ), SIGNAL( triggered() ), MonkeyCore::projectsManager(), SLOT( projectOpen_triggered() ) );
+	connect( menuBar()->action( "mProject/mSave/aCurrent" ), SIGNAL( triggered() ), MonkeyCore::projectsManager(), SLOT( projectSaveCurrent_triggered() ) );
+	connect( menuBar()->action( "mProject/mSave/aAll" ), SIGNAL( triggered() ), MonkeyCore::projectsManager(), SLOT( projectSaveAll_triggered() ) );
+	connect( menuBar()->action( "mProject/mClose/aCurrent" ), SIGNAL( triggered() ), MonkeyCore::projectsManager(), SLOT( projectCloseCurrent_triggered() ) );
+	connect( menuBar()->action( "mProject/mClose/aAll" ), SIGNAL( triggered() ), MonkeyCore::projectsManager(), SLOT( projectCloseAll_triggered() ) );
+	connect( menuBar()->action( "mProject/aSettings" ), SIGNAL( triggered() ), MonkeyCore::projectsManager(), SLOT( projectSettings_triggered() ) );
+	connect( menuBar()->action( "mProject/aAddExistingFiles" ), SIGNAL( triggered() ), MonkeyCore::projectsManager(), SLOT( projectAddExistingFiles_triggered() ) );
+	connect( menuBar()->action( "mProject/aRemove" ), SIGNAL( triggered() ), MonkeyCore::projectsManager(), SLOT( projectRemove_triggered() ) );
+	connect( MonkeyCore::recentsManager(), SIGNAL( openProjectRequested( const QString& ) ), MonkeyCore::projectsManager(), SLOT( openProject( const QString& ) ) );
 	// builder debugger interpreter menu
 	connect( menuBar()->menu( "mBuilder" ), SIGNAL( aboutToShow() ), this, SLOT( menu_aboutToShow() ) );
 	connect( menuBar()->menu( "mDebugger" ), SIGNAL( aboutToShow() ), this, SLOT( menu_aboutToShow() ) );
 	connect( menuBar()->menu( "mInterpreter" ), SIGNAL( aboutToShow() ), this, SLOT( menu_aboutToShow() ) );
 	// plugins menu
-	connect( menuBar()->action( "mPlugins/aManage" ), SIGNAL( triggered() ), pluginsManager(), SLOT( manageRequested() ) );
+	connect( menuBar()->action( "mPlugins/aManage" ), SIGNAL( triggered() ), MonkeyCore::pluginsManager(), SLOT( manageRequested() ) );
 	// window menu
-	connect( menuBar()->action( "mWindow/aSDI" ), SIGNAL( triggered() ), workspace(), SLOT( setSDI() ) );
-	connect( menuBar()->action( "mWindow/aMDI" ), SIGNAL( triggered() ), workspace(), SLOT( setMDI() ) );
-	connect( menuBar()->action( "mWindow/aTopLevel" ), SIGNAL( triggered() ), workspace(), SLOT( setTopLevel() ) );
-	connect( menuBar()->action( "mWindow/aTile" ), SIGNAL( triggered() ), workspace(), SLOT( tile() ) );
-	connect( menuBar()->action( "mWindow/aCascase" ), SIGNAL( triggered() ), workspace(), SLOT( cascade() ) );
-	connect( menuBar()->action( "mWindow/aMinimize" ), SIGNAL( triggered() ), workspace(), SLOT( minimize() ) );
-	connect( menuBar()->action( "mWindow/aRestore" ), SIGNAL( triggered() ), workspace(), SLOT( restore() ) );
+	connect( menuBar()->action( "mWindow/aSDI" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( setSDI() ) );
+	connect( menuBar()->action( "mWindow/aMDI" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( setMDI() ) );
+	connect( menuBar()->action( "mWindow/aTopLevel" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( setTopLevel() ) );
+	connect( menuBar()->action( "mWindow/aTile" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( tile() ) );
+	connect( menuBar()->action( "mWindow/aCascase" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( cascade() ) );
+	connect( menuBar()->action( "mWindow/aMinimize" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( minimize() ) );
+	connect( menuBar()->action( "mWindow/aRestore" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( restore() ) );
 	// help menu
-	connect( menuBar()->action( "mHelp/aAbout" ), SIGNAL( triggered() ), workspace(), SLOT( helpAboutApplication_triggered() ) );
-	connect( menuBar()->action( "mHelp/aAboutQt" ), SIGNAL( triggered() ), workspace(), SLOT( helpAboutQt_triggered() ) );
+	connect( menuBar()->action( "mHelp/aAbout" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( helpAboutApplication_triggered() ) );
+	connect( menuBar()->action( "mHelp/aAboutQt" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( helpAboutQt_triggered() ) );
 #ifdef __COVERAGESCANNER__
-	connect( menuBar()->action( "mHelp/aTestReport" ), SIGNAL( triggered() ), workspace(), SLOT( helpTestReport_triggered() ) );
+	connect( menuBar()->action( "mHelp/aTestReport" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( helpTestReport_triggered() ) );
 #endif
-}
-
-void UIMain::initGui()
-{
-	// unified window and title bar
-	// setUnifiedTitleAndToolBarOnMac( true );
-	// window icon
-	setWindowIcon( menuBar()->action( "mHelp/aAbout" )->icon() );
-	// set icon size for toolbar
-	setIconSize( QSize( 16, 16 ) );
-	// set central widget
-	setCentralWidget( workspace() );
-	// add project manager
-	dockToolBar( Qt::LeftToolBarArea )->addDock( UIProjectsManager::instance(), UIProjectsManager::instance()->windowTitle(), QIcon( ":/project/icons/project/project.png" ) );
-	// add qscintilla search dock
-	addDockWidget( Qt::RightDockWidgetArea, pSearch::instance() );
-	pSearch::instance()->setVisible( false );
-	pSearch::instance()->setFloating( true );
-	// create statusbar
-	statusBar()->show();
 }
 
 void UIMain::menu_aboutToShow()

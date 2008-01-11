@@ -1,5 +1,6 @@
 #include "MSVC.h"
 #include "MSVCParser.h"
+#include "MonkeyCore.h"
 #include "pMenuBar.h"
 
 #include <QTabWidget>
@@ -17,14 +18,14 @@ MSVC::MSVC()
 	
 	// install parsers
 	foreach ( QString s, availableParsers() )
-		pConsoleManager::instance()->addParser( getParser( s ) );
+		MonkeyCore::consoleManager()->addParser( getParser( s ) );
 }
 
 MSVC::~MSVC()
 {
 	// uninstall parsers
 	foreach ( QString s, availableParsers() )
-		pConsoleManager::instance()->removeParser( s );
+		MonkeyCore::consoleManager()->removeParser( s );
 }
 
 bool MSVC::setEnabled( bool b)
@@ -34,7 +35,7 @@ bool MSVC::setEnabled( bool b)
 	mPluginInfos.Enabled = b;
  	if ( b )
 	{
-		pMenuBar* mb = pMenuBar::instance();
+		pMenuBar* mb = MonkeyCore::menuBar();
 		
 		// compile command
 		pCommand c = compileCommand();
@@ -54,7 +55,7 @@ bool MSVC::setEnabled( bool b)
 	}
  	else
 	{
-		pMenuBar* mb = pMenuBar::instance();
+		pMenuBar* mb = MonkeyCore::menuBar();
 		foreach ( QAction* a, mb->menu( "mBuilder/mUserCommands" )->actions() << mb->menu( "mBuilder/mBuild" )->actions() )
 			if ( a->data().toString() == mPluginInfos.Name )
 				delete a;
@@ -77,7 +78,7 @@ pCommand MSVC::defaultCompileCommand() const
 pCommand MSVC::compileCommand() const
 {
 	// get settings object
-    QSettings* s = settings();
+    pSettings* s = MonkeyCore::settings();
     pCommand c;
     c.setText( s->value( settingsKey( "CompileCommand/Text" ) ).toString() );
     c.setCommand( s->value( settingsKey( "CompileCommand/Command" ) ).toString() );
@@ -94,7 +95,7 @@ pCommand MSVC::compileCommand() const
 
 void MSVC::setCompileCommand( const pCommand& c )
 {
-	QSettings* s = settings();
+	pSettings* s = MonkeyCore::settings();
     s->setValue( settingsKey( "CompileCommand/Text" ), c.text() );
     s->setValue( settingsKey( "CompileCommand/Command" ), c.command() );
     s->setValue( settingsKey( "CompileCommand/Arguments" ), c.arguments() );
@@ -112,7 +113,7 @@ pCommandList MSVC::userCommands() const
 	// commands list
 	pCommandList l;
 	// get settings object
-	QSettings* s = settings();
+	pSettings* s = MonkeyCore::settings();
 	// read user commands for this plugin
 	int size = s->beginReadArray( settingsKey( "Commands" ) );
 	for ( int i = 0; i < size; i++ )
@@ -139,7 +140,7 @@ pCommandList MSVC::userCommands() const
 void MSVC::setUserCommands( const pCommandList& l ) const
 {
 	// get settings object
-	QSettings* s = settings();
+	pSettings* s = MonkeyCore::settings();
 	// remove old key
 	s->remove( settingsKey( "Commands" ) );
 	// write user commands for this plugin
@@ -162,7 +163,7 @@ void MSVC::setUserCommands( const pCommandList& l ) const
 QStringList MSVC::availableParsers() const
 { return QStringList()/* "MSVCParser" )*/; }
 
-pCommandParser* MSVC::getParser( const QString& s )
+pCommandParser* MSVC::getParser( const QString& )
 {
 /*	if ( s == "MSVCParser" )
 		return new MSVCParser;*/
@@ -171,7 +172,7 @@ pCommandParser* MSVC::getParser( const QString& s )
 
 void MSVC::commandTriggered()
 {
-	pConsoleManager* cm = pConsoleManager::instance();
+	pConsoleManager* cm = MonkeyCore::consoleManager();
 	pCommandList l = userCommands();
 	if ( QAction* a = qobject_cast<QAction*>( sender() ) )
 		cm->addCommands( cm->recursiveCommandList( l, cm->getCommand( l, a->statusTip() ) ) );

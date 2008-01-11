@@ -9,37 +9,36 @@
 #include "pActionManager.h"
 #include "pAction.h"
 #include "pShortcutsEditor.h"
+#include "pSettings.h"
 
-#include <QSettings>
 #include <QApplication>
 
 pActionManager::pActionManager( QObject* o )
-	: QObject( o ), mSettings( 0L ), mError( QString() )
+	: QObject( o ), mError( QString() ), mSettings( 0 )
 {}
 
-void pActionManager::setSettings( QSettings* s, bool b )
+void pActionManager::setSettings( pSettings* s )
 {
-	if ( settings() == s )
-		return;
-
-	instance()->mSettings = s;
-	if ( b )
-		reloadSettings();
+	if ( instance()->mSettings != s )
+	{
+		instance()->mSettings = s;
+		instance()->reloadSettings();
+	}
 }
 
-QSettings* pActionManager::settings()
+pSettings* pActionManager::settings()
 { return instance()->mSettings; }
 
 void pActionManager::reloadSettings()
 {
-	if ( !settings() )
-		return;
-
 	// restore shortcut for each action
-	foreach ( pActionList al, instance()->mActions )
+	if ( pSettings* s = instance()->settings() )
 	{
-		foreach ( QAction* a, al )
-			a->setShortcut( QKeySequence( settings()->value( QString( "%1/%2/%3" ).arg( pAction::_SETTINGS_SCOPE_ ).arg( a->property( pAction::_GROUP_PROPERTY_ ).toString() ).arg( a->objectName() ), a->property( pAction::_DEFAULT_SHORTCUT_PROPERTY_ ) ).toString() ) );
+		foreach ( pActionList al, instance()->mActions )
+		{
+			foreach ( QAction* a, al )
+				a->setShortcut( QKeySequence( s->value( QString( "%1/%2/%3" ).arg( pAction::_SETTINGS_SCOPE_ ).arg( a->property( pAction::_GROUP_PROPERTY_ ).toString() ).arg( a->objectName() ), a->property( pAction::_DEFAULT_SHORTCUT_PROPERTY_ ) ).toString() ) );
+		}
 	}
 }
 
@@ -47,20 +46,16 @@ QAction* pActionManager::addAction( const QString& g, QAction* a )
 {
 	// need group
 	Q_ASSERT( !g.isEmpty() );
-
 	// need action
 	Q_ASSERT( a );
-
 	// action name is require
 	Q_ASSERT( !a->objectName().isEmpty() );
-
 	// addactions to group if it donesn't contains already
 	if ( !actions()[g].contains( a ) )
 	{
 		a->setProperty( pAction::_GROUP_PROPERTY_, g );
 		instance()->mActions[g] << a;
 	}
-
 	// return action
 	return a;
 }
@@ -69,22 +64,17 @@ void pActionManager::removeAction( const QString& g, QAction* a )
 {
 	// need group
 	Q_ASSERT( !g.isEmpty() );
-
 	// need action
 	Q_ASSERT( a );
-
 	// action name is require
 	Q_ASSERT( !a->objectName().isEmpty() );
-
 	// addactions to group if it donesn't contains already
 	if ( actions()[g].contains( a ) )
 		instance()->mActions[g].removeAll( a );
 }
 
 pHashActionList pActionManager::actions()
-{
-	return instance()->mActions;
-}
+{ return instance()->mActions; }
 
 QString pActionManager::globalGroup()
 { return tr( "Global" ); }
@@ -93,22 +83,17 @@ QKeySequence pActionManager::getShortcut( const QString& g, QAction* a, const QK
 {
 	// need group
 	Q_ASSERT( !g.isEmpty() );
-
 	// need action
 	Q_ASSERT( a != 0 );
-
-	if ( !settings() )
-		return sc;
-
 	// return defined shortcuts or the default one
-	return QKeySequence( settings()->value( QString( "%1/%2/%3" ).arg( pAction::_SETTINGS_SCOPE_ ).arg( g ).arg( a->objectName() ), sc ).toString() );
+	pSettings* s = instance()->settings();
+	return s ? QKeySequence( s->value( QString( "%1/%2/%3" ).arg( pAction::_SETTINGS_SCOPE_ ).arg( g ).arg( a->objectName() ), sc ).toString() ) : QKeySequence();
 }
 
 bool pActionManager::setShortcut( QAction* action, const QKeySequence& sc )
 {
 	// need action
 	Q_ASSERT( action != 0 );
-
 	// try to found already used shortcut
 	foreach ( pActionList al, instance()->mActions )
 	{
@@ -121,28 +106,22 @@ bool pActionManager::setShortcut( QAction* action, const QKeySequence& sc )
 			}
 		}
 	}
-
 	// remove old/set shortcut entry
-	if ( settings() )
+	if ( pSettings* s = instance()->settings() )
 	{
 		if ( action->shortcut() == sc )
-			pActionManager::instance()->settings()->remove( QString( "%1/%2/%3" ).arg( pAction::_SETTINGS_SCOPE_ ).arg( action->property( pAction::_GROUP_PROPERTY_ ).toString() ).arg( action->objectName() ) );
+			s->remove( QString( "%1/%2/%3" ).arg( pAction::_SETTINGS_SCOPE_ ).arg( action->property( pAction::_GROUP_PROPERTY_ ).toString() ).arg( action->objectName() ) );
 		else
-			pActionManager::instance()->settings()->setValue( QString( "%1/%2/%3" ).arg( pAction::_SETTINGS_SCOPE_ ).arg( action->property( pAction::_GROUP_PROPERTY_ ).toString() ).arg( action->objectName() ), sc.toString() );
+			s->setValue( QString( "%1/%2/%3" ).arg( pAction::_SETTINGS_SCOPE_ ).arg( action->property( pAction::_GROUP_PROPERTY_ ).toString() ).arg( action->objectName() ), sc.toString() );
 	}
-
 	// set new shortcut to action
 	action->setShortcut( sc );
-
+	// return success
 	return true;
 }
 
 QString pActionManager::lastError()
-{
-	return instance()->mError;
-}
+{ return instance()->mError; }
 
 void pActionManager::showSettings()
-{
-	pShortcutsEditor::instance( QApplication::activeWindow() )->exec();
-}
+{ pShortcutsEditor::instance( QApplication::activeWindow() )->exec(); }

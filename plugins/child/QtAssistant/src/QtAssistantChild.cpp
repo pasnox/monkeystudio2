@@ -1,5 +1,6 @@
 #include "QtAssistantChild.h"
 #include "pWorkspace.h"
+#include "MonkeyCore.h"
 
 // assistant include
 #include "mainwindow.h"
@@ -68,7 +69,7 @@ void QtAssistantChild::currentChanged( int i )
 void QtAssistantChild::showLink( const QString& s )
 {
 	// get workspace
-	pWorkspace* w = pWorkspace::instance();
+	pWorkspace* w = MonkeyCore::workspace();
 	
 	// check if child is in workspace
 	if ( w->indexOf( this ) != -1 )

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Categories=Qt;Development;
+Encoding=UTF-8
+Exec=monkeystudio
+Name=Monkey Studio IDE
+GenericName=IDE
+
+Terminal=false
+Type=Application
+Icon=monkeystudio.png

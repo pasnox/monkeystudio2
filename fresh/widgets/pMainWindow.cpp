@@ -8,26 +8,15 @@
  ********************************************************************************************************/
 #include "pMainWindow.h"
 #include "pSettings.h"
-#include "pActionManager.h"
 #include "pMenuBar.h"
 #include "pDockToolBarManager.h"
 #include "pDockToolBar.h"
 
 pMainWindow::pMainWindow( QWidget* w, Qt::WindowFlags f )
-	: QMainWindow( w, f )
+	: QMainWindow( w, f ), mSettings( 0 )
 {
-	// init settings
-	settings();
-
-	// init action manager
-	pActionManager::instance()->setSettings( settings(), false );
-
-	// init menubar
-	setMenuBar( menuBar() );
-
-	// init dock toolbar manager
-	dockToolBarManager()->setSettings( settings() );
-
+	// set menu bar
+	setMenuBar( new pMenuBar( this ) );
 	// init toolbar
 	dockToolBar( Qt::TopToolBarArea );
 	dockToolBar( Qt::BottomToolBarArea );
@@ -36,38 +25,44 @@ pMainWindow::pMainWindow( QWidget* w, Qt::WindowFlags f )
 }
 
 void pMainWindow::hideEvent( QHideEvent* )
+{ saveState(); }
+
+pMenuBar* pMainWindow::menuBar()
+{ return qobject_cast<pMenuBar*>( QMainWindow::menuBar() ); }
+
+pDockToolBarManager* pMainWindow::dockToolBarManager()
+{ return pDockToolBarManager::instance( this ); }
+
+pDockToolBar* pMainWindow::dockToolBar( Qt::ToolBarArea a )
+{ return dockToolBarManager()->bar( a ); }
+
+void pMainWindow::setSettings( pSettings* s )
 {
-	saveState();
+	if ( mSettings != s )
+	{
+		mSettings = s;
+		dockToolBarManager()->setSettings( s );
+		restoreState();
+	}
 }
 
 pSettings* pMainWindow::settings()
-{
-	return pSettings::instance();
-}
-
-pMenuBar* pMainWindow::menuBar()
-{
-	return pMenuBar::instance( this );
-}
-
-pDockToolBarManager* pMainWindow::dockToolBarManager()
-{
-	return pDockToolBarManager::instance( this );
-}
-
-pDockToolBar* pMainWindow::dockToolBar( Qt::ToolBarArea a )
-{
-	return dockToolBarManager()->bar( a );
-}
+{ return mSettings; }
 
 void pMainWindow::saveState()
 {
-	dockToolBarManager()->saveState();
-	settings()->saveState( this );
+	if ( settings() )
+	{
+		dockToolBarManager()->saveState();
+		settings()->saveState( this );
+	}
 }
 
 void pMainWindow::restoreState()
 {
-	dockToolBarManager()->restoreState();
-	settings()->restoreState( this );
+	if ( settings() )
+	{
+		dockToolBarManager()->restoreState();
+		settings()->restoreState( this );
+	}
 }

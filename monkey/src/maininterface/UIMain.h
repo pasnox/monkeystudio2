@@ -10,44 +10,30 @@
 #define UIMAIN_H
 
 #include "MonkeyExport.h"
-#include "QSingleton.h"
 #include "pMainWindow.h"
 
 class QActionGroup;
-class pFileManager;
-class pWorkspace;
-class PluginsManager;
-class UIProjectsManager;
-class pConsoleManager;
 
-class Q_MONKEY_EXPORT UIMain : public pMainWindow, public QSingleton<UIMain>
+class Q_MONKEY_EXPORT UIMain : public pMainWindow
 {
 	Q_OBJECT
-	friend class QSingleton<UIMain>;
+	friend class MonkeyCore;
 
 public:
 	QMenu* createPopupMenu();
-	PluginsManager* pluginsManager();
-	pFileManager* fileManager();
-	pWorkspace* workspace();
-	UIProjectsManager* projectsManager();
-	pConsoleManager* consoleManager();
 
 protected:
-	void closeEvent( QCloseEvent* );
+	QActionGroup* agStyles;
 
-protected slots:
-	void menu_aboutToShow();
-
-private:
 	UIMain( QWidget* = 0 );
+	void initGui();
+	void closeEvent( QCloseEvent* );
 	void initMenuBar();
 	void initToolBar();
 	void initConnections();
-	void initGui();
 
-	QActionGroup* agStyles;
-
+protected slots:
+	void menu_aboutToShow();
 };
 
 #endif // UIMAIN_H

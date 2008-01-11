@@ -2,7 +2,7 @@
  * PROGRAM      : fresh
  * DATE - TIME  : 2007/06/17
  * AUTHOR       : Nox PasNox ( pasnox@gmail.com )
- * FILENAME     : pSettings.h
+ * FILENAME     : MonkeyExport.h
  * LICENSE      : GPL
  * COMMENTARY   : This header allow to export class under windows
  ********************************************************************************************************/

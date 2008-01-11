@@ -3,6 +3,7 @@
 #include "pSettings.h"
 #include "pMenuBar.h"
 #include "UIPluginsSettings.h"
+#include "MonkeyCore.h"
 
 #include <QPluginLoader>
 
@@ -18,51 +19,32 @@ PluginsManager::PluginsManager( QObject* p )
 QList<BasePlugin*> PluginsManager::plugins() const
 { return mPlugins; }
 
-void PluginsManager::loadsPlugins( const QString& s )
+void PluginsManager::loadsPlugins()
 {
-	// get application path
-	QDir d( s.isEmpty() ? qApp->applicationDirPath() : s );
-#if defined( Q_OS_WIN )
-	// move up if in debug/release folder
-	if ( d.dirName().toLower() == "debug" || d.dirName().toLower() == "release" )
-		d.cdUp();
-#elif defined( Q_OS_MAC )
-	// move up 3 times if in MacOS folder
-	if ( d.dirName() == "MacOS" )
-	{
-		d.cdUp();
-		if ( !d.exists( "plugins" ) )
-		{
-			d.cdUp();
-			d.cdUp();
-		}
-	}
-#endif
-	
-	// go to plugins directory
-	d.cd( "plugins" );
-	
 	// loads static plugins
 	foreach ( QObject* o, QPluginLoader::staticInstances() )
 		if ( !addPlugin( o ) )
 			qWarning( qPrintable( tr( "Failed to load static plugin" ) ) );
-		
-	// load all plugins
-	foreach ( QFileInfo f, pMonkeyStudio::getFiles( d ) )
+	// load dynamic plugins
+	QDir d;
+	foreach ( const QString s, MonkeyCore::settings()->value( "Plugins/Path" ).toStringList() )
 	{
-		QPluginLoader l( f.absoluteFilePath() );
-		if ( !addPlugin( l.instance() ) )
+		d.setPath( QDir::isRelativePath( s ) ? qApp->applicationDirPath().append( "/%1" ).arg( s ) : s );
+		// load all plugins
+		foreach ( QFileInfo f, pMonkeyStudio::getFiles( d ) )
 		{
-			// try unload it and reload it in case of old one in memory
-			l.unload();
-			l.load();
-			
-			// if can t load it, check next
-			if ( !addPlugin( l.instance() ) )			
-				qWarning( qPrintable( tr( "Failed to load plugin ( %1 ): Error: %2" ).arg( f.absoluteFilePath(), l.errorString() ) ) );
+			QPluginLoader l( f.absoluteFilePath() );
+			if ( !addPlugin( l.instance() ) )
+			{
+				// try unload it and reload it in case of old one in memory
+				l.unload();
+				l.load();
+				// if can t load it, check next
+				if ( !addPlugin( l.instance() ) )			
+					qWarning( qPrintable( tr( "Failed to load plugin ( %1 ): Error: %2" ).arg( f.absoluteFilePath(), l.errorString() ) ) );
+			}
 		}
 	}
-	
 	// installs user requested plugins
 	enableUserPlugins();
 }
@@ -91,7 +73,7 @@ void PluginsManager::enableUserPlugins()
 	foreach ( BasePlugin* bp, mPlugins )
 	{		
 		// check in settings if we must install this plugin
-		if ( !pSettings::instance()->value( QString( "Plugins/%1" ).arg( bp->infos().Name ), true ).toBool() )
+		if ( !MonkeyCore::settings()->value( QString( "Plugins/%1" ).arg( bp->infos().Name ), true ).toBool() )
 			qWarning( qPrintable( tr( "User wantn't to intall plugin: %1" ).arg( bp->infos().Name ) ) );
 		// if not enabled, enable it
 		else if ( !bp->isEnabled() )
@@ -159,7 +141,7 @@ void PluginsManager::setCurrentBuilder( BuilderPlugin* b )
 		mBuilder->setEnabled( true );
 	
 	// enable menu according to current builder
-	pMenuBar::instance()->menu( "mBuilder" )->setEnabled( mBuilder || mCompiler );
+	MonkeyCore::menuBar()->menu( "mBuilder" )->setEnabled( mBuilder || mCompiler );
 }
 
 BuilderPlugin* PluginsManager::currentBuilder()
@@ -181,7 +163,7 @@ void PluginsManager::setCurrentCompiler( CompilerPlugin* c )
 		mCompiler->setEnabled( true );
 	
 	// enable menu according to current compiler
-	pMenuBar::instance()->menu( "mBuilder" )->setEnabled( mCompiler || mBuilder );
+	MonkeyCore::menuBar()->menu( "mBuilder" )->setEnabled( mCompiler || mBuilder );
 }
 
 CompilerPlugin* PluginsManager::currentCompiler()
@@ -203,7 +185,7 @@ void PluginsManager::setCurrentDebugger( DebuggerPlugin* d )
 		mDebugger->setEnabled( true );
 	
 	// enable menu according to current debugger
-	pMenuBar::instance()->menu( "mDebugger" )->setEnabled( mDebugger );
+	MonkeyCore::menuBar()->menu( "mDebugger" )->setEnabled( mDebugger );
 }
 
 DebuggerPlugin* PluginsManager::currentDebugger()
@@ -225,7 +207,7 @@ void PluginsManager::setCurrentInterpreter( InterpreterPlugin* i )
 		mInterpreter->setEnabled( true );
 	
 	// enable menu according to current interpreter
-	pMenuBar::instance()->menu( "mInterpreter" )->setEnabled( mInterpreter );
+	MonkeyCore::menuBar()->menu( "mInterpreter" )->setEnabled( mInterpreter );
 }
 
 InterpreterPlugin* PluginsManager::currentInterpreter()

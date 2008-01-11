@@ -1,9 +1,10 @@
 #include "pFormatterSettings.h"
+#include "MonkeyCore.h"
 #include "pSettings.h"
 
 void pFormatterSettings::applyTo( astyle::ASFormatter& f )
 {
-	QSettings* s = pSettings::instance();
+	pSettings* s = MonkeyCore::settings();
 	s->beginGroup( QString( "Plugins/%1" ).arg( PLUGIN_NAME ) );
 	int style = s->value( "style", 0 ).toInt();
 	switch( style )

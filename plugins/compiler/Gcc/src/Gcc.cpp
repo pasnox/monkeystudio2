@@ -1,4 +1,5 @@
 #include "Gcc.h"
+#include "MonkeyCore.h"
 #include "pMenuBar.h"
 
 #include <QTabWidget>
@@ -16,14 +17,14 @@ Gcc::Gcc()
 	
 	// install parsers
 	foreach ( QString s, availableParsers() )
-		pConsoleManager::instance()->addParser( getParser( s ) );
+		MonkeyCore::consoleManager()->addParser( getParser( s ) );
 }
 
 Gcc::~Gcc()
 {
 	// uninstall parsers
 	foreach ( QString s, availableParsers() )
-		pConsoleManager::instance()->removeParser( s );
+		MonkeyCore::consoleManager()->removeParser( s );
 }
 
 bool Gcc::setEnabled( bool b)
@@ -33,7 +34,7 @@ bool Gcc::setEnabled( bool b)
 	mPluginInfos.Enabled = b;
  	if ( b )
 	{
-		pMenuBar* mb = pMenuBar::instance();
+		pMenuBar* mb = MonkeyCore::menuBar();
 		
 		// compile command
 		pCommand c = compileCommand();
@@ -53,7 +54,7 @@ bool Gcc::setEnabled( bool b)
 	}
  	else
 	{
-		pMenuBar* mb = pMenuBar::instance();
+		pMenuBar* mb = MonkeyCore::menuBar();
 		foreach ( QAction* a, mb->menu( "mBuilder/mUserCommands" )->actions() << mb->menu( "mBuilder/mBuild" )->actions() )
 			if ( a->data().toString() == mPluginInfos.Name )
 				delete a;
@@ -76,7 +77,7 @@ pCommand Gcc::defaultCompileCommand() const
 pCommand Gcc::compileCommand() const
 {
 	// get settings object
-    QSettings* s = settings();
+    pSettings* s = MonkeyCore::settings();
     pCommand c;
     c.setText( s->value( settingsKey( "CompileCommand/Text" ) ).toString() );
     c.setCommand( s->value( settingsKey( "CompileCommand/Command" ) ).toString() );
@@ -93,7 +94,7 @@ pCommand Gcc::compileCommand() const
 
 void Gcc::setCompileCommand( const pCommand& c )
 {
-	QSettings* s = settings();
+	pSettings* s = MonkeyCore::settings();
     s->setValue( settingsKey( "CompileCommand/Text" ), c.text() );
     s->setValue( settingsKey( "CompileCommand/Command" ), c.command() );
     s->setValue( settingsKey( "CompileCommand/Arguments" ), c.arguments() );
@@ -111,7 +112,7 @@ pCommandList Gcc::userCommands() const
 	// commands list
 	pCommandList l;
 	// get settings object
-	QSettings* s = settings();
+	pSettings* s = MonkeyCore::settings();
 	// read user commands for this plugin
 	int size = s->beginReadArray( settingsKey( "Commands" ) );
 	for ( int i = 0; i < size; i++ )
@@ -138,7 +139,7 @@ pCommandList Gcc::userCommands() const
 void Gcc::setUserCommands( const pCommandList& l ) const
 {
 	// get settings object
-	QSettings* s = settings();
+	pSettings* s = MonkeyCore::settings();
 	// remove old key
 	s->remove( settingsKey( "Commands" ) );
 	// write user commands for this plugin
@@ -160,7 +161,7 @@ void Gcc::setUserCommands( const pCommandList& l ) const
 
 void Gcc::commandTriggered()
 {
-	pConsoleManager* cm = pConsoleManager::instance();
+	pConsoleManager* cm = MonkeyCore::consoleManager();
 	pCommandList l = userCommands() << compileCommand();
 	if ( QAction* a = qobject_cast<QAction*>( sender() ) )
 		cm->addCommands( cm->recursiveCommandList( l, cm->getCommand( l, a->statusTip() ) ) );

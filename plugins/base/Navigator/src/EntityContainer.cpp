@@ -24,6 +24,7 @@ It's extendable with a powerfull plugins system.
 #include "Ctags.h"
 #include "Entity.h"
 #include "Navigator.h"
+#include "MonkeyCore.h"
 
 EntityContainer::EntityContainer ( QWidget* parent): QTreeWidget (parent)
 {
@@ -214,5 +215,5 @@ void EntityContainer::makeGoto ()
 {
     Entity* activeEntity = (Entity*)currentItem();
     Q_ASSERT (activeEntity);
-    pFileManager::instance()->goToLine(activeEntity->file, QPoint(0,activeEntity->line), false);
+    MonkeyCore::fileManager()->goToLine(activeEntity->file, QPoint(0,activeEntity->line), false);
 }

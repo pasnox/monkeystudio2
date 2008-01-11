@@ -13,7 +13,7 @@ class Q_MONKEY_EXPORT UITranslator : public QDialog, public Ui::UITranslator, pu
 private:
 	UITranslator( QWidget* = 0 );
 
-	QString mTranslationsPath;
+	QStringList mTranslationsPath;
 
 public slots:
 	virtual void accept();

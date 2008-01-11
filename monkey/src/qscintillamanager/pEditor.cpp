@@ -18,6 +18,7 @@ It's extendable with a powerfull plugins system.
 #include "pSearch.h"
 #include "pMonkeyStudio.h"
 #include "qSciShortcutsManager.h"
+#include "MonkeyCore.h"
 
 #include "qsciprinter.h"
 
@@ -384,7 +385,7 @@ void pEditor::selectNone()
 void pEditor::invokeSearchReplace()
 {
 	// get pSearch instance
-	pSearch* psi = pSearch::instance();
+	pSearch* psi = MonkeyCore::searchDock();
 	
 	// set selected text the text to search
 	if ( !selectedText().isEmpty() )
@@ -395,7 +396,7 @@ void pEditor::invokeSearchReplace()
         psi->setVisible( true );
 	
 	// some hack to wait window activate
-	if ( pSearch::instance()->isFloating() )
+	if ( MonkeyCore::searchDock()->isFloating() )
 	{
 		while ( QApplication::activeWindow() != psi->window() )
 		{

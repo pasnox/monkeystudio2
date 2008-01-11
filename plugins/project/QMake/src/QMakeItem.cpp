@@ -19,9 +19,9 @@
 #include "QMakeParser.h"
 #include "UIQMakeProjectSettings.h"
 #include "QMake.h"
+#include "MonkeyCore.h"
 #include "pMenuBar.h"
 #include "pConsoleManager.h"
-
 #include "PluginsManager.h"
 
 using namespace pMonkeyStudio;
@@ -443,7 +443,7 @@ void QMakeItem::addCommand( const pCommand& c, const QString& s )
 	if ( !c.isValid() )
 		return;
 	// get menu bar pointer
-	pMenuBar* mb = pMenuBar::instance();
+	pMenuBar* mb = MonkeyCore::menuBar();
 	// create action
 	QAction* a = mb->action( QString( "%1/%2" ).arg( s, c.text() ) , c.text() );
 	a->setData( PLUGIN_NAME );
@@ -587,7 +587,7 @@ void recursiveRemoveCommands( QMenu* m )
 }
 
 void QMakeItem::uninstallCommands()
-{ recursiveRemoveCommands( pMenuBar::instance()->menu( "mBuilder" ) ); }
+{ recursiveRemoveCommands( MonkeyCore::menuBar()->menu( "mBuilder" ) ); }
 
 void QMakeItem::setValues( ProjectItem* it, const QString& v, const QString& o, const QStringList& l )
 {
@@ -857,7 +857,7 @@ void QMakeItem::writeItem( ProjectItem* it )
 
 void QMakeItem::commandTriggered()
 {
-	pConsoleManager* cm = pConsoleManager::instance();
+	pConsoleManager* cm = MonkeyCore::consoleManager();
 	pCommandList l = mCommands;
 	if ( QAction* a = qobject_cast<QAction*>( sender() ) )
 	{
@@ -942,7 +942,7 @@ BuilderPlugin* QMakeItem::builder() const
 				s = b->infos().Name;
 		if ( s.isEmpty() )
 			s = "GNUMake";
-		return PluginsManager::instance()->plugin<BuilderPlugin*>( PluginsManager::stAll, s );
+		return MonkeyCore::pluginsManager()->plugin<BuilderPlugin*>( PluginsManager::stAll, s );
 	}
 	return 0;
 }
@@ -963,7 +963,7 @@ CompilerPlugin* QMakeItem::compiler() const
 				s = c->infos().Name;
 		if ( s.isEmpty() )
 			s = "G++";
-		return PluginsManager::instance()->plugin<CompilerPlugin*>( PluginsManager::stAll, s );
+		return MonkeyCore::pluginsManager()->plugin<CompilerPlugin*>( PluginsManager::stAll, s );
 	}
 	return 0;
 }
@@ -984,7 +984,7 @@ DebuggerPlugin* QMakeItem::debugger() const
 				s = d->infos().Name;
 		if ( s.isEmpty() )
 			s = "GNUDebugger";
-		return PluginsManager::instance()->plugin<DebuggerPlugin*>( PluginsManager::stAll, s );
+		return MonkeyCore::pluginsManager()->plugin<DebuggerPlugin*>( PluginsManager::stAll, s );
 	}
 	return 0;
 }
@@ -1003,7 +1003,7 @@ InterpreterPlugin* QMakeItem::interpreter() const
 		if ( s.isEmpty() && parentProject() )
 			if ( InterpreterPlugin* i = parentProject()->interpreter() )
 				s = i->infos().Name;
-		return PluginsManager::instance()->plugin<InterpreterPlugin*>( PluginsManager::stAll, s );
+		return MonkeyCore::pluginsManager()->plugin<InterpreterPlugin*>( PluginsManager::stAll, s );
 	}
 	return 0;
 }

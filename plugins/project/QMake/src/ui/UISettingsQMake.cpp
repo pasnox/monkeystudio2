@@ -1,4 +1,5 @@
 #include "UISettingsQMake.h"
+#include "MonkeyCore.h"
 #include "pSettings.h"
 #include "pMonkeyStudio.h"
 
@@ -46,7 +47,7 @@ QStringList UISettingsQMake::defaultFilters()
 
 QStringList UISettingsQMake::readFilters()
 {
-	QStringList l = pSettings::instance()->value( QString( "Plugins/%1/Filters" ).arg( PLUGIN_NAME ) ).toStringList();
+	QStringList l = MonkeyCore::settings()->value( QString( "Plugins/%1/Filters" ).arg( PLUGIN_NAME ) ).toStringList();
 	return l.isEmpty() ? defaultFilters() : l;
 }
 
@@ -59,7 +60,7 @@ QStringList UISettingsQMake::defaultFiltersToolTips()
 
 QStringList UISettingsQMake::readFiltersToolTips()
 {
-	QStringList l = pSettings::instance()->value( QString( "Plugins/%1/FiltersToolTips" ).arg( PLUGIN_NAME ) ).toStringList();
+	QStringList l = MonkeyCore::settings()->value( QString( "Plugins/%1/FiltersToolTips" ).arg( PLUGIN_NAME ) ).toStringList();
 	return l.isEmpty() ? defaultFiltersToolTips() : l;
 }
 
@@ -81,7 +82,7 @@ QStringList UISettingsQMake::defaultScopes()
 
 QStringList UISettingsQMake::readScopes()
 {
-	QStringList l = pSettings::instance()->value( QString( "Plugins/%1/Scopes" ).arg( PLUGIN_NAME ) ).toStringList();
+	QStringList l = MonkeyCore::settings()->value( QString( "Plugins/%1/Scopes" ).arg( PLUGIN_NAME ) ).toStringList();
 	return l.isEmpty() ? defaultScopes() : l;
 }
 
@@ -96,7 +97,7 @@ QStringList UISettingsQMake::defaultPathFiles()
 
 QStringList UISettingsQMake::readPathFiles()
 {
-	QStringList l = pSettings::instance()->value( QString( "Plugins/%1/PathFiles" ).arg( PLUGIN_NAME ) ).toStringList();
+	QStringList l = MonkeyCore::settings()->value( QString( "Plugins/%1/PathFiles" ).arg( PLUGIN_NAME ) ).toStringList();
 	return l.isEmpty() ? defaultPathFiles() : l;
 }
 
@@ -123,7 +124,7 @@ QtItemList UISettingsQMake::defaultQtModules()
 QtItemList UISettingsQMake::readQtModules()
 {
 	QtItemList l;
-	pSettings* ps = pSettings::instance();
+	pSettings* ps = MonkeyCore::settings();
 	int s = ps->beginReadArray( QString( "Plugins/%1/QtModules" ).arg( PLUGIN_NAME ) );
 	for ( int i = 0; i < s; i++ )
 	{
@@ -168,7 +169,7 @@ QtItemList UISettingsQMake::defaultSettings()
 QtItemList UISettingsQMake::readSettings()
 {
 	QtItemList l;
-	pSettings* ps = pSettings::instance();
+	pSettings* ps = MonkeyCore::settings();
 	int s = ps->beginReadArray( QString( "Plugins/%1/Settings" ).arg( PLUGIN_NAME ) );
 	for ( int i = 0; i < s; i++ )
 	{
@@ -183,7 +184,7 @@ QtVersionList UISettingsQMake::defaultVersions()
 {
 	return QtVersionList()
 #ifdef Q_OS_MAC
-	<< QtVersion( "Qt 4", "/usr/local/Trolltech/Qt-4.3.2", "qmake", "lupdate", "lrelease", "/usr/local/Trolltech/Qt-4.3.2/doc/html", true )
+	<< QtVersion( "Qt 4", "/usr/local/Trolltech/Qt-4.3.3", "qmake", "lupdate", "lrelease", "/usr/local/Trolltech/Qt-4.3.3/doc/html", true )
 	<< QtVersion( "Qt 3", "/Developer/qt", "qmake", "lupdate", "lrelease", "/Developer/qt/doc/html", false );
 #elif defined Q_OS_WIN
 	<< QtVersion( "Qt 4", "C:\\Qt\\4.3.2", "qmake", "lupdate", "lrelease", "C:\\Qt\\4.3.2\\doc\\html", true )
@@ -197,7 +198,7 @@ QtVersionList UISettingsQMake::defaultVersions()
 QtVersionList UISettingsQMake::readVersions()
 {
 	QtVersionList l;
-	pSettings* ps = pSettings::instance();
+	pSettings* ps = MonkeyCore::settings();
 	int s = ps->beginReadArray( QString( "Plugins/%1/Versions" ).arg( PLUGIN_NAME ) );
 	for ( int i = 0; i < s; i++ )
 	{
@@ -572,7 +573,7 @@ void UISettingsQMake::on_dbbButtons_clicked( QAbstractButton* b )
 	if ( dbbButtons->standardButton( b )  != QDialogButtonBox::Save )
 		return;
 	QStringList l;
-	pSettings* ps = pSettings::instance();
+	pSettings* ps = MonkeyCore::settings();
 	// general
 	lw_currentItemChanged( 0, lwQtVersions->selectedItems().value( 0 ) );
 	ps->beginWriteArray( QString( "Plugins/%1/Versions" ).arg( PLUGIN_NAME ) );

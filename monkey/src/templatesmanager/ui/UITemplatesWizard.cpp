@@ -2,6 +2,7 @@
 #include "pFileManager.h"
 #include "pMonkeyStudio.h"
 #include "pSettings.h"
+#include "MonkeyCore.h"
 
 #include "ProjectsModel.h"
 #include "ProjectsProxy.h"
@@ -46,13 +47,13 @@ UITemplatesWizard::UITemplatesWizard( QWidget* w )
 	cbOperators->addItems( availableOperators() );
 	
     // assign projects combobox
-    mProjects = UIProjectsManager::instance()->model();
+    mProjects = MonkeyCore::projectsManager()->model();
     cbProjects->setModel( mProjects->scopesProxy() );
-    ProjectItem* p = UIProjectsManager::instance()->currentProject();
+    ProjectItem* p = MonkeyCore::projectsManager()->currentProject();
     cbProjects->setCurrentIndex( mProjects->scopesProxy()->mapFromSource( p ? p->index() : QModelIndex() ) );
 	
     // restore infos
-    pSettings* s = pSettings::instance();
+    pSettings* s = MonkeyCore::settings();
     cbLanguages->setCurrentIndex( cbLanguages->findText( s->value( "Recents/FileWizard/Language", "C++" ).toString() ) );
     leDestination->setText( s->value( "Recents/FileWizard/Destination" ).toString() );
     cbOpen->setChecked( s->value( "Recents/FileWizard/Open", true ).toBool() );
@@ -204,7 +205,7 @@ void UITemplatesWizard::on_pbCreate_clicked()
 		return;
 	
     // remember some infos
-    pSettings* s = pSettings::instance();
+    pSettings* s = MonkeyCore::settings();
     s->setValue( "Recents/FileWizard/Language", cbLanguages->currentText() );
     s->setValue( "Recents/FileWizard/Destination", leDestination->text() );
     s->setValue( "Recents/FileWizard/Open", cbOpen->isChecked() );

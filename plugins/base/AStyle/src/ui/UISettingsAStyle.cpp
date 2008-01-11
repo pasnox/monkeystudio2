@@ -1,4 +1,5 @@
 #include "UISettingsAStyle.h"
+#include "MonkeyCore.h"
 #include "pSettings.h"
 
 UISettingsAStyle::UISettingsAStyle( QWidget* p )
@@ -89,7 +90,7 @@ void UISettingsAStyle::onStyleChange()
 
 void UISettingsAStyle::loadSettings()
 {
-	QSettings* s = pSettings::instance();
+	pSettings* s = MonkeyCore::settings();
 	s->beginGroup( QString( "Plugins/%1" ).arg( PLUGIN_NAME ) );
 	int style = s->value( "style", 0 ).toInt();
 	spnIndentation->setValue( s->value( "indentation", 4 ).toInt() );
@@ -131,7 +132,7 @@ void UISettingsAStyle::saveSettings()
 		style = 4;
 	else if ( rbCustom->isChecked() )
 		style = 5;
-	QSettings* s = pSettings::instance();
+	pSettings* s = MonkeyCore::settings();
 	s->beginGroup( QString( "Plugins/%1" ).arg( PLUGIN_NAME ) );
 	s->setValue( "style", style );
 	s->setValue( "indentation", spnIndentation->value() );

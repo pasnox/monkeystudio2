@@ -25,6 +25,7 @@
 #include "PluginsManager.h"
 #include "pMenuBar.h"
 #include "pAction.h"
+#include "MonkeyCore.h"
 
 MonkeyProjectItem::MonkeyProjectItem (  ProjectItem::NodeType t, ProjectItem* i )
 {
@@ -138,7 +139,7 @@ void MonkeyProjectItem::buildMenuTriggered ()
                 cmd.setWorkingDirectory (QFileInfo(getValue()).absolutePath());
                 cmd.setSkipOnError (false);
                 cmd.setTryAllParsers (true);
-                pConsoleManager::instance()->addCommand(cmd);
+                MonkeyCore::consoleManager()->addCommand(cmd);
                 return;
         }
 };
@@ -152,11 +153,11 @@ void MonkeyProjectItem::uninstallCommands ()
 
 void MonkeyProjectItem::installCommands ()
 {
-    QMenu* menu = pMenuBar::instance()->menu( "mBuilder" );
+    QMenu* menu = MonkeyCore::menuBar()->menu( "mBuilder" );
     menu->setEnabled (true);    
     for (int i = 0; i < targets.size(); i++)
     {
-            targets[i].action = (pAction*)pMenuBar::instance()->action(QString("mBuilder/aAction%1").arg(i),targets[i].text);
+            targets[i].action = (pAction*)MonkeyCore::menuBar()->action(QString("mBuilder/aAction%1").arg(i),targets[i].text);
             targets[i].action->setEnabled ( !targets[i].command.isEmpty() );
             connect ( targets[i].action, SIGNAL (triggered()), this, SLOT (buildMenuTriggered()));
     }
@@ -164,17 +165,17 @@ void MonkeyProjectItem::installCommands ()
 
 ProjectPlugin* MonkeyProjectItem::getParentPlugin ()
 {
-    return PluginsManager::instance()->plugin<ProjectPlugin*>( PluginsManager::stAll, "MonkeyProject" );
+    return MonkeyCore::pluginsManager()->plugin<ProjectPlugin*>( PluginsManager::stAll, "MonkeyProject" );
 }
 
-void MonkeyProjectItem::addExistingFiles(const QStringList& files, const QString& scope, const QString&)
+void MonkeyProjectItem::addExistingFiles(const QStringList& files, const QString& /*scope*/, const QString&)
 {
     if ( !isProject() )
         return;
     addExistingFiles (files, this);
 }
 
-void MonkeyProjectItem::addExistingFiles(const QStringList& files, ProjectItem* item, const QString&)
+void MonkeyProjectItem::addExistingFiles(const QStringList& files, ProjectItem* /*item*/, const QString&)
 {
     if ( !isProject() )
         return;
@@ -184,12 +185,12 @@ void MonkeyProjectItem::addExistingFiles(const QStringList& files, ProjectItem* 
     }
 }
 
-void MonkeyProjectItem::addExistingFile(const QString& file, const QString& scope, const QString&)
+void MonkeyProjectItem::addExistingFile(const QString& file, const QString& /*scope*/, const QString&)
 {
     addExistingFile (file, this);
 }
 
-void MonkeyProjectItem::addExistingFile(const QString& file, ProjectItem* item, const QString&)
+void MonkeyProjectItem::addExistingFile(const QString& file, ProjectItem* /*item*/, const QString&)
 {
     ProjectItem* it = new MonkeyProjectItem( ProjectItem::ValueType, this );
     it->setValue (file);

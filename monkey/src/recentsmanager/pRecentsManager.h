@@ -2,14 +2,15 @@
 #define PRECENTSMANAGER_H
 
 #include "MonkeyExport.h"
-#include "QSingleton.h"
+
+#include <QObject>
 
 class QAction;
 
-class Q_MONKEY_EXPORT pRecentsManager : public QObject, public QSingleton<pRecentsManager>
+class Q_MONKEY_EXPORT pRecentsManager : public QObject
 {
 	Q_OBJECT
-	friend class QSingleton<pRecentsManager>;
+	friend class MonkeyCore;
 
 public:
 	int maxRecentFiles() const;
@@ -18,7 +19,7 @@ public:
 	QString recentFileOpenPath() const;
 	QString recentProjectOpenPath() const;
 
-private:
+protected:
 	pRecentsManager( QObject* = 0 );
 
 	QList<QAction*> mRecentFiles;

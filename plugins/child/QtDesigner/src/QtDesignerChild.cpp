@@ -1,9 +1,10 @@
 #include "QtDesignerChild.h"
-#include "UIMain.h"
 #include "pWorkspace.h"
 #include "pDockToolBarManager.h"
 #include "pDockToolBar.h"
 #include "pMonkeyStudio.h"
+#include "MonkeyCore.h"
+#include "UIMain.h"
 #include "pMenuBar.h"
 
 #include "QDesignerWidgetBox.h"
@@ -114,9 +115,9 @@ QtDesignerChild::QtDesignerChild( QObject* )
 	QDesignerFormWindowManagerInterface* fwm = mCore->formWindowManager();
 	// edit
 	fwm->actionUndo()->setIcon( QIcon( ":/icons/undo.png" ) );
-	fwm->actionUndo()->setShortcut( pMenuBar::instance()->action( "mEdit/aUndo" )->shortcut() );
+	fwm->actionUndo()->setShortcut( MonkeyCore::menuBar()->action( "mEdit/aUndo" )->shortcut() );
 	fwm->actionRedo()->setIcon( QIcon( ":/icons/redo.png" ) );
-	fwm->actionRedo()->setShortcut( pMenuBar::instance()->action( "mEdit/aRedo" )->shortcut() );
+	fwm->actionRedo()->setShortcut( MonkeyCore::menuBar()->action( "mEdit/aRedo" )->shortcut() );
 	fwm->actionDelete()->setIcon( QIcon( ":/icons/delete.png" ) );
 	fwm->actionSelectAll()->setIcon( QIcon( ":/icons/selectall.png" ) );
 	fwm->actionDelete()->setShortcut( tr( "Del" ) );
@@ -152,27 +153,27 @@ QtDesignerChild::QtDesignerChild( QObject* )
 	
 	pWidgetBox = new QDesignerWidgetBox( this );
 	pWidgetBox->setVisible( false );
-	UIMain::instance()->dockToolBar( Qt::LeftToolBarArea )->addDock( pWidgetBox, tr( "Widget Box" ), QIcon( ":/icons/widget.png" ) );
+	MonkeyCore::mainWindow()->dockToolBar( Qt::LeftToolBarArea )->addDock( pWidgetBox, tr( "Widget Box" ), QIcon( ":/icons/widget.png" ) );
 	
 	pObjectInspector = new QDesignerObjectInspector( this );
 	pObjectInspector->setVisible( false );
-	UIMain::instance()->dockToolBar( Qt::RightToolBarArea )->addDock( pObjectInspector, tr( "Object Inspector" ), QIcon( ":/icons/inspector.png" ) );
+	MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( pObjectInspector, tr( "Object Inspector" ), QIcon( ":/icons/inspector.png" ) );
 	
 	pPropertyEditor = new QDesignerPropertyEditor( this );
 	pPropertyEditor->setVisible( false );
-	UIMain::instance()->dockToolBar( Qt::RightToolBarArea )->addDock( pPropertyEditor, tr( "Property Editor" ), QIcon( ":/icons/property.png" ) );
+	MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( pPropertyEditor, tr( "Property Editor" ), QIcon( ":/icons/property.png" ) );
 	
 	pActionEditor = new QDesignerActionEditor( this );
 	pActionEditor->setVisible( false );
-	UIMain::instance()->dockToolBar( Qt::BottomToolBarArea )->addDock( pActionEditor, tr( "Action Editor" ), QIcon( ":/icons/action.png" ) );
+	MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( pActionEditor, tr( "Action Editor" ), QIcon( ":/icons/action.png" ) );
 	
 	pSignalSlotEditor = new QDesignerSignalSlotEditor( this );
 	pSignalSlotEditor->setVisible( false );
-	UIMain::instance()->dockToolBar( Qt::TopToolBarArea )->addDock( pSignalSlotEditor, tr( "Signal/Slot Editor" ), QIcon( ":/icons/signal.png" ) );
+	MonkeyCore::mainWindow()->dockToolBar( Qt::TopToolBarArea )->addDock( pSignalSlotEditor, tr( "Signal/Slot Editor" ), QIcon( ":/icons/signal.png" ) );
 	
 	// perform integration
 	new qdesigner_internal::QDesignerIntegration( mCore, this );
-	mCore->setTopLevel( UIMain::instance() );
+	mCore->setTopLevel( MonkeyCore::mainWindow() );
 	
 	// connection
 	connect( mArea, SIGNAL( subWindowActivated( QMdiSubWindow* ) ), this, SLOT( subWindowActivated( QMdiSubWindow* ) ) );

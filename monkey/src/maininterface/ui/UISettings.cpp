@@ -6,6 +6,7 @@
 #include "pAbbreviationsManager.h"
 #include "pMonkeyStudio.h"
 #include "pWorkspace.h"
+#include "MonkeyCore.h"
 
 #include "qscilexerbash.h"
 #include "qscilexerbatch.h"
@@ -190,9 +191,9 @@ UISettings::UISettings( QWidget* p )
 
 void UISettings::loadSettings()
 {
-	pSettings* s = pSettings::instance();
+	pSettings* s = MonkeyCore::settings();
 	QString sp;
-
+	
 	// General
 	cbRestoreProjectsOnStartup->setChecked( restoreProjectsOnStartup() );
 	leDefaultProjectsDirectory->setText( defaultProjectsDirectory() );
@@ -209,8 +210,10 @@ void UISettings::loadSettings()
 	cbRestoreSession->setChecked( restoreSessionOnStartup() );
 	gbOperators->setValues( availableOperators() );
 
-	// Templates
+	// Paths
 	pleTemplatesPaths->setValues( pTemplatesManager::instance()->templatesPath() );
+	pleTranslationsPaths->setValues( s->value( "Translations/Path" ).toStringList() );
+	plePluginsPaths->setValues( s->value( "Plugins/Path" ).toStringList() );
 
 	// Editor
 	//  General
@@ -335,7 +338,7 @@ void UISettings::loadSettings()
 	}
 	//  Lexers Highlighting
 	foreach ( QsciLexer* l, mLexers )
-		l->readSettings( *pSettings::instance(), qPrintable( scintillaSettingsPath() ) );
+		l->readSettings( *s, qPrintable( scintillaSettingsPath() ) );
 	
 	if ( cbLexersHighlightingLanguages->count() )
 		on_cbLexersHighlightingLanguages_currentIndexChanged( cbLexersHighlightingLanguages->itemText( 0 ) );
@@ -353,7 +356,7 @@ void UISettings::loadSettings()
 
 void UISettings::saveSettings()
 {
-	pSettings* s = pSettings::instance();
+	pSettings* s = MonkeyCore::settings();
 	QString sp;
 
 	// General
@@ -370,8 +373,10 @@ void UISettings::saveSettings()
 	setRestoreSessionOnStartup( cbRestoreSession->isChecked() );
 	setAvailableOperators( gbOperators->values() );
 
-	// Templates
+	// Paths
 	pTemplatesManager::instance()->setTemplatesPath( pleTemplatesPaths->values() );
+	s->setValue( "Translations/Path", pleTranslationsPaths->values() );
+	s->setValue( "Plugins/Path", plePluginsPaths->values() );
 
 	// Editor
 	//  General
@@ -479,7 +484,7 @@ void UISettings::saveSettings()
 	{
 		l->setDefaultPaper( QColor( tbDefaultDocumentPaper->toolTip() ) );
 		l->setDefaultColor( QColor( tbDefaultDocumentPen->toolTip() ) );
-		l->writeSettings( *pSettings::instance(), qPrintable( scintillaSettingsPath() ) );
+		l->writeSettings( *s, qPrintable( scintillaSettingsPath() ) );
 	}
 
 	//  Abbreviations
@@ -928,5 +933,5 @@ void UISettings::apply()
 {
 	saveSettings();
 	applyProperties();
-	pWorkspace::instance()->loadSettings();
+	MonkeyCore::workspace()->loadSettings();
 }

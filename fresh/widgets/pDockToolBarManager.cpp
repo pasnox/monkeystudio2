@@ -8,28 +8,28 @@
  ********************************************************************************************************/
 #include "pDockToolBarManager.h"
 #include "pDockToolBar.h"
+#include "pSettings.h"
 
 #include <QMainWindow>
 #include <QDockWidget>
-#include <QSettings>
 #include <QAbstractButton>
 #include <QAction>
 
 pDockToolBarManager::pDockToolBarManager( QMainWindow* w )
-	: QObject( w ), mMain( w )
-{
-	Q_ASSERT( w != 0 );
-}
+	: QObject( w ), mMain( w ), mSettings( 0 )
+{ Q_ASSERT( w != 0 ); }
 
 QMainWindow* pDockToolBarManager::mainWindow() const
+{ return mMain; }
+
+void pDockToolBarManager::setSettings( pSettings* s )
 {
-	return mMain;
+	if ( mSettings != s )
+		mSettings = s;
 }
 
-QSettings* pDockToolBarManager::settings() const
-{
-	return mSettings;
-}
+pSettings* pDockToolBarManager::settings()
+{ return mSettings; }
 
 pDockToolBar* pDockToolBarManager::bar( Qt::ToolBarArea a )
 {
@@ -62,20 +62,13 @@ pDockToolBar* pDockToolBarManager::bar( Qt::ToolBarArea a )
 			return 0;
 			break;
 		}
-
 		// add toolbar to mainwindow
 		mMain->addToolBar( a, mBars[a] );
-		
-		//
-		mBars[a]->setStyleSheet( ".QToolBar { border : none }" );
-
 		// hide
 		mBars[a]->hide();
-
 		// track dock bar changed
 		connect( mBars[a], SIGNAL( dockWidgetAreaChanged( QDockWidget*, pDockToolBar* ) ), this, SLOT( dockWidgetAreaChanged( QDockWidget*, pDockToolBar* ) ) );
 	}
-
 	// return existings toolbar
 	return mBars[a];
 }
@@ -151,63 +144,42 @@ void pDockToolBarManager::dockWidgetAreaChanged( QDockWidget* d, pDockToolBar* f
 {
 	// remove dock from old toolbar
 	f->removeDock( d );
-
 	// add dock to new toolbar
 	bar( dockWidgetAreaToToolBarArea( mMain->dockWidgetArea( d ) ) )->addDock( d, d->windowTitle(), d->windowIcon().pixmap( QSize( 24, 24 ), QIcon::Normal, QIcon::On ) );
 }
 
-void pDockToolBarManager::setSettings( QSettings* s, bool b )
-{
-	// if same settings cancel
-	if ( mSettings == s )
-		return;
-
-	// remember settings pointer
-	mSettings = s;
-
-	// restore state according to b
-	if ( b )
-		restoreState();
-}
-
 void pDockToolBarManager::restoreState( pDockToolBar* p )
 {
-	// if no settings cancel
-	if ( !mSettings )
+	// need settings
+	if ( !settings() )
 		return;
-
 	// get the bar to restore
 	QStringList l;
 	if ( p )
 		l << QString::number( mMain->toolBarArea( p ) );
 	else
 	{
-		mSettings->beginGroup( "MainWindow/Docks" );
-		l = mSettings->childGroups();
-		mSettings->endGroup();
+		settings()->beginGroup( "MainWindow/Docks" );
+		l = settings()->childGroups();
+		settings()->endGroup();
 	}
-	
 	// for docktoolbar
 	foreach ( QString i, l )
 	{
 		// get bar
 		p = bar( (Qt::ToolBarArea)i.toInt() );
-
 		// if got bar
 		if ( p )
 		{
 			// restore exclusive state
-			p->setExclusive( mSettings->value( QString( "MainWindow/Docks/%1/Exclusive" ).arg( i ), true ).toBool() );
-			
+			p->setExclusive( settings()->value( QString( "MainWindow/Docks/%1/Exclusive" ).arg( i ), true ).toBool() );
 			// bar datas
-			QStringList mList = mSettings->value( QString( "MainWindow/Docks/%1/Widgets" ).arg( i ), QStringList() ).toStringList();
-
+			QStringList mList = settings()->value( QString( "MainWindow/Docks/%1/Widgets" ).arg( i ), QStringList() ).toStringList();
 			// for each entry
 			foreach ( QString e, mList )
 			{
 				// get dock
 				QDockWidget* d = mMain->findChild<QDockWidget*>( e );
-
 				// restore dock area
 				if ( d )
 					p->addDock( d, d->windowTitle(), d->windowIcon() );
@@ -218,29 +190,25 @@ void pDockToolBarManager::restoreState( pDockToolBar* p )
 
 void pDockToolBarManager::saveState( pDockToolBar* p )
 {
-	// cancel if no settings
-	if ( !mSettings )
+	// need settings
+	if ( !settings() )
 		return;
-
 	// get the bar to save
 	QList<pDockToolBar*> l;
 	if ( p )
 		l << p;
 	else
 		l << mBars.values();
-
 	// for each docktoolbar
 	foreach ( pDockToolBar* tb, l )
 	{
 		// list to stock checked button
 		QStringList mList;
-
 		// for each dock in docktoolbar
 		foreach ( QDockWidget* d, tb->docks() )
 			mList << d->objectName();
-		
 		// write datas
-		mSettings->setValue( QString( "MainWindow/Docks/%1/Exclusive" ).arg( mMain->toolBarArea( tb ) ), tb->exclusive() );
-		mSettings->setValue( QString( "MainWindow/Docks/%1/Widgets" ).arg( mMain->toolBarArea( tb ) ), mList );
+		settings()->setValue( QString( "MainWindow/Docks/%1/Exclusive" ).arg( mMain->toolBarArea( tb ) ), tb->exclusive() );
+		settings()->setValue( QString( "MainWindow/Docks/%1/Widgets" ).arg( mMain->toolBarArea( tb ) ), mList );
 	}
 }

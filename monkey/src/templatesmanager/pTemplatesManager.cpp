@@ -12,6 +12,7 @@
 #include "pMonkeyStudio.h"
 #include "pFileManager.h"
 #include "ProjectItem.h"
+#include "MonkeyCore.h"
 
 using namespace pMonkeyStudio;
 
@@ -20,16 +21,10 @@ pTemplatesManager::pTemplatesManager( QObject* o )
 {}
 
 void pTemplatesManager::setTemplatesPath( const QStringList& l )
-{ pSettings::instance()->setValue( "Templates/DefaultDirectories", l ); }
+{ MonkeyCore::settings()->setValue( "Templates/DefaultDirectories", l ); }
 
 QStringList pTemplatesManager::templatesPath() const
-{
-	QString s = "/../templates";
-#ifdef Q_OS_MAC
-	s.prepend( "/../.." );
-#endif
-	return pSettings::instance()->value( "Templates/DefaultDirectories", QStringList( QApplication::applicationDirPath().append( s ) ) ).toStringList();
-}
+{ return MonkeyCore::settings()->value( "Templates/DefaultDirectories" ).toStringList(); }
 
 pTemplate pTemplatesManager::getTemplate( const QString& s )
 {
@@ -63,7 +58,7 @@ TemplateList pTemplatesManager::getTemplates()
 {
 	TemplateList l;
 	foreach( QString p, templatesPath() )
-		foreach ( QFileInfo f, getFiles( QDir( unTokenizeHome( p ) ), QStringList( "template.ini" ), true ) )
+		foreach ( QFileInfo f, getFiles( QDir( unTokenizeHome( QDir::isRelativePath( p ) ? qApp->applicationDirPath().append( "/%1" ).arg( p ) : p ) ), QStringList( "template.ini" ), true ) )
 			l << getTemplate( f.absoluteFilePath() );
 	return l;
 }
@@ -180,9 +175,9 @@ bool pTemplatesManager::realiseTemplate( ProjectItem* it, const QString& o, cons
 		
 		// open files if needed
         if ( fo.contains( files[f] ) )
-            pFileManager::instance()->openFile( s );
+            MonkeyCore::fileManager()->openFile( s );
         if ( po.contains( files[f] ) )
-            pFileManager::instance()->openProject( s );
+            MonkeyCore::fileManager()->openProject( s );
 		
 		// add files to project if needed
 		if ( it )

@@ -1,6 +1,7 @@
 #include <QTabWidget>
 #include "MSVCMake.h"
 #include "MSVCMakeParser.h"
+#include "MonkeyCore.h"
 #include "pConsoleManager.h"
 #include "pMenuBar.h"
 
@@ -16,14 +17,14 @@ MSVCMake::MSVCMake ()
     mPluginInfos.Enabled = false;
 	// install parsers
 	foreach ( QString s, availableParsers() )
-		pConsoleManager::instance()->addParser( getParser( s ) );
+		MonkeyCore::consoleManager()->addParser( getParser( s ) );
 }
 
 MSVCMake::~MSVCMake ()
 {
 	// uninstall parsers
 	foreach ( QString s, availableParsers() )
-		pConsoleManager::instance()->removeParser( s );
+		MonkeyCore::consoleManager()->removeParser( s );
 }
 
 bool MSVCMake::setEnabled( bool b)
@@ -33,7 +34,7 @@ bool MSVCMake::setEnabled( bool b)
     mPluginInfos.Enabled = b;
      if ( b )
     {
-        pMenuBar* mb = pMenuBar::instance();
+        pMenuBar* mb = MonkeyCore::menuBar();
         foreach ( pCommand c, pCommandList() << userCommands() )
         {
             QAction* a = mb->action( QString( "mBuilder/mUserCommands/%1" ).arg( c.text() ), c.text() );
@@ -44,7 +45,7 @@ bool MSVCMake::setEnabled( bool b)
     }
      else
     {
-        pMenuBar* mb = pMenuBar::instance();
+        pMenuBar* mb = MonkeyCore::menuBar();
         foreach ( QAction* a, mb->menu( "mBuilder/mUserCommands" )->actions() )
             if ( a->data().toString() == mPluginInfos.Name )
                 delete a;
@@ -69,7 +70,7 @@ pCommandList MSVCMake::userCommands() const
     // commands list
     pCommandList l;
     // get settings object
-    QSettings* s = settings();
+    pSettings* s = MonkeyCore::settings();
     // read user commands for this plugin
     int size = s->beginReadArray( settingsKey( "Commands" ) );
     for ( int i = 0; i < size; i++ )
@@ -96,7 +97,7 @@ pCommandList MSVCMake::userCommands() const
 void MSVCMake::setUserCommands( const pCommandList& l ) const
 {
     // get settings object
-    QSettings* s = settings();
+    pSettings* s = MonkeyCore::settings();
     // remove old key
     s->remove( settingsKey( "Commands" ) );
     // write user commands for this plugin
@@ -117,10 +118,10 @@ void MSVCMake::setUserCommands( const pCommandList& l ) const
 }
 
 QStringList MSVCMake::availableParsers() const
-{ return QStringList( /*mPluginInfos.Name*/ ); }
+{ return QStringList( /*mPluginInfos->Name*/ ); }
 
-pCommandParser* MSVCMake::getParser( const QString& s )
-{ return NULL/*s == mPluginInfos.Name ? new MSVCMakeParser : 0*/; }
+pCommandParser* MSVCMake::getParser( const QString& )
+{ return NULL/*s == mPluginInfos->Name ? new MSVCMakeParser : 0*/; }
 
 pCommand MSVCMake::defaultBuildCommand() const
 { return pCommand( "Build", "nmake", "", false, availableParsers(), "$cpp$" ); }
@@ -128,7 +129,7 @@ pCommand MSVCMake::defaultBuildCommand() const
 pCommand MSVCMake::buildCommand() const
 {
     // get settings object
-    QSettings* s = settings();
+    pSettings* s = MonkeyCore::settings();
     pCommand c;
     c.setText( s->value( settingsKey( "BuildCommand/Text" ) ).toString() );
     c.setCommand( s->value( settingsKey( "BuildCommand/Command" ) ).toString() );
@@ -145,7 +146,7 @@ pCommand MSVCMake::buildCommand() const
 
 void MSVCMake::setBuildCommand( const pCommand& c )
 {
-    QSettings* s = settings();
+    pSettings* s = MonkeyCore::settings();
     s->setValue( settingsKey( "BuildCommand/Text" ), c.text() );
     s->setValue( settingsKey( "BuildCommand/Command" ), c.command() );
     s->setValue( settingsKey( "BuildCommand/Arguments" ), c.arguments() );
@@ -157,7 +158,7 @@ void MSVCMake::setBuildCommand( const pCommand& c )
 
 void MSVCMake::commandTriggered()
 {
-    pConsoleManager* cm = pConsoleManager::instance();
+    pConsoleManager* cm = MonkeyCore::consoleManager();
     pCommandList l = userCommands() << buildCommand();
     if ( QAction* a = qobject_cast<QAction*>( sender() ) )
         cm->addCommands( cm->recursiveCommandList( l, cm->getCommand( l, a->statusTip() ) ) );

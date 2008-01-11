@@ -16,20 +16,20 @@
 #define PCONSOLEMANAGER_H
 
 #include "MonkeyExport.h"
-#include "QSingleton.h"
 #include "pCommand.h"
 
-#include <QApplication>
 #include <QProcess>
 #include <QBuffer>
+#include <QPoint>
+#include <QHash>
 
 class pCommandParser;
 class QAction;
 
-class Q_MONKEY_EXPORT pConsoleManager : public QProcess, public QSingleton<pConsoleManager>
+class Q_MONKEY_EXPORT pConsoleManager : public QProcess
 {
 	Q_OBJECT
-	friend class QSingleton<pConsoleManager>;
+	friend class MonkeyCore;
 	
 public:
 	enum StepType { stUnknown = -1, stError, stWarning, stCompiling, stLinking, stFinish, stGood, stBad }; // , stState
@@ -69,11 +69,10 @@ protected:
 	QStringList mCurrentParsers;
 	QHash<QString, pCommandParser*> mParsers;
 	QAction* mStopAction;
-	void timerEvent( QTimerEvent* );
 
-private:
-	pConsoleManager( QObject* = QApplication::instance() );
+	pConsoleManager( QObject* = 0 );
 	~pConsoleManager();
+	void timerEvent( QTimerEvent* );
 
 	/*
 	Parse output, that are in the mBuffer.   

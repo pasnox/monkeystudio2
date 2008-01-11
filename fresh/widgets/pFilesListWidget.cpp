@@ -24,6 +24,8 @@ pFilesListWidget::pFilesListWidget( const QString& s, pExtendedWorkspace* p )
 	setAcceptDrops( true );
 	setContextMenuPolicy( Qt::CustomContextMenu );
 	setWidget( mList = new QListWidget() );
+	mList->setDragDropMode( QAbstractItemView::InternalMove );
+	mList->installEventFilter( this );
 	// connection
 	connect( mList, SIGNAL( currentRowChanged( int ) ), mWorkspace, SLOT( setCurrentIndex( int ) ) );
 	connect( mWorkspace, SIGNAL( currentChanged( int ) ), this, SLOT( setCurrentRow( int ) ) );
@@ -31,6 +33,27 @@ pFilesListWidget::pFilesListWidget( const QString& s, pExtendedWorkspace* p )
     connect( mWorkspace, SIGNAL( docTitleChanged( int, const QString& ) ), this, SLOT( docTitleChanged( int, const QString& ) ) );
     connect( mWorkspace, SIGNAL( documentInserted( int, const QString&, const QIcon& ) ), this, SLOT( documentInserted( int, const QString&, const QIcon& ) ) );
 	connect( mWorkspace, SIGNAL( documentAboutToClose( int ) ), this, SLOT( documentAboutToClose( int ) ) );
+}
+
+bool pFilesListWidget::eventFilter( QObject* o, QEvent* e )
+{
+	static int i = -1;
+	static QListWidgetItem* it = 0;
+	if ( e->type() == QEvent::ChildAdded )
+	{
+		i = mList->currentRow();
+		it = mList->item( i );
+	}
+	else if ( e->type() == QEvent::ChildRemoved )
+	{
+		int j = mList->row( it );
+		if ( i != j )
+		{
+			mWorkspace->moveDocument( i, j );
+			mList->setCurrentRow( j );
+		}
+	}
+	return QDockWidget::eventFilter( o, e );
 }
 
 void pFilesListWidget::dragEnterEvent( QDragEnterEvent* e )
@@ -51,6 +74,12 @@ void pFilesListWidget::dropEvent( QDropEvent* e )
 		emit urlsDropped( e->mimeData()->urls () );
 	// default event
 	QDockWidget::dropEvent( e );
+}
+
+void pFilesListWidget::setItemToolTip( int i, const QString& s )
+{
+	if ( QListWidgetItem* it = mList->item( i ) )
+		it->setToolTip( s );
 }
 
 void pFilesListWidget::modifiedChanged( int i, bool b )

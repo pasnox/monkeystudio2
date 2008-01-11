@@ -33,8 +33,9 @@ It's extendable with a powerfull plugins system.
 #include "UIMain.h"
 #include "pFileManager.h"
 #include "pSettings.h"
+#include "MonkeyCore.h"
 
-Navigator::Navigator (QObject* parent)
+Navigator::Navigator (QObject* )
 {
 	// set plugin infos
 	mPluginInfos.Caption = tr( "Navigator" );
@@ -44,8 +45,8 @@ Navigator::Navigator (QObject* parent)
 	mPluginInfos.Name =  "Navigator";
 	mPluginInfos.Version = "0.0.1";
 	mPluginInfos.Enabled = false;
-	displayMask = pSettings::instance()->value ("Plugins/Navigator/DisplayMask",65535).toInt();
-	expandMask = pSettings::instance()->value ("Plugins/Navigator/ExpandMask",32771).toInt();
+	displayMask = settingsValue( "DisplayMask", 65535 ).toInt();
+	expandMask = settingsValue( "ExpandMask", 32771 ).toInt();
 }
 
 bool Navigator::setEnabled (bool e)
@@ -55,7 +56,7 @@ bool Navigator::setEnabled (bool e)
 	mPluginInfos.Enabled = e;
 	if (mPluginInfos.Enabled)
 	{
-		dockwgt = new pDockWidget( pWorkspace::instance());
+		dockwgt = new pDockWidget( MonkeyCore::workspace());
 		//dockwgt->hide ();
 		dockwgt->setMinimumWidth (100);
 		fileWidget = new QWidget (dockwgt);
@@ -69,12 +70,12 @@ bool Navigator::setEnabled (bool e)
 		fileLock->setCheckable ( true );
 		fileBox->addWidget (fileLock);
 		dockwgt->setWidget (fileWidget);
-		UIMain::instance()->dockToolBar( Qt::RightToolBarArea )->addDock( dockwgt,  tr( "Navigator" ), QPixmap( ":/icons/redo.png" ) );
-		connect ( pFileManager::instance(), SIGNAL (currentFileChanged( pAbstractChild*, const QString& )) , this, SLOT (currentFileChanged( pAbstractChild*, const QString )));
+		MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( dockwgt,  tr( "Navigator" ), QPixmap( ":/icons/redo.png" ) );
+		connect ( MonkeyCore::fileManager(), SIGNAL (currentFileChanged( pAbstractChild*, const QString& )) , this, SLOT (currentFileChanged( pAbstractChild*, const QString )));
 	}
 	else
 	{
-		disconnect ( pFileManager::instance(), SIGNAL (currentFileChanged( pAbstractChild*, const QString& )) , this, SLOT (currentFileChanged( pAbstractChild*, const QString& )));
+		disconnect ( MonkeyCore::fileManager(), SIGNAL (currentFileChanged( pAbstractChild*, const QString& )) , this, SLOT (currentFileChanged( pAbstractChild*, const QString& )));
 		delete dockwgt;
 	}
 	return true;
@@ -88,7 +89,7 @@ QWidget* Navigator::settingsWidget ()
 void Navigator::setDisplayMask (int mask)
 {
 	displayMask = mask;
-	pSettings::instance()->setValue ("Plugins/Navigator/DisplayMask",QVariant(mask));
+	setSettingsValue( "DisplayMask", QVariant( mask ) );
 }
 	
 int Navigator::getDisplayMask (void)
@@ -97,7 +98,7 @@ int Navigator::getDisplayMask (void)
 void Navigator::setExpandMask (int mask)
 {
 	expandMask = mask;
-	pSettings::instance()->setValue ("Plugins/Navigator/ExpandMask",QVariant(mask));	
+	setSettingsValue( "ExpandMask", QVariant( mask ) );	
 }
 
 int Navigator::getExpandMask (void)

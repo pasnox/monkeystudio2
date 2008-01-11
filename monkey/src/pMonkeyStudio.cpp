@@ -12,6 +12,7 @@
 #include "pSettings.h"
 #include "PluginsManager.h"
 #include "ProjectPlugin.h"
+#include "MonkeyCore.h"
 
 #include "pAbstractChild.h"
 #include "pEditor.h"
@@ -69,7 +70,7 @@ void pMonkeyStudio::loadTranslations()
 	mTranslators.clear();
 	
 	// get user translation setted
-	QString mLanguage = pSettings::instance()->value( "Translations/Language", "english" ).toString();
+	QString mLanguage = MonkeyCore::settings()->value( "Translations/Language", "english" ).toString();
 	QLocale l( mLanguage );
 	// qt translation path
 	QString resourceDir = QLibraryInfo::location( QLibraryInfo::TranslationsPath );
@@ -92,7 +93,7 @@ void pMonkeyStudio::loadTranslations()
 	if ( mLanguage != "english" )
 	{
 		QTranslator* t = new QTranslator( qApp );
-		if ( t->load( QString( "%1/monkey_%2" ).arg( pSettings::instance()->value( "Translations/Path" ).toString(), mLanguage ) ) )
+		if ( t->load( QString( "%1/monkey_%2" ).arg( MonkeyCore::settings()->value( "Translations/Path" ).toString(), mLanguage ) ) )
 			addTranslator( t );
 	}
 }
@@ -164,12 +165,12 @@ QStringList pMonkeyStudio::defaultOperators()
 
 const QStringList pMonkeyStudio::availableOperators()
 {
-	QStringList l = pSettings::instance()->value( settingsPath() +"/Operators" ).toStringList();
+	QStringList l = MonkeyCore::settings()->value( settingsPath() +"/Operators" ).toStringList();
 	return l.isEmpty() ? defaultOperators() : l;
 }
 
 void pMonkeyStudio::setAvailableOperators( const QStringList& l )
-{ pSettings::instance()->setValue( settingsPath() +"/Operators", l ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/Operators", l ); }
 
 const QFileInfoList pMonkeyStudio::getFiles( QDir d, const QStringList& l, bool b )
 {
@@ -223,13 +224,13 @@ const QStringList pMonkeyStudio::getImageFileNames( const QString& c, const QStr
 	QFileDialog* d = getOpenDialog( QFileDialog::ExistingFiles, c.isEmpty() ? QObject::tr( "Select image(s)" ) : c, f, l.join( ";;" ), w );
 	// choose last used filter if available
 	if ( !l.isEmpty() )
-		d->selectFilter( pSettings::instance()->value( "Recents/ImageFilter" ).toString() );
+		d->selectFilter( MonkeyCore::settings()->value( "Recents/ImageFilter" ).toString() );
 	// execute dialog
 	if ( d->exec() )
 	{
 		// remember last filter if available
 		if ( !l.isEmpty() )
-			pSettings::instance()->setValue( "Recents/ImageFilter", d->selectedFilter() );
+			MonkeyCore::settings()->setValue( "Recents/ImageFilter", d->selectedFilter() );
 		// remember selected files
 		l = d->selectedFiles();
 		// delete dialog
@@ -254,13 +255,13 @@ const QStringList pMonkeyStudio::getOpenFileNames( const QString& c, const QStri
 	QFileDialog* d = getOpenDialog( QFileDialog::ExistingFiles, c.isEmpty() ? QObject::tr( "Select file(s)" ) : c, fn, f, w );
 	// choose last used filter if available
 	if ( !f.isEmpty() )
-		d->selectFilter( pSettings::instance()->value( "Recents/FileFilter" ).toString() );
+		d->selectFilter( MonkeyCore::settings()->value( "Recents/FileFilter" ).toString() );
 	// execute dialog
 	if ( d->exec() )
 	{
 		// remember last filter if available
 		if ( !f.isEmpty() )
-			pSettings::instance()->setValue( "Recents/FileFilter", d->selectedFilter() );
+			MonkeyCore::settings()->setValue( "Recents/FileFilter", d->selectedFilter() );
 		// remember selected files
 		QStringList l = d->selectedFiles();
 		// delete dialog
@@ -280,13 +281,13 @@ const QString pMonkeyStudio::getOpenFileName( const QString& c, const QString& f
 	QFileDialog* d = getOpenDialog( QFileDialog::ExistingFile, c.isEmpty() ? QObject::tr( "Select file" ) : c, fn, f, w );
 	// choose last used filter if available
 	if ( !f.isEmpty() )
-		d->selectFilter( pSettings::instance()->value( "Recents/FileFilter" ).toString() );
+		d->selectFilter( MonkeyCore::settings()->value( "Recents/FileFilter" ).toString() );
 	// execute dialog
 	if ( d->exec() )
 	{
 		// remember last filter if available
 		if ( !f.isEmpty() )
-			pSettings::instance()->setValue( "Recents/FileFilter", d->selectedFilter() );
+			MonkeyCore::settings()->setValue( "Recents/FileFilter", d->selectedFilter() );
 		// remember selected files
 		QStringList l = d->selectedFiles();
 		// delete dialog
@@ -306,13 +307,13 @@ const QString pMonkeyStudio::getSaveFileName( const QString& c, const QString& f
 	QFileDialog* d = getOpenDialog( QFileDialog::AnyFile, c.isEmpty() ? QObject::tr( "Choose a filename" ) : c, fn, f, w, QFileDialog::AcceptSave );
 	// choose last used filter if available
 	if ( !f.isEmpty() )
-		d->selectFilter( pSettings::instance()->value( "Recents/FileFilter" ).toString() );
+		d->selectFilter( MonkeyCore::settings()->value( "Recents/FileFilter" ).toString() );
 	// execute dialog
 	if ( d->exec() )
 	{
 		// remember last filter if available
 		if ( !f.isEmpty() )
-			pSettings::instance()->setValue( "Recents/FileFilter", d->selectedFilter() );
+			MonkeyCore::settings()->setValue( "Recents/FileFilter", d->selectedFilter() );
 		// remember selected files
 		QStringList l = d->selectedFiles();
 		// delete dialog
@@ -437,7 +438,7 @@ const QHash<QString, QStringList> pMonkeyStudio::availableLanguagesSuffixes()
 	// suffixes list
 	QHash<QString, QStringList> l;
 	// get settings
-	pSettings* s = pSettings::instance();
+	pSettings* s = MonkeyCore::settings();
 	// get associations from settings
 	s->beginGroup( "LexersAssociations" );
 	foreach ( QString k, s->childKeys() )
@@ -455,7 +456,7 @@ const QHash<QString, QStringList> pMonkeyStudio::availableFilesSuffixes()
 	// get language suffixes
 	QHash<QString, QStringList> l = availableLanguagesSuffixes();
 	// add child plugins suffixes
-	QHash<QString, QStringList> ps = PluginsManager::instance()->childSuffixes();
+	QHash<QString, QStringList> ps = MonkeyCore::pluginsManager()->childSuffixes();
 	foreach ( QString k, ps.keys() )
 		foreach ( QString s, ps[k] )
 			if ( !l[k].contains( s ) )
@@ -469,7 +470,7 @@ const QHash<QString, QStringList> pMonkeyStudio::availableProjectsSuffixes()
 	// temporary hash
 	QHash<QString, QStringList> mSuffixes;
 	// get all hash
-	foreach ( ProjectPlugin* pp, PluginsManager::instance()->plugins<ProjectPlugin*>( PluginsManager::stEnabled ) )
+	foreach ( ProjectPlugin* pp, MonkeyCore::pluginsManager()->plugins<ProjectPlugin*>( PluginsManager::stEnabled ) )
 		mSuffixes.unite( pp->suffixes() );
 	// return suffixes
 	return mSuffixes;
@@ -549,9 +550,9 @@ void pMonkeyStudio::prepareAPIs()
 		// clear raw api
 		a->clear();
 		// load prepared files
-		foreach ( QString f, pSettings::instance()->value( QString( "SourceAPIs/" ).append( ln ) ).toStringList() )
+		foreach ( QString f, MonkeyCore::settings()->value( QString( "SourceAPIs/" ).append( ln ) ).toStringList() )
 		{
-			if ( !a->load( f ) )
+			if ( !a->load( QDir::isRelativePath( f ) ? qApp->applicationDirPath().append( "/%1" ).arg( f ) : f ) )
 				warning( QObject::tr( "Loaging Api File..." ), QObject::tr( "An error occured when loading api file:\n%1" ).arg( f ) );
 		}
 		// start prepare for apis
@@ -652,7 +653,8 @@ QsciLexer* pMonkeyStudio::lexerForLanguage( const QString& s )
 		// add lexer to global lexers hash
 		mGlobalsLexers[l->language()] = l;
 		// read settings
-		l->readSettings( *pSettings::instance(), qPrintable( scintillaSettingsPath() ) );
+		pSettings* ss = MonkeyCore::settings();
+		l->readSettings( *ss, qPrintable( scintillaSettingsPath() ) );
 		// set apis
 		l->setAPIs( apisForLexer( l ) );
 	}
@@ -827,9 +829,10 @@ void pMonkeyStudio::resetLexer( QsciLexer* l )
 	if ( !l )
 		return;
 	// reset lexer settings
-	pSettings::instance()->remove( QString( "%1/%2" ).arg( scintillaSettingsPath() ).arg( l->language() ) );
+	MonkeyCore::settings()->remove( QString( "%1/%2" ).arg( scintillaSettingsPath() ).arg( l->language() ) );
 	// read default settings
-	l->readSettings( *pSettings::instance(), qPrintable( scintillaSettingsPath() ) );
+	pSettings* ss = MonkeyCore::settings();
+	l->readSettings( *ss, qPrintable( scintillaSettingsPath() ) );
 	// emit changes
 	l->refreshProperties();
 }
@@ -837,14 +840,15 @@ void pMonkeyStudio::resetLexer( QsciLexer* l )
 void pMonkeyStudio::applyProperties()
 {
 	// apply editor properties
-	foreach ( pAbstractChild* c, pWorkspace::instance()->children() )
+	foreach ( pAbstractChild* c, MonkeyCore::workspace()->children() )
 		foreach ( pEditor* e, c->findChildren<pEditor*>() )
 			setEditorProperties( e );
 	// apply lexers properties
+	pSettings* ss = MonkeyCore::settings();
 	foreach ( QsciLexer* l, mGlobalsLexers.values() )
 	{
 		// refresh properties
-		l->readSettings( *pSettings::instance(), qPrintable( scintillaSettingsPath() ) );
+		l->readSettings( *ss, qPrintable( scintillaSettingsPath() ) );
 		// refresh default pen/paper if needed
 		if ( defaultDocumentColours() )
 		{
@@ -853,7 +857,7 @@ void pMonkeyStudio::applyProperties()
 		}
 		// reload apis
 		if ( l->apis() )
-			foreach ( QString s, pSettings::instance()->value( QString( "SourceAPIs/" ).append( l->language() ) ).toStringList() )
+			foreach ( QString s, ss->value( QString( "SourceAPIs/" ).append( l->language() ) ).toStringList() )
 				l->apis()->loadPrepared( s );
 	}
 }
@@ -930,391 +934,391 @@ void pMonkeyStudio::setEditorProperties( pEditor* e )
 }
 
 void pMonkeyStudio::setRestoreProjectsOnStartup( bool b )
-{ pSettings::instance()->setValue( settingsPath() +"/RestoreProjectsOnStartup", b ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/RestoreProjectsOnStartup", b ); }
 
 const bool pMonkeyStudio::restoreProjectsOnStartup()
-{ return pSettings::instance()->value( settingsPath() +"/RestoreProjectsOnStartup", true ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/RestoreProjectsOnStartup", true ).toBool(); }
 
 void pMonkeyStudio::setDefaultProjectsDirectory( const QString& s )
-{ pSettings::instance()->setValue( settingsPath() +"/DefaultProjectsDirectory", s ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/DefaultProjectsDirectory", s ); }
 
 const QString pMonkeyStudio::defaultProjectsDirectory()
-{ return pSettings::instance()->value( settingsPath() +"/DefaultProjectsDirectory", "$HOME$/.Monkey Studio/Projects" ).toString(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/DefaultProjectsDirectory", "$HOME$/.Monkey Studio/Projects" ).toString(); }
 
 void pMonkeyStudio::setTabsHaveCloseButton( bool b )
-{ pSettings::instance()->setValue( settingsPath() +"/TabsHaveCloseButton", b ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/TabsHaveCloseButton", b ); }
 
 const bool pMonkeyStudio::tabsHaveCloseButton()
-{ return pSettings::instance()->value( settingsPath() +"/TabsHaveCloseButton", false ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/TabsHaveCloseButton", false ).toBool(); }
 
 void pMonkeyStudio::setTabsHaveShortcut( bool b )
-{ pSettings::instance()->setValue( settingsPath() +"/TabsHaveShortcut", b ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/TabsHaveShortcut", b ); }
 
 const bool pMonkeyStudio::tabsHaveShortcut()
-{ return pSettings::instance()->value( settingsPath() +"/TabsHaveShortcut", false ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/TabsHaveShortcut", false ).toBool(); }
 
 void pMonkeyStudio::setTabsElided( bool b )
-{ pSettings::instance()->setValue( settingsPath() +"/TabsElided", b ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/TabsElided", b ); }
 
 const bool pMonkeyStudio::tabsElided()
-{ return pSettings::instance()->value( settingsPath() +"/TabsElided", false ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/TabsElided", false ).toBool(); }
 
 void pMonkeyStudio::setTabsTextColor( const QColor& c )
-{ pSettings::instance()->setValue( settingsPath() +"/TabsTextColor", c ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/TabsTextColor", c ); }
 
 const QColor pMonkeyStudio::tabsTextColor()
-{ return pSettings::instance()->value( settingsPath() +"/TabsTextColor", QColor( Qt::black ) ).value<QColor>(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/TabsTextColor", QColor( Qt::black ) ).value<QColor>(); }
 
 void pMonkeyStudio::setCurrentTabTextColor( const QColor& c )
-{ pSettings::instance()->setValue( settingsPath() +"/CurrentTabTextColor", c ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/CurrentTabTextColor", c ); }
 
 const QColor pMonkeyStudio::currentTabTextColor()
-{ return pSettings::instance()->value( settingsPath() +"/CurrentTabTextColor", QColor( Qt::blue ) ).value<QColor>(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/CurrentTabTextColor", QColor( Qt::blue ) ).value<QColor>(); }
 
 /*
 void pMonkeyStudio::setTabMode( pTabbedWorkspace::TabMode m )
-{ pSettings::instance()->setValue( settingsPath() +"/TabMode", m ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/TabMode", m ); }
 
 const pTabbedWorkspace::TabMode pMonkeyStudio::tabMode()
-{ return (pTabbedWorkspace::TabMode)pSettings::instance()->value( settingsPath() +"/TabMode", pTabbedWorkspace::tmMDI ).toInt(); }
+{ return (pTabbedWorkspace::TabMode)MonkeyCore::settings()->value( settingsPath() +"/TabMode", pTabbedWorkspace::tmMDI ).toInt(); }
 */
 
 void pMonkeyStudio::setDocMode( pExtendedWorkspace::DocumentMode m )
-{ pSettings::instance()->setValue( settingsPath() +"/DocMode", m ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/DocMode", m ); }
 
 const pExtendedWorkspace::DocumentMode pMonkeyStudio::docMode()
-{ return (pExtendedWorkspace::DocumentMode)pSettings::instance()->value( settingsPath() +"/DocMode", pExtendedWorkspace::dmMDI ).toInt(); }
+{ return (pExtendedWorkspace::DocumentMode)MonkeyCore::settings()->value( settingsPath() +"/DocMode", pExtendedWorkspace::dmMDI ).toInt(); }
 
 void pMonkeyStudio::setExternalChanges( pMonkeyStudio::ExternalChangesMode e )
-{ pSettings::instance()->setValue( settingsPath() +"/ExternalChanges", e ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/ExternalChanges", e ); }
 
 const pMonkeyStudio::ExternalChangesMode pMonkeyStudio::externalchanges()
-{ return (pMonkeyStudio::ExternalChangesMode)pSettings::instance()->value( settingsPath() +"/ExternalChanges", pMonkeyStudio::ecmAlert ).toInt(); }
+{ return (pMonkeyStudio::ExternalChangesMode)MonkeyCore::settings()->value( settingsPath() +"/ExternalChanges", pMonkeyStudio::ecmAlert ).toInt(); }
 
 void pMonkeyStudio::setSaveSessionOnClose( bool b )
-{ pSettings::instance()->setValue( settingsPath() +"/SaveSessionOnClose", b ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/SaveSessionOnClose", b ); }
 
 const bool pMonkeyStudio::saveSessionOnClose()
-{ return pSettings::instance()->value( settingsPath() +"/SaveSessionOnClose", true ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/SaveSessionOnClose", true ).toBool(); }
 
 void pMonkeyStudio::setRestoreSessionOnStartup( bool b )
-{ pSettings::instance()->setValue( settingsPath() +"/RestoreSessionOnStartup", b ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/RestoreSessionOnStartup", b ); }
 
 const bool pMonkeyStudio::restoreSessionOnStartup()
-{ return pSettings::instance()->value( settingsPath() +"/RestoreSessionOnStartup", true ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/RestoreSessionOnStartup", true ).toBool(); }
 
 void pMonkeyStudio::setAutoSyntaxCheck( bool b )
-{ pSettings::instance()->setValue( settingsPath() +"/AutoSyntaxCheck", b ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoSyntaxCheck", b ); }
 
 const bool pMonkeyStudio::autoSyntaxCheck()
-{ return pSettings::instance()->value( settingsPath() +"/AutoSyntaxCheck", false ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/AutoSyntaxCheck", false ).toBool(); }
 
 void pMonkeyStudio::setConvertTabsUponOpen( bool b )
-{ pSettings::instance()->setValue( settingsPath() +"/ConvertTabsUponOpen", b ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/ConvertTabsUponOpen", b ); }
 
 const bool pMonkeyStudio::convertTabsUponOpen()
-{ return pSettings::instance()->value( settingsPath() +"/ConvertTabsUponOpen", false ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/ConvertTabsUponOpen", false ).toBool(); }
 
 void pMonkeyStudio::setCreateBackupUponOpen( bool b )
-{ pSettings::instance()->setValue( settingsPath() +"/CreateBackupUponOpen", b ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/CreateBackupUponOpen", b ); }
 
 const bool pMonkeyStudio::createBackupUponOpen()
-{ return pSettings::instance()->value( settingsPath() +"/CreateBackupUponOpen", false ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/CreateBackupUponOpen", false ).toBool(); }
 
 void pMonkeyStudio::setAutoEolConversion( bool b )
-{ pSettings::instance()->setValue( settingsPath() +"/AutoEolConversion", b ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoEolConversion", b ); }
 
 const bool pMonkeyStudio::autoEolConversion()
-{ return pSettings::instance()->value( settingsPath() +"/AutoEolConversion", true ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/AutoEolConversion", true ).toBool(); }
 
 void pMonkeyStudio::setDefaultEncoding( const QString& s )
-{ pSettings::instance()->setValue( settingsPath() +"/DefaultEncoding", s ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/DefaultEncoding", s ); }
 
 const QString pMonkeyStudio::defaultEncoding()
-{ return pSettings::instance()->value( settingsPath() +"/DefaultEncoding", "UTF-8" ).toString(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/DefaultEncoding", "UTF-8" ).toString(); }
 
 void pMonkeyStudio::setSelectionBackgroundColor( const QColor& c )
-{ pSettings::instance()->setValue( settingsPath() +"/SelectionBackgroundColor", c ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/SelectionBackgroundColor", c ); }
 
 const QColor pMonkeyStudio::selectionBackgroundColor()
-{ return pSettings::instance()->value( settingsPath() +"/SelectionBackgroundColor", QColor( "#bdff9b" ) ).value<QColor>(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/SelectionBackgroundColor", QColor( "#bdff9b" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setSelectionForegroundColor( const QColor& c )
-{ pSettings::instance()->setValue( settingsPath() +"/SelectionForegroundColor", c ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/SelectionForegroundColor", c ); }
 
 const QColor pMonkeyStudio::selectionForegroundColor()
-{ return pSettings::instance()->value( settingsPath() +"/SelectionForegroundColor", QColor( "#000000" ) ).value<QColor>(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/SelectionForegroundColor", QColor( "#000000" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setDefaultDocumentColours( bool b )
-{ pSettings::instance()->setValue( settingsPath() +"/DefaultDocumentColours", b ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/DefaultDocumentColours", b ); }
 
 const bool pMonkeyStudio::defaultDocumentColours()
-{ return pSettings::instance()->value( settingsPath() +"/DefaultDocumentColours", false ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/DefaultDocumentColours", false ).toBool(); }
 
 void pMonkeyStudio::setDefaultDocumentPen( const QColor& c )
-{ pSettings::instance()->setValue( settingsPath() +"/DefaultDocumentPen", c ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/DefaultDocumentPen", c ); }
 
 const QColor pMonkeyStudio::defaultDocumentPen()
-{ return pSettings::instance()->value( settingsPath() +"/DefaultDocumentPen", QColor( Qt::black ) ).value<QColor>(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/DefaultDocumentPen", QColor( Qt::black ) ).value<QColor>(); }
 
 void pMonkeyStudio::setDefaultDocumentPaper( const QColor& c )
-{ pSettings::instance()->setValue( settingsPath() +"/DefaultDocumentPaper", c ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/DefaultDocumentPaper", c ); }
 
 const QColor pMonkeyStudio::defaultDocumentPaper()
-{ return pSettings::instance()->value( settingsPath() +"/DefaultDocumentPaper", QColor( Qt::white ) ).value<QColor>(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/DefaultDocumentPaper", QColor( Qt::white ) ).value<QColor>(); }
 
 void pMonkeyStudio::setAutoCompletionCaseSensitivity( bool b )
-{ pSettings::instance()->setValue( settingsPath() +"/AutoCompletionCaseSensitivity", b ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoCompletionCaseSensitivity", b ); }
 
 const bool pMonkeyStudio::autoCompletionCaseSensitivity()
-{ return pSettings::instance()->value( settingsPath() +"/AutoCompletionCaseSensitivity", true ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/AutoCompletionCaseSensitivity", true ).toBool(); }
 
 void pMonkeyStudio::setAutoCompletionReplaceWord( bool b )
-{ pSettings::instance()->setValue( settingsPath() +"/AutoCompletionReplaceWord", b ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoCompletionReplaceWord", b ); }
 
 const bool pMonkeyStudio::autoCompletionReplaceWord()
-{ return pSettings::instance()->value( settingsPath() +"/AutoCompletionReplaceWord", true ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/AutoCompletionReplaceWord", true ).toBool(); }
 
 void pMonkeyStudio::setAutoCompletionShowSingle( bool b )
-{ pSettings::instance()->setValue( settingsPath() +"/AutoCompletionShowSingle", b ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoCompletionShowSingle", b ); }
 
 const bool pMonkeyStudio::autoCompletionShowSingle()
-{ return pSettings::instance()->value( settingsPath() +"/AutoCompletionShowSingle", false ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/AutoCompletionShowSingle", false ).toBool(); }
 
 void pMonkeyStudio::setAutoCompletionSource( QsciScintilla::AutoCompletionSource a )
-{ pSettings::instance()->setValue( settingsPath() +"/AutoCompletionSource", a ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoCompletionSource", a ); }
 
 const QsciScintilla::AutoCompletionSource pMonkeyStudio::autoCompletionSource()
-{ return (QsciScintilla::AutoCompletionSource)pSettings::instance()->value( settingsPath() +"/AutoCompletionSource", (int)QsciScintilla::AcsAll ).toInt(); }
+{ return (QsciScintilla::AutoCompletionSource)MonkeyCore::settings()->value( settingsPath() +"/AutoCompletionSource", (int)QsciScintilla::AcsAll ).toInt(); }
 
 void pMonkeyStudio::setAutoCompletionThreshold( int i )
-{ pSettings::instance()->setValue( settingsPath() +"/AutoCompletionThreshold", i ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoCompletionThreshold", i ); }
 
 const int pMonkeyStudio::autoCompletionThreshold()
-{ return pSettings::instance()->value( settingsPath() +"/AutoCompletionThreshold", 3 ).toInt(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/AutoCompletionThreshold", 3 ).toInt(); }
 
 void pMonkeyStudio::setCallTipsBackgroundColor( const QColor& c )
-{ pSettings::instance()->setValue( settingsPath() +"/CallTipsBackgroundColor", c ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/CallTipsBackgroundColor", c ); }
 
 const QColor pMonkeyStudio::callTipsBackgroundColor()
-{ return pSettings::instance()->value( settingsPath() +"/CallTipsBackgroundColor", QColor( "#ffff9b" ) ).value<QColor>(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/CallTipsBackgroundColor", QColor( "#ffff9b" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setCallTipsForegroundColor( const QColor& c )
-{ pSettings::instance()->setValue( settingsPath() +"/CallTipsForegroundColor", c ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/CallTipsForegroundColor", c ); }
 
 const QColor pMonkeyStudio::callTipsForegroundColor()
-{ return pSettings::instance()->value( settingsPath() +"/CallTipsForegroundColor", QColor( "#000000" ) ).value<QColor>(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/CallTipsForegroundColor", QColor( "#000000" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setCallTipsHighlightColor( const QColor& c )
-{ pSettings::instance()->setValue( settingsPath() +"/CallTipsHighlightColor", c ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/CallTipsHighlightColor", c ); }
 
 const QColor pMonkeyStudio::callTipsHighlightColor()
-{ return pSettings::instance()->value( settingsPath() +"/CallTipsHighlightColor", QColor( "#ff0000" ) ).value<QColor>(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/CallTipsHighlightColor", QColor( "#ff0000" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setCallTipsStyle( QsciScintilla::CallTipsStyle s )
-{ pSettings::instance()->setValue( settingsPath() +"/CallTipsStyle", s ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/CallTipsStyle", s ); }
 
 const QsciScintilla::CallTipsStyle pMonkeyStudio::callTipsStyle()
-{ return (QsciScintilla::CallTipsStyle)pSettings::instance()->value( settingsPath() +"/CallTipsStyle", (int)QsciScintilla::CallTipsContext ).toInt(); }
+{ return (QsciScintilla::CallTipsStyle)MonkeyCore::settings()->value( settingsPath() +"/CallTipsStyle", (int)QsciScintilla::CallTipsContext ).toInt(); }
 
 void pMonkeyStudio::setCallTipsVisible( int i )
-{ pSettings::instance()->setValue( settingsPath() +"/CallTipsVisible", i ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/CallTipsVisible", i ); }
 
 const int pMonkeyStudio::callTipsVisible()
-{ return pSettings::instance()->value( settingsPath() +"/CallTipsVisible", -1 ).toInt(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/CallTipsVisible", -1 ).toInt(); }
 
 void pMonkeyStudio::setAutoIndent( bool b )
-{ pSettings::instance()->setValue( settingsPath() +"/AutoIndent", b ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoIndent", b ); }
 
 const bool pMonkeyStudio::autoIndent()
-{ return pSettings::instance()->value( settingsPath() +"/AutoIndent", true ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/AutoIndent", true ).toBool(); }
 
 void pMonkeyStudio::setBackspaceUnindents( bool b )
-{ pSettings::instance()->setValue( settingsPath() +"/BackspaceUnindents", b ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/BackspaceUnindents", b ); }
 
 const bool pMonkeyStudio::backspaceUnindents()
-{ return pSettings::instance()->value( settingsPath() +"/BackspaceUnindents", true ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/BackspaceUnindents", true ).toBool(); }
 
 void pMonkeyStudio::setIndentationGuides( bool b )
-{ pSettings::instance()->setValue( settingsPath() +"/IndentationGuides", b ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/IndentationGuides", b ); }
 
 const bool pMonkeyStudio::indentationGuides()
-{ return pSettings::instance()->value( settingsPath() +"/IndentationGuides", true ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/IndentationGuides", true ).toBool(); }
 
 void pMonkeyStudio::setIndentationsUseTabs( bool b )
-{ pSettings::instance()->setValue( settingsPath() +"/IndentationsUseTabs", b ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/IndentationsUseTabs", b ); }
 
 const bool pMonkeyStudio::indentationsUseTabs()
-{ return pSettings::instance()->value( settingsPath() +"/IndentationsUseTabs", true ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/IndentationsUseTabs", true ).toBool(); }
 
 void pMonkeyStudio::setIndentationWidth( int i )
-{ pSettings::instance()->setValue( settingsPath() +"/IndentationWidth", i ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/IndentationWidth", i ); }
 
 const int pMonkeyStudio::indentationWidth()
-{ return pSettings::instance()->value( settingsPath() +"/IndentationWidth", 4 ).toInt(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/IndentationWidth", 4 ).toInt(); }
 
 void pMonkeyStudio::setTabIndents( bool b )
-{ pSettings::instance()->setValue( settingsPath() +"/TabIndents", b ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/TabIndents", b ); }
 
 const bool pMonkeyStudio::tabIndents()
-{ return pSettings::instance()->value( settingsPath() +"/TabIndents", true ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/TabIndents", true ).toBool(); }
 
 void pMonkeyStudio::setTabWidth( int i )
-{ pSettings::instance()->setValue( settingsPath() +"/TabWidth", i ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/TabWidth", i ); }
 
 const int pMonkeyStudio::tabWidth()
-{ return pSettings::instance()->value( settingsPath() +"/TabWidth", 4 ).toInt(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/TabWidth", 4 ).toInt(); }
 
 void pMonkeyStudio::setIndentationGuidesBackgroundColor( const QColor& c )
-{ pSettings::instance()->setValue( settingsPath() +"/IndentationGuidesBackgroundColor", c ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/IndentationGuidesBackgroundColor", c ); }
 
 const QColor pMonkeyStudio::indentationGuidesBackgroundColor()
-{ return pSettings::instance()->value( settingsPath() +"/IndentationGuidesBackgroundColor", QColor( "#0000ff" ) ).value<QColor>(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/IndentationGuidesBackgroundColor", QColor( "#0000ff" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setIndentationGuidesForegroundColor( const QColor& c )
-{ pSettings::instance()->setValue( settingsPath() +"/IndentationGuidesForegroundColor", c ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/IndentationGuidesForegroundColor", c ); }
 
 const QColor pMonkeyStudio::indentationGuidesForegroundColor()
-{ return pSettings::instance()->value( settingsPath() +"/IndentationGuidesForegroundColor", QColor( "#0000ff" ) ).value<QColor>(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/IndentationGuidesForegroundColor", QColor( "#0000ff" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setBraceMatching( QsciScintilla::BraceMatch b )
-{ pSettings::instance()->setValue( settingsPath() +"/BraceMatching", b ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/BraceMatching", b ); }
 
 const QsciScintilla::BraceMatch pMonkeyStudio::braceMatching()
-{ return (QsciScintilla::BraceMatch)pSettings::instance()->value( settingsPath() +"/BraceMatching", (int)QsciScintilla::SloppyBraceMatch ).toInt(); }
+{ return (QsciScintilla::BraceMatch)MonkeyCore::settings()->value( settingsPath() +"/BraceMatching", (int)QsciScintilla::SloppyBraceMatch ).toInt(); }
 
 void pMonkeyStudio::setMatchedBraceBackgroundColor( const QColor& c )
-{ pSettings::instance()->setValue( settingsPath() +"/MatchedBraceBackgroundColor", c ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/MatchedBraceBackgroundColor", c ); }
 
 const QColor pMonkeyStudio::matchedBraceBackgroundColor()
-{ return pSettings::instance()->value( settingsPath() +"/MatchedBraceBackgroundColor", QColor( "#ffff7f" ) ).value<QColor>(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/MatchedBraceBackgroundColor", QColor( "#ffff7f" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setMatchedBraceForegroundColor( const QColor& c )
-{ pSettings::instance()->setValue( settingsPath() +"/MatchedBraceForegroundColor", c ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/MatchedBraceForegroundColor", c ); }
 
 const QColor pMonkeyStudio::matchedBraceForegroundColor()
-{ return pSettings::instance()->value( settingsPath() +"/MatchedBraceForegroundColor", QColor( "#ff0000" ) ).value<QColor>(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/MatchedBraceForegroundColor", QColor( "#ff0000" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setUnmatchedBraceBackgroundColor( const QColor& c )
-{ pSettings::instance()->setValue( settingsPath() +"/UnmatchedBraceBackgroundColor", c ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/UnmatchedBraceBackgroundColor", c ); }
 
 const QColor pMonkeyStudio::unmatchedBraceBackgroundColor()
-{ return pSettings::instance()->value( settingsPath() +"/UnmatchedBraceBackgroundColor", QColor( "#55aa00" ) ).value<QColor>(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/UnmatchedBraceBackgroundColor", QColor( "#55aa00" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setUnmatchedBraceForegroundColor( const QColor& c )
-{ pSettings::instance()->setValue( settingsPath() +"/UnmatchedBraceForegroundColor", c ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/UnmatchedBraceForegroundColor", c ); }
 
 const QColor pMonkeyStudio::unmatchedBraceForegroundColor()
-{ return pSettings::instance()->value( settingsPath() +"/UnmatchedBraceForegroundColor", QColor( "#ff0000" ) ).value<QColor>(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/UnmatchedBraceForegroundColor", QColor( "#ff0000" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setEdgeMode( QsciScintilla::EdgeMode m )
-{ pSettings::instance()->setValue( settingsPath() +"/EdgeMode", m ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/EdgeMode", m ); }
 
 const QsciScintilla::EdgeMode pMonkeyStudio::edgeMode()
-{ return (QsciScintilla::EdgeMode)pSettings::instance()->value( settingsPath() +"/EdgeMode", (int)QsciScintilla::EdgeNone ).toInt(); }
+{ return (QsciScintilla::EdgeMode)MonkeyCore::settings()->value( settingsPath() +"/EdgeMode", (int)QsciScintilla::EdgeNone ).toInt(); }
 
 void pMonkeyStudio::setEdgeColor( const QColor& c )
-{ pSettings::instance()->setValue( settingsPath() +"/EdgeColor", c ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/EdgeColor", c ); }
 
 const QColor pMonkeyStudio::edgeColor()
-{ return pSettings::instance()->value( settingsPath() +"/EdgeColor", QColor( "#ff0000" ) ).value<QColor>(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/EdgeColor", QColor( "#ff0000" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setEdgeColumn( int i )
-{ pSettings::instance()->setValue( settingsPath() +"/EdgeColumn", i ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/EdgeColumn", i ); }
 
 const int pMonkeyStudio::edgeColumn()
-{ return pSettings::instance()->value( settingsPath() +"/EdgeColumn", 80 ).toInt(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/EdgeColumn", 80 ).toInt(); }
 
 void pMonkeyStudio::setCaretLineVisible( bool b )
-{ pSettings::instance()->setValue( settingsPath() +"/CaretLineVisible", b ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/CaretLineVisible", b ); }
 
 const bool pMonkeyStudio::caretLineVisible()
-{ return pSettings::instance()->value( settingsPath() +"/CaretLineVisible", true ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/CaretLineVisible", true ).toBool(); }
 
 void pMonkeyStudio::setCaretLineBackgroundColor( const QColor& c )
-{ pSettings::instance()->setValue( settingsPath() +"/CaretLineBackgroundColor", c ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/CaretLineBackgroundColor", c ); }
 
 const QColor pMonkeyStudio::caretLineBackgroundColor()
-{ return pSettings::instance()->value( settingsPath() +"/CaretLineBackgroundColor", QColor( "#aaaaff" ) ).value<QColor>(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/CaretLineBackgroundColor", QColor( "#aaaaff" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setCaretForegroundColor( const QColor& c )
-{ pSettings::instance()->setValue( settingsPath() +"/CaretForegroundColor", c ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/CaretForegroundColor", c ); }
 
 const QColor pMonkeyStudio::caretForegroundColor()
-{ return pSettings::instance()->value( settingsPath() +"/CaretForegroundColor", QColor( "#000000" ) ).value<QColor>(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/CaretForegroundColor", QColor( "#000000" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setCaretWidth( int i )
-{ pSettings::instance()->setValue( settingsPath() +"/CaretWidth", i ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/CaretWidth", i ); }
 
 const int pMonkeyStudio::caretWidth()
-{ return pSettings::instance()->value( settingsPath() +"/CaretWidth", 1 ).toInt(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/CaretWidth", 1 ).toInt(); }
 
 void pMonkeyStudio::setLineNumbersMarginEnabled( bool b )
-{ pSettings::instance()->setValue( settingsPath() +"/LineNumbersMarginEnabled", b ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/LineNumbersMarginEnabled", b ); }
 
 const bool pMonkeyStudio::lineNumbersMarginEnabled()
-{ return pSettings::instance()->value( settingsPath() +"/LineNumbersMarginEnabled", true ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/LineNumbersMarginEnabled", true ).toBool(); }
 
 void pMonkeyStudio::setLineNumbersMarginWidth( int i )
-{ pSettings::instance()->setValue( settingsPath() +"/LineNumbersMarginWidth", i ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/LineNumbersMarginWidth", i ); }
 
 const int pMonkeyStudio::lineNumbersMarginWidth()
-{ return pSettings::instance()->value( settingsPath() +"/LineNumbersMarginWidth", 4 ).toInt(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/LineNumbersMarginWidth", 4 ).toInt(); }
 
 void pMonkeyStudio::setLineNumbersMarginAutoWidth( bool b )
-{ pSettings::instance()->setValue( settingsPath() +"/LineNumbersMarginAutoWidth", b ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/LineNumbersMarginAutoWidth", b ); }
 
 const bool pMonkeyStudio::lineNumbersMarginAutoWidth()
-{ return pSettings::instance()->value( settingsPath() +"/LineNumbersMarginAutoWidth", true ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/LineNumbersMarginAutoWidth", true ).toBool(); }
 
 void pMonkeyStudio::setFolding( QsciScintilla::FoldStyle f )
-{ pSettings::instance()->setValue( settingsPath() +"/Folding", f ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/Folding", f ); }
 
 const QsciScintilla::FoldStyle pMonkeyStudio::folding()
-{ return (QsciScintilla::FoldStyle)pSettings::instance()->value( settingsPath() +"/Folding", (int)QsciScintilla::BoxedTreeFoldStyle ).toInt(); }
+{ return (QsciScintilla::FoldStyle)MonkeyCore::settings()->value( settingsPath() +"/Folding", (int)QsciScintilla::BoxedTreeFoldStyle ).toInt(); }
 
 void pMonkeyStudio::setFoldMarginBackgroundColor( const QColor& c )
-{ pSettings::instance()->setValue( settingsPath() +"/FoldMarginBackgroundColor", c ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/FoldMarginBackgroundColor", c ); }
 
 const QColor pMonkeyStudio::foldMarginBackgroundColor()
-{ return pSettings::instance()->value( settingsPath() +"/FoldMarginBackgroundColor", QColor( "#c0c0c0" ) ).value<QColor>(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/FoldMarginBackgroundColor", QColor( "#c0c0c0" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setFoldMarginForegroundColor( const QColor& c )
-{ pSettings::instance()->setValue( settingsPath() +"/FoldMarginForegroundColor", c ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/FoldMarginForegroundColor", c ); }
 
 const QColor pMonkeyStudio::foldMarginForegroundColor()
-{ return pSettings::instance()->value( settingsPath() +"/FoldMarginForegroundColor", QColor( "#000000" ) ).value<QColor>(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/FoldMarginForegroundColor", QColor( "#000000" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setMarginsEnabled( bool b )
-{ pSettings::instance()->setValue( settingsPath() +"/MarginsEnabled", b ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/MarginsEnabled", b ); }
 
 const bool pMonkeyStudio::marginsEnabled()
-{ return pSettings::instance()->value( settingsPath() +"/MarginsEnabled", false ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/MarginsEnabled", false ).toBool(); }
 
 void pMonkeyStudio::setMarginsBackgroundColor( const QColor& c )
-{ pSettings::instance()->setValue( settingsPath() +"/MarginsBackgroundColor", c ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/MarginsBackgroundColor", c ); }
 
 const QColor pMonkeyStudio::marginsBackgroundColor()
-{ return pSettings::instance()->value( settingsPath() +"/MarginsBackgroundColor", QColor( "#c0c0c0" ) ).value<QColor>(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/MarginsBackgroundColor", QColor( "#c0c0c0" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setMarginsForegroundColor( const QColor& c )
-{ pSettings::instance()->setValue( settingsPath() +"/MarginsForegroundColor", c ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/MarginsForegroundColor", c ); }
 
 const QColor pMonkeyStudio::marginsForegroundColor()
-{ return pSettings::instance()->value( settingsPath() +"/MarginsForegroundColor", QColor( "#000000" ) ).value<QColor>(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/MarginsForegroundColor", QColor( "#000000" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setMarginsFont( const QFont& f )
-{ pSettings::instance()->setValue( settingsPath() +"/MarginsFont", f.toString() ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/MarginsFont", f.toString() ); }
 
 const QFont pMonkeyStudio::marginsFont()
 {
 	QFont f;
-	f.fromString( pSettings::instance()->value( settingsPath() +"/MarginsFont", f.toString() ).toString() );
+	f.fromString( MonkeyCore::settings()->value( settingsPath() +"/MarginsFont", f.toString() ).toString() );
 	return f;
 }
 
 void pMonkeyStudio::setEolMode( QsciScintilla::EolMode e )
-{ pSettings::instance()->setValue( settingsPath() +"/EolMode", e ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/EolMode", e ); }
 
 const QsciScintilla::EolMode pMonkeyStudio::eolMode()
 {
@@ -1325,7 +1329,7 @@ const QsciScintilla::EolMode pMonkeyStudio::eolMode()
 #else
 	int i = QsciScintilla::EolUnix;
 #endif
-	return (QsciScintilla::EolMode)pSettings::instance()->value( settingsPath() +"/EolMode", i ).toInt();
+	return (QsciScintilla::EolMode)MonkeyCore::settings()->value( settingsPath() +"/EolMode", i ).toInt();
 }
 
 QString pMonkeyStudio::getEol( QsciScintilla::EolMode e )
@@ -1347,43 +1351,43 @@ QString pMonkeyStudio::getEol( QsciScintilla::EolMode e )
 }
 
 void pMonkeyStudio::setEolVisibility( bool b )
-{ pSettings::instance()->setValue( settingsPath() +"/EolVisibility", b ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/EolVisibility", b ); }
 
 const bool pMonkeyStudio::eolVisibility()
-{ return pSettings::instance()->value( settingsPath() +"/EolVisibility", false ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/EolVisibility", false ).toBool(); }
 
 void pMonkeyStudio::setWhitespaceVisibility( QsciScintilla::WhitespaceVisibility w )
-{ pSettings::instance()->setValue( settingsPath() +"/WhitespaceVisibility", w ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/WhitespaceVisibility", w ); }
 
 const QsciScintilla::WhitespaceVisibility pMonkeyStudio::whitespaceVisibility()
-{ return (QsciScintilla::WhitespaceVisibility)pSettings::instance()->value( settingsPath() +"/WhitespaceVisibility", (int)QsciScintilla::WsInvisible ).toInt(); }
+{ return (QsciScintilla::WhitespaceVisibility)MonkeyCore::settings()->value( settingsPath() +"/WhitespaceVisibility", (int)QsciScintilla::WsInvisible ).toInt(); }
 
 void pMonkeyStudio::setWrapMode( QsciScintilla::WrapMode w )
-{ pSettings::instance()->setValue( settingsPath() +"/WrapMode", w ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/WrapMode", w ); }
 
 const QsciScintilla::WrapMode pMonkeyStudio::wrapMode()
-{ return (QsciScintilla::WrapMode)pSettings::instance()->value( settingsPath() +"/WrapMode", (int)QsciScintilla::WrapNone ).toInt(); }
+{ return (QsciScintilla::WrapMode)MonkeyCore::settings()->value( settingsPath() +"/WrapMode", (int)QsciScintilla::WrapNone ).toInt(); }
 
 void pMonkeyStudio::setWrapVisualFlagsEnabled( bool b )
-{ pSettings::instance()->setValue( settingsPath() +"/WrapVisualFlagsEnabled", b ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/WrapVisualFlagsEnabled", b ); }
 
 const bool pMonkeyStudio::wrapVisualFlagsEnabled()
-{ return pSettings::instance()->value( settingsPath() +"/WrapVisualFlagsEnabled", false ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/WrapVisualFlagsEnabled", false ).toBool(); }
 
 void pMonkeyStudio::setStartWrapVisualFlag( QsciScintilla::WrapVisualFlag f )
-{ pSettings::instance()->setValue( settingsPath() +"/StartWrapVisualFlag", f ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/StartWrapVisualFlag", f ); }
 
 const QsciScintilla::WrapVisualFlag pMonkeyStudio::startWrapVisualFlag()
-{ return (QsciScintilla::WrapVisualFlag)pSettings::instance()->value( settingsPath() +"/StartWrapVisualFlag", (int)QsciScintilla::WrapFlagNone ).toInt(); }
+{ return (QsciScintilla::WrapVisualFlag)MonkeyCore::settings()->value( settingsPath() +"/StartWrapVisualFlag", (int)QsciScintilla::WrapFlagNone ).toInt(); }
 
 void pMonkeyStudio::setEndWrapVisualFlag( QsciScintilla::WrapVisualFlag f )
-{ pSettings::instance()->setValue( settingsPath() +"/EndWrapVisualFlag", f ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/EndWrapVisualFlag", f ); }
 
 const QsciScintilla::WrapVisualFlag pMonkeyStudio::endWrapVisualFlag()
-{ return (QsciScintilla::WrapVisualFlag)pSettings::instance()->value( settingsPath() +"/EndWrapVisualFlag", (int)QsciScintilla::WrapFlagNone ).toInt(); }
+{ return (QsciScintilla::WrapVisualFlag)MonkeyCore::settings()->value( settingsPath() +"/EndWrapVisualFlag", (int)QsciScintilla::WrapFlagNone ).toInt(); }
 
 void pMonkeyStudio::setWrappedLineIndentWidth( int i )
-{ pSettings::instance()->setValue( settingsPath() +"/WrappedLineIndentWidth", i ); }
+{ MonkeyCore::settings()->setValue( settingsPath() +"/WrappedLineIndentWidth", i ); }
 
 const int pMonkeyStudio::wrappedLineIndentWidth()
-{ return pSettings::instance()->value( settingsPath() +"/WrappedLineIndentWidth", 0 ).toInt(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/WrappedLineIndentWidth", 0 ).toInt(); }

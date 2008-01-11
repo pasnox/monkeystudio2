@@ -15,6 +15,7 @@
 #include "pDockMessageBox.h"
 #include "pFileManager.h"
 #include "ProjectItem.h"
+#include "MonkeyCore.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -90,13 +91,13 @@ pDockMessageBox::pDockMessageBox( QWidget* w )
 	// connections
 	connect( lwBuildSteps, SIGNAL( itemPressed( QListWidgetItem* ) ), this, SLOT( lwBuildSteps_itemPressed( QListWidgetItem* ) ) );
 	connect( leRawCommand, SIGNAL( returnPressed() ), this, SLOT( leRawCommand_returnPressed() ) );
-	connect( pConsoleManager::instance(), SIGNAL( commandError( const pCommand&, QProcess::ProcessError ) ), this, SLOT( commandError( const pCommand&, QProcess::ProcessError ) ) );
-	connect( pConsoleManager::instance(), SIGNAL( commandFinished( const pCommand&, int, QProcess::ExitStatus ) ), this, SLOT( commandFinished( const pCommand&, int, QProcess::ExitStatus ) ) );
-	connect( pConsoleManager::instance(), SIGNAL( commandReadyRead( const pCommand&, const QByteArray& ) ), this, SLOT( commandReadyRead( const pCommand&, const QByteArray& ) ) );
-	connect( pConsoleManager::instance(), SIGNAL( commandStarted( const pCommand& ) ), this, SLOT( commandStarted( const pCommand& ) ) );
-	connect( pConsoleManager::instance(), SIGNAL( commandStateChanged( const pCommand&, QProcess::ProcessState ) ), this, SLOT( commandStateChanged( const pCommand&, QProcess::ProcessState ) ) );
-	connect( pConsoleManager::instance(), SIGNAL( commandSkipped( const pCommand& ) ), this, SLOT( commandSkipped( const pCommand& ) ) );
-	connect( pConsoleManager::instance(), SIGNAL( newStepAvailable( const pConsoleManager::Step& ) ), this, SLOT( appendStep( const pConsoleManager::Step& ) ) );
+	connect( MonkeyCore::consoleManager(), SIGNAL( commandError( const pCommand&, QProcess::ProcessError ) ), this, SLOT( commandError( const pCommand&, QProcess::ProcessError ) ) );
+	connect( MonkeyCore::consoleManager(), SIGNAL( commandFinished( const pCommand&, int, QProcess::ExitStatus ) ), this, SLOT( commandFinished( const pCommand&, int, QProcess::ExitStatus ) ) );
+	connect( MonkeyCore::consoleManager(), SIGNAL( commandReadyRead( const pCommand&, const QByteArray& ) ), this, SLOT( commandReadyRead( const pCommand&, const QByteArray& ) ) );
+	connect( MonkeyCore::consoleManager(), SIGNAL( commandStarted( const pCommand& ) ), this, SLOT( commandStarted( const pCommand& ) ) );
+	connect( MonkeyCore::consoleManager(), SIGNAL( commandStateChanged( const pCommand&, QProcess::ProcessState ) ), this, SLOT( commandStateChanged( const pCommand&, QProcess::ProcessState ) ) );
+	connect( MonkeyCore::consoleManager(), SIGNAL( commandSkipped( const pCommand& ) ), this, SLOT( commandSkipped( const pCommand& ) ) );
+	connect( MonkeyCore::consoleManager(), SIGNAL( newStepAvailable( const pConsoleManager::Step& ) ), this, SLOT( appendStep( const pConsoleManager::Step& ) ) );
 }
 
 pDockMessageBox::~pDockMessageBox()
@@ -306,7 +307,7 @@ void pDockMessageBox::lwBuildSteps_itemPressed( QListWidgetItem* it )
 		return;
 	
 	// get current project
-	if ( ProjectItem* pi = pFileManager::instance()->currentProject() )
+	if ( ProjectItem* pi = MonkeyCore::fileManager()->currentProject() )
 	{
 		// get top project of current project
 		while ( ProjectItem* ppi = pi->parentProject() )
@@ -330,14 +331,14 @@ void pDockMessageBox::lwBuildSteps_itemPressed( QListWidgetItem* it )
 		
 		// open file if ok
 		if ( b && !s.isEmpty() )
-			pFileManager::instance()->goToLine( s, it->data( Qt::UserRole +3 ).toPoint(), true );
+			MonkeyCore::fileManager()->goToLine( s, it->data( Qt::UserRole +3 ).toPoint(), true );
 	}
 }
 
 void pDockMessageBox::leRawCommand_returnPressed()
 {
 	// send command
-	pConsoleManager::instance()->sendRawCommand( leRawCommand->text() );
+	MonkeyCore::consoleManager()->sendRawCommand( leRawCommand->text() );
 	// clear lineedit
 	leRawCommand->clear();
 }

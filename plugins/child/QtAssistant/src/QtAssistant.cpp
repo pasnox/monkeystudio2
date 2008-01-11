@@ -3,6 +3,7 @@
 #include "UIMain.h"
 #include "pDockToolBar.h"
 #include "QtAssistantChild.h"
+#include "MonkeyCore.h"
 
 // assistant include
 #include "config.h"
@@ -41,7 +42,7 @@ bool QtAssistant::setEnabled( bool b )
 		if ( !conf )
 			warning( tr( "Qt Assistant profile..." ), tr( "Can't load/create the default profile for Qt Assistant, aborting..." ) );
 		// install dock
-		UIMain::instance()->dockToolBar( Qt::RightToolBarArea )->addDock( QtAssistantChild::instance()->dock(), infos().Caption, QIcon( ":/trolltech/assistant/images/assistant.png" ) );
+		MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( QtAssistantChild::instance()->dock(), infos().Caption, QIcon( ":/trolltech/assistant/images/assistant.png" ) );
 		// set plugin enabled
 		mPluginInfos.Enabled = true;
 	}

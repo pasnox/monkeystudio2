@@ -2,22 +2,20 @@
 #define PFILEMANAGER_H
 
 #include "MonkeyExport.h"
-#include "QSingleton.h"
 
 #include <QObject>
-#include <QApplication>
+#include <QPoint>
 
 class pAbstractChild;
 class ProjectItem;
 
-class Q_MONKEY_EXPORT pFileManager : public QObject, public QSingleton<pFileManager>
+class Q_MONKEY_EXPORT pFileManager : public QObject
 {
 	Q_OBJECT
-	friend class QSingleton<pFileManager>;
+	friend class MonkeyCore;
 	friend class pWorkspace;
 
 public:
-	pFileManager( QObject* = QApplication::instance() );
 	ProjectItem* currentProject() const;
 	QString currentProjectFile() const;
 	QString currentProjectPath() const;
@@ -27,6 +25,9 @@ public:
 	ProjectItem* currentItem() const;
 	QString currentItemFile() const;
 	QString currentItemPath() const;
+
+protected:
+	pFileManager( QObject* = 0 );
 
 public slots:
 	pAbstractChild* openFile( const QString& );
@@ -46,7 +47,6 @@ signals:
 	void modifiedChanged( ProjectItem*, bool );
 	void currentChanged( ProjectItem* );
 	void opened( ProjectItem* );
-
 };
 
 #endif // PFILEMANAGER_H

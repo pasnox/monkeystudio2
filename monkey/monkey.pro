@@ -16,7 +16,7 @@ include( monkey.pri )
 
 TEMPLATE	= app
 LANGUAGE	= Qt4/C++
-TARGET	= monkey
+TARGET	= monkeystudio
 DESTDIR	= ../bin
 CONFIG	*= qt warn_on thread x11 windows debug_and_release
 QT	*= gui core
@@ -41,7 +41,7 @@ else:unix:*-g++:LIBS	*= -rdynamic
 
 PRE_TARGETDEPS	*= ../qscintilla ../fresh ../ctags
 
-CONFIG( DebugBuild )|CONFIG( debug, debug|release ) {
+CONFIG( debug, debug|release ) {
 	#Debug
 	CONFIG	+= console
 	unix:TARGET	= $$join(TARGET,,,_debug)
@@ -68,6 +68,9 @@ CONFIG( DebugBuild )|CONFIG( debug, debug|release ) {
 	win32-g++:LIBS	*= -Wl,--out-implib,$${BUILD_PATH}/lib$${TARGET}.a
 	win32-msvc*:LIBS	*= /IMPLIB:$${BUILD_PATH}/$${TARGET}.lib -lshell32
 }
+
+# include install script
+include ( installs.pri )
 
 FORMS	*= src/maininterface/ui/UITranslator.ui \
 	src/maininterface/ui/UIAbout.ui \
@@ -125,7 +128,9 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/projectsmanager/ProjectsModel.h \
 	src/projectsmanager/ProjectsProxy.h \
 	src/projectsmanager/ProjectItem.h \
-	src/pluginsmanager/ui/UICompilerSettings.h
+	src/pluginsmanager/ui/UICompilerSettings.h \
+	src/settingsmanager/Settings.h \
+	src/coremanager/MonkeyCore.h
 
 SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/maininterface/ui/UIAbout.cpp \
@@ -162,11 +167,13 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/projectsmanager/ProjectsProxy.cpp \
 	src/projectsmanager/ProjectItem.cpp \
 	src/main.cpp \
-	src/pluginsmanager/ui/UICompilerSettings.cpp
+	src/pluginsmanager/ui/UICompilerSettings.cpp \
+	src/settingsmanager/Settings.cpp \
+	src/coremanager/MonkeyCore.cpp
 
 mac:SOURCES	*= src/toolsmanager/pDesktopApplications_mac.cpp
 else:unix:SOURCES	*= src/toolsmanager/pDesktopApplications_unix.cpp
 win32:SOURCES	*= src/toolsmanager/pDesktopApplications_win32.cpp
 
-TRANSLATIONS	= ../translations/monkey_french.ts \
+TRANSLATIONS	*= ../translations/monkey_french.ts \
 	../translations/monkey_belarusian.ts

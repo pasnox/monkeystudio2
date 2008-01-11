@@ -8,32 +8,41 @@
  ********************************************************************************************************/
 #include "pSettings.h"
 
+#include <QApplication>
 #include <QDir>
 #include <QFile>
 #include <QMainWindow>
 
-pSettings::pSettings( const QString& pName, const QString& pVersion, QObject* o )
-	: QSettings( QDir::convertSeparators( QString( "%1/.%2/%3.ini" ).arg( QDir::homePath(), pName, pName ) ), QSettings::IniFormat, o )
+QString pSettings::mProgramName;
+QString pSettings::mProgramVersion;
+
+QString getIniFile( const QString& s )
+{
+#ifdef Q_OS_MAC
+	return QString( "%1/../%2.ini" ).arg( QApplication::applicationDirPath() ).arg( s );
+#else
+	return QString( "%1/.%2/%2.ini" ).arg( QDir::homePath() ).arg( s );
+#endif
+}
+
+pSettings::pSettings( QObject* o )
+	: QSettings( QDir::convertSeparators( getIniFile( mProgramName ) ), QSettings::IniFormat, o )
+{ beginGroup( mProgramVersion ); }
+
+pSettings::~pSettings()
+{ endGroup(); }
+
+void pSettings::setIniInformations( const QString& pName, const QString& pVersion )
 {
 	mProgramName = pName;
 	mProgramVersion = pVersion;
-	beginGroup( mProgramVersion );
 }
 
-pSettings::~pSettings()
-{
-	endGroup();
-}
+QString pSettings::programName()
+{ return mProgramName; }
 
-QString pSettings::programName() const
-{
-	return mProgramName;
-}
-
-QString pSettings::programVersion() const
-{
-	return mProgramVersion;
-}
+QString pSettings::programVersion()
+{ return mProgramVersion; }
 
 void pSettings::restoreState( QMainWindow* w )
 {
@@ -55,7 +64,6 @@ void pSettings::saveState( QMainWindow* w )
 {
 	if ( !w )
 		return;
-
 	setValue( "MainWindow/Maximized", w->isMaximized() );
 	setValue( "MainWindow/Position", w->pos() );
 	setValue( "MainWindow/Size", w->size() );

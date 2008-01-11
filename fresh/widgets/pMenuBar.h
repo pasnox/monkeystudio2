@@ -17,7 +17,6 @@
 #define PMENUBAR_H
 
 #include "MonkeyExport.h"
-#include "QSingleton.h"
 
 #include <QMenuBar>
 #include <QHash>
@@ -60,12 +59,12 @@ inline QString pMenuBarGroup::toString() const
 	return result;
 }
 
-class Q_MONKEY_EXPORT pMenuBar : public QMenuBar, public QSingleton<pMenuBar>
+class Q_MONKEY_EXPORT pMenuBar : public QMenuBar
 {
 	Q_OBJECT
-	friend class QSingleton<pMenuBar>;
 
 public:
+	pMenuBar( QWidget* = 0 );
 	static QString normalizedKey( const QString& );
 	void beginGroupOrArray( const pMenuBarGroup& );
 	void beginGroup( const QString& );
@@ -81,8 +80,6 @@ public:
 	void deleteMenu( const QString& = QString::null );
 
 private:
-	pMenuBar( QWidget* = 0 );
-
 	QAction* searchAction( QMenu*, const QString& );
 
 	QString mMenuGroup;

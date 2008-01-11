@@ -15,9 +15,10 @@
 #ifndef PFILELISTEDITOR_H
 #define PFILELISTEDITOR_H
 
+#include "MonkeyExport.h"
 #include "pStringListEditor.h"
 
-class pFileListEditor : public pStringListEditor
+class Q_MONKEY_EXPORT pFileListEditor : public pStringListEditor
 {
     Q_OBJECT
 	
