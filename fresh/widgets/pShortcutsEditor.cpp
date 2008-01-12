@@ -31,11 +31,11 @@ pShortcutsEditor::pShortcutsEditor( QWidget* w )
 	twShortcuts->header()->setResizeMode( QHeaderView::ResizeToContents );
 	twShortcuts->header()->hide();
 
-	pbRestore = new QPushButton( tr( "&Restore default" ), this );
+	pbRestore = new QPushButton( tr( "Restore default" ), this );
 	pbRestore->setObjectName( "pbRestore" );
 	pbRestore->setEnabled( false );
 
-	pbClear = new QPushButton( tr( "C&lear" ), this );
+	pbClear = new QPushButton( tr( "Clear" ), this );
 	pbClear->setObjectName( "pbClear" );
 	pbClear->setEnabled( false );
 
@@ -43,11 +43,11 @@ pShortcutsEditor::pShortcutsEditor( QWidget* w )
 	leShortcut->setObjectName( "leShortcut" );
 	leShortcut->setEnabled( false );
 
-	pbSet = new QPushButton( tr( "&Set" ), this );
+	pbSet = new QPushButton( tr( "Set" ), this );
 	pbSet->setObjectName( "pbSet" );
 	pbSet->setEnabled( false );
 
-	pbClose = new QPushButton( tr( "&Close" ), this );
+	pbClose = new QPushButton( tr( "Close" ), this );
 	pbClose->setObjectName( "pbClose" );
 
 	QBoxLayout* hl = new QBoxLayout( QBoxLayout::LeftToRight );
