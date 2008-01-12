@@ -987,7 +987,7 @@ void pMonkeyStudio::setDocMode( pExtendedWorkspace::DocumentMode m )
 { MonkeyCore::settings()->setValue( settingsPath() +"/DocMode", m ); }
 
 const pExtendedWorkspace::DocumentMode pMonkeyStudio::docMode()
-{ return (pExtendedWorkspace::DocumentMode)MonkeyCore::settings()->value( settingsPath() +"/DocMode", pExtendedWorkspace::dmMDI ).toInt(); }
+{ return (pExtendedWorkspace::DocumentMode)MonkeyCore::settings()->value( settingsPath() +"/DocMode", pExtendedWorkspace::dmSDI ).toInt(); }
 
 void pMonkeyStudio::setExternalChanges( pMonkeyStudio::ExternalChangesMode e )
 { MonkeyCore::settings()->setValue( settingsPath() +"/ExternalChanges", e ); }
