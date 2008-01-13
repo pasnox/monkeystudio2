@@ -34,21 +34,16 @@ With Linux/*Nix:
 
 * Open a shell, and go to the sources directory.
 * type: qmake && make release // some distros use qmake-qt4 for qmake of Qt 4
-* you can then use "cd monkey && sudo make install" for install application, 
-binary will be copieds to /usr/bin and all plugins and relating resources ( templates, apis ... ) will be copied to
-/usr/lib/monkeystudio
 
 With Mac OS X:
 
 * Open a terminal, and go to the sources directory.
 * type: qmake -spec macx-g++ && make release
-* you can then use "cd monkey && make install" for install all resources in the bundle.
-You now have a full bundle that you can put where you want.
 
 How to execute Monkey Studio:
 =============================
-
-* Once it is built, there is a bin directory. Go in and execute the "monkey" binary.
+* Once you have build monkeystudio you need install resources executing this command : cd monkey && make release-install ( replace make by mingw32-make/nmake according to your platform ).
+* Once you have installed resources, you now have a full monkeystudio copy in your bin folder by default on windows/mac, and in /usr/local for unix/linux )
 
 Known Problems:
 
