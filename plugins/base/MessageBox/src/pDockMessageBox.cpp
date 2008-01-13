@@ -286,15 +286,14 @@ void pDockMessageBox::showNextError()
 	// show it if need
 	if ( !isVisible() )
 		show();
-	// show correct tab if needed
-	int i = lwBuildSteps->currentRow () + 1 ;
-	while (i < lwBuildSteps->count() &&	
-			lwBuildSteps->item (i)->data( Qt::UserRole +2 ).toString().isNull ())
+	// find next step item
+	int i = lwBuildSteps->currentRow () +1 ;
+	while ( i < lwBuildSteps->count() &&	lwBuildSteps->item( i )->data( Qt::UserRole +2 ).toString().isEmpty() )
 		i++;
-	if ( i < lwBuildSteps->count()) //finded item with setted file name
+	if ( i < lwBuildSteps->count() ) //finded item with setted file name
 	{
-		lwBuildSteps->setCurrentRow(i);
-		lwBuildSteps_itemPressed (lwBuildSteps->item(i));
+		lwBuildSteps->setCurrentRow( i );
+		lwBuildSteps_itemPressed( lwBuildSteps->item( i ) );
 	}
 }
 
@@ -311,15 +310,9 @@ void pDockMessageBox::lwBuildSteps_itemPressed( QListWidgetItem* it )
 
 	//search in the opened files
 	foreach ( pAbstractChild* c, MonkeyCore::workspace()->children() )
-	{
 		foreach ( QString f, c->files() )
-		{
-			if ( f.endsWith(s) )
-			{
+			if ( f.endsWith( s ) )
 				l << f;
-			}
-		}
-	}
 	
 	// search in the current project
 	if ( ProjectItem* pi = MonkeyCore::fileManager()->currentProject() )
@@ -327,16 +320,16 @@ void pDockMessageBox::lwBuildSteps_itemPressed( QListWidgetItem* it )
 		// get top project of current project
 		while ( ProjectItem* ppi = pi->parentProject() )
 			pi = ppi;
-		
 		// search file
-
 		foreach ( ProjectItem* it, pi->childrenProjects() << pi )
+		{
 			if ( QFile::exists( it->canonicalFilePath( s ) ) )
 			{
-				QString path = it->canonicalFilePath( s );
-				if (! l.contains(path))
-					l << path;
+				QString file = it->canonicalFilePath( s );
+				if ( !l.contains( file ) )
+					l << file;
 			}
+		}
 	}
 	
 	// cancel if no file
