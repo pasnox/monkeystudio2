@@ -41,7 +41,7 @@ void Settings::setDefaultSettings()
 	// plugins
 	l.clear();
 	l << QString( "%1/plugins" ).arg( mPath );
-	if ( !l.contains( "plugins" ) )
+	if ( !l.contains( "plugins" ) && !l.contains( "./plugins" ) )
 		l << "plugins";
 	setValue( "Plugins/Path", l );
 }
