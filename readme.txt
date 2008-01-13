@@ -15,6 +15,8 @@ It's extendable with a powerfull plugins system.
 **
 ****************************************************************************/
 
+ATTENTION : QMake binary provided by Qt 4.3.3 on windows/mingw is bugguy, resulting to create bad makefiles. Please use the precompiled package or use Qt 4.3.2 instead.
+
 How to build Monkey Studio:
 ===========================
 
