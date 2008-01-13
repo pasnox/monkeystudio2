@@ -33,9 +33,7 @@ pToolsManager::~pToolsManager()
 { delete mIconProvider; }
 
 const QFileIconProvider* pToolsManager::iconProvider()
-{
-	return mIconProvider ? mIconProvider : ( mIconProvider = new QFileIconProvider() );
-}
+{ return mIconProvider ? mIconProvider : ( mIconProvider = new QFileIconProvider() ); }
 
 const QList<pTool> pToolsManager::tools( ToolType t )
 {
