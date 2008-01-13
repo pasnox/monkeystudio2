@@ -16,6 +16,7 @@
 #include "pFileManager.h"
 #include "ProjectItem.h"
 #include "MonkeyCore.h"
+#include "pAbstractChild.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -285,15 +286,14 @@ void pDockMessageBox::showNextError()
 	// show it if need
 	if ( !isVisible() )
 		show();
-	// show correct tab if needed
-	int i = lwBuildSteps->currentRow () + 1 ;
-	while (i < lwBuildSteps->count() &&	
-			lwBuildSteps->item (i)->data( Qt::UserRole +2 ).toString().isNull ())
+	// find next step item
+	int i = lwBuildSteps->currentRow () +1 ;
+	while ( i < lwBuildSteps->count() &&	lwBuildSteps->item( i )->data( Qt::UserRole +2 ).toString().isEmpty() )
 		i++;
-	if ( i < lwBuildSteps->count()) //finded item with setted file name
+	if ( i < lwBuildSteps->count() ) //finded item with setted file name
 	{
-		lwBuildSteps->setCurrentRow(i);
-		lwBuildSteps_itemPressed (lwBuildSteps->item(i));
+		lwBuildSteps->setCurrentRow( i );
+		lwBuildSteps_itemPressed( lwBuildSteps->item( i ) );
 	}
 }
 
@@ -305,34 +305,46 @@ void pDockMessageBox::lwBuildSteps_itemPressed( QListWidgetItem* it )
 	// cancel if no file
 	if ( s.isEmpty() )
 		return;
+
+	QStringList l;
+
+	//search in the opened files
+	foreach ( pAbstractChild* c, MonkeyCore::workspace()->children() )
+		foreach ( QString f, c->files() )
+			if ( f.endsWith( s ) )
+				l << f;
 	
-	// get current project
+	// search in the current project
 	if ( ProjectItem* pi = MonkeyCore::fileManager()->currentProject() )
 	{
 		// get top project of current project
 		while ( ProjectItem* ppi = pi->parentProject() )
 			pi = ppi;
-		
 		// search file
-		QStringList l;
 		foreach ( ProjectItem* it, pi->childrenProjects() << pi )
+		{
 			if ( QFile::exists( it->canonicalFilePath( s ) ) )
-				l << it->canonicalFilePath( s );
-		
-		// cancel if no file
-		if ( l.isEmpty() )
-			return;
-		
-		// ask user to select file
-		bool b = true;
-		s = l.value( 0 );
-		if ( l.count() > 1 )
-			s = QInputDialog::getItem( window(), tr( "Choose a file..." ), tr( "Choose the file to open" ), l, 0, false, &b, Qt::Sheet );
-		
-		// open file if ok
-		if ( b && !s.isEmpty() )
-			MonkeyCore::fileManager()->goToLine( s, it->data( Qt::UserRole +3 ).toPoint(), true );
+			{
+				QString file = it->canonicalFilePath( s );
+				if ( !l.contains( file ) )
+					l << file;
+			}
+		}
 	}
+	
+	// cancel if no file
+	if ( l.isEmpty() )
+		return;
+	
+	// ask user to select file
+	bool b = true;
+	s = l.value( 0 );
+	if ( l.count() > 1 )
+		s = QInputDialog::getItem( window(), tr( "Choose a file..." ), tr( "Choose the file to open" ), l, 0, false, &b, Qt::Sheet );
+	
+	// open file if ok
+	if ( b && !s.isEmpty() )
+		MonkeyCore::fileManager()->goToLine( s, it->data( Qt::UserRole +3 ).toPoint(), true );
 }
 
 void pDockMessageBox::leRawCommand_returnPressed()

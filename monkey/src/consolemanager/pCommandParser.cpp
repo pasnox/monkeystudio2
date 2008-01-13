@@ -61,12 +61,15 @@ QString pCommandParser::name() const
     return mName;
 }
 
+#include <QDebug>
 QString pCommandParser::replaceWithMatch(QRegExp& rex, QString s)
 {
 	int pos = 0; 
     int i = 0;
+	qWarning () << "Input " <<s;
     while ( (i = s.indexOf("%", pos)) != -1)
 	{
+		qWarning () << i;
 		pos = i;
 		if ( ! s[i+1].isDigit () )
 			continue;
@@ -75,6 +78,8 @@ QString pCommandParser::replaceWithMatch(QRegExp& rex, QString s)
 			cap.chop(1);
         s.replace (i,2,cap);
 		pos += cap.size ();
+		qWarning ()<< "pos= "<<pos<< " s="<<s;
 	}
+	qWarning () << "Output " <<s;
     return s;
 }

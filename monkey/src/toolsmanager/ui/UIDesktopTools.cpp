@@ -16,6 +16,7 @@
 #include "pToolsManager.h"
 #include "pSettings.h"
 #include "pMonkeyStudio.h"
+#include "MonkeyCore.h"
 
 #include <QTimer>
 #include <QCloseEvent>
@@ -255,35 +256,35 @@ void UIDesktopTools::accept()
 		// get desktop entry
 		QList<pTool> l = pToolsManager::tools( pToolsManager::ttUserEntry );
 		// get settings
-		QSettings s;
+		pSettings* s = MonkeyCore::settings();
 		// remove all tools entries
-		s.remove( "Tools" );
+		s->remove( "Tools" );
 		// begin array
-		s.beginWriteArray( "Tools" );
+		s->beginWriteArray( "Tools" );
 		int i = 0;
 		// write desktop entry
 		for ( i = 0; i < lwRight->count(); i++ )
 		{
-			s.setArrayIndex( i );
-			s.setValue( "Caption", lwRight->item( i )->text() );
-			s.setValue( "FileIcon", lwRight->item( i )->data( pDesktopApplications::dtIcon ).toString() );
-			s.setValue( "FilePath", lwRight->item( i )->statusTip() );
-			s.setValue( "WorkingPath", "" );
-			s.setValue( "DesktopEntry", true );
+			s->setArrayIndex( i );
+			s->setValue( "Caption", lwRight->item( i )->text() );
+			s->setValue( "FileIcon", lwRight->item( i )->data( pDesktopApplications::dtIcon ).toString() );
+			s->setValue( "FilePath", lwRight->item( i )->statusTip() );
+			s->setValue( "WorkingPath", "" );
+			s->setValue( "DesktopEntry", true );
 		}
 		// write user entry
 		foreach ( pTool t, l )
 		{
-			s.setArrayIndex( i );
-			s.setValue( "Caption", t.Caption );
-			s.setValue( "FileIcon", t.FileIcon );
-			s.setValue( "FilePath", t.FilePath );
-			s.setValue( "WorkingPath", t.WorkingPath );
-			s.setValue( "DesktopEntry", false );
+			s->setArrayIndex( i );
+			s->setValue( "Caption", t.Caption );
+			s->setValue( "FileIcon", t.FileIcon );
+			s->setValue( "FilePath", t.FilePath );
+			s->setValue( "WorkingPath", t.WorkingPath );
+			s->setValue( "DesktopEntry", false );
 			i++;
 		}
 		// end array
-		s.endArray();
+		s->endArray();
 	}
 	// close dialog
 	QDialog::accept();

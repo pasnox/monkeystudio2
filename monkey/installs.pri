@@ -3,8 +3,10 @@
 # prefix and prefixdatas
 isEmpty( $$PREFIX ):PREFIX	= /usr/local
 mac:PREFIX	= $${DESTDIR}/$${TARGET}.app/Contents
-isEmpty( $$PREFIX_DATAS ):PREFIX_DATAS	= $${PREFIX}/$${TARGET}
+win32:PREFIX	= $${DESTDIR}
+isEmpty( $$PREFIX_DATAS ):PREFIX_DATAS	= $${PREFIX}/lib/$${TARGET}
 mac:PREFIX_DATAS	= $$PREFIX
+win32:PREFIX_DATAS	= $$PREFIX
 
 # templates
 templates.path	= $$PREFIX_DATAS

@@ -19,7 +19,7 @@ void Settings::setDefaultSettings()
 #else
 	mPath = ".";
 	if ( qApp->applicationDirPath() == "/usr/local/bin" )
-		mPath = "/usr/local/monkeystudio";
+		mPath = "../lib/monkeystudio";
 #endif
 	// templates
 	l.clear();
@@ -40,11 +40,8 @@ void Settings::setDefaultSettings()
 	setValue( "Translations/Path", l );
 	// plugins
 	l.clear();
-	if (mPath == "/usr/local/bin/")
-		l<< "/usr/local/monkeystudio/plugins";
-	else
-		l << QString( "%1/plugins" ).arg( mPath );
-	if ( !l.contains( "plugins" ) )
+	l << QString( "%1/plugins" ).arg( mPath );
+	if ( !l.contains( "plugins" ) && !l.contains( "./plugins" ) )
 		l << "plugins";
 	setValue( "Plugins/Path", l );
 }

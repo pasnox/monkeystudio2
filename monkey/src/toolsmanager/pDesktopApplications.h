@@ -21,8 +21,9 @@
 
 class QTreeWidget;
 
-struct pDesktopApplication
+class pDesktopApplication
 {
+public:
 	QString Name;
 	QString Icon;
 	QString GenericName;
@@ -30,8 +31,9 @@ struct pDesktopApplication
 	QStringList Categories;
 };
 
-struct pDesktopFolder
+class pDesktopFolder
 {
+public:
 	~pDesktopFolder()
 	{ qDeleteAll( Applications ); qDeleteAll( Folders ); }
 	

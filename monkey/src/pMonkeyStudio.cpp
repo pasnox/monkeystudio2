@@ -172,6 +172,23 @@ const QStringList pMonkeyStudio::availableOperators()
 void pMonkeyStudio::setAvailableOperators( const QStringList& l )
 { MonkeyCore::settings()->setValue( settingsPath() +"/Operators", l ); }
 
+const QFileInfoList pMonkeyStudio::getFolders( QDir d, const QStringList& l, bool b )
+{
+	QFileInfoList ll;
+	foreach ( QFileInfo f, d.entryInfoList( QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name ) )
+	{
+		if ( QDir::match( l, f.fileName() ) )
+			ll << f;
+		if ( b )
+		{
+			d.cd( f.filePath() );
+			ll << getFolders( d, l, b );
+			d.cdUp();
+		}
+	}
+	return ll;
+}
+
 const QFileInfoList pMonkeyStudio::getFiles( QDir d, const QStringList& l, bool b )
 {
 	QFileInfoList ll;
