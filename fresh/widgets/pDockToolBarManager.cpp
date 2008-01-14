@@ -26,9 +26,6 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
-
-
-
 #include "pDockToolBarManager.h"
 #include "pDockToolBar.h"
 #include "pSettings.h"

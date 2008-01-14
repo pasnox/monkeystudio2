@@ -26,9 +26,6 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
-
-
-
 #include "pAction.h"
 
 const char* pAction::_DEFAULT_SHORTCUT_PROPERTY_ = "Default Shortcut";

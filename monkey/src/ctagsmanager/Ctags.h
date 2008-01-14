@@ -26,7 +26,6 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
-
 #ifndef CTAGS_H
 #define CTAGS_H
 #include <QObject>
