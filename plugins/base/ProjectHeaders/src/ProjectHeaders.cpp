@@ -1,17 +1,32 @@
 /****************************************************************************
 **
-** 		Created using Monkey Studio v1.8.0.0
-** Author    : Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>
-** Project   : ProjectHeaders
+** 		Created using Monkey Studio v1.8.1.0
+** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
+** Project   : Monkey Studio Base Plugins
 ** FileName  : ProjectHeaders.cpp
-** Date      : 2007-11-04T01:45:50
+** Date      : 2008-01-14T00:40:14
 ** License   : GPL
-** Comment   : Your comment here
+** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
+** Home Page : http://www.monkeystudio.org
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+
 #include "ProjectHeaders.h"
 #include "MonkeyCore.h"
 #include "pMenuBar.h"
@@ -133,37 +148,6 @@ QString ProjectHeaders::defaultTemplatesHeader( const QString& l ) const
 }
 
 void ProjectHeaders::processLicensing()
-{
-	// create dialog
-	UIProjectHeaders d( 0, this );
-	
-	// add languages
-	d.cbLanguages->addItems( availableLanguages() );
-	
-	// add regexp and licensing
-	for ( int i = 0; i < d.cbLanguages->count(); i++ )
-	{
-		d.cbLanguages->setItemData( i, templatesHeaderRegExp( d.cbLanguages->itemText( i ) ), Qt::UserRole +1 );
-		d.cbLanguages->setItemData( i, templatesHeader( d.cbLanguages->itemText( i ) ), Qt::UserRole +2 );
-	}
-	
-	// show current language information
-	if ( d.cbLanguages->count() )
-	{
-		d.cbLanguages->setCurrentIndex( 0 );
-		d.leRegExp->setText( d.cbLanguages->itemData( 0, Qt::UserRole +1 ).toString() );
-		d.teLicensing->setPlainText( d.cbLanguages->itemData( 0, Qt::UserRole +2 ).toString() );
-	}
-	
-	// execute dialog
-	d.exec();
-	
-	// save regexp and licensing
-	for ( int i = 0; i < d.cbLanguages->count(); i++ )
-	{
-		setTemplatesHeaderRegExp( d.cbLanguages->itemText( i ), d.cbLanguages->itemData( i, Qt::UserRole +1 ).toString() );
-		setTemplatesHeader( d.cbLanguages->itemText( i ), d.cbLanguages->itemData( i, Qt::UserRole +2 ).toString() );
-	}
-}
+{ UIProjectHeaders( 0, this ).exec(); }
 
 Q_EXPORT_PLUGIN2( BaseProjectHeaders, ProjectHeaders )

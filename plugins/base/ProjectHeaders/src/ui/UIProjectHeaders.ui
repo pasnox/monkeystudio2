@@ -244,7 +244,7 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons" >
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Close|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::Close|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>
@@ -261,8 +261,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>294</x>
-     <y>403</y>
+     <x>299</x>
+     <y>370</y>
     </hint>
     <hint type="destinationlabel" >
      <x>157</x>
@@ -277,8 +277,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>362</x>
-     <y>409</y>
+     <x>367</x>
+     <y>370</y>
     </hint>
     <hint type="destinationlabel" >
      <x>286</x>
