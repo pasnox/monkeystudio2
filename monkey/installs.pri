@@ -2,11 +2,11 @@
 	
 # prefix and prefixdatas
 isEmpty( $$PREFIX ):PREFIX	= /usr/local
-mac:PREFIX	= $${DESTDIR}/$${TARGET}.app/Contents
-win32:PREFIX	= $${DESTDIR}
+isEmpty( $$PREFIX ):mac:PREFIX	= $${DESTDIR}/$${TARGET}.app/Contents
+isEmpty( $$PREFIX ):win32:PREFIX	= $${DESTDIR}
 isEmpty( $$PREFIX_DATAS ):PREFIX_DATAS	= $${PREFIX}/lib/$${TARGET}
-mac:PREFIX_DATAS	= $$PREFIX
-win32:PREFIX_DATAS	= $$PREFIX
+isEmpty( $$PREFIX_DATAS ):mac:PREFIX_DATAS	= $$PREFIX
+isEmpty( $$PREFIX_DATAS ):win32:PREFIX_DATAS	= $$PREFIX
 
 # templates
 templates.path	= $$PREFIX_DATAS
