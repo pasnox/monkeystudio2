@@ -72,6 +72,8 @@ CONFIG( debug, debug|release ) {
 # include install script
 include ( installs.pri )
 
+DEFINES	*= "PREFIX=\"\\\"$${PREFIX}\\\"\"" "PREFIX_DATAS=\"\\\"$${PREFIX_DATAS}\\\"\""
+
 FORMS	*= src/maininterface/ui/UITranslator.ui \
 	src/maininterface/ui/UIAbout.ui \
 	src/maininterface/ui/UISettings.ui \

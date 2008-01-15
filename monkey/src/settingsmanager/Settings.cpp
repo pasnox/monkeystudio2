@@ -46,7 +46,11 @@ void Settings::setDefaultSettings()
 	mPath = ".";
 #else
 	mPath = ".";
-	if ( qApp->applicationDirPath() == "/usr/local/bin" )
+	QString p = PREFIX_DATAS;
+	if ( p.endsWith( "/" ) )
+		p.chop( 1 );
+	p.append( "/bin" );
+	if ( qApp->applicationDirPath() == p )
 		mPath = "../lib/monkeystudio";
 #endif
 	// templates
