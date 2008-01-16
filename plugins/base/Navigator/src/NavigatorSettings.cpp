@@ -1,17 +1,29 @@
 /****************************************************************************
 **
-** 		Created using Monkey Studio v1.8.0.0
-** Author    : Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, The Monkey Studio Team
-** Project   : Monkey Studio 2
+** 		Created using Monkey Studio v1.8.1.0
+** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
+** Project   : Monkey Studio Base Plugins
 ** FileName  : NavigatorSettings.cpp
-** Date      : 2007-11-04T22:50:45
+** Date      : 2008-01-14T00:40:09
 ** License   : GPL
-** Comment   : Monkey Studio is a Free, Fast and lightweight crossplatform Qt RAD.
-It's extendable with a powerfull plugins system.
+** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
 ** Home Page : http://www.monkeystudio.org
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
 #include <QHBoxLayout>

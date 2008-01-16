@@ -72,6 +72,8 @@ CONFIG( debug, debug|release ) {
 # include install script
 include ( installs.pri )
 
+DEFINES	*= "PROGRAM_PREFIX=\"\\\"$${PROGRAM_PREFIX}\\\"\"" "PROGRAM_DATAS=\"\\\"$${PROGRAM_DATAS}\\\"\""
+
 FORMS	*= src/maininterface/ui/UITranslator.ui \
 	src/maininterface/ui/UIAbout.ui \
 	src/maininterface/ui/UISettings.ui \
