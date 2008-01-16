@@ -47,11 +47,11 @@ unix:!mac {
 	target.path	= $${PROGRAM_PREFIX}/bin
 
 	# desktop file
-	desktop.path	= /usr/local/share/applications
+	desktop.path	= $${PROGRAM_PREFIX}/share/applications
 	desktop.files	= ../links/monkeystudio.desktop
 
 	# desktop icon file
-	desktopicon.path	= /usr/share/icons/hicolor/32x32/apps
+	desktopicon.path	= $${PROGRAM_PREFIX}/icons/hicolor/32x32/apps
 	desktopicon.files	= ../links/monkeystudio.png
 	
 	INSTALLS	+= plugins target desktop desktopicon
