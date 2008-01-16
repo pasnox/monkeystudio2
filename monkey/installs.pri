@@ -1,34 +1,50 @@
 # Monkey Studio Install Project File
+
+# try getting infos from shell export
+PROGRAM_PREFIX	= $$(MONKEY_PREFIX)
+PROGRAM_DATAS	= $$(MONKEY_DATAS)
 	
-# prefix and prefixdatas
-isEmpty( $$PREFIX ):PREFIX	= /usr/local
-isEmpty( $$PREFIX ):mac:PREFIX	= $${DESTDIR}/$${TARGET}.app/Contents
-isEmpty( $$PREFIX ):win32:PREFIX	= $${DESTDIR}
-isEmpty( $$PREFIX_DATAS ):PREFIX_DATAS	= $${PREFIX}/lib/$${TARGET}
-isEmpty( $$PREFIX_DATAS ):mac:PREFIX_DATAS	= $$PREFIX
-isEmpty( $$PREFIX_DATAS ):win32:PREFIX_DATAS	= $$PREFIX
+# prefix
+isEmpty( PROGRAM_PREFIX ) {
+	win32:PROGRAM_PREFIX	= $${DESTDIR}
+	else:mac:PROGRAM_PREFIX	= $${DESTDIR}/$${TARGET}.app/Contents
+	else:PROGRAM_PREFIX	= /usr/local
+}
+
+# prefixdatas
+isEmpty( PROGRAM_DATAS ) {
+	win32:PROGRAM_DATAS	= $$PROGRAM_PREFIX
+	else:mac:PROGRAM_DATAS	= $$PROGRAM_PREFIX
+	else:PROGRAM_DATAS	= $${PROGRAM_PREFIX}/lib/$${TARGET}
+}
+
+!CONFIG( debug, debug|release ) {
+	message( "Monkey Studio binary will be installed to : $$PROGRAM_PREFIX" )
+	message( "Monkey Studio datas will be installed to : $$PROGRAM_DATAS" )
+	message( "You can change this by exporting these variables to your shell before calling qmake : MONKEY_PREFIX, MONKEY_DATAS" )
+}
 
 # templates
-templates.path	= $$PREFIX_DATAS
+templates.path	= $$PROGRAM_DATAS
 templates.files	= ../templates
 
 # apis
-apis.path	= $$PREFIX_DATAS
+apis.path	= $$PROGRAM_DATAS
 apis.files	= ../ctags/apis
 
 # translations
-translations.path	= $$PREFIX_DATAS/translations
+translations.path	= $$PROGRAM_DATAS/translations
 translations.files	= ../translations/*.qm
 
-INSTALLS	+= apis templates translations
+INSTALLS	= apis templates translations
 
 unix:!mac {
 	# plugins
-	plugins.path	= $$PREFIX_DATAS
+	plugins.path	= $$PROGRAM_DATAS
 	plugins.files	= $${DESTDIR}/plugins
 	
 	# binary
-	target.path	= $${PREFIX}/bin
+	target.path	= $${PROGRAM_PREFIX}/bin
 
 	# desktop file
 	desktop.path	= /usr/local/share/applications
