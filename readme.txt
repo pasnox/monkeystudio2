@@ -17,6 +17,19 @@ It's extendable with a powerfull plugins system.
 
 ATTENTION : QMake binary provided by Qt 4.3.3 on windows/mingw is bugguy, resulting to create bad makefiles. Please use the precompiled package or use Qt 4.3.2 instead.
 
+Before building, you should know about some rules if you are unix/linux users.
+By default monkey studio will install itself in /usr/local.
+If you want to change this you should do these build step ( assuming you want to install in /usr ) :
+* cd to root soruces of monkey studio
+* export MONKEY_PREFIX=/usr
+* qmake
+* make release
+* cd monkey
+* make release-install
+You now have a full working copy of monkey for your unix/linux box.
+If you have trouble when monkey starting ( because you already use old version of monkey studio ), you should rename the file ~/.Monkey Studio/Monkey Studio.ini and restart monkey studio.
+If trouble persists, please inform us.
+
 How to build Monkey Studio:
 ===========================
 
