@@ -59,22 +59,22 @@ pDockToolBar* pDockToolBarManager::bar( Qt::ToolBarArea a )
 		switch ( a )
 		{
 		case Qt::TopToolBarArea:
-			mBars[a] = new pDockToolBar( this, Qt::Horizontal );
+			mBars[a] = new pDockToolBar( this, Qt::Horizontal, mMain );
 			mBars[a]->setObjectName( "pDockToolBarTop" );
 			mBars[a]->setWindowTitle( tr( "Top DockToolBar" ) );
 			break;
 		case Qt::BottomToolBarArea:
-			mBars[a] = new pDockToolBar( this, Qt::Horizontal );
+			mBars[a] = new pDockToolBar( this, Qt::Horizontal, mMain );
 			mBars[a]->setObjectName( "pDockToolBarBottom" );
 			mBars[a]->setWindowTitle( tr( "Bottom DockToolBar" ) );
 			break;
 		case Qt::LeftToolBarArea:
-			mBars[a] = new pDockToolBar( this, Qt::Vertical );
+			mBars[a] = new pDockToolBar( this, Qt::Vertical, mMain );
 			mBars[a]->setObjectName( "pDockToolBarLeft" );
 			mBars[a]->setWindowTitle( tr( "Left DockToolBar" ) );
 			break;
 		case Qt::RightToolBarArea:
-			mBars[a] = new pDockToolBar( this, Qt::Vertical );
+			mBars[a] = new pDockToolBar( this, Qt::Vertical, mMain );
 			mBars[a]->setObjectName( "pDockToolBarRight" );
 			mBars[a]->setWindowTitle( tr( "Right DockToolBar" ) );
 			break;

@@ -46,7 +46,7 @@ class Q_MONKEY_EXPORT pDockToolBar : public QToolBar
 	Q_OBJECT
 
 public:
-	pDockToolBar( pDockToolBarManager*, Qt::Orientation = Qt::Horizontal );
+	pDockToolBar( pDockToolBarManager*, Qt::Orientation = Qt::Horizontal, QMainWindow* = 0 );
 
 	virtual bool eventFilter( QObject*, QEvent* );
 
