@@ -91,11 +91,11 @@ bool pExtendedWorkspace::eventFilter( QObject* o, QEvent* e )
 	// get document
 	if ( QWidget* td = qobject_cast<QWidget*>( o ) )
 	{
-		if ( QString( td->metaObject()->className() ) == QString( "QMdiSubWindow" ) && e->type() == QEvent::Close )
+		if ( td->inherits( "QMdiSubWindow" ) && e->type() == QEvent::Close )
 		{
 			e->ignore();
+			closeCurrentDocument();
 			return true;
-			//closeDocument( qobject_cast<QMdiSubWindow*>( td )->widget() );
 		}
 		else
 		{
@@ -267,13 +267,14 @@ void pExtendedWorkspace::closeDocument( int i )
 
 void pExtendedWorkspace::closeDocument( QWidget* td )
 {
-	return closeDocument (indexOf (td));
+	closeDocument (indexOf (td));
 }
 
-void pExtendedWorkspace::closeAllDocuments()
+bool pExtendedWorkspace::closeAllDocuments()
 {
 	for (int i = count()-1; i>=0; i--)
 		closeDocument (i);
+	return true;
 }
 
 void pExtendedWorkspace::closeCurrentDocument()
