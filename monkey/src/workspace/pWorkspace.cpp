@@ -548,11 +548,7 @@ void pWorkspace::helpTestReport_triggered()
 #endif
 
 void pWorkspace::closeCurrentDocument()
-{
-	if ( UISaveFiles::saveDocument( window(), currentChild(), false ) == UISaveFiles::bCancelClose )
-		return;
-	pExtendedWorkspace::closeCurrentDocument();
-}
+{ closeDocument( currentDocument() ); }
 
 bool pWorkspace::closeAllDocuments()
 {
@@ -566,4 +562,11 @@ bool pWorkspace::closeAllDocuments()
 	}
 	else
 		return false; //not close IDE
+}
+
+void pWorkspace::closeDocument( QWidget* document )
+{
+	if ( UISaveFiles::saveDocument( window(), qobject_cast<pAbstractChild*>( document ), false ) == UISaveFiles::bCancelClose )
+		return;
+	pExtendedWorkspace::closeDocument( document );
 }

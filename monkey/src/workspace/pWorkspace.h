@@ -56,6 +56,9 @@ public:
 	void closeCurrentDocument();
 	bool closeAllDocuments();
 
+protected:
+	virtual void closeDocument( QWidget* document );
+
 private:
 	pWorkspace( QMainWindow* = 0 );
 
