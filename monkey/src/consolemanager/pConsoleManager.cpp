@@ -26,9 +26,6 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
-#ifndef Q_OS_WIN
-#include <cstdlib> //For function 'unsetenv'
-#endif
 #include <QTimer>
 
 #include "pConsoleManager.h"
@@ -45,14 +42,17 @@ pConsoleManager::pConsoleManager( QObject* o )
 	: QProcess( o ), mLinesInStringBuffer (0)
 {
 #ifndef Q_OS_MAC
-	mStopAction = new pAction( "aStopAction", QIcon( ":/console/icons/console/stop.png" ), tr( "Stop current command" ), QString ("Pause"), tr( "Console Manager" ) ) ;
+	mStopAction = new pAction( "aStopAction", QIcon( ":/console/icons/console/stop.png" ), tr( "Stop current command" ), tr( "Pause" ), tr( "Console Manager" ) ) ;
 #else
-	mStopAction = new pAction( "aStopAction", QIcon( ":/console/icons/console/stop.png" ), tr( "Stop current command" ), QString ("Alt+End"), tr( "Console Manager" ) ) ; // Mac has no pause key
+	mStopAction = new pAction( "aStopAction", QIcon( ":/console/icons/console/stop.png" ), tr( "Stop current command" ), tr( "Alt+End" ), tr( "Console Manager" ) ) ; // Mac has no pause key
 #endif
-
-#ifndef Q_OS_WIN
-	unsetenv( "LANG" ); //For compilers and others not print local messages
-#endif
+	
+	// unset some variables environments
+	int i;
+	QStringList l = environment();
+	if ( ( i = l.indexOf( QRegExp( "^LANG=.*$" ) ) ) != -1 )
+		l.removeAt( i );
+	setEnvironment( l );
 	
 	// set status tip for
 	mStopAction->setStatusTip( tr( "Stop the currently running command" ) );
