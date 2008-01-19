@@ -231,6 +231,7 @@ void pWorkspace::internal_currentChanged( int i )
 	bool paste = hasChild ? c->isPasteAvailable() : false;
 	bool search = hasChild ? c->isSearchReplaceAvailable() : false;
 	bool go = hasChild ? c->isGoToAvailable() : false;
+	bool moreThanOneChild = count() > 1;
 
 	// update file menu
 	MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" )->setEnabled( modified );
@@ -254,8 +255,8 @@ void pWorkspace::internal_currentChanged( int i )
 	MonkeyCore::menuBar()->action( "mEdit/aExpandAbbreviation" )->setEnabled( hasChild );
 
 	// update view menu
-	MonkeyCore::menuBar()->action( "mView/aNext" )->setEnabled( hasChild );
-	MonkeyCore::menuBar()->action( "mView/aPrevious" )->setEnabled( hasChild );
+	MonkeyCore::menuBar()->action( "mView/aNext" )->setEnabled( moreThanOneChild );
+	MonkeyCore::menuBar()->action( "mView/aPrevious" )->setEnabled( moreThanOneChild );
 
 	// update status bar
 	//MonkeyCore::menuBar()->setCursorPosition( c ? c->cursorPosition() : QPoint( -1, -1 ) );
