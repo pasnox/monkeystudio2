@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>640</width>
-    <height>480</height>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -86,6 +86,92 @@
       <widget class="QComboBox" name="cbTypes" />
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QSplitter" name="sWizard" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <widget class="QListWidget" name="lwTemplates" >
+      <property name="sizePolicy" >
+       <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="toolTip" >
+       <string>Choose a template</string>
+      </property>
+      <property name="editTriggers" >
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="iconSize" >
+       <size>
+        <width>32</width>
+        <height>32</height>
+       </size>
+      </property>
+      <property name="textElideMode" >
+       <enum>Qt::ElideNone</enum>
+      </property>
+      <property name="movement" >
+       <enum>QListView::Static</enum>
+      </property>
+      <property name="resizeMode" >
+       <enum>QListView::Adjust</enum>
+      </property>
+      <property name="viewMode" >
+       <enum>QListView::IconMode</enum>
+      </property>
+     </widget>
+     <widget class="QGroupBox" name="gbInformations" >
+      <property name="enabled" >
+       <bool>false</bool>
+      </property>
+      <property name="sizePolicy" >
+       <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="title" >
+       <string>Informations</string>
+      </property>
+      <layout class="QVBoxLayout" >
+       <property name="spacing" >
+        <number>3</number>
+       </property>
+       <property name="leftMargin" >
+        <number>5</number>
+       </property>
+       <property name="topMargin" >
+        <number>5</number>
+       </property>
+       <property name="rightMargin" >
+        <number>5</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>5</number>
+       </property>
+       <item>
+        <widget class="QScrollArea" native="1" name="saWidgets" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize" >
+          <size>
+           <width>1</width>
+           <height>1</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
    </item>
    <item>
     <widget class="QGroupBox" name="gbAddToProject" >
@@ -184,92 +270,6 @@
     </layout>
    </item>
    <item>
-    <widget class="QSplitter" name="sWizard" >
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <widget class="QListWidget" name="lwTemplates" >
-      <property name="sizePolicy" >
-       <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="toolTip" >
-       <string>Choose a template</string>
-      </property>
-      <property name="editTriggers" >
-       <set>QAbstractItemView::NoEditTriggers</set>
-      </property>
-      <property name="iconSize" >
-       <size>
-        <width>32</width>
-        <height>32</height>
-       </size>
-      </property>
-      <property name="textElideMode" >
-       <enum>Qt::ElideNone</enum>
-      </property>
-      <property name="movement" >
-       <enum>QListView::Static</enum>
-      </property>
-      <property name="resizeMode" >
-       <enum>QListView::Adjust</enum>
-      </property>
-      <property name="viewMode" >
-       <enum>QListView::IconMode</enum>
-      </property>
-     </widget>
-     <widget class="QGroupBox" name="gbInformations" >
-      <property name="enabled" >
-       <bool>false</bool>
-      </property>
-      <property name="sizePolicy" >
-       <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="title" >
-       <string>Informations</string>
-      </property>
-      <layout class="QVBoxLayout" >
-       <property name="spacing" >
-        <number>3</number>
-       </property>
-       <property name="leftMargin" >
-        <number>5</number>
-       </property>
-       <property name="topMargin" >
-        <number>5</number>
-       </property>
-       <property name="rightMargin" >
-        <number>5</number>
-       </property>
-       <property name="bottomMargin" >
-        <number>5</number>
-       </property>
-       <item>
-        <widget class="QScrollArea" native="1" name="saWidgets" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize" >
-          <size>
-           <width>1</width>
-           <height>1</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </widget>
-   </item>
-   <item>
     <layout class="QHBoxLayout" >
      <property name="spacing" >
       <number>3</number>
@@ -291,16 +291,16 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pbCancel" >
+      <widget class="QPushButton" name="pbCreate" >
        <property name="text" >
-        <string>Cancel</string>
+        <string>Create</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pbCreate" >
+      <widget class="QPushButton" name="pbCancel" >
        <property name="text" >
-        <string>Create</string>
+        <string>Cancel</string>
        </property>
       </widget>
      </item>
