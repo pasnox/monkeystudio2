@@ -1,4 +1,5 @@
 #include <QApplication>
+#include <QMainWindow>
 
 #include "UIProjectsManager.h"
 #include "QMakeProjectItem.h"
@@ -13,10 +14,12 @@ int main( int argc, char** argv )
 	
 	// register items
 	ProjectItem::registerItem();
-	QMakeProjectItem::registerItem();
+	//QMakeProjectItem::registerItem();
 	
+	QMainWindow w;
 	UIProjectsManager d;
-	d.show();
+	w.addDockWidget( Qt::RightDockWidgetArea, &d );
+	w.show();
 
 	// connection
 	QObject::connect( &app, SIGNAL( lastWindowClosed() ), &app, SLOT( quit() ) );
