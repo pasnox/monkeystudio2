@@ -6,6 +6,8 @@
 
 #include <QDomDocument>
 #include <QDomElement>
+#include <QIcon>
+#include <QHash>
 
 class ProjectItemModel;
 
@@ -14,13 +16,44 @@ class ProjectItem : public QObject, public QStandardItem
 	Q_OBJECT
 	
 public:
-	ProjectItem( const QDomElement = QDomElement(), const QString& = QString(), bool = false, ProjectItem* = 0 );
+	ProjectItem( const QDomElement = QDomDocument().toElement(), const QString& = QString(), bool = false );
 	~ProjectItem();
 
 	// register item specific infos
 	static void registerItem() { qWarning( qPrintable( tr( "ProjectItem Registered" ) ) ); }
+	
 	// the visible variables in filtered view ordered by list order
-	virtual QStringList filteredVariables() const { return QStringList(); }
+	virtual QStringList filteredVariables() const;
+	virtual void registerFilteredVariables( const QString& );
+	
+	// tell if node is text based
+	virtual QStringList textTypes() const;
+	virtual void registerTextType( const QString& );
+	
+	// tell witch variables are file based
+	virtual QStringList fileVariables() const;
+	virtual void registerFileVariables( const QString& );
+	
+	// tell witch variables are path based
+	virtual QStringList pathVariables() const;
+	virtual void registerPathVariables( const QString& );
+	
+	// set variables labels
+	virtual QHash<QString, QString> variableLabels() const;
+	virtual void registerVariableLabels( const QString&, const QString& );
+	
+	// set variables icons
+	virtual QHash<QString, QIcon> variableIcons() const;
+	virtual void registerVariableIcons( const QString&, const QIcon& );
+	
+	// get defaut icon
+	QIcon getIcon( const QString&, const QString& ) const;
+	
+	// tell how to read node for s
+	QString valueName( const QString& ) const;
+	
+	// update item
+	void updateItem();
 
 	// return child item
 	virtual ProjectItem* child( int, int = 0 ) const;
@@ -41,7 +74,8 @@ public:
 	virtual void setDomElement( const QDomElement& );
 	virtual QDomElement domElement() const;
 	// return a QDomDocument about the current item and all its children
-	virtual QDomDocument toDomDocument();
+	virtual void setDomDocument( const QDomDocument& );
+	virtual QDomDocument domDocument() const;
 
 	// interpret a variable content based on it s name, search will end if ProjectItem parameter is encounteror until last item
 	virtual QString interpretedVariable( const QString&, const ProjectItem* = 0, const QString& = QString() ) const;
@@ -59,14 +93,6 @@ public:
 	virtual bool modified() const;
 	// set item modified state and emit modified signal according to second parameter
 	void setModified( bool, bool = true );
-	/*
-	// return buddy item
-	virtual ProjectItem* buddy() const;
-	// set buddy item
-	virtual void setBuddy( ProjectItem* );
-	// return data, take care of buddy if need
-	virtual QVariant data( int = Qt::UserRole +1 ) const;
-	*/
 
 	// check for sub project to open
 	virtual void checkChildrenProjects();
@@ -96,7 +122,15 @@ public:
 	virtual ProjectItem* topLevelProject() const;
 	
 protected:
+	QStringList mFilteredVariables;
+	QStringList mTextTypes;
+	QStringList mFileVariables;
+	QStringList mPathVariables;
+	QHash<QString, QString> mVariableLabels;
+	QHash<QString, QIcon> mVariableIcons;
+
 	//ProjectItem* mBuddy;
+	QDomDocument mDocument;
 	QDomElement mDomElement;
 	QString mProjectFilePath;
 	bool mModified;
