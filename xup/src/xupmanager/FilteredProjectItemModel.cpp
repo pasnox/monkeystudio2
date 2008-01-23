@@ -83,9 +83,7 @@ FilteredProjectItem* FilteredProjectItemModel::getVariable( ProjectItem* it )
 	}
 	
 	// create item variable
-	FilteredProjectItem* vit = new FilteredProjectItem( it->clone() );
-	vit->item()->setValue( "operator", "-" );
-	vit->item()->setValue( "multiline", "-" );
+	FilteredProjectItem* vit = new FilteredProjectItem( it );
 	
 	// calculate row to insert to
 	int r = it->filteredVariables().indexOf( vn );
@@ -102,6 +100,7 @@ FilteredProjectItem* FilteredProjectItemModel::getVariable( ProjectItem* it )
 	
 	// insert item
 	mItems.value( it->parent()->project() )->insertRow( ri +1, vit );
+	mItems[it] = vit;
 	
 	return vit;
 }
@@ -127,9 +126,8 @@ FilteredProjectItem* FilteredProjectItemModel::getFolder( ProjectItem* it, Filte
 	}
 	
 	// create item folder
-	FilteredProjectItem* fit = new FilteredProjectItem( it->clone() );
-	fit->item()->setValue( "type", "folder" );
-	fit->item()->setValue( "icon", "folder" );
+	FilteredProjectItem* fit = new FilteredProjectItem( it->clone( false ) );
+	fit->item()->setDomElement( it->project()->domDocument().createElement( "folder" ) );
 	fit->item()->setValue( "name", pn );
 	
 	// calculate row to insert to
@@ -158,7 +156,7 @@ void FilteredProjectItemModel::addVariable( ProjectItem* it )
 	// get variable item
 	FilteredProjectItem* vit = getVariable( it );
 	
-	bool b = XUPManager::fileVariables().contains( vit->item()->defaultValue() );
+	bool b = it->fileVariables().contains( vit->item()->defaultValue() );
 	
 	// add values to vit
 	foreach ( ProjectItem* cit, it->children( false, true ) )
@@ -167,7 +165,20 @@ void FilteredProjectItemModel::addVariable( ProjectItem* it )
 		{
 			FilteredProjectItem* ccit = new FilteredProjectItem( cit );
 			b ? getFolder( cit, vit )->appendRow( ccit ) : vit->appendRow( ccit );
+			mItems[cit] = ccit;
 		}
+	}
+}
+
+void FilteredProjectItemModel::addItemsRecursively( ProjectItem* it, FilteredProjectItem* pit )
+{
+	foreach ( ProjectItem* cit, it->children( false, true ) )
+	{
+		FilteredProjectItem* ncit = new FilteredProjectItem( cit );
+		if ( cit->hasChildren() )
+			addItemsRecursively( cit, ncit );
+		pit->appendRow( ncit );
+		mItems[cit] = ncit;
 	}
 }
 
@@ -181,13 +192,18 @@ void FilteredProjectItemModel::projectInserted( ProjectItem* it )
 	mItems[it] = pit;
 	
 	bool b = it->filteredVariables().isEmpty();
-	foreach ( ProjectItem* cit, it->children( true, true ) )
-		if ( cit->isType( "variable" ) && ( b || ( !b && it->filteredVariables().contains( cit->defaultValue() ) ) ) )
-			addVariable( cit );
-	
-	foreach ( ProjectItem* cit, it->children( false, false ) )
-		if ( cit->isProject() )
-			projectInserted( cit );
+	if ( b )
+		addItemsRecursively( it, pit );
+	else
+	{
+		foreach ( ProjectItem* cit, it->children( true, true ) )
+			if ( cit->isType( "variable" ) && !b && it->filteredVariables().contains( cit->defaultValue() ) )
+				addVariable( cit );
+		
+		foreach ( ProjectItem* cit, it->children( false, false ) )
+			if ( cit->isProject() )
+				projectInserted( cit );
+	}
 }
 
 void FilteredProjectItemModel::headerDataChanged( Qt::Orientation, int first, int last )

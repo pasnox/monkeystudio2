@@ -72,6 +72,7 @@ private:
 	FilteredProjectItem* getFolder( ProjectItem*, FilteredProjectItem* = 0 );
 	FilteredProjectItem* getVariable( ProjectItem* );
 	void addVariable( ProjectItem* );
+	void addItemsRecursively( ProjectItem*, FilteredProjectItem* );
 	void projectInserted( ProjectItem* );
 	ProjectItemModel* mSourceModel;
 	QHash<ProjectItem*, FilteredProjectItem*> mItems;
