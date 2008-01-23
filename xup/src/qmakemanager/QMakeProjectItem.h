@@ -8,7 +8,7 @@ class QMakeProjectItem : public ProjectItem
 	Q_OBJECT
 	
 public:
-	QMakeProjectItem( const QDomElement& = QDomElement(), const QString& = QString(), bool = false, ProjectItem* = 0 );
+	QMakeProjectItem( const QDomElement& = QDomElement(), const QString& = QString(), bool = false );
 
 	static void registerItem();
 	virtual QStringList filteredVariables() const;

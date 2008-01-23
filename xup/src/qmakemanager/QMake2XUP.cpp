@@ -42,7 +42,7 @@ QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 	QRegExp comments("^#(.*)");
 	QRegExp varLine("^(.*)[ \\t]*\\\\[ \\t]*(#.*)?");
 	
-	file.append( QString( "<!DOCTYPE XUPProject>\n<project version=\"%1\" name=\"%2\" expanded=\"true\">\n" ).arg( version ).arg( QFileInfo( s ).fileName() ) );
+	file.append( QString( "<!DOCTYPE XUPProject>\n<project version=\"%1\" name=\"%2\" expanded=\"false\">\n" ).arg( version ).arg( QFileInfo( s ).fileName() ) );
 	for(int i = 0;i < v.size();i++)
 	{
 		if(bloc.exactMatch(v[i]))
@@ -318,7 +318,29 @@ QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 	return file.toUtf8();
 }
 
-bool QMake2XUP::convertToPro( const QDomDocument& d, const QString& s, const QString& v )
+QByteArray convertNodeToPro( const QDomElement& e, const QString& v )
 {
-	return false;
+	// get nodes
+	QDomNodeList l = e.childNodes();
+	// iterate over nodes
+	for ( int i = 0; i < l.count(); i++ )
+	{
+		QDomNode n = l.at( i );
+		bool b = n.isText();
+	}
+	return QByteArray( "gege" );
+}
+
+QByteArray QMake2XUP::convertToPro( const QDomDocument& d, const QString& v )
+{
+	QByteArray a;
+	// get project node
+	QDomElement e  = d.firstChildElement( "project" ).toElement();
+	// check project available
+	if ( e.isNull() )
+		return QByteArray();
+	// parse project scope
+	a.append( convertNodeToPro( e, v ) );
+	// return state
+	return a;
 }

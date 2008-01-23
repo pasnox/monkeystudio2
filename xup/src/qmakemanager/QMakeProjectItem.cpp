@@ -10,8 +10,8 @@ using namespace XUPManager;
 QIcon getIcon( const QString& s )
 { return QIcon( QString( ":/icons/icons/%1.png" ).arg( s ) ); }
 
-QMakeProjectItem::QMakeProjectItem( const QDomElement& e, const QString& s, bool b, ProjectItem* bit )
-	: ProjectItem( e, s, b, bit )
+QMakeProjectItem::QMakeProjectItem( const QDomElement& e, const QString& s, bool b )
+	: ProjectItem( e, s, b )
 {}
 
 void QMakeProjectItem::registerItem()
@@ -200,18 +200,32 @@ bool QMakeProjectItem::loadProject( const QString& s, const QString& v )
 	if ( loadXUP( this, QMake2XUP::convertFromPro( s, v ), v ) )
 	{
 		mProjectFilePath = s;
+		XUPManager::updateItem( this );
 		setModified( false );
 		checkChildrenProjects();
 		return true;
 	}
 	return false;
 }
+#include <QTextEdit>
 
 bool QMakeProjectItem::saveProject( const QString& s, const QString& v )
 {
-	if ( QMake2XUP::convertToPro( toDomDocument(), s.isEmpty() ? projectFilePath() : s, v ) )
+	QByteArray a = QMake2XUP::convertToPro( toDomDocument(), v );
+	if ( !a.isNull() )
 	{
-		mProjectFilePath = s.isEmpty() ? projectFilePath() : s;
+		QTextEdit* te = new QTextEdit;
+		te->setPlainText( a );
+		te->show();
+		/*
+		QFile f( s.isEmpty() ? projectFilePath() : s );
+		if ( !f.open( QIODevice::WriteOnly | QIODevice::Text ) )
+			return false;
+		f.resize( 0 );
+		if ( !( f.write( a ) != -1 ) )
+			return false;
+		mProjectFilePath = f.fileName();
+		*/
 		setModified( false );
 		return true;
 	}
