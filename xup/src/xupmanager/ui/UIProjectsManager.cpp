@@ -1,5 +1,5 @@
 #include "UIProjectsManager.h"
-#include "QMakeProjectItem.h"
+#include "ProjectItem.h"
 #include "ProjectItemModel.h"
 #include "FilteredProjectItemModel.h"
 #include "XUPManager.h"
@@ -17,12 +17,10 @@ bool question( const QString& s )
 { return QMessageBox::question( 0, "Question...", s, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes ) == QMessageBox::Yes; }
 
 UIProjectsManager::UIProjectsManager( QWidget* w )
-	: QDockWidget( w ), mModel( new ProjectItemModel( this ) ), aNew( 0 ), aOpen( 0 ), aSaveCurrent( 0 ), aSaveAll( 0 ),
-		aCloseCurrent( 0 ), aCloseAll( 0 ), aAdd( 0 ), aRemove( 0 ), aSettings( 0 ), aSource( 0 )
+	: QDockWidget( w ), mModel( new ProjectItemModel( this ) )
 {
-	// setup ui
+	// setup widget
 	setupUi( this );
-	// temporary init
 	initGui();
 	// associate model
 	tvProjects->setModel( mModel );
@@ -43,32 +41,38 @@ UIProjectsManager::UIProjectsManager( QWidget* w )
 }
 
 UIProjectsManager::~UIProjectsManager()
-{}
+{
+	// delete actions
+	qDeleteAll( mActions );
+	mActions.clear();
+}
 
 void UIProjectsManager::initGui()
 {
 	// create actions
-	setActionNew( new QAction( QIcon(), tr( "New" ), this ) );
-	setActionOpen( new QAction( QIcon(), tr( "Open" ), this ) );
-	setActionSaveCurrent( new QAction( QIcon(), tr( "Save Current" ), this ) );
-	setActionSaveAll( new QAction( QIcon(), tr( "Save All" ), this ) );
-	setActionCloseCurrent( new QAction( QIcon(), tr( "Close Current" ), this ) );
-	setActionCloseAll( new QAction( QIcon(), tr( "Close All" ), this ) );
-	setActionAdd( new QAction( QIcon(), tr( "Add..." ), this ) );
-	setActionRemove( new QAction( QIcon(), tr( "Remove..." ), this ) );
-	setActionSettings( new QAction( QIcon(), tr( "Settings..." ), this ) );
-	setActionSource( new QAction( QIcon(), tr( "Source..." ), this ) );
+	setAction( UIProjectsManager::New, new QAction( QIcon( ":/actions/new.png" ), tr( "New" ), this ) );
+	setAction( UIProjectsManager::Open, new QAction( QIcon( ":/actions/open.png" ), tr( "Open" ), this ) );
+	setAction( UIProjectsManager::SaveCurrent, new QAction( QIcon( ":/actions/save.png" ), tr( "Save Current" ), this ) );
+	setAction( UIProjectsManager::SaveAll, new QAction( QIcon( ":/actions/saveall.png" ), tr( "Save All" ), this ) );
+	setAction( UIProjectsManager::CloseCurrent, new QAction( QIcon( ":/actions/close.png" ), tr( "Close Current" ), this ) );
+	setAction( UIProjectsManager::CloseAll, new QAction( QIcon( ":/actions/closeall.png" ), tr( "Close All" ), this ) );
+	setAction( UIProjectsManager::Add, new QAction( QIcon( ":/actions/add.png" ), tr( "Add..." ), this ) );
+	setAction( UIProjectsManager::Remove, new QAction( QIcon( ":/actions/remove.png" ), tr( "Remove..." ), this ) );
+	setAction( UIProjectsManager::Settings, new QAction( QIcon( ":/actions/settings.png" ), tr( "Settings..." ), this ) );
+	setAction( UIProjectsManager::Source, new QAction( QIcon( ":/actions/source.png" ), tr( "Source..." ), this ) );
+	setAction( UIProjectsManager::Filtered, new QAction( QIcon( ":/actions/filtered.png" ), tr( "Filtered" ), this ) );
 	// add actions to toolbar
-	tbActions->addAction( actionNew() );
-	tbActions->addAction( actionOpen() );
-	tbActions->addAction( actionSaveCurrent() );
-	tbActions->addAction( actionSaveAll() );
-	tbActions->addAction( actionCloseCurrent() );
-	tbActions->addAction( actionCloseAll() );
-	tbActions->addAction( actionAdd() );
-	tbActions->addAction( actionRemove() );
-	tbActions->addAction( actionSettings() );
-	tbActions->addAction( actionSource() );
+	tbActions->addAction( action( UIProjectsManager::New ) );
+	tbActions->addAction( action( UIProjectsManager::Open ) );
+	tbActions->addAction( action( UIProjectsManager::SaveCurrent ) );
+	tbActions->addAction( action( UIProjectsManager::SaveAll ) );
+	tbActions->addAction( action( UIProjectsManager::CloseCurrent ) );
+	tbActions->addAction( action( UIProjectsManager::CloseAll ) );
+	tbActions->addAction( action( UIProjectsManager::Add ) );
+	tbActions->addAction( action( UIProjectsManager::Remove ) );
+	tbActions->addAction( action( UIProjectsManager::Settings ) );
+	tbActions->addAction( action( UIProjectsManager::Source ) );
+	tbActions->addAction( action( UIProjectsManager::Filtered ) );
 }
 
 void UIProjectsManager::initializeProject( ProjectItem* pi )
@@ -94,14 +98,14 @@ ProjectItem* UIProjectsManager::currentProject() const
 void UIProjectsManager::setCurrentProject( const ProjectItem* pi )
 {
 	// update gui
-	actionSaveCurrent()->setEnabled( pi && pi->modified() );
-	actionSaveAll()->setEnabled( actionSaveCurrent()->isEnabled() );
-	actionCloseCurrent()->setEnabled( pi );
-	actionCloseAll()->setEnabled( pi );
-	actionAdd()->setEnabled( pi );
-	actionRemove()->setEnabled( currentValue() );
-	actionSettings()->setEnabled( pi );
-	actionSource()->setEnabled( pi );
+	action( UIProjectsManager::SaveCurrent )->setEnabled( pi && pi->modified() );
+	action( UIProjectsManager::SaveAll )->setEnabled( action( UIProjectsManager::SaveCurrent )->isEnabled() );
+	action( UIProjectsManager::CloseCurrent )->setEnabled( pi );
+	action( UIProjectsManager::CloseAll )->setEnabled( pi );
+	action( UIProjectsManager::Add )->setEnabled( pi );
+	action( UIProjectsManager::Remove )->setEnabled( currentValue() );
+	action( UIProjectsManager::Settings )->setEnabled( pi );
+	action( UIProjectsManager::Source )->setEnabled( pi );
 	// change index
 	if ( currentProject() != pi )
 		tvProxiedProjects->setCurrentIndex( mModel->filteredModel()->mapFromSource( pi ? pi->index() : QModelIndex() ) );
@@ -117,9 +121,10 @@ ProjectItem* UIProjectsManager::currentValue() const
 bool UIProjectsManager::openProject( const QString& s )
 {
 	ProjectItem* pi = 0;
+	/*
 	if ( QDir::match( "*.pro", s ) )
 		pi = new QMakeProjectItem;
-	else if ( QDir::match( "*.xup", s ) )
+	else*/ if ( QDir::match( "*.xup", s ) )
 		pi = new ProjectItem;
 	else
 		return false;
@@ -135,154 +140,97 @@ bool UIProjectsManager::openProject( const QString& s )
 bool UIProjectsManager::saveProject( ProjectItem* pi, const QString& s )
 { return pi ? pi->saveProject( s ) : false; }
 
-QAction* UIProjectsManager::actionNew() const
-{ return aNew; }
+QAction* UIProjectsManager::action( UIProjectsManager::Actions at ) const
+{ return mActions.value( at ); }
 
-void UIProjectsManager::setActionNew( QAction* a )
+void UIProjectsManager::setAction( UIProjectsManager::Actions at, QAction* a )
 {
-	if ( aNew != a )
+	// get old action if available
+	QAction* oa = action( at );
+	// check actions are differents
+	if ( oa == a )
+		return;
+	// disconnect old action, connect new one
+	switch ( at )
 	{
-		if ( aNew )
-			disconnect( aNew, SIGNAL( triggered() ), this, SLOT( actionNewTriggered() ) );
-		aNew = a;
-		if ( aNew )
-			connect( aNew, SIGNAL( triggered() ), this, SLOT( actionNewTriggered() ) );
+		case UIProjectsManager::New:
+			if ( oa )
+				disconnect( oa, SIGNAL( triggered() ), this, SLOT( actionNewTriggered() ) );
+			if ( a )
+				connect( a, SIGNAL( triggered() ), this, SLOT( actionNewTriggered() ) );
+			break;
+		case UIProjectsManager::Open:
+			if ( oa )
+				disconnect( oa, SIGNAL( triggered() ), this, SLOT( actionOpenTriggered() ) );
+			if ( a )
+				connect( a, SIGNAL( triggered() ), this, SLOT( actionOpenTriggered() ) );
+			break;
+		case UIProjectsManager::SaveCurrent:
+			if ( oa )
+				disconnect( oa, SIGNAL( triggered() ), this, SLOT( actionSaveCurrentTriggered() ) );
+			if ( a )
+				connect( a, SIGNAL( triggered() ), this, SLOT( actionSaveCurrentTriggered() ) );
+			break;
+		case UIProjectsManager::SaveAll:
+			if ( oa )
+				disconnect( oa, SIGNAL( triggered() ), this, SLOT( actionSaveAllTriggered() ) );
+			if ( a )
+				connect( a, SIGNAL( triggered() ), this, SLOT( actionSaveAllTriggered() ) );
+			break;
+		case UIProjectsManager::CloseCurrent:
+			if ( oa )
+				disconnect( oa, SIGNAL( triggered() ), this, SLOT( actionCloseCurrentTriggered() ) );
+			if ( a )
+				connect( a, SIGNAL( triggered() ), this, SLOT( actionCloseCurrentTriggered() ) );
+			break;
+		case UIProjectsManager::CloseAll:
+			if ( oa )
+				disconnect( oa, SIGNAL( triggered() ), this, SLOT( actionCloseAllTriggered() ) );
+			if ( a )
+				connect( a, SIGNAL( triggered() ), this, SLOT( actionCloseAllTriggered() ) );
+			break;
+		case UIProjectsManager::Add:
+			if ( oa )
+				disconnect( oa, SIGNAL( triggered() ), this, SLOT( actionAddTriggered() ) );
+			if ( a )
+				connect( a, SIGNAL( triggered() ), this, SLOT( actionAddTriggered() ) );
+			break;
+		case UIProjectsManager::Remove:
+			if ( oa )
+				disconnect( oa, SIGNAL( triggered() ), this, SLOT( actionRemoveTriggered() ) );
+			if ( a )
+				connect( a, SIGNAL( triggered() ), this, SLOT( actionRemoveTriggered() ) );
+			break;
+		case UIProjectsManager::Settings:
+			if ( oa )
+				disconnect( oa, SIGNAL( triggered() ), this, SLOT( actionSettingsTriggered() ) );
+			if ( a )
+				connect( a, SIGNAL( triggered() ), this, SLOT( actionSettingsTriggered() ) );
+			break;
+		case UIProjectsManager::Source:
+			if ( oa )
+				disconnect( oa, SIGNAL( triggered() ), this, SLOT( actionSourceTriggered() ) );
+			if ( a )
+				connect( a, SIGNAL( triggered() ), this, SLOT( actionSourceTriggered() ) );
+			break;
+		case UIProjectsManager::Filtered:
+			if ( oa )
+				disconnect( oa, SIGNAL( triggered() ), this, SLOT( actionFilteredTriggered() ) );
+			if ( a )
+			{
+				a->setCheckable( true );
+				a->setChecked( swViews->currentWidget() == tvProxiedProjects );
+				connect( a, SIGNAL( triggered() ), this, SLOT( actionFilteredTriggered() ) );
+			}
+			break;
+		default:
+			break;
 	}
-}
-
-QAction* UIProjectsManager::actionOpen() const
-{ return aOpen; }
-
-void UIProjectsManager::setActionOpen( QAction* a )
-{
-	if ( aOpen != a )
-	{
-		if ( aOpen )
-			disconnect( aOpen, SIGNAL( triggered() ), this, SLOT( actionOpenTriggered() ) );
-		aOpen = a;
-		if ( aOpen )
-			connect( aOpen, SIGNAL( triggered() ), this, SLOT( actionOpenTriggered() ) );
-	}
-}
-
-QAction* UIProjectsManager::actionSaveCurrent() const
-{ return aSaveCurrent; }
-
-void UIProjectsManager::setActionSaveCurrent( QAction* a )
-{
-	if ( aSaveCurrent != a )
-	{
-		if ( aSaveCurrent )
-			disconnect( aSaveCurrent, SIGNAL( triggered() ), this, SLOT( actionSaveCurrentTriggered() ) );
-		aSaveCurrent = a;
-		if ( aSaveCurrent )
-			connect( aSaveCurrent, SIGNAL( triggered() ), this, SLOT( actionSaveCurrentTriggered() ) );
-	}
-}
-
-QAction* UIProjectsManager::actionSaveAll() const
-{ return aSaveAll; }
-
-void UIProjectsManager::setActionSaveAll( QAction* a )
-{
-	if ( aSaveAll != a )
-	{
-		if ( aSaveAll )
-			disconnect( aSaveAll, SIGNAL( triggered() ), this, SLOT( actionSaveAllTriggered() ) );
-		aSaveAll = a;
-		if ( aSaveAll )
-			connect( aSaveAll, SIGNAL( triggered() ), this, SLOT( actionSaveAllTriggered() ) );
-	}
-}
-
-QAction* UIProjectsManager::actionCloseCurrent() const
-{ return aCloseCurrent; }
-
-void UIProjectsManager::setActionCloseCurrent( QAction* a )
-{
-	if ( aCloseCurrent != a )
-	{
-		if ( aCloseCurrent )
-			disconnect( aCloseCurrent, SIGNAL( triggered() ), this, SLOT( actionCloseCurrentTriggered() ) );
-		aCloseCurrent = a;
-		if ( aCloseCurrent )
-			connect( aCloseCurrent, SIGNAL( triggered() ), this, SLOT( actionCloseCurrentTriggered() ) );
-	}
-}
-
-QAction* UIProjectsManager::actionCloseAll() const
-{ return aCloseAll; }
-
-void UIProjectsManager::setActionCloseAll( QAction* a )
-{
-	if ( aCloseAll != a )
-	{
-		if ( aCloseAll )
-			disconnect( aCloseAll, SIGNAL( triggered() ), this, SLOT( actionCloseAllTriggered() ) );
-		aCloseAll = a;
-		if ( aCloseAll )
-			connect( aCloseAll, SIGNAL( triggered() ), this, SLOT( actionCloseAllTriggered() ) );
-	}
-}
-
-QAction* UIProjectsManager::actionAdd() const
-{ return aAdd; }
-
-void UIProjectsManager::setActionAdd( QAction* a )
-{
-	if ( aAdd != a )
-	{
-		if ( aAdd )
-			disconnect( aAdd, SIGNAL( triggered() ), this, SLOT( actionAddTriggered() ) );
-		aAdd = a;
-		if ( aAdd )
-			connect( aAdd, SIGNAL( triggered() ), this, SLOT( actionAddTriggered() ) );
-	}
-}
-
-QAction* UIProjectsManager::actionRemove() const
-{ return aRemove; }
-
-void UIProjectsManager::setActionRemove( QAction* a )
-{
-	if ( aRemove != a )
-	{
-		if ( aRemove )
-			disconnect( aRemove, SIGNAL( triggered() ), this, SLOT( actionRemoveTriggered() ) );
-		aRemove = a;
-		if ( aRemove )
-			connect( aRemove, SIGNAL( triggered() ), this, SLOT( actionRemoveTriggered() ) );
-	}
-}
-
-QAction* UIProjectsManager::actionSettings() const
-{ return aSettings; }
-
-void UIProjectsManager::setActionSettings( QAction* a )
-{
-	if ( aSettings != a )
-	{
-		if ( aSettings )
-			disconnect( aSettings, SIGNAL( triggered() ), this, SLOT( actionSettingsTriggered() ) );
-		aSettings = a;
-		if ( aSettings )
-			connect( aSettings, SIGNAL( triggered() ), this, SLOT( actionSettingsTriggered() ) );
-	}
-}
-
-QAction* UIProjectsManager::actionSource() const
-{ return aSource; }
-
-void UIProjectsManager::setActionSource( QAction* a )
-{
-	if ( aSource != a )
-	{
-		if ( aSource )
-			disconnect( aSource, SIGNAL( triggered() ), this, SLOT( actionSourceTriggered() ) );
-		aSource = a;
-		if ( aSource )
-			connect( aSource, SIGNAL( triggered() ), this, SLOT( actionSourceTriggered() ) );
-	}
+	// delete old action
+	delete mActions.take( at );
+	// set new action
+	if ( a )
+		mActions[at] = a;
 }
 
 void UIProjectsManager::actionNewTriggered()
@@ -339,7 +287,13 @@ void UIProjectsManager::actionSettingsTriggered()
 void UIProjectsManager::actionSourceTriggered()
 {
 	if ( ProjectItem* pi = currentProject() )
-		teLog->setPlainText( pi->toDomDocument().toString() );
+		teLog->setPlainText( pi->domDocument().toString() );
+}
+
+void UIProjectsManager::actionFilteredTriggered()
+{
+	bool b = qobject_cast<QAction*>( sender() )->isChecked();
+	swViews->setCurrentWidget( b ? tvProxiedProjects : tvProjects );
 }
 
 void UIProjectsManager::currentChanged( const QModelIndex& c, const QModelIndex& o )
@@ -377,7 +331,7 @@ void UIProjectsManager::on_tvProxiedProjects_doubleClicked( const QModelIndex& i
 		ProjectItem* it = fit->item();
 		if ( it->isProject() )
 			emit projectDoubleClicked( it );
-		else if ( it->isType( "value" ) && XUPManager::fileVariables().contains( it->parent()->defaultValue() ) )
+		else if ( it->isType( "value" ) && it->fileVariables().contains( it->parent()->defaultValue() ) )
 			emit fileDoubleClicked( it, it->filePath() );
 	}
 }
@@ -395,7 +349,7 @@ void UIProjectsManager::internal_projectOpen( ProjectItem* pi )
 			if ( bool b = QVariant( it->value( "expanded", "false" ) ).toBool() )
 				tvProxiedProjects->setExpanded( mModel->filteredModel()->mapFromSource( it->index() ), b );
 			// if value and file based variable
-			if ( it->value( "type" ) == "value" && fileVariables().contains( it->parent()->value( "name" ) ) )
+			if ( it->value( "type" ) == "value" && it->fileVariables().contains( it->parent()->value( "name" ) ) )
 			{
 				/*
 				// file configuration
@@ -424,8 +378,9 @@ void UIProjectsManager::internal_projectAboutToClose( ProjectItem* pi )
 		foreach ( ProjectItem* it, QList<ProjectItem*>() << pi << pi->children( true, false ) )
 		{
 			// check files and set correct attribute on files item ( open, cursor position, ... )
-			if ( it->value( "type" ) == "value" && fileVariables().contains( it->parent()->value( "name" ) ) )
+			if ( it->value( "type" ) == "value" && pi->fileVariables().contains( it->parent()->value( "name" ) ) )
 			{
+				// to do
 			}
 		}
 		teLog->append( tr( "Saving Session Finished..." ) );
@@ -444,7 +399,7 @@ void UIProjectsManager::internal_projectModifiedChanged( ProjectItem* pi, bool b
 	if ( pi )
 	{
 		if ( pi->project() == currentProject() )
-			actionSaveCurrent()->setEnabled( b );
+			action( UIProjectsManager::SaveCurrent )->setEnabled( b );
 		teLog->append( tr( "Project Modified Changed: %1, %2" ).arg( pi->defaultValue() ).arg( b ? tr( "True" ) : tr( "False" ) ) );
 	}
 }
