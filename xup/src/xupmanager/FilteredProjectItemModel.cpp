@@ -65,10 +65,28 @@ QModelIndex FilteredProjectItemModel::mapToSource( const QModelIndex& i ) const
 	return QModelIndex();
 }
 
+FilteredProjectItem* FilteredProjectItemModel::getProject( ProjectItem* it )
+{
+	// return already exists if possible
+	if ( mItems.contains( it ) )
+		return mItems.value( it );
+	
+	// create and add
+	FilteredProjectItem* pit = new FilteredProjectItem( it );
+	if ( it->parent() )
+		mItems[it->parent()->project()]->appendRow( pit );
+	else
+		appendRow( pit );
+	mItems[it] = pit;
+	
+	// return item
+	return pit;
+}
+
 FilteredProjectItem* FilteredProjectItemModel::getVariable( ProjectItem* it )
 {
 	// get project item
-	FilteredProjectItem* pit = mItems.value( it->project() );
+	FilteredProjectItem* pit = getProject( it->project() );
 	Q_ASSERT( pit );
 	
 	// get variable name
@@ -99,7 +117,7 @@ FilteredProjectItem* FilteredProjectItemModel::getVariable( ProjectItem* it )
 	}
 	
 	// insert item
-	mItems.value( it->parent()->project() )->insertRow( ri +1, vit );
+	getProject( it->parent()->project() )->insertRow( ri +1, vit );
 	mItems[it] = vit;
 	
 	return vit;
@@ -127,7 +145,7 @@ FilteredProjectItem* FilteredProjectItemModel::getFolder( ProjectItem* it, Filte
 	
 	// create item folder
 	FilteredProjectItem* fit = new FilteredProjectItem( it->clone( false ) );
-	fit->item()->setDomElement( it->project()->domDocument().createElement( "folder" ) );
+	fit->item()->setDomElement( it->domElement().ownerDocument().createElement( "folder" ) );
 	fit->item()->setValue( "name", pn );
 	
 	// calculate row to insert to
@@ -151,7 +169,7 @@ FilteredProjectItem* FilteredProjectItemModel::getFolder( ProjectItem* it, Filte
 	return fit;
 }
 
-void FilteredProjectItemModel::addVariable( ProjectItem* it )
+void FilteredProjectItemModel::addFilteredVariable( ProjectItem* it )
 {
 	// get variable item
 	FilteredProjectItem* vit = getVariable( it );
@@ -182,28 +200,17 @@ void FilteredProjectItemModel::addItemsRecursively( ProjectItem* it, FilteredPro
 	}
 }
 
-void FilteredProjectItemModel::projectInserted( ProjectItem* it )
+void FilteredProjectItemModel::filteredProjectInserted( ProjectItem* it )
 {
-	FilteredProjectItem* pit = new FilteredProjectItem( it );
-	if ( it->parent() )
-		mItems[it->parent()->project()]->appendRow( pit );
-	else
-		appendRow( pit );
-	mItems[it] = pit;
+	getProject( it );
 	
-	bool b = it->filteredVariables().isEmpty();
-	if ( b )
-		addItemsRecursively( it, pit );
-	else
-	{
-		foreach ( ProjectItem* cit, it->children( true, true ) )
-			if ( cit->isType( "variable" ) && !b && it->filteredVariables().contains( cit->defaultValue() ) )
-				addVariable( cit );
-		
-		foreach ( ProjectItem* cit, it->children( false, false ) )
-			if ( cit->isProject() )
-				projectInserted( cit );
-	}
+	foreach ( ProjectItem* cit, it->children( true, true ) )
+		if ( cit->isType( "variable" ) && it->filteredVariables().contains( cit->defaultValue() ) )
+			addFilteredVariable( cit );
+	
+	foreach ( ProjectItem* cit, it->children( false, false ) )
+		if ( cit->isProject() )
+			filteredProjectInserted( cit );
 }
 
 void FilteredProjectItemModel::headerDataChanged( Qt::Orientation, int first, int last )
@@ -237,10 +244,43 @@ void FilteredProjectItemModel::rowsInserted( const QModelIndex& parent, int star
 	{
 		if ( ProjectItem* it = mSourceModel->itemFromIndex( mSourceModel->index( i, 0, parent ) ) )
 		{
+			// chekc if filtered or not
+			bool b = it->filteredVariables().isEmpty();
+			// check how to add
 			if ( it->isProject() )
-				projectInserted( it );
+			{
+				if ( b )
+					addItemsRecursively( it, getProject( it ) );
+				else
+					filteredProjectInserted( it );
+			}
+			else if ( it->isType( "variable" ) )
+			{
+				if ( b )
+					addItemsRecursively( it, getProject( it->project() ) );
+				else
+					addFilteredVariable( it );
+			}
+			else if ( it->isType( "value" ) )
+			{
+			}
 		}
 	}
+	
+	/*
+	if ( b )
+		addItemsRecursively( it, pit );
+	else
+	{
+		foreach ( ProjectItem* cit, it->children( true, true ) )
+			if ( cit->isType( "variable" ) && !b && it->filteredVariables().contains( cit->defaultValue() ) )
+				addVariable( cit );
+		
+		foreach ( ProjectItem* cit, it->children( false, false ) )
+			if ( cit->isProject() )
+				projectInserted( cit );
+	}
+	*/
 }
 
 void FilteredProjectItemModel::rowsAboutToBeRemoved( const QModelIndex& parent, int start, int end )

@@ -4,17 +4,14 @@
 
 ProjectItem::ProjectItem( const QDomElement e, const QString& s, bool b )
 {
-	mFilteredVariables << "FORMS" << "HEADERS" << "SOURCES";
-	mFileVariables = mFilteredVariables;
 	// remove top
 	mTextTypes << "comment" << "value" << "emptyline" << "function";
+	mFileVariables << "FILES";
+	mFilteredVariables = mFileVariables;
 	setDomElement( e );
 	loadProject( s );
 	setModified( b );
 }
-
-ProjectItem::~ProjectItem()
-{}
 
 QStringList ProjectItem::filteredVariables() const
 { return mFilteredVariables; }
@@ -219,7 +216,12 @@ void ProjectItem::setValue( const QString& n, const QString& v )
 	if ( value( n ) != v )
 	{
 		if ( n == "text" )
-			mDomElement.firstChild().toText().setData( v );
+		{
+			if ( !mDomElement.childNodes().count() )
+				mDomElement.appendChild( mDomElement.ownerDocument().createTextNode( v ) );
+			else
+				mDomElement.firstChild().toText().setData( v );
+		}
 		else if ( n == "type" )
 			mDomElement.setTagName( v );
 		else
@@ -314,6 +316,53 @@ void ProjectItem::closeProject()
 		model()->removeRow( row(), index().parent() );
 	else
 		deleteLater();
+}
+
+void ProjectItem::addFiles( const QStringList& files, ProjectItem* scope, const QString& op )
+{
+	// get project item
+	ProjectItem* pit = project();
+	
+	// set scope
+	if ( !scope )
+		scope = this;
+	
+	// get variable item
+	ProjectItem* vit = 0;
+	foreach ( ProjectItem* cit, scope->children( false, true ) )
+	{
+		if ( cit->isType( "variable" ) && cit->defaultValue() == "FILES" && cit->value( "operator" ) == op )
+		{
+			vit = cit;
+			break;
+		}
+	}
+	
+	// create variable if needed
+	if ( !vit )
+	{
+		vit = clone( false );
+		scope->appendRow( vit );
+		vit->setDomElement( pit->domDocument().createElement( "variable" ) );
+		scope->domElement().appendChild( vit->domElement() );
+		vit->setValue( valueName(), "FILES" );
+		vit->setValue( "operator", op );
+		vit->setValue( "multiline", "true" );
+	}
+	
+	// add files
+	foreach ( QString f, files )
+	{
+		ProjectItem* it = clone( false );
+		vit->appendRow( it );
+		it->setDomElement( pit->domDocument().createElement( "value" ) );
+		vit->domElement().appendChild( it->domElement() );
+		it->setValue( it->valueName(), f );
+	}
+}
+
+void ProjectItem::removeFiles( const QStringList& files, ProjectItem* scope, const QString& op )
+{
 }
 
 QString ProjectItem::projectFilePath() const

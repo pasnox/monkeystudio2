@@ -276,7 +276,14 @@ void UIProjectsManager::actionCloseAllTriggered()
 }
 
 void UIProjectsManager::actionAddTriggered()
-{ warning( tr( "Not Yet Implemented" ) ); }
+{
+	if ( ProjectItem* pi = currentProject() )
+	{
+		const QStringList files = QFileDialog::getOpenFileNames( window(), tr( "Choose the files to add..." ), QString(), tr( "All Files (*)" ) );
+		if ( !files.isEmpty() )
+			pi->addFiles( files, pi );
+	}
+}
 
 void UIProjectsManager::actionRemoveTriggered()
 { warning( tr( "Not Yet Implemented" ) ); }

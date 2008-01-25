@@ -17,7 +17,6 @@ class ProjectItem : public QObject, public QStandardItem
 	
 public:
 	ProjectItem( const QDomElement = QDomDocument().toElement(), const QString& = QString(), bool = false );
-	~ProjectItem();
 
 	// register item specific infos
 	static void registerItem() { qWarning( qPrintable( tr( "ProjectItem Registered" ) ) ); }
@@ -97,11 +96,17 @@ public:
 	// check for sub project to open
 	virtual void checkChildrenProjects();
 	// open project
-	virtual bool loadProject( const QString& = QString(), const QString& = QString( "1.0.0" ) );
+	virtual bool loadProject( const QString& filename = QString(), const QString& version = QString( "1.0.0" ) );
 	// save project
-	virtual bool saveProject( const QString& = QString(), const QString& = QString( "1.0.0" ) );
+	virtual bool saveProject( const QString& filename = QString(), const QString& version = QString( "1.0.0" ) );
 	// close project
 	virtual void closeProject();
+	// add files to project
+	virtual void addFiles( const QStringList& files, ProjectItem* scope = 0, const QString& op = QString( "=" ) );
+	virtual void addFile( const QString& file, ProjectItem* scope = 0, const QString& op = QString( "=" ) ) { addFiles( QStringList( file ), scope, op ); };
+	// remove files to project
+	virtual void removeFiles( const QStringList& files, ProjectItem* scope= 0, const QString& op = QString( "=" ) );
+	virtual void removeFile( const QString& file, ProjectItem* scope = 0, const QString& op = QString( "=" ) ) { removeFiles( QStringList( file ), scope, op ); };
 
 	// return the project file path, ie the file u set when opening/saving the project
 	virtual QString projectFilePath() const;
