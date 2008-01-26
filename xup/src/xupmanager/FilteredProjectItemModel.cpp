@@ -65,6 +65,18 @@ QModelIndex FilteredProjectItemModel::mapToSource( const QModelIndex& i ) const
 	return QModelIndex();
 }
 
+void FilteredProjectItemModel::addItemsRecursively( ProjectItem* it, FilteredProjectItem* pit )
+{
+	foreach ( ProjectItem* cit, it->children( false, true ) )
+	{
+		FilteredProjectItem* ncit = new FilteredProjectItem( cit );
+		if ( cit->hasChildren() )
+			addItemsRecursively( cit, ncit );
+		pit->appendRow( ncit );
+		mItems[cit] = ncit;
+	}
+}
+
 FilteredProjectItem* FilteredProjectItemModel::getProject( ProjectItem* it )
 {
 	// return already exists if possible
@@ -125,6 +137,7 @@ FilteredProjectItem* FilteredProjectItemModel::getVariable( ProjectItem* it )
 
 FilteredProjectItem* FilteredProjectItemModel::getFolder( ProjectItem* it, FilteredProjectItem* vit )
 {
+	// get variable item
 	if ( !vit )
 		vit = getVariable( it->parent() );
 	
@@ -169,11 +182,28 @@ FilteredProjectItem* FilteredProjectItemModel::getFolder( ProjectItem* it, Filte
 	return fit;
 }
 
+void FilteredProjectItemModel::addFilteredValue( ProjectItem* it )
+{
+	// get variable item
+	FilteredProjectItem* vit = getVariable( it->parent() );
+	
+	// check file based
+	bool b = it->fileVariables().contains( vit->item()->defaultValue() );
+	
+	if ( !it->defaultValue().isEmpty() )
+	{
+		FilteredProjectItem* cit = new FilteredProjectItem( it );
+		b ? getFolder( it, vit )->appendRow( cit ) : vit->appendRow( cit );
+		mItems[it] = cit;
+	}
+}
+
 void FilteredProjectItemModel::addFilteredVariable( ProjectItem* it )
 {
 	// get variable item
 	FilteredProjectItem* vit = getVariable( it );
 	
+	// check is file based
 	bool b = it->fileVariables().contains( vit->item()->defaultValue() );
 	
 	// add values to vit
@@ -188,55 +218,36 @@ void FilteredProjectItemModel::addFilteredVariable( ProjectItem* it )
 	}
 }
 
-void FilteredProjectItemModel::addItemsRecursively( ProjectItem* it, FilteredProjectItem* pit )
+void FilteredProjectItemModel::addFilteredProject( ProjectItem* it )
 {
-	foreach ( ProjectItem* cit, it->children( false, true ) )
-	{
-		FilteredProjectItem* ncit = new FilteredProjectItem( cit );
-		if ( cit->hasChildren() )
-			addItemsRecursively( cit, ncit );
-		pit->appendRow( ncit );
-		mItems[cit] = ncit;
-	}
-}
-
-void FilteredProjectItemModel::filteredProjectInserted( ProjectItem* it )
-{
+	// get project
 	getProject( it );
 	
+	// add recursive variable
 	foreach ( ProjectItem* cit, it->children( true, true ) )
 		if ( cit->isType( "variable" ) && it->filteredVariables().contains( cit->defaultValue() ) )
 			addFilteredVariable( cit );
 	
+	// add recursive project
 	foreach ( ProjectItem* cit, it->children( false, false ) )
 		if ( cit->isProject() )
-			filteredProjectInserted( cit );
+			addFilteredProject( cit );
 }
 
 void FilteredProjectItemModel::headerDataChanged( Qt::Orientation, int first, int last )
-{
-	qWarning( "headerDataChanged: %i, %i", first, last );
-}
+{qWarning( "headerDataChanged: %i, %i", first, last );}
 
 void FilteredProjectItemModel::layoutAboutToBeChanged()
-{
-	qWarning( "layoutAboutToBeChanged" );
-}
+{qWarning( "layoutAboutToBeChanged" );}
 
 void FilteredProjectItemModel::layoutChanged()
-{
-	qWarning( "layoutChanged" );
-}
+{qWarning( "layoutChanged" );}
 
 void FilteredProjectItemModel::modelAboutToBeReset()
-{
-	qWarning( "modelAboutToBeReset" );
-}
+{qWarning( "modelAboutToBeReset" );}
 
 void FilteredProjectItemModel::modelReset()
-{
-	qWarning( "modelReset" );
-}
+{qWarning( "modelReset" );}
 
 void FilteredProjectItemModel::rowsInserted( const QModelIndex& parent, int start, int end )
 {
@@ -244,43 +255,27 @@ void FilteredProjectItemModel::rowsInserted( const QModelIndex& parent, int star
 	{
 		if ( ProjectItem* it = mSourceModel->itemFromIndex( mSourceModel->index( i, 0, parent ) ) )
 		{
-			// chekc if filtered or not
-			bool b = it->filteredVariables().isEmpty();
-			// check how to add
-			if ( it->isProject() )
+			// if filtered
+			if ( !it->filteredVariables().isEmpty() )
 			{
-				if ( b )
-					addItemsRecursively( it, getProject( it ) );
-				else
-					filteredProjectInserted( it );
-			}
-			else if ( it->isType( "variable" ) )
-			{
-				if ( b )
-					addItemsRecursively( it, getProject( it->project() ) );
-				else
+				if ( it->isProject() )
+					addFilteredProject( it );
+				else if ( it->isType( "variable" ) )
 					addFilteredVariable( it );
+				else if ( it->isType( "value" ) )
+					addFilteredValue( it );
 			}
-			else if ( it->isType( "value" ) )
+			else
 			{
+				if ( it->isProject() )
+					addItemsRecursively( it, getProject( it ) );
+				else if ( it->isType( "variable" ) )
+					addItemsRecursively( it, getProject( it->project() ) );
+				else if ( it->isType( "value" ) )
+					addItemsRecursively( it, getVariable( it->parent() ) );
 			}
 		}
 	}
-	
-	/*
-	if ( b )
-		addItemsRecursively( it, pit );
-	else
-	{
-		foreach ( ProjectItem* cit, it->children( true, true ) )
-			if ( cit->isType( "variable" ) && !b && it->filteredVariables().contains( cit->defaultValue() ) )
-				addVariable( cit );
-		
-		foreach ( ProjectItem* cit, it->children( false, false ) )
-			if ( cit->isProject() )
-				projectInserted( cit );
-	}
-	*/
 }
 
 void FilteredProjectItemModel::rowsAboutToBeRemoved( const QModelIndex& parent, int start, int end )

@@ -2,15 +2,22 @@
 #include "ProjectItemModel.h"
 #include "XUPManager.h"
 
+#include <QDebug>
+
 ProjectItem::ProjectItem( const QDomElement e, const QString& s, bool b )
 {
-	// remove top
-	mTextTypes << "comment" << "value" << "emptyline" << "function";
-	mFileVariables << "FILES";
-	mFilteredVariables = mFileVariables;
+	registerItem();
 	setDomElement( e );
 	loadProject( s );
 	setModified( b );
+}
+
+void ProjectItem::registerItem()
+{
+	mTextTypes << "comment" << "value" << "emptyline" << "function";
+	mFileVariables << "FILES";
+	mFilteredVariables = mFileVariables;
+	mVariableLabels["FILES"] = tr( "Project Files" );
 }
 
 QStringList ProjectItem::filteredVariables() const
@@ -69,6 +76,24 @@ QString ProjectItem::valueName( const QString& s ) const
 	if ( mTextTypes.contains( s ) )
 		return "text";
 	return "name";
+}
+
+QStringList ProjectItem::files( bool a )
+{
+	// files list
+	QStringList l;
+	
+	// check valid item
+	if ( !isType( "variable" ) || !mFileVariables.contains( defaultValue() ) )
+		return l;
+	
+	// check recurs items from vit
+	foreach ( ProjectItem* cit, children( false, false ) )
+		if ( cit->isType( "value" ) )
+				l << ( a ? cit->filePath() : cit->relativeFilePath() );
+	
+	// return list
+	return l;
 }
 
 void ProjectItem::updateItem()
@@ -157,12 +182,16 @@ void ProjectItem::appendRow( ProjectItem* it )
 
 void ProjectItem::insertRow( int i, ProjectItem* it )
 {
-	QStandardItem::insertRow( i, it );
-	if ( ProjectItem* pit = project() )
+	if ( it )
 	{
-		connect( it, SIGNAL( modifiedChanged( ProjectItem*, bool ) ), pit, SIGNAL( modifiedChanged( ProjectItem*, bool ) ) );
-		if ( it->isProject() )
-			connect( it, SIGNAL( aboutToClose( ProjectItem* ) ), pit, SIGNAL( aboutToClose( ProjectItem* ) ) );
+		QStandardItem::insertRow( i, it );
+		if ( ProjectItem* pit = project() )
+		{
+			connect( it, SIGNAL( modifiedChanged( ProjectItem*, bool ) ), pit, SIGNAL( modifiedChanged( ProjectItem*, bool ) ) );
+			if ( it->isProject() )
+				connect( it, SIGNAL( aboutToClose( ProjectItem* ) ), pit, SIGNAL( aboutToClose( ProjectItem* ) ) );
+		}
+		it->updateItem();
 	}
 }
 
@@ -182,6 +211,20 @@ QList<ProjectItem*> ProjectItem::children( bool r, bool s ) const
 		}
 	}
 	return l;
+}
+
+void ProjectItem::remove()
+{
+	bool b = isProject();
+	ProjectItem* pit = b ? 0 : project();
+	// remove item from model
+	if ( model() )
+		model()->removeRow( row(), index().parent() );
+	else
+		deleteLater();
+	// update proejct modified state
+	if ( !b && pit )
+		pit->setModified( true );
 }
 
 void ProjectItem::setDomElement( const QDomElement& e )
@@ -312,14 +355,15 @@ void ProjectItem::closeProject()
 	// tell we will close the proejct
 	emit aboutToClose( this );
 	// remove it from model
-	if ( model() )
-		model()->removeRow( row(), index().parent() );
-	else
-		deleteLater();
+	remove();
 }
 
 void ProjectItem::addFiles( const QStringList& files, ProjectItem* scope, const QString& op )
 {
+	// abort if no files
+	if ( files.isEmpty() )
+		return;
+	
 	// get project item
 	ProjectItem* pit = project();
 	
@@ -338,11 +382,13 @@ void ProjectItem::addFiles( const QStringList& files, ProjectItem* scope, const 
 		}
 	}
 	
+	//
+	bool exists = vit;
+	
 	// create variable if needed
-	if ( !vit )
+	if ( !exists )
 	{
 		vit = clone( false );
-		scope->appendRow( vit );
 		vit->setDomElement( pit->domDocument().createElement( "variable" ) );
 		scope->domElement().appendChild( vit->domElement() );
 		vit->setValue( valueName(), "FILES" );
@@ -350,15 +396,26 @@ void ProjectItem::addFiles( const QStringList& files, ProjectItem* scope, const 
 		vit->setValue( "multiline", "true" );
 	}
 	
+	// get all files
+	QStringList existingFiles = vit->files();
+	
 	// add files
 	foreach ( QString f, files )
 	{
-		ProjectItem* it = clone( false );
-		vit->appendRow( it );
-		it->setDomElement( pit->domDocument().createElement( "value" ) );
-		vit->domElement().appendChild( it->domElement() );
-		it->setValue( it->valueName(), f );
+		QString fp = pit->filePath( f );
+		if ( !existingFiles.contains( fp ) )
+		{
+			ProjectItem* it = clone( false );
+			it->setDomElement( pit->domDocument().createElement( "value" ) );
+			vit->domElement().appendChild( it->domElement() );
+			it->setValue( it->valueName(), fp );
+			vit->appendRow( it );
+		}
 	}
+	
+	// append var item only at last will prevent multiple call of addFilteredValue from filtered view
+	if ( !exists )
+		scope->appendRow( vit );
 }
 
 void ProjectItem::removeFiles( const QStringList& files, ProjectItem* scope, const QString& op )
@@ -380,15 +437,20 @@ QString ProjectItem::filePath( const QString& s )
 	if ( s.isEmpty() && isType( "value" ) )
 	{
 		const QString v = parent()->defaultValue();
-		if ( ( fileVariables().contains( v ) || pathVariables().contains( v ) ) && !defaultValue().isEmpty() )
+		if ( ( mFileVariables.contains( v ) || mPathVariables.contains( v ) ) && !defaultValue().isEmpty() )
 		{
-			QFileInfo fi( projectPath().append( "/%1" ).arg( defaultInterpretedValue() ) );
+			QString div = defaultInterpretedValue();
+			QFileInfo fi( div );
+			if ( fi.isRelative() )
+				fi.setFile( projectPath().append( "/%1" ).arg( div ) );
 			return fi.exists() ? fi.canonicalFilePath() : fi.absoluteFilePath();
 		}
 	}
 	else if ( !s.isEmpty() )
 	{
-		QFileInfo fi( projectPath().append( "/%1" ).arg( s ) );
+		QFileInfo fi( s );
+		if ( fi.isRelative() )
+			fi.setFile( projectPath().append( "/%1" ).arg( s ) );
 		return fi.exists() ? fi.canonicalFilePath() : fi.absoluteFilePath();
 	}
 	return s;

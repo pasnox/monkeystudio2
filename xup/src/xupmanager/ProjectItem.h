@@ -19,7 +19,7 @@ public:
 	ProjectItem( const QDomElement = QDomDocument().toElement(), const QString& = QString(), bool = false );
 
 	// register item specific infos
-	static void registerItem() { qWarning( qPrintable( tr( "ProjectItem Registered" ) ) ); }
+	virtual void registerItem();
 	
 	// the visible variables in filtered view ordered by list order
 	virtual QStringList filteredVariables() const;
@@ -46,13 +46,16 @@ public:
 	virtual void registerVariableIcons( const QString&, const QIcon& );
 	
 	// get defaut icon
-	QIcon getIcon( const QString&, const QString& ) const;
+	virtual QIcon getIcon( const QString&, const QString& ) const;
 	
 	// tell how to read node for s
-	QString valueName( const QString& ) const;
+	virtual QString valueName( const QString& ) const;
+	
+	// return all value files if item if a variable based on files
+	virtual QStringList files( bool absolute = true );
 	
 	// update item
-	void updateItem();
+	virtual void updateItem();
 
 	// return child item
 	virtual ProjectItem* child( int, int = 0 ) const;
@@ -68,6 +71,8 @@ public:
 	virtual void insertRow( int, ProjectItem* );
 	// get project children items, recursively according to bool and same project according to bool
 	virtual QList<ProjectItem*> children( bool = true, bool = true ) const;
+	// remove item from parent, and change project modified flag
+	virtual void remove();
 
 	// set the item QDomElement
 	virtual void setDomElement( const QDomElement& );

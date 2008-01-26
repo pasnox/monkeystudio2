@@ -10,7 +10,7 @@ class QMakeProjectItem : public ProjectItem
 public:
 	QMakeProjectItem( const QDomElement& = QDomElement(), const QString& = QString(), bool = false );
 
-	static void registerItem();
+	virtual void registerItem();
 	virtual QStringList filteredVariables() const;
 	virtual QMakeProjectItem* clone( bool = true ) const;
 	virtual QString interpretedVariable( const QString&, const ProjectItem* = 0, const QString& = QString() ) const;

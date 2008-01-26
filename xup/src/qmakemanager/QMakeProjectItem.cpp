@@ -3,9 +3,8 @@
 #include "XUPManager.h"
 #include "QMake2XUP.h"
 
-#include <QIcon>
-
-using namespace XUPManager;
+#include <QFileInfo>
+#include <QDebug>
 
 QIcon getIcon( const QString& s )
 { return QIcon( QString( ":/icons/icons/%1.png" ).arg( s ) ); }
@@ -51,22 +50,22 @@ void QMakeProjectItem::registerItem()
 	registerVariableLabels( "LIBS", tr( "Libraries Files" ) );
 	registerVariableLabels( "DEFINES", tr( "Defines" ) );
 	// variables icons
-	registerVariableIcons( "FORMS", getIcon( "forms" ) );
-	registerVariableIcons( "FORMS3", getIcon( "forms3" ) );
-	registerVariableIcons( "HEADERS", getIcon( "headers" ) );
-	registerVariableIcons( "SOURCES", getIcon( "sources" ) );
-	registerVariableIcons( "OBJECTIVE_SOURCES", getIcon( "objective_sources" ) );
-	registerVariableIcons( "TRANSLATIONS", getIcon( "translations" ) );
-	registerVariableIcons( "RESOURCES", getIcon( "resources" ) );
-	registerVariableIcons( "RC_FILE", getIcon( "rc_file" ) );
-	registerVariableIcons( "RES_FILE", getIcon( "res_file" ) );
-	registerVariableIcons( "DEF_FILE", getIcon( "def_file" ) );
-	registerVariableIcons( "SUBDIRS", getIcon( "project" ) );
-	registerVariableIcons( "INCLUDEPATH", getIcon( "includepath" ) );
-	registerVariableIcons( "DEPENDPATH", getIcon( "dependpath" ) );
-	registerVariableIcons( "VPATH", getIcon( "vpath" ) );
-	registerVariableIcons( "LIBS", getIcon( "libs" ) );
-	registerVariableIcons( "DEFINES", getIcon( "defines" ) );
+	registerVariableIcons( "FORMS", getIcon( value( "icon" ), "forms" ) );
+	registerVariableIcons( "FORMS3", getIcon( value( "icon" ), "forms3" ) );
+	registerVariableIcons( "HEADERS", getIcon( value( "icon" ), "headers" ) );
+	registerVariableIcons( "SOURCES", getIcon( value( "icon" ), "sources" ) );
+	registerVariableIcons( "OBJECTIVE_SOURCES", getIcon( value( "icon" ), "objective_sources" ) );
+	registerVariableIcons( "TRANSLATIONS", getIcon( value( "icon" ), "translations" ) );
+	registerVariableIcons( "RESOURCES", getIcon( value( "icon" ), "resources" ) );
+	registerVariableIcons( "RC_FILE", getIcon( value( "icon" ), "rc_file" ) );
+	registerVariableIcons( "RES_FILE", getIcon( value( "icon" ), "res_file" ) );
+	registerVariableIcons( "DEF_FILE", getIcon( value( "icon" ), "def_file" ) );
+	registerVariableIcons( "SUBDIRS", getIcon( value( "icon" ), "project" ) );
+	registerVariableIcons( "INCLUDEPATH", getIcon( value( "icon" ), "includepath" ) );
+	registerVariableIcons( "DEPENDPATH", getIcon( value( "icon" ), "dependpath" ) );
+	registerVariableIcons( "VPATH", getIcon( value( "icon" ), "vpath" ) );
+	registerVariableIcons( "LIBS", getIcon( value( "icon" ), "libs" ) );
+	registerVariableIcons( "DEFINES", getIcon( value( "icon" ), "defines" ) );
 	//
 	qWarning( qPrintable( tr( "QMakeProjectItem Registered" ) ) ); 
 }
@@ -78,7 +77,7 @@ QStringList QMakeProjectItem::filteredVariables() const
 }
 
 QMakeProjectItem* QMakeProjectItem::clone( bool b ) const
-{ return b ? new QMakeProjectItem( domElement().cloneNode( false ).toElement(), projectFilePath(), modified()/*, buddy()*/ ) : new QMakeProjectItem; }
+{ return b ? new QMakeProjectItem( domElement(), projectFilePath(), modified() ) : new QMakeProjectItem; }
 
 QString QMakeProjectItem::interpretedVariable( const QString& s, const ProjectItem* it, const QString& d ) const
 {
@@ -151,6 +150,8 @@ QString QMakeProjectItem::defaultInterpretedValue() const
 
 void QMakeProjectItem::checkChildrenProjects()
 {
+	return;
+	
 	foreach ( ProjectItem* it, children( true, true ) )
 	{
 		QString s;
@@ -197,10 +198,10 @@ void QMakeProjectItem::checkChildrenProjects()
 
 bool QMakeProjectItem::loadProject( const QString& s, const QString& v )
 {
-	if ( loadXUP( this, QMake2XUP::convertFromPro( s, v ), v ) )
+	if ( XUPManager::loadXUP( this, QMake2XUP::convertFromPro( s, v ), v ) )
 	{
 		mProjectFilePath = s;
-		XUPManager::updateItem( this );
+		updateItem();
 		setModified( false );
 		checkChildrenProjects();
 		return true;
@@ -211,13 +212,15 @@ bool QMakeProjectItem::loadProject( const QString& s, const QString& v )
 
 bool QMakeProjectItem::saveProject( const QString& s, const QString& v )
 {
+	return false;
+	/*
 	QByteArray a = QMake2XUP::convertToPro( toDomDocument(), v );
 	if ( !a.isNull() )
 	{
 		QTextEdit* te = new QTextEdit;
 		te->setPlainText( a );
 		te->show();
-		/*
+		/
 		QFile f( s.isEmpty() ? projectFilePath() : s );
 		if ( !f.open( QIODevice::WriteOnly | QIODevice::Text ) )
 			return false;
@@ -225,11 +228,12 @@ bool QMakeProjectItem::saveProject( const QString& s, const QString& v )
 		if ( !( f.write( a ) != -1 ) )
 			return false;
 		mProjectFilePath = f.fileName();
-		*/
+		/
 		setModified( false );
 		return true;
 	}
 	return false;
+	*/
 }
 
 QString QMakeProjectItem::filePath( const QString& s )
@@ -237,7 +241,7 @@ QString QMakeProjectItem::filePath( const QString& s )
 	if ( s.isEmpty() && isType( "value" ) )
 	{
 		const QString v = parent()->defaultValue();
-		if ( ( XUPManager::fileVariables().contains( v ) || XUPManager::pathVariables().contains( v ) ) && !defaultValue().isEmpty() )
+		if ( ( fileVariables().contains( v ) || pathVariables().contains( v ) ) && !defaultValue().isEmpty() )
 		{
 			const QString pp = projectPath().append( "/%1" );
 			const QString iv = defaultInterpretedValue();

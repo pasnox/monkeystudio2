@@ -7,6 +7,8 @@
 #include <QFileDialog>
 #include <QHeaderView>
 
+#include "QMakeProjectItem.h" // remove me
+
 using namespace XUPManager;
 
 #include <QMessageBox>
@@ -121,10 +123,9 @@ ProjectItem* UIProjectsManager::currentValue() const
 bool UIProjectsManager::openProject( const QString& s )
 {
 	ProjectItem* pi = 0;
-	/*
 	if ( QDir::match( "*.pro", s ) )
 		pi = new QMakeProjectItem;
-	else*/ if ( QDir::match( "*.xup", s ) )
+	else if ( QDir::match( "*.xup", s ) )
 		pi = new ProjectItem;
 	else
 		return false;
@@ -286,7 +287,26 @@ void UIProjectsManager::actionAddTriggered()
 }
 
 void UIProjectsManager::actionRemoveTriggered()
-{ warning( tr( "Not Yet Implemented" ) ); }
+{
+	if ( ProjectItem* it = currentValue() )
+	{
+		if ( question( tr( "Are you sur you want to remove this value ?" ) ) )
+		{
+			// if file based
+			if ( it->fileVariables().contains( it->parent()->defaultValue() ) )
+			{
+				QString fp = it->filePath();
+				if ( QFile::exists( fp ) && question( tr( "Do you want to delete the associate file ?" ) ) )
+					if ( !QFile::remove( fp ) )
+						warning( tr( "Can't delete file: %1" ).arg( fp ) );
+			}
+			// remove dom node
+			it->parent()->domElement().removeChild( it->domElement() );
+			// remove item
+			it->remove();
+		}
+	}
+}
 
 void UIProjectsManager::actionSettingsTriggered()
 { warning( tr( "Not Yet Implemented" ) ); }
@@ -311,6 +331,8 @@ void UIProjectsManager::currentChanged( const QModelIndex& c, const QModelIndex&
 	// current
 	FilteredProjectItem* fit = mModel->filteredModel()->itemFromIndex( c );
 	ProjectItem* p = fit ? fit->project() : 0;
+	// update some actions
+	action( UIProjectsManager::Remove )->setEnabled( currentValue() );
 	// if new project != old update gui
 	if ( op != p )
 	{

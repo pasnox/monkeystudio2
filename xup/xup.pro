@@ -55,8 +55,8 @@ HEADERS	+= src/xupmanager/ProjectItemModel.h \
 	src/xupmanager/ProjectItem.h \
 	src/xupmanager/XUPManager.h \
 	src/xupmanager/ui/UIProjectsManager.h \
-#	src/qmakemanager/QMakeProjectItem.h \
-#	src/qmakemanager/QMake2XUP.h \
+	src/qmakemanager/QMakeProjectItem.h \
+	src/qmakemanager/QMake2XUP.h \
 	src/xupmanager/FilteredProjectItemModel.h
 
 SOURCES	+= src/xupmanager/ProjectItemModel.cpp \
@@ -64,6 +64,6 @@ SOURCES	+= src/xupmanager/ProjectItemModel.cpp \
 	src/xupmanager/XUPManager.cpp \
 	src/xupmanager/ui/UIProjectsManager.cpp \
 	src/main.cpp \
-#	src/qmakemanager/QMakeProjectItem.cpp \
-#	src/qmakemanager/QMake2XUP.cpp \
+	src/qmakemanager/QMakeProjectItem.cpp \
+	src/qmakemanager/QMake2XUP.cpp \
 	src/xupmanager/FilteredProjectItemModel.cpp

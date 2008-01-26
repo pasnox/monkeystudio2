@@ -69,12 +69,14 @@ public:
 	QModelIndex mapToSource( const QModelIndex& ) const;
 
 private:
+	void addItemsRecursively( ProjectItem*, FilteredProjectItem* );
 	FilteredProjectItem* getProject( ProjectItem* );
 	FilteredProjectItem* getFolder( ProjectItem*, FilteredProjectItem* = 0 );
 	FilteredProjectItem* getVariable( ProjectItem* );
+	void addFilteredValue( ProjectItem* );
 	void addFilteredVariable( ProjectItem* );
-	void addItemsRecursively( ProjectItem*, FilteredProjectItem* );
-	void filteredProjectInserted( ProjectItem* );
+	void addFilteredProject( ProjectItem* );
+	
 	ProjectItemModel* mSourceModel;
 	QHash<ProjectItem*, FilteredProjectItem*> mItems;
 

@@ -12,10 +12,6 @@ int main( int argc, char** argv )
 	// init application
 	app.setApplicationName( "XUP Project Manager" );
 	
-	// register items
-	ProjectItem::registerItem();
-	//QMakeProjectItem::registerItem();
-	
 	QMainWindow w;
 	UIProjectsManager d;
 	w.addDockWidget( Qt::RightDockWidgetArea, &d );
