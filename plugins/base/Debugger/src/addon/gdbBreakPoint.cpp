@@ -130,6 +130,14 @@ int GdbBreakPoint::processError(int id, QByteArray data)
 //
 void GdbBreakPoint::processExit()
 {
+		cmd.disconnectEventToProcess(interpreterAdd);
+		cmd.leaveEventToProcess(&interpreterAdd);
+		cmd.disconnectEventToProcess(interpreterDel);
+		cmd.leaveEventToProcess(&interpreterDel);
+		cmd.disconnectEventToProcess(interpreterEnable);
+		cmd.leaveEventToProcess(&interpreterEnable);
+		cmd.disconnectEventToProcess(interpreterDisable);
+		cmd.leaveEventToProcess(&interpreterDisable);
 }
 //
 int GdbBreakPoint::addBreakpoint(int id , QByteArray data)
