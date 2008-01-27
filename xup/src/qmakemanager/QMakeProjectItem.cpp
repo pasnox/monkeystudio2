@@ -6,9 +6,6 @@
 #include <QFileInfo>
 #include <QDebug>
 
-QIcon getIcon( const QString& s )
-{ return QIcon( QString( ":/icons/icons/%1.png" ).arg( s ) ); }
-
 QMakeProjectItem::QMakeProjectItem( const QDomElement& e, const QString& s, bool b )
 	: ProjectItem()
 {
@@ -20,65 +17,83 @@ QMakeProjectItem::QMakeProjectItem( const QDomElement& e, const QString& s, bool
 
 void QMakeProjectItem::registerItem()
 {
+	// clearing default values
+	mFilteredVariables.clear();
+	//mTextTypes.clear();
+	mFileVariables.clear();
+	mPathVariables.clear();
+	mVariableLabels.clear();
+	//mVariableIcons.clear();
 	// registering...
+	// filtered variables
+	mFilteredVariables
+		<< "FORMS"
+		<< "FORMS3"
+		<< "HEADERS"
+		<< "SOURCES"
+		<< "OBJECTIVE_SOURCES"
+		<< "TRANSLATIONS"
+		<< "RESOURCES"
+		<< "RC_FILE"
+		<< "RES_FILE"
+		<< "DEF_FILE"
+		<< "INCLUDEPATH"
+		<< "DEPENDPATH"
+		<< "VPATH"
+		<< "LIBS"
+		<< "DEFINES";
 	// variables based on files
-	registerFileVariables( "FORMS" );
-	registerFileVariables( "FORMS3" );
-	registerFileVariables( "HEADERS" );
-	registerFileVariables( "SOURCES" );
-	registerFileVariables( "OBJECTIVE_SOURCES" );
-	registerFileVariables( "TRANSLATIONS" );
-	registerFileVariables( "RESOURCES" );
-	registerFileVariables( "RC_FILE" );
-	registerFileVariables( "RES_FILE" );
-	registerFileVariables( "DEF_FILE" );
-	registerFileVariables( "SUBDIRS" );
+	mFileVariables
+		<< "FORMS"
+		<< "FORMS3"
+		<< "HEADERS"
+		<< "SOURCES"
+		<< "OBJECTIVE_SOURCES"
+		<< "TRANSLATIONS"
+		<< "RESOURCES"
+		<< "RC_FILE"
+		<< "RES_FILE"
+		<< "DEF_FILE"
+		<< "SUBDIRS";
 	// variables based on paths
-	registerPathVariables( "INCLUDEPATH" );
-	registerPathVariables( "DEPENDPATH" );
-	registerPathVariables( "VPATH" );
+	mPathVariables
+		<< "INCLUDEPATH"
+		<< "DEPENDPATH"
+		<< "VPATH";
 	// variables labels
-	registerVariableLabels( "FORMS", tr( "Forms Files" ) );
-	registerVariableLabels( "FORMS3", tr( "Forms 3 Files" ) );
-	registerVariableLabels( "HEADERS", tr( "Headers Files" ) );
-	registerVariableLabels( "SOURCES", tr( "Sources Files" ) );
-	registerVariableLabels( "OBJECTIVE_SOURCES", tr( "Objective Sources Files" ) );
-	registerVariableLabels( "TRANSLATIONS", tr( "Qt Translations Files" ) );
-	registerVariableLabels( "RESOURCES", tr( "Qt Resources Files" ) );
-	registerVariableLabels( "RC_FILE", tr( "Resources Files" ) );
-	registerVariableLabels( "RES_FILE", tr( "Compiled Resources Files" ) );
-	registerVariableLabels( "DEF_FILE", tr( "Definitions Files" ) );
-	registerVariableLabels( "SUBDIRS", tr( "Sub Projects" ) );
-	registerVariableLabels( "INCLUDEPATH", tr( "Includes Paths" ) );
-	registerVariableLabels( "DEPENDPATH", tr( "Depends Paths" ) );
-	registerVariableLabels( "VPATH", tr( "Virtuals Paths" ) );
-	registerVariableLabels( "LIBS", tr( "Libraries Files" ) );
-	registerVariableLabels( "DEFINES", tr( "Defines" ) );
+	mVariableLabels[ "FORMS" ] = tr( "Forms Files" );
+	mVariableLabels[ "FORMS3" ] = tr( "Forms 3 Files" );
+	mVariableLabels[ "HEADERS" ] = tr( "Headers Files" );
+	mVariableLabels[ "SOURCES" ] = tr( "Sources Files" );
+	mVariableLabels[ "OBJECTIVE_SOURCES" ] = tr( "Objective Sources Files" );
+	mVariableLabels[ "TRANSLATIONS" ] = tr( "Qt Translations Files" );
+	mVariableLabels[ "RESOURCES" ] = tr( "Qt Resources Files" );
+	mVariableLabels[ "RC_FILE" ] = tr( "Resources Files" );
+	mVariableLabels[ "RES_FILE" ] = tr( "Compiled Resources Files" );
+	mVariableLabels[ "DEF_FILE" ] = tr( "Definitions Files" );
+	mVariableLabels[ "SUBDIRS" ] = tr( "Sub Projects" );
+	mVariableLabels[ "INCLUDEPATH" ] = tr( "Includes Paths" );
+	mVariableLabels[ "DEPENDPATH" ] = tr( "Depends Paths" );
+	mVariableLabels[ "VPATH" ] = tr( "Virtuals Paths" );
+	mVariableLabels[ "LIBS" ] = tr( "Libraries Files" );
+	mVariableLabels[ "DEFINES" ] = tr( "Defines" );
 	// variables icons
-	registerVariableIcons( "FORMS", getIcon( value( "icon" ), "forms" ) );
-	registerVariableIcons( "FORMS3", getIcon( value( "icon" ), "forms3" ) );
-	registerVariableIcons( "HEADERS", getIcon( value( "icon" ), "headers" ) );
-	registerVariableIcons( "SOURCES", getIcon( value( "icon" ), "sources" ) );
-	registerVariableIcons( "OBJECTIVE_SOURCES", getIcon( value( "icon" ), "objective_sources" ) );
-	registerVariableIcons( "TRANSLATIONS", getIcon( value( "icon" ), "translations" ) );
-	registerVariableIcons( "RESOURCES", getIcon( value( "icon" ), "resources" ) );
-	registerVariableIcons( "RC_FILE", getIcon( value( "icon" ), "rc_file" ) );
-	registerVariableIcons( "RES_FILE", getIcon( value( "icon" ), "res_file" ) );
-	registerVariableIcons( "DEF_FILE", getIcon( value( "icon" ), "def_file" ) );
-	registerVariableIcons( "SUBDIRS", getIcon( value( "icon" ), "project" ) );
-	registerVariableIcons( "INCLUDEPATH", getIcon( value( "icon" ), "includepath" ) );
-	registerVariableIcons( "DEPENDPATH", getIcon( value( "icon" ), "dependpath" ) );
-	registerVariableIcons( "VPATH", getIcon( value( "icon" ), "vpath" ) );
-	registerVariableIcons( "LIBS", getIcon( value( "icon" ), "libs" ) );
-	registerVariableIcons( "DEFINES", getIcon( value( "icon" ), "defines" ) );
-	//
-	qWarning( qPrintable( tr( "QMakeProjectItem Registered" ) ) ); 
-}
-
-QStringList QMakeProjectItem::filteredVariables() const
-{
-	return QStringList() << "FORMS" << "FORMS3" << "HEADERS" << "SOURCES" << "OBJECTIVE_SOURCES" << "TRANSLATIONS"
-		<< "RESOURCES" << "RC_FILE" << "RES_FILE" << "DEF_FILE" << "INCLUDEPATH" << "DEPENDPATH" << "VPATH" << "LIBS" << "DEFINES";
+	mVariableIcons[ "FORMS" ] = getIcon( value( "icon" ), "forms" );
+	mVariableIcons[ "FORMS3" ] = getIcon( value( "icon" ), "forms3" );
+	mVariableIcons[ "HEADERS" ] = getIcon( value( "icon" ), "headers" );
+	mVariableIcons[ "SOURCES" ] = getIcon( value( "icon" ), "sources" );
+	mVariableIcons[ "OBJECTIVE_SOURCES" ] = getIcon( value( "icon" ), "objective_sources" );
+	mVariableIcons[ "TRANSLATIONS" ] = getIcon( value( "icon" ), "translations" );
+	mVariableIcons[ "RESOURCES" ] = getIcon( value( "icon" ), "resources" );
+	mVariableIcons[ "RC_FILE" ] = getIcon( value( "icon" ), "rc_file" );
+	mVariableIcons[ "RES_FILE" ] = getIcon( value( "icon" ), "res_file" );
+	mVariableIcons[ "DEF_FILE" ] = getIcon( value( "icon" ), "def_file" );
+	mVariableIcons[ "SUBDIRS" ] = getIcon( value( "icon" ), "project" );
+	mVariableIcons[ "INCLUDEPATH" ] = getIcon( value( "icon" ), "includepath" );
+	mVariableIcons[ "DEPENDPATH" ] = getIcon( value( "icon" ), "dependpath" );
+	mVariableIcons[ "VPATH" ] = getIcon( value( "icon" ), "vpath" );
+	mVariableIcons[ "LIBS" ] = getIcon( value( "icon" ), "libs" );
+	mVariableIcons[ "DEFINES" ] = getIcon( value( "icon" ), "defines" );
 }
 
 QMakeProjectItem* QMakeProjectItem::clone( bool b ) const
@@ -103,7 +118,7 @@ QString QMakeProjectItem::interpretedVariable( const QString& s, const ProjectIt
 	else
 	{
 		QString v;
-		if ( ProjectItem* pi = /* buddy() ? buddy()->topLevelProject() : */ topLevelProject() )
+		if ( ProjectItem* pi = topLevelProject() )
 		{
 			foreach ( ProjectItem* cit, pi->children( true, false ) )
 			{
@@ -206,8 +221,8 @@ bool QMakeProjectItem::loadProject( const QString& s, const QString& v )
 	if ( XUPManager::loadXUP( this, QMake2XUP::convertFromPro( s, v ), v ) )
 	{
 		mProjectFilePath = s;
-		updateItem();
 		setModified( false );
+		updateItem();
 		checkChildrenProjects();
 		return true;
 	}

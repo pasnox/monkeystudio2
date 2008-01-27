@@ -11,7 +11,6 @@ public:
 	QMakeProjectItem( const QDomElement& = QDomElement(), const QString& = QString(), bool = false );
 
 	virtual void registerItem();
-	virtual QStringList filteredVariables() const;
 	virtual QMakeProjectItem* clone( bool = true ) const;
 	virtual QString interpretedVariable( const QString&, const ProjectItem* = 0, const QString& = QString() ) const;
 	virtual QString defaultInterpretedValue() const;

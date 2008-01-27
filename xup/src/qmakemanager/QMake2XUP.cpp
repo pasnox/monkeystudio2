@@ -8,12 +8,10 @@ si "multiline" n'existe pas, il vaux "false"
 si "nested" n'existe pas, il vaux "false"
 **************************/
 
-
 #include <QApplication>
 #include <QtCore>
 #include <QtGui>
 #include <QtXml>
-
 
 QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 {
