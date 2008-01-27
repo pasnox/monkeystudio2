@@ -81,20 +81,8 @@ private:
 	QHash<ProjectItem*, FilteredProjectItem*> mItems;
 
 private slots:
-	//void columnsAboutToBeInserted( const QModelIndex& parent, int start, int end );
-	//void columnsAboutToBeRemoved( const QModelIndex& parent, int start, int end );
-	//void columnsInserted( const QModelIndex& parent, int start, int end );
-	//void columnsRemoved( const QModelIndex& parent, int start, int end );
-	//void dataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight );
-	void headerDataChanged( Qt::Orientation orientation, int first, int last );
-	void layoutAboutToBeChanged();
-	void layoutChanged();
-	void modelAboutToBeReset();
-	void modelReset();
-	//void rowsAboutToBeInserted( const QModelIndex& parent, int start, int end );
 	void rowsAboutToBeRemoved( const QModelIndex& parent, int start, int end );
 	void rowsInserted( const QModelIndex& parent, int start, int end );
-	//void rowsRemoved( const QModelIndex& parent, int start, int end );
 };
 
 #endif // FILTEREDPROJECTITEMMODEL_H

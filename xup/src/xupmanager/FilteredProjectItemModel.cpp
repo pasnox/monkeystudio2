@@ -27,22 +27,8 @@ void FilteredProjectItemModel::setSourceModel( ProjectItemModel* m )
 	{
 		mSourceModel = m;
 		// connections
-		/*
-		connect( mSourceModel, SIGNAL( columnsAboutToBeInserted( const QModelIndex&, int, int ) ), this, SLOT( columnsAboutToBeInserted( const QModelIndex&, int, int ) ) );
-		connect( mSourceModel, SIGNAL( columnsAboutToBeRemoved( const QModelIndex&, int, int ) ), this, SLOT( columnsAboutToBeRemoved( const QModelIndex&, int, int ) ) );
-		connect( mSourceModel, SIGNAL( columnsInserted( const QModelIndex&, int, int ) ), this, SLOT( columnsInserted( const QModelIndex&, int, int ) ) );
-		connect( mSourceModel, SIGNAL( columnsRemoved( const QModelIndex&, int, int ) ), this, SLOT( columnsRemoved( const QModelIndex&, int, int ) ) );
-		connect( mSourceModel, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
-		*/
-		connect( mSourceModel, SIGNAL( headerDataChanged( Qt::Orientation, int, int ) ), this, SLOT( headerDataChanged( Qt::Orientation, int, int ) ) );
-		connect( mSourceModel, SIGNAL( layoutAboutToBeChanged() ), this, SLOT( layoutAboutToBeChanged() ) );
-		connect( mSourceModel, SIGNAL( layoutChanged() ), this, SLOT( layoutChanged() ) );
-		connect( mSourceModel, SIGNAL( modelAboutToBeReset() ), this, SLOT( modelAboutToBeReset() ) );
-		connect( mSourceModel, SIGNAL( modelReset() ), this, SLOT( modelReset() ) );
-		//connect( mSourceModel, SIGNAL( rowsAboutToBeInserted( const QModelIndex&, int, int ) ), this, SLOT( rowsAboutToBeInserted( const QModelIndex&, int, int ) ) );
 		connect( mSourceModel, SIGNAL( rowsAboutToBeRemoved( const QModelIndex&, int, int ) ), this, SLOT( rowsAboutToBeRemoved( const QModelIndex&, int, int ) ) );
 		connect( mSourceModel, SIGNAL( rowsInserted( const QModelIndex&, int, int ) ), this, SLOT( rowsInserted( const QModelIndex&, int, int ) ) );
-		//connect( mSourceModel, SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ), this, SLOT( rowsRemoved( const QModelIndex&, int, int ) ) );
 	}
 }
 
@@ -236,21 +222,6 @@ void FilteredProjectItemModel::addFilteredProject( ProjectItem* it )
 		if ( cit->isProject() )
 			addFilteredProject( cit );
 }
-
-void FilteredProjectItemModel::headerDataChanged( Qt::Orientation, int first, int last )
-{qWarning( "headerDataChanged: %i, %i", first, last );}
-
-void FilteredProjectItemModel::layoutAboutToBeChanged()
-{qWarning( "layoutAboutToBeChanged" );}
-
-void FilteredProjectItemModel::layoutChanged()
-{qWarning( "layoutChanged" );}
-
-void FilteredProjectItemModel::modelAboutToBeReset()
-{qWarning( "modelAboutToBeReset" );}
-
-void FilteredProjectItemModel::modelReset()
-{qWarning( "modelReset" );}
 
 void FilteredProjectItemModel::rowsInserted( const QModelIndex& parent, int start, int end )
 {

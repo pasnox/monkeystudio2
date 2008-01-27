@@ -2,8 +2,6 @@
 #include "ProjectItemModel.h"
 #include "XUPManager.h"
 
-#include <QDebug>
-
 ProjectItem::ProjectItem( const QDomElement e, const QString& s, bool b )
 {
 	registerItem();
@@ -17,27 +15,7 @@ void ProjectItem::registerItem()
 	mTextTypes << "comment" << "value" << "emptyline" << "function";
 	mFileVariables << "FILES";
 	mVariableLabels["FILES"] = tr( "Project Files" );
-	// QMAKE -> REMOVE ME FINAL
-	/*
-	// variables based on files
-	registerFileVariables( "FORMS" );
-	registerFileVariables( "FORMS3" );
-	registerFileVariables( "HEADERS" );
-	registerFileVariables( "SOURCES" );
-	registerFileVariables( "OBJECTIVE_SOURCES" );
-	registerFileVariables( "TRANSLATIONS" );
-	registerFileVariables( "RESOURCES" );
-	registerFileVariables( "RC_FILE" );
-	registerFileVariables( "RES_FILE" );
-	registerFileVariables( "DEF_FILE" );
-	registerFileVariables( "SUBDIRS" );
-	// variables based on paths
-	registerPathVariables( "INCLUDEPATH" );
-	registerPathVariables( "DEPENDPATH" );
-	registerPathVariables( "VPATH" );
-	*/
-	// END QMAKE
-	mFilteredVariables = mFileVariables;
+	mFilteredVariables << "FILES";
 }
 
 QStringList ProjectItem::filteredVariables() const
@@ -292,8 +270,8 @@ void ProjectItem::setValue( const QString& n, const QString& v )
 			mDomElement.setTagName( v );
 		else
 			mDomElement.setAttribute( n, v );
-		updateItem();
 		setModified( true );
+		updateItem();
 	}
 }
 
@@ -387,8 +365,62 @@ void ProjectItem::addFiles( const QStringList& files, ProjectItem* scope, const 
 	if ( files.isEmpty() )
 		return;
 	
-	// get project item
-	ProjectItem* pit = project();
+	// set scope
+	if ( !scope )
+		scope = this;
+	
+	// get variable item
+	ProjectItem* vit = 0;
+	foreach ( ProjectItem* cit, scope->children( false, true ) )
+	{
+		if ( cit->isType( "variable" ) && cit->defaultValue() == "FILES" && cit->value( "operator" ) == op )
+		{
+			vit = cit;
+			break;
+		}
+	}
+	
+	// check variable exists or not
+	bool exists = vit;
+	
+	// create variable if needed
+	if ( !exists )
+	{
+		vit = clone( false );
+		vit->setDomElement( mDomElement.ownerDocument().createElement( "variable" ) );
+		scope->domElement().appendChild( vit->domElement() );
+		vit->setValue( valueName(), "FILES" );
+		vit->setValue( "operator", op );
+		vit->setValue( "multiline", "true" );
+	}
+	
+	// get all files
+	QStringList existingFiles = vit->files();
+	
+	// add files
+	foreach ( QString f, files )
+	{
+		QString fp = filePath( f );
+		if ( !existingFiles.contains( fp ) )
+		{
+			ProjectItem* it = clone( false );
+			it->setDomElement( mDomElement.ownerDocument().createElement( "value" ) );
+			vit->domElement().appendChild( it->domElement() );
+			it->setValue( it->valueName(), relativeFilePath( fp ) );
+			vit->appendRow( it );
+		}
+	}
+	
+	// append var item only at last will prevent multiple call of addFilteredValue from filtered view
+	if ( !exists )
+		scope->appendRow( vit );
+}
+
+void ProjectItem::removeFiles( const QStringList& files, ProjectItem* scope, const QString& op )
+{
+	// abort if no files
+	if ( files.isEmpty() )
+		return;
 	
 	// set scope
 	if ( !scope )
@@ -405,44 +437,18 @@ void ProjectItem::addFiles( const QStringList& files, ProjectItem* scope, const 
 		}
 	}
 	
-	//
-	bool exists = vit;
+	// if not variable, cancel
+	if ( !vit )
+		return;
 	
-	// create variable if needed
-	if ( !exists )
-	{
-		vit = clone( false );
-		vit->setDomElement( pit->domDocument().createElement( "variable" ) );
-		scope->domElement().appendChild( vit->domElement() );
-		vit->setValue( valueName(), "FILES" );
-		vit->setValue( "operator", op );
-		vit->setValue( "multiline", "true" );
-	}
+	// check each child
+	foreach ( ProjectItem* cit, vit->children( false, false ) )
+		if ( cit->isType( "value" ) && files.contains( cit->filePath() ) )
+			cit->remove();
 	
-	// get all files
-	QStringList existingFiles = vit->files();
-	
-	// add files
-	foreach ( QString f, files )
-	{
-		QString fp = pit->filePath( f );
-		if ( !existingFiles.contains( fp ) )
-		{
-			ProjectItem* it = clone( false );
-			it->setDomElement( pit->domDocument().createElement( "value" ) );
-			vit->domElement().appendChild( it->domElement() );
-			it->setValue( it->valueName(), pit->relativeFilePath( fp ) );
-			vit->appendRow( it );
-		}
-	}
-	
-	// append var item only at last will prevent multiple call of addFilteredValue from filtered view
-	if ( !exists )
-		scope->appendRow( vit );
-}
-
-void ProjectItem::removeFiles( const QStringList& files, ProjectItem* scope, const QString& op )
-{
+	// remove variable item if emptyline
+	if ( !vit->hasChildren() )
+		vit->remove();
 }
 
 QString ProjectItem::projectFilePath() const
