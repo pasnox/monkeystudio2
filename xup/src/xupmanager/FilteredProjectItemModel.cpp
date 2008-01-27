@@ -280,6 +280,7 @@ void FilteredProjectItemModel::rowsInserted( const QModelIndex& parent, int star
 
 void FilteredProjectItemModel::rowsAboutToBeRemoved( const QModelIndex& parent, int start, int end )
 {
+	FilteredProjectItem* folder = 0;
 	for ( int i = start; i < end +1; i++ )
 	{
 		// get item
@@ -287,6 +288,13 @@ void FilteredProjectItemModel::rowsAboutToBeRemoved( const QModelIndex& parent, 
 		ProjectItem* it = mSourceModel->itemFromIndex( mi );
 		if ( it )
 		{
+			// keep parent
+			if ( !folder )
+			{
+				if ( FilteredProjectItem* fi = itemFromIndex( mapFromSource( mi ) ) )
+					if ( fi->parent() && fi->parent()->item()->isType( "folder" ) )
+						folder = fi->parent();
+			}
 			// check if items are in the hash, and remove them
 			foreach ( ProjectItem* cit, it->children( true, false ) )
 				mItems.remove( cit );
@@ -295,5 +303,8 @@ void FilteredProjectItemModel::rowsAboutToBeRemoved( const QModelIndex& parent, 
 			mItems.remove( it );
 		}
 	}
+	// check if parent if folder and is empty to remove it
+	if ( folder && !folder->hasChildren() )
+		removeRow( folder->row(), folder->index().parent() );
 }
 
