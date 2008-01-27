@@ -6,6 +6,7 @@
 
 #include "./addon/gdbControl.h"
 
+#include <QFileDialog>
 
 GdbControl::GdbControl(QWidget *o) :  GdbBase(o), bJustAdd(0), bTargetLoaded(0), bTargetRunning(0), bGdbStarted(0)
 {
@@ -17,19 +18,22 @@ GdbControl::GdbControl(QWidget *o) :  GdbBase(o), bJustAdd(0), bTargetLoaded(0),
 	bStepInto = new QPushButton("step into");
 	bContinue = new QPushButton("Continue");
 	bStop = new QPushButton("Stop");
-
+	bLoadTarget = new QPushButton("load target");
+	
 	bRun->setEnabled(false);
 	bStepOver->setEnabled(false);
 	bStepInto->setEnabled(false);
 	bContinue->setEnabled(false);
 	bStop->setEnabled(false);
 
+	h->addWidget(bLoadTarget);
 	h->addWidget(bRun);
 	h->addWidget(bContinue);
 	h->addWidget(bStepOver);
 	h->addWidget(bStepInto);
 	h->addWidget(bStop);
 
+	connect (bLoadTarget, SIGNAL(clicked()), this, SLOT(onLoadTarget()));
 	connect (bStepOver, SIGNAL(clicked()), this, SLOT(onStepOver()));
 	connect (bStepInto, SIGNAL(clicked()), this, SLOT(onStepInto()));
 	connect (bRun, SIGNAL(clicked()), this, SLOT(onRun()));
@@ -101,6 +105,19 @@ void GdbControl::processExit()
 {
 }
 //
+void GdbControl::onLoadTarget()
+{
+	QFileDialog *d = new QFileDialog(this,"Select target");
+	 if (d->exec())
+	 {
+     QStringList fileNames = d->selectedFiles(); 
+		QString file = fileNames.at(0);
+		 file.replace('\\','/');
+		emit sendRawData(this,"file " + file.toLocal8Bit());
+	 }
+}
+
+
 void GdbControl::onStepOver()
 {
 	bRun->setEnabled(false);

@@ -23,12 +23,13 @@ private: // variable
 	bool bTargetLoaded;
 	bool bTargetRunning;
 	bool bGdbStarted;
-
+	
 	QPushButton *bStepOver;
 	QPushButton *bRun ;
 	QPushButton *bStepInto ;
 	QPushButton *bContinue;
 	QPushButton *bStop;
+	QPushButton *bLoadTarget;
 
 public : // function
 	GdbControl(QWidget *p=0);
@@ -58,6 +59,7 @@ public slots:
 	void onStepInto();
 	void onContinue();
 	void onStop();
+	void onLoadTarget();
 
 private: // function
 	QWidget *mWidget;

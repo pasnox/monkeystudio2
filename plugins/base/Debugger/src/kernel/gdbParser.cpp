@@ -320,12 +320,12 @@ bool GdbParser::processParsing(const QByteArray& storg)
 				int id = check(oneLine);
 
 // a foutre dans un plug special windows
-	if(oneLine.endsWith("(y or n) "))
+/*	if(oneLine.endsWith("(y or n) "))
 	{ 
 		QMessageBox::warning(NULL, "Question from Gdb", oneLine, QMessageBox::Ok | QMessageBox::No); 
 		// emettre un sendRawData("y | n"); a gdb
 	
-	}
+	}*/
 // end windows
 				// remove all " in the string
 				// because getParametre() function error

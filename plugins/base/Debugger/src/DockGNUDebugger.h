@@ -16,6 +16,7 @@
 #include "./addon/gdbBackTrace.h"
 #include "./addon/gdbRegisters.h"
 #include "./addon/gdbWatch.h"
+#include "./addon/gdbAnswer.h"
 
 
 
@@ -37,6 +38,8 @@ public:
 	class GdbWatch *watch;
 	class GdbBreakPoint *breakp;
 	class GdbControl *control;
+	class GdbAnswer *answer;	
+	
 	class pConsoleManager *pConsole;
 	class pCommand *Cmd;
 

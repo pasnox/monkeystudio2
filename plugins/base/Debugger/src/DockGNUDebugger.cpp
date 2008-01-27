@@ -11,7 +11,7 @@
 
 #include <QFileInfo>
 #include <QCloseEvent>
-
+#include <QMessageBox>
 
 #include "pMonkeyStudio.h"
 
@@ -39,8 +39,8 @@ DockGNUDebugger::DockGNUDebugger( QWidget* w )
 	plugManager = new GdbPluginManager();
 	plugManager->setupDockWidget(mw);
 
-plugManager-> setMinimumWidth ( 1000);
-plugManager->showMaximized (); 
+//plugManager-> setMinimumWidth ( 1000);
+//plugManager->showMaximized (); 
 
 	// create backtrace
 	backtrace = new GdbBackTrace();
@@ -67,6 +67,11 @@ plugManager->showMaximized ();
 	breakp->setupDockWidget(mw);
 	mw->tabifyDockWidget(watch,breakp);
 
+	// create answer
+	answer = new  GdbAnswer();
+	answer->setupDockWidget(mw);
+	mw->tabifyDockWidget(breakp,answer);
+
 	// create control
 	control = new  GdbControl();
 	control->setupDockWidget(mw);
@@ -79,6 +84,7 @@ plugManager->showMaximized ();
 	plugManager->addPlugin(backtrace);
 	plugManager->addPlugin(control);
 	plugManager->addPlugin(bridge);
+	plugManager->addPlugin(answer);
 
 	// create parser
 	Parser = new GdbParser(this);
@@ -100,7 +106,9 @@ plugManager->showMaximized ();
 	backtrace->setParser(Parser);
 //	registers->setParser(Parser);
 	watch->setParser(Parser);
-
+	answer->setParser(Parser);
+	
+	
 	// connect brigde to Qsci
 	connect(bridge, SIGNAL(breakpoint(QByteArray , int, bool)), this , SLOT(onBreakpoint(QByteArray, int, bool)));
 	connect(bridge, SIGNAL(backtrace(QByteArray , int)), this , SLOT(onBacktrace(QByteArray, int)));
@@ -282,7 +290,7 @@ void DockGNUDebugger::gdbStarted( const pCommand& c)
 	plugManager->gdbStarted();
 	((QTextEdit * )(bridge->widget() ))->append("GDB started");
 
-	onSendRawData(NULL,"file c:/dev/debugger/debugger.exe");
+//	onSendRawData(NULL,"file c:/dev/debugger/debugger.exe");
 }
 
 
@@ -366,6 +374,8 @@ void DockGNUDebugger::onTargetStopped(int id, QString st)
 
 DockGNUDebugger:: ~DockGNUDebugger()
 {
+	QMessageBox::warning(NULL, "fermer Gdb", "test", QMessageBox::Ok ); 
+
 	pConsole->stopCurrentCommand(true);
 }
 

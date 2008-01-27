@@ -17,7 +17,8 @@ SOURCES	= src/GNUDebugger.cpp \
 	src/addon/gdbRegisters.cpp \
 	src/addon/gdbControl.cpp \
 	src/addon/gdbBridgeEditor.cpp \
-	src/addon/gdbWatch.cpp
+	src/addon/gdbWatch.cpp \
+	src/addon/gdbAnswer.cpp
 
 OPENEDFILES	= src/GNUDebugger.h \
 	src/GNUDebugger.cpp \
@@ -45,5 +46,6 @@ HEADERS	= src/GNUDebugger.h \
 	src/addon/gdbRegisters.h \
 	src/addon/gdbControl.h \
 	src/addon/gdbBridgeEditor.h \
-	src/addon/gdbWatch.h
+	src/addon/gdbWatch.h \
+	src/addon/gdbAnswer.h
 
