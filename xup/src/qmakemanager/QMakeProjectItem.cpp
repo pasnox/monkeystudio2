@@ -10,8 +10,13 @@ QIcon getIcon( const QString& s )
 { return QIcon( QString( ":/icons/icons/%1.png" ).arg( s ) ); }
 
 QMakeProjectItem::QMakeProjectItem( const QDomElement& e, const QString& s, bool b )
-	: ProjectItem( e, s, b )
-{}
+	: ProjectItem()
+{
+	registerItem();
+	setDomElement( e );
+	loadProject( s );
+	setModified( b );
+}
 
 void QMakeProjectItem::registerItem()
 {
