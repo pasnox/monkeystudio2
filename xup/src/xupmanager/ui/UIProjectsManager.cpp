@@ -303,10 +303,13 @@ void UIProjectsManager::actionRemoveTriggered()
 					if ( !QFile::remove( fp ) )
 						warning( tr( "Can't delete file: %1" ).arg( fp ) );
 			}
-			// remove dom node
-			it->parent()->domElement().removeChild( it->domElement() );
+			// get parent
+			ProjectItem* parent = it->parent();
 			// remove item
 			it->remove();
+			// delete parent is empty
+			if ( !parent->hasChildren() )
+				parent->remove();
 		}
 	}
 }
