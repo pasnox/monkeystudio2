@@ -198,11 +198,14 @@ void FilteredProjectItemModel::addFilteredVariable( ProjectItem* it )
 	// add values to vit
 	foreach ( ProjectItem* cit, it->children( false, true ) )
 	{
-		if ( !cit->defaultValue().isEmpty() )
+		if ( cit->isType( "value" ) )
 		{
-			FilteredProjectItem* ccit = new FilteredProjectItem( cit );
-			b ? getFolder( cit, vit )->appendRow( ccit ) : vit->appendRow( ccit );
-			mItems[cit] = ccit;
+			if ( !cit->defaultValue().isEmpty() )
+			{
+				FilteredProjectItem* ccit = new FilteredProjectItem( cit );
+				b ? getFolder( cit, vit )->appendRow( ccit ) : vit->appendRow( ccit );
+				mItems[cit] = ccit;
+			}
 		}
 	}
 }
