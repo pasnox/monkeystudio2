@@ -431,7 +431,7 @@ void ProjectItem::addFiles( const QStringList& files, ProjectItem* scope, const 
 			ProjectItem* it = clone( false );
 			it->setDomElement( pit->domDocument().createElement( "value" ) );
 			vit->domElement().appendChild( it->domElement() );
-			it->setValue( it->valueName(), fp );
+			it->setValue( it->valueName(), pit->relativeFilePath( fp ) );
 			vit->appendRow( it );
 		}
 	}
