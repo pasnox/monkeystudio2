@@ -96,7 +96,7 @@ public:
 	// return item modified state
 	virtual bool modified() const;
 	// set item modified state and emit modified signal according to second parameter
-	void setModified( bool, bool = true );
+	virtual void setModified( bool, bool = true );
 
 	// check for sub project to open
 	virtual void checkChildrenProjects();

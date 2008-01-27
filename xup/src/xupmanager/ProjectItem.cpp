@@ -218,6 +218,8 @@ void ProjectItem::remove()
 {
 	bool b = isProject();
 	ProjectItem* pit = b ? 0 : project();
+	// remove node
+	mDomElement.parentNode().removeChild( mDomElement );
 	// remove item from model
 	if ( model() )
 		model()->removeRow( row(), index().parent() );
@@ -329,8 +331,8 @@ bool ProjectItem::loadProject( const QString& s, const QString& v )
 	if ( XUPManager::loadXUP( this, s, v ) )
 	{
 		mProjectFilePath = s;
-		updateItem();
 		setModified( false );
+		updateItem();
 		return true;
 	}
 	return false;
