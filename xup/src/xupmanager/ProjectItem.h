@@ -148,6 +148,7 @@ protected:
 signals:
 	void modifiedChanged( ProjectItem*, bool );
 	void aboutToClose( ProjectItem* );
+	void closed( ProjectItem* );
 };
 
 #endif // PROJECTITEM_H

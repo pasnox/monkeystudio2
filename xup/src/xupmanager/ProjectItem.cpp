@@ -16,8 +16,28 @@ void ProjectItem::registerItem()
 {
 	mTextTypes << "comment" << "value" << "emptyline" << "function";
 	mFileVariables << "FILES";
-	mFilteredVariables = mFileVariables;
 	mVariableLabels["FILES"] = tr( "Project Files" );
+	// QMAKE -> REMOVE ME FINAL
+	/*
+	// variables based on files
+	registerFileVariables( "FORMS" );
+	registerFileVariables( "FORMS3" );
+	registerFileVariables( "HEADERS" );
+	registerFileVariables( "SOURCES" );
+	registerFileVariables( "OBJECTIVE_SOURCES" );
+	registerFileVariables( "TRANSLATIONS" );
+	registerFileVariables( "RESOURCES" );
+	registerFileVariables( "RC_FILE" );
+	registerFileVariables( "RES_FILE" );
+	registerFileVariables( "DEF_FILE" );
+	registerFileVariables( "SUBDIRS" );
+	// variables based on paths
+	registerPathVariables( "INCLUDEPATH" );
+	registerPathVariables( "DEPENDPATH" );
+	registerPathVariables( "VPATH" );
+	*/
+	// END QMAKE
+	mFilteredVariables = mFileVariables;
 }
 
 QStringList ProjectItem::filteredVariables() const
@@ -189,7 +209,10 @@ void ProjectItem::insertRow( int i, ProjectItem* it )
 		{
 			connect( it, SIGNAL( modifiedChanged( ProjectItem*, bool ) ), pit, SIGNAL( modifiedChanged( ProjectItem*, bool ) ) );
 			if ( it->isProject() )
+			{
 				connect( it, SIGNAL( aboutToClose( ProjectItem* ) ), pit, SIGNAL( aboutToClose( ProjectItem* ) ) );
+				connect( it, SIGNAL( closed( ProjectItem* ) ), pit, SIGNAL( closed( ProjectItem* ) ) );
+			}
 		}
 		it->updateItem();
 	}
@@ -354,8 +377,8 @@ void ProjectItem::closeProject()
 			it->closeProject();
 	// tell we will close the proejct
 	emit aboutToClose( this );
-	// remove it from model
-	remove();
+	// emit closed
+	emit closed( this );
 }
 
 void ProjectItem::addFiles( const QStringList& files, ProjectItem* scope, const QString& op )
