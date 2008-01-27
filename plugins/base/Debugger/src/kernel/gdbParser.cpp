@@ -222,9 +222,11 @@ bool GdbParser::checkRestoring(QString a, QString b)
 
 		/*
 			breapoint hit splited in two lines
-		*/
+			"Breakpoint 1, GdbPluginManger::addPlugin(QObject*) (this=0x4095318, "
+			"  p=0x404543) at src/fsdfsdf.cpp:41"
+		 */
 		<< QRegExp("^Breakpoint\\s\\d+,\\s.*$")
-		<< QRegExp("^\\s+at\\s.*:\\d+");
+		<< QRegExp("^.*at\\s.*:\\d+$");
 		
 
 	for(int i=0; i<restoringList.count() ;i+=2)
