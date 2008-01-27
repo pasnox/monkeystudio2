@@ -152,5 +152,15 @@
   <value>src/xupmanager/FilteredProjectItemModel.cpp</value>
  </variable>
  <emptyline>1</emptyline>
- <variable expanded="true" operator="=" name="FILES" multiline="true" />
+ <variable expanded="false" operator="=" name="FILES" multiline="true" >
+  <value>Makefile</value>
+  <value>xup</value>
+  <value>xup.pro</value>
+  <value>src/xupmanager/ProjectItemModel.h</value>
+  <value>src/xupmanager/XUPManager.h</value>
+  <value>build/release/.rcc/qrc_resources.cpp</value>
+  <value>../Makefile</value>
+  <value>../monkey.pro</value>
+  <value>../readme.txt</value>
+ </variable>
 </project>
