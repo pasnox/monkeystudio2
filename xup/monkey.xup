@@ -34,7 +34,7 @@
  <variable operator="+=" name="QT" >
   <value>xml</value>
  </variable>
- <variable operator="+=" name="RESOURCES" >
+ <variable expanded="true" operator="+=" name="RESOURCES" >
   <value>src/resources/resources.qrc</value>
   <value>src/qmakemanager/resources/qmakemanager.qrc</value>
  </variable>
@@ -127,11 +127,11 @@
   </variable>
  </scope>
  <emptyline>1</emptyline>
- <variable operator="+=" name="FORMS" >
+ <variable expanded="true" operator="+=" name="FORMS" >
   <value>src/xupmanager/ui/UIProjectsManager.ui</value>
  </variable>
  <emptyline>1</emptyline>
- <variable operator="+=" name="HEADERS" multiline="true" >
+ <variable expanded="true" operator="+=" name="HEADERS" multiline="true" >
   <value>src/xupmanager/ProjectItemModel.h</value>
   <value>src/xupmanager/ProjectItem.h</value>
   <value>src/xupmanager/XUPManager.h</value>
@@ -141,7 +141,7 @@
   <value>src/xupmanager/FilteredProjectItemModel.h</value>
  </variable>
  <emptyline>1</emptyline>
- <variable operator="+=" name="SOURCES" multiline="true" >
+ <variable expanded="true" operator="+=" name="SOURCES" multiline="true" >
   <value>src/xupmanager/ProjectItemModel.cpp</value>
   <value>src/xupmanager/ProjectItem.cpp</value>
   <value>src/xupmanager/XUPManager.cpp</value>
@@ -152,9 +152,5 @@
   <value>src/xupmanager/FilteredProjectItemModel.cpp</value>
  </variable>
  <emptyline>1</emptyline>
- <variable expanded="true" operator="=" name="FILES" multiline="true" >
-  <value>/home/pasnox/Documents/Development/Qt4/monkeyrepos/v2/branches/dev/xup/Makefile</value>
-  <value>/home/pasnox/Documents/Development/Qt4/monkeyrepos/v2/branches/dev/xup/Makefile.Debug</value>
-  <value>/home/pasnox/Documents/Development/Qt4/monkeyrepos/v2/branches/dev/xup/Makefile.Release</value>
- </variable>
+ <variable expanded="true" operator="=" name="FILES" multiline="true" />
 </project>
