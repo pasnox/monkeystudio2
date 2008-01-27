@@ -1,0 +1,20 @@
+<RCC>
+	<qresource>
+		<file>icons/clock.png</file>
+		<file>icons/console.png</file>
+		<file>icons/error.png</file>
+		<file>icons/tabbuild.png</file>
+		<file>icons/taboutput.png</file>
+		<file>icons/tablog.png</file>
+		<file>icons/warning.png</file>
+		<file>icons/goto.png</file>
+
+		<file>icons/buttonok.png</file>
+		<file>icons/break_enable.png</file>
+		<file>icons/break_disable.png</file>
+		<file>icons/break_conditionnal_enable.png</file>
+		<file>icons/break_conditionnal_disable.png</file>
+		<file>icons/play.png</file>
+
+	</qresource>
+</RCC>
