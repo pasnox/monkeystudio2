@@ -34,6 +34,8 @@ public : // function
 	int processError(int , QByteArray) ;
 	void processExit();
 
+	int processNo(int id, QByteArray);
+	int processYes(int id, QByteArray);
 	
 	void gdbStarted();
 	void gdbFinished();
@@ -51,7 +53,9 @@ public : // function
 private: // function
 
 	QTextEdit *mWidget;
-
+	GdbTemplateProcess<GdbAnswer> cmd;
+	QGdbInterpreter * interpreterNo;
+	QGdbInterpreter * interpreterYes;
 };
 
 #endif
