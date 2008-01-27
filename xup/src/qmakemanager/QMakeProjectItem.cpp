@@ -4,6 +4,7 @@
 #include "QMake2XUP.h"
 
 #include <QFileInfo>
+#include <QApplication>
 #include <QDebug>
 
 QMakeProjectItem::QMakeProjectItem( const QDomElement& e, const QString& s, bool b )
@@ -170,30 +171,31 @@ QString QMakeProjectItem::defaultInterpretedValue() const
 
 void QMakeProjectItem::checkChildrenProjects()
 {
-	return;
-	
 	foreach ( ProjectItem* it, children( true, true ) )
 	{
-		QString s;
+		QString fn;
+		// get subdirs values
 		if ( it->isType( "variable" ) && it->defaultValue() == "SUBDIRS" )
 		{
-			foreach ( ProjectItem* cit, it->children( false, true ) )
+			foreach ( ProjectItem* cit, it->children( false, false ) )
 			{
-				s = cit->filePath();
-				QFileInfo fi( s );
+				// get filename
+				fn = cit->filePath();
+				QFileInfo fi( fn );
 				if ( fi.isDir() )
-					s.append( QString( "/%1.pro" ).arg( fi.fileName() ) );
-				
-				if ( QFile::exists( s ) )
+					fn.append( QString( "/%1.pro" ).arg( fi.fileName() ) );
+				// if file exists open project
+				if ( QFile::exists( fn ) )
 				{
-					QMakeProjectItem* pi = new QMakeProjectItem;
-					if ( pi->loadProject( s ) )
+					ProjectItem* pi = clone( false );
+					if ( pi->loadProject( fn ) )
 						it->parent()->appendRow( pi );
 					else
 						delete pi;
 				}
 			}
 		}
+		/*
 		else if ( it->isType( "function" ) && it->defaultValue().startsWith( "include" ) )
 		{
 			s = it->defaultInterpretedValue();
@@ -213,6 +215,7 @@ void QMakeProjectItem::checkChildrenProjects()
 				}
 			}
 		}
+		*/
 	}
 }
 
@@ -224,6 +227,7 @@ bool QMakeProjectItem::loadProject( const QString& s, const QString& v )
 		setModified( false );
 		updateItem();
 		checkChildrenProjects();
+		QApplication::processEvents( QEventLoop::ExcludeUserInputEvents );
 		return true;
 	}
 	return false;
