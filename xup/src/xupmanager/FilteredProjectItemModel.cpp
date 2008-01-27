@@ -162,18 +162,21 @@ FilteredProjectItem* FilteredProjectItemModel::getFolder( ProjectItem* it, Filte
 	fit->item()->setValue( "name", pn );
 	
 	// calculate row to insert to
-	int ri = vit->rowCount();
+	int ri = 0;
 	for ( int i = 0; i < vit->rowCount(); i++ )
 	{
 		FilteredProjectItem* cit = vit->child( i );
-		int r = QString::localeAwareCompare( pn, cit->item()->defaultValue() );
-		if ( r < 0 )
+		if ( cit->item()->isType( "folder" ) )
 		{
-			ri = cit->row();
-			break;
+			int r = QString::localeAwareCompare( pn, cit->item()->defaultValue() );
+			if ( r < 0 )
+			{
+				ri = cit->row();
+				break;
+			}
+			else
+				ri = cit->row() +1;
 		}
-		else
-			ri = cit->row() +1;
 	}
 	
 	// insert item
@@ -203,7 +206,7 @@ void FilteredProjectItemModel::addFilteredVariable( ProjectItem* it )
 	// get variable item
 	FilteredProjectItem* vit = getVariable( it );
 	
-	// check is file based
+	// check if is file based
 	bool b = it->fileVariables().contains( vit->item()->defaultValue() );
 	
 	// add values to vit
@@ -303,7 +306,7 @@ void FilteredProjectItemModel::rowsAboutToBeRemoved( const QModelIndex& parent, 
 			mItems.remove( it );
 		}
 	}
-	// check if parent if folder and is empty to remove it
+	// check if parent is folder and is empty to remove it
 	if ( folder && !folder->hasChildren() )
 		removeRow( folder->row(), folder->index().parent() );
 }
