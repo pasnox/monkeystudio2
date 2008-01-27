@@ -8,6 +8,7 @@
 #include <QHeaderView>
 
 #include "QMakeProjectItem.h" // remove me
+#include <QDebug>
 
 using namespace XUPManager;
 
@@ -34,6 +35,7 @@ UIProjectsManager::UIProjectsManager( QWidget* w )
 	connect( tvProxiedProjects->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( currentChanged( const QModelIndex&, const QModelIndex& ) ) );
 	connect( this, SIGNAL( projectOpen( ProjectItem* ) ), this, SLOT( internal_projectOpen( ProjectItem* ) ) );
 	connect( this, SIGNAL( projectAboutToClose( ProjectItem* ) ), this, SLOT( internal_projectAboutToClose( ProjectItem* ) ) );
+	connect( this, SIGNAL( projectClosed( ProjectItem* ) ), this, SLOT( internal_projectClosed( ProjectItem* ) ) );
 	connect( this, SIGNAL( projectModifiedChanged( ProjectItem*, bool ) ), this, SLOT( internal_projectModifiedChanged( ProjectItem*, bool ) ) );
 	connect( this, SIGNAL( currentProjectChanged( ProjectItem* ) ), this, SLOT( internal_currentProjectChanged( ProjectItem* ) ) );
 	connect( this, SIGNAL( projectDoubleClicked( ProjectItem* ) ), this, SLOT( internal_projectDoubleClicked( ProjectItem* ) ) );
@@ -88,6 +90,7 @@ void UIProjectsManager::initializeProject( ProjectItem* pi )
 	// connection
 	connect( pi, SIGNAL( modifiedChanged( ProjectItem*, bool ) ), this, SIGNAL( projectModifiedChanged( ProjectItem*, bool ) ) );
 	connect( pi, SIGNAL( aboutToClose( ProjectItem* ) ), this, SIGNAL( projectAboutToClose( ProjectItem* ) ) );
+	connect( pi, SIGNAL( closed( ProjectItem* ) ), this, SIGNAL( projectClosed( ProjectItem* ) ) );
 }
 
 ProjectItem* UIProjectsManager::currentProject() const
@@ -101,7 +104,7 @@ void UIProjectsManager::setCurrentProject( const ProjectItem* pi )
 {
 	// update gui
 	action( UIProjectsManager::SaveCurrent )->setEnabled( pi && pi->modified() );
-	action( UIProjectsManager::SaveAll )->setEnabled( action( UIProjectsManager::SaveCurrent )->isEnabled() );
+	action( UIProjectsManager::SaveAll )->setEnabled( mModel->topLevelProjects().count() );
 	action( UIProjectsManager::CloseCurrent )->setEnabled( pi );
 	action( UIProjectsManager::CloseAll )->setEnabled( pi );
 	action( UIProjectsManager::Add )->setEnabled( pi );
@@ -403,7 +406,6 @@ void UIProjectsManager::internal_projectAboutToClose( ProjectItem* pi )
 		teLog->append( tr( "Project About To Close: %1" ).arg( pi->defaultValue() ) );
 		// save project session
 		teLog->append( tr( "Saving Session..." ) );
-		// restore project
 		foreach ( ProjectItem* it, QList<ProjectItem*>() << pi << pi->children( true, false ) )
 		{
 			// check files and set correct attribute on files item ( open, cursor position, ... )
@@ -417,9 +419,21 @@ void UIProjectsManager::internal_projectAboutToClose( ProjectItem* pi )
 		if ( pi->modified() && question( tr( "Project modified '%1', save it ?" ).arg( pi->defaultValue() ) ) )
 			if ( !saveProject( pi, QString() ) )
 				warning( tr( "An error occur while saving project" ) );
-		// change current proejct to none if there is no longer project open
+	}
+}
+
+void UIProjectsManager::internal_projectClosed( ProjectItem* pi )
+{
+	if ( pi )
+	{
+		teLog->append( tr( "Project Closed: %1" ).arg( pi->defaultValue() ) );
+		// remove project from model
+		pi->remove();
+		// set current project to none if there is no longer opened project
 		if ( !mModel->topLevelProjects().count() )
 			setCurrentProject( 0 );
+		else if ( !currentProject() )
+			setCurrentProject( mModel->topLevelProjects().value( 0 ) );
 	}
 }
 
@@ -429,6 +443,7 @@ void UIProjectsManager::internal_projectModifiedChanged( ProjectItem* pi, bool b
 	{
 		if ( pi->project() == currentProject() )
 			action( UIProjectsManager::SaveCurrent )->setEnabled( b );
+		action( UIProjectsManager::SaveAll )->setEnabled( mModel->topLevelProjects().count() );
 		teLog->append( tr( "Project Modified Changed: %1, %2" ).arg( pi->defaultValue() ).arg( b ? tr( "True" ) : tr( "False" ) ) );
 	}
 }
@@ -450,4 +465,3 @@ void UIProjectsManager::internal_fileDoubleClicked( ProjectItem* it, const QStri
 	if ( it )
 		teLog->append( tr( "File Double Clicked: %1, %2" ).arg( it->defaultValue() ).arg( s ) );
 }
-
