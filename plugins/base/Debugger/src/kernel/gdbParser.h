@@ -45,13 +45,15 @@ public:
 	GdbParser (QObject* p);
 	~GdbParser(){};
 
+
 public slots:
 
 	bool processParsing(const QByteArray&);
 	void setLastCommand(QString);
-//	int addInterpreter(QString, QRegExp , QRegExp , QString);
+
 	int addInterpreter(QString,QString, QRegExp , QRegExp , QString);
 	int removeInterpreter(int id);
+	void addRestorLine(QRegExp, QRegExp);
 
 
 private :
@@ -78,6 +80,7 @@ private :
 	int checkCmd(QString cmd);
 	int checkInterpreter(QString oneLine);
 
+	QList<QRegExp> restoringList;
 	bool checkRestoring(QString , QString);
 	void restorLine(QStringList *list);
 

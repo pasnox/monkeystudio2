@@ -4,29 +4,32 @@
 #include <QString>
 #include <QRegExp>
 
-// initialise un interpreter
-class  gdb_base_interpreter
+class  QGdbInterpreter
 {
 public :
-		gdb_base_interpreter(){};
+		QGdbInterpreter(){};
 
-		gdb_base_interpreter(QString cName, QString cGdb, QRegExp cRegExp,  QRegExp aRegExp, QString aExtention)
+		QGdbInterpreter(QString cName, QString cGdb, QRegExp cRegExp,  QRegExp aRegExp, QString aExtention)
 		{
-			cmdName = cName;
-			cmdGdb = cGdb;
-			cmdRegExp = cRegExp;
-			answerRegExp = aRegExp;
-			answerExtention = aExtention;
+			mCmdName = cName;
+			mCmdGdb = cGdb;
+			mCmdRegExp = cRegExp;
+			mAnswerRegExp = aRegExp;
+			mAnswerExtention = aExtention;
 		};
-		~gdb_base_interpreter(){};
+		~QGdbInterpreter(){};
 
-		QString cmdName;
-		QString cmdGdb;
-		QRegExp cmdRegExp;
-		QRegExp answerRegExp;
-		QString answerExtention;
+		QString cmdName(){ return mCmdName;}
+		QString cmdGdb(){ return mCmdGdb;}
+		QString answerExtention(){ return mAnswerExtention;}
+		QRegExp answerRegExp(){ return mAnswerRegExp;}
+		QRegExp cmdRegExp(){ return mCmdRegExp;}
+
+private :
+		QString mCmdName; 			// name of your command
+		QString mCmdGdb;			// command  send to gdb
+		QRegExp mCmdRegExp;		// command gdb in RegExp
+		QRegExp mAnswerRegExp;	// answer from gdb in QregExp
+		QString mAnswerExtention;	// if you want passe other infomations
 };
-
-typedef gdb_base_interpreter QGdbInterpreter;
-
 #endif

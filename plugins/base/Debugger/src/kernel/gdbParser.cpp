@@ -41,6 +41,23 @@ GdbParser::GdbParser (QObject* p) : QObject (p)
 	#ifdef Q_OS_UNIX
 		crlf = "\n";
 	#endif
+
+	restoringList 
+		/*
+		^done,reason="generic",value="Breakpoint 2, main (argc=Cannot access memory at address 0x0"
+		^done,reason="generic",value=") at src/main.cpp:20"
+		*/
+		<< QRegExp("^Breakpoint\\s\\d+,\\s.*\\s\\(.*Cannot access memory at address\\s0x[0-9a-FA-F]{1,}$")
+		<< QRegExp("^\\)\\sat\\s.*:\\d+$")
+
+		/*
+		^done,reason="generic information (not parsing)",value="#0  main (argc=Cannot access memory at address 0x0"  id : -1
+		^done,reason="generic information (not parsing)",value=") at src/main.cpp:20"  id : -1
+		*/
+		<< QRegExp("^#\\d+\\s.*Cannot access memory at address\\s0x[0-9a-FA-F]{1,}$")
+		<< QRegExp("^\\)\\sat\\s.*:\\d+$");
+
+		
 }
 //
 bool GdbParser::gotoSection(QString section)
@@ -143,9 +160,15 @@ int GdbParser::checkInterpreter(QString oneLine)
 	if(t !=-1 && interpreter.regexp.at(t).exactMatch(oneLine) )
 	{
 		//qDebug("match ok");
-
 		oneLine = interpreter.answer.at(t) + oneLine + "\",currentCmd=\"" + currentCmd +"\"";
 		onInfo(interpreter.id.at(t), oneLine);
+
+// if interpreter wait prompt event, i don't have promt line after, i emulate prompt sequence
+//^info,interpreter="GdbBreakPoint",event="breakpoint-deleted",answerExtention={fullname="main.cpp",nobkpt="1"},answerGdb="(gdb) ",currentCmd="delete 1"  id : 2
+//^done,interpreter="GdbParser",currentCmd="file ./Debugger",event="prompt",answerGdb="(gdb) "  id : 0
+		if(oneLine.contains( "(gdb) "))
+			onDone(0,"emulate prompt");
+
 		return 1;
 	}
 	//qDebug("no match");
@@ -178,7 +201,7 @@ static int index = PROMPT_ID;
 //
 int GdbParser::removeInterpreter(int id)
 {
-	if(id != -1)
+//	if(id != -1)
 	{
 		for(int i =0; i< interpreter.cmd.count(); i++)
 		{ 
@@ -204,35 +227,16 @@ int GdbParser::removeInterpreter(int id)
 */
 bool GdbParser::checkRestoring(QString a, QString b)
 {
-	QList<QRegExp> restoringList;
-	restoringList 
-		/*
-		^done,reason="generic",value="Breakpoint 2, main (argc=Cannot access memory at address 0x0"
-		^done,reason="generic",value=") at src/main.cpp:20"
-		*/
-		<< QRegExp("^Breakpoint\\s\\d+,\\s.*\\s\\(.*Cannot access memory at address\\s0x[0-9a-FA-F]{1,}$")
-		<< QRegExp("^\\)\\sat\\s.*:\\d+$")
-
-		/*
-		^done,reason="generic information (not parsing)",value="#0  main (argc=Cannot access memory at address 0x0"  id : -1
-		^done,reason="generic information (not parsing)",value=") at src/main.cpp:20"  id : -1
-		*/
-		<< QRegExp("^#\\d+\\s.*Cannot access memory at address\\s0x[0-9a-FA-F]{1,}$")
-		<< QRegExp("^\\)\\sat\\s.*:\\d+$")
-
-		/*
-			breapoint hit splited in two lines
-			"Breakpoint 1, GdbPluginManger::addPlugin(QObject*) (this=0x4095318, "
-			"  p=0x404543) at src/fsdfsdf.cpp:41"
-		 */
-		<< QRegExp("^Breakpoint\\s\\d+,\\s.*$")
-		<< QRegExp("^.*at\\s.*:\\d+$");
-		
 
 	for(int i=0; i<restoringList.count() ;i+=2)
 		if(restoringList.at(i).exactMatch(a)  && restoringList.at(i+1).exactMatch(b)) return true;
 
 	return false;
+}
+//
+void GdbParser::addRestorLine(QRegExp l1, QRegExp l2)
+{
+	restoringList << l1 << l2;
 }
 //
 void GdbParser::restorLine(QStringList *list)
@@ -314,21 +318,15 @@ bool GdbParser::processParsing(const QByteArray& storg)
 		{
 			QString oneLine = lines.at(i);
 
-			// find if i have interpreter for this answer ?
-			if(!checkInterpreter(oneLine))
-			{
-
 				// find if this anwser is in the file RegExp
 				int id = check(oneLine);
 
-// a foutre dans un plug special windows
-/*	if(oneLine.endsWith("(y or n) "))
-	{ 
-		QMessageBox::warning(NULL, "Question from Gdb", oneLine, QMessageBox::Ok | QMessageBox::No); 
-		// emettre un sendRawData("y | n"); a gdb
-	
-	}*/
-// end windows
+			// find if i have interpreter for this answer ?
+			//if(!checkInterpreter(oneLine) || id !=-1)
+			{
+				// find if this anwser is in the file RegExp
+//				int id = check(oneLine);
+
 				// remove all " in the string
 				// because getParametre() function error
 				// exemple :
@@ -337,17 +335,20 @@ bool GdbParser::processParsing(const QByteArray& storg)
 				while(oneLine.contains("\""))
 					oneLine.remove("\"");
 
-				// Id is in ^info to ^error   
-				if(id != -1 && id > INFO_ID && id < ERROR_ID)
-					onInfo(id,oneLine);
-	
 				// more than ERROR_ID (all errors)
 				if(id != -1 && id >= ERROR_ID  )
 					onError(id, oneLine);
-
+				else if(!checkInterpreter(oneLine))
+				{
+				// Id is in ^info to ^error   
+				if(id != -1 && id > INFO_ID && id < ERROR_ID)
+					onInfo(id,oneLine);
+			
 				// unknow answer or prompt found
 				if(id == -1 || id == PROMPT_ID)
 					onDone(id, oneLine);
+				
+				}
 			}
 		}
 		gdbBuffer.clear();
@@ -377,8 +378,11 @@ void GdbParser::onInfo(int id, QString st)
 {
 		switch(id)
 		{
+			//[10005]^Reading symbols from .*done\.
 			case 10005 : 	emit targetLoaded(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"target-loaded\",answerGdb=\"" + st + "\""); break;
+			//[10016]^Kill the program being debugged\? \(y or n\) \[answered Y; input not from terminal\]
 			case 10016 :
+			//[10007]^Program exited normally\.
 			case 10007 : 	emit targetExited(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"target-exited\",answerGdb=\"" + st + "\""); break;
 			case 10009 :	emit targetStopped(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"target-stopped\",answerGdb=\"" + st + "\""); 
 							emit info(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"breakpoint-hit\",answerGdb=\"" + st + "\"");
