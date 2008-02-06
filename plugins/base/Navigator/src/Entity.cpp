@@ -45,6 +45,8 @@ QIcon Entity::iFUNCTION;
 QIcon Entity::iMEMBER;
 QIcon Entity::iSTRUCT;
 QIcon Entity::iTYPEDEF;
+QIcon Entity::iMACRO;
+QIcon Entity::iENUMERATOR;
 
 Entity::Entity ( tagEntryInfo* entry, QString fileName, QDateTime time)
 {
@@ -71,6 +73,8 @@ void Entity::initIcons ()
     iMEMBER = QIcon (":/icons/MEMBER.png");
     iSTRUCT = QIcon (":/icons/STRUCT.png");
     iTYPEDEF = QIcon (":/icons/TYPEDEF.png");
+    iMACRO = QIcon (":/icons/MACRO.png");
+    iENUMERATOR = QIcon (":/icons/ENUMERATOR.png");
 }
 
 Entity* Entity::child (int i)
@@ -171,6 +175,7 @@ void Entity::updateSelf (tagEntryInfo* entry, QString fileName, QDateTime time)
     file = fileName;
     type = getEntityType (entry->kind );
     line = entry->lineNumber;
+    varType = entry->extensionFields.typeRef [0];
     updateTime = time;
     if ( entry->extensionFields.signature != NULL )
     {    
@@ -207,25 +212,22 @@ void Entity::updateGUI ()
             newText = name + " enum";
             break;
         case ENUMERATOR:
-            tip = "Enumerator";
+			setIcon (0,iENUMERATOR);
             break;
         case EXTERN:
             tip = "Extern";
             break;
         case FUNCTION:
-            tip = "Function";
+        case PROTOTYPE:
             setIcon (0,iFUNCTION);
             break;
         case MACRO:
-            tip = "Macro";
-            newText = name + " macro";
+			setIcon (0,iMACRO);
             break;
         case MEMBER:
-            tip = "Member";
+        case VARIABLE:
+            tip = QString("<i>%1</i>").arg(varType);
             setIcon (0,iMEMBER);
-            break;
-        case PROTOTYPE:
-            tip = "Prototype";
             break;
         case STRUCT:
             tip = "Struct";
@@ -241,9 +243,6 @@ void Entity::updateGUI ()
             tip = "Union";
             newText = name + " union";
             break;
-        case VARIABLE:
-            tip = "Variable";
-            break;
         case UNKNOWN:
             break;
         default:
@@ -251,7 +250,7 @@ void Entity::updateGUI ()
     }
     tip =    tip+
             ' '+
-            name+
+            name + signature + 
             '\n';
     if ( line != 0)
         tip = tip + QFileInfo (file).fileName() + QString(":%1").arg(line);
