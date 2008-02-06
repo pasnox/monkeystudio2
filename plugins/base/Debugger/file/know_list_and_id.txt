@@ -1,4 +1,4 @@
-﻿
+
 /*
 Autor: xiantia
 Version : 1.2
@@ -49,7 +49,7 @@ Comment :
 [10012]^Continuing\.
 [10013]^Continuing with no signal\.
 [10014]^Continuing with signal .*\.
-[10015]^Kill the program being debugged\? \(y or n\).
+//[10015]^Kill the program being debugged\? \(y or n\).
 [10016]^Kill the program being debugged\? \(y or n\) \[answered Y; input not from terminal\]
 [10017]^\[.* exited\]
 [10018]^Breakpoint [0-9]{1,} now unconditional\.
@@ -1944,7 +1944,7 @@ Comment :
 [21873]^You cannot use function <.*> as argument\. You must use a pointer to function type variable\. Command ignored\.
 [21874]^The program is not being run\.
 [21875]^can't handle command\-line argument containing whitespace
-//[21876]^Program not restarted\.
+[21876]^Program not restarted\.
 [21877]^Asynchronous execution not supported on this target\.
 [21878]^No symbol table loaded\.  Use the file command\.
 [21879]^Asynchronous execution not supported on this target\.
@@ -1958,7 +1958,7 @@ Comment :
 [21887]^starting address
 [21888]^Unreasonable jump request
 [21889]^No source file has been specified\.
-//[21890]^Not confirmed\.
+[21890]^Not confirmed\.
 //[21891]^Continuing at 
 //[21892]^Continuing with no signal\.
 //[21893]^Continuing with signal .*\.
@@ -1993,7 +1993,7 @@ Comment :
 [21922]^This GDB does not control a terminal\.
 [21923]^Inferior's terminal status \(currently saved by GDB\):
 [21924]^The program is not being run\.
-//[21925]^Not confirmed\.
+[21925]^Not confirmed\.
 [21926]^failed internal consistency check
 [21927]^Print inferior's saved terminal status\.
 [21928]^Kill execution of program being debugged\.
@@ -3268,7 +3268,7 @@ Comment :
 [23195]^virtual baseclass botch
 [23196]^Not implemented: member type in value_find_oload_lis
 [23197]^Attempt to extract a component of a value that is not a struct or union
-[23198]^Cannot resolve .* .* to any overloaded instance
+[23198]^Cannot resolve function .* to any overloaded instance
 [23199]^Using non\-standard conversion to match function .* to supplied arguments
 [23200]^Overloaded method instance .*, # of parms [0-9]{1,}
 [23201]^Overloaded function instance .* # of parms [0-9]{1,}
