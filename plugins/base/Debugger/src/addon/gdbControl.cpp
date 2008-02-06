@@ -8,9 +8,10 @@
 
 #include <QFileDialog>
 
-GdbControl::GdbControl(QWidget *o) :  GdbBase(o), bJustAdd(0), bTargetLoaded(0), bTargetRunning(0), bGdbStarted(0)
+GdbControl::GdbControl(GdbParser *p) :  GdbCore( p),
+	interpreterEndSteppingRange(NULL)
 {
-	mWidget = new QFrame(this);
+	mWidget = new QFrame();
 	QVBoxLayout *h = new QVBoxLayout(mWidget);
 	
 	bStepOver = new QPushButton("step over");
@@ -33,6 +34,9 @@ GdbControl::GdbControl(QWidget *o) :  GdbBase(o), bJustAdd(0), bTargetLoaded(0),
 	h->addWidget(bStepInto);
 	h->addWidget(bStop);
 
+	getContainer()->setWidget(mWidget);
+	getContainer()->setWindowTitle(name());
+
 	connect (bLoadTarget, SIGNAL(clicked()), this, SLOT(onLoadTarget()));
 	connect (bStepOver, SIGNAL(clicked()), this, SLOT(onStepOver()));
 	connect (bStepInto, SIGNAL(clicked()), this, SLOT(onStepInto()));
@@ -41,7 +45,8 @@ GdbControl::GdbControl(QWidget *o) :  GdbBase(o), bJustAdd(0), bTargetLoaded(0),
 	connect (bStop, SIGNAL(clicked()), this, SLOT(onStop()));
 
 	cmd.setClass(this);
-
+	
+	cmd.connectEventNotify("notify-question", &GdbControl::processQuestion);
 } 
 //
 GdbControl::~GdbControl()
@@ -53,50 +58,14 @@ QString GdbControl::name()
 	 return "GdbControl"; 
 }
 //
-QWidget * GdbControl::widget()
+int GdbControl::process(QGdbMessageCore m)
 {
-	return (QWidget*) mWidget ; 
+	return cmd.dispatchProcess(m);
 }
 //
-void GdbControl::setupDockWidget(QMainWindow *mw)
-{
-mw = mw;
-	
-	setWidget(widget());
-	setWindowTitle(name());
-
-	setMaximumWidth(150);
-	setFeatures (QDockWidget::NoDockWidgetFeatures);
-//	mw->addDockWidget(Qt::LeftDockWidgetArea, this);
-}
-
-//
-int GdbControl::process(int id,QByteArray data)
-{
-id = id;
-	if(!bGdbStarted || bTargetRunning || !bTargetLoaded) return PROCESS_TERMINED;
-
-
-	//	start process if event == end-stepping-range or event == breakpoint-hit)
-	if(cmd.startProcess(data))
-	{
-		bStepOver->setEnabled(true);
-		bStepInto->setEnabled(true);
-		bContinue->setEnabled(true);
-		bStop->setEnabled(true);
-
-		cmd.disconnectEventToProcess(interpreterEndSteppingRange);
-		cmd.leaveEventToProcess(&interpreterEndSteppingRange);
-	}
-
-	return PROCESS_TERMINED;
-}
-//
-int GdbControl::processError(int id, QByteArray data)
+int GdbControl::processError(QGdbMessageCore)
 {
 	// TODO
-	id=id;	
-	data = data;
  
 	return PROCESS_TERMINED;
 }
@@ -107,17 +76,58 @@ void GdbControl::processExit()
 //
 void GdbControl::onLoadTarget()
 {
-	QFileDialog *d = new QFileDialog(this,"Select target");
+	QFileDialog *d = new QFileDialog(NULL,"Select target");
 	 if (d->exec())
 	 {
-     QStringList fileNames = d->selectedFiles(); 
+		QStringList fileNames = d->selectedFiles(); 
 		QString file = fileNames.at(0);
-		 file.replace('\\','/');
+		file.replace('\\','/');
 		emit sendRawData(this,"file " + file.toLocal8Bit());
 	 }
 }
+// step over or into
+int GdbControl::processSteps(QGdbMessageCore m)
+{
+		bRun->setEnabled(true);
+		bStepOver->setEnabled(true);
+		bStepInto->setEnabled(true);
+		bContinue->setEnabled(true);
+		bStop->setEnabled(true);
 
+		cmd.disconnectEventInterpreter(interpreterEndSteppingRange);
+		cmd.leaveEventInterpreter(&interpreterEndSteppingRange);
+		return PROCESS_TERMINED;
+}
+//
+int GdbControl::processQuestion(QGdbMessageCore m)
+{
+	QByteArray currentQuestion = getParametre("currentQuestion=", m.msg);
 
+	// questions pris en charges
+	QRegExp kill("^Kill the program being debugged\\? \\(y or n\\) $");
+	QRegExp restart("^Start it from the beginning\\? \\(y or n\\) $");
+
+	if(kill.exactMatch( currentQuestion))
+	{
+		bRun->setEnabled(true);
+		bStop->setEnabled(false);
+		bStepOver->setEnabled(false);
+		bStepInto->setEnabled(false);
+		bContinue->setEnabled(false);
+	}
+
+	if(restart.exactMatch( currentQuestion))
+	{
+		bRun->setEnabled(false);
+		bStop->setEnabled(false);
+		bStepOver->setEnabled(false);
+		bStepInto->setEnabled(false);
+		bContinue->setEnabled(false);
+	}
+
+	return PROCESS_TERMINED;
+}
+//
 void GdbControl::onStepOver()
 {
 	bRun->setEnabled(false);
@@ -133,7 +143,7 @@ void GdbControl::onStepOver()
 	QRegExp("^\\d+\\s+.*"),
 	"");
 	
-	cmd.connectEventToProcess(interpreterEndSteppingRange, NULL);
+	cmd.connectEventInterpreter(interpreterEndSteppingRange, &GdbControl::processSteps);
 	cmd.forceProcess();
 }
 //
@@ -151,14 +161,13 @@ void GdbControl::onStepInto()
 	QRegExp("^s"), 
 	QRegExp("^\\d+\\s+.*"),
 	"");
-	
-	cmd.connectEventToProcess(interpreterEndSteppingRange, NULL);
+	cmd.connectEventInterpreter(interpreterEndSteppingRange, &GdbControl::processSteps);
 	cmd.forceProcess();
 }
 //
 void GdbControl::onRun()
 {
-	bRun->setEnabled(false);
+//	bRun->setEnabled(false);
 	emit sendRawData(this,"r");
 }
 //
@@ -169,35 +178,28 @@ void GdbControl::onContinue()
 //
 void GdbControl::onStop()
 {
-	sendRawData(this,"kill");
-
-	bRun->setEnabled(true);
-	bStop->setEnabled(false);
-	bStepOver->setEnabled(false);
-	bStepInto->setEnabled(false);
-	bContinue->setEnabled(false);
+	emit sendRawData(this,"kill");
 }
 //
 void GdbControl::gdbStarted()
 {
-	bGdbStarted = true;
+	GdbCore::gdbStarted();
 }
 //
 void GdbControl::gdbFinished()
 {
-	bGdbStarted = false;
-	bTargetLoaded = false;
+	GdbCore::gdbFinished();
 }
 //
 void GdbControl::targetLoaded()
 {
-	bTargetLoaded = true;
+	GdbCore::targetLoaded();
 	bRun->setEnabled(true);
 }
 //
 void GdbControl::targetRunning()
 {
-	bTargetRunning = true;
+	GdbCore::targetRunning();
 
 	bRun->setEnabled(false);
 	bStepOver->setEnabled(false);
@@ -209,8 +211,9 @@ void GdbControl::targetRunning()
 //
 void GdbControl::targetStopped()
 {
-	bTargetRunning = false;
+	GdbCore::targetStopped();
 
+	bRun->setEnabled(true);
 	bStepOver->setEnabled(true);
 	bStepInto->setEnabled(true);
 	bContinue->setEnabled(true);
@@ -219,7 +222,7 @@ void GdbControl::targetStopped()
 //
 void GdbControl::targetExited()
 {
-	bTargetRunning = false;
+	GdbCore::targetExited();
 
 	bRun->setEnabled(true);
 	bStepOver->setEnabled(false);

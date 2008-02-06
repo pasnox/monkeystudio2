@@ -6,9 +6,15 @@
 
 #include "gdbBreakPoint.h"
 
-GdbBreakPoint::GdbBreakPoint(QWidget *o) :  GdbBase(o), bJustAdd(0), bTargetLoaded(0), bTargetRunning(0), bGdbStarted(0)
+GdbBreakPoint::GdbBreakPoint( GdbParser *p) :  GdbCore( p), 
+			bJustAdd(0),
+			interpreterAdd(0), interpreterDel(0),interpreterEnable(0),interpreterDisable(0)
 {
-	tabWidget = new QTableWidget(this);
+	tabWidget = new QTableWidget();
+
+	getContainer()->setWidget(tabWidget);
+	getContainer()->setWindowTitle(name());
+
 	tabWidget->setEnabled(false);
 	tabWidget->setColumnCount(5);
 	tabWidget->setColumnWidth(4,200);
@@ -18,15 +24,44 @@ GdbBreakPoint::GdbBreakPoint(QWidget *o) :  GdbBase(o), bJustAdd(0), bTargetLoad
 	tabWidget->setHorizontalHeaderLabels(QStringList() << "Enable/Hit" << "Conditions" << "Bkpt Num" << "Line" << "File" );
  
 	tabWidget->setSelectionBehavior (QAbstractItemView::SelectRows);
-	
-//	connect(tabWidget, SIGNAL( itemClicked  ( QTableWidgetItem *)), this, SLOT(onEnableChanged(QTableWidgetItem*)));	
+
+	connect(tabWidget, SIGNAL( itemClicked  ( QTableWidgetItem *)), this, SLOT(onEnableChanged(QTableWidgetItem*)));	
+
+// function not available
 //	connect(tabWidget, SIGNAL( itemChanged  ( QTableWidgetItem *)), this, SLOT(onConditionChanged(QTableWidgetItem*)));	
+	connect(tabWidget, SIGNAL(  itemDoubleClicked( QTableWidgetItem *)) , this , SLOT(onBreakpointDoubleClicked(QTableWidgetItem*)));
 
 	icon_hit = ":/icons/buttonok.png" ;
 
 	cmd.setClass(this);
-	cmd.connectEventStartToProcess("CTRL+B",&GdbBreakPoint::processFromEditor);
+
+	cmd.connectEventStart("CTRL+B",&GdbBreakPoint::processFromEditor);
+	cmd.connectEventStart("breakpoint-hit",&GdbBreakPoint::hitBreakpoint);
+	cmd.connectEventStart("end-stepping-range",&GdbBreakPoint::hitBreakpoint);
+
+	/*
+			breapoint hit splited in two lines
+			"Breakpoint 1, GdbPluginManger::addPlugin(QObject*) (this=0x4095318, "
+			"  p=0x404543) at src/fsdfsdf.cpp:41"
+	 */
+	getParser()->addRestorLine(QRegExp("^Breakpoint\\s\\d+,\\s.*$"),QRegExp("^.*at\\s.*:\\d+$"));
+
+	connect(getContainer(), SIGNAL(  topLevelChanged ( bool) ), this, SLOT( onTopLevelChanged ( bool  )));
+
 } 
+//
+void GdbBreakPoint::onTopLevelChanged ( bool b)
+{
+	// resize widget recommended
+	if(b)
+	{
+		getContainer()->restoreGeometry(widgetSize);
+	}
+	else
+	{
+		widgetSize = getContainer()->saveGeometry();
+	}
+}
 //
 GdbBreakPoint::~GdbBreakPoint()
 {
@@ -37,92 +72,69 @@ QString GdbBreakPoint::name()
 	return "GdbBreakPoint"; 
 }
 //
-QWidget * GdbBreakPoint::widget()
-{ 
-	return (QWidget*) tabWidget ; 
-}
-//
-void GdbBreakPoint::setupDockWidget(QMainWindow *mw)
-{
-	mw = mw;
-	setWidget(widget());
-	setWindowTitle(name());
-	setAllowedAreas(Qt::AllDockWidgetAreas);
-	setFeatures (QDockWidget::DockWidgetMovable |QDockWidget::DockWidgetFloatable);
-//	mw->addDockWidget(Qt::RightDockWidgetArea, this);
-}
-//
+
 void GdbBreakPoint::gdbStarted()
 {
-	bGdbStarted = true;
+	GdbCore::gdbStarted();
 	hit(NULL, -1);
 }
 //
 void GdbBreakPoint::gdbFinished()
 {
-	bGdbStarted = false;
-	bTargetLoaded = false;
+	GdbCore::gdbFinished();
 	hit(NULL, -1);
 }
 //
 void GdbBreakPoint::targetLoaded()
 {
-	bTargetLoaded = true;
+	GdbCore::targetLoaded();
 	tabWidget->setEnabled(true);
 	hit(NULL, -1);
 }
 //
 void GdbBreakPoint::targetRunning()
 {
-	bTargetRunning = true;
+	GdbCore::targetRunning();
 	tabWidget->setEnabled(false);
 	hit(NULL, -1);
 }
 //
 void GdbBreakPoint::targetStopped()
 {
-	bTargetRunning = false;
+	GdbCore::targetStopped();
 	tabWidget->setEnabled(true);
 }
 //
 void GdbBreakPoint::targetExited()
 {
-	bTargetRunning = false;
+	GdbCore::targetExited();
 	tabWidget->setEnabled(true);
 	hit(NULL, -1);
 }
 //
-int GdbBreakPoint::processFromEditor(int id, QByteArray data)
+int GdbBreakPoint::processFromEditor(QGdbMessageCore m)
 {
-id = id;
 
-	QByteArray event = getParametre("event=", data);
-	QByteArray fullName = QFileInfo(getParametre("fullname=", data)).fileName ().toLocal8Bit();
-	QByteArray line = getParametre("line=", data);
+	QByteArray event = getParametre("event=", m.msg);
+	QByteArray fullName = QFileInfo(getParametre("fullname=", m.msg)).fileName ().toLocal8Bit();
+	QByteArray line = getParametre("line=", m.msg);
 	toggleBreakPoint(fullName, line.toInt());
 
 	return cmd.lockProcess();
 }
 //
-int GdbBreakPoint::process(int id ,QByteArray data)
+int GdbBreakPoint::process(QGdbMessageCore m)
 {
-	if(!bGdbStarted || bTargetRunning || !bTargetLoaded) return PROCESS_TERMINED;
-
-	if(cmd.startProcess(data))
-			return hitBreakpoint(id, data);
-
 	// efface les breakpoint hit si le prog est termine
-	if(getParametre("event=", data) == "exited-normally")
+	if(getParametre("event=", m.msg) == "exited-normally")
 			hit(NULL, -1);
 
-	return cmd.dispatchProcess(id ,data);
+	return cmd.dispatchProcess(m);
 }
 //
-int GdbBreakPoint::processError(int id, QByteArray data)
+int GdbBreakPoint::processError(QGdbMessageCore)
 {
 	// TODO
-	id = id;
-	data = data; 
 
 	// END TOTO
 	return PROCESS_TERMINED;
@@ -130,30 +142,29 @@ int GdbBreakPoint::processError(int id, QByteArray data)
 //
 void GdbBreakPoint::processExit()
 {
-		cmd.disconnectEventToProcess(interpreterAdd);
-		cmd.leaveEventToProcess(&interpreterAdd);
-		cmd.disconnectEventToProcess(interpreterDel);
-		cmd.leaveEventToProcess(&interpreterDel);
-		cmd.disconnectEventToProcess(interpreterEnable);
-		cmd.leaveEventToProcess(&interpreterEnable);
-		cmd.disconnectEventToProcess(interpreterDisable);
-		cmd.leaveEventToProcess(&interpreterDisable);
+		cmd.disconnectEventInterpreter(interpreterAdd);
+		cmd.leaveEventInterpreter(&interpreterAdd);
+		cmd.disconnectEventInterpreter(interpreterDel);
+		cmd.leaveEventInterpreter(&interpreterDel);
+		cmd.disconnectEventInterpreter(interpreterEnable);
+		cmd.leaveEventInterpreter(&interpreterEnable);
+		cmd.disconnectEventInterpreter(interpreterDisable);
+		cmd.leaveEventInterpreter(&interpreterDisable);
 }
 //
-int GdbBreakPoint::addBreakpoint(int id , QByteArray data)
+int GdbBreakPoint::addBreakpoint(QGdbMessageCore m)
 {	
-	id=id; // no warning
+//	id=id; // no warning
 
 	// Add BreakPoint
 	//^info,reason="breakpoint-add",value="Breakpoint 1 at 0x805b850: file src/main.cpp, line 17."
 	
-	QByteArray value = getParametre("answerGdb=", data);
+	QByteArray value = getParametre("answerGdb=", m.msg);
 	QRegExp exp("^Breakpoint\\s+(\\d+)\\s+at\\s(\\w+):\\s+file\\s+([^,]+),\\s+line\\s+(\\d+)\\." );
 	
 	if(exp.exactMatch(value))
 	{
 		QStringList list = exp.capturedTexts();
-
 
 		QByteArray fullName = QFileInfo("./"+ list.at(3).toLocal8Bit()).fileName().toLocal8Bit();
 		QByteArray line = list.at(4).toLocal8Bit();
@@ -167,12 +178,14 @@ int GdbBreakPoint::addBreakpoint(int id , QByteArray data)
 			{
 				bp->indexInGdb << number.toInt();
 				bp->lineInFile << line.toInt();
+				bp->type << "unconditional-breakpoint";
+				bp->enable << "true";
 
-				addRowInTab( bp,number, line,fullName);
+				addRowInTab(/* bp,*/number, line,fullName);
 
 				// noitify other plugin 
-				processPostMessage(-1, 
-					"sender=\"" + name().toLocal8Bit() + "\",event=\"breakpoint-add\",fileName=\"" + fullName + "\",line=\"" + line + "\"");
+			processPostMessage(-1,
+				 "sender=\"" + name().toLocal8Bit() + "\",event=\"notify-breakpoint-add\",type=\"unconditionnal-breakpoint\",enable=\"true\",fileName=\"" + fullName + "\",line=\"" + line + "\"");
 			}
 			else qDebug("(Class GdbBreakPoint function process::AddBreakpoint) CRITICAL erreur GdbBreakPoint is already set !");
 		}
@@ -183,26 +196,28 @@ int GdbBreakPoint::addBreakpoint(int id , QByteArray data)
 			bp->fileName = fullName;
 			bp->indexInGdb << number.toInt();
 			bp->lineInFile << line.toInt();	
-
-			addRowInTab(bp ,number, line, fullName);
+			bp->type << "unconditional-breakpoint";
+			bp->enable << "true";
+			addRowInTab(/* bp,*/ number, line, fullName);
 
 			BreakPointList << bp;
 		
 			// noitify other plugin 
-			processPostMessage(-1, "sender=\"" + name().toLocal8Bit() + "\",event=\"breakpoint-add\",fileName=\"" + fullName + "\",line=\"" + line + "\"");
+			processPostMessage(-1,
+				 "sender=\"" + name().toLocal8Bit() + "\",event=\"notify-breakpoint-add\",type=\"unconditionnal-breakpoint\",enable=\"true\",fileName=\"" + fullName + "\",line=\"" + line + "\"");
 		}
 		
-		cmd.disconnectEventToProcess(interpreterAdd);
-		cmd.leaveEventToProcess(&interpreterAdd);
+		cmd.disconnectEventInterpreter(interpreterAdd);
+		cmd.leaveEventInterpreter(&interpreterAdd);
 	}
 	return PROCESS_TERMINED;
 }
 //
-int GdbBreakPoint::deleteBreakpoint(int id, QByteArray data)
+int GdbBreakPoint::deleteBreakpoint(QGdbMessageCore m)
 {
-	id=id; // no warning
+//	id=id; // no warning
 	//	"^info,interpreter=\"GdbBreakPoint\",reason=\"breakpoint-deleted\",fullname=\"" + fullName.toLocal8Bit() + "\",nobkpt=\"" + QByteArray::number(bp->indexInGdb.at(index)) + "\",value=\"");
-	QByteArray answerExtention = getParametre("answerExtention=",data);
+	QByteArray answerExtention = getParametre("answerExtention=",m.msg);
 
 	QByteArray fullName = getParametre("fullname=", answerExtention);
 	QByteArray  nobkpt = getParametre("nobkpt=", answerExtention);
@@ -214,23 +229,12 @@ int GdbBreakPoint::deleteBreakpoint(int id, QByteArray data)
 		if(index!=-1 )
 		{
 			processPostMessage(-1,
-				"sender=\"" + name().toLocal8Bit() + "\",event=\"breakpoint-deleted\",fileName=\"" + bp->fileName.toLocal8Bit() + "\",line=\"" + QByteArray::number(bp->lineInFile.at(index)) + "\"");
+				"sender=\"" + name().toLocal8Bit() + "\",event=\"notify-breakpoint-deleted\",type=\"" + bp->type.at(index) + "\",enable=\"" + bp->enable.at(index) +"\",fileName=\"" + bp->fileName.toLocal8Bit() + "\",line=\"" + QByteArray::number(bp->lineInFile.at(index)) + "\"");
 
 			int indexLine = getBreakPoint( nobkpt );
 
 			bp->lineInFile.removeAt(index);
 			bp->indexInGdb.removeAt(index);				
-
-			delete bp->enable.at(index);	// delete the QTableWidgetItem
-			bp->enable.removeAt(index);		// remove it in list
-			delete bp->condition.at(index);	// delete the QTableWidgetItem
-			bp->condition.removeAt(index);		// remove it in list
-			delete bp->bkptno.at(index);	// delete the QTableWidgetItem
-			bp->bkptno.removeAt(index);		// remove it in list
-			delete bp->line.at(index);	// delete the QTableWidgetItem
-			bp->line.removeAt(index);		// remove it in list
-			delete bp->file.at(index);	// delete the QTableWidgetItem
-			bp->file.removeAt(index);		// remove it in list
 
 			tabWidget->removeRow( indexLine );	// delete line 
 
@@ -243,34 +247,25 @@ int GdbBreakPoint::deleteBreakpoint(int id, QByteArray data)
 	else qDebug("(Class GdbBreakPoint function process::RemoveBreakpoint) CRITICAL erreur file source not found !");
 
 
-	cmd.disconnectEventToProcess(interpreterDel);
-	cmd.leaveEventToProcess(&interpreterDel);
+	cmd.disconnectEventInterpreter(interpreterDel);
+	cmd.leaveEventInterpreter(&interpreterDel);
 
 	return PROCESS_TERMINED;
 }
 //
-int GdbBreakPoint::hitBreakpoint(int id, QByteArray data)
+int GdbBreakPoint::hitBreakpoint(QGdbMessageCore m )
 {
-	id=id; // no warning
+//	id=id; // no warning
 
-	QByteArray value = getParametre("answerGdb=", data);
+	QByteArray value = getParametre("answerGdb=", m.msg);
 	QRegExp exp("^Breakpoint\\s+(\\d+),\\s+.*\\s+at\\s+([^:]+):(\\d+)" );
 
 	if(exp.exactMatch(value))
 	{
 		QStringList list = exp.capturedTexts();
 
-		// verif
-		if(list.at(0) != value) 
-		{ 
-			qDebug("(Class GdbBreakpoint function proccess:hitBreakpoint)  ERROR list RegExpt empty");
-			qDebug("* " + list.at(0).toLocal8Bit());
-			qDebug("-> " + value);
-			return PROCESS_TERMINED;
-		}
-
 		QByteArray  bkptno = list.at(1).toLocal8Bit();
-		QByteArray fullName = QFileInfo("./"+ list.at(2).toLocal8Bit()).fileName().toLocal8Bit();
+		QByteArray fullName = QFileInfo( list.at(2).toLocal8Bit()).fileName().toLocal8Bit();
 		QByteArray  line = list.at(3).toLocal8Bit();
 
 		QBreakPoint *bp = getBreakPointByName(fullName);
@@ -283,12 +278,13 @@ int GdbBreakPoint::hitBreakpoint(int id, QByteArray data)
 						if(bp->lineInFile.at(i) != line.toInt()) 
 						{
 							processPostMessage(-1,
-								"sender=\"" + name().toLocal8Bit() + "\",event=\"breakpoint-moved\",fileName=\"" + bp->fileName.toLocal8Bit() + "\",beforLine=\"" + QByteArray::number(bp->lineInFile.at(i)) + "\",afterLine=\" "  + line + "\"");
+								"sender=\"" + name().toLocal8Bit() + "\",event=\"notify-breakpoint-moved\",type=\"" + bp->type.at(i) + "\",enable=\"" + bp->enable.at(i) +"\",fileName=\"" + bp->fileName.toLocal8Bit() + "\",beforLine=\"" + QByteArray::number(bp->lineInFile.at(i)) + "\",afterLine=\" "  + line + "\"");
 							qDebug("(Class GdbBreakPoint function process::BreakpointHit) Warnning : Move BreakPoint in line " + QByteArray::number(bp->lineInFile.at(i)) + " to " + line); 
 							bp->lineInFile.replace (i,line.toInt());
-							bp->line.at(i)->setText(line);
+							
+							tabWidget->item(getBreakPoint(bkptno), 3) ->setText(line);
 						}
-						hit(bp , i);
+						hit(bp ,  bkptno.toInt());
 						return PROCESS_TERMINED;
 				}
 			}
@@ -304,36 +300,35 @@ int GdbBreakPoint::hitBreakpoint(int id, QByteArray data)
 /*
 	Enable break
 */
-int GdbBreakPoint::enableBreakpoint(int id, QByteArray data)
+int GdbBreakPoint::enableBreakpoint(QGdbMessageCore m)
 {
-	id = id;
+//	id = id;
 
 	//answerExtention={nobkpt="5",fullname="main.cpp"}
-	QByteArray answerExtention = getParametre("answerExtention=" , data);
+	QByteArray answerExtention = getParametre("answerExtention=" , m.msg);
 	
-	cmd.disconnectEventToProcess(interpreterEnable);
-	cmd.leaveEventToProcess(&interpreterEnable);
-
-//	removeInterpreter();
+	cmd.disconnectEventInterpreter(interpreterEnable);
+	cmd.leaveEventInterpreter(&interpreterEnable);
+	
 	processPostMessage(-1,
-		"sender=\"" + name().toLocal8Bit() + "\",event=\"breakpoint-enabled\",fileName=\"" + getParametre("fileName=", answerExtention) + "\",line=\"" + getParametre("line=", answerExtention) + "\"");
+		"sender=\"" + name().toLocal8Bit() + "\",event=\"notify-breakpoint-enabled\",fileName=\"" + getParametre("fileName=", answerExtention) + "\",line=\"" + getParametre("line=", answerExtention) + "\"");
 	return PROCESS_TERMINED;
 }
 //
 /*
 	Disable break
 */
-int GdbBreakPoint::disableBreakpoint(int id, QByteArray data)
+int GdbBreakPoint::disableBreakpoint(QGdbMessageCore m)
 {
-	id = id;
+//	id = id;
 
-	QByteArray answerExtention = getParametre("answerExtention=" , data);
+	QByteArray answerExtention = getParametre("answerExtention=" , m.msg);
 
-	cmd.disconnectEventToProcess(interpreterDisable);
-	cmd.leaveEventToProcess(&interpreterDisable);
-//removeInterpreter();
+	cmd.disconnectEventInterpreter(interpreterDisable);
+	cmd.leaveEventInterpreter(&interpreterDisable);
+
 	processPostMessage(-1,
-		"sender=\"" + name().toLocal8Bit() + "\",event=\"breakpoint-disabled\",fileName=\"" + getParametre("fileName=", answerExtention) + "\",line=\"" + getParametre("line=", answerExtention) + "\"");
+		"sender=\"" + name().toLocal8Bit() + "\",event=\"notify-breakpoint-disabled\",fileName=\"" + getParametre("fileName=", answerExtention) + "\",line=\"" + getParametre("line=", answerExtention) + "\"");
 	return PROCESS_TERMINED;
 }
 //
@@ -347,19 +342,6 @@ QBreakPoint * GdbBreakPoint::getBreakPointByName(QByteArray fileName)
 	for(int i=0; i<BreakPointList.count() ;i++)
 	{
 		if(BreakPointList.at(i)->fileName == fileName) return BreakPointList.at(i);
-	}
-	return NULL;
-}
-//
-QBreakPoint *GdbBreakPoint::getBreakPointByItem(QTableWidgetItem * item)
-{
-	for(int i=0 ;i<BreakPointList.count(); i++)
-	{
-		for(int j=0; j<BreakPointList.at(i)->enable.count(); j++)
-		{
-			if(item == BreakPointList.at(i)->enable.at(j))
-				return  BreakPointList.at(i);
-		}
 	}
 	return NULL;
 }
@@ -392,7 +374,7 @@ void GdbBreakPoint::toggleBreakPoint(QString fullName, int numLine)
 				QRegExp("^\\(gdb\\)\\s"),
 				"fullname=\"" + fullName + "\",nobkpt=\"" + QString::number(bp->indexInGdb.at(index)) + "\"");
 
-			cmd.connectEventToProcess(interpreterDel, &GdbBreakPoint::deleteBreakpoint);
+			cmd.connectEventInterpreter(interpreterDel, &GdbBreakPoint::deleteBreakpoint);
 			cmd.forceProcess();
 		}
 		else // add
@@ -403,7 +385,7 @@ void GdbBreakPoint::toggleBreakPoint(QString fullName, int numLine)
 				QRegExp("^Breakpoint\\s\\d+\\sat\\s0x[^:]+:\\sfile\\s[^,]+,\\sline\\s\\d+\\."),
 				"");
 
-			cmd.connectEventToProcess(interpreterAdd, &GdbBreakPoint::addBreakpoint);
+			cmd.connectEventInterpreter(interpreterAdd, &GdbBreakPoint::addBreakpoint);
 			cmd.forceProcess();
 		}
 	}
@@ -414,20 +396,23 @@ void GdbBreakPoint::toggleBreakPoint(QString fullName, int numLine)
 			QRegExp("^break\\s[^:]+:\\d+"),
 			QRegExp("^Breakpoint\\s\\d+\\sat\\s0x[^:]+:\\sfile\\s[^,]+,\\sline\\s\\d+\\."),
 			"");
-
 	
-		cmd.connectEventToProcess(interpreterAdd, &GdbBreakPoint::addBreakpoint);
+		cmd.connectEventInterpreter(interpreterAdd, &GdbBreakPoint::addBreakpoint);
 		cmd.forceProcess();
 	}
 }
 // change enable / disable GdbBreakPoint
 void GdbBreakPoint::onEnableChanged(QTableWidgetItem *item)
 {
+	int numBp = tabWidget->item(tabWidget->currentRow(),2)->text().toInt();
+
+	if(item == tabWidget->item(tabWidget->currentRow(),0))
+
 	for(int i=0 ;i<BreakPointList.count(); i++)
 	{
-		for(int j=0; j<BreakPointList.at(i)->enable.count(); j++)
+		for(int j=0; j<BreakPointList.at(i)->indexInGdb.count(); j++)
 		{
-			if(item == BreakPointList.at(i)->enable.at(j))
+			if(numBp == BreakPointList.at(i)->indexInGdb.at(j))
 			{
 				if(item->checkState () == Qt::Checked) 
 				{
@@ -437,17 +422,9 @@ void GdbBreakPoint::onEnableChanged(QTableWidgetItem *item)
 						QRegExp("^\\(gdb\\)\\s"), 	
 						"line=\"" + QByteArray::number(BreakPointList.at(i)->lineInFile.at(j) )+ "\",nobkpt=\"" + QByteArray::number( BreakPointList.at(i)->indexInGdb.at(j) ) + "\",fileName=\"" + BreakPointList.at(i)->fileName.toLocal8Bit() + "\"");
 	
-					cmd.connectEventToProcess(interpreterEnable, &GdbBreakPoint::enableBreakpoint);
+					cmd.connectEventInterpreter(interpreterEnable, &GdbBreakPoint::enableBreakpoint);
 					cmd.forceProcess();
-	/*				QBaseInterpreter interpreter={"breakpoint-enable",
-						QRegExp("^enable\\s\\d+"),
-						QRegExp("^\\(gdb\\)\\s"), 	
-						"line=\"" + QByteArray::number(BreakPointList.at(i)->lineInFile.at(j) )+ "\",nobkpt=\"" + QByteArray::number( BreakPointList.at(i)->indexInGdb.at(j) ) + "\",fileName=\"" + BreakPointList.at(i)->fileName.toLocal8Bit() + "\""};
-
-					addInterpreter(interpreter);
-
-					emit sendRawData(this, "enable " + QByteArray::number(BreakPointList.at(i)->indexInGdb.at(j)));
-	*/			}
+				}
 				else
 				{
 					interpreterDisable = new QGdbInterpreter("breakpoint-disable",
@@ -456,18 +433,9 @@ void GdbBreakPoint::onEnableChanged(QTableWidgetItem *item)
 						QRegExp("^\\(gdb\\)\\s"), 	
 						"line=\"" + QByteArray::number(BreakPointList.at(i)->lineInFile.at(j)) + "\",nobkpt=\"" + QByteArray::number( BreakPointList.at(i)->indexInGdb.at(j) ) + "\",fileName=\"" + BreakPointList.at(i)->fileName.toLocal8Bit() + "\"");
 	
-					cmd.connectEventToProcess(interpreterDisable, &GdbBreakPoint::disableBreakpoint);
+					cmd.connectEventInterpreter(interpreterDisable, &GdbBreakPoint::disableBreakpoint);
 					cmd.forceProcess();
-
-/*					QBaseInterpreter interpreter={"breakpoint-disable",
-						QRegExp("^disable\\s\\d+"),
-						QRegExp("^\\(gdb\\)\\s"),
-						"line=\"" + QByteArray::number(BreakPointList.at(i)->lineInFile.at(j)) + "\",nobkpt=\"" + QByteArray::number( BreakPointList.at(i)->indexInGdb.at(j) ) + "\",fileName=\"" + BreakPointList.at(i)->fileName.toLocal8Bit() + "\""};
-
-					addInterpreter(interpreter);
-					
-					emit sendRawData(this, "disable " + QByteArray::number(BreakPointList.at(i)->indexInGdb.at(j)));
-*/				}
+				}
 			}
 		}
 	}
@@ -475,12 +443,16 @@ void GdbBreakPoint::onEnableChanged(QTableWidgetItem *item)
 //
 void GdbBreakPoint::onConditionChanged(QTableWidgetItem *item)
 {
+	int numBp = tabWidget->item(tabWidget->currentRow(),2)->text().toInt();
+
+
 	// find item in GdbBreakPointList
 	for(int i=0 ;i<BreakPointList.count(); i++)
 	{
-		for(int j=0; j<BreakPointList.at(i)->condition.count(); j++)
+		for(int j=0; j<BreakPointList.at(i)->indexInGdb.count(); j++)
 		{
-			if(item == BreakPointList.at(i)->condition.at(j))
+//			if(item == BreakPointList.at(i)->condition.at(j))
+			if(numBp == BreakPointList.at(i)->indexInGdb.at(j))
 			{
 				if(item->text().isEmpty() && !bJustAdd) 
 				{
@@ -512,53 +484,47 @@ void GdbBreakPoint::onConditionChanged(QTableWidgetItem *item)
 //
 // Contener
 //
-void GdbBreakPoint::addRowInTab(QBreakPoint *bp ,QByteArray number, QByteArray line, QByteArray file)
+void GdbBreakPoint::addRowInTab(/*QBreakPoint *bp )//,*/QByteArray number, QByteArray line, QByteArray file)
 {
+
 	// because when you add new row in tab
 	// it send itemChanged signal!
 	bJustAdd = true;
 
 	// recherche le nombre de ligne
-	int index = tabWidget->rowCount();
-
-	// create a new item
-	bp->enable << new QTableWidgetItem();
-	bp->condition << new QTableWidgetItem();
-	bp->bkptno << new QTableWidgetItem();
-	bp->line << new QTableWidgetItem();
-	bp->file << new QTableWidgetItem();
+	int numberOfRow = tabWidget->rowCount();
 
 	// add row
-	tabWidget->insertRow(index);
-	tabWidget->setRowHeight ( index, 20 );
+	tabWidget->insertRow(numberOfRow);
 
-	int nbr = bp->bkptno.count();
+//QMetaObject::invokeMethod(tabWidget, SLOT(setRowHeight ( int, int)), 
+//	Q_ARG(int, numberOfRow,).Q_ARG(int, 20);
+	tabWidget->setRowHeight ( numberOfRow, 20 );
+
+	tabWidget->setItem(numberOfRow,0, new QTableWidgetItem);//bp->enable.at(nbr-1));
+	tabWidget->setItem(numberOfRow,1, new QTableWidgetItem);//bp->condition.at(nbr-1));
+	tabWidget->setItem(numberOfRow,2, new QTableWidgetItem);//bp->bkptno.at(nbr-1));
+	tabWidget->setItem(numberOfRow,3, new QTableWidgetItem);//bp->line.at(nbr-1));
+	tabWidget->setItem(numberOfRow,4, new QTableWidgetItem);//bp->file.at(nbr-1));
 
 	// set item read only
-	Qt::ItemFlags readOnly = bp->file.at(nbr-1)->flags() ^ Qt::ItemIsEditable;
+	Qt::ItemFlags readOnly =  Qt::ItemIsEnabled | Qt::ItemIsSelectable  | Qt::ItemIsUserCheckable;
 
-	bp->enable.at(nbr-1)->setIcon(QIcon(""));
-	bp->enable.at(nbr-1)->setCheckState(Qt::Checked);
- 	bp->enable.at(nbr-1)->setFlags(readOnly );
+	tabWidget->item(numberOfRow, 0)->setIcon(QIcon(""));
+	tabWidget->item(numberOfRow, 0)->setCheckState(Qt::Checked);
+ 	tabWidget->item(numberOfRow, 0)->setFlags(readOnly );
 
-	bp->condition.at(nbr-1)->setText("none"); 
-	bp->condition.at(nbr-1)->setFlags(readOnly ); 
+	tabWidget->item(numberOfRow, 1)->setText("none"); 
+	tabWidget->item(numberOfRow, 1)->setFlags(readOnly ); 
 
-	bp->bkptno.at(nbr-1)->setText(number); 
-	bp->bkptno.at(nbr-1)->setFlags(readOnly );
+	tabWidget->item(numberOfRow, 2)->setText(number); 
+	tabWidget->item(numberOfRow, 2)->setFlags(readOnly );
 
-	bp->file.at(nbr-1)->setText(file); 
-	bp->file.at(nbr-1)->setFlags(readOnly );
+	tabWidget->item(numberOfRow, 4)->setText(file); 
+	tabWidget->item(numberOfRow, 4)->setFlags(readOnly );
 
-	bp->line.at(nbr-1)->setText(line); 
-	bp->line.at(nbr-1)->setFlags(readOnly );
-
-	tabWidget->setItem(index,0, bp->enable.at(nbr-1));
-	tabWidget->setItem(index,1, bp->condition.at(nbr-1));
-	tabWidget->setItem(index,2, bp->bkptno.at(nbr-1));
-	tabWidget->setItem(index,3, bp->line.at(nbr-1));
-	tabWidget->setItem(index,4, bp->file.at(nbr-1));
-
+	tabWidget->item(numberOfRow, 3)->setText(line); 
+	tabWidget->item(numberOfRow, 3)->setFlags(readOnly );
 }
 //
 // show GdbBreakPoint Hit in tabWidget (icon)
@@ -568,19 +534,80 @@ void GdbBreakPoint::hit(QBreakPoint *bp, int index)
 
 	for(int i=0; i< tabWidget->rowCount(); i++)
 	{
-		QTableWidgetItem *p = tabWidget->item(i,0);
-		if(bp && p == bp->enable.at(index))
+		QTableWidgetItem *p = tabWidget->item(i,2);
+		if(bp && p->text() == QString::number(index))
 		{
-			p->setIcon(QIcon(icon_hit)); 
-			p->setText("hit");
-			tabWidget->selectRow(index);
+			tabWidget->item(i,0)->setIcon(QIcon(icon_hit)); 
+			tabWidget->item(i,0)->setText("hit");
+			tabWidget->selectRow(i);
 		}
 		else
 		{
-			p->setText("");
-			p->setIcon(QIcon("")); 
+			tabWidget->item(i,0)->setText("");
+			tabWidget->item(i,0)->setIcon(QIcon("")); 
 		}
 	}
 }
 //
+void GdbBreakPoint::onBreakpointDoubleClicked(QTableWidgetItem *it)
+{
+	int numRow = tabWidget->currentRow();
 
+	tabWidget->item(numRow, 2);
+	processPostMessage(-1,
+		"sender=\"" + name().toLocal8Bit() + "\",event=\"notify-goto-breakpoint\",fileName=\"" + 	tabWidget->item(numRow, 4)->text().toLocal8Bit() + "\",line=\"" + 	tabWidget->item(numRow, 3 )->text().toLocal8Bit()+ "\"" );
+}
+
+
+
+/*
+bon lors de la suppression d'un breakpoint on envoit a gdb :
+
+(gdb) delete 1
+(gdb) _
+
+on vois que gdb n'est pas tres parlant en ce qui concerne la commande executée
+
+on va donc mettre en place un interpreter
+*/
+/*
+ interpreterDel = new QGdbInterpreter("breakpoint-deleted", // nom de l'evenement
+   "delete " + QByteArray::number(bp->indexInGdb.at(index)),// commande a executer
+   QRegExp("^delete\\s\\d+"), // meme commande mais en QRexgExp
+   QRegExp("^\\(gdb\\)\\s"),  // la reponce attendue
+   // des informations suplementaires
+   "fullname=\"" + fullName + "\",nobkpt=\"" + QString::number(bp->indexInGdb.at(index)) + "\"");
+
+   // on connect l'interpreter a la fonction deleteBreakpoint
+   cmd.connectEventToProcess(interpreterDel, &GdbBreakPoint::deleteBreakpoint);
+   // on force l'execution de la commande 
+   cmd.forceProcess();
+*/
+/*
+-----------------
+
+un fois la commande executer le parser recherche une relation entre la command 
+en cours (commande QRegExp) et  la reponce attendue (reponce QRegExp)
+
+si c'est bon le parser emet :
+^info,interpreter="GdbBreakPoint",event="breakpoint-deleted",answerExtention={fullname="main.cpp",nobkpt="1"},answerGdb="(gdb) ",currentCmd="delete 1"  id : 2
+
+sinon 
+
+^error,.....
+
+C'est est un peut plus parlant :)
+
+Le kernelDispatcher() va mettre en relation l'interpreter et la fonction, on
+a donc appel de la fonction deleteBreakpoint()
+Celle-ci effectue quelque truc et supprime l'interpreter par
+*/
+/*
+  cmd.disconnectEventToProcess(interpreterDel);
+  // mise a null du pointeur
+  cmd.leaveEventToProcess(&interpreterDel);
+*/
+/*
+le leave... evite les fuite memoire (new) et surtout met a NULL le pointeur
+ce qui evite les crash aleatoire :)
+*/

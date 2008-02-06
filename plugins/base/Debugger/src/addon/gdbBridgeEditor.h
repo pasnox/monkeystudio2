@@ -9,28 +9,21 @@
 #include <QObject>
 #include <QTextEdit>
 
-#include "./kernel/gdbBase.h"
+#include "./kernel/gdbCore.h"
+#include "./kernel/gdbTemplateCore.h"
 
-class GdbBridgeEditor : public GdbBase
+class GdbBridgeEditor : public GdbCore
 {
 	Q_OBJECT
 
-private: // variable
-
-	bool bJustAdd;
-	bool bTargetLoaded;
-	bool bTargetRunning;
-	bool bGdbStarted;
-
 
 public : // function
-	GdbBridgeEditor(QWidget *p=0);
+	GdbBridgeEditor(GdbParser *p);
 	~GdbBridgeEditor();
 	
-	int process(int id, QByteArray);
-	int processError(int , QByteArray) ;
+	int process(QGdbMessageCore);
+	int processError(QGdbMessageCore) ;
 	void processExit();
-	int processGeneric(int , QByteArray) ;
 
 	void gdbStarted();
 	void gdbFinished();
@@ -41,22 +34,20 @@ public : // function
 	void targetExited();
 
 	QString name();
-	QWidget * widget();
 
-	void setupDockWidget(QMainWindow *);
-
-	int processBackTrace(int id , QByteArray data);
-	int processBreakpointMoved(int id , QByteArray data);
-	int processBreakpointAdd(int id , QByteArray data);
-	int processBreakpointDeleted(int id , QByteArray data);
-	int processBreakpointEnabled(int id , QByteArray data);
-	int processBreakpointDisabled(int id , QByteArray data);
-	int processBreakpointConditionned(int id , QByteArray data);
-	int processBreakpointUnConditionned(int id , QByteArray data);
+	int processBackTrace(QGdbMessageCore);
+	int processBreakpointMoved(QGdbMessageCore);
+	int processBreakpointAdd(QGdbMessageCore);
+	int processBreakpointDeleted(QGdbMessageCore);
+	int processBreakpointEnabled(QGdbMessageCore);
+	int processBreakpointDisabled(QGdbMessageCore);
+	int processBreakpointConditionned(QGdbMessageCore);
+	int processBreakpointUnConditionned(QGdbMessageCore);
+	int processGotoBreakpoint(QGdbMessageCore);
 
 private: 
 	QTextEdit *mWidget;
-	GdbTemplateProcess<GdbBridgeEditor> cmd;
+	GdbTemplateCore<GdbBridgeEditor> cmd;
 
 signals:
 
@@ -65,6 +56,7 @@ signals:
 	void breakpointEnabled(QByteArray , int , bool);
 	void backtrace(QByteArray, int);
 	void breakpointMoved(QByteArray , int, int);
+	void gotoBreakpoint(QByteArray, int);
 };
 
 #endif

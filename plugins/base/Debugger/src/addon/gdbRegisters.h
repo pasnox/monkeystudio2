@@ -1,5 +1,5 @@
 /*
-	GdbControl
+	GdbRegisters
 */
 
 #ifndef GDBREGISTERS_H
@@ -7,31 +7,25 @@
 
 
 #include <QObject>
-#include <QTextEdit>
+#include <QTableWidget>
+#include <QStringListModel>
 
-#include "./kernel/gdbBase.h"
+#include "./kernel/gdbCore.h"
+#include "./kernel/gdbTemplateCore.h"
 
-class GdbRegisters : public GdbBase
+class GdbRegisters : public GdbCore
 {
 	Q_OBJECT
 
-private: // variable
-
-	bool bJustAdd;
-	bool bTargetLoaded;
-	bool bTargetRunning;
-	bool bGdbStarted;
-
-
 public : // function
-	GdbRegisters(QWidget *p=0);
+	GdbRegisters( GdbParser *p);
 	~GdbRegisters();
 	
-	int process(int id, QByteArray);
-	int processError(int , QByteArray) ;
+	int process(QGdbMessageCore);
+	int processError(QGdbMessageCore) ;
 	void processExit();
 
-	int processRegisters(int id, QByteArray data);
+	int processRegisters(QGdbMessageCore);
 
 	void gdbStarted();
 	void gdbFinished();
@@ -42,18 +36,27 @@ public : // function
 	void targetExited();
 
 	QString name();
-	QWidget * widget();
-
-	void setupDockWidget(QMainWindow *);
 
 public :
 
 	QGdbInterpreter *interpreterRegisters;
 
 private: // function
-	QTextEdit *mWidget;
-	bool enteringBlock;
-	GdbTemplateProcess<GdbRegisters> cmd;
+
+	QTableWidget *mWidget;
+//	QStringListModel *model;
+	QByteArray widgetSize;
+
+	int numberOfRegisters;
+
+	GdbTemplateCore<GdbRegisters> cmd;
+
+	void showColor(QTableWidgetItem *p, QString a);
+
+public slots:
+
+	void onTopLevelChanged ( bool b);
+
 };
 
 #endif

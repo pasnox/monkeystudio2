@@ -9,33 +9,26 @@
 #include <QObject>
 #include <QTextEdit>
 
-#include "./kernel/gdbBase.h"
+#include "./kernel/gdbCore.h"
+#include "./kernel/gdbTemplateCore.h"
 
-
-class GdbAnswer : public GdbBase
+class GdbAnswer : public GdbCore
 {
 
 		Q_OBJECT
 
-private: // variable
-
-	bool bTargetLoaded;
-	bool bTargetRunning;
-	bool bGdbStarted;
-
-
 public : // function
 
 
-	GdbAnswer(QWidget *p=0);
+	GdbAnswer(GdbParser *p=0);
 	~GdbAnswer();
 	
-	int process(int id, QByteArray);
-	int processError(int , QByteArray) ;
+	int process(QGdbMessageCore m);
+	int processError(QGdbMessageCore m) ;
 	void processExit();
 
-	int processNo(int id, QByteArray);
-	int processYes(int id, QByteArray);
+	int processNo(QGdbMessageCore m);
+	int processYes(QGdbMessageCore m);
 	
 	void gdbStarted();
 	void gdbFinished();
@@ -46,14 +39,11 @@ public : // function
 	void targetExited();
 
 	QString name();
-	QWidget * widget();
-
-	void setupDockWidget(QMainWindow *);
 
 private: // function
 
 	QTextEdit *mWidget;
-	GdbTemplateProcess<GdbAnswer> cmd;
+	GdbTemplateCore<GdbAnswer> cmd;
 	QGdbInterpreter * interpreterNo;
 	QGdbInterpreter * interpreterYes;
 };

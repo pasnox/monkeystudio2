@@ -1,20 +1,34 @@
 //==========================================
 
 /*
-	Class GdbControl
+	Class GdbBackTrace
 */
 
 #include "./addon/gdbBackTrace.h"
 
 #include <QFileInfo>
-//#include <QMessageBox>
+#include <QTextCursor>
 
-GdbBackTrace::GdbBackTrace(QWidget *o) :  GdbBase(o), bJustAdd(0), bTargetLoaded(0), bTargetRunning(0), bGdbStarted(0)
+GdbBackTrace::GdbBackTrace(GdbParser *p) :  GdbCore(p)
 {
-	mWidget = new QTextEdit(this);
+	qRegisterMetaType<QTextCursor>( "QTextCursor" );
+
+	mWidget = new QTextEdit();
 	mWidget->setEnabled(false);
 
+	getContainer()->setWidget(mWidget);
+	getContainer()->setWindowTitle(name());
+
 	cmd.setClass(this);
+	cmd.connectEventStart("breakpoint-hit" , NULL);
+	cmd.connectEventStart("end-stepping-range" , NULL);
+
+	/*
+		Backtrace line splitted in two lines
+			"#0  UIForm (this=0x80dc268, parent=0x0) "
+			"  at src/ui/UIForm.cpp:43"
+	*/
+	getParser()->addRestorLine(QRegExp("^#0\\s.*$") , QRegExp("^[^#].*\\sat\\s.*:\\d+$"));
 
 	interpreterBackTrace = new QGdbInterpreter("back-trace",
 			"bt",
@@ -22,7 +36,7 @@ GdbBackTrace::GdbBackTrace(QWidget *o) :  GdbBase(o), bJustAdd(0), bTargetLoaded
 			QRegExp("^#0\\s.*"),
 			"");
 
-	cmd.connectEventToProcess(interpreterBackTrace,  &GdbBackTrace::processBacktrace);
+	cmd.connectEventInterpreter(interpreterBackTrace,  &GdbBackTrace::processBacktrace);
 
 
 	interpreterInfoSource = new QGdbInterpreter("info-source",
@@ -31,7 +45,7 @@ GdbBackTrace::GdbBackTrace(QWidget *o) :  GdbBase(o), bJustAdd(0), bTargetLoaded
 			QRegExp("^Located\\sin\\s.*"),
 			"");
 
-	cmd.connectEventToProcess(interpreterInfoSource,  &GdbBackTrace::processInfosource);
+	cmd.connectEventInterpreter(interpreterInfoSource,  &GdbBackTrace::processInfosource);
 } 
 //
 GdbBackTrace::~GdbBackTrace()
@@ -43,70 +57,60 @@ QString GdbBackTrace::name()
 	 return "GdbBackTrace"; 
 }
 //
-QWidget * GdbBackTrace::widget()
-{
-	return (QWidget*) mWidget ; 
-}
-//
 void GdbBackTrace::gdbStarted()
 {
-	bGdbStarted = true;
+	GdbCore::gdbStarted();
 }
 //
 void GdbBackTrace::gdbFinished()
 {
-	bGdbStarted = false;
-	bTargetLoaded = false;
+	GdbCore::gdbFinished();
 	mWidget->setEnabled(false);
 }
 //
 void GdbBackTrace::targetLoaded()
 {
-	bTargetLoaded = true;
+	GdbCore::targetLoaded();
 }
 //
 void GdbBackTrace::targetRunning()
 {
-	bTargetRunning = true;
+	GdbCore::targetRunning();
 	mWidget->setEnabled(false);
 }
 //
 void GdbBackTrace::targetStopped()
 {
-	bTargetRunning = false;
+	GdbCore::targetStopped();
 	mWidget->setEnabled(true);
 }
 //
 void GdbBackTrace::targetExited()
 {
-	bTargetRunning = false;
+	GdbCore::targetExited();
 	mWidget->setEnabled(false);
 }
 //
 void GdbBackTrace::setupDockWidget(QMainWindow *mw)
 {
-	mw = mw;
+/*	mw = mw;
 	setWidget(widget());
 	setWindowTitle(name());
 	setFeatures (QDockWidget::DockWidgetMovable |QDockWidget::DockWidgetFloatable);
 	setAllowedAreas(Qt::AllDockWidgetAreas);
-}
+*/}
 //
 
-int GdbBackTrace::process(int id,QByteArray data)
+int GdbBackTrace::process(QGdbMessageCore m )
 {
-	if(!bGdbStarted || bTargetRunning || !bTargetLoaded) return PROCESS_TERMINED;
-
-	return cmd.dispatchProcess(id , data);
+	return cmd.dispatchProcess(m);
 }
 //
-int GdbBackTrace::processError(int id, QByteArray data)
+int GdbBackTrace::processError(QGdbMessageCore m)
 {
-	id = id;
 	// TODO
  
-	mWidget->append(getParametre("answerGdb=", data));
-	buffer.clear();
+	mWidget->append(getParametre("answerGdb=", m.msg));
 
 	return PROCESS_TERMINED;
 
@@ -116,66 +120,27 @@ void GdbBackTrace::processExit()
 {
 }
 //
-int GdbBackTrace::processBacktrace(int id, QByteArray data)
+int GdbBackTrace::processBacktrace(QGdbMessageCore m)
 {
-id = id;
-		QByteArray value = getParametre("answerGdb=", data);
 
-		//#0  main (argc=1, argv=0xbf9b29c4) at src/main.cpp:20
-		//#0  main (argc=Cannot access memory at address 0x0) at src/main.cpp:13
-		//#0  QObject::connect(QObject const*, char const*, QObject const*, char const*, Qt::ConnectionType) (sender=0x22fde0, signal=0x45d938 "2lastWindowClosed()  receiver=0x22fde0, method=0x45d930 1quit(), type=AutoConnection)   at kernel/qobject.cpp:2482
+		QByteArray value = getParametre("answerGdb=", m.msg);
 
-		/*
-		#0  QObject::connect(QObject const*, char const*, QObject const*, char const*, Qt::ConnectionType) (sender=0x22fde0, signal=0x45d938 "2lastWindowClosed()
-		    receiver=0x22fde0, method=0x45d930 1quit(), type=AutoConnection)
-		    at kernel/qobject.cpp:2482
-		*/
-
-		QRegExp exp(".*\\sat\\s([^:]+):(\\d+)$" );
-		if(exp.exactMatch( buffer + value))
+		QRegExp exp("^#0.*\\sat\\s([^:]+):(\\d+)$" );
+		if(exp.exactMatch( value))
 		{
 			QStringList list = exp.capturedTexts();
 
 			line = list.at(2);
 		
 			mWidget->append("(dispatching) Current file line : " + line);
-			buffer.clear();
-
-			/* restor interpreter if line is splited */
-			QGdbInterpreter * tmp = interpreterBackTrace;
-			
-			interpreterBackTrace =  cmd.modifyEventToProcess(interpreterBackTrace , new QGdbInterpreter("back-trace",
-				"bt",
-				QRegExp("^bt"),
-				QRegExp("^#0\\s.*"),
-				""));
-			
-			cmd.leaveEventToProcess(&tmp);
-			
-			return PROCESS_TERMINED;
 		}
-		else
-		{ 
-			buffer = value;
-
-			QGdbInterpreter * tmp = interpreterBackTrace;
-			
-			interpreterBackTrace = cmd.modifyEventToProcess(interpreterBackTrace,   new QGdbInterpreter("back-trace",
-				"bt",
-				QRegExp("^bt"),
-				QRegExp(".*"),
-				""));
-			
-			cmd.leaveEventToProcess(&tmp);
-			
-			return PROCESS_WAITING;
-		}
+		return PROCESS_TERMINED;
 }
 //
-int GdbBackTrace::processInfosource(int id, QByteArray data)
+int GdbBackTrace::processInfosource(QGdbMessageCore m)
 {
-	id = id;
-	QByteArray value = getParametre("answerGdb=", data);
+
+	QByteArray value = getParametre("answerGdb=", m.msg);
 
 	QRegExp exp("Located in (.*)" );
 	if(exp.exactMatch( value))
@@ -186,11 +151,10 @@ int GdbBackTrace::processInfosource(int id, QByteArray data)
 		mWidget->append("(dispatching) Current file : " + fileName);
 		// notify other plugin 
 
-		processPostMessage(0, "sender=\"" + name().toLocal8Bit() + "\",event=\"back-trace\",fileName=\"" + fileName.toLocal8Bit() + "\",line=\"" + line.toLocal8Bit() + "\"");
+		processPostMessage(0, "sender=\"" + name().toLocal8Bit() + "\",event=\"notify-back-trace\",fileName=\"" + fileName.toLocal8Bit() + "\",line=\"" + line.toLocal8Bit() + "\"");
 
 		return PROCESS_TERMINED; 
 	}
-	
 	return PROCESS_WAITING;
 }
 //

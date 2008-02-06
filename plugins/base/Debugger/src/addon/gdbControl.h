@@ -2,8 +2,8 @@
 	GdbControl
 */
 
-#ifndef GdbControl_H
-#define GdbControl_H
+#ifndef GDBCONTROL_H
+#define GDBCONTROL_H
 
 
 #include <QObject>
@@ -11,19 +11,13 @@
 #include <QHBoxLayout>
 #include <QFrame>
 
-#include "./kernel/gdbBase.h"
+#include "./kernel/gdbCore.h"
+#include "./kernel/gdbTemplateCore.h"
 
-class GdbControl : public GdbBase
+class GdbControl : public GdbCore
 {
 	Q_OBJECT
 
-private: // variable
-
-	bool bJustAdd;
-	bool bTargetLoaded;
-	bool bTargetRunning;
-	bool bGdbStarted;
-	
 	QPushButton *bStepOver;
 	QPushButton *bRun ;
 	QPushButton *bStepInto ;
@@ -32,12 +26,16 @@ private: // variable
 	QPushButton *bLoadTarget;
 
 public : // function
-	GdbControl(QWidget *p=0);
+	GdbControl( GdbParser *p);
 	~GdbControl();
 	
-	int process(int id, QByteArray);
-	int processError(int , QByteArray) ;
+	int process(QGdbMessageCore);
+	int processError(QGdbMessageCore) ;
 	void processExit();
+
+	int processSteps(QGdbMessageCore);
+	int processQuestion(QGdbMessageCore);
+
 
 	void gdbStarted();
 	void gdbFinished();
@@ -48,10 +46,10 @@ public : // function
 	void targetExited();
 
 	QString name();
-	QWidget * widget();
+/*	QWidget * widget();
 
 	void setupDockWidget(QMainWindow *);
-
+*/
 public slots:
 
 	void onRun();
@@ -63,9 +61,11 @@ public slots:
 
 private: // function
 	QWidget *mWidget;
-	GdbTemplateProcess<GdbControl> cmd;
+	GdbTemplateCore<GdbControl> cmd;
 
 	QGdbInterpreter *interpreterEndSteppingRange;
+	QGdbInterpreter *interpreterKill;
+	QGdbInterpreter *interpreterStop;
 
 };
 

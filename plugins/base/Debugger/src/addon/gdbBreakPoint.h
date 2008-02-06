@@ -11,25 +11,22 @@
 #include <QTableWidgetItem>
 #include <QFileInfo>
 
-#include "./kernel/gdbBase.h"
+#include "./kernel/gdbCore.h"
+#include "./kernel/gdbTemplateCore.h"
+
 
 struct BreakPoint
 {
 	QString fileName;
 	QList<int> lineInFile;
 	QList<int> indexInGdb;
-
-	QList<QTableWidgetItem *> enable;
-	QList<QTableWidgetItem *> condition;
-	QList<QTableWidgetItem *> bkptno;
-	QList<QTableWidgetItem *> line;
-	QList<QTableWidgetItem *> file;
-	
+	QList<QByteArray> type;
+	QList<QByteArray> enable;
 };
 typedef BreakPoint QBreakPoint;
 
 
-class GdbBreakPoint : public GdbBase
+class GdbBreakPoint : public GdbCore
 {
 	Q_OBJECT
 
@@ -39,16 +36,13 @@ private: // variable
 	QBreakPointList BreakPointList;
 	QString icon_hit;
 	bool bJustAdd;
-	bool bTargetLoaded;
-	bool bTargetRunning;
-	bool bGdbStarted;
 
 public : // function
-	GdbBreakPoint(QWidget *p=0);
+	GdbBreakPoint(GdbParser *p);
 	~GdbBreakPoint();
 	
-	int process(int , QByteArray);
-	int processError(int , QByteArray) ;
+	int process(QGdbMessageCore);
+	int processError(QGdbMessageCore) ;
 	void processExit();
 	
 	void gdbStarted();
@@ -60,44 +54,44 @@ public : // function
 	void targetExited();
 
 	QString name();
-	QWidget * widget();
-
-	void setupDockWidget(QMainWindow *);
 
 public slots:
 	void onEnableChanged(QTableWidgetItem *item);
 	void onConditionChanged(QTableWidgetItem *item);
+	void onBreakpointDoubleClicked(QTableWidgetItem *it);
+
+	void onTopLevelChanged ( bool b);
 
 public :
-	int processFromEditor(int id, QByteArray data);
+	int processFromEditor(QGdbMessageCore);
 
 private :
 
-	GdbTemplateProcess<GdbBreakPoint> cmd;
+	GdbTemplateCore<GdbBreakPoint> cmd;
 	QGdbInterpreter *interpreterAdd;
 	QGdbInterpreter *interpreterDel;
 	QGdbInterpreter *interpreterEnable;
 	QGdbInterpreter *interpreterDisable;
 
+	QByteArray widgetSize;
+
 private : // function
 
-	
+	int addBreakpoint(QGdbMessageCore);
+	int deleteBreakpoint(QGdbMessageCore);
+	int hitBreakpoint(QGdbMessageCore);
 
-	int addBreakpoint(int, QByteArray);
-	int deleteBreakpoint(int, QByteArray);
-	int hitBreakpoint(int, QByteArray);
-
-	int enableBreakpoint(int, QByteArray);
-	int disableBreakpoint(int, QByteArray);
+	int enableBreakpoint(QGdbMessageCore);
+	int disableBreakpoint(QGdbMessageCore);
 
 	void toggleBreakPoint(QString fullName, int numLine);
 	QBreakPoint * getBreakPointByName(QByteArray fileName);
-	QBreakPoint * getBreakPointByItem(QTableWidgetItem * item);
+//	QBreakPoint * getBreakPointByItem(QTableWidgetItem * item);
 	int getBreakPoint(QString);
 	int asBreakPointAt(QBreakPoint *GdbBreakPoint, int);
 
 	QTableWidget *tabWidget;
-	void addRowInTab(QBreakPoint *bp ,QByteArray number, QByteArray line, QByteArray file);
+	void addRowInTab(/*QBreakPoint *bp ,*/QByteArray number, QByteArray line, QByteArray file);
 	void hit(QBreakPoint * ,int);
 };
 

@@ -17,22 +17,26 @@
 
 #include <QFileInfo>
 
-GdbBridgeEditor::GdbBridgeEditor(QWidget *o) :  GdbBase(o), bJustAdd(0), bTargetLoaded(0), bTargetRunning(0), bGdbStarted(0)
+GdbBridgeEditor::GdbBridgeEditor( GdbParser *p) :  GdbCore( p)
 {
-	mWidget = new QTextEdit(this);
-//	mWidget->setEnabled(false);
+	mWidget = new QTextEdit();
+	mWidget->setEnabled(false);
+
+	getContainer()->setWidget(mWidget);
+	getContainer()->setWindowTitle(name());
 
 	cmd.setClass(this);
 
-	cmd.connectEventNotifyToProcess("back-trace", &GdbBridgeEditor::processBackTrace);
-	cmd.connectEventNotifyToProcess("breakpoint-moved", &GdbBridgeEditor::processBreakpointMoved);
-	cmd.connectEventNotifyToProcess("breakpoint-add", &GdbBridgeEditor::processBreakpointAdd);
-	cmd.connectEventNotifyToProcess("breakpoint-deleted", &GdbBridgeEditor::processBreakpointDeleted);
-	cmd.connectEventNotifyToProcess("breakpoint-enabled", &GdbBridgeEditor::processBreakpointEnabled);
-	cmd.connectEventNotifyToProcess("breakpoint-disabled", &GdbBridgeEditor::processBreakpointDisabled);
-	cmd.connectEventNotifyToProcess("breakpoint-conditionned", &GdbBridgeEditor::processBreakpointConditionned);
-	cmd.connectEventNotifyToProcess("breakpoint-unconditionned", &GdbBridgeEditor::processBreakpointUnConditionned);
-} 
+	cmd.connectEventNotify("notify-back-trace", &GdbBridgeEditor::processBackTrace);
+	cmd.connectEventNotify("notify-breakpoint-moved", &GdbBridgeEditor::processBreakpointMoved);
+	cmd.connectEventNotify("notify-breakpoint-add", &GdbBridgeEditor::processBreakpointAdd);
+	cmd.connectEventNotify("notify-breakpoint-deleted", &GdbBridgeEditor::processBreakpointDeleted);
+	cmd.connectEventNotify("notify-breakpoint-enabled", &GdbBridgeEditor::processBreakpointEnabled);
+	cmd.connectEventNotify("notify-breakpoint-disabled", &GdbBridgeEditor::processBreakpointDisabled);
+	cmd.connectEventNotify("notify-breakpoint-conditionned", &GdbBridgeEditor::processBreakpointConditionned);
+	cmd.connectEventNotify("notify-breakpoint-unconditionned", &GdbBridgeEditor::processBreakpointUnConditionned);
+	cmd.connectEventNotify("notify-goto-breakpoint", &GdbBridgeEditor::processGotoBreakpoint);
+}
 //
 GdbBridgeEditor::~GdbBridgeEditor()
 {
@@ -43,67 +47,50 @@ QString GdbBridgeEditor::name()
 	 return "GdbBridgeEditor"; 
 }
 //
-QWidget * GdbBridgeEditor::widget()
-{
-	return (QWidget*) mWidget ; 
-}
-//
 void GdbBridgeEditor::gdbStarted()
 {
-	bGdbStarted = true;
+	GdbCore::gdbStarted();
 }
 //
 void GdbBridgeEditor::gdbFinished()
 {
-	bGdbStarted = false;
-	bTargetLoaded = false;
+	GdbCore::gdbFinished();
 	mWidget->setEnabled(false);
 }
 //
 void GdbBridgeEditor::targetLoaded()
 {
-	bTargetLoaded = true;
+	GdbCore::targetLoaded();
 }
 //
 void GdbBridgeEditor::targetRunning()
 {
-	bTargetRunning = true;
+	GdbCore::targetRunning();
 	mWidget->setEnabled(false);
 }
 //
 void GdbBridgeEditor::targetStopped()
 {
-	bTargetRunning = false;
+	GdbCore::targetStopped();
 	mWidget->setEnabled(true);
 }
 //
 void GdbBridgeEditor::targetExited()
 {
-	bTargetRunning = false;
+	GdbCore::targetExited();
 	mWidget->setEnabled(false);
 }
 //
-void GdbBridgeEditor::setupDockWidget(QMainWindow *mw)
+int GdbBridgeEditor::process(QGdbMessageCore m)
 {
-mw = mw;
-	setWidget(widget());
-	setWindowTitle(name());
-	setFeatures (QDockWidget::DockWidgetMovable |QDockWidget::DockWidgetFloatable);
-	setAllowedAreas(Qt::AllDockWidgetAreas);
+	return cmd.dispatchProcess(m);
 }
 //
-int GdbBridgeEditor::process(int id,QByteArray data)
+int GdbBridgeEditor::processError(QGdbMessageCore m)
 {
-	if(!bGdbStarted || bTargetRunning || !bTargetLoaded) return PROCESS_TERMINED;
 
-	return cmd.dispatchProcess(id ,data);
-}
-//
-int GdbBridgeEditor::processError(int id, QByteArray data)
-{
-id = id;
 	// TODO
-	mWidget->append(getParametre("answerGdb=", data));
+	mWidget->append(getParametre("answerGdb=", m.msg));
 
 	return PROCESS_TERMINED;
 }
@@ -112,74 +99,65 @@ void GdbBridgeEditor::processExit()
 {
 }
 //
-int GdbBridgeEditor::processBackTrace(int id , QByteArray data)
+int GdbBridgeEditor::processBackTrace(QGdbMessageCore m)
 {	
-id = id;
-	emit backtrace(getParametre("fileName=", data), getParametre("line=", data).toInt());
+	emit backtrace(getParametre("fileName=", m.msg), getParametre("line=", m.msg).toInt());
 	mWidget->append("move icon back trace in editor");
 	return PROCESS_TERMINED;
 }
 //
-int GdbBridgeEditor::processBreakpointMoved(int id , QByteArray data)
+int GdbBridgeEditor::processBreakpointMoved(QGdbMessageCore m)
 {
-id = id;
-	emit breakpointMoved(getParametre("fileName=", data), getParametre("beforLine=", data).toInt(), getParametre("afterLine=", data).toInt());
+	emit breakpointMoved(getParametre("fileName=", m.msg), getParametre("beforLine=", m.msg).toInt(), getParametre("afterLine=", m.msg).toInt());
 	mWidget->append("move icon breakpoint in editor");
 	return PROCESS_TERMINED;
 }
 //
-int GdbBridgeEditor::processBreakpointAdd(int id , QByteArray data)
+int GdbBridgeEditor::processBreakpointAdd(QGdbMessageCore m)
 {
-id = id;
-	emit breakpoint(getParametre("fileName=", data), getParametre("line=", data).toInt(), true);
+	emit breakpoint(getParametre("fileName=", m.msg), getParametre("line=", m.msg).toInt(), true);
 	mWidget->append("add icon in editor");
 	return PROCESS_TERMINED;
 }
 //
-int GdbBridgeEditor::processBreakpointDeleted(int id , QByteArray data)
+int GdbBridgeEditor::processBreakpointDeleted(QGdbMessageCore m)
 {
-id = id;
-	emit breakpoint(getParametre("fileName=", data), getParametre("line=", data).toInt(), false);
+	emit breakpoint(getParametre("fileName=", m.msg), getParametre("line=", m.msg).toInt(), false);
 	mWidget->append("delete icon in editor");
 	return PROCESS_TERMINED;
 }
 //
-int GdbBridgeEditor::processBreakpointEnabled(int id , QByteArray data)
+int GdbBridgeEditor::processBreakpointEnabled(QGdbMessageCore m)
 {
-id = id;
-	emit breakpointEnabled(getParametre("fileName=", data), getParametre("line=", data).toInt(), true);
+	emit breakpointEnabled(getParametre("fileName=", m.msg), getParametre("line=", m.msg).toInt(), true);
 	mWidget->append("enable icon in editor");
 	return PROCESS_TERMINED;
 }
 //
-int GdbBridgeEditor::processBreakpointDisabled(int id , QByteArray data)
+int GdbBridgeEditor::processBreakpointDisabled(QGdbMessageCore m)
 {
-id = id;
-	emit breakpointEnabled(getParametre("fileName=", data), getParametre("line=", data).toInt(), false);
+	emit breakpointEnabled(getParametre("fileName=", m.msg), getParametre("line=", m.msg).toInt(), false);
 	mWidget->append("disable icon in editor");
 	return PROCESS_TERMINED;
 }
 //
-int GdbBridgeEditor::processBreakpointConditionned(int id , QByteArray data)
+int GdbBridgeEditor::processBreakpointConditionned(QGdbMessageCore m)
 {
-id = id;
-	emit breakpointConditionnaled(getParametre("fileName=", data), getParametre("line=", data).toInt(), true);
+	emit breakpointConditionnaled(getParametre("fileName=", m.msg), getParametre("line=", m.msg).toInt(), true);
 	mWidget->append("conditionned icon in editor");
 	return PROCESS_TERMINED;
 }
 //
-int GdbBridgeEditor::processBreakpointUnConditionned(int id , QByteArray data)
+int GdbBridgeEditor::processBreakpointUnConditionned(QGdbMessageCore m)
 {
-id = id;
-	emit breakpointConditionnaled(getParametre("fileName=", data), getParametre("line=", data).toInt(), false);
+	emit breakpointConditionnaled(getParametre("fileName=", m.msg), getParametre("line=", m.msg).toInt(), false);
 	mWidget->append("unconditionned icon in editor");
 	return PROCESS_TERMINED;
 }
 //
-int GdbBridgeEditor::processGeneric(int id, QByteArray data)
+int GdbBridgeEditor::processGotoBreakpoint(QGdbMessageCore m)
 {
-id = id;
-data = data;
+	emit gotoBreakpoint(getParametre("fileName=", m.msg), getParametre("line=", m.msg).toInt());
+	mWidget->append("goto breakpoint : " + m.msg);
 	return PROCESS_TERMINED;
 }
-//

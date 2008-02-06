@@ -10,7 +10,15 @@
 #include <QTableWidget>
 #include <QMouseEvent>
 
-#include "./kernel/gdbBase.h"
+#include "./kernel/gdbCore.h"
+#include "./kernel/gdbTemplateCore.h"
+
+/*
+
+*/
+
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 
 
 class QTableWidgetEx : public QTableWidget
@@ -18,7 +26,7 @@ class QTableWidgetEx : public QTableWidget
 	Q_OBJECT
 public :
 	
-	QTableWidgetEx(QWidget *p);
+	QTableWidgetEx(QWidget *p=0);
 
 	void dragEnterEvent(QDragEnterEvent *event);
 	void dragMoveEvent(QDragMoveEvent *event);
@@ -35,29 +43,21 @@ signals :
 };
 
 
-class GdbWatch : public GdbBase
+class GdbWatch : public GdbCore
 {
 	Q_OBJECT
 
-private: // variable
-
-	bool bJustAdd;
-	bool bTargetLoaded;
-	bool bTargetRunning;
-	bool bGdbStarted;
-
-
 public : // function
-	GdbWatch(QWidget *p=0);
+	GdbWatch( GdbParser *p);
 	~GdbWatch();
 	
-	int process(int id, QByteArray);
-	int processError(int , QByteArray) ;
+	int process(QGdbMessageCore);
+	int processError(QGdbMessageCore) ;
 	void processExit();
 
-	int processWatchPrint(int , QByteArray);
-	int processWatchAdresse(int , QByteArray);
-	int processWatchType(int , QByteArray);
+	int processWatchPrint(QGdbMessageCore);
+	int processWatchAdresse(QGdbMessageCore);
+	int processWatchType(QGdbMessageCore);
 
 	void gdbStarted();
 	void gdbFinished();
@@ -68,9 +68,6 @@ public : // function
 	void targetExited();
 
 	QString name();
-	QWidget * widget();
-
-	void setupDockWidget(QMainWindow *);
 
 public slots :
 
@@ -79,35 +76,39 @@ public slots :
 
 private : // function
 
-	struct svar
+	struct 
 	{	
 		QList<QGdbInterpreter *> interpreterPrint;
 		QList<QGdbInterpreter *> interpreterAdresse;
 		QList<QGdbInterpreter *> interpreterType;
-	};
+	}varList;
 
-	svar varList;
-
-	struct svariable
-	{
-		QString varName;
-		QTableWidgetItem *varNameItem;
-		QString varType;
-		QTableWidgetItem *varTypeItem;
-		QString varAdresse;
-		QTableWidgetItem *varAdresseItem;
-		QString varValue;
-		QTableWidgetItem *varValueItem;
-	};
-
-	QList<svariable> variableList;
-
-	GdbTemplateProcess<GdbWatch> cmd;
+	GdbTemplateCore<GdbWatch> cmd;
+	void showColor(QTableWidgetItem *p, QString a);
 
 	QTableWidgetEx *mWidget;
+	QTreeWidget *rootTree;
 
 	int currentRow;
 	int currentColumn;
+
+	// for multi line sequence
+	QString buffer;
+	bool isPrintSequence;
+
+private :
+
+	QStringList extractMember(QString val);
+	int memberType(QString val);
+	QStringList formatMember(QString val);
+	void decompilStrut(QTreeWidgetItem *parentItem, QString val);
+	void decompilStrutUpdate(QTreeWidgetItem *parentItem, QString val);
+
+
+
+
+
+
 };
 
 #endif

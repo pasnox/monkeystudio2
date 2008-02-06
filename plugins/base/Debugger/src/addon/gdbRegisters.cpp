@@ -1,27 +1,55 @@
 //==========================================
 
 /*
-	Class GdbControl
+	Class GdbRegister
 */
 
 #include "gdbRegisters.h"
 
 
-GdbRegisters::GdbRegisters(QWidget *o) :  GdbBase(o), bJustAdd(0), bTargetLoaded(0), bTargetRunning(0), bGdbStarted(0), enteringBlock(0)
+GdbRegisters::GdbRegisters(GdbParser *p) :  GdbCore( p)
 {
-	mWidget = new QTextEdit(this);
+	mWidget = new QTableWidget();
 	mWidget->setEnabled(false);
+	mWidget->setColumnCount(2);
+	mWidget->setHorizontalHeaderLabels(QStringList() << "Registers" << "Value" );
+ 	mWidget->setSelectionBehavior (QAbstractItemView::SelectRows);
+
+	getContainer()->setWidget(mWidget);
+	getContainer()->setWindowTitle(name());
+
+	numberOfRegisters = 0;
 
 	cmd.setClass(this);
+	// start my interpreter when breakpoint-hit or end-stepping-range occur
+	cmd.connectEventStart("breakpoint-hit" , NULL);
+	cmd.connectEventStart("end-stepping-range" , NULL);
 
-	interpreterRegisters = new QGdbInterpreter("info-registers",
-		"info register",
-		QRegExp("^info register"),
-		QRegExp("^\\w+\\s+\\w+\\s+.*"),
-			"");
+	// my interpreter
+	interpreterRegisters = new QGdbInterpreter("info-registers",	// event name
+		"info register",												// command for Gdb
+		QRegExp("^info register"),									// command RegExp (for parser)
+		QRegExp("^\\w+\\s+\\w+\\s+.*"),							// wait answer RegExp
+			"");														// no answer extention
 
-	cmd.connectEventToProcess(interpreterRegisters,/* "info-registers",*/ &GdbRegisters::processRegisters);
+	// install interpreter. if event start occur, i execute my command and call processRegister()
+	cmd.connectEventInterpreter( interpreterRegisters, &GdbRegisters::processRegisters);
+
+	connect(getContainer(), SIGNAL(  topLevelChanged ( bool) ), this, SLOT( onTopLevelChanged ( bool  )));
 } 
+//
+void GdbRegisters::onTopLevelChanged ( bool b)
+{
+	// resize widget recommended
+	if(b)
+	{
+		getContainer()->restoreGeometry(widgetSize);
+	}
+	else
+	{
+		widgetSize = getContainer()->saveGeometry();
+	}
+}
 //
 GdbRegisters::~GdbRegisters()
 {
@@ -32,93 +60,102 @@ QString GdbRegisters::name()
 	 return "GdbRegisters"; 
 }
 //
-QWidget * GdbRegisters::widget()
-{
-	return (QWidget*) mWidget ; 
-}
-//
 void GdbRegisters::gdbStarted()
 {
-	bGdbStarted = true;
+	GdbCore::gdbStarted();
 }
 //
 void GdbRegisters::gdbFinished()
 {
-	bGdbStarted = false;
-	bTargetLoaded = false;
+	GdbCore::gdbFinished();
 	mWidget->setEnabled(false);
 }
 //
 void GdbRegisters::targetLoaded()
 {
-	bTargetLoaded = true;
+	GdbCore::targetLoaded();
 }
 //
 void GdbRegisters::targetRunning()
 {
+	GdbCore::targetRunning();
 	mWidget->setEnabled(false);
-	bTargetRunning = true;
 }
 //
 void GdbRegisters::targetStopped()
 {
+	GdbCore::targetStopped();
 	mWidget->setEnabled(true);
-	bTargetRunning = false;
 }
 //
 void GdbRegisters::targetExited()
 {
+	GdbCore::targetExited();
 	mWidget->setEnabled(false);
-	bTargetRunning = false;
 }
 //
-void GdbRegisters::setupDockWidget(QMainWindow *mw)
+int GdbRegisters::process(QGdbMessageCore m)
 {
-	mw = mw;
-	setWidget(widget());
-	setWindowTitle(name());
-	setAllowedAreas(Qt::AllDockWidgetAreas);
-	setFeatures (QDockWidget::DockWidgetMovable |QDockWidget::DockWidgetFloatable);
+	return cmd.dispatchProcess(m);
 }
 //
-int GdbRegisters::process(int id,QByteArray data)
-{
-
-	if(!bGdbStarted || bTargetRunning || !bTargetLoaded) return PROCESS_TERMINED;
-
-	return cmd.dispatchProcess(id ,data);
-}
-//
-int GdbRegisters::processError(int id, QByteArray data)
+int GdbRegisters::processError(QGdbMessageCore m)
 {
 	// TODO
-	id = id ;
-	data = data;
- 
+	m=m; 
 	return PROCESS_TERMINED;
 }
 //
 void GdbRegisters::processExit()
 {
+	numberOfRegisters = 0;
 }
 //
-int GdbRegisters::processRegisters(int id, QByteArray data)
+void GdbRegisters::showColor(QTableWidgetItem *p, QString a)
 {
-id = id;
-	QByteArray event = getParametre("event=", data);
+	// toggle color (black / red if value in tableWidget is not egal than new value
+		if(p->text() != a)
+			p->setForeground ( QBrush(Qt::red));
+		else
+			p->setForeground ( QBrush(Qt::black));
+}
+//
+int GdbRegisters::processRegisters(QGdbMessageCore m)
+{
 	// TODO
-	enteringBlock = true;
-	
-	QByteArray value = getParametre("answerGdb=", data);
-
+	// extract answer from gdb
+	QByteArray value = getParametre("answerGdb=", m.msg);
+	// extract value from answer
 	QRegExp exp("^(\\w+)\\s+(\\w+)\\s+(.*)");
 	if(exp.exactMatch( value))
 	{
 		QStringList list = exp.capturedTexts();
-		mWidget->append(list.at(1).toLocal8Bit()  + "\t" + list.at(2).toLocal8Bit() + "\t\t" + list.at(3).toLocal8Bit());
+
+		if(mWidget->item(numberOfRegisters, 0) != NULL)
+		{
+			mWidget->item(numberOfRegisters, 0)->setText(list.at(1));
+		
+			showColor(mWidget->item(numberOfRegisters, 1), list.at(2));
+			mWidget->item(numberOfRegisters, 1)->setText(list.at(2));
+		}
+		else
+		{
+			mWidget->insertRow(numberOfRegisters);
+			mWidget->setRowHeight ( numberOfRegisters, 20 );
+
+			mWidget->setItem(numberOfRegisters, 0, new QTableWidgetItem);
+			mWidget->item(numberOfRegisters, 0)->setText(list.at(1));
+			mWidget->setItem(numberOfRegisters, 1, new QTableWidgetItem);
+			mWidget->item(numberOfRegisters, 1)->setText(list.at(2));
+
+			Qt::ItemFlags readOnly =  Qt::ItemIsEnabled | Qt::ItemIsSelectable ;
+		 	mWidget->item(numberOfRegisters, 0)->setFlags(readOnly );
+		 	mWidget->item(numberOfRegisters, 1)->setFlags(readOnly );
+		}
+		numberOfRegisters++;
 	}
 
-	// auto stopping when promt found
+	// auto stopping when promt event
 
 	return PROCESS_WAITING;
 }

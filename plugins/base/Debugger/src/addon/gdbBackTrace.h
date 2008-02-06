@@ -9,34 +9,27 @@
 #include <QObject>
 #include <QTextEdit>
 
-#include "./kernel/gdbBase.h"
+#include "./kernel/gdbCore.h"
+#include "./kernel/gdbTemplateCore.h"
 
 
-class GdbBackTrace : public GdbBase
+class GdbBackTrace : public GdbCore
 {
 
 		Q_OBJECT
 
-private: // variable
-
-	bool bJustAdd;
-	bool bTargetLoaded;
-	bool bTargetRunning;
-	bool bGdbStarted;
-
-
 public : // function
 
 
-	GdbBackTrace(QWidget *p=0);
+	GdbBackTrace(GdbParser *p);
 	~GdbBackTrace();
 	
-	int process(int id, QByteArray);
-	int processError(int , QByteArray) ;
+	int process(QGdbMessageCore);
+	int processError(QGdbMessageCore) ;
 	void processExit();
 
-	int processBacktrace(int id, QByteArray data);
-	int processInfosource(int id, QByteArray data);
+	int processBacktrace(QGdbMessageCore);
+	int processInfosource(QGdbMessageCore);
 
 	void gdbStarted();
 	void gdbFinished();
@@ -47,7 +40,6 @@ public : // function
 	void targetExited();
 
 	QString name();
-	QWidget * widget();
 
 	void setupDockWidget(QMainWindow *);
 
@@ -56,9 +48,8 @@ private: // function
 	QTextEdit *mWidget;
 	QString fileName;
 	QString line;
-	QByteArray buffer;
 
-	GdbTemplateProcess<GdbBackTrace> cmd;
+	GdbTemplateCore<GdbBackTrace> cmd;
 	QGdbInterpreter *interpreterBackTrace;
 	QGdbInterpreter *interpreterInfoSource;
 
