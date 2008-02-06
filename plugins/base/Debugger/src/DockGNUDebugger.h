@@ -3,13 +3,15 @@
 
 #include "QSingleton.h"
 #include "pConsoleManager.h"
-#include  "pCommand.h"
+#include "pCommand.h"
 
 #include "pDockWidget.h"
+#include <QMainWindow>
 
+#include "./kernel/gdbCore.h"
 
 #include "./kernel/gdbParser.h"
-#include "./addon/gdbPluginManager.h"
+#include "./kernel/gdbKernelDispatcher.h"
 #include "./addon/gdbBridgeEditor.h"
 #include "./addon/gdbBreakPoint.h"
 #include "./addon/gdbControl.h"
@@ -30,15 +32,15 @@ class DockGNUDebugger : public pDockWidget, public QSingleton<DockGNUDebugger>
 public:
 
 	QMainWindow *mw;
-	class GdbPluginManager *plugManager;
-	class GdbBridgeEditor *bridge;
+	class GdbKernelDispatcher *kernelDispatcher;
+	class GdbBridgeEditor *bridgeEditor;
 	class GdbParser *Parser;
-	class GdbBackTrace * backtrace;
-	class GdbRegisters *registers;
-	class GdbWatch *watch;
-	class GdbBreakPoint *breakp;
-	class GdbControl *control;
-	class GdbAnswer *answer;	
+	class GdbBackTrace * backtraceGdb;
+	class GdbRegisters *registersGdb;
+	class GdbWatch *watchGdb;
+	class GdbBreakPoint *breakpointGdb;
+	class GdbControl *controlGdb;
+	class GdbAnswer *answerGdb;	
 	
 	class pConsoleManager *pConsole;
 	class pCommand *Cmd;
@@ -81,7 +83,7 @@ private slots:
 	void commandReadyRead( const pCommand& c , const QByteArray& d);
 	
 	// frome plugin
-	void onSendRawData(GdbBase *plug, QByteArray data);
+	void onSendRawData(GdbCore *plug, QByteArray data);
 
 	// frome parser
 	void onDone(int , QString);

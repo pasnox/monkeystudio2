@@ -35,59 +35,51 @@ DockGNUDebugger::DockGNUDebugger( QWidget* w )
 	setWidget(mw);
 	
 	setMinimumHeight( 120 );
-	
-	plugManager = new GdbPluginManager();
-	plugManager->setupDockWidget(mw);
-
-//plugManager-> setMinimumWidth ( 1000);
-//plugManager->showMaximized (); 
-
-	// create backtrace
-	backtrace = new GdbBackTrace();
-	backtrace->setupDockWidget(mw);
-	mw->tabifyDockWidget(plugManager,backtrace);
-
-	// create registers	
-	registers = new GdbRegisters();
-	registers->setupDockWidget(mw);
-	mw->tabifyDockWidget(backtrace,registers);
-
-	// create watch
-	watch = new GdbWatch();
-	watch->setupDockWidget(mw);
-	mw->tabifyDockWidget(registers,watch);
-
-	// create bridge
-	bridge = new GdbBridgeEditor();
-	bridge->setupDockWidget(mw);
-	mw->tabifyDockWidget(watch, bridge);
-
-	// create breakpoint
-	breakp = new  GdbBreakPoint();
-	breakp->setupDockWidget(mw);
-	mw->tabifyDockWidget(watch,breakp);
-
-	// create answer
-	answer = new  GdbAnswer();
-	answer->setupDockWidget(mw);
-	mw->tabifyDockWidget(breakp,answer);
-
-	// create control
-	control = new  GdbControl();
-	control->setupDockWidget(mw);
-	mw->setCentralWidget(control);
-
-	// add plugin under manager
-	plugManager->addPlugin(breakp);
-	plugManager->addPlugin(watch);
-//	plugManager->addPlugin(registers);
-	plugManager->addPlugin(backtrace);
-	plugManager->addPlugin(control);
-	plugManager->addPlugin(bridge);
-	plugManager->addPlugin(answer);
 
 	// create parser
 	Parser = new GdbParser(this);
+
+	kernelDispatcher = new GdbKernelDispatcher(Parser);
+	mw->addDockWidget(Qt::RightDockWidgetArea, kernelDispatcher->getContainer());
+
+	// create backtrace
+	backtraceGdb = new GdbBackTrace(Parser);
+	mw->tabifyDockWidget(kernelDispatcher->getContainer(),backtraceGdb->getContainer());
+
+	// create registers	
+	registersGdb = new GdbRegisters(Parser);
+	mw->tabifyDockWidget(backtraceGdb->getContainer(),registersGdb->getContainer());
+
+	// create watch
+	watchGdb = new GdbWatch(Parser);
+	mw->tabifyDockWidget(registersGdb->getContainer(),watchGdb->getContainer());
+
+	// create bridge
+	bridgeEditor = new GdbBridgeEditor(Parser);
+	mw->tabifyDockWidget(watchGdb->getContainer(), bridgeEditor->getContainer());
+//	mw->tabifyDockWidget(registersGdb->getContainer(), bridgeEditor->getContainer());
+
+	// create breakpoint
+	breakpointGdb = new  GdbBreakPoint(Parser);
+	mw->tabifyDockWidget(bridgeEditor->getContainer(),breakpointGdb->getContainer());
+
+	// create answer
+	answerGdb = new  GdbAnswer(Parser);
+	mw->tabifyDockWidget(breakpointGdb->getContainer(),answerGdb->getContainer());
+
+	// create control
+	controlGdb = new  GdbControl(Parser);
+	mw->setCentralWidget(controlGdb->getContainer());
+
+	// add plugin under manager
+	kernelDispatcher->add(breakpointGdb);
+	kernelDispatcher->add(watchGdb);
+	kernelDispatcher->add(registersGdb);
+	kernelDispatcher->add(backtraceGdb);
+	kernelDispatcher->add(controlGdb);
+	kernelDispatcher->add(bridgeEditor);
+	kernelDispatcher->add(answerGdb);
+
 
 	// generic
 	connect(Parser, SIGNAL(done(int, QString)), this , SLOT(onDone(int, QString)));
@@ -100,21 +92,13 @@ DockGNUDebugger::DockGNUDebugger( QWidget* w )
 	connect(Parser, SIGNAL(targetRunning(int, QString)), this , SLOT(onTargetRunning(int, QString)));
 	connect(Parser, SIGNAL(targetStopped(int, QString)), this , SLOT(onTargetStopped(int, QString)));
 
-	// for change intrepreter
-	breakp->setParser(Parser);
-	control->setParser(Parser);
-	backtrace->setParser(Parser);
-//	registers->setParser(Parser);
-	watch->setParser(Parser);
-	answer->setParser(Parser);
-	
 	
 	// connect brigde to Qsci
-	connect(bridge, SIGNAL(breakpoint(QByteArray , int, bool)), this , SLOT(onBreakpoint(QByteArray, int, bool)));
-	connect(bridge, SIGNAL(backtrace(QByteArray , int)), this , SLOT(onBacktrace(QByteArray, int)));
-	connect(bridge, SIGNAL(breakpointMoved(QByteArray , int, int)), this , SLOT(onBreakpointMoved(QByteArray, int, int)));
-	connect(bridge, SIGNAL(breakpointConditionnaled(QByteArray , int,bool)), this , SLOT(onBreakpointConditionnaled(QByteArray, int, bool)));
-	connect(bridge, SIGNAL(breakpointEnabled(QByteArray , int,bool)), this , SLOT(onBreakpointEnabled(QByteArray, int, bool)));
+	connect(bridgeEditor, SIGNAL(breakpoint(QByteArray , int, bool)), this , SLOT(onBreakpoint(QByteArray, int, bool)));
+	connect(bridgeEditor, SIGNAL(backtrace(QByteArray , int)), this , SLOT(onBacktrace(QByteArray, int)));
+	connect(bridgeEditor, SIGNAL(breakpointMoved(QByteArray , int, int)), this , SLOT(onBreakpointMoved(QByteArray, int, int)));
+	connect(bridgeEditor, SIGNAL(breakpointConditionnaled(QByteArray , int,bool)), this , SLOT(onBreakpointConditionnaled(QByteArray, int, bool)));
+	connect(bridgeEditor, SIGNAL(breakpointEnabled(QByteArray , int,bool)), this , SLOT(onBreakpointEnabled(QByteArray, int, bool)));
 
 
 	pConsole =  MonkeyCore::consoleManager();
@@ -124,7 +108,7 @@ DockGNUDebugger::DockGNUDebugger( QWidget* w )
 	connect(pConsole, SIGNAL( commandReadyRead( const pCommand&, const QByteArray& )), this, SLOT( commandReadyRead( const pCommand&, const QByteArray& )));
 
 	// plugin send
-	connect(plugManager, SIGNAL(sendRawData(GdbBase*, QByteArray)) ,this , SLOT(onSendRawData(GdbBase *, QByteArray) ));
+	connect(kernelDispatcher, SIGNAL(sendRawData(GdbCore*, QByteArray)) ,this , SLOT(onSendRawData(GdbCore *, QByteArray) ));
 
 	// start gdb
 	Cmd = new pCommand( "gdb", "gdb", QString::null,true, QStringList() << "gdb", QString::null,  false );
@@ -149,7 +133,7 @@ DockGNUDebugger::DockGNUDebugger( QWidget* w )
 // a new file is open under editor
 void DockGNUDebugger::onFileOpened( const QString& file )
 {
-	((QTextEdit * )(bridge->widget() ))->append(file);
+//	((QTextEdit * )(bridge->widget() ))->append(file);
 
 	if(MonkeyCore::fileManager()->currentChild())
  	{
@@ -171,8 +155,8 @@ void DockGNUDebugger::onFileOpened( const QString& file )
 
 			// debug
 			// get name of file
-			QString name = MonkeyCore::fileManager()->currentChildFile();
-			((QTextEdit * )(bridge->widget() ))->append("connection" + name);
+//			QString name = MonkeyCore::fileManager()->currentChildFile();
+//			((QTextEdit * )(bridge->widget() ))->append("connection" + name);
 		}
 	}
 }
@@ -180,12 +164,16 @@ void DockGNUDebugger::onFileOpened( const QString& file )
 // user clicked margin
 void DockGNUDebugger::onMarginClicked(int marginIndex, int line , Qt::KeyboardModifiers state)
 {
-	((QTextEdit * )(bridge->widget() ))->append("clicked " + QString::number(line));
+//	((QTextEdit * )(bridge->widget() ))->append("clicked " + QString::number(line));
 
 	// get the name of file
-	QString name = MonkeyCore::fileManager()->currentChildFile();
+	QString fileName = MonkeyCore::fileManager()->currentChildFile();
 
-	plugManager->process(-1, "^done,interpreter=\"editor\",currentCmd=\"none\",event=\"CTRL+B\",fullname=\"" + name.toLocal8Bit() + "\",line=\"" + QString::number(line + 1).toLocal8Bit() + "\"");
+	QGdbMessageCore m;
+	m.msg = "^done,interpreter=\"editor\",currentCmd=\"none\",event=\"CTRL+B\",fullname=\"" + fileName.toLocal8Bit() + "\",line=\"" + QByteArray::number(line+1) + "\"";
+	kernelDispatcher->process(m);
+
+//	kernelDispatcher->process(-1, "^done,interpreter=\"editor\",currentCmd=\"none\",event=\"CTRL+B\",fullname=\"" + name.toLocal8Bit() + "\",line=\"" + QString::number(line + 1).toLocal8Bit() + "\"");
 }
 
 // show icon under file
@@ -232,7 +220,7 @@ void DockGNUDebugger::onBacktrace(QByteArray filename, int line)
 			e->markerAdd (line-1, iconbacktrace);
 
 			// debug
-			((QTextEdit * )(bridge->widget() ))->append("open " + filename);
+//			((QTextEdit * )(bridge->widget() ))->append("open " + filename);
 		}
 	}
 }
@@ -287,8 +275,8 @@ void DockGNUDebugger::onBreakpointConditionnaled(QByteArray filename, int line, 
 // Console frome pConsoleManager
 void DockGNUDebugger::gdbStarted( const pCommand& c)
 {
-	plugManager->gdbStarted();
-	((QTextEdit * )(bridge->widget() ))->append("GDB started");
+	kernelDispatcher->gdbStarted();
+//	((QTextEdit * )(bridge->widget() ))->append("GDB started");
 
 //	onSendRawData(NULL,"file c:/dev/debugger/debugger.exe");
 }
@@ -296,8 +284,8 @@ void DockGNUDebugger::gdbStarted( const pCommand& c)
 
 void DockGNUDebugger::gdbFinished( const pCommand& c, int a , QProcess::ExitStatus )
 {
-	plugManager->gdbFinished();
-	((QTextEdit * )(bridge->widget() ))->append("GDB finished");
+	kernelDispatcher->gdbFinished();
+//	((QTextEdit * )(bridge->widget() ))->append("GDB finished");
 }
 
 void DockGNUDebugger::commandReadyRead( const pCommand& c , const QByteArray& d)
@@ -306,7 +294,7 @@ void DockGNUDebugger::commandReadyRead( const pCommand& c , const QByteArray& d)
 }
 
 
-void DockGNUDebugger::onSendRawData(GdbBase *plug, QByteArray data)
+void DockGNUDebugger::onSendRawData(GdbCore *plug, QByteArray data)
 {
 	Parser->setLastCommand(data);
 	pConsole->sendRawData(data + crlf);
@@ -316,59 +304,71 @@ void DockGNUDebugger::onSendRawData(GdbBase *plug, QByteArray data)
 // From parser
 void DockGNUDebugger::onDone(int id, QString st)
 {
-	plugManager->process(id,st.toLocal8Bit());
+	QGdbMessageCore m;
+	m.msg = st.toLocal8Bit();
+	m.id = id;
+	kernelDispatcher->process(m);
+//	kernelDispatcher->process(id,st.toLocal8Bit());
 // debug
-	((QTextEdit * )(bridge->widget() ))->setTextColor(Qt::black);
-	((QTextEdit * )(bridge->widget() ))->append(st.toLocal8Bit() + "  id : " + QString::number(id).toLocal8Bit());
+//	((QTextEdit * )(bridge->widget() ))->setTextColor(Qt::black);
+//	((QTextEdit * )(bridge->widget() ))->append(st.toLocal8Bit() + "  id : " + QString::number(id).toLocal8Bit());
 }
 
 void DockGNUDebugger::onError(int id, QString st)
 {
-	plugManager->process(id, st.toLocal8Bit());
+	QGdbMessageCore m;
+	m.msg = st.toLocal8Bit();
+	m.id = id;
+	kernelDispatcher->process(m);
+//	kernelDispatcher->process(id, st.toLocal8Bit());
 // debug
-	((QTextEdit * )(bridge->widget() ))->setTextColor(Qt::red);
-	((QTextEdit * )(bridge->widget() ))->append( st.toLocal8Bit() + "  id : " + QString::number(id).toLocal8Bit());
+//	((QTextEdit * )(bridge->widget() ))->setTextColor(Qt::red);
+//	((QTextEdit * )(bridge->widget() ))->append( st.toLocal8Bit() + "  id : " + QString::number(id).toLocal8Bit());
 }
 
 void DockGNUDebugger::onInfo(int id, QString st)
 {
-	plugManager->process( id,st.toLocal8Bit() );
+	QGdbMessageCore m;
+	m.msg = st.toLocal8Bit();
+	m.id = id;
+	kernelDispatcher->process(m);
+//	kernelDispatcher->process( id,st.toLocal8Bit() );
 // debug
-	((QTextEdit * )(bridge->widget() ))->setTextColor(Qt::blue);
-	((QTextEdit * )(bridge->widget() ))->append( st.toLocal8Bit() + "  id : " + QString::number(id).toLocal8Bit());
+//	((QTextEdit * )(bridge->widget() ))->setTextColor(Qt::blue);
+//	((QTextEdit * )(bridge->widget() ))->append( st.toLocal8Bit() + "  id : " + QString::number(id).toLocal8Bit());
 }
 
 // target
 void DockGNUDebugger::onTargetLoaded(int id, QString st)
 {
-	plugManager->targetLoaded();
+	kernelDispatcher->targetLoaded();
 // debug
-	((QTextEdit * )(bridge->widget() ))->setTextColor(Qt::blue);
-	((QTextEdit * )(bridge->widget() ))->append( st.toLocal8Bit() + "  id : " + QString::number(id).toLocal8Bit());
+//	((QTextEdit * )(bridge->widget() ))->setTextColor(Qt::blue);
+//	((QTextEdit * )(bridge->widget() ))->append( st.toLocal8Bit() + "  id : " + QString::number(id).toLocal8Bit());
 }
 
 void DockGNUDebugger::onTargetExited(int id, QString st)
 {
-	plugManager->targetExited();
+	kernelDispatcher->targetExited();
 // debug
-	((QTextEdit * )(bridge->widget() ))->setTextColor(Qt::blue);
-	((QTextEdit * )(bridge->widget() ))->append( st.toLocal8Bit() + "  id : " + QString::number(id).toLocal8Bit());
+//	((QTextEdit * )(bridge->widget() ))->setTextColor(Qt::blue);
+//	((QTextEdit * )(bridge->widget() ))->append( st.toLocal8Bit() + "  id : " + QString::number(id).toLocal8Bit());
 }
 
 void DockGNUDebugger::onTargetRunning(int id, QString st)
 {
-	plugManager->targetRunning();
+	kernelDispatcher->targetRunning();
 // debug
-	((QTextEdit * )(bridge->widget() ))->setTextColor(Qt::blue);
-	((QTextEdit * )(bridge->widget() ))->append( st.toLocal8Bit() + "  id : " + QString::number(id).toLocal8Bit());
+//	((QTextEdit * )(bridge->widget() ))->setTextColor(Qt::blue);
+//	((QTextEdit * )(bridge->widget() ))->append( st.toLocal8Bit() + "  id : " + QString::number(id).toLocal8Bit());
 }
 
 void DockGNUDebugger::onTargetStopped(int id, QString st)
 {
-	plugManager->targetStopped();
+	kernelDispatcher->targetStopped();
 // debug
-	((QTextEdit * )(bridge->widget() ))->setTextColor(Qt::blue);
-	((QTextEdit * )(bridge->widget() ))->append(st.toLocal8Bit() + "  id : " + QString::number(id).toLocal8Bit());
+	//	((QTextEdit * )(bridge->widget() ))->setTextColor(Qt::blue);
+	//((QTextEdit * )(bridge->widget() ))->append(st.toLocal8Bit() + "  id : " + QString::number(id).toLocal8Bit());
 }
 
 
