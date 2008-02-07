@@ -93,6 +93,8 @@ void UIMain::closeEvent( QCloseEvent* e )
 	}
 	// force to close all projects
 	MonkeyCore::projectsManager()->projectCloseAll_triggered();
+	// inform that we close mainwindow
+	emit aboutToClose();
 }
 
 QMenu* UIMain::createPopupMenu()
