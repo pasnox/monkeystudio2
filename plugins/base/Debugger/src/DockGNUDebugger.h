@@ -1,15 +1,20 @@
 #ifndef PDOCKGNUDEBUGGER_H
 #define PDOCKGNUDEBUGGER_H
 
+// Pasnox include
 #include "QSingleton.h"
-#include "pConsoleManager.h"
+//#include "pConsoleManager.h"
 #include "pCommand.h"
+ #include "UIMain.h"
 
 #include "pDockWidget.h"
+
+// Xiantia include
 #include <QMainWindow>
 
 #include "./kernel/gdbCore.h"
 
+#include "./kernel/gdbProcess.h"
 #include "./kernel/gdbParser.h"
 #include "./kernel/gdbKernelDispatcher.h"
 #include "./addon/gdbBridgeEditor.h"
@@ -19,7 +24,7 @@
 #include "./addon/gdbRegisters.h"
 #include "./addon/gdbWatch.h"
 #include "./addon/gdbAnswer.h"
-
+#include "./kernel/gdbProcess.h"
 
 
 
@@ -42,11 +47,8 @@ public:
 	class GdbControl *controlGdb;
 	class GdbAnswer *answerGdb;	
 	
-	class pConsoleManager *pConsole;
+	class GdbProcess *pConsole;
 	class pCommand *Cmd;
-
-
-protected:
 
 private:
 
@@ -82,7 +84,7 @@ private slots:
 
 	void commandReadyRead( const pCommand& c , const QByteArray& d);
 	
-	// frome plugin
+	// from plugin
 	void onSendRawData(GdbCore *plug, QByteArray data);
 
 	// frome parser
@@ -95,6 +97,7 @@ private slots:
 	void onTargetRunning(int , QString);
 	void onTargetStopped(int , QString);
 
+	void onAboutToClose();
 signals:
 
 };

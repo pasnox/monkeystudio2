@@ -1958,7 +1958,7 @@ Comment :
 [21887]^starting address
 [21888]^Unreasonable jump request
 [21889]^No source file has been specified\.
-[21890]^Not confirmed\.
+//[21890]^Not confirmed\.
 //[21891]^Continuing at 
 //[21892]^Continuing with no signal\.
 //[21893]^Continuing with signal .*\.
@@ -1993,7 +1993,7 @@ Comment :
 [21922]^This GDB does not control a terminal\.
 [21923]^Inferior's terminal status \(currently saved by GDB\):
 [21924]^The program is not being run\.
-[21925]^Not confirmed\.
+//[21925]^Not confirmed\.
 [21926]^failed internal consistency check
 [21927]^Print inferior's saved terminal status\.
 [21928]^Kill execution of program being debugged\.
@@ -2060,7 +2060,7 @@ Comment :
 [21989]^Unrecognized type check setting\.
 [21990]^Unrecognized range check setting\.
 [21991]^Unrecognized case\-sensitive setting\.
-[21992]^Current language:  .*
+//[21992]^Current language:  .*
 [21993]^Type checking:     .*
 [21994]^Range checking:    .*
 [21995]^Case sensitivity:  .*
@@ -2893,7 +2893,7 @@ Comment :
 [22822]^No stack\.
 [22823]^Initial frame selected; you cannot go up\.
 [22824]^Bottom \(innermost\) frame selected; you cannot go down\.
-[22825]^Not confirmed
+//[22825]^Not confirmed
 [22826]^Problem while popping stack frames \(corrupt stack\?\)
 [22827]^'.*' not within current stack frame\.
 [22828]^Exceptions that can be caught in the current stack frame\.

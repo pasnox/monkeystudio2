@@ -88,6 +88,7 @@ void GdbControl::onLoadTarget()
 // step over or into
 int GdbControl::processSteps(QGdbMessageCore m)
 {
+m=m;
 		bRun->setEnabled(true);
 		bStepOver->setEnabled(true);
 		bStepInto->setEnabled(true);

@@ -41,8 +41,6 @@ public : // function
 
 	QString name();
 
-	void setupDockWidget(QMainWindow *);
-
 private: // function
 
 	QTextEdit *mWidget;

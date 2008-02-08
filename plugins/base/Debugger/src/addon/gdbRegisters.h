@@ -44,7 +44,6 @@ public :
 private: // function
 
 	QTableWidget *mWidget;
-//	QStringListModel *model;
 	QByteArray widgetSize;
 
 	int numberOfRegisters;

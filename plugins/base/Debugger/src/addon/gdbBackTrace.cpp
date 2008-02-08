@@ -91,16 +91,6 @@ void GdbBackTrace::targetExited()
 	mWidget->setEnabled(false);
 }
 //
-void GdbBackTrace::setupDockWidget(QMainWindow *mw)
-{
-/*	mw = mw;
-	setWidget(widget());
-	setWindowTitle(name());
-	setFeatures (QDockWidget::DockWidgetMovable |QDockWidget::DockWidgetFloatable);
-	setAllowedAreas(Qt::AllDockWidgetAreas);
-*/}
-//
-
 int GdbBackTrace::process(QGdbMessageCore m )
 {
 	return cmd.dispatchProcess(m);

@@ -15,9 +15,12 @@
 
 #include "pMonkeyStudio.h"
 
+QSize pixmapSize(16,16);
+
 DockGNUDebugger::DockGNUDebugger( QWidget* w )
 	: pDockWidget( w )
 {
+
 	// create tabwidget
 /*	// connections
 	connect( lwBuildSteps, SIGNAL( itemPressed( QListWidgetItem* ) ), this, SLOT( lwBuildSteps_itemPressed( QListWidgetItem* ) ) );
@@ -30,6 +33,10 @@ DockGNUDebugger::DockGNUDebugger( QWidget* w )
 	connect( MonkeyCore::consoleManager(), SIGNAL( commandSkipped( const pCommand& ) ), this, SLOT( commandSkipped( const pCommand& ) ) );
 	connect( MonkeyCore::consoleManager(), SIGNAL( newStepAvailable( const pConsoleManager::Step& ) ), this, SLOT( appendStep( const pConsoleManager::Step& ) ) );
 */
+
+	connect (MonkeyCore::mainWindow(), SIGNAL( aboutToClose()), this , SLOT(onAboutToClose()));
+
+
 	// create plugin Manager
 	mw = new QMainWindow(w);
 	setWidget(mw);
@@ -101,7 +108,7 @@ DockGNUDebugger::DockGNUDebugger( QWidget* w )
 	connect(bridgeEditor, SIGNAL(breakpointEnabled(QByteArray , int,bool)), this , SLOT(onBreakpointEnabled(QByteArray, int, bool)));
 
 
-	pConsole =  MonkeyCore::consoleManager();
+	pConsole =  new GdbProcess();
  
 	connect(pConsole, SIGNAL( commandStarted( const pCommand& )), this, SLOT(gdbStarted( const pCommand& )));
 	connect(pConsole, SIGNAL( commandFinished( const pCommand&, int, QProcess::ExitStatus )), this, SLOT( gdbFinished( const pCommand&, int, QProcess::ExitStatus )));
@@ -147,11 +154,11 @@ void DockGNUDebugger::onFileOpened( const QString& file )
 			connect (e, SIGNAL(marginClicked (int, int , Qt::KeyboardModifiers )), this, SLOT(onMarginClicked(int, int,  Qt::KeyboardModifiers)));
 	
 			// set somes icons on under editor
-			iconbreakenable = e->markerDefine (QPixmap(":/icons/break_enable.png"));
-			iconbreakdisable = e->markerDefine (QPixmap(":/icons/break_disable.png"));
-			iconbacktrace = e->markerDefine (QPixmap(":/icons/play.png"));
-			iconconditionenable = e->markerDefine (QPixmap(":/icons/break_conditional_enable.png"));
-			iconconditiondisable = e->markerDefine (QPixmap(":/icons/break_conditional_disable.png"));
+			iconbreakenable = e->markerDefine (QPixmap(":/icons/break_enable.png").scaled(pixmapSize) );
+			iconbreakdisable = e->markerDefine (QPixmap(":/icons/break_disable.png").scaled(pixmapSize));
+			iconbacktrace = e->markerDefine (QPixmap(":/icons/play.png").scaled(pixmapSize));
+			iconconditionenable = e->markerDefine (QPixmap(":/icons/break_conditional_enable.png").scaled(pixmapSize));
+			iconconditiondisable = e->markerDefine (QPixmap(":/icons/break_conditional_disable.png").scaled(pixmapSize));
 
 			// debug
 			// get name of file
@@ -371,12 +378,16 @@ void DockGNUDebugger::onTargetStopped(int id, QString st)
 	//((QTextEdit * )(bridge->widget() ))->append(st.toLocal8Bit() + "  id : " + QString::number(id).toLocal8Bit());
 }
 
+void DockGNUDebugger::onAboutToClose()
+{
+//	pConsole->stopCurrentCommand(true);
+	delete pConsole;
+}
 
 DockGNUDebugger:: ~DockGNUDebugger()
 {
-	QMessageBox::warning(NULL, "fermer Gdb", "test", QMessageBox::Ok ); 
+//	QMessageBox::warning(NULL, "fermer Gdb", "test", QMessageBox::Ok ); 
 
-	pConsole->stopCurrentCommand(true);
 }
 
 
