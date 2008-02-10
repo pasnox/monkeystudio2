@@ -53,6 +53,7 @@ void GdbRegisters::onTopLevelChanged ( bool b)
 //
 GdbRegisters::~GdbRegisters()
 {
+		delete getContainer();
 } 
 //
 QString GdbRegisters::name()
@@ -69,6 +70,9 @@ void GdbRegisters::gdbFinished()
 {
 	GdbCore::gdbFinished();
 	mWidget->setEnabled(false);
+
+	while(mWidget->rowCount())
+		mWidget->removeRow(0);
 }
 //
 void GdbRegisters::targetLoaded()

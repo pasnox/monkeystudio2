@@ -75,6 +75,8 @@ private :
 
 	QByteArray widgetSize;
 
+	bool waitEndProcess;
+
 private : // function
 
 	int addBreakpoint(QGdbMessageCore);
@@ -83,6 +85,8 @@ private : // function
 
 	int enableBreakpoint(QGdbMessageCore);
 	int disableBreakpoint(QGdbMessageCore);
+
+	int requestedBreakpoint(QGdbMessageCore);
 
 	void toggleBreakPoint(QString fullName, int numLine);
 	QBreakPoint * getBreakPointByName(QByteArray fileName);

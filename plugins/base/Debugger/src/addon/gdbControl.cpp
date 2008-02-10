@@ -20,19 +20,23 @@ GdbControl::GdbControl(GdbParser *p) :  GdbCore( p),
 	bContinue = new QPushButton("Continue");
 	bStop = new QPushButton("Stop");
 	bLoadTarget = new QPushButton("load target");
+	bExitGdb = new QPushButton("Exit");
 	
 	bRun->setEnabled(false);
 	bStepOver->setEnabled(false);
 	bStepInto->setEnabled(false);
 	bContinue->setEnabled(false);
 	bStop->setEnabled(false);
+	bExitGdb->setEnabled(false);
 
+	h->setSpacing(0);
 	h->addWidget(bLoadTarget);
 	h->addWidget(bRun);
 	h->addWidget(bContinue);
 	h->addWidget(bStepOver);
 	h->addWidget(bStepInto);
 	h->addWidget(bStop);
+	h->addWidget(bExitGdb);
 
 	getContainer()->setWidget(mWidget);
 	getContainer()->setWindowTitle(name());
@@ -43,6 +47,7 @@ GdbControl::GdbControl(GdbParser *p) :  GdbCore( p),
 	connect (bRun, SIGNAL(clicked()), this, SLOT(onRun()));
 	connect (bContinue, SIGNAL(clicked()), this, SLOT(onContinue()));
 	connect (bStop, SIGNAL(clicked()), this, SLOT(onStop()));
+	connect (bExitGdb, SIGNAL(clicked()), this,SLOT(onExit()));
 
 	cmd.setClass(this);
 	
@@ -51,6 +56,7 @@ GdbControl::GdbControl(GdbParser *p) :  GdbCore( p),
 //
 GdbControl::~GdbControl()
 {
+	delete getContainer();
 } 
 //
 QString GdbControl::name()
@@ -82,7 +88,9 @@ void GdbControl::onLoadTarget()
 		QStringList fileNames = d->selectedFiles(); 
 		QString file = fileNames.at(0);
 		file.replace('\\','/');
-		emit sendRawData(this,"file " + file.toLocal8Bit());
+		emit wantStart(file);
+
+//		emit sendRawData(this,"file " + file.toLocal8Bit());
 	 }
 }
 // step over or into
@@ -94,6 +102,7 @@ m=m;
 		bStepInto->setEnabled(true);
 		bContinue->setEnabled(true);
 		bStop->setEnabled(true);
+		bExitGdb->setEnabled(true);
 
 		cmd.disconnectEventInterpreter(interpreterEndSteppingRange);
 		cmd.leaveEventInterpreter(&interpreterEndSteppingRange);
@@ -115,7 +124,8 @@ int GdbControl::processQuestion(QGdbMessageCore m)
 		bStepOver->setEnabled(false);
 		bStepInto->setEnabled(false);
 		bContinue->setEnabled(false);
-	}
+		bExitGdb->setEnabled(false);
+}
 
 	if(restart.exactMatch( currentQuestion))
 	{
@@ -124,6 +134,7 @@ int GdbControl::processQuestion(QGdbMessageCore m)
 		bStepOver->setEnabled(false);
 		bStepInto->setEnabled(false);
 		bContinue->setEnabled(false);
+		bExitGdb->setEnabled(false);
 	}
 
 	return PROCESS_TERMINED;
@@ -137,6 +148,7 @@ void GdbControl::onStepOver()
 	bStepInto->setEnabled(false);
 	bContinue->setEnabled(false);
 	bStop->setEnabled(false);
+	bExitGdb->setEnabled(false);
 
 	interpreterEndSteppingRange = new QGdbInterpreter("end-stepping-range",
 	"n",
@@ -156,6 +168,7 @@ void GdbControl::onStepInto()
 	bStepInto->setEnabled(false);
 	bContinue->setEnabled(false);
 	bStop->setEnabled(false);
+	bExitGdb->setEnabled(false);
 
 	interpreterEndSteppingRange = new QGdbInterpreter("end-stepping-range",
 	"s",
@@ -182,20 +195,32 @@ void GdbControl::onStop()
 	emit sendRawData(this,"kill");
 }
 //
+void GdbControl::onExit()
+{
+	emit wantExit();
+}
+//
 void GdbControl::gdbStarted()
 {
 	GdbCore::gdbStarted();
+	bExitGdb->setEnabled(true);
 }
 //
 void GdbControl::gdbFinished()
 {
 	GdbCore::gdbFinished();
+
+	bLoadTarget->setEnabled(true);
+	bExitGdb->setEnabled(false);
+	bRun->setEnabled(false);
 }
 //
 void GdbControl::targetLoaded()
 {
 	GdbCore::targetLoaded();
 	bRun->setEnabled(true);
+	bExitGdb->setEnabled(true);
+	bLoadTarget->setEnabled(false);
 }
 //
 void GdbControl::targetRunning()
@@ -207,6 +232,7 @@ void GdbControl::targetRunning()
 	bStepInto->setEnabled(false);
 	bContinue->setEnabled(false);
 	bStop->setEnabled(false);
+	bExitGdb->setEnabled(false);
 
 }
 //
@@ -219,6 +245,7 @@ void GdbControl::targetStopped()
 	bStepInto->setEnabled(true);
 	bContinue->setEnabled(true);
 	bStop->setEnabled(true);
+	bExitGdb->setEnabled(true);
 }
 //
 void GdbControl::targetExited()
@@ -230,5 +257,6 @@ void GdbControl::targetExited()
 	bStepInto->setEnabled(false);
 	bContinue->setEnabled(false);
 	bStop->setEnabled(false);
+	bExitGdb->setEnabled(true);
 }
 //

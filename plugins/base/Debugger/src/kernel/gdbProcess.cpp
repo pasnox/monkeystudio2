@@ -3,6 +3,8 @@
 #include <QTimer>
 #include <QTimerEvent>
 
+#include <QMessageBox>
+
 static const int MAX_LINES = 4; //Maximum lines count, that can be parsed by Monkey. Than less - than better perfomance
 
 
@@ -19,16 +21,23 @@ GdbProcess::GdbProcess( QObject* o )
 	connect( this, SIGNAL( started() ), this, SLOT( started() ) );
 	connect( this, SIGNAL( stateChanged( QProcess::ProcessState ) ), this, SLOT( stateChanged( QProcess::ProcessState ) ) );
 
-	mTimerId = startTimer( 100 );
+//	mTimerId = startTimer( 100 );
 	mStringBuffer.reserve (MAX_LINES *200);
+	// CRLF
+	#ifdef Q_OS_WIN 
+		crlf = "\r\n";
+	#endif
+	#ifdef Q_OS_MAC 
+		crlf = "\n";
+	#endif
+	#ifdef Q_OS_UNIX
+		crlf = "\n";
+	#endif
 
 }
 
 GdbProcess::~GdbProcess()
 {
-	terminate();
-	waitForFinished(5);
-	kill();
 }
 
 QString GdbProcess::processInternalVariables( const QString& s )
@@ -55,7 +64,7 @@ pCommand GdbProcess::processCommand( pCommand c )
 
 void GdbProcess::timerEvent( QTimerEvent* e )
 {
-	if ( e->timerId() == mTimerId )
+/*	if ( e->timerId() == mTimerId )
 	{
 		// if running continue
 		if ( state() != QProcess::NotRunning )
@@ -63,7 +72,7 @@ void GdbProcess::timerEvent( QTimerEvent* e )
 		// execute next task is available
 		if ( !mCommands.isEmpty() )
 			executeProcess();
-	}
+	}*/
 }
 
 pCommand GdbProcess::getCommand( const pCommandList& l, const QString& s )
@@ -105,13 +114,7 @@ void GdbProcess::error( QProcess::ProcessError e )
 
 void GdbProcess::finished( int i, QProcess::ExitStatus e )
 {
-	// emit signal finished
 	emit commandFinished( currentCommand(), i, e );
-	// remove command from list
-	removeCommand( currentCommand() );
-	// clear buffer
-	mBuffer.buffer().clear();
-	mStringBuffer.clear(); // For perfomance issues
 }
 
 void GdbProcess::readyRead()
@@ -119,20 +122,7 @@ void GdbProcess::readyRead()
 	// append data to buffer to parse
 	QByteArray d = readAll ();
 	mBuffer.buffer().append( d );
-	// get current command
-	pCommand c = currentCommand();
-	// try parse output
-	if (! c.isValid() )
-		return;
-	
-	/*Alrorithm is not ideal, need fix, if will be problems with it
-	  Some text, that next parser possible to parse, can be removed
-	  And, possible, it's not idealy quick.   hlamer
-	*/
-	
-		
-	// emit signal
-	emit commandReadyRead( c, d );
+	emit commandReadyRead(mCommands.at(0), d );
 }
 
 void GdbProcess::started()
@@ -143,11 +133,6 @@ void GdbProcess::started()
 
 void GdbProcess::stateChanged( QProcess::ProcessState e )
 {
-	// emit signal state changed
-	emit commandStateChanged( currentCommand(), e );
-	// remove command if crashed and state 0
-	if ( QProcess::error() == QProcess::FailedToStart && e == QProcess::NotRunning )
-		removeCommand( currentCommand() );
 }
 
 void GdbProcess::sendRawCommand( const QString& s )
@@ -155,7 +140,7 @@ void GdbProcess::sendRawCommand( const QString& s )
 
 void GdbProcess::sendRawData( const QByteArray& a )
 {
-	if ( state() != QProcess::NotRunning )
+//	if ( state() != QProcess::NotRunning )
 	{
 		// if program is starting wait
 //		while ( state() == QProcess::Starting )
@@ -172,11 +157,23 @@ void GdbProcess::stopCurrentCommand( bool b )
 {
 	if ( state() != QProcess::NotRunning )
 	{
-		// terminate properly
-		terminate();
-		// if force, wait 30 seconds, then kill
-		if ( b )
-			QTimer::singleShot( 1, this, SLOT( kill() ) );
+		sendRawData( "kill" + crlf);
+		sendRawData( "y" + crlf);
+		sendRawData( "q" + crlf);
+
+		if(!waitForFinished(1000))
+		{
+			QMessageBox::warning(NULL,"information", "I can't  stop GDB nomaly.");
+			// terminate properly
+			terminate();
+			if(!waitForFinished(1000))
+			{
+				QMessageBox::warning(NULL,"information", "I can't  stop GDB, because your program probabily running\nPlease stop your target befor");
+				kill();
+			}
+		}
+//	waitForFinished ();
+	//	else QMessageBox::warning(NULL,"information", "I stopped GDB nomaly.");
 	}
 }
 

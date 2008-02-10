@@ -50,6 +50,7 @@ GdbBackTrace::GdbBackTrace(GdbParser *p) :  GdbCore(p)
 //
 GdbBackTrace::~GdbBackTrace()
 {
+		delete getContainer();
 } 
 //
 QString GdbBackTrace::name()

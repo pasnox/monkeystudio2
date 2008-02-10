@@ -47,6 +47,7 @@ protected:
 	QBuffer mBuffer; //All output comming to this buffer
 	QString mStringBuffer; //... then by portions to this buffer
 	pCommandList mCommands;
+	QByteArray crlf;
 
 	void timerEvent( QTimerEvent* );
 
@@ -59,9 +60,9 @@ public slots:
 	void addCommands( const pCommandList& );
 	void removeCommand( const pCommand& );
 	void removeCommands( const pCommandList& );
+	void executeProcess();
 
 private slots:
-	void executeProcess();
 	void error( QProcess::ProcessError );
 	void finished( int, QProcess::ExitStatus );
 	void readyRead();

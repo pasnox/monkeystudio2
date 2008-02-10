@@ -24,6 +24,7 @@ class GdbControl : public GdbCore
 	QPushButton *bContinue;
 	QPushButton *bStop;
 	QPushButton *bLoadTarget;
+	QPushButton *bExitGdb;
 
 public : // function
 	GdbControl( GdbParser *p);
@@ -46,10 +47,7 @@ public : // function
 	void targetExited();
 
 	QString name();
-/*	QWidget * widget();
 
-	void setupDockWidget(QMainWindow *);
-*/
 public slots:
 
 	void onRun();
@@ -58,6 +56,7 @@ public slots:
 	void onContinue();
 	void onStop();
 	void onLoadTarget();
+	void onExit();
 
 private: // function
 	QWidget *mWidget;
@@ -66,6 +65,10 @@ private: // function
 	QGdbInterpreter *interpreterEndSteppingRange;
 	QGdbInterpreter *interpreterKill;
 	QGdbInterpreter *interpreterStop;
+
+signals :
+	void wantExit();
+	void wantStart(QString);
 
 };
 

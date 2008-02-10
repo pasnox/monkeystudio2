@@ -11,14 +11,12 @@ GdbCore::GdbCore( GdbParser *p) : QThread(),
 		bTargetLoaded(false), bTargetRunning(false),
 		bTargetStopped(true), bTargetExited(true),
 		bGdbStarted(false), bGdbFinished(true),
-		mParser(NULL)
+		mParser(NULL),stopProcess(false)
 {
 	qRegisterMetaType<QGdbMessageCore>( "QGdbMessageCore" );
 
-// debuggin
-	file.setFileName("./thread_Main.txt");
-	file.open(QIODevice::WriteOnly);
 
+//	stopProcess = false;
 	statusProcess = PROCESS_TERMINED;
 	// set parset
 	mParser = p;
@@ -26,6 +24,9 @@ GdbCore::GdbCore( GdbParser *p) : QThread(),
 	mContainer = new QDockWidget();
 
 	// connect 
+
+//	connect(this ,SIGNAL(finished ( ) ), this , SLOT(onFiniched(  )));
+//	connect(this ,SIGNAL(terminated ( ) ), this , SLOT(onFiniched(  )));
 
 // Qt::DirectConnection
 // ou
@@ -47,8 +48,6 @@ qDebug("connection unix");
 //
 GdbCore::~GdbCore()
 {
-	terminate();
-	delete mContainer;
 }
 //
 void GdbCore::addInterpreter(QGdbInterpreter i)
@@ -88,10 +87,36 @@ void GdbCore::processSendRawData(GdbCore *p, QByteArray data)
 	emit sendRawData(p, data);
 }
 //
+void GdbCore::onFinished( )
+{
+//	QMessageBox::warning(NULL,"termined","thread exit " + name());
+}
+//
+void GdbCore::setStopProcess()
+{
+	stopProcess = true;
+	terminate();
+
+	if(!wait(5))
+	{
+		file.write("ERREUR THREAD NOT TERMINED\r\n");
+		file.flush();
+			QMessageBox::warning(NULL,"Information","Thread  " + name() + " not termined.");
+	}
+	else
+	{	file.write("TERMINED THREAD\r\n");
+		file.flush();
+	}
+	file.close();
+}
+//
 // checking new message queue
 void GdbCore::run()
 {
-	while(true)
+	file.setFileName("./Thread_Core_" + name() + ".txt");
+	file.open(QIODevice::WriteOnly);
+
+	while(!stopProcess)
 	{
 		mutexProcess->lock();
 		do
@@ -131,6 +156,9 @@ file.flush();
 		mutexProcess->unlock();
 		usleep(TIME_TICK);
 	}
+
+	exit();
+
 }
 //
 void GdbCore::onReadyProcess(QGdbMessageCore inBox)

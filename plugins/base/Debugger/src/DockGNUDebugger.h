@@ -3,6 +3,8 @@
 
 // Pasnox include
 #include "QSingleton.h"
+#include "pEditor.h"
+
 //#include "pConsoleManager.h"
 #include "pCommand.h"
  #include "UIMain.h"
@@ -11,6 +13,7 @@
 
 // Xiantia include
 #include <QMainWindow>
+#include <QFileInfo>
 
 #include "./kernel/gdbCore.h"
 
@@ -64,10 +67,26 @@ private:
 	int iconconditionenable;
 	int iconconditiondisable;
 
+	struct
+	{
+		QList<QString> fileName;
+		QList<pEditor*> pointeur;
+	}editor;
+	pEditor *findFile(QByteArray file);
+
+	int currentBacktraceLine;
+	QByteArray currentBacktraceFile;
+
 public slots:
 
 private slots:
 	void onFileOpened( const QString& );
+//	void onFileClosed( const QString&  );
+	void onFileClosed( int);
+
+	void onWantStart(QString);
+	void onWantExit();
+
 	void onMarginClicked(int , int  , Qt::KeyboardModifiers );
 
 	// frome Bridge Editor
@@ -76,7 +95,7 @@ private slots:
 	void onBreakpointMoved(QByteArray filename, int beforLine, int afterLine);
 	void onBreakpointEnabled(QByteArray filename, int line, bool b);
 	void onBreakpointConditionnaled(QByteArray filename, int line, bool b);
-
+	void onGotoBreakpoint(QByteArray filename, int line);
 
 	// frome console
 	void gdbStarted( const pCommand& c);

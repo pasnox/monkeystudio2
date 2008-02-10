@@ -132,7 +132,8 @@ public :
 		bClearMessages = false;
 		pClass = p;
 		bForce = false;
-		file.setFileName("./thread_" + p->name() + ".txt");
+
+		file.setFileName("./Thread_Template_" + p->name() + ".txt");
 		file.open(QIODevice::WriteOnly);
 	}
 	//
@@ -195,7 +196,7 @@ public :
 			else 		
 				QMessageBox::warning(NULL, "modifyEventToProcess", "Apptente to modify a unknow interpreter", QMessageBox::Ok ); 
 		}
-		else QMessageBox::warning(NULL, "modifyEventToProcessr", "Apptente to modify a NULL interpreter", QMessageBox::Ok ); 
+		else QMessageBox::warning(NULL, "modifyEventToProcess", "Apptente to modify a NULL interpreter", QMessageBox::Ok ); 
 		return pa;
 	}
 	//

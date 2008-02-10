@@ -22,6 +22,7 @@ GdbAnswer::GdbAnswer(GdbParser *o) :  GdbCore(o),
 //
 GdbAnswer::~GdbAnswer()
 {
+	delete getContainer();
 } 
 //
 QString GdbAnswer::name()

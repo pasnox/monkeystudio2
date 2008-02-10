@@ -40,6 +40,7 @@ GdbBridgeEditor::GdbBridgeEditor( GdbParser *p) :  GdbCore( p)
 //
 GdbBridgeEditor::~GdbBridgeEditor()
 {
+	delete getContainer();
 } 
 //
 QString GdbBridgeEditor::name()
@@ -67,6 +68,8 @@ void GdbBridgeEditor::targetRunning()
 {
 	GdbCore::targetRunning();
 	mWidget->setEnabled(false);
+	// program running don't show bactrace icon under editor
+	emit backtrace("",0);
 }
 //
 void GdbBridgeEditor::targetStopped()
@@ -79,6 +82,8 @@ void GdbBridgeEditor::targetExited()
 {
 	GdbCore::targetExited();
 	mWidget->setEnabled(false);
+	// program exited don't show bactrace icon under editor
+	emit backtrace("",0);
 }
 //
 int GdbBridgeEditor::process(QGdbMessageCore m)

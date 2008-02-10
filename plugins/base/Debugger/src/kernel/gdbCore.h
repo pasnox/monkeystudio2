@@ -43,6 +43,7 @@ private :
 	QRegExp mLastCmd;
 
 	int statusProcess;
+
 	QMutex mutexMessage;
 	QMutex mutexEndProcess;
 	QWaitCondition condition;
@@ -61,9 +62,10 @@ private :
 
 public :
 
+	bool stopProcess;
 	
 	GdbCore( GdbParser *p);
-	virtual   ~GdbCore() ;
+	virtual   ~GdbCore() =0;
 
 	virtual int process(QGdbMessageCore) {return PROCESS_TERMINED;}//= 0;
 	virtual int processError(QGdbMessageCore) {return PROCESS_TERMINED;}//= 0;
@@ -91,6 +93,7 @@ public :
 	virtual void targetRunning(void)
 		{ bTargetRunning = true, bTargetStopped = false, bTargetLoaded = true;}
 
+	virtual void setStopProcess(void);
 
 	void run();
 
@@ -123,6 +126,7 @@ public :
 
 public slots : 
 	void onReadyProcess(QGdbMessageCore);
+	void onFinished(  );
 
 signals:
 	

@@ -4,7 +4,6 @@
 #include "ProjectItem.h"
 #include "MonkeyCore.h"
 #include "pAbstractChild.h"
-#include "pEditor.h"
 
 /* debugger */
 //
@@ -106,20 +105,22 @@ DockGNUDebugger::DockGNUDebugger( QWidget* w )
 	connect(bridgeEditor, SIGNAL(breakpointMoved(QByteArray , int, int)), this , SLOT(onBreakpointMoved(QByteArray, int, int)));
 	connect(bridgeEditor, SIGNAL(breakpointConditionnaled(QByteArray , int,bool)), this , SLOT(onBreakpointConditionnaled(QByteArray, int, bool)));
 	connect(bridgeEditor, SIGNAL(breakpointEnabled(QByteArray , int,bool)), this , SLOT(onBreakpointEnabled(QByteArray, int, bool)));
+	connect(bridgeEditor, SIGNAL(gotobreakpoint(QByteArray , int)), this , SLOT(onGotoBreakpoint(QByteArray, int)));
 
-
+	// create QProcess for GDb
 	pConsole =  new GdbProcess();
  
 	connect(pConsole, SIGNAL( commandStarted( const pCommand& )), this, SLOT(gdbStarted( const pCommand& )));
 	connect(pConsole, SIGNAL( commandFinished( const pCommand&, int, QProcess::ExitStatus )), this, SLOT( gdbFinished( const pCommand&, int, QProcess::ExitStatus )));
 	connect(pConsole, SIGNAL( commandReadyRead( const pCommand&, const QByteArray& )), this, SLOT( commandReadyRead( const pCommand&, const QByteArray& )));
 
-	// plugin send
+	// plugin send a command to Gdb
 	connect(kernelDispatcher, SIGNAL(sendRawData(GdbCore*, QByteArray)) ,this , SLOT(onSendRawData(GdbCore *, QByteArray) ));
 
 	// start gdb
 	Cmd = new pCommand( "gdb", "gdb", QString::null,true, QStringList() << "gdb", QString::null,  false );
 	pConsole->addCommand(*Cmd);
+	//pConsole->executeProcess();
 
 	// CRLF
 	#ifdef Q_OS_WIN 
@@ -133,22 +134,56 @@ DockGNUDebugger::DockGNUDebugger( QWidget* w )
 	#endif
 
 	// when a file is opened
-	connect (MonkeyCore::fileManager(), SIGNAL(fileOpened( const QString& )), this, SLOT(onFileOpened( const QString& )));
-}
 
+	connect( MonkeyCore::workspace(), SIGNAL( fileOpened( const QString& ) ), this, SLOT( onFileOpened( const QString& ) ) );
+//	connect( MonkeyCore::workspace(), SIGNAL( fileClosed( const QString& ) ), this, SLOT( onFileClosed( const QString& ) ) );
+	connect( MonkeyCore::workspace(), SIGNAL( documentAboutToClose( int ) ), this, SLOT( onFileClosed( int ) ) );
+
+	connect( controlGdb, SIGNAL(wantExit()), this , SLOT(onWantExit()));
+	connect( controlGdb, SIGNAL(wantStart(QString)), this , SLOT(onWantStart(QString)));
+}
+//
+void DockGNUDebugger::onWantStart(QString file)
+{
+	// start gdb
+	pConsole->executeProcess();
+	// and load target
+	onSendRawData(NULL,"file " + file.toLocal8Bit());
+}
+//
+void DockGNUDebugger::onWantExit()
+{
+	// stop gdb
+	pConsole->stopCurrentCommand(true);
+	
+//	kernelDispatcher->gdbFinished();
+
+	// first delete back trace under all editor
+	for(int i=0; i<editor.pointeur.count(); i++)
+	{
+		editor.pointeur.at(i)->markerDeleteAll(iconbacktrace);
+		editor.pointeur.at(i)->markerDeleteAll(iconbreakenable);
+	}
+	hide();
+}
 // EDITOR
 // a new file is open under editor
 void DockGNUDebugger::onFileOpened( const QString& file )
 {
-//	((QTextEdit * )(bridge->widget() ))->append(file);
-
 	if(MonkeyCore::fileManager()->currentChild())
  	{
 		// get new file
 		pEditor *e = MonkeyCore::fileManager()->currentChild()->currentEditor();
 		if(e)
 		{
-			// set margin Qsci sensitiv
+			// get name of file
+			QString name = MonkeyCore::fileManager()->currentChildFile();
+
+			// save opened editor
+			editor.fileName << name;
+			editor.pointeur << e;
+
+			// set margin Qsci sensitive
 			e->setMarginSensitivity(0,true);
 			// connect margin clicked
 			connect (e, SIGNAL(marginClicked (int, int , Qt::KeyboardModifiers )), this, SLOT(onMarginClicked(int, int,  Qt::KeyboardModifiers)));
@@ -160,19 +195,38 @@ void DockGNUDebugger::onFileOpened( const QString& file )
 			iconconditionenable = e->markerDefine (QPixmap(":/icons/break_conditional_enable.png").scaled(pixmapSize));
 			iconconditiondisable = e->markerDefine (QPixmap(":/icons/break_conditional_disable.png").scaled(pixmapSize));
 
-			// debug
-			// get name of file
-//			QString name = MonkeyCore::fileManager()->currentChildFile();
-//			((QTextEdit * )(bridge->widget() ))->append("connection" + name);
+			// get if this editor haved breakpoint befor close / re-opening
+			QGdbMessageCore m;
+			m.id=-1;
+			m.msg = 	 "^notify,interpreter=\"editor\",currentCmd=\"none\",event=\"requested-breakpoint\",fileName=\"" + name.toLocal8Bit() + "\"";
+			kernelDispatcher->process(m);
+
+			// restor backtrace
+			if(name.toLocal8Bit() == currentBacktraceFile)
+				onBacktrace(name.toLocal8Bit() , currentBacktraceLine);
 		}
 	}
 }
-
+//
+void DockGNUDebugger::onFileClosed( int r )
+{
+	// delete editor
+	editor.pointeur.removeAt(r);
+	editor.fileName.removeAt(r);
+}
+//
+pEditor *DockGNUDebugger::findFile(QByteArray file)
+{
+	for(int i=0; i< editor.pointeur.count(); i++)
+	{
+		QString fullName = editor.fileName.at(i);
+		if(QFileInfo(fullName).fileName().toLocal8Bit() == file) return editor.pointeur.at(i);
+	}
+	return NULL;
+}
 // user clicked margin
 void DockGNUDebugger::onMarginClicked(int marginIndex, int line , Qt::KeyboardModifiers state)
 {
-//	((QTextEdit * )(bridge->widget() ))->append("clicked " + QString::number(line));
-
 	// get the name of file
 	QString fileName = MonkeyCore::fileManager()->currentChildFile();
 
@@ -180,9 +234,7 @@ void DockGNUDebugger::onMarginClicked(int marginIndex, int line , Qt::KeyboardMo
 	m.msg = "^done,interpreter=\"editor\",currentCmd=\"none\",event=\"CTRL+B\",fullname=\"" + fileName.toLocal8Bit() + "\",line=\"" + QByteArray::number(line+1) + "\"";
 	kernelDispatcher->process(m);
 
-//	kernelDispatcher->process(-1, "^done,interpreter=\"editor\",currentCmd=\"none\",event=\"CTRL+B\",fullname=\"" + name.toLocal8Bit() + "\",line=\"" + QString::number(line + 1).toLocal8Bit() + "\"");
 }
-
 // show icon under file
 void DockGNUDebugger::onBreakpoint(QByteArray filename, int line, bool b)
 {
@@ -206,66 +258,59 @@ void DockGNUDebugger::onBreakpoint(QByteArray filename, int line, bool b)
 // move backtrace under editor
 void DockGNUDebugger::onBacktrace(QByteArray filename, int line)
 {
-	if(MonkeyCore::fileManager()->currentChild() )
-	{
-		// get the current file
-		pEditor *e = MonkeyCore::fileManager()->currentChild()->currentEditor();
-	
-		if(e)
-		{
-			// first delete back trace
-			e->markerDeleteAll(iconbacktrace);
+	// save current file for restor after closed
+	currentBacktraceFile = filename;
+	currentBacktraceLine = line;
 
-			// open file (if is noit same)
-			MonkeyCore::workspace()->goToLine(filename, QPoint(1,line), true);
+	// first delete back trace under all editor
+	for(int i=0; i<editor.pointeur.count(); i++)
+		editor.pointeur.at(i)->markerDeleteAll(iconbacktrace);
 
-			// now the current file is
-			e = MonkeyCore::fileManager()->currentChild()->currentEditor();
+	// open file (if is not same)
+	MonkeyCore::workspace()->goToLine(filename, QPoint(1,line), true);
 
-			// first delete back trace
-			e->markerDeleteAll(iconbacktrace);
-			e->markerAdd (line-1, iconbacktrace);
+	// now the current file is
+	pEditor * e = MonkeyCore::fileManager()->currentChild()->currentEditor();
 
-			// debug
-//			((QTextEdit * )(bridge->widget() ))->append("open " + filename);
-		}
-	}
+	e->markerAdd (line-1, iconbacktrace);
 }
 //
 // some time gdb move breakpoint under next line 
 void DockGNUDebugger::onBreakpointMoved(QByteArray filename, int beforLine, int afterLine)
 {
-	if(MonkeyCore::fileManager()->currentChild() )
+	pEditor *e = findFile(filename);
+	if(e)
 	{
-		pEditor *e = MonkeyCore::fileManager()->currentChild()->currentEditor();
-		if(e)
-		{
-			e->markerDelete (beforLine-1, iconbreakenable);
-	
-			e->markerAdd(afterLine-1, iconbreakenable);
-		}
+		e->markerDelete (beforLine-1, iconbreakenable);
+		e->markerAdd(afterLine-1, iconbreakenable);
 	}
 }
 //
 // show breakpoint enable or not
 void DockGNUDebugger::onBreakpointEnabled(QByteArray filename, int line, bool b)
 {
-	if(MonkeyCore::fileManager()->currentChild() )
+	pEditor *e = findFile(filename);
+	if(e)
 	{
-		pEditor *e = MonkeyCore::fileManager()->currentChild()->currentEditor();
-		if(e)
+		if(b)
 		{
-			if(b)
-			{
-				e->markerDelete (line-1, iconbreakdisable);
-				e->markerAdd(line-1, iconbreakenable);
-			}
-			else
-			{
-				e->markerDelete (line-1, iconbreakenable);
-				e->markerAdd(line-1, iconbreakdisable);
-			}
+			e->markerDelete (line-1, iconbreakdisable);
+			e->markerAdd(line-1, iconbreakenable);
 		}
+		else
+		{
+			e->markerDelete (line-1, iconbreakenable);
+			e->markerAdd(line-1, iconbreakdisable);
+		}
+	}
+}
+//
+// goto line at file and at line contain breakpoint
+void DockGNUDebugger::onGotoBreakpoint(QByteArray filename, int line)
+{
+	if(MonkeyCore::workspace() )
+	{
+		MonkeyCore::workspace()->goToLine(filename, QPoint(1,line), true);
 	}
 }
 //
@@ -283,16 +328,12 @@ void DockGNUDebugger::onBreakpointConditionnaled(QByteArray filename, int line, 
 void DockGNUDebugger::gdbStarted( const pCommand& c)
 {
 	kernelDispatcher->gdbStarted();
-//	((QTextEdit * )(bridge->widget() ))->append("GDB started");
-
-//	onSendRawData(NULL,"file c:/dev/debugger/debugger.exe");
 }
 
 
 void DockGNUDebugger::gdbFinished( const pCommand& c, int a , QProcess::ExitStatus )
 {
 	kernelDispatcher->gdbFinished();
-//	((QTextEdit * )(bridge->widget() ))->append("GDB finished");
 }
 
 void DockGNUDebugger::commandReadyRead( const pCommand& c , const QByteArray& d)
@@ -315,10 +356,6 @@ void DockGNUDebugger::onDone(int id, QString st)
 	m.msg = st.toLocal8Bit();
 	m.id = id;
 	kernelDispatcher->process(m);
-//	kernelDispatcher->process(id,st.toLocal8Bit());
-// debug
-//	((QTextEdit * )(bridge->widget() ))->setTextColor(Qt::black);
-//	((QTextEdit * )(bridge->widget() ))->append(st.toLocal8Bit() + "  id : " + QString::number(id).toLocal8Bit());
 }
 
 void DockGNUDebugger::onError(int id, QString st)
@@ -327,10 +364,6 @@ void DockGNUDebugger::onError(int id, QString st)
 	m.msg = st.toLocal8Bit();
 	m.id = id;
 	kernelDispatcher->process(m);
-//	kernelDispatcher->process(id, st.toLocal8Bit());
-// debug
-//	((QTextEdit * )(bridge->widget() ))->setTextColor(Qt::red);
-//	((QTextEdit * )(bridge->widget() ))->append( st.toLocal8Bit() + "  id : " + QString::number(id).toLocal8Bit());
 }
 
 void DockGNUDebugger::onInfo(int id, QString st)
@@ -339,54 +372,50 @@ void DockGNUDebugger::onInfo(int id, QString st)
 	m.msg = st.toLocal8Bit();
 	m.id = id;
 	kernelDispatcher->process(m);
-//	kernelDispatcher->process( id,st.toLocal8Bit() );
-// debug
-//	((QTextEdit * )(bridge->widget() ))->setTextColor(Qt::blue);
-//	((QTextEdit * )(bridge->widget() ))->append( st.toLocal8Bit() + "  id : " + QString::number(id).toLocal8Bit());
 }
 
 // target
 void DockGNUDebugger::onTargetLoaded(int id, QString st)
 {
 	kernelDispatcher->targetLoaded();
-// debug
-//	((QTextEdit * )(bridge->widget() ))->setTextColor(Qt::blue);
-//	((QTextEdit * )(bridge->widget() ))->append( st.toLocal8Bit() + "  id : " + QString::number(id).toLocal8Bit());
 }
 
 void DockGNUDebugger::onTargetExited(int id, QString st)
 {
 	kernelDispatcher->targetExited();
-// debug
-//	((QTextEdit * )(bridge->widget() ))->setTextColor(Qt::blue);
-//	((QTextEdit * )(bridge->widget() ))->append( st.toLocal8Bit() + "  id : " + QString::number(id).toLocal8Bit());
 }
 
 void DockGNUDebugger::onTargetRunning(int id, QString st)
 {
 	kernelDispatcher->targetRunning();
-// debug
-//	((QTextEdit * )(bridge->widget() ))->setTextColor(Qt::blue);
-//	((QTextEdit * )(bridge->widget() ))->append( st.toLocal8Bit() + "  id : " + QString::number(id).toLocal8Bit());
 }
 
 void DockGNUDebugger::onTargetStopped(int id, QString st)
 {
 	kernelDispatcher->targetStopped();
-// debug
-	//	((QTextEdit * )(bridge->widget() ))->setTextColor(Qt::blue);
-	//((QTextEdit * )(bridge->widget() ))->append(st.toLocal8Bit() + "  id : " + QString::number(id).toLocal8Bit());
 }
 
 void DockGNUDebugger::onAboutToClose()
 {
-//	pConsole->stopCurrentCommand(true);
-	delete pConsole;
+	delete Parser;
+//	kernelDispatcher->stopAll();
+//	kernelDispatcher->setStopProcess();
+
+/*	bridgeEditor->setStopProcess();
+	backtraceGdb->setStopProcess();
+	registersGdb->setStopProcess();
+	watchGdb->setStopProcess();
+	breakpointGdb->setStopProcess();
+	controlGdb->setStopProcess();
+	answerGdb->setStopProcess();	
+	
+*/	pConsole->stopCurrentCommand(true); // terminate gdb
+//	delete pConsole;
+//	pConsole->waitForFinished();
 }
 
 DockGNUDebugger:: ~DockGNUDebugger()
 {
-//	QMessageBox::warning(NULL, "fermer Gdb", "test", QMessageBox::Ok ); 
 
 }
 

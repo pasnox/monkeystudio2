@@ -46,7 +46,14 @@ void GdbKernelDispatcher::add(GdbCore * p)
 	mWidget->append("Pluging add  " + p->name() + " ... OK");
 }
 
-
+void GdbKernelDispatcher::stopAll()
+{
+	for(int i=0; i<listPlugin.count(); i++)
+	{
+		listPlugin.at(i)->setStopProcess();
+//		delete listPlugin.at(i);
+	}
+}
 // process version 3
 int GdbKernelDispatcher::process(QGdbMessageCore m)
 {

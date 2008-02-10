@@ -59,6 +59,7 @@ GdbWatch::GdbWatch(GdbParser *p) :  GdbCore( p),
 //
 GdbWatch::~GdbWatch()
 {
+	delete getContainer();
 } 
 //
 QString GdbWatch::name()
@@ -75,6 +76,12 @@ void GdbWatch::gdbFinished()
 {
 	GdbCore::gdbFinished();
 	mWidget->setEnabled(false);
+
+	while(mWidget->rowCount())	
+	{
+		mWidget->removeRow(0);
+		removeVar(0);
+	}
 }
 //
 void GdbWatch::targetLoaded()
@@ -157,7 +164,7 @@ void GdbWatch::processExit()
 		currentRow=0;
 		currentColumn=1;
 	}
-		buffer.clear();
+	buffer.clear();
 }
 
 //

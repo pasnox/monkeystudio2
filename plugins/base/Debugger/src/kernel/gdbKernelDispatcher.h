@@ -36,7 +36,7 @@ public :
 //	void setupDockWidget(QMainWindow *);
 
 	void add(GdbCore *);
-
+	void stopAll();
 public slots:
 
 	void onPostMessage( int, QByteArray data);
