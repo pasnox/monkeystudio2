@@ -177,15 +177,22 @@ int GdbParser::checkInterpreter(QString oneLine)
 	return 0;
 }
 //
+int GdbParser::nextId()
+{
+	for(int i=PROMPT_ID + 1; i<INFO_ID -1 ; i++) //id 
+		if(!interpreter.id.contains(i)) return i;
+	return -1;
+}
+//
 int GdbParser::addInterpreter(QString name,QString cGdb, QRegExp cmd, QRegExp reg, QString answer)
 {
 // Interpreter ID start
-static int index = PROMPT_ID;
+int index;
 //qDebug("add interpreter " );
 
 	if( !interpreter.cmd.contains(cmd))
 	{
-		index++;
+//		index++;
 		interpreter.name << name;	
 
 //		interpreter.cmdGdb << cGdb;
@@ -193,6 +200,7 @@ static int index = PROMPT_ID;
 		interpreter.cmd << cmd;
 		interpreter.regexp << reg;
 		interpreter.answer << answer;
+		index = nextId();
 		interpreter.id << index;
 		//qDebug("return id : " + QByteArray::number(index) + " name : " + name.toLocal8Bit());
 		return index;
@@ -369,39 +377,52 @@ void GdbParser::setLastCommand(QString cmd)
 */
 void GdbParser::onDone(int id, QString st)
 {
-		switch(id)
-		{
-			case -1 : emit done(id, "^done,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"generic information (not parsing)\",answerGdb=\"" + st + "\"");break;
-			case PROMPT_ID: emit done(id, "^done,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"prompt\",answerGdb=\"" + st + "\""); break;
-		}
+	switch(id)
+	{
+		case -1 : emit done(id, "^done,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"generic information (not parsing)\",answerGdb=\"" + st + "\"");break;
+		case PROMPT_ID: emit done(id, "^done,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"prompt\",answerGdb=\"" + st + "\""); break;
+	}
 }
 //
 void GdbParser::onInfo(int id, QString st)
 {
-		switch(id)
-		{
-			//[10005]^Reading symbols from .*done\.
-			case 10005 : 	emit targetLoaded(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"target-loaded\",answerGdb=\"" + st + "\""); break;
-			//[10016]^Kill the program being debugged\? \(y or n\) \[answered Y; input not from terminal\]
-			case 10016 :
-			//[10007]^Program exited normally\.
-			case 10007 : 	emit targetExited(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"target-exited\",answerGdb=\"" + st + "\""); break;
-			case 10009 :	emit targetStopped(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"target-stopped\",answerGdb=\"" + st + "\""); 
-							emit info(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"breakpoint-hit\",answerGdb=\"" + st + "\"");
-							break;
-			case 10010 :
-			case 10011 :
-			case 10012 :
-			case 10013 :
-			case 10014 :	emit targetRunning(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"target-running\",answerGdb=\"" + st + "\""); break;
+	switch(id)
+	{
+		case 10004 : // no symbol found
+			QMessageBox::warning(NULL,"Sorry ...","Your target is not builded in debug option.");
+			emit targetExited(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"target-exited\",answerGdb=\"" + st + "\"");
+		break;
+		//[10005]^Reading symbols from .*done\.
+		case 10005 : 	emit targetLoaded(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"target-loaded\",answerGdb=\"" + st + "\""); break;
+		//[10016]^Kill the program being debugged\? \(y or n\) \[answered Y; input not from terminal\]
+		case 10016 :
+		//[10007]^Program exited normally\.
+		case 10007 : 	emit targetExited(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"target-exited\",answerGdb=\"" + st + "\""); break;
+		case 10009 :	emit targetStopped(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"target-stopped\",answerGdb=\"" + st + "\""); 
+		emit info(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"breakpoint-hit\",answerGdb=\"" + st + "\"");
+		break;
+		case 10010 :
+		case 10011 :
+		case 10012 :
+		case 10013 :
+		case 10014 :	emit targetRunning(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"target-running\",answerGdb=\"" + st + "\""); break;
 
-			default : if(id>=INFO_ID) emit info(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"info found (parsing)\",answerGdb=\"" + st + "\"");
-					// Interpreter command
-					else emit info(id,st);
-		}
+		default : if(id>=INFO_ID) emit info(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"info found (parsing)\",answerGdb=\"" + st + "\"");
+			// Interpreter command
+			else emit info(id,st);
+	}
 }
 //
 void GdbParser::onError(int id, QString st)
 {
-		emit error(id, "^error,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"error found\",answerGdb=\"" + st + "\"");
+	switch(id)
+	{
+		case 23290 :
+		case 22833 : // target is not for this OS
+			QMessageBox::warning(NULL,"Sorry ...","Your target can't be debugging.\nBecause this target is not for this OS");
+			emit targetExited(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"target-exited\",answerGdb=\"" + st + "\"");
+		break;
+	}
+
+	emit error(id, "^error,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"error found\",answerGdb=\"" + st + "\"");
 }

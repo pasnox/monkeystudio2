@@ -31,7 +31,7 @@ bool GNUDebugger::setEnabled( bool b )
 	if ( b && !isEnabled() )
 	{
 		// add dock to dock toolbar entry
-		MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( DockGNUDebugger::instance(), infos().Caption, QIcon( ":/icons/console.png" ) );
+		MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( DockGNUDebugger::instance(), infos().Caption, QIcon( ":/icons/debugger.png" ) );
 		mPluginInfos.Enabled = true;
 	}
 	else if ( !b && isEnabled() )

@@ -88,6 +88,7 @@ void GdbBridgeEditor::targetExited()
 //
 int GdbBridgeEditor::process(QGdbMessageCore m)
 {
+	mWidget->append("-> " +  m.msg);
 	return cmd.dispatchProcess(m);
 }
 //

@@ -53,6 +53,8 @@ public slots:
 
 	int addInterpreter(QString,QString, QRegExp , QRegExp , QString);
 	int removeInterpreter(int id);
+	int nextId();
+
 	void addRestorLine(QRegExp, QRegExp);
 
 

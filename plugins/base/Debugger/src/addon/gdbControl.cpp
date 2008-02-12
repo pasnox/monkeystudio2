@@ -7,6 +7,8 @@
 #include "./addon/gdbControl.h"
 
 #include <QFileDialog>
+#include <QIcon>
+#include <QToolTip>
 
 GdbControl::GdbControl(GdbParser *p) :  GdbCore( p),
 	interpreterEndSteppingRange(NULL)
@@ -14,20 +16,48 @@ GdbControl::GdbControl(GdbParser *p) :  GdbCore( p),
 	mWidget = new QFrame();
 	QVBoxLayout *h = new QVBoxLayout(mWidget);
 	
-	bStepOver = new QPushButton("step over");
-	bRun = new QPushButton("run");
-	bStepInto = new QPushButton("step into");
-	bContinue = new QPushButton("Continue");
-	bStop = new QPushButton("Stop");
-	bLoadTarget = new QPushButton("load target");
-	bExitGdb = new QPushButton("Exit");
-	
-	bRun->setEnabled(false);
-	bStepOver->setEnabled(false);
-	bStepInto->setEnabled(false);
-	bContinue->setEnabled(false);
-	bStop->setEnabled(false);
+	bStepOver = new QPushButton();
+	bRun = new QPushButton();
+	bStepInto = new QPushButton();
+	bContinue = new QPushButton();
+	bStop = new QPushButton();
+	bLoadTarget = new QPushButton();
+	bExitGdb = new QPushButton();
+
+	bExitGdb->setIcon(QIcon(":/icons/close.png"));
+	bExitGdb-> setIconSize (QSize(13,13));
 	bExitGdb->setEnabled(false);
+	bExitGdb->setToolTip("Exit debugging mode");
+
+	bRun->setIcon(QIcon(":/icons/update.png"));
+	bRun-> setIconSize (QSize(13,13));
+	bRun->setEnabled(false);
+	bRun->setToolTip("Start or restart");
+
+	bStop->setIcon(QIcon(":/icons/stop.png"));
+	bStop-> setIconSize (QSize(13,13));
+	bStop->setEnabled(false);
+	bStop->setToolTip("Stop debugging");
+
+	bLoadTarget->setIcon(QIcon(":/icons/file.png"));
+	bLoadTarget-> setIconSize (QSize(13,13));
+	bLoadTarget->setToolTip("Load target");
+
+	bContinue->setIcon(QIcon(":/icons/play.png"));
+	bContinue-> setIconSize (QSize(13,13));
+	bContinue->setEnabled(false);
+	bContinue->setToolTip("Run to next breakpoint");
+
+	bStepOver->setIcon(QIcon(":/icons/stepover.png"));
+	bStepOver-> setIconSize (QSize(13,13));
+	bStepOver->setEnabled(false);
+	bStepOver->setToolTip("Execute step over");
+
+	bStepInto->setIcon(QIcon(":/icons/stepinto.png"));
+	bStepInto-> setIconSize (QSize(13,13));
+	bStepInto->setEnabled(false);
+	bStepInto->setToolTip("Execute step into");
+
 
 	h->setSpacing(0);
 	h->addWidget(bLoadTarget);

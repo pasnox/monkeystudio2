@@ -33,15 +33,19 @@ GdbCore::GdbCore( GdbParser *p) : QThread(),
 // Qt::BlockingQueuedConnection
 
 
-#ifdef Q_OS_WIN
+//#ifdef Q_OS_WIN
 qDebug("connection windows");
 	connect(this, SIGNAL( readyProcess(QGdbMessageCore)),this, SLOT(onReadyProcess(QGdbMessageCore)), Qt::BlockingQueuedConnection);
-#endif
+/*#endif
 #ifdef Q_OS_UNIX
 qDebug("connection unix");
 	connect(this, SIGNAL( readyProcess(QGdbMessageCore)),this, SLOT(onReadyProcess(QGdbMessageCore)));
 #endif	
-
+#ifdef Q_OS_MAC
+qDebug("connection Mac same unix");
+	connect(this, SIGNAL( readyProcess(QGdbMessageCore)),this, SLOT(onReadyProcess(QGdbMessageCore)));
+#endif	
+*/
 	// start checking message Queue
 	start();
 }
@@ -121,8 +125,8 @@ void GdbCore::run()
 		mutexProcess->lock();
 		do
 		{
-file.write("have handle : "  + name().toLocal8Bit() + "\r\n");
-file.flush();
+//file.write("have handle : "  + name().toLocal8Bit() + "\r\n");
+//file.flush();
 			QGdbMessageCore inBox = getGdbMessage();
 			if(inBox.id != MESSAGE_EMPTY) 
 			{
@@ -137,12 +141,13 @@ file.flush();
 					emit readyProcess(inBox);
 file.write("u 3 : w 5 emit effectued\r\n");
 file.flush();
-					// wait until readyprocess is no finish
+/*					// wait until readyprocess is no finish
 #ifdef Q_OS_UNIX	
 //qDebug("wait unix");
 					condition.wait(&mutexEndProcess);
 #endif
 //						statusProcess = process(inBox);
+*/
 file.write("u 6 : w 6 exit\r\n");
 file.flush();
 					mutexEndProcess.unlock();
@@ -151,8 +156,8 @@ file.flush();
 			usleep(TIME_TICK);
 		}
 		while(statusProcess != PROCESS_TERMINED);
-file.write("leave handle\r\n");
-file.flush();
+//file.write("leave handle\r\n");
+//file.flush();
 		mutexProcess->unlock();
 		usleep(TIME_TICK);
 	}
@@ -169,11 +174,11 @@ file.flush();
 	statusProcess = process(inBox);
 file.write("u 5 : w 4 termined and wakeOne\r\n");
 file.flush();
-
+/*
 #ifdef Q_OS_UNIX
 //	qDebug("wakeOn unix");
 	condition.wakeOne();
-#endif
+#endif*/
 }
 
 void GdbCore::postGdbMessage(QGdbMessageCore m)

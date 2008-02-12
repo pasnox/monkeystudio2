@@ -105,7 +105,7 @@ DockGNUDebugger::DockGNUDebugger( QWidget* w )
 	connect(bridgeEditor, SIGNAL(breakpointMoved(QByteArray , int, int)), this , SLOT(onBreakpointMoved(QByteArray, int, int)));
 	connect(bridgeEditor, SIGNAL(breakpointConditionnaled(QByteArray , int,bool)), this , SLOT(onBreakpointConditionnaled(QByteArray, int, bool)));
 	connect(bridgeEditor, SIGNAL(breakpointEnabled(QByteArray , int,bool)), this , SLOT(onBreakpointEnabled(QByteArray, int, bool)));
-	connect(bridgeEditor, SIGNAL(gotobreakpoint(QByteArray , int)), this , SLOT(onGotoBreakpoint(QByteArray, int)));
+	connect(bridgeEditor, SIGNAL(gotoBreakpoint(QByteArray , int)), this , SLOT(onGotoBreakpoint(QByteArray, int)));
 
 	// create QProcess for GDb
 	pConsole =  new GdbProcess();
@@ -141,6 +141,8 @@ DockGNUDebugger::DockGNUDebugger( QWidget* w )
 
 	connect( controlGdb, SIGNAL(wantExit()), this , SLOT(onWantExit()));
 	connect( controlGdb, SIGNAL(wantStart(QString)), this , SLOT(onWantStart(QString)));
+
+	mw->centralWidget ()->setFixedWidth(100);
 }
 //
 void DockGNUDebugger::onWantStart(QString file)
@@ -352,6 +354,14 @@ void DockGNUDebugger::onSendRawData(GdbCore *plug, QByteArray data)
 // From parser
 void DockGNUDebugger::onDone(int id, QString st)
 {
+	QRegExp r("GNU .* (.*)");
+	if(r.exactMatch(st))
+	{
+		QStringList list = r.capturedTexts();
+
+		QString version = list.at(2);
+		setWindowTitle(version);
+	}
 	QGdbMessageCore m;
 	m.msg = st.toLocal8Bit();
 	m.id = id;

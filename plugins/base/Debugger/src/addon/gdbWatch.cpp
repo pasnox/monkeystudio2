@@ -14,7 +14,7 @@
 
 
 GdbWatch::GdbWatch(GdbParser *p) :  GdbCore( p), 
-	mWidget(NULL), currentRow(0),	currentColumn(1)
+	mWidget(NULL), currentRow(0),	currentColumn(1), isPrintSequence(false)
 {
 
 	mWidget = new QTableWidgetEx();
@@ -123,7 +123,7 @@ void GdbWatch::showColor(QTableWidgetItem *p, QString a)
 //
 int GdbWatch::processError(QGdbMessageCore m)
 {
-
+//qDebug("erreur occur");
 	QString s = getParametre("answerGdb=" , m.msg);
 
 	// show error in current column variable list
@@ -142,34 +142,44 @@ int GdbWatch::processError(QGdbMessageCore m)
 	// rotate current Column for next row
 	if( currentColumn >=  TOTAL_CHAMP) {currentRow++; currentColumn = 1;}
 
+//qDebug("end erreur : current colunm = " + QByteArray::number(currentColumn) + " current row = " + QByteArray::number(currentRow));
+
 	return PROCESS_TERMINED;
 }
 // prompt event
 void GdbWatch::processExit()
 {
+//qDebug("exit occur");
+
 	if(isPrintSequence)
 	{
 		QRegExp exp("^\\$\\d+\\s=\\s(.*)\\(gdb\\) " );
 		if(exp.exactMatch(  buffer))
 		{
+//qDebug("match print sequence");
+
 			QStringList list = exp.capturedTexts();
 			showColor(mWidget->item(currentRow, 3), list.at(1));
 			mWidget->item(currentRow, 3)->setText(list.at(1));
-		}
 		currentColumn++;
+		}
 		isPrintSequence = false;
 	}
 	else
 	{	// promp event
 		currentRow=0;
 		currentColumn=1;
+//qDebug("end exit normaly");
 	}
 	buffer.clear();
+
+//qDebug("end exit : current colunm = " + QByteArray::number(currentColumn) + " current row = " + QByteArray::number(currentRow));
 }
 
 //
 int GdbWatch::processWatchPrint(QGdbMessageCore m)
 {
+//qDebug("-> watch");
 	// entering in print sequence for multi lines
 	isPrintSequence = true;
 
@@ -188,6 +198,9 @@ int GdbWatch::processWatchPrint(QGdbMessageCore m)
 //
 int GdbWatch::processWatchAdresse(QGdbMessageCore m)
 {
+
+//qDebug("-> addresse");
+	isPrintSequence = false;
 
 	QByteArray value = getParametre("answerGdb=", m.msg);
 
@@ -210,6 +223,8 @@ int GdbWatch::processWatchAdresse(QGdbMessageCore m)
 //
 int GdbWatch::processWatchType(QGdbMessageCore m)
 {
+//qDebug("-> type");
+	isPrintSequence = false;
 
 	QByteArray value = getParametre("answerGdb=", m.msg);
 
