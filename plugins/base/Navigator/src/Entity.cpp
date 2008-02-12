@@ -251,7 +251,7 @@ void Entity::updateGUI ()
     tip =    tip+
             ' '+
             name + signature + 
-            '\n';
+            "<br>";
     if ( line != 0)
         tip = tip + QFileInfo (file).fileName() + QString(":%1").arg(line);
     else
