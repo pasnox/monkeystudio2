@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>FindInFiles</class>
- <widget class="QDialog" name="FindInFiles" >
+ <class>DockFindInFiles</class>
+ <widget class="QDockWidget" name="FindInFiles" >
   <property name="windowModality" >
    <enum>Qt::ApplicationModal</enum>
   </property>
@@ -14,9 +14,6 @@
   </property>
   <property name="windowTitle" >
    <string>Find in files</string>
-  </property>
-  <property name="windowIcon" >
-   <iconset resource="../resources/resources.qrc" >:/Icons/Icons/logo.png</iconset>
   </property>
   <property name="modal" >
    <bool>true</bool>
