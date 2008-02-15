@@ -106,7 +106,7 @@ int GdbRegisters::process(QGdbMessageCore m)
 int GdbRegisters::processError(QGdbMessageCore m)
 {
 	// TODO
-	m=m; 
+	QMessageBox::warning(NULL, "Error in GDB Registers",m.msg);
 	return PROCESS_TERMINED;
 }
 //

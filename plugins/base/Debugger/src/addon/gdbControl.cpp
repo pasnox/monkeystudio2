@@ -99,9 +99,10 @@ int GdbControl::process(QGdbMessageCore m)
 	return cmd.dispatchProcess(m);
 }
 //
-int GdbControl::processError(QGdbMessageCore)
+int GdbControl::processError(QGdbMessageCore m)
 {
 	// TODO
+	QMessageBox::warning(NULL, "Error in GDB Control",m.msg);
  
 	return PROCESS_TERMINED;
 }

@@ -142,13 +142,14 @@ DockGNUDebugger::DockGNUDebugger( QWidget* w )
 	connect( controlGdb, SIGNAL(wantExit()), this , SLOT(onWantExit()));
 	connect( controlGdb, SIGNAL(wantStart(QString)), this , SLOT(onWantStart(QString)));
 
-	mw->centralWidget ()->setFixedWidth(100);
 }
 //
 void DockGNUDebugger::onWantStart(QString file)
 {
 	// start gdb
 	pConsole->executeProcess();
+	// wait gdb start ....
+	pConsole->waitForStarted(2000);
 	// and load target
 	onSendRawData(NULL,"file " + file.toLocal8Bit());
 }
@@ -158,7 +159,8 @@ void DockGNUDebugger::onWantExit()
 	// stop gdb
 	pConsole->stopCurrentCommand(true);
 	
-//	kernelDispatcher->gdbFinished();
+	kernelDispatcher->stopAll();
+	kernelDispatcher->setStopProcess();
 
 	// first delete back trace under all editor
 	for(int i=0; i<editor.pointeur.count(); i++)

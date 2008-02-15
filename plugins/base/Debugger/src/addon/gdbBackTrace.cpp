@@ -100,6 +100,7 @@ int GdbBackTrace::process(QGdbMessageCore m )
 int GdbBackTrace::processError(QGdbMessageCore m)
 {
 	// TODO
+	QMessageBox::warning(NULL, "Error in GDB BackTrace",m.msg);
  
 	mWidget->append(getParametre("answerGdb=", m.msg));
 
