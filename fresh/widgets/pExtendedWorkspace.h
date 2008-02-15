@@ -93,10 +93,10 @@ public slots:
 	Do not make this functions virtual!!
 	closeAllDocuments must not call functions of child classes
 	*/
-	void closeDocument( QWidget* document );
-	void closeDocument( int index );
-	void closeAllDocuments();
-	void closeCurrentDocument();
+	virtual void closeDocument( QWidget* document );
+	virtual void closeDocument( int index );
+	virtual bool closeAllDocuments();
+	virtual void closeCurrentDocument();
 
 	void activateNextDocument();
 	void activatePreviousDocument();

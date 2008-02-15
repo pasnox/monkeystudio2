@@ -31,34 +31,28 @@
     </property>
     <item>
      <widget class="QFrame" name="fToolButtons" >
-      <property name="frameShape" >
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow" >
-       <enum>QFrame::Raised</enum>
-      </property>
       <layout class="QHBoxLayout" >
        <property name="spacing" >
-        <number>3</number>
+        <number>0</number>
        </property>
        <property name="leftMargin" >
-        <number>5</number>
+        <number>0</number>
        </property>
        <property name="topMargin" >
-        <number>5</number>
+        <number>0</number>
        </property>
        <property name="rightMargin" >
-        <number>5</number>
+        <number>0</number>
        </property>
        <property name="bottomMargin" >
-        <number>5</number>
+        <number>0</number>
        </property>
        <item>
         <widget class="QToolBar" name="tbActions" >
          <property name="iconSize" >
           <size>
-           <width>22</width>
-           <height>22</height>
+           <width>18</width>
+           <height>18</height>
           </size>
          </property>
          <property name="toolButtonStyle" >
@@ -73,56 +67,24 @@
      </widget>
     </item>
     <item>
-     <widget class="QSplitter" name="splitter" >
+     <widget class="QSplitter" name="sView" >
       <property name="orientation" >
        <enum>Qt::Vertical</enum>
       </property>
-      <widget class="QWidget" name="layoutWidget1" >
-       <layout class="QVBoxLayout" >
-        <item>
-         <widget class="QLabel" name="lTitleTop" >
-          <property name="text" >
-           <string>Full Model :</string>
-          </property>
-          <property name="buddy" >
-           <cstring>tvProjects</cstring>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QTreeView" name="tvProjects" >
-          <property name="editTriggers" >
-           <set>QAbstractItemView::NoEditTriggers</set>
-          </property>
-         </widget>
-        </item>
-       </layout>
+      <widget class="QStackedWidget" name="swViews" >
+       <widget class="QTreeView" name="tvProjects" >
+        <property name="editTriggers" >
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+       </widget>
+       <widget class="QTreeView" name="tvProxiedProjects" >
+        <property name="editTriggers" >
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+       </widget>
       </widget>
-      <widget class="QWidget" name="layoutWidget2" >
-       <layout class="QVBoxLayout" >
-        <item>
-         <widget class="QLabel" name="lTitleMiddle" >
-          <property name="text" >
-           <string>Filtered Model :</string>
-          </property>
-          <property name="buddy" >
-           <cstring>tvProxiedProjects</cstring>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QTreeView" name="tvProxiedProjects" >
-          <property name="editTriggers" >
-           <set>QAbstractItemView::NoEditTriggers</set>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
+      <widget class="QTextEdit" name="teLog" />
      </widget>
-    </item>
-    <item>
-     <widget class="QTextEdit" name="teLog" />
     </item>
    </layout>
   </widget>

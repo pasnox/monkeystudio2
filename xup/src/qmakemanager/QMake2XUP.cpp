@@ -8,15 +8,17 @@ si "multiline" n'existe pas, il vaux "false"
 si "nested" n'existe pas, il vaux "false"
 **************************/
 
-
 #include <QApplication>
 #include <QtCore>
 #include <QtGui>
 #include <QtXml>
 
-
 QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 {
+	// check if file exists
+	if ( !QFile::exists( s ) )
+		return QByteArray();
+	
 	QFile f( s );
 	if( !f.open( QIODevice::ReadOnly | QIODevice::Text ) )
 		return QByteArray();
@@ -42,7 +44,7 @@ QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 	QRegExp comments("^#(.*)");
 	QRegExp varLine("^(.*)[ \\t]*\\\\[ \\t]*(#.*)?");
 	
-	file.append( QString( "<!DOCTYPE XUPProject>\n<project version=\"%1\" name=\"%2\" expanded=\"true\">\n" ).arg( version ).arg( QFileInfo( s ).fileName() ) );
+	file.append( QString( "<!DOCTYPE XUPProject>\n<project version=\"%1\" name=\"%2\" expanded=\"false\">\n" ).arg( version ).arg( QFileInfo( s ).fileName() ) );
 	for(int i = 0;i < v.size();i++)
 	{
 		if(bloc.exactMatch(v[i]))
@@ -155,7 +157,12 @@ QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 				}
 			}
 			for(int ku = 0;ku < multivalues.size();ku++)
-				file.append("<value"+(liste[6].trimmed().toUtf8() != "" && ku+1 == multivalues.size() ? " comment=\""+liste[6].trimmed().toUtf8()+"\"" : "")+">"+multivalues.value(ku).toUtf8()+"</value>\n");
+			{
+				if ( multivalues.value(ku).toUtf8().startsWith( "#" ) )
+					file.append( QString( "<comment>%1</comment>" ).arg( QString( multivalues.value(ku).toUtf8() ) ) );
+				else
+					file.append("<value"+(liste[6].trimmed().toUtf8() != "" && ku+1 == multivalues.size() ? " comment=\""+liste[6].trimmed().toUtf8()+"\"" : "")+">"+multivalues.value(ku).toUtf8()+"</value>\n");
+			}
 			
 			if(isMulti == " multiline=\"true\"")
 			{
@@ -189,7 +196,12 @@ QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 						}
 					}
 					for(int ku = 0;ku < multivalues.size();ku++)
-						file.append("<value"+(liste[2].trimmed().toUtf8() != "" && ku+1 == multivalues.size() ? " comment=\""+liste[2].trimmed().toUtf8()+"\"" : "")+">"+multivalues.value(ku).toUtf8()+"</value>\n");
+					{
+						if ( multivalues.value(ku).toUtf8().startsWith( "#" ) )
+							file.append( QString( "<comment>%1</comment>" ).arg( QString( multivalues.value(ku).toUtf8() ) ) );
+						else
+							file.append("<value"+(liste[2].trimmed().toUtf8() != "" && ku+1 == multivalues.size() ? " comment=\""+liste[2].trimmed().toUtf8()+"\"" : "")+">"+multivalues.value(ku).toUtf8()+"</value>\n");
+					}
 					i++;
 				}
 				liste = v[i].split( "#" );
@@ -222,7 +234,12 @@ QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 					}
 				}
 				for(int ku = 0;ku < multivalues.size();ku++)
-					file.append("<value"+(comment.trimmed().toUtf8() != "" && ku+1 == multivalues.size() ? " comment=\""+comment.trimmed().toUtf8()+"\"" : "")+">"+multivalues.value(ku).toUtf8()+"</value>\n");
+				{
+					if ( multivalues.value(ku).toUtf8().startsWith( "#" ) )
+						file.append( QString( "<comment>%1</comment>" ).arg( QString( multivalues.value(ku).toUtf8() ) ) );
+					else
+						file.append("<value"+(comment.trimmed().toUtf8() != "" && ku+1 == multivalues.size() ? " comment=\""+comment.trimmed().toUtf8()+"\"" : "")+">"+multivalues.value(ku).toUtf8()+"</value>\n");
+				}
 			}
 			file.append("</variable>\n");
 		}
@@ -266,7 +283,10 @@ QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 			}
 			QByteArray theOp = (liste[4].trimmed().toUtf8() == "=" ? "" : " operator=\""+liste[4].trimmed().toUtf8()+"\"");
 			file.append("<variable name=\""+liste[3].trimmed().toUtf8()+"\""+theOp+">\n");
-			file.append("<value"+(liste[7].trimmed().toUtf8() != "" ? " comment=\""+liste[7].trimmed().toUtf8()+"\"" : "")+">"+liste[5].trimmed().toUtf8()+"</value>\n");
+			if ( liste[7].trimmed().toUtf8().startsWith( "#" ) )
+				file.append( QString( "<comment>%1</comment>" ).arg( QString( liste[7].trimmed().toUtf8() ) ) );
+			else
+				file.append("<value"+(liste[7].trimmed().toUtf8() != "" ? " comment=\""+liste[7].trimmed().toUtf8()+"\"" : "")+">"+liste[5].trimmed().toUtf8()+"</value>\n");
 			file.append("</variable>\n");
 		}
 		else if(end_bloc.exactMatch(v[i]))
@@ -318,7 +338,29 @@ QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 	return file.toUtf8();
 }
 
-bool QMake2XUP::convertToPro( const QDomDocument& d, const QString& s, const QString& v )
+QByteArray convertNodeToPro( const QDomElement& e, const QString& v )
 {
-	return false;
+	// get nodes
+	QDomNodeList l = e.childNodes();
+	// iterate over nodes
+	for ( int i = 0; i < l.count(); i++ )
+	{
+		QDomNode n = l.at( i );
+		bool b = n.isText();
+	}
+	return QByteArray( "gege" );
+}
+
+QByteArray QMake2XUP::convertToPro( const QDomDocument& d, const QString& v )
+{
+	QByteArray a;
+	// get project node
+	QDomElement e  = d.firstChildElement( "project" ).toElement();
+	// check project available
+	if ( e.isNull() )
+		return QByteArray();
+	// parse project scope
+	a.append( convertNodeToPro( e, v ) );
+	// return state
+	return a;
 }

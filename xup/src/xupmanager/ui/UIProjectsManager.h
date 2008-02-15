@@ -3,6 +3,8 @@
 
 #include "ui_UIProjectsManager.h"
 
+#include <QHash>
+
 class ProjectItemModel;
 class ProjectItem;
 class QAction;
@@ -12,6 +14,22 @@ class UIProjectsManager : public QDockWidget, public Ui::UIProjectsManager
 	Q_OBJECT
 	
 public:
+	enum Actions
+	{
+		New = 0, // new project
+		Open, // open project
+		SaveCurrent, // save current project
+		SaveAll, // save all projects
+		CloseCurrent, // close current proejct
+		CloseAll, // close all projects
+		Add, // add file to current project
+		Remove, // remove items/files from current project
+		Settings, // open settings dialog for current project
+		Source, // show xup source of current project
+		Filtered, // view filtered tree
+		UserAction // enum for adding custom action to project manager, ie : setAction( UIProjectsManager::UserAction +1, ... );
+	};
+	
 	UIProjectsManager( QWidget* = 0 );
 	~UIProjectsManager();
 
@@ -25,41 +43,14 @@ public:
 	bool openProject( const QString& );
 	bool saveProject( ProjectItem*, const QString& );
 
-	QAction* actionNew() const;
-	void setActionNew( QAction* );
-	QAction* actionOpen() const;
-	void setActionOpen( QAction* );
-	QAction* actionSaveCurrent() const;
-	void setActionSaveCurrent( QAction* );
-	QAction* actionSaveAll() const;
-	void setActionSaveAll( QAction* );
-	QAction* actionCloseCurrent() const;
-	void setActionCloseCurrent( QAction* );
-	QAction* actionCloseAll() const;
-	void setActionCloseAll( QAction* );
-	QAction* actionAdd() const;
-	void setActionAdd( QAction* );
-	QAction* actionRemove() const;
-	void setActionRemove( QAction* );
-	QAction* actionSettings() const;
-	void setActionSettings( QAction* );
-	QAction* actionSource() const;
-	void setActionSource( QAction* );
+	QAction* action( UIProjectsManager::Actions ) const;
+	void setAction( UIProjectsManager::Actions, QAction* );
 
 protected:
-	void initializeProject( ProjectItem* );
-
 	ProjectItemModel* mModel;
-	QAction* aNew;
-	QAction* aOpen;
-	QAction* aSaveCurrent;
-	QAction* aSaveAll;
-	QAction* aCloseCurrent;
-	QAction* aCloseAll;
-	QAction* aAdd;
-	QAction* aRemove;
-	QAction* aSettings;
-	QAction* aSource;
+	QHash<UIProjectsManager::Actions, QAction*> mActions;
+
+	void initializeProject( ProjectItem* );
 
 protected slots:
 	void actionNewTriggered();
@@ -72,13 +63,14 @@ protected slots:
 	void actionRemoveTriggered();
 	void actionSettingsTriggered();
 	void actionSourceTriggered();
+	void actionFilteredTriggered();
 	void currentChanged( const QModelIndex&, const QModelIndex& );
 	void on_tvProxiedProjects_collapsed( const QModelIndex& );
 	void on_tvProxiedProjects_expanded( const QModelIndex& );
 	void on_tvProxiedProjects_doubleClicked( const QModelIndex& );
-
 	void internal_projectOpen( ProjectItem* );
 	void internal_projectAboutToClose( ProjectItem* );
+	void internal_projectClosed( ProjectItem* );
 	void internal_projectModifiedChanged( ProjectItem*, bool );
 	void internal_currentProjectChanged( ProjectItem* );
 	void internal_projectDoubleClicked( ProjectItem* );
@@ -87,6 +79,7 @@ protected slots:
 signals:
 	void projectOpen( ProjectItem* );
 	void projectAboutToClose( ProjectItem* );
+	void projectClosed( ProjectItem* );
 	void projectModifiedChanged( ProjectItem*, bool );
 	void currentProjectChanged( ProjectItem* );
 	void projectDoubleClicked( ProjectItem* );

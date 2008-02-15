@@ -39,8 +39,8 @@
 #include <QMainWindow>
 #include <QKeyEvent>
 
-pDockToolBar::pDockToolBar( pDockToolBarManager* t, Qt::Orientation o )
-	: QToolBar(), mManager( t ), mUniqueId( 0 )
+pDockToolBar::pDockToolBar( pDockToolBarManager* t, Qt::Orientation o, QMainWindow* w )
+	: QToolBar( w ), mManager( t ), mUniqueId( 0 )
 {
 	// need docktoolbar manager
 	Q_ASSERT( t != 0 );

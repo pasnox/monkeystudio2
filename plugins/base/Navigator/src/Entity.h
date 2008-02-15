@@ -69,6 +69,8 @@ private:
     static QIcon iMEMBER;
     static QIcon iSTRUCT;
     static QIcon iTYPEDEF;
+    static QIcon iMACRO;
+    static QIcon iENUMERATOR;
     
 public:
     Entity ( tagEntryInfo* entry, QString fileName, QDateTime time);
@@ -78,6 +80,7 @@ public:
     EntityType type;
     QString file;
     int line;
+    QString varType;
     QString signature;
 
     Entity* child (int i);

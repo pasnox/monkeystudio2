@@ -57,8 +57,8 @@ private:
 	//setting. If true - entity will allow to add to self only compex entityes and his members
 	bool complex_only;
 
-	Entity* findEntityInContainer ( EntityType type, QString name );
-	Entity* findEntityInEntity (Entity* where, EntityType type, QString name );
+	Entity* findEntityInContainer ( EntityType type, const QString& name, const QString& signature);
+	Entity* findEntityInEntity (Entity* where, EntityType type, const QString& name, const QString& signature);
 
 	void addChildInContainer ( tagEntryInfo* entry, QString fileName, QDateTime time );
 

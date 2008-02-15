@@ -161,13 +161,14 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 		//connect( c, SIGNAL( currentFileChanged( const QString& ) ), statusBar(), SLOT( setFileName( const QString& ) ) );
 	}
 	
+	// add child to workspace if needed
+	if ( !children().contains( c ) )
+		MonkeyCore::workspace()->addDocument( c, QString() );
+		//MonkeyCore::workspace()->addDocument( c, c->currentFileName() );
+	
 	// open file
 	c->openFile( s );
 	
-	// add child to workspace if needed
-	if ( !children().contains( c ) )
-		MonkeyCore::workspace()->addDocument( c, c->currentFileName() );
-		
 	// set modification state because file is open before put in worksapce so workspace can't know it
 	c->setWindowModified( c->isModified() );
 	
@@ -177,7 +178,7 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 		setCurrentDocument( c );
 		c->showFile( s );
 	}
-
+	
 	// return child instance
 	return c;
 }
@@ -231,6 +232,7 @@ void pWorkspace::internal_currentChanged( int i )
 	bool paste = hasChild ? c->isPasteAvailable() : false;
 	bool search = hasChild ? c->isSearchReplaceAvailable() : false;
 	bool go = hasChild ? c->isGoToAvailable() : false;
+	bool moreThanOneChild = count() > 1;
 
 	// update file menu
 	MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" )->setEnabled( modified );
@@ -254,8 +256,8 @@ void pWorkspace::internal_currentChanged( int i )
 	MonkeyCore::menuBar()->action( "mEdit/aExpandAbbreviation" )->setEnabled( hasChild );
 
 	// update view menu
-	MonkeyCore::menuBar()->action( "mView/aNext" )->setEnabled( hasChild );
-	MonkeyCore::menuBar()->action( "mView/aPrevious" )->setEnabled( hasChild );
+	MonkeyCore::menuBar()->action( "mView/aNext" )->setEnabled( moreThanOneChild );
+	MonkeyCore::menuBar()->action( "mView/aPrevious" )->setEnabled( moreThanOneChild );
 
 	// update status bar
 	//MonkeyCore::menuBar()->setCursorPosition( c ? c->cursorPosition() : QPoint( -1, -1 ) );
@@ -548,11 +550,7 @@ void pWorkspace::helpTestReport_triggered()
 #endif
 
 void pWorkspace::closeCurrentDocument()
-{
-	if ( UISaveFiles::saveDocument( window(), currentChild(), false ) == UISaveFiles::bCancelClose )
-		return;
-	pExtendedWorkspace::closeCurrentDocument();
-}
+{ closeDocument( currentDocument() ); }
 
 bool pWorkspace::closeAllDocuments()
 {
@@ -566,4 +564,11 @@ bool pWorkspace::closeAllDocuments()
 	}
 	else
 		return false; //not close IDE
+}
+
+void pWorkspace::closeDocument( QWidget* document )
+{
+	if ( UISaveFiles::saveDocument( window(), qobject_cast<pAbstractChild*>( document ), false ) == UISaveFiles::bCancelClose )
+		return;
+	pExtendedWorkspace::closeDocument( document );
 }

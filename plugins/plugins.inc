@@ -28,6 +28,9 @@ else:unix|win32:MONKEY_PLUGINS_DIR	= ../../../bin/plugins
 LIBS	= -L$${BUILD_PATH}
 mac:*-g++:LIBS	*= -Wl,-undefined,dynamic_lookup
 
+# ubuntu hardy/debian fix
+QMAKE_LFLAGS	-= -Wl,--no-undefined
+
 win32:QMAKE_LIBDIR	+= ../../../bin
 contains( DEFINES, __COVERAGESCANNER__ ) {
 	message( "Coverage Meter Activated ( http://www.coveragemeter.com )." )

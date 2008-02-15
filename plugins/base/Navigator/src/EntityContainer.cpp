@@ -161,12 +161,12 @@ Entity*EntityContainer::getScopeEntity ( QString scope0, QString scope1)
     return scopeEntity;
 }
 
-Entity* EntityContainer::findEntityInContainer ( EntityType type, QString name )
+Entity* EntityContainer::findEntityInContainer ( EntityType type, const QString& name, const QString& signature)
 {
     for ( int i = 0; i < topLevelItemCount (); i++)
     {
         if (  (childEntity (i)->type == type || type == UNKNOWN ) 
-                && childEntity (i)->name == name )
+                && childEntity (i)->name == name && childEntity(i)->signature == signature)
         {
             return childEntity (i);
         }
@@ -174,12 +174,12 @@ Entity* EntityContainer::findEntityInContainer ( EntityType type, QString name )
     return NULL; //not finded
 }
 
-Entity* EntityContainer::findEntityInEntity (Entity* where, EntityType type, QString name )
+Entity* EntityContainer::findEntityInEntity (Entity* where, EntityType type,const QString& name, const QString& signature )
 {
     for ( int i = 0; i < where->childCount(); i++)
     {
         if (  (where->child(i)->type == type || type == UNKNOWN ) 
-                && where->child(i)->name == name )
+                && where->child(i)->name == name && where->child(i)->signature == signature)
         {
             return where->child(i);
         }
@@ -199,7 +199,7 @@ void EntityContainer::addChild ( Entity* parEnt,tagEntryInfo* entry, QString fil
 
 void EntityContainer::addChildInContainer ( tagEntryInfo* entry, QString fileName, QDateTime time )
 {
-    Entity* existing = findEntityInContainer ( Entity::getEntityType ( entry->kind), entry->name);
+    Entity* existing = findEntityInContainer ( Entity::getEntityType ( entry->kind), entry->name, entry->extensionFields.signature);
     if ( ! existing )
     {
         Entity* entity = new Entity ( entry, fileName, time);
@@ -212,7 +212,7 @@ void EntityContainer::addChildInContainer ( tagEntryInfo* entry, QString fileNam
 
 void EntityContainer::addChildInEntity ( Entity* parEnt, tagEntryInfo* entry, QString fileName, QDateTime time )
 {
-    Entity* existing = findEntityInEntity( parEnt,Entity::getEntityType ( entry->kind), entry->name);
+    Entity* existing = findEntityInEntity( parEnt,Entity::getEntityType ( entry->kind), entry->name, entry->extensionFields.signature);
     if ( !existing )
     {
         Entity* entity = new Entity ( entry, fileName, time);

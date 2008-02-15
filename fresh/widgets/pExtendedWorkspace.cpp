@@ -89,32 +89,42 @@ pExtendedWorkspace::~pExtendedWorkspace()
 bool pExtendedWorkspace::eventFilter( QObject* o, QEvent* e )
 {
 	// get document
-	QWidget* td = qobject_cast<QWidget*>( o );
-	
-	if ( indexOf( td ) == -1 )
-		return QWidget::eventFilter( o, e );
-	
-	// get event type
-	QEvent::Type t = e->type();
-	
-	// child modified state
-	switch ( t )
+	if ( QWidget* td = qobject_cast<QWidget*>( o ) )
 	{
-	case QEvent::ModifiedChange:
-		emit modifiedChanged( indexOf( td ), td->isWindowModified() );
-		break;
-	case QEvent::Close:
-		closeDocument( td );
-		return true;
-		break;
-	case QEvent::WindowActivate:
-		if ( mDocMode == dmTopLevel )
-			emit currentChanged( indexOf( td ) );
-		break;
-	case QEvent::WindowTitleChange:
-		emit docTitleChanged( indexOf( td ), td->windowTitle().replace( "[*]", QString() ) );
-	default:
-		break;
+		if ( td->inherits( "QMdiSubWindow" ) && e->type() == QEvent::Close )
+		{
+			e->ignore();
+			closeCurrentDocument();
+			return true;
+		}
+		else
+		{
+			if ( indexOf( td ) == -1 )
+				return QWidget::eventFilter( o, e );
+			
+			// get event type
+			QEvent::Type t = e->type();
+			
+			// child modified state
+			switch ( t )
+			{
+			case QEvent::ModifiedChange:
+				emit modifiedChanged( indexOf( td ), td->isWindowModified() );
+				break;
+			case QEvent::Close:
+				closeDocument( td );
+				return true;
+				break;
+			case QEvent::WindowActivate:
+				if ( mDocMode == dmTopLevel )
+					emit currentChanged( indexOf( td ) );
+				break;
+			case QEvent::WindowTitleChange:
+				emit docTitleChanged( indexOf( td ), td->windowTitle().replace( "[*]", QString() ) );
+			default:
+				break;
+			}
+		}
 	}
 
 	// return default event filter
@@ -174,9 +184,7 @@ void pExtendedWorkspace::setBackground( const QString& s )
 { mMdiAreaWidget->setBackground( QBrush( QPixmap( s ) ) ); }
 
 int pExtendedWorkspace::addDocument(QWidget* td, const QString& s,  const QIcon& i)
-{
-	return insertDocument (count(), td, s, i);
-}
+{ return insertDocument (count(), td, s, i); }
 
 int pExtendedWorkspace::insertDocument(int pos, QWidget* td, const QString&,  const QIcon& i)
 {
@@ -195,8 +203,14 @@ int pExtendedWorkspace::insertDocument(int pos, QWidget* td, const QString&,  co
 		//mStackedWidget->setCurrentWidget (td);
 		break;
 	case dmMDI:
-		mMdiAreaWidget->addSubWindow( td )->showNormal();
+	{
+		QMdiSubWindow* w = mMdiAreaWidget->addSubWindow( td );
+		w->installEventFilter( this );
+		w->showNormal();
+		if ( !td->isVisible() )
+			td->show();
 		break;
+	}
 	case dmTopLevel:
 		td->setParent( 0 );
 		//td->addActions (mMainWindow->actions());//not working !!!! FIXME
@@ -253,13 +267,14 @@ void pExtendedWorkspace::closeDocument( int i )
 
 void pExtendedWorkspace::closeDocument( QWidget* td )
 {
-	return closeDocument (indexOf (td));
+	closeDocument (indexOf (td));
 }
 
-void pExtendedWorkspace::closeAllDocuments()
+bool pExtendedWorkspace::closeAllDocuments()
 {
 	for (int i = count()-1; i>=0; i--)
 		closeDocument (i);
+	return true;
 }
 
 void pExtendedWorkspace::closeCurrentDocument()
@@ -295,10 +310,16 @@ void pExtendedWorkspace::setDocMode( pExtendedWorkspace::DocumentMode dm )
 			//	td->removeAction (act);
 			break;
 		case dmMDI:
-			mMdiAreaWidget->addSubWindow( td )->widget()->showNormal();
+		{
+			QMdiSubWindow* w = mMdiAreaWidget->addSubWindow( td );
+			w->installEventFilter( this );
+			w->showNormal();
+			if ( !td->isVisible() )
+				td->show();
 			//foreach (QAction* act, mMainWindow->actions ())
 			//	td->removeAction (act);
 			break;
+		}
 		case dmTopLevel:
 			td->setParent( 0 );
 			//td->addActions (mMainWindow->actions());

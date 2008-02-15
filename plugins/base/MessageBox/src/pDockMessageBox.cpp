@@ -1,29 +1,15 @@
 /****************************************************************************
 **
-** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Monkey Studio Base Plugins
+** 		Created using Monkey Studio v1.7.0
+** Author    : Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>
+** Project   : pDockMessageBox
 ** FileName  : pDockMessageBox.cpp
-** Date      : 2008-01-14T00:40:01
+** Date      : 2007-08-30T18:52:51
 ** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
+** Comment   : Your comment here
 **
-    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ****************************************************************************/
 #include "pDockMessageBox.h"
@@ -181,7 +167,6 @@ void pDockMessageBox::appendStep( const pConsoleManager::Step& s )
 	QListWidgetItem* lastIt = lwBuildSteps->item( lwBuildSteps->count() -1 );
 	if ( lastIt )
 		t = ( pConsoleManager::StepType )lastIt->data( Qt::UserRole +1 ).toInt();
-	lastIt = 0;
 	
 	// create new/update item
 	QListWidgetItem* it;
@@ -189,20 +174,22 @@ void pDockMessageBox::appendStep( const pConsoleManager::Step& s )
 	{
 		case pConsoleManager::stCompiling:
 		case pConsoleManager::stLinking:
-			if ( s.mType == pConsoleManager::stWarning || s.mType == pConsoleManager::stError )
-			{
+			if ( s.mType == pConsoleManager::stWarning || 
+				 s.mType == pConsoleManager::stError )
+			{   /* move down */
 				lastIt = lwBuildSteps->takeItem( lwBuildSteps->count() -1 );
 				it = new QListWidgetItem( lwBuildSteps );
+				lwBuildSteps->addItem( lastIt );
 			}
 			else
-				it = lwBuildSteps->item( lwBuildSteps->count() -1 );
-			break;
+			{
+				it = lastIt; /* overwrite */
+			}
+		break;
 		default:
 			it = new QListWidgetItem( lwBuildSteps );
-			break;
+		break;
 	}
-	if ( lastIt )
-		lwBuildSteps->addItem( lastIt );
 	
 	// set item infos
 	it->setText( s.mText );
@@ -212,21 +199,28 @@ void pDockMessageBox::appendStep( const pConsoleManager::Step& s )
 	it->setData( Qt::UserRole +3, s.mPosition ); // position
 	
 	// if item is finish, need calculate error, warning
-	if ( s.mType == pConsoleManager::stFinish )
-	{
-		// count error, warning
-		int e = 0, w = 0;
-		for ( int i = 0; i < lwBuildSteps->count() -1; i++ )
-		{
-			lastIt = lwBuildSteps->item( i );
-			if ( lastIt->data( Qt::UserRole +1 ).toInt() == pConsoleManager::stError )
-				e++;
-			if ( lastIt->data( Qt::UserRole +1 ).toInt() == pConsoleManager::stWarning )
-				w++;
+	if ( s.mType == pConsoleManager::stFinish)
+		if (s.mText.isNull())
+		{ //No own text
+			// count error, warning
+			int e = 0, w = 0;
+			for ( int i = 0; i < lwBuildSteps->count() -1; i++ )
+			{
+				lastIt = lwBuildSteps->item( i );
+				if ( lastIt->data( Qt::UserRole +1 ).toInt() == pConsoleManager::stError )
+					e++;
+				if ( lastIt->data( Qt::UserRole +1 ).toInt() == pConsoleManager::stWarning )
+					w++;
+			}
+			it->setData( Qt::UserRole +1, e ? pConsoleManager::stBad : pConsoleManager::stGood );
+			it->setText( tr( "Command terminated, error(s): %1, warning(s): %2" ).arg( e ).arg( w ) );
 		}
-		it->setData( Qt::UserRole +1, e ? pConsoleManager::stBad : pConsoleManager::stGood );
-		it->setText( tr( "Command terminated, error(s): %1, warning(s): %2" ).arg( e ).arg( w ) );
-	}
+		else //own text present
+		{
+			it->setData( Qt::UserRole +1,pConsoleManager::stBad);
+			it->setText(s.mText);
+		}
+
 	
 	// set icon and color
 	switch ( it->data( Qt::UserRole +1 ).toInt() )
@@ -403,27 +397,31 @@ void pDockMessageBox::commandError( const pCommand& c, QProcess::ProcessError e 
 	appendInBox( colourText( s, Qt::blue ), Qt::red );
 }
 
-void pDockMessageBox::commandFinished( const pCommand& c, int i, QProcess::ExitStatus e )
+void pDockMessageBox::commandFinished( const pCommand& c, int exitCode, QProcess::ExitStatus e )
 {
 	QString s( tr( "* Finished   : '%1'<br />" ).arg( colourText( c.text() ) ) );
-	s.append( tr( "* Exit Code  : #%1<br />" ).arg( colourText( QString::number( i ) ) ) );
+	s.append( tr( "* Exit Code  : #%1<br />" ).arg( colourText( QString::number( exitCode ) ) ) );
 	s.append( tr( "* Status Code: #%1<br />" ).arg( colourText( QString::number( e ) ) ) );
 	//
-	switch ( e )
-	{
-		case QProcess::NormalExit:
-			s.append( colourText( tr( "The process exited normally." ), Qt::darkGreen ) );
-			break;
-		case QProcess::CrashExit:
-			s.append( colourText( tr( "The process crashed." ), Qt::darkGreen ) );
-			break;
-		default:
-			s.append( colourText( tr( "An unknown error occurred." ), Qt::darkGreen ) );
-	}
+	if (e == QProcess::NormalExit && exitCode == 0)
+		s.append( colourText( tr( "The process exited normally." ), Qt::darkGreen ) );
+	else if (e == QProcess::CrashExit)
+		s.append( colourText( tr( "The process crashed." ), Qt::darkGreen ) );
+	else
+		s.append( colourText( tr( "The exited with exit code %1" ).arg(exitCode), Qt::darkGreen ) );
+
 	// appendOutput to console log
 	appendInBox( colourText( s, Qt::blue ), Qt::red );
 	// add finish step
-	appendStep( pConsoleManager::Step( pConsoleManager::stFinish ) );
+	if (exitCode == 0)
+		appendStep( pConsoleManager::Step( pConsoleManager::stFinish ) );
+	else
+	{
+		pConsoleManager::Step st ( pConsoleManager::stFinish );
+		st.mText = tr("Process finished with exit code %1").arg(exitCode);
+		appendStep(st);
+	}
+	
 }
 
 void pDockMessageBox::commandReadyRead( const pCommand&, const QByteArray& a )

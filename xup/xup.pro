@@ -25,8 +25,8 @@ INCLUDEPATH	= . src src/xupmanager src/xupmanager/ui src/qmakemanager
 
 BUILDER	= GNUMake
 COMPILER	= G++
-EXECUTE_RELEASE	= xup.app/Contents/MacOS/xup
-EXECUTE_DEBUG	= xup_debug.app/Contents/MacOS/xup_debug
+EXECUTE_RELEASE	= xup
+EXECUTE_DEBUG	= xup_debug
 
 CONFIG(debug, debug|release) {
 	#Debug

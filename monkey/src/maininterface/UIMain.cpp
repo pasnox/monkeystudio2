@@ -93,6 +93,8 @@ void UIMain::closeEvent( QCloseEvent* e )
 	}
 	// force to close all projects
 	MonkeyCore::projectsManager()->projectCloseAll_triggered();
+	// inform that we close mainwindow
+	emit aboutToClose();
 }
 
 QMenu* UIMain::createPopupMenu()
@@ -144,7 +146,7 @@ void UIMain::initMenuBar()
 	mb->menu( "mEdit", tr( "&Edit" ) );
 	mb->beginGroup( "mEdit" );
 		mb->action( "aSettings", tr( "Settings..." ), QIcon( ":/edit/icons/edit/settings.png" ), "", tr( "Edit the application settings" ) );
-		mb->action( "aShortcutsEditor", tr( "Shortcuts Editor..." ), QIcon( ":/edit/icons/edit/shortcuts.png" ), tr( "Ctrl+E" ), tr( "Edit the application shortcuts" ) );
+		mb->action( "aShortcutsEditor", tr( "Shortcuts Editor..." ), QIcon( ":/edit/icons/edit/shortcuts.png" ), tr( "Ctrl+Shift+E" ), tr( "Edit the application shortcuts" ) );
 		mb->action( "aTranslations", tr( "Translations..." ), QIcon( ":/edit/icons/edit/translations.png" ), tr( "Ctrl+T" ), tr( "Change the application translations files" ) );
 		mb->action( "aSeparator1" );
 		mb->action( "aUndo", tr( "&Undo" ), QIcon( ":/edit/icons/edit/undo.png" ), tr( "Ctrl+Z" ), tr( "Undo" ) )->setEnabled( false );
@@ -161,7 +163,7 @@ void UIMain::initMenuBar()
 		mb->action( "aGoTo", tr( "&Go To..." ), QIcon( ":/edit/icons/edit/goto.png" ), tr( "Ctrl+G" ), tr( "Go To..." ) )->setEnabled( false );
 		mb->menu( "mAllCommands", tr( "&All Commands" ), QIcon( ":/edit/icons/edit/commands.png" ) );
 		mb->action( "aSeparator5" );
-		mb->action( "aExpandAbbreviation", tr( "Expand Abbreviation" ), QIcon( ":/edit/icons/edit/abbreviation.png" ), tr( "Ctrl+L" ), tr( "Expand Abbreviation" ) )->setEnabled( false );
+		mb->action( "aExpandAbbreviation", tr( "Expand Abbreviation" ), QIcon( ":/edit/icons/edit/abbreviation.png" ), tr( "Ctrl+E" ), tr( "Expand Abbreviation" ) )->setEnabled( false );
 		mb->action( "aPrepareAPIs", tr( "Prepare APIs" ), QIcon( ":/edit/icons/edit/prepareapis.png" ), tr( "Ctrl+Alt+P" ), tr( "Prepare the APIs files for auto completion / calltips" ) );
 	mb->endGroup();
 	mb->menu( "mView", tr( "&View" ) );

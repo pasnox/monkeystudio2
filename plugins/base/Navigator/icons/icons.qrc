@@ -7,5 +7,7 @@
 		<file>MEMBER.png</file>
 		<file>STRUCT.png</file>
 		<file>TYPEDEF.png</file>
+		<file>MACRO.png</file>
+		<file>ENUMERATOR.png</file>
 </qresource>
 </RCC>

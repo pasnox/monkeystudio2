@@ -280,12 +280,12 @@ static kindOption CKinds [] = {
 	{ FALSE, 'l', "local",      "local variables"},
 	{ TRUE,  'm', "member",     "class, struct, and union members"},
 	{ TRUE,  'n', "namespace",  "namespaces"},
-	{ FALSE, 'p', "prototype",  "function prototypes"},
+	{ TRUE,  'p', "prototype",  "function prototypes"},
 	{ TRUE,  's', "struct",     "structure names"},
 	{ TRUE,  't', "typedef",    "typedefs"},
 	{ TRUE,  'u', "union",      "union names"},
 	{ TRUE,  'v', "variable",   "variable definitions"},
-	{ FALSE, 'x', "externvar",  "external and forward variable declarations"},
+	{ TRUE,  'x', "externvar",  "external and forward variable declarations"},
 };
 
 typedef enum {
@@ -324,7 +324,7 @@ static kindOption JavaKinds [] = {
 	{ TRUE,  'f', "field",         "fields"},
 	{ TRUE,  'g', "enum",          "enum types"},
 	{ TRUE,  'i', "interface",     "interfaces"},
-	{ FALSE, 'l', "local",         "local variables"},
+	{ TRUE,  'l', "local",         "local variables"},
 	{ TRUE,  'm', "method",        "methods"},
 	{ TRUE,  'p', "package",       "packages"},
 };
@@ -344,14 +344,14 @@ static kindOption VeraKinds [] = {
 	{ TRUE,  'e', "enumerator", "enumerators (values inside an enumeration)"},
 	{ TRUE,  'f', "function",   "function definitions"},
 	{ TRUE,  'g', "enum",       "enumeration names"},
-	{ FALSE, 'l', "local",      "local variables"},
+	{ TRUE,  'l', "local",      "local variables"},
 	{ TRUE,  'm', "member",     "class, struct, and union members"},
 	{ TRUE,  'p', "program",    "programs"},
-	{ FALSE, 'P', "prototype",  "function prototypes"},
+	{ TRUE,  'P', "prototype",  "function prototypes"},
 	{ TRUE,  't', "task",       "tasks"},
 	{ TRUE,  'T', "typedef",    "typedefs"},
 	{ TRUE,  'v', "variable",   "variable definitions"},
-	{ FALSE, 'x', "externvar",  "external variable declarations"}
+	{ TRUE,  'x', "externvar",  "external variable declarations"}
 };
 
 static const keywordDesc KeywordTable [] = {
@@ -1054,6 +1054,31 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 			p = vStringValue (typeRef);
 		}
 		tag->extensionFields.typeRef [1] = p;
+	}
+	else if (type == TAG_VARIABLE || type == TAG_MEMBER)
+	{
+		/* Variable declaration. Not a union, struct, etc. 
+		 * Works for declarations like 'int i;' 'unsigned int i;', 
+		 * 'userstype var;', but not sure will work fine for all
+		 */
+		int i ;
+		int namePos; 
+		
+		/* find, where is name of variable */
+		namePos = NumTokens-1; /* last tocken */
+		while (namePos > 0 && st->token[namePos]->type != TOKEN_NAME)
+		{
+			namePos--;
+		}
+		/* Let's all, that are placed before name, will be a type */
+		for (i = 0; i < namePos; i++)
+		{
+			if (vStringLength (st->token[i]->name) > 0)
+			{
+				tag->extensionFields.typeRef [0] = vStringValue (st->token[i]->name);
+				break;
+			}
+		}
 	}
 }
 

@@ -54,6 +54,9 @@ protected:
 
 protected slots:
 	void menu_aboutToShow();
+
+signals:
+	void aboutToClose();
 };
 
 #endif // UIMAIN_H
