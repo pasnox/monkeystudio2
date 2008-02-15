@@ -44,25 +44,25 @@ class Q_MONKEY_EXPORT pSearch : public pDockWidget, public Ui::pSearch
 	{
 		SEARCH = 0, 
 		REPLACE = 1
-	}
+	};
 	enum WhereType
 	{
 		FILE = 0,
 		PROJECT = 1, 
 		FOLDER = 2
-	}
+	};
 
 public:
 	QsciScintilla* editor() const;
 	void setEditor( QsciScintilla* );
 
 public slots:
-	void showSearchFile ();
-	void showReplaceFile ();
-	void showSearchProject ();
-	void showReplaceProject ();
-	void showSearchProject ();
-	void showReplaceProject ();
+	void showSearchFile () {};
+	void showReplaceFile () {};
+	void showSearchProject () {};
+	void showReplaceProject () {};
+	void showSearchFolder () {};
+	void showReplaceFolder () {};
 
 
 	bool on_tbPrevious_clicked();
