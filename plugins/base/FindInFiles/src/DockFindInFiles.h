@@ -1,23 +1,24 @@
-#ifndef FINDINFILES_H
-#define FINDINFILES_H
+#ifndef DOCKFINDINFILES_H
+#define DOCKFINDINFILES_H
 
-#include <QDialog>
-#include <QPointer>
-#include "ui_FindInFiles.h"
+#include <QDockWidget>
+
+#include "QSingleton.h"
+
+#include "ui_DockFindInFiles.h"
 
 class QTreeWidget;
 class QTreeWidgetItem;
 class FifThread;
 
-class FindInFiles : public QDialog, public Ui::FindInFiles
+class DockFindInFiles : public QDockWidget, public QSingleton <DockFindInFiles>, public Ui::DockFindInFiles
 {
 	Q_OBJECT
+	friend class QSingleton <DockFindInFiles>;
 public:
-	static FindInFiles* self( QWidget* = 0 );
-	FindInFiles(QWidget *parent = 0);
-	~FindInFiles();
+	DockFindInFiles(QWidget *parent = 0);
+	~DockFindInFiles();
 private:
-	static QPointer<FindInFiles> mSelf;
 	QString mCurDir;
 	QString mCurFile;
 	QStringList files;
@@ -41,4 +42,4 @@ private slots:
 	void stopThread();
 };
 
-#endif //FINDINFILES_H
+#endif //DOCKFINDINFILES_H

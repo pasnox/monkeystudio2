@@ -1,9 +1,6 @@
 <ui version="4.0" >
  <class>DockFindInFiles</class>
  <widget class="QDockWidget" name="FindInFiles" >
-  <property name="windowModality" >
-   <enum>Qt::ApplicationModal</enum>
-  </property>
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -14,9 +11,6 @@
   </property>
   <property name="windowTitle" >
    <string>Find in files</string>
-  </property>
-  <property name="modal" >
-   <bool>true</bool>
   </property>
   <layout class="QHBoxLayout" >
    <property name="margin" >
