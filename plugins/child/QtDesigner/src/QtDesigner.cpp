@@ -74,7 +74,7 @@ bool QtDesigner::setEnabled( bool b )
 
 pAbstractChild* QtDesigner::openFile( const QString& s, const QPoint& )
 {
-	QtDesignerChild::instance()->openFile( s );
+	//QtDesignerChild::instance()->openFile( s );
 	return QtDesignerChild::instance();
 }
 
