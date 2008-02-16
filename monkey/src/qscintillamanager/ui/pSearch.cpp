@@ -164,6 +164,8 @@ void pSearch::show ()
 			leMask->show();
 		break;
 	}
+	resize (minimumSize ());  //BUG not working
+	updateGeometry ();  //BUG not working
 	QDockWidget::show ();
 }
 
