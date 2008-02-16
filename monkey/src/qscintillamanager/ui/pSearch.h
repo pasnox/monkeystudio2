@@ -40,6 +40,8 @@ class Q_MONKEY_EXPORT pSearch : public pDockWidget, public Ui::pSearch
 {
 	Q_OBJECT
 	friend class MonkeyCore;
+	
+private:
 	enum OperType 
 	{
 		SEARCH = 0, 
@@ -48,21 +50,24 @@ class Q_MONKEY_EXPORT pSearch : public pDockWidget, public Ui::pSearch
 	enum WhereType
 	{
 		FILE = 0,
-		PROJECT = 1, 
+		//PROJECT = 1, 
 		FOLDER = 2
 	};
 
+	OperType mOperType;
+	WhereType mWhereType;
+	
 public:
 	QsciScintilla* editor() const;
 	void setEditor( QsciScintilla* );
 
 public slots:
-	void showSearchFile () {};
-	void showReplaceFile () {};
-	void showSearchProject () {};
-	void showReplaceProject () {};
-	void showSearchFolder () {};
-	void showReplaceFolder () {};
+	void showSearchFile ();
+	void showReplaceFile ();
+	//void showSearchProject ();
+	//void showReplaceProject ();
+	void showSearchFolder ();
+	void showReplaceFolder ();
 
 
 	bool on_tbPrevious_clicked();
@@ -74,6 +79,8 @@ protected:
 	pSearch( QsciScintilla* = 0 );
 	bool checkEditor();
 	void keyPressEvent( QKeyEvent* );
+
+	void show ();
 
 	QPointer<QsciScintilla> mEditor;
 

@@ -27,6 +27,8 @@
 **
 ****************************************************************************/
 #include "pSearch.h"
+#include "MonkeyCore.h"
+#include "pMenuBar.h"
 
 #include "qsciscintilla.h"
 
@@ -46,6 +48,14 @@ pSearch::pSearch( QsciScintilla* p )
 
 	// set current editor manage for search
 	setEditor( p );
+	
+	connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFile" ), SIGNAL( triggered() ), SLOT( showSearchFile() ) );
+	connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFile" ), SIGNAL( triggered() ), SLOT( showReplaceFile() ) );
+	//connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchProject" ), SIGNAL( triggered() ), SLOT( showSearchProject() ) );
+	//connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceProject" ), SIGNAL( triggered() ), SLOT( showReplaceProject() ) );
+	connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFolder" ), SIGNAL( triggered() ), SLOT( showSearchFolder() ) );
+	connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFolder" ), SIGNAL( triggered() ), SLOT( showReplaceFolder() ) );
+	
 }
 
 void pSearch::keyPressEvent( QKeyEvent* e )
@@ -73,6 +83,89 @@ void pSearch::setEditor( QsciScintilla* e )
 	checkEditor();
 	lInformations->clear();
 };
+
+void pSearch::showSearchFile () 
+{
+	mOperType = SEARCH;
+	mWhereType = FILE;
+	show ();
+};
+
+void pSearch::showReplaceFile () 
+{
+	mOperType = REPLACE;
+	mWhereType = FILE;
+	show ();
+};
+
+/*
+void pSearch::showSearchProject () 
+{
+	mOperType = SEARCH;
+	mWhereType = PROJECT;
+	show ();
+};
+
+void pSearch::showReplaceProject () 
+{
+	mOperType = REPLACE;
+	mWhereType = PROJECT;
+	show ();
+};
+*/
+
+void pSearch::showSearchFolder () 
+{
+	mOperType = SEARCH;
+	mWhereType = FOLDER;
+	show ();
+};
+
+void pSearch::showReplaceFolder () 
+{
+	mOperType = REPLACE;
+	mWhereType = FOLDER;
+	show ();
+};
+
+void pSearch::show ()
+{
+	switch (mOperType)
+	{
+		case SEARCH:
+			lReplaceText->hide();
+			leReplaceText->hide();
+			tbReplace->hide();
+			tbReplaceAll->hide();
+		break;
+		case REPLACE:
+			lReplaceText->show();
+			leReplaceText->show();
+			tbReplace->show();
+			tbReplaceAll->show();
+		break;
+	}
+	
+	switch (mWhereType)
+	{
+		case FILE:
+			lPath->hide();
+			lePath->hide();
+			tbPath->hide();
+			lMask->hide();
+			leMask->hide();
+		break;
+		case FOLDER:
+		//case PROJECT: // TODO
+			lPath->show();
+			lePath->show();
+			tbPath->show();
+			lMask->show();
+			leMask->show();
+		break;
+	}
+	QDockWidget::show ();
+}
 
 bool pSearch::on_tbPrevious_clicked()
 {
@@ -167,13 +260,13 @@ bool pSearch::on_tbReplace_clicked()
 		// replace and go next
 		if ( cbCaseSensitive->isChecked() && mSelection == mSearch )
 		{
-			mEditor->replace( leReplace->text() );
+			mEditor->replace( leReplaceText->text() );
 			b = true;
 			on_tbNext_clicked();
 		}
 		else if ( !cbCaseSensitive->isChecked() && mSelection.toLower() == mSearch.toLower() )
 		{
-			mEditor->replace( leReplace->text() );
+			mEditor->replace( leReplaceText->text() );
 			b = true;
 			on_tbNext_clicked();
 		}
@@ -184,7 +277,7 @@ bool pSearch::on_tbReplace_clicked()
 		// repalce and go next
 		if ( QRegExp( mSearch, cbCaseSensitive->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive ).exactMatch( mSelection ) )
 		{
-			mEditor->replace( leReplace->text() );
+			mEditor->replace( leReplaceText->text() );
 			b = true;
 			on_tbNext_clicked();
 		}

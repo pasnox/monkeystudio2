@@ -6,8 +6,14 @@
     <x>0</x>
     <y>0</y>
     <width>317</width>
-    <height>458</height>
+    <height>460</height>
    </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle" >
    <string>Search - Replace</string>
@@ -36,7 +42,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="leReplace" >
+     <widget class="QLineEdit" name="leReplaceText" >
       <property name="toolTip" >
        <string>Replace the current selection with this string</string>
       </property>
@@ -59,7 +65,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QToolButton" name="tpPath" >
+       <widget class="QToolButton" name="tbPath" >
         <property name="toolTip" >
          <string>Choose dirrectory</string>
         </property>
@@ -78,7 +84,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="pathEdit_2" >
+     <widget class="QLineEdit" name="leMask" >
       <property name="toolTip" >
        <string>Mask of file names. Use colon for separate masks</string>
       </property>
@@ -293,8 +299,8 @@
       </property>
       <property name="sizeHint" >
        <size>
-        <width>299</width>
-        <height>16</height>
+        <width>20</width>
+        <height>40</height>
        </size>
       </property>
      </spacer>
@@ -312,7 +318,7 @@
  </customwidgets>
  <tabstops>
   <tabstop>leSearch</tabstop>
-  <tabstop>leReplace</tabstop>
+  <tabstop>leReplaceText</tabstop>
   <tabstop>cbFromStart</tabstop>
   <tabstop>cbWrap</tabstop>
   <tabstop>cbCaseSensitive</tabstop>
@@ -344,7 +350,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>leReplace</sender>
+   <sender>leReplaceText</sender>
    <signal>returnPressed()</signal>
    <receiver>tbReplace</receiver>
    <slot>click()</slot>
