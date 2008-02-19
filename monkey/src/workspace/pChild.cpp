@@ -67,6 +67,11 @@ pChild::pChild()
 pChild::~pChild()
 {}
 
+pEditor* pChild::editor()
+{
+	return mEditor;
+}
+
 void pChild::cursorPositionChanged()
 { emit pAbstractChild::cursorPositionChanged( cursorPosition() ); }
 
@@ -121,20 +126,20 @@ void pChild::paste()
 
 void pChild::searchReplace()
 {
-	MonkeyCore::searchDock()->setEditor( mEditor );
-	mEditor->invokeSearchReplace();
+/*	MonkeyCore::searchDock()->setEditor( mEditor );
+	mEditor->invokeSearchReplace();*/
 }
 
 void pChild::searchPrevious()
 {
-	MonkeyCore::searchDock()->setEditor( mEditor );
-	MonkeyCore::searchDock()->on_tbPrevious_clicked();
+/*	MonkeyCore::searchDock()->setEditor( mEditor );
+	MonkeyCore::searchDock()->on_tbPrevious_clicked();*/
 }
 
 void pChild::searchNext()
 {
-	MonkeyCore::searchDock()->setEditor( mEditor );
-	MonkeyCore::searchDock()->on_tbNext_clicked();
+/*	MonkeyCore::searchDock()->setEditor( mEditor );
+	MonkeyCore::searchDock()->on_tbNext_clicked();*/
 }
 
 void pChild::goTo()

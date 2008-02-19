@@ -267,7 +267,7 @@ void pWorkspace::internal_currentChanged( int i )
 	//MonkeyCore::menuBar()->setFileName( c ? c->currentFile() : QString::null );
 
 	// search dock
-	MonkeyCore::searchDock()->setEditor( hasChild ? c->currentEditor() : 0 );
+	//MonkeyCore::searchDock()->setEditor( hasChild ? c->currentEditor() : 0 );
 	
 	// update item tooltip
 	if ( hasChild )

@@ -57,10 +57,6 @@ private:
 	OperType mOperType;
 	WhereType mWhereType;
 	
-public:
-	QsciScintilla* editor() const;
-	void setEditor( QsciScintilla* );
-
 public slots:
 	void showSearchFile ();
 	void showReplaceFile ();
@@ -72,18 +68,24 @@ public slots:
 
 	bool on_tbPrevious_clicked();
 	bool on_tbNext_clicked();
-	bool on_tbReplace_clicked();
+	void on_tbReplace_clicked();
 	void on_tbReplaceAll_clicked();
 
 protected:
-	pSearch( QsciScintilla* = 0 );
-	bool checkEditor();
+	bool isEditorAvailible ();
+	bool isProjectAvailible ();
+
+	/* Search text. 
+	 * Search Next, if next==true, Search Previous, if next = false
+     */
+	bool search (bool next);
+
+	int replace (bool all);
+
+	pSearch();
 	void keyPressEvent( QKeyEvent* );
 
 	void show ();
-
-	QPointer<QsciScintilla> mEditor;
-
 };
 
 #endif // PSEARCH_H

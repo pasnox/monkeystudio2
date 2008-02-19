@@ -45,6 +45,8 @@ public:
 	pChild();
 	virtual ~pChild();
 
+	pEditor* editor();
+
 	// return child language
 	virtual QString language() const;
 

@@ -29,13 +29,17 @@
 #include "pSearch.h"
 #include "MonkeyCore.h"
 #include "pMenuBar.h"
+#include "pWorkspace.h"
+#include "UIProjectsManager.h"
+#include "pChild.h"
+#include "pEditor.h"
 
 #include "qsciscintilla.h"
 
 #include <QKeyEvent>
 
-pSearch::pSearch( QsciScintilla* p )
-	: pDockWidget( p )
+pSearch::pSearch()
+	: pDockWidget()
 {
 	// setup dock
 	setupUi( this );
@@ -46,9 +50,6 @@ pSearch::pSearch( QsciScintilla* p )
 	// clear informations edit
 	lInformations->clear();
 
-	// set current editor manage for search
-	setEditor( p );
-	
 	connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFile" ), SIGNAL( triggered() ), SLOT( showSearchFile() ) );
 	connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFile" ), SIGNAL( triggered() ), SLOT( showReplaceFile() ) );
 	//connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchProject" ), SIGNAL( triggered() ), SLOT( showSearchProject() ) );
@@ -58,6 +59,14 @@ pSearch::pSearch( QsciScintilla* p )
 	
 }
 
+bool pSearch::isProjectAvailible ()
+{
+	if (MonkeyCore::projectsManager()->currentProject())
+		return true;
+	else
+		return false;
+}
+
 void pSearch::keyPressEvent( QKeyEvent* e )
 {
 	if ( e->key() == Qt::Key_Escape )
@@ -65,24 +74,6 @@ void pSearch::keyPressEvent( QKeyEvent* e )
 	QDockWidget::keyPressEvent( e );
 }
 
-bool pSearch::checkEditor()
-{
-	// enable/disable dock accoding to editor
-	wCentral->setEnabled( mEditor );
-	return mEditor;
-}
-
-QsciScintilla* pSearch::editor() const
-{
-	return mEditor;
-}
-
-void pSearch::setEditor( QsciScintilla* e )
-{
-	mEditor = e;
-	checkEditor();
-	lInformations->clear();
-};
 
 void pSearch::showSearchFile () 
 {
@@ -169,29 +160,37 @@ void pSearch::show ()
 	QDockWidget::show ();
 }
 
-bool pSearch::on_tbPrevious_clicked()
+bool pSearch::search (bool next)
 {
-	// cancel if no editor
-	if ( !checkEditor() )
+	pChild* child = dynamic_cast<pChild*> (MonkeyCore::workspace()->currentChild());
+	if (!child && !child->editor())
+	{
+		lInformations->setText(tr( "No active editor" ) );
 		return false;
+	}
+	pEditor* editor = child->editor ();
 
 	// get cursor position
 	int x, y;
-	mEditor->getCursorPosition( &y, &x );
-
-	// reset position if search from start
-	if ( cbFromStart->isChecked() )
+	if (cbFromStart->isChecked())
 	{
 		x = 0;
 		y = 0;
+		cbFromStart->setChecked( false );
+	}
+	else
+	{
+		editor->getCursorPosition( &y, &x );
+	}
+
+	if (!next)
+	{
+		int temp;
+		editor->getSelection(&y, &x, &temp, &temp);
 	}
 
 	// search
-	bool b = mEditor->findFirst( leSearch->text(), cbRegExp->isChecked(), cbCaseSensitive->isChecked(), cbWholeWords->isChecked(), cbWrap->isChecked(), false, y, x -mEditor->selectedText().length() );
-
-	// uncheck from start if needed
-	if ( cbFromStart->isChecked() )
-		cbFromStart->setChecked( false );
+	bool b = editor->findFirst( leSearch->text(), cbRegExp->isChecked(), cbCaseSensitive->isChecked(), cbWholeWords->isChecked(), cbWrap->isChecked(), next, y, x);
 
 	// change background acording to found or not
 	QPalette p = leSearch->palette();
@@ -203,112 +202,78 @@ bool pSearch::on_tbPrevious_clicked()
 
 	// return found state
 	return b;
+}
+
+bool pSearch::on_tbPrevious_clicked()
+{
+	return search (false);
 }
 
 bool pSearch::on_tbNext_clicked()
 {
-	// cancel if no editor
-	if ( !checkEditor() )
-		return false;
-
-	// get cursor position
-	int x, y;
-	mEditor->getCursorPosition( &y, &x );
-
-	// reset position if search from start
-	if ( cbFromStart->isChecked() )
-	{
-		x = 0;
-		y = 0;
-	}
-
-	// search
-	bool b = mEditor->findFirst( leSearch->text(), cbRegExp->isChecked(), cbCaseSensitive->isChecked(), cbWholeWords->isChecked(), cbWrap->isChecked(), true, y, x );
-
-	// uncheck from start if needed
-	if ( cbFromStart->isChecked() )
-		cbFromStart->setChecked( false );
-
-	// change background acording to found or not
-	QPalette p = leSearch->palette();
-	p.setColor( leSearch->backgroundRole(), b ? Qt::white : Qt::red );
-	leSearch->setPalette( p );
-	
-	// show message if needed
-	lInformations->setText( b ? QString::null : tr( "Not Found" ) );
-
-	// return found state
-	return b;
+	return search (true);
 }
+
 //
-bool pSearch::on_tbReplace_clicked()
+int pSearch::replace(bool all)
 {
-	// cancel if no editor
-	if ( !checkEditor() )
-		return false;
-
-	// if no selection and not found cancel
-	if ( mEditor->selectedText().isEmpty() && !on_tbNext_clicked() )
-		return false;
-
-	// get selected text
-	QString mSelection = mEditor->selectedText();
-	QString mSearch = leSearch->text();
-	bool b = false;
-
-	// if not regexp replace
-	if ( !cbRegExp->isChecked() )
+	pChild* child = dynamic_cast<pChild*> (MonkeyCore::workspace()->currentChild());
+	if (!child && !child->editor())
 	{
-		// replace and go next
-		if ( cbCaseSensitive->isChecked() && mSelection == mSearch )
-		{
-			mEditor->replace( leReplaceText->text() );
-			b = true;
-			on_tbNext_clicked();
-		}
-		else if ( !cbCaseSensitive->isChecked() && mSelection.toLower() == mSearch.toLower() )
-		{
-			mEditor->replace( leReplaceText->text() );
-			b = true;
-			on_tbNext_clicked();
-		}
+		lInformations->setText(tr( "No active editor" ) );
+		return 0;
 	}
-	// regexp replace
+	pEditor* editor = child->editor ();
+
+
+	int x, y, temp;
+	editor->getSelection(&y, &x, &temp, &temp);
+	editor->setCursorPosition(y, x);
+	
+	QString rtext = leReplaceText->text();
+	int count;
+	if (on_tbNext_clicked())
+	{
+		editor->replace (rtext);
+		count = 1;
+	}
+	
+	if (all)
+	{
+		while (on_tbNext_clicked())
+		{
+			editor->replace(rtext);
+			count++;
+		};
+	}
 	else
 	{
-		// repalce and go next
-		if ( QRegExp( mSearch, cbCaseSensitive->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive ).exactMatch( mSelection ) )
-		{
-			mEditor->replace( leReplaceText->text() );
-			b = true;
-			on_tbNext_clicked();
-		}
+		editor->findNext(); //move selection to next item
 	}
 	
-	// show message if needed
-	lInformations->setText( b ? QString::null : tr( "Nothing To Replace" ) );
+	return count;
+}
 
-	// return replace state
-	return b;
+void pSearch::on_tbReplace_clicked()
+{
+	replace (false);
+	
 }
 //
 void pSearch::on_tbReplaceAll_clicked()
 {
-	// cancel if no editor
-	if ( !checkEditor() )
+	pChild* child = dynamic_cast<pChild*> (MonkeyCore::workspace()->currentChild());
+	if (!child && !child->editor())
 		return;
+	pEditor* editor = child->editor ();
 	
 	// begin undo global action
-	mEditor->beginUndoAction();
+	editor->beginUndoAction();
 
-	// while o, repalce
-	int i = 0;
-	while ( on_tbReplace_clicked() )
-		i++;
-	
+	int count = replace (true);
 	// end undo global action
-	mEditor->endUndoAction();
+	editor->endUndoAction();
 
 	// show occurence number replaced
-	lInformations->setText( i ? tr( "%1 occurences replaced" ).arg( i ) : tr( "Nothing To Repalce" ) );
+	lInformations->setText( count ? tr( "%1 occurences replaced" ).arg( count ) : tr( "Nothing To Repalce" ) );
 }
