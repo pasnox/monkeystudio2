@@ -20,8 +20,9 @@ BUILD_PATH	= ./build
 TARGET	= xup
 CONFIG	+= debug_and_release
 QT	+= xml
+LIBS	= -L../build -lfresh
 RESOURCES	+= src/resources/resources.qrc src/qmakemanager/resources/qmakemanager.qrc
-INCLUDEPATH	= . src src/xupmanager src/xupmanager/ui src/qmakemanager
+INCLUDEPATH	= . src src/xupmanager src/xupmanager/ui src/qmakemanager ../fresh/widgets ../fresh/objects
 
 BUILDER	= GNUMake
 COMPILER	= G++
@@ -57,7 +58,9 @@ HEADERS	+= src/xupmanager/ProjectItemModel.h \
 	src/xupmanager/ui/UIProjectsManager.h \
 	src/qmakemanager/QMakeProjectItem.h \
 	src/qmakemanager/QMake2XUP.h \
-	src/xupmanager/FilteredProjectItemModel.h
+	src/xupmanager/FilteredProjectItemModel.h \
+	src/xupmanager/ui/AddFilesDialog.h \
+	src/xupmanager/ScopedProjectItemModel.h
 
 SOURCES	+= src/xupmanager/ProjectItemModel.cpp \
 	src/xupmanager/ProjectItem.cpp \
@@ -66,4 +69,6 @@ SOURCES	+= src/xupmanager/ProjectItemModel.cpp \
 	src/main.cpp \
 	src/qmakemanager/QMakeProjectItem.cpp \
 	src/qmakemanager/QMake2XUP.cpp \
-	src/xupmanager/FilteredProjectItemModel.cpp
+	src/xupmanager/FilteredProjectItemModel.cpp \
+	src/xupmanager/ui/AddFilesDialog.cpp \
+	src/xupmanager/ScopedProjectItemModel.cpp

@@ -20,6 +20,10 @@ public:
 
 	// register item specific infos
 	virtual void registerItem();
+
+	// get available operators for this kind of item
+	virtual QStringList operators() const;
+	virtual void registerOperator( const QString& op );
 	
 	// the visible variables in filtered view ordered by list order
 	virtual QStringList filteredVariables() const;
@@ -132,6 +136,7 @@ public:
 	virtual ProjectItem* topLevelProject() const;
 	
 protected:
+	QStringList mOperators;
 	QStringList mFilteredVariables;
 	QStringList mTextTypes;
 	QStringList mFileVariables;

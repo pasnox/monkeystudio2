@@ -5,32 +5,23 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>319</width>
-    <height>601</height>
+    <width>387</width>
+    <height>567</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Projects Manager</string>
   </property>
   <widget class="QWidget" name="centralwidget" >
-   <layout class="QVBoxLayout" >
-    <property name="spacing" >
-     <number>3</number>
-    </property>
-    <property name="leftMargin" >
-     <number>5</number>
-    </property>
-    <property name="topMargin" >
-     <number>5</number>
-    </property>
-    <property name="rightMargin" >
-     <number>5</number>
-    </property>
-    <property name="bottomMargin" >
-     <number>5</number>
-    </property>
+   <layout class="QHBoxLayout" >
     <item>
      <widget class="QFrame" name="fToolButtons" >
+      <property name="sizePolicy" >
+       <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <layout class="QHBoxLayout" >
        <property name="spacing" >
         <number>0</number>
@@ -49,6 +40,14 @@
        </property>
        <item>
         <widget class="QToolBar" name="tbActions" >
+         <property name="font" >
+          <font>
+           <pointsize>7</pointsize>
+          </font>
+         </property>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
          <property name="iconSize" >
           <size>
            <width>18</width>
@@ -83,7 +82,13 @@
         </property>
        </widget>
       </widget>
-      <widget class="QTextEdit" name="teLog" />
+      <widget class="QTextEdit" name="teLog" >
+       <property name="font" >
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
+      </widget>
      </widget>
     </item>
    </layout>

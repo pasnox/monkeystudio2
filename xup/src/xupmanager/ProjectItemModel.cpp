@@ -1,9 +1,10 @@
 #include "ProjectItemModel.h"
 #include "ProjectItem.h"
 #include "FilteredProjectItemModel.h"
+#include "ScopedProjectItemModel.h"
 
 ProjectItemModel::ProjectItemModel( QObject* o )
-	: QStandardItemModel( o ), mFilteredModel( 0 )
+	: QStandardItemModel( o ), mFilteredModel( 0 ), mScopedModel( 0 )
 { setItemPrototype( new ProjectItem() ); }
 
 ProjectItemModel::~ProjectItemModel()
@@ -31,4 +32,11 @@ FilteredProjectItemModel* ProjectItemModel::filteredModel()
 	if ( !mFilteredModel )
 		mFilteredModel = new FilteredProjectItemModel( this );
 	return mFilteredModel;
+}
+
+ScopedProjectItemModel* ProjectItemModel::scopedModel()
+{
+	if ( !mScopedModel )
+		mScopedModel = new ScopedProjectItemModel( this );
+	return mScopedModel;
 }

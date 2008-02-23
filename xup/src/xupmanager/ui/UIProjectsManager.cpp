@@ -3,8 +3,8 @@
 #include "ProjectItemModel.h"
 #include "FilteredProjectItemModel.h"
 #include "XUPManager.h"
+#include "AddFilesDialog.h"
 
-#include <QFileDialog>
 #include <QHeaderView>
 
 #include "QMakeProjectItem.h" // remove me
@@ -120,6 +120,13 @@ ProjectItem* UIProjectsManager::currentValue() const
 {
 	if ( FilteredProjectItem* fit = mModel->filteredModel()->itemFromIndex( tvProxiedProjects->currentIndex() ) )
 		return fit->item()->isType( "value" ) ? fit->item() : 0;
+	return 0;
+}
+
+ProjectItem* UIProjectsManager::currentItem() const
+{
+	if ( FilteredProjectItem* fit = mModel->filteredModel()->itemFromIndex( tvProxiedProjects->currentIndex() ) )
+		return fit->item();
 	return 0;
 }
 
@@ -281,11 +288,11 @@ void UIProjectsManager::actionCloseAllTriggered()
 
 void UIProjectsManager::actionAddTriggered()
 {
-	if ( ProjectItem* pi = currentProject() )
+	if ( ProjectItem* pi = currentItem() )
 	{
-		const QStringList files = QFileDialog::getOpenFileNames( window(), tr( "Choose the files to add..." ), QString(), tr( "All Files (*)" ) );
-		if ( !files.isEmpty() )
-			pi->addFiles( files, pi );
+		AddFilesDialog d( mModel->scopedModel(), pi, window() );
+		if ( d.exec() && !d.selectedFiles().isEmpty() )
+			d.currentItem()->addFiles( d.selectedFiles(), d.currentItem(), d.currentOperator() );
 	}
 }
 
@@ -315,7 +322,17 @@ void UIProjectsManager::actionRemoveTriggered()
 }
 
 void UIProjectsManager::actionSettingsTriggered()
-{ warning( tr( "Not Yet Implemented" ) ); }
+{
+	if ( ProjectItem* pi = currentProject() )
+	{
+		// get plugin name that can manage this project
+		const QString name = pi->value( "plugin" );
+		if ( name.isEmpty() )
+		{
+			warning( tr( "Your project is not yet editable, please select a correct project plugin manager" ) );
+		}
+	}
+}
 
 void UIProjectsManager::actionSourceTriggered()
 {

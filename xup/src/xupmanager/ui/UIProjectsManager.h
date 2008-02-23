@@ -39,6 +39,7 @@ public:
 	void setCurrentProject( const ProjectItem* );
 
 	ProjectItem* currentValue() const;
+	ProjectItem* currentItem() const;
 
 	bool openProject( const QString& );
 	bool saveProject( ProjectItem*, const QString& );

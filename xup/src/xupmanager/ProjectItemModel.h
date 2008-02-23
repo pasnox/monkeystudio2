@@ -5,6 +5,7 @@
 
 class ProjectItem;
 class FilteredProjectItemModel;
+class ScopedProjectItemModel;
 
 class ProjectItemModel : public QStandardItemModel
 {
@@ -22,11 +23,14 @@ public:
 	void appendRow( ProjectItem* );
 	// return all top level proejcts for column
 	QList<ProjectItem*> topLevelProjects( int = 0 ) const;
-	// return the filtered model
+	// return the filtered model, ie a view that is beautifull for user
 	FilteredProjectItemModel* filteredModel();
+	// return a scoped view of the project, ie a view that only contains project and scope items
+	ScopedProjectItemModel* scopedModel();
 
 private:
 	FilteredProjectItemModel* mFilteredModel;
+	ScopedProjectItemModel* mScopedModel;
 };
 
 #endif // PROJECTITEMMODEL_H

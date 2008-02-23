@@ -16,6 +16,16 @@ void ProjectItem::registerItem()
 	mFileVariables << "FILES";
 	mVariableLabels["FILES"] = tr( "Project Files" );
 	mFilteredVariables << "FILES";
+	mOperators << "=" << "+=" << "-=" << "*=" << "~=";
+}
+
+QStringList ProjectItem::operators() const
+{ return mOperators; }
+
+void ProjectItem::registerOperator( const QString& s )
+{
+	if ( !mOperators.contains( s ) )
+		mOperators << s;
 }
 
 QStringList ProjectItem::filteredVariables() const
@@ -185,11 +195,15 @@ void ProjectItem::insertRow( int i, ProjectItem* it )
 		QStandardItem::insertRow( i, it );
 		if ( ProjectItem* pit = project() )
 		{
-			connect( it, SIGNAL( modifiedChanged( ProjectItem*, bool ) ), pit, SIGNAL( modifiedChanged( ProjectItem*, bool ) ) );
 			if ( it->isProject() )
 			{
 				connect( it, SIGNAL( aboutToClose( ProjectItem* ) ), pit, SIGNAL( aboutToClose( ProjectItem* ) ) );
 				connect( it, SIGNAL( closed( ProjectItem* ) ), pit, SIGNAL( closed( ProjectItem* ) ) );
+			}
+			else
+			{
+				connect( it, SIGNAL( modifiedChanged( ProjectItem*, bool ) ), pit, SIGNAL( modifiedChanged( ProjectItem*, bool ) ) );
+				setModified( true );
 			}
 		}
 		it->updateItem();

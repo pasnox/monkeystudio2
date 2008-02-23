@@ -125,6 +125,10 @@
   <variable name="RCC_DIR" >
    <value>$${BUILD_PATH}/release/.rcc</value>
   </variable>
+  <variable expanded="true" operator="+=" name="FILES" multiline="true" >
+   <value>xup.pro</value>
+   <value>xup</value>
+  </variable>
  </scope>
  <emptyline>1</emptyline>
  <variable expanded="true" operator="+=" name="FORMS" >
@@ -152,5 +156,8 @@
   <value>src/xupmanager/FilteredProjectItemModel.cpp</value>
  </variable>
  <emptyline>1</emptyline>
- <variable expanded="true" operator="=" name="FILES" multiline="true" />
+ <variable expanded="true" operator="=" name="FILES" multiline="true" >
+  <value>Makefile</value>
+  <value>Makefile.Release</value>
+ </variable>
 </project>
