@@ -33,30 +33,38 @@
 #include "UIProjectsManager.h"
 #include "pChild.h"
 #include "pEditor.h"
+#include "SearchThread.h"
 
 #include "qsciscintilla.h"
 
 #include <QKeyEvent>
+#include <QDir>
+
+#include <QDebug>
 
 pSearch::pSearch()
 	: pDockWidget()
 {
 	// setup dock
 	setupUi( this );
-
+	
 	// set fixed height
 	setFixedHeight( minimumSizeHint().height() );
 	
 	// clear informations edit
 	lInformations->clear();
-
+	
+	qRegisterMetaType<pConsoleManager::Step>("pConsoleManager::Step");
+	
 	connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFile" ), SIGNAL( triggered() ), SLOT( showSearchFile() ) );
 	connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFile" ), SIGNAL( triggered() ), SLOT( showReplaceFile() ) );
 	//connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchProject" ), SIGNAL( triggered() ), SLOT( showSearchProject() ) );
 	//connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceProject" ), SIGNAL( triggered() ), SLOT( showReplaceProject() ) );
 	connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFolder" ), SIGNAL( triggered() ), SLOT( showSearchFolder() ) );
 	connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFolder" ), SIGNAL( triggered() ), SLOT( showReplaceFolder() ) );
-	
+	connect(this, SIGNAL (clearSearchResults ()), MonkeyCore::workspace(), SIGNAL (clearSearchResults ()));
+
+	mSearchThread = NULL;
 }
 
 bool pSearch::isProjectAvailible ()
@@ -145,6 +153,9 @@ void pSearch::show ()
 			tbPath->hide();
 			lMask->hide();
 			leMask->hide();
+			tbPrevious->show();
+			tbNext->setIcon (QIcon(":/edit/icons/edit/next.png"));
+			tbNext->setText (tr("Search Next"));
 		break;
 		case FOLDER:
 		//case PROJECT: // TODO
@@ -153,6 +164,9 @@ void pSearch::show ()
 			tbPath->show();
 			lMask->show();
 			leMask->show();
+			tbPrevious->hide();
+			tbNext->setIcon (QIcon(":/edit/icons/edit/search.png"));
+			tbNext->setText (tr("Search"));
 		break;
 	}
 	resize (minimumSize ());  //BUG not working
@@ -211,7 +225,51 @@ bool pSearch::on_tbPrevious_clicked()
 
 bool pSearch::on_tbNext_clicked()
 {
-	return search (true);
+	switch (mWhereType)
+	{
+		case FILE:
+			return search (true);
+		case FOLDER:
+			qWarning () << __LINE__;
+			if (mSearchThread && mSearchThread->isRunning ())
+			{ // need to stop searching
+				qWarning () << __LINE__;
+				mSearchThread->setTermEnabled (true);
+			}
+			else
+			{ // need to start searching
+				qWarning () << __LINE__;
+				emit clearSearchResults ();
+				mOccurencesFinded = 0;
+				mFilesProcessed = 0;
+				fileProcessed (0);
+				QString path = lePath->text();
+				QDir dir (path);
+				/* WARNING not the best way. Will have freeze on folders
+				  with lot of files  (  Unix '/' o_O )
+				*/
+				QStringList files = dir.entryList (QDir::NoDotAndDotDot | QDir::Files);
+				for (int i = 0; i < files.size(); i++)
+					files[i] = path + "/" + files[i];
+				QString text = leSearch->text();
+				bool whole = cbWholeWords->isChecked ();
+				bool match = cbCaseSensitive->isChecked();
+				bool regexp = cbRegExp->isChecked ();
+				mSearchThread = new SearchThread(files, text, whole, match, regexp, this);
+				tbNext->setText (tr("Stop"));
+				tbNext->setIcon (QIcon(":/console/icons/console/stop.png"));
+				
+				qWarning () << __LINE__;
+				connect (mSearchThread, SIGNAL (appendSearchResult( const pConsoleManager::Step& )), MonkeyCore::workspace(), SIGNAL (appendSearchResult( const pConsoleManager::Step& )));
+				connect (mSearchThread, SIGNAL (finished ()), this, SLOT (threadFinished()));
+				connect (mSearchThread, SIGNAL (appendSearchResult( const pConsoleManager::Step& )), this, SLOT (occurenceFinded ()));
+				connect (mSearchThread, SIGNAL (changeProgress(int)), this, SLOT (fileProcessed (int)));
+				qWarning () << __LINE__;
+				mSearchThread->start();	
+			}
+		break;
+	}
+	return true;
 }
 
 //
@@ -277,3 +335,25 @@ void pSearch::on_tbReplaceAll_clicked()
 	// show occurence number replaced
 	lInformations->setText( count ? tr( "%1 occurences replaced" ).arg( count ) : tr( "Nothing To Repalce" ) );
 }
+
+void pSearch::threadFinished ()
+{
+	qWarning () << mSearchThread->isFinished();
+	tbNext->setText (tr("Search"));
+	tbNext->setIcon (QIcon(":/edit/icons/edit/search.png"));
+	delete mSearchThread;
+	mSearchThread = NULL;
+}
+
+void pSearch::occurenceFinded ()
+{
+	mOccurencesFinded ++;
+	lInformations->setText (tr ("%1 files %2 occcurences").arg(mFilesProcessed).arg(mOccurencesFinded));
+}
+
+void pSearch::fileProcessed (int count)
+{
+	mFilesProcessed = count;
+	lInformations->setText (tr ("%1 files %2 occcurences").arg(mFilesProcessed).arg(mOccurencesFinded));
+}
+

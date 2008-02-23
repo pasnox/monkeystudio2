@@ -58,6 +58,7 @@ protected:
 	QListWidget* lwBuildSteps;
 	QTextBrowser* tbOutput;
 	QTextEdit* teLog;
+	QListWidget* lwSearchResults;
 	void showEvent( QShowEvent* );
 	void hideEvent( QHideEvent* );
 
@@ -70,13 +71,18 @@ public slots:
 	void appendLog( const QString& );
 	void appendInBox( const QString&, const QColor& = Qt::red );
 	void appendStep( const pConsoleManager::Step& );
+	void appendSearchResult( const pConsoleManager::Step& );
 	void showBuild();
 	void showOutput();
 	void showLog();
+	void showSearchResults();
 	void showNextError();
+
+	void clearSearchResults();
 
 private slots:
 	void lwBuildSteps_itemPressed( QListWidgetItem* );
+	void lwSearchResults_itemPressed( QListWidgetItem* );
 	void leRawCommand_returnPressed();
 	void commandError( const pCommand&, QProcess::ProcessError );
 	void commandFinished( const pCommand&, int, QProcess::ExitStatus );

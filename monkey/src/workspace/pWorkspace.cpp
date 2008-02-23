@@ -52,6 +52,7 @@
 #include <QToolButton>
 #include <QCloseEvent>
 #include <QMainWindow>
+#include <QDebug>
 
 using namespace pMonkeyStudio;
 
@@ -214,6 +215,7 @@ void pWorkspace::goToLine( const QString& s, const QPoint& p, bool b )
 			}
 		}
 	}
+	qWarning () << "File not finded "<< s;
 }
 
 void pWorkspace::internal_currentFileChanged( const QString& )

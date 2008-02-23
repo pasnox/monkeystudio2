@@ -31,10 +31,12 @@
 
 #include "MonkeyExport.h"
 #include "ui_pSearch.h"
+#include "pConsoleManager.h"
 
 #include <QPointer>
 
 class QsciScintilla;
+class SearchThread;
 
 class Q_MONKEY_EXPORT pSearch : public pDockWidget, public Ui::pSearch
 {
@@ -57,6 +59,10 @@ private:
 	OperType mOperType;
 	WhereType mWhereType;
 	
+	// Used for counting of occurences when searching in folder/project
+	int mOccurencesFinded;
+	int mFilesProcessed;
+	
 public slots:
 	void showSearchFile ();
 	void showReplaceFile ();
@@ -71,9 +77,19 @@ public slots:
 	void on_tbReplace_clicked();
 	void on_tbReplaceAll_clicked();
 
+protected slots:
+	void threadFinished ();
+	// slot calling, when thread emits search result
+	void occurenceFinded ();
+	// slog calling when thread processed file. 
+	// Parameter - total count of files
+	void fileProcessed (int);
+
 protected:
 	bool isEditorAvailible ();
 	bool isProjectAvailible ();
+	
+	SearchThread* mSearchThread;
 
 	/* Search text. 
 	 * Search Next, if next==true, Search Previous, if next = false
@@ -86,6 +102,9 @@ protected:
 	void keyPressEvent( QKeyEvent* );
 
 	void show ();
+signals:
+	void clearSearchResults ();
+
 };
 
 #endif // PSEARCH_H
