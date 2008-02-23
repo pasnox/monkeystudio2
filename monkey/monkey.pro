@@ -94,6 +94,7 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/recentsmanager/pRecentsManager.h \
 	src/workspace/pAbstractChild.h \
 	src/qscintillamanager/ui/pSearch.h \
+	src/qscintillamanager/SearchThread.h \
 	src/qscintillamanager/pEditor.h \
 	src/qscintillamanager/qSciShortcutsManager.h \
 	src/ctagsmanager/Ctags.h \
@@ -139,6 +140,7 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/maininterface/ui/UISettings.cpp \
 	src/recentsmanager/pRecentsManager.cpp \
 	src/qscintillamanager/ui/pSearch.cpp \
+	src/qscintillamanager/SearchThread.cpp \
 	src/qscintillamanager/pEditor.cpp \
 	src/qscintillamanager/qSciShortcutsManager.cpp \
 	src/ctagsmanager/Ctags.cpp \
