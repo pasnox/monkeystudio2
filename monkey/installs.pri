@@ -36,7 +36,12 @@ apis.files	= ../ctags/apis
 translations.path	= $$PROGRAM_DATAS/translations
 translations.files	= ../translations/*.qm
 
-INSTALLS	= apis templates translations
+# debugger know_list_and_id
+debuggerIniFile.path		= $$PROGRAM_DATAS/plugins/debugger
+debuggerIniFile.files		= ../plugins/debugger/GNUDebugger/file
+
+
+INSTALLS	= apis templates translations debuggerIniFile
 
 unix:!mac {
 	# plugins
@@ -56,3 +61,4 @@ unix:!mac {
 	
 	INSTALLS	+= plugins target desktop desktopicon
 }
+
