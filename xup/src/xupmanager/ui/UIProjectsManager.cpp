@@ -7,7 +7,8 @@
 
 #include <QHeaderView>
 
-#include "QMakeProjectItem.h" // remove me
+#include "QMakeProjectItem.h"
+
 #include <QDebug>
 
 using namespace XUPManager;
@@ -42,6 +43,9 @@ UIProjectsManager::UIProjectsManager( QWidget* w )
 	connect( this, SIGNAL( fileDoubleClicked( ProjectItem*, const QString& ) ), this, SLOT( internal_fileDoubleClicked( ProjectItem*, const QString& ) ) );
 	// set current proejct to null
 	setCurrentProject( 0 );
+	// register ProjectItem class
+	registerItem( new ProjectItem );
+	registerItem( new QMakeProjectItem );
 }
 
 UIProjectsManager::~UIProjectsManager()
@@ -49,6 +53,9 @@ UIProjectsManager::~UIProjectsManager()
 	// delete actions
 	qDeleteAll( mActions );
 	mActions.clear();
+	// delete registered items
+	qDeleteAll( mRegisteredItems );
+	mRegisteredItems.clear();
 }
 
 void UIProjectsManager::initGui()
@@ -77,6 +84,38 @@ void UIProjectsManager::initGui()
 	tbActions->addAction( action( UIProjectsManager::Settings ) );
 	tbActions->addAction( action( UIProjectsManager::Source ) );
 	tbActions->addAction( action( UIProjectsManager::Filtered ) );
+}
+
+void UIProjectsManager::registerItem( ProjectItem* it )
+{
+	const QString s = it->metaObject()->className();
+	if ( mRegisteredItems.keys().contains( s ) )
+		delete mRegisteredItems[s];
+	mRegisteredItems[s] = it;
+}
+
+void UIProjectsManager::unRegisterItem( ProjectItem* it )
+{
+	const QString s = it->metaObject()->className();
+	if ( mRegisteredItems.keys().contains( s ) )
+		delete mRegisteredItems.take( s );
+}
+
+QStringList UIProjectsManager::projectsFilters() const
+{
+	QStringList l, e;
+	foreach ( ProjectItem* rpi, mRegisteredItems )
+	{
+		foreach ( QString label, rpi->suffixes().keys() )
+		{
+			e << rpi->suffixes().value( label );
+			l << QString( "%1 (%2)" ).arg( label ).arg( rpi->suffixes().value( label ).join( " " ) );
+		}
+	}
+	qSort( l );
+	if ( l.count() > 1 )
+		l.prepend( QString( tr( "All Project Files (%1)" ) ).arg( e.join( " " ) ) );
+	return l;
 }
 
 void UIProjectsManager::initializeProject( ProjectItem* pi )
@@ -132,18 +171,35 @@ ProjectItem* UIProjectsManager::currentItem() const
 
 bool UIProjectsManager::openProject( const QString& s )
 {
+	// get project item
 	ProjectItem* pi = 0;
-	if ( QDir::match( "*.pro", s ) )
-		pi = new QMakeProjectItem;
-	else if ( QDir::match( "*.xup", s ) )
-		pi = new ProjectItem;
-	else
+	foreach ( ProjectItem* rpi, mRegisteredItems )
+	{
+		foreach ( QStringList suffixes, rpi->suffixes().values() )
+		{
+			foreach ( QString suffix, suffixes )
+			{
+				if ( QDir::match( suffix, s ) )
+				{
+					pi = rpi->clone( false );
+					break;
+				}
+			}
+		}
+	}
+
+	// if no suitable item cancel
+	if ( !pi )
 		return false;
+
+	// load project
 	if ( pi->loadProject( s ) )
 	{
 		initializeProject( pi );
 		return true;
 	}
+
+	// can load project
 	delete pi;
 	return false;
 }
@@ -249,7 +305,7 @@ void UIProjectsManager::actionNewTriggered()
 
 void UIProjectsManager::actionOpenTriggered()
 {
-	const QString s = QFileDialog::getOpenFileName( window(), tr( "Choose a project to open..." ), QString(), tr( "All Projects (*.xup *.pro);;XUP Project (*.xup);;Qt Project (*.pro)" ) );
+	const QString s = QFileDialog::getOpenFileName( window(), tr( "Choose a project to open..." ), QString(), projectsFilters().join( ";;" ) );
 	if ( !s.isNull() && !openProject( s ) )
 		warning( tr( "An error occur while opening project : %1" ).arg( s ) );
 }

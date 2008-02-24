@@ -25,6 +25,8 @@ void QMakeProjectItem::registerItem()
 	mPathVariables.clear();
 	mVariableLabels.clear();
 	//mVariableIcons.clear();
+	//mOperators.clear();
+	mSuffixes.clear();
 	// registering...
 	// filtered variables
 	mFilteredVariables
@@ -95,6 +97,9 @@ void QMakeProjectItem::registerItem()
 	mVariableIcons[ "VPATH" ] = getIcon( value( "icon" ), "vpath" );
 	mVariableIcons[ "LIBS" ] = getIcon( value( "icon" ), "libs" );
 	mVariableIcons[ "DEFINES" ] = getIcon( value( "icon" ), "defines" );
+	// register suffixes
+	mSuffixes[tr( "Qt Project" )] = QStringList( "*.pro" );
+	mSuffixes[tr( "Qt Project Include" )] = QStringList( "*.pri" );
 }
 
 QMakeProjectItem* QMakeProjectItem::clone( bool b ) const

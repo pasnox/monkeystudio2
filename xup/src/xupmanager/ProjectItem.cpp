@@ -17,6 +17,7 @@ void ProjectItem::registerItem()
 	mVariableLabels["FILES"] = tr( "Project Files" );
 	mFilteredVariables << "FILES";
 	mOperators << "=" << "+=" << "-=" << "*=" << "~=";
+	mSuffixes[tr( "Monkey Studio Project File" )] = QStringList( "*.xup" );
 }
 
 QStringList ProjectItem::operators() const
@@ -27,6 +28,12 @@ void ProjectItem::registerOperator( const QString& s )
 	if ( !mOperators.contains( s ) )
 		mOperators << s;
 }
+
+QHash<QString, QStringList> ProjectItem::suffixes() const
+{ return mSuffixes; }
+
+void ProjectItem::registerSuffixes( const QString& l, const QStringList& s )
+{ mSuffixes[l] = s; }
 
 QStringList ProjectItem::filteredVariables() const
 { return mFilteredVariables; }

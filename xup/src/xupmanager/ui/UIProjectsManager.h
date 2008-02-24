@@ -35,6 +35,10 @@ public:
 
 	void initGui();
 
+	void registerItem( ProjectItem* item );
+	void unRegisterItem( ProjectItem* item );
+	QStringList projectsFilters() const;
+
 	ProjectItem* currentProject() const;
 	void setCurrentProject( const ProjectItem* );
 
@@ -49,6 +53,7 @@ public:
 
 protected:
 	ProjectItemModel* mModel;
+	QHash<QString, ProjectItem*> mRegisteredItems;
 	QHash<UIProjectsManager::Actions, QAction*> mActions;
 
 	void initializeProject( ProjectItem* );

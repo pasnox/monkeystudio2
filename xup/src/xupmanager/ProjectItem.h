@@ -24,6 +24,10 @@ public:
 	// get available operators for this kind of item
 	virtual QStringList operators() const;
 	virtual void registerOperator( const QString& op );
+
+	// register extension that this item can manage
+	virtual QHash<QString, QStringList> suffixes() const;
+	virtual void registerSuffixes( const QString& label, const QStringList& suffixes );
 	
 	// the visible variables in filtered view ordered by list order
 	virtual QStringList filteredVariables() const;
@@ -141,6 +145,7 @@ protected:
 	QStringList mTextTypes;
 	QStringList mFileVariables;
 	QStringList mPathVariables;
+	QHash<QString, QStringList> mSuffixes;
 	QHash<QString, QString> mVariableLabels;
 	QHash<QString, QIcon> mVariableIcons;
 
