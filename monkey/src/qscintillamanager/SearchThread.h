@@ -8,23 +8,23 @@
 
 class SearchThread : public QThread
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	SearchThread(const QStringList &, const QString &, bool, bool, bool, QObject* parent);
-	~SearchThread();
-	void run();
-	void setTermEnabled(bool t) {mTerm = t;};
-	bool isTermEnabled() {return mTerm;};
+    SearchThread(const QString &, const QString &, bool, bool, bool, QObject* parent);
+    ~SearchThread();
+    void run();
+    void setTermEnabled(bool t) {mTerm = t;};
+    bool isTermEnabled() {return mTerm;};
 private:
-	QStringList files;
-	QString text; 
-	bool isWhole;
-	bool isMatch;
-	bool isReg;
-	bool mTerm;
+    QString dir;
+    QString text; 
+    bool isWhole;
+    bool isMatch;
+    bool isReg;
+    bool mTerm;
 signals:
-	void appendSearchResult( const pConsoleManager::Step& );
-	void changeProgress(int);
+    void appendSearchResult( const pConsoleManager::Step& );
+    void changeProgress(int);
 };
 
 #endif //SEARCHTHREAD_H
