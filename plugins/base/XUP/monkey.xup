@@ -1,0 +1,163 @@
+<!DOCTYPE XUPProject>
+<project version="1.0.0" expanded="true" name="xup.pro" >
+ <comment>###########################################################################################</comment>
+ <comment>##		Created using Monkey Studio v1.8.0.0</comment>
+ <comment>##</comment>
+ <comment>##	Author    :</comment>
+ <comment>##	Project   : xup</comment>
+ <comment>##	FileName  : xup.pro</comment>
+ <comment>##	Date      : 2007-12-11T01:10:27</comment>
+ <comment>##	License   : GPL</comment>
+ <comment>##	Comment   : Creating using Monkey Studio RAD</comment>
+ <comment>##	Home Page   :</comment>
+ <comment>##</comment>
+ <comment>##	This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE</comment>
+ <comment>##	WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.</comment>
+ <comment>##</comment>
+ <comment>###########################################################################################</comment>
+ <emptyline>1</emptyline>
+ <variable name="TEMPLATE" >
+  <value>app</value>
+ </variable>
+ <variable name="LANGUAGE" >
+  <value>Qt4/C++</value>
+ </variable>
+ <variable name="BUILD_PATH" >
+  <value>./build</value>
+ </variable>
+ <variable name="TARGET" >
+  <value>xup</value>
+ </variable>
+ <variable operator="+=" name="CONFIG" >
+  <value>debug_and_release</value>
+ </variable>
+ <variable operator="+=" name="QT" >
+  <value>xml</value>
+ </variable>
+ <variable expanded="true" operator="+=" name="RESOURCES" >
+  <value>src/resources/resources.qrc</value>
+  <value>src/qmakemanager/resources/qmakemanager.qrc</value>
+ </variable>
+ <variable name="INCLUDEPATH" >
+  <value>.</value>
+  <value>src</value>
+  <value>src/xupmanager</value>
+  <value>src/xupmanager/ui</value>
+  <value>src/qmakemanager</value>
+ </variable>
+ <emptyline>1</emptyline>
+ <variable name="BUILDER" >
+  <value>GNUMake</value>
+ </variable>
+ <variable name="COMPILER" >
+  <value>G++</value>
+ </variable>
+ <variable name="EXECUTE_RELEASE" >
+  <value>xup.app/Contents/MacOS/xup</value>
+ </variable>
+ <variable name="EXECUTE_DEBUG" >
+  <value>xup_debug.app/Contents/MacOS/xup_debug</value>
+ </variable>
+ <emptyline>1</emptyline>
+ <scope name="CONFIG(debug, debug|release)" >
+  <comment>#Debug</comment>
+  <variable operator="+=" name="CONFIG" >
+   <value>console</value>
+  </variable>
+  <scope nested="true" name="unix" >
+   <variable name="TARGET" >
+    <value>$$join(TARGET,,,_debug)</value>
+   </variable>
+  </scope>
+  <scope nested="true" name="else" >
+   <variable name="TARGET" >
+    <value>$$join(TARGET,,,d)</value>
+   </variable>
+  </scope>
+  <scope nested="true" name="unix" >
+   <variable name="OBJECTS_DIR" >
+    <value>$${BUILD_PATH}/debug/.obj/unix</value>
+   </variable>
+  </scope>
+  <scope nested="true" name="win32" >
+   <variable name="OBJECTS_DIR" >
+    <value>$${BUILD_PATH}/debug/.obj/win32</value>
+   </variable>
+  </scope>
+  <scope nested="true" name="mac" >
+   <variable name="OBJECTS_DIR" >
+    <value>$${BUILD_PATH}/debug/.obj/mac</value>
+   </variable>
+  </scope>
+  <variable name="UI_DIR" >
+   <value>$${BUILD_PATH}/debug/.ui</value>
+  </variable>
+  <variable name="MOC_DIR" >
+   <value>$${BUILD_PATH}/debug/.moc</value>
+  </variable>
+  <variable name="RCC_DIR" >
+   <value>$${BUILD_PATH}/debug/.rcc</value>
+  </variable>
+ </scope>
+ <scope name="else" >
+  <comment>#Release</comment>
+  <scope nested="true" name="unix" >
+   <variable name="OBJECTS_DIR" >
+    <value>$${BUILD_PATH}/release/.obj/unix</value>
+   </variable>
+  </scope>
+  <scope nested="true" name="win32" >
+   <variable name="OBJECTS_DIR" >
+    <value>$${BUILD_PATH}/release/.obj/win32</value>
+   </variable>
+  </scope>
+  <scope nested="true" name="mac" >
+   <variable name="OBJECTS_DIR" >
+    <value>$${BUILD_PATH}/release/.obj/mac</value>
+   </variable>
+  </scope>
+  <variable name="UI_DIR" >
+   <value>$${BUILD_PATH}/release/.ui</value>
+  </variable>
+  <variable name="MOC_DIR" >
+   <value>$${BUILD_PATH}/release/.moc</value>
+  </variable>
+  <variable name="RCC_DIR" >
+   <value>$${BUILD_PATH}/release/.rcc</value>
+  </variable>
+  <variable expanded="true" operator="+=" name="FILES" multiline="true" >
+   <value>xup.pro</value>
+   <value>xup</value>
+  </variable>
+ </scope>
+ <emptyline>1</emptyline>
+ <variable expanded="true" operator="+=" name="FORMS" >
+  <value>src/xupmanager/ui/UIProjectsManager.ui</value>
+ </variable>
+ <emptyline>1</emptyline>
+ <variable expanded="true" operator="+=" name="HEADERS" multiline="true" >
+  <value>src/xupmanager/ProjectItemModel.h</value>
+  <value>src/xupmanager/ProjectItem.h</value>
+  <value>src/xupmanager/XUPManager.h</value>
+  <value>src/xupmanager/ui/UIProjectsManager.h</value>
+  <value>src/qmakemanager/QMakeProjectItem.h</value>
+  <value>src/qmakemanager/QMake2XUP.h</value>
+  <value>src/xupmanager/FilteredProjectItemModel.h</value>
+ </variable>
+ <emptyline>1</emptyline>
+ <variable expanded="true" operator="+=" name="SOURCES" multiline="true" >
+  <value>src/xupmanager/ProjectItemModel.cpp</value>
+  <value>src/xupmanager/ProjectItem.cpp</value>
+  <value>src/xupmanager/XUPManager.cpp</value>
+  <value>src/xupmanager/ui/UIProjectsManager.cpp</value>
+  <value>src/main.cpp</value>
+  <value>src/qmakemanager/QMakeProjectItem.cpp</value>
+  <value>src/qmakemanager/QMake2XUP.cpp</value>
+  <value>src/xupmanager/FilteredProjectItemModel.cpp</value>
+ </variable>
+ <emptyline>1</emptyline>
+ <variable expanded="true" operator="=" name="FILES" multiline="true" >
+  <value>Makefile</value>
+  <value>Makefile.Release</value>
+ </variable>
+</project>
