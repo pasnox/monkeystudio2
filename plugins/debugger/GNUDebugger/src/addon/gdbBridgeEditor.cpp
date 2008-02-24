@@ -36,10 +36,13 @@ GdbBridgeEditor::GdbBridgeEditor( GdbParser *p) :  GdbCore( p)
 	cmd.connectEventNotify("notify-breakpoint-conditionned", &GdbBridgeEditor::processBreakpointConditionned);
 	cmd.connectEventNotify("notify-breakpoint-unconditionned", &GdbBridgeEditor::processBreakpointUnConditionned);
 	cmd.connectEventNotify("notify-goto-breakpoint", &GdbBridgeEditor::processGotoBreakpoint);
+
+	start();
 }
 //
 GdbBridgeEditor::~GdbBridgeEditor()
 {
+	delete mWidget;
 	delete getContainer();
 } 
 //
@@ -94,14 +97,13 @@ int GdbBridgeEditor::process(QGdbMessageCore m)
 //
 int GdbBridgeEditor::processError(QGdbMessageCore m)
 {
-
 	// TODO
 	mWidget->append(getParametre("answerGdb=", m.msg));
 
 	return PROCESS_TERMINED;
 }
 //
-void GdbBridgeEditor::processExit()
+void GdbBridgeEditor::processPrompt()
 {
 }
 //
@@ -121,14 +123,14 @@ int GdbBridgeEditor::processBreakpointMoved(QGdbMessageCore m)
 //
 int GdbBridgeEditor::processBreakpointAdd(QGdbMessageCore m)
 {
-	emit breakpoint(getParametre("fileName=", m.msg), getParametre("line=", m.msg).toInt(), true);
+	emit breakpoint(getParametre("fileName=", m.msg), getParametre("line=", m.msg).toInt(), getParametre("type=",m.msg),getParametre("enable=",m.msg),true);
 	mWidget->append("add icon in editor");
 	return PROCESS_TERMINED;
 }
 //
 int GdbBridgeEditor::processBreakpointDeleted(QGdbMessageCore m)
 {
-	emit breakpoint(getParametre("fileName=", m.msg), getParametre("line=", m.msg).toInt(), false);
+	emit breakpoint(getParametre("fileName=", m.msg), getParametre("line=", m.msg).toInt(), getParametre("type=",m.msg),getParametre("enable=",m.msg),false);
 	mWidget->append("delete icon in editor");
 	return PROCESS_TERMINED;
 }

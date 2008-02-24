@@ -36,6 +36,8 @@ GdbRegisters::GdbRegisters(GdbParser *p) :  GdbCore( p)
 	cmd.connectEventInterpreter( interpreterRegisters, &GdbRegisters::processRegisters);
 
 	connect(getContainer(), SIGNAL(  topLevelChanged ( bool) ), this, SLOT( onTopLevelChanged ( bool  )));
+
+	start();
 } 
 //
 void GdbRegisters::onTopLevelChanged ( bool b)
@@ -53,7 +55,8 @@ void GdbRegisters::onTopLevelChanged ( bool b)
 //
 GdbRegisters::~GdbRegisters()
 {
-		delete getContainer();
+	delete mWidget;
+	delete getContainer();
 } 
 //
 QString GdbRegisters::name()
@@ -110,7 +113,7 @@ int GdbRegisters::processError(QGdbMessageCore m)
 	return PROCESS_TERMINED;
 }
 //
-void GdbRegisters::processExit()
+void GdbRegisters::processPrompt()
 {
 	numberOfRegisters = 0;
 }

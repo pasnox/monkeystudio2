@@ -1,7 +1,7 @@
 #include "./kernel/gdbCore.h"
 #include <QMetaType>
 
-#define TIME_TICK	100
+#define TIME_TICK	500
 
 // one mutex for all class
 static QMutex *mutexProcess = new QMutex();
@@ -16,38 +16,12 @@ GdbCore::GdbCore( GdbParser *p) : QThread(),
 	qRegisterMetaType<QGdbMessageCore>( "QGdbMessageCore" );
 
 
-//	stopProcess = false;
 	statusProcess = PROCESS_TERMINED;
 	// set parset
 	mParser = p;
 	// create QDockWidget main container
 	mContainer = new QDockWidget();
-
-	// connect 
-
-//	connect(this ,SIGNAL(finished ( ) ), this , SLOT(onFiniched(  )));
-//	connect(this ,SIGNAL(terminated ( ) ), this , SLOT(onFiniched(  )));
-
-// Qt::DirectConnection
-// ou
-// Qt::BlockingQueuedConnection
-
-
-//#ifdef Q_OS_WIN
-qDebug("connection windows");
 	connect(this, SIGNAL( readyProcess(QGdbMessageCore)),this, SLOT(onReadyProcess(QGdbMessageCore)), Qt::BlockingQueuedConnection);
-/*#endif
-#ifdef Q_OS_UNIX
-qDebug("connection unix");
-	connect(this, SIGNAL( readyProcess(QGdbMessageCore)),this, SLOT(onReadyProcess(QGdbMessageCore)));
-#endif	
-#ifdef Q_OS_MAC
-qDebug("connection Mac same unix");
-	connect(this, SIGNAL( readyProcess(QGdbMessageCore)),this, SLOT(onReadyProcess(QGdbMessageCore)));
-#endif	
-*/
-	// start checking message Queue
-	start();
 }
 //
 GdbCore::~GdbCore()
@@ -74,7 +48,7 @@ void GdbCore::removeInterpreter()
 	if(mParser)
 	{
 		if(mCurrentInterpreterIndex != INVALID_INTERPRETER) 
-				mCurrentInterpreterIndex = mParser->removeInterpreter(mCurrentInterpreterIndex);
+			mCurrentInterpreterIndex = mParser->removeInterpreter(mCurrentInterpreterIndex);
 	}
 	else QMessageBox::warning(NULL, "Class GdbCore function removeInterpreter", "WARNING Parser pointer is NULL !", QMessageBox::Ok );
 }
@@ -93,7 +67,7 @@ void GdbCore::processSendRawData(GdbCore *p, QByteArray data)
 //
 void GdbCore::onFinished( )
 {
-//	QMessageBox::warning(NULL,"termined","thread exit " + name());
+	// thread finished
 }
 //
 void GdbCore::setStopProcess()
@@ -101,14 +75,15 @@ void GdbCore::setStopProcess()
 	stopProcess = true;
 	terminate();
 
-	if(!wait(5))
+	if(!wait(1000)) // wait 1 seconde
 	{
 		file.write("ERREUR THREAD NOT TERMINED\r\n");
 		file.flush();
-			QMessageBox::warning(NULL,"Information","Thread  " + name() + " not termined.");
+			QMessageBox::warning(NULL,"Information","Thread  " + name() + " not termined correctly.");
 	}
 	else
-	{	file.write("TERMINED THREAD\r\n");
+	{
+		file.write("TERMINED THREAD\r\n");
 		file.flush();
 	}
 	file.close();
@@ -117,16 +92,16 @@ void GdbCore::setStopProcess()
 // checking new message queue
 void GdbCore::run()
 {
-	file.setFileName("./Thread_Core_" + name() + ".txt");
+	file.setFileName("./plugins/debugger/Thread_Core_" + name() + ".txt");
 	file.open(QIODevice::WriteOnly);
 
 	while(!stopProcess)
 	{
+//		if(mutexProcess->tryLock())
 		mutexProcess->lock();
+		{
 		do
 		{
-//file.write("have handle : "  + name().toLocal8Bit() + "\r\n");
-//file.flush();
 			QGdbMessageCore inBox = getGdbMessage();
 			if(inBox.id != MESSAGE_EMPTY) 
 			{
@@ -134,36 +109,26 @@ void GdbCore::run()
 				{
 file.write("u 1 : w 1 have msg\r\n");
 file.flush();
-					// lock processing
-					mutexEndProcess.lock();
 file.write("u 2 : w 2 emit\r\n");
 file.flush();
 					emit readyProcess(inBox);
 file.write("u 3 : w 5 emit effectued\r\n");
 file.flush();
-/*					// wait until readyprocess is no finish
-#ifdef Q_OS_UNIX	
-//qDebug("wait unix");
-					condition.wait(&mutexEndProcess);
-#endif
-//						statusProcess = process(inBox);
-*/
 file.write("u 6 : w 6 exit\r\n");
 file.flush();
-					mutexEndProcess.unlock();
 				}
 			}
 			usleep(TIME_TICK);
 		}
 		while(statusProcess != PROCESS_TERMINED);
-//file.write("leave handle\r\n");
-//file.flush();
 		mutexProcess->unlock();
+		}
 		usleep(TIME_TICK);
 	}
+	file.write("EXITED THREAD ... \r\n");
+	file.flush();
 
 	exit();
-
 }
 //
 void GdbCore::onReadyProcess(QGdbMessageCore inBox)
@@ -172,20 +137,16 @@ file.write("u 4 : w 3 process...\r\n");
 file.flush();
 
 	statusProcess = process(inBox);
+
 file.write("u 5 : w 4 termined and wakeOne\r\n");
 file.flush();
-/*
-#ifdef Q_OS_UNIX
-//	qDebug("wakeOn unix");
-	condition.wakeOne();
-#endif*/
 }
 
 void GdbCore::postGdbMessage(QGdbMessageCore m)
 {
-		mutexMessage.lock();
-		mMsgQueue << m;
-		mutexMessage.unlock();
+	mutexMessage.lock();
+	mMsgQueue << m;
+	mutexMessage.unlock();
 }
 //
 QGdbMessageCore GdbCore::getGdbMessage()

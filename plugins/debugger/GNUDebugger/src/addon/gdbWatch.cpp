@@ -55,10 +55,13 @@ GdbWatch::GdbWatch(GdbParser *p) :  GdbCore( p),
 	cmd.setResumeError(true);
 	cmd.connectEventStart("breakpoint-hit" , NULL);
 	cmd.connectEventStart("end-stepping-range" , NULL);
+
+	start();
 } 
 //
 GdbWatch::~GdbWatch()
 {
+	delete mWidget;
 	delete getContainer();
 } 
 //
@@ -147,7 +150,7 @@ int GdbWatch::processError(QGdbMessageCore m)
 	return PROCESS_TERMINED;
 }
 // prompt event
-void GdbWatch::processExit()
+void GdbWatch::processPrompt()
 {
 //qDebug("exit occur");
 

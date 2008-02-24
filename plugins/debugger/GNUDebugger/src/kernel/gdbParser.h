@@ -45,7 +45,6 @@ public:
 	GdbParser (QObject* p);
 	~GdbParser(){};
 
-
 public slots:
 
 	bool processParsing(const QByteArray&);
@@ -100,7 +99,8 @@ private :
 	void targetExited(int , QString);
 	void targetStopped(int , QString);
 	void targetRunning(int , QString);
-
+	void targetNoLoaded(int, QString);
+	
 	void done(int , QString);
 	void error(int , QString);
 	void info(int, QString);

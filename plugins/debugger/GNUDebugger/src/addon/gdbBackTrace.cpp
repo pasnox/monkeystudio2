@@ -46,11 +46,14 @@ GdbBackTrace::GdbBackTrace(GdbParser *p) :  GdbCore(p)
 			"");
 
 	cmd.connectEventInterpreter(interpreterInfoSource,  &GdbBackTrace::processInfosource);
+
+	start();
 } 
 //
 GdbBackTrace::~GdbBackTrace()
 {
-		delete getContainer();
+	delete mWidget;
+	delete getContainer();
 } 
 //
 QString GdbBackTrace::name()
@@ -108,7 +111,7 @@ int GdbBackTrace::processError(QGdbMessageCore m)
 
 }
 //
-void GdbBackTrace::processExit()
+void GdbBackTrace::processPrompt()
 {
 }
 //

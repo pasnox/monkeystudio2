@@ -69,7 +69,7 @@ public :
 
 	virtual int process(QGdbMessageCore) {return PROCESS_TERMINED;}//= 0;
 	virtual int processError(QGdbMessageCore) {return PROCESS_TERMINED;}//= 0;
-	virtual void processExit() {}//= 0;
+	virtual void processPrompt() {}//= 0;
 
 	virtual QString name(){ return QString();};// = 0;
 

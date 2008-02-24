@@ -26,7 +26,7 @@ public : // function
 	
 	int process(QGdbMessageCore);
 	int processError(QGdbMessageCore) ;
-	void processExit();
+	void processPrompt();
 
 	int processBacktrace(QGdbMessageCore);
 	int processInfosource(QGdbMessageCore);

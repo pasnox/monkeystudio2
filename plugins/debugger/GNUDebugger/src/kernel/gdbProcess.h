@@ -34,32 +34,20 @@ public:
 	};
 	
 	inline pCommand currentCommand() const { return mCommands.value( 0 ); }
-//	inline QStringList parsersName() const { return mParsers.keys(); }
-//	inline QAction* stopAction() const { return mStopAction; }
 	
-	pCommand processCommand( pCommand );
-	pCommand getCommand( const pCommandList&, const QString& );
-	pCommandList recursiveCommandList( const pCommandList&, pCommand );
-	QString processInternalVariables( const QString& s );
 	
 protected:
-	int mTimerId;
 	QBuffer mBuffer; //All output comming to this buffer
 	QString mStringBuffer; //... then by portions to this buffer
 	pCommandList mCommands;
 	QByteArray crlf;
 
-	void timerEvent( QTimerEvent* );
 
 
 public slots:
-	void sendRawCommand( const QString& );
 	void sendRawData( const QByteArray& );
 	void stopCurrentCommand( bool = false );
 	void addCommand( const pCommand& );
-	void addCommands( const pCommandList& );
-	void removeCommand( const pCommand& );
-	void removeCommands( const pCommandList& );
 	void executeProcess();
 
 private slots:
@@ -77,7 +65,6 @@ signals:
 	void commandStateChanged( const pCommand&, QProcess::ProcessState );
 	void commandSkipped( const pCommand& );
 	void newStepAvailable( const GdbProcess::Step& );
-
 };
 
 

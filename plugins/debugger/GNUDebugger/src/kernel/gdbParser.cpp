@@ -29,10 +29,10 @@
 
 GdbParser::GdbParser (QObject* p) : QObject (p)
 {
-	if(loadingPattern("./plugins/debugger/know_list_and_id.txt"))
+	if(loadingPattern("./plugins/debugger/file/know_list_and_id.txt"))
 	{
-		QMessageBox::warning(NULL, "Error","File know_list_and_id.txt not found.\nCopy this file from MONKEY_SRC/plugins/base/debugger/file/ to ./bin/plugins/debugger/");
-		emit error(0, "(Class GdbPaser) Erreur d'ouverture du fichier de RegExp");
+	//	QMessageBox::warning(NULL, "Error","File know_list_and_id.txt not found.\nCopy this file from MONKEY_SRC/plugins/base/debugger/file/ to ./bin/plugins/debugger/");
+	//	emit error(0, "(Class GdbPaser) Erreur d'ouverture du fichier de RegExp");
 	}
 	#ifdef Q_OS_WIN 
 		crlf = "\r\n";
@@ -389,8 +389,9 @@ void GdbParser::onInfo(int id, QString st)
 	switch(id)
 	{
 		case 10004 : // no symbol found
-			QMessageBox::warning(NULL,"Sorry ...","Your target is not builded in debug option.");
-			emit targetExited(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"target-exited\",answerGdb=\"" + st + "\"");
+		emit targetNoLoaded(id,tr( "Your target is not builded in debug option.")); 
+//		QMessageBox::warning(NULL,"Sorry ...","Your target is not builded in debug option.");
+	//		emit targetExited(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"target-exited\",answerGdb=\"" + st + "\"");
 		break;
 		//[10005]^Reading symbols from .*done\.
 		case 10005 : 	emit targetLoaded(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"target-loaded\",answerGdb=\"" + st + "\""); break;
@@ -419,10 +420,12 @@ void GdbParser::onError(int id, QString st)
 	{
 		case 23290 :
 		case 22833 : // target is not for this OS
-			QMessageBox::warning(NULL,"Sorry ...","Your target can't be debugging.\nBecause this target is not for this OS");
-			emit targetExited(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"target-exited\",answerGdb=\"" + st + "\"");
+			emit targetNoLoaded(id, tr("Your target can't be debugging.\nBecause this target is not for this OS"));
+//			QMessageBox::warning(NULL,"Sorry ...","Your target can't be debugging.\nBecause this target is not for this OS");
+//			emit targetExited(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"target-exited\",answerGdb=\"" + st + "\"");
 		break;
+	
+		default : 
+			emit error(id, "^error,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"error found\",answerGdb=\"" + st + "\"");
 	}
-
-	emit error(id, "^error,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"error found\",answerGdb=\"" + st + "\"");
 }

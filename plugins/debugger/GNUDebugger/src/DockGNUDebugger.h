@@ -67,6 +67,8 @@ private:
 	int iconconditionenable;
 	int iconconditiondisable;
 
+	QString targetName;
+
 	struct
 	{
 		QList<QString> fileName;
@@ -77,10 +79,9 @@ private:
 	int currentBacktraceLine;
 	QByteArray currentBacktraceFile;
 
-public slots:
-
 private slots:
-	void onFileOpened( const QString& );
+
+void onFileOpened( const QString& );
 //	void onFileClosed( const QString&  );
 	void onFileClosed( int);
 
@@ -90,7 +91,7 @@ private slots:
 	void onMarginClicked(int , int  , Qt::KeyboardModifiers );
 
 	// frome Bridge Editor
-	void onBreakpoint(QByteArray filename, int line, bool b);
+	void onBreakpoint(QByteArray filename, int line, QByteArray, QByteArray, bool);
 	void onBacktrace(QByteArray filename, int line);
 	void onBreakpointMoved(QByteArray filename, int beforLine, int afterLine);
 	void onBreakpointEnabled(QByteArray filename, int line, bool b);
@@ -100,7 +101,8 @@ private slots:
 	// frome console
 	void gdbStarted( const pCommand& c);
 	void gdbFinished( const pCommand& c, int a , QProcess::ExitStatus );
-
+	void gdbError(const pCommand&, QProcess::ProcessError);
+	
 	void commandReadyRead( const pCommand& c , const QByteArray& d);
 	
 	// from plugin
@@ -113,12 +115,11 @@ private slots:
 
 	void onTargetExited(int , QString);
 	void onTargetLoaded(int , QString);
+	void onTargetNoLoaded(int , QString);
 	void onTargetRunning(int , QString);
 	void onTargetStopped(int , QString);
 
 	void onAboutToClose();
-signals:
-
 };
 
 #endif 

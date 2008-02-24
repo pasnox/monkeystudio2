@@ -23,7 +23,7 @@ public : // function
 	
 	int process(QGdbMessageCore);
 	int processError(QGdbMessageCore) ;
-	void processExit();
+	void processPrompt();
 
 	void gdbStarted();
 	void gdbFinished();
@@ -51,7 +51,7 @@ private:
 
 signals:
 
-	void breakpoint(QByteArray , int , bool);
+	void breakpoint(QByteArray , int , QByteArray, QByteArray ,bool);
 	void breakpointConditionnaled(QByteArray , int , bool);
 	void breakpointEnabled(QByteArray , int , bool);
 	void backtrace(QByteArray, int);

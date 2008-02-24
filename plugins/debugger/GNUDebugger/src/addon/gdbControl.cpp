@@ -82,10 +82,22 @@ GdbControl::GdbControl(GdbParser *p) :  GdbCore( p),
 	cmd.setClass(this);
 	
 	cmd.connectEventNotify("notify-question", &GdbControl::processQuestion);
+
+	start();
 } 
 //
 GdbControl::~GdbControl()
 {
+	delete bRun;
+	delete bStop;
+	delete bExitGdb;
+	delete bStepInto;
+	delete bStepOver;
+	delete bLoadTarget;
+	delete bContinue;
+	//delete h;
+	delete mWidget;
+	
 	delete getContainer();
 } 
 //
@@ -102,12 +114,12 @@ int GdbControl::process(QGdbMessageCore m)
 int GdbControl::processError(QGdbMessageCore m)
 {
 	// TODO
-	QMessageBox::warning(NULL, "Error in GDB Control",m.msg);
+	QMessageBox::warning(NULL, "Error in GDB Control", m.msg);
  
 	return PROCESS_TERMINED;
 }
 //
-void GdbControl::processExit()
+void GdbControl::processPrompt()
 {
 }
 //
@@ -123,6 +135,8 @@ void GdbControl::onLoadTarget()
 
 //		emit sendRawData(this,"file " + file.toLocal8Bit());
 	 }
+	d->close();
+	delete d;
 }
 // step over or into
 int GdbControl::processSteps(QGdbMessageCore m)
@@ -156,7 +170,7 @@ int GdbControl::processQuestion(QGdbMessageCore m)
 		bStepInto->setEnabled(false);
 		bContinue->setEnabled(false);
 		bExitGdb->setEnabled(false);
-}
+	}
 
 	if(restart.exactMatch( currentQuestion))
 	{

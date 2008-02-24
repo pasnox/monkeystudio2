@@ -133,17 +133,17 @@ public :
 		pClass = p;
 		bForce = false;
 
-		file.setFileName("./Thread_Template_" + p->name() + ".txt");
-		file.open(QIODevice::WriteOnly);
+//		file.setFileName("./plugins/debugger/Thread_Template_" + p->name() + ".txt");
+//		file.open(QIODevice::WriteOnly);
 	}
 	//
 
-	void qDebug(QByteArray s)
+/*	void qDebug(QByteArray s)
 	{
 		file.write(s + "\r\n");
 		file.flush();
 	}	
-	//
+*/	//
 	void connectEventStart(QString event, int (mT:: *p)(QGdbMessageCore))
 	{
 		start.gdbFunctionStart << p;
@@ -231,7 +231,7 @@ private :
 			//qDebug("executing commandProcess ");
 			if(generic.gdbInterpreter.at(currentIndex) != NULL)
 			{
-				qDebug("add interpreter loop " + pClass->name().toLocal8Bit() + "  " + generic.gdbInterpreter.at(currentIndex)->cmdName().toLocal8Bit());
+				//qDebug("add interpreter loop " + pClass->name().toLocal8Bit() + "  " + generic.gdbInterpreter.at(currentIndex)->cmdName().toLocal8Bit());
 				pClass->addInterpreter(*generic.gdbInterpreter.at(currentIndex));
 				pClass->processSendRawData(pClass, generic.gdbInterpreter.at(currentIndex)->cmdGdb().toLocal8Bit());
 				currentIndex++;
@@ -260,8 +260,8 @@ public :
 		// forcing processs
 		if( bForce )
 		{
-			qDebug("force");
-			qDebug(m.msg);
+		//	qDebug("force");
+		//	qDebug(m.msg);
 			bForce = false;
 			currentIndex = 0;
 
@@ -277,8 +277,8 @@ public :
 		int index = startProcess(m.msg);
 		if(index != -1 )
 		{
-				qDebug("function abonnement (start)");
-				qDebug(m.msg);
+			//	qDebug("function abonnement (start)");
+			//	qDebug(m.msg);
 				// nous somme abonnées et on veut passer par une fonction
 				if( start.gdbFunctionStart.at(index) !=NULL) 
 				{
@@ -303,8 +303,8 @@ public :
 		// the msg is a notify from other plug
 		if(isNotify(m.msg))
 		{
-			qDebug("notify");
-			qDebug(m.msg);
+		//	qDebug("notify");
+		//	qDebug(m.msg);
 			int index = notify.gdbEvent.indexOf(pClass->getParametre("event=", m.msg));
 			if(index != -1)
 				(pClass->*(notify.gdbFunction.at(index)))(m);
@@ -314,21 +314,21 @@ public :
 
 		// the msg start with interpreter="your class name" or currentCmd="your last command"
 
-		// l'evenement est pouir moi
+		// l'evenement est pour moi
 		if( isForMe(m.msg))
 		{
 			// c'est pas une erreur
 			if( isError(m.msg))
 			{
-				qDebug("erreur");
-				qDebug(m.msg);
+			//	qDebug("erreur");
+			//	qDebug(m.msg);
 				// the current command a generate error
 				unlockProcess();
 				// call processError()
 //				int status = pClass->processError(m);
 				setStatusProcess( pClass->processError(m) );
 				// remove interpreter
-				qDebug("remove interpreter (Error) " + pClass->name().toLocal8Bit());
+			//	qDebug("remove interpreter (Error) " + pClass->name().toLocal8Bit());
 				pClass->removeInterpreter();
 				// pass to next command if bResume is true
 				if(bResumeError)
@@ -339,8 +339,8 @@ public :
 			{
 				// ce n'est pas un erreur
 				// recherche l'index de  l'evenement
-				qDebug("generic process");
-				qDebug(m.msg);
+			//	qDebug("generic process");
+			//	qDebug(m.msg);
 				int index = generic.gdbEvent.indexOf(pClass->getParametre("event=", m.msg));
 				if(index != -1)
 				{
@@ -362,7 +362,7 @@ public :
 					{
 //						qDebug("next command from same class");
 						// yes , remove interpreter
-						qDebug("remove interpreter " + pClass->name().toLocal8Bit());
+					//	qDebug("remove interpreter " + pClass->name().toLocal8Bit());
 						pClass->removeInterpreter();
 						// execute next command
 						return commandProcess();
@@ -373,9 +373,9 @@ public :
 				// event prompt
 				else if( pClass->getParametre("event=" , m.msg) == "prompt")
 				{
-					qDebug("remove interpreter (prompt) " + pClass->name().toLocal8Bit());
+				//	qDebug("remove interpreter (prompt) " + pClass->name().toLocal8Bit());
 					pClass->removeInterpreter();
-					pClass->processExit();
+					pClass->processPrompt();
 
 					// i have other command after prompt event ?
 					if(currentIndex < generic.gdbFunction.count())

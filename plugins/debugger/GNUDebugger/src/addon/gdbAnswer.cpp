@@ -18,10 +18,12 @@ GdbAnswer::GdbAnswer(GdbParser *o) :  GdbCore(o),
 
 	cmd.setClass(this);
 
+	start();
 } 
 //
 GdbAnswer::~GdbAnswer()
 {
+	delete mWidget;
 	delete getContainer();
 } 
 //
@@ -138,7 +140,7 @@ int GdbAnswer::processYes(QGdbMessageCore m)
 	return PROCESS_TERMINED;
 }
 //
-void GdbAnswer::processExit()
+void GdbAnswer::processPrompt()
 {
 }
 //

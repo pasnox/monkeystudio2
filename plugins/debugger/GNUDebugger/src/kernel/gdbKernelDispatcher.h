@@ -21,7 +21,7 @@ public :
 
 	int process(QGdbMessageCore);
 	int processError(QGdbMessageCore) ;
-	void processExit();
+	void processPrompt();
 
 	void gdbStarted();
 	void gdbFinished();
