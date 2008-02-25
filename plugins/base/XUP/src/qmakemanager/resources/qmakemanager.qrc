@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/items" >
+    <qresource prefix="/qmakeitems" >
         <file alias="def_file.png">icons/items/def_file.png</file>
         <file alias="defines.png">icons/items/defines.png</file>
         <file alias="dependpath.png">icons/items/dependpath.png</file>
@@ -16,5 +16,6 @@
         <file alias="sources.png">icons/items/sources.png</file>
         <file alias="translations.png">icons/items/translations.png</file>
         <file alias="vpath.png">icons/items/vpath.png</file>
+        <file alias="project.png">icons/items/project.png</file>
     </qresource>
 </RCC>

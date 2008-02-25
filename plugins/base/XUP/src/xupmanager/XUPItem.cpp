@@ -17,7 +17,7 @@ void XUPItem::registerItem()
 	mVariableLabels["FILES"] = tr( "Project Files" );
 	mFilteredVariables << "FILES";
 	mOperators << "=" << "+=" << "-=" << "*=" << "~=";
-	mSuffixes[tr( "Monkey Studio Project File" )] = QStringList( "*.xup" );
+	mSuffixes[tr( "Monkey Studio Project" )] = QStringList( "*.xup" );
 }
 
 QStringList XUPItem::operators() const
@@ -346,6 +346,9 @@ void XUPItem::setModified( bool b, bool e )
 
 void XUPItem::checkChildrenProjects()
 {}
+
+bool XUPItem::isProjectContainer() const
+{ return false; }
 
 bool XUPItem::loadProject( const QString& s, const QString& v )
 {

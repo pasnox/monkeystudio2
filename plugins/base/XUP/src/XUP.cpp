@@ -1,5 +1,6 @@
 #include "XUP.h"
 #include "UIXUPManager.h"
+#include "QMakeXUPItem.h"
 
 #include "MonkeyCore.h"
 #include "UIMain.h"
@@ -15,7 +16,6 @@ XUP::XUP()
 	mPluginInfos.Name = "XUP";
 	mPluginInfos.Version = "0.1.0";
 	mPluginInfos.Enabled = false;
-	//Q_INIT_RESOURCE( XUPManager );
 }
 
 XUP::~XUP()
@@ -30,8 +30,11 @@ bool XUP::setEnabled( bool b )
 	{
 		// create dock manager
 		mDockXUPManager = new UIXUPManager;
+		// register XUPItem classes
+		mDockXUPManager->registerItem( new XUPItem );
+		mDockXUPManager->registerItem( new QMakeXUPItem );
 		// add dock to dockmanager
-		MonkeyCore::mainWindow()->dockToolBar( Qt::LeftToolBarArea )->addDock( mDockXUPManager, infos().Caption, QIcon( ":/icons/console.png" ) );
+		MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( mDockXUPManager, infos().Caption, QIcon( ":/icons/console.png" ) );
 		// set plugin enabled
 		mPluginInfos.Enabled = true;
 	}

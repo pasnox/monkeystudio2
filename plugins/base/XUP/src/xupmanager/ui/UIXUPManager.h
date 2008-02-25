@@ -69,7 +69,7 @@ protected slots:
 	void actionRemoveTriggered();
 	void actionSettingsTriggered();
 	void actionSourceTriggered();
-	void actionFilteredTriggered();
+	void actionFilteredToggled( bool toggled );
 	void currentChanged( const QModelIndex&, const QModelIndex& );
 	void on_tvProxiedProjects_collapsed( const QModelIndex& );
 	void on_tvProxiedProjects_expanded( const QModelIndex& );

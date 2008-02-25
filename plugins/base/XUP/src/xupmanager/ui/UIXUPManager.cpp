@@ -1,15 +1,11 @@
 #include "UIXUPManager.h"
-#include "XUPItem.h"
 #include "ProjectItemModel.h"
 #include "FilteredProjectItemModel.h"
+#include "XUPItem.h"
 #include "XUPManager.h"
 #include "AddFilesDialog.h"
 
 #include <QHeaderView>
-
-#include "QMakeProjectItem.h"
-
-#include <QDebug>
 
 using namespace XUPManager;
 
@@ -32,6 +28,8 @@ UIXUPManager::UIXUPManager( QWidget* w )
 	// hide headers
 	tvProjects->header()->hide();
 	tvProxiedProjects->header()->hide();
+	// set filtered viewq by default
+	action( UIXUPManager::Filtered )->setChecked( true );
 	// connection
 	connect( tvProxiedProjects->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( currentChanged( const QModelIndex&, const QModelIndex& ) ) );
 	connect( this, SIGNAL( projectOpen( XUPItem* ) ), this, SLOT( internal_projectOpen( XUPItem* ) ) );
@@ -43,9 +41,6 @@ UIXUPManager::UIXUPManager( QWidget* w )
 	connect( this, SIGNAL( fileDoubleClicked( XUPItem*, const QString& ) ), this, SLOT( internal_fileDoubleClicked( XUPItem*, const QString& ) ) );
 	// set current proejct to null
 	setCurrentProject( 0 );
-	// register XUPItem class
-	registerItem( new XUPItem );
-	registerItem( new QMakeProjectItem );
 }
 
 UIXUPManager::~UIXUPManager()
@@ -282,12 +277,12 @@ void UIXUPManager::setAction( UIXUPManager::Actions at, QAction* a )
 			break;
 		case UIXUPManager::Filtered:
 			if ( oa )
-				disconnect( oa, SIGNAL( triggered() ), this, SLOT( actionFilteredTriggered() ) );
+				disconnect( oa, SIGNAL( toggled( bool ) ), this, SLOT( actionFilteredToggled( bool ) ) );
 			if ( a )
 			{
 				a->setCheckable( true );
 				a->setChecked( swViews->currentWidget() == tvProxiedProjects );
-				connect( a, SIGNAL( triggered() ), this, SLOT( actionFilteredTriggered() ) );
+				connect( a, SIGNAL( toggled( bool ) ), this, SLOT( actionFilteredToggled( bool ) ) );
 			}
 			break;
 		default:
@@ -396,11 +391,8 @@ void UIXUPManager::actionSourceTriggered()
 		teLog->setPlainText( pi->domDocument().toString() );
 }
 
-void UIXUPManager::actionFilteredTriggered()
-{
-	bool b = qobject_cast<QAction*>( sender() )->isChecked();
-	swViews->setCurrentWidget( b ? tvProxiedProjects : tvProjects );
-}
+void UIXUPManager::actionFilteredToggled( bool toggled )
+{ swViews->setCurrentWidget( toggled ? tvProxiedProjects : tvProjects ); }
 
 void UIXUPManager::currentChanged( const QModelIndex& c, const QModelIndex& o )
 {

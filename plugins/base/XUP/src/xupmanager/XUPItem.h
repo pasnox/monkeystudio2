@@ -108,6 +108,8 @@ public:
 
 	// check for sub project to open
 	virtual void checkChildrenProjects();
+	// tell if this proejct can ambedeed another projects ( qt subdirs project like )
+	virtual bool isProjectContainer() const;
 	// open project
 	virtual bool loadProject( const QString& filename = QString(), const QString& version = QString( "1.0.0" ) );
 	// save project
