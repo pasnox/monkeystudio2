@@ -389,9 +389,7 @@ void GdbParser::onInfo(int id, QString st)
 	switch(id)
 	{
 		case 10004 : // no symbol found
-		emit targetNoLoaded(id,tr( "Your target is not builded in debug option.")); 
-//		QMessageBox::warning(NULL,"Sorry ...","Your target is not builded in debug option.");
-	//		emit targetExited(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"target-exited\",answerGdb=\"" + st + "\"");
+			emit targetNoLoaded(id,st);//tr( "Your target is not builded in debug option.")); 
 		break;
 		//[10005]^Reading symbols from .*done\.
 		case 10005 : 	emit targetLoaded(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"target-loaded\",answerGdb=\"" + st + "\""); break;
@@ -402,6 +400,7 @@ void GdbParser::onInfo(int id, QString st)
 		case 10009 :	emit targetStopped(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"target-stopped\",answerGdb=\"" + st + "\""); 
 		emit info(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"breakpoint-hit\",answerGdb=\"" + st + "\"");
 		break;
+
 		case 10010 :
 		case 10011 :
 		case 10012 :
@@ -418,13 +417,11 @@ void GdbParser::onError(int id, QString st)
 {
 	switch(id)
 	{
+		case 21550 :
 		case 23290 :
-		case 22833 : // target is not for this OS
-			emit targetNoLoaded(id, tr("Your target can't be debugging.\nBecause this target is not for this OS"));
-//			QMessageBox::warning(NULL,"Sorry ...","Your target can't be debugging.\nBecause this target is not for this OS");
-//			emit targetExited(id, "^info,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"target-exited\",answerGdb=\"" + st + "\"");
-		break;
-	
+		case 22833 : 
+			emit targetNoLoaded(id, st);
+
 		default : 
 			emit error(id, "^error,interpreter=\"GdbParser\",currentCmd=\"" + currentCmd +"\",event=\"error found\",answerGdb=\"" + st + "\"");
 	}
