@@ -161,14 +161,14 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 		//connect( c, SIGNAL( layoutModeChanged( AbstractChild::LayoutMode ) ), statusBar(), SLOT( setLayoutMode( AbstractChild::LayoutMode ) ) );
 		//connect( c, SIGNAL( currentFileChanged( const QString& ) ), statusBar(), SLOT( setFileName( const QString& ) ) );
 	}
+
+	// open file
+	c->openFile( s );
 	
 	// add child to workspace if needed
 	if ( !children().contains( c ) )
 		MonkeyCore::workspace()->addDocument( c, QString() );
 		//MonkeyCore::workspace()->addDocument( c, c->currentFileName() );
-	
-	// open file
-	c->openFile( s );
 	
 	// set modification state because file is open before put in worksapce so workspace can't know it
 	c->setWindowModified( c->isModified() );
