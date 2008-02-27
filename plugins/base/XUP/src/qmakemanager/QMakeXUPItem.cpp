@@ -34,7 +34,7 @@ QIcon QMakeXUPItem::getIcon( const QString& o, const QString& d ) const
 
 void QMakeXUPItem::registerItem()
 {
-	fix me by being static becasue now it's slow like the death
+	//fix me by being static becasue now it's slow like the death
 	// clearing default values
 	mFilteredVariables.clear();
 	//mTextTypes.clear();
