@@ -10,43 +10,26 @@
 #include <QInputDialog>
 #include <QDebug>
 
+XUPItemInfos QMakeXUPItem::mQMakeXUPItemInfos;
+
 QMakeXUPItem::QMakeXUPItem( const QDomElement& e, const QString& s, bool b )
 	: XUPItem()
 {
-	registerItem();
+	if ( !mQMakeXUPItemInfos.Registered )
+		registerItem();
 	setDomElement( e );
 	loadProject( s );
 	setModified( b );
 }
 
-QHash<QString, QStringList> QMakeXUPItem::variableSuffixes() const
-{ return mVariableSuffixes; }
-
-void QMakeXUPItem::registerVariableSuffixes( const QString& n, const QStringList& s )
-{ mVariableSuffixes[n] = s; }
-
-QIcon QMakeXUPItem::getIcon( const QString& o, const QString& d ) const
-{
-	return XUPItem::getIcon( o, d );
-	QString s = QFile::exists( o ) ? o : QString( ":/qmakeitems/%1.png" ).arg( d );
-	return QFile::exists( s ) ? QIcon( s ) : XUPItem::getIcon( o, d );
-}
-
 void QMakeXUPItem::registerItem()
 {
-	//fix me by being static becasue now it's slow like the death
-	// clearing default values
-	mFilteredVariables.clear();
-	//mTextTypes.clear();
-	mFileVariables.clear();
-	mPathVariables.clear();
-	mVariableLabels.clear();
-	//mVariableIcons.clear();
-	//mOperators.clear();
-	mSuffixes.clear();
+	mQMakeXUPItemInfos.Registered = true;
 	// registering...
+	mQMakeXUPItemInfos.TextTypes = XUPItem::textTypes();
+	mQMakeXUPItemInfos.Operators = XUPItem::operators();
 	// filtered variables
-	mFilteredVariables
+	mQMakeXUPItemInfos.FilteredVariables
 		<< "FORMS"
 		<< "FORMS3"
 		<< "HEADERS"
@@ -64,7 +47,7 @@ void QMakeXUPItem::registerItem()
 		<< "DEFINES"
 		<< "OTHER_FILES";
 	// variables based on files
-	mFileVariables
+	mQMakeXUPItemInfos.FileVariables
 		<< "FORMS"
 		<< "FORMS3"
 		<< "HEADERS"
@@ -78,49 +61,49 @@ void QMakeXUPItem::registerItem()
 		<< "SUBDIRS"
 		<< "OTHER_FILES";
 	// variables based on paths
-	mPathVariables
+	mQMakeXUPItemInfos.PathVariables
 		<< "INCLUDEPATH"
 		<< "DEPENDPATH"
 		<< "VPATH";
 	// variables labels
-	mVariableLabels[ "FORMS" ] = tr( "Forms Files" );
-	mVariableLabels[ "FORMS3" ] = tr( "Forms 3 Files" );
-	mVariableLabels[ "HEADERS" ] = tr( "Headers Files" );
-	mVariableLabels[ "SOURCES" ] = tr( "Sources Files" );
-	mVariableLabels[ "OBJECTIVE_SOURCES" ] = tr( "Objective Sources Files" );
-	mVariableLabels[ "TRANSLATIONS" ] = tr( "Qt Translations Files" );
-	mVariableLabels[ "RESOURCES" ] = tr( "Qt Resources Files" );
-	mVariableLabels[ "RC_FILE" ] = tr( "Resources Files" );
-	mVariableLabels[ "RES_FILE" ] = tr( "Compiled Resources Files" );
-	mVariableLabels[ "DEF_FILE" ] = tr( "Definitions Files" );
-	mVariableLabels[ "SUBDIRS" ] = tr( "Sub Projects" );
-	mVariableLabels[ "INCLUDEPATH" ] = tr( "Includes Paths" );
-	mVariableLabels[ "DEPENDPATH" ] = tr( "Depends Paths" );
-	mVariableLabels[ "VPATH" ] = tr( "Virtuals Paths" );
-	mVariableLabels[ "LIBS" ] = tr( "Libraries Files" );
-	mVariableLabels[ "DEFINES" ] = tr( "Defines" );
-	mVariableLabels[ "OTHER_FILES" ] = tr( "Other Files" );
+	mQMakeXUPItemInfos.VariableLabels[ "FORMS" ] = tr( "Forms Files" );
+	mQMakeXUPItemInfos.VariableLabels[ "FORMS3" ] = tr( "Forms 3 Files" );
+	mQMakeXUPItemInfos.VariableLabels[ "HEADERS" ] = tr( "Headers Files" );
+	mQMakeXUPItemInfos.VariableLabels[ "SOURCES" ] = tr( "Sources Files" );
+	mQMakeXUPItemInfos.VariableLabels[ "OBJECTIVE_SOURCES" ] = tr( "Objective Sources Files" );
+	mQMakeXUPItemInfos.VariableLabels[ "TRANSLATIONS" ] = tr( "Qt Translations Files" );
+	mQMakeXUPItemInfos.VariableLabels[ "RESOURCES" ] = tr( "Qt Resources Files" );
+	mQMakeXUPItemInfos.VariableLabels[ "RC_FILE" ] = tr( "Resources Files" );
+	mQMakeXUPItemInfos.VariableLabels[ "RES_FILE" ] = tr( "Compiled Resources Files" );
+	mQMakeXUPItemInfos.VariableLabels[ "DEF_FILE" ] = tr( "Definitions Files" );
+	mQMakeXUPItemInfos.VariableLabels[ "SUBDIRS" ] = tr( "Sub Projects" );
+	mQMakeXUPItemInfos.VariableLabels[ "INCLUDEPATH" ] = tr( "Includes Paths" );
+	mQMakeXUPItemInfos.VariableLabels[ "DEPENDPATH" ] = tr( "Depends Paths" );
+	mQMakeXUPItemInfos.VariableLabels[ "VPATH" ] = tr( "Virtuals Paths" );
+	mQMakeXUPItemInfos.VariableLabels[ "LIBS" ] = tr( "Libraries Files" );
+	mQMakeXUPItemInfos.VariableLabels[ "DEFINES" ] = tr( "Defines" );
+	mQMakeXUPItemInfos.VariableLabels[ "OTHER_FILES" ] = tr( "Other Files" );
 	// variables icons
-	mVariableIcons[ "FORMS" ] = getIcon( value( "icon" ), "forms" );
-	mVariableIcons[ "FORMS3" ] = getIcon( value( "icon" ), "forms3" );
-	mVariableIcons[ "HEADERS" ] = getIcon( value( "icon" ), "headers" );
-	mVariableIcons[ "SOURCES" ] = getIcon( value( "icon" ), "sources" );
-	mVariableIcons[ "OBJECTIVE_SOURCES" ] = getIcon( value( "icon" ), "objective_sources" );
-	mVariableIcons[ "TRANSLATIONS" ] = getIcon( value( "icon" ), "translations" );
-	mVariableIcons[ "RESOURCES" ] = getIcon( value( "icon" ), "resources" );
-	mVariableIcons[ "RC_FILE" ] = getIcon( value( "icon" ), "rc_file" );
-	mVariableIcons[ "RES_FILE" ] = getIcon( value( "icon" ), "res_file" );
-	mVariableIcons[ "DEF_FILE" ] = getIcon( value( "icon" ), "def_file" );
-	mVariableIcons[ "SUBDIRS" ] = getIcon( value( "icon" ), "project" );
-	mVariableIcons[ "INCLUDEPATH" ] = getIcon( value( "icon" ), "includepath" );
-	mVariableIcons[ "DEPENDPATH" ] = getIcon( value( "icon" ), "dependpath" );
-	mVariableIcons[ "VPATH" ] = getIcon( value( "icon" ), "vpath" );
-	mVariableIcons[ "LIBS" ] = getIcon( value( "icon" ), "libs" );
-	mVariableIcons[ "DEFINES" ] = getIcon( value( "icon" ), "defines" );
-	mVariableIcons[ "OTHER_FILES" ] = getIcon( value( "icon" ), "other_files" );
+	mQMakeXUPItemInfos.VariableIcons[ "FORMS" ] = getIcon( value( "icon" ), "forms" );
+	mQMakeXUPItemInfos.VariableIcons[ "FORMS3" ] = getIcon( value( "icon" ), "forms3" );
+	mQMakeXUPItemInfos.VariableIcons[ "HEADERS" ] = getIcon( value( "icon" ), "headers" );
+	mQMakeXUPItemInfos.VariableIcons[ "SOURCES" ] = getIcon( value( "icon" ), "sources" );
+	mQMakeXUPItemInfos.VariableIcons[ "OBJECTIVE_SOURCES" ] = getIcon( value( "icon" ), "objective_sources" );
+	mQMakeXUPItemInfos.VariableIcons[ "TRANSLATIONS" ] = getIcon( value( "icon" ), "translations" );
+	mQMakeXUPItemInfos.VariableIcons[ "RESOURCES" ] = getIcon( value( "icon" ), "resources" );
+	mQMakeXUPItemInfos.VariableIcons[ "RC_FILE" ] = getIcon( value( "icon" ), "rc_file" );
+	mQMakeXUPItemInfos.VariableIcons[ "RES_FILE" ] = getIcon( value( "icon" ), "res_file" );
+	mQMakeXUPItemInfos.VariableIcons[ "DEF_FILE" ] = getIcon( value( "icon" ), "def_file" );
+	mQMakeXUPItemInfos.VariableIcons[ "SUBDIRS" ] = getIcon( value( "icon" ), "project" );
+	mQMakeXUPItemInfos.VariableIcons[ "INCLUDEPATH" ] = getIcon( value( "icon" ), "includepath" );
+	mQMakeXUPItemInfos.VariableIcons[ "DEPENDPATH" ] = getIcon( value( "icon" ), "dependpath" );
+	mQMakeXUPItemInfos.VariableIcons[ "VPATH" ] = getIcon( value( "icon" ), "vpath" );
+	mQMakeXUPItemInfos.VariableIcons[ "LIBS" ] = getIcon( value( "icon" ), "libs" );
+	mQMakeXUPItemInfos.VariableIcons[ "DEFINES" ] = getIcon( value( "icon" ), "defines" );
+	mQMakeXUPItemInfos.VariableIcons[ "OTHER_FILES" ] = getIcon( value( "icon" ), "other_files" );
 	// register project suffixes
-	mSuffixes[tr( "Qt Project" )] = QStringList( "*.pro" );
-	mSuffixes[tr( "Qt Project Include" )] = QStringList( "*.pri" );
+	mQMakeXUPItemInfos.Suffixes[tr( "Qt Project" )] = QStringList( "*.pro" );
+	mQMakeXUPItemInfos.Suffixes[tr( "Qt Project Include" )] = QStringList( "*.pri" );
 	// register variable suffixes
 	// C++ filters
 	const QStringList cf = pMonkeyStudio::availableLanguagesSuffixes().value( "C++" );
@@ -148,22 +131,97 @@ void QMakeXUPItem::registerItem()
 	const QStringList pf = pMonkeyStudio::availableImageFormats();
 	// PROJECT filters
 	QStringList pjf;
-	foreach ( QStringList l, mSuffixes.values() )
+	foreach ( QStringList l, mQMakeXUPItemInfos.Suffixes.values() )
 		pjf << l;
 	// registering...
-	mVariableSuffixes[ "HEADERS" ] = hf;
-	mVariableSuffixes[ "SOURCES" ] = sf;
-	mVariableSuffixes[ "OBJECTIVE_SOURCES" ] = QStringList( "*.m" ) << "*.mm";
-	mVariableSuffixes[ "LEXSOURCES" ] = lf;
-	mVariableSuffixes[ "YACCSOURCES" ] = yf;
-	mVariableSuffixes[ "IMAGES" ] = pf;
-	mVariableSuffixes[ "FORMS" ] = QStringList( "*.ui" );
-	mVariableSuffixes[ "FORMS3" ] = QStringList( "*.ui" );
-	mVariableSuffixes[ "TRANSLATIONS" ] = QStringList( "*.ts" );
-	mVariableSuffixes[ "RESOURCES" ] = QStringList( "*.qrc" );
-	mVariableSuffixes[ "DEF_FILE" ] = QStringList( "*.def" );
-	mVariableSuffixes[ "RC_FILE" ] = QStringList( "*.rc" );
-	mVariableSuffixes[ "RES_FILE" ] = QStringList( "*.res" );
+	mQMakeXUPItemInfos.VariableSuffixes[ "HEADERS" ] = hf;
+	mQMakeXUPItemInfos.VariableSuffixes[ "SOURCES" ] = sf;
+	mQMakeXUPItemInfos.VariableSuffixes[ "OBJECTIVE_SOURCES" ] = QStringList( "*.m" ) << "*.mm";
+	mQMakeXUPItemInfos.VariableSuffixes[ "LEXSOURCES" ] = lf;
+	mQMakeXUPItemInfos.VariableSuffixes[ "YACCSOURCES" ] = yf;
+	mQMakeXUPItemInfos.VariableSuffixes[ "IMAGES" ] = pf;
+	mQMakeXUPItemInfos.VariableSuffixes[ "FORMS" ] = QStringList( "*.ui" );
+	mQMakeXUPItemInfos.VariableSuffixes[ "FORMS3" ] = QStringList( "*.ui" );
+	mQMakeXUPItemInfos.VariableSuffixes[ "TRANSLATIONS" ] = QStringList( "*.ts" );
+	mQMakeXUPItemInfos.VariableSuffixes[ "RESOURCES" ] = QStringList( "*.qrc" );
+	mQMakeXUPItemInfos.VariableSuffixes[ "DEF_FILE" ] = QStringList( "*.def" );
+	mQMakeXUPItemInfos.VariableSuffixes[ "RC_FILE" ] = QStringList( "*.rc" );
+	mQMakeXUPItemInfos.VariableSuffixes[ "RES_FILE" ] = QStringList( "*.res" );
+}
+
+QStringList QMakeXUPItem::operators() const
+{ return mQMakeXUPItemInfos.Operators; }
+
+void QMakeXUPItem::registerOperator( const QString& s )
+{
+	if ( !mQMakeXUPItemInfos.Operators.contains( s ) )
+		mQMakeXUPItemInfos.Operators << s;
+}
+
+QStringList QMakeXUPItem::filteredVariables() const
+{ return mQMakeXUPItemInfos.FilteredVariables; }
+
+void QMakeXUPItem::registerFilteredVariables( const QString& s )
+{
+	if ( !mQMakeXUPItemInfos.FilteredVariables.contains( s ) )
+		mQMakeXUPItemInfos.FilteredVariables << s;
+}
+
+QStringList QMakeXUPItem::textTypes() const
+{ return mQMakeXUPItemInfos.TextTypes; }
+
+void QMakeXUPItem::registerTextType( const QString& s )
+{
+	if ( !mQMakeXUPItemInfos.TextTypes.contains( s ) )
+		mQMakeXUPItemInfos.TextTypes << s;
+}
+
+QStringList QMakeXUPItem::fileVariables() const
+{ return mQMakeXUPItemInfos.FileVariables; }
+
+void QMakeXUPItem::registerFileVariables( const QString& s )
+{
+	if ( !mQMakeXUPItemInfos.FileVariables.contains( s ) )
+		mQMakeXUPItemInfos.FileVariables << s;
+}
+
+QStringList QMakeXUPItem::pathVariables() const
+{ return mQMakeXUPItemInfos.PathVariables; }
+
+void QMakeXUPItem::registerPathVariables( const QString& s )
+{
+	if ( !mQMakeXUPItemInfos.PathVariables.contains( s ) )
+		mQMakeXUPItemInfos.PathVariables << s;
+}
+
+QHash<QString, QStringList> QMakeXUPItem::suffixes() const
+{ return mQMakeXUPItemInfos.Suffixes; }
+
+void QMakeXUPItem::registerSuffixes( const QString& l, const QStringList& s )
+{ mQMakeXUPItemInfos.Suffixes[l] = s; }
+
+QHash<QString, QString> QMakeXUPItem::variableLabels() const
+{ return mQMakeXUPItemInfos.VariableLabels; }
+
+void QMakeXUPItem::registerVariableLabels( const QString& v, const QString& l )
+{ mQMakeXUPItemInfos.VariableLabels[v] = l; }
+
+QHash<QString, QIcon> QMakeXUPItem::variableIcons() const
+{ return mQMakeXUPItemInfos.VariableIcons; }
+
+void QMakeXUPItem::registerVariableIcons( const QString& v, const QIcon& i )
+{ mQMakeXUPItemInfos.VariableIcons[v] = i; }
+
+QHash<QString, QStringList> QMakeXUPItem::variableSuffixes() const
+{ return mQMakeXUPItemInfos.VariableSuffixes; }
+
+void QMakeXUPItem::registerVariableSuffixes( const QString& n, const QStringList& s )
+{ mQMakeXUPItemInfos.VariableSuffixes[n] = s; }
+
+QIcon QMakeXUPItem::getIcon( const QString& o, const QString& d ) const
+{
+	QString s = QFile::exists( o ) ? o : QString( ":/qmakeitems/%1.png" ).arg( d );
+	return QFile::exists( s ) ? QIcon( s ) : XUPItem::getIcon( o, d );
 }
 
 QMakeXUPItem* QMakeXUPItem::clone( bool b ) const
@@ -353,8 +411,8 @@ void QMakeXUPItem::addFiles( const QStringList& files, XUPItem* scope, const QSt
 		if ( container )
 		{
 			// check project extension
-			foreach ( QString vn, mSuffixes.keys() )
-				if ( QDir::match( mSuffixes[vn], file ) )
+			foreach ( QString vn, mQMakeXUPItemInfos.Suffixes.keys() )
+				if ( QDir::match( mQMakeXUPItemInfos.Suffixes[vn], file ) )
 					vnl << "SUBDIRS";
 			
 			// if no variable it mean not proejct file, process next file
@@ -364,8 +422,8 @@ void QMakeXUPItem::addFiles( const QStringList& files, XUPItem* scope, const QSt
 		else
 		{
 			// variables names that can handle this suffix
-			foreach ( QString vn, mVariableSuffixes.keys() )
-			if ( QDir::match( mVariableSuffixes[vn], file ) )
+			foreach ( QString vn, mQMakeXUPItemInfos.VariableSuffixes.keys() )
+			if ( QDir::match( mQMakeXUPItemInfos.VariableSuffixes[vn], file ) )
 				vnl << vn;
 		}
 		
