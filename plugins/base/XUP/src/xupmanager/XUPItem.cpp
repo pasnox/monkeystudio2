@@ -2,9 +2,12 @@
 #include "ProjectItemModel.h"
 #include "XUPManager.h"
 
+XUPItemInfos XUPItem::mXUPItemInfos;
+
 XUPItem::XUPItem( const QDomElement e, const QString& s, bool b )
 {
-	registerItem();
+	if ( !mXUPItemInfos.Registered )
+		registerItem();
 	setDomElement( e );
 	loadProject( s );
 	setModified( b );
@@ -12,83 +15,90 @@ XUPItem::XUPItem( const QDomElement e, const QString& s, bool b )
 
 void XUPItem::registerItem()
 {
-	mTextTypes << "comment" << "value" << "emptyline" << "function";
-	mFileVariables << "FILES";
-	mVariableLabels["FILES"] = tr( "Project Files" );
-	mFilteredVariables << "FILES";
-	mOperators << "=" << "+=" << "-=" << "*=" << "~=";
-	mSuffixes[tr( "Monkey Studio Project" )] = QStringList( "*.xup" );
+	mXUPItemInfos.Registered = true;
+	mXUPItemInfos.TextTypes << "comment" << "value" << "emptyline" << "function";
+	mXUPItemInfos.FileVariables << "FILES";
+	mXUPItemInfos.VariableLabels["FILES"] = tr( "Project Files" );
+	mXUPItemInfos.FilteredVariables << "FILES";
+	mXUPItemInfos.Operators << "=" << "+=" << "-=" << "*=" << "~=";
+	mXUPItemInfos.Suffixes[tr( "Monkey Studio Project" )] = QStringList( "*.xup" );
 }
 
 QStringList XUPItem::operators() const
-{ return mOperators; }
+{ return mXUPItemInfos.Operators; }
 
 void XUPItem::registerOperator( const QString& s )
 {
-	if ( !mOperators.contains( s ) )
-		mOperators << s;
+	if ( !mXUPItemInfos.Operators.contains( s ) )
+		mXUPItemInfos.Operators << s;
 }
 
-QHash<QString, QStringList> XUPItem::suffixes() const
-{ return mSuffixes; }
-
-void XUPItem::registerSuffixes( const QString& l, const QStringList& s )
-{ mSuffixes[l] = s; }
-
 QStringList XUPItem::filteredVariables() const
-{ return mFilteredVariables; }
+{ return mXUPItemInfos.FilteredVariables; }
 
 void XUPItem::registerFilteredVariables( const QString& s )
 {
-	if ( !mFilteredVariables.contains( s ) )
-		mFilteredVariables << s;
+	if ( !mXUPItemInfos.FilteredVariables.contains( s ) )
+		mXUPItemInfos.FilteredVariables << s;
 }
 
 QStringList XUPItem::textTypes() const
-{ return mTextTypes; }
+{ return mXUPItemInfos.TextTypes; }
 
 void XUPItem::registerTextType( const QString& s )
 {
-	if ( !mTextTypes.contains( s ) )
-		mTextTypes << s;
+	if ( !mXUPItemInfos.TextTypes.contains( s ) )
+		mXUPItemInfos.TextTypes << s;
 }
 
 QStringList XUPItem::fileVariables() const
-{ return mFileVariables; }
+{ return mXUPItemInfos.FileVariables; }
 
 void XUPItem::registerFileVariables( const QString& s )
 {
-	if ( !mFileVariables.contains( s ) )
-		mFileVariables << s;
+	if ( !mXUPItemInfos.FileVariables.contains( s ) )
+		mXUPItemInfos.FileVariables << s;
 }
 
 QStringList XUPItem::pathVariables() const
-{ return mPathVariables; }
+{ return mXUPItemInfos.PathVariables; }
 
 void XUPItem::registerPathVariables( const QString& s )
 {
-	if ( !mPathVariables.contains( s ) )
-		mPathVariables << s;
+	if ( !mXUPItemInfos.PathVariables.contains( s ) )
+		mXUPItemInfos.PathVariables << s;
 }
 
+QHash<QString, QStringList> XUPItem::suffixes() const
+{ return mXUPItemInfos.Suffixes; }
+
+void XUPItem::registerSuffixes( const QString& l, const QStringList& s )
+{ mXUPItemInfos.Suffixes[l] = s; }
+
 QHash<QString, QString> XUPItem::variableLabels() const
-{ return mVariableLabels; }
+{ return mXUPItemInfos.VariableLabels; }
 
 void XUPItem::registerVariableLabels( const QString& v, const QString& l )
-{ mVariableLabels[v] = l; }
+{ mXUPItemInfos.VariableLabels[v] = l; }
 
 QHash<QString, QIcon> XUPItem::variableIcons() const
-{ return mVariableIcons; }
+{ return mXUPItemInfos.VariableIcons; }
 
 void XUPItem::registerVariableIcons( const QString& v, const QIcon& i )
-{ mVariableIcons[v] = i; }
+{ mXUPItemInfos.VariableIcons[v] = i; }
+
+QHash<QString, QStringList> XUPItem::variableSuffixes() const
+{ return mXUPItemInfos.VariableSuffixes; }
+
+void XUPItem::registerVariableSuffixes( const QString& n, const QStringList& s )
+{ mXUPItemInfos.VariableSuffixes[n] = s; }
 
 QIcon XUPItem::getIcon( const QString& o, const QString& d ) const
 { return QIcon( QFile::exists( o ) ? o : QString( ":/items/%1.png" ).arg( d ) ); }
 
 QString XUPItem::valueName( const QString& s ) const
 {
-	if ( mTextTypes.contains( s ) )
+	if ( textTypes().contains( s ) )
 		return "text";
 	return "name";
 }
@@ -99,7 +109,7 @@ QStringList XUPItem::files( bool a )
 	QStringList l;
 	
 	// check valid item
-	if ( !isType( "variable" ) || !mFileVariables.contains( defaultValue() ) )
+	if ( !isType( "variable" ) || !fileVariables().contains( defaultValue() ) )
 		return l;
 	
 	// check recurs items from vit
@@ -144,13 +154,13 @@ void XUPItem::updateItem()
 	else if ( tn == "variable" )
 	{
 		// set icon
-		QIcon i = QFile::exists( value( "icon" ) ) ? QIcon( value( "icon" ) ) : mVariableIcons.value( value( "name" ) );
+		QIcon i = QFile::exists( value( "icon" ) ) ? QIcon( value( "icon" ) ) : variableIcons().value( value( "name" ) );
 		if ( i.isNull() )
 			i = getIcon( QString(), value( "type" ) );
 		setIcon( i );
 		// set caption
-		if ( mVariableLabels.contains( defaultValue() ) )
-			setText( mVariableLabels.value( defaultValue() ) );
+		if ( variableLabels().contains( defaultValue() ) )
+			setText( variableLabels().value( defaultValue() ) );
 		// set ToolTip
 		setToolTip( tr( "<b>Variable</b><br />%1" ).arg( defaultValue() ) );
 	}
@@ -158,7 +168,7 @@ void XUPItem::updateItem()
 	{
 		// set caption
 		XUPItem* pit = parent();
-		if ( pit && mFileVariables.contains( pit->defaultValue() ) )
+		if ( pit && fileVariables().contains( pit->defaultValue() ) )
 			setText( QFileInfo( defaultValue() ).fileName() );
 		// set ToolTip
 		setToolTip( QString( "<b>Value</b><br />%1 (%2, %3, %4)" ).arg( defaultValue() ).arg( pit ? pit->value( "operator", "=" ) : QString( "no parent" ) ).arg( pit ? ( QVariant( pit->value( "multiline", "false" ) ).toBool() ? tr( "multiline" ) : tr( "singleline" ) ) : tr( "no parent" ) ).arg( c ) );
@@ -492,7 +502,7 @@ QString XUPItem::filePath( const QString& s )
 	if ( s.isEmpty() && isType( "value" ) )
 	{
 		const QString v = parent()->defaultValue();
-		if ( ( mFileVariables.contains( v ) || mPathVariables.contains( v ) ) && !defaultValue().isEmpty() )
+		if ( ( fileVariables().contains( v ) || pathVariables().contains( v ) ) && !defaultValue().isEmpty() )
 		{
 			QString div = defaultInterpretedValue();
 			QFileInfo fi( div );

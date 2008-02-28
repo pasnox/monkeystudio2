@@ -9,6 +9,23 @@
 #include <QIcon>
 #include <QHash>
 
+struct XUPItemInfos
+{
+	XUPItemInfos()
+	{ Registered = false; }
+
+	bool Registered;
+	QStringList Operators;
+	QStringList FilteredVariables;
+	QStringList TextTypes;
+	QStringList FileVariables;
+	QStringList PathVariables;
+	QHash<QString, QStringList> Suffixes;
+	QHash<QString, QString> VariableLabels;
+	QHash<QString, QIcon> VariableIcons;
+	QHash<QString, QStringList> VariableSuffixes;
+};
+
 class ProjectItemModel;
 
 class XUPItem : public QObject, public QStandardItem
@@ -24,10 +41,6 @@ public:
 	// get available operators for this kind of item
 	virtual QStringList operators() const;
 	virtual void registerOperator( const QString& op );
-
-	// register extension that this item can manage
-	virtual QHash<QString, QStringList> suffixes() const;
-	virtual void registerSuffixes( const QString& label, const QStringList& suffixes );
 	
 	// the visible variables in filtered view ordered by list order
 	virtual QStringList filteredVariables() const;
@@ -45,6 +58,10 @@ public:
 	virtual QStringList pathVariables() const;
 	virtual void registerPathVariables( const QString& );
 	
+	// register extension that this item can manage
+	virtual QHash<QString, QStringList> suffixes() const;
+	virtual void registerSuffixes( const QString& label, const QStringList& suffixes );
+	
 	// set variables labels
 	virtual QHash<QString, QString> variableLabels() const;
 	virtual void registerVariableLabels( const QString&, const QString& );
@@ -52,6 +69,10 @@ public:
 	// set variables icons
 	virtual QHash<QString, QIcon> variableIcons() const;
 	virtual void registerVariableIcons( const QString&, const QIcon& );
+	
+	// set suffixes that some variables can handle
+	virtual QHash<QString, QStringList> variableSuffixes() const;
+	virtual void registerVariableSuffixes( const QString& varname, const QStringList& suffixes );
 	
 	// get defaut icon
 	virtual QIcon getIcon( const QString&, const QString& ) const;
@@ -142,14 +163,7 @@ public:
 	virtual XUPItem* topLevelProject() const;
 	
 protected:
-	QStringList mOperators;
-	QStringList mFilteredVariables;
-	QStringList mTextTypes;
-	QStringList mFileVariables;
-	QStringList mPathVariables;
-	QHash<QString, QStringList> mSuffixes;
-	QHash<QString, QString> mVariableLabels;
-	QHash<QString, QIcon> mVariableIcons;
+	static XUPItemInfos mXUPItemInfos;
 
 	//XUPItem* mBuddy;
 	QDomDocument mDocument;
