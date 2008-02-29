@@ -5,197 +5,103 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>452</width>
-    <height>162</height>
+    <width>841</width>
+    <height>140</height>
    </rect>
   </property>
   <property name="sizePolicy" >
-   <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+   <sizepolicy vsizetype="Maximum" hsizetype="Maximum" >
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
+  </property>
+  <property name="maximumSize" >
+   <size>
+    <width>16777215</width>
+    <height>16777215</height>
+   </size>
   </property>
   <property name="windowTitle" >
    <string>Search - Replace</string>
   </property>
   <widget class="QWidget" name="wCentral" >
-   <layout class="QVBoxLayout" >
+   <property name="sizePolicy" >
+    <sizepolicy vsizetype="Maximum" hsizetype="Preferred" >
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <layout class="QHBoxLayout" >
     <item>
-     <layout class="QGridLayout" >
-      <item row="1" column="0" >
+     <layout class="QVBoxLayout" >
+      <item>
        <widget class="QLabel" name="lSearchText" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="text" >
          <string>Search:</string>
         </property>
+        <property name="alignment" >
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
        </widget>
       </item>
-      <item row="1" column="1" >
+      <item>
+       <widget class="QLabel" name="lReplaceText" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text" >
+         <string>Replace:</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lPath" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text" >
+         <string>Path:</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" >
+      <item>
        <widget class="QLineEdit" name="leSearch" >
         <property name="toolTip" >
          <string>Enter the string or regular expression to find.</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="2" colspan="2" >
-       <widget class="QToolButton" name="tbPrevious" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip" >
-         <string>Search Previous</string>
-        </property>
-        <property name="text" >
-         <string>Previous</string>
-        </property>
-        <property name="icon" >
-         <iconset resource="../../resources/resources.qrc" >:/edit/icons/edit/previous.png</iconset>
-        </property>
-        <property name="toolButtonStyle" >
-         <enum>Qt::ToolButtonTextBesideIcon</enum>
-        </property>
-        <property name="autoRaise" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="4" >
-       <widget class="QToolButton" name="tbNext" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip" >
-         <string>Search Next</string>
-        </property>
-        <property name="text" >
-         <string>Next</string>
-        </property>
-        <property name="icon" >
-         <iconset resource="../../resources/resources.qrc" >:/edit/icons/edit/next.png</iconset>
-        </property>
-        <property name="toolButtonStyle" >
-         <enum>Qt::ToolButtonTextBesideIcon</enum>
-        </property>
-        <property name="autoRaise" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="5" >
-       <widget class="QCheckBox" name="cbCaseSensitive" >
-        <property name="toolTip" >
-         <string>If it's checked then the search is case sensitive.</string>
-        </property>
-        <property name="text" >
-         <string>Case</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="6" >
-       <widget class="QCheckBox" name="cbRegExp" >
-        <property name="toolTip" >
-         <string>If it's checked then expr is interpreted as a regular expression rather than a simple string.</string>
-        </property>
-        <property name="text" >
-         <string>RegExp</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" >
-       <widget class="QLabel" name="lReplaceText" >
-        <property name="text" >
-         <string>Replace:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1" >
+      <item>
        <widget class="QLineEdit" name="leReplaceText" >
         <property name="toolTip" >
          <string>Replace the current selection with this string</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="2" >
-       <widget class="QToolButton" name="tbReplace" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip" >
-         <string>Replace</string>
-        </property>
-        <property name="text" >
-         <string>Replace</string>
-        </property>
-        <property name="icon" >
-         <iconset resource="../../resources/resources.qrc" >:/edit/icons/edit/search.png</iconset>
-        </property>
-        <property name="toolButtonStyle" >
-         <enum>Qt::ToolButtonTextBesideIcon</enum>
-        </property>
-        <property name="autoRaise" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="3" colspan="2" >
-       <widget class="QToolButton" name="tbReplaceAll" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip" >
-         <string>Replace All</string>
-        </property>
-        <property name="text" >
-         <string>Replace All</string>
-        </property>
-        <property name="icon" >
-         <iconset resource="../../resources/resources.qrc" >:/edit/icons/edit/replace.png</iconset>
-        </property>
-        <property name="toolButtonStyle" >
-         <enum>Qt::ToolButtonTextBesideIcon</enum>
-        </property>
-        <property name="autoRaise" >
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="5" colspan="2" >
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" >
       <item>
        <layout class="QHBoxLayout" >
-        <item>
-         <widget class="QLabel" name="lPath" >
-          <property name="text" >
-           <string>Path:</string>
-          </property>
-         </widget>
-        </item>
         <item>
          <widget class="QLineEdit" name="lePath" >
           <property name="toolTip" >
@@ -215,10 +121,184 @@
         </item>
        </layout>
       </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" >
+      <item>
+       <layout class="QHBoxLayout" >
+        <item>
+         <layout class="QGridLayout" >
+          <item row="0" column="0" >
+           <widget class="QToolButton" name="tbPrevious" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip" >
+             <string>Search Previous</string>
+            </property>
+            <property name="text" >
+             <string>Previous</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../resources/resources.qrc" >:/edit/icons/edit/previous.png</iconset>
+            </property>
+            <property name="toolButtonStyle" >
+             <enum>Qt::ToolButtonTextBesideIcon</enum>
+            </property>
+            <property name="autoRaise" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QToolButton" name="tbNext" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip" >
+             <string>Search Next</string>
+            </property>
+            <property name="text" >
+             <string>Next</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../resources/resources.qrc" >:/edit/icons/edit/next.png</iconset>
+            </property>
+            <property name="toolButtonStyle" >
+             <enum>Qt::ToolButtonTextBesideIcon</enum>
+            </property>
+            <property name="autoRaise" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" >
+           <widget class="QToolButton" name="tbReplace" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip" >
+             <string>Replace</string>
+            </property>
+            <property name="text" >
+             <string>Replace</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../resources/resources.qrc" >:/edit/icons/edit/search.png</iconset>
+            </property>
+            <property name="toolButtonStyle" >
+             <enum>Qt::ToolButtonTextBesideIcon</enum>
+            </property>
+            <property name="autoRaise" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" >
+           <widget class="QToolButton" name="tbReplaceAll" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip" >
+             <string>Replace All</string>
+            </property>
+            <property name="text" >
+             <string>Replace All</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../resources/resources.qrc" >:/edit/icons/edit/replace.png</iconset>
+            </property>
+            <property name="toolButtonStyle" >
+             <enum>Qt::ToolButtonTextBesideIcon</enum>
+            </property>
+            <property name="autoRaise" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" >
+          <item>
+           <layout class="QHBoxLayout" >
+            <item>
+             <widget class="QCheckBox" name="cbCaseSensitive" >
+              <property name="sizePolicy" >
+               <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="toolTip" >
+               <string>If it's checked then the search is case sensitive.</string>
+              </property>
+              <property name="text" >
+               <string>Case</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="cbRegExp" >
+              <property name="sizePolicy" >
+               <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="toolTip" >
+               <string>If it's checked then expr is interpreted as a regular expression rather than a simple string.</string>
+              </property>
+              <property name="text" >
+               <string>RegExp</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType" >
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>161</width>
+              <height>28</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
       <item>
        <layout class="QHBoxLayout" >
         <item>
          <widget class="QLabel" name="lMask" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="text" >
            <string>Mask:</string>
           </property>
@@ -226,6 +306,12 @@
         </item>
         <item>
          <widget class="QLineEdit" name="leMask" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="toolTip" >
            <string>Mask of file names. Use colon for separate masks</string>
           </property>

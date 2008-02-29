@@ -174,8 +174,11 @@ void pSearch::show ()
         break;
     }
     resize (minimumSize ());  //BUG not working
-    updateGeometry ();  //BUG not working
     QDockWidget::show ();
+	widget()->resize (minimumSize ());  //BUG not working
+    widget()->updateGeometry ();  //BUG not working
+	resize (minimumSize ());  //BUG not working
+    updateGeometry ();  //BUG not working
 }
 
 bool pSearch::search (bool next)
