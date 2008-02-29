@@ -33,12 +33,16 @@
 #include "UIProjectsManager.h"
 #include "pChild.h"
 #include "pEditor.h"
+#include "UIMain.h"
+
 #include "SearchThread.h"
+
 
 #include "qsciscintilla.h"
 
 #include <QKeyEvent>
 #include <QDir>
+#include <QStatusBar>
 
 #include <QDebug>
 
@@ -52,7 +56,7 @@ pSearch::pSearch()
     setFixedHeight( minimumSizeHint().height() );
     
     // clear informations edit
-    lInformations->clear();
+    //lInformations->clear();
     
     qRegisterMetaType<pConsoleManager::Step>("pConsoleManager::Step");
     
@@ -179,23 +183,23 @@ bool pSearch::search (bool next)
     pChild* child = dynamic_cast<pChild*> (MonkeyCore::workspace()->currentChild());
     if (!child && !child->editor())
     {
-        lInformations->setText(tr( "No active editor" ) );
+        //lInformations->setText(tr( "No active editor" ) );
         return false;
     }
     pEditor* editor = child->editor ();
 
     // get cursor position
     int x, y;
-    if (cbFromStart->isChecked())
+    /*if (cbFromStart->isChecked())
     {
         x = 0;
         y = 0;
         cbFromStart->setChecked( false );
     }
     else
-    {
+    {*/
         editor->getCursorPosition( &y, &x );
-    }
+    /*}*/
 
     if (!next)
     {
@@ -204,7 +208,7 @@ bool pSearch::search (bool next)
     }
 
     // search
-    bool b = editor->findFirst( leSearch->text(), cbRegExp->isChecked(), cbCaseSensitive->isChecked(), cbWholeWords->isChecked(), cbWrap->isChecked(), next, y, x);
+    bool b = editor->findFirst( leSearch->text(), cbRegExp->isChecked(), cbCaseSensitive->isChecked(), false, true, next, y, x);
 
     // change background acording to found or not
     QPalette p = leSearch->palette();
@@ -212,7 +216,7 @@ bool pSearch::search (bool next)
     leSearch->setPalette( p );
     
     // show message if needed
-    lInformations->setText( b ? QString::null : tr( "Not Found" ) );
+    //lInformations->setText( b ? QString::null : tr( "Not Found" ) );
 
     // return found state
     return b;
@@ -245,10 +249,10 @@ bool pSearch::on_tbNext_clicked()
                 fileProcessed (0);
                 QString path = lePath->text();
                 QString text = leSearch->text();
-                bool whole = cbWholeWords->isChecked ();
+                //bool whole = cbWholeWords->isChecked ();
                 bool match = cbCaseSensitive->isChecked();
                 bool regexp = cbRegExp->isChecked ();
-                mSearchThread = new SearchThread(path, text, whole, match, regexp, this);
+                mSearchThread = new SearchThread(path, text, true, match, regexp, this);
                 tbNext->setText (tr("Stop"));
                 tbNext->setIcon (QIcon(":/console/icons/console/stop.png"));
                 
@@ -271,7 +275,7 @@ int pSearch::replace(bool all)
     pChild* child = dynamic_cast<pChild*> (MonkeyCore::workspace()->currentChild());
     if (!child && !child->editor())
     {
-        lInformations->setText(tr( "No active editor" ) );
+        //lInformations->setText(tr( "No active editor" ) );
         return 0;
     }
     pEditor* editor = child->editor ();
@@ -326,7 +330,7 @@ void pSearch::on_tbReplaceAll_clicked()
     editor->endUndoAction();
 
     // show occurence number replaced
-    lInformations->setText( count ? tr( "%1 occurences replaced" ).arg( count ) : tr( "Nothing To Repalce" ) );
+    //lInformations->setText( count ? tr( "%1 occurences replaced" ).arg( count ) : tr( "Nothing To Repalce" ) );
 }
 
 void pSearch::threadFinished ()
@@ -341,12 +345,16 @@ void pSearch::threadFinished ()
 void pSearch::occurenceFinded ()
 {
     mOccurencesFinded ++;
-    lInformations->setText (tr ("%1 files %2 occcurences").arg(mFilesProcessed).arg(mOccurencesFinded));
+    //lInformations->setText (tr ("%1 files %2 occcurences").arg(mFilesProcessed).arg(mOccurencesFinded));
 }
 
 void pSearch::fileProcessed (int count)
 {
     mFilesProcessed = count;
-    lInformations->setText (tr ("%1 files %2 occcurences").arg(mFilesProcessed).arg(mOccurencesFinded));
+    showMessage (tr ("%1 files %2 occcurences").arg(mFilesProcessed).arg(mOccurencesFinded));
 }
 
+void pSearch::showMessage (QString status)
+{
+    MonkeyCore::mainWindow()->statusBar()->showMessage (tr ("Search: %1").arg (status), 30);
+}

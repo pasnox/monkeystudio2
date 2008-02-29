@@ -102,6 +102,9 @@ protected:
 	void keyPressEvent( QKeyEvent* );
 
 	void show ();
+    
+    void showMessage (QString status);
+
 signals:
 	void clearSearchResults ();
 

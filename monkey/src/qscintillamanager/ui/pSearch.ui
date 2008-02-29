@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>317</width>
-    <height>460</height>
+    <width>452</width>
+    <height>162</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -21,159 +21,22 @@
   <widget class="QWidget" name="wCentral" >
    <layout class="QVBoxLayout" >
     <item>
-     <widget class="QLabel" name="lSearchText" >
-      <property name="text" >
-       <string>Search Text :</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLineEdit" name="leSearch" >
-      <property name="toolTip" >
-       <string>Enter the string or regular expression to find.</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="lReplaceText" >
-      <property name="text" >
-       <string>Replace Text :</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLineEdit" name="leReplaceText" >
-      <property name="toolTip" >
-       <string>Replace the current selection with this string</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="lPath" >
-      <property name="text" >
-       <string>Path</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" >
-      <item>
-       <widget class="QLineEdit" name="lePath" >
-        <property name="toolTip" >
-         <string>Path for searching</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="tbPath" >
-        <property name="toolTip" >
-         <string>Choose dirrectory</string>
-        </property>
-        <property name="text" >
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QLabel" name="lMask" >
-      <property name="text" >
-       <string>File name mask</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLineEdit" name="leMask" >
-      <property name="toolTip" >
-       <string>Mask of file names. Use colon for separate masks</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="Line" name="line_2" >
-      <property name="orientation" >
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item>
      <layout class="QGridLayout" >
-      <item row="0" column="0" >
-       <widget class="QCheckBox" name="cbFromStart" >
-        <property name="text" >
-         <string>From Start</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" colspan="2" >
-       <widget class="QCheckBox" name="cbCaseSensitive" >
-        <property name="toolTip" >
-         <string>If it's checked then the search is case sensitive.</string>
-        </property>
-        <property name="text" >
-         <string>Case Sensitive</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3" >
-       <widget class="QCheckBox" name="cbRegExp" >
-        <property name="toolTip" >
-         <string>If it's checked then expr is interpreted as a regular expression rather than a simple string.</string>
-        </property>
-        <property name="text" >
-         <string>RegExp</string>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="0" >
-       <widget class="QCheckBox" name="cbWrap" >
-        <property name="toolTip" >
-         <string>If it's checked then the search wraps around the end of the text.</string>
-        </property>
+       <widget class="QLabel" name="lSearchText" >
         <property name="text" >
-         <string>Wrap</string>
+         <string>Search:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1" >
-       <widget class="QCheckBox" name="cbWholeWords" >
+       <widget class="QLineEdit" name="leSearch" >
         <property name="toolTip" >
-         <string>If it's checked then the search looks for whole word matches only, otherwise it searches for any matching text.</string>
-        </property>
-        <property name="text" >
-         <string>Whole Words</string>
+         <string>Enter the string or regular expression to find.</string>
         </property>
        </widget>
       </item>
       <item row="1" column="2" colspan="2" >
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType" >
-         <enum>QSizePolicy::Ignored</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>89</width>
-          <height>24</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="Line" name="line" >
-      <property name="orientation" >
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" >
-      <item>
        <widget class="QToolButton" name="tbPrevious" >
         <property name="sizePolicy" >
          <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
@@ -185,7 +48,7 @@
          <string>Search Previous</string>
         </property>
         <property name="text" >
-         <string>Search Previous</string>
+         <string>Previous</string>
         </property>
         <property name="icon" >
          <iconset resource="../../resources/resources.qrc" >:/edit/icons/edit/previous.png</iconset>
@@ -198,7 +61,7 @@
         </property>
        </widget>
       </item>
-      <item>
+      <item row="1" column="4" >
        <widget class="QToolButton" name="tbNext" >
         <property name="sizePolicy" >
          <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
@@ -210,7 +73,7 @@
          <string>Search Next</string>
         </property>
         <property name="text" >
-         <string>Search Next</string>
+         <string>Next</string>
         </property>
         <property name="icon" >
          <iconset resource="../../resources/resources.qrc" >:/edit/icons/edit/next.png</iconset>
@@ -223,11 +86,41 @@
         </property>
        </widget>
       </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" >
-      <item>
+      <item row="1" column="5" >
+       <widget class="QCheckBox" name="cbCaseSensitive" >
+        <property name="toolTip" >
+         <string>If it's checked then the search is case sensitive.</string>
+        </property>
+        <property name="text" >
+         <string>Case</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="6" >
+       <widget class="QCheckBox" name="cbRegExp" >
+        <property name="toolTip" >
+         <string>If it's checked then expr is interpreted as a regular expression rather than a simple string.</string>
+        </property>
+        <property name="text" >
+         <string>RegExp</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QLabel" name="lReplaceText" >
+        <property name="text" >
+         <string>Replace:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" >
+       <widget class="QLineEdit" name="leReplaceText" >
+        <property name="toolTip" >
+         <string>Replace the current selection with this string</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2" >
        <widget class="QToolButton" name="tbReplace" >
         <property name="sizePolicy" >
          <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
@@ -252,7 +145,7 @@
         </property>
        </widget>
       </item>
-      <item>
+      <item row="2" column="3" colspan="2" >
        <widget class="QToolButton" name="tbReplaceAll" >
         <property name="sizePolicy" >
          <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
@@ -277,33 +170,70 @@
         </property>
        </widget>
       </item>
+      <item row="2" column="5" colspan="2" >
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
      </layout>
     </item>
     <item>
-     <widget class="QLabel" name="lInformations" >
-      <property name="frameShape" >
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="text" >
-       <string>Informations</string>
-      </property>
-      <property name="textFormat" >
-       <enum>Qt::PlainText</enum>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <spacer>
-      <property name="orientation" >
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" >
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
+     <layout class="QHBoxLayout" >
+      <item>
+       <layout class="QHBoxLayout" >
+        <item>
+         <widget class="QLabel" name="lPath" >
+          <property name="text" >
+           <string>Path:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lePath" >
+          <property name="toolTip" >
+           <string>Path for searching</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="tbPath" >
+          <property name="toolTip" >
+           <string>Choose dirrectory</string>
+          </property>
+          <property name="text" >
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" >
+        <item>
+         <widget class="QLabel" name="lMask" >
+          <property name="text" >
+           <string>Mask:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="leMask" >
+          <property name="toolTip" >
+           <string>Mask of file names. Use colon for separate masks</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
@@ -319,10 +249,7 @@
  <tabstops>
   <tabstop>leSearch</tabstop>
   <tabstop>leReplaceText</tabstop>
-  <tabstop>cbFromStart</tabstop>
-  <tabstop>cbWrap</tabstop>
   <tabstop>cbCaseSensitive</tabstop>
-  <tabstop>cbWholeWords</tabstop>
   <tabstop>cbRegExp</tabstop>
   <tabstop>tbPrevious</tabstop>
   <tabstop>tbReplace</tabstop>
