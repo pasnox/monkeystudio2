@@ -12,7 +12,7 @@ GNUDebugger::GNUDebugger()
 {
 	// set plugin infos
 	mPluginInfos.Caption = tr( "GNU Debugger V1.1.0 new 8829" );
-	mPluginInfos.Description = tr( "Plugin for Gdb intergration" );
+	mPluginInfos.Description = tr( "Plugin for Gdb intergration\n\nBe sure you haved Gdb version > 6.x and you haved this in your path" );
 	mPluginInfos.Author = "Pinon Yannick aka Xiantia  <private mail>";
 	mPluginInfos.Type = BasePlugin::iDebugger;
 	mPluginInfos.Name = "Debugger";

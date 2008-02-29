@@ -1,7 +1,7 @@
 #include "./kernel/gdbCore.h"
 #include <QMetaType>
 
-#define TIME_TICK	500
+#define TIME_TICK	50000
 
 // one mutex for all class
 static QMutex *mutexProcess = new QMutex();
@@ -73,7 +73,7 @@ void GdbCore::onFinished( )
 void GdbCore::setStopProcess()
 {
 	stopProcess = true;
-	terminate();
+	//terminate();
 
 	if(!wait(1000)) // wait 1 seconde
 	{
@@ -97,31 +97,33 @@ void GdbCore::run()
 
 	while(!stopProcess)
 	{
-//		if(mutexProcess->tryLock())
-		mutexProcess->lock();
+		if(mutexProcess->tryLock())
+//		mutexProcess->lock();
 		{
-		do
-		{
-			QGdbMessageCore inBox = getGdbMessage();
-			if(inBox.id != MESSAGE_EMPTY) 
+			do
 			{
-				if(isGdbStarted() && isTargetLoaded() )
+				QGdbMessageCore inBox = getGdbMessage();
+				if(inBox.id != MESSAGE_EMPTY) 
 				{
-file.write("u 1 : w 1 have msg\r\n");
-file.flush();
-file.write("u 2 : w 2 emit\r\n");
-file.flush();
-					emit readyProcess(inBox);
-file.write("u 3 : w 5 emit effectued\r\n");
-file.flush();
-file.write("u 6 : w 6 exit\r\n");
-file.flush();
+					if(isGdbStarted() && isTargetLoaded() )
+					{	
+//file.write("u 1 : w 1 have msg\r\n");
+//file.write("u 2 : w 2 emit\r\n");
+//file.flush();
+					do{	
+						emit readyProcess(inBox);
+						inBox = getGdbMessage();
+					}while(inBox.id != MESSAGE_EMPTY);
+					
+//file.write("u 3 : w 5 emit effectued\r\n");
+//file.write("u 6 : w 6 exit\r\n");
+//file.flush();
+					}
 				}
+				else usleep(TIME_TICK);
 			}
-			usleep(TIME_TICK);
-		}
-		while(statusProcess != PROCESS_TERMINED);
-		mutexProcess->unlock();
+			while(statusProcess != PROCESS_TERMINED);
+			mutexProcess->unlock();
 		}
 		usleep(TIME_TICK);
 	}

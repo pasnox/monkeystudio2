@@ -334,9 +334,9 @@ void DockGNUDebugger::onBreakpointConditionnaled(QByteArray filename, int line, 
 // Console from GdbProcess
 void DockGNUDebugger::gdbStarted( const pCommand& c)
 {
+	kernelDispatcher->gdbStarted();
 	// open target
 	onSendRawData(NULL,"file " + targetName.toLocal8Bit());
-	kernelDispatcher->gdbStarted();
 }
 //
 void DockGNUDebugger::gdbFinished( const pCommand& c, int a , QProcess::ExitStatus )
@@ -356,6 +356,7 @@ void DockGNUDebugger::gdbError(const pCommand& c, QProcess::ProcessError e)
 		break; 
 		default : ;
 	}
+	onWantExit();
 }
 //
 void DockGNUDebugger::commandReadyRead( const pCommand& c , const QByteArray& d)

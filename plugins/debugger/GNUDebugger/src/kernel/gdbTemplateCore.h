@@ -369,14 +369,12 @@ public :
 					}
 					 lockProcess(); // waiting promt
 				}
- 
 				// event prompt
 				else if( pClass->getParametre("event=" , m.msg) == "prompt")
 				{
 				//	qDebug("remove interpreter (prompt) " + pClass->name().toLocal8Bit());
 					pClass->removeInterpreter();
 					pClass->processPrompt();
-
 					// i have other command after prompt event ?
 					if(currentIndex < generic.gdbFunction.count())
 					{

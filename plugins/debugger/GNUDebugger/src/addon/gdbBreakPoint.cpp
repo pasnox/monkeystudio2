@@ -149,7 +149,6 @@ int GdbBreakPoint::processFromEditor(QGdbMessageCore m)
 		QByteArray fullName = QFileInfo(getParametre("fullname=", m.msg)).fileName ().toLocal8Bit();
 		QByteArray line = getParametre("line=", m.msg);
 		toggleBreakPoint(fullName, line.toInt());
-
 		return cmd.lockProcess();
 	}
 	return cmd.unlockProcess();
