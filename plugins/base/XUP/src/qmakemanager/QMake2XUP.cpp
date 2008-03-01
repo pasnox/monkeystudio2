@@ -379,7 +379,13 @@ QByteArray convertNodeToPro( const QDomElement& e, const QString& v )
 	if ( tn != "project" )
 	{
 		if ( tn == "function" )
-			data.append( tabsString( tabs ) +e.firstChild().toText().data() +EOL );
+		{
+			data.append( tabsString( tabs ) +e.firstChild().toText().data() );
+			comment = e.attribute( "comment" );
+			if ( !comment.isEmpty() )
+				data.append( ' ' +comment );
+			data.append( EOL );
+		}
 		else if ( tn == "emptyline" )
 		{
 			for ( int i = 0; i < e.firstChild().toText().data().toInt(); i++ )
@@ -402,14 +408,21 @@ QByteArray convertNodeToPro( const QDomElement& e, const QString& v )
 			else if ( e.previousSibling().isNull() || !isMultiline )
 				vtabs = 0;
 			data.append( tabsString( vtabs ) +e.firstChild().toText().data() );
+			comment = e.attribute( "comment" );
 			if ( isMultiline )
 			{
 				if ( !e.nextSibling().isNull() )
 					data.append( " \\" );
+				if ( !comment.isEmpty() )
+					data.append( ' ' +comment );
 				data.append( EOL );
 			}
 			else if ( e.nextSibling().isNull() )
+			{
+				if ( !comment.isEmpty() )
+					data.append( ' ' +comment );
 				data.append( EOL );
+			}
 			else
 				data.append( ' ' );
 		}
