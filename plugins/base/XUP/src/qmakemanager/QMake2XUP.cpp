@@ -40,7 +40,7 @@ QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 	QString inVarComment;
 	int nbEmptyLine = 0;
 	
-	QRegExp Variable("^(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?[ \\t]*[:|][ \\t]*)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*([~*+-]?=)[ \\t]*((?:\\\\\\\\\\\\\\\"|\\\\\\\"|[^\\\\#])+)?[ \\t]*(\\\\)?[ \t]*(#.*)?");
+	QRegExp Variable("^(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?[ \\t]*[:|][ \\t]*)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*([~*+-]?=)[ \\t]*((?:\\\\\\\\\\\\\\\"|\\\\\\\"|\\\\.|[^\\\\#])+)?[ \\t]*(\\\\)?[ \t]*(#.*)?");
 	//QRegExp bloc("^(\\})?[ \\t]*((?:(?:[-\\.a-zA-Z0-9*|_!+]+(?:\\((?:[^\\)]*)\\))?[ \\t]*[:|][ \\t]*)+)?([-a-zA-Z0-9*|_!+]+(?:\\((?:[^\\)]*)\\))?))[ \\t]*(\\{)[ \\t]*(#.*)?");
 	QRegExp bloc("^(\\})?[ \\t]*((?:(?:[-\\.a-zA-Z0-9*|_!+]+(?:\\((?:[^\\)]*)\\))?[ \\t]*[:|][ \\t]*)+)?([-a-zA-Z0-9*|_!+]+(?:\\((?:[^\\)]*)\\))?))[:]*[ \\t]*(\\{)[ \\t]*(#.*)?");
 	QRegExp function_call("^((?:[a-zA-Z0-9\\.]+(?:[ \\t]*\\((?:.*)\\))?[ \\t]*[|:][ \\t]*)+)?([a-zA-Z]+[ \\t]*\\((.*)\\))[ \\t]*(#.*)?");
@@ -384,7 +384,19 @@ QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 			qWarning("function call matched length : %d", function_call.matchedLength());
 		}
 	}
+	while(!isNested.isEmpty() && isNested.top())
+	{
+		file.append(pile.pop().toUtf8());
+		isNested.pop();
+	}
 	file.append("</project>\n");
+	/* // to output the xml in a file
+	QFile apt("debug.xml");
+	if( apt.open( QIODevice::WriteOnly | QIODevice::Text ) )
+	{
+		apt.write(file.toUtf8());
+		apt.close();
+	}*/
 	
 	return file.toUtf8();
 }
