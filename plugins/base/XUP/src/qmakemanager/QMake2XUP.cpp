@@ -13,9 +13,6 @@ si "nested" n'existe pas, il vaux "false"
 #include <QtGui>
 #include <QtXml>
 
-const QString EOL = "\r\n";
-static int tabs = 0;
-
 QString tabsString( int i )
 { return QString().fill( '\t', i ); }
 
@@ -371,11 +368,13 @@ QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 
 QByteArray convertNodeToPro( const QDomElement& e, const QString& v )
 {
-	static bool isMultiline = false;
-	bool isNested = false;
-	QString comment;
-	QString data;
-	const QString tn = e.tagName();
+	static int tabs = 0; // tabs indentation
+	static bool isMultiline = false; // tell if last variable is multiline or not
+	bool isNested = false; // tell if scope is nested or not
+	QString comment; // comment of item if available
+	QString data; // the data to return
+	const QString tn = e.tagName(); // current node tag name
+	const QString EOL = "\r\n"; // end of lines for generated file
 
 	if ( tn != "project" )
 	{
@@ -388,7 +387,11 @@ QByteArray convertNodeToPro( const QDomElement& e, const QString& v )
 		}
 		else if ( tn == "variable" )
 		{
-			data.append( tabsString( tabs ) +QString( "%1\t%2 " ).arg( e.attribute( "name" ) ).arg( e.attribute( "operator", "=" ) ) );
+			int vtabs = tabs;
+			QDomElement n = e.parentNode().toElement();
+			if ( n.tagName() == "scope" && QVariant( n.attribute( "nested", "false" ) ).toBool() )
+				vtabs--;
+			data.append( tabsString( vtabs ) +QString( "%1\t%2 " ).arg( e.attribute( "name" ) ).arg( e.attribute( "operator", "=" ) ) );
 			isMultiline = QVariant( e.attribute( "multiline", "false" ) ).toBool();
 		}
 		else if ( tn == "value" )
@@ -396,7 +399,7 @@ QByteArray convertNodeToPro( const QDomElement& e, const QString& v )
 			int vtabs = tabs;
 			if ( !e.previousSibling().isNull() && isMultiline )
 				vtabs++;
-			else if ( e.previousSibling().isNull() )
+			else if ( e.previousSibling().isNull() || !isMultiline )
 				vtabs = 0;
 			data.append( tabsString( vtabs ) +e.firstChild().toText().data() );
 			if ( isMultiline )
@@ -413,7 +416,7 @@ QByteArray convertNodeToPro( const QDomElement& e, const QString& v )
 		else if ( tn == "scope" )
 		{
 			int vtabs = tabs;
-			if ( e.attribute( "name" ) == "else" )
+			if ( e.attribute( "name" ) == "else" && !QVariant( e.previousSibling().toElement().attribute( "nested", "false" ) ).toBool() )
 				vtabs = 0;
 			isNested = QVariant( e.attribute( "nested", "false" ) ).toBool();
 			comment = e.attribute( "comment" );
@@ -422,12 +425,12 @@ QByteArray convertNodeToPro( const QDomElement& e, const QString& v )
 			{
 				data.append( " {" );
 				if ( !comment.isEmpty() )
-					data.append( " " +comment );
+					data.append( ' ' +comment );
 				data.append( EOL );
 				tabs++;
 			}
 			else
-				data.append( ":" );
+				data.append( ':' );
 		}
 		else if ( tn == "comment" )
 		{
@@ -437,6 +440,8 @@ QByteArray convertNodeToPro( const QDomElement& e, const QString& v )
 			data.append( tabsString( vtabs ) +e.firstChild().toText().data() +EOL );
 		}
 	}
+	else
+		tabs = 0;
 	
 	const QStringList tv = QStringList() << "function" << "emptyline" << "value" << "comment";
 	if ( e.hasChildNodes() && !tv.contains( tn ) )
@@ -462,7 +467,6 @@ QByteArray convertNodeToPro( const QDomElement& e, const QString& v )
 
 QByteArray QMake2XUP::convertToPro( const QDomDocument& d, const QString& v )
 {
-	tabs = 0;
 	// get project node
 	QDomElement e  = d.firstChildElement( "project" ).toElement();
 	// check project available
