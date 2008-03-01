@@ -4,8 +4,13 @@
 #include "XUPItem.h"
 #include "XUPManager.h"
 #include "AddFilesDialog.h"
+#include "XUPPlugin.h"
+
+#include "MonkeyCore.h"
+#include "PluginsManager.h"
 
 #include <QHeaderView>
+#include <QInputDialog>
 
 using namespace XUPManager;
 
@@ -377,11 +382,24 @@ void UIXUPManager::actionSettingsTriggered()
 	if ( XUPItem* pi = currentProject() )
 	{
 		// get plugin name that can manage this project
-		const QString name = pi->value( "plugin" );
-		if ( name.isEmpty() )
+		if ( pi->value( "plugin" ).isEmpty() )
 		{
-			warning( tr( "Your project is not yet editable, please select a correct project plugin manager" ) );
+			// get xup plugins
+			QHash<QString, XUPPlugin*> xpl;
+			foreach ( XUPPlugin* xp, MonkeyCore::pluginsManager()->plugins<XUPPlugin*>( PluginsManager::stAll ) )
+				xpl[ xp->infos().Caption ] = xp;
+		
+			bool ok;
+			const QString caption = QInputDialog::getItem( window(), tr( "title" ), tr( "Your project is not yet editable, please select a correct project plugin manager" ), xpl.keys(), 0, false, &ok );
+			if ( ok && !caption.isEmpty() )
+				pi->setValue( "plugin", xpl[ caption ]->infos().Name );
 		}
+		
+		// edit project settings
+		if ( pi->value( "plugin" ).isEmpty() )
+			warning( tr( "The project can't be edited because there is no associate project settings plugin." ) );
+		else if ( XUPPlugin* xp = MonkeyCore::pluginsManager()->plugins<XUPPlugin*>( PluginsManager::stAll, pi->value( "plugin" ) ).value( 0 ) )
+			xp->editProject( pi );
 	}
 }
 
