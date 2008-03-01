@@ -13,6 +13,8 @@ si "nested" n'existe pas, il vaux "false"
 #include <QtGui>
 #include <QtXml>
 
+const QString EOL = "\r\n";
+
 QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 {
 	// check if file exists
@@ -33,6 +35,7 @@ QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 	QStack<bool> isNested;
 	QStack<QString> pile;
 	QString file;
+	QString inVarComment;
 	int nbEmptyLine = 0;
 	
 	QRegExp Variable("^(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?[ \\t]*[:|][ \\t]*)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*([~*+-]?=)[ \\t]*((?:\\\\\\\\\\\\\\\"|\\\\\\\"|[^\\\\#])+)?[ \\t]*(\\\\)?[ \t]*(#.*)?");
@@ -158,8 +161,16 @@ QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 			}
 			for(int ku = 0;ku < multivalues.size();ku++)
 			{
-				if ( multivalues.value(ku).toUtf8().startsWith( "#" ) )
-					file.append( QString( "<comment>%1</comment>" ).arg( QString( multivalues.value(ku).toUtf8() ) ) );
+				inVarComment = multivalues.value(ku).toUtf8().trimmed();
+				if ( inVarComment.startsWith( "#" ) )
+				{
+					if ( inVarComment == "#" && ku < multivalues.size() )
+					{
+						ku++;
+						inVarComment = "# " +multivalues.value(ku).trimmed();
+					}
+					file.append( QString( "<comment>%1 \\</comment>" ).arg( QString( inVarComment ) ) );
+				}
 				else
 					file.append("<value"+(liste[6].trimmed().toUtf8() != "" && ku+1 == multivalues.size() ? " comment=\""+liste[6].trimmed().toUtf8()+"\"" : "")+">"+multivalues.value(ku).toUtf8()+"</value>\n");
 			}
@@ -197,8 +208,16 @@ QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 					}
 					for(int ku = 0;ku < multivalues.size();ku++)
 					{
-						if ( multivalues.value(ku).toUtf8().startsWith( "#" ) )
-							file.append( QString( "<comment>%1</comment>" ).arg( QString( multivalues.value(ku).toUtf8() ) ) );
+						inVarComment = multivalues.value(ku).toUtf8().trimmed();
+						if ( inVarComment.startsWith( "#" ) )
+						{
+							if ( inVarComment == "#" && ku < multivalues.size() )
+							{
+								ku++;
+								inVarComment = "# " +multivalues.value(ku).trimmed();
+							}
+							file.append( QString( "<comment>%1 \\</comment>" ).arg( QString( inVarComment ) ) );
+						}
 						else
 							file.append("<value"+(liste[2].trimmed().toUtf8() != "" && ku+1 == multivalues.size() ? " comment=\""+liste[2].trimmed().toUtf8()+"\"" : "")+">"+multivalues.value(ku).toUtf8()+"</value>\n");
 					}
@@ -235,8 +254,16 @@ QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 				}
 				for(int ku = 0;ku < multivalues.size();ku++)
 				{
-					if ( multivalues.value(ku).toUtf8().startsWith( "#" ) )
-						file.append( QString( "<comment>%1</comment>" ).arg( QString( multivalues.value(ku).toUtf8() ) ) );
+					inVarComment = multivalues.value(ku).toUtf8().trimmed();
+					if ( inVarComment.startsWith( "#" ) )
+					{
+						if ( inVarComment == "#" && ku < multivalues.size() )
+						{
+							ku++;
+							inVarComment = "# " +multivalues.value(ku).trimmed();
+						}
+						file.append( QString( "<comment>%1 \\</comment>" ).arg( QString( inVarComment ) ) );
+					}
 					else
 						file.append("<value"+(comment.trimmed().toUtf8() != "" && ku+1 == multivalues.size() ? " comment=\""+comment.trimmed().toUtf8()+"\"" : "")+">"+multivalues.value(ku).toUtf8()+"</value>\n");
 				}
@@ -340,27 +367,87 @@ QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 
 QByteArray convertNodeToPro( const QDomElement& e, const QString& v )
 {
-	// get nodes
-	QDomNodeList l = e.childNodes();
-	// iterate over nodes
-	for ( int i = 0; i < l.count(); i++ )
+	static bool isMultiline = false;
+	bool isNested = false;
+	QString comment;
+	QString data;
+	const QString tn = e.tagName();
+
+	if ( tn != "project" )
 	{
-		QDomNode n = l.at( i );
-		bool b = n.isText();
+		if ( tn == "function" )
+			data.append( e.firstChild().toText().data() +EOL );
+		else if ( tn == "emptyline" )
+		{
+			for ( int i = 0; i < e.firstChild().toText().data().toInt(); i++ )
+				data.append( EOL );
+		}
+		else if ( tn == "variable" )
+		{
+			data.append( QString( "%1\t%2 " ).arg( e.attribute( "name" ) ).arg( e.attribute( "operator", "=" ) ) );
+			isMultiline = QVariant( e.attribute( "multiline", "false" ) ).toBool();
+		}
+		else if ( tn == "value" )
+		{
+			data.append( e.firstChild().toText().data() );
+			if ( isMultiline )
+			{
+				if ( !e.nextSibling().isNull() )
+					data.append( " \\" );
+				data.append( EOL );
+			}
+			else if ( e.nextSibling().isNull() )
+				data.append( EOL );
+			else
+				data.append( ' ' );
+		}
+		else if ( tn == "scope" )
+		{
+			isNested = QVariant( e.attribute( "nested", "false" ) ).toBool();
+			comment = e.attribute( "comment" );
+			data.append( e.attribute( "name" ) );
+			if ( !isNested )
+			{
+				data.append( " {" );
+				if ( !comment.isEmpty() )
+					data.append( " " +comment );
+				data.append( EOL );
+			}
+			else
+				data.append( ":" );
+		}
+		else if ( tn == "comment" )
+			data.append( e.firstChild().toText().data() +EOL );
 	}
-	return QByteArray( "gege" );
+	
+	const QStringList tv = QStringList() << "function" << "emptyline" << "value" << "comment";
+	if ( e.hasChildNodes() && !tv.contains( tn ) )
+	{
+		QDomNodeList l = e.childNodes();
+		for ( int i = 0; i < l.count(); i++ )
+			data.append( convertNodeToPro( l.at( i ).toElement(), v ) );
+		
+		if ( tn == "scope" && !isNested )
+		{
+			data.append( "}" );
+			QDomElement n = e.nextSibling().toElement();
+			if ( !( n.tagName() == "scope" && n.attribute( "name" ) == "else" ) )
+				data.append( EOL );
+			else
+				data.append( ' ' );
+		}
+	}
+
+	return data.toAscii();
 }
 
 QByteArray QMake2XUP::convertToPro( const QDomDocument& d, const QString& v )
 {
-	QByteArray a;
 	// get project node
 	QDomElement e  = d.firstChildElement( "project" ).toElement();
 	// check project available
 	if ( e.isNull() )
 		return QByteArray();
 	// parse project scope
-	a.append( convertNodeToPro( e, v ) );
-	// return state
-	return a;
+	return convertNodeToPro( e, v );
 }
