@@ -3,12 +3,12 @@ include( ../../plugins.inc )
 # my comment
 
 mac:LIBS	+= -framework SDL # framework sdl comment
-else:LIBS+= -lSDL # lib sdl comment
+else:LIBS	+= -lSDL # lib sdl comment
 
 win32 { # the win32 scope comment
 	include( toto.pri ) # include comment
 	LIBS	+= -lie4 # lib ie4 comment
-} # end scope comment : this sort of comment will be never parsed / restored i think because nobody use it.
+}
 
 mac { # the mac scope comment
 	include( toto.pri ) # hihihihi
@@ -19,14 +19,14 @@ mac { # the mac scope comment
 
 imbricScope { # the imbricScope scope comment
 	winxp {
-		WINXP = true \
+		WINXP	= true \
 			false \ # false comment
 			# gigigi \
 			ggggg # ggggg comment
-		
+
 		# mlouil
 	} else {
-		WINXP = false
+		WINXP	= false
 	}
 } else {
 	include( oki.pri )
@@ -40,9 +40,9 @@ RESOURCES	= src/resources/FileBrowser.qrc
 TRANSLATIONS	= okmichel.pro \
 	okgerard.pri \ # okgerard comment
 	#okrobert \
-#	oktoto \
+	#	oktoto \
 	#	okipoirot \
-# okhenry.pru \
+	# okhenry.pru \
 	oktiti.h
 
 # pouet comme !
@@ -54,3 +54,8 @@ HEADERS	= src/FileBrowser.h \ # src/filebrowser comment
 SOURCES	= src/FileBrowser.cpp \
 	src/pDockFileBrowser.cpp \
 	src/FileBrowserSettings.cpp
+
+OTHER_FILES	= ../license.gpl \
+	../readme.txt \
+	../dev-readme
+
