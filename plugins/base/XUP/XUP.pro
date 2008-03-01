@@ -1,8 +1,8 @@
 include( ../../plugins.inc )
 
-DESTDIR	= $$MONKEY_PLUGINS_DIR/base
+DESTDIR	= $$MONKEY_PLUGINS_DIR/xup
 TARGET	= XUP
-QT	+= xml
+QT	*= xml
 RESOURCES	*= src/resources/XUPManager.qrc src/qmakemanager/resources/qmakemanager.qrc
 ALL_INCLUDES	= $$INCLUDEPATH
 INCLUDEPATH	= . src src/xupmanager src/xupmanager/ui src/qmakemanager $$ALL_INCLUDES
@@ -18,6 +18,7 @@ HEADERS	*= src/xupmanager/ProjectItemModel.h \
 	src/xupmanager/FilteredProjectItemModel.h \
 	src/xupmanager/ui/AddFilesDialog.h \
 	src/xupmanager/ScopedProjectItemModel.h \
+	src/xupmanager/XUPPlugin.h \
 	src/XUP.h
 
 SOURCES	*= src/xupmanager/ProjectItemModel.cpp \
