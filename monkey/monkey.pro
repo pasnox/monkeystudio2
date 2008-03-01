@@ -75,7 +75,7 @@ CONFIG( debug, debug|release ) {
 }
 
 # include install script
-include ( installs.pri )
+include( installs.pri )
 
 DEFINES	*= "PROGRAM_PREFIX=\"\\\"$${PROGRAM_PREFIX}\\\"\"" "PROGRAM_DATAS=\"\\\"$${PROGRAM_DATAS}\\\"\""
 
