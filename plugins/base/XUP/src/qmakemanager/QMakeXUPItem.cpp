@@ -8,7 +8,9 @@
 #include <QFileInfo>
 #include <QApplication>
 #include <QInputDialog>
+
 #include <QDebug>
+#include <QTextEdit>
 
 XUPItemInfos QMakeXUPItem::mQMakeXUPItemInfos;
 
@@ -229,7 +231,6 @@ QMakeXUPItem* QMakeXUPItem::clone( bool b ) const
 
 QString QMakeXUPItem::interpretedVariable( const QString& s, const XUPItem* it, const QString& d ) const
 {
-	return XUPItem::interpretedVariable( s, it, d );
 	/*
 		$$[QT_INSTALL_HEADERS] : read content from qt conf
 		$${QT_INSTALL_HEADERS} or $$QT_INSTALL_HEADERS : read content from var
@@ -285,7 +286,6 @@ QString QMakeXUPItem::interpretedVariable( const QString& s, const XUPItem* it, 
 
 QString QMakeXUPItem::defaultInterpretedValue() const
 {
-	return XUPItem::defaultInterpretedValue();
 	QRegExp rx( "\\$\\$?[\\{\\(\\[]?(\\w+)[\\}\\)\\]]?" );
 	const QString dv = defaultValue();
 	QString v = dv;
@@ -367,15 +367,13 @@ bool QMakeXUPItem::loadProject( const QString& s, const QString& v )
 
 bool QMakeXUPItem::saveProject( const QString& s, const QString& v )
 {
-	return false;
-	/*
-	QByteArray a = QMake2XUP::convertToPro( toDomDocument(), v );
-	if ( !a.isNull() )
+	QByteArray a = QMake2XUP::convertToPro( domDocument(), v );
+	//if ( !a.isNull() )
 	{
 		QTextEdit* te = new QTextEdit;
 		te->setPlainText( a );
 		te->show();
-		/
+		/*
 		QFile f( s.isEmpty() ? projectFilePath() : s );
 		if ( !f.open( QIODevice::WriteOnly | QIODevice::Text ) )
 			return false;
@@ -383,12 +381,11 @@ bool QMakeXUPItem::saveProject( const QString& s, const QString& v )
 		if ( !( f.write( a ) != -1 ) )
 			return false;
 		mProjectFilePath = f.fileName();
-		/
+		*/
 		setModified( false );
 		return true;
 	}
 	return false;
-	*/
 }
 
 void QMakeXUPItem::addFiles( const QStringList& files, XUPItem* scope, const QString& op )
@@ -527,7 +524,6 @@ void QMakeXUPItem::removeFiles( const QStringList& files, XUPItem* scope, const 
 
 QString QMakeXUPItem::filePath( const QString& s )
 {
-	return XUPItem::filePath( s );
 	if ( s.isEmpty() && isType( "value" ) )
 	{
 		const QString v = parent()->defaultValue();
