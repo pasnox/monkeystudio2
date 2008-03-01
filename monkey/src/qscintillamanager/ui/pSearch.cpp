@@ -44,22 +44,89 @@
 #include <QDir>
 #include <QStatusBar>
 
+#include <QGridLayout>
+#include <QToolButton>
+#include <QPushButton>
+#include <QLineEdit>
+#include <QLabel>
+#include <QCheckBox>
+
 #include <QDebug>
 
 pSearch::pSearch()
     : pDockWidget()
 {
-    // setup dock
-    setupUi( this );
-    
-    // set fixed height
-    setFixedHeight( minimumSizeHint().height() );
     
     // clear informations edit
     //lInformations->clear();
-    
+    QWidget * wgt = new QWidget (this);
+	
+	layout = new QGridLayout (wgt);
+	layout->setContentsMargins (0, 0, 0, 0);
+	layout->setSpacing (1);
+	//search
+	lSearchText = new QLabel (tr("Search:"));
+	lSearchText->setSizePolicy (QSizePolicy::Maximum, QSizePolicy::Fixed);
+	lSearchText->setAlignment (Qt::AlignVCenter | Qt::AlignRight);
+	
+	leSearch = new QLineEdit ();
+	leSearch->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+	tbPrevious = new QPushButton ();
+	tbPrevious->setText (tr("Previous"));
+	tbPrevious->setIcon (QIcon (":/edit/icons/edit/previous.png"));
+	tbPrevious->setSizePolicy (QSizePolicy::Fixed, QSizePolicy::Fixed);
+	tbPrevious->setFlat (true);
+	
+	tbNext = new QPushButton ();
+	tbNext->setText (tr("Next"));
+    tbNext->setIcon (QIcon(":/edit/icons/edit/next.png"));
+	tbNext->setSizePolicy (QSizePolicy::Fixed, QSizePolicy::Fixed);
+	tbNext->setFlat (true);
+	
+	cbCaseSensitive = new QCheckBox ();
+	cbCaseSensitive->setText (tr("Case"));
+	cbCaseSensitive->setSizePolicy (QSizePolicy::Maximum, QSizePolicy::Fixed);
+	
+	cbRegExp = new QCheckBox ();
+	cbRegExp->setText (tr("RegExp"));
+	cbRegExp->setSizePolicy (QSizePolicy::Maximum, QSizePolicy::Fixed);
+	
+	//folder
+	lPath = new QLabel  (tr("Path:"));
+	lePath = new QLineEdit ();
+	lePath->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
+	lePath->setAlignment (Qt::AlignVCenter | Qt::AlignRight);
+	tbPath = new QToolButton ();
+	tbPath->setText ("...");
+	lMask = new QLabel  (tr("Mask:"));
+	lMask->setAlignment (Qt::AlignVCenter | Qt::AlignRight);
+	leMask = new QLineEdit ();
+	leMask->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+	//replace
+	lReplaceText = new QLabel (tr("Replace:"));
+	lReplaceText->setAlignment (Qt::AlignVCenter | Qt::AlignRight);
+	leReplaceText = new QLineEdit ();
+	leReplaceText->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
+	
+	tbReplace = new QPushButton ();
+	tbReplace->setText (tr("Replace"));
+	tbReplace->setIcon (QIcon (":/edit/icons/edit/replace.png"));
+	tbReplace->setSizePolicy (QSizePolicy::Fixed, QSizePolicy::Fixed);
+	tbReplace->setFlat (true);
+	
+	tbReplaceAll = new QPushButton ();
+	tbReplaceAll->setText (tr("Replace all"));
+	tbReplaceAll->setIcon (QIcon (":/edit/icons/edit/replace.png"));
+	tbReplaceAll->setSizePolicy (QSizePolicy::Fixed, QSizePolicy::Fixed);
+	tbReplaceAll->setFlat (true);
+	
+	wgt->setLayout (layout);
+	
+	setWidget (wgt);
+	
     qRegisterMetaType<pConsoleManager::Step>("pConsoleManager::Step");
-    
     connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFile" ), SIGNAL( triggered() ), SLOT( showSearchFile() ) );
     connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFile" ), SIGNAL( triggered() ), SLOT( showReplaceFile() ) );
     //connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchProject" ), SIGNAL( triggered() ), SLOT( showSearchProject() ) );
@@ -67,8 +134,89 @@ pSearch::pSearch()
     connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFolder" ), SIGNAL( triggered() ), SLOT( showSearchFolder() ) );
     connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFolder" ), SIGNAL( triggered() ), SLOT( showReplaceFolder() ) );
     connect(this, SIGNAL (clearSearchResults ()), MonkeyCore::workspace(), SIGNAL (clearSearchResults ()));
+    
+	mSearchThread = NULL;
+	
+	widget()->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Maximum);
+	addSearchToLayout (0);
+	
+	setAllowedAreas (Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
+}
 
-    mSearchThread = NULL;
+void pSearch::addSearchToLayout (int row)
+{
+	layout->addWidget (lSearchText, row, 0, 1, 1);
+	layout->addWidget (leSearch, row, 1, 1, 2);
+	layout->addWidget (tbPrevious, row, 3, 1, 1);
+	layout->addWidget (tbNext, row, 4, 1, 1);
+	layout->addWidget (cbCaseSensitive, row, 5, 1, 1);
+	layout->addWidget (cbRegExp, row, 6, 1, 1);
+}
+
+void pSearch::addReplaceToLayout (int row)
+{
+	layout->addWidget (lReplaceText, row, 0, 1, 1);
+	layout->addWidget (leReplaceText, row, 1, 1, 2);
+	layout->addWidget (tbReplace, row, 3, 1, 1);
+	layout->addWidget (tbReplaceAll, row, 4, 1, 1);
+	
+	lReplaceText->show();
+	leReplaceText->show();
+	tbReplace->show();
+	tbReplaceAll->show();
+}
+
+void pSearch::addFolderToLayout (int row)
+{
+	layout->addWidget (lPath, row, 0, 1, 1);
+	layout->addWidget (lePath, row, 1, 1, 1);
+	layout->addWidget (tbPath, row, 2, 1, 1);
+	layout->addWidget (lMask, row, 3, 1, 1);
+	layout->addWidget (leMask, row, 4, 1, 3);
+	
+	lPath->show ();
+	lePath->show ();
+	tbPath->show ();
+	lMask->show ();
+	leMask->show ();
+}
+
+void pSearch::removeSearchFromLayout ()
+{
+	layout->removeWidget (lSearchText);
+	layout->removeWidget(leSearch);
+	layout->removeWidget (tbPrevious);
+	layout->removeWidget (tbNext);
+	layout->removeWidget (cbCaseSensitive);
+	layout->removeWidget (cbRegExp);
+}
+
+void pSearch::removeReplaceFromLayout ()
+{
+	layout->removeWidget (lReplaceText);
+	layout->removeWidget (leReplaceText);
+	layout->removeWidget (tbReplace);
+	layout->removeWidget (tbReplaceAll);
+	
+	lReplaceText->hide();
+	leReplaceText->hide();
+	tbReplace->hide();
+	tbReplaceAll->hide();
+}
+
+void pSearch::removeFolderFromLayout ()
+{
+	layout->removeWidget (lPath);
+	layout->removeWidget (lePath);
+	layout->removeWidget (tbPath);
+	layout->removeWidget (lMask);
+	layout->removeWidget (leMask);
+	
+	lPath->hide ();
+	lePath->hide ();
+	tbPath->hide ();
+	lMask->hide ();
+	leMask->hide ();
 }
 
 bool pSearch::isProjectAvailible ()
@@ -89,15 +237,26 @@ void pSearch::keyPressEvent( QKeyEvent* e )
 
 void pSearch::showSearchFile () 
 {
-    mOperType = SEARCH;
-    mWhereType = FILE;
+	if (mOperType == REPLACE)
+		removeReplaceFromLayout ();
+	mOperType = SEARCH;
+	
+	if (mWhereType == FOLDER)
+		removeFolderFromLayout ();
+	mWhereType = FILE;
     show ();
 };
 
 void pSearch::showReplaceFile () 
 {
-    mOperType = REPLACE;
-    mWhereType = FILE;
+	if (mWhereType == FOLDER)
+		removeFolderFromLayout ();
+	mWhereType = FILE;
+	
+	if (mOperType == SEARCH)
+		addReplaceToLayout(1);
+	mOperType = REPLACE;
+	
     show ();
 };
 
@@ -119,66 +278,32 @@ void pSearch::showReplaceProject ()
 
 void pSearch::showSearchFolder () 
 {
-    mOperType = SEARCH;
-    mWhereType = FOLDER;
+	if (mOperType == REPLACE)
+		removeReplaceFromLayout ();
+	mOperType = SEARCH;
+	
+	if (mWhereType == FILE)
+		addFolderToLayout(1);
+	mWhereType = FOLDER;
     show ();
 };
 
 void pSearch::showReplaceFolder () 
 {
-    mOperType = REPLACE;
-    mWhereType = FOLDER;
+	if (mOperType == SEARCH)
+		addReplaceToLayout (1);
+	mOperType = REPLACE;
+	
+	if (mWhereType == FILE)
+		addFolderToLayout (2);
+	mWhereType = FOLDER;
     show ();
 };
 
 void pSearch::show ()
 {
-    switch (mOperType)
-    {
-        case SEARCH:
-            lReplaceText->hide();
-            leReplaceText->hide();
-            tbReplace->hide();
-            tbReplaceAll->hide();
-        break;
-        case REPLACE:
-            lReplaceText->show();
-            leReplaceText->show();
-            tbReplace->show();
-            tbReplaceAll->show();
-        break;
-    }
-    
-    switch (mWhereType)
-    {
-        case FILE:
-            lPath->hide();
-            lePath->hide();
-            tbPath->hide();
-            lMask->hide();
-            leMask->hide();
-            tbPrevious->show();
-            tbNext->setIcon (QIcon(":/edit/icons/edit/next.png"));
-            tbNext->setText (tr("Search Next"));
-        break;
-        case FOLDER:
-        //case PROJECT: // TODO
-            lPath->show();
-            lePath->show();
-            tbPath->show();
-            lMask->show();
-            leMask->show();
-            tbPrevious->hide();
-            tbNext->setIcon (QIcon(":/edit/icons/edit/search.png"));
-            tbNext->setText (tr("Search"));
-        break;
-    }
-    resize (minimumSize ());  //BUG not working
+	leSearch->setFocus();
     QDockWidget::show ();
-	widget()->resize (minimumSize ());  //BUG not working
-    widget()->updateGeometry ();  //BUG not working
-	resize (minimumSize ());  //BUG not working
-    updateGeometry ();  //BUG not working
 }
 
 bool pSearch::search (bool next)
@@ -237,15 +362,12 @@ bool pSearch::on_tbNext_clicked()
         case FILE:
             return search (true);
         case FOLDER:
-            qWarning () << __LINE__;
             if (mSearchThread && mSearchThread->isRunning ())
             { // need to stop searching
-                qWarning () << __LINE__;
                 mSearchThread->setTermEnabled (true);
             }
             else
             { // need to start searching
-                qWarning () << __LINE__;
                 emit clearSearchResults ();
                 mOccurencesFinded = 0;
                 mFilesProcessed = 0;

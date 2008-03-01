@@ -30,15 +30,23 @@
 #define PSEARCH_H
 
 #include "MonkeyExport.h"
-#include "ui_pSearch.h"
+//#include "ui_pSearch.h"
 #include "pConsoleManager.h"
+#include "pDockWidget.h"
 
 #include <QPointer>
 
 class QsciScintilla;
 class SearchThread;
 
-class Q_MONKEY_EXPORT pSearch : public pDockWidget, public Ui::pSearch
+class QGridLayout;
+class QToolButton;
+class QPushButton;
+class QLineEdit;
+class QLabel;
+class QCheckBox;
+
+class Q_MONKEY_EXPORT pSearch : public pDockWidget
 {
 	Q_OBJECT
 	friend class MonkeyCore;
@@ -86,9 +94,41 @@ protected slots:
 	void fileProcessed (int);
 
 protected:
+
+	QGridLayout* layout;
+
+	//search
+	QLabel* lSearchText;
+
+	QPushButton* tbNext;
+	QPushButton* tbPrevious;
+	QCheckBox* cbCaseSensitive;
+	QCheckBox* cbRegExp;
+
+	//replace
+	QLabel* lReplaceText;
+	QLineEdit* leReplaceText;
+	QPushButton* tbReplace;
+	QPushButton* tbReplaceAll;
+
+	//folder
+	QLabel* lPath;
+	QLineEdit* lePath;
+	QToolButton* tbPath;
+	QLabel* lMask;
+	QLineEdit* leMask;
+
+	void addSearchToLayout (int row);
+	void addReplaceToLayout (int row);
+	void addFolderToLayout (int row);
+
+	void removeSearchFromLayout ();
+	void removeReplaceFromLayout ();
+	void removeFolderFromLayout ();
+
 	bool isEditorAvailible ();
 	bool isProjectAvailible ();
-	
+
 	SearchThread* mSearchThread;
 
 	/* Search text. 
@@ -105,6 +145,8 @@ protected:
     
     void showMessage (QString status);
 
+public:
+	QLineEdit* leSearch; // FIXME make protected
 signals:
 	void clearSearchResults ();
 

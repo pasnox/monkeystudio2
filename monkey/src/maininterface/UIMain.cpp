@@ -49,7 +49,10 @@
 
 UIMain::UIMain( QWidget* p )
 	: pMainWindow( p )
-{}
+{
+	setCorner (Qt::TopLeftCorner, Qt::LeftDockWidgetArea);
+	setCorner (Qt::TopRightCorner, Qt::RightDockWidgetArea);
+}
 
 void UIMain::initGui()
 {
