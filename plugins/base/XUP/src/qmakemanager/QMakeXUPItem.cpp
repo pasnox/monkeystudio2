@@ -9,9 +9,6 @@
 #include <QApplication>
 #include <QInputDialog>
 
-#include <QDebug>
-#include <QTextEdit>
-
 XUPItemInfos QMakeXUPItem::mQMakeXUPItemInfos;
 
 QMakeXUPItem::QMakeXUPItem( const QDomElement& e, const QString& s, bool b )
@@ -368,22 +365,15 @@ bool QMakeXUPItem::loadProject( const QString& s, const QString& v )
 bool QMakeXUPItem::saveProject( const QString& s, const QString& v )
 {
 	QByteArray a = QMake2XUP::convertToPro( domDocument(), v );
-	//if ( !a.isNull() )
+	if ( !a.isNull() )
 	{
-		QTextEdit* te = new QTextEdit;
-		te->setWordWrapMode( QTextOption::NoWrap );
-		te->setTabStopWidth( 10*3 );
-		te->setPlainText( a );
-		te->show();
-		/*
 		QFile f( s.isEmpty() ? projectFilePath() : s );
-		if ( !f.open( QIODevice::WriteOnly | QIODevice::Text ) )
+		if ( !f.open( QIODevice::WriteOnly ) )
 			return false;
 		f.resize( 0 );
 		if ( !( f.write( a ) != -1 ) )
 			return false;
 		mProjectFilePath = f.fileName();
-		*/
 		setModified( false );
 		return true;
 	}
