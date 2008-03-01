@@ -371,6 +371,8 @@ bool QMakeXUPItem::saveProject( const QString& s, const QString& v )
 	//if ( !a.isNull() )
 	{
 		QTextEdit* te = new QTextEdit;
+		te->setWordWrapMode( QTextOption::NoWrap );
+		te->setTabStopWidth( 10*3 );
 		te->setPlainText( a );
 		te->show();
 		/*
