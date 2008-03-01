@@ -58,6 +58,7 @@ public:
 		iDebugger,
 		iInterpreter,
 		iProject,
+		iXUP,
 		iLast };
 		
 	// plugin info structure
