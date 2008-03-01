@@ -14,6 +14,10 @@ si "nested" n'existe pas, il vaux "false"
 #include <QtXml>
 
 const QString EOL = "\r\n";
+static int tabs = 0;
+
+QString tabsString( int i )
+{ return QString().fill( '\t', i ); }
 
 QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 {
@@ -376,7 +380,7 @@ QByteArray convertNodeToPro( const QDomElement& e, const QString& v )
 	if ( tn != "project" )
 	{
 		if ( tn == "function" )
-			data.append( e.firstChild().toText().data() +EOL );
+			data.append( tabsString( tabs ) +e.firstChild().toText().data() +EOL );
 		else if ( tn == "emptyline" )
 		{
 			for ( int i = 0; i < e.firstChild().toText().data().toInt(); i++ )
@@ -384,12 +388,17 @@ QByteArray convertNodeToPro( const QDomElement& e, const QString& v )
 		}
 		else if ( tn == "variable" )
 		{
-			data.append( QString( "%1\t%2 " ).arg( e.attribute( "name" ) ).arg( e.attribute( "operator", "=" ) ) );
+			data.append( tabsString( tabs ) +QString( "%1\t%2 " ).arg( e.attribute( "name" ) ).arg( e.attribute( "operator", "=" ) ) );
 			isMultiline = QVariant( e.attribute( "multiline", "false" ) ).toBool();
 		}
 		else if ( tn == "value" )
 		{
-			data.append( e.firstChild().toText().data() );
+			int vtabs = tabs;
+			if ( !e.previousSibling().isNull() && isMultiline )
+				vtabs++;
+			else if ( e.previousSibling().isNull() )
+				vtabs = 0;
+			data.append( tabsString( vtabs ) +e.firstChild().toText().data() );
 			if ( isMultiline )
 			{
 				if ( !e.nextSibling().isNull() )
@@ -403,21 +412,30 @@ QByteArray convertNodeToPro( const QDomElement& e, const QString& v )
 		}
 		else if ( tn == "scope" )
 		{
+			int vtabs = tabs;
+			if ( e.attribute( "name" ) == "else" )
+				vtabs = 0;
 			isNested = QVariant( e.attribute( "nested", "false" ) ).toBool();
 			comment = e.attribute( "comment" );
-			data.append( e.attribute( "name" ) );
+			data.append( tabsString( vtabs ) +e.attribute( "name" ) );
 			if ( !isNested )
 			{
 				data.append( " {" );
 				if ( !comment.isEmpty() )
 					data.append( " " +comment );
 				data.append( EOL );
+				tabs++;
 			}
 			else
 				data.append( ":" );
 		}
 		else if ( tn == "comment" )
-			data.append( e.firstChild().toText().data() +EOL );
+		{
+			int vtabs = tabs;
+			if ( e.parentNode().toElement().tagName() == "variable" && isMultiline )
+				vtabs++;
+			data.append( tabsString( vtabs ) +e.firstChild().toText().data() +EOL );
+		}
 	}
 	
 	const QStringList tv = QStringList() << "function" << "emptyline" << "value" << "comment";
@@ -429,7 +447,8 @@ QByteArray convertNodeToPro( const QDomElement& e, const QString& v )
 		
 		if ( tn == "scope" && !isNested )
 		{
-			data.append( "}" );
+			tabs--;
+			data.append( tabsString( tabs ) +"}" );
 			QDomElement n = e.nextSibling().toElement();
 			if ( !( n.tagName() == "scope" && n.attribute( "name" ) == "else" ) )
 				data.append( EOL );
@@ -443,6 +462,7 @@ QByteArray convertNodeToPro( const QDomElement& e, const QString& v )
 
 QByteArray QMake2XUP::convertToPro( const QDomDocument& d, const QString& v )
 {
+	tabs = 0;
 	// get project node
 	QDomElement e  = d.firstChildElement( "project" ).toElement();
 	// check project available
