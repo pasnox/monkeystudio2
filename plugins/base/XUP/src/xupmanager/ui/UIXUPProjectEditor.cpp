@@ -20,11 +20,11 @@ UIXUPProjectEditor::UIXUPProjectEditor( XUPItem* project, QWidget* parent )
 
 	// update gui
 	ScopedProjectItemModel* sm = mProject->model()->scopedModel();
-	ProjectItemModel* pim = mProject->model();
+	FilteredProjectItemModel* fm = mProject->model()->filteredModel();
 	cbScope->setModel( sm );
 	cbScope->setRootIndex( sm->mapFromSource( mProject->index().parent() ) );
 	cbScope->setCurrentIndex( sm->mapFromSource( mProject->index() ) );
 	cbOperator->addItems( mProject->operators() );
-	tvProjectFiles->setModel( pim );
-	tvProjectFiles->setRootIndex( mProject->index().parent() );
+	tvProjectFiles->setModel( fm );
+	tvProjectFiles->setRootIndex( fm->mapFromSource( mProject->index() ) );
 }
