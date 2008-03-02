@@ -2,10 +2,10 @@
 
 #include "XUPItem.h"
 #include "ProjectItemModel.h"
-#include "FilteredProjectItemModel.h"
 #include "ScopedProjectItemModel.h"
 
 #include <QFileInfo>
+#include <QHeaderView>
 
 UIXUPProjectEditor::UIXUPProjectEditor( XUPItem* project, QWidget* parent )
 	: QDialog( parent )
@@ -25,6 +25,10 @@ UIXUPProjectEditor::UIXUPProjectEditor( XUPItem* project, QWidget* parent )
 	cbScope->setRootIndex( sm->mapFromSource( mProject->index().parent() ) );
 	cbScope->setCurrentIndex( sm->mapFromSource( mProject->index() ) );
 	cbOperator->addItems( mProject->operators() );
-	tvProjectFiles->setModel( fm );
-	tvProjectFiles->setRootIndex( fm->mapFromSource( mProject->index() ) );
+
+	FilteredProjectItem* fit = fm->itemFromIndex( fm->mapFromSource( mProject->index() ) );
+	SingleFilteredProjectModel* sfpm = new SingleFilteredProjectModel( fit, this );
+	tvProjectFiles->setModel( sfpm );
+	tvProjectFiles->setRootIndex( sfpm->mapFromSource( fm->mapFromSource( mProject->index() ) ) );
+	tvProjectFiles->header()->hide();
 }

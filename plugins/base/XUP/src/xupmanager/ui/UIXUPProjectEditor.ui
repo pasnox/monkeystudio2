@@ -156,7 +156,11 @@
         <number>0</number>
        </property>
        <item rowspan="7" row="0" column="0" >
-        <widget class="QTreeView" name="tvProjectFiles" />
+        <widget class="QTreeView" name="tvProjectFiles" >
+         <property name="editTriggers" >
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+        </widget>
        </item>
        <item row="0" column="1" >
         <widget class="QPushButton" name="pbAddProjectFiles" >
@@ -181,7 +185,7 @@
        <item row="2" column="1" >
         <widget class="QPushButton" name="pbModifyProjectFile" >
          <property name="text" >
-          <string>Modify...</string>
+          <string>Modify File...</string>
          </property>
          <property name="icon" >
           <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/modify.png</iconset>
