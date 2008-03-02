@@ -1,5 +1,5 @@
 #include "UIXUPProjectEditor.h"
-
+#include "AddFilesDialog.h"
 #include "XUPItem.h"
 #include "ProjectItemModel.h"
 #include "ScopedProjectItemModel.h"
@@ -25,10 +25,16 @@ UIXUPProjectEditor::UIXUPProjectEditor( XUPItem* project, QWidget* parent )
 	cbScope->setRootIndex( sm->mapFromSource( mProject->index().parent() ) );
 	cbScope->setCurrentIndex( sm->mapFromSource( mProject->index() ) );
 	cbOperator->addItems( mProject->operators() );
-
 	FilteredProjectItem* fit = fm->itemFromIndex( fm->mapFromSource( mProject->index() ) );
-	SingleFilteredProjectModel* sfpm = new SingleFilteredProjectModel( fit, this );
-	tvProjectFiles->setModel( sfpm );
-	tvProjectFiles->setRootIndex( sfpm->mapFromSource( fm->mapFromSource( mProject->index() ) ) );
+	FilesProjectModel* fpm = new FilesProjectModel( fit, this );
+	tvProjectFiles->setModel( fpm );
+	tvProjectFiles->setRootIndex( fpm->mapFromSource( fit->index() ) );
 	tvProjectFiles->header()->hide();
+}
+
+void UIXUPProjectEditor::on_pbAddProjectFiles_clicked()
+{
+	AddFilesDialog d( mProject->model()->scopedModel(), mProject, window() );
+	if ( d.exec() && !d.selectedFiles().isEmpty() )
+		d.currentItem()->addFiles( d.selectedFiles(), d.currentItem(), d.currentOperator() );
 }

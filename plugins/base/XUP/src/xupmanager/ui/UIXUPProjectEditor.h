@@ -9,10 +9,10 @@
 class XUPItem;
 
 #include "FilteredProjectItemModel.h"
-class SingleFilteredProjectModel : public QSortFilterProxyModel
+class FilesProjectModel : public QSortFilterProxyModel
 {
 public:
-	SingleFilteredProjectModel( FilteredProjectItem* project, QObject* owner = 0 )
+	FilesProjectModel( FilteredProjectItem* project, QObject* owner = 0 )
 		: QSortFilterProxyModel( owner )
 	{
 		Q_ASSERT( project );
@@ -34,9 +34,7 @@ protected:
 			XUPItem* pit = mProject->project();
 			bool b = false;
 			if ( it->isProject() )
-			{
 				b = it->children( true, false ).contains( pit ) || it->project() == pit;
-			}
 			else if ( it->isType( "variable" ) )
 				b = it->project() == pit && it->fileVariables().contains( it->defaultValue() );
 			else if ( it->isType( "value" ) || it->isType( "folder" ) )
@@ -56,6 +54,9 @@ public:
 
 protected:
 	XUPItem* mProject;
+
+protected slots:
+	void on_pbAddProjectFiles_clicked();
 };
 
 #endif // UIXUPPROJECTEDITOR_H
