@@ -1,10 +1,8 @@
 #include "XUPProjectEditor.h"
+#include "UIXUPProjectEditor.h"
 
 #include "MonkeyCore.h"
 #include "UIMain.h"
-
-#include <QDialog>
-#include <QFileInfo>
 
 XUPProjectEditor::XUPProjectEditor()
 {
@@ -45,10 +43,7 @@ bool XUPProjectEditor::editProject( XUPItem* project )
 {
 	if ( !project )
 		return false;
-	
-	QDialog d( MonkeyCore::mainWindow() );
-	d.setWindowTitle( tr( "Project Settings : %1" ).arg( QFileInfo( project->projectFilePath() ).completeBaseName() ) );
-	return d.exec();
+	return UIXUPProjectEditor( project, MonkeyCore::mainWindow() ).exec();
 }
 
 Q_EXPORT_PLUGIN2( XUPXUPProjectEditor, XUPProjectEditor )
