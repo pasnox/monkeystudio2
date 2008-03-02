@@ -2,9 +2,14 @@ include( ../../plugins.inc )
 
 DESTDIR	= $$MONKEY_PLUGINS_DIR/xup
 TARGET	= XUPProjectEditor
-INCLUDEPATH	*= ../XUP/src/xupmanager
+INCLUDEPATH	*= . src src/ui ../XUP/src/xupmanager ../XUP/src/xupmanager/ui
 QT	*= xml
 
-HEADERS	*= src/XUPProjectEditor.h
+FORMS	*= src/ui/UIXUPProjectEditor.ui
 
-SOURCES	*= src/XUPProjectEditor.cpp
+HEADERS	*= src/XUPProjectEditor.h \
+	src/ui/UIXUPProjectEditor.h
+
+SOURCES	*= src/XUPProjectEditor.cpp \
+	src/ui/UIXUPProjectEditor.cpp
+
