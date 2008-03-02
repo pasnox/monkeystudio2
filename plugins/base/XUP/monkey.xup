@@ -1,5 +1,5 @@
 <!DOCTYPE XUPProject>
-<project version="1.0.0" expanded="false" name="monkey.xup" >
+<project version="1.0.0" expanded="false" plugin="XUPProjectEditor" name="monkey.xup" >
  <comment># Monkey Studio 2 project file</comment>
  <emptyline>1</emptyline>
  <variable name="BUILD_PATH" >
