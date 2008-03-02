@@ -4,6 +4,7 @@
 #include <QSortFilterProxyModel>
 
 class ProjectItemModel;
+class XUPItem;
 
 class ScopedProjectItemModel : public QSortFilterProxyModel
 {
@@ -12,8 +13,12 @@ class ScopedProjectItemModel : public QSortFilterProxyModel
 public:
 	ScopedProjectItemModel( ProjectItemModel* = 0 );
 
+	void setFilteredProject( XUPItem* project );
+	XUPItem* filteredProject() const;
+
 protected:
 	ProjectItemModel* mSourceModel;
+	XUPItem* mProject;
 
 	virtual bool filterAcceptsRow( int source_row, const QModelIndex& source_parent ) const;
 };

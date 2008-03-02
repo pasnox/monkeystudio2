@@ -7,7 +7,8 @@ RESOURCES	*= src/resources/XUPManager.qrc src/qmakemanager/resources/qmakemanage
 ALL_INCLUDES	= $$INCLUDEPATH
 INCLUDEPATH	= . src src/xupmanager src/xupmanager/ui src/qmakemanager $$ALL_INCLUDES
 
-FORMS	*= src/xupmanager/ui/UIXUPManager.ui
+FORMS	*= src/xupmanager/ui/UIXUPManager.ui \
+	src/xupmanager/ui/UIXUPProjectEditor.ui
 
 HEADERS	*= src/xupmanager/ProjectItemModel.h \
 	src/xupmanager/XUPItem.h \
@@ -19,7 +20,8 @@ HEADERS	*= src/xupmanager/ProjectItemModel.h \
 	src/xupmanager/ui/AddFilesDialog.h \
 	src/xupmanager/ScopedProjectItemModel.h \
 	src/xupmanager/XUPPlugin.h \
-	src/XUP.h
+	src/XUP.h \
+	src/xupmanager/ui/UIXUPProjectEditor.h
 
 SOURCES	*= src/xupmanager/ProjectItemModel.cpp \
 	src/xupmanager/XUPItem.cpp \
@@ -30,4 +32,5 @@ SOURCES	*= src/xupmanager/ProjectItemModel.cpp \
 	src/xupmanager/FilteredProjectItemModel.cpp \
 	src/xupmanager/ui/AddFilesDialog.cpp \
 	src/xupmanager/ScopedProjectItemModel.cpp \
-	src/XUP.cpp
+	src/XUP.cpp \
+	src/xupmanager/ui/UIXUPProjectEditor.cpp

@@ -1,0 +1,305 @@
+<ui version="4.0" >
+ <class>UIXUPProjectEditor</class>
+ <widget class="QDialog" name="UIXUPProjectEditor" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>640</width>
+    <height>480</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>XUP Project Editor : %1</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <item>
+    <layout class="QHBoxLayout" >
+     <item>
+      <widget class="QToolButton" name="tbUndo" >
+       <property name="icon" >
+        <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/clear.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="tbAddScope" >
+       <property name="icon" >
+        <iconset resource="../../resources/XUPManager.qrc" >:/actions/add.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="tbRemoveScope" >
+       <property name="icon" >
+        <iconset resource="../../resources/XUPManager.qrc" >:/actions/remove.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="lScope" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text" >
+        <string>Scope :</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="cbScope" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="lOperator" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text" >
+        <string>Operator :</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="cbOperator" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QComboBox" name="cbPages" >
+     <item>
+      <property name="text" >
+       <string>Project Files</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/project_files.png</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Others Variables</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/others_variables.png</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Builder</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/builder.png</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Compiler</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/compiler.png</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Debugger</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/debugger.png</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Interpreter</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/interpreter.png</iconset>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item>
+    <widget class="QStackedWidget" name="swPages" >
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="wProjectFiles" >
+      <layout class="QGridLayout" >
+       <property name="leftMargin" >
+        <number>0</number>
+       </property>
+       <property name="topMargin" >
+        <number>0</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
+       </property>
+       <item rowspan="7" row="0" column="0" >
+        <widget class="QTreeView" name="tvProjectFiles" />
+       </item>
+       <item row="0" column="1" >
+        <widget class="QPushButton" name="pbAddProjectFiles" >
+         <property name="text" >
+          <string>Add Files...</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../../resources/XUPManager.qrc" >:/actions/add.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" >
+        <widget class="QPushButton" name="pbRemoveProjectFiles" >
+         <property name="text" >
+          <string>Remove Files...</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../../resources/XUPManager.qrc" >:/actions/remove.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1" >
+        <widget class="QPushButton" name="pbModifyProjectFile" >
+         <property name="text" >
+          <string>Modify...</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/modify.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1" >
+        <widget class="QPushButton" name="pbUpProjectFile" >
+         <property name="text" >
+          <string>Up</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/up.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1" >
+        <widget class="QPushButton" name="pbDownProjectFile" >
+         <property name="text" >
+          <string>Down</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/down.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1" >
+        <widget class="QPushButton" name="pbSortProjectFiles" >
+         <property name="text" >
+          <string>Sort</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/sort.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page" />
+     <widget class="QWidget" name="page_3" />
+     <widget class="QWidget" name="page_4" />
+     <widget class="QWidget" name="page_5" />
+     <widget class="QWidget" name="page_2" />
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="dbbButtons" >
+     <property name="standardButtons" >
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../resources/XUPManager.qrc" />
+ </resources>
+ <connections>
+  <connection>
+   <sender>cbPages</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>swPages</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>317</x>
+     <y>39</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>309</x>
+     <y>107</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dbbButtons</sender>
+   <signal>accepted()</signal>
+   <receiver>UIXUPProjectEditor</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>516</x>
+     <y>463</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>500</x>
+     <y>522</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dbbButtons</sender>
+   <signal>rejected()</signal>
+   <receiver>UIXUPProjectEditor</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>404</x>
+     <y>458</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>404</x>
+     <y>534</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

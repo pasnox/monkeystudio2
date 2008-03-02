@@ -1,6 +1,7 @@
 #include "XUP.h"
-#include "UIXUPManager.h"
 #include "QMakeXUPItem.h"
+#include "UIXUPManager.h"
+#include "UIXUPProjectEditor.h"
 
 #include "MonkeyCore.h"
 #include "UIMain.h"
@@ -9,11 +10,11 @@
 XUP::XUP()
 {
 	// set plugin infos
-	mPluginInfos.Caption = tr( "XUP Manager" );
-	mPluginInfos.Description = tr( "Next Gen XML Based Projects Manager" );
+	mPluginInfos.Caption = tr( "XUP Manager / XUP Project Editor" );
+	mPluginInfos.Description = tr( "Next Gen XML Based Projects Manager, it embeds the default project settings editor for XUP based projects and the XUP Project Manager" );
 	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
-	mPluginInfos.Type = BasePlugin::iBase;
-	mPluginInfos.Name = "XUP";
+	mPluginInfos.Type = BasePlugin::iXUP;
+	mPluginInfos.Name = "XUPManagerEditor";
 	mPluginInfos.Version = "0.1.0";
 	mPluginInfos.Enabled = false;
 }
@@ -50,4 +51,11 @@ bool XUP::setEnabled( bool b )
 	return true;
 }
 
-Q_EXPORT_PLUGIN2( BaseXUP, XUP )
+bool XUP::editProject( XUPItem* project )
+{
+	if ( !project )
+		return false;
+	return UIXUPProjectEditor( project, MonkeyCore::mainWindow() ).exec();
+}
+
+Q_EXPORT_PLUGIN2( XUPXUP, XUP )
