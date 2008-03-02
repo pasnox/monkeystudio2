@@ -50,81 +50,87 @@
 #include <QLineEdit>
 #include <QLabel>
 #include <QCheckBox>
+#include <QComboBox>
 
 #include <QDebug>
 
-pSearch::pSearch()
-    : pDockWidget()
+pSearch::pSearch() : QWidget()
 {
-    
-    // clear informations edit
-    //lInformations->clear();
-    QWidget * wgt = new QWidget (this);
-	
-	layout = new QGridLayout (wgt);
+	layout = new QGridLayout (this);
 	layout->setContentsMargins (0, 0, 0, 0);
-	layout->setSpacing (1);
+	layout->setSpacing (2);
 	//search
-	lSearchText = new QLabel (tr("Search:"));
+	lSearchText = new QLabel (tr("&Search:"));
 	lSearchText->setSizePolicy (QSizePolicy::Maximum, QSizePolicy::Fixed);
 	lSearchText->setAlignment (Qt::AlignVCenter | Qt::AlignRight);
 	
-	leSearch = new QLineEdit ();
-	leSearch->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
+	cobSearch = new QComboBox ();
+	cobSearch->setEditable (true);
+	cobSearch->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
+	lSearchText->setBuddy (cobSearch);
 
 	tbPrevious = new QPushButton ();
-	tbPrevious->setText (tr("Previous"));
+	tbPrevious->setText (tr("&Previous"));
 	tbPrevious->setIcon (QIcon (":/edit/icons/edit/previous.png"));
 	tbPrevious->setSizePolicy (QSizePolicy::Fixed, QSizePolicy::Fixed);
 	tbPrevious->setFlat (true);
 	
 	tbNext = new QPushButton ();
-	tbNext->setText (tr("Next"));
+	tbNext->setText (tr("&Next"));
     tbNext->setIcon (QIcon(":/edit/icons/edit/next.png"));
 	tbNext->setSizePolicy (QSizePolicy::Fixed, QSizePolicy::Fixed);
 	tbNext->setFlat (true);
 	
 	cbCaseSensitive = new QCheckBox ();
-	cbCaseSensitive->setText (tr("Case"));
+	cbCaseSensitive->setText (tr("&Case"));
 	cbCaseSensitive->setSizePolicy (QSizePolicy::Maximum, QSizePolicy::Fixed);
 	
 	cbRegExp = new QCheckBox ();
-	cbRegExp->setText (tr("RegExp"));
+	cbRegExp->setText (tr("Re&gExp"));
 	cbRegExp->setSizePolicy (QSizePolicy::Maximum, QSizePolicy::Fixed);
 	
-	//folder
-	lPath = new QLabel  (tr("Path:"));
-	lePath = new QLineEdit ();
-	lePath->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
-	lePath->setAlignment (Qt::AlignVCenter | Qt::AlignRight);
-	tbPath = new QToolButton ();
-	tbPath->setText ("...");
-	lMask = new QLabel  (tr("Mask:"));
-	lMask->setAlignment (Qt::AlignVCenter | Qt::AlignRight);
-	leMask = new QLineEdit ();
-	leMask->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
-
 	//replace
-	lReplaceText = new QLabel (tr("Replace:"));
+	lReplaceText = new QLabel (tr("R&eplace:"));
 	lReplaceText->setAlignment (Qt::AlignVCenter | Qt::AlignRight);
-	leReplaceText = new QLineEdit ();
-	leReplaceText->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
+	cobReplace = new QComboBox ();
+	cobReplace->setEditable (true);
+	cobReplace->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
 	
 	tbReplace = new QPushButton ();
-	tbReplace->setText (tr("Replace"));
+	tbReplace->setText (tr("&Replace"));
 	tbReplace->setIcon (QIcon (":/edit/icons/edit/replace.png"));
 	tbReplace->setSizePolicy (QSizePolicy::Fixed, QSizePolicy::Fixed);
 	tbReplace->setFlat (true);
 	
 	tbReplaceAll = new QPushButton ();
-	tbReplaceAll->setText (tr("Replace all"));
+	tbReplaceAll->setText (tr("Replace &all"));
 	tbReplaceAll->setIcon (QIcon (":/edit/icons/edit/replace.png"));
 	tbReplaceAll->setSizePolicy (QSizePolicy::Fixed, QSizePolicy::Fixed);
 	tbReplaceAll->setFlat (true);
+
+	//folder
+	lPath = new QLabel  (tr("&Path:"));
+	lPath->setAlignment (Qt::AlignVCenter | Qt::AlignRight);
 	
-	wgt->setLayout (layout);
+	lePath = new QLineEdit ();
+	lePath->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
+	lPath->setBuddy (lPath);
 	
-	setWidget (wgt);
+	tbPath = new QToolButton ();
+	tbPath->setText ("...");
+	lMask = new QLabel  (tr("&Mask:"));
+	lMask->setAlignment (Qt::AlignVCenter | Qt::AlignRight);
+	
+	leMask = new QLineEdit ();
+	leMask->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
+	lMask->setBuddy (leMask);
+	
+	connect (cobSearch, SIGNAL(returnPressed ()), SLOT(on_tbNext_clicked()));
+	
+	connect (tbNext, SIGNAL (clicked()), this, SLOT (on_tbNext_clicked ()));
+	connect (tbPrevious, SIGNAL (clicked()), this, SLOT (on_tbPrevious_clicked ()));
+	connect (tbReplace, SIGNAL (clicked()), this, SLOT (on_tbReplace_clicked ()));
+	connect (tbReplaceAll, SIGNAL (clicked()), this, SLOT (on_tbReplaceAll_clicked ()));
 	
     qRegisterMetaType<pConsoleManager::Step>("pConsoleManager::Step");
     connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFile" ), SIGNAL( triggered() ), SLOT( showSearchFile() ) );
@@ -137,16 +143,17 @@ pSearch::pSearch()
     
 	mSearchThread = NULL;
 	
-	widget()->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Maximum);
+	setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Maximum);
 	addSearchToLayout (0);
+	hide ();
 	
-	setAllowedAreas (Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
+	MonkeyCore::workspace()->layoutForSearcher()->addWidget (this);
 }
 
 void pSearch::addSearchToLayout (int row)
 {
 	layout->addWidget (lSearchText, row, 0, 1, 1);
-	layout->addWidget (leSearch, row, 1, 1, 2);
+	layout->addWidget (cobSearch, row, 1, 1, 2);
 	layout->addWidget (tbPrevious, row, 3, 1, 1);
 	layout->addWidget (tbNext, row, 4, 1, 1);
 	layout->addWidget (cbCaseSensitive, row, 5, 1, 1);
@@ -156,12 +163,12 @@ void pSearch::addSearchToLayout (int row)
 void pSearch::addReplaceToLayout (int row)
 {
 	layout->addWidget (lReplaceText, row, 0, 1, 1);
-	layout->addWidget (leReplaceText, row, 1, 1, 2);
+	layout->addWidget (cobReplace, row, 1, 1, 2);
 	layout->addWidget (tbReplace, row, 3, 1, 1);
 	layout->addWidget (tbReplaceAll, row, 4, 1, 1);
 	
 	lReplaceText->show();
-	leReplaceText->show();
+	cobReplace->show();
 	tbReplace->show();
 	tbReplaceAll->show();
 }
@@ -184,7 +191,7 @@ void pSearch::addFolderToLayout (int row)
 void pSearch::removeSearchFromLayout ()
 {
 	layout->removeWidget (lSearchText);
-	layout->removeWidget(leSearch);
+	layout->removeWidget(cobSearch);
 	layout->removeWidget (tbPrevious);
 	layout->removeWidget (tbNext);
 	layout->removeWidget (cbCaseSensitive);
@@ -194,12 +201,12 @@ void pSearch::removeSearchFromLayout ()
 void pSearch::removeReplaceFromLayout ()
 {
 	layout->removeWidget (lReplaceText);
-	layout->removeWidget (leReplaceText);
+	layout->removeWidget (cobReplace);
 	layout->removeWidget (tbReplace);
 	layout->removeWidget (tbReplaceAll);
 	
 	lReplaceText->hide();
-	leReplaceText->hide();
+	cobReplace->hide();
 	tbReplace->hide();
 	tbReplaceAll->hide();
 }
@@ -231,7 +238,7 @@ void pSearch::keyPressEvent( QKeyEvent* e )
 {
     if ( e->key() == Qt::Key_Escape )
         hide();
-    QDockWidget::keyPressEvent( e );
+    QWidget::keyPressEvent( e );
 }
 
 
@@ -244,6 +251,7 @@ void pSearch::showSearchFile ()
 	if (mWhereType == FOLDER)
 		removeFolderFromLayout ();
 	mWhereType = FILE;
+	
     show ();
 };
 
@@ -285,6 +293,7 @@ void pSearch::showSearchFolder ()
 	if (mWhereType == FILE)
 		addFolderToLayout(1);
 	mWhereType = FOLDER;
+	
     show ();
 };
 
@@ -297,21 +306,40 @@ void pSearch::showReplaceFolder ()
 	if (mWhereType == FILE)
 		addFolderToLayout (2);
 	mWhereType = FOLDER;
+	
     show ();
 };
 
 void pSearch::show ()
 {
-	leSearch->setFocus();
-    QDockWidget::show ();
+	cobSearch->setFocus();
+	
+	if (mWhereType == FILE)
+	{
+		tbNext->setText (tr("Next"));
+		tbNext->setIcon (QIcon(":/edit/icons/edit/next.png"));
+		tbPrevious->show();
+	}
+	else
+	{
+		tbNext->setText (tr("Search"));
+		tbNext->setIcon (QIcon(":/edit/icons/edit/search.png"));
+		tbPrevious->hide();
+	}
+	
+    QWidget::show ();
 }
 
 bool pSearch::search (bool next)
 {
+	QString text = cobSearch->currentText ();
+	
+	searchAddToRecents(text);
+	
     pChild* child = dynamic_cast<pChild*> (MonkeyCore::workspace()->currentChild());
     if (!child && !child->editor())
     {
-        //lInformations->setText(tr( "No active editor" ) );
+        showMessage(tr( "No active editor" ) );
         return false;
     }
     pEditor* editor = child->editor ();
@@ -336,15 +364,15 @@ bool pSearch::search (bool next)
     }
 
     // search
-    bool b = editor->findFirst( leSearch->text(), cbRegExp->isChecked(), cbCaseSensitive->isChecked(), false, true, next, y, x);
+    bool b = editor->findFirst( text, cbRegExp->isChecked(), cbCaseSensitive->isChecked(), false, true, next, y, x);
 
     // change background acording to found or not
-    QPalette p = leSearch->palette();
-    p.setColor( leSearch->backgroundRole(), b ? Qt::white : Qt::red );
-    leSearch->setPalette( p );
+    QPalette p = cobSearch->palette();
+    p.setColor( cobSearch->backgroundRole(), b ? Qt::white : Qt::red );
+    cobSearch->setPalette( p );
     
     // show message if needed
-    //lInformations->setText( b ? QString::null : tr( "Not Found" ) );
+    showMessage( b ? QString::null : tr( "Not Found" ) );
 
     // return found state
     return b;
@@ -373,7 +401,7 @@ bool pSearch::on_tbNext_clicked()
                 mFilesProcessed = 0;
                 fileProcessed (0);
                 QString path = lePath->text();
-                QString text = leSearch->text();
+                QString text = cobSearch->currentText();
                 //bool whole = cbWholeWords->isChecked ();
                 bool match = cbCaseSensitive->isChecked();
                 bool regexp = cbRegExp->isChecked ();
@@ -381,12 +409,10 @@ bool pSearch::on_tbNext_clicked()
                 tbNext->setText (tr("Stop"));
                 tbNext->setIcon (QIcon(":/console/icons/console/stop.png"));
                 
-                qWarning () << __LINE__;
                 connect (mSearchThread, SIGNAL (appendSearchResult( const pConsoleManager::Step& )), MonkeyCore::workspace(), SIGNAL (appendSearchResult( const pConsoleManager::Step& )));
                 connect (mSearchThread, SIGNAL (finished ()), this, SLOT (threadFinished()));
                 connect (mSearchThread, SIGNAL (appendSearchResult( const pConsoleManager::Step& )), this, SLOT (occurenceFinded ()));
                 connect (mSearchThread, SIGNAL (changeProgress(int)), this, SLOT (fileProcessed (int)));
-                qWarning () << __LINE__;
                 mSearchThread->start();    
             }
         break;
@@ -397,10 +423,15 @@ bool pSearch::on_tbNext_clicked()
 //
 int pSearch::replace(bool all)
 {
+	QString rtext = cobReplace->currentText();
+	
+	searchAddToRecents(cobSearch->currentText());
+	replaceAddToRecents(rtext);
+	
     pChild* child = dynamic_cast<pChild*> (MonkeyCore::workspace()->currentChild());
     if (!child && !child->editor())
     {
-        //lInformations->setText(tr( "No active editor" ) );
+        showMessage(tr( "No active editor" ) );
         return 0;
     }
     pEditor* editor = child->editor ();
@@ -410,7 +441,6 @@ int pSearch::replace(bool all)
     editor->getSelection(&y, &x, &temp, &temp);
     editor->setCursorPosition(y, x);
     
-    QString rtext = leReplaceText->text();
     int count;
     if (on_tbNext_clicked())
     {
@@ -455,12 +485,11 @@ void pSearch::on_tbReplaceAll_clicked()
     editor->endUndoAction();
 
     // show occurence number replaced
-    //lInformations->setText( count ? tr( "%1 occurences replaced" ).arg( count ) : tr( "Nothing To Repalce" ) );
+    showMessage( count ? tr( "%1 occurences replaced" ).arg( count ) : tr( "Nothing To Repalce" ) );
 }
 
 void pSearch::threadFinished ()
 {
-    qWarning () << mSearchThread->isFinished();
     tbNext->setText (tr("Search"));
     tbNext->setIcon (QIcon(":/edit/icons/edit/search.png"));
     delete mSearchThread;
@@ -470,7 +499,7 @@ void pSearch::threadFinished ()
 void pSearch::occurenceFinded ()
 {
     mOccurencesFinded ++;
-    //lInformations->setText (tr ("%1 files %2 occcurences").arg(mFilesProcessed).arg(mOccurencesFinded));
+    showMessage(tr ("%1 files %2 occcurences").arg(mFilesProcessed).arg(mOccurencesFinded));
 }
 
 void pSearch::fileProcessed (int count)
@@ -481,5 +510,36 @@ void pSearch::fileProcessed (int count)
 
 void pSearch::showMessage (QString status)
 {
-    MonkeyCore::mainWindow()->statusBar()->showMessage (tr ("Search: %1").arg (status), 30);
+	if (!status.isNull())
+		MonkeyCore::mainWindow()->statusBar()->showMessage (tr ("Search: %1").arg (status), 30000);
+	else
+		MonkeyCore::mainWindow()->statusBar()->showMessage ("");
+}
+
+void pSearch::searchAddToRecents (QString text)
+{
+	if (searchRecents.isEmpty() || searchRecents[0] != text)
+	{
+		searchRecents.prepend (text);
+		if (searchRecents.size() > 10)
+		{
+			searchRecents.removeLast ();
+		}
+		cobSearch->clear();
+		cobSearch->addItems (searchRecents);
+	}
+}
+
+void pSearch::replaceAddToRecents (QString text)
+{
+	if (replaceRecents.isEmpty() || replaceRecents[0] != text)
+	{
+		replaceRecents.prepend (text);
+		if (replaceRecents.size() > 10)
+		{
+			replaceRecents.removeLast ();
+		}
+		cobReplace->clear();
+		cobReplace->addItems (replaceRecents);
+	}
 }

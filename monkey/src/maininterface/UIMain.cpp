@@ -69,9 +69,9 @@ void UIMain::initGui()
 	// init workspace
 	setCentralWidget( MonkeyCore::workspace() );
 	// init search dock
-	addDockWidget( Qt::RightDockWidgetArea, MonkeyCore::searchDock() );
-	MonkeyCore::searchDock()->setVisible( false );
-	MonkeyCore::searchDock()->setFloating( true );
+//	addDockWidget( Qt::RightDockWidgetArea, MonkeyCore::searchDock() );
+//	MonkeyCore::searchDock()->setVisible( false );
+//	MonkeyCore::searchDock()->setFloating( true );
 	// init staus bar
 	setStatusBar( MonkeyCore::statusBar() );
 	// init connection

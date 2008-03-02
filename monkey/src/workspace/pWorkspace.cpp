@@ -52,6 +52,7 @@
 #include <QToolButton>
 #include <QCloseEvent>
 #include <QMainWindow>
+#include <QVBoxLayout>
 #include <QDebug>
 
 using namespace pMonkeyStudio;
@@ -62,6 +63,9 @@ pWorkspace::pWorkspace( QMainWindow* p )
 	Q_ASSERT( p );
 	// add dock to main window
 	p->addDockWidget( Qt::LeftDockWidgetArea, listWidget() );
+	
+	mLayoutForSearcher = NULL;
+	
 	// set background
 	//setBackground( ":/application/icons/application/background.png" );
 
@@ -573,4 +577,14 @@ void pWorkspace::closeDocument( QWidget* document )
 	if ( UISaveFiles::saveDocument( window(), qobject_cast<pAbstractChild*>( document ), false ) == UISaveFiles::bCancelClose )
 		return;
 	pExtendedWorkspace::closeDocument( document );
+}
+
+QVBoxLayout* pWorkspace::layoutForSearcher ()
+{
+	if (!mLayoutForSearcher)
+	{
+		mLayoutForSearcher = new QVBoxLayout (this);
+		mLayout->addLayout (mLayoutForSearcher);
+	}
+	return mLayoutForSearcher;
 }

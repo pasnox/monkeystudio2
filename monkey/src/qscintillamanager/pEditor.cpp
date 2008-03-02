@@ -91,8 +91,11 @@ pEditor::pEditor( QWidget* p )
             k + (QsciScintillaBase::SCMOD_CTRL << 16),
             QsciScintillaBase::SCI_NULL);
 
-	
+	// Create shortcuts manager, if not created
     qSciShortcutsManager::instance();
+	
+	// Create searcher, if not created
+	MonkeyCore::searchDock();
 }
 
 pEditor::~pEditor()
@@ -396,7 +399,7 @@ void pEditor::selectNone()
 
 void pEditor::invokeSearchReplace()
 {
-	// get pSearch instance
+/*	// get pSearch instance
 	pSearch* psi = MonkeyCore::searchDock();
 	
 	// set selected text the text to search
@@ -419,7 +422,7 @@ void pEditor::invokeSearchReplace()
 	
 	// set focus and select search text in pSearch instance
     psi->leSearch->setFocus();
-    psi->leSearch->selectAll();
+    psi->leSearch->selectAll();*/
 }
 
 void pEditor::invokeGoToLine()

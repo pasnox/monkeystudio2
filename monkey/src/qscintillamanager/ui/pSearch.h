@@ -29,12 +29,12 @@
 #ifndef PSEARCH_H
 #define PSEARCH_H
 
+#include <QWidget>
+#include <QStringList>
+
 #include "MonkeyExport.h"
-//#include "ui_pSearch.h"
 #include "pConsoleManager.h"
 #include "pDockWidget.h"
-
-#include <QPointer>
 
 class QsciScintilla;
 class SearchThread;
@@ -45,8 +45,9 @@ class QPushButton;
 class QLineEdit;
 class QLabel;
 class QCheckBox;
+class QComboBox;
 
-class Q_MONKEY_EXPORT pSearch : public pDockWidget
+class Q_MONKEY_EXPORT pSearch : public QWidget
 {
 	Q_OBJECT
 	friend class MonkeyCore;
@@ -70,6 +71,7 @@ private:
 	// Used for counting of occurences when searching in folder/project
 	int mOccurencesFinded;
 	int mFilesProcessed;
+	pDockWidget* fake;
 	
 public slots:
 	void showSearchFile ();
@@ -99,6 +101,7 @@ protected:
 
 	//search
 	QLabel* lSearchText;
+	QComboBox* cobSearch; // FIXME make protected
 
 	QPushButton* tbNext;
 	QPushButton* tbPrevious;
@@ -107,7 +110,7 @@ protected:
 
 	//replace
 	QLabel* lReplaceText;
-	QLineEdit* leReplaceText;
+	QComboBox* cobReplace;
 	QPushButton* tbReplace;
 	QPushButton* tbReplaceAll;
 
@@ -139,14 +142,21 @@ protected:
 	int replace (bool all);
 
 	pSearch();
+	virtual ~pSearch(){};
 	void keyPressEvent( QKeyEvent* );
 
 	void show ();
     
     void showMessage (QString status);
+	
+	QStringList searchRecents;
+	QStringList replaceRecents;
+/*	QStringList maskRecents;
+	QStringList pathRecents;*/
+	
+	void searchAddToRecents (QString);
+	void replaceAddToRecents (QString);
 
-public:
-	QLineEdit* leSearch; // FIXME make protected
 signals:
 	void clearSearchResults ();
 

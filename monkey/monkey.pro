@@ -57,6 +57,8 @@ CONFIG( debug, debug|release ) {
 	UI_DIR	= $${BUILD_PATH}/debug/.ui
 	MOC_DIR	= $${BUILD_PATH}/debug/.moc
 	RCC_DIR	= $${BUILD_PATH}/debug/.rcc
+	#For including all files from fresh framework, even which not used by monkey (but may be used by plugins).  TESTED ONLY ON LINUX/GCC !!!
+	unix:LIBS	*= -Wl,--whole-archive -lfresh_debug -Wl,--no-whole-archive
 	unix:LIBS	*= -lqscintilla2_debug -lfresh_debug -lctags_debug
 	else:LIBS	*= -lqscintilla2d -lfreshd -lctagsd
 	win32-g++:LIBS	*= -Wl,--out-implib,$${BUILD_PATH}/lib$${TARGET}.a
@@ -69,7 +71,10 @@ CONFIG( debug, debug|release ) {
 	UI_DIR	= $${BUILD_PATH}/release/.ui
 	MOC_DIR	= $${BUILD_PATH}/release/.moc
 	RCC_DIR	= $${BUILD_PATH}/release/.rcc
-	LIBS	*= -lqscintilla2 -lfresh -lctags
+	#For including all files from fresh framework, even which not used by monkey (but may be used by plugins).  TESTED ONLY ON LINUX/GCC !!!
+	unix:LIBS	*= -Wl,--whole-archive -lfresh -Wl,--no-whole-archive
+	else:LIBS	*= -lfresh 
+	LIBS	*= -lqscintilla2 -lctags
 	win32-g++:LIBS	*= -Wl,--out-implib,$${BUILD_PATH}/lib$${TARGET}.a
 	win32-msvc*:LIBS	*= /IMPLIB:$${BUILD_PATH}/$${TARGET}.lib -lshell32
 }
