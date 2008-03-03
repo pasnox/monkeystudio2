@@ -173,9 +173,9 @@
         </widget>
        </item>
        <item row="1" column="1" >
-        <widget class="QPushButton" name="pbRemoveProjectFiles" >
+        <widget class="QPushButton" name="pbRemoveProjectFile" >
          <property name="text" >
-          <string>Remove Files...</string>
+          <string>Remove File...</string>
          </property>
          <property name="icon" >
           <iconset resource="../../resources/XUPManager.qrc" >:/actions/remove.png</iconset>

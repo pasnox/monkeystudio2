@@ -11,6 +11,8 @@ class XUPItem;
 #include "FilteredProjectItemModel.h"
 class FilesProjectModel : public QSortFilterProxyModel
 {
+	Q_OBJECT
+
 public:
 	FilesProjectModel( FilteredProjectItem* project, QObject* owner = 0 )
 		: QSortFilterProxyModel( owner )
@@ -57,6 +59,7 @@ protected:
 
 protected slots:
 	void on_pbAddProjectFiles_clicked();
+	void on_pbRemoveProjectFile_clicked();
 };
 
 #endif // UIXUPPROJECTEDITOR_H
