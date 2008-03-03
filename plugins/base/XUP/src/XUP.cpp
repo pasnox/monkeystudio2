@@ -35,7 +35,7 @@ bool XUP::setEnabled( bool b )
 		mDockXUPManager->registerItem( new XUPItem );
 		mDockXUPManager->registerItem( new QMakeXUPItem );
 		// add dock to dockmanager
-		MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( mDockXUPManager, infos().Caption, QIcon( ":/icons/console.png" ) );
+		MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( mDockXUPManager, tr( "XUP Manager" ), QIcon( ":/icons/console.png" ) );
 		// set plugin enabled
 		mPluginInfos.Enabled = true;
 	}
