@@ -41,7 +41,7 @@ RESOURCES	*= src/resources/resources.qrc
 DEFINES	*= MONKEY_CORE_BUILD "PROGRAM_NAME=\"\\\"$${NAME}\\\"\"" "PROGRAM_VERSION=\"\\\"$${VERSION}\\\"\"" "PROGRAM_DOMAIN=\"\\\"$${DOMAIN}\\\"\"" "PROGRAM_COPYRIGHTS=\"\\\"$${COPYRIGHTS}\\\"\""
 
 LIBS	*= -L$${BUILD_PATH}
-*-g++:LIBS	*= -Wl,--whole-archive
+#*-g++:LIBS	*= -Wl,--whole-archive
 mac:*-g++:LIBS	*= -dynamic
 else:unix:*-g++:LIBS	*= -rdynamic
 
