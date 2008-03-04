@@ -41,6 +41,7 @@ RESOURCES	*= src/resources/resources.qrc
 DEFINES	*= MONKEY_CORE_BUILD "PROGRAM_NAME=\"\\\"$${NAME}\\\"\"" "PROGRAM_VERSION=\"\\\"$${VERSION}\\\"\"" "PROGRAM_DOMAIN=\"\\\"$${DOMAIN}\\\"\"" "PROGRAM_COPYRIGHTS=\"\\\"$${COPYRIGHTS}\\\"\""
 
 LIBS	*= -L$${BUILD_PATH}
+*-g++:LIBS	*= -Wl,--whole-archive
 mac:*-g++:LIBS	*= -dynamic
 else:unix:*-g++:LIBS	*= -rdynamic
 
@@ -57,8 +58,6 @@ CONFIG( debug, debug|release ) {
 	UI_DIR	= $${BUILD_PATH}/debug/.ui
 	MOC_DIR	= $${BUILD_PATH}/debug/.moc
 	RCC_DIR	= $${BUILD_PATH}/debug/.rcc
-	#For including all files from fresh framework, even which not used by monkey (but may be used by plugins).  TESTED ONLY ON LINUX/GCC !!!
-	unix:LIBS	*= -Wl,--whole-archive -lfresh_debug -Wl,--no-whole-archive
 	unix:LIBS	*= -lqscintilla2_debug -lfresh_debug -lctags_debug
 	else:LIBS	*= -lqscintilla2d -lfreshd -lctagsd
 	win32-g++:LIBS	*= -Wl,--out-implib,$${BUILD_PATH}/lib$${TARGET}.a
@@ -71,10 +70,7 @@ CONFIG( debug, debug|release ) {
 	UI_DIR	= $${BUILD_PATH}/release/.ui
 	MOC_DIR	= $${BUILD_PATH}/release/.moc
 	RCC_DIR	= $${BUILD_PATH}/release/.rcc
-	#For including all files from fresh framework, even which not used by monkey (but may be used by plugins).  TESTED ONLY ON LINUX/GCC !!!
-	unix:LIBS	*= -Wl,--whole-archive -lfresh -Wl,--no-whole-archive
-	else:LIBS	*= -lfresh 
-	LIBS	*= -lqscintilla2 -lctags
+	LIBS	*= -lqscintilla2 -lctags -lfresh
 	win32-g++:LIBS	*= -Wl,--out-implib,$${BUILD_PATH}/lib$${TARGET}.a
 	win32-msvc*:LIBS	*= /IMPLIB:$${BUILD_PATH}/$${TARGET}.lib -lshell32
 }
