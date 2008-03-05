@@ -141,9 +141,10 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 		c = new pChild;
 	
 	// made connection if worksapce don t contains this child
-	if ( !children().contains( c ) )
+	bool wasIn = children().contains( c );
+	if ( !wasIn )
 	{
-		//
+		// connections
 		connect( c, SIGNAL( currentFileChanged( const QString& ) ), this, SLOT( internal_currentFileChanged( const QString& ) ) );
 		// closed file
 		connect( c, SIGNAL( fileClosed( const QString& ) ), this, SIGNAL( fileClosed( const QString& ) ) );
@@ -163,11 +164,10 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 		//connect( c, SIGNAL( documentModeChanged( AbstractChild::DocumentMode ) ), statusBar(), SLOT( setDocumentMode( AbstractChild::DocumentMode ) ) );
 		//connect( c, SIGNAL( layoutModeChanged( AbstractChild::LayoutMode ) ), statusBar(), SLOT( setLayoutMode( AbstractChild::LayoutMode ) ) );
 		//connect( c, SIGNAL( currentFileChanged( const QString& ) ), statusBar(), SLOT( setFileName( const QString& ) ) );
+		
+		// add to workspace
+		addDocument( c, QString() );
 	}
-
-	// add child to workspace if needed
-	if ( !children().contains( c ) )
-		addDocument( c, c->currentFileName() );
 
 	// open file
 	c->openFile( s );
@@ -181,7 +181,13 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 		setCurrentDocument( c );
 		c->showFile( s );
 	}
+	
+	// temporary hack
+	internal_currentChanged( indexOf( c ) );
+
+	// emit file open
     emit fileOpened( s );
+
 	// return child instance
 	return c;
 }
