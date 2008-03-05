@@ -165,26 +165,23 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 		//connect( c, SIGNAL( currentFileChanged( const QString& ) ), statusBar(), SLOT( setFileName( const QString& ) ) );
 	}
 
+	// add child to workspace if needed
+	if ( !children().contains( c ) )
+		addDocument( c, c->currentFileName() );
+
 	// open file
 	c->openFile( s );
 	
-	// add child to workspace if needed
-	if ( !children().contains( c ) )
-		MonkeyCore::workspace()->addDocument( c, QString() );
-		//MonkeyCore::workspace()->addDocument( c, c->currentFileName() );
-	
 	// set modification state because file is open before put in worksapce so workspace can't know it
 	c->setWindowModified( c->isModified() );
-	
+
 	// set correct document if needed ( sdi hack )
 	if ( currentDocument() != c )
 	{
 		setCurrentDocument( c );
 		c->showFile( s );
 	}
-    
-    emit fileOpened (s);
-	
+    emit fileOpened( s );
 	// return child instance
 	return c;
 }
