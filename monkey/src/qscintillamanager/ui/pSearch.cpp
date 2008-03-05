@@ -125,8 +125,6 @@ pSearch::pSearch() : QWidget()
 	leMask->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
 	lMask->setBuddy (leMask);
 	
-	connect (cobSearch, SIGNAL(returnPressed ()), SLOT(on_tbNext_clicked()));
-	
 	connect (tbNext, SIGNAL (clicked()), this, SLOT (on_tbNext_clicked ()));
 	connect (tbPrevious, SIGNAL (clicked()), this, SLOT (on_tbPrevious_clicked ()));
 	connect (tbReplace, SIGNAL (clicked()), this, SLOT (on_tbReplace_clicked ()));
@@ -144,6 +142,7 @@ pSearch::pSearch() : QWidget()
 	mSearchThread = NULL;
 	
 	setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Maximum);
+    
 	addSearchToLayout (0);
 	hide ();
 	
@@ -236,8 +235,18 @@ bool pSearch::isProjectAvailible ()
 
 void pSearch::keyPressEvent( QKeyEvent* e )
 {
-    if ( e->key() == Qt::Key_Escape )
-        hide();
+    switch (e->key())
+    {
+        case Qt::Key_Escape:
+            hide();
+        break;
+        case Qt::Key_Enter:
+        case Qt::Key_Return:
+            if (mOperType == SEARCH)
+                on_tbNext_clicked();
+            else /* replace */
+                on_tbReplace_clicked ();
+    }
     QWidget::keyPressEvent( e );
 }
 
@@ -316,17 +325,21 @@ void pSearch::show ()
 	
 	if (mWhereType == FILE)
 	{
-		tbNext->setText (tr("Next"));
+		tbNext->setText (tr("&Next"));
 		tbNext->setIcon (QIcon(":/edit/icons/edit/next.png"));
 		tbPrevious->show();
 	}
 	else
 	{
-		tbNext->setText (tr("Search"));
+		tbNext->setText (tr("&Search"));
 		tbNext->setIcon (QIcon(":/edit/icons/edit/search.png"));
 		tbPrevious->hide();
 	}
 	
+    setTabOrder (cobSearch, cobReplace); // Need to restore tab order after show/hide widgets
+    setTabOrder (cobReplace, lePath);
+    setTabOrder (lePath, leMask);
+    
     QWidget::show ();
 }
 

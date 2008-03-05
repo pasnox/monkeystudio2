@@ -87,8 +87,6 @@ public:
 	virtual bool isCopyAvailable() const = 0;
 	// return the current file paste available
 	virtual bool isPasteAvailable() const = 0;
-	// return is search/replace is available
-	virtual bool isSearchReplaceAvailable() const = 0;
 	// return is goto is available
 	virtual bool isGoToAvailable() const = 0;
 	// return the modified state of file
@@ -131,12 +129,6 @@ public slots:
 	virtual void copy() = 0;
 	// paste
 	virtual void paste() = 0;
-	// search/replace in the current child
-	virtual void searchReplace() = 0;
-	// search previous
-	virtual void searchPrevious() = 0;
-	// search next
-	virtual void searchNext() = 0;
 	// go to in the current child
 	virtual void goTo() = 0;
 	// go to position for file and highlight line according to bool

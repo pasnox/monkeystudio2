@@ -397,34 +397,6 @@ void pEditor::selectNone()
     selectAll( false );
 }
 
-void pEditor::invokeSearchReplace()
-{
-/*	// get pSearch instance
-	pSearch* psi = MonkeyCore::searchDock();
-	
-	// set selected text the text to search
-	if ( !selectedText().isEmpty() )
-		psi->leSearch->setText( selectedText() );
-	
-	// made search dock visible
-    if ( !psi->isVisible() )
-        psi->setVisible( true );
-	
-	// some hack to wait window activate
-	if ( MonkeyCore::searchDock()->isFloating() )
-	{
-		while ( QApplication::activeWindow() != psi->window() )
-		{
-			psi->activateWindow();
-			QApplication::processEvents();
-		}
-    }
-	
-	// set focus and select search text in pSearch instance
-    psi->leSearch->setFocus();
-    psi->leSearch->selectAll();*/
-}
-
 void pEditor::invokeGoToLine()
 {
     bool b;

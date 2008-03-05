@@ -28,7 +28,6 @@
 ****************************************************************************/
 #include "pChild.h"
 #include "pEditor.h"
-#include "pSearch.h"
 #include "MonkeyCore.h"
 
 #include "qscilexer.h"
@@ -124,24 +123,6 @@ void pChild::copy()
 void pChild::paste()
 { mEditor->paste(); }
 
-void pChild::searchReplace()
-{
-/*	MonkeyCore::searchDock()->setEditor( mEditor );
-	mEditor->invokeSearchReplace();*/
-}
-
-void pChild::searchPrevious()
-{
-/*	MonkeyCore::searchDock()->setEditor( mEditor );
-	MonkeyCore::searchDock()->on_tbPrevious_clicked();*/
-}
-
-void pChild::searchNext()
-{
-/*	MonkeyCore::searchDock()->setEditor( mEditor );
-	MonkeyCore::searchDock()->on_tbNext_clicked();*/
-}
-
 void pChild::goTo()
 { mEditor->invokeGoToLine(); }
 
@@ -161,9 +142,6 @@ bool pChild::isCopyAvailable() const
 
 bool pChild::isPasteAvailable() const
 { return mEditor->canPaste(); }
-
-bool pChild::isSearchReplaceAvailable() const
-{ return true; }
 
 bool pChild::isGoToAvailable() const
 { return true; }

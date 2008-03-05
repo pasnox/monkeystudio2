@@ -76,7 +76,6 @@ public slots:
 	void print( bool = false );
 	void quickPrint();
 	void selectNone();
-	void invokeSearchReplace();
 	void invokeGoToLine();
 	void convertTabs( int = -1 );
 	void makeBackup();

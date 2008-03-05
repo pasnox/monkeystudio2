@@ -89,15 +89,6 @@ public:
 	// paste
 	virtual void paste();
 
-	// search/replace in the current child
-	virtual void searchReplace();
-
-	// search previous
-	virtual void searchPrevious();
-
-	// search next
-	virtual void searchNext();
-
 	// go to in the current child
 	virtual void goTo();
 
@@ -109,9 +100,6 @@ public:
 
 	// return the current file paste available
 	virtual bool isPasteAvailable() const;
-
-	// return is search/replace is available
-	virtual bool isSearchReplaceAvailable() const;
 
 	// return is goto is available
 	virtual bool isGoToAvailable() const;

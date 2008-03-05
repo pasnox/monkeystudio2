@@ -98,9 +98,6 @@ public slots:
 	void editCut_triggered();
 	void editCopy_triggered();
 	void editPaste_triggered();
-	void editSearchReplace_triggered();
-	void editSearchPrevious_triggered();
-	void editSearchNext_triggered();
 	void editGoTo_triggered();
 	void editExpandAbbreviation_triggered();
 	void editPrepareAPIs_triggered();
@@ -126,7 +123,6 @@ signals:
 	// signals for controling search results dock
 	void appendSearchResult( const pConsoleManager::Step& );
 	void clearSearchResults();
-
 };
 
 #endif // PWORKSPACE_H

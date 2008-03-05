@@ -85,7 +85,6 @@ DEFINES	*= "PROGRAM_PREFIX=\"\\\"$${PROGRAM_PREFIX}\\\"\"" "PROGRAM_DATAS=\"\\\"
 FORMS	*= src/maininterface/ui/UITranslator.ui \
 	src/maininterface/ui/UIAbout.ui \
 	src/maininterface/ui/UISettings.ui \
-	src/qscintillamanager/ui/pSearch.ui \
 	src/abbreviationsmanager/ui/UIAddAbbreviation.ui \
 	src/templatesmanager/ui/UITemplatesWizard.ui \
 	src/toolsmanager/ui/UIDesktopTools.ui \

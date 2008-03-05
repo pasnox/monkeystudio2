@@ -145,8 +145,7 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 	{
 		//
 		connect( c, SIGNAL( currentFileChanged( const QString& ) ), this, SLOT( internal_currentFileChanged( const QString& ) ) );
-		// opened/closed file
-		connect( c, SIGNAL( fileOpened( const QString& ) ), this, SIGNAL( fileOpened( const QString& ) ) );
+		// closed file
 		connect( c, SIGNAL( fileClosed( const QString& ) ), this, SIGNAL( fileClosed( const QString& ) ) );
 		// update file menu
 		connect( c, SIGNAL( modifiedChanged( bool ) ), MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" ), SLOT( setEnabled( bool ) ) );
@@ -183,6 +182,8 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 		setCurrentDocument( c );
 		c->showFile( s );
 	}
+    
+    emit fileOpened (s);
 	
 	// return child instance
 	return c;
@@ -236,7 +237,7 @@ void pWorkspace::internal_currentChanged( int i )
 	bool redo = hasChild ? c->isRedoAvailable() : false;
 	bool copy = hasChild ? c->isCopyAvailable() : false;
 	bool paste = hasChild ? c->isPasteAvailable() : false;
-	bool search = hasChild ? c->isSearchReplaceAvailable() : false;
+	bool search = hasChild;
 	bool go = hasChild ? c->isGoToAvailable() : false;
 	bool moreThanOneChild = count() > 1;
 
@@ -495,27 +496,6 @@ void pWorkspace::editPaste_triggered()
 	pAbstractChild* c = currentChild();
 	if ( c )
 		c->paste();
-}
-
-void pWorkspace::editSearchReplace_triggered()
-{
-	pAbstractChild* c = currentChild();
-	if ( c )
-		c->searchReplace();
-}
-
-void pWorkspace::editSearchPrevious_triggered()
-{
-	pAbstractChild* c = currentChild();
-	if ( c )
-		c->searchPrevious();
-}
-
-void pWorkspace::editSearchNext_triggered()
-{
-	pAbstractChild* c = currentChild();
-	if ( c )
-		c->searchNext();
 }
 
 void pWorkspace::editGoTo_triggered()
