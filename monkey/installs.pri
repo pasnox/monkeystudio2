@@ -37,11 +37,16 @@ translations.path	= $$PROGRAM_DATAS/translations
 translations.files	= ../translations/*.qm
 
 # debugger know_list_and_id
-debuggerIniFile.path		= $$PROGRAM_DATAS/plugins/debugger
+debuggerIniFile.path		= $$PROGRAM_DATAS/plugins/GNUdbg
 debuggerIniFile.files		= ../plugins/debugger/GNUDebugger/file
 
+debuggerLog.path		= $$PROGRAM_DATAS/plugins/GNUdbg
+debuggerLog.files		= ../plugins/debugger/GNUDebugger/log
 
-INSTALLS	= apis templates translations debuggerIniFile
+debuggerScript.path		= $$PROGRAM_DATAS/plugins/GNUdbg
+debuggerScript.files		= ../plugins/debugger/GNUDebugger/scripts
+
+INSTALLS	= apis templates translations debuggerIniFile debuggerLog debuggerScript 
 
 unix:!mac {
 	# plugins
