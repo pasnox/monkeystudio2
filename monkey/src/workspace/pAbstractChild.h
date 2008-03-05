@@ -143,7 +143,7 @@ public slots:
 	// ask to save all files
 	virtual void saveFiles() = 0;
 	// ask to load file
-	virtual void openFile( const QString&, QTextCodec* = 0 ) = 0;
+	virtual bool openFile( const QString&, QTextCodec* = 0 ) = 0;
 	// ask to load these files
 	virtual void openFiles( const QStringList& l )
 	{

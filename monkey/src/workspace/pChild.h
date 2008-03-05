@@ -120,7 +120,7 @@ public:
 	void backupCurrentFile( const QString& );
 
 	// ask to load file
-	virtual void openFile( const QString&, QTextCodec* = 0 );
+	virtual bool openFile( const QString&, QTextCodec* = 0 );
 
 	// ask to close file
 	virtual void closeFile( const QString& );

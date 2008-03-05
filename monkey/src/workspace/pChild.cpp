@@ -167,15 +167,15 @@ void pChild::backupCurrentFile( const QString& s )
 void pChild::saveFiles()
 { saveCurrentFile(); }
 
-void pChild::openFile( const QString& s, QTextCodec* )
+bool pChild::openFile( const QString& s, QTextCodec* )
 {
 	// if already open file, cancel
 	if ( !currentFile().isNull() )
-		return;
+		return false;
 
 	// open file
 	if ( !mEditor->openFile( s ) )
-		return;
+		return false;
 
 	// add filename to list
 	mFiles.append( s );
@@ -184,6 +184,7 @@ void pChild::openFile( const QString& s, QTextCodec* )
 	setWindowTitle( s );
 
 	emit fileOpened( s +"[*]" );
+    return true;
 }
 
 void pChild::closeFile( const QString& s )
