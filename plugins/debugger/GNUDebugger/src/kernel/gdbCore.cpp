@@ -92,7 +92,7 @@ void GdbCore::setStopProcess()
 // checking new message queue
 void GdbCore::run()
 {
-	file.setFileName("./plugins/debugger/Thread_Core_" + name() + ".txt");
+	file.setFileName("./plugins/GNUdbg/log/Thread_Core_" + name() + ".txt");
 	file.open(QIODevice::WriteOnly);
 
 	while(!stopProcess)

@@ -29,7 +29,7 @@
 
 GdbParser::GdbParser (QObject* p) : QObject (p)
 {
-	if(loadingPattern("./plugins/debugger/file/know_list_and_id.txt"))
+	if(loadingPattern("./plugins/GNUdbg/file/know_list_and_id.txt"))
 	{
 	//	QMessageBox::warning(NULL, "Error","File know_list_and_id.txt not found.\nCopy this file from MONKEY_SRC/plugins/base/debugger/file/ to ./bin/plugins/debugger/");
 	//	emit error(0, "(Class GdbPaser) Erreur d'ouverture du fichier de RegExp");
