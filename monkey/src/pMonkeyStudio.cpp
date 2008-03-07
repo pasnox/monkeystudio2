@@ -66,6 +66,7 @@
 #include "qscilexerpython.h"
 #include "qscilexerruby.h"
 #include "qscilexersql.h"
+#include "qscilexertcl.h"
 #include "qscilexertex.h"
 #include "qscilexervhdl.h"
 
