@@ -70,7 +70,9 @@
     </qresource>
     <qresource prefix="/licenses" >
         <file>texts/license.gpl</file>
-        <file alias="texts/license.gpl" >texts/license_ru.gpl</file>
+	</qresource>
+	<qresource prefix="/licenses" lang="ru">
+        <file alias="texts/license.gpl">texts/license_ru.gpl</file>
     </qresource>
     <qresource prefix="/project" >
         <file>icons/project/add.png</file>

@@ -83,7 +83,7 @@ void pMonkeyStudio::addTranslator( QTranslator* t )
 
 void pMonkeyStudio::loadTranslations()
 {
-	// clear all already installed translation
+	// clear all already installed translations
 	foreach ( QTranslator* t, mTranslators )
 		qApp->removeTranslator( t );
 	qDeleteAll( mTranslators );
@@ -113,8 +113,18 @@ void pMonkeyStudio::loadTranslations()
 	if ( mLanguage != "english" )
 	{
 		QTranslator* t = new QTranslator( qApp );
-		if ( t->load( QString( "%1/monkey_%2" ).arg( MonkeyCore::settings()->value( "Translations/Path" ).toString(), mLanguage ) ) )
-			addTranslator( t );
+		foreach ( const QString& path, MonkeyCore::settings()->value( "Translations/Path" ).toStringList() )
+		{
+			QString fn = QString( "%1/monkey_%2" ).arg( path, mLanguage );
+			if ( QFileInfo( fn ).isRelative() )
+				fn.prepend( QString( "%1/" ).arg( QApplication::applicationDirPath() ) );
+			qWarning( "fn: %s", qPrintable( fn ) );
+			if ( t->load( fn ) )
+			{
+				addTranslator( t );
+				return;
+			}
+		}
 	}
 }
 
