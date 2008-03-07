@@ -238,7 +238,7 @@ void pWorkspace::internal_currentChanged( int i )
 	bool redo = hasChild ? c->isRedoAvailable() : false;
 	bool copy = hasChild ? c->isCopyAvailable() : false;
 	bool paste = hasChild ? c->isPasteAvailable() : false;
-	bool search = hasChild;
+	bool search = hasChild && c->currentEditor();
 	bool go = hasChild ? c->isGoToAvailable() : false;
 	bool moreThanOneChild = count() > 1;
 
