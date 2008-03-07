@@ -51,6 +51,7 @@ class Q_MONKEY_EXPORT pSearch : public QWidget
 {
 	Q_OBJECT
 	friend class MonkeyCore;
+	friend class pWorkspace;
 	
 private:
 	enum OperType 
@@ -141,7 +142,7 @@ protected:
 
 	int replace (bool all);
 
-	pSearch();
+	pSearch( QWidget* parent = 0 );
 	virtual ~pSearch(){};
 	void keyPressEvent( QKeyEvent* );
 

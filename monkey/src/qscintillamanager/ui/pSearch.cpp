@@ -54,7 +54,8 @@
 
 #include <QDebug>
 
-pSearch::pSearch() : QWidget()
+pSearch::pSearch( QWidget* parent )
+	: QWidget( parent )
 {
 	layout = new QGridLayout (this);
 	layout->setContentsMargins (0, 0, 0, 0);
@@ -137,16 +138,12 @@ pSearch::pSearch() : QWidget()
     //connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceProject" ), SIGNAL( triggered() ), SLOT( showReplaceProject() ) );
     connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFolder" ), SIGNAL( triggered() ), SLOT( showSearchFolder() ) );
     connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFolder" ), SIGNAL( triggered() ), SLOT( showReplaceFolder() ) );
-    connect(this, SIGNAL (clearSearchResults ()), MonkeyCore::workspace(), SIGNAL (clearSearchResults ()));
     
 	mSearchThread = NULL;
 	
 	setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Maximum);
     
 	addSearchToLayout (0);
-	hide ();
-	
-	MonkeyCore::workspace()->layoutForSearcher()->addWidget (this);
 }
 
 void pSearch::addSearchToLayout (int row)
