@@ -27,7 +27,6 @@
 **
 ****************************************************************************/
 #include "pEditor.h"
-#include "pSearch.h"
 #include "pMonkeyStudio.h"
 #include "qSciShortcutsManager.h"
 #include "MonkeyCore.h"
@@ -91,7 +90,7 @@ pEditor::pEditor( QWidget* p )
             k + (QsciScintillaBase::SCMOD_CTRL << 16),
             QsciScintillaBase::SCI_NULL);
 
-	
+	// Create shortcuts manager, if not created
     qSciShortcutsManager::instance();
 }
 
@@ -392,34 +391,6 @@ void pEditor::quickPrint()
 void pEditor::selectNone()
 {
     selectAll( false );
-}
-
-void pEditor::invokeSearchReplace()
-{
-	// get pSearch instance
-	pSearch* psi = MonkeyCore::searchDock();
-	
-	// set selected text the text to search
-	if ( !selectedText().isEmpty() )
-		psi->leSearch->setText( selectedText() );
-	
-	// made search dock visible
-    if ( !psi->isVisible() )
-        psi->setVisible( true );
-	
-	// some hack to wait window activate
-	if ( MonkeyCore::searchDock()->isFloating() )
-	{
-		while ( QApplication::activeWindow() != psi->window() )
-		{
-			psi->activateWindow();
-			QApplication::processEvents();
-		}
-    }
-	
-	// set focus and select search text in pSearch instance
-    psi->leSearch->setFocus();
-    psi->leSearch->selectAll();
 }
 
 void pEditor::invokeGoToLine()

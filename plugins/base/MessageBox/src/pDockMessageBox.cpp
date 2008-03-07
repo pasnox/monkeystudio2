@@ -79,26 +79,48 @@ pDockMessageBox::pDockMessageBox( QWidget* w )
 	teLog->setFrameShape( QFrame::NoFrame );
 	teLog->setLineWrapMode( QTextEdit::NoWrap );
 	teLog->setTabStopWidth( 40 );
+	
+	//Search resutls
+	lwSearchResults = new QListWidget;
+	lwSearchResults->setFrameShape( QFrame::NoFrame );
+	
 	// add widget to tabwidget
 	twMessageBox->addTab( lwBuildSteps, QIcon( ":/icons/tabbuild.png" ), QString::null );
 	twMessageBox->addTab( c, QIcon( ":/icons/taboutput.png" ), QString::null );
 	twMessageBox->addTab( teLog, QIcon( ":/icons/tablog.png" ), QString::null );
+	twMessageBox->addTab( lwSearchResults, QIcon( ":/icons/tabsearch.png" ), QString::null );
 	// set tabs tooltip
-	twMessageBox->setTabToolTip( 0, tr( "Build Step" ) );
-	twMessageBox->setTabToolTip( 1, tr( "Program Output" ) );
-	twMessageBox->setTabToolTip( 2, tr( "Commands Log" ) );
+	twMessageBox->setTabToolTip( 0, tr( "Build step" ) );
+	twMessageBox->setTabToolTip( 1, tr( "Program output" ) );
+	twMessageBox->setTabToolTip( 2, tr( "Commands log" ) );
+	twMessageBox->setTabToolTip( 3, tr( "Search results" ) );
 	// set central widget to tabwidget
 	setWidget( twMessageBox );
 	// connections
-	connect( lwBuildSteps, SIGNAL( itemPressed( QListWidgetItem* ) ), this, SLOT( lwBuildSteps_itemPressed( QListWidgetItem* ) ) );
-	connect( leRawCommand, SIGNAL( returnPressed() ), this, SLOT( leRawCommand_returnPressed() ) );
-	connect( MonkeyCore::consoleManager(), SIGNAL( commandError( const pCommand&, QProcess::ProcessError ) ), this, SLOT( commandError( const pCommand&, QProcess::ProcessError ) ) );
-	connect( MonkeyCore::consoleManager(), SIGNAL( commandFinished( const pCommand&, int, QProcess::ExitStatus ) ), this, SLOT( commandFinished( const pCommand&, int, QProcess::ExitStatus ) ) );
-	connect( MonkeyCore::consoleManager(), SIGNAL( commandReadyRead( const pCommand&, const QByteArray& ) ), this, SLOT( commandReadyRead( const pCommand&, const QByteArray& ) ) );
-	connect( MonkeyCore::consoleManager(), SIGNAL( commandStarted( const pCommand& ) ), this, SLOT( commandStarted( const pCommand& ) ) );
-	connect( MonkeyCore::consoleManager(), SIGNAL( commandStateChanged( const pCommand&, QProcess::ProcessState ) ), this, SLOT( commandStateChanged( const pCommand&, QProcess::ProcessState ) ) );
-	connect( MonkeyCore::consoleManager(), SIGNAL( commandSkipped( const pCommand& ) ), this, SLOT( commandSkipped( const pCommand& ) ) );
-	connect( MonkeyCore::consoleManager(), SIGNAL( newStepAvailable( const pConsoleManager::Step& ) ), this, SLOT( appendStep( const pConsoleManager::Step& ) ) );
+	connect( lwBuildSteps, SIGNAL( itemPressed( QListWidgetItem* ) ), 
+					this, SLOT( lwBuildSteps_itemPressed( QListWidgetItem* ) ) );
+	connect( lwSearchResults, SIGNAL( itemPressed( QListWidgetItem* ) ), 
+					this, SLOT( lwSearchResults_itemPressed( QListWidgetItem* ) ) );
+	connect( leRawCommand, SIGNAL( returnPressed() ), 
+					this, SLOT( leRawCommand_returnPressed() ) );
+	connect( MonkeyCore::consoleManager(), SIGNAL( commandError( const pCommand&, QProcess::ProcessError ) ), 
+					this, SLOT( commandError( const pCommand&, QProcess::ProcessError ) ) );
+	connect( MonkeyCore::consoleManager(), SIGNAL( commandFinished( const pCommand&, int, QProcess::ExitStatus ) ), 
+					this, SLOT( commandFinished( const pCommand&, int, QProcess::ExitStatus ) ) );
+	connect( MonkeyCore::consoleManager(), SIGNAL( commandReadyRead( const pCommand&, const QByteArray& ) ), 
+					this, SLOT( commandReadyRead( const pCommand&, const QByteArray& ) ) );
+	connect( MonkeyCore::consoleManager(), SIGNAL( commandStarted( const pCommand& ) ), 
+					this, SLOT( commandStarted( const pCommand& ) ) );
+	connect( MonkeyCore::consoleManager(), SIGNAL( commandStateChanged( const pCommand&, QProcess::ProcessState ) ), 
+					this, SLOT( commandStateChanged( const pCommand&, QProcess::ProcessState ) ) );
+	connect( MonkeyCore::consoleManager(), SIGNAL( commandSkipped( const pCommand& ) ), 
+					this, SLOT( commandSkipped( const pCommand& ) ) );
+	connect( MonkeyCore::consoleManager(), SIGNAL( newStepAvailable( const pConsoleManager::Step& ) ), 
+					this, SLOT( appendStep( const pConsoleManager::Step& ) ) );
+	connect( MonkeyCore::workspace(), SIGNAL( appendSearchResult( const pConsoleManager::Step& ) ), 
+					this, SLOT( appendSearchResult( const pConsoleManager::Step& ) ) );
+	connect( MonkeyCore::workspace(), SIGNAL( clearSearchResults() ), 
+					this, SLOT( clearSearchResults() ) );
 }
 
 pDockMessageBox::~pDockMessageBox()
@@ -259,6 +281,19 @@ void pDockMessageBox::appendStep( const pConsoleManager::Step& s )
 	}
 }
 
+void pDockMessageBox::appendSearchResult( const pConsoleManager::Step& s )
+{
+	showSearchResults ();
+	QListWidgetItem* it = new QListWidgetItem( lwSearchResults );
+	// set item infos
+	it->setText( s.mText );
+	it->setToolTip( s.mFullText );
+	it->setData( Qt::UserRole +1, s.mType ); // type
+	it->setData( Qt::UserRole +2, s.mFileName ); // filename
+	it->setData( Qt::UserRole +3, s.mPosition ); // position
+}
+
+
 void pDockMessageBox::showBuild()
 {
 	// show it if need
@@ -289,6 +324,14 @@ void pDockMessageBox::showLog()
 		twMessageBox->setCurrentWidget( teLog );
 }
 
+void pDockMessageBox::showSearchResults()
+{
+	// show it if need
+	if ( !isVisible() )
+		show();
+	twMessageBox->setCurrentWidget( lwSearchResults );
+}
+
 void pDockMessageBox::showNextError()
 {
 	// show it if need
@@ -303,6 +346,11 @@ void pDockMessageBox::showNextError()
 		lwBuildSteps->setCurrentRow( i );
 		lwBuildSteps_itemPressed( lwBuildSteps->item( i ) );
 	}
+}
+
+void pDockMessageBox::clearSearchResults()
+{
+	lwSearchResults->clear ();
 }
 
 void pDockMessageBox::lwBuildSteps_itemPressed( QListWidgetItem* it )
@@ -353,6 +401,13 @@ void pDockMessageBox::lwBuildSteps_itemPressed( QListWidgetItem* it )
 	// open file if ok
 	if ( b && !s.isEmpty() )
 		MonkeyCore::fileManager()->goToLine( s, it->data( Qt::UserRole +3 ).toPoint(), true );
+}
+
+void pDockMessageBox::lwSearchResults_itemPressed( QListWidgetItem* it )
+{
+	// get filename
+	QString s = it->data( Qt::UserRole +2 ).toString();
+	MonkeyCore::fileManager()->goToLine( s, it->data( Qt::UserRole +3 ).toPoint(), true );
 }
 
 void pDockMessageBox::leRawCommand_returnPressed()
@@ -483,3 +538,5 @@ void pDockMessageBox::commandSkipped( const pCommand& c )
 	// appendOutput to console log
 	appendInBox( colourText( s, Qt::blue ), Qt::red );
 }
+
+

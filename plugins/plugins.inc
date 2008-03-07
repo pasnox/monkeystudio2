@@ -22,6 +22,11 @@ LANGUAGE	= Qt4/C++
 CONFIG	*= warn_on thread x11 dll plugin debug_and_release
 PRE_TARGETDEPS	*= ../../../monkey
 
+QMAKE_TARGET_COMPANY = "Monkey Studio Team"
+QMAKE_TARGET_PRODUCT = "Monkey Studio"
+QMAKE_TARGET_DESCRIPTION = "Crossplatform Integrated Development Environment."
+QMAKE_TARGET_COPYRIGHT = "Copyright (C) 2005 - 2008 Filipe AZEVEDO & The Monkey Studio Team"
+
 mac:MONKEY_PLUGINS_DIR	= ../../../bin/monkeystudio.app/Contents/plugins
 else:unix|win32:MONKEY_PLUGINS_DIR	= ../../../bin/plugins
 #DEFINES	= __COVERAGESCANNER__

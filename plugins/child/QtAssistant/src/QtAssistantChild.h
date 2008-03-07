@@ -82,7 +82,7 @@ public slots:
 	virtual void searchNext() {}
 	virtual void goTo( const QString&, const QPoint&, bool = false ) {}
 	virtual void backupCurrentFile( const QString& ) {}
-	virtual void openFile( const QString&, QTextCodec* = 0 ) {}
+	virtual bool openFile( const QString&, QTextCodec* = 0 ) {return false;}
 	virtual void closeFile( const QString& ) {}
 	virtual void closeFiles() {}
 	

@@ -378,11 +378,11 @@ void QtDesignerChild::setModified( QDesignerFormWindowInterface* w )
 		w->parentWidget()->setWindowModified( w->isDirty() );
 }
 
-void QtDesignerChild::openFile( const QString& s, QTextCodec* )
+bool QtDesignerChild::openFile( const QString& s, QTextCodec* )
 {
 	foreach ( const QString f, files() )
 		if ( isSameFile( f, s ) )
-			return;
+			return true;
 	
 	// create form
 	QDesignerFormWindowInterface* w = createForm();
@@ -447,6 +447,7 @@ void QtDesignerChild::openFile( const QString& s, QTextCodec* )
 	
 	// emit file opened
 	emit fileOpened( s );
+    return true;
 }
 
 void QtDesignerChild::closeFile( const QString& s )

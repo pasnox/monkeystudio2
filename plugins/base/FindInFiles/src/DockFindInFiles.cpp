@@ -4,27 +4,12 @@
 #include <QFileDialog>
 #include <QProgressBar>
 
-#include "FindInFiles.h"
+#include "DockFindInFiles.h"
 #include "FifThread.h"
-#include "../Tools.h"
-#include "../editor/Editor.h"
-#include "../project/ProjectContainer.h"
-#include "../project/ProjectItemModel.h"
-#include "../output/Output.h"
-#include "../StatusBar.h"
+
 //
-QPointer<FindInFiles> FindInFiles::mSelf = 0L;
-//
-FindInFiles* FindInFiles::self( QWidget* p )
+DockFindInFiles::DockFindInFiles(QWidget *parent) : QDockWidget(parent), fifTh(0)
 {
-	if ( !mSelf )
-		mSelf = new FindInFiles( p );
-	return mSelf;
-}
-//
-FindInFiles::FindInFiles(QWidget *parent) : QDialog(parent), fifTh(0)
-{
-	mSelf = this;
 	setupUi(this);
 	twResult = new QTreeWidget();
 
@@ -33,24 +18,20 @@ FindInFiles::FindInFiles(QWidget *parent) : QDialog(parent), fifTh(0)
 	twResult->setRootIsDecorated(false);
 	connect (twResult, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
 			 this, SLOT(itemDbClick(QTreeWidgetItem*, int)));
-	connect (StatusBar::self()->getStopButton(), SIGNAL(clicked()), SLOT(stopThread()));
-
-	Output::self()->addTab(twResult, tr("Find in files"));
-	Output::self()->setTabIcon(Output::self()->count()-1, QIcon(":/Icons_Tabs/Icons_Tabs/find.png"));
 }
 //
-FindInFiles::~FindInFiles()
+DockFindInFiles::~DockFindInFiles()
 {
 }
 //
-void FindInFiles::accept()
+void DockFindInFiles::accept()
 {
 	text = cbText->currentText();
 	if (text.isEmpty())
 		return;
 
-	Output::self()->setCurrentWidget(twResult);
-	StatusBar::self()->showProgress(true);
+	//Output::self()->setCurrentWidget(twResult);
+	//StatusBar::self()->showProgress(true);
 
 	twResult->clear();
 	QStringList mask = leMask->text().simplified().split(" ", QString::SkipEmptyParts);
@@ -64,7 +45,7 @@ void FindInFiles::accept()
 	if (mask.isEmpty())
 		mask << "*";
 
-	if (rbOpen->isChecked())
+	/*if (rbOpen->isChecked())
 		files = Editor::self()->getOpenedNames();
 	else if (rbPro->isChecked())
 		files = ProjectContainer::self()->getProFiles(true);
@@ -72,7 +53,7 @@ void FindInFiles::accept()
 		all = directory.entryInfoList(mask, QDir::Files|QDir::NoSymLinks);
 	else
 		all = directory.entryInfoList(mask, QDir::Files|QDir::AllDirs|QDir::NoDotAndDotDot|QDir::NoSymLinks);
-
+	*/
 	QFileInfo info;
 	while (!all.isEmpty())
 	{
@@ -88,13 +69,13 @@ void FindInFiles::accept()
 		all.removeFirst();
 	}
 
-	StatusBar::self()->getProgress()->setRange(0, files.count());
+	//StatusBar::self()->getProgress()->setRange(0, files.count());
 
 	findFiles();
 	close();
 }
 //
-void FindInFiles::showEvent(QShowEvent* e)
+void DockFindInFiles::showEvent(QShowEvent* e)
 {
 	int wasChecked = 0;
 
@@ -103,7 +84,7 @@ void FindInFiles::showEvent(QShowEvent* e)
 	if (rbSearch->isChecked())
 		wasChecked = 2;
 
-	if (!ProjectContainer::self()->currentProject())
+	/*if (!ProjectContainer::self()->currentProject())
 	{
 		rbPro->setEnabled(false);
 		if (wasChecked < 2)
@@ -111,8 +92,8 @@ void FindInFiles::showEvent(QShowEvent* e)
 	}
 	else
 		rbPro->setEnabled(true);
-
-	if(!Editor::self()->count())
+	*/
+	/*if(!Editor::self()->count())
 	{
 		rbOpen->setEnabled(false);
 		if (ProjectContainer::self()->currentProject() && wasChecked != 2)
@@ -122,14 +103,13 @@ void FindInFiles::showEvent(QShowEvent* e)
 	}
 	else
 		rbOpen->setEnabled(true);
-
-	if (lePath->text().simplified().isEmpty())
+	*/
+	/*if (lePath->text().simplified().isEmpty())
 		lePath->setText( Tools::lastDir(Tools::OpenFileDir) );
-
-	QDialog::showEvent(e);
+	*/
 }
 //
-void FindInFiles::findFiles()
+void DockFindInFiles::findFiles()
 {
 	mCurDir = QString();
 	mCurFile = QString();
@@ -155,13 +135,13 @@ void FindInFiles::findFiles()
 	fifTh->start();
 }
 //
-void FindInFiles::updateResult(uint num, const QString& filePath, const QString& line)
+void DockFindInFiles::updateResult(uint num, const QString& filePath, const QString& line)
 {
 	QString fileName = filePath;
 	QString dir = QFileInfo(fileName).canonicalPath();
-	if (rbPro->isChecked())
+	/*if (rbPro->isChecked())
 		fileName= Tools::makeRelative( fileName, ProjectContainer::self()->currentProject()->path() );
-	else
+	else*/
 		fileName =  QFileInfo(fileName).fileName();
 
 	if (chBoxRec->isChecked() && chBoxRec->isEnabled())
@@ -211,7 +191,7 @@ void FindInFiles::updateResult(uint num, const QString& filePath, const QString&
 	}
 }
 //
-void FindInFiles::itemDbClick( QTreeWidgetItem * item, int /*column*/)
+void DockFindInFiles::itemDbClick( QTreeWidgetItem * item, int /*column*/)
 {
 	QString fileName = item->data(0, 1025).toString();
 
@@ -221,40 +201,41 @@ void FindInFiles::itemDbClick( QTreeWidgetItem * item, int /*column*/)
 	openFile(fileName, item->data(0, 1026).toInt());
 }
 //
-void FindInFiles::openFile(const QString& filePath, int line)
+void DockFindInFiles::openFile(const QString& filePath, int line)
 {
-	if (Editor::self()->openFile(QStringList()<<filePath))
+	/*if (Editor::self()->openFile(QStringList()<<filePath))
 	{
 		Editor::self()->setErrorLine(line, true);
 		//Editor::self()->setOpened();
 	}
+	*/
 }
 //
-void FindInFiles::searchFinished()
+void DockFindInFiles::searchFinished()
 {
 	if (!twResult->topLevelItemCount())
 		twResult	->addTopLevelItem(new QTreeWidgetItem(QStringList()<<tr("Files not found")));
 
 	pbOk->setEnabled(true);
-	StatusBar::self()->showProgress(false);
+	//StatusBar::self()->showProgress(false);
 
 	fifTh->deleteLater();
 	fifTh = 0;
 }
 //
-void FindInFiles::on_tbPath_clicked()
+void DockFindInFiles::on_tbPath_clicked()
 {
 	QString pathName = QFileDialog::getExistingDirectory( this, tr( "Choose a path" ), lePath->text());
 	if ( !pathName.isEmpty() )
 		lePath->setText( pathName );
 }
 //
-void FindInFiles::changeProgress(int val)
+void DockFindInFiles::changeProgress(int val)
 {
-	StatusBar::self()->getProgress()->setValue(val);
+	//StatusBar::self()->getProgress()->setValue(val);
 }
 //
-void FindInFiles::stopThread()
+void DockFindInFiles::stopThread()
 {
 	fifTh->setTermEnabled(true);
 }

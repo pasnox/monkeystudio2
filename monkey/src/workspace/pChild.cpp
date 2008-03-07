@@ -28,7 +28,6 @@
 ****************************************************************************/
 #include "pChild.h"
 #include "pEditor.h"
-#include "pSearch.h"
 #include "MonkeyCore.h"
 
 #include "qscilexer.h"
@@ -66,6 +65,11 @@ pChild::pChild()
 
 pChild::~pChild()
 {}
+
+pEditor* pChild::editor()
+{
+	return mEditor;
+}
 
 void pChild::cursorPositionChanged()
 { emit pAbstractChild::cursorPositionChanged( cursorPosition() ); }
@@ -119,24 +123,6 @@ void pChild::copy()
 void pChild::paste()
 { mEditor->paste(); }
 
-void pChild::searchReplace()
-{
-	MonkeyCore::searchDock()->setEditor( mEditor );
-	mEditor->invokeSearchReplace();
-}
-
-void pChild::searchPrevious()
-{
-	MonkeyCore::searchDock()->setEditor( mEditor );
-	MonkeyCore::searchDock()->on_tbPrevious_clicked();
-}
-
-void pChild::searchNext()
-{
-	MonkeyCore::searchDock()->setEditor( mEditor );
-	MonkeyCore::searchDock()->on_tbNext_clicked();
-}
-
 void pChild::goTo()
 { mEditor->invokeGoToLine(); }
 
@@ -156,9 +142,6 @@ bool pChild::isCopyAvailable() const
 
 bool pChild::isPasteAvailable() const
 { return mEditor->canPaste(); }
-
-bool pChild::isSearchReplaceAvailable() const
-{ return true; }
 
 bool pChild::isGoToAvailable() const
 { return true; }
@@ -184,15 +167,15 @@ void pChild::backupCurrentFile( const QString& s )
 void pChild::saveFiles()
 { saveCurrentFile(); }
 
-void pChild::openFile( const QString& s, QTextCodec* )
+bool pChild::openFile( const QString& s, QTextCodec* )
 {
 	// if already open file, cancel
 	if ( !currentFile().isNull() )
-		return;
+		return false;
 
 	// open file
 	if ( !mEditor->openFile( s ) )
-		return;
+		return false;
 
 	// add filename to list
 	mFiles.append( s );
@@ -201,6 +184,7 @@ void pChild::openFile( const QString& s, QTextCodec* )
 	setWindowTitle( s );
 
 	emit fileOpened( s +"[*]" );
+    return true;
 }
 
 void pChild::closeFile( const QString& s )

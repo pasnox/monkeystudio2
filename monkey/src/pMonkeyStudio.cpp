@@ -66,6 +66,7 @@
 #include "qscilexerpython.h"
 #include "qscilexerruby.h"
 #include "qscilexersql.h"
+#include "qscilexertcl.h"
 #include "qscilexertex.h"
 #include "qscilexervhdl.h"
 
@@ -175,7 +176,7 @@ const QStringList pMonkeyStudio::availableLanguages()
 	static QStringList l = QStringList() << "Bash" << "Batch" << "C#" << "C++" << "CMake" << "CSS"
 		<< "D" << "Diff" << "HTML" << "IDL" << "Java" << "JavaScript" << "Lua"
 		<< "Makefile" << "POV" << "Perl" << "Properties" << "Python" << "Ruby"
-		<< "SQL" << "TeX" << "VHDL";
+		<< "SQL" << "TCL" << "TeX" << "VHDL";
 	return l;
 }
 
@@ -458,6 +459,8 @@ const QHash<QString, QStringList> pMonkeyStudio::defaultLanguagesSuffixes()
 	l["Ruby"] << "*.rbw";
 	// SQL
 	l["SQL"] << "*.sql";
+	// TCL
+	l["TCL"] << "*.tcl";
 	// TeX
 	l["TeX"] << "*.aux";
 	l["TeX"] << "*.idx";
@@ -679,6 +682,8 @@ QsciLexer* pMonkeyStudio::lexerForLanguage( const QString& s )
 		l = new QsciLexerRuby( QApplication::instance() );
 	else if ( ln == "sql" )
 		l = new QsciLexerSQL( QApplication::instance() );
+	else if ( ln == "tcl" )
+		l = new QsciLexerTCL( QApplication::instance() );
 	else if ( ln == "tex" )
 		l = new QsciLexerTeX( QApplication::instance() );
 	else if ( ln == "vhdl" )
@@ -778,6 +783,8 @@ const QVariant pMonkeyStudio::lexerProperty( const QString& s, QsciLexer* l )
 			return qobject_cast<QsciLexerCSharp*>( l )->foldCompact();
 		else if ( lng == "C++" )
 			return qobject_cast<QsciLexerCPP*>( l )->foldCompact();
+		else if ( lng == "TCL" )
+			return qobject_cast<QsciLexerTCL*>( l )->foldCompact();
 	}
 	else if ( s == "foldQuotes" )
 	{

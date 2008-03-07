@@ -49,7 +49,10 @@
 
 UIMain::UIMain( QWidget* p )
 	: pMainWindow( p )
-{}
+{
+	setCorner (Qt::TopLeftCorner, Qt::LeftDockWidgetArea);
+	setCorner (Qt::TopRightCorner, Qt::RightDockWidgetArea);
+}
 
 void UIMain::initGui()
 {
@@ -66,9 +69,9 @@ void UIMain::initGui()
 	// init workspace
 	setCentralWidget( MonkeyCore::workspace() );
 	// init search dock
-	addDockWidget( Qt::RightDockWidgetArea, MonkeyCore::searchDock() );
-	MonkeyCore::searchDock()->setVisible( false );
-	MonkeyCore::searchDock()->setFloating( true );
+//	addDockWidget( Qt::RightDockWidgetArea, MonkeyCore::searchDock() );
+//	MonkeyCore::searchDock()->setVisible( false );
+//	MonkeyCore::searchDock()->setFloating( true );
 	// init staus bar
 	setStatusBar( MonkeyCore::statusBar() );
 	// init connection
@@ -156,10 +159,15 @@ void UIMain::initMenuBar()
 		mb->action( "aCut", tr( "Cu&t" ), QIcon( ":/edit/icons/edit/cut.png" ), tr( "Ctrl+X" ), tr( "Cut" ) )->setEnabled( false );
 		mb->action( "aPaste", tr( "&Paste" ), QIcon( ":/edit/icons/edit/paste.png" ), tr( "Ctrl+V" ), tr( "Paste" ) )->setEnabled( false );
 		mb->action( "aSeparator3" );
-		mb->action( "aSearchReplace", tr( "&Search - Replace..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+F" ), tr( "Search - Replace..." ) )->setEnabled( false );
-		mb->action( "aSearchPrevious", tr( "Search Previous" ), QIcon( ":/edit/icons/edit/previous.png" ), tr( "Shift+F3" ), tr( "Search Previous" ) )->setEnabled( false );
-		mb->action( "aSearchNext", tr( "Search Next" ), QIcon( ":/edit/icons/edit/next.png" ), tr( "F3" ), tr( "Search Next" ) )->setEnabled( false );
-		mb->action( "aSeparator4" );
+		mb->menu( "mSearchReplace", tr( "&Search and replace" ) );
+			mb->action( "mSearchReplace/aSearchFile", tr( "&Search in the file..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+F" ), tr( "Search in the file..." ) )->setEnabled( true );
+			mb->action( "mSearchReplace/aReplaceFile", tr( "&Replace in the file..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+R" ), tr( "Replace in the file..." ) )->setEnabled( true );
+			//mb->action( "mSearchReplace/aSearchProject", tr( "&Search in the project..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "" ), tr( "Search in the project..." ) )->setEnabled( true );
+			//mb->action( "mSearchReplace/aReplaceProject", tr( "&Replace in the project..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "" ), tr( "Replace in the project..." ) )->setEnabled( true );
+			mb->action( "mSearchReplace/aSearchFolder", tr( "&Search in the folder..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+Alt+F" ), tr( "Search in the folder..." ) )->setEnabled( true );
+			mb->action( "mSearchReplace/aReplaceFolder", tr( "&Replace in the folder..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+Alt+R" ), tr( "Replace in the folder..." ) )->setEnabled( true );
+			mb->action( "mSearchReplace/aSearchPrevious", tr( "Search Previous" ), QIcon( ":/edit/icons/edit/previous.png" ), tr( "Shift+F3" ), tr( "Search Previous" ) )->setEnabled( true );
+			mb->action( "mSearchReplace/aSearchNext", tr( "Search Next" ), QIcon( ":/edit/icons/edit/next.png" ), tr( "F3" ), tr( "Search Next" ) )->setEnabled( true );
 		mb->action( "aGoTo", tr( "&Go To..." ), QIcon( ":/edit/icons/edit/goto.png" ), tr( "Ctrl+G" ), tr( "Go To..." ) )->setEnabled( false );
 		mb->menu( "mAllCommands", tr( "&All Commands" ), QIcon( ":/edit/icons/edit/commands.png" ) );
 		mb->action( "aSeparator5" );
@@ -279,7 +287,6 @@ void UIMain::initToolBar()
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mEdit/aCopy" ) );
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mEdit/aPaste" ) );
 	dockToolBar( Qt::TopToolBarArea )->addAction();
-	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mEdit/aSearchReplace" ) );
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mEdit/aGoTo" ) );
 	dockToolBar( Qt::TopToolBarArea )->addAction();
 	// help action
@@ -314,9 +321,9 @@ void UIMain::initConnections()
 	connect( menuBar()->action( "mEdit/aCut" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editCut_triggered() ) );
 	connect( menuBar()->action( "mEdit/aCopy" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editCopy_triggered() ) );
 	connect( menuBar()->action( "mEdit/aPaste" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editPaste_triggered() ) );
-	connect( menuBar()->action( "mEdit/aSearchReplace" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editSearchReplace_triggered() ) );
-	connect( menuBar()->action( "mEdit/aSearchPrevious" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editSearchPrevious_triggered() ) );
-	connect( menuBar()->action( "mEdit/aSearchNext" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editSearchNext_triggered() ) );
+	//connect( menuBar()->action( "mEdit/aSearchFile" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editSearchReplace_triggered() ) );
+	//connect( menuBar()->action( "mEdit/aSearchPrevious" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editSearchPrevious_triggered() ) );
+	//connect( menuBar()->action( "mEdit/aSearchNext" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editSearchNext_triggered() ) );
 	connect( menuBar()->action( "mEdit/aGoTo" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editGoTo_triggered() ) );
 	connect( menuBar()->action( "mEdit/aExpandAbbreviation" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editExpandAbbreviation_triggered() ) );
 	connect( menuBar()->action( "mEdit/aPrepareAPIs" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editPrepareAPIs_triggered() ) );

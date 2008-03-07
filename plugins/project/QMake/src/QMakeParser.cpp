@@ -97,12 +97,6 @@ bool QMakeParser::loadFile( const QString& s, QMakeItem* it )
 	*/
 	// reset file
 	f.reset();
-	qWarning( "count r: %d", f.readAll().count( "\r" ) );
-	f.reset();
-	qWarning( "count n: %d", f.readAll().count( "\n" ) );
-	f.reset();
-	qWarning( "count rn: %d", f.readAll().count( "\r\n" ) );
-	f.reset();
 	// get decoded stream
 	QTextStream t( &f );
 	t.setCodec( c );

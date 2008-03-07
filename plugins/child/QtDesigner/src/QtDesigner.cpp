@@ -72,9 +72,9 @@ bool QtDesigner::setEnabled( bool b )
 	return true;
 }
 
-pAbstractChild* QtDesigner::openFile( const QString& s, const QPoint& )
+pAbstractChild* QtDesigner::openFile( const QString&, const QPoint& )
 {
-	QtDesignerChild::instance()->openFile( s );
+	//QtDesignerChild::instance()->openFile( s );
 	return QtDesignerChild::instance();
 }
 

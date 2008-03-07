@@ -38,15 +38,15 @@
 #include <QMouseEvent>
 #include <QApplication>
 #include <QDesktopWidget>
-#include <QSizeGrip>
+#include <QStatusBar>
 
 pTreeComboBox::pTreeComboBox( QWidget* w )
-	: QWidget( w ), mFrame( new QFrame ), mView( 0 ), mModel( 0 ), mForce( false )
+	: QWidget( w ), mFrame( new QFrame( this ) ), mView( 0 ), mModel( 0 ), mForce( false )
 {
-	mFrame->setWindowFlags( Qt::Popup );
+	mFrame->setWindowFlags( Qt::Dialog | Qt::FramelessWindowHint );
 	QVBoxLayout* vl = new QVBoxLayout( mFrame );
 	vl->setSpacing( 0 );
-	vl->setMargin( 0 );
+	vl->setMargin( 3 );
 	
 	mIconSize = QSize( 16, 16 );
 	mSizeHint = QComboBox().sizeHint();
@@ -54,6 +54,7 @@ pTreeComboBox::pTreeComboBox( QWidget* w )
 	setView( new QTreeView );
 	mView->header()->hide();
 	mView->resize( mView->viewport()->size() );
+	mFrame->installEventFilter( this );
 }
 
 pTreeComboBox::~pTreeComboBox()
@@ -61,6 +62,14 @@ pTreeComboBox::~pTreeComboBox()
 
 bool pTreeComboBox::eventFilter( QObject* o, QEvent* e )
 {
+	if ( o == mFrame )
+	{
+		if ( e->type() == QEvent::WindowDeactivate )
+			if ( !rect().contains( mapFromGlobal( QCursor::pos() ) ) )
+				hidePopup();
+		return QWidget::eventFilter( o, e );
+	}
+
 	QEvent::Type t = e->type();
 	if ( t == QEvent::Hide )
 	{
@@ -241,7 +250,9 @@ void pTreeComboBox::setView( QTreeView* t )
 		else
 		{
 			mFrame->layout()->addWidget( mView );
-			mFrame->layout()->addWidget( new QSizeGrip( mFrame ) );
+			QStatusBar* sb = new QStatusBar( mFrame );
+			sb->setFixedHeight( 16 );
+			mFrame->layout()->addWidget( sb );
 		}
 		mView->setEditTriggers( QAbstractItemView::NoEditTriggers );
 		mView->setMouseTracking( true );

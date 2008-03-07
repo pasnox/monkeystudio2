@@ -61,6 +61,12 @@ pWorkspace::pWorkspace( QMainWindow* p )
 	Q_ASSERT( p );
 	// add dock to main window
 	p->addDockWidget( Qt::LeftDockWidgetArea, listWidget() );
+
+	// add search widget to workspace layout
+	pSearch* ps = MonkeyCore::searchWidget();
+	ps->setVisible( false );
+	mLayout->addWidget( ps );
+	
 	// set background
 	//setBackground( ":/application/icons/application/background.png" );
 
@@ -79,6 +85,7 @@ pWorkspace::pWorkspace( QMainWindow* p )
 	*/
 	connect( listWidget(), SIGNAL( urlsDropped( const QList<QUrl>& ) ), this, SLOT( internal_urlsDropped( const QList<QUrl>& ) ) );
 	connect( listWidget(), SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( internal_listWidget_customContextMenuRequested( const QPoint& ) ) );
+	connect( ps, SIGNAL( clearSearchResults() ), this, SIGNAL( clearSearchResults() ) );
 }
 
 void pWorkspace::loadSettings()
@@ -136,12 +143,12 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 		c = new pChild;
 	
 	// made connection if worksapce don t contains this child
-	if ( !children().contains( c ) )
+	bool wasIn = children().contains( c );
+	if ( !wasIn )
 	{
-		//
+		// connections
 		connect( c, SIGNAL( currentFileChanged( const QString& ) ), this, SLOT( internal_currentFileChanged( const QString& ) ) );
-		// opened/closed file
-		connect( c, SIGNAL( fileOpened( const QString& ) ), this, SIGNAL( fileOpened( const QString& ) ) );
+		// closed file
 		connect( c, SIGNAL( fileClosed( const QString& ) ), this, SIGNAL( fileClosed( const QString& ) ) );
 		// update file menu
 		connect( c, SIGNAL( modifiedChanged( bool ) ), MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" ), SLOT( setEnabled( bool ) ) );
@@ -159,19 +166,14 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 		//connect( c, SIGNAL( documentModeChanged( AbstractChild::DocumentMode ) ), statusBar(), SLOT( setDocumentMode( AbstractChild::DocumentMode ) ) );
 		//connect( c, SIGNAL( layoutModeChanged( AbstractChild::LayoutMode ) ), statusBar(), SLOT( setLayoutMode( AbstractChild::LayoutMode ) ) );
 		//connect( c, SIGNAL( currentFileChanged( const QString& ) ), statusBar(), SLOT( setFileName( const QString& ) ) );
+		
+		// add to workspace
+		addDocument( c, QString() );
 	}
-	
-	// add child to workspace if needed
-	if ( !children().contains( c ) )
-		MonkeyCore::workspace()->addDocument( c, QString() );
-		//MonkeyCore::workspace()->addDocument( c, c->currentFileName() );
-	
+
 	// open file
 	c->openFile( s );
-	
-	// set modification state because file is open before put in worksapce so workspace can't know it
-	c->setWindowModified( c->isModified() );
-	
+
 	// set correct document if needed ( sdi hack )
 	if ( currentDocument() != c )
 	{
@@ -179,6 +181,12 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 		c->showFile( s );
 	}
 	
+	// temporary hack
+	internal_currentChanged( indexOf( c ) );
+
+	// emit file open
+    emit fileOpened( s );
+
 	// return child instance
 	return c;
 }
@@ -230,7 +238,7 @@ void pWorkspace::internal_currentChanged( int i )
 	bool redo = hasChild ? c->isRedoAvailable() : false;
 	bool copy = hasChild ? c->isCopyAvailable() : false;
 	bool paste = hasChild ? c->isPasteAvailable() : false;
-	bool search = hasChild ? c->isSearchReplaceAvailable() : false;
+	bool search = hasChild;
 	bool go = hasChild ? c->isGoToAvailable() : false;
 	bool moreThanOneChild = count() > 1;
 
@@ -249,9 +257,9 @@ void pWorkspace::internal_currentChanged( int i )
 	MonkeyCore::menuBar()->action( "mEdit/aCut" )->setEnabled( copy );
 	MonkeyCore::menuBar()->action( "mEdit/aCopy" )->setEnabled( copy );
 	MonkeyCore::menuBar()->action( "mEdit/aPaste" )->setEnabled( paste );
-	MonkeyCore::menuBar()->action( "mEdit/aSearchReplace" )->setEnabled( search );
-	MonkeyCore::menuBar()->action( "mEdit/aSearchPrevious" )->setEnabled( search );
-	MonkeyCore::menuBar()->action( "mEdit/aSearchNext" )->setEnabled( search );
+	foreach ( QAction* a, MonkeyCore::menuBar()->menu( "mEdit/mSearchReplace" )->actions() )
+		a->setEnabled( search );
+	MonkeyCore::searchWidget()->setEnabled( search );
 	MonkeyCore::menuBar()->action( "mEdit/aGoTo" )->setEnabled( go );
 	MonkeyCore::menuBar()->action( "mEdit/aExpandAbbreviation" )->setEnabled( hasChild );
 
@@ -267,7 +275,7 @@ void pWorkspace::internal_currentChanged( int i )
 	//MonkeyCore::menuBar()->setFileName( c ? c->currentFile() : QString::null );
 
 	// search dock
-	MonkeyCore::searchDock()->setEditor( hasChild ? c->currentEditor() : 0 );
+	//MonkeyCore::searchDock()->setEditor( hasChild ? c->currentEditor() : 0 );
 	
 	// update item tooltip
 	if ( hasChild )
@@ -489,27 +497,6 @@ void pWorkspace::editPaste_triggered()
 	pAbstractChild* c = currentChild();
 	if ( c )
 		c->paste();
-}
-
-void pWorkspace::editSearchReplace_triggered()
-{
-	pAbstractChild* c = currentChild();
-	if ( c )
-		c->searchReplace();
-}
-
-void pWorkspace::editSearchPrevious_triggered()
-{
-	pAbstractChild* c = currentChild();
-	if ( c )
-		c->searchPrevious();
-}
-
-void pWorkspace::editSearchNext_triggered()
-{
-	pAbstractChild* c = currentChild();
-	if ( c )
-		c->searchNext();
 }
 
 void pWorkspace::editGoTo_triggered()
