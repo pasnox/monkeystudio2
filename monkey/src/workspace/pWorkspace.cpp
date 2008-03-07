@@ -257,9 +257,9 @@ void pWorkspace::internal_currentChanged( int i )
 	MonkeyCore::menuBar()->action( "mEdit/aCut" )->setEnabled( copy );
 	MonkeyCore::menuBar()->action( "mEdit/aCopy" )->setEnabled( copy );
 	MonkeyCore::menuBar()->action( "mEdit/aPaste" )->setEnabled( paste );
-	MonkeyCore::menuBar()->action( "mEdit/aSearchReplace" )->setEnabled( search );
-	MonkeyCore::menuBar()->action( "mEdit/aSearchPrevious" )->setEnabled( search );
-	MonkeyCore::menuBar()->action( "mEdit/aSearchNext" )->setEnabled( search );
+	foreach ( QAction* a, MonkeyCore::menuBar()->menu( "mEdit/mSearchReplace" )->actions() )
+		a->setEnabled( search );
+	MonkeyCore::searchWidget()->setEnabled( search );
 	MonkeyCore::menuBar()->action( "mEdit/aGoTo" )->setEnabled( go );
 	MonkeyCore::menuBar()->action( "mEdit/aExpandAbbreviation" )->setEnabled( hasChild );
 
