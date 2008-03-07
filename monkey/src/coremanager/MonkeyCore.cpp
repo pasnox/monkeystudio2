@@ -194,7 +194,7 @@ pConsoleManager* MonkeyCore::consoleManager()
 	return qobject_cast<pConsoleManager*>( mInstances[&pConsoleManager::staticMetaObject] );
 }
 
-pSearch* MonkeyCore::searchDock()
+pSearch* MonkeyCore::searchWidget()
 {
 	if ( !mInstances.contains( &pSearch::staticMetaObject ) )
 		mInstances[&pSearch::staticMetaObject] = new pSearch();

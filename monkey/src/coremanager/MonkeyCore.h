@@ -64,7 +64,7 @@ public:
 	static pFileManager* fileManager();
 	static pWorkspace* workspace();
 	static pConsoleManager* consoleManager();
-	static pSearch* searchDock();
+	static pSearch* searchWidget();
 	static QStatusBar* statusBar();
 // variablemaanger
 // templates manager
