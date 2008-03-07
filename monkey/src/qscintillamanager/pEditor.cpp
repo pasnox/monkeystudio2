@@ -27,7 +27,6 @@
 **
 ****************************************************************************/
 #include "pEditor.h"
-#include "pSearch.h"
 #include "pMonkeyStudio.h"
 #include "qSciShortcutsManager.h"
 #include "MonkeyCore.h"
@@ -93,9 +92,6 @@ pEditor::pEditor( QWidget* p )
 
 	// Create shortcuts manager, if not created
     qSciShortcutsManager::instance();
-	
-	// Create searcher, if not created
-	MonkeyCore::searchDock();
 }
 
 pEditor::~pEditor()
