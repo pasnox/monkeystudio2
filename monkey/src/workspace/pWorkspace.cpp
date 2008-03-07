@@ -52,8 +52,6 @@
 #include <QToolButton>
 #include <QCloseEvent>
 #include <QMainWindow>
-#include <QVBoxLayout>
-#include <QDebug>
 
 using namespace pMonkeyStudio;
 
@@ -63,8 +61,11 @@ pWorkspace::pWorkspace( QMainWindow* p )
 	Q_ASSERT( p );
 	// add dock to main window
 	p->addDockWidget( Qt::LeftDockWidgetArea, listWidget() );
-	
-	mLayoutForSearcher = NULL;
+
+	// add search widget to workspace layout
+	pSearch* ps = MonkeyCore::searchWidget();
+	ps->setVisible( false );
+	mLayout->addWidget( ps );
 	
 	// set background
 	//setBackground( ":/application/icons/application/background.png" );
@@ -84,6 +85,7 @@ pWorkspace::pWorkspace( QMainWindow* p )
 	*/
 	connect( listWidget(), SIGNAL( urlsDropped( const QList<QUrl>& ) ), this, SLOT( internal_urlsDropped( const QList<QUrl>& ) ) );
 	connect( listWidget(), SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( internal_listWidget_customContextMenuRequested( const QPoint& ) ) );
+	connect( ps, SIGNAL( clearSearchResults() ), this, SIGNAL( clearSearchResults() ) );
 }
 
 void pWorkspace::loadSettings()
@@ -223,7 +225,6 @@ void pWorkspace::goToLine( const QString& s, const QPoint& p, bool b )
 			}
 		}
 	}
-	qWarning () << "File not finded "<< s;
 }
 
 void pWorkspace::internal_currentFileChanged( const QString& )
@@ -560,14 +561,4 @@ void pWorkspace::closeDocument( QWidget* document )
 	if ( UISaveFiles::saveDocument( window(), qobject_cast<pAbstractChild*>( document ), false ) == UISaveFiles::bCancelClose )
 		return;
 	pExtendedWorkspace::closeDocument( document );
-}
-
-QVBoxLayout* pWorkspace::layoutForSearcher ()
-{
-	if (!mLayoutForSearcher)
-	{
-		mLayoutForSearcher = new QVBoxLayout (this);
-		mLayout->addLayout (mLayoutForSearcher);
-	}
-	return mLayoutForSearcher;
 }

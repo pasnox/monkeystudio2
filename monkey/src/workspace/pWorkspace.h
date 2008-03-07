@@ -35,7 +35,6 @@
 
 class pAbstractChild;
 class QMainWindow;
-class QVBoxLayout;
 
 class Q_MONKEY_EXPORT pWorkspace : public pExtendedWorkspace
 {
@@ -58,12 +57,8 @@ public:
 	void closeCurrentDocument();
 	bool closeAllDocuments();
 
-	// layout, that can be used for placing search-replace dialog
-	QVBoxLayout* layoutForSearcher();
-
 protected:
 	virtual void closeDocument( QWidget* document );
-	QVBoxLayout* mLayoutForSearcher;
 
 private:
 	pWorkspace( QMainWindow* = 0 );
