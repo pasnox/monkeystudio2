@@ -173,9 +173,6 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 
 	// open file
 	c->openFile( s );
-	
-	// set modification state because file is open before put in worksapce so workspace can't know it
-	c->setWindowModified( c->isModified() );
 
 	// set correct document if needed ( sdi hack )
 	if ( currentDocument() != c )
