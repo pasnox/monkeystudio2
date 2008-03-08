@@ -31,6 +31,7 @@
         <file alias="file.png" >icons/items/file.png</file>
         <file alias="folder.png" >icons/items/folder.png</file>
         <file alias="function.png" >icons/items/function.png</file>
+        <file alias="other_files.png" >icons/items/other_files.png</file>
         <file alias="project.png" >icons/items/project.png</file>
         <file alias="scope.png" >icons/items/scope.png</file>
         <file alias="value.png" >icons/items/value.png</file>
