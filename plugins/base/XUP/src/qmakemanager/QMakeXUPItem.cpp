@@ -29,6 +29,7 @@ void QMakeXUPItem::registerItem()
 	mQMakeXUPItemInfos.Operators = XUPItem::operators();
 	// filtered variables
 	mQMakeXUPItemInfos.FilteredVariables
+		<< "SUBDIRS"
 		<< "FORMS"
 		<< "FORMS3"
 		<< "HEADERS"
@@ -93,7 +94,7 @@ void QMakeXUPItem::registerItem()
 	mQMakeXUPItemInfos.VariableIcons[ "RC_FILE" ] = getIcon( value( "icon" ), "rc_file" );
 	mQMakeXUPItemInfos.VariableIcons[ "RES_FILE" ] = getIcon( value( "icon" ), "res_file" );
 	mQMakeXUPItemInfos.VariableIcons[ "DEF_FILE" ] = getIcon( value( "icon" ), "def_file" );
-	mQMakeXUPItemInfos.VariableIcons[ "SUBDIRS" ] = getIcon( value( "icon" ), "project" );
+	//mQMakeXUPItemInfos.VariableIcons[ "SUBDIRS" ] = getIcon( value( "icon" ), "project" );
 	mQMakeXUPItemInfos.VariableIcons[ "INCLUDEPATH" ] = getIcon( value( "icon" ), "includepath" );
 	mQMakeXUPItemInfos.VariableIcons[ "DEPENDPATH" ] = getIcon( value( "icon" ), "dependpath" );
 	mQMakeXUPItemInfos.VariableIcons[ "VPATH" ] = getIcon( value( "icon" ), "vpath" );
@@ -245,10 +246,12 @@ QString QMakeXUPItem::interpretedVariable( const QString& s, const XUPItem* it, 
 	else
 	{
 		QString v;
-		if ( XUPItem* pi = topLevelProject() )
+		if ( XUPItem* pi = topProjectForInclude() )
 		{
 			foreach ( XUPItem* cit, pi->children( true, false ) )
 			{
+				if ( cit->topProjectForInclude() != pi )
+					continue;
 				if ( it && cit == it )
 					return v;
 				if ( cit->isType( "variable" ) && cit->defaultValue() == dv )
@@ -434,7 +437,7 @@ void QMakeXUPItem::addFiles( const QStringList& files, XUPItem* scope, const QSt
 		XUPItem* vit = 0;
 		foreach ( XUPItem* cit, scope->children( false, true ) )
 		{
-			if ( cit->isType( "variable" ) && cit->defaultValue() == vn && cit->value( "operator" ) == op )
+			if ( cit->isType( "variable" ) && cit->defaultValue() == vn && cit->value( "operator", "=" ) == op )
 			{
 				vit = cit;
 				break;
