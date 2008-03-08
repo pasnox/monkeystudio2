@@ -60,6 +60,7 @@ protected:
 protected slots:
 	void on_pbAddProjectFiles_clicked();
 	void on_pbRemoveProjectFile_clicked();
+	void on_pbModifyProjectFile_clicked();
 };
 
 #endif // UIXUPPROJECTEDITOR_H
