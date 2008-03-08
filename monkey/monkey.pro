@@ -30,7 +30,7 @@ unix:ICON	= src/resources/icons/application/monkey2.png
 mac:ICON	= src/resources/icons/application/monkey2.icns
 win32:ICON	= src/resources/icons/application/monkey2.ico
 
-COPYRIGHTS	= "(c) 2005 - 2007 Azevedo Filipe"
+COPYRIGHTS	= "(c) 2005 - 2008 Azevedo Filipe"
 DOMAIN	= "www.monkeystudio.org"
 VERSION	= 1.8.2.0
 NAME	= "Monkey Studio"
