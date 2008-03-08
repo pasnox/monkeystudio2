@@ -159,8 +159,8 @@ public:
 	virtual bool isType( const QString& ) const;
 	// return the project item of this item
 	virtual XUPItem* project() const;
-	// return the top level project
-	virtual XUPItem* topLevelProject() const;
+	// return the most approppriate parent project for includes projects
+	virtual XUPItem* topProjectForInclude() const;
 	
 protected:
 	static XUPItemInfos mXUPItemInfos;

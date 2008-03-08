@@ -409,7 +409,7 @@ void XUPItem::addFiles( const QStringList& files, XUPItem* scope, const QString&
 	XUPItem* vit = 0;
 	foreach ( XUPItem* cit, scope->children( false, true ) )
 	{
-		if ( cit->isType( "variable" ) && cit->defaultValue() == "FILES" && cit->value( "operator" ) == op )
+		if ( cit->isType( "variable" ) && cit->defaultValue() == "FILES" && cit->value( "operator", "=" ) == op )
 		{
 			vit = cit;
 			break;
@@ -541,11 +541,14 @@ XUPItem* XUPItem::project() const
 	return 0;
 }
 
-XUPItem* XUPItem::topLevelProject() const
+XUPItem* XUPItem::topProjectForInclude() const
 {
-	XUPItem* it = project();
-	while ( it && it->parent() && ( it == it->project() ) )
-		if ( it->isProject() )
-			return const_cast<XUPItem*>( it );
-	return const_cast<XUPItem*>( it );
+	if ( XUPItem* it = project() )
+	{
+		if ( XUPItem* pit = it->parent() )
+			if ( pit->isType( "function" ) && pit->defaultValue().startsWith( "include" ) )
+				return pit->topProjectForInclude();
+		return it;
+	}
+	return 0;
 }
