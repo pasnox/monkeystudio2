@@ -351,7 +351,7 @@ void pSearch::show ()
     QWidget::show ();
 }
 
-bool pSearch::search (bool next)
+bool pSearch::search (bool next, bool wrap)
 {
 	QString text = cobSearch->currentText ();
 	
@@ -385,7 +385,7 @@ bool pSearch::search (bool next)
     }
 
     // search
-    bool b = editor->findFirst( text, cbRegExp->isChecked(), cbCaseSensitive->isChecked(), false, true, next, y, x);
+    bool b = editor->findFirst( text, cbRegExp->isChecked(), cbCaseSensitive->isChecked(), false, wrap, next, y, x);
 
     // change background acording to found or not
     QPalette p = cobSearch->palette();
@@ -460,29 +460,33 @@ int pSearch::replace(bool all)
     pEditor* editor = child->editor ();
 
 
-    int x, y, temp;
-    editor->getSelection(&y, &x, &temp, &temp);
-    editor->setCursorPosition(y, x);
-    
     int count;
-    if (on_tbNext_clicked())
-    {
-        editor->replace (rtext);
-        count = 1;
-    }
-    
-    if (all)
-    {
-        while (on_tbNext_clicked())
+	if (all)
+	{
+	    int x, y;
+		editor->getCursorPosition(&y, &x);
+
+		editor->setCursorPosition(0, 0);
+        while (search(true, false)) //search next, wrap switched off
         {
             editor->replace(rtext);
             count++;
         };
-    }
-    else
-    {
-        editor->findNext(); //move selection to next item
-    }
+		editor->setCursorPosition(y, x); //restore cursor position
+	}
+	else
+	{ 		//do replace one time
+		 int x, y, temp;
+		editor->getSelection(&y, &x, &temp, &temp);
+		editor->setCursorPosition(y, x);
+
+		if (on_tbNext_clicked())
+			{
+				editor->replace (rtext);
+				count = 1;
+				editor->findNext(); //move selection to next item
+			}
+	}
     
     return count;
 }
@@ -490,7 +494,6 @@ int pSearch::replace(bool all)
 void pSearch::on_tbReplace_clicked()
 {
     replace (false);
-    
 }
 //
 void pSearch::on_tbReplaceAll_clicked()
