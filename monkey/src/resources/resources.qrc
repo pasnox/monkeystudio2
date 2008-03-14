@@ -33,6 +33,7 @@
         <file>icons/edit/search.png</file>
         <file>icons/edit/settings.png</file>
         <file>icons/edit/shortcuts.png</file>
+        <file>icons/edit/text.png</file>
         <file>icons/edit/translations.png</file>
         <file>icons/edit/undo.png</file>
     </qresource>

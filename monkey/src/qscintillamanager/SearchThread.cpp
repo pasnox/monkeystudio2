@@ -100,12 +100,6 @@ void SearchThread::run()
                     ifContains = line.contains(QRegExp(text));
                 else
                 {
-                    if (!isWhole)
-                    {
-                        Qt::CaseSensitivity cs = isMatch ? Qt::CaseSensitive : Qt::CaseInsensitive;
-                        ifContains = line.contains(text, cs);
-                    }
-                    else
                         ifContains = line.contains(QRegExp("\\b"+text+"\\b"));
                 }
                 if (ifContains) 

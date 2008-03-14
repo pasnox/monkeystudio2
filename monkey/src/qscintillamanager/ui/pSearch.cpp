@@ -43,6 +43,7 @@
 #include <QKeyEvent>
 #include <QDir>
 #include <QStatusBar>
+#include <QFileDialog>
 
 #include <QGridLayout>
 #include <QToolButton>
@@ -93,9 +94,11 @@ pSearch::pSearch( QWidget* parent )
 	//replace
 	lReplaceText = new QLabel (tr("R&eplace:"));
 	lReplaceText->setAlignment (Qt::AlignVCenter | Qt::AlignRight);
+	
 	cobReplace = new QComboBox ();
 	cobReplace->setEditable (true);
 	cobReplace->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
+	lReplaceText->setBuddy (cobReplace);
 	
 	tbReplace = new QPushButton ();
 	tbReplace->setText (tr("&Replace"));
@@ -113,18 +116,20 @@ pSearch::pSearch( QWidget* parent )
 	lPath = new QLabel  (tr("&Path:"));
 	lPath->setAlignment (Qt::AlignVCenter | Qt::AlignRight);
 	
-	lePath = new QLineEdit ();
-	lePath->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
-	lPath->setBuddy (lPath);
+	cobPath = new QComboBox();
+	cobPath->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
+	cobPath->setEditable (true);
+	lPath->setBuddy (cobPath);
 	
 	tbPath = new QToolButton ();
 	tbPath->setText ("...");
 	lMask = new QLabel  (tr("&Mask:"));
 	lMask->setAlignment (Qt::AlignVCenter | Qt::AlignRight);
 	
-	leMask = new QLineEdit ();
-	leMask->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
-	lMask->setBuddy (leMask);
+	cobMask = new QComboBox ();
+	cobMask->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
+	cobMask->setEditable (true);
+	lMask->setBuddy (cobMask);
 	
 	connect (tbNext, SIGNAL (clicked()), this, SLOT (on_tbNext_clicked ()));
 	connect (tbPrevious, SIGNAL (clicked()), this, SLOT (on_tbPrevious_clicked ()));
@@ -138,12 +143,17 @@ pSearch::pSearch( QWidget* parent )
     //connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceProject" ), SIGNAL( triggered() ), SLOT( showReplaceProject() ) );
     connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFolder" ), SIGNAL( triggered() ), SLOT( showSearchFolder() ) );
     connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFolder" ), SIGNAL( triggered() ), SLOT( showReplaceFolder() ) );
+    connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchNext" ), SIGNAL( triggered() ), SLOT( on_tbNext_clicked() ) );
+    
+	connect( tbPath, SIGNAL( clicked() ), this, SLOT( on_tbPath_clicked() ) );
     
 	mSearchThread = NULL;
 	
 	setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Maximum);
     
 	addSearchToLayout (0);
+	mOperType = SEARCH;
+	mWhereType = FILE;
 }
 
 void pSearch::addSearchToLayout (int row)
@@ -172,16 +182,16 @@ void pSearch::addReplaceToLayout (int row)
 void pSearch::addFolderToLayout (int row)
 {
 	layout->addWidget (lPath, row, 0, 1, 1);
-	layout->addWidget (lePath, row, 1, 1, 1);
+	layout->addWidget (cobPath, row, 1, 1, 1);
 	layout->addWidget (tbPath, row, 2, 1, 1);
 	layout->addWidget (lMask, row, 3, 1, 1);
-	layout->addWidget (leMask, row, 4, 1, 3);
+	layout->addWidget (cobMask, row, 4, 1, 3);
 	
 	lPath->show ();
-	lePath->show ();
+	cobPath->show ();
 	tbPath->show ();
 	lMask->show ();
-	leMask->show ();
+	cobMask->show ();
 }
 
 void pSearch::removeSearchFromLayout ()
@@ -210,16 +220,16 @@ void pSearch::removeReplaceFromLayout ()
 void pSearch::removeFolderFromLayout ()
 {
 	layout->removeWidget (lPath);
-	layout->removeWidget (lePath);
+	layout->removeWidget (cobPath);
 	layout->removeWidget (tbPath);
 	layout->removeWidget (lMask);
-	layout->removeWidget (leMask);
+	layout->removeWidget (cobMask);
 	
 	lPath->hide ();
-	lePath->hide ();
+	cobPath->hide ();
 	tbPath->hide ();
 	lMask->hide ();
-	leMask->hide ();
+	cobMask->hide ();
 }
 
 bool pSearch::isProjectAvailible ()
@@ -236,6 +246,7 @@ void pSearch::keyPressEvent( QKeyEvent* e )
     {
         case Qt::Key_Escape:
             hide();
+			MonkeyCore::workspace()->focusToEditor_triggered ();
         break;
         case Qt::Key_Enter:
         case Qt::Key_Return:
@@ -334,8 +345,8 @@ void pSearch::show ()
 	}
 	
     setTabOrder (cobSearch, cobReplace); // Need to restore tab order after show/hide widgets
-    setTabOrder (cobReplace, lePath);
-    setTabOrder (lePath, leMask);
+    setTabOrder (cobReplace, cobPath);
+    setTabOrder (cobPath, cobMask);
     
     QWidget::show ();
 }
@@ -407,10 +418,12 @@ bool pSearch::on_tbNext_clicked()
             else
             { // need to start searching
                 emit clearSearchResults ();
+				pathAddToRecents (cobPath->currentText());
+				maskAddToRecents (cobMask->currentText());
                 mOccurencesFinded = 0;
                 mFilesProcessed = 0;
                 fileProcessed (0);
-                QString path = lePath->text();
+                QString path = cobPath->currentText();
                 QString text = cobSearch->currentText();
                 //bool whole = cbWholeWords->isChecked ();
                 bool match = cbCaseSensitive->isChecked();
@@ -498,6 +511,13 @@ void pSearch::on_tbReplaceAll_clicked()
     showMessage( count ? tr( "%1 occurences replaced" ).arg( count ) : tr( "Nothing To Repalce" ) );
 }
 
+void pSearch::on_tbPath_clicked ()
+{
+	QString text = QFileDialog::getExistingDirectory ( this, tr("Search path"), cobSearch->currentText(), 0);
+	if (!text.isNull())
+		cobPath->lineEdit ()->setText (text);
+}
+
 void pSearch::threadFinished ()
 {
     tbNext->setText (tr("Search"));
@@ -530,6 +550,9 @@ void pSearch::searchAddToRecents (QString text)
 {
 	if (searchRecents.isEmpty() || searchRecents[0] != text)
 	{
+		int i;
+		while ((i = searchRecents.indexOf(text)) != -1)
+			searchRecents.removeAt (i);
 		searchRecents.prepend (text);
 		if (searchRecents.size() > 10)
 		{
@@ -544,6 +567,9 @@ void pSearch::replaceAddToRecents (QString text)
 {
 	if (replaceRecents.isEmpty() || replaceRecents[0] != text)
 	{
+		int i;
+		while ((i = replaceRecents.indexOf(text)) != -1)
+			replaceRecents.removeAt (i);
 		replaceRecents.prepend (text);
 		if (replaceRecents.size() > 10)
 		{
@@ -553,3 +579,38 @@ void pSearch::replaceAddToRecents (QString text)
 		cobReplace->addItems (replaceRecents);
 	}
 }
+
+void pSearch::pathAddToRecents (QString text)
+{
+	if (pathRecents.isEmpty() || pathRecents[0] != text)
+	{
+		int i;
+		while ((i = pathRecents.indexOf(text)) != -1)
+			pathRecents.removeAt (i);
+		pathRecents.prepend (text);
+		if (pathRecents.size() > 10)
+		{
+			pathRecents.removeLast ();
+		}
+		cobPath->clear();
+		cobPath->addItems (pathRecents);
+	}
+}
+
+void pSearch::maskAddToRecents (QString text)
+{
+	if (maskRecents.isEmpty() || maskRecents[0] != text)
+	{
+		int i;
+		while ((i = maskRecents.indexOf(text)) != -1)
+			maskRecents.removeAt (i);
+		maskRecents.prepend (text);
+		if (maskRecents.size() > 10)
+		{
+			maskRecents.removeLast ();
+		}
+		cobMask->clear();
+		cobMask->addItems (maskRecents);
+	}
+}
+

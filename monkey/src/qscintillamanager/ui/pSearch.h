@@ -96,6 +96,8 @@ protected slots:
 	// Parameter - total count of files
 	void fileProcessed (int);
 
+	void on_tbPath_clicked ();
+
 protected:
 
 	QGridLayout* layout;
@@ -117,10 +119,10 @@ protected:
 
 	//folder
 	QLabel* lPath;
-	QLineEdit* lePath;
+	QComboBox* cobPath;
 	QToolButton* tbPath;
 	QLabel* lMask;
-	QLineEdit* leMask;
+	QComboBox* cobMask;
 
 	void addSearchToLayout (int row);
 	void addReplaceToLayout (int row);
@@ -152,11 +154,13 @@ protected:
 	
 	QStringList searchRecents;
 	QStringList replaceRecents;
-/*	QStringList maskRecents;
-	QStringList pathRecents;*/
+	QStringList maskRecents;
+	QStringList pathRecents;
 	
 	void searchAddToRecents (QString);
 	void replaceAddToRecents (QString);
+	void pathAddToRecents (QString);
+	void maskAddToRecents (QString);
 
 signals:
 	void clearSearchResults ();
