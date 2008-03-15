@@ -495,7 +495,7 @@ QString XUPItem::projectFilePath() const
 }
 
 QString XUPItem::projectPath() const
-{ return QFileInfo( projectFilePath() ).canonicalPath(); }
+{ return QFileInfo( projectFilePath() ).absolutePath(); }
 
 QString XUPItem::filePath( const QString& s )
 {
@@ -508,7 +508,7 @@ QString XUPItem::filePath( const QString& s )
 			QFileInfo fi( div );
 			if ( fi.isRelative() )
 				fi.setFile( projectPath().append( "/%1" ).arg( div ) );
-			return fi.exists() ? fi.canonicalFilePath() : fi.absoluteFilePath();
+			return fi.absoluteFilePath();
 		}
 	}
 	else if ( !s.isEmpty() )
@@ -516,7 +516,7 @@ QString XUPItem::filePath( const QString& s )
 		QFileInfo fi( s );
 		if ( fi.isRelative() )
 			fi.setFile( projectPath().append( "/%1" ).arg( s ) );
-		return fi.exists() ? fi.canonicalFilePath() : fi.absoluteFilePath();
+		return fi.absoluteFilePath();
 	}
 	return s;
 }

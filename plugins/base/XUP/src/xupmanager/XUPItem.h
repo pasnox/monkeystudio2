@@ -165,7 +165,6 @@ public:
 protected:
 	static XUPItemInfos mXUPItemInfos;
 
-	//XUPItem* mBuddy;
 	QDomDocument mDocument;
 	QDomElement mDomElement;
 	QString mProjectFilePath;
