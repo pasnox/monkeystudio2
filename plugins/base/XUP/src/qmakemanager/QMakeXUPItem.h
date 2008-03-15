@@ -32,6 +32,7 @@ public:
 	virtual QIcon getIcon( const QString&, const QString& ) const;
 	
 	virtual QMakeXUPItem* clone( bool = true ) const;
+	virtual void remove();
 	virtual QString interpretedVariable( const QString&, const XUPItem* = 0, const QString& = QString() ) const;
 	virtual QString defaultInterpretedValue() const;
 	virtual void checkChildrenProjects();

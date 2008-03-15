@@ -8,6 +8,9 @@
 #include <QFileInfo>
 #include <QApplication>
 #include <QInputDialog>
+#include <QMessageBox>
+
+#include <QDebug>
 
 XUPItemInfos QMakeXUPItem::mQMakeXUPItemInfos;
 
@@ -226,6 +229,36 @@ QIcon QMakeXUPItem::getIcon( const QString& o, const QString& d ) const
 
 QMakeXUPItem* QMakeXUPItem::clone( bool b ) const
 { return b ? new QMakeXUPItem( domElement(), projectFilePath(), modified() ) : new QMakeXUPItem; }
+
+void QMakeXUPItem::remove()
+{
+	// remove project from tree if needed
+	if ( isType( "value" ) && parent()->defaultValue() == "SUBDIRS" )
+	{
+		// get project file
+		QFileInfo fi( filePath() );
+		if ( fi.isDir() )
+		{
+			const QString fn = fi.fileName().append( ".pro" );
+			fi = QDir( fi.absoluteFilePath() ).entryInfoList( QStringList( fn ), QDir::Files | QDir::Readable, QDir::Name | QDir::IgnoreCase ).value( 0 );
+		}
+	
+		// check direct project to find it
+		foreach ( XUPItem* it, project()->children( false, false ) )
+		{
+			if ( it->isProject() && it->projectFilePath() == fi.absoluteFilePath() )
+			{
+				// close relating project
+				it->closeProject();
+				// normal xup remove
+				XUPItem::remove();
+				return;
+			}
+		}
+	}
+	// normal xup remove item
+	XUPItem::remove();
+}
 
 QString QMakeXUPItem::interpretedVariable( const QString& s, const XUPItem* it, const QString& d ) const
 {
@@ -527,7 +560,7 @@ QString QMakeXUPItem::filePath( const QString& s )
 			const QString pp = projectPath().append( "/%1" );
 			const QString iv = defaultInterpretedValue();
 			if ( QFile::exists( pp.arg( iv ) ) )
-				return QFileInfo( pp.arg( iv ) ).canonicalFilePath();
+				return QFileInfo( pp.arg( iv ) ).absoluteFilePath();
 			
 			// looking in paths of project
 			QString ps = interpretedVariable( "INCLUDEPATH", this );
@@ -537,9 +570,9 @@ QString QMakeXUPItem::filePath( const QString& s )
 			{
 				p.replace( '\\', '/' );
 				if ( ( p.startsWith( '/' ) || p.mid( 1, 2 ) == ":/" ) && QFile::exists( QString( p ).append( "/%1" ).arg( iv ) ) )
-					return QFileInfo( QString( p ).append( "/%1" ).arg( iv ) ).canonicalFilePath();
+					return QFileInfo( QString( p ).append( "/%1" ).arg( iv ) ).absoluteFilePath();
 				else if ( QFile::exists( pp.arg( p ).append( "/%1" ).arg( iv ) ) )
-					return QFileInfo( pp.arg( p ).append( "/%1" ).arg( iv ) ).canonicalFilePath();
+					return QFileInfo( pp.arg( p ).append( "/%1" ).arg( iv ) ).absoluteFilePath();
 			}
 		}
 	}
