@@ -330,6 +330,7 @@ void pSearch::showReplaceFolder ()
 void pSearch::show ()
 {
 	cobSearch->setFocus();
+	cobSearch->lineEdit()->selectAll ();
 	
 	if (mWhereType == FILE)
 	{
