@@ -16,6 +16,13 @@
    <item>
     <layout class="QHBoxLayout" >
      <item>
+      <widget class="QLabel" name="label_3" >
+       <property name="text" >
+        <string>Scope :</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QToolButton" name="tbUndo" >
        <property name="icon" >
         <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/clear.png</iconset>
@@ -37,19 +44,6 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="lScope" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text" >
-        <string>Scope :</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="pTreeComboBox" name="cbScope" >
        <property name="sizePolicy" >
         <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
@@ -60,13 +54,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="lOperator" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
+      <widget class="QLabel" name="label_2" >
        <property name="text" >
         <string>Operator :</string>
        </property>
@@ -85,61 +73,78 @@
     </layout>
    </item>
    <item>
-    <widget class="QComboBox" name="cbPages" >
+    <layout class="QHBoxLayout" >
      <item>
-      <property name="text" >
-       <string>Project Files</string>
-      </property>
-      <property name="icon" >
-       <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/project_files.png</iconset>
-      </property>
+      <widget class="QLabel" name="label" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text" >
+        <string>Property :</string>
+       </property>
+      </widget>
      </item>
      <item>
-      <property name="text" >
-       <string>Others Variables</string>
-      </property>
-      <property name="icon" >
-       <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/others_variables.png</iconset>
-      </property>
+      <widget class="QComboBox" name="cbPages" >
+       <item>
+        <property name="text" >
+         <string>Project Files</string>
+        </property>
+        <property name="icon" >
+         <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/project_files.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>Others Variables</string>
+        </property>
+        <property name="icon" >
+         <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/others_variables.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>Builder</string>
+        </property>
+        <property name="icon" >
+         <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/builder.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>Compiler</string>
+        </property>
+        <property name="icon" >
+         <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/compiler.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>Debugger</string>
+        </property>
+        <property name="icon" >
+         <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/debugger.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>Interpreter</string>
+        </property>
+        <property name="icon" >
+         <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/interpreter.png</iconset>
+        </property>
+       </item>
+      </widget>
      </item>
-     <item>
-      <property name="text" >
-       <string>Builder</string>
-      </property>
-      <property name="icon" >
-       <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/builder.png</iconset>
-      </property>
-     </item>
-     <item>
-      <property name="text" >
-       <string>Compiler</string>
-      </property>
-      <property name="icon" >
-       <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/compiler.png</iconset>
-      </property>
-     </item>
-     <item>
-      <property name="text" >
-       <string>Debugger</string>
-      </property>
-      <property name="icon" >
-       <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/debugger.png</iconset>
-      </property>
-     </item>
-     <item>
-      <property name="text" >
-       <string>Interpreter</string>
-      </property>
-      <property name="icon" >
-       <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/interpreter.png</iconset>
-      </property>
-     </item>
-    </widget>
+    </layout>
    </item>
    <item>
     <widget class="QStackedWidget" name="swPages" >
      <property name="currentIndex" >
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="wProjectFiles" >
       <layout class="QGridLayout" >
@@ -155,7 +160,7 @@
        <property name="bottomMargin" >
         <number>0</number>
        </property>
-       <item rowspan="7" row="0" column="0" >
+       <item rowspan="4" row="0" column="0" >
         <widget class="QTreeView" name="tvProjectFiles" >
          <property name="editTriggers" >
           <set>QAbstractItemView::NoEditTriggers</set>
@@ -193,51 +198,196 @@
         </widget>
        </item>
        <item row="3" column="1" >
-        <widget class="QPushButton" name="pbUpProjectFile" >
-         <property name="text" >
-          <string>Up</string>
-         </property>
-         <property name="icon" >
-          <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/up.png</iconset>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1" >
-        <widget class="QPushButton" name="pbDownProjectFile" >
-         <property name="text" >
-          <string>Down</string>
-         </property>
-         <property name="icon" >
-          <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/down.png</iconset>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1" >
-        <widget class="QPushButton" name="pbSortProjectFiles" >
-         <property name="text" >
-          <string>Sort</string>
-         </property>
-         <property name="icon" >
-          <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/sort.png</iconset>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1" >
         <spacer>
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeHint" >
           <size>
-           <width>20</width>
-           <height>40</height>
+           <width>142</width>
+           <height>241</height>
           </size>
          </property>
         </spacer>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="page" />
+     <widget class="QWidget" name="wOthersVariables" >
+      <layout class="QHBoxLayout" >
+       <property name="leftMargin" >
+        <number>0</number>
+       </property>
+       <property name="topMargin" >
+        <number>0</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QGroupBox" name="gbOthersVariables" >
+         <property name="title" >
+          <string>Variables</string>
+         </property>
+         <layout class="QGridLayout" >
+          <item row="0" column="0" >
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QToolButton" name="tbOthersVariablesAdd" >
+            <property name="text" >
+             <string>Add</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../resources/XUPManager.qrc" >:/actions/add.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2" >
+           <widget class="QToolButton" name="tbOthersVariablesEdit" >
+            <property name="text" >
+             <string>Edit</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/modify.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3" >
+           <widget class="QToolButton" name="tbOthersVariablesRemove" >
+            <property name="text" >
+             <string>Remove</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../resources/XUPManager.qrc" >:/actions/remove.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="4" >
+           <widget class="QListView" name="lvOthersVariables" >
+            <property name="editTriggers" >
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+            <property name="selectionBehavior" >
+             <enum>QAbstractItemView::SelectRows</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="gbOthersValues" >
+         <property name="title" >
+          <string>Values</string>
+         </property>
+         <layout class="QGridLayout" >
+          <item row="0" column="0" >
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QToolButton" name="tbOthersValuesAdd" >
+            <property name="text" >
+             <string>Add</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../resources/XUPManager.qrc" >:/actions/add.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2" >
+           <widget class="QToolButton" name="tbOthersValuesEdit" >
+            <property name="text" >
+             <string>Edit</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/modify.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3" >
+           <widget class="QToolButton" name="tbOthersValuesRemove" >
+            <property name="text" >
+             <string>Remove</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../resources/XUPManager.qrc" >:/actions/remove.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4" >
+           <widget class="QToolButton" name="tbOthersValuesClear" >
+            <property name="text" >
+             <string>Clear</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/clear.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="5" >
+           <widget class="QToolButton" name="tbOthersValuesUp" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="text" >
+             <string>Up</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/up.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="6" >
+           <widget class="QToolButton" name="tbOthersValuesDown" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="text" >
+             <string>Down</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/down.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="7" >
+           <widget class="QListView" name="lvOthersValues" >
+            <property name="editTriggers" >
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+            <property name="selectionBehavior" >
+             <enum>QAbstractItemView::SelectRows</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="page_3" />
      <widget class="QWidget" name="page_4" />
      <widget class="QWidget" name="page_5" />
@@ -260,6 +410,30 @@
    <header>pTreeComboBox.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>cbPages</tabstop>
+  <tabstop>tbAddScope</tabstop>
+  <tabstop>tbRemoveScope</tabstop>
+  <tabstop>cbScope</tabstop>
+  <tabstop>cbOperator</tabstop>
+  <tabstop>tbUndo</tabstop>
+  <tabstop>tvProjectFiles</tabstop>
+  <tabstop>pbAddProjectFiles</tabstop>
+  <tabstop>pbRemoveProjectFile</tabstop>
+  <tabstop>pbModifyProjectFile</tabstop>
+  <tabstop>tbOthersVariablesAdd</tabstop>
+  <tabstop>tbOthersVariablesEdit</tabstop>
+  <tabstop>tbOthersVariablesRemove</tabstop>
+  <tabstop>lvOthersVariables</tabstop>
+  <tabstop>tbOthersValuesAdd</tabstop>
+  <tabstop>tbOthersValuesEdit</tabstop>
+  <tabstop>tbOthersValuesRemove</tabstop>
+  <tabstop>tbOthersValuesClear</tabstop>
+  <tabstop>tbOthersValuesUp</tabstop>
+  <tabstop>tbOthersValuesDown</tabstop>
+  <tabstop>lvOthersValues</tabstop>
+  <tabstop>dbbButtons</tabstop>
+ </tabstops>
  <resources>
   <include location="../../resources/XUPManager.qrc" />
  </resources>
@@ -271,8 +445,8 @@
    <slot>setCurrentIndex(int)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>317</x>
-     <y>39</y>
+     <x>383</x>
+     <y>70</y>
     </hint>
     <hint type="destinationlabel" >
      <x>309</x>

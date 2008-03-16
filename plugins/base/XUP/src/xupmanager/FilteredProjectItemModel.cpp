@@ -4,6 +4,7 @@
 #include "XUPManager.h"
 
 #include <QFileInfo>
+#include <QDebug>
 
 FilteredProjectItemModel::FilteredProjectItemModel( ProjectItemModel* m )
 	: QStandardItemModel( m ), mSourceModel( 0 )
@@ -275,8 +276,9 @@ void FilteredProjectItemModel::rowsAboutToBeRemoved( const QModelIndex& parent, 
 			// check if items are in the hash, and remove them
 			foreach ( XUPItem* cit, it->children( true, false ) )
 				mItems.remove( cit );
-			// remove item from filtered model
-			removeRow( mItems.value( it )->row(), mItems.value( it )->index().parent() );
+			// remove item from filtered model if needed
+			if ( mItems.value( it ) )
+				removeRow( mItems.value( it )->row(), mItems.value( it )->index().parent() );
 			mItems.remove( it );
 		}
 	}

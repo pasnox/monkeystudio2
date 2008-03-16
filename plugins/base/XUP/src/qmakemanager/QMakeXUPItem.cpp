@@ -486,7 +486,7 @@ void QMakeXUPItem::addFiles( const QStringList& files, XUPItem* scope, const QSt
 			vit = clone( false );
 			vit->setDomElement( mDomElement.ownerDocument().createElement( "variable" ) );
 			scope->domElement().appendChild( vit->domElement() );
-			vit->setValue( valueName(), vn );
+			vit->setValue( vit->valueName(), vn );
 			vit->setValue( "operator", op );
 		}
 	

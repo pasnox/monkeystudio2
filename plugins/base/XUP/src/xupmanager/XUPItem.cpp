@@ -425,7 +425,7 @@ void XUPItem::addFiles( const QStringList& files, XUPItem* scope, const QString&
 		vit = clone( false );
 		vit->setDomElement( mDomElement.ownerDocument().createElement( "variable" ) );
 		scope->domElement().appendChild( vit->domElement() );
-		vit->setValue( valueName(), "FILES" );
+		vit->setValue( vit->valueName(), "FILES" );
 		vit->setValue( "operator", op );
 		vit->setValue( "multiline", "true" );
 	}

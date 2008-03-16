@@ -7,6 +7,9 @@
 #include <QDebug>
 
 class XUPItem;
+class ScopedProjectItemModel;
+class FilteredProjectItemModel;
+class ProjectEditorModel;
 
 #include "FilteredProjectItemModel.h"
 class FilesProjectModel : public QSortFilterProxyModel
@@ -56,11 +59,28 @@ public:
 
 protected:
 	XUPItem* mProject;
+	ProjectItemModel* mProjectModel;
+	ScopedProjectItemModel* mScopedModel;
+	FilteredProjectItemModel* mFilteredModel;
+	ProjectEditorModel* mVariablesModel;
+	ProjectEditorModel* mValuesModel;
+
+	XUPItem* currentScope() const;
 
 protected slots:
+	// scope
+	void on_cbScope_currentChanged( const QModelIndex& index );
+	// operator
+	void on_cbOperator_currentIndexChanged( const QString& text );
+	// project files
 	void on_pbAddProjectFiles_clicked();
 	void on_pbRemoveProjectFile_clicked();
 	void on_pbModifyProjectFile_clicked();
+	// others variables
+	void lvOthersVariables_currentChanged( const QModelIndex& current, const QModelIndex& previous );
+	void on_tbOthersVariablesAdd_clicked();
+	void on_tbOthersVariablesEdit_clicked();
+	void on_tbOthersVariablesRemove_clicked();
 };
 
 #endif // UIXUPPROJECTEDITOR_H
