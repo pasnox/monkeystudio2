@@ -43,6 +43,7 @@ UIXUPProjectEditor::UIXUPProjectEditor( XUPItem* project, QWidget* parent )
 	
 	// connections
 	connect( lvOthersVariables->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( lvOthersVariables_currentChanged( const QModelIndex&, const QModelIndex& ) ) );
+	connect( lvOthersValues->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( lvOthersValues_currentChanged( const QModelIndex&, const QModelIndex& ) ) );
 	
 	// update gui
 	cbScope->setRootIndex( mScopedModel->mapFromSource( mProject->index().parent() ) );
@@ -55,6 +56,24 @@ UIXUPProjectEditor::UIXUPProjectEditor( XUPItem* project, QWidget* parent )
 XUPItem* UIXUPProjectEditor::currentScope() const
 {
 	QModelIndex index = mScopedModel->mapToSource( cbScope->currentIndex() );
+	return mProjectModel->itemFromIndex( index );
+}
+
+XUPItem* UIXUPProjectEditor::currentVariable() const
+{
+	QModelIndex index = lvOthersVariables->currentIndex();
+	if ( index.parent() != lvOthersVariables->rootIndex() )
+		index = QModelIndex();
+	index = mVariablesModel->mapToSource( index );
+	return mProjectModel->itemFromIndex( index );
+}
+
+XUPItem* UIXUPProjectEditor::currentValue() const
+{
+	QModelIndex index = lvOthersValues->currentIndex();
+	if ( index.parent() != lvOthersValues->rootIndex() )
+		index = QModelIndex();
+	index = mValuesModel->mapToSource( index );
 	return mProjectModel->itemFromIndex( index );
 }
 
@@ -171,6 +190,8 @@ void UIXUPProjectEditor::lvOthersVariables_currentChanged( const QModelIndex& cu
 {
 	// enable values groupbox according to index validity
 	gbOthersValues->setEnabled( current.isValid() );
+	tbOthersVariablesEdit->setEnabled( current.isValid() );
+	tbOthersVariablesRemove->setEnabled( current.isValid() );
 	// get xup item
 	if ( current.isValid() )
 	{
@@ -187,6 +208,11 @@ void UIXUPProjectEditor::lvOthersVariables_currentChanged( const QModelIndex& cu
 		mValuesModel->setRootItem( mVariablesModel->rootItem() );
 		lvOthersValues->setRootIndex( mValuesModel->mapFromSource( varRootIndex ) );
 	}
+	// set current value
+	lvOthersValues_currentChanged( QModelIndex(), QModelIndex() );
+	if ( XUPItem* vit = currentVariable() )
+		if ( XUPItem* cv = vit->child( 0 ) )
+			lvOthersValues->setCurrentIndex( mValuesModel->mapFromSource( cv->index() ) );
 }
 
 void UIXUPProjectEditor::on_tbOthersVariablesAdd_clicked()
@@ -234,8 +260,7 @@ void UIXUPProjectEditor::on_tbOthersVariablesAdd_clicked()
 
 void UIXUPProjectEditor::on_tbOthersVariablesEdit_clicked()
 {
-	const QModelIndex index = mVariablesModel->mapToSource( lvOthersVariables->currentIndex() );
-	if ( XUPItem* vit = mProjectModel->itemFromIndex( index ) )
+	if ( XUPItem* vit = currentVariable() )
 	{
 		// init dialog
 		UIAddVariable d( window() );
@@ -270,13 +295,8 @@ void UIXUPProjectEditor::on_tbOthersVariablesEdit_clicked()
 
 void UIXUPProjectEditor::on_tbOthersVariablesRemove_clicked()
 {
-	// get variable
-	const QModelIndex index = mVariablesModel->mapToSource( lvOthersVariables->currentIndex() );
-	if ( XUPItem* vit = mProjectModel->itemFromIndex( index ) )
+	if ( XUPItem* vit = currentVariable() )
 	{
-		// don't remvoe project/scope
-		if ( vit == currentScope() )
-			return;
 		// confirm user request
 		if ( QMessageBox::question( window(), tr( "Remove a variable..." ), tr( "A you sure you want to remove this variable and all its content ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes ) == QMessageBox::No )
 			return;
@@ -287,5 +307,107 @@ void UIXUPProjectEditor::on_tbOthersVariablesRemove_clicked()
 		vit->remove();
 		// update view
 		on_cbScope_currentChanged( cbScope->currentIndex() );
+	}
+}
+
+void UIXUPProjectEditor::lvOthersValues_currentChanged( const QModelIndex& current, const QModelIndex& )
+{
+	// enable button according to index validity
+	tbOthersValuesEdit->setEnabled( current.isValid() );
+	tbOthersValuesRemove->setEnabled( current.isValid() );
+}
+
+void UIXUPProjectEditor::on_tbOthersValuesAdd_clicked()
+{
+	if ( XUPItem* cv = currentVariable() )
+	{
+		const QString title = tr( "Add a value..." );
+		bool ok;
+		const QString val = QInputDialog::getText( window(), title, tr( "Enter the value :" ), QLineEdit::Normal, QString(), &ok );
+		if ( ok && !val.isEmpty() )
+		{
+			// check if value already exists
+			foreach ( XUPItem* cit, cv->children( false, false ) )
+			{
+				if ( cit->isType( "value" ) && cit->defaultValue() == val )
+				{
+					if ( QMessageBox::question( window(), title, tr( "A value with the same content already exists, add anyway ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::No )
+					{
+						lvOthersValues->setCurrentIndex( mValuesModel->mapFromSource( cit->index() ) );
+						return;
+					}
+					else
+						break;
+				}
+			}
+			// create item
+			XUPItem* vit = cv->clone( false );
+			vit->setDomElement( cv->domElement().ownerDocument().createElement( "value" ) );
+			cv->domElement().appendChild( vit->domElement() );
+			vit->setValue( vit->valueName(), val );
+			// append it
+			cv->appendRow( vit );
+			// set variable multiline if needed
+			if ( cv->rowCount() > 1 )
+				cv->setValue( "multiline", "true" );
+			// set it current item
+			lvOthersValues->setCurrentIndex( mValuesModel->mapFromSource( cv->index() ) );
+		}
+	}
+}
+
+void UIXUPProjectEditor::on_tbOthersValuesEdit_clicked()
+{
+	if ( XUPItem* cv = currentValue() )
+	{
+		const QString title = tr( "Edit a value..." );
+		bool ok;
+		const QString val = QInputDialog::getText( window(), title, tr( "Edit the value :" ), QLineEdit::Normal, cv->defaultValue(), &ok );
+		if ( ok && !val.isEmpty() )
+		{
+			// check if value already exists
+			foreach ( XUPItem* cit, cv->parent()->children( false, true ) )
+			{
+				if ( cit->isType( "value" ) && cit->defaultValue() == val && cit != cv )
+				{
+					if ( QMessageBox::question( window(), title, tr( "A value with the same content already exists in this variable, proceed anyway ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::No )
+						return;
+					else
+						break;
+				}
+			}
+			// update item
+			cv->setValue( cv->valueName(), val );
+		}
+	}
+}
+
+void UIXUPProjectEditor::on_tbOthersValuesRemove_clicked()
+{
+	if ( XUPItem* vit = currentValue() )
+	{
+		// confirm user request
+		if ( QMessageBox::question( window(), tr( "Remove a value..." ), tr( "A you sure you want to remove this value ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes ) == QMessageBox::No )
+			return;
+		// delete value
+		vit->remove();
+		// update view
+		lvOthersVariables_currentChanged( lvOthersVariables->currentIndex(), QModelIndex() );
+	}
+}
+
+void UIXUPProjectEditor::on_tbOthersValuesClear_clicked()
+{
+	if ( XUPItem* vit = currentVariable() )
+	{
+		// request suer confirm
+		if ( QMessageBox::question( window(), tr( "Clear values..." ), tr( "A you sure you want to clear these values ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes ) == QMessageBox::Yes )
+		{
+			// delete items
+			while ( vit->rowCount() )
+				vit->child( 0 )->remove();
+			// update view
+			lvOthersVariables_currentChanged( lvOthersVariables->currentIndex(), QModelIndex() );
+		}
 	}
 }

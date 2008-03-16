@@ -144,7 +144,7 @@
    <item>
     <widget class="QStackedWidget" name="swPages" >
      <property name="currentIndex" >
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="wProjectFiles" >
       <layout class="QGridLayout" >
@@ -301,8 +301,8 @@
             </property>
             <property name="sizeHint" >
              <size>
-              <width>40</width>
-              <height>20</height>
+              <width>181</width>
+              <height>24</height>
              </size>
             </property>
            </spacer>
@@ -347,33 +347,7 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="5" >
-           <widget class="QToolButton" name="tbOthersValuesUp" >
-            <property name="enabled" >
-             <bool>false</bool>
-            </property>
-            <property name="text" >
-             <string>Up</string>
-            </property>
-            <property name="icon" >
-             <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/up.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="6" >
-           <widget class="QToolButton" name="tbOthersValuesDown" >
-            <property name="enabled" >
-             <bool>false</bool>
-            </property>
-            <property name="text" >
-             <string>Down</string>
-            </property>
-            <property name="icon" >
-             <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/down.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" colspan="7" >
+          <item row="1" column="0" colspan="5" >
            <widget class="QListView" name="lvOthersValues" >
             <property name="editTriggers" >
              <set>QAbstractItemView::NoEditTriggers</set>
@@ -429,8 +403,6 @@
   <tabstop>tbOthersValuesEdit</tabstop>
   <tabstop>tbOthersValuesRemove</tabstop>
   <tabstop>tbOthersValuesClear</tabstop>
-  <tabstop>tbOthersValuesUp</tabstop>
-  <tabstop>tbOthersValuesDown</tabstop>
   <tabstop>lvOthersValues</tabstop>
   <tabstop>dbbButtons</tabstop>
  </tabstops>

@@ -66,6 +66,8 @@ protected:
 	ProjectEditorModel* mValuesModel;
 
 	XUPItem* currentScope() const;
+	XUPItem* currentVariable() const;
+	XUPItem* currentValue() const;
 
 protected slots:
 	// scope
@@ -78,9 +80,17 @@ protected slots:
 	void on_pbModifyProjectFile_clicked();
 	// others variables
 	void lvOthersVariables_currentChanged( const QModelIndex& current, const QModelIndex& previous );
+	// variables
 	void on_tbOthersVariablesAdd_clicked();
 	void on_tbOthersVariablesEdit_clicked();
 	void on_tbOthersVariablesRemove_clicked();
+	// others values
+	void lvOthersValues_currentChanged( const QModelIndex& current, const QModelIndex& previous );
+	// values
+	void on_tbOthersValuesAdd_clicked();
+	void on_tbOthersValuesEdit_clicked();
+	void on_tbOthersValuesRemove_clicked();
+	void on_tbOthersValuesClear_clicked();
 };
 
 #endif // UIXUPPROJECTEDITOR_H
