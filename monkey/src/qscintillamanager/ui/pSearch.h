@@ -137,11 +137,11 @@ protected:
 
 	SearchThread* mSearchThread;
 
-	/* Search text. 
+	/* Search text in the file. 
 	 * Search Next, if next==true;  Search Previous, if next = false
 	 * Continue from start, when end riched, if wrap = true;
      */
-	bool search (bool next, bool wrap = true);
+	bool searchFile (bool next, bool wrap = true);
 
 	int replace (bool all);
 

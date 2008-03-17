@@ -329,8 +329,17 @@ void pSearch::showReplaceFolder ()
 
 void pSearch::show ()
 {
+    pChild* child = dynamic_cast<pChild*> (MonkeyCore::workspace()->currentChild());
+    if (child && child->editor())
+    {
+		pEditor* editor = child->editor ();
+        QString text = editor->selectedText ();
+		if (!text.isNull() && text.indexOf ('\n') == -1)
+			cobSearch->lineEdit()->setText (text);
+    }
+	
 	cobSearch->setFocus();
-	cobSearch->lineEdit()->selectAll ();
+	cobSearch->lineEdit()->selectAll ();    
 	
 	if (mWhereType == FILE)
 	{
@@ -345,21 +354,17 @@ void pSearch::show ()
 		tbPrevious->hide();
 	}
 	
-    setTabOrder (cobSearch, cobReplace); // Need to restore tab order after show/hide widgets
-    setTabOrder (cobReplace, cobPath);
-    setTabOrder (cobPath, cobMask);
-    
     QWidget::show ();
 }
 
-bool pSearch::search (bool next, bool wrap)
+bool pSearch::searchFile (bool next, bool wrap)
 {
 	QString text = cobSearch->currentText ();
 	
 	searchAddToRecents(text);
 	
     pChild* child = dynamic_cast<pChild*> (MonkeyCore::workspace()->currentChild());
-    if (!child && !child->editor())
+    if (!child || !child->editor())
     {
         showMessage(tr( "No active editor" ) );
         return false;
@@ -368,16 +373,7 @@ bool pSearch::search (bool next, bool wrap)
 
     // get cursor position
     int x, y;
-    /*if (cbFromStart->isChecked())
-    {
-        x = 0;
-        y = 0;
-        cbFromStart->setChecked( false );
-    }
-    else
-    {*/
-        editor->getCursorPosition( &y, &x );
-    /*}*/
+    editor->getCursorPosition( &y, &x );
 
     if (!next)
     {
@@ -402,7 +398,7 @@ bool pSearch::search (bool next, bool wrap)
 
 bool pSearch::on_tbPrevious_clicked()
 {
-    return search (false);
+    return searchFile (false);
 }
 
 bool pSearch::on_tbNext_clicked()
@@ -410,7 +406,7 @@ bool pSearch::on_tbNext_clicked()
     switch (mWhereType)
     {
         case FILE:
-            return search (true);
+            return searchFile (true);
         case FOLDER:
             if (mSearchThread && mSearchThread->isRunning ())
             { // need to stop searching
@@ -418,6 +414,11 @@ bool pSearch::on_tbNext_clicked()
             }
             else
             { // need to start searching
+				if (!QDir(cobPath->currentText()).exists())
+				{
+					showMessage (tr("Invalid path"));
+					return false;
+				}
                 emit clearSearchResults ();
 				pathAddToRecents (cobPath->currentText());
 				maskAddToRecents (cobMask->currentText());
@@ -430,7 +431,7 @@ bool pSearch::on_tbNext_clicked()
                 bool match = cbCaseSensitive->isChecked();
                 bool regexp = cbRegExp->isChecked ();
                 mSearchThread = new SearchThread(path, text, true, match, regexp, this);
-                tbNext->setText (tr("Stop"));
+                tbNext->setText (tr("&Stop"));
                 tbNext->setIcon (QIcon(":/console/icons/console/stop.png"));
                 
                 connect (mSearchThread, SIGNAL (appendSearchResult( const pConsoleManager::Step& )), MonkeyCore::workspace(), SIGNAL (appendSearchResult( const pConsoleManager::Step& )));
@@ -468,7 +469,7 @@ int pSearch::replace(bool all)
 		editor->getCursorPosition(&y, &x);
 
 		editor->setCursorPosition(0, 0);
-        while (search(true, false)) //search next, wrap switched off
+        while (searchFile(true, false)) //search next, wrap switched off
         {
             editor->replace(rtext);
             count++;
