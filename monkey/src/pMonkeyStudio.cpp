@@ -118,7 +118,6 @@ void pMonkeyStudio::loadTranslations()
 			QString fn = QString( "%1/monkey_%2" ).arg( path, mLanguage );
 			if ( QFileInfo( fn ).isRelative() )
 				fn.prepend( QString( "%1/" ).arg( QApplication::applicationDirPath() ) );
-			qWarning( "fn: %s", qPrintable( fn ) );
 			if ( t->load( fn ) )
 			{
 				addTranslator( t );

@@ -106,6 +106,8 @@ public slots:
 #ifdef __COVERAGESCANNER__
 	void helpTestReport_triggered();
 #endif
+	// no menu
+	void focusToEditor_triggered ();
 
 signals:
 	// a file has been opened

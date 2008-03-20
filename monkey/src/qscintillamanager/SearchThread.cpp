@@ -5,8 +5,6 @@
 #include <QList>
 #include <QDir>
 
-#include <QDebug>
-
 class DirWalkIterator
 {
 protected:
@@ -65,8 +63,7 @@ SearchThread::SearchThread(const QString &_dir, const QString &_text, bool _isWh
     isWhole = _isWhole;
     isMatch = _isMatch;
     isReg = _isReg;
-    qWarning () << "Created thread with dir " << dir;
-    qWarning () << "Searching " << text;
+	setPriority (QThread::LowestPriority);
 }
 
 SearchThread::~SearchThread()
@@ -75,7 +72,6 @@ SearchThread::~SearchThread()
 
 void SearchThread::run()
 {
-    qWarning () << "Thread started";
 	DirWalkIterator dirWalker (dir);
     int files_count = 0;
     QString fileName = dirWalker.next();
@@ -83,29 +79,21 @@ void SearchThread::run()
     {
         emit changeProgress(++files_count);
         QFile file(fileName);
-        qWarning () << "Processing file " << fileName;
         if (file.open(QIODevice::ReadOnly)) 
         {
             QString line;
             QTextStream in(&file);
             int i = 0;
-            while (!in.atEnd() /*&& !isTermEnabled()*/) 
+            while (!in.atEnd() && !mTerm) 
             {
                 ++i;
                 line = in.readLine();
-                //qWarning () << "Readed line " << line;
                 
                 bool ifContains = false;
                 if (isReg)
                     ifContains = line.contains(QRegExp(text));
                 else
                 {
-                    if (!isWhole)
-                    {
-                        Qt::CaseSensitivity cs = isMatch ? Qt::CaseSensitive : Qt::CaseInsensitive;
-                        ifContains = line.contains(text, cs);
-                    }
-                    else
                         ifContains = line.contains(QRegExp("\\b"+text+"\\b"));
                 }
                 if (ifContains) 
@@ -113,17 +101,17 @@ void SearchThread::run()
                     pConsoleManager::Step step;
                     step.mFileName = file.fileName();
                     step.mPosition = QPoint (0,i);
-                    step.mText = line.simplified();
+                    step.mText = QString("%1[%2]: %3").arg (QFileInfo(file.fileName()).fileName()).arg(i).arg(line.simplified());
+					step.mFullText= file.fileName();
                     emit appendSearchResult (step);
                 }
             }
         }
-        if (isTermEnabled())
+        if (mTerm)
         {
             quit();
             break;
         }
         fileName = dirWalker.next();
     }
-    qWarning () << "Thread finished";
 }

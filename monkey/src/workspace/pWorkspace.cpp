@@ -44,6 +44,8 @@
 #include "PluginsManager.h"
 #include "pFilesListWidget.h"
 #include "MonkeyCore.h"
+#include "pAction.h"
+#include "UIMain.h"
 
 #include "pChild.h"
 #include "pEditor.h"
@@ -86,6 +88,11 @@ pWorkspace::pWorkspace( QMainWindow* p )
 	connect( listWidget(), SIGNAL( urlsDropped( const QList<QUrl>& ) ), this, SLOT( internal_urlsDropped( const QList<QUrl>& ) ) );
 	connect( listWidget(), SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( internal_listWidget_customContextMenuRequested( const QPoint& ) ) );
 	connect( ps, SIGNAL( clearSearchResults() ), this, SIGNAL( clearSearchResults() ) );
+	
+	pAction* mFocusToEditor = new pAction( "aFocusToEditor", QIcon( ":/edit/icons/edit/text.png" ), tr( "Set focus to editor" ),  QString("Ins") , "Workspace" );
+	connect (mFocusToEditor, SIGNAL (triggered()), this, SLOT (focusToEditor_triggered ()));	
+	MonkeyCore::mainWindow()->addAction (mFocusToEditor);
+	mFocusToEditor ->setEnabled (true);
 }
 
 void pWorkspace::loadSettings()
@@ -535,6 +542,12 @@ void pWorkspace::helpAboutQt_triggered()
 void pWorkspace::helpTestReport_triggered()
 { UITestReport::instance( this )->exec(); }
 #endif
+
+void pWorkspace::focusToEditor_triggered ()
+{
+	if (currentChild() && currentChild()->currentEditor())
+		currentChild()->currentEditor()->setFocus();
+}
 
 void pWorkspace::closeCurrentDocument()
 { closeDocument( currentDocument() ); }

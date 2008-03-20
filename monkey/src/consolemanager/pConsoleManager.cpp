@@ -220,7 +220,7 @@ void pConsoleManager::readyRead()
 
 void pConsoleManager::started()
 {
-	// disable stop action
+	// enable stop action
 	mStopAction->setEnabled( true );
 	// emit signal
 	emit commandStarted( currentCommand() );

@@ -146,7 +146,7 @@ void UIMain::initMenuBar()
 		mb->action( "aSeparator5" );
 		mb->action( "aQuit", tr( "&Quit" ), QIcon( ":/file/icons/file/quit.png" ), tr( "Ctrl+Q" ), tr( "Quit the application" ) );
 	mb->endGroup();
-	mb->menu( "mEdit", tr( "&Edit" ) );
+	mb->menu( "mEdit", tr( "Edit" ) );
 	mb->beginGroup( "mEdit" );
 		mb->action( "aSettings", tr( "Settings..." ), QIcon( ":/edit/icons/edit/settings.png" ), "", tr( "Edit the application settings" ) );
 		mb->action( "aShortcutsEditor", tr( "Shortcuts Editor..." ), QIcon( ":/edit/icons/edit/shortcuts.png" ), tr( "Ctrl+Shift+E" ), tr( "Edit the application shortcuts" ) );
