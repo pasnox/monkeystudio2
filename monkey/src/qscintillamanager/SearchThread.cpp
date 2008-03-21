@@ -63,7 +63,6 @@ SearchThread::SearchThread(const QString &_dir, const QString &_text, bool _isWh
     isWhole = _isWhole;
     isMatch = _isMatch;
     isReg = _isReg;
-	setPriority (QThread::LowestPriority);
 }
 
 SearchThread::~SearchThread()
@@ -72,6 +71,7 @@ SearchThread::~SearchThread()
 
 void SearchThread::run()
 {
+	setPriority (QThread::LowestPriority);
 	DirWalkIterator dirWalker (dir);
     int files_count = 0;
     QString fileName = dirWalker.next();
@@ -81,37 +81,51 @@ void SearchThread::run()
         QFile file(fileName);
         if (file.open(QIODevice::ReadOnly)) 
         {
-            QString line;
-            QTextStream in(&file);
-            int i = 0;
-            while (!in.atEnd() && !mTerm) 
-            {
-                ++i;
-                line = in.readLine();
-                
-                bool ifContains = false;
-                if (isReg)
-                    ifContains = line.contains(QRegExp(text));
-                else
-                {
-                        ifContains = line.contains(QRegExp("\\b"+text+"\\b"));
-                }
-                if (ifContains) 
-                {
-                    pConsoleManager::Step step;
-                    step.mFileName = file.fileName();
-                    step.mPosition = QPoint (0,i);
-                    step.mText = QString("%1[%2]: %3").arg (QFileInfo(file.fileName()).fileName()).arg(i).arg(line.simplified());
-					step.mFullText= file.fileName();
-                    emit appendSearchResult (step);
-                }
-            }
-        }
+			if (!isBinary (file)) // Currently we not supporting binary files
+			{
+				file.seek (0);
+				QString line;
+				QTextStream in(&file);
+				int i = 0;
+				while (!in.atEnd() && !mTerm) 
+				{
+					++i;
+					line = in.readLine();
+					
+					bool ifContains = false;
+					if (isReg)
+						ifContains = line.contains(QRegExp(text));
+					else
+					{
+							ifContains = line.contains(QRegExp("\\b"+text+"\\b"));
+					}
+					if (ifContains) 
+					{
+						pConsoleManager::Step step;
+						step.mFileName = file.fileName();
+						step.mPosition = QPoint (0,i);
+						step.mText = QString("%1[%2]: %3").arg (QFileInfo(file.fileName()).fileName()).arg(i).arg(line.simplified());
+						step.mFullText= file.fileName();
+						emit appendSearchResult (step);
+					}
+				}
+			} //if not binary
+        } //if open
         if (mTerm)
         {
             quit();
             break;
         }
         fileName = dirWalker.next();
-    }
+    } //while has file
+}
+
+bool SearchThread::isBinary (QFile& file)
+{
+	char data [1024];
+	int count = file.read (data, 1024);
+	while (count--)
+		if (data[count] == '\0')
+			return true;
+	return false;
 }

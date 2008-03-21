@@ -94,7 +94,7 @@ protected slots:
 	void occurenceFinded ();
 	// slog calling when thread processed file. 
 	// Parameter - total count of files
-	void fileProcessed (int);
+	void fileProcessed (int count);
 
 	void on_tbPath_clicked ();
 

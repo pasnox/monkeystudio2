@@ -6,6 +6,8 @@
 #include <QThread>
 #include <QStringList>
 
+class QFile;
+
 class SearchThread : public QThread
 {
     Q_OBJECT
@@ -22,6 +24,10 @@ private:
     bool isMatch;
     bool isReg;
     bool mTerm;
+
+	// Heuristics: if first 1k of file contains '\0' - file is binary
+	// NOTE: procedure moving current pos in the file
+	bool isBinary (QFile& file);
 signals:
     void appendSearchResult( const pConsoleManager::Step& );
     void changeProgress(int);

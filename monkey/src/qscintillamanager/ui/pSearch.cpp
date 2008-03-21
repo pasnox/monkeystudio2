@@ -529,6 +529,7 @@ void pSearch::threadFinished ()
     tbNext->setIcon (QIcon(":/edit/icons/edit/search.png"));
     delete mSearchThread;
     mSearchThread = NULL;
+	showMessage ("Searching finished");
 }
 
 void pSearch::occurenceFinded ()
