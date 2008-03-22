@@ -16,7 +16,7 @@
    <item>
     <layout class="QHBoxLayout" >
      <item>
-      <widget class="QLabel" name="label_3" >
+      <widget class="QLabel" name="lScope" >
        <property name="text" >
         <string>Scope :</string>
        </property>
@@ -54,7 +54,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_2" >
+      <widget class="QLabel" name="lOperator" >
        <property name="text" >
         <string>Operator :</string>
        </property>
@@ -362,10 +362,178 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="page_3" />
-     <widget class="QWidget" name="page_4" />
-     <widget class="QWidget" name="page_5" />
-     <widget class="QWidget" name="page_2" />
+     <widget class="QWidget" name="wBuilders" >
+      <layout class="QVBoxLayout" >
+       <item>
+        <widget class="QGroupBox" name="gbBuilders" >
+         <property name="title" >
+          <string>Use Custom Builder</string>
+         </property>
+         <property name="checkable" >
+          <bool>true</bool>
+         </property>
+         <property name="checked" >
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" >
+          <item row="0" column="0" >
+           <widget class="QLabel" name="lBuilders" >
+            <property name="text" >
+             <string>Builders Available :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QComboBox" name="cbBuilders" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2" >
+           <widget class="QStackedWidget" name="swBuilders" >
+            <property name="currentIndex" >
+             <number>-1</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="wCompilers" >
+      <layout class="QVBoxLayout" >
+       <item>
+        <widget class="QGroupBox" name="gbCompilers" >
+         <property name="title" >
+          <string>Use Custom Compiler</string>
+         </property>
+         <property name="checkable" >
+          <bool>true</bool>
+         </property>
+         <property name="checked" >
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" >
+          <item row="0" column="0" >
+           <widget class="QLabel" name="lCompilers" >
+            <property name="text" >
+             <string>Compilers Available :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QComboBox" name="cbCompilers" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2" >
+           <widget class="QStackedWidget" name="swCompilers" >
+            <property name="currentIndex" >
+             <number>-1</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="wDebuggers" >
+      <layout class="QVBoxLayout" >
+       <item>
+        <widget class="QGroupBox" name="gbDebuggers" >
+         <property name="title" >
+          <string>Use Custom Debugger</string>
+         </property>
+         <property name="checkable" >
+          <bool>true</bool>
+         </property>
+         <property name="checked" >
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" >
+          <item row="0" column="0" >
+           <widget class="QLabel" name="lDebuggers" >
+            <property name="text" >
+             <string>Debuggers Available :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QComboBox" name="cbDebuggers" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2" >
+           <widget class="QStackedWidget" name="swDebuggers" >
+            <property name="currentIndex" >
+             <number>-1</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="wInterpreters" >
+      <layout class="QVBoxLayout" >
+       <item>
+        <widget class="QGroupBox" name="gbInterpreters" >
+         <property name="title" >
+          <string>Use Custom Interpreter</string>
+         </property>
+         <property name="checkable" >
+          <bool>true</bool>
+         </property>
+         <property name="checked" >
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" >
+          <item row="0" column="0" >
+           <widget class="QLabel" name="lInterpreters" >
+            <property name="text" >
+             <string>Interpreters Available :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QComboBox" name="cbInterpreters" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2" >
+           <widget class="QStackedWidget" name="swInterpreters" >
+            <property name="currentIndex" >
+             <number>-1</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
    <item>
@@ -455,6 +623,22 @@
     <hint type="destinationlabel" >
      <x>404</x>
      <y>534</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbBuilders</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>swBuilders</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>378</x>
+     <y>127</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>378</x>
+     <y>247</y>
     </hint>
    </hints>
   </connection>

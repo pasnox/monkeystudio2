@@ -5,6 +5,9 @@
 #include "ProjectEditorModel.h"
 #include "UIAddVariable.h"
 
+#include "MonkeyCore.h"
+#include "PluginsManager.h"
+
 #include <QDebug>
 
 #include <QFileInfo>
@@ -51,6 +54,70 @@ UIXUPProjectEditor::UIXUPProjectEditor( XUPItem* project, QWidget* parent )
 	tvProjectFiles->setRootIndex( fpm->mapFromSource( fit->index() ) );
 	lvOthersVariables->setRootIndex( mVariablesModel->mapFromSource( project->index() ) );
 	lvOthersVariables->setCurrentIndex( lvOthersVariables->rootIndex().child( 0, 0 ) );
+	
+	// temp variable
+	QString plugin;
+	int id;
+	
+	// builders
+	foreach ( BuilderPlugin* bp, MonkeyCore::pluginsManager()->plugins<BuilderPlugin*>( PluginsManager::stAll ) )
+	{
+		cbBuilders->addItem( bp->infos().Name );
+		swBuilders->addWidget( bp->settingsWidget() );
+	}
+	// choose project builder
+	plugin = mProject->value( "builder" );
+	id = cbBuilders->findText( plugin );
+	if ( id == -1 && cbBuilders->count() )
+		id = 0;
+	cbBuilders->setCurrentIndex( id );
+	swBuilders->setCurrentIndex( id );
+	gbBuilders->setChecked( !plugin.isEmpty() );
+	
+	// compilers
+	foreach ( CompilerPlugin* cp, MonkeyCore::pluginsManager()->plugins<CompilerPlugin*>( PluginsManager::stAll ) )
+	{
+		cbCompilers->addItem( cp->infos().Name );
+		swCompilers->addWidget( cp->settingsWidget() );
+	}
+	// choose project builder
+	plugin = mProject->value( "compiler" );
+	id = cbCompilers->findText( plugin );
+	if ( id == -1 && cbCompilers->count() )
+		id = 0;
+	cbCompilers->setCurrentIndex( id );
+	swCompilers->setCurrentIndex( id );
+	gbCompilers->setChecked( !plugin.isEmpty() );
+	
+	// debuggers
+	foreach ( DebuggerPlugin* dp, MonkeyCore::pluginsManager()->plugins<DebuggerPlugin*>( PluginsManager::stAll ) )
+	{
+		cbDebuggers->addItem( dp->infos().Name );
+		swDebuggers->addWidget( dp->settingsWidget() );
+	}
+	// choose project builder
+	plugin = mProject->value( "debugger" );
+	id = cbDebuggers->findText( plugin );
+	if ( id == -1 && cbDebuggers->count() )
+		id = 0;
+	cbDebuggers->setCurrentIndex( id );
+	swDebuggers->setCurrentIndex( id );
+	gbDebuggers->setChecked( !plugin.isEmpty() );
+	
+	// interpreters
+	foreach ( InterpreterPlugin* ip, MonkeyCore::pluginsManager()->plugins<InterpreterPlugin*>( PluginsManager::stAll ) )
+	{
+		cbInterpreters->addItem( ip->infos().Name );
+		swInterpreters->addWidget( ip->settingsWidget() );
+	}
+	// choose project builder
+	plugin = mProject->value( "interpreter" );
+	id = cbInterpreters->findText( plugin );
+	if ( id == -1 && cbInterpreters->count() )
+		id = 0;
+	cbInterpreters->setCurrentIndex( id );
+	swInterpreters->setCurrentIndex( id );
+	gbInterpreters->setChecked( !plugin.isEmpty() );
 }
 
 XUPItem* UIXUPProjectEditor::currentScope() const
