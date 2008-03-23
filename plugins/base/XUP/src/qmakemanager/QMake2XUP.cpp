@@ -14,6 +14,8 @@ si "nested" n'existe pas, il vaut "false"
 #include <QtGui>
 #include <QtXml>
 
+#include <exception>
+
 QString tabsString( int i )
 { return QString().fill( '\t', i ); }
 
@@ -387,7 +389,7 @@ QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 				qWarning("Variable matched length : %d", Variable.matchedLength());
 				qWarning("Bloc matched length : %d", bloc.matchedLength());
 				qWarning("function call matched length : %d", function_call.matchedLength());
-				throw new Exception("");
+				throw QString( "Erreur parsing project file: %1" ).arg( s );
 			}
 		}
 		while(!isNested.isEmpty() && isNested.top())
@@ -396,13 +398,14 @@ QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 			isNested.pop();
 		}
 	}
-	catch(Exception &e)
+	catch ( const QString& s )
 	{
 		// re-init the XML output
 		file.append( QString( "<!DOCTYPE XUPProject>\n<project version=\"%1\" name=\"%2\" expanded=\"false\">\n" ).arg( version ).arg( QFileInfo( s ).fileName() ) );
 		// empty both stacks
 		isNested.clear();
 		pile.pop();
+		qWarning( qPrintable( s ) );
 	}
 	
 	file.append( "</project>\n" );
