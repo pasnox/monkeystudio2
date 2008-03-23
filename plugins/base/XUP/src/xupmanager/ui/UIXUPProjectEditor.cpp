@@ -4,6 +4,7 @@
 #include "ScopedProjectItemModel.h"
 #include "ProjectEditorModel.h"
 #include "UIAddVariable.h"
+#include "AddFilesDialog.h"
 
 #include "MonkeyCore.h"
 #include "PluginsManager.h"
@@ -15,6 +16,30 @@
 #include <QFileDialog>
 #include <QInputDialog>
 #include <QMessageBox>
+
+void recursiveRemoveItem( XUPItem* it, bool deleteFiles = false )
+{
+	if ( it )
+	{
+		while ( it->rowCount() )
+		{
+			// get item to remove
+			XUPItem* cit = it->child( 0 );
+			// remove its children if needed
+			if ( cit->hasChildren() )
+				recursiveRemoveItem( cit );
+			// if it's a file item remvoe fiel if needed
+			if ( deleteFiles && cit->isType( "value" ) && it->fileVariables().contains( it->defaultValue() ) )
+			{
+				const QString fp = cit->filePath();
+				if ( QFile::exists( fp ) && !QFile::remove( fp ) )
+					QMessageBox::warning( 0, "Warning...", QObject::tr( "Can't delete file: %1" ).arg( fp ) );
+			}
+			// finally remove item
+			cit->remove();
+		}
+	}
+}
 
 UIXUPProjectEditor::UIXUPProjectEditor( XUPItem* project, QWidget* parent )
 	: QDialog( parent )
@@ -38,7 +63,6 @@ UIXUPProjectEditor::UIXUPProjectEditor( XUPItem* project, QWidget* parent )
 	
 	// set models
 	cbScope->setModel( mScopedModel );
-	cbOperator->addItems( mProject->operators() );
 	tvProjectFiles->setModel( fpm );
 	tvProjectFiles->header()->hide();
 	lvOthersVariables->setModel( mVariablesModel );
@@ -144,11 +168,55 @@ XUPItem* UIXUPProjectEditor::currentValue() const
 	return mProjectModel->itemFromIndex( index );
 }
 
+void UIXUPProjectEditor::on_tbAddScope_clicked()
+{
+	bool ok;
+	const QString sn = QInputDialog::getText( window(), tr( "Enter the scope value..." ), tr( "Enter the scope value you want to create :" ), QLineEdit::Normal, QString(), &ok );
+	if ( ok && !sn.isEmpty() )
+	{
+		// get current scope
+		XUPItem* curScope = currentScope();
+		// create item
+		XUPItem* scope = curScope->clone( false );
+		scope->setDomElement( curScope->domElement().ownerDocument().createElement( "scope" ) );
+		curScope->domElement().appendChild( scope->domElement() );
+		scope->setValue( scope->valueName(), sn );
+		scope->setValue( "nested", "true" );
+		// append it
+		curScope->appendRow( scope );
+		// if it's in a scope, set the scope not nested
+		if ( curScope != mProject )
+			curScope->setValue( "nested", "false" );
+		// set it current
+		cbScope->setCurrentIndex( mScopedModel->mapFromSource( scope->index() ) );
+	}
+}
+
+void UIXUPProjectEditor::on_tbRemoveScope_clicked()
+{
+	if ( XUPItem* scope = currentScope() )
+	{
+		// we can't remove proejct itself
+		if ( scope == mProject )
+			return;
+		// request suer confirm
+		if ( QMessageBox::question( window(), tr( "Remove scope..." ), tr( "A you sure you want to remove this scope ?\nAll children items will be removed too." ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::Yes )
+		{
+			// recursively remove items
+			bool b = QMessageBox::question( window(), tr( "Remove files..." ), tr( "Do you want to delete the files that are associated with items ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::Yes;
+			recursiveRemoveItem( scope, b );
+			scope->remove();
+		}
+	}
+}
+
 void UIXUPProjectEditor::on_cbScope_currentChanged( const QModelIndex& idx )
 {
 	const QModelIndex index = mScopedModel->mapToSource( idx );
 	if ( XUPItem* it = mProjectModel->itemFromIndex( index ) )
 	{
+		// enable remove scope according to current scope
+		tbRemoveScope->setEnabled( it != mProject );
 		// set model root item
 		mVariablesModel->setRootItem( it );
 		// set view root index
@@ -167,18 +235,11 @@ void UIXUPProjectEditor::on_cbScope_currentChanged( const QModelIndex& idx )
 	}
 }
 
-void UIXUPProjectEditor::on_cbOperator_currentIndexChanged( const QString& /*text*/ )
-{}
-
 void UIXUPProjectEditor::on_pbAddProjectFiles_clicked()
 {
-	const QStringList l = QFileDialog::getOpenFileNames( window(), tr( "Choose the files to add to your project" ), mProject->projectPath() );
-	if ( !l.isEmpty() )
-	{
-		QModelIndex idx = mProject->model()->scopedModel()->mapToSource( cbScope->currentIndex() );
-		XUPItem* pit = mProject->model()->itemFromIndex( idx );
-		pit->addFiles( l, 0, cbOperator->currentText() );
-	}
+	AddFilesDialog d( mScopedModel, currentScope(), window() );
+	if ( d.exec() == QDialog::Accepted && !d.selectedFiles().isEmpty() )
+		d.currentItem()->addFiles( d.selectedFiles(), d.currentItem(), d.currentOperator() );
 }
 
 void UIXUPProjectEditor::on_pbRemoveProjectFile_clicked()
@@ -284,19 +345,19 @@ void UIXUPProjectEditor::lvOthersVariables_currentChanged( const QModelIndex& cu
 
 void UIXUPProjectEditor::on_tbOthersVariablesAdd_clicked()
 {
-	// init dialog
-	UIAddVariable d( window() );
-	//d.setVariablesName(  );
-	d.setOperators( mProject->operators() );
-	// execute dialog
-	if ( d.exec() == QDialog::Accepted )
+	// if valid scope
+	if ( XUPItem* scope = currentScope() )
 	{
-		// get var / op
-		const QString vn = d.getVariableName();
-		const QString op = d.getOperator();
-		// create item
-		if ( XUPItem* scope = currentScope() )
+		// init dialog
+		UIAddVariable d( window() );
+		//d.setVariablesName(  );
+		d.setOperators( mProject->operators() );
+		// execute dialog
+		if ( d.exec() == QDialog::Accepted )
 		{
+			// get var / op
+			const QString vn = d.getVariableName();
+			const QString op = d.getOperator();
 			// check if it already exists
 			foreach ( XUPItem* cit, scope->children( false, true ) )
 			{
@@ -319,6 +380,9 @@ void UIXUPProjectEditor::on_tbOthersVariablesAdd_clicked()
 			vit->setValue( "operator", op );
 			// append it
 			scope->appendRow( vit );
+			// if it's in a scope, set the scope not nested
+			if ( scope != mProject )
+				scope->setValue( "nested", "false" );
 			// set it current item
 			lvOthersVariables->setCurrentIndex( mVariablesModel->mapFromSource( vit->index() ) );
 		}
@@ -368,8 +432,7 @@ void UIXUPProjectEditor::on_tbOthersVariablesRemove_clicked()
 		if ( QMessageBox::question( window(), tr( "Remove a variable..." ), tr( "A you sure you want to remove this variable and all its content ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes ) == QMessageBox::No )
 			return;
 		// delete childs
-		while ( vit->rowCount() )
-			vit->child( 0 )->remove();
+		recursiveRemoveItem( vit );
 		// delete variable
 		vit->remove();
 		// update view
@@ -471,10 +534,37 @@ void UIXUPProjectEditor::on_tbOthersValuesClear_clicked()
 		if ( QMessageBox::question( window(), tr( "Clear values..." ), tr( "A you sure you want to clear these values ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes ) == QMessageBox::Yes )
 		{
 			// delete items
-			while ( vit->rowCount() )
-				vit->child( 0 )->remove();
+			recursiveRemoveItem( vit );
 			// update view
 			lvOthersVariables_currentChanged( lvOthersVariables->currentIndex(), QModelIndex() );
 		}
 	}
+}
+
+void UIXUPProjectEditor::accept()
+{
+	// save plugins configuration
+	QString plugin;
+	// builder
+	plugin = cbBuilders->currentText();
+	if ( !gbBuilders->isChecked() )
+		plugin.clear();
+	mProject->setValue( "builder", plugin );
+	// compiler
+	plugin = cbCompilers->currentText();
+	if ( !gbCompilers->isChecked() )
+		plugin.clear();
+	mProject->setValue( "compiler", plugin );
+	// debugger
+	plugin = cbDebuggers->currentText();
+	if ( !gbDebuggers->isChecked() )
+		plugin.clear();
+	mProject->setValue( "debugger", plugin );
+	// interpreter
+	plugin = cbInterpreters->currentText();
+	if ( !gbInterpreters->isChecked() )
+		plugin.clear();
+	mProject->setValue( "interpreter", plugin );
+	// accept dialog
+	QDialog::accept();
 }

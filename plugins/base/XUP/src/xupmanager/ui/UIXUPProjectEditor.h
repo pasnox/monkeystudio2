@@ -71,9 +71,9 @@ protected:
 
 protected slots:
 	// scope
+	void on_tbAddScope_clicked();
+	void on_tbRemoveScope_clicked();
 	void on_cbScope_currentChanged( const QModelIndex& index );
-	// operator
-	void on_cbOperator_currentIndexChanged( const QString& text );
 	// project files
 	void on_pbAddProjectFiles_clicked();
 	void on_pbRemoveProjectFile_clicked();
@@ -91,6 +91,8 @@ protected slots:
 	void on_tbOthersValuesEdit_clicked();
 	void on_tbOthersValuesRemove_clicked();
 	void on_tbOthersValuesClear_clicked();
+	// accept
+	void accept();
 };
 
 #endif // UIXUPPROJECTEDITOR_H

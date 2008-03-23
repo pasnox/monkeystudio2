@@ -1,5 +1,5 @@
 <!DOCTYPE XUPProject>
-<project version="1.0.0" expanded="false" plugin="XUPManagerEditor" name="monkey.xup" >
+<project compiler="MSVC" version="1.0.0" expanded="true" plugin="XUPManagerEditor" builder="MSVCMake" name="monkey.xup" >
  <comment># Monkey Studio 2 project file</comment>
  <emptyline>1</emptyline>
  <variable name="BUILD_PATH" >
@@ -38,16 +38,11 @@
   <value>windows</value>
   <value>debug_and_release</value>
  </variable>
- <variable operator="*=" name="QT" >
+ <variable operator="*=" name="QT" multiline="true" >
   <value>gui</value>
   <value>core</value>
  </variable>
  <emptyline>1</emptyline>
- <scope nested="true" name="unix" >
-  <variable name="ICON" >
-   <value>src/resources/icons/application/monkey2.png</value>
-  </variable>
- </scope>
  <scope nested="true" name="mac" >
   <variable name="ICON" >
    <value>src/resources/icons/application/monkey2.icns</value>
@@ -75,6 +70,10 @@
  <scope nested="true" name="win32" >
   <variable operator="*=" name="RC_FILE" >
    <value>monkey.rc</value>
+  </variable>
+  <variable operator="*=" name="FILES" multiline="true" >
+   <value>../../../bin/Thread_Template_GdbWatch.txt</value>
+   <value>../../../bin/Thread_Template_GdbRegisters.txt</value>
   </variable>
  </scope>
  <variable operator="*=" name="RESOURCES" >
@@ -121,7 +120,7 @@
    <value>console</value>
   </variable>
   <scope nested="true" name="unix" >
-   <variable name="TARGET" >
+   <variable name="TARGET" multiline="true" >
     <value>$$join(TARGET,,,_debug)</value>
    </variable>
   </scope>
@@ -361,4 +360,8 @@
   <value>../translations/monkey_belarusian.ts</value>
  </variable>
  <emptyline>1</emptyline>
+ <variable expanded="true" operator="+=" name="FILES" multiline="true" >
+  <value>../../../bin/Thread_Core_GdbAnswer.txt</value>
+  <value>../../../bin/Thread_Core_GdbBackTrace.txt</value>
+ </variable>
 </project>

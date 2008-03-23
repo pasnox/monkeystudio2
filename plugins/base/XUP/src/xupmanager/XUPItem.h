@@ -82,10 +82,9 @@ public:
 	
 	// return all value files if item if a variable based on files
 	virtual QStringList files( bool absolute = true );
-	
-	// update item
-	virtual void updateItem();
 
+	// return item datas
+	virtual QVariant data( int role = Qt::UserRole +1 ) const;
 	// return child item
 	virtual XUPItem* child( int, int = 0 ) const;
 	// return parent item

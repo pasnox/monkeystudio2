@@ -16,6 +16,7 @@ public:
 
 	void setRootItem( XUPItem* root );
 	XUPItem* rootItem() const;
+	virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
 
 protected:
 	XUPItem* mProject;

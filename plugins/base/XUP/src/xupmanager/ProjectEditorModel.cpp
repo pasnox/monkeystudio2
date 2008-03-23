@@ -43,3 +43,27 @@ void ProjectEditorModel::setRootItem( XUPItem* root )
 
 XUPItem* ProjectEditorModel::rootItem() const
 { return mRoot; }
+
+QVariant ProjectEditorModel::data( const QModelIndex& index, int role ) const
+{
+	// if tooltip role
+	if ( role == Qt::ToolTipRole )
+	{
+		// if item
+		if ( XUPItem* it = mSourceModel->itemFromIndex( mapToSource( index ) ) )
+		{
+			QString tooltip;
+			if ( it->isType( "variable" ) )
+				return QVariant( tr( "<b>Variable</b><br />%1 (%2, %3)" ).arg( it->defaultValue() ).arg( it->value( "operator", "=" ) ).arg( QVariant( it->value( "multiline", "false" ) ).toBool() ? tr( "multiline" ) : tr( "singleline" ) ) );
+			else if ( it->isType( "value" ) )
+			{
+				QString tooltip = QString( "<b>Value</b><br />%1" ).arg( it->defaultValue() );
+				if ( !it->value( "comment" ).isEmpty() )
+					tooltip += QString( "<b>Comment</b><br />%1" ).arg( it->value( "comment" ) );
+				return QVariant( tooltip );
+			}
+		}
+	}
+	// defaut values
+	return QSortFilterProxyModel::data( index, role );
+}

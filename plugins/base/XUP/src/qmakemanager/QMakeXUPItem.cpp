@@ -390,7 +390,6 @@ bool QMakeXUPItem::loadProject( const QString& s, const QString& v )
 	{
 		mProjectFilePath = s;
 		setModified( false );
-		updateItem();
 		checkChildrenProjects();
 		QApplication::processEvents( QEventLoop::ExcludeUserInputEvents );
 		return true;

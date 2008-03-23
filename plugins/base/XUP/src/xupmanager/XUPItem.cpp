@@ -121,73 +121,65 @@ QStringList XUPItem::files( bool a )
 	return l;
 }
 
-void XUPItem::updateItem()
+QVariant XUPItem::data( int role ) const
 {
-	// set icon
-	setIcon( getIcon( value( "icon" ), value( "type" ) ) );
-	// set caption
-	setText( defaultValue() );
-	// get element tagname
-	QString tn = value( "type" );
-	// get comment
-	QString c = value( "comment" );
-	if ( c.isEmpty() )
-		c = tr( "no comment" );
-	// set visual datas
-	if ( tn == "project" )
+	// decoration role
+	if ( role == Qt::DecorationRole )
 	{
-		// set ToolTip
-		setToolTip( tr( "<b>Project</b><br />%1" ).arg( projectFilePath() ) );
+		QIcon icn = getIcon( value( "icon" ), value( "type" ) );
+		if ( isType( "variable" ) )
+		{
+			icn = QFile::exists( value( "icon" ) ) ? QIcon( value( "icon" ) ) : variableIcons().value( value( "name" ) );
+			if ( icn.isNull() )
+				icn = getIcon( QString(), value( "type" ) );
+		}
+		return QVariant( icn );
 	}
-	else if ( tn == "comment" )
+	// display role
+	else if ( role == Qt::DisplayRole )
 	{
-		// set ToolTip
-		setToolTip( tr( "<b>Comment</b><br />%1" ).arg( defaultValue() ) );
+		QString txt = defaultValue();
+		if ( isType( "emptyline" ) )
+			txt = tr( "%1 Empty Line(s)" ).arg( defaultValue() );
+		else if ( isType( "variable" ) )
+		{
+			if ( variableLabels().contains( defaultValue() ) )
+				txt = variableLabels().value( defaultValue() );
+		}
+		else if ( isType( "value" ) )
+		{
+			if ( parent() && fileVariables().contains( parent()->defaultValue() ) )
+				txt = QFileInfo( defaultValue() ).fileName();
+		}
+		return QVariant( txt );
 	}
-	else if ( tn == "emptyline" )
+	// tooltip role
+	else if ( role == Qt::ToolTipRole )
 	{
-		// set caption
-		setText( tr( "%1 Empty Line(s)" ).arg( defaultValue() ) );
-		// set ToolTip
-		setToolTip( tr( "<b>Empty Line(s)</b><br />%1" ).arg( defaultValue() ) );
+		QString tt;
+		QString cmt = value( "comment" );
+		if ( cmt.isEmpty() )
+			cmt = tr( "no comment" );
+		if ( isType( "project" ) )
+			tt = tr( "<b>Project</b><br />%1" ).arg( projectFilePath() );
+		else if ( isType( "comment" ) )
+			tt = tr( "<b>Comment</b><br />%1" ).arg( defaultValue() );
+		else if ( isType( "emptyline" ) )
+			tt = tr( "<b>Empty Line(s)</b><br />%1" ).arg( defaultValue() );
+		else if ( isType( "variable" ) )
+			tt = tr( "<b>Variable</b><br />%1" ).arg( defaultValue() );
+		else if ( isType( "value" ) )
+			tt = QString( "<b>Value</b><br />%1 (%2, %3, %4)" ).arg( defaultValue() ).arg( parent() ? parent()->value( "operator", "=" ) : QString( "no parent" ) ).arg( parent() ? ( QVariant( parent()->value( "multiline", "false" ) ).toBool() ? tr( "multiline" ) : tr( "singleline" ) ) : tr( "no parent" ) ).arg( cmt );
+		else if ( isType( "function" ) )
+			tt = tr( "<b>Function</b><br />%1 (%2)" ).arg( defaultValue() ).arg( cmt );
+		else if ( isType( "scope" ) )
+			tt = tr( "<b>Scope</b><br />%1 (%2, %3)" ).arg( defaultValue() ).arg( QVariant( value( "nested", "false" ) ).toBool() ? tr( "(nested)" ) : tr( "(not nested)" ) ).arg( cmt );
+		else if ( isType( "folder" ) )
+			tt = tr( "<b>Folder</b><br />%1" ).arg( defaultValue() );
+		return QVariant( tt );
 	}
-	else if ( tn == "variable" )
-	{
-		// set icon
-		QIcon i = QFile::exists( value( "icon" ) ) ? QIcon( value( "icon" ) ) : variableIcons().value( value( "name" ) );
-		if ( i.isNull() )
-			i = getIcon( QString(), value( "type" ) );
-		setIcon( i );
-		// set caption
-		if ( variableLabels().contains( defaultValue() ) )
-			setText( variableLabels().value( defaultValue() ) );
-		// set ToolTip
-		setToolTip( tr( "<b>Variable</b><br />%1" ).arg( defaultValue() ) );
-	}
-	else if ( tn == "value" )
-	{
-		// set caption
-		XUPItem* pit = parent();
-		if ( pit && fileVariables().contains( pit->defaultValue() ) )
-			setText( QFileInfo( defaultValue() ).fileName() );
-		// set ToolTip
-		setToolTip( QString( "<b>Value</b><br />%1 (%2, %3, %4)" ).arg( defaultValue() ).arg( pit ? pit->value( "operator", "=" ) : QString( "no parent" ) ).arg( pit ? ( QVariant( pit->value( "multiline", "false" ) ).toBool() ? tr( "multiline" ) : tr( "singleline" ) ) : tr( "no parent" ) ).arg( c ) );
-	}
-	else if ( tn == "function" )
-	{
-		// set ToolTip
-		setToolTip( tr( "<b>Function</b><br />%1 (%2)" ).arg( defaultValue() ).arg( c ) );
-	}
-	else if ( tn == "scope" )
-	{
-		// set ToolTip
-		setToolTip( tr( "<b>Scope</b><br />%1 (%2, %3)" ).arg( defaultValue() ).arg( QVariant( value( "nested", "false" ) ).toBool() ? tr( "(nested)" ) : tr( "(not nested)" ) ).arg( c ) );
-	}
-	else if ( tn == "folder" )
-	{
-		// set ToolTip
-		setToolTip( tr( "<b>Folder</b><br />%1" ).arg( defaultValue() ) );
-	}
+	// default values
+	return QStandardItem::data( role );
 }
 
 XUPItem* XUPItem::child( int r, int c ) const
@@ -223,7 +215,6 @@ void XUPItem::insertRow( int i, XUPItem* it )
 				setModified( true );
 			}
 		}
-		it->updateItem();
 	}
 }
 
@@ -264,10 +255,7 @@ void XUPItem::remove()
 void XUPItem::setDomElement( const QDomElement& e )
 {
 	if ( mDomElement != e )
-	{
 		mDomElement = e;
-		updateItem();
-	}
 }
 
 QDomElement XUPItem::domElement() const
@@ -304,7 +292,6 @@ void XUPItem::setValue( const QString& n, const QString& v )
 		else
 			mDomElement.setAttribute( n, v );
 		setModified( true );
-		updateItem();
 	}
 }
 
@@ -366,7 +353,6 @@ bool XUPItem::loadProject( const QString& s, const QString& v )
 	{
 		mProjectFilePath = s;
 		setModified( false );
-		updateItem();
 		return true;
 	}
 	return false;
