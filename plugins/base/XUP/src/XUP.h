@@ -20,6 +20,9 @@ public:
 
 protected:
 	QPointer<UIXUPManager> mDockXUPManager;
+
+protected slots:
+	void fileDoubleClicked( XUPItem*, const QString& );
 };
 
 #endif // XUP_H

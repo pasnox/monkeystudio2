@@ -4,6 +4,7 @@
 #include "UIXUPProjectEditor.h"
 
 #include "MonkeyCore.h"
+#include "pFileManager.h"
 #include "UIMain.h"
 #include "pDockToolBar.h"
 
@@ -36,6 +37,8 @@ bool XUP::setEnabled( bool b )
 		mDockXUPManager->registerItem( new QMakeXUPItem );
 		// add dock to dockmanager
 		MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( mDockXUPManager, tr( "XUP Manager" ), QIcon( ":/icons/console.png" ) );
+		// connections
+		connect( mDockXUPManager, SIGNAL( fileDoubleClicked( XUPItem*, const QString& ) ), this, SLOT( fileDoubleClicked( XUPItem*, const QString& ) ) );
 		// set plugin enabled
 		mPluginInfos.Enabled = true;
 	}
@@ -56,6 +59,12 @@ bool XUP::editProject( XUPItem* project )
 	if ( !project )
 		return false;
 	return UIXUPProjectEditor( project, MonkeyCore::mainWindow() ).exec();
+}
+
+void XUP::fileDoubleClicked( XUPItem*, const QString& filePath )
+{
+	//if ( QFile::exists( filePath ) )
+		MonkeyCore::fileManager()->openFile( filePath );
 }
 
 Q_EXPORT_PLUGIN2( XUPXUP, XUP )
