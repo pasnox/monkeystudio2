@@ -27,18 +27,16 @@
 **
 ****************************************************************************/
 #include "pSearch.h"
-#include "MonkeyCore.h"
-#include "pMenuBar.h"
-#include "pWorkspace.h"
-#include "UIProjectsManager.h"
-#include "pChild.h"
-#include "pEditor.h"
-#include "UIMain.h"
-
-#include "SearchThread.h"
+#include "../../coremanager/MonkeyCore.h"
+#include "../../workspace/pWorkspace.h"
+#include "../../projectsmanager/ui/UIProjectsManager.h"
+#include "../../workspace/pChild.h"
+#include "../pEditor.h"
+#include "../../maininterface/UIMain.h"
+#include "../SearchThread.h"
 
 
-#include "qsciscintilla.h"
+#include <qscintilla.h>
 
 #include <QKeyEvent>
 #include <QDir>
@@ -462,7 +460,7 @@ int pSearch::replace(bool all)
     pEditor* editor = child->editor ();
 
 
-    int count;
+    int count = 0;
 	if (all)
 	{
 	    int x, y;

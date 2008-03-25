@@ -30,7 +30,8 @@
 #define UIITEMSETTINGS_H
 
 #include "ui_UIItemSettings.h"
-#include "QSingleton.h"
+
+#include <fresh.h>
 
 class ProjectItem;
 

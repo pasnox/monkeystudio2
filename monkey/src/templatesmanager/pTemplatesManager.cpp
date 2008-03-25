@@ -27,11 +27,10 @@
 **
 ****************************************************************************/
 #include "pTemplatesManager.h"
-#include "pSettings.h"
-#include "pMonkeyStudio.h"
-#include "pFileManager.h"
-#include "ProjectItem.h"
-#include "MonkeyCore.h"
+#include "../pMonkeyStudio.h"
+#include "../workspace/pFileManager.h"
+#include "../projectsmanager/ProjectItem.h"
+#include "../coremanager/MonkeyCore.h"
 
 using namespace pMonkeyStudio;
 

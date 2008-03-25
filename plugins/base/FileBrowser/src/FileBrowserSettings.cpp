@@ -27,7 +27,6 @@
 **
 ****************************************************************************/
 #include "FileBrowserSettings.h"
-#include "pStringListEditor.h"
 #include "pDockFileBrowser.h"
 
 #include <QHBoxLayout>

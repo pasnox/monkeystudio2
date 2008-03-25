@@ -29,7 +29,7 @@
 #ifndef PFILEMANAGER_H
 #define PFILEMANAGER_H
 
-#include "MonkeyExport.h"
+#include <fresh.h>
 
 #include <QObject>
 #include <QPoint>

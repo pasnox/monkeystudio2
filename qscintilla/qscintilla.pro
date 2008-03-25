@@ -5,7 +5,13 @@ include( qscintilla.pri )
 # include original project
 include( $$QSCINTILLAVERSION/Qt4/qscintilla.pro )
 
-include( qscintilla.pri )
+#include( qscintilla.pri )
+
+# include path path
+INCLUDEPATH	*= $${PWD}/$$QSCINTILLAVERSION/include
+INCLUDEPATH	*= $${PWD}/$$QSCINTILLAVERSION/src
+# depend path
+DEPENDPATH	*= $${PWD}/$$QSCINTILLAVERSION/Qt4
 
 BUILD_PATH	 = ../build
 DESTDIR	= $${BUILD_PATH}

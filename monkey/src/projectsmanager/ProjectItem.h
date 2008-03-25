@@ -29,7 +29,7 @@
 #ifndef PROJECTITEM_H
 #define PROJECTITEM_H
 
-#include "MonkeyExport.h"
+#include <fresh.h>
 
 #include <QObject>
 #include <QStandardItem>

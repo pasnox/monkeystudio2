@@ -10,8 +10,8 @@
 #include <QTableWidget>
 #include <QStringListModel>
 
-#include "./kernel/gdbCore.h"
-#include "./kernel/gdbTemplateCore.h"
+#include "../kernel/gdbCore.h"
+#include "../kernel/gdbTemplateCore.h"
 
 class GdbRegisters : public GdbCore
 {

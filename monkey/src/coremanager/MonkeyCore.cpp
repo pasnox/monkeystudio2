@@ -27,24 +27,21 @@
 **
 ****************************************************************************/
 #include "MonkeyCore.h"
-#include "pMonkeyStudio.h"
-#include "Settings.h"
-#include "PluginsManager.h"
-#include "UIMain.h"
-#include "pMenuBar.h"
-#include "pRecentsManager.h"
-#include "pToolsManager.h"
-#include "UIProjectsManager.h"
-#include "pFileManager.h"
-#include "pWorkspace.h"
-#include "pConsoleManager.h"
-#include "pSearch.h"
+#include "../pMonkeyStudio.h"
+#include "../settingsmanager/Settings.h"
+#include "../pluginsmanager/PluginsManager.h"
+#include "../maininterface/UIMain.h"
+#include "../recentsmanager/pRecentsManager.h"
+#include "../toolsmanager/pToolsManager.h"
+#include "../projectsmanager/ui/UIProjectsManager.h"
+#include "../workspace/pFileManager.h"
+#include "../workspace/pWorkspace.h"
+#include "../consolemanager/pConsoleManager.h"
+#include "../qscintillamanager/ui/pSearch.h"
 #include <QStatusBar>
-#include "pActionManager.h"
 
-#include "pDockToolBar.h"
-#include "UISettings.h"
-#include "UITranslator.h"
+#include "../maininterface/ui/UISettings.h"
+#include "../maininterface/ui/UITranslator.h"
 
 #include <QSplashScreen>
 

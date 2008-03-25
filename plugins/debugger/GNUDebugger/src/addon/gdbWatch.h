@@ -10,8 +10,8 @@
 #include <QTableWidget>
 #include <QMouseEvent>
 
-#include "./kernel/gdbCore.h"
-#include "./kernel/gdbTemplateCore.h"
+#include "../kernel/gdbCore.h"
+#include "../kernel/gdbTemplateCore.h"
 
 /*
 

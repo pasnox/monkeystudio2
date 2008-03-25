@@ -27,15 +27,14 @@
 **
 ****************************************************************************/
 #include "UITemplatesWizard.h"
-#include "pFileManager.h"
-#include "pMonkeyStudio.h"
-#include "pSettings.h"
-#include "MonkeyCore.h"
+#include "../../workspace/pFileManager.h"
+#include "../../pMonkeyStudio.h"
+#include "../../coremanager/MonkeyCore.h"
 
-#include "ProjectsModel.h"
-#include "ProjectsProxy.h"
-#include "UIProjectsManager.h"
-#include "VariablesManager.h"
+#include "../../projectsmanager/ProjectsModel.h"
+#include "../../projectsmanager/ProjectsProxy.h"
+#include "../../projectsmanager/ui/UIProjectsManager.h"
+#include "../../variablesmanager/VariablesManager.h"
 
 #include <QDir>
 

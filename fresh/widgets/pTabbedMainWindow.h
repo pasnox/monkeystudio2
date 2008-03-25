@@ -29,7 +29,7 @@
 #ifndef PTABBEDMAINWINDOW_H
 #define PTABBEDMAINWINDOW_H
 
-#include "MonkeyExport.h"
+#include "../objects/MonkeyExport.h"
 #include "pMainWindow.h"
 
 class pTabbedWorkspace;

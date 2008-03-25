@@ -27,10 +27,10 @@
 **
 ****************************************************************************/
 #include "UICompilerSettings.h"
-#include "CompilerPlugin.h"
-#include  "pConsoleManager.h"
-#include "pMonkeyStudio.h"
-#include "MonkeyCore.h"
+#include "../CompilerPlugin.h"
+#include  "../../consolemanager/pConsoleManager.h"
+#include "../../pMonkeyStudio.h"
+#include "../../coremanager/MonkeyCore.h"
 
 #include <QInputDialog>
 #include <QPushButton>

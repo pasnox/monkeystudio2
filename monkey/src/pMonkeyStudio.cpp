@@ -27,14 +27,13 @@
 **
 ****************************************************************************/
 #include "pMonkeyStudio.h"
-#include "UITranslator.h"
-#include "pSettings.h"
-#include "PluginsManager.h"
-#include "ProjectPlugin.h"
-#include "MonkeyCore.h"
+#include "maininterface/ui/UITranslator.h"
+#include "pluginsmanager/PluginsManager.h"
+#include "pluginsmanager/ProjectPlugin.h"
+#include "coremanager/MonkeyCore.h"
 
-#include "pAbstractChild.h"
-#include "pEditor.h"
+#include "workspace/pAbstractChild.h"
+#include "qscintillamanager/pEditor.h"
 
 #include <QTextCodec>
 #include <QImageReader>
@@ -44,31 +43,6 @@
 #include <QLibraryInfo>
 #include <QTranslator>
 #include <QLocale>
-
-#include "qsciapis.h"
-#include "qscilexerbash.h"
-#include "qscilexerbatch.h"
-#include "qscilexercmake.h"
-#include "qscilexercpp.h"
-#include "qscilexercsharp.h"
-#include "qscilexercss.h"
-#include "qscilexerd.h"
-#include "qscilexerdiff.h"
-#include "qscilexerhtml.h"
-#include "qscilexeridl.h"
-#include "qscilexerjava.h"
-#include "qscilexerjavascript.h"
-#include "qscilexerlua.h"
-#include "qscilexermakefile.h"
-#include "qscilexerperl.h"
-#include "qscilexerpov.h"
-#include "qscilexerproperties.h"
-#include "qscilexerpython.h"
-#include "qscilexerruby.h"
-#include "qscilexersql.h"
-#include "qscilexertcl.h"
-#include "qscilexertex.h"
-#include "qscilexervhdl.h"
 
 QList<QTranslator*> mTranslators;
 QHash<QString,QsciLexer*> mGlobalsLexers;

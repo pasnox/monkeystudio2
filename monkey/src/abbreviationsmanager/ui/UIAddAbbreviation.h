@@ -29,7 +29,8 @@
 #ifndef UIADDABBREVIATION_H
 #define UIADDABBREVIATION_H
 
-#include "MonkeyExport.h"
+#include <fresh.h>
+
 #include "ui_UIAddAbbreviation.h"
 
 class QTreeWidget;

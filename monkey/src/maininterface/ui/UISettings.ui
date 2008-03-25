@@ -3538,13 +3538,13 @@
   <customwidget>
    <class>pPathListEditor</class>
    <extends>QGroupBox</extends>
-   <header>pPathListEditor.h</header>
+   <header location="global" >fresh.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>pStringListEditor</class>
    <extends>QGroupBox</extends>
-   <header>pStringListEditor.h</header>
+   <header location="global" >fresh.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

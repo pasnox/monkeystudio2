@@ -1,7 +1,8 @@
 #ifndef XUPPLUGIN_H
 #define XUPPLUGIN_H
 
-#include "BasePlugin.h"
+#include <pluginsmanager.h>
+
 #include "XUPItem.h"
 
 class Q_MONKEY_EXPORT XUPPlugin : public BasePlugin

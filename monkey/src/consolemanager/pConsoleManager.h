@@ -29,7 +29,8 @@
 #ifndef PCONSOLEMANAGER_H
 #define PCONSOLEMANAGER_H
 
-#include "MonkeyExport.h"
+#include <fresh.h>
+
 #include "pCommand.h"
 
 #include <QProcess>

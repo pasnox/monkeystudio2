@@ -28,9 +28,6 @@
 ****************************************************************************/
 #include "GNUMake.h"
 #include "GNUMakeParser.h"
-#include "MonkeyCore.h"
-#include "pConsoleManager.h"
-#include "pMenuBar.h"
 
 #include <QTabWidget>
 

@@ -4,7 +4,7 @@
 	Class GdbControl
 */
 
-#include "./addon/gdbControl.h"
+#include "gdbControl.h"
 
 #include <QFileDialog>
 #include <QIcon>

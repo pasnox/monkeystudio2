@@ -29,7 +29,7 @@
 #ifndef PCOMMAND_H
 #define PCOMMAND_H
 
-#include "MonkeyExport.h"
+#include <fresh.h>
 
 #include <QStringList>
 

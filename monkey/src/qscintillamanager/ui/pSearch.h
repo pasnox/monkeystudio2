@@ -32,9 +32,9 @@
 #include <QWidget>
 #include <QStringList>
 
-#include "MonkeyExport.h"
-#include "pConsoleManager.h"
-#include "pDockWidget.h"
+#include <fresh.h>
+
+#include "../../consolemanager/pConsoleManager.h"
 
 class QsciScintilla;
 class SearchThread;

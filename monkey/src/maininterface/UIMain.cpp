@@ -27,21 +27,18 @@
 **
 ****************************************************************************/
 #include "UIMain.h"
-#include "MonkeyCore.h"
-#include "pMonkeyStudio.h"
-#include "UIProjectsManager.h"
-#include "pDockToolBar.h"
-#include "pMenuBar.h"
-#include "pRecentsManager.h"
-#include "pToolsManager.h"
-#include "pSettings.h"
-#include "pConsoleManager.h"
-#include "pRecentsManager.h"
-#include "pFileManager.h"
-#include "pActionManager.h"
-#include "ProjectsProxy.h"
-#include "PluginsManager.h"
-#include "pSearch.h"
+#include "../coremanager/MonkeyCore.h"
+#include "../pMonkeyStudio.h"
+#include "../projectsmanager/ui/UIProjectsManager.h"
+#include "../recentsmanager/pRecentsManager.h"
+#include "../toolsmanager/pToolsManager.h"
+#include "../consolemanager/pConsoleManager.h"
+#include "../workspace/pFileManager.h"
+#include "../projectsmanager/ProjectsProxy.h"
+#include "../pluginsmanager/PluginsManager.h"
+#include "../qscintillamanager/ui/pSearch.h"
+
+#include <fresh.h>
 
 #include <QCloseEvent>
 #include <QMenu>

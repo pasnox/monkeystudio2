@@ -27,9 +27,8 @@
 **
 ****************************************************************************/
 #include "UIPluginsSettings.h"
-#include "pSettings.h"
-#include "MonkeyCore.h"
-#include "PluginsManager.h"
+#include "../../coremanager/MonkeyCore.h"
+#include "../PluginsManager.h"
 
 #include <QMetaEnum>
 

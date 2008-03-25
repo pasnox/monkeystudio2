@@ -29,9 +29,10 @@
 #ifndef UIPROJECTSMANAGER_H
 #define UIPROJECTSMANAGER_H
 
-#include "MonkeyExport.h"
+#include <fresh.h>
+
 #include "ui_UIProjectsManager.h"
-#include "ProjectItem.h"
+#include "../ProjectItem.h"
 
 #include <QDockWidget>
 

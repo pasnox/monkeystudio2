@@ -29,7 +29,8 @@
 #ifndef PLUGINSMANAGER_H
 #define PLUGINSMANAGER_H
 
-#include "MonkeyExport.h"
+#include <fresh.h>
+
 #include "BasePlugin.h"
 #include "ChildPlugin.h"
 #include "ProjectPlugin.h"

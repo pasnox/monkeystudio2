@@ -28,8 +28,6 @@
 ****************************************************************************/
 #include "MSVC.h"
 #include "MSVCParser.h"
-#include "MonkeyCore.h"
-#include "pMenuBar.h"
 
 #include <QTabWidget>
 

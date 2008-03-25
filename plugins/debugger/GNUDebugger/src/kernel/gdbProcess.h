@@ -2,15 +2,12 @@
 #define GDBPROCESS_H
 //
 
-#include "pCommand.h"
-
-
-
 #include <QProcess>
 #include <QBuffer>
 #include <QPoint>
 #include <QHash>
 
+#include <consolemanager.h>
 
 class  GdbProcess : public QProcess
 {

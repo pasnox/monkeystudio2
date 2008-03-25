@@ -1,4 +1,4 @@
-#include "./kernel/gdbCore.h"
+#include "gdbCore.h"
 #include <QMetaType>
 
 #define TIME_TICK	50000

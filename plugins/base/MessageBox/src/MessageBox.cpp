@@ -27,11 +27,9 @@
 **
 ****************************************************************************/
 #include "MessageBox.h"
-#include "MonkeyCore.h"
-#include "UIMain.h"
-#include "pMenuBar.h"
-#include "pDockToolBar.h"
 #include "pDockMessageBox.h"
+
+#include <maininterface.h>
 
 #include <QIcon>
 #include <QTabWidget>

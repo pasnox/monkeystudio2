@@ -27,8 +27,6 @@
 **
 ****************************************************************************/
 #include "Gcc.h"
-#include "MonkeyCore.h"
-#include "pMenuBar.h"
 
 #include <QTabWidget>
 

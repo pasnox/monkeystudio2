@@ -27,9 +27,9 @@
 **
 ****************************************************************************/
 #include "UISettingsQMake.h"
-#include "MonkeyCore.h"
-#include "pSettings.h"
-#include "pMonkeyStudio.h"
+
+#include <monkey.h>
+#include <coremanager.h>
 
 #include <QPushButton>
 #include <QWhatsThis>

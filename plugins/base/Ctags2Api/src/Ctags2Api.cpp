@@ -27,9 +27,9 @@
 **
 ****************************************************************************/
 #include "Ctags2Api.h"
-#include "MonkeyCore.h"
-#include "pMenuBar.h"
 #include "UICtags2Api.h"
+
+#include <coremanager.h>
 
 Ctags2Api::Ctags2Api()
 {

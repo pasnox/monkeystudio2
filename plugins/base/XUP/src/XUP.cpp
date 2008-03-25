@@ -3,10 +3,9 @@
 #include "UIXUPManager.h"
 #include "UIXUPProjectEditor.h"
 
-#include "MonkeyCore.h"
-#include "pFileManager.h"
-#include "UIMain.h"
-#include "pDockToolBar.h"
+#include <maininterface.h>
+#include <workspacemanager.h>
+#include <coremanager.h>
 
 XUP::XUP()
 {

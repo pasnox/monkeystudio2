@@ -1,8 +1,8 @@
 #ifndef GDBTEMPLATECORE_H
 #define GDBTEMPLATECORE_H
 
-#include "./kernel/gdbInterpreter.h"
-#include "./kernel/gdbCore.h"
+#include "../kernel/gdbInterpreter.h"
+#include "../kernel/gdbCore.h"
 
 
 #include <QByteArray>

@@ -6,8 +6,8 @@
 #include "UIAddVariable.h"
 #include "AddFilesDialog.h"
 
-#include "MonkeyCore.h"
-#include "PluginsManager.h"
+#include <coremanager.h>
+#include <pluginsmanager.h>
 
 #include <QDebug>
 

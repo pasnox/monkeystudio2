@@ -27,11 +27,9 @@
 **
 ****************************************************************************/
 #include "PluginsManager.h"
-#include "pMonkeyStudio.h"
-#include "pSettings.h"
-#include "pMenuBar.h"
-#include "UIPluginsSettings.h"
-#include "MonkeyCore.h"
+#include "../pMonkeyStudio.h"
+#include "ui/UIPluginsSettings.h"
+#include "../coremanager/MonkeyCore.h"
 
 #include <QPluginLoader>
 

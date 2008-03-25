@@ -29,7 +29,8 @@
 #ifndef PCOMMANDPARSER_H
 #define PCOMMANDPARSER_H
 
-#include "MonkeyExport.h"
+#include <fresh.h>
+
 #include "pConsoleManager.h"
 
 #include <QObject>

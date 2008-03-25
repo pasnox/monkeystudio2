@@ -27,11 +27,12 @@
 **
 ****************************************************************************/
 #include "FileBrowser.h"
-#include "UIMain.h"
-#include "pDockToolBar.h"
 #include "pDockFileBrowser.h"
 #include "FileBrowserSettings.h"
-#include "MonkeyCore.h"
+
+#include <fresh.h>
+#include <coremanager.h>
+#include <maininterface.h>
 
 #include <QIcon>
 

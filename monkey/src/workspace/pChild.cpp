@@ -27,10 +27,10 @@
 **
 ****************************************************************************/
 #include "pChild.h"
-#include "pEditor.h"
-#include "MonkeyCore.h"
+#include "../qscintillamanager/pEditor.h"
+#include "../coremanager/MonkeyCore.h"
 
-#include "qscilexer.h"
+#include <qscintilla.h>
 
 #include <QVBoxLayout>
 #include <QFileInfo>

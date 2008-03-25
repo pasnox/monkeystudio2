@@ -29,7 +29,8 @@
 #ifndef CHILDPLUGIN_H
 #define CHILDPLUGIN_H
 
-#include "MonkeyExport.h"
+#include <fresh.h>
+
 #include "BasePlugin.h"
 
 #include <QHash>

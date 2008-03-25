@@ -29,7 +29,7 @@
 #ifndef PEXTENDEDWORKSPACE_H
 #define PEXTENDEDWORKSPACE_H
 
-#include "MonkeyExport.h"
+#include "../objects/MonkeyExport.h"
 #include "pTabBar.h"
 
 #include <QWidget>

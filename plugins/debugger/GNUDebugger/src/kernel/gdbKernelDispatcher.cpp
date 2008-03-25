@@ -4,7 +4,7 @@
 	Class GdbKernelDispatcher
 */
 
-#include "./kernel/gdbKernelDispatcher.h"
+#include "gdbKernelDispatcher.h"
 
 
 GdbKernelDispatcher::GdbKernelDispatcher( GdbParser *p) : GdbCore(p)

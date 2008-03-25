@@ -29,7 +29,7 @@
 #ifndef MSVCMAKE_H
 #define MSVCMAKE_H
 
-#include "BuilderPlugin.h"
+#include <pluginsmanager.h>
 
 class MSVCMake : public BuilderPlugin
 {

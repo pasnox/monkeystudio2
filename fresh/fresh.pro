@@ -7,6 +7,7 @@ BUILD_PATH	 = ../build
 TEMPLATE = lib
 CONFIG	*= qt staticlib warn_on thread x11 windows debug_and_release
 DESTDIR	= $${BUILD_PATH}
+DEPENDPATH	*= $${PWD}/objects $${PWD}/widgets
 
 # make library exportable
 DEFINES	*= MONKEY_CORE_BUILD

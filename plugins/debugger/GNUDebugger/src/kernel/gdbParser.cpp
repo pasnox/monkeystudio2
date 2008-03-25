@@ -18,7 +18,7 @@
 */
 
 
-#include "./kernel/gdbParser.h"
+#include "gdbParser.h"
 
 #include <QMessageBox>
 

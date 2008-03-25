@@ -27,8 +27,6 @@
 **
 ****************************************************************************/
 #include "QMakeProxy.h"
-#include "ProjectsModel.h"
-#include "ProjectItem.h"
 #include "UIQMakeProjectSettings.h"
 #include "UISettingsQMake.h"
 

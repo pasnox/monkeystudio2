@@ -29,9 +29,9 @@
 #ifndef BASEPLUGIN_H
 #define BASEPLUGIN_H
 
-#include "MonkeyExport.h"
-#include "MonkeyCore.h"
-#include "pSettings.h"
+#include <fresh.h>
+
+#include "../coremanager/MonkeyCore.h"
 
 #include <QtPlugin>
 #include <QLabel>

@@ -29,7 +29,7 @@
 #ifndef PROJECTSPROXY_H
 #define PROJECTSPROXY_H
 
-#include "MonkeyExport.h"
+#include <fresh.h>
 
 #include <QSortFilterProxyModel>
 #include <QStringList>

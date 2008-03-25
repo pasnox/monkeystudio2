@@ -4,7 +4,7 @@
 	Class GdbAnswer
 */
 
-#include "./addon/gdbAnswer.h"
+#include "gdbAnswer.h"
 
 
 GdbAnswer::GdbAnswer(GdbParser *o) :  GdbCore(o),

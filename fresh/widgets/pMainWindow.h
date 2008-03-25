@@ -29,7 +29,7 @@
 #ifndef PMAINWINDOW_H
 #define PMAINWINDOW_H
 
-#include "MonkeyExport.h"
+#include "../objects/MonkeyExport.h"
 
 #include <QMainWindow>
 

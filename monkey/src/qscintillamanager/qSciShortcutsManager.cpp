@@ -26,13 +26,11 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
-#include <QtGlobal>
 #include "qSciShortcutsManager.h"
-#include "pMenuBar.h"
-#include "pWorkspace.h"
 #include "pEditor.h"
-#include "pAbstractChild.h"
-#include "MonkeyCore.h"
+#include "../workspace/pAbstractChild.h"
+#include "../coremanager/MonkeyCore.h"
+#include "../workspace/pWorkspace.h"
 
 qSciShortcutsManager::qSciShortcutsManager (QObject* parent): QObject(parent)
 {

@@ -29,7 +29,7 @@
 #include <QApplication>
 #include <QMessageBox>
 
-#include "MonkeyCore.h"
+#include "coremanager/MonkeyCore.h"
 
 int main( int argc, char** argv )
 {

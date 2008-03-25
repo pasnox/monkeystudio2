@@ -29,7 +29,7 @@
 #ifndef QDESIGNERWIDGETBOX_H
 #define QDESIGNERWIDGETBOX_H
 
-#include "pDockWidget.h"
+#include <fresh.h>
 
 class QtDesignerChild;
 class QDesignerWidgetBoxInterface;

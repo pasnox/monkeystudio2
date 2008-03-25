@@ -27,16 +27,15 @@
 **
 ****************************************************************************/
 #include "UIProjectsManager.h"
-#include "pMenuBar.h"
-#include "PluginsManager.h"
-#include "pMonkeyStudio.h"
-#include "pRecentsManager.h"
-#include "ProjectsProxy.h"
-#include "ProjectsModel.h"
-#include "pFileManager.h"
-#include "UITemplatesWizard.h"
+#include "../../pluginsmanager/PluginsManager.h"
+#include "../../pMonkeyStudio.h"
+#include "../../recentsmanager/pRecentsManager.h"
+#include "../../projectsmanager/ProjectsProxy.h"
+#include "../../projectsmanager/ProjectsModel.h"
+#include "../../workspace/pFileManager.h"
+#include "../../templatesmanager/ui/UITemplatesWizard.h"
 #include "UIAddExistingFiles.h"
-#include "MonkeyCore.h"
+#include "../../coremanager/MonkeyCore.h"
 
 #include <QHeaderView>
 

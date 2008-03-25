@@ -13,10 +13,10 @@
 **
 ****************************************************************************/
 #include "pDockMessageBox.h"
-#include "pFileManager.h"
-#include "ProjectItem.h"
-#include "MonkeyCore.h"
-#include "pAbstractChild.h"
+
+#include <coremanager.h>
+#include <workspacemanager.h>
+#include <projectsmanager.h>
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -30,8 +30,6 @@
 
 #include <QInputDialog>
 #include <QFile>
-
-#include "pMonkeyStudio.h"
 
 pDockMessageBox::pDockMessageBox( QWidget* w )
 	: pDockWidget( w ), mShown( false )

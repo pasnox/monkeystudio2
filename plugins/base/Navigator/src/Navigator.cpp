@@ -34,18 +34,12 @@
 #include<QDebug>
 #include<QModelIndex>
 
+#include <coremanager.h>
+#include <workspacemanager.h>
+#include <maininterface.h>
+
 #include "Navigator.h"
-#include "pDockToolBar.h"
-#include "UIProjectsManager.h"
-#include "ProjectsProxy.h"
 #include "NavigatorSettings.h"
-#include "pSettings.h"  
-#include "pWorkspace.h"
-#include "ProjectItem.h"
-#include "UIMain.h"
-#include "pFileManager.h"
-#include "pSettings.h"
-#include "MonkeyCore.h"
 
 Navigator::Navigator (QObject* )
 {

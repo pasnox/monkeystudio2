@@ -6,8 +6,7 @@
 #include "AddFilesDialog.h"
 #include "XUPPlugin.h"
 
-#include "MonkeyCore.h"
-#include "PluginsManager.h"
+#include <coremanager.h>
 
 #include <QHeaderView>
 #include <QInputDialog>

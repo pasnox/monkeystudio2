@@ -27,7 +27,8 @@
 **
 ****************************************************************************/
 #include "UICtags2Api.h"
-#include "pMonkeyStudio.h"
+
+#include <monkey.h>
 
 #include <QPushButton>
 #include <QRegExp>

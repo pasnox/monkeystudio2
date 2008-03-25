@@ -29,10 +29,10 @@
 #ifndef UITEMPLATESWIZARD
 #define UITEMPLATESWIZARD
 
-#include "MonkeyExport.h"
-#include "QSingleton.h"
+#include <fresh.h>
+
 #include "ui_UITemplatesWizard.h"
-#include "pTemplatesManager.h"
+#include "../pTemplatesManager.h"
 
 class ProjectsModel;
 

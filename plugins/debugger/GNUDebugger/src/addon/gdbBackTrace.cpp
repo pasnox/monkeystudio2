@@ -4,7 +4,7 @@
 	Class GdbBackTrace
 */
 
-#include "./addon/gdbBackTrace.h"
+#include "gdbBackTrace.h"
 
 #include <QFileInfo>
 #include <QTextCursor>

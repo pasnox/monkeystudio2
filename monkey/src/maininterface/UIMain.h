@@ -29,8 +29,7 @@
 #ifndef UIMAIN_H
 #define UIMAIN_H
 
-#include "MonkeyExport.h"
-#include "pMainWindow.h"
+#include <fresh.h>
 
 class QActionGroup;
 

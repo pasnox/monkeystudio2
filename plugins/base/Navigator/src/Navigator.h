@@ -28,7 +28,7 @@
 ****************************************************************************/
 #ifndef NAVIGATOR_H
 #define NAVIGATOR_H
-//
+
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QHash>
@@ -36,12 +36,9 @@
 #include <QTabWidget>
 #include <QTreeWidget>
 
-#include "BasePlugin.h"
+#include <pluginsmanager.h>
+
 #include "EntityContainer.h"
-#include "ProjectsModel.h"
-#include "pWorkspace.h"
-#include "QSingleton.h"
-#include "pDockWidget.h"
 
 class ProjectItem;
 class pAbstractChild;

@@ -27,7 +27,7 @@
 **
 ****************************************************************************/
 #include "UIAddAbbreviation.h"
-#include "pMonkeyStudio.h"
+#include "../../pMonkeyStudio.h"
 
 #include <QTreeWidget>
 #include <QMessageBox>

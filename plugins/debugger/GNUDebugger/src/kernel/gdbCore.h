@@ -1,8 +1,8 @@
 #ifndef GDBCORE_H
 #define GDBCORE_H
 
-#include "./kernel/gdbParser.h"
-#include "./kernel/gdbInterpreter.h"
+#include "gdbParser.h"
+#include "gdbInterpreter.h"
 
 #include <QMutex>
 #include <QThread>

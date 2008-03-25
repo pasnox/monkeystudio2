@@ -6,7 +6,7 @@
 #ifndef GDBKERNELDISPATCHER_H
 #define GDBKERNELDISPATCHER_H
 
-#include "./kernel/gdbCore.h"
+#include "gdbCore.h"
 
 #include <QTextEdit>
 

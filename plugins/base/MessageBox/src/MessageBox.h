@@ -29,7 +29,7 @@
 #ifndef MESSAGEBOX_H
 #define MESSAGEBOX_H
 
-#include "BasePlugin.h"
+#include <pluginsmanager.h>
 
 class MessageBox : public BasePlugin
 {

@@ -31,12 +31,11 @@
 
 #include <QFileDialog>
 #include <QGroupBox>
-
-#include "ProjectsModel.h"
-#include "ProjectsProxy.h"
-#include "ProjectItem.h"
-#include "pTreeComboBox.h"
 #include <QComboBox>
+
+#include "../ProjectsModel.h"
+#include "../ProjectsProxy.h"
+#include "../ProjectItem.h"
 
 class UIAddExistingFiles : public QFileDialog
 {

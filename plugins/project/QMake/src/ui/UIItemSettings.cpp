@@ -27,9 +27,7 @@
 **
 ****************************************************************************/
 #include "UIItemSettings.h"
-#include "ProjectItem.h"
-#include "ProjectsModel.h"
-#include "QMakeItemDelegate.h"
+#include "../QMakeItemDelegate.h"
 
 #include <QMetaEnum>
 #include <QFontMetrics>

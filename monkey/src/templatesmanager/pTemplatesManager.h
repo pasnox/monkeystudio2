@@ -29,9 +29,9 @@
 #ifndef PTEMPLATESMANAGER_H
 #define PTEMPLATESMANAGER_H
 
-#include "MonkeyExport.h"
-#include "QSingleton.h"
-#include "VariablesManager.h"
+#include <fresh.h>
+
+#include "../variablesmanager/VariablesManager.h"
 
 #include <QApplication>
 #include <QStringList>

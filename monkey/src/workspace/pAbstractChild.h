@@ -33,7 +33,7 @@
 #include <QFileInfo>
 #include <QTextCodec>
 
-#include "MonkeyExport.h"
+#include <fresh.h>
 
 class pEditor;
 

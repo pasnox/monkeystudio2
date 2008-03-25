@@ -29,9 +29,9 @@
 #ifndef PWORKSPACE_H
 #define PWORKSPACE_H
 
-#include "MonkeyExport.h"
-#include "pExtendedWorkspace.h"
-#include "pConsoleManager.h"
+#include <fresh.h>
+
+#include "../consolemanager/pConsoleManager.h"
 
 class pAbstractChild;
 class QMainWindow;

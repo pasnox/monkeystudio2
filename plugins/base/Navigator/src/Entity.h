@@ -35,7 +35,7 @@
 #include <QDateTime>
 #include <QIcon>
 
-#include "Ctags.h"
+#include <ctagsmanager.h>
 
 enum EntityType { 
     NAMESPACE = 0x0001,

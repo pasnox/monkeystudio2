@@ -29,7 +29,8 @@
 #ifndef PROJECTSMODEL_H
 #define PROJECTSMODEL_H
 
-#include "MonkeyExport.h"
+#include <fresh.h>
+
 #include "ProjectItem.h"
 
 #include <QStandardItemModel>

@@ -2,34 +2,26 @@
 #define PDOCKGNUDEBUGGER_H
 
 // Pasnox include
-#include "QSingleton.h"
-#include "pEditor.h"
-
-//#include "pConsoleManager.h"
-#include "pCommand.h"
- #include "UIMain.h"
-
-#include "pDockWidget.h"
+#include <fresh.h>
+#include <workspacemanager.h>
 
 // Xiantia include
 #include <QMainWindow>
 #include <QFileInfo>
 
-#include "./kernel/gdbCore.h"
+#include "kernel/gdbCore.h"
 
-#include "./kernel/gdbProcess.h"
-#include "./kernel/gdbParser.h"
-#include "./kernel/gdbKernelDispatcher.h"
-#include "./addon/gdbBridgeEditor.h"
-#include "./addon/gdbBreakPoint.h"
-#include "./addon/gdbControl.h"
-#include "./addon/gdbBackTrace.h"
-#include "./addon/gdbRegisters.h"
-#include "./addon/gdbWatch.h"
-#include "./addon/gdbAnswer.h"
-#include "./kernel/gdbProcess.h"
-
-
+#include "kernel/gdbProcess.h"
+#include "kernel/gdbParser.h"
+#include "kernel/gdbKernelDispatcher.h"
+#include "addon/gdbBridgeEditor.h"
+#include "addon/gdbBreakPoint.h"
+#include "addon/gdbControl.h"
+#include "addon/gdbBackTrace.h"
+#include "addon/gdbRegisters.h"
+#include "addon/gdbWatch.h"
+#include "addon/gdbAnswer.h"
+#include "kernel/gdbProcess.h"
 
 class DockGNUDebugger : public pDockWidget, public QSingleton<DockGNUDebugger>
 {

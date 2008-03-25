@@ -1,9 +1,9 @@
 
 #include "DockGNUDebugger.h"
-#include "pFileManager.h"
-#include "ProjectItem.h"
-#include "MonkeyCore.h"
-#include "pAbstractChild.h"
+
+#include <coremanager.h>
+#include <maininterface.h>
+#include <qscintillamanager.h>
 
 /* debugger */
 //
@@ -11,8 +11,6 @@
 #include <QFileInfo>
 #include <QCloseEvent>
 #include <QMessageBox>
-
-#include "pMonkeyStudio.h"
 
 QSize pixmapSize(16,16);
 

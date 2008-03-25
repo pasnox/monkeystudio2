@@ -29,7 +29,7 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include "pSettings.h"
+#include <fresh.h>
 
 class Q_MONKEY_EXPORT Settings : public pSettings
 {

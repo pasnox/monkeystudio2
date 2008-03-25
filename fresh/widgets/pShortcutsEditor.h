@@ -29,8 +29,8 @@
 #ifndef PSHORTCUTSEDITOR_H
 #define PSHORTCUTSEDITOR_H
 
-#include "MonkeyExport.h"
-#include "QSingleton.h"
+#include "../objects/MonkeyExport.h"
+#include "../objects/QSingleton.h"
 
 #include <QDialog>
 #include <QHash>

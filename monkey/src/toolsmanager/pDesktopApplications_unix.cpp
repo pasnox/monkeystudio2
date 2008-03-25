@@ -27,8 +27,7 @@
 **
 ****************************************************************************/
 #include "pDesktopApplications.h"
-#include "pMonkeyStudio.h"
-#include "MonkeyExport.h"
+#include "../pMonkeyStudio.h"
 
 #include <QSettings>
 

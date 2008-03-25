@@ -29,7 +29,7 @@
 #ifndef QDESIGNERPROPERTYEDITOR_H
 #define QDESIGNERPROPERTYEDITOR_H
 
-#include "pDockWidget.h"
+#include <fresh.h>
 
 class QtDesignerChild;
 class QDesignerFormWindowInterface;

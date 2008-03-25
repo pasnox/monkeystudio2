@@ -29,9 +29,9 @@
 #ifndef PTABBEDWORKSPACERIGHTCORNER_H
 #define PTABBEDWORKSPACERIGHTCORNER_H
 
-#include "MonkeyExport.h"
+#include "../objects/MonkeyExport.h"
 #include "pTabbedWorkspaceCorner.h"
-#include "QSingleton.h"
+#include "../objects/QSingleton.h"
 #include "pTabbedWorkspace.h"
 
 #include <QTabBar>

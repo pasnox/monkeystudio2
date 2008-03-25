@@ -29,7 +29,7 @@
 #ifndef PSTRINGLISTEDITOR_H
 #define PSTRINGLISTEDITOR_H
 
-#include "MonkeyExport.h"
+#include "../objects/MonkeyExport.h"
 
 #include <QGroupBox>
 

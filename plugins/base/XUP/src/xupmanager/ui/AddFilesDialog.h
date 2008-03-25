@@ -5,11 +5,11 @@
 #include <QGroupBox>
 #include <QComboBox>
 
-#include "ScopedProjectItemModel.h"
-#include "ProjectItemModel.h"
-#include "XUPItem.h"
+#include <fresh.h>
 
-#include "pTreeComboBox.h"
+#include "../ScopedProjectItemModel.h"
+#include "../ProjectItemModel.h"
+#include "../XUPItem.h"
 
 class AddFilesDialog : public QFileDialog
 {

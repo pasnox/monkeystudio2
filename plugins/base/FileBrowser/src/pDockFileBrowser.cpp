@@ -27,11 +27,9 @@
 **
 ****************************************************************************/
 #include "pDockFileBrowser.h"
-#include "pFileManager.h"
-#include "pMonkeyStudio.h"
-#include "pTreeComboBox.h"
-#include "pSettings.h"
-#include "MonkeyCore.h"
+
+#include <workspacemanager.h>
+#include <coremanager.h>
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>

@@ -11,8 +11,8 @@
 #include <QTableWidgetItem>
 #include <QFileInfo>
 
-#include "./kernel/gdbCore.h"
-#include "./kernel/gdbTemplateCore.h"
+#include "../kernel/gdbCore.h"
+#include "../kernel/gdbTemplateCore.h"
 
 
 struct BreakPoint

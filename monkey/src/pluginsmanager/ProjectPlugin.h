@@ -29,9 +29,10 @@
 #ifndef PROJECTPLUGIN_H
 #define PROJECTPLUGIN_H
 
-#include "MonkeyExport.h"
+#include <fresh.h>
+
 #include "BasePlugin.h"
-#include "ProjectItem.h"
+#include "../projectsmanager/ProjectItem.h"
 
 #include <QHash>
 #include <QStringList>

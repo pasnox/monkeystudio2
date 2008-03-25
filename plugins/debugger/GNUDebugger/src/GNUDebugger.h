@@ -1,7 +1,7 @@
 #ifndef GNUDEBUGGER_H
 #define GNUDEBUGGER_H
 
-#include "BasePlugin.h"
+#include <pluginsmanager.h>
 
 class GNUDebugger : public BasePlugin
 {

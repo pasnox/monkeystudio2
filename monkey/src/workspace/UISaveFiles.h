@@ -31,7 +31,7 @@
 
 #include <QDialog>
 
-#include "MonkeyExport.h"
+#include <fresh.h>
 
 class pAbstractChild;
 class QListWidget;

@@ -27,11 +27,9 @@
 **
 ****************************************************************************/
 #include "pEditor.h"
-#include "pMonkeyStudio.h"
-#include "qSciShortcutsManager.h"
-#include "MonkeyCore.h"
-
-#include "qsciprinter.h"
+#include "../pMonkeyStudio.h"
+#include "../qscintillamanager/qSciShortcutsManager.h"
+#include "../coremanager/MonkeyCore.h"
 
 #include <QKeyEvent>
 #include <QApplication>

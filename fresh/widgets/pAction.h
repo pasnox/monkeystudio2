@@ -29,7 +29,7 @@
 #ifndef PACTION_H
 #define PACTION_H
 
-#include "MonkeyExport.h"
+#include "../objects/MonkeyExport.h"
 
 #include <QAction>
 

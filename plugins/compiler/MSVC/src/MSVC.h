@@ -29,8 +29,7 @@
 #ifndef MSVC_H
 #define MSVC_H
 
-#include "CompilerPlugin.h"
-#include "CLIToolPlugin.h"
+#include <pluginsmanager.h>
 
 class MSVC : public CompilerPlugin, public CLIToolPlugin
 {

@@ -3,12 +3,12 @@
 #include "XUPManager.h"
 #include "QMake2XUP.h"
 
-#include "pMonkeyStudio.h"
-
 #include <QFileInfo>
 #include <QApplication>
 #include <QInputDialog>
 #include <QMessageBox>
+
+#include <monkey.h>
 
 #include <QDebug>
 

@@ -2,7 +2,7 @@
 	the origine file is writed by Pasnox, pConsole
 */
 
-#include "./kernel/gdbProcess.h"
+#include "gdbProcess.h"
 #include <QTimer>
 #include <QTimerEvent>
 

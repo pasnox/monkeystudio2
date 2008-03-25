@@ -28,9 +28,9 @@
 ****************************************************************************/
 #include "pFileManager.h"
 #include "pWorkspace.h"
-#include "UIProjectsManager.h"
+#include "../projectsmanager/ui/UIProjectsManager.h"
 #include "pAbstractChild.h"
-#include "MonkeyCore.h"
+#include "../coremanager/MonkeyCore.h"
 
 pFileManager::pFileManager( QObject* o )
 	: QObject( o )

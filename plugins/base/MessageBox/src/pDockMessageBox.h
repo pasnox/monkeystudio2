@@ -29,9 +29,8 @@
 #ifndef PDOCKMESSAGEBOX_H
 #define PDOCKMESSAGEBOX_H
 
-#include "QSingleton.h"
-#include "pConsoleManager.h"
-#include "pDockWidget.h"
+#include <fresh.h>
+#include <consolemanager.h>
 
 class QLabel;
 class QLineEdit;

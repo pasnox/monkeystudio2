@@ -30,8 +30,8 @@
 #define UIABOUT_H
 
 #include "ui_UIAbout.h"
-#include "MonkeyExport.h"
-#include "QSingleton.h"
+
+#include <fresh.h>
 
 struct pDatas
 {

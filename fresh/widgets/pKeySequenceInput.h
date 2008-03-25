@@ -29,7 +29,7 @@
 #ifndef PKEYSEQUENCEINPUT_H
 #define PKEYSEQUENCEINPUT_H
 
-#include "MonkeyExport.h"
+#include "../objects/MonkeyExport.h"
 
 #include <QLineEdit>
 

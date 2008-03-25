@@ -29,8 +29,7 @@
 #ifndef GCC_H
 #define GCC_H
 
-#include "CompilerPlugin.h"
-#include "CLIToolPlugin.h"
+#include <pluginsmanager.h>
 
 class Gcc : public CompilerPlugin, public CLIToolPlugin
 {

@@ -27,13 +27,9 @@
 **
 ****************************************************************************/
 #include "UIQMakeProjectSettings.h"
-#include "QMakeProxy.h"
-#include "ProjectsModel.h"
-#include "QMakeItem.h"
+#include "../QMakeProxy.h"
+#include "../QMakeItem.h"
 #include "UIItemSettings.h"
-#include "pMonkeyStudio.h"
-#include "PluginsManager.h"
-#include "MonkeyCore.h"
 
 #include <QCompleter>
 #include <QDirModel>
@@ -46,6 +42,10 @@
 #include <QCloseEvent>
 #include <QDebug>
 #include <QWhatsThis>
+
+#include <monkey.h>
+#include <coremanager.h>
+#include <pluginsmanager.h>
 
 using namespace pMonkeyStudio;
 

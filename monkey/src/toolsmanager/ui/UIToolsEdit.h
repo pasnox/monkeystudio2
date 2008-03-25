@@ -29,9 +29,9 @@
 #ifndef UITOOLSEDIT_H
 #define UITOOLSEDIT_H
 
-#include "MonkeyExport.h"
+#include <fresh.h>
+
 #include "ui_UIToolsEdit.h"
-#include "QSingleton.h"
 
 #include <QApplication>
 

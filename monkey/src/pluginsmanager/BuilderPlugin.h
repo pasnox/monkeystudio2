@@ -30,7 +30,7 @@
 #define BUILDERPLUGIN_H
 
 #include "CLIToolPlugin.h"
-#include "UIBuilderSettings.h"
+#include "ui/UIBuilderSettings.h"
 
 class Q_MONKEY_EXPORT BuilderPlugin : public BasePlugin, public CLIToolPlugin
 {	

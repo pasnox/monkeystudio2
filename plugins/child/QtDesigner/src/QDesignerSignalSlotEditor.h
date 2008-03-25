@@ -29,7 +29,7 @@
 #ifndef QDESIGNERSIGNALSLOTEDITOR_H
 #define QDESIGNERSIGNALSLOTEDITOR_H
 
-#include "pDockWidget.h"
+#include <fresh.h>
 
 class QtDesignerChild;
 

@@ -29,9 +29,6 @@
 #include <QTabWidget>
 #include "MSVCMake.h"
 #include "MSVCMakeParser.h"
-#include "MonkeyCore.h"
-#include "pConsoleManager.h"
-#include "pMenuBar.h"
 
 MSVCMake::MSVCMake ()
 {

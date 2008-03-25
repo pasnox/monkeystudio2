@@ -29,18 +29,16 @@
 #ifndef PMONKEYSTUDIO_H
 #define PMONKEYSTUDIO_H
 
-#include "MonkeyExport.h"
-#include "pWorkspace.h"
+#include <fresh.h>
+#include <qscintilla.h>
+
+#include "workspace/pWorkspace.h"
 
 #include <QApplication>
 #include <QMessageBox>
 #include <QDir>
 
-#include "qsciscintilla.h"
-
 class QTranslator;
-class QsciLexer;
-class QsciAPIs;
 class pEditor;
 
 namespace pMonkeyStudio

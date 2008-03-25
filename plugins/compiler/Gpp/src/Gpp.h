@@ -29,8 +29,7 @@
 #ifndef GPP_H
 #define GPP_H
 
-#include "CompilerPlugin.h"
-#include "CLIToolPlugin.h"
+#include <pluginsmanager.h>
 
 class Gpp : public CompilerPlugin, public CLIToolPlugin
 {

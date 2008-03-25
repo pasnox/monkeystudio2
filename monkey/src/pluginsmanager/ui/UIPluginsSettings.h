@@ -29,8 +29,8 @@
 #ifndef UIPLUGINSSETTINGS_H
 #define UIPLUGINSSETTINGS_H
 
-#include "MonkeyExport.h"
-#include "QSingleton.h"
+#include <fresh.h>
+
 #include "ui_UIPluginsSettings.h"
 
 #include <QApplication>

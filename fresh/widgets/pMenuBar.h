@@ -29,7 +29,7 @@
 #ifndef PMENUBAR_H
 #define PMENUBAR_H
 
-#include "MonkeyExport.h"
+#include "../objects/MonkeyExport.h"
 
 #include <QMenuBar>
 #include <QHash>

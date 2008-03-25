@@ -27,9 +27,7 @@
 **
 ****************************************************************************/
 #include "pRecentsManager.h"
-#include "MonkeyCore.h"
-#include "pSettings.h"
-#include "pMenuBar.h"
+#include "../coremanager/MonkeyCore.h"
 
 #include <QAction>
 #include <QFileInfo>

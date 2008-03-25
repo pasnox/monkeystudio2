@@ -28,13 +28,12 @@
 ****************************************************************************/
 #include "pAStyle.h"
 #include "UISettingsAStyle.h"
-#include "MonkeyCore.h"
-#include "pMenuBar.h"
-#include "pAbstractChild.h"
-#include "pWorkspace.h"
-#include "pEditor.h"
 #include "astyle.h"
 #include "pFormatterSettings.h"
+
+#include <coremanager.h>
+#include <workspacemanager.h>
+#include <qscintillamanager.h>
 
 pAStyle::pAStyle()
 {

@@ -11,8 +11,8 @@
 #include <QHBoxLayout>
 #include <QFrame>
 
-#include "./kernel/gdbCore.h"
-#include "./kernel/gdbTemplateCore.h"
+#include "../kernel/gdbCore.h"
+#include "../kernel/gdbTemplateCore.h"
 
 class GdbControl : public GdbCore
 {

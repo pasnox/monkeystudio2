@@ -29,7 +29,7 @@
 #ifndef PTOOLSMANAGER_H
 #define PTOOLSMANAGER_H
 
-#include "MonkeyExport.h"
+#include <fresh.h>
 
 #include <QFileIconProvider>
 

@@ -29,7 +29,7 @@
 #ifndef PTABBEDWORKSPACECORNERBUTTON_H
 #define PTABBEDWORKSPACECORNERBUTTON_H
 
-#include "MonkeyExport.h"
+#include "../objects/MonkeyExport.h"
 
 #include <QToolButton>
 #include <QBoxLayout>

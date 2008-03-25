@@ -29,10 +29,11 @@
 #ifndef COMPILERPLUGIN_H
 #define COMPILERPLUGIN_H
 
-#include "MonkeyExport.h"
+#include <fresh.h>
+
 #include "BasePlugin.h"
-#include "pCommand.h"
-#include "UICompilerSettings.h"
+#include "../consolemanager/pCommand.h"
+#include "ui/UICompilerSettings.h"
 
 class Q_MONKEY_EXPORT CompilerPlugin : public BasePlugin
 {

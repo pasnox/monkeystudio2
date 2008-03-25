@@ -9,8 +9,8 @@
 #include <QObject>
 #include <QTextEdit>
 
-#include "./kernel/gdbCore.h"
-#include "./kernel/gdbTemplateCore.h"
+#include "../kernel/gdbCore.h"
+#include "../kernel/gdbTemplateCore.h"
 
 class GdbBridgeEditor : public GdbCore
 {

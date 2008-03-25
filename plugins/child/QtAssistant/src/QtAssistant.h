@@ -29,7 +29,7 @@
 #ifndef QTASSISTANT_H
 #define QTASSISTANT_H
 
-#include "ChildPlugin.h"
+#include <pluginsmanager.h>
 
 class QtAssistant : public ChildPlugin
 {

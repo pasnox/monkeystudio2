@@ -1,10 +1,7 @@
 #include "GNUDebugger.h"
 #include "DockGNUDebugger.h"
 
-#include "MonkeyCore.h"
-#include "UIMain.h"
-#include "pMenuBar.h"
-#include "pDockToolBar.h"
+#include <maininterface.h>
 
 #include <QIcon>
 

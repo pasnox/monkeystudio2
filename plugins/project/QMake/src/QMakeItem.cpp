@@ -27,16 +27,12 @@
 **
 ****************************************************************************/
 #include "QMakeItem.h"
-#include "ProjectsModel.h"
 #include "UISettingsQMake.h"
-#include "pMonkeyStudio.h"
 #include "QMakeParser.h"
 #include "UIQMakeProjectSettings.h"
 #include "QMake.h"
-#include "MonkeyCore.h"
-#include "pMenuBar.h"
-#include "pConsoleManager.h"
-#include "PluginsManager.h"
+
+#include <monkey.h>
 
 using namespace pMonkeyStudio;
 
