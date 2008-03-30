@@ -33,6 +33,8 @@
 
 #include <QStringList>
 
+class XUPItem;
+
 class Q_MONKEY_EXPORT pCommand
 {
 public:
@@ -40,6 +42,7 @@ public:
 	{
 		mSkipOnError = false;
 		mTryAllParsers = false;
+		mProject = 0;
 	}
 	
 	pCommand( const QString& t, const QString& c, const QString& a, bool b = false, const QStringList& p = QStringList(), const QString& d = QString::null, bool bb = false )
@@ -51,6 +54,7 @@ public:
 		mParsers = p;
 		mWorkingDirectory = d;
 		mTryAllParsers = bb;
+		mProject = 0;
 	}
 	~pCommand() {}
 	
@@ -60,7 +64,7 @@ public:
 	bool operator==( const pCommand& t )
 	{ return text() == t.text() && command() == t.command() && arguments() == t.arguments() &&
 			workingDirectory() == t.workingDirectory() && parsers() == t.parsers() && skipOnError() == t.skipOnError() &&
-			tryAllParsers() == t.tryAllParsers(); }
+			tryAllParsers() == t.tryAllParsers() && userData() == t.userData() && project() == t.project(); }
 
 	QString text() const { return mText; }
 	QString command() const { return mCommand; }
@@ -69,6 +73,8 @@ public:
 	QStringList parsers() const { return mParsers; }
 	bool skipOnError() const { return mSkipOnError; }
 	bool tryAllParsers() const { return mTryAllParsers; }
+	QVariant userData() const { return mUserData; }
+	XUPItem* project() const { return mProject; }
 
 	void setText( const QString& s ) { mText = s; }
 	void setCommand( const QString& s ) { mCommand = s; }
@@ -79,6 +85,26 @@ public:
 	void addParsers( const QStringList& p ) { foreach ( QString s, p ) addParser( s ); }
 	void setSkipOnError( bool b ) { mSkipOnError = b; }
 	void setTryAllParsers( bool b ) { mTryAllParsers = b; }
+	void setUserData( const QVariant& data ) { mUserData = data; }
+	void setProject( XUPItem* project ) { mProject = project; }
+	
+	QString toString() const
+	{
+		QString s;
+		s += QString( "mText: %1\n" ).arg( mText );
+		s += QString( "mCommand: %1\n" ).arg( mCommand );
+		s += QString( "mArguments: %1\n" ).arg( mArguments );
+		s += QString( "mWorkingDirectory: %1\n" ).arg( mWorkingDirectory );
+		s += QString( "mSkipOnError: %1\n" ).arg( mSkipOnError );
+		s += QString( "mParsers: %1\n" ).arg( mParsers.join( " " ) );
+		s += QString( "mTryAllParsers: %1\n" ).arg( mTryAllParsers );
+		s += QString( "mUserData: %1\n" ).arg( mUserData.toString() );
+		s += QString( "mProject: %1" ).arg( (int)mProject );
+		return s;
+	}
+	
+	void debug()
+	{ qWarning( qPrintable( toString() ) ); }
 
 protected:
 	QString mText;
@@ -88,9 +114,13 @@ protected:
 	bool mSkipOnError;
 	QStringList mParsers;
 	bool mTryAllParsers;
-
+	QVariant mUserData;
+	XUPItem* mProject;
 };
 
 typedef QList<pCommand> pCommandList;
+
+Q_DECLARE_METATYPE( pCommand );
+Q_DECLARE_METATYPE( pCommandList );
 
 #endif // PCOMMAND_H
