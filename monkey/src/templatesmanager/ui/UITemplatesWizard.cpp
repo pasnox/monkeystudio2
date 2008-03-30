@@ -59,19 +59,18 @@ UITemplatesWizard::UITemplatesWizard( QWidget* w )
 	// get templates
 	mTemplates = pTemplatesManager::instance()->getTemplates();
 	
-	QStringList l( tr( "All" ) );
-	QStringList t( tr( "All" ) );
+	// set default language/type
+	cbLanguages->addItem( tr( "All" ), "All" );
+	cbTypes->addItem( tr( "All" ), "All" );
+	
+	// languages/types
 	foreach( pTemplate tp, mTemplates )
 	{
-		if ( !l.contains( tp.Language, Qt::CaseInsensitive ) )
-			l << tp.Language;
-		if ( !t.contains( tp.Type, Qt::CaseInsensitive ) )
-			t << tp.Type;
+		if ( cbLanguages->findData( tp.Language, Qt::UserRole, Qt::MatchFixedString ) == -1 )
+			cbLanguages->addItem( tr( qPrintable( tp.Language ) ), tp.Language );
+		if ( cbTypes->findData( tp.Type, Qt::UserRole, Qt::MatchFixedString ) == -1 )
+			cbTypes->addItem( tr( qPrintable( tp.Type ) ), tp.Type );
 	}
-	
-	// add items
-	cbLanguages->addItems( l );
-	cbTypes->addItems( t );
 
 	// assign projects combobox
 	mProjects = MonkeyCore::projectsManager()->model();
@@ -94,13 +93,13 @@ UITemplatesWizard::UITemplatesWizard( QWidget* w )
 }
 
 void UITemplatesWizard::setType( const QString& s )
-{ cbTypes->setCurrentIndex( cbTypes->findText( s ) ); }
+{ cbTypes->setCurrentIndex( cbTypes->findData( s ) ); }
 
 void UITemplatesWizard::onFiltersChanged()
 {
 	// get combobox text
-	QString t = cbTypes->currentText();
-	QString l = cbLanguages->currentText();
+	QString t = cbTypes->itemData( cbTypes->currentIndex() ).toString();
+	QString l = cbLanguages->itemData( cbLanguages->currentIndex() ).toString();
 	QString i;
 
 	// clear lwTemplates
@@ -231,7 +230,7 @@ void UITemplatesWizard::on_pbCreate_clicked()
 	if ( !gbAddToProject->isChecked() || !cbProjects->currentIndex().isValid() )
 		t.FilesToAdd.clear();
 	
-	// don t open project, because adding it to a parent will auto matically open it
+	// don t open project, because adding it to a parent will automatically open it
 	if ( !t.FilesToAdd.isEmpty() )
 		t.ProjectsToOpen.clear();
 	
