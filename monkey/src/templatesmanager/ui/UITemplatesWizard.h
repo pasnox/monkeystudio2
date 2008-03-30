@@ -57,7 +57,8 @@ private:
 
 private slots:
     void onFiltersChanged();
-	void on_lwTemplates_itemPressed( QListWidgetItem* );
+	void on_lwTemplates_itemPressed( QListWidgetItem* item );
+	void on_cbProjects_currentChanged( const QModelIndex& index );
     void on_tbDestination_clicked();
 
     bool checkTemplate();

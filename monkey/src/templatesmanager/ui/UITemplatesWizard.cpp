@@ -72,19 +72,18 @@ UITemplatesWizard::UITemplatesWizard( QWidget* w )
 	// add items
 	cbLanguages->addItems( l );
 	cbTypes->addItems( t );
-	//cbOperators->addItems( availableOperators() );
-	
-    // assign projects combobox
-    mProjects = MonkeyCore::projectsManager()->model();
-    cbProjects->setModel( mProjects->scopedModel() );
-    XUPItem* p = MonkeyCore::projectsManager()->currentProject();
-    cbProjects->setCurrentIndex( mProjects->scopedModel()->mapFromSource( p ? p->index() : QModelIndex() ) );
-	
-    // restore infos
-    pSettings* s = MonkeyCore::settings();
-    cbLanguages->setCurrentIndex( cbLanguages->findText( s->value( "Recents/FileWizard/Language", "C++" ).toString() ) );
-    leDestination->setText( s->value( "Recents/FileWizard/Destination" ).toString() );
-    cbOpen->setChecked( s->value( "Recents/FileWizard/Open", true ).toBool() );
+
+	// assign projects combobox
+	mProjects = MonkeyCore::projectsManager()->model();
+	cbProjects->setModel( mProjects->scopedModel() );
+	XUPItem* p = MonkeyCore::projectsManager()->currentProject();
+	cbProjects->setCurrentIndex( mProjects->scopedModel()->mapFromSource( p ? p->index() : QModelIndex() ) );
+
+	// restore infos
+	pSettings* s = MonkeyCore::settings();
+	cbLanguages->setCurrentIndex( cbLanguages->findText( s->value( "Recents/FileWizard/Language", "C++" ).toString() ) );
+	leDestination->setText( s->value( "Recents/FileWizard/Destination" ).toString() );
+	cbOpen->setChecked( s->value( "Recents/FileWizard/Open", true ).toBool() );
 	
 	// connections
 	connect( cbLanguages, SIGNAL( currentIndexChanged( int ) ), this, SLOT( onFiltersChanged() ) );
@@ -171,6 +170,17 @@ void UITemplatesWizard::on_lwTemplates_itemPressed( QListWidgetItem* it )
 	
 	// enable groupbox
 	gbInformations->setEnabled( true );
+}
+
+void UITemplatesWizard::on_cbProjects_currentChanged( const QModelIndex& index )
+{
+	const QModelIndex idx = mProjects->scopedModel()->mapToSource( index );
+	if ( XUPItem* it = mProjects->itemFromIndex( idx ) )
+	{
+		cbOperators->clear();
+		cbOperators->addItems( it->operators() );
+		leDestination->setText( it->project()->projectPath() );
+	}
 }
 
 void UITemplatesWizard::on_tbDestination_clicked()
