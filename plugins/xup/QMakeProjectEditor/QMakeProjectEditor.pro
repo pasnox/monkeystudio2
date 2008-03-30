@@ -4,7 +4,7 @@ DESTDIR	= $$MONKEY_PLUGINS_DIR/xup
 TARGET	= QMakeProjectEditor
 QT	*= xml
 
-RESOURCES *= src/resources/QMakeProjectEditor.qrc
+RESOURCES	*= src/resources/QMakeProjectEditor.qrc
 
 HEADERS	*= src/QMakeProjectEditor.h \
 	src/QMake2XUP.h \

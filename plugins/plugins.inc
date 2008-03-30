@@ -17,15 +17,15 @@ DEFINES	-= MONKEY_CORE_BUILD
 
 BUILD_PATH	= ../../../build
 
-TEMPLATE 	= lib
+TEMPLATE	= lib
 LANGUAGE	= Qt4/C++
 CONFIG	*= warn_on thread x11 dll plugin debug_and_release
 PRE_TARGETDEPS	*= ../../../monkey
 
-QMAKE_TARGET_COMPANY = "Monkey Studio Team"
-QMAKE_TARGET_PRODUCT = "Monkey Studio"
-QMAKE_TARGET_DESCRIPTION = "Crossplatform Integrated Development Environment."
-QMAKE_TARGET_COPYRIGHT = "Copyright (C) 2005 - 2008 Filipe AZEVEDO & The Monkey Studio Team"
+QMAKE_TARGET_COMPANY	= "Monkey Studio Team"
+QMAKE_TARGET_PRODUCT	= "Monkey Studio"
+QMAKE_TARGET_DESCRIPTION	= "Crossplatform Integrated Development Environment."
+QMAKE_TARGET_COPYRIGHT	= "Copyright (C) 2005 - 2008 Filipe AZEVEDO & The Monkey Studio Team"
 
 mac:MONKEY_PLUGINS_DIR	= ../../../bin/monkeystudio.app/Contents/plugins
 else:unix|win32:MONKEY_PLUGINS_DIR	= ../../../bin/plugins
@@ -39,9 +39,9 @@ QMAKE_LFLAGS	-= -Wl,--no-undefined
 win32:QMAKE_LIBDIR	+= ../../../bin
 contains( DEFINES, __COVERAGESCANNER__ ) {
 	message( "Coverage Meter Activated ( http://www.coveragemeter.com )." )
-	QMAKE_CXX = cs$$QMAKE_CXX
-	QMAKE_LINK = cs$$QMAKE_LINK
-	QMAKE_CC = cs$$QMAKE_CC
+	QMAKE_CXX	= cs$$QMAKE_CXX
+	QMAKE_LINK	= cs$$QMAKE_LINK
+	QMAKE_CC	= cs$$QMAKE_CC
 }
 
 CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
@@ -56,7 +56,7 @@ CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 	MOC_DIR	= $${BUILD_PATH}/debug/.moc
 	RCC_DIR	= $${BUILD_PATH}/debug/.rcc
 	#unix:LIBS += -lmonkeystudio_debug
-	win32:LIBS += -lmonkeystudiod
+	win32:LIBS	+= -lmonkeystudiod
 } else {
 	#Release
 	unix:OBJECTS_DIR	= $${BUILD_PATH}/release/.obj/unix
@@ -65,5 +65,5 @@ CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 	UI_DIR	= $${BUILD_PATH}/release/.ui
 	MOC_DIR	= $${BUILD_PATH}/release/.moc
 	RCC_DIR	= $${BUILD_PATH}/release/.rcc
-	win32:LIBS += -lmonkeystudio
+	win32:LIBS	+= -lmonkeystudio
 }

@@ -4,6 +4,6 @@ DESTDIR	= $$MONKEY_PLUGINS_DIR/compiler
 TARGET	= Gcc
 DEFINES	*= "PLUGIN_NAME=\"\\\"$${TARGET}\\\"\""
 
-HEADERS = src/Gcc.h 
+HEADERS	= src/Gcc.h
 
-SOURCES	= src/Gcc.cpp 
+SOURCES	= src/Gcc.cpp
