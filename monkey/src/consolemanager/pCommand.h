@@ -61,7 +61,7 @@ public:
 	bool isValid() const
 	{ return !text().isEmpty() && !command().isEmpty(); }
 	
-	bool operator==( const pCommand& t )
+	bool operator==( const pCommand& t ) const
 	{ return text() == t.text() && command() == t.command() && arguments() == t.arguments() &&
 			workingDirectory() == t.workingDirectory() && parsers() == t.parsers() && skipOnError() == t.skipOnError() &&
 			tryAllParsers() == t.tryAllParsers() && userData() == t.userData() && project() == t.project(); }
