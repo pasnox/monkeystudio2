@@ -652,7 +652,7 @@ extern boolean enableRegexKind (
 	return result;
 }
 
-extern void printRegexKinds (const langType language __unused__, boolean indent)
+extern void printRegexKinds (const langType language __unused__, boolean indent __unused__)
 {
 #ifdef HAVE_REGEX
 	if (language <= SetUpper  &&  Sets [language].count > 0)
