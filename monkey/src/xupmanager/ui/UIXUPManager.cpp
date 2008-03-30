@@ -30,6 +30,8 @@ UIXUPManager::UIXUPManager( QWidget* w )
 	// hide headers
 	tvProjects->header()->hide();
 	tvProxiedProjects->header()->hide();
+	// hide log
+	teLog->hide();
 	// connection
 	connect( tvProxiedProjects->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( currentChanged( const QModelIndex&, const QModelIndex& ) ) );
 	connect( this, SIGNAL( projectOpen( XUPItem* ) ), this, SLOT( internal_projectOpen( XUPItem* ) ) );
