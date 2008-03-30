@@ -33,7 +33,7 @@
 #include "../maininterface/UIMain.h"
 #include "../recentsmanager/pRecentsManager.h"
 #include "../toolsmanager/pToolsManager.h"
-#include "../projectsmanager/ui/UIProjectsManager.h"
+#include "../xupmanager/ui/UIXUPManager.h"
 #include "../workspace/pFileManager.h"
 #include "../workspace/pWorkspace.h"
 #include "../consolemanager/pConsoleManager.h"
@@ -163,11 +163,11 @@ pToolsManager* MonkeyCore::toolsManager()
 	return qobject_cast<pToolsManager*>( mInstances[&pToolsManager::staticMetaObject] );
 }
 
-UIProjectsManager* MonkeyCore::projectsManager()
+UIXUPManager* MonkeyCore::projectsManager()
 {
-	if ( !mInstances.contains( &UIProjectsManager::staticMetaObject ) )
-		mInstances[&UIProjectsManager::staticMetaObject] = new UIProjectsManager( mainWindow() );
-	return qobject_cast<UIProjectsManager*>( mInstances[&UIProjectsManager::staticMetaObject] );
+	if ( !mInstances.contains( &UIXUPManager::staticMetaObject ) )
+		mInstances[&UIXUPManager::staticMetaObject] = new UIXUPManager( mainWindow() );
+	return qobject_cast<UIXUPManager*>( mInstances[&UIXUPManager::staticMetaObject] );
 }
 
 pFileManager* MonkeyCore::fileManager()

@@ -128,7 +128,6 @@ public:
 	
 protected:
 	PluginInfos mPluginInfos;
-	
 };
 
 Q_DECLARE_INTERFACE( BasePlugin, "org.monkeystudio.MonkeyStudio.BasePlugin/1.0" )

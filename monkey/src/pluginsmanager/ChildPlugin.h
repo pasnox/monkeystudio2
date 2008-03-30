@@ -59,7 +59,6 @@ public:
 	
 protected:
 	QHash<QString, QStringList> mSuffixes;
-	
 };
 
 Q_DECLARE_INTERFACE( ChildPlugin, "org.monkeystudio.MonkeyStudio.ChildPlugin/1.0" )

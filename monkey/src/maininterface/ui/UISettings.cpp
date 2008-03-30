@@ -202,6 +202,8 @@ void UISettings::loadSettings()
 	
 	// General
 	cbRestoreProjectsOnStartup->setChecked( restoreProjectsOnStartup() );
+	cbSaveProjects->setChecked( saveProjectsOnCustomAction() );
+	cbSaveFiles->setChecked( saveFilesOnCustomAction() );
 	leDefaultProjectsDirectory->setText( defaultProjectsDirectory() );
 	cbTabsHaveCloseButton->setChecked( tabsHaveCloseButton() );
 	cbTabsHaveShortcut->setChecked( tabsHaveShortcut() );
@@ -214,7 +216,6 @@ void UISettings::loadSettings()
 	bgExternalChanges->button( externalchanges() )->setChecked( true );
 	cbSaveSession->setChecked( saveSessionOnClose() );
 	cbRestoreSession->setChecked( restoreSessionOnStartup() );
-	gbOperators->setValues( availableOperators() );
 
 	// Paths
 	pleTemplatesPaths->setValues( pTemplatesManager::instance()->templatesPath() );
@@ -367,6 +368,8 @@ void UISettings::saveSettings()
 
 	// General
 	setRestoreProjectsOnStartup( cbRestoreProjectsOnStartup->isChecked() );
+	setSaveProjectsOnCustomAction( cbSaveProjects->isChecked() );
+	setSaveFilesOnCustomAction( cbSaveFiles->isChecked() );
 	setDefaultProjectsDirectory( leDefaultProjectsDirectory->text() );
 	setTabsHaveCloseButton( cbTabsHaveCloseButton->isChecked() );
 	setTabsHaveShortcut( cbTabsHaveShortcut->isChecked() );
@@ -377,7 +380,6 @@ void UISettings::saveSettings()
 	setExternalChanges( (pMonkeyStudio::ExternalChangesMode)bgExternalChanges->checkedId() );
 	setSaveSessionOnClose( cbSaveSession->isChecked() );
 	setRestoreSessionOnStartup( cbRestoreSession->isChecked() );
-	setAvailableOperators( gbOperators->values() );
 
 	// Paths
 	pTemplatesManager::instance()->setTemplatesPath( pleTemplatesPaths->values() );

@@ -114,7 +114,7 @@ void PluginsManager::enableUserPlugins()
 	}
 }
 
-ProjectItem* PluginsManager::projectItem( const QString& s )
+XUPItem* PluginsManager::projectItem( const QString& s )
 {
 	foreach ( ProjectPlugin* pp, plugins<ProjectPlugin*>( PluginsManager::stEnabled ) )
 		foreach ( QString k, pp->suffixes().keys() )

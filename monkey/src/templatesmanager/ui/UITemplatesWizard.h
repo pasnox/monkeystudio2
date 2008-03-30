@@ -34,7 +34,7 @@
 #include "ui_UITemplatesWizard.h"
 #include "../pTemplatesManager.h"
 
-class ProjectsModel;
+class ProjectItemModel;
 
 class Q_MONKEY_EXPORT UITemplatesWizard : public QDialog, public Ui::UITemplatesWizard, public QSingleton<UITemplatesWizard>
 {
@@ -49,7 +49,7 @@ private:
 	QList<QLabel*> mLabels;
 	QList<QComboBox*> mCombos;
     TemplateList mTemplates;
-    ProjectsModel* mProjects;
+    ProjectItemModel* mProjects;
 
     UITemplatesWizard( QWidget* = 0 );
     QStringList getLanguages();

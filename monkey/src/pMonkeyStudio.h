@@ -57,10 +57,6 @@ namespace pMonkeyStudio
 	Q_MONKEY_EXPORT const QStringList availableTextCodecs();
 	Q_MONKEY_EXPORT const QStringList availableImageFormats();
 	Q_MONKEY_EXPORT const QStringList availableLanguages();
-	
-	Q_MONKEY_EXPORT QStringList defaultOperators();
-	Q_MONKEY_EXPORT const QStringList availableOperators();
-	Q_MONKEY_EXPORT void setAvailableOperators( const QStringList& );
 
 	Q_MONKEY_EXPORT const QFileInfoList getFolders( QDir, const QStringList&, bool = true );
 	Q_MONKEY_EXPORT const QFileInfoList getFiles( QDir, const QStringList&, bool = true );
@@ -103,6 +99,10 @@ namespace pMonkeyStudio
 	/***** GENERAL *****/
 	Q_MONKEY_EXPORT void setRestoreProjectsOnStartup( bool );
 	Q_MONKEY_EXPORT const bool restoreProjectsOnStartup();
+	Q_MONKEY_EXPORT void setSaveProjectsOnCustomAction( bool );
+	Q_MONKEY_EXPORT const bool saveProjectsOnCustomAction();
+	Q_MONKEY_EXPORT void setSaveFilesOnCustomAction( bool );
+	Q_MONKEY_EXPORT const bool saveFilesOnCustomAction();
 	Q_MONKEY_EXPORT void setDefaultProjectsDirectory( const QString& );
 	Q_MONKEY_EXPORT const QString defaultProjectsDirectory();
 	Q_MONKEY_EXPORT void setTabsHaveCloseButton( bool );

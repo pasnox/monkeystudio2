@@ -29,7 +29,7 @@
 #include "pSearch.h"
 #include "../../coremanager/MonkeyCore.h"
 #include "../../workspace/pWorkspace.h"
-#include "../../projectsmanager/ui/UIProjectsManager.h"
+#include "../../xupmanager/ui/UIXUPManager.h"
 #include "../../workspace/pChild.h"
 #include "../pEditor.h"
 #include "../../maininterface/UIMain.h"

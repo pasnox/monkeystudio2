@@ -39,7 +39,7 @@
 #include "DebuggerPlugin.h"
 #include "InterpreterPlugin.h"
 
-class ProjectItem;
+class XUPItem;
 class pAbstractChild;
 
 class Q_MONKEY_EXPORT PluginsManager : public QObject
@@ -80,7 +80,7 @@ public:
 	QHash<QString, QStringList> childSuffixes() const;
 	QString childFilters() const;
 	
-	ProjectItem* projectItem( const QString& );
+	XUPItem* projectItem( const QString& );
 	
 	void setCurrentBuilder( BuilderPlugin* );
 	BuilderPlugin* currentBuilder();

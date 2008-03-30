@@ -248,9 +248,6 @@
        </property>
        <item row="0" column="0" colspan="2" >
         <widget class="QGroupBox" name="gbProjectSettings" >
-         <property name="enabled" >
-          <bool>false</bool>
-         </property>
          <property name="title" >
           <string>&amp;Project Settings</string>
          </property>
@@ -275,6 +272,9 @@
           </property>
           <item row="0" column="0" colspan="2" >
            <widget class="QCheckBox" name="cbRestoreProjectsOnStartup" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
             <property name="text" >
              <string>Restore Projects On Startup</string>
             </property>
@@ -283,24 +283,47 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0" colspan="2" >
+          <item row="3" column="0" colspan="2" >
            <widget class="QLabel" name="lDefaultProjectsDirectory" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
             <property name="text" >
              <string>Default projects directory :</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="1" >
+          <item row="4" column="1" >
            <widget class="QToolButton" name="tbDefaultProjectsDirectory" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
             <property name="text" >
              <string>...</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="0" >
+          <item row="4" column="0" >
            <widget class="QLineEdit" name="leDefaultProjectsDirectory" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
             <property name="text" >
              <string>%HOME%/.Monkey Studio/Projects</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="2" >
+           <widget class="QCheckBox" name="cbSaveFiles" >
+            <property name="text" >
+             <string>Save all files on custom action ( Build, Debugger, Interpreter )</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2" >
+           <widget class="QCheckBox" name="cbSaveProjects" >
+            <property name="text" >
+             <string>Save all projects on custom action ( Build, Debugger, Interpreter )</string>
             </property>
            </widget>
           </item>
@@ -469,21 +492,8 @@
          </layout>
         </widget>
        </item>
-       <item rowspan="2" row="2" column="1" >
-        <widget class="pStringListEditor" name="gbOperators" >
-         <property name="title" >
-          <string>&amp;Operators</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0" >
+       <item row="2" column="1" >
         <widget class="QGroupBox" name="gbSession" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Maximum" hsizetype="Preferred" >
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="title" >
           <string>&amp;Session</string>
          </property>
@@ -517,10 +527,23 @@
             </property>
            </widget>
           </item>
+          <item>
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
          </layout>
         </widget>
        </item>
-       <item row="4" column="0" colspan="2" >
+       <item row="3" column="0" colspan="2" >
         <spacer>
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
@@ -530,8 +553,8 @@
          </property>
          <property name="sizeHint" >
           <size>
-           <width>479</width>
-           <height>126</height>
+           <width>471</width>
+           <height>16</height>
           </size>
          </property>
         </spacer>
@@ -3537,12 +3560,6 @@
  <customwidgets>
   <customwidget>
    <class>pPathListEditor</class>
-   <extends>QGroupBox</extends>
-   <header location="global" >fresh.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>pStringListEditor</class>
    <extends>QGroupBox</extends>
    <header location="global" >fresh.h</header>
    <container>1</container>

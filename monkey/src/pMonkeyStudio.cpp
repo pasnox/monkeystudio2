@@ -163,18 +163,6 @@ const QStringList pMonkeyStudio::availableLanguages()
 	return l;
 }
 
-QStringList pMonkeyStudio::defaultOperators()
-{ return QStringList() << "=" << "-=" << "+=" << "*=" << "~=" << ":" << "|"; }
-
-const QStringList pMonkeyStudio::availableOperators()
-{
-	QStringList l = MonkeyCore::settings()->value( settingsPath() +"/Operators" ).toStringList();
-	return l.isEmpty() ? defaultOperators() : l;
-}
-
-void pMonkeyStudio::setAvailableOperators( const QStringList& l )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/Operators", l ); }
-
 const QFileInfoList pMonkeyStudio::getFolders( QDir d, const QStringList& l, bool b )
 {
 	QFileInfoList ll;
@@ -964,6 +952,18 @@ void pMonkeyStudio::setRestoreProjectsOnStartup( bool b )
 
 const bool pMonkeyStudio::restoreProjectsOnStartup()
 { return MonkeyCore::settings()->value( settingsPath() +"/RestoreProjectsOnStartup", true ).toBool(); }
+
+void pMonkeyStudio::setSaveProjectsOnCustomAction( bool b )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/SaveProjectsOnCustomAction", b ); }
+
+const bool pMonkeyStudio::saveProjectsOnCustomAction()
+{ return MonkeyCore::settings()->value( settingsPath() +"/SaveProjectsOnCustomAction", false ).toBool(); }
+
+void pMonkeyStudio::setSaveFilesOnCustomAction( bool b )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/SaveFilesOnCustomAction", b ); }
+
+const bool pMonkeyStudio::saveFilesOnCustomAction()
+{ return MonkeyCore::settings()->value( settingsPath() +"/SaveFilesOnCustomAction", false ).toBool(); }
 
 void pMonkeyStudio::setDefaultProjectsDirectory( const QString& s )
 { MonkeyCore::settings()->setValue( settingsPath() +"/DefaultProjectsDirectory", s ); }

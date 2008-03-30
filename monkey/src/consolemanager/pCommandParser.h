@@ -35,7 +35,7 @@
 
 #include <QObject>
 
-class ProjectItem;
+class XUPItem;
 
 class Q_MONKEY_EXPORT pCommandParser : public QObject
 {

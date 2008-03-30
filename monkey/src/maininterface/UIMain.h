@@ -51,7 +51,7 @@ protected:
 	void initToolBar();
 	void initConnections();
 
-protected slots:
+public slots:
 	void menu_aboutToShow();
 
 signals:

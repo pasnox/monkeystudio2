@@ -29,12 +29,11 @@
 #include "UIMain.h"
 #include "../coremanager/MonkeyCore.h"
 #include "../pMonkeyStudio.h"
-#include "../projectsmanager/ui/UIProjectsManager.h"
+#include "../xupmanager/ui/UIXUPManager.h"
 #include "../recentsmanager/pRecentsManager.h"
 #include "../toolsmanager/pToolsManager.h"
 #include "../consolemanager/pConsoleManager.h"
 #include "../workspace/pFileManager.h"
-#include "../projectsmanager/ProjectsProxy.h"
 #include "../pluginsmanager/PluginsManager.h"
 #include "../qscintillamanager/ui/pSearch.h"
 
@@ -92,7 +91,7 @@ void UIMain::closeEvent( QCloseEvent* e )
 		return;
 	}
 	// force to close all projects
-	MonkeyCore::projectsManager()->projectCloseAll_triggered();
+	MonkeyCore::projectsManager()->action( UIXUPManager::CloseAll )->trigger();
 	// inform that we close mainwindow
 	emit aboutToClose();
 }
@@ -176,7 +175,6 @@ void UIMain::initMenuBar()
 		mb->menu( "mStyle", tr( "&Style" ), QIcon( ":/view/icons/view/style.png" ) );
 		mb->action( "aNext", tr( "&Next Tab" ), QIcon( ":/view/icons/view/next.png" ), tr( "Alt+Right" ), tr( "Active the next tab" ) )->setEnabled( false );
 		mb->action( "aPrevious", tr( "&Previous Tab" ), QIcon( ":/view/icons/view/previous.png" ), tr( "Alt+Left" ), tr( "Active the previous tab" ) )->setEnabled( false );
-		mb->action( "aFiltered", tr( "&Filtered Projects" ), QIcon( ":/view/icons/view/filtered.png" ), tr( "" ), tr( "Filtered project view" ) )->setCheckable( true );
 	mb->endGroup();
 	mb->menu( "mProject", tr( "&Project" ) );
 	mb->beginGroup( "mProject" );
@@ -191,8 +189,8 @@ void UIMain::initMenuBar()
 		mb->action( "aSeparator2" );
 		mb->action( "aSettings", tr( "Set&tings..." ), QIcon( ":/project/icons/project/settings.png" ), QString::null, tr( "Project settings" ) )->setEnabled( false );
 		mb->action( "aSeparator3" );
-		mb->action( "aAddExistingFiles", tr( "&Add Existing Files/Projects..." ), QIcon( ":/project/icons/project/add.png" ), QString::null, tr( "Add existing files/projects to the current project" ) )->setEnabled( false );
-		mb->action( "aRemove", tr( "&Remove Variable/Value..." ), QIcon( ":/project/icons/project/remove.png" ), QString::null, tr( "Remove the current variable/value" ) )->setEnabled( false );
+		mb->action( "aAddFiles", tr( "&Add Files..." ), QIcon( ":/project/icons/project/add.png" ), QString::null, tr( "Add existing files/projects to the current project" ) )->setEnabled( false );
+		mb->action( "aRemoveFiles", tr( "&Remove Files..." ), QIcon( ":/project/icons/project/remove.png" ), QString::null, tr( "Remove the current variable/value" ) )->setEnabled( false );
 		mb->action( "aSeparator4" );
 		mb->menu( "mRecents", tr( "&Recents" ), QIcon( ":/project/icons/project/recents.png" ) );
 		mb->action( "mRecents/aClear", tr( "&Clear" ), QIcon( ":/project/icons/project/clear.png" ), QString::null, tr( "Clear the recents projects list" ) );
@@ -254,6 +252,18 @@ void UIMain::initMenuBar()
 	}
 	// add styles action to menu
 	mb->menu( "mView/mStyle" )->addActions( agStyles->actions() );
+	// add actions to uixupmanager
+	UIXUPManager* xm = MonkeyCore::projectsManager();
+	xm->setAction( UIXUPManager::New, mb->action( "mProject/aNew" ) );
+	xm->setAction( UIXUPManager::Open, mb->action( "mProject/aOpen" ) );
+	xm->setAction( UIXUPManager::SaveCurrent, mb->action( "mProject/mSave/aCurrent" ) );
+	xm->setAction( UIXUPManager::SaveAll, mb->action( "mProject/mSave/aAll" ) );
+	xm->setAction( UIXUPManager::CloseCurrent, mb->action( "mProject/mClose/aCurrent" ) );
+	xm->setAction( UIXUPManager::CloseAll, mb->action( "mProject/mClose/aAll" ) );
+	xm->setAction( UIXUPManager::Add, mb->action( "mProject/aAddFiles" ) );
+	xm->setAction( UIXUPManager::Remove, mb->action( "mProject/aRemoveFiles" ) );
+	xm->setAction( UIXUPManager::Settings, mb->action( "mProject/aSettings" ) );
+	xm->initGui();
 }
 
 void UIMain::initToolBar()
@@ -328,18 +338,9 @@ void UIMain::initConnections()
 	connect( agStyles, SIGNAL( triggered( QAction* ) ), MonkeyCore::workspace(), SLOT( agStyles_triggered( QAction* ) ) );
 	connect( menuBar()->action( "mView/aNext" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( activateNextDocument() ) );
 	connect( menuBar()->action( "mView/aPrevious" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( activatePreviousDocument() ) );
-	connect( menuBar()->action( "mView/aFiltered" ), SIGNAL( triggered( bool ) ), MonkeyCore::projectsManager()->proxy(), SLOT( setFiltering( bool ) ) );
 	// project connection
-	connect( menuBar()->action( "mProject/aNew" ), SIGNAL( triggered() ), MonkeyCore::projectsManager(), SLOT( projectNew_triggered() ) );
-	connect( menuBar()->action( "mProject/aOpen" ), SIGNAL( triggered() ), MonkeyCore::projectsManager(), SLOT( projectOpen_triggered() ) );
-	connect( menuBar()->action( "mProject/mSave/aCurrent" ), SIGNAL( triggered() ), MonkeyCore::projectsManager(), SLOT( projectSaveCurrent_triggered() ) );
-	connect( menuBar()->action( "mProject/mSave/aAll" ), SIGNAL( triggered() ), MonkeyCore::projectsManager(), SLOT( projectSaveAll_triggered() ) );
-	connect( menuBar()->action( "mProject/mClose/aCurrent" ), SIGNAL( triggered() ), MonkeyCore::projectsManager(), SLOT( projectCloseCurrent_triggered() ) );
-	connect( menuBar()->action( "mProject/mClose/aAll" ), SIGNAL( triggered() ), MonkeyCore::projectsManager(), SLOT( projectCloseAll_triggered() ) );
-	connect( menuBar()->action( "mProject/aSettings" ), SIGNAL( triggered() ), MonkeyCore::projectsManager(), SLOT( projectSettings_triggered() ) );
-	connect( menuBar()->action( "mProject/aAddExistingFiles" ), SIGNAL( triggered() ), MonkeyCore::projectsManager(), SLOT( projectAddExistingFiles_triggered() ) );
-	connect( menuBar()->action( "mProject/aRemove" ), SIGNAL( triggered() ), MonkeyCore::projectsManager(), SLOT( projectRemove_triggered() ) );
 	connect( MonkeyCore::recentsManager(), SIGNAL( openProjectRequested( const QString& ) ), MonkeyCore::projectsManager(), SLOT( openProject( const QString& ) ) );
+	connect( MonkeyCore::projectsManager(), SIGNAL( fileDoubleClicked( const QString& ) ), MonkeyCore::workspace(), SLOT( openFile( const QString& ) ) );
 	// builder debugger interpreter menu
 	connect( menuBar()->menu( "mBuilder" ), SIGNAL( aboutToShow() ), this, SLOT( menu_aboutToShow() ) );
 	connect( menuBar()->menu( "mDebugger" ), SIGNAL( aboutToShow() ), this, SLOT( menu_aboutToShow() ) );
@@ -364,7 +365,12 @@ void UIMain::initConnections()
 
 void UIMain::menu_aboutToShow()
 {
-	if ( QMenu* m = qobject_cast<QMenu*>( sender() ) )
+	QList<QMenu*> menus;
+	if ( sender() )
+		menus << qobject_cast<QMenu*>( sender() );
+	else
+		menus << menuBar()->menu( "mBuilder" ) << menuBar()->menu( "mDebugger" ) << menuBar()->menu( "mInterpreter" );
+	foreach ( QMenu* m, menus )
 		foreach ( QAction* a, m->actions() )
 			if ( a->menu() )
 				a->menu()->menuAction()->setVisible( a->menu()->actions().count() );

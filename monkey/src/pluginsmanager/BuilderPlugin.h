@@ -39,7 +39,6 @@ public:
 	virtual pCommand buildCommand() const = 0;
 	virtual void setBuildCommand( const pCommand& ) = 0;
 	virtual QWidget* builderSettingsWidget() { return new UIBuilderSettings( this, QApplication::activeWindow() ); }
-
 };
 
 Q_DECLARE_INTERFACE( BuilderPlugin, "org.monkeystudio.MonkeyStudio.BuilderPlugin/1.0" )

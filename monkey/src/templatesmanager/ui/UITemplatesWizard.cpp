@@ -31,9 +31,10 @@
 #include "../../pMonkeyStudio.h"
 #include "../../coremanager/MonkeyCore.h"
 
-#include "../../projectsmanager/ProjectsModel.h"
-#include "../../projectsmanager/ProjectsProxy.h"
-#include "../../projectsmanager/ui/UIProjectsManager.h"
+#include "../../xupmanager/ProjectItemModel.h"
+#include "../../xupmanager/ScopedProjectItemModel.h"
+#include "../../xupmanager/XUPItem.h"
+#include "../../xupmanager/ui/UIXUPManager.h"
 #include "../../variablesmanager/VariablesManager.h"
 
 #include <QDir>
@@ -71,13 +72,13 @@ UITemplatesWizard::UITemplatesWizard( QWidget* w )
 	// add items
 	cbLanguages->addItems( l );
 	cbTypes->addItems( t );
-	cbOperators->addItems( availableOperators() );
+	//cbOperators->addItems( availableOperators() );
 	
     // assign projects combobox
     mProjects = MonkeyCore::projectsManager()->model();
-    cbProjects->setModel( mProjects->scopesProxy() );
-    ProjectItem* p = MonkeyCore::projectsManager()->currentProject();
-    cbProjects->setCurrentIndex( mProjects->scopesProxy()->mapFromSource( p ? p->index() : QModelIndex() ) );
+    cbProjects->setModel( mProjects->scopedModel() );
+    XUPItem* p = MonkeyCore::projectsManager()->currentProject();
+    cbProjects->setCurrentIndex( mProjects->scopedModel()->mapFromSource( p ? p->index() : QModelIndex() ) );
 	
     // restore infos
     pSettings* s = MonkeyCore::settings();
@@ -225,7 +226,7 @@ void UITemplatesWizard::on_pbCreate_clicked()
 		t.ProjectsToOpen.clear();
 	
 	// get proejct to add
-	ProjectItem* si = t.FilesToAdd.isEmpty() ? 0 : mProjects->itemFromIndex( mProjects->scopesProxy()->mapToSource( cbProjects->currentIndex() ) );
+	XUPItem* si = t.FilesToAdd.isEmpty() ? 0 : mProjects->itemFromIndex( mProjects->scopedModel()->mapToSource( cbProjects->currentIndex() ) );
 	
 	// process templates
 	if ( !pTemplatesManager::instance()->realiseTemplate( si, cbOperators->currentText(), t, v ) )

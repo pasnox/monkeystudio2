@@ -35,7 +35,7 @@
 #include <QPoint>
 
 class pAbstractChild;
-class ProjectItem;
+class XUPItem;
 
 class Q_MONKEY_EXPORT pFileManager : public QObject
 {
@@ -44,13 +44,13 @@ class Q_MONKEY_EXPORT pFileManager : public QObject
 	friend class pWorkspace;
 
 public:
-	ProjectItem* currentProject() const;
+	XUPItem* currentProject() const;
 	QString currentProjectFile() const;
 	QString currentProjectPath() const;
 	pAbstractChild* currentChild() const;
 	QString currentChildFile() const;
 	QString currentChildPath() const;
-	ProjectItem* currentItem() const;
+	XUPItem* currentItem() const;
 	QString currentItemFile() const;
 	QString currentItemPath() const;
 
@@ -62,19 +62,20 @@ public slots:
 	void closeFile( const QString& );
 	void goToLine( const QString&, const QPoint&, bool );
 	void openProject( const QString& );
+	/*
 	void closeProject( const QString& );
-
+	*/
 signals:
 	// files
 	void fileOpened( const QString& );
 	void fileClosed( const QString& );
 	void currentFileChanged( pAbstractChild*, const QString& );
 	// projects
-	void aboutToClose( ProjectItem* );
-	void closed( ProjectItem* );
-	void modifiedChanged( ProjectItem*, bool );
-	void currentChanged( ProjectItem* );
-	void opened( ProjectItem* );
+	void aboutToClose( XUPItem* );
+	void closed( XUPItem* );
+	void modifiedChanged( XUPItem*, bool );
+	void currentChanged( XUPItem* );
+	void opened( XUPItem* );
 };
 
 #endif // PFILEMANAGER_H
