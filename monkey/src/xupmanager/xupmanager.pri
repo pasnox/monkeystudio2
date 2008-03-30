@@ -1,6 +1,6 @@
 # xup framework
 
-XUP_PWD = $$PWD
+XUP_PWD	= $$PWD
 
 QT	*= xml
 RESOURCES	*= $${XUP_PWD}/resources/XUPManager.qrc
