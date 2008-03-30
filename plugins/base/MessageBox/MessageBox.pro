@@ -1,5 +1,6 @@
 include( ../../plugins.inc )
 
+QT	*= xml
 DESTDIR	= $$MONKEY_PLUGINS_DIR/base
 TARGET	= MessageBox
 RESOURCES	= src/resources/MessageBox.qrc

@@ -16,7 +16,7 @@
 
 #include <coremanager.h>
 #include <workspacemanager.h>
-#include <projectsmanager.h>
+#include <xupmanager.h>
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -369,18 +369,17 @@ void pDockMessageBox::lwBuildSteps_itemPressed( QListWidgetItem* it )
 				l << f;
 	
 	// search in the current project
-	if ( ProjectItem* pi = MonkeyCore::fileManager()->currentProject() )
+	if ( XUPItem* pi = MonkeyCore::fileManager()->currentProject() )
 	{
 		// get top project of current project
-		while ( ProjectItem* ppi = pi->parentProject() )
-			pi = ppi;
+		pi = pi->topLevelProject();
 		// search file
-		foreach ( ProjectItem* it, pi->childrenProjects() << pi )
+		foreach ( XUPItem* cit, pi->children( true, false ) << pi )
 		{
-			if ( QFile::exists( it->canonicalFilePath( s ) ) )
+			if ( cit->isProject() )
 			{
-				QString file = it->canonicalFilePath( s );
-				if ( !l.contains( file ) )
+				QString file = cit->filePath( s );
+				if ( QFile::exists( file ) && !l.contains( file ) )
 					l << file;
 			}
 		}
