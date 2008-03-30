@@ -693,7 +693,7 @@ void XUPItem::installCommands()
 
 void XUPItem::uninstallCommands()
 {
-	foreach ( const pCommand cmd, mCommands.values() )
+	foreach ( const pCommand& cmd, mCommands.values() )
 		emit uninstallCommandRequested( cmd, mCommands.key( cmd ) );
 	mCommands.clear();
 }

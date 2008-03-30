@@ -198,9 +198,9 @@ protected:
 	QMultiHash<QString, pCommand> mCommands;
 
 signals:
-	void modifiedChanged( XUPItem*, bool );
-	void aboutToClose( XUPItem* );
-	void closed( XUPItem* );
+	void modifiedChanged( XUPItem* item, bool modified );
+	void aboutToClose( XUPItem* project );
+	void closed( XUPItem* project );
 	void installCommandRequested( const pCommand& cmd, const QString& mnu );
 	void uninstallCommandRequested( const pCommand& cmd, const QString& mnu );
 };
