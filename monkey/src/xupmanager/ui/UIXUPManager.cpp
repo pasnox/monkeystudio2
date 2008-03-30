@@ -303,7 +303,7 @@ bool UIXUPManager::saveProject( XUPItem* pi, const QString& s )
 void UIXUPManager::actionNewTriggered()
 {
 	UITemplatesWizard* d = UITemplatesWizard::instance( this );
-	d->setType( tr( "Projects" ) );
+	d->setType( "Projects" );
 	d->exec();
 }
 
