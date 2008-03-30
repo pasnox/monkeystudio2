@@ -14,13 +14,13 @@ INCLUDEPATH	*= $${PWD}/$$QSCINTILLAVERSION/Qt4
 # depend path
 DEPENDPATH	*= $${PWD}/$$QSCINTILLAVERSION/Qt4
 
-BUILD_PATH	 = ../build
+BUILD_PATH	= ../build
 DESTDIR	= $${BUILD_PATH}
 
 # overwrite some values to made no lib
 CONFIG	-= dll
 CONFIG	+= staticlib debug_and_release
-	
+
 CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 	#Debug
 	CONFIG	+= console
@@ -32,7 +32,7 @@ CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 	UI_DIR	= $${BUILD_PATH}/debug/.ui
 	MOC_DIR	= $${BUILD_PATH}/debug/.moc
 	RCC_DIR	= $${BUILD_PATH}/debug/.rcc
-	
+
 } else {
 	#Release
 	unix:OBJECTS_DIR	= $${BUILD_PATH}/release/.obj/unix

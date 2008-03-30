@@ -4,5 +4,5 @@
 QSCINTILLAVERSION	= QScintilla-gpl-2.2.1-snapshot-20080306
 
 # include path
-INCLUDEPATH   *= $${PWD}/sdk
+INCLUDEPATH	*= $${PWD}/sdk
 INCLUDEPATH	*= $${PWD}/$$QSCINTILLAVERSION/Qt4
