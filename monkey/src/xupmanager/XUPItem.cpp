@@ -521,7 +521,7 @@ void XUPItem::setVariableValue( const QString& variable, const QString& value, c
 	}
 	
 	// remove all values
-	if ( exists && vit->rowCount() > 1 )
+	if ( exists  )
 	{
 		while ( vit->hasChildren() )
 			vit->child( 0 )->remove();
