@@ -6,6 +6,8 @@
 
 #include <coremanager.h>
 #include <pluginsmanager.h>
+#include <templatesmanager.h>
+#include <recentsmanager.h>
 
 #include <QHeaderView>
 #include <QInputDialog>
@@ -299,13 +301,37 @@ bool UIXUPManager::saveProject( XUPItem* pi, const QString& s )
 { return pi ? pi->saveProject( s ) : false; }
 
 void UIXUPManager::actionNewTriggered()
-{ warning( tr( "Not Yet Implemented" ) ); }
+{
+	UITemplatesWizard* d = UITemplatesWizard::instance( this );
+	d->setType( tr( "Projects" ) );
+	d->exec();
+}
 
 void UIXUPManager::actionOpenTriggered()
 {
-	const QString s = QFileDialog::getOpenFileName( window(), tr( "Choose a project to open..." ), QString(), projectsFilters().join( ";;" ) );
-	if ( !s.isNull() && !openProject( s ) )
-		warning( tr( "An error occur while opening project : %1" ).arg( s ) );
+	// get last file open path
+	const QString mPath = MonkeyCore::recentsManager()->recentProjectOpenPath();
+	// request user a project file
+	const QString s = QFileDialog::getOpenFileName( window(), tr( "Choose a project to open..." ), mPath, projectsFilters().join( ";;" ) );
+	// if got file
+	if ( !s.isNull() )
+	{
+		// try open project
+		if ( openProject( s ) )
+		{
+			// append file to recents project
+			MonkeyCore::recentsManager()->addRecentProject( s );
+			// store file open path
+			MonkeyCore::recentsManager()->setRecentProjectOpenPath( QFileInfo( s ).path() );
+		}
+		else
+		{
+			// remove it from recents files
+			MonkeyCore::recentsManager()->removeRecentProject( s );
+			// inform user about error
+			warning( tr( "An error occur while opening project : %1" ).arg( s ) );
+		}
+	}
 }
 
 void UIXUPManager::actionSaveCurrentTriggered()
