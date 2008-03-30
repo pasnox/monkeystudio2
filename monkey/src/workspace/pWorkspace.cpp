@@ -412,7 +412,7 @@ void pWorkspace::projectCustomActionTriggered()
 		QHash<QString, pCommand>* cmdsHash = reinterpret_cast<QHash<QString, pCommand>*>( cmd.userData().value<quintptr>() );
 		const pCommandList cmds = cmdsHash ? cmdsHash->values() : pCommandList();
 		// save project if needed
-		if ( cmd.project() && cmd.project()->modified() && saveProjectsOnCustomAction() )
+		if ( cmd.project() && saveProjectsOnCustomAction() )
 			MonkeyCore::projectsManager()->action( UIXUPManager::SaveAll )->trigger();
 		// save project files
 		if ( saveFilesOnCustomAction() )
