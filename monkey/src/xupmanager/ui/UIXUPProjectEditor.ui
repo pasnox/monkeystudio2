@@ -25,14 +25,14 @@
      <item>
       <widget class="QToolButton" name="tbAddScope" >
        <property name="icon" >
-        <iconset resource="../../resources/XUPManager.qrc" >:/actions/add.png</iconset>
+        <iconset resource="../resources/XUPManager.qrc" >:/actions/add.png</iconset>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QToolButton" name="tbRemoveScope" >
        <property name="icon" >
-        <iconset resource="../../resources/XUPManager.qrc" >:/actions/remove.png</iconset>
+        <iconset resource="../resources/XUPManager.qrc" >:/actions/remove.png</iconset>
        </property>
       </widget>
      </item>
@@ -70,7 +70,7 @@
          <string>Project Files</string>
         </property>
         <property name="icon" >
-         <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/project_files.png</iconset>
+         <iconset resource="../resources/XUPManager.qrc" >:/editor/icons/editor/project_files.png</iconset>
         </property>
        </item>
        <item>
@@ -78,7 +78,7 @@
          <string>Others Variables</string>
         </property>
         <property name="icon" >
-         <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/others_variables.png</iconset>
+         <iconset resource="../resources/XUPManager.qrc" >:/editor/icons/editor/others_variables.png</iconset>
         </property>
        </item>
        <item>
@@ -86,7 +86,7 @@
          <string>Builder</string>
         </property>
         <property name="icon" >
-         <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/builder.png</iconset>
+         <iconset resource="../resources/XUPManager.qrc" >:/editor/icons/editor/builder.png</iconset>
         </property>
        </item>
        <item>
@@ -94,7 +94,7 @@
          <string>Compiler</string>
         </property>
         <property name="icon" >
-         <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/compiler.png</iconset>
+         <iconset resource="../resources/XUPManager.qrc" >:/editor/icons/editor/compiler.png</iconset>
         </property>
        </item>
        <item>
@@ -102,7 +102,7 @@
          <string>Debugger</string>
         </property>
         <property name="icon" >
-         <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/debugger.png</iconset>
+         <iconset resource="../resources/XUPManager.qrc" >:/editor/icons/editor/debugger.png</iconset>
         </property>
        </item>
        <item>
@@ -110,7 +110,7 @@
          <string>Interpreter</string>
         </property>
         <property name="icon" >
-         <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/interpreter.png</iconset>
+         <iconset resource="../resources/XUPManager.qrc" >:/editor/icons/editor/interpreter.png</iconset>
         </property>
        </item>
       </widget>
@@ -120,7 +120,7 @@
    <item>
     <widget class="QStackedWidget" name="swPages" >
      <property name="currentIndex" >
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="wProjectFiles" >
       <layout class="QGridLayout" >
@@ -149,7 +149,7 @@
           <string>Add Files...</string>
          </property>
          <property name="icon" >
-          <iconset resource="../../resources/XUPManager.qrc" >:/actions/add.png</iconset>
+          <iconset resource="../resources/XUPManager.qrc" >:/actions/add.png</iconset>
          </property>
         </widget>
        </item>
@@ -159,7 +159,7 @@
           <string>Remove File...</string>
          </property>
          <property name="icon" >
-          <iconset resource="../../resources/XUPManager.qrc" >:/actions/remove.png</iconset>
+          <iconset resource="../resources/XUPManager.qrc" >:/actions/remove.png</iconset>
          </property>
         </widget>
        </item>
@@ -169,7 +169,7 @@
           <string>Modify File...</string>
          </property>
          <property name="icon" >
-          <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/modify.png</iconset>
+          <iconset resource="../resources/XUPManager.qrc" >:/editor/icons/editor/modify.png</iconset>
          </property>
         </widget>
        </item>
@@ -227,7 +227,7 @@
              <string>Add</string>
             </property>
             <property name="icon" >
-             <iconset resource="../../resources/XUPManager.qrc" >:/actions/add.png</iconset>
+             <iconset resource="../resources/XUPManager.qrc" >:/actions/add.png</iconset>
             </property>
            </widget>
           </item>
@@ -237,7 +237,7 @@
              <string>Edit</string>
             </property>
             <property name="icon" >
-             <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/modify.png</iconset>
+             <iconset resource="../resources/XUPManager.qrc" >:/editor/icons/editor/modify.png</iconset>
             </property>
            </widget>
           </item>
@@ -247,7 +247,7 @@
              <string>Remove</string>
             </property>
             <property name="icon" >
-             <iconset resource="../../resources/XUPManager.qrc" >:/actions/remove.png</iconset>
+             <iconset resource="../resources/XUPManager.qrc" >:/actions/remove.png</iconset>
             </property>
            </widget>
           </item>
@@ -289,7 +289,7 @@
              <string>Add</string>
             </property>
             <property name="icon" >
-             <iconset resource="../../resources/XUPManager.qrc" >:/actions/add.png</iconset>
+             <iconset resource="../resources/XUPManager.qrc" >:/actions/add.png</iconset>
             </property>
            </widget>
           </item>
@@ -299,7 +299,7 @@
              <string>Edit</string>
             </property>
             <property name="icon" >
-             <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/modify.png</iconset>
+             <iconset resource="../resources/XUPManager.qrc" >:/editor/icons/editor/modify.png</iconset>
             </property>
            </widget>
           </item>
@@ -309,7 +309,7 @@
              <string>Remove</string>
             </property>
             <property name="icon" >
-             <iconset resource="../../resources/XUPManager.qrc" >:/actions/remove.png</iconset>
+             <iconset resource="../resources/XUPManager.qrc" >:/actions/remove.png</iconset>
             </property>
            </widget>
           </item>
@@ -319,7 +319,7 @@
              <string>Clear</string>
             </property>
             <property name="icon" >
-             <iconset resource="../../resources/XUPManager.qrc" >:/editor/icons/editor/clear.png</iconset>
+             <iconset resource="../resources/XUPManager.qrc" >:/editor/icons/editor/clear.png</iconset>
             </property>
            </widget>
           </item>
@@ -549,7 +549,7 @@
   <tabstop>dbbButtons</tabstop>
  </tabstops>
  <resources>
-  <include location="../../resources/XUPManager.qrc" />
+  <include location="../resources/XUPManager.qrc" />
  </resources>
  <connections>
   <connection>
