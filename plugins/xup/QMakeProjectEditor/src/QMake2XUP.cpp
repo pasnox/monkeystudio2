@@ -15,6 +15,8 @@ si "nested" n'existe pas, il vaut "false"
 
 #include <exception>
 
+#include <monkey.h>
+
 QString tabsString( int i )
 { return QString().fill( '\t', i ); }
 
@@ -419,7 +421,7 @@ QByteArray QMake2XUP::convertFromPro( const QString& s, const QString& version )
 	return file.toUtf8();
 }
 
-QByteArray convertNodeToPro( const QDomElement& e, const QString& v )
+QByteArray convertNodeToPro( const QDomElement& e, const QString& v, const QString& EOL = pMonkeyStudio::getEol() )
 {
 	static int tabs = 0; // tabs indentation
 	static bool isMultiline = false; // tell if last variable is multiline or not
@@ -427,7 +429,6 @@ QByteArray convertNodeToPro( const QDomElement& e, const QString& v )
 	QString comment; // comment of item if available
 	QString data; // the data to return
 	const QString tn = e.tagName(); // current node tag name
-	const QString EOL = "\r\n"; // end of lines for generated file
 
 	if ( tn != "project" )
 	{
@@ -514,7 +515,7 @@ QByteArray convertNodeToPro( const QDomElement& e, const QString& v )
 	{
 		QDomNodeList l = e.childNodes();
 		for ( int i = 0; i < l.count(); i++ )
-			data.append( convertNodeToPro( l.at( i ).toElement(), v ) );
+			data.append( convertNodeToPro( l.at( i ).toElement(), v, EOL ) );
 		
 		if ( tn == "scope" && !isNested )
 		{
@@ -539,5 +540,10 @@ QByteArray QMake2XUP::convertToPro( const QDomDocument& d, const QString& v )
 	if ( e.isNull() )
 		return QByteArray();
 	// parse project scope
-	return convertNodeToPro( e, v );
+	QByteArray contents = convertNodeToPro( e, v );
+	// remove last eol
+	if ( contents.length() > 0 )
+		contents.chop( 1 );
+	// return buffer
+	return contents;
 }
