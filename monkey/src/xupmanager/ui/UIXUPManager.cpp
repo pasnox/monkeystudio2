@@ -337,7 +337,7 @@ void UIXUPManager::actionOpenTriggered()
 void UIXUPManager::actionSaveCurrentTriggered()
 {
 	if ( XUPItem* pi = currentProject() )
-		if ( !saveProject( pi, QString() ) )
+		if ( pi->modified() && !saveProject( pi, QString() ) )
 			warning( tr( "An error occur while saving project" ) );
 }
 
@@ -345,11 +345,11 @@ void UIXUPManager::actionSaveAllTriggered()
 {
 	foreach ( XUPItem* pi, mModel->topLevelProjects() )
 	{
-		if ( !saveProject( pi, QString() ) )
+		if ( pi->modified() && !saveProject( pi, QString() ) )
 			warning( tr( "An error occur while saving project: %1" ).arg( pi->defaultValue() ) );
 		foreach ( XUPItem* cpi, pi->children( true, false ) )
 			if ( cpi->isProject() )
-				if ( !saveProject( cpi, QString() ) )
+				if ( cpi->modified() && !saveProject( cpi, QString() ) )
 					warning( tr( "An error occur while saving project: %1" ).arg( cpi->defaultValue() ) );
 	}
 }
