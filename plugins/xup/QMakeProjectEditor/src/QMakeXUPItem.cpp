@@ -372,7 +372,10 @@ void QMakeXUPItem::checkChildrenProjects()
 			{
 				XUPItem* pi = clone( false );
 				if ( pi->loadProject( fn ) )
+				{
+					pi->setModified( false );
 					it->appendRow( pi );
+				}
 				else
 				{
 					delete pi;
