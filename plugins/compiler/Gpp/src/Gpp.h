@@ -31,7 +31,7 @@
 
 #include <pluginsmanager.h>
 
-class Gpp : public CompilerPlugin, public CLIToolPlugin
+class Gpp : public CompilerPlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin CompilerPlugin CLIToolPlugin )
@@ -51,10 +51,6 @@ public:
 	virtual pCommandList defaultCommands() const;
 	virtual pCommandList userCommands() const;
 	virtual void setUserCommands( const pCommandList& ) const;
-	
-public slots:
-	virtual void commandTriggered();
-
 };
 
 #endif // GPP_H

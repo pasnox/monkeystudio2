@@ -56,36 +56,10 @@ MSVC::~MSVC()
 
 bool MSVC::setEnabled( bool b)
 {
-	if ( b == mPluginInfos.Enabled )
-		return true;
-	mPluginInfos.Enabled = b;
- 	if ( b )
-	{
-		pMenuBar* mb = MonkeyCore::menuBar();
-		
-		// compile command
-		pCommand c = compileCommand();
-		QAction* a = mb->action( QString( "mBuilder/mBuild/%1" ).arg( c.text() ), c.text() );
-		a->setData( mPluginInfos.Name );
-		a->setStatusTip( c.text() );
-		connect( a, SIGNAL( triggered() ), this, SLOT( commandTriggered() ) );
-		
-		// user command
-		foreach ( pCommand c, userCommands() )
-		{
-			QAction* a = mb->action( QString( "mBuilder/mUserCommands/%1" ).arg( c.text() ), c.text() );
-			a->setData( mPluginInfos.Name );
-			a->setStatusTip( c.text() );
-			connect( a, SIGNAL( triggered() ), this, SLOT( commandTriggered() ) );
-		}
-	}
- 	else
-	{
-		pMenuBar* mb = MonkeyCore::menuBar();
-		foreach ( QAction* a, mb->menu( "mBuilder/mUserCommands" )->actions() << mb->menu( "mBuilder/mBuild" )->actions() )
-			if ( a->data().toString() == mPluginInfos.Name )
-				delete a;
-	}
+	if ( b && !isEnabled() )
+		mPluginInfos.Enabled = true;
+	else if ( !b && isEnabled() )
+		mPluginInfos.Enabled = false;
 	return true;
 }
 
@@ -194,14 +168,6 @@ pCommandParser* MSVC::getParser( const QString& )
 /*	if ( s == "MSVCParser" )
 		return new MSVCParser;*/
 	return 0;
-}
-
-void MSVC::commandTriggered()
-{
-	pConsoleManager* cm = MonkeyCore::consoleManager();
-	pCommandList l = userCommands();
-	if ( QAction* a = qobject_cast<QAction*>( sender() ) )
-		cm->addCommands( cm->recursiveCommandList( l, cm->getCommand( l, a->statusTip() ) ) );
 }
 
 Q_EXPORT_PLUGIN2( CompilerMSVC, MSVC )
