@@ -21,10 +21,10 @@ DESTDIR	= ../bin
 CONFIG	*= qt warn_on thread x11 windows debug_and_release
 QT	*= gui core
 
-QMAKE_TARGET_COMPANY = "Monkey Studio Team"
-QMAKE_TARGET_PRODUCT = "Monkey Studio"
-QMAKE_TARGET_DESCRIPTION = "Crossplatform Integrated Development Environment."
-QMAKE_TARGET_COPYRIGHT = "Copyright (C) 2005 - 2008 Filipe AZEVEDO & The Monkey Studio Team"
+QMAKE_TARGET_COMPANY	= "Monkey Studio Team"
+QMAKE_TARGET_PRODUCT	= "Monkey Studio"
+QMAKE_TARGET_DESCRIPTION	= "Crossplatform Integrated Development Environment."
+QMAKE_TARGET_COPYRIGHT	= "Copyright (C) 2005 - 2008 Filipe AZEVEDO & The Monkey Studio Team"
 
 unix:ICON	= src/resources/icons/application/monkey2.png
 mac:ICON	= src/resources/icons/application/monkey2.icns
@@ -32,7 +32,7 @@ win32:ICON	= src/resources/icons/application/monkey2.ico
 
 COPYRIGHTS	= "(c) 2005 - 2008 Azevedo Filipe"
 DOMAIN	= "www.monkeystudio.org"
-VERSION	= 1.8.2.0svn
+VERSION	= 1.8.2.0
 NAME	= "Monkey Studio"
 
 win32:RC_FILE	*= monkey.rc

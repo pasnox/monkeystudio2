@@ -3,18 +3,18 @@
 # try getting infos from shell export
 PROGRAM_PREFIX	= $$(MONKEY_PREFIX)
 PROGRAM_DATAS	= $$(MONKEY_DATAS)
-	
+
 # prefix
 isEmpty( PROGRAM_PREFIX ) {
 	win32:PROGRAM_PREFIX	= $${DESTDIR}
-	else:mac:PROGRAM_PREFIX	= $${DESTDIR}/$${TARGET}.app/Contents
+	else:	mac:PROGRAM_PREFIX	= $${DESTDIR}/$${TARGET}.app/Contents
 	else:PROGRAM_PREFIX	= /usr/local
 }
 
 # prefixdatas
 isEmpty( PROGRAM_DATAS ) {
 	win32:PROGRAM_DATAS	= $$PROGRAM_PREFIX
-	else:mac:PROGRAM_DATAS	= $$PROGRAM_PREFIX
+	else:	mac:PROGRAM_DATAS	= $$PROGRAM_PREFIX
 	else:PROGRAM_DATAS	= $${PROGRAM_PREFIX}/lib/$${TARGET}
 }
 
@@ -37,22 +37,22 @@ translations.path	= $$PROGRAM_DATAS/translations
 translations.files	= ../translations/*.qm
 
 # debugger know_list_and_id
-debuggerIniFile.path		= $$PROGRAM_DATAS/plugins/GNUdbg
-debuggerIniFile.files		= ../plugins/debugger/GNUDebugger/file
+debuggerIniFile.path	= $$PROGRAM_DATAS/plugins/GNUdbg
+debuggerIniFile.files	= ../plugins/debugger/GNUDebugger/file
 
-debuggerLog.path		= $$PROGRAM_DATAS/plugins/GNUdbg
-debuggerLog.files		= ../plugins/debugger/GNUDebugger/log
+debuggerLog.path	= $$PROGRAM_DATAS/plugins/GNUdbg
+debuggerLog.files	= ../plugins/debugger/GNUDebugger/log
 
-debuggerScript.path		= $$PROGRAM_DATAS/plugins/GNUdbg
-debuggerScript.files		= ../plugins/debugger/GNUDebugger/scripts
+debuggerScript.path	= $$PROGRAM_DATAS/plugins/GNUdbg
+debuggerScript.files	= ../plugins/debugger/GNUDebugger/scripts
 
-INSTALLS	= apis templates translations debuggerIniFile debuggerLog debuggerScript 
+INSTALLS	= apis templates translations debuggerIniFile debuggerLog debuggerScript
 
 unix:!mac {
 	# plugins
 	plugins.path	= $$PROGRAM_DATAS
 	plugins.files	= $${DESTDIR}/plugins
-	
+
 	# binary
 	target.path	= $${PROGRAM_PREFIX}/bin
 
@@ -63,7 +63,7 @@ unix:!mac {
 	# desktop icon file
 	desktopicon.path	= $${PROGRAM_PREFIX}/icons/hicolor/32x32/apps
 	desktopicon.files	= ../links/monkeystudio.png
-	
+
 	INSTALLS	+= plugins target desktop desktopicon
 }
 
