@@ -4,4 +4,4 @@
 CTAGS_VERSION	= ctags
 
 # include path
-INCLUDEPATH *= $${PWD}/sdk
+INCLUDEPATH	*= $${PWD}/sdk
