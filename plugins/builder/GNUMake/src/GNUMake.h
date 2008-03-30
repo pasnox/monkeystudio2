@@ -38,6 +38,7 @@ class GNUMake : public BuilderPlugin
 
 public:
     GNUMake();
+	~GNUMake();
     // BasePlugin
     virtual bool setEnabled( bool );
     virtual QWidget* settingsWidget();
@@ -51,10 +52,6 @@ public:
     virtual pCommand defaultBuildCommand() const;
     virtual pCommand buildCommand() const;
     virtual void setBuildCommand( const pCommand& );
-
-private slots:
-    virtual void commandTriggered();
-    
 };
 
 #endif // GNUMAKE_H

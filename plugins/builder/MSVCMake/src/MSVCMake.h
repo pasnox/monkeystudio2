@@ -52,10 +52,6 @@ public:
     virtual pCommand defaultBuildCommand() const;
     virtual pCommand buildCommand() const;
     virtual void setBuildCommand( const pCommand& );
-
-private slots:
-    virtual void commandTriggered();
-    
 };
 
 #endif // MSVCMAKE_H

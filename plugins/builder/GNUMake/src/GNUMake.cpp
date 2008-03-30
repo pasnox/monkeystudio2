@@ -41,38 +41,25 @@ GNUMake::GNUMake ()
     mPluginInfos.Name = PLUGIN_NAME;
     mPluginInfos.Version = "0.5.0";
     mPluginInfos.Enabled = false;
+	// install parsers
+	foreach ( QString s, availableParsers() )
+		MonkeyCore::consoleManager()->addParser( getParser( s ) );
+}
+
+GNUMake::~GNUMake()
+{
+	// uninstall parsers
+	foreach ( QString s, availableParsers() )
+		MonkeyCore::consoleManager()->removeParser( s );
 }
 
 bool GNUMake::setEnabled( bool b)
 {
-    if ( b == mPluginInfos.Enabled )
-        return true;
-    mPluginInfos.Enabled = b;
-     if ( b )
-    {
-        foreach ( QString s, availableParsers() )
-            MonkeyCore::consoleManager()->addParser( getParser( s ) );
-        
-        pMenuBar* mb = MonkeyCore::menuBar();
-        foreach ( pCommand c, pCommandList() << userCommands() )
-        {
-            QAction* a = mb->action( QString( "mBuilder/mUserCommands/%1" ).arg( c.text() ), c.text() );
-            a->setData( mPluginInfos.Name );
-            a->setStatusTip( c.text() );
-            connect( a, SIGNAL( triggered() ), this, SLOT( commandTriggered() ) );
-        }
-    }
-     else
-    {
-        foreach ( QString s, availableParsers() )
-            MonkeyCore::consoleManager()->removeParser( s );
-        
-        pMenuBar* mb = MonkeyCore::menuBar();
-        foreach ( QAction* a, mb->menu( "mBuilder/mUserCommands" )->actions() )
-            if ( a->data().toString() == mPluginInfos.Name )
-                delete a;
-    }
-    return true;
+	if ( b && !isEnabled() )
+		mPluginInfos.Enabled = true;
+	else if ( !b && isEnabled() )
+		mPluginInfos.Enabled = false;
+	return true;
 }
 
 QWidget* GNUMake::settingsWidget()
@@ -183,14 +170,6 @@ void GNUMake::setBuildCommand( const pCommand& c )
     s->setValue( settingsKey( "BuildCommand/Parsers" ), c.parsers() );
     s->setValue( settingsKey( "BuildCommand/TryAll" ), c.tryAllParsers() );
     s->setValue( settingsKey( "BuildCommand/SkipOnError" ), c.skipOnError() );
-}
-
-void GNUMake::commandTriggered()
-{
-    pConsoleManager* cm = MonkeyCore::consoleManager();
-    pCommandList l = userCommands() << buildCommand();
-    if ( QAction* a = qobject_cast<QAction*>( sender() ) )
-        cm->addCommands( cm->recursiveCommandList( l, cm->getCommand( l, a->statusTip() ) ) );
 }
 
 Q_EXPORT_PLUGIN2( BuilderGNUMake, GNUMake )
