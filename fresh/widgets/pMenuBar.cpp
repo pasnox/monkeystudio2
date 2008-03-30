@@ -187,6 +187,7 @@ QMenu* pMenuBar::menu( const QString& s, const QString& l, const QIcon& i )
 			if ( !mMenus.contains( mString ) )
 			{
 				mMenus[ mString ] = !mString.contains( '/' ) ? addMenu( mMenuList[ i ] ) : mMenus[ mString.left( mString.lastIndexOf( '/' ) ) ]->addMenu( mMenuList[ i ] );
+				mMenus[ mString ]->setObjectName( mMenuList[ i ] );
 				mMenus[ mString ]->setTitle( mString );
 			}
 		}
