@@ -523,8 +523,13 @@ void XUPItem::setVariableValue( const QString& variable, const QString& value, c
 	// remove all values
 	if ( exists  )
 	{
+		// if same value, return
+		if ( vit->rowCount() == 1 && vit->child( 0 )->defaultValue() == value )
+			return;
+		// clear values
 		while ( vit->hasChildren() )
 			vit->child( 0 )->remove();
+		// set singleline
 		vit->setValue( "multiline", "false" );
 	}
 	
