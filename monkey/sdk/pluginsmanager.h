@@ -1,4 +1,5 @@
 #include "../src/pluginsmanager/BasePlugin.h"
+#include "../src/pluginsmanager/XUPPlugin.h"
 #include "../src/pluginsmanager/BuilderPlugin.h"
 #include "../src/pluginsmanager/ChildPlugin.h"
 #include "../src/pluginsmanager/CLIToolPlugin.h"
