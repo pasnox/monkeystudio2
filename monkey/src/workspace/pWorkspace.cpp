@@ -460,7 +460,7 @@ void pWorkspace::projectCustomActionTriggered()
 void pWorkspace::fileNew_triggered()
 {
 	UITemplatesWizard* d = UITemplatesWizard::instance( this );
-	d->setType( tr( "Files" ) );
+	d->setType( "Files" );
 	d->exec();
 }
 
