@@ -23,7 +23,6 @@ CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 	UI_DIR	= $${BUILD_PATH}/debug/.ui
 	MOC_DIR	= $${BUILD_PATH}/debug/.moc
 	RCC_DIR	= $${BUILD_PATH}/debug/.rcc
-	
 } else {
 	#Release
 	unix:OBJECTS_DIR	= $${BUILD_PATH}/release/.obj/unix
@@ -36,7 +35,7 @@ CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 
 # Core
 # Symbols Export
-HEADER	+= MonkeyExport.h
+HEADERS	+= MonkeyExport.h
 
 # objects
 # QSingleton
