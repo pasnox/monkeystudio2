@@ -41,7 +41,8 @@ RESOURCES	*= src/resources/resources.qrc
 DEFINES	*= MONKEY_CORE_BUILD "PROGRAM_NAME=\"\\\"$${NAME}\\\"\"" "PROGRAM_VERSION=\"\\\"$${VERSION}\\\"\"" "PROGRAM_DOMAIN=\"\\\"$${DOMAIN}\\\"\"" "PROGRAM_COPYRIGHTS=\"\\\"$${COPYRIGHTS}\\\"\""
 
 LIBS	*= -L$${BUILD_PATH}
-*-g++:LIBS	*= -Wl,--whole-archive # import all symbols as the not used ones too
+mac:*-g++:LIBS	*= -Wl,-all_load # import all symbols as the not used ones too
+else:*-g++:LIBS	*= -Wl,--whole-archive # import all symbols as the not used ones too
 mac:*-g++:LIBS	*= -dynamic
 else:unix:*-g++:LIBS	*= -rdynamic
 
@@ -75,7 +76,8 @@ CONFIG( debug, debug|release ) {
 	win32-msvc*:LIBS	*= /IMPLIB:$${BUILD_PATH}/$${TARGET}.lib -lshell32
 }
 
-*-g++:LIBS	*= -Wl,--no-whole-archive # stop importing all symbols
+mac:*-g++:LIBS	*= -Wl,-noall_load # stop importing all symbols
+else:*-g++:LIBS	*= -Wl,--no-whole-archive # stop importing all symbols
 
 # include install script
 include( installs.pri )
