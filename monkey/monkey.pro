@@ -32,7 +32,7 @@ win32:ICON	= src/resources/icons/application/monkey2.ico
 
 COPYRIGHTS	= "(c) 2005 - 2008 Azevedo Filipe"
 DOMAIN	= "www.monkeystudio.org"
-VERSION	= 1.8.2.0
+VERSION	= 1.8.2.0svn
 NAME	= "Monkey Studio"
 
 win32:RC_FILE	*= monkey.rc
