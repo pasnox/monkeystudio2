@@ -483,7 +483,9 @@ QByteArray convertNodeToPro( const QDomElement& e, const QString& v, const QStri
 		else if ( tn == "scope" )
 		{
 			int vtabs = tabs;
-			if ( e.attribute( "name" ) == "else" && !QVariant( e.previousSibling().toElement().attribute( "nested", "false" ) ).toBool() )
+			QDomElement pe = e.parentNode().toElement();
+			if ( ( e.attribute( "name" ) == "else" && !QVariant( e.previousSibling().toElement().attribute( "nested", "false" ) ).toBool() ) ||
+					( pe.tagName() == "scope" && QVariant( pe.attribute( "nested", "false" ) ).toBool() ) )
 				vtabs = 0;
 			isNested = QVariant( e.attribute( "nested", "false" ) ).toBool();
 			comment = e.attribute( "comment" );
