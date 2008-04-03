@@ -7,14 +7,14 @@ PROGRAM_DATAS	= $$(MONKEY_DATAS)
 # prefix
 isEmpty( PROGRAM_PREFIX ) {
 	win32:PROGRAM_PREFIX	= $${DESTDIR}
-	else:	mac:PROGRAM_PREFIX	= $${DESTDIR}/$${TARGET}.app/Contents
+	else:mac:PROGRAM_PREFIX	= $${DESTDIR}/$${TARGET}.app/Contents
 	else:PROGRAM_PREFIX	= /usr/local
 }
 
 # prefixdatas
 isEmpty( PROGRAM_DATAS ) {
 	win32:PROGRAM_DATAS	= $$PROGRAM_PREFIX
-	else:	mac:PROGRAM_DATAS	= $$PROGRAM_PREFIX
+	else:mac:PROGRAM_DATAS	= $$PROGRAM_PREFIX
 	else:PROGRAM_DATAS	= $${PROGRAM_PREFIX}/lib/$${TARGET}
 }
 
