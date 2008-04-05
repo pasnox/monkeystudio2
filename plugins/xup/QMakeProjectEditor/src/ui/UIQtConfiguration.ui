@@ -1,0 +1,155 @@
+<ui version="4.0" >
+ <class>UIQtConfiguration</class>
+ <widget class="QWidget" name="UIQtConfiguration" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>569</width>
+    <height>391</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Qt Configuration</string>
+  </property>
+  <property name="windowIcon" >
+   <iconset resource="../resources/QMakeProjectEditor.qrc" >:/qmakeitems/project.png</iconset>
+  </property>
+  <layout class="QVBoxLayout" >
+   <item>
+    <widget class="QLabel" name="label" >
+     <property name="text" >
+      <string>Choose the Qt version you want to use with this project :</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTabWidget" name="tabWidget" >
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="wQtVersionPage" >
+      <attribute name="title" >
+       <string>Qt Version</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <item row="0" column="0" >
+        <widget class="QListWidget" name="lwQtVersions" />
+       </item>
+       <item row="0" column="1" >
+        <widget class="QLabel" name="lQtVersionInformations" >
+         <property name="minimumSize" >
+          <size>
+           <width>260</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text" >
+          <string>Please select a Qt version for your project.
+It will be used for generate the actions when requiring building, executing qmake or others Qt tools.
+If there is no Qt version available or you want to add a custom Qt version, you should configure the Project Plugin Editor clicking &lt;a href="plugin_config">here&lt;/a>. The green item mean it's the default Qt version used if you not choose a Qt version.</string>
+         </property>
+         <property name="textFormat" >
+          <enum>Qt::RichText</enum>
+         </property>
+         <property name="alignment" >
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+         </property>
+         <property name="wordWrap" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2" >
+        <widget class="QWidget" native="1" name="wQtVersion" >
+         <layout class="QGridLayout" >
+          <item row="0" column="0" >
+           <widget class="QLabel" name="lQtVersion" >
+            <property name="text" >
+             <string>Version :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QLineEdit" name="leQtVersion" >
+            <property name="toolTip" >
+             <string>Put here the Qt version</string>
+            </property>
+            <property name="readOnly" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" >
+           <widget class="QLabel" name="lQtPath" >
+            <property name="text" >
+             <string>Path :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" >
+           <widget class="QLineEdit" name="leQtPath" >
+            <property name="toolTip" >
+             <string>Put here the Qt version path</string>
+            </property>
+            <property name="readOnly" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" >
+           <widget class="QLabel" name="lQtQMakeSpec" >
+            <property name="text" >
+             <string>QMake Spec :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1" >
+           <widget class="QLineEdit" name="leQtQMakeSpec" >
+            <property name="toolTip" >
+             <string>Put here the Qt version path</string>
+            </property>
+            <property name="readOnly" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" >
+           <widget class="QLabel" name="lQtQMakeParameters" >
+            <property name="text" >
+             <string>QMake Parameters :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1" >
+           <widget class="QLineEdit" name="leQtQMakeParameters" >
+            <property name="readOnly" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="wQtConfigurationPage" >
+      <attribute name="title" >
+       <string>Qt Configuration</string>
+      </attribute>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../resources/QMakeProjectEditor.qrc" />
+ </resources>
+ <connections/>
+</ui>
