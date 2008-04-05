@@ -14,6 +14,7 @@ public:
 	QMakeProjectEditor();
 	virtual ~QMakeProjectEditor();
 	virtual bool setEnabled( bool );
+	virtual QWidget* settingsWidget();
 	virtual bool editProject( XUPItem* project );
 
 protected:

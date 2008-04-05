@@ -1,5 +1,7 @@
 #include "QMakeProjectEditor.h"
 #include "QMakeXUPItem.h"
+#include "ui/UISettingsQMakeXUPProjectEditor.h"
+#include "QMakeProjectEditorDialog.h"
 
 #include <coremanager.h>
 #include <maininterface.h>
@@ -47,11 +49,14 @@ bool QMakeProjectEditor::setEnabled( bool b )
 	return true;
 }
 
+QWidget* QMakeProjectEditor::settingsWidget()
+{ return new UISettingsQMakeXUPProjectEditor; }
+
 bool QMakeProjectEditor::editProject( XUPItem* project )
 {
 	if ( !project )
 		return false;
-	return UIXUPProjectEditor( project, MonkeyCore::mainWindow() ).exec();
+	return QMakeProjectEditorDialog( project, MonkeyCore::mainWindow() ).exec();
 }
 
 Q_EXPORT_PLUGIN2( XUPQMakeProjectEditor, QMakeProjectEditor )
