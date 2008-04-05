@@ -36,18 +36,9 @@
 QString pSettings::mProgramName;
 QString pSettings::mProgramVersion;
 
-QString getIniFile( const QString& s )
-{
-#ifdef Q_OS_MAC
-	return QString( "%1/../%2.ini" ).arg( QApplication::applicationDirPath() ).arg( s );
-#else
-	return QString( "%1/.%2/%2.ini" ).arg( QDir::homePath() ).arg( s );
-#endif
-}
-
-pSettings::pSettings( QObject* o )
-	: QSettings( QDir::convertSeparators( getIniFile( mProgramName ) ), QSettings::IniFormat, o )
-{ beginGroup( mProgramVersion ); }
+pSettings::pSettings( QObject* o,  const QString& pn, const QString& pv )
+	: QSettings( QDir::convertSeparators( getIniFile( pn ) ), QSettings::IniFormat, o )
+{ beginGroup( pv ); }
 
 pSettings::~pSettings()
 { endGroup(); }
@@ -63,6 +54,17 @@ QString pSettings::programName()
 
 QString pSettings::programVersion()
 { return mProgramVersion; }
+
+QString pSettings::getIniFile( const QString& s )
+{
+#ifdef Q_OS_MAC
+	return QString( "%1/../%2.ini" ).arg( QApplication::applicationDirPath() ).arg( s );
+#elif defined Q_OS_WIN
+	return QString( "%1/%2.ini" ).arg( QApplication::applicationDirPath() ).arg( s );
+#else
+	return QString( "%1/.%2/%3.ini" ).arg( QDir::homePath() ).arg( mProgramName ).arg( s );
+#endif
+}
 
 void pSettings::restoreState( QMainWindow* w )
 {
