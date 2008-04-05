@@ -1,5 +1,6 @@
 #include "QMakeXUPItem.h"
 #include "QMake2XUP.h"
+#include "QtVersionManager.h"
 
 #include <QFileInfo>
 #include <QApplication>
@@ -626,9 +627,9 @@ void QMakeXUPItem::installCommands()
 	cmd.setProject( this );
 	const pCommand cmdBuild = cmd;
 	
-	// get qt path
-#warning QMakeXUPItem::installCommands() qtPath must become an editable structure in the settingsWidget() of the QMakeProjectEditor plugin
-	const QString qtPath = "/usr/share/qt4/";
+	// get qt version
+	QtVersionManager mQtManager;
+	QtVersion mQtVersion = mQtManager.version( interpretedVariable( "QT_VERSION" ) );
 	
 	// evaluate some variables
 	QString s;
@@ -683,34 +684,69 @@ void QMakeXUPItem::installCommands()
 		cmd.setArguments( "distclean" );
 		addCommand( cmd, "mBuilder/mClean" );
 		
-		// qmake command
-		cmd = pCommand();
-		cmd.setText( tr( "QMake" ) );
-		cmd.setCommand( qtPath +"/bin/qmake" );
-		cmd.setWorkingDirectory( "$cpp$" );
-		cmd.setUserData( reinterpret_cast<quintptr>( &mCommands ) );
-		cmd.setProject( this );
-		addCommand( cmd, "mBuilder" );
+		// add qt commands only if possible
+		if ( mQtVersion.isValid() )
+		{
+			// qmake command
+			cmd = pCommand();
+			cmd.setText( tr( "QMake" ) );
+			cmd.setCommand( mQtVersion.qmake() );
+			cmd.setArguments( mQtVersion.qmakeParameters()/*.append( " $cp$" )*/ );
+			cmd.setWorkingDirectory( "$cpp$" );
+			cmd.setUserData( reinterpret_cast<quintptr>( &mCommands ) );
+			cmd.setProject( this );
+			addCommand( cmd, "mBuilder" );
+			
+			// lupdate command
+			cmd = pCommand();
+			cmd.setText( tr( "lupdate" ) );
+			cmd.setCommand( mQtVersion.lupdate() );
+			cmd.setArguments( "$cp$" );
+			cmd.setWorkingDirectory( "$cpp$" );
+			cmd.setUserData( reinterpret_cast<quintptr>( &mCommands ) );
+			cmd.setProject( this );
+			addCommand( cmd, "mBuilder" );
+			
+			// lrelease command
+			cmd = pCommand();
+			cmd.setText( tr( "lrelease" ) );
+			cmd.setCommand( mQtVersion.lrelease() );
+			cmd.setArguments( "$cp$" );
+			cmd.setWorkingDirectory( "$cpp$" );
+			cmd.setUserData( reinterpret_cast<quintptr>( &mCommands ) );
+			cmd.setProject( this );
+			addCommand( cmd, "mBuilder" );
 		
-		// lupdate command
-		cmd = pCommand();
-		cmd.setText( tr( "lupdate" ) );
-		cmd.setCommand( qtPath +"/bin/lupdate" );
-		cmd.setArguments( "$cp$" );
-		cmd.setWorkingDirectory( "$cpp$" );
-		cmd.setUserData( reinterpret_cast<quintptr>( &mCommands ) );
-		cmd.setProject( this );
-		addCommand( cmd, "mBuilder" );
-		
-		// lrelease command
-		cmd = pCommand();
-		cmd.setText( tr( "lrelease" ) );
-		cmd.setCommand( qtPath +"/bin/lrelease" );
-		cmd.setArguments( "$cp$" );
-		cmd.setWorkingDirectory( "$cpp$" );
-		cmd.setUserData( reinterpret_cast<quintptr>( &mCommands ) );
-		cmd.setProject( this );
-		addCommand( cmd, "mBuilder" );
+			// rebuild debug
+			cmd = cmdBuild;
+			cmd.setText( tr( "Rebuild Debug" ) );
+			cmd.setCommand( ( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build Debug" ) ).join( ";" ) );
+			cmd.setArguments( QString() );
+			addCommand( cmd, "mBuilder/mRebuild" );
+			
+			// rebuild release
+			cmd = cmdBuild;
+			cmd.setText( tr( "Rebuild Release" ) );
+			cmd.setCommand( ( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build Release" ) ).join( ";" ) );
+			cmd.setArguments( QString() );
+			addCommand( cmd, "mBuilder/mRebuild" );
+			
+			// rebuild all
+			cmd = cmdBuild;
+			cmd.setText( tr( "Rebuild All" ) );
+			cmd.setCommand( ( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build All" ) ).join( ";" ) );
+			cmd.setArguments( QString() );
+			addCommand( cmd, "mBuilder/mRebuild" );
+			
+			// simple rebuild call
+			cmd = cmdBuild;
+			cmd.setText( tr( "Rebuild" ) );
+			cmd.setCommand( ( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build" ) ).join( ";" ) );
+			cmd.setArguments( QString() );
+			addCommand( cmd, "mBuilder/mRebuild" );
+		}
+		else
+			pMonkeyStudio::warning( tr( "Warning..." ), tr( "Some actions can't be created, because there is no default Qt version setted, please go in your project settings to fix this." ) );
 		
 		// execute debug
 		cmd = cmdBuild;
@@ -727,34 +763,6 @@ void QMakeXUPItem::installCommands()
 		cmd.setArguments( QString() );
 		cmd.setWorkingDirectory( destdir != "$cpp$" ? destdir : destdir +"/release" );
 		addCommand( cmd, "mBuilder/mExecute" );
-		
-		// rebuild debug
-		cmd = cmdBuild;
-		cmd.setText( tr( "Rebuild Debug" ) );
-		cmd.setCommand( ( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build Debug" ) ).join( ";" ) );
-		cmd.setArguments( QString() );
-		addCommand( cmd, "mBuilder/mRebuild" );
-		
-		// rebuild release
-		cmd = cmdBuild;
-		cmd.setText( tr( "Rebuild Release" ) );
-		cmd.setCommand( ( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build Release" ) ).join( ";" ) );
-		cmd.setArguments( QString() );
-		addCommand( cmd, "mBuilder/mRebuild" );
-		
-		// rebuild all
-		cmd = cmdBuild;
-		cmd.setText( tr( "Rebuild All" ) );
-		cmd.setCommand( ( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build All" ) ).join( ";" ) );
-		cmd.setArguments( QString() );
-		addCommand( cmd, "mBuilder/mRebuild" );
-		
-		// simple rebuild call
-		cmd = cmdBuild;
-		cmd.setText( tr( "Rebuild" ) );
-		cmd.setCommand( ( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build" ) ).join( ";" ) );
-		cmd.setArguments( QString() );
-		addCommand( cmd, "mBuilder/mRebuild" );
 	}
 	
 	// install defaults commands
