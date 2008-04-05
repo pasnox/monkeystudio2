@@ -59,6 +59,8 @@ class Q_MONKEY_EXPORT UIXUPProjectEditor : public QDialog, public Ui::UIXUPProje
 public:
 	UIXUPProjectEditor( XUPItem* project, QWidget* parent = 0 );
 
+	void insertPage( int id = -1, QWidget* page = 0 );
+
 protected:
 	XUPItem* mProject;
 	ProjectItemModel* mProjectModel;

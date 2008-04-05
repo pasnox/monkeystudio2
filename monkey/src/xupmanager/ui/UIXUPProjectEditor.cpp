@@ -104,7 +104,7 @@ UIXUPProjectEditor::UIXUPProjectEditor( XUPItem* project, QWidget* parent )
 		cbCompilers->addItem( cp->infos().Name );
 		swCompilers->addWidget( cp->settingsWidget() );
 	}
-	// choose project builder
+	// choose project compiler
 	plugin = mProject->value( "compiler" );
 	id = cbCompilers->findText( plugin );
 	if ( id == -1 && cbCompilers->count() )
@@ -119,7 +119,7 @@ UIXUPProjectEditor::UIXUPProjectEditor( XUPItem* project, QWidget* parent )
 		cbDebuggers->addItem( dp->infos().Name );
 		swDebuggers->addWidget( dp->settingsWidget() );
 	}
-	// choose project builder
+	// choose project debugger
 	plugin = mProject->value( "debugger" );
 	id = cbDebuggers->findText( plugin );
 	if ( id == -1 && cbDebuggers->count() )
@@ -134,7 +134,7 @@ UIXUPProjectEditor::UIXUPProjectEditor( XUPItem* project, QWidget* parent )
 		cbInterpreters->addItem( ip->infos().Name );
 		swInterpreters->addWidget( ip->settingsWidget() );
 	}
-	// choose project builder
+	// choose project interpreter
 	plugin = mProject->value( "interpreter" );
 	id = cbInterpreters->findText( plugin );
 	if ( id == -1 && cbInterpreters->count() )
@@ -142,6 +142,20 @@ UIXUPProjectEditor::UIXUPProjectEditor( XUPItem* project, QWidget* parent )
 	cbInterpreters->setCurrentIndex( id );
 	swInterpreters->setCurrentIndex( id );
 	gbInterpreters->setChecked( !plugin.isEmpty() );
+}
+
+void UIXUPProjectEditor::insertPage( int id, QWidget* page )
+{
+	// check page validity
+	if ( !page )
+		return;
+	// check index
+	if ( id == -1 )
+		id = cbPages->count();
+	// insert page in stack
+	swPages->insertWidget( id, page );
+	// insert item in combobox
+	cbPages->insertItem( id, page->windowIcon(), page->windowTitle() );
 }
 
 XUPItem* UIXUPProjectEditor::currentScope() const
