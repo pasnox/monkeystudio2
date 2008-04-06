@@ -425,7 +425,7 @@ void pWorkspace::projectCustomActionTriggered()
 			if ( !QFile::exists( s ) )
 			{
 				// try reading already saved binary
-				s = cmd.project()->interpretedVariable( a->text().replace( ' ', '_' ).toUpper() );
+				s = cmd.project()->projectSettingsValue( a->text().replace( ' ', '_' ).toUpper() );
 				if ( !s.isEmpty() )
 					s = cmd.project()->filePath( s );
 				// if not exists ask user to select one
@@ -443,7 +443,7 @@ void pWorkspace::projectCustomActionTriggered()
 					cmd.setCommand( cm->quotedString( cm->nativeSeparators( s ) ) );
 					cmd.setWorkingDirectory( cm->nativeSeparators( p ) );
 					// write in project
-					cmd.project()->setVariableValue( a->text().replace( ' ', '_' ).toUpper(), cmd.project()->relativeFilePath( s ) );
+					cmd.project()->setProjectSettingsValue( a->text().replace( ' ', '_' ).toUpper(), cmd.project()->relativeFilePath( s ) );
 					// add command to console manager
 					cm->addCommand( cmd );
 				}
