@@ -90,7 +90,7 @@ UIXUPProjectEditor::UIXUPProjectEditor( XUPItem* project, QWidget* parent )
 		swBuilders->addWidget( bp->settingsWidget() );
 	}
 	// choose project builder
-	plugin = mProject->value( "builder" );
+	plugin = mProject->projectSettingsValue( "BUILDER" );
 	id = cbBuilders->findText( plugin );
 	if ( id == -1 && cbBuilders->count() )
 		id = 0;
@@ -105,7 +105,7 @@ UIXUPProjectEditor::UIXUPProjectEditor( XUPItem* project, QWidget* parent )
 		swCompilers->addWidget( cp->settingsWidget() );
 	}
 	// choose project compiler
-	plugin = mProject->value( "compiler" );
+	plugin = mProject->projectSettingsValue( "COMPILER" );
 	id = cbCompilers->findText( plugin );
 	if ( id == -1 && cbCompilers->count() )
 		id = 0;
@@ -120,7 +120,7 @@ UIXUPProjectEditor::UIXUPProjectEditor( XUPItem* project, QWidget* parent )
 		swDebuggers->addWidget( dp->settingsWidget() );
 	}
 	// choose project debugger
-	plugin = mProject->value( "debugger" );
+	plugin = mProject->projectSettingsValue( "DEBUGGER" );
 	id = cbDebuggers->findText( plugin );
 	if ( id == -1 && cbDebuggers->count() )
 		id = 0;
@@ -135,7 +135,7 @@ UIXUPProjectEditor::UIXUPProjectEditor( XUPItem* project, QWidget* parent )
 		swInterpreters->addWidget( ip->settingsWidget() );
 	}
 	// choose project interpreter
-	plugin = mProject->value( "interpreter" );
+	plugin = mProject->projectSettingsValue( "INTERPRETER" );
 	id = cbInterpreters->findText( plugin );
 	if ( id == -1 && cbInterpreters->count() )
 		id = 0;
@@ -302,7 +302,6 @@ void UIXUPProjectEditor::on_pbModifyProjectFile_clicked()
 				mb.setIcon( QMessageBox::Question );
 				mb.setText( tr( "Modify a file." ) );
 				mb.setInformativeText( tr( "Choose you either want to Edit or Browse the file." ) );
-				mb.setDetailedText( tr( "Clicking the 'Edit text value' button will popup you an input dialog where you can directly change the content of the value.\nClicking the 'Browse for a file' button will popup a file dialog where you can browse directly for a file." ) );
 				QAbstractButton* eb = mb.addButton( tr( "Edit text value" ), QMessageBox::AcceptRole );
 				QAbstractButton* bb = mb.addButton( tr( "Browse for a file" ), QMessageBox::RejectRole );
 				// execute dialog
@@ -563,22 +562,22 @@ void UIXUPProjectEditor::accept()
 	plugin = cbBuilders->currentText();
 	if ( !gbBuilders->isChecked() )
 		plugin.clear();
-	mProject->setValue( "builder", plugin );
+	mProject->setProjectSettingsValue( "BUILDER", plugin );
 	// compiler
 	plugin = cbCompilers->currentText();
 	if ( !gbCompilers->isChecked() )
 		plugin.clear();
-	mProject->setValue( "compiler", plugin );
+	mProject->setProjectSettingsValue( "COMPILER", plugin );
 	// debugger
 	plugin = cbDebuggers->currentText();
 	if ( !gbDebuggers->isChecked() )
 		plugin.clear();
-	mProject->setValue( "debugger", plugin );
+	mProject->setProjectSettingsValue( "DEBUGGER", plugin );
 	// interpreter
 	plugin = cbInterpreters->currentText();
 	if ( !gbInterpreters->isChecked() )
 		plugin.clear();
-	mProject->setValue( "interpreter", plugin );
+	mProject->setProjectSettingsValue( "INTERPRETER", plugin );
 	// accept dialog
 	QDialog::accept();
 }
