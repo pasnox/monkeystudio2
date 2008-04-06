@@ -406,7 +406,7 @@ void UIXUPManager::actionSettingsTriggered()
 	if ( XUPItem* pi = currentProject() )
 	{
 		// get plugin name that can manage this project
-		if ( pi->value( "plugin" ).isEmpty() || !MonkeyCore::pluginsManager()->plugins<XUPPlugin*>( PluginsManager::stAll, pi->value( "plugin" ) ).value( 0 ) )
+		if ( pi->projectSettingsValue( "EDITOR" ).isEmpty() || !MonkeyCore::pluginsManager()->plugins<XUPPlugin*>( PluginsManager::stAll, pi->projectSettingsValue( "EDITOR" ) ).value( 0 ) )
 		{
 			// get xup plugins
 			QHash<QString, XUPPlugin*> xpl;
@@ -414,15 +414,15 @@ void UIXUPManager::actionSettingsTriggered()
 				xpl[ xp->infos().Caption ] = xp;
 		
 			bool ok;
-			const QString caption = QInputDialog::getItem( window(), tr( "title" ), tr( "Your project is not yet editable, please select a correct project settings plugin" ), xpl.keys(), 0, false, &ok );
+			const QString caption = QInputDialog::getItem( window(), tr( "Choose an editor plugin..." ), tr( "Your project is not yet editable, please select a correct project settings plugin" ), xpl.keys(), 0, false, &ok );
 			if ( ok && !caption.isEmpty() )
-				pi->setValue( "plugin", xpl[ caption ]->infos().Name );
+				pi->setProjectSettingsValue( "EDITOR", xpl[ caption ]->infos().Name );
 		}
 		
 		// edit project settings
-		if ( pi->value( "plugin" ).isEmpty() )
+		if ( pi->projectSettingsValue( "EDITOR" ).isEmpty() )
 			warning( tr( "The project can't be edited because there is no associate project settings plugin." ) );
-		else if ( XUPPlugin* xp = MonkeyCore::pluginsManager()->plugins<XUPPlugin*>( PluginsManager::stAll, pi->value( "plugin" ) ).value( 0 ) )
+		else if ( XUPPlugin* xp = MonkeyCore::pluginsManager()->plugins<XUPPlugin*>( PluginsManager::stAll, pi->projectSettingsValue( "EDITOR" ) ).value( 0 ) )
 		{
 			// get current filtered project in scoped view
 			XUPItem* curFilteredProject = mModel->scopedModel()->filteredProject();
