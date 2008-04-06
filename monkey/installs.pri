@@ -13,8 +13,8 @@ isEmpty( PROGRAM_PREFIX ) {
 
 # prefixdatas
 isEmpty( PROGRAM_DATAS ) {
-	win32:PROGRAM_DATAS	= $$PROGRAM_PREFIX
-	else:mac:PROGRAM_DATAS	= $$PROGRAM_PREFIX
+	win32:PROGRAM_DATAS	= $${PROGRAM_PREFIX}
+	else:mac:PROGRAM_DATAS	= $${PROGRAM_PREFIX}
 	else:PROGRAM_DATAS	= $${PROGRAM_PREFIX}/lib/$${TARGET}
 }
 
@@ -25,32 +25,32 @@ isEmpty( PROGRAM_DATAS ) {
 }
 
 # templates
-templates.path	= $$PROGRAM_DATAS
+templates.path	= $${PROGRAM_DATAS}
 templates.files	= ../templates
 
 # apis
-apis.path	= $$PROGRAM_DATAS
+apis.path	= $${PROGRAM_DATAS}
 apis.files	= ../ctags/apis
 
 # translations
-translations.path	= $$PROGRAM_DATAS/translations
+translations.path	= $${PROGRAM_DATAS}/translations
 translations.files	= ../translations/*.qm
 
 # debugger know_list_and_id
-debuggerIniFile.path	= $$PROGRAM_DATAS/plugins/GNUdbg
+debuggerIniFile.path	= $${PROGRAM_DATAS}/plugins/GNUdbg
 debuggerIniFile.files	= ../plugins/debugger/GNUDebugger/file
 
-debuggerLog.path	= $$PROGRAM_DATAS/plugins/GNUdbg
+debuggerLog.path	= $${PROGRAM_DATAS}/plugins/GNUdbg
 debuggerLog.files	= ../plugins/debugger/GNUDebugger/log
 
-debuggerScript.path	= $$PROGRAM_DATAS/plugins/GNUdbg
+debuggerScript.path	= $${PROGRAM_DATAS}/plugins/GNUdbg
 debuggerScript.files	= ../plugins/debugger/GNUDebugger/scripts
 
 INSTALLS	= apis templates translations debuggerIniFile debuggerLog debuggerScript
 
 unix:!mac {
 	# plugins
-	plugins.path	= $$PROGRAM_DATAS
+	plugins.path	= $${PROGRAM_DATAS}
 	plugins.files	= $${DESTDIR}/plugins
 
 	# binary
