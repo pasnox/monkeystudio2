@@ -629,7 +629,7 @@ void QMakeXUPItem::installCommands()
 	
 	// get qt version
 	QtVersionManager mQtManager;
-	QtVersion mQtVersion = mQtManager.version( interpretedVariable( "QT_VERSION" ) );
+	QtVersion mQtVersion = mQtManager.version( projectSettingsValue( "QT_VERSION" ) );
 	
 	// evaluate some variables
 	QString s;
