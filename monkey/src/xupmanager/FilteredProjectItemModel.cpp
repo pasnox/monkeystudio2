@@ -172,11 +172,17 @@ FilteredProjectItem* FilteredProjectItemModel::getFolder( XUPItem* it, FilteredP
 
 void FilteredProjectItemModel::addFilteredValue( XUPItem* it )
 {
+	// get parent variable
+	XUPItem* parent = it->parent();
+	// check if we need to show this value
+	if ( !parent->filteredVariables().contains( parent->defaultValue() ) )
+		return;
+	
 	// get variable item
-	FilteredProjectItem* vit = getVariable( it->parent() );
+	FilteredProjectItem* vit = getVariable( parent );
 	
 	// check file based
-	bool b = it->fileVariables().contains( vit->item()->defaultValue() );
+	bool b = it->fileVariables().contains( parent->defaultValue() );
 	
 	if ( !it->defaultValue().isEmpty() )
 	{
@@ -188,6 +194,10 @@ void FilteredProjectItemModel::addFilteredValue( XUPItem* it )
 
 void FilteredProjectItemModel::addFilteredVariable( XUPItem* it )
 {
+	// check we need to show it
+	if ( !it->filteredVariables().contains( it->defaultValue() ) )
+		return;
+	
 	// get variable item
 	FilteredProjectItem* vit = getVariable( it );
 	
@@ -196,17 +206,8 @@ void FilteredProjectItemModel::addFilteredVariable( XUPItem* it )
 	
 	// add values to vit
 	foreach ( XUPItem* cit, it->children( false, true ) )
-	{
 		if ( cit->isType( "value" ) )
-		{
-			if ( !cit->defaultValue().isEmpty() )
-			{
-				FilteredProjectItem* ccit = new FilteredProjectItem( cit );
-				b ? getFolder( cit, vit )->appendRow( ccit ) : vit->appendRow( ccit );
-				mItems[cit] = ccit;
-			}
-		}
-	}
+			addFilteredValue( cit );
 }
 
 void FilteredProjectItemModel::addFilteredProject( XUPItem* it )
@@ -216,7 +217,7 @@ void FilteredProjectItemModel::addFilteredProject( XUPItem* it )
 	
 	// add recursive variable
 	foreach ( XUPItem* cit, it->children( true, true ) )
-		if ( cit->isType( "variable" ) && it->filteredVariables().contains( cit->defaultValue() ) )
+		if ( cit->isType( "variable" ) )
 			addFilteredVariable( cit );
 	
 	// add recursive project
