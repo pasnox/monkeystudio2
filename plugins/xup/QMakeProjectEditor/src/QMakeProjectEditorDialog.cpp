@@ -30,6 +30,8 @@ void QMakeProjectEditorDialog::loadsQtVersions()
 		if ( v.Default )
 			it->setBackground( QBrush( Qt::green ) );
 	}
+	
+#warning create a projectsettingsValue() / setProjectSettingsValue member so we abstract the call for stocking/reading specific settings of project in project
 }
 
 void QMakeProjectEditorDialog::lwQtVersions_currentItemChanged( QListWidgetItem* current, QListWidgetItem* )
@@ -48,7 +50,7 @@ void QMakeProjectEditorDialog::lQtVersionInformations_linkActivated( const QStri
 {
 	if ( link == "plugin_config" )
 	{
-		XUPPlugin* xp = MonkeyCore::pluginsManager()->plugin<XUPPlugin*>( PluginsManager::stAll, mProject->value( "editor" ) );
+		XUPPlugin* xp = MonkeyCore::pluginsManager()->plugin<XUPPlugin*>( PluginsManager::stAll, mProject->projectSettingsValue( "EDITOR" ) );
 		if ( xp )
 		{
 			QWidget* cd = xp->settingsWidget();
