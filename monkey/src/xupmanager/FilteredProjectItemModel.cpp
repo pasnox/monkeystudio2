@@ -2,6 +2,7 @@
 #include "ProjectItemModel.h"
 #include "XUPItem.h"
 
+#include <QDir>
 #include <QFileInfo>
 
 FilteredProjectItemModel::FilteredProjectItemModel( ProjectItemModel* m )
@@ -71,7 +72,7 @@ FilteredProjectItem* FilteredProjectItemModel::getProject( XUPItem* it )
 	// create and add
 	FilteredProjectItem* pit = new FilteredProjectItem( it );
 	if ( it->parent() )
-		mItems[it->parent()->project()]->appendRow( pit );
+		mItems[it->parent()->topProjectForInclude()]->appendRow( pit );
 	else
 		appendRow( pit );
 	mItems[it] = pit;
@@ -83,7 +84,7 @@ FilteredProjectItem* FilteredProjectItemModel::getProject( XUPItem* it )
 FilteredProjectItem* FilteredProjectItemModel::getVariable( XUPItem* it )
 {
 	// get project item
-	FilteredProjectItem* pit = getProject( it->project() );
+	FilteredProjectItem* pit = getProject( it->topProjectForInclude() );
 	Q_ASSERT( pit );
 	
 	// get variable name
@@ -114,7 +115,7 @@ FilteredProjectItem* FilteredProjectItemModel::getVariable( XUPItem* it )
 	}
 	
 	// insert item
-	getProject( it->parent()->project() )->insertRow( ri +1, vit );
+	getProject( it->parent()->topProjectForInclude() )->insertRow( ri +1, vit );
 	mItems[it] = vit;
 	
 	return vit;
@@ -127,7 +128,7 @@ FilteredProjectItem* FilteredProjectItemModel::getFolder( XUPItem* it, FilteredP
 		vit = getVariable( it->parent() );
 	
 	// get variable path
-	const QString pn = QFileInfo( it->relativeFilePath() ).path();
+	const QString pn = QFileInfo( QDir( it->topProjectForInclude()->projectPath() ).relativeFilePath( it->filePath() ) ).path();
 	
 	// if file is at root, don't create folder
 	if ( pn == "." )
@@ -213,17 +214,20 @@ void FilteredProjectItemModel::addFilteredVariable( XUPItem* it )
 void FilteredProjectItemModel::addFilteredProject( XUPItem* it )
 {
 	// get project
-	getProject( it );
+	getProject( it->topProjectForInclude() );
 	
 	// add recursive variable
-	foreach ( XUPItem* cit, it->children( true, true ) )
+	foreach ( XUPItem* cit, it->children( true, false ) )
+	{
 		if ( cit->isType( "variable" ) )
 			addFilteredVariable( cit );
-	
+	}
+	/*
 	// add recursive project
 	foreach ( XUPItem* cit, it->children( false, false ) )
 		if ( cit->isProject() )
 			addFilteredProject( cit );
+	*/
 }
 
 void FilteredProjectItemModel::rowsInserted( const QModelIndex& parent, int start, int end )
@@ -247,7 +251,7 @@ void FilteredProjectItemModel::rowsInserted( const QModelIndex& parent, int star
 				if ( it->isProject() )
 					addItemsRecursively( it, getProject( it ) );
 				else if ( it->isType( "variable" ) )
-					addItemsRecursively( it, getProject( it->project() ) );
+					addItemsRecursively( it, getProject( it->topProjectForInclude() ) );
 				else if ( it->isType( "value" ) )
 					addItemsRecursively( it, getVariable( it->parent() ) );
 			}
