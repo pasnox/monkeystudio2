@@ -151,8 +151,9 @@ public:
 	// remove files to project
 	virtual void removeFiles( const QStringList& files, XUPItem* scope= 0, const QString& op = QString( "=" ) );
 	virtual void removeFile( const QString& file, XUPItem* scope = 0, const QString& op = QString( "=" ) ) { removeFiles( QStringList( file ), scope, op ); };
-	// set/add the value of a variable from scope with operators
-	virtual void setVariableValue( const QString& variable, const QString& value, const QString& op = QString( "=" ), XUPItem* scope = 0 );
+	// return the variable values if item is a variable else nothing
+	virtual QStringList variableValues() const;
+	virtual QString variableValue() { return variableValues().join( " " ); }
 
 	// return the project file path, ie the file u set when opening/saving the project
 	virtual QString projectFilePath() const;
@@ -173,6 +174,18 @@ public:
 	virtual XUPItem* topLevelProject() const;
 	// return the most approppriate parent project for includes projects
 	virtual XUPItem* topProjectForInclude() const;
+	// return a scope by its name from item 
+	virtual XUPItem* scope( const QString& scopeName, XUPItem* fromScope = 0, bool create = false ) const;
+	
+	// return a project settings value
+	virtual QStringList projectSettingsValues( const QString& variable, const QStringList& defaultValues = QStringList() ) const;
+	virtual QString projectSettingsValue( const QString& variable, const QString& defaultValue = QString() ) const { return projectSettingsValues( variable, defaultValue.isEmpty() ? QStringList() : QStringList( defaultValue ) ).join( " " ); }
+	// set a project setting value
+	virtual void setProjectSettingsValues( const QString& variable, const QStringList& values );
+	virtual void setProjectSettingsValue( const QString& variable, const QString& value ) { setProjectSettingsValues( variable, value.isEmpty() ? QStringList() : QStringList( value ) ); }
+	// add project setting value
+	virtual void addProjectSettingsValues( const QString& variable, const QStringList& values );
+	virtual void addProjectSettingsValue( const QString& variable, const QString& value ) { addProjectSettingsValues( variable, value.isEmpty() ? QStringList() : QStringList( value ) ); }
 	
 	// return plugin associated with the project
 	virtual BuilderPlugin* builder( const QString& plugin = QString() ) const;

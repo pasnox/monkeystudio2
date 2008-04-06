@@ -9,6 +9,7 @@
 #include <QDir>
 
 XUPItemInfos XUPItem::mXUPItemInfos;
+const QString mProjectSettingsScope = "ProjectSettings";
 
 XUPItem::XUPItem( const QDomElement e, const QString& s, bool b )
 {
@@ -260,7 +261,7 @@ void XUPItem::remove()
 		model()->removeRow( row(), index().parent() );
 	else
 		deleteLater();
-	// update proejct modified state
+	// update project modified state
 	if ( !b && pit )
 		pit->setModified( true );
 }
@@ -388,7 +389,7 @@ void XUPItem::closeProject()
 	foreach ( XUPItem* it, children( false, false ) )
 		if ( it->isProject() )
 			it->closeProject();
-	// tell we will close the proejct
+	// tell we will close the project
 	emit aboutToClose( this );
 	// emit closed
 	emit closed( this );
@@ -486,63 +487,14 @@ void XUPItem::removeFiles( const QStringList& files, XUPItem* scope, const QStri
 		vit->remove();
 }
 
-void XUPItem::setVariableValue( const QString& variable, const QString& value, const QString& op, XUPItem* scope )
+QStringList XUPItem::variableValues() const
 {
-	// abort if no files
-	if ( variable.isEmpty() )
-		return;
-	
-	// set scope
-	if ( !scope )
-		scope = this;
-	
-	// get variable item
-	XUPItem* vit = 0;
-	foreach ( XUPItem* cit, scope->children( false, true ) )
-	{
-		if ( cit->isType( "variable" ) && cit->defaultValue() == variable && cit->value( "operator", "=" ) == op )
-		{
-			vit = cit;
-			break;
-		}
-	}
-	
-	// check variable exists or not
-	bool exists = vit;
-	
-	// create variable if needed
-	if ( !exists )
-	{
-		vit = clone( false );
-		vit->setDomElement( mDomElement.ownerDocument().createElement( "variable" ) );
-		scope->domElement().appendChild( vit->domElement() );
-		vit->setValue( vit->valueName(), variable );
-		vit->setValue( "operator", op );
-	}
-	
-	// remove all values
-	if ( exists  )
-	{
-		// if same value, return
-		if ( vit->rowCount() == 1 && vit->child( 0 )->defaultValue() == value )
-			return;
-		// clear values
-		while ( vit->hasChildren() )
-			vit->child( 0 )->remove();
-		// set singleline
-		vit->setValue( "multiline", "false" );
-	}
-	
-	// create item value
-	XUPItem* it = clone( false );
-	it->setDomElement( mDomElement.ownerDocument().createElement( "value" ) );
-	vit->domElement().appendChild( it->domElement() );
-	it->setValue( it->valueName(), value );
-	vit->appendRow( it );
-	
-	// append var item only at last will prevent multiple call of addFilteredValue from filtered view
-	if ( !exists )
-		scope->appendRow( vit );
+	QStringList l;
+	if ( isType( "variable" ) )
+		foreach ( XUPItem* cit, children( false, true ) )
+			if ( cit->isType( "value" ) )
+				l << cit->defaultValue();
+	return l;
 }
 
 QString XUPItem::projectFilePath() const
@@ -619,17 +571,184 @@ XUPItem* XUPItem::topProjectForInclude() const
 	return 0;
 }
 
+XUPItem* XUPItem::scope( const QString& scopeName, XUPItem* fromScope, bool create ) const
+{
+	// set the scope to search
+	if ( fromScope == 0 )
+		fromScope = const_cast<XUPItem*>( this );
+	// check each child
+	foreach ( XUPItem* cit, fromScope->children( false, true ) )
+		if ( cit->isType( "scope" ) && cit->defaultValue() == scopeName )
+			return cit;
+	// create item if needed
+	XUPItem* s = 0;
+	if ( create )
+	{
+		// create scope
+		s = clone( false );
+		s->setDomElement( mDomElement.ownerDocument().createElement( "scope" ) );
+		fromScope->domElement().appendChild( s->domElement() );
+		s->setValue( s->valueName(), scopeName );
+		// append it to fromScope
+		fromScope->appendRow( s );
+	}
+	// return scope
+	return s;
+}
+
+QStringList XUPItem::projectSettingsValues( const QString& variable, const QStringList& defaultValues ) const
+{
+	// get the most top level project
+	if ( XUPItem* project = topLevelProject() )
+		// get project settings scope
+		if ( XUPItem* scope = project->scope( mProjectSettingsScope, project, false ) )
+			// check for the variable in children
+			foreach ( XUPItem* cit, scope->children( false, true ) )
+				if ( cit->isType( "variable" ) && cit->defaultValue() == variable )
+					return cit->variableValues();
+	// else return default list
+	return defaultValues;
+}
+
+void XUPItem::setProjectSettingsValues( const QString& variable, const QStringList& values )
+{
+	// abort if no files
+	if ( variable.isEmpty() )
+		return;
+	
+	// get top level project
+	XUPItem* project = topLevelProject();
+	// get project settings scope
+	XUPItem* scope = project ? project->scope( mProjectSettingsScope, project, !values.isEmpty() ) : 0;
+	if ( !scope )
+		return;
+	
+	// get variable item
+	XUPItem* vit = 0;
+	foreach ( XUPItem* cit, scope->children( false, true ) )
+	{
+		if ( cit->isType( "variable" ) && cit->defaultValue() == variable )
+		{
+			vit = cit;
+			break;
+		}
+	}
+	
+	// check variable exists or not
+	bool exists = vit;
+	
+	// remove variable if needed
+	if ( exists && values.isEmpty() )
+	{
+		vit->remove();
+		return;
+	}
+	
+	// if not exists, and value is empty, do nothing
+	if ( !exists && values.isEmpty() )
+		return;
+	
+	// create variable if needed
+	if ( !exists )
+	{
+		vit = scope->clone( false );
+		vit->setDomElement( scope->domElement().ownerDocument().createElement( "variable" ) );
+		scope->domElement().appendChild( vit->domElement() );
+		vit->setValue( vit->valueName(), variable );
+		vit->setValue( "multiline", "true" );
+	}
+	
+	// if same value, return
+	if ( vit->variableValues() == values )
+		return;
+	// clear values
+	while ( vit->hasChildren() )
+		vit->child( 0 )->remove();
+	// set values
+	foreach ( const QString& value, values )
+	{
+		// create item value
+		XUPItem* it = vit->clone( false );
+		it->setDomElement( vit->domElement().ownerDocument().createElement( "value" ) );
+		vit->domElement().appendChild( it->domElement() );
+		it->setValue( it->valueName(), value );
+		vit->appendRow( it );
+	}
+	
+	// append var item only at last will prevent multiple call of addFilteredValue from filtered view
+	if ( !exists )
+		scope->appendRow( vit );
+}
+
+void XUPItem::addProjectSettingsValues( const QString& variable, const QStringList& values )
+{
+	// abort if no files or values
+	if ( variable.isEmpty() || values.isEmpty() )
+		return;
+	
+	// get top level project
+	XUPItem* project = topLevelProject();
+	// get project settings scope
+	XUPItem* scope = project ? project->scope( mProjectSettingsScope, project, !values.isEmpty() ) : 0;
+	if ( !scope )
+		return;
+	
+	// get variable item
+	XUPItem* vit = 0;
+	foreach ( XUPItem* cit, scope->children( false, true ) )
+	{
+		if ( cit->isType( "variable" ) && cit->defaultValue() == variable )
+		{
+			vit = cit;
+			break;
+		}
+	}
+	
+	// check variable exists or not
+	bool exists = vit;
+	
+	// create variable if needed
+	if ( !exists )
+	{
+		vit = scope->clone( false );
+		vit->setDomElement( scope->domElement().ownerDocument().createElement( "variable" ) );
+		scope->domElement().appendChild( vit->domElement() );
+		vit->setValue( vit->valueName(), variable );
+		vit->setValue( "multiline", "true" );
+	}
+	
+	// get existing values in variable
+	const QStringList existingValues = vit->variableValues();
+	// set values
+	foreach ( const QString& value, values )
+	{
+		// create item value if needed
+		if ( !existingValues.contains( value ) )
+		{
+			XUPItem* it = vit->clone( false );
+			it->setDomElement( vit->domElement().ownerDocument().createElement( "value" ) );
+			vit->domElement().appendChild( it->domElement() );
+			it->setValue( it->valueName(), value );
+			vit->appendRow( it );
+		}
+	}
+	
+	// append var item only at last will prevent multiple call of addFilteredValue from filtered view
+	if ( !exists )
+		scope->appendRow( vit );
+}
+
 BuilderPlugin* XUPItem::builder( const QString& plugin ) const
-{ return MonkeyCore::pluginsManager()->plugin<BuilderPlugin*>( PluginsManager::stAll, value( "builder", plugin ) ); }
+{ return MonkeyCore::pluginsManager()->plugin<BuilderPlugin*>( PluginsManager::stAll, projectSettingsValue( "BUILDER", plugin ) ); }
 
 CompilerPlugin* XUPItem::compiler( const QString& plugin ) const
-{ return MonkeyCore::pluginsManager()->plugin<CompilerPlugin*>( PluginsManager::stAll, value( "compiler", plugin ) ); }
+{ return MonkeyCore::pluginsManager()->plugin<CompilerPlugin*>( PluginsManager::stAll, projectSettingsValue( "COMPILER", plugin ) ); }
 
 DebuggerPlugin* XUPItem::debugger( const QString& plugin ) const
-{ return MonkeyCore::pluginsManager()->plugin<DebuggerPlugin*>( PluginsManager::stAll, value( "debugger", plugin ) ); }
+{ return MonkeyCore::pluginsManager()->plugin<DebuggerPlugin*>( PluginsManager::stAll, projectSettingsValue( "DEBUGGER", plugin ) ); }
 
 InterpreterPlugin* XUPItem::interpreter( const QString& plugin ) const
-{ return MonkeyCore::pluginsManager()->plugin<InterpreterPlugin*>( PluginsManager::stAll, value( "interpreter", plugin ) ); }
+{ return MonkeyCore::pluginsManager()->plugin<InterpreterPlugin*>( PluginsManager::stAll, projectSettingsValue( "INTERPRETER", plugin ) ); }
 
 void XUPItem::addCommand( const pCommand& cmd, const QString& mnu )
 {
