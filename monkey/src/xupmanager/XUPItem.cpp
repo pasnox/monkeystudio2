@@ -216,6 +216,7 @@ void XUPItem::insertRow( int i, XUPItem* it )
 		QStandardItem::insertRow( i, it );
 		if ( XUPItem* pit = project() )
 		{
+			connect( it, SIGNAL( modifiedChanged( XUPItem*, bool ) ), pit, SIGNAL( modifiedChanged( XUPItem*, bool ) ) );
 			if ( it->isProject() )
 			{
 				connect( it, SIGNAL( aboutToClose( XUPItem* ) ), pit, SIGNAL( aboutToClose( XUPItem* ) ) );
@@ -224,10 +225,7 @@ void XUPItem::insertRow( int i, XUPItem* it )
 				connect( it, SIGNAL( uninstallCommandRequested( const pCommand&, const QString& ) ), pit, SIGNAL( uninstallCommandRequested( const pCommand&, const QString& ) ) );
 			}
 			else
-			{
-				connect( it, SIGNAL( modifiedChanged( XUPItem*, bool ) ), pit, SIGNAL( modifiedChanged( XUPItem*, bool ) ) );
 				setModified( true );
-			}
 		}
 	}
 }
