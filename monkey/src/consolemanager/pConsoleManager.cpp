@@ -151,7 +151,14 @@ pCommandList pConsoleManager::recursiveCommandList( const pCommandList& l, pComm
 	}
 	// process variables
 	else
-		cl << processCommand( c );
+	{
+		// process variables
+		pCommand pc = processCommand( c );
+		// set skit on error
+		pc.setSkipOnError( true );
+		// add to list
+		cl << pc;
+	}
 	// return list
 	return cl;
 }
