@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** 		Created using Monkey Studio v1.8.1.0
+**         Created using Monkey Studio v1.8.1.0
 ** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
 ** Project   : Monkey Studio IDE
 ** FileName  : pCommandParser.cpp
@@ -38,7 +38,7 @@ pCommandParser::~pCommandParser()
  #include <QDebug>
  #include <QTime>
 #endif
-				 
+	
 int pCommandParser::processParsing(QString* buf)
 {
 #if PARSERS_DEBUG
@@ -47,29 +47,29 @@ int pCommandParser::processParsing(QString* buf)
 	QTime time1;
 	time1.start();
 #endif
-    foreach ( Pattern p, patterns)
+	foreach ( Pattern p, patterns)
 	{
 		int pos = p.regExp.indexIn(*buf);
 #if PARSERS_DEBUG
 		qDebug () << "parser " << name();
 		qDebug () << "parsing  " << *buf << "with" << p.regExp.pattern();
 #endif
-        if (pos != -1)
-        {
-            pConsoleManager::Step m;
-            m.mFileName = replaceWithMatch(p.regExp,p.FileName);
-            m.mPosition = QPoint( replaceWithMatch(p.regExp,p.col).toInt(), replaceWithMatch(p.regExp,p.row).toInt());
-            m.mType = p.Type;
-            m.mText = replaceWithMatch(p.regExp,p.Text);
-            m.mFullText = replaceWithMatch(p.regExp,p.FullText);
-            // emit signal
-            emit newStepAvailable( m );
+		if (pos != -1)
+		{
+			pConsoleManager::Step m;
+			m.mFileName = replaceWithMatch(p.regExp,p.FileName);
+			m.mPosition = QPoint( replaceWithMatch(p.regExp,p.col).toInt(), replaceWithMatch(p.regExp,p.row).toInt());
+			m.mType = p.Type;
+			m.mText = replaceWithMatch(p.regExp,p.Text);
+			m.mFullText = replaceWithMatch(p.regExp,p.FullText);
+			// emit signal
+			emit newStepAvailable( m );
 #if PARSERS_DEBUG
 			qDebug () << "Capture :" << p.regExp.cap();
 			qDebug () << "Returning " << p.regExp.cap().count ('\n');
 #endif
-            return p.regExp.cap().count ('\n');
-        }
+			return p.regExp.cap().count ('\n');
+		}
 #if PARSERS_DEBUG
 			qDebug () << "Not matching";
 #endif
@@ -81,33 +81,28 @@ int pCommandParser::processParsing(QString* buf)
 	
 	qDebug () << "Returning false";
 #endif
-    return 0;
+	return 0;
 }
 
 QString pCommandParser::name() const
 {
-    return mName;
+	return mName;
 }
 
-#include <QDebug>
 QString pCommandParser::replaceWithMatch(QRegExp& rex, QString s)
 {
 	int pos = 0; 
-    int i = 0;
-	qWarning () << "Input " <<s;
-    while ( (i = s.indexOf("%", pos)) != -1)
+	int i = 0;
+	while ( (i = s.indexOf("%", pos)) != -1)
 	{
-		qWarning () << i;
-		pos = i;
-		if ( ! s[i+1].isDigit () )
-			continue;
-		QString cap = rex.cap(s[i+1].digitValue ());
-		if (cap.endsWith ("\n"))
-			cap.chop(1);
-        s.replace (i,2,cap);
-		pos += cap.size ();
-		qWarning ()<< "pos= "<<pos<< " s="<<s;
+	pos = i;
+	if ( ! s[i+1].isDigit () )
+		continue;
+	QString cap = rex.cap(s[i+1].digitValue ());
+	if (cap.endsWith ("\n"))
+		cap.chop(1);
+	s.replace (i,2,cap);
+	pos += cap.size ();
 	}
-	qWarning () << "Output " <<s;
-    return s;
+	return s;
 }
