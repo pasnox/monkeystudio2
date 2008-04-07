@@ -13,6 +13,8 @@ QMakeProjectEditorDialog::QMakeProjectEditorDialog( XUPItem* project, QWidget* p
 	// insert qt conf page into project settings editor
 	insertPage( 0, mQtConfigurationPage );
 	cbPages->setCurrentIndex( 0 );
+	//
+	mQtVersion = mQtManager.version( mProject->projectSettingsValue( "QT_VERSION" ) );
 	// load qt version
 	loadsQtVersions();
 	// connections
@@ -29,9 +31,9 @@ void QMakeProjectEditorDialog::loadsQtVersions()
 		it->setData( Qt::UserRole, QVariant::fromValue( v ) );
 		if ( v.Default )
 			it->setBackground( QBrush( Qt::green ) );
+		if ( v == mQtVersion )
+			it->setSelected( true );
 	}
-	
-#warning create a projectsettingsValue() / setProjectSettingsValue member so we abstract the call for stocking/reading specific settings of project in project
 }
 
 void QMakeProjectEditorDialog::lwQtVersions_currentItemChanged( QListWidgetItem* current, QListWidgetItem* )
@@ -62,4 +64,16 @@ void QMakeProjectEditorDialog::lQtVersionInformations_linkActivated( const QStri
 			cd->show();
 		}
 	}
+}
+
+void QMakeProjectEditorDialog::accept()
+{
+	// qt version
+	if ( QListWidgetItem* it = mUiQtConfiguration.lwQtVersions->selectedItems().value( 0 ) )
+		mQtVersion = it->data( Qt::UserRole ).value<QtVersion>();
+	else
+		mQtVersion = QtVersion();
+	mProject->setProjectSettingsValue( "QT_VERSION", mQtVersion.Version );
+	// default XUP Project Editor accept
+	UIXUPProjectEditor::accept();
 }

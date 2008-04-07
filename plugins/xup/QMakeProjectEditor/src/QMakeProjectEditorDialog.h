@@ -19,11 +19,13 @@ protected:
 	QWidget* mQtConfigurationPage;
 	Ui::UIQtConfiguration mUiQtConfiguration;
 	QtVersionManager mQtManager;
+	QtVersion mQtVersion;
 
 protected slots:
 	void loadsQtVersions();
 	void lwQtVersions_currentItemChanged( QListWidgetItem* current, QListWidgetItem* previous );
 	void lQtVersionInformations_linkActivated( const QString& link );
+	virtual void accept();
 };
 
 #endif // QMAKEPROJECTEDITORDIALOG_H
