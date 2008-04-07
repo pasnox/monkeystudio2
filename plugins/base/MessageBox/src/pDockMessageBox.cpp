@@ -92,6 +92,8 @@ pDockMessageBox::pDockMessageBox( QWidget* w )
 	twMessageBox->setTabToolTip( 1, tr( "Program output" ) );
 	twMessageBox->setTabToolTip( 2, tr( "Commands log" ) );
 	twMessageBox->setTabToolTip( 3, tr( "Search results" ) );
+	// set active tab
+	twMessageBox->setCurrentIndex (0);
 	// set central widget to tabwidget
 	setWidget( twMessageBox );
 	// connections
