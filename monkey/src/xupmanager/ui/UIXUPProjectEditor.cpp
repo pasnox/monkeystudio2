@@ -578,6 +578,9 @@ void UIXUPProjectEditor::accept()
 	if ( !gbInterpreters->isChecked() )
 		plugin.clear();
 	mProject->setProjectSettingsValue( "INTERPRETER", plugin );
+	// update menu actions
+	mProject->uninstallCommands();
+	mProject->installCommands();
 	// accept dialog
 	QDialog::accept();
 }

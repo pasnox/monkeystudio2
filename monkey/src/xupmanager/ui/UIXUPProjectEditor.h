@@ -59,7 +59,7 @@ class Q_MONKEY_EXPORT UIXUPProjectEditor : public QDialog, public Ui::UIXUPProje
 public:
 	UIXUPProjectEditor( XUPItem* project, QWidget* parent = 0 );
 
-	void insertPage( int id = -1, QWidget* page = 0 );
+	virtual void insertPage( int id = -1, QWidget* page = 0 );
 
 protected:
 	XUPItem* mProject;
@@ -96,7 +96,7 @@ protected slots:
 	void on_tbOthersValuesRemove_clicked();
 	void on_tbOthersValuesClear_clicked();
 	// accept
-	void accept();
+	virtual void accept();
 };
 
 #endif // UIXUPPROJECTEDITOR_H
