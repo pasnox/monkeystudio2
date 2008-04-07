@@ -19,8 +19,8 @@ struct QtVersion
 	QString assistant() const { return QString( "%1/bin/assistant" ).arg( Path ); }
 	QString linguist() const { return QString( "%1/bin/linguist" ).arg( Path ); }
 	
-	bool operator==( const QtVersion& o ) { return Version == o.Version && Path == o.Path && QMakeSpec == o.QMakeSpec && QMakeParameters == o.QMakeParameters; }
-	bool operator!=( const QtVersion& o ) { return !operator==( o ); }
+	bool operator==( const QtVersion& o ) const { return Version == o.Version && Path == o.Path && QMakeSpec == o.QMakeSpec && QMakeParameters == o.QMakeParameters; }
+	bool operator!=( const QtVersion& o ) const { return !operator==( o ); }
 	
 	QString Version;
 	QString Path;
