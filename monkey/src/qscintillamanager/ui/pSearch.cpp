@@ -60,7 +60,7 @@ pSearch::pSearch( QWidget* parent )
 	layout->setContentsMargins (0, 0, 0, 0);
 	layout->setSpacing (2);
 	//search
-	lSearchText = new QLabel (tr("S&earch:"));
+	lSearchText = new QLabel (tr("Searc&h:"));
 	lSearchText->setSizePolicy (QSizePolicy::Maximum, QSizePolicy::Fixed);
 	lSearchText->setAlignment (Qt::AlignVCenter | Qt::AlignRight);
 	

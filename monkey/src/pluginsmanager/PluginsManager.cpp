@@ -60,14 +60,21 @@ void PluginsManager::loadsPlugins()
 		foreach ( QFileInfo f, pMonkeyStudio::getFiles( d ) )
 		{
 			QPluginLoader l( f.absoluteFilePath() );
-			if ( !addPlugin( l.instance() ) )
+			if (!l.instance())
 			{
 				// try unload it and reload it in case of old one in memory
 				l.unload();
 				l.load();
-				// if can t load it, check next
-				if ( !addPlugin( l.instance() ) )			
-					qWarning( qPrintable( tr( "Failed to load plugin ( %1 ): Error: %2" ).arg( f.absoluteFilePath(), l.errorString() ) ) );
+			}
+			if (!l.instance())
+			{
+				qWarning( qPrintable( tr( "Failed to load plugin ( %1 ): Error: %2" ).arg( f.absoluteFilePath(), l.errorString() ) ) );
+				continue;
+			}
+			if ( !addPlugin( l.instance() ) )
+			{
+				/* Free memory */
+				l.unload();
 			}
 		}
 	}
@@ -83,6 +90,14 @@ bool PluginsManager::addPlugin( QObject* o )
 	// if not return
 	if ( !bp )
 		return false;
+	
+	//Check for duplicating
+	foreach (BasePlugin* p, mPlugins)
+		if (p->infos().Name == bp->infos().Name)
+		{
+			qWarning( qPrintable( tr( "Found plugin: %1, type: %2. Scipped, duplicating" ).arg( bp->infos().Name ).arg( bp->infos().Type ) ) );
+			return false;
+		}
 	
 	// show plugin infos
 	qWarning( qPrintable( tr( "Found plugin: %1, type: %2" ).arg( bp->infos().Name ).arg( bp->infos().Type ) ) );
