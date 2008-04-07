@@ -5,6 +5,8 @@
 #include <QList>
 #include <QDir>
 
+#include <QDebug>
+
 class DirWalkIterator
 {
 protected:
@@ -55,10 +57,11 @@ public:
 	}
 };
 
-SearchThread::SearchThread(const QString &_dir, const QString &_text, bool _isWhole, bool _isMatch, bool _isReg, QObject* parent)
-    : QThread(parent)/*, mTerm(false)*/
+SearchThread::SearchThread(const QString &_dir, QString &_mask, const QString &_text, bool _isWhole, bool _isMatch, bool _isReg, QObject* parent)
+    : QThread(parent), mTerm(false)
 {
     dir = _dir;
+    mask = _mask;
     text = _text;
     isWhole = _isWhole;
     isMatch = _isMatch;
@@ -75,8 +78,16 @@ void SearchThread::run()
 	DirWalkIterator dirWalker (dir);
     int files_count = 0;
     QString fileName = dirWalker.next();
+    QRegExp maskRe = QRegExp (mask, Qt::CaseInsensitive, QRegExp::Wildcard);
     while (!fileName.isNull())
     {
+        if (!mask.isEmpty() && !maskRe.exactMatch (fileName))
+        {
+            qWarning () << mask << mask.isEmpty(), maskRe.exactMatch (fileName);
+            fileName = dirWalker.next();            
+            continue;
+        }
+        qWarning () << "Search " << text<< " on "<<dir << " with " <<mask<< " file are " << fileName;
         emit changeProgress(++files_count);
         QFile file(fileName);
         if (file.open(QIODevice::ReadOnly)) 

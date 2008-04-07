@@ -60,7 +60,7 @@ pSearch::pSearch( QWidget* parent )
 	layout->setContentsMargins (0, 0, 0, 0);
 	layout->setSpacing (2);
 	//search
-	lSearchText = new QLabel (tr("&Search:"));
+	lSearchText = new QLabel (tr("S&earch:"));
 	lSearchText->setSizePolicy (QSizePolicy::Maximum, QSizePolicy::Fixed);
 	lSearchText->setAlignment (Qt::AlignVCenter | Qt::AlignRight);
 	
@@ -424,11 +424,12 @@ bool pSearch::on_tbNext_clicked()
                 mFilesProcessed = 0;
                 fileProcessed (0);
                 QString path = cobPath->currentText();
+                QString mask = cobMask->currentText();
                 QString text = cobSearch->currentText();
                 //bool whole = cbWholeWords->isChecked ();
                 bool match = cbCaseSensitive->isChecked();
                 bool regexp = cbRegExp->isChecked ();
-                mSearchThread = new SearchThread(path, text, true, match, regexp, this);
+                mSearchThread = new SearchThread(path, mask, text, true, match, regexp, this);
                 tbNext->setText (tr("&Stop"));
                 tbNext->setIcon (QIcon(":/console/icons/console/stop.png"));
                 
@@ -516,7 +517,7 @@ void pSearch::on_tbReplaceAll_clicked()
 
 void pSearch::on_tbPath_clicked ()
 {
-	QString text = QFileDialog::getExistingDirectory ( this, tr("Search path"), cobSearch->currentText(), 0);
+	QString text = QFileDialog::getExistingDirectory ( this, tr("Search path"), cobPath->currentText(), 0);
 	if (!text.isNull())
 		cobPath->lineEdit ()->setText (text);
 }

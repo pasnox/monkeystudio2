@@ -12,13 +12,14 @@ class SearchThread : public QThread
 {
     Q_OBJECT
 public:
-    SearchThread(const QString &, const QString &, bool, bool, bool, QObject* parent);
+    SearchThread(const QString &dir, QString &mask, const QString &text, bool, bool, bool, QObject* parent);
     ~SearchThread();
     void run();
     void setTermEnabled(bool t) {mTerm = t;};
     bool isTermEnabled() {return mTerm;};
 private:
     QString dir;
+    QString mask;
     QString text; 
     bool isWhole;
     bool isMatch;
