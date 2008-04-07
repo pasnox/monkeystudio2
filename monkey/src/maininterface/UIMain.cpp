@@ -120,7 +120,7 @@ void UIMain::initMenuBar()
 {
 	// create menubar menus and actions
 	pMenuBar* mb = menuBar();
-	mb->menu( "mFile", tr( "&File" ) );
+	mb->menu( "mFile", tr( "File" ) );
 	mb->beginGroup( "mFile" );
 		mb->action( "aNew", tr( "&New..." ), QIcon( ":/file/icons/file/new.png" ), tr( "Ctrl+N" ), tr( "Create a new file" ) );
 		mb->action( "aOpen", tr( "&Open..." ), QIcon( ":/file/icons/file/open.png" ), tr( "Ctrl+O" ), tr( "Open a file" ) );
@@ -174,14 +174,14 @@ void UIMain::initMenuBar()
 		mb->action( "aExpandAbbreviation", tr( "Expand Abbreviation" ), QIcon( ":/edit/icons/edit/abbreviation.png" ), tr( "Ctrl+E" ), tr( "Expand Abbreviation" ) )->setEnabled( false );
 		mb->action( "aPrepareAPIs", tr( "Prepare APIs" ), QIcon( ":/edit/icons/edit/prepareapis.png" ), tr( "Ctrl+Alt+P" ), tr( "Prepare the APIs files for auto completion / calltips" ) );
 	mb->endGroup();
-	mb->menu( "mView", tr( "&View" ) );
+	mb->menu( "mView", tr( "View" ) );
 	mb->beginGroup( "mView" );
 		mb->menu( "mStyle", tr( "&Style" ), QIcon( ":/view/icons/view/style.png" ) );
 		mb->action( "aNext", tr( "&Next Tab" ), QIcon( ":/view/icons/view/next.png" ), tr( "Alt+Right" ), tr( "Active the next tab" ) )->setEnabled( false );
 		mb->action( "aPrevious", tr( "&Previous Tab" ), QIcon( ":/view/icons/view/previous.png" ), tr( "Alt+Left" ), tr( "Active the previous tab" ) )->setEnabled( false );
 		mb->action( "aFiltered", tr( "&Filtered Projects" ), QIcon( ":/view/icons/view/filtered.png" ), tr( "" ), tr( "Filtered project view" ) )->setCheckable( true );
 	mb->endGroup();
-	mb->menu( "mProject", tr( "&Project" ) );
+	mb->menu( "mProject", tr( "Project" ) );
 	mb->beginGroup( "mProject" );
 		mb->action( "aNew", tr( "&New" ), QIcon( ":/project/icons/project/new.png" ), tr( "Ctrl+Shift+N" ), tr( "New project..." ) );
 		mb->action( "aOpen", tr( "&Open" ), QIcon( ":/project/icons/project/open.png" ), tr( "Ctrl+Shift+O" ), tr( "Open a project..." ) );
@@ -201,7 +201,7 @@ void UIMain::initMenuBar()
 		mb->action( "mRecents/aClear", tr( "&Clear" ), QIcon( ":/project/icons/project/clear.png" ), QString::null, tr( "Clear the recents projects list" ) );
 		mb->action( "mRecents/aSeparator1" );
 	mb->endGroup();
-	mb->menu( "mBuilder", tr( "&Build" ) )->setEnabled( false );
+	mb->menu( "mBuilder", tr( "Build" ) )->setEnabled( false );
 	mb->beginGroup( "mBuilder" );
 		mb->menu( "mBuild", tr( "&Build" ), QIcon( ":/build/icons/build/build.png" ) );
 		mb->menu( "mRebuild", tr( "&Rebuild" ), QIcon( ":/build/icons/build/rebuild.png" ) );
@@ -210,9 +210,9 @@ void UIMain::initMenuBar()
 		mb->menu( "mUserCommands", tr( "&User Commands" ), QIcon( ":/build/icons/build/misc.png" ) );
 		mb->action( "aSeparator1" );
 	mb->endGroup();
-	mb->menu( "mDebugger", tr( "&Debugger" ) )->setEnabled( false );
+	mb->menu( "mDebugger", tr( "Debugger" ) )->setEnabled( false );
 	mb->menu( "mInterpreter", tr( "&Interpreter" ) )->setEnabled( false );
-	mb->menu( "mTools", tr( "&Tools" ) );
+	mb->menu( "mTools", tr( "Tools" ) );
 	mb->beginGroup( "mTools" );
 		mb->action( "aEditUser", tr( "&Edit User Tools..." ), QIcon( ":/tools/icons/tools/edit.png" ), QString::null, tr( "Edit tools..." ) );
 		mb->action( "aEditDesktop", tr( "Edit &Desktop Tools..." ), QIcon( ":/tools/icons/tools/desktop.png" ), QString::null, tr( "Edit desktop tools..." ) );
@@ -220,12 +220,12 @@ void UIMain::initMenuBar()
 		mb->menu( "mUserTools", tr( "&User Tools" ), QIcon( ":/tools/icons/tools/user.png" ) );
 		mb->menu( "mDesktopTools", tr( "Desktop &Tools" ), QIcon( ":/tools/icons/tools/desktop.png" ) );
 	mb->endGroup();
-	mb->menu( "mPlugins", tr( "Plu&gins" ) );
+	mb->menu( "mPlugins", tr( "Plugins" ) );
 	mb->beginGroup( "mPlugins" );
 		mb->action( "aManage", tr( "&Manage..." ), QIcon( ":/Icons/Icons/toolsedit.png" ), QString::null, tr( "Manage plugins..." ) );
 		mb->action( "aSeparator1" );
 	mb->endGroup();
-	mb->menu( "mWindow", tr( "&Window" ) );
+	mb->menu( "mWindow", tr( "Window" ) );
 	mb->beginGroup( "mWindow" );
 		mb->action( "aSDI", tr( "&Single Document Interface" ), QIcon( "" ), QString::null, tr( "Single Document Interface" ) );
 		mb->action( "aMDI", tr( "&Multiple Document Interface" ), QIcon( "" ), QString::null, tr( "Multiple Document Interface" ) );
@@ -236,7 +236,7 @@ void UIMain::initMenuBar()
 		mb->action( "aMinimize", tr( "&Minimize" ), QIcon( "" ), QString::null, tr( "Minimize" ) );
 		mb->action( "aRestore", tr( "&Restore" ), QIcon( "" ), QString::null, tr( "Restore normal size" ) );
 	mb->endGroup();
-	mb->menu( "mHelp", tr( "&Help" ) );
+	mb->menu( "mHelp", tr( "Help" ) );
 	mb->beginGroup( "mHelp" );
 		mb->action( "aManual", tr( "&Manual" ), QIcon( ":/help/icons/help/assistant.png" ), QString::null, tr( "Manual" ) );
 		mb->action( "aSeparator1" );
