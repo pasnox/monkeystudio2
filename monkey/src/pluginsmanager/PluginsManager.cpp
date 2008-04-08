@@ -75,7 +75,6 @@ void PluginsManager::loadsPlugins()
 			// try to add plugin to plugins list, else unload it
 			else if ( !addPlugin( l.instance() ) )
 				l.unload();
-			}
 		}
 	}
 	// installs user requested plugins
