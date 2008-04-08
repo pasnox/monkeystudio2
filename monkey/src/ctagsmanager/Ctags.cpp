@@ -84,7 +84,7 @@ FileRecord* Ctags::GetTagsForFile (QString file )
 
 TagEntryListItem* Ctags::get_tags ( QString file )
 {
-	return parseFile ( file.toStdString().c_str(), NULL);
+	return parseFile ( file.toLocal8Bit().data(), NULL);
 }
 
 //RecordsList* Ctags::GetTagsForAllFiles ()
