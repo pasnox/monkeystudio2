@@ -625,6 +625,7 @@ void QMakeXUPItem::installCommands()
 	}
 	cmd.setUserData( reinterpret_cast<quintptr>( &mCommands ) );
 	cmd.setProject( this );
+	cmd.setSkipOnError( false );
 	const pCommand cmdBuild = cmd;
 	
 	// get qt version
@@ -695,6 +696,7 @@ void QMakeXUPItem::installCommands()
 			cmd.setWorkingDirectory( "$cpp$" );
 			cmd.setUserData( reinterpret_cast<quintptr>( &mCommands ) );
 			cmd.setProject( this );
+			cmd.setSkipOnError( false );
 			addCommand( cmd, "mBuilder" );
 			
 			// lupdate command
@@ -705,6 +707,7 @@ void QMakeXUPItem::installCommands()
 			cmd.setWorkingDirectory( "$cpp$" );
 			cmd.setUserData( reinterpret_cast<quintptr>( &mCommands ) );
 			cmd.setProject( this );
+			cmd.setSkipOnError( false );
 			addCommand( cmd, "mBuilder" );
 			
 			// lrelease command
@@ -715,6 +718,7 @@ void QMakeXUPItem::installCommands()
 			cmd.setWorkingDirectory( "$cpp$" );
 			cmd.setUserData( reinterpret_cast<quintptr>( &mCommands ) );
 			cmd.setProject( this );
+			cmd.setSkipOnError( false );
 			addCommand( cmd, "mBuilder" );
 		
 			// rebuild debug
