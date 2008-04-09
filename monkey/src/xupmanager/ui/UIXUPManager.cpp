@@ -356,12 +356,16 @@ void UIXUPManager::actionSaveAllTriggered()
 
 void UIXUPManager::actionCloseCurrentTriggered()
 {
+	mYesToAll = false;
+	mNoToAll = false;
 	if ( XUPItem* pi = currentProject() )
 		pi->closeProject();
 }
 
 void UIXUPManager::actionCloseAllTriggered()
 {
+	mYesToAll = false;
+	mNoToAll = false;
 	foreach ( XUPItem* pi, mModel->topLevelProjects() )
 		pi->closeProject();
 }
@@ -540,9 +544,30 @@ void UIXUPManager::internal_projectAboutToClose( XUPItem* pi )
 		}
 		teLog->append( tr( "Saving Session Finished..." ) );
 		// save project if needed
-		if ( pi->modified() && question( tr( "Project modified '%1', save it ?" ).arg( pi->defaultValue() ) ) )
-			if ( !saveProject( pi, QString() ) )
+		if ( pi->modified() )
+		{
+			// prepare dialog infos
+			const QString title = tr( "Project Modified..." );
+			const QString text = tr( "Project modified '%1', save it ?" ).arg( pi->defaultValue() );
+			QMessageBox::StandardButton button = QMessageBox::NoButton;
+			QMessageBox::StandardButtons buttons = QMessageBox::Yes | QMessageBox::No;
+			if ( !mYesToAll && !mNoToAll )
+			{
+				buttons |= QMessageBox::YesToAll | QMessageBox::NoToAll;
+				// query user
+				button = QMessageBox::question( QApplication::activeWindow(), title, text, buttons, QMessageBox::Yes );
+			}
+			// update xxToAll state
+			if ( button == QMessageBox::YesToAll )
+				mYesToAll = true;
+			else if ( button == QMessageBox::NoToAll )
+				mNoToAll = true;
+			// check if need save
+			bool save = button == QMessageBox::Yes || mYesToAll;
+			// try save else show error
+			if ( save && !saveProject( pi, QString() ) )
 				warning( tr( "An error occur while saving project" ) );
+		}
 	}
 }
 

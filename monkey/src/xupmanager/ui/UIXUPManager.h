@@ -55,6 +55,8 @@ public:
 	void setAction( UIXUPManager::Actions, QAction* );
 
 protected:
+	bool mYesToAll;
+	bool mNoToAll;
 	ProjectItemModel* mModel;
 	QHash<QString, XUPItem*> mRegisteredItems;
 	QHash<UIXUPManager::Actions, QAction*> mActions;
