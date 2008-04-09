@@ -73,7 +73,8 @@ public:
 private:
 	void addItemsRecursively( XUPItem*, FilteredProjectItem* );
 	FilteredProjectItem* getProject( XUPItem* );
-	FilteredProjectItem* getFolder( XUPItem*, FilteredProjectItem* = 0 );
+	FilteredProjectItem* createFolder( const QString& name, XUPItem* inItem );
+	FilteredProjectItem* getFolder( XUPItem*, FilteredProjectItem* = 0, const QString& forceName = QString() );
 	FilteredProjectItem* getVariable( XUPItem* );
 	void addFilteredValue( XUPItem* );
 	void addFilteredVariable( XUPItem* );
