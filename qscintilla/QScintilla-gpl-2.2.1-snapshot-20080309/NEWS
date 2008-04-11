@@ -1,0 +1,29 @@
+v2.2 27th February 2008
+  - Based on Scintilla v1.75.
+  - A lexer's default colour, paper and font are now written to and read from
+    the settings.
+  - Windows64 is now supported.
+  - The signature of the QsciScintillaBase::SCN_MACRORECORD() signal has
+    changed slightly.
+  - Changed the licensing to match the current Qt licenses, including GPL v3.
+
+v2.1 1st June 2007
+  - A slightly revised API, incompatible with QScintilla v2.0.
+  - Lexers now remember their style settings.  A lexer no longer has to be the
+    current lexer when changing a style's color, end-of-line fill, font or
+    paper.
+  - The color(), eolFill(), font() and paper() methods of QsciLexer now return
+    the current values for a style rather than the default values.
+  - The setDefaultColor(), setDefaultFont() and setDefaultPaper() methods of
+    QsciLexer are no longer slots and no longer virtual.
+  - The defaultColor(), defaultFont() and defaultPaper() methods of QsciLexer
+    are no longer virtual.
+  - The color(), eolFill(), font() and paper() methods of all QsciLexer derived
+    classes (except for QsciLexer itself) have been renamed defaultColor(),
+    defaultEolFill(), defaultFont() and defaultPaper() respectively.
+
+v2.0 26th May 2007
+  - A revised API, incompatible with QScintilla v1.
+  - Hugely improved autocompletion and call tips support.
+  - Supports both Qt v3 and Qt v4.
+  - Includes Python bindings.
