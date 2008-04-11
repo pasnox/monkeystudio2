@@ -154,6 +154,12 @@ public:
 	// return the variable values if item is a variable else nothing
 	virtual QStringList variableValues() const;
 	virtual QString variableValue() { return variableValues().join( " " ); }
+	// set a variable value
+	virtual void setVariableValues( const QStringList& values );
+	virtual void setVariableValue( const QString& value ) { setVariableValues( value.isEmpty() ? QStringList() : QStringList( value ) ); }
+	// add variable value
+	virtual void addVariableValues( const QStringList& values );
+	virtual void addVariableValue( const QString& value ) { addVariableValues( value.isEmpty() ? QStringList() : QStringList( value ) ); }
 
 	// return the project file path, ie the file u set when opening/saving the project
 	virtual QString projectFilePath() const;
@@ -174,8 +180,10 @@ public:
 	virtual XUPItem* topLevelProject() const;
 	// return the most approppriate parent project for includes projects
 	virtual XUPItem* topProjectForInclude() const;
-	// return a scope by its name from item 
+	// return a scope by its name from item, creating it if needed
 	virtual XUPItem* scope( const QString& scopeName, XUPItem* fromScope = 0, bool create = false ) const;
+	// return the first variable by its name & operator from item, creating it if needed
+	virtual XUPItem* variable( const QString& variableName, const QString& operatorName = QString( "=" ), XUPItem* fromScope = 0, bool create = false ) const;
 	
 	// return a project settings value
 	virtual QStringList projectSettingsValues( const QString& variable, const QStringList& defaultValues = QStringList() ) const;

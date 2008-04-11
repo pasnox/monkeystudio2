@@ -495,6 +495,63 @@ QStringList XUPItem::variableValues() const
 	return l;
 }
 
+void XUPItem::setVariableValues( const QStringList& values )
+{
+	// abort if no variable
+	if ( !isType( "variable" ) )
+		return;
+	
+	// remove variable if needed
+	if ( values.isEmpty() )
+	{
+		remove();
+		return;
+	}
+	
+	// if same value, return
+	if ( variableValues() == values )
+		return;
+	
+	// clear values
+	while ( hasChildren() )
+		child( 0 )->remove();
+	
+	// set values
+	foreach ( const QString& value, values )
+	{
+		// create item value
+		XUPItem* it = clone( false );
+		it->setDomElement( domElement().ownerDocument().createElement( "value" ) );
+		domElement().appendChild( it->domElement() );
+		it->setValue( it->valueName(), value );
+		appendRow( it );
+	}
+}
+
+void XUPItem::addVariableValues( const QStringList& values )
+{
+	// abort if no files or no value
+	if ( !isType( "variable" ) || values.isEmpty() )
+		return;
+	
+	// get existing values in variable
+	const QStringList existingValues = variableValues();
+	
+	// set values
+	foreach ( const QString& value, values )
+	{
+		// create item value if needed
+		if ( !existingValues.contains( value ) )
+		{
+			XUPItem* it = clone( false );
+			it->setDomElement( domElement().ownerDocument().createElement( "value" ) );
+			domElement().appendChild( it->domElement() );
+			it->setValue( it->valueName(), value );
+			appendRow( it );
+		}
+	}
+}
+
 QString XUPItem::projectFilePath() const
 {
 	if ( XUPItem* pi = project() )
@@ -592,6 +649,32 @@ XUPItem* XUPItem::scope( const QString& scopeName, XUPItem* fromScope, bool crea
 	}
 	// return scope
 	return s;
+}
+
+XUPItem* XUPItem::variable( const QString& variableName, const QString& operatorName, XUPItem* fromScope, bool create ) const
+{
+	// set the scope to search
+	if ( fromScope == 0 )
+		fromScope = const_cast<XUPItem*>( this );
+	// check each child
+	foreach ( XUPItem* cit, fromScope->children( false, true ) )
+		if ( cit->isType( "variable" ) && cit->defaultValue() == variableName && cit->value( "operator", "=" ) == operatorName )
+			return cit;
+	// create item if needed
+	XUPItem* v = 0;
+	if ( create )
+	{
+		// create scope
+		v = clone( false );
+		v->setDomElement( mDomElement.ownerDocument().createElement( "variable" ) );
+		fromScope->domElement().appendChild( v->domElement() );
+		v->setValue( v->valueName(), variableName );
+		v->setValue( "operator", operatorName );
+		// append it to fromScope
+		fromScope->appendRow( v );
+	}
+	// return scope
+	return v;
 }
 
 QStringList XUPItem::projectSettingsValues( const QString& variable, const QStringList& defaultValues ) const
