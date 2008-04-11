@@ -7,6 +7,8 @@
 QMakeProjectEditorDialog::QMakeProjectEditorDialog( XUPItem* project, QWidget* parent )
 	: UIXUPProjectEditor( project, parent )
 {
+	lOperator->setVisible( true );
+	cbOperator->setVisible( true );
 	// init Qt configuration widget
 	mQtConfigurationPage = new QWidget( this );
 	mUiQtConfiguration.setupUi( mQtConfigurationPage );
@@ -18,6 +20,7 @@ QMakeProjectEditorDialog::QMakeProjectEditorDialog( XUPItem* project, QWidget* p
 	// load qt version
 	loadsQtVersions();
 	// connections
+	connect( cbOperator, SIGNAL( currentIndexChanged( const QString& ) ), this, SLOT( cbOperator_currentIndexChanged( const QString& ) ) );
 	connect( mUiQtConfiguration.lwQtVersions, SIGNAL( currentItemChanged( QListWidgetItem*, QListWidgetItem* ) ), this, SLOT( lwQtVersions_currentItemChanged( QListWidgetItem*, QListWidgetItem* ) ) );
 	connect( mUiQtConfiguration.lQtVersionInformations, SIGNAL( linkActivated( const QString& ) ), this, SLOT( lQtVersionInformations_linkActivated( const QString& ) ) );
 }
@@ -34,6 +37,17 @@ void QMakeProjectEditorDialog::loadsQtVersions()
 		if ( v == mQtVersion )
 			it->setSelected( true );
 	}
+}
+
+void QMakeProjectEditorDialog::cbTemplate_currentIndexChanged( const QString& curTemplate )
+{
+	XUPItem* vit = mProject->variable( "TEMPLATE", "=", 0, true );
+	
+}
+
+void QMakeProjectEditorDialog::cbOperator_currentIndexChanged( const QString& curOperator )
+{
+	XUPItem* curScope = currentScope();
 }
 
 void QMakeProjectEditorDialog::lwQtVersions_currentItemChanged( QListWidgetItem* current, QListWidgetItem* )

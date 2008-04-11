@@ -23,6 +23,8 @@ protected:
 
 protected slots:
 	void loadsQtVersions();
+	void cbTemplate_currentIndexChanged( const QString& text );
+	void cbOperator_currentIndexChanged( const QString& text );
 	void lwQtVersions_currentItemChanged( QListWidgetItem* current, QListWidgetItem* previous );
 	void lQtVersionInformations_linkActivated( const QString& link );
 	virtual void accept();

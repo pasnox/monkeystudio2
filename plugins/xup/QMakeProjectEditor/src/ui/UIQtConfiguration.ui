@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>569</width>
-    <height>391</height>
+    <width>516</width>
+    <height>487</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -15,24 +15,26 @@
   <property name="windowIcon" >
    <iconset resource="../resources/QMakeProjectEditor.qrc" >:/qmakeitems/project.png</iconset>
   </property>
-  <layout class="QVBoxLayout" >
-   <item>
-    <widget class="QLabel" name="label" >
-     <property name="text" >
-      <string>Choose the Qt version you want to use with this project :</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-     </property>
-     <property name="wordWrap" >
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
+  <layout class="QHBoxLayout" >
+   <property name="spacing" >
+    <number>0</number>
+   </property>
+   <property name="leftMargin" >
+    <number>0</number>
+   </property>
+   <property name="topMargin" >
+    <number>0</number>
+   </property>
+   <property name="rightMargin" >
+    <number>0</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>0</number>
+   </property>
    <item>
     <widget class="QTabWidget" name="tabWidget" >
      <property name="currentIndex" >
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="wQtVersionPage" >
       <attribute name="title" >
@@ -143,6 +145,857 @@ If there is no Qt version available or you want to add a custom Qt version, you 
       <attribute name="title" >
        <string>Qt Configuration</string>
       </attribute>
+      <layout class="QVBoxLayout" >
+       <item>
+        <widget class="QLabel" name="label" >
+         <property name="text" >
+          <string>This part of configuration take care of current scope, and current operator. If you don't know what to choose, use the 'root' ( project ) scope and the '+=' operator.</string>
+         </property>
+         <property name="alignment" >
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+         </property>
+         <property name="wordWrap" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QListWidget" name="lwQt" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize" >
+          <size>
+           <width>16777215</width>
+           <height>60</height>
+          </size>
+         </property>
+         <property name="iconSize" >
+          <size>
+           <width>48</width>
+           <height>48</height>
+          </size>
+         </property>
+         <property name="flow" >
+          <enum>QListView::LeftToRight</enum>
+         </property>
+         <property name="viewMode" >
+          <enum>QListView::ListMode</enum>
+         </property>
+         <property name="currentRow" >
+          <number>0</number>
+         </property>
+         <item>
+          <property name="text" >
+           <string>Application</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/temp/icons/temp/package_applications.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Library</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/temp/icons/temp/package_development.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Settings</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/temp/icons/temp/package_system.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Translation</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/translation/icons/translation/translation.png</iconset>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QStackedWidget" name="swQt" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="currentIndex" >
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="wApplication" >
+          <layout class="QGridLayout" >
+           <property name="leftMargin" >
+            <number>0</number>
+           </property>
+           <property name="topMargin" >
+            <number>0</number>
+           </property>
+           <property name="rightMargin" >
+            <number>0</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>0</number>
+           </property>
+           <item rowspan="3" row="0" column="0" >
+            <widget class="QGroupBox" name="gbBuild" >
+             <property name="title" >
+              <string>Build &amp;Settings</string>
+             </property>
+             <layout class="QVBoxLayout" >
+              <item>
+               <widget class="QComboBox" name="cbTemplate" >
+                <property name="statusTip" >
+                 <string>TEMPLATE</string>
+                </property>
+                <item>
+                 <property name="text" >
+                  <string>app</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text" >
+                  <string>lib</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text" >
+                  <string>vcapp</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text" >
+                  <string>vclib</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text" >
+                  <string>subdirs</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" >
+                <property name="spacing" >
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QFrame" name="fBuildType" >
+                  <layout class="QVBoxLayout" >
+                   <property name="leftMargin" >
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin" >
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin" >
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin" >
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QRadioButton" name="rbDebug" >
+                     <property name="statusTip" >
+                      <string>debug</string>
+                     </property>
+                     <property name="text" >
+                      <string>&amp;Debug</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="rbRelease" >
+                     <property name="statusTip" >
+                      <string>release</string>
+                     </property>
+                     <property name="text" >
+                      <string>R&amp;elease</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="rbDebugRelease" >
+                     <property name="statusTip" >
+                      <string>debug_and_release</string>
+                     </property>
+                     <property name="text" >
+                      <string>Debu&amp;g &amp;&amp; Release</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QFrame" name="fWarn" >
+                  <layout class="QVBoxLayout" >
+                   <property name="leftMargin" >
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin" >
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin" >
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin" >
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QRadioButton" name="rbWarnOff" >
+                     <property name="statusTip" >
+                      <string>warn_off</string>
+                     </property>
+                     <property name="text" >
+                      <string>Warn Of&amp;f</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="rbWarnOn" >
+                     <property name="statusTip" >
+                      <string>warn_on</string>
+                     </property>
+                     <property name="text" >
+                      <string>&amp;Warn On</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QFrame" name="fBuildAll" >
+                  <layout class="QVBoxLayout" >
+                   <property name="leftMargin" >
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin" >
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin" >
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin" >
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QCheckBox" name="cbBuildAll" >
+                     <property name="enabled" >
+                      <bool>false</bool>
+                     </property>
+                     <property name="statusTip" >
+                      <string>build_all</string>
+                     </property>
+                     <property name="text" >
+                      <string>&amp;Build All</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QCheckBox" name="cbOrdered" >
+                     <property name="enabled" >
+                      <bool>false</bool>
+                     </property>
+                     <property name="statusTip" >
+                      <string>ordered</string>
+                     </property>
+                     <property name="text" >
+                      <string>&amp;Ordered</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="0" column="1" >
+            <widget class="QGroupBox" name="gbVersion" >
+             <property name="statusTip" >
+              <string>VERSION</string>
+             </property>
+             <property name="title" >
+              <string>&amp;Version Informations</string>
+             </property>
+             <property name="checkable" >
+              <bool>true</bool>
+             </property>
+             <property name="checked" >
+              <bool>false</bool>
+             </property>
+             <layout class="QGridLayout" >
+              <item row="0" column="0" >
+               <widget class="QLabel" name="lMajor" >
+                <property name="text" >
+                 <string>&amp;Major</string>
+                </property>
+                <property name="alignment" >
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="buddy" >
+                 <cstring>sbMajor</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1" >
+               <widget class="QLabel" name="lMinor" >
+                <property name="text" >
+                 <string>Mi&amp;nor</string>
+                </property>
+                <property name="alignment" >
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="buddy" >
+                 <cstring>sbMinor</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2" >
+               <widget class="QLabel" name="lRelease" >
+                <property name="text" >
+                 <string>&amp;Release</string>
+                </property>
+                <property name="alignment" >
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="buddy" >
+                 <cstring>sbRelease</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="3" >
+               <widget class="QLabel" name="lBuild" >
+                <property name="text" >
+                 <string>&amp;Build</string>
+                </property>
+                <property name="alignment" >
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="buddy" >
+                 <cstring>sbBuild</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0" >
+               <widget class="QSpinBox" name="sbMajor" >
+                <property name="maximum" >
+                 <number>32767</number>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1" >
+               <widget class="QSpinBox" name="sbMinor" >
+                <property name="maximum" >
+                 <number>32767</number>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2" >
+               <widget class="QSpinBox" name="sbRelease" >
+                <property name="maximum" >
+                 <number>32767</number>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="3" >
+               <widget class="QSpinBox" name="sbBuild" >
+                <property name="maximum" >
+                 <number>32767</number>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0" colspan="4" >
+               <widget class="QCheckBox" name="cbBuildAutoIncrement" >
+                <property name="statusTip" >
+                 <string>APP_AUTO_INCREMENT</string>
+                </property>
+                <property name="text" >
+                 <string>A&amp;uto increment the build number</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="1" >
+            <widget class="QGroupBox" name="gbOutput" >
+             <property name="sizePolicy" >
+              <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="title" >
+              <string>Output</string>
+             </property>
+             <layout class="QGridLayout" >
+              <property name="leftMargin" >
+               <number>5</number>
+              </property>
+              <property name="topMargin" >
+               <number>5</number>
+              </property>
+              <property name="rightMargin" >
+               <number>5</number>
+              </property>
+              <property name="bottomMargin" >
+               <number>5</number>
+              </property>
+              <property name="horizontalSpacing" >
+               <number>3</number>
+              </property>
+              <property name="verticalSpacing" >
+               <number>3</number>
+              </property>
+              <item row="0" column="0" >
+               <widget class="QLabel" name="lOutputPath_2" >
+                <property name="text" >
+                 <string>Output &amp;Path :</string>
+                </property>
+                <property name="buddy" >
+                 <cstring>tbOutputPath</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1" >
+               <widget class="QLineEdit" name="leOutputPath_2" >
+                <property name="statusTip" >
+                 <string>DESTDIR</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2" >
+               <widget class="QToolButton" name="tbOutputPath_2" >
+                <property name="icon" >
+                 <iconset/>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0" >
+               <widget class="QLabel" name="lOutputName_2" >
+                <property name="sizePolicy" >
+                 <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text" >
+                 <string>Output &amp;Name :</string>
+                </property>
+                <property name="buddy" >
+                 <cstring>leOutputName</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1" colspan="2" >
+               <widget class="QLineEdit" name="leOutputName_2" >
+                <property name="statusTip" >
+                 <string>TARGET</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="2" column="1" >
+            <widget class="QGroupBox" name="gbApplication" >
+             <property name="title" >
+              <string>Application Settings</string>
+             </property>
+             <layout class="QGridLayout" >
+              <item row="0" column="0" >
+               <widget class="QLabel" name="lTitle" >
+                <property name="text" >
+                 <string>&amp;Title :</string>
+                </property>
+                <property name="buddy" >
+                 <cstring>leTitle</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1" >
+               <widget class="QLineEdit" name="leTitle" >
+                <property name="statusTip" >
+                 <string>APP_TITLE</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0" >
+               <widget class="QLabel" name="lAuthor" >
+                <property name="text" >
+                 <string>&amp;Author :</string>
+                </property>
+                <property name="buddy" >
+                 <cstring>leAuthor</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1" >
+               <widget class="QLineEdit" name="leAuthor" >
+                <property name="statusTip" >
+                 <string>APP_AUTHOR</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="wLibrary" >
+          <layout class="QGridLayout" >
+           <property name="leftMargin" >
+            <number>0</number>
+           </property>
+           <property name="topMargin" >
+            <number>0</number>
+           </property>
+           <property name="rightMargin" >
+            <number>0</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>0</number>
+           </property>
+           <item row="0" column="0" >
+            <widget class="QGroupBox" name="gbQtModules" >
+             <property name="title" >
+              <string>&amp;Qt Modules</string>
+             </property>
+             <layout class="QVBoxLayout" >
+              <property name="spacing" >
+               <number>3</number>
+              </property>
+              <property name="leftMargin" >
+               <number>5</number>
+              </property>
+              <property name="topMargin" >
+               <number>5</number>
+              </property>
+              <property name="rightMargin" >
+               <number>5</number>
+              </property>
+              <property name="bottomMargin" >
+               <number>5</number>
+              </property>
+              <item>
+               <widget class="QListWidget" name="lwQtModules_2" >
+                <property name="statusTip" >
+                 <string>QT</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="0" column="1" >
+            <widget class="QGroupBox" name="gbCompilerFlags" >
+             <property name="title" >
+              <string>&amp;Compiler/Library Flags</string>
+             </property>
+             <layout class="QVBoxLayout" >
+              <property name="spacing" >
+               <number>3</number>
+              </property>
+              <property name="leftMargin" >
+               <number>5</number>
+              </property>
+              <property name="topMargin" >
+               <number>5</number>
+              </property>
+              <property name="rightMargin" >
+               <number>5</number>
+              </property>
+              <property name="bottomMargin" >
+               <number>5</number>
+              </property>
+              <item>
+               <widget class="QListWidget" name="lwCompilerFlags_2" >
+                <property name="statusTip" >
+                 <string>CONFIG</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="0" colspan="2" >
+            <layout class="QHBoxLayout" >
+             <property name="spacing" >
+              <number>3</number>
+             </property>
+             <property name="leftMargin" >
+              <number>0</number>
+             </property>
+             <property name="topMargin" >
+              <number>0</number>
+             </property>
+             <property name="rightMargin" >
+              <number>0</number>
+             </property>
+             <property name="bottomMargin" >
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="lConfig" >
+               <property name="text" >
+                <string>&amp;Others config :</string>
+               </property>
+               <property name="buddy" >
+                <cstring>leConfig</cstring>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="leConfig" />
+             </item>
+            </layout>
+           </item>
+           <item row="2" column="0" colspan="2" >
+            <widget class="QGroupBox" name="gbInformations" >
+             <property name="sizePolicy" >
+              <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+               <horstretch>99</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="title" >
+              <string>&amp;Informations</string>
+             </property>
+             <layout class="QVBoxLayout" >
+              <property name="spacing" >
+               <number>3</number>
+              </property>
+              <property name="leftMargin" >
+               <number>5</number>
+              </property>
+              <property name="topMargin" >
+               <number>5</number>
+              </property>
+              <property name="rightMargin" >
+               <number>5</number>
+              </property>
+              <property name="bottomMargin" >
+               <number>5</number>
+              </property>
+              <item>
+               <widget class="QTextBrowser" name="tbInformations_2" />
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="wSettings" >
+          <layout class="QGridLayout" >
+           <property name="leftMargin" >
+            <number>0</number>
+           </property>
+           <property name="topMargin" >
+            <number>0</number>
+           </property>
+           <property name="rightMargin" >
+            <number>0</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>0</number>
+           </property>
+           <item row="0" column="0" colspan="3" >
+            <widget class="QLineEdit" name="leDir" />
+           </item>
+           <item row="1" column="0" >
+            <widget class="QListView" name="lvDirs" />
+           </item>
+           <item row="1" column="1" colspan="2" >
+            <widget class="QListWidget" name="lwFiles" />
+           </item>
+           <item row="2" column="0" colspan="2" >
+            <widget class="QListWidget" name="lwValues" >
+             <property name="sizePolicy" >
+              <sizepolicy vsizetype="Ignored" hsizetype="Expanding" >
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2" >
+            <widget class="QFrame" name="lVariables" >
+             <property name="sizePolicy" >
+              <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="frameShape" >
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <layout class="QVBoxLayout" >
+              <property name="spacing" >
+               <number>3</number>
+              </property>
+              <property name="leftMargin" >
+               <number>5</number>
+              </property>
+              <property name="topMargin" >
+               <number>5</number>
+              </property>
+              <property name="rightMargin" >
+               <number>5</number>
+              </property>
+              <property name="bottomMargin" >
+               <number>5</number>
+              </property>
+              <item>
+               <widget class="QComboBox" name="cbVariables" >
+                <item>
+                 <property name="text" >
+                  <string>LIBS</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text" >
+                  <string>DEFINES</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text" >
+                  <string>TRANSLATIONS</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text" >
+                  <string>INCLUDEPATH</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text" >
+                  <string>DEPENDPATH</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text" >
+                  <string>VPATH</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text" >
+                  <string>RESOURCES</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text" >
+                  <string>DEF_FILE</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text" >
+                  <string>RC_FILE</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text" >
+                  <string>RES_FILE</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pbAddValue" >
+                <property name="text" >
+                 <string>&amp;Add</string>
+                </property>
+                <property name="icon" >
+                 <iconset/>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pbEditValue" >
+                <property name="text" >
+                 <string>&amp;Edit</string>
+                </property>
+                <property name="icon" >
+                 <iconset/>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pbRemoveValue" >
+                <property name="text" >
+                 <string>&amp;Remove</string>
+                </property>
+                <property name="icon" >
+                 <iconset/>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pbClearValues" >
+                <property name="text" >
+                 <string>&amp;Clear</string>
+                </property>
+                <property name="icon" >
+                 <iconset/>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="wTranslations" >
+          <layout class="QVBoxLayout" >
+           <property name="leftMargin" >
+            <number>0</number>
+           </property>
+           <property name="topMargin" >
+            <number>0</number>
+           </property>
+           <property name="rightMargin" >
+            <number>0</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="lTranslations" >
+             <property name="text" >
+              <string>Tick the &amp;language you would like to add to your project</string>
+             </property>
+             <property name="buddy" >
+              <cstring>lwTranslations</cstring>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QListWidget" name="lwTranslations" >
+             <property name="statusTip" >
+              <string>TRANSLATIONS</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>
@@ -150,6 +1003,24 @@ If there is no Qt version available or you want to add a custom Qt version, you 
  </widget>
  <resources>
   <include location="../resources/QMakeProjectEditor.qrc" />
+  <include location="../../../../../monkey/src/resources/resources.qrc" />
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>lwQt</sender>
+   <signal>currentRowChanged(int)</signal>
+   <receiver>swQt</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>110</x>
+     <y>93</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>167</x>
+     <y>137</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
