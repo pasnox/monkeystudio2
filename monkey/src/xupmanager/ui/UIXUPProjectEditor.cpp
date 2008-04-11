@@ -51,6 +51,9 @@ UIXUPProjectEditor::UIXUPProjectEditor( XUPItem* project, QWidget* parent )
 	// init dialog
 	setupUi( this );
 	setWindowTitle( windowTitle().arg( QFileInfo( mProject->projectFilePath() ).fileName() ) );
+	lOperator->setVisible( false );
+	cbOperator->setVisible( false );
+	cbOperator->addItems( mProject->operators() );
 
 	// get models
 	mProjectModel = mProject->model();

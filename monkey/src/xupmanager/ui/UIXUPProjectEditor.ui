@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
+    <width>510</width>
     <height>480</height>
    </rect>
   </property>
@@ -45,6 +45,16 @@
         </sizepolicy>
        </property>
       </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="lOperator" >
+       <property name="text" >
+        <string>Operator :</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="cbOperator" />
      </item>
     </layout>
    </item>
