@@ -1,7 +1,7 @@
 # Monkey Studio 2.0.0 QScintilla Project file
 
 # define where is the official qscintilla folder
-QSCINTILLAVERSION	= QScintilla-gpl-2.2.1-snapshot-20080306
+QSCINTILLAVERSION	= QScintilla-gpl-2.2.1-snapshot-20080309
 
 # include path
 INCLUDEPATH	*= $${PWD}/sdk
