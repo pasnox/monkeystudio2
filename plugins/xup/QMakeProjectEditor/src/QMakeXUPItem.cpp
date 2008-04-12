@@ -389,7 +389,7 @@ bool QMakeXUPItem::isProjectContainer() const
 
 bool QMakeXUPItem::loadProject( const QString& s, const QString& v )
 {
-	if ( XUPIO::loadXUP( this, QMake2XUP::convertFromPro( s, v ), v ) )
+	if ( XUPIO::parseXUP( this, QMake2XUP::convertFromPro( s, v ), v ) )
 	{
 		mProjectFilePath = s;
 		setModified( false );
@@ -402,14 +402,14 @@ bool QMakeXUPItem::loadProject( const QString& s, const QString& v )
 
 bool QMakeXUPItem::saveProject( const QString& s, const QString& v )
 {
-	QByteArray a = QMake2XUP::convertToPro( domDocument(), v );
+	QString a = QMake2XUP::convertToPro( domDocument(), v );
 	if ( !a.isNull() )
 	{
 		QFile f( s.isEmpty() ? projectFilePath() : s );
 		if ( !f.open( QIODevice::WriteOnly ) )
 			return false;
 		f.resize( 0 );
-		if ( !( f.write( a ) != -1 ) )
+		if ( !( f.write( a.toUtf8() ) != -1 ) )
 			return false;
 		mProjectFilePath = f.fileName();
 		setModified( false );

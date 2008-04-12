@@ -8,7 +8,7 @@
 
 class XUPItem;
 
-class QMakeProjectEditorDialog : public UIXUPProjectEditor
+class QMakeProjectEditorDialog : public UIXUPProjectEditor, public Ui::UIQtConfiguration
 {
 	Q_OBJECT
 	
@@ -17,14 +17,22 @@ public:
 
 protected:
 	QWidget* mQtConfigurationPage;
-	Ui::UIQtConfiguration mUiQtConfiguration;
 	QtVersionManager mQtManager;
 	QtVersion mQtVersion;
 
 protected slots:
 	void loadsQtVersions();
+	void loadsQtConfigurations();
+	void currentScopeChanged( XUPItem* curScope );
+	void currentOperatorChanged( const QString& curOperator );
 	void cbTemplate_currentIndexChanged( const QString& text );
-	void cbOperator_currentIndexChanged( const QString& text );
+	void gbBuild_changed();
+	void gbApplication_changed();
+	void gbOutput_changed();
+	void tbOutputPath_clicked();
+	void gbVersion_clicked( bool checked );
+	void gbVersion_changed();
+	void cbBuildAutoIncrement_clicked( bool checked );
 	void lwQtVersions_currentItemChanged( QListWidgetItem* current, QListWidgetItem* previous );
 	void lQtVersionInformations_linkActivated( const QString& link );
 	virtual void accept();

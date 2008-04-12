@@ -249,6 +249,9 @@ If there is no Qt version available or you want to add a custom Qt version, you 
            </property>
            <item rowspan="3" row="0" column="0" >
             <widget class="QGroupBox" name="gbBuild" >
+             <property name="statusTip" >
+              <string>CONFIG</string>
+             </property>
              <property name="title" >
               <string>Build &amp;Settings</string>
              </property>
@@ -393,9 +396,6 @@ If there is no Qt version available or you want to add a custom Qt version, you 
                    </property>
                    <item>
                     <widget class="QCheckBox" name="cbBuildAll" >
-                     <property name="enabled" >
-                      <bool>false</bool>
-                     </property>
                      <property name="statusTip" >
                       <string>build_all</string>
                      </property>
@@ -406,9 +406,6 @@ If there is no Qt version available or you want to add a custom Qt version, you 
                    </item>
                    <item>
                     <widget class="QCheckBox" name="cbOrdered" >
-                     <property name="enabled" >
-                      <bool>false</bool>
-                     </property>
                      <property name="statusTip" >
                       <string>ordered</string>
                      </property>
@@ -426,6 +423,129 @@ If there is no Qt version available or you want to add a custom Qt version, you 
             </widget>
            </item>
            <item row="0" column="1" >
+            <widget class="QGroupBox" name="gbApplication" >
+             <property name="title" >
+              <string>Application Settings</string>
+             </property>
+             <layout class="QGridLayout" >
+              <item row="0" column="0" >
+               <widget class="QLabel" name="lTitle" >
+                <property name="text" >
+                 <string>&amp;Title :</string>
+                </property>
+                <property name="buddy" >
+                 <cstring>leTitle</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1" >
+               <widget class="QLineEdit" name="leTitle" >
+                <property name="statusTip" >
+                 <string>APP_TITLE</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0" >
+               <widget class="QLabel" name="lAuthor" >
+                <property name="text" >
+                 <string>&amp;Author :</string>
+                </property>
+                <property name="buddy" >
+                 <cstring>leAuthor</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1" >
+               <widget class="QLineEdit" name="leAuthor" >
+                <property name="statusTip" >
+                 <string>APP_AUTHOR</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="1" >
+            <widget class="QGroupBox" name="gbOutput" >
+             <property name="sizePolicy" >
+              <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="title" >
+              <string>Output</string>
+             </property>
+             <layout class="QGridLayout" >
+              <property name="leftMargin" >
+               <number>5</number>
+              </property>
+              <property name="topMargin" >
+               <number>5</number>
+              </property>
+              <property name="rightMargin" >
+               <number>5</number>
+              </property>
+              <property name="bottomMargin" >
+               <number>5</number>
+              </property>
+              <property name="horizontalSpacing" >
+               <number>3</number>
+              </property>
+              <property name="verticalSpacing" >
+               <number>3</number>
+              </property>
+              <item row="0" column="0" >
+               <widget class="QLabel" name="lOutputPath" >
+                <property name="text" >
+                 <string>Output &amp;Path :</string>
+                </property>
+                <property name="buddy" >
+                 <cstring>leOutputPath</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1" >
+               <widget class="QLineEdit" name="leOutputPath" >
+                <property name="statusTip" >
+                 <string>DESTDIR</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2" >
+               <widget class="QToolButton" name="tbOutputPath" >
+                <property name="icon" >
+                 <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/listeditor/icons/listeditor/folder.png</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0" >
+               <widget class="QLabel" name="lOutputName" >
+                <property name="sizePolicy" >
+                 <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text" >
+                 <string>Output &amp;Name :</string>
+                </property>
+                <property name="buddy" >
+                 <cstring>leOutputName</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1" colspan="2" >
+               <widget class="QLineEdit" name="leOutputName" >
+                <property name="statusTip" >
+                 <string>TARGET</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="2" column="1" >
             <widget class="QGroupBox" name="gbVersion" >
              <property name="statusTip" >
               <string>VERSION</string>
@@ -523,133 +643,10 @@ If there is no Qt version available or you want to add a custom Qt version, you 
               <item row="2" column="0" colspan="4" >
                <widget class="QCheckBox" name="cbBuildAutoIncrement" >
                 <property name="statusTip" >
-                 <string>APP_AUTO_INCREMENT</string>
+                 <string>APP_AUTO_INCREMENT_BUILD</string>
                 </property>
                 <property name="text" >
                  <string>A&amp;uto increment the build number</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item row="1" column="1" >
-            <widget class="QGroupBox" name="gbOutput" >
-             <property name="sizePolicy" >
-              <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="title" >
-              <string>Output</string>
-             </property>
-             <layout class="QGridLayout" >
-              <property name="leftMargin" >
-               <number>5</number>
-              </property>
-              <property name="topMargin" >
-               <number>5</number>
-              </property>
-              <property name="rightMargin" >
-               <number>5</number>
-              </property>
-              <property name="bottomMargin" >
-               <number>5</number>
-              </property>
-              <property name="horizontalSpacing" >
-               <number>3</number>
-              </property>
-              <property name="verticalSpacing" >
-               <number>3</number>
-              </property>
-              <item row="0" column="0" >
-               <widget class="QLabel" name="lOutputPath_2" >
-                <property name="text" >
-                 <string>Output &amp;Path :</string>
-                </property>
-                <property name="buddy" >
-                 <cstring>tbOutputPath</cstring>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1" >
-               <widget class="QLineEdit" name="leOutputPath_2" >
-                <property name="statusTip" >
-                 <string>DESTDIR</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="2" >
-               <widget class="QToolButton" name="tbOutputPath_2" >
-                <property name="icon" >
-                 <iconset/>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0" >
-               <widget class="QLabel" name="lOutputName_2" >
-                <property name="sizePolicy" >
-                 <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="text" >
-                 <string>Output &amp;Name :</string>
-                </property>
-                <property name="buddy" >
-                 <cstring>leOutputName</cstring>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1" colspan="2" >
-               <widget class="QLineEdit" name="leOutputName_2" >
-                <property name="statusTip" >
-                 <string>TARGET</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item row="2" column="1" >
-            <widget class="QGroupBox" name="gbApplication" >
-             <property name="title" >
-              <string>Application Settings</string>
-             </property>
-             <layout class="QGridLayout" >
-              <item row="0" column="0" >
-               <widget class="QLabel" name="lTitle" >
-                <property name="text" >
-                 <string>&amp;Title :</string>
-                </property>
-                <property name="buddy" >
-                 <cstring>leTitle</cstring>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1" >
-               <widget class="QLineEdit" name="leTitle" >
-                <property name="statusTip" >
-                 <string>APP_TITLE</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0" >
-               <widget class="QLabel" name="lAuthor" >
-                <property name="text" >
-                 <string>&amp;Author :</string>
-                </property>
-                <property name="buddy" >
-                 <cstring>leAuthor</cstring>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1" >
-               <widget class="QLineEdit" name="leAuthor" >
-                <property name="statusTip" >
-                 <string>APP_AUTHOR</string>
                 </property>
                </widget>
               </item>
@@ -1017,8 +1014,8 @@ If there is no Qt version available or you want to add a custom Qt version, you 
      <y>93</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>167</x>
-     <y>137</y>
+     <x>173</x>
+     <y>171</y>
     </hint>
    </hints>
   </connection>
