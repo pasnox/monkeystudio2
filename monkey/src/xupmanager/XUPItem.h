@@ -42,6 +42,8 @@ class Q_MONKEY_EXPORT XUPItem : public QObject, public QStandardItem
 	Q_OBJECT
 	
 public:
+	static QString mProjectSettingsScope;
+	
 	XUPItem( const QDomElement = QDomDocument().toElement(), const QString& = QString(), bool = false );
 
 	// register item specific infos

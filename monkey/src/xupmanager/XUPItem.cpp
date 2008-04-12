@@ -9,7 +9,7 @@
 #include <QDir>
 
 XUPItemInfos XUPItem::mXUPItemInfos;
-const QString mProjectSettingsScope = "ProjectSettings";
+QString XUPItem::mProjectSettingsScope = "ProjectSettings";
 
 XUPItem::XUPItem( const QDomElement e, const QString& s, bool b )
 {
@@ -252,6 +252,7 @@ void XUPItem::remove()
 {
 	bool b = isProject();
 	XUPItem* pit = b ? 0 : project();
+	XUPItem* scope = parent();
 	// remove node
 	mDomElement.parentNode().removeChild( mDomElement );
 	// remove item from model
@@ -448,6 +449,10 @@ void XUPItem::addFiles( const QStringList& files, XUPItem* scope, const QString&
 	// append var item only at last will prevent multiple call of addFilteredValue from filtered view
 	if ( !exists )
 		scope->appendRow( vit );
+	
+	// update scope nested if needed
+	if ( scope->isType( "scope" ) )
+		scope->setValue( "nested", scope->rowCount() > 1 ? "false" : "true" );
 }
 
 void XUPItem::removeFiles( const QStringList& files, XUPItem* scope, const QString& op )
@@ -483,6 +488,10 @@ void XUPItem::removeFiles( const QStringList& files, XUPItem* scope, const QStri
 	// remove variable item if emptyline
 	if ( !vit->hasChildren() )
 		vit->remove();
+	
+	// update scope nested if needed
+	if ( scope->isType( "scope" ) )
+		scope->setValue( "nested", scope->rowCount() > 1 ? "false" : "true" );
 }
 
 QStringList XUPItem::variableValues() const
@@ -504,7 +513,13 @@ void XUPItem::setVariableValues( const QStringList& values )
 	// remove variable if needed
 	if ( values.isEmpty() )
 	{
+		// get scope
+		XUPItem* scope = parent();
+		// remove variable
 		remove();
+		// update scope nested if needed
+		if ( scope->isType( "scope" ) )
+			scope->setValue( "nested", scope->rowCount() > 1 ? "false" : "true" );
 		return;
 	}
 	
@@ -646,6 +661,9 @@ XUPItem* XUPItem::scope( const QString& scopeName, XUPItem* fromScope, bool crea
 		s->setValue( s->valueName(), scopeName );
 		// append it to fromScope
 		fromScope->appendRow( s );
+		// update scope nested if needed
+		if ( fromScope->isType( "scope" ) )
+			fromScope->setValue( "nested", fromScope->rowCount() > 1 ? "false" : "true" );
 	}
 	// return scope
 	return s;
@@ -672,6 +690,9 @@ XUPItem* XUPItem::variable( const QString& variableName, const QString& operator
 		v->setValue( "operator", operatorName );
 		// append it to fromScope
 		fromScope->appendRow( v );
+		// update scope nested if needed
+		if ( fromScope->isType( "scope" ) )
+			fromScope->setValue( "nested", fromScope->rowCount() > 1 ? "false" : "true" );
 	}
 	// return scope
 	return v;
@@ -721,7 +742,11 @@ void XUPItem::setProjectSettingsValues( const QString& variable, const QStringLi
 	// remove variable if needed
 	if ( exists && values.isEmpty() )
 	{
+		// remova variable
 		vit->remove();
+		// update scope nested if needed
+		if ( scope->isType( "scope" ) )
+			scope->setValue( "nested", scope->rowCount() > 1 ? "false" : "true" );
 		return;
 	}
 	
@@ -759,6 +784,10 @@ void XUPItem::setProjectSettingsValues( const QString& variable, const QStringLi
 	// append var item only at last will prevent multiple call of addFilteredValue from filtered view
 	if ( !exists )
 		scope->appendRow( vit );
+	
+	// update scope nested if needed
+	if ( scope->isType( "scope" ) )
+		scope->setValue( "nested", scope->rowCount() > 1 ? "false" : "true" );
 }
 
 void XUPItem::addProjectSettingsValues( const QString& variable, const QStringList& values )
@@ -817,6 +846,10 @@ void XUPItem::addProjectSettingsValues( const QString& variable, const QStringLi
 	// append var item only at last will prevent multiple call of addFilteredValue from filtered view
 	if ( !exists )
 		scope->appendRow( vit );
+	
+	// update scope nested if needed
+	if ( scope->isType( "scope" ) )
+		scope->setValue( "nested", scope->rowCount() > 1 ? "false" : "true" );
 }
 
 BuilderPlugin* XUPItem::builder( const QString& plugin ) const
