@@ -6,7 +6,7 @@
 QString tr( const char* s, const char* c = 0, int n = -1 )
 { return QObject::tr( s, c, n ); }
 
-bool XUPIO::loadXUP( XUPItem* pi, const QByteArray& a, const QString& v )
+bool XUPIO::parseXUP( XUPItem* pi, const QString& a, const QString& v )
 {
 	// get document
 	QDomDocument d;
@@ -38,7 +38,7 @@ bool XUPIO::loadXUP( XUPItem* pi, const QString& s, const QString& v )
 	if ( !f.open( QIODevice::ReadOnly ) )
 		return false;
 	// load xup buffer
-	return loadXUP( pi, f.readAll(), v );
+	return parseXUP( pi, QString::fromUtf8( f.readAll() ), v );
 }
 
 bool XUPIO::saveXUP( XUPItem* pi, const QString& s, const QString& v )
@@ -55,7 +55,7 @@ bool XUPIO::saveXUP( XUPItem* pi, const QString& s, const QString& v )
 	// set project version
 	pi->setValue( "version", v );
 	// write content
-	return f.write( pi->domDocument().toByteArray() ) != -1;
+	return f.write( pi->domDocument().toString().toUtf8() ) != -1;
 }
 
 void XUPIO::parseRoot( XUPItem* p, const QDomElement& e )
