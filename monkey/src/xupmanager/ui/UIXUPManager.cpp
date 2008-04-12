@@ -309,10 +309,8 @@ void UIXUPManager::actionNewTriggered()
 
 void UIXUPManager::actionOpenTriggered()
 {
-	// get last file open path
-	const QString mPath = MonkeyCore::recentsManager()->recentProjectOpenPath();
 	// request user a project file
-	const QString s = QFileDialog::getOpenFileName( window(), tr( "Choose a project to open..." ), mPath, projectsFilters().join( ";;" ) );
+	const QString s = QFileDialog::getOpenFileName( window(), tr( "Choose a project to open..." ), QString::null, projectsFilters().join( ";;" ) );
 	// if got file
 	if ( !s.isNull() )
 	{
@@ -321,12 +319,9 @@ void UIXUPManager::actionOpenTriggered()
 		{
 			// append file to recents project
 			MonkeyCore::recentsManager()->addRecentProject( s );
-			// store file open path
-			MonkeyCore::recentsManager()->setRecentProjectOpenPath( QFileInfo( s ).path() );
 		}
 		else
 		{
-			// remove it from recents files
 			MonkeyCore::recentsManager()->removeRecentProject( s );
 			// inform user about error
 			warning( tr( "An error occur while opening project : %1" ).arg( s ) );

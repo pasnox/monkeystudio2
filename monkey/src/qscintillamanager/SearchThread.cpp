@@ -98,6 +98,7 @@ void SearchThread::run()
 				QString line;
 				QTextStream in(&file);
 				int i = 0;
+				QRegExp rex (text);
 				while (!in.atEnd() && !mTerm) 
 				{
 					++i;
@@ -105,10 +106,10 @@ void SearchThread::run()
 					
 					bool ifContains = false;
 					if (isReg)
-						ifContains = line.contains(QRegExp(text));
+						ifContains = line.contains(rex);
 					else
 					{
-							ifContains = line.contains(QRegExp("\\b"+text+"\\b"));
+						ifContains = line.contains(text);
 					}
 					if (ifContains) 
 					{

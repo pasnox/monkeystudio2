@@ -26,6 +26,14 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+#include <QToolButton>
+#include <QCloseEvent>
+#include <QMainWindow>
+#include <QFileInfo>
+
+#include <QDebug>
+
+
 #include "pWorkspace.h"
 #include "pAbstractChild.h"
 #include "../recentsmanager/pRecentsManager.h"
@@ -47,12 +55,6 @@
 #include "pChild.h"
 #include "../qscintillamanager/pEditor.h"
 #include "../qscintillamanager/ui/pSearch.h"
-
-#include <QToolButton>
-#include <QCloseEvent>
-#include <QMainWindow>
-
-#include <QDebug>
 
 using namespace pMonkeyStudio;
 
@@ -234,8 +236,10 @@ void pWorkspace::goToLine( const QString& s, const QPoint& p, bool b )
 	}
 }
 
-void pWorkspace::internal_currentFileChanged( const QString& )
-{ internal_currentChanged( indexOf( qobject_cast<pAbstractChild*>( sender() ) ) ); }
+void pWorkspace::internal_currentFileChanged( const QString& file)
+{
+	QDir::setCurrent (QFileInfo (file).canonicalPath());
+}
 
 void pWorkspace::internal_currentChanged( int i )
 {
@@ -291,6 +295,7 @@ void pWorkspace::internal_currentChanged( int i )
 	if ( hasChild )
 		listWidget()->setItemToolTip( i, c->currentFile() );
 	
+	internal_currentFileChanged (hasChild ? c->currentFile() : QString() );
 	// emit file changed
 	emit currentFileChanged( c, hasChild ? c->currentFile() : QString() );
 }
@@ -466,9 +471,6 @@ void pWorkspace::fileNew_triggered()
 
 void pWorkspace::fileOpen_triggered()
 {
-	// get last file open path
-	const QString mPath = currentChild() ? currentChild()->currentFile() : MonkeyCore::recentsManager()->recentFileOpenPath();
-
 	// get available filters
 	QString mFilters = availableFilesFilters();
 
@@ -482,7 +484,8 @@ void pWorkspace::fileOpen_triggered()
 	}
 
 	// open open file dialog
-	QStringList l = getOpenFileNames( tr( "Choose the file(s) to open" ), mPath, mFilters, window() );
+	qWarning () << "current are " << QDir::current();
+	QStringList l = getOpenFileNames( tr( "Choose the file(s) to open" ), QString::null, mFilters, window() );
 
 	// for each entry, open file
 	foreach ( QString s, l )
@@ -495,9 +498,6 @@ void pWorkspace::fileOpen_triggered()
 			MonkeyCore::recentsManager()->removeRecentFile( s );
 	}
 
-	// store file open path
-	if ( !l.isEmpty() )
-		MonkeyCore::recentsManager()->setRecentFileOpenPath( QFileInfo( l.at( 0 ) ).canonicalPath() );
 }
 
 void pWorkspace::fileSessionSave_triggered()

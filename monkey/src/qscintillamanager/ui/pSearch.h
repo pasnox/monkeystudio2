@@ -80,7 +80,7 @@ public slots:
 	//void showSearchProject ();
 	//void showReplaceProject ();
 	void showSearchFolder ();
-	void showReplaceFolder ();
+	//void showReplaceFolder ();
 
 
 	bool on_tbPrevious_clicked();
@@ -104,7 +104,7 @@ protected:
 
 	//search
 	QLabel* lSearchText;
-	QComboBox* cobSearch; // FIXME make protected
+	QComboBox* cobSearch;
 
 	QPushButton* tbNext;
 	QPushButton* tbPrevious;
@@ -157,6 +157,11 @@ protected:
 	QStringList replaceRecents;
 	QStringList maskRecents;
 	QStringList pathRecents;
+
+	bool isSearchTextValid ();
+	bool isReplaceTextValid ();
+	bool isPathValid ();
+	bool isMaskValid ();
 	
 	void searchAddToRecents (QString);
 	void replaceAddToRecents (QString);

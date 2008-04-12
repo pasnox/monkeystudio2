@@ -50,6 +50,7 @@
 #include <QLabel>
 #include <QCheckBox>
 #include <QComboBox>
+#include <QMessageBox>
 
 #include <QDebug>
 
@@ -140,7 +141,7 @@ pSearch::pSearch( QWidget* parent )
     //connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchProject" ), SIGNAL( triggered() ), SLOT( showSearchProject() ) );
     //connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceProject" ), SIGNAL( triggered() ), SLOT( showReplaceProject() ) );
     connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFolder" ), SIGNAL( triggered() ), SLOT( showSearchFolder() ) );
-    connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFolder" ), SIGNAL( triggered() ), SLOT( showReplaceFolder() ) );
+    //connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFolder" ), SIGNAL( triggered() ), SLOT( showReplaceFolder() ) );
     connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchNext" ), SIGNAL( triggered() ), SLOT( on_tbNext_clicked() ) );
     
 	connect( tbPath, SIGNAL( clicked() ), this, SLOT( on_tbPath_clicked() ) );
@@ -308,11 +309,12 @@ void pSearch::showSearchFolder ()
 	if (mWhereType == FILE)
 		addFolderToLayout(1);
 	mWhereType = FOLDER;
+	cobPath->lineEdit()->setText (QDir::current().absolutePath ());
 	
     show ();
 };
 
-void pSearch::showReplaceFolder () 
+/*void pSearch::showReplaceFolder () 
 {
 	if (mOperType == SEARCH)
 		addReplaceToLayout (1);
@@ -324,7 +326,7 @@ void pSearch::showReplaceFolder ()
 	
     show ();
 };
-
+*/
 void pSearch::show ()
 {
     pChild* child = dynamic_cast<pChild*> (MonkeyCore::workspace()->currentChild());
@@ -401,11 +403,16 @@ bool pSearch::on_tbPrevious_clicked()
 
 bool pSearch::on_tbNext_clicked()
 {
+	
     switch (mWhereType)
     {
         case FILE:
+			if (!isPathValid ())
+				return false;
             return searchFile (true);
         case FOLDER:
+			if (!isSearchTextValid () || !isPathValid ())
+				return false;
             if (mSearchThread && mSearchThread->isRunning ())
             { // need to stop searching
                 mSearchThread->setTermEnabled (true);
@@ -494,11 +501,19 @@ int pSearch::replace(bool all)
 
 void pSearch::on_tbReplace_clicked()
 {
+	/* Check replace text */
+	if (!isReplaceTextValid ())
+		return;
+
     replace (false);
 }
 //
 void pSearch::on_tbReplaceAll_clicked()
 {
+	/* Check replace text */
+	if (!isReplaceTextValid ())
+		return;
+
     pChild* child = dynamic_cast<pChild*> (MonkeyCore::workspace()->currentChild());
     if (!child && !child->editor())
         return;
@@ -619,3 +634,34 @@ void pSearch::maskAddToRecents (QString text)
 	}
 }
 
+bool pSearch::isSearchTextValid ()
+{
+	if (cbRegExp->isChecked())
+		if (!QRegExp (cobSearch->currentText()).isValid())
+		{
+			QMessageBox::critical (MonkeyCore::workspace(), tr("Invalid regular expression"), tr ("Regular expression is invalid"));
+			return false;
+		}
+	
+	return true;
+}
+
+bool pSearch::isReplaceTextValid ()
+{
+	return true;
+}
+
+bool pSearch::isPathValid ()
+{
+	if (!QDir (cobPath->currentText()).exists())
+	{
+		QMessageBox::critical (MonkeyCore::workspace(), tr("Invalid path"), tr ("Search path not exist"));
+		return false;
+	}
+	return true;
+}
+
+bool pSearch::isMaskValid ()
+{
+	return true;
+}
