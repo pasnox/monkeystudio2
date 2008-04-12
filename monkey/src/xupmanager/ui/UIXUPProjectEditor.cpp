@@ -167,6 +167,9 @@ XUPItem* UIXUPProjectEditor::currentScope() const
 	return mProjectModel->itemFromIndex( index );
 }
 
+QString UIXUPProjectEditor::currentOperator() const
+{ return cbOperator->currentText(); }
+
 XUPItem* UIXUPProjectEditor::currentVariable() const
 {
 	QModelIndex index = lvOthersVariables->currentIndex();
@@ -249,8 +252,13 @@ void UIXUPProjectEditor::on_cbScope_currentChanged( const QModelIndex& idx )
 		// else simulate event
 		else
 			lvOthersVariables_currentChanged( idx, idx );
+		// emit current scope changed
+		emit currentScopeChanged( it );
 	}
 }
+
+void UIXUPProjectEditor::on_cbOperator_currentIndexChanged( const QString& text )
+{ emit currentOperatorChanged( text ); }
 
 void UIXUPProjectEditor::on_pbAddProjectFiles_clicked()
 {

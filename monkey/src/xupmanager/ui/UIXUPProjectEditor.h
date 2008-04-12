@@ -70,6 +70,7 @@ protected:
 	ProjectEditorModel* mValuesModel;
 
 	XUPItem* currentScope() const;
+	QString currentOperator() const;
 	XUPItem* currentVariable() const;
 	XUPItem* currentValue() const;
 
@@ -78,6 +79,8 @@ protected slots:
 	void on_tbAddScope_clicked();
 	void on_tbRemoveScope_clicked();
 	void on_cbScope_currentChanged( const QModelIndex& index );
+	// operator
+	void on_cbOperator_currentIndexChanged( const QString& text );
 	// project files
 	void on_pbAddProjectFiles_clicked();
 	void on_pbRemoveProjectFile_clicked();
@@ -97,6 +100,10 @@ protected slots:
 	void on_tbOthersValuesClear_clicked();
 	// accept
 	virtual void accept();
+
+signals:
+	void currentScopeChanged( XUPItem* curScope );
+	void currentOperatorChanged( const QString& curOperator );
 };
 
 #endif // UIXUPPROJECTEDITOR_H
