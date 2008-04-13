@@ -128,6 +128,7 @@ pSearch::pSearch( QWidget* parent )
 	cobMask = new QComboBox ();
 	cobMask->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
 	cobMask->setEditable (true);
+	cobMask->setToolTip (tr("Spase separated list of wildcards. Example:<br> <i>*.h *.cpp file???.txt</i>"));
 	lMask->setBuddy (cobMask);
 	
 	connect (tbNext, SIGNAL (clicked()), this, SLOT (on_tbNext_clicked ()));

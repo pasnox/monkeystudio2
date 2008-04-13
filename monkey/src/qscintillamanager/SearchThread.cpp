@@ -78,16 +78,33 @@ void SearchThread::run()
 	DirWalkIterator dirWalker (dir);
     int files_count = 0;
     QString fileName = dirWalker.next();
-    QRegExp maskRe = QRegExp (mask, Qt::CaseInsensitive, QRegExp::Wildcard);
+	
+	/* Prepare masks list */
+	QStringList masks = mask.split (' ');
+	QList <QRegExp> maskRexps;
+	foreach (QString m, masks)
+		maskRexps << QRegExp (m.trimmed (), Qt::CaseInsensitive, QRegExp::Wildcard);
+	
     while (!fileName.isNull())
     {
-        if (!mask.isEmpty() && !maskRe.exactMatch (fileName))
-        {
-            qWarning () << mask << mask.isEmpty(), maskRe.exactMatch (fileName);
-            fileName = dirWalker.next();            
-            continue;
+        if (!mask.isEmpty())
+        {   // Check file for mask
+			QString name = QFileInfo (fileName).fileName(); // Just name, no path
+			bool matching = false;
+			foreach (QRegExp maskRe, maskRexps)
+			{
+				if (maskRe.exactMatch (name))
+				{
+					matching = true;
+					break;
+				}
+			}
+			if (!matching)
+			{
+				fileName = dirWalker.next();            
+				continue;  // Ignore this file, search in the next
+			}
         }
-        qWarning () << "Search " << text<< " on "<<dir << " with " <<mask<< " file are " << fileName;
         emit changeProgress(++files_count);
         QFile file(fileName);
         if (file.open(QIODevice::ReadOnly)) 
