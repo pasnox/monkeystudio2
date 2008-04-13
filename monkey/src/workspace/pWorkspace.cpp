@@ -484,7 +484,7 @@ void pWorkspace::fileOpen_triggered()
 	}
 
 	// open open file dialog
-	qWarning () << "current are " << QDir::current();
+	//qWarning () << "current are " << QDir::current();
 	QStringList l = getOpenFileNames( tr( "Choose the file(s) to open" ), QString::null, mFilters, window() );
 
 	// for each entry, open file

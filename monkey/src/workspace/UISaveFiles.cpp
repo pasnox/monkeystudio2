@@ -83,8 +83,8 @@ UISaveFiles::UISaveFiles( QWidget* w, bool b )
 	// connections
 	connect( dbbButtons, SIGNAL( clicked( QAbstractButton* ) ), this, SLOT( clicked( QAbstractButton* ) ) );
 	
-	// set focus on save button
-	dbbButtons->button( QDialogButtonBox::Save )->setFocus();
+	// set focus on discard button
+	dbbButtons->button( QDialogButtonBox::Discard )->setFocus();
 }
 
 void UISaveFiles::addFile( const QString& s, pAbstractChild* c )
