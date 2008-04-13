@@ -231,7 +231,7 @@ If there is no Qt version available or you want to add a custom Qt version, you 
           </sizepolicy>
          </property>
          <property name="currentIndex" >
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="wApplication" >
           <layout class="QGridLayout" >
@@ -691,7 +691,7 @@ If there is no Qt version available or you want to add a custom Qt version, you 
                <number>5</number>
               </property>
               <item>
-               <widget class="QListWidget" name="lwQtModules_2" >
+               <widget class="QListWidget" name="lwQtModules" >
                 <property name="statusTip" >
                  <string>QT</string>
                 </property>
@@ -722,7 +722,7 @@ If there is no Qt version available or you want to add a custom Qt version, you 
                <number>5</number>
               </property>
               <item>
-               <widget class="QListWidget" name="lwCompilerFlags_2" >
+               <widget class="QListWidget" name="lwCompilerFlags" >
                 <property name="statusTip" >
                  <string>CONFIG</string>
                 </property>
@@ -759,7 +759,11 @@ If there is no Qt version available or you want to add a custom Qt version, you 
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="leConfig" />
+              <widget class="QLineEdit" name="leConfig" >
+               <property name="statusTip" >
+                <string>CONFIG</string>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -791,7 +795,11 @@ If there is no Qt version available or you want to add a custom Qt version, you 
                <number>5</number>
               </property>
               <item>
-               <widget class="QTextBrowser" name="tbInformations_2" />
+               <widget class="QTextBrowser" name="tbInformations" >
+                <property name="openExternalLinks" >
+                 <bool>true</bool>
+                </property>
+               </widget>
               </item>
              </layout>
             </widget>
