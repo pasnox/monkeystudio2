@@ -231,7 +231,7 @@ If there is no Qt version available or you want to add a custom Qt version, you 
           </sizepolicy>
          </property>
          <property name="currentIndex" >
-          <number>1</number>
+          <number>2</number>
          </property>
          <widget class="QWidget" name="wApplication" >
           <layout class="QGridLayout" >
@@ -890,50 +890,40 @@ If there is no Qt version available or you want to add a custom Qt version, you 
                  <property name="text" >
                   <string>LIBS</string>
                  </property>
+                 <property name="icon" >
+                  <iconset resource="../resources/QMakeProjectEditor.qrc" >:/qmakeitems/libs.png</iconset>
+                 </property>
                 </item>
                 <item>
                  <property name="text" >
                   <string>DEFINES</string>
                  </property>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>TRANSLATIONS</string>
+                 <property name="icon" >
+                  <iconset resource="../resources/QMakeProjectEditor.qrc" >:/qmakeitems/defines.png</iconset>
                  </property>
                 </item>
                 <item>
                  <property name="text" >
                   <string>INCLUDEPATH</string>
                  </property>
+                 <property name="icon" >
+                  <iconset resource="../resources/QMakeProjectEditor.qrc" >:/qmakeitems/includepath.png</iconset>
+                 </property>
                 </item>
                 <item>
                  <property name="text" >
                   <string>DEPENDPATH</string>
+                 </property>
+                 <property name="icon" >
+                  <iconset resource="../resources/QMakeProjectEditor.qrc" >:/qmakeitems/dependpath.png</iconset>
                  </property>
                 </item>
                 <item>
                  <property name="text" >
                   <string>VPATH</string>
                  </property>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>RESOURCES</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>DEF_FILE</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>RC_FILE</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>RES_FILE</string>
+                 <property name="icon" >
+                  <iconset resource="../resources/QMakeProjectEditor.qrc" >:/qmakeitems/vpath.png</iconset>
                  </property>
                 </item>
                </widget>
