@@ -76,13 +76,32 @@ void SearchThread::run()
 	DirWalkIterator dirWalker (dir);
     int files_count = 0;
     QString fileName = dirWalker.next();
-    QRegExp maskRe = QRegExp (mask, Qt::CaseInsensitive, QRegExp::Wildcard);
+	
+	/* Prepare masks list */
+	QStringList masks = mask.split (' ');
+	QList <QRegExp> maskRexps;
+	foreach (QString m, masks)
+		maskRexps << QRegExp (m.trimmed (), Qt::CaseInsensitive, QRegExp::Wildcard);
+	
     while (!fileName.isNull())
     {
-        if (!mask.isEmpty() && !maskRe.exactMatch (fileName))
-        {
-            fileName = dirWalker.next();            
-            continue;
+        if (!mask.isEmpty())
+        {   // Check file for mask
+			QString name = QFileInfo (fileName).fileName(); // Just name, no path
+			bool matching = false;
+			foreach (QRegExp maskRe, maskRexps)
+			{
+				if (maskRe.exactMatch (name))
+				{
+					matching = true;
+					break;
+				}
+			}
+			if (!matching)
+			{
+				fileName = dirWalker.next();            
+				continue;  // Ignore this file, search in the next
+			}
         }
         emit changeProgress(++files_count);
         QFile file(fileName);
@@ -94,6 +113,7 @@ void SearchThread::run()
 				QString line;
 				QTextStream in(&file);
 				int i = 0;
+				QRegExp rex (text);
 				while (!in.atEnd() && !mTerm) 
 				{
 					++i;
@@ -101,11 +121,9 @@ void SearchThread::run()
 					
 					bool ifContains = false;
 					if (isReg)
-						ifContains = line.contains(QRegExp(text));
+						ifContains = line.contains(rex);
 					else
-					{
-							ifContains = line.contains(QRegExp("\\b"+text+"\\b"));
-					}
+						ifContains = line.contains(text);
 					if (ifContains) 
 					{
 						pConsoleManager::Step step;

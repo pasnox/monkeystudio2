@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** 		Created using Monkey Studio v1.8.1.0
+**         Created using Monkey Studio v1.8.1.0
 ** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
 ** Project   : Monkey Studio IDE
 ** FileName  : pCommandParser.h
@@ -64,7 +64,7 @@ public:
 
 public :
 	/* returnting count of lines, that was successfully parsed 
-	   (and should be removed from buffer)
+		(and should be removed from buffer)
 	*/
 	virtual int processParsing(QString*);
 
