@@ -37,6 +37,7 @@ protected slots:
 	void gbVersion_changed();
 	void cbBuildAutoIncrement_clicked( bool checked );
 	void qtModulesConfigurations_itemSelectionChanged();
+	void qtModulesConfigurations_changed();
 	virtual void accept();
 };
 

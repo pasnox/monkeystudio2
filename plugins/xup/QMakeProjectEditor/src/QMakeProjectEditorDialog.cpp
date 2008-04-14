@@ -41,6 +41,9 @@ QMakeProjectEditorDialog::QMakeProjectEditorDialog( XUPItem* project, QWidget* p
 	connect( cbBuildAutoIncrement, SIGNAL( clicked( bool ) ), this, SLOT( cbBuildAutoIncrement_clicked( bool ) ) );
 	connect( lwQtModules, SIGNAL( itemSelectionChanged() ), this, SLOT( qtModulesConfigurations_itemSelectionChanged() ) );
 	connect( lwCompilerFlags, SIGNAL( itemSelectionChanged() ), this, SLOT( qtModulesConfigurations_itemSelectionChanged() ) );
+	connect( lwQtModules, SIGNAL( itemClicked( QListWidgetItem* ) ), this, SLOT( qtModulesConfigurations_changed() ) );
+	connect( lwCompilerFlags, SIGNAL( itemClicked( QListWidgetItem* ) ), this, SLOT( qtModulesConfigurations_changed() ) );
+	connect( leConfig, SIGNAL( textChanged( const QString& ) ), this, SLOT( qtModulesConfigurations_changed() ) );
 }
 
 void QMakeProjectEditorDialog::createQtModulesConfigurations()
@@ -165,11 +168,15 @@ void QMakeProjectEditorDialog::loadsQtConfigurations()
 	}
 	leConfig->setText( config.trimmed() );
 	// disable widgets
+	// ** Application
+	cbTemplate->setEnabled( curScope == mProject && curOperator == "=" );
 	fBuildType->setEnabled( curScope == mProject && curOperator != "=" );
 	fWarn->setEnabled( fBuildType->isEnabled() );
 	fBuildAll->setEnabled( fBuildType->isEnabled() );
-	cbTemplate->setEnabled( curOperator == "=" );
 	gbOutput->setEnabled( curOperator == "=" );
+	// ** Library
+	lwCompilerFlags->setEnabled( curOperator != "=" );
+	leConfig->setEnabled( lwCompilerFlags->isEnabled() );
 	// restore signals of all children
 	foreach ( QWidget* w, mQtConfigurationPage->findChildren<QWidget*>() )
 		w->blockSignals( false );
@@ -282,6 +289,54 @@ void QMakeProjectEditorDialog::qtModulesConfigurations_itemSelectionChanged()
 	if ( QListWidget* lw = qobject_cast<QListWidget*>( sender() ) )
 		if ( QListWidgetItem* it = lw->selectedItems().value( 0 ) )
 			tbInformations->setHtml( it->data( Qt::UserRole ).value<QtItem>().Help );
+}
+
+void QMakeProjectEditorDialog::qtModulesConfigurations_changed()
+{
+	// QT
+	if ( sender() == lwQtModules )
+	{
+		QStringList values;
+		// lwQtModules
+		for ( int i = 0; i < lwQtModules->count(); i++ )
+		{
+			// get item
+			QListWidgetItem* it = lwQtModules->item( i );
+			// check state
+			if ( it->checkState() == Qt::Checked )
+				values << it->data( Qt::UserRole ).value<QtItem>().Value;
+		}
+		// get variable item
+		XUPItem* vit = currentScope()->variable( lwQtModules->statusTip(), currentOperator(), 0, !values.isEmpty() );
+		// update variable values if needed
+		if ( vit )
+			vit->setVariableValue( values.join( " " ) );
+	}
+	// CONFIG
+	else
+	{
+		QStringList values;
+		// gbBuild
+		foreach ( QAbstractButton* ab, gbBuild->findChildren<QAbstractButton*>() )
+			if ( ab->isChecked() )
+				values << ab->statusTip();
+		// lwCompilerFlags
+		for ( int i = 0; i < lwCompilerFlags->count(); i++ )
+		{
+			// get item
+			QListWidgetItem* it = lwCompilerFlags->item( i );
+			// check state
+			if ( it->checkState() == Qt::Checked )
+				values << it->data( Qt::UserRole ).value<QtItem>().Value;
+		}
+		// other config
+		values << leConfig->text().trimmed();
+		// get variable item
+		XUPItem* vit = currentScope()->variable( lwCompilerFlags->statusTip(), currentOperator(), 0, !values.isEmpty() );
+		// update variable values if needed
+		if ( vit )
+			vit->setVariableValue( values.join( " " ) );
+	}
 }
 
 void QMakeProjectEditorDialog::accept()
