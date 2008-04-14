@@ -54,6 +54,26 @@ UIXUPProjectEditor::UIXUPProjectEditor( XUPItem* project, QWidget* parent )
 	lOperator->setVisible( false );
 	cbOperator->setVisible( false );
 	cbOperator->addItems( mProject->operators() );
+	
+	// tbOthersVariablesEdit
+	QMenu* menu = new QMenu( tbOthersVariablesEdit );
+	aOthersVariablesEditVariable = menu->addAction( tr( "Edit Variable..." ) );
+	aOthersVariablesEditMultiline = menu->addAction( tr( "Edit Multiline Property..." ) );
+	tbOthersVariablesEdit->setMenu( menu );
+	
+	// tbOthersValuesAdd actions
+	QMenu* addMenu = new QMenu( tbOthersValuesAdd );
+	aOthersValuesAddValue = addMenu->addAction( tr( "As Value..." ) );
+	aOthersValuesAddFile = addMenu->addAction( tr( "As File..." ) );
+	aOthersValuesAddPath = addMenu->addAction( tr( "As Path..." ) );
+	tbOthersValuesAdd->setMenu( addMenu );
+	
+	// tbOthersValuesEdit actions
+	QMenu* editMenu = new QMenu( tbOthersValuesEdit );
+	aOthersValuesEditValue = editMenu->addAction( tr( "As Value..." ) );
+	aOthersValuesEditFile = editMenu->addAction( tr( "As File..." ) );
+	aOthersValuesEditPath = editMenu->addAction( tr( "As Path..." ) );
+	tbOthersValuesEdit->setMenu( editMenu );
 
 	// get models
 	mProjectModel = mProject->model();
@@ -74,6 +94,10 @@ UIXUPProjectEditor::UIXUPProjectEditor( XUPItem* project, QWidget* parent )
 	// connections
 	connect( lvOthersVariables->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( lvOthersVariables_currentChanged( const QModelIndex&, const QModelIndex& ) ) );
 	connect( lvOthersValues->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( lvOthersValues_currentChanged( const QModelIndex&, const QModelIndex& ) ) );
+	// doing here to avoid fucking bug
+	connect( menu, SIGNAL( triggered( QAction* ) ), tbOthersVariablesEdit, SIGNAL( triggered( QAction* ) ) );
+	connect( addMenu, SIGNAL( triggered( QAction* ) ), tbOthersValuesAdd, SIGNAL( triggered( QAction* ) ) );
+	connect( editMenu, SIGNAL( triggered( QAction* ) ), tbOthersValuesEdit, SIGNAL( triggered( QAction* ) ) );
 	
 	// update gui
 	cbScope->setRootIndex( mScopedModel->mapFromSource( mProject->index().parent() ) );
@@ -414,36 +438,50 @@ void UIXUPProjectEditor::on_tbOthersVariablesAdd_clicked()
 }
 
 void UIXUPProjectEditor::on_tbOthersVariablesEdit_clicked()
+{ on_tbOthersVariablesEdit_triggered( aOthersVariablesEditVariable ); }
+
+void UIXUPProjectEditor::on_tbOthersVariablesEdit_triggered( QAction* action )
 {
 	if ( XUPItem* vit = currentVariable() )
 	{
-		// init dialog
-		UIAddVariable d( window() );
-		d.setWindowTitle( tr( "Edit a variable..." ) );
-		d.setVariablesName( QStringList( vit->defaultValue() ) );
-		d.setCurrentVariableName( vit->defaultValue() );
-		d.setOperators( vit->operators() );
-		d.setCurrentOperator( vit->value( "operator", "=" ) );
-		// execute dialog
-		if ( d.exec() == QDialog::Accepted )
+		if ( action == aOthersVariablesEditVariable )
 		{
-			// get var / op
-			const QString vn = d.getVariableName();
-			const QString op = d.getOperator();
-			// check if it already exists
-			foreach ( XUPItem* cit, vit->parent()->children( false, true ) )
+			// init dialog
+			UIAddVariable d( window() );
+			d.setWindowTitle( tr( "Edit a variable..." ) );
+			d.setVariablesName( QStringList( vit->defaultValue() ) );
+			d.setCurrentVariableName( vit->defaultValue() );
+			d.setOperators( vit->operators() );
+			d.setCurrentOperator( vit->value( "operator", "=" ) );
+			// execute dialog
+			if ( d.exec() == QDialog::Accepted )
 			{
-				if ( cit->isType( "variable" ) && cit->defaultValue() == vn && cit->value( "operator", "=" ) == op && cit != vit )
+				// get var / op
+				const QString vn = d.getVariableName();
+				const QString op = d.getOperator();
+				// check if it already exists
+				foreach ( XUPItem* cit, vit->parent()->children( false, true ) )
 				{
-					if ( QMessageBox::question( window(), d.windowTitle(), tr( "A variable with the same name and operator already exists in this scope, proceed anyway ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::No )
-						return;
-					else
-						break;
+					if ( cit->isType( "variable" ) && cit->defaultValue() == vn && cit->value( "operator", "=" ) == op && cit != vit )
+					{
+						if ( QMessageBox::question( window(), d.windowTitle(), tr( "A variable with the same name and operator already exists in this scope, proceed anyway ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::No )
+							return;
+						else
+							break;
+					}
 				}
+				// update item
+				vit->setValue( vit->valueName(), vn );
+				vit->setValue( "operator", op );
 			}
-			// update item
-			vit->setValue( vit->valueName(), vn );
-			vit->setValue( "operator", op );
+		}
+		else if ( action == aOthersVariablesEditMultiline )
+		{
+			const QStringList items = QStringList() << "true" << "false";
+			bool ok;
+			const QString s = QInputDialog::getItem( window(), tr( "Edit Property..." ), tr( "Select the new property value :" ), items, items.indexOf( vit->value( "multiline", "false" ) ), false, &ok );
+			if ( ok && !s.isEmpty() )
+				vit->setValue( "multiline", s );
 		}
 	}
 }
@@ -472,12 +510,21 @@ void UIXUPProjectEditor::lvOthersValues_currentChanged( const QModelIndex& curre
 }
 
 void UIXUPProjectEditor::on_tbOthersValuesAdd_clicked()
+{ on_tbOthersValuesAdd_triggered( aOthersValuesAddValue ); }
+
+void UIXUPProjectEditor::on_tbOthersValuesAdd_triggered( QAction* action )
 {
 	if ( XUPItem* cv = currentVariable() )
 	{
 		const QString title = tr( "Add a value..." );
-		bool ok;
-		const QString val = QInputDialog::getText( window(), title, tr( "Enter the value :" ), QLineEdit::Normal, QString(), &ok );
+		bool ok = true;
+		QString val;
+		if ( action == aOthersValuesAddValue )
+			val	= QInputDialog::getText( window(), title, tr( "Enter the value :" ), QLineEdit::Normal, QString(), &ok );
+		else if ( action == aOthersValuesAddFile )
+			val = mProject->relativeFilePath( QFileDialog::getOpenFileName( window(), tr( "Choose a file" ), mProject->projectPath() ) );
+		else if ( action == aOthersValuesAddPath )
+			val = mProject->relativeFilePath( QFileDialog::getExistingDirectory( window(), tr( "Choose a path" ), mProject->projectPath() ) );
 		if ( ok && !val.isEmpty() )
 		{
 			// check if value already exists
@@ -502,8 +549,8 @@ void UIXUPProjectEditor::on_tbOthersValuesAdd_clicked()
 			// append it
 			cv->appendRow( vit );
 			// set variable multiline if needed
-			if ( cv->rowCount() > 1 )
-				cv->setValue( "multiline", "true" );
+			if ( QMessageBox::question( window(), tr( "Update Property..." ), tr( "Do you want to update the multiline property of this value ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::Yes )
+				on_tbOthersVariablesEdit_triggered( aOthersVariablesEditMultiline );
 			// set it current item
 			lvOthersValues->setCurrentIndex( mValuesModel->mapFromSource( cv->index() ) );
 		}
@@ -511,12 +558,21 @@ void UIXUPProjectEditor::on_tbOthersValuesAdd_clicked()
 }
 
 void UIXUPProjectEditor::on_tbOthersValuesEdit_clicked()
+{ on_tbOthersValuesEdit_triggered( aOthersValuesEditValue ); }
+
+void UIXUPProjectEditor::on_tbOthersValuesEdit_triggered( QAction* action )
 {
 	if ( XUPItem* cv = currentValue() )
 	{
 		const QString title = tr( "Edit a value..." );
-		bool ok;
-		const QString val = QInputDialog::getText( window(), title, tr( "Edit the value :" ), QLineEdit::Normal, cv->defaultValue(), &ok );
+		bool ok = true;
+		QString val;
+		if ( action == aOthersValuesEditValue )
+			val	= QInputDialog::getText( window(), title, tr( "Edit the value :" ), QLineEdit::Normal, cv->defaultValue(), &ok );
+		else if ( action == aOthersValuesEditFile )
+			val = mProject->relativeFilePath( QFileDialog::getOpenFileName( window(), tr( "Choose a file" ), cv->defaultInterpretedValue() ) );
+		else if ( action == aOthersValuesEditPath )
+			val = mProject->relativeFilePath( QFileDialog::getExistingDirectory( window(), tr( "Choose a path" ), cv->defaultInterpretedValue() ) );
 		if ( ok && !val.isEmpty() )
 		{
 			// check if value already exists

@@ -130,7 +130,7 @@
    <item>
     <widget class="QStackedWidget" name="swPages" >
      <property name="currentIndex" >
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="wProjectFiles" >
       <layout class="QGridLayout" >
@@ -249,6 +249,9 @@
             <property name="icon" >
              <iconset resource="../resources/XUPManager.qrc" >:/editor/icons/editor/modify.png</iconset>
             </property>
+            <property name="popupMode" >
+             <enum>QToolButton::MenuButtonPopup</enum>
+            </property>
            </widget>
           </item>
           <item row="0" column="3" >
@@ -301,6 +304,9 @@
             <property name="icon" >
              <iconset resource="../resources/XUPManager.qrc" >:/actions/add.png</iconset>
             </property>
+            <property name="popupMode" >
+             <enum>QToolButton::MenuButtonPopup</enum>
+            </property>
            </widget>
           </item>
           <item row="0" column="2" >
@@ -310,6 +316,9 @@
             </property>
             <property name="icon" >
              <iconset resource="../resources/XUPManager.qrc" >:/editor/icons/editor/modify.png</iconset>
+            </property>
+            <property name="popupMode" >
+             <enum>QToolButton::MenuButtonPopup</enum>
             </property>
            </widget>
           </item>

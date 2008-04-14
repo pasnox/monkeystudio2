@@ -68,6 +68,14 @@ protected:
 	FilteredProjectItemModel* mFilteredModel;
 	ProjectEditorModel* mVariablesModel;
 	ProjectEditorModel* mValuesModel;
+	QAction* aOthersVariablesEditVariable;
+	QAction* aOthersVariablesEditMultiline;
+	QAction* aOthersValuesAddValue;
+	QAction* aOthersValuesAddFile;
+	QAction* aOthersValuesAddPath;
+	QAction* aOthersValuesEditValue;
+	QAction* aOthersValuesEditFile;
+	QAction* aOthersValuesEditPath;
 
 	XUPItem* currentScope() const;
 	QString currentOperator() const;
@@ -90,12 +98,15 @@ protected slots:
 	// variables
 	void on_tbOthersVariablesAdd_clicked();
 	void on_tbOthersVariablesEdit_clicked();
+	void on_tbOthersVariablesEdit_triggered( QAction* action );
 	void on_tbOthersVariablesRemove_clicked();
 	// others values
 	void lvOthersValues_currentChanged( const QModelIndex& current, const QModelIndex& previous );
 	// values
 	void on_tbOthersValuesAdd_clicked();
+	void on_tbOthersValuesAdd_triggered( QAction* action );
 	void on_tbOthersValuesEdit_clicked();
+	void on_tbOthersValuesEdit_triggered( QAction* action );
 	void on_tbOthersValuesRemove_clicked();
 	void on_tbOthersValuesClear_clicked();
 	// accept
