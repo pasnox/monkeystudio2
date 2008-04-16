@@ -1,5 +1,8 @@
 #include "QMakeProjectEditorDialog.h"
 
+#include <QLocale>
+#include <QHeaderView>
+
 #include <coremanager.h>
 #include <pluginsmanager.h>
 
@@ -18,6 +21,7 @@ QMakeProjectEditorDialog::QMakeProjectEditorDialog( XUPItem* project, QWidget* p
 	mQtVersion = mQtManager.version( mProject->projectSettingsValue( "QT_VERSION" ) );
 	// create views
 	createQtModulesConfigurations();
+	createLanguages();
 	// load qt version
 	loadsQtVersions();
 	// load qt configuration
@@ -44,6 +48,38 @@ QMakeProjectEditorDialog::QMakeProjectEditorDialog( XUPItem* project, QWidget* p
 	connect( lwQtModules, SIGNAL( itemClicked( QListWidgetItem* ) ), this, SLOT( qtModulesConfigurations_changed() ) );
 	connect( lwCompilerFlags, SIGNAL( itemClicked( QListWidgetItem* ) ), this, SLOT( qtModulesConfigurations_changed() ) );
 	connect( leConfig, SIGNAL( textChanged( const QString& ) ), this, SLOT( qtModulesConfigurations_changed() ) );
+}
+
+void QMakeProjectEditorDialog::createLanguages()
+{
+	// create items
+	for ( int i = QLocale::Abkhazian; i < QLocale::Chewa +1; i++ )
+	{
+		const QLocale::Language lng = (QLocale::Language)i;
+		const QLocale lc = QLocale( lng ).name();
+		// create language item
+		QTreeWidgetItem* it = new QTreeWidgetItem( twTranslations );
+		it->setText( 0, QLocale::languageToString( lng ) );
+		it->setCheckState( 0, Qt::Unchecked );
+		it->setData( 0, Qt::UserRole, lc.name() );
+		it->setToolTip( 0, lc.name().split( "_" )[0].prepend( "Locale: " ) );
+		// create country for language items
+		foreach ( QLocale::Country cny, QLocale::countriesForLanguage( lng ) )
+		{
+			const QLocale clc = QLocale( lng, cny );
+			QTreeWidgetItem* cit = new QTreeWidgetItem( it );
+			cit->setText( 0, QLocale::countryToString( cny ) );
+			cit->setCheckState( 0, Qt::Unchecked );
+			cit->setData( 0, Qt::UserRole, clc.name() );
+			cit->setToolTip( 0, clc.name().prepend( "Locale: " ) );
+		}
+	}
+	// sort items
+	twTranslations->sortItems( 0, Qt::AscendingOrder );
+	// expand all items
+	twTranslations->expandAll();
+	// hide header
+	twTranslations->header()->hide();
 }
 
 void QMakeProjectEditorDialog::createQtModulesConfigurations()
@@ -140,7 +176,7 @@ void QMakeProjectEditorDialog::loadsQtConfigurations()
 	// APP_AUTHOR
 	value = mProject->projectSettingsValue( leAuthor->statusTip() );
 	leAuthor->setText( value );
-	// *** LIBRARY
+	// *** CONFIGURATION
 	// QT
 	value = ( vit = curScope->variable( lwQtModules->statusTip(), curOperator ) ) ? vit->variableValue() : QString();
 	for ( int i = 0; i < lwQtModules->count(); i++ )
@@ -167,6 +203,8 @@ void QMakeProjectEditorDialog::loadsQtConfigurations()
 		config.replace( rx, "" );
 	}
 	leConfig->setText( config.trimmed() );
+	// *** TRANSLATIONS
+	
 	// disable widgets
 	// ** Application
 	cbTemplate->setEnabled( curScope == mProject && curOperator == "=" );
@@ -174,7 +212,7 @@ void QMakeProjectEditorDialog::loadsQtConfigurations()
 	fWarn->setEnabled( fBuildType->isEnabled() );
 	fBuildAll->setEnabled( fBuildType->isEnabled() );
 	gbOutput->setEnabled( curOperator == "=" );
-	// ** Library
+	// ** CONFIGURATION
 	lwCompilerFlags->setEnabled( curOperator != "=" );
 	leConfig->setEnabled( lwCompilerFlags->isEnabled() );
 	// restore signals of all children

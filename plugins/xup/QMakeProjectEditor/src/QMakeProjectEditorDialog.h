@@ -21,6 +21,7 @@ protected:
 	QtVersion mQtVersion;
 
 protected slots:
+	void createLanguages();
 	void createQtModulesConfigurations();
 	void loadsQtVersions();
 	void loadsQtConfigurations();
