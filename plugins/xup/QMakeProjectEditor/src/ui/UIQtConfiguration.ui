@@ -186,7 +186,7 @@ If there is no Qt version available or you want to add a custom Qt version, you 
           <enum>QListView::ListMode</enum>
          </property>
          <property name="currentRow" >
-          <number>0</number>
+          <number>-1</number>
          </property>
          <item>
           <property name="text" >
@@ -198,18 +198,10 @@ If there is no Qt version available or you want to add a custom Qt version, you 
          </item>
          <item>
           <property name="text" >
-           <string>Library</string>
+           <string>Configuration</string>
           </property>
           <property name="icon" >
            <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/temp/icons/temp/package_development.png</iconset>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Settings</string>
-          </property>
-          <property name="icon" >
-           <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/temp/icons/temp/package_system.png</iconset>
           </property>
          </item>
          <item>
@@ -231,7 +223,7 @@ If there is no Qt version available or you want to add a custom Qt version, you 
           </sizepolicy>
          </property>
          <property name="currentIndex" >
-          <number>2</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="wApplication" >
           <layout class="QGridLayout" >
@@ -655,7 +647,7 @@ If there is no Qt version available or you want to add a custom Qt version, you 
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="wLibrary" >
+         <widget class="QWidget" name="wConfiguration" >
           <layout class="QGridLayout" >
            <property name="leftMargin" >
             <number>0</number>
@@ -824,155 +816,6 @@ If there is no Qt version available or you want to add a custom Qt version, you 
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="wSettings" >
-          <layout class="QGridLayout" >
-           <property name="leftMargin" >
-            <number>0</number>
-           </property>
-           <property name="topMargin" >
-            <number>0</number>
-           </property>
-           <property name="rightMargin" >
-            <number>0</number>
-           </property>
-           <property name="bottomMargin" >
-            <number>0</number>
-           </property>
-           <item row="0" column="0" colspan="3" >
-            <widget class="QLineEdit" name="leDir" />
-           </item>
-           <item row="1" column="0" >
-            <widget class="QListView" name="lvDirs" />
-           </item>
-           <item row="1" column="1" colspan="2" >
-            <widget class="QListWidget" name="lwFiles" />
-           </item>
-           <item row="2" column="0" colspan="2" >
-            <widget class="QListWidget" name="lwValues" >
-             <property name="sizePolicy" >
-              <sizepolicy vsizetype="Ignored" hsizetype="Expanding" >
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="2" >
-            <widget class="QFrame" name="lVariables" >
-             <property name="sizePolicy" >
-              <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="frameShape" >
-              <enum>QFrame::StyledPanel</enum>
-             </property>
-             <layout class="QVBoxLayout" >
-              <property name="spacing" >
-               <number>3</number>
-              </property>
-              <property name="leftMargin" >
-               <number>5</number>
-              </property>
-              <property name="topMargin" >
-               <number>5</number>
-              </property>
-              <property name="rightMargin" >
-               <number>5</number>
-              </property>
-              <property name="bottomMargin" >
-               <number>5</number>
-              </property>
-              <item>
-               <widget class="QComboBox" name="cbVariables" >
-                <item>
-                 <property name="text" >
-                  <string>LIBS</string>
-                 </property>
-                 <property name="icon" >
-                  <iconset resource="../resources/QMakeProjectEditor.qrc" >:/qmakeitems/libs.png</iconset>
-                 </property>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>DEFINES</string>
-                 </property>
-                 <property name="icon" >
-                  <iconset resource="../resources/QMakeProjectEditor.qrc" >:/qmakeitems/defines.png</iconset>
-                 </property>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>INCLUDEPATH</string>
-                 </property>
-                 <property name="icon" >
-                  <iconset resource="../resources/QMakeProjectEditor.qrc" >:/qmakeitems/includepath.png</iconset>
-                 </property>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>DEPENDPATH</string>
-                 </property>
-                 <property name="icon" >
-                  <iconset resource="../resources/QMakeProjectEditor.qrc" >:/qmakeitems/dependpath.png</iconset>
-                 </property>
-                </item>
-                <item>
-                 <property name="text" >
-                  <string>VPATH</string>
-                 </property>
-                 <property name="icon" >
-                  <iconset resource="../resources/QMakeProjectEditor.qrc" >:/qmakeitems/vpath.png</iconset>
-                 </property>
-                </item>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pbAddValue" >
-                <property name="text" >
-                 <string>&amp;Add</string>
-                </property>
-                <property name="icon" >
-                 <iconset/>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pbEditValue" >
-                <property name="text" >
-                 <string>&amp;Edit</string>
-                </property>
-                <property name="icon" >
-                 <iconset/>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pbRemoveValue" >
-                <property name="text" >
-                 <string>&amp;Remove</string>
-                </property>
-                <property name="icon" >
-                 <iconset/>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pbClearValues" >
-                <property name="text" >
-                 <string>&amp;Clear</string>
-                </property>
-                <property name="icon" >
-                 <iconset/>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-          </layout>
-         </widget>
          <widget class="QWidget" name="wTranslations" >
           <layout class="QVBoxLayout" >
            <property name="leftMargin" >
@@ -990,18 +833,32 @@ If there is no Qt version available or you want to add a custom Qt version, you 
            <item>
             <widget class="QLabel" name="lTranslations" >
              <property name="text" >
-              <string>Tick the &amp;language you would like to add to your project</string>
+              <string>Tick the &amp;language you would like to add to your project. Top level item mean the global language, child item mean localized language. By example, if you want to translate your application to &lt;b>French&lt;/b> of &lt;b>France&lt;/b> you will tick &lt;b>France&lt;/b> and not &lt;b>French&lt;/b> and if you want to provide only a global &lt;b>French&lt;/b> translation you will only tick &lt;b>French&lt;/b>.</string>
+             </property>
+             <property name="wordWrap" >
+              <bool>true</bool>
              </property>
              <property name="buddy" >
-              <cstring>lwTranslations</cstring>
+              <cstring>twTranslations</cstring>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QListWidget" name="lwTranslations" >
-             <property name="statusTip" >
-              <string>TRANSLATIONS</string>
+            <widget class="QTreeWidget" name="twTranslations" >
+             <property name="editTriggers" >
+              <set>QAbstractItemView::NoEditTriggers</set>
              </property>
+             <property name="itemsExpandable" >
+              <bool>false</bool>
+             </property>
+             <property name="allColumnsShowFocus" >
+              <bool>true</bool>
+             </property>
+             <column>
+              <property name="text" >
+               <string>1</string>
+              </property>
+             </column>
             </widget>
            </item>
           </layout>
