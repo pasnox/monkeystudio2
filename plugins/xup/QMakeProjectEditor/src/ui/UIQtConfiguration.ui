@@ -845,6 +845,9 @@ If there is no Qt version available or you want to add a custom Qt version, you 
            </item>
            <item>
             <widget class="QTreeWidget" name="twTranslations" >
+             <property name="statusTip" >
+              <string>TRANSLATIONS</string>
+             </property>
              <property name="editTriggers" >
               <set>QAbstractItemView::NoEditTriggers</set>
              </property>
