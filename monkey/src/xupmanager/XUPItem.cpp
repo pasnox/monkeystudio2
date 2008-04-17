@@ -567,6 +567,16 @@ void XUPItem::addVariableValues( const QStringList& values )
 	}
 }
 
+void XUPItem::removeVariableValues( const QStringList& values )
+{
+	// abort if no files or no value
+	if ( !isType( "variable" ) || values.isEmpty() )
+		return;
+	for ( int i = rowCount(); i != 0; i-- )
+		if ( values.contains( child( i )->defaultValue() ) )
+			child( i )->remove();
+}
+
 QString XUPItem::projectFilePath() const
 {
 	if ( XUPItem* pi = project() )
@@ -878,8 +888,10 @@ void XUPItem::installCommands()
 	// get plugins
 	BuilderPlugin* bp = builder();
 	CompilerPlugin* cp = compiler();
+	/*
 	DebuggerPlugin* dp = debugger();
 	InterpreterPlugin* ip = interpreter();
+	*/
 	
 	// build command
 	if ( bp )
@@ -889,6 +901,7 @@ void XUPItem::installCommands()
 			cmd.addParsers( cp->compileCommand().parsers() );
 		cmd.setUserData( reinterpret_cast<quintptr>( &mCommands ) );
 		cmd.setProject( this );
+		cmd.setSkipOnError( false );
 		addCommand( cmd, "mBuilder/mBuild" );
 	}
 	
@@ -898,6 +911,7 @@ void XUPItem::installCommands()
 		pCommand cmd = cp->compileCommand();
 		cmd.setUserData( reinterpret_cast<quintptr>( &mCommands ) );
 		cmd.setProject( this );
+		cmd.setSkipOnError( false );
 		addCommand( cmd, "mBuilder/mBuild" );
 	}
 	
@@ -910,6 +924,7 @@ void XUPItem::installCommands()
 				cmd.addParsers( cp->compileCommand().parsers() );
 			cmd.setUserData( reinterpret_cast<quintptr>( &mCommands ) );
 			cmd.setProject( this );
+			cmd.setSkipOnError( false );
 			addCommand( cmd, "mBuilder/mUserCommands" );
 		}
 	}
@@ -921,6 +936,7 @@ void XUPItem::installCommands()
 		{
 			cmd.setUserData( reinterpret_cast<quintptr>( &mCommands ) );
 			cmd.setProject( this );
+			cmd.setSkipOnError( false );
 			addCommand( cmd, "mBuilder/mUserCommands" );
 		}
 	}

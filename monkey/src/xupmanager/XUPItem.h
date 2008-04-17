@@ -162,6 +162,9 @@ public:
 	// add variable value
 	virtual void addVariableValues( const QStringList& values );
 	virtual void addVariableValue( const QString& value ) { addVariableValues( value.isEmpty() ? QStringList() : QStringList( value ) ); }
+	// remove variable value
+	virtual void removeVariableValues( const QStringList& values );
+	virtual void removeVariableValue( const QString& value ) { removeVariableValues( value.isEmpty() ? QStringList() : QStringList( value ) ); }
 
 	// return the project file path, ie the file u set when opening/saving the project
 	virtual QString projectFilePath() const;
