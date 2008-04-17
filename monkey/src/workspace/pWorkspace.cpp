@@ -417,7 +417,7 @@ void pWorkspace::projectCustomActionTriggered()
 		QHash<QString, pCommand>* cmdsHash = reinterpret_cast<QHash<QString, pCommand>*>( cmd.userData().value<quintptr>() );
 		const pCommandList cmds = cmdsHash ? cmdsHash->values() : pCommandList();
 		// save project if needed
-		if ( cmd.project() && saveProjectsOnCustomAction() )
+		if ( saveProjectsOnCustomAction() )
 			MonkeyCore::projectsManager()->action( UIXUPManager::SaveAll )->trigger();
 		// save project files
 		if ( saveFilesOnCustomAction() )
@@ -456,8 +456,13 @@ void pWorkspace::projectCustomActionTriggered()
 			// return
 			return;
 		}
-		// add commands to console
-		cm->addCommands( cm->recursiveCommandList( cmds, cm->getCommand( cmds, cmd.text() ) ) );
+		// generate commands list
+		pCommandList mCmds = cm->recursiveCommandList( cmds, cm->getCommand( cmds, cmd.text() ) );
+		// teh first one must not be skipped on last error
+		if ( mCmds.count() > 0 )
+			mCmds.first().setSkipOnError( false );
+		// send command to consolemanager
+		cm->addCommands( mCmds );
 	}
 }
 
