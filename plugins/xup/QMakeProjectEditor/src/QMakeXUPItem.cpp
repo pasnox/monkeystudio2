@@ -641,13 +641,8 @@ void QMakeXUPItem::installCommands()
 	s = interpretedVariable( "DESTDIR" );
 	if ( s.isEmpty() )
 		s = interpretedVariable( "DLLDESTDIR" );
-#ifdef Q_OS_WIN
-	if ( !s.left( 2 ).endsWith( ':' ) )
+	if ( QDir( s ).isRelative() )
 		s.prepend( "$cpp$/" );
-#else
-	if ( !s.startsWith( '/' ) )
-		s.prepend( "$cpp$/" );
-#endif
 	if ( s.endsWith( '/' ) )
 		s.chop( 1 );
 	const QString destdir = s;
