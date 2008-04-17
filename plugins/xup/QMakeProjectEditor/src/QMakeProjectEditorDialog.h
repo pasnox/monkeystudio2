@@ -39,6 +39,7 @@ protected slots:
 	void cbBuildAutoIncrement_clicked( bool checked );
 	void qtModulesConfigurations_itemSelectionChanged();
 	void qtModulesConfigurations_changed();
+	void twTranslations_itemChanged( QTreeWidgetItem* item, int column );
 	virtual void accept();
 };
 

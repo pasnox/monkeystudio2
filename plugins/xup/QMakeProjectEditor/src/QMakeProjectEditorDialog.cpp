@@ -6,6 +6,8 @@
 #include <coremanager.h>
 #include <pluginsmanager.h>
 
+const QString QtTranslationMask( "translations/%1.ts" );
+
 QMakeProjectEditorDialog::QMakeProjectEditorDialog( XUPItem* project, QWidget* parent )
 	: UIXUPProjectEditor( project, parent )
 {
@@ -48,6 +50,7 @@ QMakeProjectEditorDialog::QMakeProjectEditorDialog( XUPItem* project, QWidget* p
 	connect( lwQtModules, SIGNAL( itemClicked( QListWidgetItem* ) ), this, SLOT( qtModulesConfigurations_changed() ) );
 	connect( lwCompilerFlags, SIGNAL( itemClicked( QListWidgetItem* ) ), this, SLOT( qtModulesConfigurations_changed() ) );
 	connect( leConfig, SIGNAL( textChanged( const QString& ) ), this, SLOT( qtModulesConfigurations_changed() ) );
+	connect( twTranslations, SIGNAL( itemChanged( QTreeWidgetItem*, int ) ), this, SLOT( twTranslations_itemChanged( QTreeWidgetItem*, int ) ) );
 }
 
 void QMakeProjectEditorDialog::createLanguages()
@@ -61,7 +64,7 @@ void QMakeProjectEditorDialog::createLanguages()
 		QTreeWidgetItem* it = new QTreeWidgetItem( twTranslations );
 		it->setText( 0, QLocale::languageToString( lng ) );
 		it->setCheckState( 0, Qt::Unchecked );
-		it->setData( 0, Qt::UserRole, lc.name() );
+		it->setData( 0, Qt::UserRole, lc.name().split( "_" )[0] );
 		it->setToolTip( 0, lc.name().split( "_" )[0].prepend( "Locale: " ) );
 		// create country for language items
 		foreach ( QLocale::Country cny, QLocale::countriesForLanguage( lng ) )
@@ -204,7 +207,13 @@ void QMakeProjectEditorDialog::loadsQtConfigurations()
 	}
 	leConfig->setText( config.trimmed() );
 	// *** TRANSLATIONS
-	
+	values = ( vit = mProject->variable( twTranslations->statusTip(), "+=" ) ) ? vit->variableValues() : QStringList();
+	foreach ( QTreeWidgetItem* it, twTranslations->findItems( "*", Qt::MatchWildcard | Qt::MatchWrap | Qt::MatchRecursive ) )
+	{
+		const QString locale = it->data( 0, Qt::UserRole ).toString();
+		value = QString( QtTranslationMask ).arg( locale );
+		it->setCheckState( 0, values.contains( value ) ? Qt::Checked : Qt::Unchecked );
+	}
 	// disable widgets
 	// ** Application
 	cbTemplate->setEnabled( curScope == mProject && curOperator == "=" );
@@ -374,6 +383,19 @@ void QMakeProjectEditorDialog::qtModulesConfigurations_changed()
 		// update variable values if needed
 		if ( vit )
 			vit->setVariableValue( values.join( " " ) );
+	}
+}
+
+void QMakeProjectEditorDialog::twTranslations_itemChanged( QTreeWidgetItem* item, int )
+{
+	if ( XUPItem* vit = mProject->variable( twTranslations->statusTip(), "+=", 0, true ) )
+	{
+		const QString locale = item->data( 0, Qt::UserRole ).toString();
+		const QString translation = QString( QtTranslationMask ).arg( locale );
+		if ( item->checkState( 0 ) == Qt::Checked )
+			vit->addVariableValue( translation );
+		else
+			vit->removeVariableValue( translation );
 	}
 }
 
