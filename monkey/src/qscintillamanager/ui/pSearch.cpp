@@ -51,6 +51,8 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QMessageBox>
+#include <QCompleter>
+#include <QDirModel>
 
 #include <QDebug>
 
@@ -118,6 +120,7 @@ pSearch::pSearch( QWidget* parent )
 	cobPath = new QComboBox();
 	cobPath->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
 	cobPath->setEditable (true);
+    cobPath->lineEdit()->setCompleter (new QCompleter (new QDirModel()));
 	lPath->setBuddy (cobPath);
 	
 	tbPath = new QToolButton ();
