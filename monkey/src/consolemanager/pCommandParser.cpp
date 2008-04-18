@@ -28,7 +28,7 @@
 ****************************************************************************/
 #include "pCommandParser.h"
 
-#define PARSERS_DEBUG 0
+#define PARSERS_DEBUG 1
 
 pCommandParser::~pCommandParser()
 {
@@ -66,6 +66,7 @@ int pCommandParser::processParsing(QString* buf)
 			emit newStepAvailable( m );
 #if PARSERS_DEBUG
 			qDebug () << "Capture :" << p.regExp.cap();
+			qDebug () << "CaptureS :" << p.regExp.capturedTexts ();
 			qDebug () << "Returning " << p.regExp.cap().count ('\n');
 #endif
 			return p.regExp.cap().count ('\n');

@@ -82,13 +82,13 @@ public:
 			},
 			{
 				//Undedined reference 
-				QRegExp("^[\\w\\./]+\\.o: (In function `.+':)\\n[\\w\\./]*/([\\w\\.]+):(\\d+): (undefined reference to `.+')\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				QRegExp("^[\\w\\./]+\\.o: (In function `[^']+':)\\n([\\w\\./]*/([\\w\\.]+)):(\\d+): (undefined reference to `[^']+')\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
 				"%2", //file name
-				"%3", //column
-				"0", //row
+				"0", //column
+				"%4", //row
 				pConsoleManager::stError, //type
-				"%1 %4", //text
-				"%0" //full text
+				"%3:%4: %5", //text
+				"%2" //full text
 			},
 			{
 				//Missing library

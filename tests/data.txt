@@ -22,3 +22,12 @@ DBPathPoint.h:74: Error: Class declarations lacks Q_OBJECT macro.
 make[1]: *** [build/release/.moc/moc_DBPathPoint.cpp] Error 1
 make: *** [release] Error 2
 
+
+lXext -lX11 -lm -lpthread -lQtXml -lQtGui -lQtCore
+../build/debug/.obj/unix/UIXUPManager.o: In function `UIXUPManager::actionOpenTriggered()':
+/home/a/code/monkeyrepos/v2/branches/dev/monkey/src/xupmanager/ui/UIXUPManager.cpp:313: undefined reference to `pRecentsManager::recentProjectOpenPath() const'
+/home/a/code/monkeyrepos/v2/branches/dev/monkey/src/xupmanager/ui/UIXUPManager.cpp:325: undefined reference to `pRecentsManager::setRecentProjectOpenPath(QString const&)'
+../build/debug/.obj/unix/moc_pRecentsManager.o: In function `pRecentsManager::qt_metacall(QMetaObject::Call, int, void**)':
+/home/a/code/monkeyrepos/v2/branches/dev/monkey/../build/debug/.moc/moc_pRecentsManager.cpp:93: undefined reference to `pRecentsManager::setRecentFileOpenPath(QString const&)'
+/home/a/code/monkeyrepos/v2/branches/dev/monkey/../build/debug/.moc/moc_pRecentsManager.cpp:94: undefined reference to `pRecentsManager::setRecentProjectOpenPath(QString const&)'
+collect2: ld returned 1 exit status
