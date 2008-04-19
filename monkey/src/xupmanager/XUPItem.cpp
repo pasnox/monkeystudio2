@@ -252,7 +252,6 @@ void XUPItem::remove()
 {
 	bool b = isProject();
 	XUPItem* pit = b ? 0 : project();
-	XUPItem* scope = parent();
 	// remove node
 	mDomElement.parentNode().removeChild( mDomElement );
 	// remove item from model
@@ -572,9 +571,12 @@ void XUPItem::removeVariableValues( const QStringList& values )
 	// abort if no files or no value
 	if ( !isType( "variable" ) || values.isEmpty() )
 		return;
-	for ( int i = rowCount(); i != 0; i-- )
+	for ( int i = rowCount() -1; i > -1; i-- )
 		if ( values.contains( child( i )->defaultValue() ) )
 			child( i )->remove();
+	// auto remove variable if no longer values
+	if ( rowCount() == 0 )
+		remove();
 }
 
 QString XUPItem::projectFilePath() const
