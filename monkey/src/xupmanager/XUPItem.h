@@ -151,7 +151,7 @@ public:
 	virtual void addFiles( const QStringList& files, XUPItem* scope = 0, const QString& op = QString( "=" ) );
 	virtual void addFile( const QString& file, XUPItem* scope = 0, const QString& op = QString( "=" ) ) { addFiles( QStringList( file ), scope, op ); };
 	// remove files to project
-	virtual void removeFiles( const QStringList& files, XUPItem* scope= 0, const QString& op = QString( "=" ) );
+	virtual void removeFiles( const QStringList& files, XUPItem* scope = 0, const QString& op = QString( "=" ) );
 	virtual void removeFile( const QString& file, XUPItem* scope = 0, const QString& op = QString( "=" ) ) { removeFiles( QStringList( file ), scope, op ); };
 	// return the variable values if item is a variable else nothing
 	virtual QStringList variableValues() const;
