@@ -3,9 +3,9 @@
  <widget class="QDialog" name="UIXUPProjectEditor" >
   <property name="geometry" >
    <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>510</width>
+    <x>4</x>
+    <y>24</y>
+    <width>640</width>
     <height>480</height>
    </rect>
   </property>
@@ -134,28 +134,22 @@
      </property>
      <widget class="QWidget" name="wProjectFiles" >
       <layout class="QGridLayout" >
-       <property name="leftMargin" >
-        <number>0</number>
-       </property>
-       <property name="topMargin" >
-        <number>0</number>
-       </property>
-       <property name="rightMargin" >
-        <number>0</number>
-       </property>
-       <property name="bottomMargin" >
-        <number>0</number>
-       </property>
-       <item rowspan="4" row="0" column="0" >
-        <widget class="QTreeView" name="tvProjectFiles" >
-         <property name="editTriggers" >
-          <set>QAbstractItemView::NoEditTriggers</set>
+       <item row="0" column="0" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
          </property>
-        </widget>
+         <property name="sizeHint" >
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
        <item row="0" column="1" >
-        <widget class="QPushButton" name="pbAddProjectFiles" >
-         <property name="text" >
+        <widget class="QToolButton" name="tbAddProjectFiles" >
+         <property name="toolTip" >
           <string>Add Files...</string>
          </property>
          <property name="icon" >
@@ -163,9 +157,22 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1" >
-        <widget class="QPushButton" name="pbRemoveProjectFile" >
-         <property name="text" >
+       <item row="0" column="2" >
+        <widget class="QToolButton" name="tbModifyProjectFile" >
+         <property name="toolTip" >
+          <string>Modify File...</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../resources/XUPManager.qrc" >:/editor/icons/editor/modify.png</iconset>
+         </property>
+         <property name="popupMode" >
+          <enum>QToolButton::MenuButtonPopup</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3" >
+        <widget class="QToolButton" name="tbRemoveProjectFile" >
+         <property name="toolTip" >
           <string>Remove File...</string>
          </property>
          <property name="icon" >
@@ -173,28 +180,12 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1" >
-        <widget class="QPushButton" name="pbModifyProjectFile" >
-         <property name="text" >
-          <string>Modify File...</string>
-         </property>
-         <property name="icon" >
-          <iconset resource="../resources/XUPManager.qrc" >:/editor/icons/editor/modify.png</iconset>
+       <item row="1" column="0" colspan="4" >
+        <widget class="QTreeView" name="tvProjectFiles" >
+         <property name="editTriggers" >
+          <set>QAbstractItemView::NoEditTriggers</set>
          </property>
         </widget>
-       </item>
-       <item row="3" column="1" >
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>142</width>
-           <height>241</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>
@@ -214,6 +205,12 @@
        </property>
        <item>
         <widget class="QGroupBox" name="gbOthersVariables" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="title" >
           <string>Variables</string>
          </property>
@@ -225,7 +222,7 @@
             </property>
             <property name="sizeHint" >
              <size>
-              <width>40</width>
+              <width>20</width>
               <height>20</height>
              </size>
             </property>
@@ -233,8 +230,8 @@
           </item>
           <item row="0" column="1" >
            <widget class="QToolButton" name="tbOthersVariablesAdd" >
-            <property name="text" >
-             <string>Add</string>
+            <property name="toolTip" >
+             <string>Add...</string>
             </property>
             <property name="icon" >
              <iconset resource="../resources/XUPManager.qrc" >:/actions/add.png</iconset>
@@ -243,8 +240,8 @@
           </item>
           <item row="0" column="2" >
            <widget class="QToolButton" name="tbOthersVariablesEdit" >
-            <property name="text" >
-             <string>Edit</string>
+            <property name="toolTip" >
+             <string>Edit...</string>
             </property>
             <property name="icon" >
              <iconset resource="../resources/XUPManager.qrc" >:/editor/icons/editor/modify.png</iconset>
@@ -256,8 +253,8 @@
           </item>
           <item row="0" column="3" >
            <widget class="QToolButton" name="tbOthersVariablesRemove" >
-            <property name="text" >
-             <string>Remove</string>
+            <property name="toolTip" >
+             <string>Remove...</string>
             </property>
             <property name="icon" >
              <iconset resource="../resources/XUPManager.qrc" >:/actions/remove.png</iconset>
@@ -290,16 +287,16 @@
             </property>
             <property name="sizeHint" >
              <size>
-              <width>181</width>
-              <height>24</height>
+              <width>20</width>
+              <height>20</height>
              </size>
             </property>
            </spacer>
           </item>
           <item row="0" column="1" >
            <widget class="QToolButton" name="tbOthersValuesAdd" >
-            <property name="text" >
-             <string>Add</string>
+            <property name="toolTip" >
+             <string>Add...</string>
             </property>
             <property name="icon" >
              <iconset resource="../resources/XUPManager.qrc" >:/actions/add.png</iconset>
@@ -311,8 +308,8 @@
           </item>
           <item row="0" column="2" >
            <widget class="QToolButton" name="tbOthersValuesEdit" >
-            <property name="text" >
-             <string>Edit</string>
+            <property name="toolTip" >
+             <string>Edit...</string>
             </property>
             <property name="icon" >
              <iconset resource="../resources/XUPManager.qrc" >:/editor/icons/editor/modify.png</iconset>
@@ -324,8 +321,8 @@
           </item>
           <item row="0" column="3" >
            <widget class="QToolButton" name="tbOthersValuesRemove" >
-            <property name="text" >
-             <string>Remove</string>
+            <property name="toolTip" >
+             <string>Remove...</string>
             </property>
             <property name="icon" >
              <iconset resource="../resources/XUPManager.qrc" >:/actions/remove.png</iconset>
@@ -334,8 +331,8 @@
           </item>
           <item row="0" column="4" >
            <widget class="QToolButton" name="tbOthersValuesClear" >
-            <property name="text" >
-             <string>Clear</string>
+            <property name="toolTip" >
+             <string>Clear...</string>
             </property>
             <property name="icon" >
              <iconset resource="../resources/XUPManager.qrc" >:/editor/icons/editor/clear.png</iconset>
@@ -553,9 +550,6 @@
   <tabstop>tbRemoveScope</tabstop>
   <tabstop>cbScope</tabstop>
   <tabstop>tvProjectFiles</tabstop>
-  <tabstop>pbAddProjectFiles</tabstop>
-  <tabstop>pbRemoveProjectFile</tabstop>
-  <tabstop>pbModifyProjectFile</tabstop>
   <tabstop>tbOthersVariablesAdd</tabstop>
   <tabstop>tbOthersVariablesEdit</tabstop>
   <tabstop>tbOthersVariablesRemove</tabstop>

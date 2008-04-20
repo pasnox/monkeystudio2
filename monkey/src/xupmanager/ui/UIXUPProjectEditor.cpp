@@ -55,6 +55,12 @@ UIXUPProjectEditor::UIXUPProjectEditor( XUPItem* project, QWidget* parent )
 	cbOperator->setVisible( false );
 	cbOperator->addItems( mProject->operators() );
 	
+	// tbAddProjectFiles
+	QMenu* projectFilesMenu = new QMenu( tbModifyProjectFile );
+	aModifyProjectFileFile = projectFilesMenu->addAction( tr( "As File..." ) );
+	aModifyProjectFileValue = projectFilesMenu->addAction( tr( "As Value..." ) );
+	tbModifyProjectFile->setMenu( projectFilesMenu );
+	
 	// tbOthersVariablesEdit
 	QMenu* menu = new QMenu( tbOthersVariablesEdit );
 	aOthersVariablesEditVariable = menu->addAction( tr( "Edit Variable..." ) );
@@ -95,6 +101,7 @@ UIXUPProjectEditor::UIXUPProjectEditor( XUPItem* project, QWidget* parent )
 	connect( lvOthersVariables->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( lvOthersVariables_currentChanged( const QModelIndex&, const QModelIndex& ) ) );
 	connect( lvOthersValues->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( lvOthersValues_currentChanged( const QModelIndex&, const QModelIndex& ) ) );
 	// doing here to avoid fucking bug
+	connect( projectFilesMenu, SIGNAL( triggered( QAction* ) ), tbModifyProjectFile, SIGNAL( triggered( QAction* ) ) );
 	connect( menu, SIGNAL( triggered( QAction* ) ), tbOthersVariablesEdit, SIGNAL( triggered( QAction* ) ) );
 	connect( addMenu, SIGNAL( triggered( QAction* ) ), tbOthersValuesAdd, SIGNAL( triggered( QAction* ) ) );
 	connect( editMenu, SIGNAL( triggered( QAction* ) ), tbOthersValuesEdit, SIGNAL( triggered( QAction* ) ) );
@@ -284,14 +291,14 @@ void UIXUPProjectEditor::on_cbScope_currentChanged( const QModelIndex& idx )
 void UIXUPProjectEditor::on_cbOperator_currentIndexChanged( const QString& text )
 { emit currentOperatorChanged( text ); }
 
-void UIXUPProjectEditor::on_pbAddProjectFiles_clicked()
+void UIXUPProjectEditor::on_tbAddProjectFiles_clicked()
 {
 	AddFilesDialog d( mScopedModel, currentScope(), window() );
 	if ( d.exec() == QDialog::Accepted && !d.selectedFiles().isEmpty() )
 		d.currentItem()->addFiles( d.selectedFiles(), d.currentItem(), d.currentOperator() );
 }
 
-void UIXUPProjectEditor::on_pbRemoveProjectFile_clicked()
+void UIXUPProjectEditor::on_tbRemoveProjectFile_clicked()
 {
 	FilteredProjectItemModel* fm = mProject->model()->filteredModel();
 	FilesProjectModel* fpm = qobject_cast<FilesProjectModel*>( tvProjectFiles->model() );
@@ -321,7 +328,10 @@ void UIXUPProjectEditor::on_pbRemoveProjectFile_clicked()
 	}
 }
 
-void UIXUPProjectEditor::on_pbModifyProjectFile_clicked()
+void UIXUPProjectEditor::on_tbModifyProjectFile_clicked()
+{ on_tbModifyProjectFile_triggered( aModifyProjectFileFile ); }
+
+void UIXUPProjectEditor::on_tbModifyProjectFile_triggered( QAction* action )
 {
 	FilesProjectModel* fpm = qobject_cast<FilesProjectModel*>( tvProjectFiles->model() );
 	QModelIndex idx = tvProjectFiles->currentIndex();
@@ -332,28 +342,16 @@ void UIXUPProjectEditor::on_pbModifyProjectFile_clicked()
 			if ( it->isType( "value" ) )
 			{
 				QString s;
-				// prepare dialog
-				QMessageBox mb( window() );
-				mb.setIcon( QMessageBox::Question );
-				mb.setText( tr( "Modify a file." ) );
-				mb.setInformativeText( tr( "Choose you either want to Edit or Browse the file." ) );
-				QAbstractButton* eb = mb.addButton( tr( "Edit text value" ), QMessageBox::AcceptRole );
-				QAbstractButton* bb = mb.addButton( tr( "Browse for a file" ), QMessageBox::RejectRole );
-				// execute dialog
-				mb.exec();
-				if ( mb.clickedButton() == eb )
+				// get value
+				if ( action == aModifyProjectFileValue )
 				{
 					bool ok;
-					const QString v = QInputDialog::getText( window(), tr( "Waiting new value..." ), tr( "Enter the new content for this file value :" ), QLineEdit::Normal, it->defaultValue(), &ok );
-					if ( ok && !v.isEmpty() )
-						s = v;
+					s = QInputDialog::getText( window(), tr( "Waiting new value..." ), tr( "Enter the new content for this file value :" ), QLineEdit::Normal, it->defaultValue(), &ok );
+					if ( !ok )
+						s.clear();
 				}
-				else if ( mb.clickedButton() == bb )
-				{
-					const QString v = QFileDialog::getOpenFileName( window(), tr( "Choose a new file name" ), it->filePath() ); 
-					if ( !v.isEmpty() )
-						s = v;
-				}
+				else if ( action == aModifyProjectFileFile )
+					s = QFileDialog::getOpenFileName( window(), tr( "Choose a new file name" ), it->filePath() ); 
 				// apply new value if needed
 				if ( !s.isEmpty() )
 					it->setValue( it->valueName(), it->relativeFilePath( s ) );

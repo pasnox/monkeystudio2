@@ -68,6 +68,8 @@ protected:
 	FilteredProjectItemModel* mFilteredModel;
 	ProjectEditorModel* mVariablesModel;
 	ProjectEditorModel* mValuesModel;
+	QAction* aModifyProjectFileFile;
+	QAction* aModifyProjectFileValue;
 	QAction* aOthersVariablesEditVariable;
 	QAction* aOthersVariablesEditMultiline;
 	QAction* aOthersValuesAddValue;
@@ -90,9 +92,10 @@ protected slots:
 	// operator
 	void on_cbOperator_currentIndexChanged( const QString& text );
 	// project files
-	void on_pbAddProjectFiles_clicked();
-	void on_pbRemoveProjectFile_clicked();
-	void on_pbModifyProjectFile_clicked();
+	void on_tbAddProjectFiles_clicked();
+	void on_tbRemoveProjectFile_clicked();
+	void on_tbModifyProjectFile_clicked();
+	void on_tbModifyProjectFile_triggered( QAction* action );
 	// others variables
 	void lvOthersVariables_currentChanged( const QModelIndex& current, const QModelIndex& previous );
 	// variables
