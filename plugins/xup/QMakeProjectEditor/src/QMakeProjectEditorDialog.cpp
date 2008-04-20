@@ -7,7 +7,7 @@
 #include <pluginsmanager.h>
 
 const QString QtTranslationMask( "translations/%1.ts" );
-
+//wProjectFiles
 QMakeProjectEditorDialog::QMakeProjectEditorDialog( XUPItem* project, QWidget* parent )
 	: UIXUPProjectEditor( project, parent )
 {
