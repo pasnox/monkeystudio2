@@ -40,8 +40,9 @@
 #include <QApplication>
 
 #include "UIItemSettings.h"
-#include "ProjectItem.h"
-#include "pMonkeyStudio.h"
+
+#include <monkey.h>
+#include <projectsmanager.h>
 
 using namespace pMonkeyStudio;
 

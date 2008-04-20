@@ -30,10 +30,9 @@
 
 #include "pConsoleManager.h"
 #include "pCommandParser.h"
-#include "pMonkeyStudio.h"
-#include "pFileManager.h"
-#include "pAction.h"
-#include "MonkeyCore.h"
+#include "../pMonkeyStudio.h"
+#include "../workspace/pFileManager.h"
+#include "../coremanager/MonkeyCore.h"
 
 static const int MAX_LINES = 4; //Maximum lines count, that can be parsed by Monkey. Than less - than better perfomance
 
@@ -152,7 +151,14 @@ pCommandList pConsoleManager::recursiveCommandList( const pCommandList& l, pComm
 	}
 	// process variables
 	else
-		cl << processCommand( c );
+	{
+		// process variables
+		pCommand pc = processCommand( c );
+		// set skit on error
+		pc.setSkipOnError( true );
+		// add to list
+		cl << pc;
+	}
 	// return list
 	return cl;
 }

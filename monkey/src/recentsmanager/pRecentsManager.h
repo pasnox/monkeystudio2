@@ -29,7 +29,7 @@
 #ifndef PRECENTSMANAGER_H
 #define PRECENTSMANAGER_H
 
-#include "MonkeyExport.h"
+#include <fresh.h>
 
 #include <QObject>
 
@@ -44,9 +44,6 @@ public:
 	int maxRecentFiles() const;
 	int maxRecentProjects() const;
 
-	QString recentFileOpenPath() const;
-	QString recentProjectOpenPath() const;
-
 protected:
 	pRecentsManager( QObject* = 0 );
 
@@ -56,9 +53,6 @@ protected:
 public slots:
 	void setMaxRecentFiles( int );
 	void setMaxRecentProjects( int );
-
-	void setRecentFileOpenPath( const QString& );
-	void setRecentProjectOpenPath( const QString& );
 
 	void recentFiles_triggered( QAction* );
 	void updateRecentFiles();

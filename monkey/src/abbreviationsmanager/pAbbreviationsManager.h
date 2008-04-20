@@ -29,7 +29,7 @@
 #ifndef PABBREVIATIONSMANAGER_H
 #define PABBREVIATIONSMANAGER_H
 
-#include "MonkeyExport.h"
+#include <fresh.h>
 
 #include <QString>
 #include <QList>

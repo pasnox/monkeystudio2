@@ -27,11 +27,9 @@
 **
 ****************************************************************************/
 #include "PluginsManager.h"
-#include "pMonkeyStudio.h"
-#include "pSettings.h"
-#include "pMenuBar.h"
-#include "UIPluginsSettings.h"
-#include "MonkeyCore.h"
+#include "../pMonkeyStudio.h"
+#include "ui/UIPluginsSettings.h"
+#include "../coremanager/MonkeyCore.h"
 
 #include <QPluginLoader>
 
@@ -62,15 +60,21 @@ void PluginsManager::loadsPlugins()
 		foreach ( QFileInfo f, pMonkeyStudio::getFiles( d ) )
 		{
 			QPluginLoader l( f.absoluteFilePath() );
-			if ( !addPlugin( l.instance() ) )
+			// try unload it and reload it in case of old one in memory
+			if ( !l.instance() )
 			{
-				// try unload it and reload it in case of old one in memory
 				l.unload();
 				l.load();
-				// if can t load it, check next
-				if ( !addPlugin( l.instance() ) )			
-					qWarning( qPrintable( tr( "Failed to load plugin ( %1 ): Error: %2" ).arg( f.absoluteFilePath(), l.errorString() ) ) );
 			}
+			// continue on no plugin
+			if ( !l.instance() )
+			{
+				qWarning( qPrintable( tr( "Failed to load plugin ( %1 ): Error: %2" ).arg( f.absoluteFilePath(), l.errorString() ) ) );
+				continue;
+			}
+			// try to add plugin to plugins list, else unload it
+			else if ( !addPlugin( l.instance() ) )
+				l.unload();
 		}
 	}
 	// installs user requested plugins
@@ -85,6 +89,16 @@ bool PluginsManager::addPlugin( QObject* o )
 	// if not return
 	if ( !bp )
 		return false;
+
+	// check dupplicates
+	foreach ( BasePlugin* p, mPlugins )
+	{
+		if ( p->infos().Name == bp->infos().Name )
+		{
+			qWarning( qPrintable( tr( "Skipping duplicate plugin: %1, type: %2" ).arg( p->infos().Name ).arg( p->infos().Type ) ) );
+			return false;
+		}
+	}
 	
 	// show plugin infos
 	qWarning( qPrintable( tr( "Found plugin: %1, type: %2" ).arg( bp->infos().Name ).arg( bp->infos().Type ) ) );
@@ -116,7 +130,7 @@ void PluginsManager::enableUserPlugins()
 	}
 }
 
-ProjectItem* PluginsManager::projectItem( const QString& s )
+XUPItem* PluginsManager::projectItem( const QString& s )
 {
 	foreach ( ProjectPlugin* pp, plugins<ProjectPlugin*>( PluginsManager::stEnabled ) )
 		foreach ( QString k, pp->suffixes().keys() )

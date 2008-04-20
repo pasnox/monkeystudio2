@@ -5,6 +5,8 @@
 #include <QList>
 #include <QDir>
 
+#include <QDebug>
+
 class DirWalkIterator
 {
 protected:
@@ -123,7 +125,9 @@ void SearchThread::run()
 					if (isReg)
 						ifContains = line.contains(rex);
 					else
+					{
 						ifContains = line.contains(text);
+					}
 					if (ifContains) 
 					{
 						pConsoleManager::Step step;

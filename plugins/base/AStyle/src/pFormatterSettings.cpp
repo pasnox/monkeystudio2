@@ -27,8 +27,8 @@
 **
 ****************************************************************************/
 #include "pFormatterSettings.h"
-#include "MonkeyCore.h"
-#include "pSettings.h"
+
+#include <coremanager.h>
 
 void pFormatterSettings::applyTo( astyle::ASFormatter& f )
 {

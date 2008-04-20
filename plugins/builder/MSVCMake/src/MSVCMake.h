@@ -29,7 +29,7 @@
 #ifndef MSVCMAKE_H
 #define MSVCMAKE_H
 
-#include "BuilderPlugin.h"
+#include <pluginsmanager.h>
 
 class MSVCMake : public BuilderPlugin
 {
@@ -52,10 +52,6 @@ public:
     virtual pCommand defaultBuildCommand() const;
     virtual pCommand buildCommand() const;
     virtual void setBuildCommand( const pCommand& );
-
-private slots:
-    virtual void commandTriggered();
-    
 };
 
 #endif // MSVCMAKE_H

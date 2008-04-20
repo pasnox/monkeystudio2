@@ -27,10 +27,9 @@
 **
 ****************************************************************************/
 #include "UIDesktopTools.h"
-#include "pToolsManager.h"
-#include "pSettings.h"
-#include "pMonkeyStudio.h"
-#include "MonkeyCore.h"
+#include "../pToolsManager.h"
+#include "../../pMonkeyStudio.h"
+#include "../../coremanager/MonkeyCore.h"
 
 #include <QTimer>
 #include <QCloseEvent>

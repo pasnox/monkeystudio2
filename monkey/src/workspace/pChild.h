@@ -29,7 +29,8 @@
 #ifndef PCHILD_H
 #define PCHILD_H
 
-#include "MonkeyExport.h"
+#include <fresh.h>
+
 #include "pAbstractChild.h"
 
 class pEditor;

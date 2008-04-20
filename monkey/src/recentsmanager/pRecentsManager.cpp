@@ -27,9 +27,7 @@
 **
 ****************************************************************************/
 #include "pRecentsManager.h"
-#include "MonkeyCore.h"
-#include "pSettings.h"
-#include "pMenuBar.h"
+#include "../coremanager/MonkeyCore.h"
 
 #include <QAction>
 #include <QFileInfo>
@@ -54,12 +52,6 @@ int pRecentsManager::maxRecentFiles() const
 int pRecentsManager::maxRecentProjects() const
 { return MonkeyCore::settings()->value( "Recents/MaxProjects", 15 ).toInt(); }
 
-QString pRecentsManager::recentFileOpenPath() const
-{ return MonkeyCore::settings()->value( "Recents/FileOpenPath" ).toString(); }
-
-QString pRecentsManager::recentProjectOpenPath() const
-{ return MonkeyCore::settings()->value( "Recents/ProjectOpenPath" ).toString(); }
-
 void pRecentsManager::setMaxRecentFiles( int i )
 {
 	if ( i != MonkeyCore::settings()->value( "Recents/MaxFiles" ).toInt() )
@@ -77,12 +69,6 @@ void pRecentsManager::setMaxRecentProjects( int i )
 		updateRecentProjects();
 	}
 }
-
-void pRecentsManager::setRecentFileOpenPath( const QString& s )
-{ MonkeyCore::settings()->setValue( "Recents/FileOpenPath", s ); }
-
-void pRecentsManager::setRecentProjectOpenPath( const QString& s )
-{ MonkeyCore::settings()->setValue( "Recents/ProjectOpenPath", s ); }
 
 void pRecentsManager::recentFiles_triggered( QAction* a )
 {

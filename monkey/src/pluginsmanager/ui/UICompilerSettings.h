@@ -29,9 +29,10 @@
 #ifndef UICOMPILERSETTINGS_H
 #define UICOMPILERSETTINGS_H
 
-#include "MonkeyExport.h"
+#include <fresh.h>
+
 #include "ui_UICompilerSettings.h"
-#include "pCommand.h"
+#include "../../consolemanager/pCommand.h"
 
 #include <QWidget>
 

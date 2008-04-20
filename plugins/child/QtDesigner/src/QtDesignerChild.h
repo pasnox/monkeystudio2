@@ -29,8 +29,8 @@
 #ifndef QTDESIGNERCHILD_H
 #define QTDESIGNERCHILD_H
 
-#include "pAbstractChild.h"
-#include "QSingleton.h"
+#include <fresh.h>
+#include <workspacemanager.h>
 
 class QToolBar;
 class QMdiArea;

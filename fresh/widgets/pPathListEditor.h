@@ -29,7 +29,7 @@
 #ifndef PPATHLISTEDITOR_H
 #define PPATHLISTEDITOR_H
 
-#include "MonkeyExport.h"
+#include "../objects/MonkeyExport.h"
 #include "pFileListEditor.h"
 
 class Q_MONKEY_EXPORT pPathListEditor : public pFileListEditor

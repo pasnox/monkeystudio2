@@ -28,10 +28,7 @@
 ****************************************************************************/
 #include "QMake.h"
 #include "QMakeItem.h"
-#include "UIProjectsManager.h"
-#include "ProjectsProxy.h"
 #include "UISettingsQMake.h"
-#include "MonkeyCore.h"
 
 #include <QDir>
 

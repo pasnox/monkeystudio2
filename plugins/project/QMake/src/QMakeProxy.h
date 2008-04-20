@@ -29,7 +29,7 @@
 #ifndef QMAKEPROXY_H
 #define QMAKEPROXY_H
 
-#include "ProjectsProxy.h"
+#include <projectsmanager.h>
 
 class ProjectsModel;
 class ProjectItem;

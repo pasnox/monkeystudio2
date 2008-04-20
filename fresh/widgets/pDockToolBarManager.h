@@ -29,8 +29,8 @@
 #ifndef PDOCKTOOLBARMANAGER_H
 #define PDOCKTOOLBARMANAGER_H
 
-#include "MonkeyExport.h"
-#include "QSingleton.h"
+#include "../objects/MonkeyExport.h"
+#include "../objects/QSingleton.h"
 
 #include <QHash>
 #include <QBoxLayout>

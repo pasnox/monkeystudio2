@@ -27,18 +27,16 @@
 **
 ****************************************************************************/
 #include "pSearch.h"
-#include "MonkeyCore.h"
-#include "pMenuBar.h"
-#include "pWorkspace.h"
-#include "UIProjectsManager.h"
-#include "pChild.h"
-#include "pEditor.h"
-#include "UIMain.h"
-
-#include "SearchThread.h"
+#include "../../coremanager/MonkeyCore.h"
+#include "../../workspace/pWorkspace.h"
+#include "../../xupmanager/ui/UIXUPManager.h"
+#include "../../workspace/pChild.h"
+#include "../pEditor.h"
+#include "../../maininterface/UIMain.h"
+#include "../SearchThread.h"
 
 
-#include "qsciscintilla.h"
+#include <qscintilla.h>
 
 #include <QKeyEvent>
 #include <QDir>

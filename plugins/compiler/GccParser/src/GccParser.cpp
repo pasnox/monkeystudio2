@@ -28,7 +28,6 @@
 ****************************************************************************/
 #include "GccParser.h"
 #include "Parser.h"
-#include "MonkeyCore.h"
 
 GccParser::GccParser()
 {

@@ -6,7 +6,7 @@ DEFINES	*= "PLUGIN_NAME=\"\\\"$${TARGET}\\\"\""
 INCLUDEPATH	*= src/ui
 RESOURCES	= src/resources/Ctags2Api.qrc
 
-FORMS = src/ui/UICtags2Api.ui
+FORMS	= src/ui/UICtags2Api.ui
 
 HEADERS	= src/Ctags2Api.h \
 	src/ui/UICtags2Api.h

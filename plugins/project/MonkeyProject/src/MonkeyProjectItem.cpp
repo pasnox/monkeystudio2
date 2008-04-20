@@ -30,16 +30,10 @@
 #include <QFileInfo>
 #include <QDebug>
 
-#include "MonkeyProjectItem.h"
-#include "ProjectPlugin.h"
-#include "ProjectsModel.h"
+#include <projectsmanager.h>
+
+#include "../MonkeyProjectItem.h"
 #include "UIMonkeyProjectSettings.h"
-#include "pCommand.h"
-#include "pConsoleManager.h"
-#include "PluginsManager.h"
-#include "pMenuBar.h"
-#include "pAction.h"
-#include "MonkeyCore.h"
 
 MonkeyProjectItem::MonkeyProjectItem (  ProjectItem::NodeType t, ProjectItem* i )
 {

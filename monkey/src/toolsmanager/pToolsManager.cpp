@@ -27,13 +27,11 @@
 **
 ****************************************************************************/
 #include "pToolsManager.h"
-#include "pSettings.h"
-#include "pMenuBar.h"
-#include "UIToolsEdit.h"
-#include "UIDesktopTools.h"
-#include "pMonkeyStudio.h"
-#include "pConsoleManager.h"
-#include "MonkeyCore.h"
+#include "ui/UIToolsEdit.h"
+#include "ui/UIDesktopTools.h"
+#include "../pMonkeyStudio.h"
+#include "../consolemanager/pConsoleManager.h"
+#include "../coremanager/MonkeyCore.h"
 
 #include <QProcess>
 #include <QDesktopServices>

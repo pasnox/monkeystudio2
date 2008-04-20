@@ -29,8 +29,7 @@
 #ifndef PDOCKFILEBROWSER_H
 #define PDOCKFILEBROWSER_H
 
-#include "QSingleton.h"
-#include "pDockWidget.h"
+#include <fresh.h>
 
 #include <QModelIndex>
 #include <QSortFilterProxyModel>

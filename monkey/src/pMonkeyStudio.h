@@ -29,18 +29,16 @@
 #ifndef PMONKEYSTUDIO_H
 #define PMONKEYSTUDIO_H
 
-#include "MonkeyExport.h"
-#include "pWorkspace.h"
+#include <fresh.h>
+#include <qscintilla.h>
+
+#include "workspace/pWorkspace.h"
 
 #include <QApplication>
 #include <QMessageBox>
 #include <QDir>
 
-#include "qsciscintilla.h"
-
 class QTranslator;
-class QsciLexer;
-class QsciAPIs;
 class pEditor;
 
 namespace pMonkeyStudio
@@ -59,24 +57,20 @@ namespace pMonkeyStudio
 	Q_MONKEY_EXPORT const QStringList availableTextCodecs();
 	Q_MONKEY_EXPORT const QStringList availableImageFormats();
 	Q_MONKEY_EXPORT const QStringList availableLanguages();
+
+	Q_MONKEY_EXPORT const QFileInfoList getFolders( QDir fromDir, const QStringList& filters, bool recursive = true );
+	Q_MONKEY_EXPORT const QFileInfoList getFiles( QDir fromDir, const QStringList& filters, bool recursive = true );
+	Q_MONKEY_EXPORT const QFileInfoList getFiles( QDir fromDir, const QString& filters = QString::null, bool recursive = true );
+
+	Q_MONKEY_EXPORT const QStringList getImageFileNames( const QString& title, const QString& filename, QWidget* parent = QApplication::activeWindow() );
+	Q_MONKEY_EXPORT const QString getImageFileName( const QString& title, const QString& filename, QWidget* parent = QApplication::activeWindow() );
+
+	Q_MONKEY_EXPORT const QStringList getOpenFileNames( const QString& title, const QString& filename, const QString& filters = QString(), QWidget* parent = QApplication::activeWindow() );
+	Q_MONKEY_EXPORT const QString getOpenFileName( const QString& title, const QString& filename, const QString& filters = QString(), QWidget* parent = QApplication::activeWindow() );
 	
-	Q_MONKEY_EXPORT QStringList defaultOperators();
-	Q_MONKEY_EXPORT const QStringList availableOperators();
-	Q_MONKEY_EXPORT void setAvailableOperators( const QStringList& );
+	Q_MONKEY_EXPORT const QString getSaveFileName( const QString& title, const QString& filename, const QString& filters = QString(), QWidget* parent = QApplication::activeWindow() );
 
-	Q_MONKEY_EXPORT const QFileInfoList getFolders( QDir, const QStringList&, bool = true );
-	Q_MONKEY_EXPORT const QFileInfoList getFiles( QDir, const QStringList&, bool = true );
-	Q_MONKEY_EXPORT const QFileInfoList getFiles( QDir, const QString& = QString::null, bool = true );
-
-	Q_MONKEY_EXPORT const QStringList getImageFileNames( const QString&, const QString&, QWidget* = QApplication::activeWindow() );
-	Q_MONKEY_EXPORT const QString getImageFileName( const QString&, const QString&, QWidget* = QApplication::activeWindow() );
-
-	Q_MONKEY_EXPORT const QStringList getOpenFileNames( const QString&, const QString&, const QString& = QString(), QWidget* = QApplication::activeWindow() );
-	Q_MONKEY_EXPORT const QString getOpenFileName( const QString&, const QString&, const QString& = QString(), QWidget* = QApplication::activeWindow() );
-	
-	Q_MONKEY_EXPORT const QString getSaveFileName( const QString&, const QString&, const QString& = QString(), QWidget* = QApplication::activeWindow() );
-
-	Q_MONKEY_EXPORT const QString getExistingDirectory( const QString&, const QString&, QWidget* = QApplication::activeWindow() );
+	Q_MONKEY_EXPORT const QString getExistingDirectory( const QString& title, const QString& path, QWidget* parent = QApplication::activeWindow() );
 
 	Q_MONKEY_EXPORT const QString tokenizeHome( const QString& );
 	Q_MONKEY_EXPORT const QString unTokenizeHome( const QString& );
@@ -105,6 +99,10 @@ namespace pMonkeyStudio
 	/***** GENERAL *****/
 	Q_MONKEY_EXPORT void setRestoreProjectsOnStartup( bool );
 	Q_MONKEY_EXPORT const bool restoreProjectsOnStartup();
+	Q_MONKEY_EXPORT void setSaveProjectsOnCustomAction( bool );
+	Q_MONKEY_EXPORT const bool saveProjectsOnCustomAction();
+	Q_MONKEY_EXPORT void setSaveFilesOnCustomAction( bool );
+	Q_MONKEY_EXPORT const bool saveFilesOnCustomAction();
 	Q_MONKEY_EXPORT void setDefaultProjectsDirectory( const QString& );
 	Q_MONKEY_EXPORT const QString defaultProjectsDirectory();
 	Q_MONKEY_EXPORT void setTabsHaveCloseButton( bool );

@@ -31,9 +31,7 @@
 
 #include <QApplication>
 
-#include "QSingleton.h"
-#include "MonkeyExport.h"
-#include "pAction.h"
+#include <fresh.h>
 
 /*QScintilla using set of shorctuts. Class clearing this shortcuts, and, if need
 to do QSintilla's action, sending to it message. It's need for replacing 

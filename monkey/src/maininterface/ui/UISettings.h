@@ -29,8 +29,8 @@
 #ifndef UISETTINGS_H
 #define UISETTINGS_H
 
-#include "MonkeyExport.h"
-#include "QSingleton.h"
+#include <fresh.h>
+
 #include "ui_UISettings.h"
 
 class QsciLexer;

@@ -27,19 +27,16 @@
 **
 ****************************************************************************/
 #include "QtDesignerChild.h"
-#include "pWorkspace.h"
-#include "pDockToolBarManager.h"
-#include "pDockToolBar.h"
-#include "pMonkeyStudio.h"
-#include "MonkeyCore.h"
-#include "UIMain.h"
-#include "pMenuBar.h"
 
 #include "QDesignerWidgetBox.h"
 #include "QDesignerActionEditor.h"
 #include "QDesignerPropertyEditor.h"
 #include "QDesignerObjectInspector.h"
 #include "QDesignerSignalSlotEditor.h"
+
+#include <coremanager.h>
+#include <maininterface.h>
+#include <monkey.h>
 
 #include <QKeyEvent>
 #include <QVBoxLayout>

@@ -28,16 +28,16 @@
 ****************************************************************************/
 #ifndef CTAGS_H
 #define CTAGS_H
+
 #include <QObject>
 #include <QDateTime>
 #include <QString>
 #include <QList>
 #include <QVector>
 #include <QApplication>
-#include "MonkeyExport.h"
-#include "QSingleton.h"
-#include "entry.h"
 
+#include <fresh.h>
+#include <ctags.h>
 
 /*record in the table, in wich are file names and pointers to the tag list for it*/
 

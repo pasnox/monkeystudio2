@@ -29,7 +29,7 @@
 #ifndef GCCPARSER_H
 #define GCCPARSER_H
 
-#include "BasePlugin.h"
+#include <pluginsmanager.h>
 
 class GccParser : public BasePlugin
 {

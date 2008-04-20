@@ -27,10 +27,9 @@
 **
 ****************************************************************************/
 #include "ProjectHeaders.h"
-#include "MonkeyCore.h"
-#include "pMenuBar.h"
 #include "UIProjectHeaders.h"
-#include "pMonkeyStudio.h"
+
+#include <monkey.h>
 
 using namespace pMonkeyStudio;
 

@@ -29,10 +29,9 @@
 #ifndef GCC_H
 #define GCC_H
 
-#include "CompilerPlugin.h"
-#include "CLIToolPlugin.h"
+#include <pluginsmanager.h>
 
-class Gcc : public CompilerPlugin, public CLIToolPlugin
+class Gcc : public CompilerPlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin CompilerPlugin CLIToolPlugin )
@@ -52,10 +51,6 @@ public:
 	virtual pCommandList defaultCommands() const;
 	virtual pCommandList userCommands() const;
 	virtual void setUserCommands( const pCommandList& ) const;
-	
-public slots:
-	virtual void commandTriggered();
-
 };
 
 #endif // GCC_H

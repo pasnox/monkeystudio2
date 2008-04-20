@@ -29,12 +29,12 @@
 #ifndef UITEMPLATESWIZARD
 #define UITEMPLATESWIZARD
 
-#include "MonkeyExport.h"
-#include "QSingleton.h"
-#include "ui_UITemplatesWizard.h"
-#include "pTemplatesManager.h"
+#include <fresh.h>
 
-class ProjectsModel;
+#include "ui_UITemplatesWizard.h"
+#include "../pTemplatesManager.h"
+
+class ProjectItemModel;
 
 class Q_MONKEY_EXPORT UITemplatesWizard : public QDialog, public Ui::UITemplatesWizard, public QSingleton<UITemplatesWizard>
 {
@@ -49,7 +49,7 @@ private:
 	QList<QLabel*> mLabels;
 	QList<QComboBox*> mCombos;
     TemplateList mTemplates;
-    ProjectsModel* mProjects;
+    ProjectItemModel* mProjects;
 
     UITemplatesWizard( QWidget* = 0 );
     QStringList getLanguages();
@@ -57,7 +57,8 @@ private:
 
 private slots:
     void onFiltersChanged();
-	void on_lwTemplates_itemPressed( QListWidgetItem* );
+	void on_lwTemplates_itemPressed( QListWidgetItem* item );
+	void on_cbProjects_currentChanged( const QModelIndex& index );
     void on_tbDestination_clicked();
 
     bool checkTemplate();

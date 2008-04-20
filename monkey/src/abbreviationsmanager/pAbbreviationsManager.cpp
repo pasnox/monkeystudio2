@@ -27,11 +27,10 @@
 **
 ****************************************************************************/
 #include "pAbbreviationsManager.h"
-#include "pSettings.h"
-#include "pEditor.h"
-#include "MonkeyCore.h"
+#include "../qscintillamanager/pEditor.h"
+#include "../coremanager/MonkeyCore.h"
 
-#include "qscilexer.h"
+#include <qscintilla.h>
 
 const QList<pAbbreviation> pAbbreviationsManager::defaultAbbreviations()
 {

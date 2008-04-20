@@ -29,8 +29,9 @@
 #include <QFileDialog>
 
 #include "UIMonkeyProjectSettings.h"
-#include "pMenuBar.h"
+
 #include <QDebug>
+
 UIMonkeyProjectSettings::UIMonkeyProjectSettings(MonkeyProjectItem* pproject): QDialog()
 {
     project = pproject;

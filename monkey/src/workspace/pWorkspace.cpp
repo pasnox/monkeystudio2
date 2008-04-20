@@ -26,34 +26,35 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
-#include "pWorkspace.h"
-#include "pSettings.h"
-#include "pAbstractChild.h"
-#include "pMenuBar.h"
-#include "pRecentsManager.h"
-#include "pFileManager.h"
-#include "UISettings.h"
-#include "UITranslator.h"
-#include "UISaveFiles.h"
-#include "UIAbout.h"
-#include "UITemplatesWizard.h"
-#include "pAbbreviationsManager.h"
-#include "pMonkeyStudio.h"
-#include "pTemplatesManager.h"
-#include "UIProjectsManager.h"
-#include "PluginsManager.h"
-#include "pFilesListWidget.h"
-#include "MonkeyCore.h"
-#include "pAction.h"
-#include "UIMain.h"
-
-#include "pChild.h"
-#include "pEditor.h"
-#include "pSearch.h"
-
 #include <QToolButton>
 #include <QCloseEvent>
 #include <QMainWindow>
+#include <QFileInfo>
+
+#include <QDebug>
+
+
+#include "pWorkspace.h"
+#include "pAbstractChild.h"
+#include "../recentsmanager/pRecentsManager.h"
+#include "pFileManager.h"
+#include "../maininterface/ui/UISettings.h"
+#include "../maininterface/ui/UITranslator.h"
+#include "UISaveFiles.h"
+#include "../maininterface/ui/UIAbout.h"
+#include "../templatesmanager/ui/UITemplatesWizard.h"
+#include "../abbreviationsmanager/pAbbreviationsManager.h"
+#include "../pMonkeyStudio.h"
+#include "../templatesmanager/pTemplatesManager.h"
+#include "../xupmanager/ui/UIXUPManager.h"
+#include "../xupmanager/XUPItem.h"
+#include "../pluginsmanager/PluginsManager.h"
+#include "../coremanager/MonkeyCore.h"
+#include "../maininterface/UIMain.h"
+
+#include "pChild.h"
+#include "../qscintillamanager/pEditor.h"
+#include "../qscintillamanager/ui/pSearch.h"
 
 using namespace pMonkeyStudio;
 
@@ -87,6 +88,10 @@ pWorkspace::pWorkspace( QMainWindow* p )
 	*/
 	connect( listWidget(), SIGNAL( urlsDropped( const QList<QUrl>& ) ), this, SLOT( internal_urlsDropped( const QList<QUrl>& ) ) );
 	connect( listWidget(), SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( internal_listWidget_customContextMenuRequested( const QPoint& ) ) );
+	connect( MonkeyCore::projectsManager(), SIGNAL( projectCustomContextMenuRequested( const QPoint& ) ), this, SLOT( internal_projectsManager_customContextMenuRequested( const QPoint& ) ) );
+	connect( MonkeyCore::projectsManager(), SIGNAL( currentProjectChanged( XUPItem*, XUPItem* ) ), this, SLOT( internal_currentProjectChanged( XUPItem*, XUPItem* ) ) );
+	connect( MonkeyCore::projectsManager(), SIGNAL( projectInstallCommandRequested( const pCommand&, const QString& ) ), this, SLOT( internal_projectInstallCommandRequested( const pCommand&, const QString& ) ) );
+	connect( MonkeyCore::projectsManager(), SIGNAL( projectUninstallCommandRequested( const pCommand&, const QString& ) ), this, SLOT( internal_projectUninstallCommandRequested( const pCommand&, const QString& ) ) );
 	connect( ps, SIGNAL( clearSearchResults() ), this, SIGNAL( clearSearchResults() ) );
 	
 	pAction* mFocusToEditor = new pAction( "aFocusToEditor", QIcon( ":/edit/icons/edit/text.png" ), tr( "Set focus to editor" ),  QString("Ins") , "Workspace" );
@@ -336,11 +341,136 @@ void pWorkspace::internal_listWidget_customContextMenuRequested( const QPoint& p
 	m.exec( listWidget()->mapToGlobal( p ) );
 }
 
+void pWorkspace::internal_projectsManager_customContextMenuRequested( const QPoint& p )
+{
+	if ( MonkeyCore::projectsManager()->currentProject() )
+	{
+		// get menubar
+		pMenuBar* mb = MonkeyCore::menuBar();
+		// create menu
+		QMenu m( this );
+		// add menu commands
+		m.addActions( mb->menu( "mProject" )->actions() );
+		m.addSeparator();
+		m.addActions( mb->menu( "mBuilder" )->actions() );
+		m.addSeparator();
+		m.addActions( mb->menu( "mDebugger" )->actions() );
+		m.addSeparator();
+		m.addActions( mb->menu( "mInterpreter" )->actions() );
+		// show menu
+		m.exec( MonkeyCore::projectsManager()->tvProxiedProjects->mapToGlobal( p ) );
+	}
+}
+
+void pWorkspace::internal_currentProjectChanged( XUPItem* currentProject, XUPItem* previousProject )
+{
+	// uninstall old commands
+	if ( previousProject )
+		previousProject->uninstallCommands();
+	// get pluginsmanager
+	PluginsManager* pm = MonkeyCore::pluginsManager();
+	// set compiler, debugger and interpreter
+	BuilderPlugin* bp = pm->plugin<BuilderPlugin*>( PluginsManager::stAll, currentProject ? currentProject->projectSettingsValue( "BUILDER" ) : QString() );
+	CompilerPlugin* cp = pm->plugin<CompilerPlugin*>( PluginsManager::stAll, currentProject ? currentProject->projectSettingsValue( "COMPILER" ) : QString() );
+	DebuggerPlugin* dp = pm->plugin<DebuggerPlugin*>( PluginsManager::stAll, currentProject ? currentProject->projectSettingsValue( "DEBUGGER" ) : QString() );
+	InterpreterPlugin* ip = pm->plugin<InterpreterPlugin*>( PluginsManager::stAll, currentProject ? currentProject->projectSettingsValue( "INTERPRETER" ) : QString() );
+	pm->setCurrentBuilder( bp );
+	pm->setCurrentCompiler( cp );
+	pm->setCurrentDebugger( dp );
+	pm->setCurrentInterpreter( ip );
+	// install new commands
+	if ( currentProject )
+		currentProject->installCommands();
+	// update menu visibility
+	MonkeyCore::mainWindow()->menu_aboutToShow();
+}
+
+void pWorkspace::internal_projectInstallCommandRequested( const pCommand& cmd, const QString& mnu )
+{
+	// create action
+	QAction* a = MonkeyCore::menuBar()->action( QString( "%1/%2" ).arg( mnu, cmd.text() ) , cmd.text() );
+	a->setStatusTip( cmd.text() );
+	// set action custom data contain the command to execute
+	a->setData( QVariant::fromValue( cmd ) );
+	// connect to signal
+	connect( a, SIGNAL( triggered() ), this, SLOT( projectCustomActionTriggered() ) );
+}
+
+void pWorkspace::internal_projectUninstallCommandRequested( const pCommand& cmd, const QString& mnu )
+{
+	QMenu* menu = MonkeyCore::menuBar()->menu( mnu );
+	foreach ( QAction* a, menu->actions() )
+	{
+		if ( a->menu() )
+			internal_projectUninstallCommandRequested( cmd, QString( "%1/%2" ).arg( mnu ).arg( a->menu()->objectName() ) );
+		else if ( !a->isSeparator() && a->data().value<pCommand>() == cmd )
+			delete a;
+	}
+}
+
+void pWorkspace::projectCustomActionTriggered()
+{
+	if ( QAction* a = qobject_cast<QAction*>( sender() ) )
+	{
+		pConsoleManager* cm = MonkeyCore::consoleManager();
+		pCommand cmd = a->data().value<pCommand>();
+		QHash<QString, pCommand>* cmdsHash = reinterpret_cast<QHash<QString, pCommand>*>( cmd.userData().value<quintptr>() );
+		const pCommandList cmds = cmdsHash ? cmdsHash->values() : pCommandList();
+		// save project if needed
+		if ( saveProjectsOnCustomAction() )
+			MonkeyCore::projectsManager()->action( UIXUPManager::SaveAll )->trigger();
+		// save project files
+		if ( saveFilesOnCustomAction() )
+			fileSaveAll_triggered();
+		// check that command to execute exists, else ask to user if he want to choose another one
+		if ( cmd.project() && a->text().contains( "execute", Qt::CaseInsensitive ) )
+		{
+			cmd = cm->processCommand( cm->getCommand( cmds, cmd.text() ) );
+			QString s = QString( "%1/%2" ).arg( cmd.workingDirectory() ).arg( cmd.command() );
+			if ( !QFile::exists( s ) )
+			{
+				// try reading already saved binary
+				s = cmd.project()->projectSettingsValue( a->text().replace( ' ', '_' ).toUpper() );
+				if ( !s.isEmpty() )
+					s = cmd.project()->filePath( s );
+				// if not exists ask user to select one
+				if ( !QFile::exists( s ) && question( a->text().append( "..." ), tr( "Can't find your executable file, do you want to choose the file ?" ).arg( s ) ) )
+					s = getOpenFileName( a->text().append( "..." ), cmd.workingDirectory() );
+				// if file exists execut it
+				if ( QFile::exists( s ) )
+				{
+					QFileInfo fi( s );
+					QString f = fi.fileName().prepend( "./" );
+					QString p = fi.absolutePath();
+					if ( p.endsWith( '/' ) )
+						p.chop( 1 );
+					// correct command
+					cmd.setCommand( cm->quotedString( cm->nativeSeparators( s ) ) );
+					cmd.setWorkingDirectory( cm->nativeSeparators( p ) );
+					// write in project
+					cmd.project()->setProjectSettingsValue( a->text().replace( ' ', '_' ).toUpper(), cmd.project()->relativeFilePath( s ) );
+					// add command to console manager
+					cm->addCommand( cmd );
+				}
+			}
+			// return
+			return;
+		}
+		// generate commands list
+		pCommandList mCmds = cm->recursiveCommandList( cmds, cm->getCommand( cmds, cmd.text() ) );
+		// teh first one must not be skipped on last error
+		if ( mCmds.count() > 0 )
+			mCmds.first().setSkipOnError( false );
+		// send command to consolemanager
+		cm->addCommands( mCmds );
+	}
+}
+
 // file menu
 void pWorkspace::fileNew_triggered()
 {
 	UITemplatesWizard* d = UITemplatesWizard::instance( this );
-	d->setType( tr( "Files" ) );
+	d->setType( "Files" );
 	d->exec();
 }
 
@@ -359,6 +489,7 @@ void pWorkspace::fileOpen_triggered()
 	}
 
 	// open open file dialog
+	//qWarning () << "current are " << QDir::current();
 	QStringList l = getOpenFileNames( tr( "Choose the file(s) to open" ), QString::null, mFilters, window() );
 
 	// for each entry, open file
@@ -383,8 +514,8 @@ void pWorkspace::fileSessionSave_triggered()
 	MonkeyCore::settings()->setValue( "Session/Files", l );
 	// saves opened projects
 	l.clear();
-	foreach ( ProjectItem* p, MonkeyCore::projectsManager()->rootProjects() )
-		l << p->canonicalFilePath();
+	foreach ( XUPItem* p, MonkeyCore::projectsManager()->topLevelProjects() )
+		l << p->projectFilePath();
 	MonkeyCore::settings()->setValue( "Session/Projects", l );
 }
 

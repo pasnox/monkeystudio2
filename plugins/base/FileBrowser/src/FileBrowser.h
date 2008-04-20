@@ -29,7 +29,7 @@
 #ifndef FILEBROWSER_H
 #define FILEBROWSER_H
 
-#include "BasePlugin.h"
+#include <pluginsmanager.h>
 
 class FileBrowser : public BasePlugin
 {

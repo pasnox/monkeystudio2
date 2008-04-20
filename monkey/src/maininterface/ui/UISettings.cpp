@@ -27,37 +27,15 @@
 **
 ****************************************************************************/
 #include "UISettings.h"
-#include "pSettings.h"
-#include "UIAddAbbreviation.h"
-#include "pFileManager.h"
-#include "pTemplatesManager.h"
-#include "pAbbreviationsManager.h"
-#include "pMonkeyStudio.h"
-#include "pWorkspace.h"
-#include "MonkeyCore.h"
+#include "../../abbreviationsmanager/ui/UIAddAbbreviation.h"
+#include "../../workspace/pFileManager.h"
+#include "../../templatesmanager/pTemplatesManager.h"
+#include "../../abbreviationsmanager/pAbbreviationsManager.h"
+#include "../../pMonkeyStudio.h"
+#include "../../workspace/pWorkspace.h"
+#include "../../coremanager/MonkeyCore.h"
 
-#include "qscilexerbash.h"
-#include "qscilexerbatch.h"
-#include "qscilexercmake.h"
-#include "qscilexercpp.h"
-#include "qscilexercsharp.h"
-#include "qscilexercss.h"
-#include "qscilexerd.h"
-#include "qscilexerdiff.h"
-#include "qscilexerhtml.h"
-#include "qscilexeridl.h"
-#include "qscilexerjava.h"
-#include "qscilexerjavascript.h"
-#include "qscilexerlua.h"
-#include "qscilexermakefile.h"
-#include "qscilexerperl.h"
-#include "qscilexerpov.h"
-#include "qscilexerproperties.h"
-#include "qscilexerpython.h"
-#include "qscilexerruby.h"
-#include "qscilexersql.h"
-#include "qscilexertex.h"
-#include "qscilexervhdl.h"
+#include <qscintilla.h>
 
 #include <QButtonGroup>
 #include <QFileDialog>
@@ -224,6 +202,8 @@ void UISettings::loadSettings()
 	
 	// General
 	cbRestoreProjectsOnStartup->setChecked( restoreProjectsOnStartup() );
+	cbSaveProjects->setChecked( saveProjectsOnCustomAction() );
+	cbSaveFiles->setChecked( saveFilesOnCustomAction() );
 	leDefaultProjectsDirectory->setText( defaultProjectsDirectory() );
 	cbTabsHaveCloseButton->setChecked( tabsHaveCloseButton() );
 	cbTabsHaveShortcut->setChecked( tabsHaveShortcut() );
@@ -236,7 +216,6 @@ void UISettings::loadSettings()
 	bgExternalChanges->button( externalchanges() )->setChecked( true );
 	cbSaveSession->setChecked( saveSessionOnClose() );
 	cbRestoreSession->setChecked( restoreSessionOnStartup() );
-	gbOperators->setValues( availableOperators() );
 
 	// Paths
 	pleTemplatesPaths->setValues( pTemplatesManager::instance()->templatesPath() );
@@ -389,6 +368,8 @@ void UISettings::saveSettings()
 
 	// General
 	setRestoreProjectsOnStartup( cbRestoreProjectsOnStartup->isChecked() );
+	setSaveProjectsOnCustomAction( cbSaveProjects->isChecked() );
+	setSaveFilesOnCustomAction( cbSaveFiles->isChecked() );
 	setDefaultProjectsDirectory( leDefaultProjectsDirectory->text() );
 	setTabsHaveCloseButton( cbTabsHaveCloseButton->isChecked() );
 	setTabsHaveShortcut( cbTabsHaveShortcut->isChecked() );
@@ -399,7 +380,6 @@ void UISettings::saveSettings()
 	setExternalChanges( (pMonkeyStudio::ExternalChangesMode)bgExternalChanges->checkedId() );
 	setSaveSessionOnClose( cbSaveSession->isChecked() );
 	setRestoreSessionOnStartup( cbRestoreSession->isChecked() );
-	setAvailableOperators( gbOperators->values() );
 
 	// Paths
 	pTemplatesManager::instance()->setTemplatesPath( pleTemplatesPaths->values() );

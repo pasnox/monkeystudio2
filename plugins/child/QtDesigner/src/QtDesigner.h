@@ -29,7 +29,7 @@
 #ifndef QTDESIGNER_H
 #define QTDESIGNER_H
 
-#include "ChildPlugin.h"
+#include <pluginsmanager.h>
 
 class QtDesigner : public ChildPlugin
 {

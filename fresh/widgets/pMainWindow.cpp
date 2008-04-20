@@ -27,7 +27,7 @@
 **
 ****************************************************************************/
 #include "pMainWindow.h"
-#include "pSettings.h"
+#include "../objects/pSettings.h"
 #include "pMenuBar.h"
 #include "pDockToolBarManager.h"
 #include "pDockToolBar.h"

@@ -29,7 +29,7 @@
 #ifndef QMAKE_H
 #define QMAKE_H
 
-#include "ProjectPlugin.h"
+#include <pluginsmanager.h>
 
 class QMake : public ProjectPlugin
 {

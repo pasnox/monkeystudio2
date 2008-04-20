@@ -29,7 +29,8 @@
 #ifndef UIQMAKEPROJECTSETTINGS_H
 #define UIQMAKEPROJECTSETTINGS_H
 
-#include "QSingleton.h"
+#include <fresh.h>
+
 #include "ui_UIQMakeProjectSettings.h"
 #include "UISettingsQMake.h"
 

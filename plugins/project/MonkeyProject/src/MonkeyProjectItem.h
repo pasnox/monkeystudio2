@@ -29,9 +29,7 @@
 #ifndef NOPROJECTPROJECTITEM_H
 #define NOPROJECTPROJECTITEM_H
 
-#include "ProjectItem.h"
-#include "BuilderPlugin.h"
-//class ProjectPlugin;
+#include <pluginsmanager.h>
 
 class GenericBuilder : public BuilderPlugin //fake builder, for build menu
 {

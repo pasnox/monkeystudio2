@@ -29,7 +29,8 @@
 #ifndef MONKEYCORE_H
 #define MONKEYCORE_H
 
-#include "MonkeyExport.h"
+#include <fresh.h>
+
 #include <QObject>
 #include <QHash>
 
@@ -40,7 +41,7 @@ class pMenuBar;
 class pRecentsManager;
 class pActionManager;
 class pToolsManager;
-class UIProjectsManager;
+class UIXUPManager;
 class pFileManager;
 class pWorkspace;
 class pSearch;
@@ -60,7 +61,7 @@ public:
 	static pRecentsManager* recentsManager();
 	static pActionManager* actionManager();
 	static pToolsManager* toolsManager();
-	static UIProjectsManager* projectsManager();
+	static UIXUPManager* projectsManager();
 	static pFileManager* fileManager();
 	static pWorkspace* workspace();
 	static pConsoleManager* consoleManager();

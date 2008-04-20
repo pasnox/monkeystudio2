@@ -21,10 +21,10 @@ DESTDIR	= ../bin
 CONFIG	*= qt warn_on thread x11 windows debug_and_release
 QT	*= gui core
 
-QMAKE_TARGET_COMPANY = "Monkey Studio Team"
-QMAKE_TARGET_PRODUCT = "Monkey Studio"
-QMAKE_TARGET_DESCRIPTION = "Crossplatform Integrated Development Environment."
-QMAKE_TARGET_COPYRIGHT = "Copyright (C) 2005 - 2008 Filipe AZEVEDO & The Monkey Studio Team"
+QMAKE_TARGET_COMPANY	= "Monkey Studio Team"
+QMAKE_TARGET_PRODUCT	= "Monkey Studio"
+QMAKE_TARGET_DESCRIPTION	= "Crossplatform Integrated Development Environment."
+QMAKE_TARGET_COPYRIGHT	= "Copyright (C) 2005 - 2008 Filipe AZEVEDO & The Monkey Studio Team"
 
 unix:ICON	= src/resources/icons/application/monkey2.png
 mac:ICON	= src/resources/icons/application/monkey2.icns
@@ -32,7 +32,7 @@ win32:ICON	= src/resources/icons/application/monkey2.ico
 
 COPYRIGHTS	= "(c) 2005 - 2008 Azevedo Filipe"
 DOMAIN	= "www.monkeystudio.org"
-VERSION	= 1.8.2.0
+VERSION	= 1.8.2.0svn
 NAME	= "Monkey Studio"
 
 win32:RC_FILE	*= monkey.rc
@@ -41,7 +41,8 @@ RESOURCES	*= src/resources/resources.qrc
 DEFINES	*= MONKEY_CORE_BUILD "PROGRAM_NAME=\"\\\"$${NAME}\\\"\"" "PROGRAM_VERSION=\"\\\"$${VERSION}\\\"\"" "PROGRAM_DOMAIN=\"\\\"$${DOMAIN}\\\"\"" "PROGRAM_COPYRIGHTS=\"\\\"$${COPYRIGHTS}\\\"\""
 
 LIBS	*= -L$${BUILD_PATH}
-*-g++:LIBS	*= -Wl,--whole-archive # import all symbols as the not used ones too
+mac:*-g++:LIBS	*= -Wl,-all_load # import all symbols as the not used ones too
+else:*-g++:LIBS	*= -Wl,--whole-archive # import all symbols as the not used ones too
 mac:*-g++:LIBS	*= -dynamic
 else:unix:*-g++:LIBS	*= -rdynamic
 
@@ -75,7 +76,8 @@ CONFIG( debug, debug|release ) {
 	win32-msvc*:LIBS	*= /IMPLIB:$${BUILD_PATH}/$${TARGET}.lib -lshell32
 }
 
-*-g++:LIBS	*= -Wl,--no-whole-archive # stop importing all symbols
+mac:*-g++:LIBS	*= -Wl,-noall_load # stop importing all symbols
+else:*-g++:LIBS	*= -Wl,--no-whole-archive # stop importing all symbols
 
 # include install script
 include( installs.pri )
@@ -92,7 +94,6 @@ FORMS	*= src/maininterface/ui/UITranslator.ui \
 	src/pluginsmanager/ui/UIPluginsSettings.ui \
 	src/pluginsmanager/ui/UICLIToolSettings.ui \
 	src/pluginsmanager/ui/UIBuilderSettings.ui \
-	src/projectsmanager/ui/UIProjectsManager.ui \
 	src/pluginsmanager/ui/UICompilerSettings.ui
 
 HEADERS	*= src/maininterface/ui/UITranslator.h \
@@ -124,6 +125,7 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/consolemanager/pCommand.h \
 	src/toolsmanager/pToolsManager.h \
 	src/pluginsmanager/BasePlugin.h \
+	src/pluginsmanager/XUPPlugin.h \
 	src/pluginsmanager/ChildPlugin.h \
 	src/pluginsmanager/CLIToolPlugin.h \
 	src/pluginsmanager/ProjectPlugin.h \
@@ -133,11 +135,6 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/pluginsmanager/ui/UIPluginsSettings.h \
 	src/pluginsmanager/ui/UICLIToolSettings.h \
 	src/pluginsmanager/ui/UIBuilderSettings.h \
-	src/projectsmanager/ui/UIProjectsManager.h \
-	src/projectsmanager/ui/UIAddExistingFiles.h \
-	src/projectsmanager/ProjectsModel.h \
-	src/projectsmanager/ProjectsProxy.h \
-	src/projectsmanager/ProjectItem.h \
 	src/pluginsmanager/ui/UICompilerSettings.h \
 	src/settingsmanager/Settings.h \
 	src/coremanager/MonkeyCore.h
@@ -172,11 +169,6 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/pluginsmanager/ui/UIPluginsSettings.cpp \
 	src/pluginsmanager/ui/UICLIToolSettings.cpp \
 	src/pluginsmanager/ui/UIBuilderSettings.cpp \
-	src/projectsmanager/ui/UIProjectsManager.cpp \
-	src/projectsmanager/ui/UIAddExistingFiles.cpp \
-	src/projectsmanager/ProjectsModel.cpp \
-	src/projectsmanager/ProjectsProxy.cpp \
-	src/projectsmanager/ProjectItem.cpp \
 	src/main.cpp \
 	src/pluginsmanager/ui/UICompilerSettings.cpp \
 	src/settingsmanager/Settings.cpp \
@@ -185,6 +177,9 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 mac:SOURCES	*= src/toolsmanager/pDesktopApplications_mac.cpp
 else:unix:SOURCES	*= src/toolsmanager/pDesktopApplications_unix.cpp
 win32:SOURCES	*= src/toolsmanager/pDesktopApplications_win32.cpp
+
+# include xup framework
+include( src/xupmanager/xupmanager.pri )
 
 TRANSLATIONS	*= ../translations/monkey_french.ts \
 	../translations/monkey_belarusian.ts

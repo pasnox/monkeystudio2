@@ -27,8 +27,6 @@
 **
 ****************************************************************************/
 #include "Gcc.h"
-#include "MonkeyCore.h"
-#include "pMenuBar.h"
 
 #include <QTabWidget>
 
@@ -57,36 +55,10 @@ Gcc::~Gcc()
 
 bool Gcc::setEnabled( bool b)
 {
-	if ( b == mPluginInfos.Enabled )
-		return true;
-	mPluginInfos.Enabled = b;
- 	if ( b )
-	{
-		pMenuBar* mb = MonkeyCore::menuBar();
-		
-		// compile command
-		pCommand c = compileCommand();
-		QAction* a = mb->action( QString( "mBuilder/mBuild/%1" ).arg( c.text() ), c.text() );
-		a->setData( mPluginInfos.Name );
-		a->setStatusTip( c.text() );
-		connect( a, SIGNAL( triggered() ), this, SLOT( commandTriggered() ) );
-		
-		// user commands
-		foreach ( pCommand c, userCommands() )
-		{
-			QAction* a = mb->action( QString( "mBuilder/mUserCommands/%1" ).arg( c.text() ), c.text() );
-			a->setData( mPluginInfos.Name );
-			a->setStatusTip( c.text() );
-			connect( a, SIGNAL( triggered() ), this, SLOT( commandTriggered() ) );
-		}
-	}
- 	else
-	{
-		pMenuBar* mb = MonkeyCore::menuBar();
-		foreach ( QAction* a, mb->menu( "mBuilder/mUserCommands" )->actions() << mb->menu( "mBuilder/mBuild" )->actions() )
-			if ( a->data().toString() == mPluginInfos.Name )
-				delete a;
-	}
+	if ( b && !isEnabled() )
+		mPluginInfos.Enabled = true;
+	else if ( !b && isEnabled() )
+		mPluginInfos.Enabled = false;
 	return true;
 }
 
@@ -185,14 +157,6 @@ void Gcc::setUserCommands( const pCommandList& l ) const
 		s->setValue( "SkipOnError", c.skipOnError() );
 	}
 	s->endArray();
-}
-
-void Gcc::commandTriggered()
-{
-	pConsoleManager* cm = MonkeyCore::consoleManager();
-	pCommandList l = userCommands() << compileCommand();
-	if ( QAction* a = qobject_cast<QAction*>( sender() ) )
-		cm->addCommands( cm->recursiveCommandList( l, cm->getCommand( l, a->statusTip() ) ) );
 }
 
 Q_EXPORT_PLUGIN2( CompilerGcc, Gcc )

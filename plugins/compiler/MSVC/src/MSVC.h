@@ -29,10 +29,9 @@
 #ifndef MSVC_H
 #define MSVC_H
 
-#include "CompilerPlugin.h"
-#include "CLIToolPlugin.h"
+#include <pluginsmanager.h>
 
-class MSVC : public CompilerPlugin, public CLIToolPlugin
+class MSVC : public CompilerPlugin
 {
     Q_OBJECT
     Q_INTERFACES( BasePlugin CompilerPlugin CLIToolPlugin )
@@ -54,10 +53,6 @@ public:
 	virtual void setUserCommands( const pCommandList& ) const;
 	virtual QStringList availableParsers() const;
 	virtual pCommandParser* getParser( const QString& );
-	
-public slots:
-	virtual void commandTriggered();
-
 };
 
 #endif // MSVC_H

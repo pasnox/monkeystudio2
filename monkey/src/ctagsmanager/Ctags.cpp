@@ -26,11 +26,11 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+#include "Ctags.h"
 
 #include <QFSFileEngine>
-#include <string>
 
-#include "Ctags.h"
+#include <string>
 
 extern "C" void freeSTagEntryList ( TagEntryListItem* tag );
 extern "C" TagEntryListItem* parseFile ( const char* fileName, const char* langName);
@@ -84,7 +84,7 @@ FileRecord* Ctags::GetTagsForFile (QString file )
 
 TagEntryListItem* Ctags::get_tags ( QString file )
 {
-	return parseFile ( file.toStdString().c_str(), NULL);
+	return parseFile ( file.toLocal8Bit().data(), NULL);
 }
 
 //RecordsList* Ctags::GetTagsForAllFiles ()

@@ -27,15 +27,15 @@
 **
 ****************************************************************************/
 #include "UITemplatesWizard.h"
-#include "pFileManager.h"
-#include "pMonkeyStudio.h"
-#include "pSettings.h"
-#include "MonkeyCore.h"
+#include "../../workspace/pFileManager.h"
+#include "../../pMonkeyStudio.h"
+#include "../../coremanager/MonkeyCore.h"
 
-#include "ProjectsModel.h"
-#include "ProjectsProxy.h"
-#include "UIProjectsManager.h"
-#include "VariablesManager.h"
+#include "../../xupmanager/ProjectItemModel.h"
+#include "../../xupmanager/ScopedProjectItemModel.h"
+#include "../../xupmanager/XUPItem.h"
+#include "../../xupmanager/ui/UIXUPManager.h"
+#include "../../variablesmanager/VariablesManager.h"
 
 #include <QDir>
 
@@ -59,32 +59,30 @@ UITemplatesWizard::UITemplatesWizard( QWidget* w )
 	// get templates
 	mTemplates = pTemplatesManager::instance()->getTemplates();
 	
-	QStringList l( tr( "All" ) );
-	QStringList t( tr( "All" ) );
+	// set default language/type
+	cbLanguages->addItem( tr( "All" ), "All" );
+	cbTypes->addItem( tr( "All" ), "All" );
+	
+	// languages/types
 	foreach( pTemplate tp, mTemplates )
 	{
-		if ( !l.contains( tp.Language, Qt::CaseInsensitive ) )
-			l << tp.Language;
-		if ( !t.contains( tp.Type, Qt::CaseInsensitive ) )
-			t << tp.Type;
+		if ( cbLanguages->findData( tp.Language, Qt::UserRole, Qt::MatchFixedString ) == -1 )
+			cbLanguages->addItem( tr( qPrintable( tp.Language ) ), tp.Language );
+		if ( cbTypes->findData( tp.Type, Qt::UserRole, Qt::MatchFixedString ) == -1 )
+			cbTypes->addItem( tr( qPrintable( tp.Type ) ), tp.Type );
 	}
-	
-	// add items
-	cbLanguages->addItems( l );
-	cbTypes->addItems( t );
-	cbOperators->addItems( availableOperators() );
-	
-    // assign projects combobox
-    mProjects = MonkeyCore::projectsManager()->model();
-    cbProjects->setModel( mProjects->scopesProxy() );
-    ProjectItem* p = MonkeyCore::projectsManager()->currentProject();
-    cbProjects->setCurrentIndex( mProjects->scopesProxy()->mapFromSource( p ? p->index() : QModelIndex() ) );
-	
-    // restore infos
-    pSettings* s = MonkeyCore::settings();
-    cbLanguages->setCurrentIndex( cbLanguages->findText( s->value( "Recents/FileWizard/Language", "C++" ).toString() ) );
-    leDestination->setText( s->value( "Recents/FileWizard/Destination" ).toString() );
-    cbOpen->setChecked( s->value( "Recents/FileWizard/Open", true ).toBool() );
+
+	// assign projects combobox
+	mProjects = MonkeyCore::projectsManager()->model();
+	cbProjects->setModel( mProjects->scopedModel() );
+	XUPItem* p = MonkeyCore::projectsManager()->currentProject();
+	cbProjects->setCurrentIndex( mProjects->scopedModel()->mapFromSource( p ? p->index() : QModelIndex() ) );
+
+	// restore infos
+	pSettings* s = MonkeyCore::settings();
+	cbLanguages->setCurrentIndex( cbLanguages->findText( s->value( "Recents/FileWizard/Language", "C++" ).toString() ) );
+	leDestination->setText( s->value( "Recents/FileWizard/Destination" ).toString() );
+	cbOpen->setChecked( s->value( "Recents/FileWizard/Open", true ).toBool() );
 	
 	// connections
 	connect( cbLanguages, SIGNAL( currentIndexChanged( int ) ), this, SLOT( onFiltersChanged() ) );
@@ -95,13 +93,13 @@ UITemplatesWizard::UITemplatesWizard( QWidget* w )
 }
 
 void UITemplatesWizard::setType( const QString& s )
-{ cbTypes->setCurrentIndex( cbTypes->findText( s ) ); }
+{ cbTypes->setCurrentIndex( cbTypes->findData( s ) ); }
 
 void UITemplatesWizard::onFiltersChanged()
 {
 	// get combobox text
-	QString t = cbTypes->currentText();
-	QString l = cbLanguages->currentText();
+	QString t = cbTypes->itemData( cbTypes->currentIndex() ).toString();
+	QString l = cbLanguages->itemData( cbLanguages->currentIndex() ).toString();
 	QString i;
 
 	// clear lwTemplates
@@ -173,6 +171,17 @@ void UITemplatesWizard::on_lwTemplates_itemPressed( QListWidgetItem* it )
 	gbInformations->setEnabled( true );
 }
 
+void UITemplatesWizard::on_cbProjects_currentChanged( const QModelIndex& index )
+{
+	const QModelIndex idx = mProjects->scopedModel()->mapToSource( index );
+	if ( XUPItem* it = mProjects->itemFromIndex( idx ) )
+	{
+		cbOperators->clear();
+		cbOperators->addItems( it->operators() );
+		leDestination->setText( it->project()->projectPath() );
+	}
+}
+
 void UITemplatesWizard::on_tbDestination_clicked()
 {
 	QString s = getExistingDirectory( tr( "Select the file(s) destination" ), leDestination->text(), window() );
@@ -221,12 +230,12 @@ void UITemplatesWizard::on_pbCreate_clicked()
 	if ( !gbAddToProject->isChecked() || !cbProjects->currentIndex().isValid() )
 		t.FilesToAdd.clear();
 	
-	// don t open project, because adding it to a parent will auto matically open it
+	// don t open project, because adding it to a parent will automatically open it
 	if ( !t.FilesToAdd.isEmpty() )
 		t.ProjectsToOpen.clear();
 	
 	// get proejct to add
-	ProjectItem* si = t.FilesToAdd.isEmpty() ? 0 : mProjects->itemFromIndex( mProjects->scopesProxy()->mapToSource( cbProjects->currentIndex() ) );
+	XUPItem* si = t.FilesToAdd.isEmpty() ? 0 : mProjects->itemFromIndex( mProjects->scopedModel()->mapToSource( cbProjects->currentIndex() ) );
 	
 	// process templates
 	if ( !pTemplatesManager::instance()->realiseTemplate( si, cbOperators->currentText(), t, v ) )

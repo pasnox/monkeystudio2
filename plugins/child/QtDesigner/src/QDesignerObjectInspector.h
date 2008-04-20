@@ -29,7 +29,7 @@
 #ifndef QDESIGNEROBJECTINSPECTOR_H
 #define QDESIGNEROBJECTINSPECTOR_H
 
-#include "pDockWidget.h"
+#include <fresh.h>
 
 class QtDesignerChild;
 class QDesignerObjectInspectorInterface;

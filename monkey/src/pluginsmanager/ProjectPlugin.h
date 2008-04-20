@@ -29,12 +29,14 @@
 #ifndef PROJECTPLUGIN_H
 #define PROJECTPLUGIN_H
 
-#include "MonkeyExport.h"
+#include <fresh.h>
+
 #include "BasePlugin.h"
-#include "ProjectItem.h"
 
 #include <QHash>
 #include <QStringList>
+
+class XUPItem;
 
 class Q_MONKEY_EXPORT ProjectPlugin : public BasePlugin
 {
@@ -43,11 +45,10 @@ public:
 	virtual QHash<QString, QStringList> suffixes() const
 	{ return mSuffixes; }
 	// return a new project item of this type of project
-	virtual ProjectItem* getProjectItem( const QString& ) = 0;
+	virtual XUPItem* getProjectItem( const QString& ) = 0;
 	
 protected:
 	QHash<QString, QStringList> mSuffixes;
-	
 };
 
 Q_DECLARE_INTERFACE( ProjectPlugin, "org.monkeystudio.MonkeyStudio.ProjectPlugin/1.0" )

@@ -29,9 +29,6 @@
 #include <QTabWidget>
 #include "MSVCMake.h"
 #include "MSVCMakeParser.h"
-#include "MonkeyCore.h"
-#include "pConsoleManager.h"
-#include "pMenuBar.h"
 
 MSVCMake::MSVCMake ()
 {
@@ -48,7 +45,7 @@ MSVCMake::MSVCMake ()
 		MonkeyCore::consoleManager()->addParser( getParser( s ) );
 }
 
-MSVCMake::~MSVCMake ()
+MSVCMake::~MSVCMake()
 {
 	// uninstall parsers
 	foreach ( QString s, availableParsers() )
@@ -57,28 +54,11 @@ MSVCMake::~MSVCMake ()
 
 bool MSVCMake::setEnabled( bool b)
 {
-    if ( b == mPluginInfos.Enabled )
-        return true;
-    mPluginInfos.Enabled = b;
-     if ( b )
-    {
-        pMenuBar* mb = MonkeyCore::menuBar();
-        foreach ( pCommand c, pCommandList() << userCommands() )
-        {
-            QAction* a = mb->action( QString( "mBuilder/mUserCommands/%1" ).arg( c.text() ), c.text() );
-            a->setData( mPluginInfos.Name );
-            a->setStatusTip( c.text() );
-            connect( a, SIGNAL( triggered() ), this, SLOT( commandTriggered() ) );
-        }
-    }
-     else
-    {
-        pMenuBar* mb = MonkeyCore::menuBar();
-        foreach ( QAction* a, mb->menu( "mBuilder/mUserCommands" )->actions() )
-            if ( a->data().toString() == mPluginInfos.Name )
-                delete a;
-    }
-    return true;
+	if ( b && !isEnabled() )
+		mPluginInfos.Enabled = true;
+	else if ( !b && isEnabled() )
+		mPluginInfos.Enabled = false;
+	return true;
 }
 
 QWidget* MSVCMake::settingsWidget()
@@ -182,14 +162,6 @@ void MSVCMake::setBuildCommand( const pCommand& c )
     s->setValue( settingsKey( "BuildCommand/Parsers" ), c.parsers() );
     s->setValue( settingsKey( "BuildCommand/TryAll" ), c.tryAllParsers() );
     s->setValue( settingsKey( "BuildCommand/SkipOnError" ), c.skipOnError() );
-}
-
-void MSVCMake::commandTriggered()
-{
-    pConsoleManager* cm = MonkeyCore::consoleManager();
-    pCommandList l = userCommands() << buildCommand();
-    if ( QAction* a = qobject_cast<QAction*>( sender() ) )
-        cm->addCommands( cm->recursiveCommandList( l, cm->getCommand( l, a->statusTip() ) ) );
 }
 
 Q_EXPORT_PLUGIN2( BuilderMSVCMake, MSVCMake )

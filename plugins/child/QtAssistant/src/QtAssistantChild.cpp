@@ -27,8 +27,8 @@
 **
 ****************************************************************************/
 #include "QtAssistantChild.h"
-#include "pWorkspace.h"
-#include "MonkeyCore.h"
+
+#include <coremanager.h>
 
 // assistant include
 #include "mainwindow.h"

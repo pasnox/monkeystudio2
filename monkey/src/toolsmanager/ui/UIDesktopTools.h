@@ -29,10 +29,10 @@
 #ifndef UIDesktopTools_H
 #define UIDesktopTools_H
 
-#include "MonkeyExport.h"
-#include "QSingleton.h"
+#include <fresh.h>
+
 #include "ui_UIDesktopTools.h"
-#include "pDesktopApplications.h"
+#include "../pDesktopApplications.h"
 
 class QTreeWidgetItem;
 class pDesktopFolder;

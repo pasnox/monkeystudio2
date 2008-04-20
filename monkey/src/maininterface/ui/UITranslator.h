@@ -30,8 +30,8 @@
 #define UITRANSLATOR_H
 
 #include "ui_UITranslator.h"
-#include "MonkeyExport.h"
-#include "QSingleton.h"
+
+#include <fresh.h>
 
 class Q_MONKEY_EXPORT UITranslator : public QDialog, public Ui::UITranslator, public QSingleton<UITranslator>
 {

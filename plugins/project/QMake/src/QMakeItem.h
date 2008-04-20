@@ -29,8 +29,8 @@
 #ifndef QMAKEITEM_H
 #define QMAKEITEM_H
 
-#include "ProjectItem.h"
-#include "pCommand.h"
+#include <projectsmanager.h>
+#include <consolemanager.h>
 
 class QMakeItem : public ProjectItem
 {

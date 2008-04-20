@@ -29,7 +29,7 @@
 #include "pActionManager.h"
 #include "pAction.h"
 #include "pShortcutsEditor.h"
-#include "pSettings.h"
+#include "../objects/pSettings.h"
 
 #include <QApplication>
 

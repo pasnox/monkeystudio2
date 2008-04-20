@@ -27,11 +27,10 @@
 **
 ****************************************************************************/
 #include "QtAssistant.h"
-#include "pMonkeyStudio.h"
-#include "UIMain.h"
-#include "pDockToolBar.h"
 #include "QtAssistantChild.h"
-#include "MonkeyCore.h"
+
+#include <monkey.h>
+#include <maininterface.h>
 
 // assistant include
 #include "config.h"

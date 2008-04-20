@@ -29,7 +29,7 @@
 #ifndef GNUMAKEPARSER_H
 #define GNUMAKEPARSER_H
 
-#include "pCommandParser.h"
+#include <consolemanager.h>
 
 class GNUMakeParser : public pCommandParser
 {

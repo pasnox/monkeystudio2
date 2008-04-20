@@ -27,11 +27,10 @@
 **
 ****************************************************************************/
 #include "pTemplatesManager.h"
-#include "pSettings.h"
-#include "pMonkeyStudio.h"
-#include "pFileManager.h"
-#include "ProjectItem.h"
-#include "MonkeyCore.h"
+#include "../pMonkeyStudio.h"
+#include "../workspace/pFileManager.h"
+#include "../xupmanager/XUPItem.h"
+#include "../coremanager/MonkeyCore.h"
 
 using namespace pMonkeyStudio;
 
@@ -82,7 +81,7 @@ TemplateList pTemplatesManager::getTemplates()
 	return l;
 }
 
-bool pTemplatesManager::realiseTemplate( ProjectItem* it, const QString& o, const pTemplate& t, const VariablesManager::Dictionary& d )
+bool pTemplatesManager::realiseTemplate( XUPItem* it, const QString& o, const pTemplate& t, const VariablesManager::Dictionary& d )
 {
 	// get destination
 	QString dest = d["Destination"];
@@ -200,7 +199,7 @@ bool pTemplatesManager::realiseTemplate( ProjectItem* it, const QString& o, cons
 		
 		// add files to project if needed
 		if ( it )
-			it->project()->addExistingFile( s, it, o );
+			it->project()->addFile( s, it, o );
 	}
 	
 	// return process state

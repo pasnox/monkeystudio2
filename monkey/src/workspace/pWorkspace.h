@@ -29,12 +29,13 @@
 #ifndef PWORKSPACE_H
 #define PWORKSPACE_H
 
-#include "MonkeyExport.h"
-#include "pExtendedWorkspace.h"
-#include "pConsoleManager.h"
+#include <fresh.h>
+
+#include "../consolemanager/pConsoleManager.h"
 
 class pAbstractChild;
 class QMainWindow;
+class XUPItem;
 
 class Q_MONKEY_EXPORT pWorkspace : public pExtendedWorkspace
 {
@@ -47,6 +48,13 @@ public:
 	pAbstractChild* child( int ) const;
 	QList<pAbstractChild*> children() const;
 
+protected:
+	virtual void closeDocument( QWidget* document );
+
+private:
+	pWorkspace( QMainWindow* = 0 );
+	
+public slots:
 	// open a file and set cursor to position
 	pAbstractChild* openFile( const QString& );
 	// close the file
@@ -57,18 +65,17 @@ public:
 	void closeCurrentDocument();
 	bool closeAllDocuments();
 
-protected:
-	virtual void closeDocument( QWidget* document );
-
-private:
-	pWorkspace( QMainWindow* = 0 );
-
 private slots:
 	void internal_currentFileChanged( const QString& );
 	void internal_currentChanged( int );
 	//void internal_aboutToCloseTab( int, QCloseEvent* );
 	void internal_urlsDropped( const QList<QUrl>& );
 	void internal_listWidget_customContextMenuRequested( const QPoint& );
+	void internal_projectsManager_customContextMenuRequested( const QPoint& pos );
+	void internal_currentProjectChanged( XUPItem* currentProject, XUPItem* previousProject );
+	void internal_projectInstallCommandRequested( const pCommand& cmd, const QString& mnu );
+	void internal_projectUninstallCommandRequested( const pCommand& cmd, const QString& mnu );
+	void projectCustomActionTriggered();
 
 public slots:
 	// file menu

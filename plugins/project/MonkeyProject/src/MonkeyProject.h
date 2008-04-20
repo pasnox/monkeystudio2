@@ -29,7 +29,7 @@
 #ifndef MONKEYPROJECT_H
 #define MONKEYPROJECT_H
 
-#include "ProjectPlugin.h"
+#include <pluginsmanager.h>
 
 class MonkeyProjectItem;
 

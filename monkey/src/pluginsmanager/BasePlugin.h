@@ -29,9 +29,9 @@
 #ifndef BASEPLUGIN_H
 #define BASEPLUGIN_H
 
-#include "MonkeyExport.h"
-#include "MonkeyCore.h"
-#include "pSettings.h"
+#include <fresh.h>
+
+#include "../coremanager/MonkeyCore.h"
 
 #include <QtPlugin>
 #include <QLabel>
@@ -128,7 +128,6 @@ public:
 	
 protected:
 	PluginInfos mPluginInfos;
-	
 };
 
 Q_DECLARE_INTERFACE( BasePlugin, "org.monkeystudio.MonkeyStudio.BasePlugin/1.0" )

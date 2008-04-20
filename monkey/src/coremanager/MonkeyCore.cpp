@@ -27,24 +27,21 @@
 **
 ****************************************************************************/
 #include "MonkeyCore.h"
-#include "pMonkeyStudio.h"
-#include "Settings.h"
-#include "PluginsManager.h"
-#include "UIMain.h"
-#include "pMenuBar.h"
-#include "pRecentsManager.h"
-#include "pToolsManager.h"
-#include "UIProjectsManager.h"
-#include "pFileManager.h"
-#include "pWorkspace.h"
-#include "pConsoleManager.h"
-#include "pSearch.h"
+#include "../pMonkeyStudio.h"
+#include "../settingsmanager/Settings.h"
+#include "../pluginsmanager/PluginsManager.h"
+#include "../maininterface/UIMain.h"
+#include "../recentsmanager/pRecentsManager.h"
+#include "../toolsmanager/pToolsManager.h"
+#include "../xupmanager/ui/UIXUPManager.h"
+#include "../workspace/pFileManager.h"
+#include "../workspace/pWorkspace.h"
+#include "../consolemanager/pConsoleManager.h"
+#include "../qscintillamanager/ui/pSearch.h"
 #include <QStatusBar>
-#include "pActionManager.h"
 
-#include "pDockToolBar.h"
-#include "UISettings.h"
-#include "UITranslator.h"
+#include "../maininterface/ui/UISettings.h"
+#include "../maininterface/ui/UITranslator.h"
 
 #include <QSplashScreen>
 
@@ -166,11 +163,11 @@ pToolsManager* MonkeyCore::toolsManager()
 	return qobject_cast<pToolsManager*>( mInstances[&pToolsManager::staticMetaObject] );
 }
 
-UIProjectsManager* MonkeyCore::projectsManager()
+UIXUPManager* MonkeyCore::projectsManager()
 {
-	if ( !mInstances.contains( &UIProjectsManager::staticMetaObject ) )
-		mInstances[&UIProjectsManager::staticMetaObject] = new UIProjectsManager( mainWindow() );
-	return qobject_cast<UIProjectsManager*>( mInstances[&UIProjectsManager::staticMetaObject] );
+	if ( !mInstances.contains( &UIXUPManager::staticMetaObject ) )
+		mInstances[&UIXUPManager::staticMetaObject] = new UIXUPManager( mainWindow() );
+	return qobject_cast<UIXUPManager*>( mInstances[&UIXUPManager::staticMetaObject] );
 }
 
 pFileManager* MonkeyCore::fileManager()

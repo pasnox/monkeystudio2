@@ -29,7 +29,7 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include "pCommandParser.h"
+#include <consolemanager.h>
 
 class Parser : public pCommandParser
 {

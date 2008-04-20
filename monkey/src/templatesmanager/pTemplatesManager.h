@@ -29,14 +29,14 @@
 #ifndef PTEMPLATESMANAGER_H
 #define PTEMPLATESMANAGER_H
 
-#include "MonkeyExport.h"
-#include "QSingleton.h"
-#include "VariablesManager.h"
+#include <fresh.h>
+
+#include "../variablesmanager/VariablesManager.h"
 
 #include <QApplication>
 #include <QStringList>
 
-class ProjectItem;
+class XUPItem;
 
 typedef QHash <QString, QStringList> VarList;
 
@@ -84,7 +84,7 @@ public:
 	pTemplate getTemplate( const QString& );
 	TemplateList getTemplates();
 
-	bool realiseTemplate( ProjectItem*, const QString&, const pTemplate&, const VariablesManager::Dictionary& = VariablesManager::Dictionary() );
+	bool realiseTemplate( XUPItem*, const QString&, const pTemplate&, const VariablesManager::Dictionary& = VariablesManager::Dictionary() );
     
 };
 

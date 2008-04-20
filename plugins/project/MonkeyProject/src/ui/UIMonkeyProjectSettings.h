@@ -33,7 +33,7 @@
 
 #include "ui_UIMonkeyProjectSettings.h"
 
-#include "MonkeyProjectItem.h"
+#include "../MonkeyProjectItem.h"
 
 class UIMonkeyProjectSettings : public QDialog, Ui_UIMonkeyProjectSettings
 {

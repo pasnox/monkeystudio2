@@ -2144,7 +2144,7 @@
   <customwidget>
    <class>pTreeComboBox</class>
    <extends>QComboBox</extends>
-   <header>pTreeComboBox.h</header>
+   <header location="global" >fresh.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

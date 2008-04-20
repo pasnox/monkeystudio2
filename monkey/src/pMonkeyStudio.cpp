@@ -27,14 +27,13 @@
 **
 ****************************************************************************/
 #include "pMonkeyStudio.h"
-#include "UITranslator.h"
-#include "pSettings.h"
-#include "PluginsManager.h"
-#include "ProjectPlugin.h"
-#include "MonkeyCore.h"
+#include "maininterface/ui/UITranslator.h"
+#include "pluginsmanager/PluginsManager.h"
+#include "pluginsmanager/ProjectPlugin.h"
+#include "coremanager/MonkeyCore.h"
 
-#include "pAbstractChild.h"
-#include "pEditor.h"
+#include "workspace/pAbstractChild.h"
+#include "qscintillamanager/pEditor.h"
 
 #include <QTextCodec>
 #include <QImageReader>
@@ -44,31 +43,6 @@
 #include <QLibraryInfo>
 #include <QTranslator>
 #include <QLocale>
-
-#include "qsciapis.h"
-#include "qscilexerbash.h"
-#include "qscilexerbatch.h"
-#include "qscilexercmake.h"
-#include "qscilexercpp.h"
-#include "qscilexercsharp.h"
-#include "qscilexercss.h"
-#include "qscilexerd.h"
-#include "qscilexerdiff.h"
-#include "qscilexerhtml.h"
-#include "qscilexeridl.h"
-#include "qscilexerjava.h"
-#include "qscilexerjavascript.h"
-#include "qscilexerlua.h"
-#include "qscilexermakefile.h"
-#include "qscilexerperl.h"
-#include "qscilexerpov.h"
-#include "qscilexerproperties.h"
-#include "qscilexerpython.h"
-#include "qscilexerruby.h"
-#include "qscilexersql.h"
-#include "qscilexertcl.h"
-#include "qscilexertex.h"
-#include "qscilexervhdl.h"
 
 QList<QTranslator*> mTranslators;
 QHash<QString,QsciLexer*> mGlobalsLexers;
@@ -188,18 +162,6 @@ const QStringList pMonkeyStudio::availableLanguages()
 		<< "SQL" << "TCL" << "TeX" << "VHDL";
 	return l;
 }
-
-QStringList pMonkeyStudio::defaultOperators()
-{ return QStringList() << "=" << "-=" << "+=" << "*=" << "~=" << ":" << "|"; }
-
-const QStringList pMonkeyStudio::availableOperators()
-{
-	QStringList l = MonkeyCore::settings()->value( settingsPath() +"/Operators" ).toStringList();
-	return l.isEmpty() ? defaultOperators() : l;
-}
-
-void pMonkeyStudio::setAvailableOperators( const QStringList& l )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/Operators", l ); }
 
 const QFileInfoList pMonkeyStudio::getFolders( QDir d, const QStringList& l, bool b )
 {
@@ -990,6 +952,18 @@ void pMonkeyStudio::setRestoreProjectsOnStartup( bool b )
 
 const bool pMonkeyStudio::restoreProjectsOnStartup()
 { return MonkeyCore::settings()->value( settingsPath() +"/RestoreProjectsOnStartup", true ).toBool(); }
+
+void pMonkeyStudio::setSaveProjectsOnCustomAction( bool b )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/SaveProjectsOnCustomAction", b ); }
+
+const bool pMonkeyStudio::saveProjectsOnCustomAction()
+{ return MonkeyCore::settings()->value( settingsPath() +"/SaveProjectsOnCustomAction", false ).toBool(); }
+
+void pMonkeyStudio::setSaveFilesOnCustomAction( bool b )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/SaveFilesOnCustomAction", b ); }
+
+const bool pMonkeyStudio::saveFilesOnCustomAction()
+{ return MonkeyCore::settings()->value( settingsPath() +"/SaveFilesOnCustomAction", false ).toBool(); }
 
 void pMonkeyStudio::setDefaultProjectsDirectory( const QString& s )
 { MonkeyCore::settings()->setValue( settingsPath() +"/DefaultProjectsDirectory", s ); }

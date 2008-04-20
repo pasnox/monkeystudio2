@@ -28,7 +28,6 @@
 ****************************************************************************/
 #include "QMakeItemDelegate.h"
 #include "UISettingsQMake.h"
-#include "pMonkeyStudio.h"
 
 #include <QMetaEnum>
 

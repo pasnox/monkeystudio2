@@ -13,9 +13,7 @@
 **
 ****************************************************************************/
 #include "UIProjectHeaders.h"
-#include "pMonkeyStudio.h"
-#include "VariablesManager.h"
-#include "ProjectHeaders.h"
+#include "../ProjectHeaders.h"
 
 #include <QDir>
 #include <QFileInfoList>
@@ -24,6 +22,9 @@
 #include <QStringList>
 #include <QPushButton>
 #include <QDateTime>
+
+#include <monkey.h>
+#include <variablesmanager.h>
 
 using namespace pMonkeyStudio;
 

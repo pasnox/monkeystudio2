@@ -13,10 +13,10 @@
 **
 ****************************************************************************/
 #include "pDockMessageBox.h"
-#include "pFileManager.h"
-#include "ProjectItem.h"
-#include "MonkeyCore.h"
-#include "pAbstractChild.h"
+
+#include <coremanager.h>
+#include <workspacemanager.h>
+#include <xupmanager.h>
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -30,8 +30,6 @@
 
 #include <QInputDialog>
 #include <QFile>
-
-#include "pMonkeyStudio.h"
 
 pDockMessageBox::pDockMessageBox( QWidget* w )
 	: pDockWidget( w ), mShown( false )
@@ -94,6 +92,8 @@ pDockMessageBox::pDockMessageBox( QWidget* w )
 	twMessageBox->setTabToolTip( 1, tr( "Program output" ) );
 	twMessageBox->setTabToolTip( 2, tr( "Commands log" ) );
 	twMessageBox->setTabToolTip( 3, tr( "Search results" ) );
+	// set active tab
+	twMessageBox->setCurrentIndex (0);
 	// set central widget to tabwidget
 	setWidget( twMessageBox );
 	// connections
@@ -371,18 +371,17 @@ void pDockMessageBox::lwBuildSteps_itemPressed( QListWidgetItem* it )
 				l << f;
 	
 	// search in the current project
-	if ( ProjectItem* pi = MonkeyCore::fileManager()->currentProject() )
+	if ( XUPItem* pi = MonkeyCore::fileManager()->currentProject() )
 	{
 		// get top project of current project
-		while ( ProjectItem* ppi = pi->parentProject() )
-			pi = ppi;
+		pi = pi->topLevelProject();
 		// search file
-		foreach ( ProjectItem* it, pi->childrenProjects() << pi )
+		foreach ( XUPItem* cit, pi->children( true, false ) << pi )
 		{
-			if ( QFile::exists( it->canonicalFilePath( s ) ) )
+			if ( cit->isProject() )
 			{
-				QString file = it->canonicalFilePath( s );
-				if ( !l.contains( file ) )
+				QString file = cit->filePath( s );
+				if ( QFile::exists( file ) && !l.contains( file ) )
 					l << file;
 			}
 		}

@@ -29,8 +29,8 @@
 #ifndef QTASSISTANTCHILD_H
 #define QTASSISTANTCHILD_H
 
-#include "pAbstractChild.h"
-#include "QSingleton.h"
+#include <fresh.h>
+#include <workspacemanager.h>
 
 #include <QUrl>
 

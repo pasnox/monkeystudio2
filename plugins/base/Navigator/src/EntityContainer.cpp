@@ -31,12 +31,11 @@
 #include <QMessageBox>
 #include <QDebug>
 
-#include "pFileManager.h"
+#include <workspacemanager.h>
+
 #include "EntityContainer.h"
-#include "Ctags.h"
 #include "Entity.h"
 #include "Navigator.h"
-#include "MonkeyCore.h"
 
 EntityContainer::EntityContainer ( QWidget* parent): QTreeWidget (parent)
 {
