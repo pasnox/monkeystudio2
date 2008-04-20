@@ -1,0 +1,999 @@
+<ui version="4.0" >
+ <class>UISettingsQMakeXUPProjectEditor</class>
+ <widget class="QWidget" name="UISettingsQMakeXUPProjectEditor" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>523</width>
+    <height>412</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" >
+   <item>
+    <widget class="QTabWidget" name="twQMake" >
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="wQtVersions" >
+      <attribute name="title" >
+       <string>Qt &amp;Versions</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <item row="0" column="0" colspan="2" >
+        <layout class="QHBoxLayout" >
+         <item>
+          <widget class="QToolButton" name="tbAddQtVersion" >
+           <property name="toolTip" >
+            <string>Add a new Qt version</string>
+           </property>
+           <property name="text" >
+            <string>Add</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/listeditor/icons/listeditor/add.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbRemoveQtVersion" >
+           <property name="toolTip" >
+            <string>Remove the current Qt version</string>
+           </property>
+           <property name="text" >
+            <string>Remove</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/listeditor/icons/listeditor/remove.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbClearQtVersions" >
+           <property name="toolTip" >
+            <string>Delete all Qt versions</string>
+           </property>
+           <property name="text" >
+            <string>Clear</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/project/icons/project/clear.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbUpQtVersion" >
+           <property name="toolTip" >
+            <string>Move up the current Qt version</string>
+           </property>
+           <property name="text" >
+            <string>Up</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/listeditor/icons/listeditor/up.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbDownQtVersion" >
+           <property name="toolTip" >
+            <string>Move down the current Qt version</string>
+           </property>
+           <property name="text" >
+            <string>Down</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/listeditor/icons/listeditor/down.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbDefaultQtVersion" >
+           <property name="toolTip" >
+            <string>Set the current Qt version the default one</string>
+           </property>
+           <property name="text" >
+            <string>Default</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/project/icons/project/recents.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item rowspan="3" row="1" column="0" >
+        <widget class="QListWidget" name="lwQtVersions" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Expanding" hsizetype="Maximum" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" >
+        <widget class="QWidget" native="1" name="wQtVersion" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" >
+          <item row="0" column="0" >
+           <widget class="QLabel" name="lQtVersionVersion" >
+            <property name="text" >
+             <string>Version :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" colspan="2" >
+           <widget class="QLineEdit" name="leQtVersionVersion" >
+            <property name="toolTip" >
+             <string>Put here the Qt version</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" >
+           <widget class="QLabel" name="lQtVersionPath" >
+            <property name="text" >
+             <string>Path :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" >
+           <widget class="QLineEdit" name="leQtVersionPath" >
+            <property name="toolTip" >
+             <string>Put here the Qt version path</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2" >
+           <widget class="QToolButton" name="tbQtVersionPath" >
+            <property name="cursor" >
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="toolTip" >
+             <string>Click here to browse a Qt path</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/listeditor/icons/listeditor/folder.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" >
+           <widget class="QLabel" name="lQtVersionQMakeSpec" >
+            <property name="text" >
+             <string>QMake Spec :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1" >
+           <widget class="QComboBox" name="cbQtVersionQMakeSpec" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip" >
+             <string>Choose the QMake spec to use</string>
+            </property>
+            <property name="editable" >
+             <bool>true</bool>
+            </property>
+            <property name="duplicatesEnabled" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2" >
+           <widget class="QToolButton" name="tbQtVersionQMakeSpec" >
+            <property name="cursor" >
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="toolTip" >
+             <string>Click here to browse for a non default Qmake spec</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/listeditor/icons/listeditor/folder.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" >
+           <widget class="QLabel" name="lQtVersionQMakeParameters" >
+            <property name="text" >
+             <string>QMake Parameters :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1" colspan="2" >
+           <widget class="QLineEdit" name="leQtVersionQMakeParameters" />
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="1" >
+        <widget class="QLabel" name="lQtVersionInformations" >
+         <property name="frameShape" >
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow" >
+          <enum>QFrame::Sunken</enum>
+         </property>
+         <property name="text" >
+          <string>The green item is the default Qt version used. if there is no green item, the default Qt version used will be the first available Qt version. You can explicitely set the default Qt version selecting an item and clicking the set default button.</string>
+         </property>
+         <property name="alignment" >
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+         </property>
+         <property name="wordWrap" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType" >
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="wQtModules" >
+      <attribute name="title" >
+       <string>Qt &amp;Modules</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <item row="0" column="0" colspan="2" >
+        <layout class="QHBoxLayout" >
+         <item>
+          <widget class="QToolButton" name="tbAddQtModule" >
+           <property name="toolTip" >
+            <string>Add a new Qt module</string>
+           </property>
+           <property name="text" >
+            <string>Add</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/listeditor/icons/listeditor/add.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbRemoveQtModule" >
+           <property name="toolTip" >
+            <string>Remove the current Qt module</string>
+           </property>
+           <property name="text" >
+            <string>Remove</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/listeditor/icons/listeditor/remove.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbClearQtModules" >
+           <property name="toolTip" >
+            <string>Delete all Qt modules</string>
+           </property>
+           <property name="text" >
+            <string>Clear</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/project/icons/project/clear.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbUpQtModule" >
+           <property name="toolTip" >
+            <string>Mode up the current Qt module</string>
+           </property>
+           <property name="text" >
+            <string>Up</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/listeditor/icons/listeditor/up.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbDownQtModule" >
+           <property name="toolTip" >
+            <string>Mode down the current Qt module</string>
+           </property>
+           <property name="text" >
+            <string>Down</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/listeditor/icons/listeditor/down.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QListWidget" name="lwQtModules" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Expanding" hsizetype="Maximum" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="editTriggers" >
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" >
+        <widget class="QWidget" native="1" name="wQtModule" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
+         <layout class="QVBoxLayout" >
+          <item>
+           <widget class="QLabel" name="lCaptionQtModule" >
+            <property name="text" >
+             <string>&amp;Caption :</string>
+            </property>
+            <property name="buddy" >
+             <cstring>leCaptionQtModule</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="leCaptionQtModule" >
+            <property name="toolTip" >
+             <string>Put here the module visible text</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lValueQtModule" >
+            <property name="text" >
+             <string>&amp;Value :</string>
+            </property>
+            <property name="buddy" >
+             <cstring>leValueQtModule</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="leValueQtModule" >
+            <property name="toolTip" >
+             <string>Put here the module value</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lVariableQtModule" >
+            <property name="text" >
+             <string>V&amp;ariable :</string>
+            </property>
+            <property name="buddy" >
+             <cstring>leVariableQtModule</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="leVariableQtModule" >
+            <property name="toolTip" >
+             <string>Put here the variable name in witch we need add this value</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lHelpQtModule" >
+            <property name="text" >
+             <string>&amp;Help :</string>
+            </property>
+            <property name="buddy" >
+             <cstring>teHelpQtModule</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTextEdit" name="teHelpQtModule" >
+            <property name="toolTip" >
+             <string>Put here the help about the module</string>
+            </property>
+            <property name="tabChangesFocus" >
+             <bool>true</bool>
+            </property>
+            <property name="acceptRichText" >
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="wQtConfigurations" >
+      <attribute name="title" >
+       <string>Qt &amp;Configurations</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <item row="0" column="0" colspan="2" >
+        <layout class="QHBoxLayout" >
+         <item>
+          <widget class="QToolButton" name="tbAddQtConfiguration" >
+           <property name="toolTip" >
+            <string>Add a new Qt configuration</string>
+           </property>
+           <property name="text" >
+            <string>Add</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/listeditor/icons/listeditor/add.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbRemoveQtConfiguration" >
+           <property name="toolTip" >
+            <string>Remove the current Qt configuration</string>
+           </property>
+           <property name="text" >
+            <string>Remove</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/listeditor/icons/listeditor/remove.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbClearQtConfiguration" >
+           <property name="toolTip" >
+            <string>Delete all Qt configurations</string>
+           </property>
+           <property name="text" >
+            <string>Clear</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/project/icons/project/clear.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbUpQtConfiguration" >
+           <property name="toolTip" >
+            <string>Mode up the current Qt configuration</string>
+           </property>
+           <property name="text" >
+            <string>Up</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/listeditor/icons/listeditor/up.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbDownQtConfiguration" >
+           <property name="toolTip" >
+            <string>Mode down the current Qt configuration</string>
+           </property>
+           <property name="text" >
+            <string>Down</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/listeditor/icons/listeditor/down.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QListWidget" name="lwQtConfigurations" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Expanding" hsizetype="Maximum" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="editTriggers" >
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" >
+        <widget class="QWidget" native="1" name="wQtConfiguration" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
+         <layout class="QVBoxLayout" >
+          <item>
+           <widget class="QLabel" name="lCaptionQtConfiguration" >
+            <property name="text" >
+             <string>&amp;Caption :</string>
+            </property>
+            <property name="buddy" >
+             <cstring>leCaptionQtConfiguration</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="leCaptionQtConfiguration" >
+            <property name="toolTip" >
+             <string>Put here the configuration visible text</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lValueQtConfiguration" >
+            <property name="text" >
+             <string>&amp;Value :</string>
+            </property>
+            <property name="buddy" >
+             <cstring>leValueQtConfiguration</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="leValueQtConfiguration" >
+            <property name="toolTip" >
+             <string>Put here the configuration value</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lVariableQtConfiguration" >
+            <property name="text" >
+             <string>V&amp;ariable :</string>
+            </property>
+            <property name="buddy" >
+             <cstring>leVariableQtConfiguration</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="leVariableQtConfiguration" >
+            <property name="toolTip" >
+             <string>Put here the variable name in witch we need add this value</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lHelpQtConfiguration" >
+            <property name="text" >
+             <string>&amp;Help :</string>
+            </property>
+            <property name="buddy" >
+             <cstring>teHelpQtConfiguration</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTextEdit" name="teHelpQtConfiguration" >
+            <property name="toolTip" >
+             <string>Put here the help about the configuration</string>
+            </property>
+            <property name="tabChangesFocus" >
+             <bool>true</bool>
+            </property>
+            <property name="acceptRichText" >
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="wFilterScopeFile" >
+      <property name="enabled" >
+       <bool>false</bool>
+      </property>
+      <attribute name="title" >
+       <string>&amp;Filter &amp;&amp; Scope &amp;&amp; Path/File</string>
+      </attribute>
+      <layout class="QHBoxLayout" >
+       <property name="spacing" >
+        <number>3</number>
+       </property>
+       <property name="leftMargin" >
+        <number>5</number>
+       </property>
+       <property name="topMargin" >
+        <number>5</number>
+       </property>
+       <property name="rightMargin" >
+        <number>5</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>5</number>
+       </property>
+       <item>
+        <widget class="QGroupBox" name="gbFilter" >
+         <property name="maximumSize" >
+          <size>
+           <width>177</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="title" >
+          <string>&amp;Accepted View Filter</string>
+         </property>
+         <layout class="QGridLayout" >
+          <property name="leftMargin" >
+           <number>5</number>
+          </property>
+          <property name="topMargin" >
+           <number>5</number>
+          </property>
+          <property name="rightMargin" >
+           <number>5</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>5</number>
+          </property>
+          <property name="horizontalSpacing" >
+           <number>3</number>
+          </property>
+          <property name="verticalSpacing" >
+           <number>3</number>
+          </property>
+          <item row="0" column="6" >
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>331</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="3" >
+           <widget class="QToolButton" name="tbUpFilter" >
+            <property name="text" >
+             <string>Up</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/listeditor/icons/listeditor/up.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4" >
+           <widget class="QToolButton" name="tbDownFilter" >
+            <property name="text" >
+             <string>Down</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/listeditor/icons/listeditor/down.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QToolButton" name="tbRemoveFilter" >
+            <property name="text" >
+             <string>Remove</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/listeditor/icons/listeditor/remove.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" >
+           <widget class="QToolButton" name="tbAddFilter" >
+            <property name="text" >
+             <string>Add</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/listeditor/icons/listeditor/add.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2" >
+           <widget class="QToolButton" name="tbClearFilters" >
+            <property name="text" >
+             <string>Clear</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/project/icons/project/clear.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="7" >
+           <widget class="QListWidget" name="lwFilters" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Expanding" hsizetype="Ignored" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="5" >
+           <widget class="QToolButton" name="tbToolTipFilter" >
+            <property name="text" >
+             <string>ToolTip</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/project/icons/project/recents.png</iconset>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="gbScope" >
+         <property name="maximumSize" >
+          <size>
+           <width>155</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="title" >
+          <string>S&amp;copes</string>
+         </property>
+         <layout class="QGridLayout" >
+          <property name="leftMargin" >
+           <number>5</number>
+          </property>
+          <property name="topMargin" >
+           <number>5</number>
+          </property>
+          <property name="rightMargin" >
+           <number>5</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>5</number>
+          </property>
+          <property name="horizontalSpacing" >
+           <number>3</number>
+          </property>
+          <property name="verticalSpacing" >
+           <number>3</number>
+          </property>
+          <item row="0" column="1" >
+           <widget class="QToolButton" name="tbRemoveScope" >
+            <property name="text" >
+             <string>Remove</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/listeditor/icons/listeditor/remove.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2" >
+           <widget class="QToolButton" name="tbClearScopes" >
+            <property name="text" >
+             <string>Clear</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/project/icons/project/clear.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3" >
+           <widget class="QToolButton" name="tbUpScope" >
+            <property name="text" >
+             <string>Up</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/listeditor/icons/listeditor/up.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" >
+           <widget class="QToolButton" name="tbAddScope" >
+            <property name="text" >
+             <string>Add</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/listeditor/icons/listeditor/add.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4" >
+           <widget class="QToolButton" name="tbDownScope" >
+            <property name="text" >
+             <string>Down</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/listeditor/icons/listeditor/down.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="6" >
+           <widget class="QListWidget" name="lwScopes" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Expanding" hsizetype="Ignored" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="5" >
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>331</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="gbPathFile" >
+         <property name="maximumSize" >
+          <size>
+           <width>155</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="title" >
+          <string>&amp;Path/Files</string>
+         </property>
+         <layout class="QGridLayout" >
+          <property name="leftMargin" >
+           <number>5</number>
+          </property>
+          <property name="topMargin" >
+           <number>5</number>
+          </property>
+          <property name="rightMargin" >
+           <number>5</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>5</number>
+          </property>
+          <property name="horizontalSpacing" >
+           <number>3</number>
+          </property>
+          <property name="verticalSpacing" >
+           <number>3</number>
+          </property>
+          <item row="0" column="1" >
+           <widget class="QToolButton" name="tbRemovePathFile" >
+            <property name="text" >
+             <string>Remove</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/listeditor/icons/listeditor/remove.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2" >
+           <widget class="QToolButton" name="tbClearPathFiles" >
+            <property name="text" >
+             <string>Clear</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/project/icons/project/clear.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3" >
+           <widget class="QToolButton" name="tbUpPathFile" >
+            <property name="text" >
+             <string>Up</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/listeditor/icons/listeditor/up.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" >
+           <widget class="QToolButton" name="tbAddPathFile" >
+            <property name="text" >
+             <string>Add</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/listeditor/icons/listeditor/add.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4" >
+           <widget class="QToolButton" name="tbDownPathFile" >
+            <property name="text" >
+             <string>Down</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >:/listeditor/icons/listeditor/down.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="6" >
+           <widget class="QListWidget" name="lwPathFiles" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Expanding" hsizetype="Ignored" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="5" >
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>331</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="dbbButtons" >
+     <property name="cursor" >
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="standardButtons" >
+      <set>QDialogButtonBox::Help|QDialogButtonBox::NoButton|QDialogButtonBox::Save</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../../../../monkey/src/resources/resources.qrc" />
+ </resources>
+ <connections/>
+</ui>

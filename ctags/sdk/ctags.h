@@ -1,0 +1,16 @@
+extern "C"
+{
+	#include "../ctags/debug.h"
+	#include "../ctags/entry.h"
+	#include "../ctags/exuberantCtags.h"
+	#include "../ctags/general.h"
+	#include "../ctags/get.h"
+	#include "../ctags/keyword.h"
+	#include "../ctags/options.h"
+	#include "../ctags/parse.h"
+	#include "../ctags/read.h"
+	#include "../ctags/regex.h"
+	#include "../ctags/routines.h"
+	#include "../ctags/strlist.h"
+	#include "../ctags/vstring.h"
+}
