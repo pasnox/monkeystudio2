@@ -31,6 +31,9 @@ void XUPItem::registerItem()
 	mXUPItemInfos.Suffixes[tr( "Monkey Studio Project" )] = QStringList( "*.xup" );
 }
 
+const XUPItemInfos& XUPItem::itemInfos() const
+{ return mXUPItemInfos; }
+
 QStringList XUPItem::operators() const
 { return mXUPItemInfos.Operators; }
 
