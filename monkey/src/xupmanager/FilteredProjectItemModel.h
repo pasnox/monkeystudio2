@@ -44,7 +44,11 @@ public:
 		else if ( mItem->isType( "value" ) )
 			return mItem->project();
 		else if ( mItem->isType( "folder" ) )
+		{
+			if ( mItem->defaultValue() == QT_TRANSLATE_NOOP( "FilteredProjectItemModel", "Includes Projects" ) )
+				return parent()->project();
 			return parent()->parent()->project();
+		}
 		else
 			return parent()->project();
 	}
