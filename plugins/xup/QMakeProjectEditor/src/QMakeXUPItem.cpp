@@ -152,6 +152,9 @@ void QMakeXUPItem::registerItem()
 	mQMakeXUPItemInfos.VariableSuffixes[ "RES_FILE" ] = QStringList( "*.res" );
 }
 
+const XUPItemInfos& QMakeXUPItem::itemInfos() const
+{ return mQMakeXUPItemInfos; }
+
 QStringList QMakeXUPItem::operators() const
 { return mQMakeXUPItemInfos.Operators; }
 
