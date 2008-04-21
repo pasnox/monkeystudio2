@@ -396,7 +396,7 @@ void UIXUPProjectEditor::on_tbOthersVariablesAdd_clicked()
 	{
 		// init dialog
 		UIAddVariable d( window() );
-		//d.setVariablesName(  );
+		d.setVariablesName( scope->itemInfos().variablesList() );
 		d.setOperators( mProject->operators() );
 		// execute dialog
 		if ( d.exec() == QDialog::Accepted )
@@ -447,7 +447,7 @@ void UIXUPProjectEditor::on_tbOthersVariablesEdit_triggered( QAction* action )
 			// init dialog
 			UIAddVariable d( window() );
 			d.setWindowTitle( tr( "Edit a variable..." ) );
-			d.setVariablesName( QStringList( vit->defaultValue() ) );
+			d.setVariablesName( vit->itemInfos().variablesList() );
 			d.setCurrentVariableName( vit->defaultValue() );
 			d.setOperators( vit->operators() );
 			d.setCurrentOperator( vit->value( "operator", "=" ) );
