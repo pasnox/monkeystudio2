@@ -5,8 +5,13 @@ DESTDIR	= $$MONKEY_PLUGINS_DIR/base
 TARGET	= MessageBox
 RESOURCES	= src/resources/MessageBox.qrc
 
-HEADERS	= src/MessageBox.h \
-	src/pDockMessageBox.h
+FORMS	= src/ui/UIBuildStep.ui \
+	src/ui/UIOutput.ui \
+	src/ui/UICommand.ui \
+	src/ui/UISearchResult.ui
 
-SOURCES	= src/MessageBox.cpp \
-	src/pDockMessageBox.cpp
+HEADERS	= src/ui/MessageBoxDocks.h \
+	src/MessageBox.h
+
+SOURCES	= src/ui/MessageBoxDocks.cpp \
+	src/MessageBox.cpp
