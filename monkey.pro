@@ -7,3 +7,5 @@ ProjectSettings {
 	EXECUTE_RELEASE	= bin/monkeystudio
 	QT_VERSION	= 4.3.4
 }
+
+include (installs.pri)

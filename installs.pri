@@ -26,25 +26,25 @@ isEmpty( PROGRAM_DATAS ) {
 
 # templates
 templates.path	= $${PROGRAM_DATAS}
-templates.files	= ../templates
+templates.files	= templates
 
 # apis
 apis.path	= $${PROGRAM_DATAS}
-apis.files	= ../ctags/apis
+apis.files	= ctags/apis
 
 # translations
 translations.path	= $${PROGRAM_DATAS}/translations
-translations.files	= ../translations/*.qm
+translations.files	= translations/*.qm
 
 # debugger know_list_and_id
 debuggerIniFile.path	= $${PROGRAM_DATAS}/plugins/GNUdbg
-debuggerIniFile.files	= ../plugins/debugger/GNUDebugger/file
+debuggerIniFile.files	= plugins/debugger/GNUDebugger/file
 
 debuggerLog.path	= $${PROGRAM_DATAS}/plugins/GNUdbg
-debuggerLog.files	= ../plugins/debugger/GNUDebugger/log
+debuggerLog.files	= plugins/debugger/GNUDebugger/log
 
 debuggerScript.path	= $${PROGRAM_DATAS}/plugins/GNUdbg
-debuggerScript.files	= ../plugins/debugger/GNUDebugger/scripts
+debuggerScript.files	= plugins/debugger/GNUDebugger/scripts
 
 INSTALLS	= apis templates translations debuggerIniFile debuggerLog debuggerScript
 
@@ -55,14 +55,16 @@ unix:!mac {
 
 	# binary
 	target.path	= $${PROGRAM_PREFIX}/bin
-
+	target.files = bin/monkeystudio_debug
+	
+	
 	# desktop file
 	desktop.path	= $${PROGRAM_PREFIX}/share/applications
-	desktop.files	= ../links/monkeystudio.desktop
+	desktop.files	= links/monkeystudio.desktop
 
 	# desktop icon file
 	desktopicon.path	= $${PROGRAM_PREFIX}/icons/hicolor/32x32/apps
-	desktopicon.files	= ../links/monkeystudio.png
+	desktopicon.files	= links/monkeystudio.png
 
 	INSTALLS	+= plugins target desktop desktopicon
 }

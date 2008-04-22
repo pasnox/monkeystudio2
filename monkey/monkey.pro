@@ -79,9 +79,6 @@ CONFIG( debug, debug|release ) {
 mac:*-g++:LIBS	*= -Wl,-noall_load # stop importing all symbols
 else:*-g++:LIBS	*= -Wl,--no-whole-archive # stop importing all symbols
 
-# include install script
-include( installs.pri )
-
 DEFINES	*= "PROGRAM_PREFIX=\"\\\"$${PROGRAM_PREFIX}\\\"\"" "PROGRAM_DATAS=\"\\\"$${PROGRAM_DATAS}\\\"\""
 
 FORMS	*= src/maininterface/ui/UITranslator.ui \
