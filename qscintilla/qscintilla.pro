@@ -42,3 +42,6 @@ CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 	MOC_DIR	= $${BUILD_PATH}/release/.moc
 	RCC_DIR	= $${BUILD_PATH}/release/.rcc
 }
+
+#avoid to install library
+INSTALLS = 
