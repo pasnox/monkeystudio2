@@ -28,7 +28,7 @@
 ****************************************************************************/
 #include "pCommandParser.h"
 
-#define PARSERS_DEBUG 1
+#define PARSERS_DEBUG 0
 
 pCommandParser::~pCommandParser()
 {
