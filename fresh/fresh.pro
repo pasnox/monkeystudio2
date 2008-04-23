@@ -2,36 +2,16 @@
 
 include( fresh.pri )
 
-BUILD_PATH	= ../build
+# include config file
+include( ../config.pri )
 
 TEMPLATE	= lib
-CONFIG	*= qt staticlib warn_on thread x11 windows debug_and_release
-DESTDIR	= $${BUILD_PATH}
+CONFIG	*= staticlib
+DESTDIR	= $${PACKAGE_BUILD_PATH}
 DEPENDPATH	*= $${PWD}/objects $${PWD}/widgets
 
 # make library exportable
 DEFINES	*= MONKEY_CORE_BUILD
-
-CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
-	#Debug
-	CONFIG	+= console
-	unix:TARGET	= $$join(TARGET,,,_debug)
-	else:TARGET	= $$join(TARGET,,,d)
-	unix:OBJECTS_DIR	= $${BUILD_PATH}/debug/.obj/unix
-	win32:OBJECTS_DIR	= $${BUILD_PATH}/debug/.obj/win32
-	mac:OBJECTS_DIR	= $${BUILD_PATH}/debug/.obj/mac
-	UI_DIR	= $${BUILD_PATH}/debug/.ui
-	MOC_DIR	= $${BUILD_PATH}/debug/.moc
-	RCC_DIR	= $${BUILD_PATH}/debug/.rcc
-} else {
-	#Release
-	unix:OBJECTS_DIR	= $${BUILD_PATH}/release/.obj/unix
-	win32:OBJECTS_DIR	= $${BUILD_PATH}/release/.obj/win32
-	mac:OBJECTS_DIR	= $${BUILD_PATH}/release/.obj/mac
-	UI_DIR	= $${BUILD_PATH}/release/.ui
-	MOC_DIR	= $${BUILD_PATH}/release/.moc
-	RCC_DIR	= $${BUILD_PATH}/release/.rcc
-}
 
 # Core
 # Symbols Export

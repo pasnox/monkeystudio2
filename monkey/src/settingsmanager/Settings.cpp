@@ -46,7 +46,7 @@ void Settings::setDefaultSettings()
 	mPath = ".";
 #else
 	mPath = ".";
-	QString p = PROGRAM_PREFIX;
+	QString p = PACKAGE_PREFIX;
 	if ( p.endsWith( "/" ) )
 		p.chop( 1 );
 	p.append( "/bin" );

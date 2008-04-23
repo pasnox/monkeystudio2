@@ -1,7 +1,6 @@
-include( ../../plugins.inc )
-
-DESTDIR	= $$MONKEY_PLUGINS_DIR/base
 TARGET	= FileBrowser
+include( ../../plugins.pri )
+DESTDIR	= $$MONKEY_PLUGINS_DIR/base
 RESOURCES	= src/resources/FileBrowser.qrc
 
 HEADERS	= src/FileBrowser.h \

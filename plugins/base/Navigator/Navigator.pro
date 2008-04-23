@@ -1,7 +1,6 @@
-include( ../../plugins.inc )
-
-DESTDIR	= $$MONKEY_PLUGINS_DIR/base
 TARGET	= Navigator
+include( ../../plugins.pri )
+DESTDIR	= $$MONKEY_PLUGINS_DIR/base
 RESOURCES	= icons/icons.qrc
 
 HEADERS	= src/Navigator.h \
@@ -13,4 +12,3 @@ SOURCES	= src/Navigator.cpp \
 	src/Entity.cpp \
 	src/EntityContainer.cpp \
 	src/NavigatorSettings.cpp
-EXECUTE_DEBUG	= ../../../bin/monkeystudio_debug

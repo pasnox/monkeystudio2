@@ -1,71 +1,53 @@
 # Monkey Studio Install Project File
 
-# try getting infos from shell export
-PROGRAM_PREFIX	= $$(MONKEY_PREFIX)
-PROGRAM_DATAS	= $$(MONKEY_DATAS)
+include( config.pri )
 
-# prefix
-isEmpty( PROGRAM_PREFIX ) {
-	win32:PROGRAM_PREFIX	= $${DESTDIR}
-	else:mac:PROGRAM_PREFIX	= $${DESTDIR}/$${TARGET}.app/Contents
-	else:PROGRAM_PREFIX	= /usr/local
-}
-
-# prefixdatas
-isEmpty( PROGRAM_DATAS ) {
-	win32:PROGRAM_DATAS	= $${PROGRAM_PREFIX}
-	else:mac:PROGRAM_DATAS	= $${PROGRAM_PREFIX}
-	else:PROGRAM_DATAS	= $${PROGRAM_PREFIX}/lib/$${TARGET}
-}
-
-!CONFIG( debug, debug|release ) {
-	message( "Monkey Studio binary will be installed to : $$PROGRAM_PREFIX" )
-	message( "Monkey Studio datas will be installed to : $$PROGRAM_DATAS" )
+!build_pass {
+	message( "Monkey Studio binary will be installed to : $$PACKAGE_PREFIX" )
+	message( "Monkey Studio datas will be installed to : $$PACKAGE_DATAS" )
 	message( "You can change this by exporting these variables to your shell before calling qmake : MONKEY_PREFIX, MONKEY_DATAS" )
+
+	# templates
+	templates.path	= $${PACKAGE_DATAS}
+	templates.files	= templates
+
+	# apis
+	apis.path	= $${PACKAGE_DATAS}
+	apis.files	= ctags/apis
+
+	# translations
+	translations.path	= $${PACKAGE_DATAS}/translations
+	translations.files	= translations/*.qm
+
+	# debugger know_list_and_id
+	debuggerIniFile.path	= $${PACKAGE_DATAS}/plugins/GNUdbg
+	debuggerIniFile.files	= plugins/debugger/GNUDebugger/file
+
+	debuggerLog.path	= $${PACKAGE_DATAS}/plugins/GNUdbg
+	debuggerLog.files	= plugins/debugger/GNUDebugger/log
+
+	debuggerScript.path	= $${PACKAGE_DATAS}/plugins/GNUdbg
+	debuggerScript.files	= plugins/debugger/GNUDebugger/scripts
+
+	INSTALLS	= apis templates translations debuggerIniFile debuggerLog debuggerScript
+
+	unix:!mac {
+		# plugins
+		plugins.path	= $${PACKAGE_DATAS}
+		plugins.files	= bin/plugins
+
+		# binary
+		target.path	= $${PACKAGE_PREFIX}
+		target.files	= bin/$${PACKAGE_TARGET}
+
+		# desktop file
+		desktop.path	= $${PACKAGE_PREFIX}/../share/applications
+		desktop.files	= links/monkeystudio.desktop
+
+		# desktop icon file
+		desktopicon.path	= $${PACKAGE_PREFIX}/../icons/hicolor/32x32/apps
+		desktopicon.files	= links/monkeystudio.png
+
+		INSTALLS	+= plugins target desktop desktopicon
+	}
 }
-
-# templates
-templates.path	= $${PROGRAM_DATAS}
-templates.files	= templates
-
-# apis
-apis.path	= $${PROGRAM_DATAS}
-apis.files	= ctags/apis
-
-# translations
-translations.path	= $${PROGRAM_DATAS}/translations
-translations.files	= translations/*.qm
-
-# debugger know_list_and_id
-debuggerIniFile.path	= $${PROGRAM_DATAS}/plugins/GNUdbg
-debuggerIniFile.files	= plugins/debugger/GNUDebugger/file
-
-debuggerLog.path	= $${PROGRAM_DATAS}/plugins/GNUdbg
-debuggerLog.files	= plugins/debugger/GNUDebugger/log
-
-debuggerScript.path	= $${PROGRAM_DATAS}/plugins/GNUdbg
-debuggerScript.files	= plugins/debugger/GNUDebugger/scripts
-
-INSTALLS	= apis templates translations debuggerIniFile debuggerLog debuggerScript
-
-unix:!mac {
-	# plugins
-	plugins.path	= $${PROGRAM_DATAS}
-	plugins.files	= $${DESTDIR}/plugins
-
-	# binary
-	target.path	= $${PROGRAM_PREFIX}/bin
-	target.files = bin/monkeystudio_debug
-	
-	
-	# desktop file
-	desktop.path	= $${PROGRAM_PREFIX}/share/applications
-	desktop.files	= links/monkeystudio.desktop
-
-	# desktop icon file
-	desktopicon.path	= $${PROGRAM_PREFIX}/icons/hicolor/32x32/apps
-	desktopicon.files	= links/monkeystudio.png
-
-	INSTALLS	+= plugins target desktop desktopicon
-}
-
