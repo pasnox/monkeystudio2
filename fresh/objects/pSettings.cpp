@@ -72,15 +72,6 @@ void pSettings::restoreState( QMainWindow* w )
 		return;
 	w->restoreGeometry( value( "MainWindow/Geometry" ).toByteArray() );
 	w->restoreState( value( "MainWindow/State" ).toByteArray() );
-	/*
-	QPoint p = value( "MainWindow/Position" ).toPoint();
-	QSize s = value( "MainWindow/Size" ).toSize();
-	if ( !p.isNull() && !s.isNull() )
-	{
-		w->resize( s );
-		w->move( p );
-	}
-	*/
 	if ( value( "MainWindow/Geometry" ).toByteArray().isEmpty() )
 		w->showMaximized();
 }
@@ -89,11 +80,6 @@ void pSettings::saveState( QMainWindow* w )
 {
 	if ( !w )
 		return;
-	/*
-	setValue( "MainWindow/Maximized", w->isMaximized() );
-	setValue( "MainWindow/Position", w->pos() );
-	setValue( "MainWindow/Size", w->size() );
-	*/
 	setValue( "MainWindow/Geometry", w->saveGeometry() );
 	setValue( "MainWindow/State", w->saveState() );
 }
