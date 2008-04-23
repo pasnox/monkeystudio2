@@ -252,7 +252,6 @@ void pWorkspace::internal_currentChanged( int i )
 	bool redo = hasChild ? c->isRedoAvailable() : false;
 	bool copy = hasChild ? c->isCopyAvailable() : false;
 	bool paste = hasChild ? c->isPasteAvailable() : false;
-	bool search = hasChild && c->currentEditor();
 	bool go = hasChild ? c->isGoToAvailable() : false;
 	bool moreThanOneChild = count() > 1;
 
@@ -271,9 +270,7 @@ void pWorkspace::internal_currentChanged( int i )
 	MonkeyCore::menuBar()->action( "mEdit/aCut" )->setEnabled( copy );
 	MonkeyCore::menuBar()->action( "mEdit/aCopy" )->setEnabled( copy );
 	MonkeyCore::menuBar()->action( "mEdit/aPaste" )->setEnabled( paste );
-	foreach ( QAction* a, MonkeyCore::menuBar()->menu( "mEdit/mSearchReplace" )->actions() )
-		a->setEnabled( search );
-	MonkeyCore::searchWidget()->setEnabled( search );
+	
 	MonkeyCore::menuBar()->action( "mEdit/aGoTo" )->setEnabled( go );
 	MonkeyCore::menuBar()->action( "mEdit/aExpandAbbreviation" )->setEnabled( hasChild );
 
