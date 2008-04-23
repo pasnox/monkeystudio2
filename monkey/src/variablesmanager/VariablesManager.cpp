@@ -42,10 +42,10 @@ QString VariablesManager::getVariable (QString name, Dictionary locals)
     QString result = QString::null;
     // monkeystudio_version
     if ( name == "editor_version" )
-        result = PROGRAM_VERSION;
+        result = PACKAGE_VERSION;
     // monkeystudio_version_string
     else if ( name == "editor_version_string" )
-        result = QString( "%1 v%2" ).arg( PROGRAM_NAME ).arg( PROGRAM_VERSION );
+        result = QString( "%1 v%2" ).arg( PACKAGE_NAME ).arg( PACKAGE_VERSION );
     else if ( name == "date" )
         result = QDateTime::currentDateTime().toString( Qt::ISODate );
     if (!result.isEmpty())

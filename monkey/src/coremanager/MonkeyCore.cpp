@@ -108,7 +108,7 @@ void MonkeyCore::init()
 		workspace()->fileSessionRestore_triggered();
 	
 	// ready
-	showMessage( &splash, tr( "%1 v%2 Ready !" ).arg( PROGRAM_NAME, PROGRAM_VERSION ) );
+	showMessage( &splash, tr( "%1 v%2 Ready !" ).arg( PACKAGE_NAME, PACKAGE_VERSION ) );
 
 	// finish splashscreen
 	splash.finish( mainWindow() );
@@ -203,5 +203,5 @@ QStatusBar* MonkeyCore::statusBar()
 	if ( !mInstances.contains( &QStatusBar::staticMetaObject ) )
 		mInstances[&QStatusBar::staticMetaObject] = new QStatusBar( mainWindow() );
 	return qobject_cast<QStatusBar*>( mInstances[&QStatusBar::staticMetaObject] );
-	//StatusBar::self()->setText( StatusBar::tStatusTip, tr( "%1 v%2 Ready !" ).arg( PROGRAM_NAME, PROGRAM_VERSION ), 15000 );
+	//StatusBar::self()->setText( StatusBar::tStatusTip, tr( "%1 v%2 Ready !" ).arg( PACKAGE_NAME, PACKAGE_VERSION ), 15000 );
 }

@@ -72,6 +72,9 @@ isEmpty( PACKAGE_DATAS ) {
 	else:PACKAGE_DATAS	= $${PACKAGE_PREFIX}/lib/$${PACKAGE_TARGET}
 } else:unix:!mac:PACKAGE_DATAS	= $${PACKAGE_DATAS}/lib/$${PACKAGE_TARGET}
 
+PACKAGE_PREFIX	= $$quote( $$PACKAGE_PREFIX )
+PACKAGE_DATAS	= $$quote( $$PACKAGE_DATAS )
+
 # define package install paths so source code can use them
 DEFINES	*= "PACKAGE_PREFIX=\"\\\"$${PACKAGE_PREFIX}\\\"\"" \
   "PACKAGE_DATAS=\"\\\"$${PACKAGE_DATAS}\\\"\""
