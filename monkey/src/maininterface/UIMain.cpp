@@ -118,6 +118,7 @@ void UIMain::initMenuBar()
 {
 	// create menubar menus and actions
 	pMenuBar* mb = menuBar();
+	mb->setDefaultShortcutContext( Qt::ApplicationShortcut );
 	mb->menu( "mFile", tr( "File" ) );
 	mb->beginGroup( "mFile" );
 		mb->action( "aNew", tr( "&New..." ), QIcon( ":/file/icons/file/new.png" ), tr( "Ctrl+N" ), tr( "Create a new file" ) );
