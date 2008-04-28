@@ -18,9 +18,10 @@ CONFIG	-= release
 CONFIG	+= staticlib
 DEFINES	-= QSCINTILLA_MAKE_DLL
 
+# remove install script of qscintilla
+INSTALLS	-= header trans qsci target
+
 # include config file
 include( ../config.pri )
 
 DESTDIR	= $${PACKAGE_BUILD_PATH}
-
-INSTALLS	=

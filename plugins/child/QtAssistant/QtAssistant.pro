@@ -9,5 +9,3 @@ HEADERS	+= src/QtAssistant.h \
 
 SOURCES	+= src/QtAssistant.cpp \
 	src/QtAssistantChild.cpp
-
-INSTALLS	=
