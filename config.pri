@@ -46,13 +46,13 @@ QMAKE_TARGET_PRODUCT	= "Monkey Studio"
 QMAKE_TARGET_DESCRIPTION	= "Crossplatform Integrated Development Environment"
 QMAKE_TARGET_COPYRIGHT	= "Copyright (C) 2005 - 2008 Filipe AZEVEDO"
 PACKAGE_DOMAIN	= "www.monkeystudio.org"
-PACKAGE_VERSION	= 1.8.2.0
+PACKAGE_VERSION	= 1.8.2.0svn
 
 # define variable for source code
 DEFINES	*= "PACKAGE_NAME=\"\\\"$${QMAKE_TARGET_PRODUCT}\\\"\"" \
-  "PACKAGE_VERSION=\"\\\"$${PACKAGE_VERSION}\\\"\"" \
-  "PACKAGE_DOMAIN=\"\\\"$${PACKAGE_DOMAIN}\\\"\"" \
-  "PACKAGE_COPYRIGHTS=\"\\\"$${QMAKE_TARGET_COPYRIGHT}\\\"\""
+	"PACKAGE_VERSION=\"\\\"$${PACKAGE_VERSION}\\\"\"" \
+	"PACKAGE_DOMAIN=\"\\\"$${PACKAGE_DOMAIN}\\\"\"" \
+	"PACKAGE_COPYRIGHTS=\"\\\"$${QMAKE_TARGET_COPYRIGHT}\\\"\""
 
 # get package install paths
 PACKAGE_PREFIX	= $$(MONKEY_PREFIX)
@@ -69,7 +69,7 @@ isEmpty( PACKAGE_PREFIX ) {
 isEmpty( PACKAGE_DATAS ) {
 	win32:PACKAGE_DATAS	= $${PACKAGE_PREFIX}
 	else:mac:PACKAGE_DATAS	= $${PACKAGE_PREFIX}
-	else:PACKAGE_DATAS	= $${PACKAGE_PREFIX}/lib/$${PACKAGE_TARGET}
+	else:PACKAGE_DATAS	= /usr/local/lib/$${PACKAGE_TARGET}
 } else:unix:!mac:PACKAGE_DATAS	= $${PACKAGE_DATAS}/lib/$${PACKAGE_TARGET}
 
 PACKAGE_PREFIX	= $$quote( $$PACKAGE_PREFIX )
@@ -77,4 +77,4 @@ PACKAGE_DATAS	= $$quote( $$PACKAGE_DATAS )
 
 # define package install paths so source code can use them
 DEFINES	*= "PACKAGE_PREFIX=\"\\\"$${PACKAGE_PREFIX}\\\"\"" \
-  "PACKAGE_DATAS=\"\\\"$${PACKAGE_DATAS}\\\"\""
+	"PACKAGE_DATAS=\"\\\"$${PACKAGE_DATAS}\\\"\""
