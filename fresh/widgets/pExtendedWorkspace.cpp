@@ -46,6 +46,7 @@
 pExtendedWorkspace::pExtendedWorkspace( QWidget* w, pExtendedWorkspace::DocumentMode m )
 	: QWidget( w )
 {
+	mLastDocument = 0;
 	// tab widget
 	mTabLayout = new QBoxLayout( QBoxLayout::LeftToRight );
 	mTabLayout->setSpacing( 3 );
@@ -75,6 +76,7 @@ pExtendedWorkspace::pExtendedWorkspace( QWidget* w, pExtendedWorkspace::Document
 	setDocMode( m );
 	
 	connect( mMdiAreaWidget, SIGNAL( subWindowActivated( QMdiSubWindow* ) ), this, SLOT( mdiArea_subWindowActivated( QMdiSubWindow* ) ) );
+	connect( this, SIGNAL( currentChanged( int ) ), this, SLOT( internal_currentChanged( int ) ) );
 }
 
 pExtendedWorkspace::~pExtendedWorkspace()
@@ -169,6 +171,8 @@ QWidget* pExtendedWorkspace::currentDocument() const
 			foreach ( QWidget* w, mDocuments )
 				if ( qApp->activeWindow() == w )
 					return w;
+			if ( mDocuments.contains( mLastDocument ) )
+				return mLastDocument;
 			break;
 	}
 	return 0;
@@ -404,6 +408,9 @@ void pExtendedWorkspace::setCurrentDocument( QWidget* d )
 
 void pExtendedWorkspace::mdiArea_subWindowActivated( QMdiSubWindow* w )
 { emit currentChanged( w ? indexOf( w->widget() ) : -1 ); }
+
+void pExtendedWorkspace::internal_currentChanged( int id )
+{ mLastDocument = document( id ); }
 
 void pExtendedWorkspace::activateNextDocument()
 {
