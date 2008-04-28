@@ -71,49 +71,29 @@
 <context>
     <name>MonkeyCore</name>
     <message>
-        <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="44"/>
-        <source>Initializing Style...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="52"/>
         <source>Initializing Translation...</source>
-        <translation type="unfinished">Initialisation de la traduction ...</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="58"/>
-        <source>Initializing Console...</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Initialisation de la traduction ...</translation>
     </message>
     <message>
         <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="62"/>
         <source>Initializing Main Window...</source>
-        <translation type="unfinished">Initialisation de Main Window ...</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="70"/>
-        <source>Initializing Plugins...</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Initialisation de Main Window ...</translation>
     </message>
     <message>
         <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="74"/>
         <source>Restoring Workspace...</source>
-        <translation type="unfinished">Restauration de l&apos;Espace de Travail...</translation>
+        <translation type="obsolete">Restauration de l&apos;Espace de Travail...</translation>
     </message>
     <message>
         <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="81"/>
         <source>Restoring Session...</source>
-        <translation type="unfinished">Restauration de la Session...</translation>
+        <translation type="obsolete">Restauration de la Session...</translation>
     </message>
     <message>
         <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="86"/>
         <source>%1 v%2 Ready !</source>
-        <translation type="unfinished">%1 v%2 Prêt !</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/coremanager/MonkeyCore.cpp" line="66"/>
-        <source>Initializing Shortcuts...</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">%1 v%2 Prêt !</translation>
     </message>
 </context>
 <context>
@@ -121,37 +101,37 @@
     <message>
         <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="27"/>
         <source>Failed to load static plugin</source>
-        <translation>Impossible de charger le plugin static</translation>
+        <translation type="obsolete">Impossible de charger le plugin static</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="44"/>
         <source>Failed to load plugin ( %1 ): Error: %2</source>
-        <translation>Impossible de charger le plugin ( %1 ): Erreur: %2</translation>
+        <translation type="obsolete">Impossible de charger le plugin ( %1 ): Erreur: %2</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="62"/>
         <source>Found plugin: %1, type: %2</source>
-        <translation>Plugin trouvé: %1, Type: %2</translation>
+        <translation type="obsolete">Plugin trouvé: %1, Type: %2</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="77"/>
         <source>User wantn&apos;t to intall plugin: %1</source>
-        <translation>L&apos;utilisateur ne veut pas installer le plugin: %1</translation>
+        <translation type="obsolete">L&apos;utilisateur ne veut pas installer le plugin: %1</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="82"/>
         <source>Successfully enabled plugin: %1</source>
-        <translation>Plugin activé avec succés: %1</translation>
+        <translation type="obsolete">Plugin activé avec succés: %1</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="84"/>
         <source>Unsuccessfully enabled plugin: %1</source>
-        <translation>Plugin non activé avec succés: %1</translation>
+        <translation type="obsolete">Plugin non activé avec succés: %1</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="87"/>
         <source>Already enabled plugin: %1</source>
-        <translation>Plugin déjà activé: %1</translation>
+        <translation type="obsolete">Plugin déjà activé: %1</translation>
     </message>
 </context>
 <context>
@@ -184,117 +164,117 @@
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="36"/>
         <source>France</source>
-        <translation>France</translation>
+        <translation type="obsolete">France</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="27"/>
         <source>Creator &amp; Principal Developer</source>
-        <translation>Créateur &amp; Développeur Principal</translation>
+        <translation type="obsolete">Créateur &amp; Développeur Principal</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="28"/>
         <source>Germany</source>
-        <translation>Allemagne</translation>
+        <translation type="obsolete">Allemagne</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="28"/>
         <source>Web Developer &amp; Web Designer</source>
-        <translation>Développeur Web &amp; Designer Web</translation>
+        <translation type="obsolete">Développeur Web &amp; Designer Web</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="29"/>
         <source>GDB Driver Integration</source>
-        <translation>Intégration du pilote GDB</translation>
+        <translation type="obsolete">Intégration du pilote GDB</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="30"/>
         <source>Splashscreen &amp; Icons Designer</source>
-        <translation>Ecran de démarrage &amp; Designer des icônes</translation>
+        <translation type="obsolete">Ecran de démarrage &amp; Designer des icônes</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="31"/>
         <source>Russia</source>
-        <translation>Russie</translation>
+        <translation type="obsolete">Russie</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="31"/>
         <source>Many shared code between our IDEs</source>
-        <translation>Beaucoup de partage de code entre nos IDEs</translation>
+        <translation type="obsolete">Beaucoup de partage de code entre nos IDEs</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="32"/>
         <source>Belarus</source>
-        <translation>BeloRussie</translation>
+        <translation type="obsolete">BeloRussie</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="32"/>
         <source>Principal Developer, Class Browser</source>
-        <translation>Developpeur Principal, Classe Browser</translation>
+        <translation type="obsolete">Developpeur Principal, Classe Browser</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="33"/>
         <source>Qt Pro Parser, Some Features/Help</source>
-        <translation>Parseur Qt Pro, de l&apos;aide et des nouveautés</translation>
+        <translation type="obsolete">Parseur Qt Pro, de l&apos;aide et des nouveautés</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="36"/>
         <source>No donations for now, you can use this &lt;a href=&quot;http://sourceforge.net/project/project_donations.php?group_id=163493&quot;&gt;link&lt;/a&gt; to make donation. Donations will help paying host/domain, and relatives things about the projects ( may need a mac book for better mac version :p ).</source>
-        <translation>Pas de don pour le moment, vous pouvez utiliser ceci &lt;a href=&quot;http://sourceforge.net/project/project_donations.php?group_id=163493&quot;&gt;liens&lt;/a&gt; pour faire un don. Les dons nous aident à payer l&apos;hébergement et le domaine et toutes les choses relatives aux projets ( comme acheter un macbook pour améliorer la version mac :p ).</translation>
+        <translation type="obsolete">Pas de don pour le moment, vous pouvez utiliser ceci &lt;a href=&quot;http://sourceforge.net/project/project_donations.php?group_id=163493&quot;&gt;liens&lt;/a&gt; pour faire un don. Les dons nous aident à payer l&apos;hébergement et le domaine et toutes les choses relatives aux projets ( comme acheter un macbook pour améliorer la version mac :p ).</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="45"/>
         <source>Location</source>
-        <translation>Localisation</translation>
+        <translation type="obsolete">Localisation</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="39"/>
         <source>Trolltech&apos;s Qt homepage.</source>
-        <translation>Site officiel de Trolltech.</translation>
+        <translation type="obsolete">Site officiel de Trolltech.</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="40"/>
         <source>Team collaboration across the Internet.</source>
-        <translation>Collaboration d&apos;equipe sur l&apos;Internet.</translation>
+        <translation type="obsolete">Collaboration d&apos;equipe sur l&apos;Internet.</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="41"/>
         <source>Our webissues server ( login: anonymous, password: anonymous ).</source>
-        <translation>Notre serveur WebIssues ( pseudo: anonymous, mot de passe: anonymous ).</translation>
+        <translation type="obsolete">Notre serveur WebIssues ( pseudo: anonymous, mot de passe: anonymous ).</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="42"/>
         <source>You can send bug/patch/ideas/what ever you want to our tracker.</source>
-        <translation>Vous pouvez envoyez vos contributions ou totu ce que vous voulez sur notre tracker.</translation>
+        <translation type="obsolete">Vous pouvez envoyez vos contributions ou totu ce que vous voulez sur notre tracker.</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="43"/>
         <source>A forum is at your disposition.</source>
-        <translation>Un forum est à votre disposition.</translation>
+        <translation type="obsolete">Un forum est à votre disposition.</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="44"/>
         <source>Get the latest news using the rss feed.</source>
-        <translation>Obtenez les derniers nouvelles avec le flux RSS.</translation>
+        <translation type="obsolete">Obtenez les derniers nouvelles avec le flux RSS.</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="45"/>
         <source>Meet the Monkeys ( All team including testers ).</source>
-        <translation>Rencontrez les Singes ( Toute l&apos;équipe dont les testeurs ).</translation>
+        <translation type="obsolete">Rencontrez les Singes ( Toute l&apos;équipe dont les testeurs ).</translation>
     </message>
     <message>
         <location filename="../monkey/src/pMonkeyStudio.cpp" line="219"/>
         <source>%1 Files (*.%2)</source>
-        <translation>%1 Fichiers (*.%2)</translation>
+        <translation type="obsolete">%1 Fichiers (*.%2)</translation>
     </message>
     <message>
         <location filename="../monkey/src/pMonkeyStudio.cpp" line="222"/>
         <source>All Image Files (%1)</source>
-        <translation>Toutes les images (%1)</translation>
+        <translation type="obsolete">Toutes les images (%1)</translation>
     </message>
     <message>
         <location filename="../monkey/src/pMonkeyStudio.cpp" line="224"/>
         <source>Select image(s)</source>
-        <translation>Choisissez le(s) image(s)</translation>
+        <translation type="obsolete">Choisissez le(s) image(s)</translation>
     </message>
     <message>
         <location filename="" line="7471221"/>
@@ -319,7 +299,7 @@
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIDesktopTools.cpp" line="92"/>
         <source>No available comment</source>
-        <translation>Pas de commentaire disponible</translation>
+        <translation type="obsolete">Pas de commentaire disponible</translation>
     </message>
     <message>
         <location filename="" line="7471221"/>
@@ -344,27 +324,27 @@
     <message>
         <location filename="../monkey/src/pMonkeyStudio.cpp" line="255"/>
         <source>Select file(s)</source>
-        <translation>Choisissez un/des fichier(s)</translation>
+        <translation type="obsolete">Choisissez un/des fichier(s)</translation>
     </message>
     <message>
         <location filename="../monkey/src/pMonkeyStudio.cpp" line="281"/>
         <source>Select file</source>
-        <translation>Selectionnez un fichier</translation>
+        <translation type="obsolete">Selectionnez un fichier</translation>
     </message>
     <message>
         <location filename="../monkey/src/pMonkeyStudio.cpp" line="307"/>
         <source>Choose a filename</source>
-        <translation>Choisissez un nom de fichier</translation>
+        <translation type="obsolete">Choisissez un nom de fichier</translation>
     </message>
     <message>
         <location filename="../monkey/src/pMonkeyStudio.cpp" line="331"/>
         <source>Select a folder</source>
-        <translation>Choisissez un dossier</translation>
+        <translation type="obsolete">Choisissez un dossier</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/BasePlugin.h" line="56"/>
         <source>This plugin can&apos;t be configured</source>
-        <translation>Ce plugin ne peut être configuré</translation>
+        <translation type="obsolete">Ce plugin ne peut être configuré</translation>
     </message>
     <message>
         <location filename="" line="7471221"/>
@@ -374,19 +354,14 @@
     <message>
         <location filename="../monkey/src/pMonkeyStudio.cpp" line="556"/>
         <source>Loaging Api File...</source>
-        <translation>Chargement des fichiers API...</translation>
+        <translation type="obsolete">Chargement des fichiers API...</translation>
     </message>
     <message>
         <location filename="../monkey/src/pMonkeyStudio.cpp" line="556"/>
         <source>An error occured when loading api file:
 %1</source>
-        <translation>Une erreur est survenue en chargeant l&apos;api:
+        <translation type="obsolete">Une erreur est survenue en chargeant l&apos;api:
 %1</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="57"/>
-        <source>%1 v%2 - %3 &amp; The Monkey Studio Team</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -987,16 +962,6 @@
 <context>
     <name>UIAddAbbreviation</name>
     <message>
-        <location filename="../monkey/src/abbreviationsmanager/ui/UIAddAbbreviation.cpp" line="49"/>
-        <source>Warning...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/abbreviationsmanager/ui/UIAddAbbreviation.cpp" line="49"/>
-        <source>This template already exists for this language.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../monkey/src/abbreviationsmanager/ui/UIAddAbbreviation.ui" line="13"/>
         <source>Add Code Template</source>
         <translation type="unfinished"></translation>
@@ -1018,34 +983,29 @@
     </message>
 </context>
 <context>
-    <name>UIAddExistingFiles</name>
+    <name>UIAddVariable</name>
     <message>
-        <location filename="../monkey/src/projectsmanager/ui/UIAddExistingFiles.cpp" line="22"/>
-        <source>Choose file(s)/project(s) to add to your project</source>
+        <location filename="../monkey/src/xupmanager/ui/UIAddVariable.ui" line="13"/>
+        <source>Add a variable...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/projectsmanager/ui/UIAddExistingFiles.cpp" line="37"/>
-        <source>Scopes</source>
+        <location filename="../monkey/src/xupmanager/ui/UIAddVariable.ui" line="25"/>
+        <source>Variable Name :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/projectsmanager/ui/UIAddExistingFiles.cpp" line="50"/>
-        <source>Operators</source>
+        <location filename="../monkey/src/xupmanager/ui/UIAddVariable.ui" line="32"/>
+        <source>Operator :</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>UIBuilderSettings</name>
     <message>
-        <location filename="../monkey/src/pluginsmanager/ui/UIBuilderSettings.cpp" line="99"/>
-        <source>Select an executable</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIBuilderSettings.cpp" line="106"/>
         <source>Select a folder</source>
-        <translation type="unfinished">Choisissez un dossier</translation>
+        <translation type="obsolete">Choisissez un dossier</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UIBuilderSettings.ui" line="13"/>
@@ -1096,19 +1056,9 @@
 <context>
     <name>UICLIToolSettings</name>
     <message>
-        <location filename="../monkey/src/pluginsmanager/ui/UICLIToolSettings.cpp" line="122"/>
-        <source>New Command</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/pluginsmanager/ui/UICLIToolSettings.cpp" line="170"/>
-        <source>Select an executable</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../monkey/src/pluginsmanager/ui/UICLIToolSettings.cpp" line="177"/>
         <source>Select a folder</source>
-        <translation type="unfinished">Choisissez un dossier</translation>
+        <translation type="obsolete">Choisissez un dossier</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UICLIToolSettings.ui" line="13"/>
@@ -1189,14 +1139,9 @@
 <context>
     <name>UICompilerSettings</name>
     <message>
-        <location filename="../monkey/src/pluginsmanager/ui/UICompilerSettings.cpp" line="99"/>
-        <source>Select an executable</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../monkey/src/pluginsmanager/ui/UICompilerSettings.cpp" line="106"/>
         <source>Select a folder</source>
-        <translation type="unfinished">Choisissez un dossier</translation>
+        <translation type="obsolete">Choisissez un dossier</translation>
     </message>
     <message>
         <location filename="../monkey/src/pluginsmanager/ui/UICompilerSettings.ui" line="13"/>
@@ -1246,36 +1191,6 @@
 </context>
 <context>
     <name>UIDesktopTools</name>
-    <message>
-        <location filename="../monkey/src/toolsmanager/ui/UIDesktopTools.cpp" line="54"/>
-        <source>Tools Editor...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/toolsmanager/ui/UIDesktopTools.cpp" line="54"/>
-        <source>You&apos;re about to discard all changes. Are you sure ?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/toolsmanager/ui/UIDesktopTools.cpp" line="217"/>
-        <source>Move Up...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/toolsmanager/ui/UIDesktopTools.cpp" line="217"/>
-        <source>Only one item can be move up, please select only one item.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/toolsmanager/ui/UIDesktopTools.cpp" line="236"/>
-        <source>Move Down...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/toolsmanager/ui/UIDesktopTools.cpp" line="236"/>
-        <source>Only one item can be move down, please select only one item.</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIDesktopTools.ui" line="13"/>
         <source>Desktop Applications</source>
@@ -1345,739 +1260,14 @@
 <context>
     <name>UIMain</name>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="98"/>
-        <source>&amp;File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="100"/>
-        <source>&amp;New...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="100"/>
-        <source>Ctrl+N</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="100"/>
-        <source>Create a new file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="101"/>
-        <source>&amp;Open...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="101"/>
-        <source>Ctrl+O</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="101"/>
-        <source>Open a file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="170"/>
-        <source>&amp;Recents</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="171"/>
         <source>&amp;Clear</source>
-        <translation type="unfinished">&amp;Effacer</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="103"/>
-        <source>Clear the recents files list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="106"/>
-        <source>Session</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="107"/>
-        <source>Save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="107"/>
-        <source>Save the current session files list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="108"/>
-        <source>Restore</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="108"/>
-        <source>Restore the current session files list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="159"/>
-        <source>&amp;Save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="111"/>
-        <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="111"/>
-        <source>Save the current file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="112"/>
-        <source>Save all files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="162"/>
-        <source>&amp;Close</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="114"/>
-        <source>Ctrl+W</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="114"/>
-        <source>Close the current file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="115"/>
-        <source>Close all files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="119"/>
-        <source>Quic&amp;k Print</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="119"/>
-        <source>Quick print the current file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="120"/>
-        <source>&amp;Print...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="120"/>
-        <source>Ctrl+P</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="120"/>
-        <source>Print the current file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="122"/>
-        <source>&amp;Quit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="122"/>
-        <source>Ctrl+Q</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="122"/>
-        <source>Quit the application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="124"/>
-        <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="126"/>
-        <source>Settings...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="126"/>
-        <source>Edit the application settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="127"/>
-        <source>Shortcuts Editor...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="127"/>
-        <source>Ctrl+E</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="127"/>
-        <source>Edit the application shortcuts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="130"/>
-        <source>&amp;Undo</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="130"/>
-        <source>Ctrl+Z</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="130"/>
-        <source>Undo</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="131"/>
-        <source>&amp;Redo</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="131"/>
-        <source>Ctrl+Y</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="131"/>
-        <source>Redo</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="133"/>
-        <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="133"/>
-        <source>Ctrl+C</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="133"/>
-        <source>Copy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="134"/>
-        <source>Cu&amp;t</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="134"/>
-        <source>Ctrl+X</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="134"/>
-        <source>Cut</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="135"/>
-        <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="135"/>
-        <source>Ctrl+V</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">&amp;Effacer</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/UIMain.cpp" line="135"/>
         <source>Paste</source>
-        <translation type="unfinished">Coller</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="137"/>
-        <source>&amp;Search - Replace...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="137"/>
-        <source>Ctrl+F</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="137"/>
-        <source>Search - Replace...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="138"/>
-        <source>Search Previous</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="138"/>
-        <source>Shift+F3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="139"/>
-        <source>Search Next</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="139"/>
-        <source>F3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="141"/>
-        <source>&amp;Go To...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="141"/>
-        <source>Ctrl+G</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="141"/>
-        <source>Go To...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="144"/>
-        <source>Expand Abbreviation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="144"/>
-        <source>Ctrl+L</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="147"/>
-        <source>&amp;View</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="149"/>
-        <source>&amp;Style</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="150"/>
-        <source>&amp;Next Tab</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="150"/>
-        <source>Alt+Right</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="150"/>
-        <source>Active the next tab</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="151"/>
-        <source>&amp;Previous Tab</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="151"/>
-        <source>Alt+Left</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="151"/>
-        <source>Active the previous tab</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="154"/>
-        <source>&amp;Project</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="156"/>
-        <source>&amp;New</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="156"/>
-        <source>Ctrl+Shift+N</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="156"/>
-        <source>New project...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="157"/>
-        <source>&amp;Open</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="157"/>
-        <source>Ctrl+Shift+O</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="157"/>
-        <source>Open a project...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="159"/>
-        <source>Save the current project</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="160"/>
-        <source>Save all projects</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="162"/>
-        <source>Close the current project</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="163"/>
-        <source>Close all projects</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="165"/>
-        <source>Set&amp;tings...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="165"/>
-        <source>Project settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="171"/>
-        <source>Clear the recents projects list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="176"/>
-        <source>&amp;Build</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="185"/>
-        <source>&amp;Tools</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="187"/>
-        <source>&amp;Edit User Tools...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="187"/>
-        <source>Edit tools...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="188"/>
-        <source>Edit &amp;Desktop Tools...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="188"/>
-        <source>Edit desktop tools...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="190"/>
-        <source>&amp;User Tools</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="191"/>
-        <source>Desktop &amp;Tools</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="193"/>
-        <source>Plu&amp;gins</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="195"/>
-        <source>&amp;Manage...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="195"/>
-        <source>Manage plugins...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="209"/>
-        <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="211"/>
-        <source>&amp;Manual</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="211"/>
-        <source>Manual</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="213"/>
-        <source>&amp;About...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="213"/>
-        <source>About application...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="214"/>
-        <source>About &amp;Qt...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="214"/>
-        <source>About Qt...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="216"/>
-        <source>&amp;Test Report</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="216"/>
-        <source>Pause</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="216"/>
-        <source>Coverage Meter Test Report...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="117"/>
-        <source>Save As &amp;Backup</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="117"/>
-        <source>Ctrl+B</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="117"/>
-        <source>Save a backup of the current file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="152"/>
-        <source>&amp;Filtered Projects</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="152"/>
-        <source>Filtered project view</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="167"/>
-        <source>&amp;Add Existing Files/Projects...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="167"/>
-        <source>Add existing files/projects to the current project</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="177"/>
-        <source>&amp;Rebuild</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="178"/>
-        <source>&amp;Clean</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="179"/>
-        <source>&amp;Execute</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="180"/>
-        <source>&amp;User Commands</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="183"/>
-        <source>&amp;Debugger</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="184"/>
-        <source>&amp;Interpreter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="128"/>
-        <source>Translations...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="128"/>
-        <source>Ctrl+T</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="128"/>
-        <source>Change the application translations files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="142"/>
-        <source>&amp;All Commands</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="145"/>
-        <source>Prepare APIs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="145"/>
-        <source>Ctrl+Alt+P</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="145"/>
-        <source>Prepare the APIs files for auto completion / calltips</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="160"/>
-        <source>Save &amp;All</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="163"/>
-        <source>Close &amp;All</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="168"/>
-        <source>&amp;Remove Variable/Value...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="168"/>
-        <source>Remove the current variable/value</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="198"/>
-        <source>&amp;Window</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="200"/>
-        <source>&amp;Single Document Interface</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="200"/>
-        <source>Single Document Interface</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="201"/>
-        <source>&amp;Multiple Document Interface</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="201"/>
-        <source>Multiple Document Interface</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="202"/>
-        <source>&amp;Top Level Windows Interface</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="202"/>
-        <source>Top Level Windows Interface</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="204"/>
-        <source>&amp;Cascade</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="204"/>
-        <source>Cascade</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="205"/>
-        <source>&amp;Tile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="205"/>
-        <source>Tile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="206"/>
-        <source>&amp;Minimize</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="206"/>
-        <source>Minimize</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="207"/>
-        <source>&amp;Restore</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="207"/>
-        <source>Restore normal size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="152"/>
-        <source></source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Coller</translation>
     </message>
 </context>
 <context>
@@ -2156,138 +1346,13 @@
 <context>
     <name>UIProjectsManager</name>
     <message>
-        <location filename="../monkey/src/projectsmanager/ui/UIProjectsManager.cpp" line="235"/>
-        <source>Open Project...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/projectsmanager/ui/UIProjectsManager.cpp" line="235"/>
-        <source>There is no plugin that can manage this project :
-[%1]</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/projectsmanager/ui/UIProjectsManager.cpp" line="274"/>
-        <source>Choose the project(s) to open</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/projectsmanager/ui/UIProjectsManager.ui" line="13"/>
-        <source>Projects Manager</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/projectsmanager/ui/UIProjectsManager.ui" line="87"/>
-        <source>.QToolBar { border : none }</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/projectsmanager/ui/UIProjectsManager.ui" line="100"/>
-        <source>Projects :</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../monkey/src/projectsmanager/ui/UIProjectsManager.cpp" line="255"/>
         <source>Projects</source>
-        <translation type="unfinished">Projets</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/projectsmanager/ui/UIProjectsManager.cpp" line="342"/>
-        <source>Remove Item</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/projectsmanager/ui/UIProjectsManager.cpp" line="340"/>
-        <source>Really remove item ?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/projectsmanager/ui/UIProjectsManager.cpp" line="343"/>
-        <source>Remove Item &amp;&amp; Delete Associated File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/projectsmanager/ui/UIProjectsManager.cpp" line="362"/>
-        <source>Delete File...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/projectsmanager/ui/UIProjectsManager.cpp" line="362"/>
-        <source>Can&apos;t delete file:
-%1</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UISaveFiles</name>
-    <message>
-        <location filename="../monkey/src/workspace/UISaveFiles.cpp" line="21"/>
-        <source>Save File(s) ?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/workspace/UISaveFiles.cpp" line="32"/>
-        <source>Check the files you want to save :</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/workspace/UISaveFiles.cpp" line="42"/>
-        <source>Save Selected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/workspace/UISaveFiles.cpp" line="43"/>
-        <source>Discard All</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/workspace/UISaveFiles.cpp" line="49"/>
-        <source>Cancel Close</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Projets</translation>
     </message>
 </context>
 <context>
     <name>UISettings</name>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.cpp" line="135"/>
-        <source>No warning</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.cpp" line="136"/>
-        <source>Inconsistent</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.cpp" line="137"/>
-        <source>Tabs after spaces</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.cpp" line="138"/>
-        <source>Spaces</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.cpp" line="139"/>
-        <source>Tabs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.cpp" line="546"/>
-        <source>Select default projects directory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.cpp" line="612"/>
-        <source>Select API file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.cpp" line="612"/>
-        <source>API Files (*.api);;All Files (*)</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="13"/>
         <source>Settings</source>
@@ -2299,707 +1364,707 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="289"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="292"/>
         <source>Default projects directory :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2920"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2943"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="303"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="312"/>
         <source>%HOME%/.Monkey Studio/Projects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="337"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="360"/>
         <source>Do nothing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="347"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="370"/>
         <source>Alert the user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="354"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="377"/>
         <source>Automatically reload the file if safe, alert the user if not</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="509"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="519"/>
         <source>Save Session On Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="516"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="526"/>
         <source>Restore Session On Startup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3474"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3497"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3469"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3492"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="601"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="624"/>
         <source>Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="625"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="648"/>
         <source>Automatic Syntax Check</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="632"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="655"/>
         <source>Convert Tabs Upon Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="639"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="662"/>
         <source>Create Backup File Upon Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="646"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="669"/>
         <source>Automatic End of Line Conversion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="656"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="679"/>
         <source>Default encoding</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="689"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="712"/>
         <source>Selection Colours</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2485"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2508"/>
         <source>Background :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2468"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2491"/>
         <source>Foreground :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="759"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="782"/>
         <source>Default Document Colours</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="783"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="806"/>
         <source>Pen :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="806"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="829"/>
         <source>Paper :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="864"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="887"/>
         <source>Auto Completion Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="891"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="914"/>
         <source>Source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="912"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="935"/>
         <source>from Document</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="919"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="942"/>
         <source>from API file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="926"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="949"/>
         <source>from All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="936"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="959"/>
         <source>Case Sensitive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="943"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="966"/>
         <source>Replace Word</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="950"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="973"/>
         <source>Show Single</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="974"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="997"/>
         <source>Threshold :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1059"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1082"/>
         <source>Calltips Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1100"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1123"/>
         <source>Visible Calltips :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1184"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1207"/>
         <source>No Context</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1191"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1214"/>
         <source>Context </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1198"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1221"/>
         <source>No Auto Completion Context</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1234"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1257"/>
         <source>Highlight :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1342"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1365"/>
         <source>Indentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1383"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1406"/>
         <source>Indentation Width :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1450"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1473"/>
         <source>Tab Width :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1500"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1523"/>
         <source>Indentation Guides Colours :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1507"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1530"/>
         <source>Backspace Unindents</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1514"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1537"/>
         <source>Tab Indents</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1521"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1544"/>
         <source>Indentation Guides</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1528"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1551"/>
         <source>Auto Indent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1535"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1558"/>
         <source>Indentation use Tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1642"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1665"/>
         <source>Brace Matching Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1705"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1728"/>
         <source>Unmatched Brace Foreground :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1712"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1735"/>
         <source>Matched Brace Background :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1719"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1742"/>
         <source>Unmatched Brace Background :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1742"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1765"/>
         <source>Matched Brace Foreground :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1783"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1806"/>
         <source>Strict Brace Match</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1790"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1813"/>
         <source>Sloppy Brace Match</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1832"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1855"/>
         <source>Edge Mode Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1876"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1899"/>
         <source>Color :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1918"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1941"/>
         <source>Column Number :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1962"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1985"/>
         <source>Edge Line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1969"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="1992"/>
         <source>Edge Background</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2011"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2034"/>
         <source>Caret Line Visible</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2054"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2077"/>
         <source>Caret Line Background :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2061"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2084"/>
         <source>Caret Foreground :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2227"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2250"/>
         <source>Width :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2186"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2209"/>
         <source>Line Numbers Margin Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2271"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2294"/>
         <source>Auto Width</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2281"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2304"/>
         <source>Fold Margin Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2325"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2348"/>
         <source>Plain Fold Style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2332"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2355"/>
         <source>Circled Tree Fold Style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2339"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2362"/>
         <source>Circled Fold Style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2346"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2369"/>
         <source>Boxed Fold Style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2353"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2376"/>
         <source>Boxed Tree Fold Style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2412"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2435"/>
         <source>Global Margins Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2445"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2468"/>
         <source>12345</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2492"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2515"/>
         <source>Font :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2534"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2557"/>
         <source>Eol Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2558"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2581"/>
         <source>Eol Visibility</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2565"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2588"/>
         <source>Windows/DOS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2572"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2595"/>
         <source>Macintosh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2579"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2602"/>
         <source>Unix</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2589"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2612"/>
         <source>Whitespace Visibility Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2613"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2636"/>
         <source>Visible</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2620"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2643"/>
         <source>Visible After Indent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2630"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2653"/>
         <source>Wrap Mode Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2654"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2677"/>
         <source>Wrap Word</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2661"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2684"/>
         <source>Wrap Character</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2671"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2694"/>
         <source>Wrap Visual Flags Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2715"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2738"/>
         <source>Indent Width :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2813"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2836"/>
         <source>Flag By Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2820"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2843"/>
         <source>Flag By Border</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2830"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2853"/>
         <source>Start :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2837"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2860"/>
         <source>End :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2879"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2902"/>
         <source>APIs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2903"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2926"/>
         <source>List of API files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2910"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2933"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3029"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3052"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3005"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3028"/>
         <source>Language :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2941"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2964"/>
         <source>Select language to be configured.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2992"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3015"/>
         <source>Filename Pattern</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="2997"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3020"/>
         <source>Lexer Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3012"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3035"/>
         <source>Filename Pattern :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3019"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3042"/>
         <source>Add/Change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3061"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3084"/>
         <source>Style Element</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3119"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3142"/>
         <source>Foreground Colour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3126"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3149"/>
         <source>Background Colour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3133"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3156"/>
         <source>Font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3140"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3163"/>
         <source>Fill to end of line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3156"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3179"/>
         <source>setFoldComments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3159"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3182"/>
         <source>Fold comments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3166"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3189"/>
         <source>setFoldCompact</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3169"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3192"/>
         <source>Fold compact</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3176"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3199"/>
         <source>setFoldQuotes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3179"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3202"/>
         <source>Fold quotes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3186"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3209"/>
         <source>setFoldDirectives</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3189"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3212"/>
         <source>Fold directives</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3196"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3219"/>
         <source>setFoldAtBegin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3199"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3222"/>
         <source>Fold at begin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3206"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3229"/>
         <source>setFoldAtParenthesis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3209"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3232"/>
         <source>Fold at parenthesis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3216"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3239"/>
         <source>setFoldAtElse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3219"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3242"/>
         <source>Fold at else</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3226"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3249"/>
         <source>setFoldPreprocessor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3229"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3252"/>
         <source>Fold preprocessor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3236"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3259"/>
         <source>setStylePreprocessor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3239"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3262"/>
         <source>Style preprocessor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3246"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3269"/>
         <source>Indent opening brace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3253"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3276"/>
         <source>Indent closing brace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3260"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3283"/>
         <source>setCaseSensitiveTags</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3263"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3286"/>
         <source>Case sensitive tags</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3270"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3293"/>
         <source>setBackslashEscapes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3273"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3296"/>
         <source>Backslash escapes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3280"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3303"/>
         <source>Indentation warning :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3287"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3310"/>
         <source>setIndentationWarning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3324"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3347"/>
         <source>All Foreground Colours</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3331"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3354"/>
         <source>All Background Colours</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3338"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3361"/>
         <source>All Fonts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3363"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3386"/>
         <source>Reset Current Lexer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3385"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3408"/>
         <source>Lexer Language :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3411"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3434"/>
         <source>Templates :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3438"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3461"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3464"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3487"/>
         <source>Template</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3482"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3505"/>
         <source>Add...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3504"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="3527"/>
         <source>Code :</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3069,68 +2134,48 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="255"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="252"/>
         <source>&amp;Project Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="316"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="339"/>
         <source>On External &amp;Changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="364"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="387"/>
         <source>&amp;Workspace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="388"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="411"/>
         <source>Tabs Have Close Button</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="395"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="418"/>
         <source>Tabs Have Shortcut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="402"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="425"/>
         <source>Tabs Are Elided</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="425"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="448"/>
         <source>Tabs Text Color :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="432"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="455"/>
         <source>Current Tab Text Color :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="475"/>
-        <source>&amp;Operators</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="488"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="498"/>
         <source>&amp;Session</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.cpp" line="65"/>
-        <source>SDI</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.cpp" line="66"/>
-        <source>MDI</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.cpp" line="67"/>
-        <source>Top Level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3139,12 +2184,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="455"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="478"/>
         <source>Tab Mode :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="561"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="584"/>
         <source>Templates Paths</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3154,23 +2199,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="568"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="591"/>
         <source>Translations Paths</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="575"/>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="598"/>
         <source>Plugins Paths</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="319"/>
+        <source>Save all files on custom action ( Build, Debugger, Interpreter )</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UISettings.ui" line="326"/>
+        <source>Save all projects on custom action ( Build, Debugger, Interpreter )</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>UITemplatesWizard</name>
-    <message>
-        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="150"/>
-        <source>Select the file(s) destination</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="13"/>
         <source>Templates Wizard</source>
@@ -3192,37 +2242,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="199"/>
+        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="103"/>
         <source>Choose a template</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="234"/>
+        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="138"/>
         <source>Informations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="163"/>
+        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="249"/>
         <source>Destination :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="170"/>
+        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="256"/>
         <source>File Destination</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="177"/>
+        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="263"/>
         <source>Click to select a folder for your file(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="180"/>
+        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="266"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="132"/>
+        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="218"/>
         <source>Choose the project in witch you want to add file(s)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3232,27 +2282,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="296"/>
+        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="303"/>
         <source>Cancel</source>
         <translation type="unfinished">Annuler</translation>
     </message>
     <message>
-        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="35"/>
-        <source>All</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="160"/>
-        <source>Template...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="160"/>
-        <source>You need to select a template.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="99"/>
+        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="185"/>
         <source>Add To Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3262,53 +2297,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="303"/>
+        <location filename="../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="296"/>
         <source>Create</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>UIToolsEdit</name>
-    <message>
-        <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.cpp" line="42"/>
-        <source>Tools Editor...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.cpp" line="42"/>
-        <source>You&apos;re about to discard all changes. Are you sure ?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.cpp" line="61"/>
-        <source>Adding...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.cpp" line="61"/>
-        <source>There is no current tool, do you want to add a new one ?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.cpp" line="118"/>
-        <source>new Tool</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.cpp" line="195"/>
-        <source>Choose an icon for this tool</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.cpp" line="221"/>
-        <source>Choose the file to execute for this tool</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.cpp" line="260"/>
-        <source>Choose the working path for this tool</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.ui" line="13"/>
         <source>Tools Editor</source>
@@ -3394,19 +2389,9 @@
         <source>Down</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../monkey/src/toolsmanager/ui/UIToolsEdit.cpp" line="175"/>
-        <source>&lt;b&gt;Tools Editor&lt;/b&gt; give you the possibility to use variables&lt;br&gt;&lt;br&gt;&lt;b&gt;$cpp$&lt;/b&gt; : Current project path&lt;br&gt;&lt;b&gt;$cp$&lt;/b&gt; : Current project filepath&lt;br&gt;&lt;b&gt;$cfp$&lt;/b&gt; : Current tab path&lt;br&gt;&lt;b&gt;$cf$&lt;/b&gt; : Current tab filepath&lt;br&gt;&lt;b&gt;$cip$&lt;/b&gt; : Current item path&lt;br&gt;&lt;b&gt;$ci$&lt;/b&gt; : Current item filepath</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>UITranslator</name>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UITranslator.cpp" line="35"/>
-        <source>Choose the location of your translations</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UITranslator.ui" line="13"/>
         <source>Translation...</source>
@@ -3427,97 +2412,150 @@
         <source>Locate the translations</source>
         <translation>Définer ou se trouvent les traductions</translation>
     </message>
+</context>
+<context>
+    <name>UIXUPManager</name>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UITranslator.cpp" line="28"/>
-        <source>Changing Translations...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/maininterface/ui/UITranslator.cpp" line="28"/>
-        <source>You need to restart %1 for the new translations be applied</source>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPManager.ui" line="13"/>
+        <source>Projects Manager</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>pConsoleManager</name>
+    <name>UIXUPProjectEditor</name>
     <message>
-        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="224"/>
-        <source>User Raw Command</source>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.ui" line="13"/>
+        <source>XUP Project Editor : %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="237"/>
-        <source>sendRawData...</source>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.ui" line="21"/>
+        <source>Scope :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="237"/>
-        <source>Can&apos;t send raw data to console</source>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.ui" line="52"/>
+        <source>Operator :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="35"/>
-        <source>Stop current command</source>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.ui" line="72"/>
+        <source>Property :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="35"/>
-        <source>Console Manager</source>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.ui" line="80"/>
+        <source>Project Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="43"/>
-        <source>Stop the currently running command</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>pEditor</name>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/pEditor.cpp" line="201"/>
-        <source>Open file...</source>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.ui" line="88"/>
+        <source>Others Variables</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/qscintillamanager/pEditor.cpp" line="201"/>
-        <source>Cannot read file %1:
-%2.</source>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.ui" line="96"/>
+        <source>Builder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/qscintillamanager/pEditor.cpp" line="264"/>
-        <source>Save file...</source>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.ui" line="104"/>
+        <source>Compiler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/qscintillamanager/pEditor.cpp" line="314"/>
-        <source>Cannot write file %1:
-%2.</source>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.ui" line="112"/>
+        <source>Debugger</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/qscintillamanager/pEditor.cpp" line="418"/>
-        <source>Go To Line...</source>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.ui" line="120"/>
+        <source>Interpreter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/qscintillamanager/pEditor.cpp" line="418"/>
-        <source>Enter the line you want to go:</source>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.ui" line="153"/>
+        <source>Add Files...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/qscintillamanager/pEditor.cpp" line="314"/>
-        <source>Save backup...</source>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.ui" line="163"/>
+        <source>Modify File...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/qscintillamanager/pEditor.cpp" line="352"/>
-        <source>Quick Print...</source>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.ui" line="176"/>
+        <source>Remove File...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/qscintillamanager/pEditor.cpp" line="352"/>
-        <source>There is no defaullt printer, please set one before trying quick print</source>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.ui" line="215"/>
+        <source>Variables</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.ui" line="299"/>
+        <source>Add...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.ui" line="312"/>
+        <source>Edit...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.ui" line="325"/>
+        <source>Remove...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.ui" line="280"/>
+        <source>Values</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.ui" line="335"/>
+        <source>Clear...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.ui" line="362"/>
+        <source>Use Custom Builder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.ui" line="374"/>
+        <source>Builders Available :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.ui" line="405"/>
+        <source>Use Custom Compiler</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.ui" line="417"/>
+        <source>Compilers Available :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.ui" line="448"/>
+        <source>Use Custom Debugger</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.ui" line="460"/>
+        <source>Debuggers Available :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.ui" line="491"/>
+        <source>Use Custom Interpreter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.ui" line="503"/>
+        <source>Interpreters Available :</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3539,7 +2577,7 @@
     <message>
         <location filename="../monkey/src/recentsmanager/pRecentsManager.cpp" line="133"/>
         <source>&amp;Clear</source>
-        <translation>&amp;Effacer</translation>
+        <translation type="obsolete">&amp;Effacer</translation>
     </message>
 </context>
 <context>
@@ -3552,7 +2590,7 @@
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.cpp" line="190"/>
         <source>%1 occurences replaced</source>
-        <translation>%1 occurence remplacée</translation>
+        <translation type="obsolete">%1 occurence remplacée</translation>
     </message>
     <message>
         <location filename="" line="7471221"/>
@@ -3562,160 +2600,12 @@
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="101"/>
         <source>Replace All</source>
-        <translation>Tout remplacer</translation>
+        <translation type="obsolete">Tout remplacer</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="126"/>
         <source>Replace</source>
-        <translation>Remplacer</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="151"/>
-        <source>Search Next</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="176"/>
-        <source>Search Previous</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="255"/>
-        <source>Replace the current selection with this string</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="59"/>
-        <source>Enter the string or regular expression to find.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="192"/>
-        <source>If it&apos;s checked then the search is case sensitive.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="195"/>
-        <source>Case Sensitive</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="262"/>
-        <source>From Start</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="229"/>
-        <source>If it&apos;s checked then the search wraps around the end of the text.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="232"/>
-        <source>Wrap</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="202"/>
-        <source>If it&apos;s checked then the search looks for whole word matches only, otherwise it searches for any matching text.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="205"/>
-        <source>Whole Words</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="212"/>
-        <source>If it&apos;s checked then expr is interpreted as a regular expression rather than a simple string.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="215"/>
-        <source>RegExp</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.cpp" line="115"/>
-        <source>Not Found</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.cpp" line="166"/>
-        <source>Nothing To Replace</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.cpp" line="190"/>
-        <source>Nothing To Repalce</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="13"/>
-        <source>Search - Replace</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="45"/>
-        <source>Search Text :</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="52"/>
-        <source>Replace Text :</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/ui/pSearch.ui" line="82"/>
-        <source>Informations</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>pTemplatesManager</name>
-    <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="37"/>
-        <source>Other</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="38"/>
-        <source>Wrong template type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="39"/>
-        <source>No desctiption</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="160"/>
-        <source>Error...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="74"/>
-        <source>Destination not set.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="144"/>
-        <source>Can&apos;t create destination &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="121"/>
-        <source>Empty filename detected for file %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="152"/>
-        <source>Can&apos;t copy &apos;%1%2&apos; to &apos;%3&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="160"/>
-        <source>Can&apos;t edit file %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Remplacer</translation>
     </message>
 </context>
 <context>
@@ -3723,7 +2613,7 @@
     <message>
         <location filename="../monkey/src/toolsmanager/pToolsManager.cpp" line="110"/>
         <source>Tools Error...</source>
-        <translation>Erreur Outils ...</translation>
+        <translation type="obsolete">Erreur Outils ...</translation>
     </message>
     <message>
         <location filename="" line="7471221"/>
@@ -3732,467 +2622,41 @@
         <translation type="obsolete">L&apos;erreur tente de démarrer les outis:
 %1</translation>
     </message>
-    <message>
-        <location filename="../monkey/src/toolsmanager/pToolsManager.cpp" line="110"/>
-        <source>Error trying to start tool :
-%1</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>pWorkspace</name>
     <message>
         <location filename="../monkey/src/workspace/pWorkspace.cpp" line="325"/>
         <source>Choose the file(s) to open</source>
-        <translation>Choisissez le(s) fichier(s) à ouvrir</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="403"/>
-        <source>Choose a filename to backup your file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="268"/>
-        <source>Open As &amp;File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="269"/>
-        <source>Open As &amp;Project</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Choisissez le(s) fichier(s) à ouvrir</translation>
     </message>
     <message>
         <location filename="../monkey/src/workspace/pWorkspace.cpp" line="271"/>
         <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
+        <translation type="obsolete">Annuler</translation>
     </message>
     <message>
         <location filename="../monkey/src/workspace/pWorkspace.cpp" line="303"/>
         <source>Files</source>
-        <translation type="unfinished">Fichiers</translation>
+        <translation type="obsolete">Fichiers</translation>
     </message>
 </context>
 <context>
     <name>qSciShortcutsManager</name>
     <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="41"/>
-        <source>Extend selection up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="116"/>
-        <source>Move to line start</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="119"/>
-        <source>Extend selection to line start</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="131"/>
-        <source>Home wrap</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="146"/>
-        <source>VC Home wrap</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="149"/>
-        <source>Extend selection VC Home wrap</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="152"/>
-        <source>Move to end of line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="155"/>
-        <source>Extend selection to end of line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="167"/>
-        <source>Move to line end wrap</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="170"/>
-        <source>Extend selection to line end wrap</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="173"/>
-        <source>Move to document start</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="176"/>
-        <source>Extend selection to document start</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="179"/>
-        <source>Move to document end</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="182"/>
-        <source>Extend selection to document end</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="233"/>
-        <source>Delete line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="236"/>
-        <source>Cut line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="239"/>
-        <source>Copy line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="245"/>
-        <source>Duplicate line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="254"/>
-        <source>Edit toggle over type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="266"/>
-        <source>Delete</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="269"/>
-        <source>Select All</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="272"/>
-        <source>Zoom In</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="275"/>
-        <source>Zoom Out</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="278"/>
-        <source>Set Zoom</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="26"/>
         <source>Move down one line</source>
-        <translation type="unfinished">Descendre d&apos;une ligne</translation>
+        <translation type="obsolete">Descendre d&apos;une ligne</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="29"/>
         <source>Extend selection down one line</source>
-        <translation type="unfinished">Etendre la selection à la ligne suivante</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="32"/>
-        <source>Extend rectangular selection down one line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="35"/>
-        <source>Scroll view down one line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="38"/>
-        <source>Move up one line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="44"/>
-        <source>Extend selection up one line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="47"/>
-        <source>Scroll view up one line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="56"/>
-        <source>Move down one paragraph</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="53"/>
-        <source>Extend selection up one paragraph</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="59"/>
-        <source>Extend selection down one paragraph</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="62"/>
-        <source>Move left one character</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="65"/>
-        <source>Extend selection left one character</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="68"/>
-        <source>Extend rectangular selection left one character</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="71"/>
-        <source>Move right one character</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="74"/>
-        <source>Extend selection right one character</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="77"/>
-        <source>Extend rectangular selection right one character</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="80"/>
-        <source>Move left one word</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="83"/>
-        <source>Extend selection left one word</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="86"/>
-        <source>Move right one word</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="89"/>
-        <source>Extend selection right one word</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="92"/>
-        <source>Move left one word end</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="95"/>
-        <source>Extend selection left one word left</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="98"/>
-        <source>Move right one word end</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="101"/>
-        <source>Extend selection right one word end</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="104"/>
-        <source>Move left one word part</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="107"/>
-        <source>Extend selection left one word part </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="110"/>
-        <source>Move right one word part</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="113"/>
-        <source>Extend selection right one word part</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="122"/>
-        <source>Extend rectangular selection to line start</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="125"/>
-        <source>Move to start of displayed line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="128"/>
-        <source>Extend selection start of displayed line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="134"/>
-        <source>Extend selection on home wrap</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="137"/>
-        <source>Move to firsst VC in line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="140"/>
-        <source>Extend selection to first VC in line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="143"/>
-        <source>Extend rectangular selection to firts VC in line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="158"/>
-        <source>Extend rectangular selection to end of line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="161"/>
-        <source>Move to end displayed line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="164"/>
-        <source>Extend selection to end of displayed line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="185"/>
-        <source>Move up one page</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="188"/>
-        <source>Extend selection up one page</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="191"/>
-        <source>Extend rectangular selection up one page</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="194"/>
-        <source>Move down one page</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="197"/>
-        <source>Extend selection down one page</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="200"/>
-        <source>Extend rectangular selection down one page</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="203"/>
-        <source>Move up one page stuttered</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="206"/>
-        <source>Extend selection up one page stuttered</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="209"/>
-        <source>Move down one page stuttered</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="212"/>
-        <source>Extend selection down one page stuttered</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="215"/>
-        <source>Backspace</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="218"/>
-        <source>Backspace not a line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="221"/>
-        <source>Delete previous word</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="224"/>
-        <source>Delete next word</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="227"/>
-        <source>Delete line tp left</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="230"/>
-        <source>Delete line to right</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="242"/>
-        <source>Swap current and previous line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="248"/>
-        <source>To lower case</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="251"/>
-        <source>To upper case</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="257"/>
-        <source>Formfeed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="260"/>
-        <source>Delete one indent</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Etendre la selection à la ligne suivante</translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="263"/>
         <source>Duplicate selection</source>
-        <translation type="unfinished">Dupliquer la selection</translation>
+        <translation type="obsolete">Dupliquer la selection</translation>
     </message>
 </context>
 </TS>
