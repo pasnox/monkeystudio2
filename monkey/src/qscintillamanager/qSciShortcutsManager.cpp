@@ -306,8 +306,8 @@ void qSciShortcutsManager::keyBoardShortcutPressed ()
     pAbstractChild* child = MonkeyCore::workspace()->currentChild();
     if (child)
     {
-        pEditor* editor = child->currentEditor ();
-        if (editor && editor->hasFocus())
+        pEditor* editor = child->currentEditor();
+        if ( editor && ( editor->hasFocus() || child->isWindow() ) )
         {
             editor->SendScintilla (messageCode);
         }
