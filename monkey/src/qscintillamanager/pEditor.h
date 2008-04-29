@@ -76,7 +76,7 @@ public slots:
 	void quickPrint();
 	void selectNone();
 	void invokeGoToLine();
-	void convertTabs( int = -1 );
+	void convertTabs();
 	void makeBackup();
 
 signals:
