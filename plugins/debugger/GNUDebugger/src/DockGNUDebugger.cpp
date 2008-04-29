@@ -188,8 +188,8 @@ void DockGNUDebugger::onFileOpened( const QString& file )
 			iconbreakenable = e->markerDefine (QPixmap(":/icons/break_enable.png").scaled(pixmapSize) );
 			iconbreakdisable = e->markerDefine (QPixmap(":/icons/break_disable.png").scaled(pixmapSize));
 			iconbacktrace = e->markerDefine (QPixmap(":/icons/play.png").scaled(pixmapSize));
-			iconconditionenable = e->markerDefine (QPixmap(":/icons/break_conditional_enable.png").scaled(pixmapSize));
-			iconconditiondisable = e->markerDefine (QPixmap(":/icons/break_conditional_disable.png").scaled(pixmapSize));
+			iconconditionenable = e->markerDefine (QPixmap(":/icons/break_conditionnal_enable.png").scaled(pixmapSize));
+			iconconditiondisable = e->markerDefine (QPixmap(":/icons/break_conditionnal_disable.png").scaled(pixmapSize));
 			// get if this editor haved breakpoint befor close / re-opening
 			QGdbMessageCore m={"^notify,interpreter=\"editor\",currentCmd=\"none\",event=\"requested-breakpoint\",fileName=\"" + name.toLocal8Bit() + "\"",-1};
 			kernelDispatcher->process(m);
