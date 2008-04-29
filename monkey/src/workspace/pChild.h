@@ -138,6 +138,8 @@ public:
 protected slots:
 	void cursorPositionChanged();
 
+public slots:
+	void setWindowModified( bool moodified );
 };
 
 #endif // PCHILD_H
