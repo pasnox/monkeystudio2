@@ -292,7 +292,7 @@ void pWorkspace::internal_currentChanged( int i )
 	if ( hasChild )
 		listWidget()->setItemToolTip( i, c->currentFile() );
 	
-	internal_currentFileChanged (hasChild ? c->currentFile() : QString() );
+	internal_currentFileChanged( hasChild ? c->currentFile() : QString() );
 	// emit file changed
 	emit currentFileChanged( c, hasChild ? c->currentFile() : QString() );
 }
