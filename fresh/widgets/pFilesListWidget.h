@@ -31,6 +31,7 @@
 
 #include <QDockWidget>
 #include <QUrl>
+#include <QIcon>
 
 class pExtendedWorkspace;
 class QListWidget;
@@ -50,6 +51,8 @@ public slots:
 protected:
 	QListWidget* mList;
     pExtendedWorkspace* mWorkspace;
+	QIcon mModifiedIcon;
+	QIcon mNonModifiedIcon;
 
 	bool eventFilter( QObject*, QEvent* );
 	void dragEnterEvent( QDragEnterEvent* );
