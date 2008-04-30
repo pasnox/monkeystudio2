@@ -236,9 +236,9 @@ void pWorkspace::goToLine( const QString& s, const QPoint& p, bool b )
 	}
 }
 
-void pWorkspace::internal_currentFileChanged( const QString& file)
+void pWorkspace::internal_currentFileChanged( const QString& file )
 {
-	QDir::setCurrent (QFileInfo (file).canonicalPath());
+	QDir::setCurrent( QFileInfo( file ).absolutePath() );
 }
 
 void pWorkspace::internal_currentChanged( int i )
@@ -292,7 +292,9 @@ void pWorkspace::internal_currentChanged( int i )
 	if ( hasChild )
 		listWidget()->setItemToolTip( i, c->currentFile() );
 	
+	// internal update
 	internal_currentFileChanged( hasChild ? c->currentFile() : QString() );
+	
 	// emit file changed
 	emit currentFileChanged( c, hasChild ? c->currentFile() : QString() );
 }
@@ -379,7 +381,7 @@ void pWorkspace::internal_currentProjectChanged( XUPItem* currentProject, XUPIte
 	if ( currentProject )
 		currentProject->installCommands();
 	// update menu visibility
-	MonkeyCore::mainWindow()->menu_aboutToShow();
+	MonkeyCore::mainWindow()->menu_CustomAction_aboutToShow();
 }
 
 void pWorkspace::internal_projectInstallCommandRequested( const pCommand& cmd, const QString& mnu )

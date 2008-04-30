@@ -66,8 +66,8 @@ public slots:
 	bool closeAllDocuments();
 
 private slots:
-	void internal_currentFileChanged( const QString& );
-	void internal_currentChanged( int );
+	void internal_currentFileChanged( const QString& fileName );
+	void internal_currentChanged( int id );
 	//void internal_aboutToCloseTab( int, QCloseEvent* );
 	void internal_urlsDropped( const QList<QUrl>& );
 	void internal_listWidget_customContextMenuRequested( const QPoint& );

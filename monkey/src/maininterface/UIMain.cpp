@@ -178,6 +178,7 @@ void UIMain::initMenuBar()
 		mb->menu( "mStyle", tr( "&Style" ), QIcon( ":/view/icons/view/style.png" ) );
 		mb->action( "aNext", tr( "&Next Tab" ), QIcon( ":/view/icons/view/next.png" ), tr( "Alt+Right" ), tr( "Active the next tab" ) )->setEnabled( false );
 		mb->action( "aPrevious", tr( "&Previous Tab" ), QIcon( ":/view/icons/view/previous.png" ), tr( "Alt+Left" ), tr( "Active the previous tab" ) )->setEnabled( false );
+		mb->menu( "mDocks", tr( "Docks" ) );
 	mb->endGroup();
 	mb->menu( "mProject", tr( "Project" ) );
 	mb->beginGroup( "mProject" );
@@ -341,13 +342,14 @@ void UIMain::initConnections()
 	connect( agStyles, SIGNAL( triggered( QAction* ) ), MonkeyCore::workspace(), SLOT( agStyles_triggered( QAction* ) ) );
 	connect( menuBar()->action( "mView/aNext" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( activateNextDocument() ) );
 	connect( menuBar()->action( "mView/aPrevious" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( activatePreviousDocument() ) );
+	connect( menuBar()->menu( "mView/mDocks" ), SIGNAL( aboutToShow() ), this, SLOT( menu_ViewDocks_aboutToShow() ) );
 	// project connection
 	connect( MonkeyCore::recentsManager(), SIGNAL( openProjectRequested( const QString& ) ), MonkeyCore::projectsManager(), SLOT( openProject( const QString& ) ) );
 	connect( MonkeyCore::projectsManager(), SIGNAL( fileDoubleClicked( const QString& ) ), MonkeyCore::workspace(), SLOT( openFile( const QString& ) ) );
 	// builder debugger interpreter menu
-	connect( menuBar()->menu( "mBuilder" ), SIGNAL( aboutToShow() ), this, SLOT( menu_aboutToShow() ) );
-	connect( menuBar()->menu( "mDebugger" ), SIGNAL( aboutToShow() ), this, SLOT( menu_aboutToShow() ) );
-	connect( menuBar()->menu( "mInterpreter" ), SIGNAL( aboutToShow() ), this, SLOT( menu_aboutToShow() ) );
+	connect( menuBar()->menu( "mBuilder" ), SIGNAL( aboutToShow() ), this, SLOT( menu_CustomAction_aboutToShow() ) );
+	connect( menuBar()->menu( "mDebugger" ), SIGNAL( aboutToShow() ), this, SLOT( menu_CustomAction_aboutToShow() ) );
+	connect( menuBar()->menu( "mInterpreter" ), SIGNAL( aboutToShow() ), this, SLOT( menu_CustomAction_aboutToShow() ) );
 	// plugins menu
 	connect( menuBar()->action( "mPlugins/aManage" ), SIGNAL( triggered() ), MonkeyCore::pluginsManager(), SLOT( manageRequested() ) );
 	// window menu
@@ -366,7 +368,19 @@ void UIMain::initConnections()
 #endif
 }
 
-void UIMain::menu_aboutToShow()
+void UIMain::menu_ViewDocks_aboutToShow()
+{
+	// get menu
+	QMenu* menu = menuBar()->menu( "mView/mDocks" );
+	// add actions
+	foreach ( QDockWidget* dw, findChildren<QDockWidget*>() )
+	{
+		dw->toggleViewAction()->setIcon( dw->windowIcon() );
+		menu->addAction( dw->toggleViewAction() );
+	}
+}
+
+void UIMain::menu_CustomAction_aboutToShow()
 {
 	QList<QMenu*> menus;
 	if ( sender() )

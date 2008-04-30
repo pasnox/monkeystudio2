@@ -52,7 +52,8 @@ protected:
 	void initConnections();
 
 public slots:
-	void menu_aboutToShow();
+	void menu_ViewDocks_aboutToShow();
+	void menu_CustomAction_aboutToShow();
 
 signals:
 	void aboutToClose();
