@@ -49,11 +49,11 @@ class Q_MONKEY_EXPORT pSettings : public QSettings
 
 public:
 	pSettings( QObject* = 0, const QString& = mProgramName, const QString& = mProgramVersion );
-	~pSettings();
+	
 	static void setIniInformations( const QString& = PACKAGE_NAME, const QString& = PACKAGE_VERSION );
 	static QString programName();
 	static QString programVersion();
-	static QString getIniFile( const QString& s );
+	static QString getIniFile( const QString& name, const QString& version );
 
 	virtual void restoreState( QMainWindow* );
 	virtual void saveState( QMainWindow* );
