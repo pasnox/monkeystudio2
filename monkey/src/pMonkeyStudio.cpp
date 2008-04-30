@@ -163,180 +163,148 @@ const QStringList pMonkeyStudio::availableLanguages()
 	return l;
 }
 
-const QFileInfoList pMonkeyStudio::getFolders( QDir d, const QStringList& l, bool b )
+const QFileInfoList pMonkeyStudio::getFolders( QDir fromDir, const QStringList& filters, bool recursive )
 {
-	QFileInfoList ll;
-	foreach ( QFileInfo f, d.entryInfoList( QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name ) )
+	QFileInfoList files;
+	foreach ( QFileInfo file, fromDir.entryInfoList( QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name ) )
 	{
-		if ( QDir::match( l, f.fileName() ) )
-			ll << f;
-		if ( b )
+		if ( QDir::match( filters, file.fileName() ) )
+			files << file;
+		if ( recursive )
 		{
-			d.cd( f.filePath() );
-			ll << getFolders( d, l, b );
-			d.cdUp();
+			fromDir.cd( file.filePath() );
+			files << getFolders( fromDir, filters, recursive );
+			fromDir.cdUp();
 		}
 	}
-	return ll;
+	return files;
 }
 
-const QFileInfoList pMonkeyStudio::getFiles( QDir d, const QStringList& l, bool b )
+const QFileInfoList pMonkeyStudio::getFiles( QDir fromDir, const QStringList& filters, bool recursive )
 {
-	QFileInfoList ll;
-	foreach ( QFileInfo f, d.entryInfoList( QDir::AllEntries | QDir::NoDotAndDotDot, QDir::DirsFirst | QDir::Name ) )
+	QFileInfoList files;
+	foreach ( QFileInfo file, fromDir.entryInfoList( QDir::AllEntries | QDir::NoDotAndDotDot, QDir::DirsFirst | QDir::Name ) )
 	{
-		if ( f.isFile() && ( l.isEmpty() || QDir::match( l, f.fileName() ) ) )
-			ll << f;
-		else if ( f.isDir() && b )
+		if ( file.isFile() && ( filters.isEmpty() || QDir::match( filters, file.fileName() ) ) )
+			files << file;
+		else if ( file.isDir() && recursive )
 		{
-			d.cd( f.filePath() );
-			ll << getFiles( d, l );
-			d.cdUp();
+			fromDir.cd( file.filePath() );
+			files << getFiles( fromDir, filters );
+			fromDir.cdUp();
 		}
 	}
-	return ll;
+	return files;
 }
 
-const QFileInfoList pMonkeyStudio::getFiles( QDir d, const QString& s, bool b )
-{ return getFiles( d, s.isEmpty() ? QStringList() : QStringList( s ), b ); }
+const QFileInfoList pMonkeyStudio::getFiles( QDir fromDir, const QString& filter, bool recursive )
+{ return getFiles( fromDir, filter.isEmpty() ? QStringList() : QStringList( filter ), recursive ); }
 
-QFileDialog* getOpenDialog( QFileDialog::FileMode fm, const QString& c, const QString& fn, const QString& f, QWidget* w, QFileDialog::AcceptMode m =  QFileDialog::AcceptOpen )
+QFileDialog* getOpenDialog( QFileDialog::FileMode fileMode, const QString& caption, const QString& fileName, const QString& filter, QWidget* parent, QFileDialog::AcceptMode acceptMode = QFileDialog::AcceptOpen )
 {
 	// create dialg
-	QFileDialog* d = new QFileDialog( w, c, fn, f );
+	QFileDialog* dlg = new QFileDialog( parent, caption, fileName, filter );
 	// set file accept mode
-	d->setAcceptMode( m );
+	dlg->setAcceptMode( acceptMode );
 	// set file mode
-	d->setFileMode( fm );
-
-	// set filename for compatibility with qt 4.2.x
-	/*
-	QFileInfo fi( f );
-	d.setDirectory( fi.path() );
-	d.selectFile( fi.fileName() );
-	*/
+	dlg->setFileMode( fileMode );
 	// return dialog
-	return d;
+	return dlg;
 }
 
-const QStringList pMonkeyStudio::getImageFileNames( const QString& c, const QString& f, QWidget* w )
+const QStringList pMonkeyStudio::getImageFileNames( const QString& caption, const QString& fileName, QWidget* parent )
 {
 	// get image filters
-	QStringList l;
-	foreach ( QString s, availableImageFormats() )
-		l << QObject::tr( "%1 Files (*.%2)" ).arg( s.toUpper() ).arg( s );
+	QStringList filters;
+	foreach ( QString filter, availableImageFormats() )
+		filters << QObject::tr( "%1 Files (*.%2)" ).arg( filter.toUpper() ).arg( filter );
 	// add all format as one filter at begining
-	if ( !l.isEmpty() )
-		l.prepend( QObject::tr( "All Image Files (%1)" ).arg( QStringList( availableImageFormats() ).replaceInStrings( QRegExp( "^(.*)$" ), "*.\\1" ).join( " " ) ) );
+	if ( !filters.isEmpty() )
+		filters.prepend( QObject::tr( "All Image Files (%1)" ).arg( QStringList( availableImageFormats() ).replaceInStrings( QRegExp( "^(.*)$" ), "*.\\1" ).join( " " ) ) );
 	// create dialog
-	QFileDialog* d = getOpenDialog( QFileDialog::ExistingFiles, c.isEmpty() ? QObject::tr( "Select image(s)" ) : c, f, l.join( ";;" ), w );
+	QFileDialog* dlg = getOpenDialog( QFileDialog::ExistingFiles, caption.isEmpty() ? QObject::tr( "Select image(s)" ) : caption, fileName, filters.join( ";;" ), parent );
 	// choose last used filter if available
-	if ( !l.isEmpty() )
-		d->selectFilter( MonkeyCore::settings()->value( "Recents/ImageFilter" ).toString() );
+	if ( !filters.isEmpty() )
+		dlg->selectFilter( MonkeyCore::settings()->value( "Recents/ImageFilter" ).toString() );
 	// execute dialog
-	if ( d->exec() )
+	if ( dlg->exec() )
 	{
 		// remember last filter if available
-		if ( !l.isEmpty() )
-			MonkeyCore::settings()->setValue( "Recents/ImageFilter", d->selectedFilter() );
+		if ( !filters.isEmpty() )
+			MonkeyCore::settings()->setValue( "Recents/ImageFilter", dlg->selectedFilter() );
 		// remember selected files
-		l = d->selectedFiles();
+		filters = dlg->selectedFiles();
 		// delete dialog
-		delete d;
+		delete dlg;
 		// return selected files
-		return l;
+		return filters;
 	}
 	// delete dialog
-	delete d;
+	delete dlg;
 	// return empty list
 	return QStringList();
 }
 
-const QString pMonkeyStudio::getImageFileName( const QString& c, const QString& f, QWidget* w )
-{
-	return getImageFileNames( c, f, w ).value( 0 );
-}
+const QString pMonkeyStudio::getImageFileName( const QString& caption, const QString& fileName, QWidget* parent )
+{ return getImageFileNames( caption, fileName, parent ).value( 0 ); }
 
-const QStringList pMonkeyStudio::getOpenFileNames( const QString& c, const QString& fn, const QString& f, QWidget* w )
+const QStringList pMonkeyStudio::getOpenFileNames( const QString& caption, const QString& fileName, const QString& filter, QWidget* parent )
 {
 	// create dialg
-	QFileDialog* d = getOpenDialog( QFileDialog::ExistingFiles, c.isEmpty() ? QObject::tr( "Select file(s)" ) : c, fn, f, w );
+	QFileDialog* dlg = getOpenDialog( QFileDialog::ExistingFiles, caption.isEmpty() ? QObject::tr( "Select file(s)" ) : caption, fileName, filter, parent );
 	// choose last used filter if available
-	if ( !f.isEmpty() )
-		d->selectFilter( MonkeyCore::settings()->value( "Recents/FileFilter" ).toString() );
+	if ( !filter.isEmpty() )
+		dlg->selectFilter( MonkeyCore::settings()->value( "Recents/FileFilter" ).toString() );
 	// execute dialog
-	if ( d->exec() )
+	if ( dlg->exec() )
 	{
 		// remember last filter if available
-		if ( !f.isEmpty() )
-			MonkeyCore::settings()->setValue( "Recents/FileFilter", d->selectedFilter() );
+		if ( !filter.isEmpty() )
+			MonkeyCore::settings()->setValue( "Recents/FileFilter", dlg->selectedFilter() );
 		// remember selected files
-		QStringList l = d->selectedFiles();
+		QStringList files = dlg->selectedFiles();
 		// delete dialog
-		delete d;
+		delete dlg;
 		// return selected files
-		return l;
+		return files;
 	}
 	// delete dialog
-	delete d;
+	delete dlg;
 	// return empty list
 	return QStringList();
 }
 
-const QString pMonkeyStudio::getOpenFileName( const QString& c, const QString& fn, const QString& f, QWidget* w )
+const QString pMonkeyStudio::getOpenFileName( const QString& caption, const QString& fileName, const QString& filter, QWidget* parent )
+{ return getOpenFileNames( caption, fileName, filter, parent ).value( 0 ); }
+
+const QString pMonkeyStudio::getSaveFileName( const QString& caption, const QString& fileName, const QString& filter, QWidget* parent )
 {
 	// create dialg
-	QFileDialog* d = getOpenDialog( QFileDialog::ExistingFile, c.isEmpty() ? QObject::tr( "Select file" ) : c, fn, f, w );
+	QFileDialog* dlg = getOpenDialog( QFileDialog::AnyFile, caption.isEmpty() ? QObject::tr( "Choose a filename" ) : caption, fileName, filter, parent, QFileDialog::AcceptSave );
 	// choose last used filter if available
-	if ( !f.isEmpty() )
-		d->selectFilter( MonkeyCore::settings()->value( "Recents/FileFilter" ).toString() );
+	if ( !filter.isEmpty() )
+		dlg->selectFilter( MonkeyCore::settings()->value( "Recents/FileFilter" ).toString() );
 	// execute dialog
-	if ( d->exec() )
+	if ( dlg->exec() )
 	{
 		// remember last filter if available
-		if ( !f.isEmpty() )
-			MonkeyCore::settings()->setValue( "Recents/FileFilter", d->selectedFilter() );
+		if ( !filter.isEmpty() )
+			MonkeyCore::settings()->setValue( "Recents/FileFilter", dlg->selectedFilter() );
 		// remember selected files
-		QStringList l = d->selectedFiles();
+		QStringList files = dlg->selectedFiles();
 		// delete dialog
-		delete d;
+		delete dlg;
 		// return selected files
-		return l.value( 0 );
+		return files.value( 0 );
 	}
 	// delete dialog
-	delete d;
+	delete dlg;
 	// return empty list
 	return QString();
 }
 
-const QString pMonkeyStudio::getSaveFileName( const QString& c, const QString& fn, const QString& f, QWidget* w )
-{
-	// create dialg
-	QFileDialog* d = getOpenDialog( QFileDialog::AnyFile, c.isEmpty() ? QObject::tr( "Choose a filename" ) : c, fn, f, w, QFileDialog::AcceptSave );
-	// choose last used filter if available
-	if ( !f.isEmpty() )
-		d->selectFilter( MonkeyCore::settings()->value( "Recents/FileFilter" ).toString() );
-	// execute dialog
-	if ( d->exec() )
-	{
-		// remember last filter if available
-		if ( !f.isEmpty() )
-			MonkeyCore::settings()->setValue( "Recents/FileFilter", d->selectedFilter() );
-		// remember selected files
-		QStringList l = d->selectedFiles();
-		// delete dialog
-		delete d;
-		// return selected files
-		return l.value( 0 );
-	}
-	// delete dialog
-	delete d;
-	// return empty list
-	return QString();
-}
-
-const QString pMonkeyStudio::getExistingDirectory( const QString& c, const QString& f, QWidget* w )
-{ return QFileDialog::getExistingDirectory( w, c.isEmpty() ? QObject::tr( "Select a folder" ) : c, f ); }
+const QString pMonkeyStudio::getExistingDirectory( const QString& caption, const QString& fileName, QWidget* parent )
+{ return QFileDialog::getExistingDirectory( parent, caption.isEmpty() ? QObject::tr( "Select a folder" ) : caption, fileName ); }
 
 const QString pMonkeyStudio::tokenizeHome( const QString& s )
 { return QString( s ).replace( QDir::homePath(), "$HOME$" ); }
