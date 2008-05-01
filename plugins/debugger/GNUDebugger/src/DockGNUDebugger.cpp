@@ -159,8 +159,8 @@ void DockGNUDebugger::onWantExit()
 	// first delete back trace under all editor
 	for(int i=0; i<editor.pointeur.count(); i++)
 	{
-		editor.pointeur.at(i)->markerDeleteAll(pEditor::riPlay);
-		editor.pointeur.at(i)->markerDeleteAll(pEditor::riEnabledBreak);
+		editor.pointeur.at(i)->markerDeleteAll(pEditor::mdPlay);
+		editor.pointeur.at(i)->markerDeleteAll(pEditor::mdEnabledBreak);
 	}
 //	hide();
 }
@@ -235,9 +235,9 @@ void DockGNUDebugger::onBreakpoint(QByteArray filename, int line, QByteArray typ
 				if(type == "unconditional-breakpoint")
 				{
 					if(enable == "true")
-						e->markerAdd (line-1, pEditor::riEnabledBreak);	
+						e->markerAdd (line-1, pEditor::mdEnabledBreak);	
 					else
-						e->markerAdd (line-1, pEditor::riDisabledBreak);
+						e->markerAdd (line-1, pEditor::mdDisabledBreak);
 				}
 				else ;
 			}
@@ -246,9 +246,9 @@ void DockGNUDebugger::onBreakpoint(QByteArray filename, int line, QByteArray typ
 				if(type == "unconditional-breakpoint")
 				{
 					if(enable == "true")
-						e->markerDelete (line-1, pEditor::riEnabledBreak);	
+						e->markerDelete (line-1, pEditor::mdEnabledBreak);	
 					else
-						e->markerDelete (line-1, pEditor::riDisabledBreak);
+						e->markerDelete (line-1, pEditor::mdDisabledBreak);
 				}
 				else ;
 			}
@@ -265,7 +265,7 @@ void DockGNUDebugger::onBacktrace(QByteArray filename, int line)
 
 	// first delete back trace under all editor
 	for(int i=0; i<editor.pointeur.count(); i++)
-		editor.pointeur.at(i)->markerDeleteAll(pEditor::riPlay);
+		editor.pointeur.at(i)->markerDeleteAll(pEditor::mdPlay);
 
 	// open file (if is not same)
 	MonkeyCore::workspace()->goToLine(filename, QPoint(1,line), true);
@@ -273,7 +273,7 @@ void DockGNUDebugger::onBacktrace(QByteArray filename, int line)
 	// now the current file is
 	pEditor * e = MonkeyCore::fileManager()->currentChild()->currentEditor();
 
-	e->markerAdd (line-1, pEditor::riPlay);
+	e->markerAdd (line-1, pEditor::mdPlay);
 }
 //
 // some time gdb move breakpoint under next line 
@@ -283,8 +283,8 @@ void DockGNUDebugger::onBreakpointMoved(QByteArray filename, int beforLine, int 
 	pEditor *e = findFile(filename);
 	if(e)
 	{
-		e->markerDelete (beforLine-1, pEditor::riEnabledBreak);
-		e->markerAdd(afterLine-1, pEditor::riEnabledBreak);
+		e->markerDelete (beforLine-1, pEditor::mdEnabledBreak);
+		e->markerAdd(afterLine-1, pEditor::mdEnabledBreak);
 	}
 }
 //
@@ -296,13 +296,13 @@ void DockGNUDebugger::onBreakpointEnabled(QByteArray filename, int line, bool b)
 	{
 		if(b) // toggle
 		{
-			e->markerDelete (line-1, pEditor::riDisabledBreak);
-			e->markerAdd(line-1, pEditor::riEnabledBreak);
+			e->markerDelete (line-1, pEditor::mdDisabledBreak);
+			e->markerAdd(line-1, pEditor::mdEnabledBreak);
 		}
 		else
 		{
-			e->markerDelete (line-1, pEditor::riEnabledBreak);
-			e->markerAdd(line-1, pEditor::riDisabledBreak);
+			e->markerDelete (line-1, pEditor::mdEnabledBreak);
+			e->markerAdd(line-1, pEditor::mdDisabledBreak);
 		}
 	}
 }
