@@ -120,6 +120,9 @@ void MonkeyCore::init()
 		if ( UISettings::instance()->exec() )
 			settings()->setValue( "FirstTimeRunning", false );
 	}
+	
+	// prepare apis
+	pMonkeyStudio::prepareAPIs();
 }
 
 pSettings* MonkeyCore::settings()
