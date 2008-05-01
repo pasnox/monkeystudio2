@@ -159,8 +159,8 @@ void DockGNUDebugger::onWantExit()
 	// first delete back trace under all editor
 	for(int i=0; i<editor.pointeur.count(); i++)
 	{
-		editor.pointeur.at(i)->markerDeleteAll(iconbacktrace);
-		editor.pointeur.at(i)->markerDeleteAll(iconbreakenable);
+		editor.pointeur.at(i)->markerDeleteAll(pEditor::riPlay);
+		editor.pointeur.at(i)->markerDeleteAll(pEditor::riEnabledBreak);
 	}
 //	hide();
 }
@@ -184,12 +184,6 @@ void DockGNUDebugger::onFileOpened( const QString& file )
 			e->setMarginSensitivity(0,true);
 			// connect margin clicked
 			connect (e, SIGNAL(marginClicked (int, int , Qt::KeyboardModifiers )), this, SLOT(onMarginClicked(int, int,  Qt::KeyboardModifiers)));
-			// set somes icons on under editor
-			iconbreakenable = e->markerDefine (QPixmap(":/icons/break_enable.png").scaled(pixmapSize) );
-			iconbreakdisable = e->markerDefine (QPixmap(":/icons/break_disable.png").scaled(pixmapSize));
-			iconbacktrace = e->markerDefine (QPixmap(":/icons/play.png").scaled(pixmapSize));
-			iconconditionenable = e->markerDefine (QPixmap(":/icons/break_conditionnal_enable.png").scaled(pixmapSize));
-			iconconditiondisable = e->markerDefine (QPixmap(":/icons/break_conditionnal_disable.png").scaled(pixmapSize));
 			// get if this editor haved breakpoint befor close / re-opening
 			QGdbMessageCore m={"^notify,interpreter=\"editor\",currentCmd=\"none\",event=\"requested-breakpoint\",fileName=\"" + name.toLocal8Bit() + "\"",-1};
 			kernelDispatcher->process(m);
@@ -241,9 +235,9 @@ void DockGNUDebugger::onBreakpoint(QByteArray filename, int line, QByteArray typ
 				if(type == "unconditional-breakpoint")
 				{
 					if(enable == "true")
-						e->markerAdd (line-1, iconbreakenable);	
+						e->markerAdd (line-1, pEditor::riEnabledBreak);	
 					else
-						e->markerAdd (line-1, iconbreakdisable);
+						e->markerAdd (line-1, pEditor::riDisabledBreak);
 				}
 				else ;
 			}
@@ -252,9 +246,9 @@ void DockGNUDebugger::onBreakpoint(QByteArray filename, int line, QByteArray typ
 				if(type == "unconditional-breakpoint")
 				{
 					if(enable == "true")
-						e->markerDelete (line-1, iconbreakenable);	
+						e->markerDelete (line-1, pEditor::riEnabledBreak);	
 					else
-						e->markerDelete (line-1, iconbreakdisable);
+						e->markerDelete (line-1, pEditor::riDisabledBreak);
 				}
 				else ;
 			}
@@ -271,7 +265,7 @@ void DockGNUDebugger::onBacktrace(QByteArray filename, int line)
 
 	// first delete back trace under all editor
 	for(int i=0; i<editor.pointeur.count(); i++)
-		editor.pointeur.at(i)->markerDeleteAll(iconbacktrace);
+		editor.pointeur.at(i)->markerDeleteAll(pEditor::riPlay);
 
 	// open file (if is not same)
 	MonkeyCore::workspace()->goToLine(filename, QPoint(1,line), true);
@@ -279,7 +273,7 @@ void DockGNUDebugger::onBacktrace(QByteArray filename, int line)
 	// now the current file is
 	pEditor * e = MonkeyCore::fileManager()->currentChild()->currentEditor();
 
-	e->markerAdd (line-1, iconbacktrace);
+	e->markerAdd (line-1, pEditor::riPlay);
 }
 //
 // some time gdb move breakpoint under next line 
@@ -289,8 +283,8 @@ void DockGNUDebugger::onBreakpointMoved(QByteArray filename, int beforLine, int 
 	pEditor *e = findFile(filename);
 	if(e)
 	{
-		e->markerDelete (beforLine-1, iconbreakenable);
-		e->markerAdd(afterLine-1, iconbreakenable);
+		e->markerDelete (beforLine-1, pEditor::riEnabledBreak);
+		e->markerAdd(afterLine-1, pEditor::riEnabledBreak);
 	}
 }
 //
@@ -302,13 +296,13 @@ void DockGNUDebugger::onBreakpointEnabled(QByteArray filename, int line, bool b)
 	{
 		if(b) // toggle
 		{
-			e->markerDelete (line-1, iconbreakdisable);
-			e->markerAdd(line-1, iconbreakenable);
+			e->markerDelete (line-1, pEditor::riDisabledBreak);
+			e->markerAdd(line-1, pEditor::riEnabledBreak);
 		}
 		else
 		{
-			e->markerDelete (line-1, iconbreakenable);
-			e->markerAdd(line-1, iconbreakdisable);
+			e->markerDelete (line-1, pEditor::riEnabledBreak);
+			e->markerAdd(line-1, pEditor::riDisabledBreak);
 		}
 	}
 }

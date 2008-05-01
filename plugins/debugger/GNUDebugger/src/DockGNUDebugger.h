@@ -52,13 +52,6 @@ private:
 
 	QByteArray crlf;
 
-	int iconbreakenable;
-	int iconbreakdisable;
-	int iconbacktrace;
-
-	int iconconditionenable;
-	int iconconditiondisable;
-
 	QString targetName;
 
 	struct
