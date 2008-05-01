@@ -837,11 +837,9 @@ void pMonkeyStudio::applyProperties()
 			l->setDefaultColor( defaultDocumentPen() );
 			l->setDefaultPaper( defaultDocumentPaper() );
 		}
-		// reload apis
-		if ( l->apis() )
-			foreach ( QString s, ss->value( QString( "SourceAPIs/" ).append( l->language() ) ).toStringList() )
-				l->apis()->loadPrepared( s );
 	}
+	// reloads apis
+	prepareAPIs();
 }
 
 void pMonkeyStudio::setEditorProperties( pEditor* e )
