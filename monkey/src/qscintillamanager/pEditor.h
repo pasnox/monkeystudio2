@@ -43,11 +43,15 @@ public:
 	enum RegisterImageType
 	{
 		// completion
-		riClass = 0, riEnum, riFunction, riMember, riNamespace, riStruct, riTypedef, riVariable,
+		riClass = 0, riEnum, riFunction, riMember, riNamespace, riStruct, riTypedef, riVariable
+	};
+	
+	enum MarkerDefineType
+	{
 		// bookmarks
-		riBookmark,
+		mdBookmark = 0,
 		// debugger
-		riEnabledBreak, riDisabledBreak, riEnabledConditionalBreak, riDisabledConditionalBreak, riPlay
+		mdEnabledBreak, mdDisabledBreak, mdEnabledConditionalBreak, mdDisabledConditionalBreak, mdPlay
 	};
 
 	bool lineNumbersMarginEnabled() const;
@@ -56,6 +60,8 @@ public:
 	bool copyAvailable();
 	bool canPaste();
 	QPoint cursorPosition() const;
+	
+	bool markerAtLine( int line, int markerId );
 
 protected:
 	void keyPressEvent( QKeyEvent* );
@@ -92,7 +98,6 @@ signals:
 	void undoAvailable( bool );
 	void redoAvailable( bool );
 	void pasteAvailable( bool );
-
 };
 
 #endif // PEDITOR_H

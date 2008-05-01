@@ -48,25 +48,26 @@ bool pEditor::mPasteAvailable = false;
 pEditor::pEditor( QWidget* p )
 	: QsciScintilla( p )
 {
+	const QSize mPixSize = QSize( 16, 16 );
 	// register image for auto completion
-	registerImage( riClass, QPixmap( ":/editor/class.png" ) );
-	registerImage( riEnum, QPixmap( ":/editor/enum.png" ) );
-	registerImage( riFunction, QPixmap( ":/editor/function.png" ) );
-	registerImage( riMember, QPixmap( ":/editor/member.png" ) );
-	registerImage( riNamespace, QPixmap( ":/editor/namespace.png" ) );
-	registerImage( riStruct, QPixmap( ":/editor/struct.png" ) );
-	registerImage( riTypedef, QPixmap( ":/editor/typedef.png" ) );
-	registerImage( riVariable, QPixmap( ":/editor/variable.png" ) );
+	registerImage( riClass, QPixmap( ":/editor/class.png" ).scaled( mPixSize ) );
+	registerImage( riEnum, QPixmap( ":/editor/enum.png" ).scaled( mPixSize ) );
+	registerImage( riFunction, QPixmap( ":/editor/function.png" ).scaled( mPixSize ) );
+	registerImage( riMember, QPixmap( ":/editor/member.png" ).scaled( mPixSize ) );
+	registerImage( riNamespace, QPixmap( ":/editor/namespace.png" ).scaled( mPixSize ) );
+	registerImage( riStruct, QPixmap( ":/editor/struct.png" ).scaled( mPixSize ) );
+	registerImage( riTypedef, QPixmap( ":/editor/typedef.png" ).scaled( mPixSize ) );
+	registerImage( riVariable, QPixmap( ":/editor/variable.png" ).scaled( mPixSize ) );
 	
 	// register image for bookmarks
-	registerImage( riBookmark, QPixmap( ":/editor/bookmark.png" ) );
+	markerDefine( QPixmap( ":/editor/bookmark.png" ).scaled( mPixSize ), mdBookmark );
 	
 	// register image for debugging
-	registerImage( riEnabledBreak, QPixmap( ":/editor/break_enable.png" ) );
-	registerImage( riDisabledBreak, QPixmap( ":/editor/break_disable.png" ) );
-	registerImage( riEnabledConditionalBreak, QPixmap( ":/editor/break_conditionnal_enable.png" ) );
-	registerImage( riDisabledConditionalBreak, QPixmap( ":/editor/break_conditionnal_disable.png" ) );
-	registerImage( riPlay, QPixmap( ":/editor/play.png" ) );
+	markerDefine( QPixmap( ":/editor/break_enable.png" ).scaled( mPixSize ), mdEnabledBreak );
+	markerDefine( QPixmap( ":/editor/break_disable.png" ).scaled( mPixSize ), mdDisabledBreak );
+	markerDefine( QPixmap( ":/editor/break_conditionnal_enable.png" ).scaled( mPixSize ), mdEnabledConditionalBreak );
+	markerDefine( QPixmap( ":/editor/break_conditionnal_disable.png" ).scaled( mPixSize ), mdDisabledConditionalBreak );
+	markerDefine( QPixmap( ":/editor/play.png" ).scaled( mPixSize ), mdPlay );
 	
 	// deal with utf8
 	setUtf8( true );
@@ -183,6 +184,11 @@ bool pEditor::canPaste()
 QPoint pEditor::cursorPosition() const
 {
 	return mCursorPosition;
+}
+
+bool pEditor::markerAtLine( int line, int markerId )
+{
+	return markersAtLine( line ) & ( 1 << markerId );
 }
 
 void pEditor::setCopyAvailable( bool b )
