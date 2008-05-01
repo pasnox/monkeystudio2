@@ -288,9 +288,22 @@ qSciShortcutsManager::qSciShortcutsManager (QObject* parent): QObject(parent)
 		QIcon(), QString("Ctrl+-"), tr(""),QsciScintilla::SCI_ZOOMOUT); 
     
 	sactions << SciAction ( "mEdit/mAllCommands/SCI_SETZOOM", tr("Set Zoom"), 
-		QIcon(), QString("Ctrl+/"), tr(""),QsciScintilla::SCI_SETZOOM); 
+		QIcon(), QString("Ctrl+/"), tr(""),QsciScintilla::SCI_SETZOOM);
+	
+	// bookmarks actions
+	sactions << SciAction( "mEdit/mBookmarks/SCI_MARKERADD", tr("Add bookmark"), 
+		QIcon( ":/editor/bookmark_add.png" ), QString( "Ctrl+Alt+B" ), tr( "" ), QsciScintilla::SCI_MARKERADD );
+	
+	sactions << SciAction ( "mEdit/mBookmarks/SCI_MARKERDELETEALL", tr( "Delete bookmarks" ), 
+		QIcon(), QString(), tr( "" ), QsciScintilla::SCI_MARKERDELETEALL );
+	
+	sactions << SciAction( "mEdit/mBookmarks/SCI_MARKERPREVIOUS", tr( "Previous" ), 
+		QIcon(), QString( "Alt+PgUp" ), tr( "" ), QsciScintilla::SCI_MARKERPREVIOUS );
+	
+	sactions << SciAction( "mEdit/mBookmarks/SCI_MARKERNEXT", tr( "Next" ), 
+		QIcon(), QString( "Alt+PgDown" ), tr( "" ), QsciScintilla::SCI_MARKERNEXT );
     
-	foreach (SciAction sact, sactions)
+	foreach( SciAction sact, sactions )
     {
         QAction* qact = MonkeyCore::menuBar()->action( sact.name, sact.text, sact.icon, sact.defaultShortcut, sact.toolTip);
         qact->setProperty ("messageCode", sact.messageCode);

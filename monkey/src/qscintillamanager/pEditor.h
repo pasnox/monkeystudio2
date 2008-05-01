@@ -40,7 +40,15 @@ public:
 	pEditor( QWidget* = 0 );
 	virtual ~pEditor();
 
-	enum RegisterImageType { riClass = 0, riEnum, riFunction, riMember, riNamespace, riStruct, riTypedef, riVariable };
+	enum RegisterImageType
+	{
+		// completion
+		riClass = 0, riEnum, riFunction, riMember, riNamespace, riStruct, riTypedef, riVariable,
+		// bookmarks
+		riBookmark,
+		// debugger
+		riEnabledBreak, riDisabledBreak, riEnabledConditionalBreak, riDisabledConditionalBreak, riPlay
+	};
 
 	bool lineNumbersMarginEnabled() const;
 	int lineNumbersMarginWidth() const;

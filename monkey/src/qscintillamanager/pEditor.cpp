@@ -49,14 +49,24 @@ pEditor::pEditor( QWidget* p )
 	: QsciScintilla( p )
 {
 	// register image for auto completion
-	registerImage( riClass, QPixmap( ":/editor/icons/editor/class.png" ) );
-	registerImage( riEnum, QPixmap( ":/editor/icons/editor/enum.png" ) );
-	registerImage( riFunction, QPixmap( ":/editor/icons/editor/function.png" ) );
-	registerImage( riMember, QPixmap( ":/editor/icons/editor/member.png" ) );
-	registerImage( riNamespace, QPixmap( ":/editor/icons/editor/namespace.png" ) );
-	registerImage( riStruct, QPixmap( ":/editor/icons/editor/struct.png" ) );
-	registerImage( riTypedef, QPixmap( ":/editor/icons/editor/typedef.png" ) );
-	registerImage( riVariable, QPixmap( ":/editor/icons/editor/variable.png" ) );
+	registerImage( riClass, QPixmap( ":/editor/class.png" ) );
+	registerImage( riEnum, QPixmap( ":/editor/enum.png" ) );
+	registerImage( riFunction, QPixmap( ":/editor/function.png" ) );
+	registerImage( riMember, QPixmap( ":/editor/member.png" ) );
+	registerImage( riNamespace, QPixmap( ":/editor/namespace.png" ) );
+	registerImage( riStruct, QPixmap( ":/editor/struct.png" ) );
+	registerImage( riTypedef, QPixmap( ":/editor/typedef.png" ) );
+	registerImage( riVariable, QPixmap( ":/editor/variable.png" ) );
+	
+	// register image for bookmarks
+	registerImage( riBookmark, QPixmap( ":/editor/bookmark.png" ) );
+	
+	// register image for debugging
+	registerImage( riEnabledBreak, QPixmap( ":/editor/break_enable.png" ) );
+	registerImage( riDisabledBreak, QPixmap( ":/editor/break_disable.png" ) );
+	registerImage( riEnabledConditionalBreak, QPixmap( ":/editor/break_conditionnal_enable.png" ) );
+	registerImage( riDisabledConditionalBreak, QPixmap( ":/editor/break_conditionnal_disable.png" ) );
+	registerImage( riPlay, QPixmap( ":/editor/play.png" ) );
 	
 	// deal with utf8
 	setUtf8( true );
