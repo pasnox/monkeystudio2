@@ -38,13 +38,21 @@
         <file>icons/edit/undo.png</file>
     </qresource>
     <qresource prefix="/editor" >
-        <file>icons/editor/class.png</file>
-        <file>icons/editor/enum.png</file>
-        <file>icons/editor/function.png</file>
-        <file>icons/editor/member.png</file>
-        <file>icons/editor/namespace.png</file>
-        <file>icons/editor/struct.png</file>
-        <file>icons/editor/typedef.png</file>
+        <file alias="class.png">icons/editor/class.png</file>
+        <file alias="enum.png">icons/editor/enum.png</file>
+        <file alias="function.png">icons/editor/function.png</file>
+        <file alias="member.png">icons/editor/member.png</file>
+        <file alias="namespace.png">icons/editor/namespace.png</file>
+        <file alias="struct.png">icons/editor/struct.png</file>
+        <file alias="typedef.png">icons/editor/typedef.png</file>
+        <file alias="break_conditionnal_disable.png">icons/editor/break_conditionnal_disable.png</file>
+        <file alias="break_conditionnal_enable.png">icons/editor/break_conditionnal_enable.png</file>
+        <file alias="break_disable.png">icons/editor/break_disable.png</file>
+        <file alias="break_enable.png">icons/editor/break_enable.png</file>
+        <file alias="play.png">icons/editor/play.png</file>
+        <file alias="bookmark_add.png">icons/editor/bookmark_add.png</file>
+        <file alias="bookmark_remove.png">icons/editor/bookmark_remove.png</file>
+        <file alias="bookmark.png">icons/editor/bookmark.png</file>
     </qresource>
     <qresource prefix="/file" >
         <file>icons/file/backup.png</file>
