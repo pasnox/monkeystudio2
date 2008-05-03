@@ -61,7 +61,9 @@ public:
 	bool canPaste();
 	QPoint cursorPosition() const;
 	
-	bool markerAtLine( int line, int markerId );
+	bool markerAtLine( int line, pEditor::MarkerDefineType markerId ) const;
+	int markerFindPrevious( int line, pEditor::MarkerDefineType markerId ) const;
+	int markerFindNext( int line, pEditor::MarkerDefineType markerId ) const;
 
 protected:
 	void keyPressEvent( QKeyEvent* );

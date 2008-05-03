@@ -292,16 +292,16 @@ qSciShortcutsManager::qSciShortcutsManager (QObject* parent): QObject(parent)
 	
 	// bookmarks actions
 	sactions << SciAction( "mEdit/mBookmarks/SCI_MARKERADD", tr("Define"), 
-		QIcon( ":/editor/bookmark_add.png" ), QString( "Ctrl+Alt+B" ), tr( "" ), QsciScintilla::SCI_MARKERADD );
+		QIcon( ":/editor/bookmark_add.png" ), QString( "Ctrl+B" ), tr( "" ), QsciScintilla::SCI_MARKERADD );
 	
 	sactions << SciAction ( "mEdit/mBookmarks/SCI_MARKERDELETEALL", tr( "Delete All" ), 
 		QIcon(), QString(), tr( "" ), QsciScintilla::SCI_MARKERDELETEALL );
 	
 	sactions << SciAction( "mEdit/mBookmarks/SCI_MARKERPREVIOUS", tr( "Previous" ), 
-		QIcon(), QString( "Alt+PgUp" ), tr( "" ), QsciScintilla::SCI_MARKERPREVIOUS );
+		QIcon(), QString( "Alt+Up" ), tr( "" ), QsciScintilla::SCI_MARKERPREVIOUS );
 	
 	sactions << SciAction( "mEdit/mBookmarks/SCI_MARKERNEXT", tr( "Next" ), 
-		QIcon(), QString( "Alt+PgDown" ), tr( "" ), QsciScintilla::SCI_MARKERNEXT );
+		QIcon(), QString( "Alt+Down" ), tr( "" ), QsciScintilla::SCI_MARKERNEXT );
     
 	foreach( SciAction sact, sactions )
     {
@@ -333,19 +333,9 @@ void qSciShortcutsManager::keyBoardShortcutPressed ()
 			else if ( messageCode == QsciScintilla::SCI_MARKERDELETEALL )
 				editor->markerDeleteAll( pEditor::mdBookmark );
 			else if ( messageCode == QsciScintilla::SCI_MARKERPREVIOUS )
-			{
-				int line = editor->markerFindPrevious( mCursorPos.y() -1, 1 << pEditor::mdBookmark );
-				if ( line == -1 )
-					line = editor->markerFindPrevious( editor->lines() -1, 1 << pEditor::mdBookmark );
-				editor->setCursorPosition( line, 0 );
-			}
+				editor->setCursorPosition( editor->markerFindPrevious( mCursorPos.y() -1, pEditor::mdBookmark ), 0 );
 			else if ( messageCode == QsciScintilla::SCI_MARKERNEXT )
-			{
-				int line = editor->markerFindNext( mCursorPos.y() +1, 1 << pEditor::mdBookmark );
-				if ( line == -1 )
-					line = editor->markerFindNext( 0, 1 << pEditor::mdBookmark );
-				editor->setCursorPosition( line, 0 );
-			}
+				editor->setCursorPosition( editor->markerFindNext( mCursorPos.y() +1, pEditor::mdBookmark ), 0 );
             else
 				editor->SendScintilla( messageCode );
         }

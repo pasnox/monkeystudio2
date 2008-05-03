@@ -186,9 +186,25 @@ QPoint pEditor::cursorPosition() const
 	return mCursorPosition;
 }
 
-bool pEditor::markerAtLine( int line, int markerId )
+bool pEditor::markerAtLine( int line, pEditor::MarkerDefineType markerId ) const
 {
-	return markersAtLine( line ) & ( 1 << markerId );
+	return QsciScintilla::markersAtLine( line ) & ( 1 << markerId );
+}
+
+int pEditor::markerFindPrevious( int line, pEditor::MarkerDefineType markerId ) const
+{
+	line = QsciScintilla::markerFindPrevious( line, 1 << markerId );
+	if ( line == -1 )
+		line = QsciScintilla::markerFindPrevious( lines() -1, 1 << markerId );
+	return line;
+}
+
+int pEditor::markerFindNext( int line, pEditor::MarkerDefineType markerId ) const
+{
+	line = QsciScintilla::markerFindNext( line, 1 << markerId );
+	if ( line == -1 )
+		line = QsciScintilla::markerFindNext( 0, 1 << markerId );
+	return line;
 }
 
 void pEditor::setCopyAvailable( bool b )
