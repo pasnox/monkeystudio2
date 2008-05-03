@@ -246,6 +246,7 @@ void pWorkspace::internal_currentChanged( int i )
 	// get child
 	pAbstractChild* c = child( i );
 	bool hasChild = c;
+	bool hasEditor = c ? c->currentEditor() : false;
 	bool modified = hasChild ? c->isModified() : false;
 	bool print = hasChild ? c->isPrintAvailable() : false;
 	bool undo = hasChild ? c->isUndoAvailable() : false;
@@ -273,6 +274,8 @@ void pWorkspace::internal_currentChanged( int i )
 	
 	MonkeyCore::menuBar()->action( "mEdit/aGoTo" )->setEnabled( go );
 	MonkeyCore::menuBar()->action( "mEdit/aExpandAbbreviation" )->setEnabled( hasChild );
+	MonkeyCore::menuBar()->setMenuEnabled( MonkeyCore::menuBar()->menu( "mEdit/mAllCommands" ), hasEditor );
+	MonkeyCore::menuBar()->setMenuEnabled( MonkeyCore::menuBar()->menu( "mEdit/mBookmarks" ), hasEditor );
 
 	// update view menu
 	MonkeyCore::menuBar()->action( "mView/aNext" )->setEnabled( moreThanOneChild );
