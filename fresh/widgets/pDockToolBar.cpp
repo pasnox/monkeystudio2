@@ -375,12 +375,13 @@ void pDockToolBar::internal_checkButtonText( QAbstractButton* b )
 	// cancel if no button
 	if ( !b )
 		return;
-
+/*
 	// show text when checked, else not
 	if ( b->isChecked() && b->text().isEmpty() )
 		b->setText( b->property( "Caption" ).toString() );
 	else if ( !b->isChecked() && !b->text().isEmpty() )
 		b->setText( QString() );
+*/
 }
 
 void pDockToolBar::internal_orientationChanged( Qt::Orientation o )
