@@ -91,6 +91,7 @@ public:
 
 	void clearMenu( const QString& = QString::null );
 	void deleteMenu( const QString& = QString::null );
+	void setMenuEnabled( QMenu* menu, bool enabled );
 	
 	Qt::ShortcutContext defaultShortcutContext() const;
 	void setDefaultShortcutContext( Qt::ShortcutContext context );

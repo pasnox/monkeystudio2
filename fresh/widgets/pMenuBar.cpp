@@ -220,6 +220,20 @@ void pMenuBar::deleteMenu( const QString& s )
 	}
 }
 
+void pMenuBar::setMenuEnabled( QMenu* menu, bool enabled )
+{
+	if ( menu )
+	{
+		foreach ( QAction* a, menu->actions() )
+		{
+			a->setEnabled( enabled );
+			if ( a->menu() )
+				setMenuEnabled( a->menu(), enabled );
+		}
+		//menu->menuAction()->setEnabled( enabled );
+	}
+}
+
 Qt::ShortcutContext pMenuBar::defaultShortcutContext() const
 { return mDefaultShortcutContext; }
 
