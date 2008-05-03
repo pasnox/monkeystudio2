@@ -50,6 +50,15 @@ QtAssistantChild::QtAssistantChild( QObject* )
 	mMain->menuBar()->hide();
 	mMain->setIconSize( QSize( 16, 16 ) );
 	mMain->statusBar()->hide();
+	// add some action to toolbar
+	QToolBar* tb = mMain->findChild<QToolBar*>( "Toolbar" );
+	QAction* actionPrevPage = mMain->findChild<QAction*>( "actionPrevPage" );
+	QAction* actionNextPage = mMain->findChild<QAction*>( "actionNextPage" );
+	actionPrevPage->setIcon( QPixmap( ":/view/icons/view/previous.png" ) );
+	actionNextPage->setIcon( QPixmap( ":/view/icons/view/next.png" ) );
+	tb->addSeparator();
+	tb->addAction( actionPrevPage );
+	tb->addAction( actionNextPage );
 	// get dock pointeur
 	mDock = mMain->findChild<QDockWidget*>();
 	// layout
