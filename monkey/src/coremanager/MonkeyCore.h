@@ -34,7 +34,7 @@
 #include <QObject>
 #include <QHash>
 
-class pSettings;
+class Settings;
 class PluginsManager;
 class UIMain;
 class pMenuBar;
@@ -47,6 +47,7 @@ class pWorkspace;
 class pSearch;
 class QStatusBar;
 class pConsoleManager;
+class QueuedStatusBar;
 
 class Q_MONKEY_EXPORT MonkeyCore : public QObject
 {
@@ -54,7 +55,7 @@ class Q_MONKEY_EXPORT MonkeyCore : public QObject
 	
 public:
 	static void init();
-	static pSettings* settings();
+	static Settings* settings();
 	static PluginsManager* pluginsManager();
 	static UIMain* mainWindow();
 	static pMenuBar* menuBar();
@@ -66,7 +67,7 @@ public:
 	static pWorkspace* workspace();
 	static pConsoleManager* consoleManager();
 	static pSearch* searchWidget();
-	static QStatusBar* statusBar();
+	static QueuedStatusBar* statusBar();
 // variablemaanger
 // templates manager
 

@@ -28,6 +28,7 @@
 ****************************************************************************/
 #include "UITranslator.h"
 #include "../../coremanager/MonkeyCore.h"
+#include "../../settingsmanager/Settings.h"
 #include "../../pMonkeyStudio.h"
 
 #include <QLibraryInfo>

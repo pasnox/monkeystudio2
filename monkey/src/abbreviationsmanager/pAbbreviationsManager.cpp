@@ -29,6 +29,7 @@
 #include "pAbbreviationsManager.h"
 #include "../qscintillamanager/pEditor.h"
 #include "../coremanager/MonkeyCore.h"
+#include "../settingsmanager/Settings.h"
 
 #include <qscintilla.h>
 

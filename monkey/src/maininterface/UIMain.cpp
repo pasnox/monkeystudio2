@@ -36,6 +36,7 @@
 #include "../workspace/pFileManager.h"
 #include "../pluginsmanager/PluginsManager.h"
 #include "../qscintillamanager/ui/pSearch.h"
+#include "../queuedstatusbar/QueuedStatusBar.h"
 
 #include <fresh.h>
 
@@ -70,7 +71,7 @@ void UIMain::initGui()
 //	addDockWidget( Qt::RightDockWidgetArea, MonkeyCore::searchDock() );
 //	MonkeyCore::searchDock()->setVisible( false );
 //	MonkeyCore::searchDock()->setFloating( true );
-	// init staus bar
+	// init status bar
 	setStatusBar( MonkeyCore::statusBar() );
 	// init connection
 	initConnections();

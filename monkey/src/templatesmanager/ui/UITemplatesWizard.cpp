@@ -30,6 +30,7 @@
 #include "../../workspace/pFileManager.h"
 #include "../../pMonkeyStudio.h"
 #include "../../coremanager/MonkeyCore.h"
+#include "../../settingsmanager/Settings.h"
 
 #include "../../xupmanager/ProjectItemModel.h"
 #include "../../xupmanager/ScopedProjectItemModel.h"

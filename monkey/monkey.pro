@@ -103,7 +103,8 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/pluginsmanager/ui/UIBuilderSettings.h \
 	src/pluginsmanager/ui/UICompilerSettings.h \
 	src/settingsmanager/Settings.h \
-	src/coremanager/MonkeyCore.h
+	src/coremanager/MonkeyCore.h \
+	src/queuedstatusbar/QueuedStatusBar.h
 
 SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/maininterface/ui/UIAbout.cpp \
@@ -138,7 +139,8 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/main.cpp \
 	src/pluginsmanager/ui/UICompilerSettings.cpp \
 	src/settingsmanager/Settings.cpp \
-	src/coremanager/MonkeyCore.cpp
+	src/coremanager/MonkeyCore.cpp \
+	src/queuedstatusbar/QueuedStatusBar.cpp
 
 mac:SOURCES	*= src/toolsmanager/pDesktopApplications_mac.cpp
 else:unix:SOURCES	*= src/toolsmanager/pDesktopApplications_unix.cpp

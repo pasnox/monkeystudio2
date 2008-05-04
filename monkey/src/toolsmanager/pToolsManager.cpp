@@ -32,6 +32,7 @@
 #include "../pMonkeyStudio.h"
 #include "../consolemanager/pConsoleManager.h"
 #include "../coremanager/MonkeyCore.h"
+#include "../settingsmanager/Settings.h"
 
 #include <QProcess>
 #include <QDesktopServices>

@@ -31,6 +31,7 @@
 #include "../workspace/pFileManager.h"
 #include "../xupmanager/XUPItem.h"
 #include "../coremanager/MonkeyCore.h"
+#include "../settingsmanager/Settings.h"
 
 using namespace pMonkeyStudio;
 

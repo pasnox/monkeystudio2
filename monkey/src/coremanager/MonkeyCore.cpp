@@ -38,7 +38,7 @@
 #include "../workspace/pWorkspace.h"
 #include "../consolemanager/pConsoleManager.h"
 #include "../qscintillamanager/ui/pSearch.h"
-#include <QStatusBar>
+#include "../queuedstatusbar/QueuedStatusBar.h"
 
 #include "../maininterface/ui/UISettings.h"
 #include "../maininterface/ui/UITranslator.h"
@@ -125,7 +125,7 @@ void MonkeyCore::init()
 	pMonkeyStudio::prepareAPIs();
 }
 
-pSettings* MonkeyCore::settings()
+Settings* MonkeyCore::settings()
 {
 	if ( !mInstances.contains( &Settings::staticMetaObject ) )
 		mInstances[&Settings::staticMetaObject] = new Settings( qApp );
@@ -201,10 +201,9 @@ pSearch* MonkeyCore::searchWidget()
 	return qobject_cast<pSearch*>( mInstances[&pSearch::staticMetaObject] );
 }
 
-QStatusBar* MonkeyCore::statusBar()
+QueuedStatusBar* MonkeyCore::statusBar()
 {
-	if ( !mInstances.contains( &QStatusBar::staticMetaObject ) )
-		mInstances[&QStatusBar::staticMetaObject] = new QStatusBar( mainWindow() );
-	return qobject_cast<QStatusBar*>( mInstances[&QStatusBar::staticMetaObject] );
-	//StatusBar::self()->setText( StatusBar::tStatusTip, tr( "%1 v%2 Ready !" ).arg( PACKAGE_NAME, PACKAGE_VERSION ), 15000 );
+	if ( !mInstances.contains( &QueuedStatusBar::staticMetaObject ) )
+		mInstances[&QueuedStatusBar::staticMetaObject] = new QueuedStatusBar( mainWindow() );
+	return qobject_cast<QueuedStatusBar*>( mInstances[&QueuedStatusBar::staticMetaObject] );
 }
