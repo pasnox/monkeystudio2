@@ -4,6 +4,7 @@
 #include <QDialogButtonBox>
 #include <QHBoxLayout>
 #include <QTimer>
+#include <QShowEvent>
 
 int pQueuedMessageWidget::pQueuedMessageUniqueId = 0;
 
@@ -34,11 +35,9 @@ pQueuedMessageWidget::pQueuedMessageWidget( QWidget* parent )
 	connect( dbbButtons, SIGNAL( accepted() ), this, SLOT( stopMessage() ) );
 }
 
-QSize pQueuedMessageWidget::sizeHint() const
+int pQueuedMessageWidget::messagesCount() const
 {
-	QSize size = QWidget::sizeHint();
-	size.setHeight( 15 );
-	return size;
+	return mMessages.count();
 }
 
 int pQueuedMessageWidget::append( const pQueuedMessage& message )
@@ -79,6 +78,8 @@ void pQueuedMessageWidget::startMessage()
 	// format widget
 	lPixmap->setPixmap( msg.Pixmap );
 	lMessage->setText( msg.Message );
+	lMessage->setToolTip( msg.Message );
+	lMessage->setWhatsThis( msg.Message );
 	setAutoFillBackground( false );
 	QPalette pal = mDefaultPalette;
 	if ( msg.Background != QBrush() )

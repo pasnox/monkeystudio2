@@ -37,7 +37,7 @@ class Q_MONKEY_EXPORT pQueuedMessageWidget : public QWidget
 public:
 	pQueuedMessageWidget( QWidget* parent = 0 );
 	
-	QSize sizeHint() const;
+	int messagesCount() const;
 
 protected:
 	QHash<int,pQueuedMessage> mMessages;
