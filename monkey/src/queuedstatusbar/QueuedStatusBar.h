@@ -18,8 +18,6 @@ public:
 
 protected:
 	QLabel* mLabels[4];
-	
-	void hideOrShow();
 
 public slots:
 	void setModified( bool modified );

@@ -8,17 +8,9 @@ QueuedStatusBar::QueuedStatusBar( QWidget* parent )
 	// create labels
 	QLabel* l;
 	l = ( mLabels[ltSaveState] = new QLabel( this ) );
-	l->setFrameShape( QFrame::StyledPanel );
-	//l->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
 	l = ( mLabels[ltEOLMode] = new QLabel( this ) );
-	l->setFrameShape( QFrame::StyledPanel );
-	//l->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
 	l = ( mLabels[ltIndentMode] = new QLabel( this ) );
-	l->setFrameShape( QFrame::StyledPanel );
-	//l->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
 	l = ( mLabels[ltCursorPosition] = new QLabel( this ) );
-	l->setFrameShape( QFrame::StyledPanel );
-	//l->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
 	// add labels to status bar as permanent widgets
 	addPermanentWidget( mLabels[ltSaveState] );
 	addPermanentWidget( mLabels[ltEOLMode] );
@@ -26,13 +18,6 @@ QueuedStatusBar::QueuedStatusBar( QWidget* parent )
 	addPermanentWidget( mLabels[ltCursorPosition] );
 	//
 	setFixedHeight( 24 );
-}
-
-void QueuedStatusBar::hideOrShow()
-{
-	pQueuedStatusBar::hideOrShow();
-	if ( mQueuedWidget->isVisible() && mQueuedWidget->messagesCount() == 0 )
-		mQueuedWidget->hide();
 }
 
 QLabel* QueuedStatusBar::label( QueuedStatusBar::LabelType type )
