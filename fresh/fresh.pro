@@ -82,3 +82,9 @@ HEADERS	+= pFilesListWidget.h \
 	pExtendedWorkspace.h
 SOURCES	+= pFilesListWidget.cpp \
 	pExtendedWorkspace.cpp
+# pQueuedMessageWidget
+HEADERS	+= pQueuedMessageWidget.h
+SOURCES	+= pQueuedMessageWidget.cpp
+# pQueuedStatusBar
+HEADERS	+= pQueuedStatusBar.h
+SOURCES	+= pQueuedStatusBar.cpp
