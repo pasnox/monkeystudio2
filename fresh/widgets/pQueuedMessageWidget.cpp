@@ -93,6 +93,9 @@ void pQueuedMessageWidget::startMessage()
 	// show message
 	if ( !isVisible() )
 		show();
+	// show button
+	if ( !dbbButtons->isVisible() )
+		dbbButtons->show();
 	// emit signal
 	emit messageShown();
 }
@@ -103,6 +106,9 @@ void pQueuedMessageWidget::stopMessage()
 		startMessage();
 	else
 	{
+		lPixmap->clear();
+		lMessage->clear();
+		dbbButtons->hide();
 		setAutoFillBackground( false );
 		setPalette( mDefaultPalette );
 		hide();
