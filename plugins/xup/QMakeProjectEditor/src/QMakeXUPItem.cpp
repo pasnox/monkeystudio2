@@ -5,10 +5,11 @@
 #include <QFileInfo>
 #include <QApplication>
 #include <QInputDialog>
-#include <QMessageBox>
 
 #include <monkey.h>
 #include <pluginsmanager.h>
+#include <coremanager.h>
+#include <queuedstatusbar.h>
 
 #include <QDebug>
 
@@ -748,7 +749,7 @@ void QMakeXUPItem::installCommands()
 			addCommand( cmd, "mBuilder/mRebuild" );
 		}
 		else
-			pMonkeyStudio::warning( tr( "Warning..." ), tr( "Some actions can't be created, because there is no default Qt version setted, please go in your project settings to fix this." ) );
+			MonkeyCore::statusBar()->appendMessage( tr( "Some actions can't be created, because there is no default Qt version setted, please go in your project settings to fix this." ) );
 		
 		// execute debug
 		cmd = cmdBuild;
