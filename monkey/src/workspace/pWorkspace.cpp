@@ -51,6 +51,7 @@
 #include "../pluginsmanager/PluginsManager.h"
 #include "../coremanager/MonkeyCore.h"
 #include "../maininterface/UIMain.h"
+#include "../queuedstatusbar/QueuedStatusBar.h"
 
 #include "pChild.h"
 #include "../qscintillamanager/pEditor.h"
@@ -173,8 +174,8 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 		//connect( c, SIGNAL( searchReplaceAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aSearchReplace" ), SLOT( setEnabled( bool ) ) );
 		//connect( c, SIGNAL( goToAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aGoTo" ), SLOT( setEnabled( bool ) ) );
 		// update status bar
-		//connect( c, SIGNAL( cursorPositionChanged( const QPoint& ) ), statusBar(), SLOT( setCursorPosition( const QPoint& ) ) );
-		//connect( c, SIGNAL( modifiedChanged( bool ) ), statusBar(), SLOT( setModified( bool ) ) );
+		connect( c, SIGNAL( cursorPositionChanged( const QPoint& ) ), MonkeyCore::statusBar(), SLOT( setCursorPosition( const QPoint& ) ) );
+		connect( c, SIGNAL( modifiedChanged( bool ) ), MonkeyCore::statusBar(), SLOT( setModified( bool ) ) );
 		//connect( c, SIGNAL( documentModeChanged( AbstractChild::DocumentMode ) ), statusBar(), SLOT( setDocumentMode( AbstractChild::DocumentMode ) ) );
 		//connect( c, SIGNAL( layoutModeChanged( AbstractChild::LayoutMode ) ), statusBar(), SLOT( setLayoutMode( AbstractChild::LayoutMode ) ) );
 		//connect( c, SIGNAL( currentFileChanged( const QString& ) ), statusBar(), SLOT( setFileName( const QString& ) ) );
@@ -245,8 +246,9 @@ void pWorkspace::internal_currentChanged( int i )
 {
 	// get child
 	pAbstractChild* c = child( i );
+	pEditor* editor = c ? c->currentEditor() : 0;
 	bool hasChild = c;
-	bool hasEditor = c ? c->currentEditor() : false;
+	bool hasEditor = editor;
 	bool modified = hasChild ? c->isModified() : false;
 	bool print = hasChild ? c->isPrintAvailable() : false;
 	bool undo = hasChild ? c->isUndoAvailable() : false;
@@ -282,11 +284,10 @@ void pWorkspace::internal_currentChanged( int i )
 	MonkeyCore::menuBar()->action( "mView/aPrevious" )->setEnabled( moreThanOneChild );
 
 	// update status bar
-	//MonkeyCore::menuBar()->setCursorPosition( c ? c->cursorPosition() : QPoint( -1, -1 ) );
-	//MonkeyCore::menuBar()->setModified( c ? c->isModified() : false );
-	//MonkeyCore::menuBar()->setDocumentMode( c ? c->documentMode() : AbstractChild::mNone );
-	//MonkeyCore::menuBar()->setLayoutMode( c ? c->layoutMode() : AbstractChild::lNone );
-	//MonkeyCore::menuBar()->setFileName( c ? c->currentFile() : QString::null );
+	MonkeyCore::statusBar()->setModified( c ? c->isModified() : false );
+	MonkeyCore::statusBar()->setEOLMode( editor ? editor->eolMode() : (QsciScintilla::EolMode)0 );
+	MonkeyCore::statusBar()->setIndentMode( editor ? ( editor->indentationsUseTabs() ? 1 : 0 ) : -1 );
+	MonkeyCore::statusBar()->setCursorPosition( c ? c->cursorPosition() : QPoint( -1, -1 ) );
 
 	// search dock
 	//MonkeyCore::searchDock()->setEditor( hasChild ? c->currentEditor() : 0 );
