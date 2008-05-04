@@ -1,3 +1,8 @@
 <!DOCTYPE XUPProject>
-<project plugin="XUPProjectEditor" name="$Project Name$" >
+<project name="$Project Name$" >
+ <scope nested="false" name="ProjectSettings" >
+  <variable name="EDITOR" multiline="false" >
+   <value>XUPProjectEditor</value>
+  </variable>
+ </scope>
 </project>
