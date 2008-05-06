@@ -5,7 +5,7 @@
 
 #include "pQueuedMessageWidget.h"
 
-class pQueuedStatusBar : public QStatusBar
+class Q_MONKEY_EXPORT pQueuedStatusBar : public QStatusBar
 {
 	Q_OBJECT
 	

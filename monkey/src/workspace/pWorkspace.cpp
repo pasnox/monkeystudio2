@@ -32,7 +32,7 @@
 #include <QFileInfo>
 
 #include <QDebug>
-
+#include <QFileSystemWatcher>
 
 #include "pWorkspace.h"
 #include "pAbstractChild.h"
@@ -63,6 +63,9 @@ pWorkspace::pWorkspace( QMainWindow* p )
 	: pExtendedWorkspace( p )
 {
 	Q_ASSERT( p );
+	// creaet file watcher
+	mFileWatcher = new QFileSystemWatcher( this );
+	
 	// add dock to main window
 	p->addDockWidget( Qt::LeftDockWidgetArea, listWidget() );
 
@@ -93,6 +96,8 @@ pWorkspace::pWorkspace( QMainWindow* p )
 	connect( MonkeyCore::projectsManager(), SIGNAL( currentProjectChanged( XUPItem*, XUPItem* ) ), this, SLOT( internal_currentProjectChanged( XUPItem*, XUPItem* ) ) );
 	connect( MonkeyCore::projectsManager(), SIGNAL( projectInstallCommandRequested( const pCommand&, const QString& ) ), this, SLOT( internal_projectInstallCommandRequested( const pCommand&, const QString& ) ) );
 	connect( MonkeyCore::projectsManager(), SIGNAL( projectUninstallCommandRequested( const pCommand&, const QString& ) ), this, SLOT( internal_projectUninstallCommandRequested( const pCommand&, const QString& ) ) );
+	connect( mFileWatcher, SIGNAL( directoryChanged( const QString& ) ), this, SLOT( fileWatcher_directoryChanged( const QString& ) ) );
+	connect( mFileWatcher, SIGNAL( fileChanged( const QString& ) ), this, SLOT( fileWatcher_fileChanged( const QString& ) ) );
 	connect( ps, SIGNAL( clearSearchResults() ), this, SIGNAL( clearSearchResults() ) );
 	
 	pAction* mFocusToEditor = new pAction( "aFocusToEditor", QIcon( ":/edit/icons/edit/text.png" ), tr( "Set focus to editor" ),  QString("Ins") , "Workspace" );
@@ -147,6 +152,9 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 			}
 		}
 	}
+	
+	// track file
+	mFileWatcher->addPath( s );
 
 	// try opening file with child plugins
 	pAbstractChild* c = MonkeyCore::pluginsManager()->openChildFile( s ); // TODO: repalce by a childForFileName member witch will return a child that will open file
@@ -467,6 +475,16 @@ void pWorkspace::projectCustomActionTriggered()
 		// send command to consolemanager
 		cm->addCommands( mCmds );
 	}
+}
+
+void pWorkspace::fileWatcher_directoryChanged( const QString& path )
+{
+	MonkeyCore::statusBar()->appendMessage( QString( "Directory changed: %1" ).arg( path ) );
+}
+
+void pWorkspace::fileWatcher_fileChanged( const QString& path )
+{
+	MonkeyCore::statusBar()->appendMessage( QString( "File changed: %1" ).arg( path ) );
 }
 
 // file menu

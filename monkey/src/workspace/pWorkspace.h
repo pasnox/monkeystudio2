@@ -36,6 +36,7 @@
 class pAbstractChild;
 class QMainWindow;
 class XUPItem;
+class QFileSystemWatcher;
 
 class Q_MONKEY_EXPORT pWorkspace : public pExtendedWorkspace
 {
@@ -49,6 +50,7 @@ public:
 	QList<pAbstractChild*> children() const;
 
 protected:
+	QFileSystemWatcher* mFileWatcher;
 	virtual void closeDocument( QWidget* document );
 
 private:
@@ -76,6 +78,8 @@ private slots:
 	void internal_projectInstallCommandRequested( const pCommand& cmd, const QString& mnu );
 	void internal_projectUninstallCommandRequested( const pCommand& cmd, const QString& mnu );
 	void projectCustomActionTriggered();
+	void fileWatcher_directoryChanged( const QString& path );
+	void fileWatcher_fileChanged( const QString& path );
 
 public slots:
 	// file menu

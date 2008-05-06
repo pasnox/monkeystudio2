@@ -6,7 +6,7 @@
 
 class QLabel;
 
-class QueuedStatusBar : public pQueuedStatusBar
+class Q_MONKEY_EXPORT QueuedStatusBar : public pQueuedStatusBar
 {
 	Q_OBJECT
 	
