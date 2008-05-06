@@ -16,7 +16,6 @@ DEPENDPATH	*= $$QSCINTILLAVERSION/Qt4
 CONFIG	-= dll
 CONFIG	-= release
 CONFIG	+= staticlib
-DEFINES	-= QSCINTILLA_MAKE_DLL
 
 # remove install script of qscintilla
 INSTALLS	-= header trans qsci target
