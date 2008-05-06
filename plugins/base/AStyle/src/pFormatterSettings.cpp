@@ -29,10 +29,11 @@
 #include "pFormatterSettings.h"
 
 #include <coremanager.h>
+#include <settingsmanager.h>
 
 void pFormatterSettings::applyTo( astyle::ASFormatter& f )
 {
-	pSettings* s = MonkeyCore::settings();
+	Settings* s = MonkeyCore::settings();
 	s->beginGroup( QString( "Plugins/%1" ).arg( PLUGIN_NAME ) );
 	int style = s->value( "style", 0 ).toInt();
 	switch( style )

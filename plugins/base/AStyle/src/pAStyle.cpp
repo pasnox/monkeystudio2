@@ -84,6 +84,8 @@ void pAStyle::applyFormatter()
 	{
 		if ( pEditor* e = c->currentEditor() )
 		{
+#warning broken plugin, please fix me
+/*
 			// vars
 			QString s1 = e->text();
 			QString s2;
@@ -104,7 +106,7 @@ void pAStyle::applyFormatter()
 				eolChars = "\n";
 				break;
 			case pEditor::EolMac:
-				eolChars = "\r";
+				eolChars = "\n";
 				break;
 			}
 			
@@ -128,6 +130,7 @@ void pAStyle::applyFormatter()
 			e->clear();
 			e->insert( s2 );
 			e->setCursorPosition( l, i );
+*/
 		}
 	}
 }

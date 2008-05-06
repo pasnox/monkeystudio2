@@ -29,6 +29,7 @@
 #include "UISettingsAStyle.h"
 
 #include <coremanager.h>
+#include <settingsmanager.h>
 
 UISettingsAStyle::UISettingsAStyle( QWidget* p )
 	: QWidget( p )
@@ -118,7 +119,7 @@ void UISettingsAStyle::onStyleChange()
 
 void UISettingsAStyle::loadSettings()
 {
-	pSettings* s = MonkeyCore::settings();
+	Settings* s = MonkeyCore::settings();
 	s->beginGroup( QString( "Plugins/%1" ).arg( PLUGIN_NAME ) );
 	int style = s->value( "style", 0 ).toInt();
 	spnIndentation->setValue( s->value( "indentation", 4 ).toInt() );
@@ -160,7 +161,7 @@ void UISettingsAStyle::saveSettings()
 		style = 4;
 	else if ( rbCustom->isChecked() )
 		style = 5;
-	pSettings* s = MonkeyCore::settings();
+	Settings* s = MonkeyCore::settings();
 	s->beginGroup( QString( "Plugins/%1" ).arg( PLUGIN_NAME ) );
 	s->setValue( "style", style );
 	s->setValue( "indentation", spnIndentation->value() );
