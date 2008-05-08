@@ -7,5 +7,5 @@ include( installs.pri )
 ProjectSettings {
 	EDITOR	= QMakeProjectEditor
 	EXECUTE_RELEASE	= bin/monkeystudio
-	QT_VERSION	= 4.3.4
+	QT_VERSION	= 4.4.0
 }
