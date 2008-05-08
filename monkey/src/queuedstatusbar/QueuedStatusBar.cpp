@@ -8,9 +8,13 @@ QueuedStatusBar::QueuedStatusBar( QWidget* parent )
 	// create labels
 	QLabel* l;
 	l = ( mLabels[ltSaveState] = new QLabel( this ) );
+	l->setIndent( 10 );
 	l = ( mLabels[ltEOLMode] = new QLabel( this ) );
+	l->setIndent( 10 );
 	l = ( mLabels[ltIndentMode] = new QLabel( this ) );
+	l->setIndent( 10 );
 	l = ( mLabels[ltCursorPosition] = new QLabel( this ) );
+	l->setIndent( 10 );
 	// add labels to status bar as permanent widgets
 	addPermanentWidget( mLabels[ltSaveState] );
 	addPermanentWidget( mLabels[ltEOLMode] );
@@ -21,14 +25,10 @@ QueuedStatusBar::QueuedStatusBar( QWidget* parent )
 }
 
 QLabel* QueuedStatusBar::label( QueuedStatusBar::LabelType type )
-{
-	return mLabels[type];
-}
+{ return mLabels[type]; }
 
 void QueuedStatusBar::setModified( bool modified )
-{
-	label( ltSaveState )->setPixmap( QIcon( QPixmap( ":/file/icons/file/save.png" ) ).pixmap( QSize( 16, 16 ), modified ? QIcon::Normal : QIcon::Disabled ) );
-}
+{ label( ltSaveState )->setPixmap( QIcon( QPixmap( ":/file/icons/file/save.png" ) ).pixmap( QSize( 16, 16 ), modified ? QIcon::Normal : QIcon::Disabled ) ); }
 
 void QueuedStatusBar::setEOLMode( QsciScintilla::EolMode mode )
 {
@@ -55,20 +55,20 @@ void QueuedStatusBar::setIndentMode( int mode )
 	QString s = tr( "Indent Mode: %1" );
 	switch ( mode )
 	{
-		case -1:
-			label( ltIndentMode )->setText( s.arg( "-" ) );
-			break;
 		case 0:
 			label( ltIndentMode )->setText( s.arg( tr( "Spaces" ) ) );
 			break;
 		case 1:
 			label( ltIndentMode )->setText( s.arg( tr( "Tabs" ) ) );
 			break;
+		default:
+			label( ltIndentMode )->setText( s.arg( "-" ) );
+			break;
 	}
 }
 
 void QueuedStatusBar::setCursorPosition( const QPoint& pos )
 {
-	QString s = tr( "Line: %1, Column: %2" );
+	QString s = tr( "Line: %1 Column: %2" );
 	label( ltCursorPosition )->setText( pos == QPoint( -1, -1 ) ? s.arg( "-" ).arg( "-" ) : s.arg( pos.y() ).arg( pos.x() ) );
 }
