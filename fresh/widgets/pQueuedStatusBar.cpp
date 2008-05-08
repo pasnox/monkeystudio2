@@ -3,37 +3,37 @@
 pQueuedStatusBar::pQueuedStatusBar( QWidget* parent )
 	: QStatusBar( parent )
 {
+	mDefaultPalette = palette();
 	// create pQueuedMessageWidget
 	mQueuedWidget = new pQueuedMessageWidget( this );
-	mQueuedWidget->setVisible( false );
 	addWidget( mQueuedWidget, 100 );
 	// connections
-	connect( mQueuedWidget, SIGNAL( messageShown() ), this, SLOT( messageChanged() ) );
-	connect( mQueuedWidget, SIGNAL( messageClosed() ), this, SLOT( messageChanged() ) );
+	connect( mQueuedWidget, SIGNAL( messageShown( const pQueuedMessage& ) ), this, SLOT( messageShown( const pQueuedMessage& ) ) );
+	connect( mQueuedWidget, SIGNAL( cleared() ), this, SLOT( messageCleared() ) );
 }
 
 int pQueuedStatusBar::appendMessage( const pQueuedMessage& message )
-{
-	return mQueuedWidget->append( message );
-}
+{ return mQueuedWidget->append( message ); }
 
 int pQueuedStatusBar::appendMessage( const QString& message, int milliseconds, const QPixmap pixmap, const QBrush& background, const QBrush& foreground )
-{
-	return mQueuedWidget->append( message, milliseconds, pixmap, background, foreground );
-}
+{ return mQueuedWidget->append( message, milliseconds, pixmap, background, foreground ); }
 
 void pQueuedStatusBar::removeMessage( const pQueuedMessage& message )
-{
-	mQueuedWidget->remove( message );
-}
+{ mQueuedWidget->remove( message ); }
 
 void pQueuedStatusBar::removeMessage( int id )
+{ mQueuedWidget->remove( id ); }
+
+void pQueuedStatusBar::messageShown( const pQueuedMessage& message )
 {
-	mQueuedWidget->remove( id );
+	setAutoFillBackground( true );
+	QPalette pal = mDefaultPalette;
+	pal.setBrush( backgroundRole(), message.Background );
+	setPalette( pal );
 }
 
-void pQueuedStatusBar::messageChanged()
+void pQueuedStatusBar::messageCleared()
 {
-	setPalette( mQueuedWidget->palette() );
-	setAutoFillBackground( mQueuedWidget->autoFillBackground() );
+	setAutoFillBackground( false );
+	setPalette( mDefaultPalette );
 }
