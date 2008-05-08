@@ -9,21 +9,21 @@
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
 ** Home Page : http://www.monkeystudio.org
 **
-    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
 #ifndef PWORKSPACE_H
@@ -66,8 +66,10 @@ public slots:
 
 	void closeCurrentDocument();
 	bool closeAllDocuments();
+	
+	void fileWatcher_alertClicked( QDialogButtonBox::StandardButton button, const pQueuedMessage& message );
 
-private slots:
+protected slots:
 	void internal_currentFileChanged( const QString& fileName );
 	void internal_currentChanged( int id );
 	//void internal_aboutToCloseTab( int, QCloseEvent* );
@@ -78,6 +80,9 @@ private slots:
 	void internal_projectInstallCommandRequested( const pCommand& cmd, const QString& mnu );
 	void internal_projectUninstallCommandRequested( const pCommand& cmd, const QString& mnu );
 	void projectCustomActionTriggered();
+	void fileWatcher_ecmNothing( const QString& filename );
+	void fileWatcher_ecmReload( const QString& filename, bool force = false );
+	void fileWatcher_ecmAlert( const QString& filename );
 	void fileWatcher_directoryChanged( const QString& path );
 	void fileWatcher_fileChanged( const QString& path );
 

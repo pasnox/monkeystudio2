@@ -9,21 +9,21 @@
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
 ** Home Page : http://www.monkeystudio.org
 **
-    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
 #include <QToolButton>
@@ -206,7 +206,7 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 	internal_currentChanged( indexOf( c ) );
 
 	// emit file open
-    emit fileOpened( s );
+	emit fileOpened( s );
 
 	// return child instance
 	return c;
@@ -293,7 +293,7 @@ void pWorkspace::internal_currentChanged( int i )
 
 	// update status bar
 	MonkeyCore::statusBar()->setModified( c ? c->isModified() : false );
-	MonkeyCore::statusBar()->setEOLMode( editor ? editor->eolMode() : (QsciScintilla::EolMode)0 );
+	MonkeyCore::statusBar()->setEOLMode( editor ? editor->eolMode() : (QsciScintilla::EolMode)-1 );
 	MonkeyCore::statusBar()->setIndentMode( editor ? ( editor->indentationsUseTabs() ? 1 : 0 ) : -1 );
 	MonkeyCore::statusBar()->setCursorPosition( c ? c->cursorPosition() : QPoint( -1, -1 ) );
 
@@ -477,14 +477,84 @@ void pWorkspace::projectCustomActionTriggered()
 	}
 }
 
-void pWorkspace::fileWatcher_directoryChanged( const QString& path )
+void pWorkspace::fileWatcher_ecmNothing( const QString& filename )
+{
+	MonkeyCore::statusBar()->appendMessage( tr( "File externally modified: '%1'" ).arg( QFileInfo( filename ).fileName() ), 2000 );
+}
+
+void pWorkspace::fileWatcher_ecmReload( const QString& filename, bool force )
+{
+	// try reload
+	foreach ( pAbstractChild* ac, children() )
+	{
+		foreach ( const QString& fn, ac->files() )
+		{
+			if ( fn == filename && ( !ac->isModified( fn ) || force ) )
+			{
+				ac->closeFile( fn );
+				ac->openFile( fn );
+				MonkeyCore::statusBar()->appendMessage( tr( "Reloaded externally modified file: '%1'" ).arg( QFileInfo( filename ).fileName() ), 2000 );
+				return;;
+			}
+		}
+	}
+	// ask user
+	fileWatcher_ecmAlert( filename );
+}
+
+void pWorkspace::fileWatcher_ecmAlert( const QString& filename )
+{
+	pQueuedMessage m;
+	m.Message = tr( "The file '%1' has been modified externally, what you do ?" ).arg( QFileInfo( filename ).fileName() );
+	m.MilliSeconds = 0;
+	m.Pixmap = QPixmap();
+	m.Background = QBrush( QColor( 255, 0, 0, 20 ) );
+	m.Foreground = QBrush();
+	m.Buttons[ QDialogButtonBox::Ignore ] = QString();
+	m.Buttons[ QDialogButtonBox::Reset ] = tr( "Reload" );
+	m.Object = this;
+	m.Slot = "fileWatcher_alertClicked";
+	m.UserData = filename;
+	MonkeyCore::statusBar()->appendMessage( m );
+}
+
+void pWorkspace::fileWatcher_alertClicked( QDialogButtonBox::StandardButton button, const pQueuedMessage& message )
+{
+	switch ( button )
+	{
+		case QDialogButtonBox::Ignore:
+			fileWatcher_ecmNothing( message.UserData.toString() );
+			break;
+		case QDialogButtonBox::Reset:
+			fileWatcher_ecmReload( message.UserData.toString(), true );
+			break;
+		default:
+			break;
+	}
+}
+
+void pWorkspace::pWorkspace::fileWatcher_directoryChanged( const QString& path )
 {
 	MonkeyCore::statusBar()->appendMessage( QString( "Directory changed: %1" ).arg( path ) );
 }
 
-void pWorkspace::fileWatcher_fileChanged( const QString& path )
+void pWorkspace::fileWatcher_fileChanged( const QString& filename )
 {
-	MonkeyCore::statusBar()->appendMessage( QString( "File changed: %1" ).arg( path ) );
+	switch ( pMonkeyStudio::externalchanges() )
+	{
+		// silently inform user
+		case pMonkeyStudio::ecmNothing:
+			fileWatcher_ecmNothing( filename );
+			break;
+		// check if file is open, if open and modified goto alert, else reload it
+		case pMonkeyStudio::ecmReload:
+			fileWatcher_ecmReload( filename );
+			break;
+		// ask user what to do
+		case pMonkeyStudio::ecmAlert:
+			fileWatcher_ecmAlert( filename );
+			break;
+	}
 }
 
 // file menu
@@ -556,13 +626,23 @@ void pWorkspace::fileSaveCurrent_triggered()
 {
 	pAbstractChild* c = currentChild();
 	if ( c )
+	{
+		const QString fn = c->currentFile();
+		mFileWatcher->removePath( fn );
 		c->saveCurrentFile();
+		mFileWatcher->addPath( fn );
+	}
 }
 
 void pWorkspace::fileSaveAll_triggered()
 {
 	foreach ( pAbstractChild* c, children() )
+	{
+		const QStringList fns = c->files();
+		mFileWatcher->removePaths( fns );
 		c->saveFiles();
+		mFileWatcher->addPaths( fns );
+	}
 }
 
 void pWorkspace::fileCloseCurrent_triggered()
