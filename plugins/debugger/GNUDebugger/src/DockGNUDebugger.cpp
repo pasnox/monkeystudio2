@@ -27,7 +27,7 @@ DockGNUDebugger::DockGNUDebugger( QWidget* w )
 	// create MainWindow
 	mw = new QMainWindow(w);
 	setWidget(mw);
-	QSize s = mw->size();
+//	QSize s = mw->size();
 	
 //	setMinimumHeight( 120 );
 
@@ -42,8 +42,8 @@ DockGNUDebugger::DockGNUDebugger( QWidget* w )
 
 	// create registers	
 	registersGdb = new GdbRegisters(Parser);
-	registersGdb->getContainer()->setFixedWidth (s.width()*2-100);
-	registersGdb->getContainer()->setMinimumWidth (s.width()*2-100);
+//	registersGdb->getContainer()->setFixedWidth (s.width()*2-100);
+//	registersGdb->getContainer()->setMinimumWidth (s.width()*2-100);
 
 	// create watch
 	watchGdb = new GdbWatch(Parser);
