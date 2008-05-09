@@ -67,6 +67,7 @@ public:
 
 protected:
 	void keyPressEvent( QKeyEvent* );
+	QString getActualFileIndent ();
 
 	bool mCopyAvailable;
 	static bool mPasteAvailableInit;

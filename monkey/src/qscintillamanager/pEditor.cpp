@@ -41,6 +41,9 @@
 #include <QDir>
 #include <QDateTime>
 #include <QTextCodec>
+#include <QRegExp>
+
+#include <QDebug>
 
 bool pEditor::mPasteAvailableInit = false;
 bool pEditor::mPasteAvailable = false;
@@ -132,6 +135,22 @@ void pEditor::keyPressEvent( QKeyEvent* e )
 bool pEditor::lineNumbersMarginEnabled() const
 {
 	return marginLineNumbers( 0 );
+}
+
+QString pEditor::getActualFileIndent ()
+{
+	QString currText = "\n" + text(); // \n for more simple RegExp
+	QRegExp tabRe = QRegExp ("\n\\t");
+	int matchIntex;
+	matchIntex = tabRe.indexIn (currText);
+	if (matchIntex != -1)
+		return "\t";
+	
+	QRegExp spaceRe = QRegExp ("\n( +)");
+	matchIntex = spaceRe.indexIn (currText);
+	if (matchIntex != -1)
+		return spaceRe.cap(1);
+	return QString::null;
 }
 
 int pEditor::lineNumbersMarginWidth() const
@@ -274,7 +293,7 @@ bool pEditor::openFile( const QString& s )
 		convertEols( eolMode() );
 	
 	QApplication::restoreOverrideCursor();
-
+	qWarning () << getActualFileIndent ();
 	return true;
 }
 

@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>672</width>
-    <height>593</height>
+    <height>543</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -224,7 +224,7 @@
    <item row="1" column="1" >
     <widget class="QStackedWidget" name="swPages" >
      <property name="currentIndex" >
-      <number>0</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="pGeneral" >
       <layout class="QGridLayout" >
@@ -1362,90 +1362,47 @@
           <string>Indentation</string>
          </property>
          <layout class="QGridLayout" >
-          <property name="leftMargin" >
-           <number>5</number>
-          </property>
-          <property name="topMargin" >
-           <number>5</number>
-          </property>
-          <property name="rightMargin" >
-           <number>5</number>
-          </property>
-          <property name="bottomMargin" >
-           <number>5</number>
-          </property>
-          <property name="horizontalSpacing" >
-           <number>3</number>
-          </property>
-          <property name="verticalSpacing" >
-           <number>3</number>
-          </property>
-          <item row="4" column="0" colspan="2" >
-           <layout class="QHBoxLayout" >
-            <property name="spacing" >
-             <number>3</number>
+          <item row="0" column="0" >
+           <widget class="QCheckBox" name="cbAutoIndent" >
+            <property name="text" >
+             <string>Auto Indent</string>
             </property>
-            <property name="leftMargin" >
-             <number>0</number>
+           </widget>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QCheckBox" name="cbIndentationUseTabs" >
+            <property name="text" >
+             <string>Indentation use Tabs</string>
             </property>
-            <property name="topMargin" >
-             <number>0</number>
+           </widget>
+          </item>
+          <item row="1" column="0" >
+           <widget class="QCheckBox" name="cbBackspaceUnindents" >
+            <property name="text" >
+             <string>Backspace Unindents</string>
             </property>
-            <property name="rightMargin" >
-             <number>0</number>
+           </widget>
+          </item>
+          <item row="1" column="1" >
+           <widget class="QCheckBox" name="cbTabIndents" >
+            <property name="text" >
+             <string>Tab Indents</string>
             </property>
-            <property name="bottomMargin" >
-             <number>0</number>
+           </widget>
+          </item>
+          <item row="2" column="0" >
+           <widget class="QCheckBox" name="cbIndentationGuides" >
+            <property name="text" >
+             <string>Indentation Guides</string>
             </property>
-            <item>
-             <widget class="QLabel" name="lIndentationWidth" >
-              <property name="text" >
-               <string>Indentation Width :</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSlider" name="sIndentationWidth" >
-              <property name="sizePolicy" >
-               <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimum" >
-               <number>1</number>
-              </property>
-              <property name="maximum" >
-               <number>20</number>
-              </property>
-              <property name="pageStep" >
-               <number>2</number>
-              </property>
-              <property name="orientation" >
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="tickInterval" >
-               <number>1</number>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLCDNumber" name="lnIndentationWidth" >
-              <property name="sizePolicy" >
-               <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="numDigits" >
-               <number>2</number>
-              </property>
-              <property name="segmentStyle" >
-               <enum>QLCDNumber::Flat</enum>
-              </property>
-             </widget>
-            </item>
-           </layout>
+           </widget>
+          </item>
+          <item row="2" column="1" >
+           <widget class="QCheckBox" name="cAutodetectIndent" >
+            <property name="text" >
+             <string>Autodetect  indentation</string>
+            </property>
+           </widget>
           </item>
           <item row="3" column="0" colspan="2" >
            <layout class="QHBoxLayout" >
@@ -1514,45 +1471,77 @@
             </item>
            </layout>
           </item>
+          <item row="4" column="0" colspan="2" >
+           <layout class="QHBoxLayout" >
+            <property name="spacing" >
+             <number>3</number>
+            </property>
+            <property name="leftMargin" >
+             <number>0</number>
+            </property>
+            <property name="topMargin" >
+             <number>0</number>
+            </property>
+            <property name="rightMargin" >
+             <number>0</number>
+            </property>
+            <property name="bottomMargin" >
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="lIndentationWidth" >
+              <property name="text" >
+               <string>Indentation Width :</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSlider" name="sIndentationWidth" >
+              <property name="sizePolicy" >
+               <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimum" >
+               <number>1</number>
+              </property>
+              <property name="maximum" >
+               <number>20</number>
+              </property>
+              <property name="pageStep" >
+               <number>2</number>
+              </property>
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="tickInterval" >
+               <number>1</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLCDNumber" name="lnIndentationWidth" >
+              <property name="sizePolicy" >
+               <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="numDigits" >
+               <number>2</number>
+              </property>
+              <property name="segmentStyle" >
+               <enum>QLCDNumber::Flat</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
           <item row="5" column="0" colspan="2" >
            <widget class="QLabel" name="lIndentationGuides" >
             <property name="text" >
              <string>Indentation Guides Colours :</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" >
-           <widget class="QCheckBox" name="cbBackspaceUnindents" >
-            <property name="text" >
-             <string>Backspace Unindents</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1" >
-           <widget class="QCheckBox" name="cbTabIndents" >
-            <property name="text" >
-             <string>Tab Indents</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0" >
-           <widget class="QCheckBox" name="cbIndentationGuides" >
-            <property name="text" >
-             <string>Indentation Guides</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0" >
-           <widget class="QCheckBox" name="cbAutoIndent" >
-            <property name="text" >
-             <string>Auto Indent</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1" >
-           <widget class="QCheckBox" name="cbIndentationUseTabs" >
-            <property name="text" >
-             <string>Indentation use Tabs</string>
             </property>
            </widget>
           </item>
