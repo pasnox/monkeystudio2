@@ -613,6 +613,8 @@ QString XUPItem::filePath( const QString& s ) const
 			fi.setFile( projectPath().append( "/%1" ).arg( s ) );
 		return fi.absoluteFilePath();
 	}
+	else if ( isProject() )
+		return projectFilePath();
 	return s;
 }
 
