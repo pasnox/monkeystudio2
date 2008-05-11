@@ -8,16 +8,19 @@
 #include <pluginsmanager.h>
 #include <templatesmanager.h>
 #include <recentsmanager.h>
+#include <monkey.h>
 
 #include <QHeaderView>
 #include <QInputDialog>
 
+/*
 #include <QMessageBox>
 void warning( const QString& s )
 { QMessageBox::warning( 0, "Warning...", s ); }
 
 bool question( const QString& s )
 { return QMessageBox::question( 0, "Question...", s, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes ) == QMessageBox::Yes; }
+*/
 
 UIXUPManager::UIXUPManager( QWidget* w )
 	: QDockWidget( w ), mModel( new ProjectItemModel( this ) )
@@ -165,7 +168,7 @@ XUPItem* UIXUPManager::currentValue() const
 XUPItem* UIXUPManager::currentItem() const
 {
 	if ( FilteredProjectItem* fit = mModel->filteredModel()->itemFromIndex( tvProxiedProjects->currentIndex() ) )
-		return fit->item();
+		return fit->item()->isType( "folder" ) ? fit->project() : fit->item();
 	return 0;
 }
 
@@ -262,6 +265,60 @@ void UIXUPManager::setAction( UIXUPManager::Actions at, QAction* a )
 		mActions[at] = a;
 }
 
+void UIXUPManager::addFiles( XUPItem* scope, QWidget* parent )
+{
+	if ( !scope )
+		return;
+	// default type
+	AddFilesDialog::Type type = AddFilesDialog::Files;
+	// request user the mode to use
+	QMessageBox mb( QMessageBox::Question, tr( "What to add..." ), tr( "How to add files ?\nChoosing..." ), QMessageBox::Yes | QMessageBox::No, window() );
+	mb.button( QMessageBox::Yes )->setText( tr( "Files" ) );
+	mb.button( QMessageBox::No )->setText( tr( "Folder" ) );
+	if ( mb.exec() == QMessageBox::No )
+		type = AddFilesDialog::Folder;
+	// show dialog
+	AddFilesDialog d( type, mModel->scopedModel(), scope, parent );
+	if ( d.exec() )
+	{
+		QStringList files;
+		if ( type == AddFilesDialog::Files )
+			files = d.selectedFiles();
+		else
+		{
+			QDir dir( d.selectedFiles().value( 0 ) );
+			foreach ( const QFileInfo& fi, pMonkeyStudio::getFiles( dir, QString::null, d.isRecursive() ) )
+				files << fi.absoluteFilePath();
+		}
+		if ( !files.isEmpty() )
+			d.currentItem()->addFiles( files, d.currentItem(), d.currentOperator() );
+	}
+}
+
+void UIXUPManager::removeFiles( XUPItem* item, QWidget* parent )
+{
+	if ( !item || !item->isType( "value" ) )
+		return;
+	if ( pMonkeyStudio::question( tr( "Remove Value..." ), tr( "Are you sur you want to remove this value ?" ), parent ) )
+	{
+		// if file based
+		if ( item->fileVariables().contains( item->parent()->defaultValue() ) )
+		{
+			QString fp = item->filePath();
+			if ( QFile::exists( fp ) && pMonkeyStudio::question( tr( "Delete associations..." ), tr( "Do you want to delete the associate file ?" ), parent ) )
+				if ( !QFile::remove( fp ) )
+					pMonkeyStudio::warning( tr( "Error..." ), tr( "Can't delete file: %1" ).arg( fp ), parent );
+		}
+		// get parent
+		XUPItem* parent = item->parent();
+		// remove item
+		item->remove();
+		// delete parent is empty
+		if ( !parent->hasChildren() )
+			parent->remove();
+	}
+}
+
 bool UIXUPManager::openProject( const QString& s )
 {
 	// get project item
@@ -324,7 +381,7 @@ void UIXUPManager::actionOpenTriggered()
 		{
 			MonkeyCore::recentsManager()->removeRecentProject( s );
 			// inform user about error
-			warning( tr( "An error occur while opening project : %1" ).arg( s ) );
+			pMonkeyStudio::warning( tr( "Error..." ), tr( "An error occur while opening project : %1" ).arg( s ) );
 		}
 	}
 }
@@ -333,7 +390,7 @@ void UIXUPManager::actionSaveCurrentTriggered()
 {
 	if ( XUPItem* pi = currentProject() )
 		if ( pi->modified() && !saveProject( pi, QString() ) )
-			warning( tr( "An error occur while saving project" ) );
+			pMonkeyStudio::warning( tr( "Error..." ), tr( "An error occur while saving project" ) );
 }
 
 void UIXUPManager::actionSaveAllTriggered()
@@ -341,11 +398,11 @@ void UIXUPManager::actionSaveAllTriggered()
 	foreach ( XUPItem* pi, mModel->topLevelProjects() )
 	{
 		if ( pi->modified() && !saveProject( pi, QString() ) )
-			warning( tr( "An error occur while saving project: %1" ).arg( pi->defaultValue() ) );
+			pMonkeyStudio::warning( tr( "Error..." ), tr( "An error occur while saving project: %1" ).arg( pi->defaultValue() ) );
 		foreach ( XUPItem* cpi, pi->children( true, false ) )
 			if ( cpi->isProject() )
 				if ( cpi->modified() && !saveProject( cpi, QString() ) )
-					warning( tr( "An error occur while saving project: %1" ).arg( cpi->defaultValue() ) );
+					pMonkeyStudio::warning( tr( "Error..." ), tr( "An error occur while saving project: %1" ).arg( cpi->defaultValue() ) );
 	}
 }
 
@@ -368,36 +425,13 @@ void UIXUPManager::actionCloseAllTriggered()
 void UIXUPManager::actionAddTriggered()
 {
 	if ( XUPItem* pi = currentItem() )
-	{
-		AddFilesDialog d( mModel->scopedModel(), pi, window() );
-		if ( d.exec() && !d.selectedFiles().isEmpty() )
-			d.currentItem()->addFiles( d.selectedFiles(), d.currentItem(), d.currentOperator() );
-	}
+		addFiles( pi, window() );
 }
 
 void UIXUPManager::actionRemoveTriggered()
 {
 	if ( XUPItem* it = currentValue() )
-	{
-		if ( question( tr( "Are you sur you want to remove this value ?" ) ) )
-		{
-			// if file based
-			if ( it->fileVariables().contains( it->parent()->defaultValue() ) )
-			{
-				QString fp = it->filePath();
-				if ( QFile::exists( fp ) && question( tr( "Do you want to delete the associate file ?" ) ) )
-					if ( !QFile::remove( fp ) )
-						warning( tr( "Can't delete file: %1" ).arg( fp ) );
-			}
-			// get parent
-			XUPItem* parent = it->parent();
-			// remove item
-			it->remove();
-			// delete parent is empty
-			if ( !parent->hasChildren() )
-				parent->remove();
-		}
-	}
+		removeFiles( it, window() );
 }
 
 void UIXUPManager::actionSettingsTriggered()
@@ -420,7 +454,7 @@ void UIXUPManager::actionSettingsTriggered()
 		
 		// edit project settings
 		if ( pi->projectSettingsValue( "EDITOR" ).isEmpty() )
-			warning( tr( "The project can't be edited because there is no associate project settings plugin." ) );
+			pMonkeyStudio::warning( tr( "Warning..." ), tr( "The project can't be edited because there is no associate project settings plugin." ) );
 		else if ( XUPPlugin* xp = MonkeyCore::pluginsManager()->plugins<XUPPlugin*>( PluginsManager::stAll, pi->projectSettingsValue( "EDITOR" ) ).value( 0 ) )
 		{
 			// get current filtered project in scoped view
@@ -561,7 +595,7 @@ void UIXUPManager::internal_projectAboutToClose( XUPItem* pi )
 			bool save = button == QMessageBox::Yes || mYesToAll;
 			// try save else show error
 			if ( save && !saveProject( pi, QString() ) )
-				warning( tr( "An error occur while saving project" ) );
+				pMonkeyStudio::warning( tr( "Error..." ), tr( "An error occur while saving project" ) );
 		}
 	}
 }
