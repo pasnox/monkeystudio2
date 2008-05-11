@@ -96,7 +96,6 @@ pWorkspace::pWorkspace( QMainWindow* p )
 	connect( MonkeyCore::projectsManager(), SIGNAL( currentProjectChanged( XUPItem*, XUPItem* ) ), this, SLOT( internal_currentProjectChanged( XUPItem*, XUPItem* ) ) );
 	connect( MonkeyCore::projectsManager(), SIGNAL( projectInstallCommandRequested( const pCommand&, const QString& ) ), this, SLOT( internal_projectInstallCommandRequested( const pCommand&, const QString& ) ) );
 	connect( MonkeyCore::projectsManager(), SIGNAL( projectUninstallCommandRequested( const pCommand&, const QString& ) ), this, SLOT( internal_projectUninstallCommandRequested( const pCommand&, const QString& ) ) );
-	connect( mFileWatcher, SIGNAL( directoryChanged( const QString& ) ), this, SLOT( fileWatcher_directoryChanged( const QString& ) ) );
 	connect( mFileWatcher, SIGNAL( fileChanged( const QString& ) ), this, SLOT( fileWatcher_fileChanged( const QString& ) ) );
 	connect( ps, SIGNAL( clearSearchResults() ), this, SIGNAL( clearSearchResults() ) );
 	
@@ -533,11 +532,6 @@ void pWorkspace::fileWatcher_alertClicked( QDialogButtonBox::StandardButton butt
 	}
 }
 
-void pWorkspace::pWorkspace::fileWatcher_directoryChanged( const QString& path )
-{
-	MonkeyCore::statusBar()->appendMessage( QString( "Directory changed: %1" ).arg( path ) );
-}
-
 void pWorkspace::fileWatcher_fileChanged( const QString& filename )
 {
 	switch ( pMonkeyStudio::externalchanges() )
@@ -649,17 +643,7 @@ void pWorkspace::fileCloseCurrent_triggered()
 { closeCurrentDocument(); }
 
 void pWorkspace::fileCloseAll_triggered()
-{
-	closeAllDocuments();
-	/*
-	// try save documents
-	UISaveFiles::Buttons cb = UISaveFiles::saveDocuments( window(), children(), b );
-	
-	// close all object, disconnecting them
-	if ( cb != UISaveFiles::bCancelClose )
-		closeAllTabs( b, true );
-	*/
-}
+{ closeAllDocuments(); }
 
 void pWorkspace::fileSaveAsBackup_triggered()
 {
@@ -779,7 +763,15 @@ void pWorkspace::focusToEditor_triggered ()
 }
 
 void pWorkspace::closeCurrentDocument()
-{ closeDocument( currentDocument() ); }
+{
+	if ( pAbstractChild* ac = currentChild() )
+	{
+		// stop watching files
+		mFileWatcher->removePaths( ac->files() );
+		// close document
+		closeDocument( ac );
+	}
+}
 
 bool pWorkspace::closeAllDocuments()
 {
@@ -788,6 +780,10 @@ bool pWorkspace::closeAllDocuments()
 	// close all object, disconnecting them
 	if ( cb != UISaveFiles::bCancelClose )
 	{
+		// stop watching files
+		foreach ( pAbstractChild* ac, children() )
+			mFileWatcher->removePaths( ac->files() );
+		// close all documents
 		pExtendedWorkspace::closeAllDocuments();
 		return true;
 	}

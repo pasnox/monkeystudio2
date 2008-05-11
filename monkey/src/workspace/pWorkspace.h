@@ -83,7 +83,6 @@ protected slots:
 	void fileWatcher_ecmNothing( const QString& filename );
 	void fileWatcher_ecmReload( const QString& filename, bool force = false );
 	void fileWatcher_ecmAlert( const QString& filename );
-	void fileWatcher_directoryChanged( const QString& path );
 	void fileWatcher_fileChanged( const QString& path );
 
 public slots:
