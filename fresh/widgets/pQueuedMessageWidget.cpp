@@ -122,4 +122,7 @@ void pQueuedMessageWidget::closeMessage()
 	mMessages.erase( mMessages.begin() );
 	// process next if possible, else clear gui
 	QTimer::singleShot( 0, this, mMessages.count() > 0 ? SLOT( showMessage() ) : SLOT( clear() ) );
+	// emit finished message if needed
+	if ( mMessages.count() == 0 )
+		emit finished();
 }

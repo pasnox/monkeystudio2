@@ -72,6 +72,7 @@ signals:
 	void messageShown( const pQueuedMessage& message );
 	void messageClosed( const pQueuedMessage& message );
 	void cleared();
+	void finished();
 };
 
 #endif // PQUEUEDMESSAGEWIDGET_H
