@@ -37,8 +37,8 @@ include( config.pri )
 		plugins.files	= bin/plugins
 
 		# binary
-		target.path	= $${PACKAGE_PREFIX}
-		target.files	= bin/$${PACKAGE_TARGET}
+		TARGET.path	= $${PACKAGE_PREFIX}
+		TARGET.files	= bin/$${PACKAGE_TARGET}
 
 		# desktop file
 		desktop.path	= $${PACKAGE_PREFIX}/../share/applications
@@ -48,6 +48,6 @@ include( config.pri )
 		desktopicon.path	= $${PACKAGE_PREFIX}/../icons/hicolor/32x32/apps
 		desktopicon.files	= links/monkeystudio.png
 
-		INSTALLS	+= plugins target desktop desktopicon
+		INSTALLS	+= plugins TARGET desktop desktopicon
 	}
 }
