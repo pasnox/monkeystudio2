@@ -27,7 +27,7 @@
 **
 ****************************************************************************/
 #include "MessageBox.h"
-#include "pDockMessageBox.h"
+#include "ui/MessageBoxDocks.h"
 
 #include <maininterface.h>
 
@@ -36,6 +36,7 @@
 
 MessageBox::MessageBox()
 {
+	mMessageBoxDocks = 0;
 	// set plugin infos
 	mPluginInfos.Caption = tr( "Message Box" );
 	mPluginInfos.Description = tr( "Plugin for catching internal command console" );
@@ -56,43 +57,38 @@ bool MessageBox::setEnabled( bool b )
 {
 	if ( b && !isEnabled() )
 	{
-		// add dock to dock toolbar entry
-		MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( pDockMessageBox::instance(), infos().Caption, QIcon( ":/icons/console.png" ) );
-		// connect signals so we will be able to save/restore state of dock settings
-		connect( MonkeyCore::menuBar()->action( "mView/aShowBuild", tr( "Show Build" ), QIcon( ":/icons/tabbuild.png" ), tr( "F10" ) ), SIGNAL( triggered() ), pDockMessageBox::instance(), SLOT( showBuild() ) );
-		connect( MonkeyCore::menuBar()->action( "mView/aShowSearchResults", tr( "Show Search Results" ), QIcon( ":/icons/tabsearch.png" ), ""), SIGNAL( triggered() ), pDockMessageBox::instance(), SLOT( showSearchResults() ) );
-		connect( MonkeyCore::menuBar()->action( "mView/aShowOutput", tr( "Show Output" ), QIcon( ":/icons/taboutput.png" ) , "F11" ), SIGNAL( triggered() ), pDockMessageBox::instance(), SLOT( showOutput() ) );
-		connect( MonkeyCore::menuBar()->action( "mView/aShowLog", tr( "Show Log" ), QIcon( ":/icons/tablog.png" ), "F12"), SIGNAL( triggered() ), pDockMessageBox::instance(), SLOT( showLog() ) );
-		connect( MonkeyCore::menuBar()->action( "mView/aShowNextError", tr( "Show Next Error" ), QIcon( ":/icons/goto.png" ), "F9" ), SIGNAL( triggered() ), pDockMessageBox::instance(), SLOT( showNextError() ) );
-		connect( pDockMessageBox::instance(), SIGNAL( saveSettings() ), this, SLOT( saveSettings() ) );
-		connect( pDockMessageBox::instance(), SIGNAL( restoreSettings() ), this, SLOT( restoreSettings() ) );
+		// create docks
+		mMessageBoxDocks = new MessageBoxDocks( this );
+		// add docks to main window
+		MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mMessageBoxDocks->mBuildStep, mMessageBoxDocks->mBuildStep->windowTitle(), mMessageBoxDocks->mBuildStep->windowIcon() );
+		MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mMessageBoxDocks->mOutput, mMessageBoxDocks->mOutput->windowTitle(), mMessageBoxDocks->mOutput->windowIcon() );
+		MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mMessageBoxDocks->mCommand, mMessageBoxDocks->mCommand->windowTitle(), mMessageBoxDocks->mCommand->windowIcon() );
+		MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mMessageBoxDocks->mSearchResult, mMessageBoxDocks->mSearchResult->windowTitle(), mMessageBoxDocks->mSearchResult->windowIcon() );
+		// add actions to main window
+		connect( MonkeyCore::menuBar()->action( "mView/aShowBuild", tr( "Show Build Steps" ), QIcon( ":/icons/tabbuild.png" ), tr( "F9" ) ), SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showBuild() ) );
+		connect( MonkeyCore::menuBar()->action( "mView/aShowNextError", tr( "Show Next Error" ), QIcon( ":/icons/goto.png" ), "Shift+F9" ), SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showNextError() ) );
+		connect( MonkeyCore::menuBar()->action( "mView/aShowOutput", tr( "Show Output" ), QIcon( ":/icons/taboutput.png" ) , "F10" ), SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showOutput() ) );
+		connect( MonkeyCore::menuBar()->action( "mView/aShowCommands", tr( "Show Commands" ), QIcon( ":/icons/tablog.png" ), "F11" ), SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showLog() ) );
+		connect( MonkeyCore::menuBar()->action( "mView/aShowSearchResults", tr( "Show Search Results" ), QIcon( ":/icons/tabsearch.png" ), "F12" ), SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showSearchResults() ) );
 		// set plugin enabled
 		mPluginInfos.Enabled = true;
 	}
 	else if ( !b && isEnabled() )
 	{
+		// delete actions
 		delete MonkeyCore::menuBar()->action( "mView/aShowBuild" );
+		delete MonkeyCore::menuBar()->action( "mView/aShowNextError" );
 		delete MonkeyCore::menuBar()->action( "mView/aShowOutput" );
-		delete MonkeyCore::menuBar()->action( "mView/aShowLog" );
-		// it will remove itself from dock toolbar when deleted
-		pDockMessageBox::instance()->deleteLater();
+		delete MonkeyCore::menuBar()->action( "mView/aShowCommands" );
+		delete MonkeyCore::menuBar()->action( "mView/aShowSearchResults" );
+		// delete docks
+		delete mMessageBoxDocks;
+		mMessageBoxDocks = 0;
 		// set plugin disabled
 		mPluginInfos.Enabled = false;
 	}
 	// return default value
 	return true;
-}
-
-void MessageBox::saveSettings()
-{
-	// save current tab index
-	setSettingsValue( "CurrentIndex", pDockMessageBox::instance()->twMessageBox->currentIndex() );
-}
-
-void MessageBox::restoreSettings()
-{
-	// restore tab index
-	pDockMessageBox::instance()->twMessageBox->setCurrentIndex( settingsValue( "CurrentIndex", 0 ).toInt() );
 }
 
 Q_EXPORT_PLUGIN2( BaseMessageBox, MessageBox )

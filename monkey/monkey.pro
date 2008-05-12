@@ -1,7 +1,5 @@
 # Monkey Studio 2 project file
 
-BUILD_PATH	= ../build
-
 # include qscintilla framework
 include( ../qscintilla/qscintilla.pri )
 
@@ -11,36 +9,24 @@ include( ../fresh/fresh.pri )
 # include ctags framework
 include( ../ctags/ctags.pri )
 
-#include monkey framework
+# include monkey framework
 include( monkey.pri )
 
+# include config file
+include( ../config.pri )
+
 TEMPLATE	= app
-LANGUAGE	= Qt4/C++
-TARGET	= monkeystudio
-DESTDIR	= ../bin
-CONFIG	*= qt warn_on thread x11 windows debug_and_release
-QT	*= gui core
+TARGET	= $$PACKAGE_TARGET
+DESTDIR	= $$PACKAGE_DESTDIR
 
-QMAKE_TARGET_COMPANY	= "Monkey Studio Team"
-QMAKE_TARGET_PRODUCT	= "Monkey Studio"
-QMAKE_TARGET_DESCRIPTION	= "Crossplatform Integrated Development Environment."
-QMAKE_TARGET_COPYRIGHT	= "Copyright (C) 2005 - 2008 Filipe AZEVEDO & The Monkey Studio Team"
-
-unix:ICON	= src/resources/icons/application/monkey2.png
 mac:ICON	= src/resources/icons/application/monkey2.icns
-win32:ICON	= src/resources/icons/application/monkey2.ico
-
-COPYRIGHTS	= "(c) 2005 - 2008 Azevedo Filipe"
-DOMAIN	= "www.monkeystudio.org"
-VERSION	= 1.8.2.0
-NAME	= "Monkey Studio"
 
 win32:RC_FILE	*= monkey.rc
 RESOURCES	*= src/resources/resources.qrc
 
-DEFINES	*= MONKEY_CORE_BUILD "PROGRAM_NAME=\"\\\"$${NAME}\\\"\"" "PROGRAM_VERSION=\"\\\"$${VERSION}\\\"\"" "PROGRAM_DOMAIN=\"\\\"$${DOMAIN}\\\"\"" "PROGRAM_COPYRIGHTS=\"\\\"$${COPYRIGHTS}\\\"\""
+DEFINES	*= MONKEY_CORE_BUILD
 
-LIBS	*= -L$${BUILD_PATH}
+LIBS	*= -L$${PACKAGE_BUILD_PATH}
 mac:*-g++:LIBS	*= -Wl,-all_load # import all symbols as the not used ones too
 else:*-g++:LIBS	*= -Wl,--whole-archive # import all symbols as the not used ones too
 mac:*-g++:LIBS	*= -dynamic
@@ -50,39 +36,19 @@ PRE_TARGETDEPS	*= ../qscintilla ../fresh ../ctags
 
 CONFIG( debug, debug|release ) {
 	#Debug
-	CONFIG	+= console
-	unix:TARGET	= $$join(TARGET,,,_debug)
-	else:TARGET	= $$join(TARGET,,,d)
-	unix:OBJECTS_DIR	= $${BUILD_PATH}/debug/.obj/unix
-	win32:OBJECTS_DIR	= $${BUILD_PATH}/debug/.obj/win32
-	mac:OBJECTS_DIR	= $${BUILD_PATH}/debug/.obj/mac
-	UI_DIR	= $${BUILD_PATH}/debug/.ui
-	MOC_DIR	= $${BUILD_PATH}/debug/.moc
-	RCC_DIR	= $${BUILD_PATH}/debug/.rcc
 	unix:LIBS	*= -lqscintilla2_debug -lfresh_debug -lctags_debug
 	else:LIBS	*= -lqscintilla2d -lfreshd -lctagsd
-	win32-g++:LIBS	*= -Wl,--out-implib,$${BUILD_PATH}/lib$${TARGET}.a
-	win32-msvc*:LIBS	*= /IMPLIB:$${BUILD_PATH}/$${TARGET}.lib -lshell32
+	win32-g++:LIBS	*= -Wl,--out-implib,$${PACKAGE_BUILD_PATH}/lib$${TARGET}.a
+	win32-msvc*:LIBS	*= /IMPLIB:$${PACKAGE_BUILD_PATH}/$${TARGET}.lib -lshell32
 } else {
 	#Release
-	unix:OBJECTS_DIR	= $${BUILD_PATH}/release/.obj/unix
-	win32:OBJECTS_DIR	= $${BUILD_PATH}/release/.obj/win32
-	mac:OBJECTS_DIR	= $${BUILD_PATH}/release/.obj/mac
-	UI_DIR	= $${BUILD_PATH}/release/.ui
-	MOC_DIR	= $${BUILD_PATH}/release/.moc
-	RCC_DIR	= $${BUILD_PATH}/release/.rcc
 	LIBS	*= -lqscintilla2 -lctags -lfresh
-	win32-g++:LIBS	*= -Wl,--out-implib,$${BUILD_PATH}/lib$${TARGET}.a
-	win32-msvc*:LIBS	*= /IMPLIB:$${BUILD_PATH}/$${TARGET}.lib -lshell32
+	win32-g++:LIBS	*= -Wl,--out-implib,$${PACKAGE_BUILD_PATH}/lib$${TARGET}.a
+	win32-msvc*:LIBS	*= /IMPLIB:$${PACKAGE_BUILD_PATH}/$${TARGET}.lib -lshell32
 }
 
 mac:*-g++:LIBS	*= -Wl,-noall_load # stop importing all symbols
 else:*-g++:LIBS	*= -Wl,--no-whole-archive # stop importing all symbols
-
-# include install script
-include( installs.pri )
-
-DEFINES	*= "PROGRAM_PREFIX=\"\\\"$${PROGRAM_PREFIX}\\\"\"" "PROGRAM_DATAS=\"\\\"$${PROGRAM_DATAS}\\\"\""
 
 FORMS	*= src/maininterface/ui/UITranslator.ui \
 	src/maininterface/ui/UIAbout.ui \
@@ -137,7 +103,8 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/pluginsmanager/ui/UIBuilderSettings.h \
 	src/pluginsmanager/ui/UICompilerSettings.h \
 	src/settingsmanager/Settings.h \
-	src/coremanager/MonkeyCore.h
+	src/coremanager/MonkeyCore.h \
+	src/queuedstatusbar/QueuedStatusBar.h
 
 SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/maininterface/ui/UIAbout.cpp \
@@ -172,7 +139,8 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/main.cpp \
 	src/pluginsmanager/ui/UICompilerSettings.cpp \
 	src/settingsmanager/Settings.cpp \
-	src/coremanager/MonkeyCore.cpp
+	src/coremanager/MonkeyCore.cpp \
+	src/queuedstatusbar/QueuedStatusBar.cpp
 
 mac:SOURCES	*= src/toolsmanager/pDesktopApplications_mac.cpp
 else:unix:SOURCES	*= src/toolsmanager/pDesktopApplications_unix.cpp

@@ -53,6 +53,9 @@ public:
 
 	QAction* action( UIXUPManager::Actions ) const;
 	void setAction( UIXUPManager::Actions, QAction* );
+	
+	void addFiles( XUPItem* scope, QWidget* parent );
+	void removeFiles( XUPItem* item, QWidget* parent );
 
 protected:
 	bool mYesToAll;

@@ -1,7 +1,6 @@
-include( ../../plugins.inc )
-
-DESTDIR	= $$MONKEY_PLUGINS_DIR/compiler
 TARGET	= Gcc
+include( ../../plugins.pri )
+DESTDIR	= $$MONKEY_PLUGINS_DIR/compiler
 DEFINES	*= "PLUGIN_NAME=\"\\\"$${TARGET}\\\"\""
 
 HEADERS	= src/Gcc.h

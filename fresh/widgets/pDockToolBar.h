@@ -59,6 +59,7 @@ public:
 	bool isDockVisible( QDockWidget* ) const;
 
 	bool exclusive() const;
+	bool textAlwaysVisible() const;
 
 	int id( QDockWidget* ) const;
 	int id( QAbstractButton* ) const;
@@ -79,6 +80,7 @@ public:
 private:
 	pDockToolBarManager* mManager;
 	int mUniqueId;
+	bool mTextAlwaysVisible;
 	QFrame* mFrame;
 	QBoxLayout* mLayout;
 	QAction* aDockFrame;
@@ -91,6 +93,7 @@ public slots:
 	void removeDock( QDockWidget* );
 	void setDockVisible( QDockWidget*, bool );
 	void setExclusive( bool );
+	void setTextAlwaysVisible( bool visible );
 
 private slots:
 	void internal_checkVisibility();

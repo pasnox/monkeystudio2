@@ -1,24 +1,9 @@
-include( ../../plugins.inc )
-
-DESTDIR	= $$MONKEY_PLUGINS_DIR/GNUdbg
 TARGET	= GNUDebugger
+include( ../../plugins.pri )
+DESTDIR	= $$MONKEY_PLUGINS_DIR/GNUdbg
 DEFINES	*= "PLUGIN_NAME=\"\\\"$${TARGET}\\\"\""
-RESOURCES	*= src/resources/GNUDebugger.qrc
 
-SOURCES	= src/GNUDebugger.cpp \
-	src/DockGNUDebugger.cpp \
-	src/kernel/gdbTemplateCore.cpp \
-	src/kernel/gdbCore.cpp \
-	src/kernel/gdbParser.cpp \
-	src/kernel/gdbKernelDispatcher.cpp \
-	src/addon/gdbBackTrace.cpp \
-	src/addon/gdbBreakPoint.cpp \
-	src/addon/gdbRegisters.cpp \
-	src/addon/gdbControl.cpp \
-	src/addon/gdbBridgeEditor.cpp \
-	src/addon/gdbWatch.cpp \
-	src/addon/gdbAnswer.cpp \
-	src/kernel/gdbProcess.cpp
+RESOURCES	*= src/resources/GNUDebugger.qrc
 
 HEADERS	= src/GNUDebugger.h \
 	src/DockGNUDebugger.h \
@@ -35,3 +20,18 @@ HEADERS	= src/GNUDebugger.h \
 	src/addon/gdbWatch.h \
 	src/addon/gdbAnswer.h \
 	src/kernel/gdbProcess.h
+
+SOURCES	= src/GNUDebugger.cpp \
+	src/DockGNUDebugger.cpp \
+	src/kernel/gdbTemplateCore.cpp \
+	src/kernel/gdbCore.cpp \
+	src/kernel/gdbParser.cpp \
+	src/kernel/gdbKernelDispatcher.cpp \
+	src/addon/gdbBackTrace.cpp \
+	src/addon/gdbBreakPoint.cpp \
+	src/addon/gdbRegisters.cpp \
+	src/addon/gdbControl.cpp \
+	src/addon/gdbBridgeEditor.cpp \
+	src/addon/gdbWatch.cpp \
+	src/addon/gdbAnswer.cpp \
+	src/kernel/gdbProcess.cpp

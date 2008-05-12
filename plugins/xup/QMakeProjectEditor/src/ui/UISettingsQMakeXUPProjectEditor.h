@@ -21,7 +21,7 @@ protected slots:
 	void tbUp_clicked();
 	void tbDown_clicked();
 	void on_tbDefaultQtVersion_clicked();
-	void on_leQtVersionPath_textChanged( const QString& text );
+	void qtVersionChanged();
 	void on_tbQtVersionPath_clicked();
 	void on_tbQtVersionQMakeSpec_clicked();
 	void lw_currentItemChanged( QListWidgetItem* current, QListWidgetItem* previous );

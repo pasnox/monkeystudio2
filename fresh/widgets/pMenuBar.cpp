@@ -32,6 +32,7 @@
 pMenuBar::pMenuBar( QWidget* p )
 	: QMenuBar( p ), mMenuGroup( tr( "Main Menu" ) )
 {
+	mDefaultShortcutContext = Qt::WindowShortcut;
 }
 
 QAction* pMenuBar::searchAction( QMenu* m, const QString& s )
@@ -158,6 +159,7 @@ QAction* pMenuBar::action( const QString& s, const QString& l, const QIcon& i, c
 
 		// create action
 		a = new pAction( mText, i, l, QKeySequence( c ), g );
+		a->setShortcutContext( mDefaultShortcutContext );
 		m->addAction( a );
 
 		if ( !t.isEmpty() )
@@ -217,3 +219,23 @@ void pMenuBar::deleteMenu( const QString& s )
 		delete mMenus.take( mString );
 	}
 }
+
+void pMenuBar::setMenuEnabled( QMenu* menu, bool enabled )
+{
+	if ( menu )
+	{
+		foreach ( QAction* a, menu->actions() )
+		{
+			a->setEnabled( enabled );
+			if ( a->menu() )
+				setMenuEnabled( a->menu(), enabled );
+		}
+		//menu->menuAction()->setEnabled( enabled );
+	}
+}
+
+Qt::ShortcutContext pMenuBar::defaultShortcutContext() const
+{ return mDefaultShortcutContext; }
+
+void pMenuBar::setDefaultShortcutContext( Qt::ShortcutContext context )
+{ mDefaultShortcutContext = context; }

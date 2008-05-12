@@ -32,6 +32,7 @@
 #include <fresh.h>
 
 #include "../coremanager/MonkeyCore.h"
+#include "../settingsmanager/Settings.h"
 
 #include <QtPlugin>
 #include <QLabel>

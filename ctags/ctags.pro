@@ -2,114 +2,92 @@
 
 include( ctags.pri )
 
-BUILD_PATH	= ../build
+# include config file
+include( ../config.pri )
 
 TEMPLATE	= lib
-CONFIG	*= staticlib warn_on debug_and_release
-DESTDIR	= $${BUILD_PATH}
+CONFIG	*= staticlib
+CONFIG	-= qt
+DESTDIR	= $${PACKAGE_BUILD_PATH}
 win32-msvc*:DEFINES	*= WIN32 HAVE_REGCOMP REGEX_MALLOC STDC_HEADERS=1
 unix:DEFINES	*= HAVE_STDLIB_H HAVE_FGETPOS HAVE_SYS_STAT_H HAVE_FCNTL_H
 
-CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
-	#Debug
-	CONFIG	+= console
-	unix:TARGET	= $$join(TARGET,,,_debug)
-	else:TARGET	= $$join(TARGET,,,d)
-	unix:OBJECTS_DIR	= $${BUILD_PATH}/debug/.obj/unix
-	win32:OBJECTS_DIR	= $${BUILD_PATH}/debug/.obj/win32
-	mac:OBJECTS_DIR	= $${BUILD_PATH}/debug/.obj/mac
-	UI_DIR	= $${BUILD_PATH}/debug/.ui
-	MOC_DIR	= $${BUILD_PATH}/debug/.moc
-	RCC_DIR	= $${BUILD_PATH}/debug/.rcc
-
-} else {
-	#Release
-	unix:OBJECTS_DIR	= $${BUILD_PATH}/release/.obj/unix
-	win32:OBJECTS_DIR	= $${BUILD_PATH}/release/.obj/win32
-	mac:OBJECTS_DIR	= $${BUILD_PATH}/release/.obj/mac
-	UI_DIR	= $${BUILD_PATH}/release/.ui
-	MOC_DIR	= $${BUILD_PATH}/release/.moc
-	RCC_DIR	= $${BUILD_PATH}/release/.rcc
-}
-
-CTAGS_PATH	= $${CTAGS_VERSION}
-
 HEADERS	=  \
-	#$${CTAGS_PATH}/debug.h \
-	$${CTAGS_PATH}/entry.h \
-	$${CTAGS_PATH}/general.h \
-	$${CTAGS_PATH}/get.h \
-	$${CTAGS_PATH}/keyword.h \
-	$${CTAGS_PATH}/options.h \
-	$${CTAGS_PATH}/parse.h \
-	$${CTAGS_PATH}/read.h \
-	$${CTAGS_PATH}/routines.h \
-	$${CTAGS_PATH}/strlist.h \
-	$${CTAGS_PATH}/vstring.h \
-	#	$${CTAGS_PATH}/readtags.h \
-	#	$${CTAGS_PATH}/sort.h \
-	#	$${CTAGS_PATH}/args.h \
-	#	$${CTAGS_PATH}/ctags.h \
-	$${CTAGS_PATH}/exuberantCtags.h
+	#	$${CTAGS_VERSION}/debug.h \
+	$${CTAGS_VERSION}/entry.h \
+	$${CTAGS_VERSION}/general.h \
+	$${CTAGS_VERSION}/get.h \
+	$${CTAGS_VERSION}/keyword.h \
+	$${CTAGS_VERSION}/options.h \
+	$${CTAGS_VERSION}/parse.h \
+	$${CTAGS_VERSION}/read.h \
+	$${CTAGS_VERSION}/routines.h \
+	$${CTAGS_VERSION}/strlist.h \
+	$${CTAGS_VERSION}/vstring.h \
+	#	$${CTAGS_VERSION}/readtags.h \
+	#	$${CTAGS_VERSION}/sort.h \
+	#	$${CTAGS_VERSION}/args.h \
+	#	$${CTAGS_VERSION}/ctags.h \
+	$${CTAGS_VERSION}/exuberantCtags.h
 
-win32-msvc*:HEADERS	*= $${CTAGS_PATH}/regex.h
+win32-msvc*:HEADERS	*= $${CTAGS_VERSION}/regex.h
 
-SOURCES	= $${CTAGS_PATH}/asm.c \
-	$${CTAGS_PATH}/asp.c \
-	$${CTAGS_PATH}/awk.c \
-	$${CTAGS_PATH}/basic.c \
-	$${CTAGS_PATH}/beta.c \
-	$${CTAGS_PATH}/c.c \
-	$${CTAGS_PATH}/cobol.c \
-	$${CTAGS_PATH}/eiffel.c \
-	#	$${CTAGS_PATH}/debug.c \
-	$${CTAGS_PATH}/entry.c \
-	$${CTAGS_PATH}/erlang.c \
-	$${CTAGS_PATH}/fortran.c \
-	$${CTAGS_PATH}/get.c \
-	$${CTAGS_PATH}/html.c \
-	$${CTAGS_PATH}/jscript.c \
-	$${CTAGS_PATH}/keyword.c \
-	$${CTAGS_PATH}/lisp.c \
-	$${CTAGS_PATH}/lregex.c \
-	$${CTAGS_PATH}/lua.c \
-	$${CTAGS_PATH}/make.c \
-	$${CTAGS_PATH}/options.c \
-	$${CTAGS_PATH}/parse.c \
-	$${CTAGS_PATH}/pascal.c \
-	$${CTAGS_PATH}/perl.c \
-	$${CTAGS_PATH}/php.c \
-	$${CTAGS_PATH}/python.c \
-	$${CTAGS_PATH}/read.c \
-	$${CTAGS_PATH}/rexx.c \
-	$${CTAGS_PATH}/routines.c \
-	$${CTAGS_PATH}/ruby.c \
-	$${CTAGS_PATH}/scheme.c \
-	$${CTAGS_PATH}/sh.c \
-	$${CTAGS_PATH}/slang.c \
-	$${CTAGS_PATH}/sml.c \
-	$${CTAGS_PATH}/sql.c \
-	$${CTAGS_PATH}/strlist.c \
-	$${CTAGS_PATH}/tcl.c \
-	$${CTAGS_PATH}/verilog.c \
-	$${CTAGS_PATH}/vim.c \
-	$${CTAGS_PATH}/vstring.c \
-	$${CTAGS_PATH}/yacc.c \
-	#	$${CTAGS_PATH}/readtags.c \
-	#	$${CTAGS_PATH}/sort.c \
-	#	$${CTAGS_PATH}/args.c \
-	#	$${CTAGS_PATH}/argproc.c \
-	#	$${CTAGS_PATH}/mac.c \
-	#	$${CTAGS_PATH}/qdos.c \
-	#	$${CTAGS_PATH}/e_amiga.h \
-	#	$${CTAGS_PATH}/e_djgpp.h \
-	#	$${CTAGS_PATH}/e_mac.h \
-	#	$${CTAGS_PATH}/e_msoft.h \
-	#	$${CTAGS_PATH}/e_os2.h \
-	#	$${CTAGS_PATH}/e_qdos.h \
-	#	$${CTAGS_PATH}/e_riscos.h \
-	#	$${CTAGS_PATH}/e_vms.h \
-	#	$${CTAGS_PATH}/main.c \
-	$${CTAGS_PATH}/exuberantCtags.c
+SOURCES	= $${CTAGS_VERSION}/asm.c \
+	$${CTAGS_VERSION}/asp.c \
+	$${CTAGS_VERSION}/awk.c \
+	$${CTAGS_VERSION}/basic.c \
+	$${CTAGS_VERSION}/beta.c \
+	$${CTAGS_VERSION}/c.c \
+	$${CTAGS_VERSION}/cobol.c \
+	$${CTAGS_VERSION}/eiffel.c \
+	#	$${CTAGS_VERSION}/debug.c \
+	$${CTAGS_VERSION}/entry.c \
+	$${CTAGS_VERSION}/erlang.c \
+	$${CTAGS_VERSION}/fortran.c \
+	$${CTAGS_VERSION}/get.c \
+	$${CTAGS_VERSION}/html.c \
+	$${CTAGS_VERSION}/jscript.c \
+	$${CTAGS_VERSION}/keyword.c \
+	$${CTAGS_VERSION}/lisp.c \
+	$${CTAGS_VERSION}/lregex.c \
+	$${CTAGS_VERSION}/lua.c \
+	$${CTAGS_VERSION}/make.c \
+	$${CTAGS_VERSION}/options.c \
+	$${CTAGS_VERSION}/parse.c \
+	$${CTAGS_VERSION}/pascal.c \
+	$${CTAGS_VERSION}/perl.c \
+	$${CTAGS_VERSION}/php.c \
+	$${CTAGS_VERSION}/python.c \
+	$${CTAGS_VERSION}/read.c \
+	$${CTAGS_VERSION}/rexx.c \
+	$${CTAGS_VERSION}/routines.c \
+	$${CTAGS_VERSION}/ruby.c \
+	$${CTAGS_VERSION}/scheme.c \
+	$${CTAGS_VERSION}/sh.c \
+	$${CTAGS_VERSION}/slang.c \
+	$${CTAGS_VERSION}/sml.c \
+	$${CTAGS_VERSION}/sql.c \
+	$${CTAGS_VERSION}/strlist.c \
+	$${CTAGS_VERSION}/tcl.c \
+	$${CTAGS_VERSION}/verilog.c \
+	$${CTAGS_VERSION}/vim.c \
+	$${CTAGS_VERSION}/vstring.c \
+	$${CTAGS_VERSION}/yacc.c \
+	#	$${CTAGS_VERSION}/readtags.c \
+	#	$${CTAGS_VERSION}/sort.c \
+	#	$${CTAGS_VERSION}/args.c \
+	#	$${CTAGS_VERSION}/argproc.c \
+	#	$${CTAGS_VERSION}/mac.c \
+	#	$${CTAGS_VERSION}/qdos.c \
+	#	$${CTAGS_VERSION}/e_amiga.h \
+	#	$${CTAGS_VERSION}/e_djgpp.h \
+	#	$${CTAGS_VERSION}/e_mac.h \
+	#	$${CTAGS_VERSION}/e_msoft.h \
+	#	$${CTAGS_VERSION}/e_os2.h \
+	#	$${CTAGS_VERSION}/e_qdos.h \
+	#	$${CTAGS_VERSION}/e_riscos.h \
+	#	$${CTAGS_VERSION}/e_vms.h \
+	#	$${CTAGS_VERSION}/main.c \
+	$${CTAGS_VERSION}/exuberantCtags.c
 
-win32-msvc*:SOURCES	*= $${CTAGS_PATH}/regex.c
+win32-msvc*:SOURCES	*= $${CTAGS_VERSION}/regex.c

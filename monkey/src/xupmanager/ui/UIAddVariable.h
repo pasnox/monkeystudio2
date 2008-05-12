@@ -18,6 +18,10 @@ public:
 	void setOperators( const QStringList& ops );
 	QString getOperator() const;
 	void setCurrentOperator( const QString& op );
+
+protected:
+	QStringList mVariables;
+	QStringList mOperators;
 };
 
 #endif // UIADDVARIABLE_H

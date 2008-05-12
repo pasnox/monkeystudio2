@@ -104,7 +104,7 @@ void pAStyle::applyFormatter()
 				eolChars = "\n";
 				break;
 			case pEditor::EolMac:
-				eolChars = "\r";
+				eolChars = "\n";
 				break;
 			}
 			

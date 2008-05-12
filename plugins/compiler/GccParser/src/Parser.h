@@ -110,6 +110,17 @@ public:
 				"%0", //text
 				"%0" //full text
 			},
+#ifdef Q_OS_MAC
+			{  // MAC specific. Undefined symbol for architecture
+				QRegExp("^(Undefined symbols for architecture \\w+:)\\n\\s+(\"[^\"]+\")[^\\n]+\\n[^\\n]+\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				"", //file name
+				"", //column
+				"", //row
+				pConsoleManager::stError, //type
+				"%1 %2", //text
+				"%0" //full text
+			},
+#endif
 			{QRegExp(), "", "", "", pConsoleManager::stUnknown,"",""} //this item must be last
 		};
 		for ( int i = 0; !ps[i].regExp.isEmpty(); i++)

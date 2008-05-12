@@ -31,6 +31,8 @@
 
 #include <pluginsmanager.h>
 
+class MessageBoxDocks;
+
 class MessageBox : public BasePlugin
 {
 	Q_OBJECT
@@ -41,10 +43,8 @@ public:
 	virtual ~MessageBox();
 	virtual bool setEnabled( bool );
 
-protected slots:
-	void saveSettings();
-	void restoreSettings();
-
+protected:
+	MessageBoxDocks* mMessageBoxDocks;
 };
 
 #endif

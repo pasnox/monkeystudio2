@@ -37,11 +37,8 @@ QString pSettings::mProgramName;
 QString pSettings::mProgramVersion;
 
 pSettings::pSettings( QObject* o,  const QString& pn, const QString& pv )
-	: QSettings( QDir::convertSeparators( getIniFile( pn ) ), QSettings::IniFormat, o )
-{ beginGroup( pv ); }
-
-pSettings::~pSettings()
-{ endGroup(); }
+	: QSettings( getIniFile( pn, pv ), QSettings::IniFormat, o )
+{}
 
 void pSettings::setIniInformations( const QString& pName, const QString& pVersion )
 {
@@ -55,14 +52,14 @@ QString pSettings::programName()
 QString pSettings::programVersion()
 { return mProgramVersion; }
 
-QString pSettings::getIniFile( const QString& s )
+QString pSettings::getIniFile( const QString& name, const QString& version )
 {
 #ifdef Q_OS_MAC
-	return QString( "%1/../%2.ini" ).arg( QApplication::applicationDirPath() ).arg( s );
+	return QDir::convertSeparators( QString( "%1/../%2 %3.ini" ).arg( QApplication::applicationDirPath() ).arg( name ).arg( version ) );
 #elif defined Q_OS_WIN
-	return QString( "%1/%2.ini" ).arg( QApplication::applicationDirPath() ).arg( s );
+	return QDir::convertSeparators( QString( "%1/%2 %3.ini" ).arg( QApplication::applicationDirPath() ).arg( name ).arg( version ) );
 #else
-	return QString( "%1/.%2/%3.ini" ).arg( QDir::homePath() ).arg( mProgramName ).arg( s );
+	return QDir::convertSeparators( QString( "%1/.%2/%3 %4.ini" ).arg( QDir::homePath() ).arg( mProgramName ).arg( name ).arg( version ) );
 #endif
 }
 
@@ -70,15 +67,9 @@ void pSettings::restoreState( QMainWindow* w )
 {
 	if ( !w )
 		return;
+	w->restoreGeometry( value( "MainWindow/Geometry" ).toByteArray() );
 	w->restoreState( value( "MainWindow/State" ).toByteArray() );
-	QPoint p = value( "MainWindow/Position" ).toPoint();
-	QSize s = value( "MainWindow/Size" ).toSize();
-	if ( !p.isNull() && !s.isNull() )
-	{
-		w->resize( s );
-		w->move( p );
-	}
-	if ( value( "MainWindow/Maximized", true ).toBool() )
+	if ( value( "MainWindow/Geometry" ).toByteArray().isEmpty() )
 		w->showMaximized();
 }
 
@@ -86,8 +77,6 @@ void pSettings::saveState( QMainWindow* w )
 {
 	if ( !w )
 		return;
-	setValue( "MainWindow/Maximized", w->isMaximized() );
-	setValue( "MainWindow/Position", w->pos() );
-	setValue( "MainWindow/Size", w->size() );
+	setValue( "MainWindow/Geometry", w->saveGeometry() );
 	setValue( "MainWindow/State", w->saveState() );
 }

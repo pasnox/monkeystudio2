@@ -91,6 +91,10 @@ public:
 
 	void clearMenu( const QString& = QString::null );
 	void deleteMenu( const QString& = QString::null );
+	void setMenuEnabled( QMenu* menu, bool enabled );
+	
+	Qt::ShortcutContext defaultShortcutContext() const;
+	void setDefaultShortcutContext( Qt::ShortcutContext context );
 
 private:
 	QAction* searchAction( QMenu*, const QString& );
@@ -99,7 +103,7 @@ private:
 	QHash<QString, QMenu*> mMenus;
 	QStack<pMenuBarGroup> groupStack;
 	QString groupPrefix;
-
+	Qt::ShortcutContext mDefaultShortcutContext;
 };
 
 #endif // PMENUBAR_H

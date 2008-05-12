@@ -9,21 +9,21 @@
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
 ** Home Page : http://www.monkeystudio.org
 **
-    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
 #include <QToolButton>
@@ -32,7 +32,7 @@
 #include <QFileInfo>
 
 #include <QDebug>
-
+#include <QFileSystemWatcher>
 
 #include "pWorkspace.h"
 #include "pAbstractChild.h"
@@ -51,6 +51,7 @@
 #include "../pluginsmanager/PluginsManager.h"
 #include "../coremanager/MonkeyCore.h"
 #include "../maininterface/UIMain.h"
+#include "../queuedstatusbar/QueuedStatusBar.h"
 
 #include "pChild.h"
 #include "../qscintillamanager/pEditor.h"
@@ -62,6 +63,9 @@ pWorkspace::pWorkspace( QMainWindow* p )
 	: pExtendedWorkspace( p )
 {
 	Q_ASSERT( p );
+	// creaet file watcher
+	mFileWatcher = new QFileSystemWatcher( this );
+	
 	// add dock to main window
 	p->addDockWidget( Qt::LeftDockWidgetArea, listWidget() );
 
@@ -92,6 +96,7 @@ pWorkspace::pWorkspace( QMainWindow* p )
 	connect( MonkeyCore::projectsManager(), SIGNAL( currentProjectChanged( XUPItem*, XUPItem* ) ), this, SLOT( internal_currentProjectChanged( XUPItem*, XUPItem* ) ) );
 	connect( MonkeyCore::projectsManager(), SIGNAL( projectInstallCommandRequested( const pCommand&, const QString& ) ), this, SLOT( internal_projectInstallCommandRequested( const pCommand&, const QString& ) ) );
 	connect( MonkeyCore::projectsManager(), SIGNAL( projectUninstallCommandRequested( const pCommand&, const QString& ) ), this, SLOT( internal_projectUninstallCommandRequested( const pCommand&, const QString& ) ) );
+	connect( mFileWatcher, SIGNAL( fileChanged( const QString& ) ), this, SLOT( fileWatcher_fileChanged( const QString& ) ) );
 	connect( ps, SIGNAL( clearSearchResults() ), this, SIGNAL( clearSearchResults() ) );
 	
 	pAction* mFocusToEditor = new pAction( "aFocusToEditor", QIcon( ":/edit/icons/edit/text.png" ), tr( "Set focus to editor" ),  QString("Ins") , "Workspace" );
@@ -146,6 +151,9 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 			}
 		}
 	}
+	
+	// track file
+	mFileWatcher->addPath( s );
 
 	// try opening file with child plugins
 	pAbstractChild* c = MonkeyCore::pluginsManager()->openChildFile( s ); // TODO: repalce by a childForFileName member witch will return a child that will open file
@@ -173,8 +181,8 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 		//connect( c, SIGNAL( searchReplaceAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aSearchReplace" ), SLOT( setEnabled( bool ) ) );
 		//connect( c, SIGNAL( goToAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aGoTo" ), SLOT( setEnabled( bool ) ) );
 		// update status bar
-		//connect( c, SIGNAL( cursorPositionChanged( const QPoint& ) ), statusBar(), SLOT( setCursorPosition( const QPoint& ) ) );
-		//connect( c, SIGNAL( modifiedChanged( bool ) ), statusBar(), SLOT( setModified( bool ) ) );
+		connect( c, SIGNAL( cursorPositionChanged( const QPoint& ) ), MonkeyCore::statusBar(), SLOT( setCursorPosition( const QPoint& ) ) );
+		connect( c, SIGNAL( modifiedChanged( bool ) ), MonkeyCore::statusBar(), SLOT( setModified( bool ) ) );
 		//connect( c, SIGNAL( documentModeChanged( AbstractChild::DocumentMode ) ), statusBar(), SLOT( setDocumentMode( AbstractChild::DocumentMode ) ) );
 		//connect( c, SIGNAL( layoutModeChanged( AbstractChild::LayoutMode ) ), statusBar(), SLOT( setLayoutMode( AbstractChild::LayoutMode ) ) );
 		//connect( c, SIGNAL( currentFileChanged( const QString& ) ), statusBar(), SLOT( setFileName( const QString& ) ) );
@@ -197,7 +205,7 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 	internal_currentChanged( indexOf( c ) );
 
 	// emit file open
-    emit fileOpened( s );
+	emit fileOpened( s );
 
 	// return child instance
 	return c;
@@ -236,23 +244,24 @@ void pWorkspace::goToLine( const QString& s, const QPoint& p, bool b )
 	}
 }
 
-void pWorkspace::internal_currentFileChanged( const QString& file)
+void pWorkspace::internal_currentFileChanged( const QString& file )
 {
-	QDir::setCurrent (QFileInfo (file).canonicalPath());
+	QDir::setCurrent( QFileInfo( file ).absolutePath() );
 }
 
 void pWorkspace::internal_currentChanged( int i )
 {
 	// get child
 	pAbstractChild* c = child( i );
+	pEditor* editor = c ? c->currentEditor() : 0;
 	bool hasChild = c;
+	bool hasEditor = editor;
 	bool modified = hasChild ? c->isModified() : false;
 	bool print = hasChild ? c->isPrintAvailable() : false;
 	bool undo = hasChild ? c->isUndoAvailable() : false;
 	bool redo = hasChild ? c->isRedoAvailable() : false;
 	bool copy = hasChild ? c->isCopyAvailable() : false;
 	bool paste = hasChild ? c->isPasteAvailable() : false;
-	bool search = hasChild && c->currentEditor();
 	bool go = hasChild ? c->isGoToAvailable() : false;
 	bool moreThanOneChild = count() > 1;
 
@@ -271,22 +280,21 @@ void pWorkspace::internal_currentChanged( int i )
 	MonkeyCore::menuBar()->action( "mEdit/aCut" )->setEnabled( copy );
 	MonkeyCore::menuBar()->action( "mEdit/aCopy" )->setEnabled( copy );
 	MonkeyCore::menuBar()->action( "mEdit/aPaste" )->setEnabled( paste );
-	foreach ( QAction* a, MonkeyCore::menuBar()->menu( "mEdit/mSearchReplace" )->actions() )
-		a->setEnabled( search );
-	MonkeyCore::searchWidget()->setEnabled( search );
+	
 	MonkeyCore::menuBar()->action( "mEdit/aGoTo" )->setEnabled( go );
 	MonkeyCore::menuBar()->action( "mEdit/aExpandAbbreviation" )->setEnabled( hasChild );
+	MonkeyCore::menuBar()->setMenuEnabled( MonkeyCore::menuBar()->menu( "mEdit/mAllCommands" ), hasEditor );
+	MonkeyCore::menuBar()->setMenuEnabled( MonkeyCore::menuBar()->menu( "mEdit/mBookmarks" ), hasEditor );
 
 	// update view menu
 	MonkeyCore::menuBar()->action( "mView/aNext" )->setEnabled( moreThanOneChild );
 	MonkeyCore::menuBar()->action( "mView/aPrevious" )->setEnabled( moreThanOneChild );
 
 	// update status bar
-	//MonkeyCore::menuBar()->setCursorPosition( c ? c->cursorPosition() : QPoint( -1, -1 ) );
-	//MonkeyCore::menuBar()->setModified( c ? c->isModified() : false );
-	//MonkeyCore::menuBar()->setDocumentMode( c ? c->documentMode() : AbstractChild::mNone );
-	//MonkeyCore::menuBar()->setLayoutMode( c ? c->layoutMode() : AbstractChild::lNone );
-	//MonkeyCore::menuBar()->setFileName( c ? c->currentFile() : QString::null );
+	MonkeyCore::statusBar()->setModified( c ? c->isModified() : false );
+	MonkeyCore::statusBar()->setEOLMode( editor ? editor->eolMode() : (QsciScintilla::EolMode)-1 );
+	MonkeyCore::statusBar()->setIndentMode( editor ? ( editor->indentationsUseTabs() ? 1 : 0 ) : -1 );
+	MonkeyCore::statusBar()->setCursorPosition( c ? c->cursorPosition() : QPoint( -1, -1 ) );
 
 	// search dock
 	//MonkeyCore::searchDock()->setEditor( hasChild ? c->currentEditor() : 0 );
@@ -295,7 +303,9 @@ void pWorkspace::internal_currentChanged( int i )
 	if ( hasChild )
 		listWidget()->setItemToolTip( i, c->currentFile() );
 	
-	internal_currentFileChanged (hasChild ? c->currentFile() : QString() );
+	// internal update
+	internal_currentFileChanged( hasChild ? c->currentFile() : QString() );
+	
 	// emit file changed
 	emit currentFileChanged( c, hasChild ? c->currentFile() : QString() );
 }
@@ -382,7 +392,7 @@ void pWorkspace::internal_currentProjectChanged( XUPItem* currentProject, XUPIte
 	if ( currentProject )
 		currentProject->installCommands();
 	// update menu visibility
-	MonkeyCore::mainWindow()->menu_aboutToShow();
+	MonkeyCore::mainWindow()->menu_CustomAction_aboutToShow();
 }
 
 void pWorkspace::internal_projectInstallCommandRequested( const pCommand& cmd, const QString& mnu )
@@ -466,6 +476,81 @@ void pWorkspace::projectCustomActionTriggered()
 	}
 }
 
+void pWorkspace::fileWatcher_ecmNothing( const QString& filename )
+{
+	MonkeyCore::statusBar()->appendMessage( tr( "File externally modified: '%1'" ).arg( QFileInfo( filename ).fileName() ), 2000 );
+}
+
+void pWorkspace::fileWatcher_ecmReload( const QString& filename, bool force )
+{
+	// try reload
+	foreach ( pAbstractChild* ac, children() )
+	{
+		foreach ( const QString& fn, ac->files() )
+		{
+			if ( fn == filename && ( !ac->isModified( fn ) || force ) )
+			{
+				ac->closeFile( fn );
+				ac->openFile( fn );
+				MonkeyCore::statusBar()->appendMessage( tr( "Reloaded externally modified file: '%1'" ).arg( QFileInfo( filename ).fileName() ), 2000 );
+				return;;
+			}
+		}
+	}
+	// ask user
+	fileWatcher_ecmAlert( filename );
+}
+
+void pWorkspace::fileWatcher_ecmAlert( const QString& filename )
+{
+	pQueuedMessage m;
+	m.Message = tr( "The file '%1' has been modified externally, what you do ?" ).arg( QFileInfo( filename ).fileName() );
+	m.MilliSeconds = 0;
+	m.Pixmap = QPixmap();
+	m.Background = QBrush( QColor( 255, 0, 0, 20 ) );
+	m.Foreground = QBrush();
+	m.Buttons[ QDialogButtonBox::Ignore ] = QString();
+	m.Buttons[ QDialogButtonBox::Reset ] = tr( "Reload" );
+	m.Object = this;
+	m.Slot = "fileWatcher_alertClicked";
+	m.UserData = filename;
+	MonkeyCore::statusBar()->appendMessage( m );
+}
+
+void pWorkspace::fileWatcher_alertClicked( QDialogButtonBox::StandardButton button, const pQueuedMessage& message )
+{
+	switch ( button )
+	{
+		case QDialogButtonBox::Ignore:
+			fileWatcher_ecmNothing( message.UserData.toString() );
+			break;
+		case QDialogButtonBox::Reset:
+			fileWatcher_ecmReload( message.UserData.toString(), true );
+			break;
+		default:
+			break;
+	}
+}
+
+void pWorkspace::fileWatcher_fileChanged( const QString& filename )
+{
+	switch ( pMonkeyStudio::externalchanges() )
+	{
+		// silently inform user
+		case pMonkeyStudio::ecmNothing:
+			fileWatcher_ecmNothing( filename );
+			break;
+		// check if file is open, if open and modified goto alert, else reload it
+		case pMonkeyStudio::ecmReload:
+			fileWatcher_ecmReload( filename );
+			break;
+		// ask user what to do
+		case pMonkeyStudio::ecmAlert:
+			fileWatcher_ecmAlert( filename );
+			break;
+	}
+}
+
 // file menu
 void pWorkspace::fileNew_triggered()
 {
@@ -535,30 +620,30 @@ void pWorkspace::fileSaveCurrent_triggered()
 {
 	pAbstractChild* c = currentChild();
 	if ( c )
+	{
+		const QString fn = c->currentFile();
+		mFileWatcher->removePath( fn );
 		c->saveCurrentFile();
+		mFileWatcher->addPath( fn );
+	}
 }
 
 void pWorkspace::fileSaveAll_triggered()
 {
 	foreach ( pAbstractChild* c, children() )
+	{
+		const QStringList fns = c->files();
+		mFileWatcher->removePaths( fns );
 		c->saveFiles();
+		mFileWatcher->addPaths( fns );
+	}
 }
 
 void pWorkspace::fileCloseCurrent_triggered()
 { closeCurrentDocument(); }
 
 void pWorkspace::fileCloseAll_triggered()
-{
-	closeAllDocuments();
-	/*
-	// try save documents
-	UISaveFiles::Buttons cb = UISaveFiles::saveDocuments( window(), children(), b );
-	
-	// close all object, disconnecting them
-	if ( cb != UISaveFiles::bCancelClose )
-		closeAllTabs( b, true );
-	*/
-}
+{ closeAllDocuments(); }
 
 void pWorkspace::fileSaveAsBackup_triggered()
 {
@@ -678,7 +763,15 @@ void pWorkspace::focusToEditor_triggered ()
 }
 
 void pWorkspace::closeCurrentDocument()
-{ closeDocument( currentDocument() ); }
+{
+	if ( pAbstractChild* ac = currentChild() )
+	{
+		// stop watching files
+		mFileWatcher->removePaths( ac->files() );
+		// close document
+		closeDocument( ac );
+	}
+}
 
 bool pWorkspace::closeAllDocuments()
 {
@@ -687,6 +780,10 @@ bool pWorkspace::closeAllDocuments()
 	// close all object, disconnecting them
 	if ( cb != UISaveFiles::bCancelClose )
 	{
+		// stop watching files
+		foreach ( pAbstractChild* ac, children() )
+			mFileWatcher->removePaths( ac->files() );
+		// close all documents
 		pExtendedWorkspace::closeAllDocuments();
 		return true;
 	}

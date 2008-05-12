@@ -79,7 +79,7 @@ UIAbout::UIAbout( QWidget* p )
 	setAttribute( Qt::WA_DeleteOnClose );
 
 	// window title
-	setWindowTitle( windowTitle().arg( PROGRAM_NAME ) );
+	setWindowTitle( windowTitle().arg( PACKAGE_NAME ) );
 
 	// mouse cursor
 	twAbout->findChild<QTabBar*>()->setCursor( Qt::PointingHandCursor );
@@ -91,7 +91,7 @@ UIAbout::UIAbout( QWidget* p )
 
 	// show informations table
 	lInformations->setTextInteractionFlags( Qt::TextBrowserInteraction | Qt::TextSelectableByKeyboard );
-	lInformations->setText( mInformations.arg( PROGRAM_NAME ).arg( PROGRAM_VERSION ).arg( PROGRAM_COPYRIGHTS ).arg( PROGRAM_DOMAIN ) );
+	lInformations->setText( mInformations.arg( PACKAGE_NAME ).arg( PACKAGE_VERSION ).arg( PACKAGE_COPYRIGHTS ).arg( PACKAGE_DOMAIN ) );
 
 	// team
 	foreach ( pDatas i, mTeamates )

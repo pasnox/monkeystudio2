@@ -23,3 +23,5 @@
 #include "../widgets/pFileListEditor.h"
 #include "../widgets/pStringListEditor.h"
 #include "../widgets/pTreeComboBox.h"
+#include "../widgets/pQueuedMessageWidget.h"
+#include "../widgets/pQueuedStatusBar.h"

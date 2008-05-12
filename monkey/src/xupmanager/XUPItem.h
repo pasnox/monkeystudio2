@@ -22,6 +22,15 @@ struct Q_MONKEY_EXPORT XUPItemInfos
 {
 	XUPItemInfos()
 	{ Registered = false; }
+	
+	QStringList variablesList() const
+	{
+		QStringList list;
+		foreach ( const QString& s, QStringList( FilteredVariables ) << FileVariables << PathVariables << VariableLabels.keys() << VariableIcons.keys() << VariableSuffixes.keys() )
+			if ( !list.contains( s ) )
+				list << s;
+		return list;
+	}
 
 	bool Registered;
 	QStringList Operators;
@@ -48,6 +57,7 @@ public:
 
 	// register item specific infos
 	virtual void registerItem();
+	virtual const XUPItemInfos& itemInfos() const;
 
 	// get available operators for this kind of item
 	virtual QStringList operators() const;

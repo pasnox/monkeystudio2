@@ -1,12 +1,11 @@
 include( assistant.inc )
-include( ../../plugins.inc )
-
-DESTDIR	= $$MONKEY_PLUGINS_DIR/child
 TARGET	= QtAssistant
+include( ../../plugins.pri )
+DESTDIR	= $$MONKEY_PLUGINS_DIR/child
 DEFINES	*= "PLUGIN_NAME=\"\\\"$${TARGET}\\\"\""
-
-SOURCES	+= src/QtAssistant.cpp \
-	src/QtAssistantChild.cpp
 
 HEADERS	+= src/QtAssistant.h \
 	src/QtAssistantChild.h
+
+SOURCES	+= src/QtAssistant.cpp \
+	src/QtAssistantChild.cpp

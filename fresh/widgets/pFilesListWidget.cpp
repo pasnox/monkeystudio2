@@ -46,6 +46,9 @@ pFilesListWidget::pFilesListWidget( const QString& s, pExtendedWorkspace* p )
 	setWidget( mList = new QListWidget() );
 	mList->setDragDropMode( QAbstractItemView::InternalMove );
 	mList->installEventFilter( this );
+	// init icons
+	mModifiedIcon = QIcon( QPixmap( ":/file/icons/file/save.png" ) );
+	mNonModifiedIcon = QIcon( QPixmap( ":/file/icons/file/transparent.png" ) );
 	// connection
 	connect( mList, SIGNAL( currentRowChanged( int ) ), mWorkspace, SLOT( setCurrentIndex( int ) ) );
 	connect( mWorkspace, SIGNAL( currentChanged( int ) ), this, SLOT( setCurrentRow( int ) ) );
@@ -103,7 +106,7 @@ void pFilesListWidget::setItemToolTip( int i, const QString& s )
 }
 
 void pFilesListWidget::modifiedChanged( int i, bool b )
-{ mList->item( i )->setIcon( b ? QIcon( ":/file/icons/file/save.png" ) : QIcon( ":/file/icons/file/transparent.png" ) ); }
+{ mList->item( i )->setIcon( b ? mModifiedIcon : mNonModifiedIcon ); }
 
 void pFilesListWidget::docTitleChanged( int i, const QString& s )
 { mList->item( i )->setText( s ); }

@@ -4,14 +4,32 @@
 #include <QFrame>
 #include <QHBoxLayout>
 
-AddFilesDialog::AddFilesDialog( ScopedProjectItemModel* spim, XUPItem* pi, QWidget* w )
-	: QFileDialog( w, tr( "Choose the file(s)/project(s) to add to your project" ), pi->filePath() )
+AddFilesDialog::AddFilesDialog( AddFilesDialog::Type type, ScopedProjectItemModel* spim, XUPItem* pi, QWidget* w )
+	: QFileDialog( w )
 {
 	Q_ASSERT( spim && pi );
 	mScoped = spim;
-	// set file/accept mode
+	mType = type;
+	// set label/mode
+	switch ( mType )
+	{
+		case AddFilesDialog::Files:
+			setWindowTitle( tr( "Choose the files to add to your project" ) );
+			setFileMode( QFileDialog::ExistingFiles );
+			break;
+		case AddFilesDialog::Folder:
+			setWindowTitle( tr( "Choose the folder to add to your project" ) );
+			setFileMode( QFileDialog::DirectoryOnly );
+			break;
+	}
+	// set directory
+	setDirectory( pi->projectPath() );
+	// set accept mode
 	setAcceptMode( QFileDialog::AcceptOpen );
-	setFileMode( QFileDialog::ExistingFiles );
+	setLabelText( QFileDialog::Accept, tr( "Add" ) );
+	// create check boxLayout
+	cbRecursive = new QCheckBox( tr( "Add folders recursively." ) );
+	cbRecursive->setChecked( true );
 	// create frame for comboboxes
 	QFrame* f = new QFrame;
 	// add layout to frame
@@ -28,7 +46,7 @@ AddFilesDialog::AddFilesDialog( ScopedProjectItemModel* spim, XUPItem* pi, QWidg
 	// create projects/scopes treecombobox
 	tcbProjects = new pTreeComboBox;
 	tcbProjects->setModel( mScoped );
-	tcbProjects->setCurrentIndex( mScoped->mapFromSource( pi->index() ) );
+	tcbProjects->setCurrentIndex( mScoped->mapFromSource( pi->project()->index() ) );
 	hl1->addWidget( tcbProjects );
 	// add operators groupbox
 	QGroupBox* gb2 = new QGroupBox;
@@ -46,5 +64,9 @@ AddFilesDialog::AddFilesDialog( ScopedProjectItemModel* spim, XUPItem* pi, QWidg
 	hl->addWidget( gb1 );
 	hl->addWidget( gb2 );
 	// add frame to layout
-	qobject_cast<QGridLayout*>( layout() )->addWidget( f, 4, 0, 1, 3 );
+	QGridLayout* gridlayout = qobject_cast<QGridLayout*>( layout() );
+	gridlayout->addWidget( cbRecursive, 4, 0, 1, 3 );
+	gridlayout->addWidget( f, 5, 0, 1, 3 );
+	// set recursive checkbox visibilityChanged
+	cbRecursive->setVisible( mType == AddFilesDialog::Folder );
 }

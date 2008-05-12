@@ -1,0 +1,51 @@
+<ui version="4.0" >
+ <class>UICommand</class>
+ <widget class="pDockWidget" name="UICommand" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>140</height>
+   </rect>
+  </property>
+  <property name="windowIcon" >
+   <iconset resource="../resources/MessageBox.qrc" >:/icons/tablog.png</iconset>
+  </property>
+  <property name="windowTitle" >
+   <string>Commands</string>
+  </property>
+  <widget class="QWidget" name="centralwidget" >
+   <layout class="QVBoxLayout" >
+    <item>
+     <widget class="QTextEdit" name="teLog" >
+      <property name="verticalScrollBarPolicy" >
+       <enum>Qt::ScrollBarAlwaysOn</enum>
+      </property>
+      <property name="lineWrapMode" >
+       <enum>QTextEdit::NoWrap</enum>
+      </property>
+      <property name="readOnly" >
+       <bool>true</bool>
+      </property>
+      <property name="tabStopWidth" >
+       <number>20</number>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>pDockWidget</class>
+   <extends>QDockWidget</extends>
+   <header location="global" >fresh.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../resources/MessageBox.qrc" />
+ </resources>
+ <connections/>
+</ui>

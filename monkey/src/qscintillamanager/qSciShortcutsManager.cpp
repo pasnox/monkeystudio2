@@ -288,28 +288,56 @@ qSciShortcutsManager::qSciShortcutsManager (QObject* parent): QObject(parent)
 		QIcon(), QString("Ctrl+-"), tr(""),QsciScintilla::SCI_ZOOMOUT); 
     
 	sactions << SciAction ( "mEdit/mAllCommands/SCI_SETZOOM", tr("Set Zoom"), 
-		QIcon(), QString("Ctrl+/"), tr(""),QsciScintilla::SCI_SETZOOM); 
+		QIcon(), QString("Ctrl+/"), tr(""),QsciScintilla::SCI_SETZOOM);
+	
+	// bookmarks actions
+	sactions << SciAction( "mEdit/mBookmarks/SCI_MARKERADD", tr("Define"), 
+		QIcon( ":/editor/bookmark_add.png" ), QString( "Ctrl+B" ), tr( "" ), QsciScintilla::SCI_MARKERADD );
+	
+	sactions << SciAction ( "mEdit/mBookmarks/SCI_MARKERDELETEALL", tr( "Delete All" ), 
+		QIcon(), QString(), tr( "" ), QsciScintilla::SCI_MARKERDELETEALL );
+	
+	sactions << SciAction( "mEdit/mBookmarks/SCI_MARKERPREVIOUS", tr( "Previous" ), 
+		QIcon(), QString( "Alt+Up" ), tr( "" ), QsciScintilla::SCI_MARKERPREVIOUS );
+	
+	sactions << SciAction( "mEdit/mBookmarks/SCI_MARKERNEXT", tr( "Next" ), 
+		QIcon(), QString( "Alt+Down" ), tr( "" ), QsciScintilla::SCI_MARKERNEXT );
     
-	foreach (SciAction sact, sactions)
+	foreach( SciAction sact, sactions )
     {
-        QAction* qact = MonkeyCore::menuBar()->action( sact.name, sact.text, sact.icon, sact.defaultShortcut, sact.toolTip);
-        qact->setProperty ("messageCode", sact.messageCode);
-        connect (qact, SIGNAL (triggered()), this, SLOT (keyBoardShortcutPressed ()));
+        QAction* qact = MonkeyCore::menuBar()->action( sact.name, sact.text, sact.icon, sact.defaultShortcut, sact.toolTip );
+        qact->setData( sact.messageCode );
+        connect( qact, SIGNAL( triggered() ), this, SLOT( keyBoardShortcutPressed() ) );
     }
 }
 
 void qSciShortcutsManager::keyBoardShortcutPressed ()
 {
-    Q_ASSERT (sender());
-    int messageCode = sender()->property("messageCode").toInt();
-    Q_ASSERT (messageCode);
+    Q_ASSERT( sender() );
+    int messageCode = qobject_cast<QAction*>( sender() )->data().toInt();
+    Q_ASSERT( messageCode );
     pAbstractChild* child = MonkeyCore::workspace()->currentChild();
-    if (child)
+    if ( child )
     {
-        pEditor* editor = child->currentEditor ();
-        if (editor && editor->hasFocus())
+        pEditor* editor = child->currentEditor();
+        if ( editor && ( editor->hasFocus() || child->isWindow() ) )
         {
-            editor->SendScintilla (messageCode);
+			const QPoint mCursorPos = editor->cursorPosition();
+			if ( messageCode == QsciScintilla::SCI_MARKERADD )
+			{
+				if ( editor->markerAtLine( mCursorPos.y(), pEditor::mdBookmark ) )
+					editor->markerDelete( mCursorPos.y(), pEditor::mdBookmark );
+				else
+					editor->markerAdd( mCursorPos.y(), pEditor::mdBookmark );
+			}
+			else if ( messageCode == QsciScintilla::SCI_MARKERDELETEALL )
+				editor->markerDeleteAll( pEditor::mdBookmark );
+			else if ( messageCode == QsciScintilla::SCI_MARKERPREVIOUS )
+				editor->setCursorPosition( editor->markerFindPrevious( mCursorPos.y() -1, pEditor::mdBookmark ), 0 );
+			else if ( messageCode == QsciScintilla::SCI_MARKERNEXT )
+				editor->setCursorPosition( editor->markerFindNext( mCursorPos.y() +1, pEditor::mdBookmark ), 0 );
+            else
+				editor->SendScintilla( messageCode );
         }
     }
 }

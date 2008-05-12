@@ -33,12 +33,12 @@
 
 #include <QSettings>
 
-#ifndef PROGRAM_NAME
-#define PROGRAM_NAME "My Application"
+#ifndef PACKAGE_NAME
+#define PACKAGE_NAME "My Application"
 #endif
 
-#ifndef PROGRAM_VERSION
-#define PROGRAM_VERSION "1.0.0"
+#ifndef PACKAGE_VERSION
+#define PACKAGE_VERSION "1.0.0"
 #endif
 
 class QMainWindow;
@@ -49,11 +49,11 @@ class Q_MONKEY_EXPORT pSettings : public QSettings
 
 public:
 	pSettings( QObject* = 0, const QString& = mProgramName, const QString& = mProgramVersion );
-	~pSettings();
-	static void setIniInformations( const QString& = PROGRAM_NAME, const QString& = PROGRAM_VERSION );
+	
+	static void setIniInformations( const QString& = PACKAGE_NAME, const QString& = PACKAGE_VERSION );
 	static QString programName();
 	static QString programVersion();
-	static QString getIniFile( const QString& s );
+	static QString getIniFile( const QString& name, const QString& version );
 
 	virtual void restoreState( QMainWindow* );
 	virtual void saveState( QMainWindow* );

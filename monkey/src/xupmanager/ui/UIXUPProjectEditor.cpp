@@ -5,9 +5,11 @@
 #include "../ProjectEditorModel.h"
 #include "UIAddVariable.h"
 #include "../AddFilesDialog.h"
+#include "UIXUPManager.h"
 
 #include <coremanager.h>
 #include <pluginsmanager.h>
+#include <monkey.h>
 
 #include <QDebug>
 
@@ -292,11 +294,7 @@ void UIXUPProjectEditor::on_cbOperator_currentIndexChanged( const QString& text 
 { emit currentOperatorChanged( text ); }
 
 void UIXUPProjectEditor::on_tbAddProjectFiles_clicked()
-{
-	AddFilesDialog d( mScopedModel, currentScope(), window() );
-	if ( d.exec() == QDialog::Accepted && !d.selectedFiles().isEmpty() )
-		d.currentItem()->addFiles( d.selectedFiles(), d.currentItem(), d.currentOperator() );
-}
+{ MonkeyCore::projectsManager()->addFiles( currentScope(), window() ); }
 
 void UIXUPProjectEditor::on_tbRemoveProjectFile_clicked()
 {
@@ -304,28 +302,8 @@ void UIXUPProjectEditor::on_tbRemoveProjectFile_clicked()
 	FilesProjectModel* fpm = qobject_cast<FilesProjectModel*>( tvProjectFiles->model() );
 	QModelIndex idx = tvProjectFiles->currentIndex();
 	if ( idx.isValid() )
-	{
 		if ( XUPItem* it = mProject->model()->itemFromIndex( fm->mapToSource( fpm->mapToSource( idx ) ) ) )
-		{
-			if ( it->isType( "value" ) )
-			{
-				if ( QMessageBox::question( 0, "Question...", tr( "Are you sur you want to remove this value ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes ) == QMessageBox::Yes )
-				{
-					QString fp = it->filePath();
-					if ( QFile::exists( fp ) && QMessageBox::question( 0, "Question...", tr( "Do you want to delete the associate file ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes ) == QMessageBox::Yes )
-						if ( !QFile::remove( fp ) )
-							QMessageBox::warning( 0, "Warning...", tr( "Can't delete file: %1" ).arg( fp ) );
-					// get parent
-					XUPItem* parent = it->parent();
-					// remove item
-					it->remove();
-					// delete parent is empty
-					if ( !parent->hasChildren() )
-						parent->remove();
-				}
-			}
-		}
-	}
+			MonkeyCore::projectsManager()->removeFiles( it, window() );
 }
 
 void UIXUPProjectEditor::on_tbModifyProjectFile_clicked()
@@ -396,7 +374,7 @@ void UIXUPProjectEditor::on_tbOthersVariablesAdd_clicked()
 	{
 		// init dialog
 		UIAddVariable d( window() );
-		//d.setVariablesName(  );
+		d.setVariablesName( scope->itemInfos().variablesList() );
 		d.setOperators( mProject->operators() );
 		// execute dialog
 		if ( d.exec() == QDialog::Accepted )
@@ -447,7 +425,7 @@ void UIXUPProjectEditor::on_tbOthersVariablesEdit_triggered( QAction* action )
 			// init dialog
 			UIAddVariable d( window() );
 			d.setWindowTitle( tr( "Edit a variable..." ) );
-			d.setVariablesName( QStringList( vit->defaultValue() ) );
+			d.setVariablesName( vit->itemInfos().variablesList() );
 			d.setCurrentVariableName( vit->defaultValue() );
 			d.setOperators( vit->operators() );
 			d.setCurrentOperator( vit->value( "operator", "=" ) );

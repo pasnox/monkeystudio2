@@ -46,7 +46,7 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& version )
 	QString inVarComment;
 	int nbEmptyLine = 0;
 	
-	QRegExp Variable("^(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?[ \\t]*[:|][ \\t]*)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*([~*+-]?=)[ \\t]*((?:\\\\\\\\\\\\\\\"|\\\\\\\"|\\\\.|[^\\\\#])+)?[ \\t]*(\\\\)?[ \t]*(#.*)?");
+	QRegExp Variable("^(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?[ \\t]*[:|][ \\t]*)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*([~*+-]?=)[ \\t]*((?:\\\\\\\\\\\\\\\"|\\\\\\\"|[^\\\\#])+)?[ \\t]*(\\\\)?[ \t]*(#.*)?");
 	//QRegExp bloc("^(\\})?[ \\t]*((?:(?:[-\\.a-zA-Z0-9*|_!+]+(?:\\((?:[^\\)]*)\\))?[ \\t]*[:|][ \\t]*)+)?([-a-zA-Z0-9*|_!+]+(?:\\((?:[^\\)]*)\\))?))[ \\t]*(\\{)[ \\t]*(#.*)?");
 	QRegExp bloc("^(\\})?[ \\t]*((?:(?:[-\\.a-zA-Z0-9*|_!+]+(?:\\((?:.*)\\))?[ \\t]*[:|][ \\t]*)+)?([-\\.a-zA-Z0-9*|_!+]+(?:\\((?:.*)\\))?))[:]*[ \\t]*(\\{)[ \\t]*(#.*)?");
 	QRegExp function_call("^((?:!?[a-zA-Z0-9\\.]+(?:[ \\t]*\\((?:.*)\\))?[ \\t]*[|:][ \\t]*)+)?([a-zA-Z]+[ \\t]*\\((.*)\\))[ \\t]*(#.*)?");
@@ -144,6 +144,7 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& version )
 						isNested.push(true);
 					}
 				}
+				
 				QString isMulti = (liste[5].trimmed() == "\\" ? " multiline=\"true\"" : "");
 				QString theOp = (liste[3].trimmed() == "=" ? "" : " operator=\""+liste[3].trimmed()+"\"");
 				file.append("<variable name=\""+MyEscape(liste[2].trimmed())+"\""+theOp+isMulti+">\n");
@@ -193,7 +194,6 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& version )
 				}
 				else
 					file.append("<value"+(liste[6].trimmed() != "" ? " comment=\""+MyEscape(liste[6].trimmed())+"\"" : "")+">"+MyEscape(liste[4].trimmed())+"</value>\n");
-				
 				if(isMulti == " multiline=\"true\"")
 				{
 					i++;

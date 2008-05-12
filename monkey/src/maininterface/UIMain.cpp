@@ -9,21 +9,21 @@
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
 ** Home Page : http://www.monkeystudio.org
 **
-    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
 #include "UIMain.h"
@@ -36,6 +36,7 @@
 #include "../workspace/pFileManager.h"
 #include "../pluginsmanager/PluginsManager.h"
 #include "../qscintillamanager/ui/pSearch.h"
+#include "../queuedstatusbar/QueuedStatusBar.h"
 
 #include <fresh.h>
 
@@ -70,12 +71,12 @@ void UIMain::initGui()
 //	addDockWidget( Qt::RightDockWidgetArea, MonkeyCore::searchDock() );
 //	MonkeyCore::searchDock()->setVisible( false );
 //	MonkeyCore::searchDock()->setFloating( true );
-	// init staus bar
+	// init status bar
 	setStatusBar( MonkeyCore::statusBar() );
 	// init connection
 	initConnections();
 	// init final gui
-	setWindowTitle( QObject::tr( "%1 v%2 - %3 & The Monkey Studio Team" ).arg( PROGRAM_NAME, PROGRAM_VERSION, PROGRAM_COPYRIGHTS ) );
+	setWindowTitle( QObject::tr( "%1 v%2 - %3 & The Monkey Studio Team" ).arg( PACKAGE_NAME, PACKAGE_VERSION, PACKAGE_COPYRIGHTS ) );
 	setUnifiedTitleAndToolBarOnMac( true );
 	setWindowIcon( menuBar()->action( "mHelp/aAbout" )->icon() );
 	setIconSize( QSize( 16, 16 ) );
@@ -96,6 +97,8 @@ void UIMain::closeEvent( QCloseEvent* e )
 	MonkeyCore::projectsManager()->action( UIXUPManager::CloseAll )->trigger();
 	// inform that we close mainwindow
 	emit aboutToClose();
+	// delete settings ( for avoid bug of corruted QColor in ini file )
+	MonkeyCore::settings()->deleteLater();
 }
 
 QMenu* UIMain::createPopupMenu()
@@ -118,6 +121,7 @@ void UIMain::initMenuBar()
 {
 	// create menubar menus and actions
 	pMenuBar* mb = menuBar();
+	mb->setDefaultShortcutContext( Qt::ApplicationShortcut );
 	mb->menu( "mFile", tr( "File" ) );
 	mb->beginGroup( "mFile" );
 		mb->action( "aNew", tr( "&New..." ), QIcon( ":/file/icons/file/new.png" ), tr( "Ctrl+N" ), tr( "Create a new file" ) );
@@ -137,7 +141,7 @@ void UIMain::initMenuBar()
 		mb->action( "mClose/aCurrent", tr( "&Close" ), QIcon( ":/file/icons/file/close.png" ), tr( "Ctrl+W" ), tr( "Close the current file" ) )->setEnabled( false );
 		mb->action( "mClose/aAll", tr( "Close &All" ), QIcon( ":/file/icons/file/closeall.png" ), QString::null, tr( "Close all files" ) )->setEnabled( false );
 		mb->action( "aSeparator3" );
-		mb->action( "aSaveAsBackup", tr( "Save As &Backup" ), QIcon( ":/file/icons/file/backup.png" ), tr( "Ctrl+B" ), tr( "Save a backup of the current file" ) )->setEnabled( false );
+		mb->action( "aSaveAsBackup", tr( "Save As &Backup" ), QIcon( ":/file/icons/file/backup.png" ), QString::null, tr( "Save a backup of the current file" ) )->setEnabled( false );
 		mb->action( "aSeparator4" );
 		mb->action( "aQuickPrint", tr( "Quic&k Print" ), QIcon( ":/file/icons/file/quickprint.png" ), QString::null, tr( "Quick print the current file" ) )->setEnabled( false );
 		mb->action( "aPrint", tr( "&Print..." ), QIcon( ":/file/icons/file/print.png" ), tr( "Ctrl+P" ), tr( "Print the current file" ) )->setEnabled( false );
@@ -168,6 +172,7 @@ void UIMain::initMenuBar()
 			mb->action( "mSearchReplace/aSearchNext", tr( "Search Next" ), QIcon( ":/edit/icons/edit/next.png" ), tr( "F3" ), tr( "Search Next" ) )->setEnabled( true );
 		mb->action( "aGoTo", tr( "&Go To..." ), QIcon( ":/edit/icons/edit/goto.png" ), tr( "Ctrl+G" ), tr( "Go To..." ) )->setEnabled( false );
 		mb->menu( "mAllCommands", tr( "&All Commands" ), QIcon( ":/edit/icons/edit/commands.png" ) );
+		mb->menu( "mBookmarks", tr( "&Bookmarks" ), QIcon( ":/editor/bookmark.png" ) );
 		mb->action( "aSeparator5" );
 		mb->action( "aExpandAbbreviation", tr( "Expand Abbreviation" ), QIcon( ":/edit/icons/edit/abbreviation.png" ), tr( "Ctrl+E" ), tr( "Expand Abbreviation" ) )->setEnabled( false );
 		mb->action( "aPrepareAPIs", tr( "Prepare APIs" ), QIcon( ":/edit/icons/edit/prepareapis.png" ), tr( "Ctrl+Alt+P" ), tr( "Prepare the APIs files for auto completion / calltips" ) );
@@ -175,8 +180,9 @@ void UIMain::initMenuBar()
 	mb->menu( "mView", tr( "View" ) );
 	mb->beginGroup( "mView" );
 		mb->menu( "mStyle", tr( "&Style" ), QIcon( ":/view/icons/view/style.png" ) );
-		mb->action( "aNext", tr( "&Next Tab" ), QIcon( ":/view/icons/view/next.png" ), tr( "Alt+Right" ), tr( "Active the next tab" ) )->setEnabled( false );
-		mb->action( "aPrevious", tr( "&Previous Tab" ), QIcon( ":/view/icons/view/previous.png" ), tr( "Alt+Left" ), tr( "Active the previous tab" ) )->setEnabled( false );
+		mb->action( "aNext", tr( "&Next Tab" ), QIcon( ":/view/icons/view/next.png" ), tr( "Ctrl+Tab" ), tr( "Active the next tab" ) )->setEnabled( false );
+		mb->action( "aPrevious", tr( "&Previous Tab" ), QIcon( ":/view/icons/view/previous.png" ), tr( "Ctrl+Shift+Tab" ), tr( "Active the previous tab" ) )->setEnabled( false );
+		mb->menu( "mDocks", tr( "Docks" ) );
 	mb->endGroup();
 	mb->menu( "mProject", tr( "Project" ) );
 	mb->beginGroup( "mProject" );
@@ -340,13 +346,14 @@ void UIMain::initConnections()
 	connect( agStyles, SIGNAL( triggered( QAction* ) ), MonkeyCore::workspace(), SLOT( agStyles_triggered( QAction* ) ) );
 	connect( menuBar()->action( "mView/aNext" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( activateNextDocument() ) );
 	connect( menuBar()->action( "mView/aPrevious" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( activatePreviousDocument() ) );
+	connect( menuBar()->menu( "mView/mDocks" ), SIGNAL( aboutToShow() ), this, SLOT( menu_ViewDocks_aboutToShow() ) );
 	// project connection
 	connect( MonkeyCore::recentsManager(), SIGNAL( openProjectRequested( const QString& ) ), MonkeyCore::projectsManager(), SLOT( openProject( const QString& ) ) );
 	connect( MonkeyCore::projectsManager(), SIGNAL( fileDoubleClicked( const QString& ) ), MonkeyCore::workspace(), SLOT( openFile( const QString& ) ) );
 	// builder debugger interpreter menu
-	connect( menuBar()->menu( "mBuilder" ), SIGNAL( aboutToShow() ), this, SLOT( menu_aboutToShow() ) );
-	connect( menuBar()->menu( "mDebugger" ), SIGNAL( aboutToShow() ), this, SLOT( menu_aboutToShow() ) );
-	connect( menuBar()->menu( "mInterpreter" ), SIGNAL( aboutToShow() ), this, SLOT( menu_aboutToShow() ) );
+	connect( menuBar()->menu( "mBuilder" ), SIGNAL( aboutToShow() ), this, SLOT( menu_CustomAction_aboutToShow() ) );
+	connect( menuBar()->menu( "mDebugger" ), SIGNAL( aboutToShow() ), this, SLOT( menu_CustomAction_aboutToShow() ) );
+	connect( menuBar()->menu( "mInterpreter" ), SIGNAL( aboutToShow() ), this, SLOT( menu_CustomAction_aboutToShow() ) );
 	// plugins menu
 	connect( menuBar()->action( "mPlugins/aManage" ), SIGNAL( triggered() ), MonkeyCore::pluginsManager(), SLOT( manageRequested() ) );
 	// window menu
@@ -365,7 +372,19 @@ void UIMain::initConnections()
 #endif
 }
 
-void UIMain::menu_aboutToShow()
+void UIMain::menu_ViewDocks_aboutToShow()
+{
+	// get menu
+	QMenu* menu = menuBar()->menu( "mView/mDocks" );
+	// add actions
+	foreach ( QDockWidget* dw, findChildren<QDockWidget*>() )
+	{
+		dw->toggleViewAction()->setIcon( dw->windowIcon() );
+		menu->addAction( dw->toggleViewAction() );
+	}
+}
+
+void UIMain::menu_CustomAction_aboutToShow()
 {
 	QList<QMenu*> menus;
 	if ( sender() )

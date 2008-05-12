@@ -31,6 +31,9 @@ void XUPItem::registerItem()
 	mXUPItemInfos.Suffixes[tr( "Monkey Studio Project" )] = QStringList( "*.xup" );
 }
 
+const XUPItemInfos& XUPItem::itemInfos() const
+{ return mXUPItemInfos; }
+
 QStringList XUPItem::operators() const
 { return mXUPItemInfos.Operators; }
 
@@ -610,6 +613,8 @@ QString XUPItem::filePath( const QString& s ) const
 			fi.setFile( projectPath().append( "/%1" ).arg( s ) );
 		return fi.absoluteFilePath();
 	}
+	else if ( isProject() )
+		return projectFilePath();
 	return s;
 }
 

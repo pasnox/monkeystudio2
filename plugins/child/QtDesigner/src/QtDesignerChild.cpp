@@ -365,7 +365,7 @@ void QtDesignerChild::previewCurrentForm()
 void QtDesignerChild::setModified( QDesignerFormWindowInterface* w )
 {
 	// update designer title
-	setWindowTitle( tr( "Qt Designer" ).append( w ? QFileInfo( w->fileName() ).fileName().append( "]" ).prepend( " [" ) : QString::null ) );
+	setWindowTitle( tr( "Qt Designer" ).append( w ? QFileInfo( w->fileName() ).fileName().append( "][*]" ).prepend( " [" ) : "[*]" ) );
 	
 	// update designer state
 	setWindowModified( w && mCore->formWindowManager()->activeFormWindow() == w ? w->isDirty() : false );

@@ -28,6 +28,7 @@
 ****************************************************************************/
 #include "UITranslator.h"
 #include "../../coremanager/MonkeyCore.h"
+#include "../../settingsmanager/Settings.h"
 #include "../../pMonkeyStudio.h"
 
 #include <QLibraryInfo>
@@ -52,7 +53,7 @@ void UITranslator::accept()
 		s->setValue( "Translations/Accepted", true );
 		s->setValue( "Translations/Path", mTranslationsPath );
 		if ( parentWidget() )
-			pMonkeyStudio::warning( tr( "Changing Translations..." ), tr( "You need to restart %1 for the new translations be applied" ).arg( PROGRAM_NAME ), window() );
+			pMonkeyStudio::warning( tr( "Changing Translations..." ), tr( "You need to restart %1 for the new translations be applied" ).arg( PACKAGE_NAME ), window() );
 		QDialog::accept();
 	}
 }

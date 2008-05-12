@@ -53,6 +53,10 @@ public:
 		mDocument = mNone;
 		mLayout = lNone;
 	}
+	
+	// return defaultsize for child
+	virtual QSize sizeHint() const
+	{ return QSize( 640, 480 ); }
 
 	// return child document mode
 	virtual pAbstractChild::DocumentMode documentMode() const

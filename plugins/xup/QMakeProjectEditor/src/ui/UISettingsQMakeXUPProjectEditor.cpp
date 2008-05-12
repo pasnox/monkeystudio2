@@ -29,6 +29,10 @@ UISettingsQMakeXUPProjectEditor::UISettingsQMakeXUPProjectEditor( QWidget* paren
 		connect( tb, SIGNAL( clicked() ), this, SLOT( tbUp_clicked() ) );
 	foreach ( QToolButton* tb, findChildren<QToolButton*>( QRegExp( "tbDown*" ) ) )
 		connect( tb, SIGNAL( clicked() ), this, SLOT( tbDown_clicked() ) );
+	connect( leQtVersionVersion, SIGNAL( editingFinished() ), this, SLOT( qtVersionChanged() ) );
+	connect( leQtVersionPath, SIGNAL( editingFinished() ), this, SLOT( qtVersionChanged() ) );
+	connect( cbQtVersionQMakeSpec->lineEdit(), SIGNAL( editingFinished() ), this, SLOT( qtVersionChanged() ) );
+	connect( leQtVersionQMakeParameters, SIGNAL( editingFinished() ), this, SLOT( qtVersionChanged() ) );
 }
 
 void UISettingsQMakeXUPProjectEditor::tbAdd_clicked()
@@ -160,14 +164,17 @@ void UISettingsQMakeXUPProjectEditor::on_tbDefaultQtVersion_clicked()
 	}
 }
 
-void UISettingsQMakeXUPProjectEditor::on_leQtVersionPath_textChanged( const QString& )
+void UISettingsQMakeXUPProjectEditor::qtVersionChanged()
 { lw_currentItemChanged( lwQtVersions->currentItem(), lwQtVersions->currentItem() ); }
 
 void UISettingsQMakeXUPProjectEditor::on_tbQtVersionPath_clicked()
 {
 	const QString s = pMonkeyStudio::getExistingDirectory( tr( "Locate your qt installation directory" ), leQtVersionPath->text(), window() );
 	if ( !s.isNull() )
+	{
 		leQtVersionPath->setText( s );
+		qtVersionChanged();
+	}
 }
 
 void UISettingsQMakeXUPProjectEditor::on_tbQtVersionQMakeSpec_clicked()
@@ -178,6 +185,7 @@ void UISettingsQMakeXUPProjectEditor::on_tbQtVersionQMakeSpec_clicked()
 		if ( cbQtVersionQMakeSpec->findText( s ) == -1 )
 			cbQtVersionQMakeSpec->addItem( s );
 		cbQtVersionQMakeSpec->setCurrentIndex( cbQtVersionQMakeSpec->findText( s ) );
+		qtVersionChanged();
 	}
 }
 

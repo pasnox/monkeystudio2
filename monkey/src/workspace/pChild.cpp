@@ -60,7 +60,7 @@ pChild::pChild()
 	connect( mEditor, SIGNAL( copyAvailable( bool ) ), this, SIGNAL( copyAvailableChanged( bool ) ) );
 	connect( mEditor, SIGNAL( pasteAvailable( bool ) ), this, SIGNAL( pasteAvailableChanged( bool ) ) );
 	connect( mEditor, SIGNAL( modificationChanged( bool ) ), this, SIGNAL( modifiedChanged( bool ) ) );
-	connect( this, SIGNAL( modifiedChanged( bool ) ), window(), SLOT( setWindowModified( bool ) ) );
+	connect( this, SIGNAL( modifiedChanged( bool ) ), this, SLOT( setWindowModified( bool ) ) );
 }
 
 pChild::~pChild()
@@ -180,10 +180,7 @@ bool pChild::openFile( const QString& s, QTextCodec* )
 	// add filename to list
 	mFiles.append( s );
 
-	// change window title
-	setWindowTitle( s );
-
-	emit fileOpened( s +"[*]" );
+	emit fileOpened( s );
     return true;
 }
 
@@ -225,4 +222,18 @@ void pChild::quickPrintFile( const QString& s )
 
 	// print file
 	mEditor->quickPrint();
+}
+
+void pChild::setWindowModified( bool moodified )
+{
+	// update windowtitle if needed
+	if ( !windowTitle().contains( "[*]" ) )
+	{
+		if ( windowTitle().isEmpty() )
+			setWindowTitle( mEditor->property( "fileName" ).toString() +"[*]" );
+		else
+			setWindowTitle( windowTitle() +"[*]" );
+	}
+	// set windowmodified
+	pAbstractChild::setWindowModified( moodified );
 }

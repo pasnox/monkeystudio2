@@ -8,19 +8,12 @@
 		<file>icons/tablog.png</file>
 		<file>icons/warning.png</file>
 		<file>icons/buttonok.png</file>
-
 		<file>icons/stepover.png</file>
 		<file>icons/stepinto.png</file>
-		<file>icons/break_enable.png</file>
-		<file>icons/break_disable.png</file>
-		<file>icons/break_conditionnal_enable.png</file>
-		<file>icons/break_conditionnal_disable.png</file>
-		<file>icons/play.png</file>
 		<file>icons/stop.png</file>
 		<file>icons/close.png</file>
 		<file>icons/projectopen.png</file>
 		<file>icons/update.png</file>
 		<file>icons/file.png</file>
-
 	</qresource>
 </RCC>

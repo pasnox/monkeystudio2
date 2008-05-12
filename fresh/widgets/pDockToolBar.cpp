@@ -45,6 +45,9 @@ pDockToolBar::pDockToolBar( pDockToolBarManager* t, Qt::Orientation o, QMainWind
 	// need docktoolbar manager
 	Q_ASSERT( t != 0 );
 	Q_UNUSED( t );
+	
+	// always show button text
+	mTextAlwaysVisible = true;
 
 	// toolbar is not movable
 	setMovable( false );
@@ -305,6 +308,31 @@ void pDockToolBar::setExclusive( bool b )
 	}
 }
 
+void pDockToolBar::setTextAlwaysVisible( bool visible )
+{
+	mTextAlwaysVisible = visible;
+	foreach ( QAbstractButton* ab, mButtons )
+	{
+		if ( mTextAlwaysVisible )
+		{
+			if ( ab->text().isEmpty() )
+				ab->setText( ab->property( "Caption" ).toString() );
+		}
+		else
+		{
+			if ( ab->isChecked() && ab->text().isEmpty() )
+				ab->setText( ab->property( "Caption" ).toString() );
+			else if ( !ab->isChecked() && !ab->text().isEmpty() )
+				ab->setText( QString() );
+		}
+	}
+}
+
+bool pDockToolBar::textAlwaysVisible() const
+{
+	return mTextAlwaysVisible;
+}
+
 int pDockToolBar::id( QDockWidget* d ) const
 {
 	return mDocks.values().contains( d ) ? mDocks.key( d ) : -1;
@@ -375,12 +403,14 @@ void pDockToolBar::internal_checkButtonText( QAbstractButton* b )
 	// cancel if no button
 	if ( !b )
 		return;
-
 	// show text when checked, else not
-	if ( b->isChecked() && b->text().isEmpty() )
-		b->setText( b->property( "Caption" ).toString() );
-	else if ( !b->isChecked() && !b->text().isEmpty() )
-		b->setText( QString() );
+	if ( !mTextAlwaysVisible )
+	{
+		if ( b->isChecked() && b->text().isEmpty() )
+			b->setText( b->property( "Caption" ).toString() );
+		else if ( !b->isChecked() && !b->text().isEmpty() )
+			b->setText( QString() );
+	}
 }
 
 void pDockToolBar::internal_orientationChanged( Qt::Orientation o )

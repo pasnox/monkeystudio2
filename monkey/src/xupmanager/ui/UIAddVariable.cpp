@@ -7,23 +7,39 @@ UIAddVariable::UIAddVariable( QWidget* parent )
 void UIAddVariable::setVariablesName( const QStringList& variables )
 {
 	cbVariableName->clear();
-	cbVariableName->addItems( variables );
+	mVariables = variables;
+	cbVariableName->addItems( mVariables );
 }
 
 QString UIAddVariable::getVariableName() const
 { return cbVariableName->currentText(); }
 
 void UIAddVariable::setCurrentVariableName( const QString& var )
-{ cbVariableName->setCurrentIndex( cbVariableName->findText( var ) ); }
+{
+	if ( !mVariables.contains( var ) )
+	{
+		mVariables << var;
+		cbVariableName->addItem( var );
+	}
+	cbVariableName->setCurrentIndex( cbVariableName->findText( var ) );
+}
 
 void UIAddVariable::setOperators( const QStringList& operators )
 {
 	cbOperator->clear();
-	cbOperator->addItems( operators );
+	mOperators = operators;
+	cbOperator->addItems( mOperators );
 }
 
 QString UIAddVariable::getOperator() const
 { return cbOperator->currentText(); }
 
 void UIAddVariable::setCurrentOperator( const QString& op )
-{ cbOperator->setCurrentIndex( cbOperator->findText( op ) ); }
+{
+	if ( !mOperators.contains( op ) )
+	{
+		mOperators << op;
+		cbOperator->addItem( op );
+	}
+	cbOperator->setCurrentIndex( cbOperator->findText( op ) );
+}

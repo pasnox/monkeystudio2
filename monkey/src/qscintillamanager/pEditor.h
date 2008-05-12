@@ -40,7 +40,19 @@ public:
 	pEditor( QWidget* = 0 );
 	virtual ~pEditor();
 
-	enum RegisterImageType { riClass = 0, riEnum, riFunction, riMember, riNamespace, riStruct, riTypedef, riVariable };
+	enum RegisterImageType
+	{
+		// completion
+		riClass = 0, riEnum, riFunction, riMember, riNamespace, riStruct, riTypedef, riVariable
+	};
+	
+	enum MarkerDefineType
+	{
+		// bookmarks
+		mdBookmark = 0,
+		// debugger
+		mdEnabledBreak, mdDisabledBreak, mdEnabledConditionalBreak, mdDisabledConditionalBreak, mdPlay
+	};
 
 	bool lineNumbersMarginEnabled() const;
 	int lineNumbersMarginWidth() const;
@@ -48,9 +60,14 @@ public:
 	bool copyAvailable();
 	bool canPaste();
 	QPoint cursorPosition() const;
+	
+	bool markerAtLine( int line, pEditor::MarkerDefineType markerId ) const;
+	int markerFindPrevious( int line, pEditor::MarkerDefineType markerId ) const;
+	int markerFindNext( int line, pEditor::MarkerDefineType markerId ) const;
 
 protected:
 	void keyPressEvent( QKeyEvent* );
+	QString getActualFileIndent ();
 
 	bool mCopyAvailable;
 	static bool mPasteAvailableInit;
@@ -76,7 +93,7 @@ public slots:
 	void quickPrint();
 	void selectNone();
 	void invokeGoToLine();
-	void convertTabs( int = -1 );
+	void convertTabs();
 	void makeBackup();
 
 signals:
@@ -84,7 +101,6 @@ signals:
 	void undoAvailable( bool );
 	void redoAvailable( bool );
 	void pasteAvailable( bool );
-
 };
 
 #endif // PEDITOR_H

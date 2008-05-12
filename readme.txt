@@ -15,17 +15,18 @@ It's extendable with a powerfull plugins system.
 **
 ****************************************************************************/
 
-ATTENTION : QMake binary provided by Qt 4.3.3 on windows/mingw is bugguy, resulting to create bad makefiles. Please use the precompiled package or use Qt 4.3.2 instead.
+ATTENTION : QMake binary provided by Qt 4.3.3 on windows/mingw is bugguy, resulting to create bad makefiles. Please use the precompiled package or use Qt 4.3.2 ( or more recents ) instead.
 
 Before building, you should know about some rules if you are unix/linux users.
 By default monkey studio will install itself in /usr/local.
 If you want to change this you should do these build step ( assuming you want to install in /usr ) :
-* cd to root soruces of monkey studio
-* export MONKEY_PREFIX=/usr
-* qmake
-* make release
-* cd monkey
-* make release-install
+
+  * cd to root souuces of monkey studio
+  * export MONKEY_PREFIX=/usr
+  * qmake
+  * make
+  * make install
+
 You now have a full working copy of monkey for your unix/linux box.
 If you have trouble when monkey starting ( because you already use old version of monkey studio ), you should rename the file ~/.Monkey Studio/Monkey Studio.ini and restart monkey studio.
 If trouble persists, please inform us.
@@ -36,36 +37,38 @@ How to build Monkey Studio:
 With MinGW/Windows:
 
 * Open a console, and go to the sources directory.
-* type: qmake && mingw32-make release
-
-Windows/MinGW users can use batch files to build Monkey Studio.
+  * qmake && mingw32-make
 
 With MSVC/Windows:
 
 * Open a console, and go to the sources directory.
-* type: qmake && nmake release
+  * qmake && nmake
 
 With Linux/*Nix:
 
 * Open a shell, and go to the sources directory.
-* type: qmake && make release // some distros use qmake-qt4 for qmake of Qt 4
+  * qmake && make // some distros use qmake-qt4 for qmake of Qt 4
 
 With Mac OS X:
 
 * Open a terminal, and go to the sources directory.
-* type: qmake -spec macx-g++ && make release
+  * qmake -spec macx-g++ && make
 
 How to execute Monkey Studio:
 =============================
-* Once you have build monkeystudio you need install resources executing this command : cd monkey && make release-install ( replace make by mingw32-make/nmake according to your platform ).
-* Once you have installed resources, you now have a full monkeystudio copy in your bin folder by default on windows/mac, and in /usr/local for unix/linux )
+* Once you have build monkeystudio you need install resources executing this command : $$MAKE install ( replace $$MAKE by make/mingw32-make/nmake according to your platform ).
+* Once you have installed resources, you now have a full monkeystudio copy in your bin folder by default on windows/mac, and in /usr/local for unix/linux.
+
+You may require admin acces when using $$MAKE install.
+For unix-like, simply use a sudo, for windows, you need to have admin access.
 
 Known Problems:
 
 * MSVC 6 can't build Monkey Studio 2, and will probably never ( except if someone is able to send us a patch ).
 * For any problems, please contact us on the forums at : http://forums.monkeystudio.org or on our irc channel, irc://irc.freenode.net/monkeystudio
+* You can report bugs using our webissues server ( see About dialog for more infos )
 
 
-	Azevedo Filipe and The Monkey Studio Team,
+	Azevedo Filipe & The Monkey Studio Team,
 
 --EOF

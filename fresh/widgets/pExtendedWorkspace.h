@@ -114,6 +114,7 @@ protected:
 	pExtendedWorkspace::DocumentMode mDocMode;
 
 	QList<QWidget*> mDocuments;
+	QWidget* mLastDocument;
 
 	// main layout
 	QBoxLayout* mLayout;
@@ -130,6 +131,7 @@ protected:
 
 protected slots:
 	void mdiArea_subWindowActivated( QMdiSubWindow* );
+	void internal_currentChanged( int id );
 
 signals:
 	void documentInserted( int, const QString&, const QIcon& );
