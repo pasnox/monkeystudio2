@@ -1146,6 +1146,12 @@ void pMonkeyStudio::setIndentationsUseTabs( bool b )
 const bool pMonkeyStudio::indentationsUseTabs()
 { return MonkeyCore::settings()->value( settingsPath() +"/IndentationsUseTabs", true ).toBool(); }
 
+void pMonkeyStudio::setAutoDetectIndent( bool b )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoDetectIndent", b ); }
+
+const bool pMonkeyStudio::autoDetectIndent()
+{ return MonkeyCore::settings()->value( settingsPath() +"/AutoDetectIndent", false ).toBool(); }
+
 void pMonkeyStudio::setIndentationWidth( int i )
 { MonkeyCore::settings()->setValue( settingsPath() +"/IndentationWidth", i ); }
 

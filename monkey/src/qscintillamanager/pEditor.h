@@ -64,10 +64,12 @@ public:
 	bool markerAtLine( int line, pEditor::MarkerDefineType markerId ) const;
 	int markerFindPrevious( int line, pEditor::MarkerDefineType markerId ) const;
 	int markerFindNext( int line, pEditor::MarkerDefineType markerId ) const;
+    
+    // Set for self indentation according with actual in the file
+    void autoDetectIndent();
 
 protected:
 	void keyPressEvent( QKeyEvent* );
-	QString getActualFileIndent ();
 
 	bool mCopyAvailable;
 	static bool mPasteAvailableInit;

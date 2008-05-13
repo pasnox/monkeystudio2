@@ -181,6 +181,8 @@ namespace pMonkeyStudio
 	Q_MONKEY_EXPORT const bool indentationGuides();
 	Q_MONKEY_EXPORT void setIndentationsUseTabs( bool );
 	Q_MONKEY_EXPORT const bool indentationsUseTabs();
+	Q_MONKEY_EXPORT void setAutoDetectIndent( bool );
+	Q_MONKEY_EXPORT const bool autoDetectIndent();
 	Q_MONKEY_EXPORT void setIndentationWidth( int );
 	Q_MONKEY_EXPORT const int indentationWidth();
 	Q_MONKEY_EXPORT void setTabIndents( bool );

@@ -193,7 +193,7 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 
 	// open file
 	c->openFile( s );
-
+    
 	// set correct document if needed ( sdi hack )
 	if ( currentDocument() != c )
 	{
