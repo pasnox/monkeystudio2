@@ -749,7 +749,7 @@ void QMakeXUPItem::installCommands()
 			addCommand( cmd, "mBuilder/mRebuild" );
 		}
 		else
-			MonkeyCore::statusBar()->appendMessage( tr( "Some actions can't be created, because there is no default Qt version setted, please go in your project settings to fix this." ) );
+			MonkeyCore::statusBar()->appendMessage( tr( "Some actions can't be created, because there is no default Qt version setted, please go in your project settings to fix this." ), 2500 );
 		
 		// execute debug
 		cmd = cmdBuild;
