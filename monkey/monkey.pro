@@ -26,7 +26,7 @@ RESOURCES	*= src/resources/resources.qrc
 
 DEFINES	*= MONKEY_CORE_BUILD
 
-LIBS	*= -L$${PACKAGE_BUILD_PATH}
+LIBS	*= -L$$quote($${PACKAGE_BUILD_PATH})
 mac:*-g++:LIBS	*= -Wl,-all_load # import all symbols as the not used ones too
 else:*-g++:LIBS	*= -Wl,--whole-archive # import all symbols as the not used ones too
 mac:*-g++:LIBS	*= -dynamic
