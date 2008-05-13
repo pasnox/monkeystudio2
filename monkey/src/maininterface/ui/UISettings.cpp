@@ -610,7 +610,7 @@ void UISettings::on_pbSourceAPIsDelete_clicked()
 void UISettings::on_pbSourceAPIsAdd_clicked()
 {
 	// get files
-	QStringList files = leSourceAPIs->text().split( ";" );
+	QStringList files = leSourceAPIs->text().split( ";", QString::SkipEmptyParts );
 	// add them recursively
 	foreach ( const QString& fn, files )
 		if ( lwSourceAPIs->findItems( fn, Qt::MatchFixedString ).count() == 0 )
