@@ -78,10 +78,8 @@ namespace pMonkeyStudio
 	Q_MONKEY_EXPORT const QHash<QString, QStringList> defaultLanguagesSuffixes();
 	Q_MONKEY_EXPORT const QHash<QString, QStringList> availableLanguagesSuffixes();
 	Q_MONKEY_EXPORT const QHash<QString, QStringList> availableFilesSuffixes();
-	Q_MONKEY_EXPORT const QHash<QString, QStringList> availableProjectsSuffixes();
 	Q_MONKEY_EXPORT const QString availableLanguagesFilters();
 	Q_MONKEY_EXPORT const QString availableFilesFilters();
-	Q_MONKEY_EXPORT const QString availableProjectsFilters();
 
 	Q_MONKEY_EXPORT const QString settingsPath();
 	Q_MONKEY_EXPORT const QString scintillaSettingsPath();
