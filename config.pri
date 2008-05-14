@@ -12,7 +12,7 @@ PACKAGE_DESTDIR	= $${PACKAGE_PWD}/bin
 PACKAGE_BUILD_PATH	= $${PACKAGE_PWD}/build
 
 # build mode
-CONFIG	+= qt warn_on thread x11 windows release
+CONFIG	+= qt warn_on thread x11 windows debug
 
 # define config mode paths
 CONFIG( debug, debug|release ) {
