@@ -70,6 +70,7 @@ pSearch::pSearch( QWidget* parent )
 	cobSearch = new QComboBox ();
 	cobSearch->setEditable (true);
 	cobSearch->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
+	cobSearch->completer()->setCaseSensitivity (Qt::CaseSensitive);
 	lSearchText->setBuddy (cobSearch);
 
 	tbPrevious = new QPushButton ();
@@ -99,6 +100,7 @@ pSearch::pSearch( QWidget* parent )
 	cobReplace = new QComboBox ();
 	cobReplace->setEditable (true);
 	cobReplace->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
+	cobReplace->completer()->setCaseSensitivity (Qt::CaseSensitive);
 	lReplaceText->setBuddy (cobReplace);
 	
 	tbReplace = new QPushButton ();
@@ -132,6 +134,7 @@ pSearch::pSearch( QWidget* parent )
 	cobMask->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
 	cobMask->setEditable (true);
 	cobMask->setToolTip (tr("Spase separated list of wildcards. Example:<br> <i>*.h *.cpp file???.txt</i>"));
+	cobMask->completer()->setCaseSensitivity (Qt::CaseSensitive);
 	lMask->setBuddy (cobMask);
 	
 	connect (tbNext, SIGNAL (clicked()), this, SLOT (on_tbNext_clicked ()));
