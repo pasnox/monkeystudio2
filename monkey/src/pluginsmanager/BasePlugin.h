@@ -9,21 +9,21 @@
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
 ** Home Page : http://www.monkeystudio.org
 **
-    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
 #ifndef BASEPLUGIN_H
@@ -58,9 +58,10 @@ public:
 		iCompiler,
 		iDebugger,
 		iInterpreter,
-		iProject,
 		iXUP,
 		iLast };
+	
+	Q_DECLARE_FLAGS( Types, Type )
 		
 	// plugin info structure
 	struct Q_MONKEY_EXPORT PluginInfos
@@ -68,7 +69,8 @@ public:
 		QString Caption; // the string to show as caption
 		QString Description; // the plugin description
 		QString Author; // the plugin author
-		BasePlugin::Type Type; // the plugin type
+		BasePlugin::Types Type; // the plugin type ( can be or-ded
+		QStringList Languages; // language this plugin is for, default empty mean all
 		QString Name; // the plugin name for version control
 		QString Version; // the plugin version for version control
 		bool Enabled; // to know if this plugin is enabled
@@ -131,6 +133,8 @@ protected:
 	PluginInfos mPluginInfos;
 };
 
+Q_DECLARE_OPERATORS_FOR_FLAGS( BasePlugin::Types )
+Q_DECLARE_METATYPE( BasePlugin::PluginInfos )
 Q_DECLARE_INTERFACE( BasePlugin, "org.monkeystudio.MonkeyStudio.BasePlugin/1.0" )
 
 #endif // BASEPLUGIN_H
