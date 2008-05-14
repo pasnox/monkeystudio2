@@ -47,13 +47,11 @@ struct Q_MONKEY_EXPORT pTool
 	
 	QString toString() const
 	{
-		const char* s = QT_TRANSLATE_NOOP( "pTool",
-			QString( "Caption: %1\n"
+		return QCoreApplication::translate( "pTool",
+			"Caption: %1\n"
 			"File Path: %2\n"
 			"Working Path: %3\n"
-			"Use Console Manager: %4\n"
-			).arg( Caption ).arg( FilePath ).arg( WorkingPath ).arg( QVariant( UseConsoleManager ).toString() ).toLatin1().constData() );
-		return QCoreApplication::translate( "pTool", s );
+			"Use Console Manager: %4\n" ).arg( Caption ).arg( FilePath ).arg( WorkingPath ).arg( QVariant( UseConsoleManager ).toString() );
 	}
 
 	QString Caption;
