@@ -94,7 +94,6 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/pluginsmanager/XUPPlugin.h \
 	src/pluginsmanager/ChildPlugin.h \
 	src/pluginsmanager/CLIToolPlugin.h \
-	src/pluginsmanager/ProjectPlugin.h \
 	src/pluginsmanager/BuilderPlugin.h \
 	src/pluginsmanager/CompilerPlugin.h \
 	src/pluginsmanager/PluginsManager.h \
