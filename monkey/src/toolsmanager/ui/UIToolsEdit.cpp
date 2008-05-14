@@ -9,21 +9,21 @@
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
 ** Home Page : http://www.monkeystudio.org
 **
-    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
 #include "UIToolsEdit.h"
@@ -50,25 +50,21 @@ UIToolsEdit::UIToolsEdit( QWidget* p )
 	leFilePath->installEventFilter( this );
 	leWorkingPath->installEventFilter( this );
 	// create items
-	foreach ( pTool t, pToolsManager::tools( pToolsManager::ttUserEntry ) )
+	foreach ( pTool tool, pToolsManager::tools( pToolsManager::ttUserEntry ) )
 	{
 		// create item
-		QListWidgetItem* it = new QListWidgetItem( lwTools );
-		// fill item infos
-		it->setData( idCaption, t.Caption );
-		it->setData( idFileIcon, t.FileIcon );
-		it->setData( idFilePath, t.FilePath );
-		it->setData( idWorkingPath, t.WorkingPath );
-		it->setIcon( QIcon( t.FileIcon ) );
+		QListWidgetItem* it = new QListWidgetItem( QIcon( tool.FileIcon ), tool.Caption, lwTools );
+		it->setData( Qt::UserRole, QVariant::fromValue<pTool>( tool ) );
 	}
-	setProperty( "Modified" , false );
+	// modified state
+	setWindowModified( false );
 	// connection
 	connect( bbDialog, SIGNAL( helpRequested() ), this, SLOT( helpRequested() ) );
 }
 
 void UIToolsEdit::closeEvent( QCloseEvent* e )
 {
-	if ( property( "Modified" ).toBool() && !pMonkeyStudio::question( tr( "Tools Editor..." ), tr( "You're about to discard all changes. Are you sure ?" ), this ) )
+	if ( isWindowModified() && !pMonkeyStudio::question( tr( "Tools Editor..." ), tr( "You're about to discard all changes. Are you sure ?" ), this ) )
 		e->ignore();
 }
 
@@ -94,77 +90,78 @@ bool UIToolsEdit::eventFilter( QObject* o, QEvent* e )
 	// get link info
 	QFileInfo f( d->mimeData()->urls().at( 0 ).toLocalFile() );
 	// drag for tbFileIcon
+	pTool tool = it->data( Qt::UserRole ).value<pTool>();
+	if ( tool.Caption.isEmpty() )
+		tool.Caption = it->text();
 	if ( o == tbFileIcon )
 	{
 		if ( f.isFile() )
-		{
-			it->setData( idFileIcon, f.canonicalFilePath() );
-			tbFileIcon->setIcon( QIcon( f.canonicalFilePath() ) );
-			it->setIcon( tbFileIcon->icon() );
-		}
+			tool.FileIcon = f.absoluteFilePath();
 	}
 	// others
 	else
 	{
 		if ( f.isFile() )
 		{
-			leCaption->setText( f.baseName() );
-			it->setData( idCaption, leCaption->text() );
-			leFilePath->setText( f.canonicalFilePath() );
-			it->setData( idFilePath, leFilePath->text() );
-			leWorkingPath->setText( f.canonicalPath() );
+			tool.Caption = f.baseName();
+			tool.FilePath = f.absoluteFilePath();
+			tool.WorkingPath = f.absolutePath();
 		}
 		else if ( f.isDir() )
-			leWorkingPath->setText( f.canonicalFilePath() );
-		it->setData( idWorkingPath, leWorkingPath->text() );
+			tool.WorkingPath = f.absoluteFilePath();
 	}
-	// select the current item
-	lwTools->clearSelection();
-	lwTools->setCurrentItem( it );
-	it->setSelected( true );
+	// update item data
+	it->setData( Qt::UserRole, QVariant::fromValue<pTool>( tool ) );
+	updateGui( it, true );
 	// modified state
-	setProperty( "Modified" , true );
+	setWindowModified( true );
 	// we finish
 	return true;
 }
 
+void UIToolsEdit::updateGui( QListWidgetItem* item, bool makeCurrent )
+{
+	const pTool tool = item->data( Qt::UserRole ).value<pTool>();
+	item->setText( tool.Caption );
+	item->setIcon( QIcon( tool.FileIcon ) );
+	leCaption->setText( tool.Caption );
+	tbFileIcon->setIcon( item->icon() );
+	leFilePath->setText( tool.FilePath );
+	leWorkingPath->setText( tool.WorkingPath );
+	cbUseConsoleManager->setChecked( tool.UseConsoleManager );
+	//
+	if ( makeCurrent )
+	{
+		lwTools->clearSelection();
+		lwTools->setCurrentItem( item );
+		item->setSelected( true );
+	}
+}
+
 void UIToolsEdit::on_lwTools_itemSelectionChanged()
 {
-	// get current selected item
-	QListWidgetItem* i = lwTools->selectedItems().value( 0 );
-	// cancel if no item
-	if ( !i )
-		return;
-	// fill dialog infos
-	leCaption->setText( i->text() );
-	tbFileIcon->setIcon( i->icon() );
-	leFilePath->setText( i->data( idFilePath ).toString() );
-	leWorkingPath->setText( i->data( idWorkingPath ).toString() );
+	if ( QListWidgetItem* item = lwTools->selectedItems().value( 0 ) )
+		updateGui( item );
 }
 
 void UIToolsEdit::on_pbNew_clicked()
 {
-	QListWidgetItem* it = new QListWidgetItem( tr( "new Tool" ), lwTools );
-	lwTools->clearSelection();
-	lwTools->setCurrentItem( it );
-	it->setSelected( true );
-	on_lwTools_itemSelectionChanged();
+	QListWidgetItem* item = new QListWidgetItem( tr( "new Tool" ), lwTools );
+	pTool tool = item->data( Qt::UserRole ).value<pTool>();
+	tool.Caption = item->text();
+	item->setData( Qt::UserRole, QVariant::fromValue<pTool>( tool ) );
+	updateGui( item, true );
 	// modified state
-	setProperty( "Modified" , true );
+	setWindowModified( true );
 }
 
 void UIToolsEdit::on_pbDelete_clicked()
 {
 	delete lwTools->selectedItems().value( 0 );
 	if ( lwTools->count() )
-	{
-		lwTools->clearSelection();
-		lwTools->setCurrentRow( 0 );
-		lwTools->currentItem()->setSelected( true );
-		on_lwTools_itemSelectionChanged();
-	}
+		updateGui( lwTools->item( 0 ), true );
 	// modified state
-	setProperty( "Modified" , true );
+	setWindowModified( true );
 }
 
 void UIToolsEdit::on_pbUp_clicked()
@@ -177,7 +174,7 @@ void UIToolsEdit::on_pbUp_clicked()
 	lwTools->insertItem( id -1, it );
 	lwTools->setCurrentRow( id -1 );
 	// modified state
-	setProperty( "Modified" , true );
+	setWindowModified( true );
 }
 
 void UIToolsEdit::on_pbDown_clicked()
@@ -190,7 +187,7 @@ void UIToolsEdit::on_pbDown_clicked()
 	lwTools->insertItem( id +1, it );
 	lwTools->setCurrentRow( id +1 );
 	// modified state
-	setProperty( "Modified" , true );
+	setWindowModified( true );
 }
 
 void UIToolsEdit::helpRequested()
@@ -207,100 +204,124 @@ void UIToolsEdit::helpRequested()
 
 void UIToolsEdit::on_leCaption_editingFinished()
 {
-	QListWidgetItem* it = lwTools->selectedItems().value( 0 );
-	if ( it )
+	if ( QListWidgetItem* it = lwTools->selectedItems().value( 0 ) )
 	{
-		it->setData( idCaption, leCaption->text() );
+		pTool tool = it->data( Qt::UserRole ).value<pTool>();
+		tool.Caption = leCaption->text();
+		it->setData( Qt::UserRole, QVariant::fromValue<pTool>( tool ) );
+		updateGui( it );
 		// modified state
-		setProperty( "Modified" , true );
+		setWindowModified( true );
 	}
 }
 
 void UIToolsEdit::on_tbFileIcon_clicked()
 {
-	QListWidgetItem* it = lwTools->selectedItems().value( 0 );
-	if ( !it )
-		return;
-	QString s = pMonkeyStudio::getImageFileName( tr( "Choose an icon for this tool" ), QString::null, this );
-	if ( s.isEmpty() )
-		return;
-	it->setData( idFileIcon, s );
-	tbFileIcon->setIcon( QIcon( s ) );
-	it->setIcon( tbFileIcon->icon() );
-	// modified state
-	setProperty( "Modified" , true );
+	if ( QListWidgetItem* it = lwTools->selectedItems().value( 0 ) )
+	{
+		pTool tool = it->data( Qt::UserRole ).value<pTool>();
+		QString s = pMonkeyStudio::getImageFileName( tr( "Choose an icon for this tool" ), tool.FileIcon, this );
+		if ( s.isEmpty() )
+			return;
+		tool.FileIcon = s;
+		it->setData( Qt::UserRole, QVariant::fromValue<pTool>( tool ) );
+		updateGui( it );
+		// modified state
+		setWindowModified( true );
+	}
 }
 
 void UIToolsEdit::on_leFilePath_editingFinished()
 {
-	QListWidgetItem* it = lwTools->selectedItems().value( 0 );
-	if ( it )
+	if ( QListWidgetItem* it = lwTools->selectedItems().value( 0 ) )
 	{
-		it->setData( idFilePath, leFilePath->text() );
-		// modified state
-		setProperty( "Modified" , true );
+		pTool tool = it->data( Qt::UserRole ).value<pTool>();
+		tool.FilePath = leFilePath->text();
+		it->setData( Qt::UserRole, QVariant::fromValue<pTool>( tool ) );
+		updateGui( it );
+		setWindowModified( true );
 	}
 }
 
 void UIToolsEdit::on_tbFilePath_clicked()
 {
-	QListWidgetItem* it = lwTools->selectedItems().value( 0 );
-	if ( !it )
-		return;
-	QString s = pMonkeyStudio::getOpenFileName( tr( "Choose the file to execute for this tool" ), QString::null, QString::null, this );
-	if ( s.isEmpty() )
-		return;
-	leFilePath->setText( s );
-	leFilePath->setFocus();
-	// modified state
-	setProperty( "Modified" , true );
+	if ( QListWidgetItem* it = lwTools->selectedItems().value( 0 ) )
+	{
+		pTool tool = it->data( Qt::UserRole ).value<pTool>();
+		QString s = pMonkeyStudio::getOpenFileName( tr( "Choose the file to execute for this tool" ), tool.FilePath, QString::null, this );
+		if ( s.isEmpty() )
+			return;
+		tool.FilePath = s;
+		it->setData( Qt::UserRole, QVariant::fromValue<pTool>( tool ) );
+		updateGui( it );
+		leFilePath->setFocus();
+		setWindowModified( true );
+	}
 }
 
 void UIToolsEdit::on_tbUpdateWorkingPath_clicked()
-{
-	if ( !lwTools->selectedItems().value( 0 ) )
-		return;
-	QFileInfo f( leFilePath->text() );
-	if ( f.exists() && f.absolutePath() != leWorkingPath->text() )
+{	
+	if ( QListWidgetItem* it = lwTools->selectedItems().value( 0 ) )
 	{
-		leWorkingPath->setText( f.absolutePath() );
-		leWorkingPath->setFocus();
-		// modified state
-		setProperty( "Modified" , true );
+		QFileInfo f( leFilePath->text() );
+		if ( f.exists() && f.absolutePath() != leWorkingPath->text() )
+		{
+			pTool tool = it->data( Qt::UserRole ).value<pTool>();
+			tool.WorkingPath = f.absolutePath();
+			it->setData( Qt::UserRole, QVariant::fromValue<pTool>( tool ) );
+			updateGui( it );
+			leWorkingPath->setFocus();
+			setWindowModified( true );
+		}
 	}
 }
 
 void UIToolsEdit::on_leWorkingPath_editingFinished()
 {
-	QListWidgetItem* it = lwTools->selectedItems().value( 0 );
-	if ( it )
+	if ( QListWidgetItem* it = lwTools->selectedItems().value( 0 ) )
 	{
-		it->setData( idWorkingPath, leWorkingPath->text() );
-		// modified state
-		setProperty( "Modified" , true );
+		pTool tool = it->data( Qt::UserRole ).value<pTool>();
+		tool.WorkingPath = leWorkingPath->text();
+		it->setData( Qt::UserRole, QVariant::fromValue<pTool>( tool ) );
+		updateGui( it );
+		setWindowModified( true );
 	}
 }
 
 void UIToolsEdit::on_tbWorkingPath_clicked()
 {
-	QListWidgetItem* it = lwTools->selectedItems().value( 0 );
-	if ( !it )
-		return;
-	QString s = pMonkeyStudio::getExistingDirectory( tr( "Choose the working path for this tool" ), QString::null, this );
-	if ( s.isEmpty() )
-		return;
-	leWorkingPath->setText( s );
-	leWorkingPath->setFocus();
-	// modified state
-	setProperty( "Modified" , true );
+	if ( QListWidgetItem* it = lwTools->selectedItems().value( 0 ) )
+	{
+		pTool tool = it->data( Qt::UserRole ).value<pTool>();
+		QString s = pMonkeyStudio::getExistingDirectory( tr( "Choose the working path for this tool" ), tool.WorkingPath, this );
+		if ( s.isEmpty() )
+			return;
+		tool.WorkingPath = s;
+		it->setData( Qt::UserRole, QVariant::fromValue<pTool>( tool ) );
+		updateGui( it );
+		leWorkingPath->setFocus();
+		setWindowModified( true );
+	}
+}
+
+void UIToolsEdit::on_cbUseConsoleManager_clicked( bool clicked )
+{
+	if ( QListWidgetItem* it = lwTools->selectedItems().value( 0 ) )
+	{
+		pTool tool = it->data( Qt::UserRole ).value<pTool>();
+		tool.UseConsoleManager = clicked;
+		it->setData( Qt::UserRole, QVariant::fromValue<pTool>( tool ) );
+		updateGui( it );
+		setWindowModified( true );
+	}
 }
 
 void UIToolsEdit::accept()
 {
-	if ( property( "Modified" ).toBool() )
+	if ( isWindowModified() )
 	{
 		// get desktop entry
-		QList<pTool> l = pToolsManager::tools( pToolsManager::ttDesktopEntry );
+		const QList<pTool> tools = pToolsManager::tools( pToolsManager::ttDesktopEntry );
 		// get settings
 		pSettings* s = MonkeyCore::settings();
 		// remove all tools entries
@@ -312,21 +333,24 @@ void UIToolsEdit::accept()
 		for ( i = 0; i < lwTools->count(); i++ )
 		{
 			s->setArrayIndex( i );
-			s->setValue( "Caption", lwTools->item( i )->data( idCaption ).toString() );
-			s->setValue( "FileIcon", lwTools->item( i )->data( idFileIcon ).toString() );
-			s->setValue( "FilePath", lwTools->item( i )->data( idFilePath ).toString() );
-			s->setValue( "WorkingPath", lwTools->item( i )->data( idWorkingPath ).toString() );
+			const pTool tool = lwTools->item( i )->data( Qt::UserRole ).value<pTool>();
+			s->setValue( "Caption", tool.Caption );
+			s->setValue( "FileIcon", tool.FileIcon );
+			s->setValue( "FilePath", tool.FilePath );
+			s->setValue( "WorkingPath", tool.WorkingPath );
 			s->setValue( "DesktopEntry", false );
+			s->setValue( "UseConsoleManager", tool.UseConsoleManager );
 		}
 		// write desktop entry
-		foreach ( pTool t, l )
+		foreach ( const pTool& tool, tools )
 		{
 			s->setArrayIndex( i );
-			s->setValue( "Caption", t.Caption );
-			s->setValue( "FileIcon", t.FileIcon );
-			s->setValue( "FilePath", t.FilePath );
-			s->setValue( "WorkingPath", t.WorkingPath );
+			s->setValue( "Caption", tool.Caption );
+			s->setValue( "FileIcon", tool.FileIcon );
+			s->setValue( "FilePath", tool.FilePath );
+			s->setValue( "WorkingPath", tool.WorkingPath );
 			s->setValue( "DesktopEntry", true );
+			s->setValue( "UseConsoleManager", tool.UseConsoleManager );
 			i++;
 		}
 		// end array

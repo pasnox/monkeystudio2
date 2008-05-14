@@ -6,29 +6,17 @@
     <x>0</x>
     <y>0</y>
     <width>300</width>
-    <height>315</height>
+    <height>425</height>
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>Tools Editor</string>
+   <string>Tools Editor [*]</string>
   </property>
   <layout class="QGridLayout" >
-   <property name="leftMargin" >
+   <property name="margin" >
     <number>5</number>
    </property>
-   <property name="topMargin" >
-    <number>5</number>
-   </property>
-   <property name="rightMargin" >
-    <number>5</number>
-   </property>
-   <property name="bottomMargin" >
-    <number>5</number>
-   </property>
-   <property name="horizontalSpacing" >
-    <number>3</number>
-   </property>
-   <property name="verticalSpacing" >
+   <property name="spacing" >
     <number>3</number>
    </property>
    <item rowspan="6" row="0" column="0" >
@@ -47,7 +35,8 @@
       <string>New</string>
      </property>
      <property name="icon" >
-      <iconset resource="../../resources/resources.qrc" >:/tools/icons/tools/add.png</iconset>
+      <iconset resource="../../resources/resources.qrc" >
+       <normaloff>:/tools/icons/tools/add.png</normaloff>:/tools/icons/tools/add.png</iconset>
      </property>
     </widget>
    </item>
@@ -60,7 +49,8 @@
       <string>Delete</string>
      </property>
      <property name="icon" >
-      <iconset resource="../../resources/resources.qrc" >:/tools/icons/tools/remove.png</iconset>
+      <iconset resource="../../resources/resources.qrc" >
+       <normaloff>:/tools/icons/tools/remove.png</normaloff>:/tools/icons/tools/remove.png</iconset>
      </property>
     </widget>
    </item>
@@ -80,7 +70,8 @@
       <string>Up</string>
      </property>
      <property name="icon" >
-      <iconset resource="../../resources/resources.qrc" >:/tools/icons/tools/up.png</iconset>
+      <iconset resource="../../resources/resources.qrc" >
+       <normaloff>:/tools/icons/tools/up.png</normaloff>:/tools/icons/tools/up.png</iconset>
      </property>
     </widget>
    </item>
@@ -93,7 +84,8 @@
       <string>Down</string>
      </property>
      <property name="icon" >
-      <iconset resource="../../resources/resources.qrc" >:/tools/icons/tools/down.png</iconset>
+      <iconset resource="../../resources/resources.qrc" >
+       <normaloff>:/tools/icons/tools/down.png</normaloff>:/tools/icons/tools/down.png</iconset>
      </property>
     </widget>
    </item>
@@ -102,7 +94,7 @@
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
        <width>120</width>
        <height>16</height>
@@ -116,22 +108,10 @@
       <string>Tool</string>
      </property>
      <layout class="QGridLayout" >
-      <property name="leftMargin" >
+      <property name="margin" >
        <number>5</number>
       </property>
-      <property name="topMargin" >
-       <number>5</number>
-      </property>
-      <property name="rightMargin" >
-       <number>5</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>5</number>
-      </property>
-      <property name="horizontalSpacing" >
-       <number>3</number>
-      </property>
-      <property name="verticalSpacing" >
+      <property name="spacing" >
        <number>3</number>
       </property>
       <item row="3" column="2" >
@@ -143,7 +123,8 @@
          <string>Update working path according to file path</string>
         </property>
         <property name="icon" >
-         <iconset resource="../../resources/resources.qrc" >:/tools/icons/tools/update.png</iconset>
+         <iconset resource="../../resources/resources.qrc" >
+          <normaloff>:/tools/icons/tools/update.png</normaloff>:/tools/icons/tools/update.png</iconset>
         </property>
        </widget>
       </item>
@@ -156,7 +137,8 @@
          <string>Browse for a file, it can be an executable file or a file registered with an application ( ie: html file )</string>
         </property>
         <property name="icon" >
-         <iconset resource="../../resources/resources.qrc" >:/tools/icons/tools/file.png</iconset>
+         <iconset resource="../../resources/resources.qrc" >
+          <normaloff>:/tools/icons/tools/file.png</normaloff>:/tools/icons/tools/file.png</iconset>
         </property>
        </widget>
       </item>
@@ -176,7 +158,8 @@
          <string>Browse for the tool working path</string>
         </property>
         <property name="icon" >
-         <iconset resource="../../resources/resources.qrc" >:/tools/icons/tools/folder.png</iconset>
+         <iconset resource="../../resources/resources.qrc" >
+          <normaloff>:/tools/icons/tools/folder.png</normaloff>:/tools/icons/tools/folder.png</iconset>
         </property>
        </widget>
       </item>
@@ -209,7 +192,8 @@
          <string>...</string>
         </property>
         <property name="icon" >
-         <iconset resource="../../resources/resources.qrc" >:/tools/icons/tools/icon.png</iconset>
+         <iconset resource="../../resources/resources.qrc" >
+          <normaloff>:/tools/icons/tools/icon.png</normaloff>:/tools/icons/tools/icon.png</iconset>
         </property>
        </widget>
       </item>
@@ -234,6 +218,13 @@
         </property>
        </widget>
       </item>
+      <item row="6" column="0" colspan="3" >
+       <widget class="QCheckBox" name="cbUseConsoleManager" >
+        <property name="text" >
+         <string>Execute using console manager</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -246,7 +237,7 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons" >
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>
