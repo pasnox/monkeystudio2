@@ -108,6 +108,7 @@ public slots:
 	void editCut_triggered();
 	void editCopy_triggered();
 	void editPaste_triggered();
+	void editSearch_triggered();
 	void editGoTo_triggered();
 	void editExpandAbbreviation_triggered();
 	void editPrepareAPIs_triggered();

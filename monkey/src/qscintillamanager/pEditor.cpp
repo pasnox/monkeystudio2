@@ -43,8 +43,6 @@
 #include <QTextCodec>
 #include <QRegExp>
 
-#include <QDebug>
-
 bool pEditor::mPasteAvailableInit = false;
 bool pEditor::mPasteAvailable = false;
 

@@ -137,6 +137,8 @@ public slots:
 	virtual void goTo() = 0;
 	// go to position for file and highlight line according to bool
 	virtual void goTo( const QString&, const QPoint&, bool = false ) = 0;
+	// search in the file
+	virtual void invokeSearch () {};
 	// ask to save file
 	virtual void saveFile( const QString& ) = 0;
 	// ask to backup current file

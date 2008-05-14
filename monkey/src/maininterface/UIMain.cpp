@@ -336,7 +336,7 @@ void UIMain::initConnections()
 	connect( menuBar()->action( "mEdit/aCut" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editCut_triggered() ) );
 	connect( menuBar()->action( "mEdit/aCopy" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editCopy_triggered() ) );
 	connect( menuBar()->action( "mEdit/aPaste" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editPaste_triggered() ) );
-	//connect( menuBar()->action( "mEdit/aSearchFile" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editSearchReplace_triggered() ) );
+	connect( menuBar()->action( "mEdit/mSearchReplace/aSearchFile" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editSearch_triggered() ) );
 	//connect( menuBar()->action( "mEdit/aSearchPrevious" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editSearchPrevious_triggered() ) );
 	//connect( menuBar()->action( "mEdit/aSearchNext" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editSearchNext_triggered() ) );
 	connect( menuBar()->action( "mEdit/aGoTo" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editGoTo_triggered() ) );

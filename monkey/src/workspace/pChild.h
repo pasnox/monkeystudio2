@@ -140,6 +140,7 @@ protected slots:
 
 public slots:
 	void setWindowModified( bool moodified );
+	void invokeSearch ();
 };
 
 #endif // PCHILD_H

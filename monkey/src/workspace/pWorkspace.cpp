@@ -719,6 +719,13 @@ void pWorkspace::editPaste_triggered()
 		c->paste();
 }
 
+void pWorkspace::editSearch_triggered()
+{
+	pAbstractChild* c = currentChild();
+	if ( c )
+		c->invokeSearch();
+}
+
 void pWorkspace::editGoTo_triggered()
 {
 	pAbstractChild* c = currentChild();
