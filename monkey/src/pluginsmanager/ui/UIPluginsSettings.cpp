@@ -9,21 +9,21 @@
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
 ** Home Page : http://www.monkeystudio.org
 **
-    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
 #include "UIPluginsSettings.h"
@@ -79,7 +79,7 @@ void UIPluginsSettings::updateList()
 		QListWidgetItem* it = new QListWidgetItem( bp->infos().Name, lwNames ); // create item
 		it->setData( Qt::UserRole, i ); // plugin index
 		it->setData( Qt::UserRole +1, swWidgets->addWidget( bp->settingsWidget() ) ); // settings widget index
-		it->setData( Qt::UserRole +2, bp->infos().Type ); // plugin type
+		it->setData( Qt::UserRole +2, QVariant::fromValue<BasePlugin::PluginInfos>( bp->infos() ) ); // plugin type
 		it->setData( Qt::UserRole +3, MonkeyCore::settings()->value( QString( "Plugins/%1" ).arg( bp->infos().Name ), true ).toBool() ); // plugin auto install
 	}
 }
@@ -90,7 +90,7 @@ void UIPluginsSettings::on_cbType_currentIndexChanged( int i )
 	for ( int j = 0; j < lwNames->count(); j++ )
 	{
 		QListWidgetItem* it = lwNames->item( j ); // get item
-		int pt = it->data( Qt::UserRole +2 ).toInt(); // get item plugin type
+		int pt = it->data( Qt::UserRole +2 ).value<BasePlugin::PluginInfos>().Type; // get item plugin type
 		int ct = cbType->itemData( i ).toInt(); // get current visible type
 		it->setHidden( ( ct != BasePlugin::iAll && ct != pt ) ? true : false ); // show or hide the plugin
 		it->setSelected( false );
