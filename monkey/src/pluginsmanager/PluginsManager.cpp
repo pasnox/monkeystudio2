@@ -247,4 +247,4 @@ InterpreterPlugin* PluginsManager::currentInterpreter()
 { return mInterpreter; }
 
 void PluginsManager::manageRequested()
-{ UIPluginsSettings::instance()->exec(); }
+{ ( new UIPluginsSettings() )->show(); }
