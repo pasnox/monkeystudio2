@@ -32,6 +32,7 @@
 #include "../PluginsManager.h"
 
 #include <QMetaEnum>
+#include <QDebug>
 
 UIPluginsSettings::UIPluginsSettings( QWidget* p )
 	: QDialog( p ), mPluginsManager( MonkeyCore::pluginsManager() )
@@ -44,92 +45,47 @@ UIPluginsSettings::UIPluginsSettings( QWidget* p )
 	const QMetaObject mo = BasePlugin::staticMetaObject;
 	QMetaEnum e = mo.enumerator( mo.indexOfEnumerator( "Type" ) );
 	for ( int i = 0; i < e.keyCount() -1; i++ )
-		cbType->addItem( e.key( i ), e.value( i ) );
+		cbPluginType->addItem( e.key( i ), e.value( i ) );
+	
 	// update plugins list
 	updateList();
-	
-	// activate first plugin
-	if ( lwNames->count() )
-		lwNames->item( 0 )->setSelected( true );
-	
-	//saPlugins
-	QVBoxLayout* vl = new QVBoxLayout( saPlugins->widget() );
-	vl->setMargin( 0 );
-	
-	foreach ( BasePlugin* bp, mPluginsManager->plugins() )
-	{
-		UIPluginsSettingsElement* pse = new UIPluginsSettingsElement( bp, this );
-		vl->addWidget( pse );
-		QFrame* f = new QFrame( this );
-		f->setFrameShape( QFrame::HLine );
-		vl->addWidget( f );
-	}
-}
-
-void UIPluginsSettings::clearInfos()
-{
-	leCaption->clear();
-	leName->clear();
-	leVersion->clear();
-	leType->clear();
-	leAuthor->clear();
-	teDescription->clear();
-	cbEnableUponStart->setChecked( false );
-	cbEnabled->setChecked( false );
-	swWidgets->setCurrentIndex( -1 );
 }
 
 void UIPluginsSettings::updateList()
 {
-	// clear pages
-	while ( swWidgets->count() )
-		delete swWidgets->widget( 0 );
-	// clear items
-	lwNames->clear();
-	// create items
-	for ( int i = 0; i < mPluginsManager->plugins().count(); i++ )
+	// clear list
+	lwPlugins->clear();
+	
+	// create items and editor foreach plugin
+	foreach ( BasePlugin* bp, mPluginsManager->plugins() )
 	{
-		BasePlugin* bp = mPluginsManager->plugins().at( i ); // got plugin
-		QListWidgetItem* it = new QListWidgetItem( bp->infos().Name, lwNames ); // create item
-		it->setData( Qt::UserRole, i ); // plugin index
-		it->setData( Qt::UserRole +1, swWidgets->addWidget( bp->settingsWidget() ) ); // settings widget index
-		it->setData( Qt::UserRole +2, QVariant::fromValue<BasePlugin::PluginInfos>( bp->infos() ) ); // plugin type
-		it->setData( Qt::UserRole +3, MonkeyCore::settings()->value( QString( "Plugins/%1" ).arg( bp->infos().Name ), true ).toBool() ); // plugin auto install
+		UIPluginsSettingsElement* pse = new UIPluginsSettingsElement( bp, this );
+		QListWidgetItem* item = new QListWidgetItem( lwPlugins );
+		item->setSizeHint( pse->sizeHint() );
+		lwPlugins->setItemWidget( item, pse );
 	}
 }
 
-void UIPluginsSettings::on_cbType_currentIndexChanged( int i )
+void UIPluginsSettings::on_cbPluginType_currentIndexChanged( int id )
 {
+	// clear selection
+	lwPlugins->clearSelection();
+	lwPlugins->setCurrentItem( 0 );
+	// get current type
+	BasePlugin::Type mType = (BasePlugin::Type)cbPluginType->itemData( id ).toInt();
 	// show/hide item according to type
-	for ( int j = 0; j < lwNames->count(); j++ )
+	for ( int i = 0; i < lwPlugins->count(); i++ )
 	{
-		QListWidgetItem* it = lwNames->item( j ); // get item
-		int pt = it->data( Qt::UserRole +2 ).value<BasePlugin::PluginInfos>().Type; // get item plugin type
-		int ct = cbType->itemData( i ).toInt(); // get current visible type
-		it->setHidden( ( ct != BasePlugin::iAll && ct != pt ) ? true : false ); // show or hide the plugin
-		it->setSelected( false );
+		QListWidgetItem* item = lwPlugins->item( i );
+		UIPluginsSettingsElement* pse = qobject_cast<UIPluginsSettingsElement*>( lwPlugins->itemWidget( item ) );
+		item->setHidden( mType != BasePlugin::iAll && !pse->plugin()->infos().Type.testFlag( mType ) );
+		qWarning() << "plugin:" << pse->plugin()->infos().Caption << "type:" << pse->plugin()->infos().Type << "mtype:" << mType << "test:" << pse->plugin()->infos().Type.testFlag( mType );
 	}
-	
-	// select the first visible item if current is hidden
-	if ( lwNames->count() )
-	{
-		for ( int j = 0; j < lwNames->count(); j++ )
-		{
-			QListWidgetItem* it = lwNames->item( j ); // get item
-			if ( !it->isHidden() )
-			{
-				it->setSelected( true );
-				return;
-			}
-		}
-	}
-	
-	// in case of no entry/plugins
-	clearInfos();
 }
 
 void UIPluginsSettings::on_lwNames_itemSelectionChanged()
 {
+	/*
 	// get item
 	QListWidgetItem* i = lwNames->selectedItems().value( 0 );
 	
@@ -148,20 +104,24 @@ void UIPluginsSettings::on_lwNames_itemSelectionChanged()
 	cbEnableUponStart->setChecked( i->data( Qt::UserRole +3 ).toBool() );
 	cbEnabled->setChecked( pi.Enabled );
 	swWidgets->setCurrentIndex( i->data( Qt::UserRole +1 ).toInt() );
+	*/
 }
 
 void UIPluginsSettings::on_cbEnableUponStart_clicked( bool b )
 {
+	/*
 	// get item
 	QListWidgetItem* it = lwNames->selectedItems().value( 0 );
 	
 	// if item and visible
 	if ( it && !it->isHidden() )
 		it->setData( Qt::UserRole +3, b );
+		*/
 }
 
 void UIPluginsSettings::on_cbEnabled_clicked( bool b )
 {
+	/*
 	// get item
 	QListWidgetItem* it = lwNames->selectedItems().value( 0 );
 	
@@ -175,10 +135,12 @@ void UIPluginsSettings::on_cbEnabled_clicked( bool b )
 		// update check state
 		cbEnabled->setChecked( bp->isEnabled() );
 	}
+	*/
 }
 
 void UIPluginsSettings::accept()
 {
+	/*
 	// save auto install states
 	for ( int i = 0; i < lwNames->count(); i++ )
 	{
@@ -188,4 +150,5 @@ void UIPluginsSettings::accept()
 	
 	// close dialog
 	QDialog::accept();
+	*/
 }

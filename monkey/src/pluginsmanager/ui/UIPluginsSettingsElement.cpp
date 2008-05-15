@@ -6,10 +6,17 @@ UIPluginsSettingsElement::UIPluginsSettingsElement( BasePlugin* plugin, QWidget*
 {
 	Q_ASSERT( plugin );
 	mPlugin = plugin;
+	
 	// setup dialog
 	setupUi( this );
 	BasePlugin::PluginInfos infos = mPlugin->infos();
+	
 	//lIcon->setPixmap();
 	lTitle->setText( infos.Caption );
 	lDescription->setText( infos.Description );
+}
+
+BasePlugin* UIPluginsSettingsElement::plugin() const
+{
+	return mPlugin;
 }

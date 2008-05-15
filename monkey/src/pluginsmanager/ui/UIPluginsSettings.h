@@ -43,7 +43,6 @@ class Q_MONKEY_EXPORT UIPluginsSettings : public QDialog, public Ui::UIPluginsSe
 	friend class QSingleton<UIPluginsSettings>;
 	
 public:
-	void clearInfos();
 	void updateList();
 	
 private:
@@ -51,7 +50,7 @@ private:
 	PluginsManager* mPluginsManager;
 	
 private slots:
-	void on_cbType_currentIndexChanged( int );
+	void on_cbPluginType_currentIndexChanged( int );
 	void on_lwNames_itemSelectionChanged();
 	void on_cbEnableUponStart_clicked( bool );
 	void on_cbEnabled_clicked( bool );

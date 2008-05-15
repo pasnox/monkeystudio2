@@ -13,6 +13,7 @@ class Q_MONKEY_EXPORT UIPluginsSettingsElement : public QWidget, public Ui::UIPl
 	
 public:
 	UIPluginsSettingsElement( BasePlugin* plugin, QWidget* parent = 0 );
+	BasePlugin* plugin() const;
 
 protected:
 	BasePlugin* mPlugin;
