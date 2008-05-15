@@ -50,16 +50,16 @@ class Q_MONKEY_EXPORT BasePlugin : public QObject
 public:
 	// plugin type enums
 	enum Type
-	{	iAll = -1,
-		iBase,
-		iChild,
-		iCLITool,
-		iBuilder,
-		iCompiler,
-		iDebugger,
-		iInterpreter,
-		iXUP,
-		iLast };
+	{	iAll = 0x0,
+		iBase = 0x1,
+		iChild = 0x2,
+		iCLITool = 0x4,
+		iBuilder = 0x8,
+		iCompiler = 0x10,
+		iDebugger = 0x20,
+		iInterpreter = 0x40,
+		iXUP = 0x80,
+		iLast = 0x100 };
 	
 	Q_DECLARE_FLAGS( Types, Type )
 		
