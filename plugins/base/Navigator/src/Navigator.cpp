@@ -9,21 +9,21 @@
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
 ** Home Page : http://www.monkeystudio.org
 **
-    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
 #include <QPushButton>
@@ -112,8 +112,8 @@ int Navigator::getExpandMask (void)
 
 void Navigator::currentFileChanged(pAbstractChild*, const QString absPath)
 {
- 	if (fileLock->isChecked())
-        return;  //view is locked, do not need to change
+	if (fileLock->isChecked())
+		return;  //view is locked, do not need to change
 	showFile (absPath);
 }
 
@@ -132,15 +132,15 @@ void Navigator::showFile (const QString& absPath)
 // 	if (	not bar->isTabRaised (bar->tabIndexOf (dockwgt)) )
 // 		return;  //do not need do something, if tab not active
 	EntityContainer* oldWidget = currFileTreew; //save current TreeView
- 	currFileTreew = fileTrees [absPath]; //Try to find Treew for requested file in the cache
+	currFileTreew = fileTrees [absPath]; //Try to find Treew for requested file in the cache
 	if ( currFileTreew == NULL ) //not finded
 	{
 		currFileTreew = new EntityContainer ( NULL);
 		fileTrees.insert ( absPath, currFileTreew );
 	}//OK, not currFileTreew - actual for requested file
-    for ( int i = 0; i< files.size(); i++)
+	for ( int i = 0; i< files.size(); i++)
 	{
-        currFileTreew->updateFileInfo ( files[i] );	
+		currFileTreew->updateFileInfo ( files[i] );	
 	}
 	dockwgt->setWindowTitle (tr("Navigator")+": "+ QFileInfo (absPath).fileName());
 	fileWidget->setUpdatesEnabled(false);
@@ -152,8 +152,8 @@ void Navigator::showFile (const QString& absPath)
 		dockwgt->hide();
 	else
 		dockwgt->show();
- */
-	fileWidget->setUpdatesEnabled(true);
+	*/
+		fileWidget->setUpdatesEnabled(true);
 }
 
 
