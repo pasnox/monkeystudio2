@@ -6,29 +6,17 @@
     <x>0</x>
     <y>0</y>
     <width>640</width>
-    <height>300</height>
+    <height>303</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Plugins Settings</string>
   </property>
   <layout class="QGridLayout" >
-   <property name="leftMargin" >
+   <property name="margin" >
     <number>5</number>
    </property>
-   <property name="topMargin" >
-    <number>5</number>
-   </property>
-   <property name="rightMargin" >
-    <number>5</number>
-   </property>
-   <property name="bottomMargin" >
-    <number>5</number>
-   </property>
-   <property name="horizontalSpacing" >
-    <number>3</number>
-   </property>
-   <property name="verticalSpacing" >
+   <property name="spacing" >
     <number>3</number>
    </property>
    <item row="0" column="0" >
@@ -36,16 +24,7 @@
      <property name="spacing" >
       <number>3</number>
      </property>
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
+     <property name="margin" >
       <number>0</number>
      </property>
      <item>
@@ -92,29 +71,25 @@
    <item row="0" column="1" colspan="2" >
     <widget class="QTabWidget" name="twPlugin" >
      <property name="currentIndex" >
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="wInformations" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>381</width>
+        <height>220</height>
+       </rect>
+      </property>
       <attribute name="title" >
        <string>Informations</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="leftMargin" >
+       <property name="margin" >
         <number>5</number>
        </property>
-       <property name="topMargin" >
-        <number>5</number>
-       </property>
-       <property name="rightMargin" >
-        <number>5</number>
-       </property>
-       <property name="bottomMargin" >
-        <number>5</number>
-       </property>
-       <property name="horizontalSpacing" >
-        <number>3</number>
-       </property>
-       <property name="verticalSpacing" >
+       <property name="spacing" >
         <number>3</number>
        </property>
        <item row="0" column="0" >
@@ -218,9 +193,52 @@
       </layout>
      </widget>
      <widget class="QStackedWidget" name="swWidgets" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>381</width>
+        <height>220</height>
+       </rect>
+      </property>
       <attribute name="title" >
        <string>Configuration</string>
       </attribute>
+     </widget>
+     <widget class="QWidget" name="tab" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>381</width>
+        <height>220</height>
+       </rect>
+      </property>
+      <attribute name="title" >
+       <string>Page</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout" >
+       <item>
+        <widget class="QScrollArea" name="saPlugins" >
+         <property name="widgetResizable" >
+          <bool>true</bool>
+         </property>
+         <property name="alignment" >
+          <set>Qt::AlignHCenter|Qt::AlignTop</set>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents" >
+          <property name="geometry" >
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>367</width>
+            <height>206</height>
+           </rect>
+          </property>
+         </widget>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>
@@ -229,7 +247,7 @@
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
        <width>521</width>
        <height>27</height>
@@ -261,8 +279,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>574</x>
-     <y>436</y>
+     <x>634</x>
+     <y>297</y>
     </hint>
     <hint type="destinationlabel" >
      <x>330</x>

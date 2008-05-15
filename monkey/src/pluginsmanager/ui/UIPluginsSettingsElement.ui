@@ -1,0 +1,111 @@
+<ui version="4.0" >
+ <class>UIPluginsSettingsElement</class>
+ <widget class="QWidget" name="UIPluginsSettingsElement" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>640</width>
+    <height>80</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Plugins Settings Element</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout" >
+   <item rowspan="2" row="0" column="1" >
+    <widget class="QLabel" name="lIcon" >
+     <property name="minimumSize" >
+      <size>
+       <width>64</width>
+       <height>64</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>64</width>
+       <height>64</height>
+      </size>
+     </property>
+     <property name="scaledContents" >
+      <bool>true</bool>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2" >
+    <widget class="QLabel" name="lTitle" >
+     <property name="font" >
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3" >
+    <widget class="QPushButton" name="pbSettings" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string>Settings</string>
+     </property>
+     <property name="icon" >
+      <iconset resource="../../resources/resources.qrc" >
+       <normaloff>:/edit/icons/edit/settings.png</normaloff>:/edit/icons/edit/settings.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="4" >
+    <widget class="QPushButton" name="pbAbout" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string>About</string>
+     </property>
+     <property name="icon" >
+      <iconset resource="../../resources/resources.qrc" >
+       <normaloff>:/help/icons/help/qt.png</normaloff>:/help/icons/help/qt.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item rowspan="2" row="0" column="0" >
+    <widget class="QCheckBox" name="cbEnabled" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2" colspan="3" >
+    <widget class="QLabel" name="lDescription" >
+     <property name="alignment" >
+      <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+     </property>
+     <property name="wordWrap" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../resources/resources.qrc" />
+ </resources>
+ <connections/>
+</ui>

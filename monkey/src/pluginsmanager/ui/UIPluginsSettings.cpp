@@ -27,6 +27,7 @@
 **
 ****************************************************************************/
 #include "UIPluginsSettings.h"
+#include "UIPluginsSettingsElement.h"
 #include "../../coremanager/MonkeyCore.h"
 #include "../PluginsManager.h"
 
@@ -50,6 +51,19 @@ UIPluginsSettings::UIPluginsSettings( QWidget* p )
 	// activate first plugin
 	if ( lwNames->count() )
 		lwNames->item( 0 )->setSelected( true );
+	
+	//saPlugins
+	QVBoxLayout* vl = new QVBoxLayout( saPlugins->widget() );
+	vl->setMargin( 0 );
+	
+	foreach ( BasePlugin* bp, mPluginsManager->plugins() )
+	{
+		UIPluginsSettingsElement* pse = new UIPluginsSettingsElement( bp, this );
+		vl->addWidget( pse );
+		QFrame* f = new QFrame( this );
+		f->setFrameShape( QFrame::HLine );
+		vl->addWidget( f );
+	}
 }
 
 void UIPluginsSettings::clearInfos()

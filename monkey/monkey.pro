@@ -60,7 +60,9 @@ FORMS	*= src/maininterface/ui/UITranslator.ui \
 	src/pluginsmanager/ui/UIPluginsSettings.ui \
 	src/pluginsmanager/ui/UICLIToolSettings.ui \
 	src/pluginsmanager/ui/UIBuilderSettings.ui \
-	src/pluginsmanager/ui/UICompilerSettings.ui
+	src/pluginsmanager/ui/UICompilerSettings.ui \
+	src/pluginsmanager/ui/UIPluginsSettingsElement.ui \
+	src/pluginsmanager/ui/UIPluginsSettingsAbout.ui
 
 HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/maininterface/ui/UIAbout.h \
@@ -103,7 +105,8 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/pluginsmanager/ui/UICompilerSettings.h \
 	src/settingsmanager/Settings.h \
 	src/coremanager/MonkeyCore.h \
-	src/queuedstatusbar/QueuedStatusBar.h
+	src/queuedstatusbar/QueuedStatusBar.h \
+	src/pluginsmanager/ui/UIPluginsSettingsElement.h
 
 SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/maininterface/ui/UIAbout.cpp \
@@ -139,7 +142,8 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/pluginsmanager/ui/UICompilerSettings.cpp \
 	src/settingsmanager/Settings.cpp \
 	src/coremanager/MonkeyCore.cpp \
-	src/queuedstatusbar/QueuedStatusBar.cpp
+	src/queuedstatusbar/QueuedStatusBar.cpp \
+	src/pluginsmanager/ui/UIPluginsSettingsElement.cpp
 
 mac:SOURCES	*= src/toolsmanager/pDesktopApplications_mac.cpp
 else:unix:SOURCES	*= src/toolsmanager/pDesktopApplications_unix.cpp
