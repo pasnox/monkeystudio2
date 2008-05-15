@@ -19,10 +19,10 @@ CONFIG( debug, debug|release ) {
 	#Debug
 	message( Building in DEBUG )
 	CONFIG	+= console
-	unix:PACKAGE_TARGET	= $$join(PACKAGE_TARGET,,,_debug)
-	else:PACKAGE_TARGET	= $$join(PACKAGE_TARGET,,,d)
-	unix:TARGET	= $$join(TARGET,,,_debug)
-	else:TARGET	= $$join(TARGET,,,d)
+	unix:PACKAGE_TARGET	= $$quote($$join(PACKAGE_TARGET,,,_debug))
+	else:PACKAGE_TARGET	= $$quote($$join(PACKAGE_TARGET,,,d))
+	unix:TARGET	= $$quote($$join(TARGET,,,_debug))
+	else:TARGET	= $$quote($$join(TARGET,,,d))
 	unix:OBJECTS_DIR	= $${PACKAGE_BUILD_PATH}/debug/.obj/unix
 	win32:OBJECTS_DIR	= $${PACKAGE_BUILD_PATH}/debug/.obj/win32
 	mac:OBJECTS_DIR	= $${PACKAGE_BUILD_PATH}/debug/.obj/mac
@@ -32,6 +32,7 @@ CONFIG( debug, debug|release ) {
 } else {
 	#Release
 	message( Building in RELEASE )
+	mac:TARGET	= $$quote($$TARGET)
 	unix:OBJECTS_DIR	= $${PACKAGE_BUILD_PATH}/release/.obj/unix
 	win32:OBJECTS_DIR	= $${PACKAGE_BUILD_PATH}/release/.obj/win32
 	mac:OBJECTS_DIR	= $${PACKAGE_BUILD_PATH}/release/.obj/mac
@@ -72,8 +73,8 @@ isEmpty( PACKAGE_DATAS ) {
 	else:PACKAGE_DATAS	= /usr/local/lib/$${PACKAGE_TARGET}
 } else:unix:!mac:PACKAGE_DATAS	= $${PACKAGE_DATAS}/lib/$${PACKAGE_TARGET}
 
-PACKAGE_PREFIX	= $$quote( $$PACKAGE_PREFIX )
-PACKAGE_DATAS	= $$quote( $$PACKAGE_DATAS )
+PACKAGE_PREFIX	= $$quote($$PACKAGE_PREFIX)
+PACKAGE_DATAS	= $$quote($$PACKAGE_DATAS)
 
 # define package install paths so source code can use them
 DEFINES	*= "PACKAGE_PREFIX=\"\\\"$${PACKAGE_PREFIX}\\\"\"" \
