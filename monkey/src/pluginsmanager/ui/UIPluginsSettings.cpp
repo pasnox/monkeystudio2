@@ -31,21 +31,21 @@
 #include "../../coremanager/MonkeyCore.h"
 #include "../PluginsManager.h"
 
-#include <QMetaEnum>
-#include <QDebug>
-
 UIPluginsSettings::UIPluginsSettings( QWidget* p )
-	: QDialog( p ), mPluginsManager( MonkeyCore::pluginsManager() )
+	: QDialog( p )
 {
 	// setup dialog
 	setupUi( this );
+	setWindowModality( Qt::ApplicationModal );
 	setAttribute( Qt::WA_DeleteOnClose );
 	
 	// fill list with plugins type
-	const QMetaObject mo = BasePlugin::staticMetaObject;
-	QMetaEnum e = mo.enumerator( mo.indexOfEnumerator( "Type" ) );
-	for ( int i = 0; i < e.keyCount() -1; i++ )
-		cbPluginType->addItem( e.key( i ), e.value( i ) );
+	for ( int i = BasePlugin::iAll; i < BasePlugin::iLast; i++ )
+	{
+		const QString s = BasePlugin::typeToString( (BasePlugin::Type)i );
+		if ( !s.isEmpty() && cbPluginType->findData( i ) == -1 )
+			cbPluginType->addItem( s, i );
+	}
 	
 	// update plugins list
 	updateList();
@@ -57,7 +57,7 @@ void UIPluginsSettings::updateList()
 	lwPlugins->clear();
 	
 	// create items and editor foreach plugin
-	foreach ( BasePlugin* bp, mPluginsManager->plugins() )
+	foreach ( BasePlugin* bp, MonkeyCore::pluginsManager()->plugins() )
 	{
 		UIPluginsSettingsElement* pse = new UIPluginsSettingsElement( bp, this );
 		QListWidgetItem* item = new QListWidgetItem( lwPlugins );
@@ -79,76 +79,5 @@ void UIPluginsSettings::on_cbPluginType_currentIndexChanged( int id )
 		QListWidgetItem* item = lwPlugins->item( i );
 		UIPluginsSettingsElement* pse = qobject_cast<UIPluginsSettingsElement*>( lwPlugins->itemWidget( item ) );
 		item->setHidden( mType != BasePlugin::iAll && !pse->plugin()->infos().Type.testFlag( mType ) );
-		qWarning() << "plugin:" << pse->plugin()->infos().Caption << "type:" << pse->plugin()->infos().Type << "mtype:" << mType << "test:" << pse->plugin()->infos().Type.testFlag( mType );
 	}
-}
-
-void UIPluginsSettings::on_lwNames_itemSelectionChanged()
-{
-	/*
-	// get item
-	QListWidgetItem* i = lwNames->selectedItems().value( 0 );
-	
-	// if not item return
-	if ( !i )
-		return;
-	
-	// update plugin infos
-	BasePlugin::PluginInfos pi = mPluginsManager->plugins().at( i->data( Qt::UserRole ).toInt() )->infos();
-	leCaption->setText( pi.Caption );
-	leName->setText( pi.Name );
-	leVersion->setText( pi.Version );
-	leType->setText( QString::number( pi.Type ) );
-	leAuthor->setText( pi.Author );
-	teDescription->setPlainText( pi.Description );
-	cbEnableUponStart->setChecked( i->data( Qt::UserRole +3 ).toBool() );
-	cbEnabled->setChecked( pi.Enabled );
-	swWidgets->setCurrentIndex( i->data( Qt::UserRole +1 ).toInt() );
-	*/
-}
-
-void UIPluginsSettings::on_cbEnableUponStart_clicked( bool b )
-{
-	/*
-	// get item
-	QListWidgetItem* it = lwNames->selectedItems().value( 0 );
-	
-	// if item and visible
-	if ( it && !it->isHidden() )
-		it->setData( Qt::UserRole +3, b );
-		*/
-}
-
-void UIPluginsSettings::on_cbEnabled_clicked( bool b )
-{
-	/*
-	// get item
-	QListWidgetItem* it = lwNames->selectedItems().value( 0 );
-	
-	// if item and visible
-	if ( it && !it->isHidden() )
-	{
-		// get plugin
-		BasePlugin* bp = mPluginsManager->plugins().at( lwNames->row( it ) );
-		// enable it according to b
-		bp->setEnabled( b );
-		// update check state
-		cbEnabled->setChecked( bp->isEnabled() );
-	}
-	*/
-}
-
-void UIPluginsSettings::accept()
-{
-	/*
-	// save auto install states
-	for ( int i = 0; i < lwNames->count(); i++ )
-	{
-		QListWidgetItem* it = lwNames->item( i );
-		MonkeyCore::settings()->setValue( QString( "Plugins/%1" ).arg( it->text() ), it->data( Qt::UserRole +3 ).toBool() );
-	}
-	
-	// close dialog
-	QDialog::accept();
-	*/
 }

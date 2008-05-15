@@ -35,27 +35,18 @@
 
 #include <QApplication>
 
-class PluginsManager;
-
-class Q_MONKEY_EXPORT UIPluginsSettings : public QDialog, public Ui::UIPluginsSettings, public QSingleton<UIPluginsSettings>
+class Q_MONKEY_EXPORT UIPluginsSettings : public QDialog, public Ui::UIPluginsSettings
 {
 	Q_OBJECT
-	friend class QSingleton<UIPluginsSettings>;
-	
+
 public:
+	UIPluginsSettings( QWidget* = QApplication::activeWindow() );
+	
+protected:
 	void updateList();
 	
-private:
-	UIPluginsSettings( QWidget* = QApplication::activeWindow() );
-	PluginsManager* mPluginsManager;
-	
-private slots:
+protected slots:
 	void on_cbPluginType_currentIndexChanged( int );
-	void on_lwNames_itemSelectionChanged();
-	void on_cbEnableUponStart_clicked( bool );
-	void on_cbEnabled_clicked( bool );
-	virtual void accept();
-	
 };
 
 #endif // UIPLUGINSSETTINGS_H
