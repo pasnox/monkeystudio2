@@ -73,6 +73,7 @@ public:
 		QStringList Languages; // language this plugin is for, default empty mean all
 		QString Name; // the plugin name for version control
 		QString Version; // the plugin version for version control
+		QString License; // the plugin license
 		bool Enabled; // to know if this plugin is enabled
 	};
 	
@@ -84,8 +85,64 @@ public:
 	virtual PluginInfos infos() const
 	{ return mPluginInfos; }
 	
+	static QString typeToString( BasePlugin::Type type )
+	{
+		switch ( type )
+		{
+			case BasePlugin::iAll:
+				return QCoreApplication::translate( "BasePlugin", "All" );
+				break;
+			case BasePlugin::iBase:
+				return QCoreApplication::translate( "BasePlugin", "Basic" );
+				break;
+			case BasePlugin::iChild:
+				return QCoreApplication::translate( "BasePlugin", "Child" );
+				break;
+			case BasePlugin::iCLITool:
+				return QCoreApplication::translate( "BasePlugin", "Command Line Tool" );
+				break;
+			case BasePlugin::iBuilder:
+				return QCoreApplication::translate( "BasePlugin", "Builder" );
+				break;
+			case BasePlugin::iCompiler:
+				return QCoreApplication::translate( "BasePlugin", "Compiler" );
+				break;
+			case BasePlugin::iDebugger:
+				return QCoreApplication::translate( "BasePlugin", "Debugger" );
+				break;
+			case BasePlugin::iInterpreter:
+				return QCoreApplication::translate( "BasePlugin", "Interpreter" );
+				break;
+			case BasePlugin::iXUP:
+				return QCoreApplication::translate( "BasePlugin", "XUP Project" );
+				break;
+			case BasePlugin::iLast:
+				return QCoreApplication::translate( "BasePlugin", "NaN" );
+				break;
+			default:
+				return QString::null;
+				break;
+		}
+	}
+	
+	static QString completeTypeToString( BasePlugin::Types type )
+	{
+		QStringList types;
+		for ( int i = BasePlugin::iAll; i < BasePlugin::iLast; i++ )
+		{
+			const QString s = typeToString( (BasePlugin::Type)i );
+			if ( !s.isEmpty() && !types.contains( s ) )
+				if ( type.testFlag( (BasePlugin::Type)i ) )
+					types << s;
+		}
+		return types.join( ", " );
+	}
+	
+	virtual QPixmap pixmap() const
+	{ return QPixmap(); }
+	
 	virtual QWidget* settingsWidget()
-	{ return new QLabel( QObject::tr( "This plugin can't be configured" ) ); }
+	{ return 0; }
 	
 	virtual bool isEnabled() const
 	{ return mPluginInfos.Enabled; }
