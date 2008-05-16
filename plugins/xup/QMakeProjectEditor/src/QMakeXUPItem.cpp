@@ -326,7 +326,9 @@ QString QMakeXUPItem::interpretedVariable( const QString& s, const XUPItem* it, 
 
 QString QMakeXUPItem::defaultInterpretedValue() const
 {
-	QRegExp rx( "\\$\\$?[\\{\\(\\[]?(\\w+)[\\}\\)\\]]?" );
+	//QRegExp rx( "\\$\\$?[\\{\\(\\[]?(\\w+)[\\}\\)\\]]?" );
+	//\$\$?[\w\s]+[\{\(\[]
+	QRegExp rx( "\\$\\$?[\\{\\(\\[]?(\\w+(?!\\w*\\s*[()]))[\\}\\)\\]]?" );
 	const QString dv = defaultValue();
 	QString v = dv;
 	int p = 0;
