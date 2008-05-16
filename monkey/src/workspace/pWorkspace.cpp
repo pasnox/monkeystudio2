@@ -193,7 +193,7 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 
 	// open file
 	c->openFile( s );
-    
+	
 	// set correct document if needed ( sdi hack )
 	if ( currentDocument() != c )
 	{
@@ -442,9 +442,9 @@ void pWorkspace::projectCustomActionTriggered()
 				// try reading already saved binary
 				s = cmd.project()->projectSettingsValue( a->text().replace( ' ', '_' ).toUpper() );
 				if ( !s.isEmpty() )
-					s = cmd.project()->filePath( s );
+					s = cmd.project()->topLevelProject()->filePath( s );
 				// if not exists ask user to select one
-				if ( !QFile::exists( s ) && question( a->text().append( "..." ), tr( "Can't find your executable file, do you want to choose the file ?" ).arg( s ) ) )
+				if ( !QFile::exists( s ) && question( a->text().append( "..." ), tr( "Can't find your executable file, do you want to choose the file ?" ) ) )
 					s = getOpenFileName( a->text().append( "..." ), cmd.workingDirectory() );
 				// if file exists execut it
 				if ( QFile::exists( s ) )
@@ -458,7 +458,7 @@ void pWorkspace::projectCustomActionTriggered()
 					cmd.setCommand( cm->quotedString( cm->nativeSeparators( s ) ) );
 					cmd.setWorkingDirectory( cm->nativeSeparators( p ) );
 					// write in project
-					cmd.project()->setProjectSettingsValue( a->text().replace( ' ', '_' ).toUpper(), cmd.project()->relativeFilePath( s ) );
+					cmd.project()->setProjectSettingsValue( a->text().replace( ' ', '_' ).toUpper(), cmd.project()->topLevelProject()->relativeFilePath( s ) );
 					// add command to console manager
 					cm->addCommand( cmd );
 				}
