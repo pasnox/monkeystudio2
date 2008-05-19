@@ -132,6 +132,45 @@ QList<pAbstractChild*> pWorkspace::children() const
 	return l;
 }
 
+pAbstractChild* pWorkspace::newTextEditor()
+{
+	// get available filters
+	QString mFilters = availableFilesFilters();
+	
+	// prepend a all in one filter
+	if ( !mFilters.isEmpty() )
+	{
+		QString s;
+		foreach ( QStringList l, availableFilesSuffixes().values() )
+			s.append( l.join( " " ).append( " " ) );
+		mFilters.prepend( QString( "All Supported Files (%1);;" ).arg( s.trimmed() ) );
+	}
+
+	// open open file dialog
+	QString fileName = getSaveFileName( tr( "New File Name..." ), QString::null, mFilters, window() );
+	
+	// return 0 if user cancel
+	if ( fileName.isEmpty() )
+		return 0;
+	
+	// close file if already open
+	mFileWatcher->removePaths( QStringList( fileName ) );
+	closeFile( fileName );
+
+	// create/reset file
+	QFile file( fileName );
+	if ( !file.open( QIODevice::WriteOnly ) )
+	{
+		MonkeyCore::statusBar()->appendMessage( tr( "Can't create new file '%1'" ).arg( QFileInfo( fileName ).fileName() ), 2000 );
+		return 0;
+	}
+	// reset file
+	file.resize( 0 );
+	file.close();
+	// open file
+	return openFile( fileName );
+}
+
 pAbstractChild* pWorkspace::openFile( const QString& s )
 {
 	// if it not exists
@@ -220,6 +259,8 @@ void pWorkspace::closeFile( const QString& s )
 			if ( isSameFile( f, s ) )
 			{
 				c->closeFile( f );
+				if ( c->files().isEmpty() )
+					closeDocument( c );
 				return;
 			}
 		}
@@ -587,7 +628,6 @@ void pWorkspace::fileOpen_triggered()
 			// remove it from recents files
 			MonkeyCore::recentsManager()->removeRecentFile( s );
 	}
-
 }
 
 void pWorkspace::fileSessionSave_triggered()
@@ -651,7 +691,6 @@ void pWorkspace::fileSaveAsBackup_triggered()
 	if ( c )
 	{
 		const QString s = getSaveFileName( tr( "Choose a filename to backup your file" ), QFileInfo( c->currentFile() ).fileName(), QString::null, this );
-	
 		if ( !s.isEmpty() )
 			c->backupCurrentFile( s );
 	}
@@ -771,13 +810,9 @@ void pWorkspace::focusToEditor_triggered ()
 
 void pWorkspace::closeCurrentDocument()
 {
+	// close document
 	if ( pAbstractChild* ac = currentChild() )
-	{
-		// stop watching files
-		mFileWatcher->removePaths( ac->files() );
-		// close document
 		closeDocument( ac );
-	}
 }
 
 bool pWorkspace::closeAllDocuments()
@@ -800,7 +835,11 @@ bool pWorkspace::closeAllDocuments()
 
 void pWorkspace::closeDocument( QWidget* document )
 {
-	if ( UISaveFiles::saveDocument( window(), qobject_cast<pAbstractChild*>( document ), false ) == UISaveFiles::bCancelClose )
+	pAbstractChild* child = qobject_cast<pAbstractChild*>( document );
+	if ( UISaveFiles::saveDocument( window(), child, false ) == UISaveFiles::bCancelClose )
 		return;
-	pExtendedWorkspace::closeDocument( document );
+	// stop watching files
+	mFileWatcher->removePaths( child->files() );
+	// close document
+	pExtendedWorkspace::closeDocument( child );
 }
