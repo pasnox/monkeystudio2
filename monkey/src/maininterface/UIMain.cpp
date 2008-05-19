@@ -125,6 +125,7 @@ void UIMain::initMenuBar()
 	mb->menu( "mFile", tr( "File" ) );
 	mb->beginGroup( "mFile" );
 		mb->action( "aNew", tr( "&New..." ), QIcon( ":/file/icons/file/new.png" ), tr( "Ctrl+N" ), tr( "Create a new file" ) );
+		mb->action( "aNewTextEditor", tr( "&New Text File..." ), QIcon( ":/file/icons/file/new.png" ), QString::null, tr( "Quickly create a new text based file" ) );
 		mb->action( "aOpen", tr( "&Open..." ), QIcon( ":/file/icons/file/open.png" ), tr( "Ctrl+O" ), tr( "Open a file" ) );
 		mb->menu( "mRecents", tr( "&Recents" ), QIcon( ":/file/icons/file/recents.png" ) );
 		mb->action( "mRecents/aClear", tr( "&Clear" ), QIcon( ":/file/icons/file/clear.png" ), QString::null, tr( "Clear the recents files list" ) );
@@ -289,6 +290,7 @@ void UIMain::initToolBar()
 	dockToolBar( Qt::TopToolBarArea )->addAction();
 	// file action
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mFile/aNew" ) );
+	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mFile/aNewTextEditor" ) );
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mFile/aOpen" ) );
 	dockToolBar( Qt::TopToolBarArea )->addActions( menuBar()->menu( "mFile/mSave" )->actions() );
 	dockToolBar( Qt::TopToolBarArea )->addActions( menuBar()->menu( "mFile/mClose" )->actions() );
@@ -315,6 +317,7 @@ void UIMain::initConnections()
 {
 	// file connection
 	connect( menuBar()->action( "mFile/aNew" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileNew_triggered() ) );
+	connect( menuBar()->action( "mFile/aNewTextEditor" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( newTextEditor() ) );
 	connect( menuBar()->action( "mFile/aOpen" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileOpen_triggered() ) );
 	connect( MonkeyCore::recentsManager(), SIGNAL( openFileRequested( const QString& ) ), MonkeyCore::fileManager(), SLOT( openFile( const QString& ) ) );
 	connect( menuBar()->action( "mFile/mSession/aSave" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileSessionSave_triggered() ) );
