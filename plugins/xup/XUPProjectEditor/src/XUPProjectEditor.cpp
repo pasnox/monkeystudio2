@@ -11,7 +11,7 @@ XUPProjectEditor::XUPProjectEditor()
 	mPluginInfos.Description = tr( "Default and Generic Project Settings Editor for XUPManager" );
 	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
 	mPluginInfos.Type = BasePlugin::iXUP;
-	mPluginInfos.Name = "XUPProjectEditor";
+	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.1.0";
 	mPluginInfos.Enabled = false;
 }

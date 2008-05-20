@@ -1,7 +1,6 @@
 TARGET	= Ctags2Api
 include( ../../plugins.pri )
 DESTDIR	= $$MONKEY_PLUGINS_DIR/base
-DEFINES	*= "PLUGIN_NAME=\"\\\"$${TARGET}\\\"\""
 INCLUDEPATH	*= src/ui
 RESOURCES	= src/resources/Ctags2Api.qrc
 

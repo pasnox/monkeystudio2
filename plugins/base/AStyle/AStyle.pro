@@ -1,9 +1,10 @@
 TARGET	= AStyle
+
 include( ../../plugins.pri )
 DESTDIR	= $$MONKEY_PLUGINS_DIR/base
-DEFINES	*= NDEBUG "PLUGIN_NAME=\"\\\"$${TARGET}\\\"\""
 INCLUDEPATH	*= src src/ui src/3rdparty/astyle
 RESOURCES	= src/resources/AStyle.qrc
+DEFINES	*= NDEBUG
 
 FORMS	= src/ui/UISettingsAStyle.ui
 

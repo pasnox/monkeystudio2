@@ -109,11 +109,11 @@ DockGNUDebugger::DockGNUDebugger( QWidget* w )
 
 	// create QProcess for GDb
 	pConsole =  new GdbProcess(this);
- 
-	connect(pConsole, SIGNAL( commandStarted( const pCommand& )), this, SLOT(gdbStarted( const pCommand& )));
-	connect(pConsole, SIGNAL( commandFinished( const pCommand&, int, QProcess::ExitStatus )), this, SLOT( gdbFinished( const pCommand&, int, QProcess::ExitStatus )));
-	connect(pConsole, SIGNAL( commandReadyRead( const pCommand&, const QByteArray& )), this, SLOT( commandReadyRead( const pCommand&, const QByteArray& )));
-	connect(pConsole, SIGNAL(commandError( const pCommand&,QProcess::ProcessError)), this, SLOT(gdbError(const pCommand&,QProcess::ProcessError)));
+	
+		connect(pConsole, SIGNAL( commandStarted( const pCommand& )), this, SLOT(gdbStarted( const pCommand& )));
+		connect(pConsole, SIGNAL( commandFinished( const pCommand&, int, QProcess::ExitStatus )), this, SLOT( gdbFinished( const pCommand&, int, QProcess::ExitStatus )));
+		connect(pConsole, SIGNAL( commandReadyRead( const pCommand&, const QByteArray& )), this, SLOT( commandReadyRead( const pCommand&, const QByteArray& )));
+		connect(pConsole, SIGNAL(commandError( const pCommand&,QProcess::ProcessError)), this, SLOT(gdbError(const pCommand&,QProcess::ProcessError)));
 
 	// plugin send a command to Gdb
 	connect(kernelDispatcher, SIGNAL(sendRawData(GdbCore*, QByteArray)) ,this , SLOT(onSendRawData(GdbCore *, QByteArray) ));
@@ -170,7 +170,7 @@ void DockGNUDebugger::onWantExit()
 void DockGNUDebugger::onFileOpened( const QString& file )
 {
 	if(MonkeyCore::fileManager()->currentChild())
- 	{
+	{
 		// get new file
 		pEditor *e = MonkeyCore::fileManager()->currentChild()->currentEditor();
 		if(e)

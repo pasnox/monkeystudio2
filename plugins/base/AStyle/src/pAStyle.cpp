@@ -31,6 +31,7 @@
 #include "astyle.h"
 #include "pFormatterSettings.h"
 
+#include <monkey.h>
 #include <coremanager.h>
 #include <workspacemanager.h>
 #include <qscintillamanager.h>
@@ -94,19 +95,7 @@ void pAStyle::applyFormatter()
 			s.applyTo( f );
 			
 			// eol
-			QString eolChars;
-			switch ( e->eolMode() )
-			{
-			case pEditor::EolWindows:
-				eolChars = "\r\n";
-				break;
-			case pEditor::EolUnix:
-				eolChars = "\n";
-				break;
-			case pEditor::EolMac:
-				eolChars = "\n";
-				break;
-			}
+			QString eolChars = pMonkeyStudio::getEol( e->eolMode() );
 			
 			// add eol
 			if ( s1.length() && !s1.endsWith( '\r' ) && !s1.endsWith( '\n' ) )

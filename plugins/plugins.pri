@@ -1,5 +1,8 @@
 #This is the include file to add to your plugins project
 
+# set plugin name define
+!isEmpty( TARGET ):DEFINES	*= "PLUGIN_NAME=\"\\\"$${TARGET}\\\"\""
+
 # include config file
 include( $${PWD}/../config.pri )
 

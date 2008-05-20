@@ -48,7 +48,7 @@ Navigator::Navigator (QObject* )
 	mPluginInfos.Description = tr( "Plugin uses Exuberant Ctags library for analizing source files. It's allowing to view file structure, and quickly move cursor to needed place" );
 	mPluginInfos.Author = "Kopats Andrei aka hlamer <hlamer@tut.by>";
 	mPluginInfos.Type = BasePlugin::iBase;
-	mPluginInfos.Name =  "Navigator";
+	mPluginInfos.Name =  PLUGIN_NAME;
 	mPluginInfos.Version = "0.0.1";
 	mPluginInfos.Enabled = false;
 	displayMask = settingsValue( "DisplayMask", 65535 ).toInt();

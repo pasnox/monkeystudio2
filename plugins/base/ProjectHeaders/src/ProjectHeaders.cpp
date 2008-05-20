@@ -40,7 +40,7 @@ ProjectHeaders::ProjectHeaders()
 	mPluginInfos.Description = tr( "Plugin for managing the license headers of your sources" );
 	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
 	mPluginInfos.Type = BasePlugin::iBase;
-	mPluginInfos.Name = "ProjectHeaders";
+	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.5.0";
 	mPluginInfos.Enabled = false;
 }

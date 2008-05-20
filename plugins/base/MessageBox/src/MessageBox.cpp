@@ -42,7 +42,7 @@ MessageBox::MessageBox()
 	mPluginInfos.Description = tr( "Plugin for catching internal command console" );
 	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
 	mPluginInfos.Type = BasePlugin::iBase;
-	mPluginInfos.Name = "MessageBox";
+	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "1.0.0";
 	mPluginInfos.Enabled = false;
 }
