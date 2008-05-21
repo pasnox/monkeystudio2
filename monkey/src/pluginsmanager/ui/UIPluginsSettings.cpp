@@ -32,7 +32,7 @@
 #include "../PluginsManager.h"
 
 UIPluginsSettings::UIPluginsSettings( QWidget* p )
-	: QDialog( p )
+	: QDialog( p, Qt::Sheet )
 {
 	// setup dialog
 	setupUi( this );
