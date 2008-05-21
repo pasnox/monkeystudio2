@@ -3,30 +3,63 @@
 #include <QGridLayout>
 #include <QFrame>
 #include <QHBoxLayout>
+#include <QPushButton>
+#include <QDebug>
+#include <QTreeView>
+#include <QListView>
+#include <QFileSystemModel>
 
-AddFilesDialog::AddFilesDialog( AddFilesDialog::Type type, ScopedProjectItemModel* spim, XUPItem* pi, QWidget* w )
+AddFilesDialog::AddFilesDialog( ScopedProjectItemModel* spim, XUPItem* pi, QWidget* w )
 	: QFileDialog( w )
 {
 	Q_ASSERT( spim && pi );
 	mScoped = spim;
-	mType = type;
-	// set label/mode
-	switch ( mType )
-	{
-		case AddFilesDialog::Files:
-			setWindowTitle( tr( "Choose the files to add to your project" ) );
-			setFileMode( QFileDialog::ExistingFiles );
-			break;
-		case AddFilesDialog::Folder:
-			setWindowTitle( tr( "Choose the folder to add to your project" ) );
-			setFileMode( QFileDialog::DirectoryOnly );
-			break;
-	}
+	// dialog options
+	setWindowTitle( tr( "Choose the folders/files to add to your project" ) );
+	setFileMode( QFileDialog::ExistingFiles );
 	// set directory
 	setDirectory( pi->projectPath() );
 	// set accept mode
 	setAcceptMode( QFileDialog::AcceptOpen );
 	setLabelText( QFileDialog::Accept, tr( "Add" ) );
+	
+	// gay hack :)
+	// listview
+	if ( ( lvFiles = findChild<QListView*>( "listView" ) ) )
+	{
+	//qWarning( "listView ok" );
+		lvFiles->disconnect();
+		connect( lvFiles, SIGNAL( doubleClicked( const QModelIndex& ) ), this, SLOT( doubleClicked( const QModelIndex& ) ) );
+		connect( lvFiles->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ), this, SLOT( selectionChanged( const QItemSelection&, const QItemSelection& ) ) );
+	}
+	// treeview
+	if ( ( tvFiles = findChild<QTreeView*>( "treeView" ) ) )
+	{
+	//qWarning( "treeView ok" );
+		tvFiles->disconnect();
+		connect( tvFiles, SIGNAL( doubleClicked( const QModelIndex& ) ), this, SLOT( doubleClicked( const QModelIndex& ) ) );
+		connect( tvFiles->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ), this, SLOT( selectionChanged( const QItemSelection&, const QItemSelection& ) ) );
+	}
+	// lineedit files
+	leFiles = findChild<QLineEdit*>();
+	// accept button
+	pbAdd = 0;
+	foreach ( QPushButton* pb, findChildren<QPushButton*>() )
+	{
+		if ( pb->text() == labelText( QFileDialog::Accept ) )
+		{
+		//qWarning( "pbAdd ok" );
+			pbAdd = pb;
+			pbAdd->setEnabled( false );
+			pbAdd->disconnect();
+			connect( pbAdd, SIGNAL( clicked() ), this, SLOT( addClicked() ) );
+			break;
+		}
+	}
+	// model
+	mModel = qobject_cast<QFileSystemModel*>( lvFiles->model() );
+	//qWarning( "mModel ok: %i", mModel );
+
 	// create check boxLayout
 	cbRecursive = new QCheckBox( tr( "Add folders recursively." ) );
 	cbRecursive->setChecked( true );
@@ -67,6 +100,36 @@ AddFilesDialog::AddFilesDialog( AddFilesDialog::Type type, ScopedProjectItemMode
 	QGridLayout* gridlayout = qobject_cast<QGridLayout*>( layout() );
 	gridlayout->addWidget( cbRecursive, 4, 0, 1, 3 );
 	gridlayout->addWidget( f, 5, 0, 1, 3 );
-	// set recursive checkbox visibilityChanged
-	cbRecursive->setVisible( mType == AddFilesDialog::Folder );
+}
+
+QStringList AddFilesDialog::selectedFilesFolders() const
+{
+	QStringList files = selectedFiles();
+	files.removeAll( mModel->rootPath() );
+	files.removeAll( mModel->rootPath() +"/" );
+	files.removeAll( mModel->rootPath() +"\\" );
+	return files;
+}
+
+void AddFilesDialog::doubleClicked( const QModelIndex& index )
+{
+	if ( mModel->isDir( index ) )
+		setDirectory( mModel->rootPath() +"/" +mModel->fileName( index ) );	
+}
+
+void AddFilesDialog::selectionChanged( const QItemSelection&, const QItemSelection& )
+{
+	leFiles->clear();
+	QStringList files;
+	foreach ( const QModelIndex& index, lvFiles->selectionModel()->selectedIndexes() )
+		if ( index.column() == 0 && mModel->rootDirectory().dirName() != mModel->fileName( index ) )
+			files << "\"" +mModel->fileName( index ) +"\"";
+	leFiles->setText( files.join( " " ) );
+	pbAdd->setEnabled( files.count() > 0 );
+}
+
+void AddFilesDialog::addClicked()
+{
+	if ( selectedFilesFolders().count() > 0 )
+		QDialog::accept();
 }
