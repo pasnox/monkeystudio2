@@ -124,8 +124,8 @@ void pToolsManager::toolsMenu_triggered( QAction* a )
 	{
 		pCommand cmd;
 		cmd.setText( tool.Caption );
-		cmd.setCommand( tool.FilePath );
-		cmd.setWorkingDirectory( tool.WorkingPath );
+		cmd.setCommand( filePath );
+		cmd.setWorkingDirectory( workingPath );
 		cm->addCommand( cmd );
 		b = true;
 	}
