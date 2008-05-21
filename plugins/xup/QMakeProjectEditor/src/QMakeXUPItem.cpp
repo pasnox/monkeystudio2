@@ -326,7 +326,9 @@ QString QMakeXUPItem::interpretedVariable( const QString& s, const XUPItem* it, 
 
 QString QMakeXUPItem::defaultInterpretedValue() const
 {
-	QRegExp rx( "\\$\\$?[\\{\\(\\[]?(\\w+)[\\}\\)\\]]?" );
+	//QRegExp rx( "\\$\\$?[\\{\\(\\[]?(\\w+)[\\}\\)\\]]?" );
+	//\$\$?[\w\s]+[\{\(\[]
+	QRegExp rx( "\\$\\$?[\\{\\(\\[]?(\\w+(?!\\w*\\s*[()]))[\\}\\)\\]]?" );
 	const QString dv = defaultValue();
 	QString v = dv;
 	int p = 0;
@@ -749,7 +751,7 @@ void QMakeXUPItem::installCommands()
 			addCommand( cmd, "mBuilder/mRebuild" );
 		}
 		else
-			MonkeyCore::statusBar()->appendMessage( tr( "Some actions can't be created, because there is no default Qt version setted, please go in your project settings to fix this." ) );
+			MonkeyCore::statusBar()->appendMessage( tr( "Some actions can't be created, because there is no default Qt version setted, please go in your project settings to fix this." ), 2500 );
 		
 		// execute debug
 		cmd = cmdBuild;

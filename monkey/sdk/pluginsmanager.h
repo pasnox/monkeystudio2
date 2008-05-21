@@ -7,7 +7,6 @@
 #include "../src/pluginsmanager/DebuggerPlugin.h"
 #include "../src/pluginsmanager/InterpreterPlugin.h"
 #include "../src/pluginsmanager/PluginsManager.h"
-#include "../src/pluginsmanager/ProjectPlugin.h"
 #include "../src/pluginsmanager/WorkspacePlugin.h"
 
 #include "../src/pluginsmanager/ui/UIBuilderSettings.h"

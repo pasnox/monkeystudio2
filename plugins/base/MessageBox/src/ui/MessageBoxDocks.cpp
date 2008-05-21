@@ -376,8 +376,10 @@ void MessageBoxDocks::commandStarted( const pCommand& c )
 	// appendOutput to console log
 	appendInBox( colourText( s, Qt::blue ), Qt::red );
 	// show dock if needed
+	/*
 	if ( !mOutput->isVisible() )
 		mOutput->setVisible( true );
+	*/
 }
 
 void MessageBoxDocks::commandStateChanged( const pCommand& c, QProcess::ProcessState s )

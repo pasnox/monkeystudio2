@@ -208,7 +208,8 @@ void UISettingsQMakeXUPProjectEditor::lw_currentItemChanged( QListWidgetItem* c,
 			QtItem it = p->data( Qt::UserRole ).value<QtItem>();
 			it.Text = leCaptionQtModule->text();
 			it.Value = leValueQtModule->text();
-			it.Variable = leVariableQtModule->text().toUpper();
+			if ( it.Variable.isEmpty() )
+				it.Variable = "QT";
 			it.Help = teHelpQtModule->toPlainText();
 			p->setData( Qt::UserRole, QVariant::fromValue( it ) );
 			p->setText( it.Text );
@@ -218,7 +219,8 @@ void UISettingsQMakeXUPProjectEditor::lw_currentItemChanged( QListWidgetItem* c,
 			QtItem it = p->data( Qt::UserRole ).value<QtItem>();
 			it.Text = leCaptionQtConfiguration->text();
 			it.Value = leValueQtConfiguration->text();
-			it.Variable = leVariableQtConfiguration->text().toUpper();
+			if ( it.Variable.isEmpty() )
+				it.Variable = "CONFIG";
 			it.Help = teHelpQtConfiguration->toPlainText();
 			p->setData( Qt::UserRole, QVariant::fromValue( it ) );
 			p->setText( it.Text );
@@ -253,7 +255,6 @@ void UISettingsQMakeXUPProjectEditor::lw_currentItemChanged( QListWidgetItem* c,
 			QtItem it = c->data( Qt::UserRole ).value<QtItem>();
 			leCaptionQtModule->setText( it.Text );
 			leValueQtModule->setText( it.Value );
-			leVariableQtModule->setText( it.Variable );
 			teHelpQtModule->setPlainText( it.Help );
 			wQtModule->setEnabled( true );
 		}
@@ -262,7 +263,6 @@ void UISettingsQMakeXUPProjectEditor::lw_currentItemChanged( QListWidgetItem* c,
 			QtItem it = c->data( Qt::UserRole ).value<QtItem>();
 			leCaptionQtConfiguration->setText( it.Text );
 			leValueQtConfiguration->setText( it.Value );
-			leVariableQtConfiguration->setText( it.Variable );
 			teHelpQtConfiguration->setPlainText( it.Help );
 			wQtConfiguration->setEnabled( true );
 		}
@@ -279,7 +279,6 @@ void UISettingsQMakeXUPProjectEditor::lw_currentItemChanged( QListWidgetItem* c,
 		wQtModule->setEnabled( false );
 		leCaptionQtModule->clear();
 		leValueQtModule->clear();
-		leVariableQtModule->clear();
 		teHelpQtModule->clear();
 	}
 	else if ( sender() == lwQtConfigurations )
@@ -287,7 +286,6 @@ void UISettingsQMakeXUPProjectEditor::lw_currentItemChanged( QListWidgetItem* c,
 		wQtConfiguration->setEnabled( false );
 		leCaptionQtConfiguration->clear();
 		leValueQtConfiguration->clear();
-		leVariableQtConfiguration->clear();
 		teHelpQtConfiguration->clear();
 	}
 }

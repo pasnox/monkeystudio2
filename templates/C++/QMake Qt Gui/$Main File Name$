@@ -8,6 +8,10 @@ int main( int argc, char** argv )
 	// init application
 	app.setApplicationName( "$Application Name$" );
 
+	QWidget w;
+	w.setWindowTitle( "$Application Name$" );
+ 	w.show();
+
 	// connection
 	QObject::connect( &app, SIGNAL( lastWindowClosed() ), &app, SLOT( quit() ) );
 

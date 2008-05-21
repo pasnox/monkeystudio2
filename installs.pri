@@ -33,21 +33,21 @@ include( config.pri )
 
 	unix:!mac {
 		# plugins
-		plugins.path	= $${PACKAGE_DATAS}
-		plugins.files	= bin/plugins
+		monkey_plugins.path	= $${PACKAGE_DATAS}
+		monkey_plugins.files	= bin/plugins
 
 		# binary
-		TARGET.path	= $${PACKAGE_PREFIX}
-		TARGET.files	= bin/$${PACKAGE_TARGET}
+		monkey_target.path	= $${PACKAGE_PREFIX}
+		monkey_target.files	= bin/$${PACKAGE_TARGET}
 
 		# desktop file
-		desktop.path	= $${PACKAGE_PREFIX}/../share/applications
-		desktop.files	= links/monkeystudio.desktop
+		monkey_desktop.path	= $${PACKAGE_PREFIX}/../share/applications
+		monkey_desktop.files	= links/monkeystudio.desktop
 
 		# desktop icon file
-		desktopicon.path	= $${PACKAGE_PREFIX}/../icons/hicolor/32x32/apps
-		desktopicon.files	= links/monkeystudio.png
+		monkey_desktopicon.path	= $${PACKAGE_PREFIX}/../icons/hicolor/32x32/apps
+		monkey_desktopicon.files	= links/monkeystudio.png
 
-		INSTALLS	+= plugins TARGET desktop desktopicon
+		INSTALLS	+= monkey_plugins monkey_target monkey_desktop monkey_desktopicon
 	}
 }

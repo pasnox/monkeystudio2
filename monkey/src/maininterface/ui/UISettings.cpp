@@ -263,6 +263,7 @@ void UISettings::loadSettings()
 	cbBackspaceUnindents->setChecked( backspaceUnindents() );
 	cbIndentationGuides->setChecked( indentationGuides() );
 	cbIndentationUseTabs->setChecked( indentationsUseTabs() );
+	cbAutodetectIndent->setChecked( autoDetectIndent() );
 	cbTabIndents->setChecked( tabIndents() );
 	sIndentationTabWidth->setValue( tabWidth() );
 	sIndentationWidth->setValue( indentationWidth() );
@@ -421,6 +422,7 @@ void UISettings::saveSettings()
 	setIndentationGuides( cbIndentationGuides->isChecked() );
 	setIndentationsUseTabs( cbIndentationUseTabs->isChecked() );
 	setTabIndents( cbTabIndents->isChecked() );
+	setAutoDetectIndent( cbAutodetectIndent->isChecked() );
 	setTabWidth( sIndentationTabWidth->value() );
 	setIndentationWidth( sIndentationWidth->value() );
 	setIndentationGuidesBackgroundColor( QColor( tbIndentationGuidesBackground->toolTip() ) );
@@ -608,7 +610,7 @@ void UISettings::on_pbSourceAPIsDelete_clicked()
 void UISettings::on_pbSourceAPIsAdd_clicked()
 {
 	// get files
-	QStringList files = leSourceAPIs->text().split( ";" );
+	QStringList files = leSourceAPIs->text().split( ";", QString::SkipEmptyParts );
 	// add them recursively
 	foreach ( const QString& fn, files )
 		if ( lwSourceAPIs->findItems( fn, Qt::MatchFixedString ).count() == 0 )

@@ -9,21 +9,21 @@
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
 ** Home Page : http://www.monkeystudio.org
 **
-    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
 #ifndef UIPLUGINSSETTINGS_H
@@ -35,28 +35,18 @@
 
 #include <QApplication>
 
-class PluginsManager;
-
-class Q_MONKEY_EXPORT UIPluginsSettings : public QDialog, public Ui::UIPluginsSettings, public QSingleton<UIPluginsSettings>
+class Q_MONKEY_EXPORT UIPluginsSettings : public QDialog, public Ui::UIPluginsSettings
 {
 	Q_OBJECT
-	friend class QSingleton<UIPluginsSettings>;
-	
+
 public:
-	void clearInfos();
+	UIPluginsSettings( QWidget* = QApplication::activeWindow() );
+	
+protected:
 	void updateList();
 	
-private:
-	UIPluginsSettings( QWidget* = QApplication::activeWindow() );
-	PluginsManager* mPluginsManager;
-	
-private slots:
-	void on_cbType_currentIndexChanged( int );
-	void on_lwNames_itemSelectionChanged();
-	void on_cbEnableUponStart_clicked( bool );
-	void on_cbEnabled_clicked( bool );
-	virtual void accept();
-	
+protected slots:
+	void on_cbPluginType_currentIndexChanged( int );
 };
 
 #endif // UIPLUGINSSETTINGS_H

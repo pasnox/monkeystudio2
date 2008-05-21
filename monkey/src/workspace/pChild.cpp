@@ -9,25 +9,26 @@
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
 ** Home Page : http://www.monkeystudio.org
 **
-    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
 #include "pChild.h"
 #include "../qscintillamanager/pEditor.h"
+#include "../qscintillamanager/ui/pSearch.h"
 #include "../coremanager/MonkeyCore.h"
 
 #include <qscintilla.h>
@@ -105,6 +106,9 @@ bool pChild::isModified() const
 bool pChild::isUndoAvailable() const
 { return mEditor->isUndoAvailable(); }
 
+void pChild::invokeSearch () 
+{ MonkeyCore::searchWidget()->showSearchFile ();}
+
 void pChild::undo()
 { mEditor->undo(); }
 
@@ -176,12 +180,15 @@ bool pChild::openFile( const QString& s, QTextCodec* )
 	// open file
 	if ( !mEditor->openFile( s ) )
 		return false;
+	
+	// set window modified state
+	setWindowModified( mEditor->isModified() );
 
 	// add filename to list
 	mFiles.append( s );
 
 	emit fileOpened( s );
-    return true;
+	return true;
 }
 
 void pChild::closeFile( const QString& s )

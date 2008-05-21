@@ -159,6 +159,7 @@ QAction* pMenuBar::action( const QString& s, const QString& l, const QIcon& i, c
 
 		// create action
 		a = new pAction( mText, i, l, QKeySequence( c ), g );
+		a->setParent( m );
 		a->setShortcutContext( mDefaultShortcutContext );
 		m->addAction( a );
 

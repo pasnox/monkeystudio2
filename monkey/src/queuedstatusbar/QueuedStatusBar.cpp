@@ -11,16 +11,25 @@ QueuedStatusBar::QueuedStatusBar( QWidget* parent )
 	//mStacked->setFrameStyle( QFrame::Sunken | QFrame::StyledPanel );
 	// create labels
 	QLabel* l;
-	l = ( mLabels[ltMessage] = new QLabel( this ) );
-	l->setMargin( 2 );
 	l = ( mLabels[ltCursorPosition] = new QLabel( this ) );
 	l->setMargin( 2 );
+	l->setToolTip( tr( "Cursor position" ) );
+	l->setFrameStyle( QFrame::StyledPanel );
+	l = ( mLabels[ltMessage] = new QLabel( this ) );
+	l->setMargin( 2 );
+	l->setFrameStyle( QFrame::StyledPanel );
 	l = ( mLabels[ltSaveState] = new QLabel( this ) );
 	l->setMargin( 2 );
+	l->setToolTip( tr( "Modification state of file" ) );
+	l->setFrameStyle( QFrame::StyledPanel );
 	l = ( mLabels[ltEOLMode] = new QLabel( this ) );
 	l->setMargin( 2 );
+	l->setToolTip( tr( "EOL mode" ) );
+	l->setFrameStyle( QFrame::StyledPanel );
 	l = ( mLabels[ltIndentMode] = new QLabel( this ) );
 	l->setMargin( 2 );
+	l->setToolTip( tr( "Indentation mode" ) );
+	l->setFrameStyle( QFrame::StyledPanel );
 	//
 	mWidgetLabels = new QWidget;
 	QHBoxLayout* hlayout = new QHBoxLayout( mWidgetLabels );
@@ -85,37 +94,35 @@ void QueuedStatusBar::setModified( bool modified )
 
 void QueuedStatusBar::setEOLMode( QsciScintilla::EolMode mode )
 {
-	QString s = tr( "Eol Mode: %1" );
 	switch ( mode )
 	{
 		case QsciScintilla::EolWindows:
-			label( ltEOLMode )->setText( s.arg( "Windows" ) );
+			label( ltEOLMode )->setText("Windows");
 			break;
 		case QsciScintilla::EolUnix:
-			label( ltEOLMode )->setText( s.arg( "Unix" ) );
+			label( ltEOLMode )->setText("Unix");
 			break;
 		case QsciScintilla::EolMac:
-			label( ltEOLMode )->setText( s.arg( "Mac" ) );
+			label( ltEOLMode )->setText("Mac");
 			break;
 		default:
-			label( ltEOLMode )->setText( s.arg( "-" ) );
+			label( ltEOLMode )->setText("-");
 			break;
 	}
 }
 
 void QueuedStatusBar::setIndentMode( int mode )
 {
-	QString s = tr( "Indent Mode: %1" );
 	switch ( mode )
 	{
 		case 0:
-			label( ltIndentMode )->setText( s.arg( tr( "Spaces" ) ) );
+			label( ltIndentMode )->setText("Spaces" );
 			break;
 		case 1:
-			label( ltIndentMode )->setText( s.arg( tr( "Tabs" ) ) );
+			label( ltIndentMode )->setText("Tabs" );
 			break;
 		default:
-			label( ltIndentMode )->setText( s.arg( "-" ) );
+			label( ltIndentMode )->setText("-");
 			break;
 	}
 }

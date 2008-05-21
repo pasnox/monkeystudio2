@@ -13,15 +13,6 @@
 #include <QHeaderView>
 #include <QInputDialog>
 
-/*
-#include <QMessageBox>
-void warning( const QString& s )
-{ QMessageBox::warning( 0, "Warning...", s ); }
-
-bool question( const QString& s )
-{ return QMessageBox::question( 0, "Question...", s, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes ) == QMessageBox::Yes; }
-*/
-
 UIXUPManager::UIXUPManager( QWidget* w )
 	: QDockWidget( w ), mModel( new ProjectItemModel( this ) )
 {
@@ -269,26 +260,22 @@ void UIXUPManager::addFiles( XUPItem* scope, QWidget* parent )
 {
 	if ( !scope )
 		return;
-	// default type
-	AddFilesDialog::Type type = AddFilesDialog::Files;
-	// request user the mode to use
-	QMessageBox mb( QMessageBox::Question, tr( "What to add..." ), tr( "How to add files ?\nChoosing..." ), QMessageBox::Yes | QMessageBox::No, window() );
-	mb.button( QMessageBox::Yes )->setText( tr( "Files" ) );
-	mb.button( QMessageBox::No )->setText( tr( "Folder" ) );
-	if ( mb.exec() == QMessageBox::No )
-		type = AddFilesDialog::Folder;
 	// show dialog
-	AddFilesDialog d( type, mModel->scopedModel(), scope, parent );
+	AddFilesDialog d( mModel->scopedModel(), scope, parent );
 	if ( d.exec() )
 	{
 		QStringList files;
-		if ( type == AddFilesDialog::Files )
-			files = d.selectedFiles();
-		else
+		foreach ( const QString& path, d.selectedFilesFolders() )
 		{
-			QDir dir( d.selectedFiles().value( 0 ) );
-			foreach ( const QFileInfo& fi, pMonkeyStudio::getFiles( dir, QString::null, d.isRecursive() ) )
-				files << fi.absoluteFilePath();
+			QFileInfo pi( path );
+			if ( pi.isDir() )
+			{
+				QDir dir( path );
+				foreach ( const QFileInfo& fi, pMonkeyStudio::getFiles( dir, QString::null, d.isRecursive() ) )
+					files << fi.absoluteFilePath();
+			}
+			else
+				files << path;
 		}
 		if ( !files.isEmpty() )
 			d.currentItem()->addFiles( files, d.currentItem(), d.currentOperator() );

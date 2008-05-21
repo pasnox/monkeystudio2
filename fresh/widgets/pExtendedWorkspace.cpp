@@ -9,21 +9,21 @@
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
 ** Home Page : http://www.monkeystudio.org
 **
-    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
 #include "pExtendedWorkspace.h"
@@ -66,7 +66,7 @@ pExtendedWorkspace::pExtendedWorkspace( QWidget* w, pExtendedWorkspace::Document
 	mLayout->setSpacing( 0 );
 	mLayout->setMargin( 0 );
 	mLayout->addLayout( mTabLayout );
-    mLayout->addLayout( mStackedLayout );
+	mLayout->addLayout( mStackedLayout );
 	
 	// init view
 	//mTabBar->setDrawBase( false );
@@ -293,9 +293,9 @@ void pExtendedWorkspace::setDocMode( pExtendedWorkspace::DocumentMode dm )
 	
 	mDocMode = dm;
 
-    if (mDocMode == dmSDI)
-        mStackedLayout->setCurrentWidget( mStackedWidget );
-    else if (mDocMode ==dmMDI )
+	if (mDocMode == dmSDI)
+		mStackedLayout->setCurrentWidget( mStackedWidget );
+	else if (mDocMode ==dmMDI )
 		mStackedLayout->setCurrentWidget( mMdiAreaWidget );
 
 	if (!count())
@@ -309,7 +309,7 @@ void pExtendedWorkspace::setDocMode( pExtendedWorkspace::DocumentMode dm )
 		switch ( mDocMode )
 		{
 		case dmSDI:
-            mStackedWidget->addWidget( td );
+			mStackedWidget->addWidget( td );
 			//foreach (QAction* act, mMainWindow->actions ()) // not working !!! FIXME
 			//	td->removeAction (act);
 			break;
@@ -339,7 +339,7 @@ void pExtendedWorkspace::setDocMode( pExtendedWorkspace::DocumentMode dm )
 	
 	// restore current index
 	setCurrentIndex( i );
-    
+	
 	// emit tab mode changed
 	emit docModeChanged( mDocMode );
 }
@@ -389,7 +389,7 @@ void pExtendedWorkspace::setCurrentIndex( int i )
 	switch ( mDocMode )
 	{
 		case dmSDI:
-            mStackedWidget->setCurrentWidget( w );
+			mStackedWidget->setCurrentWidget( w );
 		case dmMDI:
 			mMdiAreaWidget->setActiveSubWindow( qobject_cast<QMdiSubWindow*>( w ? w->parent() : 0 ) );
 			break;
@@ -432,39 +432,39 @@ void pExtendedWorkspace::activatePreviousDocument()
 
 void pExtendedWorkspace::setSDI ()
 {
-    setDocMode (dmSDI);
+	setDocMode (dmSDI);
 }
 
 void pExtendedWorkspace::setMDI ()
 {
-    setDocMode (dmMDI);
+	setDocMode (dmMDI);
 }
 
 void pExtendedWorkspace::setTopLevel ()
 {
-    setDocMode (dmTopLevel);
+	setDocMode (dmTopLevel);
 }
 
 void pExtendedWorkspace::cascade ()
 {
-    setDocMode (dmMDI);
-    mMdiAreaWidget->cascadeSubWindows ();
+	setDocMode (dmMDI);
+	mMdiAreaWidget->cascadeSubWindows ();
 };
 
 void pExtendedWorkspace::tile ()
 {
-    setDocMode (dmMDI);
-    mMdiAreaWidget->tileSubWindows ();
+	setDocMode (dmMDI);
+	mMdiAreaWidget->tileSubWindows ();
 };
 
 void pExtendedWorkspace::minimize ()
 {
-    foreach (QWidget* w, mDocuments)
-        w->showMinimized ();  //WTF ???
+	foreach (QWidget* w, mDocuments)
+		w->showMinimized ();  //WTF ???
 };
 
 void pExtendedWorkspace::restore ()
 {
-    foreach (QWidget* w, mDocuments)
-        w->showNormal();
+	foreach (QWidget* w, mDocuments)
+		w->showNormal();
 };

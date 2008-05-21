@@ -26,7 +26,7 @@ RESOURCES	*= src/resources/resources.qrc
 
 DEFINES	*= MONKEY_CORE_BUILD
 
-LIBS	*= -L$$quote($${PACKAGE_BUILD_PATH})
+LIBS	*= -L$${PACKAGE_BUILD_PATH}
 mac:*-g++:LIBS	*= -Wl,-all_load # import all symbols as the not used ones too
 else:*-g++:LIBS	*= -Wl,--whole-archive # import all symbols as the not used ones too
 mac:*-g++:LIBS	*= -dynamic
@@ -60,7 +60,9 @@ FORMS	*= src/maininterface/ui/UITranslator.ui \
 	src/pluginsmanager/ui/UIPluginsSettings.ui \
 	src/pluginsmanager/ui/UICLIToolSettings.ui \
 	src/pluginsmanager/ui/UIBuilderSettings.ui \
-	src/pluginsmanager/ui/UICompilerSettings.ui
+	src/pluginsmanager/ui/UICompilerSettings.ui \
+	src/pluginsmanager/ui/UIPluginsSettingsElement.ui \
+	src/pluginsmanager/ui/UIPluginsSettingsAbout.ui
 
 HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/maininterface/ui/UIAbout.h \
@@ -94,7 +96,6 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/pluginsmanager/XUPPlugin.h \
 	src/pluginsmanager/ChildPlugin.h \
 	src/pluginsmanager/CLIToolPlugin.h \
-	src/pluginsmanager/ProjectPlugin.h \
 	src/pluginsmanager/BuilderPlugin.h \
 	src/pluginsmanager/CompilerPlugin.h \
 	src/pluginsmanager/PluginsManager.h \
@@ -104,7 +105,9 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/pluginsmanager/ui/UICompilerSettings.h \
 	src/settingsmanager/Settings.h \
 	src/coremanager/MonkeyCore.h \
-	src/queuedstatusbar/QueuedStatusBar.h
+	src/queuedstatusbar/QueuedStatusBar.h \
+	src/pluginsmanager/ui/UIPluginsSettingsElement.h \
+	src/pluginsmanager/ui/UIPluginsSettingsAbout.h
 
 SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/maininterface/ui/UIAbout.cpp \
@@ -140,7 +143,9 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/pluginsmanager/ui/UICompilerSettings.cpp \
 	src/settingsmanager/Settings.cpp \
 	src/coremanager/MonkeyCore.cpp \
-	src/queuedstatusbar/QueuedStatusBar.cpp
+	src/queuedstatusbar/QueuedStatusBar.cpp \
+	src/pluginsmanager/ui/UIPluginsSettingsElement.cpp \
+	src/pluginsmanager/ui/UIPluginsSettingsAbout.cpp
 
 mac:SOURCES	*= src/toolsmanager/pDesktopApplications_mac.cpp
 else:unix:SOURCES	*= src/toolsmanager/pDesktopApplications_unix.cpp

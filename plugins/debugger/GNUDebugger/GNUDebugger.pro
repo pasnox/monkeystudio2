@@ -1,7 +1,6 @@
 TARGET	= GNUDebugger
 include( ../../plugins.pri )
 DESTDIR	= $$MONKEY_PLUGINS_DIR/GNUdbg
-DEFINES	*= "PLUGIN_NAME=\"\\\"$${TARGET}\\\"\""
 
 RESOURCES	*= src/resources/GNUDebugger.qrc
 

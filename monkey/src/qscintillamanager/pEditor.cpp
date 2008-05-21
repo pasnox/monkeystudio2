@@ -43,8 +43,6 @@
 #include <QTextCodec>
 #include <QRegExp>
 
-#include <QDebug>
-
 bool pEditor::mPasteAvailableInit = false;
 bool pEditor::mPasteAvailable = false;
 
@@ -137,20 +135,25 @@ bool pEditor::lineNumbersMarginEnabled() const
 	return marginLineNumbers( 0 );
 }
 
-QString pEditor::getActualFileIndent ()
+void pEditor::autoDetectIndent ()
 {
 	QString currText = "\n" + text(); // \n for more simple RegExp
 	QRegExp tabRe = QRegExp ("\n\\t");
 	int matchIntex;
 	matchIntex = tabRe.indexIn (currText);
-	if (matchIntex != -1)
-		return "\t";
+	if (matchIntex != -1) // Use tabs
+	{
+		setIndentationsUseTabs (true);
+		return;
+	}
 	
 	QRegExp spaceRe = QRegExp ("\n( +)");
 	matchIntex = spaceRe.indexIn (currText);
-	if (matchIntex != -1)
-		return spaceRe.cap(1);
-	return QString::null;
+	if (matchIntex != -1) // Use spaces
+	{
+		setIndentationsUseTabs (false);
+		return;
+	}
 }
 
 int pEditor::lineNumbersMarginWidth() const
@@ -283,7 +286,13 @@ bool pEditor::openFile( const QString& s )
 	// convert tabs if needed
 	if ( pMonkeyStudio::convertTabsUponOpen() )
 		convertTabs();
-		
+	
+	//autodetect indent, if need
+	if (pMonkeyStudio::autoDetectIndent())
+	{
+		autoDetectIndent ();
+	}
+	
 	// make backup if needed
 	if ( pMonkeyStudio::createBackupUponOpen() )
 		makeBackup();
@@ -293,7 +302,7 @@ bool pEditor::openFile( const QString& s )
 		convertEols( eolMode() );
 	
 	QApplication::restoreOverrideCursor();
-	qWarning () << getActualFileIndent ();
+	
 	return true;
 }
 
@@ -347,12 +356,6 @@ bool pEditor::saveBackup( const QString& s )
 	// if not filename, cancel
 	if ( s.isEmpty() )
 		return false;
-	
-	// check if file exists
-	/*
-	if ( QFile::exists( s ) && !pMonkeyStudio::question( tr( "Save backup..." ), tr( "The file already exists, are you sure you want to overwrite it ?" ) ) )
-		return false;
-	*/
 	
 	QApplication::setOverrideCursor( Qt::WaitCursor );
 	

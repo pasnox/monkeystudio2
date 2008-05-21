@@ -29,7 +29,6 @@
 #include "pMonkeyStudio.h"
 #include "maininterface/ui/UITranslator.h"
 #include "pluginsmanager/PluginsManager.h"
-#include "pluginsmanager/ProjectPlugin.h"
 #include "coremanager/MonkeyCore.h"
 #include "queuedstatusbar/QueuedStatusBar.h"
 
@@ -444,17 +443,6 @@ const QHash<QString, QStringList> pMonkeyStudio::availableFilesSuffixes()
 	return l;
 }
 
-const QHash<QString, QStringList> pMonkeyStudio::availableProjectsSuffixes()
-{
-	// temporary hash
-	QHash<QString, QStringList> mSuffixes;
-	// get all hash
-	foreach ( ProjectPlugin* pp, MonkeyCore::pluginsManager()->plugins<ProjectPlugin*>( PluginsManager::stEnabled ) )
-		mSuffixes.unite( pp->suffixes() );
-	// return suffixes
-	return mSuffixes;
-}
-
 const QString pMonkeyStudio::availableLanguagesFilters()
 {
 	QString f;
@@ -478,21 +466,6 @@ const QString pMonkeyStudio::availableFilesFilters()
 	//
 	foreach ( QString k, sl.keys() )
 		f += QString( "%1 Files (%2);;" ).arg( k ).arg( sl.value( k ).join( " " ) );
-	// remove trailing ;;
-	if ( f.endsWith( ";;" ) )
-		f.chop( 2 );
-	// return filters list
-	return f;
-}
-
-const QString pMonkeyStudio::availableProjectsFilters()
-{
-	QString f;
-	// get suffixes
-	QHash<QString, QStringList> sl = availableProjectsSuffixes();
-	//
-	foreach ( QString k, sl.keys() )
-		f += QString( "%1 ( %2 );;" ).arg( k ).arg( sl.value( k ).join( " " ) );
 	// remove trailing ;;
 	if ( f.endsWith( ";;" ) )
 		f.chop( 2 );
@@ -1145,6 +1118,12 @@ void pMonkeyStudio::setIndentationsUseTabs( bool b )
 
 const bool pMonkeyStudio::indentationsUseTabs()
 { return MonkeyCore::settings()->value( settingsPath() +"/IndentationsUseTabs", true ).toBool(); }
+
+void pMonkeyStudio::setAutoDetectIndent( bool b )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoDetectIndent", b ); }
+
+const bool pMonkeyStudio::autoDetectIndent()
+{ return MonkeyCore::settings()->value( settingsPath() +"/AutoDetectIndent", false ).toBool(); }
 
 void pMonkeyStudio::setIndentationWidth( int i )
 { MonkeyCore::settings()->setValue( settingsPath() +"/IndentationWidth", i ); }

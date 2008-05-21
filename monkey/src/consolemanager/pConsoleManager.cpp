@@ -34,6 +34,8 @@
 #include "../workspace/pFileManager.h"
 #include "../coremanager/MonkeyCore.h"
 
+#include <QDebug>
+
 static const int MAX_LINES = 4; //Maximum lines count, that can be parsed by Monkey. Than less - than better perfomance
 
 using namespace pMonkeyStudio;
@@ -48,7 +50,9 @@ pConsoleManager::pConsoleManager( QObject* o )
 	
 	// unset some variables environments
 	int i;
-	QStringList l = environment();
+	/*FIXME need to use environment(), that returns systemEnvironment, 
+	if process env was not changed, but it's not works on Qt 4.3.4 X11 */
+	QStringList l = systemEnvironment();
 	if ( ( i = l.indexOf( QRegExp( "^LANG=.*$" ) ) ) != -1 )
 		l.removeAt( i );
 	setEnvironment( l );

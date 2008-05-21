@@ -57,6 +57,8 @@ private:
 	pWorkspace( QMainWindow* = 0 );
 	
 public slots:
+	// ask the user a filename and create / open the file
+	pAbstractChild* newTextEditor();
 	// open a file and set cursor to position
 	pAbstractChild* openFile( const QString& );
 	// close the file
@@ -108,6 +110,7 @@ public slots:
 	void editCut_triggered();
 	void editCopy_triggered();
 	void editPaste_triggered();
+	void editSearch_triggered();
 	void editGoTo_triggered();
 	void editExpandAbbreviation_triggered();
 	void editPrepareAPIs_triggered();

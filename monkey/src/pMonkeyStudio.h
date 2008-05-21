@@ -78,10 +78,8 @@ namespace pMonkeyStudio
 	Q_MONKEY_EXPORT const QHash<QString, QStringList> defaultLanguagesSuffixes();
 	Q_MONKEY_EXPORT const QHash<QString, QStringList> availableLanguagesSuffixes();
 	Q_MONKEY_EXPORT const QHash<QString, QStringList> availableFilesSuffixes();
-	Q_MONKEY_EXPORT const QHash<QString, QStringList> availableProjectsSuffixes();
 	Q_MONKEY_EXPORT const QString availableLanguagesFilters();
 	Q_MONKEY_EXPORT const QString availableFilesFilters();
-	Q_MONKEY_EXPORT const QString availableProjectsFilters();
 
 	Q_MONKEY_EXPORT const QString settingsPath();
 	Q_MONKEY_EXPORT const QString scintillaSettingsPath();
@@ -181,6 +179,8 @@ namespace pMonkeyStudio
 	Q_MONKEY_EXPORT const bool indentationGuides();
 	Q_MONKEY_EXPORT void setIndentationsUseTabs( bool );
 	Q_MONKEY_EXPORT const bool indentationsUseTabs();
+	Q_MONKEY_EXPORT void setAutoDetectIndent( bool );
+	Q_MONKEY_EXPORT const bool autoDetectIndent();
 	Q_MONKEY_EXPORT void setIndentationWidth( int );
 	Q_MONKEY_EXPORT const int indentationWidth();
 	Q_MONKEY_EXPORT void setTabIndents( bool );

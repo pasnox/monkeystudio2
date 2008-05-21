@@ -48,9 +48,9 @@ public:
 private:
 
 	DockGNUDebugger( QWidget* = 0 );
-	 ~DockGNUDebugger();
+		~DockGNUDebugger();
 
-	QByteArray crlf;
+		QByteArray crlf;
 
 	QString targetName;
 
