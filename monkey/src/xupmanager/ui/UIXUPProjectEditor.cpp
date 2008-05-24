@@ -102,11 +102,15 @@ UIXUPProjectEditor::UIXUPProjectEditor( XUPItem* project, QWidget* parent )
 	// connections
 	connect( lvOthersVariables->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( lvOthersVariables_currentChanged( const QModelIndex&, const QModelIndex& ) ) );
 	connect( lvOthersValues->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( lvOthersValues_currentChanged( const QModelIndex&, const QModelIndex& ) ) );
-	// doing here to avoid fucking bug
-	connect( projectFilesMenu, SIGNAL( triggered( QAction* ) ), tbModifyProjectFile, SIGNAL( triggered( QAction* ) ) );
-	connect( menu, SIGNAL( triggered( QAction* ) ), tbOthersVariablesEdit, SIGNAL( triggered( QAction* ) ) );
-	connect( addMenu, SIGNAL( triggered( QAction* ) ), tbOthersValuesAdd, SIGNAL( triggered( QAction* ) ) );
-	connect( editMenu, SIGNAL( triggered( QAction* ) ), tbOthersValuesEdit, SIGNAL( triggered( QAction* ) ) );
+	// fucking qt 4.3 bug that don't emit menu triggered
+	const QString qtVersion = qVersion();
+	if ( qtVersion.startsWith( "4.3" ) )
+	{
+		connect( projectFilesMenu, SIGNAL( triggered( QAction* ) ), tbModifyProjectFile, SIGNAL( triggered( QAction* ) ) );
+		connect( menu, SIGNAL( triggered( QAction* ) ), tbOthersVariablesEdit, SIGNAL( triggered( QAction* ) ) );
+		connect( addMenu, SIGNAL( triggered( QAction* ) ), tbOthersValuesAdd, SIGNAL( triggered( QAction* ) ) );
+		connect( editMenu, SIGNAL( triggered( QAction* ) ), tbOthersValuesEdit, SIGNAL( triggered( QAction* ) ) );
+	}
 	
 	// update gui
 	cbScope->setRootIndex( mScopedModel->mapFromSource( mProject->index().parent() ) );
@@ -496,12 +500,24 @@ void UIXUPProjectEditor::on_tbOthersValuesAdd_triggered( QAction* action )
 		bool ok = true;
 		QString val;
 		if ( action == aOthersValuesAddValue )
+		{
 			val	= QInputDialog::getText( window(), title, tr( "Enter the value :" ), QLineEdit::Normal, QString(), &ok );
+			if ( !ok )
+				val.clear();
+		}
 		else if ( action == aOthersValuesAddFile )
-			val = mProject->relativeFilePath( QFileDialog::getOpenFileName( window(), tr( "Choose a file" ), mProject->projectPath() ) );
+		{
+			val = QFileDialog::getOpenFileName( window(), tr( "Choose a file" ), mProject->projectPath() );
+			if ( !val.isEmpty() )
+				val = mProject->relativeFilePath( val );
+		}
 		else if ( action == aOthersValuesAddPath )
-			val = mProject->relativeFilePath( QFileDialog::getExistingDirectory( window(), tr( "Choose a path" ), mProject->projectPath() ) );
-		if ( ok && !val.isEmpty() )
+		{
+			val = QFileDialog::getExistingDirectory( window(), tr( "Choose a path" ), mProject->projectPath() );
+			if ( !val.isEmpty() )
+				val = mProject->relativeFilePath( val );
+		}
+		if ( !val.isEmpty() )
 		{
 			// check if value already exists
 			foreach ( XUPItem* cit, cv->children( false, false ) )
@@ -544,12 +560,24 @@ void UIXUPProjectEditor::on_tbOthersValuesEdit_triggered( QAction* action )
 		bool ok = true;
 		QString val;
 		if ( action == aOthersValuesEditValue )
+		{
 			val	= QInputDialog::getText( window(), title, tr( "Edit the value :" ), QLineEdit::Normal, cv->defaultValue(), &ok );
+			if ( !ok )
+				val.clear();
+		}
 		else if ( action == aOthersValuesEditFile )
-			val = mProject->relativeFilePath( QFileDialog::getOpenFileName( window(), tr( "Choose a file" ), cv->defaultInterpretedValue() ) );
+		{
+			val = QFileDialog::getOpenFileName( window(), tr( "Choose a file" ), cv->defaultInterpretedValue() );
+			if ( !val.isEmpty() )
+				val = mProject->relativeFilePath( val );
+		}
 		else if ( action == aOthersValuesEditPath )
-			val = mProject->relativeFilePath( QFileDialog::getExistingDirectory( window(), tr( "Choose a path" ), cv->defaultInterpretedValue() ) );
-		if ( ok && !val.isEmpty() )
+		{
+			val = QFileDialog::getExistingDirectory( window(), tr( "Choose a path" ), cv->defaultInterpretedValue() );
+			if ( !val.isEmpty() )
+				val = mProject->relativeFilePath( val );
+		}
+		if ( !val.isEmpty() )
 		{
 			// check if value already exists
 			foreach ( XUPItem* cit, cv->parent()->children( false, true ) )
