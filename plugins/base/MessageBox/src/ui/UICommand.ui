@@ -10,20 +10,29 @@
    </rect>
   </property>
   <property name="windowIcon" >
-   <iconset resource="../resources/MessageBox.qrc" >:/icons/tablog.png</iconset>
+   <iconset resource="../resources/MessageBox.qrc" >
+    <normaloff>:/icons/tablog.png</normaloff>:/icons/tablog.png</iconset>
   </property>
   <property name="windowTitle" >
    <string>Commands</string>
   </property>
   <widget class="QWidget" name="centralwidget" >
+   <property name="geometry" >
+    <rect>
+     <x>2</x>
+     <y>22</y>
+     <width>396</width>
+     <height>116</height>
+    </rect>
+   </property>
    <layout class="QVBoxLayout" >
     <item>
-     <widget class="QTextEdit" name="teLog" >
+     <widget class="QPlainTextEdit" name="teLog" >
       <property name="verticalScrollBarPolicy" >
        <enum>Qt::ScrollBarAlwaysOn</enum>
       </property>
-      <property name="lineWrapMode" >
-       <enum>QTextEdit::NoWrap</enum>
+      <property name="undoRedoEnabled" >
+       <bool>false</bool>
       </property>
       <property name="readOnly" >
        <bool>true</bool>
