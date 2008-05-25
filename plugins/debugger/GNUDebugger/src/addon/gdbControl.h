@@ -11,12 +11,16 @@
 #include <QHBoxLayout>
 #include <QFrame>
 
+#include <QHash>
+#include <QAction>
+
 #include "../kernel/gdbCore.h"
 #include "../kernel/gdbTemplateCore.h"
 
 class GdbControl : public GdbCore
 {
 	Q_OBJECT
+
 
 	QPushButton *bStepOver;
 	QPushButton *bRun ;
@@ -30,6 +34,8 @@ public : // function
 	GdbControl( GdbParser *p);
 	~GdbControl();
 	
+	void setAction(QHash<QString, QAction*> *);
+
 	int process(QGdbMessageCore);
 	int processError(QGdbMessageCore) ;
 	void processPrompt();
@@ -47,6 +53,7 @@ public : // function
 	void targetExited();
 
 	QString name();
+	QWidget * widget(){ return mWidget;}
 
 public slots:
 
@@ -65,6 +72,8 @@ private: // function
 	QGdbInterpreter *interpreterEndSteppingRange;
 	QGdbInterpreter *interpreterKill;
 	QGdbInterpreter *interpreterStop;
+
+	QHash<QString, QAction*> *mActionList;
 
 signals :
 	void wantExit();

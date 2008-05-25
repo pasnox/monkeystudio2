@@ -34,7 +34,7 @@
 int main( int argc, char** argv )
 {
 	// check qt version
-	QT_REQUIRE_VERSION( argc, argv, "4.4.0" );
+	QT_REQUIRE_VERSION( argc, argv, "4.3.2" );
 	// create application
 	QApplication a( argc, argv );
 	a.setApplicationName( PACKAGE_NAME );

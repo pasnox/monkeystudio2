@@ -278,7 +278,27 @@ void UIXUPManager::addFiles( XUPItem* scope, QWidget* parent )
 				files << path;
 		}
 		if ( !files.isEmpty() )
+		{
+			// import files if needed
+			if ( d.importFiles() )
+			{
+				const QString projectPath = d.currentItem()->projectPath();
+				const QString importPath = d.importPath();
+				const QString importRootPath = d.directory().absolutePath();
+				for ( int i = 0; i < files.count(); i++ )
+				{
+					if ( !files.at( i ).startsWith( projectPath ) )
+					{
+						QString fn = QString( files.at( i ) ).remove( importRootPath ).replace( "\\", "/" );
+						fn = QDir::cleanPath( QString( "%1/%2/%3" ).arg( projectPath ).arg( importPath ).arg( fn ) );
+						if ( d.directory().mkpath( QFileInfo( fn ).absolutePath() ) && QFile::copy( files.at( i ), fn ) )
+							files[ i ] = fn;
+					}
+				}
+			}
+			// add files
 			d.currentItem()->addFiles( files, d.currentItem(), d.currentOperator() );
+		}
 	}
 }
 

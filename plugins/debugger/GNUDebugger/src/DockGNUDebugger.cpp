@@ -1,3 +1,13 @@
+/*
+<PasNox> il te faut creer des action
+<PasNox> genre
+<PasNox> menubar->action( "mDebugger/aLoadTarget", caption, icon, shortcut );
+<PasNox> ca ca creer uen actino dans un menu
+<PasNox> ensuite
+<PasNox> docktoolbar( type )->addAction( menubar->action( "mDebugger/aLoadTarget" ) );
+<PasNox> et hop ca ajoute ton action dans la toolbar
+<xiantia> ok nickel
+*/
 
 #include "DockGNUDebugger.h"
 
@@ -15,7 +25,7 @@
 QSize pixmapSize(16,16);
 
 // for see all AddOn, else comment this line
-//#define DEBUG_WIDGET
+#define DEBUG_WIDGET
 
 DockGNUDebugger::DockGNUDebugger( QWidget* w )
 	: pDockWidget( w )
@@ -25,8 +35,8 @@ DockGNUDebugger::DockGNUDebugger( QWidget* w )
 	connect (MonkeyCore::mainWindow(), SIGNAL( aboutToClose()), this , SLOT(onAboutToClose()));
 
 	// create MainWindow
-	mw = new QMainWindow(w);
-	setWidget(mw);
+//	mw = new QMainWindow(w);
+//	setWidget(mw);
 //	QSize s = mw->size();
 	
 //	setMinimumHeight( 120 );
@@ -60,7 +70,19 @@ DockGNUDebugger::DockGNUDebugger( QWidget* w )
 	// create control
 	controlGdb = new  GdbControl(Parser);
 
-	#ifdef DEBUG_WIDGET
+	mainTabWidget = new QTabWidget();
+	setWidget(mainTabWidget);
+
+	mainTabWidget->addTab(kernelDispatcher->widget(),kernelDispatcher->name());
+	mainTabWidget->addTab(registersGdb->widget(),registersGdb->name());
+	mainTabWidget->addTab(backtraceGdb->widget(),backtraceGdb->name());
+	mainTabWidget->addTab(watchGdb->widget(),watchGdb->name());
+	mainTabWidget->addTab(bridgeEditor->widget(),bridgeEditor->name());
+	mainTabWidget->addTab(breakpointGdb->widget(),breakpointGdb->name());
+	mainTabWidget->addTab(answerGdb->widget(),answerGdb->name());
+
+
+/*	#ifdef DEBUG_WIDGET
 		mw->addDockWidget(Qt::RightDockWidgetArea, kernelDispatcher->getContainer());
 		mw->tabifyDockWidget(kernelDispatcher->getContainer(),registersGdb->getContainer());
 		mw->tabifyDockWidget(registersGdb->getContainer(),backtraceGdb->getContainer());
@@ -77,7 +99,7 @@ DockGNUDebugger::DockGNUDebugger( QWidget* w )
 	#endif
 
 	mw->setCentralWidget(controlGdb->getContainer());
-	
+*/	
 	// add plugin under manager
 	kernelDispatcher->add(breakpointGdb);
 	kernelDispatcher->add(watchGdb);
@@ -110,10 +132,10 @@ DockGNUDebugger::DockGNUDebugger( QWidget* w )
 	// create QProcess for GDb
 	pConsole =  new GdbProcess(this);
 	
-		connect(pConsole, SIGNAL( commandStarted( const pCommand& )), this, SLOT(gdbStarted( const pCommand& )));
-		connect(pConsole, SIGNAL( commandFinished( const pCommand&, int, QProcess::ExitStatus )), this, SLOT( gdbFinished( const pCommand&, int, QProcess::ExitStatus )));
-		connect(pConsole, SIGNAL( commandReadyRead( const pCommand&, const QByteArray& )), this, SLOT( commandReadyRead( const pCommand&, const QByteArray& )));
-		connect(pConsole, SIGNAL(commandError( const pCommand&,QProcess::ProcessError)), this, SLOT(gdbError(const pCommand&,QProcess::ProcessError)));
+	connect(pConsole, SIGNAL( commandStarted( const pCommand& )), this, SLOT(gdbStarted( const pCommand& )));
+	connect(pConsole, SIGNAL( commandFinished( const pCommand&, int, QProcess::ExitStatus )), this, SLOT( gdbFinished( const pCommand&, int, QProcess::ExitStatus )));
+	connect(pConsole, SIGNAL( commandReadyRead( const pCommand&, const QByteArray& )), this, SLOT( commandReadyRead( const pCommand&, const QByteArray& )));
+	connect(pConsole, SIGNAL(commandError( const pCommand&,QProcess::ProcessError)), this, SLOT(gdbError(const pCommand&,QProcess::ProcessError)));
 
 	// plugin send a command to Gdb
 	connect(kernelDispatcher, SIGNAL(sendRawData(GdbCore*, QByteArray)) ,this , SLOT(onSendRawData(GdbCore *, QByteArray) ));
@@ -144,8 +166,15 @@ DockGNUDebugger::DockGNUDebugger( QWidget* w )
 	connect( controlGdb, SIGNAL(wantStart(QString)), this , SLOT(onWantStart(QString)));
 }
 //
+
+GdbControl * DockGNUDebugger::gdbControl()
+{
+	return controlGdb;
+}
+
 void DockGNUDebugger::onWantStart(QString file)
 {
+//	QMessageBox::warning(NULL,tr("Sorry ..."), "on want start");
 	targetName = file;
 	// start gdb
 	pConsole->executeProcess();
@@ -153,6 +182,8 @@ void DockGNUDebugger::onWantStart(QString file)
 //
 void DockGNUDebugger::onWantExit()
 {
+//		QMessageBox::warning(NULL,tr("Sorry ..."), "on want exit");
+
 	// stop gdb
 	pConsole->stopCurrentCommand(true);
 	
@@ -169,6 +200,8 @@ void DockGNUDebugger::onWantExit()
 // a new file is open under editor
 void DockGNUDebugger::onFileOpened( const QString& file )
 {
+//		QMessageBox::warning(NULL,tr("Sorry ..."), "file opened");
+
 	if(MonkeyCore::fileManager()->currentChild())
 	{
 		// get new file
@@ -196,6 +229,8 @@ void DockGNUDebugger::onFileOpened( const QString& file )
 //
 void DockGNUDebugger::onFileClosed( int r )
 {
+//	QMessageBox::warning(NULL,tr("Sorry ..."), "file closed");
+
 	// delete editor
 	editor.pointeur.removeAt(r);
 	editor.fileName.removeAt(r);
@@ -223,7 +258,7 @@ void DockGNUDebugger::onMarginClicked(int marginIndex, int line , Qt::KeyboardMo
 // show icon under file
 void DockGNUDebugger::onBreakpoint(QByteArray filename, int line, QByteArray type,QByteArray enable, bool b)
 {
-//QMessageBox::warning(NULL,"sdqs", type + "  " + enable);
+//	QMessageBox::warning(NULL,tr("Sorry ..."), "onbreapoint");
 
 	if(MonkeyCore::fileManager()->currentChild() )
 	{
@@ -259,27 +294,37 @@ void DockGNUDebugger::onBreakpoint(QByteArray filename, int line, QByteArray typ
 // move backtrace under editor
 void DockGNUDebugger::onBacktrace(QByteArray filename, int line)
 {
-	// save current file for restor after closed
-	currentBacktraceFile = filename;
-	currentBacktraceLine = line;
+//		QMessageBox::warning(NULL,tr("Sorry ..."), filename);
 
-	// first delete back trace under all editor
-	for(int i=0; i<editor.pointeur.count(); i++)
-		editor.pointeur.at(i)->markerDeleteAll(pEditor::mdPlay);
+	// bug fix if no file is open
+	if(!filename.isEmpty())
+	{
+		// save current file for restor after closed
+		currentBacktraceFile = filename;
+		currentBacktraceLine = line;
 
-	// open file (if is not same)
-	MonkeyCore::workspace()->goToLine(filename, QPoint(1,line), true);
+		// first delete back trace under all editor
+		for(int i=0; i<editor.pointeur.count(); i++)
+			editor.pointeur.at(i)->markerDeleteAll(pEditor::mdPlay);
 
-	// now the current file is
-	pEditor * e = MonkeyCore::fileManager()->currentChild()->currentEditor();
+		// open file (if is not same)
+		if(MonkeyCore::workspace())
+			MonkeyCore::workspace()->goToLine(filename, QPoint(1,line), true);
 
-	e->markerAdd (line-1, pEditor::mdPlay);
+		// now the current file is
+		pEditor * e = MonkeyCore::fileManager()->currentChild()->currentEditor();
+
+		if(e) e->markerAdd (line-1, pEditor::mdPlay);
+	}
+
 }
 //
 // some time gdb move breakpoint under next line 
 // some BUG if this line have already one breakpoint
 void DockGNUDebugger::onBreakpointMoved(QByteArray filename, int beforLine, int afterLine)
 {
+//		QMessageBox::warning(NULL,tr("Sorry ..."), "breapoint moved");
+
 	pEditor *e = findFile(filename);
 	if(e)
 	{
@@ -291,6 +336,7 @@ void DockGNUDebugger::onBreakpointMoved(QByteArray filename, int beforLine, int 
 // show breakpoint enable or not
 void DockGNUDebugger::onBreakpointEnabled(QByteArray filename, int line, bool b)
 {
+//	QMessageBox::warning(NULL,tr("Sorry ..."), "breapoint enable");
 	pEditor *e = findFile(filename);
 	if(e)
 	{
@@ -311,6 +357,7 @@ void DockGNUDebugger::onBreakpointEnabled(QByteArray filename, int line, bool b)
 // NOT WORK because i dion't have a fullName
 void DockGNUDebugger::onGotoBreakpoint(QByteArray filename, int line)
 {
+//	QMessageBox::warning(NULL,tr("Sorry ..."), "breapoint");
 	if(MonkeyCore::workspace() )
 	{
 		MonkeyCore::workspace()->goToLine(filename, QPoint(1,line), true);
@@ -413,6 +460,7 @@ void DockGNUDebugger::onTargetNoLoaded(int id, QString st)
 //
 void DockGNUDebugger::onTargetExited(int id, QString st)
 {
+//	QMessageBox::warning(NULL,tr("exited"), st);
 	kernelDispatcher->targetExited();
 }
 //

@@ -168,7 +168,7 @@ const QFileInfoList pMonkeyStudio::getFolders( QDir fromDir, const QStringList& 
 	QFileInfoList files;
 	foreach ( QFileInfo file, fromDir.entryInfoList( QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name ) )
 	{
-		if ( QDir::match( filters, file.fileName() ) )
+		if ( filters.isEmpty() || QDir::match( filters, file.fileName() ) )
 			files << file;
 		if ( recursive )
 		{

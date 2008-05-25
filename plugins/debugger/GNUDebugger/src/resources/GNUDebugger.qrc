@@ -15,5 +15,6 @@
 		<file>icons/projectopen.png</file>
 		<file>icons/update.png</file>
 		<file>icons/file.png</file>
+		<file>icons/play.png</file>
 	</qresource>
 </RCC>

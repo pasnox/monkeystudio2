@@ -47,7 +47,10 @@ void MessageBoxDocks::appendOutput( const QString& s )
 	bool b = p == mOutput->tbOutput->verticalScrollBar()->maximum();
 	// appendOutput text
 	mOutput->tbOutput->moveCursor( QTextCursor::End );
-	mOutput->tbOutput->insertHtml( s +"<br />" );
+	// QPlainTextEdit does not have an insertHtml member
+	QTextCursor cursor = mOutput->tbOutput->textCursor();
+	cursor.insertHtml( s +"<br />" );
+	mOutput->tbOutput->setTextCursor( cursor );
 	// if scrollbar is at maximum, increase it
 	mOutput->tbOutput->verticalScrollBar()->setValue( b ? mOutput->tbOutput->verticalScrollBar()->maximum() : p );
 }
@@ -59,7 +62,10 @@ void MessageBoxDocks::appendLog( const QString& s )
 	bool b = p == mCommand->teLog->verticalScrollBar()->maximum();
 	// appendOutput text
 	mCommand->teLog->moveCursor( QTextCursor::End );
-	mCommand->teLog->insertHtml( s +"<br />" );
+	// QPlainTextEdit does not have an insertHtml member
+	QTextCursor cursor = mCommand->teLog->textCursor();
+	cursor.insertHtml( s +"<br />" );
+	mCommand->teLog->setTextCursor( cursor );
 	// if scrollbar is at maximum, increase it
 	mCommand->teLog->verticalScrollBar()->setValue( b ? mCommand->teLog->verticalScrollBar()->maximum() : p );
 }
@@ -362,6 +368,16 @@ void MessageBoxDocks::commandReadyRead( const pCommand&, const QByteArray& a )
 	bool b = p == mOutput->tbOutput->verticalScrollBar()->maximum();
 	// appendOutput log
 	mOutput->tbOutput->moveCursor( QTextCursor::End );
+	/*
+	QTextCursor cursor = mOutput->tbOutput->textCursor();
+	QTextCharFormat format = cursor.blockCharFormat();
+	if ( format.foreground().color() != QColor( Qt::black ) )
+	{
+		format.setForeground( QBrush( Qt::black ) );
+		cursor.setBlockCharFormat( format );
+		mOutput->tbOutput->setTextCursor( cursor );
+	}
+	*/
 	mOutput->tbOutput->insertPlainText( QTextCodec::codecForLocale()->toUnicode( a ) );
 	// if scrollbar is at maximum, increase it, else restore last position
 	mOutput->tbOutput->verticalScrollBar()->setValue( b ? mOutput->tbOutput->verticalScrollBar()->maximum() : p );

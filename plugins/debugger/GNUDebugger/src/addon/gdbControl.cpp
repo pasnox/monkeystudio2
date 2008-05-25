@@ -68,8 +68,8 @@ GdbControl::GdbControl(GdbParser *p) :  GdbCore( p),
 	h->addWidget(bStop);
 	h->addWidget(bExitGdb);
 
-	getContainer()->setWidget(mWidget);
-	getContainer()->setWindowTitle(name());
+//	getContainer()->setWidget(mWidget);
+//	getContainer()->setWindowTitle(name());
 
 	connect (bLoadTarget, SIGNAL(clicked()), this, SLOT(onLoadTarget()));
 	connect (bStepOver, SIGNAL(clicked()), this, SLOT(onStepOver()));
@@ -98,9 +98,15 @@ GdbControl::~GdbControl()
 	//delete h;
 	delete mWidget;
 	
-	delete getContainer();
+//	delete getContainer();
 } 
 //
+void GdbControl::setAction(QHash<QString, QAction *> *a)
+{
+	mActionList = a;
+}
+
+
 QString GdbControl::name()
 {
 	 return "GdbControl"; 
@@ -141,7 +147,17 @@ void GdbControl::onLoadTarget()
 // step over or into
 int GdbControl::processSteps(QGdbMessageCore m)
 {
+// no warning
 m=m;
+
+		mActionList->value("aRestart")->setEnabled(true);
+
+		mActionList->value("aStepOver")->setEnabled(true);
+		mActionList->value("aStepInto")->setEnabled(true);
+		mActionList->value("aContinue")->setEnabled(true);
+		mActionList->value("aStop")->setEnabled(true);
+		mActionList->value("aExitGdb")->setEnabled(true);
+
 		bRun->setEnabled(true);
 		bStepOver->setEnabled(true);
 		bStepInto->setEnabled(true);
@@ -164,6 +180,13 @@ int GdbControl::processQuestion(QGdbMessageCore m)
 
 	if(kill.exactMatch( currentQuestion))
 	{
+		mActionList->value("aRestart")->setEnabled(true);
+		mActionList->value("aStepOver")->setEnabled(false);
+		mActionList->value("aStepInto")->setEnabled(false);
+		mActionList->value("aContinue")->setEnabled(false);
+		mActionList->value("aStop")->setEnabled(false);
+		mActionList->value("aExitGdb")->setEnabled(false);
+
 		bRun->setEnabled(true);
 		bStop->setEnabled(false);
 		bStepOver->setEnabled(false);
@@ -174,6 +197,13 @@ int GdbControl::processQuestion(QGdbMessageCore m)
 
 	if(restart.exactMatch( currentQuestion))
 	{
+		mActionList->value("aRestart")->setEnabled(false);
+		mActionList->value("aStepOver")->setEnabled(false);
+		mActionList->value("aStepInto")->setEnabled(false);
+		mActionList->value("aContinue")->setEnabled(false);
+		mActionList->value("aStop")->setEnabled(false);
+		mActionList->value("aExitGdb")->setEnabled(false);
+
 		bRun->setEnabled(false);
 		bStop->setEnabled(false);
 		bStepOver->setEnabled(false);
@@ -187,8 +217,14 @@ int GdbControl::processQuestion(QGdbMessageCore m)
 //
 void GdbControl::onStepOver()
 {
-	bRun->setEnabled(false);
+		mActionList->value("aRestart")->setEnabled(false);
+		mActionList->value("aStepOver")->setEnabled(false);
+		mActionList->value("aStepInto")->setEnabled(false);
+		mActionList->value("aContinue")->setEnabled(false);
+		mActionList->value("aStop")->setEnabled(false);
+		mActionList->value("aExitGdb")->setEnabled(false);
 
+		bRun->setEnabled(false);
 	bStepOver->setEnabled(false);
 	bStepInto->setEnabled(false);
 	bContinue->setEnabled(false);
@@ -207,7 +243,14 @@ void GdbControl::onStepOver()
 //
 void GdbControl::onStepInto()
 {
-	bRun->setEnabled(false);
+		mActionList->value("aRestart")->setEnabled(false);
+		mActionList->value("aStepOver")->setEnabled(false);
+		mActionList->value("aStepInto")->setEnabled(false);
+		mActionList->value("aContinue")->setEnabled(false);
+		mActionList->value("aStop")->setEnabled(false);
+		mActionList->value("aExitGdb")->setEnabled(false);
+
+		bRun->setEnabled(false);
 
 	bStepOver->setEnabled(false);
 	bStepInto->setEnabled(false);
@@ -249,11 +292,16 @@ void GdbControl::gdbStarted()
 {
 	GdbCore::gdbStarted();
 	bExitGdb->setEnabled(true);
+		mActionList->value("aExitGdb")->setEnabled(true);
 }
 //
 void GdbControl::gdbFinished()
 {
 	GdbCore::gdbFinished();
+
+		mActionList->value("aLoadTarget")->setEnabled(true);
+		mActionList->value("aRestart")->setEnabled(false);
+		mActionList->value("aExitGdb")->setEnabled(false);
 
 	bLoadTarget->setEnabled(true);
 	bExitGdb->setEnabled(false);
@@ -266,6 +314,10 @@ void GdbControl::targetLoaded()
 	bRun->setEnabled(true);
 	bExitGdb->setEnabled(true);
 	bLoadTarget->setEnabled(false);
+
+		mActionList->value("aRestart")->setEnabled(true);
+		mActionList->value("aLoadTarget")->setEnabled(false);
+		mActionList->value("aExitGdb")->setEnabled(true);
 }
 //
 void GdbControl::targetRunning()
@@ -279,6 +331,12 @@ void GdbControl::targetRunning()
 	bStop->setEnabled(false);
 	bExitGdb->setEnabled(false);
 
+		mActionList->value("aRestart")->setEnabled(false);
+		mActionList->value("aStepOver")->setEnabled(false);
+		mActionList->value("aStepInto")->setEnabled(false);
+		mActionList->value("aContinue")->setEnabled(false);
+		mActionList->value("aStop")->setEnabled(false);
+		mActionList->value("aExitGdb")->setEnabled(false);
 }
 //
 void GdbControl::targetStopped()
@@ -291,6 +349,14 @@ void GdbControl::targetStopped()
 	bContinue->setEnabled(true);
 	bStop->setEnabled(true);
 	bExitGdb->setEnabled(true);
+
+		mActionList->value("aRestart")->setEnabled(true);
+		mActionList->value("aStepOver")->setEnabled(true);
+		mActionList->value("aStepInto")->setEnabled(true);
+		mActionList->value("aContinue")->setEnabled(true);
+		mActionList->value("aStop")->setEnabled(true);
+		mActionList->value("aExitGdb")->setEnabled(true);
+
 }
 //
 void GdbControl::targetExited()
@@ -303,5 +369,12 @@ void GdbControl::targetExited()
 	bContinue->setEnabled(false);
 	bStop->setEnabled(false);
 	bExitGdb->setEnabled(true);
+
+		mActionList->value("aRestart")->setEnabled(true);
+		mActionList->value("aStepOver")->setEnabled(false);
+		mActionList->value("aStepInto")->setEnabled(false);
+		mActionList->value("aContinue")->setEnabled(false);
+		mActionList->value("aStop")->setEnabled(false);
+		mActionList->value("aExitGdb")->setEnabled(true);
 }
 //

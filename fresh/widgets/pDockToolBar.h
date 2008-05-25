@@ -50,7 +50,7 @@ public:
 
 	virtual bool eventFilter( QObject*, QEvent* );
 
-	void addAction( QAction* = 0, bool = true );
+	QAction* addAction( QAction* = 0, bool = true );
 	void addActions( QList<QAction*>, bool = true );
 
 	int addDock( QDockWidget*, const QString& = QString(), const QIcon& = QIcon() );

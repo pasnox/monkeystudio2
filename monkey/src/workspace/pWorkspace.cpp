@@ -421,14 +421,15 @@ void pWorkspace::internal_currentProjectChanged( XUPItem* currentProject, XUPIte
 	// get pluginsmanager
 	PluginsManager* pm = MonkeyCore::pluginsManager();
 	// set compiler, debugger and interpreter
-	BuilderPlugin* bp = pm->plugin<BuilderPlugin*>( PluginsManager::stAll, currentProject ? currentProject->projectSettingsValue( "BUILDER" ) : QString() );
-	CompilerPlugin* cp = pm->plugin<CompilerPlugin*>( PluginsManager::stAll, currentProject ? currentProject->projectSettingsValue( "COMPILER" ) : QString() );
-	DebuggerPlugin* dp = pm->plugin<DebuggerPlugin*>( PluginsManager::stAll, currentProject ? currentProject->projectSettingsValue( "DEBUGGER" ) : QString() );
-	InterpreterPlugin* ip = pm->plugin<InterpreterPlugin*>( PluginsManager::stAll, currentProject ? currentProject->projectSettingsValue( "INTERPRETER" ) : QString() );
+	BuilderPlugin* bp = currentProject ? pm->plugin<BuilderPlugin*>( PluginsManager::stAll, currentProject->projectSettingsValue( "BUILDER" ) ) : 0;
+	CompilerPlugin* cp = currentProject ? pm->plugin<CompilerPlugin*>( PluginsManager::stAll, currentProject->projectSettingsValue( "COMPILER" ) ) : 0;
+	DebuggerPlugin* dp = currentProject ? pm->plugin<DebuggerPlugin*>( PluginsManager::stAll, currentProject->projectSettingsValue( "DEBUGGER" ) ) : 0;
+	InterpreterPlugin* ip = currentProject ? pm->plugin<InterpreterPlugin*>( PluginsManager::stAll, currentProject->projectSettingsValue( "INTERPRETER" ) ) : 0;
 	pm->setCurrentBuilder( bp );
 	pm->setCurrentCompiler( cp );
 	pm->setCurrentDebugger( dp );
 	pm->setCurrentInterpreter( ip );
+	qWarning() << currentProject << previousProject << bp << cp << dp << ip;
 	// install new commands
 	if ( currentProject )
 		currentProject->installCommands();

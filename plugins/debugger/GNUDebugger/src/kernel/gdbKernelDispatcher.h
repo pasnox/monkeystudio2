@@ -31,12 +31,13 @@ public :
 	void targetExited();
 
 	QString name();
-//	QWidget *widget();
+	QWidget *widget(){return mWidget;}
 
 //	void setupDockWidget(QMainWindow *);
 
 	void add(GdbCore *);
 	void stopAll();
+
 public slots:
 
 	void onPostMessage( int, QByteArray data);

@@ -37,24 +37,14 @@
 #include <QComboBox>
 #include <QLineEdit>
 #include <QListView>
-#include <QDirModel>
+#include <QFileSystemModel>
 #include <QScrollArea>
 #include <QTabWidget>
 #include <QTreeView>
 #include <QHeaderView>
 
-bool pDockFileBrowser::FilteredModel::filterAcceptsRow( int row, const QModelIndex& parent ) const
-{
-	if ( parent == QModelIndex() ) 
-		return true;
-	foreach ( const QString s, mWildcards )
-		if ( QRegExp( s, Qt::CaseSensitive, QRegExp::Wildcard ).exactMatch( parent.child( row, 0 ).data().toString() ) )
-				return false;
-	return true;
-}
-
 pDockFileBrowser::pDockFileBrowser( QWidget* w )
-	: pDockWidget( w ), mShown( false )
+	: pDockWidget( w )
 {
 	// restrict areas
 	setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
@@ -79,12 +69,6 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	tbUp->setToolTip( tr( "Go Up" ) );
 	h->addWidget( tbUp );
 	
-	// refresh toolbutton
-	QToolButton* tbRefresh = new QToolButton;
-	tbRefresh->setIcon( QIcon( ":/icons/reload.png" ) );
-	tbRefresh->setToolTip( tr( "Refresh current view" ) );
-	h->addWidget( tbRefresh );
-	
 	// combo drive
 	mCombo = new pTreeComboBox;
 	mCombo->setToolTip( tr( "Quick Navigation" ) );
@@ -105,16 +89,18 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	v->addWidget( mLineEdit );
 	
 	// dir model
-	mDirsModel = new QDirModel( this );
-	mDirsModel->setFilter( QDir::AllEntries | QDir::Readable | QDir::CaseSensitive | QDir::NoDotAndDotDot );
-	mDirsModel->setSorting( QDir::DirsFirst | QDir::Name );
+	mDirsModel = new QFileSystemModel( this );
+	mDirsModel->setNameFilterDisables( false );
+	mDirsModel->setFilter( QDir::AllDirs | QDir::AllEntries | QDir::CaseSensitive | QDir::NoDotAndDotDot );
+	mDirsModel->setRootPath( QString::null ); // need to be called to reset the model
 	
-	mFilteredModel = new FilteredModel ( this );
+	// create proxy model
+	mFilteredModel = new FileBrowserFilteredModel( this );
 	mFilteredModel->setSourceModel( mDirsModel );
 	
 	// files view
 	mTree = new QTreeView;
-	v->addWidget ( mTree );
+	v->addWidget( mTree );
 	
 	// assign model to views
 	mCombo->setModel( mDirsModel );
@@ -124,9 +110,6 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	mCombo->view()->setColumnHidden( 1, true );
 	mCombo->view()->setColumnHidden( 2, true );
 	mCombo->view()->setColumnHidden( 3, true );
-	mTree->setColumnHidden( 1, true );
-	mTree->setColumnHidden( 2, true );
-	mTree->setColumnHidden( 3, true );
 	mTree->header()->hide();
 	
 	// set root index
@@ -141,32 +124,9 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	
 	// connections
 	connect( tbUp, SIGNAL( clicked() ), this, SLOT( tbUp_clicked() ) );
-	connect( tbRefresh, SIGNAL( clicked() ), this, SLOT( tbRefresh_clicked() ) );
 	connect( tbRoot, SIGNAL( clicked() ), this, SLOT( tbRoot_clicked() ) );
 	connect( mCombo, SIGNAL( currentChanged( const QModelIndex& ) ), this, SLOT( cb_currentChanged( const QModelIndex& ) ) );
 	connect( mTree, SIGNAL( doubleClicked( const QModelIndex& ) ), this, SLOT( tv_doubleClicked( const QModelIndex& ) ) );
-}
-
-void pDockFileBrowser::showEvent( QShowEvent* e )
-{
-	// default event
-	QDockWidget::showEvent( e );
-	// check if first showEvent
-	if ( !mShown )
-	{
-		mShown = true;
-		// restore settings
-		emit restoreSettings();
-	}
-}
-
-void pDockFileBrowser::hideEvent( QHideEvent* e )
-{
-	// default event
-	QDockWidget::hideEvent( e );
-	// save settings
-	if ( mShown )
-		emit saveSettings();
 }
 
 void pDockFileBrowser::tbUp_clicked()
@@ -174,12 +134,6 @@ void pDockFileBrowser::tbUp_clicked()
 	// cd up only if not the root index
 	if ( mCombo->currentIndex() != mCombo->rootIndex() )
 		setCurrentPath( mDirsModel->filePath( mCombo->currentIndex().parent() ) );
-}
-
-void pDockFileBrowser::tbRefresh_clicked()
-{
-	// refresh current parent folder
-	mDirsModel->refresh( mCombo->currentIndex() );
 }
 
 void pDockFileBrowser::tbRoot_clicked()
@@ -194,11 +148,10 @@ void pDockFileBrowser::tbRoot_clicked()
 	setCurrentPath( mDirsModel->filePath( index ) );
 }
 
-void pDockFileBrowser::tv_doubleClicked( const QModelIndex& i )
+void pDockFileBrowser::tv_doubleClicked( const QModelIndex& idx )
 {
 	// open file corresponding to index
-	QModelIndex index = mFilteredModel->mapToSource( i );
-	// open file
+	const QModelIndex index = mFilteredModel->mapToSource( idx );
 	if ( !mDirsModel->isDir( index ) )
 		MonkeyCore::fileManager()->openFile( mDirsModel->filePath( index ) );
 }
@@ -222,13 +175,8 @@ void pDockFileBrowser::setCurrentPath( const QString& s )
 	mLineEdit->setToolTip( mLineEdit->text() );
 }
 
-QStringList pDockFileBrowser::wildcards() const
-{ return mFilteredModel->mWildcards; }
+QStringList pDockFileBrowser::filters() const
+{ return mFilteredModel->filters(); }
 
-void pDockFileBrowser::setWildcards( const QStringList& l )
-{
-	const QString s = currentPath();
-	mFilteredModel->mWildcards = l;
-	mFilteredModel->invalidate();
-	setCurrentPath( s );
-}
+void pDockFileBrowser::setFilters( const QStringList& filters )
+{ mFilteredModel->setFilters( filters ); }

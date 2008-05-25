@@ -21,6 +21,7 @@
 #include "gdbParser.h"
 
 #include <QMessageBox>
+#include <QApplication>
 
 #define INFO_ID			10000
 #define ERROR_ID 		20000
@@ -29,10 +30,11 @@
 
 GdbParser::GdbParser (QObject* p) : QObject (p)
 {
-	if(loadingPattern("./plugins/GNUdbg/file/know_list_and_id.txt"))
+	// try to load ini file in install path
+	if(loadingPattern(QApplication::applicationDirPath() + "/plugins/GNUdbg/file/know_list_and_id.txt"))
 	{
-	//	QMessageBox::warning(NULL, "Error","File know_list_and_id.txt not found.\nCopy this file from MONKEY_SRC/plugins/base/debugger/file/ to ./bin/plugins/debugger/");
-	//	emit error(0, "(Class GdbPaser) Erreur d'ouverture du fichier de RegExp");
+		if(loadingPattern(QApplication::applicationDirPath() + "/../plugins/debugger/GNUDebugger/file/know_list_and_id.txt"))
+			QMessageBox::warning(NULL, "Error","File know_list_and_id.txt not found . Debugger can not work !");
 	}
 	#ifdef Q_OS_WIN 
 		crlf = "\r\n";

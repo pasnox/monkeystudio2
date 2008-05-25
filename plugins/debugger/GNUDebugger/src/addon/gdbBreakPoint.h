@@ -54,6 +54,7 @@ public : // function
 	void targetExited();
 
 	QString name();
+	QWidget * widget() { return tabWidget;}
 
 public slots:
 	void onEnableChanged(QTableWidgetItem *item);

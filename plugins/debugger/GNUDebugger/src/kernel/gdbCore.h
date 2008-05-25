@@ -58,7 +58,8 @@ private :
 	bool bGdbFinished;
 
 	class GdbParser	 * mParser;
-	class QDockWidget *mContainer;
+//	class QDockWidget *mContainer;
+//	class QWidget *mContainer;
 
 public :
 
@@ -72,6 +73,8 @@ public :
 	virtual void processPrompt() {}//= 0;
 
 	virtual QString name(){ return QString();};// = 0;
+
+	virtual QWidget * widget() = 0 ;
 
 	virtual void gdbStarted(void)
 		{bGdbStarted = true; bGdbFinished = false;}
@@ -106,7 +109,7 @@ public :
 	int isGdbFinished() { return bGdbFinished;}
 	//
 	GdbParser * getParser() {return mParser;}
-	QDockWidget * getContainer() {return mContainer;}
+//	QWidget * getContainer() {return mContainer;}
 	//
 	void addInterpreter(QGdbInterpreter i);
 	void removeInterpreter();

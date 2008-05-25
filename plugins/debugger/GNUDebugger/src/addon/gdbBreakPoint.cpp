@@ -12,8 +12,8 @@ GdbBreakPoint::GdbBreakPoint( GdbParser *p) :  GdbCore( p),
 {
 	tabWidget = new QTableWidget();
 
-	getContainer()->setWidget(tabWidget);
-	getContainer()->setWindowTitle(name());
+//	getContainer()->setWidget(tabWidget);
+//	getContainer()->setWindowTitle(name());
 
 	tabWidget->setEnabled(false);
 	tabWidget->setColumnCount(5);
@@ -48,7 +48,7 @@ GdbBreakPoint::GdbBreakPoint( GdbParser *p) :  GdbCore( p),
 	 */
 	getParser()->addRestorLine(QRegExp("^Breakpoint\\s\\d+,\\s.*$"),QRegExp("^.*at\\s.*:\\d+$"));
 
-	connect(getContainer(), SIGNAL(  topLevelChanged ( bool) ), this, SLOT( onTopLevelChanged ( bool  )));
+//	connect(getContainer(), SIGNAL(  topLevelChanged ( bool) ), this, SLOT( onTopLevelChanged ( bool  )));
 
 	waitEndProcess = false;
 	
@@ -58,7 +58,7 @@ GdbBreakPoint::GdbBreakPoint( GdbParser *p) :  GdbCore( p),
 void GdbBreakPoint::onTopLevelChanged ( bool b)
 {
 	// resize widget recommended
-	if(b)
+/*	if(b)
 	{
 		getContainer()->restoreGeometry(widgetSize);
 	}
@@ -66,12 +66,12 @@ void GdbBreakPoint::onTopLevelChanged ( bool b)
 	{
 		widgetSize = getContainer()->saveGeometry();
 	}
-}
+*/}
 //
 GdbBreakPoint::~GdbBreakPoint()
 {
 	delete tabWidget;
-	delete getContainer();
+//	delete getContainer();
 } 
 //
 QString GdbBreakPoint::name()

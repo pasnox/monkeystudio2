@@ -31,6 +31,10 @@
 
 #include <pluginsmanager.h>
 
+#include <QPointer>
+
+class pDockFileBrowser;
+
 class FileBrowser : public BasePlugin
 {
 	Q_OBJECT
@@ -41,6 +45,16 @@ public:
 	virtual ~FileBrowser();
 	virtual bool setEnabled( bool );
 	virtual QWidget* settingsWidget();
+	virtual QPixmap pixmap() const;
+	
+	QStringList filters() const;
+	void setFilters( const QStringList& filters, bool updateDock = false );
+	
+	QString path() const;
+	void setPath( const QString& path, bool updateDock = false );
+
+protected:
+	QPointer<pDockFileBrowser> mDock;
 
 protected slots:
 	void saveSettings();

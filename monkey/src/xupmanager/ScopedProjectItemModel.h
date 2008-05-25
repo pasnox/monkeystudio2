@@ -17,6 +17,8 @@ public:
 
 	void setFilteredProject( XUPItem* project );
 	XUPItem* filteredProject() const;
+	
+	inline ProjectItemModel* model() const { return mSourceModel; }
 
 protected:
 	ProjectItemModel* mSourceModel;

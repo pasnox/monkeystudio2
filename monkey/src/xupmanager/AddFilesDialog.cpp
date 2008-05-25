@@ -1,4 +1,5 @@
 #include "AddFilesDialog.h"
+#include "../pMonkeyStudio.h"
 
 #include <QGridLayout>
 #include <QFrame>
@@ -79,7 +80,6 @@ AddFilesDialog::AddFilesDialog( ScopedProjectItemModel* spim, XUPItem* pi, QWidg
 	// create projects/scopes treecombobox
 	tcbProjects = new pTreeComboBox;
 	tcbProjects->setModel( mScoped );
-	tcbProjects->setCurrentIndex( mScoped->mapFromSource( pi->project()->index() ) );
 	hl1->addWidget( tcbProjects );
 	// add operators groupbox
 	QGroupBox* gb2 = new QGroupBox;
@@ -96,10 +96,28 @@ AddFilesDialog::AddFilesDialog( ScopedProjectItemModel* spim, XUPItem* pi, QWidg
 	// add groupbox to layout
 	hl->addWidget( gb1 );
 	hl->addWidget( gb2 );
-	// add frame to layout
+	// create import widgets
+	gbCopy = new QGroupBox( tr( "Import external files" ), this );
+	gbCopy->setCheckable( true );
+	gbCopy->setChecked( false );
+	gbCopy->setToolTip( tr( "Imported files will by default be copied to project path unless you provide a relative only path from project path" ) );
+	cbCopy = new QComboBox( this );
+	cbCopy->setSizeAdjustPolicy( QComboBox::AdjustToMinimumContentsLength );
+	cbCopy->setEditable( true );
+	QHBoxLayout* hlCopy = new QHBoxLayout( gbCopy );
+	hlCopy->addWidget( cbCopy );
+	// add widgets to global layout
 	QGridLayout* gridlayout = qobject_cast<QGridLayout*>( layout() );
 	gridlayout->addWidget( cbRecursive, 4, 0, 1, 3 );
 	gridlayout->addWidget( f, 5, 0, 1, 3 );
+	gridlayout->addWidget( gbCopy, 6, 0, 1, 3 );
+	
+	// connections
+	connect( tcbProjects, SIGNAL( currentChanged( const QModelIndex& ) ), this, SLOT( projects_currentChanged( const QModelIndex& ) ) );
+	
+	
+	// select current scope in the project combobox
+	tcbProjects->setCurrentIndex( mScoped->mapFromSource( pi->project()->index() ) );
 }
 
 QStringList AddFilesDialog::selectedFilesFolders() const
@@ -132,4 +150,19 @@ void AddFilesDialog::addClicked()
 {
 	if ( selectedFilesFolders().count() > 0 )
 		QDialog::accept();
+}
+
+void AddFilesDialog::projects_currentChanged( const QModelIndex& index )
+{
+	const QModelIndex idx = mScoped->mapToSource( index );
+	const XUPItem* it = mScoped->model()->itemFromIndex( idx )->project();
+	const QString projectPath = it->projectPath();
+	const QString currentPath = cbCopy->currentText();
+	// update combobox
+	QDir dir( projectPath );
+	cbCopy->clear();
+	foreach ( const QFileInfo& fi, pMonkeyStudio::getFolders( dir, QStringList() ) )
+		cbCopy->addItem( dir.relativeFilePath( fi.filePath() ) );
+	// restore last path if possible
+	cbCopy->setCurrentIndex( cbCopy->findText( currentPath ) );
 }

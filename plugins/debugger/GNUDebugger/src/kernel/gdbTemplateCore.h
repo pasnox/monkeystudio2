@@ -219,6 +219,7 @@ public :
 		data.replace("[", "\\["); // table tab[i]
 		data.replace("]", "\\]");
 		data.replace(".","\\."); // member of struct struct.member
+		data.replace("+","\\+"); // member of struct struct.member
 		return data;
 	}
 	//

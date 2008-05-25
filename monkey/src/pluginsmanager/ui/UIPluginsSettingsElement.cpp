@@ -40,7 +40,7 @@ void UIPluginsSettingsElement::on_pbSettings_clicked()
 	{
 		mSettingsWidget->setProperty( "mInit", true );
 		mSettingsWidget->resize( mSettingsWidget->sizeHint() );
-		mSettingsWidget->setParent( window(), Qt::Tool );
+		mSettingsWidget->setParent( window(), Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint );
 		mSettingsWidget->setWindowModality( Qt::ApplicationModal );
 		mSettingsWidget->setAttribute( Qt::WA_DeleteOnClose, false );
 		mSettingsWidget->setWindowIcon( mPlugin->pixmap() );
@@ -49,6 +49,10 @@ void UIPluginsSettingsElement::on_pbSettings_clicked()
 	// show widget
 	QRect geometry = mSettingsWidget->geometry();
 	geometry.moveCenter( window()->geometry().center() );
+	if ( geometry.left() < 0 )
+		geometry.moveLeft( -geometry.left() );
+	if ( geometry.top() < 0 )
+		geometry.moveTop( -geometry.top() );
 	mSettingsWidget->setGeometry( geometry );
 	mSettingsWidget->show();
 }
