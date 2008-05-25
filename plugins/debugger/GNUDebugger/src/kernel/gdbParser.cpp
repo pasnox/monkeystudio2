@@ -64,6 +64,11 @@ GdbParser::GdbParser (QObject* p) : QObject (p)
 		
 }
 //
+GdbParser::~GdbParser()
+{
+//	QMessageBox::warning(NULL,"delete", "parser");
+}
+
 bool GdbParser::gotoSection(QString section)
 {
 	// goto section

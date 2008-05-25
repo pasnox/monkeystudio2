@@ -43,7 +43,7 @@ class GdbParser : public QObject
 
 public:
 	GdbParser (QObject* p);
-	~GdbParser(){};
+	~GdbParser();
 
 public slots:
 
