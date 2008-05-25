@@ -1,23 +1,16 @@
-#ifndef UISETTING_H
-#define UISETTING_H
-//
+#ifndef UIGNUDEBUGGERSETTING_H
+#define UIGNUDEBUGGERSETTING_H
 #include "ui_UIGNUDebuggerSetting.h"
-//
 
 class UIGNUDebuggerSetting : public QWidget, public Ui::UIGNUDebuggerSetting
 {
 	Q_OBJECT
-	//
+
 public:
 	UIGNUDebuggerSetting( QWidget* = 0 );
 
-	//
-private slots:
-	void on_pbApply_clicked();
-
-protected:
-	void closeEvent( QCloseEvent* );
-	//
+protected slots:
+	void on_dbbButtons_clicked( QAbstractButton* button );
 };
-//
-#endif // UISETTING_H
+
+#endif // UIGNUDEBUGGERSETTING_H
