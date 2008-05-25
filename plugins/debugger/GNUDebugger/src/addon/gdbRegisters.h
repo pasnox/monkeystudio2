@@ -36,6 +36,7 @@ public : // function
 	void targetExited();
 
 	QString name();
+	QWidget * widget() { return mWidget;}
 
 public :
 

@@ -16,8 +16,8 @@ GdbBackTrace::GdbBackTrace(GdbParser *p) :  GdbCore(p)
 	mWidget = new QTextEdit();
 	mWidget->setEnabled(false);
 
-	getContainer()->setWidget(mWidget);
-	getContainer()->setWindowTitle(name());
+//	getContainer()->setWidget(mWidget);
+//	getContainer()->setWindowTitle(name());
 
 	cmd.setClass(this);
 	cmd.connectEventStart("breakpoint-hit" , NULL);
@@ -53,7 +53,7 @@ GdbBackTrace::GdbBackTrace(GdbParser *p) :  GdbCore(p)
 GdbBackTrace::~GdbBackTrace()
 {
 	delete mWidget;
-	delete getContainer();
+//	delete getContainer();
 } 
 //
 QString GdbBackTrace::name()

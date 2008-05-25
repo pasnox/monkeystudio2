@@ -9,17 +9,17 @@
 
 GdbKernelDispatcher::GdbKernelDispatcher( GdbParser *p) : GdbCore(p)
 {
-	mWidget = new QTextEdit();
+	mWidget = new QTextEdit;
 
-	getContainer()->setWidget(mWidget);
-	getContainer()->setWindowTitle(name());
+//	getContainer()->setWidget(mWidget);
+//	getContainer()->setWindowTitle(name());
 	start();
 }
 //
 GdbKernelDispatcher::~GdbKernelDispatcher()
 {
 	delete mWidget;
-	delete getContainer();
+//	delete getContainer();
 }
 //
 QString GdbKernelDispatcher::name()

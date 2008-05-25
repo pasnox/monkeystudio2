@@ -26,9 +26,9 @@ GdbWatch::GdbWatch(GdbParser *p) :  GdbCore( p),
 	mWidget->setHorizontalHeaderLabels(QStringList() << "Name" << "Type" << "Address" << "Value"  ); 
 	mWidget->setSelectionBehavior (QAbstractItemView::SelectRows);
 
-	getContainer()->setWidget(mWidget);
+//	getContainer()->setWidget(mWidget);
 //	getContainer()->setWidget(rootTree);
-	getContainer()->setWindowTitle(name());
+//	getContainer()->setWindowTitle(name());
 
 // fo test
 /*	addNewVar("var test");
@@ -62,7 +62,7 @@ GdbWatch::GdbWatch(GdbParser *p) :  GdbCore( p),
 GdbWatch::~GdbWatch()
 {
 	delete mWidget;
-	delete getContainer();
+//	delete getContainer();
 } 
 //
 QString GdbWatch::name()

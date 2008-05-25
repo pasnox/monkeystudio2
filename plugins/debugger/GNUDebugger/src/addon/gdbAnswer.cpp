@@ -13,8 +13,8 @@ GdbAnswer::GdbAnswer(GdbParser *o) :  GdbCore(o),
 	mWidget = new QTextEdit();
 	mWidget->setEnabled(false);
 
-	getContainer()->setWidget(mWidget);
-	getContainer()->setWindowTitle(name());
+//	getContainer()->setWidget(mWidget);
+//	getContainer()->setWindowTitle(name());
 
 	cmd.setClass(this);
 
@@ -24,7 +24,7 @@ GdbAnswer::GdbAnswer(GdbParser *o) :  GdbCore(o),
 GdbAnswer::~GdbAnswer()
 {
 	delete mWidget;
-	delete getContainer();
+//	delete getContainer();
 } 
 //
 QString GdbAnswer::name()

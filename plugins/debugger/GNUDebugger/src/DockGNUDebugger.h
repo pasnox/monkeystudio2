@@ -45,14 +45,16 @@ public:
 	class GdbProcess *pConsole;
 	class pCommand *Cmd;
 
+	GdbControl * gdbControl();
 private:
 
 	DockGNUDebugger( QWidget* = 0 );
 		~DockGNUDebugger();
 
-		QByteArray crlf;
+	QByteArray crlf;
 
 	QString targetName;
+	QTabWidget *mainTabWidget;
 
 	struct
 	{

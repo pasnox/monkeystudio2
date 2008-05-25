@@ -20,7 +20,8 @@ GdbCore::GdbCore( GdbParser *p) : QThread(),
 	// set parset
 	mParser = p;
 	// create QDockWidget main container
-	mContainer = new QDockWidget();
+//	mContainer = new QDockWidget();
+//	mContainer = new QWidget();
 	connect(this, SIGNAL( readyProcess(QGdbMessageCore)),this, SLOT(onReadyProcess(QGdbMessageCore)), Qt::BlockingQueuedConnection);
 }
 //
@@ -77,23 +78,23 @@ void GdbCore::setStopProcess()
 
 	if(!wait(1000)) // wait 1 seconde
 	{
-		file.write("ERREUR THREAD NOT TERMINED\r\n");
-		file.flush();
+//		file.write("ERREUR THREAD NOT TERMINED\r\n");
+//		file.flush();
 			QMessageBox::warning(NULL,"Information","Thread  " + name() + " not termined correctly.");
 	}
 	else
 	{
-		file.write("TERMINED THREAD\r\n");
-		file.flush();
+//		file.write("TERMINED THREAD\r\n");
+//		file.flush();
 	}
-	file.close();
+//	file.close();
 }
 //
 // checking new message queue
 void GdbCore::run()
 {
-	file.setFileName("./plugins/GNUdbg/log/Thread_Core_" + name() + ".txt");
-	file.open(QIODevice::WriteOnly);
+//	file.setFileName("./plugins/GNUdbg/log/Thread_Core_" + name() + ".txt");
+//	file.open(QIODevice::WriteOnly);
 
 	while(!stopProcess)
 	{
@@ -127,21 +128,21 @@ void GdbCore::run()
 		}
 		usleep(TIME_TICK);
 	}
-	file.write("EXITED THREAD ... \r\n");
-	file.flush();
+//	file.write("EXITED THREAD ... \r\n");
+//	file.flush();
 
 	exit();
 }
 //
 void GdbCore::onReadyProcess(QGdbMessageCore inBox)
 {
-file.write("u 4 : w 3 process...\r\n");
-file.flush();
+//file.write("u 4 : w 3 process...\r\n");
+//file.flush();
 
 	statusProcess = process(inBox);
 
-file.write("u 5 : w 4 termined and wakeOne\r\n");
-file.flush();
+//file.write("u 5 : w 4 termined and wakeOne\r\n");
+//file.flush();
 }
 
 void GdbCore::postGdbMessage(QGdbMessageCore m)

@@ -2,6 +2,7 @@
 #define GNUDEBUGGER_H
 
 #include <pluginsmanager.h>
+#include "DockGNUDebugger.h"
 
 class GNUDebugger : public BasePlugin
 {
@@ -16,7 +17,13 @@ public:
 protected slots:
 	void saveSettings();
 	void restoreSettings();
+	QWidget* settingsWidget();
 
+private:
+
+	QHash<QString , QAction *> actionList;
+
+	DockGNUDebugger * mDockGNUDebugger;
 };
 
 #endif

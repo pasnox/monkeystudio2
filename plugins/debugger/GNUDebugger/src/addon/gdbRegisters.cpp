@@ -9,14 +9,14 @@
 
 GdbRegisters::GdbRegisters(GdbParser *p) :  GdbCore( p)
 {
-	mWidget = new QTableWidget();
+	mWidget = new QTableWidget;
 	mWidget->setEnabled(false);
 	mWidget->setColumnCount(2);
 	mWidget->setHorizontalHeaderLabels(QStringList() << "Registers" << "Value" );
  	mWidget->setSelectionBehavior (QAbstractItemView::SelectRows);
 
-	getContainer()->setWidget(mWidget);
-	getContainer()->setWindowTitle(name());
+//	getContainer()->setWidget(mWidget);
+//	getContainer()->setWindowTitle(name());
 
 	numberOfRegisters = 0;
 
@@ -35,7 +35,7 @@ GdbRegisters::GdbRegisters(GdbParser *p) :  GdbCore( p)
 	// install interpreter. if event start occur, i execute my command and call processRegister()
 	cmd.connectEventInterpreter( interpreterRegisters, &GdbRegisters::processRegisters);
 
-	connect(getContainer(), SIGNAL(  topLevelChanged ( bool) ), this, SLOT( onTopLevelChanged ( bool  )));
+//	connect(getContainer(), SIGNAL(  topLevelChanged ( bool) ), this, SLOT( onTopLevelChanged ( bool  )));
 
 	start();
 } 
@@ -43,7 +43,7 @@ GdbRegisters::GdbRegisters(GdbParser *p) :  GdbCore( p)
 void GdbRegisters::onTopLevelChanged ( bool b)
 {
 	// resize widget recommended
-	if(b)
+/*	if(b)
 	{
 		getContainer()->restoreGeometry(widgetSize);
 	}
@@ -51,12 +51,13 @@ void GdbRegisters::onTopLevelChanged ( bool b)
 	{
 		widgetSize = getContainer()->saveGeometry();
 	}
+*/
 }
 //
 GdbRegisters::~GdbRegisters()
 {
 	delete mWidget;
-	delete getContainer();
+//	delete getContainer();
 } 
 //
 QString GdbRegisters::name()

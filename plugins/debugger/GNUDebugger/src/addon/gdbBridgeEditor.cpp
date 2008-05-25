@@ -22,8 +22,8 @@ GdbBridgeEditor::GdbBridgeEditor( GdbParser *p) :  GdbCore( p)
 	mWidget = new QTextEdit();
 	mWidget->setEnabled(false);
 
-	getContainer()->setWidget(mWidget);
-	getContainer()->setWindowTitle(name());
+//	getContainer()->setWidget(mWidget);
+//	getContainer()->setWindowTitle(name());
 
 	cmd.setClass(this);
 
@@ -43,7 +43,7 @@ GdbBridgeEditor::GdbBridgeEditor( GdbParser *p) :  GdbCore( p)
 GdbBridgeEditor::~GdbBridgeEditor()
 {
 	delete mWidget;
-	delete getContainer();
+//	delete getContainer();
 } 
 //
 QString GdbBridgeEditor::name()
