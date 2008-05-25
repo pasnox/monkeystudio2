@@ -27,38 +27,37 @@
 **
 ****************************************************************************/
 #include "FileBrowserSettings.h"
-#include "pDockFileBrowser.h"
+#include "FileBrowser.h"
 
-#include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QDialogButtonBox>
 #include <QPushButton>
 
-FileBrowserSettings::FileBrowserSettings()
+FileBrowserSettings::FileBrowserSettings( FileBrowser* plugin, QWidget* parent )
+	: QWidget( parent )
 {
+	// retain plugin
+	mPlugin = plugin;
+	
 	// window attribute
 	setAttribute( Qt::WA_DeleteOnClose );
 	
 	// list editor
 	mEditor = new pStringListEditor( this, tr( "Except Suffixes" ) );
-	mEditor->setValues( pDockFileBrowser::instance()->wildcards() );
+	mEditor->setValues( plugin->filters() );
 	
 	// apply button
-	QPushButton* applyBtn = new QPushButton( tr( "Apply" ), this );
-	
-	// button layout
-	QHBoxLayout* applyBox = new QHBoxLayout;
-	applyBox->addWidget( applyBtn, 0, Qt::AlignRight );
+	QDialogButtonBox* dbbApply = new QDialogButtonBox( this );
+	dbbApply->addButton( QDialogButtonBox::Apply );
 	
 	// global layout
 	QVBoxLayout* vbox = new QVBoxLayout( this );
-	vbox->setMargin( 5 );
-	vbox->setSpacing( 3 );
 	vbox->addWidget( mEditor );
-	vbox->addLayout( applyBox );
+	vbox->addWidget( dbbApply );
 	
 	// connections
-	connect ( applyBtn, SIGNAL ( clicked() ), this, SLOT ( setSettings() ) );
+	connect( dbbApply->button( QDialogButtonBox::Apply ), SIGNAL( clicked() ), this, SLOT( applySettings() ) );
 }
 
-void FileBrowserSettings::setSettings()
-{ pDockFileBrowser::instance()->setWildcards( mEditor->values() ); }
+void FileBrowserSettings::applySettings()
+{ mPlugin->setFilters( mEditor->values(), true ); }

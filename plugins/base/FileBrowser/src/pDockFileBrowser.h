@@ -33,63 +33,72 @@
 
 #include <QModelIndex>
 #include <QSortFilterProxyModel>
+#include <QDir>
 
 class pTreeComboBox;
 class QLineEdit;
 class QListView;
-class QDirModel;
+class QFileSystemModel;
 class QTreeView;
 
-class pDockFileBrowser : public pDockWidget, public QSingleton<pDockFileBrowser>
+class pDockFileBrowser : public pDockWidget
 {
 	Q_OBJECT
-	friend class QSingleton<pDockFileBrowser>;
-
-	class FilteredModel: public QSortFilterProxyModel
+	
+	class FileBrowserFilteredModel : public QSortFilterProxyModel
 	{
-		friend class pDockFileBrowser;
-			
-	protected:
-		QStringList mWildcards;
-	
-		bool filterAcceptsRow( int row, const QModelIndex& parent ) const;
-	
 	public:
-		FilteredModel( QObject* parent = 0 ) : QSortFilterProxyModel( parent ) {}
-	};
+		FileBrowserFilteredModel( QObject* parent = 0 )
+			: QSortFilterProxyModel( parent ) {}
+		
+		QStringList filters() const
+		{ return mFilters; }
+		
+		void setFilters( const QStringList& filters )
+		{
+			mFilters = filters;
+			invalidateFilter();
+		}
+		
+		int columnCount( const QModelIndex& /*parent*/ = QModelIndex() ) const
+		{ return 1; }
+		
+		virtual bool hasChildren( const QModelIndex& parent = QModelIndex() ) const
+		{ return sourceModel()->hasChildren( mapToSource( parent ) ); }
 	
+	protected:
+		QStringList mFilters;
+		
+		bool filterAcceptsRow( int source_row, const QModelIndex& source_parent ) const
+		{
+			if ( source_parent == QModelIndex() )
+				return true;
+			return !QDir::match( mFilters, source_parent.child( source_row, 0 ).data().toString() );
+		}
+	};
+
 public:
+	pDockFileBrowser( QWidget* = 0 );
+	
 	QString currentPath() const;
-	QStringList wildcards() const;
+	QStringList filters() const;
 
 protected:
-	bool mShown;
 	pTreeComboBox* mCombo;
 	QLineEdit* mLineEdit;
 	QTreeView* mTree;
-	QDirModel* mDirsModel;
-	FilteredModel* mFilteredModel;
-
-	void showEvent( QShowEvent* );
-	void hideEvent( QHideEvent* );
-
-private:
-	pDockFileBrowser( QWidget* = 0 );
+	QFileSystemModel* mDirsModel;
+	FileBrowserFilteredModel* mFilteredModel;
 
 public slots:
-	void setCurrentPath( const QString& );
-	void setWildcards( const QStringList& );
+	void setCurrentPath( const QString& path );
+	void setFilters( const QStringList& filters );
 
-private slots:
+protected slots:
 	void tbUp_clicked();
-	void tbRefresh_clicked();
 	void tbRoot_clicked();
-	void cb_currentChanged( const QModelIndex& );
-	void tv_doubleClicked( const QModelIndex& );
-
-signals:
-	void saveSettings();
-	void restoreSettings();
+	void cb_currentChanged( const QModelIndex& index );
+	void tv_doubleClicked( const QModelIndex& index );
 };
 
 #endif // PDOCKFILEBROWSER_H

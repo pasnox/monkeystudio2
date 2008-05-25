@@ -58,18 +58,21 @@ bool FileBrowser::setEnabled( bool b )
 {
 	if ( b && !isEnabled() )
 	{
+		// create dock
+		mDock = new pDockFileBrowser();
 		// add dock to dock toolbar entry
-		MonkeyCore::mainWindow()->dockToolBar( Qt::LeftToolBarArea )->addDock( pDockFileBrowser::instance(), infos().Caption, QIcon( ":/icons/browser.png" ) );
-		// connect signals so we will be able to save/restore state of dock settings
-		connect( pDockFileBrowser::instance(), SIGNAL( saveSettings() ), this, SLOT( saveSettings() ) );
-		connect( pDockFileBrowser::instance(), SIGNAL( restoreSettings() ), this, SLOT( restoreSettings() ) );
+		MonkeyCore::mainWindow()->dockToolBar( Qt::LeftToolBarArea )->addDock( mDock, infos().Caption, QIcon( pixmap() ) );
+		// restore settings
+		restoreSettings();
 		// set plugin enabled
 		mPluginInfos.Enabled = true;
 	}
 	else if ( !b && isEnabled() )
 	{
+		// save settings
+		saveSettings();
 		// it will remove itself from dock toolbar when deleted
-		pDockFileBrowser::instance()->deleteLater();
+		mDock->deleteLater();
 		// set plugin disabled
 		mPluginInfos.Enabled = false;
 	}
@@ -78,20 +81,47 @@ bool FileBrowser::setEnabled( bool b )
 }
 
 QWidget* FileBrowser::settingsWidget()
-{ return new FileBrowserSettings(); }
+{ return new FileBrowserSettings( this ); }
+
+QPixmap FileBrowser::pixmap() const
+{ return QPixmap( ":/icons/browser.png" ); }
+
+QStringList FileBrowser::filters() const
+{ return settingsValue( "Wildcards", QStringList() << "*~" << "*.o" << "*.pyc" << "*.bak" ).toStringList(); }
+
+void FileBrowser::setFilters( const QStringList& filters, bool updateDock )
+{
+	setSettingsValue( "Wildcards", filters );
+	if ( updateDock && mDock )
+		mDock->setFilters( filters );
+}
+
+QString FileBrowser::path() const
+{ return settingsValue( "Path" ).toString(); }
+
+void FileBrowser::setPath( const QString& path, bool updateDock )
+{
+	setSettingsValue( "Path", path );
+	if ( updateDock && mDock )
+		mDock->setCurrentPath( path );
+}
 
 void FileBrowser::saveSettings()
 {
-	setSettingsValue( "Path", pDockFileBrowser::instance()->currentPath() );
-	setSettingsValue( "Wildcards", pDockFileBrowser::instance()->wildcards() );
+	if ( mDock )
+	{
+		setPath( mDock->currentPath() );
+		setFilters( mDock->filters() );
+	}
 }
 
 void FileBrowser::restoreSettings()
 {
-	QString s = settingsValue( "Path" ).toString();
-	if ( !s.isEmpty() )
-		pDockFileBrowser::instance()->setCurrentPath( s );
-	pDockFileBrowser::instance()->setWildcards( settingsValue( "Wildcards", QStringList() << "*~" << "*.o" << "*.pyc" << "*.bak" ).toStringList() );
+	if ( mDock )
+	{
+		mDock->setCurrentPath( path() );
+		mDock->setFilters( filters() );
+	}
 }
 
 Q_EXPORT_PLUGIN2( BaseFileBrowser, FileBrowser )

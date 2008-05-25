@@ -31,6 +31,7 @@
 
 #include <QWidget>
 
+class FileBrowser;
 class pStringListEditor;
 
 class FileBrowserSettings : public QWidget
@@ -38,14 +39,14 @@ class FileBrowserSettings : public QWidget
 	Q_OBJECT
 	
 public:
-	FileBrowserSettings();
+	FileBrowserSettings( FileBrowser* plugin, QWidget* parent = 0 );
 
-private:
+protected:
+	FileBrowser* mPlugin;
 	pStringListEditor* mEditor;
 
-private slots:
-	void setSettings();
-
+protected slots:
+	void applySettings();
 };
 
 #endif // FILEBROWSERSETTINGS_H
