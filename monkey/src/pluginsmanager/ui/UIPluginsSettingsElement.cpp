@@ -40,7 +40,7 @@ void UIPluginsSettingsElement::on_pbSettings_clicked()
 	{
 		mSettingsWidget->setProperty( "mInit", true );
 		mSettingsWidget->resize( mSettingsWidget->sizeHint() );
-		mSettingsWidget->setParent( window(), Qt::Tool | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint );
+		mSettingsWidget->setParent( window(), Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint );
 		mSettingsWidget->setWindowModality( Qt::ApplicationModal );
 		mSettingsWidget->setAttribute( Qt::WA_DeleteOnClose, false );
 		mSettingsWidget->setWindowIcon( mPlugin->pixmap() );
