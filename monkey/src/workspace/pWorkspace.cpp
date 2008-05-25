@@ -30,8 +30,6 @@
 #include <QCloseEvent>
 #include <QMainWindow>
 #include <QFileInfo>
-
-#include <QDebug>
 #include <QFileSystemWatcher>
 
 #include "pWorkspace.h"
@@ -429,7 +427,6 @@ void pWorkspace::internal_currentProjectChanged( XUPItem* currentProject, XUPIte
 	pm->setCurrentCompiler( cp );
 	pm->setCurrentDebugger( dp );
 	pm->setCurrentInterpreter( ip );
-	qWarning() << currentProject << previousProject << bp << cp << dp << ip;
 	// install new commands
 	if ( currentProject )
 		currentProject->installCommands();
