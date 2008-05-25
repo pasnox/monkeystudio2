@@ -1,6 +1,6 @@
 #include "GNUDebugger.h"
 
-#include "./ui/UIsetting.h"
+#include "./ui/UIGNUDebuggerSetting.h"
 
 #include <maininterface.h>
 
@@ -16,6 +16,7 @@ GNUDebugger::GNUDebugger()
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "1.2.0";
 	mPluginInfos.Enabled = false;
+
 }
 
 GNUDebugger::~GNUDebugger()
@@ -124,6 +125,6 @@ void GNUDebugger::restoreSettings()
 }
 
 QWidget* GNUDebugger::settingsWidget()
-{ return  new UIsetting; }
+{ return  new UIGNUDebuggerSetting; }
 
 Q_EXPORT_PLUGIN2( BaseGNUDebugger, GNUDebugger )

@@ -20,9 +20,9 @@ SOURCES	= src/GNUDebugger.cpp \
 	src/addon/gdbWatch.cpp \
 	src/addon/gdbAnswer.cpp \
 	src/kernel/gdbProcess.cpp \
-	src/ui/UIsetting.cpp
+	src/ui/UIGNUDebuggerSetting.cpp
 
-FORMS	= src/ui/UIsetting.ui
+FORMS	= src/ui/UIGNUDebuggerSetting.ui
 
 OPENEDFILES	= src/ui/UIsetting.h \
 	src/ui/UIsetting.cpp \
@@ -44,5 +44,5 @@ HEADERS	= src/GNUDebugger.h \
 	src/addon/gdbWatch.h \
 	src/addon/gdbAnswer.h \
 	src/kernel/gdbProcess.h \
-	src/ui/UIsetting.h
+	src/ui/UIGNUDebuggerSetting.h
 
