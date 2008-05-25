@@ -57,6 +57,7 @@ void GdbRegisters::onTopLevelChanged ( bool b)
 GdbRegisters::~GdbRegisters()
 {
 	delete mWidget;
+	delete interpreterRegisters;
 //	delete getContainer();
 } 
 //

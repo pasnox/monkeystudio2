@@ -1,5 +1,4 @@
 #include "GNUDebugger.h"
-#include "DockGNUDebugger.h"
 #include "./ui/UIGNUDebuggerSetting.h"
 
 #include <maininterface.h>
@@ -29,8 +28,9 @@ bool GNUDebugger::setEnabled( bool b )
 {
 	if ( b && !isEnabled() )
 	{
+//		QMessageBox::warning(NULL,tr("Sorry ..."), "enable plugin");
 		// get instance
-		DockGNUDebugger* mDockGNUDebugger = DockGNUDebugger::instance();
+		 mDockGNUDebugger = DockGNUDebugger::instance();
 		// add dock to dock toolbar entry
 		MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mDockGNUDebugger, infos().Caption, QIcon( pixmap() ) );
 		// add actions to main window
@@ -68,12 +68,17 @@ bool GNUDebugger::setEnabled( bool b )
 	}
 	else if ( !b && isEnabled() )
 	{
+		
+//		QMessageBox::warning(NULL,tr("Sorry ..."), "desible plugin");
 		// delete actions
-		qDeleteAll( actionList );
+		foreach ( QAction* a, actionList )
+			delete MonkeyCore::mainWindow()->dockToolBar( Qt::TopToolBarArea )->addAction( a );
+//		qDeleteAll( actionList );
 		delete aSeparator;
 		actionList.clear();
 		// delete dock
-		DockGNUDebugger::instance()->deleteLater();
+		delete mDockGNUDebugger;
+//		DockGNUDebugger::instance()->deleteLater();
 		// set plugin disabled
 		mPluginInfos.Enabled = false;
 	}

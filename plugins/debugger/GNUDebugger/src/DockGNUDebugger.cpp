@@ -34,15 +34,8 @@ DockGNUDebugger::DockGNUDebugger( QWidget* w )
 	// closing Monkey
 	connect (MonkeyCore::mainWindow(), SIGNAL( aboutToClose()), this , SLOT(onAboutToClose()));
 
-	// create MainWindow
-//	mw = new QMainWindow(w);
-//	setWidget(mw);
-//	QSize s = mw->size();
-	
-//	setMinimumHeight( 120 );
-
 	// create parser
-	Parser = new GdbParser(this);
+	Parser = new GdbParser(0);
 
 	// create dispathcer 
 	kernelDispatcher = new GdbKernelDispatcher(Parser);
@@ -52,8 +45,6 @@ DockGNUDebugger::DockGNUDebugger( QWidget* w )
 
 	// create registers	
 	registersGdb = new GdbRegisters(Parser);
-//	registersGdb->getContainer()->setFixedWidth (s.width()*2-100);
-//	registersGdb->getContainer()->setMinimumWidth (s.width()*2-100);
 
 	// create watch
 	watchGdb = new GdbWatch(Parser);
@@ -70,9 +61,11 @@ DockGNUDebugger::DockGNUDebugger( QWidget* w )
 	// create control
 	controlGdb = new  GdbControl(Parser);
 
-	mainTabWidget = new QTabWidget();
+	// create main container
+	mainTabWidget = new QTabWidget(this);
 	setWidget(mainTabWidget);
 
+	// add plugin under tabWidget
 	mainTabWidget->addTab(kernelDispatcher->widget(),kernelDispatcher->name());
 	mainTabWidget->addTab(registersGdb->widget(),registersGdb->name());
 	mainTabWidget->addTab(backtraceGdb->widget(),backtraceGdb->name());
@@ -82,25 +75,7 @@ DockGNUDebugger::DockGNUDebugger( QWidget* w )
 	mainTabWidget->addTab(answerGdb->widget(),answerGdb->name());
 
 
-/*	#ifdef DEBUG_WIDGET
-		mw->addDockWidget(Qt::RightDockWidgetArea, kernelDispatcher->getContainer());
-		mw->tabifyDockWidget(kernelDispatcher->getContainer(),registersGdb->getContainer());
-		mw->tabifyDockWidget(registersGdb->getContainer(),backtraceGdb->getContainer());
-		mw->tabifyDockWidget(backtraceGdb->getContainer(),watchGdb->getContainer());
-		mw->tabifyDockWidget(watchGdb->getContainer(), bridgeEditor->getContainer());
-		mw->tabifyDockWidget(bridgeEditor->getContainer(),breakpointGdb->getContainer());
-		mw->tabifyDockWidget(breakpointGdb->getContainer(),answerGdb->getContainer());
-	#endif
-	
-	#ifndef DEBUG_WIDGET
-		mw->addDockWidget(Qt::RightDockWidgetArea, registersGdb->getContainer());
-		mw->tabifyDockWidget(registersGdb->getContainer(),watchGdb->getContainer());
-		mw->tabifyDockWidget(watchGdb->getContainer(), breakpointGdb->getContainer());
-	#endif
-
-	mw->setCentralWidget(controlGdb->getContainer());
-*/	
-	// add plugin under manager
+	// add plugin under manager (dispatch message)
 	kernelDispatcher->add(breakpointGdb);
 	kernelDispatcher->add(watchGdb);
 	kernelDispatcher->add(registersGdb);
@@ -109,12 +84,12 @@ DockGNUDebugger::DockGNUDebugger( QWidget* w )
 	kernelDispatcher->add(bridgeEditor);
 	kernelDispatcher->add(answerGdb);
 
-	// generic
+	// generic from parser
 	connect(Parser, SIGNAL(done(int, QString)), this , SLOT(onDone(int, QString)));
 	connect(Parser, SIGNAL(error(int, QString)), this , SLOT(onError(int, QString)));
 	connect(Parser, SIGNAL(info(int, QString)), this , SLOT(onInfo(int, QString)));
 
-	// target
+	// target from parser
 	connect(Parser, SIGNAL(targetLoaded(int, QString)), this , SLOT(onTargetLoaded(int, QString)));
 	connect(Parser, SIGNAL(targetNoLoaded(int, QString)), this , SLOT(onTargetNoLoaded(int, QString)));
 	connect(Parser, SIGNAL(targetExited(int, QString)), this , SLOT(onTargetExited(int, QString)));
@@ -130,19 +105,19 @@ DockGNUDebugger::DockGNUDebugger( QWidget* w )
 	connect(bridgeEditor, SIGNAL(gotoBreakpoint(QByteArray , int)), this , SLOT(onGotoBreakpoint(QByteArray, int)));
 
 	// create QProcess for GDb
-	pConsole =  new GdbProcess(this);
+	processGdb =  new GdbProcess(0);
 	
-	connect(pConsole, SIGNAL( commandStarted( const pCommand& )), this, SLOT(gdbStarted( const pCommand& )));
-	connect(pConsole, SIGNAL( commandFinished( const pCommand&, int, QProcess::ExitStatus )), this, SLOT( gdbFinished( const pCommand&, int, QProcess::ExitStatus )));
-	connect(pConsole, SIGNAL( commandReadyRead( const pCommand&, const QByteArray& )), this, SLOT( commandReadyRead( const pCommand&, const QByteArray& )));
-	connect(pConsole, SIGNAL(commandError( const pCommand&,QProcess::ProcessError)), this, SLOT(gdbError(const pCommand&,QProcess::ProcessError)));
+	connect(processGdb, SIGNAL( commandStarted( const pCommand& )), this, SLOT(gdbStarted( const pCommand& )));
+	connect(processGdb, SIGNAL( commandFinished( const pCommand&, int, QProcess::ExitStatus )), this, SLOT( gdbFinished( const pCommand&, int, QProcess::ExitStatus )));
+	connect(processGdb, SIGNAL( commandReadyRead( const pCommand&, const QByteArray& )), this, SLOT( commandReadyRead( const pCommand&, const QByteArray& )));
+	connect(processGdb, SIGNAL(commandError( const pCommand&,QProcess::ProcessError)), this, SLOT(gdbError(const pCommand&,QProcess::ProcessError)));
 
 	// plugin send a command to Gdb
 	connect(kernelDispatcher, SIGNAL(sendRawData(GdbCore*, QByteArray)) ,this , SLOT(onSendRawData(GdbCore *, QByteArray) ));
 
 	// start gdb
 	Cmd = new pCommand( "gdb", "gdb", QString::null,true, QStringList() << "gdb", QString::null,  false );
-	pConsole->addCommand(*Cmd);
+	processGdb->addCommand(*Cmd);
 
 	// CRLF
 	#ifdef Q_OS_WIN 
@@ -158,12 +133,13 @@ DockGNUDebugger::DockGNUDebugger( QWidget* w )
 	// when a file is opened
 	connect( MonkeyCore::workspace(), SIGNAL( fileOpened( const QString& ) ), this, SLOT( onFileOpened( const QString& ) ) );
 	// when file is closed
-//	connect( MonkeyCore::workspace(), SIGNAL( fileClosed( const QString& ) ), this, SLOT( onFileClosed( const QString& ) ) );
 	connect( MonkeyCore::workspace(), SIGNAL( documentAboutToClose( int ) ), this, SLOT( onFileClosed( int ) ) );
 
 	// when user want start or exit gdb
 	connect( controlGdb, SIGNAL(wantExit()), this , SLOT(onWantExit()));
 	connect( controlGdb, SIGNAL(wantStart(QString)), this , SLOT(onWantStart(QString)));
+
+
 }
 //
 
@@ -177,21 +153,24 @@ void DockGNUDebugger::onWantStart(QString file)
 //	QMessageBox::warning(NULL,tr("Sorry ..."), "on want start");
 	targetName = file;
 	// start gdb
-	pConsole->executeProcess();
+	if(processGdb) processGdb->executeProcess();
 }
 //
 void DockGNUDebugger::onWantExit()
 {
-//		QMessageBox::warning(NULL,tr("Sorry ..."), "on want exit");
+//	QMessageBox::warning(NULL,tr("Sorry ..."), "on want exit");
 
 	// stop gdb
-	pConsole->stopCurrentCommand(true);
+	processGdb->stopCurrentCommand(true);
 	
 	// first delete back trace under all editor
 	for(int i=0; i<editor.pointeur.count(); i++)
 	{
-		editor.pointeur.at(i)->markerDeleteAll(pEditor::mdPlay);
-		editor.pointeur.at(i)->markerDeleteAll(pEditor::mdEnabledBreak);
+		if(editor.pointeur.at(i))
+		{
+			editor.pointeur.at(i)->markerDeleteAll(pEditor::mdPlay);
+			editor.pointeur.at(i)->markerDeleteAll(pEditor::mdEnabledBreak);
+		}
 	}
 //	hide();
 }
@@ -294,29 +273,24 @@ void DockGNUDebugger::onBreakpoint(QByteArray filename, int line, QByteArray typ
 // move backtrace under editor
 void DockGNUDebugger::onBacktrace(QByteArray filename, int line)
 {
-//		QMessageBox::warning(NULL,tr("Sorry ..."), filename);
+	// save current file for restor after closed
+	currentBacktraceFile = filename;
+	currentBacktraceLine = line;
 
-	// bug fix if no file is open
-	if(!filename.isEmpty())
+	// first delete back trace under all editor
+	for(int i=0; i<editor.pointeur.count(); i++)
+		editor.pointeur.at(i)->markerDeleteAll(pEditor::mdPlay);
+
+	// open file (if is not same)
+	if(MonkeyCore::workspace())
+		MonkeyCore::workspace()->goToLine(filename, QPoint(1,line), true);
+
+	// now the current file is fix bug il no file is open
+	if(MonkeyCore::fileManager() && MonkeyCore::fileManager()->currentChild())
 	{
-		// save current file for restor after closed
-		currentBacktraceFile = filename;
-		currentBacktraceLine = line;
-
-		// first delete back trace under all editor
-		for(int i=0; i<editor.pointeur.count(); i++)
-			editor.pointeur.at(i)->markerDeleteAll(pEditor::mdPlay);
-
-		// open file (if is not same)
-		if(MonkeyCore::workspace())
-			MonkeyCore::workspace()->goToLine(filename, QPoint(1,line), true);
-
-		// now the current file is
 		pEditor * e = MonkeyCore::fileManager()->currentChild()->currentEditor();
-
 		if(e) e->markerAdd (line-1, pEditor::mdPlay);
 	}
-
 }
 //
 // some time gdb move breakpoint under next line 
@@ -376,9 +350,29 @@ void DockGNUDebugger::onBreakpointConditionnaled(QByteArray filename, int line, 
 // Console from GdbProcess
 void DockGNUDebugger::gdbStarted( const pCommand& c)
 {
+	editor.pointeur.clear();//removeAt(r);
+	editor.fileName.clear();//removeAt(r);
 	kernelDispatcher->gdbStarted();
 	// open target
 	onSendRawData(NULL,"file " + targetName.toLocal8Bit());
+
+
+	//find if editor is open befor load plugin
+	if(MonkeyCore::workspace())
+	{
+		QList<pAbstractChild*>  e = MonkeyCore::workspace()->children();//currentChild()->currentEditor();
+		for(int i =0; i< e.count(); i++)
+		{
+			pAbstractChild  *pf = e.at(i);
+
+			editor.fileName << pf->currentFile();
+			editor.pointeur << pf->currentEditor();
+			// set margin Qsci sensitive
+			pf->currentEditor()->setMarginSensitivity(0,true);
+			// connect margin clicked
+			connect (pf->currentEditor(), SIGNAL(marginClicked (int, int , Qt::KeyboardModifiers )), this, SLOT(onMarginClicked(int, int,  Qt::KeyboardModifiers)));
+		}
+	}
 }
 //
 void DockGNUDebugger::gdbFinished( const pCommand& c, int a , QProcess::ExitStatus )
@@ -409,7 +403,7 @@ void DockGNUDebugger::commandReadyRead( const pCommand& c , const QByteArray& d)
 void DockGNUDebugger::onSendRawData(GdbCore *plug, QByteArray data)
 {
 	Parser->setLastCommand(data);
-	pConsole->sendRawData(data + crlf);
+	processGdb->sendRawData(data + crlf);
 }
 
 // From parser
@@ -476,21 +470,23 @@ void DockGNUDebugger::onTargetStopped(int id, QString st)
 //
 void DockGNUDebugger::onAboutToClose()
 {
-	// stop all thread
-	kernelDispatcher->stopAll();
-	// stop dispatcher
-	kernelDispatcher->setStopProcess();
-	// stop gdb
-	pConsole->stopCurrentCommand(true);
-
-	delete Parser;
-	delete pConsole;
-	delete Cmd;
-	delete kernelDispatcher;
+	// call destructeur
+//	delete this;
 }
 //
 DockGNUDebugger:: ~DockGNUDebugger()
 {
+	// delete by parent
+	// delete tabWidget
+	
+	// delete all marquer
+//	onWantExit();
+	// delete plugins
+	delete Parser;
+	delete processGdb;
+	kernelDispatcher->stopAndDelete();
+	kernelDispatcher->setStopProcess();
+	delete kernelDispatcher;
 }
 
 

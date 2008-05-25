@@ -11,15 +11,12 @@ GdbKernelDispatcher::GdbKernelDispatcher( GdbParser *p) : GdbCore(p)
 {
 	mWidget = new QTextEdit;
 
-//	getContainer()->setWidget(mWidget);
-//	getContainer()->setWindowTitle(name());
 	start();
 }
 //
 GdbKernelDispatcher::~GdbKernelDispatcher()
 {
 	delete mWidget;
-//	delete getContainer();
 }
 //
 QString GdbKernelDispatcher::name()
@@ -35,13 +32,16 @@ void GdbKernelDispatcher::add(GdbCore * p)
 	mWidget->append("Pluging add  " + p->name() + " ... OK");
 }
 //
-void GdbKernelDispatcher::stopAll()
+void GdbKernelDispatcher::stopAndDelete()
 {
-	for(int i=0; i<listPlugin.count(); i++)
+	int j = listPlugin.count();
+	for(int i=0; i<j; i++)
 	{
-		listPlugin.at(i)->setStopProcess();
-		delete listPlugin.at(i);
-		listPlugin.replace(i, NULL);
+		listPlugin.at(0)->setStopProcess();
+		listPlugin.at(0)->wait();
+//		QMessageBox::warning(NULL,"delete", listPlugin.at(0)->name());
+		delete listPlugin.at(0);
+		listPlugin.removeAt(0);
 	}
 }
 // process version 3

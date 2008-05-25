@@ -36,7 +36,7 @@ public :
 //	void setupDockWidget(QMainWindow *);
 
 	void add(GdbCore *);
-	void stopAll();
+	void stopAndDelete();
 
 public slots:
 

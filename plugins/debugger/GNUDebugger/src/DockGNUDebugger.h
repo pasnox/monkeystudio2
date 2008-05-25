@@ -42,7 +42,7 @@ public:
 	class GdbControl *controlGdb;
 	class GdbAnswer *answerGdb;	
 	
-	class GdbProcess *pConsole;
+	class GdbProcess *processGdb;
 	class pCommand *Cmd;
 
 	GdbControl * gdbControl();
