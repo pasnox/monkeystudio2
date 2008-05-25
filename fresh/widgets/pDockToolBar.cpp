@@ -128,7 +128,7 @@ bool pDockToolBar::eventFilter( QObject* o, QEvent* e )
 	return QToolBar::eventFilter( o, e );
 }
 
-void pDockToolBar::addAction( QAction* a, bool b )
+QAction* pDockToolBar::addAction( QAction* a, bool b )
 {
 	// create a separator if no action
 	if ( !a )
@@ -143,6 +143,8 @@ void pDockToolBar::addAction( QAction* a, bool b )
 		QToolBar::addAction( a );
 
 	internal_checkVisibility();
+	
+	return a;
 }
 
 void pDockToolBar::addActions( QList<QAction*> a, bool b )
