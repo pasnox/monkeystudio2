@@ -1,5 +1,7 @@
 #include "GNUDebugger.h"
 
+#include "./ui/UIsetting.h"
+
 #include <maininterface.h>
 
 #include <QIcon>
@@ -12,7 +14,7 @@ GNUDebugger::GNUDebugger()
 	mPluginInfos.Author = "Pinon Yannick aka Xiantia  <private mail>";
 	mPluginInfos.Type = BasePlugin::iDebugger;
 	mPluginInfos.Name = PLUGIN_NAME;
-	mPluginInfos.Version = "1.1.0";
+	mPluginInfos.Version = "1.2.0";
 	mPluginInfos.Enabled = false;
 }
 
@@ -97,8 +99,12 @@ bool GNUDebugger::setEnabled( bool b )
 		delete MonkeyCore::menuBar()->action( "mDebugger/aStartorrestart" );
 		delete MonkeyCore::menuBar()->action( "mDebugger/aContinue" );
 		delete MonkeyCore::menuBar()->action( "mDebugger/aStepinto" );
+		delete MonkeyCore::menuBar()->action( "mDebugger/aStepover" );
 		delete MonkeyCore::menuBar()->action( "mDebugger/aStop" );
 		delete MonkeyCore::menuBar()->action( "mDebugger/aQuit" );
+
+		// disable debugger menu
+		MonkeyCore::menuBar()->menu( "mDebugger" )->setEnabled(false);
 
 		DockGNUDebugger::instance()->deleteLater();
 
@@ -118,6 +124,6 @@ void GNUDebugger::restoreSettings()
 }
 
 QWidget* GNUDebugger::settingsWidget()
-{ return NULL; }
+{ return  new UIsetting; }
 
 Q_EXPORT_PLUGIN2( BaseGNUDebugger, GNUDebugger )
