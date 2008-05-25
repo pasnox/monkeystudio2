@@ -20,7 +20,7 @@
 GdbBridgeEditor::GdbBridgeEditor( GdbParser *p) :  GdbCore( p)
 {
 	mWidget = new QTextEdit();
-	mWidget->setEnabled(false);
+//	mWidget->setEnabled(false);
 
 //	getContainer()->setWidget(mWidget);
 //	getContainer()->setWindowTitle(name());
@@ -59,7 +59,7 @@ void GdbBridgeEditor::gdbStarted()
 void GdbBridgeEditor::gdbFinished()
 {
 	GdbCore::gdbFinished();
-	mWidget->setEnabled(false);
+//	mWidget->setEnabled(false);
 }
 //
 void GdbBridgeEditor::targetLoaded()
@@ -70,7 +70,7 @@ void GdbBridgeEditor::targetLoaded()
 void GdbBridgeEditor::targetRunning()
 {
 	GdbCore::targetRunning();
-	mWidget->setEnabled(false);
+//	mWidget->setEnabled(false);
 	// program running don't show bactrace icon under editor
 	emit backtrace("",0);
 }
@@ -84,7 +84,7 @@ void GdbBridgeEditor::targetStopped()
 void GdbBridgeEditor::targetExited()
 {
 	GdbCore::targetExited();
-	mWidget->setEnabled(false);
+//	mWidget->setEnabled(false);
 	// program exited don't show bactrace icon under editor
 	emit backtrace("",0);
 }

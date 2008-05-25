@@ -360,7 +360,7 @@ void DockGNUDebugger::gdbStarted( const pCommand& c)
 	//find if editor is open befor load plugin
 	if(MonkeyCore::workspace())
 	{
-		QList<pAbstractChild*>  e = MonkeyCore::workspace()->children();//currentChild()->currentEditor();
+		QList<pAbstractChild*>  e = MonkeyCore::workspace()->children();
 		for(int i =0; i< e.count(); i++)
 		{
 			pAbstractChild  *pf = e.at(i);

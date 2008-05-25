@@ -292,7 +292,7 @@ void GdbControl::gdbStarted()
 {
 	GdbCore::gdbStarted();
 	bExitGdb->setEnabled(true);
-		mActionList->value("aExitGdb")->setEnabled(true);
+	mActionList->value("aExitGdb")->setEnabled(true);
 }
 //
 void GdbControl::gdbFinished()
