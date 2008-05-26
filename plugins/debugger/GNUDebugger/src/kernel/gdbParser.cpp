@@ -1,17 +1,17 @@
 /********************************************************************************************************
- * PROGRAM      : Debugger (PARSER)
- * DATE - TIME  : mardi 01 janvier 2008 - 18h48
- * AUTHOR       :  (  )
- * FILENAME     : GdbParser.cpp
- * LICENSE      : 
- * COMMENTARY   : 
- ********************************************************************************************************/
+	* PROGRAM      : Debugger (PARSER)
+	* DATE - TIME  : mardi 01 janvier 2008 - 18h48
+	* AUTHOR       :  (  )
+	* FILENAME     : GdbParser.cpp
+	* LICENSE      : 
+	* COMMENTARY   : 
+	********************************************************************************************************/
 
 /* main parser
 
-	this file parse all data from Gdb
-	it use a file for searsh data 
-	it emit done() , error() and info()
+		this file parse all data from Gdb
+		it use a file for searsh data 
+		it emit done() , error() and info()
 
 	this parser can add user parser by call addInterpreter()
 	if the new data can be parse with new interpreter, this data send 
@@ -20,22 +20,38 @@
 
 #include "gdbParser.h"
 
-#include <QMessageBox>
+#include <coremanager.h>
+#include <settingsmanager.h>
+#include <monkey.h>
+#include <queuedstatusbar.h>
+
 #include <QApplication>
 
 #define INFO_ID			10000
 #define ERROR_ID 		20000
 #define PROMPT_ID		0
 
+#include <QDebug>
 
 GdbParser::GdbParser (QObject* p) : QObject (p)
 {
-	// try to load ini file in install path
-	if(loadingPattern(QApplication::applicationDirPath() + "/plugins/GNUdbg/file/know_list_and_id.txt"))
+	// get plugins paths
+	QStringList pluginsPath = MonkeyCore::settings()->value( "Plugins/Path" ).toStringList();
+	// get all files in plugins path nammed 'know_list_and_id.txt'
+	QFileInfoList files;
+	QDir pluginsDir;
+	for ( int i = 0; i < pluginsPath.count(); i++ )
 	{
-		if(loadingPattern(QApplication::applicationDirPath() + "/../plugins/debugger/GNUDebugger/file/know_list_and_id.txt"))
-			QMessageBox::warning(NULL, "Error","File know_list_and_id.txt not found . Debugger can not work !");
+		QString path = pluginsPath.at( i );
+		if ( QFileInfo( path ).isRelative() )
+			path = QDir::cleanPath( QApplication::applicationDirPath() +"/" + path );
+		pluginsDir.setPath( path );
+		files << pMonkeyStudio::getFiles( pluginsDir, QString( "know_list_and_id.txt" ), true );
 	}
+	// load txt file if possible, else warn user in status bar
+	if ( files.isEmpty() || !loadingPattern( files.first().absoluteFilePath() ) )
+		MonkeyCore::statusBar()->appendMessage( tr( "File know_list_and_id.txt not found. Debugger can not work !" ), 5000 );
+	
 	#ifdef Q_OS_WIN 
 		crlf = "\r\n";
 	#endif
@@ -64,6 +80,11 @@ GdbParser::GdbParser (QObject* p) : QObject (p)
 		
 }
 //
+GdbParser::~GdbParser()
+{
+//	QMessageBox::warning(NULL,"delete", "parser");
+}
+
 bool GdbParser::gotoSection(QString section)
 {
 	// goto section
@@ -96,13 +117,13 @@ QString GdbParser::getRexp(QString line)
 //
 bool GdbParser::loadingPattern(QString fileName)
 {
-int i=0;
-	file.setFileName(fileName);
-	if(file.open(QIODevice::ReadOnly))
+	int i = 0;
+	file.setFileName( fileName );
+	if ( file.open( QIODevice::ReadOnly ) )
 	{
 		QByteArray line;
 		QRegExp exp;
-		if(gotoSection("[know_errors_list_gdb]"))
+		if ( gotoSection( "[know_errors_list_gdb]" ) )
 		{
 			line = file.readLine();
 			while(line.simplified() != "[/know_errors_list_gdb]" && !file.atEnd ())
@@ -112,26 +133,27 @@ int i=0;
 					int id = getId(line);
 					QString rexp = getRexp(line);
 
-
 					exp.setPattern(rexp);
 
-	if(list.pattern.contains(exp)) i++;// qDebug("skipping regExp : " + rexp.toLocal8Bit());
-	else
-	{
-//qDebug("id " + QByteArray::number(id));
-//qDebug("string " + rexp.toLocal8Bit());
-					list.pattern << exp;
-					list.id << id;
-	}
-			}
+					if ( list.pattern.contains( exp ) )
+						i++;// qDebug("skipping regExp : " + rexp.toLocal8Bit());
+					else
+					{
+						//qDebug("id " + QByteArray::number(id));
+						//qDebug("string " + rexp.toLocal8Bit());
+						list.pattern << exp;
+						list.id << id;
+					}
+				}
 				line = file.readLine();
 			}
 		}
-qDebug("total skipping : " + QByteArray::number(i));
+		qDebug("total skipping : " + QByteArray::number(i));
 		file.close();
-		return 0;
+		return true;
 	}
-	else return 1;
+	else
+		return false;
 }
 
 // generique regExp
