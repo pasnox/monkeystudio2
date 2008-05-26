@@ -17,7 +17,6 @@
 #include <QHeaderView>
 #include <QFileDialog>
 #include <QInputDialog>
-#include <QMessageBox>
 
 void recursiveRemoveItem( XUPItem* it, bool deleteFiles = false )
 {
@@ -35,7 +34,7 @@ void recursiveRemoveItem( XUPItem* it, bool deleteFiles = false )
 			{
 				const QString fp = cit->filePath();
 				if ( QFile::exists( fp ) && !QFile::remove( fp ) )
-					QMessageBox::warning( 0, "Warning...", QObject::tr( "Can't delete file: %1" ).arg( fp ) );
+					pMonkeyStudio::warning( QObject::tr( "Warning..." ), QObject::tr( "Can't delete file: %1" ).arg( fp ) );
 			}
 			// finally remove item
 			cit->remove();
@@ -257,10 +256,10 @@ void UIXUPProjectEditor::on_tbRemoveScope_clicked()
 		if ( scope == mProject )
 			return;
 		// request suer confirm
-		if ( QMessageBox::question( window(), tr( "Remove scope..." ), tr( "A you sure you want to remove this scope ?\nAll children items will be removed too." ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::Yes )
+		if ( pMonkeyStudio::question( tr( "Remove scope..." ), tr( "A you sure you want to remove this scope ?\nAll children items will be removed too." ) ) )
 		{
 			// recursively remove items
-			bool b = QMessageBox::question( window(), tr( "Remove files..." ), tr( "Do you want to delete the files that are associated with items ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::Yes;
+			bool b = pMonkeyStudio::question( tr( "Remove files..." ), tr( "Do you want to delete the files that are associated with items ?" ) );
 			recursiveRemoveItem( scope, b );
 			scope->remove();
 		}
@@ -391,7 +390,7 @@ void UIXUPProjectEditor::on_tbOthersVariablesAdd_clicked()
 			{
 				if ( cit->isType( "variable" ) && cit->defaultValue() == vn && cit->value( "operator", "=" ) == op )
 				{
-					if ( QMessageBox::question( window(), tr( "Add a variable..." ), tr( "A variable with the same name and operator already exists in this scope, do you want to use it instead ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes ) == QMessageBox::Yes )
+					if ( pMonkeyStudio::question( tr( "Add a variable..." ), tr( "A variable with the same name and operator already exists in this scope, do you want to use it instead ?" ) ) )
 					{
 						lvOthersVariables->setCurrentIndex( mVariablesModel->mapFromSource( cit->index() ) );
 						return;
@@ -444,7 +443,7 @@ void UIXUPProjectEditor::on_tbOthersVariablesEdit_triggered( QAction* action )
 				{
 					if ( cit->isType( "variable" ) && cit->defaultValue() == vn && cit->value( "operator", "=" ) == op && cit != vit )
 					{
-						if ( QMessageBox::question( window(), d.windowTitle(), tr( "A variable with the same name and operator already exists in this scope, proceed anyway ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::No )
+						if ( pMonkeyStudio::question( d.windowTitle(), tr( "A variable with the same name and operator already exists in this scope, proceed anyway ?" ) ) )
 							return;
 						else
 							break;
@@ -471,7 +470,7 @@ void UIXUPProjectEditor::on_tbOthersVariablesRemove_clicked()
 	if ( XUPItem* vit = currentVariable() )
 	{
 		// confirm user request
-		if ( QMessageBox::question( window(), tr( "Remove a variable..." ), tr( "A you sure you want to remove this variable and all its content ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes ) == QMessageBox::No )
+		if ( pMonkeyStudio::question( tr( "Remove a variable..." ), tr( "A you sure you want to remove this variable and all its content ?" ) ) )
 			return;
 		// delete childs
 		recursiveRemoveItem( vit );
@@ -524,7 +523,7 @@ void UIXUPProjectEditor::on_tbOthersValuesAdd_triggered( QAction* action )
 			{
 				if ( cit->isType( "value" ) && cit->defaultValue() == val )
 				{
-					if ( QMessageBox::question( window(), title, tr( "A value with the same content already exists, add anyway ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::No )
+					if ( pMonkeyStudio::question( title, tr( "A value with the same content already exists, add anyway ?" ) ) )
 					{
 						lvOthersValues->setCurrentIndex( mValuesModel->mapFromSource( cit->index() ) );
 						return;
@@ -541,7 +540,7 @@ void UIXUPProjectEditor::on_tbOthersValuesAdd_triggered( QAction* action )
 			// append it
 			cv->appendRow( vit );
 			// set variable multiline if needed
-			if ( QMessageBox::question( window(), tr( "Update Property..." ), tr( "Do you want to update the multiline property of this value ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::Yes )
+			if ( pMonkeyStudio::question( tr( "Update Property..." ), tr( "Do you want to update the multiline property of this value ?" ) ) )
 				on_tbOthersVariablesEdit_triggered( aOthersVariablesEditMultiline );
 			// set it current item
 			lvOthersValues->setCurrentIndex( mValuesModel->mapFromSource( cv->index() ) );
@@ -584,7 +583,7 @@ void UIXUPProjectEditor::on_tbOthersValuesEdit_triggered( QAction* action )
 			{
 				if ( cit->isType( "value" ) && cit->defaultValue() == val && cit != cv )
 				{
-					if ( QMessageBox::question( window(), title, tr( "A value with the same content already exists in this variable, proceed anyway ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::No )
+					if ( pMonkeyStudio::question( title, tr( "A value with the same content already exists in this variable, proceed anyway ?" ) ) )
 						return;
 					else
 						break;
@@ -601,7 +600,7 @@ void UIXUPProjectEditor::on_tbOthersValuesRemove_clicked()
 	if ( XUPItem* vit = currentValue() )
 	{
 		// confirm user request
-		if ( QMessageBox::question( window(), tr( "Remove a value..." ), tr( "A you sure you want to remove this value ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes ) == QMessageBox::No )
+		if ( pMonkeyStudio::question( tr( "Remove a value..." ), tr( "A you sure you want to remove this value ?" ) ) )
 			return;
 		// delete value
 		vit->remove();
@@ -615,7 +614,7 @@ void UIXUPProjectEditor::on_tbOthersValuesClear_clicked()
 	if ( XUPItem* vit = currentVariable() )
 	{
 		// request suer confirm
-		if ( QMessageBox::question( window(), tr( "Clear values..." ), tr( "A you sure you want to clear these values ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes ) == QMessageBox::Yes )
+		if ( pMonkeyStudio::question( tr( "Clear values..." ), tr( "A you sure you want to clear these values ?" ) ) )
 		{
 			// delete items
 			recursiveRemoveItem( vit );

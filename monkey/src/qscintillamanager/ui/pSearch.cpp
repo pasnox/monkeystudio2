@@ -9,25 +9,26 @@
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
 ** Home Page : http://www.monkeystudio.org
 **
-    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
 #include "pSearch.h"
 #include "../../coremanager/MonkeyCore.h"
+#include "../../queuedstatusbar/QueuedStatusBar.h"
 #include "../../workspace/pWorkspace.h"
 #include "../../xupmanager/ui/UIXUPManager.h"
 #include "../../workspace/pChild.h"
@@ -50,7 +51,6 @@
 #include <QLabel>
 #include <QCheckBox>
 #include <QComboBox>
-#include <QMessageBox>
 #include <QCompleter>
 #include <QDirModel>
 
@@ -81,7 +81,7 @@ pSearch::pSearch( QWidget* parent )
 	
 	tbNext = new QPushButton ();
 	tbNext->setText (tr("&Next"));
-    tbNext->setIcon (QIcon(":/edit/icons/edit/next.png"));
+	tbNext->setIcon (QIcon(":/edit/icons/edit/next.png"));
 	tbNext->setSizePolicy (QSizePolicy::Fixed, QSizePolicy::Fixed);
 	tbNext->setFlat (true);
 	
@@ -122,7 +122,7 @@ pSearch::pSearch( QWidget* parent )
 	cobPath = new QComboBox();
 	cobPath->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
 	cobPath->setEditable (true);
-    cobPath->lineEdit()->setCompleter (new QCompleter (new QDirModel()));
+	cobPath->lineEdit()->setCompleter (new QCompleter (new QDirModel()));
 	lPath->setBuddy (cobPath);
 	
 	tbPath = new QToolButton ();
@@ -142,21 +142,21 @@ pSearch::pSearch( QWidget* parent )
 	connect (tbReplace, SIGNAL (clicked()), this, SLOT (on_tbReplace_clicked ()));
 	connect (tbReplaceAll, SIGNAL (clicked()), this, SLOT (on_tbReplaceAll_clicked ()));
 	
-    qRegisterMetaType<pConsoleManager::Step>("pConsoleManager::Step");
-    //connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFile" ), SIGNAL( triggered() ), SLOT( showSearchFile() ) );
-    connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFile" ), SIGNAL( triggered() ), SLOT( showReplaceFile() ) );
-    //connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchProject" ), SIGNAL( triggered() ), SLOT( showSearchProject() ) );
-    //connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceProject" ), SIGNAL( triggered() ), SLOT( showReplaceProject() ) );
-    connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFolder" ), SIGNAL( triggered() ), SLOT( showSearchFolder() ) );
-    //connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFolder" ), SIGNAL( triggered() ), SLOT( showReplaceFolder() ) );
-    connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchNext" ), SIGNAL( triggered() ), SLOT( on_tbNext_clicked() ) );
-    
+	qRegisterMetaType<pConsoleManager::Step>("pConsoleManager::Step");
+	//connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFile" ), SIGNAL( triggered() ), SLOT( showSearchFile() ) );
+	connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFile" ), SIGNAL( triggered() ), SLOT( showReplaceFile() ) );
+	//connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchProject" ), SIGNAL( triggered() ), SLOT( showSearchProject() ) );
+	//connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceProject" ), SIGNAL( triggered() ), SLOT( showReplaceProject() ) );
+	connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFolder" ), SIGNAL( triggered() ), SLOT( showSearchFolder() ) );
+	//connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFolder" ), SIGNAL( triggered() ), SLOT( showReplaceFolder() ) );
+	connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchNext" ), SIGNAL( triggered() ), SLOT( on_tbNext_clicked() ) );
+	
 	connect( tbPath, SIGNAL( clicked() ), this, SLOT( on_tbPath_clicked() ) );
-    
+	
 	mSearchThread = NULL;
 	
 	setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Maximum);
-    
+	
 	addSearchToLayout (0);
 	mOperType = SEARCH;
 	mWhereType = FILE;
@@ -240,28 +240,28 @@ void pSearch::removeFolderFromLayout ()
 
 bool pSearch::isProjectAvailible ()
 {
-    if (MonkeyCore::projectsManager()->currentProject())
-        return true;
-    else
-        return false;
+	if (MonkeyCore::projectsManager()->currentProject())
+		return true;
+	else
+		return false;
 }
 
 void pSearch::keyPressEvent( QKeyEvent* e )
 {
-    switch (e->key())
-    {
-        case Qt::Key_Escape:
-            hide();
+	switch (e->key())
+	{
+		case Qt::Key_Escape:
+			hide();
 			MonkeyCore::workspace()->focusToEditor_triggered ();
-        break;
-        case Qt::Key_Enter:
-        case Qt::Key_Return:
-            if (mOperType == SEARCH)
-                on_tbNext_clicked();
-            else /* replace */
-                on_tbReplace_clicked ();
-    }
-    QWidget::keyPressEvent( e );
+		break;
+		case Qt::Key_Enter:
+		case Qt::Key_Return:
+			if (mOperType == SEARCH)
+				on_tbNext_clicked();
+			else /* replace */
+				on_tbReplace_clicked ();
+	}
+	QWidget::keyPressEvent( e );
 }
 
 
@@ -275,7 +275,7 @@ void pSearch::showSearchFile ()
 		removeFolderFromLayout ();
 	mWhereType = FILE;
 	
-    show ();
+	show ();
 };
 
 void pSearch::showReplaceFile () 
@@ -288,22 +288,22 @@ void pSearch::showReplaceFile ()
 		addReplaceToLayout(1);
 	mOperType = REPLACE;
 	
-    show ();
+	show ();
 };
 
 /*
 void pSearch::showSearchProject () 
 {
-    mOperType = SEARCH;
-    mWhereType = PROJECT;
-    show ();
+	mOperType = SEARCH;
+	mWhereType = PROJECT;
+	show ();
 };
 
 void pSearch::showReplaceProject () 
 {
-    mOperType = REPLACE;
-    mWhereType = PROJECT;
-    show ();
+	mOperType = REPLACE;
+	mWhereType = PROJECT;
+	show ();
 };
 */
 
@@ -318,7 +318,7 @@ void pSearch::showSearchFolder ()
 	mWhereType = FOLDER;
 	cobPath->lineEdit()->setText (QDir::current().absolutePath ());
 	
-    show ();
+	show ();
 };
 
 /*void pSearch::showReplaceFolder () 
@@ -331,19 +331,19 @@ void pSearch::showSearchFolder ()
 		addFolderToLayout (2);
 	mWhereType = FOLDER;
 	
-    show ();
+	show ();
 };
 */
 void pSearch::show ()
 {
-    pChild* child = dynamic_cast<pChild*> (MonkeyCore::workspace()->currentChild());
-    if (child && child->editor())
-    {
+	pChild* child = dynamic_cast<pChild*> (MonkeyCore::workspace()->currentChild());
+	if (child && child->editor())
+	{
 		pEditor* editor = child->editor ();
-        QString text = editor->selectedText ();
+		QString text = editor->selectedText ();
 		if (!text.isNull() && text.indexOf ('\n') == -1)
 			cobSearch->lineEdit()->setText (text);
-    }
+	}
 	
 	cobSearch->setFocus();
 	cobSearch->lineEdit()->selectAll ();    
@@ -361,7 +361,7 @@ void pSearch::show ()
 		tbPrevious->hide();
 	}
 	
-    QWidget::show ();
+	QWidget::show ();
 }
 
 bool pSearch::searchFile (bool next, bool wrap)
@@ -370,92 +370,92 @@ bool pSearch::searchFile (bool next, bool wrap)
 	
 	searchAddToRecents(text);
 	
-    pChild* child = dynamic_cast<pChild*> (MonkeyCore::workspace()->currentChild());
-    if (!child || !child->editor())
-    {
-        showMessage(tr( "No active editor" ) );
-        return false;
-    }
-    pEditor* editor = child->editor ();
+	pChild* child = dynamic_cast<pChild*> (MonkeyCore::workspace()->currentChild());
+	if (!child || !child->editor())
+	{
+		showMessage(tr( "No active editor" ) );
+		return false;
+	}
+	pEditor* editor = child->editor ();
 
-    // get cursor position
-    int x, y;
-    editor->getCursorPosition( &y, &x );
+	// get cursor position
+	int x, y;
+	editor->getCursorPosition( &y, &x );
 
-    if (!next)
-    {
-        int temp;
-        editor->getSelection(&y, &x, &temp, &temp);
-    }
+	if (!next)
+	{
+		int temp;
+		editor->getSelection(&y, &x, &temp, &temp);
+	}
 
-    // search
-    bool b = editor->findFirst( text, cbRegExp->isChecked(), cbCaseSensitive->isChecked(), false, wrap, next, y, x);
+	// search
+	bool b = editor->findFirst( text, cbRegExp->isChecked(), cbCaseSensitive->isChecked(), false, wrap, next, y, x);
 
-    // change background acording to found or not
-    QPalette p = cobSearch->palette();
-    p.setColor( cobSearch->backgroundRole(), b ? Qt::white : Qt::red );
-    cobSearch->setPalette( p );
-    
-    // show message if needed
-    showMessage( b ? QString::null : tr( "Not Found" ) );
+	// change background acording to found or not
+	QPalette p = cobSearch->palette();
+	p.setColor( cobSearch->backgroundRole(), b ? Qt::white : Qt::red );
+	cobSearch->setPalette( p );
+	
+	// show message if needed
+	showMessage( b ? QString::null : tr( "Not Found" ) );
 
-    // return found state
-    return b;
+	// return found state
+	return b;
 }
 
 bool pSearch::on_tbPrevious_clicked()
 {
-    return searchFile (false);
+	return searchFile (false);
 }
 
 bool pSearch::on_tbNext_clicked()
 {
 	
-    switch (mWhereType)
-    {
-        case FILE:
+	switch (mWhereType)
+	{
+		case FILE:
 			if (!isPathValid ())
 				return false;
-            return searchFile (true);
-        case FOLDER:
+			return searchFile (true);
+		case FOLDER:
 			if (!isSearchTextValid () || !isPathValid ())
 				return false;
-            if (mSearchThread && mSearchThread->isRunning ())
-            { // need to stop searching
-                mSearchThread->setTermEnabled (true);
-            }
-            else
-            { // need to start searching
+			if (mSearchThread && mSearchThread->isRunning ())
+			{ // need to stop searching
+				mSearchThread->setTermEnabled (true);
+			}
+			else
+			{ // need to start searching
 				if (!QDir(cobPath->currentText()).exists())
 				{
 					showMessage (tr("Invalid path"));
 					return false;
 				}
-                emit clearSearchResults ();
+				emit clearSearchResults ();
 				pathAddToRecents (cobPath->currentText());
 				maskAddToRecents (cobMask->currentText());
-                mOccurencesFinded = 0;
-                mFilesProcessed = 0;
-                fileProcessed (0);
-                QString path = cobPath->currentText();
-                QString mask = cobMask->currentText();
-                QString text = cobSearch->currentText();
-                //bool whole = cbWholeWords->isChecked ();
-                bool match = cbCaseSensitive->isChecked();
-                bool regexp = cbRegExp->isChecked ();
-                mSearchThread = new SearchThread(path, mask, text, true, match, regexp, this);
-                tbNext->setText (tr("&Stop"));
-                tbNext->setIcon (QIcon(":/console/icons/console/stop.png"));
-                
-                connect (mSearchThread, SIGNAL (appendSearchResult( const pConsoleManager::Step& )), MonkeyCore::workspace(), SIGNAL (appendSearchResult( const pConsoleManager::Step& )));
-                connect (mSearchThread, SIGNAL (finished ()), this, SLOT (threadFinished()));
-                connect (mSearchThread, SIGNAL (appendSearchResult( const pConsoleManager::Step& )), this, SLOT (occurenceFinded ()));
-                connect (mSearchThread, SIGNAL (changeProgress(int)), this, SLOT (fileProcessed (int)));
-                mSearchThread->start();    
-            }
-        break;
-    }
-    return true;
+				mOccurencesFinded = 0;
+				mFilesProcessed = 0;
+				fileProcessed (0);
+				QString path = cobPath->currentText();
+				QString mask = cobMask->currentText();
+				QString text = cobSearch->currentText();
+				//bool whole = cbWholeWords->isChecked ();
+				bool match = cbCaseSensitive->isChecked();
+				bool regexp = cbRegExp->isChecked ();
+				mSearchThread = new SearchThread(path, mask, text, true, match, regexp, this);
+				tbNext->setText (tr("&Stop"));
+				tbNext->setIcon (QIcon(":/console/icons/console/stop.png"));
+				
+				connect (mSearchThread, SIGNAL (appendSearchResult( const pConsoleManager::Step& )), MonkeyCore::workspace(), SIGNAL (appendSearchResult( const pConsoleManager::Step& )));
+				connect (mSearchThread, SIGNAL (finished ()), this, SLOT (threadFinished()));
+				connect (mSearchThread, SIGNAL (appendSearchResult( const pConsoleManager::Step& )), this, SLOT (occurenceFinded ()));
+				connect (mSearchThread, SIGNAL (changeProgress(int)), this, SLOT (fileProcessed (int)));
+				mSearchThread->start();    
+			}
+		break;
+	}
+	return true;
 }
 
 //
@@ -466,34 +466,34 @@ int pSearch::replace(bool all)
 	searchAddToRecents(cobSearch->currentText());
 	replaceAddToRecents(rtext);
 	
-    pChild* child = dynamic_cast<pChild*> (MonkeyCore::workspace()->currentChild());
-    if (!child && !child->editor())
-    {
-        showMessage(tr( "No active editor" ) );
-        return 0;
-    }
-    pEditor* editor = child->editor ();
+	pChild* child = dynamic_cast<pChild*> (MonkeyCore::workspace()->currentChild());
+	if (!child && !child->editor())
+	{
+		showMessage(tr( "No active editor" ) );
+		return 0;
+	}
+	pEditor* editor = child->editor ();
 
 
-    int count = 0;
+	int count = 0;
 	if (all)
 	{
-	    int x, y;
+		int x, y;
 		editor->getCursorPosition(&y, &x);
 
 		editor->setCursorPosition(0, 0);
-        while (searchFile(true, false)) //search next, wrap switched off
-        {
-            editor->replace(rtext);
-            count++;
-        };
+		while (searchFile(true, false)) //search next, wrap switched off
+		{
+			editor->replace(rtext);
+			count++;
+		};
 		editor->setCursorPosition(y, x); //restore cursor position
 	}
 	else
 	{ 		//do replace one time
-		 int x, y, temp;
-		editor->getSelection(&y, &x, &temp, &temp);
-		editor->setCursorPosition(y, x);
+			int x, y, temp;
+			editor->getSelection(&y, &x, &temp, &temp);
+			editor->setCursorPosition(y, x);
 
 		if (on_tbNext_clicked())
 			{
@@ -502,8 +502,8 @@ int pSearch::replace(bool all)
 				editor->findNext(); //move selection to next item
 			}
 	}
-    
-    return count;
+	
+	return count;
 }
 
 void pSearch::on_tbReplace_clicked()
@@ -512,7 +512,7 @@ void pSearch::on_tbReplace_clicked()
 	if (!isReplaceTextValid ())
 		return;
 
-    replace (false);
+	replace (false);
 }
 //
 void pSearch::on_tbReplaceAll_clicked()
@@ -521,20 +521,20 @@ void pSearch::on_tbReplaceAll_clicked()
 	if (!isReplaceTextValid ())
 		return;
 
-    pChild* child = dynamic_cast<pChild*> (MonkeyCore::workspace()->currentChild());
-    if (!child && !child->editor())
-        return;
-    pEditor* editor = child->editor ();
-    
-    // begin undo global action
-    editor->beginUndoAction();
+	pChild* child = dynamic_cast<pChild*> (MonkeyCore::workspace()->currentChild());
+	if (!child && !child->editor())
+		return;
+	pEditor* editor = child->editor ();
+	
+	// begin undo global action
+	editor->beginUndoAction();
 
-    int count = replace (true);
-    // end undo global action
-    editor->endUndoAction();
+	int count = replace (true);
+	// end undo global action
+	editor->endUndoAction();
 
-    // show occurence number replaced
-    showMessage( count ? tr( "%1 occurences replaced" ).arg( count ) : tr( "Nothing To Repalce" ) );
+	// show occurence number replaced
+	showMessage( count ? tr( "%1 occurences replaced" ).arg( count ) : tr( "Nothing To Repalce" ) );
 }
 
 void pSearch::on_tbPath_clicked ()
@@ -546,23 +546,23 @@ void pSearch::on_tbPath_clicked ()
 
 void pSearch::threadFinished ()
 {
-    tbNext->setText (tr("Search"));
-    tbNext->setIcon (QIcon(":/edit/icons/edit/search.png"));
-    delete mSearchThread;
-    mSearchThread = NULL;
+	tbNext->setText (tr("Search"));
+	tbNext->setIcon (QIcon(":/edit/icons/edit/search.png"));
+	delete mSearchThread;
+	mSearchThread = NULL;
 	showMessage ("Searching finished");
 }
 
 void pSearch::occurenceFinded ()
 {
-    mOccurencesFinded ++;
-    showMessage(tr ("%1 files %2 occcurences").arg(mFilesProcessed).arg(mOccurencesFinded));
+	mOccurencesFinded ++;
+	showMessage(tr ("%1 files %2 occcurences").arg(mFilesProcessed).arg(mOccurencesFinded));
 }
 
 void pSearch::fileProcessed (int count)
 {
-    mFilesProcessed = count;
-    showMessage (tr ("%1 files %2 occcurences").arg(mFilesProcessed).arg(mOccurencesFinded));
+	mFilesProcessed = count;
+	showMessage (tr ("%1 files %2 occcurences").arg(mFilesProcessed).arg(mOccurencesFinded));
 }
 
 void pSearch::showMessage (QString status)
@@ -646,7 +646,7 @@ bool pSearch::isSearchTextValid ()
 	if (cbRegExp->isChecked())
 		if (!QRegExp (cobSearch->currentText()).isValid())
 		{
-			QMessageBox::critical (MonkeyCore::workspace(), tr("Invalid regular expression"), tr ("Regular expression is invalid"));
+			MonkeyCore::statusBar()->appendMessage( tr( "Regular expression is invalid" ), 2500 );
 			return false;
 		}
 	
@@ -662,7 +662,7 @@ bool pSearch::isPathValid ()
 {
 	if (!QDir (cobPath->currentText()).exists())
 	{
-		QMessageBox::critical (MonkeyCore::workspace(), tr("Invalid path"), tr ("Search path not exist"));
+		MonkeyCore::statusBar()->appendMessage( tr( "Search path not exist" ), 2500 );
 		return false;
 	}
 	return true;

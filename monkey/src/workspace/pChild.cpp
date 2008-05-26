@@ -35,7 +35,6 @@
 
 #include <QVBoxLayout>
 #include <QFileInfo>
-#include <QMessageBox>
 #include <QTextStream>
 #include <QTextCodec>
 #include <QApplication>

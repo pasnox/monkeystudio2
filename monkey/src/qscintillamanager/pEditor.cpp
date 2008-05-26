@@ -30,6 +30,7 @@
 #include "../pMonkeyStudio.h"
 #include "../qscintillamanager/qSciShortcutsManager.h"
 #include "../coremanager/MonkeyCore.h"
+#include "../queuedstatusbar/QueuedStatusBar.h"
 
 #include <QKeyEvent>
 #include <QApplication>
@@ -263,7 +264,7 @@ bool pEditor::openFile( const QString& s )
 	QFile f( s );
 	if ( !f.open( QFile::ReadOnly ) )
 	{
-		pMonkeyStudio::warning( tr( "Open file..." ), tr( "Cannot read file %1:\n%2." ).arg( s ).arg( f.errorString() ), this );
+		MonkeyCore::statusBar()->appendMessage( tr( "Cannot read file %1:\n%2." ).arg( s ).arg( f.errorString() ) );
 		return false;
 	}
 
@@ -332,7 +333,7 @@ bool pEditor::saveFile( const QString& s )
 	// try open file to write in
 	if ( !f.open( QFile::WriteOnly ) )
 	{
-		pMonkeyStudio::warning( tr( "Save file..." ), tr( "Cannot write file %1:\n%2." ).arg( fn ).arg( f.errorString() ), this );
+		MonkeyCore::statusBar()->appendMessage( tr( "Cannot write file %1:\n%2." ).arg( fn ).arg( f.errorString() ) );
 		return false;
 	}
 
@@ -378,7 +379,7 @@ bool pEditor::saveBackup( const QString& s )
 	// try open file to write in
 	if ( !f.open( QFile::WriteOnly ) )
 	{
-		pMonkeyStudio::warning( tr( "Save backup..." ), tr( "Cannot write file %1:\n%2." ).arg( s ).arg( f.errorString() ), this );
+		MonkeyCore::statusBar()->appendMessage( tr( "Cannot write file %1:\n%2." ).arg( s ).arg( f.errorString() ) );
 		return false;
 	}
 
@@ -416,7 +417,7 @@ void pEditor::print( bool b )
 		// check if default printer is set
 		if ( p.printerName().isEmpty() )
 		{
-			pMonkeyStudio::warning( tr( "Quick Print..." ), tr( "There is no defaullt printer, please set one before trying quick print" ), this );
+			MonkeyCore::statusBar()->appendMessage( tr( "There is no defaullt printer, please set one before trying quick print" ) );
 			return;
 		}
 		

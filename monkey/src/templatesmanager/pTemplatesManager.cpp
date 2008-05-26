@@ -9,21 +9,21 @@
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
 ** Home Page : http://www.monkeystudio.org
 **
-    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
 #include "pTemplatesManager.h"
@@ -70,7 +70,7 @@ pTemplate pTemplatesManager::getTemplate( const QString& s )
 		t.Variables[v] = set.value( v +"Values" ).toStringList();
 	
 	// return template
-    return t;
+	return t;
 }
 
 TemplateList pTemplatesManager::getTemplates()
@@ -193,10 +193,10 @@ bool pTemplatesManager::realiseTemplate( XUPItem* it, const QString& o, const pT
 		file.close();
 		
 		// open files if needed
-        if ( fo.contains( files[f] ) )
-            MonkeyCore::fileManager()->openFile( s );
-        if ( po.contains( files[f] ) )
-            MonkeyCore::fileManager()->openProject( s );
+		if ( fo.contains( files[f] ) )
+			MonkeyCore::fileManager()->openFile( s );
+		if ( po.contains( files[f] ) )
+			MonkeyCore::fileManager()->openProject( s );
 		
 		// add files to project if needed
 		if ( it )
