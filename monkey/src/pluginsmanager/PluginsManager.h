@@ -104,6 +104,7 @@ protected:
 	
 public slots:
 	void manageRequested();
+	void clearPlugins();
 };
 
 #endif // PLUGINSMANAGER_H

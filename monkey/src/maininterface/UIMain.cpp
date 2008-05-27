@@ -373,6 +373,8 @@ void UIMain::initConnections()
 #ifdef __COVERAGESCANNER__
 	connect( menuBar()->action( "mHelp/aTestReport" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( helpTestReport_triggered() ) );
 #endif
+	// plugins manager
+	connect( this, SIGNAL( aboutToClose() ), MonkeyCore::pluginsManager(), SLOT( clearPlugins() ) );
 }
 
 void UIMain::menu_ViewDocks_aboutToShow()
