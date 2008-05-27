@@ -3,6 +3,8 @@
 
 #include <pluginsmanager.h>
 
+#include <QPointer>
+
 class XUPItem;
 
 class QMakeProjectEditor : public XUPPlugin
@@ -18,7 +20,7 @@ public:
 	virtual bool editProject( XUPItem* project );
 
 protected:
-	XUPItem* mItem;
+	QPointer<XUPItem> mItem;
 };
 
 #endif // QMAKEPROJECTEDITOR_H
