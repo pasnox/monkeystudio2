@@ -328,6 +328,16 @@ void UIXUPManager::removeFiles( XUPItem* item, QWidget* parent )
 
 bool UIXUPManager::openProject( const QString& s )
 {
+	// check that project is not yet open
+	foreach ( XUPItem* it, topLevelProjects() )
+	{
+		if ( pMonkeyStudio::isSameFile( it->projectFilePath(), s ) )
+		{
+			setCurrentProject( it );
+			return true;
+		}
+	}
+
 	// get project item
 	XUPItem* pi = 0;
 	foreach ( XUPItem* rpi, mRegisteredItems )
