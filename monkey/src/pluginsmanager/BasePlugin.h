@@ -85,6 +85,9 @@ public:
 	virtual PluginInfos infos() const
 	{ return mPluginInfos; }
 	
+	bool neverEnable() const
+	{ return settingsValue( "NeverEnable", false ).toBool(); }
+	
 	static QString typeToString( BasePlugin::Type type )
 	{
 		switch ( type )
