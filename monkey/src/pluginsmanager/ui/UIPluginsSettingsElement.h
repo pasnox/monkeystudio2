@@ -22,9 +22,10 @@ protected:
 	QWidget* mSettingsWidget;
 
 protected slots:
-	void on_cbEnabled_clicked( bool checked );
+	void on_cbEnabled_toggled( bool checked );
 	void on_pbSettings_clicked();
 	void on_pbAbout_clicked();
+	void on_cbNeverEnable_toggled( bool checked );
 };
 
 #endif // UIPLUGINSSETTINGSELEMENT_H

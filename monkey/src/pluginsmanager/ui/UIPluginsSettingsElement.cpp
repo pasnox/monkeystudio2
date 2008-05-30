@@ -15,10 +15,11 @@ UIPluginsSettingsElement::UIPluginsSettingsElement( BasePlugin* plugin, QWidget*
 	// setup dialog
 	setupUi( this );
 	cbEnabled->setChecked( mPlugin->isEnabled() );
-	lIcon->setPixmap( mPlugin->pixmap() );
+	lIcon->setPixmap( mPlugin->pixmap().scaledToWidth( lIcon->maximumWidth(), Qt::SmoothTransformation ) );
 	lTitle->setText( infos.Caption );
 	lDescription->setText( infos.Description );
 	pbSettings->setVisible( mSettingsWidget );
+	cbNeverEnable->setChecked( mPlugin->neverEnable() );
 }
 
 UIPluginsSettingsElement::~UIPluginsSettingsElement()
@@ -27,8 +28,10 @@ UIPluginsSettingsElement::~UIPluginsSettingsElement()
 BasePlugin* UIPluginsSettingsElement::plugin() const
 { return mPlugin; }
 
-void UIPluginsSettingsElement::on_cbEnabled_clicked( bool checked )
+void UIPluginsSettingsElement::on_cbEnabled_toggled( bool checked )
 {
+	if ( checked )
+		cbNeverEnable->setChecked( false );
 	mPlugin->setEnabled( checked );
 	MonkeyCore::settings()->setValue( QString( "Plugins/%1" ).arg( mPlugin->infos().Name ), checked );
 }
@@ -62,4 +65,11 @@ void UIPluginsSettingsElement::on_pbAbout_clicked()
 	UIPluginsSettingsAbout psa( mPlugin, window() );
 	psa.resize( psa.sizeHint() );
 	psa.exec();
+}
+
+void UIPluginsSettingsElement::on_cbNeverEnable_toggled( bool checked )
+{
+	if( checked )
+		cbEnabled->setChecked( false );
+	MonkeyCore::settings()->setValue( QString( "Plugins/%1/NeverEnable" ).arg( mPlugin->infos().Name ), checked );
 }
