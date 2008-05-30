@@ -27,7 +27,7 @@ bool RegExpEditor::setEnabled( bool b )
 	if ( b && !isEnabled() )
 	{
 		// create action
-		QAction* a = MonkeyCore::menuBar()->action( "mTools/aRegExpEditor", infos().Caption, QIcon( pixmap() ), QString::null, mPluginInfos.Description );
+		QAction* a = MonkeyCore::menuBar()->action( "mTools/aRegExpEditor", infos().Caption, pixmap(), QString::null, mPluginInfos.Description );
 		// connections
 		connect( a, SIGNAL( triggered() ), this, SLOT( action_triggered() ) );
 		// set plugin enabled
@@ -45,6 +45,9 @@ bool RegExpEditor::setEnabled( bool b )
 	// return default value
 	return true;
 }
+
+QPixmap RegExpEditor::pixmap() const
+{ return QPixmap( ":/edit/icons/edit/search.png" ); }
 
 void RegExpEditor::action_triggered()
 {

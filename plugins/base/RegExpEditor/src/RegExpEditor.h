@@ -14,6 +14,7 @@ public:
 	RegExpEditor();
 	~RegExpEditor();
 	virtual bool setEnabled( bool );
+	virtual QPixmap pixmap() const;
 
 protected:
 	QPointer<UIRegExpEditor> mEditor;

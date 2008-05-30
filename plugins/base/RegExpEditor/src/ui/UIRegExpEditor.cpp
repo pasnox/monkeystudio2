@@ -29,12 +29,21 @@ void UIRegExpEditor::on_tbFind_clicked()
 	// create the regexp
 	QRegExp regexp( pattern, cbCaseSensitive->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive, cbSyntax->itemData( cbSyntax->currentIndex() ).value<QRegExp::PatternSyntax>() );
 	regexp.setMinimal( !cbGreedy->isChecked() );
-	// check null
-	if ( pattern.isEmpty() || text.isEmpty() )
+	// check null pattern
+	if ( pattern.isEmpty() )
+	{
+		statusBar()->showMessage( tr( "Pattern can't be empty !" ) );
 		return;
+	}
+	// check null text
+	if ( text.isEmpty() )
+	{
+		statusBar()->showMessage( tr( "Test text can't be empty !" ) );
+		return;
+	}
 	// clear tree
 	twResults->clear();
-	// tracking time  elapsed in case of infinite loop
+	// tracking time elapsed
 	QTime elapsedTime;
 	elapsedTime.start();
 	// searching
