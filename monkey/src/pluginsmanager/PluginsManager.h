@@ -72,8 +72,12 @@ public:
 		return l;
 	}
 	template <class T>
-	T plugin( PluginsManager::StateType t, const QString& n = QString::null,  const QString& v = QString::null )
-	{ return plugins<T>( t, n, v ).value( 0 ); }
+	T plugin( PluginsManager::StateType type, const QString& name,  const QString& version = QString::null )
+	{
+		if ( name.isEmpty() )
+			return 0;
+		return plugins<T>( type, name, version ).value( 0 );
+	}
 	
 	pAbstractChild* openChildFile( const QString& );
 	QHash<QString, QStringList> childSuffixes() const;
