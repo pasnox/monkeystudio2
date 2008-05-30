@@ -423,10 +423,10 @@ void pWorkspace::internal_currentProjectChanged( XUPItem* currentProject, XUPIte
 	CompilerPlugin* cp = currentProject ? pm->plugin<CompilerPlugin*>( PluginsManager::stAll, currentProject->projectSettingsValue( "COMPILER" ) ) : 0;
 	DebuggerPlugin* dp = currentProject ? pm->plugin<DebuggerPlugin*>( PluginsManager::stAll, currentProject->projectSettingsValue( "DEBUGGER" ) ) : 0;
 	InterpreterPlugin* ip = currentProject ? pm->plugin<InterpreterPlugin*>( PluginsManager::stAll, currentProject->projectSettingsValue( "INTERPRETER" ) ) : 0;
-	pm->setCurrentBuilder( bp );
-	pm->setCurrentCompiler( cp );
-	pm->setCurrentDebugger( dp );
-	pm->setCurrentInterpreter( ip );
+	pm->setCurrentBuilder( bp && !bp->neverEnable() ? bp : 0 );
+	pm->setCurrentCompiler( cp && !cp->neverEnable() ? cp : 0 );
+	pm->setCurrentDebugger( dp && !dp->neverEnable() ? dp : 0 );
+	pm->setCurrentInterpreter( ip && !ip->neverEnable() ? ip : 0 );
 	// install new commands
 	if ( currentProject )
 		currentProject->installCommands();
