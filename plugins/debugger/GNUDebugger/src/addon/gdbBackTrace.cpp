@@ -53,7 +53,8 @@ GdbBackTrace::GdbBackTrace(GdbParser *p) :  GdbCore(p)
 GdbBackTrace::~GdbBackTrace()
 {
 	delete mWidget;
-//	delete getContainer();
+	delete interpreterBackTrace;
+	delete interpreterInfoSource;
 } 
 //
 QString GdbBackTrace::name()

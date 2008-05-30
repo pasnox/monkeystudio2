@@ -2,6 +2,7 @@
 #define GNUDEBUGGER_H
 
 #include <pluginsmanager.h>
+#include "DockGNUDebugger.h"
 
 #include <QPointer>
 
@@ -24,6 +25,8 @@ protected slots:
 private:
 	QPointer<QAction> aSeparator;
 	QHash<QString , QAction*> actionList;
+	DockGNUDebugger *mDockGNUDebugger;
+
 };
 
 #endif

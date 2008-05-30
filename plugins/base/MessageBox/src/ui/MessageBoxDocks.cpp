@@ -251,7 +251,7 @@ void MessageBoxDocks::lwBuildSteps_itemPressed( QListWidgetItem* it )
 	foreach ( pAbstractChild* c, MonkeyCore::workspace()->children() )
 		foreach ( QString f, c->files() )
 			if ( f.endsWith( s ) )
-				l << f;
+				l << QDir::cleanPath( f );
 	
 	// search in the current project
 	if ( XUPItem* pi = MonkeyCore::fileManager()->currentProject() )
@@ -263,7 +263,7 @@ void MessageBoxDocks::lwBuildSteps_itemPressed( QListWidgetItem* it )
 		{
 			if ( cit->isProject() )
 			{
-				QString file = cit->filePath( s );
+				QString file = QDir::cleanPath( cit->filePath( s ) );
 				if ( QFile::exists( file ) && !l.contains( file ) )
 					l << file;
 			}

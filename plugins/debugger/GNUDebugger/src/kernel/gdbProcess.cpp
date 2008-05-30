@@ -39,6 +39,7 @@ GdbProcess::GdbProcess( QObject* o )
 //
 GdbProcess::~GdbProcess()
 {
+//		QMessageBox::warning(NULL,"delete", "gdb process");
 }
 
 void GdbProcess::error( QProcess::ProcessError e )

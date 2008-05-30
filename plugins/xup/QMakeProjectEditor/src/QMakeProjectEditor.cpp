@@ -38,10 +38,8 @@ bool QMakeProjectEditor::setEnabled( bool b )
 	}
 	else if ( !b && isEnabled() )
 	{
-		// unregister qmake item
+		// unregister qmake item, unregistering auto delete the item
 		MonkeyCore::projectsManager()->unRegisterItem( mItem );
-		delete mItem;
-		mItem = 0;
 		// set plugin disabled
 		mPluginInfos.Enabled = false;
 	}

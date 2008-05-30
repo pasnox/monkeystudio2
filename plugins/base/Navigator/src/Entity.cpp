@@ -31,7 +31,6 @@
 #include <QString>
 #include <QStringList>
 #include <QDebug>
-#include <QMessageBox>
 #include <QToolTip>
 #include <QDateTime>
 #include <QFileInfo>

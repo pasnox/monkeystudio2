@@ -28,7 +28,6 @@
 ****************************************************************************/
 #include <QString>
 #include <QDateTime>
-#include <QMessageBox>
 #include <QDebug>
 
 #include <workspacemanager.h>

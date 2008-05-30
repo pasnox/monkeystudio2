@@ -248,3 +248,14 @@ InterpreterPlugin* PluginsManager::currentInterpreter()
 
 void PluginsManager::manageRequested()
 { ( new UIPluginsSettings() )->show(); }
+
+void PluginsManager::clearPlugins()
+{
+	foreach ( BasePlugin* bp, mPlugins )
+	{
+		qWarning( "Clearing plugin...%s", qPrintable( bp->infos().Name ) );
+		bp->setEnabled( false );
+	}
+	qDeleteAll( mPlugins );
+	mPlugins.clear();
+}
