@@ -8,28 +8,28 @@ include( config.pri )
 	message( "You can change this by exporting these variables to your shell before calling qmake : MONKEY_PREFIX, MONKEY_DATAS" )
 
 	# templates
-	templates.path	= $${PACKAGE_DATAS}
-	templates.files	= templates
+	monkey_templates.path	= $${PACKAGE_DATAS}
+	monkey_templates.files	= templates
 
 	# apis
-	apis.path	= $${PACKAGE_DATAS}
-	apis.files	= ctags/apis
+	monkey_apis.path	= $${PACKAGE_DATAS}/apis
+	monkey_apis.files	= ctags/apis/*.api
 
 	# translations
-	translations.path	= $${PACKAGE_DATAS}/translations
-	translations.files	= translations/*.qm
+	monkey_translations.path	= $${PACKAGE_DATAS}/translations
+	monkey_translations.files	= translations/*.qm
 
 	# debugger know_list_and_id
-	debuggerIniFile.path	= $${PACKAGE_DATAS}/plugins/GNUdbg
-	debuggerIniFile.files	= plugins/debugger/GNUDebugger/file
+	monkey_debuggerIniFile.path	= $${PACKAGE_DATAS}/plugins/GNUdbg
+	monkey_debuggerIniFile.files	= plugins/debugger/GNUDebugger/file
 
-	debuggerLog.path	= $${PACKAGE_DATAS}/plugins/GNUdbg
-	debuggerLog.files	= plugins/debugger/GNUDebugger/log
+	monkey_debuggerLog.path	= $${PACKAGE_DATAS}/plugins/GNUdbg
+	monkey_debuggerLog.files	= plugins/debugger/GNUDebugger/log
 
-	debuggerScript.path	= $${PACKAGE_DATAS}/plugins/GNUdbg
-	debuggerScript.files	= plugins/debugger/GNUDebugger/scripts
+	monkey_debuggerScript.path	= $${PACKAGE_DATAS}/plugins/GNUdbg
+	monkey_debuggerScript.files	= plugins/debugger/GNUDebugger/scripts
 
-	INSTALLS	= apis templates translations debuggerIniFile debuggerLog debuggerScript
+	INSTALLS	= monkey_templates monkey_apis monkey_translations monkey_debuggerIniFile monkey_debuggerLog monkey_debuggerScript
 
 	unix:!mac {
 		# plugins
@@ -37,15 +37,15 @@ include( config.pri )
 		monkey_plugins.files	= bin/plugins
 
 		# binary
-		monkey_target.path	= $${PACKAGE_PREFIX}
+		monkey_target.path	= $${PACKAGE_PREFIX}/bin
 		monkey_target.files	= bin/$${PACKAGE_TARGET}
 
 		# desktop file
-		monkey_desktop.path	= $${PACKAGE_PREFIX}/../share/applications
+		monkey_desktop.path	= $${PACKAGE_PREFIX}/share/applications
 		monkey_desktop.files	= links/monkeystudio.desktop
 
 		# desktop icon file
-		monkey_desktopicon.path	= $${PACKAGE_PREFIX}/../icons/hicolor/32x32/apps
+		monkey_desktopicon.path	= $${PACKAGE_PREFIX}/share/icons/hicolor/32x32/apps
 		monkey_desktopicon.files	= links/monkeystudio.png
 
 		INSTALLS	+= monkey_plugins monkey_target monkey_desktop monkey_desktopicon
