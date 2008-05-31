@@ -47,7 +47,7 @@ QMAKE_TARGET_PRODUCT	= "Monkey Studio"
 QMAKE_TARGET_DESCRIPTION	= "Crossplatform Integrated Development Environment"
 QMAKE_TARGET_COPYRIGHT	= "Copyright (C) 2005 - 2008 Filipe AZEVEDO"
 PACKAGE_DOMAIN	= "www.monkeystudio.org"
-PACKAGE_VERSION	= 1.8.2.0
+PACKAGE_VERSION	= 1.8.2.0svn
 
 # define variable for source code
 DEFINES	*= "PACKAGE_NAME=\"\\\"$${QMAKE_TARGET_PRODUCT}\\\"\"" \
@@ -63,15 +63,15 @@ PACKAGE_DATAS	= $$(MONKEY_DATAS)
 isEmpty( PACKAGE_PREFIX ) {
 	win32:PACKAGE_PREFIX	= $${PACKAGE_DESTDIR}
 	else:mac:PACKAGE_PREFIX	= $${PACKAGE_DESTDIR}/$${PACKAGE_TARGET}.app/Contents
-	else:PACKAGE_PREFIX	= /usr/local/bin
-} else:unix:!mac:PACKAGE_PREFIX	= $${PACKAGE_PREFIX}/bin
+	else:PACKAGE_PREFIX	= /usr/local
+}
 
 # datas
 isEmpty( PACKAGE_DATAS ) {
 	win32:PACKAGE_DATAS	= $${PACKAGE_PREFIX}
 	else:mac:PACKAGE_DATAS	= $${PACKAGE_PREFIX}
-	else:PACKAGE_DATAS	= /usr/local/lib/$${PACKAGE_TARGET}
-} else:unix:!mac:PACKAGE_DATAS	= $${PACKAGE_DATAS}/lib/$${PACKAGE_TARGET}
+	else:PACKAGE_DATAS	= $${PACKAGE_PREFIX}/lib/$${PACKAGE_TARGET}
+}
 
 PACKAGE_PREFIX	= $$quote($$PACKAGE_PREFIX)
 PACKAGE_DATAS	= $$quote($$PACKAGE_DATAS)

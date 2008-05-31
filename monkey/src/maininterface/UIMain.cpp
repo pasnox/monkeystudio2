@@ -223,6 +223,7 @@ void UIMain::initMenuBar()
 		mb->action( "aSeparator1" );
 		mb->menu( "mUserTools", tr( "&User Tools" ), QIcon( ":/tools/icons/tools/user.png" ) );
 		mb->menu( "mDesktopTools", tr( "Desktop &Tools" ), QIcon( ":/tools/icons/tools/desktop.png" ) );
+		mb->action( "aSeparator2" );
 	mb->endGroup();
 	mb->menu( "mPlugins", tr( "Plugins" ) );
 	mb->beginGroup( "mPlugins" );
