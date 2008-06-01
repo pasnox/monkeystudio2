@@ -1,0 +1,28 @@
+Source: monkeystudio
+Section: devel
+Priority: optional
+Maintainer: Ubuntu MOTU Developers <ubuntu-motu@lists.ubuntu.com>
+XSBC-Original-Maintainer: Filipe AZEVEDO <pasnox@gmail.com>
+Build-Depends: debhelper (>= 5), libqt4-dev
+Standards-Version: 3.7.3
+
+Package: monkeystudio
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: gdb
+Description: Qt 4 Integrated Development Enviroment (IDE)
+  Monkey Studio is a crossplatform Qt 4 IDE. It is developed using the Qt
+  library itself, meaning it will run on any platform supported by Qt 4. This
+  allows you to work on the same project on multiple platforms using the same
+  IDE.
+  Monkey Studio uses the Qt Project file (.pro) to manage the project, and
+  there are no extra files created. Monkey Studio also features...
+  .
+    * Project creation wizard
+    * File creation wizard
+    * Code snippest
+    * Class Browser
+    * Code completion with syntax highlighting
+    * GDB integration
+    * Plugin architecture
+    * And a lot to discover...
