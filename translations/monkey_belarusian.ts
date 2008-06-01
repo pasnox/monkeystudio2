@@ -456,385 +456,2405 @@
 <context>
     <name>QsciCommand</name>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="49"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="62"/>
         <source>Move down one line</source>
-        <translation type="obsolete">Падвінуцца на адзін радок уніз</translation>
+        <translation type="unfinished">Падвінуцца на адзін радок уніз</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="56"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="69"/>
         <source>Extend selection down one line</source>
-        <translation type="obsolete">Пашырыць выдзяленне на адзін радок уніз</translation>
+        <translation type="unfinished">Пашырыць выдзяленне на адзін радок уніз</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="63"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="76"/>
         <source>Scroll view down one line</source>
-        <translation type="obsolete">Перамяціць scroll на адзін радок уніз</translation>
+        <translation type="unfinished">Перамяціць scroll на адзін радок уніз</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="70"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="83"/>
         <source>Extend rectangular selection down one line</source>
-        <translation type="obsolete">Пашырыць прамавугольнае выдзяленне на адзін радок уніз</translation>
+        <translation type="unfinished">Пашырыць прамавугольнае выдзяленне на адзін радок уніз</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="77"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="90"/>
         <source>Move up one line</source>
-        <translation type="obsolete">Перамясціць курсор на адзін радок уверх</translation>
+        <translation type="unfinished">Перамясціць курсор на адзін радок уверх</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="84"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="97"/>
         <source>Extend selection up one line</source>
-        <translation type="obsolete">Пашырыць выдзяленне на адзін радок уверх</translation>
+        <translation type="unfinished">Пашырыць выдзяленне на адзін радок уверх</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="91"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="104"/>
         <source>Scroll view up one line</source>
-        <translation type="obsolete">Перамясціць scroll на адзін радок уверх</translation>
+        <translation type="unfinished">Перамясціць scroll на адзін радок уверх</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="98"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="111"/>
         <source>Extend rectangular selection up one line</source>
-        <translation type="obsolete">Пашырыць прамавыгольнае выдзяленне на адзін радок уверх</translation>
+        <translation type="unfinished">Пашырыць прамавыгольнае выдзяленне на адзін радок уверх</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="105"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="118"/>
         <source>Move up one paragraph</source>
-        <translation type="obsolete">Перамясціцца ўверх на адзін параграф</translation>
+        <translation type="unfinished">Перамясціцца ўверх на адзін параграф</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="112"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="125"/>
         <source>Extend selection up one paragraph</source>
-        <translation type="obsolete">Пашырыць выдзяленне ўверх на адзін параграф</translation>
+        <translation type="unfinished">Пашырыць выдзяленне ўверх на адзін параграф</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="119"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="132"/>
         <source>Move down one paragraph</source>
-        <translation type="obsolete">Перамясціцца уніз на адзін параграф</translation>
+        <translation type="unfinished">Перамясціцца уніз на адзін параграф</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="126"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="139"/>
         <source>Extend selection down one paragraph</source>
-        <translation type="obsolete">Пашырыць выдзяленне ўніз на адзін параграф</translation>
+        <translation type="unfinished">Пашырыць выдзяленне ўніз на адзін параграф</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="133"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="146"/>
         <source>Move left one character</source>
-        <translation type="obsolete">Перамясціцца ўлева на адзін сімвал</translation>
+        <translation type="unfinished">Перамясціцца ўлева на адзін сімвал</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="140"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="153"/>
         <source>Extend selection left one character</source>
-        <translation type="obsolete">Пашырыць выдзяленне ўлева на адзін сімвал</translation>
+        <translation type="unfinished">Пашырыць выдзяленне ўлева на адзін сімвал</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="147"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="160"/>
         <source>Move left one word</source>
-        <translation type="obsolete">Перасясціцца ўлева на адно слова</translation>
+        <translation type="unfinished">Перасясціцца ўлева на адно слова</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="154"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="167"/>
         <source>Extend selection left one word</source>
-        <translation type="obsolete">Пашырыць выдзяленне ўлева на адно свова</translation>
+        <translation type="unfinished">Пашырыць выдзяленне ўлева на адно свова</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="161"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="174"/>
         <source>Extend rectangular selection left one character</source>
-        <translation type="obsolete">Пашырыць прамавугольнае выдзяленне ўлева на адно слова</translation>
+        <translation type="unfinished">Пашырыць прамавугольнае выдзяленне ўлева на адно слова</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="168"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="181"/>
         <source>Move right one character</source>
-        <translation type="obsolete">Перамясціцца ўправа на адно слова</translation>
+        <translation type="unfinished">Перамясціцца ўправа на адно слова</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="175"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="188"/>
         <source>Extend selection right one character</source>
-        <translation type="obsolete">Пашырыць выдзяленне управа на адно слова</translation>
+        <translation type="unfinished">Пашырыць выдзяленне управа на адно слова</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="182"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="195"/>
         <source>Move right one word</source>
-        <translation type="obsolete">Перамясціцца управа на адно слова</translation>
+        <translation type="unfinished">Перамясціцца управа на адно слова</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="189"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="202"/>
         <source>Extend selection right one word</source>
-        <translation type="obsolete">Пашырыць выдзяленне управа на адно слова</translation>
+        <translation type="unfinished">Пашырыць выдзяленне управа на адно слова</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="196"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="209"/>
         <source>Extend rectangular selection right one character</source>
-        <translation type="obsolete">Пашырыць выдзяленне управа на адно слова</translation>
+        <translation type="unfinished">Пашырыць выдзяленне управа на адно слова</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="203"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="216"/>
         <source>Move left one word part</source>
-        <translation type="obsolete">Перамясціцца улева на частку слова</translation>
+        <translation type="unfinished">Перамясціцца улева на частку слова</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="210"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="223"/>
         <source>Extend selection left one word part</source>
-        <translation type="obsolete">Пашырыць выдзяленне ўлева на частку слова</translation>
+        <translation type="unfinished">Пашырыць выдзяленне ўлева на частку слова</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="217"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="230"/>
         <source>Move right one word part</source>
-        <translation type="obsolete">Перамясціцца управа на частку слова</translation>
+        <translation type="unfinished">Перамясціцца управа на частку слова</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="224"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="237"/>
         <source>Extend selection right one word part</source>
-        <translation type="obsolete">Пашырыць выдзяленне ўправа на частку слова</translation>
+        <translation type="unfinished">Пашырыць выдзяленне ўправа на частку слова</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="231"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="244"/>
         <source>Move to first visible character in line</source>
-        <translation type="obsolete">Перамясціцца ўправа да першага бачнага сімлава ў радку</translation>
+        <translation type="unfinished">Перамясціцца ўправа да першага бачнага сімлава ў радку</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="238"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="251"/>
         <source>Extend selection to first visible character in line</source>
-        <translation type="obsolete">Пашырыць выдзяленне да першага бачнага сімвала ў радку</translation>
+        <translation type="unfinished">Пашырыць выдзяленне да першага бачнага сімвала ў радку</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="245"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="258"/>
         <source>Move to start of text</source>
-        <translation type="obsolete">Перамясціцца ў пачатак тэксту</translation>
+        <translation type="unfinished">Перамясціцца ў пачатак тэксту</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="252"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="265"/>
         <source>Extend selection to start of text</source>
-        <translation type="obsolete">Пашырыць выдзяленне да пачатку тэксту</translation>
+        <translation type="unfinished">Пашырыць выдзяленне да пачатку тэксту</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="259"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="272"/>
         <source>Move to start of displayed line</source>
-        <translation type="obsolete">Перамясціцца у пачатак бачнай лініі</translation>
+        <translation type="unfinished">Перамясціцца у пачатак бачнай лініі</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="266"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="279"/>
         <source>Extend selection to start of line</source>
-        <translation type="obsolete">Пашырыць выдзяленне да пачатку радка</translation>
+        <translation type="unfinished">Пашырыць выдзяленне да пачатку радка</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="273"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="286"/>
         <source>Extend rectangular selection to first visible character in line</source>
-        <translation type="obsolete">Пашырыць прамавугольнае выдзяленне да першага бачнага сімвала ў радку</translation>
+        <translation type="unfinished">Пашырыць прамавугольнае выдзяленне да першага бачнага сімвала ў радку</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="280"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="293"/>
         <source>Move to end of line</source>
-        <translation type="obsolete">Перамясціцца у канец радка</translation>
+        <translation type="unfinished">Перамясціцца у канец радка</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="287"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="300"/>
         <source>Extend selection to end of line</source>
-        <translation type="obsolete">Пашырыць выдзяленне у канец радка</translation>
+        <translation type="unfinished">Пашырыць выдзяленне у канец радка</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="294"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="307"/>
         <source>Move to end of text</source>
-        <translation type="obsolete">Перамясціцца у канец тэксту</translation>
+        <translation type="unfinished">Перамясціцца у канец тэксту</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="301"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="314"/>
         <source>Extend selection to end of text</source>
-        <translation type="obsolete">Пашырыць выдзяленне да канца тэксту</translation>
+        <translation type="unfinished">Пашырыць выдзяленне да канца тэксту</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="308"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="321"/>
         <source>Move to end of displayed line</source>
-        <translation type="obsolete">Перамясціцца у канец радку</translation>
+        <translation type="unfinished">Перамясціцца у канец радку</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="315"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="328"/>
         <source>Extend selection to end of displayed line</source>
-        <translation type="obsolete">Пашырыць выдзяленне да канца радка</translation>
+        <translation type="unfinished">Пашырыць выдзяленне да канца радка</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="322"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="335"/>
         <source>Extend rectangular selection to end of line</source>
-        <translation type="obsolete">Пашырыць выдзяленне да канца радка</translation>
+        <translation type="unfinished">Пашырыць выдзяленне да канца радка</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="329"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="342"/>
         <source>Move up one page</source>
-        <translation type="obsolete">Перамясціцца ўверх на старонку</translation>
+        <translation type="unfinished">Перамясціцца ўверх на старонку</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="336"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="349"/>
         <source>Extend selection up one page</source>
-        <translation type="obsolete">Пашырыць выдзяленне ўверх на старонку</translation>
+        <translation type="unfinished">Пашырыць выдзяленне ўверх на старонку</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="343"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="356"/>
         <source>Extend rectangular selection up one page</source>
-        <translation type="obsolete">Пашырыць выдзяленне на адну старонку ўверх</translation>
+        <translation type="unfinished">Пашырыць выдзяленне на адну старонку ўверх</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="350"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="363"/>
         <source>Move down one page</source>
-        <translation type="obsolete">Перамясціцца ўніз на адну старонку</translation>
+        <translation type="unfinished">Перамясціцца ўніз на адну старонку</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="357"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="370"/>
         <source>Extend selection down one page</source>
-        <translation type="obsolete">Пашырыць выдзяленне на адну старонку ўніз</translation>
+        <translation type="unfinished">Пашырыць выдзяленне на адну старонку ўніз</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="364"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="377"/>
         <source>Extend rectangular selection down one page</source>
-        <translation type="obsolete">Пашырыць прамавугольнае выдзяленне на старонку ўніз</translation>
+        <translation type="unfinished">Пашырыць прамавугольнае выдзяленне на старонку ўніз</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="371"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="384"/>
         <source>Delete current character</source>
-        <translation type="obsolete">Выдаліць сімвал</translation>
+        <translation type="unfinished">Выдаліць сімвал</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="378"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="391"/>
         <source>Cut selection</source>
-        <translation type="obsolete">Выдаліць выдзеленны тэкс у буфер</translation>
+        <translation type="unfinished">Выдаліць выдзеленны тэкс у буфер</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="385"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="398"/>
         <source>Delete word to right</source>
-        <translation type="obsolete">Выдаліць слова зправа</translation>
+        <translation type="unfinished">Выдаліць слова зправа</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="392"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="405"/>
         <source>Delete line to right</source>
-        <translation type="obsolete">Выдаліць да канца радка</translation>
+        <translation type="unfinished">Выдаліць да канца радка</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="406"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="419"/>
         <source>Paste</source>
-        <translation type="obsolete">Уставіць</translation>
+        <translation type="unfinished">Уставіць</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="413"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="426"/>
         <source>Copy selection</source>
-        <translation type="obsolete">Скапіраваць</translation>
+        <translation type="unfinished">Скапіраваць</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="420"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="433"/>
         <source>Cancel</source>
-        <translation type="obsolete">Адмена</translation>
+        <translation type="unfinished">Адмена</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="427"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="440"/>
         <source>Delete previous character</source>
-        <translation type="obsolete">Выдаліць сімвал перад курсорам</translation>
+        <translation type="unfinished">Выдаліць сімвал перад курсорам</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="434"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="447"/>
         <source>Delete word to left</source>
-        <translation type="obsolete">Выдаліць слова ўлева</translation>
+        <translation type="unfinished">Выдаліць слова ўлева</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="441"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="454"/>
         <source>Undo the last command</source>
-        <translation type="obsolete">Адмена апошняй каманды</translation>
+        <translation type="unfinished">Адмена апошняй каманды</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="448"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="461"/>
         <source>Delete line to left</source>
-        <translation type="obsolete">Вылаліць на пачатку радка</translation>
+        <translation type="unfinished">Вылаліць на пачатку радка</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="455"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="468"/>
         <source>Redo last command</source>
-        <translation type="obsolete">Адмяніць адмену апошняй каманды</translation>
+        <translation type="unfinished">Адмяніць адмену апошняй каманды</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="462"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="475"/>
         <source>Select all text</source>
-        <translation type="obsolete">Выдзяліць увесь тэкст</translation>
+        <translation type="unfinished">Выдзяліць увесь тэкст</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="469"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="482"/>
         <source>Indent one level</source>
-        <translation type="obsolete">Отступ</translation>
+        <translation type="unfinished">Отступ</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="476"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="489"/>
         <source>Move back one indentation level</source>
-        <translation type="obsolete">Выдаліць отступ</translation>
+        <translation type="unfinished">Выдаліць отступ</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="483"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="496"/>
         <source>Insert new line</source>
-        <translation type="obsolete">Уставіць новы радок</translation>
+        <translation type="unfinished">Уставіць новы радок</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="490"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="503"/>
         <source>Zoom in</source>
-        <translation type="obsolete">Павялічыць маштаб</translation>
+        <translation type="unfinished">Павялічыць маштаб</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="497"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="510"/>
         <source>Zoom out</source>
-        <translation type="obsolete">Паменшыць маштаб</translation>
+        <translation type="unfinished">Паменшыць маштаб</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="504"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="517"/>
         <source>Set zoom</source>
-        <translation type="obsolete">Маштаб</translation>
+        <translation type="unfinished">Маштаб</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="518"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="531"/>
         <source>Cut current line</source>
-        <translation type="obsolete">Выдаліць радок у буфер</translation>
+        <translation type="unfinished">Выдаліць радок у буфер</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="525"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="538"/>
         <source>Delete current line</source>
-        <translation type="obsolete">Выдаліць радок</translation>
+        <translation type="unfinished">Выдаліць радок</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="532"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="545"/>
         <source>Copy current line</source>
-        <translation type="obsolete">Скапіраваць радок</translation>
+        <translation type="unfinished">Скапіраваць радок</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="539"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="552"/>
         <source>Swap current and previous lines</source>
-        <translation type="obsolete">Абмяняць месцамі бягучы радок і радок вышэй</translation>
+        <translation type="unfinished">Абмяняць месцамі бягучы радок і радок вышэй</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="546"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="559"/>
         <source>Duplicate selection</source>
-        <translation type="obsolete">Дубліраваць выдзялены тэкст</translation>
+        <translation type="unfinished">Дубліраваць выдзялены тэкст</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="553"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="566"/>
         <source>Convert selection to lower case</source>
-        <translation type="obsolete">Сканвертаваць выдзелены тэкст у малыя літары</translation>
+        <translation type="unfinished">Сканвертаваць выдзелены тэкст у малыя літары</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="560"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="573"/>
         <source>Convert selection to upper case</source>
-        <translation type="obsolete">Сканвертаваць выдзелены тэкст у вялікія літары</translation>
+        <translation type="unfinished">Сканвертаваць выдзелены тэкст у вялікія літары</translation>
     </message>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscicommandset.cpp" line="567"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="580"/>
         <source>Delete previous character if not at line start</source>
-        <translation type="obsolete">Выдаліць сімвал перад курсорам, калі гэта не пачатак радка</translation>
+        <translation type="unfinished">Выдаліць сімвал перад курсорам, калі гэта не пачатак радка</translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="412"/>
+        <source>Toggle insert/overtype</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscicommandset.cpp" line="524"/>
+        <source>Formfeed</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QsciLexerBash</name>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerbash.cpp" line="214"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerbash.cpp" line="217"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerbash.cpp" line="220"/>
+        <source>Comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerbash.cpp" line="223"/>
+        <source>Number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerbash.cpp" line="226"/>
+        <source>Keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerbash.cpp" line="229"/>
+        <source>Double-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerbash.cpp" line="232"/>
+        <source>Single-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerbash.cpp" line="235"/>
+        <source>Operator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerbash.cpp" line="238"/>
+        <source>Identifier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerbash.cpp" line="241"/>
+        <source>Scalar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerbash.cpp" line="244"/>
+        <source>Parameter expansion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerbash.cpp" line="247"/>
+        <source>Backticks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerbash.cpp" line="250"/>
+        <source>Here document delimiter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerbash.cpp" line="253"/>
+        <source>Single-quoted here document</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QsciLexerBatch</name>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerbatch.cpp" line="185"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerbatch.cpp" line="188"/>
+        <source>Comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerbatch.cpp" line="191"/>
+        <source>Keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerbatch.cpp" line="194"/>
+        <source>Label</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerbatch.cpp" line="197"/>
+        <source>Hide command character</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerbatch.cpp" line="200"/>
+        <source>External command</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerbatch.cpp" line="203"/>
+        <source>Variable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerbatch.cpp" line="206"/>
+        <source>Operator</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QsciLexerCMake</name>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercmake.cpp" line="204"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercmake.cpp" line="207"/>
+        <source>Comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercmake.cpp" line="210"/>
+        <source>String</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercmake.cpp" line="213"/>
+        <source>Left quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercmake.cpp" line="216"/>
+        <source>Right quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercmake.cpp" line="219"/>
+        <source>Function</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercmake.cpp" line="222"/>
+        <source>Variable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercmake.cpp" line="225"/>
+        <source>Label</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercmake.cpp" line="228"/>
+        <source>User defined</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercmake.cpp" line="231"/>
+        <source>WHILE block</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercmake.cpp" line="234"/>
+        <source>FOREACH block</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercmake.cpp" line="237"/>
+        <source>IF block</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercmake.cpp" line="240"/>
+        <source>MACRO block</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercmake.cpp" line="243"/>
+        <source>Variable within a string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercmake.cpp" line="246"/>
+        <source>Number</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QsciLexerCPP</name>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercpp.cpp" line="275"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercpp.cpp" line="278"/>
+        <source>C comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercpp.cpp" line="281"/>
+        <source>C++ comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercpp.cpp" line="284"/>
+        <source>JavaDoc style C comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercpp.cpp" line="287"/>
+        <source>Number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercpp.cpp" line="290"/>
+        <source>Keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercpp.cpp" line="293"/>
+        <source>Double-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercpp.cpp" line="296"/>
+        <source>Single-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercpp.cpp" line="299"/>
+        <source>Pre-processor block</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercpp.cpp" line="302"/>
+        <source>Operator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercpp.cpp" line="305"/>
+        <source>Identifier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercpp.cpp" line="308"/>
+        <source>Unclosed string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercpp.cpp" line="311"/>
+        <source>JavaDoc style C++ comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercpp.cpp" line="314"/>
+        <source>Secondary keywords and identifiers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercpp.cpp" line="317"/>
+        <source>JavaDoc keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercpp.cpp" line="320"/>
+        <source>JavaDoc keyword error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercpp.cpp" line="323"/>
+        <source>Global classes and typedefs</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QsciLexerCSS</name>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercss.cpp" line="243"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercss.cpp" line="246"/>
+        <source>Tag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercss.cpp" line="249"/>
+        <source>Class selector</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercss.cpp" line="252"/>
+        <source>Pseudo-class</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercss.cpp" line="255"/>
+        <source>Unknown pseudo-class</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercss.cpp" line="258"/>
+        <source>Operator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercss.cpp" line="261"/>
+        <source>CSS1 property</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercss.cpp" line="264"/>
+        <source>Unknown property</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercss.cpp" line="267"/>
+        <source>Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercss.cpp" line="270"/>
+        <source>ID selector</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercss.cpp" line="273"/>
+        <source>Important</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercss.cpp" line="276"/>
+        <source>@-rule</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercss.cpp" line="279"/>
+        <source>Double-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercss.cpp" line="282"/>
+        <source>Single-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercss.cpp" line="285"/>
+        <source>CSS2 property</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercss.cpp" line="288"/>
+        <source>Attribute</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QsciLexerCSharp</name>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexercsharp.cpp" line="118"/>
+        <source>Verbatim string</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QsciLexerD</name>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerd.cpp" line="277"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerd.cpp" line="280"/>
+        <source>Block comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerd.cpp" line="283"/>
+        <source>Line comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerd.cpp" line="286"/>
+        <source>DDoc style block comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerd.cpp" line="289"/>
+        <source>Nesting comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerd.cpp" line="292"/>
+        <source>Number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerd.cpp" line="295"/>
+        <source>Keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerd.cpp" line="298"/>
+        <source>Secondary keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerd.cpp" line="301"/>
+        <source>Documentation keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerd.cpp" line="304"/>
+        <source>Type definition</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerd.cpp" line="307"/>
+        <source>String</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerd.cpp" line="310"/>
+        <source>Unclosed string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerd.cpp" line="313"/>
+        <source>Character</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerd.cpp" line="316"/>
+        <source>Operator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerd.cpp" line="319"/>
+        <source>Identifier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerd.cpp" line="322"/>
+        <source>DDoc style line comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerd.cpp" line="325"/>
+        <source>DDoc keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerd.cpp" line="328"/>
+        <source>DDoc keyword error</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QsciLexerDiff</name>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexerdiff.cpp" line="107"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerdiff.cpp" line="120"/>
         <source>Command</source>
-        <translation type="obsolete">Каманда</translation>
+        <translation type="unfinished">Каманда</translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerdiff.cpp" line="114"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerdiff.cpp" line="117"/>
+        <source>Comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerdiff.cpp" line="123"/>
+        <source>Header</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerdiff.cpp" line="126"/>
+        <source>Position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerdiff.cpp" line="129"/>
+        <source>Removed line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerdiff.cpp" line="132"/>
+        <source>Added line</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QsciLexerHTML</name>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="553"/>
+        <source>HTML default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="556"/>
+        <source>Tag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="559"/>
+        <source>Unknown tag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="562"/>
+        <source>Attribute</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="565"/>
+        <source>Unknown attribute</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="568"/>
+        <source>HTML number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="571"/>
+        <source>HTML double-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="574"/>
+        <source>HTML single-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="577"/>
+        <source>Other text in a tag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="580"/>
+        <source>HTML comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="583"/>
+        <source>Entity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="586"/>
+        <source>End of a tag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="589"/>
+        <source>Start of an XML fragment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="592"/>
+        <source>End of an XML fragment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="595"/>
+        <source>Script tag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="598"/>
+        <source>Start of an ASP fragment with @</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="601"/>
+        <source>Start of an ASP fragment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="604"/>
+        <source>CDATA</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="607"/>
+        <source>Start of a PHP fragment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="610"/>
+        <source>Unquoted HTML value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="613"/>
+        <source>ASP X-Code comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="616"/>
+        <source>SGML default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="619"/>
+        <source>SGML command</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="622"/>
+        <source>First parameter of an SGML command</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="625"/>
+        <source>SGML double-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="628"/>
+        <source>SGML single-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="631"/>
+        <source>SGML error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="634"/>
+        <source>SGML special entity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="637"/>
+        <source>SGML comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="640"/>
+        <source>First parameter comment of an SGML command</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="643"/>
+        <source>SGML block default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="646"/>
+        <source>Start of a JavaScript fragment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="649"/>
+        <source>JavaScript default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="652"/>
+        <source>JavaScript comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="655"/>
+        <source>JavaScript line comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="658"/>
+        <source>JavaDoc style JavaScript comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="661"/>
+        <source>JavaScript number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="664"/>
+        <source>JavaScript word</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="667"/>
+        <source>JavaScript keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="670"/>
+        <source>JavaScript double-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="673"/>
+        <source>JavaScript single-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="676"/>
+        <source>JavaScript symbol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="679"/>
+        <source>JavaScript unclosed string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="682"/>
+        <source>JavaScript regular expression</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="685"/>
+        <source>Start of an ASP JavaScript fragment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="688"/>
+        <source>ASP JavaScript default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="691"/>
+        <source>ASP JavaScript comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="694"/>
+        <source>ASP JavaScript line comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="697"/>
+        <source>JavaDoc style ASP JavaScript comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="700"/>
+        <source>ASP JavaScript number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="703"/>
+        <source>ASP JavaScript word</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="706"/>
+        <source>ASP JavaScript keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="709"/>
+        <source>ASP JavaScript double-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="712"/>
+        <source>ASP JavaScript single-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="715"/>
+        <source>ASP JavaScript symbol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="718"/>
+        <source>ASP JavaScript unclosed string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="721"/>
+        <source>ASP JavaScript regular expression</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="724"/>
+        <source>Start of a VBScript fragment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="727"/>
+        <source>VBScript default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="730"/>
+        <source>VBScript comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="733"/>
+        <source>VBScript number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="736"/>
+        <source>VBScript keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="739"/>
+        <source>VBScript string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="742"/>
+        <source>VBScript identifier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="745"/>
+        <source>VBScript unclosed string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="748"/>
+        <source>Start of an ASP VBScript fragment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="751"/>
+        <source>ASP VBScript default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="754"/>
+        <source>ASP VBScript comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="757"/>
+        <source>ASP VBScript number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="760"/>
+        <source>ASP VBScript keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="763"/>
+        <source>ASP VBScript string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="766"/>
+        <source>ASP VBScript identifier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="769"/>
+        <source>ASP VBScript unclosed string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="772"/>
+        <source>Start of a Python fragment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="775"/>
+        <source>Python default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="778"/>
+        <source>Python comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="781"/>
+        <source>Python number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="784"/>
+        <source>Python double-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="787"/>
+        <source>Python single-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="790"/>
+        <source>Python keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="793"/>
+        <source>Python triple double-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="796"/>
+        <source>Python triple single-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="799"/>
+        <source>Python class name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="802"/>
+        <source>Python function or method name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="805"/>
+        <source>Python operator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="808"/>
+        <source>Python identifier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="811"/>
+        <source>Start of an ASP Python fragment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="814"/>
+        <source>ASP Python default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="817"/>
+        <source>ASP Python comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="820"/>
+        <source>ASP Python number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="823"/>
+        <source>ASP Python double-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="826"/>
+        <source>ASP Python single-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="829"/>
+        <source>ASP Python keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="832"/>
+        <source>ASP Python triple double-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="835"/>
+        <source>ASP Python triple single-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="838"/>
+        <source>ASP Python class name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="841"/>
+        <source>ASP Python function or method name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="844"/>
+        <source>ASP Python operator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="847"/>
+        <source>ASP Python identifier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="850"/>
+        <source>PHP default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="853"/>
+        <source>PHP double-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="856"/>
+        <source>PHP single-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="859"/>
+        <source>PHP keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="862"/>
+        <source>PHP number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="865"/>
+        <source>PHP variable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="868"/>
+        <source>PHP comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="871"/>
+        <source>PHP line comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="874"/>
+        <source>PHP double-quoted variable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerhtml.cpp" line="877"/>
+        <source>PHP operator</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QsciLexerIDL</name>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexeridl.cpp" line="112"/>
+        <source>UUID</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QsciLexerJavaScript</name>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerjavascript.cpp" line="120"/>
+        <source>Regular expression</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QsciLexerLua</name>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerlua.cpp" line="228"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerlua.cpp" line="231"/>
+        <source>Comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerlua.cpp" line="234"/>
+        <source>Line comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerlua.cpp" line="237"/>
+        <source>Number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerlua.cpp" line="240"/>
+        <source>Keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerlua.cpp" line="243"/>
+        <source>String</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerlua.cpp" line="246"/>
+        <source>Character</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerlua.cpp" line="249"/>
+        <source>Literal string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerlua.cpp" line="252"/>
+        <source>Preprocessor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerlua.cpp" line="255"/>
+        <source>Operator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerlua.cpp" line="258"/>
+        <source>Identifier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerlua.cpp" line="261"/>
+        <source>Unclosed string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerlua.cpp" line="264"/>
+        <source>Basic functions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerlua.cpp" line="267"/>
+        <source>String, table and maths functions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerlua.cpp" line="270"/>
+        <source>Coroutines, i/o and system facilities</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QsciLexerMakefile</name>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexermakefile.cpp" line="139"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexermakefile.cpp" line="142"/>
+        <source>Comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexermakefile.cpp" line="145"/>
+        <source>Preprocessor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexermakefile.cpp" line="148"/>
+        <source>Variable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexermakefile.cpp" line="151"/>
+        <source>Operator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexermakefile.cpp" line="154"/>
+        <source>Target</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexermakefile.cpp" line="157"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QsciLexerPOV</name>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpov.cpp" line="288"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpov.cpp" line="291"/>
+        <source>Comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpov.cpp" line="294"/>
+        <source>Comment line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpov.cpp" line="297"/>
+        <source>Number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpov.cpp" line="300"/>
+        <source>Operator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpov.cpp" line="303"/>
+        <source>Identifier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpov.cpp" line="306"/>
+        <source>String</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpov.cpp" line="309"/>
+        <source>Unclosed string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpov.cpp" line="312"/>
+        <source>Directive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpov.cpp" line="315"/>
+        <source>Bad directive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpov.cpp" line="318"/>
+        <source>Objects, CSG and appearance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpov.cpp" line="321"/>
+        <source>Types, modifiers and items</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpov.cpp" line="324"/>
+        <source>Predefined identifiers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpov.cpp" line="327"/>
+        <source>Predefined functions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpov.cpp" line="330"/>
+        <source>User defined 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpov.cpp" line="333"/>
+        <source>User defined 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpov.cpp" line="336"/>
+        <source>User defined 3</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QsciLexerPerl</name>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="271"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="274"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="277"/>
+        <source>Comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="280"/>
+        <source>POD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="283"/>
+        <source>Number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="286"/>
+        <source>Keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="289"/>
+        <source>Double-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="292"/>
+        <source>Single-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="295"/>
+        <source>Operator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="298"/>
+        <source>Identifier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="301"/>
+        <source>Scalar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="304"/>
+        <source>Array</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="307"/>
+        <source>Hash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="310"/>
+        <source>Symbol table</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="313"/>
+        <source>Regular expression</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="316"/>
+        <source>Substitution</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="319"/>
+        <source>Backticks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="322"/>
+        <source>Data section</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="325"/>
+        <source>Here document delimiter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="328"/>
+        <source>Single-quoted here document</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="331"/>
+        <source>Double-quoted here document</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="334"/>
+        <source>Backtick here document</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="337"/>
+        <source>Quoted string (q)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="340"/>
+        <source>Quoted string (qq)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="343"/>
+        <source>Quoted string (qx)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="346"/>
+        <source>Quoted string (qr)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="349"/>
+        <source>Quoted string (qw)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="352"/>
+        <source>POD verbatim</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="355"/>
+        <source>Subroutine prototype</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="358"/>
+        <source>Format identifier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerperl.cpp" line="361"/>
+        <source>Format body</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QsciLexerProperties</name>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerproperties.cpp" line="134"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerproperties.cpp" line="137"/>
+        <source>Comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerproperties.cpp" line="140"/>
+        <source>Section</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerproperties.cpp" line="143"/>
+        <source>Assignment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerproperties.cpp" line="146"/>
+        <source>Default value</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QsciLexerPython</name>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpython.cpp" line="241"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpython.cpp" line="244"/>
+        <source>Comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpython.cpp" line="247"/>
+        <source>Number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpython.cpp" line="250"/>
+        <source>Double-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpython.cpp" line="253"/>
+        <source>Single-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpython.cpp" line="256"/>
+        <source>Keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpython.cpp" line="259"/>
+        <source>Triple single-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpython.cpp" line="262"/>
+        <source>Triple double-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpython.cpp" line="265"/>
+        <source>Class name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpython.cpp" line="268"/>
+        <source>Function or method name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpython.cpp" line="271"/>
+        <source>Operator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpython.cpp" line="274"/>
+        <source>Identifier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpython.cpp" line="277"/>
+        <source>Comment block</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpython.cpp" line="280"/>
+        <source>Unclosed string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpython.cpp" line="283"/>
+        <source>Highlighted identifier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerpython.cpp" line="286"/>
+        <source>Decorator</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QsciLexerRuby</name>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="258"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="261"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="264"/>
+        <source>Comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="267"/>
+        <source>POD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="270"/>
+        <source>Number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="273"/>
+        <source>Keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="276"/>
+        <source>Double-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="279"/>
+        <source>Single-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="282"/>
+        <source>Class name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="285"/>
+        <source>Function or method name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="288"/>
+        <source>Operator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="291"/>
+        <source>Identifier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="294"/>
+        <source>Regular expression</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="297"/>
+        <source>Global</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="300"/>
+        <source>Symbol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="303"/>
+        <source>Module name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="306"/>
+        <source>Instance variable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="309"/>
+        <source>Class variable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="312"/>
+        <source>Backticks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="315"/>
+        <source>Data section</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="318"/>
+        <source>Here document delimiter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="321"/>
+        <source>Here document</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="324"/>
+        <source>%q string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="327"/>
+        <source>%Q string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="330"/>
+        <source>%x string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="333"/>
+        <source>%r string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="336"/>
+        <source>%w string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="339"/>
+        <source>Demoted keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="342"/>
+        <source>stdin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="345"/>
+        <source>stdout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexerruby.cpp" line="348"/>
+        <source>stderr</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QsciLexerSQL</name>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexersql.cpp" line="264"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexersql.cpp" line="267"/>
+        <source>Comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexersql.cpp" line="270"/>
+        <source>Comment line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexersql.cpp" line="273"/>
+        <source>JavaDoc style comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexersql.cpp" line="276"/>
+        <source>Number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexersql.cpp" line="279"/>
+        <source>Keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexersql.cpp" line="282"/>
+        <source>Double-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexersql.cpp" line="285"/>
+        <source>Single-quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexersql.cpp" line="288"/>
+        <source>SQL*Plus keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexersql.cpp" line="291"/>
+        <source>SQL*Plus prompt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexersql.cpp" line="294"/>
+        <source>Operator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexersql.cpp" line="297"/>
+        <source>Identifier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexersql.cpp" line="300"/>
+        <source>SQL*Plus comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexersql.cpp" line="303"/>
+        <source># comment line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexersql.cpp" line="306"/>
+        <source>JavaDoc keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexersql.cpp" line="309"/>
+        <source>JavaDoc keyword error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexersql.cpp" line="312"/>
+        <source>User defined 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexersql.cpp" line="315"/>
+        <source>User defined 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexersql.cpp" line="318"/>
+        <source>User defined 3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexersql.cpp" line="321"/>
+        <source>User defined 4</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QsciLexerTCL</name>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertcl.cpp" line="303"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertcl.cpp" line="306"/>
+        <source>Comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertcl.cpp" line="309"/>
+        <source>Comment line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertcl.cpp" line="312"/>
+        <source>Number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertcl.cpp" line="315"/>
+        <source>Quoted keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertcl.cpp" line="318"/>
+        <source>Quoted string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertcl.cpp" line="321"/>
+        <source>Operator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertcl.cpp" line="324"/>
+        <source>Identifier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertcl.cpp" line="327"/>
+        <source>Substitution</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertcl.cpp" line="330"/>
+        <source>Brace substitution</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertcl.cpp" line="333"/>
+        <source>Modifier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertcl.cpp" line="336"/>
+        <source>Expand keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertcl.cpp" line="339"/>
+        <source>TCL keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertcl.cpp" line="342"/>
+        <source>Tk keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertcl.cpp" line="345"/>
+        <source>iTCL keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertcl.cpp" line="348"/>
+        <source>Tk command</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertcl.cpp" line="351"/>
+        <source>User defined 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertcl.cpp" line="354"/>
+        <source>User defined 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertcl.cpp" line="357"/>
+        <source>User defined 3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertcl.cpp" line="360"/>
+        <source>User defined 4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertcl.cpp" line="363"/>
+        <source>Comment box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertcl.cpp" line="366"/>
+        <source>Comment block</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QsciLexerTeX</name>
     <message>
-        <location filename="../qscintilla/QScintilla-gpl-2-snapshot-20071024/Qt4/qscilexertex.cpp" line="198"/>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertex.cpp" line="211"/>
         <source>Command</source>
-        <translation type="obsolete">Каманда</translation>
+        <translation type="unfinished">Каманда</translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertex.cpp" line="199"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertex.cpp" line="202"/>
+        <source>Special</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertex.cpp" line="205"/>
+        <source>Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertex.cpp" line="208"/>
+        <source>Symbol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexertex.cpp" line="214"/>
+        <source>Text</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QsciLexerVHDL</name>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexervhdl.cpp" line="220"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexervhdl.cpp" line="223"/>
+        <source>Comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexervhdl.cpp" line="226"/>
+        <source>Comment line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexervhdl.cpp" line="229"/>
+        <source>Number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexervhdl.cpp" line="232"/>
+        <source>String</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexervhdl.cpp" line="235"/>
+        <source>Operator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexervhdl.cpp" line="238"/>
+        <source>Identifier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexervhdl.cpp" line="241"/>
+        <source>Unclosed string</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexervhdl.cpp" line="244"/>
+        <source>Keyword</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexervhdl.cpp" line="247"/>
+        <source>Standard operator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexervhdl.cpp" line="250"/>
+        <source>Attribute</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexervhdl.cpp" line="253"/>
+        <source>Standard function</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexervhdl.cpp" line="256"/>
+        <source>Standard package</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexervhdl.cpp" line="259"/>
+        <source>Standard type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qscintilla/QScintilla-gpl-2.2.1-snapshot-20080309/Qt4/qscilexervhdl.cpp" line="262"/>
+        <source>User defined</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4394,7 +6414,12 @@ All children items will be removed too.</source>
     <message>
         <location filename="../fresh/widgets/pActionManager.cpp" line="124"/>
         <source>Key Sequence &apos;%1&apos; already assigned to the &apos;%2/%3&apos;</source>
-        <translation type="obsolete">Камбінацыя клавіш &apos;%1&apos; ужо прызначана для &apos;%2/%3&apos;</translation>
+        <translation type="unfinished">Камбінацыя клавіш &apos;%1&apos; ужо прызначана для &apos;%2/%3&apos;</translation>
+    </message>
+    <message>
+        <location filename="../fresh/widgets/pActionManager.cpp" line="100"/>
+        <source>Global</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4443,32 +6468,32 @@ All children items will be removed too.</source>
 <context>
     <name>pDockToolBar</name>
     <message>
-        <location filename="../fresh/widgets/pDockToolBar.cpp" line="336"/>
+        <location filename="../fresh/widgets/pDockToolBar.cpp" line="386"/>
         <source>%1 - Exclusive</source>
-        <translation type="obsolete">%1 - Арыгінальны</translation>
+        <translation type="unfinished">%1 - Арыгінальны</translation>
     </message>
 </context>
 <context>
     <name>pDockToolBarManager</name>
     <message>
-        <location filename="../fresh/widgets/pDockToolBarManager.cpp" line="44"/>
+        <location filename="../fresh/widgets/pDockToolBarManager.cpp" line="64"/>
         <source>Top DockToolBar</source>
-        <translation type="obsolete">Верхняя панэль</translation>
+        <translation type="unfinished">Верхняя панэль</translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pDockToolBarManager.cpp" line="49"/>
+        <location filename="../fresh/widgets/pDockToolBarManager.cpp" line="69"/>
         <source>Bottom DockToolBar</source>
-        <translation type="obsolete">Ніжняя панэль</translation>
+        <translation type="unfinished">Ніжняя панэль</translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pDockToolBarManager.cpp" line="54"/>
+        <location filename="../fresh/widgets/pDockToolBarManager.cpp" line="74"/>
         <source>Left DockToolBar</source>
-        <translation type="obsolete">Лэвая панэль</translation>
+        <translation type="unfinished">Лэвая панэль</translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pDockToolBarManager.cpp" line="59"/>
+        <location filename="../fresh/widgets/pDockToolBarManager.cpp" line="79"/>
         <source>Right DockToolBar</source>
-        <translation type="obsolete">Правая панэль</translation>
+        <translation type="unfinished">Правая панэль</translation>
     </message>
 </context>
 <context>
@@ -4522,11 +6547,40 @@ All children items will be removed too.</source>
     </message>
 </context>
 <context>
+    <name>pExtendedWorkspace</name>
+    <message>
+        <location filename="../fresh/widgets/pExtendedWorkspace.cpp" line="57"/>
+        <source>Files List</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>pFileListEditor</name>
+    <message>
+        <location filename="../fresh/widgets/pFileListEditor.cpp" line="43"/>
+        <source>Choose file(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fresh/widgets/pFileListEditor.cpp" line="62"/>
+        <source>Choose file</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>pMenuBar</name>
     <message>
-        <location filename="../fresh/widgets/pMenuBar.cpp" line="20"/>
+        <location filename="../fresh/widgets/pMenuBar.cpp" line="33"/>
         <source>Main Menu</source>
-        <translation type="obsolete">Галоўнае меню</translation>
+        <translation type="unfinished">Галоўнае меню</translation>
+    </message>
+</context>
+<context>
+    <name>pPathListEditor</name>
+    <message>
+        <location filename="../fresh/widgets/pPathListEditor.cpp" line="59"/>
+        <source>Choose directory</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4763,9 +6817,9 @@ All children items will be removed too.</source>
 <context>
     <name>pShortcutsEditor</name>
     <message>
-        <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="25"/>
+        <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="45"/>
         <source>Shortcuts Editor</source>
-        <translation type="obsolete">Рэдактар цэтлікаў</translation>
+        <translation type="unfinished">Рэдактар цэтлікаў</translation>
     </message>
     <message>
         <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="34"/>
@@ -4788,17 +6842,90 @@ All children items will be removed too.</source>
         <translation type="obsolete">Закрыць</translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="166"/>
+        <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="186"/>
         <source>Error</source>
-        <translation type="obsolete">Памылка</translation>
+        <translation type="unfinished">Памылка</translation>
+    </message>
+    <message>
+        <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="54"/>
+        <source>Restore default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="58"/>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="66"/>
+        <source>Set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="70"/>
+        <source>Close</source>
+        <translation type="unfinished">Закрыць</translation>
+    </message>
+</context>
+<context>
+    <name>pStringListEditor</name>
+    <message>
+        <location filename="../fresh/widgets/pStringListEditor.cpp" line="57"/>
+        <source>Add Item</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fresh/widgets/pStringListEditor.cpp" line="58"/>
+        <source>Remove Item</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fresh/widgets/pStringListEditor.cpp" line="59"/>
+        <source>Clear Items</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fresh/widgets/pStringListEditor.cpp" line="60"/>
+        <source>Move Item Up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fresh/widgets/pStringListEditor.cpp" line="61"/>
+        <source>Move Item Down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fresh/widgets/pStringListEditor.cpp" line="62"/>
+        <source>Edit Item</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fresh/widgets/pStringListEditor.cpp" line="105"/>
+        <source>New item</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>pTabBar</name>
     <message>
-        <location filename="../fresh/widgets/pTabBar.cpp" line="42"/>
+        <location filename="../fresh/widgets/pTabBar.cpp" line="55"/>
         <source>Tabbed Workspace</source>
-        <translation type="obsolete">Працоўная прастора з укладкамі</translation>
+        <translation type="unfinished">Працоўная прастора з укладкамі</translation>
+    </message>
+    <message>
+        <location filename="../fresh/widgets/pTabBar.cpp" line="47"/>
+        <source>Tabs Have &amp;Close Button</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fresh/widgets/pTabBar.cpp" line="51"/>
+        <source>Tabs Have &amp;Shortcut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../fresh/widgets/pTabBar.cpp" line="55"/>
+        <source>Tabs Are &amp;Elided</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4819,52 +6946,57 @@ All children items will be removed too.</source>
         <translation type="obsolete">Рэжым &quot;ellided&quot; для Ўкладак</translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pTabbedWorkspace.cpp" line="295"/>
+        <location filename="../fresh/widgets/pTabbedWorkspace.cpp" line="315"/>
         <source>&amp;Close</source>
-        <translation type="obsolete">Закрыць</translation>
+        <translation type="unfinished">Закрыць</translation>
+    </message>
+    <message>
+        <location filename="../fresh/widgets/pTabbedWorkspace.cpp" line="316"/>
+        <source>Close &amp;All</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>pTabbedWorkspaceRightCorner</name>
     <message>
-        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="38"/>
+        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="58"/>
         <source>Tabbed Workspace/Shape Mode</source>
-        <translation type="obsolete">Форма ўкладак</translation>
-    </message>
-    <message>
-        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="50"/>
-        <source>Tabbed Workspace/Tab Mode</source>
-        <translation type="obsolete">Рэжым укладак</translation>
-    </message>
-    <message>
-        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="62"/>
-        <source>Tabbed Workspace/Document Mode</source>
-        <translation type="obsolete">Рэжым дакументаў</translation>
-    </message>
-    <message>
-        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="67"/>
-        <source>&amp;Close All</source>
-        <translation type="obsolete">Закрыць усе</translation>
-    </message>
-    <message>
-        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="67"/>
-        <source>Tabbed Workspace</source>
-        <translation type="obsolete">Працоўная прастора</translation>
+        <translation type="unfinished">Форма ўкладак</translation>
     </message>
     <message>
         <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="70"/>
+        <source>Tabbed Workspace/Tab Mode</source>
+        <translation type="unfinished">Рэжым укладак</translation>
+    </message>
+    <message>
+        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="82"/>
+        <source>Tabbed Workspace/Document Mode</source>
+        <translation type="unfinished">Рэжым дакументаў</translation>
+    </message>
+    <message>
+        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="87"/>
+        <source>&amp;Close All</source>
+        <translation type="unfinished">Закрыць усе</translation>
+    </message>
+    <message>
+        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="87"/>
+        <source>Tabbed Workspace</source>
+        <translation type="unfinished">Працоўная прастора</translation>
+    </message>
+    <message>
+        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="90"/>
         <source>Tab Shape</source>
-        <translation type="obsolete">Форма укладак</translation>
+        <translation type="unfinished">Форма укладак</translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="71"/>
+        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="91"/>
         <source>Tab Mode</source>
-        <translation type="obsolete">Рэжым укладак</translation>
+        <translation type="unfinished">Рэжым укладак</translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="72"/>
+        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="92"/>
         <source>Document Mode</source>
-        <translation type="obsolete">Рэжым дакументаў</translation>
+        <translation type="unfinished">Рэжым дакументаў</translation>
     </message>
 </context>
 <context>
@@ -5206,11 +7338,6 @@ Use Console Manager: %4
         <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="275"/>
         <source>Duplicate selection</source>
         <translation type="unfinished">Дубліраваць выдзялены тэкст</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="304"/>
-        <source></source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="53"/>
