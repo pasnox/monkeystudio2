@@ -101,7 +101,7 @@ sudo pbuilder build --logfile ../log.txt ../$package-0ubuntu1.dsc
 
 # copying deb file
 echo "Copying deb file..."
-cp /var/cache/pbuilder/result/"$package"_"$arch".deb ..
+cp /var/cache/pbuilder/result/"$package"-0ubuntu1_"$arch".deb ..
 
 # done
 echo "Done !"
