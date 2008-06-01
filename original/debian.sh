@@ -12,7 +12,7 @@ package_name=monkeystudio
 version=$1
 if [ "$version" = '' ]
 then
-	version=1.8.x
+		version=1.8.x
 fi
 
 # monkey revision
@@ -37,10 +37,11 @@ then
 fi
 
 # package version
-package_version="$version"+svn"$revision"-0ubuntu1
+package_version="$version"+svn"$revision"
 
 # generate complete name of package
 package="$package_name"_"$package_version"
+package_new="$package_name"-"$package_version"
 
 # generate package orig
 package_orig=$package.orig.tar.gz
@@ -68,8 +69,11 @@ updateChangeLog()
 	# 1 = package orig
 	# 2 = package version
 	
+	# get fullname and email of packager associate with gpg id
+	export DEBFULLNAME=''
+	export DEBEMAIL="$(gpg --list-key $id | grep -m 1 ^uid | sed 's/^uid[ ]*//')"
+	
 	# update changelog
-	echo uupdate -u ../$1 -v $2
 	uupdate -u ../$1 -v $2
 }
 
@@ -80,17 +84,24 @@ createSourceOrig $revision $package $package_orig
 # updating the change log
 updateChangeLog $package_orig $package_version
 
+# delete temporary folder
+rm -R ../"$package_new".orig
+
+# go into new package
+echo "Going into new package"
+cd ../$package_new
+
 # creating source package
 echo "Creating source package..."
-#debuild -S -sa --lintian-opts -i -k0$id
+debuild -S -sa --lintian-opts -i -k0$id
 
 # building package
 echo "Building package..."
-#sudo pbuilder build --logfile ../log.txt ../$package-0ubuntu1.dsc
+sudo pbuilder build --logfile ../log.txt ../$package-0ubuntu1.dsc
 
 # copying deb file
 echo "Copying deb file..."
-#cp /var/cache/pbuilder/result/$package-0ubuntu1_"$arch".deb ..
+cp /var/cache/pbuilder/result/"$package"_"$arch".deb ..
 
 # done
 echo "Done !"

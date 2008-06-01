@@ -1,0 +1,67 @@
+--- uupdate	2007-06-21 19:01:07.000000000 +0200
++++ uupdate	2008-06-01 16:10:46.000000000 +0200
+ # Command line syntax is one of:
+@@ -303,9 +303,9 @@
+ 	fi
+ 
+ 	if [ -n "$EPOCH" ]; then
+-	    echo "New Release will be $EPOCH:$NEW_VERSION-1."
++	    echo "New Release will be $EPOCH:$NEW_VERSION-0ubuntu1."
+ 	else
+-	    echo "New Release will be $NEW_VERSION-1."
++	    echo "New Release will be $NEW_VERSION-0ubuntu1."
+ 	fi
+     fi
+ 
+@@ -316,8 +316,8 @@
+     fi
+ 
+     # Sanity check
+-    if dpkg --compare-versions "$NEW_VERSION-1" le "$VERSION"; then
+-	echo "$PROGNAME: new version $NEW_VERSION-1 <= current version $VERSION; aborting!" >&2
++    if dpkg --compare-versions "$NEW_VERSION-0ubuntu1" le "$VERSION"; then
++	echo "$PROGNAME: new version $NEW_VERSION-0ubuntu1 <= current version $VERSION; aborting!" >&2
+ 	exit 1
+     fi
+ 
+@@ -421,7 +421,7 @@
+ 	    STATUS=1
+ 	fi
+ 	chmod a+x debian/rules
+-	debchange -v "$NEW_VERSION-1" "New upstream release"
++	debchange -v "$NEW_VERSION-0ubuntu1" "New upstream release"
+ 	echo "Remember: Your current directory is the OLD sourcearchive!"
+ 	echo "Do a \"cd ../$PACKAGE-$SNEW_VERSION\" to see the new package"
+ 	exit
+@@ -491,9 +491,9 @@
+ 	fi
+     fi
+     if [ -n "$EPOCH" ]; then
+-	echo "New Release will be $EPOCH:$NEW_VERSION-1."
++	echo "New Release will be $EPOCH:$NEW_VERSION-0ubuntu1."
+     else
+-	echo "New Release will be $NEW_VERSION-1."
++	echo "New Release will be $NEW_VERSION-0ubuntu1."
+     fi
+ 
+     # Strip epoch number
+@@ -503,8 +503,8 @@
+     fi
+ 
+     # Sanity check
+-    if dpkg --compare-versions "$NEW_VERSION-1" le "$VERSION"; then
+-	echo "$PROGNAME: new version $NEW_VERSION-1 <= current version $VERSION; aborting!" >&2
++    if dpkg --compare-versions "$NEW_VERSION-0ubuntu1" le "$VERSION"; then
++	echo "$PROGNAME: new version $NEW_VERSION-0ubuntu1 <= current version $VERSION; aborting!" >&2
+ 	exit 1
+     fi
+ 
+@@ -719,7 +719,7 @@
+ 	exit 1
+     fi
+     chmod a+x debian/rules
+-    debchange -v "$NEW_VERSION-1" New upstream release
++    debchange -v "$NEW_VERSION-0ubuntu1" New upstream release
+     echo "Remember: Your current directory is the OLD sourcearchive!"
+     echo "Do a \"cd ../$PACKAGE-$SNEW_VERSION\" to see the new package"
+ fi
