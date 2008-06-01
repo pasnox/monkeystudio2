@@ -1,7 +1,0 @@
-#include <ciostream>
-
-int main ( int argc, char** argv )
-{
-	print( "$What to print$" );
-	return 0;
-}

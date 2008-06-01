@@ -1,0 +1,33 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.7
+Date: Sat, 31 May 2008 15:06:12 +0200
+Source: monkeystudio
+Binary: monkeystudio
+Architecture: source
+Version: 1.8.2+2040-0ubuntu1
+Distribution: intrepid
+Urgency: low
+Maintainer: Ubuntu MOTU Developers <ubuntu-motu@lists.ubuntu.com>
+Changed-By: Filipe AZEVEDO <pasnox@gmail.com>
+Description: 
+ monkeystudio - Qt 4 Integrated Development Enviroment (IDE)
+Launchpad-Bugs-Fixed: 182693
+Changes: 
+ monkeystudio (1.8.2+2040-0ubuntu1) intrepid; urgency=low
+ .
+   * Initial release (LP: #182693)
+Files: 
+ 50931ce509f67ba8b4524d13e03af3cb 694 devel optional monkeystudio_1.8.2+2040-0ubuntu1.dsc
+ 63b9ad2ac0969ae0d7036db8cd81c0ec 3822139 devel optional monkeystudio_1.8.2+2040.orig.tar.gz
+ a897ca79a02d348e6b026b14158a5783 3564 devel optional monkeystudio_1.8.2+2040-0ubuntu1.diff.gz
+Original-Maintainer: Filipe AZEVEDO <pasnox@gmail.com>
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.6 (GNU/Linux)
+
+iD8DBQFIQqpgnHH66u0RhY0RAo1tAKCqItdLIa+nPlfUxDV0YNqJec/4GgCfWThD
+HGWVl9zzS8+WESKLD7jbV40=
+=Ku7T
+-----END PGP SIGNATURE-----
