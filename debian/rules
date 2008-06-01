@@ -10,13 +10,26 @@
 #export DH_VERBOSE=1
 
 
+DEBIAN_DIR := $(shell echo ${MAKEFILE_LIST} | awk '{print $$1}' | xargs dirname )
+DATE := $(shell date +%y%m%d)
+VERSION := $(word 1, $(subst +, ,$(DEB_UPSTREAM_VERSION)))
+DIR := ${DEB_SOURCE_PACKAGE}-${VERSION}+svn${DATE}
+TAR := ${DEB_SOURCE_PACKAGE}_${VERSION}+svn${DATE}.orig.tar.gz
 
+get-orig-source:
+        cd ${DEBIAN_DIR}/.. && \
+        svn co svn://monkeystudio.org/monkeyrepos/v2/branches/dev/ ${DIR} && \
+        find ${DIR} -name .svn|xargs rm -r && \
+        tar czf ${CURDIR}/${TAR} ${DIR} && \
+        rm -r ${DIR}
 
 configure: configure-stamp
 configure-stamp:
 	dh_testdir
 	# Add here commands to configure the package.
-	MONKEY_PREFIX=$(CURDIR)/debian/monkeystudio/usr qmake-qt4
+	#MONKEY_PREFIX=$(CURDIR)/debian/monkeystudio/usr qmake-qt4
+	
+	get-orig-source:
 
 	touch configure-stamp
 
@@ -27,7 +40,7 @@ build-stamp: configure-stamp
 	dh_testdir
 
 	# Add here commands to compile the package.
-	MONKEY_PREFIX=/usr $(MAKE)
+	#MONKEY_PREFIX=/usr $(MAKE)
 	#docbook-to-man debian/monkeystudio.sgml > monkeystudio.1
 
 	touch $@
@@ -38,7 +51,7 @@ clean:
 	rm -f build-stamp configure-stamp
 
 	# Add here commands to clean up after the build process.
-	[ ! -f Makefile ] || MONKEY_PREFIX=$(CURDIR)/debian/monkeystudio/usr $(MAKE) distclean
+	#[ ! -f Makefile ] || MONKEY_PREFIX=$(CURDIR)/debian/monkeystudio/usr $(MAKE) distclean
 
 	dh_clean  --exclude ./ctags/ctags/README.orig
 
@@ -49,8 +62,8 @@ install: build
 	dh_installdirs
 
 	# Add here commands to install the package into debian/monkeystudio.
-	MONKEY_PREFIX=$(CURDIR)/debian/monkeystudio/usr qmake-qt4
-	MONKEY_PREFIX=$(CURDIR)/debian/monkeystudio/usr $(MAKE) install
+	#MONKEY_PREFIX=$(CURDIR)/debian/monkeystudio/usr qmake-qt4
+	#MONKEY_PREFIX=$(CURDIR)/debian/monkeystudio/usr $(MAKE) install
 
 
 # Build architecture-independent files here.
