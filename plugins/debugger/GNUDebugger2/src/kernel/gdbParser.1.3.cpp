@@ -86,22 +86,22 @@ GdbParser::GdbParser (QObject * parent) : QObject (parent)
 				Breakpoint 2, main (argc=Cannot access memory at address 0x0
 				) at src/main.cpp:20
 			*/
-			gdbRestoreLine->add( "^Breakpoint\\s\\d+,\\s.*\\s\\(.*Cannot access memory at address\\s0x[0-9a-FA-F]{1,}$" , 
-				"^\\)\\sat\\s.*:\\d+$");
+//			gdbRestoreLine->add( "^Breakpoint\\s\\d+,\\s.*\\s\\(.*Cannot access memory at address\\s0x[0-9a-FA-F]{1,}$" , 
+//				"^\\)\\sat\\s.*:\\d+$");
 		
 			/*
 				#0  main (argc=Cannot access memory at address 0x0
 				) at src/main.cpp:2
 			*/
-			gdbRestoreLine->add( "^#\\d+\\s.*Cannot access memory at address\\s0x[0-9a-FA-F]{1,}" ,
-				"\\)\\sat\\s.*:\\d+$");
+//			gdbRestoreLine->add( "^#\\d+\\s.*Cannot access memory at address\\s0x[0-9a-FA-F]{1,}" ,
+//				"\\)\\sat\\s.*:\\d+$");
 	
 			/*
 				Reading symbols from C:/DEV/debugger/debug/debugger.exe...
 				done.
 			*/
-			gdbRestoreLine->add("^Reading symbols from .*\\.\\.\\.",
-				"done\\.$");
+			gdbRestoreLine->add("^Reading symbols from .*\\.\\.\\..*",
+				".*done\\.$");
 
 			/*
 				Breakpoint 14, UIForm::UIForm (this=0x4b61ee0, parent=0x0)

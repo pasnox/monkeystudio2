@@ -41,6 +41,10 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 	: pDockWidget( w )
 {
 
+	// set charset for gdb
+//	QTextCodec::setCodecForLocale(QTextCodec::codecForName("ISO-8859-1"));
+	QTextCodec *n = QTextCodec::codecForLocale ();
+	QMessageBox::warning(NULL,n->name(),"name of local");
 	// closing Monkey
 	connect (MonkeyCore::mainWindow(), SIGNAL( aboutToClose()), this , SLOT(onAboutToClose()));
 

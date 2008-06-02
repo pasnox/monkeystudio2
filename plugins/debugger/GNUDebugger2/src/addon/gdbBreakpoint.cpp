@@ -20,6 +20,7 @@
 #include "gdbBreakpoint.h"
 #include <QMessageBox>
 #include <QFileInfo>
+#include <QTextCodec>
 
 
 GdbBreakpoint::GdbBreakpoint(QObject * parent, QPointer<GdbParser> pa , QPointer<GdbProcess> pr) : GdbCore(parent, pa, pr)
@@ -29,7 +30,8 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent, QPointer<GdbParser> pa , QPointer
 
 	setEnabled(true);
 	setWaitEndProcess(false);
-	
+
+
 	/*
 		create new parser :
 
