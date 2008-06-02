@@ -1,2 +1,2 @@
 TEMPLATE	= subdirs
-SUBDIRS	= GNUDebugger2
+SUBDIRS	= GNUDebugger
