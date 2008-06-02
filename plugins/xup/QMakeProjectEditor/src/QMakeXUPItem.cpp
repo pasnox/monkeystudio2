@@ -602,16 +602,16 @@ QStringList QMakeXUPItem::splitFiles( const QString& s ) const
 }
 
 BuilderPlugin* QMakeXUPItem::builder( const QString& plugin ) const
-{ return XUPItem::builder( plugin ); }
+{ return XUPItem::builder( plugin.isEmpty() ? "GNUMake" : plugin ); }
 
 CompilerPlugin* QMakeXUPItem::compiler( const QString& plugin ) const
-{ return XUPItem::compiler( plugin ); }
+{ return XUPItem::compiler( plugin.isEmpty() ? "G++" : plugin ); }
 
 DebuggerPlugin* QMakeXUPItem::debugger( const QString& plugin ) const
-{ return XUPItem::debugger( plugin ); }
+{ return XUPItem::debugger( plugin.isEmpty() ? "GNUDebugger" : plugin ); }
 
 InterpreterPlugin* QMakeXUPItem::interpreter( const QString& plugin ) const
-{ return XUPItem::interpreter( plugin ); }
+{ return XUPItem::interpreter( plugin.isEmpty() ? "" : plugin ); }
 
 void QMakeXUPItem::installCommands()
 {
