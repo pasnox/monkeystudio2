@@ -37,8 +37,8 @@ public:
 	void tryRestore(QStringList * );
 	bool find(const QString &, const QString &);
 
-	int GdbRestoreLine::begin(const QStringList & , const QRegExp &);
-	int GdbRestoreLine::end(const int & , const QStringList &, const QRegExp &);
+	int begin(const QStringList & , const QRegExp &);
+	int end(const int & , const QStringList &, const QRegExp &);
 
 private:
 
