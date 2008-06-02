@@ -142,7 +142,7 @@ public:
 	}
 	
 	virtual QPixmap pixmap() const
-	{ return QPixmap(); }
+	{ return QPixmap( ":/build/icons/build/misc.png" ); }
 	
 	virtual QWidget* settingsWidget()
 	{ return 0; }
