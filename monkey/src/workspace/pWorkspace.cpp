@@ -419,10 +419,10 @@ void pWorkspace::internal_currentProjectChanged( XUPItem* currentProject, XUPIte
 	// get pluginsmanager
 	PluginsManager* pm = MonkeyCore::pluginsManager();
 	// set compiler, debugger and interpreter
-	BuilderPlugin* bp = currentProject ? pm->plugin<BuilderPlugin*>( PluginsManager::stAll, currentProject->projectSettingsValue( "BUILDER" ) ) : 0;
-	CompilerPlugin* cp = currentProject ? pm->plugin<CompilerPlugin*>( PluginsManager::stAll, currentProject->projectSettingsValue( "COMPILER" ) ) : 0;
-	DebuggerPlugin* dp = currentProject ? pm->plugin<DebuggerPlugin*>( PluginsManager::stAll, currentProject->projectSettingsValue( "DEBUGGER" ) ) : 0;
-	InterpreterPlugin* ip = currentProject ? pm->plugin<InterpreterPlugin*>( PluginsManager::stAll, currentProject->projectSettingsValue( "INTERPRETER" ) ) : 0;
+	BuilderPlugin* bp = currentProject ? currentProject->builder() : 0;
+	CompilerPlugin* cp = currentProject ? currentProject->compiler() : 0;
+	DebuggerPlugin* dp = currentProject ? currentProject->debugger() : 0;
+	InterpreterPlugin* ip = currentProject ? currentProject->interpreter() : 0;
 	pm->setCurrentBuilder( bp && !bp->neverEnable() ? bp : 0 );
 	pm->setCurrentCompiler( cp && !cp->neverEnable() ? cp : 0 );
 	pm->setCurrentDebugger( dp && !dp->neverEnable() ? dp : 0 );
