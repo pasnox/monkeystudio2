@@ -40,7 +40,7 @@ public slots:
 
 	void onBacktrace( int , QString );
 	void onInfoSource( int , QString );
-	void onRequestBacktrace();
+	void onRequestBacktrace(const QString &);
 
 	
 	// gdb

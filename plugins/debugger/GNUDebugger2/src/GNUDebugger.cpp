@@ -40,7 +40,6 @@ bool GNUDebugger::setEnabled( bool b )
 		actionList["aStepInto"] = MonkeyCore::menuBar()->action( "mDebugger/aStepinto", tr( "Step into" ), QIcon( ":/icons/stepinto.png" ) );
 		actionList["aStop"] = MonkeyCore::menuBar()->action( "mDebugger/aStop", tr( "Stop" ), QIcon( ":/icons/stop.png" ) );
 		actionList["aExitGdb"] = MonkeyCore::menuBar()->action( "mDebugger/aQuit", tr( "Quit debug mode" ), QIcon( ":/icons/close.png" ) );
-//		actionList["aToggleBreak"] = MonkeyCore::menuBar()->action( "mDebugger/aToggleBreak", tr( "Toggle break" ), QIcon( ":/icons/projectcloseall.png" ) );
 		// connections
 		connect( actionList["aLoadTarget"], SIGNAL( triggered() ), mDockGNUDebugger, SLOT( onActionLoadTarget() ) );
 		connect( actionList["aRestart"], SIGNAL( triggered() ), mDockGNUDebugger, SLOT( onActionRestart() ) );
@@ -49,7 +48,6 @@ bool GNUDebugger::setEnabled( bool b )
 		connect( actionList["aStepInto"] , SIGNAL( triggered() ), mDockGNUDebugger, SLOT( onActionStepInto() ) );
 		connect( actionList["aStop"], SIGNAL( triggered() ), mDockGNUDebugger, SLOT( onActionStop() ) );
 		connect( actionList["aExitGdb"], SIGNAL( triggered() ), mDockGNUDebugger, SLOT( onActionExit() ) );
-//		connect( actionList["aToggleBreak"], SIGNAL( triggered() ), mDockGNUDebugger, SLOT( onActionToggleBreak() ) );
 
 		// init action disable
 		actionList["aRestart"]->setEnabled( false );
@@ -58,7 +56,6 @@ bool GNUDebugger::setEnabled( bool b )
 		actionList["aStepInto"]->setEnabled( false );
 		actionList["aStop"]->setEnabled( false );
 		actionList["aExitGdb"]->setEnabled( false );
-//		actionList["aToggleBreak"]->setEnabled( false );
 
 		// separator and add icon to toolbar
 		aSeparator = MonkeyCore::mainWindow()->dockToolBar( Qt::TopToolBarArea )->addAction();
@@ -78,8 +75,8 @@ bool GNUDebugger::setEnabled( bool b )
 		delete aSeparator;
 		actionList.clear();
 		// delete dock
-		delete mDockGNUDebugger;
-//		DockGNUDebugger::instance()->deleteLater();
+//		delete mDockGNUDebugger;
+		DockGNUDebugger::instance()->deleteLater();
 		// set plugin disabled
 		mPluginInfos.Enabled = false;
 	}

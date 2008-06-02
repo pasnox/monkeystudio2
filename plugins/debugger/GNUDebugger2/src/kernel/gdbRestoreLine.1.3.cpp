@@ -10,7 +10,7 @@
 
 
 #include "gdbRestoreLine.1.3.h"
-
+#include <QMessageBox>
 
 GdbRestoreLine::GdbRestoreLine(QObject *parent ) : QObject(parent)
 {
@@ -37,6 +37,20 @@ void GdbRestoreLine::add(const QString & l1, const QString & l2)
 }
 
 
+int GdbRestoreLine::begin(const QStringList & l, const QRegExp &r)
+{
+	for(int i=0; i<l.count() ; i++)
+		if(r.exactMatch(l.at(i))) return i;
+	return -1;
+}
+
+int GdbRestoreLine::end(const int & b, const QStringList & l, const QRegExp &r)
+{
+	for(int i=b; i<l.count() ; i++)
+		if(r.exactMatch(l.at(i))) return i;
+	return -1;
+}
+
 bool GdbRestoreLine::find(const QString & l1, const QString & l2)
 {
 	for(int i=0; i<GdbRestoreLineList.count() ; i++)
@@ -46,7 +60,34 @@ bool GdbRestoreLine::find(const QString & l1, const QString & l2)
 
 void GdbRestoreLine::tryRestore(QStringList * list)
 {
-	for(int i=0; i<list->count() - 1 ; i++)
+	// new version 1.4
+	foreach(GdbLines l , GdbRestoreLineList)
+	{
+		int lBegin = begin(*list, l.l1);
+		if(lBegin != -1)
+		{
+//			QMessageBox::warning(NULL,"l1 found", list->at(lBegin));
+			int lEnd = end(lBegin, *list , l.l2);
+			if(lEnd != -1)
+			{
+//				QMessageBox::warning(NULL,"l2 found", list->at(lEnd));
+				// ok found
+				QString s;
+				for(int i=lBegin; i<=lEnd; i++)
+				{
+					// create line
+					s.append( list->at(lBegin));
+					list->removeAt(lBegin);
+				}
+				list->insert(lBegin, s);
+//				QMessageBox::warning(NULL,"restoring", s);
+			}
+		}
+	}
+
+	
+	
+/*	for(int i=0; i<list->count() - 1 ; i++)
 	{
 		QString a = list->at(i);
 		QString b = list->at(i+1); 
@@ -60,4 +101,4 @@ void GdbRestoreLine::tryRestore(QStringList * list)
 			qDebug( "(Class GdbRestoreLine function tryRestore) WARNNING : Restoring line \"" + QString(a+b).toLocal8Bit() + "\"");
 		}
 	}
-}
+*/}

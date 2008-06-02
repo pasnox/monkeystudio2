@@ -85,7 +85,7 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 		s->beginGroup( QString( "Plugins/%1" ).arg( PLUGIN_NAME ) );
 			mPathGdb = s->value("PathGdb", "gdb").toString();
 			QStringList mPluginList = s->allKeys();
-/*			foreach(QString p , mPluginList)
+			foreach(QString p , mPluginList)
 			{
 				bool e = s->value( p, true).toBool();
 				
@@ -96,7 +96,7 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 						r->setEnabled(e);
 					}
 				}
-			}*/
+			}
 
 		s->endGroup();
 
@@ -164,7 +164,7 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 		connect(Bridge, SIGNAL(userToggleBreakpoint(const QString &, const int &)), this, SLOT(onUserToggleBreakpoint(const QString &, const int &)));
 
 		connect(Bridge, SIGNAL(requestBreakpoint(const QString &)), Breakpoint , SLOT(onRequestBreakpoint(const QString &)));
-		connect(Bridge, SIGNAL(requestBacktrace()), Backtrace , SLOT(onRequestBacktrace()));
+		connect(Bridge, SIGNAL(requestBacktrace(const QString &)), Backtrace , SLOT(onRequestBacktrace(const QString &)));
 	
 		// add plugin under tabWidget
 		if(Breakpoint->isEnabled()) mainTabWidget->addTab(Breakpoint->widget(),Breakpoint->name());

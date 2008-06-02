@@ -74,6 +74,6 @@ signals :
 
 	void userToggleBreakpoint(const QString & , const int &);
 	void requestBreakpoint(const QString &);
-	void requestBacktrace();
+	void requestBacktrace(const QString &);
 };
 #endif

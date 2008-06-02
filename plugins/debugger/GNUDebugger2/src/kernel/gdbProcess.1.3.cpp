@@ -12,12 +12,6 @@ GdbProcess::GdbProcess( QObject * parent ) : QProcess( parent )
 	setReadChannelMode( QProcess::MergedChannels );
 	// connections
 
-/*	connect( this, SIGNAL( error( QProcess::ProcessError ) ), this, SLOT( error( QProcess::ProcessError ) ) );
-	connect( this, SIGNAL( finished( int, QProcess::ExitStatus ) ), this, SLOT( finished( int, QProcess::ExitStatus ) ) );
-	connect( this, SIGNAL( started() ), this, SLOT( started() ) );
-	connect( this, SIGNAL( stateChanged( QProcess::ProcessState ) ), this, SLOT( stateChanged( QProcess::ProcessState ) ) );
-*/
-
 	connect( this, SIGNAL( readyRead() ), this, SLOT( readyRead() ) );
 
 	// CRLF

@@ -71,6 +71,9 @@ GdbParser::GdbParser (QObject * parent) : QObject (parent)
 				crlf = "\n";
 			#endif
 
+			/*
+				Parsing and if ...
+			*/
 
 			mEndParsing.clear();
 			mEndParsing << QRegExp(".*\\(gdb\\).$")
@@ -80,28 +83,37 @@ GdbParser::GdbParser (QObject * parent) : QObject (parent)
 				<< QRegExp(".*\\(y or n\\).$");
 
 			/*
-				^done,reason="generic",value="Breakpoint 2, main (argc=Cannot access memory at address 0x0"
-				^done,reason="generic",value=") at src/main.cpp:20"
+				Breakpoint 2, main (argc=Cannot access memory at address 0x0
+				) at src/main.cpp:20
 			*/
 			gdbRestoreLine->add( "^Breakpoint\\s\\d+,\\s.*\\s\\(.*Cannot access memory at address\\s0x[0-9a-FA-F]{1,}$" , 
 				"^\\)\\sat\\s.*:\\d+$");
 		
-
 			/*
-				^done,reason="generic information (not parsing)",value="#0  main (argc=Cannot access memory at address 0x0"  id : -1
-				^done,reason="generic information (not parsing)",value=") at src/main.cpp:20"  id : -1
+				#0  main (argc=Cannot access memory at address 0x0
+				) at src/main.cpp:2
 			*/
-			gdbRestoreLine->add( "^#\\d+\\s.*Cannot access memory at address\\s0x[0-9a-FA-F]{1,}$" ,
-				"^\\)\\sat\\s.*:\\d+$");
+			gdbRestoreLine->add( "^#\\d+\\s.*Cannot access memory at address\\s0x[0-9a-FA-F]{1,}" ,
+				"\\)\\sat\\s.*:\\d+$");
 	
 			/*
 				Reading symbols from C:/DEV/debugger/debug/debugger.exe...
 				done.
 			*/
-// ->  BUG not work
-			gdbRestoreLine->add("^Reading symbols from .*\\.\\.\\.$",
-				"^done\\.$");
-			
+			gdbRestoreLine->add("^Reading symbols from .*\\.\\.\\.",
+				"done\\.$");
+
+			/*
+				Breakpoint 14, UIForm::UIForm (this=0x4b61ee0, parent=0x0)
+					at src/ui/UIForm.cpp:40
+
+				Breakpoint 3, QInternal::activateCallbacks (cb=EventNotifyCallback, 
+				    parameters=0x22f600) at global/qglobal.cpp:2690
+
+			*/			
+			gdbRestoreLine->add("^Breakpoint\\s\\d+,\\s.*",
+				".*at\\s+[^:]+:\\d+$");
+
 			cmdList.clear();
 
 			MonkeyCore::statusBar()->appendMessage( tr( "GdbParser initializing sucess full" ), 5000 );

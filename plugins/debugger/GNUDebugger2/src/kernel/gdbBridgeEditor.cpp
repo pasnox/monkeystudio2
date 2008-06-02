@@ -23,6 +23,7 @@ GdbBridgeEditor::~GdbBridgeEditor()
 {
 }
 
+// new file is opened, add this on list
 void GdbBridgeEditor::add(const QString & s)
 {
 	if(MonkeyCore::fileManager() && MonkeyCore::fileManager()->currentChild())
@@ -43,7 +44,7 @@ void GdbBridgeEditor::add(const QString & s)
 			connect (pe.pointeur, SIGNAL(marginClicked (int, int , Qt::KeyboardModifiers )), this, SLOT(onMarginClicked(int, int,  Qt::KeyboardModifiers)));
 
 			emit requestBreakpoint(pe.fileName);
-			emit requestBacktrace();
+			emit requestBacktrace(pe.fileName);
 		}
 	}
 }
@@ -75,7 +76,7 @@ void GdbBridgeEditor::removeBacktrace()
 
 void GdbBridgeEditor::fileOpenedBeforeDebugger()
 {
-	//find if editor is open befor load plugin
+	//find if editor is open before load plugin
 	if(MonkeyCore::workspace())
 	{
 		QList<pAbstractChild*>  e = MonkeyCore::workspace()->children();
@@ -91,7 +92,7 @@ void GdbBridgeEditor::fileOpenedBeforeDebugger()
 			// connect margin clicked
 			connect (pe.pointeur , SIGNAL(marginClicked (int, int , Qt::KeyboardModifiers )), this, SLOT(onMarginClicked(int, int,  Qt::KeyboardModifiers)));
 	
-			emit requestBreakpoint(pe.fileName);
+//			emit requestBreakpoint(pe.fileName);
 		}
 	}
 }

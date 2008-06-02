@@ -38,7 +38,18 @@ GdbBacktrace::GdbBacktrace(QObject * parent, QPointer<GdbParser> pa , QPointer<G
 			"#0  UIForm (this=0x80dc268, parent=0x0) "
 			"  at src/ui/UIForm.cpp:43"
 	*/
-	GdbCore::Parser()->addRestoreLine("^#0\\s.*$" , "^[^#].*\\sat\\s.*:\\d+$");
+	/*
+		#0 main (arc, arg) at src/main.cpp:23
+	  
+		#0  QObject::connect (sender=<incomplete type>, 
+		signal=0x48e278 "2toggleBreakpoint(QString, int, bool)", 
+		receiver=<incomplete type>, 
+		method=0x48e250 "1onToggleBreakpoint(QString, int, bool)", 
+		type=AutoConnection) at kernel/qobject.cpp:2348
+	*/
+
+	GdbCore::Parser()->addRestoreLine("^#0\\s.*" , 
+		".*\\sat\\s.*:\\d+$");
 
 
 	/*
@@ -48,10 +59,11 @@ GdbBacktrace::GdbBacktrace(QObject * parent, QPointer<GdbParser> pa , QPointer<G
 		aRegExp = 
 	*/
 
+	
 	interpreterBacktrace = GdbCore::Parser()->addInterpreter("Backtrace",
 		"bt",
 		QRegExp("^bt"),
-		QRegExp("^#0\\s.*"),
+		QRegExp("^#0\\s.*\\sat\\s.*:\\d+"),
 		"^info,interpreter=\"" + name() + "\",event=\"Backtrace\",answerGdb=\"");
 
 	// connect interpreter to function
@@ -169,6 +181,7 @@ void GdbBacktrace::onInfoSource(int id, QString s)
 
 	if(r.exactMatch( findValue(s,"answerGdb") ))
 	{
+		//get the full path of file
 		QStringList l = r.capturedTexts();
 		mCurrentFile = l.at(1);
 
@@ -181,8 +194,9 @@ void GdbBacktrace::onInfoSource(int id, QString s)
 
 }
 
-void GdbBacktrace::onRequestBacktrace()
+void GdbBacktrace::onRequestBacktrace(const QString & s)
 {
-	mWidget->append("*** Request backtrace ***");
-	emit onToggleBacktrace(mCurrentFile, mCurrentLine);
+	mWidget->append("*** Request backtrace *** " + s);
+	if(s == mCurrentFile)
+		emit onToggleBacktrace(mCurrentFile, mCurrentLine);
 }
