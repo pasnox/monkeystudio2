@@ -72,6 +72,8 @@ private :
 	void onError(int , QString);
 	void onInfo(int , QString);
 
+	void getCommand();
+	void switchCommand(const QString &);
 
  signals:
 

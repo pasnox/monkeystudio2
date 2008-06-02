@@ -35,6 +35,7 @@ ajouter au parser :
 #include <QMessageBox>
 
 
+bool loaded = false;
 
 DockGNUDebugger::DockGNUDebugger( QWidget * w )
 	: pDockWidget( w )
@@ -151,6 +152,8 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 			QRegExp("^s$"), 
 			QRegExp("\\d+\\s+.*"),
 			"^info,interpreter=\"Step-Into\",event=\"End-Stepping-Range\",answerGdb=\"");
+
+//find parser for 0xb704e450 in __libc_start_main () from /lib/tls/i686/cmov/libc.             so.6
 
 		//connect interpreter to function
 		Connect = new GdbConnectTemplate<DockGNUDebugger>;
@@ -301,25 +304,33 @@ void DockGNUDebugger::onActionToggleBreak()
 // signal from GdbProcess (QProcess started)
 void DockGNUDebugger::gdbStarted()
 {
+
+qDebug("Gdb state : " + QByteArray::number(Process->state()));
+if(!loaded)
+{
 	rawLog->append("*** Gdb started ***");
 
 	// gdb is started, now load target under Gdb
-	Parser->setLastCommand("Load target");
+	Parser->setLastCommand("file " + mSelectedTarget.toLocal8Bit());
 	Process->sendRawData("file " + mSelectedTarget.toLocal8Bit());
 	
 	Dispatcher->gdbStarted();
+	loaded = true;
+}
 }
 
 void DockGNUDebugger::gdbFinished( int a , QProcess::ExitStatus e)
 {
-
+qDebug("Gdb Finished");
 	rawLog->append("*** Gdb finished successfull code : " + QString::number(a) + " ***");
 
 	setEnabledActions(false);
 	mActionList->value("aLoadTarget")->setEnabled(true);
 
 	Dispatcher->gdbFinished();
+loaded = false;
 }
+
 
 void DockGNUDebugger::gdbError( QProcess::ProcessError e)
 {
@@ -404,7 +415,7 @@ void DockGNUDebugger::onError(int id, QString st)
 	rawLog->append(QString::number(id) + " : " + st);
 	rawLog->setTextColor(QColor(0,0,0));
 
-	rawLog->append("*** Stop Gdb ***");
+	rawLog->append("*** Error from parser ***");
 
 	// why stp gdb on all error from parser ???	
 //	Process->stopProcess();
@@ -443,7 +454,7 @@ void DockGNUDebugger::onInterpreter(const QPointer<BaseInterpreter> & i, const i
 // from editor margin clicked
 void DockGNUDebugger::onUserToggleBreakpoint(const QString & fileName, const int & line)
 {
-	rawLog->append("** user toggle breakpoint *** " + QString::number(line + 1));
+	rawLog->append("** user toggle breakpoint *** " + fileName + " " + QString::number(line + 1));
 	Breakpoint->toggleBreakpoint(fileName, line + 1);
 }
 

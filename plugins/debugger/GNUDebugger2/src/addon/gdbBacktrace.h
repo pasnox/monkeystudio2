@@ -44,7 +44,7 @@ public slots:
 
 	
 	// gdb
-	void gdbExited();
+	void gdbFinished();
 	void gdbStarted();
 	// target
 	void targetRunning(const int &, const QString &);

@@ -115,7 +115,7 @@ GdbParser::~GdbParser()
 {
 	cmdList.clear();
 	mEndParsing.clear();
-
+	currentCmd.clear();
 	// Qt delete for me all child. 
 }
 
@@ -165,6 +165,27 @@ bool GdbParser::checkEndParsing(const QString data)
 	return false;
 }
 //
+
+void GdbParser::getCommand()
+{
+	if(cmdList.count())
+	{
+		currentCmd = cmdList.at(0);
+		cmdList.removeAt(0);
+	}
+}
+
+//
+void GdbParser::switchCommand(const QString & s)
+{
+	if(cmdList.count() && s == "(gdb) ")
+	{
+		currentCmd = cmdList.at(0);
+		cmdList.removeAt(0);
+	}
+}
+
+// 
 bool GdbParser::processParsing(const QByteArray & storg)
 {
 	QByteArray st = storg;
@@ -172,28 +193,32 @@ bool GdbParser::processParsing(const QByteArray & storg)
 
 #ifdef Q_OS_WIN
 
-	// for windows
-	// swap prompt "(gdb) "
-	// because under windows readAll() function read ALL data from stdout and after stderr
-	// exemple :
-	//	(gdb)
-	//	(gdb) error undefined command
-	//
-	//	after :
-	//
-	//	(gdb)
-	//	error undefined command
-	//	(gdb)
+	/*
+		For windows
+		swap prompt "(gdb) "
+		because under windows readAll() function read ALL data from stdout and AFTER stderr
 	
+		False sequence :
+	
+		(gdb)
+		(gdb) error undefined command
+	
+		True sequence :
+	
+		(gdb)
+		error undefined command
+		(gdb)
+	*/
 	QRegExp p(".*\\(gdb\\)\\s.+");
 	if(p.exactMatch(st))
 	{
 		st.remove(st.indexOf("(gdb) "),6);
-			st += "(gdb) ";
+		st += "(gdb) ";
 	}
 	// end windows
 
 #endif
+
 
 	// append buffer
 	gdbBuffer.append(st);
@@ -202,13 +227,11 @@ bool GdbParser::processParsing(const QByteArray & storg)
 	// buffer completed
 	if(checkEndParsing(gdbBuffer))
 	{
-		// switch to next command
-		if(cmdList.count())
-		{
-			currentCmd = cmdList.at(0);
-			cmdList.removeAt(0);
-		}
 
+		// get the current command
+		getCommand();
+
+		// spilt line
 		QStringList lines = gdbBuffer.split(crlf);
 
 		// if answer is splitted in two string
@@ -220,6 +243,47 @@ bool GdbParser::processParsing(const QByteArray & storg)
 		{
 			// extract one line from all lines
 			QString oneLine = lines.at(i);
+
+			/*
+				for Linux : some time the prompt have not crlf at the end of "(gdb) "
+				True sequence :
+	
+				GNU gdb 6.8-debian
+				Copyright (C) 2008 Free Software Foundation, Inc.
+				License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+				This is free software: you are free to change and redistribute it.
+				There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+				and "show warranty" for details.
+				This GDB was configured as "i486-linux-gnu".
+	
+				(gdb) 
+				Reading symbols from /home/yannick/dev/debugger/Debugger...
+				done.
+				(gdb)
+				-------------------------------------------------------------------------------
+				False sequence :
+	
+				GNU gdb 6.8-debian
+				Copyright (C) 2008 Free Software Foundation, Inc.
+				License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+				This is free software: you are free to change and redistribute it.
+				There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+				and "show warranty" for details.
+				This GDB was configured as "i486-linux-gnu".
+				(gdb) Reading symbols from /home/yannick/dev/debugger/Debugger...
+				done.
+				(done)
+			*/
+
+			QRegExp f("^\\(gdb\\)\\s.+");
+			if(f.exactMatch(oneLine))
+			{
+				qDebug("PARSER : Prompt formated false");
+				qDebug("PARSER : " + oneLine.toLocal8Bit());
+				QString c = oneLine.remove(0, 6);
+				oneLine = lines[i] = "(gdb) ";
+				lines.insert(i+1, c);
+			}
 
 			// find if this anwser is present under file ini
 			int id = -1;
@@ -234,6 +298,7 @@ bool GdbParser::processParsing(const QByteArray & storg)
 			
 			while(oneLine.contains("\""))
 				oneLine.remove("\"");
+
 
 			// more than ERROR_ID (all errors)
 			if(id != -1 && id >= ERROR_ID  )
@@ -269,9 +334,15 @@ bool GdbParser::processParsing(const QByteArray & storg)
 						onDone(0,"Emulate prompt");
 				}
 			}
+
+			// oneLine == ((gdb) ?
+			// yes i have receive one block from gdb generate by two commands
+			// switch to next commant
+			switchCommand(oneLine);
 		}
 
 		gdbBuffer.clear();
+//		currentCmd = "Passible sync command failed : current command is Cleaning";
 		return true;
 	}
 	return false;

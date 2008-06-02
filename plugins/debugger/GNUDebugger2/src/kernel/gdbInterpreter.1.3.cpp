@@ -97,12 +97,8 @@ int GdbInterpreter::findCmd(const QString & cmd)
 QPointer<BaseInterpreter> GdbInterpreter::find(const QString & currentCmd, const QString & lineValue)
 {
 	int t = findCmd(currentCmd);
-//	if(t != -1) 
-//		QMessageBox::warning(NULL,"find interpreter", currentCmd + "\n" + lineValue +"\n" + GdbInterpreterList.at(t)->getAnswerRegExp().pattern());
-
 	if(t != -1 && GdbInterpreterList.at(t)->getAnswerRegExp().exactMatch( lineValue ) )
 	{
-//		QMessageBox::warning(NULL,"match interpreter", currentCmd);
 		return GdbInterpreterList.at(t);
 	}
 	return NULL;

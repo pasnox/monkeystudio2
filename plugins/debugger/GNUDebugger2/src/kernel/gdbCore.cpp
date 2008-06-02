@@ -4,7 +4,9 @@
 
 
 GdbCore::GdbCore(QObject * parent, QPointer<GdbParser> pa , 	QPointer<GdbProcess> pr) : QObject (parent)
-{ mParser = pa; mProcess = pr;}
+{ mParser = pa; mProcess = pr; watchDog.setSingleShot(true);
+connect(&watchDog, SIGNAL(timeout()), this , SLOT(onTimer()));
+}
 
 GdbCore::~GdbCore()
 {
@@ -29,7 +31,23 @@ void GdbCore::info(const int &, const QString &){}
 QString GdbCore::name() { return QString();}
 QPointer<QWidget> GdbCore::widget() { return QPointer<QWidget>();}
 
-void GdbCore::interpreter(const QPointer<BaseInterpreter> & i, const int & id, const QString & s){}
+void GdbCore::interpreter(const QPointer<BaseInterpreter> & , const int & , const QString & ){}
+
+void GdbCore::setEnabled(const bool & b ) { mEnabled = b;}
+bool GdbCore::isEnabled() { return mEnabled;}
+
+void GdbCore::setWaitEndProcess(const bool & p){ if(p ) watchDog.start(5000); else watchDog.stop(); qDebug("set wait " + QByteArray::number(p) + " " +  name().toLocal8Bit()); mWaitEndProcess = p;}
+
+bool GdbCore::isWaitEndProcess() { qDebug("get wait " + QByteArray::number(mWaitEndProcess) + " " +  name().toLocal8Bit()); return mWaitEndProcess;}
+
+void GdbCore::onTimer()
+{
+	if(isWaitEndProcess())
+	{
+		qDebug("Detecting kernel panic");
+		setWaitEndProcess(false);
+	}
+}
 
 QString GdbCore::findValue(const QString & st , const QString & key)
 {

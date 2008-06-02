@@ -130,7 +130,7 @@ void GdbBreakpoint::removeAllBreakpoint()
 		delete bp;
 }
 
-void GdbBreakpoint::gdbExited()
+void GdbBreakpoint::gdbFinished()
 {
 	removeAllBreakpoint();
 	breakpointList.clear();
@@ -144,15 +144,17 @@ void GdbBreakpoint::gdbStarted()
 	setWaitEndProcess(false);
 }
 
-void GdbBreakpoint::targetRunning(const int & id, const QString & s)
+void GdbBreakpoint::targetRunning(const int & , const QString & )
 {
 }
 
-void GdbBreakpoint::targetStopped(const int & id, const QString & s)
+void GdbBreakpoint::targetStopped(const int & , const QString & s)
 {
 	/*
 		reason : breakpoint-hit
 		reason : end-stepping-range (step over or step into)
+		Breakpoint 1, main (argc=1, argv=0xbfe6fc74) at src/main.cpp:21
+		Breakpoint 1, main (argc=604801882, argv=0x8b240489) at src/main.cpp:13
 	*/
 
 	mWidget->append("*** target stopped ***");
@@ -173,7 +175,8 @@ void GdbBreakpoint::breakpointMoved(const QString & fileName, const int & line, 
 	Breakpoint * bp = findByName(fileName);
 	if(bp)
 	{
-		for(int i=0; i< breakpointList.count() ; i++)
+
+		for(int i=0; i< bp->bp.count() ; i++)
 		{
 			BaseBreakpoint b = bp->bp.at(i);
 			if(b.index == index && b.line != line)
@@ -192,7 +195,8 @@ void GdbBreakpoint::breakpointMoved(const QString & fileName, const int & line, 
 void GdbBreakpoint::toggleBreakpoint(const QString & fileName, const int & line)
 {
 	
-	if(isWaitEndProcess()) return;
+	if(isWaitEndProcess()) 
+		return;
 
 	Breakpoint *  bp = findByName(fileName);
 
@@ -243,7 +247,7 @@ void GdbBreakpoint::toggleBreakpoint(const QString & fileName, const int & line)
 
 
 
-void GdbBreakpoint::onBreakpointAdd( int id, QString s)
+void GdbBreakpoint::onBreakpointAdd( int , QString s)
 {
 
 	mWidget->append("gdb -> " + s);
@@ -302,7 +306,7 @@ void GdbBreakpoint::onBreakpointAdd( int id, QString s)
 }
 
 
-void GdbBreakpoint::onBreakpointDelete( int id, QString s)
+void GdbBreakpoint::onBreakpointDelete( int , QString s)
 {
 	mWidget->append("gdb -> " + s);
 	QString n = findValue(s,"fileName");

@@ -29,6 +29,9 @@ GdbBacktrace::GdbBacktrace(QObject * parent, QPointer<GdbParser> pa , QPointer<G
 
 	setEnabled(true);
 	setWaitEndProcess(false);
+
+	mCurrentLine = -1;
+	mCurrentFile.clear();
 	
 	/*
 		Backtrace line splitted in two lines
@@ -97,7 +100,7 @@ void GdbBacktrace::interpreter(const QPointer<BaseInterpreter> & i, const int & 
 
 
 
-void GdbBacktrace::gdbExited()
+void GdbBacktrace::gdbFinished()
 {
 	setWaitEndProcess(false);
 	mCurrentLine = -1;
