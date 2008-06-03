@@ -4,6 +4,9 @@
 #include <pluginsmanager.h>
 #include "DockGNUDebugger.h"
 
+// for loading one time the parser file
+#include "./kernel/gdbPatternFile.1.3.h"
+
 #include <QPointer>
 
 class GNUDebugger : public DebuggerPlugin
@@ -24,9 +27,11 @@ protected slots:
 
 private:
 	QPointer<QAction> aSeparator;
+	QPointer<GdbPatternFile> patternFile;
+
 	QHash<QString , QAction*> actionList;
 	DockGNUDebugger *mDockGNUDebugger;
-
+	
 };
 
 #endif

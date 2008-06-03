@@ -10,7 +10,7 @@
 
 
 #ifndef GDBPATTERNFILE_H
-#define GDBPATTERNFILE_h
+#define GDBPATTERNFILE_H
 
 
 /* 
@@ -41,11 +41,12 @@ public:
 	~GdbPatternFile();
 	bool load(const QString & );
 	GdbPattern find(const QString &);
-	int getId(const GdbPattern & p);
-	QString getPattern(const GdbPattern & p );
 
 
 private :
+
+	int getId(const GdbPattern & p);
+	QString getPattern(const GdbPattern & p );
 
 	QList<GdbPattern> GdbPatternList;
 

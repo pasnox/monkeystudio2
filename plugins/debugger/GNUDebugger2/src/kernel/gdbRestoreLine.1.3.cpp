@@ -58,7 +58,7 @@ bool GdbRestoreLine::find(const QString & l1, const QString & l2)
 	return false;
 }
 
-void GdbRestoreLine::tryRestore(QStringList * list)
+bool GdbRestoreLine::tryRestore(QStringList * list)
 {
 	// new version 1.4
 	foreach(GdbLines l , GdbRestoreLineList)
@@ -81,11 +81,12 @@ void GdbRestoreLine::tryRestore(QStringList * list)
 				}
 				list->insert(lBegin, s);
 //				QMessageBox::warning(NULL,"restoring", s);
+				return true;
 			}
 		}
 	}
 
-	
+	return false;	
 	
 /*	for(int i=0; i<list->count() - 1 ; i++)
 	{

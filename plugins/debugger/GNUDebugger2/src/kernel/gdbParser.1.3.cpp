@@ -61,7 +61,8 @@ GdbParser::GdbParser (QObject * parent) : QObject (parent)
 		else
 		{
 	
-			#ifdef Q_OS_WIN 
+			crlf = crlf = pMonkeyStudio::getEol().toLocal8Bit();
+			/*#ifdef Q_OS_WIN 
 				crlf = "\r\n";
 			#endif
 			#ifdef Q_OS_MAC 
@@ -70,7 +71,7 @@ GdbParser::GdbParser (QObject * parent) : QObject (parent)
 			#ifdef Q_OS_UNIX
 				crlf = "\n";
 			#endif
-
+			*/
 			/*
 				Parsing and if ...
 			*/
@@ -183,6 +184,7 @@ void GdbParser::getCommand()
 	if(cmdList.count())
 	{
 		currentCmd = cmdList.at(0);
+		onInfo(-1,"Get current command" + currentCmd);
 		cmdList.removeAt(0);
 	}
 }
@@ -246,9 +248,9 @@ bool GdbParser::processParsing(const QByteArray & storg)
 		// spilt line
 		QStringList lines = gdbBuffer.split(crlf);
 
-		// if answer is splitted in two string
-		if(gdbRestoreLine) 
-			gdbRestoreLine->tryRestore(&lines);
+		// if answer is splitted in more string
+		if(gdbRestoreLine && gdbRestoreLine->tryRestore(&lines)) 
+			onInfo(-1,"Possible Restoring splited line");
 
 		// read line by line
 		for(int i=0; i<lines.count(); i++)
@@ -269,8 +271,7 @@ bool GdbParser::processParsing(const QByteArray & storg)
 				This GDB was configured as "i486-linux-gnu".
 	
 				(gdb) 
-				Reading symbols from /home/yannick/dev/debugger/Debugger...
-				done.
+				Reading symbols from /home/yannick/dev/debugger/Debugger...done.
 				(gdb)
 				-------------------------------------------------------------------------------
 				False sequence :
@@ -284,17 +285,22 @@ bool GdbParser::processParsing(const QByteArray & storg)
 				This GDB was configured as "i486-linux-gnu".
 				(gdb) Reading symbols from /home/yannick/dev/debugger/Debugger...
 				done.
-				(done)
+				(gdb)
 			*/
 
 			QRegExp f("^\\(gdb\\)\\s.+");
 			if(f.exactMatch(oneLine))
 			{
-				qDebug("PARSER : Prompt formated false");
-				qDebug("PARSER : " + oneLine.toLocal8Bit());
+				onInfo(-1,"Prompt not have crlf");
+				onInfo(-1,oneLine); 
+				//(gdb) Reading symbols from /home/yannick/dev/debugger/Debugger...done
 				QString c = oneLine.remove(0, 6);
+				// Reading symbols from /home/yannick/dev/debugger/Debugger...done
 				oneLine = lines[i] = "(gdb) ";
+				// (gdb) 
 				lines.insert(i+1, c);
+				// (gdb)
+				// Reading symbols from /home/yannick/dev/debugger/Debugger...done
 			}
 
 			// find if this anwser is present under file ini
@@ -350,20 +356,27 @@ bool GdbParser::processParsing(const QByteArray & storg)
 			// oneLine == ((gdb) ?
 			// yes i have receive one block from gdb generate by two commands
 			// switch to next commant
-			switchCommand(oneLine);
+//			switchCommand(oneLine);
 		}
 
 		gdbBuffer.clear();
-//		currentCmd = "Passible sync command failed : current command is Cleaning";
+		emit parserReady();
+//		onInfo(-1, "status=\"PARSER READY");
 		return true;
 	}
 	return false;
 }
 //
-void GdbParser::setLastCommand(QString cmd)
+void GdbParser::setNextCommand(QString cmd)
 {
 	cmdList << cmd;
 }
+
+void GdbParser::clearAllCommand()
+{
+	cmdList.clear();
+}
+
 //
 /*
 	sub main parser
@@ -373,7 +386,10 @@ void GdbParser::onDone(int id, QString st)
 	switch(id)
 	{
 		case -1 : emit done(id, "^done,interpreter=\"GdbParser\",event=\"generic information (not parsing)\",answerGdb=\"" + st + "\",currentCmd=\"" + currentCmd +"\"");break;
-		case PROMPT_ID: emit done(id, "^done,interpreter=\"GdbParser\",event=\"prompt\",answerGdb=\"" + st + "\",currentCmd=\"" + currentCmd +"\""); break;
+		case PROMPT_ID: emit done(id, "^done,interpreter=\"GdbParser\",event=\"prompt\",answerGdb=\"" + st + "\",currentCmd=\"" + currentCmd +"\""); 
+//			getCommand();
+			break;
+
 	}
 }
 //

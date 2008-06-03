@@ -87,6 +87,7 @@ GdbBacktrace::GdbBacktrace(QObject * parent, QPointer<GdbParser> pa , QPointer<G
 	mWidget = new QTextEdit();
 }
 
+//
 
 GdbBacktrace::~GdbBacktrace()
 {
@@ -94,23 +95,28 @@ GdbBacktrace::~GdbBacktrace()
 	delete mWidget;
 }
 
+//
+
 QString GdbBacktrace::name()
 {
 	return "GdbBacktrace";
 }
 
+//
 
 QPointer<QWidget> GdbBacktrace::widget()
 {
 	return (QPointer<QWidget>)( mWidget );
 }
 
+//
+
 void GdbBacktrace::interpreter(const QPointer<BaseInterpreter> & i, const int & id, const QString & s)
 {
 	Connect->call( i, id, s);
 }
 
-
+//
 
 void GdbBacktrace::gdbFinished()
 {
@@ -119,6 +125,8 @@ void GdbBacktrace::gdbFinished()
 	mCurrentFile.clear();
 }
 
+//
+
 void GdbBacktrace::gdbStarted()
 {
 	setWaitEndProcess(false);
@@ -126,26 +134,34 @@ void GdbBacktrace::gdbStarted()
 	mCurrentFile.clear();
 }
 
+//
+
 void GdbBacktrace::targetRunning(const int & id, const QString & s)
 {
 	// just delete bactrace when target running
 	emit onToggleBacktrace("", -1);
 }
 
+//
+
 void GdbBacktrace::targetStopped(const int & id, const QString & s)
 {
 	setWaitEndProcess(true);
 
 	mWidget->append("*** target stopped ***");
-	GdbCore::Parser()->setLastCommand("bt");
+	GdbCore::Parser()->setNextCommand("bt");
 	GdbCore::Process()->sendRawData("bt");
 }
+
+//
 
 void GdbBacktrace::targetExited(const int & id, const QString & s)
 {
 	// just delete bactrace when target exited
 	emit onToggleBacktrace("", -1);
 }
+
+//
 
 void GdbBacktrace::onBacktrace(int id, QString s)
 {
@@ -164,14 +180,16 @@ void GdbBacktrace::onBacktrace(int id, QString s)
 
 		mWidget->append("Current Line : " + QString::number(mCurrentLine));
 
-		GdbCore::Parser()->setLastCommand("info source");
+		GdbCore::Parser()->setNextCommand("info source");
 		GdbCore::Process()->sendRawData("info source");
 	}
 }
 
+//
+
 void GdbBacktrace::onInfoSource(int id, QString s)
 {
-	mWidget->append("** infosource receiver **");
+	mWidget->append("** info source receiver **");
 	
 	/*
 	*/
@@ -193,6 +211,8 @@ void GdbBacktrace::onInfoSource(int id, QString s)
 	}
 
 }
+
+//
 
 void GdbBacktrace::onRequestBacktrace(const QString & s)
 {

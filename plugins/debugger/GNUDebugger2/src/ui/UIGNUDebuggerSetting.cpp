@@ -76,7 +76,6 @@ void UIGNUDebuggerSetting::commandReadyRead( const QByteArray & s)
 
 	labelCurrentVersion->setText(l.at(0));
 	Process->sendRawData("quit");
-	Process->stopProcess();
 }
 
 void UIGNUDebuggerSetting::started()
@@ -112,22 +111,23 @@ void UIGNUDebuggerSetting::loadSettings()
 	mPluginList = s->allKeys();
 	s->endGroup();
 
- }
+}
 
 void UIGNUDebuggerSetting::saveSettings()
 {
 	Settings * s = MonkeyCore::settings();
+	// set the gdb path
 	s->beginGroup( QString( "Plugins/%1" ).arg( PLUGIN_NAME ) );
-		s->setValue( "PathGdb", editPath->text() );
+	s->setValue( "PathGdb", editPath->text() );
 		
-		QList<QCheckBox*> cbs = groupPlugins->findChildren<QCheckBox*>();
-		foreach(QCheckBox * c, cbs)
-		{
-			if(c->checkState () == Qt::Checked) 
-				s->setValue("AddOn/" + c->text(), true);
-			else
-				s->setValue("AddOn/" + c->text(), false);
-		}
+	QList<QCheckBox*> cbs = groupPlugins->findChildren<QCheckBox*>();
+	foreach(QCheckBox * c, cbs)
+	{
+		if(c->checkState () == Qt::Checked) 
+			s->setValue("AddOn/" + c->text(), true);
+		else
+			s->setValue("AddOn/" + c->text(), false);
+	}
 	s->endGroup();
 }
 

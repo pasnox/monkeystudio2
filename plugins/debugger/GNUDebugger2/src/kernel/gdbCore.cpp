@@ -44,7 +44,7 @@ void GdbCore::onTimer()
 {
 	if(isWaitEndProcess())
 	{
-		qDebug("Detecting kernel panic");
+		qDebug("Detecting kernel panic : " + name().toLocal8Bit());
 		setWaitEndProcess(false);
 	}
 }

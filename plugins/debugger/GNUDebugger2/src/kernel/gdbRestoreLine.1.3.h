@@ -34,7 +34,7 @@ public:
 	
 	void add(const QRegExp &, const QRegExp &);
 	void add(const QString &, const QString &);
-	void tryRestore(QStringList * );
+	bool tryRestore(QStringList * );
 	bool find(const QString &, const QString &);
 
 	int begin(const QStringList & , const QRegExp &);

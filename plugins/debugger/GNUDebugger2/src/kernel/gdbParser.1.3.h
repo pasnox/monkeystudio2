@@ -35,8 +35,8 @@ public:
 public slots:
 
 	bool processParsing(const QByteArray&);
-	void setLastCommand(QString);
-
+	void setNextCommand(QString);
+	void clearAllCommand();
 
 	// gateAway restoreLine
 	void addRestoreLine(const QString &, const QString &);
@@ -66,7 +66,6 @@ private :
 	// var
 	QString crlf;
 
-
 	// base parser
 	void onDone(int , QString);
 	void onError(int , QString);
@@ -89,6 +88,8 @@ private :
 	void done(int , QString);
 	void error(int , QString);
 	void info(int, QString);
+
+	void parserReady();
 };
 
 

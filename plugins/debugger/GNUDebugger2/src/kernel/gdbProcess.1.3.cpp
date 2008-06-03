@@ -3,7 +3,7 @@
 */
 
 #include "gdbProcess.1.3.h"
-
+#include "monkey.h"
 
 
 GdbProcess::GdbProcess( QObject * parent ) : QProcess( parent )
@@ -12,18 +12,13 @@ GdbProcess::GdbProcess( QObject * parent ) : QProcess( parent )
 	setReadChannelMode( QProcess::MergedChannels );
 	// connections
 
-	connect( this, SIGNAL( readyRead() ), this, SLOT( readyRead() ) );
+	mIsReady = true;
 
-	// CRLF
-	#ifdef Q_OS_WIN 
-		crlf = "\r\n";
-	#endif
-	#ifdef Q_OS_MAC 
-		crlf = "\n";
-	#endif
-	#ifdef Q_OS_UNIX
-		crlf = "\n";
-	#endif
+	connect( this, SIGNAL( readyRead() ), this, SLOT( readyRead() ) );
+	connect (&t, SIGNAL(timeout()), this , SLOT(onTimer()));
+	t.start(100);
+
+	crlf = pMonkeyStudio::getEol().toLocal8Bit();
 }
 //
 GdbProcess::~GdbProcess()
@@ -39,23 +34,45 @@ void GdbProcess::readyRead()
 }
 
 //
-void GdbProcess::sendRawData( const QByteArray & a )
+
+void GdbProcess::onTimer()
 {
-	write( a + crlf );
+	if(mCmdList.count() && mIsReady)
+	{
+		write( mCmdList.at(0) + crlf );
+		mCmdList.removeAt(0);
+		mIsReady = false;
+	}
 }
 
 //
+
+void GdbProcess::onParserReady()
+{
+	mIsReady = true;
+
+}
+
+void GdbProcess::sendRawData( const QByteArray & a )
+{
+	mCmdList << a;
+}
+
+//
+
+void GdbProcess::stopTarget()
+{
+	// quit gdb
+	sendRawData( "q" + crlf);
+	mIsReady = true;
+}
+
 void GdbProcess::stopProcess()
 {
 	if ( state() == QProcess::Running )
 	{
-		// stop target into gdb
-		sendRawData( "kill" + crlf);
-		// some time gdb want confirmation
-		sendRawData( "y" + crlf);
-		// quit gdb
-		sendRawData( "q" + crlf);
 		// if gdb not want finish
+
 		if(!waitForFinished(500))
 		{
 			terminate();

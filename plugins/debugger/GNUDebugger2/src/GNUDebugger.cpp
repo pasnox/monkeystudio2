@@ -5,6 +5,7 @@
 
 #include <QIcon>
 
+ 
 GNUDebugger::GNUDebugger()
 {
 	aSeparator = 0;
@@ -16,6 +17,9 @@ GNUDebugger::GNUDebugger()
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "1.3.0";
 	mPluginInfos.Enabled = false;
+
+//	patternFile = new GdbPatternFile(this);
+//	patternFile->load(
 }
 
 GNUDebugger::~GNUDebugger()
@@ -75,7 +79,6 @@ bool GNUDebugger::setEnabled( bool b )
 		delete aSeparator;
 		actionList.clear();
 		// delete dock
-//		delete mDockGNUDebugger;
 		DockGNUDebugger::instance()->deleteLater();
 		// set plugin disabled
 		mPluginInfos.Enabled = false;

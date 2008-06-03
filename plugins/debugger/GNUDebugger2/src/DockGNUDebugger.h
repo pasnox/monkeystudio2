@@ -24,8 +24,6 @@
 #include "./addon/gdbBacktrace.h"
 
 
-
-
 class DockGNUDebugger : public pDockWidget, public QSingleton<DockGNUDebugger>
 {
 	Q_OBJECT
@@ -40,7 +38,6 @@ public:
 	QPointer<GdbBridgeEditor> Bridge;
 	QPointer<GdbKernelDispatcher> Dispatcher;
 
-//	QPointer<class GdbBreakpoint> Breakpoint;
 	class GdbBreakpoint *Breakpoint;
 	class GdbBacktrace *Backtrace;
 
@@ -50,6 +47,9 @@ private:
 
 	DockGNUDebugger( QWidget* = 0 );
 	~DockGNUDebugger();
+
+	void loadSettings();
+	void saveSettings();
 
 	// interpreter 
 	GdbConnectTemplate<DockGNUDebugger> *Connect;
@@ -68,17 +68,8 @@ private:
 	QByteArray crlf;
 
 	QString mPathGdb;
-	
-	/*	struct
-	{
-		QList<QString> fileName;
-		QList<pEditor*> pointeur;
-	}editor;
-	pEditor *findFile(QByteArray file);
-
-	int currentBacktraceLine;
-	QByteArray currentBacktraceFile;
-*/
+	bool isGdbStarted;
+	bool isTargetRunning;
 	
 public slots:
 
@@ -112,44 +103,11 @@ void onActionToggleBreak();
 	
 	void onUserToggleBreakpoint(const QString & , const int & );
 	
-	//	void onFileOpened( const QString& );
-//	void onFileClosed( const QString&  );
-//	void onFileClosed( int);
-
-/*	void onWantStart(QString);
-	void onWantExit();
-
-	void onMarginClicked(int , int  , Qt::KeyboardModifiers );
-
-	// frome Bridge Editor
-	void onBreakpoint(QByteArray filename, int line, QByteArray, QByteArray, bool);
-	void onBacktrace(QByteArray filename, int line);
-	void onBreakpointMoved(QByteArray filename, int beforLine, int afterLine);
-	void onBreakpointEnabled(QByteArray filename, int line, bool b);
-	void onBreakpointConditionnaled(QByteArray filename, int line, bool b);
-	void onGotoBreakpoint(QByteArray filename, int line);
-
-	// frome console
-	void gdbStarted( const pCommand& c);
-	void gdbFinished( const pCommand& c, int a , QProcess::ExitStatus );
-	void gdbError(const pCommand&, QProcess::ProcessError);
-	
-	void commandReadyRead( const pCommand& c , const QByteArray& d);
-	
-	// from plugin
-	void onSendRawData(GdbCore *plug, QByteArray data);
-
 	// from parser
-*/	void onDone(int , QString);
+	void onDone(int , QString);
 	void onInfo(int , QString);
 	void onError(int , QString);
-/*
-	void onTargetExited(int , QString);
-	void onTargetLoaded(int , QString);
-	void onTargetNoLoaded(int , QString);
-	void onTargetRunning(int , QString);
-	void onTargetStopped(int , QString);
-*/
+
 	void onAboutToClose();
 };
 
