@@ -223,6 +223,7 @@ void UIProjectHeaders::accept()
 	// get variables manager
 	VariablesManager* vm = VariablesManager::instance();
 	// get recursive files
+	bool yesToAll = false;
 	foreach ( QFileInfo fi, pMonkeyStudio::getFiles( QDir( leDirectory->text() ), filters, true ) )
 	{
 		QFile f( fi.absoluteFilePath() );
@@ -234,14 +235,28 @@ void UIProjectHeaders::accept()
 		rx.setMinimal( true );
 		if ( rx.indexIn( b ) != -1 && rx.cap( 1 ).trimmed().length() > 0 )
 		{
-			QMessageBox msg( window() );
-			msg.setWindowTitle( tr( "Replace Licensing..." ) );
-			msg.setIcon( QMessageBox::Question );
-			msg.setStandardButtons( QMessageBox::Yes | QMessageBox::No );
-			msg.setText( tr( "There already is a licensing, in file :\n%1\n replace it ?" ).arg( fi.fileName() ) );
-			msg.setDetailedText( rx.cap( 1 ) );
-			if ( msg.exec() == QMessageBox::No )
-				continue;
+			if ( !yesToAll )
+			{
+				QMessageBox msg( window() );
+				msg.setWindowTitle( tr( "Replace Licensing..." ) );
+				msg.setIcon( QMessageBox::Question );
+				msg.setStandardButtons( QMessageBox::YesToAll | QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel );
+				msg.setText( tr( "There already is a licensing, in file :\n%1\n replace it ?" ).arg( fi.fileName() ) );
+				msg.setDetailedText( rx.cap( 1 ) );
+				switch ( msg.exec() )
+				{
+					case QMessageBox::YesToAll:
+						yesToAll = true;
+						break;
+					case QMessageBox::No:
+						continue;
+						break;
+					case QMessageBox::Cancel:
+						return;
+					default:
+						break;
+				}
+			}
 			b.remove( 0, rx.cap( 1 ).length() );
 		}
 		// set variables

@@ -44,7 +44,6 @@ public:
 
 protected slots:
 	void processLicensing();
-
 };
 
 #endif // PROJECTHEADERS_H
