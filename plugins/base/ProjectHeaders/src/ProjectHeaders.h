@@ -40,14 +40,7 @@ public:
 	ProjectHeaders();
 	virtual ~ProjectHeaders();
 	virtual bool setEnabled( bool );
-
-	void setTemplatesHeaderRegExp( const QString&, const QString& );
-	QString templatesHeaderRegExp( const QString& ) const;
-	QString defaultTemplatesHeaderRegExp( const QString& ) const;
-
-	void setTemplatesHeader( const QString&, const QString& );
-	QString templatesHeader( const QString& ) const;
-	QString defaultTemplatesHeader( const QString& ) const;
+	virtual QPixmap pixmap() const;
 
 protected slots:
 	void processLicensing();

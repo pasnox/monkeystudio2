@@ -12,20 +12,15 @@
   <property name="windowTitle" >
    <string>Project Licensing Updater</string>
   </property>
+  <property name="windowIcon" >
+   <iconset resource="../resources/ProjectHeaders.qrc" >
+    <normaloff>:/icons/licensing.png</normaloff>:/icons/licensing.png</iconset>
+  </property>
   <layout class="QVBoxLayout" >
    <property name="spacing" >
     <number>3</number>
    </property>
-   <property name="leftMargin" >
-    <number>5</number>
-   </property>
-   <property name="topMargin" >
-    <number>5</number>
-   </property>
-   <property name="rightMargin" >
-    <number>5</number>
-   </property>
-   <property name="bottomMargin" >
+   <property name="margin" >
     <number>5</number>
    </property>
    <item>
@@ -34,26 +29,22 @@
       <number>0</number>
      </property>
      <widget class="QWidget" name="wProjectInformations" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>646</width>
+        <height>293</height>
+       </rect>
+      </property>
       <attribute name="title" >
        <string>Project Informations</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="leftMargin" >
+       <property name="margin" >
         <number>5</number>
        </property>
-       <property name="topMargin" >
-        <number>5</number>
-       </property>
-       <property name="rightMargin" >
-        <number>5</number>
-       </property>
-       <property name="bottomMargin" >
-        <number>5</number>
-       </property>
-       <property name="horizontalSpacing" >
-        <number>3</number>
-       </property>
-       <property name="verticalSpacing" >
+       <property name="spacing" >
         <number>3</number>
        </property>
        <item row="0" column="0" >
@@ -73,7 +64,8 @@
        <item row="0" column="2" >
         <widget class="QToolButton" name="tbDirectory" >
          <property name="icon" >
-          <iconset resource="../resources/ProjectHeaders.qrc" >:/icons/folder.png</iconset>
+          <iconset resource="../resources/ProjectHeaders.qrc" >
+           <normaloff>:/icons/folder.png</normaloff>:/icons/folder.png</iconset>
          </property>
         </widget>
        </item>
@@ -166,26 +158,22 @@
       </layout>
      </widget>
      <widget class="QWidget" name="wLicensesConfiguration" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>646</width>
+        <height>293</height>
+       </rect>
+      </property>
       <attribute name="title" >
        <string>Licenses Configuration</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="leftMargin" >
+       <property name="margin" >
         <number>5</number>
        </property>
-       <property name="topMargin" >
-        <number>5</number>
-       </property>
-       <property name="rightMargin" >
-        <number>5</number>
-       </property>
-       <property name="bottomMargin" >
-        <number>5</number>
-       </property>
-       <property name="horizontalSpacing" >
-        <number>3</number>
-       </property>
-       <property name="verticalSpacing" >
+       <property name="spacing" >
         <number>3</number>
        </property>
        <item row="0" column="0" >
@@ -229,10 +217,40 @@
          <property name="lineWrapMode" >
           <enum>QTextEdit::NoWrap</enum>
          </property>
+         <property name="tabStopWidth" >
+          <number>40</number>
+         </property>
          <property name="acceptRichText" >
           <bool>false</bool>
          </property>
         </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="wEncoding" >
+      <attribute name="title" >
+       <string>File Encoding</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout" >
+       <item row="0" column="0" >
+        <widget class="QLabel" name="lSourceEncoding" >
+         <property name="text" >
+          <string>Source File Encoding:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" >
+        <widget class="QLabel" name="lTargetEncoding" >
+         <property name="text" >
+          <string>Target File Encoding :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QListWidget" name="lwSourceEncoding" />
+       </item>
+       <item row="1" column="1" >
+        <widget class="QListWidget" name="lwTargetEncoding" />
        </item>
       </layout>
      </widget>
@@ -244,7 +262,7 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons" >
-      <set>QDialogButtonBox::Close|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::Apply|QDialogButtonBox::Close</set>
      </property>
     </widget>
    </item>

@@ -38,18 +38,27 @@ class UIProjectHeaders : public QDialog, public Ui::UIProjectHeaders
 	Q_OBJECT
 	
 public:
-	UIProjectHeaders( QWidget* = 0, ProjectHeaders* = 0 );
+	UIProjectHeaders( QWidget* parent, ProjectHeaders* plugin );
 
 protected:
 	ProjectHeaders* mPlugin;
+	
+	void setTemplatesHeaderRegExp( const QString& language, const QString& regexp );
+	QString templatesHeaderRegExp( const QString& language ) const;
+	QString defaultTemplatesHeaderRegExp( const QString& language ) const;
 
-	void hideEvent( QHideEvent* );
+	void setTemplatesHeader( const QString& language, const QString& license );
+	QString templatesHeader( const QString& language ) const;
+	QString defaultTemplatesHeader( const QString& language ) const;
 
 protected slots:
+	void restoreSettings();
+	void saveSettings();
 	void on_tbDirectory_clicked();
 	void on_cbLanguages_highlighted( int );
 	void on_cbLanguages_currentIndexChanged( int );
-	void accept();
+	virtual void reject();
+	virtual void accept();
 
 };
 
