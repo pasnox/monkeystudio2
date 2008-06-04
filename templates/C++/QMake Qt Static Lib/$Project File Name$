@@ -20,6 +20,8 @@ TARGET	= $Target Name$
 CONFIG	+= debug_and_release staticlib
 BUILD_PATH	 =  $Build Path$
 
+ProjectSettings:EDITOR	= QMakeProjectEditor
+
 CONFIG(debug, debug|release) {
 	#Debug
 	CONFIG	+= console

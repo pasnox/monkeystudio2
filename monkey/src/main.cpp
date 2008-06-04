@@ -30,6 +30,8 @@
 #include <QMessageBox>
 
 #include "coremanager/MonkeyCore.h"
+#include "pluginsmanager/PluginsManager.h"
+#include "settingsmanager/Settings.h"
 
 int main( int argc, char** argv )
 {
@@ -43,6 +45,11 @@ int main( int argc, char** argv )
 	QObject::connect( &a, SIGNAL( lastWindowClosed() ), &a, SLOT( quit() ) );
 	// init monkey studio core
 	MonkeyCore::init();
-	// start application
-	return a.exec();
+	// execute application
+	int result = a.exec();
+	// some cleanup
+	MonkeyCore::pluginsManager()->clearPlugins();
+	delete MonkeyCore::settings();
+	// return app exit code
+	return result;
 }

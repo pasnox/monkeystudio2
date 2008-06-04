@@ -602,16 +602,16 @@ QStringList QMakeXUPItem::splitFiles( const QString& s ) const
 }
 
 BuilderPlugin* QMakeXUPItem::builder( const QString& plugin ) const
-{ return XUPItem::builder( plugin ); }
+{ return XUPItem::builder( plugin.isEmpty() ? "GNUMake" : plugin ); }
 
 CompilerPlugin* QMakeXUPItem::compiler( const QString& plugin ) const
-{ return XUPItem::compiler( plugin ); }
+{ return XUPItem::compiler( plugin.isEmpty() ? "G++" : plugin ); }
 
 DebuggerPlugin* QMakeXUPItem::debugger( const QString& plugin ) const
-{ return XUPItem::debugger( plugin ); }
+{ return XUPItem::debugger( plugin.isEmpty() ? "GNUDebugger" : plugin ); }
 
 InterpreterPlugin* QMakeXUPItem::interpreter( const QString& plugin ) const
-{ return XUPItem::interpreter( plugin ); }
+{ return XUPItem::interpreter( plugin.isEmpty() ? "" : plugin ); }
 
 void QMakeXUPItem::installCommands()
 {
@@ -750,8 +750,11 @@ void QMakeXUPItem::installCommands()
 			cmd.setArguments( QString() );
 			addCommand( cmd, "mBuilder/mRebuild" );
 		}
-		else
-			MonkeyCore::statusBar()->appendMessage( tr( "Some actions can't be created, because there is no default Qt version setted, please go in your project settings to fix this." ), 2500 );
+		else if ( projectSettingsValue( "SHOW_QT_VERSION_WARNING", "1" ) == "1" )
+		{
+			setProjectSettingsValue( "SHOW_QT_VERSION_WARNING", "0" );
+			MonkeyCore::statusBar()->appendMessage( tr( "Some actions can't be created, because there is no default Qt version setted, please go in your project settings ( %1 ) to fix this." ).arg( defaultValue() ) );
+		}
 		
 		// execute debug
 		cmd = cmdBuild;

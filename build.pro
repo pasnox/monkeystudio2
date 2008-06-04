@@ -9,4 +9,6 @@ ProjectSettings {
 	EXECUTE_RELEASE	= bin/monkeystudio
 	QT_VERSION	= 4.4.0
 	EXECUTE_DEBUG	= bin/monkeystudio_debug
+	BUILDER	= GNUMake
+	COMPILER	= G++
 }

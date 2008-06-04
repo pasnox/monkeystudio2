@@ -15,7 +15,8 @@ UIPluginsSettingsElement::UIPluginsSettingsElement( BasePlugin* plugin, QWidget*
 	// setup dialog
 	setupUi( this );
 	cbEnabled->setChecked( mPlugin->isEnabled() );
-	lIcon->setPixmap( mPlugin->pixmap().scaledToWidth( lIcon->maximumWidth(), Qt::SmoothTransformation ) );
+	if ( !mPlugin->pixmap().isNull() )
+		lIcon->setPixmap( mPlugin->pixmap().scaledToWidth( lIcon->maximumWidth(), Qt::SmoothTransformation ) );
 	lTitle->setText( infos.Caption );
 	lDescription->setText( infos.Description );
 	pbSettings->setVisible( mSettingsWidget );

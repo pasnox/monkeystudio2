@@ -21,6 +21,8 @@ CONFIG	-= qt
 CONFIG	+= debug_and_release
 BUILD_PATH	 =  $Build Path$
 
+ProjectSettings:EDITOR	= QMakeProjectEditor
+
 QMAKE_CFLAGS_RELEASE -= -O2
 QMAKE_CXXFLAGS_RELEASE -= -O2
 QMAKE_CFLAGS_RELEASE += -O3

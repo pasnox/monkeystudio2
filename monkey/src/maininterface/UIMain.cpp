@@ -97,8 +97,6 @@ void UIMain::closeEvent( QCloseEvent* e )
 	MonkeyCore::projectsManager()->action( UIXUPManager::CloseAll )->trigger();
 	// inform that we close mainwindow
 	emit aboutToClose();
-	// delete settings ( for avoid bug of corruted QColor in ini file )
-	MonkeyCore::settings()->deleteLater();
 }
 
 QMenu* UIMain::createPopupMenu()
@@ -374,8 +372,6 @@ void UIMain::initConnections()
 #ifdef __COVERAGESCANNER__
 	connect( menuBar()->action( "mHelp/aTestReport" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( helpTestReport_triggered() ) );
 #endif
-	// plugins manager
-	connect( this, SIGNAL( aboutToClose() ), MonkeyCore::pluginsManager(), SLOT( clearPlugins() ) );
 }
 
 void UIMain::menu_ViewDocks_aboutToShow()
