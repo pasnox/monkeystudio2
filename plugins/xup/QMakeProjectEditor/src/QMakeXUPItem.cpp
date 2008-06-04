@@ -750,8 +750,11 @@ void QMakeXUPItem::installCommands()
 			cmd.setArguments( QString() );
 			addCommand( cmd, "mBuilder/mRebuild" );
 		}
-		else
-			MonkeyCore::statusBar()->appendMessage( tr( "Some actions can't be created, because there is no default Qt version setted, please go in your project settings to fix this." ), 2500 );
+		else if ( projectSettingsValue( "SHOW_QT_VERSION_WARNING", "1" ) == "1" )
+		{
+			setProjectSettingsValue( "SHOW_QT_VERSION_WARNING", "0" );
+			MonkeyCore::statusBar()->appendMessage( tr( "Some actions can't be created, because there is no default Qt version setted, please go in your project settings ( %1 ) to fix this." ).arg( defaultValue() ) );
+		}
 		
 		// execute debug
 		cmd = cmdBuild;
