@@ -79,6 +79,9 @@ void MessageBoxDocks::appendInBox( const QString& s, const QColor& c )
 
 void MessageBoxDocks::appendStep( const pConsoleManager::Step& s )
 {
+	// scrollbar position
+	int scrollValue = mBuildStep->lwBuildSteps->verticalScrollBar()->value();
+	bool scrollMaximum = scrollValue == mBuildStep->lwBuildSteps->verticalScrollBar()->maximum();
 	// get last type
 	pConsoleManager::StepType t = pConsoleManager::stUnknown;
 	QListWidgetItem* lastIt = mBuildStep->lwBuildSteps->item( mBuildStep->lwBuildSteps->count() -1 );
@@ -116,6 +119,7 @@ void MessageBoxDocks::appendStep( const pConsoleManager::Step& s )
 	
 	// if item is finish, need calculate error, warning
 	if ( s.mType == pConsoleManager::stFinish )
+	{
 		if ( s.mText.isNull() )
 		{ //No own text
 			// count error, warning
@@ -136,7 +140,7 @@ void MessageBoxDocks::appendStep( const pConsoleManager::Step& s )
 			it->setData( Qt::UserRole +1,pConsoleManager::stBad );
 			it->setText( s.mText );
 		}
-
+	}
 	
 	// set icon and color
 	switch ( it->data( Qt::UserRole +1 ).toInt() )
@@ -173,6 +177,9 @@ void MessageBoxDocks::appendStep( const pConsoleManager::Step& s )
 			it->setBackground( QColor( 125, 125, 125, 20 ) );
 			break;
 	}
+	
+	// get back scrollbar position
+	mBuildStep->lwBuildSteps->verticalScrollBar()->setValue( scrollMaximum ? mBuildStep->lwBuildSteps->verticalScrollBar()->maximum() : scrollValue );
 }
 
 void MessageBoxDocks::appendSearchResult( const pConsoleManager::Step& s )
