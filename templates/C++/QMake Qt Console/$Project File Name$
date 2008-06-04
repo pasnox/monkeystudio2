@@ -21,6 +21,8 @@ QT	-= gui
 CONFIG	+= debug_and_release
 BUILD_PATH	 =  $Build Path$
 
+ProjectSettings:EDITOR	= QMakeProjectEditor
+
 CONFIG(debug, debug|release) {
 	#Debug
 	CONFIG	+= console
