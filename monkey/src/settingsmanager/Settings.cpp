@@ -93,4 +93,57 @@ void Settings::setDefaultSettings()
 	if ( !l.contains( "plugins" ) && !l.contains( "./plugins" ) )
 		l << "plugins";
 	setValue( "Plugins/Path", l );
+	// syntax highlighter
+	setDefaultCppSyntaxHighlight();
+}
+
+void Settings::setDefaultCppSyntaxHighlight()
+{
+#if defined Q_OS_MAC
+	const QString font = "Bitstream Vera Sans Mono, 10";
+#elif defined Q_OS_WIN
+	const QString font = "Courier New, 10";
+#else
+	const QString font = "Bitstream Vera Sans Mono, 9";
+#endif
+	// configure styles
+	LexerStyleList styles;	
+	styles << LexerStyle( 0, 0, false, "%1, 0, 0, 0", 16777215 );
+	styles << LexerStyle( 1, 10526880, false, "%1, 0, 0, 0", 16777215 );
+	styles << LexerStyle( 2, 10526880, false, "%1, 0, 0, 0", 16777215 );
+	styles << LexerStyle( 3, 8421631, false, "%1, 1, 0, 0", 16777215 );
+	styles << LexerStyle( 4, 15728880, false, "%1, 0, 0, 0", 16777215 );
+	styles << LexerStyle( 5, 160, false, "%1, 1, 0, 0", 16777215 );
+	styles << LexerStyle( 6, 255, false, "%1, 0, 0, 0", 16777215 );
+	styles << LexerStyle( 7, 14721024, false, "%1, 0, 0, 0", 16777215 );
+	styles << LexerStyle( 9, 40960, false, "%1, 0, 0, 0", 16777215 );
+	styles << LexerStyle( 10, 16711680, false, "%1, 0, 0, 0", 16777215 );
+	styles << LexerStyle( 11, 0, false, "%1, 0, 0, 0", 16777215 );
+	styles << LexerStyle( 12, 0, true, "%1, 0, 0, 0", 16711680 );
+	styles << LexerStyle( 15, 8421631, false, "%1, 1, 0, 0", 16777215 );
+	styles << LexerStyle( 16,0 , false, "%1, 0, 0, 0", 16777215 );
+	styles << LexerStyle( 17, 32896, false, "%1, 0, 0, 0", 16777215 );
+	styles << LexerStyle( 18, 8388608, false, "%1, 0, 0, 0", 16777215 );
+	styles << LexerStyle( 19, 0, false, "%1, 0, 0, 0", 16777215 );
+	// write styles
+	beginGroup( "Scintilla/C++" );
+	foreach ( const LexerStyle& style, styles )
+	{
+		beginGroup( QString( "style%1" ).arg( style.id ) );
+		setValue( "color", style.color );
+		setValue( "eolfill", style.eolfill );
+		setValue( "font", style.font.arg( font ).split( ',' ) );
+		setValue( "paper", style.paper );
+		endGroup();
+	}
+	setValue( "properties/foldatelse", QVariant( true ).toString() );
+	setValue( "properties/foldcomments", QVariant( true ).toString() );
+	setValue( "properties/foldcompact", QVariant( true ).toString() );
+	setValue( "properties/foldpreprocessor", QVariant( true ).toString() );
+	setValue( "properties/stylepreprocessor", QVariant( true ).toString() );
+	setValue( "defaultcolor", 0 );
+	setValue( "defaultpaper", 16777215 );
+	setValue( "defaultfont", QString( "Verdana, 10, 0, 0, 0" ).split( ',' ) );
+	setValue( "autoindentstyle", 1 );
+	endGroup();
 }
