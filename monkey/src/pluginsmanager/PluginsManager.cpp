@@ -59,6 +59,10 @@ void PluginsManager::loadsPlugins()
 		// load all plugins
 		foreach ( QFileInfo f, pMonkeyStudio::getFiles( d ) )
 		{
+			// don't proced no library file
+			if ( !QLibrary::isLibrary( f.absoluteFilePath() ) )
+				continue;
+			// load plugin
 			QPluginLoader l( f.absoluteFilePath() );
 			// try unload it and reload it in case of old one in memory
 			if ( !l.instance() )
