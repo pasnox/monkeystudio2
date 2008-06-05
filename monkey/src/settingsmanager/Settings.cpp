@@ -79,7 +79,7 @@ void Settings::setDefaultSettings()
 		s = QString( "%1/ctags/apis" ).arg( mPath );
 	setValue( "SourceAPIs/CMake", QStringList( s +"/cmake.api" ) );
 	setValue( "SourceAPIs/C#", QStringList( s +"/cs.api" ) );
-	setValue( "SourceAPIs/C++", QStringList() << s +"/c.api" << s +"/cpp.api" << s +"/glut.api" << s +"/opengl.api" << s +"/qt-4.3.2.api" );
+	setValue( "SourceAPIs/C++", QStringList() << s +"/c.api" << s +"/cpp.api" << s +"/glut.api" << s +"/opengl.api" << s +"/qt-4.4.0.api" );
 	// translations
 	l.clear();
 	l << QString( "%1/translations" ).arg( mPath );
