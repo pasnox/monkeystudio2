@@ -20,7 +20,7 @@
 #include "./kernel/gdbBridgeEditor.h"
 #include "./kernel/gdbKernelDispatcher.h"
 
-#include "./addon/gdbBreakpoint.h"
+#include "./addon/gdbBreakpoint/gdbBreakpoint.h"
 #include "./addon/gdbBacktrace.h"
 
 
@@ -82,11 +82,7 @@ public slots:
 	void onActionContinue();
 	void onActionStepOver();
 	void onActionStepInto();
-	void onActionStop();
 
-// test breakpoint
-void onActionToggleBreak();
-	
 	// Gdb
 	void gdbStarted();
 	void gdbFinished(  int a , QProcess::ExitStatus );

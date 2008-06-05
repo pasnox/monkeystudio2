@@ -23,7 +23,7 @@
 #include <QTextCodec>
 
 
-GdbBreakpoint::GdbBreakpoint(QObject * parent, QPointer<GdbParser> pa , QPointer<GdbProcess> pr) : GdbCore(parent, pa, pr)
+GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 {
 	// new connexion for auto-call onBreakpointAdd()
 	Connect = new GdbConnectTemplate<GdbBreakpoint>;
@@ -65,9 +65,11 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent, QPointer<GdbParser> pa , QPointer
 
 	Connect->add(this, interpreterDelBreakpoint, &GdbBreakpoint::onBreakpointDelete);
 
-	mWidget = new QTextEdit();
+	mWidget = UIGdbBreakpoint::self();
+//	new QTextEdit();
 }
 
+//
 
 GdbBreakpoint::~GdbBreakpoint()
 {
@@ -76,22 +78,28 @@ GdbBreakpoint::~GdbBreakpoint()
 	delete mWidget;
 }
 
+//
+
 QString GdbBreakpoint::name()
 {
 	return "GdbBreakpoint";
 }
 
+//
 
 QPointer<QWidget> GdbBreakpoint::widget()
 {
 	return (QPointer<QWidget>)( mWidget );
 }
 
+//
+
 void GdbBreakpoint::interpreter(const QPointer<BaseInterpreter> & i, const int & id, const QString & s)
 {
 	Connect->call( i, id, s);
 }
 
+//
 
 Breakpoint * GdbBreakpoint::findByName(const QString & fileName)
 {
@@ -105,6 +113,8 @@ Breakpoint * GdbBreakpoint::findByName(const QString & fileName)
 	return NULL;
 }
 
+//
+
 int   GdbBreakpoint::asBreakpointAtLine(Breakpoint *b, int line)
 {
 	int i=0;
@@ -116,6 +126,8 @@ int   GdbBreakpoint::asBreakpointAtLine(Breakpoint *b, int line)
 	return -1;
 }
 
+//
+
 void GdbBreakpoint::removeBreakpoint(Breakpoint * bp)
 {
 	int i = breakpointList.indexOf(bp);
@@ -126,29 +138,45 @@ void GdbBreakpoint::removeBreakpoint(Breakpoint * bp)
 	}
 }
 
+//
+
 void GdbBreakpoint::removeAllBreakpoint()
 {
 	foreach(Breakpoint * bp, breakpointList)
 		delete bp;
 }
 
+//
+
 void GdbBreakpoint::gdbFinished()
 {
 	removeAllBreakpoint();
 	breakpointList.clear();
 	setWaitEndProcess(false);
+	desableBreakpointHit();
+	mWidget->upDateData(breakpointList);
 }
+
+//
 
 void GdbBreakpoint::gdbStarted()
 {
 	removeAllBreakpoint();
 	breakpointList.clear();
 	setWaitEndProcess(false);
+	desableBreakpointHit();
+	mWidget->upDateData(breakpointList);
 }
+
+//
 
 void GdbBreakpoint::targetRunning(const int & , const QString & )
 {
+	desableBreakpointHit();
+	mWidget->upDateData(breakpointList);
 }
+
+//
 
 void GdbBreakpoint::targetStopped(const int & , const QString & s)
 {
@@ -159,43 +187,59 @@ void GdbBreakpoint::targetStopped(const int & , const QString & s)
 		Breakpoint 1, main (argc=604801882, argv=0x8b240489) at src/main.cpp:13
 	*/
 
-	mWidget->append("*** target stopped ***");
-
 	QString answer = findValue(s, "answerGdb");
 	QRegExp r("^Breakpoint\\s+(\\d+),\\s*.*at\\s+(.*):(\\d+)");
+
+	desableBreakpointHit();
 
 	if(r.exactMatch(answer))
 	{
 		QStringList l = r.capturedTexts();
 		breakpointMoved(l.at(2), l.at(3).toInt(), l.at(1).toInt());
 	}
+	mWidget->upDateData(breakpointList);
 }
 
+//
+
+void GdbBreakpoint::targetExited(const int & , const QString & s)
+{
+	desableBreakpointHit();
+	mWidget->upDateData(breakpointList);
+}
+
+//
+
+void GdbBreakpoint::desableBreakpointHit()
+{
+	foreach(Breakpoint *bp , breakpointList)
+	{
+		for(int i=0; i<bp->bp.count(); i++)
+		{
+			bp->bp[i].hit = false;
+		}
+	}
+
+}
 
 void GdbBreakpoint::breakpointMoved(const QString & fileName, const int & line, const int & index)
 {
 	Breakpoint * bp = findByName(fileName);
 	if(bp)
 	{
-
 		for(int i=0; i< bp->bp.count() ; i++)
 		{
+			// move breakpoint under editor
 			BaseBreakpoint b = bp->bp.at(i);
 			// line under gdb as changed
 			if(b.index == index && b.line != line)
 			{
 				int r  = asBreakpointAtLine(bp,line);
 				if(r != -1) 
-				{
 					// clear to editor
 					toggleBreakpoint(bp->fileName, b.line);
-					
-//					QMessageBox::warning(NULL,"breakpoint","break deja present");
-				}
 				else
 				{
-						mWidget->append("Gdb as moved breakpoint " + QString::number(b.line) + " to " + QString::number(line));
-
 						// clear current breakpoint
 						emit onToggleBreakpoint(bp->fileName, b.line, false);
 						bp->bp[i].line = line;
@@ -203,11 +247,17 @@ void GdbBreakpoint::breakpointMoved(const QString & fileName, const int & line, 
 						emit onToggleBreakpoint(bp->fileName, bp->bp.at(i).line, true);
 				}
 			}
+
+			// check if breakpoint hit fior show icon under TreeView
+			if(b.index == index) bp->bp[i].hit = true;
+			else bp->bp[i].hit = false;
+		
 		}
 	}
 }
 
 //main function
+
 void GdbBreakpoint::toggleBreakpoint(const QString & fileName, const int & line)
 {
 	
@@ -216,60 +266,60 @@ void GdbBreakpoint::toggleBreakpoint(const QString & fileName, const int & line)
 
 	Breakpoint *  bp = findByName(fileName);
 
-	mWidget->append("*** user toggle breakpoint ***");
+//	mWidget->append("*** user toggle breakpoint ***");
 	
 	if(bp)
 	{
-		mWidget->append("file found");
+//		mWidget->append("file found");
 		// file source exist
 		// have already bp in this line ?
 		int index  = asBreakpointAtLine(bp,line);
 		if(index != -1)
 		{
-			mWidget->append("line found (delete)");
+//			mWidget->append("line found (delete)");
 		
 			GdbCore::Parser()->setNextCommand("delete " + QString::number(bp->bp.at(index).index));
 			GdbCore::Parser()->changeAnswerInterpreter(interpreterDelBreakpoint, 
 				"^info,interpreter=\"" + name() + "\",event=\"Breakpoint-Delete\",fileName=\""+ fileName +"\",line=\""+ QString::number(line) +"\",answerGdb=\"");
 			GdbCore::Process()->sendRawData("delete " +  QByteArray::number(bp->bp.at(index).index));
 
-			mWidget->append("send -> delete " +  QString::number(bp->bp.at(index).index) );
+//			mWidget->append("send -> delete " +  QString::number(bp->bp.at(index).index) );
 			setWaitEndProcess(true);
 		}
 		else // add
 		{
-			mWidget->append("line no found (add)");
+//			mWidget->append("line no found (add)");
 		
 			GdbCore::Parser()->setNextCommand("b " + fileName + ":" + QString::number(line));
 			GdbCore::Parser()->changeAnswerInterpreter(interpreterAddBreakpoint, 
 				"^info,interpreter=\"" + name() + "\",event=\"Breakpoint-Add\",fileName=\""+ fileName +"\",line=\""+ QString::number(line) +"\",answerGdb=\"");
 			GdbCore::Process()->sendRawData("b " + fileName.toLocal8Bit() + ":" + QByteArray::number(line));
 
-			mWidget->append("send -> b " + fileName + ":" + QString::number(line) );
+//			mWidget->append("send -> b " + fileName + ":" + QString::number(line) );
 			setWaitEndProcess(true);
 		}
 	}
 	else // pas de fichier source donc add bp
 	{
-		mWidget->append("file no found (add first)");
+//		mWidget->append("file no found (add first)");
 		
 		GdbCore::Parser()->setNextCommand("b " + fileName + ":" + QString::number(line));
 		GdbCore::Parser()->changeAnswerInterpreter(interpreterAddBreakpoint, 
 			"^info,interpreter=\"" + name() + "\",event=\"Breakpoint-Add\",fileName=\""+ fileName +"\",line=\""+ QString::number(line) +"\",answerGdb=\"");
 		GdbCore::Process()->sendRawData("b " + fileName.toLocal8Bit() + ":" + QByteArray::number(line));
 
-		mWidget->append("send -> b " + fileName + ":" + QString::number(line) );
+//		mWidget->append("send -> b " + fileName + ":" + QString::number(line) );
 
 		setWaitEndProcess(true);
 	}
 }
 
-
+//
 
 void GdbBreakpoint::onBreakpointAdd( int , QString s)
 {
 
-	mWidget->append("gdb -> " + s);
+//	mWidget->append("gdb -> " + s);
 
 	QString n = findValue(s,"fileName");
 
@@ -287,16 +337,18 @@ void GdbBreakpoint::onBreakpointAdd( int , QString s)
 			{
 				QStringList l = r.capturedTexts();
 				BaseBreakpoint p;
+				p.hit = false;
 				p.line = findValue(s,"line").toInt();
 				p.index = l.at(1).toInt();
-				p.type = 0;
-				p.enable = 1;
+				p.type = 1;
+				p.enable = true;
+				p.condition = "No implemented";
 				bp->bp << p;
 
 				setWaitEndProcess(false);
 				emit  onToggleBreakpoint(bp->fileName, p.line, true );
 
-				mWidget->append("-> breakpoint add sucess full");
+//				mWidget->append("-> breakpoint add sucess full");
 
 			}
 		}
@@ -308,26 +360,31 @@ void GdbBreakpoint::onBreakpointAdd( int , QString s)
 				Breakpoint * b = new Breakpoint;
 				b->fileName = n;
 				BaseBreakpoint p;
+				p.hit = false;
 				p.line = findValue(s,"line").toInt();
 				p.index = l.at(1).toInt();
-				p.type = 0;
-				p.enable = 1;
+				p.type = 1;
+				p.enable = true;
+				p.condition = "No implemented";
+
 				b->bp << p;
 				breakpointList << b;
 
 				setWaitEndProcess(false);
 				emit  onToggleBreakpoint(b->fileName, p.line, true );
 
-				mWidget->append("-> breakpoint add sucess full");
+//				mWidget->append("-> breakpoint add sucess full");
 			}
 		}
+		mWidget->upDateData(breakpointList);
 	}
 }
 
+//
 
 void GdbBreakpoint::onBreakpointDelete( int , QString s)
 {
-	mWidget->append("gdb -> " + s);
+//	mWidget->append("gdb -> " + s);
 	QString n = findValue(s,"fileName");
 
 	if( !n.isEmpty())
@@ -342,7 +399,7 @@ void GdbBreakpoint::onBreakpointDelete( int , QString s)
 				bp->bp.removeAt(index);	
 				setWaitEndProcess(false);
 
-				mWidget->append("-> breakpoint deleted sucess full");
+//				mWidget->append("-> breakpoint deleted sucess full");
 			}
 			else
 				QMessageBox::warning(NULL,"Critical erreur","Repport this bug : Delete breakpoint but no have this line !");
@@ -352,13 +409,17 @@ void GdbBreakpoint::onBreakpointDelete( int , QString s)
 	
 		if(bp && bp->bp.count() == 0)
 			removeBreakpoint(bp);
+
+		mWidget->upDateData(breakpointList);
+
 	}
 }
 
+//
 
 void GdbBreakpoint::onRequestBreakpoint(const QString & fileName)
 {
-	mWidget->append("*** Request breakpoint for : " + fileName);
+//	mWidget->append("*** Request breakpoint for : " + fileName);
 
 	Breakpoint *bp = findByName(fileName);
 	if(bp)
@@ -369,3 +430,4 @@ void GdbBreakpoint::onRequestBreakpoint(const QString & fileName)
 		}
 	}
 }
+

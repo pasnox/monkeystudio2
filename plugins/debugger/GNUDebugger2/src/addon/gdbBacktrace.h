@@ -33,7 +33,7 @@ class GdbBacktrace : public GdbCore
 
 public:
 
-	GdbBacktrace(QObject * parent = 0, QPointer<GdbParser> = 0, 	QPointer<GdbProcess> = 0);
+	GdbBacktrace(QObject * parent = 0);
 	~GdbBacktrace();
 
 public slots:

@@ -3,6 +3,11 @@
 
 #include <maininterface.h>
 
+#include <coremanager.h>
+#include <settingsmanager.h>
+#include <monkey.h>
+#include <queuedstatusbar.h>
+
 #include <QIcon>
 
  
@@ -15,11 +20,38 @@ GNUDebugger::GNUDebugger()
 	mPluginInfos.Author = "Pinon Yannick aka Xiantia  <private mail>";
 	mPluginInfos.Type = BasePlugin::iDebugger;
 	mPluginInfos.Name = PLUGIN_NAME;
-	mPluginInfos.Version = "1.3.0";
+	mPluginInfos.Version = "1.3.1";
 	mPluginInfos.Enabled = false;
 
-//	patternFile = new GdbPatternFile(this);
-//	patternFile->load(
+	// get the new instance of GdbPattermFile
+	patternFile = GdbPatternFile::instance(this);
+
+	// load pattern
+	QStringList pluginsPath = MonkeyCore::settings()->value( "Plugins/Path" ).toStringList();
+	// get all files in plugins path nammed 'gdbparsing.txt'
+	QFileInfoList files;
+	QDir pluginsDir;
+	for ( int i = 0; i < pluginsPath.count(); i++ )
+	{
+		QString path = pluginsPath.at( i );
+		if ( QFileInfo( path ).isRelative() )
+			path = QDir::cleanPath( QApplication::applicationDirPath() +"/" + path );
+		pluginsDir.setPath( path );
+		files << pMonkeyStudio::getFiles( pluginsDir, QString( "gdbparsing.txt" ), true );
+	}
+
+/*
+<PasNox> pQueuedMessage msg;
+<PasNox> msg.Background = QBrush( ... );
+<PasNox> addMessage( msg );
+*/
+
+	// load txt file if possible, else warn user in status bar
+	if ( files.isEmpty() || ! patternFile->load( files.first().absoluteFilePath() ) )
+		MonkeyCore::statusBar()->appendMessage( tr( "gdbparsing.txt not found. Debugger can not work !" ), 5000 ,QPixmap(), QBrush(QColor(255,80,80)));
+	else 	MonkeyCore::statusBar()->appendMessage( tr( "GdbPatternFile initializing sucess full" ), 1000 ,QPixmap(), QBrush(QColor(120,250,100)));
+
+
 }
 
 GNUDebugger::~GNUDebugger()
@@ -42,7 +74,6 @@ bool GNUDebugger::setEnabled( bool b )
 		actionList["aContinue"] = MonkeyCore::menuBar()->action( "mDebugger/aContinue", tr( "Continue to next breakpoint" ), QIcon( ":/icons/play.png" ) );
 		actionList["aStepOver"] = MonkeyCore::menuBar()->action( "mDebugger/aStepover", tr( "Step over" ), QIcon( ":/icons/stepover.png" ) );
 		actionList["aStepInto"] = MonkeyCore::menuBar()->action( "mDebugger/aStepinto", tr( "Step into" ), QIcon( ":/icons/stepinto.png" ) );
-		actionList["aStop"] = MonkeyCore::menuBar()->action( "mDebugger/aStop", tr( "Stop" ), QIcon( ":/icons/stop.png" ) );
 		actionList["aExitGdb"] = MonkeyCore::menuBar()->action( "mDebugger/aQuit", tr( "Quit debug mode" ), QIcon( ":/icons/close.png" ) );
 		// connections
 		connect( actionList["aLoadTarget"], SIGNAL( triggered() ), mDockGNUDebugger, SLOT( onActionLoadTarget() ) );
@@ -50,7 +81,6 @@ bool GNUDebugger::setEnabled( bool b )
 		connect( actionList["aContinue"], SIGNAL( triggered() ), mDockGNUDebugger, SLOT( onActionContinue() ) );
 		connect( actionList["aStepOver"], SIGNAL( triggered() ), mDockGNUDebugger, SLOT( onActionStepOver() ) );
 		connect( actionList["aStepInto"] , SIGNAL( triggered() ), mDockGNUDebugger, SLOT( onActionStepInto() ) );
-		connect( actionList["aStop"], SIGNAL( triggered() ), mDockGNUDebugger, SLOT( onActionStop() ) );
 		connect( actionList["aExitGdb"], SIGNAL( triggered() ), mDockGNUDebugger, SLOT( onActionExit() ) );
 
 		// init action disable
@@ -58,7 +88,6 @@ bool GNUDebugger::setEnabled( bool b )
 		actionList["aContinue"]->setEnabled( false );
 		actionList["aStepOver"]->setEnabled( false );
 		actionList["aStepInto"]->setEnabled( false );
-		actionList["aStop"]->setEnabled( false );
 		actionList["aExitGdb"]->setEnabled( false );
 
 		// separator and add icon to toolbar

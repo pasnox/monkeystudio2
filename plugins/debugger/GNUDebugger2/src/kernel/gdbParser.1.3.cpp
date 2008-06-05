@@ -25,7 +25,6 @@
 #include <monkey.h>
 #include <queuedstatusbar.h>
 
-//#include <QApplication>
 
 
 #define INFO_ID			10000
@@ -33,55 +32,25 @@
 #define PROMPT_ID		0
 
 
-GdbParser::GdbParser (QObject * parent) : QObject (parent)
+GdbParser::GdbParser (QObject * parent) : QObject (parent), mIsReady(1)
 {
+	// get the current instance
+	gdbPatternFile = GdbPatternFile::instance();
+	// new instance child clas
 	gdbInterpreter = new GdbInterpreter(this);
-	gdbPatternFile = new GdbPatternFile(this);
 	gdbRestoreLine = new GdbRestoreLine(this);
 
 	if(gdbInterpreter && gdbPatternFile && gdbRestoreLine)
 	{
-		// get plugins paths
-		QStringList pluginsPath = MonkeyCore::settings()->value( "Plugins/Path" ).toStringList();
-		// get all files in plugins path nammed 'know_list_and_id.txt'
-		QFileInfoList files;
-		QDir pluginsDir;
-		for ( int i = 0; i < pluginsPath.count(); i++ )
-		{
-			QString path = pluginsPath.at( i );
-			if ( QFileInfo( path ).isRelative() )
-				path = QDir::cleanPath( QApplication::applicationDirPath() +"/" + path );
-			pluginsDir.setPath( path );
-			files << pMonkeyStudio::getFiles( pluginsDir, QString( "gdbparsing.txt" ), true );
-		}
 	
-		// load txt file if possible, else warn user in status bar
-		if ( files.isEmpty() || ! gdbPatternFile->load( files.first().absoluteFilePath() ) )
-			MonkeyCore::statusBar()->appendMessage( tr( "gdbparsing.txt not found. Debugger can not work !" ), 5000 );
-		else
-		{
-	
-			crlf = crlf = pMonkeyStudio::getEol().toLocal8Bit();
-			/*#ifdef Q_OS_WIN 
-				crlf = "\r\n";
-			#endif
-			#ifdef Q_OS_MAC 
-				crlf = "\n";
-			#endif
-			#ifdef Q_OS_UNIX
-				crlf = "\n";
-			#endif
-			*/
-			/*
-				Parsing and if ...
-			*/
+		crlf = crlf = pMonkeyStudio::getEol().toLocal8Bit();
 
-			mEndParsing.clear();
-			mEndParsing << QRegExp(".*\\(gdb\\).$")
-				<< QRegExp("^\\(gdb\\)\\s$")
-				<< QRegExp(".*Continuing\\."+ crlf + "$") 
-				<< QRegExp("^Starting program:.*") 
-				<< QRegExp(".*\\(y or n\\).$");
+		mEndParsing.clear();
+		mEndParsing << QRegExp(".*\\(gdb\\).$")
+			<< QRegExp("^\\(gdb\\)\\s$")
+			<< QRegExp(".*Continuing\\."+ crlf + "$") 
+			<< QRegExp("^Starting program:.*") 
+			<< QRegExp(".*\\(y or n\\).$");
 
 			/*
 				Breakpoint 2, main (argc=Cannot access memory at address 0x0
@@ -97,38 +66,38 @@ GdbParser::GdbParser (QObject * parent) : QObject (parent)
 //			gdbRestoreLine->add( "^#\\d+\\s.*Cannot access memory at address\\s0x[0-9a-FA-F]{1,}" ,
 //				"\\)\\sat\\s.*:\\d+$");
 	
-			/*
-				Reading symbols from C:/DEV/debugger/debug/debugger.exe...
-				done.
-			*/
-			gdbRestoreLine->add("^Reading symbols from .*\\.\\.\\..*",
-				".*done\\.$");
+		/*
+			Reading symbols from C:/DEV/debugger/debug/debugger.exe...
+			done.
+		*/
+		gdbRestoreLine->add("^Reading symbols from .*\\.\\.\\..*",
+			".*done\\.$");
 
-			/*
-				Breakpoint 14, UIForm::UIForm (this=0x4b61ee0, parent=0x0)
-					at src/ui/UIForm.cpp:40
+		/*
+			Breakpoint 14, UIForm::UIForm (this=0x4b61ee0, parent=0x0)
+				at src/ui/UIForm.cpp:40
 
-				Breakpoint 3, QInternal::activateCallbacks (cb=EventNotifyCallback, 
-				    parameters=0x22f600) at global/qglobal.cpp:2690
+			Breakpoint 3, QInternal::activateCallbacks (cb=EventNotifyCallback, 
+				parameters=0x22f600) at global/qglobal.cpp:2690
 
-			*/			
-			gdbRestoreLine->add("^Breakpoint\\s\\d+,\\s.*",
-				".*at\\s+[^:]+:\\d+$");
+		*/			
+		gdbRestoreLine->add("^Breakpoint\\s\\d+,\\s.*",
+			".*at\\s+[^:]+:\\d+$");
 
-			cmdList.clear();
+		mCmdList.clear();
 
-			MonkeyCore::statusBar()->appendMessage( tr( "GdbParser initializing sucess full" ), 5000 );
-		}
+		MonkeyCore::statusBar()->appendMessage( tr( "GdbParser initializing sucess full" ), 1000 ,QPixmap(), QBrush(QColor(120,250,100)));
 	}
-	else MonkeyCore::statusBar()->appendMessage( tr( "GdbParser initializing FAILED" ), 5000 );
+	else MonkeyCore::statusBar()->appendMessage( tr( "GdbParser initializing FAILED" ), 5000,QPixmap(), QBrush(QColor(255,80,80)) );
+
 }
 
 //
 GdbParser::~GdbParser()
 {
-	cmdList.clear();
+	mCmdList.clear();
 	mEndParsing.clear();
-	currentCmd.clear();
+	mCurrentCmd.clear();
 	// Qt delete for me all child. 
 }
 
@@ -181,21 +150,21 @@ bool GdbParser::checkEndParsing(const QString data)
 
 void GdbParser::getCommand()
 {
-	if(cmdList.count())
+	if(mCmdList.count())
 	{
-		currentCmd = cmdList.at(0);
-		onInfo(-1,"Get current command" + currentCmd);
-		cmdList.removeAt(0);
+		mCurrentCmd = mCmdList.at(0);
+		onInfo(-1,"Get current command" + mCurrentCmd);
+		mCmdList.removeAt(0);
 	}
 }
 
 //
 void GdbParser::switchCommand(const QString & s)
 {
-	if(cmdList.count() && s == "(gdb) ")
+	if(mCmdList.count() && s == "(gdb) ")
 	{
-		currentCmd = cmdList.at(0);
-		cmdList.removeAt(0);
+		mCurrentCmd = mCmdList.at(0);
+		mCmdList.removeAt(0);
 	}
 }
 
@@ -203,7 +172,7 @@ void GdbParser::switchCommand(const QString & s)
 bool GdbParser::processParsing(const QByteArray & storg)
 {
 	QByteArray st = storg;
-
+	mIsReady = false;
 
 #ifdef Q_OS_WIN
 
@@ -325,7 +294,7 @@ bool GdbParser::processParsing(const QByteArray & storg)
 			else 
 			{
 				// find interpreter
-				QPointer<BaseInterpreter> bi = gdbInterpreter->find(currentCmd, oneLine);
+				QPointer<BaseInterpreter> bi = gdbInterpreter->find(mCurrentCmd, oneLine);
 					
 				if( !bi )
 				{
@@ -360,8 +329,8 @@ bool GdbParser::processParsing(const QByteArray & storg)
 		}
 
 		gdbBuffer.clear();
-		emit parserReady();
-//		onInfo(-1, "status=\"PARSER READY");
+//		mIsReady = true;
+//		emit parserReady();
 		return true;
 	}
 	return false;
@@ -369,12 +338,12 @@ bool GdbParser::processParsing(const QByteArray & storg)
 //
 void GdbParser::setNextCommand(QString cmd)
 {
-	cmdList << cmd;
+	mCmdList << cmd;
 }
 
 void GdbParser::clearAllCommand()
 {
-	cmdList.clear();
+	mCmdList.clear();
 }
 
 //
@@ -385,9 +354,11 @@ void GdbParser::onDone(int id, QString st)
 {
 	switch(id)
 	{
-		case -1 : emit done(id, "^done,interpreter=\"GdbParser\",event=\"generic information (not parsing)\",answerGdb=\"" + st + "\",currentCmd=\"" + currentCmd +"\"");break;
-		case PROMPT_ID: emit done(id, "^done,interpreter=\"GdbParser\",event=\"prompt\",answerGdb=\"" + st + "\",currentCmd=\"" + currentCmd +"\""); 
-//			getCommand();
+		case -1 : emit done(id, "^done,interpreter=\"GdbParser\",event=\"generic information (not parsing)\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\"");break;
+		case PROMPT_ID: emit done(id, "^done,interpreter=\"GdbParser\",event=\"prompt\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\""); 
+		mIsReady = true;
+		emit parserReady();
+			getCommand();
 			break;
 
 	}
@@ -402,16 +373,16 @@ void GdbParser::onInfo(int id, QString st)
 		break;
 		//[10005]^Reading symbols from .*done\.
 		case 10005 : 
-			emit targetLoaded(id, "^info,interpreter=\"GdbParser\",event=\"target-loaded\",answerGdb=\"" + st + "\",currentCmd=\"" + currentCmd +"\""); break;
+			emit targetLoaded(id, "^info,interpreter=\"GdbParser\",event=\"target-loaded\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\""); break;
 		//[10016]^Kill the program being debugged\? \(y or n\) \[answered Y; input not from terminal\]
 		case 10016 :
 		//[10007]^Program exited normally\.
 		case 10007 : 
-			emit targetExited(id, "^info,interpreter=\"GdbParser\",event=\"target-exited\",answerGdb=\"" + st + "\",currentCmd=\"" + currentCmd +"\""); break;
+			emit targetExited(id, "^info,interpreter=\"GdbParser\",event=\"target-exited\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\""); break;
 	
 		case 10009 : // breakpoint hit
-				emit targetStopped(id, "^info,interpreter=\"GdbParser\",event=\"target-stopped\",answerGdb=\"" + st + "\",currentCmd=\"" + currentCmd +"\""); 
-				emit info(id, "^info,interpreter=\"GdbParser\",event=\"breakpoint-hit\",answerGdb=\"" + st + "\",currentCmd=\"" + currentCmd +"\"");
+				emit targetStopped(id, "^info,interpreter=\"GdbParser\",event=\"target-stopped\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\""); 
+				emit info(id, "^info,interpreter=\"GdbParser\",event=\"breakpoint-hit\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\"");
 		break;
 
 		case 10010 : // run "r" command
@@ -419,11 +390,11 @@ void GdbParser::onInfo(int id, QString st)
 		case 10012 : // continue. "c" command
 		case 10013 :
 		case 10014 :
-			emit targetRunning(id, "^info,interpreter=\"GdbParser\",event=\"target-running\",answerGdb=\"" + st + "\",currentCmd=\"" + currentCmd +"\""); break;
+			emit targetRunning(id, "^info,interpreter=\"GdbParser\",event=\"target-running\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\""); break;
 
-		default : if(id>=INFO_ID) emit info(id, "^info,interpreter=\"GdbParser\",event=\"info found (parsing)\",answerGdb=\"" + st + "\",currentCmd=\"" + currentCmd +"\"");
+		default : if(id>=INFO_ID) emit info(id, "^info,interpreter=\"GdbParser\",event=\"info found (parsing)\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\"");
 			// Interpreter command
-			else emit info(id,st + "\",currentCmd=\"" + currentCmd +"\"");
+			else emit info(id,st + "\",currentCmd=\"" + mCurrentCmd +"\"");
 	}
 }
 //
@@ -437,6 +408,6 @@ void GdbParser::onError(int id, QString st)
 			emit targetNoLoaded(id, st);
 		break;
 		default : 
-			emit error(id, "^error,interpreter=\"GdbParser\",event=\"error found\",answerGdb=\"" + st + "\",currentCmd=\"" + currentCmd +"\"");
+			emit error(id, "^error,interpreter=\"GdbParser\",event=\"error found\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\"");
 	}
 }

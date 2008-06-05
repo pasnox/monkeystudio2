@@ -1,6 +1,7 @@
 #ifndef GDBPROCESS_H
 #define GDBPROCESS_H
 //
+#include "fresh.h"
 
 #include <QProcess>
 #include <QBuffer>
@@ -8,10 +9,12 @@
 #include <QHash>
 #include <QTimer>
 
-class  GdbProcess : public QProcess
+class  GdbProcess : public QProcess, public QSingleton<GdbProcess>
 {
+
 	Q_OBJECT
-	
+	friend class QSingleton<GdbProcess>;
+
 public:
 
 	GdbProcess( QObject *parent = 0 );

@@ -3,8 +3,8 @@
 
 
 
-GdbCore::GdbCore(QObject * parent, QPointer<GdbParser> pa , 	QPointer<GdbProcess> pr) : QObject (parent)
-{ mParser = pa; mProcess = pr; watchDog.setSingleShot(true);
+GdbCore::GdbCore(QObject * parent) : QObject (parent)
+{ mParser = GdbParser::instance(); mProcess = GdbProcess::instance(); watchDog.setSingleShot(true);
 connect(&watchDog, SIGNAL(timeout()), this , SLOT(onTimer()));
 }
 

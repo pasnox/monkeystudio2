@@ -15,13 +15,15 @@
 #include "gdbCore.h"
 #include "gdbParser.1.3.h"
 
-class GdbKernelDispatcher : public QObject
+class GdbKernelDispatcher : public QObject, public QSingleton<GdbKernelDispatcher>
 {
+
 	Q_OBJECT
+	friend class QSingleton<GdbKernelDispatcher>;
 
 public :
 
-	GdbKernelDispatcher(QObject * parent = 0, QPointer<GdbParser> = 0);
+	GdbKernelDispatcher(QObject * parent = 0);
 	~GdbKernelDispatcher();
 
 	void add(/*const QPointer<class GdbParser> &, */ const QPointer< class GdbCore> &);

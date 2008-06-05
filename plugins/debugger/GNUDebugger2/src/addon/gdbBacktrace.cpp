@@ -22,7 +22,7 @@
 #include <QFileInfo>
 
 
-GdbBacktrace::GdbBacktrace(QObject * parent, QPointer<GdbParser> pa , QPointer<GdbProcess> pr) : GdbCore(parent, pa, pr)
+GdbBacktrace::GdbBacktrace(QObject * parent) : GdbCore(parent)
 {
 	// new connexion for auto-call onBreakpointAdd()
 	Connect = new GdbConnectTemplate<GdbBacktrace>;

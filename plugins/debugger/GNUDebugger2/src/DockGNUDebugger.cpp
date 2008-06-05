@@ -6,6 +6,7 @@
 #include <maininterface.h>
 #include <qscintillamanager.h>
 #include "monkey.h"
+//#include "xupmanager.h"
 
 /* debugger */
 //
@@ -74,14 +75,14 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 	connect (MonkeyCore::mainWindow(), SIGNAL( aboutToClose()), this , SLOT(onAboutToClose()));
 
 	// create kernel (parser ,process, ...)
-	Parser = new GdbParser(this);
-	Process = new GdbProcess(this);
-	Bridge = new GdbBridgeEditor(this);
-	Dispatcher = new GdbKernelDispatcher(this, Parser);
+	Parser =  GdbParser::instance(this);
+	Process = GdbProcess::instance(this);
+	Bridge =  GdbBridgeEditor::instance(this);
+	Dispatcher = GdbKernelDispatcher::instance(this);
 
 	// create addon
-	Breakpoint = new GdbBreakpoint(this, Parser, Process);
-	Backtrace = new GdbBacktrace(this, Parser, Process);
+	Breakpoint = new GdbBreakpoint(this);
+	Backtrace = new GdbBacktrace(this);
 
 
 	if( !Parser)
@@ -188,7 +189,6 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 		if(Backtrace->isEnabled()) mainTabWidget->addTab(Backtrace->widget(),Backtrace->name());
 
 		crlf = pMonkeyStudio::getEol().toLocal8Bit();
-
 	}
 }
 
@@ -231,6 +231,10 @@ void DockGNUDebugger::onActionLoadTarget()
 	isTargetRunning = isGdbStarted = false;
 	Parser->clearAllCommand();
 
+//	UIXUPManager p* = MonkeyCore::projectsManager()->currentProject();
+//	if(MonkeyCore::projectsManager()->currentProject())
+//		QString s = MonkeyCore::projectsManager()->currentProject()->projectSettingsValue( "EXECUTE_DEBUG" );
+	
 	rawLog->append("*** selected target ***");
 	// open dialog for select target
 	mSelectedTarget = QFileDialog::getOpenFileName(this, tr("Select your target"));
@@ -265,63 +269,54 @@ void DockGNUDebugger::onActionExit()
 
 void DockGNUDebugger::onActionRestart()
 {
-	setEnabledActions(false);
-	rawLog->append("*** User restart ***");
-	Parser->setNextCommand("r");
-	Process->sendRawData("r");
-	Process->onParserReady();
+	if(Parser->isReady())
+	{
+		setEnabledActions(false);
+		rawLog->append("*** User restart ***");
+		Parser->setNextCommand("r");
+		Process->sendRawData("r");
+	}
 }
 
 //
 
 void DockGNUDebugger::onActionContinue()
 {
-	setEnabledActions(false);
-	rawLog->append("*** User continue ***");
-	Parser->setNextCommand("c");
-	Process->sendRawData("c");
-	Process->onParserReady();
+	if(Parser->isReady())
+	{
+		setEnabledActions(false);
+		rawLog->append("*** User continue ***");
+		Parser->setNextCommand("c");
+		Process->sendRawData("c");
+	}
 }
 
 //
 
 void DockGNUDebugger::onActionStepOver()
 {
-	setEnabledActions(false);
+	if(Parser->isReady())
+	{
+		setEnabledActions(false);
 	
-	rawLog->append("*** User step over ***");
-	Parser->setNextCommand("n");
-	Process->sendRawData("n");
-	Process->onParserReady();
-
+		rawLog->append("*** User step over ***");
+		Parser->setNextCommand("n");
+		Process->sendRawData("n");
+	}
 }
 
 //
 
 void DockGNUDebugger::onActionStepInto()
 {
-	setEnabledActions(false);
+	if(Parser->isReady())
+	{
+		setEnabledActions(false);
 
-	rawLog->append("*** User step into ***");
-	Parser->setNextCommand("s");
-	Process->sendRawData("s");
-	Process->onParserReady();
-}
-
-//
-
-void DockGNUDebugger::onActionStop()
-{
-	rawLog->append("*** User stop debugging ***");
-
-}
-
-// test breakpoint
-
-void DockGNUDebugger::onActionToggleBreak()
-{
-	rawLog->append("*** User toggle breakpoint ***");
-	Process->sendRawData("b main.cpp:69");
+		rawLog->append("*** User step into ***");
+		Parser->setNextCommand("s");
+		Process->sendRawData("s");
+	}
 }
 
 
@@ -355,10 +350,19 @@ void DockGNUDebugger::gdbFinished( int a , QProcess::ExitStatus e)
 {
 	rawLog->append("*** Gdb finished successfull code : " + QString::number(a) + " ***");
 
+	switch(e)
+	{
+		case QProcess::NormalExit : rawLog->append("The process exited normally.");
+		break;
+		case QProcess::Crashed : rawLog->append("The process crashed.");
+	}
+
+
+	Dispatcher->gdbFinished();
+
 	setEnabledActions(false);
 	mActionList->value("aLoadTarget")->setEnabled(true);
 
-	Dispatcher->gdbFinished();
 	isGdbStarted = false;
 }
 
@@ -368,11 +372,25 @@ void DockGNUDebugger::gdbFinished( int a , QProcess::ExitStatus e)
 void DockGNUDebugger::gdbError( QProcess::ProcessError e)
 {
 	rawLog->append("*** Critical gdb Erreur code : " + QString::number(e) + " ***");
+	switch(e)
+	{
+		case QProcess::FailedToStart : rawLog->append("The process failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program.");
+		break;
+		case QProcess::Crashed : rawLog->append("The process crashed some time after starting successfully.");
+		break;
+		case  QProcess::Timedout : rawLog->append("The last waitFor...() function timed out. The state of QProcess is unchanged, and you can try calling waitFor...() again.");
+		break;
+		case QProcess::WriteError : rawLog->append("An error occurred when attempting to write to the process. For example, the process may not be running, or it may have closed its input channel.");
+		break;
+		case QProcess::ReadError : rawLog->append("An error occurred when attempting to read from the process. For example, the process may not be running.");
+		break;
+		case QProcess::UnknownError : rawLog->append("An unknown error occurred. This is the default return value of error().");
+	}
+
+	Dispatcher->gdbError();
 
 	setEnabledActions(false);
 	mActionList->value("aLoadTarget")->setEnabled(true);
-
-	Dispatcher->gdbError();
 
 	isGdbStarted = false;
 }
@@ -383,11 +401,11 @@ void DockGNUDebugger::onTargetLoaded(int id, QString st)
 {
 	rawLog->append("*** Target loaded success full ***");
 
+	Dispatcher->targetLoaded(id, st);
+
 	setEnabledActions(false);
 	mActionList->value("aExitGdb")->setEnabled( true );
 	mActionList->value("aRestart")->setEnabled( true );
-
-	Dispatcher->targetLoaded(id, st);
 }
 
 //
@@ -427,10 +445,12 @@ void DockGNUDebugger::onTargetStopped(int id, QString st)
 	rawLog->append(QString::number(id) + " : " + st);
 	rawLog->append("*** Target stopped ***");
 
+
+	Dispatcher->targetStopped(id, st);
+
 	setEnabledActions( true );
 	mActionList->value("aLoadTarget")->setEnabled( false );
 
-	Dispatcher->targetStopped(id, st);
 	isTargetRunning = false;
 }
 
@@ -441,12 +461,12 @@ void DockGNUDebugger::onTargetExited(int id, QString st)
 	rawLog->append(QString::number(id) + " : " + st);
 	rawLog->append("*** Target exit success full ***");
 
+	Dispatcher->targetExited(id, st);
+	
 	setEnabledActions( false );
 	mActionList->value("aExitGdb")->setEnabled( true );
 	mActionList->value("aRestart")->setEnabled( true );
 
-	Dispatcher->targetExited(id, st);
-	
 	isTargetRunning = false;
 }
 

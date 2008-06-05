@@ -18,6 +18,7 @@
 	read pattern file and store this to listPattern
 
 */
+#include <fresh.h>
 
 #include <QObject>
 #include <QRegExp>
@@ -30,10 +31,11 @@ typedef struct GdbPattern
 };
 
 
-class GdbPatternFile : public QObject
+class GdbPatternFile : public QObject, public QSingleton<GdbPatternFile>
 {
 
 	Q_OBJECT
+	friend class QSingleton<GdbPatternFile>;
 
 public:
 

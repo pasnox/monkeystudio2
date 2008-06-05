@@ -24,7 +24,7 @@ class GdbCore : public QObject
 
 public:
 
-	GdbCore(QObject * parent = 0, QPointer<GdbParser> = 0, QPointer<GdbProcess> = 0);
+	GdbCore(QObject * parent = 0);
 	~GdbCore();
 
 	QPointer<GdbParser> Parser() {  return mParser;}

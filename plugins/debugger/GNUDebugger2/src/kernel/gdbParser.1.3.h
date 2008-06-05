@@ -10,6 +10,8 @@
 #ifndef GDBPARSER_H
 #define GDBPARSER_H
 
+#include "fresh.h"
+
 #include <QObject>
 #include <QString>
 
@@ -23,9 +25,11 @@
 
 
 
-class GdbParser : public QObject
+class GdbParser : public QObject, public QSingleton<GdbParser>
 {
+
 	Q_OBJECT
+	friend class QSingleton<GdbParser>;
 
 public:
 
@@ -48,6 +52,8 @@ public slots:
 	bool removeInterpreter( const QPointer<BaseInterpreter> & );
 	void changeAnswerInterpreter(const QPointer<BaseInterpreter> &, const QString &);
 
+	bool isReady() { return mIsReady;}
+
 private :
 
 	QPointer<GdbInterpreter> gdbInterpreter;
@@ -56,8 +62,8 @@ private :
 
 	QList<QRegExp> mEndParsing;
 
-	QStringList cmdList;
-	QString currentCmd;
+	QStringList mCmdList;
+	QString mCurrentCmd;
 
 	QString gdbBuffer;
 	
@@ -73,6 +79,8 @@ private :
 
 	void getCommand();
 	void switchCommand(const QString &);
+
+	bool mIsReady;
 
  signals:
 

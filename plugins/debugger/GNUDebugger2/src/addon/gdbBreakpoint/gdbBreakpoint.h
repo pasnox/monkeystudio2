@@ -22,23 +22,10 @@
 
 #include <QObject>
 #include <QTextEdit>
-#include "../kernel/gdbCore.h"
+#include "../../kernel/gdbCore.h"
+#include "./ui/UIGdbBreakpoint.h"
 
-
-	typedef struct BaseBreakpoint
-	{
-		int line;
-		int index;
-		int type;
-		int enable;
-	};
-
-
-	typedef struct Breakpoint
-	{
-		QString fileName;
-		QList<BaseBreakpoint> bp;
-	};
+#include "gdbBreakpointStruct.h"
 
 
 
@@ -49,7 +36,7 @@ class GdbBreakpoint : public GdbCore
 
 public:
 
-	GdbBreakpoint(QObject * parent = 0, QPointer<GdbParser> = 0, 	QPointer<GdbProcess> = 0);
+	GdbBreakpoint(QObject * parent = 0 );
 	~GdbBreakpoint();
 
 public slots:
@@ -68,6 +55,7 @@ public slots:
 	// target
 	void targetRunning(const int &, const QString &);
 	void targetStopped(const int &, const QString &);
+	void targetExited(const int &, const QString &);
 
 	QString name();
 	QPointer<QWidget> widget();
@@ -86,8 +74,10 @@ private:
 	void removeAllBreakpoint();
 
 	void breakpointMoved(const QString & , const int & , const int & );
+	void desableBreakpointHit();
 
-	QPointer<QTextEdit> mWidget;
+//	QPointer<QTextEdit> mWidget;
+	QPointer<UIGdbBreakpoint> mWidget;
 
 signals:
 

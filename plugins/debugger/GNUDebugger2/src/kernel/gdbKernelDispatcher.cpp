@@ -11,9 +11,9 @@
 #include "gdbKernelDispatcher.h"
 
 
-GdbKernelDispatcher::GdbKernelDispatcher(QObject * parent , QPointer<GdbParser> p) : QObject(parent)
+GdbKernelDispatcher::GdbKernelDispatcher(QObject * parent ) : QObject(parent)
 {
-	mParser = p;
+	mParser = GdbParser::instance();
 	addonList.clear();
 }
 

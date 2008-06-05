@@ -20,16 +20,11 @@ include( config.pri )
 	monkey_translations.files	= translations/*.qm
 
 	# debugger know_list_and_id
-	monkey_debuggerIniFile.path	= $${PACKAGE_DATAS}/plugins/GNUdbg
-	monkey_debuggerIniFile.files	= plugins/debugger/GNUDebugger/file
+	monkey_debuggerIniFile.path	= $${PACKAGE_DATAS}/plugins/GNUdbg2
+	monkey_debuggerIniFile.files	= plugins/debugger/GNUDebugger2/file
 
-	monkey_debuggerLog.path	= $${PACKAGE_DATAS}/plugins/GNUdbg
-	monkey_debuggerLog.files	= plugins/debugger/GNUDebugger/log
 
-	monkey_debuggerScript.path	= $${PACKAGE_DATAS}/plugins/GNUdbg
-	monkey_debuggerScript.files	= plugins/debugger/GNUDebugger/scripts
-
-	INSTALLS	= monkey_templates monkey_apis monkey_translations monkey_debuggerIniFile monkey_debuggerLog monkey_debuggerScript
+	INSTALLS	= monkey_templates monkey_apis monkey_translations monkey_debuggerIniFile
 
 	unix:!mac {
 		# plugins

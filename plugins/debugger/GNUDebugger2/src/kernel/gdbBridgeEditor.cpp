@@ -21,6 +21,8 @@ GdbBridgeEditor::GdbBridgeEditor(QObject *parent) : QObject(parent)
 
 GdbBridgeEditor::~GdbBridgeEditor()
 {
+	removeAllBreakpoints();
+	removeBacktrace();
 }
 
 // new file is opened, add this on list

@@ -33,10 +33,11 @@
 #include <qscintillamanager.h>
 
 
-class GdbBridgeEditor : public QObject
+class GdbBridgeEditor : public QObject , public QSingleton<GdbBridgeEditor>
 {
 
 	Q_OBJECT
+	friend class QSingleton<GdbBridgeEditor>;
 
 	typedef struct Editor
 	{
