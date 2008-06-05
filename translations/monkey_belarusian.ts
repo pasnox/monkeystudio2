@@ -3385,67 +3385,67 @@
         <translation type="obsolete">Файл</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="127"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="125"/>
         <source>&amp;New...</source>
         <translation type="unfinished">Новы...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="127"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="125"/>
         <source>Create a new file</source>
         <translation type="unfinished">Стварыць новы файл</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="129"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="127"/>
         <source>&amp;Open...</source>
         <translation type="unfinished">Адкрыць...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="129"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="127"/>
         <source>Open a file</source>
         <translation type="unfinished">Адкрыць файл</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="204"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="202"/>
         <source>&amp;Recents</source>
         <translation type="unfinished">Адкрытыя файлы</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="205"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="203"/>
         <source>&amp;Clear</source>
         <translation type="unfinished">Ачысціць</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="131"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="129"/>
         <source>Clear the recents files list</source>
         <translation type="unfinished">Ачысціць спіс адкрытых файлаў</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="134"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="132"/>
         <source>Session</source>
         <translation type="unfinished">Сессія</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="135"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="133"/>
         <source>Save</source>
         <translation type="unfinished">Захаваць</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="135"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="133"/>
         <source>Save the current session files list</source>
         <translation type="unfinished">Захаваць спіс адкрытых файлаў</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="136"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="134"/>
         <source>Restore</source>
         <translation type="unfinished">Аднавіць</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="136"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="134"/>
         <source>Restore the current session files list</source>
         <translation type="unfinished">Адвіць захаваны спіс адкрытых файлаў</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="193"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="191"/>
         <source>&amp;Save</source>
         <translation type="unfinished">Захаваць</translation>
     </message>
@@ -3455,7 +3455,7 @@
         <translation type="obsolete">Бягучую</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="139"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="137"/>
         <source>Save the current file</source>
         <translation type="unfinished">Захаваць бягучы файл</translation>
     </message>
@@ -3465,62 +3465,62 @@
         <translation type="obsolete">Усе</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="140"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="138"/>
         <source>Save all files</source>
         <translation type="unfinished">Захаваць усе файлы</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="196"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="194"/>
         <source>&amp;Close</source>
         <translation type="unfinished">Закрыць</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="142"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="140"/>
         <source>Close the current file</source>
         <translation type="unfinished">Захаваць цяперашні файл</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="143"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="141"/>
         <source>Close all files</source>
         <translation type="unfinished">Закрыць усе файлы</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="145"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="143"/>
         <source>Save As &amp;Backup</source>
         <translation type="unfinished">Захаваць копію</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="145"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="143"/>
         <source>Save a backup of the current file</source>
         <translation type="unfinished">Захаваць копію бягучага файла</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="147"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="145"/>
         <source>Quic&amp;k Print</source>
         <translation type="unfinished">Хуткі друк</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="147"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="145"/>
         <source>Quick print the current file</source>
         <translation type="unfinished">Друкаваць бягучы файл</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="148"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="146"/>
         <source>&amp;Print...</source>
         <translation type="unfinished">Друк...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="148"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="146"/>
         <source>Print the current file</source>
         <translation type="unfinished">Друкаваць бягучы файл</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="150"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="148"/>
         <source>&amp;Quit</source>
         <translation type="unfinished">Выхад</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="150"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="148"/>
         <source>Quit the application</source>
         <translation type="unfinished">Выхад з прылады</translation>
     </message>
@@ -3530,72 +3530,72 @@
         <translation type="obsolete">Рэдагаванне</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="154"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="152"/>
         <source>Settings...</source>
         <translation type="unfinished">Наладкі...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="154"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="152"/>
         <source>Edit the application settings</source>
         <translation type="unfinished">Рэдагаваць наладкі прылады</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="155"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="153"/>
         <source>Shortcuts Editor...</source>
         <translation type="unfinished">Рэдактар цэтлікаў...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="155"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="153"/>
         <source>Edit the application shortcuts</source>
         <translation type="unfinished">Рэдагаваць цэтлікі прылады</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="158"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="156"/>
         <source>&amp;Undo</source>
         <translation type="unfinished">Вярнуць</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="158"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="156"/>
         <source>Undo</source>
         <translation type="unfinished">Вярнуць</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="159"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="157"/>
         <source>&amp;Redo</source>
         <translation type="unfinished">Адмяніць адмену</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="159"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="157"/>
         <source>Redo</source>
         <translation type="unfinished">Адмяніць адмену</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="161"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="159"/>
         <source>&amp;Copy</source>
         <translation type="unfinished">Капіраваць</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="161"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="159"/>
         <source>Copy</source>
         <translation type="unfinished">Капіраваць</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="162"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="160"/>
         <source>Cu&amp;t</source>
         <translation type="unfinished">Выразаць</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="162"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="160"/>
         <source>Cut</source>
         <translation type="unfinished">Выразаць</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="163"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="161"/>
         <source>&amp;Paste</source>
         <translation type="unfinished">Уставіць</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="163"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="161"/>
         <source>Paste</source>
         <translation type="unfinished">Уставіць</translation>
     </message>
@@ -3610,42 +3610,42 @@
         <translation type="obsolete">Знацсці - замяніць...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="172"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="170"/>
         <source>Search Previous</source>
         <translation type="unfinished">Знайсці папярэдняе</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="173"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="171"/>
         <source>Search Next</source>
         <translation type="unfinished">Знайсці наступнае</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="174"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="172"/>
         <source>&amp;Go To...</source>
         <translation type="unfinished">Перайсці на радок...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="174"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="172"/>
         <source>Go To...</source>
         <translation type="unfinished">Перайсці на радок...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="175"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="173"/>
         <source>&amp;All Commands</source>
         <translation type="unfinished">Усе каманды</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="178"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="176"/>
         <source>Expand Abbreviation</source>
         <translation type="unfinished">Разгарнуць скарачэнне</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="179"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="177"/>
         <source>Prepare APIs</source>
         <translation type="unfinished">Прыгатаваць API-файлы</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="179"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="177"/>
         <source>Prepare the APIs files for auto completion / calltips</source>
         <translation type="unfinished">Прыкатаваць API-файлы для аўтадапаўненя / Падказак</translation>
     </message>
@@ -3655,27 +3655,27 @@
         <translation type="obsolete">Від</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="183"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="181"/>
         <source>&amp;Style</source>
         <translation type="unfinished">Стыль</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="184"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="182"/>
         <source>&amp;Next Tab</source>
         <translation type="unfinished">Наступная ўкладка</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="184"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="182"/>
         <source>Active the next tab</source>
         <translation type="unfinished">Паказаць наступную Ўкладку</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="185"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="183"/>
         <source>&amp;Previous Tab</source>
         <translation type="unfinished">Папярэдняя ўкладка</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="185"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="183"/>
         <source>Active the previous tab</source>
         <translation type="unfinished">Паказаць папярэднюю ўкладку</translation>
     </message>
@@ -3695,52 +3695,52 @@
         <translation type="obsolete">Праект</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="190"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="188"/>
         <source>&amp;New</source>
         <translation type="unfinished">Новы</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="190"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="188"/>
         <source>New project...</source>
         <translation type="unfinished">Новы праект...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="191"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="189"/>
         <source>&amp;Open</source>
         <translation type="unfinished">Адкрыць</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="191"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="189"/>
         <source>Open a project...</source>
         <translation type="unfinished">Адкрыць праект...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="193"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="191"/>
         <source>Save the current project</source>
         <translation type="unfinished">Захаваць бягучы праект</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="194"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="192"/>
         <source>Save all projects</source>
         <translation type="unfinished">Захаваць усе праекты</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="196"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="194"/>
         <source>Close the current project</source>
         <translation type="unfinished">Закрыць бягучы праект</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="197"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="195"/>
         <source>Close all projects</source>
         <translation type="unfinished">Закрыць усе праекты</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="199"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="197"/>
         <source>Set&amp;tings...</source>
         <translation type="unfinished">Наладкі...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="199"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="197"/>
         <source>Project settings</source>
         <translation type="unfinished">Наладкі праекта</translation>
     </message>
@@ -3750,37 +3750,37 @@
         <translation type="obsolete">Дадаць існуючыя файлы/праекты...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="201"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="199"/>
         <source>Add existing files/projects to the current project</source>
         <translation type="unfinished">Дадаць існуючыя файлы/праекты у бягучы праект</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="205"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="203"/>
         <source>Clear the recents projects list</source>
         <translation type="unfinished">Ачысціць спіс нядаўна адкрытых праектаў</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="210"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="208"/>
         <source>&amp;Build</source>
         <translation type="unfinished">Пабудова</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="211"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="209"/>
         <source>&amp;Rebuild</source>
         <translation type="unfinished">Перабудаваць</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="212"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="210"/>
         <source>&amp;Clean</source>
         <translation type="unfinished">Ачысціць</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="213"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="211"/>
         <source>&amp;Execute</source>
         <translation type="unfinished">Выканаць</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="214"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="212"/>
         <source>&amp;User Commands</source>
         <translation type="unfinished">Каманды карыстальніка</translation>
     </message>
@@ -3790,7 +3790,7 @@
         <translation type="obsolete">Нададчык</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="218"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="216"/>
         <source>&amp;Interpreter</source>
         <translation type="unfinished">Інтэрпрэтатар</translation>
     </message>
@@ -3800,32 +3800,32 @@
         <translation type="obsolete">Прылады</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="221"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="219"/>
         <source>&amp;Edit User Tools...</source>
         <translation type="unfinished">Рэдагаваць прылады...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="221"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="219"/>
         <source>Edit tools...</source>
         <translation type="unfinished">Рэдагаваць прылады...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="222"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="220"/>
         <source>Edit &amp;Desktop Tools...</source>
         <translation type="unfinished">Рэдагаваць прылады працоўнага стала...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="222"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="220"/>
         <source>Edit desktop tools...</source>
         <translation type="unfinished">Рэдагаваць прылады працоўнага стала...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="224"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="222"/>
         <source>&amp;User Tools</source>
         <translation type="unfinished">Прылады карыстальніка</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="225"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="223"/>
         <source>Desktop &amp;Tools</source>
         <translation type="unfinished">Прылады працоўнага стала</translation>
     </message>
@@ -3835,12 +3835,12 @@
         <translation type="obsolete">Плагін</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="230"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="228"/>
         <source>&amp;Manage...</source>
         <translation type="unfinished">Наладкі...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="230"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="228"/>
         <source>Manage plugins...</source>
         <translation type="unfinished">Наладкі плагінаў...</translation>
     </message>
@@ -3850,382 +3850,382 @@
         <translation type="obsolete">Інфармацыя</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="246"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="244"/>
         <source>&amp;Manual</source>
         <translation type="unfinished">Кінаўніцства</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="246"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="244"/>
         <source>Manual</source>
         <translation type="unfinished">Кіраўніцства</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="248"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="246"/>
         <source>&amp;About...</source>
         <translation type="unfinished">Аб праграмме...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="248"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="246"/>
         <source>About application...</source>
         <translation type="unfinished">Аб праграмме...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="249"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="247"/>
         <source>About &amp;Qt...</source>
         <translation type="unfinished">Аб Qt...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="249"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="247"/>
         <source>About Qt...</source>
         <translation type="unfinished">Аб Qt...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="251"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="249"/>
         <source>&amp;Test Report</source>
         <translation type="unfinished">Паведамленне аб памылцы</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="251"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="249"/>
         <source>Pause</source>
         <translation type="unfinished">Пауза</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="251"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="249"/>
         <source>Coverage Meter Test Report...</source>
         <translation type="unfinished">Coverage Mete паведамленне...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="125"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="123"/>
         <source>File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="127"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="125"/>
         <source>Ctrl+N</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="128"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="126"/>
         <source>&amp;New Text File...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="128"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="126"/>
         <source>Quickly create a new text based file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="129"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="127"/>
         <source>Ctrl+O</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="139"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="137"/>
         <source>Ctrl+S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="194"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="192"/>
         <source>Save &amp;All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="142"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="140"/>
         <source>Ctrl+W</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="197"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="195"/>
         <source>Close &amp;All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="148"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="146"/>
         <source>Ctrl+P</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="150"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="148"/>
         <source>Ctrl+Q</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="152"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="150"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="155"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="153"/>
         <source>Ctrl+Shift+E</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="156"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="154"/>
         <source>Translations...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="156"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="154"/>
         <source>Ctrl+T</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="156"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="154"/>
         <source>Change the application translations files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="158"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="156"/>
         <source>Ctrl+Z</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="159"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="157"/>
         <source>Ctrl+Y</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="161"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="159"/>
         <source>Ctrl+C</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="162"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="160"/>
         <source>Ctrl+X</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="163"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="161"/>
         <source>Ctrl+V</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="165"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="163"/>
         <source>&amp;Search and replace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="166"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="164"/>
         <source>&amp;Search in the file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="166"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="164"/>
         <source>Ctrl+F</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="166"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="164"/>
         <source>Search in the file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="167"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="165"/>
         <source>&amp;Replace in the file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="167"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="165"/>
         <source>Ctrl+R</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="167"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="165"/>
         <source>Replace in the file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="170"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="168"/>
         <source>&amp;Search in the folder...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="170"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="168"/>
         <source>Ctrl+Alt+F</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="170"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="168"/>
         <source>Search in the folder...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="172"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="170"/>
         <source>Shift+F3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="173"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="171"/>
         <source>F3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="174"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="172"/>
         <source>Ctrl+G</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="176"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="174"/>
         <source>&amp;Bookmarks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="178"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="176"/>
         <source>Ctrl+E</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="179"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="177"/>
         <source>Ctrl+Alt+P</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="181"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="179"/>
         <source>View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="184"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="182"/>
         <source>Ctrl+Tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="185"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="183"/>
         <source>Ctrl+Shift+Tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="186"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="184"/>
         <source>Docks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="188"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="186"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="190"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="188"/>
         <source>Ctrl+Shift+N</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="191"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="189"/>
         <source>Ctrl+Shift+O</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="201"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="199"/>
         <source>&amp;Add Files...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="202"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="200"/>
         <source>&amp;Remove Files...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="202"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="200"/>
         <source>Remove the current variable/value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="208"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="206"/>
         <source>Build</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="217"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="215"/>
         <source>Debugger</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="219"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="217"/>
         <source>Tools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="228"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="226"/>
         <source>Plugins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="233"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="231"/>
         <source>Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="235"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="233"/>
         <source>&amp;Single Document Interface</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="235"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="233"/>
         <source>Single Document Interface</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="236"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="234"/>
         <source>&amp;Multiple Document Interface</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="236"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="234"/>
         <source>Multiple Document Interface</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="237"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="235"/>
         <source>&amp;Top Level Windows Interface</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="237"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="235"/>
         <source>Top Level Windows Interface</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="239"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="237"/>
         <source>&amp;Cascade</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="239"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="237"/>
         <source>Cascade</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="240"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="238"/>
         <source>&amp;Tile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="240"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="238"/>
         <source>Tile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="241"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="239"/>
         <source>&amp;Minimize</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="241"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="239"/>
         <source>Minimize</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="242"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="240"/>
         <source>&amp;Restore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="242"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="240"/>
         <source>Restore normal size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/UIMain.cpp" line="244"/>
+        <location filename="../monkey/src/maininterface/UIMain.cpp" line="242"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4354,7 +4354,7 @@
 <context>
     <name>UIPluginsSettingsElement</name>
     <message>
-        <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettingsElement.cpp" line="50"/>
+        <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettingsElement.cpp" line="51"/>
         <source>Settings %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7593,6 +7593,11 @@ Use Console Manager: %4
         <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="303"/>
         <source>Next</source>
         <translation type="unfinished">Наступны крок</translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="304"/>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

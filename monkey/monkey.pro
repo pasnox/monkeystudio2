@@ -155,4 +155,5 @@ win32:SOURCES	*= src/toolsmanager/pDesktopApplications_win32.cpp
 include( src/xupmanager/xupmanager.pri )
 
 TRANSLATIONS	*= ../translations/monkey_french.ts \
-	../translations/monkey_belarusian.ts
+	../translations/monkey_belarusian.ts \
+	../translations/monkey_italian.ts
