@@ -17,6 +17,7 @@ UIPluginsSettingsElement::UIPluginsSettingsElement( BasePlugin* plugin, QWidget*
 	cbEnabled->setChecked( mPlugin->isEnabled() );
 	if ( !mPlugin->pixmap().isNull() )
 		lIcon->setPixmap( mPlugin->pixmap().scaledToWidth( lIcon->maximumWidth(), Qt::SmoothTransformation ) );
+	lIcon->setEnabled( cbEnabled->isChecked() );
 	lTitle->setText( infos.Caption );
 	lDescription->setText( infos.Description );
 	pbSettings->setVisible( mSettingsWidget );
@@ -33,6 +34,7 @@ void UIPluginsSettingsElement::on_cbEnabled_toggled( bool checked )
 {
 	if ( checked )
 		cbNeverEnable->setChecked( false );
+	lIcon->setEnabled( checked );
 	mPlugin->setEnabled( checked );
 	MonkeyCore::settings()->setValue( QString( "Plugins/%1" ).arg( mPlugin->infos().Name ), checked );
 }
