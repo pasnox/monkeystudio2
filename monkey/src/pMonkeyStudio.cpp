@@ -786,13 +786,24 @@ void pMonkeyStudio::resetLexer( QsciLexer* l )
 	// cancel if no lexer
 	if ( !l )
 		return;
-	// reset lexer settings
-	MonkeyCore::settings()->remove( QString( "%1/%2" ).arg( scintillaSettingsPath() ).arg( l->language() ) );
-	// read default settings
-	pSettings* ss = MonkeyCore::settings();
-	l->readSettings( *ss, qPrintable( scintillaSettingsPath() ) );
-	// emit changes
-	l->refreshProperties();
+	
+	// get settings pointer
+	pSettings* settings = MonkeyCore::settings();
+	// remove lexer entry
+	settings->remove( QString( "%1/%2" ).arg( scintillaSettingsPath() ).arg( l->language() ) );
+	// set default styles
+	for ( int i = 0; i < 128; ++i )
+	{
+		if (!l->description( i ).isEmpty() )
+		{
+			l->setColor( l->defaultColor( i ), i);
+			l->setEolFill( l->defaultEolFill( i ), i);
+			l->setFont( l->defaultFont( i ), i);
+			l->setPaper( l->defaultPaper( i ), i);
+		}
+	}
+	// re read properties
+	l->readSettings( *settings, qPrintable( scintillaSettingsPath() ) );
 }
 
 void pMonkeyStudio::applyProperties()
