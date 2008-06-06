@@ -22,31 +22,25 @@
 
 void DockGNUDebugger::loadSettings()
 {
-	Settings* s = MonkeyCore::settings();
-	s->beginGroup( QString( "Plugins/%1" ).arg( PLUGIN_NAME ) );
-	mPathGdb = s->value("PathGdb", "gdb").toString();
 
-	QStringList pluginList = s->allKeys();
-	foreach(QString p , pluginList)
+/*	foreach(GdbAddOn *p , GdbSetting::instance()->getAddOn() )
 	{
-		bool e = s->value( p, true).toBool();
 		foreach(QPointer< class GdbCore> r, Dispatcher->list())
 		{
-			if(p.endsWith(r->name()))
+			if(p->name == r->name)
 			{
 				// enable or disable addOn
-				r->setEnabled(e);
+				r->setEnabled(p.enable);
 			}
 		}
 	}
-	s->endGroup();
-}
+*/}
 
 //
 
 void DockGNUDebugger::saveSettings()
 {
-	Settings * s = MonkeyCore::settings();
+/*	Settings * s = MonkeyCore::settings();
 	s->beginGroup( QString( "Plugins/%1" ).arg( PLUGIN_NAME ) );
 
 	foreach(QPointer< class GdbCore> r, Dispatcher->list())
@@ -58,7 +52,7 @@ void DockGNUDebugger::saveSettings()
 			s->setValue("AddOn/" + r->name(), false);
 	}
 	s->endGroup();
-}
+*/}
 
 
 //
@@ -85,37 +79,13 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 	Backtrace = new GdbBacktrace(this);
 
 
-	if( !Parser)
-		QMessageBox::warning(NULL,"Critical erreur", "Parser is not ready (NULL pointer");
-	
-	if( !Process)
-		QMessageBox::warning(NULL,"Critical erreur", "Process is not ready (NULL pointer");
-	
-	if( !Bridge)
-		QMessageBox::warning(NULL,"Critical erreur", "Bridge is not ready (NULL pointer");
-
-	if( !Dispatcher)
-		QMessageBox::warning(NULL,"Critical erreur", "Dispatcher is not ready (NULL pointer");
-
-	if( !Breakpoint)
-		QMessageBox::warning(NULL,"Critical erreur", "Breakpoint is not ready (NULL pointer");
-
-	if( !Backtrace)
-		QMessageBox::warning(NULL,"Critical erreur", "Backtrace is not ready (NULL pointer");
-
 	if( Parser && Process && Bridge && Dispatcher && Breakpoint && Backtrace)
 	{
-		// add to dispatcher
+		// addOn to dispatcher
 		Dispatcher->add(Breakpoint);
 		Dispatcher->add(Backtrace);
 
-		// load settings for enable / desable addOn
-		loadSettings();
-		// write setting (requier because if no setting as saved , started for the first)
-		saveSettings();
 
-		Process->setCommand(mPathGdb);
-		
 		// connections
 		connect(Process, SIGNAL( commandReadyRead( const QByteArray & )), this , SLOT( commandReadyRead( const QByteArray & )));
 		connect(Process, SIGNAL( started( )), this, SLOT(gdbStarted()));
@@ -144,9 +114,6 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 		connect(Parser, SIGNAL(onInterpreter(const QPointer<BaseInterpreter> & ,const int & , const QString &)), this , 
 			SLOT(onInterpreter(const QPointer<BaseInterpreter> & , const int & , const QString &)));
 
-		connect(Parser, SIGNAL(parserReady()), Process , 
-			SLOT(onParserReady()));
-		
 		// breakpoint
 		
 		connect(Breakpoint, SIGNAL(onToggleBreakpoint(const QString &, const int &, const bool &)), Bridge,
@@ -184,9 +151,12 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 		Connect->add(this, interpreterStepOver, &DockGNUDebugger::onTargetStopped );
 		Connect->add(this, interpreterStepInto, &DockGNUDebugger::onTargetStopped );
 	
-		// add plugin under tabWidget
-		if(Breakpoint->isEnabled()) mainTabWidget->addTab(Breakpoint->widget(),Breakpoint->name());
-		if(Backtrace->isEnabled()) mainTabWidget->addTab(Backtrace->widget(),Backtrace->name());
+		// find if addOn is enable ?
+		foreach(QPointer< class GdbCore> r, Dispatcher->list())
+		{
+			r->setEnabled( GdbSetting::instance()->getStartUp( r->name() ));
+			if(r->isEnabled()) mainTabWidget->addTab( r->widget(),r->name() );
+		}
 
 		crlf = pMonkeyStudio::getEol().toLocal8Bit();
 	}
@@ -241,6 +211,8 @@ void DockGNUDebugger::onActionLoadTarget()
 	if( !mSelectedTarget.isEmpty())
 	{
 		rawLog->append("*** " + mSelectedTarget + " ***");
+
+		Process->setCommand( GdbSetting::instance()->getPathGdb() );
 
 		Parser->setNextCommand("Starting GDB");
 		Process->startProcess();
@@ -326,11 +298,11 @@ void DockGNUDebugger::onActionStepInto()
 void DockGNUDebugger::gdbStarted()
 {
 
-	if(!isGdbStarted) // requiere for Linux, it send two signals started()
+	if(!isGdbStarted) // requiere for Linux, it send two signals started() ??
 	{
 		rawLog->append("*** Gdb started ***");
 
-		Process->onParserReady();
+		Parser->setReady(true);
 
 //		Parser->setNextCommand("set options for gdb");
 //		Process->sendRawData("set breakpoint pending on");
@@ -479,10 +451,6 @@ void DockGNUDebugger::onError(int id, QString st)
 	rawLog->setTextColor(QColor(255,0,0));
 	rawLog->append(QString::number(id) + " : " + st);
 	rawLog->setTextColor(QColor(0,0,0));
-
-
-	// why stp gdb on all error from parser ???	
-//	Process->stopProcess();
 
 	Dispatcher->error(id, st);
 }

@@ -37,6 +37,19 @@ GdbPatternFile::GdbPatternFile(QObject *parent) :  QObject(parent)
 
 GdbPatternFile::~GdbPatternFile()
 {
+	if(QFile::exists(mFullName))
+	{
+		QFile f(mFullName);
+
+		f.open(QIODevice::WriteOnly);
+		QDataStream s(&f);
+
+		foreach(GdbPattern p , GdbPatternList)
+			s << QString("[" + QString::number(p.id) + "]" + p.key.pattern() + "[" + p.comment + "]"  );
+
+		f.close();
+
+	}
 	GdbPatternList.clear();
 }
 
@@ -46,6 +59,8 @@ GdbPatternFile::~GdbPatternFile()
 bool GdbPatternFile::load(const QString & fullName)
 {
 	// fullNme type /home/xiantia/dev/....
+	mFullName = fullName;
+
 	QFile file(fullName);
 	// try open
 	if(file.open(QIODevice::ReadOnly))
@@ -60,7 +75,7 @@ bool GdbPatternFile::load(const QString & fullName)
 			// [10020]can not read memorie\.
 			ds >> s;
 			// match ?	
-			QRegExp r("\\[(\\d+)\\](.*)");
+			QRegExp r("\\[(\\d+)\\](.*)\\[(.*)\\]");
 			if(r.exactMatch(s))
 			{
 				//extract id and string
@@ -68,6 +83,7 @@ bool GdbPatternFile::load(const QString & fullName)
 				GdbPattern p;
 				p.id = l.at(1).toInt();
 				p.key = QRegExp(l.at(2));
+				p.comment = l.at(3);
 				// store 
 				GdbPatternList << p;
 			}
@@ -86,7 +102,7 @@ bool GdbPatternFile::load(const QString & fullName)
 GdbPattern GdbPatternFile::find(const QString  & value)
 {
 	// init default pattern
-	GdbPattern pattern={QRegExp(value),-1};
+	GdbPattern pattern={QString() , QRegExp(value),-1};
 	
 	// find of all pattern
 	for(int i =0; i< GdbPatternList.count(); i++)
@@ -112,4 +128,10 @@ int GdbPatternFile::getId(const GdbPattern & p)
 QString GdbPatternFile::getPattern(const GdbPattern & p)
 {
 	return p.key.pattern();
+}
+
+
+QString GdbPatternFile::getComment( const GdbPattern & p)
+{
+	return p.comment;
 }

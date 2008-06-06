@@ -53,6 +53,7 @@ public slots:
 	void changeAnswerInterpreter(const QPointer<BaseInterpreter> &, const QString &);
 
 	bool isReady() { return mIsReady;}
+	void setReady(bool a) {mIsReady = a;}
 
 private :
 
@@ -97,7 +98,7 @@ private :
 	void error(int , QString);
 	void info(int, QString);
 
-	void parserReady();
+//	void parserReady();
 };
 
 

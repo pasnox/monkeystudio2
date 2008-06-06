@@ -12,8 +12,6 @@ GdbProcess::GdbProcess( QObject * parent ) : QProcess( parent )
 	setReadChannelMode( QProcess::MergedChannels );
 	// connections
 
-	mIsReady = true;
-
 	connect( this, SIGNAL( readyRead() ), this, SLOT( readyRead() ) );
 	connect (&t, SIGNAL(timeout()), this , SLOT(onTimer()));
 	t.start(100);
@@ -37,21 +35,23 @@ void GdbProcess::readyRead()
 
 void GdbProcess::onTimer()
 {
-	if(mCmdList.count() && mIsReady)
+	if(GdbParser::instance())
 	{
-		write( mCmdList.at(0) + crlf );
+		if(mCmdList.count() && GdbParser::instance()->isReady())
+		{
+			write( mCmdList.at(0) + crlf );
 		mCmdList.removeAt(0);
-		mIsReady = false;
+		}
 	}
 }
 
 //
 
-void GdbProcess::onParserReady()
+/*void GdbProcess::onParserReady()
 {
 	mIsReady = true;
 
-}
+}*/
 
 void GdbProcess::sendRawData( const QByteArray & a )
 {
@@ -64,7 +64,6 @@ void GdbProcess::stopTarget()
 {
 	// quit gdb
 	sendRawData( "q" + crlf);
-	mIsReady = true;
 }
 
 void GdbProcess::stopProcess()
@@ -96,8 +95,11 @@ void GdbProcess::setWorkingDirectorie(const QString & dir)
 //
 void GdbProcess::startProcess()
 {
+	if(!mCommand.isEmpty())
+	{
 		// execute command
-		start( QString( "%1" ).arg( mCommand ) );
+		start(  mCommand  );
 		// wait for gdb started
 		waitForStarted (500);
+	}
 }

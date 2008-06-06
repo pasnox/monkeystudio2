@@ -25,37 +25,51 @@ GNUDebugger::GNUDebugger()
 
 	// get the new instance of GdbPattermFile
 	patternFile = GdbPatternFile::instance(this);
+	GdbSetting::instance(this);
+	GdbSetting::instance()->load();
 
-	// load pattern
-	QStringList pluginsPath = MonkeyCore::settings()->value( "Plugins/Path" ).toStringList();
-	// get all files in plugins path nammed 'gdbparsing.txt'
-	QFileInfoList files;
-	QDir pluginsDir;
-	for ( int i = 0; i < pluginsPath.count(); i++ )
+	if(GdbSetting::instance()->getPathParseFile().isEmpty())
 	{
-		QString path = pluginsPath.at( i );
-		if ( QFileInfo( path ).isRelative() )
-			path = QDir::cleanPath( QApplication::applicationDirPath() +"/" + path );
-		pluginsDir.setPath( path );
-		files << pMonkeyStudio::getFiles( pluginsDir, QString( "gdbparsing.txt" ), true );
+		// load pattern
+		QStringList pluginsPath = MonkeyCore::settings()->value( "Plugins/Path" ).toStringList();
+		QFileInfoList files;
+		// get all files in plugins path nammed 'gdbparsing.txt'
+		QDir pluginsDir;
+		for ( int i = 0; i < pluginsPath.count(); i++ )
+		{
+			QString path = pluginsPath.at( i );
+			if ( QFileInfo( path ).isRelative() )
+				path = QDir::cleanPath( QApplication::applicationDirPath() +"/" + path );
+			pluginsDir.setPath( path );
+			files << pMonkeyStudio::getFiles( pluginsDir, QString( "gdbparsing.txt" ), true );
+		}
+		GdbSetting::instance()->setPathParseFile( files.first().absoluteFilePath());
+		
+		if ( files.isEmpty() || ! patternFile->load( GdbSetting::instance()->getPathParseFile() ) )
+			MonkeyCore::statusBar()->appendMessage( tr( "gdbparsing.txt not found. Debugger can not work !" ) + GdbSetting::instance()->getPathParseFile(), 5000 ,QPixmap(), QBrush(QColor(255,80,80)));
+		else 	MonkeyCore::statusBar()->appendMessage( tr( "GdbPatternFile initializing sucess full" ), 1000 ,QPixmap(), QBrush(QColor(120,250,100)));
 	}
 
-/*
+	else
+	{
+	/*
 <PasNox> pQueuedMessage msg;
 <PasNox> msg.Background = QBrush( ... );
 <PasNox> addMessage( msg );
 */
 
 	// load txt file if possible, else warn user in status bar
-	if ( files.isEmpty() || ! patternFile->load( files.first().absoluteFilePath() ) )
-		MonkeyCore::statusBar()->appendMessage( tr( "gdbparsing.txt not found. Debugger can not work !" ), 5000 ,QPixmap(), QBrush(QColor(255,80,80)));
+	if ( ! patternFile->load( GdbSetting::instance()->getPathParseFile() ) )
+		MonkeyCore::statusBar()->appendMessage( tr( "gdbparsing.txt not found. Debugger can not work !" ) + GdbSetting::instance()->getPathParseFile(), 5000 ,QPixmap(), QBrush(QColor(255,80,80)));
 	else 	MonkeyCore::statusBar()->appendMessage( tr( "GdbPatternFile initializing sucess full" ), 1000 ,QPixmap(), QBrush(QColor(120,250,100)));
 
-
+	}
 }
 
 GNUDebugger::~GNUDebugger()
 {
+	GdbSetting::instance()->save();
+
 	if ( isEnabled() )
 		setEnabled( false );
 }
@@ -108,7 +122,8 @@ bool GNUDebugger::setEnabled( bool b )
 		delete aSeparator;
 		actionList.clear();
 		// delete dock
-		DockGNUDebugger::instance()->deleteLater();
+		delete mDockGNUDebugger;
+		//DockGNUDebugger::instance()->deleteLater(); <- not work, more slow
 		// set plugin disabled
 		mPluginInfos.Enabled = false;
 	}

@@ -27,7 +27,6 @@ void GdbKernelDispatcher::add(/*const  QPointer<class GdbParser> & a, */const QP
 	addonList << p;
 	connect(mParser, SIGNAL(onInterpreter(const QPointer<BaseInterpreter> & ,const int & , const QString &)), p , 
 		SLOT(interpreter(const QPointer<BaseInterpreter> & , const int & , const QString &)));
-
 }
 /*
 void GdbKernelDispatcher::remove(const QPointer<GdbCore> & p)

@@ -26,6 +26,7 @@
 
 typedef struct GdbPattern
 {
+	QString comment;
 	QRegExp key;
 	int id;
 };
@@ -44,14 +45,19 @@ public:
 	bool load(const QString & );
 	GdbPattern find(const QString &);
 
-
-private :
+	QList<GdbPattern> * get(){ return &GdbPatternList;}
 
 	int getId(const GdbPattern & p);
 	QString getPattern(const GdbPattern & p );
+	QString getComment( const GdbPattern & p);
+
+	QString getFileName() { return mFullName; }
+
+private :
+
 
 	QList<GdbPattern> GdbPatternList;
-
+	QString mFullName;
 };
 	 
 #endif

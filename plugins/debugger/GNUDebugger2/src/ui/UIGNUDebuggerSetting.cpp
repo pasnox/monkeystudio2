@@ -8,15 +8,13 @@
 #include <QFileDialog>
 #include <QCheckBox>
 
+#include "../kernel/gdbSetting.1.3.h"
 
 UIGNUDebuggerSetting::UIGNUDebuggerSetting( QWidget* parent )
 	: QWidget( parent )
 {
 	setupUi( this );
 	setAttribute( Qt::WA_DeleteOnClose );
-
-	// default
-	loadSettings();
 
 	Process = new GdbProcess(this);
 	
@@ -25,47 +23,59 @@ UIGNUDebuggerSetting::UIGNUDebuggerSetting( QWidget* parent )
 	connect(Process, SIGNAL( finished(  int , QProcess::ExitStatus  )), this, SLOT(finished( int , QProcess::ExitStatus)));
 	connect(Process, SIGNAL( error ( QProcess::ProcessError )), this, SLOT(error(QProcess::ProcessError)));
 
-	Process->setCommand(mPathGdb);
 
-	connect(bButtonPath, SIGNAL( clicked()), this, SLOT(bClicked()));
+	connect(bButtonPathGdb, SIGNAL( clicked()), this, SLOT(bClickedPathGdb()));
+	connect(bButtonPathParsingFile, SIGNAL( clicked()), this, SLOT(bClickedPathParsingFile()));
+	connect(bButtonManageFile, SIGNAL( clicked()), this, SLOT(bClickedManageFile()));
 
-	Process->startProcess();
 
-	editPath->setText(mPathGdb);
+	editPathGdb->setText( GdbSetting::instance()->getPathGdb() );
+	editPathParsingFile->setText( GdbSetting::instance()->getPathParseFile() );
 
-	// add setting 
-	QVBoxLayout *l = new QVBoxLayout();
+	QVBoxLayout *vb = new QVBoxLayout(groupPlugins);
 
-	Settings* s = MonkeyCore::settings();
-	s->beginGroup( QString( "Plugins/%1" ).arg( PLUGIN_NAME ) );
-
-	foreach(QString p, mPluginList)
+	QList<GdbAddOn> *l = GdbSetting::instance()->getAddOnList();
+	foreach(GdbAddOn  p,  *l)
 	{
-		bool e = s->value( p, true).toBool();
-		if(p.startsWith("AddOn"))
-		{
-			QCheckBox *a = new QCheckBox( p.right( p.length() - p.indexOf("/") - 1) );
-			l->addWidget(a);	
-			e ? a->setCheckState(Qt::Checked) : a->setCheckState(Qt::Unchecked);
-		}
+		QCheckBox * cb = new QCheckBox( p.name );
+		vb->addWidget(cb);	
+		p.enable ? cb->setCheckState(Qt::Checked) : cb->setCheckState(Qt::Unchecked);
 	}
-	s->endGroup();
-	groupPlugins->setLayout(l);
+
+//	mPathGdb = ;
+	Process->setCommand(GdbSetting::instance()->getPathGdb());//mPathGdb);
+	Process->startProcess();
 }
 
+//
 
-void UIGNUDebuggerSetting::bClicked()
+void UIGNUDebuggerSetting::bClickedManageFile()
 {
-	mPathGdb = QFileDialog::getOpenFileName(this, tr("Location of Gdb"));
+	UIManageParsingFile *d = UIManageParsingFile::self(this) ;
+	d->exec();
+}
+
+//
+
+void UIGNUDebuggerSetting::bClickedPathParsingFile()
+{
+	QString mPathParsingFile = QFileDialog::getOpenFileName(this, tr("Location of Parsing file"));
+	editPathParsingFile->setText(mPathParsingFile);
+}
+
+//
+
+void UIGNUDebuggerSetting::bClickedPathGdb()
+{
+	QString mPathGdb = QFileDialog::getOpenFileName(this, tr("Location of Gdb"));
 
 	if(!mPathGdb.isEmpty())
 	{
-		editPath->setText(mPathGdb);
-		Process->sendRawData("quit");
-		Process->stopProcess();
-
+		editPathGdb->setText(mPathGdb);
 		Process->setCommand(mPathGdb);
 		Process->startProcess();
+		
+		Process->sendRawData("quit");
 	}
 }
 
@@ -73,26 +83,24 @@ void UIGNUDebuggerSetting::commandReadyRead( const QByteArray & s)
 {
 	// read version of GDB
 	QStringList l = QString(s).split( pMonkeyStudio::getEol());
-
-	labelCurrentVersion->setText(l.at(0));
+	if(l.count())
+		labelCurrentVersion->setText(l.at(0));
 	Process->sendRawData("quit");
 }
 
 void UIGNUDebuggerSetting::started()
-{
-}
+{}
 
 void UIGNUDebuggerSetting::finished( int , QProcess::ExitStatus  )
-{
-}
+{}
 
 // gdb no found
 void UIGNUDebuggerSetting::error( QProcess::ProcessError )
 {
-	labelCurrentVersion->setText("Gdb no found");
+	labelCurrentVersion->setText(tr("Version not found"));
 }
 
-void UIGNUDebuggerSetting::on_dbbButtons_clicked( QAbstractButton* button )
+void UIGNUDebuggerSetting::on_dbbButtons_clicked( QAbstractButton * button )
 {
 	if ( button == dbbButtons->button( QDialogButtonBox::Apply ) )
 	{
@@ -105,30 +113,19 @@ void UIGNUDebuggerSetting::on_dbbButtons_clicked( QAbstractButton* button )
 
 void UIGNUDebuggerSetting::loadSettings()
 {
-	Settings* s = MonkeyCore::settings();
-	s->beginGroup( QString( "Plugins/%1" ).arg( PLUGIN_NAME ) );
-	mPathGdb = s->value("PathGdb", "gdb").toString();
-	mPluginList = s->allKeys();
-	s->endGroup();
-
 }
 
 void UIGNUDebuggerSetting::saveSettings()
 {
-	Settings * s = MonkeyCore::settings();
-	// set the gdb path
-	s->beginGroup( QString( "Plugins/%1" ).arg( PLUGIN_NAME ) );
-	s->setValue( "PathGdb", editPath->text() );
-		
+	GdbSetting::instance()->setPathGdb(editPathGdb->text());
+	GdbSetting::instance()->setPathParseFile(editPathParsingFile->text());
+
 	QList<QCheckBox*> cbs = groupPlugins->findChildren<QCheckBox*>();
 	foreach(QCheckBox * c, cbs)
 	{
-		if(c->checkState () == Qt::Checked) 
-			s->setValue("AddOn/" + c->text(), true);
-		else
-			s->setValue("AddOn/" + c->text(), false);
+		GdbSetting::instance()->setEnable( c->text() , (c->checkState () == Qt::Checked) ? true : false); 
 	}
-	s->endGroup();
+	GdbSetting::instance()->save();
 }
 
 

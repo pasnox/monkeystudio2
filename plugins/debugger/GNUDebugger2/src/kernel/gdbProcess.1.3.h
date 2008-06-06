@@ -9,6 +9,9 @@
 #include <QHash>
 #include <QTimer>
 
+#include "gdbParser.1.3.h"
+
+
 class  GdbProcess : public QProcess, public QSingleton<GdbProcess>
 {
 
@@ -27,7 +30,6 @@ private:
 	QString mDir;
 	QList<QByteArray> mCmdList;
 	QTimer t;
-	bool mIsReady;
 
 public slots:
 
@@ -41,7 +43,6 @@ public slots:
 	
 	void startProcess();
 
-	void onParserReady();
 
 private slots:
 

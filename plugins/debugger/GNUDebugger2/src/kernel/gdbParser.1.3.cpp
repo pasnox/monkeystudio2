@@ -36,7 +36,7 @@ GdbParser::GdbParser (QObject * parent) : QObject (parent), mIsReady(1)
 {
 	// get the current instance
 	gdbPatternFile = GdbPatternFile::instance();
-	// new instance child clas
+	// new instance child class
 	gdbInterpreter = new GdbInterpreter(this);
 	gdbRestoreLine = new GdbRestoreLine(this);
 
@@ -172,7 +172,8 @@ void GdbParser::switchCommand(const QString & s)
 bool GdbParser::processParsing(const QByteArray & storg)
 {
 	QByteArray st = storg;
-	mIsReady = false;
+
+	setReady(false);
 
 #ifdef Q_OS_WIN
 
@@ -329,8 +330,7 @@ bool GdbParser::processParsing(const QByteArray & storg)
 		}
 
 		gdbBuffer.clear();
-//		mIsReady = true;
-//		emit parserReady();
+		setReady(true);
 		return true;
 	}
 	return false;
@@ -357,8 +357,6 @@ void GdbParser::onDone(int id, QString st)
 		case -1 : emit done(id, "^done,interpreter=\"GdbParser\",event=\"generic information (not parsing)\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\"");break;
 		case PROMPT_ID: emit done(id, "^done,interpreter=\"GdbParser\",event=\"prompt\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\""); 
 		mIsReady = true;
-		emit parserReady();
-			getCommand();
 			break;
 
 	}

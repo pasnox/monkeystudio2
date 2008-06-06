@@ -16,6 +16,7 @@
 #include "./kernel/gdbParser.1.3.h"
 #include "./kernel/gdbProcess.1.3.h"
 #include "./kernel/gdbInterpreter.1.3.h"
+#include "./kernel/gdbSetting.1.3.h"
 #include "./kernel/gdbConnectTemplate.h"
 #include "./kernel/gdbBridgeEditor.h"
 #include "./kernel/gdbKernelDispatcher.h"
@@ -67,7 +68,7 @@ private:
 	// end of line
 	QByteArray crlf;
 
-	QString mPathGdb;
+//	QString mPathGdb;
 	bool isGdbStarted;
 	bool isTargetRunning;
 	

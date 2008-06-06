@@ -3,6 +3,10 @@
 #include "ui_UIGNUDebuggerSetting.h"
 
 #include "../../src/kernel/gdbProcess.1.3.h"
+#include "../../src/kernel/gdbKernelDispatcher.h"
+
+#include "UIManageParsingFile.h"
+
 #include <QPointer>
 
 class UIGNUDebuggerSetting : public QWidget, public Ui::UIGNUDebuggerSetting
@@ -10,6 +14,7 @@ class UIGNUDebuggerSetting : public QWidget, public Ui::UIGNUDebuggerSetting
 	Q_OBJECT
 
 public:
+
 	UIGNUDebuggerSetting( QWidget* = 0 );
 	void setKernel(QList<QPointer< class GdbCore> >);
 
@@ -22,13 +27,17 @@ protected slots:
 	void started();
 	void finished( int , QProcess::ExitStatus  );
 	void error( QProcess::ProcessError );
-	void bClicked();
+
+	void bClickedPathGdb();
+	void bClickedPathParsingFile();
+	void bClickedManageFile();
 
 	void loadSettings();
 	void saveSettings();
 
 private :
-	QString mPathGdb;
+
+	
 	QPointer<GdbProcess> Process;
 	QStringList mPluginList;
 };
