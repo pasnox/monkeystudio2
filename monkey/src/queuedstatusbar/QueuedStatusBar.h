@@ -16,6 +16,7 @@ public:
 	QueuedStatusBar( QWidget* parent = 0 );
 	
 	QLabel* label( QueuedStatusBar::LabelType type );
+	virtual QSize sizeHint() const;
 
 protected:
 	QStackedWidget* mStacked;
