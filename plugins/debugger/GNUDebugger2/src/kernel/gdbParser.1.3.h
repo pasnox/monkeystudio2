@@ -1,11 +1,11 @@
 /********************************************************************************************************
- * PROGRAM      : Debugger
- * DATE - TIME  : lundi 31 dcembre 2007 - 18h04
- * AUTHOR       :  (  )
- * FILENAME     : gdbParser
- * LICENSE      : 
- * COMMENTARY   : 
- ********************************************************************************************************/
+	* PROGRAM      : Debugger
+	* DATE - TIME  : lundi 31 dcembre 2007 - 18h04
+	* AUTHOR       :  (  )
+	* FILENAME     : gdbParser
+	* LICENSE      : 
+	* COMMENTARY   : 
+	********************************************************************************************************/
 
 #ifndef GDBPARSER_H
 #define GDBPARSER_H
@@ -28,8 +28,8 @@
 class GdbParser : public QObject, public QSingleton<GdbParser>
 {
 
-	Q_OBJECT
-	friend class QSingleton<GdbParser>;
+		Q_OBJECT
+		friend class QSingleton<GdbParser>;
 
 public:
 
@@ -38,7 +38,7 @@ public:
 
 public slots:
 
-	bool processParsing(const QByteArray&);
+	bool processParsing(const QString&);
 	void setNextCommand(QString);
 	void clearAllCommand();
 
@@ -83,9 +83,9 @@ private :
 
 	bool mIsReady;
 
- signals:
+	signals:
 
-	void onInterpreter(const QPointer<BaseInterpreter> & , const int & , const QString &);
+		void onInterpreter(const QPointer<BaseInterpreter> & , const int & , const QString &);
 
 	void targetLoaded(int , QString);
 	void targetNoLoaded(int, QString);

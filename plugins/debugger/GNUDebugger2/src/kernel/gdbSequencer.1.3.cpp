@@ -35,7 +35,7 @@ void GdbSequencer::start(const int & i)
 	if(mCurrentIndex < mCmdList.count())
 	{
 		GdbParser::instance()->setNextCommand( mCmdList.at(i).cmd );
-		GdbProcess::instance()->sendRawData( mCmdList.at(i).cmd.toLocal8Bit() );
+		GdbProcess::instance()->sendRawData( mCmdList.at(i).cmd );
 	}
 }
 

@@ -66,7 +66,7 @@ private:
 	QHash<QString, QAction*> *mActionList;
 
 	// end of line
-	QByteArray crlf;
+	QString crlf;
 
 //	QString mPathGdb;
 	bool isGdbStarted;
@@ -88,7 +88,7 @@ public slots:
 	void gdbStarted();
 	void gdbFinished(  int a , QProcess::ExitStatus );
 	void gdbError( QProcess::ProcessError);
-	void commandReadyRead(  const QByteArray& d);
+	void commandReadyRead(  const QString& d);
 
 	// Target
 	void onTargetLoaded(int , QString);

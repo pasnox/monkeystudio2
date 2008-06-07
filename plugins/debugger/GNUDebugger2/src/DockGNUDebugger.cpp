@@ -87,7 +87,7 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 
 
 		// connections
-		connect(Process, SIGNAL( commandReadyRead( const QByteArray & )), this , SLOT( commandReadyRead( const QByteArray & )));
+		connect(Process, SIGNAL( commandReadyRead( const QString& )), this , SLOT( commandReadyRead( const QString& )));
 		connect(Process, SIGNAL( started( )), this, SLOT(gdbStarted()));
 		connect(Process, SIGNAL( finished(  int , QProcess::ExitStatus  )), this, SLOT(gdbFinished( int , QProcess::ExitStatus)));
 		connect(Process, SIGNAL( error ( QProcess::ProcessError )), this, SLOT(gdbError(QProcess::ProcessError)));
@@ -158,7 +158,7 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 			if(r->isEnabled()) mainTabWidget->addTab( r->widget(),r->name() );
 		}
 
-		crlf = pMonkeyStudio::getEol().toLocal8Bit();
+		crlf = QTextCodec::codecForLocale()->fromUnicode( pMonkeyStudio::getEol() );
 	}
 }
 
@@ -186,12 +186,12 @@ void DockGNUDebugger::setEnabledActions(bool b)
 
 //
 
-void DockGNUDebugger::commandReadyRead(  const QByteArray & d)
+void DockGNUDebugger::commandReadyRead(  const QString& d)
 {
 	rawLog->setTextColor(QColor(0,0,255));
-	rawLog->append(d);
+	rawLog->append( d );
 	rawLog->setTextColor(QColor(0,0,0));
-	Parser->processParsing(d);
+	Parser->processParsing( d );
 }
 
 // Actions
@@ -308,8 +308,8 @@ void DockGNUDebugger::gdbStarted()
 //		Process->sendRawData("set breakpoint pending on");
 
 		// gdb is started, now load target under Gdb
-		Parser->setNextCommand("file \"" + mSelectedTarget.toLocal8Bit() + "\"");
-		Process->sendRawData("file \"" + mSelectedTarget.toLocal8Bit() + "\"");
+		Parser->setNextCommand("file \"" + mSelectedTarget + "\"");
+		Process->sendRawData("file \"" + mSelectedTarget + "\"");
 		
 		Dispatcher->gdbStarted();
 		isGdbStarted = true;

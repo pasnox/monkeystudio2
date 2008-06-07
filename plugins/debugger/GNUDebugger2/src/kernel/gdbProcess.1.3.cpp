@@ -5,6 +5,7 @@
 #include "gdbProcess.1.3.h"
 #include "monkey.h"
 
+#include <QTextCodec>
 
 GdbProcess::GdbProcess( QObject * parent ) : QProcess( parent )
 {
@@ -16,7 +17,7 @@ GdbProcess::GdbProcess( QObject * parent ) : QProcess( parent )
 	connect (&t, SIGNAL(timeout()), this , SLOT(onTimer()));
 	t.start(100);
 
-	crlf = pMonkeyStudio::getEol().toLocal8Bit();
+	crlf = pMonkeyStudio::getEol();
 }
 //
 GdbProcess::~GdbProcess()
@@ -27,8 +28,8 @@ GdbProcess::~GdbProcess()
 // read data from Gdb
 void GdbProcess::readyRead()
 {
-	QByteArray d = readAll ();
-	emit commandReadyRead( d );
+	QString buf = QTextCodec::codecForLocale()->toUnicode( readAll() );
+	emit commandReadyRead( buf );
 }
 
 //
@@ -39,8 +40,8 @@ void GdbProcess::onTimer()
 	{
 		if(mCmdList.count() && GdbParser::instance()->isReady())
 		{
-			write( mCmdList.at(0) + crlf );
-		mCmdList.removeAt(0);
+			write( QTextCodec::codecForLocale()->fromUnicode( mCmdList.at(0) + crlf ) );
+			mCmdList.removeAt(0);
 		}
 	}
 }
@@ -53,7 +54,7 @@ void GdbProcess::onTimer()
 
 }*/
 
-void GdbProcess::sendRawData( const QByteArray & a )
+void GdbProcess::sendRawData( const QString& a )
 {
 	mCmdList << a;
 }

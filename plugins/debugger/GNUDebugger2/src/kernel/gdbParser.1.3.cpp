@@ -43,7 +43,7 @@ GdbParser::GdbParser (QObject * parent) : QObject (parent), mIsReady(1)
 	if(gdbInterpreter && gdbPatternFile && gdbRestoreLine)
 	{
 	
-		crlf = crlf = pMonkeyStudio::getEol().toLocal8Bit();
+		crlf = pMonkeyStudio::getEol();
 
 		mEndParsing.clear();
 		mEndParsing << QRegExp(".*\\(gdb\\).$")
@@ -86,7 +86,7 @@ GdbParser::GdbParser (QObject * parent) : QObject (parent), mIsReady(1)
 
 		mCmdList.clear();
 
-		MonkeyCore::statusBar()->appendMessage( tr( "GdbParser initializing sucess full" ), 1000 ,QPixmap(), QBrush(QColor(120,250,100)));
+		MonkeyCore::statusBar()->appendMessage( tr( "GdbParser initializing sucess full" ), 2500 ,QPixmap(), QBrush(QColor(120,250,100)));
 	}
 	else MonkeyCore::statusBar()->appendMessage( tr( "GdbParser initializing FAILED" ), 5000,QPixmap(), QBrush(QColor(255,80,80)) );
 
@@ -153,7 +153,7 @@ void GdbParser::getCommand()
 	if(mCmdList.count())
 	{
 		mCurrentCmd = mCmdList.at(0);
-		onInfo(-1,"Get current command" + mCurrentCmd);
+		onInfo(-1,"Get current command " + mCurrentCmd);
 		mCmdList.removeAt(0);
 	}
 }
@@ -169,9 +169,9 @@ void GdbParser::switchCommand(const QString & s)
 }
 
 // 
-bool GdbParser::processParsing(const QByteArray & storg)
+bool GdbParser::processParsing(const QString & storg)
 {
-	QByteArray st = storg;
+	QString st = storg;
 
 	setReady(false);
 

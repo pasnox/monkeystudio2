@@ -18,7 +18,7 @@ UIGNUDebuggerSetting::UIGNUDebuggerSetting( QWidget* parent )
 
 	Process = new GdbProcess(this);
 	
-	connect(Process, SIGNAL( commandReadyRead( const QByteArray & )), this , SLOT( commandReadyRead( const QByteArray & )));
+	connect(Process, SIGNAL( commandReadyRead( const QString& )), this , SLOT( commandReadyRead( const QString& )));
 	connect(Process, SIGNAL( started( )), this, SLOT(started()));
 	connect(Process, SIGNAL( finished(  int , QProcess::ExitStatus  )), this, SLOT(finished( int , QProcess::ExitStatus)));
 	connect(Process, SIGNAL( error ( QProcess::ProcessError )), this, SLOT(error(QProcess::ProcessError)));
@@ -80,7 +80,7 @@ void UIGNUDebuggerSetting::bClickedPathGdb()
 	}
 }
 
-void UIGNUDebuggerSetting::commandReadyRead( const QByteArray & s)
+void UIGNUDebuggerSetting::commandReadyRead( const QString& s)
 {
 	// read version of GDB
 	QStringList l = QString(s).split( pMonkeyStudio::getEol());

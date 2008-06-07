@@ -25,15 +25,15 @@ public:
 
 private:
 	
-	QByteArray crlf;
+	QString crlf;
 	QString mCommand;
 	QString mDir;
-	QList<QByteArray> mCmdList;
+	QList<QString> mCmdList;
 	QTimer t;
 
 public slots:
 
-	void sendRawData( const QByteArray & );
+	void sendRawData( const QString& );
 
 	void stopProcess();
 	void stopTarget();
@@ -51,7 +51,7 @@ private slots:
 	
 signals:
 
-	void commandReadyRead(  const QByteArray & );
+	void commandReadyRead(  const QString& );
 };
 
 

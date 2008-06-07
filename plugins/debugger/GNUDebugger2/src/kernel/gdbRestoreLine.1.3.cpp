@@ -99,7 +99,7 @@ bool GdbRestoreLine::tryRestore(QStringList * list)
 			list->replace(i, a+b);
 			list->removeAt(i+1);
 
-			qDebug( "(Class GdbRestoreLine function tryRestore) WARNNING : Restoring line \"" + QString(a+b).toLocal8Bit() + "\"");
+			qDebug() << "(Class GdbRestoreLine function tryRestore) WARNNING : Restoring line \"" + QString(a+b) + "\"";
 		}
 	}
 */}

@@ -23,7 +23,7 @@ protected slots:
 	void on_dbbButtons_clicked( QAbstractButton* button );
 
 
-	void commandReadyRead( const QByteArray & );
+	void commandReadyRead( const QString& );
 	void started();
 	void finished( int , QProcess::ExitStatus  );
 	void error( QProcess::ProcessError );
