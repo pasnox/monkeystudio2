@@ -9,21 +9,21 @@
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
 ** Home Page : http://www.monkeystudio.org
 **
-    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
 #include "UIAbout.h"
@@ -45,7 +45,7 @@ const QString mDatasMask =
 "	<tr>"
 "		<td>"
 "			<b>%1</b><br />"
-"			%2 - %3<br />"
+"			%2 %3"
 "			%4 (<a href=\"%5\">%6</a>)<br />"
 "		</td>"
 "	</tr>"
@@ -53,12 +53,13 @@ const QString mDatasMask =
 
 const QList<pDatas> mTeamates = QList<pDatas>()
 	<< pDatas( "Filipe Azevedo", "Nox P@sNox", QObject::tr( "France" ), "pasnox@gmail.com", QObject::tr( "Creator & Principal Developer" ) )
-	<< pDatas( "Manuel Schmidt", "oversize", QObject::tr( "Germany" ), "manuel@schmidtman.de", QObject::tr( "Web Developer & Web Designer" ) )
-	<< pDatas( "Yannick", "xiantia", QObject::tr( "France" ), "xiantia@gmail.com", QObject::tr( "GDB Driver Integration" ) )
-	<< pDatas( "Julien Decologne", "Judd", QObject::tr( "France" ), "judd@hotmail.com", QObject::tr( "Splashscreen & Icons Designer" ) )
+	<< pDatas( "Kopats Andrei", "hlamer", QObject::tr( "Belarus" ), "hlamer@tut.by", QObject::tr( "Principal Developer, Class Browser, Beloruss translator" ) )
+	<< pDatas( "Yannick", "xiantia", QObject::tr( "France" ), "xiantia@gmail.com", QObject::tr( "GNU Debugger plugin" ) )
+	<< pDatas( "Roper Alexander", "Minirop", QObject::tr( "France" ), "minirop@peyj.com", QObject::tr( "Qt Pro Parser, Some Features/Help" ) )
 	<< pDatas( "Mashin Evgeniy", "evgenM", QObject::tr( "Russia" ), "mashin.zhenya@gmail.com", QObject::tr( "Many shared code between our IDEs" ) )
-	<< pDatas( "Kopats Andrei", "hlamer", QObject::tr( "Belarus" ), "hlamer@tut.by", QObject::tr( "Principal Developer, Class Browser" ) )
-	<< pDatas( "Roper Alexander", "Minirop", QObject::tr( "France" ), "minirop@peyj.com", QObject::tr( "Qt Pro Parser, Some Features/Help" ) );
+	<< pDatas( "Manuel Schmidt", "oversize", QObject::tr( "Germany" ), "manuel@schmidtman.de", QObject::tr( "Web Developer & Web Designer" ) )
+	<< pDatas( "Julien Decologne", "Judd", QObject::tr( "France" ), "judd@hotmail.com", QObject::tr( "Splashscreen & Icons Designer" ) )
+	<< pDatas( "Plano Marc", "Marc31", QObject::tr( "France" ), "marc31boss@gmail.com", QObject::tr( "French translator" ) );
 
 const QList<pDatas> mDonors = QList<pDatas>()
 	<< pDatas( "Filipe Azevedo", "Nox P@sNox", QObject::tr( "France" ), "pasnox@gmail.com", QObject::tr( "No donations for now, you can use this <a href=\"http://sourceforge.net/project/project_donations.php?group_id=163493\">link</a> to make donation. Donations will help paying host/domain, and relatives things about the projects ( may need a mac book for better mac version :p )." ) );
@@ -95,7 +96,7 @@ UIAbout::UIAbout( QWidget* p )
 
 	// team
 	foreach ( pDatas i, mTeamates )
-		tbTeam->append( mDatasMask.arg( i.Comment ).arg( i.Name ).arg( i.Login ).arg( i.Pays ).arg( QString( "mailto:" ).append( i.Email ) ).arg( i.Email ) );
+		tbTeam->append( mDatasMask.arg( i.Comment ).arg( i.Name +" -" ).arg( i.Login +"<br />" ).arg( i.Pays ).arg( QString( "mailto:" ).append( i.Email ) ).arg( i.Email ) );
 	tbTeam->moveCursor( QTextCursor::Start );
 
 	// license
@@ -107,7 +108,7 @@ UIAbout::UIAbout( QWidget* p )
 
 	// donors
 	foreach ( pDatas i, mDonors )
-		tbDonations->append( mDatasMask.arg( i.Comment ).arg( i.Name ).arg( i.Login ).arg( i.Pays ).arg( QString( "mailto:" ).append( i.Email ) ).arg( i.Email ) );
+		tbDonations->append( mDatasMask.arg( i.Comment ).arg( i.Name +" -" ).arg( i.Login +"<br />" ).arg( i.Pays ).arg( QString( "mailto:" ).append( i.Email ) ).arg( i.Email ) );
 	tbDonations->moveCursor( QTextCursor::Start );
 
 	// links
