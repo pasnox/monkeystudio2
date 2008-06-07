@@ -308,8 +308,8 @@ void DockGNUDebugger::gdbStarted()
 //		Process->sendRawData("set breakpoint pending on");
 
 		// gdb is started, now load target under Gdb
-		Parser->setNextCommand("file " + mSelectedTarget.toLocal8Bit());
-		Process->sendRawData("file " + mSelectedTarget.toLocal8Bit());
+		Parser->setNextCommand("file \"" + mSelectedTarget.toLocal8Bit() + "\"");
+		Process->sendRawData("file \"" + mSelectedTarget.toLocal8Bit() + "\"");
 		
 		Dispatcher->gdbStarted();
 		isGdbStarted = true;

@@ -60,7 +60,8 @@ void UIGNUDebuggerSetting::bClickedManageFile()
 void UIGNUDebuggerSetting::bClickedPathParsingFile()
 {
 	QString mPathParsingFile = QFileDialog::getOpenFileName(this, tr("Location of Parsing file"));
-	editPathParsingFile->setText(mPathParsingFile);
+	if(!mPathParsingFile.isEmpty())
+		editPathParsingFile->setText(mPathParsingFile);
 }
 
 //

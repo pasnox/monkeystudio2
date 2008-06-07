@@ -293,7 +293,7 @@ void GdbBreakpoint::toggleBreakpoint(const QString & fileName, const int & line)
 			GdbCore::Parser()->setNextCommand("b " + fileName + ":" + QString::number(line));
 			GdbCore::Parser()->changeAnswerInterpreter(interpreterAddBreakpoint, 
 				"^info,interpreter=\"" + name() + "\",event=\"Breakpoint-Add\",fileName=\""+ fileName +"\",line=\""+ QString::number(line) +"\",answerGdb=\"");
-			GdbCore::Process()->sendRawData("b " + fileName.toLocal8Bit() + ":" + QByteArray::number(line));
+			GdbCore::Process()->sendRawData("b \"" + fileName.toLocal8Bit() + "\":" + QByteArray::number(line));
 
 //			mWidget->append("send -> b " + fileName + ":" + QString::number(line) );
 			setWaitEndProcess(true);
@@ -306,7 +306,7 @@ void GdbBreakpoint::toggleBreakpoint(const QString & fileName, const int & line)
 		GdbCore::Parser()->setNextCommand("b " + fileName + ":" + QString::number(line));
 		GdbCore::Parser()->changeAnswerInterpreter(interpreterAddBreakpoint, 
 			"^info,interpreter=\"" + name() + "\",event=\"Breakpoint-Add\",fileName=\""+ fileName +"\",line=\""+ QString::number(line) +"\",answerGdb=\"");
-		GdbCore::Process()->sendRawData("b " + fileName.toLocal8Bit() + ":" + QByteArray::number(line));
+		GdbCore::Process()->sendRawData("b \"" + fileName.toLocal8Bit() + "\":" + QByteArray::number(line));
 
 //		mWidget->append("send -> b " + fileName + ":" + QString::number(line) );
 
