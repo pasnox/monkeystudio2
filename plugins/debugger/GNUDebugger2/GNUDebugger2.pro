@@ -18,6 +18,7 @@ SOURCES	= src/GNUDebugger.cpp \
 	src/kernel/gdbBridgeEditor.cpp \
 	src/kernel/gdbKernelDispatcher.cpp \
 	src/kernel/gdbCore.cpp \
+	src/kernel/gdbSequencer.1.3.cpp \
 	src/kernel/gdbSetting.1.3.cpp \
 	src/addon/gdbBreakpoint/gdbBreakpoint.cpp \
 	src/addon/gdbBacktrace.cpp \
@@ -50,6 +51,7 @@ HEADERS	= src/GNUDebugger.h \
 	src/kernel/gdbBridgeEditor.h \
 	src/kernel/gdbKernelDispatcher.h \
 	src/kernel/gdbCore.h \
+	src/kernel/gdbSequencer.1.3.h \
 	src/kernel/gdbSetting.1.3.h \
 	src/addon/gdbBreakpoint/gdbBreakpoint.h \
 	src/addon/gdbBacktrace.h \

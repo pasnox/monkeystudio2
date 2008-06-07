@@ -26,8 +26,9 @@ UIManageParsingFile::UIManageParsingFile( QWidget* parent )
 		QTreeWidgetItem *i =  new QTreeWidgetItem(QStringList() << QString::number(GdbPatternFile::instance()->getId( p ))
 		<< GdbPatternFile::instance()->getPattern( p ) << GdbPatternFile::instance()->getComment( p ));
 
+		p.enable ? i->setCheckState(0,Qt::Checked) : i->setCheckState(0,Qt::Unchecked);
 		i->setFlags(i->flags() | Qt::ItemIsEditable);
-		i->setIcon(0, QIcon(":/icons/buttonok.png"));
+		i->setIcon(0, QIcon(":/icons/warning.png"));
 		treeWidget->addTopLevelItem(i);
 	}
 	connect(bSave, SIGNAL(clicked()), this,  SLOT(onSave()));
@@ -61,7 +62,10 @@ void UIManageParsingFile::onSave()
 	for(int i=0; i< treeWidget->topLevelItemCount (); i++)
 	{
 		QTreeWidgetItem *it = treeWidget->topLevelItem(i);
-		GdbPattern p = {it->data(2, Qt::DisplayRole).toString(),  QRegExp(it->data(1, Qt::DisplayRole).toString()), it->data(0, Qt::DisplayRole).toInt() };
+		GdbPattern p = {it->data(2, Qt::DisplayRole).toString(), 
+			QRegExp(it->data(1, Qt::DisplayRole).toString()),
+			it->data(0, Qt::DisplayRole).toInt(), 
+			it->checkState(0) == Qt::Checked ? true : false};
 		l->replace(i, p);
 	}
 }

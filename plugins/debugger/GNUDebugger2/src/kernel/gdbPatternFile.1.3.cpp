@@ -37,6 +37,7 @@ GdbPatternFile::GdbPatternFile(QObject *parent) :  QObject(parent)
 
 GdbPatternFile::~GdbPatternFile()
 {
+	// save the pattern file
 	if(QFile::exists(mFullName))
 	{
 		QFile f(mFullName);
@@ -45,7 +46,7 @@ GdbPatternFile::~GdbPatternFile()
 		QDataStream s(&f);
 
 		foreach(GdbPattern p , GdbPatternList)
-			s << QString("[" + QString::number(p.id) + "]" + p.key.pattern() + "[" + p.comment + "]"  );
+			s << QString(QString::number(p.enable) + "[" + QString::number(p.id) + "]" + p.key.pattern() + "[" + p.comment + "]"  );
 
 		f.close();
 
@@ -75,15 +76,16 @@ bool GdbPatternFile::load(const QString & fullName)
 			// [10020]can not read memorie\.
 			ds >> s;
 			// match ?	
-			QRegExp r("\\[(\\d+)\\](.*)\\[(.*)\\]");
+			QRegExp r("(\\d)\\[(\\d+)\\](.*)\\[(.*)\\]");
 			if(r.exactMatch(s))
 			{
 				//extract id and string
 				QStringList l = r.capturedTexts();
 				GdbPattern p;
-				p.id = l.at(1).toInt();
-				p.key = QRegExp(l.at(2));
-				p.comment = l.at(3);
+				p.id = l.at(2).toInt();
+				p.key = QRegExp(l.at(3));
+				p.comment = l.at(4);
+				p.enable = l.at(1).toInt();
 				// store 
 				GdbPatternList << p;
 			}
@@ -102,12 +104,13 @@ bool GdbPatternFile::load(const QString & fullName)
 GdbPattern GdbPatternFile::find(const QString  & value)
 {
 	// init default pattern
-	GdbPattern pattern={QString() , QRegExp(value),-1};
+	GdbPattern pattern={QString() , QRegExp(value),-1,false};
 	
 	// find of all pattern
 	for(int i =0; i< GdbPatternList.count(); i++)
 	{
-		if(GdbPatternList.at(i).key.exactMatch( value )) 
+
+		if(GdbPatternList.at(i).enable && GdbPatternList.at(i).key.exactMatch( value )) 
 		{
 			return GdbPatternList.at(i);
 		}

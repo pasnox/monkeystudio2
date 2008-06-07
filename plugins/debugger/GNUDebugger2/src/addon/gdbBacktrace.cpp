@@ -84,6 +84,10 @@ GdbBacktrace::GdbBacktrace(QObject * parent) : GdbCore(parent)
 
 	Connect->add(this, interpreterInfoSource, &GdbBacktrace::onInfoSource);
 
+	Sequencer = new GdbSequencer(this);
+	QList<SequencerCmd> s = QList<SequencerCmd>() << SequencerCmd("backtrace", "bt") << SequencerCmd("infosource", "info source") ; 
+	Sequencer->add(s);
+
 	mWidget = new QTextEdit();
 }
 
@@ -149,8 +153,10 @@ void GdbBacktrace::targetStopped(const int & id, const QString & s)
 	setWaitEndProcess(true);
 
 	mWidget->append("*** target stopped ***");
-	GdbCore::Parser()->setNextCommand("bt");
-	GdbCore::Process()->sendRawData("bt");
+	
+	Sequencer->start();
+//	GdbCore::Parser()->setNextCommand("bt");
+//	GdbCore::Process()->sendRawData("bt");
 }
 
 //
@@ -180,8 +186,9 @@ void GdbBacktrace::onBacktrace(int id, QString s)
 
 		mWidget->append("Current Line : " + QString::number(mCurrentLine));
 
-		GdbCore::Parser()->setNextCommand("info source");
-		GdbCore::Process()->sendRawData("info source");
+		Sequencer->loop();
+		//GdbCore::Parser()->setNextCommand("info source");
+		//GdbCore::Process()->sendRawData("info source");
 	}
 }
 

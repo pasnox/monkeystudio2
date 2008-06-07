@@ -23,7 +23,7 @@
 #include <QObject>
 #include <QTextEdit>
 #include "../kernel/gdbCore.h"
-
+#include "../kernel/gdbSequencer.1.3.h"
 
 
 class GdbBacktrace : public GdbCore
@@ -62,7 +62,7 @@ private:
 	QPointer<BaseInterpreter> interpreterBacktrace;
 	QPointer<BaseInterpreter> interpreterInfoSource;
 
-
+	QPointer<GdbSequencer> Sequencer;
 	QPointer<QTextEdit> mWidget;
 
 	int mCurrentLine;
