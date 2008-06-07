@@ -29,17 +29,18 @@ BaseInterpreter::BaseInterpreter(QObject *parent): QObject(parent)
 {
 }
 
+//
 
-
-void BaseInterpreter::set(QString cName, QString cGdb, QRegExp cRegExp,  QRegExp aRegExp, QString aExtention)
+void BaseInterpreter::set(/*QString cName, QString cGdb,*/ QRegExp cRegExp, QRegExp aRegExp, QString aExtention)
 {
-	mCmdName = cName;
-	mCmdGdb = cGdb;
+//	mCmdName = cName;
+//	mCmdGdb = cGdb;
 	mCmdRegExp = cRegExp;
 	mAnswerRegExp = aRegExp;
 	mAnswerExtention = aExtention;
 }
 
+//
 
 BaseInterpreter::~BaseInterpreter()
 {
@@ -53,19 +54,21 @@ GdbInterpreter::GdbInterpreter(QObject *parent) : QObject(parent)
 	GdbInterpreterList.clear(); 
 }
 
+//
 
-QPointer<BaseInterpreter>  GdbInterpreter::add(const QString & cName, const QString & cGdb, const QRegExp & cRegExp,
+QPointer<BaseInterpreter>  GdbInterpreter::add(/*const QString & cName, const QString & cGdb,*/ const QRegExp & cRegExp,
 											   const QRegExp & aRegExp, const QString & aExtention)
 {
 	QPointer<BaseInterpreter> i = new BaseInterpreter(this);
 	if(i)
 	{
-		i->set(cName, cGdb,cRegExp, aRegExp, aExtention);
+		i->set(/*cName, cGdb,*/cRegExp, aRegExp, aExtention);
 		GdbInterpreterList << i;
 	}
 	return i;
 }	
 
+//
 
 bool GdbInterpreter::remove(const QPointer<BaseInterpreter> & i)
 {
@@ -79,6 +82,8 @@ bool GdbInterpreter::remove(const QPointer<BaseInterpreter> & i)
 	return false;
 }
 
+//
+
 void GdbInterpreter::changeAnswer(const QPointer<BaseInterpreter> & i, const QString & s)
 {
 	foreach(QPointer<BaseInterpreter> b , GdbInterpreterList)
@@ -86,6 +91,7 @@ void GdbInterpreter::changeAnswer(const QPointer<BaseInterpreter> & i, const QSt
 }
 
 // find if an interpreter have a command (private function)
+
 int GdbInterpreter::findCmd(const QString & cmd)
 {
 	for(int i=0; i< GdbInterpreterList.count(); i++)
@@ -94,6 +100,7 @@ int GdbInterpreter::findCmd(const QString & cmd)
 }
 
 // find interpreter from current command
+
 QPointer<BaseInterpreter> GdbInterpreter::find(const QString & currentCmd, const QString & lineValue)
 {
 	int t = findCmd(currentCmd);
@@ -104,7 +111,7 @@ QPointer<BaseInterpreter> GdbInterpreter::find(const QString & currentCmd, const
 	return NULL;
 }
 		
-
+//
 
 GdbInterpreter::~GdbInterpreter()
 {

@@ -112,11 +112,11 @@ void GdbParser::addRestoreLine(const QString & l1, const QString & l2)
 
 // gateAway Interpreter
 
-QPointer<BaseInterpreter> GdbParser::addInterpreter(const QString & cName, const QString & cGdb, const QRegExp & cRegExp, 
+QPointer<BaseInterpreter> GdbParser::addInterpreter(/*const QString & cName, const QString & cGdb,*/ const QRegExp & cRegExp, 
 													const QRegExp & aRegExp,const QString & aExtention)
 {
 	if(gdbInterpreter)
-		return gdbInterpreter->add(cName , cGdb , cRegExp ,  aRegExp , aExtention );
+		return gdbInterpreter->add(/*cName , cGdb , */cRegExp ,  aRegExp , aExtention );
 	else return NULL;
 }
 
@@ -275,7 +275,7 @@ bool GdbParser::processParsing(const QString & storg)
 
 			// find if this anwser is present under file ini
 			int id = -1;
-			if( gdbPatternFile )
+			if( gdbPatternFile && !oneLine.isEmpty())
 				id = gdbPatternFile->find(oneLine).id;
 
 			// remove all " in the string

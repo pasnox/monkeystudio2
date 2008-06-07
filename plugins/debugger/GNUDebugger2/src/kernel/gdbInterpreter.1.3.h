@@ -25,7 +25,7 @@ public :
 
 		BaseInterpreter(QObject *parent = 0);
 
-		void set(QString cName, QString cGdb, QRegExp cRegExp,  QRegExp aRegExp, QString aExtention);
+		void set(/*QString cName, QString cGdb,*/ QRegExp cRegExp,  QRegExp aRegExp, QString aExtention);
 
 
 		~BaseInterpreter();
@@ -40,10 +40,6 @@ public :
 		void setCmdRegExp(QRegExp s) { mCmdRegExp = s ;}
 		
 private :
-// not use
-		QString mCmdName; 			// name of your command
-// not use
-		QString mCmdGdb;			// command  send to gdb
 
 		QRegExp mCmdRegExp;			// command gdb in RegExp format
 		QRegExp mAnswerRegExp;		// answer from gdb in QregExp
@@ -63,7 +59,7 @@ public :
 	
 		GdbInterpreter(QObject *parent = 0);
 
-		QPointer<BaseInterpreter> add(const QString &, const QString &, const QRegExp &,  const QRegExp &, const QString & );
+		QPointer<BaseInterpreter> add(/*const QString &, const QString &,*/ const QRegExp &,  const QRegExp &, const QString & );
 		bool remove(const QPointer<BaseInterpreter> &);
 		void changeAnswer(const QPointer<BaseInterpreter> &, const QString &);
 		QPointer<BaseInterpreter> find(const QString & , const QString & );

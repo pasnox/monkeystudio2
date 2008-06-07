@@ -21,23 +21,9 @@ UIGdbBreakpoint::UIGdbBreakpoint( QWidget* parent )
 	: QWidget( parent )
 {
 	setupUi( this );
-
-	
-	treeModel = new QStandardItemModel(0, 6);
-
-	treeModel->setHeaderData(0, Qt::Horizontal, QObject::tr("Hit"));
-	treeModel->setHeaderData(1, Qt::Horizontal, QObject::tr("Enable"));
-	treeModel->setHeaderData(2, Qt::Horizontal, QObject::tr("Condition"));
-	treeModel->setHeaderData(3, Qt::Horizontal, QObject::tr("Index"));
-	treeModel->setHeaderData(4, Qt::Horizontal, QObject::tr("Line"));
-	treeModel->setHeaderData(5, Qt::Horizontal, QObject::tr("File"));
-
-	treeView->setRootIsDecorated(false);
-    treeView->setAlternatingRowColors(true);
-	treeView->setModel(treeModel);
-	treeView->setColumnWidth ( 0, QPixmap(":/icons/buttonok.png").size().width()) ;
-
-	treeView->setItemDelegate( new TreeDelegate(this));
+	treeWidget->setRootIsDecorated(false);
+    treeWidget->setAlternatingRowColors(true);
+	treeWidget->setColumnWidth ( 0, QPixmap(":/icons/buttonok.png").size().width()) ;
 }
 
 //
@@ -51,47 +37,44 @@ void UIGdbBreakpoint::closeEvent( QCloseEvent* e )
 
 void UIGdbBreakpoint::upDateData(const QList<Breakpoint *> & bl)
 {
-	// get the current row count and delete this
-	int rc = treeModel->rowCount();
-	treeModel->removeRows(0, rc);
-	
+	treeWidget->clear();
+
 	// foreach Breakpoint
 	foreach(Breakpoint *bp, bl)
 	{
 		// for one file
 		foreach(BaseBreakpoint bbp, bp->bp)
 		{
-			rc = treeModel->rowCount();
-			treeModel->insertRow(rc);
-		
-			treeModel->setData(treeModel->index(rc,0), bbp.hit ? QIcon(":/icons/buttonok.png"): QIcon(), Qt::DecorationRole);
-			treeModel->setData(treeModel->index(rc,1), bbp.enable ? "True": "False");
-			treeModel->setData(treeModel->index(rc,2), bbp.condition);
-			treeModel->setData(treeModel->index(rc,3), bbp.index);
-			treeModel->setData(treeModel->index(rc,4), bbp.line);
-			treeModel->setData(treeModel->index(rc,5), bp->fileName);
+			QComboBox * cb = new QComboBox();
+			cb->addItem("True", true);
+			cb->addItem("False", false);
+	
+			connect( cb, SIGNAL(currentIndexChanged ( int )), this , SLOT(onCurrentIndexChanged ( int )));
+
+			bbp.enable ? cb->setCurrentIndex(0) : cb->setCurrentIndex(1);
+
+			QTreeWidgetItem *i =  new QTreeWidgetItem(QStringList() << QString()/* id */ << QString() /* ComboBox */
+				<< bbp.condition << QString::number(bbp.index) << QString::number(bbp.line) << bp->fileName);
+				
+		//	i->setFlags(i->flags() | Qt::ItemIsEditable);
+			bbp.hit ? i->setIcon(0,QIcon(":/icons/buttonok.png")) : i->setIcon(0,QIcon());
+			treeWidget->addTopLevelItem(i);
+			treeWidget->setItemWidget(i, 1, cb);
 		}
 	}
 }
 
-/*
-<PasNox> deja utiliser le model directmeent na aucun sens !
-<PasNox> pk tu fais ca ?
-<PasNox> utilsie des QTreeItem pour ajouter des items
-<PasNox> puis
-<PasNox> setItemDelegate( item, delagate )
-<PasNox> ensuite au lieu d'utiliser plein de data
-<PasNox> creer une structure
-<PasNox> que tu register avec qRegisterMetaType, comme ca tu pourra la stocker dans des variant
-<PasNox> struct BreakPoint
-<PasNox> {
-<PasNox> bool enable;
-<PasNox> string condition;
-<PasNox> ...
-<PasNox> };
-<PasNox> qRegisterMetaType<BreakPoint>( "BreakPoint" )
-<PasNox> item->setData( UserRole, QVariant::fromValue( breakpoiiinstructure ) );
-<xiantia> oui ok, deja je veut just que lorsque je vait sur "enable" il m'ouvre un QComboBox sur la column 1
-<PasNox> BreakPoint bp = item->data( userrole ).value<BreakPoint>();
-*/
+void UIGdbBreakpoint::onCurrentIndexChanged(int i)
+{
+
+	for(int j=0; j< treeWidget->topLevelItemCount(); j++)
+	{	
+		QTreeWidgetItem *it = (QTreeWidgetItem*) treeWidget->topLevelItem(j);
+		QComboBox *cb = (QComboBox*) sender();
+		if(treeWidget->itemWidget(it,1) == cb)
+		{
+			emit enabledBreakpoint(it->data(5, Qt::DisplayRole).toString(), it->data(3, Qt::DisplayRole).toInt(), !cb->currentIndex());
+		}
+	}
+}
 

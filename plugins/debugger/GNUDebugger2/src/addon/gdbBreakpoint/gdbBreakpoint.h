@@ -22,7 +22,7 @@
 
 #include <QObject>
 #include <QTextEdit>
-#include "../../kernel/gdbCore.h"
+#include "../../kernel/gdbCore.1.3.h"
 #include "./ui/UIGdbBreakpoint.h"
 
 #include "gdbBreakpointStruct.h"
@@ -40,6 +40,9 @@ public:
 	~GdbBreakpoint();
 
 public slots:
+
+	void onBreakpointEnabled(int, QString);
+	void onBreakpointDisabled(int, QString);
 
 
 	void onBreakpointAdd( int , QString );
@@ -60,6 +63,8 @@ public slots:
 	QString name();
 	QPointer<QWidget> widget();
 
+	void toggleEnabledBreakpoint(QString ,int , bool);
+
 private:
 
 	GdbConnectTemplate<GdbBreakpoint> *Connect;
@@ -67,8 +72,12 @@ private:
 	QPointer<BaseInterpreter> interpreterDelBreakpoint;
 	QList<Breakpoint *>  breakpointList;
 
+	QPointer<BaseInterpreter> interpreterEnabledBreakpoint;
+	QPointer<BaseInterpreter> interpreterDisabledBreakpoint;
+
 	Breakpoint * findByName(const QString &);
 	int asBreakpointAtLine(Breakpoint *, int);
+	int asBreakpointIndex(Breakpoint *b, int index);
 
 	void removeBreakpoint(Breakpoint * bp);
 	void removeAllBreakpoint();
@@ -81,7 +90,8 @@ private:
 
 signals:
 
-	void onToggleBreakpoint(const QString &, const int &, const bool );
+	void onToggleBreakpoint(const Breakpoint & , const BaseBreakpoint & , const bool &);
+	void onToggleBreakpointEnabled(const Breakpoint & , const BaseBreakpoint &);
 };
 
 #endif

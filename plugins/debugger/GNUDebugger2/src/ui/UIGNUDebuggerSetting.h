@@ -3,7 +3,7 @@
 #include "ui_UIGNUDebuggerSetting.h"
 
 #include "../../src/kernel/gdbProcess.1.3.h"
-#include "../../src/kernel/gdbKernelDispatcher.h"
+#include "../../src/kernel/gdbKernelDispatcher.1.3.h"
 
 #include "UIManageParsingFile.h"
 

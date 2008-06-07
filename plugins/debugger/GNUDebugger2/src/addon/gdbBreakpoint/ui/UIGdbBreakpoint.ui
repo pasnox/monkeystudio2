@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>446</width>
-    <height>575</height>
+    <width>389</width>
+    <height>334</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -17,7 +17,44 @@
     <number>0</number>
    </property>
    <item row="0" column="0" >
-    <widget class="QTreeView" name="treeView" />
+    <widget class="QTreeWidget" name="treeWidget" >
+     <property name="autoFillBackground" >
+      <bool>true</bool>
+     </property>
+     <property name="alternatingRowColors" >
+      <bool>true</bool>
+     </property>
+     <column>
+      <property name="text" >
+       <string>Hit</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Enable</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Condition</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Index</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Line</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>File</string>
+      </property>
+     </column>
+    </widget>
    </item>
   </layout>
  </widget>

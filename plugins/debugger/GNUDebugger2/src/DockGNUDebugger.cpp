@@ -116,11 +116,14 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 
 		// breakpoint
 		
-		connect(Breakpoint, SIGNAL(onToggleBreakpoint(const QString &, const int &, const bool &)), Bridge,
-			SLOT(onToggleBreakpoint(const QString &, const int &, const bool &)));
+		connect(Breakpoint, SIGNAL(onToggleBreakpoint(const Breakpoint &, const BaseBreakpoint &, const bool &)), Bridge,
+			SLOT(onToggleBreakpoint(const Breakpoint &, const BaseBreakpoint &, const bool& )));
 
-		connect(Backtrace, SIGNAL(onToggleBacktrace(const QString &, const int &)), Bridge,
-			SLOT(onToggleBacktrace(const QString &, const int &)));
+		connect(Breakpoint, SIGNAL(onToggleBreakpointEnabled(const Breakpoint &, const BaseBreakpoint &)), Bridge,
+			SLOT(onToggleBreakpointEnabled(const Breakpoint & , const BaseBreakpoint &)));
+
+		connect(Backtrace, SIGNAL(onToggleBacktrace(const QString & , const int &)), Bridge,
+			SLOT(onToggleBacktrace(const QString & , const int &)));
 
 		// Monkey
 		connect( MonkeyCore::workspace(), SIGNAL( fileOpened( const QString & ) ), Bridge, SLOT( add( const QString & ) ) );
@@ -133,14 +136,16 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 
 		
 		// add permanent Interpreter	
-		interpreterStepOver = Parser->addInterpreter("step-over", 
-			"n",
+		interpreterStepOver = Parser->addInterpreter(
+			//"step-over", 
+			//"n",
 			QRegExp("^n$"), 
 			QRegExp("\\d+\\s+.*"),
 			"^info,interpreter=\"Step-Over\",event=\"End-Stepping-Range\",answerGdb=\"");
 
-		interpreterStepInto = Parser->addInterpreter("step-into", 
-			"s", 
+		interpreterStepInto = Parser->addInterpreter(
+			//"step-into", 
+			//"s", 
 			QRegExp("^s$"), 
 			QRegExp("\\d+\\s+.*"),
 			"^info,interpreter=\"Step-Into\",event=\"End-Stepping-Range\",answerGdb=\"");

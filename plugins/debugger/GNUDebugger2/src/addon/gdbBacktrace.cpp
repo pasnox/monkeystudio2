@@ -60,8 +60,9 @@ GdbBacktrace::GdbBacktrace(QObject * parent) : GdbCore(parent)
 	*/
 
 	
-	interpreterBacktrace = GdbCore::Parser()->addInterpreter("Backtrace",
-		"bt",
+	interpreterBacktrace = GdbCore::Parser()->addInterpreter(
+		//"Backtrace",
+		//"bt",
 		QRegExp("^bt"),
 		QRegExp("^#0\\s.*\\sat\\s.*:\\d+"),
 		"^info,interpreter=\"" + name() + "\",event=\"Backtrace\",answerGdb=\"");
@@ -76,8 +77,9 @@ GdbBacktrace::GdbBacktrace(QObject * parent) : GdbCore(parent)
 		cRegExpCmd = "info"
 		aRegExp = "(gdb) "
 	*/
-	interpreterInfoSource = GdbCore::Parser()->addInterpreter("Info-source",
-		"info source",
+	interpreterInfoSource = GdbCore::Parser()->addInterpreter(
+		//"Info-source",
+		//"info source",
 		QRegExp("^info source"),
 		QRegExp("^Located\\sin\\s.*"),
 		"^info,interpreter=\"" + name() + "\",event=\"Info-source\",answerGdb=\"");

@@ -46,7 +46,7 @@ public slots:
 	void addRestoreLine(const QString &, const QString &);
 
 	// gatAway interpreter
-	QPointer<BaseInterpreter> addInterpreter(const QString & cName, const QString & cGdb, const QRegExp & cRegExp,
+	QPointer<BaseInterpreter> addInterpreter(/*const QString & cName, const QString & cGdb,*/ const QRegExp & cRegExp,
 		const QRegExp & aRegExp, const QString & aExtention);
 
 	bool removeInterpreter( const QPointer<BaseInterpreter> & );

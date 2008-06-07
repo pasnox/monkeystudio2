@@ -22,9 +22,8 @@
 
 #include <QObject>
 #include <QTextEdit>
-#include "../kernel/gdbCore.h"
+#include "../kernel/gdbCore.1.3.h"
 #include "../kernel/gdbSequencer.1.3.h"
-
 
 class GdbBacktrace : public GdbCore
 {

@@ -17,9 +17,9 @@
 #include "./kernel/gdbProcess.1.3.h"
 #include "./kernel/gdbInterpreter.1.3.h"
 #include "./kernel/gdbSetting.1.3.h"
-#include "./kernel/gdbConnectTemplate.h"
-#include "./kernel/gdbBridgeEditor.h"
-#include "./kernel/gdbKernelDispatcher.h"
+#include "./kernel/gdbConnectTemplate.1.3.h"
+#include "./kernel/gdbBridgeEditor.1.3.h"
+#include "./kernel/gdbKernelDispatcher.1.3.h"
 
 #include "./addon/gdbBreakpoint/gdbBreakpoint.h"
 #include "./addon/gdbBacktrace.h"
