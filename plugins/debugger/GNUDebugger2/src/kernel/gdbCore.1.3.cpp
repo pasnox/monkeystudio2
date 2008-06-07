@@ -1,5 +1,5 @@
 
-#include "gdbCore.h"
+#include "gdbCore.1.3.h"
 
 #include <QDebug>
 
