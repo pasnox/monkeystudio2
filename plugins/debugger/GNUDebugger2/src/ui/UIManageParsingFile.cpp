@@ -2,7 +2,7 @@
 //
 #include <QCloseEvent>
 #include <QFile>
-#include <QdataStream>
+#include <QDataStream>
 
 //
 QPointer<UIManageParsingFile> UIManageParsingFile::_self = 0L;
