@@ -32,6 +32,7 @@
 #include <maininterface.h>
 #include <qscintillamanager.h>
 
+#include "../addon/gdbBreakpoint/gdbBreakpointStruct.h"
 
 class GdbBridgeEditor : public QObject , public QSingleton<GdbBridgeEditor>
 {
@@ -62,7 +63,8 @@ public slots:
 	// slot from Qsi
 	void onMarginClicked(int, int, Qt::KeyboardModifiers);
 
-	void onToggleBreakpoint(const QString & fileName, const int & line, const bool & b);
+	void onToggleBreakpoint(const Breakpoint &, const BaseBreakpoint & , const bool & b);
+	void onToggleBreakpointEnabled(const Breakpoint & bp, const BaseBreakpoint & p);
 	void onToggleBacktrace(const QString & filename, const int & line);
 
 private :
