@@ -28,7 +28,8 @@ UIManageParsingFile::UIManageParsingFile( QWidget* parent )
 
 		p.enable ? i->setCheckState(0,Qt::Checked) : i->setCheckState(0,Qt::Unchecked);
 		i->setFlags(i->flags() | Qt::ItemIsEditable);
-		i->setIcon(0, QIcon(":/icons/warning.png"));
+		if( GdbPatternFile::instance()->getId( p ) >= 20000 ) i->setIcon(0, QIcon(":/icons/warningred.png"));
+		else i->setIcon(0, QIcon(":/icons/warning.png"));
 		treeWidget->addTopLevelItem(i);
 	}
 	connect(bSave, SIGNAL(clicked()), this,  SLOT(onSave()));

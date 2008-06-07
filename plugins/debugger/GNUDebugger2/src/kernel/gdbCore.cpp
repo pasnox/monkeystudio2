@@ -36,9 +36,9 @@ void GdbCore::interpreter(const QPointer<BaseInterpreter> & , const int & , cons
 void GdbCore::setEnabled(const bool & b ) { mEnabled = b;}
 bool GdbCore::isEnabled() { return mEnabled;}
 
-void GdbCore::setWaitEndProcess(const bool & p){ if(p ) watchDog.start(5000); else watchDog.stop(); qDebug() << "set wait " + QString::number(p) + " " +  name(); mWaitEndProcess = p;}
+void GdbCore::setWaitEndProcess(const bool & p){ if(p ) watchDog.start(5000); else watchDog.stop();/* qDebug() << "set wait " + QString::number(p) + " " +  name(); */ mWaitEndProcess = p;}
 
-bool GdbCore::isWaitEndProcess() { qDebug() << "get wait " + QString::number(mWaitEndProcess) + " " +  name(); return mWaitEndProcess;}
+bool GdbCore::isWaitEndProcess() { /*qDebug() << "get wait " + QString::number(mWaitEndProcess) + " " +  name(); */return mWaitEndProcess;}
 
 void GdbCore::onTimer()
 {
