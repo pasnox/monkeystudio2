@@ -42,8 +42,6 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 	*/
 
 	interpreterAddBreakpoint = GdbCore::Parser()->addInterpreter(
-		//"Breakpoint-add",
-		//"b",
 		QRegExp("^b\\s.*:\\d+$"),
 		QRegExp("^Breakpoint\\s+\\d+\\s+at\\s\\w+:\\s+file\\s+[^,]+,\\s+line\\s+\\d+\\.(|\\s+\\(\\d+\\s\\w*\\))"),
 		"");
@@ -59,8 +57,6 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 		aRegExp = "(gdb) "
 	*/
 	interpreterDelBreakpoint = GdbCore::Parser()->addInterpreter(
-		//"Breakpoint-delete",
-		//"delete ",
 		QRegExp("^delete\\s\\d+"),
 		QRegExp("^\\(gdb\\)\\s"),
 		"^info,interpreter=\"" + name() + "\",event=\"Breakpoint-delete\",answerGdb=\"");
@@ -74,8 +70,6 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 		aRegExp = "(gdb) "
 	*/
 	interpreterEnabledBreakpoint = GdbCore::Parser()->addInterpreter(
-		//"Breakpoint-Enabled",
-		//"enable",
 		QRegExp("^enable\\s\\d+"),
 		QRegExp("^\\(gdb\\)\\s"),
 		"");
@@ -89,8 +83,6 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 		aRegExp = "(gdb) "
 	*/
 	interpreterDisabledBreakpoint = GdbCore::Parser()->addInterpreter(
-		//"Breakpoint-Disable",
-		//"disable",
 		QRegExp("^disable\\s\\d+"),
 		QRegExp("^\\(gdb\\)\\s"),
 		"");
@@ -453,6 +445,9 @@ void GdbBreakpoint::onRequestBreakpoint(const QString & fileName)
 
 void GdbBreakpoint::toggleEnabledBreakpoint(QString fileName, int index, bool b)
 {
+	if(isWaitEndProcess())
+		return;
+	
 	if(b)
 	{
 		GdbCore::Parser()->changeAnswerInterpreter(interpreterEnabledBreakpoint, 
@@ -485,6 +480,7 @@ void GdbBreakpoint::onBreakpointEnabled(int, QString s)
 			{
 				bp->bp[index].enable = true;
 				emit onToggleBreakpointEnabled(*bp, bp->bp.at(index) );
+				setWaitEndProcess(false);
 			}
 		
 		}
@@ -507,6 +503,7 @@ void GdbBreakpoint::onBreakpointDisabled(int, QString s)
 			{
 				bp->bp[index].enable = false;
 				emit onToggleBreakpointEnabled(*bp, bp->bp.at(index));
+				setWaitEndProcess(false);
 			}
 		
 		}

@@ -85,7 +85,6 @@ private:
 	void breakpointMoved(const QString & , const int & , const int & );
 	void desableBreakpointHit();
 
-//	QPointer<QTextEdit> mWidget;
 	QPointer<UIGdbBreakpoint> mWidget;
 
 signals:

@@ -22,7 +22,7 @@
 #include "./kernel/gdbKernelDispatcher.1.3.h"
 
 #include "./addon/gdbBreakpoint/gdbBreakpoint.h"
-#include "./addon/gdbBacktrace.h"
+#include "./addon/gdbBacktrace/gdbBacktrace.h"
 
 
 class DockGNUDebugger : public pDockWidget, public QSingleton<DockGNUDebugger>

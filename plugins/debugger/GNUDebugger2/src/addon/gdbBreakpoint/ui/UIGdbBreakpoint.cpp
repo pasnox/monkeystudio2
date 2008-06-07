@@ -1,9 +1,8 @@
 #include "UIGdbBreakpoint.h"
 //
 #include <QCloseEvent>
-#include <QStandardItemModel>
+#include <QComboBox>
  //
-#include "treeDelegate.h"
 
 QPointer<UIGdbBreakpoint> UIGdbBreakpoint::_self = 0L;
 //
