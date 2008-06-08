@@ -786,13 +786,24 @@ void pMonkeyStudio::resetLexer( QsciLexer* l )
 	// cancel if no lexer
 	if ( !l )
 		return;
-	// reset lexer settings
-	MonkeyCore::settings()->remove( QString( "%1/%2" ).arg( scintillaSettingsPath() ).arg( l->language() ) );
-	// read default settings
-	pSettings* ss = MonkeyCore::settings();
-	l->readSettings( *ss, qPrintable( scintillaSettingsPath() ) );
-	// emit changes
-	l->refreshProperties();
+	
+	// get settings pointer
+	pSettings* settings = MonkeyCore::settings();
+	// remove lexer entry
+	settings->remove( QString( "%1/%2" ).arg( scintillaSettingsPath() ).arg( l->language() ) );
+	// set default styles
+	for ( int i = 0; i < 128; ++i )
+	{
+		if (!l->description( i ).isEmpty() )
+		{
+			l->setColor( l->defaultColor( i ), i);
+			l->setEolFill( l->defaultEolFill( i ), i);
+			l->setFont( l->defaultFont( i ), i);
+			l->setPaper( l->defaultPaper( i ), i);
+		}
+	}
+	// re read properties
+	l->readSettings( *settings, qPrintable( scintillaSettingsPath() ) );
 }
 
 void pMonkeyStudio::applyProperties()
@@ -1177,13 +1188,13 @@ void pMonkeyStudio::setUnmatchedBraceBackgroundColor( const QColor& c )
 { MonkeyCore::settings()->setValue( settingsPath() +"/UnmatchedBraceBackgroundColor", c ); }
 
 const QColor pMonkeyStudio::unmatchedBraceBackgroundColor()
-{ return MonkeyCore::settings()->value( settingsPath() +"/UnmatchedBraceBackgroundColor", QColor( "#55aa00" ) ).value<QColor>(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/UnmatchedBraceBackgroundColor", QColor( "#ff0000" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setUnmatchedBraceForegroundColor( const QColor& c )
 { MonkeyCore::settings()->setValue( settingsPath() +"/UnmatchedBraceForegroundColor", c ); }
 
 const QColor pMonkeyStudio::unmatchedBraceForegroundColor()
-{ return MonkeyCore::settings()->value( settingsPath() +"/UnmatchedBraceForegroundColor", QColor( "#ff0000" ) ).value<QColor>(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/UnmatchedBraceForegroundColor", QColor( "#ffffff" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setEdgeMode( QsciScintilla::EdgeMode m )
 { MonkeyCore::settings()->setValue( settingsPath() +"/EdgeMode", m ); }
@@ -1261,7 +1272,7 @@ void pMonkeyStudio::setFoldMarginForegroundColor( const QColor& c )
 { MonkeyCore::settings()->setValue( settingsPath() +"/FoldMarginForegroundColor", c ); }
 
 const QColor pMonkeyStudio::foldMarginForegroundColor()
-{ return MonkeyCore::settings()->value( settingsPath() +"/FoldMarginForegroundColor", QColor( "#000000" ) ).value<QColor>(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/FoldMarginForegroundColor", QColor( "#ffffff" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setMarginsEnabled( bool b )
 { MonkeyCore::settings()->setValue( settingsPath() +"/MarginsEnabled", b ); }
@@ -1279,7 +1290,7 @@ void pMonkeyStudio::setMarginsForegroundColor( const QColor& c )
 { MonkeyCore::settings()->setValue( settingsPath() +"/MarginsForegroundColor", c ); }
 
 const QColor pMonkeyStudio::marginsForegroundColor()
-{ return MonkeyCore::settings()->value( settingsPath() +"/MarginsForegroundColor", QColor( "#000000" ) ).value<QColor>(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/MarginsForegroundColor", QColor( "#ffffff" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setMarginsFont( const QFont& f )
 { MonkeyCore::settings()->setValue( settingsPath() +"/MarginsFont", f.toString() ); }

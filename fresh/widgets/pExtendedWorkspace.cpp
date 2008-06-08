@@ -386,17 +386,20 @@ void pExtendedWorkspace::setCurrentIndex( int i )
 	QWidget* w = document( i );
 	
 	// update gui if needed
-	switch ( mDocMode )
+	if ( i != -1 )
 	{
-		case dmSDI:
-			mStackedWidget->setCurrentWidget( w );
-		case dmMDI:
-			mMdiAreaWidget->setActiveSubWindow( qobject_cast<QMdiSubWindow*>( w ? w->parent() : 0 ) );
-			break;
-		case dmTopLevel:
-			if ( w && !w->isActiveWindow() )
-				w->activateWindow();
-			break;
+		switch ( mDocMode )
+		{
+			case dmSDI:
+				mStackedWidget->setCurrentWidget( w );
+			case dmMDI:
+				mMdiAreaWidget->setActiveSubWindow( qobject_cast<QMdiSubWindow*>( w ? w->parent() : 0 ) );
+				break;
+			case dmTopLevel:
+				if ( w && !w->isActiveWindow() )
+					w->activateWindow();
+				break;
+		}
 	}
 	
 	// emit document change

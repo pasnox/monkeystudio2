@@ -14,22 +14,20 @@ QueuedStatusBar::QueuedStatusBar( QWidget* parent )
 	l = ( mLabels[ltCursorPosition] = new QLabel( this ) );
 	l->setMargin( 2 );
 	l->setToolTip( tr( "Cursor position" ) );
-	l->setFrameStyle( QFrame::StyledPanel );
 	l = ( mLabels[ltMessage] = new QLabel( this ) );
 	l->setMargin( 2 );
-	l->setFrameStyle( QFrame::StyledPanel );
 	l = ( mLabels[ltSaveState] = new QLabel( this ) );
 	l->setMargin( 2 );
 	l->setToolTip( tr( "Modification state of file" ) );
-	l->setFrameStyle( QFrame::StyledPanel );
 	l = ( mLabels[ltEOLMode] = new QLabel( this ) );
 	l->setMargin( 2 );
 	l->setToolTip( tr( "EOL mode" ) );
-	l->setFrameStyle( QFrame::StyledPanel );
 	l = ( mLabels[ltIndentMode] = new QLabel( this ) );
 	l->setMargin( 2 );
 	l->setToolTip( tr( "Indentation mode" ) );
-	l->setFrameStyle( QFrame::StyledPanel );
+	// may need fix for some styles
+	for ( int i = ltMessage; i < ltIndentMode +1; ++i )
+		label( (QueuedStatusBar::LabelType)i )->setFrameStyle( QFrame::StyledPanel );
 	//
 	mWidgetLabels = new QWidget;
 	QHBoxLayout* hlayout = new QHBoxLayout( mWidgetLabels );
@@ -57,6 +55,13 @@ QueuedStatusBar::QueuedStatusBar( QWidget* parent )
 QLabel* QueuedStatusBar::label( QueuedStatusBar::LabelType type )
 { return mLabels[type]; }
 
+QSize QueuedStatusBar::sizeHint() const
+{
+	QSize size = pQueuedStatusBar::sizeHint();
+	size.setHeight( mHeight );
+	return size;
+}
+
 void QueuedStatusBar::resizeEvent( QResizeEvent* event )
 {
 	pQueuedStatusBar::resizeEvent( event );
@@ -70,16 +75,10 @@ void QueuedStatusBar::resizeEvent( QResizeEvent* event )
 }
 
 void QueuedStatusBar::messageShown( const pQueuedMessage& /*message*/ )
-{
-	mStacked->setCurrentIndex( mStacked->indexOf( mQueuedWidget ) );
-	setFixedHeight( mStacked->sizeHint().height() );
-}
+{ mStacked->setCurrentIndex( mStacked->indexOf( mQueuedWidget ) ); }
 
 void QueuedStatusBar::messageFinished()
-{
-	mStacked->setCurrentIndex( mStacked->indexOf( mWidgetLabels ) );
-	setFixedHeight( mHeight );
-}
+{ mStacked->setCurrentIndex( mStacked->indexOf( mWidgetLabels ) ); }
 
 void QueuedStatusBar::setMessage( const QString& message )
 {
