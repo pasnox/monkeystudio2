@@ -12,6 +12,7 @@ Prise en charge du click margin si gdb n'est pas en fonction
 Ajouter la prise en charge du pending breakpoint : "set breakpoint pending on" -> "Breakpoint 1 (C:/Qt/4.4.0/src/corelib/kernel/qobject.cpp:2328) pending."
 	Attention il affiche aussi "File xxxx not found avant"
 
+Pb de droit sous linux pour le save gdbparsing.txt
 
 Utiliser le target par defaut de monkey 
 
