@@ -1,24 +1,32 @@
 Future : 
+
+fixer le bug du QComboBox dimention
+fixer l'icon breakpoint disable
+
 Ajouter la gestion des bp condionnel
 
-Ajouter la gestion des enable / disable breakpoint
-	modif du signal onToggleBreakpoint(QString, int, bool)
-	par onToggleBreakpoint(QString , struct BaseBreakpoint, bool);
 Ajouter le working directorie a Gdb
 
-Ajouter la prise en charge des accents
 Prise en charge du click margin si gdb n'est pas en fonction
-Modifier le chargement du fichier d'init
+
 Ajouter la prise en charge du pending breakpoint : "set breakpoint pending on" -> "Breakpoint 1 (C:/Qt/4.4.0/src/corelib/kernel/qobject.cpp:2328) pending."
 	Attention il affiche aussi "File xxxx not found avant"
 
-Modifier le install.pri
-Passer en GNUDebugger v1.3 sur le depot 
 
 Utiliser le target par defaut de monkey 
+
+
 test:								linux:		windows:	mac:
 --------------------------------------------------------------------------------------------------------------------------------------
 
+Ajouter la gestion des enable / disable breakpoint		ok		ok
+Modifier le chargement du fichier d'init			ok		ok
+
+Modifier le install.pri						ok		ok
+Passer en GNUDebugger v1.3 sur le depot 			ok		ok
+
+Ajouter la prise en charge des accents				ok		ok
+Ajouter la prise en charge des espaces				ok		ok
 
 le lancement de gdb						ok		ok
 le chargement target sur split line (done)			ok		ok
@@ -35,18 +43,18 @@ supprimer breakpoint / backtrace sur quit			ok		ok
 supprimer backtrace sur stop					ok		ok
 desibled / enabled action					ok		ok
 
-gdb version (bug affichage sous linux)				bug		ok
+gdb version (bug affichage sous linux)				ok		ok
 gdb path							ok		ok
 
-setting manager							a tester	ok
-setting desabled /enabled addOn					a tester	ok
+setting manager							ok		ok
+setting desabled /enabled addOn					ok		ok
 
-si move breakpoint sur une ligne comportant deja un bp		a tester	ok
+si move breakpoint sur une ligne comportant deja un bp		ok		ok
 Note: breakpoint 12 also set at pc 0x40d476.
 
-detection de bp hit / end-stepping-range			a tester	ok
+detection de bp hit / end-stepping-range			ok		ok
 
-si on fait rapidement step / over le parser n'est pas pret	a tester	ok
+si on fait rapidement step / over le parser n'est pas pret	ok		ok
 ajouter la fonction Parser->isReady() 
 
 
