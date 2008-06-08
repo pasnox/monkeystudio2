@@ -4,6 +4,7 @@
 # 2 = monkey svn revision, default xxxx
 # 3 = architecture, default i386
 # 4 = gpg id, default Filipe AZEVEDO
+# 5 = dev or empty ( trunk ) for svn url
 
 # package name
 package_name=monkeystudio
@@ -12,7 +13,7 @@ package_name=monkeystudio
 version=$1
 if [ "$version" = '' ]
 then
-		version=1.8.x
+	version=1.8.x
 fi
 
 # monkey revision
@@ -36,6 +37,16 @@ then
 	id=ED11858D
 fi
 
+# svn url
+if [ "$5" = 'dev' ]
+then
+	svn=svn://monkeystudio.org/monkeyrepos/v2/branches/dev
+else
+	svn=svn://monkeystudio.org/monkeyrepos/v2/trunk
+fi
+
+echo $svn
+
 # package version
 package_version="$version"+svn"$revision"
 
@@ -52,9 +63,12 @@ createSourceOrig()
 	# 1 = revision
 	# 2 = package
 	# 3 = package orig
-	
+
+	# remove dir if needed
+	rm -R ./$2
+
 	# export repository
-	svn export -r $1 -q svn://monkeystudio.org/monkeyrepos/v2/branches/dev ./$2
+	svn export -r $1 -q $svn ./$2
 	
 	# create orig tarball
 	tar czf ../$3 ./$2
