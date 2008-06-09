@@ -12,17 +12,21 @@
 #include "gdbRestoreLine.1.3.h"
 #include <QMessageBox>
 
+//
+
 GdbRestoreLine::GdbRestoreLine(QObject *parent ) : QObject(parent)
 {
 	GdbRestoreLineList.clear();
 }
 
+//
 
 GdbRestoreLine::~GdbRestoreLine()
 {
 	GdbRestoreLineList.clear();
 }
 
+//
 
 void GdbRestoreLine::add(const QRegExp & l1, const QRegExp & l2) 
 {
@@ -30,19 +34,24 @@ void GdbRestoreLine::add(const QRegExp & l1, const QRegExp & l2)
 	GdbRestoreLineList << l;
 }
 
+//
+
 void GdbRestoreLine::add(const QString & l1, const QString & l2) 
 {
 	GdbLines l={ QRegExp(l1), QRegExp(l2) };
 	GdbRestoreLineList << l;
 }
 
+//
 
-int GdbRestoreLine::begin(const QStringList & l, const QRegExp &r)
+int GdbRestoreLine::begin(const int & b , const QStringList & l, const QRegExp &r)
 {
-	for(int i=0; i<l.count() ; i++)
+	for(int i=b; i<l.count() ; i++)
 		if(r.exactMatch(l.at(i))) return i;
 	return -1;
 }
+
+//
 
 int GdbRestoreLine::end(const int & b, const QStringList & l, const QRegExp &r)
 {
@@ -51,6 +60,8 @@ int GdbRestoreLine::end(const int & b, const QStringList & l, const QRegExp &r)
 	return -1;
 }
 
+// not use
+
 bool GdbRestoreLine::find(const QString & l1, const QString & l2)
 {
 	for(int i=0; i<GdbRestoreLineList.count() ; i++)
@@ -58,48 +69,44 @@ bool GdbRestoreLine::find(const QString & l1, const QString & l2)
 	return false;
 }
 
+//
+/*
+#0  qMain (argc=1, argv=0x3d4c30)
+ at src/main.cpp:65
+#1  0x004578d4 in WinMain (instance=0x400000, prevInstance=0x0, cmdShow=10)
+    at qtmain_win.cpp:140
+#2  0x0045730a in main ()
+(gdb) 
+*/
 bool GdbRestoreLine::tryRestore(QStringList * list)
 {
+	bool r = false;
+
 	// new version 1.4
 	foreach(GdbLines l , GdbRestoreLineList)
 	{
-		int lBegin = begin(*list, l.l1);
-		if(lBegin != -1)
+		for(int i=0; i< list->count(); i++)
 		{
-//			QMessageBox::warning(NULL,"l1 found", list->at(lBegin));
-			int lEnd = end(lBegin, *list , l.l2);
-			if(lEnd != -1)
+			int lBegin = begin(i, *list, l.l1);
+			if(lBegin != -1)
 			{
-//				QMessageBox::warning(NULL,"l2 found", list->at(lEnd));
-				// ok found
-				QString s;
-				for(int i=lBegin; i<=lEnd; i++)
+				int lEnd = end(lBegin, *list , l.l2);
+				if(lEnd != -1)
 				{
-					// create line
-					s.append( list->at(lBegin));
-					list->removeAt(lBegin);
+					r = true;
+					// ok found
+					QString s;
+					for(int j=lBegin; j<=lEnd; j++)
+					{
+						// create line
+						s.append( list->at(lBegin));
+						list->removeAt(lBegin);
+					}
+					list->insert(lBegin, s);
+					//				return true;
 				}
-				list->insert(lBegin, s);
-//				QMessageBox::warning(NULL,"restoring", s);
-				return true;
 			}
 		}
 	}
-
-	return false;	
-	
-/*	for(int i=0; i<list->count() - 1 ; i++)
-	{
-		QString a = list->at(i);
-		QString b = list->at(i+1); 
-
-		if(find( a , b))
-		{
-			// line splited			
-			list->replace(i, a+b);
-			list->removeAt(i+1);
-
-			qDebug() << "(Class GdbRestoreLine function tryRestore) WARNNING : Restoring line \"" + QString(a+b) + "\"";
-		}
-	}
-*/}
+	return r;	
+}

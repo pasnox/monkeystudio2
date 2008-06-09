@@ -1,21 +1,38 @@
+
+V1.3.2 change log
+
+fix start gdb : some time target is not loaded correctly (parser not correctly sync)
+fix breakpoint disable : this is not clear under editor is you quit debug mode
+fix step-into / step-ouver : if you speed click under button (parser panic)
+fix all lines : all lines from gdb can be restoring (splited line)(kernel)
+fix ComboBox : Under Breakpoint Ui this is now correctly resizing
+
+
+V1.3.1 pre-release
+
 Future : 
 
-fixer le bug du QComboBox dimention
-fixer l'icon breakpoint disable
+- le restoreline ne restore qu'une seul fois
+- fixer le bug du QComboBox dimention
+- fixer l'icon breakpoint disable
 
-Ajouter la gestion des bp condionnel
+- Ajouter la gestion des bp condionnel
 
-Ajouter le working directorie a Gdb
+- Ajouter le working directorie a Gdb
 
-Prise en charge du click margin si gdb n'est pas en fonction
+- Prise en charge du click margin si gdb n'est pas en fonction
 
-Ajouter la prise en charge du pending breakpoint : "set breakpoint pending on" -> "Breakpoint 1 (C:/Qt/4.4.0/src/corelib/kernel/qobject.cpp:2328) pending."
+- Ajouter la prise en charge du pending breakpoint : "set breakpoint pending on" -> "Breakpoint 1 (C:/Qt/4.4.0/src/corelib/kernel/qobject.cpp:2328) pending."
 	Attention il affiche aussi "File xxxx not found avant"
 
-Pb de droit sous linux pour le save gdbparsing.txt
+- Pb de droit sous linux pour le save gdbparsing.txt
 
-Utiliser le target par defaut de monkey 
+- Utiliser le target par defaut de monkey 
 
+
+
+
+V1.3.1 Test
 
 test:								linux:		windows:	mac:
 --------------------------------------------------------------------------------------------------------------------------------------

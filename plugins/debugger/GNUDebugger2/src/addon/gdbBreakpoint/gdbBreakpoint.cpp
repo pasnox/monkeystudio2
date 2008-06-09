@@ -454,6 +454,7 @@ void GdbBreakpoint::toggleEnabledBreakpoint(QString fileName, int index, bool b)
 			"^info,interpreter=\"" + name() + "\",event=\"Breakpoint-Enabled\",fileName=\""+ fileName +"\",index=\""+ QString::number(index) +"\",enabled=\"true\",answerGdb=\"");
 		GdbCore::Parser()->setNextCommand("enable " + QString::number(index));
 		GdbCore::Process()->sendRawData("enable " + QString::number(index));
+		setWaitEndProcess(true);
 	}
 	else
 	{
@@ -461,6 +462,7 @@ void GdbBreakpoint::toggleEnabledBreakpoint(QString fileName, int index, bool b)
 			"^info,interpreter=\"" + name() + "\",event=\"Breakpoint-Disable\",fileName=\""+ fileName +"\",index=\""+ QString::number(index) +"\",enabled=\"false\",answerGdb=\"");
 		GdbCore::Parser()->setNextCommand("disable " + QString::number(index));
 		GdbCore::Process()->sendRawData("disable " + QString::number(index));
+		setWaitEndProcess(true);
 	}
 }
 
@@ -505,7 +507,6 @@ void GdbBreakpoint::onBreakpointDisabled(int, QString s)
 				emit onToggleBreakpointEnabled(*bp, bp->bp.at(index));
 				setWaitEndProcess(false);
 			}
-		
 		}
 	}
 }

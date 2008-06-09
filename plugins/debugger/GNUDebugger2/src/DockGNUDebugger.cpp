@@ -204,8 +204,15 @@ void DockGNUDebugger::commandReadyRead(  const QString& d)
 void DockGNUDebugger::onActionLoadTarget()
 {
 	isTargetRunning = isGdbStarted = false;
-	Parser->clearAllCommand();
 
+	Process->clearAllCommand();
+	Parser->clearAllCommand();
+	
+	// set parser not ready because i start Gdb, i can only send 
+	// a command if gdb is started by waitting prompt (gdb)
+	// fix V1.3.2
+	Parser->setReady(false);
+		
 //	UIXUPManager p* = MonkeyCore::projectsManager()->currentProject();
 //	if(MonkeyCore::projectsManager()->currentProject())
 //		QString s = MonkeyCore::projectsManager()->currentProject()->projectSettingsValue( "EXECUTE_DEBUG" );
@@ -246,6 +253,13 @@ void DockGNUDebugger::onActionExit()
 
 void DockGNUDebugger::onActionRestart()
 {
+	Process->clearAllCommand();
+	Parser->clearAllCommand();
+	
+	Parser->setReady(true);
+		
+	isTargetRunning = false;
+
 	if(Parser->isReady())
 	{
 		setEnabledActions(false);
@@ -307,7 +321,7 @@ void DockGNUDebugger::gdbStarted()
 	{
 		rawLog->append("*** Gdb started ***");
 
-		Parser->setReady(true);
+//		Parser->setReady(true);
 
 //		Parser->setNextCommand("set options for gdb");
 //		Process->sendRawData("set breakpoint pending on");

@@ -18,6 +18,7 @@ GdbProcess::GdbProcess( QObject * parent ) : QProcess( parent )
 	t.start(100);
 
 	crlf = pMonkeyStudio::getEol();
+	mCmdList.clear();
 }
 //
 GdbProcess::~GdbProcess()
@@ -40,6 +41,7 @@ void GdbProcess::onTimer()
 	{
 		if(mCmdList.count() && GdbParser::instance()->isReady())
 		{
+			GdbParser::instance()->setReady(false);
 			write( QTextCodec::codecForLocale()->fromUnicode( mCmdList.at(0) + crlf ) );
 			mCmdList.removeAt(0);
 		}
@@ -60,6 +62,11 @@ void GdbProcess::sendRawData( const QString& a )
 }
 
 //
+
+void GdbProcess::clearAllCommand()
+{
+	mCmdList.clear();
+}
 
 void GdbProcess::stopTarget()
 {

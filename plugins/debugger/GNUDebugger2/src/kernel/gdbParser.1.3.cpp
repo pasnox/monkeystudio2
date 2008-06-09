@@ -31,8 +31,7 @@
 #define ERROR_ID 		20000
 #define PROMPT_ID		0
 
-
-GdbParser::GdbParser (QObject * parent) : QObject (parent), mIsReady(1)
+GdbParser::GdbParser (QObject * parent) : QObject (parent), mIsReady(0)
 {
 	// get the current instance
 	gdbPatternFile = GdbPatternFile::instance();
@@ -153,7 +152,7 @@ void GdbParser::getCommand()
 	if(mCmdList.count())
 	{
 		mCurrentCmd = mCmdList.at(0);
-		onInfo(-1,"Get current command " + mCurrentCmd);
+		onInfo(-1,"\"Get current command : ");
 		mCmdList.removeAt(0);
 	}
 }
@@ -220,13 +219,23 @@ bool GdbParser::processParsing(const QString & storg)
 
 		// if answer is splitted in more string
 		if(gdbRestoreLine && gdbRestoreLine->tryRestore(&lines)) 
-			onInfo(-1,"Possible Restoring splited line");
+		{
+			for(int i=0; i<lines.count(); i++)
+				onInfo(-1," !! Restoring -> \"" +  lines.at(i));
+		}
 
 		// read line by line
 		for(int i=0; i<lines.count(); i++)
 		{
 			// extract one line from all lines
 			QString oneLine = lines.at(i);
+
+
+			/*
+				since V1.3.2 this is not using
+						|
+						V
+			*/
 
 			/*
 				for Linux : some time the prompt have not crlf at the end of "(gdb) "
@@ -273,10 +282,16 @@ bool GdbParser::processParsing(const QString & storg)
 				// Reading symbols from /home/yannick/dev/debugger/Debugger...done
 			}
 
+
 			// find if this anwser is present under file ini
 			int id = -1;
 			if( gdbPatternFile && !oneLine.isEmpty())
 				id = gdbPatternFile->find(oneLine).id;
+
+			
+			/*
+				since V1.3.2 this is not using
+			*/
 
 			// remove all " in the string
 			// because getParametre() function bug 

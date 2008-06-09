@@ -20,7 +20,7 @@ GNUDebugger::GNUDebugger()
 	mPluginInfos.Author = "Pinon Yannick aka Xiantia  <private mail>";
 	mPluginInfos.Type = BasePlugin::iDebugger;
 	mPluginInfos.Name = PLUGIN_NAME;
-	mPluginInfos.Version = "1.3.1";
+	mPluginInfos.Version = "1.3.2";
 	mPluginInfos.Enabled = false;
 
 	// get the new instance of GdbPattermFile

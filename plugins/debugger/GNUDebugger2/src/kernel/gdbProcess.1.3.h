@@ -42,7 +42,7 @@ public slots:
 	void setWorkingDirectorie(const QString &);
 	
 	void startProcess();
-
+	void clearAllCommand();
 
 private slots:
 

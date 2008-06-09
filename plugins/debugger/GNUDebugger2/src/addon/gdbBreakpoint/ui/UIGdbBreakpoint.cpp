@@ -44,26 +44,23 @@ void UIGdbBreakpoint::upDateData(const QList<Breakpoint *> & bl)
 		// for one file
 		foreach(BaseBreakpoint bbp, bp->bp)
 		{
-			QComboBox * cb = new QComboBox();
+			QTreeWidgetItem *i =  new QTreeWidgetItem(treeWidget);
+			i->setText(2, bbp.condition);
+			i->setText(3, QString::number(bbp.index));
+			i->setText(4, QString::number(bbp.line));
+			i->setText(5, bp->fileName);
+
+			QComboBox * cb = new QComboBox(this);
 			cb->addItem("True", true);
 			cb->addItem("False", false);
 
 			connect( cb, SIGNAL(currentIndexChanged ( int )), this , SLOT(onCurrentIndexChanged ( int )));
 
 			bbp.enable ? cb->setCurrentIndex(0) : cb->setCurrentIndex(1);
-
-			QTreeWidgetItem *i =  new QTreeWidgetItem(treeWidget);
-			i->setText(2, bbp.condition);
-			i->setText(3, QString::number(bbp.index));
-			i->setText(4, QString::number(bbp.line));
-			i->setText(5, bp->fileName);
-			
-//			QTreeWidgetItem *i =  new QTreeWidgetItem(QStringList() << QString()/* id */ << QString() /* ComboBox */
-//				<< bbp.condition << QString::number(bbp.index) << QString::number(bbp.line) << bp->fileName);
 				
-		//	i->setFlags(i->flags() | Qt::ItemIsEditable);
 			bbp.hit ? i->setIcon(0,QIcon(":/icons/buttonok.png")) : i->setIcon(0,QIcon());
-//			treeWidget->addTopLevelItem(i);
+			// because under Qt4.4.0 the last row is not re-sizing (comboBox)
+			i->setSizeHint( 1,cb->sizeHint() );			
 			treeWidget->setItemWidget(i, 1, cb);
 		}
 	}
@@ -77,9 +74,7 @@ void UIGdbBreakpoint::onCurrentIndexChanged(int i)
 		QTreeWidgetItem *it = (QTreeWidgetItem*) treeWidget->topLevelItem(j);
 		QComboBox *cb = (QComboBox*) sender();
 		if(treeWidget->itemWidget(it,1) == cb)
-		{
 			emit enabledBreakpoint(it->text(5), it->text(3).toInt(), !cb->currentIndex());
-		}
 	}
 }
 

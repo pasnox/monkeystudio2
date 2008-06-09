@@ -63,7 +63,9 @@ void GdbBridgeEditor::removeAllBreakpoints()
 {
 	foreach(Editor e , editorList)
 	{
+		// fix v1.3.2
 		e.pointeur->markerDeleteAll( pEditor::mdEnabledBreak);	
+		e.pointeur->markerDeleteAll( pEditor::mdDisabledBreak);	
 	}
 }
 

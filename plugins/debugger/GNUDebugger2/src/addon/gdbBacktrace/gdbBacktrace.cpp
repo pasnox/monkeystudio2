@@ -48,7 +48,7 @@ GdbBacktrace::GdbBacktrace(QObject * parent) : GdbCore(parent)
 		type=AutoConnection) at kernel/qobject.cpp:2348
 	*/
 
-	GdbCore::Parser()->addRestoreLine("^#0\\s.*" , 
+	GdbCore::Parser()->addRestoreLine("^#\\d+\\s.*" , 
 		".*\\sat\\s.*:\\d+$");
 
 

@@ -37,7 +37,7 @@ public:
 	bool tryRestore(QStringList * );
 	bool find(const QString &, const QString &);
 
-	int begin(const QStringList & , const QRegExp &);
+	int begin(const int &, const QStringList & , const QRegExp &);
 	int end(const int & , const QStringList &, const QRegExp &);
 
 private:
