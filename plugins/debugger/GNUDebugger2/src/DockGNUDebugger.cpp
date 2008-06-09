@@ -6,7 +6,6 @@
 #include <maininterface.h>
 #include <qscintillamanager.h>
 #include "monkey.h"
-//#include "xupmanager.h"
 
 /* debugger */
 //
@@ -61,9 +60,6 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 	: pDockWidget( w ), isGdbStarted(false), isTargetRunning(false)
 
 {
-
-	// set charset for gdb not work
-	//	QTextCodec::setCodecForLocale(QTextCodec::codecForName("ISO-8859-1"));
 
 	// closing Monkey
 	connect (MonkeyCore::mainWindow(), SIGNAL( aboutToClose()), this , SLOT(onAboutToClose()));
@@ -509,8 +505,12 @@ void DockGNUDebugger::onInterpreter(const QPointer<BaseInterpreter> & i, const i
 
 void DockGNUDebugger::onUserToggleBreakpoint(const QString & fileName, const int & line)
 {
-	rawLog->append("** user toggle breakpoint *** " + fileName + " " + QString::number(line + 1));
-	Breakpoint->toggleBreakpoint(fileName, line + 1);
+	// fix 1.3.2 not send data to gdb if it not started or if target not running
+	if(isGdbStarted && !isTargetRunning)
+	{
+		rawLog->append("** user toggle breakpoint *** " + fileName + " " + QString::number(line + 1));
+		Breakpoint->toggleBreakpoint(fileName, line + 1);
+	}
 }
 
 // close monkey

@@ -273,23 +273,28 @@ void GdbBreakpoint::breakpointMoved(const QString & fileName, const int & line, 
 			{
 				int r  = asBreakpointAtLine(bp,line);
 				if(r != -1) 
+				{
 					// clear to editor
+					showMessage("Breakpoint deleted allready set." , 2500, _WARNING_);
 					toggleBreakpoint(bp->fileName, b.line);
+					bp->bp[r].hit = true;
+				}
 				else
 				{
-						// clear current breakpoint
-//						emit onToggleBreakpoint(bp->fileName, b.line, false);
-						emit onToggleBreakpoint(*bp, b, false);
-						bp->bp[i].line = line;
-						// move breakpoint
-//						emit onToggleBreakpoint(bp->fileName, bp->bp.at(i).line, true);
-						emit onToggleBreakpoint(*bp, bp->bp.at(i) , true);
+					showMessage("Breakpoint moved." , 2500, _WARNING_);
+					// clear current breakpoint
+//					emit onToggleBreakpoint(bp->fileName, b.line, false);
+					emit onToggleBreakpoint(*bp, b, false);
+					bp->bp[i].line = line;
+					// move breakpoint
+//					emit onToggleBreakpoint(bp->fileName, bp->bp.at(i).line, true);
+					emit onToggleBreakpoint(*bp, bp->bp.at(i) , true);
 				}
 			}
 
-			// check if breakpoint hit fior show icon under TreeView
+			// check if breakpoint hit for show icon under TreeView
 			if(b.index == index) bp->bp[i].hit = true;
-			else bp->bp[i].hit = false;
+//			else bp->bp[i].hit = false;
 		
 		}
 	}
@@ -417,10 +422,12 @@ void GdbBreakpoint::onBreakpointDelete( int , QString s)
 				setWaitEndProcess(false);
 			}
 			else
-				QMessageBox::warning(NULL,"Critical erreur","Repport this bug : Delete breakpoint but no have this line !");
+				showMessage("Critical erreur : Repport this bug please : Delete breakpoint but no have this line !" , 5000, _CRITICAL_);
+			//QMessageBox::warning(NULL,"Critical erreur","Repport this bug : Delete breakpoint but no have this line !");
 		}
 		else
-			QMessageBox::warning(NULL,"Critical erreur","Repport this bug : Delete breakpoint but no have this file !");
+			showMessage("Critical erreur : Repport this bug please : Delete breakpoint but no have this file !" , 5000, _CRITICAL_);
+//			QMessageBox::warning(NULL,"Critical erreur","Repport this bug : Delete breakpoint but no have this file !");
 	
 		if(bp && bp->bp.count() == 0)
 			removeBreakpoint(bp);

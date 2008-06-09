@@ -20,11 +20,7 @@
 
 #include "gdbParser.1.3.h"
 
-#include <coremanager.h>
-#include <settingsmanager.h>
 #include <monkey.h>
-#include <queuedstatusbar.h>
-
 
 
 #define INFO_ID			10000
@@ -84,11 +80,7 @@ GdbParser::GdbParser (QObject * parent) : QObject (parent), mIsReady(0)
 			".*at\\s+[^:]+:\\d+$");
 
 		mCmdList.clear();
-
-		MonkeyCore::statusBar()->appendMessage( tr( "GdbParser initializing sucess full" ), 2500 ,QPixmap(), QBrush(QColor(120,250,100)));
 	}
-	else MonkeyCore::statusBar()->appendMessage( tr( "GdbParser initializing FAILED" ), 5000,QPixmap(), QBrush(QColor(255,80,80)) );
-
 }
 
 //

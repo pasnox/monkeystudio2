@@ -20,6 +20,16 @@
      </property>
      <column>
       <property name="text" >
+       <string>Type</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Use</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
        <string>Id</string>
       </property>
      </column>

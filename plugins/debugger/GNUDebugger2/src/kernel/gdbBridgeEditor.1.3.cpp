@@ -83,20 +83,20 @@ void GdbBridgeEditor::fileOpenedBeforeDebugger()
 	//find if editor is open before load plugin
 	if(MonkeyCore::workspace())
 	{
-		QList<pAbstractChild*>  e = MonkeyCore::workspace()->children();
-		for(int i =0; i< e.count(); i++)
+		QList<pAbstractChild * >  e = MonkeyCore::workspace()->children();
+		foreach(pAbstractChild * pf, e)//for(int i =0; i< e.count(); i++)
 		{
-			pAbstractChild  * pf = e.at(i);
+//			pAbstractChild  * pf = e.at(i);
+			if( qobject_cast<pEditor*>( pf->currentEditor() ))
+			{
+				Editor pe = {pf->currentFile() , pf->currentEditor()}; 
+				editorList << pe;
 
-			Editor pe = {pf->currentFile() , pf->currentEditor()}; 
-			editorList << pe;
-
-			// set margin Qsci sensitive
-			pe.pointeur->setMarginSensitivity(0,true);
-			// connect margin clicked
-			connect (pe.pointeur , SIGNAL(marginClicked (int, int , Qt::KeyboardModifiers )), this, SLOT(onMarginClicked(int, int,  Qt::KeyboardModifiers)));
-	
-//			emit requestBreakpoint(pe.fileName);
+				// set margin Qsci sensitive
+				pe.pointeur->setMarginSensitivity(0,true);
+				// connect margin clicked
+				connect (pe.pointeur , SIGNAL(marginClicked (int, int , Qt::KeyboardModifiers )), this, SLOT(onMarginClicked(int, int,  Qt::KeyboardModifiers)));
+			}
 		}
 	}
 }

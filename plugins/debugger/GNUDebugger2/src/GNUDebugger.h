@@ -12,7 +12,7 @@
 class GNUDebugger : public DebuggerPlugin
 {
 	Q_OBJECT
-	Q_INTERFACES( BasePlugin DebuggerPlugin )
+	Q_INTERFACES( BasePlugin DebuggerPlugin  )
 
 public:
 	GNUDebugger();
@@ -30,7 +30,7 @@ private:
 	QPointer<GdbPatternFile> patternFile;
 
 	QHash<QString , QAction*> actionList;
-	DockGNUDebugger *mDockGNUDebugger;
+	QPointer<DockGNUDebugger> mDockGNUDebugger;
 	
 };
 

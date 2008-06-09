@@ -18,6 +18,14 @@
 #include "gdbParser.1.3.h"
 #include "gdbProcess.1.3.h"
 
+#include <coremanager.h>
+#include <settingsmanager.h>
+#include <monkey.h>
+#include <queuedstatusbar.h>
+
+enum SHOW{ _WARNING_,  _CRITICAL_, _INFO_};
+			
+
 class GdbCore : public QObject
 {
 	Q_OBJECT
@@ -59,6 +67,7 @@ public slots:
 	void setWaitEndProcess(const bool & );
 	bool isWaitEndProcess();
 
+	void showMessage(QString, int, SHOW);
 private slots:
 
 	void onTimer();

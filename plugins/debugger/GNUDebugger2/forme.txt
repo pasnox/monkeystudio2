@@ -1,5 +1,20 @@
+09/06/08 21h14 V1.3.2 change log
 
-V1.3.2 change log
+fix crash at startup if file parsing.txt is not found and Monkey haven't .ini
+fix crash if you open monkey with the last file opened is Designer format (not pEditor) 
+fix sync error if you click under margin but target is not loaded
+
+know bug : 
+
+If run under linux or mac Os you can't save the file "gdbparser.txt", because Monkey is installed in /usr/local/lib/... and 
+you don't have access.
+
+If you want add brakpoint into qWidget.h for example, you can't add this because gdb have not loaded library.
+Error -> "File ... not found" and youi have "Detecting kernel panic." message.
+For this, just run target, and you can add your breakpoint.
+
+
+09/06/08 19H04 V1.3.2 change log
 
 fix start gdb : some time target is not loaded correctly (parser not correctly sync)
 fix breakpoint disable : this is not clear under editor is you quit debug mode
@@ -12,15 +27,11 @@ V1.3.1 pre-release
 
 Future : 
 
-- le restoreline ne restore qu'une seul fois
-- fixer le bug du QComboBox dimention
 - fixer l'icon breakpoint disable
 
 - Ajouter la gestion des bp condionnel
 
 - Ajouter le working directorie a Gdb
-
-- Prise en charge du click margin si gdb n'est pas en fonction
 
 - Ajouter la prise en charge du pending breakpoint : "set breakpoint pending on" -> "Breakpoint 1 (C:/Qt/4.4.0/src/corelib/kernel/qobject.cpp:2328) pending."
 	Attention il affiche aussi "File xxxx not found avant"

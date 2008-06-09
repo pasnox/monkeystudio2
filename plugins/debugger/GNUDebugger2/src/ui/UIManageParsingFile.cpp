@@ -3,6 +3,7 @@
 #include <QCloseEvent>
 #include <QFile>
 #include <QDataStream>
+#include <QCheckBox>
 
 //
 QPointer<UIManageParsingFile> UIManageParsingFile::_self = 0L;
@@ -23,14 +24,27 @@ UIManageParsingFile::UIManageParsingFile( QWidget* parent )
 	
 	foreach(GdbPattern p, *l)
 	{
-		QTreeWidgetItem *i =  new QTreeWidgetItem(QStringList() << QString::number(GdbPatternFile::instance()->getId( p ))
-		<< GdbPatternFile::instance()->getPattern( p ) << GdbPatternFile::instance()->getComment( p ));
+//		QCheckBox *cb= new QCheckBox();
+		
+		QTreeWidgetItem *i =  new QTreeWidgetItem(treeWidget);//QStringList() << QString::number(GdbPatternFile::instance()->getId( p ))
+		//<< GdbPatternFile::instance()->getPattern( p ) << GdbPatternFile::instance()->getComment( p ));
 
-		p.enable ? i->setCheckState(0,Qt::Checked) : i->setCheckState(0,Qt::Unchecked);
+		i->setText(2, QString::number(GdbPatternFile::instance()->getId( p )));
+		i->setText(3, GdbPatternFile::instance()->getPattern( p ));
+		i->setText(4, GdbPatternFile::instance()->getComment( p ));
+
+//		cb->setTristate(true);
+		p.enable ? i->setCheckState(1,Qt::Checked) : i->setCheckState(1,Qt::Unchecked);
+//		i->setTristate(1, true);
+		
 		i->setFlags(i->flags() | Qt::ItemIsEditable);
+		
 		if( GdbPatternFile::instance()->getId( p ) >= 20000 ) i->setIcon(0, QIcon(":/icons/warningred.png"));
 		else i->setIcon(0, QIcon(":/icons/warning.png"));
-		treeWidget->addTopLevelItem(i);
+
+//		treeWidget->setItemWidget(i, 1, cb);
+
+		//		treeWidget->addTopLevelItem(i);
 	}
 	connect(bSave, SIGNAL(clicked()), this,  SLOT(onSave()));
 
