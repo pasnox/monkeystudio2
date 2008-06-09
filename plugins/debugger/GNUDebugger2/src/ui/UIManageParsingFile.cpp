@@ -77,10 +77,10 @@ void UIManageParsingFile::onSave()
 	for(int i=0; i< treeWidget->topLevelItemCount (); i++)
 	{
 		QTreeWidgetItem *it = treeWidget->topLevelItem(i);
-		GdbPattern p = {it->data(2, Qt::DisplayRole).toString(), 
-			QRegExp(it->data(1, Qt::DisplayRole).toString()),
-			it->data(0, Qt::DisplayRole).toInt(), 
-			it->checkState(0) == Qt::Checked ? true : false};
+		GdbPattern p = {it->text(4), 
+			QRegExp(it->text(3)),
+			it->text(2).toInt(), 
+			it->checkState(1) == Qt::Checked ? true : false};
 		l->replace(i, p);
 	}
 }

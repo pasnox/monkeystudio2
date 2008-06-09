@@ -319,8 +319,8 @@ void DockGNUDebugger::gdbStarted()
 
 //		Parser->setReady(true);
 
-//		Parser->setNextCommand("set options for gdb");
-//		Process->sendRawData("set breakpoint pending on");
+		Parser->setNextCommand("set breakpoint pending on");
+		Process->sendRawData("set breakpoint pending on");
 
 		// gdb is started, now load target under Gdb
 		Parser->setNextCommand("file \"" + mSelectedTarget + "\"");
@@ -401,7 +401,6 @@ void DockGNUDebugger::onTargetNoLoaded(int id, QString st)
 {
 	rawLog->append(QString::number(id) + " : " + st);
 	rawLog->append("*** Target no Loaded Stop Gdb ***");
-
 
 	Process->stopProcess();
 

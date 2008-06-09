@@ -1,3 +1,9 @@
+09/06/08 23h40 v1.3.2 change log
+
+fix breakpoint pending : you can add breakpoint inder all file at start up gdb (library not loaded)
+
+
+
 09/06/08 21h14 V1.3.2 change log
 
 fix crash at startup if file parsing.txt is not found and Monkey haven't .ini
@@ -9,7 +15,7 @@ know bug :
 If run under linux or mac Os you can't save the file "gdbparser.txt", because Monkey is installed in /usr/local/lib/... and 
 you don't have access.
 
-If you want add brakpoint into qWidget.h for example, you can't add this because gdb have not loaded library.
+If you want add breakpoint into qWidget.h for example, you can't add this because gdb have not loaded library.
 Error -> "File ... not found" and youi have "Detecting kernel panic." message.
 For this, just run target, and you can add your breakpoint.
 
@@ -32,9 +38,6 @@ Future :
 - Ajouter la gestion des bp condionnel
 
 - Ajouter le working directorie a Gdb
-
-- Ajouter la prise en charge du pending breakpoint : "set breakpoint pending on" -> "Breakpoint 1 (C:/Qt/4.4.0/src/corelib/kernel/qobject.cpp:2328) pending."
-	Attention il affiche aussi "File xxxx not found avant"
 
 - Pb de droit sous linux pour le save gdbparsing.txt
 

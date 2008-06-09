@@ -43,14 +43,16 @@ public slots:
 
 	void onBreakpointEnabled(int, QString);
 	void onBreakpointDisabled(int, QString);
-
+	void toggleEnabledBreakpoint(QString ,int , bool);
 
 	void onBreakpointAdd( int , QString );
 	void onBreakpointDelete( int , QString );
+	void toggleBreakpoint(const QString &, const int &);
+
 	void interpreter(const QPointer<BaseInterpreter> & , const int & , const QString & );
 
-	void toggleBreakpoint(const QString &, const int &);
 	void onRequestBreakpoint(const QString & );
+	void onBreakpointPending(int, QString );
 	
 	// gdb
 	void gdbFinished();
@@ -63,17 +65,19 @@ public slots:
 	QString name();
 	QPointer<QWidget> widget();
 
-	void toggleEnabledBreakpoint(QString ,int , bool);
 
 private:
 
 	GdbConnectTemplate<GdbBreakpoint> *Connect;
+	QList<Breakpoint *>  breakpointList;
+
 	QPointer<BaseInterpreter> interpreterAddBreakpoint;
 	QPointer<BaseInterpreter> interpreterDelBreakpoint;
-	QList<Breakpoint *>  breakpointList;
 
 	QPointer<BaseInterpreter> interpreterEnabledBreakpoint;
 	QPointer<BaseInterpreter> interpreterDisabledBreakpoint;
+
+	QPointer<BaseInterpreter> interpreterBreakpointPending;
 
 	Breakpoint * findByName(const QString &);
 	int asBreakpointAtLine(Breakpoint *, int);

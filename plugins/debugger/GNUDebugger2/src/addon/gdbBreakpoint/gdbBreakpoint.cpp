@@ -33,7 +33,7 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 
 
 	/*
-		create new parser :
+		create new parser : For add breakpoint
 
 		cRegExpCmd = "b main.cpp:12"
 		aRegExp = "Breakpoint 1 at 0x437bdf: file src/addon/gdbBackTrace.cpp, line 15."
@@ -51,7 +51,7 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 
 
 	/*
-		create new parser :
+		create new parser : For delete breakpoint
 
 		cRegExpCmd = "delete 1"
 		aRegExp = "(gdb) "
@@ -64,7 +64,7 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 	Connect->add(this, interpreterDelBreakpoint, &GdbBreakpoint::onBreakpointDelete);
 
 	/*
-		create new parser :
+		create new parser : For enable breakpoint
 
 		cRegExpCmd = "enable 1"
 		aRegExp = "(gdb) "
@@ -77,7 +77,7 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 	Connect->add(this, interpreterEnabledBreakpoint, &GdbBreakpoint::onBreakpointEnabled);
 
 	/*
-		create new parser :
+		create new parser : For disable breakpoint
 
 		cRegExpCmd = "disable 1"
 		aRegExp = "(gdb) "
@@ -88,6 +88,19 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 		"");
 
 	Connect->add(this, interpreterDisabledBreakpoint, &GdbBreakpoint::onBreakpointDisabled);
+
+	/*
+		create new parser : For breakpoint pending
+
+		cRegExpCmd = "disable 1"
+		aRegExp = "(gdb) "
+	*/
+	interpreterBreakpointPending = GdbCore::Parser()->addInterpreter(
+		QRegExp("^b\\s.*:\\d+$"),
+		QRegExp("^Breakpoint\\s(\\d+)\\s\\((.*):(\\d+)\\)\\spending\\.$"),
+		"^info,interpreter=\"" + name() + "\",event=\"Breakpoint-Add-Pending\",answerGdb=\"");
+
+	Connect->add(this, interpreterBreakpointPending, &GdbBreakpoint::onBreakpointPending);
 
 	mWidget = UIGdbBreakpoint::self();
 	connect( mWidget, SIGNAL(enabledBreakpoint(QString, int, bool)), this, SLOT(toggleEnabledBreakpoint(QString, int, bool)));
@@ -379,6 +392,7 @@ void GdbBreakpoint::onBreakpointAdd( int , QString s)
 		}
 		else
 		{
+			QMessageBox::warning(NULL,"pending match","add first");
 			if(r.exactMatch(a))
 			{
 				QStringList l = r.capturedTexts();
@@ -517,3 +531,20 @@ void GdbBreakpoint::onBreakpointDisabled(int, QString s)
 		}
 	}
 }
+
+// ================================ Breakpoint pending =================
+
+void GdbBreakpoint::onBreakpointPending(int, QString s)
+{
+	QString n = findValue(s,"answerGdb");
+
+	if( !n.isEmpty() )
+	{
+		if(interpreterBreakpointPending->getAnswerRegExp().exactMatch(n))
+		{
+			QStringList l = interpreterBreakpointPending->getAnswerRegExp().capturedTexts();
+			onBreakpointAdd(0,"fileName=\"" + l.at(2) + "\",line=\"" + l.at(3) + "\",answerGdb=\"Breakpoint " + l.at(1) + " at pending: file " + l.at(2) + ", line " + l.at(3) + ".");
+		}
+	}
+}
+

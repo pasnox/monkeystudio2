@@ -189,6 +189,7 @@ bool GdbParser::processParsing(const QString & storg)
 	{
 		st.remove(st.indexOf("(gdb) "),6);
 		st += "(gdb) ";
+		onInfo(-1," Swap stdOut / sdtErr -> (Windows)\n\"" +  st);
 	}
 	// end windows
 
