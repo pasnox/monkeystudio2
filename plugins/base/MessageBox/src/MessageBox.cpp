@@ -28,8 +28,11 @@
 ****************************************************************************/
 #include "MessageBox.h"
 #include "ui/MessageBoxDocks.h"
+#include "ui/UIMessageBoxSettings.h"
 
+#include <coremanager.h>
 #include <maininterface.h>
+#include <consolemanager.h>
 
 #include <QIcon>
 #include <QTabWidget>
@@ -70,11 +73,14 @@ bool MessageBox::setEnabled( bool b )
 		connect( MonkeyCore::menuBar()->action( "mView/aShowOutput", tr( "Show Output" ), QIcon( ":/icons/taboutput.png" ) , "F10" ), SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showOutput() ) );
 		connect( MonkeyCore::menuBar()->action( "mView/aShowCommands", tr( "Show Commands" ), QIcon( ":/icons/tablog.png" ), "F11" ), SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showLog() ) );
 		connect( MonkeyCore::menuBar()->action( "mView/aShowSearchResults", tr( "Show Search Results" ), QIcon( ":/icons/tabsearch.png" ), "F12" ), SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showSearchResults() ) );
+		connect( MonkeyCore::consoleManager(), SIGNAL( started() ), this, SLOT( onConsoleStarted() ) );
 		// set plugin enabled
 		mPluginInfos.Enabled = true;
 	}
 	else if ( !b && isEnabled() )
 	{
+		// disconnect
+		disconnect( MonkeyCore::consoleManager(), SIGNAL( started() ), this, SLOT( onConsoleStarted() ) );
 		// delete actions
 		delete MonkeyCore::menuBar()->action( "mView/aShowBuild" );
 		delete MonkeyCore::menuBar()->action( "mView/aShowNextError" );
@@ -89,6 +95,29 @@ bool MessageBox::setEnabled( bool b )
 	}
 	// return default value
 	return true;
+}
+
+QWidget* MessageBox::settingsWidget()
+{ return new UIMessageBoxSettings( this ); }
+
+void MessageBox::onConsoleStarted()
+{
+	if ( settingsValue( "ActivateDock", true ).toBool() )
+	{
+		UIMessageBoxSettings::Dock dock = (UIMessageBoxSettings::Dock)settingsValue( "ActivatedDock", UIMessageBoxSettings::Output ).toInt();
+		switch ( dock )
+		{
+			case UIMessageBoxSettings::BuildStep:
+				mMessageBoxDocks->mBuildStep->show();
+				break;
+			case UIMessageBoxSettings::Output:
+				mMessageBoxDocks->mOutput->show();
+				break;
+			case UIMessageBoxSettings::Command:
+				mMessageBoxDocks->mCommand->show();
+				break;
+		}
+	}
 }
 
 Q_EXPORT_PLUGIN2( BaseMessageBox, MessageBox )
