@@ -1,6 +1,16 @@
+12/06/08 12h23 v1.3.2 change log
+
+fix icon not cleared when you quit debugger mode
+add breakpoint conditionned
+modfify gdbparsing.txt (new structure)
+add step finish : run target untill end function
+now the target is executed in the target directory (not Monkey directory) 
+
+
+
 09/06/08 23h40 v1.3.2 change log
 
-fix breakpoint pending : you can add breakpoint inder all file at start up gdb (library not loaded)
+fix breakpoint pending : you can add breakpoint under all files at start up gdb (library not loaded)
 
 
 
@@ -33,9 +43,29 @@ V1.3.1 pre-release
 
 Future : 
 
-- fixer l'icon breakpoint disable
+- command gdb 
+"watch" ->  
+"finish" -> goto at end function
+"clear" -> delete all breakpoint
+"tbreak args" break only one time
+"hbreak args" hardbreak
+"watch expr" break if var changed
+"rwatch expr" break if var is readed
+"awatch expr" break if var is readed or writed
+"wathis w" print ype of varname
+"ptype w" show all methode or member of varname
+"set confirm off"
 
-- Ajouter la gestion des bp condionnel
+
+
+- configuration de gdb 
+slotDebugCommand("set pagination off\n");
+slotDebugCommand("set width 0\n");
+slotDebugCommand("set height 0\n");
+slotDebugCommand("set complaints 0\n");
+
+
+- fixer l'icon breakpoint disable
 
 - Ajouter le working directorie a Gdb
 

@@ -15,7 +15,8 @@ class UIGdbBreakpoint : public QWidget, public Ui::UIGdbBreakpoint
 
 public slots:
 
-	void onCurrentIndexChanged(int );
+	void onEnableChanged(int );
+	void onConditionChanged( );
 
 public:
 	static UIGdbBreakpoint* self( QWidget* = 0 );
@@ -33,7 +34,9 @@ private:
 	QStandardItemModel *treeModel;
 	//
 signals:
-	void enabledBreakpoint(QString , int, bool);
+
+	void enabledBreakpoint(const QString  &, const int &, const bool &);
+	void conditionnedBreakpoint(const QString  &, const int &, const QString &);
 
 };
 //

@@ -42,18 +42,28 @@ public slots:
 	void onRequestBacktrace(const QString &);
 
 	
-	// gdb
-	void gdbFinished();
-	void gdbStarted();
-	// target
-	void targetRunning(const int &, const QString &);
-	void targetStopped(const int &, const QString &);
-	void targetExited(const int & id, const QString & s);
 
 	QString name();
 	QPointer<QWidget> widget();
 
 	void interpreter(const QPointer<BaseInterpreter> & , const int & , const QString & );
+
+	// gdb
+	void gdbFinished();
+	void gdbStarted();
+	void gdbError();
+
+	// target
+	void targetLoaded(const int &, const QString &);
+	void targetNoLoaded(const int &, const QString &);
+	void targetRunning(const int &, const QString &);
+	void targetStopped(const int &, const QString &);
+	void targetExited(const int &, const QString &);
+
+	// Parser
+	void error(const int &, const QString &);
+	void done(const int &, const QString &);
+	void info(const int &, const QString &);
 
 private:
 

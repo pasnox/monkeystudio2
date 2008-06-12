@@ -17,10 +17,11 @@ void GdbSequencer::add(const SequencerCmd & c)
 	mCmdList << c;
 }
 
-void GdbSequencer::add(const QList<SequencerCmd> & s)
+void GdbSequencer::add(const QString & className, const QList<SequencerCmd> & s)
 {
 	mCmdList.clear();
 	mCmdList = s;
+	mClassName = className;
 }
 
 void GdbSequencer::start()
@@ -34,7 +35,7 @@ void GdbSequencer::start(const int & i)
 
 	if(mCurrentIndex < mCmdList.count())
 	{
-		GdbParser::instance()->setNextCommand( mCmdList.at(i).cmd );
+		GdbParser::instance()->setNextCommand(mClassName, mCmdList.at(i).cmd );
 		GdbProcess::instance()->sendRawData( mCmdList.at(i).cmd );
 	}
 }

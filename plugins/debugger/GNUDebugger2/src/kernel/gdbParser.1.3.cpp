@@ -143,7 +143,9 @@ void GdbParser::getCommand()
 {
 	if(mCmdList.count())
 	{
-		mCurrentCmd = mCmdList.at(0);
+		mCurrentCmd = mCmdList.at(0).cmd;
+		mCurrentClassName = mCmdList.at(0).className;
+
 		onInfo(-1,"\"Get current command : ");
 		mCmdList.removeAt(0);
 	}
@@ -152,12 +154,12 @@ void GdbParser::getCommand()
 //
 void GdbParser::switchCommand(const QString & s)
 {
-	if(mCmdList.count() && s == "(gdb) ")
+/*	if(mCmdList.count() && s == "(gdb) ")
 	{
 		mCurrentCmd = mCmdList.at(0);
 		mCmdList.removeAt(0);
 	}
-}
+*/}
 
 // 
 bool GdbParser::processParsing(const QString & storg)
@@ -277,9 +279,9 @@ bool GdbParser::processParsing(const QString & storg)
 
 
 			// find if this anwser is present under file ini
-			int id = -1;
+			GdbPattern p={"", QRegExp(), false, false};
 			if( gdbPatternFile && !oneLine.isEmpty())
-				id = gdbPatternFile->find(oneLine).id;
+				p = gdbPatternFile->find(oneLine);
 
 			
 			/*
@@ -295,11 +297,13 @@ bool GdbParser::processParsing(const QString & storg)
 			while(oneLine.contains("\""))
 				oneLine.remove("\"");
 
+			if(p.show  && !p.enable)
+				onDone(p.id, "FOUND ERROR BUT THIS IS DISABLE, PLEASE REPORT THIS LINE TO MONKEY TEAM");
 
 			// more than ERROR_ID (all errors)
-			if(id != -1 && id >= ERROR_ID  )
+			if(p.id != -1 && p.id >= ERROR_ID  && p.enable )
 				// error found
-				onError(id, oneLine);
+				onError(p.id, oneLine);
 			else 
 			{
 				// find interpreter
@@ -310,12 +314,12 @@ bool GdbParser::processParsing(const QString & storg)
 					// interpreter no found for this command
 
 					// Id is in ^info to ^error   
-					if(id != -1 && id > INFO_ID && id < ERROR_ID)
-						onInfo(id,oneLine);
+					if(p.id != -1 && p.id > INFO_ID && p.id < ERROR_ID)
+						onInfo(p.id,oneLine);
 			
 					// unknow answer or prompt found
-					if(id == -1 || id == PROMPT_ID)
-						onDone(id, oneLine);
+					if(p.id == -1 || p.id == PROMPT_ID)
+						onDone(p.id, oneLine);
 				}
 				else
 				{
@@ -344,9 +348,10 @@ bool GdbParser::processParsing(const QString & storg)
 	return false;
 }
 //
-void GdbParser::setNextCommand(QString cmd)
+void GdbParser::setNextCommand(QString className ,QString cmd)
 {
-	mCmdList << cmd;
+	Command c = { className, cmd};
+	mCmdList << c;
 }
 
 void GdbParser::clearAllCommand()
@@ -362,10 +367,10 @@ void GdbParser::onDone(int id, QString st)
 {
 	switch(id)
 	{
-		case -1 : emit done(id, "^done,interpreter=\"GdbParser\",event=\"generic information (not parsing)\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\"");break;
-		case PROMPT_ID: emit done(id, "^done,interpreter=\"GdbParser\",event=\"prompt\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\""); 
-		mIsReady = true;
+		case PROMPT_ID: emit done(id, "^done,interpreter=\"" + mCurrentClassName + "\",event=\"prompt\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\""); 
+			mIsReady = true;
 			break;
+		default : emit done(id, "^done,interpreter=\"GdbParser\",event=\"generic information (not parsing)\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\"");break;
 
 	}
 }
@@ -414,6 +419,6 @@ void GdbParser::onError(int id, QString st)
 			emit targetNoLoaded(id, st);
 		break;
 		default : 
-			emit error(id, "^error,interpreter=\"GdbParser\",event=\"error found\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\"");
+			emit error(id, "^error,interpreter=\"" + mCurrentClassName + "\",event=\"error found\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\"");
 	}
 }

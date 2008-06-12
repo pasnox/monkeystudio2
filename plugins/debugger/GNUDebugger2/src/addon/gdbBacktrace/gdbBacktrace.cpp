@@ -84,7 +84,7 @@ GdbBacktrace::GdbBacktrace(QObject * parent) : GdbCore(parent)
 
 	Sequencer = new GdbSequencer(this);
 	QList<SequencerCmd> s = QList<SequencerCmd>() << SequencerCmd("backtrace", "bt") << SequencerCmd("infosource", "info source") ; 
-	Sequencer->add(s);
+	Sequencer->add(name() , s);
 
 	mWidget = UIGdbBacktrace::self();
     mWidget->treeWidget->setAlternatingRowColors(true);
@@ -119,6 +119,16 @@ void GdbBacktrace::interpreter(const QPointer<BaseInterpreter> & i, const int & 
 	Connect->call( i, id, s);
 }
 
+// Gdb status
+
+void GdbBacktrace::gdbStarted()
+{
+	setWaitEndProcess(false);
+	mCurrentLine = -1;
+	mCurrentFile.clear();
+	mWidget->treeWidget->clear();
+}
+
 //
 
 void GdbBacktrace::gdbFinished()
@@ -131,13 +141,12 @@ void GdbBacktrace::gdbFinished()
 
 //
 
-void GdbBacktrace::gdbStarted()
-{
-	setWaitEndProcess(false);
-	mCurrentLine = -1;
-	mCurrentFile.clear();
-	mWidget->treeWidget->clear();
-}
+void GdbBacktrace::gdbError(){}
+
+// Taget status
+
+void GdbBacktrace::targetLoaded(const int &, const QString &){}
+void GdbBacktrace::targetNoLoaded(const int &, const QString &){}
 
 //
 
@@ -169,7 +178,18 @@ void GdbBacktrace::targetExited(const int & id, const QString & s)
 	mWidget->treeWidget->clear();
 }
 
-//
+// Parser status
+
+void GdbBacktrace::error(const int &, const QString & s)
+{
+	showMessage(name() + " have generate error : " + s, 5000, _CRITICAL_);
+	setWaitEndProcess(false);
+}
+
+void GdbBacktrace::done(const int &, const QString &){}
+void GdbBacktrace::info(const int &, const QString &){}
+
+// Interpreters
 
 void GdbBacktrace::onBacktrace(int id, QString s)
 {

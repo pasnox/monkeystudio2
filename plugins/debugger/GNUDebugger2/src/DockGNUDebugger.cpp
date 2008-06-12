@@ -115,43 +115,50 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 		connect(Breakpoint, SIGNAL(onToggleBreakpoint(const Breakpoint &, const BaseBreakpoint &, const bool &)), Bridge,
 			SLOT(onToggleBreakpoint(const Breakpoint &, const BaseBreakpoint &, const bool& )));
 
-		connect(Breakpoint, SIGNAL(onToggleBreakpointEnabled(const Breakpoint &, const BaseBreakpoint &)), Bridge,
+/*		connect(Breakpoint, SIGNAL(onToggleBreakpointEnabled(const Breakpoint &, const BaseBreakpoint &)), Bridge,
 			SLOT(onToggleBreakpointEnabled(const Breakpoint & , const BaseBreakpoint &)));
 
+		connect(Breakpoint, SIGNAL(onToggleBreakpointConditionned(const Breakpoint &, const BaseBreakpoint &)), Bridge,
+			SLOT(onToggleBreakpointConditionned(const Breakpoint & , const BaseBreakpoint &)));
+*/
 		connect(Backtrace, SIGNAL(onToggleBacktrace(const QString & , const int &)), Bridge,
 			SLOT(onToggleBacktrace(const QString & , const int &)));
 
 		// Monkey
-		connect( MonkeyCore::workspace(), SIGNAL( fileOpened( const QString & ) ), Bridge, SLOT( add( const QString & ) ) );
-		connect( MonkeyCore::workspace(), SIGNAL( documentAboutToClose( int ) ), Bridge, SLOT( remove( int ) ) );
+		connect( MonkeyCore::workspace(), SIGNAL( fileOpened( const QString & ) ), Bridge, SLOT( addEditor( const QString & ) ) );
+		connect( MonkeyCore::workspace(), SIGNAL( documentAboutToClose( int ) ), Bridge, SLOT( removeEditor( int ) ) );
 
 		// connection BridgeEditor
 		connect(Bridge, SIGNAL(userToggleBreakpoint(const QString &, const int &)), this, SLOT(onUserToggleBreakpoint(const QString &, const int &)));
 		connect(Bridge, SIGNAL(requestBreakpoint(const QString &)), Breakpoint , SLOT(onRequestBreakpoint(const QString &)));
 		connect(Bridge, SIGNAL(requestBacktrace(const QString &)), Backtrace , SLOT(onRequestBacktrace(const QString &)));
 
+		Connect = new GdbConnectTemplate<DockGNUDebugger>;
 		
 		// add permanent Interpreter	
 		interpreterStepOver = Parser->addInterpreter(
-			//"step-over", 
-			//"n",
 			QRegExp("^n$"), 
 			QRegExp("\\d+\\s+.*"),
 			"^info,interpreter=\"Step-Over\",event=\"End-Stepping-Range\",answerGdb=\"");
 
+		Connect->add(this, interpreterStepOver, &DockGNUDebugger::onTargetStopped );
+
+		
 		interpreterStepInto = Parser->addInterpreter(
-			//"step-into", 
-			//"s", 
 			QRegExp("^s$"), 
 			QRegExp("\\d+\\s+.*"),
 			"^info,interpreter=\"Step-Into\",event=\"End-Stepping-Range\",answerGdb=\"");
 
-
-		//connect interpreter to function
-		Connect = new GdbConnectTemplate<DockGNUDebugger>;
-		Connect->add(this, interpreterStepOver, &DockGNUDebugger::onTargetStopped );
 		Connect->add(this, interpreterStepInto, &DockGNUDebugger::onTargetStopped );
 	
+
+		interpreterStepFinish = Parser->addInterpreter(
+			QRegExp("^finish$"), 
+			QRegExp("\\d+\\s+.*"),
+			"^info,interpreter=\"Step-Finish\",event=\"End-Stepping-Range\",answerGdb=\"");
+
+		Connect->add(this, interpreterStepFinish, &DockGNUDebugger::onTargetStopped );
+
 		// find if addOn is enable ?
 		foreach(QPointer< class GdbCore> r, Dispatcher->list())
 		{
@@ -222,7 +229,7 @@ void DockGNUDebugger::onActionLoadTarget()
 
 		Process->setCommand( GdbSetting::instance()->getPathGdb() );
 
-		Parser->setNextCommand("Starting GDB");
+		Parser->setNextCommand("Dock", "Starting GDB");
 		Process->startProcess();
 	}
 }
@@ -237,7 +244,7 @@ void DockGNUDebugger::onActionExit()
 	Bridge->removeAllBreakpoints();
 	Bridge->removeBacktrace();
 
-	Parser->setNextCommand("Stop GDB");
+	Parser->setNextCommand("Dock", "Stop GDB");
 	
 	if(!isTargetRunning)	
 		Process->stopTarget();
@@ -260,7 +267,7 @@ void DockGNUDebugger::onActionRestart()
 	{
 		setEnabledActions(false);
 		rawLog->append("*** User restart ***");
-		Parser->setNextCommand("r");
+		Parser->setNextCommand("Dock", "r");
 		Process->sendRawData("r");
 	}
 }
@@ -273,7 +280,7 @@ void DockGNUDebugger::onActionContinue()
 	{
 		setEnabledActions(false);
 		rawLog->append("*** User continue ***");
-		Parser->setNextCommand("c");
+		Parser->setNextCommand("Dock", "c");
 		Process->sendRawData("c");
 	}
 }
@@ -287,7 +294,7 @@ void DockGNUDebugger::onActionStepOver()
 		setEnabledActions(false);
 	
 		rawLog->append("*** User step over ***");
-		Parser->setNextCommand("n");
+		Parser->setNextCommand("Dock", "n");
 		Process->sendRawData("n");
 	}
 }
@@ -301,11 +308,23 @@ void DockGNUDebugger::onActionStepInto()
 		setEnabledActions(false);
 
 		rawLog->append("*** User step into ***");
-		Parser->setNextCommand("s");
+		Parser->setNextCommand("Dock", "s");
 		Process->sendRawData("s");
 	}
 }
 
+
+void DockGNUDebugger::onActionStepFinish()
+{
+	if(Parser->isReady())
+	{
+		setEnabledActions(false);
+
+		rawLog->append("*** User step finish ***");
+		Parser->setNextCommand("Dock", "finish");
+		Process->sendRawData("finish");
+	}
+}
 
 // Process
 
@@ -317,13 +336,16 @@ void DockGNUDebugger::gdbStarted()
 	{
 		rawLog->append("*** Gdb started ***");
 
-//		Parser->setReady(true);
-
-		Parser->setNextCommand("set breakpoint pending on");
+		// set options
+		Parser->setNextCommand("Dock", "set breakpoint pending on");
 		Process->sendRawData("set breakpoint pending on");
 
+		// set directorie
+		Parser->setNextCommand("Dock", "cd \"" + QFileInfo(mSelectedTarget).path() +"\"");
+		Process->sendRawData("cd \"" + QFileInfo(mSelectedTarget).path() + "\"");
+
 		// gdb is started, now load target under Gdb
-		Parser->setNextCommand("file \"" + mSelectedTarget + "\"");
+		Parser->setNextCommand("Dock", "file \"" + mSelectedTarget + "\"");
 		Process->sendRawData("file \"" + mSelectedTarget + "\"");
 		
 		Dispatcher->gdbStarted();

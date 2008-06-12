@@ -2,6 +2,7 @@
 //
 #include <QCloseEvent>
 #include <QComboBox>
+#include <QLineEdit>
  //
 
 QPointer<UIGdbBreakpoint> UIGdbBreakpoint::_self = 0L;
@@ -54,7 +55,11 @@ void UIGdbBreakpoint::upDateData(const QList<Breakpoint *> & bl)
 			cb->addItem("True", true);
 			cb->addItem("False", false);
 
-			connect( cb, SIGNAL(currentIndexChanged ( int )), this , SLOT(onCurrentIndexChanged ( int )));
+			QLineEdit * le = new QLineEdit(bbp.condition);
+			le->setAlignment(Qt::AlignHCenter);
+
+			connect( cb, SIGNAL(currentIndexChanged ( int )), this , SLOT(onEnableChanged ( int )));
+			connect( le, SIGNAL(editingFinished ()), this , SLOT(onConditionChanged ()));
 
 			bbp.enable ? cb->setCurrentIndex(0) : cb->setCurrentIndex(1);
 				
@@ -62,11 +67,12 @@ void UIGdbBreakpoint::upDateData(const QList<Breakpoint *> & bl)
 			// because under Qt4.4.0 the last row is not re-sizing (comboBox)
 			i->setSizeHint( 1,cb->sizeHint() );			
 			treeWidget->setItemWidget(i, 1, cb);
+			treeWidget->setItemWidget(i, 2, le);
 		}
 	}
 }
 
-void UIGdbBreakpoint::onCurrentIndexChanged(int i)
+void UIGdbBreakpoint::onEnableChanged(int i)
 {
 
 	for(int j=0; j< treeWidget->topLevelItemCount(); j++)
@@ -78,3 +84,14 @@ void UIGdbBreakpoint::onCurrentIndexChanged(int i)
 	}
 }
 
+void UIGdbBreakpoint::onConditionChanged()
+{
+
+	for(int j=0; j< treeWidget->topLevelItemCount(); j++)
+	{	
+		QTreeWidgetItem *it = (QTreeWidgetItem*) treeWidget->topLevelItem(j);
+		QLineEdit *le = (QLineEdit*) sender();
+		if(treeWidget->itemWidget(it,2) == le)
+			emit conditionnedBreakpoint(it->text(5), it->text(3).toInt(), le->text());
+	}
+}

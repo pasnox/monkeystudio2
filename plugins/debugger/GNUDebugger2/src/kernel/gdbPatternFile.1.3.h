@@ -30,6 +30,7 @@ typedef struct GdbPattern
 	QRegExp key;
 	int id;
 	bool enable;
+	bool show;
 };
 
 

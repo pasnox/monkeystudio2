@@ -26,7 +26,7 @@ GdbBridgeEditor::~GdbBridgeEditor()
 }
 
 // new file is opened, add this on list
-void GdbBridgeEditor::add(const QString & s)
+void GdbBridgeEditor::addEditor(const QString & s)
 {
 	if(MonkeyCore::fileManager() && MonkeyCore::fileManager()->currentChild())
 	{
@@ -52,7 +52,7 @@ void GdbBridgeEditor::add(const QString & s)
 }
 
 // file closed , remove this of list
-void GdbBridgeEditor::remove(const int & i)
+void GdbBridgeEditor::removeEditor(const int & i)
 {
 	// remove editor of list
 	if(i < editorList.count())
@@ -66,8 +66,22 @@ void GdbBridgeEditor::removeAllBreakpoints()
 		// fix v1.3.2
 		e.pointeur->markerDeleteAll( pEditor::mdEnabledBreak);	
 		e.pointeur->markerDeleteAll( pEditor::mdDisabledBreak);	
+		e.pointeur->markerDeleteAll( pEditor::mdEnabledConditionalBreak);	
+		e.pointeur->markerDeleteAll( pEditor::mdDisabledConditionalBreak);	
 	}
 }
+
+//
+
+void GdbBridgeEditor::removeAllBreakpointsAt( pEditor *e , const int & line)
+{
+		e->markerDelete(line, pEditor::mdEnabledBreak);	
+		e->markerDelete(line, pEditor::mdDisabledBreak);	
+		e->markerDelete(line, pEditor::mdEnabledConditionalBreak);	
+		e->markerDelete(line, pEditor::mdDisabledConditionalBreak);	
+}
+
+//
 
 void GdbBridgeEditor::removeBacktrace()
 {
@@ -77,6 +91,7 @@ void GdbBridgeEditor::removeBacktrace()
 	}
 }
 
+//
 
 void GdbBridgeEditor::fileOpenedBeforeDebugger()
 {
@@ -87,6 +102,7 @@ void GdbBridgeEditor::fileOpenedBeforeDebugger()
 		foreach(pAbstractChild * pf, e)//for(int i =0; i< e.count(); i++)
 		{
 //			pAbstractChild  * pf = e.at(i);
+			// fix v 1.3.2 if last file opened is a Designer Ui
 			if( qobject_cast<pEditor*>( pf->currentEditor() ))
 			{
 				Editor pe = {pf->currentFile() , pf->currentEditor()}; 
@@ -101,7 +117,8 @@ void GdbBridgeEditor::fileOpenedBeforeDebugger()
 	}
 }
 
-// user click under margin
+// User click under margin
+
 void GdbBridgeEditor::onMarginClicked( int margeIndex, int line, Qt::KeyboardModifiers d)
 {
 	// get the name of the current file
@@ -112,18 +129,30 @@ void GdbBridgeEditor::onMarginClicked( int margeIndex, int line, Qt::KeyboardMod
 	}
 }
 
-// toggle breakpoint
+// Toggle breakpoint
+
 void GdbBridgeEditor::onToggleBreakpoint(const Breakpoint & bp, const BaseBreakpoint & p, const bool & b)
 {
 	pEditor * e = findFile(bp.fileName);
 	if(e)
 	{
+		removeAllBreakpointsAt(e, p.line - 1);
+
 		if(b)
-			p.enable ? e->markerAdd (p.line - 1, pEditor::mdEnabledBreak) : e->markerAdd (p.line - 1, pEditor::mdDisabledBreak);	
-		else
-			p.enable ? e->markerDelete (p.line - 1, pEditor::mdEnabledBreak) : e->markerDelete (p.line - 1, pEditor::mdDisabledBreak);	
+		{
+			switch(p.type)
+			{
+			case 1 : // normal break
+				p.enable ? e->markerAdd (p.line - 1, pEditor::mdEnabledBreak) : e->markerAdd (p.line - 1, pEditor::mdDisabledBreak);	
+				break;
+			case 2 : // conditionned
+				p.enable ? e->markerAdd (p.line - 1, pEditor::mdEnabledConditionalBreak) : e->markerAdd (p.line - 1, pEditor::mdDisabledConditionalBreak);	
+			}
+		}
 	}
 }
+
+//
 
 void GdbBridgeEditor::onToggleBacktrace(const QString & fileName, const int & line)
 {
@@ -160,21 +189,5 @@ pEditor * GdbBridgeEditor::findFile(const QString & file)
 	return NULL;
 }
 
-void GdbBridgeEditor::onToggleBreakpointEnabled(const Breakpoint & bp, const BaseBreakpoint & p)
-{
+//
 
-	pEditor * e = findFile(bp.fileName);
-	if(e)
-	{
-		if(p.enable)
-		{
-			e->markerAdd (p.line - 1, pEditor::mdEnabledBreak);	
-			e->markerDelete (p.line - 1, pEditor::mdDisabledBreak);	
-		}
-		else
-		{
-			e->markerDelete (p.line - 1, pEditor::mdEnabledBreak);	
-			e->markerAdd (p.line - 1, pEditor::mdDisabledBreak);	
-		}
-	}
-}

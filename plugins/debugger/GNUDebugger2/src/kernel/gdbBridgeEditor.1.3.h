@@ -53,25 +53,25 @@ public :
 
 public slots:
 
-	void add(const QString &);
-	void remove(const int &);
+	void addEditor(const QString &);
+	void removeEditor(const int &);
 	void removeAllBreakpoints();
 	void removeBacktrace();
-
-	void fileOpenedBeforeDebugger();
 
 	// slot from Qsi
 	void onMarginClicked(int, int, Qt::KeyboardModifiers);
 
 	void onToggleBreakpoint(const Breakpoint &, const BaseBreakpoint & , const bool & b);
-	void onToggleBreakpointEnabled(const Breakpoint & bp, const BaseBreakpoint & p);
-	void onToggleBacktrace(const QString & filename, const int & line);
+	void onToggleBacktrace(const QString & , const int & );
 
-private :
+private:
 
 	pEditor * findFile(const QString &);
 
 	QList<Editor> editorList;
+
+	void removeAllBreakpointsAt( pEditor * , const int & );
+	void fileOpenedBeforeDebugger();
 
 signals :
 

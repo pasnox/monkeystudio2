@@ -85,6 +85,7 @@ bool GNUDebugger::setEnabled( bool b )
 		actionList["aContinue"] = MonkeyCore::menuBar()->action( "mDebugger/aContinue", tr( "Continue to next breakpoint" ), QIcon( ":/icons/play.png" ) );
 		actionList["aStepOver"] = MonkeyCore::menuBar()->action( "mDebugger/aStepover", tr( "Step over" ), QIcon( ":/icons/stepover.png" ) );
 		actionList["aStepInto"] = MonkeyCore::menuBar()->action( "mDebugger/aStepinto", tr( "Step into" ), QIcon( ":/icons/stepinto.png" ) );
+		actionList["aStepFinish"] = MonkeyCore::menuBar()->action( "mDebugger/aStepfinish", tr( "Step Finish" ), QIcon( ":/icons/stepfinish.png" ) );
 		actionList["aExitGdb"] = MonkeyCore::menuBar()->action( "mDebugger/aQuit", tr( "Quit debug mode" ), QIcon( ":/icons/close.png" ) );
 		// connections
 		connect( actionList["aLoadTarget"], SIGNAL( triggered() ), mDockGNUDebugger, SLOT( onActionLoadTarget() ) );
@@ -92,6 +93,7 @@ bool GNUDebugger::setEnabled( bool b )
 		connect( actionList["aContinue"], SIGNAL( triggered() ), mDockGNUDebugger, SLOT( onActionContinue() ) );
 		connect( actionList["aStepOver"], SIGNAL( triggered() ), mDockGNUDebugger, SLOT( onActionStepOver() ) );
 		connect( actionList["aStepInto"] , SIGNAL( triggered() ), mDockGNUDebugger, SLOT( onActionStepInto() ) );
+		connect( actionList["aStepFinish"] , SIGNAL( triggered() ), mDockGNUDebugger, SLOT( onActionStepFinish() ) );
 		connect( actionList["aExitGdb"], SIGNAL( triggered() ), mDockGNUDebugger, SLOT( onActionExit() ) );
 
 		// init action disable
@@ -99,6 +101,7 @@ bool GNUDebugger::setEnabled( bool b )
 		actionList["aContinue"]->setEnabled( false );
 		actionList["aStepOver"]->setEnabled( false );
 		actionList["aStepInto"]->setEnabled( false );
+		actionList["aStepFinish"]->setEnabled( false );
 		actionList["aExitGdb"]->setEnabled( false );
 
 		// separator and add icon to toolbar

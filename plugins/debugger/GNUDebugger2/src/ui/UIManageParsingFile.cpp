@@ -24,33 +24,25 @@ UIManageParsingFile::UIManageParsingFile( QWidget* parent )
 	
 	foreach(GdbPattern p, *l)
 	{
-//		QCheckBox *cb= new QCheckBox();
-		
-		QTreeWidgetItem *i =  new QTreeWidgetItem(treeWidget);//QStringList() << QString::number(GdbPatternFile::instance()->getId( p ))
-		//<< GdbPatternFile::instance()->getPattern( p ) << GdbPatternFile::instance()->getComment( p ));
+		QTreeWidgetItem *i =  new QTreeWidgetItem(treeWidget);
+		i->setFlags(i->flags() | Qt::ItemIsEditable | Qt::ItemIsTristate );// not work -> | Qt::ItemIsUserCheckable );
 
-		i->setText(2, QString::number(GdbPatternFile::instance()->getId( p )));
-		i->setText(3, GdbPatternFile::instance()->getPattern( p ));
-		i->setText(4, GdbPatternFile::instance()->getComment( p ));
+		i->setText(3, QString::number(GdbPatternFile::instance()->getId( p )));
+		i->setText(4, GdbPatternFile::instance()->getPattern( p ));
+		i->setText(5, GdbPatternFile::instance()->getComment( p ));
 
-//		cb->setTristate(true);
 		p.enable ? i->setCheckState(1,Qt::Checked) : i->setCheckState(1,Qt::Unchecked);
-//		i->setTristate(1, true);
-		
-		i->setFlags(i->flags() | Qt::ItemIsEditable);
+		p.show ? i->setCheckState(2,Qt::Checked) : i->setCheckState(2,Qt::Unchecked);
+
 		
 		if( GdbPatternFile::instance()->getId( p ) >= 20000 ) i->setIcon(0, QIcon(":/icons/warningred.png"));
 		else i->setIcon(0, QIcon(":/icons/warning.png"));
-
-//		treeWidget->setItemWidget(i, 1, cb);
-
-		//		treeWidget->addTopLevelItem(i);
 	}
 	connect(bSave, SIGNAL(clicked()), this,  SLOT(onSave()));
-
-
 }
+
 //
+
 void UIManageParsingFile::closeEvent( QCloseEvent* e )
 {
 	e->accept();
@@ -77,10 +69,11 @@ void UIManageParsingFile::onSave()
 	for(int i=0; i< treeWidget->topLevelItemCount (); i++)
 	{
 		QTreeWidgetItem *it = treeWidget->topLevelItem(i);
-		GdbPattern p = {it->text(4), 
-			QRegExp(it->text(3)),
-			it->text(2).toInt(), 
-			it->checkState(1) == Qt::Checked ? true : false};
+		GdbPattern p = {it->text(5), 
+			QRegExp(it->text(4)),
+			it->text(3).toInt(), 
+			it->checkState(1) == Qt::Checked ? true : false,
+			it->checkState(2) == Qt::Checked ? true : false};
 		l->replace(i, p);
 	}
 }

@@ -46,7 +46,7 @@ GdbPatternFile::~GdbPatternFile()
 		QDataStream s(&f);
 
 		foreach(GdbPattern p , GdbPatternList)
-			s << QString(QString::number(p.enable) + "[" + QString::number(p.id) + "]" + p.key.pattern() + "[" + p.comment + "]"  );
+			s << QString(QString::number(p.enable) + QString::number(p.show) + "[" + QString::number(p.id) + "]" + p.key.pattern() + "[" + p.comment + "]"  );
 
 		f.close();
 
@@ -76,16 +76,17 @@ bool GdbPatternFile::load(const QString & fullName)
 			// [10020]can not read memorie\.
 			ds >> s;
 			// match ?	
-			QRegExp r("(\\d)\\[(\\d+)\\](.*)\\[(.*)\\]");
+			QRegExp r("(\\d)(\\d)\\[(\\d+)\\](.*)\\[(.*)\\]");
 			if(r.exactMatch(s))
 			{
 				//extract id and string
 				QStringList l = r.capturedTexts();
 				GdbPattern p;
-				p.id = l.at(2).toInt();
-				p.key = QRegExp(l.at(3));
-				p.comment = l.at(4);
+				p.id = l.at(3).toInt();
+				p.key = QRegExp(l.at(4));
+				p.comment = l.at(5);
 				p.enable = l.at(1).toInt();
+				p.show = l.at(2).toInt();
 				// store 
 				GdbPatternList << p;
 			}
@@ -110,7 +111,7 @@ GdbPattern GdbPatternFile::find(const QString  & value)
 	for(int i =0; i< GdbPatternList.count(); i++)
 	{
 
-		if(GdbPatternList.at(i).enable && GdbPatternList.at(i).key.exactMatch( value )) 
+		if((GdbPatternList.at(i).enable || GdbPatternList.at(i).show) && GdbPatternList.at(i).key.exactMatch( value )) 
 		{
 			return GdbPatternList.at(i);
 		}
