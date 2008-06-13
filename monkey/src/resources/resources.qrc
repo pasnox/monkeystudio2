@@ -45,14 +45,14 @@
         <file alias="namespace.png">icons/editor/namespace.png</file>
         <file alias="struct.png">icons/editor/struct.png</file>
         <file alias="typedef.png">icons/editor/typedef.png</file>
-        <file alias="break_conditionnal_disable.png">icons/editor/break_conditionnal_disable.png</file>
-        <file alias="break_conditionnal_enable.png">icons/editor/break_conditionnal_enable.png</file>
-        <file alias="break_disable.png">icons/editor/break_disable.png</file>
-        <file alias="break_enable.png">icons/editor/break_enable.png</file>
-        <file alias="play.png">icons/editor/play.png</file>
         <file alias="bookmark_add.png">icons/editor/bookmark_add.png</file>
         <file alias="bookmark_remove.png">icons/editor/bookmark_remove.png</file>
         <file alias="bookmark.png">icons/editor/bookmark.png</file>
+        <file alias="break_conditionnal_disable.png">icons/editor/breakconditiondisable.png</file>
+        <file alias="break_conditionnal_enable.png">icons/editor/breakconditionenable.png</file>
+        <file alias="break_disable.png">icons/editor/breakdisable.png</file>
+        <file alias="break_enable.png">icons/editor/breakenable.png</file>
+        <file alias="play.png">icons/editor/play.png</file>
     </qresource>
     <qresource prefix="/file" >
         <file>icons/file/backup.png</file>

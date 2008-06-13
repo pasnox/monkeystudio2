@@ -17,7 +17,7 @@
 		<file>icons/projectopen.png</file>
 		<file>icons/update.png</file>
 		<file>icons/file.png</file>
-		<file>icons/play.png</file>
+		<file>icons/continue.png</file>
 		<file>icons/projectcloseall.png</file>
 	</qresource>
 </RCC>
