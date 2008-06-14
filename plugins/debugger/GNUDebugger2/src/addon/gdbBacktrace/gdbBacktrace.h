@@ -45,6 +45,7 @@ public slots:
 
 	QString name();
 	QPointer<QWidget> widget();
+	QIcon icon();
 
 	void interpreter(const QPointer<BaseInterpreter> & , const int & , const QString & );
 

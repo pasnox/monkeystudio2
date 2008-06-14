@@ -19,20 +19,6 @@ GdbCore::~GdbCore()
 }
 
 
-/*void GdbCore::gdbStarted(){}
-void GdbCore::gdbFinished(){}
-void GdbCore::gdbError(){}
-
-void GdbCore::targetLoaded(const int &, const QString &){}
-void GdbCore::targetNoLoaded(const int &, const QString &){}
-void GdbCore::targetRunning(const int &, const QString &){}
-void GdbCore::targetStopped(const int &, const QString &){}
-void GdbCore::targetExited(const int &, const QString &){}
-
-void GdbCore::error(const int &, const QString &){}
-void GdbCore::done(const int &, const QString &){}
-void GdbCore::info(const int &, const QString &){}
-*/
 void GdbCore::showMessage(QString s, int t, SHOW c)
 {
 	QColor b;
@@ -47,8 +33,6 @@ void GdbCore::showMessage(QString s, int t, SHOW c)
 	MonkeyCore::statusBar()->appendMessage( s, t ,QPixmap(), QBrush(b));
 }
 
-//QString GdbCore::name() { return QString();}
-//QPointer<QWidget> GdbCore::widget() { return QPointer<QWidget>();}
 
 void GdbCore::interpreter(const QPointer<BaseInterpreter> & , const int & , const QString & ){}
 

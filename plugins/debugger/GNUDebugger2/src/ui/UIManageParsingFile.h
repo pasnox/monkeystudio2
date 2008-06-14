@@ -7,6 +7,8 @@
 //
 #include "../kernel/gdbPatternFile.1.3.h"
 
+#include "UIManageDelegate.h"
+
 
 class UIManageParsingFile : public QDialog, public Ui::UIManageParsingFile
 {
@@ -23,6 +25,10 @@ private:
 	static QPointer<UIManageParsingFile> _self;
 	//
 	QList<GdbPattern> * l;
+
+	QStandardItemModel *model;
+	UIManageDelegate *delegate;
+
 public slots:
 		void onSave();
 

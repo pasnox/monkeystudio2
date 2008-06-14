@@ -5,6 +5,7 @@
 #include <QDataStream>
 #include <QCheckBox>
 
+
 //
 QPointer<UIManageParsingFile> UIManageParsingFile::_self = 0L;
 //
@@ -20,23 +21,47 @@ UIManageParsingFile::UIManageParsingFile( QWidget* parent )
 {
 	setupUi( this );
 
+
+	// set model
+	model = new QStandardItemModel(0,4);
+	treeView->setModel(model);
+    delegate = new UIManageDelegate(this);
+	treeView->setItemDelegate(delegate);
+    treeView->setAlternatingRowColors(true);
+
+	model->setHeaderData(0, Qt::Horizontal, tr("Id"));
+	model->setHeaderData(1, Qt::Horizontal, tr("Expert"));
+	model->setHeaderData(2, Qt::Horizontal, tr("Pattern"));
+	model->setHeaderData(3, Qt::Horizontal, tr("Comment"));
+
 	l = GdbPatternFile::instance()->get();
 	
 	foreach(GdbPattern p, *l)
 	{
-		QTreeWidgetItem *i =  new QTreeWidgetItem(treeWidget);
-		i->setFlags(i->flags() | Qt::ItemIsEditable | Qt::ItemIsTristate );// not work -> | Qt::ItemIsUserCheckable );
+		int i = model->rowCount();
+		model->insertRow(i);
 
-		i->setText(3, QString::number(GdbPatternFile::instance()->getId( p )));
-		i->setText(4, GdbPatternFile::instance()->getPattern( p ));
-		i->setText(5, GdbPatternFile::instance()->getComment( p ));
+		model->setData(model->index(i, 0), GdbPatternFile::instance()->getId( p ) );
+	
+		if( GdbPatternFile::instance()->getId( p ) >= 20000 ) 
+			model->setData(model->index(i, 0), QIcon(":/icons/warningred.png"), Qt::DecorationRole );
+		else 
+			model->setData(model->index(i, 0), QIcon(":/icons/warning.png"), Qt::DecorationRole );
 
-		p.enable ? i->setCheckState(1,Qt::Checked) : i->setCheckState(1,Qt::Unchecked);
-		p.show ? i->setCheckState(2,Qt::Checked) : i->setCheckState(2,Qt::Unchecked);
+		switch (p.enable)
+		{
+		case 0 :  model->setData(model->index(i, 1), tr("No use"));
+			break;
+		case 1 :  model->setData(model->index(i, 1), tr("Allway use"));
+			break;
+		case 2 :  model->setData(model->index(i, 1), tr("Show message"));
+			break;
+		}
 
-		
-		if( GdbPatternFile::instance()->getId( p ) >= 20000 ) i->setIcon(0, QIcon(":/icons/warningred.png"));
-		else i->setIcon(0, QIcon(":/icons/warning.png"));
+		model->setData(model->index(i, 1), p.enable , Qt::UserRole);
+
+		model->setData(model->index(i, 2), GdbPatternFile::instance()->getPattern( p ) );
+		model->setData(model->index(i, 3), GdbPatternFile::instance()->getComment( p ) );
 	}
 	connect(bSave, SIGNAL(clicked()), this,  SLOT(onSave()));
 }
@@ -48,32 +73,15 @@ void UIManageParsingFile::closeEvent( QCloseEvent* e )
 	e->accept();
 }
 
-/*void UIManageParsingFile::onSave()
-{
-	QFile f(GdbPatternFile::instance()->getFileName());
-
-	f.open(QIODevice::WriteOnly);
-	QDataStream s(&f);
-
-	for(int i=0; i< treeWidget->topLevelItemCount (); i++)
-	{
-		QTreeWidgetItem *it = treeWidget->topLevelItem(i);
-		s << QString("[" + it->data(0, Qt::DisplayRole).toString() + "]" + it->data(1, Qt::DisplayRole).toString() + "[" + it->data(2, Qt::DisplayRole).toString() + "]"  );
-	}
-	f.close();
-}
-*/
 
 void UIManageParsingFile::onSave()
 {
-	for(int i=0; i< treeWidget->topLevelItemCount (); i++)
+	for(int i=0; i< model->rowCount(); i++)
 	{
-		QTreeWidgetItem *it = treeWidget->topLevelItem(i);
-		GdbPattern p = {it->text(5), 
-			QRegExp(it->text(4)),
-			it->text(3).toInt(), 
-			it->checkState(1) == Qt::Checked ? true : false,
-			it->checkState(2) == Qt::Checked ? true : false};
+		GdbPattern p = {model->data(model->index(i, 3)).toString(), // comment 
+			QRegExp(model->data(model->index(i, 2)).toString()), // pattern
+			model->data(model->index(i, 0)).toInt(),  // id
+			model->data(model->index(i, 1), Qt::UserRole).toInt()};
 		l->replace(i, p);
 	}
 }

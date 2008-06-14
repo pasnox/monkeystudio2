@@ -297,12 +297,12 @@ bool GdbParser::processParsing(const QString & storg)
 			while(oneLine.contains("\""))
 				oneLine.remove("\"");
 
-			if(p.show  && !p.enable)
+			if(p.enable == 2) // just show message
 				onDone(p.id, "FOUND ERROR BUT THIS IS DISABLE, PLEASE REPORT THIS LINE TO MONKEY TEAM");
 
 			// more than ERROR_ID (all errors)
-			if(p.id != -1 && p.id >= ERROR_ID  && p.enable )
-				// error found
+			if(p.id != -1 && p.id >= ERROR_ID  && p.enable == 1)
+				// error found, if is enbaled in file
 				onError(p.id, oneLine);
 			else 
 			{

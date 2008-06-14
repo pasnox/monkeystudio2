@@ -114,6 +114,12 @@ QPointer<QWidget> GdbBacktrace::widget()
 
 //
 
+QIcon GdbBacktrace::icon()
+{
+	return QIcon(":/icons/buttonok.png");
+}
+
+
 void GdbBacktrace::interpreter(const QPointer<BaseInterpreter> & i, const int & id, const QString & s)
 {
 	Connect->call( i, id, s);

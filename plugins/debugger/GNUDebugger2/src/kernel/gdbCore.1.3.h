@@ -56,6 +56,7 @@ public slots:
 
 	virtual QString name() = 0; 
 	virtual QPointer<QWidget> widget() = 0;
+	virtual QIcon icon() = 0;
 
 	virtual void interpreter(const QPointer<BaseInterpreter> & , const int & , const QString & ) = 0;
 

@@ -60,6 +60,7 @@ public slots:
 
 	QString name();
 	QPointer<QWidget> widget();
+	QIcon icon();
 
 	// gdb
 	void gdbFinished();

@@ -163,7 +163,11 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 		foreach(QPointer< class GdbCore> r, Dispatcher->list())
 		{
 			r->setEnabled( GdbSetting::instance()->getStartUp( r->name() ));
-			if(r->isEnabled()) mainTabWidget->addTab( r->widget(),r->name() );
+			if(r->isEnabled()) 
+			{
+				mainTabWidget->addTab( r->widget(),r->name() );
+				mainTabWidget->setTabIcon(mainTabWidget->count()-1, r->icon());
+			}
 		}
 
 		crlf = QTextCodec::codecForLocale()->fromUnicode( pMonkeyStudio::getEol() );

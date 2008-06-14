@@ -14,41 +14,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout" >
    <item row="0" column="0" colspan="4" >
-    <widget class="QTreeWidget" name="treeWidget" >
-     <property name="alternatingRowColors" >
-      <bool>true</bool>
-     </property>
-     <column>
-      <property name="text" >
-       <string>Type</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
-       <string>Use</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
-       <string>Expert</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
-       <string>Id</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
-       <string>Patterns</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
-       <string>Comments</string>
-      </property>
-     </column>
-    </widget>
+    <widget class="QTreeView" name="treeView" />
    </item>
    <item row="1" column="0" >
     <spacer name="horizontalSpacer" >

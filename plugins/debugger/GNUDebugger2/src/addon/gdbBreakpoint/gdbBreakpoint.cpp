@@ -158,6 +158,13 @@ QPointer<QWidget> GdbBreakpoint::widget()
 
 //
 
+QIcon GdbBreakpoint::icon()
+{
+	return QIcon(":/icons/buttonok.png");
+}
+
+//
+
 void GdbBreakpoint::interpreter(const QPointer<BaseInterpreter> & i, const int & id, const QString & s)
 {
 	Connect->call( i, id, s);
