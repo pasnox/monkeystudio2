@@ -11,5 +11,7 @@
 		<file>icons/update.png</file>
 		<file>icons/open.png</file>
 		<file>icons/continue.png</file>
+		<file>icons/backtrace.png</file>
+		<file>icons/breakpoint.png</file>
 	</qresource>
 </RCC>

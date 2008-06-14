@@ -160,7 +160,7 @@ QPointer<QWidget> GdbBreakpoint::widget()
 
 QIcon GdbBreakpoint::icon()
 {
-	return QIcon(":/icons/buttonok.png");
+	return QIcon(":/icons/breakpoint.png");
 }
 
 //

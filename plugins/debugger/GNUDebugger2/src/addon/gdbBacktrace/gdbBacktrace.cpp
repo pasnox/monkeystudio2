@@ -116,7 +116,7 @@ QPointer<QWidget> GdbBacktrace::widget()
 
 QIcon GdbBacktrace::icon()
 {
-	return QIcon(":/icons/buttonok.png");
+	return QIcon(":/icons/backtrace.png");
 }
 
 

@@ -345,8 +345,8 @@ void DockGNUDebugger::gdbStarted()
 		Process->sendRawData("set breakpoint pending on");
 
 		// set directorie
-		Parser->setNextCommand("Dock", "cd \"" + QFileInfo(mSelectedTarget).path() +"\"");
-		Process->sendRawData("cd \"" + QFileInfo(mSelectedTarget).path() + "\"");
+		Parser->setNextCommand("Dock", "cd " + QFileInfo(mSelectedTarget).path() );
+		Process->sendRawData("cd " + QFileInfo(mSelectedTarget).path() );
 
 		// gdb is started, now load target under Gdb
 		Parser->setNextCommand("Dock", "file \"" + mSelectedTarget + "\"");

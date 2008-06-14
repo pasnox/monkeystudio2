@@ -1,3 +1,12 @@
+
+14/06/08 17h23 v1.3.2 change log
+
+Add icon in QTabWidget
+New manage parsing.txt (delegate)
+New editor of GdbBreakpoint (delegate)
+
+
+
 14/06/08 00h23 v1.3.2 change log
 
 Update new icons
@@ -75,6 +84,13 @@ slotDebugCommand("set complaints 0\n");
 - Pb de droit sous linux pour le save gdbparsing.txt
 
 - Utiliser le target par defaut de monkey 
+
+- Supprimer les message 
+10001
+10002
+10003
+- rechercher le finish outframe
+	"finish" not meaningful in the outermost frame.
 
 
 
