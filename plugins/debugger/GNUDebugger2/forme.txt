@@ -5,6 +5,7 @@ Add icon in QTabWidget
 New manage parsing.txt (delegate)
 New editor of GdbBreakpoint (delegate)
 
+small bug found : step finish -> "finish" not meaningful in the outermost frame.
 
 
 14/06/08 00h23 v1.3.2 change log
@@ -56,43 +57,6 @@ fix ComboBox : Under Breakpoint Ui this is now correctly resizing
 
 V1.3.1 pre-release
 
-Future : 
-
-- command gdb 
-"watch" ->  
-"finish" -> goto at end function
-"clear" -> delete all breakpoint
-"tbreak args" break only one time
-"hbreak args" hardbreak
-"watch expr" break if var changed
-"rwatch expr" break if var is readed
-"awatch expr" break if var is readed or writed
-"wathis w" print ype of varname
-"ptype w" show all methode or member of varname
-"set confirm off"
-
-
-
-- configuration de gdb 
-slotDebugCommand("set pagination off\n");
-slotDebugCommand("set width 0\n");
-slotDebugCommand("set height 0\n");
-slotDebugCommand("set complaints 0\n");
-
-
-
-- Pb de droit sous linux pour le save gdbparsing.txt
-
-- Utiliser le target par defaut de monkey 
-
-- Supprimer les message 
-10001
-10002
-10003
-- rechercher le finish outframe
-	"finish" not meaningful in the outermost frame.
-
-
 
 
 V1.3.1 Test
@@ -142,5 +106,42 @@ ajouter la fonction Parser->isReady()
 ====================================================================================================================================
 
 
- 
+Future : 
+
+- command gdb 
+"watch" ->  
+"finish" -> goto at end function
+"clear" -> delete all breakpoint
+"tbreak args" break only one time
+"hbreak args" hardbreak
+"watch expr" break if var changed
+"rwatch expr" break if var is readed
+"awatch expr" break if var is readed or writed
+"wathis w" print ype of varname
+"ptype w" show all methode or member of varname
+"set confirm off"
+
+
+
+- configuration de gdb 
+slotDebugCommand("set pagination off\n");
+slotDebugCommand("set width 0\n");
+slotDebugCommand("set height 0\n");
+slotDebugCommand("set complaints 0\n");
+
+
+- la prise en charge des target release (pour le debugage de crash)
+
+- warning: Source file is more recent than executable.
+
+- Pb de droit sous linux pour le save gdbparsing.txt
+
+- Utiliser le target par defaut de monkey 
+
+- Supprimer les message 
+10001
+10002
+10003
+- rechercher le finish outframe
+	"finish" not meaningful in the outermost frame.
 
