@@ -318,6 +318,11 @@ void GdbBreakpoint::info(const int &, const QString &)
 {
 }
 
+void GdbBreakpoint::prompt(const int &, const QString &)
+{
+	setWaitEndProcess(false);
+}
+
 // Interpreters
 
 void GdbBreakpoint::desableBreakpointHit()

@@ -13,5 +13,6 @@
 		<file>icons/continue.png</file>
 		<file>icons/backtrace.png</file>
 		<file>icons/breakpoint.png</file>
+		<file>icons/cpu.png</file>
 	</qresource>
 </RCC>

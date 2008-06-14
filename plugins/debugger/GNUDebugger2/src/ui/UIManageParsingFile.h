@@ -31,7 +31,7 @@ private:
 
 public slots:
 		void onSave();
-
+	void onTextChanged(QString s);
 };
 //
 #endif // UIMANAGEPARSINGFILE_H

@@ -103,3 +103,8 @@ void GdbKernelDispatcher::info(const int & id, const QString & s)
 		if(p->isEnabled())		p->info(id, s);
 }
 
+void GdbKernelDispatcher::prompt(const int & id, const QString & s)
+{
+	foreach(QPointer<GdbCore> p , addonList)
+		if(p->isEnabled())		p->prompt(id, s);
+}

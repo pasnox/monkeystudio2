@@ -59,7 +59,9 @@ GdbBacktrace::GdbBacktrace(QObject * parent) : GdbCore(parent)
 		aRegExp = 
 	*/
 
-	
+/*
+#0  0x00400085 in ?? ()
+*/	
 	interpreterBacktrace = GdbCore::Parser()->addInterpreter(
 		QRegExp("^bt"),
 		QRegExp("^#\\d+\\s.*\\sat\\s.*:\\d+"),
@@ -194,6 +196,11 @@ void GdbBacktrace::error(const int &, const QString & s)
 
 void GdbBacktrace::done(const int &, const QString &){}
 void GdbBacktrace::info(const int &, const QString &){}
+
+void GdbBacktrace::prompt(const int &, const QString &)
+{
+	setWaitEndProcess(false);
+}
 
 // Interpreters
 

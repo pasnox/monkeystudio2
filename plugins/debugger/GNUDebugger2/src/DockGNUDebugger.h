@@ -23,6 +23,7 @@
 
 #include "./addon/gdbBreakpoint/gdbBreakpoint.h"
 #include "./addon/gdbBacktrace/gdbBacktrace.h"
+#include "./addon/gdbRegister/gdbRegister.h"
 
 
 class DockGNUDebugger : public pDockWidget, public QSingleton<DockGNUDebugger>
@@ -41,6 +42,7 @@ public:
 
 	class GdbBreakpoint *Breakpoint;
 	class GdbBacktrace *Backtrace;
+	class GdbRegister *Register;
 
 	void setAction(QHash<QString, QAction*> *);
 
@@ -107,6 +109,7 @@ public slots:
 	void onDone(int , QString);
 	void onInfo(int , QString);
 	void onError(int , QString);
+	void onPrompt(int , QString);
 
 	void onAboutToClose();
 };

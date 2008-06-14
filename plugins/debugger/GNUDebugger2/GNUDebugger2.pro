@@ -23,15 +23,18 @@ SOURCES	= src/GNUDebugger.cpp \
 	src/kernel/gdbSequencer.1.3.cpp \
 	src/kernel/gdbSetting.1.3.cpp \
 	src/addon/gdbBreakpoint/gdbBreakpoint.cpp \
-	src/addon/gdbBacktrace/gdbBacktrace.cpp \
 	src/addon/gdbBreakpoint/ui/UIGdbBreakpoint.cpp \
 	src/addon/gdbBreakpoint/ui/UIBreakpointDelegate.cpp \
-	src/addon/gdbBacktrace/ui/UIGdbBacktrace.cpp
+	src/addon/gdbBacktrace/gdbBacktrace.cpp \
+	src/addon/gdbBacktrace/ui/UIGdbBacktrace.cpp \
+	src/addon/gdbRegister/gdbRegister.cpp \
+	src/addon/gdbRegister/ui/UIGdbRegister.cpp
 
 FORMS	= src/ui/UIGNUDebuggerSetting.ui \
 	src/ui/UIManageParsingFile.ui \
 	src/addon/gdbBreakpoint/ui/UIGdbBreakpoint.ui \
-	src/addon/gdbBacktrace/ui/UIGdbBacktrace.ui
+	src/addon/gdbBacktrace/ui/UIGdbBacktrace.ui \
+	src/addon/gdbRegister/ui/UIGdbRegister.ui
 
 OPENEDFILES	= src/ui/UIsetting.h \
 	src/ui/UIsetting.cpp \
@@ -64,5 +67,7 @@ HEADERS	= src/GNUDebugger.h \
 	src/addon/gdbBreakpoint/ui/UIGdbBreakpoint.h \
 	src/addon/gdbBreakpoint/ui/UIBreakpointDelegate.h \
 	src/addon/gdbBacktrace/gdbBacktrace.h \
-	src/addon/gdbBacktrace/ui/UIGdbBacktrace.h
+	src/addon/gdbBacktrace/ui/UIGdbBacktrace.h \
+	src/addon/gdbRegister/gdbRegister.h \
+	src/addon/gdbRegister/ui/UIGdbRegister.h
 

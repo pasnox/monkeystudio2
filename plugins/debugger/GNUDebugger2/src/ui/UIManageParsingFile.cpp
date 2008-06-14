@@ -28,6 +28,7 @@ UIManageParsingFile::UIManageParsingFile( QWidget* parent )
     delegate = new UIManageDelegate(this);
 	treeView->setItemDelegate(delegate);
     treeView->setAlternatingRowColors(true);
+	treeView->setSortingEnabled(true);
 
 	model->setHeaderData(0, Qt::Horizontal, tr("Id"));
 	model->setHeaderData(1, Qt::Horizontal, tr("Expert"));
@@ -64,6 +65,7 @@ UIManageParsingFile::UIManageParsingFile( QWidget* parent )
 		model->setData(model->index(i, 3), GdbPatternFile::instance()->getComment( p ) );
 	}
 	connect(bSave, SIGNAL(clicked()), this,  SLOT(onSave()));
+	connect( lineEdit, SIGNAL(textChanged(QString)), this ,  SLOT(onTextChanged(QString)));
 }
 
 //
@@ -73,6 +75,7 @@ void UIManageParsingFile::closeEvent( QCloseEvent* e )
 	e->accept();
 }
 
+//
 
 void UIManageParsingFile::onSave()
 {
@@ -83,5 +86,18 @@ void UIManageParsingFile::onSave()
 			model->data(model->index(i, 0)).toInt(),  // id
 			model->data(model->index(i, 1), Qt::UserRole).toInt()};
 		l->replace(i, p);
+	}
+}
+
+//
+
+void UIManageParsingFile::onTextChanged(QString s)
+{
+	textEdit->clear();
+
+	foreach(GdbPattern p, *l)
+	{
+		if( GdbPatternFile::instance()->getPattern( p ).contains( lineEdit->text()))
+			textEdit->append( "Id : " + QString::number(GdbPatternFile::instance()->getId(p)) + " Pattern : " + GdbPatternFile::instance()->getPattern(p));
 	}
 }

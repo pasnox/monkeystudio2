@@ -73,6 +73,7 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 	// create addon
 	Breakpoint = new GdbBreakpoint(this);
 	Backtrace = new GdbBacktrace(this);
+	Register = new GdbRegister(this);
 
 
 	if( Parser && Process && Bridge && Dispatcher && Breakpoint && Backtrace)
@@ -80,7 +81,8 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 		// addOn to dispatcher
 		Dispatcher->add(Breakpoint);
 		Dispatcher->add(Backtrace);
-
+		Dispatcher->add(Register);
+	
 
 		// connections
 		connect(Process, SIGNAL( commandReadyRead( const QString& )), this , SLOT( commandReadyRead( const QString& )));
@@ -100,6 +102,7 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 		connect(Parser, SIGNAL(done(int, QString)), this , SLOT(onDone(int, QString)));
 		connect(Parser, SIGNAL(error(int, QString)), this , SLOT(onError(int, QString)));
 		connect(Parser, SIGNAL(info(int, QString)), this , SLOT(onInfo(int, QString)));
+		connect(Parser, SIGNAL(prompt(int, QString)), this , SLOT(onPrompt(int, QString)));
 
 		connect(Parser, SIGNAL(targetLoaded(int, QString)), this , SLOT(onTargetLoaded(int, QString)));
 		connect(Parser, SIGNAL(targetNoLoaded(int, QString)), this , SLOT(onTargetNoLoaded(int, QString)));
@@ -265,7 +268,8 @@ void DockGNUDebugger::onActionRestart()
 	
 	Parser->setReady(true);
 		
-	isTargetRunning = false;
+	// fix v1.3.2 when i load target i consider traget runing
+	isTargetRunning = true;
 
 	if(Parser->isReady())
 	{
@@ -515,6 +519,17 @@ void DockGNUDebugger::onInfo(int id, QString st)
 	rawLog->setTextColor(QColor(0,0,0));
 
 	Dispatcher->info(id, st);
+}
+
+//
+
+void DockGNUDebugger::onPrompt(int id, QString st)
+{
+	rawLog->setTextColor(QColor(255,0,0));
+	rawLog->append(QString::number(id) + " : " + st);
+	rawLog->setTextColor(QColor(0,0,0));
+
+	Dispatcher->prompt(id, st);
 }
 
 // Interpreter for step over / into

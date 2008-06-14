@@ -111,4 +111,13 @@ void GdbKernelDispatcher::info(const int & id, const QString & s)
 	}
 }
 
+void GdbKernelDispatcher::prompt(const int & id, const QString & s)
+{
+	foreach(QPointer<GdbCore> p , addonList)
+	{
+	//	QMessageBox::warning(NULL,"info", s + "\n" + p->name() + "  value :" + GdbCore::findValue(s, "^info,interpreter" ));
+		if(p->isEnabled() && ( p->wantAllMessages() || (p->name() == GdbCore::findValue(s, "^info,interpreter" )) ))
+			p->prompt(id, s);
+	}
+}
 

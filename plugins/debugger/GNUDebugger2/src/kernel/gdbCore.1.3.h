@@ -53,6 +53,7 @@ public slots:
 	virtual void error(const int &, const QString &) = 0;
 	virtual void done(const int &, const QString &) = 0;
 	virtual void info(const int &, const QString &) = 0;
+	virtual void prompt(const int &, const QString &) = 0;
 
 	virtual QString name() = 0; 
 	virtual QPointer<QWidget> widget() = 0;

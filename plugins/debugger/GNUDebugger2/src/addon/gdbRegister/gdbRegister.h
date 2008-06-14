@@ -2,56 +2,78 @@
  * PROGRAM      : Debugger
  * DATE - TIME  : lundi 31 mai 2008 - 18h04
  * AUTHOR       : Xiantia
- * FILENAME     : GdbKernelDispatcher
+ * FILENAME     : GdbRegister
  * LICENSE      : GPL
  * COMMENTARY   : 
  ********************************************************************************************************/
 
+/*
 
-#ifndef GDBKERNELDISPATCHER_H
-#define GDBKERNELDISPATCHER_H
+	GdbResgiter class
+
+
+	Xiantia@gmail.com
+
+	for Debugger v1.3.0
+*/
+
+#ifndef GDBREGISTER_H
+#define GDBREGISTER_H
 
 #include <QObject>
-#include "gdbCore.h"
-#include "gdbParser.1.3.h"
+#include "../../kernel/gdbCore.1.3.h"
+#include "../../kernel/gdbSequencer.1.3.h"
+#include "./ui/UIGdbRegister.h"
 
-class GdbKernelDispatcher : public QObject, public QSingleton<GdbKernelDispatcher>
+class GdbRegister : public GdbCore
 {
-
 	Q_OBJECT
-	friend class QSingleton<GdbKernelDispatcher>;
 
-public :
 
-	GdbKernelDispatcher(QObject * parent = 0);
-	~GdbKernelDispatcher();
+public:
 
-	void add(/*const QPointer<class GdbParser> &, */ const QPointer< class GdbCore> &);
-	void remove( const QPointer< class GdbCore> &);
-	void removeAll();
+	GdbRegister(QObject * parent = 0);
+	~GdbRegister();
 
-	void gdbStarted();
+public slots:
+
+	void onRegister( int , QString );
+
+	QString name();
+	QPointer<QWidget> widget();
+	QIcon icon();
+
+	void interpreter(const QPointer<BaseInterpreter> & , const int & , const QString & );
+
+	// gdb
 	void gdbFinished();
+	void gdbStarted();
 	void gdbError();
 
+	// target
 	void targetLoaded(const int &, const QString &);
 	void targetNoLoaded(const int &, const QString &);
 	void targetRunning(const int &, const QString &);
 	void targetStopped(const int &, const QString &);
 	void targetExited(const int &, const QString &);
 
+	// Parser
 	void error(const int &, const QString &);
 	void done(const int &, const QString &);
 	void info(const int &, const QString &);
 	void prompt(const int &, const QString &);
 
-	QList<QPointer< class GdbCore> > list() { return addonList;}
+private:
 
-private :
+	GdbConnectTemplate<GdbRegister> *Connect;
+	QPointer<BaseInterpreter> interpreterRegister;
 
-	QList<QPointer< class GdbCore> > addonList;
+	QPointer<GdbSequencer> Sequencer;
+	QPointer<UIGdbRegister> mWidget;
 
-	QPointer<GdbParser> mParser;
+	int numRegister;
+
+signals:
 };
 
 #endif

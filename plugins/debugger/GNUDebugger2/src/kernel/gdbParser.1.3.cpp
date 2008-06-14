@@ -367,7 +367,8 @@ void GdbParser::onDone(int id, QString st)
 {
 	switch(id)
 	{
-		case PROMPT_ID: emit done(id, "^done,interpreter=\"" + mCurrentClassName + "\",event=\"prompt\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\""); 
+		case PROMPT_ID: //emit done(id, "^done,interpreter=\"" + mCurrentClassName + "\",event=\"prompt\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\""); 
+			emit prompt(id, "^done,interpreter=\"" + mCurrentClassName + "\",event=\"prompt\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\""); 
 			mIsReady = true;
 			break;
 		default : emit done(id, "^done,interpreter=\"GdbParser\",event=\"generic information (not parsing)\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\"");break;
@@ -391,6 +392,8 @@ void GdbParser::onInfo(int id, QString st)
 		case 10007 : 
 			emit targetExited(id, "^info,interpreter=\"GdbParser\",event=\"target-exited\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\""); break;
 	
+		case 10021 : // Program received signal SIGSEGV, Segmentation fault.
+		case 10020 : // Step finish but no can execute this
 		case 10009 : // breakpoint hit
 				emit targetStopped(id, "^info,interpreter=\"GdbParser\",event=\"target-stopped\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\""); 
 				emit info(id, "^info,interpreter=\"GdbParser\",event=\"breakpoint-hit\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\"");

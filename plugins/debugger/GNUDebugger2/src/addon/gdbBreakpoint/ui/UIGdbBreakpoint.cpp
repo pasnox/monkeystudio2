@@ -84,7 +84,6 @@ void UIGdbBreakpoint::onItemChanged( const QModelIndex & topLeft, const QModelIn
 
 	for(int j=0; j< model->rowCount(); j++)
 	{	
-		
 		if(model->index(j,1) == topLeft && model->index(j,5).data().toString() !="" )
 			emit enabledBreakpoint(model->index(j,5).data().toString(), model->index(j,3).data().toInt(),!model->index(j,1).data(Qt::UserRole).toInt() );
 		if(model->index(j,2) == topLeft && model->index(j,5).data().toString() !="" )

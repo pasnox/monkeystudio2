@@ -106,6 +106,7 @@ private :
 	void done(int , QString);
 	void error(int , QString);
 	void info(int, QString);
+	void prompt(int, QString);
 
 //	void parserReady();
 };

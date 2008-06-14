@@ -65,6 +65,7 @@ public slots:
 	void error(const int &, const QString &);
 	void done(const int &, const QString &);
 	void info(const int &, const QString &);
+	void prompt(const int &, const QString &);
 
 private:
 

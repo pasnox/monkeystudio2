@@ -26,7 +26,7 @@ QWidget * UIManageDelegate::createEditor(QWidget *parent,
 	    return editor;
 	}
 
-	if(index.column() == 2 || index.column() == 3) return QItemDelegate::createEditor(parent, option, index);
+	if(index.column() == 2 || index.column() == 3 || index.column() == 0) return QItemDelegate::createEditor(parent, option, index);
 
 	return NULL;
 }
@@ -46,7 +46,7 @@ void UIManageDelegate::setEditorData(QWidget *editor,
 	    cb->setCurrentIndex(value);
 	}
 
-	if(index.column() == 2 || index.column() == 3) QItemDelegate::setEditorData(editor, index);
+	if(index.column() == 2 || index.column() == 3 || index.column() == 0) QItemDelegate::setEditorData(editor, index);
 }
 
 //! [2]
@@ -74,7 +74,7 @@ void UIManageDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 		return;
 	}
 
-	if(index.column() == 2 || index.column() == 3) QItemDelegate::setModelData(editor,model,  index);
+	if(index.column() == 2 || index.column() == 3 || index.column() == 0) QItemDelegate::setModelData(editor,model,  index);
 }
 
 //! [3]
