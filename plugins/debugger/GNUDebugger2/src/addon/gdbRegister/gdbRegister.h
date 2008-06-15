@@ -73,7 +73,7 @@ private:
 
 	int numRegister;
 
-signals:
+	void showColor(QTreeWidgetItem *, QString );
 };
 
 #endif

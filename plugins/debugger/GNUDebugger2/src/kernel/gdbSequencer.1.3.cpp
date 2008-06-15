@@ -65,4 +65,7 @@ void GdbSequencer::change(const SequencerCmd & a, const SequencerCmd & b )
 			mCmdList.replace(i, b);
 }
 
-
+QString GdbSequencer::currentCmd()
+{
+	return mCmdList.at(mCurrentIndex).name;
+}

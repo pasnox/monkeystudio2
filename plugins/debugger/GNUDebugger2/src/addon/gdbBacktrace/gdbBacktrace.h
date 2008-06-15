@@ -78,6 +78,7 @@ private:
 
 	int mCurrentLine;
 	QString mCurrentFile;
+	int numBacktrace;
 
 signals:
 

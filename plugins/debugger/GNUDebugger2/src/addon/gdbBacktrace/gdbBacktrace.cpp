@@ -74,7 +74,7 @@ GdbBacktrace::GdbBacktrace(QObject * parent) : GdbCore(parent)
 	/*
 		create new parser :
 
-		cRegExpCmd = "info"
+		cRegExpCmd = "info source"
 		aRegExp = "(gdb) "
 	*/
 	interpreterInfoSource = GdbCore::Parser()->addInterpreter(
@@ -85,11 +85,13 @@ GdbBacktrace::GdbBacktrace(QObject * parent) : GdbCore(parent)
 	Connect->add(this, interpreterInfoSource, &GdbBacktrace::onInfoSource);
 
 	Sequencer = new GdbSequencer(this);
-	QList<SequencerCmd> s = QList<SequencerCmd>() << SequencerCmd("backtrace", "bt") << SequencerCmd("infosource", "info source") ; 
-	Sequencer->add(name() , s);
+	QList<SequencerCmd> s = QList<SequencerCmd>() << SequencerCmd("Backtrace", "bt") << SequencerCmd("Infosource", "info source") ; 
+	Sequencer->add( name() , s);
 
 	mWidget = UIGdbBacktrace::self();
     mWidget->treeWidget->setAlternatingRowColors(true);
+
+	numBacktrace=0;
 }
 
 //
@@ -169,12 +171,7 @@ void GdbBacktrace::targetRunning(const int & id, const QString & s)
 void GdbBacktrace::targetStopped(const int & id, const QString & s)
 {
 	setWaitEndProcess(true);
-
-	mWidget->treeWidget->clear();
-	
 	Sequencer->start();
-//	GdbCore::Parser()->setNextCommand("bt");
-//	GdbCore::Process()->sendRawData("bt");
 }
 
 //
@@ -197,19 +194,50 @@ void GdbBacktrace::error(const int &, const QString & s)
 void GdbBacktrace::done(const int &, const QString &){}
 void GdbBacktrace::info(const int &, const QString &){}
 
-void GdbBacktrace::prompt(const int &, const QString &)
+void GdbBacktrace::prompt(const int &, const QString & s)
 {
+	// promt from bactrace command
+	if(Sequencer->currentCmd() == "Backtrace")
+	{
+		// clean up
+		int f = mWidget->treeWidget->topLevelItemCount();
+
+		for(int i=numBacktrace; i< f; i++)
+			mWidget->treeWidget->takeTopLevelItem(i);
+
+		numBacktrace=0;
+	}
 	setWaitEndProcess(false);
+	
+	Sequencer->loop();
 }
 
 // Interpreters
 
 void GdbBacktrace::onBacktrace(int id, QString s)
 {
-	QTreeWidgetItem *i = new QTreeWidgetItem(QStringList() << findValue(s,"answerGdb"));
-	mWidget->treeWidget->addTopLevelItem(i);
+	/*
+		see all backtrace in Ui
+	*/
+	
+	QRegExp rb("^#\\d+.*\\sat\\s[^:]+:\\d+$");
+
+	if(rb.exactMatch(findValue(s,"answerGdb")))
+	{
+		QStringList l = rb.capturedTexts();
+		QTreeWidgetItem * i;
+
+		if(numBacktrace < mWidget->treeWidget->topLevelItemCount()) 
+			i = mWidget->treeWidget->topLevelItem (numBacktrace);
+		else 
+			i = new QTreeWidgetItem(mWidget->treeWidget);
+
+		i->setText(0,findValue(s,"answerGdb"));
+		numBacktrace++;
+	}
 
 	/*
+		just extract current backtrace
 		#0  qMain (argc=1, argv=0x3d4c20) at src/main.cpp:65
 	*/
 
@@ -220,10 +248,6 @@ void GdbBacktrace::onBacktrace(int id, QString s)
 		QStringList l = r.capturedTexts();
 		mCurrentLine = l.at(2).toInt();
 		mCurrentFile = l.at(1);
-
-		Sequencer->loop();
-		//GdbCore::Parser()->setNextCommand("info source");
-		//GdbCore::Process()->sendRawData("info source");
 	}
 }
 
@@ -232,6 +256,7 @@ void GdbBacktrace::onBacktrace(int id, QString s)
 void GdbBacktrace::onInfoSource(int id, QString s)
 {
 	/*
+		Info source receiver
 	*/
 
 	QRegExp r("Located\\sin\\s(.*)" );
@@ -241,10 +266,7 @@ void GdbBacktrace::onInfoSource(int id, QString s)
 		//get the full path of file
 		QStringList l = r.capturedTexts();
 		mCurrentFile = l.at(1);
-
 		emit onToggleBacktrace(mCurrentFile, mCurrentLine);
-
-		setWaitEndProcess(false);
 	}
 }
 

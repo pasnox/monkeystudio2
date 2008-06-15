@@ -66,6 +66,8 @@ public :
 	void loop();
 	void change(const SequencerCmd &, const SequencerCmd &);
 
+	QString currentCmd();
+
 private :
 
 	int mCurrentIndex; 

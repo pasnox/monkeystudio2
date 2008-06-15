@@ -1,3 +1,16 @@
+15/06/08 12h12 v1.3.2 change log
+
+Add new editor manage file (find pattern)
+Add prompt event
+Add GdbRegister and show red value if it change
+Add GdbRegister icon (warning icon is not transparent)(fix latter)
+
+Bug found : 
+Can't write file gdbparsing.txt in Linux and Mac OS, because i don't have privilege
+If two files with the same name (but in different directory) are opened in editor, findFile() function not work correctly
+Step Finish action can freeze debugger if you are in the first frame (usually main function)
+
+
 
 14/06/08 17h23 v1.3.2 change log
 
@@ -6,6 +19,8 @@ New manage parsing.txt (delegate)
 New editor of GdbBreakpoint (delegate)
 
 small bug found : step finish -> "finish" not meaningful in the outermost frame.
+id : 21899
+
 
 
 14/06/08 00h23 v1.3.2 change log
@@ -123,14 +138,8 @@ Future :
 
 
 
-- configuration de gdb 
-slotDebugCommand("set pagination off\n");
-slotDebugCommand("set width 0\n");
-slotDebugCommand("set height 0\n");
-slotDebugCommand("set complaints 0\n");
-
-
 - la prise en charge des target release (pour le debugage de crash)
+(pas tres stable si on enable le debug des release)
 
 - warning: Source file is more recent than executable.
 
@@ -138,10 +147,4 @@ slotDebugCommand("set complaints 0\n");
 
 - Utiliser le target par defaut de monkey 
 
-- Supprimer les message 
-10001
-10002
-10003
-- rechercher le finish outframe
-	"finish" not meaningful in the outermost frame.
-
+- bug si deux fichiers on le meme nom mais a des endroits different

@@ -2,7 +2,7 @@
  * PROGRAM      : Debugger
  * DATE - TIME  : lundi 31 mai 2008 - 18h04
  * AUTHOR       : Xiantia
- * FILENAME     : GdbBacktrace
+ * FILENAME     : GdbRegister
  * LICENSE      : GPL
  * COMMENTARY   : 
  ********************************************************************************************************/
@@ -126,9 +126,6 @@ void GdbRegister::targetRunning(const int & id, const QString & s)
 void GdbRegister::targetStopped(const int & id, const QString & s)
 {
 	setWaitEndProcess(true);
-
-	mWidget->treeWidget->clear();
-	
 	Sequencer->start();
 }
 
@@ -160,8 +157,6 @@ void GdbRegister::prompt(const int &, const QString &)
 
 void GdbRegister::onRegister(int id, QString s)
 {
-	QTreeWidgetItem *i = new QTreeWidgetItem;
-	mWidget->treeWidget->addTopLevelItem(i);
 
 	/*
 		#0  qMain (argc=1, argv=0x3d4c20) at src/main.cpp:65
@@ -172,11 +167,38 @@ void GdbRegister::onRegister(int id, QString s)
 	if(r.exactMatch(findValue(s,"answerGdb")))
 	{
 		QStringList l = r.capturedTexts();
-		i->setText(0, l.at(1));
-		i->setText(1, l.at(2));
-		i->setText(2, l.at(3));
+		
+		QTreeWidgetItem * i;
 
-		setWaitEndProcess(false);
+		if(numRegister < mWidget->treeWidget->topLevelItemCount()) 
+		{
+			i = mWidget->treeWidget->topLevelItem ( numRegister);
+			showColor(i, l.at(2));
+
+		}
+		else i = new QTreeWidgetItem(mWidget->treeWidget);
+
+		i->setText(0,l.at(1));
+		i->setText(1,l.at(2));
+		i->setText(2,l.at(3));
+		numRegister++;
+	}
+}
+
+//
+
+void GdbRegister::showColor(QTreeWidgetItem *p, QString a)
+{
+	// toggle color (black / red if value in treeWidget is not egal than new value
+	if(p->text(1) != a)
+	{
+		p->setForeground( 1, QBrush(Qt::red));
+		p->setForeground( 2, QBrush(Qt::red));
+	}
+	else
+	{
+		p->setForeground( 1 , QBrush(Qt::black));
+		p->setForeground( 2 , QBrush(Qt::black));
 	}
 }
 
