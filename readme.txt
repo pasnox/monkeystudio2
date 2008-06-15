@@ -46,6 +46,9 @@ With MSVC/Windows:
 
 * Open a console, and go to the sources directory.
   * qmake && nmake
+(possible you will need to set, for wich compiler to generate makefilelike...
+  * qmake -spec win32-msvc2005
+)
 
 With Linux/*Nix:
 
