@@ -1,7 +1,7 @@
 #!/bin/sh
 #-------------------------------------------------------------------------------
-QT_PATH_FRAMEWORKS=/usr/local/Trolltech/Qt-4.3.3/lib
-QT_PLUGINGS=/usr/local/Trolltech/Qt-4.3.3/plugins
+QT_PATH_FRAMEWORKS=/usr/local/Trolltech/Qt-4.4.0/lib
+QT_PLUGINGS=/usr/local/Trolltech/Qt-4.4.0/plugins
 YABAUSE_APP=../Yabause.app
 YABAUSE_FRAMEWORKS=$YABAUSE_APP/Contents/Frameworks
 YABAUSE=$YABAUSE_APP/Contents/MacOS/Yabause
