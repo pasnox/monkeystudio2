@@ -28,14 +28,12 @@
 ****************************************************************************/
 #include "QtAssistant.h"
 #include "QtAssistantChild.h"
+#include "QtAssistantConfig.h"
+#include "ui/UIQtAssistantSettings.h"
 
 #include <monkey.h>
 #include <maininterface.h>
-
-// assistant include
-#include "config.h"
-
-using namespace pMonkeyStudio;
+#include <queuedstatusbar.h>
 
 QtAssistant::QtAssistant()
 {
@@ -47,8 +45,6 @@ QtAssistant::QtAssistant()
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "1.0.0";
 	mPluginInfos.Enabled = false;
-	// initialize assistant resource
-	Q_INIT_RESOURCE( assistant );
 }
 
 QtAssistant::~QtAssistant()
@@ -58,16 +54,19 @@ QtAssistant::~QtAssistant()
 }
 
 QWidget* QtAssistant::settingsWidget()
-{ return BasePlugin::settingsWidget(); }
+{ return new UIQtAssistantSettings( this ); }
 
 bool QtAssistant::setEnabled( bool b )
 {
 	if ( b && !isEnabled() )
 	{
 		// load configuration
-		Config* conf = Config::loadConfig( QString() );
+		Config* conf = QtAssistantConfig::instance( this );
 		if ( !conf )
-			warning( tr( "Qt Assistant profile..." ), tr( "Can't load/create the default profile for Qt Assistant, aborting..." ) );
+		{
+			MonkeyCore::statusBar()->appendMessage( tr( "Can't load/create the default profile for Qt Assistant, aborting..." ), 2500 );
+			return false;
+		}
 		// install dock
 		MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( QtAssistantChild::instance()->dock(), infos().Caption, QIcon( ":/trolltech/assistant/images/assistant.png" ) );
 		// set plugin enabled

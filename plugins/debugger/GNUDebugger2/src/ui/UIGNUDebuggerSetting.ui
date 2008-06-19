@@ -81,7 +81,7 @@
       </sizepolicy>
      </property>
      <property name="title" >
-      <string>Enable plugins</string>
+      <string>Enable Addon</string>
      </property>
     </widget>
    </item>
@@ -132,7 +132,7 @@
       </palette>
      </property>
      <property name="text" >
-      <string>Debugger plugin must be restarted if you enable / disable plugins</string>
+      <string>Debugger plugin must be restarted if you change value</string>
      </property>
      <property name="alignment" >
       <set>Qt::AlignCenter</set>

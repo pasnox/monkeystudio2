@@ -5,8 +5,9 @@
 //
 #include <QPointer>
 //
-#include <QStandardItemModel>
 #include "../gdbBreakpointStruct.h"
+
+#include "UIBreakpointDelegate.h"
 
 class UIGdbBreakpoint : public QWidget, public Ui::UIGdbBreakpoint
 {
@@ -15,7 +16,9 @@ class UIGdbBreakpoint : public QWidget, public Ui::UIGdbBreakpoint
 
 public slots:
 
-	void onCurrentIndexChanged(int );
+	void onEnableChanged(int );
+	void onConditionChanged( );
+	void onItemChanged(const QModelIndex & , const QModelIndex & );
 
 public:
 	static UIGdbBreakpoint* self( QWidget* = 0 );
@@ -28,12 +31,15 @@ protected:
 private:
 	UIGdbBreakpoint( QWidget* = 0 );
 	static QPointer<UIGdbBreakpoint> _self;
-	void addRow(QAbstractItemModel *model, QString hit, bool enable, QString condition, int line, QString file);
+//	void addRow(QAbstractItemModel *model, QString hit, bool enable, QString condition, int line, QString file);
 	
-	QStandardItemModel *treeModel;
-	//
+	QStandardItemModel *model;
+	UIBreakpointDelegate *delegate;
+
 signals:
-	void enabledBreakpoint(QString , int, bool);
+
+	void enabledBreakpoint(const QString  &, const int &, const bool &);
+	void conditionnedBreakpoint(const QString  &, const int &, const QString &);
 
 };
 //

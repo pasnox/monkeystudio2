@@ -29,7 +29,7 @@ typedef struct GdbPattern
 	QString comment;
 	QRegExp key;
 	int id;
-	bool enable;
+	int enable;
 };
 
 

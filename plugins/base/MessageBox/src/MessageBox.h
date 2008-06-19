@@ -42,9 +42,13 @@ public:
 	MessageBox();
 	virtual ~MessageBox();
 	virtual bool setEnabled( bool );
+	virtual QWidget* settingsWidget();
 
 protected:
 	MessageBoxDocks* mMessageBoxDocks;
+
+protected slots:
+	void onConsoleStarted();
 };
 
 #endif

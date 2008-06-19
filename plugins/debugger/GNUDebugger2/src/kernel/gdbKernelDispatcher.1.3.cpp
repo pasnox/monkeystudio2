@@ -10,6 +10,7 @@
 
 #include "gdbKernelDispatcher.1.3.h"
 
+#include <QMessageBox>
 
 GdbKernelDispatcher::GdbKernelDispatcher(QObject * parent ) : QObject(parent)
 {
@@ -89,17 +90,32 @@ void GdbKernelDispatcher::targetExited(const int & id , const QString & s)
 void GdbKernelDispatcher::error(const int & id, const QString & s)
 {
 	foreach(QPointer<GdbCore> p , addonList)
-		if(p->isEnabled())		p->error(id, s);
+		if(p->isEnabled() && (p->wantAllMessages() || (p->name() == GdbCore::findValue(s, "^error,interpreter" )) ))	
+			p->error(id, s);
 }
 
 void GdbKernelDispatcher::done(const int & id, const QString & s)
 {
 	foreach(QPointer<GdbCore> p , addonList)
-		if(p->isEnabled())		p->done(id, s);}
+		if(p->isEnabled() && (p->wantAllMessages() || (p->name() == GdbCore::findValue(s, "^done,interpreter" )) ))
+			p->done(id, s);
+}
 
 void GdbKernelDispatcher::info(const int & id, const QString & s)
 {
 	foreach(QPointer<GdbCore> p , addonList)
-		if(p->isEnabled())		p->info(id, s);
+	{
+		if(p->isEnabled() && ( p->wantAllMessages() || (p->name() == GdbCore::findValue(s, "^info,interpreter" )) ))
+			p->info(id, s);
+	}
+}
+
+void GdbKernelDispatcher::prompt(const int & id, const QString & s)
+{
+	foreach(QPointer<GdbCore> p , addonList)
+	{
+		if(p->isEnabled() && ( p->wantAllMessages() || (p->name() == GdbCore::findValue(s, "^prompt,interpreter" )) ))
+			p->prompt(id, s);
+	}
 }
 

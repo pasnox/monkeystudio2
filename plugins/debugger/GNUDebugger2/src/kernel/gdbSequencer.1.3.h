@@ -56,7 +56,7 @@ public :
 	~GdbSequencer();
 
 	void add(const SequencerCmd & );
-	void add(const QList<SequencerCmd> &);
+	void add(const QString & , const QList<SequencerCmd> &);
 
 	void start();
 	void start(const int &);
@@ -66,11 +66,15 @@ public :
 	void loop();
 	void change(const SequencerCmd &, const SequencerCmd &);
 
+	QString currentCmd();
+
 private :
 
 	int mCurrentIndex; 
 	QPointer<GdbParser> mParser;
 	QPointer<GdbProcess> mProcess;
+
+	QString mClassName;
 
 	QList<SequencerCmd> mCmdList;
 };

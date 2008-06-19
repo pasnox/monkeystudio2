@@ -6,7 +6,6 @@
 #include <maininterface.h>
 #include <qscintillamanager.h>
 #include "monkey.h"
-//#include "xupmanager.h"
 
 /* debugger */
 //
@@ -62,9 +61,6 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 
 {
 
-	// set charset for gdb not work
-	//	QTextCodec::setCodecForLocale(QTextCodec::codecForName("ISO-8859-1"));
-
 	// closing Monkey
 	connect (MonkeyCore::mainWindow(), SIGNAL( aboutToClose()), this , SLOT(onAboutToClose()));
 
@@ -77,6 +73,7 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 	// create addon
 	Breakpoint = new GdbBreakpoint(this);
 	Backtrace = new GdbBacktrace(this);
+	Register = new GdbRegister(this);
 
 
 	if( Parser && Process && Bridge && Dispatcher && Breakpoint && Backtrace)
@@ -84,7 +81,8 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 		// addOn to dispatcher
 		Dispatcher->add(Breakpoint);
 		Dispatcher->add(Backtrace);
-
+		Dispatcher->add(Register);
+	
 
 		// connections
 		connect(Process, SIGNAL( commandReadyRead( const QString& )), this , SLOT( commandReadyRead( const QString& )));
@@ -104,6 +102,7 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 		connect(Parser, SIGNAL(done(int, QString)), this , SLOT(onDone(int, QString)));
 		connect(Parser, SIGNAL(error(int, QString)), this , SLOT(onError(int, QString)));
 		connect(Parser, SIGNAL(info(int, QString)), this , SLOT(onInfo(int, QString)));
+		connect(Parser, SIGNAL(prompt(int, QString)), this , SLOT(onPrompt(int, QString)));
 
 		connect(Parser, SIGNAL(targetLoaded(int, QString)), this , SLOT(onTargetLoaded(int, QString)));
 		connect(Parser, SIGNAL(targetNoLoaded(int, QString)), this , SLOT(onTargetNoLoaded(int, QString)));
@@ -119,48 +118,59 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 		connect(Breakpoint, SIGNAL(onToggleBreakpoint(const Breakpoint &, const BaseBreakpoint &, const bool &)), Bridge,
 			SLOT(onToggleBreakpoint(const Breakpoint &, const BaseBreakpoint &, const bool& )));
 
-		connect(Breakpoint, SIGNAL(onToggleBreakpointEnabled(const Breakpoint &, const BaseBreakpoint &)), Bridge,
+/*		connect(Breakpoint, SIGNAL(onToggleBreakpointEnabled(const Breakpoint &, const BaseBreakpoint &)), Bridge,
 			SLOT(onToggleBreakpointEnabled(const Breakpoint & , const BaseBreakpoint &)));
 
+		connect(Breakpoint, SIGNAL(onToggleBreakpointConditionned(const Breakpoint &, const BaseBreakpoint &)), Bridge,
+			SLOT(onToggleBreakpointConditionned(const Breakpoint & , const BaseBreakpoint &)));
+*/
 		connect(Backtrace, SIGNAL(onToggleBacktrace(const QString & , const int &)), Bridge,
 			SLOT(onToggleBacktrace(const QString & , const int &)));
 
 		// Monkey
-		connect( MonkeyCore::workspace(), SIGNAL( fileOpened( const QString & ) ), Bridge, SLOT( add( const QString & ) ) );
-		connect( MonkeyCore::workspace(), SIGNAL( documentAboutToClose( int ) ), Bridge, SLOT( remove( int ) ) );
+		connect( MonkeyCore::workspace(), SIGNAL( fileOpened( const QString & ) ), Bridge, SLOT( addEditor( const QString & ) ) );
+		connect( MonkeyCore::workspace(), SIGNAL( documentAboutToClose( int ) ), Bridge, SLOT( removeEditor( int ) ) );
 
 		// connection BridgeEditor
 		connect(Bridge, SIGNAL(userToggleBreakpoint(const QString &, const int &)), this, SLOT(onUserToggleBreakpoint(const QString &, const int &)));
 		connect(Bridge, SIGNAL(requestBreakpoint(const QString &)), Breakpoint , SLOT(onRequestBreakpoint(const QString &)));
 		connect(Bridge, SIGNAL(requestBacktrace(const QString &)), Backtrace , SLOT(onRequestBacktrace(const QString &)));
 
+		Connect = new GdbConnectTemplate<DockGNUDebugger>;
 		
 		// add permanent Interpreter	
 		interpreterStepOver = Parser->addInterpreter(
-			//"step-over", 
-			//"n",
 			QRegExp("^n$"), 
 			QRegExp("\\d+\\s+.*"),
 			"^info,interpreter=\"Step-Over\",event=\"End-Stepping-Range\",answerGdb=\"");
 
+		Connect->add(this, interpreterStepOver, &DockGNUDebugger::onTargetStopped );
+
+		
 		interpreterStepInto = Parser->addInterpreter(
-			//"step-into", 
-			//"s", 
 			QRegExp("^s$"), 
 			QRegExp("\\d+\\s+.*"),
 			"^info,interpreter=\"Step-Into\",event=\"End-Stepping-Range\",answerGdb=\"");
 
-
-		//connect interpreter to function
-		Connect = new GdbConnectTemplate<DockGNUDebugger>;
-		Connect->add(this, interpreterStepOver, &DockGNUDebugger::onTargetStopped );
 		Connect->add(this, interpreterStepInto, &DockGNUDebugger::onTargetStopped );
 	
+
+		interpreterStepFinish = Parser->addInterpreter(
+			QRegExp("^finish$"), 
+			QRegExp("\\d+\\s+.*"),
+			"^info,interpreter=\"Step-Finish\",event=\"End-Stepping-Range\",answerGdb=\"");
+
+		Connect->add(this, interpreterStepFinish, &DockGNUDebugger::onTargetStopped );
+
 		// find if addOn is enable ?
 		foreach(QPointer< class GdbCore> r, Dispatcher->list())
 		{
 			r->setEnabled( GdbSetting::instance()->getStartUp( r->name() ));
-			if(r->isEnabled()) mainTabWidget->addTab( r->widget(),r->name() );
+			if(r->isEnabled()) 
+			{
+				mainTabWidget->addTab( r->widget(),r->name() );
+				mainTabWidget->setTabIcon(mainTabWidget->count()-1, r->icon());
+			}
 		}
 
 		crlf = QTextCodec::codecForLocale()->fromUnicode( pMonkeyStudio::getEol() );
@@ -204,8 +214,15 @@ void DockGNUDebugger::commandReadyRead(  const QString& d)
 void DockGNUDebugger::onActionLoadTarget()
 {
 	isTargetRunning = isGdbStarted = false;
-	Parser->clearAllCommand();
 
+	Process->clearAllCommand();
+	Parser->clearAllCommand();
+	
+	// set parser not ready because i start Gdb, i can only send 
+	// a command if gdb is started by waitting prompt (gdb)
+	// fix V1.3.2
+	Parser->setReady(false);
+		
 //	UIXUPManager p* = MonkeyCore::projectsManager()->currentProject();
 //	if(MonkeyCore::projectsManager()->currentProject())
 //		QString s = MonkeyCore::projectsManager()->currentProject()->projectSettingsValue( "EXECUTE_DEBUG" );
@@ -219,7 +236,7 @@ void DockGNUDebugger::onActionLoadTarget()
 
 		Process->setCommand( GdbSetting::instance()->getPathGdb() );
 
-		Parser->setNextCommand("Starting GDB");
+		Parser->setNextCommand("Dock", "Starting GDB");
 		Process->startProcess();
 	}
 }
@@ -234,7 +251,7 @@ void DockGNUDebugger::onActionExit()
 	Bridge->removeAllBreakpoints();
 	Bridge->removeBacktrace();
 
-	Parser->setNextCommand("Stop GDB");
+	Parser->setNextCommand("Dock", "Stop GDB");
 	
 	if(!isTargetRunning)	
 		Process->stopTarget();
@@ -246,11 +263,19 @@ void DockGNUDebugger::onActionExit()
 
 void DockGNUDebugger::onActionRestart()
 {
+	Process->clearAllCommand();
+	Parser->clearAllCommand();
+	
+	Parser->setReady(true);
+		
+	// fix v1.3.2 when i load target i consider traget runing
+	isTargetRunning = true;
+
 	if(Parser->isReady())
 	{
 		setEnabledActions(false);
 		rawLog->append("*** User restart ***");
-		Parser->setNextCommand("r");
+		Parser->setNextCommand("Dock", "r");
 		Process->sendRawData("r");
 	}
 }
@@ -263,7 +288,7 @@ void DockGNUDebugger::onActionContinue()
 	{
 		setEnabledActions(false);
 		rawLog->append("*** User continue ***");
-		Parser->setNextCommand("c");
+		Parser->setNextCommand("Dock", "c");
 		Process->sendRawData("c");
 	}
 }
@@ -277,7 +302,7 @@ void DockGNUDebugger::onActionStepOver()
 		setEnabledActions(false);
 	
 		rawLog->append("*** User step over ***");
-		Parser->setNextCommand("n");
+		Parser->setNextCommand("Dock", "n");
 		Process->sendRawData("n");
 	}
 }
@@ -291,11 +316,23 @@ void DockGNUDebugger::onActionStepInto()
 		setEnabledActions(false);
 
 		rawLog->append("*** User step into ***");
-		Parser->setNextCommand("s");
+		Parser->setNextCommand("Dock", "s");
 		Process->sendRawData("s");
 	}
 }
 
+
+void DockGNUDebugger::onActionStepFinish()
+{
+	if(Parser->isReady())
+	{
+		setEnabledActions(false);
+
+		rawLog->append("*** User step finish ***");
+		Parser->setNextCommand("Dock", "finish");
+		Process->sendRawData("finish");
+	}
+}
 
 // Process
 
@@ -307,13 +344,16 @@ void DockGNUDebugger::gdbStarted()
 	{
 		rawLog->append("*** Gdb started ***");
 
-		Parser->setReady(true);
+		// set options
+		Parser->setNextCommand("Dock", "set breakpoint pending on");
+		Process->sendRawData("set breakpoint pending on");
 
-//		Parser->setNextCommand("set options for gdb");
-//		Process->sendRawData("set breakpoint pending on");
+		// set directorie
+		Parser->setNextCommand("Dock", "cd " + QFileInfo(mSelectedTarget).path() );
+		Process->sendRawData("cd " + QFileInfo(mSelectedTarget).path() );
 
 		// gdb is started, now load target under Gdb
-		Parser->setNextCommand("file \"" + mSelectedTarget + "\"");
+		Parser->setNextCommand("Dock", "file \"" + mSelectedTarget + "\"");
 		Process->sendRawData("file \"" + mSelectedTarget + "\"");
 		
 		Dispatcher->gdbStarted();
@@ -391,7 +431,6 @@ void DockGNUDebugger::onTargetNoLoaded(int id, QString st)
 {
 	rawLog->append(QString::number(id) + " : " + st);
 	rawLog->append("*** Target no Loaded Stop Gdb ***");
-
 
 	Process->stopProcess();
 
@@ -482,6 +521,17 @@ void DockGNUDebugger::onInfo(int id, QString st)
 	Dispatcher->info(id, st);
 }
 
+//
+
+void DockGNUDebugger::onPrompt(int id, QString st)
+{
+	rawLog->setTextColor(QColor(255,0,0));
+	rawLog->append(QString::number(id) + " : " + st);
+	rawLog->setTextColor(QColor(0,0,0));
+
+	Dispatcher->prompt(id, st);
+}
+
 // Interpreter for step over / into
 
 void DockGNUDebugger::onInterpreter(const QPointer<BaseInterpreter> & i, const int & id, const QString & s)
@@ -495,8 +545,12 @@ void DockGNUDebugger::onInterpreter(const QPointer<BaseInterpreter> & i, const i
 
 void DockGNUDebugger::onUserToggleBreakpoint(const QString & fileName, const int & line)
 {
-	rawLog->append("** user toggle breakpoint *** " + fileName + " " + QString::number(line + 1));
-	Breakpoint->toggleBreakpoint(fileName, line + 1);
+	// fix 1.3.2 not send data to gdb if it not started or if target not running
+	if(isGdbStarted && !isTargetRunning)
+	{
+		rawLog->append("** user toggle breakpoint *** " + fileName + " " + QString::number(line + 1));
+		Breakpoint->toggleBreakpoint(fileName, line + 1);
+	}
 }
 
 // close monkey

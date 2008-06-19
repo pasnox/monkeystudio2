@@ -18,7 +18,7 @@
 */
 
 #include "gdbBreakpoint.h"
-#include <QMessageBox>
+//#include <QMessageBox>
 #include <QFileInfo>
 #include <QTextCodec>
 
@@ -33,7 +33,7 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 
 
 	/*
-		create new parser :
+		create new parser : For add breakpoint
 
 		cRegExpCmd = "b main.cpp:12"
 		aRegExp = "Breakpoint 1 at 0x437bdf: file src/addon/gdbBackTrace.cpp, line 15."
@@ -43,7 +43,7 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 
 	interpreterAddBreakpoint = GdbCore::Parser()->addInterpreter(
 		QRegExp("^b\\s.*:\\d+$"),
-		QRegExp("^Breakpoint\\s+\\d+\\s+at\\s\\w+:\\s+file\\s+[^,]+,\\s+line\\s+\\d+\\.(|\\s+\\(\\d+\\s\\w*\\))"),
+		QRegExp("^Breakpoint\\s+(\\d+)\\s+at\\s(\\w+):\\s+file\\s+([^,]+),\\s+line\\s+(\\d+)\\.(|\\s+\\(\\d+\\s\\w*\\))"),
 		"");
 
 	// connect interpreter to function
@@ -51,7 +51,7 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 
 
 	/*
-		create new parser :
+		create new parser : For delete breakpoint
 
 		cRegExpCmd = "delete 1"
 		aRegExp = "(gdb) "
@@ -64,7 +64,7 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 	Connect->add(this, interpreterDelBreakpoint, &GdbBreakpoint::onBreakpointDelete);
 
 	/*
-		create new parser :
+		create new parser : For enable breakpoint
 
 		cRegExpCmd = "enable 1"
 		aRegExp = "(gdb) "
@@ -77,7 +77,7 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 	Connect->add(this, interpreterEnabledBreakpoint, &GdbBreakpoint::onBreakpointEnabled);
 
 	/*
-		create new parser :
+		create new parser : For disable breakpoint
 
 		cRegExpCmd = "disable 1"
 		aRegExp = "(gdb) "
@@ -89,8 +89,48 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 
 	Connect->add(this, interpreterDisabledBreakpoint, &GdbBreakpoint::onBreakpointDisabled);
 
+	/*
+		create new parser : For breakpoint pending
+
+		cRegExpCmd = "disable 1"
+		aRegExp = "(gdb) "
+	*/
+	interpreterBreakpointPending = GdbCore::Parser()->addInterpreter(
+		QRegExp("^b\\s.*:\\d+$"),
+		QRegExp("^Breakpoint\\s(\\d+)\\s\\((.*):(\\d+)\\)\\spending\\.$"),
+		"^info,interpreter=\"" + name() + "\",event=\"Breakpoint-Add-Pending\",answerGdb=\"");
+
+	Connect->add(this, interpreterBreakpointPending, &GdbBreakpoint::onBreakpointPending);
+
+	/*
+		create new parser : For breakpoint Condition
+
+		cRegExpCmd = "condition 1 i==2"
+		aRegExp = "(gdb) "
+	*/
+	interpreterConditionnedBreakpoint = GdbCore::Parser()->addInterpreter(
+		QRegExp("^condition\\s\\d+.+$"),
+		QRegExp("^\\(gdb\\)\\s"),
+		"");
+
+	Connect->add(this, interpreterConditionnedBreakpoint, &GdbBreakpoint::onBreakpointConditionned);
+
+	/*
+		create new parser : For breakpoint unCondition
+
+		cRegExpCmd = "condition 1"
+		aRegExp = "Breakpoint 1 now unconditional."
+	*/
+	interpreterUnConditionnedBreakpoint = GdbCore::Parser()->addInterpreter(
+		QRegExp("^condition\\s\\d+$"),
+		QRegExp("^Breakpoint\\s\\d+\\snow\\sunconditional.$"),
+		"");
+
+	Connect->add(this, interpreterUnConditionnedBreakpoint, &GdbBreakpoint::onBreakpointUnConditionned);
+
 	mWidget = UIGdbBreakpoint::self();
-	connect( mWidget, SIGNAL(enabledBreakpoint(QString, int, bool)), this, SLOT(toggleEnabledBreakpoint(QString, int, bool)));
+	connect( mWidget, SIGNAL(enabledBreakpoint(const QString &, const int &, const bool &)), this, SLOT(toggleEnabledBreakpoint(const QString &, const int &, const bool &)));
+	connect( mWidget, SIGNAL(conditionnedBreakpoint(const QString &,const  int &, const QString &)), this, SLOT(toggleConditionnedBreakpoint(const QString &, const  int &, const QString &)));
 }
 
 //
@@ -114,6 +154,13 @@ QString GdbBreakpoint::name()
 QPointer<QWidget> GdbBreakpoint::widget()
 {
 	return (QPointer<QWidget>)( mWidget );
+}
+
+//
+
+QIcon GdbBreakpoint::icon()
+{
+	return QIcon(":/icons/breakpoint.png");
 }
 
 //
@@ -183,6 +230,17 @@ void GdbBreakpoint::removeAllBreakpoint()
 		delete bp;
 }
 
+// Gdb status
+
+void GdbBreakpoint::gdbStarted()
+{
+	removeAllBreakpoint();
+	breakpointList.clear();
+	setWaitEndProcess(false);
+	desableBreakpointHit();
+	mWidget->upDateData(breakpointList);
+}
+
 //
 
 void GdbBreakpoint::gdbFinished()
@@ -196,16 +254,12 @@ void GdbBreakpoint::gdbFinished()
 
 //
 
-void GdbBreakpoint::gdbStarted()
-{
-	removeAllBreakpoint();
-	breakpointList.clear();
-	setWaitEndProcess(false);
-	desableBreakpointHit();
-	mWidget->upDateData(breakpointList);
-}
+void GdbBreakpoint::gdbError(){}
 
-//
+// Target status
+
+void GdbBreakpoint::targetLoaded(const int &, const QString &){}
+void GdbBreakpoint::targetNoLoaded(const int &, const QString &){}
 
 void GdbBreakpoint::targetRunning(const int & , const QString & )
 {
@@ -245,7 +299,31 @@ void GdbBreakpoint::targetExited(const int & , const QString & s)
 	mWidget->upDateData(breakpointList);
 }
 
+// Parser status
+
+void GdbBreakpoint::error(const int &, const QString & s)
+{
+	showMessage(name() + " have generate error : " + s, 5000, _WARNING_);
+	mWidget->upDateData(breakpointList);
+	setWaitEndProcess(false);
+}
+
 //
+
+void GdbBreakpoint::done(const int &, const QString &)
+{
+}
+
+void GdbBreakpoint::info(const int &, const QString &)
+{
+}
+
+void GdbBreakpoint::prompt(const int &, const QString &)
+{
+	setWaitEndProcess(false);
+}
+
+// Interpreters
 
 void GdbBreakpoint::desableBreakpointHit()
 {
@@ -273,24 +351,25 @@ void GdbBreakpoint::breakpointMoved(const QString & fileName, const int & line, 
 			{
 				int r  = asBreakpointAtLine(bp,line);
 				if(r != -1) 
+				{
 					// clear to editor
+					showMessage("Breakpoint deleted allready set." , 2500, _WARNING_);
 					toggleBreakpoint(bp->fileName, b.line);
+					bp->bp[r].hit = true;
+				}
 				else
 				{
-						// clear current breakpoint
-//						emit onToggleBreakpoint(bp->fileName, b.line, false);
-						emit onToggleBreakpoint(*bp, b, false);
-						bp->bp[i].line = line;
-						// move breakpoint
-//						emit onToggleBreakpoint(bp->fileName, bp->bp.at(i).line, true);
-						emit onToggleBreakpoint(*bp, bp->bp.at(i) , true);
+					showMessage("Breakpoint moved." , 2500, _WARNING_);
+					// clear current breakpoint
+					emit onToggleBreakpoint(*bp, b, false);
+					bp->bp[i].line = line;
+					// move breakpoint
+					emit onToggleBreakpoint(*bp, bp->bp.at(i) , true);
 				}
 			}
 
-			// check if breakpoint hit fior show icon under TreeView
+			// check if breakpoint hit for show icon under TreeView
 			if(b.index == index) bp->bp[i].hit = true;
-			else bp->bp[i].hit = false;
-		
 		}
 	}
 }
@@ -312,7 +391,7 @@ void GdbBreakpoint::toggleBreakpoint(const QString & fileName, const int & line)
 		int index  = asBreakpointAtLine(bp,line);
 		if(index != -1)
 		{
-			GdbCore::Parser()->setNextCommand("delete " + QString::number(bp->bp.at(index).index));
+			GdbCore::Parser()->setNextCommand(name(), "delete " + QString::number(bp->bp.at(index).index));
 			GdbCore::Parser()->changeAnswerInterpreter(interpreterDelBreakpoint, 
 				"^info,interpreter=\"" + name() + "\",event=\"Breakpoint-Delete\",fileName=\""+ fileName +"\",line=\""+ QString::number(line) +"\",answerGdb=\"");
 			GdbCore::Process()->sendRawData("delete " +  QString::number(bp->bp.at(index).index));
@@ -321,7 +400,7 @@ void GdbBreakpoint::toggleBreakpoint(const QString & fileName, const int & line)
 		}
 		else // add
 		{
-			GdbCore::Parser()->setNextCommand("b " + fileName + ":" + QString::number(line));
+			GdbCore::Parser()->setNextCommand(name(), "b " + fileName + ":" + QString::number(line));
 			GdbCore::Parser()->changeAnswerInterpreter(interpreterAddBreakpoint, 
 				"^info,interpreter=\"" + name() + "\",event=\"Breakpoint-Add\",fileName=\""+ fileName +"\",line=\""+ QString::number(line) +"\",answerGdb=\"");
 			GdbCore::Process()->sendRawData("b \"" + fileName + "\":" + QString::number(line));
@@ -331,7 +410,7 @@ void GdbBreakpoint::toggleBreakpoint(const QString & fileName, const int & line)
 	}
 	else // pas de fichier source donc add bp
 	{
-		GdbCore::Parser()->setNextCommand("b " + fileName + ":" + QString::number(line));
+		GdbCore::Parser()->setNextCommand(name(), "b " + fileName + ":" + QString::number(line));
 		GdbCore::Parser()->changeAnswerInterpreter(interpreterAddBreakpoint, 
 			"^info,interpreter=\"" + name() + "\",event=\"Breakpoint-Add\",fileName=\""+ fileName +"\",line=\""+ QString::number(line) +"\",answerGdb=\"");
 		GdbCore::Process()->sendRawData("b \"" + fileName + "\":" + QString::number(line));
@@ -350,7 +429,8 @@ void GdbBreakpoint::onBreakpointAdd( int , QString s)
 	{
 		Breakpoint * bp = findByName(n);
 		QString a =findValue(s, "answerGdb");
-		QRegExp r("^Breakpoint\\s+(\\d+)\\s+at\\s(\\w+):\\s+file\\s+([^,]+),\\s+line\\s+(\\d+)\\.(|\\s+\\(\\d+\\s\\w*\\))");
+		QRegExp r = interpreterAddBreakpoint->getAnswerRegExp();
+		//("^Breakpoint\\s+(\\d+)\\s+at\\s(\\w+):\\s+file\\s+([^,]+),\\s+line\\s+(\\d+)\\.(|\\s+\\(\\d+\\s\\w*\\))");
 
 		if(bp)
 		{
@@ -365,7 +445,7 @@ void GdbBreakpoint::onBreakpointAdd( int , QString s)
 				p.index = l.at(1).toInt();
 				p.type = 1;
 				p.enable = true;
-				p.condition = "No implemented";
+				p.condition = tr("none");
 				bp->bp << p;
 
 				setWaitEndProcess(false);
@@ -385,7 +465,7 @@ void GdbBreakpoint::onBreakpointAdd( int , QString s)
 				p.index = l.at(1).toInt();
 				p.type = 1;
 				p.enable = true;
-				p.condition = "No implemented";
+				p.condition = tr("none");
 
 				b->bp << p;
 				breakpointList << b;
@@ -417,10 +497,10 @@ void GdbBreakpoint::onBreakpointDelete( int , QString s)
 				setWaitEndProcess(false);
 			}
 			else
-				QMessageBox::warning(NULL,"Critical erreur","Repport this bug : Delete breakpoint but no have this line !");
+				showMessage("Critical erreur : Repport this bug please : Delete breakpoint but no have this line !" , 0, _CRITICAL_);
 		}
 		else
-			QMessageBox::warning(NULL,"Critical erreur","Repport this bug : Delete breakpoint but no have this file !");
+			showMessage("Critical erreur : Repport this bug please : Delete breakpoint but no have this file !" , 0, _CRITICAL_);
 	
 		if(bp && bp->bp.count() == 0)
 			removeBreakpoint(bp);
@@ -443,7 +523,7 @@ void GdbBreakpoint::onRequestBreakpoint(const QString & fileName)
 
 //=================== Enable / desable breakpoint =====================
 
-void GdbBreakpoint::toggleEnabledBreakpoint(QString fileName, int index, bool b)
+void GdbBreakpoint::toggleEnabledBreakpoint(const QString & fileName, const int & index, const bool &b)
 {
 	if(isWaitEndProcess())
 		return;
@@ -452,15 +532,17 @@ void GdbBreakpoint::toggleEnabledBreakpoint(QString fileName, int index, bool b)
 	{
 		GdbCore::Parser()->changeAnswerInterpreter(interpreterEnabledBreakpoint, 
 			"^info,interpreter=\"" + name() + "\",event=\"Breakpoint-Enabled\",fileName=\""+ fileName +"\",index=\""+ QString::number(index) +"\",enabled=\"true\",answerGdb=\"");
-		GdbCore::Parser()->setNextCommand("enable " + QString::number(index));
+		GdbCore::Parser()->setNextCommand(name(), "enable " + QString::number(index));
 		GdbCore::Process()->sendRawData("enable " + QString::number(index));
+		setWaitEndProcess(true);
 	}
 	else
 	{
 		GdbCore::Parser()->changeAnswerInterpreter(interpreterDisabledBreakpoint, 
 			"^info,interpreter=\"" + name() + "\",event=\"Breakpoint-Disable\",fileName=\""+ fileName +"\",index=\""+ QString::number(index) +"\",enabled=\"false\",answerGdb=\"");
-		GdbCore::Parser()->setNextCommand("disable " + QString::number(index));
+		GdbCore::Parser()->setNextCommand(name() ,"disable " + QString::number(index));
 		GdbCore::Process()->sendRawData("disable " + QString::number(index));
+		setWaitEndProcess(true);
 	}
 }
 
@@ -479,7 +561,8 @@ void GdbBreakpoint::onBreakpointEnabled(int, QString s)
 			if(index != -1)
 			{
 				bp->bp[index].enable = true;
-				emit onToggleBreakpointEnabled(*bp, bp->bp.at(index) );
+//				emit onToggleBreakpointEnabled(*bp, bp->bp.at(index) );
+				emit  onToggleBreakpoint(*bp, bp->bp.at(index), true );
 				setWaitEndProcess(false);
 			}
 		
@@ -502,10 +585,117 @@ void GdbBreakpoint::onBreakpointDisabled(int, QString s)
 			if(index != -1)
 			{
 				bp->bp[index].enable = false;
-				emit onToggleBreakpointEnabled(*bp, bp->bp.at(index));
+				emit  onToggleBreakpoint(*bp, bp->bp.at(index), true);
+
+//				emit onToggleBreakpointEnabled(*bp, bp->bp.at(index));
 				setWaitEndProcess(false);
 			}
-		
+		}
+	}
+}
+
+// ================================ Breakpoint pending =================
+
+void GdbBreakpoint::onBreakpointPending(int, QString s)
+{
+	QString n = findValue(s,"answerGdb");
+
+	if( !n.isEmpty() )
+	{
+		//("^Breakpoint\\s+(\\d+)\\s+at\\s(\\w+):\\s+file\\s+([^,]+),\\s+line\\s+(\\d+)\\.(|\\s+\\(\\d+\\s\\w*\\))");
+		QRegExp r = interpreterBreakpointPending->getAnswerRegExp();
+		if(r.exactMatch(n))
+		{
+			QStringList l = r.capturedTexts();
+			onBreakpointAdd(0,"fileName=\"" + l.at(2) + "\",line=\"" + l.at(3) + "\",answerGdb=\"Breakpoint " + l.at(1) + " at pending: file " + l.at(2) + ", line " + l.at(3) + ".");
+		}
+	}
+}
+
+// =============================== Breakpoint Conditionned ================
+/*
+(gdb) condition 1
+Breakpoint 1 now unconditional.
+(gdb) condition 1 qsdqsdqd
+No symbol "qsdqsdqd" in current context.
+(gdb) condition 1 3423FFSDF
+Invalid number "3423FFSDF".
+(gdb) condition 1 '""
+Unmatched single quote.
+(gdb)
+*/
+
+void GdbBreakpoint::toggleConditionnedBreakpoint(const QString & fileName, const int & index, const QString & condition)
+{
+	if(isWaitEndProcess())
+		return;
+
+	GdbCore::Parser()->changeAnswerInterpreter(interpreterConditionnedBreakpoint, 
+		"^info,interpreter=\"" + name() + "\",event=\"Breakpoint-Conditionned\",fileName=\""+ fileName +"\",index=\""+ QString::number(index) +"\",condition=\"" + condition + "\",answerGdb=\"");
+	GdbCore::Parser()->changeAnswerInterpreter(interpreterUnConditionnedBreakpoint, 
+		"^info,interpreter=\"" + name() + "\",event=\"Breakpoint-unConditionned\",fileName=\""+ fileName +"\",index=\""+ QString::number(index) +"\",condition=\"\",answerGdb=\"");
+
+	if(condition.isEmpty() || condition == tr("none"))
+	{
+		GdbCore::Parser()->setNextCommand(name() ,"condition " + QString::number(index));
+		GdbCore::Process()->sendRawData("condition " + QString::number(index));
+	}
+	else
+	{
+		GdbCore::Parser()->setNextCommand(name() ,"condition " + QString::number(index) + " " + condition);
+		GdbCore::Process()->sendRawData("condition " + QString::number(index) + " " + condition);
+	}
+	setWaitEndProcess(true);
+}
+
+//
+
+void GdbBreakpoint::onBreakpointConditionned(int, QString s)
+{
+	QString n = findValue(s,"fileName");
+
+	if( !n.isEmpty() )
+	{
+		Breakpoint * bp = findByName(n);
+		if(bp)
+		{
+			int index  = asBreakpointIndex(bp,findValue(s,"index").toInt());
+			if(index != -1)
+			{
+				QString c = findValue(s,"condition");
+				bp->bp[index].condition = c.isEmpty() ? tr("none") : c;
+				bp->bp[index].type = 2;
+//				emit onToggleBreakpointConditionned(*bp, bp->bp.at(index));
+				emit  onToggleBreakpoint(*bp, bp->bp.at(index), true );
+				setWaitEndProcess(false);
+				mWidget->upDateData(breakpointList);
+			}
+		}
+	}
+}
+
+//
+
+void GdbBreakpoint::onBreakpointUnConditionned(int, QString s)
+{
+	QString n = findValue(s,"fileName");
+
+	if( !n.isEmpty() )
+	{
+		Breakpoint * bp = findByName(n);
+		if(bp)
+		{
+			int index  = asBreakpointIndex(bp,findValue(s,"index").toInt());
+			if(index != -1)
+			{
+				QString c = findValue(s,"condition");
+				bp->bp[index].condition = c.isEmpty() ? tr("none") : c;
+				bp->bp[index].type = 1;
+//				emit onToggleBreakpointConditionned(*bp, bp->bp.at(index));
+				emit  onToggleBreakpoint(*bp, bp->bp.at(index), true );
+				setWaitEndProcess(false);
+				mWidget->upDateData(breakpointList);
+			}
 		}
 	}
 }

@@ -86,6 +86,7 @@ bool GdbPatternFile::load(const QString & fullName)
 				p.key = QRegExp(l.at(3));
 				p.comment = l.at(4);
 				p.enable = l.at(1).toInt();
+//				p.show = l.at(2).toInt();
 				// store 
 				GdbPatternList << p;
 			}
@@ -110,7 +111,7 @@ GdbPattern GdbPatternFile::find(const QString  & value)
 	for(int i =0; i< GdbPatternList.count(); i++)
 	{
 
-		if(GdbPatternList.at(i).enable && GdbPatternList.at(i).key.exactMatch( value )) 
+		if((GdbPatternList.at(i).enable != 0) && GdbPatternList.at(i).key.exactMatch( value )) 
 		{
 			return GdbPatternList.at(i);
 		}

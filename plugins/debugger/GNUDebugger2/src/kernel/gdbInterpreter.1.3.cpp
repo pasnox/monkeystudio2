@@ -91,7 +91,7 @@ void GdbInterpreter::changeAnswer(const QPointer<BaseInterpreter> & i, const QSt
 }
 
 // find if an interpreter have a command (private function)
-
+// not use
 int GdbInterpreter::findCmd(const QString & cmd)
 {
 	for(int i=0; i< GdbInterpreterList.count(); i++)
@@ -103,12 +103,23 @@ int GdbInterpreter::findCmd(const QString & cmd)
 
 QPointer<BaseInterpreter> GdbInterpreter::find(const QString & currentCmd, const QString & lineValue)
 {
+	// V 1.3.2 fix for searsh all interpreter , not just one
+	for(int i = 0; i< GdbInterpreterList.count(); i++)
+	{
+		QPointer<BaseInterpreter> b = GdbInterpreterList.at(i);
+		if(b->getCmdRegExp().exactMatch(currentCmd) && b->getAnswerRegExp().exactMatch( lineValue ) )
+			return b;
+	}
+	return NULL;
+
+/*
 	int t = findCmd(currentCmd);
 	if(t != -1 && GdbInterpreterList.at(t)->getAnswerRegExp().exactMatch( lineValue ) )
 	{
 		return GdbInterpreterList.at(t);
 	}
 	return NULL;
+*/
 }
 		
 //

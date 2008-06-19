@@ -54,7 +54,7 @@ public :
 		Settings* s = MonkeyCore::settings();
 		s->beginGroup( QString( "Plugins/%1" ).arg( PLUGIN_NAME ) );
 			gdbSettings.pathGdb = s->value("PathGdb", "gdb").toString();
-			gdbSettings.pathParseFile =  s->value("PathParseFile", QString() ).toString();
+			gdbSettings.pathParseFile =  s->value("PathParseFile", "gdbparsing.txt" ).toString();
 			QStringList l = s->allKeys();
 
 		foreach(QString k ,l)

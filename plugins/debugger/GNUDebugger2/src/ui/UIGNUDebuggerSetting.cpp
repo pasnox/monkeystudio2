@@ -16,9 +16,9 @@ UIGNUDebuggerSetting::UIGNUDebuggerSetting( QWidget* parent )
 	setupUi( this );
 	setAttribute( Qt::WA_DeleteOnClose );
 
-	Process = new GdbProcess(this);
+	Process = new QProcess(this);
 	
-	connect(Process, SIGNAL( commandReadyRead( const QString& )), this , SLOT( commandReadyRead( const QString& )));
+	connect(Process, SIGNAL( readyRead( )), this , SLOT( onReadyRead(  )));
 	connect(Process, SIGNAL( started( )), this, SLOT(started()));
 	connect(Process, SIGNAL( finished(  int , QProcess::ExitStatus  )), this, SLOT(finished( int , QProcess::ExitStatus)));
 	connect(Process, SIGNAL( error ( QProcess::ProcessError )), this, SLOT(error(QProcess::ProcessError)));
@@ -42,9 +42,7 @@ UIGNUDebuggerSetting::UIGNUDebuggerSetting( QWidget* parent )
 		p.enable ? cb->setCheckState(Qt::Checked) : cb->setCheckState(Qt::Unchecked);
 	}
 
-//	mPathGdb = ;
-	Process->setCommand(GdbSetting::instance()->getPathGdb());//mPathGdb);
-	Process->startProcess();
+	Process->start(GdbSetting::instance()->getPathGdb());
 }
 
 //
@@ -73,20 +71,22 @@ void UIGNUDebuggerSetting::bClickedPathGdb()
 	if(!mPathGdb.isEmpty())
 	{
 		editPathGdb->setText(mPathGdb);
-		Process->setCommand(mPathGdb);
-		Process->startProcess();
-		
-		Process->sendRawData("quit");
+		Process->start(mPathGdb);
+		Process->waitForStarted(1000);
+		Process->write("quit\r\n");
 	}
 }
 
-void UIGNUDebuggerSetting::commandReadyRead( const QString& s)
+void UIGNUDebuggerSetting::onReadyRead( )
 {
+	QByteArray b = Process->readAll();
+
 	// read version of GDB
-	QStringList l = QString(s).split( pMonkeyStudio::getEol());
+	QStringList l = QString(b).split( pMonkeyStudio::getEol());
 	if(l.count())
 		labelCurrentVersion->setText(l.at(0));
-	Process->sendRawData("quit");
+
+	Process->write("quit\r\n");
 }
 
 void UIGNUDebuggerSetting::started()
@@ -118,9 +118,11 @@ void UIGNUDebuggerSetting::loadSettings()
 
 void UIGNUDebuggerSetting::saveSettings()
 {
+	// get the path
 	GdbSetting::instance()->setPathGdb(editPathGdb->text());
 	GdbSetting::instance()->setPathParseFile(editPathParsingFile->text());
 
+	// enable or not AddOn
 	QList<QCheckBox*> cbs = groupPlugins->findChildren<QCheckBox*>();
 	foreach(QCheckBox * c, cbs)
 	{
@@ -128,6 +130,3 @@ void UIGNUDebuggerSetting::saveSettings()
 	}
 	GdbSetting::instance()->save();
 }
-
-
-

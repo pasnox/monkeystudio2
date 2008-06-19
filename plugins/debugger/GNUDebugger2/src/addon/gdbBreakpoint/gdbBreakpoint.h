@@ -43,37 +43,59 @@ public slots:
 
 	void onBreakpointEnabled(int, QString);
 	void onBreakpointDisabled(int, QString);
-
+	void toggleEnabledBreakpoint(const QString & ,const int & , const bool &);
 
 	void onBreakpointAdd( int , QString );
 	void onBreakpointDelete( int , QString );
+	void toggleBreakpoint(const QString &, const int &);
+
+	void onBreakpointConditionned(int, QString);
+	void onBreakpointUnConditionned(int, QString);
+	void toggleConditionnedBreakpoint(const QString &, const int &, const QString &);
+
+	void onRequestBreakpoint(const QString & );
+	void onBreakpointPending(int, QString );
+	
 	void interpreter(const QPointer<BaseInterpreter> & , const int & , const QString & );
 
-	void toggleBreakpoint(const QString &, const int &);
-	void onRequestBreakpoint(const QString & );
-	
+	QString name();
+	QPointer<QWidget> widget();
+	QIcon icon();
+
 	// gdb
 	void gdbFinished();
 	void gdbStarted();
+	void gdbError();
+
 	// target
+	void targetLoaded(const int &, const QString &);
+	void targetNoLoaded(const int &, const QString &);
 	void targetRunning(const int &, const QString &);
 	void targetStopped(const int &, const QString &);
 	void targetExited(const int &, const QString &);
 
-	QString name();
-	QPointer<QWidget> widget();
+	// Parser
+	void error(const int &, const QString &);
+	void done(const int &, const QString &);
+	void info(const int &, const QString &);
+	void prompt(const int &, const QString &);
 
-	void toggleEnabledBreakpoint(QString ,int , bool);
 
 private:
 
 	GdbConnectTemplate<GdbBreakpoint> *Connect;
+	QList<Breakpoint *>  breakpointList;
+
 	QPointer<BaseInterpreter> interpreterAddBreakpoint;
 	QPointer<BaseInterpreter> interpreterDelBreakpoint;
-	QList<Breakpoint *>  breakpointList;
 
 	QPointer<BaseInterpreter> interpreterEnabledBreakpoint;
 	QPointer<BaseInterpreter> interpreterDisabledBreakpoint;
+
+	QPointer<BaseInterpreter> interpreterBreakpointPending;
+
+	QPointer<BaseInterpreter> interpreterConditionnedBreakpoint;
+	QPointer<BaseInterpreter> interpreterUnConditionnedBreakpoint;
 
 	Breakpoint * findByName(const QString &);
 	int asBreakpointAtLine(Breakpoint *, int);
@@ -90,7 +112,8 @@ private:
 signals:
 
 	void onToggleBreakpoint(const Breakpoint & , const BaseBreakpoint & , const bool &);
-	void onToggleBreakpointEnabled(const Breakpoint & , const BaseBreakpoint &);
+//	void onToggleBreakpointEnabled(const Breakpoint & , const BaseBreakpoint &);
+//	void onToggleBreakpointConditionned(const Breakpoint & , const BaseBreakpoint &);
 };
 
 #endif

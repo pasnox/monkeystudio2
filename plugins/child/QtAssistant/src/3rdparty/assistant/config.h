@@ -69,6 +69,7 @@ struct FontSettings
 
 class Config
 {
+	friend class QtAssistantConfig; // P@sNox
 public:
 
     Config();

@@ -3,8 +3,14 @@ TARGET	= QtAssistant
 include( ../../plugins.pri )
 DESTDIR	= $$MONKEY_PLUGINS_DIR/child
 
-HEADERS	+= src/QtAssistant.h \
-	src/QtAssistantChild.h
+FORMS	*= src/ui/UIQtAssistantSettings.ui
 
-SOURCES	+= src/QtAssistant.cpp \
-	src/QtAssistantChild.cpp
+HEADERS	*= src/QtAssistant.h \
+	src/QtAssistantChild.h \
+	src/QtAssistantConfig.h \
+	src/ui/UIQtAssistantSettings.h
+
+SOURCES	*= src/QtAssistant.cpp \
+	src/QtAssistantChild.cpp \
+	src/QtAssistantConfig.cpp \
+	src/ui/UIQtAssistantSettings.cpp

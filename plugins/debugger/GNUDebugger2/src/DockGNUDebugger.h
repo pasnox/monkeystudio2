@@ -23,6 +23,7 @@
 
 #include "./addon/gdbBreakpoint/gdbBreakpoint.h"
 #include "./addon/gdbBacktrace/gdbBacktrace.h"
+#include "./addon/gdbRegister/gdbRegister.h"
 
 
 class DockGNUDebugger : public pDockWidget, public QSingleton<DockGNUDebugger>
@@ -41,6 +42,7 @@ public:
 
 	class GdbBreakpoint *Breakpoint;
 	class GdbBacktrace *Backtrace;
+	class GdbRegister *Register;
 
 	void setAction(QHash<QString, QAction*> *);
 
@@ -56,6 +58,7 @@ private:
 	GdbConnectTemplate<DockGNUDebugger> *Connect;
 	QPointer<BaseInterpreter> interpreterStepOver;
 	QPointer<BaseInterpreter> interpreterStepInto;
+	QPointer<BaseInterpreter> interpreterStepFinish;
 	// main widget
 	QTabWidget *mainTabWidget;
 	// add log
@@ -83,6 +86,7 @@ public slots:
 	void onActionContinue();
 	void onActionStepOver();
 	void onActionStepInto();
+	void onActionStepFinish();
 
 	// Gdb
 	void gdbStarted();
@@ -96,6 +100,7 @@ public slots:
 	void onTargetRunning(int , QString);
 	void onTargetExited(int , QString);
 	void onTargetStopped(int , QString);
+
 	void onInterpreter(const QPointer<BaseInterpreter> & , const int &, const QString &);
 	
 	void onUserToggleBreakpoint(const QString & , const int & );
@@ -104,6 +109,7 @@ public slots:
 	void onDone(int , QString);
 	void onInfo(int , QString);
 	void onError(int , QString);
+	void onPrompt(int , QString);
 
 	void onAboutToClose();
 };

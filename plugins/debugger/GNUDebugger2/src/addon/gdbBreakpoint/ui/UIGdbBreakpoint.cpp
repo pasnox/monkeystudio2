@@ -2,7 +2,9 @@
 //
 #include <QCloseEvent>
 #include <QComboBox>
+#include <QLineEdit>
  //
+#include <QMessageBox>
 
 QPointer<UIGdbBreakpoint> UIGdbBreakpoint::_self = 0L;
 //
@@ -20,9 +22,24 @@ UIGdbBreakpoint::UIGdbBreakpoint( QWidget* parent )
 	: QWidget( parent )
 {
 	setupUi( this );
-	treeWidget->setRootIsDecorated(false);
-    treeWidget->setAlternatingRowColors(true);
-	treeWidget->setColumnWidth ( 0, QPixmap(":/icons/buttonok.png").size().width()) ;
+
+    	// set model
+	model = new QStandardItemModel(0,6);
+	treeView->setModel(model);
+    delegate = new UIBreakpointDelegate(this);
+	treeView->setItemDelegate(delegate);
+    treeView->setAlternatingRowColors(true);
+
+	model->setHeaderData(0, Qt::Horizontal, tr("Hit"));
+	model->setHeaderData(1, Qt::Horizontal, tr("Enable"));
+	model->setHeaderData(2, Qt::Horizontal, tr("Condition"));
+	model->setHeaderData(3, Qt::Horizontal, tr("Index"));
+	model->setHeaderData(4, Qt::Horizontal, tr("Line"));
+	model->setHeaderData(5, Qt::Horizontal, tr("File"));
+
+	connect(model, SIGNAL(dataChanged ( const QModelIndex & , const QModelIndex &  )), this, SLOT(onItemChanged ( const QModelIndex & , const QModelIndex &  )));
+	treeView->setColumnWidth ( 0, QPixmap(":/icons/buttonok.png").size().width()) ;
+	treeView->setRootIsDecorated(false);
 }
 
 //
@@ -36,7 +53,7 @@ void UIGdbBreakpoint::closeEvent( QCloseEvent* e )
 
 void UIGdbBreakpoint::upDateData(const QList<Breakpoint *> & bl)
 {
-	treeWidget->clear();
+	model->removeRows(0, model->rowCount());
 
 	// foreach Breakpoint
 	foreach(Breakpoint *bp, bl)
@@ -44,42 +61,58 @@ void UIGdbBreakpoint::upDateData(const QList<Breakpoint *> & bl)
 		// for one file
 		foreach(BaseBreakpoint bbp, bp->bp)
 		{
-			QComboBox * cb = new QComboBox();
-			cb->addItem("True", true);
-			cb->addItem("False", false);
+			int i = model->rowCount();
+			model->insertRow(i);
 
-			connect( cb, SIGNAL(currentIndexChanged ( int )), this , SLOT(onCurrentIndexChanged ( int )));
+			bbp.enable ? model->setData(model->index(i, 1), "True" ) :model->setData(model->index(i, 1), "False" );
+			model->setData(model->index(i, 2),  bbp.condition );
+			model->setData(model->index(i, 3), QString::number(bbp.index) );
+			model->setData(model->index(i, 4), QString::number(bbp.line) );
+			model->setData(model->index(i, 5), bp->fileName);
 
-			bbp.enable ? cb->setCurrentIndex(0) : cb->setCurrentIndex(1);
-
-			QTreeWidgetItem *i =  new QTreeWidgetItem(treeWidget);
-			i->setText(2, bbp.condition);
-			i->setText(3, QString::number(bbp.index));
-			i->setText(4, QString::number(bbp.line));
-			i->setText(5, bp->fileName);
-			
-//			QTreeWidgetItem *i =  new QTreeWidgetItem(QStringList() << QString()/* id */ << QString() /* ComboBox */
-//				<< bbp.condition << QString::number(bbp.index) << QString::number(bbp.line) << bp->fileName);
-				
-		//	i->setFlags(i->flags() | Qt::ItemIsEditable);
-			bbp.hit ? i->setIcon(0,QIcon(":/icons/buttonok.png")) : i->setIcon(0,QIcon());
-//			treeWidget->addTopLevelItem(i);
-			treeWidget->setItemWidget(i, 1, cb);
+			if( bbp.hit ) 
+				model->setData(model->index(i, 0), QIcon(":/icons/buttonok.png"), Qt::DecorationRole );
+			else 
+				model->setData(model->index(i, 0), QIcon(), Qt::DecorationRole );
 		}
 	}
 }
 
-void UIGdbBreakpoint::onCurrentIndexChanged(int i)
+
+void UIGdbBreakpoint::onItemChanged( const QModelIndex & topLeft, const QModelIndex & bottomRight )
 {
 
-	for(int j=0; j< treeWidget->topLevelItemCount(); j++)
+	for(int j=0; j< model->rowCount(); j++)
 	{	
-		QTreeWidgetItem *it = (QTreeWidgetItem*) treeWidget->topLevelItem(j);
-		QComboBox *cb = (QComboBox*) sender();
-		if(treeWidget->itemWidget(it,1) == cb)
-		{
-			emit enabledBreakpoint(it->text(5), it->text(3).toInt(), !cb->currentIndex());
-		}
+		if(model->index(j,1) == topLeft && model->index(j,5).data().toString() !="" )
+			emit enabledBreakpoint(model->index(j,5).data().toString(), model->index(j,3).data().toInt(),!model->index(j,1).data(Qt::UserRole).toInt() );
+		if(model->index(j,2) == topLeft && model->index(j,5).data().toString() !="" )
+			emit conditionnedBreakpoint(model->index(j,5).data().toString(), model->index(j,3).data().toInt(), model->index(j,2).data().toString());
 	}
 }
+
+
+void UIGdbBreakpoint::onEnableChanged(int i)
+{
+/*
+	QComboBox *cb = (QComboBox*) sender();
+	for(int j=0; j< model->rowCount(); j++)
+	{	
+		QModelIndex  m = model->index(j,1);
+		if( (QComboBox*)(m.data()) == cb)
+			emit enabledBreakpoint(model->index(j,5).data().toString(), model->index(j,3).data().toInt(), !cb->currentIndex());
+	}
+*/}
+
+void UIGdbBreakpoint::onConditionChanged()
+{
+
+/*	for(int j=0; j< treeWidget->topLevelItemCount(); j++)
+	{	
+		QTreeWidgetItem *it = (QTreeWidgetItem*) treeWidget->topLevelItem(j);
+		QLineEdit *le = (QLineEdit*) sender();
+		if(treeWidget->itemWidget(it,2) == le)
+			emit conditionnedBreakpoint(it->text(5), it->text(3).toInt(), le->text());
+	}
+*/}
 

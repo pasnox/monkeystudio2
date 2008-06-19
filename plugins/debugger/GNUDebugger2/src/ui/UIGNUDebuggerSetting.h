@@ -2,12 +2,12 @@
 #define UIGNUDEBUGGERSETTING_H
 #include "ui_UIGNUDebuggerSetting.h"
 
-#include "../../src/kernel/gdbProcess.1.3.h"
 #include "../../src/kernel/gdbKernelDispatcher.1.3.h"
 
 #include "UIManageParsingFile.h"
 
 #include <QPointer>
+#include <QProcess>
 
 class UIGNUDebuggerSetting : public QWidget, public Ui::UIGNUDebuggerSetting
 {
@@ -23,7 +23,7 @@ protected slots:
 	void on_dbbButtons_clicked( QAbstractButton* button );
 
 
-	void commandReadyRead( const QString& );
+	void onReadyRead( );
 	void started();
 	void finished( int , QProcess::ExitStatus  );
 	void error( QProcess::ProcessError );
@@ -38,7 +38,7 @@ protected slots:
 private :
 
 	
-	QPointer<GdbProcess> Process;
+	QPointer<QProcess> Process;
 	QStringList mPluginList;
 };
 

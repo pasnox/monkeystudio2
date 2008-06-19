@@ -31,6 +31,12 @@ class GdbParser : public QObject, public QSingleton<GdbParser>
 		Q_OBJECT
 		friend class QSingleton<GdbParser>;
 
+		typedef struct Command
+		{
+			QString className;
+			QString cmd;
+		};
+
 public:
 
 	GdbParser (QObject * parent = 0);
@@ -39,7 +45,7 @@ public:
 public slots:
 
 	bool processParsing(const QString&);
-	void setNextCommand(QString);
+	void setNextCommand(QString , QString);
 	void clearAllCommand();
 
 	// gateAway restoreLine
@@ -63,8 +69,11 @@ private :
 
 	QList<QRegExp> mEndParsing;
 
-	QStringList mCmdList;
+//	QStringList mCmdList;
+	QList<Command> mCmdList;
+
 	QString mCurrentCmd;
+	QString mCurrentClassName;
 
 	QString gdbBuffer;
 	
@@ -97,6 +106,7 @@ private :
 	void done(int , QString);
 	void error(int , QString);
 	void info(int, QString);
+	void prompt(int, QString);
 
 //	void parserReady();
 };

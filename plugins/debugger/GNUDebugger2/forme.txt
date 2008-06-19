@@ -1,21 +1,80 @@
-Future : 
+15/06/08 12h12 v1.3.2 change log
 
-fixer le bug du QComboBox dimention
-fixer l'icon breakpoint disable
+Add new editor manage file (find pattern)
+Add prompt event
+Add GdbRegister and show red value if it change
+Add GdbRegister icon (warning icon is not transparent)(fix latter)
 
-Ajouter la gestion des bp condionnel
+Bug found : 
+Can't write file gdbparsing.txt in Linux and Mac OS, because i don't have privilege
+If two files with the same name (but in different directory) are opened in editor, findFile() function not work correctly
+Step Finish action can freeze debugger if you are in the first frame (usually main function)
 
-Ajouter le working directorie a Gdb
 
-Prise en charge du click margin si gdb n'est pas en fonction
 
-Ajouter la prise en charge du pending breakpoint : "set breakpoint pending on" -> "Breakpoint 1 (C:/Qt/4.4.0/src/corelib/kernel/qobject.cpp:2328) pending."
-	Attention il affiche aussi "File xxxx not found avant"
+14/06/08 17h23 v1.3.2 change log
 
-Pb de droit sous linux pour le save gdbparsing.txt
+Add icon in QTabWidget
+New manage parsing.txt (delegate)
+New editor of GdbBreakpoint (delegate)
 
-Utiliser le target par defaut de monkey 
+small bug found : step finish -> "finish" not meaningful in the outermost frame.
+id : 21899
 
+
+
+14/06/08 00h23 v1.3.2 change log
+
+Update new icons
+
+
+
+12/06/08 12h23 v1.3.2 change log
+
+fix icon not cleared when you quit debugger mode
+add breakpoint conditionned
+modfify gdbparsing.txt (new structure)
+add step finish : run target untill end function
+now the target is executed in the target directory (not Monkey directory) 
+
+
+
+09/06/08 23h40 v1.3.2 change log
+
+fix breakpoint pending : you can add breakpoint under all files at start up gdb (library not loaded)
+
+
+
+09/06/08 21h14 V1.3.2 change log
+
+fix crash at startup if file parsing.txt is not found and Monkey haven't .ini
+fix crash if you open monkey with the last file opened is Designer format (not pEditor) 
+fix sync error if you click under margin but target is not loaded
+
+know bug : 
+
+If run under linux or mac Os you can't save the file "gdbparser.txt", because Monkey is installed in /usr/local/lib/... and 
+you don't have access.
+
+If you want add breakpoint into qWidget.h for example, you can't add this because gdb have not loaded library.
+Error -> "File ... not found" and youi have "Detecting kernel panic." message.
+For this, just run target, and you can add your breakpoint.
+
+
+09/06/08 19H04 V1.3.2 change log
+
+fix start gdb : some time target is not loaded correctly (parser not correctly sync)
+fix breakpoint disable : this is not clear under editor is you quit debug mode
+fix step-into / step-ouver : if you speed click under button (parser panic)
+fix all lines : all lines from gdb can be restoring (splited line)(kernel)
+fix ComboBox : Under Breakpoint Ui this is now correctly resizing
+
+
+V1.3.1 pre-release
+
+
+
+V1.3.1 Test
 
 test:								linux:		windows:	mac:
 --------------------------------------------------------------------------------------------------------------------------------------
@@ -62,5 +121,30 @@ ajouter la fonction Parser->isReady()
 ====================================================================================================================================
 
 
- 
+Future : 
 
+- command gdb 
+"watch" ->  
+"finish" -> goto at end function
+"clear" -> delete all breakpoint
+"tbreak args" break only one time
+"hbreak args" hardbreak
+"watch expr" break if var changed
+"rwatch expr" break if var is readed
+"awatch expr" break if var is readed or writed
+"wathis w" print ype of varname
+"ptype w" show all methode or member of varname
+"set confirm off"
+
+
+
+- la prise en charge des target release (pour le debugage de crash)
+(pas tres stable si on enable le debug des release)
+
+- warning: Source file is more recent than executable.
+
+- Pb de droit sous linux pour le save gdbparsing.txt
+
+- Utiliser le target par defaut de monkey 
+
+- bug si deux fichiers on le meme nom mais a des endroits different

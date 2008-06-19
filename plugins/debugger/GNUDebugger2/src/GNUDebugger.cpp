@@ -2,14 +2,12 @@
 #include "./ui/UIGNUDebuggerSetting.h"
 
 #include <maininterface.h>
-
 #include <coremanager.h>
 #include <settingsmanager.h>
 #include <monkey.h>
 #include <queuedstatusbar.h>
 
 #include <QIcon>
-
  
 GNUDebugger::GNUDebugger()
 {
@@ -20,7 +18,7 @@ GNUDebugger::GNUDebugger()
 	mPluginInfos.Author = "Pinon Yannick aka Xiantia  <private mail>";
 	mPluginInfos.Type = BasePlugin::iDebugger;
 	mPluginInfos.Name = PLUGIN_NAME;
-	mPluginInfos.Version = "1.3.1";
+	mPluginInfos.Version = "1.3.2";
 	mPluginInfos.Enabled = false;
 
 	// get the new instance of GdbPattermFile
@@ -43,28 +41,27 @@ GNUDebugger::GNUDebugger()
 			pluginsDir.setPath( path );
 			files << pMonkeyStudio::getFiles( pluginsDir, QString( "gdbparsing.txt" ), true );
 		}
-		GdbSetting::instance()->setPathParseFile( files.first().absoluteFilePath());
-		
-		if ( files.isEmpty() || ! patternFile->load( GdbSetting::instance()->getPathParseFile() ) )
-			MonkeyCore::statusBar()->appendMessage( tr( "gdbparsing.txt not found. Debugger can not work !" ) + GdbSetting::instance()->getPathParseFile(), 5000 ,QPixmap(), QBrush(QColor(255,80,80)));
-		else 	MonkeyCore::statusBar()->appendMessage( tr( "GdbPatternFile initializing sucess full" ), 1000 ,QPixmap(), QBrush(QColor(120,250,100)));
-	}
 
+		
+		if ( files.isEmpty())
+			MonkeyCore::statusBar()->appendMessage( tr( "gdbparsing.txt not found. Debugger can not work ! " ) + GdbSetting::instance()->getPathParseFile(), 5000 ,QPixmap(), QBrush(QColor(255,80,80)));
+		else
+		{
+			GdbSetting::instance()->setPathParseFile( files.first().absoluteFilePath());
+			patternFile->load( GdbSetting::instance()->getPathParseFile() );
+//			MonkeyCore::statusBar()->appendMessage( tr( "GdbPatternFile initializing sucess full" ), 2500 ,QPixmap(), QBrush(QColor(120,250,100)));
+		}
+	}
 	else
 	{
-	/*
-<PasNox> pQueuedMessage msg;
-<PasNox> msg.Background = QBrush( ... );
-<PasNox> addMessage( msg );
-*/
-
-	// load txt file if possible, else warn user in status bar
-	if ( ! patternFile->load( GdbSetting::instance()->getPathParseFile() ) )
-		MonkeyCore::statusBar()->appendMessage( tr( "gdbparsing.txt not found. Debugger can not work !" ) + GdbSetting::instance()->getPathParseFile(), 5000 ,QPixmap(), QBrush(QColor(255,80,80)));
-	else 	MonkeyCore::statusBar()->appendMessage( tr( "GdbPatternFile initializing sucess full" ), 1000 ,QPixmap(), QBrush(QColor(120,250,100)));
+		// load txt file if possible, else warn user in status bar
+		if ( ! patternFile->load( GdbSetting::instance()->getPathParseFile() ) )
+			MonkeyCore::statusBar()->appendMessage( tr( "gdbparsing.txt not found. Debugger can not work ! " ) + GdbSetting::instance()->getPathParseFile(), 5000 ,QPixmap(), QBrush(QColor(255,80,80)));
+//		else 	MonkeyCore::statusBar()->appendMessage( tr( "GdbPatternFile initializing sucess full" ), 2500 ,QPixmap(), QBrush(QColor(120,250,100)));
 
 	}
 }
+
 
 GNUDebugger::~GNUDebugger()
 {
@@ -83,11 +80,12 @@ bool GNUDebugger::setEnabled( bool b )
 		// add dock to dock toolbar entry
 		MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mDockGNUDebugger, infos().Caption, QIcon( pixmap() ) );
 		// add actions to main window
-		actionList["aLoadTarget"] = MonkeyCore::menuBar()->action( "mDebugger/aSelectTarget", tr( "Load target" ), QIcon( ":/icons/file.png" ) );
+		actionList["aLoadTarget"] = MonkeyCore::menuBar()->action( "mDebugger/aSelectTarget", tr( "Load target" ), QIcon( ":/icons/open.png" ) );
 		actionList["aRestart"] = MonkeyCore::menuBar()->action( "mDebugger/aStartorrestart", tr( "Start or restart target" ), QIcon( ":/icons/update.png" ) );
-		actionList["aContinue"] = MonkeyCore::menuBar()->action( "mDebugger/aContinue", tr( "Continue to next breakpoint" ), QIcon( ":/icons/play.png" ) );
+		actionList["aContinue"] = MonkeyCore::menuBar()->action( "mDebugger/aContinue", tr( "Continue to next breakpoint" ), QIcon( ":/icons/continue.png" ) );
 		actionList["aStepOver"] = MonkeyCore::menuBar()->action( "mDebugger/aStepover", tr( "Step over" ), QIcon( ":/icons/stepover.png" ) );
 		actionList["aStepInto"] = MonkeyCore::menuBar()->action( "mDebugger/aStepinto", tr( "Step into" ), QIcon( ":/icons/stepinto.png" ) );
+		actionList["aStepFinish"] = MonkeyCore::menuBar()->action( "mDebugger/aStepfinish", tr( "Step Finish" ), QIcon( ":/icons/stepfinish.png" ) );
 		actionList["aExitGdb"] = MonkeyCore::menuBar()->action( "mDebugger/aQuit", tr( "Quit debug mode" ), QIcon( ":/icons/close.png" ) );
 		// connections
 		connect( actionList["aLoadTarget"], SIGNAL( triggered() ), mDockGNUDebugger, SLOT( onActionLoadTarget() ) );
@@ -95,6 +93,7 @@ bool GNUDebugger::setEnabled( bool b )
 		connect( actionList["aContinue"], SIGNAL( triggered() ), mDockGNUDebugger, SLOT( onActionContinue() ) );
 		connect( actionList["aStepOver"], SIGNAL( triggered() ), mDockGNUDebugger, SLOT( onActionStepOver() ) );
 		connect( actionList["aStepInto"] , SIGNAL( triggered() ), mDockGNUDebugger, SLOT( onActionStepInto() ) );
+		connect( actionList["aStepFinish"] , SIGNAL( triggered() ), mDockGNUDebugger, SLOT( onActionStepFinish() ) );
 		connect( actionList["aExitGdb"], SIGNAL( triggered() ), mDockGNUDebugger, SLOT( onActionExit() ) );
 
 		// init action disable
@@ -102,6 +101,7 @@ bool GNUDebugger::setEnabled( bool b )
 		actionList["aContinue"]->setEnabled( false );
 		actionList["aStepOver"]->setEnabled( false );
 		actionList["aStepInto"]->setEnabled( false );
+		actionList["aStepFinish"]->setEnabled( false );
 		actionList["aExitGdb"]->setEnabled( false );
 
 		// separator and add icon to toolbar
@@ -135,16 +135,14 @@ QPixmap GNUDebugger::pixmap() const
 { return QPixmap( ":/icons/debugger.png" ); }
 
 void GNUDebugger::saveSettings()
-{
-}
+{}
 
 void GNUDebugger::restoreSettings()
-{
-}
+{}
 
 QWidget* GNUDebugger::settingsWidget()
-{ 
+{
 	return new UIGNUDebuggerSetting;
 }
-
+// DebuggerPlugin
 Q_EXPORT_PLUGIN2( BaseGNUDebugger, GNUDebugger )
