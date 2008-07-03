@@ -2,14 +2,14 @@
  * PROGRAM      : Debugger
  * DATE - TIME  : lundi 31 mai 2008 - 18h04
  * AUTHOR       : Xiantia
- * FILENAME     : GdbRegister
+ * FILENAME     : GdbWatch
  * LICENSE      : GPL
  * COMMENTARY   : 
  ********************************************************************************************************/
 
 /*
 
-	GdbResgiter class
+	GdbWatch class
 
 
 	Xiantia@gmail.com
@@ -17,27 +17,31 @@
 	for Debugger v1.3.0
 */
 
-#ifndef GDBREGISTER_H
-#define GDBREGISTER_H
+#ifndef GDBWATCH_H
+#define GDBWATCH_H
 
 #include <QObject>
 #include "../../kernel/gdbCore.1.3.h"
 #include "../../kernel/gdbSequencer.1.3.h"
-#include "./ui/UIGdbRegister.h"
+#include "./ui/UIGdbWatch.h"
 
-class GdbRegister : public GdbCore
+#include "gdbWatchStruct.h"
+
+class GdbWatch : public GdbCore
 {
 	Q_OBJECT
 
 
 public:
 
-	GdbRegister(QObject * parent = 0);
-	~GdbRegister();
+	GdbWatch(QObject * parent = 0);
+	~GdbWatch();
 
 public slots:
 
-	void onRegister( int , QString );
+	void onType( int , QString );
+	void onAddress( int , QString );
+	void onValue( int , QString );
 
 	QString name();
 	QPointer<QWidget> widget();
@@ -65,15 +69,21 @@ public slots:
 
 private:
 
-	GdbConnectTemplate<GdbRegister> Connect;
-	QPointer<BaseInterpreter> interpreterRegister;
+	GdbConnectTemplate<GdbWatch> *Connect;
+	QPointer<BaseInterpreter> interpreterAddress;
+	QPointer<BaseInterpreter> interpreterWhatis;
+	QPointer<BaseInterpreter> interpreterValue;
 
 	QPointer<GdbSequencer> Sequencer;
-	QPointer<UIGdbRegister> mWidget;
+	QPointer<UIGdbWatch> mWidget;
 
-	int numRegister;
 
 	void showColor(QTreeWidgetItem *, QString );
+	int currentVar;
+
+	// test script
+//	GdbScript scp;
+
 };
 
 #endif
