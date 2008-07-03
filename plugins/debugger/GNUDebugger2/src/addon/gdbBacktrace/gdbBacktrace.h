@@ -69,7 +69,7 @@ public slots:
 
 private:
 
-	GdbConnectTemplate<GdbBacktrace> *Connect;
+	GdbConnectTemplate<GdbBacktrace> Connect;
 	QPointer<BaseInterpreter> interpreterBacktrace;
 	QPointer<BaseInterpreter> interpreterInfoSource;
 

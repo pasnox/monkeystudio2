@@ -31,9 +31,9 @@ BaseInterpreter::BaseInterpreter(QObject *parent): QObject(parent)
 
 //
 
-void BaseInterpreter::set(/*QString cName, QString cGdb,*/ QRegExp cRegExp, QRegExp aRegExp, QString aExtention)
+void BaseInterpreter::set(QString cName,/* QString cGdb,*/ QRegExp cRegExp, QRegExp aRegExp, QString aExtention)
 {
-//	mCmdName = cName;
+	mClassName = cName;
 //	mCmdGdb = cGdb;
 	mCmdRegExp = cRegExp;
 	mAnswerRegExp = aRegExp;
@@ -50,22 +50,22 @@ BaseInterpreter::~BaseInterpreter()
 
 GdbInterpreter::GdbInterpreter(QObject *parent) : QObject(parent)
 { 
-	mParent = parent;
 	GdbInterpreterList.clear(); 
 }
 
 //
 
-QPointer<BaseInterpreter>  GdbInterpreter::add(/*const QString & cName, const QString & cGdb,*/ const QRegExp & cRegExp,
+QPointer<BaseInterpreter>  GdbInterpreter::add(const QString & cName,/* const QString & cGdb,*/ const QRegExp & cRegExp,
 											   const QRegExp & aRegExp, const QString & aExtention)
 {
 	QPointer<BaseInterpreter> i = new BaseInterpreter(this);
 	if(i)
 	{
-		i->set(/*cName, cGdb,*/cRegExp, aRegExp, aExtention);
+		i->set(cName, cRegExp, aRegExp, aExtention);
 		GdbInterpreterList << i;
+		return i;
 	}
-	return i;
+	return NULL;
 }	
 
 //
@@ -90,44 +90,23 @@ void GdbInterpreter::changeAnswer(const QPointer<BaseInterpreter> & i, const QSt
 		if(b == i ) b->setAnswerExtention(s);
 }
 
-// find if an interpreter have a command (private function)
-// not use
-int GdbInterpreter::findCmd(const QString & cmd)
-{
-	for(int i=0; i< GdbInterpreterList.count(); i++)
-		if(GdbInterpreterList.at(i)->getCmdRegExp().exactMatch(cmd)) return i;
-	return -1; 
-}
 
 // find interpreter from current command
 
-QPointer<BaseInterpreter> GdbInterpreter::find(const QString & currentCmd, const QString & lineValue)
+QPointer<BaseInterpreter> GdbInterpreter::find(const QString & currentClassName , const QString & currentCmd, const QString & lineValue)
 {
 	// V 1.3.2 fix for searsh all interpreter , not just one
 	for(int i = 0; i< GdbInterpreterList.count(); i++)
 	{
 		QPointer<BaseInterpreter> b = GdbInterpreterList.at(i);
-		if(b->getCmdRegExp().exactMatch(currentCmd) && b->getAnswerRegExp().exactMatch( lineValue ) )
+		if(b->getClassName() == currentClassName && b->getCmdRegExp().exactMatch(currentCmd) && b->getAnswerRegExp().exactMatch( lineValue )  )
 			return b;
 	}
 	return NULL;
-
-/*
-	int t = findCmd(currentCmd);
-	if(t != -1 && GdbInterpreterList.at(t)->getAnswerRegExp().exactMatch( lineValue ) )
-	{
-		return GdbInterpreterList.at(t);
-	}
-	return NULL;
-*/
 }
 		
 //
 
 GdbInterpreter::~GdbInterpreter()
 {
-	int c = GdbInterpreterList.count();
-	for(int i=0; i<c; i++)
-		if( GdbInterpreterList.at(i) ) delete GdbInterpreterList.at(i);
-	GdbInterpreterList.clear();
 }

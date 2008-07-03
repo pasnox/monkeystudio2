@@ -24,9 +24,6 @@
 
 GdbRegister::GdbRegister(QObject * parent) : GdbCore(parent)
 {
-	// new connexion 
-	Connect = new GdbConnectTemplate<GdbRegister>;
-
 	setEnabled(true);
 	setWaitEndProcess(false);
 
@@ -35,13 +32,14 @@ GdbRegister::GdbRegister(QObject * parent) : GdbCore(parent)
 	
 	*/
 
-	interpreterRegister = GdbCore::Parser()->addInterpreter(
+	interpreterRegister = Parser()->addInterpreter(
+		name(),
 		QRegExp("^info registers"),
 		QRegExp("^\\w+\\s+0x\\w+\\s+.*"),
 		"^info,interpreter=\"" + name() + "\",event=\"Register\",answerGdb=\"");
 
 	// connect interpreter to function
-	Connect->add(this, interpreterRegister, &GdbRegister::onRegister);
+	Connect.add(this, interpreterRegister, &GdbRegister::onRegister);
 
 
 
@@ -49,7 +47,7 @@ GdbRegister::GdbRegister(QObject * parent) : GdbCore(parent)
 	QList<SequencerCmd> s = QList<SequencerCmd>() << SequencerCmd("inforegister", "info registers")  ; 
 	Sequencer->add(name() , s);
 
-	mWidget = UIGdbRegister::self();
+	mWidget = UIGdbRegister::self(0);
     mWidget->treeWidget->setAlternatingRowColors(true);
 
 	numRegister = 0;
@@ -59,7 +57,6 @@ GdbRegister::GdbRegister(QObject * parent) : GdbCore(parent)
 
 GdbRegister::~GdbRegister()
 {
-	delete Connect;
 	delete mWidget;
 }
 
@@ -87,7 +84,7 @@ QIcon GdbRegister::icon()
 
 void GdbRegister::interpreter(const QPointer<BaseInterpreter> & i, const int & id, const QString & s)
 {
-	Connect->call( i, id, s);
+	Connect.call( i, id, s);
 }
 
 // Gdb status

@@ -5,6 +5,7 @@ include( ../../plugins.pri )
 DESTDIR	= $$MONKEY_PLUGINS_DIR/GNUdbg2
 TARGET	= GNUDebugger2
 RESOURCES	= src/resources/GNUDebugger.qrc
+QT += script
 
 SOURCES	= src/GNUDebugger.cpp \
 	src/DockGNUDebugger.cpp \
@@ -22,19 +23,27 @@ SOURCES	= src/GNUDebugger.cpp \
 	src/kernel/gdbCore.1.3.cpp \
 	src/kernel/gdbSequencer.1.3.cpp \
 	src/kernel/gdbSetting.1.3.cpp \
+	src/kernel/gdbScript.cpp \
 	src/addon/gdbBreakpoint/gdbBreakpoint.cpp \
 	src/addon/gdbBreakpoint/ui/UIGdbBreakpoint.cpp \
 	src/addon/gdbBreakpoint/ui/UIBreakpointDelegate.cpp \
 	src/addon/gdbBacktrace/gdbBacktrace.cpp \
 	src/addon/gdbBacktrace/ui/UIGdbBacktrace.cpp \
 	src/addon/gdbRegister/gdbRegister.cpp \
-	src/addon/gdbRegister/ui/UIGdbRegister.cpp
+	src/addon/gdbRegister/ui/UIGdbRegister.cpp \
+	src/addon/gdbCli/gdbCli.cpp \
+	src/addon/gdbCli/ui/UIGdbCli.cpp \
+	src/addon/gdbWatch/gdbWatch.cpp \
+	src/addon/gdbWatch/ui/UIGdbWatch.cpp \
+	src/addon/gdbWatch/gdbWatchStruct.cpp
 
 FORMS	= src/ui/UIGNUDebuggerSetting.ui \
 	src/ui/UIManageParsingFile.ui \
 	src/addon/gdbBreakpoint/ui/UIGdbBreakpoint.ui \
 	src/addon/gdbBacktrace/ui/UIGdbBacktrace.ui \
-	src/addon/gdbRegister/ui/UIGdbRegister.ui
+	src/addon/gdbRegister/ui/UIGdbRegister.ui \
+	src/addon/gdbWatch/ui/UIGdbWatch.ui \
+	src/addon/gdbCli/ui/UIGdbCli.ui
 
 OPENEDFILES	= src/ui/UIsetting.h \
 	src/ui/UIsetting.cpp \
@@ -63,11 +72,17 @@ HEADERS	= src/GNUDebugger.h \
 	src/kernel/gdbCore.1.3.h \
 	src/kernel/gdbSequencer.1.3.h \
 	src/kernel/gdbSetting.1.3.h \
+	src/kernel/gdbScript.h \
 	src/addon/gdbBreakpoint/gdbBreakpoint.h \
 	src/addon/gdbBreakpoint/ui/UIGdbBreakpoint.h \
 	src/addon/gdbBreakpoint/ui/UIBreakpointDelegate.h \
 	src/addon/gdbBacktrace/gdbBacktrace.h \
 	src/addon/gdbBacktrace/ui/UIGdbBacktrace.h \
 	src/addon/gdbRegister/gdbRegister.h \
-	src/addon/gdbRegister/ui/UIGdbRegister.h
+	src/addon/gdbRegister/ui/UIGdbRegister.h \
+	src/addon/gdbCli/gdbCli.h \
+	src/addon/gdbCli/ui/UIGdbCli.h \
+	src/addon/gdbWatch/gdbWatch.h \
+	src/addon/gdbWatch/ui/UIGdbWatch.h \
+	src/addon/gdbWatch/gdbWatchStruct.h
 

@@ -26,7 +26,7 @@ public :
 	GdbKernelDispatcher(QObject * parent = 0);
 	~GdbKernelDispatcher();
 
-	void add(/*const QPointer<class GdbParser> &, */ const QPointer< class GdbCore> &);
+	void add( const QPointer< class GdbCore> &);
 	void remove( const QPointer< class GdbCore> &);
 	void removeAll();
 

@@ -26,8 +26,14 @@ GNUDebugger::GNUDebugger()
 	GdbSetting::instance(this);
 	GdbSetting::instance()->load();
 
+	// find gdbParsing.txt
+
+	// if you start Mks for the first time
+	// setting is not found (monkeystudio.ini)
 	if(GdbSetting::instance()->getPathParseFile().isEmpty())
 	{
+		// auto find file
+
 		// load pattern
 		QStringList pluginsPath = MonkeyCore::settings()->value( "Plugins/Path" ).toStringList();
 		QFileInfoList files;
@@ -44,27 +50,27 @@ GNUDebugger::GNUDebugger()
 
 		
 		if ( files.isEmpty())
-			MonkeyCore::statusBar()->appendMessage( tr( "gdbparsing.txt not found. Debugger can not work ! " ) + GdbSetting::instance()->getPathParseFile(), 5000 ,QPixmap(), QBrush(QColor(255,80,80)));
+			MonkeyCore::statusBar()->appendMessage( tr( "gdbparsing.txt not found. Debugger can not work ! " ) + GdbSetting::instance()->getPathParseFile(), 0 ,QPixmap(), QBrush(QColor(255,80,80)));
 		else
 		{
 			GdbSetting::instance()->setPathParseFile( files.first().absoluteFilePath());
 			patternFile->load( GdbSetting::instance()->getPathParseFile() );
-//			MonkeyCore::statusBar()->appendMessage( tr( "GdbPatternFile initializing sucess full" ), 2500 ,QPixmap(), QBrush(QColor(120,250,100)));
 		}
 	}
 	else
 	{
+		// setting is not empty
+		// aptent load 
 		// load txt file if possible, else warn user in status bar
 		if ( ! patternFile->load( GdbSetting::instance()->getPathParseFile() ) )
 			MonkeyCore::statusBar()->appendMessage( tr( "gdbparsing.txt not found. Debugger can not work ! " ) + GdbSetting::instance()->getPathParseFile(), 5000 ,QPixmap(), QBrush(QColor(255,80,80)));
-//		else 	MonkeyCore::statusBar()->appendMessage( tr( "GdbPatternFile initializing sucess full" ), 2500 ,QPixmap(), QBrush(QColor(120,250,100)));
-
 	}
 }
 
 
 GNUDebugger::~GNUDebugger()
 {
+	// save current setting
 	GdbSetting::instance()->save();
 
 	if ( isEnabled() )

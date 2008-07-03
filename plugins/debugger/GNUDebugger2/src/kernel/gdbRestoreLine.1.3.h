@@ -22,6 +22,7 @@ class GdbRestoreLine : public QObject
 
 	typedef struct GdbLines
 	{
+		QString className;
 		QRegExp l1;
 		QRegExp l2;
 	};
@@ -32,13 +33,13 @@ public:
 	GdbRestoreLine(QObject *parent = 0);
 	~GdbRestoreLine();
 	
-	void add(const QRegExp &, const QRegExp &);
-	void add(const QString &, const QString &);
-	bool tryRestore(QStringList * );
-	bool find(const QString &, const QString &);
+	void add(const QString & ,const QRegExp &, const QRegExp &);
+	void add(const QString &, const QString &, const QString &);
+	bool tryRestore(const QString &, QStringList * );
+//	bool find(const QString &, const QString &);
 
-	int begin(const int &, const QStringList & , const QRegExp &);
-	int end(const int & , const QStringList &, const QRegExp &);
+	int begin(/*const QString &,*/ const int &, const QStringList & , const QRegExp &);
+	int end(/*const QString &, */const int & , const QStringList &, const QRegExp &);
 
 private:
 

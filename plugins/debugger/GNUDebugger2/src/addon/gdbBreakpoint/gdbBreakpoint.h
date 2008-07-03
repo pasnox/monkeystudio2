@@ -83,7 +83,7 @@ public slots:
 
 private:
 
-	GdbConnectTemplate<GdbBreakpoint> *Connect;
+	GdbConnectTemplate<GdbBreakpoint> Connect;
 	QList<Breakpoint *>  breakpointList;
 
 	QPointer<BaseInterpreter> interpreterAddBreakpoint;
@@ -112,8 +112,6 @@ private:
 signals:
 
 	void onToggleBreakpoint(const Breakpoint & , const BaseBreakpoint & , const bool &);
-//	void onToggleBreakpointEnabled(const Breakpoint & , const BaseBreakpoint &);
-//	void onToggleBreakpointConditionned(const Breakpoint & , const BaseBreakpoint &);
 };
 
 #endif

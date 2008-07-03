@@ -25,22 +25,25 @@ public :
 
 		BaseInterpreter(QObject *parent = 0);
 
-		void set(/*QString cName, QString cGdb,*/ QRegExp cRegExp,  QRegExp aRegExp, QString aExtention);
+		void set(QString cName,/* QString cGdb,*/ QRegExp cRegExp,  QRegExp aRegExp, QString aExtention);
 
 
 		~BaseInterpreter();
 
+		QString getClassName() {return mClassName;} 
 		QRegExp getCmdRegExp() { return mCmdRegExp;}
 		QRegExp getAnswerRegExp() { return mAnswerRegExp;}
 		QString getAnswerExtention() { return mAnswerExtention;}
 		int getId(){ return (int) this;}
 
+		void setClassName(QString s) { mClassName = s;}
 		void setAnswerExtention(QString s) { mAnswerExtention = s ;}
 		void setAnswerRegExp(QRegExp s) { mAnswerRegExp = s ;}
 		void setCmdRegExp(QRegExp s) { mCmdRegExp = s ;}
 		
 private :
 
+		QString mClassName;
 		QRegExp mCmdRegExp;			// command gdb in RegExp format
 		QRegExp mAnswerRegExp;		// answer from gdb in QregExp
 		QString mAnswerExtention;	// if you want passe other informations
@@ -59,18 +62,14 @@ public :
 	
 		GdbInterpreter(QObject *parent = 0);
 
-		QPointer<BaseInterpreter> add(/*const QString &, const QString &,*/ const QRegExp &,  const QRegExp &, const QString & );
+		QPointer<BaseInterpreter> add(const QString &,/* const QString &,*/ const QRegExp &,  const QRegExp &, const QString & );
 		bool remove(const QPointer<BaseInterpreter> &);
 		void changeAnswer(const QPointer<BaseInterpreter> &, const QString &);
-		QPointer<BaseInterpreter> find(const QString & , const QString & );
+		QPointer<BaseInterpreter> find(const QString & , const QString & , const QString & );
 
 		~GdbInterpreter();
 
 private :
-		QObject *mParent;
-
-		int findCmd(const QString & );
-
 		QList< QPointer<BaseInterpreter> > GdbInterpreterList;
 
 };

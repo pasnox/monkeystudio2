@@ -24,12 +24,12 @@ public:
 	static UIGdbBreakpoint* self( QWidget* = 0 );
 	//
 	void upDateData(const QList<Breakpoint *> & );
+	UIGdbBreakpoint( QWidget* = 0 );
 
 protected:
 	void closeEvent( QCloseEvent* );
 	//
 private:
-	UIGdbBreakpoint( QWidget* = 0 );
 	static QPointer<UIGdbBreakpoint> _self;
 //	void addRow(QAbstractItemModel *model, QString hit, bool enable, QString condition, int line, QString file);
 	

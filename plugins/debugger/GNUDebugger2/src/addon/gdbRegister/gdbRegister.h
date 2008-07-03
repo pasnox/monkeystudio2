@@ -65,7 +65,7 @@ public slots:
 
 private:
 
-	GdbConnectTemplate<GdbRegister> *Connect;
+	GdbConnectTemplate<GdbRegister> Connect;
 	QPointer<BaseInterpreter> interpreterRegister;
 
 	QPointer<GdbSequencer> Sequencer;

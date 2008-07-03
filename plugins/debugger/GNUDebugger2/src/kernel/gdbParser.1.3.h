@@ -49,10 +49,10 @@ public slots:
 	void clearAllCommand();
 
 	// gateAway restoreLine
-	void addRestoreLine(const QString &, const QString &);
+	void addRestoreLine(const QString &, const QString &, const QString &);
 
 	// gatAway interpreter
-	QPointer<BaseInterpreter> addInterpreter(/*const QString & cName, const QString & cGdb,*/ const QRegExp & cRegExp,
+	QPointer<BaseInterpreter> addInterpreter(const QString & cName, /*const QString & cGdb,*/ const QRegExp & cRegExp,
 		const QRegExp & aRegExp, const QString & aExtention);
 
 	bool removeInterpreter( const QPointer<BaseInterpreter> & );
@@ -92,9 +92,9 @@ private :
 
 	bool mIsReady;
 
-	signals:
+signals:
 
-		void onInterpreter(const QPointer<BaseInterpreter> & , const int & , const QString &);
+	void onInterpreter(const QPointer<BaseInterpreter> & , const int & , const QString &);
 
 	void targetLoaded(int , QString);
 	void targetNoLoaded(int, QString);
@@ -107,8 +107,6 @@ private :
 	void error(int , QString);
 	void info(int, QString);
 	void prompt(int, QString);
-
-//	void parserReady();
 };
 
 

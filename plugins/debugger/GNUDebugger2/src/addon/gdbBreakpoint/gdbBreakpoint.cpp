@@ -25,9 +25,6 @@
 
 GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 {
-	// new connexion for auto-call onBreakpointAdd()
-	Connect = new GdbConnectTemplate<GdbBreakpoint>;
-
 	setEnabled(true);
 	setWaitEndProcess(false);
 
@@ -41,13 +38,14 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 		aRegExp = "Breakpoint 2 at 0x437d2b: file src/addon/gdbBackTrace.cpp, line 22. (2 locations)"
 	*/
 
-	interpreterAddBreakpoint = GdbCore::Parser()->addInterpreter(
+	interpreterAddBreakpoint = Parser()->addInterpreter(
+		name(),
 		QRegExp("^b\\s.*:\\d+$"),
 		QRegExp("^Breakpoint\\s+(\\d+)\\s+at\\s(\\w+):\\s+file\\s+([^,]+),\\s+line\\s+(\\d+)\\.(|\\s+\\(\\d+\\s\\w*\\))"),
 		"");
 
 	// connect interpreter to function
-	Connect->add(this, interpreterAddBreakpoint, &GdbBreakpoint::onBreakpointAdd);
+	Connect.add(this, interpreterAddBreakpoint, &GdbBreakpoint::onBreakpointAdd);
 
 
 	/*
@@ -56,12 +54,13 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 		cRegExpCmd = "delete 1"
 		aRegExp = "(gdb) "
 	*/
-	interpreterDelBreakpoint = GdbCore::Parser()->addInterpreter(
+	interpreterDelBreakpoint = Parser()->addInterpreter(
+		name(),
 		QRegExp("^delete\\s\\d+"),
 		QRegExp("^\\(gdb\\)\\s"),
 		"^info,interpreter=\"" + name() + "\",event=\"Breakpoint-delete\",answerGdb=\"");
 
-	Connect->add(this, interpreterDelBreakpoint, &GdbBreakpoint::onBreakpointDelete);
+	Connect.add(this, interpreterDelBreakpoint, &GdbBreakpoint::onBreakpointDelete);
 
 	/*
 		create new parser : For enable breakpoint
@@ -69,12 +68,13 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 		cRegExpCmd = "enable 1"
 		aRegExp = "(gdb) "
 	*/
-	interpreterEnabledBreakpoint = GdbCore::Parser()->addInterpreter(
+	interpreterEnabledBreakpoint = Parser()->addInterpreter(
+		name(),
 		QRegExp("^enable\\s\\d+"),
 		QRegExp("^\\(gdb\\)\\s"),
 		"");
 
-	Connect->add(this, interpreterEnabledBreakpoint, &GdbBreakpoint::onBreakpointEnabled);
+	Connect.add(this, interpreterEnabledBreakpoint, &GdbBreakpoint::onBreakpointEnabled);
 
 	/*
 		create new parser : For disable breakpoint
@@ -82,12 +82,13 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 		cRegExpCmd = "disable 1"
 		aRegExp = "(gdb) "
 	*/
-	interpreterDisabledBreakpoint = GdbCore::Parser()->addInterpreter(
+	interpreterDisabledBreakpoint = Parser()->addInterpreter(
+		name(),
 		QRegExp("^disable\\s\\d+"),
 		QRegExp("^\\(gdb\\)\\s"),
 		"");
 
-	Connect->add(this, interpreterDisabledBreakpoint, &GdbBreakpoint::onBreakpointDisabled);
+	Connect.add(this, interpreterDisabledBreakpoint, &GdbBreakpoint::onBreakpointDisabled);
 
 	/*
 		create new parser : For breakpoint pending
@@ -95,12 +96,13 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 		cRegExpCmd = "disable 1"
 		aRegExp = "(gdb) "
 	*/
-	interpreterBreakpointPending = GdbCore::Parser()->addInterpreter(
+	interpreterBreakpointPending = Parser()->addInterpreter(
+		name(),
 		QRegExp("^b\\s.*:\\d+$"),
 		QRegExp("^Breakpoint\\s(\\d+)\\s\\((.*):(\\d+)\\)\\spending\\.$"),
 		"^info,interpreter=\"" + name() + "\",event=\"Breakpoint-Add-Pending\",answerGdb=\"");
 
-	Connect->add(this, interpreterBreakpointPending, &GdbBreakpoint::onBreakpointPending);
+	Connect.add(this, interpreterBreakpointPending, &GdbBreakpoint::onBreakpointPending);
 
 	/*
 		create new parser : For breakpoint Condition
@@ -108,12 +110,13 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 		cRegExpCmd = "condition 1 i==2"
 		aRegExp = "(gdb) "
 	*/
-	interpreterConditionnedBreakpoint = GdbCore::Parser()->addInterpreter(
+	interpreterConditionnedBreakpoint = Parser()->addInterpreter(
+		name(),
 		QRegExp("^condition\\s\\d+.+$"),
 		QRegExp("^\\(gdb\\)\\s"),
 		"");
 
-	Connect->add(this, interpreterConditionnedBreakpoint, &GdbBreakpoint::onBreakpointConditionned);
+	Connect.add(this, interpreterConditionnedBreakpoint, &GdbBreakpoint::onBreakpointConditionned);
 
 	/*
 		create new parser : For breakpoint unCondition
@@ -121,14 +124,15 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 		cRegExpCmd = "condition 1"
 		aRegExp = "Breakpoint 1 now unconditional."
 	*/
-	interpreterUnConditionnedBreakpoint = GdbCore::Parser()->addInterpreter(
+	interpreterUnConditionnedBreakpoint = Parser()->addInterpreter(
+		name(),
 		QRegExp("^condition\\s\\d+$"),
 		QRegExp("^Breakpoint\\s\\d+\\snow\\sunconditional.$"),
 		"");
 
-	Connect->add(this, interpreterUnConditionnedBreakpoint, &GdbBreakpoint::onBreakpointUnConditionned);
+	Connect.add(this, interpreterUnConditionnedBreakpoint, &GdbBreakpoint::onBreakpointUnConditionned);
 
-	mWidget = UIGdbBreakpoint::self();
+	mWidget = UIGdbBreakpoint::self(0);
 	connect( mWidget, SIGNAL(enabledBreakpoint(const QString &, const int &, const bool &)), this, SLOT(toggleEnabledBreakpoint(const QString &, const int &, const bool &)));
 	connect( mWidget, SIGNAL(conditionnedBreakpoint(const QString &,const  int &, const QString &)), this, SLOT(toggleConditionnedBreakpoint(const QString &, const  int &, const QString &)));
 }
@@ -138,7 +142,6 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 GdbBreakpoint::~GdbBreakpoint()
 {
 	removeAllBreakpoint();
-	delete Connect;
 	delete mWidget;
 }
 
@@ -167,7 +170,7 @@ QIcon GdbBreakpoint::icon()
 
 void GdbBreakpoint::interpreter(const QPointer<BaseInterpreter> & i, const int & id, const QString & s)
 {
-	Connect->call( i, id, s);
+	Connect.call( i, id, s);
 }
 
 //
@@ -303,7 +306,7 @@ void GdbBreakpoint::targetExited(const int & , const QString & s)
 
 void GdbBreakpoint::error(const int &, const QString & s)
 {
-	showMessage(name() + " have generate error : " + s, 5000, _WARNING_);
+	showMessage(name() + " have generate error : " + s, 5000, _CRITICAL_);
 	mWidget->upDateData(breakpointList);
 	setWaitEndProcess(false);
 }

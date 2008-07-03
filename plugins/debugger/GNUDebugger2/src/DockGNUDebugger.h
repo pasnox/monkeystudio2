@@ -24,6 +24,8 @@
 #include "./addon/gdbBreakpoint/gdbBreakpoint.h"
 #include "./addon/gdbBacktrace/gdbBacktrace.h"
 #include "./addon/gdbRegister/gdbRegister.h"
+#include "./addon/gdbWatch/gdbWatch.h"
+#include "./addon/gdbCli/gdbCli.h"
 
 
 class DockGNUDebugger : public pDockWidget, public QSingleton<DockGNUDebugger>
@@ -43,6 +45,8 @@ public:
 	class GdbBreakpoint *Breakpoint;
 	class GdbBacktrace *Backtrace;
 	class GdbRegister *Register;
+	class GdbWatch *Watch;
+	class GdbCli *Cli;
 
 	void setAction(QHash<QString, QAction*> *);
 
@@ -55,7 +59,7 @@ private:
 	void saveSettings();
 
 	// interpreter 
-	GdbConnectTemplate<DockGNUDebugger> *Connect;
+	GdbConnectTemplate<DockGNUDebugger> Connect;
 	QPointer<BaseInterpreter> interpreterStepOver;
 	QPointer<BaseInterpreter> interpreterStepInto;
 	QPointer<BaseInterpreter> interpreterStepFinish;

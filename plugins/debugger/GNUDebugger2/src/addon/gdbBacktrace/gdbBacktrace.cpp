@@ -24,9 +24,6 @@
 
 GdbBacktrace::GdbBacktrace(QObject * parent) : GdbCore(parent)
 {
-	// new connexion 
-	Connect = new GdbConnectTemplate<GdbBacktrace>;
-
 	setEnabled(true);
 	setWaitEndProcess(false);
 
@@ -48,7 +45,8 @@ GdbBacktrace::GdbBacktrace(QObject * parent) : GdbCore(parent)
 		type=AutoConnection) at kernel/qobject.cpp:2348
 	*/
 
-	GdbCore::Parser()->addRestoreLine("^#\\d+\\s.*" , 
+	GdbCore::Parser()->addRestoreLine(name(),
+		"^#\\d+\\s.*" , 
 		".*\\sat\\s.*:\\d+$");
 
 
@@ -62,13 +60,14 @@ GdbBacktrace::GdbBacktrace(QObject * parent) : GdbCore(parent)
 /*
 #0  0x00400085 in ?? ()
 */	
-	interpreterBacktrace = GdbCore::Parser()->addInterpreter(
+	interpreterBacktrace = Parser()->addInterpreter(
+		name(),
 		QRegExp("^bt"),
 		QRegExp("^#\\d+\\s.*\\sat\\s.*:\\d+"),
 		"^info,interpreter=\"" + name() + "\",event=\"Backtrace\",answerGdb=\"");
 
 	// connect interpreter to function
-	Connect->add(this, interpreterBacktrace, &GdbBacktrace::onBacktrace);
+	Connect.add(this, interpreterBacktrace, &GdbBacktrace::onBacktrace);
 
 
 	/*
@@ -77,18 +76,19 @@ GdbBacktrace::GdbBacktrace(QObject * parent) : GdbCore(parent)
 		cRegExpCmd = "info source"
 		aRegExp = "(gdb) "
 	*/
-	interpreterInfoSource = GdbCore::Parser()->addInterpreter(
+	interpreterInfoSource = Parser()->addInterpreter(
+		name(),
 		QRegExp("^info source"),
 		QRegExp("^Located\\sin\\s.*"),
 		"^info,interpreter=\"" + name() + "\",event=\"Info-source\",answerGdb=\"");
 
-	Connect->add(this, interpreterInfoSource, &GdbBacktrace::onInfoSource);
+	Connect.add(this, interpreterInfoSource, &GdbBacktrace::onInfoSource);
 
 	Sequencer = new GdbSequencer(this);
 	QList<SequencerCmd> s = QList<SequencerCmd>() << SequencerCmd("Backtrace", "bt") << SequencerCmd("Infosource", "info source") ; 
 	Sequencer->add( name() , s);
 
-	mWidget = UIGdbBacktrace::self();
+	mWidget = UIGdbBacktrace::self(0);
     mWidget->treeWidget->setAlternatingRowColors(true);
 
 	numBacktrace=0;
@@ -98,7 +98,6 @@ GdbBacktrace::GdbBacktrace(QObject * parent) : GdbCore(parent)
 
 GdbBacktrace::~GdbBacktrace()
 {
-	delete Connect;
 	delete mWidget;
 }
 
@@ -126,7 +125,7 @@ QIcon GdbBacktrace::icon()
 
 void GdbBacktrace::interpreter(const QPointer<BaseInterpreter> & i, const int & id, const QString & s)
 {
-	Connect->call( i, id, s);
+	Connect.call( i, id, s);
 }
 
 // Gdb status

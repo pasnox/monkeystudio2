@@ -1,3 +1,15 @@
+
+
+02/07/08 10h23 v1.3.2 change log
+
+Add message when you want toggle breapoint and target running
+AddOn GdbCli
+Modify Interpreter and RestoreLine for filter className
+Bug fix for multi enable / disable plugin (tab deleted later)
+
+
+
+
 15/06/08 12h12 v1.3.2 change log
 
 Add new editor manage file (find pattern)

@@ -22,22 +22,22 @@ GdbKernelDispatcher::~GdbKernelDispatcher()
 {
 }
 
-void GdbKernelDispatcher::add(/*const  QPointer<class GdbParser> & a, */const QPointer<class GdbCore> & p)
+void GdbKernelDispatcher::add(const QPointer<class GdbCore> & p)
 {
 	// add on to the dispatcher 
 	addonList << p;
 	connect(mParser, SIGNAL(onInterpreter(const QPointer<BaseInterpreter> & ,const int & , const QString &)), p , 
 		SLOT(interpreter(const QPointer<BaseInterpreter> & , const int & , const QString &)));
 }
-/*
-void GdbKernelDispatcher::remove(const QPointer<GdbCore> & p)
-{
-}
-*/
+
+//
+
 void GdbKernelDispatcher::removeAll()
 {
-	addonList.clear();
+//	addonList.clear();
 }
+
+//
 
 void GdbKernelDispatcher::gdbStarted()
 {

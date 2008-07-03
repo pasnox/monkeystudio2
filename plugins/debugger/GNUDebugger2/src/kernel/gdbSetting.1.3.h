@@ -84,9 +84,9 @@ public :
 	
 	void setEnable(QString n, bool b)
 	{
+		GdbAddOn p={ n , b};
 		for(int i = 0; i< gdbSettings.addOnList.count() ;i++)
 		{
-			GdbAddOn p={ n , b};
 			if(gdbSettings.addOnList.at(i).name == n)
 				gdbSettings.addOnList.replace(i,p) ;
 		}

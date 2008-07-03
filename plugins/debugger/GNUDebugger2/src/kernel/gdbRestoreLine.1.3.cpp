@@ -28,23 +28,23 @@ GdbRestoreLine::~GdbRestoreLine()
 
 //
 
-void GdbRestoreLine::add(const QRegExp & l1, const QRegExp & l2) 
+void GdbRestoreLine::add(const QString & className ,const QRegExp & l1, const QRegExp & l2) 
 {
-	GdbLines l={ l1, l2 };
+	GdbLines l={className, l1, l2 };
 	GdbRestoreLineList << l;
 }
 
 //
 
-void GdbRestoreLine::add(const QString & l1, const QString & l2) 
+void GdbRestoreLine::add(const QString & className ,const QString & l1, const QString & l2) 
 {
-	GdbLines l={ QRegExp(l1), QRegExp(l2) };
+	GdbLines l={ className, QRegExp(l1), QRegExp(l2) };
 	GdbRestoreLineList << l;
 }
 
 //
 
-int GdbRestoreLine::begin(const int & b , const QStringList & l, const QRegExp &r)
+int GdbRestoreLine::begin(/*const QString & className ,*/const int & b , const QStringList & l, const QRegExp &r)
 {
 	for(int i=b; i<l.count() ; i++)
 		if(r.exactMatch(l.at(i))) return i;
@@ -53,7 +53,7 @@ int GdbRestoreLine::begin(const int & b , const QStringList & l, const QRegExp &
 
 //
 
-int GdbRestoreLine::end(const int & b, const QStringList & l, const QRegExp &r)
+int GdbRestoreLine::end(/*const QString & className ,*/const int & b, const QStringList & l, const QRegExp &r)
 {
 	for(int i=b; i<l.count() ; i++)
 		if(r.exactMatch(l.at(i))) return i;
@@ -61,14 +61,14 @@ int GdbRestoreLine::end(const int & b, const QStringList & l, const QRegExp &r)
 }
 
 // not use
-
+/*
 bool GdbRestoreLine::find(const QString & l1, const QString & l2)
 {
 	for(int i=0; i<GdbRestoreLineList.count() ; i++)
 		if(GdbRestoreLineList.at(i).l1.exactMatch(l1)  && GdbRestoreLineList.at(i).l2.exactMatch(l2)) return true;
 	return false;
 }
-
+*/
 //
 /*
 #0  qMain (argc=1, argv=0x3d4c30)
@@ -78,7 +78,7 @@ bool GdbRestoreLine::find(const QString & l1, const QString & l2)
 #2  0x0045730a in main ()
 (gdb) 
 */
-bool GdbRestoreLine::tryRestore(QStringList * list)
+bool GdbRestoreLine::tryRestore(const QString & className , QStringList * list)
 {
 	bool r = false;
 
@@ -87,10 +87,10 @@ bool GdbRestoreLine::tryRestore(QStringList * list)
 	{
 		for(int i=0; i< list->count(); i++)
 		{
-			int lBegin = begin(i, *list, l.l1);
-			if(lBegin != -1)
+			int lBegin = begin(/*className, */i, *list, l.l1);
+			if(lBegin != -1 && l.className == className)
 			{
-				int lEnd = end(lBegin, *list , l.l2);
+				int lEnd = end(/*className, */lBegin, *list , l.l2);
 				if(lEnd != -1)
 				{
 					r = true;

@@ -65,7 +65,8 @@ GdbParser::GdbParser (QObject * parent) : QObject (parent), mIsReady(0)
 			Reading symbols from C:/DEV/debugger/debug/debugger.exe...
 			done.
 		*/
-		gdbRestoreLine->add("^Reading symbols from .*\\.\\.\\..*",
+		gdbRestoreLine->add("Dock",
+			"^Reading symbols from .*\\.\\.\\..*",
 			".*done\\.$");
 
 		/*
@@ -76,7 +77,8 @@ GdbParser::GdbParser (QObject * parent) : QObject (parent), mIsReady(0)
 				parameters=0x22f600) at global/qglobal.cpp:2690
 
 		*/			
-		gdbRestoreLine->add("^Breakpoint\\s\\d+,\\s.*",
+		gdbRestoreLine->add("Dock",
+			"^Breakpoint\\s\\d+,\\s.*",
 			".*at\\s+[^:]+:\\d+$");
 
 		mCmdList.clear();
@@ -95,19 +97,19 @@ GdbParser::~GdbParser()
 
 // gateAway RestoreLine
 
-void GdbParser::addRestoreLine(const QString & l1, const QString & l2)
+void GdbParser::addRestoreLine(const QString & className, const QString & l1, const QString & l2)
 {
 	if(gdbRestoreLine)
-		gdbRestoreLine->add(l1, l2);
+		gdbRestoreLine->add(className, l1, l2);
 }
 
 // gateAway Interpreter
 
-QPointer<BaseInterpreter> GdbParser::addInterpreter(/*const QString & cName, const QString & cGdb,*/ const QRegExp & cRegExp, 
+QPointer<BaseInterpreter> GdbParser::addInterpreter(const QString & cName, /*const QString & cGdb,*/ const QRegExp & cRegExp, 
 													const QRegExp & aRegExp,const QString & aExtention)
 {
 	if(gdbInterpreter)
-		return gdbInterpreter->add(/*cName , cGdb , */cRegExp ,  aRegExp , aExtention );
+		return gdbInterpreter->add(cName ,/* cGdb , */cRegExp ,  aRegExp , aExtention );
 	else return NULL;
 }
 
@@ -213,7 +215,7 @@ bool GdbParser::processParsing(const QString & storg)
 		QStringList lines = gdbBuffer.split(crlf);
 
 		// if answer is splitted in more string
-		if(gdbRestoreLine && gdbRestoreLine->tryRestore(&lines)) 
+		if(gdbRestoreLine && gdbRestoreLine->tryRestore(mCurrentClassName, &lines)) 
 		{
 			for(int i=0; i<lines.count(); i++)
 				onInfo(-1," !! Restoring -> \"" +  lines.at(i));
@@ -307,7 +309,7 @@ bool GdbParser::processParsing(const QString & storg)
 			else 
 			{
 				// find interpreter
-				QPointer<BaseInterpreter> bi = gdbInterpreter->find(mCurrentCmd, oneLine);
+				QPointer<BaseInterpreter> bi = gdbInterpreter->find(mCurrentClassName , mCurrentCmd, oneLine);
 					
 				if( !bi )
 				{
@@ -371,7 +373,7 @@ void GdbParser::onDone(int id, QString st)
 			emit prompt(id, "^prompt,interpreter=\"" + mCurrentClassName + "\",event=\"prompt\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\""); 
 			mIsReady = true;
 			break;
-		default : emit done(id, "^done,interpreter=\"GdbParser\",event=\"generic information (not parsing)\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\"");break;
+		default : emit done(id, "^done,interpreter=\"" + mCurrentClassName + "\",event=\"generic information (not parsing)\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\"");break;
 
 	}
 }
