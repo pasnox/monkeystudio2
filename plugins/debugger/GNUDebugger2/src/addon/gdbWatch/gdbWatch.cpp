@@ -190,8 +190,8 @@ void GdbWatch::onType(int id, QString s)
 		i->setText(1,l.at(1));
 
 		// get if is a pointer
-//		if( isPointer(i->text(0)) )
-//			Sequencer->change("printAdress "+ i->text(0),"p "+ i->text(0).remove("*"));
+		if( isPointer(i->text(0)) )
+			Sequencer->change("printAdress "+ i->text(0),"p "+ i->text(0).remove("*"));
 	}
 	// execute next command if have
 	Sequencer->loop(); // adress
