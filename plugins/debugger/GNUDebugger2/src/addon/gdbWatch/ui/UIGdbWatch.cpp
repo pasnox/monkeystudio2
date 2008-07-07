@@ -39,7 +39,7 @@ void UIGdbWatch::dragEnterEvent(QDragEnterEvent *event)
 
 void UIGdbWatch::dropEvent(QDropEvent *event)
 {
-	QMessageBox::warning(NULL,"Event", event->mimeData()->text());
+//	QMessageBox::warning(NULL,"Event", event->mimeData()->text());
 	QTreeWidgetItem *i = new QTreeWidgetItem(treeWidget);
 	i->setText(0,event->mimeData()->text());
 
@@ -60,10 +60,10 @@ void UIGdbWatch::userDeleteVar ( const QModelIndex &  m)
 
 //
 
-QList< QTreeWidgetItem*> UIGdbWatch::getAllvar()
+QStringList UIGdbWatch::getAllvar()
 {
-	QList< QTreeWidgetItem*> it ;
+	QStringList it ;
 	for(int i=0 ; i< treeWidget->topLevelItemCount(); i++)
-		it << treeWidget->topLevelItem(i);
+		it << treeWidget->topLevelItem(i)->text(0);
 	return it;
 }

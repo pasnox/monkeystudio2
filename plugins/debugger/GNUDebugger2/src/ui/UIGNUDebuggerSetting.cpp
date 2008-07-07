@@ -27,12 +27,14 @@ UIGNUDebuggerSetting::UIGNUDebuggerSetting( QWidget* parent )
 	connect(bButtonPathGdb, SIGNAL( clicked()), this, SLOT(bClickedPathGdb()));
 	connect(bButtonPathParsingFile, SIGNAL( clicked()), this, SLOT(bClickedPathParsingFile()));
 	connect(bButtonManageFile, SIGNAL( clicked()), this, SLOT(bClickedManageFile()));
+	connect(bButtonPathScript, SIGNAL( clicked()), this, SLOT(bClickedPathScript()));
 
 
 	editPathGdb->setText( GdbSetting::instance()->getPathGdb() );
 	editPathParsingFile->setText( GdbSetting::instance()->getPathParseFile() );
+	editPathScript->setText( GdbSetting::instance()->getPathScript() );
 
-	QVBoxLayout *vb = new QVBoxLayout(groupPlugins);
+	vb = new QVBoxLayout(groupPlugins);
 
 	QList<GdbAddOn> *l = GdbSetting::instance()->getAddOnList();
 	foreach(GdbAddOn  p,  *l)
@@ -60,6 +62,15 @@ void UIGNUDebuggerSetting::bClickedPathParsingFile()
 	QString mPathParsingFile = QFileDialog::getOpenFileName(this, tr("Location of Parsing file"));
 	if(!mPathParsingFile.isEmpty())
 		editPathParsingFile->setText(mPathParsingFile);
+}
+
+//
+
+void UIGNUDebuggerSetting::bClickedPathScript()
+{
+	QString mDir = QFileDialog::getExistingDirectory(this, tr("Location of Scripts"));
+	if(!mDir.isEmpty())
+		editPathScript->setText(mDir);
 }
 
 //
@@ -121,6 +132,7 @@ void UIGNUDebuggerSetting::saveSettings()
 	// get the path
 	GdbSetting::instance()->setPathGdb(editPathGdb->text());
 	GdbSetting::instance()->setPathParseFile(editPathParsingFile->text());
+	GdbSetting::instance()->setPathScript(editPathScript->text());
 
 	// enable or not AddOn
 	QList<QCheckBox*> cbs = groupPlugins->findChildren<QCheckBox*>();

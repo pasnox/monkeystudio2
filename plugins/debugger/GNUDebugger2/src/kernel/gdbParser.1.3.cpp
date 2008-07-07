@@ -325,22 +325,22 @@ bool GdbParser::processParsing(const QString & storg)
 				}
 				else
 				{
-					emit onInterpreter(bi, - bi->getId(), bi->getAnswerExtention() + oneLine);
-
-					onInfo( - bi->getId() , bi->getAnswerExtention() + oneLine);
-
-					// if interpreter wait prompt event, i don't have prompt line after, i emulate prompt sequence
-					//^info,interpreter="GdbBreakPoint",event="breakpoint-deleted",answerExtention={fullname="main.cpp",nobkpt="1"},answerGdb="(gdb) ",currentCmd="delete 1"  id : 2
-					//^done,interpreter="GdbParser",currentCmd="file ./Debugger",event="prompt",answerGdb="(gdb) "  id : 0
+					// fixed 1.3.2 07/07/08
+					// remove prompt event 
 					if(oneLine.contains( "(gdb) "))
+					{
+						oneLine.remove("(gdb) ");
+						emit onInterpreter(bi, - bi->getId(), bi->getAnswerExtention() + oneLine);
+						onInfo( - bi->getId() , bi->getAnswerExtention() + oneLine);
 						onDone(0,"Emulate prompt");
+					}
+					else
+					{
+						emit onInterpreter(bi, - bi->getId(), bi->getAnswerExtention() + oneLine);
+						onInfo( - bi->getId() , bi->getAnswerExtention() + oneLine);
+					}
 				}
 			}
-
-			// oneLine == ((gdb) ?
-			// yes i have receive one block from gdb generate by two commands
-			// switch to next commant
-//			switchCommand(oneLine);
 		}
 
 		gdbBuffer.clear();

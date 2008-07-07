@@ -213,7 +213,7 @@ void GdbBacktrace::prompt(const int &, const QString & s)
 
 // Interpreters
 
-void GdbBacktrace::onBacktrace(int id, QString s)
+void GdbBacktrace::onBacktrace(int , QString s)
 {
 	/*
 		see all backtrace in Ui
@@ -258,7 +258,7 @@ void GdbBacktrace::onInfoSource(int id, QString s)
 		Info source receiver
 	*/
 
-	QRegExp r("Located\\sin\\s(.*)" );
+	QRegExp r("^Located\\sin\\s(.*)" );
 
 	if(r.exactMatch( findValue(s,"answerGdb") ))
 	{

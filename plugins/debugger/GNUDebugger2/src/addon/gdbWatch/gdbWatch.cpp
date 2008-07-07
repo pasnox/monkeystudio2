@@ -2,7 +2,7 @@
  * PROGRAM      : Debugger
  * DATE - TIME  : lundi 31 mai 2008 - 18h04
  * AUTHOR       : Xiantia
- * FILENAME     : GdbRegister
+ * FILENAME     : GdbBacktrace
  * LICENSE      : GPL
  * COMMENTARY   : 
  ********************************************************************************************************/
@@ -20,12 +20,12 @@
 #include "gdbWatch.h"
 #include <QMessageBox>
 #include <QFileInfo>
+#include <QToolTip>
 
 
 GdbWatch::GdbWatch(QObject * parent) : GdbCore(parent)
 {
 	// new connexion 
-	Connect = new GdbConnectTemplate<GdbWatch>;
 
 	setEnabled(true);
 	setWaitEndProcess(false);
@@ -54,25 +54,25 @@ GdbWatch::GdbWatch(QObject * parent) : GdbCore(parent)
 		"^info,interpreter=\"" + name() + "\",event=\"WatchValue\",answerGdb=\"");
 
 	// connect interpreters to functions
-	Connect->add(this, interpreterWhatis, &GdbWatch::onType);
-	Connect->add(this, interpreterValue, &GdbWatch::onValue);
-	Connect->add(this, interpreterAddress, &GdbWatch::onAddress);
+	Connect.add(this, interpreterWhatis, &GdbWatch::onType);
+	Connect.add(this, interpreterValue, &GdbWatch::onValue);
+	Connect.add(this, interpreterAddress, &GdbWatch::onAddress);
 
-	// create sequencer for test
+	// create sequencer 
 	Sequencer = new GdbSequencer(this);
-	QList<SequencerCmd> s = QList<SequencerCmd>() 	<< SequencerCmd("printType", "whatis s") << SequencerCmd("printAdress", "p &s") << SequencerCmd("printValue", "print s") ; 
-	Sequencer->add(name() , s);
 
 	// create Ui
 	mWidget = UIGdbWatch::self();
     mWidget->treeWidget->setAlternatingRowColors(true);
+
+	connect(mWidget, SIGNAL(userAddVar(QString)), this , SLOT(onUserAddVar(QString)));
+
 }
 
 //
 
 GdbWatch::~GdbWatch()
 {
-	delete Connect;
 	delete mWidget;
 }
 
@@ -101,7 +101,7 @@ QIcon GdbWatch::icon()
 
 void GdbWatch::interpreter(const QPointer<BaseInterpreter> & i, const int & id, const QString & s)
 {
-	Connect->call( i, id, s);
+	Connect.call( i, id, s);
 }
 
 // Gdb status
@@ -134,8 +134,9 @@ void GdbWatch::targetRunning(const int & id, const QString & s){}
 
 void GdbWatch::targetStopped(const int & id, const QString & s)
 {
-	setWaitEndProcess(true);
+//	setWaitEndProcess(true);
 	currentVar = 0;
+	createSequencer();
 	Sequencer->start();
 }
 
@@ -150,35 +151,20 @@ void GdbWatch::targetExited(const int & id, const QString & s)
 
 void GdbWatch::error(const int &, const QString & s)
 {
-	showMessage(name() + " have generate error : " + s, 5000, _CRITICAL_);
-	setWaitEndProcess(false);
+	currentVar++;
+	Sequencer->start(currentVar * 3);
 }
 
 //
 
-void GdbWatch::done(const int &, const QString & s)
-{
-/*	if(findValue(s,"^done,interpreter") == "GdbScript")
-	{
-//		QMessageBox::warning(NULL,"Done message...", s);
-		scp.data(findValue(s, "answerGdb"));
-		//processReceive(findValue(s, "answerGdb"));
-	}
-*/
-}
-
-//
-
+void GdbWatch::done(const int &, const QString & s){}
 void GdbWatch::info(const int &, const QString &){}
+
+//
 
 void GdbWatch::prompt(const int &, const QString & s)
 {
 	setWaitEndProcess(false);
-/*	if(findValue(s,"^prompt,interpreter") == "GdbScript")
-	{
-		scp.exec();
-	}
-*/
 }
 
 // Interpreters
@@ -196,21 +182,32 @@ void GdbWatch::onType(int id, QString s)
 		if(currentVar < mWidget->treeWidget->topLevelItemCount()) 
 		{
 			i = mWidget->treeWidget->topLevelItem ( currentVar);
-			showColor(i, l.at(1));
+			showColor(i, 1, l.at(1));
 
 		}
 		else i = new QTreeWidgetItem(mWidget->treeWidget);
 
-
 		i->setText(1,l.at(1));
+
+		// get if is a pointer
+//		if( isPointer(i->text(0)) )
+//			Sequencer->change("printAdress "+ i->text(0),"p "+ i->text(0).remove("*"));
 	}
 	// execute next command if have
-	Sequencer->loop();
+	Sequencer->loop(); // adress
 }
 
 //
 
-void GdbWatch::onValue(int id, QString s)
+void GdbWatch::onScriptFinishedTranslate(const QString & s)
+{
+	Sequencer->skipLoop();
+	onValue(0, "answerGdb=\"$1 = " + s + "\"");
+}
+
+//
+
+void GdbWatch::onValue(int, QString s)
 {
 	QRegExp r("^\\$\\d+\\s+=\\s+(.*)$");
 
@@ -223,7 +220,7 @@ void GdbWatch::onValue(int id, QString s)
 		if(currentVar < mWidget->treeWidget->topLevelItemCount()) 
 		{
 			i = mWidget->treeWidget->topLevelItem ( currentVar);
-			showColor(i, l.at(1));
+			showColor(i, 4, l.at(1));
 		}
 		else i = new QTreeWidgetItem(mWidget->treeWidget);
 
@@ -233,6 +230,7 @@ void GdbWatch::onValue(int id, QString s)
 		WatchStruct w;
 		w.decompilStrut(i,l.at(1)); 
 	}
+	currentVar++;
 	Sequencer->loop();
 }
 
@@ -251,28 +249,60 @@ void GdbWatch::onAddress(int id, QString s)
 		if(currentVar < mWidget->treeWidget->topLevelItemCount()) 
 		{
 			i = mWidget->treeWidget->topLevelItem ( currentVar);
-			showColor(i, l.at(1));
-
+			showColor(i, 2, l.at(1));
 		}
 		else i = new QTreeWidgetItem(mWidget->treeWidget);
 
 		i->setText(2,l.at(1));
+
+		if(GdbScript::canTranslate(i->text(1)))
+		{
+			i->setText(4,tr("Waitting translate .."));
+			emit requestScriptTranslate(i->text(1),i->text(0)); 
+			return; // get value from script
+		}
 	}
-	Sequencer->loop();
+	Sequencer->loop(); // value
+}
+
+// Tools
+
+void GdbWatch::showColor(QTreeWidgetItem *p, int index, QString a)
+{
+	// toggle color (black / red if value in treeWidget is not egal than new value
+	if(p->text(index) != a)
+		p->setForeground( index, QBrush(Qt::red));
+	else
+		p->setForeground( index , QBrush(Qt::black));
+}
+
+// when target is stopped
+
+void GdbWatch::createSequencer()
+{
+	QStringList l = mWidget->getAllvar();
+	QList<SequencerCmd> s;
+
+	for(int i=0; i < l.count(); i++)
+		s << SequencerCmd("printType "+l.at(i), "whatis " + l.at(i)) << SequencerCmd("printAdress "+l.at(i), "p &" + l.at(i)) << SequencerCmd("printValue "+l.at(i), "print "+ l.at(i)) ; 
+	Sequencer->add(name() , s);
+}
+
+// when user drag and drop var in treewidget
+
+void GdbWatch::onUserAddVar(QString n)
+{
+	QList<SequencerCmd> s;
+	s << SequencerCmd("printType", "whatis " + n) << SequencerCmd("printAdress", "p &" + n) << SequencerCmd("printValue", "print " + n) ; 
+	Sequencer->add(name() , s);
+	currentVar = mWidget->treeWidget->topLevelItemCount() - 1;
+	Sequencer->start();
 }
 
 //
 
-void GdbWatch::showColor(QTreeWidgetItem *p, QString a)
+bool GdbWatch::isPointer(const QString & s)
 {
-	// toggle color (black / red if value in treeWidget is not egal than new value
-	if(p->text(1) != a)
-	{
-		p->setForeground( 1, QBrush(Qt::red));
-	}
-	else
-	{
-		p->setForeground( 1 , QBrush(Qt::black));
-	}
+	if(s.contains("*")) return true;
+	return false;
 }
-

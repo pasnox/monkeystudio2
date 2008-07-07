@@ -26,6 +26,8 @@
 #include "./addon/gdbRegister/gdbRegister.h"
 #include "./addon/gdbWatch/gdbWatch.h"
 #include "./addon/gdbCli/gdbCli.h"
+#include "./addon/gdbToolTip/gdbToolTip.h"
+#include "./addon/gdbScript/gdbScript.h"
 
 
 class DockGNUDebugger : public pDockWidget, public QSingleton<DockGNUDebugger>
@@ -47,6 +49,8 @@ public:
 	class GdbRegister *Register;
 	class GdbWatch *Watch;
 	class GdbCli *Cli;
+	class GdbToolTip *ToolTip;
+	class GdbScript *Script;
 
 	void setAction(QHash<QString, QAction*> *);
 

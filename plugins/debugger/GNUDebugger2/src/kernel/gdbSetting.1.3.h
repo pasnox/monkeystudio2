@@ -29,6 +29,7 @@ typedef struct GdbSettings
 {
 	QString pathGdb;
 	QString pathParseFile;
+	QString pathScript;
 
 	QList<GdbAddOn> addOnList;
 };
@@ -54,8 +55,10 @@ public :
 		Settings* s = MonkeyCore::settings();
 		s->beginGroup( QString( "Plugins/%1" ).arg( PLUGIN_NAME ) );
 			gdbSettings.pathGdb = s->value("PathGdb", "gdb").toString();
-			gdbSettings.pathParseFile =  s->value("PathParseFile", "gdbparsing.txt" ).toString();
-			QStringList l = s->allKeys();
+			gdbSettings.pathParseFile =  s->value("PathParseFile", "" ).toString();
+			gdbSettings.pathScript =  s->value("PathScript", "" ).toString();
+
+		QStringList l = s->allKeys();
 
 		foreach(QString k ,l)
 		{
@@ -75,6 +78,7 @@ public :
 			s->beginGroup( QString( "Plugins/%1" ).arg( PLUGIN_NAME ) );
 			s->setValue( "PathGdb", gdbSettings.pathGdb);
 			s->setValue( "PathParseFile", gdbSettings.pathParseFile );
+			s->setValue( "PathScript", gdbSettings.pathScript );
 		
 			foreach(GdbAddOn a , gdbSettings.addOnList)
 				s->setValue( "AddOn/" + a.name, a.enable ? true : false);
@@ -112,6 +116,9 @@ public :
 	QString getPathParseFile(){ return gdbSettings.pathParseFile;}
 	void setPathParseFile(QString s) { gdbSettings.pathParseFile = s;}
 	
+	QString getPathScript(){ return gdbSettings.pathScript;}
+	void setPathScript(QString s) { gdbSettings.pathScript = s;}
+
 	QList<GdbAddOn> * getAddOnList() { return &gdbSettings.addOnList;}
 
 };

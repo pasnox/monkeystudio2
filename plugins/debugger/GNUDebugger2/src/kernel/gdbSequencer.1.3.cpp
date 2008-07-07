@@ -7,15 +7,20 @@ GdbSequencer::GdbSequencer(QObject * parent) : QObject(parent)
 {
 }
 
+//
 
 GdbSequencer::~GdbSequencer()
 {
 }
 
+//
+
 void GdbSequencer::add(const SequencerCmd & c)
 {
 	mCmdList << c;
 }
+
+//
 
 void GdbSequencer::add(const QString & className, const QList<SequencerCmd> & s)
 {
@@ -24,10 +29,14 @@ void GdbSequencer::add(const QString & className, const QList<SequencerCmd> & s)
 	mClassName = className;
 }
 
+//
+
 void GdbSequencer::start()
 {
 	start(0);
 }
+
+//
 
 void GdbSequencer::start(const int & i)
 {
@@ -40,10 +49,14 @@ void GdbSequencer::start(const int & i)
 	}
 }
 
+//
+
 void GdbSequencer::remove()
 {
 	mCmdList.clear();
 }
+
+//
 
 void GdbSequencer::remove(const SequencerCmd & a)
 {
@@ -52,11 +65,22 @@ void GdbSequencer::remove(const SequencerCmd & a)
 			mCmdList.removeAt(i);
 }
 
+//
+
 void GdbSequencer::loop()
 {
 	mCurrentIndex++;
 	start(mCurrentIndex);
 }
+
+//
+
+void GdbSequencer::skipLoop()
+{
+	mCurrentIndex++;
+}
+
+//
 
 void GdbSequencer::change(const SequencerCmd & a, const SequencerCmd & b )
 {
@@ -65,7 +89,25 @@ void GdbSequencer::change(const SequencerCmd & a, const SequencerCmd & b )
 			mCmdList.replace(i, b);
 }
 
+//
+
+void GdbSequencer::change(const QString & name, const QString & v)
+{
+	for(int i = 0 ; i <mCmdList.count(); i++)
+	{
+		if(mCmdList.at(i).name == name)
+		{
+			SequencerCmd s(name, v);
+			mCmdList.replace(i, s);
+		}
+	}
+}
+
+//
+
 QString GdbSequencer::currentCmd()
 {
-	return mCmdList.at(mCurrentIndex).name;
+	if(mCurrentIndex < mCmdList.count())
+		return mCmdList.at(mCurrentIndex).name;
+	else return QString();
 }

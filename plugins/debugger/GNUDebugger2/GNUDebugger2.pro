@@ -23,7 +23,6 @@ SOURCES	= src/GNUDebugger.cpp \
 	src/kernel/gdbCore.1.3.cpp \
 	src/kernel/gdbSequencer.1.3.cpp \
 	src/kernel/gdbSetting.1.3.cpp \
-	src/kernel/gdbScript.cpp \
 	src/addon/gdbBreakpoint/gdbBreakpoint.cpp \
 	src/addon/gdbBreakpoint/ui/UIGdbBreakpoint.cpp \
 	src/addon/gdbBreakpoint/ui/UIBreakpointDelegate.cpp \
@@ -31,7 +30,9 @@ SOURCES	= src/GNUDebugger.cpp \
 	src/addon/gdbBacktrace/ui/UIGdbBacktrace.cpp \
 	src/addon/gdbRegister/gdbRegister.cpp \
 	src/addon/gdbRegister/ui/UIGdbRegister.cpp \
+	src/addon/gdbToolTip/gdbToolTip.cpp \
 	src/addon/gdbCli/gdbCli.cpp \
+	src/addon/gdbScript/gdbScript.cpp \
 	src/addon/gdbCli/ui/UIGdbCli.cpp \
 	src/addon/gdbWatch/gdbWatch.cpp \
 	src/addon/gdbWatch/ui/UIGdbWatch.cpp \
@@ -72,7 +73,6 @@ HEADERS	= src/GNUDebugger.h \
 	src/kernel/gdbCore.1.3.h \
 	src/kernel/gdbSequencer.1.3.h \
 	src/kernel/gdbSetting.1.3.h \
-	src/kernel/gdbScript.h \
 	src/addon/gdbBreakpoint/gdbBreakpoint.h \
 	src/addon/gdbBreakpoint/ui/UIGdbBreakpoint.h \
 	src/addon/gdbBreakpoint/ui/UIBreakpointDelegate.h \
@@ -80,6 +80,8 @@ HEADERS	= src/GNUDebugger.h \
 	src/addon/gdbBacktrace/ui/UIGdbBacktrace.h \
 	src/addon/gdbRegister/gdbRegister.h \
 	src/addon/gdbRegister/ui/UIGdbRegister.h \
+	src/addon/gdbToolTip/gdbToolTip.h \
+	src/addon/gdbScript/gdbScript.h \
 	src/addon/gdbCli/gdbCli.h \
 	src/addon/gdbCli/ui/UIGdbCli.h \
 	src/addon/gdbWatch/gdbWatch.h \

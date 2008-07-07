@@ -64,8 +64,10 @@ public :
 	void remove(const SequencerCmd & );
 
 	void loop();
+	void skipLoop();
 	void change(const SequencerCmd &, const SequencerCmd &);
-
+	void change(const QString &, const QString &);
+	
 	QString currentCmd();
 
 private :

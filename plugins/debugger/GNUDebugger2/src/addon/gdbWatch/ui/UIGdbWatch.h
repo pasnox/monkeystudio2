@@ -14,7 +14,7 @@ public:
 	//
 	void dragEnterEvent(QDragEnterEvent *event);
 	void dropEvent(QDropEvent *event);
-	QList< QTreeWidgetItem*> getAllvar();
+	QStringList getAllvar();
 
 public slots:
 

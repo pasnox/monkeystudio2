@@ -29,6 +29,7 @@ protected slots:
 	void error( QProcess::ProcessError );
 
 	void bClickedPathGdb();
+	void bClickedPathScript();
 	void bClickedPathParsingFile();
 	void bClickedManageFile();
 
@@ -40,6 +41,8 @@ private :
 	
 	QPointer<QProcess> Process;
 	QStringList mPluginList;
+
+	QVBoxLayout *vb;
 };
 
 #endif // UIGNUDEBUGGERSETTING_H

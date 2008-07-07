@@ -55,16 +55,19 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 	Breakpoint = new GdbBreakpoint(this);
 	Backtrace = new GdbBacktrace(this);
 	Register = new GdbRegister(this);
-//	Watch = new GdbWatch(this);
+	Watch = new GdbWatch(this);
 	Cli = new GdbCli(this);
-
+	ToolTip = new GdbToolTip(this);
+	Script = new GdbScript(this);
 
 	// addOn to dispatcher
 	Dispatcher->add(Breakpoint);
 	Dispatcher->add(Backtrace);
 	Dispatcher->add(Register);
-//	Dispatcher->add(Watch);
+	Dispatcher->add(Watch);
 	Dispatcher->add(Cli);
+	Dispatcher->add(ToolTip);
+	Dispatcher->add(Script);
 
 
 	// connections
@@ -107,6 +110,10 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 	connect(Bridge, SIGNAL(userToggleBreakpoint(const QString &, const int &)), this, SLOT(onUserToggleBreakpoint(const QString &, const int &)));
 	connect(Bridge, SIGNAL(requestBreakpoint(const QString &)), Breakpoint , SLOT(onRequestBreakpoint(const QString &)));
 	connect(Bridge, SIGNAL(requestBacktrace(const QString &)), Backtrace , SLOT(onRequestBacktrace(const QString &)));
+	connect(Bridge, SIGNAL(requestShowVar(const QString &)), ToolTip , SLOT(onRequestShowVar(const QString &)));
+
+	connect(Watch, SIGNAL(requestScriptTranslate(const QString &, const QString &)), Script , SLOT(onRequestScriptTranslate(const QString &, const QString &)));
+	connect(Script, SIGNAL(scriptFinishedTranslate(const QString &)), Watch , SLOT(onScriptFinishedTranslate(const QString &)));
 
 	
 	// add permanent Interpreter	
@@ -141,7 +148,7 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 	foreach(QPointer< class GdbCore> r, Dispatcher->list())
 	{
 		r->setEnabled( GdbSetting::instance()->getStartUp( r->name() ));
-		if(r->isEnabled() )// && r->widget()) 
+		if(r->isEnabled() && r->widget()) 
 			mainTabWidget->addTab( r->widget(),r->icon(), r->name() );
 	}
 

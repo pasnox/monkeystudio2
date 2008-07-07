@@ -66,8 +66,8 @@ QStringList memberList;
 
 
 // return le type du membre de la structure
-// 2 : c'est un autre structure
-// 1 : membre " x= y"
+// 2 : c'est une autre structure
+// 1 : membre " x = y"
 // 0 : membre orphelin "0x00"
 int WatchStruct::memberType(QString val)
 {
@@ -92,46 +92,54 @@ QStringList WatchStruct::formatMember(QString val)
 	if(val.contains("="))
 	{
 		QStringList list = val.split(" = ");
-		return QStringList()<<list.at(0) <<list.at(1);
+		return QStringList() <<list.at(0) <<list.at(1);
 	}	
 	if(val.contains(" = {"))
 	{
-		return QStringList()<<val <<"";
+		return QStringList()<< val <<"";
 	}	
-	return QStringList()<<val << val;
+	return QStringList()<< val << val;
 }
 
 
 // recursive function
+// fixed 1.3.2 07/07/08
 void WatchStruct::decompilStrut(QTreeWidgetItem *parentItem, QString val)
 {
 QString memberBlock;
 int indexTab=0;
+int index = 0;
 
 	QStringList memberList = extractMember(val);
 	for(int i=0; i<memberList.count();i++)
 	{
 		memberBlock = memberList.at(i);
 		while(memberBlock.startsWith(" ")) memberBlock.remove(0,1);
+
 		QTreeWidgetItem *child;	
-		child = new QTreeWidgetItem(parentItem);
+		child = parentItem->child(index);
+		if(child == NULL) 
+			child = new QTreeWidgetItem(parentItem);
 		switch(memberType(memberBlock))
 		{
 			case 0: // orphelin
 				child->setText(0, "[0x" + QString::number(indexTab++,16) +"]");
-				child->setText(4, "$ = " + memberBlock);
+//				child->setText(4, "$ = " + memberBlock);
+				child->setText(4, memberBlock);
 				decompilStrut(child, memberBlock);
 			break;
 
 			case 1 :
 				child->setText(0, formatMember(memberBlock).at(0));
-				child->setText(4, "$ = " + formatMember(memberBlock).at(1));
+//				child->setText(4, "$ = " + formatMember(memberBlock).at(1));
+				child->setText(4, formatMember(memberBlock).at(1));
 			break;
 			case 2:
 				child->setText(0, formatMember(memberBlock).at(0));
 //				child->setText(4, "$ = " + memberList.at(i).right(memberList.at(i).length() - memberList.at(i).indexOf(" = {") - 3));
 				decompilStrut(child, memberBlock);
 		} // end switch
+		index++;
 	}// end for
 }
 

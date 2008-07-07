@@ -2,14 +2,14 @@
  * PROGRAM      : Debugger
  * DATE - TIME  : lundi 31 mai 2008 - 18h04
  * AUTHOR       : Xiantia
- * FILENAME     : GdbWatch
+ * FILENAME     : GdbToolTip
  * LICENSE      : GPL
  * COMMENTARY   : 
  ********************************************************************************************************/
 
 /*
 
-	GdbWatch class
+	GdbToolTip class
 
 
 	Xiantia@gmail.com
@@ -17,34 +17,28 @@
 	for Debugger v1.3.0
 */
 
-#ifndef GDBWATCH_H
-#define GDBWATCH_H
+#ifndef GDBTOOLTIP_H
+#define GDBTOOLTIP_H
 
 #include <QObject>
 #include "../../kernel/gdbCore.1.3.h"
 #include "../../kernel/gdbSequencer.1.3.h"
-#include "./ui/UIGdbWatch.h"
-#include "../gdbScript/gdbScript.h"
 
-#include "gdbWatchStruct.h"
 
-class GdbWatch : public GdbCore
+class GdbToolTip : public GdbCore
 {
 	Q_OBJECT
 
 
 public:
 
-	GdbWatch(QObject * parent = 0);
-	~GdbWatch();
+	GdbToolTip(QObject * parent = 0);
+	~GdbToolTip();
 
 public slots:
 
-	void onType( int , QString );
-	void onAddress( int , QString );
 	void onValue( int , QString );
-	void onUserAddVar(QString);
-	void onScriptFinishedTranslate(const QString &);
+	void onRequestShowVar(const QString &);
 
 	QString name();
 	QPointer<QWidget> widget();
@@ -72,26 +66,14 @@ public slots:
 
 private:
 
-	GdbConnectTemplate<GdbWatch> Connect;
-	QPointer<BaseInterpreter> interpreterAddress;
-	QPointer<BaseInterpreter> interpreterWhatis;
+	GdbConnectTemplate<GdbToolTip> Connect;
 	QPointer<BaseInterpreter> interpreterValue;
 
 	QPointer<GdbSequencer> Sequencer;
-	QPointer<UIGdbWatch> mWidget;
 
-
-	void showColor(QTreeWidgetItem *, int , QString );
-	int currentVar;
-	void createSequencer();
-	bool isPointer(const QString & );
-
-	QString mOldValue;
-
-signals:
-
-	void requestScriptTranslate(const QString &, const QString &);
-
+	bool enteredShowVar;
+	bool isGdbStarted;
+	bool isTargetStopped;
 };
 
 #endif

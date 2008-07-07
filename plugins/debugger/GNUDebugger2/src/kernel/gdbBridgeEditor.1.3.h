@@ -63,6 +63,9 @@ public slots:
 
 	void onToggleBreakpoint(const Breakpoint &, const BaseBreakpoint & , const bool & b);
 	void onToggleBacktrace(const QString & , const int & );
+	//
+	void onRequestShowVar(const QString &);
+	void onCopyAvailable(bool);
 
 private:
 
@@ -78,5 +81,6 @@ signals :
 	void userToggleBreakpoint(const QString & , const int &);
 	void requestBreakpoint(const QString &);
 	void requestBacktrace(const QString &);
+	void requestShowVar(const QString &);
 };
 #endif

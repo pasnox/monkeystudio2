@@ -44,11 +44,30 @@ void GdbBridgeEditor::addEditor(const QString & s)
 			pe.pointeur->setMarginSensitivity(0,true);
 			// connect margin clicked
 			connect (pe.pointeur, SIGNAL(marginClicked (int, int , Qt::KeyboardModifiers )), this, SLOT(onMarginClicked(int, int,  Qt::KeyboardModifiers)));
+			connect (pe.pointeur, SIGNAL(copyAvailable(bool )), this, SLOT(onCopyAvailable(bool )));
 
 			emit requestBreakpoint(pe.fileName);
 			emit requestBacktrace(pe.fileName);
 		}
 	}
+}
+
+//
+
+void GdbBridgeEditor::onCopyAvailable(bool b)
+{
+	pEditor *e = MonkeyCore::fileManager()->currentChild()->currentEditor();
+	if(e && b)
+		emit requestShowVar(e->selectedText());
+}
+
+//
+
+void GdbBridgeEditor::onRequestShowVar(const QString &s)
+{
+	pEditor *e = MonkeyCore::fileManager()->currentChild()->currentEditor();
+	if(e )
+		e->showUserList(8829, QStringList() << "value" << s);
 }
 
 // file closed , remove this of list
@@ -112,6 +131,7 @@ void GdbBridgeEditor::fileOpenedBeforeDebugger()
 				pe.pointeur->setMarginSensitivity(0,true);
 				// connect margin clicked
 				connect (pe.pointeur , SIGNAL(marginClicked (int, int , Qt::KeyboardModifiers )), this, SLOT(onMarginClicked(int, int,  Qt::KeyboardModifiers)));
+				connect (pe.pointeur, SIGNAL(copyAvailable(bool )), this, SLOT(onCopyAvailable(bool )));
 			}
 		}
 	}
