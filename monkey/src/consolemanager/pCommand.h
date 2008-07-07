@@ -104,7 +104,7 @@ public:
 	}
 	
 	void debug()
-	{ qWarning( qPrintable( toString() ) ); }
+	{ qWarning( toString().toLocal8Bit().constData() ); }
 
 protected:
 	QString mText;
