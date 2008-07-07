@@ -1,11 +1,11 @@
 /********************************************************************************************************
- * PROGRAM      : Debugger
- * DATE - TIME  : lundi 31 mai 2008 - 18h04
- * AUTHOR       : Xiantia
- * FILENAME     : GdbInterpreter
- * LICENSE      : GPL
- * COMMENTARY   : 
- ********************************************************************************************************/
+	* PROGRAM      : Debugger
+	* DATE - TIME  : lundi 31 mai 2008 - 18h04
+	* AUTHOR       : Xiantia
+	* FILENAME     : GdbInterpreter
+	* LICENSE      : GPL
+	* COMMENTARY   : 
+	********************************************************************************************************/
 
 
 #ifndef GDBINTERPRETER_H
@@ -23,7 +23,7 @@ class BaseInterpreter : public QObject
 
 public :
 
-		BaseInterpreter(QObject *parent = 0);
+			BaseInterpreter(QObject *parent = 0);
 
 		void set(QString cName,/* QString cGdb,*/ QRegExp cRegExp,  QRegExp aRegExp, QString aExtention);
 
@@ -34,7 +34,7 @@ public :
 		QRegExp getCmdRegExp() { return mCmdRegExp;}
 		QRegExp getAnswerRegExp() { return mAnswerRegExp;}
 		QString getAnswerExtention() { return mAnswerExtention;}
-		int getId(){ return (int) this;}
+		quintptr getId(){ return (quintptr) this;}
 
 		void setClassName(QString s) { mClassName = s;}
 		void setAnswerExtention(QString s) { mAnswerExtention = s ;}

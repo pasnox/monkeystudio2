@@ -1,15 +1,15 @@
 /********************************************************************************************************
- * PROGRAM      : Debugger
- * DATE - TIME  : lundi 31 mai 2008 - 18h04
- * AUTHOR       : Xiantia
- * FILENAME     : GdbInterpreter
- * LICENSE      : GPL
- * COMMENTARY   : 
- ********************************************************************************************************/
+	* PROGRAM      : Debugger
+	* DATE - TIME  : lundi 31 mai 2008 - 18h04
+	* AUTHOR       : Xiantia
+	* FILENAME     : GdbInterpreter
+	* LICENSE      : GPL
+	* COMMENTARY   : 
+	********************************************************************************************************/
 
 /*
 
-	GdbInterpreter class
+		GdbInterpreter class
 
 	Store all interpreter 
 
@@ -56,11 +56,11 @@ GdbInterpreter::GdbInterpreter(QObject *parent) : QObject(parent)
 //
 
 QPointer<BaseInterpreter>  GdbInterpreter::add(const QString & cName,/* const QString & cGdb,*/ const QRegExp & cRegExp,
-											   const QRegExp & aRegExp, const QString & aExtention)
+												const QRegExp & aRegExp, const QString & aExtention)
 {
-	QPointer<BaseInterpreter> i = new BaseInterpreter(this);
-	if(i)
-	{
+		QPointer<BaseInterpreter> i = new BaseInterpreter(this);
+		if(i)
+		{
 		i->set(cName, cRegExp, aRegExp, aExtention);
 		GdbInterpreterList << i;
 		return i;
