@@ -14,19 +14,22 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
 ****************************************************************************/
-/**
-	* \file MonkeyExport.h
-	* \date 2008-01-14T00:27:36
-	* \brief Export Symbol Macros
-	* \details This allow symbols to be exported/imported for Window OS
-	* \author Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-	*/
+/*!
+	\file MonkeyExport.h
+	\date 2008-01-14T00:27:36
+	\author Filipe AZEVEDO aka Nox P\@sNox <pasnox@gmail.com>
+	\brief Export Symbol Macros
+*/
 #ifndef MONKEY_EXPORT_H
 #define MONKEY_EXPORT_H
 
 #include <qglobal.h>
+
+/*!
+	\def Q_MONKEY_EXPORT
+	\details This macro allow symbols to be exported/imported for Window OS
+*/
 
 #if defined(MONKEY_CORE_BUILD)
 #define Q_MONKEY_EXPORT Q_DECL_EXPORT
