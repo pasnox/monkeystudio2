@@ -26,6 +26,14 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file Ctags.cpp
+	\date 2008-01-14T00:36:54
+	\author Andrei Kopats
+	\brief Implementation for \link Ctags Ctags class \endlink
+*/
+
+
 #include "Ctags.h"
 
 #include <QFSFileEngine>
@@ -38,18 +46,33 @@ extern "C" void installLanguageMapDefaults (void);
 extern "C" void initializeParsing (void);
 extern "C" void freeParserResources (void);
 
+/*!
+	\brief Constructor of class
+	\param parent Parent objects
+*/
 Ctags::Ctags (QObject* parent) :QObject (parent)
 {
 	initializeParsing ();
 	installLanguageMapDefaults ();	
 }
 
-
+/*!
+	\brief Destructor of class
+*/
 Ctags::~Ctags ()
 {
 	freeParserResources ();
 }
 
+/*!
+	\brief Parse/reparse file
+	
+	Record for file must de already stored in the fileRecords hash
+	\param file Absolute file name
+	\return result of checking of file
+	\retval true File was parsed/reparsed
+	\retval false File is up to date
+*/
 bool Ctags::updateFileRecord (QString file) //reparse file if need, or parse first time
 {
 	FileRecord* record = fileRecords[file];
@@ -67,6 +90,16 @@ bool Ctags::updateFileRecord (QString file) //reparse file if need, or parse fir
 	return true;
 }
 
+/*!
+	\brief Get tags for file
+	
+	One interface of class for recieving tags from file
+	\param file Absolute file name
+	\return result FileRecord structure
+	\retval pointer Pointer to FileRecord structure for file
+	\retval NULL some error ocurred
+*/
+
 FileRecord* Ctags::GetTagsForFile (QString file )
 {
 	FileRecord* result = fileRecords[file];
@@ -82,6 +115,14 @@ FileRecord* Ctags::GetTagsForFile (QString file )
 	return result;
 }
 
+/*!
+	\brief Parse file by calling ctags library function and revieve allocated TagEntryListItem list
+	\note List should be freed after using by calling freeTagEntryList function
+	\param file Absolute file name
+	\return First item of single-linked list of tags for file
+	\retval pointer Pointer to first item of list
+	\retval NULL Some error ocurred
+*/
 TagEntryListItem* Ctags::get_tags ( QString file )
 {
 	return parseFile ( file.toLocal8Bit().data(), NULL);
@@ -107,7 +148,10 @@ TagEntryListItem* Ctags::get_tags ( QString file )
 // 		emit  tagUpdates ( updatedRecords );
 //}
 
-
+/*!
+	\brief Frees memory, used by TagEntryListItem's single-linked list
+	\param item Pointer to first item of list
+*/
 void Ctags::freeTagEntryList (TagEntryListItem* item)
 {
 	while ( item != NULL )
