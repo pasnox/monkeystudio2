@@ -9,7 +9,10 @@
 #include <QSize>
 #include <QComboBox>
 
-//! [0]
+//! Delegate of UIGbdManageFile
+/**
+\author xiantia.
+*/
 class UIManageDelegate : public QItemDelegate
 {
     Q_OBJECT

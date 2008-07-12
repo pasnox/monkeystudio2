@@ -5,6 +5,12 @@
 //
 #include <QPointer>
 //
+
+//! Ui for show variables values in QTabWiget. It used by GdbWatch class. 
+/**
+\author xiantia
+\version 1.3.2
+*/
 class UIGdbWatch : public QWidget, public Ui::UIGdbWatch
 {
 	Q_OBJECT

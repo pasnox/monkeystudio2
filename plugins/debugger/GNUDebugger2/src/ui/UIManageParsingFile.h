@@ -9,6 +9,13 @@
 
 #include "UIManageDelegate.h"
 
+//! Manage parsing file
+/**
+\author xiantia.
+
+This Ui can modifit the parsing file. It use QTreeWidget and Delegate for this.
+You can find pattern too and change values.
+*/
 
 class UIManageParsingFile : public QDialog, public Ui::UIManageParsingFile
 {
@@ -30,7 +37,9 @@ private:
 	UIManageDelegate *delegate;
 
 public slots:
-		void onSave();
+	//! Save
+	void onSave();
+	//! Find
 	void onTextChanged(QString s);
 };
 //

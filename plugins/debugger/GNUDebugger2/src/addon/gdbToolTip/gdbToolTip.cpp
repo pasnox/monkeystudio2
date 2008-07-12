@@ -37,7 +37,7 @@ GdbToolTip::GdbToolTip(QObject * parent) : GdbCore(parent)
 
 	interpreterValue = GdbCore::Parser()->addInterpreter(
 		name(),
-		QRegExp("^print .*"), // use print and not p because interpreterAddress use this
+		QRegExp("^print .*"), 
 		QRegExp("^\\$\\d+\\s+=\\s+.*"),
 		"^info,interpreter=\"" + name() + "\",event=\"WatchValue\",answerGdb=\"");
 
@@ -121,7 +121,7 @@ void GdbToolTip::targetStopped(const int & id, const QString & s)
 
 void GdbToolTip::targetExited(const int & id, const QString & s)
 {
-	isTargetStopped = false;
+	isTargetStopped = true;
 }
 
 // Parser status

@@ -28,6 +28,11 @@
 
 #include "gdbWatchStruct.h"
 
+//! This class implements all function see user values. This class is an AddOn for GNU debugger 
+/**
+\author xiantia
+\version 1.3.2
+*/
 class GdbWatch : public GdbCore
 {
 	Q_OBJECT

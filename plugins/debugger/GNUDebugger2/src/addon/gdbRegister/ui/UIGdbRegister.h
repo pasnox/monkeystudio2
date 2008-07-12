@@ -5,6 +5,12 @@
 //
 #include <QPointer>
 //
+
+//! Ui for show registers values in QTabWiget. It used by GdbRegister class. 
+/**
+\author xiantia
+\version 1.3.2
+*/
 class UIGdbRegister : public QWidget, public Ui::UIGdbRegister
 {
 	Q_OBJECT

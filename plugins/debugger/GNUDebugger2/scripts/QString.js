@@ -5,20 +5,20 @@ var res;
 var mOp;
 var mCast;
 
-process = function(parent , varName , isPointer)
+process = function(parent , varName , cast , isPointer)
 {
 	mVarName = varName;
 	res = "";
 	// get is varName is a pointer
 	mOp = isPointer ? "->" : ".";
-	mCast = isPointer ? "(QString*)" : "(QString)";
+	mCast = "(" + cast + ")";
 
 	Exp = new RegExp("(.*)\\s+(\\w+)");
 	if(Exp.test(mVarName))
 	{
 		t = Exp.exec(mVarName);
 		mVarName = t[2];
-		return "WAIT:p (" + mCast + t[2] + ")" + mOp + "d.alloc:sizeFunction";
+		return "WAIT:p (" + mCast +  t[2] + ")" + mOp + "d.alloc:sizeFunction";
 	}
 	else 
 		// QString seul
@@ -26,7 +26,7 @@ process = function(parent , varName , isPointer)
 }
 
 
-sizeFunction = function(parent, data, isPointer)
+sizeFunction = function(parent, data,cast , isPointer)
 {
 
 	ExpSize = new RegExp("\\$\\d+\\s*=\\s*(\\d+)");
@@ -39,7 +39,7 @@ sizeFunction = function(parent, data, isPointer)
 	return "FINISH:Can't translate QString:NULL";
 }
 
-stringFunction = function(parent, data, isPointer)
+stringFunction = function(parent, data, cast  ,isPointer)
 {
 	ExpVar = new RegExp("0x\\w+:\\s*(.+)");
 	list = data.split('\n');

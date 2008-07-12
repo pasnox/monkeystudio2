@@ -16,6 +16,9 @@ UIManageParsingFile* UIManageParsingFile::self( QWidget* parent )
 	return _self;
 }
 //
+/**
+Create QTreeWidget for view all patterns
+*/
 UIManageParsingFile::UIManageParsingFile( QWidget* parent )
 	: QDialog( parent )
 {
@@ -76,7 +79,9 @@ void UIManageParsingFile::closeEvent( QCloseEvent* e )
 }
 
 //
-
+/**
+Save the current configuration
+*/
 void UIManageParsingFile::onSave()
 {
 	for(int i=0; i< model->rowCount(); i++)
@@ -90,7 +95,9 @@ void UIManageParsingFile::onSave()
 }
 
 //
-
+/**
+Find pattern whan text has changed
+*/
 void UIManageParsingFile::onTextChanged(QString s)
 {
 	textEdit->clear();

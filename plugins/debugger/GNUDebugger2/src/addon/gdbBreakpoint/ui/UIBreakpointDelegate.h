@@ -9,7 +9,11 @@
 #include <QSize>
 #include <QComboBox>
 
-//! [0]
+//! Ui for change edit line in QTabWiget. It used by GdbBreakpoint class. 
+/**
+\author xiantia
+\version 1.3.2
+*/
 class UIBreakpointDelegate : public QItemDelegate
 {
     Q_OBJECT

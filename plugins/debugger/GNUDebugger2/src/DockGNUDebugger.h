@@ -29,7 +29,14 @@
 #include "./addon/gdbToolTip/gdbToolTip.h"
 #include "./addon/gdbScript/gdbScript.h"
 
+//! This class is a main class container.
+/**
+\author xiantia
+\version 1.3.2
 
+It create all Addon pointers, connect some signals from Addon to other AddOn.
+*/
+ 
 class DockGNUDebugger : public pDockWidget, public QSingleton<DockGNUDebugger>
 {
 	Q_OBJECT
@@ -38,20 +45,64 @@ class DockGNUDebugger : public pDockWidget, public QSingleton<DockGNUDebugger>
 	
 public:
 
-
+	/**
+	 * \brief Pointer to GdbParser Class
+	*/
 	QPointer<GdbParser> Parser;
+
+	/**
+	 * \brief Pointer to GdbProcess Class
+	*/
 	QPointer<GdbProcess> Process;
+	
+	/**
+	 * \brief Pointer to GdbBridgeEditor Class
+	*/
 	QPointer<GdbBridgeEditor> Bridge;
+
+	/**
+	 * \brief Pointer to GdbKernelDispatcher Class
+	*/
 	QPointer<GdbKernelDispatcher> Dispatcher;
 
+	/**
+	 * \brief Create GdbBreakpoint Pointer Class
+	*/
 	class GdbBreakpoint *Breakpoint;
+
+	/**
+	 * \brief Create GdbBacktrace Pointer Class
+	*/
 	class GdbBacktrace *Backtrace;
+
+	/**
+	 * \brief Create GdbBreakpoint Pointer Class
+	*/
 	class GdbRegister *Register;
+
+	/**
+	 * \brief Create GdbWatch Pointer Class
+	*/
 	class GdbWatch *Watch;
+
+	/**
+	 * \brief Create GdbCli Pointer Class
+	*/
 	class GdbCli *Cli;
+
+	/**
+	 * \brief Create GdbToolTip Pointer Class
+	*/
 	class GdbToolTip *ToolTip;
+
+	/**
+	 * \brief Create GdbBreakpoint Pointer Class
+	*/
 	class GdbScript *Script;
 
+	/**
+	 * \brief Contains all action from GNUDebugger class plugin
+	*/
 	void setAction(QHash<QString, QAction*> *);
 
 private:
@@ -59,58 +110,89 @@ private:
 	DockGNUDebugger( QWidget* = 0 );
 	~DockGNUDebugger();
 
+	/**
+	 * \brief Load current setting from Monkey .ini
+	*/
 	void loadSettings();
+
+	/**
+	 * \brief Save current setting from Monkey .ini
+	*/
 	void saveSettings();
 
 	// interpreter 
+	//! Connect is a GdbConnectTemplate, it use for connect interperter to other function
 	GdbConnectTemplate<DockGNUDebugger> Connect;
+	//! Contains interpreterStepOver pointer. With this pointer you can connect onTargetStopped function
 	QPointer<BaseInterpreter> interpreterStepOver;
+	//! Contains interpreterStepInto pointer. With this pointer you can connect onTargetStopped function
 	QPointer<BaseInterpreter> interpreterStepInto;
+	//! Contains interpreterStepFinish pointer. With this pointer you can connect onTargetStopped function
 	QPointer<BaseInterpreter> interpreterStepFinish;
-	// main widget
+	//! Main container for GNU debugger is QTabWidget
 	QTabWidget *mainTabWidget;
-	// add log
+	//! Add raw log in QTabWidget
 	QTextEdit *rawLog;
-	// path and name of target seleted
+	//! Path and name of target selected
 	QString mSelectedTarget;
-	// Action list for remote MonkeyStudio::toolBar
+	//! Action list for remote MonkeyStudio::toolBar
 	QHash<QString, QAction*> *mActionList;
-
-	// end of line
+	//! End of line
 	QString crlf;
 
-//	QString mPathGdb;
+	//! Indicate if Gdb is started
 	bool isGdbStarted;
+	//! Indicate if target is running
 	bool isTargetRunning;
-	
+	//! This var is use for not have two stopped signal consecutif
+	bool disableStep;	
+
 public slots:
 
+	//! Enable or disable all action in Monkey toolBar
 	void setEnabledActions(bool b);
 
 	// Actions
+	//! When user click <b>Load target</b> action in Monkey toolBar
 	void onActionLoadTarget();
+	//! When user click <b>Exit debug mode</b> action in Monkey toolBar
 	void onActionExit();
+	//! When user click <b>Restart target</b> action in Monkey toolBar
 	void onActionRestart();
+	//! When user click <b>Continue</b> action in Monkey toolBar
 	void onActionContinue();
+	//! When user click <b>Step over</b> action in Monkey toolBar
 	void onActionStepOver();
+	//! When user click <b>Step into</b> action in Monkey toolBar
 	void onActionStepInto();
+	//! When user click <b>Step finish</b> action in Monkey toolBar
 	void onActionStepFinish();
 
 	// Gdb
+	//! Calling when Gdb is started correctly
 	void gdbStarted();
+	//! Calling when Gdb is finished (exit normaly)
 	void gdbFinished(  int a , QProcess::ExitStatus );
+	//! Calling when Gdb generate a error (crash)
 	void gdbError( QProcess::ProcessError);
+	//! Calling when Gdb answer, Gdb have new data aviable
 	void commandReadyRead(  const QString& d);
 
 	// Target
+	//! Target is loaded correctly
 	void onTargetLoaded(int , QString);
+	//! Target is no loaded correctly (format is not correct)
 	void onTargetNoLoaded(int , QString);
+	//! Target is running
 	void onTargetRunning(int , QString);
+	//! Target is exited correctly
 	void onTargetExited(int , QString);
+	//! Target is stopped (breakpoint for example)
 	void onTargetStopped(int , QString);
 
+	//! Calling when GdbParser class emit interpreter signal
 	void onInterpreter(const QPointer<BaseInterpreter> & , const int &, const QString &);
-	
+	//! Calling when user click in the margin
 	void onUserToggleBreakpoint(const QString & , const int & );
 	
 	// from parser

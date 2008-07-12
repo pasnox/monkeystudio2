@@ -25,41 +25,64 @@
 
 #include "gdbInterpreter.1.3.h"
  
+//! This class is a template for connect a signal to the function
+/**
+\author xiantia
+\version 1.3.2
+
+This connect is a same as QObject::connect but any signal is passed to the function.
+
+When GdbParser found an interpreter (className, command and answer are correct) it emit interpreter signal.
+interpreter function in AddOn is call and this template find if the current interpreter is in this class. In this case the
+correct function is call.
+*/
 
 template <class _T>
 class GdbConnectTemplate
 {
 
-	// struct
+	//! Struct invok, store parent class, interpreter pointer and address function
 	struct invok
 	{
+		//! Pointer to the class (generaly this)
 		_T *mParent;		// class _T pointer
+		//! Pointer to the interpreter
 		QPointer<BaseInterpreter> mInterpreter; // just pointer
+		//! Proptype of function (void function(int, QString) 
 		void (_T:: *mPf)(int , QString ); // for call _T::Function(int, QString)
 	};
+
 
 	typedef invok Invoker;
 
 public :
 
-	// Add connexion
+	//! Add connexion
 	void add( _T *p, QPointer<BaseInterpreter> i , void(_T:: *f)(int , QString));
-	// remove connexion
+	//! Remove connexion
 	void remove(const QPointer<BaseInterpreter> & i);
-	// invok _T::Function
+	//! call function
 	void call(const QPointer<BaseInterpreter> & i, const int & id, const QString & st);
 
 private :
 	
-	// find Interpreter id (Pointer)
+	//! Find Interpreter id (Pointer)
 	int findInvoker(const QPointer<BaseInterpreter> & i);
-	// list of all connexion for template class
+	//! List of all connexion for this template class
 	QList<Invoker> invokerList;
 
 };
 
 
-
+/**
+* Add new function to the interpreter
+* \code 
+* GdbConnectTemplate::add(this, interpreterPointer, &ClassName::functionName)
+* \endcode
+*
+* Where <b>this</b> is the current class, <b>interpreterPointer</b> is a pointer returned by GdbParser::addInterpreter(), <b>className</b> is the name of your class and
+* <b>functionName</b> is the name of function that you want call.
+*/
 template <class _T>
 void GdbConnectTemplate<_T>::add( _T *p, QPointer<BaseInterpreter> i , void(_T:: *f)(int , QString))
 {
@@ -75,7 +98,9 @@ void GdbConnectTemplate<_T>::remove(const QPointer<BaseInterpreter> & i)
 	if(j != -1) invokerList.removeAt(i);
 }
 
-// invok _T::Function
+/**
+If an interpreter is found in this list, the function associate is called
+*/
 template <class _T>
 void GdbConnectTemplate<_T>::call(const QPointer<BaseInterpreter> & i, const int & id, const QString & st)
 { 
@@ -85,7 +110,9 @@ void GdbConnectTemplate<_T>::call(const QPointer<BaseInterpreter> & i, const int
 }
  
 
-// find Interpreter id (Pointer)
+/**
+\retval index of interpreter list or -1 if not found
+*/
 template <class _T>
 int GdbConnectTemplate<_T>::findInvoker(const QPointer<BaseInterpreter> & i)
 {

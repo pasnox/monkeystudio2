@@ -40,6 +40,7 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 	// create main container
 	mainTabWidget = new QTabWidget();
 	setWidget(mainTabWidget);
+	disableStep = false;
 
 	// create rawLog
 	rawLog = new QTextEdit(mainTabWidget);
@@ -121,7 +122,7 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 		"Dock",
 		QRegExp("^n$"), 
 		QRegExp("\\d+\\s+.*"),
-		"^info,interpreter=\"Step-Over\",event=\"End-Stepping-Range\",answerGdb=\"");
+		"^info,interpreter=\"Dock\",event=\"Step-Over\",answerGdb=\"");
 
 	// connect interpreter to function
 	Connect.add(this, interpreterStepOver, &DockGNUDebugger::onTargetStopped );
@@ -131,7 +132,7 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 		"Dock",
 		QRegExp("^s$"), 
 		QRegExp("\\d+\\s+.*"),
-		"^info,interpreter=\"Step-Into\",event=\"End-Stepping-Range\",answerGdb=\"");
+		"^info,interpreter=\"Dock\",event=\"Step-into\",answerGdb=\"");
 
 	Connect.add(this, interpreterStepInto, &DockGNUDebugger::onTargetStopped );
 
@@ -140,7 +141,7 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 		"Dock",
 		QRegExp("^finish$"), 
 		QRegExp("\\d+\\s+.*"),
-		"^info,interpreter=\"Step-Finish\",event=\"End-Stepping-Range\",answerGdb=\"");
+		"^info,interpreter=\"Dock\",event=\"Step-Finish\",answerGdb=\"");
 
 	Connect.add(this, interpreterStepFinish, &DockGNUDebugger::onTargetStopped );
 
@@ -393,6 +394,10 @@ void DockGNUDebugger::gdbError( QProcess::ProcessError e)
 
 	isGdbStarted = false;
 	isTargetRunning = false;
+
+	// gdb crashed rmove all marker in editor
+	Bridge->removeAllBreakpoints();
+	Bridge->removeBacktrace();
 }
 
 // Target
@@ -442,6 +447,35 @@ void DockGNUDebugger::onTargetRunning(int id, QString st)
 void DockGNUDebugger::onTargetStopped(int id, QString st)
 
 {
+/*
+when breakpoint hit
+or
+breakpoint hit and step over command (bug , i have two target stopped signal)
+  
+*/
+
+/*
+	10009 : ^info,interpreter="GdbParser",event="target-stopped",answerGdb="Breakpoint 2, qMain (argc=1, argv=0x3d4c48) at src/main.cpp:37",currentCmd="n"
+	*** Target stopped ***
+or
+	10009 : ^info,interpreter="GdbParser",event="target-stopped",answerGdb="Breakpoint 2, qMain (argc=1, argv=0x3d4c48) at src/main.cpp:37",currentCmd="n"
+	*** Target stopped ***
+	-73471976 : ^info,interpreter="Dock",event="Step-Over",answerGdb="37	QString s = coucou;",currentCmd="n"
+	*** Target stopped ***
+
+or
+	-73471976 : ^info,interpreter="Dock",event="Step-Over",answerGdb="37	QString s = coucou;",currentCmd="n"
+	*** Target stopped ***
+*/
+
+	QString event = GdbCore::findValue(st, "event");
+
+	if(event == "target-stopped")
+		disableStep = true;
+
+	if(disableStep && (event == "Step-Over" || event == "Step-Into"))
+		return;
+	
 	rawLog->append(QString::number(id) + " : " + st);
 	rawLog->append("*** Target stopped ***");
 
@@ -509,11 +543,13 @@ void DockGNUDebugger::onInfo(int id, QString st)
 
 void DockGNUDebugger::onPrompt(int id, QString st)
 {
+	disableStep = false;
 	rawLog->setTextColor(QColor(255,0,0));
 	rawLog->append(QString::number(id) + " : " + st);
 	rawLog->setTextColor(QColor(0,0,0));
 
 	Dispatcher->prompt(id, st);
+
 }
 
 // Interpreter for step over / into

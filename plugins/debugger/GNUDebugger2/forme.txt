@@ -1,3 +1,39 @@
+
+http://trac.monkeystudio.org/wiki/TempAbbreviatons
+
+- la prise en charge des target release (pour le debugage de crash)
+(pas tres stable si on enable le debug des release)
+
+- warning: Source file is more recent than executable.
+
+- Pb de droit sous linux pour le save gdbparsing.txt
+
+- Utiliser le target par defaut de monkey , peut tre fixé
+
+- bug si deux fichiers on le meme nom mais a des endroits different, peut etre fixé
+
+- set read only editor when debug, peut etre fixé
+
+- use script generique
+
+===========================================
+
+
+12/07/08 14h09 v1.3.2 change log
+
+Optimize Gdbwatch (not send whatis) now tested
+fix two message stopped when user execute step over and line have a breakpoint
+Add doc for doxygen
+New fromat of script
+ 
+
+
+08/07/08 14h09 v1.3.2 change log
+
+Optimize Gdbwatch (not send whatis) not tested
+
+
+
 07/07/08 00h34 v1.3.2 change log
 
 AddOn GdbScript
@@ -171,15 +207,3 @@ Future :
 
 
 
-- la prise en charge des target release (pour le debugage de crash)
-(pas tres stable si on enable le debug des release)
-
-- warning: Source file is more recent than executable.
-
-- Pb de droit sous linux pour le save gdbparsing.txt
-
-- Utiliser le target par defaut de monkey 
-
-- bug si deux fichiers on le meme nom mais a des endroits different
-
-- set read only editor when debug

@@ -5,7 +5,7 @@ include( ../../plugins.pri )
 DESTDIR	= $$MONKEY_PLUGINS_DIR/GNUdbg2
 TARGET	= GNUDebugger2
 RESOURCES	= src/resources/GNUDebugger.qrc
-QT += script
+QT	+= script
 
 SOURCES	= src/GNUDebugger.cpp \
 	src/DockGNUDebugger.cpp \
@@ -88,3 +88,4 @@ HEADERS	= src/GNUDebugger.h \
 	src/addon/gdbWatch/ui/UIGdbWatch.h \
 	src/addon/gdbWatch/gdbWatchStruct.h
 
+

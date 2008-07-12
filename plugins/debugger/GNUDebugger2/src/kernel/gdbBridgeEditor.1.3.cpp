@@ -7,11 +7,17 @@
  * COMMENTARY   : 
  ********************************************************************************************************/
 
+
 #include "gdbBridgeEditor.1.3.h"
 
 #include <QMessageBox>
 
+/*
+Contructor of GdbBrigdeEditor
 
+GdbBridgeEditor connect signal from Qsci Editor and GNU Debugger plugin
+ 
+*/
 GdbBridgeEditor::GdbBridgeEditor(QObject *parent) : QObject(parent)
 {
 	editorList.clear();
@@ -19,13 +25,19 @@ GdbBridgeEditor::GdbBridgeEditor(QObject *parent) : QObject(parent)
 	fileOpenedBeforeDebugger();
 }
 
+//
+
 GdbBridgeEditor::~GdbBridgeEditor()
 {
 	removeAllBreakpoints();
 	removeBacktrace();
 }
 
-// new file is opened, add this on list
+/*
+Save the new Qsci editor in <b>editorList</b> variable
+
+When user open a new Qsci editor (code source) this function is call and save the current pointer 
+*/
 void GdbBridgeEditor::addEditor(const QString & s)
 {
 	if(MonkeyCore::fileManager() && MonkeyCore::fileManager()->currentChild())
@@ -52,7 +64,11 @@ void GdbBridgeEditor::addEditor(const QString & s)
 	}
 }
 
-//
+/*
+Signal form Qsci indicate the user select text
+
+When user select text in editor, GNU debugger plugin can show a value of variable 
+*/
 
 void GdbBridgeEditor::onCopyAvailable(bool b)
 {
@@ -62,21 +78,30 @@ void GdbBridgeEditor::onCopyAvailable(bool b)
 }
 
 //
-
+/*
 void GdbBridgeEditor::onRequestShowVar(const QString &s)
 {
 	pEditor *e = MonkeyCore::fileManager()->currentChild()->currentEditor();
 	if(e )
 		e->showUserList(8829, QStringList() << "value" << s);
 }
+*/
 
-// file closed , remove this of list
+/*
+Remove pointer saved in <b>editorList</b> variable
+
+When user close Qsci editor (code source) this function is call and remove the current pointer 
+*/
 void GdbBridgeEditor::removeEditor(const int & i)
 {
 	// remove editor of list
 	if(i < editorList.count())
 		editorList.removeAt(i);
 }
+
+/*
+Remove all breakpoints icon in Qsci editor
+*/
 
 void GdbBridgeEditor::removeAllBreakpoints()
 {
@@ -90,8 +115,9 @@ void GdbBridgeEditor::removeAllBreakpoints()
 	}
 }
 
-//
-
+/*
+Remove all icons in Qsci editor <b>e</b> present in <b>line</b>
+*/
 void GdbBridgeEditor::removeAllBreakpointsAt( pEditor *e , const int & line)
 {
 		e->markerDelete(line, pEditor::mdEnabledBreak);	
@@ -100,7 +126,9 @@ void GdbBridgeEditor::removeAllBreakpointsAt( pEditor *e , const int & line)
 		e->markerDelete(line, pEditor::mdDisabledConditionalBreak);	
 }
 
-//
+/*
+Remove BackTrace icon in current editor 
+*/
 
 void GdbBridgeEditor::removeBacktrace()
 {
@@ -110,7 +138,9 @@ void GdbBridgeEditor::removeBacktrace()
 	}
 }
 
-//
+/*
+Same as Add() function but save Qsci editor pointer if is opened before GNU debugger is started
+*/
 
 void GdbBridgeEditor::fileOpenedBeforeDebugger()
 {
@@ -120,7 +150,6 @@ void GdbBridgeEditor::fileOpenedBeforeDebugger()
 		QList<pAbstractChild * >  e = MonkeyCore::workspace()->children();
 		foreach(pAbstractChild * pf, e)//for(int i =0; i< e.count(); i++)
 		{
-//			pAbstractChild  * pf = e.at(i);
 			// fix v 1.3.2 if last file opened is a Designer Ui
 			if( qobject_cast<pEditor*>( pf->currentEditor() ))
 			{
@@ -137,7 +166,9 @@ void GdbBridgeEditor::fileOpenedBeforeDebugger()
 	}
 }
 
-// User click under margin
+/*
+User click in Qsci margin
+*/
 
 void GdbBridgeEditor::onMarginClicked( int margeIndex, int line, Qt::KeyboardModifiers d)
 {
@@ -149,7 +180,9 @@ void GdbBridgeEditor::onMarginClicked( int margeIndex, int line, Qt::KeyboardMod
 	}
 }
 
-// Toggle breakpoint
+/*
+Toggle breakpoint icon 
+*/
 
 void GdbBridgeEditor::onToggleBreakpoint(const Breakpoint & bp, const BaseBreakpoint & p, const bool & b)
 {
@@ -172,7 +205,9 @@ void GdbBridgeEditor::onToggleBreakpoint(const Breakpoint & bp, const BaseBreakp
 	}
 }
 
-//
+/*
+Toggle backtrace icon
+*/
 
 void GdbBridgeEditor::onToggleBacktrace(const QString & fileName, const int & line)
 {
@@ -192,7 +227,9 @@ void GdbBridgeEditor::onToggleBacktrace(const QString & fileName, const int & li
 
 }
 
-// find file in editorList
+/**
+Find file in <b>editorList</b> variable
+*/
 pEditor * GdbBridgeEditor::findFile(const QString & file)
 {
 	/*

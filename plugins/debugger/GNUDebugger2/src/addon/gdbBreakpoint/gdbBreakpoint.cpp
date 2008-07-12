@@ -25,6 +25,7 @@
 
 GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 {
+
 	setEnabled(true);
 	setWaitEndProcess(false);
 
@@ -38,7 +39,7 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 		aRegExp = "Breakpoint 2 at 0x437d2b: file src/addon/gdbBackTrace.cpp, line 22. (2 locations)"
 	*/
 
-	interpreterAddBreakpoint = Parser()->addInterpreter(
+	interpreterAddBreakpoint = GdbCore::Parser()->addInterpreter(
 		name(),
 		QRegExp("^b\\s.*:\\d+$"),
 		QRegExp("^Breakpoint\\s+(\\d+)\\s+at\\s(\\w+):\\s+file\\s+([^,]+),\\s+line\\s+(\\d+)\\.(|\\s+\\(\\d+\\s\\w*\\))"),
@@ -54,7 +55,7 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 		cRegExpCmd = "delete 1"
 		aRegExp = "(gdb) "
 	*/
-	interpreterDelBreakpoint = Parser()->addInterpreter(
+	interpreterDelBreakpoint = GdbCore::Parser()->addInterpreter(
 		name(),
 		QRegExp("^delete\\s\\d+"),
 		QRegExp("^\\(gdb\\)\\s"),
@@ -68,7 +69,7 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 		cRegExpCmd = "enable 1"
 		aRegExp = "(gdb) "
 	*/
-	interpreterEnabledBreakpoint = Parser()->addInterpreter(
+	interpreterEnabledBreakpoint = GdbCore::Parser()->addInterpreter(
 		name(),
 		QRegExp("^enable\\s\\d+"),
 		QRegExp("^\\(gdb\\)\\s"),
@@ -82,7 +83,7 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 		cRegExpCmd = "disable 1"
 		aRegExp = "(gdb) "
 	*/
-	interpreterDisabledBreakpoint = Parser()->addInterpreter(
+	interpreterDisabledBreakpoint = GdbCore::Parser()->addInterpreter(
 		name(),
 		QRegExp("^disable\\s\\d+"),
 		QRegExp("^\\(gdb\\)\\s"),
@@ -96,7 +97,7 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 		cRegExpCmd = "disable 1"
 		aRegExp = "(gdb) "
 	*/
-	interpreterBreakpointPending = Parser()->addInterpreter(
+	interpreterBreakpointPending = GdbCore::Parser()->addInterpreter(
 		name(),
 		QRegExp("^b\\s.*:\\d+$"),
 		QRegExp("^Breakpoint\\s(\\d+)\\s\\((.*):(\\d+)\\)\\spending\\.$"),
@@ -110,7 +111,7 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 		cRegExpCmd = "condition 1 i==2"
 		aRegExp = "(gdb) "
 	*/
-	interpreterConditionnedBreakpoint = Parser()->addInterpreter(
+	interpreterConditionnedBreakpoint = GdbCore::Parser()->addInterpreter(
 		name(),
 		QRegExp("^condition\\s\\d+.+$"),
 		QRegExp("^\\(gdb\\)\\s"),
@@ -124,7 +125,7 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 		cRegExpCmd = "condition 1"
 		aRegExp = "Breakpoint 1 now unconditional."
 	*/
-	interpreterUnConditionnedBreakpoint = Parser()->addInterpreter(
+	interpreterUnConditionnedBreakpoint = GdbCore::Parser()->addInterpreter(
 		name(),
 		QRegExp("^condition\\s\\d+$"),
 		QRegExp("^Breakpoint\\s\\d+\\snow\\sunconditional.$"),

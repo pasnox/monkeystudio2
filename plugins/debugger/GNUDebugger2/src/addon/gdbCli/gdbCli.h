@@ -25,6 +25,15 @@
 #include "../../kernel/gdbSequencer.1.3.h"
 #include "./ui/UIGdbCli.h"
 
+//! Implements all functions for send user command to Gdb.This class is an AddOn for GNU debugger
+
+/**
+\author xiantia
+\version 1.3.2
+
+This class can send user command to Gdb, this is a console for Gdb.
+*/
+
 class GdbCli : public GdbCore
 {
 	Q_OBJECT
@@ -37,12 +46,18 @@ public:
 
 public slots:
 
+	/**
+	 * \brief Calling when user click on "Send" button. This function send user command to Gdb.
+	*/
 	void onSend();
 
 	QString name();
 	QPointer<QWidget> widget();
 	QIcon icon();
 
+	/**
+	 * \brief Not interpreter implemented for this class.
+	*/
 	void interpreter(const QPointer<BaseInterpreter> & , const int & , const QString & );
 
 	// gdb

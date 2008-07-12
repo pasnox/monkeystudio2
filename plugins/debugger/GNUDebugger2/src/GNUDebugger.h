@@ -9,6 +9,12 @@
 
 #include <QPointer>
 
+//! Main class
+/**
+\author xiantia
+\version 1.3.2
+*/
+
 class GNUDebugger : public DebuggerPlugin
 {
 	Q_OBJECT

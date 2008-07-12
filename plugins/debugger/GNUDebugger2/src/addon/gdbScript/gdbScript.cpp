@@ -49,7 +49,7 @@ void GdbScript::interpreter(const QPointer<BaseInterpreter> & i, const int & id,
 
 // static function
 
-bool GdbScript::canTranslate(const QString & container)
+bool GdbScript::tryTranslate(const QString & container)
 {
 	QRegExp r("(\\w+)\\s*<(.+)>\\s*$");
 	GdbList list;
@@ -61,7 +61,7 @@ bool GdbScript::canTranslate(const QString & container)
 		QStringList l = r.capturedTexts();
 		
 		if(QFile::exists(pathScript  + l.at(1) + ".js")) 
-			return canTranslate(l.at(2));				// recusive
+			return tryTranslate(l.at(2));				// recusive
 		return false;
 	}
 
@@ -101,6 +101,7 @@ bool GdbScript::createScript(const QString & container)
 		if(QFile::exists(mPathScript + l.at(1) + ".js")) 
 		{
 			list.type = l.at(1);		// QList
+			list.cast = l.at(2);
 			list.isPointer = false;		// default 
 			list.scriptFile = mPathScript + l.at(1) + ".js"; // file name
 			list.script = new QScriptEngine(this);		// script pointeur
@@ -122,6 +123,7 @@ bool GdbScript::createScript(const QString & container)
 	if(QFile::exists(mPathScript + list.type + ".js")) 
 	{
 		list.scriptFile = mPathScript + list.type + ".js";
+		list.cast = container;
 		list.script = new QScriptEngine(this);
 		if( ! loadScript(list.scriptFile, list.script))
 			QMessageBox::warning(NULL,"Script Load error", "["+list.type+"]");
@@ -173,13 +175,14 @@ void GdbScript::exec(const QString & data)
 void GdbScript::exec()
 {
 //	bool mIsPointer = false;
-	if(	currentScriptIndex >= gdbScriptList.count()) QMessageBox::warning(NULL,"erreur", "currentScript trop haut");
+	if(	currentScriptIndex >= gdbScriptList.count()){ QMessageBox::warning(NULL,"critical erreur, Mks has crash after close this", "currentScript trop haut"); return ;}
 
  	QScriptValue function = gdbScriptList.at(currentScriptIndex).script->evaluate( gdbScriptList.at(currentScriptIndex).function );
 
-//	QMessageBox::warning(NULL,"call ", "Script : "  + gdbScriptList.at(currentScriptIndex).type + "\nFunction : " + gdbScriptList.at(currentScriptIndex).function + "\nData : [" + mData + "]\nisPointer : " + QString::number(gdbScriptList.at(currentScriptIndex).isPointer));
+//	QMessageBox::warning(NULL,"call ", "Script : "  + gdbScriptList.at(currentScriptIndex).type + "\nFunction : " + gdbScriptList.at(currentScriptIndex).function + "\nData : [" + mData + "]\nCast : " + gdbScriptList.at(currentScriptIndex).cast+ "\nisPointer : " + QString::number(gdbScriptList.at(currentScriptIndex).isPointer));
 	QScriptValue res = function.call( function, QScriptValueList() << gdbScriptList.at(currentScriptIndex).script->newQObject(this) 
 		<< QScriptValue(gdbScriptList.at(currentScriptIndex).script, mData)
+		<< QScriptValue(gdbScriptList.at(currentScriptIndex).script, gdbScriptList.at(currentScriptIndex).cast)
 		<< QScriptValue(gdbScriptList.at(currentScriptIndex).script, gdbScriptList.at(currentScriptIndex).isPointer));
 
 	mData.clear();

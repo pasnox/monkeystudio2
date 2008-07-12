@@ -9,6 +9,12 @@
 
 #include "UIBreakpointDelegate.h"
 
+//! Ui for show breakpoints in QTabWiget. It used by GdbBreakpoint class. 
+/**
+\author xiantia
+\version 1.3.2
+*/
+
 class UIGdbBreakpoint : public QWidget, public Ui::UIGdbBreakpoint
 {
 	Q_OBJECT

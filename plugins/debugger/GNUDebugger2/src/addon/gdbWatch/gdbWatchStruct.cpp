@@ -143,7 +143,7 @@ int index = 0;
 	}// end for
 }
 
-
+/*
 void WatchStruct::decompilStrutUpdate(QTreeWidgetItem *parentItem, QString val)
 {
 QString memberBlock;
@@ -179,3 +179,4 @@ int index=0;
 		index++;
 	}// end for
 }
+*/

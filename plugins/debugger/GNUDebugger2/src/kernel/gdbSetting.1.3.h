@@ -19,21 +19,44 @@
 
 #include <QMessageBox>
 
+//! Small struct for setting AddOn
+/**
+\author xiantia
+\version 1.3.2
+*/
 typedef struct GdbAddOn
 {
+	//! Name of AddOn
 	QString name;
+	//! Enable or not
 	bool enable;
 };
 
+//! Small struct for store some informations
+/**
+\author xiantia
+\version 1.3.2
+*/
 typedef struct GdbSettings
 {
+	//! Current path of Gdb
 	QString pathGdb;
+	//! Current path of parse file
 	QString pathParseFile;
+	//! Current path of script file
 	QString pathScript;
 
+	//! List of all AddOn
 	QList<GdbAddOn> addOnList;
 };
 
+//! Load setting from Monkey .ini and store current configuration
+
+/**
+\author xiantia.
+
+It load setting from Monkey .ini. It configure AddOn (enable or not) and load current path
+*/
 
 class GdbSetting : public QObject, public QSingleton<GdbSetting>
 {
@@ -43,6 +66,7 @@ class GdbSetting : public QObject, public QSingleton<GdbSetting>
 
 private :
 
+	//! Struct contains current path and AddOn list  
 	GdbSettings gdbSettings;
 
 public :
@@ -50,6 +74,7 @@ public :
 	GdbSetting(QObject * parent = 0);
 	~GdbSetting(){};
 
+	//! Load setting from .ini
 	void load()
 	{
 		Settings* s = MonkeyCore::settings();
@@ -72,6 +97,7 @@ public :
 		s->endGroup();
 	}
 
+	//! Save setting in .ini
 	void save()
 	{
 			Settings * s = MonkeyCore::settings();
@@ -86,6 +112,7 @@ public :
 			s->endGroup();
 	}
 	
+	//! Set enable or disable AddOn
 	void setEnable(QString n, bool b)
 	{
 		GdbAddOn p={ n , b};
@@ -96,6 +123,7 @@ public :
 		}
 	}
 
+	//! get if AddOn is Enable or Disable
 	bool getStartUp(QString name)
 	{
 		foreach(GdbAddOn a, gdbSettings.addOnList)
@@ -109,18 +137,23 @@ public :
 		return true;
 	}
 
-
+	//! Get path of Gdb
 	QString getPathGdb() { return gdbSettings.pathGdb;}
+	//! Set path of Gdb
 	void setPathGdb(QString s){ gdbSettings.pathGdb = s;}
 
+	//! Get path of parse file
 	QString getPathParseFile(){ return gdbSettings.pathParseFile;}
+	//! Set path of parse file
 	void setPathParseFile(QString s) { gdbSettings.pathParseFile = s;}
 	
+	//! Get path of path script file
 	QString getPathScript(){ return gdbSettings.pathScript;}
+	//! Set path of path script file
 	void setPathScript(QString s) { gdbSettings.pathScript = s;}
 
+	//! Get list of AddOn
 	QList<GdbAddOn> * getAddOnList() { return &gdbSettings.addOnList;}
-
 };
 
 #endif

@@ -153,17 +153,8 @@ void GdbParser::getCommand()
 	}
 }
 
-//
-void GdbParser::switchCommand(const QString & s)
-{
-/*	if(mCmdList.count() && s == "(gdb) ")
-	{
-		mCurrentCmd = mCmdList.at(0);
-		mCmdList.removeAt(0);
-	}
-*/}
-
 // 
+
 bool GdbParser::processParsing(const QString & storg)
 {
 	QString st = storg;
@@ -320,7 +311,8 @@ bool GdbParser::processParsing(const QString & storg)
 						onInfo(p.id,oneLine);
 			
 					// unknow answer or prompt found
-					if(p.id == -1 || p.id == PROMPT_ID)
+					// fixed for not have prompt when the line is empty. v1.3.2 09/07/08
+					if( (p.id == -1 || p.id == PROMPT_ID) && !oneLine.isEmpty())
 						onDone(p.id, oneLine);
 				}
 				else
@@ -330,13 +322,13 @@ bool GdbParser::processParsing(const QString & storg)
 					if(oneLine.contains( "(gdb) "))
 					{
 						oneLine.remove("(gdb) ");
-						emit onInterpreter(bi, - bi->getId(), bi->getAnswerExtention() + oneLine);
+						emit onInterpreter(bi, - bi->getId(), bi->getAnswerExtention() + oneLine + "\",currentCmd=\"" + mCurrentCmd +"\"");
 						onInfo( - bi->getId() , bi->getAnswerExtention() + oneLine);
 						onDone(0,"Emulate prompt");
 					}
 					else
 					{
-						emit onInterpreter(bi, - bi->getId(), bi->getAnswerExtention() + oneLine);
+						emit onInterpreter(bi, - bi->getId(), bi->getAnswerExtention() + oneLine + "\",currentCmd=\"" + mCurrentCmd +"\"");
 						onInfo( - bi->getId() , bi->getAnswerExtention() + oneLine);
 					}
 				}
@@ -397,8 +389,9 @@ void GdbParser::onInfo(int id, QString st)
 		case 10021 : // Program received signal SIGSEGV, Segmentation fault.
 		case 10020 : // Step finish but no can execute this
 		case 10009 : // breakpoint hit
+//				emit targetStopped(id, "^info,interpreter=\"GdbParser\",event=\"target-stopped\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\""); 
+//				emit info(id, "^info,interpreter=\"GdbParser\",event=\"breakpoint-hit\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\"");
 				emit targetStopped(id, "^info,interpreter=\"GdbParser\",event=\"target-stopped\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\""); 
-				emit info(id, "^info,interpreter=\"GdbParser\",event=\"breakpoint-hit\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\"");
 		break;
 
 		case 10010 : // run "r" command
@@ -410,7 +403,7 @@ void GdbParser::onInfo(int id, QString st)
 
 		default : if(id>=INFO_ID) emit info(id, "^info,interpreter=\"GdbParser\",event=\"info found (parsing)\",answerGdb=\"" + st + "\",currentCmd=\"" + mCurrentCmd +"\"");
 			// Interpreter command
-			else emit info(id,st + "\",currentCmd=\"" + mCurrentCmd +"\"");
+			else emit info(id, st + "\",currentCmd=\"" + mCurrentCmd +"\"");
 	}
 }
 //

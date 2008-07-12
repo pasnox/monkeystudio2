@@ -1,11 +1,11 @@
 
 #include "gdbCore.1.3.h"
 
-
 GdbCore::GdbCore(QObject * parent) : QObject (parent)
 {
 	mParser = GdbParser::instance(); 
 	mProcess = GdbProcess::instance(); 
+
 	watchDog.setSingleShot(true);
 	connect(&watchDog, SIGNAL(timeout()), this , SLOT(onTimer()));
 	
@@ -17,7 +17,6 @@ GdbCore::GdbCore(QObject * parent) : QObject (parent)
 GdbCore::~GdbCore()
 {
 }
-
 
 void GdbCore::showMessage(QString s, int t, SHOW c)
 {
@@ -32,7 +31,6 @@ void GdbCore::showMessage(QString s, int t, SHOW c)
 
 	MonkeyCore::statusBar()->appendMessage( s, t ,QPixmap(), QBrush(b));
 }
-
 
 void GdbCore::interpreter(const QPointer<BaseInterpreter> & , const int & , const QString & ){}
 

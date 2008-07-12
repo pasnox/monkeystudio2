@@ -1,11 +1,9 @@
 
 
-process = function(parent , varName , isPointer)
+process = function(parent , varName , cast ,isPointer)
 {
 	mVarName = varName;
 	// get is varName is a pointer
-	mOp = isPointer ? "->" : ".";
-	mCast = isPointer ? "(QString*)" : "(QString)";
 
 	Exp = new RegExp("(.*)\\s+(\\w+)");
 	if(Exp.test(mVarName))
@@ -25,7 +23,7 @@ process = function(parent , varName , isPointer)
 	return "FINISH:Can't translate QString:NULL";
 }	
 
-processValue = function(parent, data, isPointer)
+processValue = function(parent, data, cast , isPointer)
 {
 	Exp = new RegExp("\\$\\d+\\s+=\\s(\\w+)");
 

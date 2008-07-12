@@ -255,7 +255,8 @@ void GdbWatch::onAddress(int id, QString s)
 
 		i->setText(2,l.at(1));
 
-		if(GdbScript::canTranslate(i->text(1)))
+		// use script
+		if(GdbScript::tryTranslate(i->text(1)))
 		{
 			i->setText(4,tr("Waitting translate .."));
 			emit requestScriptTranslate(i->text(1),i->text(0)); 
@@ -284,7 +285,8 @@ void GdbWatch::createSequencer()
 	QList<SequencerCmd> s;
 
 	for(int i=0; i < l.count(); i++)
-		s << SequencerCmd("printType "+l.at(i), "whatis " + l.at(i)) << SequencerCmd("printAdress "+l.at(i), "p &" + l.at(i)) << SequencerCmd("printValue "+l.at(i), "print "+ l.at(i)) ; 
+		// optimize, do not send whatis (no change)
+		s << /*SequencerCmd("printType "+l.at(i), "whatis " + l.at(i)) <<*/ SequencerCmd("printAdress "+l.at(i), "p &" + l.at(i)) << SequencerCmd("printValue "+l.at(i), "print "+ l.at(i)) ; 
 	Sequencer->add(name() , s);
 }
 
