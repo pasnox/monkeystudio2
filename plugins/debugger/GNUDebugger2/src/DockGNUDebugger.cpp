@@ -7,8 +7,6 @@
 #include <qscintillamanager.h>
 #include "monkey.h"
 
-/* debugger */
-//
 
 #include <QFileDialog>
 
@@ -60,6 +58,8 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 	Cli = new GdbCli(this);
 	ToolTip = new GdbToolTip(this);
 	Script = new GdbScript(this);
+	// TODO 
+	// You can add your addOn here
 
 	// addOn to dispatcher
 	Dispatcher->add(Breakpoint);
@@ -69,16 +69,18 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 	Dispatcher->add(Cli);
 	Dispatcher->add(ToolTip);
 	Dispatcher->add(Script);
+	// TODO
+	// You can add your addOn to dispatcher
 
 
-	// connections
+	// Process
 	connect(Process, SIGNAL( commandReadyRead( const QString& )), this , SLOT( commandReadyRead( const QString& )));
 	connect(Process, SIGNAL( started( )), this, SLOT(gdbStarted()));
 	connect(Process, SIGNAL( finished(  int , QProcess::ExitStatus  )), this, SLOT(gdbFinished( int , QProcess::ExitStatus)));
 	connect(Process, SIGNAL( error ( QProcess::ProcessError )), this, SLOT(gdbError(QProcess::ProcessError)));
 
 
-	// connection from parser
+	// Parser
 	connect(Parser, SIGNAL(done(int, QString)), this , SLOT(onDone(int, QString)));
 	connect(Parser, SIGNAL(error(int, QString)), this , SLOT(onError(int, QString)));
 	connect(Parser, SIGNAL(info(int, QString)), this , SLOT(onInfo(int, QString)));
@@ -93,12 +95,12 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 	connect(Parser, SIGNAL(onInterpreter(const QPointer<BaseInterpreter> & ,const int & , const QString &)), this , 
 		SLOT(onInterpreter(const QPointer<BaseInterpreter> & , const int & , const QString &)));
 
-	// breakpoint
+	// Breakpoint
 	
 	connect(Breakpoint, SIGNAL(onToggleBreakpoint(const Breakpoint &, const BaseBreakpoint &, const bool &)), Bridge,
 		SLOT(onToggleBreakpoint(const Breakpoint &, const BaseBreakpoint &, const bool& )));
 
-	// backtrace
+	// Backtrace
 	
 	connect(Backtrace, SIGNAL(onToggleBacktrace(const QString & , const int &)), Bridge,
 		SLOT(onToggleBacktrace(const QString & , const int &)));
@@ -107,13 +109,16 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 	connect( MonkeyCore::workspace(), SIGNAL( fileOpened( const QString & ) ), Bridge, SLOT( addEditor( const QString & ) ) );
 	connect( MonkeyCore::workspace(), SIGNAL( documentAboutToClose( int ) ), Bridge, SLOT( removeEditor( int ) ) );
 
-	// connection BridgeEditor
+	// BridgeEditor
 	connect(Bridge, SIGNAL(userToggleBreakpoint(const QString &, const int &)), this, SLOT(onUserToggleBreakpoint(const QString &, const int &)));
 	connect(Bridge, SIGNAL(requestBreakpoint(const QString &)), Breakpoint , SLOT(onRequestBreakpoint(const QString &)));
 	connect(Bridge, SIGNAL(requestBacktrace(const QString &)), Backtrace , SLOT(onRequestBacktrace(const QString &)));
 	connect(Bridge, SIGNAL(requestShowVar(const QString &)), ToolTip , SLOT(onRequestShowVar(const QString &)));
 
+	// Watch
 	connect(Watch, SIGNAL(requestScriptTranslate(const QString &, const QString &)), Script , SLOT(onRequestScriptTranslate(const QString &, const QString &)));
+	
+	// Script
 	connect(Script, SIGNAL(scriptFinishedTranslate(const QString &)), Watch , SLOT(onScriptFinishedTranslate(const QString &)));
 
 	
@@ -576,10 +581,4 @@ void DockGNUDebugger::onUserToggleBreakpoint(const QString & fileName, const int
 		else
 			GdbCore::showMessage(tr("I can't toggle breakpoint when target running."), 5000, _WARNING_ );
 	}
-}
-
-// close monkey
-
-void DockGNUDebugger::onAboutToClose()
-{
 }

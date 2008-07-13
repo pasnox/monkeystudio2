@@ -10,6 +10,11 @@
 	\version 1.3.2
 	
 	Base Struct for one breakpoint 
+
+	GdbBreakpoint class uses two structs to store all informations of the beakpoints.
+	
+	The first struct store only information for one breakpoint.
+	The second struct is Breakpoint.
 	*/
 	typedef struct BaseBreakpoint
 	{
@@ -27,7 +32,7 @@
 		QString condition;
 	};
 
-	//! It is a struct for store all brekpoints for one file
+	//! It is a struct for store all breakpoints for one file
 
 	/**
 	\author xiantia

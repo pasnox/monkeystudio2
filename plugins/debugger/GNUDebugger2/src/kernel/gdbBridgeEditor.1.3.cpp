@@ -77,16 +77,6 @@ void GdbBridgeEditor::onCopyAvailable(bool b)
 		emit requestShowVar(e->selectedText());
 }
 
-//
-/*
-void GdbBridgeEditor::onRequestShowVar(const QString &s)
-{
-	pEditor *e = MonkeyCore::fileManager()->currentChild()->currentEditor();
-	if(e )
-		e->showUserList(8829, QStringList() << "value" << s);
-}
-*/
-
 /*
 Remove pointer saved in <b>editorList</b> variable
 

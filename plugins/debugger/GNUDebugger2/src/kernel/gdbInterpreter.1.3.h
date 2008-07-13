@@ -23,6 +23,10 @@
 \version 1.3.2
 
 This class store all informations for only one interpreter
+one to interpreter is small a parser for a class, a command and an answer
+
+When data arrives of gdb, GdbParser seeks if the command in court, the command and the reponce correspond has one to interpreter.
+If it is the case, the signal interpreter is emitted coming from GdbParser.
 */
 
 class BaseInterpreter : public QObject
@@ -33,7 +37,11 @@ public :
 		BaseInterpreter(QObject *parent = 0);
 
 		/**
-		 * \brief Set or configure interpreter 
+		 * \brief Set an interpreter 
+		 * \param ClassName sush as GdbWatch, command sush as "^p .*", anwser sush as "^$\\d+\\s=\\s.*" and answerExtention
+		 *
+		 * \note answerExtention is used to modify the reponce of Gdb, for example when Gdb removes a breakpoint, 
+		 * it answers just by the prompt one and we do not have any information on what it 'passed
 		*/
 		void set(QString cName,/* QString cGdb,*/ QRegExp cRegExp,  QRegExp aRegExp, QString aExtention);
 

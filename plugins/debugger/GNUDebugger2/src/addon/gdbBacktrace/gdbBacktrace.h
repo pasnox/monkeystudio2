@@ -33,6 +33,34 @@
 
 When target is stopped, this class search where is Gdb has stopped.
 For that it send "bt" and "info source" commands for extract the line number of file and the absolue path of file.
+
+GdbBacktarce thus will start by adding two to interpreters has GdbParser:
+- interpreterBacktrace which goes parser the line " ^#\\d+\\s.*\\sat\\s.*:\\d+", i.e. all the lines which starts with #.
+\code
+ #0 main (arc, arg) at src/main.cpp:23
+\endcode
+
+- interpreterInfosource which goes parser all the lines which starts with "^Located\\sin\\s.*"
+\code
+ Located in \usr\local\bin\dev\test.cpp
+\endcode
+
+\note These two interpreters are not active which if their respective command are in court.
+
+Once created to interpreter them is connected has two functions:
+- onBacktrace which will extract from the chain the number of the line where Gdb it is stopped.
+- onInfosource which will extract from the chain the file name where Gdb it is stopped.
+
+\note The two commands has to send has Gdb are directly stored in Sequencer
+
+When the sequence is finished the signal onToggleBacktrace (mCurrentFile, mCurrentLine) is emitted and 
+GdbBridgeEditor is informed by it, those which will place the icon on the file and the line corresponding.
+
+Another function is to add has GdbBacktrace class. When a new editor is opened, GdbBridgeEditor emitted the sinal 
+requestBacktrace, those the purpose of which is to ask whether the editor had the backtrace just before closing/opening
+If the name of the open file is the same one that mCurrentFile, then the signal onToggleBacktrace is emitted.
+
+
 */
 
 class GdbBacktrace : public GdbCore
@@ -60,7 +88,7 @@ public slots:
 	void onInfoSource( int , QString );
 
 	/**
-	 * \brief Calling when an editor is open. 
+	 * \brief Calling when an editor is open. Restore backtrace icon 
 	 * If mCurrentfile is equal in the name of the opened file, onToggleBacktrace signal is 
 	 * emitted indicating that Gdb is stopped on this file. the editor can now show icon backtrace on the margin
 	*/

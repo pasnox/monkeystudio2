@@ -34,7 +34,77 @@
 \version 1.3.2
 
 This class can toogle breakpoint when user click in the margin, enable or disable breakpoint from UIGdbBreakpoint and set
-condition or not
+condition or not.
+
+It will start by adding seven interpreters has GdbParser for parse only specific line:
+- add of a breakpoint
+\code
+	interpreterAddBreakpoint = GdbCore::Parser()->addInterpreter(
+		name(),
+		QRegExp("^b\\s.*:\\d+$"),
+		QRegExp("^Breakpoint\\s+(\\d+)\\s+at\\s(\\w+):\\s+file\\s+([^,]+),\\s+line\\s+(\\d+)\\.(|\\s+\\(\\d+\\s\\w*\\))"),
+		"");
+\endcode
+
+- to remove a breakpoint
+\code
+	interpreterDelBreakpoint = GdbCore::Parser()->addInterpreter(
+		name(),
+		QRegExp("^delete\\s\\d+"),
+		QRegExp("^\\(gdb\\)\\s"),
+		"^info,interpreter=\"" + name() + "\",event=\"Breakpoint-delete\",answerGdb=\"");
+\endcode
+
+- enable a breakpoint
+\code
+	interpreterEnabledBreakpoint = GdbCore::Parser()->addInterpreter(
+		name(),
+		QRegExp("^enable\\s\\d+"),
+		QRegExp("^\\(gdb\\)\\s"),
+		"");
+\endcode
+
+- disable a breakpoint
+\code
+	interpreterDisabledBreakpoint = GdbCore::Parser()->addInterpreter(
+		name(),
+		QRegExp("^disable\\s\\d+"),
+		QRegExp("^\\(gdb\\)\\s"),
+		"");
+\endcode
+
+- to condition a breapoint
+\code
+	interpreterConditionnedBreakpoint = GdbCore::Parser()->addInterpreter(
+		name(),
+		QRegExp("^condition\\s\\d+.+$"),
+		QRegExp("^\\(gdb\\)\\s"),
+		"");
+\endcode
+
+- uncondition a breakpoint
+\code
+	interpreterUnConditionnedBreakpoint = GdbCore::Parser()->addInterpreter(
+		name(),
+		QRegExp("^condition\\s\\d+$"),
+		QRegExp("^Breakpoint\\s\\d+\\snow\\sunconditional.$"),
+		"");
+\endcode
+
+- set breakpoint before load lib
+ \code
+	interpreterBreakpointPending = GdbCore::Parser()->addInterpreter(
+		name(),
+		QRegExp("^b\\s.*:\\d+$"),
+		QRegExp("^Breakpoint\\s(\\d+)\\s\\((.*):(\\d+)\\)\\spending\\.$"),
+		"^info,interpreter=\"" + name() + "\",event=\"Breakpoint-Add-Pending\",answerGdb=\"");
+\endcode
+
+\note These interpreters are not active which if their respective command are in court.
+
+Then to connect them to the corresponding functions.
+
+According to the events, the GdbBreakpoint class  modify the struct Breakpoint and emits the signal onToggleBreakpoint
 */
 
 class GdbBreakpoint : public GdbCore
