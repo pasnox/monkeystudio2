@@ -47,19 +47,19 @@ public:
 
 	
 	/**
-	 * \brief Return a pointer to Parser class
+	 * \brief Return a pointer to GdbParser class
 	 *
 	 *
-	 * \return Pointer to Parser class
+	 * \return Pointer to GdbParser class
 	 * 
 	 */
 	QPointer<GdbParser> Parser() {  return mParser;}
 	
 	/**
-	 * \brief Return a pointer to Process class
+	 * \brief Return a pointer to GdbProcess class
 	 *
 	 *
-	 * \return Pointer to Process class
+	 * \return Pointer to GdbProcess class
 	 * 
 	 */
 	QPointer<GdbProcess> Process() {  return mProcess;}

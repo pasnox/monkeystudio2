@@ -66,6 +66,7 @@ public :
 
 	/**
 	 * \brief Create all script list for translate the current variable type.
+	 * \retval true if Qt container can be translated. 
 	*/
 	bool createScript(const QString &);
 	
@@ -118,20 +119,21 @@ public :
 	QIcon icon() { return QIcon();}
 
 
-	/**
-	*/
+	//! Connect interpreter to function
 	void interpreter(const QPointer<BaseInterpreter> & , const int & , const QString & );
 
 	int mSequence;
 
 private:
 
+	//! Load script from .js and store this in GdbList struct
 	bool loadScript(const QString & , QPointer<QScriptEngine>);
 
 	QString mData;
 	QString mVarName;
 	QString mPathScript;
 
+	//! List of all script for translate Qt container
 	QList<GdbList> gdbScriptList;
 	QPointer<BaseInterpreter> interpreterScript;
 

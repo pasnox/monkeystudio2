@@ -159,6 +159,7 @@ public slots:
 	void toggleBreakpoint(const QString &, const int &);
 
 
+
 	//! Condition or not a breakpoint, calling when "condition numBreak condition" command is correctly executed. Calling by GdbConnectTemplate
 	/**
 	When this command is correctly executed , this function is call by an interpreter. Now this function can emit onToggleBreakpoint
@@ -217,7 +218,9 @@ public slots:
 
 private:
 
+	//! Connect interpreter to function
 	GdbConnectTemplate<GdbBreakpoint> Connect;
+	//! List of all breakpoint, struct Breakpoint
 	QList<Breakpoint *>  breakpointList;
 
 	//! Connect "b fileName:Line" command to onAddBreakpoint function 

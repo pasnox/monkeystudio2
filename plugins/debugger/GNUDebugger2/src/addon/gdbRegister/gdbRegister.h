@@ -93,6 +93,7 @@ private:
 	 * \brief Pointer to GdbSequencer contains all commands.
 	 */
 	QPointer<GdbSequencer> Sequencer;
+	//! Pointer to widget container
 	QPointer<UIGdbRegister> mWidget;
 
 	int numRegister;
