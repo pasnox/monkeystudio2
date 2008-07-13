@@ -1,14 +1,4 @@
 /****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Fresh Framework
-** FileName  : pFilesListWidget.cpp
-** Date      : 2008-01-14T00:27:44
-** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
-**
 	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
 	This program is free software; you can redistribute it and/or modify
@@ -24,7 +14,6 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
 ****************************************************************************/
 #include "pFilesListWidget.h"
 #include "pExtendedWorkspace.h"
@@ -33,8 +22,13 @@
 #include <QMainWindow>
 #include <QDropEvent>
 
-pFilesListWidget::pFilesListWidget( const QString& s, pExtendedWorkspace* p )
-	: QDockWidget( s ), mWorkspace( p )
+/*!
+	\details Create a new pFilesListWidget instance
+	\param title The dock title
+	\param workspace The workspace on where operate the dock
+*/
+pFilesListWidget::pFilesListWidget( const QString& title, pExtendedWorkspace* workspace )
+	: pDockWidget( title ), mWorkspace( workspace )
 {
 	Q_ASSERT ( mWorkspace );
 	setParent( mWorkspace );
@@ -58,16 +52,16 @@ pFilesListWidget::pFilesListWidget( const QString& s, pExtendedWorkspace* p )
 	connect( mWorkspace, SIGNAL( documentAboutToClose( int ) ), this, SLOT( documentAboutToClose( int ) ) );
 }
 
-bool pFilesListWidget::eventFilter( QObject* o, QEvent* e )
+bool pFilesListWidget::eventFilter( QObject* object, QEvent* event )
 {
 	static int i = -1;
 	static QListWidgetItem* it = 0;
-	if ( e->type() == QEvent::ChildAdded )
+	if ( event->type() == QEvent::ChildAdded )
 	{
 		i = mList->currentRow();
 		it = mList->item( i );
 	}
-	else if ( e->type() == QEvent::ChildRemoved )
+	else if ( event->type() == QEvent::ChildRemoved )
 	{
 		int j = mList->row( it );
 		if ( i != j )
@@ -76,52 +70,57 @@ bool pFilesListWidget::eventFilter( QObject* o, QEvent* e )
 			mList->setCurrentRow( j );
 		}
 	}
-	return QDockWidget::eventFilter( o, e );
+	return QDockWidget::eventFilter( object, event );
 }
 
-void pFilesListWidget::dragEnterEvent( QDragEnterEvent* e )
+void pFilesListWidget::dragEnterEvent( QDragEnterEvent* event )
 {
 	// if correct mime and same tabbar
-	if ( e->mimeData()->hasUrls() )
+	if ( event->mimeData()->hasUrls() )
 	{
 		// accept drag
-		e->acceptProposedAction();
+		event->acceptProposedAction();
 	}
 	// default event
-	QDockWidget::dragEnterEvent( e );
+	QDockWidget::dragEnterEvent( event );
 }
 
-void pFilesListWidget::dropEvent( QDropEvent* e )
+void pFilesListWidget::dropEvent( QDropEvent* event )
 {
-	if ( e->mimeData()->hasUrls() )
-		emit urlsDropped( e->mimeData()->urls () );
+	if ( event->mimeData()->hasUrls() )
+		emit urlsDropped( event->mimeData()->urls () );
 	// default event
-	QDockWidget::dropEvent( e );
+	QDockWidget::dropEvent( event );
 }
 
-void pFilesListWidget::setItemToolTip( int i, const QString& s )
+/*!
+	\details Set the toolTip for item id
+	\param id The item id
+	\param toolTip The toolTip to set
+*/
+void pFilesListWidget::setItemToolTip( int id, const QString& toolTip )
 {
-	if ( QListWidgetItem* it = mList->item( i ) )
-		it->setToolTip( s );
+	if ( QListWidgetItem* it = mList->item( id ) )
+		it->setToolTip( toolTip );
 }
 
-void pFilesListWidget::modifiedChanged( int i, bool b )
+void pFilesListWidget::modifiedChanged( int id, bool modified )
 {
-	if ( QListWidgetItem* it = mList->item( i ) )
-		it->setIcon( b ? mModifiedIcon : mNonModifiedIcon );
+	if ( QListWidgetItem* it = mList->item( id ) )
+		it->setIcon( modified ? mModifiedIcon : mNonModifiedIcon );
 }
 
-void pFilesListWidget::docTitleChanged( int i, const QString& s )
+void pFilesListWidget::docTitleChanged( int id, const QString& title )
 {
-	if ( QListWidgetItem* it = mList->item( i ) )
-		it->setText( s );
+	if ( QListWidgetItem* it = mList->item( id ) )
+		it->setText( title );
 }
 
-void pFilesListWidget::documentInserted( int i, const QString& s, const QIcon& )
-{ mList->insertItem( i, s ); }
+void pFilesListWidget::documentInserted( int id, const QString& title, const QIcon& icon )
+{ mList->insertItem( id, title ); }
 
-void pFilesListWidget::documentAboutToClose( int i )
-{ delete mList->takeItem( i ); }
+void pFilesListWidget::documentAboutToClose( int id )
+{ delete mList->takeItem( id ); }
 
-void pFilesListWidget::setCurrentRow( int i )
-{ mList->setCurrentRow( i ); }
+void pFilesListWidget::setCurrentRow( int id )
+{ mList->setCurrentRow( id ); }

@@ -1,14 +1,4 @@
 /****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Fresh Framework
-** FileName  : pExtendedWorkspace.h
-** Date      : 2008-01-14T00:27:43
-** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
-**
 	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
 	This program is free software; you can redistribute it and/or modify
@@ -24,8 +14,13 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
 ****************************************************************************/
+/*!
+	\file pExtendedWorkspace.h
+	\date 2008-01-14T00:27:43
+	\author Filipe AZEVEDO aka Nox P\@sNox <pasnox@gmail.com>
+	\brief An extended container for SDI, MDI, TopLevel children
+*/
 #ifndef PEXTENDEDWORKSPACE_H
 #define PEXTENDEDWORKSPACE_H
 
@@ -44,6 +39,12 @@ class QMdiSubWindow;
 class pAction;
 class pFilesListWidget;
 
+/*!
+	\brief An extended container for SDI, MDI, TopLevel children
+	\details The container is like a QStackedWidget that can at runtime be switched
+	\details in many views like SDI, MDI and independant TopLevel window.
+	\details Call closeAllDocuments when destroyed.
+*/
 class Q_MONKEY_EXPORT pExtendedWorkspace : public QWidget
 {
 	Q_OBJECT
@@ -52,10 +53,10 @@ class Q_MONKEY_EXPORT pExtendedWorkspace : public QWidget
 public:
 	enum DocumentMode { dmSDI = 0, dmMDI, dmTopLevel };
 
-	pExtendedWorkspace( QWidget* , pExtendedWorkspace::DocumentMode = pExtendedWorkspace::dmSDI );
+	pExtendedWorkspace( QWidget* parent, pExtendedWorkspace::DocumentMode mode = pExtendedWorkspace::dmSDI );
 	~pExtendedWorkspace();
 	
-	virtual bool eventFilter( QObject*, QEvent* );
+	virtual bool eventFilter( QObject* object, QEvent* event );
 
 	//getters
 	pTabBar* tabBar() const;
@@ -65,36 +66,36 @@ public:
 	QTabBar::Shape tabShape() const;
 
 	QWidgetList documents() const;	
-	QWidget* document( int ) const;
+	QWidget* document( int id ) const;
 	int count() const;
 	
 	int currentIndex() const;
 	QWidget* currentDocument() const;
-	int indexOf( QWidget* ) const;
+	int indexOf( QWidget* widget ) const;
 
-	void setBackground( const QPixmap& );
-	void setBackground( const QString& );
+	void setBackground( const QPixmap& pixmap );
+	void setBackground( const QString& fileName );
 	
-	int addDocument( QWidget*, const QString&,  const QIcon& = QIcon() );
-	int insertDocument( int, QWidget*, const QString&, const QIcon& = QIcon() );
+	int addDocument( QWidget* widget, const QString& title, const QIcon& icon = QIcon() );
+	int insertDocument( int id, QWidget* widget, const QString& title, const QIcon& icon = QIcon() );
 	
-	QWidget* takeDocument( int );
-	void removeDocument( int );
-	void moveDocument( int, int );
+	QWidget* takeDocument( int id );
+	void removeDocument( int id );
+	void moveDocument( int fromId, int toId );
 	
 public slots:
-	void setDocMode( pExtendedWorkspace::DocumentMode );
-	void setTabShape( QTabBar::Shape );
+	void setDocMode( pExtendedWorkspace::DocumentMode mode );
+	void setTabShape( QTabBar::Shape shape );
 
-	void setCurrentIndex( int );
-	void setCurrentDocument( QWidget* );
+	void setCurrentIndex( int id );
+	void setCurrentDocument( QWidget* widget );
 
 	/*
 	Do not make this functions virtual!!
 	closeAllDocuments must not call functions of child classes
 	*/
 	virtual void closeDocument( QWidget* document );
-	virtual void closeDocument( int index );
+	virtual void closeDocument( int id );
 	virtual bool closeAllDocuments();
 	virtual void closeCurrentDocument();
 
@@ -130,22 +131,21 @@ protected:
 	QMdiArea* mMdiAreaWidget;
 
 protected slots:
-	void mdiArea_subWindowActivated( QMdiSubWindow* );
+	void mdiArea_subWindowActivated( QMdiSubWindow* window );
 	void internal_currentChanged( int id );
 
 signals:
-	void documentInserted( int, const QString&, const QIcon& );
-	void documentAboutToBeRemoved( int );
-	void documentAboutToClose( int );
+	void documentInserted( int id, const QString& title, const QIcon& icon );
+	void documentAboutToBeRemoved( int id );
+	void documentAboutToClose( int id );
 	// -1 if last file was closed
-	void currentChanged( int );
-	void tabShapeChanged( QTabBar::Shape );
-	void docModeChanged( pExtendedWorkspace::DocumentMode );
-	void modifiedChanged( int, bool );
-	void docTitleChanged( int, const QString& );
+	void currentChanged( int id );
+	void tabShapeChanged( QTabBar::Shape shape );
+	void docModeChanged( pExtendedWorkspace::DocumentMode mode );
+	void modifiedChanged( int id, bool modified );
+	void docTitleChanged( int id, const QString& title );
 	
 //	void aboutToCloseAll ();
-	
 };
 
 #endif // PEXTENDEDWORKSPACE_H
