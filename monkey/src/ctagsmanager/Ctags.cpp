@@ -47,7 +47,7 @@ extern "C" void initializeParsing (void);
 extern "C" void freeParserResources (void);
 
 /*!
-	\brief Constructor of class
+	Constructor of class
 	\param parent Parent objects
 */
 Ctags::Ctags (QObject* parent) :QObject (parent)
@@ -57,7 +57,7 @@ Ctags::Ctags (QObject* parent) :QObject (parent)
 }
 
 /*!
-	\brief Destructor of class
+	Destructor of class
 */
 Ctags::~Ctags ()
 {
@@ -65,7 +65,7 @@ Ctags::~Ctags ()
 }
 
 /*!
-	\brief Parse/reparse file
+	Parse/reparse file
 	
 	Record for file must de already stored in the fileRecords hash
 	\param file Absolute file name
@@ -91,7 +91,7 @@ bool Ctags::updateFileRecord (QString file) //reparse file if need, or parse fir
 }
 
 /*!
-	\brief Get tags for file
+	Get tags for file
 	
 	One interface of class for recieving tags from file
 	\param file Absolute file name
@@ -116,7 +116,7 @@ FileRecord* Ctags::GetTagsForFile (QString file )
 }
 
 /*!
-	\brief Parse file by calling ctags library function and revieve allocated TagEntryListItem list
+	Parse file by calling ctags library function and revieve allocated TagEntryListItem list
 	\note List should be freed after using by calling freeTagEntryList function
 	\param file Absolute file name
 	\return First item of single-linked list of tags for file
@@ -149,7 +149,7 @@ TagEntryListItem* Ctags::get_tags ( QString file )
 //}
 
 /*!
-	\brief Frees memory, used by TagEntryListItem's single-linked list
+	Frees memory, used by TagEntryListItem's single-linked list
 	\param item Pointer to first item of list
 */
 void Ctags::freeTagEntryList (TagEntryListItem* item)
