@@ -15,21 +15,23 @@
 #include <QMessageBox>
 
 
-//
-
+/**
+ \detail Load current setting from Monkey .ini
+*/
 void DockGNUDebugger::loadSettings()
 {
 }
 
-//
-
+/**
+ \detail Save current setting from Monkey .ini
+*/
 void DockGNUDebugger::saveSettings()
 {
 }
 
-
-//
-
+/**
+ \detail Create a new object.
+*/
 DockGNUDebugger::DockGNUDebugger( QWidget * w )
 	: pDockWidget( w ), isGdbStarted(false), isTargetRunning(false)
 
@@ -161,30 +163,36 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 	crlf = QTextCodec::codecForLocale()->fromUnicode( pMonkeyStudio::getEol() );
 }
 
-//
-
+/**
+ \detail Delete main container
+*/
 DockGNUDebugger:: ~DockGNUDebugger()
 {
 	mainTabWidget->deleteLater();
 }
 
-//
-
+/**
+ \detail Set actions from GNUDebugger to this class.
+*/
 void DockGNUDebugger::setAction(QHash<QString, QAction *> *a)
 {
 	mActionList = a;
 }
 
-//
-
+/**
+ \details Enable or disable all actions in Monkey toolBar.
+ \param If b is true, all actions are enable, else are disable.
+*/
 void DockGNUDebugger::setEnabledActions(bool b)
 {
 	foreach(QAction * a, *mActionList)
 		a->setEnabled(b);
 }
 
-//
-
+/**
+ \detail Calling when Gdb has an answer or Gdb has new datas, after it call GdbParser for parse this string.
+ \param d is raw data from Gdb
+*/
 void DockGNUDebugger::commandReadyRead(  const QString& d)
 {
 	rawLog->setTextColor(QColor(0,0,255));
@@ -195,6 +203,9 @@ void DockGNUDebugger::commandReadyRead(  const QString& d)
 
 // Actions
 
+/**
+ \detail When user click <b>Load target</b> action in Monkey toolBar. This function start Gdb and load the target.
+*/
 void DockGNUDebugger::onActionLoadTarget()
 {
 	isTargetRunning = isGdbStarted = false;
@@ -225,8 +236,9 @@ void DockGNUDebugger::onActionLoadTarget()
 	}
 }
 
-//
-
+/**
+ \detail When user click <b>Exit debug mode</b> action in Monkey toolBar. Stop and quit Gdb.
+*/
 void DockGNUDebugger::onActionExit()
 {
 	rawLog->append("*** User exit debug mode ***");
@@ -243,8 +255,10 @@ void DockGNUDebugger::onActionExit()
 		Process->stopProcess();
 }
 
-//
-
+	
+/**
+ \detail When user click <b>Restart target</b> action in Monkey toolBar. This function restart the target at the begining.
+*/
 void DockGNUDebugger::onActionRestart()
 {
 	Process->clearAllCommand();
@@ -264,8 +278,9 @@ void DockGNUDebugger::onActionRestart()
 	}
 }
 
-//
-
+/**
+ \detail When user click <b>Continue</b> action in Monkey toolBar. This function start and stop target to the next breakpoint, if has.
+*/
 void DockGNUDebugger::onActionContinue()
 {
 	if(Parser->isReady())
@@ -277,8 +292,9 @@ void DockGNUDebugger::onActionContinue()
 	}
 }
 
-//
-
+/**
+ \detail When user click <b>Step over</b> action in Monkey toolBar. This function execute step over.
+*/
 void DockGNUDebugger::onActionStepOver()
 {
 	if(Parser->isReady())
@@ -291,8 +307,10 @@ void DockGNUDebugger::onActionStepOver()
 	}
 }
 
-//
-
+	
+/**
+ \detail When user click <b>Step into</b> action in Monkey toolBar. This function execute step into.
+*/
 void DockGNUDebugger::onActionStepInto()
 {
 	if(Parser->isReady())
@@ -305,7 +323,10 @@ void DockGNUDebugger::onActionStepInto()
 	}
 }
 
-
+	
+/**
+ \detail When user click <b>Step finish</b> action in Monkey toolBar. This function carry out the function until the end.
+*/
 void DockGNUDebugger::onActionStepFinish()
 {
 	if(Parser->isReady())
@@ -318,9 +339,12 @@ void DockGNUDebugger::onActionStepFinish()
 	}
 }
 
-// Process
 
-// signal from GdbProcess (QProcess started)
+// Gdb
+
+/**
+ \detail Calling when Gdb is started correctly and dispatch this event to all AddOn.
+*/
 void DockGNUDebugger::gdbStarted()
 {
 
@@ -345,8 +369,11 @@ void DockGNUDebugger::gdbStarted()
 	}
 }
 
-//
 
+/**
+ \detail Calling when Gdb is finiched correctly and dispatch this event to all AddOn.
+ \param e is QProcess::ExitStatus var.
+*/
 void DockGNUDebugger::gdbFinished( int a , QProcess::ExitStatus e)
 {
 	rawLog->append("*** Gdb finished successfull code : " + QString::number(a) + " ***");
@@ -370,7 +397,10 @@ void DockGNUDebugger::gdbFinished( int a , QProcess::ExitStatus e)
 }
 
 
-//
+/**
+ \detail Calling when Gdb generate a error and dispatch this event to all AddOn.
+ \param e is QProcess::ProcessError var.
+*/
 
 void DockGNUDebugger::gdbError( QProcess::ProcessError e)
 {
@@ -407,6 +437,11 @@ void DockGNUDebugger::gdbError( QProcess::ProcessError e)
 
 // Target
 
+/**
+ \detail Target is loaded correctly. Dispatch now this event to all AddOn
+ \param id is an Id of string
+ \param st is the string.
+*/
 void DockGNUDebugger::onTargetLoaded(int id, QString st)
 {
 	rawLog->append("*** Target loaded success full ***");
@@ -418,8 +453,11 @@ void DockGNUDebugger::onTargetLoaded(int id, QString st)
 	mActionList->value("aRestart")->setEnabled( true );
 }
 
-//
-
+/**
+ \detail Target is no loaded correctly (format is not correct). Dispatch this event to all AddOn.
+ \param id is an Id of string
+ \param st is the string.
+*/
 void DockGNUDebugger::onTargetNoLoaded(int id, QString st)
 {
 	rawLog->append(QString::number(id) + " : " + st);
@@ -431,6 +469,12 @@ void DockGNUDebugger::onTargetNoLoaded(int id, QString st)
 }
 
 //
+
+/**
+ \detail Target is running. Dispatch this event to all AddOn.
+ \param id is an Id of string
+ \param st is the string.
+*/
 
 void DockGNUDebugger::onTargetRunning(int id, QString st)
 {
@@ -447,8 +491,11 @@ void DockGNUDebugger::onTargetRunning(int id, QString st)
 	isTargetRunning = true;
 }
 
-//
-
+/**
+ \detail Target is stopped (breakpoint for example). Dispatch this event to all AddOn.
+ \param id is an Id of string
+ \param st is the string.
+*/
 void DockGNUDebugger::onTargetStopped(int id, QString st)
 
 {
@@ -493,8 +540,12 @@ or
 	isTargetRunning = false;
 }
 
-//
-
+	
+/**
+ \detail Target is exited correctly. Dispatch this event to all AddOn.
+ \param id is an Id of string
+ \param st is the string.
+*/
 void DockGNUDebugger::onTargetExited(int id, QString st)
 {
 	rawLog->append(QString::number(id) + " : " + st);
@@ -510,6 +561,11 @@ void DockGNUDebugger::onTargetExited(int id, QString st)
 }
 
 // Parser
+/**
+ \detail Error event. Calling when GdbParser emit error signal
+  \param id is an Id of error
+  \param st is the Error string.
+*/
 
 void DockGNUDebugger::onError(int id, QString st)
 {
@@ -522,8 +578,11 @@ void DockGNUDebugger::onError(int id, QString st)
 	Dispatcher->error(id, st);
 }
 
-//
-
+/**
+ \detail Done event. Calling when GdbParser emit done signal.
+ \param id is an Id of string
+ \param st is the Done string.
+*/
 void DockGNUDebugger::onDone(int id, QString st)
 {
 	rawLog->setTextColor(QColor(0,255,0));
@@ -533,8 +592,11 @@ void DockGNUDebugger::onDone(int id, QString st)
 	Dispatcher->done(id, st);
 }
 
-//
-
+/**
+ \detail Info event.	Calling when GdbParser emit info signal.
+ \param id is an Id of string
+ \param is the Info string.
+*/
 void DockGNUDebugger::onInfo(int id, QString st)
 {
 	rawLog->setTextColor(QColor(255,255,0));
@@ -544,8 +606,11 @@ void DockGNUDebugger::onInfo(int id, QString st)
 	Dispatcher->info(id, st);
 }
 
-//
-
+/**
+ \detail Prompt event. Calling when GdbParser emit prompt signal.
+ \param id egal 0
+ \param st is the Prompt string.
+*/
 void DockGNUDebugger::onPrompt(int id, QString st)
 {
 	disableStep = false;
@@ -559,6 +624,12 @@ void DockGNUDebugger::onPrompt(int id, QString st)
 
 // Interpreter for step over / into
 
+/**
+ \detail Calling when GdbParser class emit interpreter signal. Now interpreter switch event to the correct function.
+ \param i is a pointer to the BaseInterpreter struct
+ \param id is an Id of string
+ \param s is the string.
+*/
 void DockGNUDebugger::onInterpreter(const QPointer<BaseInterpreter> & i, const int & id, const QString & s)
 {
 	// connect step into / over
@@ -568,6 +639,11 @@ void DockGNUDebugger::onInterpreter(const QPointer<BaseInterpreter> & i, const i
 
 // from editor margin clicked
 
+/**
+ \detail Calling when user click in the margin. Call GdbBreakpoint::toggleBreakpoint() function.
+ \param fileName is the name of file
+ \param line is the line number.
+*/
 void DockGNUDebugger::onUserToggleBreakpoint(const QString & fileName, const int & line)
 {
 	// fix 1.3.2 not send data to gdb if it not started or if target not running
