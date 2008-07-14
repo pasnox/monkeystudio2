@@ -15,7 +15,13 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
-
+/*!
+	\file gdbKernelDispatcher.1.3.cpp
+	\date 14/08/08
+	\author Xiantia
+	\version 1.3.2
+	\brief This class dispatch all messages to all AddOn
+*/
 
 #include "gdbKernelDispatcher.1.3.h"
 

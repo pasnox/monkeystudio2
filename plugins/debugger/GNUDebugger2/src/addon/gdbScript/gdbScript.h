@@ -47,7 +47,7 @@ class GdbScript : public GdbCore
 	Q_OBJECT
 
 	/*!
-		\details This structure store all informations for use a script.
+		\brief This structure store all informations for use a script.
 	*/	
 	typedef struct GdbList
 	{

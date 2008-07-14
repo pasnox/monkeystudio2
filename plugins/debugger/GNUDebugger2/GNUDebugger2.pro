@@ -74,6 +74,7 @@ HEADERS	= src/GNUDebugger.h \
 	src/kernel/gdbSequencer.1.3.h \
 	src/kernel/gdbSetting.1.3.h \
 	src/addon/gdbBreakpoint/gdbBreakpoint.h \
+	src/addon/gdbBreakpoint/gdbBreakpointStruct.h \
 	src/addon/gdbBreakpoint/ui/UIGdbBreakpoint.h \
 	src/addon/gdbBreakpoint/ui/UIBreakpointDelegate.h \
 	src/addon/gdbBacktrace/gdbBacktrace.h \

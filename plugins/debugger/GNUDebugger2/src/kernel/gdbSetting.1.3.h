@@ -35,7 +35,7 @@
 #include <QMessageBox>
 
 /*! 
-	\details Small struct for setting AddOn
+	\brief Small struct for setting AddOn
 */
 typedef struct GdbAddOn
 {
@@ -46,7 +46,7 @@ typedef struct GdbAddOn
 };
 
 /*!
-	\details Small struct for store some informations
+	\brief Small struct for store some informations
 */
 typedef struct GdbSettings
 {

@@ -70,7 +70,7 @@ class GdbParser : public QObject, public QSingleton<GdbParser>
 		friend class QSingleton<GdbParser>;
 
 		/*! 
-			\details Struct for store command list
+			\brief Struct for store command list
 		*/	
 		typedef struct Command
 		{

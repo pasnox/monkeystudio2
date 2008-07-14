@@ -33,7 +33,7 @@
 #include <QRegExp>
 
 /*!
-	\details Struct for strore all informations of pattern
+	\brief Struct for strore all informations of pattern
 */
 typedef struct GdbPattern
 {

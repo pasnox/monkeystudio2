@@ -59,7 +59,7 @@ class GdbRestoreLine : public QObject
 {
 
 	/*!
-		\details Struct for store data
+		\brief Struct for store data
 	*/
 	typedef struct GdbLines
 	{

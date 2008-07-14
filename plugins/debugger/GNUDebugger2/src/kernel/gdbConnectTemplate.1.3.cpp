@@ -20,7 +20,7 @@
 	\date 14/08/08
 	\author Xiantia
 	\version 1.3.2
-	\brief 
+	\brief This class is a template for connect a signal to the function
 */
 #include "gdbConnectTemplate.1.3.h"
 

@@ -62,7 +62,7 @@ class GdbBridgeEditor : public QObject , public QSingleton<GdbBridgeEditor>
 	friend class QSingleton<GdbBridgeEditor>;
 
 	/*!
-		\details Struct for store fileName and Qsci pointer
+		\brief Struct for store fileName and Qsci pointer
 	*/
 	typedef struct Editor
 	{

@@ -1,21 +1,38 @@
+/****************************************************************************
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
+/*!
+	\file gdbBreakpointStruct.h
+	\date 14/08/08
+	\author Xiantia
+	\version 1.3.2
+	\brief It is a base struct for store some informations for breakpoint
+*/
 
 #ifndef GDBBREAKPOINTSTRUCT
 #define GDBBREAKPOINTSTRUCT
 
-	//! It is a base struct for store some informations for one breakpoint
-
-	/**
-	\author xiantia
-	\version 1.3.2
-	
-	Base Struct for one breakpoint 
-
-	GdbBreakpoint class uses two structs to store all informations of the beakpoints.
+/*!
+	\brief 	Base Struct for one breakpoint 
+	\details 	GdbBreakpoint class uses two structs to store all informations of the beakpoints.
 	
 	The first struct store only information for one breakpoint.
 	The second struct is Breakpoint.
-	*/
+*/
 	typedef struct BaseBreakpoint
 	{
 		//! Contains the line from editor, the breakpoint is located at this line
@@ -32,14 +49,10 @@
 		QString condition;
 	};
 
-	//! It is a struct for store all breakpoints for one file
-
-	/**
-	\author xiantia
-	\version 1.3.2
-
-	Struct of all Breakpoints strored for one file
-	\note One file can contains more breakpoints.
+	/*!
+		\brief It is a struct for store all breakpoints for one file
+		\details Struct of all Breakpoints strored for one file
+		\note One file can contains more breakpoints.
 	*/
 	typedef struct Breakpoint
 	{
