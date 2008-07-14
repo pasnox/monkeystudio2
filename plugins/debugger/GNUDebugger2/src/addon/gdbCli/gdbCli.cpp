@@ -6,6 +6,13 @@
  * LICENSE      : GPL
  * COMMENTARY   : 
  ********************************************************************************************************/
+/*!
+	\file gdbCli.cpp
+	\date 14/08/08
+	\author Xiantia
+	\version 1.3.2
+ 	\brief Implements all functions for send user command to Gdb.This class is an AddOn for GNU debugger
+*/
 
 /*
 
@@ -21,7 +28,10 @@
 #include <QMessageBox>
 #include <QFileInfo>
 
-
+/*!
+	\details Create new object
+	\param parent of this object
+*/
 GdbCli::GdbCli(QObject * parent) : GdbCore(parent)
 {
 	setEnabled(true);
@@ -33,6 +43,9 @@ GdbCli::GdbCli(QObject * parent) : GdbCore(parent)
 
 //
 
+/*!
+	\details Delete container
+*/
 GdbCli::~GdbCli()
 {
 	delete mWidget;
@@ -127,6 +140,9 @@ void GdbCli::prompt(const int &, const QString & s){
 	setWaitEndProcess(false);
 }
 
+/*!
+	\details Calling when user click on "Send" button. This function send user command to Gdb.
+*/
 void GdbCli::onSend()
 {
 	QString s = mWidget->lineEdit->text();

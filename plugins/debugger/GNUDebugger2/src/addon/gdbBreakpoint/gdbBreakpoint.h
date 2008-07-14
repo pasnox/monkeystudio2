@@ -1,12 +1,27 @@
-/********************************************************************************************************
- * PROGRAM      : Debugger
- * DATE - TIME  : lundi 31 mai 2008 - 18h04
- * AUTHOR       : Xiantia
- * FILENAME     : GdbBreakpoint
- * LICENSE      : GPL
- * COMMENTARY   : 
- ********************************************************************************************************/
+/****************************************************************************
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
+/*!
+	\file gdbBreakpoint.h
+	\date 14/08/08
+	\author Xiantia
+	\version 1.3.2
+	\brief Implements all functions for remote breakpoints.This class is an AddOn for GNU debugger
+*/
 /*
 
 	GdbBreakpoint class
@@ -27,13 +42,10 @@
 
 #include "gdbBreakpointStruct.h"
 
-//! Implements all functions for remote breakpoint.This class is an AddOn for GNU debugger
+/*!
+	\brief Implements all functions for remote breakpoints.This class is an AddOn for GNU debugger
 
-/**
-\author xiantia
-\version 1.3.2
-
-This class can toogle breakpoint when user click in the margin, enable or disable breakpoint from UIGdbBreakpoint and set
+	\details This class can toogle breakpoint when user click in the margin, enable or disable breakpoint from UIGdbBreakpoint and set
 condition or not.
 
 It will start by adding seven interpreters has GdbParser for parse only specific line:
@@ -107,6 +119,10 @@ Then to connect them to the corresponding functions.
 According to the events, the GdbBreakpoint class  modify the struct Breakpoint and emits the signal onToggleBreakpoint
 */
 
+*/
+
+
+
 class GdbBreakpoint : public GdbCore
 {
 	Q_OBJECT
@@ -119,78 +135,21 @@ public:
 
 public slots:
 
-	//! Calling when Gdb has executed correctly the last command "enable numBreak", Calling by GdbConnectTemplate
-	/**
-	When this command is executed correctly , this function is call by an interpreter. Now this function can emit onToggleBreakpoint
-	*/
 	void onBreakpointEnabled(int, QString);
-	
-	//! Calling when Gdb has executed correctly the last command "Disable numBreak", Calling by GdbConnectTemplate
-	/**
-	When this command is correctly executed , this function is call by an interpreter. Now this function can emit onToggleBreakpoint
-	*/
 	void onBreakpointDisabled(int, QString);
-	
-	//! Calling when user want enable or disable breakpoint from UIGdbBreakpoint
-	/**
-	 This function send "enable numBreak" or "disable numBreak" to Gdb. If the answer from Gdb is correct, an interpreter switch to the correct function
-	 onBreakpointEnabled() or onBreakpointDisabled()
-	*/
 	void toggleEnabledBreakpoint(const QString & ,const int & , const bool &);
 
-
-	
-	
-	//! Add breakpoint, calling when "delete numBreak" command is correctly executed. Calling by GdbConnectTemplate
-	/**
-	When this command is correctly executed , this function is call by an interpreter. Now this function can emit onToggleBreakpoint
-	*/
 	void onBreakpointAdd( int , QString );
-	//! Delete breakpoint,calling when "b main.cpp:23" command is correctly executed. Calling by GdbConnectTemplate
-	/**
-	When this command is correctly executed , this function is call by an interpreter. Now this function can emit onToggleBreakpoint
-	*/
 	void onBreakpointDelete( int , QString );
-	//! Calling when user click in the margin
-	/**
-	This function send "delete numBreak" or "b fileName:line" to Gdb. If the answer from Gdb is correct, an interpreter switch to the correct function
-	 onBreakpointDelete() or onBreakpointAdd()
-	*/
 	void toggleBreakpoint(const QString &, const int &);
 
-
-
-	//! Condition or not a breakpoint, calling when "condition numBreak condition" command is correctly executed. Calling by GdbConnectTemplate
-	/**
-	When this command is correctly executed , this function is call by an interpreter. Now this function can emit onToggleBreakpoint
-	*/
 	void onBreakpointConditionned(int, QString);
-	//! Condition or not a breakpoint, calling when "condition numBreak" command is correctly executed. Calling by GdbConnectTemplate
-	/**
-	When this command is correctly executed , this function is call by an interpreter. Now this function can emit onToggleBreakpoint
-	*/
 	void onBreakpointUnConditionned(int, QString);
-
-	//! Calling when user want contionned breakpoint from UIGdbBreakpoint
-	/**
-	This function send "condition numBreak condition" or "condition numBreak" to Gdb. If the answer from Gdb is correct, an interpreter switch to the correct function
-	 onBreakpointUnConditionned() or onBreakpointConditionned()
-	*/
 	void toggleConditionnedBreakpoint(const QString &, const int &, const QString &);
 
-	//! Calling when a new file is opened
-	/**
-	Find if this file have some breakpoints. In this case, this function emit onToggleBreakpoint signal
-	*/
 	void onRequestBreakpoint(const QString & );
-
-	//! Set breakpoint, but the current lib is not loaded by Gdb
 	void onBreakpointPending(int, QString );
 	
-	//! Generique interpreter 
-	/**
-	Switch all interpreter to the correct function
-	*/
 	void interpreter(const QPointer<BaseInterpreter> & , const int & , const QString & );
 
 	QString name();
@@ -218,70 +177,67 @@ public slots:
 
 private:
 
-	//! Connect interpreter to function
+	/*! 
+		\details Connect interpreter to function
+	*/
 	GdbConnectTemplate<GdbBreakpoint> Connect;
-	//! List of all breakpoint, struct Breakpoint
+	/*! 
+		\details  List of all breakpoints, struct Breakpoint
+	*/
 	QList<Breakpoint *>  breakpointList;
 
-	//! Connect "b fileName:Line" command to onAddBreakpoint function 
+	/*! 
+		\details Connect "b fileName:Line" command to onAddBreakpoint() function 
+	*/
 	QPointer<BaseInterpreter> interpreterAddBreakpoint;
-	//! Connect "delete numBreak" command to onDeleteBreakpoint function 
+	
+	/*! 
+		\details Connect "delete numBreak" command to onDeleteBreakpoint() function 
+	*/
 	QPointer<BaseInterpreter> interpreterDelBreakpoint;
 
-	//! Connect "enable numBreak" command to onEnableBreakpoint function 
+	/*! 
+		\details Connect "enable numBreak" command to onEnableBreakpoint() function 
+	*/
 	QPointer<BaseInterpreter> interpreterEnabledBreakpoint;
-	//! Connect "disable numBreake" command to onDisableBreakpoint function 
+	/*! 
+		\details Connect "disable numBreake" command to onDisableBreakpoint() function 
+	*/
 	QPointer<BaseInterpreter> interpreterDisabledBreakpoint;
 
-	//! Same as "b fileName:line" command but lib is not loaded by Gdb 
+	/*! 
+		\details Same as "b fileName:line" command but lib is not loaded by Gdb 
+	*/
 	QPointer<BaseInterpreter> interpreterBreakpointPending;
 
-	//! Connect "condition numBreak myCondition" command to onConditionnedBreakpoint function 
+	/*! 
+		\details Connect "condition numBreak myCondition" command to onConditionnedBreakpoint() function 
+	*/
 	QPointer<BaseInterpreter> interpreterConditionnedBreakpoint;
-	//! Connect "condition numBreak" command to onUnConditionnedBreakpoint function 
+
+	/*! 
+		\details Connect "condition numBreak" command to onUnConditionnedBreakpoint() function 
+	*/
 	QPointer<BaseInterpreter> interpreterUnConditionnedBreakpoint;
 
-	//! Find in list 
-	/**
-	* \retval A pointer to the main struct, in this struct you have all breakpoint for this file, if it has. Else return NULL 
-	*/
 	Breakpoint * findByName(const QString &);
-
-	//! Find if file has already breakpoint at this line
-	/**
-	* \retval true if have, else false
-	*/
 	int asBreakpointAtLine(Breakpoint *, int);
-
-	//! Find if file has already breakpoint with this index (index is returned by Gdb)
-	/**
-	* \retval true if have, else false
-	*/
 	int asBreakpointIndex(Breakpoint *b, int index);
 
-	//! Remove all breakpoints for this file
 	void removeBreakpoint(Breakpoint * bp);
-	//! Remove all breakpoints (clear list)
 	void removeAllBreakpoint();
 
-	//! Calling when a breakpoint has moved
-	/**
-	Some time Gdb move breakpoint to the next line
-	*/
 	void breakpointMoved(const QString & , const int & , const int & );
-	//! Hide icon in UIGdbBreakpoint. 
 	void desableBreakpointHit();
 
 	QPointer<UIGdbBreakpoint> mWidget;
 
 signals:
 
-	//! Emit for indicats that this breakpoint is add, deleted or modified.
-	/**
-	Breakpoint is a struct, it use for have file name (Breakpoint.fileName).
-	BaseBreakpoint is a struct, only one breakpoint, in this case is the current breakpoint.
+	/*!
+	\details Emit for indicats that this breakpoint is add, deleted or modified.
 	*/
-	void onToggleBreakpoint(const Breakpoint & , const BaseBreakpoint & , const bool &);
+		void onToggleBreakpoint(const Breakpoint & , const BaseBreakpoint & , const bool &);
 };
 
 #endif

@@ -1,22 +1,35 @@
-/********************************************************************************************************
- * PROGRAM      : Debugger
- * DATE - TIME  : lundi 31 mai 2008 - 18h04
- * AUTHOR       : Xiantia
- * FILENAME     : GdbBridgeEditor
- * LICENSE      : GPL
- * COMMENTARY   : 
- ********************************************************************************************************/
+/****************************************************************************
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
+/*!
+	\file gdbBridgeEditor.1.3.h
+	\date 14/08/08
+	\author Xiantia
+	\version 1.3.2
+	\brief Implements all functions for remote Qsci.
+*/
 
 #include "gdbBridgeEditor.1.3.h"
 
 #include <QMessageBox>
 
-/*
-Contructor of GdbBrigdeEditor
-
-GdbBridgeEditor connect signal from Qsci Editor and GNU Debugger plugin
- 
+/*!
+	\details Create new object
+	\param parent of this object
 */
 GdbBridgeEditor::GdbBridgeEditor(QObject *parent) : QObject(parent)
 {
@@ -26,17 +39,20 @@ GdbBridgeEditor::GdbBridgeEditor(QObject *parent) : QObject(parent)
 }
 
 //
-
+/*!
+	\details Remove all breakpoints and backtrace in editor
+*/
 GdbBridgeEditor::~GdbBridgeEditor()
 {
 	removeAllBreakpoints();
 	removeBacktrace();
 }
 
-/*
-Save the new Qsci editor in <b>editorList</b> variable
-
-When user open a new Qsci editor (code source) this function is call and save the current pointer 
+/*!
+	\details New file is opened.
+	When a new editor (source code) is opened this function is call, it store fileName and pointer in Editor struct. 
+	Set sensitivity the margin and request if this file has breakpoint or backtrace before the last closed.
+	\param s is de name of editor
 */
 void GdbBridgeEditor::addEditor(const QString & s)
 {
@@ -64,12 +80,13 @@ void GdbBridgeEditor::addEditor(const QString & s)
 	}
 }
 
-/*
-Signal form Qsci indicate the user select text
-
-When user select text in editor, GNU debugger plugin can show a value of variable 
+	
+/*!
+	\details User has selected string in editor
+	If user select string in editor, this string is possible a var, Gdb can print the value of this.
+	GdbToolTip show this value in the tooltip.
+	\param b indicate the new text is selected in editor
 */
-
 void GdbBridgeEditor::onCopyAvailable(bool b)
 {
 	pEditor *e = MonkeyCore::fileManager()->currentChild()->currentEditor();
@@ -77,10 +94,9 @@ void GdbBridgeEditor::onCopyAvailable(bool b)
 		emit requestShowVar(e->selectedText());
 }
 
-/*
-Remove pointer saved in <b>editorList</b> variable
-
-When user close Qsci editor (code source) this function is call and remove the current pointer 
+/*!
+	\details Remove Qsci pointer to the list, when this editor is cliosed by a user
+	\param i is the index in this list
 */
 void GdbBridgeEditor::removeEditor(const int & i)
 {
@@ -89,10 +105,9 @@ void GdbBridgeEditor::removeEditor(const int & i)
 		editorList.removeAt(i);
 }
 
-/*
-Remove all breakpoints icon in Qsci editor
+/*!
+	\details Remove all icons (breakpoint) in QSci margin  for all editor opened
 */
-
 void GdbBridgeEditor::removeAllBreakpoints()
 {
 	foreach(Editor e , editorList)
@@ -105,8 +120,10 @@ void GdbBridgeEditor::removeAllBreakpoints()
 	}
 }
 
-/*
-Remove all icons in Qsci editor <b>e</b> present in <b>line</b>
+/*!
+	\details  Remove all icons (breakpoints) at line for only one editor
+	\param e is the pointer to the editor
+	\param line is the line number
 */
 void GdbBridgeEditor::removeAllBreakpointsAt( pEditor *e , const int & line)
 {
@@ -116,10 +133,9 @@ void GdbBridgeEditor::removeAllBreakpointsAt( pEditor *e , const int & line)
 		e->markerDelete(line, pEditor::mdDisabledConditionalBreak);	
 }
 
-/*
-Remove BackTrace icon in current editor 
+/*!
+	\details Remove all icons (backtrace) in Qsci margin for all editor opened
 */
-
 void GdbBridgeEditor::removeBacktrace()
 {
 	foreach(Editor e , editorList)
@@ -128,10 +144,9 @@ void GdbBridgeEditor::removeBacktrace()
 	}
 }
 
-/*
-Same as Add() function but save Qsci editor pointer if is opened before GNU debugger is started
+/*!
+	\details Same as add function, but call when editor is opened before GNU plugin is started
 */
-
 void GdbBridgeEditor::fileOpenedBeforeDebugger()
 {
 	//find if editor is open before load plugin
@@ -156,10 +171,14 @@ void GdbBridgeEditor::fileOpenedBeforeDebugger()
 	}
 }
 
-/*
-User click in Qsci margin
+/*!
+	\details User has clicked in the margin.
+	When user click in the margin, this function emit userToggleBreakpoint signal.
+	GdbBreakpoint class answer and call onToggleBreakpoint function via DockGNUDebugger class.
+	\param margeIndex is the maring index
+	\param line is the line number for set breakpoint
+	\param d is Qt::KeyboardModifiers
 */
-
 void GdbBridgeEditor::onMarginClicked( int margeIndex, int line, Qt::KeyboardModifiers d)
 {
 	// get the name of the current file
@@ -170,10 +189,12 @@ void GdbBridgeEditor::onMarginClicked( int margeIndex, int line, Qt::KeyboardMod
 	}
 }
 
-/*
-Toggle breakpoint icon 
+/*!
+	\details Toggle breakpoint icon in margin
+	\param bp is Breakpoint struct 
+	\param p is BaseBreakpoint struct
+	\param b indicate if breakpoint is add or delete
 */
-
 void GdbBridgeEditor::onToggleBreakpoint(const Breakpoint & bp, const BaseBreakpoint & p, const bool & b)
 {
 	pEditor * e = findFile(bp.fileName);
@@ -195,10 +216,12 @@ void GdbBridgeEditor::onToggleBreakpoint(const Breakpoint & bp, const BaseBreakp
 	}
 }
 
-/*
-Toggle backtrace icon
+/*!
+	\details //! Toggle backtrace icon in margin.
+	Move backtrace in editor where Gdb has breaked
+	\param fileName is the name of this file 
+	\param line is the line number
 */
-
 void GdbBridgeEditor::onToggleBacktrace(const QString & fileName, const int & line)
 {
 	// remove back trace in all editor
@@ -217,8 +240,10 @@ void GdbBridgeEditor::onToggleBacktrace(const QString & fileName, const int & li
 
 }
 
-/**
-Find file in <b>editorList</b> variable
+/*!
+	\details find file by name
+	\param file is the name of file
+	\retval A pointer to the editor or NULL if not found.
 */
 pEditor * GdbBridgeEditor::findFile(const QString & file)
 {

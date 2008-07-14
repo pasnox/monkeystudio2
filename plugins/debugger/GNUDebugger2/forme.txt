@@ -8,7 +8,7 @@ http://trac.monkeystudio.org/wiki/TempAbbreviatons
 
 - Pb de droit sous linux pour le save gdbparsing.txt
 
-- Utiliser le target par defaut de monkey , peut tre fixé
+- Utiliser le target par defaut de monkey , peut etre fixé
 
 - bug si deux fichiers on le meme nom mais a des endroits different, peut etre fixé
 

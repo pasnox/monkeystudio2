@@ -1,26 +1,45 @@
-/*
+/****************************************************************************
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
-Info	:	decompilation des structures 	
-by	:	Xiantia
-version	:	1.0
-date	:	28/11/06
-licence	:	owner
- 	
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
+/*!
+	\file gdbWatchStruct.cpp
+	\date 14/08/08
+	\author Xiantia
+	\version 1.3.2
+	\brief This class implements all functions for unformated structure from Gdb. Used by GdbWatch class 
 */
 
 
 #include "gdbWatchStruct.h"
 #include <QMessageBox>
 
-
-// extrait les membres de la  structure
-// exemple : "rtf = {art = {0}, a = 5 , b = 6 , rtf  = {t = 12 , r = 34}}"
-// return  :
-// 1 : art = {0}
-// 2 : a = 5
-// 3 : b = 6
-// 4 : rtf = {t = 12 , r = 34}
-
+/*!
+	\details Extract member from sturct
+	\param val is the string of struct.
+	\code
+	example : "rtf = {art = {0}, a = 5 , b = 6 , rtf  = {t = 12 , r = 34}}"
+	return  :
+	1 : art = {0}
+	2 : a = 5
+	3 : b = 6
+	4 : rtf = {t = 12 , r = 34}
+	\endcode
+	\retval List of all members.
+*/
 QStringList WatchStruct::extractMember(QString val)
 {
 int count =-1;
@@ -65,10 +84,13 @@ QStringList memberList;
 }
 
 
-// return le type du membre de la structure
-// 2 : c'est une autre structure
-// 1 : membre " x = y"
-// 0 : membre orphelin "0x00"
+/*!
+	\details Return type of member
+	\param val is the member name
+	\retval  2 if member is a other struct
+	\retval  1 if member is egality "x = 2"
+	\retval  0 if member is orphelin "0x00"
+*/
 int WatchStruct::memberType(QString val)
 {
 QString name;
@@ -86,7 +108,11 @@ QStringList arg;
 }
 
 
-// formatage des membres
+/**
+	\details Return the member correctly formated.
+	\param val is the string
+	\retval Member correctly formated.
+*/
 QStringList WatchStruct::formatMember(QString val)
 {
 	if(val.contains("="))
@@ -104,6 +130,24 @@ QStringList WatchStruct::formatMember(QString val)
 
 // recursive function
 // fixed 1.3.2 07/07/08
+/*!
+ * \details Unformated structure from Gdb and create child of QTreeWidget.
+ *
+ * Recursive function.
+ * For example Gdb send myStruct = { a = 3, b = { x = 4, y = 6}}.
+ * After formated you see correctly this struture in QTreeWidget
+ *
+ * \code 
+ * Var Name			Value
+ * myStruct
+ *	|_ a			3
+ *	|_ b			
+ *		|_ x		4
+ *		|_ y		6
+ * \endcode
+ * \param parentItem is the parent item
+ * \param val is the value has decompil
+*/
 void WatchStruct::decompilStrut(QTreeWidgetItem *parentItem, QString val)
 {
 QString memberBlock;
@@ -143,40 +187,3 @@ int index = 0;
 	}// end for
 }
 
-/*
-void WatchStruct::decompilStrutUpdate(QTreeWidgetItem *parentItem, QString val)
-{
-QString memberBlock;
-int index=0;
-
-	QStringList memberList = extractMember(val);
-
-	for(int i=0; i<memberList.count();i++)
-	{
-		memberBlock = memberList.at(i);
-		while(memberBlock.startsWith(" ")) memberBlock.remove(0,1);
-		QTreeWidgetItem *child;	
-		child = parentItem->child(index);
-		// quelques fois Gdb ajout un nouveau membre et comme il n'est 
-		// pas initialisé on plante d'iou le test suivant
-		if(child == NULL ) return;
-		
-		switch(memberType(memberBlock))
-		{
-			case 0:
-				child->setText(3, "$ = " + memberBlock);
-				decompilStrutUpdate(child, memberBlock);
-			break;
-			case 1 :
-//				isVariableChangedValue(child,"$ = " + formatMember(memberBlock).at(1));
-				child->setText(3, "$ = " + formatMember(memberBlock).at(1));
-			break;
-			case 2:
-//				isVariableChangedValue(child,"$ = " + memberList.at(i).right(memberList.at(i).length() - memberList.at(i).indexOf(" = {") - 3));
-				child->setText(3, "$ = " + memberList.at(i).right(memberList.at(i).length() - memberList.at(i).indexOf(" = {") - 3));
-				decompilStrutUpdate(child, memberBlock);
-		} // end switch
-		index++;
-	}// end for
-}
-*/

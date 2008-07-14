@@ -1,3 +1,28 @@
+/****************************************************************************
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
+/*!
+	\file DockGNUDebugger.h
+	\date 14/08/08
+	\author Xiantia
+	\version 1.3.2
+	\brief This class is a main class container. 
+*/
+
 #ifndef PDOCKGNUDEBUGGER_H
 #define PDOCKGNUDEBUGGER_H
 
@@ -30,47 +55,43 @@
 #include "./addon/gdbScript/gdbScript.h"
 
 /*!
-* \brief This class is a main class container. 
-* \file DockGNUDebugger.h 
-* \author xiantia
-* \version 1.3.2
-* DockGNUDebugger is created by GNUDebugger.
-* Those is the main container class. It creates all AddOn and the connect together.
-* It has under its GdbParser order which parse warp the data coming from Gdb, 
-* GdbProcess which controls Gdb, GdbBridgeEditor which control the editor Qsci and GdbKernelDispatcher which control AddOn.
-* The creation of AddOn is very simple.
-* AddOn are class which adds news function to the debugger such as GdbBreakpoint and GdbWatch.
-* For that it has pointers on AddOn and add them to GdbKernelDispatcher so that AddOn receives the messages coming from GdbParser.
-*
-* in .h
-*
-* \code
-*	// declare pointer to AddOn
-*	class GdbBreakpoint *Breakpoint;
-* \endcode
-*
-* in .cpp
-*
-* \code
-*	// create new class
-*	Breakpoint = new GdbBreakpoint(this);
-*	// add them to Dispatcher
-*	Dispatcher->add(Breakpoint);
-* \endcode
-*
-* Connect signals
-*
-* \code
-*	connect(Bridge, SIGNAL(requestBreakpoint(const QString &)), Breakpoint , SLOT(onRequestBreakpoint(const QString &)));
-* \endcode
-*
-* Once creates AddOn are visible in QTabWidget of DockGNUDebugger if the function widget() return a pointer not NULL.
-*
-*
-*\note All AddOn must derive from GdbCore.
-*
+	\brief This class is a main class container. 
+	\details 
+	* DockGNUDebugger is created by GNUDebugger.
+	* Those is the main container class. It creates all AddOn and the connect together.
+	* It has under its GdbParser order which parse warp the data coming from Gdb, 
+	* GdbProcess which controls Gdb, GdbBridgeEditor which control the editor Qsci and GdbKernelDispatcher which control AddOn.
+	* The creation of AddOn is very simple.
+	* AddOn are class which adds news function to the debugger such as GdbBreakpoint and GdbWatch.
+	* For that it has pointers on AddOn and add them to GdbKernelDispatcher so that AddOn receives the messages coming from GdbParser.
+	*
+	* in .h
+	*
+	* \code
+	*	// declare pointer to AddOn
+	*	class GdbBreakpoint *Breakpoint;
+	* \endcode
+	*
+	* in .cpp
+	*
+	* \code
+	*	// create new class
+	*	Breakpoint = new GdbBreakpoint(this);
+	*	// add them to Dispatcher
+	*	Dispatcher->add(Breakpoint);
+	* \endcode
+	*
+	* Connect signals
+	*
+	* \code
+	*	connect(Bridge, SIGNAL(requestBreakpoint(const QString &)), Breakpoint , SLOT(onRequestBreakpoint(const QString &)));
+	* \endcode
+	*
+	* Once creates AddOn are visible in QTabWidget of DockGNUDebugger if the function widget() return a pointer not NULL.
+	*
+	*
+	*\note All AddOn must derive from GdbCore.
 */
-
  
 class DockGNUDebugger : public pDockWidget, public QSingleton<DockGNUDebugger>
 {
@@ -81,62 +102,62 @@ class DockGNUDebugger : public pDockWidget, public QSingleton<DockGNUDebugger>
 public:
 
 	/*!
-	 * \detail Pointer to GdbParser Class
+	 * \details Pointer to GdbParser Class
 	*/
 	QPointer<GdbParser> Parser;
 
 	/*!
-	 * \detail Pointer to GdbProcess Class
+	 * \details Pointer to GdbProcess Class
 	*/
 	QPointer<GdbProcess> Process;
 	
 	/*!
-	 * \detail Pointer to GdbBridgeEditor Class
+	 * \details Pointer to GdbBridgeEditor Class
 	*/
 	QPointer<GdbBridgeEditor> Bridge;
 
 	/*!
-	 * \detail Pointer to GdbKernelDispatcher Class
+	 * \details Pointer to GdbKernelDispatcher Class
 	*/
 	QPointer<GdbKernelDispatcher> Dispatcher;
 
 	/*!
-	 * \detail Create GdbBreakpoint Pointer Class
+	 * \details Create GdbBreakpoint Pointer Class
 	*/
 	class GdbBreakpoint *Breakpoint;
 
 	/*!
-	 * \detail Create GdbBacktrace Pointer Class
+	 * \details Create GdbBacktrace Pointer Class
 	*/
 	class GdbBacktrace *Backtrace;
 
 	/*!
-	 * \detail Create GdbBreakpoint Pointer Class
+	 * \details Create GdbBreakpoint Pointer Class
 	*/
 	class GdbRegister *Register;
 
 	/*!
-	 * \detail Create GdbWatch Pointer Class
+	 * \details Create GdbWatch Pointer Class
 	*/
 	class GdbWatch *Watch;
 
 	/*!
-	 * \detail Create GdbCli Pointer Class
+	 * \details Create GdbCli Pointer Class
 	*/
 	class GdbCli *Cli;
 
 	/*!
-	 * \detail Create GdbToolTip Pointer Class
+	 * \details Create GdbToolTip Pointer Class
 	*/
 	class GdbToolTip *ToolTip;
 
 	/*!
-	 * \detail Create GdbScript Pointer Class
+	 * \details Create GdbScript Pointer Class
 	*/
 	class GdbScript *Script;
 
 	/*!
-	 * \detail Contains all action from GNUDebugger class plugin, this action is viewed in Monkey Studio ToolBar
+	 * \details Contains all action from GNUDebugger class plugin, this action is viewed in Monkey Studio ToolBar
 	*/
 	void setAction(QHash<QString, QAction*> *);
 
@@ -150,62 +171,62 @@ private:
 
 	// interpreter 
 	/*!
-	 * \detail Connect is a GdbConnectTemplate var, it's use for connect interperter to other function
+	 * \details Connect is a GdbConnectTemplate var, it's use for connect interperter to other function
 	*/
 	GdbConnectTemplate<DockGNUDebugger> Connect;
 
 	/*!
-	 * \detail Contains interpreterStepOver pointer. This pointer is connect to onTargetStopped function
+	 * \details Contains interpreterStepOver pointer. This pointer is connect to onTargetStopped function
 	*/
 	QPointer<BaseInterpreter> interpreterStepOver;
 
 	/*!
-	 * \detail Contains interpreterStepInto pointer. This pointer is connect to onTargetStopped function
+	 * \details Contains interpreterStepInto pointer. This pointer is connect to onTargetStopped function
 	*/
 	QPointer<BaseInterpreter> interpreterStepInto;
 
 	/*!
-	 * \detail Contains interpreterStepFinish pointer. This pointer is connect to onTargetStopped function
+	 * \details Contains interpreterStepFinish pointer. This pointer is connect to onTargetStopped function
 	*/
 	QPointer<BaseInterpreter> interpreterStepFinish;
 	
 	/*!
-	 * \detail Main container for GNU debugger is QTabWidget
+	 * \details Main container for GNU debugger is QTabWidget
 	*/
 	QTabWidget *mainTabWidget;
 
 	/*!
-	 * \detail Add raw log in QTabWidget
+	 * \details Add raw log in QTabWidget
 	*/
 	QTextEdit *rawLog;
 
 	/*!
-	 * \detail Path and name of target selected
+	 * \details Path and name of target selected
 	*/
 	QString mSelectedTarget;
 
 	/*!
-	 * \detail Action list for remote MonkeyStudio::toolBar
+	 * \details Action list for remote MonkeyStudio::toolBar
 	*/
 	QHash<QString, QAction*> *mActionList;
 
 	/*!
-	 * \detail End of line
+	 * \details End of line
 	*/
 	QString crlf;
 
 	/*!
-	 * \detail Indicate if Gdb is started
+	 * \details Indicate if Gdb is started
 	*/
 	bool isGdbStarted;
 	
 	/*!
-	 * \detail Indicate if target is running
+	 * \details Indicate if target is running
 	*/
 	bool isTargetRunning;
 
 	/*!
-	 * \detail This var is use for not have two stopped signal consecutive
+	 * \details This var is use for not have two stopped signal consecutive
 	*/
 	bool disableStep;	
 

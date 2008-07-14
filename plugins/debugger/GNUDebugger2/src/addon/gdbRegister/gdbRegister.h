@@ -1,12 +1,27 @@
-/********************************************************************************************************
- * PROGRAM      : Debugger
- * DATE - TIME  : lundi 31 mai 2008 - 18h04
- * AUTHOR       : Xiantia
- * FILENAME     : GdbRegister
- * LICENSE      : GPL
- * COMMENTARY   : 
- ********************************************************************************************************/
+/****************************************************************************
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
+/*!
+	\file gdbRegister.h
+	\date 14/08/08
+	\author Xiantia
+	\version 1.3.2
+	\brief Implements all functions for show values of cpu registers.This class is an AddOn for GNU debugger
+*/
 /*
 
 	GdbResgiter class
@@ -25,13 +40,11 @@
 #include "../../kernel/gdbSequencer.1.3.h"
 #include "./ui/UIGdbRegister.h"
 
-//! Implements all functions for show values of cpu registers.This class is an AddOn for GNU debugger
 
-/**
-\author xiantia
-\version 1.3.2
+/*!
+	\brief Implements all functions for show values of cpu registers.This class is an AddOn for GNU debugger
+ 	\details This class show in TabWidget all values of all cpu registers.
 
-This class show in TabWidget all values of all cpu registers.
 */
 class GdbRegister : public GdbCore
 {
@@ -45,19 +58,12 @@ public:
 
 public slots:
 
-	/**
-	 * \brief Calling when GdbParser class found correct interpreter (in this case interpreterRegister)
-	 * and call onRegister function.
-	 */
 	void onRegister( int , QString );
 
 	QString name();
 	QPointer<QWidget> widget();
 	QIcon icon();
 
-	/**
-	 * \brief This function call onRegister function.
-	 */
 	void interpreter(const QPointer<BaseInterpreter> & , const int & , const QString & );
 
 	// gdb
@@ -80,27 +86,24 @@ public slots:
 
 private:
 
-	/**
-	 * \brief This variable is a template for connect interpreterRegister and onRegister function
+	/*!
+	  \details This variable is a template for connect interpreterRegister and onRegister function
 	 */
 	GdbConnectTemplate<GdbRegister> Connect;
-	/**
-	 * \brief Pointer to interpreterRegister
+	/*!
+	  \details Pointer to interpreterRegister
 	 */
 	QPointer<BaseInterpreter> interpreterRegister;
 
-	/**
-	 * \brief Pointer to GdbSequencer contains all commands.
+	/*!
+	 \details Pointer to GdbSequencer contains all commands.
 	 */
 	QPointer<GdbSequencer> Sequencer;
-	//! Pointer to widget container
+
 	QPointer<UIGdbRegister> mWidget;
 
 	int numRegister;
 
-	/**
-	 * \brief Toogle color if new value of register has changed.
-	 */
 	void showColor(QTreeWidgetItem *, QString );
 };
 

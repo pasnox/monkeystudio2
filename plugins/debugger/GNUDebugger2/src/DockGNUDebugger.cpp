@@ -1,4 +1,27 @@
+/****************************************************************************
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
+/*!
+	\file DockGNUDebugger.cpp
+	\date 14/08/08
+	\author Xiantia
+	\version 1.3.2
+	\brief This class is a main class container. 
+*/
 
 #include "DockGNUDebugger.h"
 #include <settingsmanager.h>
@@ -16,21 +39,21 @@
 
 
 /*!
-* \detail Load current setting from Monkey .ini
+* \details Load current setting from Monkey .ini
 */
 void DockGNUDebugger::loadSettings()
 {
 }
 
 /*!
-* \detail Save current setting from Monkey .ini
+* \details Save current setting from Monkey .ini
 */
 void DockGNUDebugger::saveSettings()
 {
 }
 
 /*!
-* \detail Create a new object.
+* \details Create a new object.
 */
 DockGNUDebugger::DockGNUDebugger( QWidget * w )
 	: pDockWidget( w ), isGdbStarted(false), isTargetRunning(false)
@@ -164,7 +187,7 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 }
 
 /*!
-* \detail Delete main container
+* \details Delete main container
 */
 DockGNUDebugger:: ~DockGNUDebugger()
 {
@@ -172,7 +195,7 @@ DockGNUDebugger:: ~DockGNUDebugger()
 }
 
 /*!
-* \detail Set actions from GNUDebugger to this class.
+* \details Set actions from GNUDebugger to this class.
 */
 void DockGNUDebugger::setAction(QHash<QString, QAction *> *a)
 {
@@ -181,7 +204,7 @@ void DockGNUDebugger::setAction(QHash<QString, QAction *> *a)
 
 /*!
 * \details Enable or disable all actions in Monkey toolBar.
-* \param If b is true, all actions are enable, else are disable.
+* \param b is true, all actions are enable, else are disable.
 */
 void DockGNUDebugger::setEnabledActions(bool b)
 {
@@ -190,7 +213,7 @@ void DockGNUDebugger::setEnabledActions(bool b)
 }
 
 /*!
-* \detail Calling when Gdb has an answer or Gdb has new datas, after it call GdbParser for parse this string.
+* \details Calling when Gdb has an answer or Gdb has new datas, after it call GdbParser for parse this string.
 * \param d is raw data from Gdb
 */
 void DockGNUDebugger::commandReadyRead(  const QString& d)
@@ -204,7 +227,7 @@ void DockGNUDebugger::commandReadyRead(  const QString& d)
 // Actions
 
 /*!
-* \detail When user click <b>Load target</b> action in Monkey toolBar. This function start Gdb and load the target.
+* \details When user click <b>Load target</b> action in Monkey toolBar. This function start Gdb and load the target.
 */
 void DockGNUDebugger::onActionLoadTarget()
 {
@@ -237,7 +260,7 @@ void DockGNUDebugger::onActionLoadTarget()
 }
 
 /*!
-* \detail When user click <b>Exit debug mode</b> action in Monkey toolBar. Stop and quit Gdb.
+* \details When user click <b>Exit debug mode</b> action in Monkey toolBar. Stop and quit Gdb.
 */
 void DockGNUDebugger::onActionExit()
 {
@@ -257,7 +280,7 @@ void DockGNUDebugger::onActionExit()
 
 	
 /*!
-* \detail When user click <b>Restart target</b> action in Monkey toolBar. This function restart the target at the begining.
+* \details When user click <b>Restart target</b> action in Monkey toolBar. This function restart the target at the begining.
 */
 void DockGNUDebugger::onActionRestart()
 {
@@ -279,7 +302,7 @@ void DockGNUDebugger::onActionRestart()
 }
 
 /*!
-* \detail When user click <b>Continue</b> action in Monkey toolBar. This function start and stop target to the next breakpoint, if has.
+* \details When user click <b>Continue</b> action in Monkey toolBar. This function start and stop target to the next breakpoint, if has.
 */
 void DockGNUDebugger::onActionContinue()
 {
@@ -293,7 +316,7 @@ void DockGNUDebugger::onActionContinue()
 }
 
 /*!
-* \detail When user click <b>Step over</b> action in Monkey toolBar. This function execute step over.
+* \details When user click <b>Step over</b> action in Monkey toolBar. This function execute step over.
 */
 void DockGNUDebugger::onActionStepOver()
 {
@@ -309,7 +332,7 @@ void DockGNUDebugger::onActionStepOver()
 
 	
 /*!
-* \detail When user click <b>Step into</b> action in Monkey toolBar. This function execute step into.
+* \details When user click <b>Step into</b> action in Monkey toolBar. This function execute step into.
 */
 void DockGNUDebugger::onActionStepInto()
 {
@@ -325,7 +348,7 @@ void DockGNUDebugger::onActionStepInto()
 
 	
 /*!
-* \detail When user click <b>Step finish</b> action in Monkey toolBar. This function carry out the function until the end.
+* \details When user click <b>Step finish</b> action in Monkey toolBar. This function carry out the function until the end.
 */
 void DockGNUDebugger::onActionStepFinish()
 {
@@ -343,7 +366,7 @@ void DockGNUDebugger::onActionStepFinish()
 // Gdb
 
 /*!
-* \detail Calling when Gdb is started correctly and dispatch this event to all AddOn.
+* \details Calling when Gdb is started correctly and dispatch this event to all AddOn.
 */
 void DockGNUDebugger::gdbStarted()
 {
@@ -371,8 +394,9 @@ void DockGNUDebugger::gdbStarted()
 
 
 /*!
-* \detail Calling when Gdb is finiched correctly and dispatch this event to all AddOn.
+* \details Calling when Gdb is finiched correctly and dispatch this event to all AddOn.
 * \param e is QProcess::ExitStatus var.
+* \param a is an interger
 */
 void DockGNUDebugger::gdbFinished( int a , QProcess::ExitStatus e)
 {
@@ -398,7 +422,7 @@ void DockGNUDebugger::gdbFinished( int a , QProcess::ExitStatus e)
 
 
 /*!
-* \detail Calling when Gdb generate a error and dispatch this event to all AddOn.
+* \details Calling when Gdb generate a error and dispatch this event to all AddOn.
 * \param e is QProcess::ProcessError var.
 */
 
@@ -438,7 +462,7 @@ void DockGNUDebugger::gdbError( QProcess::ProcessError e)
 // Target
 
 /*!
-* \detail Target is loaded correctly. Dispatch now this event to all AddOn
+* \details Target is loaded correctly. Dispatch now this event to all AddOn
 * \param id is an Id of string
 * \param st is the string.
 */
@@ -454,7 +478,7 @@ void DockGNUDebugger::onTargetLoaded(int id, QString st)
 }
 
 /*!
-* \detail Target is no loaded correctly (format is not correct). Dispatch this event to all AddOn.
+* \details Target is no loaded correctly (format is not correct). Dispatch this event to all AddOn.
 * \param id is an Id of string
 * \param st is the string.
 */
@@ -471,7 +495,7 @@ void DockGNUDebugger::onTargetNoLoaded(int id, QString st)
 //
 
 /*!
-* \detail Target is running. Dispatch this event to all AddOn.
+* \details Target is running. Dispatch this event to all AddOn.
 * \param id is an Id of string
 * \param st is the string.
 */
@@ -492,7 +516,7 @@ void DockGNUDebugger::onTargetRunning(int id, QString st)
 }
 
 /*!
-* \detail Target is stopped (breakpoint for example). Dispatch this event to all AddOn.
+* \details Target is stopped (breakpoint for example). Dispatch this event to all AddOn.
 * \param id is an Id of string
 * \param st is the string.
 */
@@ -542,7 +566,7 @@ or
 
 	
 /*!
-* \detail Target is exited correctly. Dispatch this event to all AddOn.
+* \details Target is exited correctly. Dispatch this event to all AddOn.
 * \param id is an Id of string
 * \param st is the string.
 */
@@ -562,7 +586,7 @@ void DockGNUDebugger::onTargetExited(int id, QString st)
 
 // Parser
 /*!
-* \detail Error event. Calling when GdbParser emit error signal
+* \details Error event. Calling when GdbParser emit error signal
 * \param id is an Id of error
 * \param st is the Error string.
 */
@@ -579,7 +603,7 @@ void DockGNUDebugger::onError(int id, QString st)
 }
 
 /*!
-* \detail Done event. Calling when GdbParser emit done signal.
+* \details Done event. Calling when GdbParser emit done signal.
 * \param id is an Id of string
 * \param st is the Done string.
 */
@@ -593,9 +617,9 @@ void DockGNUDebugger::onDone(int id, QString st)
 }
 
 /*!
-* \detail Info event.	Calling when GdbParser emit info signal.
+* \details Info event.	Calling when GdbParser emit info signal.
 * \param id is an Id of string
-* \param is the Info string.
+* \param st is the Info string.
 */
 void DockGNUDebugger::onInfo(int id, QString st)
 {
@@ -607,7 +631,7 @@ void DockGNUDebugger::onInfo(int id, QString st)
 }
 
 /*!
-* \detail Prompt event. Calling when GdbParser emit prompt signal.
+* \details Prompt event. Calling when GdbParser emit prompt signal.
 * \param id egal 0
 * \param st is the Prompt string.
 */
@@ -625,7 +649,7 @@ void DockGNUDebugger::onPrompt(int id, QString st)
 // Interpreter for step over / into
 
 /*!
-* \detail Calling when GdbParser class emit interpreter signal. Now interpreter switch event to the correct function.
+* \details Calling when GdbParser class emit interpreter signal. Now interpreter switch event to the correct function.
 * \param i is a pointer to the BaseInterpreter struct
 * \param id is an Id of string
 * \param s is the string.
@@ -640,7 +664,7 @@ void DockGNUDebugger::onInterpreter(const QPointer<BaseInterpreter> & i, const i
 // from editor margin clicked
 
 /*!
-* \detail Calling when user click in the margin. Call GdbBreakpoint::toggleBreakpoint() function.
+* \details Calling when user click in the margin. Call GdbBreakpoint::toggleBreakpoint() function.
 * \param fileName is the name of file
 * \param line is the line number.
 */

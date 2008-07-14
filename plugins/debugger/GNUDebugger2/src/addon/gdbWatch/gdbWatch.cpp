@@ -1,12 +1,27 @@
-/********************************************************************************************************
- * PROGRAM      : Debugger
- * DATE - TIME  : lundi 31 mai 2008 - 18h04
- * AUTHOR       : Xiantia
- * FILENAME     : GdbBacktrace
- * LICENSE      : GPL
- * COMMENTARY   : 
- ********************************************************************************************************/
+/****************************************************************************
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
+/*!
+	\file gdbWatch.cpp
+	\date 14/08/08
+	\author Xiantia
+	\version 1.3.2
+	\brief  This class implements all functions for see user values. This class is an AddOn for GNU debugger 
+*/
 /*
 
 	GdbBacktrace class
@@ -22,7 +37,10 @@
 #include <QFileInfo>
 #include <QToolTip>
 
-
+/*!
+	\details Create new object
+	\param parent of this object
+*/
 GdbWatch::GdbWatch(QObject * parent) : GdbCore(parent)
 {
 	// new connexion 
@@ -70,7 +88,9 @@ GdbWatch::GdbWatch(QObject * parent) : GdbCore(parent)
 }
 
 //
-
+/*!
+	\details Delete container.
+*/
 GdbWatch::~GdbWatch()
 {
 	delete mWidget;
@@ -168,8 +188,11 @@ void GdbWatch::prompt(const int &, const QString & s)
 }
 
 // Interpreters
-
-void GdbWatch::onType(int id, QString s)
+/*!
+	\details Calling when Gdb print the type of the var.
+	\param s is the string from GdbParser.
+*/
+void GdbWatch::onType(int , QString s)
 {
 	QRegExp r("^type\\s+=\\s+(.*)$");
 
@@ -199,6 +222,10 @@ void GdbWatch::onType(int id, QString s)
 
 //
 
+/*!
+	\details Slot when GdbScript has finished translate Qt class
+	\param s is the value.
+*/
 void GdbWatch::onScriptFinishedTranslate(const QString & s)
 {
 	Sequencer->skipLoop();
@@ -206,7 +233,10 @@ void GdbWatch::onScriptFinishedTranslate(const QString & s)
 }
 
 //
-
+/*!
+	\details Calling when Gdb print the value of the var.
+	\param s is the string from GdbParser.
+*/
 void GdbWatch::onValue(int, QString s)
 {
 	QRegExp r("^\\$\\d+\\s+=\\s+(.*)$");
@@ -235,8 +265,11 @@ void GdbWatch::onValue(int, QString s)
 }
 
 //
-
-void GdbWatch::onAddress(int id, QString s)
+/*!
+	\details Calling when Gdb print adress of the var.
+	\param s is the string from GdbParser.
+*/
+void GdbWatch::onAddress(int , QString s)
 {
 	QRegExp r("^\\$\\d+\\s+=\\s+(.*)$");
 
@@ -267,7 +300,12 @@ void GdbWatch::onAddress(int id, QString s)
 }
 
 // Tools
-
+/*!
+	\details toggle color when the value has changed
+	\param p is the pointer to QTreeWidgetItem
+	\param index is the index of p
+	\param a is the new value
+*/
 void GdbWatch::showColor(QTreeWidgetItem *p, int index, QString a)
 {
 	// toggle color (black / red if value in treeWidget is not egal than new value
@@ -277,8 +315,9 @@ void GdbWatch::showColor(QTreeWidgetItem *p, int index, QString a)
 		p->setForeground( index , QBrush(Qt::black));
 }
 
-// when target is stopped
-
+/*!
+	\details Create sequencer with the var present in Ui
+*/
 void GdbWatch::createSequencer()
 {
 	QStringList l = mWidget->getAllvar();
@@ -291,7 +330,10 @@ void GdbWatch::createSequencer()
 }
 
 // when user drag and drop var in treewidget
-
+/*!
+	\details User drag and drop the new var in Ui
+	\param n is the name of var
+*/
 void GdbWatch::onUserAddVar(QString n)
 {
 	QList<SequencerCmd> s;
@@ -302,7 +344,12 @@ void GdbWatch::onUserAddVar(QString n)
 }
 
 //
+/*!
+	\details Get if var is a pointer or not
+	\param s is the name of var
+	\retval  true if var is a pointer
 
+*/
 bool GdbWatch::isPointer(const QString & s)
 {
 	if(s.contains("*")) return true;

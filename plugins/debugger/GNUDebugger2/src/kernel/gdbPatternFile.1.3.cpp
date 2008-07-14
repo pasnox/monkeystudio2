@@ -1,11 +1,28 @@
-/********************************************************************************************************
- * PROGRAM      : Debugger
- * DATE - TIME  : lundi 31 mai 2008 - 18h04
- * AUTHOR       : Xiantia
- * FILENAME     : GdbPatternFile
- * LICENSE      : GPL
- * COMMENTARY   : 
- ********************************************************************************************************/
+/****************************************************************************
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
+/*!
+	\file gdbPatternFile.1.3.cpp
+	\date 14/08/08
+	\author Xiantia
+	\version 1.3.2
+	\brief Load and store all patterns from gdbparing.txt file in list
+*/
+
 
 /*
 
@@ -29,12 +46,18 @@
 // debug
 #include <QMessageBox>
 
-
+/*!
+	\details Create new object
+	\param parent of this object
+*/
 GdbPatternFile::GdbPatternFile(QObject *parent) :  QObject(parent)
 {
 	GdbPatternList.clear();
 }
 
+/*!
+	\details Save current pattern list in file 
+*/
 GdbPatternFile::~GdbPatternFile()
 {
 	// save the pattern file
@@ -54,9 +77,12 @@ GdbPatternFile::~GdbPatternFile()
 	GdbPatternList.clear();
 }
 
-//
-// Load QRegExp to GdbPatterList
-//
+
+/*!
+	\details Load QRegExp froim file to GdbPatternList
+	\param fullName is the name of file
+	\retval true if the file is loaded correctly
+*/
 bool GdbPatternFile::load(const QString & fullName)
 {
 	// fullNme type /home/xiantia/dev/....
@@ -99,9 +125,13 @@ bool GdbPatternFile::load(const QString & fullName)
 	}
 	return false;
 }
-//
-// find value in GdbPatternList
-//
+
+
+/*!
+	\details find value in GdbPatternList
+	\param value that you search
+	\retval GdbPattern struct
+*/
 GdbPattern GdbPatternFile::find(const QString  & value)
 {
 	// init default pattern
@@ -119,22 +149,33 @@ GdbPattern GdbPatternFile::find(const QString  & value)
 	// return no found pattern
 	return pattern; 
 }
-//
-// get id of pattern
-//
+
+
+/*!
+	\details get id of pattern
+	\param p is GdbPattern struct.
+	\retval id of pattern.
+*/
 int GdbPatternFile::getId(const GdbPattern & p)
 {
 	return p.id;
 }
-//
-// get pattern
-//
+
+/*!
+	\details get QRegExp of pattern
+	\param p is GdbPattern struct.
+	\retval string of pattern.
+*/
 QString GdbPatternFile::getPattern(const GdbPattern & p)
 {
 	return p.key.pattern();
 }
 
-
+/*!
+	\details get comment of pattern
+	\param p is GdbPattern struct.
+	\retval string of comment.
+*/
 QString GdbPatternFile::getComment( const GdbPattern & p)
 {
 	return p.comment;

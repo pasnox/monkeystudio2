@@ -1,20 +1,38 @@
+/****************************************************************************
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
+/*!
+	\file gdbScript.cpp
+	\date 14/08/08
+	\author Xiantia
+	\version 1.3.2
+	\brief This class implements all function for use script .js. This class is an AddOn for GNU debugger
+*/
 
 #include "gdbScript.h"
 #include <QFile>
 #include <QMessageBox>
 
 #include "../../kernel/gdbSetting.1.3.h"
-/*
 
-QList<QString>
-
-  "p varname.d.end" , "p varname.d.array[0]", "p varname.d.array[0]" , ...., 
-
-
+/*!
+	\details Create new object
+	\param parent of thi object
 */
-
-
 GdbScript::GdbScript(QObject * parent) : GdbCore(parent)
 {
 	currentScriptIndex = 0;
@@ -35,7 +53,9 @@ GdbScript::GdbScript(QObject * parent) : GdbCore(parent)
 }
 
 //
-
+/*!
+	\details none
+*/
 GdbScript::~GdbScript()
 {
 }
@@ -49,6 +69,11 @@ void GdbScript::interpreter(const QPointer<BaseInterpreter> & i, const int & id,
 
 // static function
 
+/**
+	\details Just test if Qt class type can be translated by .js.
+	\param container is type of Qt var (QList<QString> for exemple). 
+	\retval true if Qt container can be translated. 
+*/
 bool GdbScript::tryTranslate(const QString & container)
 {
 	QRegExp r("(\\w+)\\s*<(.+)>\\s*$");
@@ -78,6 +103,11 @@ bool GdbScript::tryTranslate(const QString & container)
 
 // from gdbWatch
 
+/*!
+	\details Calling when other Addon want translate Qt class in other format.
+	\param c is type of Qt var (QList<QString> for exemple).
+	\param n is the name of var.
+*/
 void GdbScript::onRequestScriptTranslate(const QString & c , const QString & n)
 {
 	createScript(c); // type -> QList<QString> for exemple 
@@ -85,7 +115,12 @@ void GdbScript::onRequestScriptTranslate(const QString & c , const QString & n)
 }
 
 // 
-	
+
+/*!
+	\details Create all script list for translate the current variable type.
+	\param container is type of Qt var (QList<QString> for exemple). 
+	\retval true if Qt container can be translated. 
+*/
 bool GdbScript::createScript(const QString & container)
 {
 	currentScriptIndex=0;	
@@ -136,6 +171,11 @@ bool GdbScript::createScript(const QString & container)
 
 //
 
+/*!
+	\details Load script from .js and store this in GdbList struct
+	\param fileName is the name of file
+	\param e is the pointer to the QScriptEngine
+*/
 bool GdbScript::loadScript(const QString & fileName, QPointer<QScriptEngine> e)
 {
 	QFile file(fileName);
@@ -150,6 +190,11 @@ bool GdbScript::loadScript(const QString & fileName, QPointer<QScriptEngine> e)
 
 //
 
+/*!
+	\details  Extract value from script answer.
+	\param d is the string contains data from script function
+	\return status, next command and next function to call.
+*/
 void GdbScript::extractValue(const QString & d)
 {
 	QStringList l = d.split(":");
@@ -163,15 +208,21 @@ void GdbScript::extractValue(const QString & d)
 
 //
 
+/*!
+	\details Execute script with other data, for example <b>varName</b>.
+	\param data is the data has to send to script 
+*/
 void GdbScript::exec(const QString & data)
 {
-//	QMessageBox::warning(NULL, "exec","execute script " + data);
 	mData = data;
 	exec();
 }
 
 //
 
+/*!
+	\details Execute script with mData.
+*/
 void GdbScript::exec()
 {
 //	bool mIsPointer = false;
@@ -245,6 +296,10 @@ void GdbScript::exec()
 
 //
 
+/*!
+	\details New datas from Gdb is avaible.
+	\param s is the data from GdbParser
+*/
 void GdbScript::data(int ,QString  s)
 {
 	setWaitEndProcess(false);

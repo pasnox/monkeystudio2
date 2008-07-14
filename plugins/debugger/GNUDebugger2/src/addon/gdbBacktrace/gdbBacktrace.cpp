@@ -1,11 +1,28 @@
-/********************************************************************************************************
- * PROGRAM      : Debugger
- * DATE - TIME  : lundi 31 mai 2008 - 18h04
- * AUTHOR       : Xiantia
- * FILENAME     : GdbBacktrace
- * LICENSE      : GPL
- * COMMENTARY   : 
- ********************************************************************************************************/
+/****************************************************************************
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
+
+/*!
+	\file gdbBacktrace.cpp 
+	\date 14/08/08
+	\author Xiantia
+	\version 1.3.2
+	\brief Implements all functions for parse backtrace commands.This class is an AddOn for GNU debugger
+*/
 
 /*
 
@@ -21,7 +38,9 @@
 #include <QMessageBox>
 #include <QFileInfo>
 
-
+/*!
+* \details Create a new object
+*/
 GdbBacktrace::GdbBacktrace(QObject * parent) : GdbCore(parent)
 {
 	setEnabled(true);
@@ -95,34 +114,36 @@ GdbBacktrace::GdbBacktrace(QObject * parent) : GdbCore(parent)
 }
 
 //
-
+/*!
+* \details Delete mWidget
+*/
 GdbBacktrace::~GdbBacktrace()
 {
 	delete mWidget;
 }
-
-//
 
 QString GdbBacktrace::name()
 {
 	return "GdbBacktrace";
 }
 
-//
-
 QPointer<QWidget> GdbBacktrace::widget()
 {
 	return (QPointer<QWidget>)( mWidget );
 }
-
-//
 
 QIcon GdbBacktrace::icon()
 {
 	return QIcon(":/icons/backtrace.png");
 }
 
-
+/*!
+* \details This function switches interpreterBacktrace attached to onBacktrace function or
+* interpreterInfosource attached to onInfoSource function.
+* \param i is a pointer to BaseInterpreter struct.
+* \param id is an Id od string.
+* \param s is a string. 
+*/
 void GdbBacktrace::interpreter(const QPointer<BaseInterpreter> & i, const int & id, const QString & s)
 {
 	Connect.call( i, id, s);
@@ -213,6 +234,10 @@ void GdbBacktrace::prompt(const int &, const QString & s)
 
 // Interpreters
 
+/*!
+* \details Calling when interpreter() function found onBacktrace event attached with interpreterBacktrace
+* \param s is a string from Gdb.
+*/
 void GdbBacktrace::onBacktrace(int , QString s)
 {
 	/*
@@ -250,9 +275,11 @@ void GdbBacktrace::onBacktrace(int , QString s)
 	}
 }
 
-//
-
-void GdbBacktrace::onInfoSource(int id, QString s)
+/*!
+* \details Calling when interpreter) function found onInfoSource event attached with interpreterInfosource
+* \param s is a string from Gdb.
+*/
+void GdbBacktrace::onInfoSource(int , QString s)
 {
 	/*
 		Info source receiver
@@ -269,8 +296,12 @@ void GdbBacktrace::onInfoSource(int id, QString s)
 	}
 }
 
-//
-
+/*!
+* \details Calling when an editor is open. Restore backtrace icon 
+* If mCurrentfile is equal in the name of the opened file, onToggleBacktrace signal is 
+* emitted indicating that Gdb is stopped on this file. the editor can now show icon backtrace on the margin
+* \param s is name of file that request backtrace.
+*/
 void GdbBacktrace::onRequestBacktrace(const QString & s)
 {
 	if(s == mCurrentFile)

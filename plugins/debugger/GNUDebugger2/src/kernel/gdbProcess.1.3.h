@@ -1,3 +1,28 @@
+/****************************************************************************
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
+/*!
+	\file gdbProcess.1.3.h
+	\date 14/08/08
+	\author Xiantia
+	\version 1.3.2
+	\brief Remote Gdb
+*/
+
 #ifndef GDBPROCESS_H
 #define GDBPROCESS_H
 //
@@ -11,15 +36,12 @@
 
 #include "gdbParser.1.3.h"
 
-//! Remote Gdb
-/**
-\author xiantia
-\version 1.3.2
-
-This Class is QProcess. It use for remote Gdb, send and receive data.
-
-For send command to Gdb use sendRawData() 
+/*!
+	\brief Remote Gdb 
+	\details This Class is QProcess. It use for remote Gdb, send and receive data.
+	For send command to Gdb use sendRawData() 
 */
+
 class  GdbProcess : public QProcess, public QSingleton<GdbProcess>
 {
 
@@ -33,42 +55,44 @@ public:
 
 private:
 	
-	//! Current crlf
+	/*!
+		\details Current crlf
+	*/
 	QString crlf;
-	//! Current command
+	
+	/*!
+		\details Current command
+	*/
 	QString mCommand;
-	//! Current work directorie
+	
+	/*!
+		\details Current work directorie
+	*/
 	QString mDir;
-	//! List of commands
+
+	/*!
+		\details List of commands
+	*/
 	QList<QString> mCmdList;
-	//! 
+
+	/*!
+		\details Timer for start next command if has.	
+	*/
 	QTimer t;
 
 public slots:
 
-	//! Send command to Gdb, the command not have crlf at end.
 	void sendRawData( const QString& );
-
-	//! Stop Gdb
 	void stopProcess();
-	//! Try stop target
 	void stopTarget();
-
-	//! Add new command, if Gdb execute other command, this new command is standbye
 	void setCommand( const QString & );
-	//! Set work directorie
 	void setWorkingDirectorie(const QString &);
-	
-	//! Start Gdb
 	void startProcess();
-	//! Clear command in standbye
 	void clearAllCommand();
 
 private slots:
 
-	//! New data is avaible
 	void readyRead();
-	//! Execute new command only if GdbParser is ready and have a command
 	void onTimer();
 	
 signals:

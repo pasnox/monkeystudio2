@@ -1,12 +1,27 @@
-/********************************************************************************************************
-	* PROGRAM      : Debugger
-	* DATE - TIME  : lundi 31 mai 2008 - 18h04
-	* AUTHOR       : Xiantia
-	* FILENAME     : GdbInterpreter
-	* LICENSE      : GPL
-	* COMMENTARY   : 
-	********************************************************************************************************/
+/****************************************************************************
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
+/*!
+	\file gdbInterpreter.1.3.h
+	\date 14/08/08
+	\author Xiantia
+	\version 1.3.2
+	\brief This class store interpreters
+*/
 
 #ifndef GDBINTERPRETER_H
 #define GDBINTERPRETER_H
@@ -16,123 +31,101 @@
 #include <QRegExp>
 #include <QPointer>
 
-//! This class store only one interpreter
 
-/**
-\author xiantia
-\version 1.3.2
-
-This class store all informations for only one interpreter
-one to interpreter is small a parser for a class, a command and an answer
-
-When data arrives of gdb, GdbParser seeks if the command in court, the command and the reponce correspond has one to interpreter.
-If it is the case, the signal interpreter is emitted coming from GdbParser.
+/*!
+	\brief This class store only one interpreter
+	\details This class store all informations for only one interpreter.
 */
-
 class BaseInterpreter : public QObject
 {
 
 public :
 
 		BaseInterpreter(QObject *parent = 0);
-
-		/**
-		 * \brief Set an interpreter 
-		 * \param ClassName sush as GdbWatch, command sush as "^p .*", anwser sush as "^$\\d+\\s=\\s.*" and answerExtention
-		 *
-		 * \note answerExtention is used to modify the reponce of Gdb, for example when Gdb removes a breakpoint, 
-		 * it answers just by the prompt one and we do not have any information on what it 'passed
-		*/
-		void set(QString cName,/* QString cGdb,*/ QRegExp cRegExp,  QRegExp aRegExp, QString aExtention);
-
-
 		~BaseInterpreter();
 
-		/**
-		 * \brief Return the class name 
+		void set(QString cName, QRegExp cRegExp,  QRegExp aRegExp, QString aExtention);
+
+		/*!
+		 * \details Return the class name 
 		*/
 		QString getClassName() {return mClassName;} 
 
-		/**
-		 * \brief Return the current command in QRegExp format 
+		/*!
+		 * \details Return the current command in QRegExp format 
 		*/
 		QRegExp getCmdRegExp() { return mCmdRegExp;}
 
-		/**
-		 * \brief Return the correct answer in RegExp format 
+		/*!
+		 * \details Return the correct answer in RegExp format 
 		*/
 		QRegExp getAnswerRegExp() { return mAnswerRegExp;}
 
-		/**
-		 * \brief Return the new answer from Gdb (change answer from Gdb) 
+		/*!
+		 * \details Return the new answer from Gdb (change answer from Gdb) 
 		*/
 		QString getAnswerExtention() { return mAnswerExtention;}
 
-		/**
-		 * \brief Return an unic Id for
+		/*!
+		 * \details Return an unic Id for
 		*/
 		quintptr getId(){ return (quintptr) this;}
 
+		
+		/*!
+		 * \details Set name of class
+		*/
 		void setClassName(QString s) { mClassName = s;}
+	
+		/*!
+		 * \details Set the answer extention
+		*/
 		void setAnswerExtention(QString s) { mAnswerExtention = s ;}
+		
+		/*!
+		 * \details Set the answer
+		*/
 		void setAnswerRegExp(QRegExp s) { mAnswerRegExp = s ;}
+		
+		/*!
+		 * \details Set the command
+		*/
 		void setCmdRegExp(QRegExp s) { mCmdRegExp = s ;}
 		
 private :
-		//! Class name
 		QString mClassName;		
-		//! command gdb in RegExp format
 		QRegExp mCmdRegExp;		
-		//! answer from gdb in QregExp
 		QRegExp mAnswerRegExp;		
-		//! if you want pass other informations
 		QString mAnswerExtention;	
 };
 
-
-//! This class store all interpreters from all AddOn
-
-/**
-	This is list of all interpreters
+/*!
+	\brief This class store all interpreters from all AddOn.
+	\details This is the list of all interpreters.
+	An interpreter is small parser for a one class, one command and one an answer.
+	When data arrives of gdb, GdbParser seeks if the className in court, the command and the reponce correspond has one interpreter.
+	In this case, the signal interpreter is emitted coming from GdbParser class.
 */
-
 class  GdbInterpreter : public QObject
 {
-		Q_OBJECT
+	Q_OBJECT
 
 public :
 	
-		GdbInterpreter(QObject *parent = 0);
+	GdbInterpreter(QObject *parent = 0);
+	~GdbInterpreter();
 
-		/**
-		 * \brief Add new interpreter in list
-		*/
-		QPointer<BaseInterpreter> add(const QString &,/* const QString &,*/ const QRegExp &,  const QRegExp &, const QString & );
-
-		/**
-		 * \brief Remove an interpreter in member list
-		*/
-		bool remove(const QPointer<BaseInterpreter> &);
-
-		/**
-		 * \brief Change answer extention
-		*/
-		void changeAnswer(const QPointer<BaseInterpreter> &, const QString &);
-
-		/**
-		 * \brief Fin if an interpreter can be found for the current class ,command, answer from Gdb.
-		 * \retval A pointer to this interpreter.
-		*/
-		QPointer<BaseInterpreter> find(const QString & , const QString & , const QString & );
-
-		~GdbInterpreter();
+	QPointer<BaseInterpreter> add(const QString &, const QRegExp &,  const QRegExp &, const QString & );
+	bool remove(const QPointer<BaseInterpreter> &);
+	void changeAnswer(const QPointer<BaseInterpreter> &, const QString &);
+	QPointer<BaseInterpreter> find(const QString & , const QString & , const QString & );
 
 private :
 
-		/**
-		 * \brief List off all interpreters
-		*/
-		QList< QPointer<BaseInterpreter> > GdbInterpreterList;
+	/*!
+	 * \details List off all interpreters
+	*/
+	QList< QPointer<BaseInterpreter> > GdbInterpreterList;
 
 };
 #endif

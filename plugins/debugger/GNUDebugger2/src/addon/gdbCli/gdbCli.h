@@ -1,12 +1,27 @@
-/********************************************************************************************************
- * PROGRAM      : Debugger
- * DATE - TIME  : lundi 31 mai 2008 - 18h04
- * AUTHOR       : Xiantia
- * FILENAME     : GdbCli
- * LICENSE      : GPL
- * COMMENTARY   : 
- ********************************************************************************************************/
+/****************************************************************************
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
+/*!
+	\file gdbCli.h
+	\date 14/08/08
+	\author Xiantia
+	\version 1.3.2
+	\brief Implements all functions for send user command to Gdb.This class is an AddOn for GNU debugger
+*/
 /*
 
 	GdbCli class
@@ -25,15 +40,12 @@
 #include "../../kernel/gdbSequencer.1.3.h"
 #include "./ui/UIGdbCli.h"
 
-//! Implements all functions for send user command to Gdb.This class is an AddOn for GNU debugger
 
-/**
-\author xiantia
-\version 1.3.2
-
-This class can send user command to Gdb, this is a console for Gdb.
+/*!
+	\brief Implements all functions for send user command to Gdb.This class is an AddOn for GNU debugger.
+	
+	This is a same as a console.
 */
-
 class GdbCli : public GdbCore
 {
 	Q_OBJECT
@@ -46,18 +58,12 @@ public:
 
 public slots:
 
-	/**
-	 * \brief Calling when user click on "Send" button. This function send user command to Gdb.
-	*/
 	void onSend();
 
 	QString name();
 	QPointer<QWidget> widget();
 	QIcon icon();
 
-	/**
-	 * \brief Not interpreter implemented for this class.
-	*/
 	void interpreter(const QPointer<BaseInterpreter> & , const int & , const QString & );
 
 	// gdb

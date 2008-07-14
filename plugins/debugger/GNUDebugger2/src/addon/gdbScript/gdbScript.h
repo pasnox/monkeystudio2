@@ -1,4 +1,27 @@
+/****************************************************************************
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
+/*!
+	\file gdbScript.h
+	\date 14/08/08
+	\author Xiantia
+	\version 1.3.2
+	\brief This class implements all function for use script .js. This class is an AddOn for GNU debugger
+*/
 
 #ifndef GDBSCRIPT_H
 #define GDBSCRIPT_H
@@ -8,25 +31,24 @@
 #include "../../kernel/gdbCore.1.3.h"
 #include "../../kernel/gdbSequencer.1.3.h"
 
-//! This class implements all function for use script .js. This class is an AddOn for GNU debugger
- 
-/**
-\author xiantia
-\version 1.3.2
-
-This class can translate Qt class (QString, QList, QImage,...) in other format.
+/*!
+	\brief This class implements all function for use script .js. This class is an AddOn for GNU debugger
+	\details This class can translate Qt class (QString, QList, QImage,...) in other format.
 This new format can be show in GdbWatch class. This new format can be use by WatchStruct class if is correct.
 
 For example QString can't be show directly. When Gdb print QString variable, it return a struture but the true value
 of QString is not present. A script can send other commands for create the true value of QString variable.
 
 This class use .js script.
+
 */
 class GdbScript : public GdbCore
 {
 	Q_OBJECT
 
-	//! This structure store all informations for use a script. 
+	/*!
+		\details This structure store all informations for use a script.
+	*/	
 	typedef struct GdbList
 	{
 		//! Type of script, QString , QList<int>, ...
@@ -49,9 +71,6 @@ class GdbScript : public GdbCore
 
 public slots:
 
-	/**
-	 * \brief Calling when other Addon want translate Qt class in other format.
-	*/
 	void onRequestScriptTranslate(const QString &, const QString &);
 
 public :
@@ -59,35 +78,13 @@ public :
 	GdbScript(QObject * parent =0);
 	~GdbScript();
 	
-	/**
-	 * \brief Just test if Qt class type can be translated by .js.
-	*/
 	static bool tryTranslate(const QString &);
-
-	/**
-	 * \brief Create all script list for translate the current variable type.
-	 * \retval true if Qt container can be translated. 
-	*/
 	bool createScript(const QString &);
 	
-	/**
-	 * \brief Execute script with mData
-	*/
 	void exec();
-
-	/**
-	 * \brief execute script with other data, for example <b>varName</b>.
-	*/
 	void exec(const QString & );
-	
-	/**
-	 * \brief Extract value from script answer.
-	*/
 	void extractValue(const QString &);
 
-	/**
-	 * \brief New datas from Gdb is avaible.
-	*/
 	void data(int , QString);
 	
 	void gdbStarted(){}
@@ -118,33 +115,31 @@ public :
 	QPointer<QWidget> widget(){return (QPointer<QWidget>)(NULL);}
 	QIcon icon() { return QIcon();}
 
-
-	//! Connect interpreter to function
 	void interpreter(const QPointer<BaseInterpreter> & , const int & , const QString & );
 
 	int mSequence;
 
 private:
 
-	//! Load script from .js and store this in GdbList struct
 	bool loadScript(const QString & , QPointer<QScriptEngine>);
 
 	QString mData;
 	QString mVarName;
 	QString mPathScript;
 
-	//! List of all script for translate Qt container
+	/*!
+		\details List of all script for translate Qt container
+	*/
 	QList<GdbList> gdbScriptList;
 	QPointer<BaseInterpreter> interpreterScript;
 
 	int currentScriptIndex;
-
 	GdbConnectTemplate<GdbScript> Connect;
 
 signals :
 
-	/**
-	 * \brief when the translation is termined , this signal is emit, it contains the new forma of var
+	/*!
+		\details when the translation is termined , this signal is emit, it contains the new forma of var
 	*/
 	void scriptFinishedTranslate(const QString &); 
 

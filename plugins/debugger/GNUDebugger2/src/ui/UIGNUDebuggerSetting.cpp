@@ -1,3 +1,28 @@
+/****************************************************************************
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
+/*!
+	\file 
+	\date 14/08/08
+	\author Xiantia
+	\version 1.3.2
+	\brief Main Ui for setting GNU debugger
+*/
+
 #include "UIGNUDebuggerSetting.h"
 
 #include <coremanager.h>
@@ -10,6 +35,10 @@
 
 #include "../kernel/gdbSetting.1.3.h"
 
+/*!
+	\details Create new object
+	\param parent of this object
+*/
 UIGNUDebuggerSetting::UIGNUDebuggerSetting( QWidget* parent )
 	: QWidget( parent )
 {
@@ -48,7 +77,10 @@ UIGNUDebuggerSetting::UIGNUDebuggerSetting( QWidget* parent )
 }
 
 //
-
+/*!
+	\details Button manage file clicked.
+	Open Ui for this
+*/
 void UIGNUDebuggerSetting::bClickedManageFile()
 {
 	UIManageParsingFile *d = UIManageParsingFile::self(this) ;
@@ -56,7 +88,10 @@ void UIGNUDebuggerSetting::bClickedManageFile()
 }
 
 //
-
+/*!
+	\details Button parser file clicked.
+	Open Ui for this
+*/
 void UIGNUDebuggerSetting::bClickedPathParsingFile()
 {
 	QString mPathParsingFile = QFileDialog::getOpenFileName(this, tr("Location of Parsing file"));
@@ -65,7 +100,10 @@ void UIGNUDebuggerSetting::bClickedPathParsingFile()
 }
 
 //
-
+/*!
+	\details Button path script file clicked.
+	Open Ui for this
+*/
 void UIGNUDebuggerSetting::bClickedPathScript()
 {
 	QString mDir = QFileDialog::getExistingDirectory(this, tr("Location of Scripts"));
@@ -75,6 +113,10 @@ void UIGNUDebuggerSetting::bClickedPathScript()
 
 //
 
+/*!
+	\details Button path Gdb file clicked.
+	Open Ui for this
+*/
 void UIGNUDebuggerSetting::bClickedPathGdb()
 {
 	QString mPathGdb = QFileDialog::getOpenFileName(this, tr("Location of Gdb"));
@@ -88,6 +130,23 @@ void UIGNUDebuggerSetting::bClickedPathGdb()
 	}
 }
 
+/*! 
+	\details Data from Gdb (it is not GdbProcess).
+	Get the current version and quit Gdb.
+
+	\code
+		GNU gdb 6.7.50.20071127
+		Copyright (C) 2007 Free Software Foundation, Inc.
+		License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+		This is free software: you are free to change and redistribute it.
+		There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+		and "show warranty" for details.
+		This GDB was configured as "i686-pc-mingw32".
+	\endcode
+	
+	The current version is "GNU gdb 6.7.50.20071127"
+
+*/
 void UIGNUDebuggerSetting::onReadyRead( )
 {
 	QByteArray b = Process->readAll();
@@ -100,18 +159,29 @@ void UIGNUDebuggerSetting::onReadyRead( )
 	Process->write("quit\r\n");
 }
 
+/*!
+	\details Process Gdb correctly started 
+*/
 void UIGNUDebuggerSetting::started()
 {}
 
+/*!
+	\details Process Gdb correctly finished
+*/
 void UIGNUDebuggerSetting::finished( int , QProcess::ExitStatus  )
 {}
 
-// gdb no found
+/*!
+	\details Process crash
+*/
 void UIGNUDebuggerSetting::error( QProcess::ProcessError )
 {
 	labelCurrentVersion->setText(tr("Version not found"));
 }
 
+/*! 
+	\details Apply button clicked
+*/
 void UIGNUDebuggerSetting::on_dbbButtons_clicked( QAbstractButton * button )
 {
 	if ( button == dbbButtons->button( QDialogButtonBox::Apply ) )
@@ -122,11 +192,16 @@ void UIGNUDebuggerSetting::on_dbbButtons_clicked( QAbstractButton * button )
 	}
 }
 
-
+/*!
+	\details load current settings
+*/
 void UIGNUDebuggerSetting::loadSettings()
 {
 }
 
+/*!
+	\details Save current settings
+*/
 void UIGNUDebuggerSetting::saveSettings()
 {
 	// get the path

@@ -1,12 +1,27 @@
-/********************************************************************************************************
- * PROGRAM      : Debugger
- * DATE - TIME  : lundi 31 mai 2008 - 18h04
- * AUTHOR       : Xiantia
- * FILENAME     : GdbSetting
- * LICENSE      : GPL
- * COMMENTARY   : 
- ********************************************************************************************************/
+/****************************************************************************
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
+/*!
+	\file gdbSetting.1.3.h
+	\date 14/08/08
+	\author Xiantia
+	\version 1.3.2
+	\brief Load setting from Monkey .ini and store current configuration
+*/
 
 #ifndef GDBSETTING_H
 #define GDBSETTING_H
@@ -19,10 +34,8 @@
 
 #include <QMessageBox>
 
-//! Small struct for setting AddOn
-/**
-\author xiantia
-\version 1.3.2
+/*! 
+	\details Small struct for setting AddOn
 */
 typedef struct GdbAddOn
 {
@@ -32,10 +45,8 @@ typedef struct GdbAddOn
 	bool enable;
 };
 
-//! Small struct for store some informations
-/**
-\author xiantia
-\version 1.3.2
+/*!
+	\details Small struct for store some informations
 */
 typedef struct GdbSettings
 {
@@ -45,19 +56,15 @@ typedef struct GdbSettings
 	QString pathParseFile;
 	//! Current path of script file
 	QString pathScript;
-
 	//! List of all AddOn
 	QList<GdbAddOn> addOnList;
 };
 
-//! Load setting from Monkey .ini and store current configuration
 
-/**
-\author xiantia.
-
-It load setting from Monkey .ini. It configure AddOn (enable or not) and load current path
+/*!
+	\brief Load setting from Monkey .ini and store current configuration
+	\details It load setting from Monkey .ini. It configure AddOn (enable or not) and load current path
 */
-
 class GdbSetting : public QObject, public QSingleton<GdbSetting>
 {
 
@@ -66,7 +73,9 @@ class GdbSetting : public QObject, public QSingleton<GdbSetting>
 
 private :
 
-	//! Struct contains current path and AddOn list  
+	/*!
+		\details Struct contains current path and AddOn list  
+	*/
 	GdbSettings gdbSettings;
 
 public :
@@ -74,7 +83,9 @@ public :
 	GdbSetting(QObject * parent = 0);
 	~GdbSetting(){};
 
-	//! Load setting from .ini
+	/*! 
+		\details Load setting from .ini
+	*/
 	void load()
 	{
 		Settings* s = MonkeyCore::settings();
@@ -97,7 +108,9 @@ public :
 		s->endGroup();
 	}
 
-	//! Save setting in .ini
+	/*! 
+		\details Save setting in .ini
+	*/
 	void save()
 	{
 			Settings * s = MonkeyCore::settings();
@@ -112,7 +125,11 @@ public :
 			s->endGroup();
 	}
 	
-	//! Set enable or disable AddOn
+	/*! 
+		\details Set enable or disable AddOn
+		\param n is the name of AddOn
+		\param b is true if you want enable AddOn
+	*/
 	void setEnable(QString n, bool b)
 	{
 		GdbAddOn p={ n , b};
@@ -123,7 +140,10 @@ public :
 		}
 	}
 
-	//! get if AddOn is Enable or Disable
+	/*!
+		\details Get if AddOn is Enable or Disable
+		\retval true if AddOn is enabled
+	*/
 	bool getStartUp(QString name)
 	{
 		foreach(GdbAddOn a, gdbSettings.addOnList)
@@ -137,22 +157,37 @@ public :
 		return true;
 	}
 
+	/*!
 	//! Get path of Gdb
+	*/
 	QString getPathGdb() { return gdbSettings.pathGdb;}
-	//! Set path of Gdb
+	/*!
+		\details Set path of Gdb
+	*/
 	void setPathGdb(QString s){ gdbSettings.pathGdb = s;}
 
-	//! Get path of parse file
+	/*!
+		\details Get path of parse file
+	*/
 	QString getPathParseFile(){ return gdbSettings.pathParseFile;}
-	//! Set path of parse file
+	
+	/*!
+		\details Set path of parse file
+	*/
 	void setPathParseFile(QString s) { gdbSettings.pathParseFile = s;}
 	
-	//! Get path of path script file
+	/*!
+		\details Get path of path script file
+	*/
 	QString getPathScript(){ return gdbSettings.pathScript;}
-	//! Set path of path script file
+	/*!
+		\details Set path of path script file
+	*/
 	void setPathScript(QString s) { gdbSettings.pathScript = s;}
 
-	//! Get list of AddOn
+	/*!
+		\details Get list of AddOn
+	*/
 	QList<GdbAddOn> * getAddOnList() { return &gdbSettings.addOnList;}
 };
 

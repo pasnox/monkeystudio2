@@ -1,11 +1,27 @@
-/********************************************************************************************************
-	* PROGRAM      : Debugger (PARSER)
-	* DATE - TIME  : mardi 01 janvier 2008 - 18h48
-	* AUTHOR       :  (  )
-	* FILENAME     : GdbParser.cpp
-	* LICENSE      : 
-	* COMMENTARY   : 
-	********************************************************************************************************/
+/****************************************************************************
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
+/*!
+	\file gdbParser.1.3.cpp
+	\date 14/08/08
+	\author Xiantia
+	\version 1.3.2
+	\brief Parse all datas from Gdb
+*/
 
 /* main parser
 
@@ -27,6 +43,10 @@
 #define ERROR_ID 		20000
 #define PROMPT_ID		0
 
+/*!
+	\details Create new object
+	\param parent of this object
+*/
 GdbParser::GdbParser (QObject * parent) : QObject (parent), mIsReady(0)
 {
 	// get the current instance
@@ -95,17 +115,26 @@ GdbParser::~GdbParser()
 }
 
 
-// gateAway RestoreLine
-
+/*!
+	\details GateAway RestoreLine
+	\param className is the class name
+	\param l1 is the fisrt line
+	\param l2 is the last line
+*/
 void GdbParser::addRestoreLine(const QString & className, const QString & l1, const QString & l2)
 {
 	if(gdbRestoreLine)
 		gdbRestoreLine->add(className, l1, l2);
 }
 
-// gateAway Interpreter
-
-QPointer<BaseInterpreter> GdbParser::addInterpreter(const QString & cName, /*const QString & cGdb,*/ const QRegExp & cRegExp, 
+/*!
+	\details GateAway Interpreter
+	\param cName is the name of class
+	\param cRegExp is the command
+	\param aRegExp is the answer
+	\param aExtention is the answer extention 
+*/
+QPointer<BaseInterpreter> GdbParser::addInterpreter(const QString & cName,  const QRegExp & cRegExp, 
 													const QRegExp & aRegExp,const QString & aExtention)
 {
 	if(gdbInterpreter)
@@ -113,7 +142,10 @@ QPointer<BaseInterpreter> GdbParser::addInterpreter(const QString & cName, /*con
 	else return NULL;
 }
 
-
+/*!
+	\details Remove an interpreter
+	\param i is the pointer to this interpreter
+*/
 bool GdbParser::removeInterpreter( const QPointer<BaseInterpreter> & i )
 {
 	if(gdbInterpreter)
@@ -121,15 +153,23 @@ bool GdbParser::removeInterpreter( const QPointer<BaseInterpreter> & i )
 	else return false;
 }
 
+/*!
+	\details Change answerExtention for an interpreter
+	\param i is the pointer to this interpreter
+	\param s is the new answer
+*/
 void GdbParser::changeAnswerInterpreter(const QPointer<BaseInterpreter> & i, const QString & s)
 {
 	if(gdbInterpreter)
 		gdbInterpreter->changeAnswer(i, s);
 }
 
-//
-/*
-	main parser
+/*!
+	\details Find end of string block
+	All data from Gdb are append while prompt are other string is found
+	For example it return true if string block ends with "(gdb) ", "Continue.", ....
+	\param data is data from GdbProcess
+	\retval true if the string block ends with mEndParsing list
 */
 bool GdbParser::checkEndParsing(const QString data)
 {
@@ -139,8 +179,10 @@ bool GdbParser::checkEndParsing(const QString data)
 
 	return false;
 }
-//
 
+/*!
+	\details Get the next command if it has
+*/
 void GdbParser::getCommand()
 {
 	if(mCmdList.count())
@@ -154,7 +196,11 @@ void GdbParser::getCommand()
 }
 
 // 
-
+/*!
+	\details New data from Gdb is avaible, parse this
+	\param storg is the raw data from GdbProcess class
+	\retval true if the string block from GdbParser is completed.
+*/
 bool GdbParser::processParsing(const QString & storg)
 {
 	QString st = storg;
@@ -342,21 +388,27 @@ bool GdbParser::processParsing(const QString & storg)
 	return false;
 }
 //
+/*!
+	\details Add new command
+	\param className is the class name.
+	\param cmd command to send
+*/
 void GdbParser::setNextCommand(QString className ,QString cmd)
 {
 	Command c = { className, cmd};
 	mCmdList << c;
 }
 
+/*!
+	\details Clear all commands in list
+*/
 void GdbParser::clearAllCommand()
 {
 	mCmdList.clear();
 }
 
 //
-/*
-	sub main parser
-*/
+
 void GdbParser::onDone(int id, QString st)
 {
 	switch(id)
@@ -369,7 +421,9 @@ void GdbParser::onDone(int id, QString st)
 
 	}
 }
+
 //
+
 void GdbParser::onInfo(int id, QString st)
 {
 	switch(id)
@@ -406,7 +460,9 @@ void GdbParser::onInfo(int id, QString st)
 			else emit info(id, st + "\",currentCmd=\"" + mCurrentCmd +"\"");
 	}
 }
+
 //
+
 void GdbParser::onError(int id, QString st)
 {
 	switch(id)
