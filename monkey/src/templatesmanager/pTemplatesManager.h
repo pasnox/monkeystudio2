@@ -26,6 +26,12 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file pTemplatesManager.h
+	\date 2008-01-14T00:37:13
+	\author Andrei KOPATS, Filepe AZEVEDO
+	\brief Header for pTemplatesManager class
+*/
 #ifndef PTEMPLATESMANAGER_H
 #define PTEMPLATESMANAGER_H
 
@@ -44,21 +50,28 @@ typedef QHash <QString, QStringList> VarList;
 	NOTE Filenames can contain variables. Example: Project$name$.pro
 	This files will be renamed
 */
+
+/*!
+	\brief Inmemory representation of template.
+*/
 struct Q_MONKEY_EXPORT pTemplate
 {
-    QString Name;
-    QString Language;
-    QString Type;
-    QString Description;
-    QString Icon;
-	QString Script;
-    QString DirPath; // with '/' at end
-    QStringList Files;
-    QStringList FilesToOpen;
-    QStringList ProjectsToOpen;
-	QStringList FilesToAdd;
+    QString Name;							/*<! Name of template, which are displaying for user */
+    QString Language;						/*<! Programming language */
+    QString Type;							/*<! Type of template (Project, File..) */
+    QString Description;					/*<! Desctiption of template. Shown on tooltip */
+    QString Icon;							/*<! Path to template icon */
+	QString Script;							/*<! Script for configure template. Currently support not implemented*/
+    QString DirPath; 						/*<! Dirrectory, containing template */
+    QStringList Files;						/*<! List of files of template */
+    QStringList FilesToOpen;				/*<! List of files, which should be open after template creation */
+    QStringList ProjectsToOpen;				/*<! List of project, which should be open after template creation */
+	QStringList FilesToAdd;					/*<! List of files, which coult be added to some project, after creation */
     VarList Variables;
 	
+	/*!
+		Compare two templates
+	*/
 	bool operator==( const pTemplate& t )
 	{ return Name == t.Name && Language == t.Language && Type == t.Type &&
 			Description == t.Description && Icon == t.Icon && Script == t.Script &&
@@ -67,8 +80,16 @@ struct Q_MONKEY_EXPORT pTemplate
 
 };
 
+/*!
+	List of templates   BUG this comment not including to documentation
+*/
 typedef QList<pTemplate> TemplateList;
 
+/*!
+	\brief Implementation of Templates Manager module
+	
+	Allows to cteate files from template, configure template before creation of files, open files and projects, add new files to projects
+*/
 class Q_MONKEY_EXPORT pTemplatesManager : public QObject, public QSingleton<pTemplatesManager>
 {
     Q_OBJECT

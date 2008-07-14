@@ -1,7 +1,7 @@
 /****************************************************************************
 **
 ** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
+** Authors   : Andrei KOPATS aka hlamer <hlamer@tut.by>, Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
 ** Project   : Monkey Studio IDE
 ** FileName  : pTemplatesManager.cpp
 ** Date      : 2008-01-14T00:37:12
@@ -26,6 +26,13 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file pTemplatesManager.cpp
+	\date 2008-01-14T00:37:13
+	\author Andrei KOPATS, Filepe AZEVEDO
+	\brief Implementation of pTemplatesManager class
+*/
+
 #include "pTemplatesManager.h"
 #include "../pMonkeyStudio.h"
 #include "../workspace/pFileManager.h"
@@ -35,16 +42,33 @@
 
 using namespace pMonkeyStudio;
 
+/*!
+	Class constructor
+	\param o Parent object. Passing to QObject constructor
+*/
 pTemplatesManager::pTemplatesManager( QObject* o )
 	: QObject( o )
 {}
 
+/*!
+	Set's templates path - dirrectory, on which templates will be searched
+	\param l List of dirrectoryes
+*/
 void pTemplatesManager::setTemplatesPath( const QStringList& l )
 { MonkeyCore::settings()->setValue( "Templates/DefaultDirectories", l ); }
 
+/*!
+	Get list of dirrectoryes, where templates is searching
+	\return list of dirrectoryes
+*/
 QStringList pTemplatesManager::templatesPath() const
 { return MonkeyCore::settings()->value( "Templates/DefaultDirectories" ).toStringList(); }
 
+/*!
+	Read template from file
+	\param s Path of template config file (.ini)
+	\return Inmemory representation of template
+*/
 pTemplate pTemplatesManager::getTemplate( const QString& s )
 {
 	// open ini file
@@ -73,6 +97,10 @@ pTemplate pTemplatesManager::getTemplate( const QString& s )
 	return t;
 }
 
+/*!
+	Read all availible templates
+	\return List of templates, finded in all configured path
+*/
 TemplateList pTemplatesManager::getTemplates()
 {
 	TemplateList l;
@@ -82,7 +110,20 @@ TemplateList pTemplatesManager::getTemplates()
 	return l;
 }
 
-bool pTemplatesManager::realiseTemplate( XUPItem* it, const QString& o, const pTemplate& t, const VariablesManager::Dictionary& d )
+/*!
+	Create files from already configured template
+	\param itemWhereAdd		Project, on which files should be added. NULL, if not need to add
+	\param o Try to ask PasNox what is it :-/
+	\param t Template to realise
+	\param d Dictionary of variables for template
+	\return Result of creation
+	\retval true All files is created successfully
+	\retval false Some error ocurred
+*/
+bool pTemplatesManager::realiseTemplate( XUPItem* itemWhereAdd, 
+										const QString& o, 
+										const pTemplate& t, 
+										const VariablesManager::Dictionary& d )
 {
 	// get destination
 	QString dest = d["Destination"];
@@ -199,8 +240,8 @@ bool pTemplatesManager::realiseTemplate( XUPItem* it, const QString& o, const pT
 			MonkeyCore::fileManager()->openProject( s );
 		
 		// add files to project if needed
-		if ( it )
-			it->project()->addFile( s, it, o );
+		if ( itemWhereAdd )
+			itemWhereAdd->project()->addFile( s, it, o );
 	}
 	
 	// return process state
