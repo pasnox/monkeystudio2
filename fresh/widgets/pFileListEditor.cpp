@@ -27,6 +27,7 @@
 	\param parent The parent widget
 	\param title The editor title
 	\param  path The editor path
+	\param filter The filter used against file names
 */
 pFileListEditor::pFileListEditor( QWidget* parent, const QString& title, const QString& path, const QString& filter ):
 	pStringListEditor( parent, title ), mPath( path ), mFilter( filter )
