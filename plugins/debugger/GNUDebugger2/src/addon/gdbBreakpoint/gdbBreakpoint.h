@@ -119,10 +119,6 @@ Then to connect them to the corresponding functions.
 According to the events, the GdbBreakpoint class  modify the struct Breakpoint and emits the signal onToggleBreakpoint
 */
 
-*/
-
-
-
 class GdbBreakpoint : public GdbCore
 {
 	Q_OBJECT

@@ -35,17 +35,35 @@
 */
 	typedef struct BaseBreakpoint
 	{
-		//! Contains the line from editor, the breakpoint is located at this line
+		/*!
+			\details Contains the line where the breakpoint is set
+		*/
 		int line;
-		//! Contains the index from Gdb, number returned by Gdb
+
+		/*!
+			\details Contains the index from Gdb, number returned by Gdb
+		*/
 		int index;
-		//! If index is true, it indicate that Gdb has breaked
+
+		/*!
+			\details If index is true, it indicate that Gdb has breaked in this breakpoint
+		*/
 		bool hit;
-		//! Breakpoint is  : 0 = unconditionned, 1 = contidionned
+
+		/*!
+			\details Breakpoint is  : 0 = unconditionned, 1 = contidionned
+		*/
 		int type;
-		//! Breakpoint is enable if enable is true
+
+		/*!
+			\details Breakpoint is enable if enable is true
+		*/
 		bool enable;
-		//! Condition for this breakpoint, for example "i==3". Gdb break only if condition is true
+
+		/*!
+			\details Condition for this breakpoint, for example "i==3". Gdb break only 
+			if condition is true
+		*/
 		QString condition;
 	};
 
@@ -56,9 +74,14 @@
 	*/
 	typedef struct Breakpoint
 	{
-		//! Contains the fileName 
+		/*!
+			\details Contains the fileName 
+		*/
 		QString fileName;
-		//! Contains all breakpoints informations (list)
+		
+		/*!
+			\details Contains all breakpoints informations (list)
+		*/
 		QList<BaseBreakpoint> bp;
 	};
 

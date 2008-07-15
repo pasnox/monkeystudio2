@@ -79,7 +79,8 @@ private:
 		\details Timer for start next command if has.	
 	*/
 	QTimer t;
-
+	
+	
 public slots:
 
 	void sendRawData( const QString& );
@@ -89,7 +90,7 @@ public slots:
 	void setWorkingDirectorie(const QString &);
 	void startProcess();
 	void clearAllCommand();
-
+	
 private slots:
 
 	void readyRead();

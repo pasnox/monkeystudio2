@@ -54,10 +54,8 @@
 	\details This class configure Qsci. For example, set sensitivity margin, set read only editor and add or remove marker in the margin.
 	For this a struct Editor is used. All signals and slots are connected to the other class by DockGNUDebugger class.  
 */
-
 class GdbBridgeEditor : public QObject , public QSingleton<GdbBridgeEditor>
 {
-
 	Q_OBJECT
 	friend class QSingleton<GdbBridgeEditor>;
 
@@ -107,17 +105,20 @@ signals :
 	void userToggleBreakpoint(const QString & , const int &);
 
 	/*!
-		\details Request breakpoint for the file
+		\details Emit when an editor is opened.
+		This signal indicate that this editor request breakpoint for this file.
 	*/
 	void requestBreakpoint(const QString &);
 
 	/*!
-		\details Request backtrace for this file
+		\details Emit when an editor is opened.
+		This signal indicate that this editor request backtrace for this file
 	*/
 	void requestBacktrace(const QString &);
 
 	/*!
-		\details Request show var, user select string in editor
+		\details Request show var, user select string in editor.
+		This signal indicate that this editor has selected string and want show value.
 	*/
 	void requestShowVar(const QString &);
 };

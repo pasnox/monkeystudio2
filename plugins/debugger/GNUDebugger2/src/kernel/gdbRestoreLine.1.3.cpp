@@ -48,7 +48,7 @@ GdbRestoreLine::~GdbRestoreLine()
 
 //
 /*!
-	\details Add new restoring
+	\details Add new restoring line
 	\param className is the name of class
 	\param l1 is the first line
 	\param l2 is the last line
@@ -61,7 +61,7 @@ void GdbRestoreLine::add(const QString & className ,const QRegExp & l1, const QR
 
 //
 /*!
-	\details Add new restoring
+	\details Add new restoring line
 	\param className is the name of class
 	\param l1 is the first line
 	\param l2 is the last line
@@ -74,7 +74,7 @@ void GdbRestoreLine::add(const QString & className ,const QString & l1, const QS
 
 //
 /*!
-	\details Get the first line
+	\details Get the first line in string block (QStringList)
 	\param b is index of the first line to start
 	\param l is a list of string
 	\param r is QRegExp that you find. 
@@ -114,8 +114,8 @@ int GdbRestoreLine::end(/*const QString & className ,*/const int & b, const QStr
 /*!
 	\details try restore line
 	\param className is the name of current class
-	\param list is the list of string
-	\retval true if the string is restored.
+	\param list is the list of string (QStringList)
+	\retval true if the string is restored, else false
 */
 bool GdbRestoreLine::tryRestore(const QString & className , QStringList * list)
 {

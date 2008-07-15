@@ -56,8 +56,6 @@ void GdbKernelDispatcher::add(const QPointer<class GdbCore> & p)
 		SLOT(interpreter(const QPointer<BaseInterpreter> & , const int & , const QString &)));
 }
 
-//
-
 
 //
 /*!

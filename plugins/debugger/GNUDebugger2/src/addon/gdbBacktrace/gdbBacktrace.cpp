@@ -21,7 +21,8 @@
 	\date 14/08/08
 	\author Xiantia
 	\version 1.3.2
-	\brief Implements all functions for parse backtrace commands.This class is an AddOn for GNU debugger
+	\brief Implements all functions for parse backtrace commands.
+	This class is an AddOn for GNU debugger
 */
 
 /*
@@ -140,8 +141,8 @@ QIcon GdbBacktrace::icon()
 /*!
 * \details This function switches interpreterBacktrace attached to onBacktrace function or
 * interpreterInfosource attached to onInfoSource function.
-* \param i is a pointer to BaseInterpreter struct.
-* \param id is an Id od string.
+* \param i is a pointer to BaseInterpreter class.
+* \param id is an Id of string.
 * \param s is a string. 
 */
 void GdbBacktrace::interpreter(const QPointer<BaseInterpreter> & i, const int & id, const QString & s)
@@ -176,6 +177,9 @@ void GdbBacktrace::gdbError(){}
 // Taget status
 
 void GdbBacktrace::targetLoaded(const int &, const QString &){}
+
+//
+
 void GdbBacktrace::targetNoLoaded(const int &, const QString &){}
 
 //
@@ -212,7 +216,12 @@ void GdbBacktrace::error(const int &, const QString & s)
 }
 
 void GdbBacktrace::done(const int &, const QString &){}
+
+//
+
 void GdbBacktrace::info(const int &, const QString &){}
+
+//
 
 void GdbBacktrace::prompt(const int &, const QString & s)
 {
@@ -236,7 +245,7 @@ void GdbBacktrace::prompt(const int &, const QString & s)
 
 /*!
 * \details Calling when interpreter() function found onBacktrace event attached with interpreterBacktrace
-* \param s is a string from Gdb.
+* \param s is a string from GdbParser class.
 */
 void GdbBacktrace::onBacktrace(int , QString s)
 {
@@ -277,7 +286,7 @@ void GdbBacktrace::onBacktrace(int , QString s)
 
 /*!
 * \details Calling when interpreter) function found onInfoSource event attached with interpreterInfosource
-* \param s is a string from Gdb.
+* \param s is a string from GdbParser class.
 */
 void GdbBacktrace::onInfoSource(int , QString s)
 {
@@ -297,13 +306,14 @@ void GdbBacktrace::onInfoSource(int , QString s)
 }
 
 /*!
-* \details Calling when an editor is open. Restore backtrace icon 
-* If mCurrentfile is equal in the name of the opened file, onToggleBacktrace signal is 
-* emitted indicating that Gdb is stopped on this file. the editor can now show icon backtrace on the margin
-* \param s is name of file that request backtrace.
+* \details Calling when an editor is opened. Restore backtrace icon in this editor. 
+* If mCurrentfile is a same as the name of the opened file, onToggleBacktrace signal is 
+* emitted indicating that Gdb is stopped on this file. The editor show icon backtrace on the margin.
+* \param s is name of file that request backtrace icon.
 */
 void GdbBacktrace::onRequestBacktrace(const QString & s)
 {
 	if(s == mCurrentFile)
 		emit onToggleBacktrace(mCurrentFile, mCurrentLine);
 }
+

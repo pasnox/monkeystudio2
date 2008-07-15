@@ -37,12 +37,11 @@
 
 	This slots call GdbKernelDispatcher::error() for example. Now all error() function of all AddOn is called.
 
-	If you want write a new AddOn for GNU debugger, just derive GdbCore and re-implements all functions and add your AddOn by call GdbKernelDispatcher::add().
-	in DockGNUDebugger class
+	If you want write a new AddOn for GNU debugger, just derive GdbCore and re-implements all functions and 
+	add your AddOn by call GdbKernelDispatcher::add() in DockGNUDebugger class
 */
 class GdbKernelDispatcher : public QObject, public QSingleton<GdbKernelDispatcher>
 {
-
 	Q_OBJECT
 	friend class QSingleton<GdbKernelDispatcher>;
 
@@ -69,16 +68,20 @@ public :
 	void prompt(const int &, const QString &);
 
 	/*!
-		\details Return all AddOn in this list
+		\details Return all AddOn list
 	*/
 	QList<QPointer< class GdbCore> > list() { return addonList;}
 
 private :
 
-	//! List of all AddOn pointer
+	/*! 
+		\details List of all AddOn pointer
+	*/
 	QList<QPointer< class GdbCore> > addonList;
 
-	//! Pointer to the GdbParser class
+	/*!
+		\details Pointer to the GdbParser class
+	*/
 	QPointer<GdbParser> mParser;
 };
 

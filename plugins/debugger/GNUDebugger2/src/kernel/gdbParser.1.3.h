@@ -43,7 +43,7 @@
 	\brief Parse all datas from Gdb
 	\details When new data is avaible from Gdb, the processParsing function is call.
 
-	1 : processParsing function try restore string block if some lines is splited in more lines. For example
+	- processParsing function try restore string block if some lines is splited in more lines. For example
 
 	\code
 	Breakpoint 1, 0x3de4ac at 
@@ -58,10 +58,11 @@
 	(gdb)
 	\endcode
 
-	2 : processParsing search if this line is know in gdbparsing.txt by use GdbPatternFile class. This file have all strings that Gdb can print in console.
+	- processParsing search if this line is know in gdbparsing.txt by use GdbPatternFile class. 
+	This file have all strings that Gdb can print in console.
 
-	3 : processParsing search if an interpreter can be found by use GdbInterpreter, in this case interpreter signal is emit.
-
+	- processParsing search if an interpreter can be found by use GdbInterpreter, 
+	in this case interpreter signal is emit.
 */
 class GdbParser : public QObject, public QSingleton<GdbParser>
 {
@@ -70,7 +71,7 @@ class GdbParser : public QObject, public QSingleton<GdbParser>
 		friend class QSingleton<GdbParser>;
 
 		/*! 
-			\brief Struct for store command list
+			\brief Struct for store the current command
 		*/	
 		typedef struct Command
 		{

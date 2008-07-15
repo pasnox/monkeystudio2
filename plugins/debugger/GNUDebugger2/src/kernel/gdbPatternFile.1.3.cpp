@@ -56,7 +56,7 @@ GdbPatternFile::GdbPatternFile(QObject *parent) :  QObject(parent)
 }
 
 /*!
-	\details Save current pattern list in file 
+	\details Save current pattern list in file. This list is composed of GdbPattern struct. 
 */
 GdbPatternFile::~GdbPatternFile()
 {
@@ -80,8 +80,8 @@ GdbPatternFile::~GdbPatternFile()
 
 /*!
 	\details Load QRegExp froim file to GdbPatternList
-	\param fullName is the name of file
-	\retval true if the file is loaded correctly
+	\param fullName is the path and name of file
+	\retval true if the file is loaded correctly, else false
 */
 bool GdbPatternFile::load(const QString & fullName)
 {
@@ -128,9 +128,9 @@ bool GdbPatternFile::load(const QString & fullName)
 
 
 /*!
-	\details find value in GdbPatternList
-	\param value that you search
-	\retval GdbPattern struct
+	\details Find value in GdbPatternList list
+	\param value is the value that you search
+	\retval GdbPattern struct contains the value or a empty GdbPattern if not found.  
 */
 GdbPattern GdbPatternFile::find(const QString  & value)
 {
@@ -152,7 +152,7 @@ GdbPattern GdbPatternFile::find(const QString  & value)
 
 
 /*!
-	\details get id of pattern
+	\details Get id of pattern.
 	\param p is GdbPattern struct.
 	\retval id of pattern.
 */
@@ -162,7 +162,7 @@ int GdbPatternFile::getId(const GdbPattern & p)
 }
 
 /*!
-	\details get QRegExp of pattern
+	\details Get QRegExp of pattern
 	\param p is GdbPattern struct.
 	\retval string of pattern.
 */
@@ -172,7 +172,7 @@ QString GdbPatternFile::getPattern(const GdbPattern & p)
 }
 
 /*!
-	\details get comment of pattern
+	\details Get comments of pattern
 	\param p is GdbPattern struct.
 	\retval string of comment.
 */

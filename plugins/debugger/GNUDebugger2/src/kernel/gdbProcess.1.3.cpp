@@ -57,7 +57,9 @@ GdbProcess::~GdbProcess()
 
 // read data from Gdb
 /*!
-	\details  New data from Gdb is avaible
+	\details  New data from Gdb is avaible.
+	Emit commandReadyRead(data) , tis signal is connected to GdbParser class via 
+	DockGNUDebugger class
 */
 void GdbProcess::readyRead()
 {
@@ -149,7 +151,7 @@ void GdbProcess::setWorkingDirectorie(const QString & dir)
 
 //
 /*!
-	\details 	//! Start Gdb
+	\details Start Gdb
 */
 void GdbProcess::startProcess()
 {
@@ -161,3 +163,4 @@ void GdbProcess::startProcess()
 		waitForStarted (500);
 	}
 }
+

@@ -48,45 +48,37 @@
 	interpreter function in AddOn is call and this template find if the current interpreter is in this class. In this case the
 	correct function is call.
 */
-
 template <class _T>
 class GdbConnectTemplate
 {
 
-	//! Struct invok, store parent class, interpreter pointer and address function
-	struct invok
+	/*! 
+		\brief Struct invoker, store parent class, interpreter pointer and address function
+	*/
+	typedef struct Invoker
 	{
-		//! Pointer to the class (generaly this)
+		/*! 
+			\details Pointer to the class (generaly this)
+		*/
 		_T *mParent;		// class _T pointer
-		//! Pointer to the interpreter
+		/*! 
+			\details Pointer to the interpreter
+		*/
 		QPointer<BaseInterpreter> mInterpreter; // just pointer
-		//! Proptype of function (void function(int, QString) 
+		/*! 
+			\details Prototype of function is "void function(int, QString)" 
+		*/
 		void (_T:: *mPf)(int , QString ); // for call _T::Function(int, QString)
 	};
 
-
-	typedef invok Invoker;
-
 public :
 
-	/*!
-		\details Add new connexion
-	*/
 	void add( _T *p, QPointer<BaseInterpreter> i , void(_T:: *f)(int , QString));
-	/*!
-		\details Remove connexion
-	*/
 	void remove(const QPointer<BaseInterpreter> & i);
-	/*!
-		\details call function
-	*/
 	void call(const QPointer<BaseInterpreter> & i, const int & id, const QString & st);
 
 private :
 	
-	/*!
-		\details Find Interpreter id (Pointer)
-	*/
 	int findInvoker(const QPointer<BaseInterpreter> & i);
 	
 	/*! 
@@ -114,7 +106,7 @@ void GdbConnectTemplate<_T>::add( _T *p, QPointer<BaseInterpreter> i , void(_T::
 
 /*!
 	\details Remove connexion in list
-	\param i is the pointer to the ineterpreter
+	\param i is the pointer to the interpreter
 */
 template <class _T>
 void GdbConnectTemplate<_T>::remove(const QPointer<BaseInterpreter> & i)
@@ -150,7 +142,4 @@ int GdbConnectTemplate<_T>::findInvoker(const QPointer<BaseInterpreter> & i)
 		if(invokerList.at(j).mInterpreter == i) return j;
 	return -1;
 }
-
-
-
 #endif

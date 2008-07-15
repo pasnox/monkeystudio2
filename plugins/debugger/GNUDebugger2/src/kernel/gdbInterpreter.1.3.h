@@ -41,62 +41,62 @@ class BaseInterpreter : public QObject
 
 public :
 
-		BaseInterpreter(QObject *parent = 0);
-		~BaseInterpreter();
+	BaseInterpreter(QObject *parent = 0);
+	~BaseInterpreter();
 
-		void set(QString cName, QRegExp cRegExp,  QRegExp aRegExp, QString aExtention);
+	void set(QString cName, QRegExp cRegExp,  QRegExp aRegExp, QString aExtention);
 
-		/*!
-		 * \details Return the class name 
-		*/
-		QString getClassName() {return mClassName;} 
+	/*!
+	 * \details Return the class name 
+	*/
+	QString getClassName() {return mClassName;} 
 
-		/*!
-		 * \details Return the current command in QRegExp format 
-		*/
-		QRegExp getCmdRegExp() { return mCmdRegExp;}
+	/*!
+	 * \details Return the current command in QRegExp format 
+	*/
+	QRegExp getCmdRegExp() { return mCmdRegExp;}
 
-		/*!
-		 * \details Return the correct answer in RegExp format 
-		*/
-		QRegExp getAnswerRegExp() { return mAnswerRegExp;}
+	/*!
+	 * \details Return the correct answer in RegExp format 
+	*/
+	QRegExp getAnswerRegExp() { return mAnswerRegExp;}
 
-		/*!
-		 * \details Return the new answer from Gdb (change answer from Gdb) 
-		*/
-		QString getAnswerExtention() { return mAnswerExtention;}
+	/*!
+	 * \details Return the new answer from Gdb (change the answer from Gdb) 
+	*/
+	QString getAnswerExtention() { return mAnswerExtention;}
 
-		/*!
-		 * \details Return an unic Id for
-		*/
-		quintptr getId(){ return (quintptr) this;}
-
-		
-		/*!
-		 * \details Set name of class
-		*/
-		void setClassName(QString s) { mClassName = s;}
+	/*!
+	 * \details Return an unic Id for this interpreter
+	*/
+	quintptr getId(){ return (quintptr) this;}
 	
-		/*!
-		 * \details Set the answer extention
-		*/
-		void setAnswerExtention(QString s) { mAnswerExtention = s ;}
-		
-		/*!
-		 * \details Set the answer
-		*/
-		void setAnswerRegExp(QRegExp s) { mAnswerRegExp = s ;}
-		
-		/*!
-		 * \details Set the command
-		*/
-		void setCmdRegExp(QRegExp s) { mCmdRegExp = s ;}
+	/*!
+	 * \details Set name of class
+	*/
+	void setClassName(QString s) { mClassName = s;}
+
+	/*!
+	 * \details Set the answer extention
+	*/
+	void setAnswerExtention(QString s) { mAnswerExtention = s ;}
+	
+	/*!
+	 * \details Set the answer
+	*/
+	void setAnswerRegExp(QRegExp s) { mAnswerRegExp = s ;}
+	
+	/*!
+	 * \details Set the command
+	*/
+	void setCmdRegExp(QRegExp s) { mCmdRegExp = s ;}
 		
 private :
-		QString mClassName;		
-		QRegExp mCmdRegExp;		
-		QRegExp mAnswerRegExp;		
-		QString mAnswerExtention;	
+
+	QString mClassName;		
+	QRegExp mCmdRegExp;		
+	QRegExp mAnswerRegExp;		
+	QString mAnswerExtention;	
 };
 
 /*!

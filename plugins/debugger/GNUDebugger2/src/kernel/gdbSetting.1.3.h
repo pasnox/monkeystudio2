@@ -35,39 +35,51 @@
 #include <QMessageBox>
 
 /*! 
-	\brief Small struct for setting AddOn
+	\brief Struct for setting AddOn
 */
 typedef struct GdbAddOn
 {
-	//! Name of AddOn
+	/*! 
+		\details Name of AddOn
+	*/
 	QString name;
-	//! Enable or not
+	/*! 
+	\details Enable or not
+	*/
 	bool enable;
 };
 
 /*!
-	\brief Small struct for store some informations
+	\brief Struct for store some informations
 */
 typedef struct GdbSettings
 {
-	//! Current path of Gdb
+	/*! 
+		\details Current path of Gdb
+	*/
 	QString pathGdb;
-	//! Current path of parse file
+	/*! 
+		\details Current path of parse file
+	*/
 	QString pathParseFile;
-	//! Current path of script file
+	/*! 
+		\details Current path of script file
+	*/
 	QString pathScript;
-	//! List of all AddOn
+	/*! 
+		\details List of all AddOn
+	*/
 	QList<GdbAddOn> addOnList;
 };
 
 
 /*!
 	\brief Load setting from Monkey .ini and store current configuration
-	\details It load setting from Monkey .ini. It configure AddOn (enable or not) and load current path
+	\details It load setting from Monkey .ini. It configure AddOn (enable or not) 
+	and load current path.
 */
 class GdbSetting : public QObject, public QSingleton<GdbSetting>
 {
-
 	Q_OBJECT
 	friend class QSingleton<GdbSetting>;
 
@@ -128,7 +140,7 @@ public :
 	/*! 
 		\details Set enable or disable AddOn
 		\param n is the name of AddOn
-		\param b is true if you want enable AddOn
+		\param b is true if AddOn is enables from .ini
 	*/
 	void setEnable(QString n, bool b)
 	{
@@ -142,8 +154,8 @@ public :
 
 	/*!
 		\details Get if AddOn is Enable or Disable
-		\retval true if AddOn is enabled
-	*/
+		\retval true if AddOn is found in .ini, else return default GdbAddOn struct
+		*/
 	bool getStartUp(QString name)
 	{
 		foreach(GdbAddOn a, gdbSettings.addOnList)
@@ -158,7 +170,7 @@ public :
 	}
 
 	/*!
-	//! Get path of Gdb
+		\details Get path of Gdb
 	*/
 	QString getPathGdb() { return gdbSettings.pathGdb;}
 	/*!
@@ -190,5 +202,4 @@ public :
 	*/
 	QList<GdbAddOn> * getAddOnList() { return &gdbSettings.addOnList;}
 };
-
 #endif

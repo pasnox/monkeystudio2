@@ -106,6 +106,9 @@ GdbParser::GdbParser (QObject * parent) : QObject (parent), mIsReady(0)
 }
 
 //
+/*!
+	\details Clear some lists
+*/
 GdbParser::~GdbParser()
 {
 	mCmdList.clear();
@@ -116,7 +119,7 @@ GdbParser::~GdbParser()
 
 
 /*!
-	\details GateAway RestoreLine
+	\details GateAway for GdbRestoreLine class
 	\param className is the class name
 	\param l1 is the fisrt line
 	\param l2 is the last line
@@ -128,7 +131,7 @@ void GdbParser::addRestoreLine(const QString & className, const QString & l1, co
 }
 
 /*!
-	\details GateAway Interpreter
+	\details GateAway GdbInterpreter class
 	\param cName is the name of class
 	\param cRegExp is the command
 	\param aRegExp is the answer
@@ -173,7 +176,6 @@ void GdbParser::changeAnswerInterpreter(const QPointer<BaseInterpreter> & i, con
 */
 bool GdbParser::checkEndParsing(const QString data)
 {
-
 	for(int i=0; i < mEndParsing.count(); i++)
 		if(mEndParsing.at(i).exactMatch(data)) 	return true;
 
@@ -182,6 +184,7 @@ bool GdbParser::checkEndParsing(const QString data)
 
 /*!
 	\details Get the next command if it has
+	This attach the current string block from Gdb and the current command 
 */
 void GdbParser::getCommand()
 {
@@ -197,9 +200,9 @@ void GdbParser::getCommand()
 
 // 
 /*!
-	\details New data from Gdb is avaible, parse this
+	\details New data from Gdb is avaible, parse this.
 	\param storg is the raw data from GdbProcess class
-	\retval true if the string block from GdbParser is completed.
+	\retval true if the string block from GdbParser is completed, else false
 */
 bool GdbParser::processParsing(const QString & storg)
 {
@@ -391,7 +394,7 @@ bool GdbParser::processParsing(const QString & storg)
 /*!
 	\details Add new command
 	\param className is the class name.
-	\param cmd command to send
+	\param cmd is command to send to GdbProcess.
 */
 void GdbParser::setNextCommand(QString className ,QString cmd)
 {

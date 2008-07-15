@@ -40,6 +40,7 @@ GdbCore::GdbCore(QObject * parent) : QObject (parent)
 	setWantAllMessages(false);
 	setEnabled(true);
 	setWaitEndProcess(false);
+	mTime = 5000;
 }
 
 /*!
@@ -135,17 +136,18 @@ bool GdbCore::isEnabled() { return mEnabled;}
  * ...
  * ...
  * data from Gdb
- * setWaitEndProcess(false); // stop watch before 5 secondes
+ * setWaitEndProcess(false); // stop watch before X secondes, default is 5 seconds.
  * \endcode
- * \param p is true, this indicate AddOn has send data to Gdb ns wait answer from it.
+ * You can change the time by setWatchDogTime() function
+ * \param p is true, this indicate AddOn has send data to Gdb and wait answer from it.
 */
-void GdbCore::setWaitEndProcess(const bool & p){ if(p ) watchDog.start(5000); else watchDog.stop();/* qDebug() << "set wait " + QString::number(p) + " " +  name(); */ mWaitEndProcess = p;}
+void GdbCore::setWaitEndProcess(const bool & p){ if(p ) watchDog.start(mTime); else watchDog.stop();/* qDebug() << "set wait " + QString::number(p) + " " +  name(); */ mWaitEndProcess = p;}
 
 /*!
  * \details Return the current state of wait end process
  * \retval true if AddOn wait answer from Gdb
  */
-bool GdbCore::isWaitEndProcess() { /*qDebug() << "get wait " + QString::number(mWaitEndProcess) + " " +  name(); */return mWaitEndProcess;}
+bool GdbCore::isWaitEndProcess() { return mWaitEndProcess;}
 
 /*!
  * \details Slot for watchDog.
@@ -171,7 +173,7 @@ void GdbCore::onTimer()
  *
  * \note The quotation marks ' " ' are not turned over and they are removed if the string comprises some.
  *
- * \param st is a format string from Parser Class
+ * \param st is a format string from GdbParser Class
  * \param key is the tag that you find
  * \retval QString contains the value of key
 */
@@ -186,4 +188,12 @@ QString GdbCore::findValue(const QString & st , const QString & key)
 		if(k == key ) return v.remove("\"");
 	}
 	return QString();
+}
+
+/*!
+	\details Set the time for watchDog
+*/
+void GdbCore::setWatchDogTime(int t)
+{
+	mTime = t;
 }

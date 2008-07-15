@@ -40,7 +40,10 @@
 #include "gdbInterpreter.1.3.h"
 
 // base class of interpreter 
-
+/*!
+	\details Create new object
+	\param parent of this object
+*/
 BaseInterpreter::BaseInterpreter(QObject *parent): QObject(parent)
 {
 }
@@ -53,7 +56,7 @@ BaseInterpreter::BaseInterpreter(QObject *parent): QObject(parent)
 	\param aRegExp is the answer in QRegExp sush as "^\\$\\d+\\s=\\s.*"
 	\param aExtention is the answer extention in QRegExp
 	\note answerExtention is used to modify the reponce of Gdb, for example when Gdb removes a breakpoint, 
-	it answers just by the prompt one and we do not have any information on what it 'passed
+	it answers just by the prompt one and we do not have any information on what it passed
 */
 void BaseInterpreter::set(QString cName,QRegExp cRegExp, QRegExp aRegExp, QString aExtention)
 {
@@ -84,10 +87,10 @@ GdbInterpreter::GdbInterpreter(QObject *parent) : QObject(parent)
 //
 /*!
 	\details Add new interpreter in list.
-	\param cName is the ClassName sush as "GdbWatch"
-	\param cRegExp is the command in QRegExp
-	\param aRegExp is the answer in QRegExp
-	\param aExtention is the answer extention in QRegExp
+	\param cName is the ClassName sush as "GdbWatch" returned by name() function of GdbCore class
+	\param cRegExp is the command in QRegExp format
+	\param aRegExp is the answer in QRegExp format
+	\param aExtention is the answer extention in QRegExp format
 	\retval Pointer to new BaseInterpreter class or NULL if an error occure
 */
 QPointer<BaseInterpreter>  GdbInterpreter::add(const QString & cName, const QRegExp & cRegExp,
@@ -107,7 +110,7 @@ QPointer<BaseInterpreter>  GdbInterpreter::add(const QString & cName, const QReg
 /*!
 	\details Remove an interpreter in member list
 	\param i is the pointer to the BaseInterpreter class.
-	\retval true if remove successfull.
+	\retval true if remove successfull, else false.
 */
 bool GdbInterpreter::remove(const QPointer<BaseInterpreter> & i)
 {
@@ -134,9 +137,9 @@ void GdbInterpreter::changeAnswer(const QPointer<BaseInterpreter> & i, const QSt
 }
 
 
-// find interpreter from current command
+// 
 /*!
-	\details Fin if an interpreter can be found for the current class ,command, answer from Gdb.
+	\details Fin if an interpreter can be found for the current class ,command and  answer from Gdb.
 	\param currentClassName is the current class name.
 	\param currentCmd is the current command
 	\param lineValue is the line for parse

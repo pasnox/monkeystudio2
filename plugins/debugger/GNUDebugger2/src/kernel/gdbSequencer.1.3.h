@@ -48,10 +48,14 @@
 */
 class SequencerCmd
 {
-
 	friend class GdbSequencer;
 
 public:
+	/*!
+		\details Store only one command
+		\param n is the name of command
+		\param c is the command
+	*/
 	SequencerCmd(QString n, QString c)
 	{
 		name = n;
@@ -65,27 +69,29 @@ private:
 
 /*!
 	\brief Execute commands step by step
-	\details Store your commands, for example is you have a sequence of commands, you can add this in GdbSequencer class
+	\details Store your commands, for example if you have a sequence of commands, 
+	you can add this in GdbSequencer class
 
 	\code
+	// create list
 	QList<SequencerCmd> s ;
 	s << SequencerCmd("processWathis","whatis varName") << SequencerCmd("processPrint","p varName");
-
+	// store list 
 	GdbSequencer::add(ClassName, s);
-
+	// Start command at the begining
 	GdbSequencer::start();
 	\endcode
 
-	This code send "whatis varName", now you have answer from Gdb, when you have finish process whatis,
+	This code send "whatis varName", Gdb answer, when you have finish process whatis,
 	 call GdbSequencer::loop() for send now "p varName" to Gdb.
 
-	You can start Sequencer at the second command if you want by call GdbSequencer::start(1). If you want no execute a command, use GdbSequencer::skipLoop(),
+	You can start Sequencer at the second command if you want by call GdbSequencer::start(1). 
+	If you want no execute a command, use GdbSequencer::skipLoop(),
 	the current command is skiped.
 */
 class GdbSequencer : public QObject
 {
 	Q_OBJECT
-
 
 public :
 
@@ -131,5 +137,4 @@ private :
 	*/
 	QList<SequencerCmd> mCmdList;
 };
-
 #endif

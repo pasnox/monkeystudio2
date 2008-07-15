@@ -29,6 +29,7 @@
 
 /*!
 	\details Create new object
+	Get if editor are opened before that Debugger pluggin is started.
 	\param parent of this object
 */
 GdbBridgeEditor::GdbBridgeEditor(QObject *parent) : QObject(parent)
@@ -40,7 +41,7 @@ GdbBridgeEditor::GdbBridgeEditor(QObject *parent) : QObject(parent)
 
 //
 /*!
-	\details Remove all breakpoints and backtrace in editor
+	\details Remove all breakpoints and backtrace icon in editor
 */
 GdbBridgeEditor::~GdbBridgeEditor()
 {
@@ -50,8 +51,10 @@ GdbBridgeEditor::~GdbBridgeEditor()
 
 /*!
 	\details New file is opened.
-	When a new editor (source code) is opened this function is call, it store fileName and pointer in Editor struct. 
-	Set sensitivity the margin and request if this file has breakpoint or backtrace before the last closed.
+	When a new editor (source code) is opened this function is call, 
+	it store fileName and pointer in Editor struct. 
+	Set sensitivity the margin and request if this file has breakpoint or backtrace 
+	before the last closed.
 	\param s is de name of editor
 */
 void GdbBridgeEditor::addEditor(const QString & s)
@@ -84,8 +87,8 @@ void GdbBridgeEditor::addEditor(const QString & s)
 /*!
 	\details User has selected string in editor
 	If user select string in editor, this string is possible a var, Gdb can print the value of this.
-	GdbToolTip show this value in the tooltip.
-	\param b indicate the new text is selected in editor
+	GdbToolTip class can show this value in the tooltip.
+	\param b indicate the new text is selected in editor, false if the text is not unselected.
 */
 void GdbBridgeEditor::onCopyAvailable(bool b)
 {
@@ -95,7 +98,7 @@ void GdbBridgeEditor::onCopyAvailable(bool b)
 }
 
 /*!
-	\details Remove Qsci pointer to the list, when this editor is cliosed by a user
+	\details Remove Qsci pointer to the list, when this editor is closed by a user
 	\param i is the index in this list
 */
 void GdbBridgeEditor::removeEditor(const int & i)
@@ -106,7 +109,7 @@ void GdbBridgeEditor::removeEditor(const int & i)
 }
 
 /*!
-	\details Remove all icons (breakpoint) in QSci margin  for all editor opened
+	\details Remove all icons (breakpoint) in QSci margin and for all editors opened
 */
 void GdbBridgeEditor::removeAllBreakpoints()
 {
@@ -127,10 +130,10 @@ void GdbBridgeEditor::removeAllBreakpoints()
 */
 void GdbBridgeEditor::removeAllBreakpointsAt( pEditor *e , const int & line)
 {
-		e->markerDelete(line, pEditor::mdEnabledBreak);	
-		e->markerDelete(line, pEditor::mdDisabledBreak);	
-		e->markerDelete(line, pEditor::mdEnabledConditionalBreak);	
-		e->markerDelete(line, pEditor::mdDisabledConditionalBreak);	
+	e->markerDelete(line, pEditor::mdEnabledBreak);	
+	e->markerDelete(line, pEditor::mdDisabledBreak);	
+	e->markerDelete(line, pEditor::mdEnabledConditionalBreak);	
+	e->markerDelete(line, pEditor::mdDisabledConditionalBreak);	
 }
 
 /*!
@@ -145,7 +148,7 @@ void GdbBridgeEditor::removeBacktrace()
 }
 
 /*!
-	\details Same as add function, but call when editor is opened before GNU plugin is started
+	\details Same as add() function, but call when an editor is opened before GNU plugin is started
 */
 void GdbBridgeEditor::fileOpenedBeforeDebugger()
 {
@@ -175,8 +178,8 @@ void GdbBridgeEditor::fileOpenedBeforeDebugger()
 	\details User has clicked in the margin.
 	When user click in the margin, this function emit userToggleBreakpoint signal.
 	GdbBreakpoint class answer and call onToggleBreakpoint function via DockGNUDebugger class.
-	\param margeIndex is the maring index
-	\param line is the line number for set breakpoint
+	\param margeIndex is the margin index
+	\param line is the line number for toggle breakpoint
 	\param d is Qt::KeyboardModifiers
 */
 void GdbBridgeEditor::onMarginClicked( int margeIndex, int line, Qt::KeyboardModifiers d)
@@ -193,7 +196,7 @@ void GdbBridgeEditor::onMarginClicked( int margeIndex, int line, Qt::KeyboardMod
 	\details Toggle breakpoint icon in margin
 	\param bp is Breakpoint struct 
 	\param p is BaseBreakpoint struct
-	\param b indicate if breakpoint is add or delete
+	\param b indicate if breakpoint is add or deleted
 */
 void GdbBridgeEditor::onToggleBreakpoint(const Breakpoint & bp, const BaseBreakpoint & p, const bool & b)
 {
@@ -217,7 +220,7 @@ void GdbBridgeEditor::onToggleBreakpoint(const Breakpoint & bp, const BaseBreakp
 }
 
 /*!
-	\details //! Toggle backtrace icon in margin.
+	\details Toggle backtrace icon in margin.
 	Move backtrace in editor where Gdb has breaked
 	\param fileName is the name of this file 
 	\param line is the line number

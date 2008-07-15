@@ -163,6 +163,7 @@ public slots:
 	bool isEnabled() ;
 	static QString findValue(const QString & , const QString &);
 	static void showMessage(QString, int, SHOW);
+	void setWatchDogTime(int);
 
 	/*!
 	 * \details Return the current state wantAllMessages.
@@ -217,6 +218,11 @@ private :
 		\details Private var, AddOn wan all data from Gdb, use wantAllMessages() function.
 	*/
 	bool mWantAllMessages;
+
+	/*!
+		\details time for watchDog
+	*/
+	int mTime;
 };
 
 #endif

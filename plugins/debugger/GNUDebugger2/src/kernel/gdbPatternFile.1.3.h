@@ -33,7 +33,9 @@
 #include <QRegExp>
 
 /*!
-	\brief Struct for strore all informations of pattern
+	\brief Struct for strore all informations of pattern.
+	\details A pattern is compose by one Id, one 
+	comment, one key and one interger indicate if this pattern is use or not.
 */
 typedef struct GdbPattern
 {
@@ -57,7 +59,7 @@ typedef struct GdbPattern
 
 
 /*!
-	\brief Load file and store all informations in list of GdbPattern struct.
+	\brief Load file and store all informations in list, GdbPattern struct.
 */
 class GdbPatternFile : public QObject, public QSingleton<GdbPatternFile>
 {
@@ -88,10 +90,14 @@ public:
 
 private :
 
-	//! List of all patterns
+	/*! 
+		\details List of all patterns
+		This list contains all datas from parse file. It stored in GdbPattern struct.
+	*/
 	QList<GdbPattern> GdbPatternList;
-	//! Current parse file use
+	/*!
+		\details Current parse file to use
+	*/
 	QString mFullName;
 };
-	 
 #endif
