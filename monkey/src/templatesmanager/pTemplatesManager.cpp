@@ -112,21 +112,18 @@ TemplateList pTemplatesManager::getTemplates()
 
 /*!
 	Create files from already configured template
-	\param itemWhereAdd		Project, on which files should be added. NULL, if not need to add
-	\param o Try to ask PasNox what is it :-/
-	\param t Template to realise
-	\param d Dictionary of variables for template
+	\param scope The project scope where to add files. Else NULL
+	\param op The scope operator to use
+	\param temp Template to realise
+	\param dictionnary Dictionary of variables for template
 	\return Result of creation
 	\retval true All files is created successfully
 	\retval false Some error ocurred
 */
-bool pTemplatesManager::realiseTemplate( XUPItem* itemWhereAdd, 
-										const QString& o, 
-										const pTemplate& t, 
-										const VariablesManager::Dictionary& d )
+bool pTemplatesManager::realiseTemplate( XUPItem* scope, const QString& op, const pTemplate& temp, const VariablesManager::Dictionary& dictionnary )
 {
 	// get destination
-	QString dest = d["Destination"];
+	QString dest = dictionnary["Destination"];
 	
 	// check destination
 	if ( dest.isEmpty() )
@@ -151,16 +148,16 @@ bool pTemplatesManager::realiseTemplate( XUPItem* itemWhereAdd,
 	
 	// replace values in files/projects to open
 	QStringList fo, po, fa;
-	for ( int i = 0; i < t.FilesToOpen.count(); i++ )
-		fo << VariablesManager::instance()->replaceAllVariables( t.FilesToOpen.at( i ), d );
-	for ( int i = 0; i < t.ProjectsToOpen.count(); i++ )
-		po << VariablesManager::instance()->replaceAllVariables( t.ProjectsToOpen.at( i ), d );
-	for ( int i = 0; i < t.FilesToAdd.count(); i++ )
-		fa << VariablesManager::instance()->replaceAllVariables( t.FilesToAdd.at( i ), d );
+	for ( int i = 0; i < temp.FilesToOpen.count(); i++ )
+		fo << VariablesManager::instance()->replaceAllVariables( temp.FilesToOpen.at( i ), dictionnary );
+	for ( int i = 0; i < temp.ProjectsToOpen.count(); i++ )
+		po << VariablesManager::instance()->replaceAllVariables( temp.ProjectsToOpen.at( i ), dictionnary );
+	for ( int i = 0; i < temp.FilesToAdd.count(); i++ )
+		fa << VariablesManager::instance()->replaceAllVariables( temp.FilesToAdd.at( i ), dictionnary );
 	
 	// get files
 	QHash<QString, QString> files;
-	foreach( QString f, t.Files )
+	foreach( QString f, temp.Files )
 	{
 		// check if sources and destination are differents
 		QString sf, df;
@@ -173,7 +170,7 @@ bool pTemplatesManager::realiseTemplate( XUPItem* itemWhereAdd,
 		}
 		
 		// process variables
-		QString s = VariablesManager::instance()->replaceAllVariables( df, d );
+		QString s = VariablesManager::instance()->replaceAllVariables( df, dictionnary );
 		
 		// check value validity
 		if ( s.isEmpty() )
@@ -190,7 +187,7 @@ bool pTemplatesManager::realiseTemplate( XUPItem* itemWhereAdd,
 	foreach( QString f, files.keys() )
 	{
 		// get source file
-		QString k = QFile::exists( QString( "%1%2" ).arg( t.DirPath, f ) ) ? f : VariablesManager::instance()->replaceAllVariables( f, d );
+		QString k = QFile::exists( QString( "%1%2" ).arg( temp.DirPath, f ) ) ? f : VariablesManager::instance()->replaceAllVariables( f, dictionnary );
 		
 		// get file name
 		QString s = QString( "%1%2" ).arg( dest, files[f] );
@@ -207,9 +204,9 @@ bool pTemplatesManager::realiseTemplate( XUPItem* itemWhereAdd,
 		}
 		
 		// copy file
-		if ( !QFile::copy( QString( "%1%2" ).arg( t.DirPath, k ), s ) )
+		if ( !QFile::copy( QString( "%1%2" ).arg( temp.DirPath, k ), s ) )
 		{
-			warning( tr( "Error..." ), tr( "Can't copy '%1%2' to '%3'" ).arg( t.DirPath, k, s ) );
+			warning( tr( "Error..." ), tr( "Can't copy '%1%2' to '%3'" ).arg( temp.DirPath, k, s ) );
 			return false;
 		}
 		
@@ -228,7 +225,7 @@ bool pTemplatesManager::realiseTemplate( XUPItem* itemWhereAdd,
 		file.resize( 0 );
 		
 		// write process contents
-		file.write( VariablesManager::instance()->replaceAllVariables( c, d ).toLocal8Bit() );
+		file.write( VariablesManager::instance()->replaceAllVariables( c, dictionnary ).toLocal8Bit() );
 		
 		// close file
 		file.close();
@@ -240,8 +237,8 @@ bool pTemplatesManager::realiseTemplate( XUPItem* itemWhereAdd,
 			MonkeyCore::fileManager()->openProject( s );
 		
 		// add files to project if needed
-		if ( itemWhereAdd )
-			itemWhereAdd->project()->addFile( s, it, o );
+		if ( scope )
+			scope->project()->addFile( s, scope, op );
 	}
 	
 	// return process state
