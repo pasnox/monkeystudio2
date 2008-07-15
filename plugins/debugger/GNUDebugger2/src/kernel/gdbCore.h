@@ -16,7 +16,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 /*!
-	\file gdbCore.1.3.h
+	\file gdbCore.h
 	\date 2008-01-14T00:27:39
 	\author xiantia
 	\version 1.3.2
