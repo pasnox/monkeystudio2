@@ -20,7 +20,7 @@
 	\date 2008-01-14T00:27:39
 	\author xiantia
 	\version 1.3.2
-	\brief Derived by all Addon
+	\brief Derived by all Addons
 */
 
 #include "gdbCore.h"
@@ -52,14 +52,14 @@ GdbCore::~GdbCore()
 
 /*!
  * \details Show message in Monkey Studio status bar.
- * \param s is string to show
- * \param t is time in seconde
- * \param c is brush color
+ * \param string is string to show
+ * \param time is time in seconde
+ * \param brush is brush color
  */
-void GdbCore::showMessage(QString s, int t, SHOW c)
+void GdbCore::showMessage(QString string, int time, SHOW brush)
 {
 	QColor b;
-	switch(c)
+	switch(brush)
 	{
 	case _WARNING_ : b.setRgb(240,240,100); break;
 	case _INFO_ : b.setRgb(120,250,100); break;
@@ -67,7 +67,7 @@ void GdbCore::showMessage(QString s, int t, SHOW c)
 
 	}
 
-	MonkeyCore::statusBar()->appendMessage( s, t ,QPixmap(), QBrush(b));
+	MonkeyCore::statusBar()->appendMessage( string, time ,QPixmap(), QBrush(brush));
 }
 
 /*!
@@ -91,7 +91,7 @@ void GdbCore::showMessage(QString s, int t, SHOW c)
  * 
  * In interpreter function :
  * \code
- * Connect.call(interpreter, id, string);
+ * Connect.call(pInter, stId, string);
  * \endcode
  *
  * onValue function is only and automatically calls, when you send your 
@@ -103,8 +103,11 @@ void GdbCore::showMessage(QString s, int t, SHOW c)
  * For example when you remove a breakpoint, Gdb answer just by prompt event and you have any information on what it passed. 
  * You can modify the answer of Gdb by specifying this one in answerExtention string.
  *
+ * \param pInter is a pointer to the interpreter found.
+ * \param stId is the unic id of string.
+ * \param string is the string formated from GdbParser class.
  */
-void GdbCore::interpreter(const QPointer<BaseInterpreter> & , const int & , const QString & ){}
+void GdbCore::interpreter(const QPointer<BaseInterpreter> & pInter , const int & stId , const QString & string){}
 
 /*!
  * \details Set enabled or not this AddOn.
@@ -139,9 +142,9 @@ bool GdbCore::isEnabled() { return mEnabled;}
  * setWaitEndProcess(false); // stop watch before X secondes, default is 5 seconds.
  * \endcode
  * You can change the time by setWatchDogTime() function
- * \param p is true, this indicate AddOn has send data to Gdb and wait answer from it.
+ * \param b is true, this indicate AddOn has send data to Gdb and wait answer from it.
 */
-void GdbCore::setWaitEndProcess(const bool & p){ if(p ) watchDog.start(mTime); else watchDog.stop();/* qDebug() << "set wait " + QString::number(p) + " " +  name(); */ mWaitEndProcess = p;}
+void GdbCore::setWaitEndProcess(const bool & b){ if(b ) watchDog.start(mTime); else watchDog.stop();/* qDebug() << "set wait " + QString::number(p) + " " +  name(); */ mWaitEndProcess = b;}
 
 /*!
  * \details Return the current state of wait end process
@@ -192,6 +195,7 @@ QString GdbCore::findValue(const QString & st , const QString & key)
 
 /*!
 	\details Set the time for watchDog
+	\param t is the time for watchDog. If no answer occure from GdbParser and time out, a message is show Monkey status bar. 
 */
 void GdbCore::setWatchDogTime(int t)
 {
