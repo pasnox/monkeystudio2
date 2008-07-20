@@ -135,27 +135,36 @@ bool GdbCore::isEnabled() { return mEnabled;}
  *
  * \code 
  * setWaitEndProcess(true); // use watchDog
- * send data to Gdb
+ * // send data to Gdb
  * ...
  * ...
- * data from Gdb
- * setWaitEndProcess(false); // stop watch before X secondes, default is 5 seconds.
+ * // data from Gdb
+ * setWaitEndProcess(false); // stop watch before X secondes, default is 5 seconds (default).
  * \endcode
  * You can change the time by setWatchDogTime() function
  * \param b is true, this indicate AddOn has send data to Gdb and wait answer from it.
+ * \sa isWaitEndProcess(), setWatchDogTime(), onTimer()
 */
-void GdbCore::setWaitEndProcess(const bool & b){ if(b ) watchDog.start(mTime); else watchDog.stop();/* qDebug() << "set wait " + QString::number(p) + " " +  name(); */ mWaitEndProcess = b;}
+void GdbCore::setWaitEndProcess(const bool & b)
+{ 
+	if(b ) 
+		watchDog.start(mTime); 
+	else watchDog.stop();
+	mWaitEndProcess = b;
+}
 
 /*!
  * \details Return the current state of wait end process
  * \retval true if AddOn wait answer from Gdb
+ * \sa setWaitEndProcess(), setWatchDogTime(), onTimer()
  */
 bool GdbCore::isWaitEndProcess() { return mWaitEndProcess;}
 
 /*!
  * \details Slot for watchDog.
  *
- * This function is calling automatly by the internal watchDog if setWaitEndProcess is true and the time out occure.
+ * This function is calling automatly by the internal watchDog if the time out occure.
+ * \sa isWaitEndProcess(), setWaitEndProcess(), setWatchDogTime()
  */
 void GdbCore::onTimer()
 {
@@ -196,6 +205,7 @@ QString GdbCore::findValue(const QString & st , const QString & key)
 /*!
 	\details Set the time for watchDog
 	\param t is the time for watchDog. If no answer occure from GdbParser and time out, a message is show Monkey status bar. 
+	\sa setWaitEndProcess(), isWaitEndProcess(), onTimer()
 */
 void GdbCore::setWatchDogTime(int t)
 {
