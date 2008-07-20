@@ -146,6 +146,9 @@ public slots:
 	void onRequestBreakpoint(const QString & );
 	void onBreakpointPending(int, QString );
 	
+	/*!
+		\sa GdbInterpreter
+	*/
 	void interpreter(const QPointer<BaseInterpreter> & , const int & , const QString & );
 
 	QString name();
@@ -174,45 +177,46 @@ public slots:
 private:
 
 	/*! 
-		\details Connect interpreter to function
+		\sa GdbConnectTemplate
 	*/
 	GdbConnectTemplate<GdbBreakpoint> Connect;
 	/*! 
 		\details  List of all breakpoints, struct Breakpoint
+		\sa Breakpoint
 	*/
 	QList<Breakpoint *>  breakpointList;
 
 	/*! 
-		\details Connect "b fileName:Line" command to onAddBreakpoint() function 
+		\sa BaseInterpreter, GdbInterpreter
 	*/
 	QPointer<BaseInterpreter> interpreterAddBreakpoint;
 	
 	/*! 
-		\details Connect "delete numBreak" command to onDeleteBreakpoint() function 
+		\sa BaseInterpreter, GdbInterpreter
 	*/
 	QPointer<BaseInterpreter> interpreterDelBreakpoint;
 
 	/*! 
-		\details Connect "enable numBreak" command to onEnableBreakpoint() function 
+		\sa BaseInterpreter, GdbInterpreter
 	*/
 	QPointer<BaseInterpreter> interpreterEnabledBreakpoint;
 	/*! 
-		\details Connect "disable numBreake" command to onDisableBreakpoint() function 
+		\sa BaseInterpreter, GdbInterpreter
 	*/
 	QPointer<BaseInterpreter> interpreterDisabledBreakpoint;
 
 	/*! 
-		\details Same as "b fileName:line" command but lib is not loaded by Gdb 
+		\sa BaseInterpreter, GdbInterpreter
 	*/
 	QPointer<BaseInterpreter> interpreterBreakpointPending;
 
 	/*! 
-		\details Connect "condition numBreak myCondition" command to onConditionnedBreakpoint() function 
+		\sa BaseInterpreter, GdbInterpreter
 	*/
 	QPointer<BaseInterpreter> interpreterConditionnedBreakpoint;
 
 	/*! 
-		\details Connect "condition numBreak" command to onUnConditionnedBreakpoint() function 
+		\sa BaseInterpreter, GdbInterpreter
 	*/
 	QPointer<BaseInterpreter> interpreterUnConditionnedBreakpoint;
 
@@ -231,9 +235,9 @@ private:
 signals:
 
 	/*!
-	\details Emit for indicats that this breakpoint is add, deleted or modified.
+		\details Emit for indicats that this breakpoint is add, deleted or modified.
 	*/
-		void onToggleBreakpoint(const Breakpoint & , const BaseBreakpoint & , const bool &);
+	void onToggleBreakpoint(const Breakpoint & , const BaseBreakpoint & , const bool &);
 };
 
 #endif

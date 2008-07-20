@@ -95,6 +95,9 @@ public slots:
 	QPointer<QWidget> widget();
 	QIcon icon();
 
+	/*!
+		\sa GdbInterpreter
+	*/
 	void interpreter(const QPointer<BaseInterpreter> & , const int & , const QString & );
 
 	// gdb
@@ -118,23 +121,22 @@ public slots:
 private:
 
 	/*!
-	 * \details This variable is a template for connect GdbBacktrace::onBacktrace() with interpreterBacktrace
-	 * and GdbBacktrace::onInfoSource() with interpreterInfosource.
+		\sa GdbConnectTemplate
 	*/
 	GdbConnectTemplate<GdbBacktrace> Connect;
 
 	/*!
-	* \details Store interpreterBacktrace pointer returned by GdbParser class.
+		\sa BaseInterpreter, GdbInterpreter
 	*/
 	QPointer<BaseInterpreter> interpreterBacktrace;
 	
 	/*!
-	* \details Store interpreterInfoSource pointer returned by GdbParser class.
+		\sa BaseInterpreter, GdbInterpreter
 	*/
 	QPointer<BaseInterpreter> interpreterInfoSource;
 
 	/*!
-	* \details Store Sequencer. It contains all commands has send to Gdb
+		\sa GdbSequencer
 	*/
 	QPointer<GdbSequencer> Sequencer;
 

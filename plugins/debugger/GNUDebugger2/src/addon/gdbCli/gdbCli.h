@@ -64,6 +64,9 @@ public slots:
 	QPointer<QWidget> widget();
 	QIcon icon();
 
+	/*!
+		\sa GdbInterpreter
+	*/
 	void interpreter(const QPointer<BaseInterpreter> & , const int & , const QString & );
 
 	// gdb

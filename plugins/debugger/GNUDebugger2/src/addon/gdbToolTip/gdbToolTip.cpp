@@ -215,6 +215,7 @@ void GdbToolTip::onValue(int, QString s)
 /**
  * \details This function is call when user select text in editor. This function send "print varName" to Gdb.
  * \param n is the name of var from editor.
+ * \sa GdbBridgeEditor::requestShowVar()
 */
 void GdbToolTip::onRequestShowVar(const QString & n)
 {

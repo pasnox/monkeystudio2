@@ -58,7 +58,7 @@ GdbProcess::~GdbProcess()
 // read data from Gdb
 /*!
 	\details  New data from Gdb is avaible.
-	Emit commandReadyRead(data) , tis signal is connected to GdbParser class via 
+	Emit commandReadyRead(data) , this signal is connected to GdbParser class via 
 	DockGNUDebugger class
 */
 void GdbProcess::readyRead()

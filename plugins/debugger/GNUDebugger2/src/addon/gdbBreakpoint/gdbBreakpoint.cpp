@@ -438,6 +438,7 @@ void GdbBreakpoint::breakpointMoved(const QString & fileName, const int & line, 
 	onBreakpointDelete() or onBreakpointAdd().
 	\param fileName is the name of file.
 	\param line is the line number.
+	\sa GdbBridgeEditor::userToggleBreakpoint()
 */
 void GdbBreakpoint::toggleBreakpoint(const QString & fileName, const int & line)
 {
@@ -583,10 +584,11 @@ void GdbBreakpoint::onBreakpointDelete( int , QString s)
 //
 
 /*!
-	\details Calling when a new file is opened
-	Find if this file have some breakpoints. In this case, this function emit onToggleBreakpoint
+	\details Calling when a new file is opened.
+	Find if this file have some breakpoints. In this case, this function emit onToggleBreakpoint()
 	signal.
 	\param fileName is the name of file.
+	\sa GdbBridgeEditor::requestBreakpoint()
 */
 void GdbBreakpoint::onRequestBreakpoint(const QString & fileName)
 {

@@ -139,32 +139,36 @@ public :
 	
 	/*! 
 		\details Set enable or disable AddOn
-		\param n is the name of AddOn
+		\param addOnName is the name of AddOn
 		\param b is true if AddOn is enables from .ini
+		\sa getStartUp()
 	*/
-	void setEnable(QString n, bool b)
+	void setEnable(QString addOnName, bool b)
 	{
-		GdbAddOn p={ n , b};
+		GdbAddOn p={ addOnName , b};
 		for(int i = 0; i< gdbSettings.addOnList.count() ;i++)
 		{
-			if(gdbSettings.addOnList.at(i).name == n)
+			if(gdbSettings.addOnList.at(i).name == addOnName)
 				gdbSettings.addOnList.replace(i,p) ;
 		}
 	}
 
 	/*!
 		\details Get if AddOn is Enable or Disable
-		\retval true if AddOn is found in .ini, else return default GdbAddOn struct
-		*/
-	bool getStartUp(QString name)
+		\param addOnName is the name of addOn
+		\retval Current state saved in .ini, if AddOn is not found in .ini, return true by default
+		\sa setEnable()
+	*/
+	bool getStartUp(QString addOnName)
 	{
 		foreach(GdbAddOn a, gdbSettings.addOnList)
 		{
-			if(a.name == name) 
+			if(a.name == addOnName) 
 				return a.enable;
 		}
 		
-		GdbAddOn p = { name, true };
+		// default addon is true
+		GdbAddOn p = { addOnName, true };
 		gdbSettings.addOnList << p;	
 		return true;
 	}
@@ -198,7 +202,7 @@ public :
 	void setPathScript(QString s) { gdbSettings.pathScript = s;}
 
 	/*!
-		\details Get list of AddOn
+		\details Get list of AddOns
 	*/
 	QList<GdbAddOn> * getAddOnList() { return &gdbSettings.addOnList;}
 };

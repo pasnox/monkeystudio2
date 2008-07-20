@@ -89,17 +89,17 @@ public slots:
 private:
 
 	/*!
-	 * \details This variable is a template for connect GdbToolTip::onValue() and interpreterValue.
-	 * When onRequestShowVar function is call. it send "print variableName" to Gdb.
-	 * The answer from Gdb is parse in GdbParser class, this class search an interpreter and found interpreterValue.
-	 * Parser Class emit interpreter signal and call GdbToolTip::interpreter(..) function, in this it call Connect.call() function 
-	 * and found onValue function attached with this interpreter.
+		\sa GdbConnectTemplate
 	*/
 	GdbConnectTemplate<GdbToolTip> Connect;
+
+	/*!
+		\sa BaseInterpreter, GdbParser::addInterpreter()
+	*/
 	QPointer<BaseInterpreter> interpreterValue;
 
 	/**
-	 * \details This variable store all commands to send to Gdb. In this case Sequencer has just one command, "print variableName".
+	 * \sa GdbSequencer
 	*/
 	QPointer<GdbSequencer> Sequencer;
 

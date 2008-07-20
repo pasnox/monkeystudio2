@@ -44,11 +44,12 @@ GdbSequencer::~GdbSequencer()
 //
 /*!
 	\details  Add new command to the end of command list
-	\param c is the command 
+	\param cmd is the command 
+	\sa remove()
 */
-void GdbSequencer::add(const SequencerCmd & c)
+void GdbSequencer::add(const SequencerCmd & cmd)
 {
-	mCmdList << c;
+	mCmdList << cmd;
 }
 
 //
@@ -56,12 +57,13 @@ void GdbSequencer::add(const SequencerCmd & c)
 	\details Add new command list
 	\note The last command list is cleared.
 	\param className is the cleaa name
-	\param s is the command list
+	\param cmdList is the command list
+	\sa remove()
 */
-void GdbSequencer::add(const QString & className, const QList<SequencerCmd> & s)
+void GdbSequencer::add(const QString & className, const QList<SequencerCmd> & cmdList)
 {
 	mCmdList.clear();
-	mCmdList = s;
+	mCmdList = cmdList;
 	mClassName = className;
 }
 
@@ -69,6 +71,8 @@ void GdbSequencer::add(const QString & className, const QList<SequencerCmd> & s)
 /*!
 	\details Send the first command to gdb. 
 	Use loop() function for send the next command to gdb.
+	\sa start(const int &)
+
 */
 void GdbSequencer::start()
 {
@@ -79,6 +83,7 @@ void GdbSequencer::start()
 /*!
 	\details Same as start() function , but start sequence at index
 	\param i is the index of the first command that you start
+	\sa start()
 */
 void GdbSequencer::start(const int & i)
 {
@@ -94,6 +99,7 @@ void GdbSequencer::start(const int & i)
 //
 /*!
 	\details remove all commands in list
+	\sa remove(const SequencerCmd &)
 */
 void GdbSequencer::remove()
 {
@@ -102,19 +108,21 @@ void GdbSequencer::remove()
 
 //
 /*!
-	\details remove just one commands in list
-	\param a is the command that you want removed
+	\details remove just one command in list
+	\param cmd is the command that you want removed
+	\sa remove()
 */
-void GdbSequencer::remove(const SequencerCmd & a)
+void GdbSequencer::remove(const SequencerCmd & cmd)
 {
 	for(int i = 0 ; i <mCmdList.count(); i++)
-		if(mCmdList.at(i).name == a.name)
+		if(mCmdList.at(i).name == cmd.name)
 			mCmdList.removeAt(i);
 }
 
 //
 /*!
 	\details execute next command
+	\sa skipLoop()
 */
 void GdbSequencer::loop()
 {
@@ -125,6 +133,7 @@ void GdbSequencer::loop()
 //
 /*!
 	\details skip current command
+	\sa loop()
 */
 void GdbSequencer::skipLoop()
 {
@@ -134,29 +143,31 @@ void GdbSequencer::skipLoop()
 //
 /*!
 	\details Change command by an other
-	\param a is the command to be change
-	\param b is the nex command 
+	\param before is the command to be change
+	\param after is the new command 
+	\sa change(const QString & , const QString & )
 */
-void GdbSequencer::change(const SequencerCmd & a, const SequencerCmd & b )
+void GdbSequencer::change(const SequencerCmd & before, const SequencerCmd & after )
 {
 	for(int i = 0 ; i <mCmdList.count(); i++)
-		if(mCmdList.at(i).name == a.name)
-			mCmdList.replace(i, b);
+		if(mCmdList.at(i).name == before.name)
+			mCmdList.replace(i, after);
 }
 
 //
 /*!
 	\details Same as change(const SequencerCmd &, const SequencerCmd &)
-	\param name is the name of the command that you want change
-	\param v is the new command string
+	\param cmdName is the name of the command that you want change
+	\param newCmd is the new command string
+	\sa change(const SequencerCmd & , const SequencerCmd &  )
 */
-void GdbSequencer::change(const QString & name, const QString & v)
+void GdbSequencer::change(const QString & cmdName, const QString & newCmd)
 {
 	for(int i = 0 ; i <mCmdList.count(); i++)
 	{
-		if(mCmdList.at(i).name == name)
+		if(mCmdList.at(i).name == cmdName)
 		{
-			SequencerCmd s(name, v);
+			SequencerCmd s(cmdName, newCmd);
 			mCmdList.replace(i, s);
 		}
 	}
@@ -165,7 +176,7 @@ void GdbSequencer::change(const QString & name, const QString & v)
 //
 /*!
 	\details Return the current command
-	\retval Command string
+	\retval Current command string or empty string if not have.
 */
 QString GdbSequencer::currentCmd()
 {

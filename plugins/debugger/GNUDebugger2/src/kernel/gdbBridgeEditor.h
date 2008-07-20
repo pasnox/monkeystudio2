@@ -91,6 +91,7 @@ private:
 
 	/*! 
 		\details List of all editor opened
+		\sa addEditor(), removeEditor()
 	*/
 	QList<Editor> editorList;
 
@@ -100,26 +101,35 @@ private:
 signals :
 
 	/*!
-		\details Emit when user click in the margin 
+		\details Emit when user click in the margin
+		\param fileName is the name of file.
+		\param line is the number of line where user has toggle breakpoint.
+		\sa GdbBreakpoint::toggleBreakpoint()
 	*/
-	void userToggleBreakpoint(const QString & , const int &);
+	void userToggleBreakpoint(const QString &fileName , const int &line);
 
 	/*!
 		\details Emit when an editor is opened.
 		This signal indicate that this editor request breakpoint for this file.
+		\param fileName is the name of file.
+		\sa GdbBreakpoint::onRequestBreakpoint()
 	*/
-	void requestBreakpoint(const QString &);
+	void requestBreakpoint(const QString &fileName);
 
 	/*!
 		\details Emit when an editor is opened.
 		This signal indicate that this editor request backtrace for this file
+		\param fileName is the name of file.
+		\sa GdbBacktrace::onRequestBacktrace()
 	*/
-	void requestBacktrace(const QString &);
+	void requestBacktrace(const QString &fileName);
 
 	/*!
 		\details Request show var, user select string in editor.
 		This signal indicate that this editor has selected string and want show value.
+		\param textSelected is the text selected by the user in Qsci.
+		\sa GdbToolTip::onRequestShowVar()
 	*/
-	void requestShowVar(const QString &);
+	void requestShowVar(const QString &textSelected);
 };
 #endif

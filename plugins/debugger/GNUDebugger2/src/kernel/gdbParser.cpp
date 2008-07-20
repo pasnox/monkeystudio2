@@ -119,10 +119,11 @@ GdbParser::~GdbParser()
 
 
 /*!
-	\details GateAway for GdbRestoreLine class
+	\details GateAway for GdbRestoreLine class. In internal this function call GdbRestoreLine::add()
 	\param className is the class name
-	\param l1 is the fisrt line
+	\param l1 is the first line
 	\param l2 is the last line
+	\sa GdbRestoreLine, GdbCore::Parser()->addRestoreLine()
 */
 void GdbParser::addRestoreLine(const QString & className, const QString & l1, const QString & l2)
 {
@@ -131,11 +132,13 @@ void GdbParser::addRestoreLine(const QString & className, const QString & l1, co
 }
 
 /*!
-	\details GateAway GdbInterpreter class
+	\details GateAway GdbInterpreter class.In internal this function call GdbInterpreter::add()
 	\param cName is the name of class
 	\param cRegExp is the command
 	\param aRegExp is the answer
 	\param aExtention is the answer extention 
+	\retval A pointer to the new BaseInterpreter
+	\sa removeInterpreter(), GdbInterpreter, GdbCore::Parser()->addInterpreter()
 */
 QPointer<BaseInterpreter> GdbParser::addInterpreter(const QString & cName,  const QRegExp & cRegExp, 
 													const QRegExp & aRegExp,const QString & aExtention)
@@ -147,31 +150,33 @@ QPointer<BaseInterpreter> GdbParser::addInterpreter(const QString & cName,  cons
 
 /*!
 	\details Remove an interpreter
-	\param i is the pointer to this interpreter
+	\param pInter is the pointer to this interpreter.
+	\retval true if this interpreter is correctly removed else false.
+	\sa addInterpreter()
 */
-bool GdbParser::removeInterpreter( const QPointer<BaseInterpreter> & i )
+bool GdbParser::removeInterpreter( const QPointer<BaseInterpreter> & pInter )
 {
 	if(gdbInterpreter)
-		return  gdbInterpreter->remove( i );
+		return  gdbInterpreter->remove( pInter );
 	else return false;
 }
 
 /*!
 	\details Change answerExtention for an interpreter
-	\param i is the pointer to this interpreter
-	\param s is the new answer
+	\param pInter is the pointer to this interpreter
+	\param newAnswer is the new answer
 */
-void GdbParser::changeAnswerInterpreter(const QPointer<BaseInterpreter> & i, const QString & s)
+void GdbParser::changeAnswerInterpreter(const QPointer<BaseInterpreter> & pInter, const QString & newAnswer)
 {
 	if(gdbInterpreter)
-		gdbInterpreter->changeAnswer(i, s);
+		gdbInterpreter->changeAnswer(pInter, newAnswer);
 }
 
 /*!
-	\details Find end of string block
+	\details Find end of string block.
 	All data from Gdb are append while prompt are other string is found
 	For example it return true if string block ends with "(gdb) ", "Continue.", ....
-	\param data is data from GdbProcess
+	\param data is datas from GdbProcess (Gdb)
 	\retval true if the string block ends with mEndParsing list
 */
 bool GdbParser::checkEndParsing(const QString data)
@@ -183,7 +188,7 @@ bool GdbParser::checkEndParsing(const QString data)
 }
 
 /*!
-	\details Get the next command if it has
+	\details Get the next command if it has.
 	This attach the current string block from Gdb and the current command 
 */
 void GdbParser::getCommand()
@@ -201,8 +206,9 @@ void GdbParser::getCommand()
 // 
 /*!
 	\details New data from Gdb is avaible, parse this.
+	When the string block is completed, GdbParser emit some signals, by example if it found "(gdb)" in string block,it emit prompt() signal
 	\param storg is the raw data from GdbProcess class
-	\retval true if the string block from GdbParser is completed, else false
+	\retval true if the string block from GdbParser is completed, else false.
 */
 bool GdbParser::processParsing(const QString & storg)
 {
@@ -395,6 +401,7 @@ bool GdbParser::processParsing(const QString & storg)
 	\details Add new command
 	\param className is the class name.
 	\param cmd is command to send to GdbProcess.
+	\sa GdbCore::Parser()
 */
 void GdbParser::setNextCommand(QString className ,QString cmd)
 {
@@ -404,6 +411,7 @@ void GdbParser::setNextCommand(QString className ,QString cmd)
 
 /*!
 	\details Clear all commands in list
+	\sa setNextCommand()
 */
 void GdbParser::clearAllCommand()
 {

@@ -64,6 +64,9 @@ public slots:
 	QPointer<QWidget> widget();
 	QIcon icon();
 
+	/*!
+		\sa GdbInterpreter
+	*/
 	void interpreter(const QPointer<BaseInterpreter> & , const int & , const QString & );
 
 	// gdb
@@ -87,16 +90,16 @@ public slots:
 private:
 
 	/*!
-	  \details This variable is a template for connect interpreterRegister and onRegister function
+	  \sa GdbConnectTemplate
 	 */
 	GdbConnectTemplate<GdbRegister> Connect;
 	/*!
-	  \details Pointer to interpreterRegister
+		\sa BaseInterpreter, GdbInterpreter
 	 */
 	QPointer<BaseInterpreter> interpreterRegister;
 
 	/*!
-	 \details Pointer to GdbSequencer contains all commands.
+	 \sa GdbSequencer
 	 */
 	QPointer<GdbSequencer> Sequencer;
 

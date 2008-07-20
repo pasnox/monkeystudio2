@@ -137,26 +137,30 @@ public:
 	/*!
 	 * \details Get the GdbParser class.
 	 * 
-	 * This is used for store the commmand in GdbParser class. It work with GdbProcess
+	 * This is used for access to GdbParser class.
+	 * For example store the commmand in GdbParser class and send data to Gdb.
 	 *
 	 * \code
 	 * Parser()->setNextCommand( name(), "command has to send"); 
 	 * Process()->sendRawData("command has to send");
 	 * \endcode
 	 * \retval Pointer to GdbParser class
+	 * \sa GdbParser
 	 */
 	QPointer<GdbParser> Parser() {  return mParser;}
 	
 	/*!
 	 * \details Get the GdbProcess class.
-	 * 
-	 * This is used for send the command to Gdb. It work with GdbParser
+	 *
+	 * This is used for access to GdbProcess class.
+	 * For example store the commmand in GdbParser class and send data to Gdb.
 	 *
 	 * \code
 	 * Parser()->setNextCommand( name(), "command has to send"); 
 	 * Process()->sendRawData("command has to send");
 	 * \endcode
 	 * \retval Pointer to GdbProcess class
+	 * \sa GdbProcess
 	 */
 	QPointer<GdbProcess> Process() {  return mProcess;}
 

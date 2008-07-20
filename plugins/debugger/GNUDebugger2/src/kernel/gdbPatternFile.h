@@ -60,6 +60,9 @@ typedef struct GdbPattern
 
 /*!
 	\brief Load file and store all informations in list, GdbPattern struct.
+	GdbParser use one list for parse all datas from GdbProcess. It seek in this file the string from Gdb.
+	This file is loaded in GdbPattern. this pattern store an Id, one key, one comment and if this pattern is use or not.
+	\sa GdbPaser, GdbPattern
 */
 class GdbPatternFile : public QObject, public QSingleton<GdbPatternFile>
 {

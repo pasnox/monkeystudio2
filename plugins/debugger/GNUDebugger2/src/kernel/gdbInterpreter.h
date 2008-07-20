@@ -35,6 +35,7 @@
 /*!
 	\brief This class store only one interpreter
 	\details This class store all informations for only one interpreter.
+	\sa GdbInterpreter
 */
 class BaseInterpreter : public QObject
 {
@@ -103,8 +104,43 @@ private :
 	\brief This class store all interpreters from all AddOn.
 	\details This is the list of all interpreters.
 	An interpreter is small parser for a one class, one command and one an answer.
-	When data arrives of gdb, GdbParser seeks if the className in court, the command and the reponce correspond has one interpreter.
-	In this case, the signal interpreter is emitted coming from GdbParser class.
+	When data arrives of gdb, GdbParser seeks if the className in court (set by setNextCommand() function), 
+	the command and the reponce correspond has one interpreter.
+	In this case, the signal GdbParser::onInterpreter() is emitted.
+
+	By example: if you want print the value of a variable X, in a consol Gdb, you made:
+
+	\code
+	p X
+	\endcode
+
+	Gdb answers by:
+
+	\code
+	$2 = 23
+	(gdb)
+	\endcode
+	
+	Has this point you want just to extract the value and to treat it by a specific function.
+
+	For parse this sequence you will create an interpreter, which has like name that the name of the class (name() function) 
+	and which parse only command "p ..." and the reponce "$2 = ...".
+
+	\code
+	BaseInterpreter *pInter = GdbInterpreter::add( name(),		// Name of AddOn sush as "GdbWatch"
+		QRegExp("^p .*"),		// Command 
+		QRegExp("^\\$\\d+\\s=\\s.*"),	// Answer
+		"");				// answerExtention
+	\endcode
+
+	Now when your AddOn sending has Gdb the command "p varName" by GdbCore::Process()->sendRawData("p varName"), an interpreter is found by GdbParser 
+	because "p varName" == "^p .*" and "$2 = 23" == "^\$\d+\s=\s.*". In this case the signal GdbParser::onInterpreter() is emitted and call interpreter() function in
+	your AddOn.
+
+	\note AddOn can have more interpreters for parser more sequences, but only one function is called.
+	You can call other functions if you use GdbConnectTemplate class.
+
+	\sa BaseInterpreter ,  GdbConnectTemplate
 */
 class  GdbInterpreter : public QObject
 {

@@ -88,8 +88,8 @@ GdbInterpreter::GdbInterpreter(QObject *parent) : QObject(parent)
 /*!
 	\details Add new interpreter in list.
 	\param cName is the ClassName sush as "GdbWatch" returned by name() function of GdbCore class
-	\param cRegExp is the command in QRegExp format
-	\param aRegExp is the answer in QRegExp format
+	\param cRegExp is the command in QRegExp sush as "^p *." 
+	\param aRegExp is the answer in QRegExp sush as "^\\$\\d+\\s=\\s.*"
 	\param aExtention is the answer extention in QRegExp format
 	\retval Pointer to new BaseInterpreter class or NULL if an error occure
 */
@@ -109,12 +109,12 @@ QPointer<BaseInterpreter>  GdbInterpreter::add(const QString & cName, const QReg
 //
 /*!
 	\details Remove an interpreter in member list
-	\param i is the pointer to the BaseInterpreter class.
+	\param pInter is the pointer to the BaseInterpreter class.
 	\retval true if remove successfull, else false.
 */
-bool GdbInterpreter::remove(const QPointer<BaseInterpreter> & i)
+bool GdbInterpreter::remove(const QPointer<BaseInterpreter> & pInter)
 {
-	int ind = GdbInterpreterList.indexOf(i); 
+	int ind = GdbInterpreterList.indexOf(pInter); 
 	if( ind != -1)
 	{
 		delete GdbInterpreterList.at(ind);
@@ -127,19 +127,19 @@ bool GdbInterpreter::remove(const QPointer<BaseInterpreter> & i)
 //
 /*!
 	\details Change answer extention
-	\param i is the pointer to the BaseInterpreter class that you want change.
-	\param s is the new answer
+	\param pInter is the pointer to the BaseInterpreter class that you want change.
+	\param string is the new answer
 */
-void GdbInterpreter::changeAnswer(const QPointer<BaseInterpreter> & i, const QString & s)
+void GdbInterpreter::changeAnswer(const QPointer<BaseInterpreter> & pInter, const QString & string)
 {
 	foreach(QPointer<BaseInterpreter> b , GdbInterpreterList)
-		if(b == i ) b->setAnswerExtention(s);
+		if(b == pInter ) b->setAnswerExtention(string);
 }
 
 
 // 
 /*!
-	\details Fin if an interpreter can be found for the current class ,command and  answer from Gdb.
+	\details Find if an interpreter can be found for the current class ,command and answer from Gdb.
 	\param currentClassName is the current class name.
 	\param currentCmd is the current command
 	\param lineValue is the line for parse

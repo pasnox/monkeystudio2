@@ -115,6 +115,10 @@ public :
 	QPointer<QWidget> widget(){return (QPointer<QWidget>)(NULL);}
 	QIcon icon() { return QIcon();}
 
+
+	/*!
+		\sa GdbInterpreter
+	*/
 	void interpreter(const QPointer<BaseInterpreter> & , const int & , const QString & );
 
 	int mSequence;

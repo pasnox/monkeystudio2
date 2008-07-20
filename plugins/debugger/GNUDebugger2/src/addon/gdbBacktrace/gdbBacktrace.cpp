@@ -310,6 +310,7 @@ void GdbBacktrace::onInfoSource(int , QString s)
 * If mCurrentfile is a same as the name of the opened file, onToggleBacktrace signal is 
 * emitted indicating that Gdb is stopped on this file. The editor show icon backtrace on the margin.
 * \param s is name of file that request backtrace icon.
+* \sa GdbBridgeEditor::requestBacktrace()
 */
 void GdbBacktrace::onRequestBacktrace(const QString & s)
 {

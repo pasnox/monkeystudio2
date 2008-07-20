@@ -79,7 +79,7 @@ GdbPatternFile::~GdbPatternFile()
 
 
 /*!
-	\details Load QRegExp froim file to GdbPatternList
+	\details Load QRegExp from file to GdbPatternList
 	\param fullName is the path and name of file
 	\retval true if the file is loaded correctly, else false
 */

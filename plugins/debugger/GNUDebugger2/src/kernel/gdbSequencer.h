@@ -53,13 +53,13 @@ class SequencerCmd
 public:
 	/*!
 		\details Store only one command
-		\param n is the name of command
-		\param c is the command
+		\param cmdName is the name of command sush as "my command"
+		\param command is the command has to send to Gdb
 	*/
-	SequencerCmd(QString n, QString c)
+	SequencerCmd(QString cmdName, QString command)
 	{
-		name = n;
-		cmd = c;
+		name = cmdName;
+		cmd = command;
 	}
 
 private:

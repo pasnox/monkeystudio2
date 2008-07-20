@@ -5,13 +5,15 @@ var mCast;
 var Width;
 var Heigth;
 
-process = function(parent , varName , isPointer)
+process = function(parent , varName , cast ,isPointer)
 {
-	mVarName = varName;
+alerte("coucou");
+//	mVarName = varName;
 	// get is varName is a pointer
-	mOp = isPointer ? "->" : ".";
-	mCast = isPointer ? "(QString*)" : "(QString)";
-	return "WAIT:p (" + mVarName + ")" + mOp + "size():sizeFunction";
+//	mOp = isPointer ? "->" : ".";
+//	mCast = isPointer ? "(QString*)" : "(QString)";
+//	return "WAIT:p (" + mVarName + ")" + mOp + "size():sizeFunction";
+return "FINISH::";
 }
 
 

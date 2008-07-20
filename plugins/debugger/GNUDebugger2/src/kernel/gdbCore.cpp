@@ -106,6 +106,7 @@ void GdbCore::showMessage(QString string, int time, SHOW brush)
  * \param pInter is a pointer to the interpreter found.
  * \param stId is the unic id of string.
  * \param string is the string formated from GdbParser class.
+ * \sa GdbInterpreter class.
  */
 void GdbCore::interpreter(const QPointer<BaseInterpreter> & pInter , const int & stId , const QString & string){}
 
