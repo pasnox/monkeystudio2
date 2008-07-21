@@ -37,7 +37,8 @@
 	\details A pattern is compose by one Id, one 
 	comment, one key and one interger indicate if this pattern is use or not.
 */
-typedef struct GdbPattern
+/*typedef, fixe for 64 bits*/
+struct GdbPattern
 {
 	/*!
 		\details Comment of pattern

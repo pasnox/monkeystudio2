@@ -61,7 +61,8 @@ class GdbRestoreLine : public QObject
 	/*!
 		\brief Struct for store data
 	*/
-	typedef struct GdbLines
+	/*typedef, fixe for 64 bits*/
+	struct GdbLines
 	{
 		/*!
 			\details class name

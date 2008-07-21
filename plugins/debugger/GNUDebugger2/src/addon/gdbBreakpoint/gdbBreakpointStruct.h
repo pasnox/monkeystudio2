@@ -33,7 +33,8 @@
 	The first struct store only information for one breakpoint.
 	The second struct is Breakpoint.
 */
-	typedef struct BaseBreakpoint
+	/*typedef, fixe for 64 bits*/
+	struct BaseBreakpoint
 	{
 		/*!
 			\details Contains the line where the breakpoint is set
@@ -72,7 +73,8 @@
 		\details Struct of all Breakpoints strored for one file
 		\note One file can contains more breakpoints.
 	*/
-	typedef struct Breakpoint
+	/*typedef, fixe for 64 bits*/
+	struct Breakpoint
 	{
 		/*!
 			\details Contains the fileName 

@@ -42,7 +42,10 @@
 /*!
 \details Enum for show message to the status bar
 */
-enum SHOW{ _WARNING_,  _CRITICAL_, _INFO_};
+enum SHOW{ _WARNING_, /**< enum value for yellow brush. */  
+ _CRITICAL_, /**< enum value for red brush. */
+ _INFO_ /**< enum value for green brush. */
+};
 
 
 /*!

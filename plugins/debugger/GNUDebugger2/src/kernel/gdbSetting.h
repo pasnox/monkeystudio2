@@ -37,7 +37,8 @@
 /*! 
 	\brief Struct for setting AddOn
 */
-typedef struct GdbAddOn
+/*typedef, fixe for 64 bits*/
+struct GdbAddOn
 {
 	/*! 
 		\details Name of AddOn
@@ -52,7 +53,8 @@ typedef struct GdbAddOn
 /*!
 	\brief Struct for store some informations
 */
-typedef struct GdbSettings
+/*typedef, fixe for 64 bits*/
+struct GdbSettings
 {
 	/*! 
 		\details Current path of Gdb
