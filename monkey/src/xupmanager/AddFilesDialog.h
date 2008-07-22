@@ -7,13 +7,13 @@
 #include <QGroupBox>
 #include <QComboBox>
 #include <QCheckBox>
+#include <QFileSystemModel>
 
 #include "ScopedProjectItemModel.h"
 #include "ProjectItemModel.h"
 #include "XUPItem.h"
 
 class QListView;
-class QFileSystemModel;
 
 class Q_MONKEY_EXPORT AddFilesDialog : public QFileDialog
 {
