@@ -9,6 +9,7 @@
 #include <QTreeView>
 #include <QListView>
 #include <QFileSystemModel>
+#include <QFileSystemWatcher>
 
 AddFilesDialog::AddFilesDialog( ScopedProjectItemModel* spim, XUPItem* pi, QWidget* w )
 	: QFileDialog( w )
