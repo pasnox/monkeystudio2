@@ -1,3 +1,28 @@
+/****************************************************************************
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
+/*!
+	\file GNUDebugger.cpp
+	\date 14/08/08
+	\author Xiantia
+	\version 1.3.2
+	\brief Main class, interface of pluginFactory
+*/
+
 #include "GNUDebugger.h"
 #include "./ui/UIGNUDebuggerSetting.h"
 
@@ -9,6 +34,10 @@
 
 #include <QIcon>
  
+/*!
+	\brief Main class, interface of pluginFactory
+	\details Create main DockGNUDebugger class adn configure this
+*/
 GNUDebugger::GNUDebugger()
 {
 	aSeparator = 0;
@@ -26,8 +55,14 @@ GNUDebugger::GNUDebugger()
 	GdbSetting::instance(this);
 	GdbSetting::instance()->load();
 
+	// find gdbParsing.txt
+
+	// if you start Mks for the first time
+	// setting is not found (monkeystudio.ini)
 	if(GdbSetting::instance()->getPathParseFile().isEmpty())
 	{
+		// auto find file
+
 		// load pattern
 		QStringList pluginsPath = MonkeyCore::settings()->value( "Plugins/Path" ).toStringList();
 		QFileInfoList files;
@@ -44,33 +79,39 @@ GNUDebugger::GNUDebugger()
 
 		
 		if ( files.isEmpty())
-			MonkeyCore::statusBar()->appendMessage( tr( "gdbparsing.txt not found. Debugger can not work ! " ) + GdbSetting::instance()->getPathParseFile(), 5000 ,QPixmap(), QBrush(QColor(255,80,80)));
+			MonkeyCore::statusBar()->appendMessage( tr( "gdbparsing.txt not found. Debugger can not work ! " ) + GdbSetting::instance()->getPathParseFile(), 0 ,QPixmap(), QBrush(QColor(255,80,80)));
 		else
 		{
 			GdbSetting::instance()->setPathParseFile( files.first().absoluteFilePath());
 			patternFile->load( GdbSetting::instance()->getPathParseFile() );
-//			MonkeyCore::statusBar()->appendMessage( tr( "GdbPatternFile initializing sucess full" ), 2500 ,QPixmap(), QBrush(QColor(120,250,100)));
 		}
 	}
 	else
 	{
+		// setting is not empty
+		// aptent load 
 		// load txt file if possible, else warn user in status bar
 		if ( ! patternFile->load( GdbSetting::instance()->getPathParseFile() ) )
 			MonkeyCore::statusBar()->appendMessage( tr( "gdbparsing.txt not found. Debugger can not work ! " ) + GdbSetting::instance()->getPathParseFile(), 5000 ,QPixmap(), QBrush(QColor(255,80,80)));
-//		else 	MonkeyCore::statusBar()->appendMessage( tr( "GdbPatternFile initializing sucess full" ), 2500 ,QPixmap(), QBrush(QColor(120,250,100)));
-
 	}
 }
 
-
+/*!
+	\details Save current settings 
+*/
 GNUDebugger::~GNUDebugger()
 {
+	// save current setting
 	GdbSetting::instance()->save();
 
 	if ( isEnabled() )
 		setEnabled( false );
 }
 
+/*!
+	\details Set enabled or disable plugin
+	\param b is trus for enabled plugin
+*/
 bool GNUDebugger::setEnabled( bool b )
 {
 	if ( b && !isEnabled() )

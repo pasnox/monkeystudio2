@@ -1,14 +1,4 @@
 /****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Fresh Framework
-** FileName  : pDockToolBar.cpp
-** Date      : 2008-01-14T00:27:40
-** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
-**
 	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
 	This program is free software; you can redistribute it and/or modify
@@ -24,7 +14,6 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
 ****************************************************************************/
 #include "pDockToolBar.h"
 #include "pDockToolBarManager.h"
@@ -39,12 +28,18 @@
 #include <QMainWindow>
 #include <QKeyEvent>
 
-pDockToolBar::pDockToolBar( pDockToolBarManager* t, Qt::Orientation o, QMainWindow* w )
-	: QToolBar( w ), mManager( t ), mUniqueId( 0 )
+/*!
+	\details Create a new object
+	\param manager The pDockToolBarManager manager
+	\param orientation The toolbar orientation
+	\param window The main window
+*/
+pDockToolBar::pDockToolBar( pDockToolBarManager* manager, Qt::Orientation orientation, QMainWindow* window )
+	: QToolBar( window ), mManager( manager ), mUniqueId( 0 )
 {
 	// need docktoolbar manager
-	Q_ASSERT( t != 0 );
-	Q_UNUSED( t );
+	Q_ASSERT( manager != 0 );
+	Q_UNUSED( manager );
 	
 	// always show button text
 	mTextAlwaysVisible = true;
@@ -80,125 +75,143 @@ pDockToolBar::pDockToolBar( pDockToolBarManager* t, Qt::Orientation o, QMainWind
 	connect( this, SIGNAL( orientationChanged( Qt::Orientation ) ), this, SLOT( internal_orientationChanged( Qt::Orientation ) ) );
 
 	// set toolbar/layout orientation
-	setOrientation( o );
+	setOrientation( orientation );
 }
 
-bool pDockToolBar::eventFilter( QObject* o, QEvent* e )
+bool pDockToolBar::eventFilter( QObject* object, QEvent* event )
 {
 	// get event type
-	QEvent::Type t = e->type();
+	QEvent::Type type = event->type();
 	// try casting object to dockwidget
-	QDockWidget* d = qobject_cast<QDockWidget*>( o );
+	QDockWidget* dock = qobject_cast<QDockWidget*>( object );
 
 	// if it s a dock widget
-	if ( d )
+	if ( dock )
 	{
-		if ( t == QEvent::Show || t == QEvent::Hide )
+		if ( type == QEvent::Show || type == QEvent::Hide )
 		{
 			// if exclusive, hide all except this one
-			if ( t == QEvent::Show && aToggleExclusive->isChecked() )
+			if ( type == QEvent::Show && aToggleExclusive->isChecked() )
 			{
 				foreach ( QDockWidget* dw, docks() )
 				{
-					if ( dw != d && dw->isVisible() )
+					if ( dw != dock && dw->isVisible() )
 						dw->hide();
 				}
 			}
 
 			// get dock button
-			QAbstractButton* b = button( d );
+			QAbstractButton* btn = button( dock );
 
 			// check the dock button
-			b->setChecked( t == QEvent::Show );
+			btn->setChecked( type == QEvent::Show );
 
 			// check button text
-			internal_checkButtonText( b );
+			internal_checkButtonText( btn );
 
 			// check toolbar visibility
 			internal_checkVisibility();
 		}
-		else if ( t == QEvent::KeyPress )
+		else if ( type == QEvent::KeyPress )
 		{
-			if ( static_cast<QKeyEvent*>( e )->key() == Qt::Key_Escape )
-				d->hide();
+			if ( static_cast<QKeyEvent*>( event )->key() == Qt::Key_Escape )
+				dock->hide();
 		}
 	}
 
 	// deturn default event filter
-	return QToolBar::eventFilter( o, e );
+	return QToolBar::eventFilter( object, event );
 }
 
-QAction* pDockToolBar::addAction( QAction* a, bool b )
+/*!
+	\details Add an action into this pDockToolBar
+	\param action The action to add, if null create a new separator action
+	\param insert If true the action is inserted before the dock buttons, else it's append
+	\return The added action
+*/
+QAction* pDockToolBar::addAction( QAction* action, bool insert )
 {
 	// create a separator if no action
-	if ( !a )
+	if ( !action )
 	{
-		a = new QAction( this );
-		a->setSeparator( true );
+		action = new QAction( this );
+		action->setSeparator( true );
 	}
 
-	if ( b )
-		QToolBar::insertAction( aDockFrame, a );
+	if ( insert )
+		QToolBar::insertAction( aDockFrame, action );
 	else
-		QToolBar::addAction( a );
+		QToolBar::addAction( action );
 
 	internal_checkVisibility();
 	
-	return a;
+	return action;
 }
 
-void pDockToolBar::addActions( QList<QAction*> a, bool b )
+/*!
+	\details Add actions into this pDockToolBar
+	\param actions The actions to add
+	\param insert If true the actions are inserted before the dock buttons, else they are append
+*/
+void pDockToolBar::addActions( QList<QAction*> actions, bool insert )
 {
-	if ( b )
-		QToolBar::insertActions( aDockFrame, a );
+	if ( insert )
+		QToolBar::insertActions( aDockFrame, actions );
 	else
-		QToolBar::addActions( a );
+		QToolBar::addActions( actions );
 
 	internal_checkVisibility();
 }
 
-int pDockToolBar::addDock( QDockWidget* d, const QString& s, const QIcon& i )
+/*!
+	\details Add a dock in this toolbar, the dock is moved area if needed
+	\param dock The dock to add
+	\param title The dock button title
+	\param icon The dock button icon
+	\return Return the unique id that identify the dock
+*/
+int pDockToolBar::addDock( QDockWidget* dock, const QString& title, const QIcon& icon )
 {	
 	// cancel if no dock or dock already managed
-	if ( !d || id( d ) != -1 )
+	if ( !dock || id( dock ) != -1 )
 		return -1;
 
 	// check if this dock is already in another bar, and remove it
-	pDockToolBar* tb = mManager->bar( mManager->dockWidgetAreaToToolBarArea( mManager->mainWindow()->dockWidgetArea( d ) ) );
-	if ( tb && tb->id( d ) != -1 )
-		tb->removeDock( d );
+	pDockToolBar* tb = mManager->bar( mManager->dockWidgetAreaToToolBarArea( mManager->mainWindow()->dockWidgetArea( dock ) ) );
+	if ( tb && tb->id( dock ) != -1 )
+		tb->removeDock( dock );
 
 	// set dock title
-	if ( !s.isEmpty() )
-		d->setWindowTitle( s );
+	if ( !title.isEmpty() )
+		dock->setWindowTitle( title );
 
 	// set object name if needed
-	if ( d->objectName().isEmpty() )
-		d->setObjectName( QString( "QDockWidget_%1" ).arg( s ).replace( " ", "_" ).trimmed() );
+	if ( dock->objectName().isEmpty() )
+		dock->setObjectName( QString( "QDockWidget_%1" ).arg( title ).replace( " ", "_" ).trimmed() );
 
 	// set dock icon
-	if ( !i.isNull() )
-		d->setWindowIcon( i );
+	if ( !icon.isNull() )
+		dock->setWindowIcon( icon );
 
 	// create button
 	pTabbedWorkspaceCornerButton* pb = new pTabbedWorkspaceCornerButton( this, mManager->toolBarAreaToBoxLayoutDirection( mManager->mainWindow()->toolBarArea( this ) ) );
 	pb->setCheckable( true );
 	pb->setFont( font() );
-	pb->setText( d->windowTitle() );
+	pb->setText( dock->windowTitle() );
 	pb->setToolTip( pb->text() );
 	pb->setProperty( "Caption", pb->text() );
 	pb->setToolButtonStyle( Qt::ToolButtonTextBesideIcon );
 	pb->setIconSize( iconSize() );
-	pb->setIcon( i );
+	pb->setIcon( icon );
 
 	// add button to layout
 	mLayout->addWidget( pb );
 
 	// add dock to correct area
-	Qt::DockWidgetArea da = mManager->mainWindow()->dockWidgetArea( d );
+	Qt::DockWidgetArea da = mManager->mainWindow()->dockWidgetArea( dock );
 	Qt::DockWidgetArea ta = mManager->toolBarAreaToDockWidgetArea( mManager->mainWindow()->toolBarArea( this ) );
 	if ( da != ta )
-		mManager->mainWindow()->addDockWidget( ta, d, orientation() );
+		mManager->mainWindow()->addDockWidget( ta, dock, orientation() );
 
 	// if exclusive, hide all dock except this one
 	if ( aToggleExclusive->isChecked() && count() )
@@ -211,21 +224,21 @@ int pDockToolBar::addDock( QDockWidget* d, const QString& s, const QIcon& i )
 	}
 
 	// check button according to dock visibility
-	pb->setChecked( d->isVisible() );
+	pb->setChecked( dock->isVisible() );
 
 	// check button text
 	internal_checkButtonText( pb );
 
 	// add dock/button to list
 	mButtons[mUniqueId] = pb;
-	mDocks[mUniqueId] = d;
+	mDocks[mUniqueId] = dock;
 
 	// filter the dock
-	d->installEventFilter( this );
+	dock->installEventFilter( this );
 
 	// connect
-	connect( d->toggleViewAction(), SIGNAL( changed() ), this, SLOT( internal_dockChanged() ) );
-	connect( d, SIGNAL( destroyed( QObject* ) ), this, SLOT( internal_dockDestroyed( QObject* ) ) );
+	connect( dock->toggleViewAction(), SIGNAL( changed() ), this, SLOT( internal_dockChanged() ) );
+	connect( dock, SIGNAL( destroyed( QObject* ) ), this, SLOT( internal_dockDestroyed( QObject* ) ) );
 	connect( pb, SIGNAL( clicked( bool ) ), this, SLOT( internal_buttonClicked( bool ) ) );
 
 	// check if we need to hide/show the toolbar
@@ -235,31 +248,39 @@ int pDockToolBar::addDock( QDockWidget* d, const QString& s, const QIcon& i )
 	return mUniqueId++;
 }
 
-void pDockToolBar::removeDock( int i )
+/*!
+	\details Unmanage a dock
+	\param id The dock id
+*/
+void pDockToolBar::removeDock( int id )
 {
-	removeDock( dock( i ) );
+	removeDock( dock( id ) );
 }
 
-void pDockToolBar::removeDock( QDockWidget* d )
+/*!
+	\details Unmanage a dock
+	\param dock The dock to unmanage
+*/
+void pDockToolBar::removeDock( QDockWidget* dock )
 {
 	// get dock id
-	int i = id( d );
+	int i = id( dock );
 
 	// cancel if dock is not acutally own by this toolbar
 	if ( i == -1 )
 		return;
 	
 	// remove filter event
-	d->removeEventFilter( this );
+	dock->removeEventFilter( this );
 
 	// disconnect
-	disconnect( d->toggleViewAction(), SIGNAL( changed() ), this, SLOT( internal_dockChanged() ) );
-	disconnect( d, SIGNAL( destroyed( QObject* ) ), this, SLOT( internal_dockDestroyed( QObject* ) ) );
+	disconnect( dock->toggleViewAction(), SIGNAL( changed() ), this, SLOT( internal_dockChanged() ) );
+	disconnect( dock, SIGNAL( destroyed( QObject* ) ), this, SLOT( internal_dockDestroyed( QObject* ) ) );
 
 	// delete button
-	QAbstractButton* b = button( d );
+	QAbstractButton* btn = button( dock );
 	mButtons.remove( i );
-	b->deleteLater();
+	btn->deleteLater();
 
 	// remove dock from list
 	mDocks.remove( i );
@@ -268,36 +289,56 @@ void pDockToolBar::removeDock( QDockWidget* d )
 	internal_checkVisibility();
 }
 
-bool pDockToolBar::isDockVisible( int i ) const
+/*!
+	\details Check a dock visibility
+	\param id The dock id to check
+*/
+bool pDockToolBar::isDockVisible( int id ) const
 {
-	return isDockVisible( dock( i ) );
+	return isDockVisible( dock( id ) );
 }
 
-bool pDockToolBar::isDockVisible( QDockWidget* d ) const
+/*!
+	\details Check a dock visibility
+	\param dock The dock to check
+*/
+bool pDockToolBar::isDockVisible( QDockWidget* dock ) const
 {
 	// if dock is in internal list
-	if ( id( d ) != -1 )
-		return button( d )->isChecked();
+	if ( id( dock ) != -1 )
+		return button( dock )->isChecked();
 
 	// else return widget visibility
-	return d ? d->isVisible() : false;
+	return dock ? dock->isVisible() : false;
 }
 
-void pDockToolBar::setDockVisible( QDockWidget* d, bool b )
+/*!
+	\details Set a dock visibility
+	\param dock The dock
+	\param visible The visible state
+*/
+void pDockToolBar::setDockVisible( QDockWidget* dock, bool visible )
 {
-	d->setVisible( b );
+	dock->setVisible( visible );
 }
 
+/*!
+	\details Return true if the pDockToolBar buttons are exclusive, else false
+*/
 bool pDockToolBar::exclusive() const
 {
 	return aToggleExclusive->isChecked();
 }
 
-void pDockToolBar::setExclusive( bool b )
+/*!
+	\details Set this pDockToolBar exclusive, ie each dock button are exclusive meaning activating one will deactivate all others
+	\param exclusive exclusive or not
+*/
+void pDockToolBar::setExclusive( bool exclusive )
 {
-	if ( aToggleExclusive->isChecked() == b )
+	if ( aToggleExclusive->isChecked() == exclusive )
 		return;
-	aToggleExclusive->setChecked( b );
+	aToggleExclusive->setChecked( exclusive );
 
 	// if exclusive, hide all
 	if ( aToggleExclusive->isChecked() && count() )
@@ -310,6 +351,10 @@ void pDockToolBar::setExclusive( bool b )
 	}
 }
 
+/*!
+	\details If parameter is yes, the text on button will always be shown, else they will be shwn only when they are active
+	\param visible Text visibility
+*/
 void pDockToolBar::setTextAlwaysVisible( bool visible )
 {
 	mTextAlwaysVisible = visible;
@@ -330,56 +375,95 @@ void pDockToolBar::setTextAlwaysVisible( bool visible )
 	}
 }
 
+/*!
+	\details Return true if button text is always shown, else false
+*/
 bool pDockToolBar::textAlwaysVisible() const
 {
 	return mTextAlwaysVisible;
 }
 
-int pDockToolBar::id( QDockWidget* d ) const
+/*!
+	\details Return the id of the dock given in parameter
+	\param dock The dock to get id from
+*/
+int pDockToolBar::id( QDockWidget* dock ) const
 {
-	return mDocks.values().contains( d ) ? mDocks.key( d ) : -1;
+	return mDocks.values().contains( dock ) ? mDocks.key( dock ) : -1;
 }
 
-int pDockToolBar::id( QAbstractButton* b ) const
+/*!
+	\details Return the id of the button given in parameter
+	\param button The button to get id from
+*/
+int pDockToolBar::id( QAbstractButton* button ) const
 {
-	return mButtons.values().contains( b ) ? mButtons.key( b ) : -1;
+	return mButtons.values().contains( button ) ? mButtons.key( button ) : -1;
 }
 
-QDockWidget* pDockToolBar::dock( int i ) const
+/*!
+	\details Return the dock associated with the id given in parameter
+	\param id The id of the dock to get
+*/
+QDockWidget* pDockToolBar::dock( int id ) const
 {
-	return mDocks.value( i );
+	return mDocks.value( id );
 }
 
-QDockWidget* pDockToolBar::dock( QAbstractButton* b ) const
+/*!
+	\details Return the dock associated with the button given in parameter
+	\param button The button of the dock to get
+*/
+QDockWidget* pDockToolBar::dock( QAbstractButton* button ) const
 {
-	return dock( id( b ) );
+	return dock( id( button ) );
 }
 
-QAbstractButton* pDockToolBar::button( int i ) const
+/*!
+	\details Return the button associated with the id given in parameter
+	\param id The id of the button to get
+*/
+QAbstractButton* pDockToolBar::button( int id ) const
 {
-	return mButtons.value( i );
+	return mButtons.value( id );
 }
 
-QAbstractButton* pDockToolBar::button( QDockWidget* d ) const
+/*!
+	\details Return the button associated with the dock given in parameter
+	\param dock The dock of the button to get
+*/
+QAbstractButton* pDockToolBar::button( QDockWidget* dock ) const
 {
-	return button( id( d ) );
+	return button( id( dock ) );
 }
 
+/*!
+	\details Return the docks list
+*/
 QList<QDockWidget*> pDockToolBar::docks() const
 {
 	return mDocks.values();
 }
 
+/*!
+	\details Return the buttons list
+*/
 QList<QAbstractButton*> pDockToolBar::buttons() const
 {
 	return mButtons.values();
 }
 
+/*!
+	\details Return the number of docks managed by this pDockToolBar
+*/
 int pDockToolBar::count() const
 {
 	return docks().count();
 }
 
+/*!
+	\details Return the togglabe exclusive action associated with this pDockToolBar
+*/
 QAction* pDockToolBar::toggleExclusiveAction() const 
 {
 	// set action text

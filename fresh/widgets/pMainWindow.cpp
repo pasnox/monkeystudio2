@@ -1,30 +1,19 @@
 /****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Fresh Framework
-** FileName  : pMainWindow.cpp
-** Date      : 2008-01-14T00:27:46
-** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
-**
-    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 #include "pMainWindow.h"
 #include "../objects/pSettings.h"
@@ -32,8 +21,13 @@
 #include "pDockToolBarManager.h"
 #include "pDockToolBar.h"
 
-pMainWindow::pMainWindow( QWidget* w, Qt::WindowFlags f )
-	: QMainWindow( w, f ), mSettings( 0 )
+/*!
+	\details Create a new pMainWindow object
+	\param parent The parent widget
+	\param windowFlags The window flags
+*/
+pMainWindow::pMainWindow( QWidget* parent, Qt::WindowFlags windowFlags )
+	: QMainWindow( parent, windowFlags ), mSettings( 0 )
 {
 	// set menu bar
 	setMenuBar( new pMenuBar( this ) );
@@ -44,31 +38,57 @@ pMainWindow::pMainWindow( QWidget* w, Qt::WindowFlags f )
 	dockToolBar( Qt::RightToolBarArea );
 }
 
-void pMainWindow::hideEvent( QHideEvent* )
-{ saveState(); }
+void pMainWindow::hideEvent( QHideEvent* event )
+{
+	Q_UNUSED( event );
+	saveState();
+}
 
+/*!
+	\details Return the pMenuBar object
+*/
 pMenuBar* pMainWindow::menuBar()
 { return qobject_cast<pMenuBar*>( QMainWindow::menuBar() ); }
 
+/*!
+	\details Return the pDockToolBarManager object
+*/
 pDockToolBarManager* pMainWindow::dockToolBarManager()
 { return pDockToolBarManager::instance( this ); }
 
-pDockToolBar* pMainWindow::dockToolBar( Qt::ToolBarArea a )
-{ return dockToolBarManager()->bar( a ); }
+/*!
+	\details Return the pDockToolBar object for \c area
+	\param area The area of the bar to get
+*/
+pDockToolBar* pMainWindow::dockToolBar( Qt::ToolBarArea area )
+{ return dockToolBarManager()->bar( area ); }
 
-void pMainWindow::setSettings( pSettings* s )
+/*!
+	\details Set the pSettings object to use by this pMainWindow
+	\details restoreState() is automatically called after.
+	\param settings The pSettings object
+*/
+void pMainWindow::setSettings( pSettings* settings )
 {
-	if ( mSettings != s )
+	if ( mSettings != settings )
 	{
-		mSettings = s;
-		dockToolBarManager()->setSettings( s );
+		mSettings = settings;
+		dockToolBarManager()->setSettings( settings );
 		restoreState();
 	}
 }
 
+/*!
+	\details Return the pSettings object
+*/
 pSettings* pMainWindow::settings()
 { return mSettings; }
 
+/*!
+	\details Save the pMainWindow state.
+	\details Concretly pDockToolBarManager::saveState() and
+	\details pSettings::saveState() are called.
+*/
 void pMainWindow::saveState()
 {
 	if ( settings() )
@@ -78,6 +98,11 @@ void pMainWindow::saveState()
 	}
 }
 
+/*!
+	\details Restore the pMainWindow state.
+	\details Concretly pDockToolBarManager::restoreState() and
+	\details pSettings::restoreState() are called.
+*/
 void pMainWindow::restoreState()
 {
 	if ( settings() )

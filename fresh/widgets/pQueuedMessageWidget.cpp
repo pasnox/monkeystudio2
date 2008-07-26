@@ -1,3 +1,20 @@
+/****************************************************************************
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
 #include "pQueuedMessageWidget.h"
 
 #include <QLabel>
@@ -10,6 +27,10 @@
 
 int pQueuedMessageWidget::pQueuedMessageUniqueId = 0;
 
+/*!
+	\details Create a new pQueuedMessageWidget object
+	\param parent The parent widget
+*/
 pQueuedMessageWidget::pQueuedMessageWidget( QWidget* parent )
 	: QWidget( parent )
 {
@@ -28,16 +49,23 @@ pQueuedMessageWidget::pQueuedMessageWidget( QWidget* parent )
 	// layout
 	QHBoxLayout* hbl = new QHBoxLayout( this );
 	hbl->setMargin( 0 );
-	hbl->addWidget( lPixmap, 0, Qt::AlignTop | Qt::AlignHCenter );
+	hbl->addWidget( lPixmap, 0, Qt::AlignCenter );
 	hbl->addWidget( lMessage );
-	hbl->addWidget( dbbButtons, 0, Qt::AlignTop | Qt::AlignHCenter );
+	hbl->addWidget( dbbButtons, 0, Qt::AlignCenter );
 	// connections
 	connect( dbbButtons, SIGNAL( clicked( QAbstractButton* ) ), this, SLOT( clicked( QAbstractButton* ) ) );
 }
 
+/*!
+	\details Return the number of message currently queued
+*/
 int pQueuedMessageWidget::messagesCount() const
 { return mMessages.count(); }
 
+/*!
+	\details Append a message to the queued and return it's unique \c id
+	\param message The message structure to add
+*/
 int pQueuedMessageWidget::append( const pQueuedMessage& message )
 {
 	if ( !mMessages.values().contains( message ) )
@@ -50,6 +78,14 @@ int pQueuedMessageWidget::append( const pQueuedMessage& message )
 	return mMessages.key( message );
 }
 
+/*!
+	\details Append a message to the queued and return it's unique \c id
+	\param message The message to show
+	\param milliseconds The milliseconds to wait before the message is auto closed, use 0 for unlimited time
+	\param pixmap The pixmap to use as icon
+	\param background The brush background
+	\param foreground The brush foreground
+*/
 int pQueuedMessageWidget::append( const QString& message, int milliseconds, const QPixmap pixmap, const QBrush& background, const QBrush& foreground )
 {
 	pQueuedMessage m;
@@ -61,12 +97,23 @@ int pQueuedMessageWidget::append( const QString& message, int milliseconds, cons
 	return append( m );
 }
 
+/*!
+	\details Remove a message from the queue
+	\param message The message to remove
+*/
 void pQueuedMessageWidget::remove( const pQueuedMessage& message )
 { mMessages.remove( mMessages.key( message ) ); }
 
+/*!
+	\details Remove a message from the queue by it's id
+	\param id The message id to remove
+*/
 void pQueuedMessageWidget::remove( int id )
 { mMessages.remove( id ); }
 
+/*!
+	\details Clear the current message
+*/
 void pQueuedMessageWidget::clear()
 {
 	lPixmap->clear();
@@ -83,6 +130,10 @@ void pQueuedMessageWidget::clicked( QAbstractButton* button )
 	closeMessage();
 }
 
+/*!
+	\details Show the curernt message.
+	\details The widget must be visible as only the gui contents is updated.
+*/
 void pQueuedMessageWidget::showMessage()
 {
 	// get message
@@ -114,6 +165,9 @@ void pQueuedMessageWidget::showMessage()
 	emit messageShown( msg );
 }
 
+/*!
+	\details Close the current shown message
+*/
 void pQueuedMessageWidget::closeMessage()
 {
 	// emit message

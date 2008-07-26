@@ -14,5 +14,7 @@
 		<file>icons/backtrace.png</file>
 		<file>icons/breakpoint.png</file>
 		<file>icons/cpu.png</file>
+		<file>icons/cli.png</file>
+		<file>icons/watch.png</file>
 	</qresource>
 </RCC>

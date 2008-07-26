@@ -1,7 +1,7 @@
 /****************************************************************************
 **
 ** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
+** Authors   : Andrei KOPATS aka hlamer <hlamer@tut.by>
 ** Project   : Monkey Studio IDE
 ** FileName  : VariablesManager.h
 ** Date      : 2008-01-14T00:37:18
@@ -26,6 +26,13 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file VariablesManager.h
+	\date 2008-01-14T00:37:18
+	\author Andrei KOPATS
+	\brief Header for VariablesManager class
+*/
+
 #ifndef VARIABLESMANAGER_H
 #define VARIABLESMANAGER_H
 
@@ -34,6 +41,11 @@
 #include <QApplication>
 #include <QHash>
 
+/*!
+	\brief Implementation of Variables Manager
+	Variables Manager allowing you to replace names of some variables 
+	in the string with according values.
+*/
 class Q_MONKEY_EXPORT VariablesManager : public QObject, public QSingleton<VariablesManager>
 {
     Q_OBJECT

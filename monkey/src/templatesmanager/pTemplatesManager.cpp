@@ -1,7 +1,7 @@
 /****************************************************************************
 **
 ** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
+** Authors   : Andrei KOPATS aka hlamer <hlamer@tut.by>, Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
 ** Project   : Monkey Studio IDE
 ** FileName  : pTemplatesManager.cpp
 ** Date      : 2008-01-14T00:37:12
@@ -26,6 +26,13 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file pTemplatesManager.cpp
+	\date 2008-01-14T00:37:13
+	\author Andrei KOPATS, Filepe AZEVEDO
+	\brief Implementation of pTemplatesManager class
+*/
+
 #include "pTemplatesManager.h"
 #include "../pMonkeyStudio.h"
 #include "../workspace/pFileManager.h"
@@ -35,16 +42,33 @@
 
 using namespace pMonkeyStudio;
 
+/*!
+	Class constructor
+	\param o Parent object. Passing to QObject constructor
+*/
 pTemplatesManager::pTemplatesManager( QObject* o )
 	: QObject( o )
 {}
 
+/*!
+	Set's templates path - dirrectory, on which templates will be searched
+	\param l List of dirrectoryes
+*/
 void pTemplatesManager::setTemplatesPath( const QStringList& l )
 { MonkeyCore::settings()->setValue( "Templates/DefaultDirectories", l ); }
 
+/*!
+	Get list of dirrectoryes, where templates is searching
+	\return list of dirrectoryes
+*/
 QStringList pTemplatesManager::templatesPath() const
 { return MonkeyCore::settings()->value( "Templates/DefaultDirectories" ).toStringList(); }
 
+/*!
+	Read template from file
+	\param s Path of template config file (.ini)
+	\return Inmemory representation of template
+*/
 pTemplate pTemplatesManager::getTemplate( const QString& s )
 {
 	// open ini file
@@ -73,6 +97,10 @@ pTemplate pTemplatesManager::getTemplate( const QString& s )
 	return t;
 }
 
+/*!
+	Read all availible templates
+	\return List of templates, finded in all configured path
+*/
 TemplateList pTemplatesManager::getTemplates()
 {
 	TemplateList l;
@@ -82,10 +110,20 @@ TemplateList pTemplatesManager::getTemplates()
 	return l;
 }
 
-bool pTemplatesManager::realiseTemplate( XUPItem* it, const QString& o, const pTemplate& t, const VariablesManager::Dictionary& d )
+/*!
+	Create files from already configured template
+	\param scope The project scope where to add files. Else NULL
+	\param op The scope operator to use
+	\param temp Template to realise
+	\param dictionnary Dictionary of variables for template
+	\return Result of creation
+	\retval true All files is created successfully
+	\retval false Some error ocurred
+*/
+bool pTemplatesManager::realiseTemplate( XUPItem* scope, const QString& op, const pTemplate& temp, const VariablesManager::Dictionary& dictionnary )
 {
 	// get destination
-	QString dest = d["Destination"];
+	QString dest = dictionnary["Destination"];
 	
 	// check destination
 	if ( dest.isEmpty() )
@@ -110,16 +148,16 @@ bool pTemplatesManager::realiseTemplate( XUPItem* it, const QString& o, const pT
 	
 	// replace values in files/projects to open
 	QStringList fo, po, fa;
-	for ( int i = 0; i < t.FilesToOpen.count(); i++ )
-		fo << VariablesManager::instance()->replaceAllVariables( t.FilesToOpen.at( i ), d );
-	for ( int i = 0; i < t.ProjectsToOpen.count(); i++ )
-		po << VariablesManager::instance()->replaceAllVariables( t.ProjectsToOpen.at( i ), d );
-	for ( int i = 0; i < t.FilesToAdd.count(); i++ )
-		fa << VariablesManager::instance()->replaceAllVariables( t.FilesToAdd.at( i ), d );
+	for ( int i = 0; i < temp.FilesToOpen.count(); i++ )
+		fo << VariablesManager::instance()->replaceAllVariables( temp.FilesToOpen.at( i ), dictionnary );
+	for ( int i = 0; i < temp.ProjectsToOpen.count(); i++ )
+		po << VariablesManager::instance()->replaceAllVariables( temp.ProjectsToOpen.at( i ), dictionnary );
+	for ( int i = 0; i < temp.FilesToAdd.count(); i++ )
+		fa << VariablesManager::instance()->replaceAllVariables( temp.FilesToAdd.at( i ), dictionnary );
 	
 	// get files
 	QHash<QString, QString> files;
-	foreach( QString f, t.Files )
+	foreach( QString f, temp.Files )
 	{
 		// check if sources and destination are differents
 		QString sf, df;
@@ -132,7 +170,7 @@ bool pTemplatesManager::realiseTemplate( XUPItem* it, const QString& o, const pT
 		}
 		
 		// process variables
-		QString s = VariablesManager::instance()->replaceAllVariables( df, d );
+		QString s = VariablesManager::instance()->replaceAllVariables( df, dictionnary );
 		
 		// check value validity
 		if ( s.isEmpty() )
@@ -149,7 +187,7 @@ bool pTemplatesManager::realiseTemplate( XUPItem* it, const QString& o, const pT
 	foreach( QString f, files.keys() )
 	{
 		// get source file
-		QString k = QFile::exists( QString( "%1%2" ).arg( t.DirPath, f ) ) ? f : VariablesManager::instance()->replaceAllVariables( f, d );
+		QString k = QFile::exists( QString( "%1%2" ).arg( temp.DirPath, f ) ) ? f : VariablesManager::instance()->replaceAllVariables( f, dictionnary );
 		
 		// get file name
 		QString s = QString( "%1%2" ).arg( dest, files[f] );
@@ -166,9 +204,9 @@ bool pTemplatesManager::realiseTemplate( XUPItem* it, const QString& o, const pT
 		}
 		
 		// copy file
-		if ( !QFile::copy( QString( "%1%2" ).arg( t.DirPath, k ), s ) )
+		if ( !QFile::copy( QString( "%1%2" ).arg( temp.DirPath, k ), s ) )
 		{
-			warning( tr( "Error..." ), tr( "Can't copy '%1%2' to '%3'" ).arg( t.DirPath, k, s ) );
+			warning( tr( "Error..." ), tr( "Can't copy '%1%2' to '%3'" ).arg( temp.DirPath, k, s ) );
 			return false;
 		}
 		
@@ -187,7 +225,7 @@ bool pTemplatesManager::realiseTemplate( XUPItem* it, const QString& o, const pT
 		file.resize( 0 );
 		
 		// write process contents
-		file.write( VariablesManager::instance()->replaceAllVariables( c, d ).toLocal8Bit() );
+		file.write( VariablesManager::instance()->replaceAllVariables( c, dictionnary ).toLocal8Bit() );
 		
 		// close file
 		file.close();
@@ -199,8 +237,8 @@ bool pTemplatesManager::realiseTemplate( XUPItem* it, const QString& o, const pT
 			MonkeyCore::fileManager()->openProject( s );
 		
 		// add files to project if needed
-		if ( it )
-			it->project()->addFile( s, it, o );
+		if ( scope )
+			scope->project()->addFile( s, scope, op );
 	}
 	
 	// return process state

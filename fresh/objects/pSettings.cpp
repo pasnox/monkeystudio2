@@ -1,30 +1,19 @@
 /****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Fresh Framework
-** FileName  : pSettings.cpp
-** Date      : 2008-01-14T00:27:37
-** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
-**
-    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 #include "pSettings.h"
 
@@ -36,22 +25,45 @@
 QString pSettings::mProgramName;
 QString pSettings::mProgramVersion;
 
-pSettings::pSettings( QObject* o,  const QString& pn, const QString& pv )
-	: QSettings( getIniFile( pn, pv ), QSettings::IniFormat, o )
+/*!
+	\details Construct a new pSettings
+	\param parent The object parent
+	\param name The settings name
+	\param version The settings version.
+*/
+pSettings::pSettings( QObject* parent,  const QString& name, const QString& version )
+	: QSettings( getIniFile( name, version ), QSettings::IniFormat, parent )
 {}
 
-void pSettings::setIniInformations( const QString& pName, const QString& pVersion )
+/*!
+	\details Initialize the default settings name and version
+	\param name The settings name
+	\param version The settings version
+*/
+void pSettings::setIniInformations( const QString& name, const QString& version )
 {
-	mProgramName = pName;
-	mProgramVersion = pVersion;
+	mProgramName = name;
+	mProgramVersion = version;
 }
 
+/*!
+	\details Return the default name
+*/
 QString pSettings::programName()
 { return mProgramName; }
 
+/*!
+	\details Return the default version
+*/
 QString pSettings::programVersion()
 { return mProgramVersion; }
 
+/*!
+	\details Return a filePath for storing the ini file according to it's parameters
+	\param name The settings name
+	\param version The settings version
+	\return 
+*/
 QString pSettings::getIniFile( const QString& name, const QString& version )
 {
 #ifdef Q_OS_MAC
@@ -63,20 +75,34 @@ QString pSettings::getIniFile( const QString& name, const QString& version )
 #endif
 }
 
-void pSettings::restoreState( QMainWindow* w )
+/*!
+	\details Restore a main winow state
+	\param window The main window to restore
+*/
+void pSettings::restoreState( QMainWindow* window )
 {
-	if ( !w )
+	if ( !window )
 		return;
-	w->restoreGeometry( value( "MainWindow/Geometry" ).toByteArray() );
-	w->restoreState( value( "MainWindow/State" ).toByteArray() );
+	window->restoreGeometry( value( "MainWindow/Geometry" ).toByteArray() );
+	window->restoreState( value( "MainWindow/State" ).toByteArray() );
 	if ( value( "MainWindow/Geometry" ).toByteArray().isEmpty() )
-		w->showMaximized();
+		window->showMaximized();
 }
 
-void pSettings::saveState( QMainWindow* w )
+/*!
+	\details Save a main winow state
+	\param window The main window to save
+*/
+void pSettings::saveState( QMainWindow* window )
 {
-	if ( !w )
+	if ( !window )
 		return;
-	setValue( "MainWindow/Geometry", w->saveGeometry() );
-	setValue( "MainWindow/State", w->saveState() );
+	setValue( "MainWindow/Geometry", window->saveGeometry() );
+	setValue( "MainWindow/State", window->saveState() );
 }
+
+/*!
+	\details A virtual member that you can reimplement for creating a default settings member
+*/
+void pSettings::setDefaultSettings()
+{}

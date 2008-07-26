@@ -1,12 +1,27 @@
-/********************************************************************************************************
-	* PROGRAM      : Debugger
-	* DATE - TIME  : lundi 31 mai 2008 - 18h04
-	* AUTHOR       : Xiantia
-	* FILENAME     : GdbBreakpoint
-	* LICENSE      : GPL
-	* COMMENTARY   : 
-	********************************************************************************************************/
+/****************************************************************************
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
+/*!
+	\file gdbBreakpoint.cpp
+	\date 14/08/08
+	\author Xiantia
+	\version 1.3.2
+	\brief Implements all functions for remote breakpoints.This class is an AddOn for GNU debugger
+*/
 /*
 
 		GdbBreakpoint class
@@ -18,15 +33,14 @@
 */
 
 #include "gdbBreakpoint.h"
-//#include <QMessageBox>
 #include <QFileInfo>
 #include <QTextCodec>
 
-
+/*!
+	\details Create a new object, some interpreters and connect it to the functions
+*/
 GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 {
-	// new connexion for auto-call onBreakpointAdd()
-	Connect = new GdbConnectTemplate<GdbBreakpoint>;
 
 	setEnabled(true);
 	setWaitEndProcess(false);
@@ -42,12 +56,13 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 	*/
 
 	interpreterAddBreakpoint = GdbCore::Parser()->addInterpreter(
+		name(),
 		QRegExp("^b\\s.*:\\d+$"),
 		QRegExp("^Breakpoint\\s+(\\d+)\\s+at\\s(\\w+):\\s+file\\s+([^,]+),\\s+line\\s+(\\d+)\\.(|\\s+\\(\\d+\\s\\w*\\))"),
 		"");
 
 	// connect interpreter to function
-	Connect->add(this, interpreterAddBreakpoint, &GdbBreakpoint::onBreakpointAdd);
+	Connect.add(this, interpreterAddBreakpoint, &GdbBreakpoint::onBreakpointAdd);
 
 
 	/*
@@ -57,11 +72,12 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 		aRegExp = "(gdb) "
 	*/
 	interpreterDelBreakpoint = GdbCore::Parser()->addInterpreter(
+		name(),
 		QRegExp("^delete\\s\\d+"),
 		QRegExp("^\\(gdb\\)\\s"),
 		"^info,interpreter=\"" + name() + "\",event=\"Breakpoint-delete\",answerGdb=\"");
 
-	Connect->add(this, interpreterDelBreakpoint, &GdbBreakpoint::onBreakpointDelete);
+	Connect.add(this, interpreterDelBreakpoint, &GdbBreakpoint::onBreakpointDelete);
 
 	/*
 		create new parser : For enable breakpoint
@@ -70,11 +86,12 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 		aRegExp = "(gdb) "
 	*/
 	interpreterEnabledBreakpoint = GdbCore::Parser()->addInterpreter(
+		name(),
 		QRegExp("^enable\\s\\d+"),
 		QRegExp("^\\(gdb\\)\\s"),
 		"");
 
-	Connect->add(this, interpreterEnabledBreakpoint, &GdbBreakpoint::onBreakpointEnabled);
+	Connect.add(this, interpreterEnabledBreakpoint, &GdbBreakpoint::onBreakpointEnabled);
 
 	/*
 		create new parser : For disable breakpoint
@@ -83,11 +100,12 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 		aRegExp = "(gdb) "
 	*/
 	interpreterDisabledBreakpoint = GdbCore::Parser()->addInterpreter(
+		name(),
 		QRegExp("^disable\\s\\d+"),
 		QRegExp("^\\(gdb\\)\\s"),
 		"");
 
-	Connect->add(this, interpreterDisabledBreakpoint, &GdbBreakpoint::onBreakpointDisabled);
+	Connect.add(this, interpreterDisabledBreakpoint, &GdbBreakpoint::onBreakpointDisabled);
 
 	/*
 		create new parser : For breakpoint pending
@@ -96,11 +114,12 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 		aRegExp = "(gdb) "
 	*/
 	interpreterBreakpointPending = GdbCore::Parser()->addInterpreter(
+		name(),
 		QRegExp("^b\\s.*:\\d+$"),
 		QRegExp("^Breakpoint\\s(\\d+)\\s\\((.*):(\\d+)\\)\\spending\\.$"),
 		"^info,interpreter=\"" + name() + "\",event=\"Breakpoint-Add-Pending\",answerGdb=\"");
 
-	Connect->add(this, interpreterBreakpointPending, &GdbBreakpoint::onBreakpointPending);
+	Connect.add(this, interpreterBreakpointPending, &GdbBreakpoint::onBreakpointPending);
 
 	/*
 		create new parser : For breakpoint Condition
@@ -109,11 +128,12 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 		aRegExp = "(gdb) "
 	*/
 	interpreterConditionnedBreakpoint = GdbCore::Parser()->addInterpreter(
+		name(),
 		QRegExp("^condition\\s\\d+.+$"),
 		QRegExp("^\\(gdb\\)\\s"),
 		"");
 
-	Connect->add(this, interpreterConditionnedBreakpoint, &GdbBreakpoint::onBreakpointConditionned);
+	Connect.add(this, interpreterConditionnedBreakpoint, &GdbBreakpoint::onBreakpointConditionned);
 
 	/*
 		create new parser : For breakpoint unCondition
@@ -122,23 +142,25 @@ GdbBreakpoint::GdbBreakpoint(QObject * parent) : GdbCore(parent)
 		aRegExp = "Breakpoint 1 now unconditional."
 	*/
 	interpreterUnConditionnedBreakpoint = GdbCore::Parser()->addInterpreter(
+		name(),
 		QRegExp("^condition\\s\\d+$"),
 		QRegExp("^Breakpoint\\s\\d+\\snow\\sunconditional.$"),
 		"");
 
-	Connect->add(this, interpreterUnConditionnedBreakpoint, &GdbBreakpoint::onBreakpointUnConditionned);
+	Connect.add(this, interpreterUnConditionnedBreakpoint, &GdbBreakpoint::onBreakpointUnConditionned);
 
-	mWidget = UIGdbBreakpoint::self();
+	mWidget = UIGdbBreakpoint::self(0);
 	connect( mWidget, SIGNAL(enabledBreakpoint(const QString &, const int &, const bool &)), this, SLOT(toggleEnabledBreakpoint(const QString &, const int &, const bool &)));
 	connect( mWidget, SIGNAL(conditionnedBreakpoint(const QString &,const  int &, const QString &)), this, SLOT(toggleConditionnedBreakpoint(const QString &, const  int &, const QString &)));
 }
 
 //
-
+/*!
+	\details Remove all breakpoint in lists and delete widget container
+*/
 GdbBreakpoint::~GdbBreakpoint()
 {
 	removeAllBreakpoint();
-	delete Connect;
 	delete mWidget;
 }
 
@@ -167,11 +189,16 @@ QIcon GdbBreakpoint::icon()
 
 void GdbBreakpoint::interpreter(const QPointer<BaseInterpreter> & i, const int & id, const QString & s)
 {
-	Connect->call( i, id, s);
+	Connect.call( i, id, s);
 }
 
 //
 
+/*!
+	\details Find file in list
+	\param fileName is the file name that you find.
+	\return Pointer to Breakpoint struct or NULL if not found.
+*/
 Breakpoint * GdbBreakpoint::findByName(const QString & fileName)
 {
 	/*
@@ -186,6 +213,13 @@ Breakpoint * GdbBreakpoint::findByName(const QString & fileName)
 
 //
 
+/*!
+	\details Find if file has already breakpoint at this line
+	\param b is a pointer to Breakpoint struct
+	\param line is line that you find.
+	\return index of BaseBreakpoint struct where line is found or -1 if this not have breakpoint
+	at this line
+*/
 int   GdbBreakpoint::asBreakpointAtLine(Breakpoint *b, int line)
 {
 	int i=0;
@@ -198,7 +232,13 @@ int   GdbBreakpoint::asBreakpointAtLine(Breakpoint *b, int line)
 }
 
 //
-
+/*!
+	\details Find if file has already breakpoint with this index (index is returned by Gdb) 
+	\param b is a pointer to Breakpoint struct
+	\param index is the index that you find.
+	\return index of BaseBreakpoint struct where index is found or -1 if this not have breakpoint
+	with this index
+*/
 int   GdbBreakpoint::asBreakpointIndex(Breakpoint *b, int index)
 {
 	int i=0;
@@ -212,6 +252,9 @@ int   GdbBreakpoint::asBreakpointIndex(Breakpoint *b, int index)
 
 //
 
+/*!
+	\details Remove all breakpoints for this file
+*/
 void GdbBreakpoint::removeBreakpoint(Breakpoint * bp)
 {
 	int i = breakpointList.indexOf(bp);
@@ -224,6 +267,9 @@ void GdbBreakpoint::removeBreakpoint(Breakpoint * bp)
 
 //
 
+/*!
+	\details Remove all breakpoints (clear list)
+*/
 void GdbBreakpoint::removeAllBreakpoint()
 {
 	foreach(Breakpoint * bp, breakpointList)
@@ -303,7 +349,7 @@ void GdbBreakpoint::targetExited(const int & , const QString & s)
 
 void GdbBreakpoint::error(const int &, const QString & s)
 {
-	showMessage(name() + " have generate error : " + s, 5000, _WARNING_);
+	showMessage(name() + " have generate error : " + s, 5000, _CRITICAL_);
 	mWidget->upDateData(breakpointList);
 	setWaitEndProcess(false);
 }
@@ -325,6 +371,9 @@ void GdbBreakpoint::prompt(const int &, const QString &)
 
 // Interpreters
 
+/*!
+	\details Hide "hit" icon in UIGdbBreakpoint. 
+*/
 void GdbBreakpoint::desableBreakpointHit()
 {
 	foreach(Breakpoint *bp , breakpointList)
@@ -334,9 +383,15 @@ void GdbBreakpoint::desableBreakpointHit()
 			bp->bp[i].hit = false;
 		}
 	}
-
 }
 
+/*!
+	\details Calling when a breakpoint has moved
+	Some time Gdb move breakpoint to the next line. Modify Breakpoint struct for store this new index.
+	\param fileName is the file name that the breakpoint has moved.
+	\param line is the line number that the breakpoint has moved.
+	\param index is a index from Gdb.
+*/
 void GdbBreakpoint::breakpointMoved(const QString & fileName, const int & line, const int & index)
 {
 	Breakpoint * bp = findByName(fileName);
@@ -376,6 +431,15 @@ void GdbBreakpoint::breakpointMoved(const QString & fileName, const int & line, 
 
 // ================= Add /Del Breakpoint ===========================
 
+/*!
+	\details Calling when user click in the margin
+	This function send "delete numBreak" or "b fileName:line" to Gdb. 
+	If the answer from Gdb is correct, an interpreter switch to the correct function 
+	onBreakpointDelete() or onBreakpointAdd().
+	\param fileName is the name of file.
+	\param line is the line number.
+	\sa GdbBridgeEditor::userToggleBreakpoint()
+*/
 void GdbBreakpoint::toggleBreakpoint(const QString & fileName, const int & line)
 {
 	
@@ -421,6 +485,11 @@ void GdbBreakpoint::toggleBreakpoint(const QString & fileName, const int & line)
 
 //
 
+/*!
+	\details Add breakpoint, calling when "delete numBreak" command is correctly executed. 
+	\param s is the string from GdbParser class.
+*/
+	
 void GdbBreakpoint::onBreakpointAdd( int , QString s)
 {
 	QString n = findValue(s,"fileName");
@@ -479,7 +548,10 @@ void GdbBreakpoint::onBreakpointAdd( int , QString s)
 }
 
 //
-
+/*!
+	\details Delete breakpoint, calling when "b main.cpp:23" command is correctly executed.
+	\param s is the string from GdbParser class.
+*/
 void GdbBreakpoint::onBreakpointDelete( int , QString s)
 {
 	QString n = findValue(s,"fileName");
@@ -511,6 +583,13 @@ void GdbBreakpoint::onBreakpointDelete( int , QString s)
 
 //
 
+/*!
+	\details Calling when a new file is opened.
+	Find if this file have some breakpoints. In this case, this function emit onToggleBreakpoint()
+	signal.
+	\param fileName is the name of file.
+	\sa GdbBridgeEditor::requestBreakpoint()
+*/
 void GdbBreakpoint::onRequestBreakpoint(const QString & fileName)
 {
 	Breakpoint *bp = findByName(fileName);
@@ -523,6 +602,14 @@ void GdbBreakpoint::onRequestBreakpoint(const QString & fileName)
 
 //=================== Enable / desable breakpoint =====================
 
+/*!
+	\details Calling when user want enable or disable breakpoint from UIGdbBreakpoint.
+	 This function send "enable numBreak" or "disable numBreak" to Gdb. If the answer from Gdb is correct, 
+	 an interpreter switch to the correct function.	 onBreakpointEnabled() or onBreakpointDisabled().
+	\param fileName is the name of file.
+	\param index is the index in Gdb
+	\param b is true if you want enable breakpoint else b is false.
+*/
 void GdbBreakpoint::toggleEnabledBreakpoint(const QString & fileName, const int & index, const bool &b)
 {
 	if(isWaitEndProcess())
@@ -547,7 +634,9 @@ void GdbBreakpoint::toggleEnabledBreakpoint(const QString & fileName, const int 
 }
 
 //
-
+/*!
+	\details Calling when Gdb has executed correctly the last command "enable numBreak".
+*/
 void GdbBreakpoint::onBreakpointEnabled(int, QString s)
 {
 	QString n = findValue(s,"fileName");
@@ -571,7 +660,9 @@ void GdbBreakpoint::onBreakpointEnabled(int, QString s)
 }
 
 //
-
+/*!
+	\details Calling when Gdb has executed correctly the last command "Disable numBreak".
+*/
 void GdbBreakpoint::onBreakpointDisabled(int, QString s)
 {
 	QString n = findValue(s,"fileName");
@@ -596,6 +687,11 @@ void GdbBreakpoint::onBreakpointDisabled(int, QString s)
 
 // ================================ Breakpoint pending =================
 
+/*!
+	\details Set breakpoint, but the current lib is not loaded by Gdb. this function is same as 
+	onBreakpointAdd() function.
+	\param s is the string from GdbParser class.
+*/
 void GdbBreakpoint::onBreakpointPending(int, QString s)
 {
 	QString n = findValue(s,"answerGdb");
@@ -624,7 +720,15 @@ Invalid number "3423FFSDF".
 Unmatched single quote.
 (gdb)
 */
-
+/*!
+	\details Calling when user want contionned or not a breakpoint from UIGdbBreakpoint
+	This function send "condition numBreak condition" or "condition numBreak" to Gdb. 
+	If the answer from Gdb is correct, an interpreter switch to the correct function
+	 onBreakpointUnConditionned() or onBreakpointConditionned().
+	\param fileName is the name of file.
+	\param index is the index in Gdb
+	\param condition is the condition that you want set.
+*/
 void GdbBreakpoint::toggleConditionnedBreakpoint(const QString & fileName, const int & index, const QString & condition)
 {
 	if(isWaitEndProcess())
@@ -650,6 +754,11 @@ void GdbBreakpoint::toggleConditionnedBreakpoint(const QString & fileName, const
 
 //
 
+/*!
+	\details Condition or not a breakpoint, calling when "condition numBreak condition" command 
+	is correctly executed.
+	\param s is the string from GdbParser class.
+*/
 void GdbBreakpoint::onBreakpointConditionned(int, QString s)
 {
 	QString n = findValue(s,"fileName");
@@ -676,6 +785,10 @@ void GdbBreakpoint::onBreakpointConditionned(int, QString s)
 
 //
 
+/*!
+	\details Condition or not a breakpoint, calling when "condition numBreak" command is correctly executed.
+	\param s is the string from GdbParser class.
+*/
 void GdbBreakpoint::onBreakpointUnConditionned(int, QString s)
 {
 	QString n = findValue(s,"fileName");

@@ -1,3 +1,72 @@
+
+http://trac.monkeystudio.org/wiki/TempAbbreviatons
+
+- la prise en charge des target release (pour le debugage de crash)
+(pas tres stable si on enable le debug des release)
+
+- warning: Source file is more recent than executable.
+
+- Pb de droit sous linux pour le save gdbparsing.txt
+
+- Utiliser le target par defaut de monkey , peut etre fixé
+
+- bug si deux fichiers on le meme nom mais a des endroits different, peut etre fixé
+
+- set read only editor when debug, peut etre fixé
+
+- use script generique
+
+===========================================
+
+
+12/07/08 14h09 v1.3.2 change log
+
+Optimize Gdbwatch (not send whatis) now tested
+fix two message stopped when user execute step over and line have a breakpoint
+Add doc for doxygen
+New fromat of script
+ 
+
+
+08/07/08 14h09 v1.3.2 change log
+
+Optimize Gdbwatch (not send whatis) not tested
+
+
+
+07/07/08 00h34 v1.3.2 change log
+
+AddOn GdbScript
+Very first addOn (no stable)
+Modify GdbSetting for use path of script
+
+
+
+06/07/08 10h34 v1.3.2 change log
+
+AddOn GdbToolTip is now separate (GdbWatch)
+Fix some very small bug GdbToolTip (formated string)
+
+
+
+05/07/08 03h34 v1.3.2 change log
+
+GdbParser modified for emulate prompt ( Interpreter .*)
+AddOn  GdbTooTip for Qsci and view value of variable when select variable from editor
+Update gdbparsing.txt file
+
+
+
+02/07/08 10h23 v1.3.2 change log
+
+Add message when you want toggle breapoint and target running
+AddOn GdbCli
+Modify Interpreter and RestoreLine for filter className
+Bug fix for multi enable / disable plugin (tab deleted later)
+
+
+
+
 15/06/08 12h12 v1.3.2 change log
 
 Add new editor manage file (find pattern)
@@ -138,13 +207,3 @@ Future :
 
 
 
-- la prise en charge des target release (pour le debugage de crash)
-(pas tres stable si on enable le debug des release)
-
-- warning: Source file is more recent than executable.
-
-- Pb de droit sous linux pour le save gdbparsing.txt
-
-- Utiliser le target par defaut de monkey 
-
-- bug si deux fichiers on le meme nom mais a des endroits different

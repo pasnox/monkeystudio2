@@ -32,7 +32,6 @@
 #include "../coremanager/MonkeyCore.h"
 
 #include <QPluginLoader>
-#include <QLibrary>
 
 PluginsManager::PluginsManager( QObject* p )
 	: QObject( p )

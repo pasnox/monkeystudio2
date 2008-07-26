@@ -1,12 +1,27 @@
-/********************************************************************************************************
- * PROGRAM      : Debugger
- * DATE - TIME  : lundi 31 mai 2008 - 18h04
- * AUTHOR       : Xiantia
- * FILENAME     : GdbRegister
- * LICENSE      : GPL
- * COMMENTARY   : 
- ********************************************************************************************************/
+/****************************************************************************
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
+/*!
+	\file gdbRegister.cpp
+	\date 14/08/08
+	\author Xiantia
+	\version 1.3.2
+	\brief Implements all functions for show values of cpu registers.This class is an AddOn for GNU debugger
+*/
 /*
 
 	GdbBacktrace class
@@ -21,12 +36,12 @@
 #include <QMessageBox>
 #include <QFileInfo>
 
-
+/*!
+	\details Create a new object
+	\param parent of this object
+*/
 GdbRegister::GdbRegister(QObject * parent) : GdbCore(parent)
 {
-	// new connexion 
-	Connect = new GdbConnectTemplate<GdbRegister>;
-
 	setEnabled(true);
 	setWaitEndProcess(false);
 
@@ -35,13 +50,14 @@ GdbRegister::GdbRegister(QObject * parent) : GdbCore(parent)
 	
 	*/
 
-	interpreterRegister = GdbCore::Parser()->addInterpreter(
+	interpreterRegister = Parser()->addInterpreter(
+		name(),
 		QRegExp("^info registers"),
 		QRegExp("^\\w+\\s+0x\\w+\\s+.*"),
 		"^info,interpreter=\"" + name() + "\",event=\"Register\",answerGdb=\"");
 
 	// connect interpreter to function
-	Connect->add(this, interpreterRegister, &GdbRegister::onRegister);
+	Connect.add(this, interpreterRegister, &GdbRegister::onRegister);
 
 
 
@@ -49,17 +65,18 @@ GdbRegister::GdbRegister(QObject * parent) : GdbCore(parent)
 	QList<SequencerCmd> s = QList<SequencerCmd>() << SequencerCmd("inforegister", "info registers")  ; 
 	Sequencer->add(name() , s);
 
-	mWidget = UIGdbRegister::self();
+	mWidget = UIGdbRegister::self(0);
     mWidget->treeWidget->setAlternatingRowColors(true);
 
 	numRegister = 0;
 }
 
 //
-
+/*!
+	\details None.
+*/
 GdbRegister::~GdbRegister()
 {
-	delete Connect;
 	delete mWidget;
 }
 
@@ -87,7 +104,7 @@ QIcon GdbRegister::icon()
 
 void GdbRegister::interpreter(const QPointer<BaseInterpreter> & i, const int & id, const QString & s)
 {
-	Connect->call( i, id, s);
+	Connect.call( i, id, s);
 }
 
 // Gdb status
@@ -155,7 +172,11 @@ void GdbRegister::prompt(const int &, const QString &)
 
 // Interpreters
 
-void GdbRegister::onRegister(int id, QString s)
+/*!
+	\details Calling when GdbParser class found correct interpreter (in this case interpreterRegister)
+	\param s is the string from GdbParser class.
+*/
+void GdbRegister::onRegister(int , QString s)
 {
 
 	/*
@@ -187,6 +208,11 @@ void GdbRegister::onRegister(int id, QString s)
 
 //
 
+/*!
+	\details Toogle color if new value of register has changed.
+	\param p is the QTreeWidgetItem pointer
+	\param a is the new string value.
+*/
 void GdbRegister::showColor(QTreeWidgetItem *p, QString a)
 {
 	// toggle color (black / red if value in treeWidget is not egal than new value

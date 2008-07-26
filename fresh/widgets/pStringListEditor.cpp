@@ -1,29 +1,19 @@
 /****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Fresh Framework
-** FileName  : pStringListEditor.cpp
-** Date      : 2008-01-14T00:27:49
-** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
-**
-    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
 #include "pStringListEditor.h"
@@ -33,11 +23,16 @@
 #include <QAction>
 #include <QListWidget>
 
-pStringListEditor::pStringListEditor( QWidget* p, const QString& t )
-	: QGroupBox( t, p )
+/*!
+	\details Create a new pStringListEditor instance
+	\param parent The parent widget
+	\param title The editor title
+*/
+pStringListEditor::pStringListEditor( QWidget* parent, const QString& title )
+	: QGroupBox( title, parent )
 {
 	// create layout
-    QVBoxLayout* vbox = new QVBoxLayout( this );
+	QVBoxLayout* vbox = new QVBoxLayout( this );
 	vbox->setMargin( 5 );
 	vbox->setSpacing( 3 );
 	
@@ -51,7 +46,7 @@ pStringListEditor::pStringListEditor( QWidget* p, const QString& t )
 	// create listwidget
 	mList = new QListWidget;
 	mList->setMinimumHeight( 40 );
-    vbox->addWidget( mList );
+	vbox->addWidget( mList );
 	
 	// create actions
 	QAction* aAdd = new QAction( QIcon( ":/listeditor/icons/listeditor/add.png" ), tr( "Add Item" ), tb );
@@ -79,12 +74,16 @@ pStringListEditor::pStringListEditor( QWidget* p, const QString& t )
 	connect( mList, SIGNAL( itemChanged( QListWidgetItem* ) ), this, SIGNAL( edited() ) );
 }
 
-void pStringListEditor::setValues( const QStringList& l )
+/*!
+	\details Set the editor values
+	\param values The string list to set as values
+*/
+void pStringListEditor::setValues( const QStringList& values )
 {
 	mList->clear();
-	foreach ( QString s, l )
+	foreach ( QString value, values )
 	{
-		QListWidgetItem* it = new QListWidgetItem( s, mList );
+		QListWidgetItem* it = new QListWidgetItem( value, mList );
 		it->setFlags( it->flags() | Qt::ItemIsEditable );
 		mList->setCurrentItem( it );
 		mList->scrollToItem( it );
@@ -92,12 +91,15 @@ void pStringListEditor::setValues( const QStringList& l )
 	emit edited();
 }
 
+/*!
+	\details Return the editor QStringList values
+*/
 QStringList pStringListEditor::values() const
 {
-	QStringList l;
+	QStringList values;
 	foreach ( QListWidgetItem* it, mList->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
-		l << it->text();
-	return l;
+		values << it->text();
+	return values;
 }
 
 void pStringListEditor::onAddItem()

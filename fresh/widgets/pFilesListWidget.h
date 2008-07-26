@@ -1,14 +1,4 @@
 /****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Fresh Framework
-** FileName  : pFilesListWidget.h
-** Date      : 2008-01-14T00:27:45
-** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
-**
 	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
 	This program is free software; you can redistribute it and/or modify
@@ -24,12 +14,18 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
 ****************************************************************************/
+/*!
+	\file pFilesListWidget.h
+	\date 2008-01-14T00:27:45
+	\author Filipe AZEVEDO aka Nox P\@sNox <pasnox@gmail.com>
+	\brief A QListWidget dock for pExtendedWorkspace
+*/
 #ifndef PFILESLISTWIDGET_H
 #define PFILESLISTWIDGET_H
 
-#include <QDockWidget>
+#include "pDockWidget.h"
+
 #include <QUrl>
 #include <QIcon>
 
@@ -38,15 +34,20 @@ class QListWidget;
 class QDragEnterEvent;
 class QDropEvent;
 
-class pFilesListWidget : public QDockWidget
+/*!
+	\brief A QListWidget dock for pExtendedWorkspace
+	\details The list is showing all workspace document windowTitle,
+	\details you can activated a document by clicking its corresponding item in the list.
+*/
+class pFilesListWidget : public pDockWidget
 {
 	Q_OBJECT
 	
 public:
-	pFilesListWidget( const QString&, pExtendedWorkspace* );
+	pFilesListWidget( const QString& title, pExtendedWorkspace* workspace );
 
 public slots:
-	void setItemToolTip( int, const QString& );
+	void setItemToolTip( int id, const QString& toolTip );
 
 protected:
 	QListWidget* mList;
@@ -54,19 +55,19 @@ protected:
 	QIcon mModifiedIcon;
 	QIcon mNonModifiedIcon;
 
-	bool eventFilter( QObject*, QEvent* );
-	void dragEnterEvent( QDragEnterEvent* );
-	void dropEvent( QDropEvent* );
+	bool eventFilter( QObject* object, QEvent* event );
+	void dragEnterEvent( QDragEnterEvent* event );
+	void dropEvent( QDropEvent* event );
 
 protected slots:
-	void modifiedChanged( int, bool );
-	void docTitleChanged( int, const QString& );
-	void documentInserted( int, const QString&, const QIcon& );
-	void documentAboutToClose( int );
-	void setCurrentRow( int );
+	void modifiedChanged( int id, bool modified );
+	void docTitleChanged( int id, const QString& title );
+	void documentInserted( int id, const QString& title, const QIcon& icon );
+	void documentAboutToClose( int id );
+	void setCurrentRow( int id );
 
 signals:
-	void urlsDropped( const QList<QUrl>& );
+	void urlsDropped( const QList<QUrl>& urls );
 };
 
 #endif // PFILESLISTWIDGET_H

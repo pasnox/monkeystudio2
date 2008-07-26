@@ -31,6 +31,7 @@
 #include <QMainWindow>
 #include <QFileInfo>
 #include <QFileSystemWatcher>
+#include <QDir>
 
 #include "pWorkspace.h"
 #include "pAbstractChild.h"
@@ -283,9 +284,11 @@ void pWorkspace::goToLine( const QString& s, const QPoint& p, bool b )
 	}
 }
 
+#include <QDebug>
 void pWorkspace::internal_currentFileChanged( const QString& file )
 {
 	QDir::setCurrent( QFileInfo( file ).absolutePath() );
+		qDebug () << "cd " << QFileInfo( file ).absolutePath();
 }
 
 void pWorkspace::internal_currentChanged( int i )
@@ -614,7 +617,7 @@ void pWorkspace::fileOpen_triggered()
 
 	// open open file dialog
 	//qWarning () << "current are " << QDir::current();
-	QStringList l = getOpenFileNames( tr( "Choose the file(s) to open" ), QString::null, mFilters, window() );
+	QStringList l = getOpenFileNames( tr( "Choose the file(s) to open" ), QDir::current().absolutePath(), mFilters, window() );
 
 	// for each entry, open file
 	foreach ( QString s, l )

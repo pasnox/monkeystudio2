@@ -26,6 +26,13 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file VariablesManager.cpp
+	\date 2008-01-14T00:37:18
+	\author Andrei KOPATS
+	\brief Implementation of VariablesManager class
+*/
+
 #include "VariablesManager.h"
 
 #include <QStringList>
@@ -33,10 +40,19 @@
 #include <QRegExp>
 #include <QDateTime>
 
+/*!
+	Class constructor
+	\param o Parent object. Passing to QObject constructor
+*/
 VariablesManager::VariablesManager( QObject* o )
 	: QObject( o )
 {}
 
+/*!
+	Get value of variable
+	\param locals Local dictionary of variables
+	\return Value of variable. Empty string, if variable is unknown
+*/
 QString VariablesManager::getVariable (QString name, Dictionary locals)
 {
     QString result = QString::null;
@@ -57,6 +73,13 @@ QString VariablesManager::getVariable (QString name, Dictionary locals)
     return QString::null;
 }
 
+/*!
+	Check, if variable is set localy or globaly
+	\param name Name of variable
+	\param locals Local dictionary
+	\retval true Variable is set
+	\retval false Variable is not set
+*/
 bool VariablesManager::isSet (QString name, Dictionary& locals)
 {
     if (    name == "editor_version" ||
@@ -66,7 +89,12 @@ bool VariablesManager::isSet (QString name, Dictionary& locals)
     return (globals.contains(name) || locals.contains(name));
 }
 
-#include <QDebug>
+/*!
+	Replace all variables in the text by it's values
+	\param text Text for processing
+	\param locals Local dictionary of variables
+	return New string
+*/
 QString VariablesManager::replaceAllVariables (QString text, Dictionary locals)
 {
     int p = 0;
@@ -80,7 +108,6 @@ QString VariablesManager::replaceAllVariables (QString text, Dictionary locals)
         s = rex.capturedTexts().value( 1 );
         findedVariables.append (s);
         p += rex.matchedLength();
-		qWarning() << "var: " << s;
     }
     // replace occurences
     foreach ( QString s, findedVariables )

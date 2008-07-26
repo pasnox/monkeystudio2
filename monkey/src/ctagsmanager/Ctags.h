@@ -26,6 +26,12 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file Ctags.h
+	\date 2008-01-14T00:36:54
+	\author Andrei Kopats
+	\brief Header for \link Ctags Ctags class \endlink
+*/
 #ifndef CTAGS_H
 #define CTAGS_H
 
@@ -39,29 +45,42 @@
 #include <fresh.h>
 #include <ctags.h>
 
-/*record in the table, in wich are file names and pointers to the tag list for it*/
-
+/*!
+	\brief Structure containing information about already parsed file
+*/
 struct Q_MONKEY_EXPORT FileRecord {
-	TagEntryListItem*  firstTagEntry;
-	QDateTime time;
+	TagEntryListItem*  firstTagEntry; 	/*!< Pointer to first item of tag's list. May be NULL. 	*/
+	QDateTime time; 					/*!< Time of getting of tags							*/
 };
 
+/*!
+	\brief Frontend for ctags library
+	
+	Providing support of parsing source 
+	files on different languages, and giving list of tags, containing 
+	information about file contense
+	See Exuberant Ctags project for more information about 
+	possibilityes of ctags library.
+*/
 class Q_MONKEY_EXPORT Ctags: public QObject, public QSingleton<Ctags>
 {
 	Q_OBJECT
 	friend class QSingleton<Ctags>;
 private:
+
 	Ctags (QObject* parent = QApplication::instance());
 	~Ctags ();
-	/* ClassBrouser and other objects will use pointers to the "QString file" of FileRecord for economy of memory, 
-	*so, if record created it must NEVER be deleted while monkeyDS working.
-	If need free some memory, possible to free TagEntryList and set time to QDateTime::null
+	
+	/*!
+		\brief Hash, containing links to \link FileRecord \endlink structures for files
+		
+		ClassBrouser and other objects will use pointers to the "QString file" of FileRecord for economy of memory, 
+		so, if record created it must NEVER be deleted while MkS working.
+		If need free some memory, possible to free TagEntryList and set time to QDateTime::null
+		
 	*/
 	QHash<QString, FileRecord*> fileRecords;  //records for already parsed files
 
-	//reparse file if need, or parse first time
-	//returns true if record was parsed/reparsed, or false, if record up to date
-	//record for file must already exist in the hash
 	bool updateFileRecord (QString file);
 
 	//internal function for call exuberant ctags

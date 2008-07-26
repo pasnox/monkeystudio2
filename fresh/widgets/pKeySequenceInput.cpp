@@ -1,57 +1,50 @@
 /****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Fresh Framework
-** FileName  : pKeySequenceInput.cpp
-** Date      : 2008-01-14T00:27:45
-** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
-**
-    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 #include "pKeySequenceInput.h"
 
 #include <QKeySequence>
 #include <QKeyEvent>
 
-pKeySequenceInput::pKeySequenceInput( QWidget* w )
-	: QLineEdit( w )
+/*!
+	\details Create a new pKeySequenceInput object
+	\param parent The parent widget
+*/
+pKeySequenceInput::pKeySequenceInput( QWidget* parent )
+	: QLineEdit( parent )
 {}
 
-void pKeySequenceInput::keyPressEvent( QKeyEvent* e )
+void pKeySequenceInput::keyPressEvent( QKeyEvent* event )
 {	
 	// return if auto repeat
-	if ( e->isAutoRepeat() )
+	if ( event->isAutoRepeat() )
 		return;
 	
 	// if user press something, sequence is not finished
 	setProperty( "Finished", false );
 	
 	// show current sequence
-	setText( checkKeyEvent( e, true ) );
+	setText( checkKeyEvent( event ) );
 }
 
-void pKeySequenceInput::keyReleaseEvent( QKeyEvent* e )
+void pKeySequenceInput::keyReleaseEvent( QKeyEvent* event )
 {
 	// return if auto repeat
-	if ( e->isAutoRepeat() )
+	if ( event->isAutoRepeat() )
 		return;
 	
 	// check if sequence is finished or not
@@ -59,29 +52,36 @@ void pKeySequenceInput::keyReleaseEvent( QKeyEvent* e )
 		return;
 	
 	// show current sequence
-	setText( checkKeyEvent( e, false ) );
+	setText( checkKeyEvent( event ) );
 }
 
-QString pKeySequenceInput::checkKeyEvent( QKeyEvent* e, bool b )
+/*!
+	\details Check a QKeyEvent event
+	\param event The QKeyEvent to check
+	\return The QString shortcut generate from the QKeyEvent
+*/
+QString pKeySequenceInput::checkKeyEvent( QKeyEvent* event )
 {
+// is key pressed or key released ?
+	const bool keyPressed = event->type() == QEvent::KeyPress;
+	
 	// or-ed keys
 	int mKeys = 0;
 	
 	// check modifiers pressed
-	if ( e->modifiers() & Qt::ControlModifier )
+	if ( event->modifiers() & Qt::ControlModifier )
 		mKeys |= Qt::ControlModifier;
-	if ( e->modifiers() & Qt::AltModifier )
+	if ( event->modifiers() & Qt::AltModifier )
 		mKeys |= Qt::AltModifier;
-	if ( e->modifiers() & Qt::ShiftModifier )
+	if ( event->modifiers() & Qt::ShiftModifier )
 		mKeys |= Qt::ShiftModifier;
-	if ( e->modifiers() & Qt::MetaModifier )
+	if ( event->modifiers() & Qt::MetaModifier )
 		mKeys |= Qt::MetaModifier;
 	
-	// if key press event
-	if ( b )
+	if ( keyPressed )
 	{
 		// get press key
-		switch( e->key() )
+		switch( event->key() )
 		{
 			// this keys can't be used
 			case Qt::Key_Shift:
@@ -100,7 +100,7 @@ QString pKeySequenceInput::checkKeyEvent( QKeyEvent* e, bool b )
 				break;
 			default:
 				// add pressed key
-				mKeys |= e->key();
+				mKeys |= event->key();
 				
 				// set sequence finished
 				setProperty( "Finished", true );

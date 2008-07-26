@@ -71,6 +71,14 @@ Known Problems:
 * For any problems, please contact us on the forums at : http://forums.monkeystudio.org or on our irc channel, irc://irc.freenode.net/monkeystudio
 * You can report bugs using our webissues server ( see About dialog for more infos )
 
+How to generate Doxygen documentation:
+======================================
+You should execute command 
+doxygen doxygen.config
+from root dirrectory of source archive
+(dirrectory, where config storing)
+Dirrectory 'doc/html' with documentation will appear.
+
 
 	Azevedo Filipe & The Monkey Studio Team,
 
