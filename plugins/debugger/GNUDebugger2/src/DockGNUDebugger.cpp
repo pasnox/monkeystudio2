@@ -37,7 +37,6 @@
 #include <QCloseEvent>
 #include <QMessageBox>
 
-
 /*!
 * \details Load current setting from Monkey .ini
 */
