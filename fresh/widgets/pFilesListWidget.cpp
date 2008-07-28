@@ -116,7 +116,7 @@ void pFilesListWidget::docTitleChanged( int id, const QString& title )
 		it->setText( title );
 }
 
-void pFilesListWidget::documentInserted( int id, const QString& title, const QIcon& icon )
+void pFilesListWidget::documentInserted( int id, const QString& title, const QIcon& /*icon*/ )
 { mList->insertItem( id, title ); }
 
 void pFilesListWidget::documentAboutToClose( int id )

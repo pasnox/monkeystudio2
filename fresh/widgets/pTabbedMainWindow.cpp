@@ -1,14 +1,4 @@
 /****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Fresh Framework
-** FileName  : pTabbedMainWindow.cpp
-** Date      : 2008-01-14T00:27:51
-** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
-**
 	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
 	This program is free software; you can redistribute it and/or modify
@@ -24,28 +14,41 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
 ****************************************************************************/
 #include "pTabbedMainWindow.h"
 #include "pTabbedWorkspace.h"
 
-pTabbedMainWindow::pTabbedMainWindow( QWidget* w, Qt::WindowFlags f )
-	: pMainWindow( w, f ), mWorkspace( new pTabbedWorkspace )
+/*!
+	\details Create a new pTabbedMainWindow object
+	\param parent The parent widget
+	\param windowFlags The window flags
+*/
+pTabbedMainWindow::pTabbedMainWindow( QWidget* parent, Qt::WindowFlags windowFlags )
+	: pMainWindow( parent, windowFlags ), mWorkspace( new pTabbedWorkspace )
 {
 	// init tabbed workspace
 	setCentralWidget( mWorkspace );
 }
 
+/*!
+	\details Return the pTabbedWorkspace object
+*/
 pTabbedWorkspace* pTabbedMainWindow::tabbedWorkspace()
 {
 	return mWorkspace;
 }
 
+/*!
+	\details Save the window state
+*/
 void pTabbedMainWindow::saveState()
 {
 	pMainWindow::saveState();
 }
 
+/*!
+	\details Restore the window state
+*/
 void pTabbedMainWindow::restoreState()
 {
 	pMainWindow::restoreState();

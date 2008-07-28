@@ -1,14 +1,4 @@
 /****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Fresh Framework
-** FileName  : pTabBar.h
-** Date      : 2008-01-14T00:27:50
-** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
-**
 	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
 	This program is free software; you can redistribute it and/or modify
@@ -24,8 +14,13 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
 ****************************************************************************/
+/*!
+	\file pTabBar.h
+	\date 2008-01-14T00:27:50
+	\author Filipe AZEVEDO aka Nox P\@sNox <pasnox@gmail.com>
+	\brief A extended QTabBar
+*/
 #ifndef PTABBAR_H
 #define PTABBAR_H
 
@@ -36,12 +31,16 @@
 class QAction;
 class pAction;
 
+/*!
+	\brief A extended QTabBar
+	\details that allow tab drag and drop, shortcuts, text elided, tabs color, current tab color and close button
+*/
 class pTabBar : public QTabBar
 {
 	Q_OBJECT
 
 public:
-	pTabBar( QWidget* = 0 );
+	pTabBar( QWidget* parent = 0 );
 
 	QColor tabsColor() const;
 	QColor currentTabColor() const;
@@ -54,24 +53,24 @@ public:
 
 public slots:
 	void resetTabsColor();
-	void setTabsColor( const QColor& );
-	void setCurrentTabColor( const QColor& );
-	void setTabsHaveCloseButton( bool );
-	void setTabsHaveShortcut( bool );
-	void setTabsElided( bool );
+	void setTabsColor( const QColor& color );
+	void setCurrentTabColor( const QColor& color );
+	void setTabsHaveCloseButton( bool buttons );
+	void setTabsHaveShortcut( bool shortcuts );
+	void setTabsElided( bool elided );
 
 protected:
-	virtual void paintEvent( QPaintEvent* );
-	virtual void mousePressEvent( QMouseEvent* );
-	virtual void mouseReleaseEvent( QMouseEvent* );
-	virtual void mouseMoveEvent(QMouseEvent* );
-	virtual void dragEnterEvent( QDragEnterEvent* );
-	virtual void dropEvent( QDropEvent* );
-	virtual void tabInserted( int );
-	virtual void tabRemoved( int );
-	virtual QRect iconRectForTab( int );
-	virtual bool inCloseButtonRect( int, const QPoint& );
-	void updateTabsNumber( int = -1 );
+	virtual void paintEvent( QPaintEvent* event );
+	virtual void mousePressEvent( QMouseEvent* event );
+	virtual void mouseReleaseEvent( QMouseEvent* event );
+	virtual void mouseMoveEvent( QMouseEvent* event );
+	virtual void dragEnterEvent( QDragEnterEvent* event );
+	virtual void dropEvent( QDropEvent* event );
+	virtual void tabInserted( int id );
+	virtual void tabRemoved( int id );
+	virtual QRect iconRectForTab( int id );
+	virtual bool inCloseButtonRect( int id, const QPoint& pos );
+	void updateTabsNumber( int id = -1 );
 
 	QPoint dragStartPosition;
 	QColor mTabsColor;
@@ -82,18 +81,17 @@ protected:
 	pAction* aToggleTabsElided;
 
 signals:
-	void leftButtonPressed( int, const QPoint& );
-	void midButtonPressed( int, const QPoint& );
-	void rightButtonPressed( int, const QPoint& );
-	void tabDropped( int, int );
-	void tabsColorChanged( const QColor& );
-	void currentTabColorChanged( const QColor& );
-	void closeButtonClicked( int );
-	void tabsHaveCloseButtonChanged( bool );
-	void tabsHaveShortcutChanged( bool );
-	void tabsElidedChanged( bool );
-	void urlsDropped( const QList<QUrl>& );
-
+	void leftButtonPressed( int id, const QPoint& pos );
+	void midButtonPressed( int id, const QPoint& pos );
+	void rightButtonPressed( int id, const QPoint& pos );
+	void tabDropped( int from, int to );
+	void tabsColorChanged( const QColor& color );
+	void currentTabColorChanged( const QColor& color );
+	void closeButtonClicked( int id );
+	void tabsHaveCloseButtonChanged( bool buttons );
+	void tabsHaveShortcutChanged( bool shortcuts );
+	void tabsElidedChanged( bool elided );
+	void urlsDropped( const QList<QUrl>& urls );
 };
 
 #endif // PTABBAR_H

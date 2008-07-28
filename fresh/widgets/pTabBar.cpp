@@ -1,14 +1,5 @@
 /****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Fresh Framework
-** FileName  : pTabBar.cpp
-** Date      : 2008-01-14T00:27:50
-** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
-**
+
 	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
 	This program is free software; you can redistribute it and/or modify
@@ -24,7 +15,6 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
 ****************************************************************************/
 #include "pTabBar.h"
 #include "pAction.h"
@@ -34,10 +24,12 @@
 #include <QIcon>
 #include <QPainter>
 
-#include <QDebug>
-
-pTabBar::pTabBar( QWidget* w )
-	: QTabBar( w )
+/*!
+	\details Create a new pTabBar object
+	\param parent The parent widget
+*/
+pTabBar::pTabBar( QWidget* parent )
+	: QTabBar( parent )
 {
 	// set default colors
 	mTabsColor = Qt::black;
@@ -71,10 +63,10 @@ pTabBar::pTabBar( QWidget* w )
 	connect( aToggleTabsElided, SIGNAL( toggled( bool ) ), this, SLOT( setTabsElided( bool ) ) );
 }
 
-void pTabBar::paintEvent( QPaintEvent* e )
+void pTabBar::paintEvent( QPaintEvent* event )
 {
 	// draw tabs
-	QTabBar::paintEvent( e );
+	QTabBar::paintEvent( event );
 	
 	// update button close
 	if ( !aToggleTabsHaveCloseButton->isChecked() )
@@ -97,56 +89,56 @@ void pTabBar::paintEvent( QPaintEvent* e )
 	}
 }
 
-void pTabBar::mousePressEvent( QMouseEvent* e )
+void pTabBar::mousePressEvent( QMouseEvent* event )
 {
 	// reset drag position
 	dragStartPosition = QPoint();
 	
 	// get tab under cursor
-	int i = tabAt( e->pos() );
+	int i = tabAt( event->pos() );
 	
 	// if tab
 	if ( i != -1 )
 	{
 		// emit left button pressed
-		if ( e->button() == Qt::LeftButton )
-			emit leftButtonPressed( i, e->globalPos() );
+		if ( event->button() == Qt::LeftButton )
+			emit leftButtonPressed( i, event->globalPos() );
 		
 		// emit mid button pressed
-		if ( e->button() == Qt::MidButton )
-			emit midButtonPressed( i, e->globalPos() );
+		if ( event->button() == Qt::MidButton )
+			emit midButtonPressed( i, event->globalPos() );
 		
 		// emit right button pressed and drag position
-		if ( e->button() == Qt::RightButton )
+		if ( event->button() == Qt::RightButton )
 		{
-			emit rightButtonPressed( i, e->globalPos() );
-			dragStartPosition = e->pos();
+			emit rightButtonPressed( i, event->globalPos() );
+			dragStartPosition = event->pos();
 		}
 	}
 	
 	// default event
-	QTabBar::mousePressEvent( e );
+	QTabBar::mousePressEvent( event );
 }
 
-void pTabBar::mouseReleaseEvent( QMouseEvent* e )
+void pTabBar::mouseReleaseEvent( QMouseEvent* event )
 {
 	// check button close clicked
 	if ( aToggleTabsHaveCloseButton->isChecked() )
 	{
 		// get tab under cursor
-		int i = tabAt( e->pos() );
+		int i = tabAt( event->pos() );
 		
 		// if tab and left button and  tab icon pressed
 		if ( i != -1 )
-			if ( e->button() == Qt::LeftButton && inCloseButtonRect( i, e->pos() ) )
+			if ( event->button() == Qt::LeftButton && inCloseButtonRect( i, event->pos() ) )
 				emit closeButtonClicked( i );
 	}
 	
 	// default event
-	QTabBar::mouseReleaseEvent( e );
+	QTabBar::mouseReleaseEvent( event );
 }
 
-void pTabBar::mouseMoveEvent(QMouseEvent * e )
+void pTabBar::mouseMoveEvent( QMouseEvent* event )
 {
 	if ( aToggleTabsHaveCloseButton->isChecked() )
 	{
@@ -154,23 +146,23 @@ void pTabBar::mouseMoveEvent(QMouseEvent * e )
 		update();
 	
 		// change cursor if over button
-		if ( inCloseButtonRect( tabAt( e->pos() ), e->pos() ) )
+		if ( inCloseButtonRect( tabAt( event->pos() ), event->pos() ) )
 			setCursor( Qt::PointingHandCursor );
 		else
 			unsetCursor();
 	}
 	
 	// need left button
-	if ( e->buttons() != Qt::LeftButton )
+	if ( event->buttons() != Qt::LeftButton )
 		return;
 	
 	// need target tab and minimum drag distance
-	if ( tabAt( e->pos() ) == -1 || ( e->pos() -dragStartPosition ).manhattanLength() < QApplication::startDragDistance() )
+	if ( tabAt( event->pos() ) == -1 || ( event->pos() -dragStartPosition ).manhattanLength() < QApplication::startDragDistance() )
 		return;
 
 	// create mime
 	QMimeData* m = new QMimeData;
-	m->setData( "x-tabindex", QByteArray::number( tabAt( e->pos() ) ) );
+	m->setData( "x-tabindex", QByteArray::number( tabAt( event->pos() ) ) );
 	m->setData( "x-tabbar", QByteArray::number( reinterpret_cast<quintptr>( this ) ) );
 	
 	// create drag and set mime
@@ -181,36 +173,36 @@ void pTabBar::mouseMoveEvent(QMouseEvent * e )
 	d->exec( Qt::MoveAction );
 	
 	// default event
-	QTabBar::mouseMoveEvent( e );
+	QTabBar::mouseMoveEvent( event );
 }
 
-void pTabBar::dragEnterEvent( QDragEnterEvent* e )
+void pTabBar::dragEnterEvent( QDragEnterEvent* event )
 {
 	// if correct mime and same tabbar
-	if ( ( e->mimeData()->hasFormat( "x-tabindex" ) && e->mimeData()->hasFormat( "x-tabbar" ) 
-		&& reinterpret_cast<pTabBar*>( QVariant( e->mimeData()->data( "x-tabbar" ) ).value<quintptr>() ) == this 
-		&& tabAt( e->pos() ) != -1 ) || e->mimeData()->hasUrls() )
+	if ( ( event->mimeData()->hasFormat( "x-tabindex" ) && event->mimeData()->hasFormat( "x-tabbar" ) 
+		&& reinterpret_cast<pTabBar*>( QVariant( event->mimeData()->data( "x-tabbar" ) ).value<quintptr>() ) == this 
+		&& tabAt( event->pos() ) != -1 ) || event->mimeData()->hasUrls() )
 	{
 		// accept drag
-		e->acceptProposedAction();
+		event->acceptProposedAction();
 	}
 	
 	// default event
-	QTabBar::dragEnterEvent( e );
+	QTabBar::dragEnterEvent( event );
 }
 
-void pTabBar::dropEvent( QDropEvent* e )
+void pTabBar::dropEvent( QDropEvent* event )
 {
-	if ( !e->mimeData()->hasUrls() )
+	if ( !event->mimeData()->hasUrls() )
 	{
 		// get drop tab
-		int ni = tabAt( e->pos() );
+		int ni = tabAt( event->pos() );
 		
 		// if get it
 		if ( ni != -1 )
 		{
 			// get original tab infos
-			int oi = e->mimeData()->data( "x-tabindex" ).toInt();
+			int oi = event->mimeData()->data( "x-tabindex" ).toInt();
 			QVariant otd = tabData( oi );
 			QIcon oti = tabIcon( oi );
 			QString ott = tabText( oi );
@@ -229,7 +221,7 @@ void pTabBar::dropEvent( QDropEvent* e )
 			setTabWhatsThis( i, otwt );
 			
 			//accept
-			e->acceptProposedAction();
+			event->acceptProposedAction();
 			
 			// emit signal
 			emit tabDropped( oi, i );
@@ -239,10 +231,10 @@ void pTabBar::dropEvent( QDropEvent* e )
 		}
 	}
 	else
-		emit urlsDropped( e->mimeData()->urls () );
+		emit urlsDropped( event->mimeData()->urls () );
 	
 	// default event
-	QTabBar::dropEvent( e );
+	QTabBar::dropEvent( event );
 }
 
 void pTabBar::tabInserted( int i )
@@ -334,67 +326,105 @@ QRect pTabBar::iconRectForTab( int i )
 bool pTabBar::inCloseButtonRect( int i, const QPoint& p )
 { return iconRectForTab( i ).contains( p ); }
 
+/*!
+	\details Redo the tabs color
+*/
 void pTabBar::resetTabsColor()
 {
 	for ( int i = 0; i < count(); i++ )
 		setTabTextColor( i, i == currentIndex() ? currentTabColor() : tabsColor() );
 }
 
+/*!
+	\details Return the tabs text color
+*/
 QColor pTabBar::tabsColor() const
 { return mTabsColor; }
 
-void pTabBar::setTabsColor( const QColor& c )
+/*!
+	\details Set the tabs text color
+	\param color The text color
+*/
+void pTabBar::setTabsColor( const QColor& color )
 {
-	if ( mTabsColor == c )
+	if ( mTabsColor == color )
 		return;
-	mTabsColor = c;
+	mTabsColor = color;
 	emit tabsColorChanged( mTabsColor );
 }
 
+/*!
+	\details Return the current tab text color
+*/
 QColor pTabBar::currentTabColor() const
 { return mCurrentTabColor; }
 
-void pTabBar::setCurrentTabColor( const QColor& c )
+/*!
+	\details Set the current tab text color
+	\param color The text color
+*/
+void pTabBar::setCurrentTabColor( const QColor& color )
 {
-	if ( mCurrentTabColor == c )
+	if ( mCurrentTabColor == color )
 		return;
-	mCurrentTabColor = c;
+	mCurrentTabColor = color;
 	emit currentTabColorChanged( mCurrentTabColor );
 }
 
+/*!
+	\details Return true if tabs have a small close button else false
+*/
 bool pTabBar::tabsHaveCloseButton() const
 { return aToggleTabsHaveCloseButton->isChecked(); }
 
-void pTabBar::setTabsHaveCloseButton( bool b )
+/*!
+	\details Set if tabs have or not a small close button
+	\param buttons True for buttons, else false
+*/
+void pTabBar::setTabsHaveCloseButton( bool buttons )
 {
-	if ( aToggleTabsHaveCloseButton->isChecked() == b && sender() != aToggleTabsHaveCloseButton )
+	if ( aToggleTabsHaveCloseButton->isChecked() == buttons && sender() != aToggleTabsHaveCloseButton )
 		return;
-	aToggleTabsHaveCloseButton->setChecked( b );
+	aToggleTabsHaveCloseButton->setChecked( buttons );
 	setTabText( 0, tabText( 0 ) ); // workaround for tabs update
 	emit tabsHaveCloseButtonChanged( aToggleTabsHaveCloseButton->isChecked() );
 }
 
+/*!
+	\details Return true if tabs have shortcut else false
+*/
 bool pTabBar::tabsHaveShortcut() const
 { return aToggleTabsHaveShortcut->isChecked(); }
 
-void pTabBar::setTabsHaveShortcut( bool b )
+/*!
+	\details Set if tabs have or not shortcut
+	\param shortcuts True for shortcuts, else false
+*/
+void pTabBar::setTabsHaveShortcut( bool shortcuts )
 {
-	if ( aToggleTabsHaveShortcut->isChecked() == b && sender() != aToggleTabsHaveShortcut )
+	if ( aToggleTabsHaveShortcut->isChecked() == shortcuts && sender() != aToggleTabsHaveShortcut )
 		return;
-	aToggleTabsHaveShortcut->setChecked( b );
+	aToggleTabsHaveShortcut->setChecked( shortcuts );
 	updateTabsNumber();
 	emit tabsHaveShortcutChanged( aToggleTabsHaveShortcut->isChecked() );
 }
 
+/*!
+	\details Return true if tabs text is elided else false
+*/
 bool pTabBar::tabsElided() const
 { return  aToggleTabsElided->isChecked(); }
 
-void pTabBar::setTabsElided( bool b )
+/*!
+	\details Set if tabs text is elided or not
+	\param elided True for elided text, else false
+*/
+void pTabBar::setTabsElided( bool elided )
 {
-	if ( aToggleTabsElided->isChecked() == b && sender() != aToggleTabsElided )
+	if ( aToggleTabsElided->isChecked() == elided && sender() != aToggleTabsElided )
 		return;
 	aToggleTabsElided->setChecked( b );
-	setElideMode( b ? Qt::ElideMiddle : Qt::ElideNone );
+	setElideMode( elided ? Qt::ElideMiddle : Qt::ElideNone );
 	setTabText( 0, tabText( 0 ) ); // workaround for tabs update
 	emit tabsElidedChanged( aToggleTabsElided->isChecked() );
 }
@@ -426,11 +456,20 @@ void pTabBar::updateTabsNumber( int i )
 	}
 }
 
+/*!
+	\details Return a togglable QAction for managing the "Have close button" property
+*/
 QAction* pTabBar::toggleTabsHaveCloseButtonAction() const
 { return aToggleTabsHaveCloseButton; }
 
+/*!
+	\details Return a togglable QAction for managing the "Have shortcut" property
+*/
 QAction* pTabBar::toggleTabsHaveShortcutAction() const
 { return aToggleTabsHaveShortcut; }
 
+/*!
+	\details Return a togglable QAction for managing the "Text elided" property
+*/
 QAction* pTabBar::toggleTabsElidedAction() const
 { return aToggleTabsElided; }

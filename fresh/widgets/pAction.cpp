@@ -17,8 +17,11 @@
 ****************************************************************************/
 #include "pAction.h"
 
+/*! \details The Default Shortcut property name */
 const char* pAction::_DEFAULT_SHORTCUT_PROPERTY_ = "Default Shortcut";
+/*! \details The Group property name */
 const char* pAction::_GROUP_PROPERTY_ = "Group";
+/*! \details The Settings Scope used to write/read ini file */
 const char* pAction::_SETTINGS_SCOPE_ = "Shortcuts Manager";
 
 /*!

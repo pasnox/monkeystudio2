@@ -1,14 +1,4 @@
 /****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Fresh Framework
-** FileName  : pTabbedWorkspace.h
-** Date      : 2008-01-14T00:27:52
-** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
-**
 	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
 	This program is free software; you can redistribute it and/or modify
@@ -24,8 +14,14 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
 ****************************************************************************/
+/*!
+	\file pTabbedWorkspace.h
+	\date 2008-01-14T00:27:52
+	\author Filipe AZEVEDO aka Nox P\@sNox <pasnox@gmail.com>
+	\brief An extended workspace
+	\brief This class and its associated classes are obsolete
+*/
 #ifndef PTABBEDWORKSPACE_H
 #define PTABBEDWORKSPACE_H
 
@@ -43,6 +39,11 @@ class pTabbedWorkspaceCorner;
 class pAction;
 class pTabBar;
 
+/*!
+	\brief An extended workspace
+	\details that can at run time be switched to SDI/MDI/TopLevel Window.
+	\details See pExtendedWorkspace
+*/
 class Q_MONKEY_EXPORT pTabbedWorkspace : public QWidget
 {
 	Q_OBJECT
@@ -127,7 +128,6 @@ signals:
 	void tabModeChanged( pTabbedWorkspace::TabMode );
 	void documentModeChanged( pTabbedWorkspace::DocumentMode );
 	void closeAllRequested();
-
 };
 
 #endif // PTABBEDWORKSPACE_H
