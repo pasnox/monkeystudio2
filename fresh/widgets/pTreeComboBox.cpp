@@ -1,14 +1,4 @@
 /****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Fresh Framework
-** FileName  : pTreeComboBox.cpp
-** Date      : 2008-01-14T00:27:56
-** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
-**
 	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
 	This program is free software; you can redistribute it and/or modify
@@ -24,7 +14,6 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
 ****************************************************************************/
 #include "pTreeComboBox.h"
 
@@ -40,8 +29,26 @@
 #include <QDesktopWidget>
 #include <QStatusBar>
 
-pTreeComboBox::pTreeComboBox( QWidget* w )
-	: QWidget( w ), mFrame( new QFrame( this ) ), mView( 0 ), mModel( 0 ), mForce( false )
+int recursiveCount( const QModelIndex& it )
+{
+	int j = 0;
+	if ( !it.parent().isValid() )
+		j++;
+	for ( int i = 0; i < it.model()->rowCount( it ); i++ )
+	{
+		j++;
+		if ( it.model()->rowCount( it.child( i, 0 ) ) )
+			j += recursiveCount( it.child( i, 0 ) );
+	}
+	return j;
+}
+
+/*!
+	\details Create a new pTreeComboBox object
+	\param parent The parent widget
+*/
+pTreeComboBox::pTreeComboBox( QWidget* parent )
+	: QWidget( parent ), mFrame( new QFrame( this ) ), mView( 0 ), mModel( 0 ), mForce( false )
 {
 	mFrame->setWindowFlags( Qt::Dialog | Qt::FramelessWindowHint );
 	QVBoxLayout* vl = new QVBoxLayout( mFrame );
@@ -60,17 +67,17 @@ pTreeComboBox::pTreeComboBox( QWidget* w )
 pTreeComboBox::~pTreeComboBox()
 { delete mView; }
 
-bool pTreeComboBox::eventFilter( QObject* o, QEvent* e )
+bool pTreeComboBox::eventFilter( QObject* object, QEvent* event )
 {
-	if ( o == mFrame )
+	if ( object == mFrame )
 	{
-		if ( e->type() == QEvent::WindowDeactivate )
+		if ( event->type() == QEvent::WindowDeactivate )
 			if ( !rect().contains( mapFromGlobal( QCursor::pos() ) ) )
 				hidePopup();
-		return QWidget::eventFilter( o, e );
+		return QWidget::eventFilter( object, event );
 	}
 
-	QEvent::Type t = e->type();
+	QEvent::Type t = event->type();
 	if ( t == QEvent::Hide )
 	{
 		if ( currentIndex() != mIndex )
@@ -84,7 +91,7 @@ bool pTreeComboBox::eventFilter( QObject* o, QEvent* e )
 	}
 	else if ( t == QEvent::MouseMove )
 	{
-		if ( QMouseEvent* me = dynamic_cast<QMouseEvent*>( e ) )
+		if ( QMouseEvent* me = dynamic_cast<QMouseEvent*>( event ) )
 		{
 			QModelIndex i = mView->indexAt( mView->mapFromGlobal( me->globalPos() ) );
 			if ( mView->currentIndex() != i )
@@ -97,32 +104,30 @@ bool pTreeComboBox::eventFilter( QObject* o, QEvent* e )
 			}
 		}
 	}
-	return QWidget::eventFilter( o, e );
+	return QWidget::eventFilter( object, event );
 }
 
+/*!
+	\details Return the widget size hint
+*/
 QSize pTreeComboBox::sizeHint() const
 { return mSizeHint; }
 
-int recursiveCount( const QModelIndex& it )
-{
-	int j = 0;
-	if ( !it.parent().isValid() )
-		j++;
-	for ( int i = 0; i < it.model()->rowCount( it ); i++ )
-	{
-		j++;
-		if ( it.model()->rowCount( it.child( i, 0 ) ) )
-			j += recursiveCount( it.child( i, 0 ) );
-	}
-	return j;
-}
-
+/*!
+	\details Return the number of row in the model
+*/
 int pTreeComboBox::count() const
 { return recursiveCount( mModel->index( 0, 0 ) ); }
 
+/*!
+	\details Return the iconSize
+*/
 QSize pTreeComboBox::iconSize() const
 { return mIconSize; }
 
+/*!
+	\details Set the icon size
+*/
 void pTreeComboBox::setIconSize( const QSize& s )
 {
 	if ( mIconSize != s )
@@ -132,7 +137,7 @@ void pTreeComboBox::setIconSize( const QSize& s )
 	}
 }
 
-void pTreeComboBox::paintEvent( QPaintEvent* )
+void pTreeComboBox::paintEvent( QPaintEvent* /*event*/ )
 {
 	QStyleOptionComboBox o;
 
@@ -163,29 +168,33 @@ void pTreeComboBox::paintEvent( QPaintEvent* )
 	p.drawControl( QStyle::CE_ComboBoxLabel, o );
 }
 
-void pTreeComboBox::hideEvent( QHideEvent* )
+void pTreeComboBox::hideEvent( QHideEvent* /*event*/ )
 { hidePopup(); }
 
-void pTreeComboBox::enterEvent( QEvent* )
+void pTreeComboBox::enterEvent( QEvent* /*event*/ )
 { update(); }
 
-void pTreeComboBox::leaveEvent( QEvent* )
+void pTreeComboBox::leaveEvent( QEvent* /*event*/ )
 { update(); }
 
-void pTreeComboBox::mousePressEvent( QMouseEvent* )
+void pTreeComboBox::mousePressEvent( QMouseEvent* /*event*/ )
 {
 	if ( !mView )
 		return;
 	mFrame->isVisible() ? hidePopup() : showPopup();
 }
 
+/*!
+	\details Hide the popup
+*/
 void pTreeComboBox::hidePopup()
 {
 	if ( mFrame->isVisible() )
 		mFrame->hide();
 }
 
-void pTreeComboBox::calculPopupGeometry() // code copied from QComboBox  original class from Trolltech, arrange to feet my needs
+void pTreeComboBox::calculPopupGeometry()
+// code copied from QComboBox  original class from Trolltech, arrange to feet my needs
 {
 	//int itemHeight = mView->sizeHintForIndex( mModel->index( 0, 0 ) ).height();
 	QRect listRect( rect() );
@@ -223,6 +232,9 @@ void pTreeComboBox::calculPopupGeometry() // code copied from QComboBox  origina
 	mFrame->setGeometry( listRect );
 }
 
+/*!
+	\details Show the popup
+*/
 void pTreeComboBox::showPopup()
 {
 	if ( !mFrame->isVisible() && mView )

@@ -46,35 +46,35 @@ public:
 	pTreeComboBox( QWidget* parent = 0 );
 	~pTreeComboBox();
 
-	bool eventFilter( QObject*, QEvent* );
+	bool eventFilter( QObject* object, QEvent* event );
 
 	virtual QSize sizeHint() const;
 	int count() const;
 
 	virtual QSize iconSize() const;
-	virtual void setIconSize( const QSize& );
+	virtual void setIconSize( const QSize& size );
 
 	virtual void hidePopup();
 	virtual void showPopup();
 
 	QTreeView* view() const;
-	void setView( QTreeView* );
+	void setView( QTreeView* view );
 
 	QAbstractItemModel* model() const;
-	void setModel( QAbstractItemModel* );
+	void setModel( QAbstractItemModel* model );
 
 	QModelIndex rootIndex() const;
-	void setRootIndex( const QModelIndex& );
+	void setRootIndex( const QModelIndex& index );
 
 	QModelIndex currentIndex() const;
-	void setCurrentIndex( const QModelIndex& );
+	void setCurrentIndex( const QModelIndex& index );
 	
 	void expandAll();
 
 protected slots:
-	void internal_activated( const QModelIndex& );
-	void internal_clicked( const QModelIndex& );
-	void internal_currentChanged( const QModelIndex&, const QModelIndex& );
+	void internal_activated( const QModelIndex& index );
+	void internal_clicked( const QModelIndex& index );
+	void internal_currentChanged( const QModelIndex& previous, const QModelIndex& current );
 
 protected:
 	QSize mIconSize;
@@ -85,20 +85,19 @@ protected:
 	QModelIndex mIndex;
 	bool mForce;
 
-	void paintEvent( QPaintEvent* );
-	void hideEvent( QHideEvent* );
-	void enterEvent( QEvent* );
-	void leaveEvent( QEvent* );
-	void mousePressEvent( QMouseEvent* );
+	void paintEvent( QPaintEvent* event );
+	void hideEvent( QHideEvent* event );
+	void enterEvent( QEvent* event );
+	void leaveEvent( QEvent* event );
+	void mousePressEvent( QMouseEvent* event );
 
 	void calculPopupGeometry();
 
 signals:
-	void activated( const QModelIndex& );
-	void clicked( const QModelIndex& );
-	void currentChanged( const QModelIndex& );
-	void highlighted( const QModelIndex& );
-
+	void activated( const QModelIndex& index );
+	void clicked( const QModelIndex& index );
+	void currentChanged( const QModelIndex& index );
+	void highlighted( const QModelIndex& index );
 };
 
 #endif // PTREECOMBOBOX_H

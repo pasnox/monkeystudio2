@@ -423,7 +423,7 @@ void pTabBar::setTabsElided( bool elided )
 {
 	if ( aToggleTabsElided->isChecked() == elided && sender() != aToggleTabsElided )
 		return;
-	aToggleTabsElided->setChecked( b );
+	aToggleTabsElided->setChecked( elided );
 	setElideMode( elided ? Qt::ElideMiddle : Qt::ElideNone );
 	setTabText( 0, tabText( 0 ) ); // workaround for tabs update
 	emit tabsElidedChanged( aToggleTabsElided->isChecked() );
