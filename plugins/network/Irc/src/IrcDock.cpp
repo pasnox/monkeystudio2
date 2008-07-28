@@ -26,6 +26,8 @@
 
 #include "IrcDock.h"
 
+#define USER_TAG "|Mks"
+
 IrcDock::IrcDock( QWidget * w )
 	: pDockWidget( w )
 {
@@ -34,7 +36,7 @@ IrcDock::IrcDock( QWidget * w )
 	connect(mUiIrcMain, SIGNAL(ircJoinChannel(QString)), this , SLOT(onIrcJoinChannel(QString)));
 
 
-	mTabWidget = new QTabWidget();
+	mTabWidget = new QTabWidget(this);
 	mTabWidget->addTab(mUiIrcMain,"log Irc");
 	
 	// create tcp socket
@@ -112,7 +114,7 @@ void IrcDock::onIrcConnect(QString s, bool b)
 		if(r.exactMatch(s))
 		{
 			QStringList l = r.capturedTexts();
-			mUserName = l.at(1);
+			mUserName = l.at(1) + USER_TAG ;
 			mTcpSocket->connectToHost(l.at(2), l.at(3).toInt());
 		}
 	}
@@ -270,7 +272,11 @@ IrcDock::~IrcDock()
 {
 	onSend("QUIT");
 	mTcpSocket->close();
-	delete mTcpSocket;
-	delete mUiIrcMain;
+
+	
+//	delete mTcpSocket;
+//	delete mUiIrcMain;
+
+	// Qt delete for me
 }
 

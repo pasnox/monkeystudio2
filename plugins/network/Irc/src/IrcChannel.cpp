@@ -34,34 +34,35 @@
 IrcChannel::IrcChannel(QWidget * parent) : QWidget(parent)
 {
 	// create container
-	QHBoxLayout *l = new QHBoxLayout();
-	QHBoxLayout *h = new QHBoxLayout();
-	QVBoxLayout *v = new QVBoxLayout(this);
-	QSplitter *splitter = new QSplitter();
+	QHBoxLayout *editAndListLayout = new QHBoxLayout();
+	QHBoxLayout *editAndPartLayout = new QHBoxLayout();
+	QVBoxLayout *mainLayout = new QVBoxLayout(this);
+	QSplitter *splitter = new QSplitter(this);
 
-	mTopic = new QLabel();
 	
 	// un-comments this if you want see topic 
-//	v->addWidget(mTopic);
+//	mTopic = new QLabel(this);
+//	mainLayout->addWidget(mTopic);
 	
-	v->addLayout(l);
+	mainLayout->addLayout(editAndListLayout);
 
  	// create widget
-	mTextEdit = new QTextEdit();
+//	mTextEdit = new QTextEdit();
+	mTextEdit = new QPlainTextEdit();
 	mTextEdit->setReadOnly(true);
-	mTextEdit->setAcceptRichText(true);
+//	mTextEdit->setAcceptRichText(true);
 
-	mMemberList = new QListWidget();
+	mMemberList = new QListWidget(this);
 	mMemberList->setSortingEnabled (true);
 
 	mLineEdit = new QLineEdit();
 	mPart = new QPushButton(tr("Part"));
-	h->addWidget(mLineEdit);
-	h->addWidget(mPart);
-	v->addLayout(h);
+	editAndPartLayout->addWidget(mLineEdit);
+	editAndPartLayout->addWidget(mPart);
+	mainLayout->addLayout(editAndPartLayout);
 
 	// add widget to container
-	l->addWidget(splitter);
+	editAndListLayout->addWidget(splitter);
 	splitter->addWidget(mTextEdit);
 	splitter->addWidget(mMemberList);
 
@@ -80,7 +81,7 @@ void IrcChannel::keyPressEvent ( QKeyEvent * event )
 	{
 		// PRIVMSG #testmonkeystudio :coucou de monkey
 		QString m = mLineEdit->text();
-		mTextEdit->append("<font color=\"#000000\"><b>&lt;" + userName() + "&gt; </b>" + m + "</font>");
+		mTextEdit->appendHtml("<font color=\"#000000\"><b>&lt;" + userName() + "&gt; </b>" + m + "</font>");
 
 		emit sendData("PRIVMSG " + name() + " :" + m );
 		mLineEdit->clear();
@@ -106,12 +107,12 @@ void IrcChannel::userJoin(QString l)
 				newItem->setText(t.at(1));
 				mMemberList->addItem(newItem);
 
-				mTextEdit->append("<font color=\"#00ff00\">* "  + t.at(1) + " has joined " + name()  + "</font>");
+				mTextEdit->appendHtml("<font color=\"#00ff00\">* "  + t.at(1) + " has joined " + name()  + "</font>");
 			}
 			else 
 			{
 				// this user is me :)
-				mTextEdit->append("<font color=\"#ff0000\">Now talking in " + name() + "</font>");
+				mTextEdit->appendHtml("<font color=\"#ff0000\">Now talking in " + name() + "</font>");
 			}
 
 		}
@@ -136,7 +137,7 @@ void IrcChannel::userPart(QString l)
 			{	
 				mMemberList->removeItemWidget( it ); 
 				delete it;
-				mTextEdit->append("<font color=\"#0000ff\">* " + t.at(1) + " has left " + name() + " " + t.at(3) + "</font>");
+				mTextEdit->appendHtml("<font color=\"#0000ff\">* " + t.at(1) + " has left " + name() + " " + t.at(3) + "</font>");
 			}
 		}
 	}
@@ -158,7 +159,7 @@ void IrcChannel::userQuit(QString l)
 		{
 			mMemberList->removeItemWidget( it );
 			delete it;
-			mTextEdit->append("<font color=\"#0000ff\">* " + t.at(1) + " has quit " + name() + " " + t.at(2) + "</font>");
+			mTextEdit->appendHtml("<font color=\"#0000ff\">* " + t.at(1) + " has quit " + name() + " " + t.at(2) + "</font>");
 		}
 	}
 }
@@ -178,7 +179,7 @@ void IrcChannel::userNickChange(QString s)
 		if(it)
 		{
 			it->setText( hasPrivilege(it->text()) + l.at(2));
-			mTextEdit->append("<font color=\"#ff0000\">User " + l.at(1) + " is now known as " + l.at(2) + "</font>");
+			mTextEdit->appendHtml("<font color=\"#ff0000\">User " + l.at(1) + " is now known as " + l.at(2) + "</font>");
 		}
 	}
 }
@@ -239,7 +240,7 @@ void IrcChannel::message(QString l)
 		QStringList t = r.capturedTexts();
 		if(t.at(2).toLower() == name())
 //			if( !userAction(t.at(3)))
-				mTextEdit->append("<font color=\"#000000\"><b>&lt;" + t.at(1) + "&gt; </b>" + t.at(3) + "</font>");
+				mTextEdit->appendHtml("<font color=\"#000000\"><b>&lt;" + t.at(1) + "&gt; </b>" + t.at(3) + "</font>");
 //			else
 //				mTextEdit->append("<font color=\"#ffff00\">* " + t.at(1) + " " + t.at(3).remove(".ACTION ") + "</font>");
 	}
@@ -323,10 +324,10 @@ void IrcChannel::setTopic(QString l)
 	QRegExp r (":.*\\s332\\s.*\\s([^ ]+)\\s:(.*)");
 	if(r.exactMatch(l))
 	{
-		QStringList t = r.capturedTexts();
+/*		QStringList t = r.capturedTexts();
 		if(t.at(1).toLower() == name())
 			mTopic->setText(t.at(2));
-	}
+*/	}
 }
 
 /*!
@@ -383,7 +384,7 @@ void IrcChannel::setUserPrivilege(QString s)
 			QListWidgetItem *it = findUser(t.at(4));
 			if(it)
 			{
-				mTextEdit->append("<font color=\"#00ff00\">* " + t.at(1) + " sets mode : " + t.at(3) + " " + t.at(4) + "</font>");
+				mTextEdit->appendHtml("<font color=\"#00ff00\">* " + t.at(1) + " sets mode : " + t.at(3) + " " + t.at(4) + "</font>");
 				QString n = userPrefix.value(t.at(3)); // get the corresponding tag og privilege
 				QString u = it->text();
 				if(hasPrivilege(u).isEmpty()) // user haven't privilege, add this 

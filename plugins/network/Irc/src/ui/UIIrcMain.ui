@@ -32,7 +32,7 @@
      <item>
       <widget class="QLineEdit" name="leNickServerPort" >
        <property name="text" >
-        <string>xiantia@irc.freenode.net:6667</string>
+        <string>userName@irc.freenode.net:6667</string>
        </property>
       </widget>
      </item>

@@ -35,7 +35,7 @@
 #include <QWidget>
 #include <QKeyEvent>
 #include <QPushButton>
-#include <QTextEdit>
+#include <QPlainTextEdit>
 #include <QLineEdit>
 #include <QListWidget>
 #include <QHBoxLayout>
@@ -83,7 +83,9 @@ public slots :
 
 private:
 
-	QTextEdit * mTextEdit;
+//	QTextEdit * mTextEdit;
+QPlainTextEdit * mTextEdit;
+
 	QListWidget * mMemberList;
 	QPushButton *mPart;
 	QLineEdit * mLineEdit;
