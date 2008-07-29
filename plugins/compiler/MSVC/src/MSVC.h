@@ -26,11 +26,22 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file MSVC.h
+	\date 2008-01-14T00:53:21
+	\author Filipe AZEVEDO
+	\brief Header for MSVC compiler plugin class
+*/
 #ifndef MSVC_H
 #define MSVC_H
 
 #include <pluginsmanager.h>
 
+/*!
+	\brief MSVC compiler plugin
+	
+	Allows to compile current file using msvc compiler and configure parsers for output
+*/
 class MSVC : public CompilerPlugin
 {
 	Q_OBJECT

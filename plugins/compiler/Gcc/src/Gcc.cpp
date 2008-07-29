@@ -26,10 +26,20 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file Gcc.cpp
+	\date 2008-01-14T00:53:21
+	\author Filipe AZEVEDO
+	\brief Gcc compiler plugin class
+*/
+
 #include "Gcc.h"
 
 #include <QTabWidget>
 
+/*!
+	Class constructor
+*/
 Gcc::Gcc()
 {
 	// set plugin infos
@@ -46,6 +56,9 @@ Gcc::Gcc()
 		MonkeyCore::consoleManager()->addParser( getParser( s ) );
 }
 
+/*!
+	Destructor of class
+*/
 Gcc::~Gcc()
 {
 	// uninstall parsers
@@ -53,6 +66,13 @@ Gcc::~Gcc()
 		MonkeyCore::consoleManager()->removeParser( s );
 }
 
+/*!
+	Enable/disable plugin
+	\param b Flag. Enable = true, Disable = false
+	\return Status of process 
+	\retval true Successfully enabled
+	\retval false Some error ocurred
+*/
 bool Gcc::setEnabled( bool b)
 {
 	if ( b && !isEnabled() )
@@ -62,6 +82,10 @@ bool Gcc::setEnabled( bool b)
 	return true;
 }
 
+/*!
+	Get settings widget for configuring plugin
+	\return Pointer to widget
+*/
 QWidget* Gcc::settingsWidget()
 {
 	QTabWidget* tw = new QTabWidget;
@@ -71,9 +95,17 @@ QWidget* Gcc::settingsWidget()
 	return tw;
 }
 
+/*!
+	Get default compiler command 
+	\return pCommand object
+*/
 pCommand Gcc::defaultCompileCommand() const
 { return pCommand( "Compile Current File", "gcc", "-w \"$cf$\"", false, QStringList( "GccParser" ), "$cfp$" ); }
 
+/*!
+	Get compile command according with settings
+	\return pCommand object
+*/
 pCommand Gcc::compileCommand() const
 {
 	// get settings object
@@ -92,6 +124,9 @@ pCommand Gcc::compileCommand() const
 	return c;
 }
 
+/*!
+	Set command for compiling file
+*/
 void Gcc::setCompileCommand( const pCommand& c )
 {
 	pSettings* s = MonkeyCore::settings();
@@ -104,9 +139,17 @@ void Gcc::setCompileCommand( const pCommand& c )
 	s->setValue( settingsKey( "CompileCommand/SkipOnError" ), c.skipOnError() );
 }
 
+/*!
+	Get predefined commands list of compiler
+	\return list of pCommand objects
+*/
 pCommandList Gcc::defaultCommands() const
 { return pCommandList(); }
 
+/*!
+	Get user defined commands
+	\return list of pCommand objects
+*/
 pCommandList Gcc::userCommands() const
 {
 	// commands list
@@ -136,6 +179,10 @@ pCommandList Gcc::userCommands() const
 	return l;
 }
 
+/*!
+	Set user definded list of commands
+	\param l List of commands
+*/
 void Gcc::setUserCommands( const pCommandList& l ) const
 {
 	// get settings object

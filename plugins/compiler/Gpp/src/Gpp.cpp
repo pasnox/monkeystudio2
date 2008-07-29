@@ -26,10 +26,20 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file Gpp.cpp
+	\date 2008-01-14T00:53:21
+	\author Filipe AZEVEDO
+	\brief Header for Gcc compiler plugin class
+*/
+
 #include "Gpp.h"
 
 #include <QTabWidget>
 
+/*!
+	Class constructor
+*/
 Gpp::Gpp()
 {
 	// set plugin infos
@@ -46,6 +56,9 @@ Gpp::Gpp()
 		MonkeyCore::consoleManager()->addParser( getParser( s ) );
 }
 
+/*!
+	Destructor of class
+*/
 Gpp::~Gpp()
 {
 	// uninstall parsers
@@ -53,6 +66,13 @@ Gpp::~Gpp()
 		MonkeyCore::consoleManager()->removeParser( s );
 }
 
+/*!
+	Enable/disable plugin
+	\param b Flag. Enable = true, Disable = false
+	\return Status of process 
+	\retval true Successfully enabled
+	\retval false Some error ocurred
+*/
 bool Gpp::setEnabled( bool b)
 {
 	if ( b && !isEnabled() )
@@ -62,6 +82,10 @@ bool Gpp::setEnabled( bool b)
 	return true;
 }
 
+/*!
+	Get settings widget for configuring plugin
+	\return Pointer to widget
+*/
 QWidget* Gpp::settingsWidget()
 {
 	QTabWidget* tw = new QTabWidget;
@@ -71,9 +95,17 @@ QWidget* Gpp::settingsWidget()
 	return tw;
 }
 
+/*!
+	Get default compiler command 
+	\return pCommand object
+*/
 pCommand Gpp::defaultCompileCommand() const
 { return pCommand( "Compile Current File", "g++", "-w \"$cf$\"", false, QStringList( "GccParser" ), "$cfp$" ); }
 
+/*!
+	Get compile command according with settings
+	\return pCommand object
+*/
 pCommand Gpp::compileCommand() const
 {
 	// get settings object
@@ -92,6 +124,9 @@ pCommand Gpp::compileCommand() const
 	return c;
 }
 
+/*!
+	Set command for compiling file
+*/
 void Gpp::setCompileCommand( const pCommand& c )
 {
 	pSettings* s = MonkeyCore::settings();
@@ -104,9 +139,17 @@ void Gpp::setCompileCommand( const pCommand& c )
 	s->setValue( settingsKey( "CompileCommand/SkipOnError" ), c.skipOnError() );
 }
 
+/*!
+	Get predefined commands list of compiler
+	\return list of pCommand objects
+*/
 pCommandList Gpp::defaultCommands() const
 { return pCommandList(); }
 
+/*!
+	Get user defined commands
+	\return list of pCommand objects
+*/
 pCommandList Gpp::userCommands() const
 {
 	// commands list
@@ -136,6 +179,10 @@ pCommandList Gpp::userCommands() const
 	return l;
 }
 
+/*!
+	Set user definded list of commands
+	\param l List of commands
+*/
 void Gpp::setUserCommands( const pCommandList& l ) const
 {
 	// get settings object

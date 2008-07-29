@@ -1,7 +1,7 @@
 /****************************************************************************
 **
 ** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
+** Authors   : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
 ** Project   : Monkey Studio Compiler Plugins
 ** FileName  : Gcc.h
 ** Date      : 2008-01-14T00:53:21
@@ -26,11 +26,22 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file Gcc.h
+	\date 2008-01-14T00:53:21
+	\author Filipe AZEVEDO
+	\brief Header for Gcc compiler plugin class
+*/
 #ifndef GCC_H
 #define GCC_H
 
 #include <pluginsmanager.h>
 
+/*!
+	\brief Gcc compiler plugin
+	
+	Allows to compile current file using gcc compiler and configure parsers for output
+*/
 class Gcc : public CompilerPlugin
 {
 	Q_OBJECT

@@ -26,11 +26,22 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file Gpp.h
+	\date 2008-01-14T00:53:21
+	\author Filipe AZEVEDO
+	\brief Header for Gpp compiler plugin class
+*/
 #ifndef GPP_H
 #define GPP_H
 
 #include <pluginsmanager.h>
 
+/*!
+	\brief G++ compiler plugin
+	
+	Allows to compile current file using g++ compiler and configure parsers for output
+*/
 class Gpp : public CompilerPlugin
 {
 	Q_OBJECT

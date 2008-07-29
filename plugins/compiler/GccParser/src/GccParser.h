@@ -26,11 +26,23 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file GccParser.h
+	\date 2008-01-14T00:53:21
+	\author Andrei Kopats
+	\brief Header for GccParser plugin class
+*/
+
 #ifndef GCCPARSER_H
 #define GCCPARSER_H
 
 #include <pluginsmanager.h>
 
+/*!
+	\brief Gcc parser plugin
+	
+	Allows to parse output of gcc and g++ and display errors and warnings on MessageBox
+*/
 class GccParser : public BasePlugin
 {
 	Q_OBJECT

@@ -26,11 +26,20 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file MSVC.cpp
+	\date 2008-01-14T00:53:21
+	\author Filipe AZEVEDO
+	\brief Gcc compiler plugin class
+*/
 #include "MSVC.h"
 #include "MSVCParser.h"
 
 #include <QTabWidget>
 
+/*!
+	Class constructor
+*/
 MSVC::MSVC()
 {
 	// set plugin infos
@@ -47,6 +56,9 @@ MSVC::MSVC()
 		MonkeyCore::consoleManager()->addParser( getParser( s ) );
 }
 
+/*!
+	Destructor of class
+*/
 MSVC::~MSVC()
 {
 	// uninstall parsers
@@ -54,6 +66,13 @@ MSVC::~MSVC()
 		MonkeyCore::consoleManager()->removeParser( s );
 }
 
+/*!
+	Enable/disable plugin
+	\param b Flag. Enable = true, Disable = false
+	\return Status of process 
+	\retval true Successfully enabled
+	\retval false Some error ocurred
+*/
 bool MSVC::setEnabled( bool b)
 {
 	if ( b && !isEnabled() )
@@ -63,6 +82,10 @@ bool MSVC::setEnabled( bool b)
 	return true;
 }
 
+/*!
+	Get settings widget for configuring plugin
+	\return Pointer to widget
+*/
 QWidget* MSVC::settingsWidget()
 {
 	QTabWidget* tw = new QTabWidget;
@@ -72,9 +95,17 @@ QWidget* MSVC::settingsWidget()
 	return tw;
 }
 
+/*!
+	Get default compiler command 
+	\return pCommand object
+*/
 pCommand MSVC::defaultCompileCommand() const
 { return pCommand( "Compile Current File", "cl", "$cf$", false, availableParsers(), "$cfp$" ); }
 
+/*!
+	Get compile command according with settings
+	\return pCommand object
+*/
 pCommand MSVC::compileCommand() const
 {
 	// get settings object
@@ -93,6 +124,9 @@ pCommand MSVC::compileCommand() const
 	return c;
 }
 
+/*!
+	Set command for compiling file
+*/
 void MSVC::setCompileCommand( const pCommand& c )
 {
 	pSettings* s = MonkeyCore::settings();
@@ -105,9 +139,17 @@ void MSVC::setCompileCommand( const pCommand& c )
 	s->setValue( settingsKey( "CompileCommand/SkipOnError" ), c.skipOnError() );
 }
 
+/*!
+	Get predefined commands list of compiler
+	\return list of pCommand objects
+*/
 pCommandList MSVC::defaultCommands() const
 { return pCommandList(); }
 
+/*!
+	Get user defined commands
+	\return list of pCommand objects
+*/
 pCommandList MSVC::userCommands() const
 {
 	// commands list
@@ -137,6 +179,10 @@ pCommandList MSVC::userCommands() const
 	return l;
 }
 
+/*!
+	Set user definded list of commands
+	\param l List of commands
+*/
 void MSVC::setUserCommands( const pCommandList& l ) const
 {
 	// get settings object

@@ -26,9 +26,19 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file GccParser.cpp
+	\date 2008-01-14T00:53:21
+	\author Andrei Kopats
+	\brief Implementation for GccParser plugin class
+*/
+
 #include "GccParser.h"
 #include "Parser.h"
 
+/*!
+	Class constructor
+*/
 GccParser::GccParser()
 {
 	// set plugin infos
@@ -41,11 +51,21 @@ GccParser::GccParser()
 	mPluginInfos.Enabled = false;
 }
 
+/*!
+	Class destructor
+*/
 GccParser::~GccParser()
 {
 	setEnabled (false);
 }
 
+/*!
+	Enable/disable plugin
+	\param b Flag. Enable = true, Disable = false
+	\return Status of process 
+	\retval true Successfully enabled
+	\retval false Some error ocurred
+*/
 bool GccParser::setEnabled( bool b)
 {
 	mPluginInfos.Enabled = b;

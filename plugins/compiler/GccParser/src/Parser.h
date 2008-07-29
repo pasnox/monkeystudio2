@@ -26,15 +26,38 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file Parser.h
+	\date 2008-01-14T00:53:21
+	\author Andrei Kopats
+	\brief Set of regular expressions for parsing output of gcc and g++ compiler
+*/
+
 #ifndef PARSER_H
 #define PARSER_H
 
 #include <consolemanager.h>
 
+/*!
+	\brief Set of regular expressions for parsing output of gcc and g++ compiler
+	
+	Allows to find errors and warnings in the output of compiler
+*/
 class Parser : public pCommandParser
 {
 Q_OBJECT
 public:
+	/*!
+		Class constructor. Contatning regular expressions for known errors
+		
+		NOTE DO NOT NEED TO ADD SUPPORT OF ALL POSSIBLE ERRORS OF COMPILER
+		Checking of every regular expression requires some time. Than more expressions - 
+		
+		NOTE Try to avoid using expressions as '.*blabla',  because QRegExp should 
+		check all string for detect, do it's according to regexp. It's requiring HUGE time
+		Try always use something as  'blabla...'. For such regular expressions need to
+		test just few symbols for understand, that string not according to pattern
+	*/
 	Parser(QObject* parent ) :pCommandParser (parent)
 	{
 		mName = PLUGIN_NAME;
