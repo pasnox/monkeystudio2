@@ -1,7 +1,7 @@
 /****************************************************************************
 **
 ** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
+** Authors   : Andrei Kopats aka hlamer <hlamer at tut by>
 ** Project   : Monkey Studio Base Plugins
 ** FileName  : Navigator.h
 ** Date      : 2008-01-14T00:40:08
@@ -26,6 +26,12 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file Navigator.h
+	\date 2008-01-14T00:40:08
+	\author Andrei Kopats
+	\brief Header file for Navigator plugin
+*/
 #ifndef NAVIGATOR_H
 #define NAVIGATOR_H
 
@@ -44,6 +50,11 @@ class ProjectItem;
 class pAbstractChild;
 // I am not sure with the English language terminology, if you ( reader) know it better, correct it
 
+/*!
+	\brief plugin main class
+
+	Navigator class implements interface of plugin, GUI, stores settings of plugin
+*/
 class Navigator : public BasePlugin, public QSingleton<Navigator>
 {
 	Q_OBJECT

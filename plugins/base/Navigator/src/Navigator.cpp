@@ -1,7 +1,7 @@
 /****************************************************************************
 **
 ** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
+** Authors   : Andrei Kopats aka hlamer <hlamer at tut by>
 ** Project   : Monkey Studio Base Plugins
 ** FileName  : Navigator.cpp
 ** Date      : 2008-01-14T00:40:08
@@ -26,6 +26,13 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file Navigator.cpp
+	\date 2008-01-14T00:40:08
+	\author Andrei Kopats
+	\brief Header file for Navigator plugin
+*/
+
 #include <QPushButton>
 #include <QString>
 #include<QStringList>
@@ -41,6 +48,9 @@
 #include "Navigator.h"
 #include "NavigatorSettings.h"
 
+/*!
+	Class constructor
+*/
 Navigator::Navigator (QObject* )
 {
 	// set plugin infos
@@ -55,6 +65,13 @@ Navigator::Navigator (QObject* )
 	expandMask = settingsValue( "ExpandMask", 32771 ).toInt();
 }
 
+/*!
+	Enable/disable plugin
+	\param e Flag. Enable = true, Disable = false
+	\return Status of process 
+	\retval true Successfully enabled
+	\retval false Some error ocurred
+*/
 bool Navigator::setEnabled (bool e)
 {
 	if (mPluginInfos.Enabled ==e)
@@ -87,29 +104,62 @@ bool Navigator::setEnabled (bool e)
 	return true;
 }
 
+/*!
+	Get settings widget for configuring plugin
+	\return Pointer to widget
+*/
 QWidget* Navigator::settingsWidget ()
 {
 	return new NavigatorSettings ();
 }
 
+/*!
+	Set display mask for displaying items in the tree. 
+	Mask will be stored in the settings
+	
+	\param mask Mask should contain logical OR of types of entityes, which should be 
+		displayed in the tree. See \ref EntityType for description of entity types
+*/
 void Navigator::setDisplayMask (int mask)
 {
 	displayMask = mask;
 	setSettingsValue( "DisplayMask", QVariant( mask ) );
 }
 	
+/*!
+	Get display mask of plugin.
+	\return Display mask
+	\retval Logical OR of types on Entityes, which should be displayed
+*/
 int Navigator::getDisplayMask (void)
 {return displayMask;}
 
+/*!
+	Set expand mask for automatical expanding some nodes in the tree. 
+	Mask will be stored in the settings
+	
+	\param mask Mask should contain logical OR of types of entityes, which should be 
+		automatically expanded. See \ref EntityType for description of entity types
+*/
 void Navigator::setExpandMask (int mask)
 {
 	expandMask = mask;
 	setSettingsValue( "ExpandMask", QVariant( mask ) );	
 }
 
+/*!
+	Get expand mask of plugin.
+	\return Expand mask
+	\retval Logical OR of types on Entityes, which should be automatically expanded
+*/
 int Navigator::getExpandMask (void)
 {return expandMask;}
 
+/*!
+	Signal handler, which switches current file in the view, according with 
+	current editing file
+	\param absPath Absolute file path of new file
+*/
 void Navigator::currentFileChanged(pAbstractChild*, const QString absPath)
 {
 	if (fileLock->isChecked())
@@ -117,6 +167,10 @@ void Navigator::currentFileChanged(pAbstractChild*, const QString absPath)
 	showFile (absPath);
 }
 
+/*!
+	External interface for display file in the Navigator
+	\return Display absPath Absolute path of file, which should be displayed
+*/
 void Navigator::showFile (const QString& absPath)
 {
 	QStringList files (absPath); //  'files' contains list of all paths
@@ -155,6 +209,5 @@ void Navigator::showFile (const QString& absPath)
 	*/
 		fileWidget->setUpdatesEnabled(true);
 }
-
 
 Q_EXPORT_PLUGIN2( BaseNavigator, Navigator )

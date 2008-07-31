@@ -26,6 +26,13 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file NavigatorSettings.h
+	\date 2008-01-14T00:40:08
+	\author Andrei Kopats
+	\brief NavigatorSettings class implementation
+*/
+
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QPushButton>
@@ -34,6 +41,9 @@
 #include "NavigatorSettings.h"
 #include "Navigator.h"
 
+/*!
+	Class constructor
+*/
 NavigatorSettings::NavigatorSettings ()
 {
 	names <<"Namespaces"<<	"Classes"<<"Constructors"<<"Destrutors";
@@ -72,10 +82,16 @@ NavigatorSettings::NavigatorSettings ()
 	connect ( applyBtn, SIGNAL ( clicked()), this, SLOT (setSettings()));
 }
 
+/*!
+	Class destructor
+*/
 NavigatorSettings::~NavigatorSettings ()
 {
 }
 
+/*!
+	Reads settings from UI and applyes it (saves)
+*/
 void NavigatorSettings::setSettings()
 {
 	int displayMask = 0;

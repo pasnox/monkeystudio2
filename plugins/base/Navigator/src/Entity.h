@@ -26,6 +26,12 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file Entity.h
+	\date 2008-01-14T00:40:08
+	\author Andrei Kopats
+	\brief Header file for Entity class
+*/
 #ifndef ENTITY_H
 #define ENTITY_H
 #include <QString>
@@ -37,6 +43,10 @@
 
 #include <ctagsmanager.h>
 
+/*!
+	Enum representing possible types of entityes
+	Set of entityes, except ROTO_ENTITY and UNKNOWN taked from Ctags
+*/
 enum EntityType { 
 	NAMESPACE = 0x0001,
 	CLASS = 0x0002,
@@ -59,9 +69,19 @@ enum EntityType {
 	UNKNOWN = 0x8000 //16
 };
 
+/*!
+	\brief Any item, which can be part of source file and can be included in the tree
+
+	Stores all information about item (type, name, line of source file...).
+	Entity can have parent and child entityes (class is parent, member of class is child)
+	
+	Entity also can display self on UI, as part on tree model
+*/
 class Entity : public QTreeWidgetItem
 {
+	
 private:
+	// Icons, which is using for display entity on UI
 	static QIcon iNAMESPACE;
 	static QIcon iCLASS;
 	static QIcon iENUM;

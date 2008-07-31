@@ -26,6 +26,13 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file Entity.cpp
+	\date 2008-01-14T00:40:08
+	\author Andrei Kopats
+	\brief Implementation of Entity class
+*/
+
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QString>
@@ -47,11 +54,24 @@ QIcon Entity::iTYPEDEF;
 QIcon Entity::iMACRO;
 QIcon Entity::iENUMERATOR;
 
+/*!
+	Class constructor. Will read initial info to self.
+	\param entry Tag entry, from which Entity should be constructed
+	\param fileName File, where entity containing
+	\param time Time of last update of entity (update of tag for entity)
+*/
 Entity::Entity ( tagEntryInfo* entry, QString fileName, QDateTime time)
 {
 	updateSelf (entry, fileName, time);
 }
 
+/*!
+	Class constructor. Will create entity be not full info.
+
+	This construstor using for Entityes, for which currenlty are no full info
+	\param ttype Entity type. Possible it will be UNKNOWN
+	\param tname Name of entity
+*/
 Entity::Entity (EntityType ttype, QString tname)
 {
 	type = ttype; 
@@ -62,7 +82,9 @@ Entity::Entity (EntityType ttype, QString tname)
 	updateGUI ();
 }
 
-
+/*!
+	Load static icons, which using by all members of class
+*/
 void Entity::initIcons ()
 {
 	iNAMESPACE = QIcon(":/icons/NAMESPACE.png");
@@ -76,11 +98,21 @@ void Entity::initIcons ()
 	iENUMERATOR = QIcon (":/icons/ENUMERATOR.png");
 }
 
+/*!
+	Returns child of entity (according with model) as pointer to Entity instance
+	\param Child number
+*/
 Entity* Entity::child (int i)
 {
 	return (Entity*)QTreeWidgetItem::child(i);
 }
 
+/*!
+	Converts kind of entity be Exuberant Ctags encoding to EntityType
+	\param kind Ctags type varible
+	\return Entity type
+	\retval EntityType variable
+*/
 EntityType Entity::getEntityType (char kind)
 {
 	switch (kind)
@@ -121,6 +153,12 @@ EntityType Entity::getEntityType (char kind)
 	}
 }
 
+/*!
+	Converts kind of scope in Ctags encoding to type of Entity, which representing scope
+	\param kindName Ctags type variable
+	\return Entity type
+	\retval EntityType variable
+*/
 EntityType Entity::getScopeType ( QString kindName )
 {
 	if ( kindName == "class")
@@ -138,8 +176,15 @@ EntityType Entity::getScopeType ( QString kindName )
 	return UNKNOWN;
 }
 
-
-
+/*!
+	Cleanup information about file, which are older, than some time limit
+	Used for updating information without recreation of tree
+		1) Add/replace current information
+		2) Remove old
+	Will process reqursively all childs
+	\param file File, for which information should be deleted
+	\param olderThan time stamp. Information (Entityes), which have older time should be deleted
+*/
 void Entity::deleteFileInfo ( QString file, QDateTime olderThan )
 {
 	Entity* chld;
@@ -168,6 +213,12 @@ void Entity::deleteFileInfo ( QString file, QDateTime olderThan )
 	}
 }
 
+/*!
+	Read own information from Tag
+	\param entry Tag, containing information about self
+	\param fileName Name of file, containing self
+	\param time Time stamp of information
+*/
 void Entity::updateSelf (tagEntryInfo* entry, QString fileName, QDateTime time)
 {
 	name = entry->name;  //  do possible make this assigmengs automaticaly ???
@@ -183,6 +234,9 @@ void Entity::updateSelf (tagEntryInfo* entry, QString fileName, QDateTime time)
 	updateGUI ();
 }
 
+/*!
+	Update own text and icon according with internal information
+*/
 void Entity::updateGUI ()
 {
 	QString tip;

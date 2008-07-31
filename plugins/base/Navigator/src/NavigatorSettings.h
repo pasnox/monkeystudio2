@@ -26,11 +26,22 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file NavigatorSettings.h
+	\date 2008-01-14T00:40:08
+	\author Andrei Kopats
+	\brief Header file for NavigatorSettings class
+*/
 #ifndef NAVIGATORSETTINGS_H
 #define NAVIGATORSETTINGS_H
 
 #include <QCheckBox>
 
+/*!
+	\brief Navigator plugin settings widget
+	
+	Allows to configure display masks of Navigator
+*/
 class NavigatorSettings : public QWidget
 {
 Q_OBJECT
