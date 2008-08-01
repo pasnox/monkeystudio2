@@ -38,7 +38,7 @@
 #include "Entity.h"
 
 /*!
-	Root root of tree, displaying file items
+	\brief Root root of tree, displaying file items
 	
 	Class herited from QTreeWidget using for build tree for file and for displaying
 	this tree on UI
