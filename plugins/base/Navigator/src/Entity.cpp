@@ -99,8 +99,8 @@ void Entity::initIcons ()
 }
 
 /*!
-	Returns child of entity (according with model) as pointer to Entity instance
-	\param Child number
+	Get child of entity (according with model) as pointer to Entity instance
+	\param i Child number
 */
 Entity* Entity::child (int i)
 {

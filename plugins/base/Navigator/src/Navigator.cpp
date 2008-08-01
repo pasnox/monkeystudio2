@@ -118,7 +118,7 @@ QWidget* Navigator::settingsWidget ()
 	Mask will be stored in the settings
 	
 	\param mask Mask should contain logical OR of types of entityes, which should be 
-		displayed in the tree. See \ref EntityType for description of entity types
+		displayed in the tree. See EntityType for description of entity types
 */
 void Navigator::setDisplayMask (int mask)
 {
@@ -139,7 +139,7 @@ int Navigator::getDisplayMask (void)
 	Mask will be stored in the settings
 	
 	\param mask Mask should contain logical OR of types of entityes, which should be 
-		automatically expanded. See \ref EntityType for description of entity types
+		automatically expanded. See EntityType for description of entity types
 */
 void Navigator::setExpandMask (int mask)
 {

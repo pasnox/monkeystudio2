@@ -229,6 +229,7 @@ Entity* EntityContainer::findEntityInContainer ( EntityType type, const QString&
 /*!
 	Search entity by name, type and signature in the another Entity
 	(search in the childs)
+	\param where parent Entity, in childs of which child Entity should be searched
 	\param type Entity type for searching
 	\param name Name of Entity
 	\param signature Signature of Entity
@@ -266,7 +267,6 @@ void EntityContainer::addChild ( Entity* parEnt,tagEntryInfo* entry, QString fil
 
 /*!
 	Create new Entity in the self
-	\param parEnt Pointer to parent entity. Can be NULL
 	\param entry Entry, from which Entity should be created
 	\param fileName Name of file, where are Entity
 	\param time Time stamp of information
