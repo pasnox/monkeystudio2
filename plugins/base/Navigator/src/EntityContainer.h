@@ -26,11 +26,23 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file EntityContainer.h
+	\date 2008-01-14T00:40:08
+	\author Andrei Kopats
+	\brief Header file for EntityContainer class
+*/
 #ifndef ENTITYCONTAINER_H
 #define ENTITYCONTAINER_H
 #include <QTreeWidget>
 #include "Entity.h"
 
+/*!
+	Root root of tree, displaying file items
+	
+	Class herited from QTreeWidget using for build tree for file and for displaying
+	this tree on UI
+*/
 class EntityContainer  : public QTreeWidget 
 {
 Q_OBJECT

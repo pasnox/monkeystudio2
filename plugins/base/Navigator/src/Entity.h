@@ -27,7 +27,7 @@
 **
 ****************************************************************************/
 /*!
-	\file Entity.h
+	\file EntityContainer.h
 	\date 2008-01-14T00:40:08
 	\author Andrei Kopats
 	\brief Header file for Entity class

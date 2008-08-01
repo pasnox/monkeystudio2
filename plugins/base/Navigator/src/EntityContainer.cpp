@@ -26,6 +26,12 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file EntityContainer.h
+	\date 2008-01-14T00:40:08
+	\author Andrei Kopats
+	\brief Header file for EntityContainer class
+*/
 #include <QString>
 #include <QDateTime>
 #include <QDebug>
@@ -36,6 +42,12 @@
 #include "Entity.h"
 #include "Navigator.h"
 
+/*!
+	Constructor of class
+	
+	Creates object, launches initialisation of icons of Entity class
+	\param parent Parent widget
+*/
 EntityContainer::EntityContainer ( QWidget* parent): QTreeWidget (parent)
 {
 	headerItem ()->setHidden (true);
@@ -43,17 +55,33 @@ EntityContainer::EntityContainer ( QWidget* parent): QTreeWidget (parent)
 	Entity::initIcons ();
 }
 
+/*!
+	Destuctor of class
+*/
 EntityContainer::~EntityContainer ()
 {
 	disconnect (this, SIGNAL (clicked ( const QModelIndex)),this, SLOT (makeGoto()));
 }
 
-
+/*!
+	Return child as pointer to Entity
+	\param i Child number
+	\return Pointer to child
+*/
 Entity* EntityContainer::childEntity (int i)
 {
 	return (Entity*)topLevelItem(i);
 }
 
+/*!
+	Remove old information about file
+
+	Using for update info without recreation of all tree. New information are
+	adding, than old removing.
+	\param file file, for which information should be removed
+	\param olderThan Time stamp. Information removing, if it older than this
+		stamp
+*/
 void EntityContainer::deleteFileInfo ( QString file, QDateTime olderThan )
 {
 	Entity* chld;
@@ -82,6 +110,11 @@ void EntityContainer::deleteFileInfo ( QString file, QDateTime olderThan )
 	}
 }
 
+/*!
+	Process record for file and add info from it to self
+	\param fileName Name of file, for which information is reading
+	\param fileRecord Record, containing information about file
+*/
 void EntityContainer::addTagsFromRecord (QString fileName, FileRecord*  fileRecord)
 {
 	TagEntryListItem* item = fileRecord->firstTagEntry;
@@ -98,6 +131,10 @@ void EntityContainer::addTagsFromRecord (QString fileName, FileRecord*  fileReco
 	}
 };
 
+/*!
+	Update information about file (recieve newest information)
+	\param fileName Full path of file
+*/
 void EntityContainer::updateFileInfo ( QString fileName )
 {
 	FileRecord* rd = Ctags::instance()->GetTagsForFile (fileName); 
@@ -105,6 +142,15 @@ void EntityContainer::updateFileInfo ( QString fileName )
 	deleteFileInfo (fileName, rd->time);//deltete not updated  
 }
 
+/*!
+	Search entity, which according to scopes 
+
+	For example - search entity, according to class, if scope is class
+	If entity is not finded - new one with incomplete info will be created
+	\param scope0 Scope value from Ctags
+	\param scope1 Scope value from Ctags
+	\return Pointer to Entity
+*/
 Entity*EntityContainer::getScopeEntity ( QString scope0, QString scope1)
 {
 	//qDebug ( qPrintable ("trying to find scope| " + scope0 +"|"+ scope1 +"| in " ));
@@ -159,6 +205,14 @@ Entity*EntityContainer::getScopeEntity ( QString scope0, QString scope1)
 	return scopeEntity;
 }
 
+/*!
+	Search entity by name, type and signature in the all container
+	\param type Entity type for searching
+	\param name Name of Entity
+	\param signature Signature of Entity
+	\return Pointer to Entity
+	\retval NULL 
+*/
 Entity* EntityContainer::findEntityInContainer ( EntityType type, const QString& name, const QString& signature)
 {
 	for ( int i = 0; i < topLevelItemCount (); i++)
@@ -172,6 +226,15 @@ Entity* EntityContainer::findEntityInContainer ( EntityType type, const QString&
 	return NULL; //not finded
 }
 
+/*!
+	Search entity by name, type and signature in the another Entity
+	(search in the childs)
+	\param type Entity type for searching
+	\param name Name of Entity
+	\param signature Signature of Entity
+	\return Pointer to Entity
+	\retval NULL 
+*/
 Entity* EntityContainer::findEntityInEntity (Entity* where, EntityType type,const QString& name, const QString& signature )
 {
 	for ( int i = 0; i < where->childCount(); i++)
@@ -185,6 +248,13 @@ Entity* EntityContainer::findEntityInEntity (Entity* where, EntityType type,cons
 	return NULL; //not finded
 }
 
+/*!
+	Create new Entity in the self, or in the some from Entityes
+	\param parEnt Pointer to parent entity. Can be NULL
+	\param entry Entry, from which Entity should be created
+	\param fileName Name of file, where are Entity
+	\param time Time stamp of information
+*/
 void EntityContainer::addChild ( Entity* parEnt,tagEntryInfo* entry, QString fileName, QDateTime time )
 {
 	if (parEnt)
@@ -194,7 +264,13 @@ void EntityContainer::addChild ( Entity* parEnt,tagEntryInfo* entry, QString fil
 
 }
 
-
+/*!
+	Create new Entity in the self
+	\param parEnt Pointer to parent entity. Can be NULL
+	\param entry Entry, from which Entity should be created
+	\param fileName Name of file, where are Entity
+	\param time Time stamp of information
+*/
 void EntityContainer::addChildInContainer ( tagEntryInfo* entry, QString fileName, QDateTime time )
 {
 	Entity* existing = findEntityInContainer ( Entity::getEntityType ( entry->kind), entry->name, entry->extensionFields.signature);
@@ -208,6 +284,13 @@ void EntityContainer::addChildInContainer ( tagEntryInfo* entry, QString fileNam
 		existing->updateSelf (entry, fileName, time);
 }
 
+/*!
+	Create new Entity in the existing Entity
+	\param parEnt Pointer to parent entity. Can be NULL
+	\param entry Entry, from which Entity should be created
+	\param fileName Name of file, where are Entity
+	\param time Time stamp of information
+*/
 void EntityContainer::addChildInEntity ( Entity* parEnt, tagEntryInfo* entry, QString fileName, QDateTime time )
 {
 	Entity* existing = findEntityInEntity( parEnt,Entity::getEntityType ( entry->kind), entry->name, entry->extensionFields.signature);
@@ -221,6 +304,12 @@ void EntityContainer::addChildInEntity ( Entity* parEnt, tagEntryInfo* entry, QS
 		existing->updateSelf ( entry, fileName, time);
 }
 
+/*!
+	Open file/line in the Editor
+
+	Using wheh user clicks on some item in the tree
+	Current item will be readed from UI
+*/
 void EntityContainer::makeGoto ()
 {
 	Entity* activeEntity = (Entity*)currentItem();
