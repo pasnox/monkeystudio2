@@ -74,7 +74,7 @@ public:
 protected slots:
 	void internal_activated( const QModelIndex& index );
 	void internal_clicked( const QModelIndex& index );
-	void internal_currentChanged( const QModelIndex& previous, const QModelIndex& current );
+	void internal_currentChanged( const QModelIndex& current, const QModelIndex& previous );
 
 protected:
 	QSize mIconSize;

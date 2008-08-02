@@ -246,15 +246,21 @@ void pTreeComboBox::showPopup()
 	}
 }
 
+/*!
+	\details Return the view widget
+*/
 QTreeView* pTreeComboBox::view() const
 { return mView; }
 
-void pTreeComboBox::setView( QTreeView* t )
+/*!
+	\details Set the view widget
+*/
+void pTreeComboBox::setView( QTreeView* view )
 {
-	if ( mView == t )
+	if ( mView == view )
 		return;
 	delete mView;
-	mView = t;
+	mView = view;
 	if ( mView )
 	{
 		if ( mFrame->layout()->count() )
@@ -275,13 +281,19 @@ void pTreeComboBox::setView( QTreeView* t )
 	}
 }
 
+/*!
+	\details Return the used model
+*/
 QAbstractItemModel* pTreeComboBox::model() const
 { return mModel; }
 
-void pTreeComboBox::setModel( QAbstractItemModel* m )
+/*!
+	\details Set the model
+*/
+void pTreeComboBox::setModel( QAbstractItemModel* model )
 {
-	if ( mModel != m )
-		mModel = m;
+	if ( mModel != model )
+		mModel = model;
 	if ( mView && mView->model() != mModel )
 	{
 		mView->setModel( mModel );
@@ -289,12 +301,21 @@ void pTreeComboBox::setModel( QAbstractItemModel* m )
 	}
 }
 
+/*!
+	\details Return the root index
+*/
 QModelIndex pTreeComboBox::rootIndex() const
 { return mView ? mView->rootIndex() : QModelIndex(); }
 
-void pTreeComboBox::setRootIndex( const QModelIndex& i )
-{ if ( mView ) mView->setRootIndex( i ); }
+/*!
+	\details Set the root index
+*/
+void pTreeComboBox::setRootIndex( const QModelIndex& index )
+{ if ( mView ) mView->setRootIndex( index ); }
 
+/*!
+	\details Return the current index
+*/
 QModelIndex pTreeComboBox::currentIndex() const
 {
 	if ( mView )
@@ -302,46 +323,52 @@ QModelIndex pTreeComboBox::currentIndex() const
 	return QModelIndex();
 }
 
-void pTreeComboBox::setCurrentIndex( const QModelIndex& i )
+/*!
+	\details Set the current index
+*/
+void pTreeComboBox::setCurrentIndex( const QModelIndex& index )
 {
-	if ( mView && ( currentIndex() != i || !i.isValid() ) )
+	if ( mView && ( currentIndex() != index || !index.isValid() ) )
 	{
-		mIndex = i;
+		mIndex = index;
 		mForce = true;
 		mView->clearSelection();
-		mView->setCurrentIndex( i );
+		mView->setCurrentIndex( index );
 		mForce = false;
 		update();
 	}
 }
 
+/*!
+	\details Expand all rows
+*/
 void pTreeComboBox::expandAll()
 { if ( mView ) mView->expandAll(); }
 
-void pTreeComboBox::internal_activated( const QModelIndex& i )
+void pTreeComboBox::internal_activated( const QModelIndex& index )
 {
-	if ( mIndex != i )
+	if ( mIndex != index )
 	{
-		mIndex = i;
-		emit currentChanged( i );
+		mIndex = index;
+		emit currentChanged( index );
 	}
-	emit activated( i );
+	emit activated( index );
 	hidePopup();
 }
 
-void pTreeComboBox::internal_clicked( const QModelIndex& i )
+void pTreeComboBox::internal_clicked( const QModelIndex& index )
 {
-	if ( mIndex != i )
+	if ( mIndex != index )
 	{
-		mIndex = i;
-		emit currentChanged( i );
+		mIndex = index;
+		emit currentChanged( index );
 	}
-	emit clicked( i );
+	emit clicked( index );
 	hidePopup();
 }
 
-void pTreeComboBox::internal_currentChanged( const QModelIndex& c, const QModelIndex& )
+void pTreeComboBox::internal_currentChanged( const QModelIndex& current, const QModelIndex& )
 {
 	if ( mForce )
-		emit currentChanged( c );
+		emit currentChanged( current );
 }
