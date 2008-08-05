@@ -15,6 +15,8 @@ It's extendable with a powerfull plugins system.
 **
 ****************************************************************************/
 
+NEW: You can now use a system wide install of qscintilla for building monkey studio, for this export this variable before calling qmake : MONKEY_SYSTEM_QSCINTILLA=1
+
 ATTENTION 1 : Monkey Studio require at least Qt 4.4.0 MINIMUM !
 ATTENTION 2 : When you want to install monkey studio ( usually "make install" ) you should call first "qmake" as qmake create badly makefile install rules 
 ( it doesn't add not existing files, so binary and plugins will not be installed )
