@@ -1150,7 +1150,7 @@ const bool pMonkeyStudio::tabsHaveShortcut()
 */
 void pMonkeyStudio::setTabsElided( bool have )
 { MonkeyCore::settings()->setValue( settingsPath() +"/TabsElided", have ); }
-
+//f
 const bool pMonkeyStudio::tabsElided()
 { return MonkeyCore::settings()->value( settingsPath() +"/TabsElided", false ).toBool(); }
 
