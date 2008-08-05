@@ -1,7 +1,7 @@
 /****************************************************************************
 **
 ** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
+** Authors   : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
 ** Project   : Monkey Studio IDE
 ** FileName  : pConsoleManager.h
 ** Date      : 2008-01-14T00:36:51
@@ -26,6 +26,13 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file pConsoleManager.h
+	\date 2008-01-14T00:36:50
+	\author Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
+	\brief Header of pConsoleManager class
+*/
+
 #ifndef PCONSOLEMANAGER_H
 #define PCONSOLEMANAGER_H
 
@@ -41,6 +48,14 @@
 class pCommandParser;
 class QAction;
 
+/*!
+	Console Manager provides support of running commands and parsing it's output
+	
+	It can in series execute commands, inform other systems by signals about 
+	starting/stoping of execution command. 
+	Output of commands is reading and parsing by availible parsers. Parsers can be
+	configured separately for every command
+*/
 class Q_MONKEY_EXPORT pConsoleManager : public QProcess
 {
 	Q_OBJECT

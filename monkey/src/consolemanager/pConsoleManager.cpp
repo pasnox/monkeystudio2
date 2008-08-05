@@ -26,6 +26,13 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file pConsoleManager.cpp
+	\date 2008-01-14T00:36:50
+	\author Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
+	\brief Implementation of pConsoleManager class
+*/
+
 #include <QTimer>
 
 #include "pConsoleManager.h"
@@ -34,11 +41,17 @@
 #include "../workspace/pFileManager.h"
 #include "../coremanager/MonkeyCore.h"
 
-#include <QDebug>
-
+/*!
+	Defines maximum count of lines, which are storing in the buffer for parsing
+*/
 static const int MAX_LINES = 4; //Maximum lines count, that can be parsed by Monkey. Than less - than better perfomance
 
 using namespace pMonkeyStudio;
+
+/*!
+	Constructor of class
+	\param o Parent object
+*/
 pConsoleManager::pConsoleManager( QObject* o )
 	: QProcess( o ), mLinesInStringBuffer (0)
 {
@@ -63,7 +76,10 @@ pConsoleManager::pConsoleManager( QObject* o )
 	// mixe channels
 	setReadChannelMode( QProcess::MergedChannels );
 	// connections
+	
+	// :-/
 	connect( this, SIGNAL( error( QProcess::ProcessError ) ), this, SLOT( error( QProcess::ProcessError ) ) );
+	
 	connect( this, SIGNAL( finished( int, QProcess::ExitStatus ) ), this, SLOT( finished( int, QProcess::ExitStatus ) ) );
 	connect( this, SIGNAL( readyRead() ), this, SLOT( readyRead() ) );
 	connect( this, SIGNAL( started() ), this, SLOT( started() ) );
@@ -74,6 +90,9 @@ pConsoleManager::pConsoleManager( QObject* o )
 	mStringBuffer.reserve (MAX_LINES *200);
 }
 
+/*!
+	Destructor of class
+*/
 pConsoleManager::~pConsoleManager()
 {
 	terminate();
@@ -81,6 +100,10 @@ pConsoleManager::~pConsoleManager()
 	kill();
 }
 
+/*!
+	Append parser to list of alailable parsers (which could be used for some commands)
+	\param p Pointer to parser
+*/
 void pConsoleManager::addParser( pCommandParser* p )
 {
 	if ( p && !mParsers.contains( p->name() ) )
@@ -90,6 +113,10 @@ void pConsoleManager::addParser( pCommandParser* p )
 	}
 }
 
+/*!
+	Remove parser to list of available parsers (which could be used for some commands)
+	\param p Pointer to parser
+*/
 void pConsoleManager::removeParser( pCommandParser* p )
 {
 	if ( p && mParsers.contains( p->name() ) )
@@ -99,12 +126,24 @@ void pConsoleManager::removeParser( pCommandParser* p )
 	}
 }
 
+/*!
+	Remove parser to list of available parsers (which could be used for some commands)
+	\param p Name of parser
+*/
 void pConsoleManager::removeParser( const QString& s )
 { removeParser( mParsers.value( s ) ); }
 
+/*!
+	Convert path separators to native for OS
+*/
 QString pConsoleManager::nativeSeparators( const QString& s )
 { return QDir::toNativeSeparators( s ); }
 
+/*!
+	Check, if string contains spaces, and, if it do - add quotes <"> to start and end of it
+	\param s Source string
+	\return Result string
+*/
 QString pConsoleManager::quotedString( const QString& s )
 {
 	QString t = s;
@@ -113,6 +152,13 @@ QString pConsoleManager::quotedString( const QString& s )
 	return t;
 }
 
+/*!
+	Replace internal varibles in the string with it's values
+	
+	FIXME function should be replaced with using of VariablesManager
+	\param s Source string
+	\return Result string
+*/
 QString pConsoleManager::processInternalVariables( const QString& s )
 {
 	QString v = s;
@@ -125,6 +171,13 @@ QString pConsoleManager::processInternalVariables( const QString& s )
 	return v;
 }
 
+/*!
+	Prepare command for starting (set internal variables)
+	
+	\param c Command for execution
+	\return Command for execution
+	\retval Command, gived as parameter
+*/
 pCommand pConsoleManager::processCommand( pCommand c )
 {
 	// process variables
@@ -135,6 +188,12 @@ pCommand pConsoleManager::processCommand( pCommand c )
 	return c;
 }
 
+/*!
+	Search command in the list by it's text, or return empty one
+	\param l List of commands, where to search
+	\param s Text of command for searhing
+	\return Finded command, or empty command if not finded
+*/
 pCommand pConsoleManager::getCommand( const pCommandList& l, const QString& s )
 {
 	foreach ( pCommand c, l )
@@ -143,6 +202,10 @@ pCommand pConsoleManager::getCommand( const pCommandList& l, const QString& s )
 	return pCommand();
 }
 
+/*!
+	FIXME PasNox, comment please
+	
+*/
 pCommandList pConsoleManager::recursiveCommandList( const pCommandList& l, pCommand c )
 {
 	pCommandList cl;
@@ -167,6 +230,13 @@ pCommandList pConsoleManager::recursiveCommandList( const pCommandList& l, pComm
 	return cl;
 }
 
+/*!
+	Handler of timer event
+	
+	Exucutes next command, if there is available in the list, and no currently running commands
+	FIXME Check, if it's realy nessesery to use timer
+	\param e Timer event
+*/
 void pConsoleManager::timerEvent( QTimerEvent* e )
 {
 	if ( e->timerId() == mTimerId )
@@ -180,6 +250,10 @@ void pConsoleManager::timerEvent( QTimerEvent* e )
 	}
 }
 
+/*!
+	Emit signal, when process failing with error
+	\param e Process error
+*/
 void pConsoleManager::error( QProcess::ProcessError e )
 {
 	// emit signal error
@@ -191,6 +265,12 @@ void pConsoleManager::error( QProcess::ProcessError e )
 #endif
 }
 
+/*!
+	Handler of finishing of execution of command
+	
+	\param i Ask PasNox, what is it
+	\param e Exit status of process
+*/
 void pConsoleManager::finished( int i, QProcess::ExitStatus e )
 {
 	parseOutput (true);
@@ -206,6 +286,11 @@ void pConsoleManager::finished( int i, QProcess::ExitStatus e )
 	mLinesInStringBuffer = 0;
 }
 
+/*!
+	Handler or 'ready read' event from child process
+	
+	Reads output from process and tryes to parse it
+*/
 void pConsoleManager::readyRead()
 {
 	// append data to buffer to parse
@@ -228,6 +313,9 @@ void pConsoleManager::readyRead()
 	emit commandReadyRead( c, d );
 }
 
+/*!
+	Handler of 'started' event from child process
+*/
 void pConsoleManager::started()
 {
 	// enable stop action
@@ -236,6 +324,10 @@ void pConsoleManager::started()
 	emit commandStarted( currentCommand() );
 }
 
+/*!
+	Handler of changing status of child process
+	\param e New process state
+*/
 void pConsoleManager::stateChanged( QProcess::ProcessState e )
 {
 	// emit signal state changed
@@ -245,6 +337,10 @@ void pConsoleManager::stateChanged( QProcess::ProcessState e )
 		removeCommand( currentCommand() );
 }
 
+/*!
+	Create command and append it to list for executing
+	\param s Command to execute
+*/
 void pConsoleManager::sendRawCommand( const QString& s )
 { addCommand( pCommand( tr( "User Raw Command" ), s, QString::null, false ) ); }
 
@@ -256,12 +352,22 @@ void pConsoleManager::sendRawData( const QByteArray& a )
 		while ( state() == QProcess::Starting )
 			QApplication::processEvents( QEventLoop::ExcludeUserInputEvents );
 		// send raw command to process
-		qWarning( "sendRawData bytes written: %s", qPrintable( QString::number( write( a  ) ) ) );
+		write( a  );
 	}
 	else
 		warning( tr( "sendRawData..." ), tr( "Can't send raw data to console" ) );
 }
 
+/*!
+	Try to stop current command. Stop can be forced
+	
+	\param b Force stop. If false - process will just try to terminate child by executing
+		terminate () function, 
+		if true - process will be killed in 30 seconds, if will not terminate self
+	
+	FIXME Check, do it's possible, that process will be terminated correctly, and timer will
+	kill next executed command
+*/
 void pConsoleManager::stopCurrentCommand( bool b )
 {
 	if ( state() != QProcess::NotRunning )
@@ -274,30 +380,50 @@ void pConsoleManager::stopCurrentCommand( bool b )
 	}
 }
 
+/*!
+	Add command to list for executing
+	\param c  Command
+*/
 void pConsoleManager::addCommand( const pCommand& c )
 {
 	if ( c.isValid() )
 		mCommands << c;
 }
 
+/*!
+	Add list of command for executing
+	\param l List of commands
+*/
 void pConsoleManager::addCommands( const pCommandList& l )
 {
 	foreach ( pCommand c, l )
 		addCommand( c );
 }
 
+/*!
+	Remove command from list of commands for executing
+	
+	\param c Command
+*/
 void pConsoleManager::removeCommand( const pCommand& c )
 {
 	if ( mCommands.contains( c ) )
 		mCommands.removeAt( mCommands.indexOf ( c ) );
 }
 
+/*!
+	Remove list of commands from list for executing
+	\param l List of commands
+*/
 void pConsoleManager::removeCommands( const pCommandList& l )
 {
 	foreach ( pCommand c, l )
 		removeCommand( c );
 }
 
+/*!
+	Execute commands, which currently are in the list
+*/
 void pConsoleManager::executeProcess()
 {
 	foreach ( pCommand c, mCommands )
@@ -331,6 +457,12 @@ void pConsoleManager::executeProcess()
 	}
 }
 
+/*!
+	Parse output of command, which are storing in the buffer, using parsers.
+	
+	\param commandFinished If command already are finished, make processing while
+	buffer will not be empty. If not finished - wait for further output.
+*/
 void pConsoleManager::parseOutput (bool commandFinished)
 {
 	bool finished;
