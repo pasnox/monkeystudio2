@@ -32,12 +32,20 @@ else:*-g++:LIBS	*= -Wl,--whole-archive # import all symbols as the not used ones
 mac:*-g++:LIBS	*= -dynamic
 else:unix:*-g++:LIBS	*= -rdynamic
 
-PRE_TARGETDEPS	*= ../qscintilla ../fresh ../ctags
+!contains( DEFINES, SYSTEM_QSCINTILLA ) {
+	PRE_TARGETDEPS	*= ../qscintilla
+}
+PRE_TARGETDEPS	*= ../fresh ../ctags
 
 CONFIG( debug, debug|release ) {
 	#Debug
-	unix:LIBS	*= -lqscintilla2_debug -lfresh_debug -lctags_debug
-	else:LIBS	*= -lqscintilla2d -lfreshd -lctagsd
+	!contains( DEFINES, SYSTEM_QSCINTILLA ) {
+		unix:LIBS	*= -lqscintilla2_debug -lfresh_debug -lctags_debug
+		else:LIBS	*= -lqscintilla2d -lfreshd -lctagsd
+	} else {
+		unix:LIBS	*= -lqscintilla2 -lfresh_debug -lctags_debug
+		else:LIBS	*= -lqscintilla2 -lfreshd -lctagsd
+	}
 	win32-g++:LIBS	*= -Wl,--out-implib,$${PACKAGE_BUILD_PATH}/lib$${TARGET}.a
 	win32-msvc*:LIBS	*= /IMPLIB:$${PACKAGE_BUILD_PATH}/$${TARGET}.lib -lshell32
 } else {

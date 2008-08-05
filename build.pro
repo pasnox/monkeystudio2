@@ -1,5 +1,11 @@
 TEMPLATE	= subdirs
-SUBDIRS	= qscintilla fresh ctags monkey plugins
+
+SYSTEM_QSCINTILLA = $$(MONKEY_SYSTEM_QSCINTILLA)
+!isEqual( SYSTEM_QSCINTILLA, 1 ) {
+	SUBDIRS	*= qscintilla
+} 
+
+SUBDIRS	*= fresh ctags monkey plugins
 
 # include install script
 include( installs.pri )

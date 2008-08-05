@@ -1,14 +1,4 @@
 /****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Monkey Studio IDE
-** FileName  : pMonkeyStudio.cpp
-** Date      : 2008-01-14T00:37:22
-** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
-**
 	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
 	This program is free software; you can redistribute it and/or modify
@@ -24,7 +14,6 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
 ****************************************************************************/
 #include "pMonkeyStudio.h"
 #include "maininterface/ui/UITranslator.h"
@@ -48,13 +37,20 @@ QList<QTranslator*> mTranslators;
 QHash<QString,QsciLexer*> mGlobalsLexers;
 QHash<QString,QsciAPIs*> mGlobalsAPIs;
 
-void pMonkeyStudio::addTranslator( QTranslator* t )
+/*!
+	\details Add a translator to translators list
+	\param translator The translator to install
+*/
+void pMonkeyStudio::addTranslator( QTranslator* translator )
 {
-	qApp->installTranslator( t );
-	if ( !mTranslators.contains( t ) )
-		mTranslators << t;
+	qApp->installTranslator( translator );
+	if ( !mTranslators.contains( translator ) )
+		mTranslators << translator;
 }
 
+/*!
+	\details Loads all needed translations
+*/
 void pMonkeyStudio::loadTranslations()
 {
 	// clear all already installed translations
@@ -101,20 +97,45 @@ void pMonkeyStudio::loadTranslations()
 	}
 }
 
+/*!
+	\details A short for QMessageBox::warning static method
+	\param c The window title
+	\param s The text to show
+	\param w The parent widget defaulted to the current active window
+*/
 void pMonkeyStudio::warning( const QString& c, const QString& s, QWidget* w )
 { QMessageBox::warning( w, c, s ); }
 
+/*!
+	\details A short for QMessageBox::information static method
+	\param c The window title
+	\param s The text to show
+	\param w The parent widget defaulted to the current active window
+*/
 void pMonkeyStudio::information( const QString& c, const QString& s, QWidget* w )
 { QMessageBox::information( w, c, s ); }
 
+/*!
+	\details A short for QMessageBox::question static method thant return true if user accept or false if he reject
+	\param c The window title
+	\param s The text to show
+	\param w The parent widget defaulted to the current active window
+	\param b The shown buttons
+	\param d The default button
+*/
 bool pMonkeyStudio::question( const QString& c, const QString& s, QWidget* w, QMessageBox::StandardButtons b, QMessageBox::StandardButton d )
 { return QMessageBox::question( w, c, s, b, d ) == QMessageBox::Yes; }
 
-bool pMonkeyStudio::isSameFile( const QString& f, const QString& o )
+/*!
+	\details Return true if files point to same file, usefull when files are symbolic link, or windows link
+	\param left The left file
+	\param right The right file
+*/
+bool pMonkeyStudio::isSameFile( const QString& left, const QString& right )
 {
 	// get file info
-	QFileInfo fif( f );
-	QFileInfo fio( o );
+	QFileInfo fif( left );
+	QFileInfo fio( right );
 	
 	// check files exists
 	if ( fif.exists() != fio.exists() )
@@ -130,6 +151,9 @@ bool pMonkeyStudio::isSameFile( const QString& f, const QString& o )
 	return fif.canonicalFilePath() == fio.canonicalFilePath();
 }
 
+/*!
+	\details Return a list of all know text codecs
+*/
 const QStringList pMonkeyStudio::availableTextCodecs()
 {
 	static QStringList l;
@@ -142,6 +166,9 @@ const QStringList pMonkeyStudio::availableTextCodecs()
 	return l;
 }
 
+/*!
+	\details Return a list of all know image formats
+*/
 const QStringList pMonkeyStudio::availableImageFormats()
 {
 	static QStringList l;
@@ -154,15 +181,28 @@ const QStringList pMonkeyStudio::availableImageFormats()
 	return l;
 }
 
+/*!
+	\details Return a lsit of all know languages
+*/
 const QStringList pMonkeyStudio::availableLanguages()
 {
 	static QStringList l = QStringList() << "Bash" << "Batch" << "C#" << "C++" << "CMake" << "CSS"
 		<< "D" << "Diff" << "HTML" << "IDL" << "Java" << "JavaScript" << "Lua"
 		<< "Makefile" << "POV" << "Perl" << "Properties" << "Python" << "Ruby"
-		<< "SQL" << "TCL" << "TeX" << "VHDL";
+		<< "SQL"
+#if QSCINTILLA_VERSION > 0x020200
+		<< "TCL"
+#endif
+		<< "TeX" << "VHDL";
 	return l;
 }
 
+/*!
+	\details Return a QFileInfoList containing folders
+	\param fromDir The folder from witch to get contents
+	\param filters The filters to apply for validate folders name
+	\param recursive If true, the folders are scanned recursively, else not
+*/
 const QFileInfoList pMonkeyStudio::getFolders( QDir fromDir, const QStringList& filters, bool recursive )
 {
 	QFileInfoList files;
@@ -180,6 +220,12 @@ const QFileInfoList pMonkeyStudio::getFolders( QDir fromDir, const QStringList& 
 	return files;
 }
 
+/*!
+	\details Return a QFileInfoList containing files
+	\param fromDir The folder from witch to get contents
+	\param filters The filters to apply for validate files name
+	\param recursive If true, the folders are scanned recursively, else not
+*/
 const QFileInfoList pMonkeyStudio::getFiles( QDir fromDir, const QStringList& filters, bool recursive )
 {
 	QFileInfoList files;
@@ -197,6 +243,12 @@ const QFileInfoList pMonkeyStudio::getFiles( QDir fromDir, const QStringList& fi
 	return files;
 }
 
+/*!
+	\details Return a QFileInfoList containing files
+	\param fromDir The folder from witch to get contents
+	\param filters The filters to apply for validate files name
+	\param recursive If true, the folders are scanned recursively, else not
+*/
 const QFileInfoList pMonkeyStudio::getFiles( QDir fromDir, const QString& filter, bool recursive )
 { return getFiles( fromDir, filter.isEmpty() ? QStringList() : QStringList( filter ), recursive ); }
 
@@ -212,6 +264,12 @@ QFileDialog* getOpenDialog( QFileDialog::FileMode fileMode, const QString& capti
 	return dlg;
 }
 
+/*!
+	\details A dialog that return a list of files name choosen from available know image formats
+	\param caption The window title
+	\param fileName The default filename to select ( or path )
+	\param parent The parent widget
+*/
 const QStringList pMonkeyStudio::getImageFileNames( const QString& caption, const QString& fileName, QWidget* parent )
 {
 	// get image filters
@@ -245,9 +303,22 @@ const QStringList pMonkeyStudio::getImageFileNames( const QString& caption, cons
 	return QStringList();
 }
 
+/*!
+	\details A dialog that return a file name choosen from available know image formats
+	\param caption The window title
+	\param fileName The default filename to select ( or path )
+	\param parent The parent widget
+*/
 const QString pMonkeyStudio::getImageFileName( const QString& caption, const QString& fileName, QWidget* parent )
 { return getImageFileNames( caption, fileName, parent ).value( 0 ); }
 
+/*!
+	\details Return a QStringList of files name
+	\param caption The window title
+	\param fileName The default filename to select ( or path )
+	\param filter The filter to apply
+	\param parent The parent widget
+*/
 const QStringList pMonkeyStudio::getOpenFileNames( const QString& caption, const QString& fileName, const QString& filter, QWidget* parent )
 {
 	// create dialg
@@ -274,9 +345,23 @@ const QStringList pMonkeyStudio::getOpenFileNames( const QString& caption, const
 	return QStringList();
 }
 
+/*!
+	\details Return a QString file name
+	\param caption The window title
+	\param fileName The default filename to select ( or path )
+	\param filter The filter to apply
+	\param parent The parent widget
+*/
 const QString pMonkeyStudio::getOpenFileName( const QString& caption, const QString& fileName, const QString& filter, QWidget* parent )
 { return getOpenFileNames( caption, fileName, filter, parent ).value( 0 ); }
 
+/*!
+	\details Return a QString file name
+	\param caption The window title
+	\param fileName The default filename to select ( or path )
+	\param filter The filter to apply
+	\param parent The parent widget
+*/
 const QString pMonkeyStudio::getSaveFileName( const QString& caption, const QString& fileName, const QString& filter, QWidget* parent )
 {
 	// create dialg
@@ -303,15 +388,32 @@ const QString pMonkeyStudio::getSaveFileName( const QString& caption, const QStr
 	return QString();
 }
 
+/*!
+	\details Convenient function for get an existing folder
+	\param caption The window title
+	\param fileName The default path to shown
+	\param parent The parent widget
+*/
 const QString pMonkeyStudio::getExistingDirectory( const QString& caption, const QString& fileName, QWidget* parent )
 { return QFileDialog::getExistingDirectory( parent, caption.isEmpty() ? QObject::tr( "Select a folder" ) : caption, fileName ); }
 
-const QString pMonkeyStudio::tokenizeHome( const QString& s )
-{ return QString( s ).replace( QDir::homePath(), "$HOME$" ); }
+/*!
+	\details Return a tokenized string, ie: the token $HOME$ is replaced by the home path of the user
+	\param string The string to tokenize
+*/
+const QString pMonkeyStudio::tokenizeHome( const QString& string )
+{ return QString( string ).replace( QDir::homePath(), "$HOME$" ); }
 
-const QString pMonkeyStudio::unTokenizeHome( const QString& s )
-{ return QString( s ).replace( "$HOME$", QDir::homePath() ); }
+/*!
+	\details Return an untokenized string, ie: the home path is replaced by $HOME$
+	\param string The string to untokenize
+*/
+const QString pMonkeyStudio::unTokenizeHome( const QString& string )
+{ return QString( string ).replace( "$HOME$", QDir::homePath() ); }
 
+/*!
+	\details Return all default languages suffixes
+*/
 const QHash<QString, QStringList> pMonkeyStudio::defaultLanguagesSuffixes()
 {
 	// suffixes list
@@ -398,8 +500,10 @@ const QHash<QString, QStringList> pMonkeyStudio::defaultLanguagesSuffixes()
 	l["Ruby"] << "*.rbw";
 	// SQL
 	l["SQL"] << "*.sql";
+#if QSCINTILLA_VERSION > 0x020200
 	// TCL
 	l["TCL"] << "*.tcl";
+#endif
 	// TeX
 	l["TeX"] << "*.aux";
 	l["TeX"] << "*.idx";
@@ -411,6 +515,9 @@ const QHash<QString, QStringList> pMonkeyStudio::defaultLanguagesSuffixes()
 	return l;
 }
 
+/*!
+	\details Return all available languages suffixes
+*/
 const QHash<QString, QStringList> pMonkeyStudio::availableLanguagesSuffixes()
 {
 	// suffixes list
@@ -429,6 +536,9 @@ const QHash<QString, QStringList> pMonkeyStudio::availableLanguagesSuffixes()
 	return l;
 }
 
+/*!
+	\details Return all available files suffixes
+*/
 const QHash<QString, QStringList> pMonkeyStudio::availableFilesSuffixes()
 {
 	// get language suffixes
@@ -443,6 +553,9 @@ const QHash<QString, QStringList> pMonkeyStudio::availableFilesSuffixes()
 	return l;
 }
 
+/*!
+	\details Return all available languages filters
+*/
 const QString pMonkeyStudio::availableLanguagesFilters()
 {
 	QString f;
@@ -458,6 +571,9 @@ const QString pMonkeyStudio::availableLanguagesFilters()
 	return f;
 }
 
+/*!
+	\details Return all available files filters
+*/
 const QString pMonkeyStudio::availableFilesFilters()
 {
 	QString f;
@@ -473,16 +589,25 @@ const QString pMonkeyStudio::availableFilesFilters()
 	return f;
 }
 
+/*!
+	\details Return the base settings path used by all option in this namespace
+*/
 const QString pMonkeyStudio::settingsPath()
 {
 	return "/Settings";
 }
 
+/*!
+	\details Return the scintilla settigns path
+*/
 const QString pMonkeyStudio::scintillaSettingsPath()
 {
 	return "/Scintilla";
 }
 
+/*!
+	\details Reload all available api files
+*/
 void pMonkeyStudio::prepareAPIs()
 {
 	// check lexers & apis
@@ -514,46 +639,62 @@ void pMonkeyStudio::prepareAPIs()
 	}
 }
 
-QsciAPIs* pMonkeyStudio::apisForLexer( QsciLexer* l )
+/*!
+	\details Return a QsciAPIs for the given lexer
+	\param lexer The lexer to get apis object
+*/
+QsciAPIs* pMonkeyStudio::apisForLexer( QsciLexer* lexer )
 {
 	// cancel if no lexer
-	if ( !l )
+	if ( !lexer )
 		return 0;
 	// check if apis already exists
-	if ( !mGlobalsAPIs.contains( l->language() ) )
+	if ( !mGlobalsAPIs.contains( lexer->language() ) )
 	{
 		// create apis
-		QsciAPIs* a = new QsciAPIs( l );
+		QsciAPIs* apis = new QsciAPIs( lexer );
 		// store global apis
-		mGlobalsAPIs[l->language()] = a;
+		mGlobalsAPIs[lexer->language()] = apis;
 	}
 	// return apis
-	return mGlobalsAPIs.value( l->language() );
+	return mGlobalsAPIs.value( lexer->language() );
 }
 
-QString pMonkeyStudio::languageForFileName( const QString& s )
+/*!
+	\details Return the language of a file name
+	\param fileName The fil name to get language from
+*/
+QString pMonkeyStudio::languageForFileName( const QString& fileName )
 {
-	QsciLexer* l = lexerForFileName( s );
-	return l ? QString( l->language() ) : QString();
+	QsciLexer* lexer = lexerForFileName( fileName );
+	return lexer ? QString( lexer->language() ) : QString();
 }
 
-QsciLexer* pMonkeyStudio::lexerForFileName( const QString& s )
+/*!
+	\details Return a QsciLexer for the given file name
+	\param fileName The filenae to get lexer from
+*/
+QsciLexer* pMonkeyStudio::lexerForFileName( const QString& fileName )
 {
 	// get suffixes
 	QHash<QString, QStringList> l = availableFilesSuffixes();
 	// check suffixe
 	foreach ( QString k, l.keys() )
-		if ( QDir::match( l.value( k ), s ) )
+		if ( QDir::match( l.value( k ), fileName ) )
 			return lexerForLanguage( k );
 	return 0;
 }
 
-QsciLexer* pMonkeyStudio::lexerForLanguage( const QString& s )
+/*!
+	\details Return a QsciLexer for the given language
+	\param language The language to get lexer from
+*/
+QsciLexer* pMonkeyStudio::lexerForLanguage( const QString& language )
 {
-	if ( mGlobalsLexers.keys().contains( s ) )
-		return mGlobalsLexers.value( s );
+	if ( mGlobalsLexers.keys().contains( language ) )
+		return mGlobalsLexers.value( language );
 	// get language
-	const QString ln = s.toLower();
+	const QString ln = language.toLower();
 	// lexer
 	QsciLexer* l = 0;
 	// init lexer
@@ -597,8 +738,10 @@ QsciLexer* pMonkeyStudio::lexerForLanguage( const QString& s )
 		l = new QsciLexerRuby( QApplication::instance() );
 	else if ( ln == "sql" )
 		l = new QsciLexerSQL( QApplication::instance() );
+#if QSCINTILLA_VERSION > 0x020200
 	else if ( ln == "tcl" )
 		l = new QsciLexerTCL( QApplication::instance() );
+#endif
 	else if ( ln == "tex" )
 		l = new QsciLexerTeX( QApplication::instance() );
 	else if ( ln == "vhdl" )
@@ -618,194 +761,213 @@ QsciLexer* pMonkeyStudio::lexerForLanguage( const QString& s )
 	return l;
 }
 
-bool pMonkeyStudio::setLexerProperty( const QString& s, QsciLexer* l, const QVariant& v )
+/*!
+	\details Return true if can set \c property for \c lexer to \c value else return false
+	\param property The property name
+	\param lexer The lexer to modify
+	\param value The value to set
+*/
+bool pMonkeyStudio::setLexerProperty( const QString& property, QsciLexer* lexer, const QVariant& value )
 {
 	// cancel no property, no lexer or if variant is not valid
-	if ( !l || s.trimmed().isEmpty() || !v.isValid() )
+	if ( !lexer || property.trimmed().isEmpty() || !value.isValid() )
 		return false;
 	// if bool
-	if ( v.type() == QVariant::Bool )
-		return QMetaObject::invokeMethod( l, qPrintable( s ), Q_ARG( bool, v.toBool() ) );
+	if ( value.type() == QVariant::Bool )
+		return QMetaObject::invokeMethod( lexer, qPrintable( property ), Q_ARG( bool, value.toBool() ) );
 	// if int
-	else if ( v.type() == QVariant::Int )
-		return QMetaObject::invokeMethod( l, qPrintable( s ), Q_ARG( QsciLexerPython::IndentationWarning, (QsciLexerPython::IndentationWarning)v.toInt() ) );
+	else if ( value.type() == QVariant::Int )
+		return QMetaObject::invokeMethod( lexer, qPrintable( property ), Q_ARG( QsciLexerPython::IndentationWarning, (QsciLexerPython::IndentationWarning)value.toInt() ) );
 	// return default value
 	return false;
 }
 
-const QVariant pMonkeyStudio::lexerProperty( const QString& s, QsciLexer* l )
+/*!
+	\details Return a lexer property value
+	\param property The property to query
+	\param lexer The lexer to query property from
+*/
+const QVariant pMonkeyStudio::lexerProperty( const QString& property, QsciLexer* lexer )
 {
 	// if no member or lexer return null variant
-	if ( !l || s.isEmpty() )
+	if ( !lexer || property.isEmpty() )
 		return QVariant();
 	// get language
-	const QString lng = QString( l->language() );
+	const QString lng = QString( lexer->language() );
 	// checking property
-	if ( s == "foldComments" )
+	if ( property == "foldComments" )
 	{
 		if ( lng == "Bash" )
-			return qobject_cast<QsciLexerBash*>( l )->foldComments();
+			return qobject_cast<QsciLexerBash*>( lexer )->foldComments();
 		else if ( lng == "CSS" )
-			return qobject_cast<QsciLexerCSS*>( l )->foldComments();
+			return qobject_cast<QsciLexerCSS*>( lexer )->foldComments();
 		else if ( lng == "D" )
-			return qobject_cast<QsciLexerD*>( l )->foldComments();
+			return qobject_cast<QsciLexerD*>( lexer )->foldComments();
 		else if ( lng == "Perl" )
-			return qobject_cast<QsciLexerPerl*>( l )->foldComments();
+			return qobject_cast<QsciLexerPerl*>( lexer )->foldComments();
 		else if ( lng == "POV" )
-			return qobject_cast<QsciLexerPOV*>( l )->foldComments();
+			return qobject_cast<QsciLexerPOV*>( lexer )->foldComments();
 		else if ( lng == "Python" )
-			return qobject_cast<QsciLexerPython*>( l )->foldComments();
+			return qobject_cast<QsciLexerPython*>( lexer )->foldComments();
 		else if ( lng == "SQL" )
-			return qobject_cast<QsciLexerSQL*>( l )->foldComments();
+			return qobject_cast<QsciLexerSQL*>( lexer )->foldComments();
 		else if ( lng == "VHDL" )
-			return qobject_cast<QsciLexerVHDL*>( l )->foldComments();
+			return qobject_cast<QsciLexerVHDL*>( lexer )->foldComments();
 		else if ( lng == "JavaScript" )
-			return qobject_cast<QsciLexerJavaScript*>( l )->foldComments();
+			return qobject_cast<QsciLexerJavaScript*>( lexer )->foldComments();
 		else if ( lng == "Java" )
-			return qobject_cast<QsciLexerJava*>( l )->foldComments();
+			return qobject_cast<QsciLexerJava*>( lexer )->foldComments();
 		else if ( lng == "C#" )
-			return qobject_cast<QsciLexerCSharp*>( l )->foldComments();
+			return qobject_cast<QsciLexerCSharp*>( lexer )->foldComments();
 		else if ( lng == "C++" )
-			return qobject_cast<QsciLexerCPP*>( l )->foldComments();
+			return qobject_cast<QsciLexerCPP*>( lexer )->foldComments();
 	}
-	else if ( s == "foldCompact" )
+	else if ( property == "foldCompact" )
 	{
 		if ( lng == "Bash" )
-			return qobject_cast<QsciLexerBash*>( l )->foldCompact();
+			return qobject_cast<QsciLexerBash*>( lexer )->foldCompact();
 		else if ( lng == "CSS" )
-			return qobject_cast<QsciLexerCSS*>( l )->foldCompact();
+			return qobject_cast<QsciLexerCSS*>( lexer )->foldCompact();
 		else if ( lng == "D" )
-			return qobject_cast<QsciLexerD*>( l )->foldCompact();
+			return qobject_cast<QsciLexerD*>( lexer )->foldCompact();
 		else if ( lng == "HTML" )
-			return qobject_cast<QsciLexerHTML*>( l )->foldCompact();
+			return qobject_cast<QsciLexerHTML*>( lexer )->foldCompact();
 		else if ( lng == "Lua" )
-			return qobject_cast<QsciLexerLua*>( l )->foldCompact();
+			return qobject_cast<QsciLexerLua*>( lexer )->foldCompact();
 		else if ( lng == "Perl" )
-			return qobject_cast<QsciLexerPerl*>( l )->foldCompact();
+			return qobject_cast<QsciLexerPerl*>( lexer )->foldCompact();
 		else if ( lng == "POV" )
-			return qobject_cast<QsciLexerPOV*>( l )->foldCompact();
+			return qobject_cast<QsciLexerPOV*>( lexer )->foldCompact();
 		else if ( lng == "Properties" )
-			return qobject_cast<QsciLexerProperties*>( l )->foldCompact();
+			return qobject_cast<QsciLexerProperties*>( lexer )->foldCompact();
 		else if ( lng == "SQL" )
-			return qobject_cast<QsciLexerSQL*>( l )->foldCompact();
+			return qobject_cast<QsciLexerSQL*>( lexer )->foldCompact();
 		else if ( lng == "VHDL" )
-			return qobject_cast<QsciLexerVHDL*>( l )->foldCompact();
+			return qobject_cast<QsciLexerVHDL*>( lexer )->foldCompact();
 		else if ( lng == "JavaScript" )
-			return qobject_cast<QsciLexerJavaScript*>( l )->foldCompact();
+			return qobject_cast<QsciLexerJavaScript*>( lexer )->foldCompact();
 		else if ( lng == "Java" )
-			return qobject_cast<QsciLexerJava*>( l )->foldCompact();
+			return qobject_cast<QsciLexerJava*>( lexer )->foldCompact();
 		else if ( lng == "C#" )
-			return qobject_cast<QsciLexerCSharp*>( l )->foldCompact();
+			return qobject_cast<QsciLexerCSharp*>( lexer )->foldCompact();
 		else if ( lng == "C++" )
-			return qobject_cast<QsciLexerCPP*>( l )->foldCompact();
+			return qobject_cast<QsciLexerCPP*>( lexer )->foldCompact();
+#if QSCINTILLA_VERSION > 0x020200
 		else if ( lng == "TCL" )
-			return qobject_cast<QsciLexerTCL*>( l )->foldCompact();
+			return qobject_cast<QsciLexerTCL*>( lexer )->foldCompact();
+#endif
 	}
-	else if ( s == "foldQuotes" )
+	else if ( property == "foldQuotes" )
 	{
 		if ( lng == "Python" )
-			return qobject_cast<QsciLexerPython*>( l )->foldQuotes();
+			return qobject_cast<QsciLexerPython*>( lexer )->foldQuotes();
 	}
-	else if ( s == "foldDirectives" )
+	else if ( property == "foldDirectives" )
 	{
 		if ( lng == "POV" )
-			return qobject_cast<QsciLexerPOV*>( l )->foldDirectives();
+			return qobject_cast<QsciLexerPOV*>( lexer )->foldDirectives();
 	}
-	else if ( s == "foldAtBegin" )
+	else if ( property == "foldAtBegin" )
 	{
 		if ( lng == "VHDL" )
-			return qobject_cast<QsciLexerVHDL*>( l )->foldAtBegin();
+			return qobject_cast<QsciLexerVHDL*>( lexer )->foldAtBegin();
 	}
-	else if ( s == "foldAtParenthesis" )
+	else if ( property == "foldAtParenthesis" )
 	{
 		if ( lng == "VHDL" )
-			return qobject_cast<QsciLexerVHDL*>( l )->foldAtParenthesis();
+			return qobject_cast<QsciLexerVHDL*>( lexer )->foldAtParenthesis();
 	}
-	else if ( s == "foldAtElse" )
+	else if ( property == "foldAtElse" )
 	{
 		if ( lng == "CMake" )
-			return qobject_cast<QsciLexerCMake*>( l )->foldAtElse();
+			return qobject_cast<QsciLexerCMake*>( lexer )->foldAtElse();
 		else if ( lng == "D" )
-			return qobject_cast<QsciLexerD*>( l )->foldAtElse();
+			return qobject_cast<QsciLexerD*>( lexer )->foldAtElse();
 		else if ( lng == "VHDL" )
-			return qobject_cast<QsciLexerVHDL*>( l )->foldAtElse();
+			return qobject_cast<QsciLexerVHDL*>( lexer )->foldAtElse();
 		else if ( lng == "JavaScript" )
-			return qobject_cast<QsciLexerJavaScript*>( l )->foldAtElse();
+			return qobject_cast<QsciLexerJavaScript*>( lexer )->foldAtElse();
 		else if ( lng == "Java" )
-			return qobject_cast<QsciLexerJava*>( l )->foldAtElse();
+			return qobject_cast<QsciLexerJava*>( lexer )->foldAtElse();
 		else if ( lng == "C#" )
-			return qobject_cast<QsciLexerCSharp*>( l )->foldAtElse();
+			return qobject_cast<QsciLexerCSharp*>( lexer )->foldAtElse();
 		else if ( lng == "C++" )
-			return qobject_cast<QsciLexerCPP*>( l )->foldAtElse();
+			return qobject_cast<QsciLexerCPP*>( lexer )->foldAtElse();
 	}
-	else if ( s == "foldPreprocessor" )
+	else if ( property == "foldPreprocessor" )
 	{
 		if ( lng == "HTML" )
-			return qobject_cast<QsciLexerHTML*>( l )->foldPreprocessor();
+			return qobject_cast<QsciLexerHTML*>( lexer )->foldPreprocessor();
 		else if ( lng == "JavaScript" )
-			return qobject_cast<QsciLexerJavaScript*>( l )->foldPreprocessor();
+			return qobject_cast<QsciLexerJavaScript*>( lexer )->foldPreprocessor();
 		else if ( lng == "Java" )
-			return qobject_cast<QsciLexerJava*>( l )->foldPreprocessor();
+			return qobject_cast<QsciLexerJava*>( lexer )->foldPreprocessor();
 		else if ( lng == "C#" )
-			return qobject_cast<QsciLexerCSharp*>( l )->foldPreprocessor();
+			return qobject_cast<QsciLexerCSharp*>( lexer )->foldPreprocessor();
 		else if ( lng == "C++" )
-			return qobject_cast<QsciLexerCPP*>( l )->foldPreprocessor();
+			return qobject_cast<QsciLexerCPP*>( lexer )->foldPreprocessor();
 	}
-	else if ( s == "stylePreprocessor" )
+	else if ( property == "stylePreprocessor" )
 	{
 		if ( lng == "JavaScript" )
-			return qobject_cast<QsciLexerJavaScript*>( l )->stylePreprocessor();
+			return qobject_cast<QsciLexerJavaScript*>( lexer )->stylePreprocessor();
 		else if ( lng == "Java" )
-			return qobject_cast<QsciLexerJava*>( l )->stylePreprocessor();
+			return qobject_cast<QsciLexerJava*>( lexer )->stylePreprocessor();
 		else if ( lng == "C#" )
-			return qobject_cast<QsciLexerCSharp*>( l )->stylePreprocessor();
+			return qobject_cast<QsciLexerCSharp*>( lexer )->stylePreprocessor();
 		else if ( lng == "C++" )
-			return qobject_cast<QsciLexerCPP*>( l )->stylePreprocessor();
+			return qobject_cast<QsciLexerCPP*>( lexer )->stylePreprocessor();
 	}
-	else if ( s == "caseSensitiveTags" )
+	else if ( property == "caseSensitiveTags" )
 	{
 		if ( lng == "HTML" )
-			return qobject_cast<QsciLexerHTML*>( l )->caseSensitiveTags();
+			return qobject_cast<QsciLexerHTML*>( lexer )->caseSensitiveTags();
 	}
-	else if ( s == "backslashEscapes" )
+	else if ( property == "backslashEscapes" )
 	{
 		if ( lng == "SQL" )
-			return qobject_cast<QsciLexerSQL*>( l )->backslashEscapes();
+			return qobject_cast<QsciLexerSQL*>( lexer )->backslashEscapes();
 	}
-	else if ( s == "indentationWarning" )
+	else if ( property == "indentationWarning" )
 	{
 		if ( lng == "Python" )
-			return qobject_cast<QsciLexerPython*>( l )->indentationWarning();
+			return qobject_cast<QsciLexerPython*>( lexer )->indentationWarning();
 	}
 	// default return value
 	return QVariant();
 }
 
-void pMonkeyStudio::resetLexer( QsciLexer* l )
+/*!
+	\details Reset the properties of a lexer
+	\param lexer The lexer to reset
+*/
+void pMonkeyStudio::resetLexer( QsciLexer* lexer )
 {
 	// cancel if no lexer
-	if ( !l )
+	if ( !lexer )
 		return;
-	
 	// get settings pointer
 	pSettings* settings = MonkeyCore::settings();
 	// remove lexer entry
-	settings->remove( QString( "%1/%2" ).arg( scintillaSettingsPath() ).arg( l->language() ) );
+	settings->remove( QString( "%1/%2" ).arg( scintillaSettingsPath() ).arg( lexer->language() ) );
 	// set default styles
 	for ( int i = 0; i < 128; ++i )
 	{
-		if (!l->description( i ).isEmpty() )
+		if ( !lexer->description( i ).isEmpty() )
 		{
-			l->setColor( l->defaultColor( i ), i);
-			l->setEolFill( l->defaultEolFill( i ), i);
-			l->setFont( l->defaultFont( i ), i);
-			l->setPaper( l->defaultPaper( i ), i);
+			lexer->setColor( lexer->defaultColor( i ), i );
+			lexer->setEolFill( lexer->defaultEolFill( i ), i );
+			lexer->setFont( lexer->defaultFont( i ), i );
+			lexer->setPaper( lexer->defaultPaper( i ), i );
 		}
 	}
 	// re read properties
-	l->readSettings( *settings, qPrintable( scintillaSettingsPath() ) );
+	lexer->readSettings( *settings, qPrintable( scintillaSettingsPath() ) );
 }
 
+/*!
+	\details Apply the settings ( after having pressed apply/ok in the settings dialog )
+*/
 void pMonkeyStudio::applyProperties()
 {
 	// apply editor properties
@@ -829,115 +991,165 @@ void pMonkeyStudio::applyProperties()
 	prepareAPIs();
 }
 
-void pMonkeyStudio::setEditorProperties( pEditor* e )
+/*!
+	\details Apply properties to the given \c editor
+	\param editor The editor to set properties
+*/
+void pMonkeyStudio::setEditorProperties( pEditor* editor )
 {
-	if ( !e )
+	if ( !editor )
 		return;
 	// apply settings from UISettings
 	// General
-	e->setSelectionBackgroundColor( selectionBackgroundColor() );
-	e->setSelectionForegroundColor( selectionForegroundColor() );
+	editor->setSelectionBackgroundColor( selectionBackgroundColor() );
+	editor->setSelectionForegroundColor( selectionForegroundColor() );
 	if ( defaultDocumentColours() )
 	{
 		// set scintilla default colors
-		e->setColor( defaultDocumentPen() );
-		e->setPaper( defaultDocumentPaper() );
+		editor->setColor( defaultDocumentPen() );
+		editor->setPaper( defaultDocumentPaper() );
 	}
 	// Auto Completion
-	e->setAutoCompletionCaseSensitivity( autoCompletionCaseSensitivity() );
-	e->setAutoCompletionReplaceWord( autoCompletionReplaceWord() );
-	e->setAutoCompletionShowSingle( autoCompletionShowSingle() );
-	e->setAutoCompletionSource( autoCompletionSource() );
-	e->setAutoCompletionThreshold( autoCompletionThreshold() );
+	editor->setAutoCompletionCaseSensitivity( autoCompletionCaseSensitivity() );
+	editor->setAutoCompletionReplaceWord( autoCompletionReplaceWord() );
+	editor->setAutoCompletionShowSingle( autoCompletionShowSingle() );
+	editor->setAutoCompletionSource( autoCompletionSource() );
+	editor->setAutoCompletionThreshold( autoCompletionThreshold() );
 	// CallTips
-	e->setCallTipsBackgroundColor( callTipsBackgroundColor() );
-	e->setCallTipsForegroundColor( callTipsForegroundColor() );
-	e->setCallTipsHighlightColor( callTipsHighlightColor() );
-	e->setCallTipsStyle( callTipsStyle() );
-	e->setCallTipsVisible( callTipsVisible() );
+	editor->setCallTipsBackgroundColor( callTipsBackgroundColor() );
+	editor->setCallTipsForegroundColor( callTipsForegroundColor() );
+	editor->setCallTipsHighlightColor( callTipsHighlightColor() );
+	editor->setCallTipsStyle( callTipsStyle() );
+	editor->setCallTipsVisible( callTipsVisible() );
 	// Indentation
-	e->setAutoIndent( autoIndent() );
-	e->setBackspaceUnindents( backspaceUnindents() );
-	e->setIndentationGuides( indentationGuides() );
-	e->setIndentationsUseTabs( indentationsUseTabs() );
-	e->setIndentationWidth( indentationWidth() );
-	e->setTabIndents( tabIndents() );
-	e->setTabWidth( tabWidth() );
-	e->setIndentationGuidesBackgroundColor( indentationGuidesBackgroundColor() );
-	e->setIndentationGuidesForegroundColor( indentationGuidesForegroundColor() );
+	editor->setAutoIndent( autoIndent() );
+	editor->setBackspaceUnindents( backspaceUnindents() );
+	editor->setIndentationGuides( indentationGuides() );
+	editor->setIndentationsUseTabs( indentationsUseTabs() );
+	editor->setIndentationWidth( indentationWidth() );
+	editor->setTabIndents( tabIndents() );
+	editor->setTabWidth( tabWidth() );
+	editor->setIndentationGuidesBackgroundColor( indentationGuidesBackgroundColor() );
+	editor->setIndentationGuidesForegroundColor( indentationGuidesForegroundColor() );
 	// Brace Matching
-	e->setBraceMatching( braceMatching() );
-	e->setMatchedBraceBackgroundColor( matchedBraceBackgroundColor() );
-	e->setMatchedBraceForegroundColor( matchedBraceForegroundColor() );
-	e->setUnmatchedBraceBackgroundColor( unmatchedBraceBackgroundColor() );
-	e->setUnmatchedBraceForegroundColor( unmatchedBraceForegroundColor() );
+	editor->setBraceMatching( braceMatching() );
+	editor->setMatchedBraceBackgroundColor( matchedBraceBackgroundColor() );
+	editor->setMatchedBraceForegroundColor( matchedBraceForegroundColor() );
+	editor->setUnmatchedBraceBackgroundColor( unmatchedBraceBackgroundColor() );
+	editor->setUnmatchedBraceForegroundColor( unmatchedBraceForegroundColor() );
 	// Edge Mode
-	e->setEdgeMode( edgeMode() );
-	e->setEdgeColor( edgeColor() );
-	e->setEdgeColumn( edgeColumn() );
+	editor->setEdgeMode( edgeMode() );
+	editor->setEdgeColor( edgeColor() );
+	editor->setEdgeColumn( edgeColumn() );
 	// Caret
-	e->setCaretLineVisible( caretLineVisible() );
-	e->setCaretLineBackgroundColor( caretLineBackgroundColor() );
-	e->setCaretForegroundColor( caretForegroundColor() );
-	e->setCaretWidth( caretWidth() );
+	editor->setCaretLineVisible( caretLineVisible() );
+	editor->setCaretLineBackgroundColor( caretLineBackgroundColor() );
+	editor->setCaretForegroundColor( caretForegroundColor() );
+	editor->setCaretWidth( caretWidth() );
 	// Margins
 	if ( marginsEnabled() )
 	{
-		e->setMarginsBackgroundColor( marginsBackgroundColor() );
-		e->setMarginsForegroundColor( marginsForegroundColor() );
-		e->setMarginsFont( marginsFont() );
+		editor->setMarginsBackgroundColor( marginsBackgroundColor() );
+		editor->setMarginsForegroundColor( marginsForegroundColor() );
+		editor->setMarginsFont( marginsFont() );
 	}
-	e->setLineNumbersMarginEnabled( lineNumbersMarginEnabled() );
-	e->setLineNumbersMarginWidth( lineNumbersMarginWidth() );
-	e->setLineNumbersMarginAutoWidth( lineNumbersMarginAutoWidth() );
-	e->setFolding( folding() );
-	e->setFoldMarginColors( foldMarginForegroundColor(), foldMarginBackgroundColor() );
+	editor->setLineNumbersMarginEnabled( lineNumbersMarginEnabled() );
+	editor->setLineNumbersMarginWidth( lineNumbersMarginWidth() );
+	editor->setLineNumbersMarginAutoWidth( lineNumbersMarginAutoWidth() );
+	editor->setFolding( folding() );
+	editor->setFoldMarginColors( foldMarginForegroundColor(), foldMarginBackgroundColor() );
 	// Special Characters
-	e->setEolMode( eolMode() );
-	e->setEolVisibility( eolVisibility() );
-	e->setWhitespaceVisibility( whitespaceVisibility() );
-	e->setWrapMode( wrapMode() );
-	e->setWrapVisualFlags( endWrapVisualFlag(), startWrapVisualFlag(), wrappedLineIndentWidth() );
+	editor->setEolMode( eolMode() );
+	editor->setEolVisibility( eolVisibility() );
+	editor->setWhitespaceVisibility( whitespaceVisibility() );
+	editor->setWrapMode( wrapMode() );
+	editor->setWrapVisualFlags( endWrapVisualFlag(), startWrapVisualFlag(), wrappedLineIndentWidth() );
 }
 
-void pMonkeyStudio::setRestoreProjectsOnStartup( bool b )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/RestoreProjectsOnStartup", b ); }
+/*!
+	\details Restore projects at startup
+	\param restore True to restore, else false
+*/
+void pMonkeyStudio::setRestoreProjectsOnStartup( bool restore )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/RestoreProjectsOnStartup", restore ); }
 
+/*!
+	\details Return true if projects are restored at startup, else false
+*/
 const bool pMonkeyStudio::restoreProjectsOnStartup()
 { return MonkeyCore::settings()->value( settingsPath() +"/RestoreProjectsOnStartup", true ).toBool(); }
 
-void pMonkeyStudio::setSaveProjectsOnCustomAction( bool b )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/SaveProjectsOnCustomAction", b ); }
+/*!
+	\details Save projects on custom actions triggered ( builder, compiler, debugger, interpreter )
+	\param save True to save, else false
+*/
+void pMonkeyStudio::setSaveProjectsOnCustomAction( bool save )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/SaveProjectsOnCustomAction", save ); }
 
+/*!
+	\details Return true if projects are saved on custom actions triggered, else false
+*/
 const bool pMonkeyStudio::saveProjectsOnCustomAction()
 { return MonkeyCore::settings()->value( settingsPath() +"/SaveProjectsOnCustomAction", false ).toBool(); }
 
-void pMonkeyStudio::setSaveFilesOnCustomAction( bool b )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/SaveFilesOnCustomAction", b ); }
+/*!
+	\details Save files on custom actions triggered ( builder, compiler, debugger, interpreter )
+	\param save True to save, else false
+*/
+void pMonkeyStudio::setSaveFilesOnCustomAction( bool save )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/SaveFilesOnCustomAction", save ); }
 
+/*!
+	\details Return true if files are saved on custom actions triggered, else false
+*/
 const bool pMonkeyStudio::saveFilesOnCustomAction()
 { return MonkeyCore::settings()->value( settingsPath() +"/SaveFilesOnCustomAction", false ).toBool(); }
 
-void pMonkeyStudio::setDefaultProjectsDirectory( const QString& s )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/DefaultProjectsDirectory", s ); }
+/*!
+	\details Set the default project path
+	\param path The default path
+*/
+void pMonkeyStudio::setDefaultProjectsDirectory( const QString& path )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/DefaultProjectsDirectory", path ); }
 
+/*!
+	\details Return the default project path
+*/
 const QString pMonkeyStudio::defaultProjectsDirectory()
 { return MonkeyCore::settings()->value( settingsPath() +"/DefaultProjectsDirectory", "$HOME$/.Monkey Studio/Projects" ).toString(); }
 
-void pMonkeyStudio::setTabsHaveCloseButton( bool b )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/TabsHaveCloseButton", b ); }
+/*!
+	\details Set if tabs have close button
+	\param have True to have button, else false
+*/
+void pMonkeyStudio::setTabsHaveCloseButton( bool have )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/TabsHaveCloseButton", have ); }
 
+/*!
+	\details Return if tabs have  close button
+*/
 const bool pMonkeyStudio::tabsHaveCloseButton()
 { return MonkeyCore::settings()->value( settingsPath() +"/TabsHaveCloseButton", false ).toBool(); }
 
-void pMonkeyStudio::setTabsHaveShortcut( bool b )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/TabsHaveShortcut", b ); }
+/*!
+	\details Set tabs have shortcut
+	\param have True for shortcut, else false
+*/
+void pMonkeyStudio::setTabsHaveShortcut( bool have )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/TabsHaveShortcut", have ); }
 
+/*!
+	\details Return true if tabs have shortcut, else false
+*/
 const bool pMonkeyStudio::tabsHaveShortcut()
 { return MonkeyCore::settings()->value( settingsPath() +"/TabsHaveShortcut", false ).toBool(); }
 
-void pMonkeyStudio::setTabsElided( bool b )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/TabsElided", b ); }
+/*!
+	\details Set tabs text are elided
+	\param elided True for elided text, else false
+*/
+void pMonkeyStudio::setTabsElided( bool have )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/TabsElided", have ); }
 
 const bool pMonkeyStudio::tabsElided()
 { return MonkeyCore::settings()->value( settingsPath() +"/TabsElided", false ).toBool(); }
