@@ -1,7 +1,7 @@
 /****************************************************************************
 **
 **         Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
+** Authors   : Andrei Kopats aka hlamer <hlamer@tut.by>
 ** Project   : Monkey Studio IDE
 ** FileName  : pCommandParser.cpp
 ** Date      : 2008-01-14T00:36:50
@@ -26,10 +26,24 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file pCommandParser.h
+	\date 2008-01-14T00:36:50
+	\author Andrei Kopats
+	\brief Implementation of pCommandParser class
+*/
 #include "pCommandParser.h"
 
+/*!
+	Change value of this macro, if you need to debug parsing or parsers, 
+	and also check, how much time parsing takes
+	A lot of debug info will be printed
+*/
 #define PARSERS_DEBUG 0
 
+/*!
+	Destructor of class
+*/
 pCommandParser::~pCommandParser()
 {
 }
@@ -38,7 +52,15 @@ pCommandParser::~pCommandParser()
  #include <QDebug>
  #include <QTime>
 #endif
+
+/*!
+	Try to parse string buffer.
 	
+	If parsing will successfull, signals with results will be emited
+	\param buf string buffer
+	\return count of chars, which are recognised
+	\retval 0 - String not recognised
+*/
 int pCommandParser::processParsing(QString* buf)
 {
 #if PARSERS_DEBUG
@@ -85,11 +107,25 @@ int pCommandParser::processParsing(QString* buf)
 	return 0;
 }
 
+/*!
+	Get name of parser
+	\return Name of parser
+*/
 QString pCommandParser::name() const
 {
 	return mName;
 }
 
+/*!
+	Function replaces sequences "%d" (where d is number) with matches 
+	from regular expression. 
+
+	%0 mean wall match, %n - nth submatch.
+	Function is using for generating results of parsing
+	\param rex Already matched regular expression (searching of a pattern 
+		should be called before this function)
+	\return Resulting string
+*/
 QString pCommandParser::replaceWithMatch(QRegExp& rex, QString s)
 {
 	int pos = 0; 

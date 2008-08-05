@@ -1,7 +1,7 @@
 /****************************************************************************
 **
 ** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
+** Authors   : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
 ** Project   : Monkey Studio IDE
 ** FileName  : pCommand.h
 ** Date      : 2008-01-14T00:36:49
@@ -26,6 +26,12 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file pCommand.h
+	\date 2008-01-14T00:36:50
+	\author Filipe AZEVEDO aka Nox PasNox <pasnox@gmail.com>
+	\brief Header for pCommand
+*/
 #ifndef PCOMMAND_H
 #define PCOMMAND_H
 
@@ -35,6 +41,23 @@
 
 class XUPItem;
 
+	QString mText;
+	QString mCommand;
+	QString mArguments;
+	QString mWorkingDirectory;
+	bool mSkipOnError;
+	QStringList mParsers;
+	bool mTryAllParsers;
+	QVariant mUserData;
+	XUPItem* mProject;
+/*!
+	Container for storing console command
+	
+	pCommand can store command line for executing command, working dirrectory,
+	options of execution of command, can define parsers, which could be used 
+	for executing, and also can remember project, for which command is 
+	executing
+*/
 class Q_MONKEY_EXPORT pCommand
 {
 public:
@@ -107,17 +130,20 @@ public:
 	{ qWarning( toString().toLocal8Bit().constData() ); }
 
 protected:
-	QString mText;
-	QString mCommand;
-	QString mArguments;
-	QString mWorkingDirectory;
-	bool mSkipOnError;
-	QStringList mParsers;
-	bool mTryAllParsers;
-	QVariant mUserData;
-	XUPItem* mProject;
+	QString mText; 				/**< Comment about command */
+	QString mCommand;			/**< Console command */
+	QString mArguments;			/**< Arguments */
+	QString mWorkingDirectory;	/**< Working dirrectory of process */
+	bool mSkipOnError;			/**< Skip command, if error ocurred */
+	QStringList mParsers;		/**< List of parsers, which should be used for command. Position in the list is not ignored */
+	bool mTryAllParsers;		/**< Try to use all availible parsers after parsers from list */
+	QVariant mUserData;			/**< Ask PasNox, hot to use it */
+	XUPItem* mProject;			/**< Project, for which command is executing */
 };
 
+/*!
+	List of pCommand objects
+*/
 typedef QList<pCommand> pCommandList;
 
 Q_DECLARE_METATYPE( pCommand );

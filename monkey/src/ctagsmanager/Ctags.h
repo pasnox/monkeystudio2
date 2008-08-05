@@ -1,12 +1,12 @@
 /****************************************************************************
 **
 ** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
+** Authors   : Andrei Kopats aka hlamer <hlamer@tut.by>
 ** Project   : Monkey Studio IDE
 ** FileName  : Ctags.h
 ** Date      : 2008-01-14T00:36:54
 ** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
+** Comment   : 
 ** Home Page : http://www.monkeystudio.org
 **
     Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
