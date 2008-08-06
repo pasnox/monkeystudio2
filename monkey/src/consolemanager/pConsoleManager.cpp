@@ -1,7 +1,7 @@
 /****************************************************************************
 **
 ** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
+** Authors   : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
 ** Project   : Monkey Studio IDE
 ** FileName  : pConsoleManager.cpp
 ** Date      : 2008-01-14T00:36:50
@@ -29,7 +29,7 @@
 /*!
 	\file pConsoleManager.cpp
 	\date 2008-01-14T00:36:50
-	\author Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
+	\author Filipe AZEVEDO aka Nox PasNox <pasnox@gmail.com>
 	\brief Implementation of pConsoleManager class
 */
 
@@ -128,7 +128,7 @@ void pConsoleManager::removeParser( pCommandParser* p )
 
 /*!
 	Remove parser to list of available parsers (which could be used for some commands)
-	\param p Name of parser
+	\param s Name of parser
 */
 void pConsoleManager::removeParser( const QString& s )
 { removeParser( mParsers.value( s ) ); }

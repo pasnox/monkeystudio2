@@ -30,7 +30,7 @@
 	\file Navigator.cpp
 	\date 2008-01-14T00:40:08
 	\author Andrei Kopats
-	\brief Header file for Navigator plugin
+	\brief Implementation of main class of MessageBox plugin
 */
 
 #include <QPushButton>

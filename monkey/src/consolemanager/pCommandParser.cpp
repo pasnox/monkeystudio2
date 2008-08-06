@@ -124,6 +124,8 @@ QString pCommandParser::name() const
 	Function is using for generating results of parsing
 	\param rex Already matched regular expression (searching of a pattern 
 		should be called before this function)
+	\param s String, which contains %d (where d is number) patterns.
+		Patterns will be replaced with according submatch of string
 	\return Resulting string
 */
 QString pCommandParser::replaceWithMatch(QRegExp& rex, QString s)

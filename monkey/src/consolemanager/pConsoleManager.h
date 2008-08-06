@@ -29,7 +29,7 @@
 /*!
 	\file pConsoleManager.h
 	\date 2008-01-14T00:36:50
-	\author Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
+	\author Filipe AZEVEDO aka Nox PasNox <pasnox@gmail.com>
 	\brief Header of pConsoleManager class
 */
 

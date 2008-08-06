@@ -26,6 +26,12 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file MessageBox.cpp
+	\date 2008-01-14T00:40:08
+	\author Andrei Kopats
+	\brief implementation of main class of MessageBox plugin
+*/
 #include "MessageBox.h"
 #include "ui/MessageBoxDocks.h"
 #include "ui/UIMessageBoxSettings.h"
@@ -37,6 +43,9 @@
 #include <QIcon>
 #include <QTabWidget>
 
+/*!
+	Constructor of class
+*/
 MessageBox::MessageBox()
 {
 	mMessageBoxDocks = 0;
@@ -50,12 +59,25 @@ MessageBox::MessageBox()
 	mPluginInfos.Enabled = false;
 }
 
+/*!
+	Destructor of class. Uninstalls plugin from IDE
+*/
 MessageBox::~MessageBox()
 {
 	if ( isEnabled() )
 		setEnabled( false );
 }
 
+/*!
+	Enable/disable plugin
+	
+	If plugin is enabled - it visible on main window and it's actions are in 
+	the main menu
+	\param b Flag. Enable = true, Disable = false
+	\return Status of process 
+	\retval true Successfully enabled
+	\retval false Some error ocurred
+*/
 bool MessageBox::setEnabled( bool b )
 {
 	if ( b && !isEnabled() )
@@ -97,6 +119,10 @@ bool MessageBox::setEnabled( bool b )
 	return true;
 }
 
+/*!
+	Get settings widget for configuring plugin
+	\return Pointer to widget
+*/
 QWidget* MessageBox::settingsWidget()
 { return new UIMessageBoxSettings( this ); }
 
