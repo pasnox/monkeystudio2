@@ -41,15 +41,6 @@
 
 class XUPItem;
 
-	QString mText;
-	QString mCommand;
-	QString mArguments;
-	QString mWorkingDirectory;
-	bool mSkipOnError;
-	QStringList mParsers;
-	bool mTryAllParsers;
-	QVariant mUserData;
-	XUPItem* mProject;
 /*!
 	Container for storing console command
 	
