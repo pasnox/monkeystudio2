@@ -15,5 +15,5 @@ isEqual( SYSTEM_QSCINTILLA, 1 ) {
 	# define where is the official qscintilla folder
 	QSCINTILLAVERSION	= QScintilla-gpl-2.2.1-snapshot-20080309
 	# include path
-	INCLUDEPATH	*= $${QSCINTILLA_PWD}/$$QSCINTILLAVERSION/Qt4
+	INCLUDEPATH	*= $${QSCINTILLA_PWD}/$$QSCINTILLAVERSION/Qt4 $${QSCINTILLA_PWD}/$$QSCINTILLAVERSION/Qt4/Qsci
 }
