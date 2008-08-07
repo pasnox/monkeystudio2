@@ -1,5 +1,5 @@
 include( ../../plugins.pri )
-DESTDIR	= $$MONKEY_PLUGINS_DIR/reseau
+DESTDIR	= $$MONKEY_PLUGINS_DIR/network
 TARGET	= Irc
 QT	*=  xml network gui
 

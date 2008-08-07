@@ -179,7 +179,7 @@ void IrcChannel::userNickChange(QString s)
 		if(it)
 		{
 			it->setText( hasPrivilege(it->text()) + l.at(2));
-			mTextEdit->appendHtml("<font color=\"#ff0000\">User " + l.at(1) + " is now known as " + l.at(2) + "</font>");
+			mTextEdit->appendHtml("<font color=\"#ff0000\">User " + l.at(1) + " is now know as " + l.at(2) + "</font>");
 		}
 	}
 }
@@ -312,7 +312,7 @@ QString IrcChannel::partMessage()
 
 /*!
 	\details Set the current topic for this channel
-	\note Use if you un-comment mTopic un constructor
+	\note Use if you un-comment mTopic in constructor
 	\param l is the string from Irc server
 */
 void IrcChannel::setTopic(QString l)

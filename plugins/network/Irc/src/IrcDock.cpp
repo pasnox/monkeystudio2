@@ -26,7 +26,7 @@
 
 #include "IrcDock.h"
 
-#define USER_TAG "|Mks"
+#define USER_TAG "|MkS"
 
 IrcDock::IrcDock( QWidget * w )
 	: pDockWidget( w )
