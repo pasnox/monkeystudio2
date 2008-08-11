@@ -26,6 +26,12 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file FileBrowser.h
+	\date 2008-01-14T00:40:08
+	\author Filipe AZEVEDO, Andrei KOPATS
+	\brief Header file for FileBrowser plugin
+*/
 #ifndef FILEBROWSER_H
 #define FILEBROWSER_H
 
@@ -35,6 +41,11 @@
 
 class pDockFileBrowser;
 
+/*!
+	Main class of FileBrowser plugin
+	
+	Plugin allows to see file system contents and open files
+*/
 class FileBrowser : public BasePlugin
 {
 	Q_OBJECT

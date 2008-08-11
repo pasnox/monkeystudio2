@@ -26,6 +26,12 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file FileBrowserSettings.cpp
+	\date 2008-01-14T00:40:08
+	\author Filipe AZEVEDO, Andrei KOPATS
+	\brief Settings widget of FileBrowser plugin
+*/
 #include "FileBrowserSettings.h"
 #include "FileBrowser.h"
 
@@ -33,6 +39,11 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 
+/*!
+	Creates settings widget
+	\param plugin Pointer to FileBrowser plugin
+	\param parent Parent widget of settings widget
+*/
 FileBrowserSettings::FileBrowserSettings( FileBrowser* plugin, QWidget* parent )
 	: QWidget( parent )
 {
@@ -59,5 +70,8 @@ FileBrowserSettings::FileBrowserSettings( FileBrowser* plugin, QWidget* parent )
 	connect( dbbApply->button( QDialogButtonBox::Apply ), SIGNAL( clicked() ), this, SLOT( applySettings() ) );
 }
 
+/*!
+	Handler of clicking Apply button. Applying settings
+*/
 void FileBrowserSettings::applySettings()
 { mPlugin->setFilters( mEditor->values(), true ); }

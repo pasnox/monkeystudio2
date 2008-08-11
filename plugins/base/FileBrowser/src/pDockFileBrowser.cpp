@@ -26,6 +26,12 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file pDockFileBrowser.cpp
+	\date 2008-01-14T00:40:08
+	\author Filipe AZEVEDO, Andrei KOPATS
+	\brief UI of FileBrowser plugin
+*/
 #include "pDockFileBrowser.h"
 
 #include <workspacemanager.h>
@@ -43,6 +49,10 @@
 #include <QTreeView>
 #include <QHeaderView>
 
+/*!
+	Create UI
+	\param w Pointer to parent widget
+*/
 pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	: pDockWidget( w )
 {
@@ -129,6 +139,11 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	connect( mTree, SIGNAL( doubleClicked( const QModelIndex& ) ), this, SLOT( tv_doubleClicked( const QModelIndex& ) ) );
 }
 
+/*!
+	Handler of click on Up button.
+
+	Moves root of tree up one level
+*/
 void pDockFileBrowser::tbUp_clicked()
 {
 	// cd up only if not the root index
@@ -136,6 +151,11 @@ void pDockFileBrowser::tbUp_clicked()
 		setCurrentPath( mDirsModel->filePath( mCombo->currentIndex().parent() ) );
 }
 
+/*!
+	Handler of click on Root button. 
+	
+	If there are selected dirrectory in the tree - it will be set as root
+*/
 void pDockFileBrowser::tbRoot_clicked()
 {
 	// seet root of model to path of selected item
@@ -148,6 +168,12 @@ void pDockFileBrowser::tbRoot_clicked()
 	setCurrentPath( mDirsModel->filePath( index ) );
 }
 
+/*!
+	Handler of click on item in the tree
+	
+	If there are file doubleclicked - it will be opened
+	\param idx Index of clicked tree
+*/
 void pDockFileBrowser::tv_doubleClicked( const QModelIndex& idx )
 {
 	// open file corresponding to index
@@ -156,12 +182,25 @@ void pDockFileBrowser::tv_doubleClicked( const QModelIndex& idx )
 		MonkeyCore::fileManager()->openFile( mDirsModel->filePath( index ) );
 }
 
+/*!
+	Handler of changing of current dirrectory in combo box. Opens dirrectory 
+	in the tree.
+	\param i Index of clicked item in the combo box
+*/
 void pDockFileBrowser::cb_currentChanged( const QModelIndex& i )
 { setCurrentPath( mDirsModel->filePath( i ) ); }
 
+/*!
+	Get current path (root of the tree)
+	\return Current path (root of the tree)
+*/
 QString pDockFileBrowser::currentPath() const
 { return mDirsModel->filePath( mCombo->currentIndex() ); }
 
+/*!
+	Set current path (root of the tree)
+	\param s New path
+*/
 void pDockFileBrowser::setCurrentPath( const QString& s )
 {
 	// get index
@@ -175,8 +214,17 @@ void pDockFileBrowser::setCurrentPath( const QString& s )
 	mLineEdit->setToolTip( mLineEdit->text() );
 }
 
+/*!
+	Get filter wildcards, which currently using for filtering out unneeded file
+	names from tree
+	\return List if wildcards for filtering
+*/
 QStringList pDockFileBrowser::filters() const
 { return mFilteredModel->filters(); }
 
+/*!
+	Set filter wildcards for filtering out unneeded files
+	\param filters List of wildcards
+*/
 void pDockFileBrowser::setFilters( const QStringList& filters )
 { mFilteredModel->setFilters( filters ); }

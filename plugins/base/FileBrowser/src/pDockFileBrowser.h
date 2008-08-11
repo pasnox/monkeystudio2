@@ -26,6 +26,13 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file pDockFileBrowser.h
+	\date 2008-01-14T00:40:08
+	\author Filipe AZEVEDO, Andrei KOPATS
+	\brief UI of FileBrowser plugin
+*/
+
 #ifndef PDOCKFILEBROWSER_H
 #define PDOCKFILEBROWSER_H
 
@@ -41,6 +48,13 @@ class QListView;
 class QFileSystemModel;
 class QTreeView;
 
+/*!
+	UI interface of FileBrowser plugin. 
+	
+	Dock with file system tree, Combo Box, allowing navigation in a file system
+	tree, buttons for moving root of tree to currently selected dirrectory and
+	up (relatively for current dirrectory)
+*/
 class pDockFileBrowser : public pDockWidget
 {
 	Q_OBJECT
