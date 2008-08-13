@@ -1,3 +1,5 @@
+//TODO make it standalone application
+
 #include "RegExpEditor.h"
 #include "UIRegExpEditor.h"
 

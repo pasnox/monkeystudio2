@@ -1,3 +1,5 @@
+// TODO make it standalone application
+
 #ifndef REGEXPEDITOR_H
 #define REGEXPEDITOR_H
 

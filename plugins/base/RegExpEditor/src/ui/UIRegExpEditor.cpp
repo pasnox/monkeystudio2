@@ -1,3 +1,38 @@
+/****************************************************************************
+**
+** 		Created using Monkey Studio v1.8.1.0
+** Authors   : Andrei Kopats aka hlamer <hlamer at tut by>, 
+               Filipe AZEVEDO aka PasNox <pasnox at gmail com>
+** Project   : Monkey Studio Base Plugins
+** FileName  : UIRegExpEditor.cpp
+** Date      : 2008-01-14T00:40:08
+** License   : GPL
+** Comment   : Regular expression editor
+** Home Page : http://www.monkeystudio.org
+**
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+**
+****************************************************************************/
+/*!
+	\file UIRegExpEditor.cpp
+	\date 2008-01-14T00:40:08
+	\author Andrei KOPATS, Filipe AZEVEDO
+	\brief Regular expression editor
+*/
 #include "UIRegExpEditor.h"
 
 #include <monkey.h>
@@ -5,6 +40,10 @@
 #include <QTime>
 #include <QDebug>
 
+/*!
+	Initialise UI
+	\param w Parent widget
+*/
 UIRegExpEditor::UIRegExpEditor( QWidget* w )
 	: QMainWindow( w, Qt::Tool )
 {
@@ -21,6 +60,13 @@ UIRegExpEditor::UIRegExpEditor( QWidget* w )
 	cbGreedy->setChecked( true );
 }
 
+/*!
+	Handler or click on Find button
+
+	Searchs for matching, if it's possible and displaying it on UI
+	If impossible to search (empty pattern for example) - explains on status 
+	bar, why impossible
+*/
 void UIRegExpEditor::on_tbFind_clicked()
 {
 	// get pattern and text
