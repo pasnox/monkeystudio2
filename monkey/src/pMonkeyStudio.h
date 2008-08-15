@@ -240,6 +240,8 @@ namespace pMonkeyStudio
 	Q_MONKEY_EXPORT QString getEol( QsciScintilla::EolMode mode = pMonkeyStudio::eolMode() );
 	Q_MONKEY_EXPORT void setEolVisibility( bool visible );
 	Q_MONKEY_EXPORT const bool eolVisibility();
+	Q_MONKEY_EXPORT void setAutoDetectEol( bool detect );
+	Q_MONKEY_EXPORT const bool autoDetectEol();
 	Q_MONKEY_EXPORT void setWhitespaceVisibility( QsciScintilla::WhitespaceVisibility visibility );
 	Q_MONKEY_EXPORT const QsciScintilla::WhitespaceVisibility whitespaceVisibility();
 	Q_MONKEY_EXPORT void setWrapMode( QsciScintilla::WrapMode mode );

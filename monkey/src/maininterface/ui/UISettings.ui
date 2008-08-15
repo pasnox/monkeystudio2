@@ -212,7 +212,7 @@
    <item row="1" column="1" >
     <widget class="QStackedWidget" name="swPages" >
      <property name="currentIndex" >
-      <number>0</number>
+      <number>10</number>
      </property>
      <widget class="QWidget" name="pGeneral" >
       <property name="geometry" >
@@ -220,7 +220,7 @@
         <x>0</x>
         <y>0</y>
         <width>481</width>
-        <height>699</height>
+        <height>705</height>
        </rect>
       </property>
       <layout class="QGridLayout" >
@@ -506,7 +506,7 @@
         <x>0</x>
         <y>0</y>
         <width>481</width>
-        <height>699</height>
+        <height>705</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" >
@@ -545,7 +545,7 @@
         <x>0</x>
         <y>0</y>
         <width>481</width>
-        <height>699</height>
+        <height>705</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" >
@@ -771,7 +771,7 @@
         <x>0</x>
         <y>0</y>
         <width>481</width>
-        <height>699</height>
+        <height>705</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" >
@@ -935,7 +935,7 @@
         <x>0</x>
         <y>0</y>
         <width>481</width>
-        <height>699</height>
+        <height>705</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" >
@@ -1169,7 +1169,7 @@
         <x>0</x>
         <y>0</y>
         <width>481</width>
-        <height>699</height>
+        <height>705</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" >
@@ -1430,7 +1430,7 @@
         <x>0</x>
         <y>0</y>
         <width>481</width>
-        <height>699</height>
+        <height>705</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" >
@@ -1595,7 +1595,7 @@
         <x>0</x>
         <y>0</y>
         <width>481</width>
-        <height>699</height>
+        <height>705</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" >
@@ -1743,7 +1743,7 @@
         <x>0</x>
         <y>0</y>
         <width>481</width>
-        <height>699</height>
+        <height>705</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" >
@@ -1896,7 +1896,7 @@
         <x>0</x>
         <y>0</y>
         <width>481</width>
-        <height>699</height>
+        <height>705</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" >
@@ -2192,7 +2192,7 @@
         <x>0</x>
         <y>0</y>
         <width>481</width>
-        <height>699</height>
+        <height>705</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" >
@@ -2205,7 +2205,7 @@
        <item>
         <widget class="QGroupBox" name="gbEolMode" >
          <property name="title" >
-          <string>Eol Mode</string>
+          <string>EOL Mode</string>
          </property>
          <layout class="QGridLayout" >
           <property name="margin" >
@@ -2214,7 +2214,7 @@
           <property name="spacing" >
            <number>3</number>
           </property>
-          <item row="1" column="0" colspan="3" >
+          <item row="2" column="0" colspan="3" >
            <widget class="QCheckBox" name="cbEolVisibility" >
             <property name="text" >
              <string>Eol Visibility</string>
@@ -2239,6 +2239,13 @@
            <widget class="QRadioButton" name="rbEolUnix" >
             <property name="text" >
              <string>Unix</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" >
+           <widget class="QCheckBox" name="cbAutoDetectEol" >
+            <property name="text" >
+             <string>Autodetect EOL</string>
             </property>
            </widget>
           </item>
@@ -2467,7 +2474,7 @@
         <x>0</x>
         <y>0</y>
         <width>481</width>
-        <height>699</height>
+        <height>705</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" >

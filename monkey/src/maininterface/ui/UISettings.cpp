@@ -317,6 +317,7 @@ void UISettings::loadSettings()
 	//  Special Characters
 	bgEolMode->button( eolMode() )->setChecked( true );
 	cbEolVisibility->setChecked( eolVisibility() );
+	cbAutoDetectEol->setChecked( autoDetectEol() );
 	gbWhitespaceVisibilityEnabled->setChecked( whitespaceVisibility() != QsciScintilla::WsInvisible );
 	if ( bgWhitespaceVisibility->button( whitespaceVisibility() ) )
 		bgWhitespaceVisibility->button( whitespaceVisibility() )->setChecked( true );
@@ -394,6 +395,7 @@ void UISettings::saveSettings()
 	setConvertTabsUponOpen( cbConvertTabsUponOpen->isChecked() );
 	setCreateBackupUponOpen( cbCreateBackupUponOpen->isChecked() ) ;
 	setAutoEolConversion( cbAutoEolConversion->isChecked() );
+	setAutoDetectEol( cbAutoDetectEol->isChecked() );
 	setDefaultEncoding( cbDefaultEncoding->currentText() );
 	setSelectionBackgroundColor( QColor( tbSelectionBackground->toolTip() ) );
 	setSelectionForegroundColor( QColor( tbSelectionForeground->toolTip() ) );
@@ -462,6 +464,7 @@ void UISettings::saveSettings()
 	//  Special Characters
 	setEolMode( (QsciScintilla::EolMode)bgEolMode->checkedId() );
 	setEolVisibility( cbEolVisibility->isChecked() );
+	setAutoDetectEol( cbAutoDetectEol->isChecked() );
 	setWhitespaceVisibility( QsciScintilla::WsInvisible );
 	if ( gbWhitespaceVisibilityEnabled->isChecked() )
 		setWhitespaceVisibility( (QsciScintilla::WhitespaceVisibility)bgWhitespaceVisibility->checkedId() );

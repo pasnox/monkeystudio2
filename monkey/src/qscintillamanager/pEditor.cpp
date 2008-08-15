@@ -157,6 +157,21 @@ void pEditor::autoDetectIndent ()
 	}
 }
 
+void pEditor::autoDetectEol ()
+{
+	QString currText = text();
+	if (text().indexOf("\r\n") != -1)
+	{
+		setEolMode (QsciScintilla::EolWindows);
+		return;
+	}
+	if (text().indexOf("\n") != -1)
+	{
+		setEolMode (QsciScintilla::EolUnix);
+		return;
+	}
+}
+
 int pEditor::lineNumbersMarginWidth() const
 {
 	return property( "LineNumbersMarginWidth" ).toInt();
@@ -292,6 +307,12 @@ bool pEditor::openFile( const QString& s )
 	if (pMonkeyStudio::autoDetectIndent())
 	{
 		autoDetectIndent ();
+	}
+	
+	//autodetect eol, if need
+	if (pMonkeyStudio::autoDetectEol())
+	{
+		autoDetectEol ();
 	}
 	
 	// make backup if needed

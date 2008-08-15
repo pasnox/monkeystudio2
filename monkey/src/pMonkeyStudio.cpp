@@ -1553,6 +1553,12 @@ void pMonkeyStudio::setEolVisibility( bool b )
 const bool pMonkeyStudio::eolVisibility()
 { return MonkeyCore::settings()->value( settingsPath() +"/EolVisibility", false ).toBool(); }
 
+void pMonkeyStudio::setAutoDetectEol( bool detect )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoDetectEol", detect ); }
+
+const bool pMonkeyStudio::autoDetectEol()
+{ return MonkeyCore::settings()->value( settingsPath() +"/AutoDetectEol", false ).toBool(); }
+
 void pMonkeyStudio::setWhitespaceVisibility( QsciScintilla::WhitespaceVisibility w )
 { MonkeyCore::settings()->setValue( settingsPath() +"/WhitespaceVisibility", w ); }
 

@@ -68,6 +68,9 @@ public:
 	// Set for self indentation according with actual in the file
 	void autoDetectIndent();
 
+	// Set for self EOL mode according with actual in the file
+	void autoDetectEol();
+
 protected:
 	void keyPressEvent( QKeyEvent* );
 
