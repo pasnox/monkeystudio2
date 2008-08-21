@@ -155,37 +155,37 @@
         <translation type="unfinished">Не магчыма загрузіць статычны плагін</translation>
     </message>
     <message>
-        <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="72"/>
+        <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="76"/>
         <source>Failed to load plugin ( %1 ): Error: %2</source>
         <translation type="unfinished">Не магчыма загрузіць плагін  ( %1 ): Памылка: %2</translation>
     </message>
     <message>
-        <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="104"/>
+        <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="108"/>
         <source>Found plugin: %1, type: %2</source>
         <translation type="unfinished">Знойдзены плугін: %1, тып: %2</translation>
     </message>
     <message>
-        <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="119"/>
+        <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="123"/>
         <source>User wantn&apos;t to intall plugin: %1</source>
         <translation type="unfinished">Згодна канфігурацыі, не інсталюецца плугін: %1</translation>
     </message>
     <message>
-        <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="124"/>
+        <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="128"/>
         <source>Successfully enabled plugin: %1</source>
         <translation type="unfinished">Паспяхова інсталяваны плагін: %1</translation>
     </message>
     <message>
-        <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="126"/>
+        <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="130"/>
         <source>Unsuccessfully enabled plugin: %1</source>
         <translation type="unfinished">Памылка пры інсталяцыі плагіна: %1</translation>
     </message>
     <message>
-        <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="129"/>
+        <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="133"/>
         <source>Already enabled plugin: %1</source>
         <translation type="unfinished">Ужо інсталяваны плагін: %1</translation>
     </message>
     <message>
-        <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="98"/>
+        <location filename="../monkey/src/pluginsmanager/PluginsManager.cpp" line="102"/>
         <source>Skipping duplicate plugin: %1, type: %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -261,7 +261,7 @@
         <translation type="obsolete">%1 v%2 Гатова !</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="64"/>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="65"/>
         <source>France</source>
         <translation type="unfinished">Францыя</translation>
     </message>
@@ -271,22 +271,22 @@
         <translation type="unfinished">Стваральнік архітэктуры, распрацоўшчык</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="56"/>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="60"/>
         <source>Germany</source>
         <translation type="unfinished">Германія</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="56"/>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="60"/>
         <source>Web Developer &amp; Web Designer</source>
         <translation type="unfinished">Вэб-распрацоўшчык і дзізайнер</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="57"/>
         <source>GDB Driver Integration</source>
-        <translation type="unfinished">Інтэграцыя GDB</translation>
+        <translation type="obsolete">Інтэграцыя GDB</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="58"/>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="61"/>
         <source>Splashscreen &amp; Icons Designer</source>
         <translation type="unfinished">Дзізайнер іконак і застаўкі</translation>
     </message>
@@ -301,82 +301,82 @@
         <translation type="unfinished">Многа кода, якім мы мы абмяняліся</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="60"/>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="56"/>
         <source>Belarus</source>
         <translation type="unfinished">Беларусь</translation>
     </message>
     <message>
         <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="60"/>
         <source>Principal Developer, Class Browser</source>
-        <translation type="unfinished">Распрацоўшчык архітэктуры, Навігатара, ..., гэтага перакладу</translation>
+        <translation type="obsolete">Распрацоўшчык архітэктуры, Навігатара, ..., гэтага перакладу</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="61"/>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="58"/>
         <source>Qt Pro Parser, Some Features/Help</source>
         <translation type="unfinished">Парсер Qt праектаў, дапамога</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="64"/>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="65"/>
         <source>No donations for now, you can use this &lt;a href=&quot;http://sourceforge.net/project/project_donations.php?group_id=163493&quot;&gt;link&lt;/a&gt; to make donation. Donations will help paying host/domain, and relatives things about the projects ( may need a mac book for better mac version :p ).</source>
         <translation type="unfinished">Яшчэ ніхто нічым не падзяліўся. Калі вы жадаеце, &lt;a href=&quot;http://sourceforge.net/project/project_donations.php?group_id=163493&quot;&gt;тут&lt;/a&gt; можаце дараваць нам грошай. Яны пойдуць, напрыклад, на аплату хосцінгу.</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="73"/>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="74"/>
         <source>Location</source>
         <translation type="unfinished">Месца знаходжання</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="67"/>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="68"/>
         <source>Trolltech&apos;s Qt homepage.</source>
         <translation type="unfinished">Афіцыйны сайт Trolltech.</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="68"/>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="69"/>
         <source>Team collaboration across the Internet.</source>
         <translation type="unfinished">Узаемадзеянне каманды цераз Інтэрнет.</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="69"/>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="70"/>
         <source>Our webissues server ( login: anonymous, password: anonymous ).</source>
         <translation type="unfinished">Наш webissues сервер ( login: anonymous, password: anonymous ).</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="70"/>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="71"/>
         <source>You can send bug/patch/ideas/what ever you want to our tracker.</source>
         <translation type="unfinished">Вы можаце дасылаць сваі ідэі, нашы багі, і яшчэ чаго пажадаеце на наш tracker.</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="71"/>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="72"/>
         <source>A forum is at your disposition.</source>
         <translation type="unfinished">Наш форум.</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="72"/>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="73"/>
         <source>Get the latest news using the rss feed.</source>
         <translation type="unfinished">Апошнія навіны вы можаце атрымоўваць з нашай rss-стужкі.</translation>
     </message>
     <message>
-        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="73"/>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="74"/>
         <source>Meet the Monkeys ( All team including testers ).</source>
         <translation type="unfinished">Малпы (Не блытаць з малпа-кодзерамі!!!) (Уся каманда, ўключаючы тесцераў).</translation>
     </message>
     <message>
-        <location filename="../monkey/src/pMonkeyStudio.cpp" line="220"/>
+        <location filename="../monkey/src/pMonkeyStudio.cpp" line="278"/>
         <source>%1 Files (*.%2)</source>
         <translation type="unfinished">%1 Файлы (*.%2)</translation>
     </message>
     <message>
-        <location filename="../monkey/src/pMonkeyStudio.cpp" line="223"/>
+        <location filename="../monkey/src/pMonkeyStudio.cpp" line="281"/>
         <source>All Image Files (%1)</source>
         <translation type="unfinished">Усе файлы выяў (%1)</translation>
     </message>
     <message>
-        <location filename="../monkey/src/pMonkeyStudio.cpp" line="225"/>
+        <location filename="../monkey/src/pMonkeyStudio.cpp" line="283"/>
         <source>Select image(s)</source>
         <translation type="unfinished">Выберыце выяву(ы)</translation>
     </message>
     <message>
-        <location filename="../monkey/src/pMonkeyStudio.cpp" line="254"/>
+        <location filename="../monkey/src/pMonkeyStudio.cpp" line="325"/>
         <source>Select file(s)</source>
         <translation type="unfinished">Выберыце файл(ы)</translation>
     </message>
@@ -386,12 +386,12 @@
         <translation type="obsolete">Выберыце файл</translation>
     </message>
     <message>
-        <location filename="../monkey/src/pMonkeyStudio.cpp" line="283"/>
+        <location filename="../monkey/src/pMonkeyStudio.cpp" line="368"/>
         <source>Choose a filename</source>
         <translation type="unfinished">Увядзіце імя файла</translation>
     </message>
     <message>
-        <location filename="../monkey/src/pMonkeyStudio.cpp" line="307"/>
+        <location filename="../monkey/src/pMonkeyStudio.cpp" line="398"/>
         <source>Select a folder</source>
         <translation type="unfinished">Выберыце тэчку</translation>
     </message>
@@ -438,7 +438,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/pMonkeyStudio.cpp" line="510"/>
+        <location filename="../monkey/src/pMonkeyStudio.cpp" line="635"/>
         <source>Can&apos;t load api file: &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -450,6 +450,21 @@
     <message>
         <location filename="../monkey/src/xupmanager/ui/UIXUPProjectEditor.cpp" line="37"/>
         <source>Can&apos;t delete file: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="56"/>
+        <source>Principal Developer, Class Browser, Beloruss translator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="57"/>
+        <source>GNU Debugger plugin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../monkey/src/maininterface/ui/UIAbout.cpp" line="62"/>
+        <source>French translator</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2865,22 +2880,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/queuedstatusbar/QueuedStatusBar.cpp" line="23"/>
+        <location filename="../monkey/src/queuedstatusbar/QueuedStatusBar.cpp" line="21"/>
         <source>Modification state of file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/queuedstatusbar/QueuedStatusBar.cpp" line="27"/>
+        <location filename="../monkey/src/queuedstatusbar/QueuedStatusBar.cpp" line="24"/>
         <source>EOL mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/queuedstatusbar/QueuedStatusBar.cpp" line="31"/>
+        <location filename="../monkey/src/queuedstatusbar/QueuedStatusBar.cpp" line="27"/>
         <source>Indentation mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/queuedstatusbar/QueuedStatusBar.cpp" line="132"/>
+        <location filename="../monkey/src/queuedstatusbar/QueuedStatusBar.cpp" line="131"/>
         <source>Line: %1 Column: %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4354,7 +4369,7 @@
 <context>
     <name>UIPluginsSettingsElement</name>
     <message>
-        <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettingsElement.cpp" line="51"/>
+        <location filename="../monkey/src/pluginsmanager/ui/UIPluginsSettingsElement.cpp" line="53"/>
         <source>Settings %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6412,12 +6427,12 @@ All children items will be removed too.</source>
 <context>
     <name>pActionManager</name>
     <message>
-        <location filename="../fresh/widgets/pActionManager.cpp" line="124"/>
+        <location filename="../fresh/widgets/pActionManager.cpp" line="157"/>
         <source>Key Sequence &apos;%1&apos; already assigned to the &apos;%2/%3&apos;</source>
         <translation type="unfinished">Камбінацыя клавіш &apos;%1&apos; ужо прызначана для &apos;%2/%3&apos;</translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pActionManager.cpp" line="100"/>
+        <location filename="../fresh/widgets/pActionManager.cpp" line="120"/>
         <source>Global</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6425,42 +6440,42 @@ All children items will be removed too.</source>
 <context>
     <name>pConsoleManager</name>
     <message>
-        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="48"/>
+        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="61"/>
         <source>Stop current command</source>
         <translation type="unfinished">Перапыніць бягучую каманду</translation>
     </message>
     <message>
-        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="48"/>
+        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="61"/>
         <source>Console Manager</source>
         <translation type="unfinished">Мэнэджэр кансолі</translation>
     </message>
     <message>
-        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="61"/>
+        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="74"/>
         <source>Stop the currently running command</source>
         <translation type="unfinished">Перапыніць бягучую каманду</translation>
     </message>
     <message>
-        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="249"/>
+        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="345"/>
         <source>User Raw Command</source>
         <translation type="unfinished">Кансольная каманда</translation>
     </message>
     <message>
-        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="262"/>
+        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="358"/>
         <source>sendRawData...</source>
         <translation type="unfinished">Даслаць дадзеныя...</translation>
     </message>
     <message>
-        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="262"/>
+        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="358"/>
         <source>Can&apos;t send raw data to console</source>
         <translation type="unfinished">Немагчыма даслаць дадзеныя ў кансоль</translation>
     </message>
     <message>
-        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="46"/>
+        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="59"/>
         <source>Pause</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="48"/>
+        <location filename="../monkey/src/consolemanager/pConsoleManager.cpp" line="61"/>
         <source>Alt+End</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6468,7 +6483,7 @@ All children items will be removed too.</source>
 <context>
     <name>pDockToolBar</name>
     <message>
-        <location filename="../fresh/widgets/pDockToolBar.cpp" line="386"/>
+        <location filename="../fresh/widgets/pDockToolBar.cpp" line="470"/>
         <source>%1 - Exclusive</source>
         <translation type="unfinished">%1 - Арыгінальны</translation>
     </message>
@@ -6476,22 +6491,22 @@ All children items will be removed too.</source>
 <context>
     <name>pDockToolBarManager</name>
     <message>
-        <location filename="../fresh/widgets/pDockToolBarManager.cpp" line="64"/>
+        <location filename="../fresh/widgets/pDockToolBarManager.cpp" line="72"/>
         <source>Top DockToolBar</source>
         <translation type="unfinished">Верхняя панэль</translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pDockToolBarManager.cpp" line="69"/>
+        <location filename="../fresh/widgets/pDockToolBarManager.cpp" line="77"/>
         <source>Bottom DockToolBar</source>
         <translation type="unfinished">Ніжняя панэль</translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pDockToolBarManager.cpp" line="74"/>
+        <location filename="../fresh/widgets/pDockToolBarManager.cpp" line="82"/>
         <source>Left DockToolBar</source>
         <translation type="unfinished">Лэвая панэль</translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pDockToolBarManager.cpp" line="79"/>
+        <location filename="../fresh/widgets/pDockToolBarManager.cpp" line="87"/>
         <source>Right DockToolBar</source>
         <translation type="unfinished">Правая панэль</translation>
     </message>
@@ -6549,7 +6564,7 @@ All children items will be removed too.</source>
 <context>
     <name>pExtendedWorkspace</name>
     <message>
-        <location filename="../fresh/widgets/pExtendedWorkspace.cpp" line="57"/>
+        <location filename="../fresh/widgets/pExtendedWorkspace.cpp" line="51"/>
         <source>Files List</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6557,12 +6572,12 @@ All children items will be removed too.</source>
 <context>
     <name>pFileListEditor</name>
     <message>
-        <location filename="../fresh/widgets/pFileListEditor.cpp" line="43"/>
+        <location filename="../fresh/widgets/pFileListEditor.cpp" line="39"/>
         <source>Choose file(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pFileListEditor.cpp" line="62"/>
+        <location filename="../fresh/widgets/pFileListEditor.cpp" line="58"/>
         <source>Choose file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6570,7 +6585,7 @@ All children items will be removed too.</source>
 <context>
     <name>pMenuBar</name>
     <message>
-        <location filename="../fresh/widgets/pMenuBar.cpp" line="33"/>
+        <location filename="../fresh/widgets/pMenuBar.cpp" line="37"/>
         <source>Main Menu</source>
         <translation type="unfinished">Галоўнае меню</translation>
     </message>
@@ -6578,7 +6593,7 @@ All children items will be removed too.</source>
 <context>
     <name>pPathListEditor</name>
     <message>
-        <location filename="../fresh/widgets/pPathListEditor.cpp" line="59"/>
+        <location filename="../fresh/widgets/pPathListEditor.cpp" line="54"/>
         <source>Choose directory</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6817,7 +6832,7 @@ All children items will be removed too.</source>
 <context>
     <name>pShortcutsEditor</name>
     <message>
-        <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="45"/>
+        <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="38"/>
         <source>Shortcuts Editor</source>
         <translation type="unfinished">Рэдактар цэтлікаў</translation>
     </message>
@@ -6842,27 +6857,27 @@ All children items will be removed too.</source>
         <translation type="obsolete">Закрыць</translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="186"/>
+        <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="179"/>
         <source>Error</source>
         <translation type="unfinished">Памылка</translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="54"/>
+        <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="47"/>
         <source>Restore default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="58"/>
+        <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="51"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="66"/>
+        <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="59"/>
         <source>Set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="70"/>
+        <location filename="../fresh/widgets/pShortcutsEditor.cpp" line="63"/>
         <source>Close</source>
         <translation type="unfinished">Закрыць</translation>
     </message>
@@ -6870,37 +6885,37 @@ All children items will be removed too.</source>
 <context>
     <name>pStringListEditor</name>
     <message>
-        <location filename="../fresh/widgets/pStringListEditor.cpp" line="57"/>
+        <location filename="../fresh/widgets/pStringListEditor.cpp" line="52"/>
         <source>Add Item</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pStringListEditor.cpp" line="58"/>
+        <location filename="../fresh/widgets/pStringListEditor.cpp" line="53"/>
         <source>Remove Item</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pStringListEditor.cpp" line="59"/>
+        <location filename="../fresh/widgets/pStringListEditor.cpp" line="54"/>
         <source>Clear Items</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pStringListEditor.cpp" line="60"/>
+        <location filename="../fresh/widgets/pStringListEditor.cpp" line="55"/>
         <source>Move Item Up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pStringListEditor.cpp" line="61"/>
+        <location filename="../fresh/widgets/pStringListEditor.cpp" line="56"/>
         <source>Move Item Down</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pStringListEditor.cpp" line="62"/>
+        <location filename="../fresh/widgets/pStringListEditor.cpp" line="57"/>
         <source>Edit Item</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pStringListEditor.cpp" line="105"/>
+        <location filename="../fresh/widgets/pStringListEditor.cpp" line="107"/>
         <source>New item</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6908,22 +6923,22 @@ All children items will be removed too.</source>
 <context>
     <name>pTabBar</name>
     <message>
-        <location filename="../fresh/widgets/pTabBar.cpp" line="55"/>
+        <location filename="../fresh/widgets/pTabBar.cpp" line="47"/>
         <source>Tabbed Workspace</source>
         <translation type="unfinished">Працоўная прастора з укладкамі</translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pTabBar.cpp" line="47"/>
+        <location filename="../fresh/widgets/pTabBar.cpp" line="39"/>
         <source>Tabs Have &amp;Close Button</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pTabBar.cpp" line="51"/>
+        <location filename="../fresh/widgets/pTabBar.cpp" line="43"/>
         <source>Tabs Have &amp;Shortcut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pTabBar.cpp" line="55"/>
+        <location filename="../fresh/widgets/pTabBar.cpp" line="47"/>
         <source>Tabs Are &amp;Elided</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6946,12 +6961,12 @@ All children items will be removed too.</source>
         <translation type="obsolete">Рэжым &quot;ellided&quot; для Ўкладак</translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pTabbedWorkspace.cpp" line="315"/>
+        <location filename="../fresh/widgets/pTabbedWorkspace.cpp" line="304"/>
         <source>&amp;Close</source>
         <translation type="unfinished">Закрыць</translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pTabbedWorkspace.cpp" line="316"/>
+        <location filename="../fresh/widgets/pTabbedWorkspace.cpp" line="305"/>
         <source>Close &amp;All</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6959,42 +6974,42 @@ All children items will be removed too.</source>
 <context>
     <name>pTabbedWorkspaceRightCorner</name>
     <message>
-        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="58"/>
+        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="47"/>
         <source>Tabbed Workspace/Shape Mode</source>
         <translation type="unfinished">Форма ўкладак</translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="70"/>
+        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="59"/>
         <source>Tabbed Workspace/Tab Mode</source>
         <translation type="unfinished">Рэжым укладак</translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="82"/>
+        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="71"/>
         <source>Tabbed Workspace/Document Mode</source>
         <translation type="unfinished">Рэжым дакументаў</translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="87"/>
+        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="76"/>
         <source>&amp;Close All</source>
         <translation type="unfinished">Закрыць усе</translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="87"/>
+        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="76"/>
         <source>Tabbed Workspace</source>
         <translation type="unfinished">Працоўная прастора</translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="90"/>
+        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="79"/>
         <source>Tab Shape</source>
         <translation type="unfinished">Форма укладак</translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="91"/>
+        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="80"/>
         <source>Tab Mode</source>
         <translation type="unfinished">Рэжым укладак</translation>
     </message>
     <message>
-        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="92"/>
+        <location filename="../fresh/widgets/pTabbedWorkspaceRightCorner.cpp" line="81"/>
         <source>Document Mode</source>
         <translation type="unfinished">Рэжым дакументаў</translation>
     </message>
@@ -7002,47 +7017,47 @@ All children items will be removed too.</source>
 <context>
     <name>pTemplatesManager</name>
     <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="56"/>
+        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="80"/>
         <source>Other</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="57"/>
+        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="81"/>
         <source>Wrong template type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="58"/>
+        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="82"/>
         <source>No desctiption</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="179"/>
+        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="217"/>
         <source>Error...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="93"/>
+        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="131"/>
         <source>Destination not set.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="163"/>
+        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="201"/>
         <source>Can&apos;t create destination &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="140"/>
+        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="178"/>
         <source>Empty filename detected for file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="171"/>
+        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="209"/>
         <source>Can&apos;t copy &apos;%1%2&apos; to &apos;%3&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="179"/>
+        <location filename="../monkey/src/templatesmanager/pTemplatesManager.cpp" line="217"/>
         <source>Can&apos;t edit file %1: %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7082,17 +7097,17 @@ Use Console Manager: %4
 <context>
     <name>pWorkspace</name>
     <message>
-        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="617"/>
+        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="620"/>
         <source>Choose the file(s) to open</source>
         <translation type="unfinished">Абярыце файл(ы) для адкрыцця</translation>
     </message>
     <message>
-        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="691"/>
+        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="694"/>
         <source>Choose a filename to backup your file</source>
         <translation type="unfinished">Увядзіце імя копіі файла</translation>
     </message>
     <message>
-        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="365"/>
+        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="368"/>
         <source>Cancel</source>
         <translation type="unfinished">Адмена</translation>
     </message>
@@ -7102,52 +7117,52 @@ Use Console Manager: %4
         <translation type="obsolete">Файлы</translation>
     </message>
     <message>
-        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="100"/>
+        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="101"/>
         <source>Set focus to editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="148"/>
+        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="149"/>
         <source>New File Name...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="162"/>
+        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="163"/>
         <source>Can&apos;t create new file &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="362"/>
+        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="365"/>
         <source>Open As &amp;File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="363"/>
+        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="366"/>
         <source>Open As &amp;Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="486"/>
+        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="489"/>
         <source>Can&apos;t find your executable file, do you want to choose the file ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="520"/>
+        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="523"/>
         <source>File externally modified: &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="534"/>
+        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="537"/>
         <source>Reloaded externally modified file: &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="546"/>
+        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="549"/>
         <source>The file &apos;%1&apos; has been modified externally, what you do ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="552"/>
+        <location filename="../monkey/src/workspace/pWorkspace.cpp" line="555"/>
         <source>Reload</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7593,11 +7608,6 @@ Use Console Manager: %4
         <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="303"/>
         <source>Next</source>
         <translation type="unfinished">Наступны крок</translation>
-    </message>
-    <message>
-        <location filename="../monkey/src/qscintillamanager/qSciShortcutsManager.cpp" line="304"/>
-        <source></source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
