@@ -164,4 +164,5 @@ include( src/xupmanager/xupmanager.pri )
 
 TRANSLATIONS	*= ../translations/monkey_french.ts \
 	../translations/monkey_belarusian.ts \
-	../translations/monkey_italian.ts
+	../translations/monkey_italian.ts \
+	../translations/monkey_arabic.ts
