@@ -1146,23 +1146,40 @@ const bool pMonkeyStudio::tabsHaveShortcut()
 
 /*!
 	\details Set tabs text are elided
-	\param elided True for elided text, else false
+	\param elided true for elided text, else false
 */
 void pMonkeyStudio::setTabsElided( bool have )
 { MonkeyCore::settings()->setValue( settingsPath() +"/TabsElided", have ); }
-//f
+
+/*!
+	\details Return true if tabs text is elided, else false
+*/
 const bool pMonkeyStudio::tabsElided()
 { return MonkeyCore::settings()->value( settingsPath() +"/TabsElided", false ).toBool(); }
 
-void pMonkeyStudio::setTabsTextColor( const QColor& c )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/TabsTextColor", c ); }
+/*!
+	\details Set tabs text color
+	\param color The tabs text color
+*/
+void pMonkeyStudio::setTabsTextColor( const QColor& color )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/TabsTextColor", color ); }
 
+/*!
+	\details Return the tabs text color
+*/
 const QColor pMonkeyStudio::tabsTextColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/TabsTextColor", QColor( Qt::black ) ).value<QColor>(); }
 
-void pMonkeyStudio::setCurrentTabTextColor( const QColor& c )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/CurrentTabTextColor", c ); }
+/*!
+	\details Set the current tab text color
+	\param color The current tab text color
+*/
+void pMonkeyStudio::setCurrentTabTextColor( const QColor& color )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/CurrentTabTextColor", color ); }
 
+/*!
+	\details Return the current tab text color
+*/
 const QColor pMonkeyStudio::currentTabTextColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/CurrentTabTextColor", QColor( Qt::blue ) ).value<QColor>(); }
 
@@ -1174,225 +1191,484 @@ const pTabbedWorkspace::TabMode pMonkeyStudio::tabMode()
 { return (pTabbedWorkspace::TabMode)MonkeyCore::settings()->value( settingsPath() +"/TabMode", pTabbedWorkspace::tmMDI ).toInt(); }
 */
 
-void pMonkeyStudio::setDocMode( pExtendedWorkspace::DocumentMode m )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/DocMode", m ); }
+/*!
+	\details Set the workspace doc mode
+	\param mode The mode to apply
+*/
+void pMonkeyStudio::setDocMode( pExtendedWorkspace::DocumentMode mode )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/DocMode", mode ); }
 
+/*!
+	\details Return the mod used by the workspace
+*/
 const pExtendedWorkspace::DocumentMode pMonkeyStudio::docMode()
 { return (pExtendedWorkspace::DocumentMode)MonkeyCore::settings()->value( settingsPath() +"/DocMode", pExtendedWorkspace::dmSDI ).toInt(); }
 
-void pMonkeyStudio::setExternalChanges( pMonkeyStudio::ExternalChangesMode e )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/ExternalChanges", e ); }
+/*!
+	\details Set the external changes react mode
+	\param mode The mode to apply
+*/
+void pMonkeyStudio::setExternalChanges( pMonkeyStudio::ExternalChangesMode mode )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/ExternalChanges", mode ); }
 
+/*!
+	\details Return the external changes react mode
+*/
 const pMonkeyStudio::ExternalChangesMode pMonkeyStudio::externalchanges()
 { return (pMonkeyStudio::ExternalChangesMode)MonkeyCore::settings()->value( settingsPath() +"/ExternalChanges", pMonkeyStudio::ecmAlert ).toInt(); }
 
-void pMonkeyStudio::setSaveSessionOnClose( bool b )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/SaveSessionOnClose", b ); }
+/*!
+	\details Set if session must be save on close
+	\param save If true, session is saved, else not
+*/
+void pMonkeyStudio::setSaveSessionOnClose( bool save )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/SaveSessionOnClose", save ); }
 
+/*!
+	\details Return true if session is saved at close, else false
+*/
 const bool pMonkeyStudio::saveSessionOnClose()
 { return MonkeyCore::settings()->value( settingsPath() +"/SaveSessionOnClose", true ).toBool(); }
 
-void pMonkeyStudio::setRestoreSessionOnStartup( bool b )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/RestoreSessionOnStartup", b ); }
+/*!
+	\details Set if session is restored on startup
+	\param restore If true, session will be restored on startup, else not
+*/
+void pMonkeyStudio::setRestoreSessionOnStartup( bool restore )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/RestoreSessionOnStartup", restore ); }
 
+/*!
+	\details Return true if session will be restored on startup, else false
+*/
 const bool pMonkeyStudio::restoreSessionOnStartup()
 { return MonkeyCore::settings()->value( settingsPath() +"/RestoreSessionOnStartup", true ).toBool(); }
 
-void pMonkeyStudio::setAutoSyntaxCheck( bool b )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoSyntaxCheck", b ); }
+/*!
+	\details Set if auto syntax check is performed
+	\param activate If true, automatic syntax check will be performed, else not
+*/
+void pMonkeyStudio::setAutoSyntaxCheck( bool activate )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoSyntaxCheck", activate ); }
 
+/*!
+	\details Return true if auto syntax check is performed, else false
+*/
 const bool pMonkeyStudio::autoSyntaxCheck()
 { return MonkeyCore::settings()->value( settingsPath() +"/AutoSyntaxCheck", false ).toBool(); }
 
-void pMonkeyStudio::setConvertTabsUponOpen( bool b )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/ConvertTabsUponOpen", b ); }
+/*!
+	\details Set is tabs are converted upon open
+	\param convert If true tabs will be converted, else not
+*/
+void pMonkeyStudio::setConvertTabsUponOpen( bool convert )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/ConvertTabsUponOpen", convert ); }
 
+/*!
+	\details Return true if tabs are converted upon open, else false
+*/
 const bool pMonkeyStudio::convertTabsUponOpen()
 { return MonkeyCore::settings()->value( settingsPath() +"/ConvertTabsUponOpen", false ).toBool(); }
 
-void pMonkeyStudio::setCreateBackupUponOpen( bool b )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/CreateBackupUponOpen", b ); }
+/*!
+	\details Set if file are backup upon open
+	\param backup If true, file is backup upon open
+*/
+void pMonkeyStudio::setCreateBackupUponOpen( bool backup )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/CreateBackupUponOpen", backup ); }
 
+/*!
+	\details Return true if file is backup upon open, else false
+*/
 const bool pMonkeyStudio::createBackupUponOpen()
 { return MonkeyCore::settings()->value( settingsPath() +"/CreateBackupUponOpen", false ).toBool(); }
 
-void pMonkeyStudio::setAutoEolConversion( bool b )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoEolConversion", b ); }
+/*!
+	\details Set if eol are convert upon open
+	\param convert If true, eol are convert, else not
+*/
+void pMonkeyStudio::setAutoEolConversion( bool convert )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoEolConversion", convert ); }
 
+/*!
+	\details Return true if eol are convert, else false
+*/
 const bool pMonkeyStudio::autoEolConversion()
 { return MonkeyCore::settings()->value( settingsPath() +"/AutoEolConversion", true ).toBool(); }
 
-void pMonkeyStudio::setDefaultEncoding( const QString& s )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/DefaultEncoding", s ); }
+/*!
+	\details Set the default used encoding for opening/saving files
+	\param codec The codec to use
+*/
+void pMonkeyStudio::setDefaultEncoding( const QString& codec )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/DefaultEncoding", codec ); }
 
+/*!
+	\details Return the default used encoding for opening/saving files. Default UTF-8
+*/
 const QString pMonkeyStudio::defaultEncoding()
 { return MonkeyCore::settings()->value( settingsPath() +"/DefaultEncoding", "UTF-8" ).toString(); }
 
-void pMonkeyStudio::setSelectionBackgroundColor( const QColor& c )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/SelectionBackgroundColor", c ); }
+/*!
+	\details Set the selection background color
+	\param color The color to apply
+*/
+void pMonkeyStudio::setSelectionBackgroundColor( const QColor& color )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/SelectionBackgroundColor", color ); }
 
+/*!
+	\details Return the selection background color
+*/
 const QColor pMonkeyStudio::selectionBackgroundColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/SelectionBackgroundColor", QColor( "#bdff9b" ) ).value<QColor>(); }
 
-void pMonkeyStudio::setSelectionForegroundColor( const QColor& c )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/SelectionForegroundColor", c ); }
+/*!
+	\details Set the selection foreground color
+	\param color The color to apply
+*/
+void pMonkeyStudio::setSelectionForegroundColor( const QColor& color )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/SelectionForegroundColor", color ); }
 
+/*!
+	\details Return the selection foreground color
+*/
 const QColor pMonkeyStudio::selectionForegroundColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/SelectionForegroundColor", QColor( "#000000" ) ).value<QColor>(); }
 
-void pMonkeyStudio::setDefaultDocumentColours( bool b )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/DefaultDocumentColours", b ); }
+/*!
+	\details Set if editors got default colors or no
+	\param useDefault If true, use default pen and paper for editors, else use custom one
+*/
+void pMonkeyStudio::setDefaultDocumentColours( bool useDefault )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/DefaultDocumentColours", useDefault ); }
 
+/*!
+	\details Return if editors use default colros or custom one
+*/
 const bool pMonkeyStudio::defaultDocumentColours()
 { return MonkeyCore::settings()->value( settingsPath() +"/DefaultDocumentColours", false ).toBool(); }
 
-void pMonkeyStudio::setDefaultDocumentPen( const QColor& c )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/DefaultDocumentPen", c ); }
+/*!
+	\details Set custom editor pen color
+	\param color The color to apply
+*/
+void pMonkeyStudio::setDefaultDocumentPen( const QColor& color )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/DefaultDocumentPen", color ); }
 
+/*!
+	\details Return the custom editor pen color
+*/
 const QColor pMonkeyStudio::defaultDocumentPen()
 { return MonkeyCore::settings()->value( settingsPath() +"/DefaultDocumentPen", QColor( Qt::black ) ).value<QColor>(); }
 
-void pMonkeyStudio::setDefaultDocumentPaper( const QColor& c )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/DefaultDocumentPaper", c ); }
+/*!
+	\details Set the custom editor paper color
+	\param color The color to apply
+*/
+void pMonkeyStudio::setDefaultDocumentPaper( const QColor& color )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/DefaultDocumentPaper", color ); }
 
+/*!
+	\details Return the custom editor paper color
+*/
 const QColor pMonkeyStudio::defaultDocumentPaper()
 { return MonkeyCore::settings()->value( settingsPath() +"/DefaultDocumentPaper", QColor( Qt::white ) ).value<QColor>(); }
 
-void pMonkeyStudio::setAutoCompletionCaseSensitivity( bool b )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoCompletionCaseSensitivity", b ); }
+/*!
+	\details Set auto completion is case sensitive or not
+	\param sensitive If true auto completion is case sensitive, else not
+*/
+void pMonkeyStudio::setAutoCompletionCaseSensitivity( bool sensitive )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoCompletionCaseSensitivity", sensitive ); }
 
+/*!
+	\details Return true if auto completion is case sensitive, else false
+*/
 const bool pMonkeyStudio::autoCompletionCaseSensitivity()
 { return MonkeyCore::settings()->value( settingsPath() +"/AutoCompletionCaseSensitivity", true ).toBool(); }
 
-void pMonkeyStudio::setAutoCompletionReplaceWord( bool b )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoCompletionReplaceWord", b ); }
+/*!
+	\details Set if applying an autocompletion replace current word, or append to it
+	\param replace If true repalce word, else append to it
+*/
+void pMonkeyStudio::setAutoCompletionReplaceWord( bool replace )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoCompletionReplaceWord", replace ); }
 
+/*!
+	\details Return true if auto completion repalce word else false
+*/
 const bool pMonkeyStudio::autoCompletionReplaceWord()
 { return MonkeyCore::settings()->value( settingsPath() +"/AutoCompletionReplaceWord", true ).toBool(); }
 
-void pMonkeyStudio::setAutoCompletionShowSingle( bool b )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoCompletionShowSingle", b ); }
+/*!
+	\details Set if auto completion list is shown for single match
+	\param show If true, showw single match in list popup, else auto complate
+*/
+void pMonkeyStudio::setAutoCompletionShowSingle( bool show )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoCompletionShowSingle", show ); }
 
+/*!
+	\details Return true if single match is shown, else false
+*/
 const bool pMonkeyStudio::autoCompletionShowSingle()
 { return MonkeyCore::settings()->value( settingsPath() +"/AutoCompletionShowSingle", false ).toBool(); }
 
-void pMonkeyStudio::setAutoCompletionSource( QsciScintilla::AutoCompletionSource a )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoCompletionSource", a ); }
+/*!
+	\details Set autocompletion source mode
+	\param mode The mode to use
+*/
+void pMonkeyStudio::setAutoCompletionSource( QsciScintilla::AutoCompletionSource mode )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoCompletionSource", mode ); }
 
+/*!
+	\details Return the autocompletion mode used
+*/
 const QsciScintilla::AutoCompletionSource pMonkeyStudio::autoCompletionSource()
 { return (QsciScintilla::AutoCompletionSource)MonkeyCore::settings()->value( settingsPath() +"/AutoCompletionSource", (int)QsciScintilla::AcsAll ).toInt(); }
 
-void pMonkeyStudio::setAutoCompletionThreshold( int i )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoCompletionThreshold", i ); }
+/*!
+	\details Set the autocompletion threshold ( ie: needed typed letters to invoke autocompletion list )
+	\param count The number of letters to type
+*/
+void pMonkeyStudio::setAutoCompletionThreshold( int count )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoCompletionThreshold", count ); }
 
+/*!
+	\details Return the autocompletion threshold count
+*/
 const int pMonkeyStudio::autoCompletionThreshold()
 { return MonkeyCore::settings()->value( settingsPath() +"/AutoCompletionThreshold", 3 ).toInt(); }
 
-void pMonkeyStudio::setCallTipsBackgroundColor( const QColor& c )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/CallTipsBackgroundColor", c ); }
+/*!
+	\details Set the calltips background color
+	\param color The color to apply
+*/
+void pMonkeyStudio::setCallTipsBackgroundColor( const QColor& color )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/CallTipsBackgroundColor", color ); }
 
+/*!
+	\details Return the calltips baclground color
+*/
 const QColor pMonkeyStudio::callTipsBackgroundColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/CallTipsBackgroundColor", QColor( "#ffff9b" ) ).value<QColor>(); }
 
-void pMonkeyStudio::setCallTipsForegroundColor( const QColor& c )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/CallTipsForegroundColor", c ); }
+/*!
+	\details Set calltips foreground color
+	\param color The color to apply
+*/
+void pMonkeyStudio::setCallTipsForegroundColor( const QColor& color )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/CallTipsForegroundColor", color ); }
 
+/*!
+	\details Return the calltips foreground color
+*/
 const QColor pMonkeyStudio::callTipsForegroundColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/CallTipsForegroundColor", QColor( "#000000" ) ).value<QColor>(); }
 
-void pMonkeyStudio::setCallTipsHighlightColor( const QColor& c )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/CallTipsHighlightColor", c ); }
+/*!
+	\details Set the calltips highlight color
+	\param color The color to apply
+*/
+void pMonkeyStudio::setCallTipsHighlightColor( const QColor& color )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/CallTipsHighlightColor", color ); }
 
+/*!
+	\details Return the calltips highlight color
+*/
 const QColor pMonkeyStudio::callTipsHighlightColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/CallTipsHighlightColor", QColor( "#ff0000" ) ).value<QColor>(); }
 
-void pMonkeyStudio::setCallTipsStyle( QsciScintilla::CallTipsStyle s )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/CallTipsStyle", s ); }
+/*!
+	\details Set the calltips style
+	\param style The style to apply
+*/
+void pMonkeyStudio::setCallTipsStyle( QsciScintilla::CallTipsStyle style )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/CallTipsStyle", style ); }
 
+/*!
+	\details Return the calltips style
+*/
 const QsciScintilla::CallTipsStyle pMonkeyStudio::callTipsStyle()
 { return (QsciScintilla::CallTipsStyle)MonkeyCore::settings()->value( settingsPath() +"/CallTipsStyle", (int)QsciScintilla::CallTipsContext ).toInt(); }
 
-void pMonkeyStudio::setCallTipsVisible( int i )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/CallTipsVisible", i ); }
+/*!
+	\details Set the calltips visible count
+	\param count The number of calltips to show at one time
+*/
+void pMonkeyStudio::setCallTipsVisible( int count )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/CallTipsVisible", count ); }
 
+/*!
+	\details Return the calltips visible number
+*/
 const int pMonkeyStudio::callTipsVisible()
 { return MonkeyCore::settings()->value( settingsPath() +"/CallTipsVisible", -1 ).toInt(); }
 
-void pMonkeyStudio::setAutoIndent( bool b )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoIndent", b ); }
+/*!
+	\details Set auto indentation
+	\param autoindent If true auto indentation is performed, else no
+*/
+void pMonkeyStudio::setAutoIndent( bool autoindent )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoIndent", autoindent ); }
 
+/*!
+	\details Return true if auto indentation is active, else false
+*/
 const bool pMonkeyStudio::autoIndent()
 { return MonkeyCore::settings()->value( settingsPath() +"/AutoIndent", true ).toBool(); }
 
-void pMonkeyStudio::setBackspaceUnindents( bool b )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/BackspaceUnindents", b ); }
+/*!
+	\details Set if backspace unindents
+	\param unindents If true, backspace key do unindents, else no
+*/
+void pMonkeyStudio::setBackspaceUnindents( bool unindents )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/BackspaceUnindents", unindents ); }
 
+/*!
+	\details Return true if backspace key unindents else false
+*/
 const bool pMonkeyStudio::backspaceUnindents()
 { return MonkeyCore::settings()->value( settingsPath() +"/BackspaceUnindents", true ).toBool(); }
 
-void pMonkeyStudio::setIndentationGuides( bool b )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/IndentationGuides", b ); }
+/*!
+	\details Set if indentation guides are visible
+	\param visible If true guides are visible
+*/
+void pMonkeyStudio::setIndentationGuides( bool visible )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/IndentationGuides", visible ); }
 
+/*!
+	\details Return true if indentation guides are shown, else false
+*/
 const bool pMonkeyStudio::indentationGuides()
 { return MonkeyCore::settings()->value( settingsPath() +"/IndentationGuides", true ).toBool(); }
 
-void pMonkeyStudio::setIndentationsUseTabs( bool b )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/IndentationsUseTabs", b ); }
+/*!
+	\details Set if indentation use tabs
+	\param tabs If true, tabs are used, else spaces
+*/
+void pMonkeyStudio::setIndentationsUseTabs( bool tabs )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/IndentationsUseTabs", tabs ); }
 
+/*!
+	\details Return true if indentation use tabs, else false
+*/
 const bool pMonkeyStudio::indentationsUseTabs()
 { return MonkeyCore::settings()->value( settingsPath() +"/IndentationsUseTabs", true ).toBool(); }
 
-void pMonkeyStudio::setAutoDetectIndent( bool b )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoDetectIndent", b ); }
+/*!
+	\details Set if indent is auto detected
+	\param detect If true, inden is auto detected, else no
+*/
+void pMonkeyStudio::setAutoDetectIndent( bool detect )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/AutoDetectIndent", detect ); }
 
+/*!
+	\details Return true if indent is auto detected, else false
+*/
 const bool pMonkeyStudio::autoDetectIndent()
 { return MonkeyCore::settings()->value( settingsPath() +"/AutoDetectIndent", false ).toBool(); }
 
-void pMonkeyStudio::setIndentationWidth( int i )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/IndentationWidth", i ); }
+/*!
+	\details Set indentation width
+	\param width The indentation width
+*/
+void pMonkeyStudio::setIndentationWidth( int width )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/IndentationWidth", width ); }
 
+/*!
+	\details Return the indentation width
+*/
 const int pMonkeyStudio::indentationWidth()
 { return MonkeyCore::settings()->value( settingsPath() +"/IndentationWidth", 4 ).toInt(); }
 
-void pMonkeyStudio::setTabIndents( bool b )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/TabIndents", b ); }
+/*!
+	\details Set if tab key indents
+	\param indent If true, tab key do indent, else add simple tabulation
+*/
+void pMonkeyStudio::setTabIndents( bool indent )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/TabIndents", indent ); }
 
+/*!
+	\details Return true if tab key do indent, else false
+*/
 const bool pMonkeyStudio::tabIndents()
 { return MonkeyCore::settings()->value( settingsPath() +"/TabIndents", true ).toBool(); }
 
-void pMonkeyStudio::setTabWidth( int i )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/TabWidth", i ); }
+/*!
+	\details Set tab width
+	\param width The tab width
+*/
+void pMonkeyStudio::setTabWidth( int width )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/TabWidth", width ); }
 
+/*!
+	\details Return the tab width
+*/
 const int pMonkeyStudio::tabWidth()
 { return MonkeyCore::settings()->value( settingsPath() +"/TabWidth", 4 ).toInt(); }
 
-void pMonkeyStudio::setIndentationGuidesBackgroundColor( const QColor& c )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/IndentationGuidesBackgroundColor", c ); }
+/*!
+	\details Set the indentation guide guide background color
+	\param color The color to apply
+*/
+void pMonkeyStudio::setIndentationGuidesBackgroundColor( const QColor& color )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/IndentationGuidesBackgroundColor", color ); }
 
+/*!
+	\details Return the indentation guide background color
+*/
 const QColor pMonkeyStudio::indentationGuidesBackgroundColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/IndentationGuidesBackgroundColor", QColor( "#0000ff" ) ).value<QColor>(); }
 
+/*!
+	\details Set the indentation guide foreground color
+	\param color The color to apply
+*/
 void pMonkeyStudio::setIndentationGuidesForegroundColor( const QColor& c )
 { MonkeyCore::settings()->setValue( settingsPath() +"/IndentationGuidesForegroundColor", c ); }
 
+/*!
+	\details Return the indentation guide foreground color
+*/
 const QColor pMonkeyStudio::indentationGuidesForegroundColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/IndentationGuidesForegroundColor", QColor( "#0000ff" ) ).value<QColor>(); }
 
-void pMonkeyStudio::setBraceMatching( QsciScintilla::BraceMatch b )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/BraceMatching", b ); }
+/*!
+	\details Set the brace matching mode
+	\param mode The mode to apply
+*/
+void pMonkeyStudio::setBraceMatching( QsciScintilla::BraceMatch mode )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/BraceMatching", mode ); }
 
+/*!
+	\details Return the brace matching mode
+*/
 const QsciScintilla::BraceMatch pMonkeyStudio::braceMatching()
 { return (QsciScintilla::BraceMatch)MonkeyCore::settings()->value( settingsPath() +"/BraceMatching", (int)QsciScintilla::SloppyBraceMatch ).toInt(); }
 
-void pMonkeyStudio::setMatchedBraceBackgroundColor( const QColor& c )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/MatchedBraceBackgroundColor", c ); }
+/*!
+	\details Set the matched brace background color
+	\param color The color to apply
+*/
+void pMonkeyStudio::setMatchedBraceBackgroundColor( const QColor& color )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/MatchedBraceBackgroundColor", color ); }
 
+/*!
+	\details Return the matched brace background color
+*/
 const QColor pMonkeyStudio::matchedBraceBackgroundColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/MatchedBraceBackgroundColor", QColor( "#ffff7f" ) ).value<QColor>(); }
 
-void pMonkeyStudio::setMatchedBraceForegroundColor( const QColor& c )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/MatchedBraceForegroundColor", c ); }
+/*!
+	\details Set the matched brache foreground color
+	\param color The color to apply
+*/
+void pMonkeyStudio::setMatchedBraceForegroundColor( const QColor& color )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/MatchedBraceForegroundColor", color ); }
 
+/*!
+	\details Return the matched brace foreground color
+*/
 const QColor pMonkeyStudio::matchedBraceForegroundColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/MatchedBraceForegroundColor", QColor( "#ff0000" ) ).value<QColor>(); }
 
