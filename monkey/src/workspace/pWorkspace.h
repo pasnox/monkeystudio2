@@ -35,7 +35,7 @@
 
 class pAbstractChild;
 class QMainWindow;
-class XUPItem;
+class XUPProjectItem;
 class QFileSystemWatcher;
 
 class Q_MONKEY_EXPORT pWorkspace : public pExtendedWorkspace
@@ -78,7 +78,7 @@ protected slots:
 	void internal_urlsDropped( const QList<QUrl>& );
 	void internal_listWidget_customContextMenuRequested( const QPoint& );
 	void internal_projectsManager_customContextMenuRequested( const QPoint& pos );
-	void internal_currentProjectChanged( XUPItem* currentProject, XUPItem* previousProject );
+	void internal_currentProjectChanged( XUPProjectItem* currentProject, XUPProjectItem* previousProject );
 	void internal_projectInstallCommandRequested( const pCommand& cmd, const QString& mnu );
 	void internal_projectUninstallCommandRequested( const pCommand& cmd, const QString& mnu );
 	void projectCustomActionTriggered();

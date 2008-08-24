@@ -40,13 +40,13 @@ public:
 	
 	ProjectItemModel* model() const;
 
-	void registerItem( XUPItem* item );
-	void unRegisterItem( XUPItem* item );
+	void registerItem( XUPProjectItem* item );
+	void unRegisterItem( XUPProjectItem* item );
 	QStringList projectsFilters() const;
 
-	QList<XUPItem*> topLevelProjects() const;
-	XUPItem* currentProject() const;
-	void setCurrentProject( const XUPItem* );
+	QList<XUPProjectItem*> topLevelProjects() const;
+	XUPProjectItem* currentProject() const;
+	void setCurrentProject( const XUPProjectItem* );
 
 	XUPItem* currentValue() const;
 	XUPItem* currentItem() const;
@@ -61,10 +61,10 @@ protected:
 	bool mYesToAll;
 	bool mNoToAll;
 	ProjectItemModel* mModel;
-	QHash<QString, XUPItem*> mRegisteredItems;
+	QHash<QString, XUPProjectItem*> mRegisteredItems;
 	QHash<UIXUPManager::Actions, QAction*> mActions;
 
-	void initializeProject( XUPItem* );
+	void initializeProject( XUPProjectItem* );
 
 public slots:
 	bool openProject( const QString& );
@@ -86,22 +86,22 @@ protected slots:
 	void on_tvProxiedProjects_collapsed( const QModelIndex& );
 	void on_tvProxiedProjects_expanded( const QModelIndex& );
 	void on_tvProxiedProjects_doubleClicked( const QModelIndex& );
-	void internal_projectOpen( XUPItem* );
-	void internal_projectAboutToClose( XUPItem* );
-	void internal_projectClosed( XUPItem* );
-	void internal_projectModifiedChanged( XUPItem*, bool );
-	void internal_currentProjectChanged( XUPItem*, XUPItem* );
-	void internal_projectDoubleClicked( XUPItem* );
+	void internal_projectOpen( XUPProjectItem* );
+	void internal_projectAboutToClose( XUPProjectItem* );
+	void internal_projectClosed( XUPProjectItem* );
+	void internal_projectModifiedChanged( XUPProjectItem*, bool );
+	void internal_currentProjectChanged( XUPProjectItem*, XUPProjectItem* );
+	void internal_projectDoubleClicked( XUPProjectItem* );
 	void internal_fileDoubleClicked( XUPItem*, const QString& );
 
 signals:
-	void projectOpen( XUPItem* project );
-	void projectAboutToClose( XUPItem* project );
-	void projectClosed( XUPItem* project );
-	void projectModifiedChanged( XUPItem* project, bool modified );
-	void currentProjectChanged( XUPItem* currentProject, XUPItem* previousProject );
-	void currentProjectChanged( XUPItem* currentProject );
-	void projectDoubleClicked( XUPItem* project );
+	void projectOpen( XUPProjectItem* project );
+	void projectAboutToClose( XUPProjectItem* project );
+	void projectClosed( XUPProjectItem* project );
+	void projectModifiedChanged( XUPProjectItem* project, bool modified );
+	void currentProjectChanged( XUPProjectItem* currentProject, XUPProjectItem* previousProject );
+	void currentProjectChanged( XUPProjectItem* currentProject );
+	void projectDoubleClicked( XUPProjectItem* project );
 	void fileDoubleClicked( XUPItem* project, const QString& fileName );
 	void fileDoubleClicked( const QString& fileName );
 	void projectCustomContextMenuRequested( const QPoint& pos );

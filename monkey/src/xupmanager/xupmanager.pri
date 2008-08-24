@@ -11,6 +11,7 @@ FORMS	*= $${XUP_PWD}/ui/UIAddVariable.ui \
 
 HEADERS	*= $${XUP_PWD}/XUPIO.h \
 	$${XUP_PWD}/XUPItem.h \
+	$${XUP_PWD}/XUPProjectItem.h \
 	$${XUP_PWD}/ProjectItemModel.h \
 	$${XUP_PWD}/ScopedProjectItemModel.h \
 	$${XUP_PWD}/FilteredProjectItemModel.h \
@@ -22,6 +23,7 @@ HEADERS	*= $${XUP_PWD}/XUPIO.h \
 
 SOURCES	*= $${XUP_PWD}/XUPIO.cpp \
 	$${XUP_PWD}/XUPItem.cpp \
+	$${XUP_PWD}/XUPProjectItem.cpp \
 	$${XUP_PWD}/ProjectItemModel.cpp \
 	$${XUP_PWD}/ScopedProjectItemModel.cpp \
 	$${XUP_PWD}/FilteredProjectItemModel.cpp \

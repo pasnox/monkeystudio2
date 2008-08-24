@@ -3,12 +3,12 @@
 
 #include "BasePlugin.h"
 
-class XUPItem;
+class XUPProjectItem;
 
 class Q_MONKEY_EXPORT XUPPlugin : public BasePlugin
 {
 public:
-	virtual bool editProject( XUPItem* project ) = 0;
+	virtual bool editProject( XUPProjectItem* project ) = 0;
 };
 
 Q_DECLARE_INTERFACE( XUPPlugin, "org.monkeystudio.MonkeyStudio.XUPPlugin/1.0" )

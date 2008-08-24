@@ -35,6 +35,7 @@
 #include <QPoint>
 
 class pAbstractChild;
+class XUPProjectItem;
 class XUPItem;
 
 class Q_MONKEY_EXPORT pFileManager : public QObject
@@ -44,7 +45,7 @@ class Q_MONKEY_EXPORT pFileManager : public QObject
 	friend class pWorkspace;
 
 public:
-	XUPItem* currentProject() const;
+	XUPProjectItem* currentProject() const;
 	QString currentProjectFile() const;
 	QString currentProjectPath() const;
 	pAbstractChild* currentChild() const;
@@ -71,11 +72,11 @@ signals:
 	void fileClosed( const QString& );
 	void currentFileChanged( pAbstractChild*, const QString& );
 	// projects
-	void aboutToClose( XUPItem* );
-	void closed( XUPItem* );
-	void modifiedChanged( XUPItem*, bool );
-	void currentChanged( XUPItem* );
-	void opened( XUPItem* );
+	void aboutToClose( XUPProjectItem* );
+	void closed( XUPProjectItem* );
+	void modifiedChanged( XUPProjectItem*, bool );
+	void currentChanged( XUPProjectItem* );
+	void opened( XUPProjectItem* );
 };
 
 #endif // PFILEMANAGER_H

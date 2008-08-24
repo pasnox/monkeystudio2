@@ -6,14 +6,14 @@
 #include "ui_UIQtConfiguration.h"
 #include "QtVersionManager.h"
 
-class XUPItem;
+class XUPProjectItem;
 
 class QMakeProjectEditorDialog : public UIXUPProjectEditor, public Ui::UIQtConfiguration
 {
 	Q_OBJECT
 	
 public:
-	QMakeProjectEditorDialog( XUPItem* project, QWidget* parent );
+	QMakeProjectEditorDialog( XUPProjectItem* project, QWidget* parent );
 
 protected:
 	QWidget* mQtConfigurationPage;

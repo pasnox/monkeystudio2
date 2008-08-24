@@ -1,5 +1,6 @@
 #include "ProjectItemModel.h"
 #include "XUPItem.h"
+#include "XUPProjectItem.h"
 #include "FilteredProjectItemModel.h"
 #include "ScopedProjectItemModel.h"
 
@@ -19,11 +20,11 @@ XUPItem* ProjectItemModel::itemFromIndex( const QModelIndex& i ) const
 void ProjectItemModel::appendRow( XUPItem* it )
 { QStandardItemModel::appendRow( it ); }
 
-QList<XUPItem*> ProjectItemModel::topLevelProjects( int c ) const
+QList<XUPProjectItem*> ProjectItemModel::topLevelProjects( int c ) const
 {
-	QList<XUPItem*> l;
+	QList<XUPProjectItem*> l;
 	for ( int i = 0; i < rowCount(); i++ )
-		l << item( i, c );
+		l << dynamic_cast<XUPProjectItem*> (item( i, c ));
 	return l;
 }
 

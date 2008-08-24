@@ -2,6 +2,7 @@
 #include "../ProjectItemModel.h"
 #include "../FilteredProjectItemModel.h"
 #include "../XUPItem.h"
+#include "../XUPProjectItem.h"
 #include "../AddFilesDialog.h"
 
 #include <coremanager.h>
@@ -17,7 +18,7 @@ UIXUPManager::UIXUPManager( QWidget* w )
 	: QDockWidget( w ), mModel( new ProjectItemModel( this ) )
 {
 	// register base item
-	registerItem( new XUPItem );
+	registerItem( new XUPProjectItem );
 	// setup widget
 	setupUi( this );
 	// associate model
@@ -30,12 +31,12 @@ UIXUPManager::UIXUPManager( QWidget* w )
 	teLog->hide();
 	// connection
 	connect( tvProxiedProjects->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( currentChanged( const QModelIndex&, const QModelIndex& ) ) );
-	connect( this, SIGNAL( projectOpen( XUPItem* ) ), this, SLOT( internal_projectOpen( XUPItem* ) ) );
-	connect( this, SIGNAL( projectAboutToClose( XUPItem* ) ), this, SLOT( internal_projectAboutToClose( XUPItem* ) ) );
-	connect( this, SIGNAL( projectClosed( XUPItem* ) ), this, SLOT( internal_projectClosed( XUPItem* ) ) );
-	connect( this, SIGNAL( projectModifiedChanged( XUPItem*, bool ) ), this, SLOT( internal_projectModifiedChanged( XUPItem*, bool ) ) );
-	connect( this, SIGNAL( currentProjectChanged( XUPItem*, XUPItem* ) ), this, SLOT( internal_currentProjectChanged( XUPItem*, XUPItem* ) ) );
-	connect( this, SIGNAL( projectDoubleClicked( XUPItem* ) ), this, SLOT( internal_projectDoubleClicked( XUPItem* ) ) );
+	connect( this, SIGNAL( projectOpen( XUPProjectItem* ) ), this, SLOT( internal_projectOpen( XUPProjectItem* ) ) );
+	connect( this, SIGNAL( projectAboutToClose( XUPProjectItem* ) ), this, SLOT( internal_projectAboutToClose( XUPProjectItem* ) ) );
+	connect( this, SIGNAL( projectClosed( XUPProjectItem* ) ), this, SLOT( internal_projectClosed( XUPProjectItem* ) ) );
+	connect( this, SIGNAL( projectModifiedChanged( XUPProjectItem*, bool ) ), this, SLOT( internal_projectModifiedChanged( XUPProjectItem*, bool ) ) );
+	connect( this, SIGNAL( currentProjectChanged( XUPProjectItem*, XUPProjectItem* ) ), this, SLOT( internal_currentProjectChanged( XUPProjectItem*, XUPProjectItem* ) ) );
+	connect( this, SIGNAL( projectDoubleClicked( XUPProjectItem* ) ), this, SLOT( internal_projectDoubleClicked( XUPProjectItem* ) ) );
 	connect( this, SIGNAL( fileDoubleClicked( XUPItem*, const QString& ) ), this, SLOT( internal_fileDoubleClicked( XUPItem*, const QString& ) ) );
 	connect( tvProxiedProjects, SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SIGNAL( projectCustomContextMenuRequested( const QPoint& ) ) );
 }
@@ -75,7 +76,7 @@ void UIXUPManager::initGui()
 ProjectItemModel* UIXUPManager::model() const
 { return mModel; }
 
-void UIXUPManager::registerItem( XUPItem* it )
+void UIXUPManager::registerItem( XUPProjectItem* it )
 {
 	const QString s = it->metaObject()->className();
 	if ( mRegisteredItems.keys().contains( s ) )
@@ -83,7 +84,7 @@ void UIXUPManager::registerItem( XUPItem* it )
 	mRegisteredItems[s] = it;
 }
 
-void UIXUPManager::unRegisterItem( XUPItem* it )
+void UIXUPManager::unRegisterItem( XUPProjectItem* it )
 {
 	const QString s = it->metaObject()->className();
 	if ( mRegisteredItems.keys().contains( s ) )
@@ -93,7 +94,7 @@ void UIXUPManager::unRegisterItem( XUPItem* it )
 QStringList UIXUPManager::projectsFilters() const
 {
 	QStringList l, e;
-	foreach ( XUPItem* rpi, mRegisteredItems )
+	foreach ( XUPProjectItem* rpi, mRegisteredItems )
 	{
 		foreach ( QString label, rpi->suffixes().keys() )
 		{
@@ -107,14 +108,14 @@ QStringList UIXUPManager::projectsFilters() const
 	return l;
 }
 
-void UIXUPManager::initializeProject( XUPItem* pi )
+void UIXUPManager::initializeProject( XUPProjectItem* pi )
 {
 	// add project into model
 	mModel->appendRow( pi );
 	// connection
-	connect( pi, SIGNAL( modifiedChanged( XUPItem*, bool ) ), this, SIGNAL( projectModifiedChanged( XUPItem*, bool ) ) );
-	connect( pi, SIGNAL( aboutToClose( XUPItem* ) ), this, SIGNAL( projectAboutToClose( XUPItem* ) ) );
-	connect( pi, SIGNAL( closed( XUPItem* ) ), this, SIGNAL( projectClosed( XUPItem* ) ) );
+	connect( pi, SIGNAL( modifiedChanged( XUPProjectItem*, bool ) ), this, SIGNAL( projectModifiedChanged( XUPProjectItem*, bool ) ) );
+	connect( pi, SIGNAL( aboutToClose( XUPProjectItem* ) ), this, SIGNAL( projectAboutToClose( XUPProjectItem* ) ) );
+	connect( pi, SIGNAL( closed( XUPProjectItem* ) ), this, SIGNAL( projectClosed( XUPProjectItem* ) ) );
 	connect( pi, SIGNAL( installCommandRequested( const pCommand&, const QString& ) ), this, SIGNAL( projectInstallCommandRequested( const pCommand&, const QString& ) ) );
 	connect( pi, SIGNAL( uninstallCommandRequested( const pCommand&, const QString& ) ), this, SIGNAL( projectUninstallCommandRequested( const pCommand&, const QString& ) ) );
 	// tell proejct is open
@@ -123,17 +124,17 @@ void UIXUPManager::initializeProject( XUPItem* pi )
 	setCurrentProject( pi );
 }
 
-QList<XUPItem*> UIXUPManager::topLevelProjects() const
+QList<XUPProjectItem*> UIXUPManager::topLevelProjects() const
 { return mModel->topLevelProjects(); }
 
-XUPItem* UIXUPManager::currentProject() const
+XUPProjectItem* UIXUPManager::currentProject() const
 {
 	if ( FilteredProjectItem* fit = mModel->filteredModel()->itemFromIndex( tvProxiedProjects->currentIndex() ) )
 		return fit->project();
 	return 0;
 }
 
-void UIXUPManager::setCurrentProject( const XUPItem* pi )
+void UIXUPManager::setCurrentProject( const XUPProjectItem* pi )
 {
 	// update gui
 	action( UIXUPManager::SaveCurrent )->setEnabled( pi && pi->modified() );
@@ -329,7 +330,7 @@ void UIXUPManager::removeFiles( XUPItem* item, QWidget* parent )
 bool UIXUPManager::openProject( const QString& s )
 {
 	// check that project is not yet open
-	foreach ( XUPItem* it, topLevelProjects() )
+	foreach ( XUPProjectItem* it, topLevelProjects() )
 	{
 		if ( pMonkeyStudio::isSameFile( it->projectFilePath(), s ) )
 		{
@@ -339,8 +340,8 @@ bool UIXUPManager::openProject( const QString& s )
 	}
 
 	// get project item
-	XUPItem* pi = 0;
-	foreach ( XUPItem* rpi, mRegisteredItems )
+	XUPProjectItem* pi = 0;
+	foreach ( XUPProjectItem* rpi, mRegisteredItems )
 	{
 		foreach ( QStringList suffixes, rpi->suffixes().values() )
 		{
@@ -427,7 +428,7 @@ void UIXUPManager::actionCloseCurrentTriggered()
 {
 	mYesToAll = false;
 	mNoToAll = false;
-	if ( XUPItem* pi = currentProject() )
+	if ( XUPProjectItem* pi = currentProject() )
 		pi->closeProject();
 }
 
@@ -435,7 +436,7 @@ void UIXUPManager::actionCloseAllTriggered()
 {
 	mYesToAll = false;
 	mNoToAll = false;
-	foreach ( XUPItem* pi, mModel->topLevelProjects() )
+	foreach ( XUPProjectItem* pi, mModel->topLevelProjects() )
 		pi->closeProject();
 }
 
@@ -453,7 +454,7 @@ void UIXUPManager::actionRemoveTriggered()
 
 void UIXUPManager::actionSettingsTriggered()
 {
-	if ( XUPItem* pi = currentProject() )
+	if ( XUPProjectItem* pi = currentProject() )
 	{
 		// get plugin name that can manage this project
 		if ( pi->projectSettingsValue( "EDITOR" ).isEmpty() || !MonkeyCore::pluginsManager()->plugins<XUPPlugin*>( PluginsManager::stAll, pi->projectSettingsValue( "EDITOR" ) ).value( 0 ) )
@@ -499,10 +500,18 @@ void UIXUPManager::currentChanged( const QModelIndex& c, const QModelIndex& o )
 {
 	// old
 	FilteredProjectItem* ofit = mModel->filteredModel()->itemFromIndex( o );
-	XUPItem* op = ofit ? ofit->project() : 0;
+	XUPProjectItem* op;
+	if (ofit)
+		op = dynamic_cast<XUPProjectItem*> (ofit->project());
+	else
+		op = NULL;
 	// current
 	FilteredProjectItem* fit = mModel->filteredModel()->itemFromIndex( c );
-	XUPItem* p = fit ? fit->project() : 0;
+	XUPProjectItem* p;
+	if (fit)
+		p = dynamic_cast<XUPProjectItem*> (fit->project());
+	else
+		p = NULL;
 	// update some actions
 	action( UIXUPManager::Remove )->setEnabled( currentValue() );
 	// if new project != old update gui
@@ -532,7 +541,7 @@ void UIXUPManager::on_tvProxiedProjects_doubleClicked( const QModelIndex& i )
 	{
 		XUPItem* it = fit->item();
 		if ( it->isProject() )
-			emit projectDoubleClicked( it );
+			emit projectDoubleClicked( dynamic_cast<XUPProjectItem*> (it) );
 		else if ( it->isType( "value" ) && it->fileVariables().contains( it->parent()->defaultValue() ) )
 		{
 			const QString fp = it->filePath();
@@ -542,7 +551,7 @@ void UIXUPManager::on_tvProxiedProjects_doubleClicked( const QModelIndex& i )
 	}
 }
 
-void UIXUPManager::internal_projectOpen( XUPItem* pi )
+void UIXUPManager::internal_projectOpen( XUPProjectItem* pi )
 {
 	if ( pi )
 	{
@@ -573,7 +582,7 @@ void UIXUPManager::internal_projectOpen( XUPItem* pi )
 	}
 }
 
-void UIXUPManager::internal_projectAboutToClose( XUPItem* pi )
+void UIXUPManager::internal_projectAboutToClose( XUPProjectItem* pi )
 {
 	if ( pi )
 	{
@@ -617,7 +626,7 @@ void UIXUPManager::internal_projectAboutToClose( XUPItem* pi )
 	}
 }
 
-void UIXUPManager::internal_projectClosed( XUPItem* pi )
+void UIXUPManager::internal_projectClosed( XUPProjectItem* pi )
 {
 	if ( pi )
 	{
@@ -632,7 +641,7 @@ void UIXUPManager::internal_projectClosed( XUPItem* pi )
 	}
 }
 
-void UIXUPManager::internal_projectModifiedChanged( XUPItem* pi, bool b )
+void UIXUPManager::internal_projectModifiedChanged( XUPProjectItem* pi, bool b )
 {
 	if ( pi )
 	{
@@ -643,13 +652,13 @@ void UIXUPManager::internal_projectModifiedChanged( XUPItem* pi, bool b )
 	}
 }
 
-void UIXUPManager::internal_currentProjectChanged( XUPItem* it, XUPItem* )
+void UIXUPManager::internal_currentProjectChanged( XUPProjectItem* it, XUPProjectItem* )
 {
 	if ( it )
 		teLog->append( tr( "Current Project Changed: %1" ).arg( it->defaultValue() ) );
 }
 
-void UIXUPManager::internal_projectDoubleClicked( XUPItem* it )
+void UIXUPManager::internal_projectDoubleClicked( XUPProjectItem* it )
 {
 	if ( it )
 		teLog->append( tr( "Project Double Clicked: %1" ).arg( it->defaultValue() ) );

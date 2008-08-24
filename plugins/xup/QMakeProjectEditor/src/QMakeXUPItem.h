@@ -3,7 +3,7 @@
 
 #include <xupmanager.h>
 
-class QMakeXUPItem : public XUPItem
+class QMakeXUPItem : public XUPProjectItem
 {
 	Q_OBJECT
 	

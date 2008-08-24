@@ -1,5 +1,6 @@
 #include "../src/xupmanager/XUPIO.h"
 #include "../src/xupmanager/XUPItem.h"
+#include "../src/xupmanager/XUPProjectItem.h"
 #include "../src/xupmanager/ProjectItemModel.h"
 #include "../src/xupmanager/ScopedProjectItemModel.h"
 #include "../src/xupmanager/FilteredProjectItemModel.h"

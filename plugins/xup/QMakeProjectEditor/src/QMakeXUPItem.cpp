@@ -16,7 +16,7 @@
 XUPItemInfos QMakeXUPItem::mQMakeXUPItemInfos;
 
 QMakeXUPItem::QMakeXUPItem( const QDomElement& e, const QString& s, bool b )
-	: XUPItem()
+	: XUPProjectItem()
 {
 	if ( !mQMakeXUPItemInfos.Registered )
 		registerItem();
@@ -253,7 +253,7 @@ void QMakeXUPItem::remove()
 			if ( it->isProject() && it->projectFilePath() == fi.absoluteFilePath() )
 			{
 				// close relating project
-				it->closeProject();
+				dynamic_cast<XUPProjectItem*> (it)->closeProject();
 				// normal xup remove
 				XUPItem::remove();
 				return;
@@ -602,16 +602,16 @@ QStringList QMakeXUPItem::splitFiles( const QString& s ) const
 }
 
 BuilderPlugin* QMakeXUPItem::builder( const QString& plugin ) const
-{ return XUPItem::builder( plugin.isEmpty() ? "GNUMake" : plugin ); }
+{ return XUPProjectItem::builder( plugin.isEmpty() ? "GNUMake" : plugin ); }
 
 CompilerPlugin* QMakeXUPItem::compiler( const QString& plugin ) const
-{ return XUPItem::compiler( plugin.isEmpty() ? "G++" : plugin ); }
+{ return XUPProjectItem::compiler( plugin.isEmpty() ? "G++" : plugin ); }
 
 DebuggerPlugin* QMakeXUPItem::debugger( const QString& plugin ) const
-{ return XUPItem::debugger( plugin.isEmpty() ? "GNUDebugger" : plugin ); }
+{ return XUPProjectItem::debugger( plugin.isEmpty() ? "GNUDebugger" : plugin ); }
 
 InterpreterPlugin* QMakeXUPItem::interpreter( const QString& plugin ) const
-{ return XUPItem::interpreter( plugin.isEmpty() ? "" : plugin ); }
+{ return XUPProjectItem::interpreter( plugin.isEmpty() ? "" : plugin ); }
 
 void QMakeXUPItem::installCommands()
 {
@@ -774,5 +774,5 @@ void QMakeXUPItem::installCommands()
 	}
 	
 	// install defaults commands
-	XUPItem::installCommands();
+	XUPProjectItem::installCommands();
 }

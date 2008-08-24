@@ -1,5 +1,6 @@
 #include "UIXUPProjectEditor.h"
 #include "../XUPItem.h"
+#include "../XUPProjectItem.h"
 #include "../ProjectItemModel.h"
 #include "../ScopedProjectItemModel.h"
 #include "../ProjectEditorModel.h"
@@ -42,7 +43,7 @@ void recursiveRemoveItem( XUPItem* it, bool deleteFiles = false )
 	}
 }
 
-UIXUPProjectEditor::UIXUPProjectEditor( XUPItem* project, QWidget* parent )
+UIXUPProjectEditor::UIXUPProjectEditor( XUPProjectItem* project, QWidget* parent )
 	: QDialog( parent )
 {
 	// get proejct

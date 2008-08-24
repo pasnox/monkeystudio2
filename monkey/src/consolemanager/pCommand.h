@@ -39,7 +39,7 @@
 
 #include <QStringList>
 
-class XUPItem;
+class XUPProjectItem;
 
 /*!
 	Container for storing console command
@@ -88,7 +88,7 @@ public:
 	bool skipOnError() const { return mSkipOnError; }
 	bool tryAllParsers() const { return mTryAllParsers; }
 	QVariant userData() const { return mUserData; }
-	XUPItem* project() const { return mProject; }
+	XUPProjectItem* project() const { return mProject; }
 
 	void setText( const QString& s ) { mText = s; }
 	void setCommand( const QString& s ) { mCommand = s; }
@@ -100,7 +100,7 @@ public:
 	void setSkipOnError( bool b ) { mSkipOnError = b; }
 	void setTryAllParsers( bool b ) { mTryAllParsers = b; }
 	void setUserData( const QVariant& data ) { mUserData = data; }
-	void setProject( XUPItem* project ) { mProject = project; }
+	void setProject( XUPProjectItem* project ) { mProject = project; }
 	
 	QString toString() const
 	{
@@ -129,7 +129,7 @@ protected:
 	QStringList mParsers;		/**< List of parsers, which should be used for command. Position in the list is not ignored */
 	bool mTryAllParsers;		/**< Try to use all availible parsers after parsers from list */
 	QVariant mUserData;			/**< Ask PasNox, hot to use it */
-	XUPItem* mProject;			/**< Project, for which command is executing */
+	XUPProjectItem* mProject;			/**< Project, for which command is executing */
 };
 
 /*!

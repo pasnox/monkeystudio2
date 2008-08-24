@@ -35,6 +35,7 @@
 #include "../../xupmanager/ProjectItemModel.h"
 #include "../../xupmanager/ScopedProjectItemModel.h"
 #include "../../xupmanager/XUPItem.h"
+#include "../../xupmanager/XUPProjectItem.h"
 #include "../../xupmanager/ui/UIXUPManager.h"
 #include "../../variablesmanager/VariablesManager.h"
 

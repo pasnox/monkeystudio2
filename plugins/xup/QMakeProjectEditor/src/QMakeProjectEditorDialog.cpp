@@ -8,7 +8,7 @@
 
 const QString QtTranslationMask( "translations/%1.ts" );
 //wProjectFiles
-QMakeProjectEditorDialog::QMakeProjectEditorDialog( XUPItem* project, QWidget* parent )
+QMakeProjectEditorDialog::QMakeProjectEditorDialog( XUPProjectItem* project, QWidget* parent )
 	: UIXUPProjectEditor( project, parent )
 {
 	lOperator->setVisible( true );
@@ -277,8 +277,8 @@ void QMakeProjectEditorDialog::gbBuild_changed()
 			values << ab->statusTip();
 	// add project settings scope
 	if ( currentScope() == mProject && currentOperator() == "+=" )
-		if ( !values.contains( XUPItem::mProjectSettingsScope ) )
-			values << XUPItem::mProjectSettingsScope;
+		if ( !values.contains( XUPProjectItem::mProjectSettingsScope ) )
+			values << XUPProjectItem::mProjectSettingsScope;
 	// get variable
 	XUPItem* vit = mProject->variable( gbBuild->statusTip(), currentOperator(), 0, !values.isEmpty() );
 	// update variable values if needed

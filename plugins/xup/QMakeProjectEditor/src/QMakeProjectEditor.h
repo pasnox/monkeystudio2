@@ -5,7 +5,7 @@
 
 #include <QPointer>
 
-class XUPItem;
+class XUPProjectItem;
 
 class QMakeProjectEditor : public XUPPlugin
 {
@@ -17,10 +17,10 @@ public:
 	virtual ~QMakeProjectEditor();
 	virtual bool setEnabled( bool );
 	virtual QWidget* settingsWidget();
-	virtual bool editProject( XUPItem* project );
+	virtual bool editProject( XUPProjectItem* project );
 
 protected:
-	QPointer<XUPItem> mItem;
+	QPointer<XUPProjectItem> mItem;
 };
 
 #endif // QMAKEPROJECTEDITOR_H

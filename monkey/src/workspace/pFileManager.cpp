@@ -29,7 +29,7 @@
 #include "pFileManager.h"
 #include "pWorkspace.h"
 #include "../xupmanager/ui/UIXUPManager.h"
-#include "../xupmanager/XUPItem.h"
+#include "../xupmanager/XUPProjectItem.h"
 #include "pAbstractChild.h"
 #include "../coremanager/MonkeyCore.h"
 
@@ -41,14 +41,14 @@ pFileManager::pFileManager( QObject* o )
 	connect( MonkeyCore::workspace(), SIGNAL( fileClosed( const QString& ) ), this, SIGNAL( fileClosed( const QString& ) ) );
 	connect( MonkeyCore::workspace(), SIGNAL( currentFileChanged( pAbstractChild*, const QString& ) ), this, SIGNAL( currentFileChanged( pAbstractChild*, const QString& ) ) );
 	// projects
-	connect( MonkeyCore::projectsManager(), SIGNAL( projectAboutToClose( XUPItem* ) ), this, SIGNAL( aboutToClose( XUPItem* ) ) );
-	connect( MonkeyCore::projectsManager(), SIGNAL( projectClosed( XUPItem* ) ), this, SIGNAL( closed( XUPItem* ) ) );
-	connect( MonkeyCore::projectsManager(), SIGNAL( projectModifiedChanged( XUPItem*, bool ) ), this, SIGNAL( modifiedChanged( XUPItem*, bool ) ) );
-	connect( MonkeyCore::projectsManager(), SIGNAL( currentProjectChanged( XUPItem* ) ), this, SIGNAL( currentChanged( XUPItem* ) ) );
-	connect( MonkeyCore::projectsManager(), SIGNAL( projectOpen( XUPItem* ) ), this, SIGNAL( opened( XUPItem* ) ) );
+	connect( MonkeyCore::projectsManager(), SIGNAL( projectAboutToClose( XUPProjectItem* ) ), this, SIGNAL( aboutToClose( XUPProjectItem* ) ) );
+	connect( MonkeyCore::projectsManager(), SIGNAL( projectClosed( XUPProjectItem* ) ), this, SIGNAL( closed( XUPProjectItem* ) ) );
+	connect( MonkeyCore::projectsManager(), SIGNAL( projectModifiedChanged( XUPProjectItem*, bool ) ), this, SIGNAL( modifiedChanged( XUPProjectItem*, bool ) ) );
+	connect( MonkeyCore::projectsManager(), SIGNAL( currentProjectChanged( XUPProjectItem* ) ), this, SIGNAL( currentChanged( XUPProjectItem* ) ) );
+	connect( MonkeyCore::projectsManager(), SIGNAL( projectOpen( XUPProjectItem* ) ), this, SIGNAL( opened( XUPProjectItem* ) ) );
 }
 
-XUPItem* pFileManager::currentProject() const
+XUPProjectItem* pFileManager::currentProject() const
 { return MonkeyCore::projectsManager()->currentProject(); }
 
 QString pFileManager::currentProjectFile() const

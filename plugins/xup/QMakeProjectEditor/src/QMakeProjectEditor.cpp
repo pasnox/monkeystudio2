@@ -50,7 +50,7 @@ bool QMakeProjectEditor::setEnabled( bool b )
 QWidget* QMakeProjectEditor::settingsWidget()
 { return new UISettingsQMakeXUPProjectEditor; }
 
-bool QMakeProjectEditor::editProject( XUPItem* project )
+bool QMakeProjectEditor::editProject( XUPProjectItem* project )
 {
 	if ( !project )
 		return false;

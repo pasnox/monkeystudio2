@@ -6,9 +6,9 @@
 #include "ui_UIXUPProjectEditor.h"
 
 #include <QSortFilterProxyModel>
-#include <QDebug>
 
 class XUPItem;
+class XUPProjectItem;
 class ScopedProjectItemModel;
 class FilteredProjectItemModel;
 class ProjectEditorModel;
@@ -57,12 +57,12 @@ class Q_MONKEY_EXPORT UIXUPProjectEditor : public QDialog, public Ui::UIXUPProje
 	Q_OBJECT
 
 public:
-	UIXUPProjectEditor( XUPItem* project, QWidget* parent = 0 );
+	UIXUPProjectEditor( XUPProjectItem* project, QWidget* parent = 0 );
 
 	virtual void insertPage( int id = -1, QWidget* page = 0 );
 
 protected:
-	XUPItem* mProject;
+	XUPProjectItem* mProject;
 	ProjectItemModel* mProjectModel;
 	ScopedProjectItemModel* mScopedModel;
 	FilteredProjectItemModel* mFilteredModel;

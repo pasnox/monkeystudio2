@@ -7,6 +7,7 @@
 #include <QHash>
 
 #include "XUPItem.h"
+#include "XUPProjectItem.h"
 
 class ProjectItemModel;
 
@@ -37,12 +38,12 @@ public:
 	XUPItem* item() const
 	{ return mItem; }
 	
-	XUPItem* project() const
+	XUPProjectItem* project() const
 	{
 		if ( mItem->isProject() )
-			return mItem;
+			return dynamic_cast<XUPProjectItem*> (mItem);
 		else if ( mItem->isType( "value" ) )
-			return mItem->project();
+			return dynamic_cast<XUPProjectItem*> (mItem->project());
 		/*
 		else if ( mItem->isType( "folder" ) )
 		{
