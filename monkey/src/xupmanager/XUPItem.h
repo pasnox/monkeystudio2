@@ -52,8 +52,6 @@ class Q_MONKEY_EXPORT XUPItem : public QObject, public QStandardItem
 	
 public:
 	
-	XUPItem( const QDomElement = QDomDocument().toElement(), const QString& = QString(), bool = false );
-
 	// register item specific infos
 	virtual void registerItem();
 	virtual const XUPItemInfos& itemInfos() const;

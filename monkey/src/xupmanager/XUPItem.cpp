@@ -9,15 +9,6 @@
 
 XUPItemInfos XUPItem::mXUPItemInfos;
 
-XUPItem::XUPItem( const QDomElement e, const QString& s, bool b )
-{
-	if ( !mXUPItemInfos.Registered )
-		registerItem();
-	setDomElement( e );
-	loadProject( s ); // FIXME Do it actual for Item ???		
-	setModified( b );
-}
-
 void XUPItem::registerItem()
 {
 	mXUPItemInfos.Registered = true;
