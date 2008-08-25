@@ -43,7 +43,7 @@ protected:
 			if ( it->isProject() )
 				b = it->children( true, false ).contains( pit ) || it->project() == pit;
 			else if ( it->isType( "variable" ) )
-				b = it->project() == pit && it->fileVariables().contains( it->defaultValue() );
+				b = it->project() == pit && it->project()->fileVariables().contains( it->defaultValue() );
 			else if ( it->isType( "value" ) || it->isType( "folder" ) )
 				b = true;
 			return b;

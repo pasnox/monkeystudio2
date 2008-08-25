@@ -18,7 +18,7 @@ UIXUPManager::UIXUPManager( QWidget* w )
 	: QDockWidget( w ), mModel( new ProjectItemModel( this ) )
 {
 	// register base item
-	registerItem( new XUPProjectItem );
+	//registerItem( new XUPProjectItem ); // FIXME commented during dividing of classes
 	// setup widget
 	setupUi( this );
 	// associate model
@@ -310,7 +310,7 @@ void UIXUPManager::removeFiles( XUPItem* item, QWidget* parent )
 	if ( pMonkeyStudio::question( tr( "Remove Value..." ), tr( "Are you sur you want to remove this value ?" ), parent ) )
 	{
 		// if file based
-		if ( item->fileVariables().contains( item->parent()->defaultValue() ) )
+		if ( item->project()->fileVariables().contains( item->parent()->defaultValue() ) )
 		{
 			QString fp = item->filePath();
 			if ( QFile::exists( fp ) && pMonkeyStudio::question( tr( "Delete associations..." ), tr( "Do you want to delete the associate file ?" ), parent ) )
@@ -372,7 +372,7 @@ bool UIXUPManager::openProject( const QString& s )
 	return false;
 }
 
-bool UIXUPManager::saveProject( XUPItem* pi, const QString& s )
+bool UIXUPManager::saveProject( XUPProjectItem* pi, const QString& s )
 { return pi ? pi->saveProject( s ) : false; }
 
 void UIXUPManager::actionNewTriggered()
@@ -406,21 +406,24 @@ void UIXUPManager::actionOpenTriggered()
 
 void UIXUPManager::actionSaveCurrentTriggered()
 {
-	if ( XUPItem* pi = currentProject() )
+	if ( XUPProjectItem* pi = currentProject() )
 		if ( pi->modified() && !saveProject( pi, QString() ) )
 			pMonkeyStudio::warning( tr( "Error..." ), tr( "An error occur while saving project" ) );
 }
 
 void UIXUPManager::actionSaveAllTriggered()
 {
-	foreach ( XUPItem* pi, mModel->topLevelProjects() )
+	foreach ( XUPProjectItem* pi, mModel->topLevelProjects() )
 	{
 		if ( pi->modified() && !saveProject( pi, QString() ) )
 			pMonkeyStudio::warning( tr( "Error..." ), tr( "An error occur while saving project: %1" ).arg( pi->defaultValue() ) );
 		foreach ( XUPItem* cpi, pi->children( true, false ) )
-			if ( cpi->isProject() )
-				if ( cpi->modified() && !saveProject( cpi, QString() ) )
-					pMonkeyStudio::warning( tr( "Error..." ), tr( "An error occur while saving project: %1" ).arg( cpi->defaultValue() ) );
+		{
+			XUPProjectItem* cpip = dynamic_cast<XUPProjectItem*> (cpi);
+			if (cpip)
+				if ( cpip->modified() && !saveProject( cpip, QString() ) )
+					pMonkeyStudio::warning( tr( "Error..." ), tr( "An error occur while saving project: %1" ).arg( cpip->defaultValue() ) );
+		}
 	}
 }
 
@@ -476,7 +479,7 @@ void UIXUPManager::actionSettingsTriggered()
 		else if ( XUPPlugin* xp = MonkeyCore::pluginsManager()->plugins<XUPPlugin*>( PluginsManager::stAll, pi->projectSettingsValue( "EDITOR" ) ).value( 0 ) )
 		{
 			// get current filtered project in scoped view
-			XUPItem* curFilteredProject = mModel->scopedModel()->filteredProject();
+			XUPProjectItem* curFilteredProject = mModel->scopedModel()->filteredProject();
 			// set current filtered proejct to current one
 			mModel->scopedModel()->setFilteredProject( pi );
 			// edit project
@@ -542,7 +545,7 @@ void UIXUPManager::on_tvProxiedProjects_doubleClicked( const QModelIndex& i )
 		XUPItem* it = fit->item();
 		if ( it->isProject() )
 			emit projectDoubleClicked( dynamic_cast<XUPProjectItem*> (it) );
-		else if ( it->isType( "value" ) && it->fileVariables().contains( it->parent()->defaultValue() ) )
+		else if ( it->isType( "value" ) && it->project()->fileVariables().contains( it->parent()->defaultValue() ) )
 		{
 			const QString fp = it->filePath();
 			emit fileDoubleClicked( it, fp );
@@ -564,7 +567,7 @@ void UIXUPManager::internal_projectOpen( XUPProjectItem* pi )
 			if ( bool b = QVariant( it->value( "expanded", "false" ) ).toBool() )
 				tvProxiedProjects->setExpanded( mModel->filteredModel()->mapFromSource( it->index() ), b );
 			// if value and file based variable
-			if ( it->value( "type" ) == "value" && it->fileVariables().contains( it->parent()->value( "name" ) ) )
+			if ( it->value( "type" ) == "value" && it->project()->fileVariables().contains( it->parent()->value( "name" ) ) )
 			{
 				/*
 				// file configuration

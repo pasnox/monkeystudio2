@@ -29,8 +29,8 @@ void QMakeXUPItem::registerItem()
 {
 	mQMakeXUPItemInfos.Registered = true;
 	// registering...
-	mQMakeXUPItemInfos.TextTypes = XUPItem::textTypes();
-	mQMakeXUPItemInfos.Operators = XUPItem::operators();
+	mQMakeXUPItemInfos.TextTypes << "comment" << "value" << "emptyline" << "function";
+	mQMakeXUPItemInfos.Operators << "=" << "+=" << "-=" << "*=" << "~=";
 	// filtered variables
 	mQMakeXUPItemInfos.FilteredVariables
 		<< "SUBDIRS"
@@ -358,7 +358,7 @@ void QMakeXUPItem::checkChildrenProjects()
 				// if file exists open project
 				if ( QFile::exists( fn ) )
 				{
-					XUPItem* pi = clone( false );
+					XUPProjectItem* pi = clone( false );
 					if ( pi->loadProject( fn ) )
 						it->project()->appendRow( pi );
 					else
@@ -377,7 +377,7 @@ void QMakeXUPItem::checkChildrenProjects()
 			// open project include if it exists
 			if ( QFile::exists( fn ) )
 			{
-				XUPItem* pi = clone( false );
+				XUPProjectItem* pi = clone( false );
 				if ( pi->loadProject( fn ) )
 					it->appendRow( pi );
 				else
@@ -522,7 +522,7 @@ void QMakeXUPItem::addFiles( const QStringList& files, XUPItem* scope, const QSt
 		// open sub project if needed
 		if ( vn == "SUBDIRS" && container )
 		{
-			XUPItem* pi = clone( false );
+			XUPProjectItem* pi = clone( false );
 			if ( pi->loadProject( file ) )
 				project()->appendRow( pi );
 			else

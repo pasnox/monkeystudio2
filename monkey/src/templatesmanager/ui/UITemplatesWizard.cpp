@@ -176,7 +176,7 @@ void UITemplatesWizard::on_lwTemplates_itemPressed( QListWidgetItem* it )
 void UITemplatesWizard::on_cbProjects_currentChanged( const QModelIndex& index )
 {
 	const QModelIndex idx = mProjects->scopedModel()->mapToSource( index );
-	if ( XUPItem* it = mProjects->itemFromIndex( idx ) )
+	if ( XUPProjectItem* it = dynamic_cast<XUPProjectItem*> (mProjects->itemFromIndex( idx )) )
 	{
 		cbOperators->clear();
 		cbOperators->addItems( it->operators() );

@@ -13,8 +13,49 @@ public:
 
 	XUPProjectItem( const QDomElement = QDomDocument().toElement(), const QString& = QString(), bool = false );
 	
+	// register item specific infos
+	virtual void registerItem() = 0;
+	virtual const XUPItemInfos& itemInfos() const;
+
+	// get available operators for this kind of item
+	virtual QStringList operators() const;
+	virtual void registerOperator( const QString& op );
+	
+	// the visible variables in filtered view ordered by list order
+	virtual QStringList filteredVariables() const;
+	virtual void registerFilteredVariables( const QString& );
+
+	// tell if node is text based
+	virtual QStringList textTypes() const;
+	virtual void registerTextType( const QString& );
+	
+	// tell witch variables are file based
+	virtual QStringList fileVariables() const;
+	virtual void registerFileVariables( const QString& );
+	
+	// tell witch variables are path based
+	virtual QStringList pathVariables() const;
+	virtual void registerPathVariables( const QString& );
+	
+	// register extension that this item can manage
+	virtual QHash<QString, QStringList> suffixes() const;
+	virtual void registerSuffixes( const QString& label, const QStringList& suffixes );
+
+	// set variables labels
+	virtual QHash<QString, QString> variableLabels() const;
+	virtual void registerVariableLabels( const QString&, const QString& );
+	
+	// set variables icons
+	virtual QHash<QString, QIcon> variableIcons() const;
+	virtual void registerVariableIcons( const QString&, const QIcon& );
+	
+	// set suffixes that some variables can handle
+	virtual QHash<QString, QStringList> variableSuffixes() const;
+	virtual void registerVariableSuffixes( const QString& varname, const QStringList& suffixes );
+
+
 	// return copy of this item
-	virtual XUPProjectItem* clone( bool = true ) const;
+	virtual XUPProjectItem* clone( bool = true ) const = 0;
 	
 	// return a project settings value
 	virtual QStringList projectSettingsValues( const QString& variable, const QStringList& defaultValues = QStringList() ) const;
@@ -29,6 +70,11 @@ public:
 	virtual void addProjectSettingsValue( const QString& variable, const QString& value ) 
 		{ addProjectSettingsValues( variable, value.isEmpty() ? QStringList() : QStringList( value ) ); }
 	
+	// open project
+	virtual bool loadProject( const QString& filename = QString(), const QString& version = QString( "1.0.0" ) );
+	// save project
+	virtual bool saveProject( const QString& filename = QString(), const QString& version = QString( "1.0.0" ) );
+
 	// close project
 	virtual void closeProject();
 	
@@ -44,6 +90,9 @@ public:
 	virtual void installCommands();
 	// uninstall custom project actions in menus
 	virtual void uninstallCommands();
+
+protected:
+	static XUPItemInfos mXUPItemInfos;
 
 signals:
 	void modifiedChanged( XUPProjectItem* item, bool modified );

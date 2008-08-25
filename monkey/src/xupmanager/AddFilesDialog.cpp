@@ -1,6 +1,9 @@
 #include "AddFilesDialog.h"
 #include "../pMonkeyStudio.h"
 
+#include "XUPItem.h"
+#include "XUPProjectItem.h"
+
 #include <QGridLayout>
 #include <QFrame>
 #include <QHBoxLayout>
@@ -91,7 +94,7 @@ AddFilesDialog::AddFilesDialog( ScopedProjectItemModel* spim, XUPItem* pi, QWidg
 	hl2->setSpacing( 0 );
 	// create operators combobox
 	cbOperators = new QComboBox;
-	cbOperators->addItems( pi->operators() );
+	cbOperators->addItems( pi->project()->operators() );
 	hl2->addWidget( cbOperators );
 	// add groupbox to layout
 	hl->addWidget( gb1 );

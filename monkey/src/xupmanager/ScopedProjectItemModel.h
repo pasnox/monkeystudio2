@@ -7,6 +7,7 @@
 
 class ProjectItemModel;
 class XUPItem;
+class XUPProjectItem;
 
 class Q_MONKEY_EXPORT ScopedProjectItemModel : public QSortFilterProxyModel
 {
@@ -15,14 +16,14 @@ class Q_MONKEY_EXPORT ScopedProjectItemModel : public QSortFilterProxyModel
 public:
 	ScopedProjectItemModel( ProjectItemModel* = 0 );
 
-	void setFilteredProject( XUPItem* project );
-	XUPItem* filteredProject() const;
+	void setFilteredProject( XUPProjectItem* project );
+	XUPProjectItem* filteredProject() const;
 	
 	inline ProjectItemModel* model() const { return mSourceModel; }
 
 protected:
 	ProjectItemModel* mSourceModel;
-	XUPItem* mProject;
+	XUPProjectItem* mProject;
 
 	virtual bool filterAcceptsRow( int sr, const QModelIndex& sp ) const;
 };

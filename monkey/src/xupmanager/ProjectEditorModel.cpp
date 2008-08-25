@@ -1,5 +1,6 @@
 #include "ProjectEditorModel.h"
 #include "XUPItem.h"
+#include "XUPProjectItem.h"
 #include "ProjectItemModel.h"
 
 ProjectEditorModel::ProjectEditorModel( XUPItem* project, ProjectEditorModel::ViewType viewType, QObject* owner )
@@ -18,13 +19,13 @@ bool ProjectEditorModel::filterAcceptsRow( int sr, const QModelIndex& sp ) const
 	QModelIndex idx = mSourceModel->index( sr, 0, sp );
 	if ( XUPItem* it = mSourceModel->itemFromIndex( idx ) )
 	{
-		XUPItem* pit = mProject->project();
+		XUPProjectItem* pit = mProject->project();
 		// if project or parent project
 		if ( it->isProject() )
 			return it->children( true, false ).contains( pit ) || it->project() == pit;
 		// if variable and filter != values
 		if ( it->isType( "variable" ) && mType != ProjectEditorModel::vtValues )
-			return it->project() == pit && !it->fileVariables().contains( it->defaultValue() );
+			return it->project() == pit && !it->project()->fileVariables().contains( it->defaultValue() );
 		// if value and filter != variable
 		if ( ( it->isType( "value" ) || it->isType( "folder" ) ) && mType != ProjectEditorModel::vtVariables )
 			return true;

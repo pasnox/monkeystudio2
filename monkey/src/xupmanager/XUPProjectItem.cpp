@@ -1,21 +1,95 @@
 #include "../coremanager/MonkeyCore.h"
 #include "../pluginsmanager/PluginsManager.h"
+#include "XUPIO.h"
 
 #include "XUPProjectItem.h"
 
+
 QString XUPProjectItem::mProjectSettingsScope = "ProjectSettings";
+XUPItemInfos XUPProjectItem::mXUPItemInfos;
 
 XUPProjectItem::XUPProjectItem( const QDomElement e, const QString& s, bool b )
 {
+#if 0
 	if ( !mXUPItemInfos.Registered )
 		registerItem();
+#endif
 	setDomElement( e );
 	loadProject( s );
 	setModified( b );
 }
 
-XUPProjectItem* XUPProjectItem::clone( bool b ) const
-{ return b ? new XUPProjectItem( domElement(), projectFilePath(), modified() ) : new XUPProjectItem; }
+const XUPItemInfos& XUPProjectItem::itemInfos() const
+{ return mXUPItemInfos; }
+
+QStringList XUPProjectItem::operators() const
+{ return mXUPItemInfos.Operators; }
+
+void XUPProjectItem::registerOperator( const QString& s )
+{
+	if ( !mXUPItemInfos.Operators.contains( s ) )
+		mXUPItemInfos.Operators << s;
+}
+
+QStringList XUPProjectItem::filteredVariables() const
+{ return mXUPItemInfos.FilteredVariables; }
+
+void XUPProjectItem::registerFilteredVariables( const QString& s )
+{
+	if ( !mXUPItemInfos.FilteredVariables.contains( s ) )
+		mXUPItemInfos.FilteredVariables << s;
+}
+
+QStringList XUPProjectItem::textTypes() const
+{ return mXUPItemInfos.TextTypes; }
+
+void XUPProjectItem::registerTextType( const QString& s )
+{
+	if ( !mXUPItemInfos.TextTypes.contains( s ) )
+		mXUPItemInfos.TextTypes << s;
+}
+
+QStringList XUPProjectItem::fileVariables() const
+{ return mXUPItemInfos.FileVariables; }
+
+void XUPProjectItem::registerFileVariables( const QString& s )
+{
+	if ( !mXUPItemInfos.FileVariables.contains( s ) )
+		mXUPItemInfos.FileVariables << s;
+}
+
+QStringList XUPProjectItem::pathVariables() const
+{ return mXUPItemInfos.PathVariables; }
+
+void XUPProjectItem::registerPathVariables( const QString& s )
+{
+	if ( !mXUPItemInfos.PathVariables.contains( s ) )
+		mXUPItemInfos.PathVariables << s;
+}
+
+QHash<QString, QStringList> XUPProjectItem::suffixes() const
+{ return mXUPItemInfos.Suffixes; }
+
+void XUPProjectItem::registerSuffixes( const QString& l, const QStringList& s )
+{ mXUPItemInfos.Suffixes[l] = s; }
+
+QHash<QString, QString> XUPProjectItem::variableLabels() const
+{ return mXUPItemInfos.VariableLabels; }
+
+void XUPProjectItem::registerVariableLabels( const QString& v, const QString& l )
+{ mXUPItemInfos.VariableLabels[v] = l; }
+
+QHash<QString, QIcon> XUPProjectItem::variableIcons() const
+{ return mXUPItemInfos.VariableIcons; }
+
+void XUPProjectItem::registerVariableIcons( const QString& v, const QIcon& i )
+{ mXUPItemInfos.VariableIcons[v] = i; }
+
+QHash<QString, QStringList> XUPProjectItem::variableSuffixes() const
+{ return mXUPItemInfos.VariableSuffixes; }
+
+void XUPProjectItem::registerVariableSuffixes( const QString& n, const QStringList& s )
+{ mXUPItemInfos.VariableSuffixes[n] = s; }
 
 QStringList XUPProjectItem::projectSettingsValues( const QString& variable, const QStringList& defaultValues ) const
 {
@@ -76,7 +150,7 @@ void XUPProjectItem::setProjectSettingsValues( const QString& variable, const QS
 	// create variable if needed
 	if ( !exists )
 	{
-		vit = scope->clone( false );
+		vit = scope->clone();
 		vit->setDomElement( scope->domElement().ownerDocument().createElement( "variable" ) );
 		scope->domElement().appendChild( vit->domElement() );
 		vit->setValue( vit->valueName(), variable );
@@ -93,7 +167,7 @@ void XUPProjectItem::setProjectSettingsValues( const QString& variable, const QS
 	foreach ( const QString& value, values )
 	{
 		// create item value
-		XUPItem* it = vit->clone( false );
+		XUPItem* it = vit->clone();
 		it->setDomElement( vit->domElement().ownerDocument().createElement( "value" ) );
 		vit->domElement().appendChild( it->domElement() );
 		it->setValue( it->valueName(), value );
@@ -139,7 +213,7 @@ void XUPProjectItem::addProjectSettingsValues( const QString& variable, const QS
 	// create variable if needed
 	if ( !exists )
 	{
-		vit = scope->clone( false );
+		vit = scope->clone();
 		vit->setDomElement( scope->domElement().ownerDocument().createElement( "variable" ) );
 		scope->domElement().appendChild( vit->domElement() );
 		vit->setValue( vit->valueName(), variable );
@@ -154,7 +228,7 @@ void XUPProjectItem::addProjectSettingsValues( const QString& variable, const QS
 		// create item value if needed
 		if ( !existingValues.contains( value ) )
 		{
-			XUPItem* it = vit->clone( false );
+			XUPItem* it = vit->clone();
 			it->setDomElement( vit->domElement().ownerDocument().createElement( "value" ) );
 			vit->domElement().appendChild( it->domElement() );
 			it->setValue( it->valueName(), value );
@@ -169,6 +243,28 @@ void XUPProjectItem::addProjectSettingsValues( const QString& variable, const QS
 	// update scope nested if needed
 	if ( scope->isType( "scope" ) )
 		scope->setValue( "nested", scope->rowCount() > 1 ? "false" : "true" );
+}
+
+bool XUPProjectItem::loadProject( const QString& s, const QString& v )
+{
+	if ( XUPIO::loadXUP( this, s, v ) )
+	{
+		mProjectFilePath = s;
+		setModified( false );
+		return true;
+	}
+	return false;
+}
+
+bool XUPProjectItem::saveProject( const QString& s, const QString& v )
+{
+	if ( XUPIO::saveXUP( this, s.isEmpty() ? projectFilePath() : s, v ) )
+	{
+		mProjectFilePath = s.isEmpty() ? projectFilePath() : s;
+		setModified( false );
+		return true;
+	}
+	return false;
 }
 
 void XUPProjectItem::closeProject()

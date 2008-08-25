@@ -103,12 +103,12 @@ FilteredProjectItem* FilteredProjectItemModel::getVariable( XUPItem* it )
 	FilteredProjectItem* vit = new FilteredProjectItem( it );
 	
 	// calculate row to insert to
-	int r = it->filteredVariables().indexOf( vn );
+	int r = it->project()->filteredVariables().indexOf( vn );
 	int ri = -1;
 	for ( int i = 0; i < pit->rowCount(); i++ )
 	{
 		FilteredProjectItem* cit = pit->child( i );
-		const int ci = it->filteredVariables().indexOf( cit->item()->defaultValue() );
+		const int ci = it->project()->filteredVariables().indexOf( cit->item()->defaultValue() );
 		if ( cit->item()->isProject() )
 			continue;
 		else if ( ci < r )
@@ -126,7 +126,7 @@ FilteredProjectItem* FilteredProjectItemModel::getVariable( XUPItem* it )
 
 FilteredProjectItem* FilteredProjectItemModel::createFolder( const QString& name, XUPItem* inItem )
 {
-	FilteredProjectItem* fit = new FilteredProjectItem( inItem->clone( false ) );
+	FilteredProjectItem* fit = new FilteredProjectItem( inItem->clone() );
 	fit->item()->setDomElement( inItem->domElement().ownerDocument().createElement( "folder" ) );
 	fit->item()->setValue( "name", name );
 	return fit;
@@ -185,14 +185,14 @@ void FilteredProjectItemModel::addFilteredValue( XUPItem* it )
 	// get parent variable
 	XUPItem* parent = it->parent();
 	// check if we need to show this value
-	if ( !parent->filteredVariables().contains( parent->defaultValue() ) )
+	if ( !parent->project()->filteredVariables().contains( parent->defaultValue() ) )
 		return;
 	
 	// get variable item
 	FilteredProjectItem* vit = getVariable( parent );
 	
 	// check file based
-	bool b = it->fileVariables().contains( parent->defaultValue() );
+	bool b = it->project()->fileVariables().contains( parent->defaultValue() );
 	
 	if ( !it->defaultValue().isEmpty() )
 	{
@@ -205,7 +205,7 @@ void FilteredProjectItemModel::addFilteredValue( XUPItem* it )
 void FilteredProjectItemModel::addFilteredVariable( XUPItem* it )
 {
 	// check we need to show it
-	if ( !it->filteredVariables().contains( it->defaultValue() ) )
+	if ( !it->project()->filteredVariables().contains( it->defaultValue() ) )
 		return;
 	
 	// add values to vit
@@ -236,7 +236,7 @@ void FilteredProjectItemModel::rowsInserted( const QModelIndex& parent, int star
 		if ( XUPItem* it = mSourceModel->itemFromIndex( mSourceModel->index( i, 0, parent ) ) )
 		{
 			// if filtered
-			if ( !it->filteredVariables().isEmpty() )
+			if ( !it->project()->filteredVariables().isEmpty() )
 			{
 				if ( it->isProject() )
 					addFilteredProject( it );

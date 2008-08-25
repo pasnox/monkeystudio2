@@ -31,7 +31,7 @@ void recursiveRemoveItem( XUPItem* it, bool deleteFiles = false )
 			if ( cit->hasChildren() )
 				recursiveRemoveItem( cit );
 			// if it's a file item remvoe fiel if needed
-			if ( deleteFiles && cit->isType( "value" ) && it->fileVariables().contains( it->defaultValue() ) )
+			if ( deleteFiles && cit->isType( "value" ) && it->project()->fileVariables().contains( it->defaultValue() ) )
 			{
 				const QString fp = cit->filePath();
 				if ( QFile::exists( fp ) && !QFile::remove( fp ) )
@@ -234,7 +234,7 @@ void UIXUPProjectEditor::on_tbAddScope_clicked()
 		// get current scope
 		XUPItem* curScope = currentScope();
 		// create item
-		XUPItem* scope = curScope->clone( false );
+		XUPItem* scope = curScope->clone();
 		scope->setDomElement( curScope->domElement().ownerDocument().createElement( "scope" ) );
 		curScope->domElement().appendChild( scope->domElement() );
 		scope->setValue( scope->valueName(), sn );
@@ -378,7 +378,7 @@ void UIXUPProjectEditor::on_tbOthersVariablesAdd_clicked()
 	{
 		// init dialog
 		UIAddVariable d( window() );
-		d.setVariablesName( scope->itemInfos().variablesList() );
+		d.setVariablesName( scope->project()->itemInfos().variablesList() );
 		d.setOperators( mProject->operators() );
 		// execute dialog
 		if ( d.exec() == QDialog::Accepted )
@@ -401,7 +401,7 @@ void UIXUPProjectEditor::on_tbOthersVariablesAdd_clicked()
 				}
 			}
 			// create item
-			XUPItem* vit = scope->clone( false );
+			XUPItem* vit = scope->clone();
 			vit->setDomElement( scope->domElement().ownerDocument().createElement( "variable" ) );
 			scope->domElement().appendChild( vit->domElement() );
 			vit->setValue( vit->valueName(), vn );
@@ -429,9 +429,9 @@ void UIXUPProjectEditor::on_tbOthersVariablesEdit_triggered( QAction* action )
 			// init dialog
 			UIAddVariable d( window() );
 			d.setWindowTitle( tr( "Edit a variable..." ) );
-			d.setVariablesName( vit->itemInfos().variablesList() );
+			d.setVariablesName( vit->project()->itemInfos().variablesList() );
 			d.setCurrentVariableName( vit->defaultValue() );
-			d.setOperators( vit->operators() );
+			d.setOperators( vit->project()->operators() );
 			d.setCurrentOperator( vit->value( "operator", "=" ) );
 			// execute dialog
 			if ( d.exec() == QDialog::Accepted )
@@ -534,7 +534,7 @@ void UIXUPProjectEditor::on_tbOthersValuesAdd_triggered( QAction* action )
 				}
 			}
 			// create item
-			XUPItem* vit = cv->clone( false );
+			XUPItem* vit = cv->clone();
 			vit->setDomElement( cv->domElement().ownerDocument().createElement( "value" ) );
 			cv->domElement().appendChild( vit->domElement() );
 			vit->setValue( vit->valueName(), val );

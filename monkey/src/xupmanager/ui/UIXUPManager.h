@@ -68,7 +68,7 @@ protected:
 
 public slots:
 	bool openProject( const QString& );
-	bool saveProject( XUPItem*, const QString& );
+	bool saveProject( XUPProjectItem*, const QString& );
 
 protected slots:
 	void actionNewTriggered();
