@@ -287,7 +287,7 @@ QString XUPItem::defaultInterpretedValue() const
 
 QString XUPItem::valueName( const QString& s ) const
 {
-	if ( project()->textTypes().contains( s ) ) //FIXME Do it's right?
+	if ( project() && project()->textTypes().contains( s ) ) //FIXME Do it's right?
 		return "text";
 	return "name";
 }
@@ -337,22 +337,7 @@ bool XUPItem::modified() const
 
 void XUPItem::setModified( bool b, bool e )
 {
-	if ( isProject() && b && !modified() )
-	{
-		mModified = true;
-		if ( e )
-			emit modifiedChanged( this, true );
-	}
-	else if ( isProject() && !b && modified() )
-	{
-		foreach ( XUPItem* it, children( true, true ) )
-			if ( it->modified() )
-				it->setModified( false, false );
-		mModified = false;
-		if ( e )
-			emit modifiedChanged( this, false );
-	}
-	else if ( mModified != b )
+	if ( mModified != b )
 	{
 		mModified = b;
 		if ( e )

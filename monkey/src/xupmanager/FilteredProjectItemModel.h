@@ -9,6 +9,8 @@
 #include "XUPItem.h"
 #include "XUPProjectItem.h"
 
+#include <QDebug>
+
 class ProjectItemModel;
 
 class Q_MONKEY_EXPORT FilteredProjectItem : public QStandardItem

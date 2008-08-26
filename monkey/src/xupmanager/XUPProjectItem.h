@@ -11,7 +11,7 @@ public:
 	
 	static QString mProjectSettingsScope;
 
-	XUPProjectItem( const QDomElement = QDomDocument().toElement(), const QString& = QString(), bool = false );
+	XUPProjectItem( const QDomElement = QDomDocument().toElement(), const QString& = QString());
 	
 	// register item specific infos
 	virtual void registerItem() = 0;
@@ -56,6 +56,12 @@ public:
 
 	// return copy of this item
 	virtual XUPProjectItem* clone( bool = true ) const = 0;
+
+	// return the project item of this item (this!!!). Implemented for overloading of XUPItem's function
+	virtual XUPProjectItem* project();
+	
+	// set item modified state and emit modified signal according to second parameter
+	virtual void setModified( bool, bool = true );
 	
 	// return a project settings value
 	virtual QStringList projectSettingsValues( const QString& variable, const QStringList& defaultValues = QStringList() ) const;

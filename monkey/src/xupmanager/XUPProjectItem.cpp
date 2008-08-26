@@ -8,7 +8,7 @@
 QString XUPProjectItem::mProjectSettingsScope = "ProjectSettings";
 XUPItemInfos XUPProjectItem::mXUPItemInfos;
 
-XUPProjectItem::XUPProjectItem( const QDomElement e, const QString& s, bool b )
+XUPProjectItem::XUPProjectItem( const QDomElement e, const QString& s)
 {
 #if 0
 	if ( !mXUPItemInfos.Registered )
@@ -16,7 +16,6 @@ XUPProjectItem::XUPProjectItem( const QDomElement e, const QString& s, bool b )
 #endif
 	setDomElement( e );
 	loadProject( s );
-	setModified( b );
 }
 
 const XUPItemInfos& XUPProjectItem::itemInfos() const
@@ -90,6 +89,30 @@ QHash<QString, QStringList> XUPProjectItem::variableSuffixes() const
 
 void XUPProjectItem::registerVariableSuffixes( const QString& n, const QStringList& s )
 { mXUPItemInfos.VariableSuffixes[n] = s; }
+
+XUPProjectItem* XUPProjectItem::project()
+{
+	return this;
+}
+
+void XUPProjectItem::setModified( bool b, bool e )
+{
+	if (b && !modified() )
+	{
+		mModified = true;
+		if ( e )
+			emit modifiedChanged( this, true );
+	}
+	else if (!b && modified() )
+	{
+		foreach ( XUPItem* it, children( true, true ) )
+			if ( it->modified() )
+				it->setModified( false, false );
+		mModified = false;
+		if ( e )
+			emit modifiedChanged( this, false );
+	}
+}
 
 QStringList XUPProjectItem::projectSettingsValues( const QString& variable, const QStringList& defaultValues ) const
 {
