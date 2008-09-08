@@ -1,11 +1,11 @@
 # Monkey Studio 2.0.0 QScintilla Project file
+include( qscintilla_check.pri )
 
 QSCINTILLA_PWD	= $$PWD
 
 # include sdk path
 INCLUDEPATH	*= $${QSCINTILLA_PWD}/sdk
 
-SYSTEM_QSCINTILLA = $$(MONKEY_SYSTEM_QSCINTILLA)
 isEqual( SYSTEM_QSCINTILLA, 1 ) {
 	#define 
 	DEFINES	*= SYSTEM_QSCINTILLA

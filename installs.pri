@@ -3,11 +3,12 @@
 include( config.pri )
 
 !build_pass {
-	SYSTEM_QSCINTILLA = $$(MONKEY_SYSTEM_QSCINTILLA)
 	isEqual( SYSTEM_QSCINTILLA, 1 ):message( "Using system QScintilla library" )
 	else:message( "Using integrated QScintilla library" )
-	message( "Monkey Studio binary will be installed to : $$PACKAGE_PREFIX" )
-	message( "Monkey Studio datas will be installed to : $$PACKAGE_DATAS" )
+	message( "You can change qscintilla link type by exporting the MONKEY_SYSTEM_QSCINTILLA variable." )
+	message( "Defining MONKEY_SYSTEM_QSCINTILLA=1 will use system wide qscintilla installation, else the integrated one." )
+	message( "MkS binary will be installed to : $$PACKAGE_PREFIX" )
+	message( "MkS datas will be installed to : $$PACKAGE_DATAS" )
 	message( "You can change this by exporting these variables to your shell before calling qmake : MONKEY_PREFIX, MONKEY_DATAS" )
 
 	# templates

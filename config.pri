@@ -12,7 +12,7 @@ PACKAGE_DESTDIR	= $${PACKAGE_PWD}/bin
 PACKAGE_BUILD_PATH	= $${PACKAGE_PWD}/build
 
 # build mode
-CONFIG	+= qt warn_on thread x11 windows debug
+CONFIG	+= qt warn_on thread x11 windows release
 
 # define config mode paths
 CONFIG( debug, debug|release ) {
@@ -47,7 +47,7 @@ QMAKE_TARGET_PRODUCT	= "Monkey Studio"
 QMAKE_TARGET_DESCRIPTION	= "Crossplatform Integrated Development Environment"
 QMAKE_TARGET_COPYRIGHT	= "Copyright (C) 2005 - 2008 Filipe AZEVEDO"
 PACKAGE_DOMAIN	= "www.monkeystudio.org"
-PACKAGE_VERSION	= 1.8.2.2svn_debug
+PACKAGE_VERSION	= 1.8.2.2svn
 
 # define variable for source code
 DEFINES	*= "PACKAGE_NAME=\"\\\"$${QMAKE_TARGET_PRODUCT}\\\"\"" \
@@ -79,3 +79,6 @@ PACKAGE_DATAS	= $$quote($$PACKAGE_DATAS)
 # define package install paths so source code can use them
 DEFINES	*= "PACKAGE_PREFIX=\"\\\"$${PACKAGE_PREFIX}\\\"\"" \
 	"PACKAGE_DATAS=\"\\\"$${PACKAGE_DATAS}\\\"\""
+
+# qscintilla library
+include( qscintilla/qscintilla_check.pri )
