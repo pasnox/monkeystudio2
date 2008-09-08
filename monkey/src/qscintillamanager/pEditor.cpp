@@ -438,7 +438,7 @@ void pEditor::print( bool b )
 		// check if default printer is set
 		if ( p.printerName().isEmpty() )
 		{
-			MonkeyCore::statusBar()->appendMessage( tr( "There is no defaullt printer, please set one before trying quick print" ) );
+			MonkeyCore::statusBar()->appendMessage( tr( "There is no default printer, please set one before trying quick print" ) );
 			return;
 		}
 		
