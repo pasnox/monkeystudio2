@@ -32,14 +32,12 @@ else:*-g++:LIBS	*= -Wl,--whole-archive # import all symbols as the not used ones
 mac:*-g++:LIBS	*= -dynamic
 else:unix:*-g++:LIBS	*= -rdynamic
 
-!contains( DEFINES, SYSTEM_QSCINTILLA ) {
-	PRE_TARGETDEPS	*= ../qscintilla
-}
+isEqual( SYSTEM_QSCINTILLA, 1 ):PRE_TARGETDEPS	*= ../qscintilla
 PRE_TARGETDEPS	*= ../fresh ../ctags
 
 CONFIG( debug, debug|release ) {
 	#Debug
-	!contains( DEFINES, SYSTEM_QSCINTILLA ) {
+	!isEqual( SYSTEM_QSCINTILLA, 1 ) {
 		unix:LIBS	*= -lqscintilla2_debug -lfresh_debug -lctags_debug
 		else:LIBS	*= -lqscintilla2d -lfreshd -lctagsd
 	} else {

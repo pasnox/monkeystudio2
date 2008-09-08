@@ -7,8 +7,6 @@ QSCINTILLA_PWD	= $$PWD
 INCLUDEPATH	*= $${QSCINTILLA_PWD}/sdk
 
 isEqual( SYSTEM_QSCINTILLA, 1 ) {
-	#define 
-	DEFINES	*= SYSTEM_QSCINTILLA
 	# include path
 	INCLUDEPATH	*= $$[QT_INSTALL_HEADERS]/Qsci
 } else {
