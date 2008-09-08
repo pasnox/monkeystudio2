@@ -47,7 +47,8 @@ public:
 	enum LayoutMode { lNone = 0, lNormal, lVertical, lHorizontal } mLayout;
 
 	// constructor
-	pAbstractChild()
+	pAbstractChild( QWidget* parent = 0 )
+		: QFrame( parent )
 	{
 		setAttribute( Qt::WA_DeleteOnClose );
 		mDocument = mNone;
