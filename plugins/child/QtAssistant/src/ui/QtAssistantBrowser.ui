@@ -1,0 +1,172 @@
+<ui version="4.0" >
+ <class>QtAssistantBrowser</class>
+ <widget class="pAbstractChild" name="QtAssistantBrowser" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>411</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Qt Assistant</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout" >
+   <item>
+    <widget class="QToolBar" name="tbButtons" >
+     <property name="floatable" >
+      <bool>false</bool>
+     </property>
+     <addaction name="aPrevious" />
+     <addaction name="aNext" />
+     <addaction name="aHome" />
+     <addaction name="separator" />
+     <addaction name="aZoomIn" />
+     <addaction name="aZoomOut" />
+     <addaction name="aZoomReset" />
+     <addaction name="separator" />
+     <addaction name="aFindInText" />
+     <addaction name="aPreviousTab" />
+     <addaction name="aNextTab" />
+    </widget>
+   </item>
+   <item>
+    <widget class="QTabWidget" name="twPages" >
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="wSearch" >
+      <attribute name="title" >
+       <string>&amp;Search</string>
+      </attribute>
+      <attribute name="icon" >
+       <iconset resource="../resources/QtAssistant.qrc" >
+        <normaloff>:/icons/find.png</normaloff>:/icons/find.png</iconset>
+      </attribute>
+      <layout class="QVBoxLayout" name="vlSearch" />
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QtAssistantInlineSearch" native="1" name="isSearch" />
+   </item>
+  </layout>
+  <action name="aPrevious" >
+   <property name="icon" >
+    <iconset resource="../resources/QtAssistant.qrc" >
+     <normaloff>:/icons/previous.png</normaloff>:/icons/previous.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Previous page</string>
+   </property>
+  </action>
+  <action name="aNext" >
+   <property name="icon" >
+    <iconset resource="../resources/QtAssistant.qrc" >
+     <normaloff>:/icons/next.png</normaloff>:/icons/next.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Next page</string>
+   </property>
+  </action>
+  <action name="aHome" >
+   <property name="icon" >
+    <iconset resource="../resources/QtAssistant.qrc" >
+     <normaloff>:/icons/home.png</normaloff>:/icons/home.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Home page</string>
+   </property>
+  </action>
+  <action name="aFindInText" >
+   <property name="icon" >
+    <iconset resource="../resources/QtAssistant.qrc" >
+     <normaloff>:/icons/find.png</normaloff>:/icons/find.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Find in Text</string>
+   </property>
+  </action>
+  <action name="aZoomIn" >
+   <property name="icon" >
+    <iconset resource="../resources/QtAssistant.qrc" >
+     <normaloff>:/icons/zoomin.png</normaloff>:/icons/zoomin.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Zoom In</string>
+   </property>
+  </action>
+  <action name="aZoomOut" >
+   <property name="icon" >
+    <iconset resource="../resources/QtAssistant.qrc" >
+     <normaloff>:/icons/zoomout.png</normaloff>:/icons/zoomout.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Zoom Out</string>
+   </property>
+  </action>
+  <action name="aZoomReset" >
+   <property name="icon" >
+    <iconset resource="../resources/QtAssistant.qrc" >
+     <normaloff>:/icons/resetzoom.png</normaloff>:/icons/resetzoom.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Zoom Reset</string>
+   </property>
+  </action>
+  <action name="aAddNewPage" >
+   <property name="icon" >
+    <iconset resource="../resources/QtAssistant.qrc" >
+     <normaloff>:/icons/addtab.png</normaloff>:/icons/addtab.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Add new page</string>
+   </property>
+  </action>
+  <action name="aCloseCurrentPage" >
+   <property name="icon" >
+    <iconset resource="../resources/QtAssistant.qrc" >
+     <normaloff>:/icons/closetab.png</normaloff>:/icons/closetab.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Close current page</string>
+   </property>
+  </action>
+  <action name="aNextTab" >
+   <property name="icon" >
+    <iconset resource="../resources/QtAssistant.qrc" >
+     <normaloff>:/icons/nexttab.png</normaloff>:/icons/nexttab.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Next tab</string>
+   </property>
+  </action>
+  <action name="aPreviousTab" >
+   <property name="icon" >
+    <iconset resource="../resources/QtAssistant.qrc" >
+     <normaloff>:/icons/previoustab.png</normaloff>:/icons/previoustab.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Previous tab</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>pAbstractChild</class>
+   <extends>QWidget</extends>
+   <header>workspacemanager.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QtAssistantInlineSearch</class>
+   <extends>QWidget</extends>
+   <header>QtAssistantInlineSearch.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../resources/QtAssistant.qrc" />
+ </resources>
+ <connections/>
+</ui>
