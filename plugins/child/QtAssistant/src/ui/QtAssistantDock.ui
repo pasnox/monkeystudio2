@@ -18,6 +18,12 @@
   </property>
   <widget class="QWidget" name="wCentral" >
    <layout class="QVBoxLayout" name="vlCentral" >
+    <property name="spacing" >
+     <number>6</number>
+    </property>
+    <property name="margin" >
+     <number>9</number>
+    </property>
     <item>
      <widget class="QComboBox" name="cbFilter" />
     </item>
@@ -26,20 +32,30 @@
       <property name="tabPosition" >
        <enum>QTabWidget::South</enum>
       </property>
-      <property name="currentIndex" >
-       <number>0</number>
-      </property>
       <widget class="QWidget" name="wContents" >
        <attribute name="title" >
         <string>&amp;Contents</string>
        </attribute>
-       <layout class="QVBoxLayout" name="vlContents" />
+       <layout class="QVBoxLayout" name="vlContents" >
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <property name="margin" >
+         <number>9</number>
+        </property>
+       </layout>
       </widget>
       <widget class="QWidget" name="wIndex" >
        <attribute name="title" >
         <string>&amp;Index</string>
        </attribute>
        <layout class="QVBoxLayout" name="vlIndex" >
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <property name="margin" >
+         <number>9</number>
+        </property>
         <item>
          <widget class="QLabel" name="lLookFor" >
           <property name="text" >
@@ -59,7 +75,14 @@
        <attribute name="title" >
         <string>&amp;Bookmarks</string>
        </attribute>
-       <layout class="QVBoxLayout" name="vlBookmarks" />
+       <layout class="QVBoxLayout" name="vlBookmarks" >
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <property name="margin" >
+         <number>9</number>
+        </property>
+       </layout>
       </widget>
      </widget>
     </item>
