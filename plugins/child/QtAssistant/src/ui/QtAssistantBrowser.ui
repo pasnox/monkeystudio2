@@ -21,6 +21,12 @@
    </property>
    <item>
     <widget class="QToolBar" name="tbButtons" >
+     <property name="iconSize" >
+      <size>
+       <width>16</width>
+       <height>16</height>
+      </size>
+     </property>
      <property name="floatable" >
       <bool>false</bool>
      </property>
