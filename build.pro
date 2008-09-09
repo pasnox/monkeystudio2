@@ -5,6 +5,7 @@ ProjectSettings {
 	EXECUTE_DEBUG	= bin/monkeystudio_debug
 	BUILDER	= GNUMake
 	COMPILER	= G++
+	DEBUGGER	= GNUDebugger2
 }
 
 # include install script
