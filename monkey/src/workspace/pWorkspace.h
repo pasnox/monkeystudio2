@@ -60,6 +60,7 @@ public slots:
 	// ask the user a filename and create / open the file
 	pAbstractChild* newTextEditor();
 	// open a file and set cursor to position
+	void initChildConnections( pAbstractChild* child );
 	pAbstractChild* openFile( const QString& );
 	// close the file
 	void closeFile( const QString& );
