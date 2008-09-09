@@ -7,12 +7,12 @@ ProjectSettings {
 	COMPILER	= G++
 }
 
-TEMPLATE	= subdirs
-SUBDIRS	*= fresh ctags monkey plugins
-
 # include install script
 include( installs.pri )
+
+TEMPLATE	= subdirs
 
 !isEqual( SYSTEM_QSCINTILLA, 1 ) {
 	SUBDIRS	*= qscintilla
 }
+SUBDIRS	*= fresh ctags monkey plugins
