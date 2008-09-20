@@ -18,7 +18,7 @@ HEADERS	*= $${XUP_PWD}/XUPIO.h \
 	$${XUP_PWD}/ProjectEditorModel.h \
 	$${XUP_PWD}/AddFilesDialog.h \
 	$${XUP_PWD}/ui/UIAddVariable.h \
-	$${XUP_PWD}/ui/UIXUPProjectEditor.h \
+#	$${XUP_PWD}/ui/UIXUPProjectEditor.h \
 	$${XUP_PWD}/ui/UIXUPManager.h
 
 SOURCES	*= $${XUP_PWD}/XUPIO.cpp \
@@ -30,5 +30,5 @@ SOURCES	*= $${XUP_PWD}/XUPIO.cpp \
 	$${XUP_PWD}/ProjectEditorModel.cpp \
 	$${XUP_PWD}/AddFilesDialog.cpp \
 	$${XUP_PWD}/ui/UIAddVariable.cpp \
-	$${XUP_PWD}/ui/UIXUPProjectEditor.cpp \
+#	$${XUP_PWD}/ui/UIXUPProjectEditor.cpp \
 	$${XUP_PWD}/ui/UIXUPManager.cpp

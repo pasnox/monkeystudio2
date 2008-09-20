@@ -349,7 +349,7 @@ bool UIXUPManager::openProject( const QString& s )
 			{
 				if ( QDir::match( suffix, s ) )
 				{
-					pi = rpi->clone( false );
+					pi = rpi->clone();
 					break;
 				}
 			}

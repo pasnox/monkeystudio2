@@ -231,9 +231,6 @@ QIcon QMakeXUPItem::getIcon( const QString& o, const QString& d ) const
 	return QFile::exists( s ) ? QIcon( s ) : XUPItem::getIcon( o, d );
 }
 
-QMakeXUPItem* QMakeXUPItem::clone( bool b ) const
-{ return b ? new QMakeXUPItem( domElement(), projectFilePath(), modified() ) : new QMakeXUPItem; }
-
 void QMakeXUPItem::remove()
 {
 	// remove project from tree if needed
@@ -358,7 +355,7 @@ void QMakeXUPItem::checkChildrenProjects()
 				// if file exists open project
 				if ( QFile::exists( fn ) )
 				{
-					XUPProjectItem* pi = clone( false );
+					QMakeXUPItem* pi = new QMakeXUPItem();
 					if ( pi->loadProject( fn ) )
 						it->project()->appendRow( pi );
 					else
@@ -377,7 +374,7 @@ void QMakeXUPItem::checkChildrenProjects()
 			// open project include if it exists
 			if ( QFile::exists( fn ) )
 			{
-				XUPProjectItem* pi = clone( false );
+				QMakeXUPItem* pi = new QMakeXUPItem ();
 				if ( pi->loadProject( fn ) )
 					it->appendRow( pi );
 				else
@@ -491,7 +488,7 @@ void QMakeXUPItem::addFiles( const QStringList& files, XUPItem* scope, const QSt
 		// create variable if needed
 		if ( !exists )
 		{
-			vit = clone( false );
+			vit = new XUPItem ();
 			vit->setDomElement( mDomElement.ownerDocument().createElement( "variable" ) );
 			scope->domElement().appendChild( vit->domElement() );
 			vit->setValue( vit->valueName(), vn );
@@ -508,7 +505,7 @@ void QMakeXUPItem::addFiles( const QStringList& files, XUPItem* scope, const QSt
 		QString fp = filePath( file );
 		if ( !existingFiles.contains( fp ) )
 		{
-			XUPItem* it = clone( false );
+			XUPItem* it = new XUPItem();
 			it->setDomElement( mDomElement.ownerDocument().createElement( "value" ) );
 			vit->domElement().appendChild( it->domElement() );
 			it->setValue( it->valueName(), relativeFilePath( fp ) );
@@ -522,7 +519,7 @@ void QMakeXUPItem::addFiles( const QStringList& files, XUPItem* scope, const QSt
 		// open sub project if needed
 		if ( vn == "SUBDIRS" && container )
 		{
-			XUPProjectItem* pi = clone( false );
+			QMakeXUPItem* pi = new QMakeXUPItem();
 			if ( pi->loadProject( file ) )
 				project()->appendRow( pi );
 			else

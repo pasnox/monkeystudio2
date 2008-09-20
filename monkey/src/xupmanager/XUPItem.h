@@ -65,8 +65,6 @@ public:
 	virtual XUPItem* parent() const;
 	// return model
 	virtual ProjectItemModel* model() const;
-	// return copy of this item
-	virtual XUPItem* clone() const;
 	// append row
 	virtual void appendRow( XUPItem* );
 	// insert row

@@ -175,7 +175,7 @@ void XUPProjectItem::setProjectSettingsValues( const QString& variable, const QS
 	// create variable if needed
 	if ( !exists )
 	{
-		vit = scope->clone();
+		vit = new XUPItem();
 		vit->setDomElement( scope->domElement().ownerDocument().createElement( "variable" ) );
 		scope->domElement().appendChild( vit->domElement() );
 		vit->setValue( vit->valueName(), variable );
@@ -192,7 +192,7 @@ void XUPProjectItem::setProjectSettingsValues( const QString& variable, const QS
 	foreach ( const QString& value, values )
 	{
 		// create item value
-		XUPItem* it = vit->clone();
+		XUPItem* it = new XUPItem();
 		it->setDomElement( vit->domElement().ownerDocument().createElement( "value" ) );
 		vit->domElement().appendChild( it->domElement() );
 		it->setValue( it->valueName(), value );
@@ -238,7 +238,7 @@ void XUPProjectItem::addProjectSettingsValues( const QString& variable, const QS
 	// create variable if needed
 	if ( !exists )
 	{
-		vit = scope->clone();
+		vit = new XUPItem();
 		vit->setDomElement( scope->domElement().ownerDocument().createElement( "variable" ) );
 		scope->domElement().appendChild( vit->domElement() );
 		vit->setValue( vit->valueName(), variable );
@@ -253,7 +253,7 @@ void XUPProjectItem::addProjectSettingsValues( const QString& variable, const QS
 		// create item value if needed
 		if ( !existingValues.contains( value ) )
 		{
-			XUPItem* it = vit->clone();
+			XUPItem* it = new XUPItem();
 			it->setDomElement( vit->domElement().ownerDocument().createElement( "value" ) );
 			vit->domElement().appendChild( it->domElement() );
 			it->setValue( it->valueName(), value );

@@ -126,7 +126,7 @@ FilteredProjectItem* FilteredProjectItemModel::getVariable( XUPItem* it )
 
 FilteredProjectItem* FilteredProjectItemModel::createFolder( const QString& name, XUPItem* inItem )
 {
-	FilteredProjectItem* fit = new FilteredProjectItem( inItem->clone() );
+	FilteredProjectItem* fit = new FilteredProjectItem(new XUPItem());
 	fit->item()->setDomElement( inItem->domElement().ownerDocument().createElement( "folder" ) );
 	fit->item()->setValue( "name", name );
 	return fit;

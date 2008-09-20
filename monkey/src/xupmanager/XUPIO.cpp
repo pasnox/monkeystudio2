@@ -71,7 +71,7 @@ void XUPIO::parseRoot( XUPItem* p, const QDomElement& e )
 			// get child node
 			QDomElement de = l.at( i ).toElement();
 			// create item
-			XUPItem* it = p->clone();
+			XUPItem* it = new XUPItem();
 			// assign node
 			it->setDomElement( de );
 			// append item to parent

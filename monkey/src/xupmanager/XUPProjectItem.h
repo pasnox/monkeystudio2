@@ -54,8 +54,7 @@ public:
 	virtual void registerVariableSuffixes( const QString& varname, const QStringList& suffixes );
 
 
-	// return copy of this item
-	virtual XUPProjectItem* clone( bool = true ) const = 0;
+	virtual XUPProjectItem* clone() const = 0;
 
 	// return the project item of this item (this!!!). Implemented for overloading of XUPItem's function
 	virtual XUPProjectItem* project();

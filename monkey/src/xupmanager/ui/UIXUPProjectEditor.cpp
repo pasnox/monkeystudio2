@@ -234,7 +234,7 @@ void UIXUPProjectEditor::on_tbAddScope_clicked()
 		// get current scope
 		XUPItem* curScope = currentScope();
 		// create item
-		XUPItem* scope = curScope->clone();
+		XUPItem* scope = new XUPItem();
 		scope->setDomElement( curScope->domElement().ownerDocument().createElement( "scope" ) );
 		curScope->domElement().appendChild( scope->domElement() );
 		scope->setValue( scope->valueName(), sn );
@@ -401,7 +401,7 @@ void UIXUPProjectEditor::on_tbOthersVariablesAdd_clicked()
 				}
 			}
 			// create item
-			XUPItem* vit = scope->clone();
+			XUPItem* vit = new XUPItem();
 			vit->setDomElement( scope->domElement().ownerDocument().createElement( "variable" ) );
 			scope->domElement().appendChild( vit->domElement() );
 			vit->setValue( vit->valueName(), vn );
@@ -534,7 +534,7 @@ void UIXUPProjectEditor::on_tbOthersValuesAdd_triggered( QAction* action )
 				}
 			}
 			// create item
-			XUPItem* vit = cv->clone();
+			XUPItem* vit = new XUPItem();
 			vit->setDomElement( cv->domElement().ownerDocument().createElement( "value" ) );
 			cv->domElement().appendChild( vit->domElement() );
 			vit->setValue( vit->valueName(), val );

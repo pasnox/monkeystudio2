@@ -86,9 +86,6 @@ XUPItem* XUPItem::parent() const
 ProjectItemModel* XUPItem::model() const
 { return dynamic_cast<ProjectItemModel*>( QStandardItem::model() ); }
 
-XUPItem* XUPItem::clone() const
-{ return new XUPItem; } //FIXME
-
 void XUPItem::appendRow( XUPItem* it )
 { insertRow( rowCount(), it ); }
 
@@ -192,7 +189,7 @@ void XUPItem::addFiles( const QStringList& files, XUPItem* scope, const QString&
 	// create variable if needed
 	if ( !exists )
 	{
-		vit = clone();
+		vit = new XUPItem();
 		vit->setDomElement( mDomElement.ownerDocument().createElement( "variable" ) );
 		scope->domElement().appendChild( vit->domElement() );
 		vit->setValue( vit->valueName(), "FILES" );
@@ -209,7 +206,7 @@ void XUPItem::addFiles( const QStringList& files, XUPItem* scope, const QString&
 		QString fp = filePath( f );
 		if ( !existingFiles.contains( fp ) )
 		{
-			XUPItem* it = clone();
+			XUPItem* it = new XUPItem();
 			it->setDomElement( mDomElement.ownerDocument().createElement( "value" ) );
 			vit->domElement().appendChild( it->domElement() );
 			it->setValue( it->valueName(), relativeFilePath( fp ) );
@@ -392,7 +389,7 @@ void XUPItem::setVariableValues( const QStringList& values )
 	foreach ( const QString& value, values )
 	{
 		// create item value
-		XUPItem* it = clone();
+		XUPItem* it = new XUPItem();
 		it->setDomElement( domElement().ownerDocument().createElement( "value" ) );
 		domElement().appendChild( it->domElement() );
 		it->setValue( it->valueName(), value );
@@ -415,7 +412,7 @@ void XUPItem::addVariableValues( const QStringList& values )
 		// create item value if needed
 		if ( !existingValues.contains( value ) )
 		{
-			XUPItem* it = clone();
+			XUPItem* it = new XUPItem();
 			it->setDomElement( domElement().ownerDocument().createElement( "value" ) );
 			domElement().appendChild( it->domElement() );
 			it->setValue( it->valueName(), value );
@@ -526,7 +523,7 @@ XUPItem* XUPItem::scope( const QString& scopeName, XUPItem* fromScope, bool crea
 	if ( create )
 	{
 		// create scope
-		s = clone();
+		s = new XUPItem();
 		s->setDomElement( mDomElement.ownerDocument().createElement( "scope" ) );
 		fromScope->domElement().appendChild( s->domElement() );
 		s->setValue( s->valueName(), scopeName );
@@ -554,7 +551,7 @@ XUPItem* XUPItem::variable( const QString& variableName, const QString& operator
 	if ( create )
 	{
 		// create scope
-		v = clone();
+		v = new XUPItem();
 		v->setDomElement( mDomElement.ownerDocument().createElement( "variable" ) );
 		fromScope->domElement().appendChild( v->domElement() );
 		v->setValue( v->valueName(), variableName );
