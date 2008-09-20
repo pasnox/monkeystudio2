@@ -76,6 +76,11 @@ public:
 	// remove item from parent, and change project modified flag
 	virtual void remove();
 
+	/* FIXME (AndreyK)
+	   Now, as I understanding, files can be added to a item (SOURCES, HEADERS)
+	   Let's it will be added to a Project, and it should define self, what to do with files
+	   For me, XUPItem should not have next 5 methods
+	*/
 	// return all value files if item if a variable based on files
 	virtual QStringList files( bool absolute = true );
 	// add files to project
@@ -145,8 +150,11 @@ public:
 	virtual XUPProjectItem* project() const;
 	// return the top level project if available
 	virtual XUPProjectItem* topLevelProject() const;
+	
 	// return the most approppriate parent project for includes projects
+	// FIXME Do this function realy need ??? Maybe need some refactoring
 	virtual XUPProjectItem* topProjectForInclude() const;
+	
 	// return a scope by its name from item, creating it if needed
 	virtual XUPItem* scope( const QString& scopeName, XUPItem* fromScope = 0, bool create = false ) const;
 	// return the first variable by its name & operator from item, creating it if needed

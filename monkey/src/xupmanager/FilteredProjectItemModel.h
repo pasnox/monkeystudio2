@@ -1,3 +1,5 @@
+//FIXME make general review of class
+
 #ifndef FILTEREDPROJECTITEMMODEL_H
 #define FILTEREDPROJECTITEMMODEL_H
 

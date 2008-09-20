@@ -56,7 +56,7 @@ void UIXUPManager::initGui()
 	// create actions
 	setAction( UIXUPManager::Source, new QAction( QIcon( ":/actions/source.png" ), tr( "Source..." ), this ) );
 	setAction( UIXUPManager::Filtered, new QAction( QIcon( ":/actions/filtered.png" ), tr( "Filtered" ), this ) );
-	action( UIXUPManager::Filtered )->setChecked( true );
+	action( UIXUPManager::Filtered )->setChecked( false ); // FIXME deactivated while have problems with filtered model
 	// add actions to toolbar
 	tbActions->addAction( action( UIXUPManager::New ) );
 	tbActions->addAction( action( UIXUPManager::Open ) );

@@ -4,6 +4,7 @@
 
 #include "XUPProjectItem.h"
 
+#include <QDebug>
 
 QString XUPProjectItem::mProjectSettingsScope = "ProjectSettings";
 XUPItemInfos XUPProjectItem::mXUPItemInfos;
@@ -15,7 +16,8 @@ XUPProjectItem::XUPProjectItem( const QDomElement e, const QString& s)
 		registerItem();
 #endif
 	setDomElement( e );
-	loadProject( s );
+	if (! s.isEmpty())
+		loadProject( s );
 }
 
 const XUPItemInfos& XUPProjectItem::itemInfos() const
