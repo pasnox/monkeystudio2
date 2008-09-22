@@ -11,7 +11,7 @@ public:
 	QMakeXUPItem( const QDomElement& = QDomElement(), const QString& = QString(), bool = false );
 
 	virtual void registerItem();
-	virtual const XUPItemInfos& itemInfos() const;
+	virtual const XUPProjectItemInfos& itemInfos() const;
 	virtual QStringList operators() const;
 	virtual void registerOperator( const QString& op );
 	virtual QStringList filteredVariables() const;
@@ -57,7 +57,7 @@ public:
 	virtual void installCommands();
 
 protected:
-	static XUPItemInfos mQMakeXUPItemInfos;
+	static XUPProjectItemInfos mQMakeXUPProjectItemInfos;
 };
 
 #endif // QMAKEXUPITEM_H

@@ -1,10 +1,11 @@
+#include <QStandardItem>
+
 #include "../coremanager/MonkeyCore.h"
 #include "../pluginsmanager/PluginsManager.h"
 #include "XUPIO.h"
+#include "ProjectItemModel.h"
 
 #include "XUPProjectItem.h"
-
-#include <QDebug>
 
 QString XUPProjectItem::mProjectSettingsScope = "ProjectSettings";
 XUPProjectItemInfos XUPProjectItem::mXUPProjectItemInfos;
@@ -15,6 +16,9 @@ XUPProjectItem::XUPProjectItem( const QDomElement e, const QString& s)
 	if (! s.isEmpty())
 		loadProject( s );
 }
+
+ProjectItemModel* XUPProjectItem::model() const
+{ return dynamic_cast<ProjectItemModel*>( QStandardItem::model() ); }
 
 const XUPProjectItemInfos& XUPProjectItem::itemInfos() const
 { return mXUPProjectItemInfos; }
@@ -265,6 +269,17 @@ void XUPProjectItem::addProjectSettingsValues( const QString& variable, const QS
 	if ( scope->isType( "scope" ) )
 		scope->setValue( "nested", scope->rowCount() > 1 ? "false" : "true" );
 }
+
+QString XUPProjectItem::projectFilePath() const
+{
+	return mProjectFilePath;
+}
+
+QString XUPProjectItem::projectPath() const
+{ return QFileInfo( projectFilePath() ).absolutePath(); }
+
+QString XUPProjectItem::relativeFilePath( const QString& s ) const
+{ return QDir( projectPath() ).relativeFilePath( filePath( s ) ); }
 
 bool XUPProjectItem::loadProject( const QString& s, const QString& v )
 {

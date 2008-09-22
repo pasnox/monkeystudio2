@@ -336,7 +336,7 @@ void UIXUPProjectEditor::on_tbModifyProjectFile_triggered( QAction* action )
 					s = QFileDialog::getOpenFileName( window(), tr( "Choose a new file name" ), it->filePath() ); 
 				// apply new value if needed
 				if ( !s.isEmpty() )
-					it->setValue( it->valueName(), it->relativeFilePath( s ) );
+					it->setValue( it->valueName(), it->project()->relativeFilePath( s ) );
 			}
 		}
 	}

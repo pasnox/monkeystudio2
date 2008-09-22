@@ -3,6 +3,13 @@
 
 #include "XUPItem.h"
 
+class BuilderPlugin;
+class CompilerPlugin;
+class DebuggerPlugin;
+class InterpreterPlugin;
+
+class ProjectItemModel;
+
 struct Q_MONKEY_EXPORT XUPProjectItemInfos
 {
 	XUPProjectItemInfos()
@@ -42,6 +49,9 @@ public:
 	// register item specific infos
 	virtual void registerItem() = 0;
 	virtual const XUPProjectItemInfos& itemInfos() const;
+
+	// return model
+	virtual ProjectItemModel* model() const;
 
 	// get available operators for this kind of item
 	virtual QStringList operators() const;
@@ -85,6 +95,13 @@ public:
 	// return the project item of this item (this!!!). Implemented for overloading of XUPItem's function
 	virtual XUPProjectItem* project();
 	
+	// check for sub project to open
+	virtual void checkChildrenProjects() {};
+	
+	// tell if this proejct can ambedeed another projects ( qt subdirs project like )
+	virtual bool isProjectContainer() const 
+		{ return false; };
+
 	// set item modified state and emit modified signal according to second parameter
 	virtual void setModified( bool, bool = true );
 	
@@ -101,6 +118,14 @@ public:
 	virtual void addProjectSettingsValue( const QString& variable, const QString& value ) 
 		{ addProjectSettingsValues( variable, value.isEmpty() ? QStringList() : QStringList( value ) ); }
 	
+	// return the project file path, ie the file u set when opening/saving the project
+	virtual QString projectFilePath() const;
+	// return the project path
+	virtual QString projectPath() const;
+
+	// return relative file path of filepath according to project filepath
+	virtual QString relativeFilePath( const QString& ) const;
+
 	// open project
 	virtual bool loadProject( const QString& filename = QString(), const QString& version = QString( "1.0.0" ) );
 	// save project
@@ -124,6 +149,8 @@ public:
 
 protected:
 	static XUPProjectItemInfos mXUPProjectItemInfos;
+	
+	QString mProjectFilePath;
 
 signals:
 	void modifiedChanged( XUPProjectItem* item, bool modified );

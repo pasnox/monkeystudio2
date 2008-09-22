@@ -281,7 +281,7 @@ void UIXUPManager::addFiles( XUPItem* scope, QWidget* parent )
 			// import files if needed
 			if ( d.importFiles() )
 			{
-				const QString projectPath = d.currentItem()->projectPath();
+				const QString projectPath = d.currentItem()->project()->projectPath();
 				const QString importPath = d.importPath();
 				const QString importRootPath = d.directory().absolutePath();
 				for ( int i = 0; i < files.count(); i++ )

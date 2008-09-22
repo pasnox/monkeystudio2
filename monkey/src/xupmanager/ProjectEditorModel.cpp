@@ -3,7 +3,7 @@
 #include "XUPProjectItem.h"
 #include "ProjectItemModel.h"
 
-ProjectEditorModel::ProjectEditorModel( XUPItem* project, ProjectEditorModel::ViewType viewType, QObject* owner )
+ProjectEditorModel::ProjectEditorModel( XUPProjectItem* project, ProjectEditorModel::ViewType viewType, QObject* owner )
 	: QSortFilterProxyModel( owner )
 {
 	Q_ASSERT( project );

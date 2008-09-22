@@ -22,7 +22,7 @@ AddFilesDialog::AddFilesDialog( ScopedProjectItemModel* spim, XUPItem* pi, QWidg
 	setWindowTitle( tr( "Choose the folders/files to add to your project" ) );
 	setFileMode( QFileDialog::ExistingFiles );
 	// set directory
-	setDirectory( pi->projectPath() );
+	setDirectory( pi->project()->projectPath() );
 	// set accept mode
 	setAcceptMode( QFileDialog::AcceptOpen );
 	setLabelText( QFileDialog::Accept, tr( "Add" ) );
@@ -159,7 +159,7 @@ void AddFilesDialog::projects_currentChanged( const QModelIndex& index )
 {
 	const QModelIndex idx = mScoped->mapToSource( index );
 	const XUPItem* it = mScoped->model()->itemFromIndex( idx )->project();
-	const QString projectPath = it->projectPath();
+	const QString projectPath = it->project()->projectPath();
 	const QString currentPath = cbCopy->currentText();
 	// update combobox
 	QDir dir( projectPath );

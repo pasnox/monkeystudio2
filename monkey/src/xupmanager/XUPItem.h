@@ -6,22 +6,14 @@
 #include "../consolemanager/pCommand.h"
 
 #include <QObject>
-#include <QStandardItem>
 
 #include <QDomDocument>
 #include <QDomElement>
 #include <QIcon>
 #include <QMultiHash>
+#include <QStandardItem>
 
 class XUPProjectItem;
-
-class BuilderPlugin;
-class CompilerPlugin;
-class DebuggerPlugin;
-class InterpreterPlugin;
-
-
-class ProjectItemModel;
 
 class Q_MONKEY_EXPORT XUPItem : public QObject, public QStandardItem
 {
@@ -38,8 +30,6 @@ public:
 	virtual XUPItem* child( int, int = 0 ) const;
 	// return parent item
 	virtual XUPItem* parent() const;
-	// return model
-	virtual ProjectItemModel* model() const;
 	// append row
 	virtual void appendRow( XUPItem* );
 	// insert row
@@ -89,10 +79,6 @@ public:
 	// set item modified state and emit modified signal according to second parameter
 	virtual void setModified( bool, bool = true );
 
-	// check for sub project to open
-	virtual void checkChildrenProjects();
-	// tell if this proejct can ambedeed another projects ( qt subdirs project like )
-	virtual bool isProjectContainer() const;
 	// return the variable values if item is a variable else nothing
 	virtual QStringList variableValues() const;
 	virtual QString variableValue() { return variableValues().join( " " ); }
@@ -106,15 +92,8 @@ public:
 	virtual void removeVariableValues( const QStringList& values );
 	virtual void removeVariableValue( const QString& value ) { removeVariableValues( value.isEmpty() ? QStringList() : QStringList( value ) ); }
 
-	// return the project file path, ie the file u set when opening/saving the project
-	virtual QString projectFilePath() const;
-	// return the project path
-	virtual QString projectPath() const;
 	// if item is a value, and it s variable is file or path based, return the full file path of the value, else return a file path according to project path for parameter
 	virtual QString filePath( const QString& = QString() ) const;
-	// return relative file path of filepath according to project filepath
-	virtual QString relativeFilePath( const QString& = QString() ) const;
-	
 	// tell if this item is a project
 	virtual bool isProject() const;
 	// tell if this item is type
@@ -137,7 +116,7 @@ protected:
 	
 	QDomDocument mDocument;
 	QDomElement mDomElement;
-	QString mProjectFilePath;
+
 	bool mModified;
 	
 	QMultiHash<QString, pCommand> mCommands;

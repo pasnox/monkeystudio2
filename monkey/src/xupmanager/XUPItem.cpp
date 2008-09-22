@@ -1,7 +1,5 @@
 #include "XUPItem.h"
 #include "XUPProjectItem.h"
-#include "ProjectItemModel.h"
-
 
 #include <QFile>
 #include <QFileInfo>
@@ -43,7 +41,7 @@ QVariant XUPItem::data( int role ) const
 				if ( project()->fileVariables().contains( parent()->defaultValue() ) )
 					txt = QFileInfo( defaultInterpretedValue() ).fileName();
 				else if ( project()->pathVariables().contains( parent()->defaultValue() ) )
-					txt = relativeFilePath( defaultInterpretedValue() );
+					txt = project()->relativeFilePath( defaultInterpretedValue() ); // TODO review. Do it's correct?
 			}
 		}
 		return QVariant( txt );
@@ -55,9 +53,9 @@ QVariant XUPItem::data( int role ) const
 		QString cmt = value( "comment" );
 		if ( cmt.isEmpty() )
 			cmt = tr( "no comment" );
-		if ( isType( "project" ) )
+/*		if ( isType( "project" ) )
 			tt = tr( "<b>Project</b><br />%1" ).arg( projectFilePath() );
-		else if ( isType( "comment" ) )
+*/		else if ( isType( "comment" ) )
 			tt = tr( "<b>Comment</b><br />%1" ).arg( defaultValue() );
 		else if ( isType( "emptyline" ) )
 			tt = tr( "<b>Empty Line(s)</b><br />%1" ).arg( defaultValue() );
@@ -82,9 +80,6 @@ XUPItem* XUPItem::child( int r, int c ) const
 
 XUPItem* XUPItem::parent() const
 { return dynamic_cast<XUPItem*>( QStandardItem::parent() ); }
-
-ProjectItemModel* XUPItem::model() const
-{ return dynamic_cast<ProjectItemModel*>( QStandardItem::model() ); }
 
 void XUPItem::appendRow( XUPItem* it )
 { insertRow( rowCount(), it ); }
@@ -156,7 +151,7 @@ QStringList XUPItem::files( bool a )
 	// check recurs items from vit
 	foreach ( XUPItem* cit, children( false, false ) )
 		if ( cit->isType( "value" ) )
-				l << ( a ? cit->filePath() : cit->relativeFilePath() );
+				l << ( a ? cit->filePath() : project()->relativeFilePath (cit->filePath()) ); //TODO review. Do it's right ?
 	
 	// return list
 	return l;
@@ -209,7 +204,7 @@ void XUPItem::addFiles( const QStringList& files, XUPItem* scope, const QString&
 			XUPItem* it = new XUPItem();
 			it->setDomElement( mDomElement.ownerDocument().createElement( "value" ) );
 			vit->domElement().appendChild( it->domElement() );
-			it->setValue( it->valueName(), relativeFilePath( fp ) );
+			it->setValue( it->valueName(), project()->relativeFilePath( fp ) );
 			vit->appendRow( it );
 		}
 	}
@@ -342,12 +337,6 @@ void XUPItem::setModified( bool b, bool e )
 	}
 }
 
-void XUPItem::checkChildrenProjects()
-{}
-
-bool XUPItem::isProjectContainer() const
-{ return false; }
-
 QStringList XUPItem::variableValues() const
 {
 	QStringList l;
@@ -434,16 +423,6 @@ void XUPItem::removeVariableValues( const QStringList& values )
 		remove();
 }
 
-QString XUPItem::projectFilePath() const
-{
-	if ( XUPItem* pi = project() )
-		return pi->mProjectFilePath;
-	return QString();
-}
-
-QString XUPItem::projectPath() const
-{ return QFileInfo( projectFilePath() ).absolutePath(); }
-
 QString XUPItem::filePath( const QString& s ) const
 {
 	if ( s.isEmpty() && isType( "value" ) )
@@ -454,7 +433,7 @@ QString XUPItem::filePath( const QString& s ) const
 			QString div = defaultInterpretedValue();
 			QFileInfo fi( div );
 			if ( fi.isRelative() )
-				fi.setFile( projectPath().append( "/%1" ).arg( div ) );
+				fi.setFile( project()->projectPath().append( "/%1" ).arg( div ) );
 			return fi.absoluteFilePath();
 		}
 	}
@@ -462,16 +441,13 @@ QString XUPItem::filePath( const QString& s ) const
 	{
 		QFileInfo fi( s );
 		if ( fi.isRelative() )
-			fi.setFile( projectPath().append( "/%1" ).arg( s ) );
+			fi.setFile( project()->projectPath().append( "/%1" ).arg( s ) );
 		return fi.absoluteFilePath();
 	}
 	else if ( isProject() )
-		return projectFilePath();
+		return project()->projectFilePath();
 	return s;
 }
-
-QString XUPItem::relativeFilePath( const QString& s ) const
-{ return QDir( projectPath() ).relativeFilePath( filePath( s ) ); }
 
 bool XUPItem::isProject() const
 { return value( "type" ) == "project"; }

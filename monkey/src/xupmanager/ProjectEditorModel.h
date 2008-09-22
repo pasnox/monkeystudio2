@@ -6,6 +6,7 @@
 #include <QSortFilterProxyModel>
 
 class XUPItem;
+class XUPProjectItem;
 class ProjectItemModel;
 
 class Q_MONKEY_EXPORT ProjectEditorModel : public QSortFilterProxyModel
@@ -14,14 +15,14 @@ class Q_MONKEY_EXPORT ProjectEditorModel : public QSortFilterProxyModel
 
 public:
 	enum ViewType { vtAll = 0, vtVariables, vtValues };
-	ProjectEditorModel( XUPItem* project, ProjectEditorModel::ViewType viewType = ProjectEditorModel::vtAll, QObject* owner = 0 );
+	ProjectEditorModel( XUPProjectItem* project, ProjectEditorModel::ViewType viewType = ProjectEditorModel::vtAll, QObject* owner = 0 );
 
 	void setRootItem( XUPItem* root );
 	XUPItem* rootItem() const;
 	virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
 
 protected:
-	XUPItem* mProject;
+	XUPProjectItem* mProject;
 	XUPItem* mRoot;
 	ProjectEditorModel::ViewType mType;
 	ProjectItemModel* mSourceModel;

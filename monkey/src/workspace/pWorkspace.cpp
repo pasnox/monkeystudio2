@@ -645,7 +645,7 @@ void pWorkspace::fileSessionSave_triggered()
 	MonkeyCore::settings()->setValue( "Session/Files", l );
 	// saves opened projects
 	l.clear();
-	foreach ( XUPItem* p, MonkeyCore::projectsManager()->topLevelProjects() )
+	foreach ( XUPProjectItem* p, MonkeyCore::projectsManager()->topLevelProjects() )
 		l << p->projectFilePath();
 	MonkeyCore::settings()->setValue( "Session/Projects", l );
 }
