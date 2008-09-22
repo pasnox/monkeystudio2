@@ -52,7 +52,7 @@ XUPProjectItem* pFileManager::currentProject() const
 { return MonkeyCore::projectsManager()->currentProject(); }
 
 QString pFileManager::currentProjectFile() const
-{ return currentProject() ? currentProject()->projectFilePath() : QString(); }
+{ return currentProject() ? currentProject()->filePath() : QString(); }
 
 QString pFileManager::currentProjectPath() const
 { return currentProject() ? currentProject()->projectPath() : QString(); }

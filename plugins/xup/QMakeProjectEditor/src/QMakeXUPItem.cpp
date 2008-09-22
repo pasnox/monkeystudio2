@@ -245,7 +245,7 @@ void QMakeXUPItem::remove()
 		// check direct project to find it
 		foreach ( XUPItem* it, project()->children( false, false ) )
 		{
-			if ( it->isProject() && it->project()->projectFilePath() == fi.absoluteFilePath() )
+			if ( it->isProject() && it->project()->filePath() == fi.absoluteFilePath() )
 			{
 				// close relating project
 				dynamic_cast<XUPProjectItem*> (it)->closeProject();
@@ -406,7 +406,7 @@ bool QMakeXUPItem::saveProject( const QString& s, const QString& v )
 	QString a = QMake2XUP::convertToPro( domDocument(), v );
 	if ( !a.isNull() )
 	{
-		QFile f( s.isEmpty() ? projectFilePath() : s );
+		QFile f( s.isEmpty() ? filePath() : s );
 		if ( !f.open( QIODevice::WriteOnly ) )
 			return false;
 		f.resize( 0 );
@@ -637,7 +637,7 @@ void QMakeXUPItem::installCommands()
 	QString s;
 	s = interpretedVariable( "TARGET" );
 	if ( s.isEmpty() )
-		s = QFileInfo( projectFilePath() ).baseName();
+		s = QFileInfo( filePath() ).baseName();
 	const QString target = s;
 	s = interpretedVariable( "DESTDIR" );
 	if ( s.isEmpty() )

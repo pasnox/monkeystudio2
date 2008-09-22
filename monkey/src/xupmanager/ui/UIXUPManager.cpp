@@ -330,7 +330,7 @@ bool UIXUPManager::openProject( const QString& s )
 	// check that project is not yet open
 	foreach ( XUPProjectItem* it, topLevelProjects() )
 	{
-		if ( pMonkeyStudio::isSameFile( it->projectFilePath(), s ) )
+		if ( pMonkeyStudio::isSameFile( it->filePath(), s ) )
 		{
 			setCurrentProject( it );
 			return true;

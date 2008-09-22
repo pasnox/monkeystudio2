@@ -52,7 +52,7 @@ UIXUPProjectEditor::UIXUPProjectEditor( XUPProjectItem* project, QWidget* parent
 
 	// init dialog
 	setupUi( this );
-	setWindowTitle( windowTitle().arg( QFileInfo( mProject->projectFilePath() ).fileName() ) );
+	setWindowTitle( windowTitle().arg( QFileInfo( mProject->filePath() ).fileName() ) );
 	lOperator->setVisible( false );
 	cbOperator->setVisible( false );
 	cbOperator->addItems( mProject->operators() );

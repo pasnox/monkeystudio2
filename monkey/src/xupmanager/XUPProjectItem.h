@@ -49,7 +49,7 @@ public:
 	// register item specific infos
 	virtual void registerItem() = 0;
 	virtual const XUPProjectItemInfos& itemInfos() const;
-
+	
 	// return model
 	virtual ProjectItemModel* model() const;
 
@@ -119,7 +119,7 @@ public:
 		{ addProjectSettingsValues( variable, value.isEmpty() ? QStringList() : QStringList( value ) ); }
 	
 	// return the project file path, ie the file u set when opening/saving the project
-	virtual QString projectFilePath() const;
+	virtual QString filePath() const;
 	// return the project path
 	virtual QString projectPath() const;
 
@@ -150,6 +150,7 @@ public:
 protected:
 	static XUPProjectItemInfos mXUPProjectItemInfos;
 	
+	// FIXME remove it, store project path same way, as XUPItem
 	QString mProjectFilePath;
 
 signals:

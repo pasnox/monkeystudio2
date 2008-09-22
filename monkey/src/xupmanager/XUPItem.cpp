@@ -125,8 +125,6 @@ QList<XUPItem*> XUPItem::children( bool r, bool s ) const
 
 void XUPItem::remove()
 {
-	bool b = isProject();
-	XUPItem* pit = b ? 0 : project();
 	// remove node
 	mDomElement.parentNode().removeChild( mDomElement );
 	// remove item from model
@@ -134,9 +132,10 @@ void XUPItem::remove()
 		model()->removeRow( row(), index().parent() );
 	else
 		deleteLater();
-	// update project modified state
-	if ( !b && pit )
-		pit->setModified( true );
+	
+	// update parent modified state
+	if (parent())
+		parent()->setModified( true );
 }
 
 QStringList XUPItem::files( bool a )
@@ -320,10 +319,9 @@ QString XUPItem::defaultValue( const QString& v ) const
 
 bool XUPItem::modified() const
 {
-	if ( isProject() )
-		foreach ( XUPItem* it, children( true, true ) )
-			if ( it->modified() )
-				return true;
+	foreach ( XUPItem* it, children( true, true ) )
+		if ( it->modified() )
+			return true;
 	return mModified;
 }
 
@@ -445,7 +443,7 @@ QString XUPItem::filePath( const QString& s ) const
 		return fi.absoluteFilePath();
 	}
 	else if ( isProject() )
-		return project()->projectFilePath();
+		return project()->filePath();
 	return s;
 }
 

@@ -94,6 +94,7 @@ public:
 
 	// if item is a value, and it s variable is file or path based, return the full file path of the value, else return a file path according to project path for parameter
 	virtual QString filePath( const QString& = QString() ) const;
+	
 	// tell if this item is a project
 	virtual bool isProject() const;
 	// tell if this item is type

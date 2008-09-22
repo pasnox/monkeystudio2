@@ -489,7 +489,7 @@ void pWorkspace::projectCustomActionTriggered()
 				// try reading already saved binary
 				s = cmd.project()->projectSettingsValue( a->text().replace( ' ', '_' ).toUpper() );
 				if ( !s.isEmpty() )
-					s = cmd.project()->topLevelProject()->filePath( s );
+					s = cmd.project()->topLevelProject()->filePath(); //TODO check, was filePath (s)
 				// if not exists ask user to select one
 				if ( !QFile::exists( s ) && question( a->text().append( "..." ), tr( "Can't find your executable file, do you want to choose the file ?" ) ) )
 					s = getOpenFileName( a->text().append( "..." ), cmd.workingDirectory() );
@@ -646,7 +646,7 @@ void pWorkspace::fileSessionSave_triggered()
 	// saves opened projects
 	l.clear();
 	foreach ( XUPProjectItem* p, MonkeyCore::projectsManager()->topLevelProjects() )
-		l << p->projectFilePath();
+		l << p->filePath();
 	MonkeyCore::settings()->setValue( "Session/Projects", l );
 }
 

@@ -270,16 +270,16 @@ void XUPProjectItem::addProjectSettingsValues( const QString& variable, const QS
 		scope->setValue( "nested", scope->rowCount() > 1 ? "false" : "true" );
 }
 
-QString XUPProjectItem::projectFilePath() const
+QString XUPProjectItem::filePath() const
 {
 	return mProjectFilePath;
 }
 
 QString XUPProjectItem::projectPath() const
-{ return QFileInfo( projectFilePath() ).absolutePath(); }
+{ return QFileInfo( filePath() ).absolutePath(); }
 
 QString XUPProjectItem::relativeFilePath( const QString& s ) const
-{ return QDir( projectPath() ).relativeFilePath( filePath( s ) ); }
+{ return QDir( projectPath() ).relativeFilePath( filePath() ); } // TODO was filePath (s)
 
 bool XUPProjectItem::loadProject( const QString& s, const QString& v )
 {
@@ -294,9 +294,9 @@ bool XUPProjectItem::loadProject( const QString& s, const QString& v )
 
 bool XUPProjectItem::saveProject( const QString& s, const QString& v )
 {
-	if ( XUPIO::saveXUP( this, s.isEmpty() ? projectFilePath() : s, v ) )
+	if ( XUPIO::saveXUP( this, s.isEmpty() ? filePath() : s, v ) )
 	{
-		mProjectFilePath = s.isEmpty() ? projectFilePath() : s;
+		mProjectFilePath = s.isEmpty() ? filePath() : s;
 		setModified( false );
 		return true;
 	}
