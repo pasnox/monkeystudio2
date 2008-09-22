@@ -442,8 +442,6 @@ QString XUPItem::filePath( const QString& s ) const
 			fi.setFile( project()->projectPath().append( "/%1" ).arg( s ) );
 		return fi.absoluteFilePath();
 	}
-	else if ( isProject() )
-		return project()->filePath();
 	return s;
 }
 
@@ -458,8 +456,8 @@ XUPProjectItem* XUPItem::project() const
 	XUPItem* it = const_cast<XUPItem*>( this );
 	while (it->parent())
 		it = it->parent();
-	if ( it->isProject() )
-		return dynamic_cast<XUPProjectItem*>( it );
+		if ( it->isProject() )
+			return dynamic_cast<XUPProjectItem*>( it );
 	return 0;
 }
 
