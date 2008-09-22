@@ -53,9 +53,9 @@ QVariant XUPItem::data( int role ) const
 		QString cmt = value( "comment" );
 		if ( cmt.isEmpty() )
 			cmt = tr( "no comment" );
-/*		if ( isType( "project" ) )
-			tt = tr( "<b>Project</b><br />%1" ).arg( projectFilePath() );
-*/		else if ( isType( "comment" ) )
+		if ( isType( "project" ) )
+			tt = tr( "<b>Project</b><br />%1" ).arg( filePath() );
+		else if ( isType( "comment" ) )
 			tt = tr( "<b>Comment</b><br />%1" ).arg( defaultValue() );
 		else if ( isType( "emptyline" ) )
 			tt = tr( "<b>Empty Line(s)</b><br />%1" ).arg( defaultValue() );
