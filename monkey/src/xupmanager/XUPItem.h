@@ -120,8 +120,6 @@ protected:
 
 	bool mModified;
 	
-	QMultiHash<QString, pCommand> mCommands;
-
 signals:
 	void modifiedChanged( XUPItem* item, bool modified ); // FIXME Do item must have this signal ?
 };

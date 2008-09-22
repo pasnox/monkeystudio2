@@ -152,6 +152,7 @@ protected:
 	
 	// FIXME remove it, store project path same way, as XUPItem
 	QString mProjectFilePath;
+	QMultiHash<QString, pCommand> mCommands;
 
 signals:
 	void modifiedChanged( XUPProjectItem* item, bool modified );
