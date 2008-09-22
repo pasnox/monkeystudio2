@@ -17,8 +17,6 @@
 UIXUPManager::UIXUPManager( QWidget* w )
 	: QDockWidget( w ), mModel( new ProjectItemModel( this ) )
 {
-	// register base item
-	//registerItem( new XUPProjectItem ); // FIXME commented during dividing of classes
 	// setup widget
 	setupUi( this );
 	// associate model

@@ -20,31 +20,6 @@ class CompilerPlugin;
 class DebuggerPlugin;
 class InterpreterPlugin;
 
-struct Q_MONKEY_EXPORT XUPItemInfos
-{
-	XUPItemInfos()
-	{ Registered = false; }
-	
-	QStringList variablesList() const
-	{
-		QStringList list;
-		foreach ( const QString& s, QStringList( FilteredVariables ) << FileVariables << PathVariables << VariableLabels.keys() << VariableIcons.keys() << VariableSuffixes.keys() )
-			if ( !list.contains( s ) )
-				list << s;
-		return list;
-	}
-
-	bool Registered;
-	QStringList Operators;
-	QStringList FilteredVariables;
-	QStringList TextTypes;
-	QStringList FileVariables;
-	QStringList PathVariables;
-	QHash<QString, QStringList> Suffixes;
-	QHash<QString, QString> VariableLabels;
-	QHash<QString, QIcon> VariableIcons;
-	QHash<QString, QStringList> VariableSuffixes;
-};
 
 class ProjectItemModel;
 

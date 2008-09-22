@@ -7,90 +7,86 @@
 #include <QDebug>
 
 QString XUPProjectItem::mProjectSettingsScope = "ProjectSettings";
-XUPItemInfos XUPProjectItem::mXUPItemInfos;
+XUPProjectItemInfos XUPProjectItem::mXUPProjectItemInfos;
 
 XUPProjectItem::XUPProjectItem( const QDomElement e, const QString& s)
 {
-#if 0
-	if ( !mXUPItemInfos.Registered )
-		registerItem();
-#endif
 	setDomElement( e );
 	if (! s.isEmpty())
 		loadProject( s );
 }
 
-const XUPItemInfos& XUPProjectItem::itemInfos() const
-{ return mXUPItemInfos; }
+const XUPProjectItemInfos& XUPProjectItem::itemInfos() const
+{ return mXUPProjectItemInfos; }
 
 QStringList XUPProjectItem::operators() const
-{ return mXUPItemInfos.Operators; }
+{ return mXUPProjectItemInfos.Operators; }
 
 void XUPProjectItem::registerOperator( const QString& s )
 {
-	if ( !mXUPItemInfos.Operators.contains( s ) )
-		mXUPItemInfos.Operators << s;
+	if ( !mXUPProjectItemInfos.Operators.contains( s ) )
+		mXUPProjectItemInfos.Operators << s;
 }
 
 QStringList XUPProjectItem::filteredVariables() const
-{ return mXUPItemInfos.FilteredVariables; }
+{ return mXUPProjectItemInfos.FilteredVariables; }
 
 void XUPProjectItem::registerFilteredVariables( const QString& s )
 {
-	if ( !mXUPItemInfos.FilteredVariables.contains( s ) )
-		mXUPItemInfos.FilteredVariables << s;
+	if ( !mXUPProjectItemInfos.FilteredVariables.contains( s ) )
+		mXUPProjectItemInfos.FilteredVariables << s;
 }
 
 QStringList XUPProjectItem::textTypes() const
-{ return mXUPItemInfos.TextTypes; }
+{ return mXUPProjectItemInfos.TextTypes; }
 
 void XUPProjectItem::registerTextType( const QString& s )
 {
-	if ( !mXUPItemInfos.TextTypes.contains( s ) )
-		mXUPItemInfos.TextTypes << s;
+	if ( !mXUPProjectItemInfos.TextTypes.contains( s ) )
+		mXUPProjectItemInfos.TextTypes << s;
 }
 
 QStringList XUPProjectItem::fileVariables() const
-{ return mXUPItemInfos.FileVariables; }
+{ return mXUPProjectItemInfos.FileVariables; }
 
 void XUPProjectItem::registerFileVariables( const QString& s )
 {
-	if ( !mXUPItemInfos.FileVariables.contains( s ) )
-		mXUPItemInfos.FileVariables << s;
+	if ( !mXUPProjectItemInfos.FileVariables.contains( s ) )
+		mXUPProjectItemInfos.FileVariables << s;
 }
 
 QStringList XUPProjectItem::pathVariables() const
-{ return mXUPItemInfos.PathVariables; }
+{ return mXUPProjectItemInfos.PathVariables; }
 
 void XUPProjectItem::registerPathVariables( const QString& s )
 {
-	if ( !mXUPItemInfos.PathVariables.contains( s ) )
-		mXUPItemInfos.PathVariables << s;
+	if ( !mXUPProjectItemInfos.PathVariables.contains( s ) )
+		mXUPProjectItemInfos.PathVariables << s;
 }
 
 QHash<QString, QStringList> XUPProjectItem::suffixes() const
-{ return mXUPItemInfos.Suffixes; }
+{ return mXUPProjectItemInfos.Suffixes; }
 
 void XUPProjectItem::registerSuffixes( const QString& l, const QStringList& s )
-{ mXUPItemInfos.Suffixes[l] = s; }
+{ mXUPProjectItemInfos.Suffixes[l] = s; }
 
 QHash<QString, QString> XUPProjectItem::variableLabels() const
-{ return mXUPItemInfos.VariableLabels; }
+{ return mXUPProjectItemInfos.VariableLabels; }
 
 void XUPProjectItem::registerVariableLabels( const QString& v, const QString& l )
-{ mXUPItemInfos.VariableLabels[v] = l; }
+{ mXUPProjectItemInfos.VariableLabels[v] = l; }
 
 QHash<QString, QIcon> XUPProjectItem::variableIcons() const
-{ return mXUPItemInfos.VariableIcons; }
+{ return mXUPProjectItemInfos.VariableIcons; }
 
 void XUPProjectItem::registerVariableIcons( const QString& v, const QIcon& i )
-{ mXUPItemInfos.VariableIcons[v] = i; }
+{ mXUPProjectItemInfos.VariableIcons[v] = i; }
 
 QHash<QString, QStringList> XUPProjectItem::variableSuffixes() const
-{ return mXUPItemInfos.VariableSuffixes; }
+{ return mXUPProjectItemInfos.VariableSuffixes; }
 
 void XUPProjectItem::registerVariableSuffixes( const QString& n, const QStringList& s )
-{ mXUPItemInfos.VariableSuffixes[n] = s; }
+{ mXUPProjectItemInfos.VariableSuffixes[n] = s; }
 
 XUPProjectItem* XUPProjectItem::project()
 {

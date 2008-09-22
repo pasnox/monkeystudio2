@@ -11,8 +11,6 @@
 #include <coremanager.h>
 #include <queuedstatusbar.h>
 
-#include <QDebug>
-
 XUPItemInfos QMakeXUPItem::mQMakeXUPItemInfos;
 
 QMakeXUPItem::QMakeXUPItem( const QDomElement& e, const QString& s, bool b )

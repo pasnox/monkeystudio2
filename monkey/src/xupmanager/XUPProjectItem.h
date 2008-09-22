@@ -3,6 +3,32 @@
 
 #include "XUPItem.h"
 
+struct Q_MONKEY_EXPORT XUPProjectItemInfos
+{
+	XUPProjectItemInfos()
+	{ Registered = false; }
+	
+	QStringList variablesList() const
+	{
+		QStringList list;
+		foreach ( const QString& s, QStringList( FilteredVariables ) << FileVariables << PathVariables << VariableLabels.keys() << VariableIcons.keys() << VariableSuffixes.keys() )
+			if ( !list.contains( s ) )
+				list << s;
+		return list;
+	}
+
+	bool Registered;
+	QStringList Operators;
+	QStringList FilteredVariables;
+	QStringList TextTypes;
+	QStringList FileVariables;
+	QStringList PathVariables;
+	QHash<QString, QStringList> Suffixes;
+	QHash<QString, QString> VariableLabels;
+	QHash<QString, QIcon> VariableIcons;
+	QHash<QString, QStringList> VariableSuffixes;
+};
+
 class Q_MONKEY_EXPORT XUPProjectItem : public XUPItem
 {
 	Q_OBJECT
@@ -15,7 +41,7 @@ public:
 	
 	// register item specific infos
 	virtual void registerItem() = 0;
-	virtual const XUPItemInfos& itemInfos() const;
+	virtual const XUPProjectItemInfos& itemInfos() const;
 
 	// get available operators for this kind of item
 	virtual QStringList operators() const;
@@ -97,7 +123,7 @@ public:
 	virtual void uninstallCommands();
 
 protected:
-	static XUPItemInfos mXUPItemInfos;
+	static XUPProjectItemInfos mXUPProjectItemInfos;
 
 signals:
 	void modifiedChanged( XUPProjectItem* item, bool modified );
