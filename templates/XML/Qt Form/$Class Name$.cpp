@@ -6,6 +6,6 @@ $Class Name$::$Class Name$( QWidget* parent )
 	setupUi( this );
 }
 
-$Class Name$::~$Class Name$
+$Class Name$::~$Class Name$()
 {
 }
