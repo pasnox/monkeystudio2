@@ -40,18 +40,18 @@ public:
 	virtual void remove();
 
 	/* FIXME (AndreyK)
-	   Now, as I understanding, files can be added to a item (SOURCES, HEADERS)
-	   Let's it will be added to a Project, and it should define self, what to do with files
-	   For me, XUPItem should not have next 5 methods
-	*/
-	// return all value files if item if a variable based on files
-	virtual QStringList files( bool absolute = true );
-	// add files to project
-	virtual void addFiles( const QStringList& files, XUPItem* scope = 0, const QString& op = QString( "=" ) );
-	virtual void addFile( const QString& file, XUPItem* scope = 0, const QString& op = QString( "=" ) ) { addFiles( QStringList( file ), scope, op ); };
-	// remove files to project
-	virtual void removeFiles( const QStringList& files, XUPItem* scope = 0, const QString& op = QString( "=" ) );
-	virtual void removeFile( const QString& file, XUPItem* scope = 0, const QString& op = QString( "=" ) ) { removeFiles( QStringList( file ), scope, op ); };
+		Now, as I understanding, files can be added to a item (SOURCES, HEADERS)
+		Let's it will be added to a Project, and it should define self, what to do with files
+		For me, XUPItem should not have next 5 methods
+		*/
+		// return all value files if item if a variable based on files
+		virtual QStringList files( bool absolute = true );
+		// add files to project
+		virtual void addFiles( const QStringList& files, XUPItem* scope = 0, const QString& op = QString( "=" ) );
+		virtual void addFile( const QString& file, XUPItem* scope = 0, const QString& op = QString( "=" ) ) { addFiles( QStringList( file ), scope, op ); };
+		// remove files to project
+		virtual void removeFiles( const QStringList& files, XUPItem* scope = 0, const QString& op = QString( "=" ) );
+		virtual void removeFile( const QString& file, XUPItem* scope = 0, const QString& op = QString( "=" ) ) { removeFiles( QStringList( file ), scope, op ); };
 
 	// set the item QDomElement
 	virtual void setDomElement( const QDomElement& );
