@@ -1,13 +1,11 @@
 #!/bin/sh
-# Copyright 2007 David Johnson
-# The author grants unlimited permission to
-# copy, distribute and modify this script
+# Copyright 2008 AZEVEDO Filipe
 
 #### functions ###################################################
 
 getBinaryDependencies()
 {
-	for n in `otool -LX $1 | grep Qt` ; do
+	for n in `otool -LX "${1}" | grep Qt` ; do
 		path=`echo $n | grep Qt`
 		if [ $path ] ; then
 			tmp="$tmp $path"
@@ -26,26 +24,26 @@ makeInstall()
 	else
 		echo -n "ERROR: Makefile not found. This script requires the macx-g++ makespec"
 	fi
-	strip $1
+	strip "${1}"
 }
 
 copyDependencies()
 {
 	echo "Copying dependencies..."
-	mkdir -p $1
+	mkdir -p "${1}"
 	for path in $2 ; do
-		name=`basename $path`
+		name=`basename "${path}"`
 		fullname="$FWPATH/$name"
 		
 		# check for non framework, like libQtCLuScene.4.dylib
-		dylib=`expr ${path} : '.*\(dylib\)$'`
+		dylib=`expr "${path}" : '.*\(dylib\)$'`
 		if [ "x${dylib}" = "x" ] ; then
 			fullname="$FWPATH/$name.framework/Versions/4/$name"
 		fi
 		
 		# is symlink ?
-		if [ -h $fullname ] ; then
-			symlink=`readlink $fullname`
+		if [ -h "${fullname}" ] ; then
+			symlink=`readlink "${fullname}"`
 			if [ $symlink[0] = '/' ] ; then
 				$fullname=$symlink
 			else
@@ -54,15 +52,16 @@ copyDependencies()
 		fi
 		
 		# is file exists
-		if [ ! -f $fullname ] ; then
+		if [ ! -f "${fullname}" ] ; then
 			echo "ERROR: cannot find $fullname"
 			exit
 		fi
 		
 		echo -n "$name framework"
-		cp -f $fullname $1/$name
+		target="$1/$name"
+		cp -f "${fullname}" "${target}"
 		# strip libs (-x is max allowable for shared libs)
-		strip -x $1/$name
+		strip -x "${target}"
 	done
 }
 
@@ -70,7 +69,7 @@ echoFrameworks()
 {
 	echo "Using frameworks..."
 	for path in $1 ; do
-		name=`basename $path`
+		name=`basename "${path}"`
 		echo -n " $name"
 	done
 }
@@ -79,19 +78,20 @@ setIds()
 {
 	echo "Setting framework IDs..."
 	for path in $1 ; do
-		name=`basename $path`
+		name=`basename "${path}"`
 		echo -n " $name"
-		install_name_tool -id @executable_path/../Frameworks/$name $2/$name
+		target="$2/$name"
+		install_name_tool -id @executable_path/../Frameworks/$name "${target}"
 	done
 }
 
 changeBinaryPaths()
 {
-	echo "Changing framework paths for `basename $1`..."
+	echo "Changing framework paths for `basename "${1}"`..."
 	for path in $2 ; do
-		name=`basename $path`
+		name=`basename "${path}"`
 		echo -n " $name"
-		install_name_tool -change $path @executable_path/../Frameworks/$name $1
+		install_name_tool -change $path @executable_path/../Frameworks/$name "${1}"
 	done
 }
 
@@ -99,10 +99,10 @@ fixBundledFrameworks()
 {
 	echo "Fixing bundled frameworks..."
 	for fwpath in $1 ; do
-		fwname=`basename $fwpath`
+		fwname=`basename "${fwpath}"`
 		framework="$2/$fwname"
 		# get framework dependencies
-		deps=`getBinaryDependencies $framework`
+		deps=`getBinaryDependencies "$framework"`
 		changeBinaryPaths "$framework" "$deps" 
 	done
 }
@@ -115,10 +115,10 @@ copyAccessiblePlugins()
 	
 	for lib in `ls "$1/accessible"` ; do
 		lib="$1/accessible/$lib"
-		deps=`getBinaryDependencies $lib`
+		deps=`getBinaryDependencies "$lib"`
 		changeBinaryPaths "$lib" "$deps"
 		# strip libs (-x is max allowable for shared libs)
-		strip -x $lib
+		strip -x "${lib}"
 	done
 }
 
@@ -130,10 +130,10 @@ copyCodecsPlugins()
 	
 	for lib in `ls "$1/codecs"` ; do
 		lib="$1/codecs/$lib"
-		deps=`getBinaryDependencies $lib`
+		deps=`getBinaryDependencies "$lib"`
 		changeBinaryPaths "$lib" "$deps"
 		# strip libs (-x is max allowable for shared libs)
-		strip -x $lib
+		strip -x "${lib}"
 	done
 }
 
@@ -145,10 +145,10 @@ copyDesignerPlugins()
 	
 	for lib in `ls "$1/designer"` ; do
 		lib="$1/designer/$lib"
-		deps=`getBinaryDependencies $lib`
+		deps=`getBinaryDependencies "$lib"`
 		changeBinaryPaths "$lib" "$deps"
 		# strip libs (-x is max allowable for shared libs)
-		strip -x $lib
+		strip -x "${lib}"
 	done
 }
 
@@ -160,10 +160,10 @@ copyIconPlugins()
 	
 	for lib in `ls "$1/iconengines"` ; do
 		lib="$1/iconengines/$lib"
-		deps=`getBinaryDependencies $lib`
+		deps=`getBinaryDependencies "$lib"`
 		changeBinaryPaths "$lib" "$deps"
 		# strip libs (-x is max allowable for shared libs)
-		strip -x $lib
+		strip -x "${lib}"
 	done
 }
 
@@ -175,10 +175,10 @@ copyImagePlugins()
 	
 	for lib in `ls "$1/imageformats"` ; do
 		lib="$1/imageformats/$lib"
-		deps=`getBinaryDependencies $lib`
+		deps=`getBinaryDependencies "$lib"`
 		changeBinaryPaths "$lib" "$deps"
 		# strip libs (-x is max allowable for shared libs)
-		strip -x $lib
+		strip -x "${lib}"
 	done
 }
 
@@ -188,12 +188,14 @@ copyInputPlugins()
 	mkdir -p "$1/inputmethods"
 	cp -Rf "$QT_PLUGINS_PATH/inputmethods" "$1"
 	
+	exit
+	
 	for lib in `ls "$1/inputmethods"` ; do
 		lib="$1/inputmethods/$lib"
-		deps=`getBinaryDependencies $lib`
+		deps=`getBinaryDependencies "$lib"`
 		changeBinaryPaths "$lib" "$deps"
 		# strip libs (-x is max allowable for shared libs)
-		strip -x $lib
+		strip -x "${lib}"
 	done
 }
 
@@ -205,10 +207,10 @@ copyPhononPlugins()
 	
 	for lib in `ls "$1/phonon_backend"` ; do
 		lib="$1/phonon_backend/$lib"
-		deps=`getBinaryDependencies $lib`
+		deps=`getBinaryDependencies "$lib"`
 		changeBinaryPaths "$lib" "$deps"
 		# strip libs (-x is max allowable for shared libs)
-		strip -x $lib
+		strip -x "${lib}"
 	done
 }
 
@@ -220,10 +222,10 @@ copyScriptPlugins()
 	
 	for lib in `ls "$1/script"` ; do
 		lib="$1/script/$lib"
-		deps=`getBinaryDependencies $lib`
+		deps=`getBinaryDependencies "$lib"`
 		changeBinaryPaths "$lib" "$deps"
 		# strip libs (-x is max allowable for shared libs)
-		strip -x $lib
+		strip -x "${lib}"
 	done
 }
 
@@ -235,10 +237,10 @@ copySqlPlugins()
 	
 	for lib in `ls "$1/sqldrivers"` ; do
 		lib="$1/sqldrivers/$lib"
-		deps=`getBinaryDependencies $lib`
+		deps=`getBinaryDependencies "$lib"`
 		changeBinaryPaths "$lib" "$deps"
 		# strip libs (-x is max allowable for shared libs)
-		strip -x $lib
+		strip -x "${lib}"
 	done
 }
 
@@ -278,7 +280,7 @@ if [ ! -d $FWPATH/QtCore.framework ] ; then
 fi
 
 ### get required user input #########################################
-if [ -z $APPNAME ] ; then
+if [ -z "$APPNAME" ] ; then
 	echo
 	echo "This script prepares a Qt application bundle for deployment. It will"
 	echo "copy over the required Qt frameworks and sets the installation"
@@ -292,33 +294,133 @@ if [ -z $APPNAME ] ; then
 	APPNAME=$userinput
 fi
 
-BUNDLE=$APPNAME.app
-APPBIN="$BUNDLE/Contents/MacOS/`basename $APPNAME`"
-APP_PLUGINS_PATH="$BUNDLE/Contents/Resources/bin"
+BUNDLE="$APPNAME.app"
+APPBIN="$BUNDLE/Contents/MacOS/`basename \"${APPNAME}\"`"
+APP_PLUGINS_PATH="$BUNDLE/Contents/plugins"
+APP_QT_PLUGINS_PATH="$BUNDLE/Contents/plugins/qt"
 FRAMEWORKS_PATH="$BUNDLE/Contents/Frameworks"
 QT_PLUGINS_PATH=`qmake -query QT_INSTALL_PLUGINS`
 
-if [ ! -d $BUNDLE ] ; then
+if [ ! -d "${BUNDLE}" ] ; then
 	echo "ERROR: cannot find application bundle \"$BUNDLE\" in current directory"
 	exit
 fi
 
-if [ ! -x $APPBIN ] ; then
-	echo "ERROR: cannot find application in bundle. Did you forget to run make?"
+if [ ! -x "${APPBIN}" ] ; then
+	echo "ERROR: cannot find application \"$APPBIN\" in bundle. Did you forget to run make?"
 	exit
 fi
 
-echo "application: $APPNAME"
-echo "bundle:      $BUNDLE"
+echo "application: ${APPNAME}"
+echo "bundle:      ${BUNDLE}"
 echo
 
-### query binary for frameworks #####################################
-FRAMEWORKS=`getBinaryDependencies $APPBIN`
-echoFrameworks "$FRAMEWORKS"
-echo
 
 ### make install ####################################################
-makeInstall "$APPBIN"
+#makeInstall "$APPBIN"
+echo
+
+getSourceFramework()
+{
+	framework="$FWPATH/$1"
+		
+	# check for non framework, like libQtCLuScene.4.dylib
+	dylib=`expr "${framework}" : '.*\(dylib\)$'`
+	if [ "x${dylib}" = "x" ] ; then
+		framework="$FWPATH/$1.framework/Versions/4/$1"
+	fi
+	
+	# is symlink ?
+	if [ -h "${framework}" ] ; then
+		symlink=`readlink "${framework}"`
+		if [ $symlink[0] = '/' ] ; then
+			$framework=$symlink
+		else
+			framework="$FWPATH/$symlink"
+		fi
+	fi
+	echo "$framework"
+}
+
+getTargetFramework()
+{
+	echo "$FRAMEWORKS_PATH/$1"
+}
+
+relinkBinary()
+{	
+	# strip libs (-x is max allowable for shared libs)
+	strip -x "${1}"
+	
+	# get dependencies
+	frameworks_path=`getBinaryDependencies "$1"`
+	
+	# update framework/library paths
+	changeBinaryPaths "$1" "$frameworks_path"
+	echo
+	
+	# copy dependencies frameworks/libraries
+	for framework_path in $frameworks_path ; do
+		# get framework
+		framework=`basename "${framework_path}"`
+		
+		# get filenames
+		source=`getSourceFramework "$framework"`
+		target=`getTargetFramework "$framework"`
+		
+		# copy file if needed
+		if [ -e "${source}" ] ; then
+			if [ ! -e "${target}" ] ; then
+				echo "Copying & striping `basename \"${source}\"` framework/library..."
+				path=`dirname "${target}"`
+				mkdir -p "${path}"
+				cp -f "${source}" "${path}"
+				# strip libs (-x is max allowable for shared libs)
+				strip -x "${target}"
+				echo
+				
+				# set id in target
+				echo "Updating $framework id..."
+				install_name_tool -id @executable_path/../Frameworks/"${framework}" "${target}"
+				echo
+				
+				# update framework/library paths
+				changeBinaryPaths "$target" "`getBinaryDependencies "$target"`"
+				echo
+			fi
+		fi
+	done
+}
+
+relinkPlugins()
+{
+	tmp_plugins=`find "${1}" | egrep ".dylib"`
+	
+	old_ifs="$IFS"
+	IFS=$'\n'
+	count=0
+	for plugin in $tmp_plugins ; do
+		plugins[$count]="${plugin}"
+		((count++))
+	done
+	IFS=$old_ifs
+	
+	count=${#plugins[@]}
+	for ((i=0;i<$count;i++));
+	do
+		plugin=${plugins[${i}]}
+		relinkBinary "$plugin"
+	done
+}
+
+relinkBinary "$APPBIN"
+relinkPlugins "$APP_PLUGINS_PATH"
+
+exit
+
+### query binary for frameworks #####################################
+FRAMEWORKS=`getBinaryDependencies "$APPBIN"`
+echoFrameworks "$FRAMEWORKS"
 echo
 
 ### copy over frameworks ############################################
@@ -326,7 +428,7 @@ copyDependencies "$FRAMEWORKS_PATH" "$FRAMEWORKS"
 echo
 
 # remove unwanted parts
-find $FRAMEWORKS_PATH | egrep "debug|Headers" | xargs rm -rf
+find "${FRAMEWORKS_PATH}" | egrep "debug|Headers" | xargs rm -rf
 
 ### set the identification names for frameworks #####################
 setIds "$FRAMEWORKS" "$FRAMEWORKS_PATH"
@@ -341,12 +443,14 @@ fixBundledFrameworks "$FRAMEWORKS" "$FRAMEWORKS_PATH"
 echo
 
 ### copy plugins ###############################################
-copyAllPlugins
+#copyAllPlugins
+copyAccessiblePlugins "$APP_PLUGINS_PATH"
 echo
 
 ### misc cleanup ###############################################
-find $BUNDLE/Contents | egrep "CVS" | xargs rm -rf
-find $BUNDLE/Contents | egrep ".svn" | xargs rm -rf
+target="$BUNDLE/Contents"
+find "${target}" | egrep "CVS" | xargs rm -rf
+find "${target}" | egrep ".svn" | xargs rm -rf
 
 ### create disk image ###############################################
 #echo "Creating disk image"
