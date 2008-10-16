@@ -413,6 +413,7 @@ relinkPlugins()
 	done
 }
 
+copyAllPlugins
 relinkBinary "$APPBIN"
 relinkPlugins "$APP_PLUGINS_PATH"
 
