@@ -171,7 +171,7 @@ relinkBinary()
 {
 	echo "Striping `basename \"${1}\"` binary..."
 	# strip libs (-x is max allowable for shared libs)
-	strip -x "${1}"
+	#strip -x "${1}"
 	
 	# set id in target
 	if [ ! "x${2}" = "x" ] ; then
@@ -199,7 +199,7 @@ relinkBinary()
 				#echo "Copying & striping `basename \"${source}\"` framework/library..."
 				path=`dirname "${target}"`
 				mkdir -p "${path}"
-				cp -f "${source}" "${path}"
+				cp -f "${source}" "${target}"
 				
 				echo
 				relinkBinary "${target}" "${framework}"
@@ -222,7 +222,7 @@ relinkPlugins "$APP_PLUGINS_PATH"
 echo
 
 echo "Striping `basename \"${APP_BIN}\"` binary..."
-strip "${APP_BIN}"
+#strip "${APP_BIN}"
 echo
 
 ### misc cleanup ##################################################
@@ -279,7 +279,7 @@ copyDependencies()
 		target="$1/$name"
 		cp -f "${fullname}" "${target}"
 		# strip libs (-x is max allowable for shared libs)
-		strip -x "${target}"
+		#strip -x "${target}"
 	done
 }
 

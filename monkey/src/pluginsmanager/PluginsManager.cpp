@@ -62,6 +62,11 @@ void PluginsManager::loadsPlugins()
 			// don't proced no library file
 			if ( !QLibrary::isLibrary( f.absoluteFilePath() ) )
 				continue;
+#ifdef Q_OS_MAC
+			// don't proceed Qt plugins on mac
+			if ( f.absoluteFilePath().contains( "/qt/" ) )
+				continue;
+#endif
 			// load plugin
 			QPluginLoader l( f.absoluteFilePath() );
 			// try unload it and reload it in case of old one in memory

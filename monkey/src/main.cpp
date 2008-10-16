@@ -38,6 +38,10 @@ int main( int argc, char** argv )
 	a.setOrganizationName( PACKAGE_NAME );
 	a.setOrganizationDomain( PACKAGE_DOMAIN );
 	QObject::connect( &a, SIGNAL( lastWindowClosed() ), &a, SLOT( quit() ) );
+#ifdef Q_OS_MAC
+	// qt plugins path for mac os x
+	QApplication::setLibraryPaths( QStringList( QApplication::applicationDirPath().append( "/../plugins/qt" ) ) );
+#endif
 	// init monkey studio core
 	MonkeyCore::init();
 	// execute application
