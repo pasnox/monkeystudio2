@@ -57,8 +57,8 @@ copyPlugins()
 	path="$2/$1"
 	if [ ! -d "${path}" ] ; then
 		echo "Copying $1 plugins..."
-		#mkdir -p "${path}"
-		cp -Rf "$QT_PLUGINS_PATH/$1" "$2"
+		mkdir -p "${path}"
+		cp -R "$QT_PLUGINS_PATH/${1}" "${2}"
 	fi
 }
 
@@ -150,23 +150,21 @@ relinkPlugins()
 	do
 		plugin=${plugins[${i}]}
 		relinkBinary "$plugin"
+		echo
 	done
 }
 
 makeInstall()
 {
 	echo "Running make install..."
+	qmake
 	if [ -e Makefile.Release ] ; then
-		make -f Makefile.Release install
+		make -f Makefile.Release && make -f Makefile.Release install
 	elif [ -e Makefile ] ; then
-		make install
+		make && make install
 	else
 		echo -n "ERROR: Makefile not found. This script requires the macx-g++ makespec"
 	fi
-	echo
-	
-	echo "Striping `basename \"${1}\"` binary..."
-	strip "${1}"
 }
 
 relinkBinary()
@@ -175,12 +173,16 @@ relinkBinary()
 	# strip libs (-x is max allowable for shared libs)
 	strip -x "${1}"
 	
+	# set id in target
+	if [ ! "x${2}" = "x" ] ; then
+		setId "${2}" "${1}"
+	fi
+	
 	# get dependencies
 	frameworks_path=`getBinaryDependencies "$1"`
 	
 	# update framework/library paths
 	changeBinaryPaths "$1" "$frameworks_path"
-	echo
 	
 	# copy dependencies frameworks/libraries
 	for framework_path in $frameworks_path ; do
@@ -194,34 +196,34 @@ relinkBinary()
 		# copy file if needed
 		if [ -e "${source}" ] ; then
 			if [ ! -e "${target}" ] ; then
-				echo "Copying & striping `basename \"${source}\"` framework/library..."
+				#echo "Copying & striping `basename \"${source}\"` framework/library..."
 				path=`dirname "${target}"`
 				mkdir -p "${path}"
 				cp -f "${source}" "${path}"
 				
-				
-				# strip libs (-x is max allowable for shared libs)
-				strip -x "${target}"
-				
-				# set id in target
-				setId "${framework}" "${target}"
-				
-				# update framework/library paths
-				changeBinaryPaths "$target" "`getBinaryDependencies \"${target}\"`"
-				
 				echo
+				relinkBinary "${target}" "${framework}"
 			fi
 		fi
 	done
 }
 
 ### deployement #################################################
-relinkBinary "$APP_BIN"
 makeInstall "$APP_BIN"
 echo
+
+relinkBinary "$APP_BIN"
+echo
+
 copyAllPlugins
 echo
+
 relinkPlugins "$APP_PLUGINS_PATH"
+echo
+
+echo "Striping `basename \"${APP_BIN}\"` binary..."
+strip "${APP_BIN}"
+echo
 
 ### misc cleanup ##################################################
 target="$BUNDLE/Contents"
