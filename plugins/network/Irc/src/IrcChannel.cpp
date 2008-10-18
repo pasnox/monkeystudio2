@@ -81,7 +81,7 @@ void IrcChannel::keyPressEvent ( QKeyEvent * event )
 	{
 		// PRIVMSG #testmonkeystudio :coucou de monkey
 		QString m = mLineEdit->text();
-		mTextEdit->appendHtml("<font color=\"#000000\"><b>&lt;" + userName() + "&gt; </b>" + m + "</font>");
+		mTextEdit->appendHtml("<font color=\"#000000\"><b>&lt;" + userName() + "&gt; </b>" + Qt::escape(m) + "</font>");
 
 		emit sendData("PRIVMSG " + name() + " :" + m );
 		mLineEdit->clear();
@@ -240,7 +240,7 @@ void IrcChannel::message(QString l)
 		QStringList t = r.capturedTexts();
 		if(t.at(2).toLower() == name())
 //			if( !userAction(t.at(3)))
-				mTextEdit->appendHtml("<font color=\"#000000\"><b>&lt;" + t.at(1) + "&gt; </b>" + t.at(3) + "</font>");
+				mTextEdit->appendHtml("<font color=\"#000000\"><b>&lt;" + t.at(1) + "&gt; </b>" + Qt::escape(t.at(3)) + "</font>");
 //			else
 //				mTextEdit->append("<font color=\"#ffff00\">* " + t.at(1) + " " + t.at(3).remove(".ACTION ") + "</font>");
 	}

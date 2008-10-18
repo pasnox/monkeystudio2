@@ -79,7 +79,7 @@ void IrcDock::onTcpError(QAbstractSocket::SocketError socketError)
 */
 void IrcDock::onHostFound ()
 {
-	mUiIrcMain->appendLog("Host found");
+	mUiIrcMain->appendLog("V1 : Host found");
 }
 
 /*!
