@@ -143,6 +143,7 @@ pAbstractChild* pWorkspace::newTextEditor()
 		foreach ( QStringList l, availableFilesSuffixes().values() )
 			s.append( l.join( " " ).append( " " ) );
 		mFilters.prepend( QString( "All Supported Files (%1);;" ).arg( s.trimmed() ) );
+		mFilters.prepend( QString( "All Files (*);;" ));
 	}
 
 	// open open file dialog
@@ -618,6 +619,7 @@ void pWorkspace::fileOpen_triggered()
 		foreach ( QStringList l, availableFilesSuffixes().values() )
 			s.append( l.join( " " ).append( " " ) );
 		mFilters.prepend( QString( "All Supported Files (%1);;" ).arg( s.trimmed() ) );
+		mFilters.prepend( QString( "All Files (*);;" ));
 	}
 
 	// open open file dialog
