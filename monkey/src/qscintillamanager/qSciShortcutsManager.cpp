@@ -212,9 +212,6 @@ qSciShortcutsManager::qSciShortcutsManager (QObject* parent): QObject(parent)
 	sactions << SciAction ( "mEdit/mAllCommands/SCI_STUTTEREDPAGEDOWNEXTEND", tr("Extend selection down one page stuttered"), 
 		QIcon(), QString(""), tr(""),QsciScintilla::SCI_STUTTEREDPAGEDOWNEXTEND);
     
-	sactions << SciAction ( "mEdit/mAllCommands/SCI_DELETEBACK", tr("Backspace"), 
-		QIcon(), QString("Backspace"), tr(""),QsciScintilla::SCI_DELETEBACK);
-    
 	sactions << SciAction ( "mEdit/mAllCommands/SCI_DELETEBACKNOTLINE", tr("Backspace not a line"), 
 		QIcon(), QString(""), tr(""),QsciScintilla::SCI_DELETEBACKNOTLINE);
     
