@@ -93,6 +93,10 @@ pEditor::pEditor( QWidget* p )
 	SendScintilla( QsciScintillaBase::SCI_ASSIGNCMDKEY, SCK_TAB, SCI_TAB);
 	SendScintilla( QsciScintillaBase::SCI_ASSIGNCMDKEY, SCK_ESCAPE, SCI_CANCEL);
 	SendScintilla( QsciScintillaBase::SCI_ASSIGNCMDKEY, SCK_RETURN, SCI_NEWLINE);
+	SendScintilla( QsciScintillaBase::SCI_ASSIGNCMDKEY, SCK_DOWN, SCI_LINEDOWN);
+	SendScintilla( QsciScintillaBase::SCI_ASSIGNCMDKEY, SCK_UP, SCI_LINEUP);
+	SendScintilla( QsciScintillaBase::SCI_ASSIGNCMDKEY, SCK_RIGHT, SCI_CHARRIGHT);
+	SendScintilla( QsciScintillaBase::SCI_ASSIGNCMDKEY, SCK_LEFT, SCI_CHARLEFT);
 
 	// By default control characters don't do anything (rather than insert the
 	// control character into the text). (c) Phil

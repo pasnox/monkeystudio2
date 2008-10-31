@@ -35,9 +35,6 @@
 qSciShortcutsManager::qSciShortcutsManager (QObject* parent): QObject(parent)
 {
     //Fill with all availible QScintila actions
-    sactions << SciAction ( "mEdit/mAllCommands/SCI_LINEDOWN", tr("Move down one line"), 
-		QIcon(), QString("Down"), tr(""),QsciScintilla::SCI_LINEDOWN);
-    
 	sactions << SciAction ( "mEdit/mAllCommands/SCI_LINEDOWNEXTEND", tr("Extend selection down one line"), QIcon(),
 		QString("Shift+Down"), tr(""),QsciScintilla::SCI_LINEDOWNEXTEND);
     
@@ -46,9 +43,6 @@ qSciShortcutsManager::qSciShortcutsManager (QObject* parent): QObject(parent)
     
 	sactions << SciAction ( "mEdit/mAllCommands/SCI_LINESCROLLDOWN", tr("Scroll view down one line"), 
 		QIcon(), QString("Ctrl+Down"), tr(""),QsciScintilla::SCI_LINESCROLLDOWN);
-    
-	sactions << SciAction ( "mEdit/mAllCommands/SCI_LINEUP", tr("Move up one line"), 
-		QIcon(), QString("Up"), tr(""),QsciScintilla::SCI_LINEUP);
     
 	sactions << SciAction ( "mEdit/mAllCommands/SCI_LINEUPEXTEND", tr("Extend selection up"), 
 		QIcon(), QString("Shift+Up"), tr(""),QsciScintilla::SCI_LINEUPEXTEND);
@@ -71,17 +65,11 @@ qSciShortcutsManager::qSciShortcutsManager (QObject* parent): QObject(parent)
 	sactions << SciAction ( "mEdit/mAllCommands/SCI_PARAUPEXTEND", tr("Extend selection down one paragraph"), 
 		QIcon(), QString("Shift+Ctrl+["), tr(""),QsciScintilla::SCI_PARAUPEXTEND);
     
-	sactions << SciAction ( "mEdit/mAllCommands/SCI_CHARLEFT", tr("Move left one character"), 
-		QIcon(), QString("Left"), tr(""),QsciScintilla::SCI_CHARLEFT);
-    
 	sactions << SciAction ( "mEdit/mAllCommands/SCI_CHARLEFTEXTEND", tr("Extend selection left one character"), 
 		QIcon(), QString("Shift+Left"), tr(""),QsciScintilla::SCI_CHARLEFTEXTEND);
     
 	sactions << SciAction ( "mEdit/mAllCommands/SCI_CHARLEFTRECTEXTEND", tr("Extend rectangular selection left one character"), 
 		QIcon(), QString("Shift+Alt+Left"), tr(""),QsciScintilla::SCI_CHARLEFTRECTEXTEND);
-    
-	sactions << SciAction ( "mEdit/mAllCommands/SCI_CHARRIGHT", tr("Move right one character"), 
-		QIcon(), QString("Right"), tr(""),QsciScintilla::SCI_CHARRIGHT);
     
 	sactions << SciAction ( "mEdit/mAllCommands/SCI_CHARRIGHTEXTEND", tr("Extend selection right one character"), 
 		QIcon(), QString("Shift+Right"), tr(""),QsciScintilla::SCI_CHARRIGHTEXTEND);
