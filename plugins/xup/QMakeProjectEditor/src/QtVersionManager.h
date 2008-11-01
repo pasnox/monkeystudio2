@@ -9,11 +9,7 @@ struct QtVersion
 	QtVersion( const QString& version, const QString& path, bool def, const QString& qmakeSpec, const QString& qmakeParams ) { Version = version; Path = path; Default = def; QMakeSpec = qmakeSpec; QMakeParameters = qmakeParams; }
 	
 	bool isValid() const { return !( Version.isEmpty() && Path.isEmpty() ); }
-#ifndef Q_OS_WIN // hlamer: On Qt 4.4.0 qmake generates invalid Makefile, when runned without .exe
-	QString qmake() const { return QString( "%1/bin/qmake.exe" ).arg( Path ); }
-#else
 	QString qmake() const { return QString( "%1/bin/qmake" ).arg( Path ); }
-#endif
 	QString qmakeSpec() const { return ( QMakeSpec != "default" && !QMakeSpec.isEmpty() ) ? QString( "-spec %1" ).arg( QMakeSpec ) : QString(); }
 	QString qmakeParameters() const { return qmakeSpec().append( " " +QMakeParameters ); }
 	QString lupdate() const { return QString( "%1/bin/lupdate" ).arg( Path ); }
