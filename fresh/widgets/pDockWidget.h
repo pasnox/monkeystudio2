@@ -40,7 +40,8 @@ class Q_MONKEY_EXPORT pDockWidget : public QDockWidget
 	
 public:
 	pDockWidget( const QString& title, QWidget* parent = 0, Qt::WindowFlags flags = 0 );
-	pDockWidget( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+        pDockWidget( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+        virtual ~pDockWidget();
 
 	virtual QSize sizeHint() const;
     

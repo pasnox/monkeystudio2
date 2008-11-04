@@ -28,8 +28,7 @@
 	\param flags The dock window flags
 */
 pDockWidget::pDockWidget( const QString& title, QWidget* parent, Qt::WindowFlags flags )
-	: QDockWidget( title, parent, flags ),
-    mToggleViewPAction (NULL)
+        : QDockWidget( title, parent, flags ), mToggleViewPAction( 0 )
 {}
 
 /*!
@@ -38,10 +37,13 @@ pDockWidget::pDockWidget( const QString& title, QWidget* parent, Qt::WindowFlags
 	\param flags The dock window flags
 */
 pDockWidget::pDockWidget( QWidget* parent, Qt::WindowFlags flags )
-	: QDockWidget( parent, flags )
+        : QDockWidget( parent, flags ), mToggleViewPAction( 0 )
+{}
+
+pDockWidget::~pDockWidget()
 {
-    if (mToggleViewPAction)
-        delete mToggleViewPAction;
+        if ( mToggleViewPAction )
+                delete mToggleViewPAction;
 }
 
 QSize pDockWidget::contentsSize() const
