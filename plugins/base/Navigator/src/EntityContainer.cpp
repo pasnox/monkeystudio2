@@ -53,6 +53,7 @@ EntityContainer::EntityContainer ( QWidget* parent, Navigator* navigator):
     mNavigator (navigator)
 {
 	headerItem ()->setHidden (true);
+	connect (this, SIGNAL (activated ( const QModelIndex)),this, SLOT (makeGoto()));
 	connect (this, SIGNAL (clicked ( const QModelIndex)),this, SLOT (makeGoto()));
 	Entity::initIcons ();
 }

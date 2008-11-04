@@ -51,6 +51,7 @@ public slots:
 protected:
 	QSize contentsSize() const;
 	QSize mSize;
+    pAction* mToggleViewPAction;
 };
 
 #endif // PDOCKWIDGET_H

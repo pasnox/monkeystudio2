@@ -28,7 +28,8 @@
 	\param flags The dock window flags
 */
 pDockWidget::pDockWidget( const QString& title, QWidget* parent, Qt::WindowFlags flags )
-	: QDockWidget( title, parent, flags )
+	: QDockWidget( title, parent, flags ),
+    mToggleViewPAction (NULL)
 {}
 
 /*!
@@ -38,7 +39,10 @@ pDockWidget::pDockWidget( const QString& title, QWidget* parent, Qt::WindowFlags
 */
 pDockWidget::pDockWidget( QWidget* parent, Qt::WindowFlags flags )
 	: QDockWidget( parent, flags )
-{}
+{
+    if (mToggleViewPAction)
+        delete mToggleViewPAction;
+}
 
 QSize pDockWidget::contentsSize() const
 {
@@ -65,18 +69,21 @@ QSize pDockWidget::sizeHint() const
 */
 pAction* pDockWidget::toggleViewPAction (QString defaultShortcut)
 {
+    if (mToggleViewPAction)
+        return mToggleViewPAction;
+    
     if (! windowTitle().isEmpty())
     {
-        pAction* act = new pAction (   "a" + windowTitle(), 
-                                        windowIcon(), 
-                                        tr("Show/hide ") + windowTitle(), 
-                                        defaultShortcut,
-                                        "Docks");
-        act->setCheckable (true);
-        act->setChecked (isVisible());
-        connect (act, SIGNAL (toggled (bool)), this, SLOT (setVisible (bool)));
-        connect (this, SIGNAL (visibilityChanged (bool)), act, SLOT (setChecked (bool)));
-        return act;
+        mToggleViewPAction = new pAction (  "a" + windowTitle(), 
+                                            windowIcon(), 
+                                            tr("Show/hide ") + windowTitle(), 
+                                            defaultShortcut,
+                                            "Docks");
+        mToggleViewPAction->setCheckable (true);
+        mToggleViewPAction->setChecked (isVisible());
+        connect (mToggleViewPAction, SIGNAL (toggled (bool)), this, SLOT (setVisible (bool)));
+        connect (this, SIGNAL (visibilityChanged (bool)), mToggleViewPAction, SLOT (setChecked (bool)));
+        return mToggleViewPAction;
     }
     else
     {
