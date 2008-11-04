@@ -48,7 +48,9 @@
 	Creates object, launches initialisation of icons of Entity class
 	\param parent Parent widget
 */
-EntityContainer::EntityContainer ( QWidget* parent): QTreeWidget (parent)
+EntityContainer::EntityContainer ( QWidget* parent, Navigator* navigator): 
+    QTreeWidget (parent),
+    mNavigator (navigator)
 {
 	headerItem ()->setHidden (true);
 	connect (this, SIGNAL (clicked ( const QModelIndex)),this, SLOT (makeGoto()));
@@ -315,4 +317,9 @@ void EntityContainer::makeGoto ()
 	Entity* activeEntity = (Entity*)currentItem();
 	Q_ASSERT (activeEntity);
 	MonkeyCore::fileManager()->goToLine(activeEntity->file, QPoint(0,activeEntity->line), false);
+    
+    if (mNavigator && mNavigator->getAutoHide())
+    {
+        mNavigator->setDockVisible (false);
+    }
 }

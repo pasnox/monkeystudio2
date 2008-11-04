@@ -37,6 +37,8 @@
 #include <QTreeWidget>
 #include "Entity.h"
 
+class Navigator;
+
 /*!
 	\brief Root root of tree, displaying file items
 	
@@ -47,12 +49,14 @@ class EntityContainer  : public QTreeWidget
 {
 Q_OBJECT
 public:
-	EntityContainer ( QWidget* parent);
+	EntityContainer ( QWidget* parent, Navigator* navigator);
 	~EntityContainer ();
 	void updateFileInfo ( QString fileName );	
 	void deleteFileInfo ( QString file, QDateTime olderThan );
 
 private:
+    Navigator* mNavigator;
+    
 	void addTagsFromRecord (QString fileName, FileRecord*  fileRecord);
 
 	Entity* childEntity (int);

@@ -206,6 +206,35 @@ QAction* pMenuBar::action( const QString& path, const QString& text, const QIcon
 }
 
 /*!
+	\details Add action to menu
+	\param path The path of the action
+	\param action Action to add
+*/
+void pMenuBar::addAction( const QString& path, pAction* action)
+{
+	QString mString = fixedPath( path );
+
+	QMenu* foundMenu = menu( path );
+	QMenu* tmpMenu = foundMenu;
+
+    // get group
+    QString group;
+    while ( tmpMenu && !tmpMenu->title().isEmpty() )
+    {
+        group.prepend( tmpMenu->title() +"/" );
+        tmpMenu = qobject_cast<QMenu*>( tmpMenu->parentWidget() );
+    }
+
+    // add main menu group
+    group.prepend( mMenuGroup +"/" );
+
+    // create action
+    action->setParent( foundMenu );
+    action->setShortcutContext( mDefaultShortcutContext );
+    foundMenu->addAction( action );
+}
+
+/*!
 	\details Return a QMenu at \c path.
 	\details If the path don't exists, the menu is created and
 	\details title and icon are used as meu properties.

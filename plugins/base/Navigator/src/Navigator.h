@@ -61,19 +61,23 @@ class Navigator : public BasePlugin, public QSingleton<Navigator>
 	Q_INTERFACES( BasePlugin )
 	friend class QSingleton<Navigator>;
 	//
-private:
+protected:
+	pDockWidget* dockwgt;
 	QHash <ProjectItem* , EntityContainer*> projectTrees;
 	QHash <QString , EntityContainer*> fileTrees;
-	pDockWidget* dockwgt;
 	QWidget* fileWidget ;
 	QVBoxLayout* fileBox;
 	EntityContainer* currFileTreew;
 	QPushButton* fileLock;
 	int displayMask;
 	int expandMask;
+    
+    // Setting. Hide dock, when user selected something
+    bool mAutoHide;
 
 public:
 	Navigator (QObject* parent = NULL);
+
 	bool setEnabled (bool e);
 	QWidget* settingsWidget ();
 
@@ -81,7 +85,11 @@ public:
 	int getDisplayMask (void);
 	void setExpandMask (int mask);
 	int getExpandMask (void);
-
+	void setAutoHide (bool);
+	bool getAutoHide (void);
+    
+    void setDockVisible (bool);
+    
 public slots:
 	
 	void showFile (const QString&);

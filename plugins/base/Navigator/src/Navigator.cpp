@@ -38,7 +38,6 @@
 #include<QStringList>
 #include <QTabWidget>
 #include <QFileInfo>
-#include<QDebug>
 #include<QModelIndex>
 
 #include <coremanager.h>
@@ -51,18 +50,20 @@
 /*!
 	Class constructor
 */
-Navigator::Navigator (QObject* )
+Navigator::Navigator (QObject* ):
+    dockwgt (NULL)
 {
 	// set plugin infos
 	mPluginInfos.Caption = tr( "Navigator" );
 	mPluginInfos.Description = tr( "Plugin uses Exuberant Ctags library for analizing source files. It's allowing to view file structure, and quickly move cursor to needed place" );
-	mPluginInfos.Author = "Kopats Andrei aka hlamer <hlamer@tut.by>";
+	mPluginInfos.Author = "Andrei Kopats aka hlamer <hlamer@tut.by>";
 	mPluginInfos.Type = BasePlugin::iBase;
 	mPluginInfos.Name =  PLUGIN_NAME;
 	mPluginInfos.Version = "0.0.1";
 	mPluginInfos.Enabled = false;
 	displayMask = settingsValue( "DisplayMask", 65535 ).toInt();
 	expandMask = settingsValue( "ExpandMask", 32771 ).toInt();
+	mAutoHide = settingsValue( "mAutoHide", true ).toBool();
 }
 
 /*!
@@ -79,14 +80,16 @@ bool Navigator::setEnabled (bool e)
 	mPluginInfos.Enabled = e;
 	if (mPluginInfos.Enabled)
 	{
-		dockwgt = new pDockWidget( MonkeyCore::workspace());
+		dockwgt = new pDockWidget("Navigator", MonkeyCore::workspace());
+        pAction* dockAct = dockwgt->toggleViewPAction ("F1");
+        MonkeyCore::menuBar()->addAction ("mDocks", dockAct);
 		//dockwgt->hide ();
 		dockwgt->setMinimumWidth (100);
 		fileWidget = new QWidget (dockwgt);
 		fileBox = new QVBoxLayout ( fileWidget);
 		fileBox->setMargin( 5 );
 		fileBox->setSpacing( 3 );
-		currFileTreew = new EntityContainer (fileWidget);
+		currFileTreew = new EntityContainer (fileWidget, this);
 		fileTrees.insert ( NULL, currFileTreew);
 		fileBox->addWidget ( currFileTreew);
 		fileLock = new QPushButton (tr("Lock view"), fileWidget);
@@ -132,7 +135,9 @@ void Navigator::setDisplayMask (int mask)
 	\retval Logical OR of types on Entityes, which should be displayed
 */
 int Navigator::getDisplayMask (void)
-{return displayMask;}
+{
+    return displayMask;
+}
 
 /*!
 	Set expand mask for automatical expanding some nodes in the tree. 
@@ -153,7 +158,40 @@ void Navigator::setExpandMask (int mask)
 	\retval Logical OR of types on Entityes, which should be automatically expanded
 */
 int Navigator::getExpandMask (void)
-{return expandMask;}
+{
+    return expandMask;
+}
+
+/*!
+	Set autoHide mode of plugin
+	If autoHide is switched on, dock of the Navigator will be hiden every time,
+    when user selected some item.
+	
+	\param value value of option
+*/
+void Navigator::setAutoHide (bool value)
+{
+	mAutoHide = value;
+	setSettingsValue( "AutoHide", QVariant( value ) );	
+}
+
+/*!
+	Get autoHide mode of plugin.
+	\return option value
+*/
+bool Navigator::getAutoHide (void)
+{
+    return mAutoHide;
+}
+
+/*!
+	Set dock visible of hidden
+	\param visible Do dock have to be visible
+*/
+void Navigator::setDockVisible (bool visible)
+{
+    dockwgt->setVisible (visible);
+}
 
 /*!
 	Signal handler, which switches current file in the view, according with 
@@ -189,7 +227,7 @@ void Navigator::showFile (const QString& absPath)
 	currFileTreew = fileTrees [absPath]; //Try to find Treew for requested file in the cache
 	if ( currFileTreew == NULL ) //not finded
 	{
-		currFileTreew = new EntityContainer ( NULL);
+		currFileTreew = new EntityContainer ( NULL, this);
 		fileTrees.insert ( absPath, currFileTreew );
 	}//OK, not currFileTreew - actual for requested file
 	for ( int i = 0; i< files.size(); i++)
@@ -207,7 +245,7 @@ void Navigator::showFile (const QString& absPath)
 	else
 		dockwgt->show();
 	*/
-		fileWidget->setUpdatesEnabled(true);
+    fileWidget->setUpdatesEnabled(true);
 }
 
 Q_EXPORT_PLUGIN2( BaseNavigator, Navigator )

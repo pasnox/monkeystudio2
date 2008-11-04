@@ -28,6 +28,8 @@
 
 #include <QDockWidget>
 
+class pAction;
+
 /*!
 	\brief A QDockWidget that keep it's size
 	\details when hidden then shown when docked
@@ -41,7 +43,8 @@ public:
 	pDockWidget( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
 
 	virtual QSize sizeHint() const;
-
+    
+    virtual pAction* toggleViewPAction (QString defaultShortcut = QString::null);
 public slots:
 	virtual void setVisible( bool visible );
 

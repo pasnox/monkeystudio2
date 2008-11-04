@@ -33,6 +33,8 @@
 #include <QAction>
 #include <QIcon>
 
+class pAction;
+
 /*!
 	\brief An internal class used by pMenuBar
 	\details It allow to manage valued path ( ie: QSettings like )
@@ -95,6 +97,8 @@ public:
 	QString fixedPath( const QString& path, bool prependPrefix = false );
 
 	QAction* action( const QString& path, const QString& text = QString::null, const QIcon& icon = QIcon(), const QString& shortcut = QString::null, const QString& toolTip = QString::null );
+    void addAction( const QString& path, pAction* action);
+    
 	QMenu* menu( const QString& path = QString::null, const QString& title = QString::null, const QIcon& icon = QIcon() );
 
 	void clearMenu( const QString& path = QString::null );

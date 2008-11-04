@@ -15,6 +15,8 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
+#include "pAction.h"
+
 #include "pDockWidget.h"
 
 #include <QStyle>
@@ -55,6 +57,32 @@ QSize pDockWidget::contentsSize() const
 */
 QSize pDockWidget::sizeHint() const
 { return mSize.isValid() && !isFloating() ? mSize : QDockWidget::sizeHint(); }
+
+/*!
+	\details Create pAction, which will togle visible state of dock and installToggleViewAction
+    it to "Docks" menu
+    \param defaultShortcut Default shortcut for dock
+*/
+pAction* pDockWidget::toggleViewPAction (QString defaultShortcut)
+{
+    if (! windowTitle().isEmpty())
+    {
+        pAction* act = new pAction (   "a" + windowTitle(), 
+                                        windowIcon(), 
+                                        tr("Show/hide ") + windowTitle(), 
+                                        defaultShortcut,
+                                        "Docks");
+        act->setCheckable (true);
+        act->setChecked (isVisible());
+        connect (act, SIGNAL (toggled (bool)), this, SLOT (setVisible (bool)));
+        connect (this, SIGNAL (visibilityChanged (bool)), act, SLOT (setChecked (bool)));
+        return act;
+    }
+    else
+    {
+        return NULL;
+    }
+}
 
 /*!
 	\details Set dock visibility

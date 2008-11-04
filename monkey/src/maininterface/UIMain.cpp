@@ -239,6 +239,7 @@ void UIMain::initMenuBar()
 		mb->action( "aMinimize", tr( "&Minimize" ), QIcon( "" ), QString::null, tr( "Minimize" ) );
 		mb->action( "aRestore", tr( "&Restore" ), QIcon( "" ), QString::null, tr( "Restore normal size" ) );
 	mb->endGroup();
+	mb->menu( "mDocks", tr( "Docks" ) );
 	mb->menu( "mHelp", tr( "Help" ) );
 	mb->beginGroup( "mHelp" );
 		mb->action( "aManual", tr( "&Manual" ), QIcon( ":/help/icons/help/assistant.png" ), QString::null, tr( "Manual" ) );
