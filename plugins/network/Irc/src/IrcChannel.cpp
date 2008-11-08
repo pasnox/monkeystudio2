@@ -46,7 +46,7 @@ IrcChannel::IrcChannel(QWidget * parent) : QWidget(parent)
 	
 	mainLayout->addLayout(editAndListLayout);
 
- 	// create widget
+	// create widget
 //	mTextEdit = new QTextEdit();
 	mTextEdit = new QPlainTextEdit();
 	mTextEdit->setReadOnly(true);
@@ -101,7 +101,7 @@ void IrcChannel::userJoin(QString l)
 		QStringList t = r.capturedTexts();
 		if(t.at(2).toLower() == name())
 		{
-		    if(userName() != t.at(1))
+			if(userName() != t.at(1))
 			{
 				QListWidgetItem *newItem = new QListWidgetItem;
 				newItem->setText(t.at(1));

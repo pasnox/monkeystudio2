@@ -25,6 +25,9 @@
 
 #include "gdbBridgeEditor.h"
 
+#include <pFileManager.h>
+#include <pAbstractChild.h>
+
 #include <QMessageBox>
 
 /*!

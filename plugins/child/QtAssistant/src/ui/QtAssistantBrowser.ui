@@ -175,7 +175,7 @@
   <customwidget>
    <class>pAbstractChild</class>
    <extends>QWidget</extends>
-   <header>workspacemanager.h</header>
+   <header>pAbstractChild.h</header>
   </customwidget>
   <customwidget>
    <class>QtAssistantInlineSearch</class>

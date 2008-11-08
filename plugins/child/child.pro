@@ -1,2 +1,2 @@
 TEMPLATE	= subdirs
-SUBDIRS	= QtDesigner 
+SUBDIRS	= QtAssistant QtDesigner

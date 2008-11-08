@@ -1,8 +1,7 @@
 /****************************************************************************
 **
 ** 		Created using Monkey Studio v1.8.1.0
-** Authors   : Andrei Kopats aka hlamer <hlamer at tut by>, 
-               Filipe AZEVEDO aka PasNox <pasnox at gmail com>
+** Authors   : Andrei Kopats aka hlamer <hlamer at tut by>, Filipe AZEVEDO aka PasNox <pasnox at gmail com>
 ** Project   : Monkey Studio Base Plugins
 ** FileName  : UIRegExpEditor.cpp
 ** Date      : 2008-01-14T00:40:08
@@ -35,7 +34,7 @@
 */
 #include "UIRegExpEditor.h"
 
-#include <monkey.h>
+#include <pMonkeyStudio.h>
 
 #include <QTime>
 #include <QDebug>

@@ -29,7 +29,7 @@
 #include "Ctags2Api.h"
 #include "UICtags2Api.h"
 
-#include <coremanager.h>
+#include <MonkeyCore.h>
 
 Ctags2Api::Ctags2Api()
 {

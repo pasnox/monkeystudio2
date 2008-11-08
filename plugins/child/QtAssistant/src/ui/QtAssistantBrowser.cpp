@@ -18,8 +18,8 @@
 #include "QtAssistantBrowser.h"
 #include "../HelpViewer.h"
 
-#include <coremanager.h>
-#include <queuedstatusbar.h>
+#include <MonkeyCore.h>
+#include <QueuedStatusBar.h>
 
 #include <QTextBrowser>
 #include <QClipboard>

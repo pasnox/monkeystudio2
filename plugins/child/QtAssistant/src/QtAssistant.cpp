@@ -21,7 +21,7 @@
 #include "ui/UIQtAssistantSettings.h"
 #include "3rdparty/preferencesdialog.h"
 
-#include <maininterface.h>
+#include <UIMain.h>
 
 #include <QDebug>
 

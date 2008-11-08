@@ -35,7 +35,7 @@
 #ifndef GPP_H
 #define GPP_H
 
-#include <pluginsmanager.h>
+#include <CompilerPlugin.h>
 
 /*!
 	\brief G++ compiler plugin

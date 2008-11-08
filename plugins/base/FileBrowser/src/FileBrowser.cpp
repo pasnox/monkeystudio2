@@ -39,8 +39,8 @@
 #include "FileBrowserSettings.h"
 
 #include <fresh.h>
-#include <coremanager.h>
-#include <maininterface.h>
+#include <MonkeyCore.h>
+#include <UIMain.h>
 
 #include <QIcon>
 

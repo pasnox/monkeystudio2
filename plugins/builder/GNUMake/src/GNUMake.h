@@ -29,7 +29,7 @@
 #ifndef GNUMAKE_H
 #define GNUMAKE_H
 
-#include <pluginsmanager.h>
+#include <BuilderPlugin.h>
 
 class GNUMake : public BuilderPlugin
 {

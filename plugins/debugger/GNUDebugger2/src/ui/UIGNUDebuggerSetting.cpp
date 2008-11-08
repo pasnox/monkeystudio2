@@ -25,9 +25,9 @@
 
 #include "UIGNUDebuggerSetting.h"
 
-#include <coremanager.h>
-#include <settingsmanager.h>
-#include "monkey.h"
+#include <MonkeyCore.h>
+#include <Settings.h>
+#include "pMonkeyStudio.h"
 
 #include <QPushButton>
 #include <QFileDialog>

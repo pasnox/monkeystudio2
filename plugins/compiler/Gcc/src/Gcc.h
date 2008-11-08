@@ -35,7 +35,7 @@
 #ifndef GCC_H
 #define GCC_H
 
-#include <pluginsmanager.h>
+#include <CompilerPlugin.h>
 
 /*!
 	\brief Gcc compiler plugin

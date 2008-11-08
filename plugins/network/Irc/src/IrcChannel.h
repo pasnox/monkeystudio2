@@ -28,9 +28,8 @@
 #define IRCCHANNEL_H
 
 #include <fresh.h>
-#include <workspacemanager.h>
-#include <coremanager.h>
-#include <xupmanager.h>
+#include <pWorkspace.h>
+#include <MonkeyCore.h>
 
 #include <QWidget>
 #include <QKeyEvent>

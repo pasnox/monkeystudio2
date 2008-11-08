@@ -34,9 +34,9 @@
 #include "QDesignerObjectInspector.h"
 #include "QDesignerSignalSlotEditor.h"
 
-#include <coremanager.h>
-#include <maininterface.h>
-#include <monkey.h>
+#include <MonkeyCore.h>
+#include <UIMain.h>
+#include <pMonkeyStudio.h>
 
 #include <QKeyEvent>
 #include <QVBoxLayout>

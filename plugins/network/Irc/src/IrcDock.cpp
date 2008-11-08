@@ -26,6 +26,8 @@
 
 #include "IrcDock.h"
 
+#include <QTextCodec>
+
 #define USER_TAG "|MkS"
 
 IrcDock::IrcDock( QWidget * w )
@@ -62,14 +64,14 @@ void IrcDock::onTcpError(QAbstractSocket::SocketError socketError)
 	switch (socketError) 
 	{
 	case QAbstractSocket::RemoteHostClosedError:
-	 break;
-	case QAbstractSocket::HostNotFoundError:
+		break;
+		case QAbstractSocket::HostNotFoundError:
 		mUiIrcMain->appendLog("The host was not found. Please check the host name and port settings.");
-	 break;
-	case QAbstractSocket::ConnectionRefusedError:
+		break;
+		case QAbstractSocket::ConnectionRefusedError:
 		mUiIrcMain->appendLog("The connection was refused by the peer. Make sure the fortune server is running, and check that the host name and port settings are correct.");
-	 break;
-	default:
+		break;
+		default:
 		mUiIrcMain->appendLog("The following error occurred");
 	}
 }

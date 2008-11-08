@@ -42,7 +42,7 @@
 #include <QTabWidget>
 #include <QTreeWidget>
 
-#include <pluginsmanager.h>
+#include <BasePlugin.h>
 
 #include "EntityContainer.h"
 
@@ -71,9 +71,9 @@ protected:
 	QPushButton* fileLock;
 	int displayMask;
 	int expandMask;
-    
-    // Setting. Hide dock, when user selected something
-    bool mAutoHide;
+	
+	// Setting. Hide dock, when user selected something
+	bool mAutoHide;
 
 public:
 	Navigator (QObject* parent = NULL);
@@ -87,9 +87,9 @@ public:
 	int getExpandMask (void);
 	void setAutoHide (bool);
 	bool getAutoHide (void);
-    
-    void setDockVisible (bool);
-    
+	
+	void setDockVisible (bool);
+	
 public slots:
 	
 	void showFile (const QString&);

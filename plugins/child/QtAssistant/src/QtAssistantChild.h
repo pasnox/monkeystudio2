@@ -18,7 +18,7 @@
 #ifndef QTASSISTANTCHILD_H
 #define QTASSISTANTCHILD_H
 
-#include <workspacemanager.h>
+#include <pAbstractChild.h>
 
 class QtAssistantChild : public pAbstractChild
 {

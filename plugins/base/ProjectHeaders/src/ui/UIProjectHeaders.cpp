@@ -24,8 +24,8 @@
 #include <QDateTime>
 #include <QDebug>
 
-#include <monkey.h>
-#include <variablesmanager.h>
+#include <pMonkeyStudio.h>
+#include <VariablesManager.h>
 
 UIProjectHeaders::UIProjectHeaders( QWidget* parent, ProjectHeaders* plugin )
 	: QDialog( parent ), mPlugin( plugin )

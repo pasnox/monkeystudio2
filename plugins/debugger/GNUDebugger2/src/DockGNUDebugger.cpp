@@ -24,11 +24,11 @@
 */
 
 #include "DockGNUDebugger.h"
-#include <settingsmanager.h>
-#include <coremanager.h>
-#include <maininterface.h>
-#include <qscintillamanager.h>
-#include "monkey.h"
+#include <Settings.h>
+#include <MonkeyCore.h>
+#include <UIMain.h>
+#include <pEditor.h>
+#include "pMonkeyStudio.h"
 
 
 #include <QFileDialog>
@@ -526,12 +526,12 @@ void DockGNUDebugger::onTargetStopped(int id, QString st)
 when breakpoint hit
 or
 breakpoint hit and step over command (bug , i have two target stopped signal)
-  
+	
 */
 
 /*
-	10009 : ^info,interpreter="GdbParser",event="target-stopped",answerGdb="Breakpoint 2, qMain (argc=1, argv=0x3d4c48) at src/main.cpp:37",currentCmd="n"
-	*** Target stopped ***
+		10009 : ^info,interpreter="GdbParser",event="target-stopped",answerGdb="Breakpoint 2, qMain (argc=1, argv=0x3d4c48) at src/main.cpp:37",currentCmd="n"
+		*** Target stopped ***
 or
 	10009 : ^info,interpreter="GdbParser",event="target-stopped",answerGdb="Breakpoint 2, qMain (argc=1, argv=0x3d4c48) at src/main.cpp:37",currentCmd="n"
 	*** Target stopped ***

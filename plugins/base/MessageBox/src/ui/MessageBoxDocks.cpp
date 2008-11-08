@@ -40,10 +40,13 @@
 
 #include <QScrollBar>
 #include <QInputDialog>
+#include <QDir>
 
-#include <coremanager.h>
-#include <workspacemanager.h>
-#include <xupmanager.h>
+#include <MonkeyCore.h>
+#include <pWorkspace.h>
+#include <pAbstractChild.h>
+#include <pFileManager.h>
+#include <XUPItem.h>
 
 /*!
 	Constructor of class
@@ -372,7 +375,9 @@ void MessageBoxDocks::lwBuildSteps_itemPressed( QListWidgetItem* it )
 				l << QDir::cleanPath( f );
 	
 	// search in the current project
-	if ( XUPItem* pi = MonkeyCore::fileManager()->currentProject() )
+#warning MessageBoxDocks::lwBuildSteps_itemPressed( QListWidgetItem* it )
+	/*
+	if ( XUPProjectItem* pi = MonkeyCore::fileManager()->currentProject() )
 	{
 		// get top project of current project
 		pi = pi->topLevelProject();
@@ -387,6 +392,7 @@ void MessageBoxDocks::lwBuildSteps_itemPressed( QListWidgetItem* it )
 			}
 		}
 	}
+	*/
 	
 	// cancel if no file
 	if ( l.isEmpty() )

@@ -35,7 +35,7 @@
 #ifndef MESSAGEBOX_H
 #define MESSAGEBOX_H
 
-#include <pluginsmanager.h>
+#include <BasePlugin.h>
 
 class MessageBoxDocks;
 

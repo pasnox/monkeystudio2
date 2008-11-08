@@ -28,7 +28,6 @@
 
 // Pasnox include
 #include <fresh.h>
-#include <workspacemanager.h>
 
 // Xiantia include
 #include <QTextEdit>
@@ -92,74 +91,74 @@
 	*
 	*\note All AddOn must derive from GdbCore.
 */
- 
+	
 class DockGNUDebugger : public pDockWidget, public QSingleton<DockGNUDebugger>
 {
-	Q_OBJECT
-	friend class QSingleton<DockGNUDebugger>;
-	friend class GNUDebugger;
-	
+		Q_OBJECT
+		friend class QSingleton<DockGNUDebugger>;
+		friend class GNUDebugger;
+		
 public:
 
 	/*!
-	 * \details Pointer to GdbParser Class
-	*/
-	QPointer<GdbParser> Parser;
+		* \details Pointer to GdbParser Class
+		*/
+		QPointer<GdbParser> Parser;
 
 	/*!
-	 * \details Pointer to GdbProcess Class
-	*/
-	QPointer<GdbProcess> Process;
-	
-	/*!
-	 * \details Pointer to GdbBridgeEditor Class
-	*/
-	QPointer<GdbBridgeEditor> Bridge;
+		* \details Pointer to GdbProcess Class
+		*/
+		QPointer<GdbProcess> Process;
+		
+		/*!
+		* \details Pointer to GdbBridgeEditor Class
+		*/
+		QPointer<GdbBridgeEditor> Bridge;
 
 	/*!
-	 * \details Pointer to GdbKernelDispatcher Class
-	*/
-	QPointer<GdbKernelDispatcher> Dispatcher;
+		* \details Pointer to GdbKernelDispatcher Class
+		*/
+		QPointer<GdbKernelDispatcher> Dispatcher;
 
 	/*!
-	 * \details Create GdbBreakpoint Pointer Class
-	*/
-	class GdbBreakpoint *Breakpoint;
+		* \details Create GdbBreakpoint Pointer Class
+		*/
+		class GdbBreakpoint *Breakpoint;
 
 	/*!
-	 * \details Create GdbBacktrace Pointer Class
-	*/
-	class GdbBacktrace *Backtrace;
+		* \details Create GdbBacktrace Pointer Class
+		*/
+		class GdbBacktrace *Backtrace;
 
 	/*!
-	 * \details Create GdbBreakpoint Pointer Class
-	*/
-	class GdbRegister *Register;
+		* \details Create GdbBreakpoint Pointer Class
+		*/
+		class GdbRegister *Register;
 
 	/*!
-	 * \details Create GdbWatch Pointer Class
-	*/
-	class GdbWatch *Watch;
+		* \details Create GdbWatch Pointer Class
+		*/
+		class GdbWatch *Watch;
 
 	/*!
-	 * \details Create GdbCli Pointer Class
-	*/
-	class GdbCli *Cli;
+		* \details Create GdbCli Pointer Class
+		*/
+		class GdbCli *Cli;
 
 	/*!
-	 * \details Create GdbToolTip Pointer Class
-	*/
-	class GdbToolTip *ToolTip;
+		* \details Create GdbToolTip Pointer Class
+		*/
+		class GdbToolTip *ToolTip;
 
 	/*!
-	 * \details Create GdbScript Pointer Class
-	*/
-	class GdbScript *Script;
+		* \details Create GdbScript Pointer Class
+		*/
+		class GdbScript *Script;
 
 	/*!
-	 * \details Contains all action from GNUDebugger class plugin, this action is viewed in Monkey Studio ToolBar
-	*/
-	void setAction(QHash<QString, QAction*> *);
+		* \details Contains all action from GNUDebugger class plugin, this action is viewed in Monkey Studio ToolBar
+		*/
+		void setAction(QHash<QString, QAction*> *);
 
 private:
 
@@ -171,64 +170,64 @@ private:
 
 	// interpreter 
 	/*!
-	 * \details Connect is a GdbConnectTemplate var, it's use for connect interperter to other function
-	*/
-	GdbConnectTemplate<DockGNUDebugger> Connect;
+		* \details Connect is a GdbConnectTemplate var, it's use for connect interperter to other function
+		*/
+		GdbConnectTemplate<DockGNUDebugger> Connect;
 
 	/*!
-	 * \details Contains interpreterStepOver pointer. This pointer is connect to onTargetStopped function
-	*/
-	QPointer<BaseInterpreter> interpreterStepOver;
+		* \details Contains interpreterStepOver pointer. This pointer is connect to onTargetStopped function
+		*/
+		QPointer<BaseInterpreter> interpreterStepOver;
 
 	/*!
-	 * \details Contains interpreterStepInto pointer. This pointer is connect to onTargetStopped function
-	*/
-	QPointer<BaseInterpreter> interpreterStepInto;
+		* \details Contains interpreterStepInto pointer. This pointer is connect to onTargetStopped function
+		*/
+		QPointer<BaseInterpreter> interpreterStepInto;
 
 	/*!
-	 * \details Contains interpreterStepFinish pointer. This pointer is connect to onTargetStopped function
-	*/
-	QPointer<BaseInterpreter> interpreterStepFinish;
-	
-	/*!
-	 * \details Main container for GNU debugger is QTabWidget
-	*/
-	QTabWidget *mainTabWidget;
+		* \details Contains interpreterStepFinish pointer. This pointer is connect to onTargetStopped function
+		*/
+		QPointer<BaseInterpreter> interpreterStepFinish;
+		
+		/*!
+		* \details Main container for GNU debugger is QTabWidget
+		*/
+		QTabWidget *mainTabWidget;
 
 	/*!
-	 * \details Add raw log in QTabWidget
-	*/
-	QTextEdit *rawLog;
+		* \details Add raw log in QTabWidget
+		*/
+		QTextEdit *rawLog;
 
 	/*!
-	 * \details Path and name of target selected
-	*/
-	QString mSelectedTarget;
+		* \details Path and name of target selected
+		*/
+		QString mSelectedTarget;
 
 	/*!
-	 * \details Action list for remote MonkeyStudio::toolBar
-	*/
-	QHash<QString, QAction*> *mActionList;
+		* \details Action list for remote MonkeyStudio::toolBar
+		*/
+		QHash<QString, QAction*> *mActionList;
 
 	/*!
-	 * \details End of line
-	*/
-	QString crlf;
+		* \details End of line
+		*/
+		QString crlf;
 
 	/*!
-	 * \details Indicate if Gdb is started
-	*/
-	bool isGdbStarted;
-	
-	/*!
-	 * \details Indicate if target is running
-	*/
-	bool isTargetRunning;
+		* \details Indicate if Gdb is started
+		*/
+		bool isGdbStarted;
+		
+		/*!
+		* \details Indicate if target is running
+		*/
+		bool isTargetRunning;
 
 	/*!
-	 * \details This var is use for not have two stopped signal consecutive
-	*/
-	bool disableStep;	
+		* \details This var is use for not have two stopped signal consecutive
+		*/
+		bool disableStep;	
 
 public slots:
 

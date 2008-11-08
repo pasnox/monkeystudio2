@@ -35,7 +35,7 @@
 #ifndef MSVC_H
 #define MSVC_H
 
-#include <pluginsmanager.h>
+#include <CompilerPlugin.h>
 
 /*!
 	\brief MSVC compiler plugin

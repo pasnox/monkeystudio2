@@ -40,9 +40,10 @@
 #include <QFileInfo>
 #include<QModelIndex>
 
-#include <coremanager.h>
-#include <workspacemanager.h>
-#include <maininterface.h>
+#include <MonkeyCore.h>
+#include <pFileManager.h>
+#include <pWorkspace.h>
+#include <UIMain.h>
 
 #include "Navigator.h"
 #include "NavigatorSettings.h"
@@ -51,7 +52,7 @@
 	Class constructor
 */
 Navigator::Navigator (QObject* ):
-    dockwgt (NULL)
+	dockwgt (NULL)
 {
 	// set plugin infos
 	mPluginInfos.Caption = tr( "Navigator" );
@@ -81,8 +82,8 @@ bool Navigator::setEnabled (bool e)
 	if (mPluginInfos.Enabled)
 	{
 		dockwgt = new pDockWidget("Navigator", MonkeyCore::workspace());
-        pAction* dockAct = dockwgt->toggleViewPAction ("F1");
-        MonkeyCore::menuBar()->addAction ("mDocks", dockAct);
+		pAction* dockAct = dockwgt->toggleViewPAction ("F1");
+		MonkeyCore::menuBar()->addAction ("mDocks", dockAct);
 		//dockwgt->hide ();
 		dockwgt->setMinimumWidth (100);
 		fileWidget = new QWidget (dockwgt);
@@ -136,7 +137,7 @@ void Navigator::setDisplayMask (int mask)
 */
 int Navigator::getDisplayMask (void)
 {
-    return displayMask;
+	return displayMask;
 }
 
 /*!
@@ -159,13 +160,13 @@ void Navigator::setExpandMask (int mask)
 */
 int Navigator::getExpandMask (void)
 {
-    return expandMask;
+	return expandMask;
 }
 
 /*!
 	Set autoHide mode of plugin
 	If autoHide is switched on, dock of the Navigator will be hiden every time,
-    when user selected some item.
+	when user selected some item.
 	
 	\param value value of option
 */
@@ -181,7 +182,7 @@ void Navigator::setAutoHide (bool value)
 */
 bool Navigator::getAutoHide (void)
 {
-    return mAutoHide;
+	return mAutoHide;
 }
 
 /*!
@@ -190,7 +191,7 @@ bool Navigator::getAutoHide (void)
 */
 void Navigator::setDockVisible (bool visible)
 {
-    dockwgt->setVisible (visible);
+	dockwgt->setVisible (visible);
 }
 
 /*!
@@ -245,7 +246,7 @@ void Navigator::showFile (const QString& absPath)
 	else
 		dockwgt->show();
 	*/
-    fileWidget->setUpdatesEnabled(true);
+	fileWidget->setUpdatesEnabled(true);
 }
 
 Q_EXPORT_PLUGIN2( BaseNavigator, Navigator )

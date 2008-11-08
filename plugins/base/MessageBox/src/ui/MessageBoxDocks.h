@@ -47,7 +47,7 @@
 #include "ui_UISearchResult.h"
 
 #include <fresh.h>
-#include <consolemanager.h>
+#include <pConsoleManager.h>
 
 /*!
 	Implementation of Build Steps tab of Message box

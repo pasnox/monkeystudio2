@@ -36,7 +36,8 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include <consolemanager.h>
+#include <pConsoleManager.h>
+#include <pCommandParser.h>
 
 /*!
 	\brief Set of regular expressions for parsing output of gcc and g++ compiler

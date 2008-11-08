@@ -1,8 +1,8 @@
 #include "MkSQtDocInstaller.h"
 #include "3rdparty/qtdocinstaller.h"
 
-#include <coremanager.h>
-#include <queuedstatusbar.h>
+#include <MonkeyCore.h>
+#include <QueuedStatusBar.h>
 
 #include <QDesktopServices>
 #include <QDir>

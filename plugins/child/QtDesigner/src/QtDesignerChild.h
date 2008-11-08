@@ -30,7 +30,8 @@
 #define QTDESIGNERCHILD_H
 
 #include <fresh.h>
-#include <workspacemanager.h>
+#include <pWorkspace.h>
+#include <pAbstractChild.h>
 
 class QToolBar;
 class QMdiArea;

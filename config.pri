@@ -13,6 +13,7 @@ PACKAGE_BUILD_PATH	= $${PACKAGE_PWD}/build
 
 # build mode
 CONFIG	+= qt warn_on thread x11 windows debug
+QT	+= xml
 
 # define config mode paths
 CONFIG( debug, debug|release ) {

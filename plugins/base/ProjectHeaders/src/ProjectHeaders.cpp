@@ -29,7 +29,7 @@
 #include "ProjectHeaders.h"
 #include "UIProjectHeaders.h"
 
-#include <monkey.h>
+#include <pMonkeyStudio.h>
 
 using namespace pMonkeyStudio;
 

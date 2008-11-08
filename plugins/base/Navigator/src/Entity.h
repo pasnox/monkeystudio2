@@ -41,7 +41,7 @@
 #include <QDateTime>
 #include <QIcon>
 
-#include <ctagsmanager.h>
+#include <Ctags.h>
 
 /*!
 	Enum representing possible types of entityes

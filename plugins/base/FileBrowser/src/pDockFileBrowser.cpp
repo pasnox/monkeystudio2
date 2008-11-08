@@ -34,8 +34,9 @@
 */
 #include "pDockFileBrowser.h"
 
-#include <workspacemanager.h>
-#include <coremanager.h>
+#include <pWorkspace.h>
+#include <MonkeyCore.h>
+#include <pFileManager.h>
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>

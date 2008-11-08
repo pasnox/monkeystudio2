@@ -5,7 +5,8 @@
 #include "../3rdparty/topicchooser.h"
 #include "../3rdparty/bookmarkmanager.h"
 
-#include <coremanager.h>
+#include <MonkeyCore.h>
+#include <pWorkspace.h>
 
 #include <QKeyEvent>
 

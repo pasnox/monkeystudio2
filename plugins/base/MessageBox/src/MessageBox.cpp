@@ -36,9 +36,9 @@
 #include "ui/MessageBoxDocks.h"
 #include "ui/UIMessageBoxSettings.h"
 
-#include <coremanager.h>
-#include <maininterface.h>
-#include <consolemanager.h>
+#include <MonkeyCore.h>
+#include <UIMain.h>
+#include <pConsoleManager.h>
 
 #include <QIcon>
 #include <QTabWidget>
