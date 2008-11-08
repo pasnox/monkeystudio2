@@ -117,8 +117,8 @@ public:
 		return s;
 	}
 	
-	void debug()
-	{ qWarning( toString().toLocal8Bit().constData() ); }
+	void debug() const
+	{ /*qWarning( toString().toLocal8Bit().constData() );*/ }
 
 protected:
 	QString mText; 				/**< Comment about command */

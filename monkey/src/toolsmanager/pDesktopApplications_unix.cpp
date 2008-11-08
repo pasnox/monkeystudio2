@@ -9,21 +9,21 @@
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
 ** Home Page : http://www.monkeystudio.org
 **
-    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
 #include "pDesktopApplications.h"
@@ -98,9 +98,9 @@ bool DirectorySizeDistance( const pThemeFolder& t, int s )
 		return 0;
 	}
 	// Threshold
-  if ( t.Type == "Threshold" )
-  {
-		if ( s < t.Size -t.Threshold )
+	if ( t.Type == "Threshold" )
+	{
+			if ( s < t.Size -t.Threshold )
 			return t.MinSize -s;
 		if ( s > t.Size +t.Threshold )
 			return s -t.MaxSize;
@@ -113,24 +113,28 @@ bool DirectorySizeDistance( const pThemeFolder& t, int s )
 bool DirectoryMatchesSize( const pThemeFolder& t, int s )
 {
 	// Fixed
-  if ( t.Type == "Fixed" )
-		return t.Size == s;
-  // Scaled
-  if ( t.Type == "Scaled" )
-		return t.MinSize <= s <= t.MaxSize;
-  // Threshold
-  if ( t.Type == "Threshold" )
-		return t.Size -t.Threshold <= s <= t.Size +t.Threshold;
-  // None
-  return 0;
+	if ( t.Type == "Fixed" )
+			return t.Size == s;
+	// Scaled
+	if ( t.Type == "Scaled" )
+	{
+		return t.MinSize <= s && s <= t.MaxSize;
+	}
+	// Threshold
+	if ( t.Type == "Threshold" )
+	{
+		return t.Size -t.Threshold <= s && s <= t.Size +t.Threshold;
+	}
+	// None
+	return 0;
 }
 
 QString LookupIcon( const QString& i, int s, const QString& t )
 {
-	// Fixed, Threshold
-	QString f;
-	foreach ( pThemeFolder tf, mThemes.value( t ).Folders )
-	{
+		// Fixed, Threshold
+		QString f;
+		foreach ( pThemeFolder tf, mThemes.value( t ).Folders )
+		{
 		foreach ( QString d, tf.Path )
 		{
 			foreach ( QString e, mIconExtensions )
@@ -183,34 +187,34 @@ QString LookupFallbackIcon( const QString& i )
 QString FindIconHelper( const QString& i, int s, const QString& t )
 {
 	QStringList l;
-  QString f = LookupIcon( i, s, t );
-  if ( !f.isNull() )
-    return f;
-  if ( !mThemes.value( t ).Inherits.isEmpty() )
-    l << mThemes.value( t ).Inherits;
-  else if ( t.toLower() != "hicolor" )
-    l << "hicolor";
-	foreach ( QString p, l )
-	{
-    f = FindIconHelper( i, s, p );
-    if ( !f.isEmpty() )
-      return f;
-  }
-  return QString();
+	QString f = LookupIcon( i, s, t );
+	if ( !f.isNull() )
+		return f;
+	if ( !mThemes.value( t ).Inherits.isEmpty() )
+		l << mThemes.value( t ).Inherits;
+	else if ( t.toLower() != "hicolor" )
+		l << "hicolor";
+		foreach ( QString p, l )
+		{
+		f = FindIconHelper( i, s, p );
+		if ( !f.isEmpty() )
+		return f;
+	}
+	return QString();
 }
 
 QString FindIcon( const QString& i, int s, const QString& t )
 {
-  QString f = FindIconHelper( i, s, t );
-  if ( !f.isEmpty() )
-    return f;
-  return LookupFallbackIcon( i );
+	QString f = FindIconHelper( i, s, t );
+	if ( !f.isEmpty() )
+		return f;
+	return LookupFallbackIcon( i );
 }
 
 void hashThemes()
 {
-	if ( !mThemeHashed )
-	{
+		if ( !mThemeHashed )
+		{
 		mThemeHashed = true;
 		foreach ( QString tp, themesPaths() )
 		{

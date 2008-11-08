@@ -36,8 +36,8 @@
 #include "pTemplatesManager.h"
 #include "../pMonkeyStudio.h"
 #include "../workspace/pFileManager.h"
-#include "../xupmanager/XUPItem.h"
-#include "../xupmanager/XUPProjectItem.h"
+#include "../xupmanager/core/XUPItem.h"
+#include "../xupmanager/core/XUPProjectItem.h"
 #include "../coremanager/MonkeyCore.h"
 #include "../settingsmanager/Settings.h"
 
@@ -238,8 +238,11 @@ bool pTemplatesManager::realiseTemplate( XUPItem* scope, const QString& op, cons
 			MonkeyCore::fileManager()->openProject( s );
 		
 		// add files to project if needed
+#warning pTemplatesManager::realiseTemplate
+		/*
 		if ( scope )
 			scope->project()->addFile( s, scope, op );
+		*/
 	}
 	
 	// return process state

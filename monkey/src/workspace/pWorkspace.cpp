@@ -45,8 +45,8 @@
 #include "../abbreviationsmanager/pAbbreviationsManager.h"
 #include "../pMonkeyStudio.h"
 #include "../templatesmanager/pTemplatesManager.h"
-#include "../xupmanager/ui/UIXUPManager.h"
-#include "../xupmanager/XUPProjectItem.h"
+#include "../xupmanager/gui/XUPProjectManager.h"
+#include "../xupmanager/core/XUPProjectItem.h"
 #include "../pluginsmanager/PluginsManager.h"
 #include "../coremanager/MonkeyCore.h"
 #include "../maininterface/UIMain.h"
@@ -416,7 +416,7 @@ void pWorkspace::internal_projectsManager_customContextMenuRequested( const QPoi
 		m.addSeparator();
 		m.addActions( mb->menu( "mInterpreter" )->actions() );
 		// show menu
-		m.exec( MonkeyCore::projectsManager()->tvProxiedProjects->mapToGlobal( p ) );
+		m.exec( MonkeyCore::projectsManager()->tvFiltered->mapToGlobal( p ) );
 	}
 }
 
@@ -424,7 +424,9 @@ void pWorkspace::internal_currentProjectChanged( XUPProjectItem* currentProject,
 {
 	// uninstall old commands
 	if ( previousProject )
+	{
 		previousProject->uninstallCommands();
+	}
 	// get pluginsmanager
 	PluginsManager* pm = MonkeyCore::pluginsManager();
 	// set compiler, debugger and interpreter
@@ -438,7 +440,9 @@ void pWorkspace::internal_currentProjectChanged( XUPProjectItem* currentProject,
 	pm->setCurrentInterpreter( ip && !ip->neverEnable() ? ip : 0 );
 	// install new commands
 	if ( currentProject )
+	{
 		currentProject->installCommands();
+	}
 	// update menu visibility
 	MonkeyCore::mainWindow()->menu_CustomAction_aboutToShow();
 }
@@ -476,10 +480,15 @@ void pWorkspace::projectCustomActionTriggered()
 		const pCommandList cmds = cmdsHash ? cmdsHash->values() : pCommandList();
 		// save project if needed
 		if ( saveProjectsOnCustomAction() )
-			MonkeyCore::projectsManager()->action( UIXUPManager::SaveAll )->trigger();
+		{
+			// TODO: completly remove the save, save all proejct way: project must be save each time they have been edited
+			//MonkeyCore::projectsManager()->action( UIXUPManager::SaveAll )->trigger();
+		}
 		// save project files
 		if ( saveFilesOnCustomAction() )
+		{
 			fileSaveAll_triggered();
+		}
 		// check that command to execute exists, else ask to user if he want to choose another one
 		if ( cmd.project() && a->text().contains( "execute", Qt::CaseInsensitive ) )
 		{
@@ -490,10 +499,14 @@ void pWorkspace::projectCustomActionTriggered()
 				// try reading already saved binary
 				s = cmd.project()->projectSettingsValue( a->text().replace( ' ', '_' ).toUpper() );
 				if ( !s.isEmpty() )
-					s = cmd.project()->topLevelProject()->filePath(); //TODO check, was filePath (s)
+				{
+					s = cmd.project()->topLevelProject()->filePath( s );
+				}
 				// if not exists ask user to select one
 				if ( !QFile::exists( s ) && question( a->text().append( "..." ), tr( "Can't find your executable file, do you want to choose the file ?" ) ) )
+				{
 					s = getOpenFileName( a->text().append( "..." ), cmd.workingDirectory() );
+				}
 				// if file exists execut it
 				if ( QFile::exists( s ) )
 				{
@@ -501,7 +514,9 @@ void pWorkspace::projectCustomActionTriggered()
 					QString f = fi.fileName().prepend( "./" );
 					QString p = fi.absolutePath();
 					if ( p.endsWith( '/' ) )
+					{
 						p.chop( 1 );
+					}
 					// correct command
 					cmd.setCommand( cm->quotedString( cm->nativeSeparators( s ) ) );
 					cmd.setWorkingDirectory( cm->nativeSeparators( p ) );
@@ -516,7 +531,7 @@ void pWorkspace::projectCustomActionTriggered()
 		}
 		// generate commands list
 		pCommandList mCmds = cm->recursiveCommandList( cmds, cm->getCommand( cmds, cmd.text() ) );
-		// teh first one must not be skipped on last error
+		// the first one must not be skipped on last error
 		if ( mCmds.count() > 0 )
 			mCmds.first().setSkipOnError( false );
 		// send command to consolemanager
@@ -643,12 +658,16 @@ void pWorkspace::fileSessionSave_triggered()
 	QStringList l;
 	// saves opened files
 	foreach ( pAbstractChild* c, children() )
+	{
 		l << c->files();
+	}
 	MonkeyCore::settings()->setValue( "Session/Files", l );
 	// saves opened projects
 	l.clear();
 	foreach ( XUPProjectItem* p, MonkeyCore::projectsManager()->topLevelProjects() )
-		l << p->filePath();
+	{
+		l << p->fileName();
+	}
 	MonkeyCore::settings()->setValue( "Session/Projects", l );
 }
 

@@ -74,7 +74,7 @@ const QList<pTool> pToolsManager::tools( ToolType t )
 	for ( int i = 0; i < n; i++ )
 	{
 		s->setArrayIndex( i );
-		if ( t == ttAll || ( t == ttUserEntry && !s->value( "DesktopEntry" ).toBool() ) || t == ttDesktopEntry && s->value( "DesktopEntry" ).toBool() )
+		if ( ( t == ttAll ) || ( t == ttUserEntry && !s->value( "DesktopEntry" ).toBool() ) || ( t == ttDesktopEntry && s->value( "DesktopEntry" ).toBool() ) )
 			l << pTool( s->value( "Caption" ).toString(), s->value( "FileIcon" ).toString(), s->value( "FilePath" ).toString(), s->value( "WorkingPath" ).toString(), s->value( "DesktopEntry" ).toBool(), s->value( "UseConsoleManager" ).toBool() );
 	}
 	s->endArray();

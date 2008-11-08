@@ -9,21 +9,21 @@
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
 ** Home Page : http://www.monkeystudio.org
 **
-    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
 #include "UITemplatesWizard.h"
@@ -32,11 +32,14 @@
 #include "../../coremanager/MonkeyCore.h"
 #include "../../settingsmanager/Settings.h"
 
+#warning uncomment include
+/*
 #include "../../xupmanager/ProjectItemModel.h"
 #include "../../xupmanager/ScopedProjectItemModel.h"
-#include "../../xupmanager/XUPItem.h"
-#include "../../xupmanager/XUPProjectItem.h"
-#include "../../xupmanager/ui/UIXUPManager.h"
+*/
+#include "../../xupmanager/core/XUPItem.h"
+#include "../../xupmanager/core/XUPProjectItem.h"
+#include "../../xupmanager/gui/XUPProjectManager.h"
 #include "../../variablesmanager/VariablesManager.h"
 
 #include <QDir>
@@ -44,10 +47,10 @@
 using namespace pMonkeyStudio;
 
 UITemplatesWizard::UITemplatesWizard( QWidget* w )
-    : QDialog( w )
+	: QDialog( w )
 {
 	// init dialog
-    setupUi( this );
+	setupUi( this );
 	setAttribute( Qt::WA_DeleteOnClose );
 	saWidgets->setWidgetResizable( true );
 	
@@ -75,10 +78,13 @@ UITemplatesWizard::UITemplatesWizard( QWidget* w )
 	}
 
 	// assign projects combobox
+#warning uncomment UITemplatesWizard constructor
+	/*
 	mProjects = MonkeyCore::projectsManager()->model();
 	cbProjects->setModel( mProjects->scopedModel() );
 	XUPItem* p = MonkeyCore::projectsManager()->currentProject();
 	cbProjects->setCurrentIndex( mProjects->scopedModel()->mapFromSource( p ? p->index() : QModelIndex() ) );
+	*/
 
 	// restore infos
 	pSettings* s = MonkeyCore::settings();
@@ -175,6 +181,8 @@ void UITemplatesWizard::on_lwTemplates_itemPressed( QListWidgetItem* it )
 
 void UITemplatesWizard::on_cbProjects_currentChanged( const QModelIndex& index )
 {
+#warning uncomment UITemplatesWizard::on_cbProjects_currentChanged
+/*
 	const QModelIndex idx = mProjects->scopedModel()->mapToSource( index );
 	if ( XUPProjectItem* it = dynamic_cast<XUPProjectItem*> (mProjects->itemFromIndex( idx )) )
 	{
@@ -182,6 +190,7 @@ void UITemplatesWizard::on_cbProjects_currentChanged( const QModelIndex& index )
 		cbOperators->addItems( it->operators() );
 		leDestination->setText( it->project()->projectPath() );
 	}
+*/
 }
 
 void UITemplatesWizard::on_tbDestination_clicked()
@@ -207,7 +216,7 @@ bool UITemplatesWizard::checkTemplate()
 void UITemplatesWizard::on_pbCreate_clicked()
 {
 	// check if we can go later
-    if ( !checkTemplate() )
+	if ( !checkTemplate() )
 		return;
 	
 	// get variables
@@ -222,11 +231,11 @@ void UITemplatesWizard::on_pbCreate_clicked()
 	pTemplate t = mTemplates.value( lwTemplates->selectedItems().value( 0 )->data( Qt::UserRole +1 ).toInt() );
 	
 	// check if need open files
-    if ( !cbOpen->isChecked() )
-    {
-        t.FilesToOpen.clear();
-        t.ProjectsToOpen.clear();
-    }
+	if ( !cbOpen->isChecked() )
+	{
+		t.FilesToOpen.clear();
+		t.ProjectsToOpen.clear();
+	}
 	
 	// check if need add files
 	if ( !gbAddToProject->isChecked() || !cbProjects->currentIndex().isValid() )
@@ -237,18 +246,19 @@ void UITemplatesWizard::on_pbCreate_clicked()
 		t.ProjectsToOpen.clear();
 	
 	// get proejct to add
-	XUPItem* si = t.FilesToAdd.isEmpty() ? 0 : mProjects->itemFromIndex( mProjects->scopedModel()->mapToSource( cbProjects->currentIndex() ) );
+#warning uncomment item creation
+	XUPItem* si = 0;//t.FilesToAdd.isEmpty() ? 0 : mProjects->itemFromIndex( mProjects->scopedModel()->mapToSource( cbProjects->currentIndex() ) );
 	
 	// process templates
 	if ( !pTemplatesManager::instance()->realiseTemplate( si, cbOperators->currentText(), t, v ) )
 		return;
 	
-    // remember some infos
-    pSettings* s = MonkeyCore::settings();
-    s->setValue( "Recents/FileWizard/Language", cbLanguages->currentText() );
-    s->setValue( "Recents/FileWizard/Destination", leDestination->text() );
-    s->setValue( "Recents/FileWizard/Open", cbOpen->isChecked() );
+	// remember some infos
+	pSettings* s = MonkeyCore::settings();
+	s->setValue( "Recents/FileWizard/Language", cbLanguages->currentText() );
+	s->setValue( "Recents/FileWizard/Destination", leDestination->text() );
+	s->setValue( "Recents/FileWizard/Open", cbOpen->isChecked() );
 	
-    // close dialog
-    QDialog::accept();	
+	// close dialog
+	QDialog::accept();	
 }

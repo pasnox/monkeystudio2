@@ -154,7 +154,7 @@ bool pMonkeyStudio::isSameFile( const QString& left, const QString& right )
 /*!
 	\details Return a list of all know text codecs
 */
-const QStringList pMonkeyStudio::availableTextCodecs()
+QStringList pMonkeyStudio::availableTextCodecs()
 {
 	static QStringList l;
 	if ( l.isEmpty() )
@@ -169,7 +169,7 @@ const QStringList pMonkeyStudio::availableTextCodecs()
 /*!
 	\details Return a list of all know image formats
 */
-const QStringList pMonkeyStudio::availableImageFormats()
+QStringList pMonkeyStudio::availableImageFormats()
 {
 	static QStringList l;
 	if ( l.isEmpty() )
@@ -184,7 +184,7 @@ const QStringList pMonkeyStudio::availableImageFormats()
 /*!
 	\details Return a lsit of all know languages
 */
-const QStringList pMonkeyStudio::availableLanguages()
+QStringList pMonkeyStudio::availableLanguages()
 {
 	static QStringList l = QStringList() << "Bash" << "Batch" << "C#" << "C++" << "CMake" << "CSS"
 		<< "D" << "Diff" << "HTML" << "IDL" << "Java" << "JavaScript" << "Lua"
@@ -203,7 +203,7 @@ const QStringList pMonkeyStudio::availableLanguages()
 	\param filters The filters to apply for validate folders name
 	\param recursive If true, the folders are scanned recursively, else not
 */
-const QFileInfoList pMonkeyStudio::getFolders( QDir fromDir, const QStringList& filters, bool recursive )
+QFileInfoList pMonkeyStudio::getFolders( QDir fromDir, const QStringList& filters, bool recursive )
 {
 	QFileInfoList files;
 	foreach ( QFileInfo file, fromDir.entryInfoList( QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name ) )
@@ -226,7 +226,7 @@ const QFileInfoList pMonkeyStudio::getFolders( QDir fromDir, const QStringList& 
 	\param filters The filters to apply for validate files name
 	\param recursive If true, the folders are scanned recursively, else not
 */
-const QFileInfoList pMonkeyStudio::getFiles( QDir fromDir, const QStringList& filters, bool recursive )
+QFileInfoList pMonkeyStudio::getFiles( QDir fromDir, const QStringList& filters, bool recursive )
 {
 	QFileInfoList files;
 	foreach ( QFileInfo file, fromDir.entryInfoList( QDir::AllEntries | QDir::NoDotAndDotDot, QDir::DirsFirst | QDir::Name ) )
@@ -249,7 +249,7 @@ const QFileInfoList pMonkeyStudio::getFiles( QDir fromDir, const QStringList& fi
 	\param filters The filters to apply for validate files name
 	\param recursive If true, the folders are scanned recursively, else not
 */
-const QFileInfoList pMonkeyStudio::getFiles( QDir fromDir, const QString& filter, bool recursive )
+QFileInfoList pMonkeyStudio::getFiles( QDir fromDir, const QString& filter, bool recursive )
 { return getFiles( fromDir, filter.isEmpty() ? QStringList() : QStringList( filter ), recursive ); }
 
 QFileDialog* getOpenDialog( QFileDialog::FileMode fileMode, const QString& caption, const QString& fileName, const QString& filter, QWidget* parent, QFileDialog::AcceptMode acceptMode = QFileDialog::AcceptOpen )
@@ -270,7 +270,7 @@ QFileDialog* getOpenDialog( QFileDialog::FileMode fileMode, const QString& capti
 	\param fileName The default filename to select ( or path )
 	\param parent The parent widget
 */
-const QStringList pMonkeyStudio::getImageFileNames( const QString& caption, const QString& fileName, QWidget* parent )
+QStringList pMonkeyStudio::getImageFileNames( const QString& caption, const QString& fileName, QWidget* parent )
 {
 	// get image filters
 	QStringList filters;
@@ -309,7 +309,7 @@ const QStringList pMonkeyStudio::getImageFileNames( const QString& caption, cons
 	\param fileName The default filename to select ( or path )
 	\param parent The parent widget
 */
-const QString pMonkeyStudio::getImageFileName( const QString& caption, const QString& fileName, QWidget* parent )
+QString pMonkeyStudio::getImageFileName( const QString& caption, const QString& fileName, QWidget* parent )
 { return getImageFileNames( caption, fileName, parent ).value( 0 ); }
 
 /*!
@@ -319,7 +319,7 @@ const QString pMonkeyStudio::getImageFileName( const QString& caption, const QSt
 	\param filter The filter to apply
 	\param parent The parent widget
 */
-const QStringList pMonkeyStudio::getOpenFileNames( const QString& caption, const QString& fileName, const QString& filter, QWidget* parent )
+QStringList pMonkeyStudio::getOpenFileNames( const QString& caption, const QString& fileName, const QString& filter, QWidget* parent )
 {
 	// create dialg
 	QFileDialog* dlg = getOpenDialog( QFileDialog::ExistingFiles, caption.isEmpty() ? QObject::tr( "Select file(s)" ) : caption, fileName, filter, parent );
@@ -352,7 +352,7 @@ const QStringList pMonkeyStudio::getOpenFileNames( const QString& caption, const
 	\param filter The filter to apply
 	\param parent The parent widget
 */
-const QString pMonkeyStudio::getOpenFileName( const QString& caption, const QString& fileName, const QString& filter, QWidget* parent )
+QString pMonkeyStudio::getOpenFileName( const QString& caption, const QString& fileName, const QString& filter, QWidget* parent )
 { return getOpenFileNames( caption, fileName, filter, parent ).value( 0 ); }
 
 /*!
@@ -362,7 +362,7 @@ const QString pMonkeyStudio::getOpenFileName( const QString& caption, const QStr
 	\param filter The filter to apply
 	\param parent The parent widget
 */
-const QString pMonkeyStudio::getSaveFileName( const QString& caption, const QString& fileName, const QString& filter, QWidget* parent )
+QString pMonkeyStudio::getSaveFileName( const QString& caption, const QString& fileName, const QString& filter, QWidget* parent )
 {
 	// create dialg
 	QFileDialog* dlg = getOpenDialog( QFileDialog::AnyFile, caption.isEmpty() ? QObject::tr( "Choose a filename" ) : caption, fileName, filter, parent, QFileDialog::AcceptSave );
@@ -394,27 +394,27 @@ const QString pMonkeyStudio::getSaveFileName( const QString& caption, const QStr
 	\param fileName The default path to shown
 	\param parent The parent widget
 */
-const QString pMonkeyStudio::getExistingDirectory( const QString& caption, const QString& fileName, QWidget* parent )
+QString pMonkeyStudio::getExistingDirectory( const QString& caption, const QString& fileName, QWidget* parent )
 { return QFileDialog::getExistingDirectory( parent, caption.isEmpty() ? QObject::tr( "Select a folder" ) : caption, fileName ); }
 
 /*!
 	\details Return a tokenized string, ie: the token $HOME$ is replaced by the home path of the user
 	\param string The string to tokenize
 */
-const QString pMonkeyStudio::tokenizeHome( const QString& string )
+QString pMonkeyStudio::tokenizeHome( const QString& string )
 { return QString( string ).replace( QDir::homePath(), "$HOME$" ); }
 
 /*!
 	\details Return an untokenized string, ie: the home path is replaced by $HOME$
 	\param string The string to untokenize
 */
-const QString pMonkeyStudio::unTokenizeHome( const QString& string )
+QString pMonkeyStudio::unTokenizeHome( const QString& string )
 { return QString( string ).replace( "$HOME$", QDir::homePath() ); }
 
 /*!
 	\details Return all default languages suffixes
 */
-const QHash<QString, QStringList> pMonkeyStudio::defaultLanguagesSuffixes()
+QHash<QString, QStringList> pMonkeyStudio::defaultLanguagesSuffixes()
 {
 	// suffixes list
 	QHash<QString, QStringList> l;
@@ -518,7 +518,7 @@ const QHash<QString, QStringList> pMonkeyStudio::defaultLanguagesSuffixes()
 /*!
 	\details Return all available languages suffixes
 */
-const QHash<QString, QStringList> pMonkeyStudio::availableLanguagesSuffixes()
+QHash<QString, QStringList> pMonkeyStudio::availableLanguagesSuffixes()
 {
 	// suffixes list
 	QHash<QString, QStringList> l;
@@ -539,7 +539,7 @@ const QHash<QString, QStringList> pMonkeyStudio::availableLanguagesSuffixes()
 /*!
 	\details Return all available files suffixes
 */
-const QHash<QString, QStringList> pMonkeyStudio::availableFilesSuffixes()
+QHash<QString, QStringList> pMonkeyStudio::availableFilesSuffixes()
 {
 	// get language suffixes
 	QHash<QString, QStringList> l = availableLanguagesSuffixes();
@@ -556,7 +556,7 @@ const QHash<QString, QStringList> pMonkeyStudio::availableFilesSuffixes()
 /*!
 	\details Return all available languages filters
 */
-const QString pMonkeyStudio::availableLanguagesFilters()
+QString pMonkeyStudio::availableLanguagesFilters()
 {
 	QString f;
 	// get suffixes
@@ -574,7 +574,7 @@ const QString pMonkeyStudio::availableLanguagesFilters()
 /*!
 	\details Return all available files filters
 */
-const QString pMonkeyStudio::availableFilesFilters()
+QString pMonkeyStudio::availableFilesFilters()
 {
 	QString f;
 	// get suffixes
@@ -592,7 +592,7 @@ const QString pMonkeyStudio::availableFilesFilters()
 /*!
 	\details Return the base settings path used by all option in this namespace
 */
-const QString pMonkeyStudio::settingsPath()
+QString pMonkeyStudio::settingsPath()
 {
 	return "/Settings";
 }
@@ -600,7 +600,7 @@ const QString pMonkeyStudio::settingsPath()
 /*!
 	\details Return the scintilla settigns path
 */
-const QString pMonkeyStudio::scintillaSettingsPath()
+QString pMonkeyStudio::scintillaSettingsPath()
 {
 	return "/Scintilla";
 }
@@ -787,7 +787,7 @@ bool pMonkeyStudio::setLexerProperty( const QString& property, QsciLexer* lexer,
 	\param property The property to query
 	\param lexer The lexer to query property from
 */
-const QVariant pMonkeyStudio::lexerProperty( const QString& property, QsciLexer* lexer )
+QVariant pMonkeyStudio::lexerProperty( const QString& property, QsciLexer* lexer )
 {
 	// if no member or lexer return null variant
 	if ( !lexer || property.isEmpty() )
@@ -1076,7 +1076,7 @@ void pMonkeyStudio::setRestoreProjectsOnStartup( bool restore )
 /*!
 	\details Return true if projects are restored at startup, else false
 */
-const bool pMonkeyStudio::restoreProjectsOnStartup()
+bool pMonkeyStudio::restoreProjectsOnStartup()
 { return MonkeyCore::settings()->value( settingsPath() +"/RestoreProjectsOnStartup", true ).toBool(); }
 
 /*!
@@ -1089,7 +1089,7 @@ void pMonkeyStudio::setSaveProjectsOnCustomAction( bool save )
 /*!
 	\details Return true if projects are saved on custom actions triggered, else false
 */
-const bool pMonkeyStudio::saveProjectsOnCustomAction()
+bool pMonkeyStudio::saveProjectsOnCustomAction()
 { return MonkeyCore::settings()->value( settingsPath() +"/SaveProjectsOnCustomAction", false ).toBool(); }
 
 /*!
@@ -1102,7 +1102,7 @@ void pMonkeyStudio::setSaveFilesOnCustomAction( bool save )
 /*!
 	\details Return true if files are saved on custom actions triggered, else false
 */
-const bool pMonkeyStudio::saveFilesOnCustomAction()
+bool pMonkeyStudio::saveFilesOnCustomAction()
 { return MonkeyCore::settings()->value( settingsPath() +"/SaveFilesOnCustomAction", false ).toBool(); }
 
 /*!
@@ -1115,7 +1115,7 @@ void pMonkeyStudio::setDefaultProjectsDirectory( const QString& path )
 /*!
 	\details Return the default project path
 */
-const QString pMonkeyStudio::defaultProjectsDirectory()
+QString pMonkeyStudio::defaultProjectsDirectory()
 { return MonkeyCore::settings()->value( settingsPath() +"/DefaultProjectsDirectory", "$HOME$/.Monkey Studio/Projects" ).toString(); }
 
 /*!
@@ -1128,7 +1128,7 @@ void pMonkeyStudio::setTabsHaveCloseButton( bool have )
 /*!
 	\details Return if tabs have  close button
 */
-const bool pMonkeyStudio::tabsHaveCloseButton()
+bool pMonkeyStudio::tabsHaveCloseButton()
 { return MonkeyCore::settings()->value( settingsPath() +"/TabsHaveCloseButton", false ).toBool(); }
 
 /*!
@@ -1141,7 +1141,7 @@ void pMonkeyStudio::setTabsHaveShortcut( bool have )
 /*!
 	\details Return true if tabs have shortcut, else false
 */
-const bool pMonkeyStudio::tabsHaveShortcut()
+bool pMonkeyStudio::tabsHaveShortcut()
 { return MonkeyCore::settings()->value( settingsPath() +"/TabsHaveShortcut", false ).toBool(); }
 
 /*!
@@ -1154,7 +1154,7 @@ void pMonkeyStudio::setTabsElided( bool have )
 /*!
 	\details Return true if tabs text is elided, else false
 */
-const bool pMonkeyStudio::tabsElided()
+bool pMonkeyStudio::tabsElided()
 { return MonkeyCore::settings()->value( settingsPath() +"/TabsElided", false ).toBool(); }
 
 /*!
@@ -1167,7 +1167,7 @@ void pMonkeyStudio::setTabsTextColor( const QColor& color )
 /*!
 	\details Return the tabs text color
 */
-const QColor pMonkeyStudio::tabsTextColor()
+QColor pMonkeyStudio::tabsTextColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/TabsTextColor", QColor( Qt::black ) ).value<QColor>(); }
 
 /*!
@@ -1180,7 +1180,7 @@ void pMonkeyStudio::setCurrentTabTextColor( const QColor& color )
 /*!
 	\details Return the current tab text color
 */
-const QColor pMonkeyStudio::currentTabTextColor()
+QColor pMonkeyStudio::currentTabTextColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/CurrentTabTextColor", QColor( Qt::blue ) ).value<QColor>(); }
 
 /*
@@ -1201,7 +1201,7 @@ void pMonkeyStudio::setDocMode( pExtendedWorkspace::DocumentMode mode )
 /*!
 	\details Return the mod used by the workspace
 */
-const pExtendedWorkspace::DocumentMode pMonkeyStudio::docMode()
+pExtendedWorkspace::DocumentMode pMonkeyStudio::docMode()
 { return (pExtendedWorkspace::DocumentMode)MonkeyCore::settings()->value( settingsPath() +"/DocMode", pExtendedWorkspace::dmSDI ).toInt(); }
 
 /*!
@@ -1214,7 +1214,7 @@ void pMonkeyStudio::setExternalChanges( pMonkeyStudio::ExternalChangesMode mode 
 /*!
 	\details Return the external changes react mode
 */
-const pMonkeyStudio::ExternalChangesMode pMonkeyStudio::externalchanges()
+pMonkeyStudio::ExternalChangesMode pMonkeyStudio::externalchanges()
 { return (pMonkeyStudio::ExternalChangesMode)MonkeyCore::settings()->value( settingsPath() +"/ExternalChanges", pMonkeyStudio::ecmAlert ).toInt(); }
 
 /*!
@@ -1227,7 +1227,7 @@ void pMonkeyStudio::setSaveSessionOnClose( bool save )
 /*!
 	\details Return true if session is saved at close, else false
 */
-const bool pMonkeyStudio::saveSessionOnClose()
+bool pMonkeyStudio::saveSessionOnClose()
 { return MonkeyCore::settings()->value( settingsPath() +"/SaveSessionOnClose", true ).toBool(); }
 
 /*!
@@ -1240,7 +1240,7 @@ void pMonkeyStudio::setRestoreSessionOnStartup( bool restore )
 /*!
 	\details Return true if session will be restored on startup, else false
 */
-const bool pMonkeyStudio::restoreSessionOnStartup()
+bool pMonkeyStudio::restoreSessionOnStartup()
 { return MonkeyCore::settings()->value( settingsPath() +"/RestoreSessionOnStartup", true ).toBool(); }
 
 /*!
@@ -1253,7 +1253,7 @@ void pMonkeyStudio::setAutoSyntaxCheck( bool activate )
 /*!
 	\details Return true if auto syntax check is performed, else false
 */
-const bool pMonkeyStudio::autoSyntaxCheck()
+bool pMonkeyStudio::autoSyntaxCheck()
 { return MonkeyCore::settings()->value( settingsPath() +"/AutoSyntaxCheck", false ).toBool(); }
 
 /*!
@@ -1266,7 +1266,7 @@ void pMonkeyStudio::setConvertTabsUponOpen( bool convert )
 /*!
 	\details Return true if tabs are converted upon open, else false
 */
-const bool pMonkeyStudio::convertTabsUponOpen()
+bool pMonkeyStudio::convertTabsUponOpen()
 { return MonkeyCore::settings()->value( settingsPath() +"/ConvertTabsUponOpen", false ).toBool(); }
 
 /*!
@@ -1279,7 +1279,7 @@ void pMonkeyStudio::setCreateBackupUponOpen( bool backup )
 /*!
 	\details Return true if file is backup upon open, else false
 */
-const bool pMonkeyStudio::createBackupUponOpen()
+bool pMonkeyStudio::createBackupUponOpen()
 { return MonkeyCore::settings()->value( settingsPath() +"/CreateBackupUponOpen", false ).toBool(); }
 
 /*!
@@ -1292,7 +1292,7 @@ void pMonkeyStudio::setAutoEolConversion( bool convert )
 /*!
 	\details Return true if eol are convert, else false
 */
-const bool pMonkeyStudio::autoEolConversion()
+bool pMonkeyStudio::autoEolConversion()
 { return MonkeyCore::settings()->value( settingsPath() +"/AutoEolConversion", true ).toBool(); }
 
 /*!
@@ -1305,7 +1305,7 @@ void pMonkeyStudio::setDefaultEncoding( const QString& codec )
 /*!
 	\details Return the default used encoding for opening/saving files. Default UTF-8
 */
-const QString pMonkeyStudio::defaultEncoding()
+QString pMonkeyStudio::defaultEncoding()
 { return MonkeyCore::settings()->value( settingsPath() +"/DefaultEncoding", "UTF-8" ).toString(); }
 
 /*!
@@ -1318,7 +1318,7 @@ void pMonkeyStudio::setSelectionBackgroundColor( const QColor& color )
 /*!
 	\details Return the selection background color
 */
-const QColor pMonkeyStudio::selectionBackgroundColor()
+QColor pMonkeyStudio::selectionBackgroundColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/SelectionBackgroundColor", QColor( "#bdff9b" ) ).value<QColor>(); }
 
 /*!
@@ -1331,7 +1331,7 @@ void pMonkeyStudio::setSelectionForegroundColor( const QColor& color )
 /*!
 	\details Return the selection foreground color
 */
-const QColor pMonkeyStudio::selectionForegroundColor()
+QColor pMonkeyStudio::selectionForegroundColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/SelectionForegroundColor", QColor( "#000000" ) ).value<QColor>(); }
 
 /*!
@@ -1344,7 +1344,7 @@ void pMonkeyStudio::setDefaultDocumentColours( bool useDefault )
 /*!
 	\details Return if editors use default colros or custom one
 */
-const bool pMonkeyStudio::defaultDocumentColours()
+bool pMonkeyStudio::defaultDocumentColours()
 { return MonkeyCore::settings()->value( settingsPath() +"/DefaultDocumentColours", false ).toBool(); }
 
 /*!
@@ -1357,7 +1357,7 @@ void pMonkeyStudio::setDefaultDocumentPen( const QColor& color )
 /*!
 	\details Return the custom editor pen color
 */
-const QColor pMonkeyStudio::defaultDocumentPen()
+QColor pMonkeyStudio::defaultDocumentPen()
 { return MonkeyCore::settings()->value( settingsPath() +"/DefaultDocumentPen", QColor( Qt::black ) ).value<QColor>(); }
 
 /*!
@@ -1370,7 +1370,7 @@ void pMonkeyStudio::setDefaultDocumentPaper( const QColor& color )
 /*!
 	\details Return the custom editor paper color
 */
-const QColor pMonkeyStudio::defaultDocumentPaper()
+QColor pMonkeyStudio::defaultDocumentPaper()
 { return MonkeyCore::settings()->value( settingsPath() +"/DefaultDocumentPaper", QColor( Qt::white ) ).value<QColor>(); }
 
 /*!
@@ -1383,7 +1383,7 @@ void pMonkeyStudio::setAutoCompletionCaseSensitivity( bool sensitive )
 /*!
 	\details Return true if auto completion is case sensitive, else false
 */
-const bool pMonkeyStudio::autoCompletionCaseSensitivity()
+bool pMonkeyStudio::autoCompletionCaseSensitivity()
 { return MonkeyCore::settings()->value( settingsPath() +"/AutoCompletionCaseSensitivity", true ).toBool(); }
 
 /*!
@@ -1396,7 +1396,7 @@ void pMonkeyStudio::setAutoCompletionReplaceWord( bool replace )
 /*!
 	\details Return true if auto completion repalce word else false
 */
-const bool pMonkeyStudio::autoCompletionReplaceWord()
+bool pMonkeyStudio::autoCompletionReplaceWord()
 { return MonkeyCore::settings()->value( settingsPath() +"/AutoCompletionReplaceWord", true ).toBool(); }
 
 /*!
@@ -1409,7 +1409,7 @@ void pMonkeyStudio::setAutoCompletionShowSingle( bool show )
 /*!
 	\details Return true if single match is shown, else false
 */
-const bool pMonkeyStudio::autoCompletionShowSingle()
+bool pMonkeyStudio::autoCompletionShowSingle()
 { return MonkeyCore::settings()->value( settingsPath() +"/AutoCompletionShowSingle", false ).toBool(); }
 
 /*!
@@ -1422,7 +1422,7 @@ void pMonkeyStudio::setAutoCompletionSource( QsciScintilla::AutoCompletionSource
 /*!
 	\details Return the autocompletion mode used
 */
-const QsciScintilla::AutoCompletionSource pMonkeyStudio::autoCompletionSource()
+QsciScintilla::AutoCompletionSource pMonkeyStudio::autoCompletionSource()
 { return (QsciScintilla::AutoCompletionSource)MonkeyCore::settings()->value( settingsPath() +"/AutoCompletionSource", (int)QsciScintilla::AcsAll ).toInt(); }
 
 /*!
@@ -1435,7 +1435,7 @@ void pMonkeyStudio::setAutoCompletionThreshold( int count )
 /*!
 	\details Return the autocompletion threshold count
 */
-const int pMonkeyStudio::autoCompletionThreshold()
+int pMonkeyStudio::autoCompletionThreshold()
 { return MonkeyCore::settings()->value( settingsPath() +"/AutoCompletionThreshold", 3 ).toInt(); }
 
 /*!
@@ -1448,7 +1448,7 @@ void pMonkeyStudio::setCallTipsBackgroundColor( const QColor& color )
 /*!
 	\details Return the calltips baclground color
 */
-const QColor pMonkeyStudio::callTipsBackgroundColor()
+QColor pMonkeyStudio::callTipsBackgroundColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/CallTipsBackgroundColor", QColor( "#ffff9b" ) ).value<QColor>(); }
 
 /*!
@@ -1461,7 +1461,7 @@ void pMonkeyStudio::setCallTipsForegroundColor( const QColor& color )
 /*!
 	\details Return the calltips foreground color
 */
-const QColor pMonkeyStudio::callTipsForegroundColor()
+QColor pMonkeyStudio::callTipsForegroundColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/CallTipsForegroundColor", QColor( "#000000" ) ).value<QColor>(); }
 
 /*!
@@ -1474,7 +1474,7 @@ void pMonkeyStudio::setCallTipsHighlightColor( const QColor& color )
 /*!
 	\details Return the calltips highlight color
 */
-const QColor pMonkeyStudio::callTipsHighlightColor()
+QColor pMonkeyStudio::callTipsHighlightColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/CallTipsHighlightColor", QColor( "#ff0000" ) ).value<QColor>(); }
 
 /*!
@@ -1487,7 +1487,7 @@ void pMonkeyStudio::setCallTipsStyle( QsciScintilla::CallTipsStyle style )
 /*!
 	\details Return the calltips style
 */
-const QsciScintilla::CallTipsStyle pMonkeyStudio::callTipsStyle()
+QsciScintilla::CallTipsStyle pMonkeyStudio::callTipsStyle()
 { return (QsciScintilla::CallTipsStyle)MonkeyCore::settings()->value( settingsPath() +"/CallTipsStyle", (int)QsciScintilla::CallTipsContext ).toInt(); }
 
 /*!
@@ -1500,7 +1500,7 @@ void pMonkeyStudio::setCallTipsVisible( int count )
 /*!
 	\details Return the calltips visible number
 */
-const int pMonkeyStudio::callTipsVisible()
+int pMonkeyStudio::callTipsVisible()
 { return MonkeyCore::settings()->value( settingsPath() +"/CallTipsVisible", -1 ).toInt(); }
 
 /*!
@@ -1513,7 +1513,7 @@ void pMonkeyStudio::setAutoIndent( bool autoindent )
 /*!
 	\details Return true if auto indentation is active, else false
 */
-const bool pMonkeyStudio::autoIndent()
+bool pMonkeyStudio::autoIndent()
 { return MonkeyCore::settings()->value( settingsPath() +"/AutoIndent", true ).toBool(); }
 
 /*!
@@ -1526,7 +1526,7 @@ void pMonkeyStudio::setBackspaceUnindents( bool unindents )
 /*!
 	\details Return true if backspace key unindents else false
 */
-const bool pMonkeyStudio::backspaceUnindents()
+bool pMonkeyStudio::backspaceUnindents()
 { return MonkeyCore::settings()->value( settingsPath() +"/BackspaceUnindents", true ).toBool(); }
 
 /*!
@@ -1539,7 +1539,7 @@ void pMonkeyStudio::setIndentationGuides( bool visible )
 /*!
 	\details Return true if indentation guides are shown, else false
 */
-const bool pMonkeyStudio::indentationGuides()
+bool pMonkeyStudio::indentationGuides()
 { return MonkeyCore::settings()->value( settingsPath() +"/IndentationGuides", true ).toBool(); }
 
 /*!
@@ -1552,7 +1552,7 @@ void pMonkeyStudio::setIndentationsUseTabs( bool tabs )
 /*!
 	\details Return true if indentation use tabs, else false
 */
-const bool pMonkeyStudio::indentationsUseTabs()
+bool pMonkeyStudio::indentationsUseTabs()
 { return MonkeyCore::settings()->value( settingsPath() +"/IndentationsUseTabs", true ).toBool(); }
 
 /*!
@@ -1565,7 +1565,7 @@ void pMonkeyStudio::setAutoDetectIndent( bool detect )
 /*!
 	\details Return true if indent is auto detected, else false
 */
-const bool pMonkeyStudio::autoDetectIndent()
+bool pMonkeyStudio::autoDetectIndent()
 { return MonkeyCore::settings()->value( settingsPath() +"/AutoDetectIndent", false ).toBool(); }
 
 /*!
@@ -1578,7 +1578,7 @@ void pMonkeyStudio::setIndentationWidth( int width )
 /*!
 	\details Return the indentation width
 */
-const int pMonkeyStudio::indentationWidth()
+int pMonkeyStudio::indentationWidth()
 { return MonkeyCore::settings()->value( settingsPath() +"/IndentationWidth", 4 ).toInt(); }
 
 /*!
@@ -1591,7 +1591,7 @@ void pMonkeyStudio::setTabIndents( bool indent )
 /*!
 	\details Return true if tab key do indent, else false
 */
-const bool pMonkeyStudio::tabIndents()
+bool pMonkeyStudio::tabIndents()
 { return MonkeyCore::settings()->value( settingsPath() +"/TabIndents", true ).toBool(); }
 
 /*!
@@ -1604,7 +1604,7 @@ void pMonkeyStudio::setTabWidth( int width )
 /*!
 	\details Return the tab width
 */
-const int pMonkeyStudio::tabWidth()
+int pMonkeyStudio::tabWidth()
 { return MonkeyCore::settings()->value( settingsPath() +"/TabWidth", 4 ).toInt(); }
 
 /*!
@@ -1617,7 +1617,7 @@ void pMonkeyStudio::setIndentationGuidesBackgroundColor( const QColor& color )
 /*!
 	\details Return the indentation guide background color
 */
-const QColor pMonkeyStudio::indentationGuidesBackgroundColor()
+QColor pMonkeyStudio::indentationGuidesBackgroundColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/IndentationGuidesBackgroundColor", QColor( "#0000ff" ) ).value<QColor>(); }
 
 /*!
@@ -1630,7 +1630,7 @@ void pMonkeyStudio::setIndentationGuidesForegroundColor( const QColor& c )
 /*!
 	\details Return the indentation guide foreground color
 */
-const QColor pMonkeyStudio::indentationGuidesForegroundColor()
+QColor pMonkeyStudio::indentationGuidesForegroundColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/IndentationGuidesForegroundColor", QColor( "#0000ff" ) ).value<QColor>(); }
 
 /*!
@@ -1643,7 +1643,7 @@ void pMonkeyStudio::setBraceMatching( QsciScintilla::BraceMatch mode )
 /*!
 	\details Return the brace matching mode
 */
-const QsciScintilla::BraceMatch pMonkeyStudio::braceMatching()
+QsciScintilla::BraceMatch pMonkeyStudio::braceMatching()
 { return (QsciScintilla::BraceMatch)MonkeyCore::settings()->value( settingsPath() +"/BraceMatching", (int)QsciScintilla::SloppyBraceMatch ).toInt(); }
 
 /*!
@@ -1656,7 +1656,7 @@ void pMonkeyStudio::setMatchedBraceBackgroundColor( const QColor& color )
 /*!
 	\details Return the matched brace background color
 */
-const QColor pMonkeyStudio::matchedBraceBackgroundColor()
+QColor pMonkeyStudio::matchedBraceBackgroundColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/MatchedBraceBackgroundColor", QColor( "#ffff7f" ) ).value<QColor>(); }
 
 /*!
@@ -1669,121 +1669,121 @@ void pMonkeyStudio::setMatchedBraceForegroundColor( const QColor& color )
 /*!
 	\details Return the matched brace foreground color
 */
-const QColor pMonkeyStudio::matchedBraceForegroundColor()
+QColor pMonkeyStudio::matchedBraceForegroundColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/MatchedBraceForegroundColor", QColor( "#ff0000" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setUnmatchedBraceBackgroundColor( const QColor& c )
 { MonkeyCore::settings()->setValue( settingsPath() +"/UnmatchedBraceBackgroundColor", c ); }
 
-const QColor pMonkeyStudio::unmatchedBraceBackgroundColor()
+QColor pMonkeyStudio::unmatchedBraceBackgroundColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/UnmatchedBraceBackgroundColor", QColor( "#ff0000" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setUnmatchedBraceForegroundColor( const QColor& c )
 { MonkeyCore::settings()->setValue( settingsPath() +"/UnmatchedBraceForegroundColor", c ); }
 
-const QColor pMonkeyStudio::unmatchedBraceForegroundColor()
+QColor pMonkeyStudio::unmatchedBraceForegroundColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/UnmatchedBraceForegroundColor", QColor( "#ffffff" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setEdgeMode( QsciScintilla::EdgeMode m )
 { MonkeyCore::settings()->setValue( settingsPath() +"/EdgeMode", m ); }
 
-const QsciScintilla::EdgeMode pMonkeyStudio::edgeMode()
+QsciScintilla::EdgeMode pMonkeyStudio::edgeMode()
 { return (QsciScintilla::EdgeMode)MonkeyCore::settings()->value( settingsPath() +"/EdgeMode", (int)QsciScintilla::EdgeNone ).toInt(); }
 
 void pMonkeyStudio::setEdgeColor( const QColor& c )
 { MonkeyCore::settings()->setValue( settingsPath() +"/EdgeColor", c ); }
 
-const QColor pMonkeyStudio::edgeColor()
+QColor pMonkeyStudio::edgeColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/EdgeColor", QColor( "#ff0000" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setEdgeColumn( int i )
 { MonkeyCore::settings()->setValue( settingsPath() +"/EdgeColumn", i ); }
 
-const int pMonkeyStudio::edgeColumn()
+int pMonkeyStudio::edgeColumn()
 { return MonkeyCore::settings()->value( settingsPath() +"/EdgeColumn", 80 ).toInt(); }
 
 void pMonkeyStudio::setCaretLineVisible( bool b )
 { MonkeyCore::settings()->setValue( settingsPath() +"/CaretLineVisible", b ); }
 
-const bool pMonkeyStudio::caretLineVisible()
+bool pMonkeyStudio::caretLineVisible()
 { return MonkeyCore::settings()->value( settingsPath() +"/CaretLineVisible", true ).toBool(); }
 
 void pMonkeyStudio::setCaretLineBackgroundColor( const QColor& c )
 { MonkeyCore::settings()->setValue( settingsPath() +"/CaretLineBackgroundColor", c ); }
 
-const QColor pMonkeyStudio::caretLineBackgroundColor()
+QColor pMonkeyStudio::caretLineBackgroundColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/CaretLineBackgroundColor", QColor( "#aaaaff" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setCaretForegroundColor( const QColor& c )
 { MonkeyCore::settings()->setValue( settingsPath() +"/CaretForegroundColor", c ); }
 
-const QColor pMonkeyStudio::caretForegroundColor()
+QColor pMonkeyStudio::caretForegroundColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/CaretForegroundColor", QColor( "#000000" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setCaretWidth( int i )
 { MonkeyCore::settings()->setValue( settingsPath() +"/CaretWidth", i ); }
 
-const int pMonkeyStudio::caretWidth()
+int pMonkeyStudio::caretWidth()
 { return MonkeyCore::settings()->value( settingsPath() +"/CaretWidth", 1 ).toInt(); }
 
 void pMonkeyStudio::setLineNumbersMarginEnabled( bool b )
 { MonkeyCore::settings()->setValue( settingsPath() +"/LineNumbersMarginEnabled", b ); }
 
-const bool pMonkeyStudio::lineNumbersMarginEnabled()
+bool pMonkeyStudio::lineNumbersMarginEnabled()
 { return MonkeyCore::settings()->value( settingsPath() +"/LineNumbersMarginEnabled", true ).toBool(); }
 
 void pMonkeyStudio::setLineNumbersMarginWidth( int i )
 { MonkeyCore::settings()->setValue( settingsPath() +"/LineNumbersMarginWidth", i ); }
 
-const int pMonkeyStudio::lineNumbersMarginWidth()
+int pMonkeyStudio::lineNumbersMarginWidth()
 { return MonkeyCore::settings()->value( settingsPath() +"/LineNumbersMarginWidth", 4 ).toInt(); }
 
 void pMonkeyStudio::setLineNumbersMarginAutoWidth( bool b )
 { MonkeyCore::settings()->setValue( settingsPath() +"/LineNumbersMarginAutoWidth", b ); }
 
-const bool pMonkeyStudio::lineNumbersMarginAutoWidth()
+bool pMonkeyStudio::lineNumbersMarginAutoWidth()
 { return MonkeyCore::settings()->value( settingsPath() +"/LineNumbersMarginAutoWidth", true ).toBool(); }
 
 void pMonkeyStudio::setFolding( QsciScintilla::FoldStyle f )
 { MonkeyCore::settings()->setValue( settingsPath() +"/Folding", f ); }
 
-const QsciScintilla::FoldStyle pMonkeyStudio::folding()
+QsciScintilla::FoldStyle pMonkeyStudio::folding()
 { return (QsciScintilla::FoldStyle)MonkeyCore::settings()->value( settingsPath() +"/Folding", (int)QsciScintilla::BoxedTreeFoldStyle ).toInt(); }
 
 void pMonkeyStudio::setFoldMarginBackgroundColor( const QColor& c )
 { MonkeyCore::settings()->setValue( settingsPath() +"/FoldMarginBackgroundColor", c ); }
 
-const QColor pMonkeyStudio::foldMarginBackgroundColor()
+QColor pMonkeyStudio::foldMarginBackgroundColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/FoldMarginBackgroundColor", QColor( "#c0c0c0" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setFoldMarginForegroundColor( const QColor& c )
 { MonkeyCore::settings()->setValue( settingsPath() +"/FoldMarginForegroundColor", c ); }
 
-const QColor pMonkeyStudio::foldMarginForegroundColor()
+QColor pMonkeyStudio::foldMarginForegroundColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/FoldMarginForegroundColor", QColor( "#ffffff" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setMarginsEnabled( bool b )
 { MonkeyCore::settings()->setValue( settingsPath() +"/MarginsEnabled", b ); }
 
-const bool pMonkeyStudio::marginsEnabled()
+bool pMonkeyStudio::marginsEnabled()
 { return MonkeyCore::settings()->value( settingsPath() +"/MarginsEnabled", false ).toBool(); }
 
 void pMonkeyStudio::setMarginsBackgroundColor( const QColor& c )
 { MonkeyCore::settings()->setValue( settingsPath() +"/MarginsBackgroundColor", c ); }
 
-const QColor pMonkeyStudio::marginsBackgroundColor()
+QColor pMonkeyStudio::marginsBackgroundColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/MarginsBackgroundColor", QColor( "#c0c0c0" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setMarginsForegroundColor( const QColor& c )
 { MonkeyCore::settings()->setValue( settingsPath() +"/MarginsForegroundColor", c ); }
 
-const QColor pMonkeyStudio::marginsForegroundColor()
+QColor pMonkeyStudio::marginsForegroundColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/MarginsForegroundColor", QColor( "#ffffff" ) ).value<QColor>(); }
 
 void pMonkeyStudio::setMarginsFont( const QFont& f )
 { MonkeyCore::settings()->setValue( settingsPath() +"/MarginsFont", f.toString() ); }
 
-const QFont pMonkeyStudio::marginsFont()
+QFont pMonkeyStudio::marginsFont()
 {
 	QFont f;
 	f.fromString( MonkeyCore::settings()->value( settingsPath() +"/MarginsFont", f.toString() ).toString() );
@@ -1793,7 +1793,7 @@ const QFont pMonkeyStudio::marginsFont()
 void pMonkeyStudio::setEolMode( QsciScintilla::EolMode e )
 { MonkeyCore::settings()->setValue( settingsPath() +"/EolMode", e ); }
 
-const QsciScintilla::EolMode pMonkeyStudio::eolMode()
+QsciScintilla::EolMode pMonkeyStudio::eolMode()
 {
 #if defined( Q_WS_WIN )
 	int i = QsciScintilla::EolWindows;
@@ -1826,47 +1826,47 @@ QString pMonkeyStudio::getEol( QsciScintilla::EolMode e )
 void pMonkeyStudio::setEolVisibility( bool b )
 { MonkeyCore::settings()->setValue( settingsPath() +"/EolVisibility", b ); }
 
-const bool pMonkeyStudio::eolVisibility()
+bool pMonkeyStudio::eolVisibility()
 { return MonkeyCore::settings()->value( settingsPath() +"/EolVisibility", false ).toBool(); }
 
 void pMonkeyStudio::setAutoDetectEol( bool detect )
 { MonkeyCore::settings()->setValue( settingsPath() +"/AutoDetectEol", detect ); }
 
-const bool pMonkeyStudio::autoDetectEol()
+bool pMonkeyStudio::autoDetectEol()
 { return MonkeyCore::settings()->value( settingsPath() +"/AutoDetectEol", false ).toBool(); }
 
 void pMonkeyStudio::setWhitespaceVisibility( QsciScintilla::WhitespaceVisibility w )
 { MonkeyCore::settings()->setValue( settingsPath() +"/WhitespaceVisibility", w ); }
 
-const QsciScintilla::WhitespaceVisibility pMonkeyStudio::whitespaceVisibility()
+QsciScintilla::WhitespaceVisibility pMonkeyStudio::whitespaceVisibility()
 { return (QsciScintilla::WhitespaceVisibility)MonkeyCore::settings()->value( settingsPath() +"/WhitespaceVisibility", (int)QsciScintilla::WsInvisible ).toInt(); }
 
 void pMonkeyStudio::setWrapMode( QsciScintilla::WrapMode w )
 { MonkeyCore::settings()->setValue( settingsPath() +"/WrapMode", w ); }
 
-const QsciScintilla::WrapMode pMonkeyStudio::wrapMode()
+QsciScintilla::WrapMode pMonkeyStudio::wrapMode()
 { return (QsciScintilla::WrapMode)MonkeyCore::settings()->value( settingsPath() +"/WrapMode", (int)QsciScintilla::WrapNone ).toInt(); }
 
 void pMonkeyStudio::setWrapVisualFlagsEnabled( bool b )
 { MonkeyCore::settings()->setValue( settingsPath() +"/WrapVisualFlagsEnabled", b ); }
 
-const bool pMonkeyStudio::wrapVisualFlagsEnabled()
+bool pMonkeyStudio::wrapVisualFlagsEnabled()
 { return MonkeyCore::settings()->value( settingsPath() +"/WrapVisualFlagsEnabled", false ).toBool(); }
 
 void pMonkeyStudio::setStartWrapVisualFlag( QsciScintilla::WrapVisualFlag f )
 { MonkeyCore::settings()->setValue( settingsPath() +"/StartWrapVisualFlag", f ); }
 
-const QsciScintilla::WrapVisualFlag pMonkeyStudio::startWrapVisualFlag()
+QsciScintilla::WrapVisualFlag pMonkeyStudio::startWrapVisualFlag()
 { return (QsciScintilla::WrapVisualFlag)MonkeyCore::settings()->value( settingsPath() +"/StartWrapVisualFlag", (int)QsciScintilla::WrapFlagNone ).toInt(); }
 
 void pMonkeyStudio::setEndWrapVisualFlag( QsciScintilla::WrapVisualFlag f )
 { MonkeyCore::settings()->setValue( settingsPath() +"/EndWrapVisualFlag", f ); }
 
-const QsciScintilla::WrapVisualFlag pMonkeyStudio::endWrapVisualFlag()
+QsciScintilla::WrapVisualFlag pMonkeyStudio::endWrapVisualFlag()
 { return (QsciScintilla::WrapVisualFlag)MonkeyCore::settings()->value( settingsPath() +"/EndWrapVisualFlag", (int)QsciScintilla::WrapFlagNone ).toInt(); }
 
 void pMonkeyStudio::setWrappedLineIndentWidth( int i )
 { MonkeyCore::settings()->setValue( settingsPath() +"/WrappedLineIndentWidth", i ); }
 
-const int pMonkeyStudio::wrappedLineIndentWidth()
+int pMonkeyStudio::wrappedLineIndentWidth()
 { return MonkeyCore::settings()->value( settingsPath() +"/WrappedLineIndentWidth", 0 ).toInt(); }

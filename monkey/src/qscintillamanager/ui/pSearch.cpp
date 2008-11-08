@@ -30,7 +30,7 @@
 #include "../../coremanager/MonkeyCore.h"
 #include "../../queuedstatusbar/QueuedStatusBar.h"
 #include "../../workspace/pWorkspace.h"
-#include "../../xupmanager/ui/UIXUPManager.h"
+#include "../../xupmanager/gui/XUPProjectManager.h"
 #include "../../workspace/pChild.h"
 #include "../pEditor.h"
 #include "../../maininterface/UIMain.h"

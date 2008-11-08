@@ -29,7 +29,7 @@
 #include "UIMain.h"
 #include "../coremanager/MonkeyCore.h"
 #include "../pMonkeyStudio.h"
-#include "../xupmanager/ui/UIXUPManager.h"
+#include "../xupmanager/gui/XUPProjectManager.h"
 #include "../recentsmanager/pRecentsManager.h"
 #include "../toolsmanager/pToolsManager.h"
 #include "../consolemanager/pConsoleManager.h"
@@ -84,6 +84,8 @@ void UIMain::initGui()
 
 void UIMain::closeEvent( QCloseEvent* e )
 {
+	// inform that we close mainwindow
+	emit aboutToClose();
 	// save session if needed
 	if ( pMonkeyStudio::saveSessionOnClose() )
 		MonkeyCore::workspace()->fileSessionSave_triggered();
@@ -94,9 +96,7 @@ void UIMain::closeEvent( QCloseEvent* e )
 		return;
 	}
 	// force to close all projects
-	MonkeyCore::projectsManager()->action( UIXUPManager::CloseAll )->trigger();
-	// inform that we close mainwindow
-	emit aboutToClose();
+	MonkeyCore::projectsManager()->action( XUPProjectManager::atCloseAll )->trigger();
 }
 
 QMenu* UIMain::createPopupMenu()
@@ -262,6 +262,8 @@ void UIMain::initMenuBar()
 	// add styles action to menu
 	mb->menu( "mView/mStyle" )->addActions( agStyles->actions() );
 	// add actions to uixupmanager
+#warning uncomment UIMain::initMenuBar()
+	/*
 	UIXUPManager* xm = MonkeyCore::projectsManager();
 	xm->setAction( UIXUPManager::New, mb->action( "mProject/aNew" ) );
 	xm->setAction( UIXUPManager::Open, mb->action( "mProject/aOpen" ) );
@@ -273,6 +275,7 @@ void UIMain::initMenuBar()
 	xm->setAction( UIXUPManager::Remove, mb->action( "mProject/aRemoveFiles" ) );
 	xm->setAction( UIXUPManager::Settings, mb->action( "mProject/aSettings" ) );
 	xm->initGui();
+	*/
 }
 
 void UIMain::initToolBar()

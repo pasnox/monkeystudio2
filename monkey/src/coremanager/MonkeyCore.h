@@ -41,7 +41,7 @@ class pMenuBar;
 class pRecentsManager;
 class pActionManager;
 class pToolsManager;
-class UIXUPManager;
+class XUPProjectManager;
 class pFileManager;
 class pWorkspace;
 class pSearch;
@@ -62,7 +62,7 @@ public:
 	static pRecentsManager* recentsManager();
 	static pActionManager* actionManager();
 	static pToolsManager* toolsManager();
-	static UIXUPManager* projectsManager();
+	static XUPProjectManager* projectsManager();
 	static pFileManager* fileManager();
 	static pWorkspace* workspace();
 	static pConsoleManager* consoleManager();
