@@ -24,6 +24,9 @@ SOURCES	+= QSingleton.cpp
 # psettings
 HEADERS	+= pSettings.h
 SOURCES	+= pSettings.cpp
+# pIconManager
+HEADERS	+= pIconManager.h
+SOURCES	+= pIconManager.cpp
 
 # widgets
 # pTabBar

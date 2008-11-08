@@ -1,0 +1,1 @@
+#include <../widgets/pTabbedWorkspaceRightCorner.h>
