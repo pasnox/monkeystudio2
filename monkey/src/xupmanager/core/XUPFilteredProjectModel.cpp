@@ -56,13 +56,24 @@ XUPFilteredProjectModel::~XUPFilteredProjectModel()
 
 QModelIndex XUPFilteredProjectModel::index( int row, int column, const QModelIndex& parentProxy ) const
 {
-	if ( !mSourceModel || column > 0 )
-		return QModelIndex();
-	
-	XUPItem* item = parentProxy.isValid() ? mapToSource( parentProxy ) : mSourceModel->mRootProject;
+	XUPItem* item = mapToSource( parentProxy );
 	XUPItemMappingIterator it = mItemsMapping.constFind( item );
 	
-	if ( it != mItemsMapping.constEnd() )
+	if ( it == mItemsMapping.constEnd() )
+	{
+		if ( row == 0 && column == 0 )
+		{
+			it = mItemsMapping.constFind( mSourceModel->mRootProject );
+			
+			if ( it != mItemsMapping.constEnd() )
+			{
+				QModelIndex index = createIndex( row, column, *it );
+				it.value()->mProxyIndex = index;
+				return index;
+			}
+		}
+	}
+	else
 	{
 		XUPItem* item = it.value()->mMappedChildren.value( row );
 		if ( item )
@@ -82,13 +93,14 @@ QModelIndex XUPFilteredProjectModel::index( int row, int column, const QModelInd
 
 QModelIndex XUPFilteredProjectModel::parent( const QModelIndex& proxyIndex ) const
 {
-	XUPItem* item = proxyIndex.isValid() ? mapToSource( proxyIndex ) : mSourceModel->mRootProject;
+	XUPItem* item = mapToSource( proxyIndex );
 	XUPItemMappingIterator it = mItemsMapping.constFind( item );
 
 	if ( it != mItemsMapping.constEnd() )
 	{
 		XUPItem* parentItem = it.value()->mParent;
 		it = mItemsMapping.constFind( parentItem );
+		
 		if ( it != mItemsMapping.constEnd() )
 		{
 			return it.value()->mProxyIndex;
@@ -102,13 +114,15 @@ int XUPFilteredProjectModel::rowCount( const QModelIndex& proxyParent ) const
 {
 	if ( mSourceModel )
 	{
-		XUPItem* item = proxyParent.isValid() ? mapToSource( proxyParent ) : mSourceModel->mRootProject;
+		XUPItem* item = mapToSource( proxyParent );
 		XUPItemMappingIterator it = mItemsMapping.constFind( item );
 		
 		if ( it != mItemsMapping.constEnd() )
 		{
 			return it.value()->mMappedChildren.count();
 		}
+		
+		return 1;
 	}
 	
 	return 0;
@@ -198,6 +212,10 @@ XUPItemMappingIterator XUPFilteredProjectModel::createMapping( XUPItem* item, XU
 		XUPItemMappingIterator parentIt = createMapping( parent );
 		Q_ASSERT( parentIt != mItemsMapping.constEnd() );
 		parentIt.value()->mMappedChildren << item;
+	}
+	else
+	{
+		m->mParent = 0;
 	}
 
 	Q_ASSERT( it != mItemsMapping.constEnd() );

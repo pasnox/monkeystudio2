@@ -12,31 +12,48 @@ XUPProjectModel::XUPProjectModel( QObject* parent )
 XUPProjectModel::~XUPProjectModel()
 {
 	if ( mRootProject )
+	{
 		mRootProject->close();
+	}
 }
 
 QModelIndex XUPProjectModel::indexFromItem( XUPItem* item ) const
 {
+	if ( !item )
+	{
+		return QModelIndex();
+	}
+	
 	int column = 0;
 	int row = item->parent() ? item->parent()->childIndex( item ) : 0;
 	
-	return item != mRootProject ? createIndex( row, column, item ) : QModelIndex();
+	return createIndex( row, column, item );
 }
 
 QModelIndex XUPProjectModel::index( int row, int column, const QModelIndex& parent ) const
 {
 	if ( !hasIndex( row, column, parent ) )
+	{
 		return QModelIndex();
+	}
 	
-	XUPItem* parentItem;
 	if ( !parent.isValid() )
-		parentItem = mRootProject;
+	{
+		if ( row == 0 && mRootProject )
+		{
+			return createIndex( row, column, static_cast<XUPItem*>( mRootProject ) );
+		}
+	}
 	else
-		parentItem = static_cast<XUPItem*>( parent.internalPointer() );
-	
-	XUPItem* childItem = parentItem->child( row );
-	if ( childItem )
-		return createIndex( row, column, childItem );
+	{
+		XUPItem* parentItem = static_cast<XUPItem*>( parent.internalPointer() );
+		XUPItem* childItem = parentItem->child( row );
+		
+		if ( childItem )
+		{
+			return createIndex( row, column, childItem );
+		}
+	}
 	
 	return QModelIndex();
 }
@@ -44,13 +61,17 @@ QModelIndex XUPProjectModel::index( int row, int column, const QModelIndex& pare
 QModelIndex XUPProjectModel::parent( const QModelIndex& index ) const
 {
 	if ( !index.isValid() )
+	{
 		return QModelIndex();
+	}
 
 	XUPItem* childItem = static_cast<XUPItem*>( index.internalPointer() );
-	XUPItem* parentItem = childItem->parent();
+	XUPItem* parentItem = childItem->XUPItem::parent();
 
-	if ( !parentItem || parentItem == mRootProject )
+	if ( !parentItem || childItem == mRootProject )
+	{
 		return QModelIndex();
+	}
 
 	return createIndex( parentItem->row(), 0, parentItem );
 }
@@ -58,21 +79,23 @@ QModelIndex XUPProjectModel::parent( const QModelIndex& index ) const
 int XUPProjectModel::rowCount( const QModelIndex& parent ) const
 {
 	if ( parent.column() > 0 )
+	{
 		return 0;
+	}
 
-	XUPItem* parentItem;
 	if ( !parent.isValid() )
-		parentItem = mRootProject;
-	else
-		parentItem = static_cast<XUPItem*>( parent.internalPointer() );
-	
+	{
+		return mRootProject ? 1 : 0;
+	}
+
+	XUPItem* parentItem = static_cast<XUPItem*>( parent.internalPointer() );
 	return parentItem->childCount();
 }
 
 int XUPProjectModel::columnCount( const QModelIndex& parent ) const
 {
 	Q_UNUSED( parent );
-	return 1;
+	return mRootProject ? 1 : 0;
 }
 
 QVariant XUPProjectModel::headerData( int section, Qt::Orientation orientation, int role ) const
@@ -82,18 +105,25 @@ QVariant XUPProjectModel::headerData( int section, Qt::Orientation orientation, 
 		if ( mRootProject )
 		{
 			if ( role == Qt::DecorationRole )
+			{
 				return mRootProject->displayIcon();
+			}
 			else if ( role == Qt::DisplayRole )
+			{
 				return mRootProject->displayText();
+			}
 		}
 	}
+	
 	return QVariant();
 }
 
 QVariant XUPProjectModel::data( const QModelIndex& index, int role ) const
 {
 	if ( !index.isValid() )
+	{
 		return QVariant();
+	}
 
 	switch ( role )
 	{
@@ -122,19 +152,24 @@ QVariant XUPProjectModel::data( const QModelIndex& index, int role ) const
 					QDomNode attribute = attributeMap.item( i );
 					attributes << attribute.nodeName() +"=\"" +attribute.nodeValue() +"\"";
 				}
+				
 				return attributes.join( "\n" );
 			}
 		}
 		default:
 			break;
 	}
+	
 	return QVariant();
 }
 
 Qt::ItemFlags XUPProjectModel::flags( const QModelIndex& index ) const
 {
 	if ( !index.isValid() )
+	{
 		return 0;
+	}
+	
 	return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 

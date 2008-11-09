@@ -51,7 +51,7 @@ XUPProjectManager::XUPProjectManager( QWidget* parent )
 	connect( tvFiltered->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( tvFiltered_currentChanged( const QModelIndex&, const QModelIndex& ) ) );
 	connect( tvFiltered, SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SIGNAL( projectCustomContextMenuRequested( const QPoint& ) ) );
 	
-	setCurrentProject( 0 );
+	setCurrentProject( 0, 0 );
 }
 
 XUPProjectManager::~XUPProjectManager()
@@ -70,7 +70,7 @@ void XUPProjectManager::on_cbProjects_currentIndexChanged( int id )
 {
 	XUPProjectModel* model = cbProjects->itemData( id ).value<XUPProjectModel*>();
 	XUPProjectItem* project = model ? model->mRootProject : 0;
-	setCurrentProject( project );
+	setCurrentProject( project, currentProject() );
 }
 
 void XUPProjectManager::debugMenu_triggered( QAction* action )
@@ -228,19 +228,12 @@ void XUPProjectManager::tvFiltered_currentChanged( const QModelIndex& current, c
 	XUPProjectItem* curProject = curItem ? curItem->project() : 0;
 	XUPProjectItem* preProject = preItem ? preItem->project() : 0;
 	
-	action( atClose )->setEnabled( curProject );
-	action( atCloseAll )->setEnabled( curProject );
-	action( atEdit )->setEnabled( curProject );
-	action( atAddFiles )->setEnabled( curProject );
-	action( atRemoveFiles )->setEnabled( curProject );
-
-	// if new project != old update gui
-	if ( curProject != preProject )
+	if ( !previous.isValid() )
 	{
-		setCurrentProject( curProject );
-		emit currentProjectChanged( curProject, preProject );
-		emit currentProjectChanged( curProject );
+		preProject = curProject->topLevelProject();
 	}
+	
+	setCurrentProject( curProject, preProject );
 }
 
 void XUPProjectManager::on_tvFiltered_activated( const QModelIndex& index )
@@ -413,7 +406,7 @@ bool XUPProjectManager::openProject( const QString& fileName, const QString& enc
 			int id = cbProjects->count();
 			cbProjects->addItem( model->headerData( 0, Qt::Horizontal, Qt::DisplayRole ).toString(), QVariant::fromValue<XUPProjectModel*>( model ) );
 			cbProjects->setItemIcon( id, model->headerData( 0, Qt::Horizontal, Qt::DecorationRole ).value<QIcon>() );
-			setCurrentProject( model->mRootProject );
+			setCurrentProject( model->mRootProject, currentProject() );
 			return true;
 		}
 		else
@@ -532,28 +525,43 @@ void XUPProjectManager::setCurrentProjectModel( XUPProjectModel* model )
 	cbProjects->setCurrentIndex( id );
 }
 
-void XUPProjectManager::setCurrentProject( XUPProjectItem* project )
+void XUPProjectManager::setCurrentProject( XUPProjectItem* curProject, XUPProjectItem* preProject )
 {
 	// update project actions
-	action( atClose )->setEnabled( project );
-	action( atCloseAll )->setEnabled( project );
-	action( atEdit )->setEnabled( project );
-	action( atAddFiles )->setEnabled( project );
-	action( atRemoveFiles )->setEnabled( project );
+	action( atClose )->setEnabled( curProject );
+	action( atCloseAll )->setEnabled( curProject );
+	action( atEdit )->setEnabled( curProject );
+	action( atAddFiles )->setEnabled( curProject );
+	action( atRemoveFiles )->setEnabled( curProject );
 	
-	if ( !project )
+	if ( !curProject )
 	{
 		setCurrentProjectModel( 0 );
 	}
-	else if ( project->model() != currentProjectModel() )
+	else if ( curProject->model() != currentProjectModel() )
 	{
-		setCurrentProjectModel( project->model() );
+		setCurrentProjectModel( curProject->model() );
+	}
+	
+	// if new project != old update gui
+	if ( curProject != preProject )
+	{
+		emit currentProjectChanged( curProject, preProject );
+		emit currentProjectChanged( curProject );
+		
+		qWarning() << "----------------------------------------";
+		if ( curProject )
+			qWarning() << "curProject" << curProject->displayText();
+		if ( preProject )
+			qWarning() << "preProject" << preProject->displayText();
 	}
 	
 	// change current index
-	if ( currentProject() != project )
+	/*
+	if ( currentProject() != project || !tvFiltered->currentIndex().isValid() )
 	{
 		QModelIndex index = mFilteredModel->mapFromSource( project );
 		tvFiltered->setCurrentIndex( index );
 	}
+	*/
 }

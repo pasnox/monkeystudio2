@@ -45,10 +45,10 @@ public slots:
 	void editProject();
 	void addFiles();
 	void removeFiles();
-	void setCurrentProjectModel( XUPProjectModel* model );
-	void setCurrentProject( XUPProjectItem* project );
+	void setCurrentProject( XUPProjectItem* curProject, XUPProjectItem* preProject );
 
 protected slots:
+	void setCurrentProjectModel( XUPProjectModel* model );
 	void fileClosed( QObject* object );
 	void on_cbProjects_currentIndexChanged( int id );
 	void debugMenu_triggered( QAction* action );
