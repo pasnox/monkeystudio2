@@ -49,7 +49,7 @@ pFileManager::pFileManager( QObject* o )
 }
 
 XUPProjectItem* pFileManager::currentProject() const
-{ return MonkeyCore::projectsManager()->currentProjectItem(); }
+{ return MonkeyCore::projectsManager()->currentProject(); }
 
 QString pFileManager::currentProjectFile() const
 { return currentProject() ? currentProject()->fileName() : QString(); }

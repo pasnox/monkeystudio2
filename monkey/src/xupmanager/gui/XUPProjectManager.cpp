@@ -47,6 +47,11 @@ XUPProjectManager::XUPProjectManager( QWidget* parent )
 	mDebugMenu->addAction( "projectSettingsDebug" );
 	
 	connect( mDebugMenu, SIGNAL( triggered( QAction* ) ), this, SLOT( debugMenu_triggered( QAction* ) ) );
+	
+	connect( tvFiltered->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( tvFiltered_currentChanged( const QModelIndex&, const QModelIndex& ) ) );
+	connect( tvFiltered, SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SIGNAL( projectCustomContextMenuRequested( const QPoint& ) ) );
+	
+	setCurrentProject( 0 );
 }
 
 XUPProjectManager::~XUPProjectManager()
@@ -63,16 +68,14 @@ void XUPProjectManager::fileClosed( QObject* object )
 
 void XUPProjectManager::on_cbProjects_currentIndexChanged( int id )
 {
-	XUPProjectModel* project = cbProjects->itemData( id ).value<XUPProjectModel*>();
+	XUPProjectModel* model = cbProjects->itemData( id ).value<XUPProjectModel*>();
+	XUPProjectItem* project = model ? model->mRootProject : 0;
 	setCurrentProject( project );
 }
 
 void XUPProjectManager::debugMenu_triggered( QAction* action )
 {
-	const QModelIndex index = tvNative->currentIndex(); // tvFiltered->currentIndex();
-	if ( !index.isValid() )
-		return;
-	XUPItem* item = static_cast<XUPItem*>( index.internalPointer() ); // mFilteredModel->mapToSource( index );
+	XUPItem* item = currentItem();
 	
 	pteLog->appendPlainText( "------------------" );
 	
@@ -218,6 +221,28 @@ void XUPProjectManager::on_pbNative_toggled( bool checked )
 	}
 }
 
+void XUPProjectManager::tvFiltered_currentChanged( const QModelIndex& current, const QModelIndex& previous )
+{
+	XUPItem* curItem = mFilteredModel->mapToSource( current );
+	XUPItem* preItem = mFilteredModel->mapToSource( previous );
+	XUPProjectItem* curProject = curItem ? curItem->project() : 0;
+	XUPProjectItem* preProject = preItem ? preItem->project() : 0;
+	
+	action( atClose )->setEnabled( curProject );
+	action( atCloseAll )->setEnabled( curProject );
+	action( atEdit )->setEnabled( curProject );
+	action( atAddFiles )->setEnabled( curProject );
+	action( atRemoveFiles )->setEnabled( curProject );
+
+	// if new project != old update gui
+	if ( curProject != preProject )
+	{
+		setCurrentProject( curProject );
+		emit currentProjectChanged( curProject, preProject );
+		emit currentProjectChanged( curProject );
+	}
+}
+
 void XUPProjectManager::on_tvFiltered_activated( const QModelIndex& index )
 {
 	XUPItem* item = mFilteredModel->mapToSource( index );
@@ -259,18 +284,7 @@ void XUPProjectManager::on_tvFiltered_activated( const QModelIndex& index )
 				openFile( fn );
 			}
 		}
-		
-		// simply for testing XUPItem::index() member
-		QModelIndex index = item->index();
-		tvNative->setCurrentIndex( index );
-		tvNative->setExpanded( index, true );
 	}
-}
-
-void XUPProjectManager::on_tvNative_activated( const QModelIndex& index )
-{
-	QModelIndex proxyIndex = mFilteredModel->mapFromSource( static_cast<XUPItem*>( index.internalPointer() ) );
-	on_tvFiltered_activated( proxyIndex );
 }
 
 QAction* XUPProjectManager::action( XUPProjectManager::ActionType type )
@@ -305,11 +319,11 @@ QAction* XUPProjectManager::action( XUPProjectManager::ActionType type )
 			break;
 		case XUPProjectManager::atAddFiles:
 			action = new QAction( pIconManager::icon( "add.png", ":/project" ), tr( "Add existing files to current project..." ), this );
-			connect( action, SIGNAL( triggered() ), this, SLOT( editProject() ) );
+			connect( action, SIGNAL( triggered() ), this, SLOT( addFiles() ) );
 			break;
 		case XUPProjectManager::atRemoveFiles:
 			action = new QAction( pIconManager::icon( "remove.png", ":/project" ), tr( "Remove files from current project..." ), this );
-			connect( action, SIGNAL( triggered() ), this, SLOT( editProject() ) );
+			connect( action, SIGNAL( triggered() ), this, SLOT( removeFiles() ) );
 			break;
 	}
 	
@@ -383,25 +397,29 @@ bool XUPProjectManager::openFile( const QString& fileName, const QString& encodi
 	return true;
 }
 
+void XUPProjectManager::newProject()
+{
+}
+
 bool XUPProjectManager::openProject( const QString& fileName, const QString& encoding )
 {
 	QFileInfo fi( fileName );
 	
 	if ( fi.exists() && fi.isFile() )
 	{
-		XUPProjectModel* project = new XUPProjectModel( this );
-		if ( project->open( fileName ) )
+		XUPProjectModel* model = new XUPProjectModel( this );
+		if ( model->open( fileName ) )
 		{
 			int id = cbProjects->count();
-			cbProjects->addItem( project->headerData( 0, Qt::Horizontal, Qt::DisplayRole ).toString(), QVariant::fromValue<XUPProjectModel*>( project ) );
-			cbProjects->setItemIcon( id, project->headerData( 0, Qt::Horizontal, Qt::DecorationRole ).value<QIcon>() );
-			cbProjects->setCurrentIndex( id );
+			cbProjects->addItem( model->headerData( 0, Qt::Horizontal, Qt::DisplayRole ).toString(), QVariant::fromValue<XUPProjectModel*>( model ) );
+			cbProjects->setItemIcon( id, model->headerData( 0, Qt::Horizontal, Qt::DecorationRole ).value<QIcon>() );
+			setCurrentProject( model->mRootProject );
 			return true;
 		}
 		else
 		{
-			pteLog->appendPlainText( project->lastError() );
-			delete project;
+			pteLog->appendPlainText( model->lastError() );
+			delete model;
 		}
 	}
 	
@@ -412,12 +430,11 @@ bool XUPProjectManager::openProject()
 {
 	const QString fn = QFileDialog::getOpenFileName( this, tr( "Choose a project to open" ), QLatin1String( "." ), XUPProjectItem::projectInfos()->projectsFilter() );
 	return openProject( fn );
-	
 }
 
 void XUPProjectManager::XUPProjectManager::closeProject()
 {
-	XUPProjectModel* project = currentProject();
+	XUPProjectModel* project = currentProjectModel();
 	if ( project )
 	{
 		if ( !project->save() )
@@ -456,32 +473,35 @@ void XUPProjectManager::editProject()
 */
 }
 
-XUPProjectModel* XUPProjectManager::currentProject() const
+void XUPProjectManager::addFiles()
 {
-	return qobject_cast<XUPProjectModel*>( tvNative->model() );
 }
 
-XUPProjectItem* XUPProjectManager::currentProjectItem() const
+void XUPProjectManager::removeFiles()
 {
-	XUPProjectModel* model = currentProject();
-	if ( !model )
+}
+
+XUPProjectModel* XUPProjectManager::currentProjectModel() const
+{
+	return mFilteredModel->sourceModel();
+}
+
+XUPProjectItem* XUPProjectManager::currentProject() const
+{
+	XUPProjectModel* curModel = currentProjectModel();
+	XUPItem* curItem = currentItem();
+	
+	if ( curItem )
 	{
-		return 0;
+		return curItem->project();
 	}
 	
-	XUPProjectItem* project = 0;
-	XUPItem* item = mFilteredModel->mapToSource( tvFiltered->currentIndex() );
-	qWarning() << item;
-	if ( item )
+	if ( !curItem && curModel )
 	{
-		project = item->project();
-	}
-	else
-	{
-		project = model->mRootProject;
+		return curModel->mRootProject;
 	}
 	
-	return project;
+	return 0;
 }
 
 XUPItem* XUPProjectManager::currentItem() const
@@ -503,14 +523,37 @@ XUPProjectItemList XUPProjectManager::topLevelProjects() const
 	return projects;
 }
 
-void XUPProjectManager::setCurrentProject( XUPProjectModel* project )
+void XUPProjectManager::setCurrentProjectModel( XUPProjectModel* model )
 {
-	mFilteredModel->setSourceModel( project );
-	tvNative->setModel( project );
+	mFilteredModel->setSourceModel( model );
+	tvNative->setModel( model );
 	
-	int id = cbProjects->findData( QVariant::fromValue<XUPProjectModel*>( project ) );
-	if ( cbProjects->currentIndex() != id )
+	int id = cbProjects->findData( QVariant::fromValue<XUPProjectModel*>( model ) );
+	cbProjects->setCurrentIndex( id );
+}
+
+void XUPProjectManager::setCurrentProject( XUPProjectItem* project )
+{
+	// update project actions
+	action( atClose )->setEnabled( project );
+	action( atCloseAll )->setEnabled( project );
+	action( atEdit )->setEnabled( project );
+	action( atAddFiles )->setEnabled( project );
+	action( atRemoveFiles )->setEnabled( project );
+	
+	if ( !project )
 	{
-		cbProjects->setCurrentIndex( id );
+		setCurrentProjectModel( 0 );
+	}
+	else if ( project->model() != currentProjectModel() )
+	{
+		setCurrentProjectModel( project->model() );
+	}
+	
+	// change current index
+	if ( currentProject() != project )
+	{
+		QModelIndex index = mFilteredModel->mapFromSource( project );
+		tvFiltered->setCurrentIndex( index );
 	}
 }

@@ -89,14 +89,23 @@
     </item>
     <item>
      <widget class="QStackedWidget" name="swPages" >
+      <property name="currentIndex" >
+       <number>0</number>
+      </property>
       <widget class="QWidget" name="wFiltered" >
        <layout class="QVBoxLayout" name="verticalLayout" >
         <item>
          <widget class="QTreeView" name="tvFiltered" >
+          <property name="contextMenuPolicy" >
+           <enum>Qt::CustomContextMenu</enum>
+          </property>
           <property name="uniformRowHeights" >
            <bool>true</bool>
           </property>
           <property name="allColumnsShowFocus" >
+           <bool>true</bool>
+          </property>
+          <property name="headerHidden" >
            <bool>true</bool>
           </property>
           <property name="expandsOnDoubleClick" >
@@ -114,6 +123,9 @@
            <bool>true</bool>
           </property>
           <property name="allColumnsShowFocus" >
+           <bool>true</bool>
+          </property>
+          <property name="headerHidden" >
            <bool>true</bool>
           </property>
           <property name="expandsOnDoubleClick" >
