@@ -68,15 +68,14 @@ public slots:
 	*/
 signals:
 	// files
-	void fileOpened( const QString& );
-	void fileClosed( const QString& );
-	void currentFileChanged( pAbstractChild*, const QString& );
+	void fileOpened( const QString& fileName );
+	void fileClosed( const QString& fileName );
+	void currentFileChanged( pAbstractChild* child, const QString& fileName );
 	// projects
-	void aboutToClose( XUPProjectItem* );
-	void closed( XUPProjectItem* );
-	void modifiedChanged( XUPProjectItem*, bool );
+	void open( XUPProjectItem* project );
+	void aboutToClose( XUPProjectItem* project );
 	void currentChanged( XUPProjectItem* );
-	void opened( XUPProjectItem* );
+	void currentChanged( XUPProjectItem*, XUPProjectItem* );
 };
 
 #endif // PFILEMANAGER_H
