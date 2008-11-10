@@ -122,7 +122,8 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/xupmanager/core/XUPProjectItemInfos.h \
 	src/xupmanager/core/XUPProjectModel.h \
 	src/xupmanager/gui/UIXUPFindFiles.h \
-	src/xupmanager/gui/XUPProjectManager.h
+	src/xupmanager/gui/XUPProjectManager.h \
+	src/shared/MkSFileDialog.h
 
 SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/maininterface/ui/UIAbout.cpp \
@@ -167,7 +168,8 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/xupmanager/core/XUPProjectItemInfos.cpp \
 	src/xupmanager/core/XUPProjectModel.cpp \
 	src/xupmanager/gui/UIXUPFindFiles.cpp \
-	src/xupmanager/gui/XUPProjectManager.cpp
+	src/xupmanager/gui/XUPProjectManager.cpp \
+	src/shared/MkSFileDialog.cpp
 
 mac:SOURCES	*= src/toolsmanager/pDesktopApplications_mac.cpp
 else:unix:SOURCES	*= src/toolsmanager/pDesktopApplications_unix.cpp
