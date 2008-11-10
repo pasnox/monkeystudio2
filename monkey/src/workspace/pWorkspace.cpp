@@ -93,8 +93,6 @@ pWorkspace::pWorkspace( QMainWindow* p )
 	connect( listWidget(), SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( internal_listWidget_customContextMenuRequested( const QPoint& ) ) );
 	connect( MonkeyCore::projectsManager(), SIGNAL( projectCustomContextMenuRequested( const QPoint& ) ), this, SLOT( internal_projectsManager_customContextMenuRequested( const QPoint& ) ) );
 	connect( MonkeyCore::projectsManager(), SIGNAL( currentProjectChanged( XUPProjectItem*, XUPProjectItem* ) ), this, SLOT( internal_currentProjectChanged( XUPProjectItem*, XUPProjectItem* ) ) );
-	connect( MonkeyCore::projectsManager(), SIGNAL( projectInstallCommandRequested( const pCommand&, const QString& ) ), this, SLOT( internal_projectInstallCommandRequested( const pCommand&, const QString& ) ) );
-	connect( MonkeyCore::projectsManager(), SIGNAL( projectUninstallCommandRequested( const pCommand&, const QString& ) ), this, SLOT( internal_projectUninstallCommandRequested( const pCommand&, const QString& ) ) );
 	connect( mFileWatcher, SIGNAL( fileChanged( const QString& ) ), this, SLOT( fileWatcher_fileChanged( const QString& ) ) );
 	connect( ps, SIGNAL( clearSearchResults() ), this, SIGNAL( clearSearchResults() ) );
 	
@@ -387,7 +385,7 @@ void pWorkspace::internal_urlsDropped( const QList<QUrl>& l )
 	{
 		foreach ( QUrl u, l )
 			if ( !u.toLocalFile().trimmed().isEmpty() )
-				MonkeyCore::projectsManager()->openProject( u.toLocalFile() );
+				MonkeyCore::projectsManager()->openProject( u.toLocalFile(), pMonkeyStudio::defaultEncoding() );
 	}
 }
 
@@ -426,6 +424,9 @@ void pWorkspace::internal_currentProjectChanged( XUPProjectItem* currentProject,
 	if ( previousProject )
 	{
 		previousProject->uninstallCommands();
+		
+		disconnect( previousProject, SIGNAL( installCommandRequested( const pCommand&, const QString& ) ), this, SLOT( internal_projectInstallCommandRequested( const pCommand&, const QString& ) ) );
+		disconnect( previousProject, SIGNAL( uninstallCommandRequested( const pCommand&, const QString& ) ), this, SLOT( internal_projectUninstallCommandRequested( const pCommand&, const QString& ) ) );
 	}
 	// get pluginsmanager
 	PluginsManager* pm = MonkeyCore::pluginsManager();
@@ -441,6 +442,9 @@ void pWorkspace::internal_currentProjectChanged( XUPProjectItem* currentProject,
 	// install new commands
 	if ( currentProject )
 	{
+		connect( currentProject, SIGNAL( installCommandRequested( const pCommand&, const QString& ) ), this, SLOT( internal_projectInstallCommandRequested( const pCommand&, const QString& ) ) );
+		connect( currentProject, SIGNAL( uninstallCommandRequested( const pCommand&, const QString& ) ), this, SLOT( internal_projectUninstallCommandRequested( const pCommand&, const QString& ) ) );
+		
 		currentProject->installCommands();
 	}
 	// update menu visibility
@@ -679,7 +683,7 @@ void pWorkspace::fileSessionRestore_triggered()
 			MonkeyCore::recentsManager()->removeRecentFile( s );
 	// restore projects
 	foreach ( QString s, MonkeyCore::settings()->value( "Session/Projects", QStringList() ).toStringList() )
-		if ( !MonkeyCore::projectsManager()->openProject( s ) ) // remove it from recents projects
+		if ( !MonkeyCore::projectsManager()->openProject( s, pMonkeyStudio::defaultEncoding() ) ) // remove it from recents projects
 			MonkeyCore::recentsManager()->removeRecentProject( s );
 }
 
