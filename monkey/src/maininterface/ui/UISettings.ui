@@ -212,17 +212,9 @@
    <item row="1" column="1" >
     <widget class="QStackedWidget" name="swPages" >
      <property name="currentIndex" >
-      <number>10</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="pGeneral" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>705</height>
-       </rect>
-      </property>
       <layout class="QGridLayout" >
        <property name="margin" >
         <number>0</number>
@@ -242,57 +234,35 @@
           <property name="spacing" >
            <number>3</number>
           </property>
-          <item row="0" column="0" colspan="2" >
-           <widget class="QCheckBox" name="cbRestoreProjectsOnStartup" >
-            <property name="enabled" >
-             <bool>false</bool>
-            </property>
-            <property name="text" >
-             <string>Restore Projects On Startup</string>
-            </property>
-            <property name="checked" >
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0" colspan="2" >
+          <item row="2" column="0" colspan="2" >
            <widget class="QLabel" name="lDefaultProjectsDirectory" >
-            <property name="enabled" >
-             <bool>false</bool>
-            </property>
             <property name="text" >
              <string>Default projects directory :</string>
             </property>
            </widget>
           </item>
-          <item row="4" column="1" >
+          <item row="3" column="1" >
            <widget class="QToolButton" name="tbDefaultProjectsDirectory" >
-            <property name="enabled" >
-             <bool>false</bool>
-            </property>
             <property name="text" >
              <string>...</string>
             </property>
            </widget>
           </item>
-          <item row="4" column="0" >
+          <item row="3" column="0" >
            <widget class="QLineEdit" name="leDefaultProjectsDirectory" >
-            <property name="enabled" >
-             <bool>false</bool>
-            </property>
             <property name="text" >
              <string>%HOME%/.Monkey Studio/Projects</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="0" colspan="2" >
+          <item row="1" column="0" colspan="2" >
            <widget class="QCheckBox" name="cbSaveFiles" >
             <property name="text" >
              <string>Save all files on custom action ( Build, Debugger, Interpreter )</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0" colspan="2" >
+          <item row="0" column="0" colspan="2" >
            <widget class="QCheckBox" name="cbSaveProjects" >
             <property name="text" >
              <string>Save all projects on custom action ( Build, Debugger, Interpreter )</string>
@@ -501,14 +471,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pPaths" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>705</height>
-       </rect>
-      </property>
       <layout class="QVBoxLayout" >
        <property name="spacing" >
         <number>3</number>
@@ -540,14 +502,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pEditorGeneral" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>705</height>
-       </rect>
-      </property>
       <layout class="QVBoxLayout" >
        <property name="spacing" >
         <number>3</number>
@@ -766,14 +720,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pAutoCompletion" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>705</height>
-       </rect>
-      </property>
       <layout class="QVBoxLayout" >
        <property name="spacing" >
         <number>3</number>
@@ -930,14 +876,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pCalltips" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>705</height>
-       </rect>
-      </property>
       <layout class="QVBoxLayout" >
        <property name="spacing" >
         <number>3</number>
@@ -1164,14 +1102,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pIndentation" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>705</height>
-       </rect>
-      </property>
       <layout class="QVBoxLayout" >
        <property name="spacing" >
         <number>3</number>
@@ -1425,14 +1355,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pBraceMatching" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>705</height>
-       </rect>
-      </property>
       <layout class="QVBoxLayout" >
        <property name="spacing" >
         <number>3</number>
@@ -1590,14 +1512,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pEdgeMode" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>705</height>
-       </rect>
-      </property>
       <layout class="QVBoxLayout" >
        <property name="spacing" >
         <number>3</number>
@@ -1738,14 +1652,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pCaret" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>705</height>
-       </rect>
-      </property>
       <layout class="QVBoxLayout" >
        <property name="spacing" >
         <number>3</number>
@@ -1891,14 +1797,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pMargins" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>705</height>
-       </rect>
-      </property>
       <layout class="QVBoxLayout" >
        <property name="spacing" >
         <number>3</number>
@@ -2187,14 +2085,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pEditorVisibility" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>705</height>
-       </rect>
-      </property>
       <layout class="QVBoxLayout" >
        <property name="spacing" >
         <number>3</number>
@@ -2469,14 +2359,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pSourceAPIs" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>705</height>
-       </rect>
-      </property>
       <layout class="QVBoxLayout" >
        <property name="spacing" >
         <number>3</number>
@@ -2547,14 +2429,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pLexersAssociations" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>699</height>
-       </rect>
-      </property>
       <layout class="QGridLayout" >
        <property name="margin" >
         <number>0</number>
@@ -2631,14 +2505,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pLexersHighlighting" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>699</height>
-       </rect>
-      </property>
       <layout class="QGridLayout" >
        <property name="margin" >
         <number>0</number>
@@ -2944,14 +2810,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pAbbreviations" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>699</height>
-       </rect>
-      </property>
       <layout class="QVBoxLayout" >
        <property name="spacing" >
         <number>3</number>

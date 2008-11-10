@@ -202,7 +202,6 @@ void UISettings::loadSettings()
 	QString sp;
 	
 	// General
-	cbRestoreProjectsOnStartup->setChecked( restoreProjectsOnStartup() );
 	cbSaveProjects->setChecked( saveProjectsOnCustomAction() );
 	cbSaveFiles->setChecked( saveFilesOnCustomAction() );
 	leDefaultProjectsDirectory->setText( defaultProjectsDirectory() );
@@ -370,7 +369,6 @@ void UISettings::saveSettings()
 	QString sp;
 
 	// General
-	setRestoreProjectsOnStartup( cbRestoreProjectsOnStartup->isChecked() );
 	setSaveProjectsOnCustomAction( cbSaveProjects->isChecked() );
 	setSaveFilesOnCustomAction( cbSaveFiles->isChecked() );
 	setDefaultProjectsDirectory( leDefaultProjectsDirectory->text() );
