@@ -91,3 +91,6 @@ SOURCES	+= pQueuedMessageWidget.cpp
 # pQueuedStatusBar
 HEADERS	+= pQueuedStatusBar.h
 SOURCES	+= pQueuedStatusBar.cpp
+# pFileDialog
+HEADERS	+= pFileDialog.h
+SOURCES	+= pFileDialog.cpp
