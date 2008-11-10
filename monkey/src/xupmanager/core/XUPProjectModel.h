@@ -36,7 +36,7 @@ public:
 	QString lastError() const;
 	
 	// XUP Project members
-	virtual bool open( const QString& fileName, const QString& encoding = QLatin1String( "UTF-8" ) );
+	virtual bool open( const QString& fileName, const QString& encoding );
 	virtual void close();
 	virtual bool save();
 
