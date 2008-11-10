@@ -90,8 +90,6 @@ namespace pMonkeyStudio
 	Q_MONKEY_EXPORT void setEditorProperties( pEditor* editor );
 	
 	/***** GENERAL *****/
-	Q_MONKEY_EXPORT void setRestoreProjectsOnStartup( bool restore );
-	Q_MONKEY_EXPORT bool restoreProjectsOnStartup();
 	Q_MONKEY_EXPORT void setSaveProjectsOnCustomAction( bool save );
 	Q_MONKEY_EXPORT bool saveProjectsOnCustomAction();
 	Q_MONKEY_EXPORT void setSaveFilesOnCustomAction( bool save );
