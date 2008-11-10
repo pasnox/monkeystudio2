@@ -3,11 +3,10 @@
 #include "pIconManager.h"
 #include "XUPProjectModel.h"
 #include "XUPFilteredProjectModel.h"
-
-#include <QFileDialog>
-#include <QTextCodec>
+#include "MkSFileDialog.h"
 
 #include <QDebug>
+#include <QTextCodec>
 #include <QMenu>
 #include <QInputDialog>
 
@@ -238,6 +237,8 @@ void XUPProjectManager::tvFiltered_currentChanged( const QModelIndex& current, c
 
 void XUPProjectManager::on_tvFiltered_activated( const QModelIndex& index )
 {
+	return;
+	
 	XUPItem* item = mFilteredModel->mapToSource( index );
 	if ( item )
 	{
@@ -274,7 +275,56 @@ void XUPProjectManager::on_tvFiltered_activated( const QModelIndex& index )
 			
 			if ( QFile::exists( fn ) )
 			{
-				openFile( fn );
+				openFile( fn, item->project()->attribute( "encoding" ) );
+			}
+		}
+	}
+}
+
+void XUPProjectManager::on_tvFiltered_doubleClicked( const QModelIndex& index )
+{
+	XUPItem* item = mFilteredModel->mapToSource( index );
+	if ( item )
+	{
+		if ( item->type() == XUPItem::Project )
+		{
+			emit projectDoubleClicked( item->project() );
+		}
+		else if ( item->type() == XUPItem::File )
+		{
+			XUPProjectItem* project = item->project()->rootIncludeProject();
+			QString fn = project->filePath( project->interpretValue( item, "content" ) );
+			
+			if ( !QFile::exists( fn ) )
+			{
+				QString findFile = item->attribute( "content" ).remove( '"' );
+				QFileInfoList files = project->findFile( findFile );
+				switch ( files.count() )
+				{
+					case 0:
+						fn.clear();
+						break;
+					case 1:
+						fn = files.at( 0 ).absoluteFilePath();
+						break;
+					default:
+					{
+						UIXUPFindFiles dlg( findFile, this );
+						dlg.setFiles( files, project->path() );
+						fn.clear();
+						if ( dlg.exec() == QDialog::Accepted )
+						{
+							fn = dlg.selectedFile();
+						}
+						break;
+					}
+				}
+			}
+			
+			if ( QFile::exists( fn ) )
+			{
+				emit fileDoubleClicked( item->project(), fn );
+				emit fileDoubleClicked( fn );
 			}
 		}
 	}
@@ -401,12 +451,13 @@ bool XUPProjectManager::openProject( const QString& fileName, const QString& enc
 	if ( fi.exists() && fi.isFile() )
 	{
 		XUPProjectModel* model = new XUPProjectModel( this );
-		if ( model->open( fileName ) )
+		if ( model->open( fileName, encoding ) )
 		{
 			int id = cbProjects->count();
 			cbProjects->addItem( model->headerData( 0, Qt::Horizontal, Qt::DisplayRole ).toString(), QVariant::fromValue<XUPProjectModel*>( model ) );
 			cbProjects->setItemIcon( id, model->headerData( 0, Qt::Horizontal, Qt::DecorationRole ).value<QIcon>() );
 			setCurrentProject( model->mRootProject, currentProject() );
+			emit projectOpen( currentProject() );
 			return true;
 		}
 		else
@@ -421,23 +472,54 @@ bool XUPProjectManager::openProject( const QString& fileName, const QString& enc
 
 bool XUPProjectManager::openProject()
 {
-	const QString fn = QFileDialog::getOpenFileName( this, tr( "Choose a project to open" ), QLatin1String( "." ), XUPProjectItem::projectInfos()->projectsFilter() );
-	return openProject( fn );
+	pFileDialogResult result = MkSFileDialog::getOpenProjects( window() );
+	
+	const QStringList files = result.value( "filenames" ).toStringList();
+	if ( !files.isEmpty() )
+	{
+		const QString codec = result.value( "codec" ).toString();
+		foreach ( const QString file, files )
+		{
+			if ( !openProject( file, codec ) )
+			{
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	return false;
 }
 
-void XUPProjectManager::XUPProjectManager::closeProject()
+void XUPProjectManager::closeProject()
 {
-	XUPProjectModel* project = currentProjectModel();
-	if ( project )
+	XUPProjectModel* curModel = currentProjectModel();
+	if ( curModel )
 	{
-		if ( !project->save() )
-		{
-			pteLog->appendPlainText( project->lastError() );
-		}
-		project->close();
-		int id = cbProjects->findData( QVariant::fromValue<XUPProjectModel*>( project ) );
+		XUPProjectItem* preProject = currentProject();
+		
+		bool blocked = cbProjects->blockSignals( true );
+		int id = cbProjects->findData( QVariant::fromValue<XUPProjectModel*>( curModel ) );
 		cbProjects->removeItem( id );
-		delete project;
+		XUPProjectModel* model = cbProjects->itemData( cbProjects->currentIndex() ).value<XUPProjectModel*>();
+		setCurrentProjectModel( model );
+		cbProjects->blockSignals( blocked );
+		
+		XUPProjectItem* curProject = currentProject();
+		
+		setCurrentProject( curProject, preProject );
+		
+		emit projectAboutToClose( preProject );
+		
+		
+		if ( !curModel->save() )
+		{
+			pteLog->appendPlainText( curModel->lastError() );
+		}
+		
+		curModel->close();
+		delete curModel;
 	}
 }
 
@@ -468,6 +550,12 @@ void XUPProjectManager::editProject()
 
 void XUPProjectManager::addFiles()
 {
+	MkSFileDialog fd( this );
+	/*
+	fd.setTextCodec( "UTF-8" );
+	fd.setReadOnly( true );
+	*/
+	fd.exec();
 }
 
 void XUPProjectManager::removeFiles()
