@@ -70,7 +70,8 @@ FORMS	*= src/maininterface/ui/UITranslator.ui \
 	src/pluginsmanager/ui/UIPluginsSettingsElement.ui \
 	src/pluginsmanager/ui/UIPluginsSettingsAbout.ui \
 	src/xupmanager/gui/UIXUPFindFiles.ui \
-	src/xupmanager/gui/XUPProjectManager.ui
+	src/xupmanager/gui/XUPProjectManager.ui \
+	src/xupmanager/gui/XUPAddFiles.ui
 
 HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/maininterface/ui/UIAbout.h \
@@ -123,6 +124,8 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/xupmanager/core/XUPProjectModel.h \
 	src/xupmanager/gui/UIXUPFindFiles.h \
 	src/xupmanager/gui/XUPProjectManager.h \
+	src/xupmanager/core/XUPProjectModelProxy.h \
+	src/xupmanager/gui/XUPAddFiles.h \
 	src/shared/MkSFileDialog.h
 
 SOURCES	*= src/maininterface/ui/UITranslator.cpp \
@@ -169,6 +172,8 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/xupmanager/core/XUPProjectModel.cpp \
 	src/xupmanager/gui/UIXUPFindFiles.cpp \
 	src/xupmanager/gui/XUPProjectManager.cpp \
+	src/xupmanager/core/XUPProjectModelProxy.cpp \
+	src/xupmanager/gui/XUPAddFiles.cpp \
 	src/shared/MkSFileDialog.cpp
 
 mac:SOURCES	*= src/toolsmanager/pDesktopApplications_mac.cpp
