@@ -10,7 +10,6 @@
 class XUPProjectModel;
 class XUPFilteredProjectModel;
 class XUPItem;
-class QPlainTextEdit;
 
 class Q_MONKEY_EXPORT XUPProjectManager : public pDockWidget, public Ui::XUPProjectManager
 {
@@ -31,14 +30,12 @@ public:
 protected:
 	QMap<XUPProjectManager::ActionType, QAction*> mActions;
 	XUPFilteredProjectModel* mFilteredModel;
-	QMap<QString, QPlainTextEdit*> mOpenedFiles;
 	QMenu* mDebugMenu;
 	
 	void addFilesToScope( XUPItem* scope, const QStringList& allFiles, const QString& op );
 
 public slots:
 	void addError( const QString& error );
-	bool openFile( const QString& fileName, const QString& encoding );
 	bool openProject( const QString& fileName, const QString& encoding );
 	void newProject();
 	bool openProject();
@@ -51,27 +48,25 @@ public slots:
 
 protected slots:
 	void setCurrentProjectModel( XUPProjectModel* model );
-	void fileClosed( QObject* object );
 	void on_cbProjects_currentIndexChanged( int id );
 	void debugMenu_triggered( QAction* action );
 	void on_pbFiltered_toggled( bool checked );
 	void on_pbNative_toggled( bool checked );
 	void tvFiltered_currentChanged( const QModelIndex& current, const QModelIndex& previous );
-	void on_tvFiltered_activated( const QModelIndex& index );
 	void on_tvFiltered_doubleClicked( const QModelIndex& index );
 
 signals:
 	void projectCustomContextMenuRequested( const QPoint& pos );
 	
-	void projectOpen( XUPProjectItem* project );
+	void projectOpened( XUPProjectItem* project );
 	void projectAboutToClose( XUPProjectItem* project );
 	
 	void currentProjectChanged( XUPProjectItem* currentProject, XUPProjectItem* previousProject );
 	void currentProjectChanged( XUPProjectItem* currentProject );
 	
 	void projectDoubleClicked( XUPProjectItem* project );
-	void fileDoubleClicked( XUPProjectItem* project, const QString& fileName );
-	void fileDoubleClicked( const QString& fileName );
+	void fileDoubleClicked( XUPProjectItem* project, const QString& fileName, const QString& encoding );
+	void fileDoubleClicked( const QString& fileName, const QString& encoding );
 };
 
 #endif // XUPPROJECTMANAGER_H

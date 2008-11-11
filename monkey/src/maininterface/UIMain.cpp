@@ -322,7 +322,7 @@ void UIMain::initConnections()
 	connect( menuBar()->action( "mFile/aNew" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileNew_triggered() ) );
 	connect( menuBar()->action( "mFile/aNewTextEditor" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( newTextEditor() ) );
 	connect( menuBar()->action( "mFile/aOpen" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileOpen_triggered() ) );
-	connect( MonkeyCore::recentsManager(), SIGNAL( openFileRequested( const QString& ) ), MonkeyCore::fileManager(), SLOT( openFile( const QString& ) ) );
+	connect( MonkeyCore::recentsManager(), SIGNAL( openFileRequested( const QString&, const QString& ) ), MonkeyCore::fileManager(), SLOT( openFile( const QString&, const QString& ) ) );
 	connect( menuBar()->action( "mFile/mSession/aSave" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileSessionSave_triggered() ) );
 	connect( menuBar()->action( "mFile/mSession/aRestore" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileSessionRestore_triggered() ) );
 	connect( menuBar()->action( "mFile/mSave/aCurrent" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileSaveCurrent_triggered() ) );
@@ -354,8 +354,8 @@ void UIMain::initConnections()
 	connect( menuBar()->action( "mView/aPrevious" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( activatePreviousDocument() ) );
 	connect( menuBar()->menu( "mView/mDocks" ), SIGNAL( aboutToShow() ), this, SLOT( menu_ViewDocks_aboutToShow() ) );
 	// project connection
-	connect( MonkeyCore::recentsManager(), SIGNAL( openProjectRequested( const QString& ) ), MonkeyCore::projectsManager(), SLOT( openProject( const QString& ) ) );
-	connect( MonkeyCore::projectsManager(), SIGNAL( fileDoubleClicked( const QString& ) ), MonkeyCore::workspace(), SLOT( openFile( const QString& ) ) );
+	connect( MonkeyCore::recentsManager(), SIGNAL( openProjectRequested( const QString&, const QString& ) ), MonkeyCore::projectsManager(), SLOT( openProject( const QString&, const QString& ) ) );
+	connect( MonkeyCore::projectsManager(), SIGNAL( fileDoubleClicked( const QString&, const QString& ) ), MonkeyCore::workspace(), SLOT( openFile( const QString&, const QString& ) ) );
 	// builder debugger interpreter menu
 	connect( menuBar()->menu( "mBuilder" ), SIGNAL( aboutToShow() ), this, SLOT( menu_CustomAction_aboutToShow() ) );
 	connect( menuBar()->menu( "mDebugger" ), SIGNAL( aboutToShow() ), this, SLOT( menu_CustomAction_aboutToShow() ) );

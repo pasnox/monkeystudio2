@@ -4,6 +4,7 @@
 #include "XUPProjectModel.h"
 #include "XUPFilteredProjectModel.h"
 #include "MkSFileDialog.h"
+#include "pMonkeyStudio.h"
 
 #include <QDebug>
 #include <QTextCodec>
@@ -58,13 +59,6 @@ XUPProjectManager::~XUPProjectManager()
 	delete XUPProjectItem::projectInfos();
 }
 
-void XUPProjectManager::fileClosed( QObject* object )
-{
-	QWidget* widget = qobject_cast<QWidget*>( object ); // fuck bug on casting to QPlainTextEdit that return 0
-	if ( widget )
-		mOpenedFiles.remove( widget->windowFilePath() );
-}
-
 void XUPProjectManager::on_cbProjects_currentIndexChanged( int id )
 {
 	XUPProjectModel* model = cbProjects->itemData( id ).value<XUPProjectModel*>();
@@ -76,7 +70,7 @@ void XUPProjectManager::debugMenu_triggered( QAction* action )
 {
 	XUPItem* item = currentItem();
 	
-	pteLog->appendPlainText( "------------------" );
+	addError( "------------------" );
 	
 	QString attribute;
 	
@@ -123,29 +117,29 @@ void XUPProjectManager::debugMenu_triggered( QAction* action )
 	{
 		if ( item->type() == XUPItem::Value )
 		{
-			pteLog->appendPlainText( item->attribute( attribute ).prepend( "Interpret value '" ).append( "'" ) );
-			pteLog->appendPlainText( item->project()->rootIncludeProject()->interpretValue( item, attribute ) );
+			addError( item->attribute( attribute ).prepend( "Interpret value '" ).append( "'" ) );
+			addError( item->project()->rootIncludeProject()->interpretValue( item, attribute ) );
 		}
 	}
 	else if ( action->text() == "interpretVariable" )
 	{
 		if ( item->type() == XUPItem::Variable )
 		{
-			pteLog->appendPlainText( item->attribute( attribute ).prepend( "Interpret variable '" ).append( "'" ) );
-			pteLog->appendPlainText( item->project()->rootIncludeProject()->interpretVariable( item->attribute( attribute ), item, "#Null" ) );
+			addError( item->attribute( attribute ).prepend( "Interpret variable '" ).append( "'" ) );
+			addError( item->project()->rootIncludeProject()->interpretVariable( item->attribute( attribute ), item, "#Null" ) );
 		}
 	}
 	else if ( action->text() == "project" )
 	{
-		pteLog->appendPlainText( item->project()->displayText().prepend( "Project: " ) );
+		addError( item->project()->displayText().prepend( "Project: " ) );
 	}
 	else if ( action->text() == "topLevelProject" )
 	{
-		pteLog->appendPlainText( item->project()->topLevelProject()->displayText().prepend( "Top level project: " ) );
+		addError( item->project()->topLevelProject()->displayText().prepend( "Top level project: " ) );
 	}
 	else if ( action->text() == "rootIncludeProject" )
 	{
-		pteLog->appendPlainText( item->project()->rootIncludeProject()->displayText().prepend( "Root include project: " ) );
+		addError( item->project()->rootIncludeProject()->displayText().prepend( "Root include project: " ) );
 	}
 	else if ( action->text() == "editAttribute" )
 	{
@@ -193,10 +187,10 @@ void XUPProjectManager::debugMenu_triggered( QAction* action )
 		values << project->projectSettingsValue( "DEBUG_BINARY" );
 		values << project->projectSettingsValue( "RELEASE_BINARY" );
 		values << project->projectSettingsValue( "TEST" );
-		pteLog->appendPlainText( values.join( " " ) );
+		addError( values.join( " " ) );
 		
 		project->setProjectSettingsValue( "TEST", "okimichel" );
-		pteLog->appendPlainText( project->projectSettingsValue( "TEST" ) );
+		addError( project->projectSettingsValue( "TEST" ) );
 	}
 }
 
@@ -235,52 +229,6 @@ void XUPProjectManager::tvFiltered_currentChanged( const QModelIndex& current, c
 	setCurrentProject( curProject, preProject );
 }
 
-void XUPProjectManager::on_tvFiltered_activated( const QModelIndex& index )
-{
-	return;
-	
-	XUPItem* item = mFilteredModel->mapToSource( index );
-	if ( item )
-	{
-		if ( item->type() == XUPItem::File )
-		{
-			XUPProjectItem* pItem = item->project()->rootIncludeProject();
-			QString fn = pItem->filePath( pItem->interpretValue( item, "content" ) );
-			
-			if ( !QFile::exists( fn ) )
-			{
-				QString findFile = item->attribute( "content" ).remove( '"' );
-				QFileInfoList files = pItem->findFile( findFile );
-				switch ( files.count() )
-				{
-					case 0:
-						fn.clear();
-						break;
-					case 1:
-						fn = files.at( 0 ).absoluteFilePath();
-						break;
-					default:
-					{
-						UIXUPFindFiles dlg( findFile, this );
-						dlg.setFiles( files, pItem->path() );
-						fn.clear();
-						if ( dlg.exec() )
-						{
-							fn = dlg.selectedFile();
-						}
-						break;
-					}
-				}
-			}
-			
-			if ( QFile::exists( fn ) )
-			{
-				openFile( fn, item->project()->attribute( "encoding" ) );
-			}
-		}
-	}
-}
-
 void XUPProjectManager::on_tvFiltered_doubleClicked( const QModelIndex& index )
 {
 	XUPItem* item = mFilteredModel->mapToSource( index );
@@ -292,13 +240,14 @@ void XUPProjectManager::on_tvFiltered_doubleClicked( const QModelIndex& index )
 		}
 		else if ( item->type() == XUPItem::File )
 		{
-			XUPProjectItem* project = item->project()->rootIncludeProject();
-			QString fn = project->filePath( project->interpretValue( item, "content" ) );
+			XUPProjectItem* project = item->project();
+			XUPProjectItem* rootIncludeProject = project->rootIncludeProject();
+			QString fn = rootIncludeProject->filePath( rootIncludeProject->interpretValue( item, "content" ) );
 			
 			if ( !QFile::exists( fn ) )
 			{
 				QString findFile = item->attribute( "content" ).remove( '"' );
-				QFileInfoList files = project->findFile( findFile );
+				QFileInfoList files = rootIncludeProject->findFile( findFile );
 				switch ( files.count() )
 				{
 					case 0:
@@ -310,7 +259,7 @@ void XUPProjectManager::on_tvFiltered_doubleClicked( const QModelIndex& index )
 					default:
 					{
 						UIXUPFindFiles dlg( findFile, this );
-						dlg.setFiles( files, project->path() );
+						dlg.setFiles( files, rootIncludeProject->path() );
 						fn.clear();
 						if ( dlg.exec() == QDialog::Accepted )
 						{
@@ -323,8 +272,9 @@ void XUPProjectManager::on_tvFiltered_doubleClicked( const QModelIndex& index )
 			
 			if ( QFile::exists( fn ) )
 			{
-				emit fileDoubleClicked( item->project(), fn );
-				emit fileDoubleClicked( fn );
+				const QString encoding = project->temporaryValue( "encoding" ).toString();
+				emit fileDoubleClicked( project, fn, encoding );
+				emit fileDoubleClicked( fn, encoding );
 			}
 		}
 	}
@@ -385,61 +335,6 @@ void XUPProjectManager::addError( const QString& error )
 	pteLog->appendPlainText( error );
 }
 
-bool XUPProjectManager::openFile( const QString& fileName, const QString& encoding )
-{
-	// check already open file
-	QPlainTextEdit* pte = mOpenedFiles.value( fileName );
-	if ( pte )
-	{
-		if ( pte->isMinimized() )
-			pte->showNormal();
-		pte->activateWindow();
-		return true;
-	}
-	
-	// get QFile
-	QFile file( fileName );
-	
-	// check existence
-	if ( !file.exists() )
-	{
-		addError( tr( "file not exists: %1" ).arg( fileName ) );
-		return false;
-	}
-	
-	// check is file
-	if ( !QFileInfo( fileName ).isFile() )
-	{
-		addError( tr( "file is not a file: %1" ).arg( fileName ) );
-		return false;
-	}
-	
-	// try open it for reading
-	if ( !file.open( QIODevice::ReadOnly ) )
-	{
-		addError( tr( "Can't open file for reading: %1" ).arg( fileName ) );
-		return false;
-	}
-	
-	// decode content
-	QTextCodec* codec = QTextCodec::codecForName( encoding.toUtf8() );
-	QString buffer = codec->toUnicode( file.readAll() );
-	
-	pte = new QPlainTextEdit( this );
-	pte->setWindowFlags( Qt::Window );
-	pte->setAttribute( Qt::WA_DeleteOnClose );
-	pte->setWindowFilePath( fileName );
-	pte->setPlainText( buffer );
-	connect( pte, SIGNAL( modificationChanged( bool )), pte, SLOT( setWindowModified( bool ) ) );
-	connect( pte, SIGNAL( destroyed( QObject* )), this, SLOT( fileClosed( QObject* ) ) );
-	
-	mOpenedFiles[ fileName ] = pte;
-	
-	pte->show();
-	
-	return true;
-}
-
 void XUPProjectManager::newProject()
 {
 }
@@ -457,7 +352,7 @@ bool XUPProjectManager::openProject( const QString& fileName, const QString& enc
 			cbProjects->addItem( model->headerData( 0, Qt::Horizontal, Qt::DisplayRole ).toString(), QVariant::fromValue<XUPProjectModel*>( model ) );
 			cbProjects->setItemIcon( id, model->headerData( 0, Qt::Horizontal, Qt::DecorationRole ).value<QIcon>() );
 			setCurrentProject( model->mRootProject, currentProject() );
-			emit projectOpen( currentProject() );
+			emit projectOpened( currentProject() );
 			return true;
 		}
 		else
@@ -612,6 +507,7 @@ void XUPProjectManager::addFilesToScope( XUPItem* scope, const QStringList& allF
 		}
 	}
 	
+	// save project
 	if ( !project->save() )
 	{
 		addError( project->lastError() );
@@ -654,6 +550,56 @@ void XUPProjectManager::addFiles()
 
 void XUPProjectManager::removeFiles()
 {
+	XUPItem* curItem = currentItem();
+	
+	qWarning() << "test" << curItem << curItem->type();
+	
+	
+	if ( !curItem || !( curItem->type() == XUPItem::Value || curItem->type() == XUPItem::File || curItem->type() == XUPItem::Path ) )
+	{
+		return;
+	}
+	
+	if ( curItem )
+		qWarning() << curItem->displayText();
+	
+	if ( pMonkeyStudio::question( tr( "Remove Value..." ), tr( "Are you sur you want to remove this value ?" ), window() ) )
+	{
+		XUPProjectItem* project = curItem->project();
+		
+		// if file item
+		if ( curItem->type() == XUPItem::File )
+		{
+			XUPProjectItem* rootIncludeProject = project->rootIncludeProject();
+			const QString fp = rootIncludeProject->filePath( rootIncludeProject->interpretValue( curItem, "content" ) );
+			
+			// ask removing file
+			if ( QFile::exists( fp ) && pMonkeyStudio::question( tr( "Delete associations..." ), tr( "Do you want to delete the associate file ?" ), window() ) )
+			{
+				if ( !QFile::remove( fp ) )
+				{
+					pMonkeyStudio::warning( tr( "Error..." ), tr( "Can't delete file: %1" ).arg( fp ), window() );
+				}
+			}
+		}
+		
+		// remove value & variable if needed
+		XUPItem* variable = curItem->parent();
+		XUPItem* variableParent = variable->parent();
+		
+		variable->removeChild( curItem );
+		
+		if ( variable->childCount() == 0 )
+		{
+			variableParent->removeChild( variable );
+		}
+		
+		// save project
+		if ( !project->save() )
+		{
+			addError( project->lastError() );
+		}
+	}
 }
 
 XUPProjectModel* XUPProjectManager::currentProjectModel() const

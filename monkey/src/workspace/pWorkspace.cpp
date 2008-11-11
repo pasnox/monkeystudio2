@@ -33,6 +33,8 @@
 #include <QFileSystemWatcher>
 #include <QDir>
 
+#include <QDebug>
+
 #include "pWorkspace.h"
 #include "pAbstractChild.h"
 #include "../recentsmanager/pRecentsManager.h"
@@ -51,6 +53,7 @@
 #include "../coremanager/MonkeyCore.h"
 #include "../maininterface/UIMain.h"
 #include "../queuedstatusbar/QueuedStatusBar.h"
+#include "MkSFileDialog.h"
 
 #include "pChild.h"
 #include "../qscintillamanager/pEditor.h"
@@ -140,16 +143,21 @@ pAbstractChild* pWorkspace::newTextEditor()
 		QString s;
 		foreach ( QStringList l, availableFilesSuffixes().values() )
 			s.append( l.join( " " ).append( " " ) );
-		mFilters.prepend( QString( "All Supported Files (%1);;" ).arg( s.trimmed() ) );
 		mFilters.prepend( QString( "All Files (*);;" ));
+		mFilters.prepend( QString( "All Supported Files (%1);;" ).arg( s.trimmed() ) );
 	}
+	
+	// show filedialog to user
+	pFileDialogResult result = MkSFileDialog::getSaveFileName( window(), tr( "New File Name..." ), QString::null, mFilters, true );
 
 	// open open file dialog
-	QString fileName = getSaveFileName( tr( "New File Name..." ), QString::null, mFilters, window() );
+	QString fileName = result[ "filename" ].toString();
 	
 	// return 0 if user cancel
 	if ( fileName.isEmpty() )
+	{
 		return 0;
+	}
 	
 	// close file if already open
 	mFileWatcher->removePaths( QStringList( fileName ) );
@@ -162,11 +170,13 @@ pAbstractChild* pWorkspace::newTextEditor()
 		MonkeyCore::statusBar()->appendMessage( tr( "Can't create new file '%1'" ).arg( QFileInfo( fileName ).fileName() ), 2000 );
 		return 0;
 	}
+	
 	// reset file
 	file.resize( 0 );
 	file.close();
+	
 	// open file
-	return openFile( fileName );
+	return openFile( fileName, result[ "codec" ].toString() );
 }
 
 void pWorkspace::initChildConnections( pAbstractChild* child )
@@ -193,7 +203,7 @@ void pWorkspace::initChildConnections( pAbstractChild* child )
 	//connect( child, SIGNAL( currentFileChanged( const QString& ) ), statusBar(), SLOT( setFileName( const QString& ) ) );
 }
 
-pAbstractChild* pWorkspace::openFile( const QString& s )
+pAbstractChild* pWorkspace::openFile( const QString& s, const QString& encoding )
 {
 	// if it not exists
 	if ( !QFile::exists( s ) || !QFileInfo( s ).isFile() )
@@ -234,7 +244,7 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 	}
 
 	// open file
-	c->openFile( s );
+	c->openFile( s, encoding );
 	
 	// set correct document if needed ( sdi hack )
 	if ( currentDocument() != c )
@@ -270,10 +280,10 @@ void pWorkspace::closeFile( const QString& s )
 	}
 }
 
-void pWorkspace::goToLine( const QString& s, const QPoint& p, bool b )
+void pWorkspace::goToLine( const QString& s, const QPoint& p, bool b, const QString& encoding )
 {
 	if ( b )
-		openFile( s );
+		openFile( s, encoding );
 	foreach ( pAbstractChild* c, children() )
 	{
 		foreach ( QString f, c->files() )
@@ -288,11 +298,9 @@ void pWorkspace::goToLine( const QString& s, const QPoint& p, bool b )
 	}
 }
 
-#include <QDebug>
 void pWorkspace::internal_currentFileChanged( const QString& file )
 {
 	QDir::setCurrent( QFileInfo( file ).absolutePath() );
-		qDebug () << "cd " << QFileInfo( file ).absolutePath();
 }
 
 void pWorkspace::internal_currentChanged( int i )
@@ -379,7 +387,7 @@ void pWorkspace::internal_urlsDropped( const QList<QUrl>& l )
 	{
 		foreach ( QUrl u, l )
 			if ( !u.toLocalFile().trimmed().isEmpty() )
-				openFile( u.toLocalFile() );
+				openFile( u.toLocalFile(), pMonkeyStudio::defaultEncoding() );
 	}
 	else if ( a == aop )
 	{
@@ -558,7 +566,7 @@ void pWorkspace::fileWatcher_ecmReload( const QString& filename, bool force )
 			if ( fn == filename && ( !ac->isModified( fn ) || force ) )
 			{
 				ac->closeFile( fn );
-				ac->openFile( fn );
+				ac->openFile( fn, ac->textCodec() );
 				MonkeyCore::statusBar()->appendMessage( tr( "Reloaded externally modified file: '%1'" ).arg( QFileInfo( filename ).fileName() ), 2000 );
 				return;;
 			}
@@ -637,23 +645,31 @@ void pWorkspace::fileOpen_triggered()
 		QString s;
 		foreach ( QStringList l, availableFilesSuffixes().values() )
 			s.append( l.join( " " ).append( " " ) );
-		mFilters.prepend( QString( "All Supported Files (%1);;" ).arg( s.trimmed() ) );
 		mFilters.prepend( QString( "All Files (*);;" ));
+		mFilters.prepend( QString( "All Supported Files (%1);;" ).arg( s.trimmed() ) );
 	}
+	
+	// show filedialog to user
+	pFileDialogResult result = MkSFileDialog::getOpenFileNames( window(), tr( "Choose the file(s) to open" ), QDir::current().absolutePath(), mFilters, true, false );
 
 	// open open file dialog
-	//qWarning () << "current are " << QDir::current();
-	QStringList l = getOpenFileNames( tr( "Choose the file(s) to open" ), QDir::current().absolutePath(), mFilters, window() );
+	QStringList fileNames = result[ "filenames" ].toStringList();
+	
+	// return 0 if user cancel
+	if ( fileNames.isEmpty() )
+	{
+		return;
+	}
 
 	// for each entry, open file
-	foreach ( QString s, l )
+	foreach ( QString file, fileNames )
 	{
-		if ( openFile( s ) )
+		if ( openFile( file, result[ "codec" ].toString() ) )
 			// append file to recents
-			MonkeyCore::recentsManager()->addRecentFile( s );
+			MonkeyCore::recentsManager()->addRecentFile( file );
 		else
 			// remove it from recents files
-			MonkeyCore::recentsManager()->removeRecentFile( s );
+			MonkeyCore::recentsManager()->removeRecentFile( file );
 	}
 }
 
@@ -679,7 +695,7 @@ void pWorkspace::fileSessionRestore_triggered()
 {
 	// restore files
 	foreach ( QString s, MonkeyCore::settings()->value( "Session/Files", QStringList() ).toStringList() )
-		if ( !openFile( s ) ) // remove it from recents files
+		if ( !openFile( s, pMonkeyStudio::defaultEncoding() ) ) // remove it from recents files
 			MonkeyCore::recentsManager()->removeRecentFile( s );
 	// restore projects
 	foreach ( QString s, MonkeyCore::settings()->value( "Session/Projects", QStringList() ).toStringList() )

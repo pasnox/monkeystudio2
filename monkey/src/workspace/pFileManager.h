@@ -56,23 +56,21 @@ public:
 	QString currentItemPath() const;
 
 protected:
-	pFileManager( QObject* = 0 );
+	pFileManager( QObject* parent = 0 );
 
 public slots:
-	pAbstractChild* openFile( const QString& );
-	void closeFile( const QString& );
-	void goToLine( const QString&, const QPoint&, bool );
-	void openProject( const QString& );
-	/*
-	void closeProject( const QString& );
-	*/
+	pAbstractChild* openFile( const QString& fileName, const QString& encoding );
+	void closeFile( const QString& fileName );
+	void goToLine( const QString& fileName, const QPoint& position, bool highlight, const QString& encoding );
+	void openProject( const QString& fileName, const QString& encoding );
+
 signals:
 	// files
 	void fileOpened( const QString& fileName );
 	void fileClosed( const QString& fileName );
 	void currentFileChanged( pAbstractChild* child, const QString& fileName );
 	// projects
-	void open( XUPProjectItem* project );
+	void opened( XUPProjectItem* project );
 	void aboutToClose( XUPProjectItem* project );
 	void currentChanged( XUPProjectItem* );
 	void currentChanged( XUPProjectItem*, XUPProjectItem* );

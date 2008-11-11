@@ -42,7 +42,7 @@ pFileManager::pFileManager( QObject* o )
 	connect( MonkeyCore::workspace(), SIGNAL( fileClosed( const QString& ) ), this, SIGNAL( fileClosed( const QString& ) ) );
 	connect( MonkeyCore::workspace(), SIGNAL( currentFileChanged( pAbstractChild*, const QString& ) ), this, SIGNAL( currentFileChanged( pAbstractChild*, const QString& ) ) );
 	// projects
-	connect( MonkeyCore::projectsManager(), SIGNAL( projectOpen( XUPProjectItem* ) ), this, SIGNAL( open( XUPProjectItem* ) ) );
+	connect( MonkeyCore::projectsManager(), SIGNAL( projectOpened( XUPProjectItem* ) ), this, SIGNAL( opened( XUPProjectItem* ) ) );
 	connect( MonkeyCore::projectsManager(), SIGNAL( projectAboutToClose( XUPProjectItem* ) ), this, SIGNAL( aboutToClose( XUPProjectItem* ) ) );
 	connect( MonkeyCore::projectsManager(), SIGNAL( currentProjectChanged( XUPProjectItem* ) ), this, SIGNAL( currentChanged( XUPProjectItem* ) ) );
 	connect( MonkeyCore::projectsManager(), SIGNAL( currentProjectChanged( XUPProjectItem*, XUPProjectItem* ) ), this, SIGNAL( currentChanged( XUPProjectItem*, XUPProjectItem* ) ) );
@@ -95,20 +95,16 @@ QString pFileManager::currentItemPath() const
 	return QString::null;
 }
 
-pAbstractChild* pFileManager::openFile( const QString& s )
-{ return MonkeyCore::workspace()->openFile( s ); }
+pAbstractChild* pFileManager::openFile( const QString& fileName, const QString& encoding )
+{ return MonkeyCore::workspace()->openFile( fileName, encoding ); }
 
 void pFileManager::closeFile( const QString& s )
 { MonkeyCore::workspace()->closeFile( s ); }
 
-void pFileManager::goToLine( const QString& s, const QPoint& p, bool b )
-{ MonkeyCore::workspace()->goToLine( s, p, b ); }
+void pFileManager::goToLine( const QString& s, const QPoint& p, bool b, const QString& encoding )
+{ MonkeyCore::workspace()->goToLine( s, p, b, encoding ); }
 
-void pFileManager::openProject( const QString& s )
+void pFileManager::openProject( const QString& fileName, const QString& encoding )
 {
-	MonkeyCore::projectsManager()->openProject( s, pMonkeyStudio::defaultEncoding() );
+	MonkeyCore::projectsManager()->openProject( fileName, encoding );
 }
-/*
-void pFileManager::closeProject( const QString& s )
-{ MonkeyCore::projectsManager()->closeProject( s ); }
-*/
