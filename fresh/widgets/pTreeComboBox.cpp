@@ -347,6 +347,11 @@ void pTreeComboBox::expandAll()
 
 void pTreeComboBox::internal_activated( const QModelIndex& index )
 {
+	if ( !( index.flags() & Qt::ItemIsEnabled ) || !( index.flags() & Qt::ItemIsSelectable ) )
+	{
+		return;
+	}
+	
 	if ( mIndex != index )
 	{
 		mIndex = index;
@@ -358,6 +363,11 @@ void pTreeComboBox::internal_activated( const QModelIndex& index )
 
 void pTreeComboBox::internal_clicked( const QModelIndex& index )
 {
+	if ( !( index.flags() & Qt::ItemIsEnabled ) || !( index.flags() & Qt::ItemIsSelectable ) )
+	{
+		return;
+	}
+	
 	if ( mIndex != index )
 	{
 		mIndex = index;
