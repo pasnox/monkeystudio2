@@ -31,6 +31,75 @@ void MkSFileDialog::currentScopeChanged( XUPItem* scope )
 	}
 }
 
+pFileDialogResult MkSFileDialog::getOpenFileName( QWidget* parent, const QString& caption, const QString& dir, const QString& filter, bool enabledTextCodec, bool enabledOpenReadOnly, QString* selectedFilter, Options options )
+{
+	pFileDialogResult result;
+	MkSFileDialog fd( parent );
+	setOpenFileNameDialog( &fd, caption, dir, filter, enabledTextCodec, enabledOpenReadOnly, selectedFilter, options );
+	fd.setTextCodec( pMonkeyStudio::defaultEncoding() );
+	fd.mAddFiles->setVisible( false );
+	
+	if ( fd.exec() == QDialog::Accepted )
+	{
+		if ( selectedFilter )
+		{
+			*selectedFilter = fd.selectedFilter();
+		}
+		
+		result[ "filename" ] = fd.selectedFiles().value( 0 );
+		result[ "codec" ] = fd.textCodec();
+		result[ "openreadonly" ] = fd.openReadOnly();
+	}
+	
+	return result;
+}
+
+pFileDialogResult MkSFileDialog::getOpenFileNames( QWidget* parent, const QString& caption, const QString& dir, const QString& filter, bool enabledTextCodec, bool enabledOpenReadOnly, QString* selectedFilter, Options options )
+{
+	pFileDialogResult result;
+	MkSFileDialog fd( parent );
+	setOpenFileNamesDialog( &fd, caption, dir, filter, enabledTextCodec, enabledOpenReadOnly, selectedFilter, options );
+	fd.setTextCodec( pMonkeyStudio::defaultEncoding() );
+	fd.mAddFiles->setVisible( false );
+	
+	if ( fd.exec() == QDialog::Accepted )
+	{
+		if ( selectedFilter )
+		{
+			*selectedFilter = fd.selectedFilter();
+		}
+		
+		result[ "filenames" ] = fd.selectedFiles().value( 0 );
+		result[ "codec" ] = fd.textCodec();
+		result[ "openreadonly" ] = fd.openReadOnly();
+	}
+	
+	return result;
+}
+
+pFileDialogResult MkSFileDialog::getSaveFileName( QWidget* parent, const QString& caption, const QString& dir, const QString& filter, bool enabledTextCodec, QString* selectedFilter, Options options )
+{
+	pFileDialogResult result;
+	MkSFileDialog fd( parent );
+	setSaveFileNameDialog( &fd, caption, dir, filter, enabledTextCodec, selectedFilter, options );
+	fd.setTextCodec( pMonkeyStudio::defaultEncoding() );
+	fd.mAddFiles->setVisible( false );
+	
+	if ( fd.exec() == QDialog::Accepted )
+	{
+		if ( selectedFilter )
+		{
+			*selectedFilter = fd.selectedFilter();
+		}
+		
+		result[ "filename" ] = fd.selectedFiles().value( 0 );
+		result[ "codec" ] = fd.textCodec();
+		result[ "openreadonly" ] = fd.openReadOnly();
+	}
+	
+	return result;
+}
+
 pFileDialogResult MkSFileDialog::getOpenProjects( QWidget* parent )
 {
 	pFileDialogResult result;
