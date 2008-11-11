@@ -693,7 +693,7 @@ void XUPProjectItem::handleIncludeItem( XUPItem* function ) const
 			const QString fn = filePath( parameters );
 			
 			XUPProjectItem* project = newProject();
-			if ( project->open( fn, attribute( "codec" ) ) )
+			if ( project->open( fn, temporaryValue( "codec" ).toString() ) )
 			{
 				function->addChild( project );
 			}
@@ -753,7 +753,7 @@ bool XUPProjectItem::open( const QString& fileName, const QString& codec )
 	}
 	
 	// all is ok
-	setAttribute( "codec", codec );
+	setTemporaryValue( "codec", codec );
 	setTemporaryValue( "fileName", fileName );
 	setLastError( QString::null );
 	file.close();

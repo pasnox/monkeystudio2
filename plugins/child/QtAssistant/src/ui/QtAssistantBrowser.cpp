@@ -287,7 +287,7 @@ void QtAssistantBrowser::backupCurrentFile( const QString& filename )
 void QtAssistantBrowser::saveFiles()
 {}
 
-bool QtAssistantBrowser::openFile( const QString& /*filename*/, QTextCodec* /*codec*/ )
+bool QtAssistantBrowser::openFile( const QString& /*filename*/, const QString& /*codec*/ )
 {
 	return false;
 }

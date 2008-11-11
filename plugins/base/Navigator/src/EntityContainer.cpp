@@ -38,6 +38,7 @@
 
 #include <pWorkspace.h>
 #include <pFileManager.h>
+#include <pMonkeyStudio.h>
 
 #include "EntityContainer.h"
 #include "Entity.h"
@@ -318,7 +319,7 @@ void EntityContainer::makeGoto ()
 {
 	Entity* activeEntity = (Entity*)currentItem();
 	Q_ASSERT (activeEntity);
-	MonkeyCore::fileManager()->goToLine(activeEntity->file, QPoint(0,activeEntity->line), false);
+	MonkeyCore::fileManager()->goToLine(activeEntity->file, QPoint(0,activeEntity->line), false, pMonkeyStudio::defaultCodec());
 	
 	if (mNavigator && mNavigator->getAutoHide())
 	{

@@ -406,7 +406,7 @@ void MessageBoxDocks::lwBuildSteps_itemPressed( QListWidgetItem* it )
 	
 	// open file if ok
 	if ( b && !s.isEmpty() )
-		MonkeyCore::fileManager()->goToLine( s, it->data( Qt::UserRole +3 ).toPoint(), true );
+		MonkeyCore::fileManager()->goToLine( s, it->data( Qt::UserRole +3 ).toPoint(), true, pMonkeyStudio::defaultCodec() );
 }
 
 /*!
@@ -419,7 +419,7 @@ void MessageBoxDocks::lwSearchResults_itemPressed( QListWidgetItem* it )
 {
 	// get filename
 	QString s = it->data( Qt::UserRole +2 ).toString();
-	MonkeyCore::fileManager()->goToLine( s, it->data( Qt::UserRole +3 ).toPoint(), true );
+	MonkeyCore::fileManager()->goToLine( s, it->data( Qt::UserRole +3 ).toPoint(), true, pMonkeyStudio::defaultCodec() );
 }
 
 /*!

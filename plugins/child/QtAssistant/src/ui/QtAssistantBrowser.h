@@ -57,7 +57,7 @@ public slots:
 	virtual void saveFile( const QString& filename );
 	virtual void backupCurrentFile( const QString& filename );
 	virtual void saveFiles();
-	virtual bool openFile( const QString& filename, QTextCodec* codec );
+	virtual bool openFile( const QString& filename, const QString& codec );
 	virtual void closeFile( const QString& filename );
 	virtual void closeFiles();
 	virtual void printFile( const QString& filename );

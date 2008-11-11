@@ -37,6 +37,7 @@
 #include <pWorkspace.h>
 #include <MonkeyCore.h>
 #include <pFileManager.h>
+#include <pMonkeyStudio.h>
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -180,7 +181,7 @@ void pDockFileBrowser::tv_doubleClicked( const QModelIndex& idx )
 	// open file corresponding to index
 	const QModelIndex index = mFilteredModel->mapToSource( idx );
 	if ( !mDirsModel->isDir( index ) )
-		MonkeyCore::fileManager()->openFile( mDirsModel->filePath( index ) );
+		MonkeyCore::fileManager()->openFile( mDirsModel->filePath( index ), pMonkeyStudio::defaultCodec() );
 }
 
 /*!

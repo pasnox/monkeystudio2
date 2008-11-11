@@ -235,7 +235,7 @@ void GdbBridgeEditor::onToggleBacktrace(const QString & fileName, const int & li
 
 	// open file (if is not same)
 	if(MonkeyCore::workspace())
-		MonkeyCore::workspace()->goToLine(fileName, QPoint(1,line), true);
+		MonkeyCore::workspace()->goToLine(fileName, QPoint(1,line), true, pMonkeyStudio::defaultCodec());
 
 	// now the current file is , bug fix if no file is open
 	if(MonkeyCore::fileManager() && MonkeyCore::fileManager()->currentChild())

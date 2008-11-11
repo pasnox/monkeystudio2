@@ -375,10 +375,10 @@ void QtDesignerChild::setModified( QDesignerFormWindowInterface* w )
 		w->parentWidget()->setWindowModified( w->isDirty() );
 }
 
-bool QtDesignerChild::openFile( const QString& s, QTextCodec* )
+bool QtDesignerChild::openFile( const QString& fileName, const QString& codec )
 {
-	foreach ( const QString f, files() )
-		if ( isSameFile( f, s ) )
+	foreach ( const QString file, files() )
+		if ( isSameFile( file, fileName ) )
 			return true;
 	
 	// create form
@@ -391,16 +391,16 @@ bool QtDesignerChild::openFile( const QString& s, QTextCodec* )
 	w->installEventFilter( this );
 	
 	// assign file name
-	w->setFileName( s );
+	w->setFileName( fileName );
 	
 	// set default size
 	QSize mainContainerSize( 400, 300 );
 	
 	// set contents
-	if ( QFile::exists( s ) )
+	if ( QFile::exists( fileName ) )
 	{
 		// set content
-		QFile f( s );
+		QFile f( fileName );
 		w->setContents( &f );
 		
 		// get original size
@@ -434,7 +434,7 @@ bool QtDesignerChild::openFile( const QString& s, QTextCodec* )
 	connect( w, SIGNAL( changed() ), this, SLOT( formChanged() ) );
 	
 	// set window title
-	mw->setWindowTitle( QFileInfo( s ).fileName() +"[*]" );
+	mw->setWindowTitle( QFileInfo( fileName ).fileName() +"[*]" );
 	
 	// set modified state
 	setModified( w );
@@ -443,7 +443,7 @@ bool QtDesignerChild::openFile( const QString& s, QTextCodec* )
 	emit modifiedChanged( w->isDirty() );
 	
 	// emit file opened
-	emit fileOpened( s );
+	emit fileOpened( fileName );
 	return true;
 }
 

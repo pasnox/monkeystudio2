@@ -369,10 +369,10 @@ bool XUPProjectManager::openProject()
 {
 	pFileDialogResult result = MkSFileDialog::getOpenProjects( window() );
 	
-	const QStringList files = result.value( "filenames" ).toStringList();
+	const QStringList files = result[ "filenames" ].toStringList();
 	if ( !files.isEmpty() )
 	{
-		const QString codec = result.value( "codec" ).toString();
+		const QString codec = result[ "codec" ].toString();
 		foreach ( const QString file, files )
 		{
 			if ( !openProject( file, codec ) )
@@ -552,16 +552,11 @@ void XUPProjectManager::removeFiles()
 {
 	XUPItem* curItem = currentItem();
 	
-	qWarning() << "test" << curItem << curItem->type();
-	
 	
 	if ( !curItem || !( curItem->type() == XUPItem::Value || curItem->type() == XUPItem::File || curItem->type() == XUPItem::Path ) )
 	{
 		return;
 	}
-	
-	if ( curItem )
-		qWarning() << curItem->displayText();
 	
 	if ( pMonkeyStudio::question( tr( "Remove Value..." ), tr( "Are you sur you want to remove this value ?" ), window() ) )
 	{
@@ -676,20 +671,5 @@ void XUPProjectManager::setCurrentProject( XUPProjectItem* curProject, XUPProjec
 	{
 		emit currentProjectChanged( curProject, preProject );
 		emit currentProjectChanged( curProject );
-		
-		qWarning() << "----------------------------------------";
-		if ( curProject )
-			qWarning() << "curProject" << curProject->displayText();
-		if ( preProject )
-			qWarning() << "preProject" << preProject->displayText();
 	}
-	
-	// change current index
-	/*
-	if ( currentProject() != project || !tvFiltered->currentIndex().isValid() )
-	{
-		QModelIndex index = mFilteredModel->mapFromSource( project );
-		tvFiltered->setCurrentIndex( index );
-	}
-	*/
 }
