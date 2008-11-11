@@ -170,23 +170,28 @@ void pChild::backupCurrentFile( const QString& s )
 void pChild::saveFiles()
 { saveCurrentFile(); }
 
-bool pChild::openFile( const QString& s, QTextCodec* )
+bool pChild::openFile( const QString& fileName, const QString& codec )
 {
 	// if already open file, cancel
 	if ( !currentFile().isNull() )
 		return false;
 
 	// open file
-	if ( !mEditor->openFile( s ) )
+	if ( !mEditor->openFile( fileName, codec ) )
 		return false;
 	
 	// set window modified state
 	setWindowModified( mEditor->isModified() );
 
 	// add filename to list
-	mFiles.append( s );
+	mFiles.append( fileName );
+	
+	if ( !mCodec )
+	{
+		mCodec = QTextCodec::codecForName( codec.toUtf8() );
+	}
 
-	emit fileOpened( s );
+	emit fileOpened( fileName );
 	return true;
 }
 

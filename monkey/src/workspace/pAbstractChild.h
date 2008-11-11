@@ -35,6 +35,8 @@
 
 #include <fresh.h>
 
+#include "pMonkeyStudio.h"
+
 class pEditor;
 
 class Q_MONKEY_EXPORT pAbstractChild : public QFrame
@@ -50,6 +52,7 @@ public:
 	pAbstractChild( QWidget* parent = 0 )
 		: QFrame( parent )
 	{
+		mCodec = 0;
 		setAttribute( Qt::WA_DeleteOnClose );
 		mDocument = mNone;
 		mLayout = lNone;
@@ -122,6 +125,9 @@ public slots:
 	virtual void setWindowTitle( const QString& s )
 	{ QWidget::setWindowTitle( QFileInfo( s.isEmpty() ? currentFile() : s ).fileName() ); }
 	
+	virtual QString textCodec() const
+	{ return mCodec ? mCodec->name() : pMonkeyStudio::defaultEncoding(); }
+	
 	// show/focus the file in child
 	virtual void showFile( const QString& ) = 0;
 	// undo
@@ -150,12 +156,12 @@ public slots:
 	// ask to save all files
 	virtual void saveFiles() = 0;
 	// ask to load file
-	virtual bool openFile( const QString&, QTextCodec* = 0 ) = 0;
+	virtual bool openFile( const QString& fileName, const QString& codec ) = 0;
 	// ask to load these files
-	virtual void openFiles( const QStringList& l )
+	virtual void openFiles( const QStringList& fileNames, const QString& codec )
 	{
-		foreach ( QString s, l )
-			openFile( s );
+		foreach ( const QString& file, fileNames )
+			openFile( file, codec );
 	}
 	// ask to close file
 	virtual void closeFile( const QString& ) = 0;
@@ -178,6 +184,7 @@ public slots:
 protected:
 	// files list this child manage
 	QStringList mFiles;
+	QTextCodec* mCodec;
 
 signals:
 	// emit when a file is opened
