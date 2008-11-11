@@ -127,7 +127,7 @@ void pFileDialog::setDialog( pFileDialog* dlg, const QString& caption, const QSt
 	dlg->setTextCodecEnabled( enabledTextCodec );
 	dlg->setOpenReadOnlyEnabled( enabledOpenReadOnly );
 	dlg->setConfirmOverwrite( !( options & DontConfirmOverwrite ) );
-    dlg->setResolveSymlinks( !( options & DontResolveSymlinks ) );
+	dlg->setResolveSymlinks( !( options & DontResolveSymlinks ) );
 	
 	// select file if needed )
 	if ( !( options & ShowDirsOnly ) && QFileInfo( dir ).isFile() )
