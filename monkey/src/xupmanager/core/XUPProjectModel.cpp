@@ -11,10 +11,7 @@ XUPProjectModel::XUPProjectModel( QObject* parent )
 
 XUPProjectModel::~XUPProjectModel()
 {
-	if ( mRootProject )
-	{
-		mRootProject->close();
-	}
+	close();
 }
 
 QModelIndex XUPProjectModel::indexFromItem( XUPItem* item ) const
@@ -28,6 +25,16 @@ QModelIndex XUPProjectModel::indexFromItem( XUPItem* item ) const
 	int row = item->parent() ? item->parent()->childIndex( item ) : 0;
 	
 	return createIndex( row, column, item );
+}
+
+XUPItem* XUPProjectModel::itemFromIndex( const QModelIndex& index ) const
+{
+	if ( index.isValid() )
+	{
+		return static_cast<XUPItem*>( index.internalPointer() );
+	}
+	
+	return 0;
 }
 
 QModelIndex XUPProjectModel::index( int row, int column, const QModelIndex& parent ) const
@@ -213,10 +220,4 @@ void XUPProjectModel::close()
 		delete mRootProject;
 		mRootProject = 0;
 	}
-}
-
-bool XUPProjectModel::save()
-{
-	setLastError( tr( "Can't save project, not yet implemented !" ) );
-	return false;
 }

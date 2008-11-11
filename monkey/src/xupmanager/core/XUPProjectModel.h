@@ -30,6 +30,7 @@ public:
 	
 	//
 	QModelIndex indexFromItem( XUPItem* item ) const;
+	XUPItem* itemFromIndex( const QModelIndex& index ) const;
 	
 	// error handler
 	void setLastError( const QString& error );
@@ -38,7 +39,6 @@ public:
 	// XUP Project members
 	virtual bool open( const QString& fileName, const QString& encoding );
 	virtual void close();
-	virtual bool save();
 
 protected:
 	XUPProjectItem* mRootProject;
