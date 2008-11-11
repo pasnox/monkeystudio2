@@ -110,8 +110,8 @@ public:
 	virtual void customRowCount( XUPItem* item ) const;
 	// open a project with encoding
 	virtual bool open( const QString& fileName, const QString& encoding = QLatin1String( "UTF-8" ) );
-	// close the proejct
-	virtual void close();
+	// save the project
+	virtual bool save();
 	
 	// return plugin associated with the project
 	virtual BuilderPlugin* builder( const QString& plugin = QString() ) const;

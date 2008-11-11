@@ -14,6 +14,8 @@
 
 #include <QDebug>
 
+const QString XUP_VERSION = "1.1.0";
+
 XUPProjectItemInfos* XUPProjectItem::mXUPProjectInfos = new XUPProjectItemInfos();
 bool XUPProjectItem::mFoundCallerItem = false;
 
@@ -759,8 +761,43 @@ bool XUPProjectItem::open( const QString& fileName, const QString& encoding )
 	return true;
 }
 
-void XUPProjectItem::close()
+bool XUPProjectItem::save()
 {
+	setLastError( mDocument.toString( 4 ) );
+	return false;
+	
+	// ********************
+	
+	// try open file for writing
+	QFile file( temporaryValue( "fileName" ).toString() );
+	if ( !file.open( QIODevice::WriteOnly ) )
+		return false;
+	
+	// erase file content
+	file.resize( 0 );
+	
+	// set xup version
+	setAttribute( "version", XUP_VERSION );
+	
+	// encode content
+	QTextCodec* codec = QTextCodec::codecForName( temporaryValue( "encoding" ).toString().toUtf8() );
+	QByteArray content = codec->fromUnicode( mDocument.toString( 4 ) );
+	
+	// write content
+	bool result = file.write( content ) != -1;
+	file.close();
+	
+	// set error message if needed
+	if ( result )
+	{
+		setLastError( QString::null );
+	}
+	else
+	{
+		setLastError( tr( "Can't write content" ) );
+	}
+	
+	return result;
 }
 
 BuilderPlugin* XUPProjectItem::builder( const QString& plugin ) const
