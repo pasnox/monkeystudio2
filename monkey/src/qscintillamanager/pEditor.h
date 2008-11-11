@@ -90,7 +90,7 @@ public slots:
 	void setLineNumbersMarginEnabled( bool );
 	void setLineNumbersMarginWidth( int );
 	void setLineNumbersMarginAutoWidth( bool );
-	bool openFile( const QString& );
+	bool openFile( const QString& fileName, const QString& codec );
 	bool saveFile( const QString& = QString() );
 	bool saveBackup( const QString& );
 	void closeFile();

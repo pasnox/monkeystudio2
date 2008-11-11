@@ -273,7 +273,7 @@ void pEditor::clipboardDataChanged()
 	emit pasteAvailable( canPaste() );
 }
 
-bool pEditor::openFile( const QString& s )
+bool pEditor::openFile( const QString& fileName, const QString& codec )
 {
 	if ( isModified() )
 		return false;
@@ -281,27 +281,27 @@ bool pEditor::openFile( const QString& s )
 	QApplication::setOverrideCursor( Qt::WaitCursor );
 	
 	// open file
-	QFile f( s );
+	QFile f( fileName );
 	if ( !f.open( QFile::ReadOnly ) )
 	{
-		MonkeyCore::statusBar()->appendMessage( tr( "Cannot read file %1:\n%2." ).arg( s ).arg( f.errorString() ) );
+		MonkeyCore::statusBar()->appendMessage( tr( "Cannot read file %1:\n%2." ).arg( fileName ).arg( f.errorString() ) );
 		return false;
 	}
 
 	// remember filename
-	setProperty( "fileName", s );
+	setProperty( "fileName", fileName );
+	setProperty( "codec", codec );
 
 	// set lexer and apis
-	setLexer( pMonkeyStudio::lexerForFileName( s ) );
+	setLexer( pMonkeyStudio::lexerForFileName( fileName ) );
 
 	// set properties
 	pMonkeyStudio::setEditorProperties( this );
 
 	// load file
-	QTextStream i( &f );
-	if ( i.codec()->name() != qPrintable( pMonkeyStudio::defaultEncoding() ) )
-		i.setCodec( qPrintable( pMonkeyStudio::defaultEncoding() ) );
-	setText( i.readAll() );
+	QTextCodec* c = QTextCodec::codecForName( codec.toUtf8() );
+	QString datas = c->toUnicode( f.readAll() );
+	setText( datas );
 	setModified( false );
 
 	// convert tabs if needed
@@ -309,15 +309,15 @@ bool pEditor::openFile( const QString& s )
 		convertTabs();
 	
 	//autodetect indent, if need
-	if (pMonkeyStudio::autoDetectIndent())
+	if ( pMonkeyStudio::autoDetectIndent() )
 	{
 		autoDetectIndent ();
 	}
 	
 	//autodetect eol, if need
-	if (pMonkeyStudio::autoDetectEol())
+	if ( pMonkeyStudio::autoDetectEol() )
 	{
-		autoDetectEol ();
+		autoDetectEol();
 	}
 	
 	// make backup if needed
@@ -365,17 +365,20 @@ bool pEditor::saveFile( const QString& s )
 
 	// writing file
 	QApplication::setOverrideCursor( Qt::WaitCursor );
-	QTextStream o( &f );
-	if ( o.codec()->name() != qPrintable( pMonkeyStudio::defaultEncoding() ) )
-		o.setCodec( qPrintable( pMonkeyStudio::defaultEncoding() ) );
-	o << text();
-	setModified( false );
+	
+	f.resize( 0 );
+	QTextCodec* c = QTextCodec::codecForName( property( "codec" ).toString().toUtf8() );
+	bool ok = f.write( c->fromUnicode( text() ) ) != -1;
+
+	if ( ok )
+	{
+		setModified( false );
+		setProperty( "fileName", fn );
+	}
+	
 	QApplication::restoreOverrideCursor();
 
-	// remember filename
-	setProperty( "fileName", fn );
-
-	return true;
+	return ok;
 }
 
 bool pEditor::saveBackup( const QString& s )
@@ -410,14 +413,15 @@ bool pEditor::saveBackup( const QString& s )
 	}
 
 	// writing file
-	QTextStream o( &f );
-	if ( o.codec()->name() != qPrintable( pMonkeyStudio::defaultEncoding() ) )
-		o.setCodec( qPrintable( pMonkeyStudio::defaultEncoding() ) );
-	o << text();
+	QApplication::setOverrideCursor( Qt::WaitCursor );
+	
+	f.resize( 0 );
+	QTextCodec* c = QTextCodec::codecForName( property( "codec" ).toString().toUtf8() );
+	bool ok = f.write( c->fromUnicode( text() ) ) != -1;
 	
 	QApplication::restoreOverrideCursor();
 
-	return true;
+	return ok;
 }
 
 void pEditor::closeFile()
