@@ -104,6 +104,7 @@ QDir::Filters pFileDialog::filterForMode() const
 	{
 		filters |= QDir::Drives | QDir::AllDirs | QDir::Files | QDir::Dirs;
 	}
+	
 	return filters;
 }
 
@@ -116,7 +117,12 @@ void pFileDialog::setDialog( pFileDialog* dlg, const QString& caption, const QSt
 #ifdef Q_OS_MAC
 	if ( !( options & DontUseSheet ) )
 	{
-		dlg->setWindowflags( dlg->windowFlags() | Qt::Sheet );
+		// that's impossible to have a sheet in a sheet
+		QWidget* parent = dlg->parentWidget();
+		if ( parent && !parent->windowFlags().testFlag( Qt::Sheet ) )
+		{
+			dlg->setWindowflags( dlg->windowFlags() | Qt::Sheet );
+		}
 	}
 #endif
 	
@@ -146,24 +152,24 @@ void pFileDialog::setOpenFileNameDialog( pFileDialog* dlg, const QString& captio
 {
 	setDialog( dlg, caption, dir, filter, enabledTextCodec, enabledOpenReadOnly, selectedFilter, options );
 	dlg->setFileMode( QFileDialog::ExistingFile );
-	dlg->setAcceptMode( AcceptOpen );
 	dlg->setFilter( dlg->filterForMode() );
+	dlg->setAcceptMode( AcceptOpen );
 }
 
 void pFileDialog::setOpenFileNamesDialog( pFileDialog* dlg, const QString& caption, const QString& dir, const QString& filter, bool enabledTextCodec, bool enabledOpenReadOnly, QString* selectedFilter, Options options )
 {
 	setDialog( dlg, caption, dir, filter, enabledTextCodec, enabledOpenReadOnly, selectedFilter, options );
 	dlg->setFileMode( QFileDialog::ExistingFiles );
-	dlg->setAcceptMode( AcceptOpen );
 	dlg->setFilter( dlg->filterForMode() );
+	dlg->setAcceptMode( AcceptOpen );
 }
 
 void pFileDialog::setSaveFileNameDialog( pFileDialog* dlg, const QString& caption, const QString& dir, const QString& filter, bool enabledTextCodec, QString* selectedFilter, Options options )
 {
 	setDialog( dlg, caption, dir, filter, enabledTextCodec, false, selectedFilter, options );
-	dlg->setFileMode( QFileDialog::ExistingFiles );
-	dlg->setAcceptMode( AcceptSave );
+	dlg->setFileMode( QFileDialog::AnyFile );
 	dlg->setFilter( dlg->filterForMode() );
+	dlg->setAcceptMode( AcceptSave );
 }
 
 pFileDialogResult pFileDialog::getOpenFileName( QWidget* parent, const QString& caption, const QString& dir, const QString& filter, bool enabledTextCodec, bool enabledOpenReadOnly, QString* selectedFilter, Options options )
