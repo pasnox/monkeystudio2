@@ -512,12 +512,6 @@ void XUPProjectManager::closeProject()
 		
 		emit projectAboutToClose( preProject );
 		
-		
-		if ( !curModel->save() )
-		{
-			pteLog->appendPlainText( curModel->lastError() );
-		}
-		
 		curModel->close();
 		delete curModel;
 	}
@@ -548,14 +542,114 @@ void XUPProjectManager::editProject()
 */
 }
 
+void XUPProjectManager::addFilesToScope( XUPItem* scope, const QStringList& allFiles, const QString& op )
+{
+	QStringList files = allFiles;
+	XUPProjectItem* project = scope->project();
+	XUPProjectItem* rootIncludeProject = project->rootIncludeProject();
+	const StringStringListList mVariableSuffixes = project->projectInfos()->variableSuffixes( project->projectType() );
+	
+	foreach ( const PairStringStringList& pair, mVariableSuffixes )
+	{
+		XUPItemList variables = project->getVariables( scope, pair.first, 0, false );
+		
+		foreach ( const QString& file, files )
+		{
+			if ( QDir::match( pair.second, file ) )
+			{
+				bool foundFile = false;
+				XUPItem* usedVariable = 0;
+				
+				foreach ( XUPItem* variable, variables )
+				{
+					if ( variable->attribute( "operator" ) != op )
+					{
+						continue;
+					}
+					
+					usedVariable = variable;
+					
+					foreach ( XUPItem* child, variable->children() )
+					{
+						if ( child->type() != XUPItem::File )
+						{
+							continue;
+						}
+						
+						const QString fn = rootIncludeProject->filePath( rootIncludeProject->interpretValue( child, "content" ) );
+						
+						if ( fn == file )
+						{
+							foundFile = true;
+							break;
+						}
+					}
+					
+					if ( foundFile )
+					{
+						break;
+					}
+				}
+				
+				if ( foundFile )
+				{
+					continue;
+				}
+				
+				if ( !usedVariable )
+				{
+					usedVariable = scope->addChild( XUPItem::Variable );
+					usedVariable->setAttribute( "name", pair.first );
+					usedVariable->setAttribute( "operator", op );
+					variables << usedVariable;
+				}
+				
+				usedVariable->setAttribute( "multiline", "true" );
+				
+				XUPItem* value = usedVariable->addChild( XUPItem::File );
+				value->setAttribute( "content", project->relativeFilePath( file ) );
+			}
+		}
+	}
+	
+	if ( !project->save() )
+	{
+		addError( project->lastError() );
+	}
+}
+
 void XUPProjectManager::addFiles()
 {
-	MkSFileDialog fd( this );
-	/*
-	fd.setTextCodec( "UTF-8" );
-	fd.setReadOnly( true );
-	*/
-	fd.exec();
+	pFileDialogResult result = MkSFileDialog::getProjectAddFiles( window() );
+	
+	if ( !result.isEmpty() )
+	{
+		QStringList files = result[ "filenames" ].toStringList();
+		XUPItem* scope = result[ "scope" ].value<XUPItem*>();
+		
+		// import files if needed
+		if ( result[ "import" ].toBool() )
+		{
+			const QString projectPath = scope->project()->path();
+			const QString importPath = result[ "importpath" ].toString();
+			const QString importRootPath = result[ "directory" ].toString();
+			QDir dir( importRootPath );
+			
+			for ( int i = 0; i < files.count(); i++ )
+			{
+				if ( !files.at( i ).startsWith( projectPath ) )
+				{
+					QString fn = QString( files.at( i ) ).remove( importRootPath ).replace( "\\", "/" );
+					fn = QDir::cleanPath( QString( "%1/%2/%3" ).arg( projectPath ).arg( importPath ).arg( fn ) );
+					if ( dir.mkpath( QFileInfo( fn ).absolutePath() ) && QFile::copy( files.at( i ), fn ) )
+						files[ i ] = fn;
+				}
+			}
+		}
+		
+		// add files to scope
+		addFilesToScope( scope, files, result[ "operator" ].toString() );
+	}
 }
 
 void XUPProjectManager::removeFiles()

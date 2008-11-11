@@ -1,0 +1,82 @@
+<ui version="4.0" >
+ <class>XUPAddFiles</class>
+ <widget class="QWidget" name="XUPAddFiles" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>441</width>
+    <height>145</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>My Form Class</string>
+  </property>
+  <layout class="QGridLayout" name="glWidget" >
+   <item row="0" column="0" >
+    <widget class="QGroupBox" name="gbScopes" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="title" >
+      <string>Scopes</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout" >
+      <item>
+       <widget class="pTreeComboBox" name="tcbScopes" />
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="1" >
+    <widget class="QGroupBox" name="gbOperators" >
+     <property name="title" >
+      <string>Operators</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2" >
+      <item>
+       <widget class="QComboBox" name="cbOperators" />
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="2" >
+    <widget class="QGroupBox" name="gbImport" >
+     <property name="toolTip" >
+      <string>Imported files will by default be copied to project path unless you provide a relative only path from project path</string>
+     </property>
+     <property name="title" >
+      <string>Import external files</string>
+     </property>
+     <property name="checkable" >
+      <bool>true</bool>
+     </property>
+     <property name="checked" >
+      <bool>false</bool>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_3" >
+      <item>
+       <widget class="QComboBox" name="cbImport" >
+        <property name="editable" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>pTreeComboBox</class>
+   <extends>QComboBox</extends>
+   <header>pTreeComboBox.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

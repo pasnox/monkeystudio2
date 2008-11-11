@@ -33,6 +33,8 @@ protected:
 	XUPFilteredProjectModel* mFilteredModel;
 	QMap<QString, QPlainTextEdit*> mOpenedFiles;
 	QMenu* mDebugMenu;
+	
+	void addFilesToScope( XUPItem* scope, const QStringList& allFiles, const QString& op );
 
 public slots:
 	void addError( const QString& error );
