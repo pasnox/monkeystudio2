@@ -763,15 +763,13 @@ bool XUPProjectItem::open( const QString& fileName, const QString& encoding )
 
 bool XUPProjectItem::save()
 {
-	setLastError( mDocument.toString( 4 ) );
-	return false;
-	
-	// ********************
-	
 	// try open file for writing
 	QFile file( temporaryValue( "fileName" ).toString() );
+	
 	if ( !file.open( QIODevice::WriteOnly ) )
+	{
 		return false;
+	}
 	
 	// erase file content
 	file.resize( 0 );
