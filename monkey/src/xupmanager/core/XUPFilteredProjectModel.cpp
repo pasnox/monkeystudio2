@@ -377,7 +377,8 @@ void XUPFilteredProjectModel::populateVariable( XUPItem* variable )
 
 	foreach ( XUPItem* value, tmpValuesItem )
 	{
-		if ( !variableIterator.value()->findValue( value->attribute( "content" ) ) )
+		const QString content = value->attribute( "content" );
+		if ( !content.isEmpty() && !variableIterator.value()->findValue( content ) )
 		{
 			createMapping( value, variable );
 		}
@@ -486,6 +487,10 @@ void XUPFilteredProjectModel::internal_dataChanged( const QModelIndex& topLeft, 
 {
 	Q_UNUSED( bottomRight );
 	
+	emit layoutAboutToBeChanged();
+	
 	XUPProjectItem* project = static_cast<XUPItem*>( topLeft.internalPointer() )->project();
 	populateProject( project );
+	
+	emit layoutChanged();
 }
