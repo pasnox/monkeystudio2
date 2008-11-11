@@ -59,10 +59,10 @@ protected:
 	pFileManager( QObject* parent = 0 );
 
 public slots:
-	pAbstractChild* openFile( const QString& fileName, const QString& encoding );
+	pAbstractChild* openFile( const QString& fileName, const QString& codec );
 	void closeFile( const QString& fileName );
-	void goToLine( const QString& fileName, const QPoint& position, bool highlight, const QString& encoding );
-	void openProject( const QString& fileName, const QString& encoding );
+	void goToLine( const QString& fileName, const QPoint& position, bool highlight, const QString& codec );
+	void openProject( const QString& fileName, const QString& codec );
 
 signals:
 	// files

@@ -129,8 +129,8 @@ namespace pMonkeyStudio
 	Q_MONKEY_EXPORT bool createBackupUponOpen();
 	Q_MONKEY_EXPORT void setAutoEolConversion( bool convert );
 	Q_MONKEY_EXPORT bool autoEolConversion();
-	Q_MONKEY_EXPORT void setDefaultEncoding( const QString& encoding );
-	Q_MONKEY_EXPORT QString defaultEncoding();
+	Q_MONKEY_EXPORT void setDefaultCodec( const QString& codec );
+	Q_MONKEY_EXPORT QString defaultCodec();
 	Q_MONKEY_EXPORT void setSelectionBackgroundColor( const QColor& background );
 	Q_MONKEY_EXPORT QColor selectionBackgroundColor();
 	Q_MONKEY_EXPORT void setSelectionForegroundColor( const QColor& foreground );

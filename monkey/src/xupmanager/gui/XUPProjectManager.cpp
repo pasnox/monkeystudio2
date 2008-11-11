@@ -272,9 +272,9 @@ void XUPProjectManager::on_tvFiltered_doubleClicked( const QModelIndex& index )
 			
 			if ( QFile::exists( fn ) )
 			{
-				const QString encoding = project->temporaryValue( "encoding" ).toString();
-				emit fileDoubleClicked( project, fn, encoding );
-				emit fileDoubleClicked( fn, encoding );
+				const QString codec = project->temporaryValue( "codec" ).toString();
+				emit fileDoubleClicked( project, fn, codec );
+				emit fileDoubleClicked( fn, codec );
 			}
 		}
 	}
@@ -339,14 +339,14 @@ void XUPProjectManager::newProject()
 {
 }
 
-bool XUPProjectManager::openProject( const QString& fileName, const QString& encoding )
+bool XUPProjectManager::openProject( const QString& fileName, const QString& codec )
 {
 	QFileInfo fi( fileName );
 	
 	if ( fi.exists() && fi.isFile() )
 	{
 		XUPProjectModel* model = new XUPProjectModel( this );
-		if ( model->open( fileName, encoding ) )
+		if ( model->open( fileName, codec ) )
 		{
 			int id = cbProjects->count();
 			cbProjects->addItem( model->headerData( 0, Qt::Horizontal, Qt::DisplayRole ).toString(), QVariant::fromValue<XUPProjectModel*>( model ) );

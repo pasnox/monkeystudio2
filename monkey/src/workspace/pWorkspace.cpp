@@ -203,7 +203,7 @@ void pWorkspace::initChildConnections( pAbstractChild* child )
 	//connect( child, SIGNAL( currentFileChanged( const QString& ) ), statusBar(), SLOT( setFileName( const QString& ) ) );
 }
 
-pAbstractChild* pWorkspace::openFile( const QString& s, const QString& encoding )
+pAbstractChild* pWorkspace::openFile( const QString& s, const QString& codec )
 {
 	// if it not exists
 	if ( !QFile::exists( s ) || !QFileInfo( s ).isFile() )
@@ -244,7 +244,7 @@ pAbstractChild* pWorkspace::openFile( const QString& s, const QString& encoding 
 	}
 
 	// open file
-	c->openFile( s, encoding );
+	c->openFile( s, codec );
 	
 	// set correct document if needed ( sdi hack )
 	if ( currentDocument() != c )
@@ -280,10 +280,10 @@ void pWorkspace::closeFile( const QString& s )
 	}
 }
 
-void pWorkspace::goToLine( const QString& s, const QPoint& p, bool b, const QString& encoding )
+void pWorkspace::goToLine( const QString& s, const QPoint& p, bool b, const QString& codec )
 {
 	if ( b )
-		openFile( s, encoding );
+		openFile( s, codec );
 	foreach ( pAbstractChild* c, children() )
 	{
 		foreach ( QString f, c->files() )
@@ -387,13 +387,13 @@ void pWorkspace::internal_urlsDropped( const QList<QUrl>& l )
 	{
 		foreach ( QUrl u, l )
 			if ( !u.toLocalFile().trimmed().isEmpty() )
-				openFile( u.toLocalFile(), pMonkeyStudio::defaultEncoding() );
+				openFile( u.toLocalFile(), pMonkeyStudio::defaultCodec() );
 	}
 	else if ( a == aop )
 	{
 		foreach ( QUrl u, l )
 			if ( !u.toLocalFile().trimmed().isEmpty() )
-				MonkeyCore::projectsManager()->openProject( u.toLocalFile(), pMonkeyStudio::defaultEncoding() );
+				MonkeyCore::projectsManager()->openProject( u.toLocalFile(), pMonkeyStudio::defaultCodec() );
 	}
 }
 
@@ -695,11 +695,11 @@ void pWorkspace::fileSessionRestore_triggered()
 {
 	// restore files
 	foreach ( QString s, MonkeyCore::settings()->value( "Session/Files", QStringList() ).toStringList() )
-		if ( !openFile( s, pMonkeyStudio::defaultEncoding() ) ) // remove it from recents files
+		if ( !openFile( s, pMonkeyStudio::defaultCodec() ) ) // remove it from recents files
 			MonkeyCore::recentsManager()->removeRecentFile( s );
 	// restore projects
 	foreach ( QString s, MonkeyCore::settings()->value( "Session/Projects", QStringList() ).toStringList() )
-		if ( !MonkeyCore::projectsManager()->openProject( s, pMonkeyStudio::defaultEncoding() ) ) // remove it from recents projects
+		if ( !MonkeyCore::projectsManager()->openProject( s, pMonkeyStudio::defaultCodec() ) ) // remove it from recents projects
 			MonkeyCore::recentsManager()->removeRecentProject( s );
 }
 

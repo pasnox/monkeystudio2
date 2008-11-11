@@ -75,7 +75,7 @@ void pRecentsManager::setMaxRecentProjects( int i )
 void pRecentsManager::recentFiles_triggered( QAction* a )
 {
 	if ( a->text() != tr( "&Clear" ) )
-		emit openFileRequested( a->data().toString(), pMonkeyStudio::defaultEncoding() );
+		emit openFileRequested( a->data().toString(), pMonkeyStudio::defaultCodec() );
 	else if ( a->text() == tr( "&Clear" ) )
 	{
 		MonkeyCore::settings()->setValue( "Recents/Files", QStringList() );
@@ -145,7 +145,7 @@ void pRecentsManager::removeRecentFile( const QString& s )
 void pRecentsManager::recentProjects_triggered( QAction* a )
 {
 	if ( a->text() != tr( "&Clear" ) )
-		emit openProjectRequested( a->data().toString(), pMonkeyStudio::defaultEncoding() );
+		emit openProjectRequested( a->data().toString(), pMonkeyStudio::defaultCodec() );
 	else if ( a->text() == tr( "&Clear" ) )
 	{
 		MonkeyCore::settings()->setValue( "Recents/Projects", QStringList() );

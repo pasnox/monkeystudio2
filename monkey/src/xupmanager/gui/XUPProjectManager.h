@@ -36,7 +36,7 @@ protected:
 
 public slots:
 	void addError( const QString& error );
-	bool openProject( const QString& fileName, const QString& encoding );
+	bool openProject( const QString& fileName, const QString& codec );
 	void newProject();
 	bool openProject();
 	void closeProject();
@@ -65,8 +65,8 @@ signals:
 	void currentProjectChanged( XUPProjectItem* currentProject );
 	
 	void projectDoubleClicked( XUPProjectItem* project );
-	void fileDoubleClicked( XUPProjectItem* project, const QString& fileName, const QString& encoding );
-	void fileDoubleClicked( const QString& fileName, const QString& encoding );
+	void fileDoubleClicked( XUPProjectItem* project, const QString& fileName, const QString& codec );
+	void fileDoubleClicked( const QString& fileName, const QString& codec );
 };
 
 #endif // XUPPROJECTMANAGER_H

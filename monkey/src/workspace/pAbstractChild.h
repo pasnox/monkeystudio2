@@ -126,7 +126,7 @@ public slots:
 	{ QWidget::setWindowTitle( QFileInfo( s.isEmpty() ? currentFile() : s ).fileName() ); }
 	
 	virtual QString textCodec() const
-	{ return mCodec ? mCodec->name() : pMonkeyStudio::defaultEncoding(); }
+	{ return mCodec ? mCodec->name() : pMonkeyStudio::defaultCodec(); }
 	
 	// show/focus the file in child
 	virtual void showFile( const QString& ) = 0;

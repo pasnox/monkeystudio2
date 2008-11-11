@@ -1283,17 +1283,17 @@ bool pMonkeyStudio::autoEolConversion()
 { return MonkeyCore::settings()->value( settingsPath() +"/AutoEolConversion", true ).toBool(); }
 
 /*!
-	\details Set the default used encoding for opening/saving files
+	\details Set the default used codec for opening/saving files
 	\param codec The codec to use
 */
-void pMonkeyStudio::setDefaultEncoding( const QString& codec )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/DefaultEncoding", codec ); }
+void pMonkeyStudio::setDefaultCodec( const QString& codec )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/DefaultCodec", codec ); }
 
 /*!
-	\details Return the default used encoding for opening/saving files. Default UTF-8
+	\details Return the default used codec for opening/saving files. Default UTF-8
 */
-QString pMonkeyStudio::defaultEncoding()
-{ return MonkeyCore::settings()->value( settingsPath() +"/DefaultEncoding", "UTF-8" ).toString(); }
+QString pMonkeyStudio::defaultCodec()
+{ return MonkeyCore::settings()->value( settingsPath() +"/DefaultCodec", "UTF-8" ).toString(); }
 
 /*!
 	\details Set the selection background color

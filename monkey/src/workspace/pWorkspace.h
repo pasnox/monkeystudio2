@@ -61,11 +61,11 @@ public slots:
 	pAbstractChild* newTextEditor();
 	// open a file and set cursor to position
 	void initChildConnections( pAbstractChild* child );
-	pAbstractChild* openFile( const QString& fileName, const QString& encoding );
+	pAbstractChild* openFile( const QString& fileName, const QString& codec );
 	// close the file
 	void closeFile( const QString& );
 	// goto to position inside file, highlight line according to bool, opening it if needed
-	void goToLine( const QString& fileName, const QPoint& pos, bool highlight, const QString& encoding );
+	void goToLine( const QString& fileName, const QPoint& pos, bool highlight, const QString& codec );
 
 	void closeCurrentDocument();
 	bool closeAllDocuments();

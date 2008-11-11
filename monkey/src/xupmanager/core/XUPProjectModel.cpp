@@ -190,7 +190,7 @@ QString XUPProjectModel::lastError() const
 	return mLastError;
 }
 
-bool XUPProjectModel::open( const QString& fileName, const QString& encoding )
+bool XUPProjectModel::open( const QString& fileName, const QString& codec )
 {
 	XUPProjectItem* tmpProject = XUPProjectItem::projectInfos()->newProjectItem( fileName );
 	if ( !tmpProject )
@@ -199,7 +199,7 @@ bool XUPProjectModel::open( const QString& fileName, const QString& encoding )
 		return false;
 	}
 	
-	if ( tmpProject->open( fileName, encoding ) )
+	if ( tmpProject->open( fileName, codec ) )
 	{
 		setLastError( QString::null );
 		mRootProject = tmpProject;

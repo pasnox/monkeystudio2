@@ -693,7 +693,7 @@ void XUPProjectItem::handleIncludeItem( XUPItem* function ) const
 			const QString fn = filePath( parameters );
 			
 			XUPProjectItem* project = newProject();
-			if ( project->open( fn, attribute( "encoding" ) ) )
+			if ( project->open( fn, attribute( "codec" ) ) )
 			{
 				function->addChild( project );
 			}
@@ -711,7 +711,7 @@ void XUPProjectItem::customRowCount( XUPItem* item ) const
 	Q_UNUSED( item );
 }
 
-bool XUPProjectItem::open( const QString& fileName, const QString& encoding )
+bool XUPProjectItem::open( const QString& fileName, const QString& codec )
 {
 	// get QFile
 	QFile file( fileName );
@@ -731,8 +731,8 @@ bool XUPProjectItem::open( const QString& fileName, const QString& encoding )
 	}
 	
 	// decode content
-	QTextCodec* codec = QTextCodec::codecForName( encoding.toUtf8() );
-	QString buffer = codec->toUnicode( file.readAll() );
+	QTextCodec* c = QTextCodec::codecForName( codec.toUtf8() );
+	QString buffer = c->toUnicode( file.readAll() );
 	
 	// parse content
 	QString errorMsg;
@@ -753,7 +753,7 @@ bool XUPProjectItem::open( const QString& fileName, const QString& encoding )
 	}
 	
 	// all is ok
-	setAttribute( "encoding", encoding );
+	setAttribute( "codec", codec );
 	setTemporaryValue( "fileName", fileName );
 	setLastError( QString::null );
 	file.close();
@@ -778,7 +778,7 @@ bool XUPProjectItem::save()
 	setAttribute( "version", XUP_VERSION );
 	
 	// encode content
-	QTextCodec* codec = QTextCodec::codecForName( temporaryValue( "encoding" ).toString().toUtf8() );
+	QTextCodec* codec = QTextCodec::codecForName( temporaryValue( "codec" ).toString().toUtf8() );
 	QByteArray content = codec->fromUnicode( mDocument.toString( 4 ) );
 	
 	// write content

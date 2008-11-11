@@ -65,8 +65,8 @@ public slots:
 	void removeRecentProject( const QString& );
 
 signals:
-	void openFileRequested( const QString& fileName, const QString& encoding );
-	void openProjectRequested( const QString& fileName, const QString& encoding );
+	void openFileRequested( const QString& fileName, const QString& codec );
+	void openProjectRequested( const QString& fileName, const QString& codec );
 
 };
 

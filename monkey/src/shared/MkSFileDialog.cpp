@@ -36,7 +36,7 @@ pFileDialogResult MkSFileDialog::getOpenFileName( QWidget* parent, const QString
 	pFileDialogResult result;
 	MkSFileDialog fd( parent );
 	setOpenFileNameDialog( &fd, caption, dir, filter, enabledTextCodec, enabledOpenReadOnly, selectedFilter, options );
-	fd.setTextCodec( pMonkeyStudio::defaultEncoding() );
+	fd.setTextCodec( pMonkeyStudio::defaultCodec() );
 	fd.mAddFiles->setVisible( false );
 	
 	if ( fd.exec() == QDialog::Accepted )
@@ -59,7 +59,7 @@ pFileDialogResult MkSFileDialog::getOpenFileNames( QWidget* parent, const QStrin
 	pFileDialogResult result;
 	MkSFileDialog fd( parent );
 	setOpenFileNamesDialog( &fd, caption, dir, filter, enabledTextCodec, enabledOpenReadOnly, selectedFilter, options );
-	fd.setTextCodec( pMonkeyStudio::defaultEncoding() );
+	fd.setTextCodec( pMonkeyStudio::defaultCodec() );
 	fd.mAddFiles->setVisible( false );
 	
 	if ( fd.exec() == QDialog::Accepted )
@@ -82,7 +82,7 @@ pFileDialogResult MkSFileDialog::getSaveFileName( QWidget* parent, const QString
 	pFileDialogResult result;
 	MkSFileDialog fd( parent );
 	setSaveFileNameDialog( &fd, caption, dir, filter, enabledTextCodec, selectedFilter, options );
-	fd.setTextCodec( pMonkeyStudio::defaultEncoding() );
+	fd.setTextCodec( pMonkeyStudio::defaultCodec() );
 	fd.mAddFiles->setVisible( false );
 	
 	if ( fd.exec() == QDialog::Accepted )
@@ -111,7 +111,7 @@ pFileDialogResult MkSFileDialog::getOpenProjects( QWidget* parent )
 	
 	MkSFileDialog fd( parent );
 	setOpenFileNamesDialog( &fd, caption, dir, filter, enabledTextCodec, enabledOpenReadOnly, 0, 0 );
-	fd.setTextCodec( pMonkeyStudio::defaultEncoding() );
+	fd.setTextCodec( pMonkeyStudio::defaultCodec() );
 	fd.mAddFiles->setVisible( false );
 	
 	if ( fd.exec() == QDialog::Accepted )
@@ -141,7 +141,7 @@ pFileDialogResult MkSFileDialog::getProjectAddFiles( QWidget* parent )
 		
 		MkSFileDialog fd( parent );
 		setOpenFileNamesDialog( &fd, caption, dir, filter, enabledTextCodec, enabledOpenReadOnly, 0, 0 );
-		fd.setTextCodec( pMonkeyStudio::defaultEncoding() );
+		fd.setTextCodec( pMonkeyStudio::defaultCodec() );
 		fd.mAddFiles->setModel( model );
 		fd.mAddFiles->setCurrentScope( curProject );
 		fd.mAddFiles->setOperators( operators );

@@ -230,12 +230,12 @@ bool pTemplatesManager::realiseTemplate( XUPItem* scope, const QString& op, cons
 		
 		// close file
 		file.close();
-#warning shoud add an encoding combobox to allow to choose the code, default one will be the selected one in preference
+#warning shoud add a codec combobox to allow to choose the code, default one will be the selected one in preference
 		// open files if needed
 		if ( fo.contains( files[f] ) )
-			MonkeyCore::fileManager()->openFile( s, pMonkeyStudio::defaultEncoding() );
+			MonkeyCore::fileManager()->openFile( s, pMonkeyStudio::defaultCodec() );
 		if ( po.contains( files[f] ) )
-			MonkeyCore::fileManager()->openProject( s, pMonkeyStudio::defaultEncoding() );
+			MonkeyCore::fileManager()->openProject( s, pMonkeyStudio::defaultCodec() );
 		
 		// add files to project if needed
 #warning pTemplatesManager::realiseTemplate

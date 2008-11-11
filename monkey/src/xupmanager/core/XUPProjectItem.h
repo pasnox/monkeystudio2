@@ -108,8 +108,8 @@ public:
 	virtual void handleIncludeItem( XUPItem* function ) const;
 	// reimplement this member to allow custom row count, by example to open subproject
 	virtual void customRowCount( XUPItem* item ) const;
-	// open a project with encoding
-	virtual bool open( const QString& fileName, const QString& encoding = QLatin1String( "UTF-8" ) );
+	// open a project with codec
+	virtual bool open( const QString& fileName, const QString& codec );
 	// save the project
 	virtual bool save();
 	

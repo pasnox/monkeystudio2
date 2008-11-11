@@ -95,16 +95,16 @@ QString pFileManager::currentItemPath() const
 	return QString::null;
 }
 
-pAbstractChild* pFileManager::openFile( const QString& fileName, const QString& encoding )
-{ return MonkeyCore::workspace()->openFile( fileName, encoding ); }
+pAbstractChild* pFileManager::openFile( const QString& fileName, const QString& codec )
+{ return MonkeyCore::workspace()->openFile( fileName, codec ); }
 
 void pFileManager::closeFile( const QString& s )
 { MonkeyCore::workspace()->closeFile( s ); }
 
-void pFileManager::goToLine( const QString& s, const QPoint& p, bool b, const QString& encoding )
-{ MonkeyCore::workspace()->goToLine( s, p, b, encoding ); }
+void pFileManager::goToLine( const QString& s, const QPoint& p, bool b, const QString& codec )
+{ MonkeyCore::workspace()->goToLine( s, p, b, codec ); }
 
-void pFileManager::openProject( const QString& fileName, const QString& encoding )
+void pFileManager::openProject( const QString& fileName, const QString& codec )
 {
-	MonkeyCore::projectsManager()->openProject( fileName, encoding );
+	MonkeyCore::projectsManager()->openProject( fileName, codec );
 }

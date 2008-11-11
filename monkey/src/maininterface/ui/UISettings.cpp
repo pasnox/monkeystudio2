@@ -74,7 +74,7 @@ UISettings::UISettings( QWidget* p )
 	cbTabModes->addItem( tr( "Top Level" ), pExtendedWorkspace::dmTopLevel );
 
 	// loads text codecs
-	cbDefaultEncoding->addItems( availableTextCodecs() );
+	cbDefaultCodec->addItems( availableTextCodecs() );
 
 	// auto completion source
 	bgAutoCompletionSource = new QButtonGroup( gbAutoCompletionSource );
@@ -228,7 +228,7 @@ void UISettings::loadSettings()
 	cbConvertTabsUponOpen->setChecked( convertTabsUponOpen() );
 	cbCreateBackupUponOpen->setChecked( createBackupUponOpen() );
 	cbAutoEolConversion->setChecked( autoEolConversion() );
-	cbDefaultEncoding->setCurrentIndex( cbDefaultEncoding->findText( defaultEncoding() ) );
+	cbDefaultCodec->setCurrentIndex( cbDefaultCodec->findText( defaultCodec() ) );
 	tbSelectionBackground->setIcon( colourizedPixmap( selectionBackgroundColor() ) );
 	tbSelectionBackground->setToolTip( selectionBackgroundColor().name() );
 	tbSelectionForeground->setIcon( colourizedPixmap( selectionForegroundColor() ) );
@@ -394,7 +394,7 @@ void UISettings::saveSettings()
 	setCreateBackupUponOpen( cbCreateBackupUponOpen->isChecked() ) ;
 	setAutoEolConversion( cbAutoEolConversion->isChecked() );
 	setAutoDetectEol( cbAutoDetectEol->isChecked() );
-	setDefaultEncoding( cbDefaultEncoding->currentText() );
+	setDefaultCodec( cbDefaultCodec->currentText() );
 	setSelectionBackgroundColor( QColor( tbSelectionBackground->toolTip() ) );
 	setSelectionForegroundColor( QColor( tbSelectionForeground->toolTip() ) );
 	setDefaultDocumentColours( gbDefaultDocumentColours->isChecked() );
