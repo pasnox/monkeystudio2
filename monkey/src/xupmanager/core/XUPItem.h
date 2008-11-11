@@ -105,4 +105,6 @@ protected:
 	QDomElement node() const;
 };
 
+Q_DECLARE_METATYPE( XUPItem* );
+
 #endif // XUPITEM_H

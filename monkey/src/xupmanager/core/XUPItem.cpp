@@ -210,7 +210,7 @@ void XUPItem::removeChild( XUPItem* item )
 	}
 }
 
-XUPItem* XUPItem::addChild( XUPItem::Type type, int row )
+XUPItem* XUPItem::addChild( XUPItem::Type pType, int row )
 {
 	// calculate row if needed
 	if ( row == -1 )
@@ -219,7 +219,7 @@ XUPItem* XUPItem::addChild( XUPItem::Type type, int row )
 	}
 	
 	QString stringType;
-	switch ( type )
+	switch ( pType )
 	{
 		case XUPItem::Project:
 			stringType = "project";
@@ -297,6 +297,12 @@ XUPItem* XUPItem::addChild( XUPItem::Type type, int row )
 		
 		// end insert
 		m->endInsertRows();
+		
+		// update scope nested property
+		if ( type() == XUPItem::Scope )
+		{
+			setAttribute( "nested", "false" );
+		}
 		
 		return child( row );
 	}
