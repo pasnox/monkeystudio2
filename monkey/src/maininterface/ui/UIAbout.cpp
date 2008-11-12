@@ -59,7 +59,8 @@ const QList<pDatas> mTeamates = QList<pDatas>()
 	<< pDatas( "Mashin Evgeniy", "evgenM", QObject::tr( "Russia" ), "mashin.zhenya@gmail.com", QObject::tr( "Many shared code between our IDEs" ) )
 	<< pDatas( "Manuel Schmidt", "oversize", QObject::tr( "Germany" ), "manuel@schmidtman.de", QObject::tr( "Web Developer & Web Designer" ) )
 	<< pDatas( "Julien Decologne", "Judd", QObject::tr( "France" ), "judd@hotmail.com", QObject::tr( "Splashscreen & Icons Designer" ) )
-	<< pDatas( "Plano Marc", "Marc31", QObject::tr( "France" ), "marc31boss@gmail.com", QObject::tr( "French translator" ) );
+	<< pDatas( "Plano Marc", "Marc31", QObject::tr( "France" ), "marc31boss@gmail.com", QObject::tr( "French translator" ) )
+	<< pDatas( "Lukic Djordje", "rumpl", QObject::tr( "Serbia" ), "rumplstiltzkin@gmail.com", QObject::tr( "SDK Script Generator" ) );
 
 const QList<pDatas> mDonors = QList<pDatas>()
 	<< pDatas( "Filipe Azevedo", "Nox P@sNox", QObject::tr( "France" ), "pasnox@gmail.com", QObject::tr( "No donations for now, you can use this <a href=\"http://sourceforge.net/project/project_donations.php?group_id=163493\">link</a> to make donation. Donations will help paying host/domain, and relatives things about the projects ( may need a mac book for better mac version :p )." ) );
