@@ -64,6 +64,9 @@
    </item>
    <item row="0" column="1" >
     <widget class="QStackedWidget" name="swPages" >
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
      <widget class="QWidget" name="wAbout" >
       <layout class="QHBoxLayout" name="horizontalLayout_6" >
        <item>
@@ -583,7 +586,7 @@ p, li { white-space: pre-wrap; }
        <item row="0" column="1" >
         <widget class="QToolButton" name="tbAddFile" >
          <property name="icon" >
-          <iconset resource="../../../resources/XUPManager.qrc" >
+          <iconset>
            <normaloff>:/actions/add.png</normaloff>:/actions/add.png</iconset>
          </property>
         </widget>
@@ -591,7 +594,7 @@ p, li { white-space: pre-wrap; }
        <item row="0" column="2" >
         <widget class="QToolButton" name="tbEditFile" >
          <property name="icon" >
-          <iconset resource="../../../resources/XUPManager.qrc" >
+          <iconset>
            <normaloff>:/editor/icons/editor/modify.png</normaloff>:/editor/icons/editor/modify.png</iconset>
          </property>
         </widget>
@@ -602,7 +605,7 @@ p, li { white-space: pre-wrap; }
           <string>-</string>
          </property>
          <property name="icon" >
-          <iconset resource="../../../resources/XUPManager.qrc" >
+          <iconset>
            <normaloff>:/actions/remove.png</normaloff>:/actions/remove.png</iconset>
          </property>
         </widget>
@@ -671,7 +674,7 @@ p, li { white-space: pre-wrap; }
  </widget>
  <resources>
   <include location="../resources/QMake.qrc" />
-  <include location="../../../resources/XUPManager.qrc" />
+  <include location="../../../../../monkey/src/resources/resources.qrc" />
  </resources>
  <connections>
   <connection>

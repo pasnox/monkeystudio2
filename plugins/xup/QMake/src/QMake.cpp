@@ -18,6 +18,10 @@
 #include "QMake.h"
 #include "QMakeProjectItem.h"
 //#include "UISettingsQMake.h"
+#include "UISimpleQMakeEditor.h"
+
+#include <MonkeyCore.h>
+#include <UIMain.h>
 
 #include <QDir>
 
@@ -72,15 +76,12 @@ QWidget* QMake::settingsWidget()
 
 bool QMake::editProject( XUPProjectItem* project )
 {
-	return false;
-	/*
 	if ( !project )
 	{
 		return false;
 	}
 	
-	return QMakeProjectEditorDialog( project, MonkeyCore::mainWindow() ).exec();
-	*/
+	return UISimpleQMakeEditor( project, MonkeyCore::mainWindow() ).exec() == QDialog::Accepted;
 }
 
 Q_EXPORT_PLUGIN2( ProjectQMake, QMake )

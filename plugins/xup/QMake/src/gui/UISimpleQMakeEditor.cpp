@@ -1,5 +1,5 @@
 #include "UISimpleQMakeEditor.h"
-#include "../../../core/XUPProjectItem.h"
+#include "XUPProjectItem.h"
 
 #include <QFileDialog>
 #include <QInputDialog>
