@@ -5,6 +5,10 @@
 #include "XUPFilteredProjectModel.h"
 #include "MkSFileDialog.h"
 #include "pMonkeyStudio.h"
+#include "MonkeyCore.h"
+#include "PluginsManager.h"
+#include "XUPPlugin.h"
+#include "UITemplatesWizard.h"
 
 #include <QDebug>
 #include <QTextCodec>
@@ -337,6 +341,9 @@ void XUPProjectManager::addError( const QString& error )
 
 void XUPProjectManager::newProject()
 {
+	UITemplatesWizard* dlg = UITemplatesWizard::instance( this );
+	dlg->setType( "Projects" );
+	dlg->exec();
 }
 
 bool XUPProjectManager::openProject( const QString& fileName, const QString& codec )
@@ -422,19 +429,51 @@ void XUPProjectManager::closeAllProjects()
 
 void XUPProjectManager::editProject()
 {
-#warning uncomment XUPProjectManager::editProject
-/*
-	XUPProjectItem* project = currentProjectItem();
+	XUPProjectItem* project = currentProject();
 	
-	if ( project )
+	if ( !project )
 	{
-		UISimpleQMakeEditor editor( project, this );
-		if ( editor.exec() == QDialog::Accepted )
+		return;
+	}
+	
+	// get plugin name that can manage this project
+	if ( project->projectSettingsValue( "EDITOR" ).isEmpty() || !MonkeyCore::pluginsManager()->plugins<XUPPlugin*>( PluginsManager::stAll, project->projectSettingsValue( "EDITOR" ) ).value( 0 ) )
+	{
+		// get xup plugins
+		QHash<QString, XUPPlugin*> plugins;
+		
+		foreach ( XUPPlugin* plugin, MonkeyCore::pluginsManager()->plugins<XUPPlugin*>( PluginsManager::stAll ) )
 		{
-			
+			plugins[ plugin->infos().Caption ] = plugin;
+		}
+	
+		bool ok;
+		const QString caption = QInputDialog::getItem( window(), tr( "Choose an editor plugin..." ), tr( "Your project is not yet editable, please select a correct project settings plugin" ), plugins.keys(), 0, false, &ok );
+		if ( ok && !caption.isEmpty() )
+		{
+			project->setProjectSettingsValue( "EDITOR", plugins[ caption ]->infos().Name );
 		}
 	}
-*/
+	
+	// edit project settings
+	if ( project->projectSettingsValue( "EDITOR" ).isEmpty() )
+	{
+		pMonkeyStudio::warning( tr( "Warning..." ), tr( "The project can't be edited because there is no associate project settings plugin." ) );
+	}
+	
+	XUPPlugin* plugin = MonkeyCore::pluginsManager()->plugins<XUPPlugin*>( PluginsManager::stAll, project->projectSettingsValue( "EDITOR" ) ).value( 0 );
+	
+	if ( plugin )
+	{
+		// edit project and save it if needed
+		if ( plugin->editProject( project ) )
+		{
+			if ( !project->save() )
+			{
+				addError( project->lastError() );
+			}
+		}
+	}
 }
 
 void XUPProjectManager::addFilesToScope( XUPItem* scope, const QStringList& allFiles, const QString& op )
