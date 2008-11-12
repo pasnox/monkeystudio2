@@ -199,9 +199,6 @@ pFileDialogResult MkSFileDialog::getNewEditorFile( QWidget* parent )
 			result[ "addtoproject" ] = fd.mAddFiles->addToProject();
 			result[ "scope" ] = QVariant::fromValue<XUPItem*>( fd.mAddFiles->currentScope() );
 			result[ "operator" ] = fd.mAddFiles->currentOperator();
-			result[ "import" ] = fd.mAddFiles->importExternalFiles();
-			result[ "importpath" ] = fd.mAddFiles->importExternalFilesPath();
-			result[ "directory" ] = fd.directory().absolutePath();
 		}
 	}
 	
