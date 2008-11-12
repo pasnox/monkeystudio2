@@ -67,6 +67,33 @@ XUPProjectModel* XUPAddFiles::model() const
 	return mModel;
 }
 
+void XUPAddFiles::setAddToProjectChoice( bool choice )
+{
+	if ( choice )
+	{
+		gbScopes->setCheckable( true );
+	}
+	else
+	{
+		gbScopes->setCheckable( false );
+	}
+}
+
+bool XUPAddFiles::addToProjectChoice() const
+{
+	return gbScopes->isCheckable();
+}
+
+bool XUPAddFiles::addToProject() const
+{
+	if ( gbScopes->isCheckable() )
+	{
+		return gbScopes->isChecked();
+	}
+	
+	return true;
+}
+
 void XUPAddFiles::setCurrentScope( XUPItem* item )
 {
 	QModelIndex index = item->index();

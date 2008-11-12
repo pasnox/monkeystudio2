@@ -18,6 +18,10 @@ public:
 	void setModel( XUPProjectModel* model );
 	XUPProjectModel* model() const;
 	
+	void setAddToProjectChoice( bool choice );
+	bool addToProjectChoice() const;
+	bool addToProject() const;
+	
 	void setCurrentScope( XUPItem* item );
 	XUPItem* currentScope() const;
 	

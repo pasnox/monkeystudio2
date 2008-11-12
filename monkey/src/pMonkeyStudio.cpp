@@ -585,6 +585,16 @@ QString pMonkeyStudio::availableFilesFilters()
 	// remove trailing ;;
 	if ( f.endsWith( ";;" ) )
 		f.chop( 2 );
+	
+	if ( !f.isEmpty() )
+	{
+		QString s;
+		foreach ( QStringList l, availableFilesSuffixes().values() )
+			s.append( l.join( " " ).append( " " ) );
+		f.prepend( QString( "All Files (*);;" ));
+		f.prepend( QString( "All Supported Files (%1);;" ).arg( s.trimmed() ) );
+	}
+	
 	// return filters list
 	return f;
 }

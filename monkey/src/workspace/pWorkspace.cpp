@@ -134,21 +134,7 @@ QList<pAbstractChild*> pWorkspace::children() const
 
 pAbstractChild* pWorkspace::newTextEditor()
 {
-	// get available filters
-	QString mFilters = availableFilesFilters();
-	
-	// prepend a all in one filter
-	if ( !mFilters.isEmpty() )
-	{
-		QString s;
-		foreach ( QStringList l, availableFilesSuffixes().values() )
-			s.append( l.join( " " ).append( " " ) );
-		mFilters.prepend( QString( "All Files (*);;" ));
-		mFilters.prepend( QString( "All Supported Files (%1);;" ).arg( s.trimmed() ) );
-	}
-	
-	// show filedialog to user
-	pFileDialogResult result = MkSFileDialog::getSaveFileName( window(), tr( "New File Name..." ), QString::null, mFilters, true );
+	pFileDialogResult result = MkSFileDialog::getNewEditorFile( window() );
 
 	// open open file dialog
 	QString fileName = result[ "filename" ].toString();
@@ -174,6 +160,12 @@ pAbstractChild* pWorkspace::newTextEditor()
 	// reset file
 	file.resize( 0 );
 	file.close();
+	
+	if ( result.value( "addtoproject", false ).toBool() )
+	{
+		// add files to scope
+		MonkeyCore::projectsManager()->addFilesToScope( result[ "scope" ].value<XUPItem*>(), QStringList( fileName ), result[ "operator" ].toString() );
+	}
 	
 	// open file
 	return openFile( fileName, result[ "codec" ].toString() );

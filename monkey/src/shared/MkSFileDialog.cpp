@@ -160,3 +160,50 @@ pFileDialogResult MkSFileDialog::getProjectAddFiles( QWidget* parent )
 	
 	return result;
 }
+
+pFileDialogResult MkSFileDialog::getNewEditorFile( QWidget* parent )
+{
+	pFileDialogResult result;
+	XUPProjectModel* model = MonkeyCore::projectsManager()->currentProjectModel();
+	XUPProjectItem* curProject = MonkeyCore::projectsManager()->currentProject();
+	QStringList operators = curProject ? curProject->projectInfos()->operators( curProject->projectType() ) : QStringList();
+	QString caption = tr( "New File Name..." );
+	QString dir = pMonkeyStudio::defaultProjectsDirectory();
+	QString filter = curProject ? XUPProjectItem::projectInfos()->variableSuffixesFilter( curProject->projectType() ) : pMonkeyStudio::availableFilesFilters();
+	bool enabledTextCodec = true;
+	
+	MkSFileDialog fd( parent );
+	setSaveFileNameDialog( &fd, caption, dir, filter, enabledTextCodec, 0, 0 );
+	fd.setTextCodec( pMonkeyStudio::defaultCodec() );
+	
+	if ( curProject )
+	{
+		fd.mAddFiles->setModel( model );
+	fd.mAddFiles->setAddToProjectChoice( true );
+		fd.mAddFiles->setCurrentScope( curProject );
+		fd.mAddFiles->setOperators( operators );
+		fd.mAddFiles->setCurrentOperator( operators.value( 0 ) );
+	}
+	else
+	{
+		fd.mAddFiles->setVisible( false );
+	}
+	
+	if ( fd.exec() == QDialog::Accepted )
+	{
+		result[ "filename" ] = fd.selectedFiles().value( 0 );
+		result[ "codec" ] = fd.textCodec();
+		
+		if ( model )
+		{
+			result[ "addtoproject" ] = fd.mAddFiles->addToProject();
+			result[ "scope" ] = QVariant::fromValue<XUPItem*>( fd.mAddFiles->currentScope() );
+			result[ "operator" ] = fd.mAddFiles->currentOperator();
+			result[ "import" ] = fd.mAddFiles->importExternalFiles();
+			result[ "importpath" ] = fd.mAddFiles->importExternalFilesPath();
+			result[ "directory" ] = fd.directory().absolutePath();
+		}
+	}
+	
+	return result;
+}

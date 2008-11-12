@@ -78,5 +78,38 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>gbScopes</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>gbOperators</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>242</x>
+     <y>19</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>383</x>
+     <y>19</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>gbScopes</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>gbImport</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>176</x>
+     <y>19</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>197</x>
+     <y>91</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

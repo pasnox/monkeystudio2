@@ -19,6 +19,7 @@ public:
 	
 	static pFileDialogResult getOpenProjects( QWidget* parent = 0 );
 	static pFileDialogResult getProjectAddFiles( QWidget* parent = 0 );
+	static pFileDialogResult getNewEditorFile( QWidget* parent = 0 );
 
 protected:
 	XUPAddFiles* mAddFiles;
