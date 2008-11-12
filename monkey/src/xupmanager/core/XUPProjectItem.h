@@ -101,6 +101,8 @@ public:
 	inline virtual int projectType() const { return XUPProjectItem::XUPProject; }
 	// register the project type
 	virtual void registerProjectType() const;
+	// unregister the project type
+	virtual void unRegisterProjectType() const;
 	// return a new instance of this kind of projecttype
 	// FIXME AK in future I think XUPProject will be abstract class
 	inline virtual XUPProjectItem* newProject() const { return new XUPProjectItem(); }

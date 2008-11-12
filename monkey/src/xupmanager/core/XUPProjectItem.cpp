@@ -682,6 +682,11 @@ void XUPProjectItem::registerProjectType() const
 	mXUPProjectInfos->registerVariableSuffixes( pType, mVariableSuffixes );
 }
 
+void XUPProjectItem::unRegisterProjectType() const
+{
+	mXUPProjectInfos->unRegisterType( projectType() );
+}
+
 void XUPProjectItem::handleIncludeItem( XUPItem* function ) const
 {
 	if ( function->type() == XUPItem::Function && function->attribute( "name" ).toLower() == "include" )
