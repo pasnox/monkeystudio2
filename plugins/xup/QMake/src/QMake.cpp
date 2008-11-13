@@ -17,7 +17,7 @@
 ****************************************************************************/
 #include "QMake.h"
 #include "QMakeProjectItem.h"
-//#include "UISettingsQMake.h"
+#include "UISettingsQMake.h"
 #include "UISimpleQMakeEditor.h"
 
 #include <MonkeyCore.h>
@@ -72,7 +72,7 @@ bool QMake::setEnabled( bool enabled )
 }
 
 QWidget* QMake::settingsWidget()
-{ return 0;/*new UISettingsQMake();*/ }
+{ return new UISettingsQMake(); }
 
 bool QMake::editProject( XUPProjectItem* project )
 {

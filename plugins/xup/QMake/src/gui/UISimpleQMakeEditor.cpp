@@ -19,35 +19,6 @@ UISimpleQMakeEditor::UISimpleQMakeEditor( XUPProjectItem* project, QWidget* pare
 		connect( rb, SIGNAL( toggled( bool ) ), this, SLOT( projectTypeChanged() ) );
 	}
 	
-#warning should use settings from qmake plugin setttings
-	QListWidgetItem* coreItem = new QListWidgetItem( lwQtModules );
-	coreItem->setText( "QtCore" );
-	coreItem->setData( Qt::UserRole, "core" );
-	
-	QListWidgetItem* guiItem = new QListWidgetItem( lwQtModules );
-	guiItem->setText( "QtGui" );
-	guiItem->setData( Qt::UserRole, "gui" );
-	
-	QListWidgetItem* networkItem = new QListWidgetItem( lwQtModules );
-	networkItem->setText( "QtNetwork" );
-	networkItem->setData( Qt::UserRole, "network" );
-	
-	QListWidgetItem* svgItem = new QListWidgetItem( lwQtModules );
-	svgItem->setText( "QtSvg" );
-	svgItem->setData( Qt::UserRole, "svg" );
-	
-	QListWidgetItem* designerItem = new QListWidgetItem( lwModules );
-	designerItem->setText( "Designer" );
-	designerItem->setData( Qt::UserRole, "designer" );
-	
-	QListWidgetItem* phononItem = new QListWidgetItem( lwModules );
-	phononItem->setText( "Phonon" );
-	phononItem->setData( Qt::UserRole, "phonon" );
-	
-	QListWidgetItem* webkitkItem = new QListWidgetItem( lwModules );
-	webkitkItem->setText( "WebKit" );
-	webkitkItem->setData( Qt::UserRole, "webkit" );
-	
 	init( project );
 	
 	lwPages->setCurrentRow( 1 );
@@ -101,6 +72,7 @@ void UISimpleQMakeEditor::updateProjectFiles()
 
 void UISimpleQMakeEditor::init( XUPProjectItem* project )
 {
+	mConfigGui.clear();
 	mFileVariables = project->projectInfos()->fileVariables( project->projectType() );
 	mPathVariables = project->projectInfos()->pathVariables( project->projectType() );
 	QString value;
@@ -108,16 +80,97 @@ void UISimpleQMakeEditor::init( XUPProjectItem* project )
 	mProject = project;
 	mValues.clear();
 	
-	mValues[ "TEMPLATE" ] = project->interpretVariable( "TEMPLATE" );
-	mValues[ "CONFIG" ] = project->interpretVariable( "CONFIG" );
-	mValues[ "QT" ] = project->interpretVariable( "QT" );
-	mValues[ "TARGET" ] = project->interpretVariable( "TARGET" );
-	mValues[ "DESTDIR" ] = project->interpretVariable( "DESTDIR" );
-	mValues[ "DLLDESTDIR" ] = project->interpretVariable( "DLLDESTDIR" );
-	
-	foreach ( const QString& variable, mFileVariables )
+	foreach ( QAbstractButton* ab, wCompilerSettings->findChildren<QAbstractButton*>() )
 	{
-		mValues[ variable ] = project->interpretVariable( variable );
+		if ( !ab->statusTip().isEmpty() )
+		{
+			mConfigGui << ab->statusTip();
+		}
+	}
+	
+	mConfigGui << "app_bundle" << "lib_bundle" << "embed_manifest_exe" << "embed_manifest_dll"
+		<< "designer" << "plugin" << "shared" << "dll" << "static" << "staticlib";
+	
+	QtVersionManager mQtManager;
+	lwQtVersion->clear();
+	lwQtModules->clear();
+	lwModules->clear();
+	
+	mQtVersion = mQtManager.version( mProject->projectSettingsValue( "QT_VERSION" ) );
+	
+	// qt versions
+	foreach ( const QtVersion& qv, mQtManager.versions() )
+	{
+		QListWidgetItem* it = new QListWidgetItem( qv.Version, lwQtVersion );
+		it->setData( Qt::UserRole, QVariant::fromValue( qv ) );
+		
+		if ( qv.Default )
+			it->setBackground( QBrush( Qt::green ) );
+		
+		if ( qv == mQtVersion )
+			it->setSelected( true );
+	}
+	
+	// qt modules
+	foreach ( const QtItem& mi, mQtManager.modules() )
+	{
+		QListWidgetItem* it = new QListWidgetItem( mi.Text, lwQtModules );
+		it->setData( Qt::UserRole, QVariant::fromValue( mi ) );
+	}
+	
+	// configuration
+	foreach ( const QtItem& ci, mQtManager.configurations() )
+	{
+		if ( !mConfigGui.contains( ci.Value, Qt::CaseInsensitive ) )
+		{
+			if ( ci.Text.toLower() != "lib only" && ci.Text.toLower() != "x11 only" && ci.Text.toLower() != "mac os x only" )
+			{
+				QListWidgetItem* it = new QListWidgetItem( ci.Text, lwModules );
+				it->setData( Qt::UserRole, QVariant::fromValue( ci ) );
+				
+				if ( ci.Value.isEmpty() && ci.Variable.isEmpty() )
+				{
+					QFont font( it->font() );
+					font.setBold( true );
+					it->setFont( font );
+					it->setBackground( QBrush( QColor( Qt::darkBlue ) ) );
+					it->setForeground( QBrush( QColor( Qt::white ) ) );
+					it->setTextAlignment( Qt::AlignCenter );
+					it->setFlags( it->flags() ^ Qt::ItemIsUserCheckable );
+				}
+				else
+					it->setCheckState( Qt::Unchecked );
+			}
+		}
+	}
+
+	// loading
+	
+	foreach ( XUPItem* child, mProject->childrenList() )
+	{
+		if ( child->type() == XUPItem::Variable )
+		{
+			QString variableName = child->attribute( "name" );
+			QString op = child->attribute( "operator", "=" );
+			
+			if ( op != "=" && op != "+=" && op != "*=" )
+			{
+				continue;
+			}
+			
+			foreach ( XUPItem* value, child->childrenList() )
+			{
+				XUPItem::Type type = value->type();
+				
+				if ( type != XUPItem::Value && type != XUPItem::File && type != XUPItem::Path )
+				{
+					continue;
+				}
+				
+				QString val = QString( mValues[ variableName ].trimmed() +" " +value->attribute( "content" ) ).trimmed();
+				mValues[ variableName ] = val;
+			}
+		}
 	}
 	
 	// update gui
@@ -171,7 +224,9 @@ void UISimpleQMakeEditor::init( XUPProjectItem* project )
 	for ( int i = 0; i < lwQtModules->count(); i++ )
 	{
 		QListWidgetItem* item = lwQtModules->item( i );
-		if ( values.contains( item->data( Qt::UserRole ).toString() ) )
+		QtItem mi = item->data( Qt::UserRole ).value<QtItem>();
+		
+		if ( values.contains( mi.Value ) )
 		{
 			item->setCheckState( Qt::Checked );
 		}
@@ -185,11 +240,13 @@ void UISimpleQMakeEditor::init( XUPProjectItem* project )
 	for ( int i = 0; i < lwModules->count(); i++ )
 	{
 		QListWidgetItem* item = lwModules->item( i );
-		if ( values.contains( item->data( Qt::UserRole ).toString() ) )
+		QtItem ci = item->data( Qt::UserRole ).value<QtItem>();
+		
+		if ( values.contains( ci.Value ) )
 		{
 			item->setCheckState( Qt::Checked );
 		}
-		else
+		else if ( !ci.Value.isEmpty() )
 		{
 			item->setCheckState( Qt::Unchecked );
 		}
@@ -197,88 +254,30 @@ void UISimpleQMakeEditor::init( XUPProjectItem* project )
 	
 	// compiler settings
 	values = project->splitMultiLineValue( mValues[ "CONFIG" ] );
-	if ( values.contains( "debug_and_release" ) )
+	
+	foreach ( QAbstractButton* ab, wCompilerSettings->findChildren<QAbstractButton*>() )
 	{
-		rbDebugRelease->setChecked( true );
-		if ( values.contains( "build_all" ) )
+		if ( !ab->statusTip().isEmpty() )
 		{
-			cbBuildAll->setChecked( true );
+			if ( ab == cbBuildAll )
+			{
+				ab->setChecked( values.contains( ab->statusTip() ) && values.contains( "debug_and_release" ) );
+			}
+			else
+			{
+				ab->setChecked( values.contains( ab->statusTip() ) );
+			}
+		}
+		else if ( ab == cbBundle )
+		{
+			ab->setChecked( values.contains( "app_bundle" ) || values.contains( "lib_bundle" ) );
+		}
+		else if ( ab == cbManifest )
+		{
+			ab->setChecked( values.contains( "embed_manifest_exe" ) || values.contains( "embed_manifest_dll" ) );
 		}
 	}
-	else if ( values.contains( "debug" ) )
-	{
-		rbDebug->setChecked( true );
-	}
-	else if ( values.contains( "release" ) )
-	{
-		rbRelease->setChecked( true );
-	}
-	
-	if ( values.contains( "exceptions" ) )
-	{
-		cbExceptions->setChecked( true );
-	}
-	
-	if ( values.contains( "rtti" ) )
-	{
-		cbRtti->setChecked( true );
-	}
-	
-	if ( values.contains( "stl" ) )
-	{
-		cbStl->setChecked( true );
-	}
-	
-	if ( values.contains( "thread" ) )
-	{
-		cbThread->setChecked( true );
-	}
-	
-	if ( values.contains( "app_bundle" ) || values.contains( "lib_bundle" ) )
-	{
-		cbBundle->setChecked( true );
-	}
-	
-	if ( values.contains( "ppc" ) )
-	{
-		cbPpc->setChecked( true );
-	}
-	
-	if ( values.contains( "x86" ) )
-	{
-		cbX86->setChecked( true );
-	}
-	
-	if ( values.contains( "x11" ) )
-	{
-		cbX11->setChecked( true );
-	}
-	
-	if ( values.contains( "warn_on" ) )
-	{
-		rbWarningOn->setChecked( true );
-	}
-	
-	if ( values.contains( "warn_off" ) )
-	{
-		rbWarningOff->setChecked( true );
-	}
-	
-	if ( values.contains( "console" ) )
-	{
-		cbConsole->setChecked( true );
-	}
-	
-	if ( values.contains( "embed_manifest_dll" ) || values.contains( "embed_manifest_exe" ) )
-	{
-		cbManifest->setChecked( true );
-	}
-	
-	if ( values.contains( "windows" ) )
-	{
-		cbWindows->setChecked( true );
-	}
-	
+
 	updateProjectFiles();
 }
 
@@ -553,7 +552,7 @@ void UISimpleQMakeEditor::accept()
 				variableItem->setAttribute( "multiline", "true" );
 				
 				// remove all child
-				foreach ( XUPItem* child, variableItem->children() )
+				foreach ( XUPItem* child, variableItem->childrenList() )
 				{
 					if ( child->type() == type )
 					{
@@ -583,7 +582,7 @@ void UISimpleQMakeEditor::accept()
 				variableItem->setAttribute( "multiline", "false" );
 				
 				// remove all child values
-				foreach ( XUPItem* child, variableItem->children() )
+				foreach ( XUPItem* child, variableItem->childrenList() )
 				{
 					if ( child->type() == XUPItem::Value )
 					{
@@ -602,7 +601,7 @@ void UISimpleQMakeEditor::accept()
 				variableItem->setAttribute( "multiline", "false" );
 				
 				// remove all child values
-				foreach ( XUPItem* child, variableItem->children() )
+				foreach ( XUPItem* child, variableItem->childrenList() )
 				{
 					if ( child->type() == XUPItem::Value )
 					{
@@ -618,7 +617,7 @@ void UISimpleQMakeEditor::accept()
 		else if ( isEmpty && variableItem && variableItem->childCount() > 0 )
 		{
 			// remove all child values
-			foreach ( XUPItem* child, variableItem->children() )
+			foreach ( XUPItem* child, variableItem->childrenList() )
 			{
 				if ( child->type() == XUPItem::Value || child->type() == XUPItem::File || child->type() == XUPItem::Path )
 				{

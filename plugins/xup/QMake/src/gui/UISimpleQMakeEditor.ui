@@ -5,15 +5,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>620</width>
-    <height>458</height>
+    <width>640</width>
+    <height>480</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Simple QMake Project Editor</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2" >
-   <item rowspan="2" row="0" column="0" >
+   <property name="margin" >
+    <number>6</number>
+   </property>
+   <property name="spacing" >
+    <number>4</number>
+   </property>
+   <item row="1" column="0" >
     <widget class="QListWidget" name="lwPages" >
      <property name="minimumSize" >
       <size>
@@ -26,9 +32,6 @@
        <width>140</width>
        <height>16777215</height>
       </size>
-     </property>
-     <property name="currentRow" >
-      <number>0</number>
      </property>
      <item>
       <property name="text" >
@@ -62,13 +65,16 @@
      </item>
     </widget>
    </item>
-   <item row="0" column="1" >
+   <item row="1" column="1" >
     <widget class="QStackedWidget" name="swPages" >
      <property name="currentIndex" >
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="wAbout" >
       <layout class="QHBoxLayout" name="horizontalLayout_6" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
        <item>
         <widget class="QTextBrowser" name="tbAbout" >
          <property name="html" >
@@ -92,6 +98,9 @@ p, li { white-space: pre-wrap; }
      </widget>
      <widget class="QWidget" name="wProject" >
       <layout class="QVBoxLayout" name="verticalLayout_6" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
        <item>
         <widget class="QGroupBox" name="gbProjectType" >
          <property name="title" >
@@ -176,8 +185,9 @@ p, li { white-space: pre-wrap; }
          </item>
          <item row="1" column="2" >
           <widget class="QToolButton" name="tbProjectTarget" >
-           <property name="text" >
-            <string>...</string>
+           <property name="icon" >
+            <iconset resource="../../../../../monkey/src/resources/resources.qrc" >
+             <normaloff>:/listeditor/icons/listeditor/folder.png</normaloff>:/listeditor/icons/listeditor/folder.png</iconset>
            </property>
           </widget>
          </item>
@@ -210,6 +220,9 @@ p, li { white-space: pre-wrap; }
      </widget>
      <widget class="QWidget" name="wModules" >
       <layout class="QGridLayout" name="gridLayout_3" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
        <item row="0" column="0" >
         <widget class="QGroupBox" name="gbQtModules" >
          <property name="title" >
@@ -336,12 +349,22 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item row="2" column="0" colspan="2" >
-        <widget class="QTextEdit" name="teModuleHelp" />
+        <widget class="QTextEdit" name="teModuleHelp" >
+         <property name="maximumSize" >
+          <size>
+           <width>16777215</width>
+           <height>120</height>
+          </size>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
      <widget class="QWidget" name="wCompilerSettings" >
       <layout class="QGridLayout" name="gridLayout_4" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
        <item rowspan="2" row="0" column="0" >
         <widget class="QGroupBox" name="gbBuildType" >
          <property name="title" >
@@ -570,6 +593,9 @@ p, li { white-space: pre-wrap; }
      </widget>
      <widget class="QWidget" name="wProjectFiles" >
       <layout class="QGridLayout" name="gridLayout_5" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
        <item row="0" column="0" >
         <spacer name="horizontalSpacer" >
          <property name="orientation" >
@@ -586,16 +612,16 @@ p, li { white-space: pre-wrap; }
        <item row="0" column="1" >
         <widget class="QToolButton" name="tbAddFile" >
          <property name="icon" >
-          <iconset>
-           <normaloff>:/actions/add.png</normaloff>:/actions/add.png</iconset>
+          <iconset resource="../../../../../monkey/src/resources/resources.qrc" >
+           <normaloff>:/listeditor/icons/listeditor/add.png</normaloff>:/listeditor/icons/listeditor/add.png</iconset>
          </property>
         </widget>
        </item>
        <item row="0" column="2" >
         <widget class="QToolButton" name="tbEditFile" >
          <property name="icon" >
-          <iconset>
-           <normaloff>:/editor/icons/editor/modify.png</normaloff>:/editor/icons/editor/modify.png</iconset>
+          <iconset resource="../../../../../monkey/src/resources/resources.qrc" >
+           <normaloff>:/listeditor/icons/listeditor/edit.png</normaloff>:/listeditor/icons/listeditor/edit.png</iconset>
          </property>
         </widget>
        </item>
@@ -605,8 +631,8 @@ p, li { white-space: pre-wrap; }
           <string>-</string>
          </property>
          <property name="icon" >
-          <iconset>
-           <normaloff>:/actions/remove.png</normaloff>:/actions/remove.png</iconset>
+          <iconset resource="../../../../../monkey/src/resources/resources.qrc" >
+           <normaloff>:/listeditor/icons/listeditor/remove.png</normaloff>:/listeditor/icons/listeditor/remove.png</iconset>
          </property>
         </widget>
        </item>
@@ -632,6 +658,9 @@ p, li { white-space: pre-wrap; }
      </widget>
      <widget class="QWidget" name="wValuesEditor" >
       <layout class="QGridLayout" name="gridLayout_6" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
        <item row="0" column="1" >
         <widget class="QLabel" name="lValues" >
          <property name="text" >
@@ -660,13 +689,114 @@ p, li { white-space: pre-wrap; }
      </widget>
     </widget>
    </item>
-   <item row="1" column="1" >
+   <item row="2" column="0" colspan="2" >
     <widget class="QDialogButtonBox" name="dbbButtons" >
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons" >
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2" >
+    <widget class="QLabel" name="lTitle" >
+     <property name="minimumSize" >
+      <size>
+       <width>0</width>
+       <height>21</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>16777215</width>
+       <height>21</height>
+      </size>
+     </property>
+     <property name="palette" >
+      <palette>
+       <active>
+        <colorrole role="Base" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Window" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </active>
+       <inactive>
+        <colorrole role="Base" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Window" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </inactive>
+       <disabled>
+        <colorrole role="Base" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Window" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </disabled>
+      </palette>
+     </property>
+     <property name="font" >
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="autoFillBackground" >
+      <bool>true</bool>
+     </property>
+     <property name="frameShape" >
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow" >
+      <enum>QFrame::Raised</enum>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="indent" >
+      <number>9</number>
      </property>
     </widget>
    </item>
@@ -716,12 +846,12 @@ p, li { white-space: pre-wrap; }
    <slot>setCurrentIndex(int)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>104</x>
-     <y>26</y>
+     <x>106</x>
+     <y>53</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>173</x>
-     <y>6</y>
+     <x>175</x>
+     <y>33</y>
     </hint>
    </hints>
   </connection>
@@ -732,12 +862,28 @@ p, li { white-space: pre-wrap; }
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>251</x>
-     <y>143</y>
+     <x>184</x>
+     <y>155</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>249</x>
-     <y>186</y>
+     <x>184</x>
+     <y>195</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lwPages</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>lTitle</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>104</x>
+     <y>81</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>156</x>
+     <y>16</y>
     </hint>
    </hints>
   </connection>

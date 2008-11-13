@@ -2,6 +2,7 @@
 #define UISIMPLEQMAKEEDITOR_H
 
 #include "ui_UISimpleQMakeEditor.h"
+#include "../QtVersionManager.h"
 
 #include <QMap>
 
@@ -18,8 +19,10 @@ public:
 
 protected:
 	XUPProjectItem* mProject;
+	QStringList mConfigGui;
 	QStringList mFileVariables;
 	QStringList mPathVariables;
+	QtVersion mQtVersion;
 	QMap<QString, QString> mValues;
 	QMap<QString, QTreeWidgetItem*> mProjectFilesItems;
 	
