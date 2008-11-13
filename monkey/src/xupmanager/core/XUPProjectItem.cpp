@@ -478,7 +478,7 @@ XUPItem* XUPProjectItem::projectSettingsScope( bool create ) const
 	if ( project )
 	{
 		const QString mScopeName = "XUPProjectSettings";
-		XUPItemList items = XUPItem::children();
+		XUPItemList items = childrenList();
 		
 		foreach ( XUPItem* child, items )
 		{
@@ -517,7 +517,7 @@ QStringList XUPProjectItem::projectSettingsValues( const QString& variableName, 
 			
 			foreach ( const XUPItem* variable, variables )
 			{
-				foreach ( const XUPItem* child, variable->XUPItem::children() )
+				foreach ( const XUPItem* child, variable->childrenList() )
 				{
 					if ( child->type() == XUPItem::Value )
 					{
@@ -568,7 +568,7 @@ void XUPProjectItem::setProjectSettingsValues( const QString& variableName, cons
 		}
 		
 		QStringList cleanValues = values;
-		foreach ( XUPItem* child, variable->XUPItem::children() )
+		foreach ( XUPItem* child, variable->childrenList() )
 		{
 			if ( child->type() == XUPItem::Value )
 			{
@@ -626,7 +626,7 @@ void XUPProjectItem::addProjectSettingsValues( const QString& variableName, cons
 		}
 		
 		QStringList cleanValues = values;
-		foreach ( XUPItem* child, variable->XUPItem::children() )
+		foreach ( XUPItem* child, variable->childrenList() )
 		{
 			if ( child->type() == XUPItem::Value )
 			{

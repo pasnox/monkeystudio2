@@ -503,7 +503,7 @@ void XUPProjectManager::addFilesToScope( XUPItem* scope, const QStringList& allF
 					
 					usedVariable = variable;
 					
-					foreach ( XUPItem* child, variable->children() )
+					foreach ( XUPItem* child, variable->childrenList() )
 					{
 						if ( child->type() != XUPItem::File )
 						{

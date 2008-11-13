@@ -109,7 +109,7 @@ XUPItem* XUPItem::child( int i ) const
 	return 0;
 }
 
-XUPItemList XUPItem::children() const
+XUPItemList XUPItem::childrenList() const
 {
 	// create all child if needed before returning list
 	for ( int i = 0; i < childCount(); i++ )
