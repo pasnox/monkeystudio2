@@ -121,7 +121,7 @@ void pFileDialog::setDialog( pFileDialog* dlg, const QString& caption, const QSt
 		QWidget* parent = dlg->parentWidget();
 		if ( parent && !parent->windowFlags().testFlag( Qt::Sheet ) )
 		{
-			dlg->setWindowflags( dlg->windowFlags() | Qt::Sheet );
+			dlg->setWindowFlags( dlg->windowFlags() | Qt::Sheet );
 		}
 	}
 #endif
