@@ -49,6 +49,7 @@ XUPProjectManager::XUPProjectManager( QWidget* parent )
 	mDebugMenu->addAction( "addItem" );
 	mDebugMenu->addAction( "debugFilteredModel" );
 	mDebugMenu->addAction( "projectSettingsDebug" );
+	mDebugMenu->addAction( "saveProject" );
 	
 	connect( mDebugMenu, SIGNAL( triggered( QAction* ) ), this, SLOT( debugMenu_triggered( QAction* ) ) );
 	
@@ -73,6 +74,9 @@ void XUPProjectManager::on_cbProjects_currentIndexChanged( int id )
 void XUPProjectManager::debugMenu_triggered( QAction* action )
 {
 	XUPItem* item = currentItem();
+	
+	if ( !item )
+		return;
 	
 	addError( "------------------" );
 	
@@ -195,6 +199,15 @@ void XUPProjectManager::debugMenu_triggered( QAction* action )
 		
 		project->setProjectSettingsValue( "TEST", "okimichel" );
 		addError( project->projectSettingsValue( "TEST" ) );
+	}
+	else if ( action->text() == "saveProject" )
+	{
+		XUPProjectItem* project = item->project();
+		
+		if ( project )
+		{
+			addError( project->toString() );
+		}
 	}
 }
 
@@ -436,8 +449,10 @@ void XUPProjectManager::editProject()
 		return;
 	}
 	
+	XUPProjectItem* topLevelProject = project->topLevelProject();
+	
 	// get plugin name that can manage this project
-	if ( project->projectSettingsValue( "EDITOR" ).isEmpty() || !MonkeyCore::pluginsManager()->plugins<XUPPlugin*>( PluginsManager::stAll, project->projectSettingsValue( "EDITOR" ) ).value( 0 ) )
+	if ( topLevelProject->projectSettingsValue( "EDITOR" ).isEmpty() || !MonkeyCore::pluginsManager()->plugins<XUPPlugin*>( PluginsManager::stAll, topLevelProject->projectSettingsValue( "EDITOR" ) ).value( 0 ) )
 	{
 		// get xup plugins
 		QHash<QString, XUPPlugin*> plugins;
@@ -449,26 +464,35 @@ void XUPProjectManager::editProject()
 	
 		bool ok;
 		const QString caption = QInputDialog::getItem( window(), tr( "Choose an editor plugin..." ), tr( "Your project is not yet editable, please select a correct project settings plugin" ), plugins.keys(), 0, false, &ok );
+		
 		if ( ok && !caption.isEmpty() )
 		{
-			project->setProjectSettingsValue( "EDITOR", plugins[ caption ]->infos().Name );
+			topLevelProject->setProjectSettingsValue( "EDITOR", plugins[ caption ]->infos().Name );
 		}
 	}
 	
 	// edit project settings
-	if ( project->projectSettingsValue( "EDITOR" ).isEmpty() )
+	if ( topLevelProject->projectSettingsValue( "EDITOR" ).isEmpty() )
 	{
 		pMonkeyStudio::warning( tr( "Warning..." ), tr( "The project can't be edited because there is no associate project settings plugin." ) );
 	}
 	
-	XUPPlugin* plugin = MonkeyCore::pluginsManager()->plugins<XUPPlugin*>( PluginsManager::stAll, project->projectSettingsValue( "EDITOR" ) ).value( 0 );
+	XUPPlugin* plugin = MonkeyCore::pluginsManager()->plugins<XUPPlugin*>( PluginsManager::stAll, topLevelProject->projectSettingsValue( "EDITOR" ) ).value( 0 );
 	
 	if ( plugin )
 	{
 		// edit project and save it if needed
 		if ( plugin->editProject( project ) )
 		{
-			if ( !project->save() )
+			if ( project->save() )
+			{
+				// need save topLevelProject ( for XUPProejctSettings scope  )
+				if ( !topLevelProject->save() )
+				{
+					addError( topLevelProject->lastError() );
+				}
+			}
+			else
 			{
 				addError( project->lastError() );
 			}
@@ -576,8 +600,11 @@ void XUPProjectManager::addFiles()
 				{
 					QString fn = QString( files.at( i ) ).remove( importRootPath ).replace( "\\", "/" );
 					fn = QDir::cleanPath( QString( "%1/%2/%3" ).arg( projectPath ).arg( importPath ).arg( fn ) );
+					
 					if ( dir.mkpath( QFileInfo( fn ).absolutePath() ) && QFile::copy( files.at( i ), fn ) )
+					{
 						files[ i ] = fn;
+					}
 				}
 			}
 		}
