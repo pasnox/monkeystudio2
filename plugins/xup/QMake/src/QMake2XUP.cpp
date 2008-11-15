@@ -24,7 +24,7 @@ QString tabsString( int i )
 QString MyEscape( QString b )
 { return Qt::escape( b ).replace( "\"" , "&quot;" ); }
 
-QString QMake2XUP::convertFromPro( const QString& s, const QString& encoding )
+QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
 {
 	// check if file exists
 	if ( !QFile::exists( s ) )
@@ -33,7 +33,7 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& encoding )
 	QFile f( s );
 	if( !f.open( QIODevice::ReadOnly | QIODevice::Text ) )
 		return QString();
-	QString data = QTextCodec::codecForName( encoding.toUtf8() )->toUnicode( f.readAll() );
+	QString data = QTextCodec::codecForName( codec.toUtf8() )->toUnicode( f.readAll() );
 	
 	QVector<QString> temp_v = data.split( '\n' ).toVector();
 	QVector<QString> v;
@@ -59,7 +59,7 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& encoding )
 	const QStringList fileVariables = QMakeProjectItem::projectInfos()->fileVariables( QMakeProjectItem::QMakeProject );
 	const QStringList pathVariables = QMakeProjectItem::projectInfos()->pathVariables( QMakeProjectItem::QMakeProject );
 	
-	file.append( QString( "<!DOCTYPE XUPProject>\n<project encoding=\"%1\" name=\"%2\" expanded=\"false\">\n" ).arg( encoding ).arg( QFileInfo( s ).fileName() ) );
+	file.append( QString( "<!DOCTYPE XUPProject>\n<project codec=\"%1\" name=\"%2\" expanded=\"false\">\n" ).arg( codec ).arg( QFileInfo( s ).fileName() ) );
 	try
 	{
 		for(int i = 0;i < v.size();i++)
@@ -444,7 +444,7 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& encoding )
 	catch ( const QString& s )
 	{
 		// re-init the XML output
-		file.append( QString( "<!DOCTYPE XUPProject>\n<project encoding=\"%1\" name=\"%2\" expanded=\"false\">\n" ).arg( encoding ).arg( QFileInfo( s ).fileName() ) );
+		file.append( QString( "<!DOCTYPE XUPProject>\n<project codec=\"%1\" name=\"%2\" expanded=\"false\">\n" ).arg( codec ).arg( QFileInfo( s ).fileName() ) );
 		// empty both stacks
 		isNested.clear();
 		pile.pop();
@@ -463,131 +463,202 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& encoding )
 	return file;
 }
 
-QString convertNodeToPro( const QDomElement& e, const QString& v, const QString& EOL = pMonkeyStudio::getEol() )
+QString convertNodeToPro( const QDomElement& element, const QString& EOL = pMonkeyStudio::getEol() )
 {
 	static int tabs = 0; // tabs indentation
 	static bool isMultiline = false; // tell if last variable is multiline or not
 	bool isNested = false; // tell if scope is nested or not
 	QString comment; // comment of item if available
 	QString data; // the data to return
-	const QString tn = e.tagName(); // current node tag name
+	const QString tag = element.tagName(); // current node tag name
 
-	if ( tn != "project" )
+	if ( tag != "project" )
 	{
-		if ( tn == "function" )
+		if ( tag == "function" )
 		{
-			data.append( tabsString( tabs ) +e.firstChild().toText().data() );
-			comment = e.attribute( "comment" );
+			QString function = QString( "%1(%2)" ).arg( element.attribute( "name" ) ).arg( element.attribute( "parameters" ) );
+			comment = element.attribute( "comment" );
+			
+			data.append( tabsString( tabs ) +function );
+			
 			if ( !comment.isEmpty() )
+			{
 				data.append( ' ' +comment );
+			}
+			
 			data.append( EOL );
 		}
-		else if ( tn == "emptyline" )
+		else if ( tag == "emptyline" )
 		{
-			for ( int i = 0; i < e.firstChild().toText().data().toInt(); i++ )
-				data.append( EOL );
-		}
-		else if ( tn == "variable" )
-		{
-			int vtabs = tabs;
-			QDomElement n = e.parentNode().toElement();
-			if ( n.tagName() == "scope" && QVariant( n.attribute( "nested", "false" ) ).toBool() )
-				vtabs--;
-			data.append( tabsString( vtabs ) +QString( "%1\t%2 " ).arg( e.attribute( "name" ) ).arg( e.attribute( "operator", "=" ) ) );
-			isMultiline = QVariant( e.attribute( "multiline", "false" ) ).toBool();
-		}
-		else if ( tn == "value" )
-		{
-			int vtabs = tabs;
-			if ( !e.previousSibling().isNull() && isMultiline )
-				vtabs++;
-			else if ( e.previousSibling().isNull() || !isMultiline )
-				vtabs = 0;
-			data.append( tabsString( vtabs ) +e.firstChild().toText().data() );
-			comment = e.attribute( "comment" );
-			if ( isMultiline )
+			int count = element.attribute( "count" ).toInt();
+			
+			for ( int i = 0; i < count; i++ )
 			{
-				if ( !e.nextSibling().isNull() )
-					data.append( " \\" );
-				if ( !comment.isEmpty() )
-					data.append( ' ' +comment );
 				data.append( EOL );
 			}
-			else if ( e.nextSibling().isNull() )
+		}
+		else if ( tag == "variable" )
+		{
+			int vtabs = tabs;
+			QDomElement parentElement = element.parentNode().toElement();
+			QString variable = QString( "%1\t%2 " ).arg( element.attribute( "name" ) ).arg( element.attribute( "operator", "=" ) );
+			isMultiline = QVariant( element.attribute( "multiline", "false" ) ).toBool();
+			
+			if ( parentElement.tagName() == "scope" && QVariant( parentElement.attribute( "nested", "false" ) ).toBool() )
+			{
+				vtabs--;
+			}
+			
+			data.append( tabsString( vtabs ) +variable );
+		}
+		else if ( tag == "value" || tag == "file" || tag == "path" )
+		{
+			int vtabs = tabs;
+			QString value = element.attribute( "content" );
+			comment = element.attribute( "comment" );
+			
+			if ( !element.previousSibling().isNull() && isMultiline )
+			{
+				vtabs++;
+			}
+			else if ( element.previousSibling().isNull() || !isMultiline )
+			{
+				vtabs = 0;
+			}
+			
+			data.append( tabsString( vtabs ) +value );
+			
+			if ( isMultiline )
+			{
+				if ( !element.nextSibling().isNull() )
+				{
+					data.append( " \\" );
+				}
+				
+				if ( !comment.isEmpty() )
+				{
+					data.append( ' ' +comment );
+				}
+				
+				data.append( EOL );
+			}
+			else if ( element.nextSibling().isNull() )
 			{
 				if ( !comment.isEmpty() )
+				{
 					data.append( ' ' +comment );
+				}
+				
 				data.append( EOL );
 			}
 			else
+			{
 				data.append( ' ' );
+			}
 		}
-		else if ( tn == "scope" )
+		else if ( tag == "scope" )
 		{
 			int vtabs = tabs;
-			QDomElement pe = e.parentNode().toElement();
-			if ( ( e.attribute( "name" ) == "else" && !QVariant( e.previousSibling().toElement().attribute( "nested", "false" ) ).toBool() ) ||
-					( pe.tagName() == "scope" && QVariant( pe.attribute( "nested", "false" ) ).toBool() ) )
+			QDomElement parentElement = element.parentNode().toElement();
+			isNested = QVariant( element.attribute( "nested", "false" ) ).toBool();
+			comment = element.attribute( "comment" );
+			QString name = element.attribute( "name" );
+			
+			if ( ( element.attribute( "name" ) == "else" && !QVariant( element.previousSibling().toElement().attribute( "nested", "false" ) ).toBool() ) ||
+				( parentElement.tagName() == "scope" && QVariant( parentElement.attribute( "nested", "false" ) ).toBool() ) )
+			{
 				vtabs = 0;
-			isNested = QVariant( e.attribute( "nested", "false" ) ).toBool();
-			comment = e.attribute( "comment" );
-			data.append( tabsString( vtabs ) +e.attribute( "name" ) );
+			}
+			
+			data.append( tabsString( vtabs ) +name );
+			
 			if ( !isNested )
 			{
 				data.append( " {" );
+				
 				if ( !comment.isEmpty() )
+				{
 					data.append( ' ' +comment );
+				}
+				
 				data.append( EOL );
 				tabs++;
 			}
 			else
+			{
 				data.append( ':' );
+			}
 		}
-		else if ( tn == "comment" )
+		else if ( tag == "comment" )
 		{
 			int vtabs = tabs;
-			if ( e.parentNode().toElement().tagName() == "variable" && isMultiline )
+			QString cmt = element.attribute( "value" );
+			
+			if ( element.parentNode().toElement().tagName() == "variable" && isMultiline )
+			{
 				vtabs++;
-			data.append( tabsString( vtabs ) +e.firstChild().toText().data() +EOL );
+			}
+			
+			data.append( tabsString( vtabs ) +cmt +EOL );
 		}
 	}
 	else
-		tabs = 0;
-	
-	const QStringList tv = QStringList() << "function" << "emptyline" << "value" << "comment";
-	if ( e.hasChildNodes() && !tv.contains( tn ) )
 	{
-		QDomNodeList l = e.childNodes();
-		for ( int i = 0; i < l.count(); i++ )
-			data.append( convertNodeToPro( l.at( i ).toElement(), v, EOL ) );
+		tabs = 0;
+	}
+	
+	const QStringList containers = QStringList() << "function" << "emptyline" << "value" << "file" << "path" << "comment";
+	
+	if ( element.hasChildNodes() && !containers.contains( tag ) )
+	{
+		QDomNodeList nodes = element.childNodes();
 		
-		if ( tn == "scope" && !isNested )
+		for ( int i = 0; i < nodes.count(); i++ )
+		{
+			data.append( convertNodeToPro( nodes.at( i ).toElement(), EOL ) );
+		}
+		
+		if ( tag == "scope" && !isNested )
 		{
 			tabs--;
+			QDomElement childElement = element.nextSibling().toElement();
+			
 			data.append( tabsString( tabs ) +"}" );
-			QDomElement n = e.nextSibling().toElement();
-			if ( !( n.tagName() == "scope" && n.attribute( "name" ) == "else" ) )
+			
+			if ( !( childElement.tagName() == "scope" && childElement.attribute( "name" ) == "else" ) )
+			{
 				data.append( EOL );
+			}
 			else
+			{
 				data.append( ' ' );
+			}
 		}
 	}
 
-	return data.toAscii();
+	return data;
 }
 
-QString QMake2XUP::convertToPro( const QDomDocument& d, const QString& v )
+QString QMake2XUP::convertToPro( const QDomDocument& document )
 {
 	// get project node
-	QDomElement e  = d.firstChildElement( "project" ).toElement();
+	QDomElement element  = document.firstChildElement( "project" ).toElement();
+	
 	// check project available
-	if ( e.isNull() )
-		return QString();
+	if ( element.isNull() )
+	{
+		return QString::null;
+	}
+	
 	// parse project scope
-	QString contents = convertNodeToPro( e, v );
+	QString contents = convertNodeToPro( element );
+	
 	// remove last eol
 	if ( contents.length() > 0 )
+	{
 		contents.chop( 1 );
+	}
+	
 	// return buffer
 	return contents;
 }
