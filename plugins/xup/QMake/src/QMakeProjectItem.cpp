@@ -110,6 +110,11 @@ QString QMakeProjectItem::interpretValue( XUPItem* callerItem, const QString& at
 	return value;
 }
 
+QString QMakeProjectItem::toString() const
+{
+	return QMake2XUP::convertToPro( mDocument );
+}
+
 void QMakeProjectItem::registerProjectType() const
 {
 	// get proejct type
@@ -299,6 +304,7 @@ bool QMakeProjectItem::open( const QString& fileName, const QString& codec )
 
 bool QMakeProjectItem::save()
 {
-	setLastError( tr( "Not yet implemented" ) );
+	//temporaryValue( "codec" ).toString()
+	setLastError( tr( "Save project: Not yet implemented\n" ) +toString() );
 	return false;
 }

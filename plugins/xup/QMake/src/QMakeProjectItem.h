@@ -13,6 +13,7 @@ public:
 	QMakeProjectItem();
 	virtual ~QMakeProjectItem();
 	
+	virtual QString toString() const;
 	inline virtual int projectType() const { return QMakeProjectItem::QMakeProject; }
 	virtual void registerProjectType() const;
 	inline virtual XUPProjectItem* newProject() const { return new QMakeProjectItem(); }
