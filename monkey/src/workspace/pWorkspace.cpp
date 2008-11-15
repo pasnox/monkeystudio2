@@ -500,11 +500,13 @@ void pWorkspace::projectCustomActionTriggered()
 			QString s = QString( "%1/%2" ).arg( cmd.workingDirectory() ).arg( cmd.command() );
 			if ( !QFile::exists( s ) )
 			{
+				XUPProjectItem* project = cmd.project();
+				XUPProjectItem* topLevelProject = project->topLevelProject();
 				// try reading already saved binary
-				s = cmd.project()->projectSettingsValue( a->text().replace( ' ', '_' ).toUpper() );
+				s = topLevelProject->projectSettingsValue( a->text().replace( ' ', '_' ).toUpper() );
 				if ( !s.isEmpty() )
 				{
-					s = cmd.project()->topLevelProject()->filePath( s );
+					s = topLevelProject->filePath( s );
 				}
 				// if not exists ask user to select one
 				if ( !QFile::exists( s ) && question( a->text().append( "..." ), tr( "Can't find your executable file, do you want to choose the file ?" ) ) )
@@ -525,7 +527,8 @@ void pWorkspace::projectCustomActionTriggered()
 					cmd.setCommand( cm->quotedString( cm->nativeSeparators( s ) ) );
 					cmd.setWorkingDirectory( cm->nativeSeparators( p ) );
 					// write in project
-					cmd.project()->setProjectSettingsValue( a->text().replace( ' ', '_' ).toUpper(), cmd.project()->topLevelProject()->relativeFilePath( s ) );
+					topLevelProject->setProjectSettingsValue( a->text().replace( ' ', '_' ).toUpper(), topLevelProject->relativeFilePath( s ) );
+					topLevelProject->save();
 					// add command to console manager
 					cm->addCommand( cmd );
 				}
