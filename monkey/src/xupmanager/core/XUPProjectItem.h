@@ -81,6 +81,8 @@ public:
 	virtual QString interpretVariable( const QString& variableName, const XUPItem* callerItem = 0, const QString& defaultValue = QString::null ) const;
 	// return the result of interpreting the caller attribute
 	virtual QString interpretValue( XUPItem* callerItem, const QString& attribute ) const;
+	// return the project datas as qstring
+	virtual QString toString() const;
 	
 	// return the project settings scope, creating it if needed
 	XUPItem* projectSettingsScope( bool create ) const;

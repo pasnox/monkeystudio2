@@ -471,6 +471,11 @@ QString XUPProjectItem::interpretValue( XUPItem* callerItem, const QString& attr
 	return value;
 }
 
+QString XUPProjectItem::toString() const
+{
+	return mDocument.toString( 4 );
+}
+
 XUPItem* XUPProjectItem::projectSettingsScope( bool create ) const
 {
 	XUPProjectItem* project = topLevelProject();
@@ -494,6 +499,9 @@ XUPItem* XUPProjectItem::projectSettingsScope( bool create ) const
 			XUPItem* scope = project->addChild( XUPItem::Scope, 0 );
 			scope->setAttribute( "name", mScopeName );
 			scope->setAttribute( "nested", "false" );
+			
+			XUPItem* emptyline = project->addChild( XUPItem::EmptyLine, 1 );
+			emptyline->setAttribute( "count", "1" );
 			
 			return scope;
 		}
@@ -784,7 +792,7 @@ bool XUPProjectItem::save()
 	
 	// encode content
 	QTextCodec* codec = QTextCodec::codecForName( temporaryValue( "codec" ).toString().toUtf8() );
-	QByteArray content = codec->fromUnicode( mDocument.toString( 4 ) );
+	QByteArray content = codec->fromUnicode( toString() );
 	
 	// write content
 	bool result = file.write( content ) != -1;
