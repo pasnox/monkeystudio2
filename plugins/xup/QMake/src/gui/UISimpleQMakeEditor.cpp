@@ -1,7 +1,8 @@
 #include "UISimpleQMakeEditor.h"
 #include "XUPProjectItem.h"
 
-#include <QFileDialog>
+#include <MkSFileDialog.h>
+
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QDebug>
@@ -144,8 +145,7 @@ void UISimpleQMakeEditor::init( XUPProjectItem* project )
 		}
 	}
 
-	// loading
-	
+	// loading datas from variable of root scope having operator =, += or *= only
 	foreach ( XUPItem* child, mProject->childrenList() )
 	{
 		if ( child->type() == XUPItem::Variable )
@@ -253,8 +253,6 @@ void UISimpleQMakeEditor::init( XUPProjectItem* project )
 	}
 	
 	// compiler settings
-	values = project->splitMultiLineValue( mValues[ "CONFIG" ] );
-	
 	foreach ( QAbstractButton* ab, wCompilerSettings->findChildren<QAbstractButton*>() )
 	{
 		if ( !ab->statusTip().isEmpty() )
@@ -283,34 +281,34 @@ void UISimpleQMakeEditor::init( XUPProjectItem* project )
 
 XUPItem* UISimpleQMakeEditor::getUniqueVariableItem( const QString& variableName, bool create )
 {
+	const QStringList mOperators = QStringList() << "=" << "+=" << "*=";
 	XUPItemList variables = mProject->getVariables( mProject, variableName, 0, false );
-	if ( variables.isEmpty() )
+	XUPItem* variableItem = 0;
+	
+	// remove duplicate variables
+	foreach ( XUPItem* variable, variables )
 	{
-		if ( create )
-		{
-			XUPItem* variableItem = mProject->addChild( XUPItem::Variable );
-			variableItem->setAttribute( "name", variableName );
-			return variableItem;
-		}
+		QString op = variable->attribute( "operator", "=" );
 		
-		return 0;
-	}
-	else if ( variables.count() == 1 )
-	{
-		return variables.first();
-	}
-	else
-	{
-		foreach ( XUPItem* variable, variables )
+		if ( !variableItem && mOperators.contains( op ) )
 		{
-			if ( variable != variables.first() )
-			{
-				variable->parent()->removeChild( variable );
-			}
+			variableItem = variable;
+		}
+		else if ( mOperators.contains( op ) )
+		{
+			variable->parent()->removeChild( variable );
 		}
 	}
 	
-	return variables.first();
+	// create it if needed
+	if ( !variableItem && create )
+	{
+		variableItem = mProject->addChild( XUPItem::Variable );
+		variableItem->setAttribute( "name", variableName );
+	}
+	
+	// return item
+	return variableItem;
 }
 
 void UISimpleQMakeEditor::projectTypeChanged()
@@ -332,11 +330,36 @@ void UISimpleQMakeEditor::on_tbProjectTarget_clicked()
 
 void UISimpleQMakeEditor::on_tbAddFile_clicked()
 {
-	const QString filters = mProject->projectInfos()->variableSuffixesFilter( mProject->projectType() );
-	QStringList files = QFileDialog::getOpenFileNames( this, tr( "Choose the file(s) to add to your project" ), mProject->path(), filters );
+	pFileDialogResult result = MkSFileDialog::getProjectAddFiles( window(), false );
 	
-	if ( !files.isEmpty() )
+	if ( !result.isEmpty() )
 	{
+		QStringList files = result[ "filenames" ].toStringList();
+		
+		// import files if needed
+		if ( result[ "import" ].toBool() )
+		{
+			const QString projectPath = mProject->path();
+			const QString importPath = result[ "importpath" ].toString();
+			const QString importRootPath = result[ "directory" ].toString();
+			QDir dir( importRootPath );
+			
+			for ( int i = 0; i < files.count(); i++ )
+			{
+				if ( !files.at( i ).startsWith( projectPath ) )
+				{
+					QString fn = QString( files.at( i ) ).remove( importRootPath ).replace( "\\", "/" );
+					fn = QDir::cleanPath( QString( "%1/%2/%3" ).arg( projectPath ).arg( importPath ).arg( fn ) );
+					
+					if ( dir.mkpath( QFileInfo( fn ).absolutePath() ) && QFile::copy( files.at( i ), fn ) )
+					{
+						files[ i ] = fn;
+					}
+				}
+			}
+		}
+		
+		// add files
 		foreach ( QString fn, files )
 		{
 			fn = mProject->relativeFilePath( fn );
@@ -365,7 +388,7 @@ void UISimpleQMakeEditor::on_tbEditFile_clicked()
 	{
 		bool ok;
 		QString oldValue = item->data( 0, Qt::UserRole ).toString();
-		QString fn = QInputDialog::getText( this, tr( "Edit filen ame" ), tr( "Type a new name for this file" ), QLineEdit::Normal, oldValue, &ok );
+		QString fn = QInputDialog::getText( this, tr( "Edit file name" ), tr( "Type a new name for this file" ), QLineEdit::Normal, oldValue, &ok );
 		if ( ok && !fn.isEmpty() )
 		{
 			QString variable = mProject->projectInfos()->variableNameForFileName( mProject->projectType(), fn );
@@ -414,6 +437,17 @@ void UISimpleQMakeEditor::on_tbRemoveFile_clicked()
 
 void UISimpleQMakeEditor::accept()
 {
+	// xup settings
+	mQtVersion = QtVersion();
+	QListWidgetItem* qtVersionItem = lwQtVersion->selectedItems().value( 0 );
+	
+	if ( qtVersionItem )
+	{
+		mQtVersion = qtVersionItem->data( Qt::UserRole ).value<QtVersion>();
+	}
+
+	mProject->setProjectSettingsValue( "QT_VERSION", mQtVersion.Version );
+	
 	QString tmplate;
 	QStringList config;
 	QStringList qt;
@@ -470,7 +504,7 @@ void UISimpleQMakeEditor::accept()
 		QListWidgetItem* item = lwQtModules->item( i );
 		if ( item->checkState() == Qt::Checked )
 		{
-			qt << item->data( Qt::UserRole ).toString();
+			qt << item->data( Qt::UserRole ).value<QtItem>().Value;
 		}
 	}
 	
@@ -479,7 +513,7 @@ void UISimpleQMakeEditor::accept()
 		QListWidgetItem* item = lwModules->item( i );
 		if ( item->checkState() == Qt::Checked )
 		{
-			config << item->data( Qt::UserRole ).toString();
+			config << item->data( Qt::UserRole ).value<QtItem>().Value;
 		}
 	}
 	
@@ -633,5 +667,5 @@ void UISimpleQMakeEditor::accept()
 		}
 	}
 	
-	qWarning() << mValues;
+	QDialog::accept();
 }
