@@ -124,7 +124,7 @@ pFileDialogResult MkSFileDialog::getOpenProjects( QWidget* parent )
 	return result;
 }
 
-pFileDialogResult MkSFileDialog::getProjectAddFiles( QWidget* parent )
+pFileDialogResult MkSFileDialog::getProjectAddFiles( QWidget* parent, bool allowChooseScope )
 {
 	pFileDialogResult result;
 	XUPProjectModel* model = MonkeyCore::projectsManager()->currentProjectModel();
@@ -146,6 +146,7 @@ pFileDialogResult MkSFileDialog::getProjectAddFiles( QWidget* parent )
 		fd.mAddFiles->setCurrentScope( curProject );
 		fd.mAddFiles->setOperators( operators );
 		fd.mAddFiles->setCurrentOperator( operators.first() );
+		fd.mAddFiles->setScopeChoiceEnabled( allowChooseScope );
 		
 		if ( fd.exec() == QDialog::Accepted )
 		{
