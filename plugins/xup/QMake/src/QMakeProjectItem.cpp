@@ -304,7 +304,10 @@ bool QMakeProjectItem::open( const QString& fileName, const QString& codec )
 
 bool QMakeProjectItem::save()
 {
-	//temporaryValue( "codec" ).toString()
+	return XUPProjectItem::save();
+	
+	/*
 	setLastError( tr( "Save project: Not yet implemented\n" ) +toString() );
 	return false;
+	*/
 }

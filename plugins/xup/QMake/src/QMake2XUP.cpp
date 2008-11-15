@@ -476,7 +476,7 @@ QString convertNodeToPro( const QDomElement& element, const QString& EOL = pMonk
 	{
 		if ( tag == "function" )
 		{
-			QString function = QString( "%1(%2)" ).arg( element.attribute( "name" ) ).arg( element.attribute( "parameters" ) );
+			QString function = QString( "%1( %2 )" ).arg( element.attribute( "name" ) ).arg( element.attribute( "parameters" ) );
 			comment = element.attribute( "comment" );
 			
 			data.append( tabsString( tabs ) +function );
