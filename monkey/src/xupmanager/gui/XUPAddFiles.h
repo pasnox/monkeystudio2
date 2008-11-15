@@ -34,6 +34,9 @@ public:
 	
 	void setImportExternalFilesPath( const QString& path );
 	QString importExternalFilesPath() const;
+	
+	void setScopeChoiceEnabled( bool enabled );
+	void setImportExternalFilesPathEnabled( bool enabled );
 
 protected:
 	XUPProjectModelProxy* mProxy;

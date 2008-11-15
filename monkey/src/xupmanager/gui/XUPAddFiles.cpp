@@ -154,3 +154,14 @@ QString XUPAddFiles::importExternalFilesPath() const
 {
 	return cbImport->currentText();
 }
+
+void XUPAddFiles::setScopeChoiceEnabled( bool enabled )
+{
+	gbScopes->setEnabled( enabled );
+	gbOperators->setEnabled( enabled );
+}
+
+void XUPAddFiles::setImportExternalFilesPathEnabled( bool enabled )
+{
+	gbImport->setEnabled( enabled );
+}
