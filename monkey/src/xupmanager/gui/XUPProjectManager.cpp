@@ -19,6 +19,11 @@ XUPProjectManager::XUPProjectManager( QWidget* parent )
 	: pDockWidget( parent )
 {
 	setupUi( this );
+
+#ifdef QT_NO_DEBUG
+	wDebug->setVisible( false );
+	pteLog->setVisible( false );
+#endif
 	
 	// register generic xup project format
 	XUPProjectItem* pItem = new XUPProjectItem();
