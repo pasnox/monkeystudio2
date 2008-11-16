@@ -132,7 +132,7 @@ public:
 
 protected:
 	QDomDocument mDocument;
-	QMap<QString, pCommand> mCommands;
+	pCommandMap mCommands;
 	static XUPProjectItemInfos* mXUPProjectInfos;
 	static bool mFoundCallerItem;
 

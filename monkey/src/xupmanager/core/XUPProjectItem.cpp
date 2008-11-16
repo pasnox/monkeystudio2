@@ -512,6 +512,7 @@ XUPItem* XUPProjectItem::projectSettingsScope( bool create ) const
 
 QStringList XUPProjectItem::projectSettingsValues( const QString& variableName, const QStringList& defaultValues ) const
 {
+	QStringList values;
 	XUPProjectItem* project = topLevelProject();
 	
 	if ( project )
@@ -521,7 +522,6 @@ QStringList XUPProjectItem::projectSettingsValues( const QString& variableName, 
 		if ( scope )
 		{
 			XUPItemList variables = getVariables( scope, variableName, 0, false );
-			QStringList values;
 			
 			foreach ( const XUPItem* variable, variables )
 			{
@@ -533,12 +533,10 @@ QStringList XUPProjectItem::projectSettingsValues( const QString& variableName, 
 					}
 				}
 			}
-			
-			return values;
 		}
 	}
 	
-	return defaultValues;
+	return values.isEmpty() ? defaultValues : values;
 }
 
 void XUPProjectItem::setProjectSettingsValues( const QString& variableName, const QStringList& values )
@@ -836,7 +834,7 @@ void XUPProjectItem::addCommand( const pCommand& cmd, const QString& mnu )
 	if ( cmd.isValid() )
 	{
 		emit installCommandRequested( cmd, mnu );
-		mCommands.insert( mnu, cmd );
+		mCommands.insertMulti( mnu, cmd );
 	}
 }
 
@@ -856,7 +854,7 @@ void XUPProjectItem::installCommands()
 		pCommand cmd = bp->buildCommand();
 		if ( cp )
 			cmd.addParsers( cp->compileCommand().parsers() );
-		cmd.setUserData( reinterpret_cast<quintptr>( &mCommands ) );
+		cmd.setUserData( QVariant::fromValue( &mCommands ) );
 		cmd.setProject( this );
 		cmd.setSkipOnError( false );
 		addCommand( cmd, "mBuilder/mBuild" );
@@ -866,7 +864,7 @@ void XUPProjectItem::installCommands()
 	if ( cp )
 	{
 		pCommand cmd = cp->compileCommand();
-		cmd.setUserData( reinterpret_cast<quintptr>( &mCommands ) );
+		cmd.setUserData( QVariant::fromValue( &mCommands ) );
 		cmd.setProject( this );
 		cmd.setSkipOnError( false );
 		addCommand( cmd, "mBuilder/mBuild" );
@@ -879,7 +877,7 @@ void XUPProjectItem::installCommands()
 		{
 			if ( cp )
 				cmd.addParsers( cp->compileCommand().parsers() );
-			cmd.setUserData( reinterpret_cast<quintptr>( &mCommands ) );
+			cmd.setUserData( QVariant::fromValue( &mCommands ) );
 			cmd.setProject( this );
 			cmd.setSkipOnError( false );
 			addCommand( cmd, "mBuilder/mUserCommands" );
@@ -891,7 +889,7 @@ void XUPProjectItem::installCommands()
 	{
 		foreach ( pCommand cmd, cp->userCommands() )
 		{
-			cmd.setUserData( reinterpret_cast<quintptr>( &mCommands ) );
+			cmd.setUserData( QVariant::fromValue( &mCommands ) );
 			cmd.setProject( this );
 			cmd.setSkipOnError( false );
 			addCommand( cmd, "mBuilder/mUserCommands" );

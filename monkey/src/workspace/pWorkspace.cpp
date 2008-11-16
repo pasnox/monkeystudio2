@@ -439,6 +439,7 @@ void pWorkspace::internal_currentProjectChanged( XUPProjectItem* currentProject,
 	pm->setCurrentCompiler( cp && !cp->neverEnable() ? cp : 0 );
 	pm->setCurrentDebugger( dp && !dp->neverEnable() ? dp : 0 );
 	pm->setCurrentInterpreter( ip && !ip->neverEnable() ? ip : 0 );
+	
 	// install new commands
 	if ( currentProject )
 	{
@@ -480,7 +481,7 @@ void pWorkspace::projectCustomActionTriggered()
 	{
 		pConsoleManager* cm = MonkeyCore::consoleManager();
 		pCommand cmd = a->data().value<pCommand>();
-		QHash<QString, pCommand>* cmdsHash = reinterpret_cast<QHash<QString, pCommand>*>( cmd.userData().value<quintptr>() );
+		pCommandMap* cmdsHash = cmd.userData().value<pCommandMap*>();
 		const pCommandList cmds = cmdsHash ? cmdsHash->values() : pCommandList();
 		// save project if needed
 		if ( saveProjectsOnCustomAction() )
