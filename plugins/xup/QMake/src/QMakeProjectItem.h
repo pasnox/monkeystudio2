@@ -23,6 +23,12 @@ public:
 	
 	virtual QString interpretVariable( const QString& variableName, const XUPItem* callerItem = 0, const QString& defaultValue = QString::null ) const;
 	virtual QString interpretValue( XUPItem* callerItem, const QString& attribute ) const;
+	
+	virtual BuilderPlugin* builder( const QString& plugin = QString() ) const;
+	virtual CompilerPlugin* compiler( const QString& plugin = QString() ) const;
+	virtual DebuggerPlugin* debugger( const QString& plugin = QString() ) const;
+	virtual InterpreterPlugin* interpreter( const QString& plugin = QString() ) const;
+	virtual void installCommands();
 };
 
 #endif // QMAKEPROJECTITEM_H

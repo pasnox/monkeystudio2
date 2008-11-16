@@ -1,8 +1,12 @@
 #include "QMakeProjectItem.h"
 #include "QMake2XUP.h"
-#include "XUPProjectItemInfos.h"
+#include "../QtVersionManager.h"
 
+#include <XUPProjectItemInfos.h>
 #include <pMonkeyStudio.h>
+#include <QueuedStatusBar.h>
+#include <BuilderPlugin.h>
+#include <CompilerPlugin.h>
 
 #include <QApplication>
 #include <QTextCodec>
@@ -310,4 +314,207 @@ bool QMakeProjectItem::save()
 	setLastError( tr( "Save project: Not yet implemented\n" ) +toString() );
 	return false;
 	*/
+}
+
+BuilderPlugin* QMakeProjectItem::builder( const QString& plugin ) const
+{
+	return XUPProjectItem::builder( plugin.isEmpty() ? "GNUMake" : plugin );
+}
+
+CompilerPlugin* QMakeProjectItem::compiler( const QString& plugin ) const
+{
+	return XUPProjectItem::compiler( plugin.isEmpty() ? "G++" : plugin );
+}
+
+DebuggerPlugin* QMakeProjectItem::debugger( const QString& plugin ) const
+{
+	return XUPProjectItem::debugger( plugin.isEmpty() ? "GNUDebugger" : plugin );
+}
+
+InterpreterPlugin* QMakeProjectItem::interpreter( const QString& plugin ) const
+{
+	return XUPProjectItem::interpreter( plugin.isEmpty() ? "" : plugin );
+}
+
+void QMakeProjectItem::installCommands()
+{
+	// get plugins
+	BuilderPlugin* bp = builder();
+	CompilerPlugin* cp = compiler();
+	
+	// temp command
+	pCommand cmd;
+	
+	// build command
+	if ( bp )
+	{
+		cmd = bp->buildCommand();
+		
+		if ( cp )
+		{
+			cmd.addParsers( cp->compileCommand().parsers() );
+		}
+	}
+	
+	cmd.setUserData( QVariant::fromValue( &mCommands ) );
+	cmd.setProject( this );
+	cmd.setSkipOnError( false );
+	const pCommand cmdBuild = cmd;
+	
+	// get qt version
+	QtVersionManager mQtManager;
+	QtVersion mQtVersion = mQtManager.version( projectSettingsValue( "QT_VERSION" ) );
+	
+	// evaluate some variables
+	QString s;
+	s = rootIncludeProject()->interpretVariable( "TARGET" );
+	
+	if ( s.isEmpty() )
+	{
+		s = QFileInfo( fileName() ).baseName();
+	
+	}
+	
+	const QString target = s;
+	s = rootIncludeProject()->interpretVariable( "DESTDIR" );
+	
+	if ( s.isEmpty() )
+	{
+		s = rootIncludeProject()->interpretVariable( "DLLDESTDIR" );
+	}
+	
+	if ( QDir( s ).isRelative() )
+	{
+		s.prepend( "$cpp$/" );
+	}
+	
+	if ( s.endsWith( '/' ) )
+	{
+		s.chop( 1 );
+	}
+	
+	const QString destdir = s;
+	
+	// compiler
+	if ( bp && cmdBuild.isValid() )
+	{
+		// build debug
+		cmd = cmdBuild;
+		cmd.setText( tr( "Build Debug" ) );
+		cmd.setArguments( "debug" );
+		addCommand( cmd, "mBuilder/mBuild" );
+		
+		// build release
+		cmd = cmdBuild;
+		cmd.setText( tr( "Build Release" ) );
+		cmd.setArguments( "release" );
+		addCommand( cmd, "mBuilder/mBuild" );
+		
+		// build all
+		cmd = cmdBuild;
+		cmd.setText( tr( "Build All" ) );
+		cmd.setArguments( "all" );
+		addCommand( cmd, "mBuilder/mBuild" );
+		
+		// clean
+		cmd = cmdBuild;
+		cmd.setText( tr( "Clean" ) );
+		cmd.setArguments( "clean" );
+		addCommand( cmd, "mBuilder/mClean" );
+		
+		// distclean
+		cmd = cmdBuild;
+		cmd.setText( tr( "Distclean" ) );
+		cmd.setArguments( "distclean" );
+		addCommand( cmd, "mBuilder/mClean" );
+		
+		// add qt commands only if possible
+		if ( mQtVersion.isValid() )
+		{
+			// qmake command
+			cmd = pCommand();
+			cmd.setText( tr( "QMake" ) );
+			cmd.setCommand( mQtVersion.qmake() );
+			cmd.setArguments( mQtVersion.qmakeParameters()/*.append( " $cp$" )*/ );
+			cmd.setWorkingDirectory( "$cpp$" );
+			cmd.setUserData( QVariant::fromValue( &mCommands ) );
+			cmd.setProject( this );
+			cmd.setSkipOnError( false );
+			addCommand( cmd, "mBuilder" );
+			
+			// lupdate command
+			cmd = pCommand();
+			cmd.setText( tr( "lupdate" ) );
+			cmd.setCommand( mQtVersion.lupdate() );
+			cmd.setArguments( "$cp$" );
+			cmd.setWorkingDirectory( "$cpp$" );
+			cmd.setUserData( QVariant::fromValue( &mCommands ) );
+			cmd.setProject( this );
+			cmd.setSkipOnError( false );
+			addCommand( cmd, "mBuilder" );
+			
+			// lrelease command
+			cmd = pCommand();
+			cmd.setText( tr( "lrelease" ) );
+			cmd.setCommand( mQtVersion.lrelease() );
+			cmd.setArguments( "$cp$" );
+			cmd.setWorkingDirectory( "$cpp$" );
+			cmd.setUserData( QVariant::fromValue( &mCommands ) );
+			cmd.setProject( this );
+			cmd.setSkipOnError( false );
+			addCommand( cmd, "mBuilder" );
+		
+			// rebuild debug
+			cmd = cmdBuild;
+			cmd.setText( tr( "Rebuild Debug" ) );
+			cmd.setCommand( ( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build Debug" ) ).join( ";" ) );
+			cmd.setArguments( QString() );
+			addCommand( cmd, "mBuilder/mRebuild" );
+			
+			// rebuild release
+			cmd = cmdBuild;
+			cmd.setText( tr( "Rebuild Release" ) );
+			cmd.setCommand( ( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build Release" ) ).join( ";" ) );
+			cmd.setArguments( QString() );
+			addCommand( cmd, "mBuilder/mRebuild" );
+			
+			// rebuild all
+			cmd = cmdBuild;
+			cmd.setText( tr( "Rebuild All" ) );
+			cmd.setCommand( ( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build All" ) ).join( ";" ) );
+			cmd.setArguments( QString() );
+			addCommand( cmd, "mBuilder/mRebuild" );
+			
+			// simple rebuild call
+			cmd = cmdBuild;
+			cmd.setText( tr( "Rebuild" ) );
+			cmd.setCommand( ( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build" ) ).join( ";" ) );
+			cmd.setArguments( QString() );
+			addCommand( cmd, "mBuilder/mRebuild" );
+		}
+		else if ( projectSettingsValue( "SHOW_QT_VERSION_WARNING", "1" ) == "1" )
+		{
+			setProjectSettingsValue( "SHOW_QT_VERSION_WARNING", "0" );
+			MonkeyCore::statusBar()->appendMessage( tr( "Some actions can't be created, because there is no default Qt version setted, please go in your project settings ( %1 ) to fix this." ).arg( displayText() ) );
+		}
+		
+		// execute debug
+		cmd = cmdBuild;
+		cmd.setText( tr( "Execute Debug" ) );
+		cmd.setCommand( target );
+		cmd.setArguments( QString() );
+		cmd.setWorkingDirectory( destdir != "$cpp$" ? destdir : destdir +"/debug" );
+		addCommand( cmd, "mBuilder/mExecute" );
+		
+		// execute release
+		cmd = cmdBuild;
+		cmd.setText( tr( "Execute Release" ) );
+		cmd.setCommand( target );
+		cmd.setArguments( QString() );
+		cmd.setWorkingDirectory( destdir != "$cpp$" ? destdir : destdir +"/release" );
+		addCommand( cmd, "mBuilder/mExecute" );
+	}
+	
+	// install defaults commands
+	XUPProjectItem::installCommands();
 }
