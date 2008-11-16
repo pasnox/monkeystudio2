@@ -33,6 +33,7 @@ protected:
 protected slots:
 	void projectTypeChanged();
 	void on_tbProjectTarget_clicked();
+	void modules_itemSelectionChanged();
 	void on_tbAddFile_clicked();
 	void on_tbEditFile_clicked();
 	void on_tbRemoveFile_clicked();

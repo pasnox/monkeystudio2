@@ -356,6 +356,18 @@ p, li { white-space: pre-wrap; }
            <height>120</height>
           </size>
          </property>
+         <property name="tabChangesFocus" >
+          <bool>true</bool>
+         </property>
+         <property name="undoRedoEnabled" >
+          <bool>false</bool>
+         </property>
+         <property name="readOnly" >
+          <bool>true</bool>
+         </property>
+         <property name="tabStopWidth" >
+          <number>40</number>
+         </property>
         </widget>
        </item>
       </layout>

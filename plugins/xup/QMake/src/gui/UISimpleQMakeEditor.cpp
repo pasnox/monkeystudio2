@@ -23,6 +23,9 @@ UISimpleQMakeEditor::UISimpleQMakeEditor( XUPProjectItem* project, QWidget* pare
 	init( project );
 	
 	lwPages->setCurrentRow( 1 );
+	
+	connect( lwQtModules, SIGNAL( itemSelectionChanged() ), this, SLOT( modules_itemSelectionChanged() ) );
+	connect( lwModules, SIGNAL( itemSelectionChanged() ), this, SLOT( modules_itemSelectionChanged() ) );
 }
 
 UISimpleQMakeEditor::~UISimpleQMakeEditor()
@@ -325,6 +328,19 @@ void UISimpleQMakeEditor::on_tbProjectTarget_clicked()
 	if ( !path.isEmpty() )
 	{
 		leProjectTarget->setText( mProject->relativeFilePath( path ) );
+	}
+}
+
+void UISimpleQMakeEditor::modules_itemSelectionChanged()
+{
+	QListWidget* lw = qobject_cast<QListWidget*>( sender() );
+	QListWidgetItem* it = lw ? lw->selectedItems().value( 0 ) : 0;
+	
+	teModuleHelp->clear();
+	
+	if ( it )
+	{
+		teModuleHelp->setHtml( it->data( Qt::UserRole ).value<QtItem>().Help );
 	}
 }
 
