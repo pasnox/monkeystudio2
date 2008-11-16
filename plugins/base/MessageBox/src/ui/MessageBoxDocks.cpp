@@ -1,16 +1,4 @@
 /****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.1.0
-** Authors   : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>, 
-**             Andrei KOPATS aka hlamer <hlamer at tut by>
-**                
-** Project   : Monkey Studio Base Plugins
-** FileName  : MessageBoxDocs.cpp
-** Date      : 2008-01-14T00:40:08
-** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
-**
 	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
 	This program is free software; you can redistribute it and/or modify
@@ -26,27 +14,24 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
 ****************************************************************************/
 /*!
 	\file MessageBoxDocks.cpp
 	\date 2008-01-14T00:40:08
 	\author Filipe AZEVEDO, Andrei KOPATS
 	\brief Implementation of MessageBoxDocks class
-	
 */
 
 #include "MessageBoxDocks.h"
 
 #include <QScrollBar>
-#include <QInputDialog>
-#include <QDir>
 
 #include <MonkeyCore.h>
 #include <pWorkspace.h>
 #include <pAbstractChild.h>
 #include <pFileManager.h>
-#include <XUPItem.h>
+#include <XUPProjectItem.h>
+#include <UIXUPFindFiles.h>
 
 /*!
 	Constructor of class
@@ -360,53 +345,75 @@ void MessageBoxDocks::clearSearchResults()
 void MessageBoxDocks::lwBuildSteps_itemPressed( QListWidgetItem* it )
 {
 	// get filename
-	QString s = it->data( Qt::UserRole +2 ).toString();
+	QString fn = it->data( Qt::UserRole +2 ).toString();
 	
 	// cancel if no file
-	if ( s.isEmpty() )
-		return;
-
-	QStringList l;
-
-	//search in the opened files
-	foreach ( pAbstractChild* c, MonkeyCore::workspace()->children() )
-		foreach ( QString f, c->files() )
-			if ( f.endsWith( s ) )
-				l << QDir::cleanPath( f );
-	
-	// search in the current project
-#warning MessageBoxDocks::lwBuildSteps_itemPressed( QListWidgetItem* it )
-	/*
-	if ( XUPProjectItem* pi = MonkeyCore::fileManager()->currentProject() )
+	if ( fn.isEmpty() )
 	{
-		// get top project of current project
-		pi = pi->topLevelProject();
-		// search file
-		foreach ( XUPItem* cit, pi->children( true, false ) << pi )
+		return;
+	}
+	
+	XUPProjectItem* project = MonkeyCore::fileManager()->currentProject();
+	XUPProjectItem* rootIncludeProject = project ? project->rootIncludeProject() : 0;
+	bool isRelative = QFileInfo( fn ).isRelative();
+	
+	if ( project && isRelative )
+	{
+		QString filePath = project->filePath( fn );
+		
+		if ( QFile::exists( filePath ) )
 		{
-			if ( cit->isProject() )
+			fn = filePath;
+		}
+	}
+	
+	if ( !QFile::exists( fn ) && rootIncludeProject && isRelative )
+	{
+		QString filePath = rootIncludeProject->filePath( fn );
+		
+		if ( QFile::exists( filePath ) )
+		{
+			fn = filePath;
+		}
+	}
+	
+	if ( !QFile::exists( fn ) )
+	{
+		if ( rootIncludeProject )
+		{
+			QString findFile = fn;
+			QFileInfoList files = rootIncludeProject->findFile( findFile );
+			
+			switch ( files.count() )
 			{
-				QString file = QDir::cleanPath( cit->filePath( s ) );
-				if ( QFile::exists( file ) && !l.contains( file ) )
-					l << file;
+				case 0:
+					fn.clear();
+					break;
+				case 1:
+					fn = files.at( 0 ).absoluteFilePath();
+					break;
+				default:
+				{
+					UIXUPFindFiles dlg( findFile, mBuildStep->parentWidget()->window() );
+					dlg.setFiles( files, rootIncludeProject->path() );
+					fn.clear();
+					
+					if ( dlg.exec() == QDialog::Accepted )
+					{
+						fn = dlg.selectedFile();
+					}
+					
+					break;
+				}
 			}
 		}
 	}
-	*/
 	
-	// cancel if no file
-	if ( l.isEmpty() )
-		return;
-	
-	// ask user to select file
-	bool b = true;
-	s = l.value( 0 );
-	if ( l.count() > 1 )
-		s = QInputDialog::getItem( mBuildStep->window(), tr( "Choose a file..." ), tr( "Choose the file to open" ), l, 0, false, &b, Qt::Sheet );
-	
-	// open file if ok
-	if ( b && !s.isEmpty() )
-		MonkeyCore::fileManager()->goToLine( s, it->data( Qt::UserRole +3 ).toPoint(), true, pMonkeyStudio::defaultCodec() );
+	if ( QFile::exists( fn ) )
+	{
+		QString codec = project ? project->temporaryValue( "codec" ).toString() : pMonkeyStudio::defaultCodec();
+		MonkeyCore::fileManager()->goToLine( fn, it->data( Qt::UserRole +3 ).toPoint(), true, codec );
+	}
 }
 
 /*!
@@ -551,11 +558,6 @@ void MessageBoxDocks::commandStarted( const pCommand& c )
 	s.append( tr( "* Working Directory: %1" ).arg( colourText( c.workingDirectory() ) ) );
 	// appendOutput to console log
 	appendInBox( colourText( s, Qt::blue ), Qt::red );
-	// show dock if needed
-	/*
-	if ( !mOutput->isVisible() )
-		mOutput->setVisible( true );
-	*/
 }
 
 /*!
