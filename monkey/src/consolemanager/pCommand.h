@@ -118,7 +118,7 @@ public:
 	}
 	
 	void debug() const
-	{ /*qWarning( toString().toLocal8Bit().constData() );*/ }
+	{ qWarning( "%s", toString().toLocal8Bit().constData() ); }
 
 protected:
 	QString mText; 				/**< Comment about command */
@@ -129,15 +129,18 @@ protected:
 	QStringList mParsers;		/**< List of parsers, which should be used for command. Position in the list is not ignored */
 	bool mTryAllParsers;		/**< Try to use all availible parsers after parsers from list */
 	QVariant mUserData;			/**< Ask PasNox, hot to use it */
-	XUPProjectItem* mProject;			/**< Project, for which command is executing */
+	XUPProjectItem* mProject;	/**< Project, for which command is executing */
 };
 
 /*!
 	List of pCommand objects
 */
 typedef QList<pCommand> pCommandList;
+typedef QMap<QString, pCommand> pCommandMap;
 
 Q_DECLARE_METATYPE( pCommand );
 Q_DECLARE_METATYPE( pCommandList );
+Q_DECLARE_METATYPE( pCommandMap );
+Q_DECLARE_METATYPE( pCommandMap* );
 
 #endif // PCOMMAND_H
