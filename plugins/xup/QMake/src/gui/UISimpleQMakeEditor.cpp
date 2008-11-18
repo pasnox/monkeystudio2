@@ -2,6 +2,9 @@
 #include "XUPProjectItem.h"
 
 #include <MkSFileDialog.h>
+#include <pMonkeyStudio.h>
+#include <MonkeyCore.h>
+#include <PluginsManager.h>
 
 #include <QInputDialog>
 #include <QMessageBox>
@@ -9,23 +12,79 @@
 
 UISimpleQMakeEditor::UISimpleQMakeEditor( XUPProjectItem* project, QWidget* parent )
 	: QDialog( parent )
-{	
+{
+	// init dialog
 	setupUi( this );
 	
+	// set dialog infos
 	setWindowIcon( project->displayIcon() );
 	setWindowTitle( windowTitle().append( " - " ).append( project->displayText() ) );
 	
+	// set size hint for page item ( left panel )
+	for ( int i = 0; i < lwPages->count(); i++ )
+	{
+		QListWidgetItem* item = lwPages->item( i );
+		item->setSizeHint( QSize( 154, 40 ) );
+	}
+	
+	// values editor actions
+	// tbOthersValuesAdd actions
+	QMenu* addMenu = new QMenu( tbOthersValuesAdd );
+	aOthersValuesAddValue = addMenu->addAction( tr( "As Value..." ) );
+	aOthersValuesAddFile = addMenu->addAction( tr( "As File..." ) );
+	aOthersValuesAddPath = addMenu->addAction( tr( "As Path..." ) );
+	tbOthersValuesAdd->setMenu( addMenu );
+	
+	// tbOthersValuesEdit actions
+	QMenu* editMenu = new QMenu( tbOthersValuesEdit );
+	aOthersValuesEditValue = editMenu->addAction( tr( "As Value..." ) );
+	aOthersValuesEditFile = editMenu->addAction( tr( "As File..." ) );
+	aOthersValuesEditPath = editMenu->addAction( tr( "As Path..." ) );
+	tbOthersValuesEdit->setMenu( editMenu );
+	
+	// plugins
+	
+	// builders
+	foreach ( BuilderPlugin* bp, MonkeyCore::pluginsManager()->plugins<BuilderPlugin*>( PluginsManager::stAll ) )
+	{
+		cbBuilders->addItem( bp->infos().Name );
+		swBuilders->addWidget( bp->settingsWidget() );
+	}
+	
+	// compilers
+	foreach ( CompilerPlugin* cp, MonkeyCore::pluginsManager()->plugins<CompilerPlugin*>( PluginsManager::stAll ) )
+	{
+		cbCompilers->addItem( cp->infos().Name );
+		swCompilers->addWidget( cp->settingsWidget() );
+	}
+	
+	// debuggers
+	foreach ( DebuggerPlugin* dp, MonkeyCore::pluginsManager()->plugins<DebuggerPlugin*>( PluginsManager::stAll ) )
+	{
+		cbDebuggers->addItem( dp->infos().Name );
+		swDebuggers->addWidget( dp->settingsWidget() );
+	}
+	
+	// interpreters
+	foreach ( InterpreterPlugin* ip, MonkeyCore::pluginsManager()->plugins<InterpreterPlugin*>( PluginsManager::stAll ) )
+	{
+		cbInterpreters->addItem( ip->infos().Name );
+		swInterpreters->addWidget( ip->settingsWidget() );
+	}
+	
+	// connections
+	connect( lwQtModules, SIGNAL( itemSelectionChanged() ), this, SLOT( modules_itemSelectionChanged() ) );
+	connect( lwModules, SIGNAL( itemSelectionChanged() ), this, SLOT( modules_itemSelectionChanged() ) );
 	foreach ( QRadioButton* rb, gbProjectType->findChildren<QRadioButton*>() )
 	{
 		connect( rb, SIGNAL( toggled( bool ) ), this, SLOT( projectTypeChanged() ) );
 	}
 	
+	// init proejct settings dialog
 	init( project );
 	
+	// set correct page
 	lwPages->setCurrentRow( 1 );
-	
-	connect( lwQtModules, SIGNAL( itemSelectionChanged() ), this, SLOT( modules_itemSelectionChanged() ) );
-	connect( lwModules, SIGNAL( itemSelectionChanged() ), this, SLOT( modules_itemSelectionChanged() ) );
 }
 
 UISimpleQMakeEditor::~UISimpleQMakeEditor()
@@ -74,6 +133,38 @@ void UISimpleQMakeEditor::updateProjectFiles()
 	}
 }
 
+void UISimpleQMakeEditor::updateValuesEditorVariables()
+{
+	QListWidgetItem* curItem = lwOthersVariables->selectedItems().value( 0 );
+	const QString curVariable = curItem ? curItem->text() : QString::null;
+	curItem = 0;
+	
+	lwOthersVariables->clear();
+	lwOthersValues->clear();
+	
+	foreach ( const QString& variable, mValues.keys() )
+	{
+		if ( !mManagedVariables.contains( variable ) )
+		{
+			lwOthersVariables->addItem( variable );
+			
+			if ( variable == curVariable )
+			{
+				curItem = lwOthersVariables->item( lwOthersVariables->count() -1 );
+				curItem->setSelected( true );
+			}
+		}
+	}
+}
+
+void UISimpleQMakeEditor::updateValuesEditorValues( const QString& variable )
+{
+	const QStringList values = mProject->splitMultiLineValue( mValues[ variable ] );
+	
+	lwOthersValues->clear();
+	lwOthersValues->addItems( values );
+}
+
 void UISimpleQMakeEditor::init( XUPProjectItem* project )
 {
 	mConfigGui.clear();
@@ -83,6 +174,10 @@ void UISimpleQMakeEditor::init( XUPProjectItem* project )
 	QStringList values;
 	mProject = project;
 	mValues.clear();
+	mManagedVariables.clear();
+	mManagedVariables << "TEMPLATE" << "CONFIG" << "TARGET" << "DESTDIR" << "DLLDESTDIR" << "QT" << mFileVariables;
+	QString plugin;
+	int id;
 	
 	foreach ( QAbstractButton* ab, wCompilerSettings->findChildren<QAbstractButton*>() )
 	{
@@ -280,6 +375,61 @@ void UISimpleQMakeEditor::init( XUPProjectItem* project )
 	}
 
 	updateProjectFiles();
+	updateValuesEditorVariables();
+	
+	// plugins
+	
+	// choose project builder
+	plugin = mProject->projectSettingsValue( "BUILDER" );
+	id = cbBuilders->findText( plugin );
+	
+	if ( id == -1 && cbBuilders->count() )
+	{
+		id = 0;
+	}
+	
+	cbBuilders->setCurrentIndex( id );
+	swBuilders->setCurrentIndex( id );
+	gbBuilders->setChecked( !plugin.isEmpty() );
+	
+	// choose project compiler
+	plugin = mProject->projectSettingsValue( "COMPILER" );
+	id = cbCompilers->findText( plugin );
+	
+	if ( id == -1 && cbCompilers->count() )
+	{
+		id = 0;
+	}
+	
+	cbCompilers->setCurrentIndex( id );
+	swCompilers->setCurrentIndex( id );
+	gbCompilers->setChecked( !plugin.isEmpty() );
+	
+	// choose project debugger
+	plugin = mProject->projectSettingsValue( "DEBUGGER" );
+	id = cbDebuggers->findText( plugin );
+	
+	if ( id == -1 && cbDebuggers->count() )
+	{
+		id = 0;
+	}
+	
+	cbDebuggers->setCurrentIndex( id );
+	swDebuggers->setCurrentIndex( id );
+	gbDebuggers->setChecked( !plugin.isEmpty() );
+	
+	// choose project interpreter
+	plugin = mProject->projectSettingsValue( "INTERPRETER" );
+	id = cbInterpreters->findText( plugin );
+	
+	if ( id == -1 && cbInterpreters->count() )
+	{
+		id = 0;
+	}
+	
+	cbInterpreters->setCurrentIndex( id );
+	swInterpreters->setCurrentIndex( id );
+	gbInterpreters->setChecked( !plugin.isEmpty() );
 }
 
 XUPItem* UISimpleQMakeEditor::getUniqueVariableItem( const QString& variableName, bool create )
@@ -451,19 +601,288 @@ void UISimpleQMakeEditor::on_tbRemoveFile_clicked()
 	}
 }
 
+void UISimpleQMakeEditor::on_lwOthersVariables_currentItemChanged( QListWidgetItem* current, QListWidgetItem* previous )
+{
+	// enable/disable actions
+	gbOthersValues->setEnabled( current );
+	tbOthersVariablesEdit->setEnabled( current );
+	tbOthersVariablesRemove->setEnabled( current );
+	
+	// save previous variable datas
+	if ( previous )
+	{
+		const QString variable = previous->text();
+		QStringList values;
+		
+		for ( int i = 0; i < lwOthersValues->count(); i++ )
+		{
+			values << lwOthersValues->item( i )->text();
+		}
+		
+		mValues[ variable ] = values.join( " " );;
+	}
+	
+	// update values view
+	const QString variable = current ? current->text() : QString::null;
+	updateValuesEditorValues( variable );
+}
+
+void UISimpleQMakeEditor::on_tbOthersVariablesAdd_clicked()
+{
+	bool ok;
+	const QStringList variables = mProject->projectInfos()->knowVariables( mProject->projectType() );
+	const QString variable = QInputDialog::getItem( window(), tr( "Add variable..." ), tr( "Select a variable name or enter a new one" ), variables, 0, true, &ok );
+	
+	if ( !variable.isEmpty() && ok )
+	{
+		if ( !mValues.keys().contains( variable ) && !mManagedVariables.contains( variable ) )
+		{
+			QListWidgetItem* item = new QListWidgetItem( variable, lwOthersVariables );
+			lwOthersVariables->setCurrentItem( item );
+			
+			mValues[ variable ] = QString::null;
+			mVariablesToRemove.removeAll( variable );
+		}
+		else
+		{
+			pMonkeyStudio::information( tr( "Information..." ), tr( "This variable already exists or is filtered out." ), window() );
+		}
+	}
+}
+
+void UISimpleQMakeEditor::on_tbOthersVariablesEdit_clicked()
+{
+	QListWidgetItem* item = lwOthersVariables->currentItem();
+	
+	if ( !item )
+	{
+		return;
+	}
+	
+	bool ok;
+	QString oldVariable = item->text();
+	QString variable = QInputDialog::getText( window(), tr( "Edit variable..." ), tr( "Enter a new name for this variable" ), QLineEdit::Normal, oldVariable, &ok );
+	
+	if ( !variable.isEmpty() && ok )
+	{
+		if ( !mValues.keys().contains( variable ) && !mManagedVariables.contains( variable ) )
+		{
+			item->setText( variable );
+			
+			mValues.remove( oldVariable );
+			if ( !mVariablesToRemove.contains( oldVariable ) )
+			{
+				mVariablesToRemove << oldVariable;
+			}
+		}
+		else
+		{
+			pMonkeyStudio::information( tr( "Information..." ), tr( "This variable already exists or is filtered out." ), window() );
+		}
+	}
+}
+
+void UISimpleQMakeEditor::on_tbOthersVariablesRemove_clicked()
+{
+	QListWidgetItem* item = lwOthersVariables->currentItem();
+	
+	if ( !item )
+	{
+		return;
+	}
+	
+	// confirm user request
+	if ( pMonkeyStudio::question( tr( "Remove a variable..." ), tr( "A you sure you want to remove this variable and all its content ?" ) ) )
+	{
+		QString variable = item->text();
+		
+		lwOthersValues->clear();
+		delete item;
+		
+		mValues.remove( variable );
+		if ( !mVariablesToRemove.contains( variable ) )
+		{
+			mVariablesToRemove << variable;
+		}
+	}
+}
+
+void UISimpleQMakeEditor::on_lwOthersValues_currentItemChanged( QListWidgetItem* current, QListWidgetItem* previous )
+{
+	// enable button according to item validity
+	tbOthersValuesEdit->setEnabled( current );
+	tbOthersValuesRemove->setEnabled( current );
+	Q_UNUSED( previous );
+}
+
+void UISimpleQMakeEditor::on_tbOthersValuesAdd_clicked()
+{
+	on_tbOthersValuesAdd_triggered( aOthersValuesAddValue );
+}
+
+void UISimpleQMakeEditor::on_tbOthersValuesAdd_triggered( QAction* action )
+{
+	QListWidgetItem* variableItem = lwOthersVariables->currentItem();
+	
+	if ( variableItem )
+	{
+		const QString title = tr( "Add a value..." );
+		bool ok = true;
+		QString val;
+		
+		if ( action == aOthersValuesAddValue )
+		{
+			val	= QInputDialog::getText( window(), title, tr( "Enter the value :" ), QLineEdit::Normal, QString(), &ok );
+			if ( !ok )
+			{
+				val.clear();
+			}
+		}
+		else if ( action == aOthersValuesAddFile )
+		{
+			val = QFileDialog::getOpenFileName( window(), tr( "Choose a file" ), mProject->path() );
+			if ( !val.isEmpty() )
+			{
+				val = mProject->relativeFilePath( val );
+			}
+		}
+		else if ( action == aOthersValuesAddPath )
+		{
+			val = QFileDialog::getExistingDirectory( window(), tr( "Choose a path" ), mProject->path() );
+			if ( !val.isEmpty() )
+			{
+				val = mProject->relativeFilePath( val );
+			}
+		}
+		
+		if ( !val.isEmpty() )
+		{
+			// quote value if needed
+			if ( val.contains( " " ) && !val.startsWith( '"' ) && !val.endsWith( '"' ) )
+			{
+				val.prepend( '"' ).append( '"' );
+			}
+			
+			// check if value exists
+			for ( int i = 0; i < lwOthersValues->count(); i++ )
+			{
+				QListWidgetItem* valueItem = lwOthersValues->item( i );
+				
+				if ( valueItem->text() == val )
+				{
+					lwOthersValues->setCurrentItem( valueItem );
+					return;
+				}
+			}
+			
+			// create value item
+			QListWidgetItem* valueItem = new QListWidgetItem( val, lwOthersValues );
+			lwOthersValues->setCurrentItem( valueItem );
+		}
+	}
+}
+
+void UISimpleQMakeEditor::on_tbOthersValuesEdit_clicked()
+{
+	on_tbOthersValuesEdit_triggered( aOthersValuesEditValue );
+}
+
+void UISimpleQMakeEditor::on_tbOthersValuesEdit_triggered( QAction* action )
+{
+	QListWidgetItem* valueItem = lwOthersValues->currentItem();
+	
+	if ( valueItem )
+	{
+		const QString title = tr( "Edit a value..." );
+		bool ok = true;
+		QString oldValue = valueItem->text();
+		QString val;
+		
+		if ( action == aOthersValuesEditValue )
+		{
+			val	= QInputDialog::getText( window(), title, tr( "Edit the value :" ), QLineEdit::Normal, oldValue, &ok );
+			if ( !ok )
+			{
+				val.clear();
+			}
+		}
+		else if ( action == aOthersValuesEditFile )
+		{
+			val = QFileDialog::getOpenFileName( window(), tr( "Choose a file" ), oldValue );
+			if ( !val.isEmpty() )
+			{
+				val = mProject->relativeFilePath( val );
+			}
+		}
+		else if ( action == aOthersValuesEditPath )
+		{
+			val = QFileDialog::getExistingDirectory( window(), tr( "Choose a path" ), oldValue );
+			if ( !val.isEmpty() )
+			{
+				val = mProject->relativeFilePath( val );
+			}
+		}
+		
+		if ( !val.isEmpty() )
+		{
+			// quote value if needed
+			if ( val.contains( " " ) && !val.startsWith( '"' ) && !val.endsWith( '"' ) )
+			{
+				val.prepend( '"' ).append( '"' );
+			}
+			
+			// check if value exists
+			for ( int i = 0; i < lwOthersValues->count(); i++ )
+			{
+				QListWidgetItem* item = lwOthersValues->item( i );
+				
+				if ( item->text() == val )
+				{
+					lwOthersValues->setCurrentItem( item );
+					return;
+				}
+			}
+			
+			// update item
+			valueItem->setText( val );
+		}
+	}
+}
+
+void UISimpleQMakeEditor::on_tbOthersValuesRemove_clicked()
+{
+	QListWidgetItem* valueItem = lwOthersValues->currentItem();
+	
+	if ( valueItem )
+	{
+		// confirm user request
+		if ( !pMonkeyStudio::question( tr( "Remove a value..." ), tr( "A you sure you want to remove this value ?" ) ) )
+		{
+			return;
+		}
+		
+		// remove value
+		delete valueItem;
+	}
+}
+
+void UISimpleQMakeEditor::on_tbOthersValuesClear_clicked()
+{
+	QListWidgetItem* variableItem = lwOthersVariables->currentItem();
+	
+	if ( variableItem )
+	{
+		// request user confirm
+		if ( pMonkeyStudio::question( tr( "Clear values..." ), tr( "A you sure you want to clear these values ?" ) ) )
+		{
+			lwOthersValues->clear();
+		}
+	}
+}
+
 void UISimpleQMakeEditor::accept()
 {
-	// xup settings
-	mQtVersion = QtVersion();
-	QListWidgetItem* qtVersionItem = lwQtVersion->selectedItems().value( 0 );
-	
-	if ( qtVersionItem )
-	{
-		mQtVersion = qtVersionItem->data( Qt::UserRole ).value<QtVersion>();
-	}
-
-	mProject->setProjectSettingsValue( "QT_VERSION", mQtVersion.Version );
-	
+	QString plugin;
 	QString tmplate;
 	QStringList config;
 	QStringList qt;
@@ -572,12 +991,22 @@ void UISimpleQMakeEditor::accept()
 		}
 	}
 	
+	// save current variable if needed
+	QListWidgetItem* curItem = lwOthersVariables->currentItem();
+	on_lwOthersVariables_currentItemChanged( curItem, curItem );
+	
 	mValues[ "TEMPLATE" ] = tmplate;
 	mValues[ "CONFIG" ] = config.join( " " );
 	mValues[ "QT" ] = qt.join( " " );
 	mValues[ "TARGET" ] = target.join( " " );
 	mValues[ "DESTDIR" ] = destdir;
 	mValues[ "DLLDESTDIR" ] = dlldestdir;
+	
+	// tell about variables to remove
+	foreach ( const QString& variable, mVariablesToRemove )
+	{
+		mValues[ variable ] = QString::null;
+	}
 	
 	foreach ( const QString& variable, mValues.keys() )
 	{
@@ -683,5 +1112,63 @@ void UISimpleQMakeEditor::accept()
 		}
 	}
 	
+	// xup settings
+	mQtVersion = QtVersion();
+	QListWidgetItem* qtVersionItem = lwQtVersion->selectedItems().value( 0 );
+	
+	if ( qtVersionItem )
+	{
+		mQtVersion = qtVersionItem->data( Qt::UserRole ).value<QtVersion>();
+	}
+
+	mProject->setProjectSettingsValue( "QT_VERSION", mQtVersion.Version );
+	
+	// plugins
+	
+	// builder
+	plugin = cbBuilders->currentText();
+	
+	if ( !gbBuilders->isChecked() )
+	{
+		plugin.clear();
+	}
+	
+	mProject->setProjectSettingsValue( "BUILDER", plugin );
+	
+	// compiler
+	plugin = cbCompilers->currentText();
+	
+	if ( !gbCompilers->isChecked() )
+	{
+		plugin.clear();
+	}
+		
+	mProject->setProjectSettingsValue( "COMPILER", plugin );
+	
+	// debugger
+	plugin = cbDebuggers->currentText();
+	
+	if ( !gbDebuggers->isChecked() )
+	{
+		plugin.clear();
+	}
+		
+	mProject->setProjectSettingsValue( "DEBUGGER", plugin );
+	
+	// interpreter
+	plugin = cbInterpreters->currentText();
+	
+	if ( !gbInterpreters->isChecked() )
+	{
+		plugin.clear();
+	}
+		
+	mProject->setProjectSettingsValue( "INTERPRETER", plugin );
+	
+	// update menu actions
+	mProject->uninstallCommands();
+	mProject->installCommands();
+	
+	// close dialog
 	QDialog::accept();
 }

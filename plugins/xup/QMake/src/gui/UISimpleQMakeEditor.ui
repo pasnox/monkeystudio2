@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
+    <width>641</width>
     <height>480</height>
    </rect>
   </property>
@@ -23,44 +23,116 @@
     <widget class="QListWidget" name="lwPages" >
      <property name="minimumSize" >
       <size>
-       <width>140</width>
+       <width>160</width>
        <height>0</height>
       </size>
      </property>
      <property name="maximumSize" >
       <size>
-       <width>140</width>
+       <width>160</width>
        <height>16777215</height>
       </size>
+     </property>
+     <property name="iconSize" >
+      <size>
+       <width>22</width>
+       <height>22</height>
+      </size>
+     </property>
+     <property name="movement" >
+      <enum>QListView::Static</enum>
+     </property>
+     <property name="viewMode" >
+      <enum>QListView::IconMode</enum>
      </property>
      <item>
       <property name="text" >
        <string>About</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="../../../../../monkey/src/resources/resources.qrc" >
+        <normaloff>:/xupeditor/icons/xupeditor/about.png</normaloff>:/xupeditor/icons/xupeditor/about.png</iconset>
       </property>
      </item>
      <item>
       <property name="text" >
        <string>Project</string>
       </property>
+      <property name="icon" >
+       <iconset resource="../../../../../monkey/src/resources/resources.qrc" >
+        <normaloff>:/xupeditor/icons/xupeditor/project.png</normaloff>:/xupeditor/icons/xupeditor/project.png</iconset>
+      </property>
      </item>
      <item>
       <property name="text" >
        <string>Modules</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="../../../../../monkey/src/resources/resources.qrc" >
+        <normaloff>:/xupeditor/icons/xupeditor/modules.png</normaloff>:/xupeditor/icons/xupeditor/modules.png</iconset>
       </property>
      </item>
      <item>
       <property name="text" >
        <string>Compiler Settings</string>
       </property>
+      <property name="icon" >
+       <iconset resource="../../../../../monkey/src/resources/resources.qrc" >
+        <normaloff>:/xupeditor/icons/xupeditor/settings.png</normaloff>:/xupeditor/icons/xupeditor/settings.png</iconset>
+      </property>
      </item>
      <item>
       <property name="text" >
        <string>Project Files</string>
       </property>
+      <property name="icon" >
+       <iconset resource="../../../../../monkey/src/resources/resources.qrc" >
+        <normaloff>:/xupeditor/icons/xupeditor/files.png</normaloff>:/xupeditor/icons/xupeditor/files.png</iconset>
+      </property>
      </item>
      <item>
       <property name="text" >
        <string>Values Editor</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="../../../../../monkey/src/resources/resources.qrc" >
+        <normaloff>:/xupeditor/icons/xupeditor/values.png</normaloff>:/xupeditor/icons/xupeditor/values.png</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Builder</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="../../../../../monkey/src/resources/resources.qrc" >
+        <normaloff>:/xupeditor/icons/xupeditor/builder.png</normaloff>:/xupeditor/icons/xupeditor/builder.png</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Compiler</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="../../../../../monkey/src/resources/resources.qrc" >
+        <normaloff>:/xupeditor/icons/xupeditor/compiler.png</normaloff>:/xupeditor/icons/xupeditor/compiler.png</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Debugger</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="../../../../../monkey/src/resources/resources.qrc" >
+        <normaloff>:/xupeditor/icons/xupeditor/debugger.png</normaloff>:/xupeditor/icons/xupeditor/debugger.png</iconset>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Interpreter</string>
+      </property>
+      <property name="icon" >
+       <iconset resource="../../../../../monkey/src/resources/resources.qrc" >
+        <normaloff>:/xupeditor/icons/xupeditor/interpreter.png</normaloff>:/xupeditor/icons/xupeditor/interpreter.png</iconset>
       </property>
      </item>
     </widget>
@@ -68,7 +140,7 @@
    <item row="1" column="1" >
     <widget class="QStackedWidget" name="swPages" >
      <property name="currentIndex" >
-      <number>1</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="wAbout" >
       <layout class="QHBoxLayout" name="horizontalLayout_6" >
@@ -669,32 +741,333 @@ p, li { white-space: pre-wrap; }
       </layout>
      </widget>
      <widget class="QWidget" name="wValuesEditor" >
-      <layout class="QGridLayout" name="gridLayout_6" >
+      <layout class="QHBoxLayout" name="horizontalLayout" >
        <property name="margin" >
         <number>0</number>
        </property>
-       <item row="0" column="1" >
-        <widget class="QLabel" name="lValues" >
-         <property name="text" >
-          <string>Value</string>
+       <item>
+        <widget class="QGroupBox" name="gbOthersVariables" >
+         <property name="maximumSize" >
+          <size>
+           <width>200</width>
+           <height>16777215</height>
+          </size>
          </property>
-        </widget>
-       </item>
-       <item row="1" column="1" >
-        <widget class="QPlainTextEdit" name="pteValues" />
-       </item>
-       <item row="2" column="1" >
-        <widget class="QPushButton" name="pbAddFilePath" >
-         <property name="text" >
-          <string>Add file path</string>
-         </property>
-        </widget>
-       </item>
-       <item rowspan="3" row="0" column="0" >
-        <widget class="QGroupBox" name="gbVariables" >
          <property name="title" >
           <string>Variables</string>
          </property>
+         <layout class="QGridLayout" name="_2" >
+          <item row="0" column="0" >
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0" >
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QToolButton" name="tbOthersVariablesAdd" >
+            <property name="toolTip" >
+             <string>Add...</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >
+              <normaloff>:/listeditor/icons/listeditor/add.png</normaloff>:/listeditor/icons/listeditor/add.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2" >
+           <widget class="QToolButton" name="tbOthersVariablesEdit" >
+            <property name="toolTip" >
+             <string>Edit...</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >
+              <normaloff>:/listeditor/icons/listeditor/edit.png</normaloff>:/listeditor/icons/listeditor/edit.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3" >
+           <widget class="QToolButton" name="tbOthersVariablesRemove" >
+            <property name="toolTip" >
+             <string>Remove...</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >
+              <normaloff>:/listeditor/icons/listeditor/remove.png</normaloff>:/listeditor/icons/listeditor/remove.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="4" >
+           <widget class="QListWidget" name="lwOthersVariables" >
+            <property name="editTriggers" >
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+            <property name="selectionBehavior" >
+             <enum>QAbstractItemView::SelectRows</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="gbOthersValues" >
+         <property name="title" >
+          <string>Values</string>
+         </property>
+         <layout class="QGridLayout" name="_3" >
+          <item row="0" column="0" >
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0" >
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QToolButton" name="tbOthersValuesAdd" >
+            <property name="toolTip" >
+             <string>Add...</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >
+              <normaloff>:/listeditor/icons/listeditor/add.png</normaloff>:/listeditor/icons/listeditor/add.png</iconset>
+            </property>
+            <property name="popupMode" >
+             <enum>QToolButton::MenuButtonPopup</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2" >
+           <widget class="QToolButton" name="tbOthersValuesEdit" >
+            <property name="toolTip" >
+             <string>Edit...</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >
+              <normaloff>:/listeditor/icons/listeditor/edit.png</normaloff>:/listeditor/icons/listeditor/edit.png</iconset>
+            </property>
+            <property name="popupMode" >
+             <enum>QToolButton::MenuButtonPopup</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3" >
+           <widget class="QToolButton" name="tbOthersValuesRemove" >
+            <property name="toolTip" >
+             <string>Remove...</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >
+              <normaloff>:/listeditor/icons/listeditor/remove.png</normaloff>:/listeditor/icons/listeditor/remove.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4" >
+           <widget class="QToolButton" name="tbOthersValuesClear" >
+            <property name="toolTip" >
+             <string>Clear...</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >
+              <normaloff>:/listeditor/icons/listeditor/clear.png</normaloff>:/listeditor/icons/listeditor/clear.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="5" >
+           <widget class="QListWidget" name="lwOthersValues" >
+            <property name="editTriggers" >
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+            <property name="selectionBehavior" >
+             <enum>QAbstractItemView::SelectRows</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="wBuilder" >
+      <layout class="QVBoxLayout" name="verticalLayout_7" >
+       <item>
+        <widget class="QGroupBox" name="gbBuilders" >
+         <property name="title" >
+          <string>Use Custom Builder</string>
+         </property>
+         <property name="checkable" >
+          <bool>true</bool>
+         </property>
+         <property name="checked" >
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" name="_4" >
+          <item row="0" column="0" >
+           <widget class="QLabel" name="lBuilders" >
+            <property name="text" >
+             <string>Builders Available :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QComboBox" name="cbBuilders" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2" >
+           <widget class="QStackedWidget" name="swBuilders" >
+            <property name="currentIndex" >
+             <number>-1</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="wCompiler" >
+      <layout class="QVBoxLayout" name="verticalLayout_9" >
+       <item>
+        <widget class="QGroupBox" name="gbCompilers" >
+         <property name="title" >
+          <string>Use Custom Compiler</string>
+         </property>
+         <property name="checkable" >
+          <bool>true</bool>
+         </property>
+         <property name="checked" >
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" name="_5" >
+          <item row="0" column="0" >
+           <widget class="QLabel" name="lCompilers" >
+            <property name="text" >
+             <string>Compilers Available :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QComboBox" name="cbCompilers" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2" >
+           <widget class="QStackedWidget" name="swCompilers" >
+            <property name="currentIndex" >
+             <number>-1</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="wDebugger" >
+      <layout class="QVBoxLayout" name="verticalLayout_10" >
+       <item>
+        <widget class="QGroupBox" name="gbDebuggers" >
+         <property name="title" >
+          <string>Use Custom Debugger</string>
+         </property>
+         <property name="checkable" >
+          <bool>true</bool>
+         </property>
+         <property name="checked" >
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" name="_6" >
+          <item row="0" column="0" >
+           <widget class="QLabel" name="lDebuggers" >
+            <property name="text" >
+             <string>Debuggers Available :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QComboBox" name="cbDebuggers" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2" >
+           <widget class="QStackedWidget" name="swDebuggers" >
+            <property name="currentIndex" >
+             <number>-1</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="wInterpreter" >
+      <layout class="QVBoxLayout" name="verticalLayout_11" >
+       <item>
+        <widget class="QGroupBox" name="gbInterpreters" >
+         <property name="title" >
+          <string>Use Custom Interpreter</string>
+         </property>
+         <property name="checkable" >
+          <bool>true</bool>
+         </property>
+         <property name="checked" >
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" name="_7" >
+          <item row="0" column="0" >
+           <widget class="QLabel" name="lInterpreters" >
+            <property name="text" >
+             <string>Interpreters Available :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QComboBox" name="cbInterpreters" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2" >
+           <widget class="QStackedWidget" name="swInterpreters" >
+            <property name="currentIndex" >
+             <number>-1</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>
