@@ -100,6 +100,8 @@ public:
 	QString variableSuffixesFilter( int projectType ) const;
 	// return the variable name associated with this filename
 	QString variableNameForFileName( int projectType, const QString& fileName ) const;
+	// return a list of all know variable for this kind of project
+	QStringList knowVariables( int projectType ) const;
 	
 protected:
 	QMap<int, XUPProjectItem*> mRegisteredProjectItems; // project type, project item

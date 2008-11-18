@@ -265,3 +265,59 @@ QString XUPProjectItemInfos::variableNameForFileName( int projectType, const QSt
 	
 	return QString::null;
 }
+
+QStringList XUPProjectItemInfos::knowVariables( int projectType ) const
+{
+	QStringList variables;
+	
+	foreach ( const QString& variable, mFilteredVariables.value( projectType ) )
+	{
+		if ( !variables.contains( variable ) )
+		{
+			variables << variable;
+		}
+	}
+	
+	foreach ( const QString& variable, mFileVariables.value( projectType ) )
+	{
+		if ( !variables.contains( variable ) )
+		{
+			variables << variable;
+		}
+	}
+	
+	foreach ( const QString& variable, mPathVariables.value( projectType ) )
+	{
+		if ( !variables.contains( variable ) )
+		{
+			variables << variable;
+		}
+	}
+	
+	foreach ( const PairStringString& pair, mVariableLabels.value( projectType ) )
+	{
+		if ( !variables.contains( pair.first ) )
+		{
+			variables << pair.first;
+		}
+	}
+	
+	foreach ( const PairStringString& pair, mVariableIcons.value( projectType ) )
+	{
+		if ( !variables.contains( pair.first ) )
+		{
+			variables << pair.first;
+		}
+	}
+	
+	foreach ( const PairStringStringList& pair, mVariableSuffixes.value( projectType ) )
+	{
+		if ( !variables.contains( pair.first ) )
+		{
+			variables << pair.first;
+		}
+	}
+	
+	variables.sort();
+	return variables;
+}
