@@ -1,14 +1,4 @@
 /****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.1.0
-** Authors   : Andrei KOPATS aka hlamer <hlamer@tut.by>, Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Monkey Studio IDE
-** FileName  : pTemplatesManager.cpp
-** Date      : 2008-01-14T00:37:12
-** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
-**
 	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
 	This program is free software; you can redistribute it and/or modify
@@ -24,7 +14,6 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
 ****************************************************************************/
 /*!
 	\file pTemplatesManager.cpp
@@ -33,13 +22,14 @@
 	\brief Implementation of pTemplatesManager class
 */
 
-#include "pTemplatesManager.h"
-#include "../pMonkeyStudio.h"
-#include "../workspace/pFileManager.h"
-#include "../xupmanager/core/XUPItem.h"
-#include "../xupmanager/core/XUPProjectItem.h"
-#include "../coremanager/MonkeyCore.h"
-#include "../settingsmanager/Settings.h"
+#include <pTemplatesManager.h>
+#include <pMonkeyStudio.h>
+#include <pFileManager.h>
+#include <XUPItem.h>
+#include <XUPProjectItem.h>
+#include <MonkeyCore.h>
+#include <XUPProjectManager.h>
+#include <Settings.h>
 
 using namespace pMonkeyStudio;
 
@@ -238,11 +228,10 @@ bool pTemplatesManager::realiseTemplate( XUPItem* scope, const QString& op, cons
 			MonkeyCore::fileManager()->openProject( s, pMonkeyStudio::defaultCodec() );
 		
 		// add files to project if needed
-#warning pTemplatesManager::realiseTemplate
-		/*
 		if ( scope )
-			scope->project()->addFile( s, scope, op );
-		*/
+		{
+			MonkeyCore::projectsManager()->addFilesToScope( scope, QStringList( s ), op );
+		}
 	}
 	
 	// return process state

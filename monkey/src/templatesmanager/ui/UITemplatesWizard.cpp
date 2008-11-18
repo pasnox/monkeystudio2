@@ -26,21 +26,17 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
-#include "UITemplatesWizard.h"
-#include "../../workspace/pFileManager.h"
-#include "../../pMonkeyStudio.h"
-#include "../../coremanager/MonkeyCore.h"
-#include "../../settingsmanager/Settings.h"
-
-#warning uncomment include
-/*
-#include "../../xupmanager/ProjectItemModel.h"
-#include "../../xupmanager/ScopedProjectItemModel.h"
-*/
-#include "../../xupmanager/core/XUPItem.h"
-#include "../../xupmanager/core/XUPProjectItem.h"
-#include "../../xupmanager/gui/XUPProjectManager.h"
-#include "../../variablesmanager/VariablesManager.h"
+#include <UITemplatesWizard.h>
+#include <pFileManager.h>
+#include <pMonkeyStudio.h>
+#include <MonkeyCore.h>
+#include <Settings.h>
+#include <XUPProjectModelProxy.h>
+#include <XUPProjectModel.h>
+#include <XUPItem.h>
+#include <XUPProjectItem.h>
+#include <XUPProjectManager.h>
+#include <VariablesManager.h>
 
 #include <QDir>
 
@@ -78,13 +74,19 @@ UITemplatesWizard::UITemplatesWizard( QWidget* w )
 	}
 
 	// assign projects combobox
-#warning uncomment UITemplatesWizard constructor
-	/*
-	mProjects = MonkeyCore::projectsManager()->model();
-	cbProjects->setModel( mProjects->scopedModel() );
-	XUPItem* p = MonkeyCore::projectsManager()->currentProject();
-	cbProjects->setCurrentIndex( mProjects->scopedModel()->mapFromSource( p ? p->index() : QModelIndex() ) );
-	*/
+	mModel = MonkeyCore::projectsManager()->currentProjectModel();
+	mProxy = new XUPProjectModelProxy( this );
+	XUPProjectItem* project = MonkeyCore::projectsManager()->currentProject();
+	QModelIndex index = project ? project->index() : QModelIndex();
+	
+	mProxy->setSourceModel( mModel );
+	cbProjects->setModel( mProxy );
+	cbProjects->setCurrentIndex( mProxy->mapFromSource( index ) );
+	
+	if ( project )
+	{
+		cbOperators->addItems( project->projectInfos()->operators( project->projectType() ) );
+	}
 
 	// restore infos
 	pSettings* s = MonkeyCore::settings();
@@ -173,24 +175,25 @@ void UITemplatesWizard::on_lwTemplates_itemPressed( QListWidgetItem* it )
 		mCombos << c;
 	}
 	
-	//saWidgets->resize( saWidgets->widget()->sizeHint() );
-	
 	// enable groupbox
 	gbInformations->setEnabled( true );
 }
 
 void UITemplatesWizard::on_cbProjects_currentChanged( const QModelIndex& index )
 {
-#warning uncomment UITemplatesWizard::on_cbProjects_currentChanged
-/*
-	const QModelIndex idx = mProjects->scopedModel()->mapToSource( index );
-	if ( XUPProjectItem* it = dynamic_cast<XUPProjectItem*> (mProjects->itemFromIndex( idx )) )
+	const QModelIndex idx = mProxy->mapToSource( index );
+	XUPItem* item = mModel->itemFromIndex( idx );
+	XUPProjectItem* project = item ? item->project() : 0;
+	
+	if ( project )
 	{
-		cbOperators->clear();
-		cbOperators->addItems( it->operators() );
-		leDestination->setText( it->project()->projectPath() );
+		const QString path = project->path();
+		
+		if ( !leDestination->text().startsWith( path ) )
+		{
+			leDestination->setText( project->path() );
+		}
 	}
-*/
 }
 
 void UITemplatesWizard::on_tbDestination_clicked()
@@ -246,8 +249,9 @@ void UITemplatesWizard::on_pbCreate_clicked()
 		t.ProjectsToOpen.clear();
 	
 	// get proejct to add
-#warning uncomment item creation
-	XUPItem* si = 0;//t.FilesToAdd.isEmpty() ? 0 : mProjects->itemFromIndex( mProjects->scopedModel()->mapToSource( cbProjects->currentIndex() ) );
+	QModelIndex proxyIndex = cbProjects->currentIndex();
+	QModelIndex index = mProxy->mapToSource( proxyIndex );
+	XUPItem* si = t.FilesToAdd.isEmpty() ? 0 : mModel->itemFromIndex( index );
 	
 	// process templates
 	if ( !pTemplatesManager::instance()->realiseTemplate( si, cbOperators->currentText(), t, v ) )
