@@ -82,8 +82,7 @@ bool Navigator::setEnabled (bool e)
 	if (mPluginInfos.Enabled)
 	{
 		dockwgt = new pDockWidget("Navigator", MonkeyCore::workspace());
-		pAction* dockAct = dockwgt->toggleViewPAction ("F1");
-		MonkeyCore::menuBar()->addAction ("mDocks", dockAct);
+        MonkeyCore::menuBar()->addAction ("mDocks", dockwgt->toggleViewPAction ("F1"));
 		//dockwgt->hide ();
 		dockwgt->setMinimumWidth (100);
 		fileWidget = new QWidget (dockwgt);
@@ -91,6 +90,7 @@ bool Navigator::setEnabled (bool e)
 		fileBox->setMargin( 5 );
 		fileBox->setSpacing( 3 );
 		currFileTreew = new EntityContainer (fileWidget, this);
+		dockwgt->setAutoFocusWidget (currFileTreew);
 		fileTrees.insert ( NULL, currFileTreew);
 		fileBox->addWidget ( currFileTreew);
 		fileLock = new QPushButton (tr("Lock view"), fileWidget);
