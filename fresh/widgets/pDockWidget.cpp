@@ -125,12 +125,13 @@ void pDockWidget::setVisible( bool visible )
 #include <QDebug>
 void pDockWidget::onToggleViewActionTriggered (bool checked)
 {
-	setVisible (checked);
 	if (checked && mAutoFocusWidget)
 	{
 		mAutoFocusWidget->setFocus();
 		activateWindow();
 		qDebug () << isActiveWindow() << mAutoFocusWidget->hasFocus();
-		qDebug () << mAutoFocusWidget;
+		qDebug () << mAutoFocusWidget << mAutoFocusWidget->focusPolicy();
+		qDebug () << QApplication::focusWidget();
 	}
+	setVisible (checked);
 }
