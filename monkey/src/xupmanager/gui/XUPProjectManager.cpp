@@ -480,6 +480,7 @@ void XUPProjectManager::editProject()
 	if ( topLevelProject->projectSettingsValue( "EDITOR" ).isEmpty() )
 	{
 		pMonkeyStudio::warning( tr( "Warning..." ), tr( "The project can't be edited because there is no associate project settings plugin." ) );
+		return;
 	}
 	
 	XUPPlugin* plugin = MonkeyCore::pluginsManager()->plugins<XUPPlugin*>( PluginsManager::stAll, topLevelProject->projectSettingsValue( "EDITOR" ) ).value( 0 );
@@ -525,7 +526,7 @@ void XUPProjectManager::addFilesToScope( XUPItem* scope, const QStringList& allF
 				
 				foreach ( XUPItem* variable, variables )
 				{
-					if ( variable->attribute( "operator" ) != op )
+					if ( variable->attribute( "operator", "=" ) != op )
 					{
 						continue;
 					}
