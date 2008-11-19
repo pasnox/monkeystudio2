@@ -536,7 +536,20 @@ QStringList XUPProjectItem::projectSettingsValues( const QString& variableName, 
 		}
 	}
 	
-	return values.isEmpty() ? defaultValues : values;
+	if ( values.isEmpty() )
+	{
+		// a hack that allow xupproejct settings variable to be added to project node
+		if ( defaultValues.isEmpty() )
+		{
+			values = QStringList( attribute( variableName.toLower() ) );
+		}
+		else
+		{
+			values = defaultValues;
+		}
+	}
+	
+	return values;
 }
 
 void XUPProjectItem::setProjectSettingsValues( const QString& variableName, const QStringList& values )
