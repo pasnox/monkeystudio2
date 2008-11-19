@@ -441,9 +441,9 @@ bool pSearch::on_tbNext_clicked()
 				QString mask = cobMask->currentText();
 				QString text = cobSearch->currentText();
 				//bool whole = cbWholeWords->isChecked ();
-				bool match = cbCaseSensitive->isChecked();
+				bool caseSensetive = cbCaseSensitive->isChecked();
 				bool regexp = cbRegExp->isChecked ();
-				mSearchThread = new SearchThread(path, mask, text, true, match, regexp, this);
+				mSearchThread = new SearchThread(SearchThread::SEARCH, path, mask, text, "", caseSensetive, regexp, this);
 				tbNext->setText (tr("&Stop"));
 				tbNext->setIcon (QIcon(":/console/icons/console/stop.png"));
 				

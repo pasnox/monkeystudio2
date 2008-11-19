@@ -57,15 +57,16 @@ public:
 	}
 };
 
-SearchThread::SearchThread(const QString &_dir, QString &_mask, const QString &_text, bool _isWhole, bool _isMatch, bool _isReg, QObject* parent)
+SearchThread::SearchThread(Mode _mode, const QString &_dir, QString &_mask, const QString &_search, const QString& _replace, bool _caseSensetive, bool _isReg, QObject* parent)
     : QThread(parent), mTerm(false)
 {
-    dir = _dir;
-    mask = _mask;
-    text = _text;
-    isWhole = _isWhole;
-    isMatch = _isMatch;
-    isReg = _isReg;
+	mMode = _mode;
+    mDir = _dir;
+    mMask = _mask;
+    mSearch = _search;
+    mReplace = _replace;
+    mIsReg = _isReg;
+	mCaseSensetive = _caseSensetive;
 }
 
 SearchThread::~SearchThread()
@@ -75,19 +76,19 @@ SearchThread::~SearchThread()
 void SearchThread::run()
 {
 	setPriority (QThread::LowestPriority);
-	DirWalkIterator dirWalker (dir);
+	DirWalkIterator dirWalker (mDir);
     int files_count = 0;
     QString fileName = dirWalker.next();
 	
 	/* Prepare masks list */
-	QStringList masks = mask.split (' ');
+	QStringList masks = mMask.split (' ');
 	QList <QRegExp> maskRexps;
 	foreach (QString m, masks)
 		maskRexps << QRegExp (m.trimmed (), Qt::CaseInsensitive, QRegExp::Wildcard);
 	
     while (!fileName.isNull())
     {
-        if (!mask.isEmpty())
+        if (!mMask.isEmpty())
         {   // Check file for mask
 			QString name = QFileInfo (fileName).fileName(); // Just name, no path
 			bool matching = false;
@@ -109,36 +110,7 @@ void SearchThread::run()
         QFile file(fileName);
         if (file.open(QIODevice::ReadOnly)) 
         {
-			if (!isBinary (file)) // Currently we not supporting binary files
-			{
-				file.seek (0);
-				QString line;
-				QTextStream in(&file);
-				int i = 0;
-				QRegExp rex (text);
-				while (!in.atEnd() && !mTerm) 
-				{
-					++i;
-					line = in.readLine();
-					
-					bool ifContains = false;
-					if (isReg)
-						ifContains = line.contains(rex);
-					else
-					{
-						ifContains = line.contains(text);
-					}
-					if (ifContains) 
-					{
-						pConsoleManager::Step step;
-						step.mFileName = file.fileName();
-						step.mPosition = QPoint (0,i);
-						step.mText = QString("%1[%2]: %3").arg (QFileInfo(file.fileName()).fileName()).arg(i).arg(line.simplified());
-						step.mFullText= file.fileName();
-						emit appendSearchResult (step);
-					}
-				}
-			} //if not binary
+			search (file);
         } //if open
         if (mTerm)
         {
@@ -157,4 +129,72 @@ bool SearchThread::isBinary (QFile& file)
 		if (data[count] == '\0')
 			return true;
 	return false;
+}
+
+void SearchThread::search (QFile& file)
+{
+	if (!isBinary (file)) // Currently we not supporting binary files
+	{
+		file.seek (0);
+		QString line;
+		QTextStream in(&file);
+		int i = 0;
+		QRegExp rex (mSearch);
+		while (!in.atEnd() && !mTerm) 
+		{
+			++i;
+			line = in.readLine();
+			
+			bool ifContains = false;
+			if (mIsReg)
+				ifContains = line.contains(rex);
+			else
+			{
+				ifContains = line.contains(mSearch);
+			}
+			if (ifContains) 
+			{
+				pConsoleManager::Step step;
+				step.mFileName = file.fileName();
+				step.mPosition = QPoint (0,i);
+				step.mText = QString("%1[%2]: %3").arg (QFileInfo(file.fileName()).fileName()).arg(i).arg(line.simplified());
+				step.mFullText= file.fileName();
+				emit appendSearchResult (step);
+			}
+		}
+	} //if not binary
+}
+
+void SearchThread::replace (QFile& file)
+{
+	if (!isBinary (file)) // Currently we not supporting binary files
+	{
+		file.seek (0);
+		QString line;
+		QTextStream in(&file);
+		int i = 0;
+		QRegExp rex (mSearch);
+		while (!in.atEnd() && !mTerm) 
+		{
+			++i;
+			line = in.readLine();
+			
+			bool ifContains = false;
+			if (mIsReg)
+				ifContains = line.contains(rex);
+			else
+			{
+				ifContains = line.contains(mSearch);
+			}
+			if (ifContains) 
+			{
+				pConsoleManager::Step step;
+				step.mFileName = file.fileName();
+				step.mPosition = QPoint (0,i);
+				step.mText = QString("%1[%2]: %3").arg (QFileInfo(file.fileName()).fileName()).arg(i).arg(line.simplified());
+				step.mFullText= file.fileName();
+				emit appendSearchResult (step);
+			}
+		}
+	} //if not binary
 }
