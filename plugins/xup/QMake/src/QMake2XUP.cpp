@@ -18,6 +18,8 @@ si "nested" n'existe pas, il vaut "false"
 
 #include <exception>
 
+const QString mQMakeEditor = "QMake";
+
 QString tabsString( int i )
 { return QString().fill( '\t', i ); }
 
@@ -59,7 +61,7 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
 	const QStringList fileVariables = QMakeProjectItem::projectInfos()->fileVariables( QMakeProjectItem::QMakeProject );
 	const QStringList pathVariables = QMakeProjectItem::projectInfos()->pathVariables( QMakeProjectItem::QMakeProject );
 	
-	file.append( QString( "<!DOCTYPE XUPProject>\n<project codec=\"%1\" name=\"%2\" expanded=\"false\">\n" ).arg( codec ).arg( QFileInfo( s ).fileName() ) );
+	file.append( QString( "<!DOCTYPE XUPProject>\n<project codec=\"%1\" name=\"%2\" editor=\"%3\" expanded=\"false\">\n" ).arg( codec ).arg( QFileInfo( s ).fileName() ).arg( mQMakeEditor ) );
 	try
 	{
 		for(int i = 0;i < v.size();i++)
@@ -444,7 +446,7 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
 	catch ( const QString& s )
 	{
 		// re-init the XML output
-		file.append( QString( "<!DOCTYPE XUPProject>\n<project codec=\"%1\" name=\"%2\" expanded=\"false\">\n" ).arg( codec ).arg( QFileInfo( s ).fileName() ) );
+		file.append( QString( "<!DOCTYPE XUPProject>\n<project codec=\"%1\" name=\"%2\" editor=\"%3\" expanded=\"false\">\n" ).arg( codec ).arg( QFileInfo( s ).fileName() ).arg( mQMakeEditor ) );
 		// empty both stacks
 		isNested.clear();
 		pile.pop();
