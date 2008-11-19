@@ -7,11 +7,11 @@ int main( int argc, char** argv )
 	QApplication app( argc, argv );
 
 	// init application
-	app.setApplicationName( "$Application Name$" );
+	app.setApplicationName( "$Project Name$" );
 
 	QWidget w;
-	w.setWindowTitle( "$Application Name$" );
- 	w.show();
+	w.setWindowTitle( "$Project Name$" );
+	w.show();
 
 	// connection
 	QObject::connect( &app, SIGNAL( lastWindowClosed() ), &app, SLOT( quit() ) );
