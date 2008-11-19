@@ -123,7 +123,7 @@ void EntityContainer::deleteFileInfo ( QString file, QDateTime olderThan )
 void EntityContainer::addTagsFromRecord (QString fileName, FileRecord*  fileRecord)
 {
 	TagEntryListItem* item = fileRecord->firstTagEntry;
-	int displayMask = Navigator::instance()->getDisplayMask();
+	int displayMask = mNavigator->getDisplayMask();
 	while ( item != NULL )
 	{
 		tagEntryInfo* entry = &item->tag;    
@@ -180,7 +180,7 @@ Entity*EntityContainer::getScopeEntity ( QString scope0, QString scope1)
 	{
 		scopeEntity = new Entity ( UNKNOWN, scopes[0]);
 		addTopLevelItem ( scopeEntity);
-		scopeEntity->setExpanded (Navigator::instance()->getExpandMask() & scopeEntity->type);
+		scopeEntity->setExpanded (mNavigator->getExpandMask() & scopeEntity->type);
 	}
 	scopes.removeAt (0);
 	
@@ -283,7 +283,7 @@ void EntityContainer::addChildInContainer ( tagEntryInfo* entry, QString fileNam
 	{
 		Entity* entity = new Entity ( entry, fileName, time);
 		addTopLevelItem (entity);
-		entity->setExpanded (Navigator::instance()->getExpandMask() & entity->type);
+		entity->setExpanded (mNavigator->getExpandMask() & entity->type);
 	}
 	else
 		existing->updateSelf (entry, fileName, time);
@@ -303,7 +303,7 @@ void EntityContainer::addChildInEntity ( Entity* parEnt, tagEntryInfo* entry, QS
 	{
 		Entity* entity = new Entity ( entry, fileName, time);
 		parEnt->addChild (entity);
-		entity->setExpanded (Navigator::instance()->getExpandMask() & entity->type);
+		entity->setExpanded (mNavigator->getExpandMask() & entity->type);
 	}
 	else
 		existing->updateSelf ( entry, fileName, time);

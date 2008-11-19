@@ -44,7 +44,8 @@
 /*!
 	Class constructor
 */
-NavigatorSettings::NavigatorSettings ()
+NavigatorSettings::NavigatorSettings (Navigator* parent):
+	mNavigator (parent)
 {
 	names <<"Namespaces"<<	"Classes"<<"Constructors"<<"Destrutors";
 	names <<"Enums"<<"Enumerators"<<"Externs"<<"Functions";
@@ -54,8 +55,15 @@ NavigatorSettings::NavigatorSettings ()
 	QVBoxLayout* vbox = new QVBoxLayout (this);
 	
 	QHBoxLayout* settingsBox = new QHBoxLayout ();
+	
+	QGroupBox* displayGroup = new QGroupBox("Display:");
 	QVBoxLayout* displayBox = new QVBoxLayout ();
+	displayGroup->setLayout (displayBox);
+	
+	QGroupBox* expandGroup = new QGroupBox("Automatically expand:");
 	QVBoxLayout* expandBox = new QVBoxLayout ();
+	expandGroup->setLayout (expandBox);
+	
 	displayBox->addWidget ( new QLabel ("Display:"));
 	expandBox->addWidget ( new QLabel ("Automaticaly expand:"));
 	
@@ -63,20 +71,24 @@ NavigatorSettings::NavigatorSettings ()
 	{
 		displayFlags.append (new QCheckBox(names[i],this));
 		displayBox->addWidget (displayFlags[i]);
-		displayFlags[i]->setChecked ( Navigator::instance()->getDisplayMask() & (1<<i));
+		displayFlags[i]->setChecked ( mNavigator->getDisplayMask() & (1<<i));
 		expandFlags.append(new QCheckBox(names[i],this));
 		expandBox->addWidget (expandFlags[i]);
-		expandFlags[i]->setChecked ( Navigator::instance()->getExpandMask() & (1<<i));
+		expandFlags[i]->setChecked ( mNavigator->getExpandMask() & (1<<i));
 	}
 
-	settingsBox->addLayout (displayBox);
-	settingsBox->addLayout (expandBox);
-
+	settingsBox->addWidget (displayGroup);
+	settingsBox->addWidget (expandGroup);
+	
+	hideOnExitCheckbox.setText (tr("Hide on exit"));
+	hideOnExitCheckbox.setChecked (mNavigator->getAutoHide());
+	
 	QHBoxLayout* applyBox = new QHBoxLayout (this);
-	QPushButton* applyBtn = new QPushButton (tr("Apply"), this);
+	QPushButton* applyBtn = new QPushButton (tr("&Apply"), this);
 	applyBox->addWidget (applyBtn, 0, Qt::AlignRight);
 	
 	vbox->addLayout (settingsBox);
+	vbox->addWidget (&hideOnExitCheckbox);
 	vbox->addLayout (applyBox);
 	
 	connect ( applyBtn, SIGNAL ( clicked()), this, SLOT (setSettings()));
@@ -101,6 +113,7 @@ void NavigatorSettings::setSettings()
 		displayMask |=  (displayFlags[i]->isChecked())<<i;
 		expandMask |=  (expandFlags[i]->isChecked())<<i;
 	}
-	Navigator::instance()->setDisplayMask (displayMask);
-	Navigator::instance()->setExpandMask (expandMask);	
+	mNavigator->setDisplayMask (displayMask);
+	mNavigator->setExpandMask (expandMask);	
+	mNavigator->setAutoHide (hideOnExitCheckbox.isChecked());
 }

@@ -55,7 +55,7 @@ class pAbstractChild;
 
 	Navigator class implements interface of plugin, GUI, stores settings of plugin
 */
-class Navigator : public BasePlugin, public QSingleton<Navigator>
+class Navigator : public BasePlugin
 {
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin )

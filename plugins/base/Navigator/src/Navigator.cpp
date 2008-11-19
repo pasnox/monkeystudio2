@@ -114,7 +114,7 @@ bool Navigator::setEnabled (bool e)
 */
 QWidget* Navigator::settingsWidget ()
 {
-	return new NavigatorSettings ();
+	return new NavigatorSettings (this);
 }
 
 /*!
@@ -180,8 +180,10 @@ void Navigator::setAutoHide (bool value)
 	Get autoHide mode of plugin.
 	\return option value
 */
+#include <QDebug> //FIXME
 bool Navigator::getAutoHide (void)
 {
+		qDebug() <<  mAutoHide << this;
 	return mAutoHide;
 }
 
@@ -199,6 +201,7 @@ void Navigator::setDockVisible (bool visible)
 	current editing file
 	\param absPath Absolute file path of new file
 */
+#include <QDebug>
 void Navigator::currentFileChanged(pAbstractChild*, const QString absPath)
 {
 	if (fileLock->isChecked())
