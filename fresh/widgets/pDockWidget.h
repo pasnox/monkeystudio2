@@ -46,6 +46,7 @@ public:
 	virtual QSize sizeHint() const;
     
     virtual pAction* toggleViewPAction (QString defaultShortcut = QString::null);
+	virtual void setAutoFocusWidget (QWidget* widget);
 public slots:
 	virtual void setVisible( bool visible );
 
@@ -53,6 +54,9 @@ protected:
 	QSize contentsSize() const;
 	QSize mSize;
     pAction* mToggleViewPAction;
+	QWidget* mAutoFocusWidget;
+protected slots:
+	void onToggleViewActionTriggered (bool checked);
 };
 
 #endif // PDOCKWIDGET_H

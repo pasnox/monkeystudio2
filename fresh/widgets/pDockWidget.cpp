@@ -28,7 +28,9 @@
 	\param flags The dock window flags
 */
 pDockWidget::pDockWidget( const QString& title, QWidget* parent, Qt::WindowFlags flags )
-        : QDockWidget( title, parent, flags ), mToggleViewPAction( 0 )
+        : QDockWidget( title, parent, flags ), 
+		mToggleViewPAction( 0 ),
+		mAutoFocusWidget (0)
 {}
 
 /*!
@@ -37,7 +39,9 @@ pDockWidget::pDockWidget( const QString& title, QWidget* parent, Qt::WindowFlags
 	\param flags The dock window flags
 */
 pDockWidget::pDockWidget( QWidget* parent, Qt::WindowFlags flags )
-        : QDockWidget( parent, flags ), mToggleViewPAction( 0 )
+        : QDockWidget( parent, flags ), 
+		mToggleViewPAction( 0 ),
+		mAutoFocusWidget (0)
 {}
 
 pDockWidget::~pDockWidget()
@@ -78,12 +82,12 @@ pAction* pDockWidget::toggleViewPAction (QString defaultShortcut)
     {
         mToggleViewPAction = new pAction (  "a" + windowTitle(), 
                                             windowIcon(), 
-                                            tr("Show/hide ") + windowTitle(), 
+                                            tr("Show ") + windowTitle(), 
                                             defaultShortcut,
                                             "Docks");
         mToggleViewPAction->setCheckable (true);
         mToggleViewPAction->setChecked (isVisible());
-        connect (mToggleViewPAction, SIGNAL (toggled (bool)), this, SLOT (setVisible (bool)));
+        connect (mToggleViewPAction, SIGNAL (toggled (bool)), this, SLOT (onToggleViewActionTriggered (bool)));
         connect (this, SIGNAL (visibilityChanged (bool)), mToggleViewPAction, SLOT (setChecked (bool)));
         return mToggleViewPAction;
     }
@@ -91,6 +95,16 @@ pAction* pDockWidget::toggleViewPAction (QString defaultShortcut)
     {
         return NULL;
     }
+}
+
+
+/*!
+	\details Set widget, which will recieve focus automaticaly, when toggled action for show dock
+	\param widget Widget
+*/
+void pDockWidget::setAutoFocusWidget (QWidget* widget)
+{
+	mAutoFocusWidget = widget;
 }
 
 /*!
@@ -102,4 +116,20 @@ void pDockWidget::setVisible( bool visible )
 	if ( !visible && !isFloating() )
 		mSize = contentsSize();
 	QDockWidget::setVisible( visible );
+}
+
+/*!
+	\details Set dock visibility, if nessesery - set focus to widget
+	\param checked - if true - show, else - hide
+*/
+#include <QDebug>
+void pDockWidget::onToggleViewActionTriggered (bool checked)
+{
+	setVisible (checked);
+	if (checked && mAutoFocusWidget)
+	{
+		mAutoFocusWidget->setFocus();
+		activateWindow();
+		qDebug () << isActiveWindow() << mAutoFocusWidget->hasFocus();
+	}
 }
