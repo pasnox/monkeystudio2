@@ -135,7 +135,7 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	setCurrentPath( mDirsModel->filePath( mCombo->rootIndex() ) );
 	
 	// set own auto focus widget
-	setAutoFocusWidget (mLineEdit);
+	setAutoFocusWidget (mTree);
 	
 	// connections
 	connect( tbUp, SIGNAL( clicked() ), this, SLOT( tbUp_clicked() ) );

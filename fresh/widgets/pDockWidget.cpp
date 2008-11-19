@@ -131,5 +131,6 @@ void pDockWidget::onToggleViewActionTriggered (bool checked)
 		mAutoFocusWidget->setFocus();
 		activateWindow();
 		qDebug () << isActiveWindow() << mAutoFocusWidget->hasFocus();
+		qDebug () << mAutoFocusWidget;
 	}
 }
