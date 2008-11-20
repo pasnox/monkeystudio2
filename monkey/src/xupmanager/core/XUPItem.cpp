@@ -374,6 +374,11 @@ QString XUPItem::attribute( const QString& name, const QString& defaultValue ) c
 
 void XUPItem::setAttribute( const QString& name, const QString& value )
 {
+	if ( mDomElement.attribute( name ) == value )
+	{
+		return;
+	}
+	
 	mDomElement.setAttribute( name, value );
 	
 	// update model if needed
