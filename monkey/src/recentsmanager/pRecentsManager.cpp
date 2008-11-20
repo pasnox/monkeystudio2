@@ -74,9 +74,9 @@ void pRecentsManager::setMaxRecentProjects( int i )
 
 void pRecentsManager::recentFiles_triggered( QAction* a )
 {
-	if ( a->text() != tr( "&Clear" ) )
+	if ( a->objectName() != "aClear" )
 		emit openFileRequested( a->data().toString(), pMonkeyStudio::defaultCodec() );
-	else if ( a->text() == tr( "&Clear" ) )
+	else if ( a->objectName() == "aClear" )
 	{
 		MonkeyCore::settings()->setValue( "Recents/Files", QStringList() );
 		updateRecentFiles();
@@ -86,8 +86,7 @@ void pRecentsManager::recentFiles_triggered( QAction* a )
 void pRecentsManager::updateRecentFiles()
 {
 	// clears actions
-	foreach ( QAction* a, mRecentFiles )
-		a->deleteLater();
+	qDeleteAll( mRecentFiles );
 	mRecentFiles.clear();
 	// get recents files
 	QStringList l = MonkeyCore::settings()->value( "Recents/Files" ).toStringList();
@@ -144,9 +143,9 @@ void pRecentsManager::removeRecentFile( const QString& s )
 
 void pRecentsManager::recentProjects_triggered( QAction* a )
 {
-	if ( a->text() != tr( "&Clear" ) )
+	if ( a->objectName() != "aClear" )
 		emit openProjectRequested( a->data().toString(), pMonkeyStudio::defaultCodec() );
-	else if ( a->text() == tr( "&Clear" ) )
+	else if ( a->objectName() == "aClear" )
 	{
 		MonkeyCore::settings()->setValue( "Recents/Projects", QStringList() );
 		updateRecentProjects();
@@ -156,8 +155,7 @@ void pRecentsManager::recentProjects_triggered( QAction* a )
 void pRecentsManager::updateRecentProjects()
 {
 	// clear actions
-	foreach ( QAction* a, mRecentProjects )
-		a->deleteLater();
+	qDeleteAll( mRecentProjects );
 	mRecentProjects.clear();
 	// get recents projects
 	QStringList l = MonkeyCore::settings()->value( "Recents/Projects" ).toStringList();
