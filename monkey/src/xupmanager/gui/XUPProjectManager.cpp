@@ -9,6 +9,8 @@
 #include "PluginsManager.h"
 #include "XUPPlugin.h"
 #include "UITemplatesWizard.h"
+#include "pRecentsManager.h"
+#include "QueuedStatusBar.h"
 
 #include <QDebug>
 #include <QTextCodec>
@@ -366,6 +368,16 @@ void XUPProjectManager::newProject()
 
 bool XUPProjectManager::openProject( const QString& fileName, const QString& codec )
 {
+	// check that project is not yet open
+	foreach ( XUPProjectItem* project, topLevelProjects() )
+	{
+		if ( pMonkeyStudio::isSameFile( project->fileName(), fileName ) )
+		{
+			setCurrentProject( project, currentProject() );
+			return true;
+		}
+	}
+	
 	QFileInfo fi( fileName );
 	
 	if ( fi.exists() && fi.isFile() )
@@ -373,15 +385,25 @@ bool XUPProjectManager::openProject( const QString& fileName, const QString& cod
 		XUPProjectModel* model = new XUPProjectModel( this );
 		if ( model->open( fileName, codec ) )
 		{
+			// append file to recents project
+			MonkeyCore::recentsManager()->addRecentProject( fileName );
+			
 			int id = cbProjects->count();
 			cbProjects->addItem( model->headerData( 0, Qt::Horizontal, Qt::DisplayRole ).toString(), QVariant::fromValue<XUPProjectModel*>( model ) );
 			cbProjects->setItemIcon( id, model->headerData( 0, Qt::Horizontal, Qt::DecorationRole ).value<QIcon>() );
 			setCurrentProject( model->mRootProject, currentProject() );
 			emit projectOpened( currentProject() );
+			
 			return true;
 		}
 		else
 		{
+			// remove from recents
+			MonkeyCore::recentsManager()->removeRecentProject( fileName );
+			
+			// inform user about error
+			MonkeyCore::statusBar()->appendMessage( tr( "An error occur while opening project : %1" ).arg( fileName ) );
+			
 			pteLog->appendPlainText( model->lastError() );
 			delete model;
 		}
