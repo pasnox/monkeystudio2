@@ -6,6 +6,7 @@ ProjectSettings {
 	BUILDER	= GNUMake
 	COMPILER	= G++
 	DEBUGGER	= GNUDebugger2
+	SHOW_QT_VERSION_WARNING	= 0
 }
 
 # include install script
