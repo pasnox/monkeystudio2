@@ -634,16 +634,6 @@ void pWorkspace::fileOpen_triggered()
 {
 	// get available filters
 	QString mFilters = availableFilesFilters();
-
-	// prepend a all in one filter
-	if ( !mFilters.isEmpty() )
-	{
-		QString s;
-		foreach ( QStringList l, availableFilesSuffixes().values() )
-			s.append( l.join( " " ).append( " " ) );
-		mFilters.prepend( QString( "All Files (*);;" ));
-		mFilters.prepend( QString( "All Supported Files (%1);;" ).arg( s.trimmed() ) );
-	}
 	
 	// show filedialog to user
 	pFileDialogResult result = MkSFileDialog::getOpenFileNames( window(), tr( "Choose the file(s) to open" ), QDir::current().absolutePath(), mFilters, true, false );
@@ -661,11 +651,15 @@ void pWorkspace::fileOpen_triggered()
 	foreach ( QString file, fileNames )
 	{
 		if ( openFile( file, result[ "codec" ].toString() ) )
+		{
 			// append file to recents
 			MonkeyCore::recentsManager()->addRecentFile( file );
+		}
 		else
+		{
 			// remove it from recents files
 			MonkeyCore::recentsManager()->removeRecentFile( file );
+		}
 	}
 }
 
