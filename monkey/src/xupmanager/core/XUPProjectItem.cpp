@@ -483,7 +483,7 @@ XUPItem* XUPProjectItem::projectSettingsScope( bool create ) const
 	if ( project )
 	{
 		const QString mScopeName = "XUPProjectSettings";
-		XUPItemList items = childrenList();
+		XUPItemList items = project->childrenList();
 		
 		foreach ( XUPItem* child, items )
 		{
