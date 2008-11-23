@@ -90,7 +90,6 @@ void MonkeyCore::init()
 	// init shortcuts editor
 	showMessage( &splash, tr( "Initializing Shortcuts..." ) );
 	MonkeyCore::actionsManager()->setSettings( settings() );
-	MonkeyCore::actionsManager()->reloadSettings();
 	
 	// init pluginsmanager
 	showMessage( &splash, tr( "Initializing Plugins..." ) );
@@ -99,6 +98,9 @@ void MonkeyCore::init()
 	// restore window state
 	showMessage( &splash, tr( "Restoring Workspace..." ) );
 	mainWindow()->setSettings( settings() );
+	
+	// restore shortcuts
+	MonkeyCore::actionsManager()->reloadSettings();
 	
 	// show main window
 	mainWindow()->show();
