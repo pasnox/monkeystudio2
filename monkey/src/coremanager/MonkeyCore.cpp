@@ -104,6 +104,7 @@ void MonkeyCore::init()
 	
 	// show main window
 	mainWindow()->show();
+	mainWindow()->menu_Docks_aboutToShow();
 	
 	// restore session
 	showMessage( &splash, tr( "Restoring Session..." ) );
