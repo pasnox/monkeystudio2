@@ -314,9 +314,10 @@ void pMenuBar::addAction( const QString& path, QAction* action )
 	
 	QMenu* mnu = menu( path );
 	
-	pActionsManager::setActionsManager( action, mActionsManager );
-	pActionsManager::setActionPath( action, absoluteScope( path ) );
 	action->setShortcutContext( mDefaultShortcutContext );
+	pActionsManager::setActionPath( action, absoluteScope( path ) );
+	pActionsManager::setActionsManager( action, mActionsManager );
+	
 	mnu->addAction( action );
 }
 
