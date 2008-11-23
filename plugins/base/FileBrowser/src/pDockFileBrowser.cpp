@@ -134,8 +134,8 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	// set lineedit path
 	setCurrentPath( mDirsModel->filePath( mCombo->rootIndex() ) );
 	
-	// set own auto focus widget
-	setAutoFocusWidget (mTree);
+	// redirirect focus proxy
+	setFocusProxy( mTree );
 	
 	// connections
 	connect( tbUp, SIGNAL( clicked() ), this, SLOT( tbUp_clicked() ) );
