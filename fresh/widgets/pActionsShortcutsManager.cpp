@@ -29,6 +29,8 @@
 
 #include <QDebug>
 
+
+
 pActionsShortcutsManager::pActionsShortcutsManager( pActionsManager* manager, QWidget* parent )
 	: QDialog( parent )
 {
@@ -121,7 +123,7 @@ pActionsShortcutsManager::pActionsShortcutsManager( pActionsManager* manager, QW
 			pathItem->setFirstColumnSpanned( true );
 			pathItem->setFlags( pathItem->flags() ^ Qt::ItemIsSelectable );
 			pathItem->setTextAlignment( 0, Qt::AlignCenter );
-			pathItem->setText( 0, mPath );
+			pathItem->setText( 0, strippedText( mPath ) );
 			pathItem->setBackground( 0, pal.mid() );
 			pathItem->setForeground( 0, pal.text().color().lighter( 400 ) );
 			
@@ -135,7 +137,7 @@ pActionsShortcutsManager::pActionsShortcutsManager( pActionsManager* manager, QW
 		
 		QTreeWidgetItem* item = new QTreeWidgetItem( pathItem );
 		item->setIcon( 0, action->icon() );
-		item->setText( 0, action->text() );
+		item->setText( 0, strippedText( action->text() ) );
 		item->setData( 0, Qt::UserRole, QVariant::fromValue( action ) );
 		item->setTextAlignment( 1, Qt::AlignVCenter | Qt::AlignRight );
 		item->setText( 1, action->shortcut().toString() );
@@ -154,6 +156,18 @@ pActionsShortcutsManager::pActionsShortcutsManager( pActionsManager* manager, QW
 QSize pActionsShortcutsManager::sizeHint() const
 {
 	return QSize( 640, 480 );
+}
+
+QString pActionsShortcutsManager::strippedText( const QString& text )
+{
+	const QString tag = "***|MkS|***";
+	QString s = text;
+	
+	s.replace( "&&", tag );
+	s.replace( "&", QString::null );
+	s.replace( tag, "&&" );
+	
+	return s;
 }
 
 void pActionsShortcutsManager::on_leFilter_textChanged( const QString& text )

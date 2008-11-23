@@ -37,6 +37,7 @@ public:
 	pActionsShortcutsManager( pActionsManager* manager, QWidget* parent = 0 );
 	
 	virtual QSize sizeHint() const;
+	static QString strippedText( const QString& text );
 
 protected:
 	QHash<QString, QTreeWidgetItem*> mItems;
