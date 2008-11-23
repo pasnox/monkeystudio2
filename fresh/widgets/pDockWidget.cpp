@@ -20,6 +20,10 @@
 
 #include <QStyle>
 #include <QAction>
+#include <QTimer>
+#include <QApplication>
+
+#include <QDebug>
 
 /*!
 	\brief Create a new pDockWidget instance
@@ -28,8 +32,10 @@
 	\param flags The dock window flags
 */
 pDockWidget::pDockWidget( const QString& title, QWidget* parent, Qt::WindowFlags flags )
-	: QDockWidget( title, parent, flags )//, mToggleViewAction( 0 ), mAutoFocusWidget( 0 ), mActionsManager( 0 )
-{}
+	: QDockWidget( title, parent, flags )
+{
+	connect( toggleViewAction(), SIGNAL( toggled( bool ) ), this, SLOT( toggleViewAction_toggled( bool ) ) );
+}
 
 /*!
 	\brief Create a new pDockWidget instance
@@ -37,8 +43,15 @@ pDockWidget::pDockWidget( const QString& title, QWidget* parent, Qt::WindowFlags
 	\param flags The dock window flags
 */
 pDockWidget::pDockWidget( QWidget* parent, Qt::WindowFlags flags )
-	: QDockWidget( parent, flags )//, mToggleViewAction( 0 ), mAutoFocusWidget( 0 ), mActionsManager( 0 )
-{}
+	: QDockWidget( parent, flags )
+{
+	connect( toggleViewAction(), SIGNAL( toggled( bool ) ), this, SLOT( toggleViewAction_toggled( bool ) ) );
+}
+
+pDockWidget::~pDockWidget()
+{
+	setFocusProxy( 0 );
+}
 
 QSize pDockWidget::contentsSize() const
 {
@@ -52,11 +65,39 @@ QSize pDockWidget::contentsSize() const
 	return contents;
 }
 
+void pDockWidget::toggleViewAction_toggled( bool toggled )
+{
+	if ( toggled && focusProxy() )
+	{
+		if ( isFloating() )
+		{
+			QTimer::singleShot( 25, this, SLOT( handleWindowActivation() ) );
+		}
+		else
+		{
+			QTimer::singleShot( 25, this, SLOT( handleFocusProxy() ) );
+		}
+	}
+}
+
+void pDockWidget::handleWindowActivation()
+{
+	activateWindow();
+	QTimer::singleShot( 25, this, SLOT( handleFocusProxy() ) );
+}
+
+void pDockWidget::handleFocusProxy()
+{
+	focusProxy()->setFocus();
+}
+
 /*!
 	\details Return the dock sizeHint
 */
 QSize pDockWidget::sizeHint() const
-{ return mSize.isValid() && !isFloating() ? mSize : QDockWidget::sizeHint(); }
+{
+	return mSize.isValid() && !isFloating() ? mSize : QDockWidget::sizeHint();
+}
 
 void pDockWidget::setActionsManager( pActionsManager* manager )
 {
@@ -77,13 +118,4 @@ void pDockWidget::setVisible( bool visible )
 	if ( !visible && !isFloating() )
 		mSize = contentsSize();
 	QDockWidget::setVisible( visible );
-}
-
-void pDockWidget::toggleViewAction_toggled( bool toggled )
-{
-	if ( toggled )
-	{
-		setFocus();
-		activateWindow();
-	}
 }

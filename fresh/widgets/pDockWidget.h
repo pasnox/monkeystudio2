@@ -41,6 +41,7 @@ class Q_MONKEY_EXPORT pDockWidget : public QDockWidget
 public:
 	pDockWidget( const QString& title, QWidget* parent = 0, Qt::WindowFlags flags = 0 );
 	pDockWidget( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+	~pDockWidget();
 
 	virtual QSize sizeHint() const;
 	
@@ -58,6 +59,8 @@ protected:
 
 protected slots:
 	void toggleViewAction_toggled( bool toggled );
+	void handleWindowActivation();
+	void handleFocusProxy();
 };
 
 #endif // PDOCKWIDGET_H
