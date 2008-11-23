@@ -24,7 +24,9 @@
 #ifndef PMENUBAR_H
 #define PMENUBAR_H
 
-#include "../objects/MonkeyExport.h"
+#include "MonkeyExport.h"
+#include "pGroupPath.h"
+#include "pActionsManager.h"
 
 #include <QMenuBar>
 #include <QHash>
@@ -33,51 +35,11 @@
 #include <QAction>
 #include <QIcon>
 
-class pAction;
-
-/*!
-	\brief An internal class used by pMenuBar
-	\details It allow to manage valued path ( ie: QSettings like )
-*/
-class Q_MONKEY_EXPORT pMenuBarGroup
-{
-public:
-	inline pMenuBarGroup()
-		: num( -1 ), maxNum( -1 ) {}
-	inline pMenuBarGroup( const QString& s )
-		: str( s ), num( -1 ), maxNum( -1 ) {}
-	inline pMenuBarGroup( const QString& s, bool guessArraySize )
-		: str( s ), num( 0 ), maxNum( guessArraySize ? 0 : -1 ) {}
-	//
-	inline QString name() const { return str; }
-	inline QString toString() const;
-	inline bool isArray() const { return num != -1; }
-	inline int arraySizeGuess() const { return maxNum; }
-	inline void setArrayIndex( int i )
-		{ num = i +1; if ( maxNum != -1 && num > maxNum ) maxNum = num; }
-	//
-	QString str;
-	int num;
-	int maxNum;
-};
-
-inline QString pMenuBarGroup::toString() const
-{
-	QString result;
-	result = str;
-	if ( num > 0 )
-	{
-		result += QLatin1Char( '/' );
-		result += QString::number( num );
-	}
-	return result;
-}
-
 /*!
 	\brief An extended QMenuBar
 	\details This menu bar is working like a QSettings, you can get action/menu on the fly
 	\details with call like this : menu->action( "mFile/aSave" );
-	\details If the path is not existing then the action is created.
+	\details If the path is not existing then the complete action path is created.
 */
 class Q_MONKEY_EXPORT pMenuBar : public QMenuBar
 {
@@ -85,33 +47,32 @@ class Q_MONKEY_EXPORT pMenuBar : public QMenuBar
 
 public:
 	pMenuBar( QWidget* parent = 0 );
-	
-	QAction* searchAction( QMenu* menu, const QString& name );
 
+	QString absoluteScope( const QString& path );
+	QString relativeScope( const QString& path );
 	static QString normalizedKey( const QString& key );
-	void beginGroupOrArray( const pMenuBarGroup& group );
+	void beginGroupOrArray( const pGroupPath& group );
 	void beginGroup( const QString& group );
 	QString group() const;
 	void endGroup();
-
-	QString fixedPath( const QString& path, bool prependPrefix = false );
-
-	QAction* action( const QString& path, const QString& text = QString::null, const QIcon& icon = QIcon(), const QString& shortcut = QString::null, const QString& toolTip = QString::null );
-    void addAction( const QString& path, pAction* action);
-    
-	QMenu* menu( const QString& path = QString::null, const QString& title = QString::null, const QIcon& icon = QIcon() );
-
-	void clearMenu( const QString& path = QString::null );
-	void deleteMenu( const QString& path = QString::null );
-	void setMenuEnabled( QMenu* menu, bool enabled );
 	
 	Qt::ShortcutContext defaultShortcutContext() const;
 	void setDefaultShortcutContext( Qt::ShortcutContext context );
-
+	
+	pActionsManager* actionsManager() const;
+	
+	QMenu* menu( const QString& path = QString::null, const QString& title = QString::null, const QIcon& icon = QIcon() );
+	QAction* action( const QString& path, const QString& text = QString::null, const QIcon& icon = QIcon(), const QString& shortcut = QString::null, const QString& toolTip = QString::null );
+	void addAction( const QString& path, QAction* action );
+	
+	void clearMenu( const QString& path );
+	void deleteMenu( const QString& path );
+	void setMenuEnabled( QMenu* menu, bool enabled );
+	
 private:
-	QString mMenuGroup;
+	pActionsManager* mActionsManager;
 	QHash<QString, QMenu*> mMenus;
-	QStack<pMenuBarGroup> groupStack;
+	QStack<pGroupPath> groupStack;
 	QString groupPrefix;
 	Qt::ShortcutContext mDefaultShortcutContext;
 };

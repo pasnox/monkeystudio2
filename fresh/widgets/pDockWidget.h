@@ -24,11 +24,11 @@
 #ifndef PDOCKWIDGET_H
 #define PDOCKWIDGET_H
 
-#include "../objects/MonkeyExport.h"
+#include "MonkeyExport.h"
 
 #include <QDockWidget>
 
-class pAction;
+class pActionsManager;
 
 /*!
 	\brief A QDockWidget that keep it's size
@@ -40,23 +40,24 @@ class Q_MONKEY_EXPORT pDockWidget : public QDockWidget
 	
 public:
 	pDockWidget( const QString& title, QWidget* parent = 0, Qt::WindowFlags flags = 0 );
-        pDockWidget( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
-        virtual ~pDockWidget();
+	pDockWidget( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
 
 	virtual QSize sizeHint() const;
-    
-    virtual pAction* toggleViewPAction (QString defaultShortcut = QString::null);
-	virtual void setAutoFocusWidget (QWidget* widget);
+	
+	void setActionsManager( pActionsManager* manager );
+	pActionsManager* actionsManager() const;
+	
 public slots:
 	virtual void setVisible( bool visible );
 
 protected:
-	QSize contentsSize() const;
+	pActionsManager* mActionsManager;
 	QSize mSize;
-    pAction* mToggleViewPAction;
-	QWidget* mAutoFocusWidget;
+	
+	QSize contentsSize() const;
+
 protected slots:
-	void onToggleViewActionTriggered (bool checked);
+	void toggleViewAction_toggled( bool toggled );
 };
 
 #endif // PDOCKWIDGET_H

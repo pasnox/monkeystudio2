@@ -15,51 +15,45 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
-/*!
-	\file pShortcutsEditor.h
-	\date 2008-01-14T00:27:48
-	\author Filipe AZEVEDO aka Nox P\@sNox <pasnox@gmail.com>
-	\brief A shortcut dialog editor
-*/
-#ifndef PSHORTCUTSEDITOR_H
-#define PSHORTCUTSEDITOR_H
+#ifndef PACTIONSSHORTCUTSMANAGER_H
+#define PACTIONSSHORTCUTSMANAGER_H
 
-#include "../objects/MonkeyExport.h"
-#include "../objects/QSingleton.h"
+#include "MonkeyExport.h"
 
 #include <QDialog>
 #include <QHash>
 
+class pActionsManager;
 class QTreeWidget;
 class QTreeWidgetItem;
 class QPushButton;
 class QLineEdit;
 
-/*!
-	\brief A shortcut dialog editor
-	\details This dialog allow to edit shortcut of pAction actions
-*/
-class Q_MONKEY_EXPORT pShortcutsEditor : public QDialog, public QSingleton<pShortcutsEditor>
+class Q_MONKEY_EXPORT pActionsShortcutsManager : public QDialog
 {
 	Q_OBJECT
-	friend class QSingleton<pShortcutsEditor>;
 
 public:
-	pShortcutsEditor( QWidget* parent = 0 );
+	pActionsShortcutsManager( pActionsManager* manager, QWidget* parent = 0 );
+	
+	virtual QSize sizeHint() const;
 
-private:
+protected:
 	QHash<QString, QTreeWidgetItem*> mItems;
+	QLineEdit* leFilter;
 	QTreeWidget* twShortcuts;
 	QPushButton* pbRestore;
 	QPushButton* pbClear;
 	QLineEdit* leShortcut;
 	QPushButton* pbSet;
 	QPushButton* pbClose;
+	pActionsManager* mManager;
 
 private slots:
+	void on_leFilter_textChanged( const QString& text );
 	void on_twShortcuts_itemSelectionChanged();
 	void pbRestore_pbSet_clicked();
 	void on_leShortcut_textChanged( const QString& text );
 };
 
-#endif // PSHORTCUTSEDITOR_H
+#endif // PACTIONSSHORTCUTSMANAGER_H

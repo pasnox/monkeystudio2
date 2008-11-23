@@ -41,15 +41,16 @@ SOURCES	+= pTabbedWorkspaceCorner.cpp \
 	pTabbedWorkspaceCornerButton.cpp \
 	pTabbedWorkspace.cpp \
 	pTabbedWorkspaceRightCorner.cpp
+# pGroupPath
+HEADERS	+= pGroupPath.h
+SOURCES	+= pGroupPath.cpp
 # action manager
-HEADERS	+= pAction.h \
-	pActionManager.h \
-	pKeySequenceInput.h \
-	pShortcutsEditor.h
-SOURCES	+= pAction.cpp \
-	pActionManager.cpp \
-	pKeySequenceInput.cpp \
-	pShortcutsEditor.cpp
+HEADERS	+= pActionsShortcutsManager.h \
+	pActionsManager.h \
+	pKeySequenceInput.h
+SOURCES	+= pActionsShortcutsManager.cpp \
+	pActionsManager.cpp \
+	pKeySequenceInput.cpp
 # pmenubar
 HEADERS	+= pMenuBar.h
 SOURCES	+= pMenuBar.cpp

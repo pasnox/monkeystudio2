@@ -16,9 +16,9 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 #include "pTabbedWorkspaceRightCorner.h"
-#include "pAction.h"
 
 #include <QMenu>
+#include <QAction>
 #include <QMetaEnum>
 
 pTabbedWorkspaceRightCorner::pTabbedWorkspaceRightCorner( pTabbedWorkspace* p )
@@ -37,6 +37,8 @@ pTabbedWorkspaceRightCorner::pTabbedWorkspaceRightCorner( pTabbedWorkspace* p )
 	agTabMode = new QActionGroup( menu );
 	agDocumentMode = new QActionGroup( menu );
 
+#warning Deprecated, uncomment code if needed
+	/*
 	// fill enums in menu
 	QMetaEnum e;
 
@@ -102,6 +104,7 @@ pTabbedWorkspaceRightCorner::pTabbedWorkspaceRightCorner( pTabbedWorkspace* p )
 	connect( aTabbedCloseAll, SIGNAL( triggered() ), p, SIGNAL( closeAllRequested() ) );
 
 	setActions( QList<QAction*>() << menu->menuAction() );
+	*/
 }
 
 void pTabbedWorkspaceRightCorner::agTabShape_triggered( QAction* a )

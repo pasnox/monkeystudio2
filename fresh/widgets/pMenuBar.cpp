@@ -1,14 +1,4 @@
 /****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Fresh Framework
-** FileName  : pMenuBar.cpp
-** Date      : 2008-01-14T00:27:47
-** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
-**
 	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
 	This program is free software; you can redistribute it and/or modify
@@ -24,72 +14,94 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
 ****************************************************************************/
 #include "pMenuBar.h"
-#include "pAction.h"
+
+#include <QDebug>
 
 /*!
 	\brief Create a new pMenuBar object
 	\param parent The parent widget
 */
 pMenuBar::pMenuBar( QWidget* parent )
-	: QMenuBar( parent ), mMenuGroup( tr( "Main Menu" ) )
+	: QMenuBar( parent )
 {
 	mDefaultShortcutContext = Qt::WindowShortcut;
+	mActionsManager = new pActionsManager( "Menu Bar", this );
 }
 
 /*!
-	\details Return an action having corresponding name in menu.
-	\details If the name is like aSeparatorXXX or XXX represent a number
-	\details a new separator is returned if it's not found.
-	\details If name is not found, and don't contains separator mask, null is returned.
-	\param menu The QMenu to scan
-	\param name The action name to search
+	\details Return a full path of path
+	\param path The path to make full
 */
-QAction* pMenuBar::searchAction( QMenu* menu, const QString& name )
+QString pMenuBar::absoluteScope( const QString& path )
 {
-	foreach ( QAction* action, menu->actions() )
-		if ( action->objectName().toLower() == name.toLower() )
-			return action;
+	QString fPath = QString( path ).prepend( groupPrefix );
+	
+	return mActionsManager->fixedPath( fPath );
+}
 
-	if ( name.contains( QRegExp( "^aseparator\\d{1,2}$", Qt::CaseInsensitive ) ) )
-		return menu->addSeparator();
-
-	return 0;
+QString pMenuBar::relativeScope( const QString& path )
+{
+	QString mPath = mActionsManager->fixedPath( path );
+	
+	if ( mPath.startsWith( groupPrefix ) )
+	{
+		return mPath.mid( groupPrefix.length() );
+	}
+	
+	QString prf = groupPrefix.left( groupPrefix.length() -1 );
+	
+	if ( mPath.startsWith( prf ) )
+	{
+		return mPath.mid( prf.length() );
+	}
+	
+	return mPath;
 }
 
 QString pMenuBar::normalizedKey( const QString& key )
 {
 	QString r = key;
-
 	int i = 0;
+	
 	while ( i < r.size() )
 	{
 		while ( r.at( i ) == QLatin1Char( '/' ) )
 		{
 			r.remove( i, 1 );
+			
 			if ( i == r.size() )
+			{
 				goto after_loop;
+			}
 		}
 		while ( r.at( i ) != QLatin1Char( '/' ) )
 		{
 			++i;
+			
 			if ( i == r.size() )
+			{
 				return r;
+			}
 		}
+		
 		++i; // leave the slash alone
 	}
 
 after_loop:
 	if ( !r.isEmpty() )
+	{
 		r.truncate( i -1 ); // remove the trailing slash
+	}
+	
 	return r;
 }
 
-void pMenuBar::beginGroupOrArray( const pMenuBarGroup& group )
+void pMenuBar::beginGroupOrArray( const pGroupPath& group )
 {
 	groupStack.push( group );
+	
 	if ( !group.name().isEmpty() )
 	{
 		groupPrefix += group.name();
@@ -103,7 +115,7 @@ void pMenuBar::beginGroupOrArray( const pMenuBarGroup& group )
 */
 void pMenuBar::beginGroup( const QString& group )
 {
-	beginGroupOrArray( pMenuBarGroup( normalizedKey( group ) ) );
+	beginGroupOrArray( pGroupPath( normalizedKey( group ) ) );
 }
 
 /*!
@@ -127,111 +139,43 @@ void pMenuBar::endGroup()
 		return;
 	}
 
-	pMenuBarGroup g = groupStack.pop();
+	pGroupPath g = groupStack.pop();
 	int len = g.toString().size();
+	
 	if ( len > 0 )
-		groupPrefix.truncate( groupPrefix.size() -( len +1 ) );
-
-	if ( g.isArray() )
-		qWarning( "pMenuBar::endGroup: Expected endArray() instead" );
-}
-
-/*!
-	\details Return a fixed path
-	\param path The path to fix
-	\param prependPrefix If true, the current prefix is prepend, else nothing is prepend.
-*/
-QString pMenuBar::fixedPath( const QString& path, bool prependPrefix )
-{
-	QString mString = path;
-	if ( prependPrefix )
-		mString.prepend( groupPrefix );
-	mString.replace( '\\', '/' );
-	if ( mString.endsWith( '/' ) )
-		mString.chop( 1 );
-	return mString;
-}
-
-/*!
-	\details Return the action at \c path
-	\details If the path doesn't exists, the action is created.
-	\param path The path of the action to get
-	\param text The action text 
-	\param icon The action icon
-	\param shortcut The action shortcut
-	\param toolTip The action tooltip/statusTip
-*/
-QAction* pMenuBar::action( const QString& path, const QString& text, const QIcon& icon, const QString& shortcut, const QString& toolTip )
-{
-	QString mString = fixedPath( path );
-	QString mName = mString.mid( mString.lastIndexOf( '/' ) +1 );
-	QString mPath;
-
-	if ( mString.contains( '/' ) )
-		mPath = mString.mid( 0, mString.lastIndexOf( '/' ) );
-
-	QMenu* foundMenu = menu( mPath );
-	QMenu* tmpMenu = foundMenu;
-	QAction* action = searchAction( foundMenu, mName );
-
-	// create action if needed
-	if ( !action )
 	{
-		// get group
-		QString group;
-		while ( tmpMenu && !tmpMenu->title().isEmpty() )
-		{
-			group.prepend( tmpMenu->title() +"/" );
-			tmpMenu = qobject_cast<QMenu*>( tmpMenu->parentWidget() );
-		}
-
-		// add main menu group
-		group.prepend( mMenuGroup +"/" );
-
-		// create action
-		action = new pAction( mName, icon, text, QKeySequence( shortcut ), group );
-		action->setParent( foundMenu );
-		action->setShortcutContext( mDefaultShortcutContext );
-		foundMenu->addAction( action );
-
-		if ( !toolTip.isEmpty() )
-			action->setStatusTip( toolTip );
-
-		if ( !toolTip.isEmpty() )
-			action->setToolTip( toolTip );
+		groupPrefix.truncate( groupPrefix.size() -( len +1 ) );
 	}
 
-	// return action
-	return action;
+	if ( g.isArray() )
+	{
+		qWarning( "pMenuBar::endGroup: Expected endArray() instead" );
+	}
 }
 
 /*!
-	\details Add action to menu
-	\param path The path of the action
-	\param action Action to add
+	\details Return the default ShortcutContext used by actions created by the class
 */
-void pMenuBar::addAction( const QString& path, pAction* action)
+Qt::ShortcutContext pMenuBar::defaultShortcutContext() const
 {
-	QString mString = fixedPath( path );
+	return mDefaultShortcutContext;
+}
 
-	QMenu* foundMenu = menu( path );
-	QMenu* tmpMenu = foundMenu;
+/*!
+	\details Set the default ShortcutContext used by actions created by the class
+	\param context The default ShortcutContext
+*/
+void pMenuBar::setDefaultShortcutContext( Qt::ShortcutContext context )
+{
+	mDefaultShortcutContext = context;
+}
 
-    // get group
-    QString group;
-    while ( tmpMenu && !tmpMenu->title().isEmpty() )
-    {
-        group.prepend( tmpMenu->title() +"/" );
-        tmpMenu = qobject_cast<QMenu*>( tmpMenu->parentWidget() );
-    }
-
-    // add main menu group
-    group.prepend( mMenuGroup +"/" );
-
-    // create action
-    action->setParent( foundMenu );
-    action->setShortcutContext( mDefaultShortcutContext );
-    foundMenu->addAction( action );
+/*!
+	\details Return the pActionsManager used by this pMenuBar
+*/
+pActionsManager* pMenuBar::actionsManager() const
+{
+	return mActionsManager;
 }
 
 /*!
@@ -244,88 +188,177 @@ void pMenuBar::addAction( const QString& path, pAction* action)
 */
 QMenu* pMenuBar::menu( const QString& path, const QString& title, const QIcon& icon )
 {
-	QString mString = fixedPath( path, true );
-	QMenu* mMenu = 0L;
-	if ( !mMenus.contains( mString ) )
+	QString fPath = absoluteScope( path );
+	
+	if ( !mMenus.contains( fPath ) )
 	{
-		QStringList mMenuList = mString.split( '/' );
-		mString.clear();
-		for ( int i = 0; i < mMenuList.count(); i++ )
+		QStringList parts = fPath.split( "/" );
+		QString curPath;
+		
+		for ( int i = 0; i < parts.count(); i++ )
 		{
-			mString += '/' + mMenuList[ i ];
-			if ( mString[ 0 ] == '/' )
-				mString.remove( 0, 1 );
-			if ( !mMenus.contains( mString ) )
+			curPath += "/" +parts.at( i );
+			
+			if ( curPath[ 0 ] == '/' )
 			{
-				mMenus[ mString ] = !mString.contains( '/' ) ? addMenu( mMenuList[ i ] ) : mMenus[ mString.left( mString.lastIndexOf( '/' ) ) ]->addMenu( mMenuList[ i ] );
-				mMenus[ mString ]->setObjectName( mMenuList[ i ] );
-				mMenus[ mString ]->setTitle( mString );
+				curPath.remove( 0, 1 );
+			}
+			
+			if ( !mMenus.contains( curPath ) )
+			{
+				QMenu* mnu = 0;
+				
+				if ( curPath.contains( '/' ) )
+				{
+					const QString parentPath = curPath.left( curPath.lastIndexOf( '/' ) );
+					mnu = mMenus[ parentPath ]->addMenu( parts.at( i ) );
+				}
+				else
+				{
+					mnu = addMenu( parts.at( i ) );
+				}
+				
+				mMenus[ curPath ] = mnu;
+				mMenus[ curPath ]->setObjectName( parts.at( i ) );
+				mMenus[ curPath ]->setTitle( parts.at( i ) );
 			}
 		}
 	}
-	mMenu = mMenus[ mString ];
-	if ( !title.isEmpty() && mMenu->title() != title )
-		mMenu->setTitle( title );
-	if ( !icon.isNull() && mMenu->icon().cacheKey() != icon.cacheKey() )
-		mMenu->setIcon( icon );
-
-	return mMenu;
+	
+	QMenu* mnu = mMenus[ fPath ];
+	
+	if ( !title.isEmpty() && mnu->title() != title )
+	{
+		mnu->setTitle( title );
+		
+		fPath = mActionsManager->fixedPath( path );
+		if (!fPath.contains( '/' ) )
+		{
+			mActionsManager->setPathPartTranslation( fPath, title );
+		}
+	}
+	
+	if ( !icon.isNull() && mnu->icon().cacheKey() != icon.cacheKey() )
+	{
+		mnu->setIcon( icon );
+	}
+	
+	return mnu;
 }
 
-/*!
-	\details Clear the menu at \c path
-	\param path The menu path
-*/
+QAction* pMenuBar::action( const QString& path, const QString& text, const QIcon& icon, const QString& shortcut, const QString& toolTip )
+{
+	QString fPath = absoluteScope( path );
+	QString aName = fPath.mid( fPath.lastIndexOf( '/' ) +1 );
+	QString mPath;
+
+	if ( fPath.contains( '/' ) )
+	{
+		mPath = fPath.mid( 0, fPath.lastIndexOf( '/' ) );
+	}
+	
+	// get action
+	QAction* action = mActionsManager->action( mPath, aName );
+
+	// create action if needed
+	if ( !action )
+	{
+		// create actions
+		action = mActionsManager->newAction( mPath, shortcut, aName );
+		
+		// check for separator
+		if ( aName.contains( QRegExp( "^aseparator\\d{1,2}$", Qt::CaseInsensitive ) ) )
+		{
+			action->setSeparator( true );
+		}
+		
+		// setup action
+		action->setShortcutContext( mDefaultShortcutContext );
+		
+		if ( !text.isEmpty() )
+		{
+			action->setText( text );
+		}
+		
+		if ( !icon.isNull() )
+		{
+			action->setIcon( icon );
+		}
+		
+		if ( !toolTip.isEmpty() )
+		{
+			action->setStatusTip( toolTip );
+		}
+
+		if ( !toolTip.isEmpty() )
+		{
+			action->setToolTip( toolTip );
+		}
+		
+		// add action to menu
+		menu( relativeScope( mPath ) )->addAction( action );
+	}
+
+	// return action
+	return action;
+}
+
+void pMenuBar::addAction( const QString& path, QAction* action )
+{
+	Q_ASSERT( action );
+	
+	QMenu* mnu = menu( path );
+	
+	pActionsManager::setActionsManager( action, mActionsManager );
+	action->setShortcutContext( mDefaultShortcutContext );
+	mnu->addAction( action );
+}
+
 void pMenuBar::clearMenu( const QString& path )
 {
-	QString mPath = fixedPath( path, true );
-	if ( mMenus.contains( mPath ) )
-		mMenus[ mPath ]->clear();
+	const QString fPath = absoluteScope( path );
+	QMenu* mnu = mMenus.value( fPath );
+	
+	if ( mnu )
+	{
+		mnu->clear();
+		
+		foreach ( QAction* action, mActionsManager->actions( fPath ) )
+		{
+			if ( action->associatedWidgets().isEmpty() )
+			{
+				delete action;
+			}
+		}
+	}
 }
 
-/*!
-	\details Delete the menu at \c path
-	\param path The menu path
-*/
 void pMenuBar::deleteMenu( const QString& path )
 {
-	QString mPath = fixedPath( path, true );
-	if ( mMenus.contains( mPath ) )
+	const QString fPath = absoluteScope( path );
+	QMenu* mnu = mMenus.value( fPath );
+	
+	if ( mnu )
 	{
-		mMenus[ mPath ]->clear();
-		delete mMenus.take( mPath );
+		clearMenu( path );
+		delete mMenus.take( fPath );
 	}
 }
 
-/*!
-	\details Enable/Disable the menu at \c path.
-	\details This cause all actions of a menu to be recursively disabled/enabled.
-	\param menu The menu to enable/disable
-	\param enabled If true, enable menu, else disable it
-*/
-void pMenuBar::setMenuEnabled( QMenu* menu, bool enabled )
+void pMenuBar::setMenuEnabled( QMenu* mnu, bool enabled )
 {
-	if ( menu )
+	if ( mnu )
 	{
-		foreach ( QAction* action, menu->actions() )
+		foreach ( QAction* action, mnu->actions() )
 		{
 			action->setEnabled( enabled );
+			
 			if ( action->menu() )
+			{
 				setMenuEnabled( action->menu(), enabled );
+			}
 		}
-		//menu->menuAction()->setEnabled( enabled );
+		
+		//mnu->menuAction()->setEnabled( enabled );
 	}
 }
-
-/*!
-	\details Return the default ShortcutContext used by actions created by the class
-*/
-Qt::ShortcutContext pMenuBar::defaultShortcutContext() const
-{ return mDefaultShortcutContext; }
-
-/*!
-	\details Set the default ShortcutContext used by actions created by the class
-	\param context The default ShortcutContext
-*/
-void pMenuBar::setDefaultShortcutContext( Qt::ShortcutContext context )
-{ mDefaultShortcutContext = context; }

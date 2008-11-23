@@ -17,12 +17,12 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 #include "pTabBar.h"
-#include "pAction.h"
 
 #include <QMouseEvent>
 #include <QApplication>
 #include <QIcon>
 #include <QPainter>
+#include <QAction>
 
 /*!
 	\details Create a new pTabBar object
@@ -35,6 +35,9 @@ pTabBar::pTabBar( QWidget* parent )
 	mTabsColor = Qt::black;
 	mCurrentTabColor = Qt::blue;
 	
+#warning Deprecated, uncomment code if needed this class
+
+	/*
 	// close button
 	aToggleTabsHaveCloseButton = new pAction( "aTabbedTabsHaveShortcut", tr( "Tabs Have &Close Button" ), QKeySequence(), tr( "Tabbed Workspace" ) );
 	aToggleTabsHaveCloseButton->setCheckable( true );
@@ -46,6 +49,7 @@ pTabBar::pTabBar( QWidget* parent )
 	// elid
 	aToggleTabsElided = new pAction( "aTabbedTabsElided", tr( "Tabs Are &Elided" ), QKeySequence(), tr( "Tabbed Workspace" ) );
 	aToggleTabsElided->setCheckable( true );
+	*/
 	
 	// for accepting drop
 	setAcceptDrops( true );
@@ -58,9 +62,12 @@ pTabBar::pTabBar( QWidget* parent )
 	connect( this, SIGNAL( tabsColorChanged( const QColor& ) ), this, SLOT( resetTabsColor() ) );
 	connect( this, SIGNAL( currentTabColorChanged( const QColor& ) ), this, SLOT( resetTabsColor() ) );
 	connect( this, SIGNAL( tabsHaveCloseButtonChanged( bool ) ), this, SLOT( update() ) );
+#warning Uncomment
+	/*
 	connect( aToggleTabsHaveCloseButton, SIGNAL( toggled( bool ) ), this, SLOT( setTabsHaveCloseButton( bool ) ) );
 	connect( aToggleTabsHaveShortcut, SIGNAL( toggled( bool ) ), this, SLOT( setTabsHaveShortcut( bool ) ) );
 	connect( aToggleTabsElided, SIGNAL( toggled( bool ) ), this, SLOT( setTabsElided( bool ) ) );
+	*/
 }
 
 void pTabBar::paintEvent( QPaintEvent* event )

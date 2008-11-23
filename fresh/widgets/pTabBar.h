@@ -29,7 +29,6 @@
 #include <QUrl>
 
 class QAction;
-class pAction;
 
 /*!
 	\brief A extended QTabBar
@@ -76,9 +75,9 @@ protected:
 	QColor mTabsColor;
 	QColor mCurrentTabColor;
 
-	pAction* aToggleTabsHaveCloseButton;
-	pAction* aToggleTabsHaveShortcut;
-	pAction* aToggleTabsElided;
+	QAction* aToggleTabsHaveCloseButton;
+	QAction* aToggleTabsHaveShortcut;
+	QAction* aToggleTabsElided;
 
 signals:
 	void leftButtonPressed( int id, const QPoint& pos );
