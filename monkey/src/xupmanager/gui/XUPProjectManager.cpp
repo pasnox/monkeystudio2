@@ -21,6 +21,8 @@ XUPProjectManager::XUPProjectManager( QWidget* parent )
 	: pDockWidget( parent )
 {
 	setupUi( this );
+	
+	setActionsManager( MonkeyCore::actionsManager() );
 
 #ifdef QT_NO_DEBUG
 	wDebug->setVisible( false );
@@ -316,10 +318,12 @@ QAction* XUPProjectManager::action( XUPProjectManager::ActionType type )
 	{
 		case XUPProjectManager::atNew:
 			action = new QAction( pIconManager::icon( "new.png", ":/project" ), tr( "New project..." ), this );
+			mActionsManager->setDefaultShortcut( action, tr( "Ctrl+Shift+N" ) );
 			connect( action, SIGNAL( triggered() ), this, SLOT( newProject() ) );
 			break;
 		case XUPProjectManager::atOpen:
 			action = new QAction( pIconManager::icon( "open.png", ":/project" ), tr( "Open project..." ), this );
+			mActionsManager->setDefaultShortcut( action, tr( "Ctrl+Shift+O" ) );
 			connect( action, SIGNAL( triggered() ), this, SLOT( openProject() ) );
 			break;
 		case XUPProjectManager::atClose:
