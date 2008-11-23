@@ -39,7 +39,7 @@ class PluginsManager;
 class UIMain;
 class pMenuBar;
 class pRecentsManager;
-class pActionManager;
+class pActionsManager;
 class pToolsManager;
 class XUPProjectManager;
 class pFileManager;
@@ -60,7 +60,7 @@ public:
 	static UIMain* mainWindow();
 	static pMenuBar* menuBar();
 	static pRecentsManager* recentsManager();
-	static pActionManager* actionManager();
+	static pActionsManager* actionsManager();
 	static pToolsManager* toolsManager();
 	static XUPProjectManager* projectsManager();
 	static pFileManager* fileManager();

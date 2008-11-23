@@ -89,7 +89,8 @@ void MonkeyCore::init()
 	
 	// init shortcuts editor
 	showMessage( &splash, tr( "Initializing Shortcuts..." ) );
-	MonkeyCore::actionManager()->setSettings( settings() );
+	MonkeyCore::actionsManager()->setSettings( settings() );
+	MonkeyCore::actionsManager()->reloadSettings();
 	
 	// init pluginsmanager
 	showMessage( &splash, tr( "Initializing Plugins..." ) );
@@ -149,8 +150,10 @@ UIMain* MonkeyCore::mainWindow()
 pMenuBar* MonkeyCore::menuBar()
 { return mainWindow()->menuBar(); }
 
-pActionManager* MonkeyCore::actionManager()
-{ return pActionManager::instance(); }
+pActionsManager* MonkeyCore::actionsManager()
+{
+	return menuBar()->actionsManager();
+}
 
 pRecentsManager* MonkeyCore::recentsManager()
 {
