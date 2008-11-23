@@ -99,10 +99,14 @@ pWorkspace::pWorkspace( QMainWindow* p )
 	connect( mFileWatcher, SIGNAL( fileChanged( const QString& ) ), this, SLOT( fileWatcher_fileChanged( const QString& ) ) );
 	connect( ps, SIGNAL( clearSearchResults() ), this, SIGNAL( clearSearchResults() ) );
 	
-	pAction* mFocusToEditor = new pAction( "aFocusToEditor", QIcon( ":/edit/icons/edit/text.png" ), tr( "Set focus to editor" ),  QString("Ins") , "Workspace" );
-	connect (mFocusToEditor, SIGNAL (triggered()), this, SLOT (focusToEditor_triggered ()));	
-	MonkeyCore::mainWindow()->addAction (mFocusToEditor);
-	mFocusToEditor ->setEnabled (true);
+	QAction* mFocusToEditor = new QAction( this );
+	mFocusToEditor->setIcon( QIcon( ":/edit/icons/edit/text.png" ) );
+	mFocusToEditor->setText( tr( "Set Focus to Editor" ) );
+	pActionsManager::setDefaultShortcut( mFocusToEditor, QKeySequence( "Ctrl+Return" ) );
+	
+	MonkeyCore::menuBar()->addAction( "mView", mFocusToEditor );
+	
+	connect( mFocusToEditor, SIGNAL( triggered() ), this, SLOT( focusToEditor_triggered() ) );
 }
 
 void pWorkspace::loadSettings()
