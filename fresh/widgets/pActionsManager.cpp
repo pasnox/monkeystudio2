@@ -9,6 +9,7 @@
 
 const QString pActionsManager::mSettingsScope = "Shortcuts Manager";
 QMapStringString pActionsManager::mPathPartTranslations;
+int pActionsManager::mUnknowActionCount = 0;
 
 pActionsManager::pActionsManager( const QString& name, QObject* parent )
 	: QObject( parent )
@@ -45,12 +46,7 @@ void pActionsManager::reloadSettings() const
 	{
 		foreach ( QAction* action, actions() )
 		{
-			const QString key = QString( "%1/%2/%3/%4" ).arg( mSettingsScope ).arg( mName ).arg( actionPath( action ) ).arg( action->objectName() );
-			QString shortcutText = defaultShortcut( action );
-			shortcutText = mSettings->value( key, shortcutText ).toString();
-			const QKeySequence shortcut = QKeySequence( shortcutText );
-			
-			action->setShortcut( shortcut );
+			updateShortcut( action );
 		}
 	}
 }
@@ -125,10 +121,12 @@ QAction* pActionsManager::newAction( const QString& path, const QKeySequence& dS
 	
 	action = new QAction( this );
 	
+	action->setObjectName( name );
 	setActionsManager( action, this );
 	setActionPath( action, path );
 	setDefaultShortcut( action, dShortcut );
-	action->setObjectName( name );
+	
+	updateShortcut( action );
 	
 	return action;
 }
@@ -173,6 +171,7 @@ bool pActionsManager::setShortcut( QAction* action, const QKeySequence& shortcut
 	if ( settings )
 	{
 		const QString key = QString( "%1/%2/%3/%4" ).arg( mSettingsScope ).arg( manager->mName ).arg( actionPath( action ) ).arg( action->objectName() );
+		qWarning() << "key" << key;
 		
 		if ( action->shortcut() == shortcut )
 		{
@@ -189,6 +188,19 @@ bool pActionsManager::setShortcut( QAction* action, const QKeySequence& shortcut
 	
 	// return success
 	return true;
+}
+
+void pActionsManager::updateShortcut( QAction* action ) const
+{
+	if ( mSettings )
+	{
+		const QString key = QString( "%1/%2/%3/%4" ).arg( mSettingsScope ).arg( mName ).arg( actionPath( action ) ).arg( action->objectName() );
+		QString shortcutText = defaultShortcut( action );
+		shortcutText = mSettings->value( key, shortcutText ).toString();
+		const QKeySequence shortcut = QKeySequence( shortcutText );
+		
+		action->setShortcut( shortcut );
+	}
 }
 
 pActionsManager* pActionsManager::actionsManager( QAction* action )
@@ -219,9 +231,29 @@ void pActionsManager::setActionsManager( QAction* action, pActionsManager* manag
 	// manage action
 	if ( manager )
 	{
+		if ( action->objectName().isEmpty() )
+		{
+			QString name = action->text();
+			
+			if ( name.isEmpty() )
+			{
+				name = QString( "Unknow_Action_%2" ).arg( mUnknowActionCount );
+				mUnknowActionCount++;
+			}
+			
+			action->setObjectName( name );
+		}
+		
+		Q_ASSERT( !action->objectName().isEmpty() );
+		
 		action->setParent( manager );
 		manager->mActions.append( action );
 		action->setProperty( QString::number( ActionsManager ).toLocal8Bit().constData(), QVariant::fromValue( manager ) );
+		
+		if ( !actionPath( action ).isEmpty() )
+		{
+			manager->updateShortcut( action );
+		}
 		
 		connect( action, SIGNAL( destroyed( QObject* ) ), manager, SLOT( actionDestroyed( QObject* ) ) );
 	}

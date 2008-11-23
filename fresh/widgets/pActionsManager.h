@@ -54,6 +54,9 @@ protected:
 	QPointer<QSettings> mSettings;
 	static QMapStringString mPathPartTranslations; // one part of path, translation
 	static const QString mSettingsScope;
+	static int mUnknowActionCount;
+	
+	void updateShortcut( QAction* action ) const;
 
 protected slots:
 	void actionDestroyed( QObject* object );
