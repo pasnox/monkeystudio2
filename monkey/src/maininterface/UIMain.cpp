@@ -185,19 +185,16 @@ void UIMain::initMenuBar()
 	mb->endGroup();
 	mb->menu( "mProject", tr( "Project" ) );
 	mb->beginGroup( "mProject" );
-		mb->action( "aNew", tr( "&New" ), QIcon( ":/project/icons/project/new.png" ), tr( "Ctrl+Shift+N" ), tr( "New project..." ) );
-		mb->action( "aOpen", tr( "&Open" ), QIcon( ":/project/icons/project/open.png" ), tr( "Ctrl+Shift+O" ), tr( "Open a project..." ) );
-		mb->menu( "mSave", tr( "&Save" ), QIcon( ":/project/icons/project/save.png" ) );
-		mb->action( "mSave/aCurrent", tr( "&Save" ), QIcon( ":/project/icons/project/save.png" ), QString::null, tr( "Save the current project" ) )->setEnabled( false );
-		mb->action( "mSave/aAll", tr( "Save &All" ), QIcon( ":/project/icons/project/saveall.png" ), QString::null, tr( "Save all projects" ) )->setEnabled( false );
-		mb->menu( "mClose", tr( "&Close" ), QIcon( ":/project/icons/project/close.png" ) );
-		mb->action( "mClose/aCurrent", tr( "&Close" ), QIcon( ":/project/icons/project/close.png" ), QString::null, tr( "Close the current project" ) )->setEnabled( false );
-		mb->action( "mClose/aAll", tr( "Close &All" ), QIcon( ":/project/icons/project/closeall.png" ), QString::null, tr( "Close all projects" ) )->setEnabled( false );
+		mb->addAction( QString::null, MonkeyCore::projectsManager()->action( XUPProjectManager::atNew ) );
+		mb->addAction( QString::null, MonkeyCore::projectsManager()->action( XUPProjectManager::atOpen ) );
+		mb->action( "aSeparator1" );
+		mb->addAction( QString::null, MonkeyCore::projectsManager()->action( XUPProjectManager::atClose ) );
+		mb->addAction( QString::null, MonkeyCore::projectsManager()->action( XUPProjectManager::atCloseAll ) );
 		mb->action( "aSeparator2" );
-		mb->action( "aSettings", tr( "Set&tings..." ), QIcon( ":/project/icons/project/settings.png" ), QString::null, tr( "Project settings" ) )->setEnabled( false );
+		mb->addAction( QString::null, MonkeyCore::projectsManager()->action( XUPProjectManager::atEdit ) );
 		mb->action( "aSeparator3" );
-		mb->action( "aAddFiles", tr( "&Add Files..." ), QIcon( ":/project/icons/project/add.png" ), QString::null, tr( "Add existing files/projects to the current project" ) )->setEnabled( false );
-		mb->action( "aRemoveFiles", tr( "&Remove Files..." ), QIcon( ":/project/icons/project/remove.png" ), QString::null, tr( "Remove the current variable/value" ) )->setEnabled( false );
+		mb->addAction( QString::null, MonkeyCore::projectsManager()->action( XUPProjectManager::atAddFiles ) );
+		mb->addAction( QString::null, MonkeyCore::projectsManager()->action( XUPProjectManager::atRemoveFiles ) );
 		mb->action( "aSeparator4" );
 		mb->menu( "mRecents", tr( "&Recents" ), QIcon( ":/project/icons/project/recents.png" ) );
 		mb->action( "mRecents/aClear", tr( "&Clear" ), QIcon( ":/project/icons/project/clear.png" ), QString::null, tr( "Clear the recents projects list" ) );
@@ -335,7 +332,7 @@ void UIMain::initConnections()
 	connect( menuBar()->action( "mFile/aQuit" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileExit_triggered() ) );
 	// edit connection
 	connect( menuBar()->action( "mEdit/aSettings" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editSettings_triggered() ) );
-	connect( menuBar()->action( "mEdit/aShortcutsEditor" ), SIGNAL( triggered() ), MonkeyCore::actionManager(), SLOT( showSettings() ) );
+	connect( menuBar()->action( "mEdit/aShortcutsEditor" ), SIGNAL( triggered() ), MonkeyCore::actionsManager(), SLOT( editActionsShortcuts() ) );
 	connect( menuBar()->action( "mEdit/aTranslations" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editTranslations_triggered() ) );
 	connect( menuBar()->action( "mEdit/aUndo" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editUndo_triggered() ) );
 	connect( menuBar()->action( "mEdit/aRedo" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editRedo_triggered() ) );
