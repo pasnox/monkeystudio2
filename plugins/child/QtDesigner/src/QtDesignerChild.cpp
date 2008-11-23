@@ -377,6 +377,8 @@ void QtDesignerChild::setModified( QDesignerFormWindowInterface* w )
 
 bool QtDesignerChild::openFile( const QString& fileName, const QString& codec )
 {
+	Q_UNUSED( codec );
+	
 	foreach ( const QString file, files() )
 		if ( isSameFile( file, fileName ) )
 			return true;

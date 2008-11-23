@@ -93,7 +93,7 @@ public:
 	pTemplate getTemplate( const QString& );
 	TemplateList getTemplates();
 
-	bool realiseTemplate( XUPItem*, const QString&, const pTemplate&, const VariablesManager::Dictionary& = VariablesManager::Dictionary() );
+	bool realiseTemplate( XUPItem* scope, const QString& op, const pTemplate& tmplate, const QString& codec, const VariablesManager::Dictionary& variables = VariablesManager::Dictionary() );
 	
 };
 

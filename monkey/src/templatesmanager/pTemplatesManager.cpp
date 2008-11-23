@@ -31,6 +31,8 @@
 #include <XUPProjectManager.h>
 #include <Settings.h>
 
+#include <QTextCodec>
+
 using namespace pMonkeyStudio;
 
 /*!
@@ -111,7 +113,7 @@ TemplateList pTemplatesManager::getTemplates()
 	\retval true All files is created successfully
 	\retval false Some error ocurred
 */
-bool pTemplatesManager::realiseTemplate( XUPItem* scope, const QString& op, const pTemplate& temp, const VariablesManager::Dictionary& dictionnary )
+bool pTemplatesManager::realiseTemplate( XUPItem* scope, const QString& op, const pTemplate& temp, const QString& codec, const VariablesManager::Dictionary& dictionnary )
 {
 	// get destination
 	QString dest = dictionnary["Destination"];
@@ -210,22 +212,24 @@ bool pTemplatesManager::realiseTemplate( XUPItem* scope, const QString& op, cons
 		}
 		
 		// get contents
-		QString c = QString::fromLocal8Bit( file.readAll() );
+		QString c = QString::fromUtf8( file.readAll() );
 		
 		// reset file
 		file.resize( 0 );
 		
 		// write process contents
-		file.write( VariablesManager::instance()->replaceAllVariables( c, dictionnary ).toLocal8Bit() );
+		QTextCodec* textCodec = QTextCodec::codecForName( codec.toUtf8() );
+		c = VariablesManager::instance()->replaceAllVariables( c, dictionnary );
+		file.write( textCodec->fromUnicode( c ) );
 		
 		// close file
 		file.close();
-#warning shoud add a codec combobox to allow to choose the code, default one will be the selected one in preference
+		
 		// open files if needed
 		if ( fo.contains( files[f] ) )
-			MonkeyCore::fileManager()->openFile( s, pMonkeyStudio::defaultCodec() );
+			MonkeyCore::fileManager()->openFile( s, codec );
 		if ( po.contains( files[f] ) )
-			MonkeyCore::fileManager()->openProject( s, pMonkeyStudio::defaultCodec() );
+			MonkeyCore::fileManager()->openProject( s, codec );
 		
 		// add files to project if needed
 		if ( scope )

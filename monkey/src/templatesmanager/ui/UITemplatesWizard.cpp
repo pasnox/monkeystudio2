@@ -87,12 +87,15 @@ UITemplatesWizard::UITemplatesWizard( QWidget* w )
 	{
 		cbOperators->addItems( project->projectInfos()->operators( project->projectType() ) );
 	}
+	
+	cbCodec->addItems( pMonkeyStudio::availableTextCodecs() );
 
 	// restore infos
 	pSettings* s = MonkeyCore::settings();
 	cbLanguages->setCurrentIndex( cbLanguages->findText( s->value( "Recents/FileWizard/Language", "C++" ).toString() ) );
 	leDestination->setText( s->value( "Recents/FileWizard/Destination" ).toString() );
 	cbOpen->setChecked( s->value( "Recents/FileWizard/Open", true ).toBool() );
+	cbCodec->setCurrentIndex( cbCodec->findText( pMonkeyStudio::defaultCodec() ) );
 	
 	// connections
 	connect( cbLanguages, SIGNAL( currentIndexChanged( int ) ), this, SLOT( onFiltersChanged() ) );
@@ -179,6 +182,19 @@ void UITemplatesWizard::on_lwTemplates_itemPressed( QListWidgetItem* it )
 	gbInformations->setEnabled( true );
 }
 
+void UITemplatesWizard::on_gbAddToProject_toggled( bool toggled )
+{
+	const QModelIndex idx = mProxy->mapToSource( cbProjects->currentIndex() );
+	XUPItem* item = mModel->itemFromIndex( idx );
+	XUPProjectItem* project = item ? item->project() : 0;
+	
+	if ( toggled && project )
+	{
+		QString codec = project->temporaryValue( "codec", pMonkeyStudio::defaultCodec() ).toString();
+		cbCodec->setCurrentIndex( cbCodec->findText( codec ) );
+	}
+}
+
 void UITemplatesWizard::on_cbProjects_currentChanged( const QModelIndex& index )
 {
 	const QModelIndex idx = mProxy->mapToSource( index );
@@ -192,6 +208,12 @@ void UITemplatesWizard::on_cbProjects_currentChanged( const QModelIndex& index )
 		if ( !leDestination->text().startsWith( path ) )
 		{
 			leDestination->setText( project->path() );
+		}
+		
+		if ( gbAddToProject->isChecked() )
+		{
+			QString codec = project->temporaryValue( "codec", pMonkeyStudio::defaultCodec() ).toString();
+			cbCodec->setCurrentIndex( cbCodec->findText( codec ) );
 		}
 	}
 }
@@ -254,7 +276,7 @@ void UITemplatesWizard::on_pbCreate_clicked()
 	XUPItem* si = t.FilesToAdd.isEmpty() ? 0 : mModel->itemFromIndex( index );
 	
 	// process templates
-	if ( !pTemplatesManager::instance()->realiseTemplate( si, cbOperators->currentText(), t, v ) )
+	if ( !pTemplatesManager::instance()->realiseTemplate( si, cbOperators->currentText(), t, cbCodec->currentText(), v ) )
 		return;
 	
 	// remember some infos
