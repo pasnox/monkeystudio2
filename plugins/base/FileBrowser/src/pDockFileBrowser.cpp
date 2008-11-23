@@ -51,6 +51,8 @@
 #include <QTreeView>
 #include <QHeaderView>
 
+#include <QDebug>
+
 /*!
 	Create UI
 	\param w Pointer to parent widget
@@ -141,6 +143,7 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	connect( tbUp, SIGNAL( clicked() ), this, SLOT( tbUp_clicked() ) );
 	connect( tbRoot, SIGNAL( clicked() ), this, SLOT( tbRoot_clicked() ) );
 	connect( mCombo, SIGNAL( currentChanged( const QModelIndex& ) ), this, SLOT( cb_currentChanged( const QModelIndex& ) ) );
+	connect( mTree, SIGNAL( activated( const QModelIndex& ) ), this, SLOT( tv_activated( const QModelIndex& ) ) );
 	connect( mTree, SIGNAL( doubleClicked( const QModelIndex& ) ), this, SLOT( tv_doubleClicked( const QModelIndex& ) ) );
 }
 
@@ -171,6 +174,13 @@ void pDockFileBrowser::tbRoot_clicked()
 	if ( !mDirsModel->isDir( index ) )
 		index = index.parent();
 	setCurrentPath( mDirsModel->filePath( index ) );
+}
+
+void pDockFileBrowser::tv_activated( const QModelIndex& idx )
+{
+	const QModelIndex index = mFilteredModel->mapToSource( idx );
+	if ( !mDirsModel->isDir( index ) )
+		MonkeyCore::fileManager()->openFile( mDirsModel->filePath( index ), pMonkeyStudio::defaultCodec() );
 }
 
 /*!

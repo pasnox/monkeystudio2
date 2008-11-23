@@ -112,6 +112,7 @@ protected slots:
 	void tbUp_clicked();
 	void tbRoot_clicked();
 	void cb_currentChanged( const QModelIndex& index );
+	void tv_activated( const QModelIndex& index );
 	void tv_doubleClicked( const QModelIndex& index );
 };
 

@@ -55,8 +55,8 @@ public:
 	void deleteFileInfo ( QString file, QDateTime olderThan );
 
 private:
-    Navigator* mNavigator;
-    
+	Navigator* mNavigator;
+	
 	void addTagsFromRecord (QString fileName, FileRecord*  fileRecord);
 
 	Entity* childEntity (int);

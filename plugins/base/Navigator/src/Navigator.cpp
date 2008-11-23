@@ -81,11 +81,11 @@ bool Navigator::setEnabled (bool e)
 	mPluginInfos.Enabled = e;
 	if (mPluginInfos.Enabled)
 	{
+		QString curFile = MonkeyCore::fileManager()->currentChildFile();
 		dockwgt = new pDockWidget("Navigator", MonkeyCore::workspace());
 		// shortcut
 		QAction* action = dockwgt->toggleViewAction();
-		MonkeyCore::menuBar()->addAction( "mDocks", action );
-		MonkeyCore::actionsManager()->setDefaultShortcut( action, QKeySequence( "F1" ) );
+		MonkeyCore::actionsManager()->setDefaultShortcut( action, QString( "F1" ) );
 		//dockwgt->hide ();
 		dockwgt->setMinimumWidth (100);
 		fileWidget = new QWidget (dockwgt);
@@ -93,7 +93,6 @@ bool Navigator::setEnabled (bool e)
 		fileBox->setMargin( 5 );
 		fileBox->setSpacing( 3 );
 		currFileTreew = new EntityContainer (fileWidget, this);
-		dockwgt->setFocusProxy( currFileTreew );
 		fileTrees.insert ( NULL, currFileTreew);
 		fileBox->addWidget ( currFileTreew);
 		fileLock = new QPushButton (tr("Lock view"), fileWidget);
@@ -102,11 +101,19 @@ bool Navigator::setEnabled (bool e)
 		dockwgt->setWidget (fileWidget);
 		MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( dockwgt,  tr( "Navigator" ), QPixmap( ":/icons/redo.png" ) );
 		connect ( MonkeyCore::fileManager(), SIGNAL (currentFileChanged( pAbstractChild*, const QString& )) , this, SLOT (currentFileChanged( pAbstractChild*, const QString )));
+		
+		if ( !curFile.isEmpty() )
+		{
+			showFile( curFile );
+		}
 	}
 	else
 	{
 		disconnect ( MonkeyCore::fileManager(), SIGNAL (currentFileChanged( pAbstractChild*, const QString& )) , this, SLOT (currentFileChanged( pAbstractChild*, const QString& )));
 		delete dockwgt;
+#warning memory leak ! can''t delete, cause one can be child of dock that will delete it, causing qDeleteAll to delete an already deleted object
+		//qDeleteAll( fileTrees );
+		fileTrees.clear();	
 	}
 	return true;
 }
@@ -232,11 +239,15 @@ void Navigator::showFile (const QString& absPath)
 // 		return;  //do not need do something, if tab not active
 	EntityContainer* oldWidget = currFileTreew; //save current TreeView
 	currFileTreew = fileTrees [absPath]; //Try to find Treew for requested file in the cache
+	
 	if ( currFileTreew == NULL ) //not finded
 	{
 		currFileTreew = new EntityContainer ( NULL, this);
 		fileTrees.insert ( absPath, currFileTreew );
 	}//OK, not currFileTreew - actual for requested file
+	
+	dockwgt->setFocusProxy( currFileTreew );
+	
 	for ( int i = 0; i< files.size(); i++)
 	{
 		currFileTreew->updateFileInfo ( files[i] );	
