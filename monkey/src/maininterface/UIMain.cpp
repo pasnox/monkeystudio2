@@ -181,7 +181,6 @@ void UIMain::initMenuBar()
 		mb->menu( "mStyle", tr( "&Style" ), QIcon( ":/view/icons/view/style.png" ) );
 		mb->action( "aNext", tr( "&Next Tab" ), QIcon( ":/view/icons/view/next.png" ), tr( "Ctrl+Tab" ), tr( "Active the next tab" ) )->setEnabled( false );
 		mb->action( "aPrevious", tr( "&Previous Tab" ), QIcon( ":/view/icons/view/previous.png" ), tr( "Ctrl+Shift+Tab" ), tr( "Active the previous tab" ) )->setEnabled( false );
-		mb->menu( "mDocks", tr( "Docks" ) );
 	mb->endGroup();
 	mb->menu( "mProject", tr( "Project" ) );
 	mb->beginGroup( "mProject" );
@@ -258,21 +257,6 @@ void UIMain::initMenuBar()
 	}
 	// add styles action to menu
 	mb->menu( "mView/mStyle" )->addActions( agStyles->actions() );
-	// add actions to uixupmanager
-#warning uncomment UIMain::initMenuBar()
-	/*
-	UIXUPManager* xm = MonkeyCore::projectsManager();
-	xm->setAction( UIXUPManager::New, mb->action( "mProject/aNew" ) );
-	xm->setAction( UIXUPManager::Open, mb->action( "mProject/aOpen" ) );
-	xm->setAction( UIXUPManager::SaveCurrent, mb->action( "mProject/mSave/aCurrent" ) );
-	xm->setAction( UIXUPManager::SaveAll, mb->action( "mProject/mSave/aAll" ) );
-	xm->setAction( UIXUPManager::CloseCurrent, mb->action( "mProject/mClose/aCurrent" ) );
-	xm->setAction( UIXUPManager::CloseAll, mb->action( "mProject/mClose/aAll" ) );
-	xm->setAction( UIXUPManager::Add, mb->action( "mProject/aAddFiles" ) );
-	xm->setAction( UIXUPManager::Remove, mb->action( "mProject/aRemoveFiles" ) );
-	xm->setAction( UIXUPManager::Settings, mb->action( "mProject/aSettings" ) );
-	xm->initGui();
-	*/
 }
 
 void UIMain::initToolBar()
@@ -349,7 +333,7 @@ void UIMain::initConnections()
 	connect( agStyles, SIGNAL( triggered( QAction* ) ), MonkeyCore::workspace(), SLOT( agStyles_triggered( QAction* ) ) );
 	connect( menuBar()->action( "mView/aNext" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( activateNextDocument() ) );
 	connect( menuBar()->action( "mView/aPrevious" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( activatePreviousDocument() ) );
-	connect( menuBar()->menu( "mView/mDocks" ), SIGNAL( aboutToShow() ), this, SLOT( menu_ViewDocks_aboutToShow() ) );
+	connect( menuBar()->menu( "mDocks" ), SIGNAL( aboutToShow() ), this, SLOT( menu_Docks_aboutToShow() ) );
 	// project connection
 	connect( MonkeyCore::recentsManager(), SIGNAL( openProjectRequested( const QString&, const QString& ) ), MonkeyCore::projectsManager(), SLOT( openProject( const QString&, const QString& ) ) );
 	connect( MonkeyCore::projectsManager(), SIGNAL( fileDoubleClicked( const QString&, const QString& ) ), MonkeyCore::workspace(), SLOT( openFile( const QString&, const QString& ) ) );
@@ -375,15 +359,20 @@ void UIMain::initConnections()
 #endif
 }
 
-void UIMain::menu_ViewDocks_aboutToShow()
+void UIMain::menu_Docks_aboutToShow()
 {
 	// get menu
-	QMenu* menu = menuBar()->menu( "mView/mDocks" );
+	QMenu* menu = menuBar()->menu( "mDocks" );
+	menu->clear();
+	
 	// add actions
 	foreach ( QDockWidget* dw, findChildren<QDockWidget*>() )
 	{
-		dw->toggleViewAction()->setIcon( dw->windowIcon() );
-		menu->addAction( dw->toggleViewAction() );
+		QAction* action = dw->toggleViewAction();
+		
+		action->setIcon( dw->windowIcon() );
+		menu->addAction( action );
+		menuBar()->addAction( "mDocks", action );
 	}
 }
 
