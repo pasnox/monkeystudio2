@@ -79,6 +79,10 @@ void MonkeyCore::init()
 		UITranslator::instance()->exec();
 	pMonkeyStudio::loadTranslations();
 	
+	// init shortcuts editor
+	showMessage( &splash, tr( "Initializing Actions Manager..." ) );
+	MonkeyCore::actionsManager()->setSettings( settings() );
+	
 	// start console manager
 	showMessage( &splash, tr( "Initializing Console..." ) );
 	consoleManager();
@@ -86,10 +90,6 @@ void MonkeyCore::init()
 	// init main window
 	showMessage( &splash, tr( "Initializing Main Window..." ) );
 	mainWindow()->initGui();
-	
-	// init shortcuts editor
-	showMessage( &splash, tr( "Initializing Shortcuts..." ) );
-	MonkeyCore::actionsManager()->setSettings( settings() );
 	
 	// init pluginsmanager
 	showMessage( &splash, tr( "Initializing Plugins..." ) );
@@ -99,17 +99,16 @@ void MonkeyCore::init()
 	showMessage( &splash, tr( "Restoring Workspace..." ) );
 	mainWindow()->setSettings( settings() );
 	
-	// restore shortcuts
-	MonkeyCore::actionsManager()->reloadSettings();
-	
-	// show main window
-	mainWindow()->show();
-	mainWindow()->menu_Docks_aboutToShow();
-	
 	// restore session
 	showMessage( &splash, tr( "Restoring Session..." ) );
 	if ( pMonkeyStudio::restoreSessionOnStartup() )
+	{
 		workspace()->fileSessionRestore_triggered();
+	}
+	
+	// show main window
+	mainWindow()->menu_Docks_aboutToShow();
+	mainWindow()->show();
 	
 	// ready
 	showMessage( &splash, tr( "%1 v%2 Ready !" ).arg( PACKAGE_NAME, PACKAGE_VERSION ) );
