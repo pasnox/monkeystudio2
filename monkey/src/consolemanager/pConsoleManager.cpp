@@ -40,6 +40,7 @@
 #include "../pMonkeyStudio.h"
 #include "../workspace/pFileManager.h"
 #include "../coremanager/MonkeyCore.h"
+#include "pActionsManager.h"
 
 /*!
 	Defines maximum count of lines, which are storing in the buffer for parsing
@@ -55,11 +56,17 @@ using namespace pMonkeyStudio;
 pConsoleManager::pConsoleManager( QObject* o )
 	: QProcess( o ), mLinesInStringBuffer (0)
 {
+	pActionsManager* am = MonkeyCore::actionsManager();
+	am->setPathPartTranslation( "Console Manager", tr( "Console Manager" ) );
 #ifndef Q_OS_MAC
-	mStopAction = new pAction( "aStopAction", QIcon( ":/console/icons/console/stop.png" ), tr( "Stop current command" ), tr( "Pause" ), tr( "Console Manager" ) ) ;
+	mStopAction = MonkeyCore::actionsManager()->newAction( "Console Manager", tr( "Pause" ), "aStopAction" );
 #else
-	mStopAction = new pAction( "aStopAction", QIcon( ":/console/icons/console/stop.png" ), tr( "Stop current command" ), tr( "Alt+End" ), tr( "Console Manager" ) ) ; // Mac has no pause key
+	mStopAction = MonkeyCore::actionsManager()->newAction( "Console Manager", tr( "Alt+End" ), "aStopAction" );
 #endif
+	mStopAction->setIcon( QIcon( ":/console/icons/console/stop.png" ) );
+	mStopAction->setText( tr( "Stop current command" ) );
+	mStopAction->setToolTip( tr( "Stop current command" ) );
+	mStopAction->setStatusTip( tr( "Stop current command" ) );
 	
 	// unset some variables environments
 	int i;
