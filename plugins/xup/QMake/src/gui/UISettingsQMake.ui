@@ -278,6 +278,13 @@
            <widget class="QLineEdit" name="leQtVersionQMakeParameters" />
           </item>
           <item>
+           <widget class="QCheckBox" name="cbQtVersionHaveSuffixe" >
+            <property name="text" >
+             <string>Binaries have "-qt4" suffixe.</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="verticalSpacer" >
             <property name="orientation" >
              <enum>Qt::Vertical</enum>

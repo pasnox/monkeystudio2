@@ -36,6 +36,7 @@ UISettingsQMake::UISettingsQMake( QWidget* parent )
 	connect( leQtVersionPath, SIGNAL( editingFinished() ), this, SLOT( qtVersionChanged() ) );
 	connect( cbQtVersionQMakeSpec->lineEdit(), SIGNAL( editingFinished() ), this, SLOT( qtVersionChanged() ) );
 	connect( leQtVersionQMakeParameters, SIGNAL( editingFinished() ), this, SLOT( qtVersionChanged() ) );
+	connect( cbQtVersionHaveSuffixe, SIGNAL( toggled( bool ) ), this, SLOT( qtVersionChanged() ) );
 }
 
 void UISettingsQMake::tbAdd_clicked()
@@ -173,6 +174,7 @@ void UISettingsQMake::lw_currentItemChanged( QListWidgetItem* c, QListWidgetItem
 			v.Path = leQtVersionPath->text();
 			v.QMakeSpec = cbQtVersionQMakeSpec->currentText();
 			v.QMakeParameters = leQtVersionQMakeParameters->text();
+			v.HaveQt4Suffixe = cbQtVersionHaveSuffixe->isChecked();
 			p->setData( Qt::UserRole, QVariant::fromValue( v ) );
 			p->setText( v.Version );
 		}
@@ -221,6 +223,7 @@ void UISettingsQMake::lw_currentItemChanged( QListWidgetItem* c, QListWidgetItem
 				cbQtVersionQMakeSpec->addItem( v.QMakeSpec );
 			cbQtVersionQMakeSpec->setCurrentIndex( cbQtVersionQMakeSpec->findText( v.QMakeSpec ) );
 			leQtVersionQMakeParameters->setText( v.QMakeParameters );
+			cbQtVersionHaveSuffixe->setChecked( v.HaveQt4Suffixe );
 			wQtVersion->setEnabled( true );
 		}
 		else if ( c->listWidget() == lwQtModules )
@@ -246,6 +249,7 @@ void UISettingsQMake::lw_currentItemChanged( QListWidgetItem* c, QListWidgetItem
 		leQtVersionVersion->clear();
 		leQtVersionPath->clear();
 		cbQtVersionQMakeSpec->clear();
+		cbQtVersionHaveSuffixe->setChecked( false );
 	}
 	else if ( sender() == lwQtModules )
 	{
