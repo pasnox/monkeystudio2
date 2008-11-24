@@ -84,8 +84,7 @@ bool Navigator::setEnabled (bool e)
 		QString curFile = MonkeyCore::fileManager()->currentChildFile();
 		dockwgt = new pDockWidget("Navigator", MonkeyCore::workspace());
 		// shortcut
-		QAction* action = dockwgt->toggleViewAction();
-		MonkeyCore::actionsManager()->setDefaultShortcut( action, QString( "F1" ) );
+		pActionsManager::setDefaultShortcut( dockwgt->toggleViewAction(), QString( "F1" ) );
 		//dockwgt->hide ();
 		dockwgt->setMinimumWidth (100);
 		fileWidget = new QWidget (dockwgt);
