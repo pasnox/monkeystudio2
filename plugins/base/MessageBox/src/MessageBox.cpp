@@ -90,11 +90,7 @@ bool MessageBox::setEnabled( bool b )
 		MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mMessageBoxDocks->mCommand, mMessageBoxDocks->mCommand->windowTitle(), mMessageBoxDocks->mCommand->windowIcon() );
 		MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mMessageBoxDocks->mSearchResult, mMessageBoxDocks->mSearchResult->windowTitle(), mMessageBoxDocks->mSearchResult->windowIcon() );
 		// add actions to main window
-		connect( MonkeyCore::menuBar()->action( "mView/aShowBuild", tr( "Show Build Steps" ), QIcon( ":/icons/tabbuild.png" ), tr( "F9" ) ), SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showBuild() ) );
 		connect( MonkeyCore::menuBar()->action( "mView/aShowNextError", tr( "Show Next Error" ), QIcon( ":/icons/goto.png" ), "Shift+F9" ), SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showNextError() ) );
-		connect( MonkeyCore::menuBar()->action( "mView/aShowOutput", tr( "Show Output" ), QIcon( ":/icons/taboutput.png" ) , "F10" ), SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showOutput() ) );
-		connect( MonkeyCore::menuBar()->action( "mView/aShowCommands", tr( "Show Commands" ), QIcon( ":/icons/tablog.png" ), "F11" ), SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showLog() ) );
-		connect( MonkeyCore::menuBar()->action( "mView/aShowSearchResults", tr( "Show Search Results" ), QIcon( ":/icons/tabsearch.png" ), "F12" ), SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showSearchResults() ) );
 		connect( MonkeyCore::consoleManager(), SIGNAL( started() ), this, SLOT( onConsoleStarted() ) );
 		// set plugin enabled
 		mPluginInfos.Enabled = true;
@@ -104,11 +100,7 @@ bool MessageBox::setEnabled( bool b )
 		// disconnect
 		disconnect( MonkeyCore::consoleManager(), SIGNAL( started() ), this, SLOT( onConsoleStarted() ) );
 		// delete actions
-		delete MonkeyCore::menuBar()->action( "mView/aShowBuild" );
 		delete MonkeyCore::menuBar()->action( "mView/aShowNextError" );
-		delete MonkeyCore::menuBar()->action( "mView/aShowOutput" );
-		delete MonkeyCore::menuBar()->action( "mView/aShowCommands" );
-		delete MonkeyCore::menuBar()->action( "mView/aShowSearchResults" );
 		// delete docks
 		delete mMessageBoxDocks;
 		mMessageBoxDocks = 0;
