@@ -318,22 +318,103 @@ bool QMakeProjectItem::save()
 
 BuilderPlugin* QMakeProjectItem::builder( const QString& plugin ) const
 {
-	return XUPProjectItem::builder( plugin.isEmpty() ? "GNUMake" : plugin );
+	QString plug = plugin;
+	
+	if ( plug.isEmpty() )
+	{
+		QtVersionManager mQtManager;
+		QtVersion mQtVersion = mQtManager.version( projectSettingsValue( "QT_VERSION" ) );
+		
+		if ( mQtVersion.isValid() )
+		{
+			if ( mQtVersion.QMakeSpec.contains( "msvc", Qt::CaseInsensitive ) )
+			{
+				plug = "MSVCMake";
+			}
+		}
+		
+		if ( plug.isEmpty() )
+		{
+			plug = "GNUMake";
+		}
+	}
+	
+	return XUPProjectItem::builder( plug );
 }
 
 CompilerPlugin* QMakeProjectItem::compiler( const QString& plugin ) const
 {
-	return XUPProjectItem::compiler( plugin.isEmpty() ? "G++" : plugin );
+	QString plug = plugin;
+	
+	if ( plug.isEmpty() )
+	{
+		QtVersionManager mQtManager;
+		QtVersion mQtVersion = mQtManager.version( projectSettingsValue( "QT_VERSION" ) );
+		
+		if ( mQtVersion.isValid() )
+		{
+			if ( mQtVersion.QMakeSpec.contains( "msvc", Qt::CaseInsensitive ) )
+			{
+				plug = "MSVC";
+			}
+		}
+		
+		if ( plug.isEmpty() )
+		{
+			plug = "G++";
+		}
+	}
+	
+	return XUPProjectItem::compiler( plug );
 }
 
 DebuggerPlugin* QMakeProjectItem::debugger( const QString& plugin ) const
 {
-	return XUPProjectItem::debugger( plugin.isEmpty() ? "GNUDebugger" : plugin );
+	QString plug = plugin;
+	
+	if ( plug.isEmpty() )
+	{
+		QtVersionManager mQtManager;
+		QtVersion mQtVersion = mQtManager.version( projectSettingsValue( "QT_VERSION" ) );
+		
+		if ( mQtVersion.isValid() )
+		{
+			if ( !mQtVersion.QMakeSpec.contains( "msvc", Qt::CaseInsensitive ) )
+			{
+				plug = "GNUDebugger";
+			}
+		}
+	}
+	
+	return XUPProjectItem::debugger( plug );
 }
 
 InterpreterPlugin* QMakeProjectItem::interpreter( const QString& plugin ) const
 {
-	return XUPProjectItem::interpreter( plugin.isEmpty() ? "" : plugin );
+	QString plug = plugin;
+	
+	if ( plug.isEmpty() )
+	{
+		/*
+		QtVersionManager mQtManager;
+		QtVersion mQtVersion = mQtManager.version( projectSettingsValue( "QT_VERSION" ) );
+		
+		if ( mQtVersion.isValid() )
+		{
+			if ( mQtVersion.QMakeSpec.contains( "msvc", Qt::CaseInsensitive ) )
+			{
+				plug = "MSVC";
+			}
+		}
+		
+		if ( plug.isEmpty() )
+		{
+			plug = "G++";
+		}
+		*/
+	}
+	
+	return XUPProjectItem::interpreter( plug );
 }
 
 void QMakeProjectItem::installCommands()
