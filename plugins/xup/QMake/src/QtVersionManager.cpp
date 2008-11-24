@@ -1,12 +1,80 @@
 #include "QtVersionManager.h"
 
-const QString mQtVersionKey = "Versions";
-const QString mQtModuleKey = "Modules";
-const QString mQtConfigurationKey = "Configurations";
+#include <QProcess>
+
+const QString QtVersionManager::mQtVersionKey = "Versions";
+const QString QtVersionManager::mQtModuleKey = "Modules";
+const QString QtVersionManager::mQtConfigurationKey = "Configurations";
 
 QtVersionManager::QtVersionManager( QObject* owner )
 	: pSettings( owner, "QtVersions", "1.0.0" )
-{}
+{
+	checkForSystemVersion();
+}
+
+void QtVersionManager::checkForSystemVersion()
+{
+	QtVersionList allQt = versions();
+	QtVersion sysQt = systemVersion();
+	
+	if ( sysQt.isValid() )
+	{
+		foreach ( const QtVersion& version, allQt )
+		{
+			if ( version.Version == sysQt.Version )
+			{
+				return;
+			}
+		}
+		
+		allQt << sysQt;
+		setVersions( allQt );
+	}
+}
+
+QtVersion QtVersionManager::systemVersion() const
+{
+	QtVersion sysQt;
+	QProcess process;
+	QString version;
+	QString datas;
+	bool haveSuffixe = false;
+	
+	process.start( "qmake -v" );
+	process.waitForFinished();
+	datas = QString::fromLocal8Bit( process.readAll() );
+	
+	if ( !datas.contains( "Using Qt version 4." ) )
+	{
+		process.start( "qmake-qt4 -v" );
+		process.waitForFinished();
+		datas = QString::fromLocal8Bit( process.readAll() );
+		haveSuffixe = true;
+	}
+	
+	if ( datas.contains( "Using Qt version 4." ) )
+	{
+		datas = datas.trimmed().split( "\n" ).last();
+		datas.remove( "Using Qt version " );
+		
+		version = datas.left( 5 );
+		datas = datas.mid( 9 ).replace( "\\", "/" );
+		
+		QStringList parts = datas.split( "/" );
+		parts.removeLast();
+		
+		datas = parts.join( "/" );
+		
+		sysQt.Version = tr( "Qt System (%1)" ).arg( version );
+		sysQt.Path = datas;
+		sysQt.Default = const_cast<QtVersionManager*>( this )->versions().isEmpty();
+		sysQt.QMakeSpec = QString::null;
+		sysQt.QMakeParameters = QString::null;
+		sysQt.HaveQt4Suffixe = haveSuffixe;
+	}
+	
+	return sysQt;
+}
 
 QtVersionList QtVersionManager::versions()
 {
@@ -15,7 +83,7 @@ QtVersionList QtVersionManager::versions()
 	for ( int i = 0; i < s; i++ )
 	{
 		setArrayIndex( i );
-		l << QtVersion( value( "Version" ).toString(), value( "Path" ).toString(), value( "Default" ).toBool(), value( "QMakeSpec" ).toString(), value( "QMakeParameters" ).toString() );
+		l << QtVersion( value( "Version" ).toString(), value( "Path" ).toString(), value( "Default" ).toBool(), value( "QMakeSpec" ).toString(), value( "QMakeParameters" ).toString(), value( "HaveQt4Suffixe" ).toBool() );
 	}
 	endArray();
 	return l;
@@ -32,16 +100,24 @@ void QtVersionManager::setVersions( const QtVersionList& versions )
 		setValue( "Default", v.Default );
 		setValue( "QMakeSpec", v.QMakeSpec );
 		setValue( "QMakeParameters", v.QMakeParameters );
+		setValue( "HaveQt4Suffixe", v.HaveQt4Suffixe );
 	}
 	endArray();
 }
 
 QtVersion QtVersionManager::defaultVersion()
 {
-	foreach ( const QtVersion& v, versions() )
+	QtVersionList allQt = versions();
+	
+	foreach ( const QtVersion& v, allQt )
+	{
 		if ( v.Default )
+		{
 			return v;
-	return versions().value( 0 );
+		}
+	}
+	
+	return allQt.value( 0 );
 }
 
 QtVersion QtVersionManager::version( const QString& version )
