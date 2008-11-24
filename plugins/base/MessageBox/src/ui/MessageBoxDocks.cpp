@@ -44,10 +44,18 @@
 MessageBoxDocks::MessageBoxDocks( QObject* parent )
 	: QObject( parent )
 {
+	// create docks
 	mBuildStep = new UIBuildStep;
 	mOutput = new UIOutput;
 	mCommand = new UICommand;
 	mSearchResult = new UISearchResult;
+	
+	// set defaultshortcuts
+	pActionsManager::setDefaultShortcut( mBuildStep->toggleViewAction(), QKeySequence( "F9" ) );
+	pActionsManager::setDefaultShortcut( mOutput->toggleViewAction(), QKeySequence( "F10" ) );
+	pActionsManager::setDefaultShortcut( mCommand->toggleViewAction(), QKeySequence( "F11" ) );
+	pActionsManager::setDefaultShortcut( mSearchResult->toggleViewAction(), QKeySequence( "F12" ) );
+	
 	// connections
 	connect( mBuildStep->lwBuildSteps, SIGNAL( itemPressed( QListWidgetItem* ) ), this, SLOT( lwBuildSteps_itemPressed( QListWidgetItem* ) ) );
 	connect( mOutput->cbRawCommand->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( cbRawCommand_returnPressed() ) );
