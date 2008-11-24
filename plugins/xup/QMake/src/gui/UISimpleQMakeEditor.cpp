@@ -25,6 +25,11 @@ UISimpleQMakeEditor::UISimpleQMakeEditor( XUPProjectItem* project, QWidget* pare
 	{
 		QListWidgetItem* item = lwPages->item( i );
 		item->setSizeHint( QSize( 154, 40 ) );
+		
+		if ( i > 5 ) // plugins not visible
+		{
+			item->setHidden( true );
+		}
 	}
 	
 	// values editor actions
@@ -43,7 +48,7 @@ UISimpleQMakeEditor::UISimpleQMakeEditor( XUPProjectItem* project, QWidget* pare
 	tbOthersValuesEdit->setMenu( editMenu );
 	
 	// plugins
-	
+	/*
 	// builders
 	foreach ( BuilderPlugin* bp, MonkeyCore::pluginsManager()->plugins<BuilderPlugin*>( PluginsManager::stAll ) )
 	{
@@ -71,6 +76,7 @@ UISimpleQMakeEditor::UISimpleQMakeEditor( XUPProjectItem* project, QWidget* pare
 		cbInterpreters->addItem( ip->infos().Name );
 		swInterpreters->addWidget( ip->settingsWidget() );
 	}
+	*/
 	
 	// connections
 	connect( lwQtModules, SIGNAL( itemSelectionChanged() ), this, SLOT( modules_itemSelectionChanged() ) );
