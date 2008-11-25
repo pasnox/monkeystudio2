@@ -166,7 +166,7 @@ void UIMain::initMenuBar()
 			//mb->action( "mSearchReplace/aSearchProject", tr( "&Search in the project..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "" ), tr( "Search in the project..." ) )->setEnabled( true );
 			//mb->action( "mSearchReplace/aReplaceProject", tr( "&Replace in the project..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "" ), tr( "Replace in the project..." ) )->setEnabled( true );
 			mb->action( "mSearchReplace/aSearchFolder", tr( "&Search in the folder..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+Alt+F" ), tr( "Search in the folder..." ) )->setEnabled( true );
-			//mb->action( "mSearchReplace/aReplaceFolder", tr( "&Replace in the folder..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+Alt+R" ), tr( "Replace in the folder..." ) )->setEnabled( true );
+			mb->action( "mSearchReplace/aReplaceFolder", tr( "&Replace in the folder..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+Alt+R" ), tr( "Replace in the folder..." ) )->setEnabled( true );
 			mb->action( "mSearchReplace/aSearchPrevious", tr( "Search Previous" ), QIcon( ":/edit/icons/edit/previous.png" ), tr( "Shift+F3" ), tr( "Search Previous" ) )->setEnabled( true );
 			mb->action( "mSearchReplace/aSearchNext", tr( "Search Next" ), QIcon( ":/edit/icons/edit/next.png" ), tr( "F3" ), tr( "Search Next" ) )->setEnabled( true );
 		mb->action( "aGoTo", tr( "&Go To..." ), QIcon( ":/edit/icons/edit/goto.png" ), tr( "Ctrl+G" ), tr( "Go To..." ) )->setEnabled( false );

@@ -148,7 +148,7 @@ pSearch::pSearch( QWidget* parent )
 	//connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchProject" ), SIGNAL( triggered() ), SLOT( showSearchProject() ) );
 	//connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceProject" ), SIGNAL( triggered() ), SLOT( showReplaceProject() ) );
 	connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFolder" ), SIGNAL( triggered() ), SLOT( showSearchFolder() ) );
-	//connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFolder" ), SIGNAL( triggered() ), SLOT( showReplaceFolder() ) );
+	connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFolder" ), SIGNAL( triggered() ), SLOT( showReplaceFolder() ) );
 	connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchNext" ), SIGNAL( triggered() ), SLOT( on_tbNext_clicked() ) );
 	
 	connect( tbPath, SIGNAL( clicked() ), this, SLOT( on_tbPath_clicked() ) );
@@ -267,12 +267,7 @@ void pSearch::keyPressEvent( QKeyEvent* e )
 
 void pSearch::showSearchFile () 
 {
-	if (mOperType == REPLACE)
-		removeReplaceFromLayout ();
 	mOperType = SEARCH;
-	
-	if (mWhereType == FOLDER)
-		removeFolderFromLayout ();
 	mWhereType = FILE;
 	
 	show ();
@@ -280,12 +275,7 @@ void pSearch::showSearchFile ()
 
 void pSearch::showReplaceFile () 
 {
-	if (mWhereType == FOLDER)
-		removeFolderFromLayout ();
 	mWhereType = FILE;
-	
-	if (mOperType == SEARCH)
-		addReplaceToLayout(1);
 	mOperType = REPLACE;
 	
 	show ();
@@ -309,31 +299,21 @@ void pSearch::showReplaceProject ()
 
 void pSearch::showSearchFolder () 
 {
-	if (mOperType == REPLACE)
-		removeReplaceFromLayout ();
 	mOperType = SEARCH;
-	
-	if (mWhereType == FILE)
-		addFolderToLayout(1);
 	mWhereType = FOLDER;
 	cobPath->lineEdit()->setText (QDir::current().absolutePath ());
 	
 	show ();
 };
 
-/*void pSearch::showReplaceFolder () 
+void pSearch::showReplaceFolder () 
 {
-	if (mOperType == SEARCH)
-		addReplaceToLayout (1);
 	mOperType = REPLACE;
-	
-	if (mWhereType == FILE)
-		addFolderToLayout (2);
 	mWhereType = FOLDER;
 	
 	show ();
 };
-*/
+
 void pSearch::show ()
 {
 	pChild* child = dynamic_cast<pChild*> (MonkeyCore::workspace()->currentChild());
@@ -347,18 +327,31 @@ void pSearch::show ()
 	
 	cobSearch->setFocus();
 	cobSearch->lineEdit()->selectAll ();    
+
+	removeFolderFromLayout();
+	removeReplaceFromLayout();
+	
+	int i = 1;
+	if (mOperType == REPLACE)
+		addReplaceToLayout (i++);
+	if (mWhereType == FOLDER)
+		addFolderToLayout (i++);
 	
 	if (mWhereType == FILE)
 	{
 		tbNext->setText (tr("&Next"));
 		tbNext->setIcon (QIcon(":/edit/icons/edit/next.png"));
+		tbReplaceAll->setEnabled (true);
 		tbPrevious->show();
+		tbReplace->show();
 	}
-	else
+	else // FOLDER
 	{
 		tbNext->setText (tr("&Search"));
 		tbNext->setIcon (QIcon(":/edit/icons/edit/search.png"));
+		tbReplaceAll->setEnabled (false);
 		tbPrevious->hide();
+		tbReplace->hide();
 	}
 	
 	QWidget::show ();

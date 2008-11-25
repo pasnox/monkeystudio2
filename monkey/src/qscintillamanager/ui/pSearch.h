@@ -80,7 +80,7 @@ public slots:
 	//void showSearchProject ();
 	//void showReplaceProject ();
 	void showSearchFolder ();
-	//void showReplaceFolder ();
+	void showReplaceFolder ();
 
 
 	bool on_tbPrevious_clicked();
