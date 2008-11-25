@@ -82,7 +82,7 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/qscintillamanager/SearchThread.h \
 	src/qscintillamanager/pEditor.h \
 	src/qscintillamanager/qSciShortcutsManager.h \
-	src/ctagsmanager/Ctags.h \
+	src/ctagsmanager/CtagsManager.h \
 	src/workspace/pChild.h \
 	src/workspace/UISaveFiles.h \
 	src/workspace/pFileManager.h \
@@ -136,7 +136,7 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/qscintillamanager/SearchThread.cpp \
 	src/qscintillamanager/pEditor.cpp \
 	src/qscintillamanager/qSciShortcutsManager.cpp \
-	src/ctagsmanager/Ctags.cpp \
+	src/ctagsmanager/CtagsManager.cpp \
 	src/workspace/pChild.cpp \
 	src/workspace/UISaveFiles.cpp \
 	src/workspace/pFileManager.cpp \
