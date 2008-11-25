@@ -5,6 +5,7 @@
 #include "DebuggerPlugin.h"
 #include "InterpreterPlugin.h"
 #include "MonkeyCore.h"
+#include "pMenuBar.h"
 #include "PluginsManager.h"
 #include "pMonkeyStudio.h"
 
@@ -861,20 +862,42 @@ void XUPProjectItem::installCommands()
 	InterpreterPlugin* ip = interpreter();
 	*/
 	
+	bool emptyMenu = MonkeyCore::menuBar()->menu( "mBuilder/mBuild" )->actions().isEmpty();
+	
 	// build command
-	if ( bp )
+	if ( bp && emptyMenu )
 	{
 		pCommand cmd = bp->buildCommand();
+		
 		if ( cp )
+		{
 			cmd.addParsers( cp->compileCommand().parsers() );
+		}
+		
 		cmd.setUserData( QVariant::fromValue( &mCommands ) );
 		cmd.setProject( this );
 		cmd.setSkipOnError( false );
 		addCommand( cmd, "mBuilder/mBuild" );
+		
+		// clean
+		cmd.setText( tr( "Clean" ) );
+		cmd.setArguments( "clean" );
+		addCommand( cmd, "mBuilder/mClean" );
+		
+		// distclean
+		cmd.setText( tr( "Distclean" ) );
+		cmd.setArguments( "distclean" );
+		addCommand( cmd, "mBuilder/mClean" );
+		
+		// rebuild
+		cmd.setText( tr( "Rebuild" ) );
+		cmd.setCommand( ( QStringList() << tr( "Clean" ) << tr( "Build" ) ).join( ";" ) );
+		cmd.setArguments( QString() );
+		addCommand( cmd, "mBuilder/mRebuild" );
 	}
 	
 	// compile file command
-	if ( cp )
+	if ( cp && emptyMenu )
 	{
 		pCommand cmd = cp->compileCommand();
 		cmd.setUserData( QVariant::fromValue( &mCommands ) );
