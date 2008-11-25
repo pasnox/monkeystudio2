@@ -423,6 +423,13 @@ void QMakeProjectItem::installCommands()
 	BuilderPlugin* bp = builder();
 	CompilerPlugin* cp = compiler();
 	
+	// config variable
+	QStringList config = splitMultiLineValue( rootIncludeProject()->interpretVariable( "CONFIG" ) );
+	bool haveDebug = config.contains( "debug" );
+	bool haveRelease = config.contains( "release" );
+	bool haveDebugRelease = config.contains( "debug_and_release" );
+	//bool haveAll = config.contains( "build_all" );
+	
 	// temp command
 	pCommand cmd;
 	
@@ -480,34 +487,85 @@ void QMakeProjectItem::installCommands()
 	if ( bp && cmdBuild.isValid() )
 	{
 		// build debug
-		cmd = cmdBuild;
-		cmd.setText( tr( "Build Debug" ) );
-		cmd.setArguments( "debug" );
-		addCommand( cmd, "mBuilder/mBuild" );
+		if ( haveDebug || haveDebugRelease )
+		{
+			cmd = cmdBuild;
+			cmd.setText( tr( "Build Debug" ) );
+			cmd.setArguments( "debug" );
+			addCommand( cmd, "mBuilder/mBuild" );
+		}
 		
 		// build release
-		cmd = cmdBuild;
-		cmd.setText( tr( "Build Release" ) );
-		cmd.setArguments( "release" );
-		addCommand( cmd, "mBuilder/mBuild" );
+		if ( haveRelease || haveDebugRelease )
+		{
+			cmd = cmdBuild;
+			cmd.setText( tr( "Build Release" ) );
+			cmd.setArguments( "release" );
+			addCommand( cmd, "mBuilder/mBuild" );
+		}
 		
 		// build all
-		cmd = cmdBuild;
-		cmd.setText( tr( "Build All" ) );
-		cmd.setArguments( "all" );
-		addCommand( cmd, "mBuilder/mBuild" );
+		if ( haveDebugRelease )
+		{
+			cmd = cmdBuild;
+			cmd.setText( tr( "Build All" ) );
+			cmd.setArguments( "all" );
+			addCommand( cmd, "mBuilder/mBuild" );
+		}
 		
-		// clean
-		cmd = cmdBuild;
-		cmd.setText( tr( "Clean" ) );
-		cmd.setArguments( "clean" );
-		addCommand( cmd, "mBuilder/mClean" );
+		// clean debug
+		if ( haveDebug || haveDebugRelease )
+		{
+			cmd = cmdBuild;
+			cmd.setText( tr( "Clean Debug" ) );
+			cmd.setArguments( "debug-clean" );
+			addCommand( cmd, "mBuilder/mClean" );
+		}
 		
-		// distclean
-		cmd = cmdBuild;
-		cmd.setText( tr( "Distclean" ) );
-		cmd.setArguments( "distclean" );
-		addCommand( cmd, "mBuilder/mClean" );
+		// clean release
+		if ( haveRelease || haveDebugRelease )
+		{
+			cmd = cmdBuild;
+			cmd.setText( tr( "Clean Release" ) );
+			cmd.setArguments( "release-clean" );
+			addCommand( cmd, "mBuilder/mClean" );
+		}
+		
+		// clean all
+		if ( haveDebugRelease )
+		{
+			cmd = cmdBuild;
+			cmd.setText( tr( "Clean All" ) );
+			cmd.setArguments( "clean" );
+			addCommand( cmd, "mBuilder/mClean" );
+		}
+		
+		// distclean debug
+		if ( haveDebug || haveDebugRelease )
+		{
+			cmd = cmdBuild;
+			cmd.setText( tr( "Distclean Debug" ) );
+			cmd.setArguments( "debug-distclean" );
+			addCommand( cmd, "mBuilder/mClean" );
+		}
+		
+		// distclean release
+		if ( haveRelease || haveDebugRelease )
+		{
+			cmd = cmdBuild;
+			cmd.setText( tr( "Distclean Release" ) );
+			cmd.setArguments( "release-distclean" );
+			addCommand( cmd, "mBuilder/mClean" );
+		}
+		
+		// distclean all
+		if ( haveDebugRelease )
+		{
+			cmd = cmdBuild;
+			cmd.setText( tr( "Distclean All" ) );
+			cmd.setArguments( "distclean" );
+			addCommand( cmd, "mBuilder/mClean" );
+		}
 		
 		// add qt commands only if possible
 		if ( mQtVersion.isValid() )
@@ -546,32 +604,34 @@ void QMakeProjectItem::installCommands()
 			addCommand( cmd, "mBuilder" );
 		
 			// rebuild debug
-			cmd = cmdBuild;
-			cmd.setText( tr( "Rebuild Debug" ) );
-			cmd.setCommand( ( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build Debug" ) ).join( ";" ) );
-			cmd.setArguments( QString() );
-			addCommand( cmd, "mBuilder/mRebuild" );
+			if ( haveDebug || haveDebugRelease )
+			{
+				cmd = cmdBuild;
+				cmd.setText( tr( "Rebuild Debug" ) );
+				cmd.setCommand( ( QStringList() << tr( "QMake" ) << tr( "Distclean Debug" ) << tr( "QMake" ) << tr( "Build Debug" ) ).join( ";" ) );
+				cmd.setArguments( QString() );
+				addCommand( cmd, "mBuilder/mRebuild" );
+			}
 			
 			// rebuild release
-			cmd = cmdBuild;
-			cmd.setText( tr( "Rebuild Release" ) );
-			cmd.setCommand( ( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build Release" ) ).join( ";" ) );
-			cmd.setArguments( QString() );
-			addCommand( cmd, "mBuilder/mRebuild" );
+			if ( haveRelease || haveDebugRelease )
+			{
+				cmd = cmdBuild;
+				cmd.setText( tr( "Rebuild Release" ) );
+				cmd.setCommand( ( QStringList() << tr( "QMake" ) << tr( "Distclean Release" ) << tr( "QMake" ) << tr( "Build Release" ) ).join( ";" ) );
+				cmd.setArguments( QString() );
+				addCommand( cmd, "mBuilder/mRebuild" );
+			}
 			
 			// rebuild all
-			cmd = cmdBuild;
-			cmd.setText( tr( "Rebuild All" ) );
-			cmd.setCommand( ( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build All" ) ).join( ";" ) );
-			cmd.setArguments( QString() );
-			addCommand( cmd, "mBuilder/mRebuild" );
-			
-			// simple rebuild call
-			cmd = cmdBuild;
-			cmd.setText( tr( "Rebuild" ) );
-			cmd.setCommand( ( QStringList() << tr( "QMake" ) << tr( "Distclean" ) << tr( "QMake" ) << tr( "Build" ) ).join( ";" ) );
-			cmd.setArguments( QString() );
-			addCommand( cmd, "mBuilder/mRebuild" );
+			if ( haveDebugRelease )
+			{
+				cmd = cmdBuild;
+				cmd.setText( tr( "Rebuild All" ) );
+				cmd.setCommand( ( QStringList() << tr( "QMake" ) << tr( "Distclean All" ) << tr( "QMake" ) << tr( "Build All" ) ).join( ";" ) );
+				cmd.setArguments( QString() );
+				addCommand( cmd, "mBuilder/mRebuild" );
+			}
 		}
 		else if ( projectSettingsValue( "SHOW_QT_VERSION_WARNING", "1" ) == "1" )
 		{
@@ -581,20 +641,26 @@ void QMakeProjectItem::installCommands()
 		}
 		
 		// execute debug
-		cmd = cmdBuild;
-		cmd.setText( tr( "Execute Debug" ) );
-		cmd.setCommand( target );
-		cmd.setArguments( QString() );
-		cmd.setWorkingDirectory( destdir != "$cpp$" ? destdir : destdir +"/debug" );
-		addCommand( cmd, "mBuilder/mExecute" );
+		if ( haveDebug || haveDebugRelease )
+		{
+			cmd = cmdBuild;
+			cmd.setText( tr( "Execute Debug" ) );
+			cmd.setCommand( target );
+			cmd.setArguments( QString() );
+			cmd.setWorkingDirectory( destdir != "$cpp$" ? destdir : destdir +"/debug" );
+			addCommand( cmd, "mBuilder/mExecute" );
+		}
 		
 		// execute release
-		cmd = cmdBuild;
-		cmd.setText( tr( "Execute Release" ) );
-		cmd.setCommand( target );
-		cmd.setArguments( QString() );
-		cmd.setWorkingDirectory( destdir != "$cpp$" ? destdir : destdir +"/release" );
-		addCommand( cmd, "mBuilder/mExecute" );
+		if ( haveRelease || haveDebugRelease )
+		{
+			cmd = cmdBuild;
+			cmd.setText( tr( "Execute Release" ) );
+			cmd.setCommand( target );
+			cmd.setArguments( QString() );
+			cmd.setWorkingDirectory( destdir != "$cpp$" ? destdir : destdir +"/release" );
+			addCommand( cmd, "mBuilder/mExecute" );
+		}
 	}
 	
 	// install defaults commands
