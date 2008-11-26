@@ -10,3 +10,6 @@ HEADERS	= src/FileBrowser.h \
 SOURCES	= src/FileBrowser.cpp \
 	src/pDockFileBrowser.cpp \
 	src/FileBrowserSettings.cpp
+
+SOURCES	*= src/pDockFileBrowserTitleBar.cpp
+HEADERS	*= src/pDockFileBrowserTitleBar.h

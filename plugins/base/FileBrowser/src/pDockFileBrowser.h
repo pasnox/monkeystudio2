@@ -47,6 +47,7 @@ class QLineEdit;
 class QListView;
 class QFileSystemModel;
 class QTreeView;
+class pDockFileBrowserTitleBar;
 
 /*!
 	UI interface of FileBrowser plugin. 
@@ -98,7 +99,7 @@ public:
 	QStringList filters() const;
 
 protected:
-	pTreeComboBox* mCombo;
+	pDockFileBrowserTitleBar* mTitleBar;
 	QLineEdit* mLineEdit;
 	QTreeView* mTree;
 	QFileSystemModel* mDirsModel;
@@ -109,9 +110,9 @@ public slots:
 	void setFilters( const QStringList& filters );
 
 protected slots:
-	void tbUp_clicked();
-	void tbRoot_clicked();
-	void cb_currentChanged( const QModelIndex& index );
+	void aUp_triggered();
+	void aGoTo_triggered();
+	void aRoot_triggered();
 	void tv_activated( const QModelIndex& index );
 	void tv_doubleClicked( const QModelIndex& index );
 };

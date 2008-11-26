@@ -33,6 +33,7 @@
 	\brief UI of FileBrowser plugin
 */
 #include "pDockFileBrowser.h"
+#include "pDockFileBrowserTitleBar.h"
 
 #include <pWorkspace.h>
 #include <MonkeyCore.h>
@@ -49,7 +50,7 @@
 #include <QScrollArea>
 #include <QTabWidget>
 #include <QTreeView>
-#include <QHeaderView>
+#include <QFileDialog>
 
 #include <QDebug>
 
@@ -62,51 +63,53 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 {
 	// restrict areas
 	setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
+	
+	// title bar
+	mTitleBar = new pDockFileBrowserTitleBar( this );
+	setTitleBarWidget( mTitleBar );
+	
+	layout()->setMargin( 0 );
+	
+	// actions
+	// cdup action
+	QAction* aUp = new QAction( this );
+	aUp->setIcon( QIcon( ":/icons/up.png" ) );
+	aUp->setToolTip( tr( "Go Up" ) );
+	mTitleBar->addAction( aUp, 0 );
+	
+	// go to action
+	QAction* aGoTo = new QAction( this );
+	aGoTo->setIcon( QIcon( ":/icons/browser.png" ) );
+	aGoTo->setToolTip( tr( "Select a root folder" ) );
+	mTitleBar->addAction( aGoTo, 1 );
+	
+	// set current path action
+	QAction* aRoot = new QAction( this );
+	aRoot->setIcon( QIcon( ":/icons/goto.png" ) );
+	aRoot->setToolTip( tr( "Set selected item as root" ) );
+	mTitleBar->addAction( aRoot, 2 );
+	
+	// add separator
+	mTitleBar->addSeparator( 3 );
 
 	// central widget
 	QWidget* wdg = new QWidget( this );
 	setWidget( wdg );
 	
 	// vertical layout
-	QVBoxLayout* v = new QVBoxLayout( wdg );
-	v->setMargin( 5 );
-	v->setSpacing( 3 );
-	
-	// horizontal layout for toolbutton && combobox
-	QHBoxLayout* h = new QHBoxLayout;
-	h->setMargin( 0 );
-	h->setSpacing( 3 );
-	
-	// cdup toolbutton
-	QToolButton* tbUp = new QToolButton;
-	tbUp->setIcon( QIcon( ":/icons/up.png" ) );
-	tbUp->setToolTip( tr( "Go Up" ) );
-	h->addWidget( tbUp );
-	
-	// combo drive
-	mCombo = new pTreeComboBox;
-	mCombo->setToolTip( tr( "Quick Navigation" ) );
-	h->addWidget( mCombo );
-	
-	// set current path button
-	QToolButton* tbRoot = new QToolButton;
-	tbRoot->setIcon( QIcon( ":/icons/goto.png" ) );
-	tbRoot->setToolTip( tr( "Set selected item as root" ) );
-	h->addWidget( tbRoot );
-	
-	// add horizontal layout into vertical one
-	v->addLayout( h );
+	QVBoxLayout* vl = new QVBoxLayout( wdg );
+	vl->setMargin( 0 );
+	vl->setSpacing( 2 );
 	
 	// lineedit
 	mLineEdit = new QLineEdit;
 	mLineEdit->setReadOnly( true );
-	v->addWidget( mLineEdit );
+	vl->addWidget( mLineEdit );
 	
 	// dir model
 	mDirsModel = new QFileSystemModel( this );
 	mDirsModel->setNameFilterDisables( false );
 	mDirsModel->setFilter( QDir::AllDirs | QDir::AllEntries | QDir::CaseSensitive | QDir::NoDotAndDotDot );
-	mDirsModel->setRootPath( QString::null ); // need to be called to reset the model
 	
 	// create proxy model
 	mFilteredModel = new FileBrowserFilteredModel( this );
@@ -114,35 +117,31 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	
 	// files view
 	mTree = new QTreeView;
-	v->addWidget( mTree );
+	vl->addWidget( mTree );
 	
 	// assign model to views
-	mCombo->setModel( mDirsModel );
 	mTree->setModel( mFilteredModel );
 	
 	// custom view
-	mCombo->view()->setColumnHidden( 1, true );
-	mCombo->view()->setColumnHidden( 2, true );
-	mCombo->view()->setColumnHidden( 3, true );
-	mTree->header()->hide();
+	mTree->setHeaderHidden( true );
 	
 	// set root index
 #ifndef Q_OS_WIN
-	mCombo->setRootIndex( mDirsModel->index( "/" ) );
+	mDirsModel->setRootPath( "/" );
 #else
-	mCombo->setRootIndex( QModelIndex() );
+	mDirsModel->setRootPath( QString::null );
 #endif
 	
 	// set lineedit path
-	setCurrentPath( mDirsModel->filePath( mCombo->rootIndex() ) );
+	setCurrentPath( mDirsModel->filePath( mDirsModel->index( 0, 0 ) ) );
 	
 	// redirirect focus proxy
 	setFocusProxy( mTree );
 	
 	// connections
-	connect( tbUp, SIGNAL( clicked() ), this, SLOT( tbUp_clicked() ) );
-	connect( tbRoot, SIGNAL( clicked() ), this, SLOT( tbRoot_clicked() ) );
-	connect( mCombo, SIGNAL( currentChanged( const QModelIndex& ) ), this, SLOT( cb_currentChanged( const QModelIndex& ) ) );
+	connect( aUp, SIGNAL( triggered() ), this, SLOT( aUp_triggered() ) );
+	connect( aGoTo, SIGNAL( triggered() ), this, SLOT( aGoTo_triggered() ) );
+	connect( aRoot, SIGNAL( triggered() ), this, SLOT( aRoot_triggered() ) );
 	connect( mTree, SIGNAL( activated( const QModelIndex& ) ), this, SLOT( tv_activated( const QModelIndex& ) ) );
 	connect( mTree, SIGNAL( doubleClicked( const QModelIndex& ) ), this, SLOT( tv_doubleClicked( const QModelIndex& ) ) );
 }
@@ -152,11 +151,39 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 
 	Moves root of tree up one level
 */
-void pDockFileBrowser::tbUp_clicked()
+void pDockFileBrowser::aUp_triggered()
 {
 	// cd up only if not the root index
-	if ( mCombo->currentIndex() != mCombo->rootIndex() )
-		setCurrentPath( mDirsModel->filePath( mCombo->currentIndex().parent() ) );
+	QModelIndex index = mTree->rootIndex();
+	
+	if ( !index.isValid() )
+	{
+		return;
+	}
+	
+	index = index.parent();
+	index = mFilteredModel->mapToSource( index );
+	const QString path = mDirsModel->filePath( index );
+	
+#ifndef Q_OS_WIN
+	if ( path.isEmpty() )
+	{
+		return;
+	}
+#endif
+	
+	setCurrentPath( path );
+}
+
+void pDockFileBrowser::aGoTo_triggered()
+{
+	QAction* action = qobject_cast<QAction*>( sender() );
+	const QString path = QFileDialog::getExistingDirectory( window(), action->toolTip(), currentPath() );
+	
+	if ( !path.isEmpty() )
+	{
+		setCurrentPath( path );
+	}
 }
 
 /*!
@@ -164,7 +191,7 @@ void pDockFileBrowser::tbUp_clicked()
 	
 	If there are selected dirrectory in the tree - it will be set as root
 */
-void pDockFileBrowser::tbRoot_clicked()
+void pDockFileBrowser::aRoot_triggered()
 {
 	// seet root of model to path of selected item
 	QModelIndex index = mTree->selectionModel()->selectedIndexes().value( 0 );
@@ -179,8 +206,15 @@ void pDockFileBrowser::tbRoot_clicked()
 void pDockFileBrowser::tv_activated( const QModelIndex& idx )
 {
 	const QModelIndex index = mFilteredModel->mapToSource( idx );
-	if ( !mDirsModel->isDir( index ) )
+	
+	if ( mDirsModel->isDir( index ) )
+	{
+		setCurrentPath( mDirsModel->filePath( index ) );
+	}
+	else
+	{
 		MonkeyCore::fileManager()->openFile( mDirsModel->filePath( index ), pMonkeyStudio::defaultCodec() );
+	}
 }
 
 /*!
@@ -193,24 +227,21 @@ void pDockFileBrowser::tv_doubleClicked( const QModelIndex& idx )
 {
 	// open file corresponding to index
 	const QModelIndex index = mFilteredModel->mapToSource( idx );
+	
 	if ( !mDirsModel->isDir( index ) )
+	{
 		MonkeyCore::fileManager()->openFile( mDirsModel->filePath( index ), pMonkeyStudio::defaultCodec() );
+	}
 }
-
-/*!
-	Handler of changing of current dirrectory in combo box. Opens dirrectory 
-	in the tree.
-	\param i Index of clicked item in the combo box
-*/
-void pDockFileBrowser::cb_currentChanged( const QModelIndex& i )
-{ setCurrentPath( mDirsModel->filePath( i ) ); }
 
 /*!
 	Get current path (root of the tree)
 	\return Current path (root of the tree)
 */
 QString pDockFileBrowser::currentPath() const
-{ return mDirsModel->filePath( mCombo->currentIndex() ); }
+{
+	return mDirsModel->filePath( mFilteredModel->mapToSource( mTree->rootIndex() ) );
+}
 
 /*!
 	Set current path (root of the tree)
@@ -221,7 +252,6 @@ void pDockFileBrowser::setCurrentPath( const QString& s )
 	// get index
 	QModelIndex index = mDirsModel->index( s );
 	// set current path
-	mCombo->setCurrentIndex( index );
 	mFilteredModel->invalidate();
 	mTree->setRootIndex( mFilteredModel->mapFromSource( index ) );
 	// set lineedit path
@@ -235,11 +265,15 @@ void pDockFileBrowser::setCurrentPath( const QString& s )
 	\return List if wildcards for filtering
 */
 QStringList pDockFileBrowser::filters() const
-{ return mFilteredModel->filters(); }
+{
+	return mFilteredModel->filters();
+}
 
 /*!
 	Set filter wildcards for filtering out unneeded files
 	\param filters List of wildcards
 */
 void pDockFileBrowser::setFilters( const QStringList& filters )
-{ mFilteredModel->setFilters( filters ); }
+{
+	mFilteredModel->setFilters( filters );
+}
