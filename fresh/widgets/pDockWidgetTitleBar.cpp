@@ -60,6 +60,11 @@ void pDockWidgetTitleBar::paintEvent( QPaintEvent* event )
 	titleOpt.initFrom( mDock );
 	titleOpt.rect = rect();
 	
+	if ( titleOpt.title.isEmpty() )
+	{
+		titleOpt.title = mDock->windowTitle();
+	}
+	
 	// paint dock title
 	if ( mDock->features() & QDockWidget::DockWidgetVerticalTitleBar )
 	{
