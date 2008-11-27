@@ -66,7 +66,7 @@ MessageBoxDocks::MessageBoxDocks( QObject* parent )
 	connect( MonkeyCore::consoleManager(), SIGNAL( commandStateChanged( const pCommand&, QProcess::ProcessState ) ), this, SLOT( commandStateChanged( const pCommand&, QProcess::ProcessState ) ) );
 	connect( MonkeyCore::consoleManager(), SIGNAL( commandSkipped( const pCommand& ) ), this, SLOT( commandSkipped( const pCommand& ) ) );
 	connect( MonkeyCore::consoleManager(), SIGNAL( newStepAvailable( const pConsoleManager::Step& ) ), this, SLOT( appendStep( const pConsoleManager::Step& ) ) );
-	connect( mSearchResult->lwSearchResults, SIGNAL( itemPressed( QListWidgetItem* ) ), this, SLOT( lwSearchResults_itemPressed( QListWidgetItem* ) ) );
+	connect( mSearchResult->twSearchResults, SIGNAL( itemDoubleClicked( QTreeWidgetItem*, int ) ), this, SLOT( twSearchResults_itemPressed( QTreeWidgetItem* ) ) );
 	connect( MonkeyCore::workspace(), SIGNAL( appendSearchResult( const pConsoleManager::Step& ) ), this, SLOT( appendSearchResult( const pConsoleManager::Step& ) ) );
 	connect( MonkeyCore::workspace(), SIGNAL( clearSearchResults() ), this, SLOT( clearSearchResults() ) );
 }
@@ -267,18 +267,42 @@ void MessageBoxDocks::appendStep( const pConsoleManager::Step& s )
 void MessageBoxDocks::appendSearchResult( const pConsoleManager::Step& s )
 {
 	showSearchResults();
-	QListWidgetItem* it = new QListWidgetItem( mSearchResult->lwSearchResults );
+	QTreeWidgetItem* it = NULL;
+	QTreeWidgetItem* parentItem = NULL;
+	if (s.mType == pConsoleManager::stResultForReplace)
+	{
+		QString parentItemFile = QString::null;
+		if (mSearchResult->twSearchResults->topLevelItemCount())
+		{
+			parentItem = mSearchResult->twSearchResults->topLevelItem(mSearchResult->twSearchResults->topLevelItemCount()-1);
+			parentItemFile = parentItem->data (0, Qt::UserRole + 2).toString();
+		}
+		if (s.mFileName != parentItemFile) // it's a next file, need create next item (or it's just a first search result)
+		{
+			parentItem = new QTreeWidgetItem (mSearchResult->twSearchResults);
+			parentItem->setData( 0, Qt::UserRole +2, s.mFileName ); // filename
+			parentItem->setFlags (parentItem->flags() | Qt::ItemIsUserCheckable);
+			parentItem->setCheckState (0, Qt::Checked);
+		}
+		it = new QTreeWidgetItem( parentItem );
+	}
+	else
+	{
+		it = new QTreeWidgetItem( mSearchResult->twSearchResults );
+	}
+	
+	parentItem->setText (0, QString ("%1 (%2)").arg (s.mFileName).arg(parentItem->childCount()));
 	// set item infos
-	it->setText( s.mText );
-	it->setToolTip( s.mFullText );
-	it->setData( Qt::UserRole +1, s.mType ); // type
-	it->setData( Qt::UserRole +2, s.mFileName ); // filename
-	it->setData( Qt::UserRole +3, s.mPosition ); // position
+	it->setText( 0, s.mText );
+	it->setToolTip( 0, s.mFullText );
+	it->setData( 0, Qt::UserRole +1, s.mType ); // type
+	it->setData( 0, Qt::UserRole +2, s.mFileName ); // filename
+	it->setData( 0, Qt::UserRole +3, s.mPosition ); // position
 	
 	if (s.mType == pConsoleManager::stResultForReplace)
 	{
 		it->setFlags (it->flags() | Qt::ItemIsUserCheckable);
-		it->setCheckState (Qt::Checked);
+		it->setCheckState (0, Qt::Checked);
 	}
 }
 
@@ -346,7 +370,7 @@ void MessageBoxDocks::showNextError()
 */
 void MessageBoxDocks::clearSearchResults()
 {
-	mSearchResult->lwSearchResults->clear();
+	mSearchResult->twSearchResults->clear();
 }
 
 /*!
@@ -436,11 +460,11 @@ void MessageBoxDocks::lwBuildSteps_itemPressed( QListWidgetItem* it )
 	Opens file/line in the editor
 	\param it Item, which was pressed
 */
-void MessageBoxDocks::lwSearchResults_itemPressed( QListWidgetItem* it )
+void MessageBoxDocks::twSearchResults_itemPressed( QTreeWidgetItem* it )
 {
 	// get filename
-	QString s = it->data( Qt::UserRole +2 ).toString();
-	MonkeyCore::fileManager()->goToLine( s, it->data( Qt::UserRole +3 ).toPoint(), true, pMonkeyStudio::defaultCodec() );
+	QString s = it->data( 0, Qt::UserRole +2 ).toString();
+	MonkeyCore::fileManager()->goToLine( s, it->data( 0, Qt::UserRole +3 ).toPoint(), true, pMonkeyStudio::defaultCodec() );
 }
 
 /*!

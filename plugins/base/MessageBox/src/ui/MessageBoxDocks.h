@@ -132,7 +132,7 @@ public slots:
 
 protected slots:
 	void lwBuildSteps_itemPressed( QListWidgetItem* );
-	void lwSearchResults_itemPressed( QListWidgetItem* );
+	void twSearchResults_itemPressed( QTreeWidgetItem* );
 	void cbRawCommand_returnPressed();
 	void commandError( const pCommand&, QProcess::ProcessError );
 	void commandFinished( const pCommand&, int, QProcess::ExitStatus );

@@ -10,7 +10,8 @@
    </rect>
   </property>
   <property name="windowIcon" >
-   <iconset resource="../resources/MessageBox.qrc" >:/icons/tabsearch.png</iconset>
+   <iconset resource="../resources/MessageBox.qrc" >
+    <normaloff>:/icons/tabsearch.png</normaloff>:/icons/tabsearch.png</iconset>
   </property>
   <property name="windowTitle" >
    <string>Search Results</string>
@@ -18,7 +19,19 @@
   <widget class="QWidget" name="centralwidget" >
    <layout class="QVBoxLayout" >
     <item>
-     <widget class="QListWidget" name="lwSearchResults" />
+     <widget class="QTreeWidget" name="twSearchResults" >
+      <property name="rootIsDecorated" >
+       <bool>true</bool>
+      </property>
+      <property name="headerHidden" >
+       <bool>true</bool>
+      </property>
+      <column>
+       <property name="text" >
+        <string>1</string>
+       </property>
+      </column>
+     </widget>
     </item>
    </layout>
   </widget>
