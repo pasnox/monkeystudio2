@@ -62,7 +62,19 @@ class Q_MONKEY_EXPORT pConsoleManager : public QProcess
 	friend class MonkeyCore;
 	
 public:
-	enum StepType { stUnknown = -1, stError, stWarning, stCompiling, stLinking, stFinish, stGood, stBad }; // , stState
+	enum StepType 
+	{ 
+		stUnknown = -1, 
+		stError, 
+		stWarning, 
+		stCompiling, 
+		stLinking, 
+		stFinish, 
+		stGood, 
+		stBad,
+		stSearchResult,
+		stResultForReplace
+	}; // , stState
 	
 	struct Step
 	{

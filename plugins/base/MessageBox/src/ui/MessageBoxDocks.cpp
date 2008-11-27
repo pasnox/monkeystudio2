@@ -274,6 +274,12 @@ void MessageBoxDocks::appendSearchResult( const pConsoleManager::Step& s )
 	it->setData( Qt::UserRole +1, s.mType ); // type
 	it->setData( Qt::UserRole +2, s.mFileName ); // filename
 	it->setData( Qt::UserRole +3, s.mPosition ); // position
+	
+	if (s.mType == pConsoleManager::stResultForReplace)
+	{
+		it->setFlags (it->flags() | Qt::ItemIsUserCheckable);
+		it->setCheckState (Qt::Checked);
+	}
 }
 
 /*!

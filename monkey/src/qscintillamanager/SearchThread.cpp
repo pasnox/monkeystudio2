@@ -110,7 +110,14 @@ void SearchThread::run()
         QFile file(fileName);
         if (file.open(QIODevice::ReadOnly)) 
         {
-			search (file);
+			if (mMode == SEARCH)
+			{
+				search (file);
+			}
+			else
+			{
+				replace (file);
+			}
         } //if open
         if (mTerm)
         {
@@ -155,6 +162,7 @@ void SearchThread::search (QFile& file)
 			if (ifContains) 
 			{
 				pConsoleManager::Step step;
+				step.mType = pConsoleManager::stSearchResult;
 				step.mFileName = file.fileName();
 				step.mPosition = QPoint (0,i);
 				step.mText = QString("%1[%2]: %3").arg (QFileInfo(file.fileName()).fileName()).arg(i).arg(line.simplified());
@@ -189,6 +197,7 @@ void SearchThread::replace (QFile& file)
 			if (ifContains) 
 			{
 				pConsoleManager::Step step;
+				step.mType = pConsoleManager::stResultForReplace;
 				step.mFileName = file.fileName();
 				step.mPosition = QPoint (0,i);
 				step.mText = QString("%1[%2]: %3").arg (QFileInfo(file.fileName()).fileName()).arg(i).arg(line.simplified());

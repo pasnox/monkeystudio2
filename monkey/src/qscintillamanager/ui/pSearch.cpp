@@ -341,9 +341,12 @@ void pSearch::show ()
 	{
 		tbNext->setText (tr("&Next"));
 		tbNext->setIcon (QIcon(":/edit/icons/edit/next.png"));
-		tbReplaceAll->setEnabled (true);
 		tbPrevious->show();
-		tbReplace->show();
+		if (mOperType == REPLACE)
+		{
+			tbReplaceAll->setEnabled (true);
+			tbReplace->show();
+		}
 	}
 	else // FOLDER
 	{
@@ -436,7 +439,10 @@ bool pSearch::on_tbNext_clicked()
 				//bool whole = cbWholeWords->isChecked ();
 				bool caseSensetive = cbCaseSensitive->isChecked();
 				bool regexp = cbRegExp->isChecked ();
-				mSearchThread = new SearchThread(SearchThread::SEARCH, path, mask, text, "", caseSensetive, regexp, this);
+				if (mOperType == SEARCH)
+					mSearchThread = new SearchThread(SearchThread::SEARCH, path, mask, text, "", caseSensetive, regexp, this);
+				else
+					mSearchThread = new SearchThread(SearchThread::REPLACE, path, mask, text, "", caseSensetive, regexp, this);
 				tbNext->setText (tr("&Stop"));
 				tbNext->setIcon (QIcon(":/console/icons/console/stop.png"));
 				
