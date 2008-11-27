@@ -47,7 +47,6 @@ class QLineEdit;
 class QListView;
 class QFileSystemModel;
 class QTreeView;
-class pDockFileBrowserTitleBar;
 
 /*!
 	UI interface of FileBrowser plugin. 
@@ -99,7 +98,6 @@ public:
 	QStringList filters() const;
 
 protected:
-	pDockFileBrowserTitleBar* mTitleBar;
 	QLineEdit* mLineEdit;
 	QTreeView* mTree;
 	QFileSystemModel* mDirsModel;

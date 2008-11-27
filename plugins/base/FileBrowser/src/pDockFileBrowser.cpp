@@ -33,12 +33,12 @@
 	\brief UI of FileBrowser plugin
 */
 #include "pDockFileBrowser.h"
-#include "pDockFileBrowserTitleBar.h"
 
 #include <pWorkspace.h>
 #include <MonkeyCore.h>
 #include <pFileManager.h>
 #include <pMonkeyStudio.h>
+#include <pDockWidgetTitleBar.h>
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -64,10 +64,6 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	// restrict areas
 	setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
 	
-	// title bar
-	mTitleBar = new pDockFileBrowserTitleBar( this );
-	setTitleBarWidget( mTitleBar );
-	
 	layout()->setMargin( 0 );
 	
 	// actions
@@ -75,22 +71,22 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	QAction* aUp = new QAction( this );
 	aUp->setIcon( QIcon( ":/icons/up.png" ) );
 	aUp->setToolTip( tr( "Go Up" ) );
-	mTitleBar->addAction( aUp, 0 );
+	titleBar()->addAction( aUp, 0 );
 	
 	// go to action
 	QAction* aGoTo = new QAction( this );
 	aGoTo->setIcon( QIcon( ":/icons/browser.png" ) );
 	aGoTo->setToolTip( tr( "Select a root folder" ) );
-	mTitleBar->addAction( aGoTo, 1 );
+	titleBar()->addAction( aGoTo, 1 );
 	
 	// set current path action
 	QAction* aRoot = new QAction( this );
 	aRoot->setIcon( QIcon( ":/icons/goto.png" ) );
 	aRoot->setToolTip( tr( "Set selected item as root" ) );
-	mTitleBar->addAction( aRoot, 2 );
+	titleBar()->addAction( aRoot, 2 );
 	
 	// add separator
-	mTitleBar->addSeparator( 3 );
+	titleBar()->addSeparator( 3 );
 
 	// central widget
 	QWidget* wdg = new QWidget( this );
