@@ -29,6 +29,7 @@
 #include <QDockWidget>
 
 class pActionsManager;
+class pDockWidgetTitleBar;
 
 /*!
 	\brief A QDockWidget that keep it's size
@@ -45,6 +46,8 @@ public:
 
 	virtual QSize sizeHint() const;
 	
+	pDockWidgetTitleBar* titleBar() const;
+	
 	void setActionsManager( pActionsManager* manager );
 	pActionsManager* actionsManager() const;
 	
@@ -52,9 +55,11 @@ public slots:
 	virtual void setVisible( bool visible );
 
 protected:
+	pDockWidgetTitleBar* mTitleBar;
 	pActionsManager* mActionsManager;
 	QSize mSize;
 	
+	void init();
 	QSize contentsSize() const;
 
 protected slots:

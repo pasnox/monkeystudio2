@@ -16,6 +16,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 #include "pDockWidget.h"
+#include "pDockWidgetTitleBar.h"
 #include "pActionsManager.h"
 
 #include <QStyle>
@@ -34,7 +35,7 @@
 pDockWidget::pDockWidget( const QString& title, QWidget* parent, Qt::WindowFlags flags )
 	: QDockWidget( title, parent, flags )
 {
-	connect( toggleViewAction(), SIGNAL( toggled( bool ) ), this, SLOT( toggleViewAction_toggled( bool ) ) );
+	init();
 }
 
 /*!
@@ -45,6 +46,14 @@ pDockWidget::pDockWidget( const QString& title, QWidget* parent, Qt::WindowFlags
 pDockWidget::pDockWidget( QWidget* parent, Qt::WindowFlags flags )
 	: QDockWidget( parent, flags )
 {
+	init();
+}
+
+void pDockWidget::init()
+{
+	mTitleBar = new pDockWidgetTitleBar( this );
+	setTitleBarWidget( mTitleBar );
+
 	connect( toggleViewAction(), SIGNAL( toggled( bool ) ), this, SLOT( toggleViewAction_toggled( bool ) ) );
 }
 
@@ -97,6 +106,11 @@ void pDockWidget::handleFocusProxy()
 QSize pDockWidget::sizeHint() const
 {
 	return mSize.isValid() && !isFloating() ? mSize : QDockWidget::sizeHint();
+}
+
+pDockWidgetTitleBar* pDockWidget::titleBar() const
+{
+	return mTitleBar;
 }
 
 void pDockWidget::setActionsManager( pActionsManager* manager )
