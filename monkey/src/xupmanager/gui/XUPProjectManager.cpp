@@ -12,6 +12,8 @@
 #include "pRecentsManager.h"
 #include "QueuedStatusBar.h"
 
+#include <pDockWidgetTitleBar.h>
+
 #include <QDebug>
 #include <QTextCodec>
 #include <QMenu>
@@ -33,14 +35,15 @@ XUPProjectManager::XUPProjectManager( QWidget* parent )
 	XUPProjectItem* pItem = new XUPProjectItem();
 	pItem->registerProjectType();
 	
-	tbActions->addAction( action( atNew ) );
-	tbActions->addAction( action( atOpen ) );
-	tbActions->addAction( action( atClose ) );
-	tbActions->addAction( action( atCloseAll ) );
-	tbActions->addAction( action( atEdit ) );
-	tbActions->addAction( action( atAddFiles ) );
-	tbActions->addAction( action( atRemoveFiles ) );
-	tbActions->addAction( aDebug );
+	titleBar()->addAction( action( atNew ), 0 );
+	titleBar()->addAction( action( atOpen ), 1 );
+	titleBar()->addAction( action( atClose ), 2 );
+	titleBar()->addAction( action( atCloseAll ), 3 );
+	titleBar()->addAction( action( atEdit ), 4 );
+	titleBar()->addAction( action( atAddFiles ), 5 );
+	titleBar()->addAction( action( atRemoveFiles ), 6 );
+	titleBar()->addAction( aDebug, 7 );
+	titleBar()->addSeparator( 8 );
 	
 	mFilteredModel = new XUPFilteredProjectModel( tvFiltered );
 	tvFiltered->setModel( mFilteredModel );

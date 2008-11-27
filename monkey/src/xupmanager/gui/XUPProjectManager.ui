@@ -13,13 +13,16 @@
    <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
   </property>
   <property name="windowTitle" >
-   <string>Project Manager</string>
+   <string>Projects</string>
   </property>
   <widget class="QWidget" name="wCentral" >
    <layout class="QVBoxLayout" name="verticalLayout_3" >
     <item>
      <widget class="QWidget" native="1" name="wDebug" >
       <layout class="QHBoxLayout" name="horizontalLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
        <item>
         <widget class="QPushButton" name="pbFiltered" >
          <property name="text" >
@@ -58,9 +61,6 @@
        </item>
       </layout>
      </widget>
-    </item>
-    <item>
-     <widget class="QToolBar" name="tbActions" />
     </item>
     <item>
      <widget class="QComboBox" name="cbProjects" />
@@ -137,7 +137,6 @@
    <zorder>swPages</zorder>
    <zorder>pteLog</zorder>
    <zorder>wDebug</zorder>
-   <zorder></zorder>
   </widget>
   <action name="aDebug" >
    <property name="icon" >
