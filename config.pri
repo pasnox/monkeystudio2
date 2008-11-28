@@ -12,7 +12,7 @@ PACKAGE_DESTDIR	= $${PACKAGE_PWD}/bin
 PACKAGE_BUILD_PATH	= $${PACKAGE_PWD}/build
 
 # build mode
-CONFIG	+= qt warn_on thread x11 windows debug
+CONFIG	+= qt warn_on thread x11 windows release
 QT	+= xml
 
 # define config mode paths
@@ -49,8 +49,8 @@ QMAKE_TARGET_DESCRIPTION	= "Crossplatform Integrated Development Environment"
 QMAKE_TARGET_COPYRIGHT	= "Copyright (C) 2005 - 2008 Filipe AZEVEDO"
 PACKAGE_DOMAIN	= "www.monkeystudio.org"
 
-release:PACKAGE_VERSION	= 1.8.2.2svn_release
-debug:PACKAGE_VERSION	= 1.8.2.2svn_debug
+release:PACKAGE_VERSION	= 1.8.3.0svn_release
+debug:PACKAGE_VERSION	= 1.8.3.0svn_debug
 
 # define variable for source code
 DEFINES	*= "PACKAGE_NAME=\"\\\"$${QMAKE_TARGET_PRODUCT}\\\"\"" \
@@ -59,28 +59,50 @@ DEFINES	*= "PACKAGE_NAME=\"\\\"$${QMAKE_TARGET_PRODUCT}\\\"\"" \
 	"PACKAGE_COPYRIGHTS=\"\\\"$${QMAKE_TARGET_COPYRIGHT}\\\"\""
 
 # get package install paths
-PACKAGE_PREFIX	= $$(MONKEY_PREFIX)
-PACKAGE_DATAS	= $$(MONKEY_DATAS)
+
+# [23:29] <eponyme> PasNox , ca semble utiliser $$QT_ARCH, qui vaut i386 ou x86_64 , et selon la valeur, il change ses path
+# [23:30] <eponyme> il en parle ici : http://lists.trolltech.com/qt-interest/2008-02/thread00218-0.html
+
+unix:!mac {
+	# default prefix path
+	isEmpty( prefix ):prefix = /usr
+
+	!isEmpty( prefix ) {
+		# plugins path
+		isEmpty( plugins ) {
+			plugins	= $$prefix/lib
+		}
+		
+		# datas path
+		isEmpty( datas ) {
+			datas	= $$prefix/share
+		}
+	}
+} else:mac {
+} else:win32 {
+}
+
+PACKAGE_PREFIX	= $$quote($$prefix/bin)
+PACKAGE_PLUGINS	= $$quote($$plugins/$$PACKAGE_TARGET)
+PACKAGE_DATAS	= $$quote($$datas/$$PACKAGE_TARGET)
 
 # prefix
-isEmpty( PACKAGE_PREFIX ) {
-	win32:PACKAGE_PREFIX	= $${PACKAGE_DESTDIR}
-	else:mac:PACKAGE_PREFIX	= $${PACKAGE_DESTDIR}/$${PACKAGE_TARGET}.app/Contents
-	else:PACKAGE_PREFIX	= /usr/local
-}
+# isEmpty( PACKAGE_PREFIX ) {
+# 	win32:PACKAGE_PREFIX	= $${PACKAGE_DESTDIR}
+# 	else:mac:PACKAGE_PREFIX	= $${PACKAGE_DESTDIR}/$${PACKAGE_TARGET}.app/Contents
+# 	else:PACKAGE_PREFIX	= /usr/local
+# }
 
 # datas
-isEmpty( PACKAGE_DATAS ) {
-	win32:PACKAGE_DATAS	= $${PACKAGE_PREFIX}
-	else:mac:PACKAGE_DATAS	= $${PACKAGE_PREFIX}
-	else:PACKAGE_DATAS	= $${PACKAGE_PREFIX}/lib/$${PACKAGE_TARGET}
-}
-
-PACKAGE_PREFIX	= $$quote($$PACKAGE_PREFIX)
-PACKAGE_DATAS	= $$quote($$PACKAGE_DATAS)
+# isEmpty( PACKAGE_DATAS ) {
+# 	win32:PACKAGE_DATAS	= $${PACKAGE_PREFIX}
+# 	else:mac:PACKAGE_DATAS	= $${PACKAGE_PREFIX}
+# 	else:PACKAGE_DATAS	= $${PACKAGE_PREFIX}/lib/$${PACKAGE_TARGET}
+# }
 
 # define package install paths so source code can use them
 DEFINES	*= "PACKAGE_PREFIX=\"\\\"$${PACKAGE_PREFIX}\\\"\"" \
+	"PACKAGE_PLUGINS=\"\\\"$${PACKAGE_PLUGINS}\\\"\"" \
 	"PACKAGE_DATAS=\"\\\"$${PACKAGE_DATAS}\\\"\""
 
 # qscintilla library
