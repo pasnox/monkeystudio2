@@ -132,7 +132,6 @@
      </widget>
     </item>
    </layout>
-   <zorder>tbActions</zorder>
    <zorder>cbProjects</zorder>
    <zorder>swPages</zorder>
    <zorder>pteLog</zorder>
