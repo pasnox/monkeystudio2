@@ -12,7 +12,7 @@ PACKAGE_DESTDIR	= $${PACKAGE_PWD}/bin
 PACKAGE_BUILD_PATH	= $${PACKAGE_PWD}/build
 
 # build mode
-CONFIG	+= qt warn_on thread x11 windows release
+CONFIG	+= qt warn_on thread x11 windows debug
 QT	+= xml
 
 # define config mode paths
@@ -49,8 +49,13 @@ QMAKE_TARGET_DESCRIPTION	= "Crossplatform Integrated Development Environment"
 QMAKE_TARGET_COPYRIGHT	= "Copyright (C) 2005 - 2008 Filipe AZEVEDO"
 PACKAGE_DOMAIN	= "www.monkeystudio.org"
 
-release:PACKAGE_VERSION	= 1.8.3.0svn_release
-debug:PACKAGE_VERSION	= 1.8.3.0svn_debug
+PACKAGE_VERSION	= 1.8.3.0
+
+CONFIG( debug, debug|release ) {
+	PACKAGE_VERSION	= $${PACKAGE_VERSION}svn_debug
+} else {
+	PACKAGE_VERSION	= $${PACKAGE_VERSION}svn_release
+}
 
 # define variable for source code
 DEFINES	*= "PACKAGE_NAME=\"\\\"$${QMAKE_TARGET_PRODUCT}\\\"\"" \
