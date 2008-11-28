@@ -32,12 +32,113 @@
 #include <QStringList>
 #include <QDir>
 
+#include <QDebug>
+
 Settings::Settings( QObject* o )
 	: pSettings( o )
 {}
 
+/*
+[22:42] <PasNox> binary: /usr/bin
+[22:43] <PasNox> plugins /usr/lib/mks
+[22:43] <PasNox> allother: /usr/share/mks
+*/
+
 void Settings::setDefaultSettings()
 {
+	const QString appPath = qApp->applicationDirPath();
+	bool appIsInstalled = appPath == PACKAGE_PREFIX;
+	QString pluginsPath;
+	QString templatesPath;
+	QString translationsPath;
+	QString apisPath;
+	
+	if ( !appIsInstalled )
+	{
+#ifdef Q_OS_MAC
+		// todo
+#elif defined Q_OS_WIN
+		// todo
+#else
+		pluginsPath = "plugins";
+		templatesPath = "../templates";
+		translationsPath = "../translations";
+		apisPath = "../ctags/apis";
+#endif
+        }
+        else
+        {
+#ifdef Q_OS_MAC
+                // todo
+#elif defined Q_OS_WIN
+                // todo
+#else
+                pluginsPath = PACKAGE_PLUGINS;
+                templatesPath = QString( "%1/templates" ).arg( PACKAGE_DATAS );
+                translationsPath = QString( "%1/translations" ).arg( PACKAGE_DATAS );
+                apisPath = QString( "%1/apis" ).arg( PACKAGE_DATAS );
+#endif
+        }
+	
+	qWarning() << "Settings::setDefaultSettings()" << appPath << PACKAGE_PREFIX << appIsInstalled;
+	qWarning() << "pluginsPath" << pluginsPath;
+	qWarning() << "templatesPath" << templatesPath;
+	qWarning() << "translationsPath" << translationsPath;
+	qWarning() << "apisPath" << apisPath;
+	
+	// plugins
+	if ( !pluginsPath.isEmpty() )
+	{
+		QStringList paths = value( "Plugins/Path" ).toStringList();
+		
+		if ( !paths.contains( pluginsPath ) )
+		{
+			paths << pluginsPath;
+		}
+		
+		setValue( "Plugins/Path", paths );
+	}
+	
+	// templates
+	if ( !templatesPath.isEmpty() )
+	{
+		QStringList paths = value( "Templates/DefaultDirectories" ).toStringList();
+		
+		if ( !paths.contains( templatesPath ) )
+		{
+			paths << templatesPath;
+		}
+		
+		setValue( "Templates/DefaultDirectories", paths );
+	}
+	
+	// translations
+	if ( !translationsPath.isEmpty() )
+	{
+		QStringList paths = value( "Translations/Path" ).toStringList();
+		
+		if ( !paths.contains( translationsPath ) )
+		{
+			paths << translationsPath;
+		}
+		
+		setValue( "Translations/Path", paths );
+	}
+	
+	// apis
+	if ( !apisPath.isEmpty() )
+	{
+		setValue( "SourceAPIs/CMake", QStringList( apisPath +"/cmake.api" ) );
+		setValue( "SourceAPIs/C#", QStringList( apisPath +"/cs.api" ) );
+		setValue( "SourceAPIs/C++", QStringList() << apisPath +"/c.api" << apisPath +"/cpp.api" << apisPath +"/glut.api" << apisPath +"/opengl.api" << apisPath +"/qt-4.4.0.api" );
+	}
+	
+	// syntax highlighter
+	setDefaultCppSyntaxHighlight();
+
+	return;
+	
+/*
 	QString mPath;
 	QString s;
 	QStringList l;
@@ -95,6 +196,7 @@ void Settings::setDefaultSettings()
 	setValue( "Plugins/Path", l );
 	// syntax highlighter
 	setDefaultCppSyntaxHighlight();
+*/
 }
 
 void Settings::setDefaultCppSyntaxHighlight()
