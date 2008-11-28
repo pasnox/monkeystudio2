@@ -8,6 +8,10 @@ class QBoxLayout;
 #include <QToolButton>
 #include <QStylePainter>
 #include <QStyleOptionToolButton>
+#ifdef Q_OS_MAC
+#include <QMacStyle>
+#endif
+
 class pDockWidgetButton : public QToolButton
 {
 	Q_OBJECT
