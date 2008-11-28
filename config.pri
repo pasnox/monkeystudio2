@@ -84,26 +84,28 @@ unix:!mac {
 		}
 	}
 } else:mac {
+	prefix	= $${PACKAGE_DESTDIR}/$${PACKAGE_TARGET}.app/Contents
+	plugins	= $${prefix}/plugins
+	datas	= $${prefix}/Resources
 } else:win32 {
+	prefix	= $${PACKAGE_DESTDIR}
+	plugins	= $${prefix}/plugins
+	datas	= $${prefix}
 }
 
-PACKAGE_PREFIX	= $$quote($$prefix/bin)
-PACKAGE_PLUGINS	= $$quote($$plugins/$$PACKAGE_TARGET)
-PACKAGE_DATAS	= $$quote($$datas/$$PACKAGE_TARGET)
-
-# prefix
-# isEmpty( PACKAGE_PREFIX ) {
-# 	win32:PACKAGE_PREFIX	= $${PACKAGE_DESTDIR}
-# 	else:mac:PACKAGE_PREFIX	= $${PACKAGE_DESTDIR}/$${PACKAGE_TARGET}.app/Contents
-# 	else:PACKAGE_PREFIX	= /usr/local
-# }
-
-# datas
-# isEmpty( PACKAGE_DATAS ) {
-# 	win32:PACKAGE_DATAS	= $${PACKAGE_PREFIX}
-# 	else:mac:PACKAGE_DATAS	= $${PACKAGE_PREFIX}
-# 	else:PACKAGE_DATAS	= $${PACKAGE_PREFIX}/lib/$${PACKAGE_TARGET}
-# }
+unix:!mac {
+	PACKAGE_PREFIX	= $$quote($$prefix/bin)
+	PACKAGE_PLUGINS	= $$quote($$plugins/$$PACKAGE_TARGET)
+	PACKAGE_DATAS	= $$quote($$datas/$$PACKAGE_TARGET)
+} else:mac {
+	PACKAGE_PREFIX	= $$quote($$prefix/MacOS)
+	PACKAGE_PLUGINS	= $$quote($$plugins)
+	PACKAGE_DATAS	= $$quote($$datas)
+} else:win32 {
+	PACKAGE_PREFIX	= $$quote($$prefix)
+	PACKAGE_PLUGINS	= $$quote($$plugins)
+	PACKAGE_DATAS	= $$quote($$datas)
+}
 
 # define package install paths so source code can use them
 DEFINES	*= "PACKAGE_PREFIX=\"\\\"$${PACKAGE_PREFIX}\\\"\"" \
