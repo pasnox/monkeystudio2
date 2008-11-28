@@ -65,20 +65,20 @@ void Settings::setDefaultSettings()
 		translationsPath = "../translations";
 		apisPath = "../ctags/apis";
 #endif
-        }
-        else
-        {
+	}
+	else
+	{
 #ifdef Q_OS_MAC
-                // todo
+		// todo
 #elif defined Q_OS_WIN
-                // todo
+		// todo
 #else
-                pluginsPath = PACKAGE_PLUGINS;
-                templatesPath = QString( "%1/templates" ).arg( PACKAGE_DATAS );
-                translationsPath = QString( "%1/translations" ).arg( PACKAGE_DATAS );
-                apisPath = QString( "%1/apis" ).arg( PACKAGE_DATAS );
+		pluginsPath = PACKAGE_PLUGINS;
+		templatesPath = QString( "%1/templates" ).arg( PACKAGE_DATAS );
+		translationsPath = QString( "%1/translations" ).arg( PACKAGE_DATAS );
+		apisPath = QString( "%1/apis" ).arg( PACKAGE_DATAS );
 #endif
-        }
+	}
 	
 	qWarning() << "Settings::setDefaultSettings()" << appPath << PACKAGE_PREFIX << appIsInstalled;
 	qWarning() << "pluginsPath" << pluginsPath;
