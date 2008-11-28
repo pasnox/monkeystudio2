@@ -700,17 +700,33 @@ void QtAssistantBrowser::restoreLastShownPages()
 	if ( !lastShownPageList.isEmpty() )
 	{
 		QVector<QString> zoomList = mHelpEngine->customValue( zoom ).toString().split( QLatin1Char( '|' ), QString::SkipEmptyParts ).toVector();
+		
 		if ( zoomList.isEmpty() )
+		{
 			zoomList.fill( QLatin1String( "1.0" ), lastShownPageList.size() );
-
+		}
+		
+		if ( zoomList.count() < lastShownPageList.count() )
+		{
+			for ( int i = 0; i < lastShownPageList.count(); i++ )
+			{
+				zoomList << QLatin1String( "1.0" );
+			}
+		}
+		else
+		{
+			zoomList.resize( lastShownPageList.count() );
+		}
+		
 		QVector<QString>::const_iterator zIt = zoomList.constBegin();
 		QStringList::const_iterator it = lastShownPageList.constBegin();
+		
 		for ( ; it != lastShownPageList.constEnd(); ++it, ++zIt )
 		{
 			HelpViewer* hv = newEmptyTab( (*zIt).toFloat() );
 			hv->setSource( (*it) );
 		}
-
+		
 		twPages->setCurrentIndex( mHelpEngine->customValue( QLatin1String( "LastTabPage" ), 1 ).toInt() );
 	}
 	/*
