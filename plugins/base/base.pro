@@ -1,2 +1,2 @@
 TEMPLATE	= subdirs
-SUBDIRS	= FileBrowser MessageBox AStyle Ctags2Api Navigator ProjectHeaders RegExpEditor
+SUBDIRS	= FileBrowser MessageBox AStyle Ctags2Api Navigator ProjectHeaders RegExpEditor PostIt
