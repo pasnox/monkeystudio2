@@ -428,7 +428,6 @@ void QMakeProjectItem::installCommands()
 	bool haveDebug = config.contains( "debug" );
 	bool haveRelease = config.contains( "release" );
 	bool haveDebugRelease = config.contains( "debug_and_release" );
-	//bool haveAll = config.contains( "build_all" );
 	
 	// temp command
 	pCommand cmd;
@@ -528,6 +527,10 @@ void QMakeProjectItem::installCommands()
 			{
 				cmd.setArguments( "debug-clean" );
 			}
+			else
+			{
+				cmd.setArguments( "clean" );
+			}
 			addCommand( cmd, "mBuilder/mClean" );
 		}
 		
@@ -539,6 +542,10 @@ void QMakeProjectItem::installCommands()
 			if ( haveDebugRelease )
 			{
 				cmd.setArguments( "release-clean" );
+			}
+			else
+			{
+				cmd.setArguments( "clean" );
 			}
 			addCommand( cmd, "mBuilder/mClean" );
 		}
@@ -561,6 +568,10 @@ void QMakeProjectItem::installCommands()
 			{
 				cmd.setArguments( "debug-distclean" );
 			}
+			else
+			{
+				cmd.setArguments( "distclean" );
+			}
 			addCommand( cmd, "mBuilder/mClean" );
 		}
 		
@@ -572,6 +583,10 @@ void QMakeProjectItem::installCommands()
 			if ( haveDebugRelease )
 			{
 				cmd.setArguments( "release-distclean" );
+			}
+			else
+			{
+				cmd.setArguments( "distclean" );
 			}
 			addCommand( cmd, "mBuilder/mClean" );
 		}
