@@ -491,7 +491,10 @@ void QMakeProjectItem::installCommands()
 		{
 			cmd = cmdBuild;
 			cmd.setText( tr( "Build Debug" ) );
-			cmd.setArguments( "debug" );
+			if ( haveDebugRelease )
+			{
+				cmd.setArguments( "debug" );
+			}
 			addCommand( cmd, "mBuilder/mBuild" );
 		}
 		
@@ -500,7 +503,10 @@ void QMakeProjectItem::installCommands()
 		{
 			cmd = cmdBuild;
 			cmd.setText( tr( "Build Release" ) );
-			cmd.setArguments( "release" );
+			if ( haveDebugRelease )
+			{
+				cmd.setArguments( "release" );
+			}
 			addCommand( cmd, "mBuilder/mBuild" );
 		}
 		
@@ -518,7 +524,10 @@ void QMakeProjectItem::installCommands()
 		{
 			cmd = cmdBuild;
 			cmd.setText( tr( "Clean Debug" ) );
-			cmd.setArguments( "debug-clean" );
+			if ( haveDebugRelease )
+			{
+				cmd.setArguments( "debug-clean" );
+			}
 			addCommand( cmd, "mBuilder/mClean" );
 		}
 		
@@ -527,7 +536,10 @@ void QMakeProjectItem::installCommands()
 		{
 			cmd = cmdBuild;
 			cmd.setText( tr( "Clean Release" ) );
-			cmd.setArguments( "release-clean" );
+			if ( haveDebugRelease )
+			{
+				cmd.setArguments( "release-clean" );
+			}
 			addCommand( cmd, "mBuilder/mClean" );
 		}
 		
@@ -545,7 +557,10 @@ void QMakeProjectItem::installCommands()
 		{
 			cmd = cmdBuild;
 			cmd.setText( tr( "Distclean Debug" ) );
-			cmd.setArguments( "debug-distclean" );
+			if ( haveDebugRelease )
+			{
+				cmd.setArguments( "debug-distclean" );
+			}
 			addCommand( cmd, "mBuilder/mClean" );
 		}
 		
@@ -554,7 +569,10 @@ void QMakeProjectItem::installCommands()
 		{
 			cmd = cmdBuild;
 			cmd.setText( tr( "Distclean Release" ) );
-			cmd.setArguments( "release-distclean" );
+			if ( haveDebugRelease )
+			{
+				cmd.setArguments( "release-distclean" );
+			}
 			addCommand( cmd, "mBuilder/mClean" );
 		}
 		
