@@ -170,6 +170,8 @@ QFileInfoList XUPProjectItem::findFile( const QString& partialFilePath ) const
 	// get compressed path list
 	paths = compressedPaths( paths );
 	
+	qWarning() << "looking in" << paths;
+	
 	// get all matching files in paths
 	QFileInfoList files;
 	QDir dir;
@@ -177,7 +179,7 @@ QFileInfoList XUPProjectItem::findFile( const QString& partialFilePath ) const
 	foreach ( const QString& path, paths )
 	{
 		dir.setPath( path );
-		files << pMonkeyStudio::getFiles( dir, QStringList( partialFilePath ), true );
+		files << pMonkeyStudio::getFiles( dir, QFileInfo( partialFilePath ).fileName(), true );
 	}
 
 	return files;

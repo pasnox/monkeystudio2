@@ -33,6 +33,8 @@
 #include <XUPProjectItem.h>
 #include <UIXUPFindFiles.h>
 
+#include <QDebug>
+
 /*!
 	Constructor of class
 	
@@ -392,7 +394,7 @@ void MessageBoxDocks::lwBuildSteps_itemPressed( QListWidgetItem* it )
 	}
 	
 	XUPProjectItem* project = MonkeyCore::fileManager()->currentProject();
-	XUPProjectItem* rootIncludeProject = project ? project->rootIncludeProject() : 0;
+	XUPProjectItem* topLevelProject = project ? project->topLevelProject() : 0;
 	bool isRelative = QFileInfo( fn ).isRelative();
 	
 	if ( project && isRelative )
@@ -405,9 +407,9 @@ void MessageBoxDocks::lwBuildSteps_itemPressed( QListWidgetItem* it )
 		}
 	}
 	
-	if ( !QFile::exists( fn ) && rootIncludeProject && isRelative )
+	if ( !QFile::exists( fn ) && topLevelProject && isRelative )
 	{
-		QString filePath = rootIncludeProject->filePath( fn );
+		QString filePath = topLevelProject->filePath( fn );
 		
 		if ( QFile::exists( filePath ) )
 		{
@@ -417,10 +419,15 @@ void MessageBoxDocks::lwBuildSteps_itemPressed( QListWidgetItem* it )
 	
 	if ( !QFile::exists( fn ) )
 	{
-		if ( rootIncludeProject )
+		if ( topLevelProject )
 		{
+		qWarning() << "searching file:" << fn;
 			QString findFile = fn;
-			QFileInfoList files = rootIncludeProject->findFile( findFile );
+			QFileInfoList files = topLevelProject->findFile( findFile );
+			
+			foreach ( const QFileInfo& fi, files )
+				qWarning() << fi.absoluteFilePath();
+			qWarning() << "count" << files.count();
 			
 			switch ( files.count() )
 			{
@@ -433,7 +440,7 @@ void MessageBoxDocks::lwBuildSteps_itemPressed( QListWidgetItem* it )
 				default:
 				{
 					UIXUPFindFiles dlg( findFile, mBuildStep->parentWidget()->window() );
-					dlg.setFiles( files, rootIncludeProject->path() );
+					dlg.setFiles( files, topLevelProject->path() );
 					fn.clear();
 					
 					if ( dlg.exec() == QDialog::Accepted )

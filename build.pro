@@ -1,3 +1,7 @@
+XUPProjectSettings {
+	EXECUTE_DEBUG	= bin/monkeystudio_debug
+}
+
 ProjectSettings {
 	EDITOR	= QMakeProjectEditor
 	EXECUTE_RELEASE	= bin/monkeystudio

@@ -236,7 +236,7 @@ QFileInfoList pMonkeyStudio::getFiles( QDir fromDir, const QStringList& filters,
 		else if ( file.isDir() && recursive )
 		{
 			fromDir.cd( file.filePath() );
-			files << getFiles( fromDir, filters );
+			files << getFiles( fromDir, filters, recursive );
 			fromDir.cdUp();
 		}
 	}
