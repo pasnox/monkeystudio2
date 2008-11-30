@@ -1,16 +1,6 @@
 XUPProjectSettings {
 	EXECUTE_DEBUG	= bin/monkeystudio_debug
-}
-
-ProjectSettings {
-	EDITOR	= QMakeProjectEditor
-	EXECUTE_RELEASE	= bin/monkeystudio
-	QT_VERSION	= 4.4.0
-	EXECUTE_DEBUG	= bin/monkeystudio_debug
-	BUILDER	= GNUMake
-	COMPILER	= G++
-	DEBUGGER	= GNUDebugger2
-	SHOW_QT_VERSION_WARNING	= 0
+	QT_VERSION	= Qt System (4.4.3)
 }
 
 # include install script
@@ -18,7 +8,11 @@ include( installs.pri )
 
 TEMPLATE	= subdirs
 
+SUBDIRS	= fresh \
+	ctags \
+	monkey \
+	plugins
+
 !isEqual( SYSTEM_QSCINTILLA, 1 ) {
-	SUBDIRS	*= qscintilla
+	SUBDIRS	= qscintilla $$SUBDIRS
 }
-SUBDIRS	*= fresh ctags monkey plugins
