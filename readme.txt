@@ -15,20 +15,16 @@ It's extendable with a powerfull plugins system.
 **
 ****************************************************************************/
 
-ATTENTION 1 : Monkey Studio require at least Qt 4.4.0 MINIMUM !
-ATTENTION 2 : When you want to install monkey studio ( usually "make install" ) you should call first "qmake" as qmake create badly makefile install rules 
-( it doesn't add not existing files, so binary and plugins will not be installed )
+ATTENTION : Monkey Studio require at least Qt 4.4.0 MINIMUM !
 
 Before building, you should know about some rules if you are unix/linux users.
-By default monkey studio will install itself in /usr/local.
-If you want to change this you should do these build step ( assuming you want to install in /usr ) :
+By default monkey studio will install itself in /usr.
+If you want to change this you should do these build step ( assuming you want to install in /usr/local ) :
 
-  * cd to root sources of monkey studio
-  * export MONKEY_PREFIX=/usr // only needed if you want to overwrite default install path
-  * qmake
-  * make
-  * qmake // this is important as it seem that qmake is bugguy and it doesn't add installable files in makefile until they really exists
-  * make install
+	* cd to root sources of monkey studio
+	* qmake prefix=/usr/local
+	* make
+	* sudo make install
 
 You now have a full working copy of monkey for your unix/linux box.
 If you have trouble when monkey starting ( because you already use old version of monkey studio ), you should rename the file ~/.Monkey Studio/Monkey Studio.ini and restart monkey studio.
@@ -40,22 +36,22 @@ How to build Monkey Studio:
 With MinGW/Windows:
 
 * Open a console, and go to the sources directory.
-  * qmake && mingw32-make
+	* qmake && mingw32-make
 
 With MSVC/Windows:
 
 * Open a console, and go to the sources directory.
-  * qmake && nmake // possible you will need to set, for wich compiler to generate makefile like : qmake -spec win32-msvc2005
+	* qmake && nmake // possible you will need to set, for wich compiler to generate makefile like : qmake -spec win32-msvc2005
 
 With Linux/*Nix:
 
 * Open a shell, and go to the sources directory.
-  * qmake && make // some distros use qmake-qt4 for qmake of Qt 4
+	* qmake && make // some distros use qmake-qt4 for qmake of Qt 4
 
 With Mac OS X:
 
 * Open a terminal, and go to the sources directory.
-  * qmake -spec macx-g++ && make
+	* qmake -spec macx-g++ && make
 
 How to execute Monkey Studio:
 =============================
@@ -77,8 +73,7 @@ You should execute command
 doxygen doxygen.config
 from root dirrectory of source archive
 (dirrectory, where config storing)
-Dirrectory 'doc/html' with documentation will appear.
-
+Directory 'doc/html' with documentation will appear.
 
 	Azevedo Filipe & The Monkey Studio Team,
 
