@@ -577,7 +577,7 @@ void QtDesignerChild::saveFile( const QString& s )
 				if ( f.open( QIODevice::WriteOnly | QIODevice::Text ) )
 				{
 					f.resize( 0 );
-					f.write( qPrintable( i->contents() ) );
+					f.write( i->contents().toUtf8() );
 					f.close();
 					i->setDirty( false );
 					setModified( i );
