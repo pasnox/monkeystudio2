@@ -300,7 +300,21 @@ void pDockFileBrowser::tv_doubleClicked( const QModelIndex& idx )
 */
 QString pDockFileBrowser::currentPath() const
 {
-	return mDirsModel->filePath( mFilteredModel->mapToSource( mTree->rootIndex() ) );
+	QModelIndex index = mTree->selectionModel()->selectedIndexes().value( 0 );
+	
+	if ( !index.isValid() )
+	{
+		index = mTree->rootIndex();
+	}
+	
+	index = mFilteredModel->mapToSource( index );
+	
+	if ( !mDirsModel->isDir( index ) )
+	{
+		index = index.parent();
+	}
+	
+	return mDirsModel->filePath( index );
 }
 
 /*!
