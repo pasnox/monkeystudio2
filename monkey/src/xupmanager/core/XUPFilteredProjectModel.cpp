@@ -61,7 +61,7 @@ QModelIndex XUPFilteredProjectModel::index( int row, int column, const QModelInd
 	
 	if ( it == mItemsMapping.constEnd() )
 	{
-		if ( row == 0 && column == 0 )
+		if ( row == 0 && column == 0 && mSourceModel )
 		{
 			it = mItemsMapping.constFind( mSourceModel->mRootProject );
 			
