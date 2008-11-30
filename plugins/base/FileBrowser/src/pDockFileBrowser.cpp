@@ -39,6 +39,7 @@
 #include <pFileManager.h>
 #include <pMonkeyStudio.h>
 #include <pDockWidgetTitleBar.h>
+#include <pIconManager.h>
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -68,25 +69,49 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	
 	// actions
 	// cdup action
-	QAction* aUp = new QAction( this );
-	aUp->setIcon( QIcon( ":/icons/up.png" ) );
-	aUp->setToolTip( tr( "Go Up" ) );
+	QAction* aUp = new QAction( tr( "Go Up" ), this );
+	aUp->setIcon( pIconManager::icon( "up.png", ":/icons" ) );
+	aUp->setToolTip( aUp->text() );
 	titleBar()->addAction( aUp, 0 );
 	
 	// go to action
-	QAction* aGoTo = new QAction( this );
-	aGoTo->setIcon( QIcon( ":/icons/browser.png" ) );
-	aGoTo->setToolTip( tr( "Select a root folder" ) );
+	QAction* aGoTo = new QAction( tr( "Select a root folder" ), this );
+	aGoTo->setIcon( pIconManager::icon( "browser.png", ":/icons" ) );
+	aGoTo->setToolTip( aGoTo->text() );
 	titleBar()->addAction( aGoTo, 1 );
 	
 	// set current path action
-	QAction* aRoot = new QAction( this );
-	aRoot->setIcon( QIcon( ":/icons/goto.png" ) );
-	aRoot->setToolTip( tr( "Set selected item as root" ) );
+	QAction* aRoot = new QAction( tr( "Set selected item as root" ), this );
+	aRoot->setIcon( pIconManager::icon( "goto.png", ":/icons" ) );
+	aRoot->setToolTip( aRoot->text() );
 	titleBar()->addAction( aRoot, 2 );
 	
 	// add separator
 	titleBar()->addSeparator( 3 );
+	
+	// add bookmark
+	QAction* aAdd = new QAction( tr( "Add the current selected folder to bookmarks" ), this );
+	aAdd->setIcon( pIconManager::icon( "add.png" ) );
+	aAdd->setToolTip( aAdd->text() );
+	titleBar()->addAction( aAdd, 4 );
+	
+	// remove bookmark
+	QAction* aRemove = new QAction( tr( "Remove the current selected folder from bookmarks" ), this );
+	aRemove->setIcon( pIconManager::icon( "remove.png" ) );
+	aRemove->setToolTip( aRemove->text() );
+	titleBar()->addAction( aRemove, 5 );
+	
+	// bookmarks menu
+	mBookmarksMenu = new QMenu( this );
+	QAction* aBookmarks = new QAction( tr( "Bookmarks..." ), this );
+	aBookmarks->setIcon( pIconManager::icon( "bookmark.png" ) );
+	aBookmarks->setToolTip( aBookmarks->text() );
+	QToolButton* tb = qobject_cast<QToolButton*>( titleBar()->addAction( aBookmarks, 6 ) );
+	tb->setPopupMode( QToolButton::InstantPopup );
+	aBookmarks->setMenu( mBookmarksMenu );
+	
+	// add separator
+	titleBar()->addSeparator( 7 );
 
 	// central widget
 	QWidget* wdg = new QWidget( this );
@@ -113,6 +138,7 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	
 	// files view
 	mTree = new QTreeView;
+	mTree->setContextMenuPolicy( Qt::ActionsContextMenu );
 	vl->addWidget( mTree );
 	
 	// assign model to views
@@ -134,10 +160,21 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	// redirirect focus proxy
 	setFocusProxy( mTree );
 	
+	// set tree actions
+	mTree->addAction( aUp );
+	mTree->addAction( aGoTo );
+	mTree->addAction( aRoot );
+	mTree->addAction( aAdd );
+	mTree->addAction( aRemove );
+	mTree->addAction( aBookmarks );
+	
 	// connections
 	connect( aUp, SIGNAL( triggered() ), this, SLOT( aUp_triggered() ) );
 	connect( aGoTo, SIGNAL( triggered() ), this, SLOT( aGoTo_triggered() ) );
 	connect( aRoot, SIGNAL( triggered() ), this, SLOT( aRoot_triggered() ) );
+	connect( aAdd, SIGNAL( triggered() ), this, SLOT( aAdd_triggered() ) );
+	connect( aRemove, SIGNAL( triggered() ), this, SLOT( aRemove_triggered() ) );
+	connect( mBookmarksMenu, SIGNAL( triggered( QAction* ) ), this, SLOT( bookmark_triggered( QAction* ) ) );
 	connect( mTree, SIGNAL( activated( const QModelIndex& ) ), this, SLOT( tv_activated( const QModelIndex& ) ) );
 	connect( mTree, SIGNAL( doubleClicked( const QModelIndex& ) ), this, SLOT( tv_doubleClicked( const QModelIndex& ) ) );
 }
@@ -197,6 +234,33 @@ void pDockFileBrowser::aRoot_triggered()
 	if ( !mDirsModel->isDir( index ) )
 		index = index.parent();
 	setCurrentPath( mDirsModel->filePath( index ) );
+}
+
+void pDockFileBrowser::aAdd_triggered()
+{
+	const QString path = currentPath();
+	
+	if ( !mBookmarks.contains( path ) && !path.isEmpty() )
+	{
+		mBookmarks << path;
+		updateBookmarks();
+	}
+}
+
+void pDockFileBrowser::aRemove_triggered()
+{
+	const QString path = currentPath();
+	
+	if ( mBookmarks.contains( path ) )
+	{
+		mBookmarks.removeAll( path );
+		updateBookmarks();
+	}
+}
+
+void pDockFileBrowser::bookmark_triggered( QAction* action )
+{
+	setCurrentPath( action->data().toString() );
 }
 
 void pDockFileBrowser::tv_activated( const QModelIndex& idx )
@@ -272,4 +336,33 @@ QStringList pDockFileBrowser::filters() const
 void pDockFileBrowser::setFilters( const QStringList& filters )
 {
 	mFilteredModel->setFilters( filters );
+}
+
+QStringList pDockFileBrowser::bookmarks() const
+{
+	return mBookmarks;
+}
+
+void pDockFileBrowser::setBookmarks( const QStringList& bookmarks )
+{
+	if ( mBookmarks == bookmarks )
+	{
+		return;
+	}
+	
+	mBookmarks = bookmarks;
+	updateBookmarks();
+}
+
+void pDockFileBrowser::updateBookmarks()
+{
+	mBookmarksMenu->clear();
+	
+	foreach ( const QString& path, mBookmarks )
+	{
+		QAction* action = mBookmarksMenu->addAction( QDir( path ).dirName() );
+		action->setToolTip( path );
+		action->setStatusTip( path );
+		action->setData( path );
+	}
 }

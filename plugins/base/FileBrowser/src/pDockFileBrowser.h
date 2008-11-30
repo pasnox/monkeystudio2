@@ -96,21 +96,29 @@ public:
 	
 	QString currentPath() const;
 	QStringList filters() const;
+	QStringList bookmarks() const;
 
 protected:
 	QLineEdit* mLineEdit;
 	QTreeView* mTree;
 	QFileSystemModel* mDirsModel;
 	FileBrowserFilteredModel* mFilteredModel;
+	QStringList mBookmarks;
+	QMenu* mBookmarksMenu;
 
 public slots:
 	void setCurrentPath( const QString& path );
 	void setFilters( const QStringList& filters );
+	void setBookmarks( const QStringList& bookmarks );
+	void updateBookmarks();
 
 protected slots:
 	void aUp_triggered();
 	void aGoTo_triggered();
 	void aRoot_triggered();
+	void aAdd_triggered();
+	void aRemove_triggered();
+	void bookmark_triggered( QAction* action );
 	void tv_activated( const QModelIndex& index );
 	void tv_doubleClicked( const QModelIndex& index );
 };

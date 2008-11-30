@@ -61,6 +61,9 @@ public:
 	QStringList filters() const;
 	void setFilters( const QStringList& filters, bool updateDock = false );
 	
+	QStringList bookmarks() const;
+	void setBookmarks( const QStringList& bookmarks, bool updateDock = false );
+	
 	QString path() const;
 	void setPath( const QString& path, bool updateDock = false );
 

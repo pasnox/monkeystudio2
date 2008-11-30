@@ -41,6 +41,7 @@
 #include <fresh.h>
 #include <MonkeyCore.h>
 #include <UIMain.h>
+#include <pMonkeyStudio.h>
 
 #include <QIcon>
 
@@ -137,6 +138,18 @@ void FileBrowser::setFilters( const QStringList& filters, bool updateDock )
 		mDock->setFilters( filters );
 }
 
+QStringList FileBrowser::bookmarks() const
+{
+	return settingsValue( "Bookmarks", QStringList() << QDir::homePath() << pMonkeyStudio::defaultProjectsDirectory() ).toStringList();
+}
+
+void FileBrowser::setBookmarks( const QStringList& bookmarks, bool updateDock )
+{
+	setSettingsValue( "Bookmarks", bookmarks );
+	if ( updateDock && mDock )
+		mDock->setBookmarks( bookmarks );
+}
+
 /*!
 	Get current path (root of the tree) from the settings
 	\return Dirrectory path
@@ -165,6 +178,7 @@ void FileBrowser::saveSettings()
 	{
 		setPath( mDock->currentPath() );
 		setFilters( mDock->filters() );
+		setBookmarks( mDock->bookmarks() );
 	}
 }
 
@@ -177,6 +191,7 @@ void FileBrowser::restoreSettings()
 	{
 		mDock->setCurrentPath( path() );
 		mDock->setFilters( filters() );
+		mDock->setBookmarks( bookmarks() );
 	}
 }
 
