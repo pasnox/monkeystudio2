@@ -12,7 +12,7 @@ class QBoxLayout;
 #include <QMacStyle>
 #endif
 
-class pDockWidgetButton : public QToolButton
+class Q_MONKEY_EXPORT pDockWidgetButton : public QToolButton
 {
 	Q_OBJECT
 	friend class pDockWidgetTitleBar;
@@ -78,7 +78,7 @@ protected:
 	}
 };
 
-class pDockWidgetTitleBar : public QWidget
+class Q_MONKEY_EXPORT pDockWidgetTitleBar : public QWidget
 {
 	Q_OBJECT
 

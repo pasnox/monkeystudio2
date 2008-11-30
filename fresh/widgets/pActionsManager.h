@@ -1,6 +1,8 @@
 #ifndef PACTIONSMANAGER_H
 #define PACTIONSMANAGER_H
 
+#include "MonkeyExport.h"
+
 #include <QObject>
 #include <QList>
 #include <QAction>
@@ -10,7 +12,7 @@ typedef QList<QAction*> QActionList;
 typedef QMap<QString, QString> QMapStringString;
 class QSettings;
 
-class pActionsManager : public QObject
+class Q_MONKEY_EXPORT pActionsManager : public QObject
 {
 	Q_OBJECT
 	
