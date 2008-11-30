@@ -6,7 +6,7 @@
 class XUPAddFiles;
 class XUPItem;
 
-class MkSFileDialog : public pFileDialog
+class Q_MONKEY_EXPORT MkSFileDialog : public pFileDialog
 {
 	Q_OBJECT
 	
