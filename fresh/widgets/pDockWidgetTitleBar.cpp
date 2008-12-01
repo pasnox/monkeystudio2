@@ -99,12 +99,26 @@ QSize pDockWidgetTitleBar::sizeHint() const
 
 QSize pDockWidgetTitleBar::buttonSize() const
 {
-	return QSize( 18, 18 );
+	ensurePolished();
+	
+	int size = 2*style()->pixelMetric( QStyle::PM_DockWidgetTitleBarButtonMargin, 0, this );
+	
+	//if ( !icon().isNull() )
+	{
+		int iconSize = style()->pixelMetric( QStyle::PM_SmallIconSize, 0, this );
+		//const QPixmap pm = icon().pixmap( iconSize );
+		//size += qMax( pm.width(), pm.height() );
+		size += iconSize;
+	}
+
+	qWarning() << style()->pixelMetric( QStyle::PM_DockWidgetTitleMargin, 0, this ) << style()->pixelMetric( QStyle::PM_DockWidgetTitleBarButtonMargin, 0, this) << size;
+
+	return QSize( size, size );
 }
 
 QSize pDockWidgetTitleBar::iconSize() const
 {
-	return QSize( 12, 12 );
+	return buttonSize() -QSize( 6, 6 );
 }
 
 QWidget* pDockWidgetTitleBar::addToolButton( QToolButton* tb, int index )

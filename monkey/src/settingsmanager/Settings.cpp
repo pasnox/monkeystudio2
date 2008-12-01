@@ -93,11 +93,13 @@ void Settings::setDefaultSettings()
 #endif
 	}
 	
+	/*
 	qWarning() << "Settings::setDefaultSettings()" << appPath << PACKAGE_PREFIX << appIsInstalled;
 	qWarning() << "pluginsPath" << pluginsPath;
 	qWarning() << "templatesPath" << templatesPath;
 	qWarning() << "translationsPath" << translationsPath;
 	qWarning() << "apisPath" << apisPath;
+	*/
 	
 	// plugins
 	if ( !pluginsPath.isEmpty() )
@@ -148,68 +150,6 @@ void Settings::setDefaultSettings()
 	
 	// syntax highlighter
 	setDefaultCppSyntaxHighlight();
-
-	return;
-	
-/*
-	QString mPath;
-	QString s;
-	QStringList l;
-	bool relativePath;
-	bool binContainsPlugins = false;
-#ifdef Q_OS_MAC
-	mPath = "..";
-#elif defined Q_OS_WIN
-	mPath = ".";
-#else
-	mPath = "..";
-	// get app path
-	const QString appPath = qApp->applicationDirPath();
-	// get app folders list
-	const QStringList folders = QDir( appPath ).entryList( QDir::AllDirs | QDir::NoDotAndDotDot );
-	// if it contains at least plugins it can be installed fodler
-	if ( folders.contains( "plugins" ) )
-	{
-		// plugin is default build into bin, but datas are .. level
-		mPath = "..";
-		binContainsPlugins = true;
-		// if it contains apis, then all fodlers are there
-		if ( folders.contains( "apis" ) )
-		mPath = ".";
-	}
-	else if ( QDir( PACKAGE_DATAS ).exists() )
-		mPath = PACKAGE_DATAS;
-#endif
-	relativePath = QDir( mPath ).isRelative();
-	// templates
-	l.clear();
-	l << QString( "%1/templates" ).arg( mPath );
-	if ( !l.contains( "../templates" ) )
-		l << "../templates";
-	setValue( "Templates/DefaultDirectories", l );
-	// apis
-	s = QString( "%1/apis" ).arg( mPath );
-	if ( !QDir( s ).exists() )
-		s = QString( "%1/ctags/apis" ).arg( mPath );
-	setValue( "SourceAPIs/CMake", QStringList( s +"/cmake.api" ) );
-	setValue( "SourceAPIs/C#", QStringList( s +"/cs.api" ) );
-	setValue( "SourceAPIs/C++", QStringList() << s +"/c.api" << s +"/cpp.api" << s +"/glut.api" << s +"/opengl.api" << s +"/qt-4.4.0.api" );
-	// translations
-	l.clear();
-	l << QString( "%1/translations" ).arg( mPath );
-	if ( !l.contains( "../translations" ) )
-		l << "../translations";
-	setValue( "Translations/Path", l );
-	// plugins
-	l.clear();
-	if ( !binContainsPlugins )
-		l << QString( "%1/plugins" ).arg( mPath );
-	if ( !l.contains( "plugins" ) && !l.contains( "./plugins" ) )
-		l << "plugins";
-	setValue( "Plugins/Path", l );
-	// syntax highlighter
-	setDefaultCppSyntaxHighlight();
-*/
 }
 
 void Settings::setDefaultCppSyntaxHighlight()
