@@ -56,7 +56,10 @@ void Settings::setDefaultSettings()
 	if ( !appIsInstalled )
 	{
 #ifdef Q_OS_MAC
-		// todo
+		pluginsPath = "../plugins";
+		templatesPath = "../../../templates";
+		translationsPath = "../../../translations";
+		apisPath = "../../../ctags/apis";
 #elif defined Q_OS_WIN
 		// todo
 #else
@@ -69,7 +72,10 @@ void Settings::setDefaultSettings()
 	else
 	{
 #ifdef Q_OS_MAC
-		// todo
+		pluginsPath = "../plugins";
+		templatesPath = "../Resources/templates";
+		translationsPath = "../Resources/translations";
+		apisPath = "../Resources/apis";
 #elif defined Q_OS_WIN
 		// todo
 #else
