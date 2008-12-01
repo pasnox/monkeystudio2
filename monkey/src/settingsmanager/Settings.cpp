@@ -38,12 +38,6 @@ Settings::Settings( QObject* o )
 	: pSettings( o )
 {}
 
-/*
-[22:42] <PasNox> binary: /usr/bin
-[22:43] <PasNox> plugins /usr/lib/mks
-[22:43] <PasNox> allother: /usr/share/mks
-*/
-
 void Settings::setDefaultSettings()
 {
 	const QString appPath = qApp->applicationDirPath();
@@ -52,6 +46,13 @@ void Settings::setDefaultSettings()
 	QString templatesPath;
 	QString translationsPath;
 	QString apisPath;
+
+#ifdef Q_OS_WIN
+	if ( appIsInstalled && !QFile::exists( QString( "%1/templates" ).arg( PACKAGE_PREFIX ) ) )
+	{
+		appIsInstalled = false;
+	}
+#endif
 	
 	if ( !appIsInstalled )
 	{
@@ -61,7 +62,10 @@ void Settings::setDefaultSettings()
 		translationsPath = "../../../translations";
 		apisPath = "../../../ctags/apis";
 #elif defined Q_OS_WIN
-		// todo
+		pluginsPath = "plugins";
+		templatesPath = "../templates";
+		translationsPath = "../translations";
+		apisPath = "../ctags/apis";
 #else
 		pluginsPath = "plugins";
 		templatesPath = "../templates";
@@ -77,7 +81,10 @@ void Settings::setDefaultSettings()
 		translationsPath = "../Resources/translations";
 		apisPath = "../Resources/apis";
 #elif defined Q_OS_WIN
-		// todo
+		pluginsPath = "plugins";
+		templatesPath = "templates";
+		translationsPath = "translations";
+		apisPath = "apis";
 #else
 		pluginsPath = PACKAGE_PLUGINS;
 		templatesPath = QString( "%1/templates" ).arg( PACKAGE_DATAS );
@@ -208,7 +215,7 @@ void Settings::setDefaultSettings()
 void Settings::setDefaultCppSyntaxHighlight()
 {
 #if defined Q_OS_MAC
-	const QString font = "Bitstream Vera Sans Mono, 10";
+	const QString font = "Bitstream Vera Sans Mono, 11";
 #elif defined Q_OS_WIN
 	const QString font = "Courier New, 10";
 #else
