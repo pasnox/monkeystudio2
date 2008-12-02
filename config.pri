@@ -18,7 +18,7 @@ QT	+= xml
 # define config mode paths
 CONFIG( debug, debug|release ) {
 	#Debug
-	message( Building in DEBUG )
+	message( Building in DEBUG for architecture $$QT_ARCH )
 	CONFIG	+= console
 	unix:PACKAGE_TARGET	= $$quote($$join(PACKAGE_TARGET,,,_debug))
 	else:PACKAGE_TARGET	= $$quote($$join(PACKAGE_TARGET,,,d))
@@ -32,7 +32,7 @@ CONFIG( debug, debug|release ) {
 	RCC_DIR	= $${PACKAGE_BUILD_PATH}/debug/.rcc
 } else {
 	#Release
-	message( Building in RELEASE )
+	message( Building in RELEASE for architecture $$QT_ARCH )
 	mac:TARGET	= $$quote($$TARGET)
 	unix:OBJECTS_DIR	= $${PACKAGE_BUILD_PATH}/release/.obj/unix
 	win32:OBJECTS_DIR	= $${PACKAGE_BUILD_PATH}/release/.obj/win32
@@ -65,9 +65,6 @@ DEFINES	*= "PACKAGE_NAME=\"\\\"$${QMAKE_TARGET_PRODUCT}\\\"\"" \
 
 # get package install paths
 
-# [23:29] <eponyme> PasNox , ca semble utiliser $$QT_ARCH, qui vaut i386 ou x86_64 , et selon la valeur, il change ses path
-# [23:30] <eponyme> il en parle ici : http://lists.trolltech.com/qt-interest/2008-02/thread00218-0.html
-
 unix:!mac {
 	# default prefix path
 	isEmpty( prefix ):prefix = /usr
@@ -75,7 +72,11 @@ unix:!mac {
 	!isEmpty( prefix ) {
 		# plugins path
 		isEmpty( plugins ) {
-			plugins	= $$prefix/lib
+			isEqual( QT_ARCH, "i386" ) {
+				plugins	= $$prefix/lib
+			} else {
+				plugins	= $$prefix/lib64
+			}
 		}
 		
 		# datas path
