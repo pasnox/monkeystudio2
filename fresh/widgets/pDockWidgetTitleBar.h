@@ -3,14 +3,16 @@
 
 #include "pDockWidget.h"
 
-class QBoxLayout;
-
+#include <QFrame>
 #include <QToolButton>
 #include <QStylePainter>
 #include <QStyleOptionToolButton>
 #ifdef Q_OS_MAC
 #include <QMacStyle>
 #endif
+
+class QBoxLayout;
+class QToolBar;
 
 class Q_MONKEY_EXPORT pDockWidgetButton : public QToolButton
 {
@@ -78,7 +80,7 @@ protected:
 	}
 };
 
-class Q_MONKEY_EXPORT pDockWidgetTitleBar : public QWidget
+class Q_MONKEY_EXPORT pDockWidgetTitleBar : public QFrame
 {
 	Q_OBJECT
 
@@ -88,15 +90,13 @@ public:
 	
 	virtual QSize sizeHint() const;
 	QSize buttonSize() const;
-	QSize iconSize() const;
-	QWidget* addToolButton( QToolButton* tb, int index = -1 );
 	QWidget* addAction( QAction* action, int index = -1 );
-	QWidget* addSeparator( int index = -1 );
+	void addSeparator( int index = -1 );
 
 protected:
 	pDockWidget* mDock;
 	QBoxLayout* mBox1;
-	QBoxLayout* mBox2;
+	QToolBar* mToolBar;
 	pDockWidgetButton* bOrientation;
 	pDockWidgetButton* bFloat;
 	pDockWidgetButton* bClose;
@@ -104,8 +104,8 @@ protected:
 	void paintEvent( QPaintEvent* event );
 
 protected slots:
-	void aOrientation_clicked();
-	void aFloat_clicked();
+	void bOrientation_clicked();
+	void bFloat_clicked();
 	void featuresChanged( QDockWidget::DockWidgetFeatures features );
 };
 

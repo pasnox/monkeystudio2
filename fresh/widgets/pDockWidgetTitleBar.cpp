@@ -4,40 +4,49 @@
 #include <QLayout>
 #include <QToolButton>
 #include <QFrame>
+#include <QToolBar>
 
 #include <QDebug>
 
 pDockWidgetTitleBar::pDockWidgetTitleBar( pDockWidget* parent )
-	: QWidget( parent )
+	: QFrame( parent )
 {
 	Q_ASSERT( parent );
 	
 	mDock = parent;
 	
-	bOrientation = new pDockWidgetButton( pDockWidgetButton::Orientation, this );
-	bFloat = new pDockWidgetButton( pDockWidgetButton::Float, this );
-	bClose = new pDockWidgetButton( pDockWidgetButton::Close, this );
+	int size = style()->pixelMetric( QStyle::PM_SmallIconSize ) -4;
 	
 	mBox1 = new QBoxLayout( QBoxLayout::LeftToRight, this );
-	mBox1->setMargin( 3 );
+	mBox1->setMargin( 0 );
 	mBox1->setSpacing( 0 );
 	
-	mBox2 = new QBoxLayout( QBoxLayout::LeftToRight );
-	mBox2->setMargin( 0 );
-	mBox2->setSpacing( 0 );
+	mToolBar = new QToolBar( this );
+	mToolBar->setIconSize( QSize( size, size ) );
+	mToolBar->layout()->setMargin( 0 );
+	mToolBar->layout()->setSpacing( 0 );
 	
 	mBox1->addStretch( 100 );
-	mBox1->addLayout( mBox2 );
+	mBox1->addWidget( mToolBar, 0, Qt::AlignCenter );
 	
-	addToolButton( bOrientation );
-	addToolButton( bFloat );
-	addToolButton( bClose );
+	bOrientation = new pDockWidgetButton( pDockWidgetButton::Orientation, this );
+	bOrientation->setFixedSize( buttonSize() );
+	
+	bFloat = new pDockWidgetButton( pDockWidgetButton::Float, this );
+	bFloat->setFixedSize( buttonSize() );
+	
+	bClose = new pDockWidgetButton( pDockWidgetButton::Close, this );
+	bClose->setFixedSize( buttonSize() );
+	
+	mToolBar->addWidget( bOrientation );
+	mToolBar->addWidget( bFloat );
+	mToolBar->addWidget( bClose );
 	
 	featuresChanged( mDock->features() );
 	
 	connect( mDock, SIGNAL( featuresChanged( QDockWidget::DockWidgetFeatures ) ), this, SLOT( featuresChanged( QDockWidget::DockWidgetFeatures ) ) );
-	connect( bOrientation, SIGNAL( clicked() ), this, SLOT( aOrientation_clicked() ) );
-	connect( bFloat, SIGNAL( clicked() ), this, SLOT( aFloat_clicked() ) );
+	connect( bOrientation, SIGNAL( clicked() ), this, SLOT( bOrientation_clicked() ) );
+	connect( bFloat, SIGNAL( clicked() ), this, SLOT( bFloat_clicked() ) );
 	connect( bClose, SIGNAL( clicked() ), mDock, SLOT( close() ) );
 }
 
@@ -52,7 +61,10 @@ void pDockWidgetTitleBar::paintEvent( QPaintEvent* event )
 	QStylePainter p( this );
 	
 	// paint frame
-	//drawFrame( &p );
+	if ( mDock->isFloating() )
+	{
+		drawFrame( &p );
+	}
 	
 	// init style options
 	QStyleOptionDockWidgetV2 titleOpt;
@@ -82,16 +94,31 @@ void pDockWidgetTitleBar::paintEvent( QPaintEvent* event )
 
 QSize pDockWidgetTitleBar::sizeHint() const
 {
-	QSize size = mDock->widget() ? mDock->widget()->size() : QSize();
-	QDockWidget::DockWidgetFeatures features = mDock->features();
+	ensurePolished();
 	
-	if ( features & QDockWidget::DockWidgetVerticalTitleBar )
+	QSize size = QFrame::sizeHint();
+	int i = mToolBar->sizeHint().width();
+	
+	if ( mDock->features() & QDockWidget::DockWidgetVerticalTitleBar )
 	{
-		size.setWidth( buttonSize().width() +3 );
+		i = mToolBar->sizeHint().height();
+	}
+	
+	if ( mDock )
+	{
+		QFontMetrics fm( font() );
+		i += fm.width( mDock->windowTitle() );
+	}
+	
+	i += 2 *style()->pixelMetric( QStyle::PM_DockWidgetTitleMargin );
+	
+	if ( mDock->features() & QDockWidget::DockWidgetVerticalTitleBar )
+	{
+		size.setHeight( i );
 	}
 	else
 	{
-		size.setHeight( buttonSize().height() +3 );
+		size.setWidth( i );
 	}
 	
 	return size;
@@ -99,44 +126,10 @@ QSize pDockWidgetTitleBar::sizeHint() const
 
 QSize pDockWidgetTitleBar::buttonSize() const
 {
-	ensurePolished();
+	int size = 2 *style()->pixelMetric( QStyle::PM_DockWidgetTitleBarButtonMargin );
+	size += style()->pixelMetric( QStyle::PM_SmallIconSize ) -2;
 	
-	int size = 2*style()->pixelMetric( QStyle::PM_DockWidgetTitleBarButtonMargin, 0, this );
-	
-	//if ( !icon().isNull() )
-	{
-		int iconSize = style()->pixelMetric( QStyle::PM_SmallIconSize, 0, this );
-		//const QPixmap pm = icon().pixmap( iconSize );
-		//size += qMax( pm.width(), pm.height() );
-		size += iconSize;
-	}
-
-	qWarning() << style()->pixelMetric( QStyle::PM_DockWidgetTitleMargin, 0, this ) << style()->pixelMetric( QStyle::PM_DockWidgetTitleBarButtonMargin, 0, this) << size;
-
 	return QSize( size, size );
-}
-
-QSize pDockWidgetTitleBar::iconSize() const
-{
-	return buttonSize() -QSize( 6, 6 );
-}
-
-QWidget* pDockWidgetTitleBar::addToolButton( QToolButton* tb, int index )
-{
-	Q_ASSERT( tb );
-	
-	if ( index == -1 )
-	{
-		index = mBox2->count();
-	}
-	
-	tb->setFixedSize( buttonSize() );
-	tb->setIconSize( iconSize() );
-	tb->setAutoRaise( true );
-	
-	mBox2->insertWidget( index, tb, 0, Qt::AlignCenter );
-	
-	return tb;
 }
 
 QWidget* pDockWidgetTitleBar::addAction( QAction* action, int index )
@@ -145,42 +138,34 @@ QWidget* pDockWidgetTitleBar::addAction( QAction* action, int index )
 	
 	if ( index == -1 )
 	{
-		index = mBox2->count();
+		index = mToolBar->actions().count();
 	}
 	
-	if ( action->isSeparator() )
+	QAction* before = mToolBar->actions().value( index );
+	mToolBar->insertAction( before, action );
+	QWidget* widget = mToolBar->widgetForAction( action );
+	
+	QToolButton* tb = qobject_cast<QToolButton*>( widget );
+	if ( tb )
 	{
-		QFrame::Shape shape = mBox2->direction() == QBoxLayout::LeftToRight ? QFrame::VLine : QFrame::HLine;
-		QFrame* f = new QFrame( this );
-		
-		f->setProperty( "isSeparator", true );
-		f->setFrameStyle( shape | QFrame::Sunken );
-		f->setFixedSize( 3, buttonSize().height() );
-		
-		mBox2->insertWidget( index, f, 0, Qt::AlignCenter );
-		
-		delete action;
-		return f;
+		tb->setFixedSize( buttonSize() );
 	}
-	else
-	{
-		QToolButton* tb = new QToolButton( this );
-		
-		tb->setDefaultAction( action );
-		
-		return addToolButton( tb, index );
-	}
+	
+	return widget;
 }
 
-QWidget* pDockWidgetTitleBar::addSeparator( int index )
+void pDockWidgetTitleBar::addSeparator( int index )
 {
-	QAction* action = new QAction( this );
-	action->setSeparator( true );
+	if ( index == -1 )
+	{
+		index = mToolBar->actions().count();
+	}
 	
-	return addAction( action, index );
+	QAction* before = mToolBar->actions().value( index );
+	mToolBar->insertSeparator( before );
 }
 
-void pDockWidgetTitleBar::aOrientation_clicked()
+void pDockWidgetTitleBar::bOrientation_clicked()
 {
 	QDockWidget::DockWidgetFeatures features = mDock->features();
 	
@@ -194,7 +179,7 @@ void pDockWidgetTitleBar::aOrientation_clicked()
 	}
 }
 
-void pDockWidgetTitleBar::aFloat_clicked()
+void pDockWidgetTitleBar::bFloat_clicked()
 {
 	mDock->setFloating( !mDock->isFloating() );
 }
@@ -205,46 +190,22 @@ void pDockWidgetTitleBar::featuresChanged( QDockWidget::DockWidgetFeatures featu
 	{
 		// vertical
 		mBox1->setDirection( QBoxLayout::BottomToTop );
-		mBox2->setDirection( QBoxLayout::BottomToTop );
+		mBox1->setContentsMargins( 4, 4, 0, 4 );
+		mToolBar->setOrientation( Qt::Vertical );
 		
 		bOrientation->setIcon( style()->standardIcon( QStyle::SP_ToolBarHorizontalExtensionButton ) );
 		bFloat->setVisible( features & QDockWidget::DockWidgetFloatable );
 		bClose->setVisible( features & QDockWidget::DockWidgetClosable );
-		
-		QFrame::Shape shape = mBox2->direction() == QBoxLayout::BottomToTop ? QFrame::HLine : QFrame::VLine;
-		
-		for ( int i = 0; i < mBox2->count(); i++ )
-		{
-			QFrame* f = qobject_cast<QFrame*>( mBox2->itemAt( i )->widget() );
-			
-			if ( f && f->property( "isSeparator" ).toBool() )
-			{
-				f->setFrameShape( shape );
-				f->setFixedSize( buttonSize().width(), 3 );
-			}
-		}
 	}
 	else
 	{
 		// horizontal
 		mBox1->setDirection( QBoxLayout::LeftToRight );
-		mBox2->setDirection( QBoxLayout::LeftToRight );
+		mBox1->setContentsMargins( 4, 4, 4, 0 );
+		mToolBar->setOrientation( Qt::Horizontal );
 		
 		bOrientation->setIcon( style()->standardIcon( QStyle::SP_ToolBarVerticalExtensionButton ) );
 		bFloat->setVisible( features & QDockWidget::DockWidgetFloatable );
 		bClose->setVisible( features & QDockWidget::DockWidgetClosable );
-		
-		QFrame::Shape shape = mBox2->direction() == QBoxLayout::LeftToRight ? QFrame::VLine : QFrame::HLine;
-		
-		for ( int i = 0; i < mBox2->count(); i++ )
-		{
-			QFrame* f = qobject_cast<QFrame*>( mBox2->itemAt( i )->widget() );
-			
-			if ( f && f->property( "isSeparator" ).toBool() )
-			{
-				f->setFrameShape( shape );
-				f->setFixedSize( 3, buttonSize().height() );
-			}
-		}
 	}
 }
