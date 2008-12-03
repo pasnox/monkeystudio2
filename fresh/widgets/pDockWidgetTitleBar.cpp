@@ -24,13 +24,13 @@ pDockWidgetTitleBar::pDockWidgetTitleBar( pDockWidget* parent )
 	mBox1->addStretch( 100 );
 	mBox1->addLayout( mBox2 );
 	
-	bOrientation = new pDockWidgetButton( pDockWidgetButton::Orientation, this );
+	bOrientation = new pDockWidgetButton( this, pDockWidgetButton::Orientation );
 	bOrientation->setFixedSize( buttonSize() );
 	
-	bFloat = new pDockWidgetButton( pDockWidgetButton::Float, this );
+	bFloat = new pDockWidgetButton( this, pDockWidgetButton::Float );
 	bFloat->setFixedSize( buttonSize() );
 	
-	bClose = new pDockWidgetButton( pDockWidgetButton::Close, this );
+	bClose = new pDockWidgetButton( this, pDockWidgetButton::Close );
 	bClose->setFixedSize( buttonSize() );
 	
 	mBox2->addWidget( bOrientation, 0, Qt::AlignCenter );
@@ -143,8 +143,7 @@ QWidget* pDockWidgetTitleBar::addAction( QAction* action, int index )
 		index = mBox2->count();
 	}
 	
-	QToolButton* tb = new QToolButton( this );
-	tb->setAutoRaise( true );
+	QToolButton* tb = new pDockWidgetButton( this );
 	tb->setDefaultAction( action );
 	tb->setFixedSize( buttonSize() );
 	tb->setIconSize( iconSize() );

@@ -20,9 +20,9 @@ class Q_MONKEY_EXPORT pDockWidgetButton : public QToolButton
 	friend class pDockWidgetTitleBar;
 	
 public:
-	enum Type { Orientation = 0, Float, Close };
+	enum Type { None, Orientation = 0, Float, Close };
 	
-	pDockWidgetButton( pDockWidgetButton::Type type, QWidget* parent = 0 )
+	pDockWidgetButton( QWidget* parent = 0, pDockWidgetButton::Type type = None )
 		: QToolButton( parent )
 	{
 		mType = type;
@@ -40,6 +40,8 @@ public:
 				break;
 			case Close:
 				setIcon( style()->standardIcon( QStyle::SP_TitleBarCloseButton ) );
+				break;
+			default:
 				break;
 		}
 	}
