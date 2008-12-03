@@ -28,6 +28,7 @@ public:
 		mType = type;
 		
 		setFocusPolicy( Qt::NoFocus );
+		setAutoRaise( true );
 		
 		switch ( mType )
 		{
@@ -90,13 +91,15 @@ public:
 	
 	virtual QSize sizeHint() const;
 	QSize buttonSize() const;
+	QSize iconSize() const;
 	QWidget* addAction( QAction* action, int index = -1 );
 	void addSeparator( int index = -1 );
 
 protected:
 	pDockWidget* mDock;
 	QBoxLayout* mBox1;
-	QToolBar* mToolBar;
+	QBoxLayout* mBox2;
+	//QToolBar* mToolBar;
 	pDockWidgetButton* bOrientation;
 	pDockWidgetButton* bFloat;
 	pDockWidgetButton* bClose;

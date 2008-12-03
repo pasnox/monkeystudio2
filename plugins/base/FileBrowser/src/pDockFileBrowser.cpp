@@ -107,7 +107,7 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	aBookmarks->setIcon( pIconManager::icon( "bookmark.png" ) );
 	aBookmarks->setToolTip( aBookmarks->text() );
 	QToolButton* tb = qobject_cast<QToolButton*>( titleBar()->addAction( aBookmarks, 6 ) );
-	//tb->setPopupMode( QToolButton::InstantPopup );
+	tb->setPopupMode( QToolButton::InstantPopup );
 	aBookmarks->setMenu( mBookmarksMenu );
 	
 	// add separator

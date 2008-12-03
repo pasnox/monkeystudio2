@@ -2,8 +2,6 @@
 
 #include <QAction>
 #include <QLayout>
-#include <QToolButton>
-#include <QFrame>
 #include <QToolBar>
 
 #include <QDebug>
@@ -15,19 +13,16 @@ pDockWidgetTitleBar::pDockWidgetTitleBar( pDockWidget* parent )
 	
 	mDock = parent;
 	
-	int size = style()->pixelMetric( QStyle::PM_SmallIconSize ) -4;
-	
 	mBox1 = new QBoxLayout( QBoxLayout::LeftToRight, this );
 	mBox1->setMargin( 0 );
 	mBox1->setSpacing( 0 );
 	
-	mToolBar = new QToolBar( this );
-	mToolBar->setIconSize( QSize( size, size ) );
-	mToolBar->layout()->setMargin( 0 );
-	mToolBar->layout()->setSpacing( 0 );
+	mBox2 = new QBoxLayout( QBoxLayout::LeftToRight );
+	mBox2->setMargin( 0 );
+	mBox2->setSpacing( 0 );
 	
 	mBox1->addStretch( 100 );
-	mBox1->addWidget( mToolBar, 0, Qt::AlignCenter );
+	mBox1->addLayout( mBox2 );
 	
 	bOrientation = new pDockWidgetButton( pDockWidgetButton::Orientation, this );
 	bOrientation->setFixedSize( buttonSize() );
@@ -38,9 +33,9 @@ pDockWidgetTitleBar::pDockWidgetTitleBar( pDockWidget* parent )
 	bClose = new pDockWidgetButton( pDockWidgetButton::Close, this );
 	bClose->setFixedSize( buttonSize() );
 	
-	mToolBar->addWidget( bOrientation );
-	mToolBar->addWidget( bFloat );
-	mToolBar->addWidget( bClose );
+	mBox2->addWidget( bOrientation, 0, Qt::AlignCenter );
+	mBox2->addWidget( bFloat, 0, Qt::AlignCenter );
+	mBox2->addWidget( bClose, 0, Qt::AlignCenter );
 	
 	featuresChanged( mDock->features() );
 	
@@ -97,11 +92,11 @@ QSize pDockWidgetTitleBar::sizeHint() const
 	ensurePolished();
 	
 	QSize size = QFrame::sizeHint();
-	int i = mToolBar->sizeHint().width();
+	int i = mBox2->sizeHint().width();
 	
 	if ( mDock->features() & QDockWidget::DockWidgetVerticalTitleBar )
 	{
-		i = mToolBar->sizeHint().height();
+		i = mBox2->sizeHint().height();
 	}
 	
 	if ( mDock )
@@ -132,37 +127,53 @@ QSize pDockWidgetTitleBar::buttonSize() const
 	return QSize( size, size );
 }
 
+QSize pDockWidgetTitleBar::iconSize() const
+{
+	int size = style()->pixelMetric( QStyle::PM_SmallIconSize ) -4;
+	
+	return QSize( size, size );
+}
+
 QWidget* pDockWidgetTitleBar::addAction( QAction* action, int index )
 {
 	Q_ASSERT( action );
 	
 	if ( index == -1 )
 	{
-		index = mToolBar->actions().count();
+		index = mBox2->count();
 	}
 	
-	QAction* before = mToolBar->actions().value( index );
-	mToolBar->insertAction( before, action );
-	QWidget* widget = mToolBar->widgetForAction( action );
+	QToolButton* tb = new QToolButton( this );
+	tb->setAutoRaise( true );
+	tb->setDefaultAction( action );
+	tb->setFixedSize( buttonSize() );
+	tb->setIconSize( iconSize() );
 	
-	QToolButton* tb = qobject_cast<QToolButton*>( widget );
-	if ( tb )
-	{
-		tb->setFixedSize( buttonSize() );
-	}
+	mBox2->insertWidget( index, tb, 0, Qt::AlignCenter );
 	
-	return widget;
+	return tb;
 }
 
 void pDockWidgetTitleBar::addSeparator( int index )
 {
 	if ( index == -1 )
 	{
-		index = mToolBar->actions().count();
+		index = mBox2->count();
 	}
 	
-	QAction* before = mToolBar->actions().value( index );
-	mToolBar->insertSeparator( before );
+	QFrame* f = new QFrame( this );
+	f->setFixedSize( iconSize() );
+	
+	if ( mDock->features() & QDockWidget::DockWidgetVerticalTitleBar )
+	{
+		f->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+	}
+	else
+	{
+		f->setFrameStyle( QFrame::VLine | QFrame::Sunken );
+	}
+	
+	mBox2->insertWidget( index, f, 0, Qt::AlignCenter );
 }
 
 void pDockWidgetTitleBar::bOrientation_clicked()
@@ -190,8 +201,13 @@ void pDockWidgetTitleBar::featuresChanged( QDockWidget::DockWidgetFeatures featu
 	{
 		// vertical
 		mBox1->setDirection( QBoxLayout::BottomToTop );
-		mBox1->setContentsMargins( 4, 4, 0, 4 );
-		mToolBar->setOrientation( Qt::Vertical );
+		mBox1->setContentsMargins( 3, 3, 0, 3 );
+		mBox2->setDirection( QBoxLayout::BottomToTop );
+		
+		foreach ( QFrame* f, findChildren<QFrame*>() )
+		{
+			f->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+		}
 		
 		bOrientation->setIcon( style()->standardIcon( QStyle::SP_ToolBarHorizontalExtensionButton ) );
 		bFloat->setVisible( features & QDockWidget::DockWidgetFloatable );
@@ -201,8 +217,13 @@ void pDockWidgetTitleBar::featuresChanged( QDockWidget::DockWidgetFeatures featu
 	{
 		// horizontal
 		mBox1->setDirection( QBoxLayout::LeftToRight );
-		mBox1->setContentsMargins( 4, 4, 4, 0 );
-		mToolBar->setOrientation( Qt::Horizontal );
+		mBox1->setContentsMargins( 3, 3, 3, 0 );
+		mBox2->setDirection( QBoxLayout::LeftToRight );
+		
+		foreach ( QFrame* f, findChildren<QFrame*>() )
+		{
+			f->setFrameStyle( QFrame::VLine | QFrame::Sunken );
+		}
 		
 		bOrientation->setIcon( style()->standardIcon( QStyle::SP_ToolBarVerticalExtensionButton ) );
 		bFloat->setVisible( features & QDockWidget::DockWidgetFloatable );
