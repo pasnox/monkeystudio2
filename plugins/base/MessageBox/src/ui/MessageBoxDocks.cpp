@@ -293,7 +293,9 @@ void MessageBoxDocks::appendSearchResult( const pConsoleManager::Step& s )
 		it = new QTreeWidgetItem( mSearchResult->twSearchResults );
 	}
 	
-	parentItem->setText (0, QString ("%1 (%2)").arg (s.mFileName).arg(parentItem->childCount()));
+	if (parentItem) // stResultForReplace
+		parentItem->setText (0, QString ("%1 (%2)").arg (s.mFileName).arg(parentItem->childCount()));
+	
 	// set item infos
 	it->setText( 0, s.mText );
 	it->setToolTip( 0, s.mFullText );
