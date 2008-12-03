@@ -124,6 +124,18 @@ QSize pDockWidgetTitleBar::buttonSize() const
 	int size = 2 *style()->pixelMetric( QStyle::PM_DockWidgetTitleBarButtonMargin );
 	size += style()->pixelMetric( QStyle::PM_SmallIconSize ) -2;
 	
+	QStyleOptionDockWidgetV2 titleOpt;
+	
+	titleOpt.initFrom( mDock );
+	titleOpt.rect = mDock->rect();
+	
+	if ( titleOpt.title.isEmpty() )
+	{
+		titleOpt.title = mDock->windowTitle();
+	}
+	
+	qWarning() << style()->subElementRect( QStyle::SE_DockWidgetFloatButton, &titleOpt, mDock );
+	
 	return QSize( size, size );
 }
 
