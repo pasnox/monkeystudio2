@@ -58,7 +58,12 @@ void pDockWidgetTitleBar::paintEvent( QPaintEvent* event )
 	// paint frame
 	if ( mDock->isFloating() )
 	{
+		//setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
 		drawFrame( &p );
+	}
+	else
+	{
+		//setFrameStyle( QFrame::NoFrame | QFrame::Plain );
 	}
 	
 	// init style options
@@ -66,7 +71,18 @@ void pDockWidgetTitleBar::paintEvent( QPaintEvent* event )
 	
 	titleOpt.initFrom( mDock );
 	titleOpt.rect = rect();
-	
+
+/*
+	if ( mDock->features() & QDockWidget::DockWidgetVerticalTitleBar )
+	{
+		titleOpt.rect.setWidth( titleOpt.rect.width() +2 );
+	}
+	else
+	{
+		titleOpt.rect.setHeight( titleOpt.rect.height() +2 );
+	}
+*/
+
 	if ( titleOpt.title.isEmpty() )
 	{
 		titleOpt.title = mDock->windowTitle();
@@ -85,64 +101,54 @@ void pDockWidgetTitleBar::paintEvent( QPaintEvent* event )
 	}
 
 	p.drawControl( QStyle::CE_DockWidgetTitle, titleOpt );
+	
 }
 
 QSize pDockWidgetTitleBar::sizeHint() const
 {
 	ensurePolished();
-	
-	QSize size = QFrame::sizeHint();
-	int i = mBox2->sizeHint().width();
-	
-	if ( mDock->features() & QDockWidget::DockWidgetVerticalTitleBar )
-	{
-		i = mBox2->sizeHint().height();
-	}
-	
-	if ( mDock )
-	{
-		QFontMetrics fm( font() );
-		i += fm.width( mDock->windowTitle() );
-	}
-	
-	i += 2 *style()->pixelMetric( QStyle::PM_DockWidgetTitleMargin );
+
+	int titleMargin = style()->pixelMetric( QStyle::PM_DockWidgetTitleMargin );
+
+	QFontMetrics fm( font() );
+	QSize titleSize = QSize( fm.width( mDock->windowTitle() ), fm.height() ) +QSize( titleMargin, titleMargin );
+	QSize buttonsSize = mBox2->sizeHint();
 	
 	if ( mDock->features() & QDockWidget::DockWidgetVerticalTitleBar )
 	{
-		size.setHeight( i );
+		buttonsSize.transpose();
 	}
-	else
+
+	int height = qMax( titleSize.height(), buttonsSize.height() );
+
+	if ( titleSize.height() == buttonsSize.height() ||
+		( titleSize.height() != buttonsSize.height() && buttonsSize.height() == height ) )
 	{
-		size.setWidth( i );
+		height += titleMargin;
 	}
+
+	height += titleMargin /2;
 	
+	QSize size = QSize( titleSize.width() +buttonsSize.width(), height );
+
+	if ( mDock->features() & QDockWidget::DockWidgetVerticalTitleBar )
+	{
+		size.transpose();
+	}
+
 	return size;
 }
 
 QSize pDockWidgetTitleBar::buttonSize() const
 {
-	int size = 2 *style()->pixelMetric( QStyle::PM_DockWidgetTitleBarButtonMargin );
-	size += style()->pixelMetric( QStyle::PM_SmallIconSize ) -2;
-	
-	QStyleOptionDockWidgetV2 titleOpt;
-	
-	titleOpt.initFrom( mDock );
-	titleOpt.rect = mDock->rect();
-	
-	if ( titleOpt.title.isEmpty() )
-	{
-		titleOpt.title = mDock->windowTitle();
-	}
-	
-	qWarning() << style()->subElementRect( QStyle::SE_DockWidgetFloatButton, &titleOpt, mDock );
-	
+	int size = style()->pixelMetric( QStyle::PM_SmallIconSize );
 	return QSize( size, size );
 }
 
 QSize pDockWidgetTitleBar::iconSize() const
 {
-	int size = style()->pixelMetric( QStyle::PM_SmallIconSize ) -4;
-	
+	int size = style()->pixelMetric( QStyle::PM_SmallIconSize );
+	size -= style()->pixelMetric( QStyle::PM_DockWidgetTitleBarButtonMargin );
 	return QSize( size, size );
 }
 
@@ -156,9 +162,9 @@ QWidget* pDockWidgetTitleBar::addAction( QAction* action, int index )
 	}
 	
 	QToolButton* tb = new pDockWidgetButton( this );
-	tb->setDefaultAction( action );
 	tb->setFixedSize( buttonSize() );
 	tb->setIconSize( iconSize() );
+	tb->setDefaultAction( action );
 	
 	mBox2->insertWidget( index, tb, 0, Qt::AlignCenter );
 	

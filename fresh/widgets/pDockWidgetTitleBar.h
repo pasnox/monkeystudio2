@@ -20,7 +20,7 @@ class Q_MONKEY_EXPORT pDockWidgetButton : public QToolButton
 	friend class pDockWidgetTitleBar;
 	
 public:
-	enum Type { None, Orientation = 0, Float, Close };
+	enum Type { None = 0, Orientation, Float, Close };
 	
 	pDockWidgetButton( QWidget* parent = 0, pDockWidgetButton::Type type = None )
 		: QToolButton( parent )
@@ -77,8 +77,15 @@ protected:
 		opt.activeSubControls = 0;
 		opt.features = QStyleOptionToolButton::None;
 		opt.arrowType = Qt::NoArrow;
-		int size = style()->pixelMetric( QStyle::PM_SmallIconSize, 0, this );
-		opt.iconSize = QSize( size, size );
+		if ( mType != None )
+		{
+			int size = style()->pixelMetric( QStyle::PM_SmallIconSize, 0, this );
+			opt.iconSize = QSize( size, size );
+		}
+		else
+		{
+			opt.iconSize = iconSize();
+		}
 		style()->drawComplexControl( QStyle::CC_ToolButton, &opt, &p, this );
 	}
 };
