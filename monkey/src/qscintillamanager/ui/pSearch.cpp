@@ -466,7 +466,7 @@ int pSearch::replace(bool all)
 	replaceAddToRecents(rtext);
 	
 	pChild* child = dynamic_cast<pChild*> (MonkeyCore::workspace()->currentChild());
-	if (!child && !child->editor())
+	if (!child || !child->editor())
 	{
 		showMessage(tr( "No active editor" ) );
 		return 0;
