@@ -1,5 +1,6 @@
 TARGET	= QMake
 include( ../../plugins.pri )
+CONFIG	+= exceptions
 DESTDIR	= $$MONKEY_PLUGINS_DIR/xup
 
 INCLUDEPATH	*= src/gui
