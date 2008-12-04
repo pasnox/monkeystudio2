@@ -68,6 +68,8 @@ void pDockWidgetTitleBar::paintEvent( QPaintEvent* event )
 	}
 	
 	// paint dock title
+	QSize buttonsSizeHint = mBox2->sizeHint();
+	
 	if ( mDock->features() & QDockWidget::DockWidgetVerticalTitleBar )
 	{
 		p.rotate( -90 );
@@ -77,7 +79,11 @@ void pDockWidgetTitleBar::paintEvent( QPaintEvent* event )
 		
 		size.transpose();
 		titleOpt.rect.setSize( size );
+		
+		buttonsSizeHint.transpose();
 	}
+	
+	titleOpt.rect.setWidth( titleOpt.rect.width() -buttonsSizeHint.width() );
 
 	p.drawControl( QStyle::CE_DockWidgetTitle, titleOpt );
 	
