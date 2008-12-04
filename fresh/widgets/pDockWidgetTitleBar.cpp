@@ -3,18 +3,19 @@
 #include <QAction>
 #include <QLayout>
 #include <QToolBar>
+#include <QFrame>
 
 #include <QDebug>
 
 pDockWidgetTitleBar::pDockWidgetTitleBar( pDockWidget* parent )
-	: QFrame( parent )
+	: QWidget( parent )
 {
 	Q_ASSERT( parent );
 	
 	mDock = parent;
 	
 	mBox1 = new QBoxLayout( QBoxLayout::LeftToRight, this );
-	mBox1->setMargin( 0 );
+	mBox1->setMargin( style()->pixelMetric( QStyle::PM_DockWidgetTitleMargin ) /2 );
 	mBox1->setSpacing( 0 );
 	
 	mBox2 = new QBoxLayout( QBoxLayout::LeftToRight );
@@ -55,33 +56,11 @@ void pDockWidgetTitleBar::paintEvent( QPaintEvent* event )
 	
 	QStylePainter p( this );
 	
-	// paint frame
-	if ( mDock->isFloating() )
-	{
-		//setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
-		drawFrame( &p );
-	}
-	else
-	{
-		//setFrameStyle( QFrame::NoFrame | QFrame::Plain );
-	}
-	
 	// init style options
 	QStyleOptionDockWidgetV2 titleOpt;
 	
 	titleOpt.initFrom( mDock );
 	titleOpt.rect = rect();
-
-/*
-	if ( mDock->features() & QDockWidget::DockWidgetVerticalTitleBar )
-	{
-		titleOpt.rect.setWidth( titleOpt.rect.width() +2 );
-	}
-	else
-	{
-		titleOpt.rect.setHeight( titleOpt.rect.height() +2 );
-	}
-*/
 
 	if ( titleOpt.title.isEmpty() )
 	{
@@ -127,7 +106,7 @@ QSize pDockWidgetTitleBar::sizeHint() const
 		height += titleMargin;
 	}
 
-	height += titleMargin /2;
+	height += titleMargin *2;
 	
 	QSize size = QSize( titleSize.width() +buttonsSize.width(), height );
 
@@ -218,7 +197,6 @@ void pDockWidgetTitleBar::featuresChanged( QDockWidget::DockWidgetFeatures featu
 	{
 		// vertical
 		mBox1->setDirection( QBoxLayout::BottomToTop );
-		mBox1->setContentsMargins( 3, 3, 0, 3 );
 		mBox2->setDirection( QBoxLayout::BottomToTop );
 		
 		foreach ( QFrame* f, findChildren<QFrame*>() )
@@ -234,7 +212,6 @@ void pDockWidgetTitleBar::featuresChanged( QDockWidget::DockWidgetFeatures featu
 	{
 		// horizontal
 		mBox1->setDirection( QBoxLayout::LeftToRight );
-		mBox1->setContentsMargins( 3, 3, 3, 0 );
 		mBox2->setDirection( QBoxLayout::LeftToRight );
 		
 		foreach ( QFrame* f, findChildren<QFrame*>() )

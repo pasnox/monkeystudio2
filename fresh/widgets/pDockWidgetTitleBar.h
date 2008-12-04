@@ -3,7 +3,6 @@
 
 #include "pDockWidget.h"
 
-#include <QFrame>
 #include <QToolButton>
 #include <QStylePainter>
 #include <QStyleOptionToolButton>
@@ -12,7 +11,6 @@
 #endif
 
 class QBoxLayout;
-class QToolBar;
 
 class Q_MONKEY_EXPORT pDockWidgetButton : public QToolButton
 {
@@ -90,7 +88,7 @@ protected:
 	}
 };
 
-class Q_MONKEY_EXPORT pDockWidgetTitleBar : public QFrame
+class Q_MONKEY_EXPORT pDockWidgetTitleBar : public QWidget
 {
 	Q_OBJECT
 
@@ -108,7 +106,6 @@ protected:
 	pDockWidget* mDock;
 	QBoxLayout* mBox1;
 	QBoxLayout* mBox2;
-	//QToolBar* mToolBar;
 	pDockWidgetButton* bOrientation;
 	pDockWidgetButton* bFloat;
 	pDockWidgetButton* bClose;
