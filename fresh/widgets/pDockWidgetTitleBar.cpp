@@ -106,7 +106,7 @@ QSize pDockWidgetTitleBar::sizeHint() const
 		height += titleMargin;
 	}
 
-	height += titleMargin *2;
+	height += titleMargin +( titleMargin /2 );
 	
 	QSize size = QSize( titleSize.width() +buttonsSize.width(), height );
 
