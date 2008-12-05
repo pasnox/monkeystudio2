@@ -39,6 +39,8 @@ QtAssistantBrowser::QtAssistantBrowser( QHelpEngine* engine, QWidget* parent )
 	setupUi( this );
 	isSearch->setVisible( false );
 	
+	//setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+	
 	// corner widgets
 	tbCloneTab = new QToolButton( this );
 	tbCloneTab->setAutoRaise( true );
@@ -84,7 +86,20 @@ QtAssistantBrowser::QtAssistantBrowser( QHelpEngine* engine, QWidget* parent )
 	
 	// event filter event
 	foreach ( QLineEdit* le, twPages->widget( 0 )->findChildren<QLineEdit*>() )
+	{
 		le->installEventFilter( this );
+	}
+	
+	// layouts
+	foreach ( QLayout* l, findChildren<QLayout*>() )
+	{
+		l->setMargin( 5 );
+		l->setSpacing( 5 );
+	}
+	
+	QLayout* l = twPages->widget( 0 )->layout();
+	l->setMargin( 0 );
+	l->setSpacing( 0 );
 	
 	// connections
 	connect( aPrevious, SIGNAL( triggered() ), this, SLOT( previousPage() ) );

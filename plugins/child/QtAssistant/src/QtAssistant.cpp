@@ -16,7 +16,6 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 #include "QtAssistant.h"
-#include "QtAssistantChild.h"
 #include "ui/QtAssistantDock.h"
 #include "ui/UIQtAssistantSettings.h"
 #include "3rdparty/preferencesdialog.h"

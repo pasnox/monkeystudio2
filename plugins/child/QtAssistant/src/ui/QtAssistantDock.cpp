@@ -26,6 +26,8 @@ QtAssistantDock::QtAssistantDock( QWidget* parent )
 	// create bookmarks manager
 	mBookmarkManager = new BookmarkManager( mHelpEngine );
 	bwBookmarks = new BookmarkWidget( mBookmarkManager, this );
+	bwBookmarks->layout()->setMargin( 5 );
+	bwBookmarks->layout()->setSpacing( 5 );
 
 	// create dock pages
 	vlContents->addWidget( mHelpEngine->contentWidget() );
