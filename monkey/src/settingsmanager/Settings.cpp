@@ -52,15 +52,20 @@ void Settings::setDefaultSettings()
 	{
 		appIsInstalled = false;
 	}
+#elif defined Q_OS_MAC
+	if ( appIsInstalled && !QFile::exists( QString( "%1/../Resources/templates" ).arg( appPath ) ) )
+	{
+		appIsInstalled = false;
+	}
 #endif
 	
 	if ( !appIsInstalled )
 	{
 #ifdef Q_OS_MAC
 		pluginsPath = "../plugins";
-		templatesPath = "../../../templates";
-		translationsPath = "../../../translations";
-		apisPath = "../../../ctags/apis";
+		templatesPath = "../../../../templates";
+		translationsPath = "../../../../translations";
+		apisPath = "../../../../ctags/apis";
 #elif defined Q_OS_WIN
 		pluginsPath = "plugins";
 		templatesPath = "../templates";
