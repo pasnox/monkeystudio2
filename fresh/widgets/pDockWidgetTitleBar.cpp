@@ -127,6 +127,11 @@ QSize pDockWidgetTitleBar::sizeHint() const
 QSize pDockWidgetTitleBar::buttonSize() const
 {
 	int size = style()->pixelMetric( QStyle::PM_SmallIconSize );
+
+#ifndef Q_OS_WIN
+	size += style()->pixelMetric( QStyle::PM_DockWidgetTitleBarButtonMargin );
+#endif
+	
 	return QSize( size, size );
 }
 
@@ -134,6 +139,11 @@ QSize pDockWidgetTitleBar::iconSize() const
 {
 	int size = style()->pixelMetric( QStyle::PM_SmallIconSize );
 	size -= style()->pixelMetric( QStyle::PM_DockWidgetTitleBarButtonMargin );
+	
+#ifndef Q_OS_WIN
+	size -= style()->pixelMetric( QStyle::PM_DockWidgetTitleBarButtonMargin );
+#endif
+	
 	return QSize( size, size );
 }
 
