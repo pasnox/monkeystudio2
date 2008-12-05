@@ -40,8 +40,8 @@ int main( int argc, char** argv )
 	QObject::connect( &a, SIGNAL( lastWindowClosed() ), &a, SLOT( quit() ) );
 #ifdef Q_OS_MAC
 	// qt plugins path for mac os x
-	QStringList pluginsPaths = QApplication::libraryPaths();
-	pluginsPaths << QApplication::applicationDirPath().append( "/../plugins/qt" );
+	QStringList pluginsPaths = QStringList() << QApplication::applicationDirPath().append( "/../plugins/qt" )
+		<< QApplication::libraryPaths();
 	QApplication::setLibraryPaths( pluginsPaths );
 #endif
 	// init monkey studio core
