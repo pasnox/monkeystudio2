@@ -541,15 +541,53 @@ void XUPProjectManager::addFilesToScope( XUPItem* scope, const QStringList& allF
 	XUPProjectItem* project = scope->project();
 	XUPProjectItem* rootIncludeProject = project->rootIncludeProject();
 	const StringStringListList mVariableSuffixes = project->projectInfos()->variableSuffixes( project->projectType() );
+	QMap<QString, QStringList> suffixeVariables; // suffixe, variable
 	
+	// this map allow to know if a suffixe can be handled by more than one variable
 	foreach ( const PairStringStringList& pair, mVariableSuffixes )
 	{
-		XUPItemList variables = project->getVariables( scope, pair.first, 0, false );
-		
-		foreach ( const QString& file, files )
+		foreach ( QString suffixe, pair.second )
 		{
-			if ( QDir::match( pair.second, file ) )
+			suffixe = suffixe.toLower();
+			
+			if ( !suffixeVariables[ suffixe ].contains( pair.first ) )
 			{
+				suffixeVariables[ suffixe ] << pair.first;
+			}
+		}
+	}
+	
+	foreach ( const QString& file, files )
+	{
+		foreach ( const QString& suffixe, suffixeVariables.keys() )
+		{
+			if ( QDir::match( suffixe, file ) )
+			{
+				const QStringList variablesName = suffixeVariables[ suffixe ];
+			
+				QString variableName;
+				if ( variablesName.count() > 1 )
+				{
+					bool ok;
+					variableName = QInputDialog::getItem( QApplication::activeWindow(), tr( "Choose variable..." ), tr( "More than one variable can handle this file,\nplease select the variable you want to use for this file :\n%1" ).arg( QFileInfo( file ).fileName() ), variablesName, 0, false, &ok );
+					
+					if ( !ok )
+					{
+						variableName.clear();
+					}
+				}
+				else
+				{
+					variableName = variablesName.at( 0 );
+				}
+				
+				if ( variableName.isEmpty() )
+				{
+					variableName = "OTHER_FILES";
+				}
+				
+				XUPItemList variables = project->getVariables( scope, variableName, 0, false );
+				
 				bool foundFile = false;
 				XUPItem* usedVariable = 0;
 				
@@ -586,13 +624,13 @@ void XUPProjectManager::addFilesToScope( XUPItem* scope, const QStringList& allF
 				
 				if ( foundFile )
 				{
-					continue;
+					break;
 				}
 				
 				if ( !usedVariable )
 				{
 					usedVariable = scope->addChild( XUPItem::Variable );
-					usedVariable->setAttribute( "name", pair.first );
+					usedVariable->setAttribute( "name", variableName );
 					usedVariable->setAttribute( "operator", op );
 					variables << usedVariable;
 				}
@@ -601,6 +639,8 @@ void XUPProjectManager::addFilesToScope( XUPItem* scope, const QStringList& allF
 				
 				XUPItem* value = usedVariable->addChild( XUPItem::File );
 				value->setAttribute( "content", project->relativeFilePath( file ) );
+				
+				break;
 			}
 		}
 	}
