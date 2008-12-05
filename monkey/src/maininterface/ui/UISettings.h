@@ -44,7 +44,6 @@ private:
 	UISettings( QWidget* = 0 );
 	void loadSettings();
 	void saveSettings();
-	QPixmap colourizedPixmap( const QColor& ) const;
 	QButtonGroup* bgExternalChanges;
 	QButtonGroup* bgAutoCompletionSource;
 	QButtonGroup* bgCallTipsStyle;
@@ -65,7 +64,6 @@ public slots:
 private slots:
 	void on_twMenu_itemSelectionChanged();
 	void on_tbDefaultProjectsDirectory_clicked();
-	void tbColours_clicked();
 	void tbFonts_clicked();
 	void cbSourceAPIsLanguages_beforeChanged( int );
 	void on_cbSourceAPIsLanguages_currentIndexChanged( int );

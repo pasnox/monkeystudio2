@@ -212,7 +212,7 @@
    <item row="1" column="1" >
     <widget class="QStackedWidget" name="swPages" >
      <property name="currentIndex" >
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="pGeneral" >
       <layout class="QGridLayout" >
@@ -345,19 +345,14 @@
            </widget>
           </item>
           <item row="3" column="1" colspan="2" >
-           <widget class="QToolButton" name="tbTabsTextColor" >
+           <widget class="pColorButton" name="tbTabsTextColor" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="iconSize" >
-             <size>
-              <width>48</width>
-              <height>16</height>
-             </size>
-            </property>
+            
            </widget>
           </item>
           <item row="3" column="0" >
@@ -375,19 +370,14 @@
            </widget>
           </item>
           <item row="4" column="1" colspan="2" >
-           <widget class="QToolButton" name="tbCurrentTabTextColor" >
+           <widget class="pColorButton" name="tbCurrentTabTextColor" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="iconSize" >
-             <size>
-              <width>48</width>
-              <height>16</height>
-             </size>
-            </property>
+            
            </widget>
           </item>
           <item row="5" column="0" >
@@ -599,19 +589,14 @@
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="tbSelectionBackground" >
+           <widget class="pColorButton" name="tbSelectionBackground" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="iconSize" >
-             <size>
-              <width>48</width>
-              <height>16</height>
-             </size>
-            </property>
+            
            </widget>
           </item>
           <item>
@@ -622,19 +607,14 @@
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="tbSelectionForeground" >
+           <widget class="pColorButton" name="tbSelectionForeground" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="iconSize" >
-             <size>
-              <width>48</width>
-              <height>16</height>
-             </size>
-            </property>
+            
            </widget>
           </item>
          </layout>
@@ -663,19 +643,14 @@
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="tbDefaultDocumentPen" >
+           <widget class="pColorButton" name="tbDefaultDocumentPen" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="iconSize" >
-             <size>
-              <width>48</width>
-              <height>16</height>
-             </size>
-            </property>
+            
            </widget>
           </item>
           <item>
@@ -686,19 +661,14 @@
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="tbDefaultDocumentPaper" >
+           <widget class="pColorButton" name="tbDefaultDocumentPaper" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="iconSize" >
-             <size>
-              <width>48</width>
-              <height>16</height>
-             </size>
-            </property>
+            
            </widget>
           </item>
          </layout>
@@ -1025,34 +995,23 @@
                </widget>
               </item>
               <item row="2" column="1" >
-               <widget class="QToolButton" name="tbCalltipsHighlight" >
+               <widget class="pColorButton" name="tbCalltipsHighlight" >
                 <property name="sizePolicy" >
                  <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
                 </property>
-                <property name="iconSize" >
-                 <size>
-                  <width>48</width>
-                  <height>16</height>
-                 </size>
-                </property>
+                
                </widget>
               </item>
               <item row="0" column="1" >
-               <widget class="QToolButton" name="tbCalltipsBackground" >
+               <widget class="pColorButton" name="tbCalltipsBackground" >
                 <property name="sizePolicy" >
                  <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
-                </property>
-                <property name="iconSize" >
-                 <size>
-                  <width>48</width>
-                  <height>16</height>
-                 </size>
                 </property>
                </widget>
               </item>
@@ -1064,18 +1023,12 @@
                </widget>
               </item>
               <item row="1" column="1" >
-               <widget class="QToolButton" name="tbCalltipsForeground" >
+               <widget class="pColorButton" name="tbCalltipsForeground" >
                 <property name="sizePolicy" >
                  <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
-                </property>
-                <property name="iconSize" >
-                 <size>
-                  <width>48</width>
-                  <height>16</height>
-                 </size>
                 </property>
                </widget>
               </item>
@@ -1296,18 +1249,12 @@
              </widget>
             </item>
             <item>
-             <widget class="QToolButton" name="tbIndentationGuidesBackground" >
+             <widget class="pColorButton" name="tbIndentationGuidesBackground" >
               <property name="sizePolicy" >
                <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
-              </property>
-              <property name="iconSize" >
-               <size>
-                <width>48</width>
-                <height>16</height>
-               </size>
               </property>
              </widget>
             </item>
@@ -1319,18 +1266,12 @@
              </widget>
             </item>
             <item>
-             <widget class="QToolButton" name="tbIndentationGuidesForeground" >
+             <widget class="pColorButton" name="tbIndentationGuidesForeground" >
               <property name="sizePolicy" >
                <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
-              </property>
-              <property name="iconSize" >
-               <size>
-                <width>48</width>
-                <height>16</height>
-               </size>
               </property>
              </widget>
             </item>
@@ -1386,18 +1327,12 @@
              <number>3</number>
             </property>
             <item row="1" column="1" >
-             <widget class="QToolButton" name="tbMatchedBraceBackground" >
+             <widget class="pColorButton" name="tbMatchedBraceBackground" >
               <property name="sizePolicy" >
                <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
-              </property>
-              <property name="iconSize" >
-               <size>
-                <width>48</width>
-                <height>16</height>
-               </size>
               </property>
              </widget>
             </item>
@@ -1423,18 +1358,12 @@
              </widget>
             </item>
             <item row="0" column="1" >
-             <widget class="QToolButton" name="tbMatchedBraceForeground" >
+             <widget class="pColorButton" name="tbMatchedBraceForeground" >
               <property name="sizePolicy" >
                <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
-              </property>
-              <property name="iconSize" >
-               <size>
-                <width>48</width>
-                <height>16</height>
-               </size>
               </property>
              </widget>
             </item>
@@ -1446,34 +1375,22 @@
              </widget>
             </item>
             <item row="3" column="1" >
-             <widget class="QToolButton" name="tbUnmatchedBraceBackground" >
+             <widget class="pColorButton" name="tbUnmatchedBraceBackground" >
               <property name="sizePolicy" >
                <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
-              </property>
-              <property name="iconSize" >
-               <size>
-                <width>48</width>
-                <height>16</height>
-               </size>
               </property>
              </widget>
             </item>
             <item row="2" column="1" >
-             <widget class="QToolButton" name="tbUnmatchedBraceForeground" >
+             <widget class="pColorButton" name="tbUnmatchedBraceForeground" >
               <property name="sizePolicy" >
                <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
-              </property>
-              <property name="iconSize" >
-               <size>
-                <width>48</width>
-                <height>16</height>
-               </size>
               </property>
              </widget>
             </item>
@@ -1550,18 +1467,12 @@
              </widget>
             </item>
             <item>
-             <widget class="QToolButton" name="tbEdgeColor" >
+             <widget class="pColorButton" name="tbEdgeColor" >
               <property name="sizePolicy" >
                <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
-              </property>
-              <property name="iconSize" >
-               <size>
-                <width>48</width>
-                <height>16</height>
-               </size>
               </property>
              </widget>
             </item>
@@ -1675,19 +1586,14 @@
            <number>3</number>
           </property>
           <item row="1" column="1" >
-           <widget class="QToolButton" name="tbCaretForeground" >
+           <widget class="pColorButton" name="tbCaretForeground" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="iconSize" >
-             <size>
-              <width>48</width>
-              <height>16</height>
-             </size>
-            </property>
+            
            </widget>
           </item>
           <item row="0" column="0" >
@@ -1763,19 +1669,14 @@
            </layout>
           </item>
           <item row="0" column="1" >
-           <widget class="QToolButton" name="tbCaretLineBackground" >
+           <widget class="pColorButton" name="tbCaretLineBackground" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="iconSize" >
-             <size>
-              <width>48</width>
-              <height>16</height>
-             </size>
-            </property>
+            
            </widget>
           </item>
          </layout>
@@ -1942,13 +1843,8 @@
            </layout>
           </item>
           <item row="1" column="2" >
-           <widget class="QToolButton" name="tbFoldMarginBackground" >
-            <property name="iconSize" >
-             <size>
-              <width>48</width>
-              <height>16</height>
-             </size>
-            </property>
+           <widget class="pColorButton" name="tbFoldMarginBackground" >
+            
            </widget>
           </item>
           <item row="1" column="1" >
@@ -1959,13 +1855,8 @@
            </widget>
           </item>
           <item row="0" column="2" >
-           <widget class="QToolButton" name="tbFoldMarginForeground" >
-            <property name="iconSize" >
-             <size>
-              <width>48</width>
-              <height>16</height>
-             </size>
-            </property>
+           <widget class="pColorButton" name="tbFoldMarginForeground" >
+            
            </widget>
           </item>
           <item row="0" column="1" >
@@ -2017,22 +1908,12 @@
             <property name="text" >
              <string>12345</string>
             </property>
-            <property name="iconSize" >
-             <size>
-              <width>48</width>
-              <height>16</height>
-             </size>
-            </property>
+            
            </widget>
           </item>
           <item row="1" column="1" >
-           <widget class="QToolButton" name="tbMarginsBackground" >
-            <property name="iconSize" >
-             <size>
-              <width>48</width>
-              <height>16</height>
-             </size>
-            </property>
+           <widget class="pColorButton" name="tbMarginsBackground" >
+            
            </widget>
           </item>
           <item row="0" column="0" >
@@ -2043,13 +1924,8 @@
            </widget>
           </item>
           <item row="0" column="1" >
-           <widget class="QToolButton" name="tbMarginsForeground" >
-            <property name="iconSize" >
-             <size>
-              <width>48</width>
-              <height>16</height>
-             </size>
-            </property>
+           <widget class="pColorButton" name="tbMarginsForeground" >
+            
            </widget>
           </item>
           <item row="1" column="0" >
@@ -2940,6 +2816,11 @@
    <extends>QGroupBox</extends>
    <header location="global" >fresh.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>pColorButton</class>
+   <extends>QPushButton</extends>
+   <header location="global" >pColorButton.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

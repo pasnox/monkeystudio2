@@ -50,7 +50,7 @@ bool pEditor::mPasteAvailable = false;
 pEditor::pEditor( QWidget* p )
 	: QsciScintilla( p )
 {
-	setFrameStyle( QFrame::NoFrame | QFrame::Plain );
+	//setFrameStyle( QFrame::NoFrame | QFrame::Plain );
 	
 	const QSize mPixSize = QSize( 16, 16 );
 	// register image for auto completion

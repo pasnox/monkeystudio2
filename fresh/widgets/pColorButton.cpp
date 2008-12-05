@@ -29,13 +29,15 @@ void pColorButton::init( const QColor& color )
 
 void pColorButton::updateColorName()
 {
+	setToolTip( mColor.name().replace( "#", QString::number( mColor.alpha(), 16 ).prepend( "#" ) ) );
+	
 	if ( mColorNameHidden )
 	{
 		setText( QString::null );
 	}
 	else
 	{
-		setText( mColor.name().replace( "#", QString::number( mColor.alpha(), 16 ).prepend( "#" ) ) );
+		setText( toolTip() );
 	}
 }
 
