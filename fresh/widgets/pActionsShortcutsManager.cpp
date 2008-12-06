@@ -29,8 +29,6 @@
 
 #include <QDebug>
 
-
-
 pActionsShortcutsManager::pActionsShortcutsManager( pActionsManager* manager, QWidget* parent )
 	: QDialog( parent )
 {
@@ -233,7 +231,7 @@ void pActionsShortcutsManager::pbRestore_pbSet_clicked()
 		// show warning
 		else
 		{
-			QMessageBox::warning( window(), tr( "Error" ), mManager->lastError(), QMessageBox::Close );
+			QMessageBox::warning( window(), tr( "Error" ), strippedText( mManager->lastError() ), QMessageBox::Close );
 			leShortcut->setText( action->shortcut().toString() );
 		}
 	}

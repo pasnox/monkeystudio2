@@ -5,8 +5,6 @@
 #include <QDir>
 #include <QSettings>
 
-#include <QDebug>
-
 const QString pActionsManager::mSettingsScope = "Shortcuts Manager";
 QMapStringString pActionsManager::mPathPartTranslations;
 int pActionsManager::mUnknowActionCount = 0;
@@ -64,9 +62,7 @@ void pActionsManager::actionDestroyed( QObject* object )
 
 void pActionsManager::editActionsShortcuts()
 {
-	pActionsShortcutsManager dlg( this, QApplication::activeWindow() );
-	
-	dlg.exec();
+	pActionsShortcutsManager( this, QApplication::activeWindow() ).exec();
 }
 
 QActionList pActionsManager::actions( const QString& path ) const
@@ -161,7 +157,7 @@ bool pActionsManager::setShortcut( QAction* action, const QKeySequence& shortcut
 	{
 		if ( a != action && a->shortcut() == shortcut && !shortcut.isEmpty() )
 		{
-			manager->mLastError = tr( "Key Sequence '%1' already assigned to '%2/%3'" ).arg( shortcut.toString() ).arg( actionPath( a ) ).arg( a->text() );
+			manager->mLastError = tr( "Key Sequence '%1' already assigned to '%2 > %3'" ).arg( shortcut.toString() ).arg( pathTranslation( a ) ).arg( a->text() );
 			return false;
 		}
 	}
@@ -170,12 +166,13 @@ bool pActionsManager::setShortcut( QAction* action, const QKeySequence& shortcut
 	QSettings* settings = manager->settings();
 	if ( settings )
 	{
+		QKeySequence dShortcut = defaultShortcut( action );
 		const QString key = QString( "%1/%2/%3/%4" ).arg( mSettingsScope ).arg( manager->mName ).arg( actionPath( action ) ).arg( action->objectName() );
-		qWarning() << "key" << key;
 		
-		if ( action->shortcut() == shortcut )
+		if ( shortcut == dShortcut )
 		{
 			settings->remove( key );
+			qWarning( "remove key: %s", key.toAscii().constData() );
 		}
 		else
 		{
@@ -282,9 +279,10 @@ void pActionsManager::setDefaultShortcut( QAction* action, const QKeySequence& s
 	Q_ASSERT( action );
 	action->setProperty( QString::number( DefaultShortcut ).toLocal8Bit().constData(), QVariant::fromValue( shortcut ) );
 	
-	if ( action->shortcut().isEmpty() )
+	pActionsManager* manager = actionsManager( action );
+	if ( manager )
 	{
-		action->setShortcut( shortcut );
+		manager->updateShortcut( action );
 	}
 }
 
