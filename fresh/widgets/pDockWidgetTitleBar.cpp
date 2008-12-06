@@ -68,22 +68,25 @@ void pDockWidgetTitleBar::paintEvent( QPaintEvent* event )
 	}
 	
 	// paint dock title
-	QSize buttonsSizeHint = mBox2->sizeHint();
-	
-	if ( mDock->features() & QDockWidget::DockWidgetVerticalTitleBar )
+	if ( style()->objectName().toLower() != "windowsxp" )
 	{
-		p.rotate( -90 );
-		p.translate( QPoint( -rect().height(), 0 ) );
+		QSize buttonsSizeHint = mBox2->sizeHint();
 		
-		QSize size = titleOpt.rect.size();
-		
-		size.transpose();
-		titleOpt.rect.setSize( size );
-		
-		buttonsSizeHint.transpose();
-	}
+		if ( mDock->features() & QDockWidget::DockWidgetVerticalTitleBar )
+		{
+			p.rotate( -90 );
+			p.translate( QPoint( -rect().height(), 0 ) );
+			
+			QSize size = titleOpt.rect.size();
+			
+			size.transpose();
+			titleOpt.rect.setSize( size );
+			
+			buttonsSizeHint.transpose();
+		}
 	
-	titleOpt.rect.setWidth( titleOpt.rect.width() -buttonsSizeHint.width() );
+		titleOpt.rect.setWidth( titleOpt.rect.width() -buttonsSizeHint.width() );
+	}
 
 	p.drawControl( QStyle::CE_DockWidgetTitle, titleOpt );
 	
@@ -109,7 +112,7 @@ QSize pDockWidgetTitleBar::sizeHint() const
 	if ( titleSize.height() == buttonsSize.height() ||
 		( titleSize.height() != buttonsSize.height() && buttonsSize.height() == height ) )
 	{
-		height += titleMargin;
+		//height += titleMargin;
 	}
 
 	height += titleMargin +( titleMargin /2 );
@@ -127,9 +130,9 @@ QSize pDockWidgetTitleBar::sizeHint() const
 QSize pDockWidgetTitleBar::buttonSize() const
 {
 	int size = style()->pixelMetric( QStyle::PM_SmallIconSize );
-#ifndef Q_OS_WIN
+//#ifndef Q_OS_WIN
 	size += style()->pixelMetric( QStyle::PM_DockWidgetTitleBarButtonMargin );
-#endif
+//#endif
 	return QSize( size, size );
 }
 
