@@ -135,9 +135,14 @@ QtItemList QtVersionManager::defaultModules()
 	<< QtItem( "QtGui", "gui", "QT", "Add support for Qt Gui classes" )
 	<< QtItem( "QtNetwork", "network", "QT", "Add support for Qt Network classes" )
 	<< QtItem( "QtOpenGL", "opengl", "QT", "Add support for Qt OpenGL classes" )
+	<< QtItem( "QtScript", "script", "QT", "Add support for Qt Script classes" )
 	<< QtItem( "QtSql", "sql", "QT", "Add support for Qt Sql classes" )
 	<< QtItem( "QtSvg", "svg", "QT", "Add support for Qt Svg classes" )
+	<< QtItem( "QtWebKit", "webkit", "QT", "Add support for Qt WebKit classes" )
 	<< QtItem( "QtXml", "xml", "QT", "Add support for Qt Xml classes" )
+	<< QtItem( "QtXmlPatterns", "xmlpatterns", "QT", "Add support for Qt Xml Patterns classes (XQuery & XPath)" )
+	<< QtItem( "Phonon", "phonon", "QT", "Add support for Qt Xml Patterns classes (XQuery & XPath)" )
+	<< QtItem( "QtDBus", "dbus", "QT", "Add support for Qt DBus classes (unix like only)" )
 	<< QtItem( "Qt3Support", "qt3support", "QT", "Add support for Qt Qt3Support classes" );
 }
 
@@ -201,13 +206,13 @@ QtItemList QtVersionManager::defaultConfigurations()
 	<< QtItem( "qt", "qt", "CONFIG", "The target is a Qt application/library and requires the Qt library and header files. The proper include and library paths for the Qt library will automatically be added to the project. This is defined by default, and can be fine-tuned with the QT variable." )
 	<< QtItem( "resources", "resources", "CONFIG", "Configures qmake to run rcc on the content of RESOURCES if defined." )
 	<< QtItem( "uic3", "uic3", "CONFIG", "Configures qmake to run uic3 on the content of FORMS3 if defined; otherwise the contents of FORMS will be processed instead." )
-	<< QtItem( "designer", "designer", "CONFIG", "Add support for Qt Designer classes" )
-	<< QtItem( "uitools", "uitools", "CONFIG", "Add support for Qt UiTools classes" )
-	<< QtItem( "assistant", "assistant", "CONFIG", "Add support for Qt Assistant classes" )
-	<< QtItem( "qtestlib", "qtestlib", "CONFIG", "Add support for Qt Test classes" )
-	<< QtItem( "qaxcontainer", "qaxcontainer", "CONFIG", "Add support for QAxContainer classes" )
-	<< QtItem( "qaxserver", "qaxserver", "CONFIG", "Add support for QAxServer classes" )
-	<< QtItem( "qdbus", "qdbus", "CONFIG", "Add support for Qt DBus classes" );
+	<< QtItem( "QtDesigner", "designer", "CONFIG", "Add support for Qt Designer classes" )
+	<< QtItem( "QtUiTools", "uitools", "CONFIG", "Add support for Qt UiTools classes" )
+	<< QtItem( "QtHelp", "help", "CONFIG", "Add support for Qt Help classes" )
+	<< QtItem( "QtAssistant", "assistant", "CONFIG", "Add support for Qt Assistant classes" )
+	<< QtItem( "QtTest", "qtestlib", "CONFIG", "Add support for Qt Test classes" )
+	<< QtItem( "QAxContainer", "qaxcontainer", "CONFIG", "Add support for QAxContainer classes (windows only)" )
+	<< QtItem( "QAxServer", "qaxserver", "CONFIG", "Add support for QAxServer classes (windows only)" );
 }
 
 QtItemList QtVersionManager::configurations()
