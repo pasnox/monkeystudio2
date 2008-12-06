@@ -68,23 +68,23 @@ void pDockWidgetTitleBar::paintEvent( QPaintEvent* event )
 	}
 	
 	// paint dock title
+	QSize buttonsSizeHint = mBox2->sizeHint();
+	
+	if ( mDock->features() & QDockWidget::DockWidgetVerticalTitleBar )
+	{
+		p.rotate( -90 );
+		p.translate( QPoint( -rect().height(), 0 ) );
+		
+		QSize size = titleOpt.rect.size();
+		
+		size.transpose();
+		titleOpt.rect.setSize( size );
+		
+		buttonsSizeHint.transpose();
+	}
+	
 	if ( style()->objectName().toLower() != "windowsxp" )
 	{
-		QSize buttonsSizeHint = mBox2->sizeHint();
-		
-		if ( mDock->features() & QDockWidget::DockWidgetVerticalTitleBar )
-		{
-			p.rotate( -90 );
-			p.translate( QPoint( -rect().height(), 0 ) );
-			
-			QSize size = titleOpt.rect.size();
-			
-			size.transpose();
-			titleOpt.rect.setSize( size );
-			
-			buttonsSizeHint.transpose();
-		}
-	
 		titleOpt.rect.setWidth( titleOpt.rect.width() -buttonsSizeHint.width() );
 	}
 
@@ -109,12 +109,6 @@ QSize pDockWidgetTitleBar::sizeHint() const
 
 	int height = qMax( titleSize.height(), buttonsSize.height() );
 
-	if ( titleSize.height() == buttonsSize.height() ||
-		( titleSize.height() != buttonsSize.height() && buttonsSize.height() == height ) )
-	{
-		//height += titleMargin;
-	}
-
 	height += titleMargin +( titleMargin /2 );
 	
 	QSize size = QSize( titleSize.width() +buttonsSize.width(), height );
@@ -130,9 +124,7 @@ QSize pDockWidgetTitleBar::sizeHint() const
 QSize pDockWidgetTitleBar::buttonSize() const
 {
 	int size = style()->pixelMetric( QStyle::PM_SmallIconSize );
-//#ifndef Q_OS_WIN
 	size += style()->pixelMetric( QStyle::PM_DockWidgetTitleBarButtonMargin );
-//#endif
 	return QSize( size, size );
 }
 
@@ -140,9 +132,12 @@ QSize pDockWidgetTitleBar::iconSize() const
 {
 	int size = style()->pixelMetric( QStyle::PM_SmallIconSize );
 	size -= style()->pixelMetric( QStyle::PM_DockWidgetTitleBarButtonMargin );
-#ifndef Q_OS_WIN
-	size -= style()->pixelMetric( QStyle::PM_DockWidgetTitleBarButtonMargin );
-#endif
+	
+	if ( style()->objectName().toLower() != "windowsxp" )
+	{
+		size -= style()->pixelMetric( QStyle::PM_DockWidgetTitleBarButtonMargin );
+	}
+
 	return QSize( size, size );
 }
 
