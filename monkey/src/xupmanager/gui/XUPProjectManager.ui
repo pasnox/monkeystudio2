@@ -76,9 +76,6 @@
     </item>
     <item>
      <widget class="QStackedWidget" name="swPages" >
-      <property name="currentIndex" >
-       <number>1</number>
-      </property>
       <widget class="QWidget" name="wFiltered" >
        <layout class="QVBoxLayout" name="verticalLayout" >
         <property name="spacing" >
