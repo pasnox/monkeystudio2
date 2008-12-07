@@ -53,7 +53,7 @@ QString VariablesManager::getVariable( QString name, Dictionary locals )
 		return globals[name];
 	if (locals.contains(name))
 		return locals[name];
-	return QString::null;
+	return QString( "$%1$" ).arg( name ); // was QString::null if not found, it's not a variable to replace! ( ie: php script that contains $variables
 }
 
 /*!
@@ -82,7 +82,7 @@ QString VariablesManager::replaceAllVariables (QString text, Dictionary locals)
 {
 	int p = 0;
 	QString s;
-	QRegExp rex( "(\\$[^$\\n]+\\$)" );
+	QRegExp rex( "(\\$(?:\\w|\\s|'|\\.)+\\$)" );
 	// search and interpret values
 	QList<QString> findedVariables;
 	while ( ( p = rex.indexIn( text, p ) ) != -1 )
