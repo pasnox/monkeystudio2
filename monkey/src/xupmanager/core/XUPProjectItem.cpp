@@ -859,15 +859,14 @@ void XUPProjectItem::installCommands()
 	// get plugins
 	BuilderPlugin* bp = builder();
 	CompilerPlugin* cp = compiler();
-	/*
-	DebuggerPlugin* dp = debugger();
+	//DebuggerPlugin* dp = debugger();
 	InterpreterPlugin* ip = interpreter();
-	*/
 	
-	bool emptyMenu = MonkeyCore::menuBar()->menu( "mBuilder/mBuild" )->actions().isEmpty();
+	bool emptyBuilderBuildMenu = MonkeyCore::menuBar()->menu( "mBuilder/mBuild" )->actions().isEmpty();
+	bool emptyInterpreterMenu = MonkeyCore::menuBar()->menu( "mInterpreter" )->actions().isEmpty();
 	
 	// build command
-	if ( bp && emptyMenu )
+	if ( bp && emptyBuilderBuildMenu )
 	{
 		pCommand cmd = bp->buildCommand();
 		
@@ -899,13 +898,23 @@ void XUPProjectItem::installCommands()
 	}
 	
 	// compile file command
-	if ( cp && emptyMenu )
+	if ( cp && emptyBuilderBuildMenu )
 	{
 		pCommand cmd = cp->compileCommand();
 		cmd.setUserData( QVariant::fromValue( &mCommands ) );
 		cmd.setProject( this );
 		cmd.setSkipOnError( false );
 		addCommand( cmd, "mBuilder/mBuild" );
+	}
+	
+	// interprete file command
+	if ( ip && emptyInterpreterMenu )
+	{
+		pCommand cmd = ip->interpretCommand();
+		cmd.setUserData( QVariant::fromValue( &mCommands ) );
+		cmd.setProject( this );
+		cmd.setSkipOnError( false );
+		addCommand( cmd, "mInterpreter" );
 	}
 	
 	// install builder user command
@@ -933,9 +942,30 @@ void XUPProjectItem::installCommands()
 			addCommand( cmd, "mBuilder/mUserCommands" );
 		}
 	}
-	
+	/*
 	// install debugger user command
+	if ( dp )
+	{
+		foreach ( pCommand cmd, dp->userCommands() )
+		{
+			cmd.setUserData( QVariant::fromValue( &mCommands ) );
+			cmd.setProject( this );
+			cmd.setSkipOnError( false );
+			addCommand( cmd, "mDebugger/mUserCommands" );
+		}
+	}
+	*/
 	// install interpreter user command
+	if ( ip )
+	{
+		foreach ( pCommand cmd, ip->userCommands() )
+		{
+			cmd.setUserData( QVariant::fromValue( &mCommands ) );
+			cmd.setProject( this );
+			cmd.setSkipOnError( false );
+			addCommand( cmd, "mInterpreter/mUserCommands" );
+		}
+	}
 }
 
 void XUPProjectItem::uninstallCommands()
