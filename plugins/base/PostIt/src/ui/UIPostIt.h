@@ -23,7 +23,7 @@ private:
 protected slots:
         void on_tbAdd_clicked();
         void on_lstNotes_itemActivated ( QListWidgetItem *item );
-        void on_lstNotes_itemDoubleClicked ( QListWidgetItem *item );
+		void on_tbEdit_clicked();
         void on_tbDelete_clicked();
         void closeEvent( QCloseEvent *event );
         void on_txtContent_textChanged();

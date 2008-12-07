@@ -61,6 +61,17 @@ QDomElement notesManager::getElement( uint id )
         return QDomElement();
 }
 
+//return title of "id" element
+QString notesManager::getTitleElement( uint id )
+{
+    QDomNodeList list = mXmlDocument.elementsByTagName( "note" );
+
+    if ( id >= 0 && id < list.length() )
+        return list.item( id ).toElement().attribute( "title" );
+    else
+        return QString();
+}
+
 //add QDomElement with "note" value in mXmlDocument
 void notesManager::addElement(QString title, QString note)
 {

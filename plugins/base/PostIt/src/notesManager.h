@@ -15,6 +15,7 @@ class notesManager
         void removeElement( uint id );
         void removeAllElements();
 
+		QString getTitleElement( uint id );
         QDomElement getElement( uint id );
         QStringList getElements();
 

@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>492</width>
-    <height>451</height>
+    <height>450</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -34,6 +34,20 @@
             <property name="icon" >
              <iconset resource="../../../../../monkey/src/resources/resources.qrc" >
               <normaloff>:/listeditor/icons/listeditor/add.png</normaloff>:/listeditor/icons/listeditor/add.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="tbEdit" >
+            <property name="toolTip" >
+             <string>Edit title</string>
+            </property>
+            <property name="text" >
+             <string>...</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc" >
+              <normaloff>:/listeditor/icons/listeditor/edit.png</normaloff>:/listeditor/icons/listeditor/edit.png</iconset>
             </property>
            </widget>
           </item>

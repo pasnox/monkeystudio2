@@ -71,24 +71,28 @@ void UIPostIt::on_lstNotes_itemActivated ( QListWidgetItem *item )
 }
 
 //edit title on doubleclicked
-void UIPostIt::on_lstNotes_itemDoubleClicked ( QListWidgetItem * item )
+void UIPostIt::on_tbEdit_clicked ()
 {
-    bool inputResult;
-    QString title = QInputDialog::getText(this, "Edit title", "Enter new title note :", QLineEdit::Normal, "", &inputResult );
-    
-    if ( inputResult ) {
-        mNotesManager->setTitleElement( lstNotes->currentRow(), title );
-        loadNotes();
+    if ( lstNotes->currentRow() != -1 ) {
+        bool inputResult;
+        QString title = QInputDialog::getText(this, "Edit title", "Enter new title note :", QLineEdit::Normal, mNotesManager->getTitleElement( lstNotes->currentRow() ), &inputResult );
+        
+        if ( inputResult ) {
+            mNotesManager->setTitleElement( lstNotes->currentRow(), title );
+            loadNotes();
+        }
     }
 }
 
 //delete selected note
 void UIPostIt::on_tbDelete_clicked()
 {
-    uint i = lstNotes->currentRow();
-    mNotesManager->removeElement( i );
-    txtContent->clear();
-    loadNotes();
+    if ( lstNotes->currentRow() != -1 ) {
+        uint i = lstNotes->currentRow();
+        mNotesManager->removeElement( i );
+        txtContent->clear();
+        loadNotes();
+    }
 }
 
 //when PostIt closing
