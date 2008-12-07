@@ -1,14 +1,4 @@
 /****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Monkey Studio IDE
-** FileName  : DebuggerPlugin.h
-** Date      : 2008-01-14T00:37:01
-** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
-**
 	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
 	This program is free software; you can redistribute it and/or modify
@@ -24,19 +14,41 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
 ****************************************************************************/
-#ifndef DEBUGGERPLUGIN_H
-#define DEBUGGERPLUGIN_H
+#ifndef UIINTERPRETERSETTINGS_H
+#define UIINTERPRETERSETTINGS_H
 
 #include <fresh.h>
+#include <pCommand.h>
 
-#include "BasePlugin.h"
+#include "ui_UIInterpreterSettings.h"
 
-class Q_MONKEY_EXPORT DebuggerPlugin : public BasePlugin
+#include <QWidget>
+
+class InterpreterPlugin;
+
+class Q_MONKEY_EXPORT UIInterpreterSettings : public QWidget, public Ui::UIInterpreterSettings
 {
+	Q_OBJECT
+	
+protected:
+	pCommand mDefault;
+	pCommand mReset;
+	pCommand mCommand;
+	InterpreterPlugin* mPlugin;
+
+public:
+	UIInterpreterSettings( InterpreterPlugin*, QWidget* = 0 );
+
+	void updateCommand();
+	void restoreDefault();
+	void reset();
+	void save();
+
+protected slots:
+	void on_tbBuildCommandCommand_clicked();
+	void on_tbBuildCommandWorkingDirectory_clicked();
+	void on_dbbButtons_clicked( QAbstractButton* );
 };
 
-Q_DECLARE_INTERFACE( DebuggerPlugin, "org.monkeystudio.MonkeyStudio.DebuggerPlugin/1.0" )
-
-#endif // DEBUGGERPLUGIN_H
+#endif // UIINTERPRETERSETTINGS_H
