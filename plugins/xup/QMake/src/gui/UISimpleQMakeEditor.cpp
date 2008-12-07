@@ -10,6 +10,8 @@
 #include <QMessageBox>
 #include <QDebug>
 
+//leCustomConfig
+
 UISimpleQMakeEditor::UISimpleQMakeEditor( XUPProjectItem* project, QWidget* parent )
 	: QDialog( parent )
 {
@@ -177,6 +179,7 @@ void UISimpleQMakeEditor::init( XUPProjectItem* project )
 	mFileVariables = project->projectInfos()->fileVariables( project->projectType() );
 	mPathVariables = project->projectInfos()->pathVariables( project->projectType() );
 	QString value;
+	QStringList config;
 	QStringList values;
 	mProject = project;
 	mValues.clear();
@@ -265,19 +268,27 @@ void UISimpleQMakeEditor::init( XUPProjectItem* project )
 			foreach ( XUPItem* value, child->childrenList() )
 			{
 				XUPItem::Type type = value->type();
+				QString val;
 				
 				if ( type != XUPItem::Value && type != XUPItem::File && type != XUPItem::Path )
 				{
 					continue;
 				}
 				
-				QString val = QString( mValues[ variableName ].trimmed() +" " +value->attribute( "content" ) ).trimmed();
-				mValues[ variableName ] = val;
+				if ( !mValues.keys().contains( "QT" ) && variableName == "QT" && ( op == "+=" || op == "*=" ) )
+				{
+					val += "core gui ";
+				}
+				
+				val += mValues[ variableName ].trimmed();
+				val += " " +value->attribute( "content" );
+				mValues[ variableName ] = val.trimmed();
 			}
 		}
 	}
 	
 	// update gui
+	config = project->splitMultiLineValue( mValues[ "CONFIG" ] );
 	
 	// project
 	value = mValues[ "TEMPLATE" ];
@@ -291,22 +302,27 @@ void UISimpleQMakeEditor::init( XUPProjectItem* project )
 	}
 	else if ( value == "lib" )
 	{
-		values = project->splitMultiLineValue( mValues[ "CONFIG" ] );
-		if ( values.contains( "designer" ) )
+		if ( config.contains( "designer" ) )
 		{
 			rbQtDesignerPlugin->setChecked( true );
+			config.removeAll( "designer" );
 		}
-		else if ( values.contains( "plugin" ) )
+		else if ( config.contains( "plugin" ) )
 		{
 			rbQtPlugin->setChecked( true );
+			config.removeAll( "plugin" );
 		}
-		else if ( values.contains( "shared" ) || values.contains( "dll" ) )
+		else if ( config.contains( "shared" ) || config.contains( "dll" ) )
 		{
 			rbSharedLib->setChecked( true );
+			config.removeAll( "shared" );
+			config.removeAll( "dll" );
 		}
-		else if ( values.contains( "static" ) || values.contains( "staticlib" ) )
+		else if ( config.contains( "static" ) || config.contains( "staticlib" ) )
 		{
 			rbStaticLib->setChecked( true );
+			config.removeAll( "static" );
+			config.removeAll( "staticlib" );
 		}
 	}
 	
@@ -340,15 +356,15 @@ void UISimpleQMakeEditor::init( XUPProjectItem* project )
 		}
 	}
 	
-	values = project->splitMultiLineValue( mValues[ "CONFIG" ] );
 	for ( int i = 0; i < lwModules->count(); i++ )
 	{
 		QListWidgetItem* item = lwModules->item( i );
 		QtItem ci = item->data( Qt::UserRole ).value<QtItem>();
 		
-		if ( values.contains( ci.Value ) )
+		if ( config.contains( ci.Value ) )
 		{
 			item->setCheckState( Qt::Checked );
+			config.removeAll( ci.Value );
 		}
 		else if ( !ci.Value.isEmpty() )
 		{
@@ -363,22 +379,32 @@ void UISimpleQMakeEditor::init( XUPProjectItem* project )
 		{
 			if ( ab == cbBuildAll )
 			{
-				ab->setChecked( values.contains( ab->statusTip() ) && values.contains( "debug_and_release" ) );
+				ab->setChecked( config.contains( ab->statusTip() ) && config.contains( "debug_and_release" ) );
+				config.removeAll( "debug_and_release" );
 			}
 			else
 			{
-				ab->setChecked( values.contains( ab->statusTip() ) );
+				ab->setChecked( config.contains( ab->statusTip() ) );
 			}
 		}
 		else if ( ab == cbBundle )
 		{
-			ab->setChecked( values.contains( "app_bundle" ) || values.contains( "lib_bundle" ) );
+			ab->setChecked( config.contains( "app_bundle" ) || config.contains( "lib_bundle" ) );
+			config.removeAll( "app_bundle" );
+			config.removeAll( "lib_bundle" );
 		}
 		else if ( ab == cbManifest )
 		{
-			ab->setChecked( values.contains( "embed_manifest_exe" ) || values.contains( "embed_manifest_dll" ) );
+			ab->setChecked( config.contains( "embed_manifest_exe" ) || config.contains( "embed_manifest_dll" ) );
+			config.removeAll( "embed_manifest_exe" );
+			config.removeAll( "embed_manifest_dll" );
 		}
+		
+		config.removeAll( ab->statusTip() );
 	}
+	
+	// custom configuration
+	leCustomConfig->setText( config.join( " " ) );
 
 	updateProjectFiles();
 	updateValuesEditorVariables();
@@ -480,7 +506,9 @@ void UISimpleQMakeEditor::projectTypeChanged()
 
 void UISimpleQMakeEditor::on_tbProjectTarget_clicked()
 {
-	QString path = QFileDialog::getExistingDirectory( this, tr( "Choose a target path for your project" ), mProject->filePath( leProjectTarget->text() ) );
+	QString path = leProjectTarget->text().isEmpty() ? mProject->path() : mProject->filePath( leProjectTarget->text() );
+	path = QFileDialog::getExistingDirectory( this, tr( "Choose a target path for your project" ), path );
+	
 	if ( !path.isEmpty() )
 	{
 		leProjectTarget->setText( mProject->relativeFilePath( path ) );
@@ -1000,6 +1028,9 @@ void UISimpleQMakeEditor::accept()
 	// save current variable if needed
 	QListWidgetItem* curItem = lwOthersVariables->currentItem();
 	on_lwOthersVariables_currentItemChanged( curItem, curItem );
+	
+	// custom configuration
+	config << mProject->splitMultiLineValue( leCustomConfig->text() );
 	
 	mValues[ "TEMPLATE" ] = tmplate;
 	mValues[ "CONFIG" ] = config.join( " " );
