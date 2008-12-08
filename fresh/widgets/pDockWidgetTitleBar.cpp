@@ -133,7 +133,11 @@ QSize pDockWidgetTitleBar::iconSize() const
 	int size = style()->pixelMetric( QStyle::PM_SmallIconSize );
 	size -= style()->pixelMetric( QStyle::PM_DockWidgetTitleBarButtonMargin );
 	
-	if ( style()->objectName().toLower() != "windowsxp" )
+#ifdef Q_WS_WIN
+	if ( !qobject_cast<QWindowsXPStyle*>( style() ) )
+#elif defined Q_WS_MAC
+	if ( !qobject_cast<QMacStyle*>( style() ) )
+#endif
 	{
 		size -= style()->pixelMetric( QStyle::PM_DockWidgetTitleBarButtonMargin );
 	}
