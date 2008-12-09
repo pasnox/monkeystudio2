@@ -12,6 +12,7 @@ PACKAGE_DESTDIR	= $${PACKAGE_PWD}/bin
 PACKAGE_BUILD_PATH	= $${PACKAGE_PWD}/build
 
 # build mode
+CONFIG -= debug release debug_and_release
 CONFIG	+= qt warn_on thread x11 windows debug
 QT	+= xml
 
@@ -67,7 +68,7 @@ DEFINES	*= "PACKAGE_NAME=\"\\\"$${QMAKE_TARGET_PRODUCT}\\\"\"" \
 
 unix:!mac {
 	# default prefix path
-	isEmpty( prefix ):prefix = /usr
+	isEmpty( prefix ):prefix = /usr/local
 
 	!isEmpty( prefix ) {
 		# plugins path
