@@ -85,7 +85,7 @@ bool FileBrowser::setEnabled( bool b )
 		// add dock to dock toolbar entry
 		MonkeyCore::mainWindow()->dockToolBar( Qt::LeftToolBarArea )->addDock( mDock, infos().Caption, QIcon( pixmap() ) );
 		// create menu action for the dock
-		pActionsManager::setDefaultShortcut( mDock->toggleViewAction(), QKeySequence( "F2" ) );
+		pActionsManager::setDefaultShortcut( mDock->toggleViewAction(), QKeySequence( "F7" ) );
 		// restore settings
 		restoreSettings();
 		// set plugin enabled
