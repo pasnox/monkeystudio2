@@ -238,12 +238,12 @@ void UIMain::initMenuBar()
 	mb->menu( "mDocks", tr( "Docks" ) );
 	mb->menu( "mHelp", tr( "Help" ) );
 	mb->beginGroup( "mHelp" );
-		mb->action( "aManual", tr( "&Manual" ), QIcon( ":/help/icons/help/assistant.png" ), QString::null, tr( "Manual" ) );
-		mb->action( "aSeparator1" );
 		mb->action( "aAbout", tr( "&About..." ), QIcon( ":/application/icons/application/monkey2.png" ), QString::null, tr( "About application..." ) );
 		mb->action( "aAboutQt", tr( "About &Qt..." ), QIcon( ":/help/icons/help/qt.png" ), QString::null, tr( "About Qt..." ) );
+		mb->action( "aSeparator1" );
 #ifdef __COVERAGESCANNER__
 		mb->action( "aTestReport", tr( "&Test Report" ), QIcon( ) , tr( "Pause" ), tr( "Coverage Meter Test Report..." ) );
+		mb->action( "aSeparator2" );
 #endif
 	mb->endGroup();
 	// create action for styles
