@@ -69,7 +69,7 @@ pFileDialogResult MkSFileDialog::getOpenFileNames( QWidget* parent, const QStrin
 			*selectedFilter = fd.selectedFilter();
 		}
 		
-		result[ "filenames" ] = fd.selectedFiles().value( 0 );
+		result[ "filenames" ] = fd.selectedFiles();
 		result[ "codec" ] = fd.textCodec();
 		result[ "openreadonly" ] = fd.openReadOnly();
 	}
