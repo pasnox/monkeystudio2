@@ -9,7 +9,7 @@
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
 ** Home Page : http://www.monkeystudio.org
 **
-	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+		Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -43,17 +43,26 @@
 #include "../maininterface/ui/UISettings.h"
 #include "../maininterface/ui/UITranslator.h"
 
+#include <pIconManager.h>
+
 #include <QSplashScreen>
+#include <QPixmap>
+#include <QString>
+#include <QDate>
 
 void showMessage( QSplashScreen* s, const QString& m )
-{ s->showMessage( m, Qt::AlignRight | Qt::AlignBottom, Qt::white ); }
+{ s->showMessage( m, Qt::AlignRight | Qt::AlignBottom, s->property( "isXMas" ).toBool() ? Qt::red : Qt::white ); }
 
 QHash<const QMetaObject*, QObject*> MonkeyCore::mInstances;
 
 void MonkeyCore::init()
 {
 	// create splashscreen
-	QSplashScreen splash( QPixmap( ":/application/icons/application/splashscreen.png" ) );
+	bool isXMas = QDate::currentDate().month() == 12;
+	
+	QSplashScreen splash( pIconManager::pixmap( isXMas ? "splashscreen_christmas.png" : "splashscreen.png", ":/application" ) );
+	splash.setProperty( "isXMas", isXMas );
+	
 	QFont ft( splash.font() );
 #ifndef Q_OS_WIN
 	ft.setPointSize( ft.pointSize() -2 );
