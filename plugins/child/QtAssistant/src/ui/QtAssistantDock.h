@@ -27,6 +27,8 @@ protected:
 	BookmarkManager* mBookmarkManager;
 	BookmarkWidget* bwBookmarks;
 	QtAssistantBrowser* mBrowser;
+	QAction* aKeywordHelp;
+	QAction* aSearchHelp;
 	QAction* aOpenContent;
 	QAction* aOpenContentInNewTab;
 	QAction* aOpenIndex;
@@ -34,6 +36,10 @@ protected:
 	
 	bool eventFilter( QObject* obj, QEvent* e );
 	void hideEvent( QHideEvent* e );
+	
+	bool isWordCharacter( const QChar& character ) const;
+	QString currentWord( const QString& text, int cursorPos ) const;
+	QString currentWord() const;
 
 protected slots:
 	void showBrowser();
@@ -47,6 +53,8 @@ protected slots:
 	void addBookmark();
 	void indexingStarted();
 	void indexingFinished();
+	void keywordHelp();
+	void searchHelp();
 };
 
 #endif // QTASSISTANTDOCK_H

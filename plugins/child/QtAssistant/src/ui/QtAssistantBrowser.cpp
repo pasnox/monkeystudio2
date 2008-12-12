@@ -440,6 +440,11 @@ void QtAssistantBrowser::openInNewTabUrl( const QUrl& url )
 	hv->setSource( url );
 }
 
+void QtAssistantBrowser::setCurrentIndex( int index )
+{
+	twPages->setCurrentIndex( index );
+}
+
 void QtAssistantBrowser::previousTab()
 {
 	int index = twPages->currentIndex() -1;

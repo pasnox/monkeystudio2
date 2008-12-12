@@ -7,6 +7,8 @@
 
 #include <MonkeyCore.h>
 #include <pWorkspace.h>
+#include <pEditor.h>
+#include <QueuedStatusBar.h>
 
 #include <QKeyEvent>
 
@@ -47,6 +49,10 @@ QtAssistantDock::QtAssistantDock( QWidget* parent )
 	aOpenIndexInNewTab = new QAction( tr( "Open Link in New Tab" ), mHelpEngine->indexWidget() );
 	mHelpEngine->indexWidget()->addAction( aOpenIndex );
 	mHelpEngine->indexWidget()->addAction( aOpenIndexInNewTab );
+	
+	// help on keyword
+	aKeywordHelp = MonkeyCore::menuBar()->action( "mHelp/aKeywordHelp", tr( "Keyword Help" ), QIcon( ":/help/icons/help/assistant.png" ), "F1", tr( "Search the current word in indexes." ) );
+	aSearchHelp = MonkeyCore::menuBar()->action( "mHelp/aSearchHelp", tr( "Search Help" ), QIcon( ":/help/icons/help/assistant.png" ), "Shift+F1", tr( "Search the current word using the search engine." ) );
 
 	// create browser
 	mBrowser = new QtAssistantBrowser( mHelpEngine );
@@ -70,6 +76,8 @@ QtAssistantDock::QtAssistantDock( QWidget* parent )
 	connect( bwBookmarks, SIGNAL( requestShowLink( const QUrl& ) ), mBrowser, SLOT( openUrl( const QUrl& ) ) );
 	connect( bwBookmarks, SIGNAL( requestShowLinkInNewTab( const QUrl& ) ), mBrowser, SLOT( openInNewTabUrl( const QUrl& ) ) );
 	connect( bwBookmarks, SIGNAL( addBookmark() ), this, SLOT( addBookmark() ) );
+	connect( aKeywordHelp, SIGNAL( triggered() ), this, SLOT( keywordHelp() ) );
+	connect( aSearchHelp, SIGNAL( triggered() ), this, SLOT( searchHelp() ) );
 	
 	// browser child connection
 	MonkeyCore::workspace()->initChildConnections( mBrowser );
@@ -84,11 +92,14 @@ QtAssistantDock::QtAssistantDock( QWidget* parent )
 	// init documentation
 	mDocInstaller = new MkSQtDocInstaller( mHelpEngine );
 	if ( mDocInstaller->checkDocumentation() )
+	{
 		mBrowser->restoreLastShownPages();
+	}
 }
 
 QtAssistantDock::~QtAssistantDock()
 {
+	delete aKeywordHelp;
 	mBrowser->close();
 	delete mBrowser;
 }
@@ -234,4 +245,126 @@ void QtAssistantDock::indexingStarted()
 void QtAssistantDock::indexingFinished()
 {
 	pbProgress->setVisible( false );
+}
+
+bool QtAssistantDock::isWordCharacter( const QChar& character ) const
+{
+	return character.isLetterOrNumber() || character.isMark() || character == '_';
+}
+
+QString QtAssistantDock::currentWord( const QString& text, int cursorPos ) const
+{
+	int start = cursorPos;
+	int end = cursorPos;
+	QString word = text;
+	
+	while ( isWordCharacter( word[ start ] ) )
+	{
+		if ( start == 0 || !isWordCharacter( word[ start -1 ] ) )
+			break;
+		start--;
+	}
+	
+	while ( isWordCharacter( word[ end ] ) )
+	{
+		if ( end == word.length() -1 || !isWordCharacter( word[ end +1 ] ) )
+			break;
+		end++;
+	}
+	
+	if ( start != end || isWordCharacter( word[ cursorPos ] ) )
+	{
+		word = word.mid( start, end -start +1 );
+	}
+	else
+	{
+		word.clear();
+	}
+	
+	return word;
+}
+
+QString QtAssistantDock::currentWord() const
+{
+	QWidget* widget = QApplication::focusWidget();
+	
+	if ( !widget )
+	{
+		return QString::null;
+	}
+	
+	QString className = widget->metaObject()->className();
+	QString selectedText;
+	
+	if ( className == "QComboBox" )
+	{
+		QComboBox* cb = qobject_cast<QComboBox*>( widget );
+		
+		if ( cb->isEditable() )
+		{
+			widget = cb->lineEdit();
+			className = "QLineEdit";
+		}
+	}
+	
+	if ( className == "pEditor" )
+	{
+		pEditor* editor = qobject_cast<pEditor*>( widget );
+		QString tab = QString( "" ).fill( ' ', editor->tabWidth() );
+		
+		if ( editor->hasSelectedText() )
+		{
+			selectedText = editor->selectedText().replace( "\t", tab );
+			selectedText = currentWord( selectedText, 0 );
+		}
+		else
+		{
+			selectedText = editor->currentLineText().replace( "\t", tab );
+			selectedText = currentWord( selectedText, editor->cursorPosition().x() );
+		}
+	}
+	else if ( className == "QLineEdit" )
+	{
+		QLineEdit* lineedit = qobject_cast<QLineEdit*>( widget );
+		
+		if ( lineedit->hasSelectedText() )
+		{
+			selectedText = currentWord( lineedit->selectedText(), 0 );
+		}
+		else
+		{
+			selectedText = currentWord( lineedit->text(), lineedit->cursorPosition() );
+		}
+	}
+	
+	return selectedText;
+}
+
+void QtAssistantDock::keywordHelp()
+{
+	const QString selectedText = currentWord();
+	
+	if ( !selectedText.isEmpty() )
+	{
+		leLookFor->setText( selectedText );
+		mHelpEngine->indexWidget()->activateCurrentItem();
+		
+		if ( !mHelpEngine->indexWidget()->currentIndex().isValid() )
+		{
+			MonkeyCore::statusBar()->appendMessage( tr( "No help found for: %1" ).arg( selectedText ), 1000 );
+		}
+	}
+}
+
+void QtAssistantDock::searchHelp()
+{
+	const QString selectedText = currentWord();
+	
+	if ( !selectedText.isEmpty() )
+	{
+		QHelpSearchQuery query( QHelpSearchQuery::DEFAULT, QStringList( selectedText ) );
+		mHelpEngine->searchEngine()->search( QList<QHelpSearchQuery>() << query );
+		showBrowser();
+		mBrowser->setCurrentIndex( 0 );
+	}
 }

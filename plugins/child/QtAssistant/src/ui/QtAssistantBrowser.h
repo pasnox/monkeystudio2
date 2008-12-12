@@ -70,6 +70,7 @@ public slots:
 	
 	void openUrl( const QUrl& url );
 	void openInNewTabUrl( const QUrl& url );
+	void setCurrentIndex( int index );
 	
 	void searchZoomIn();
 	void searchZoomOut();
