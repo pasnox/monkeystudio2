@@ -28,9 +28,12 @@
 ****************************************************************************/
 #include "UIAbout.h"
 
+#include <pIconManager.h>
+
 #include <QFile>
 #include <QDesktopServices>
 #include <QTabBar>
+#include <QDate>
 
 const QString mInformations =
 "<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"font-size:small;\">"
@@ -54,13 +57,14 @@ const QString mDatasMask =
 const QList<pDatas> mTeamates = QList<pDatas>()
 	<< pDatas( "Filipe Azevedo", "Nox P@sNox", QObject::tr( "France" ), "pasnox@gmail.com", QObject::tr( "Creator & Principal Developer" ) )
 	<< pDatas( "Kopats Andrei", "hlamer", QObject::tr( "Belarus" ), "hlamer@tut.by", QObject::tr( "Principal Developer, Class Browser, Beloruss translator" ) )
-	<< pDatas( "Yannick", "xiantia", QObject::tr( "France" ), "xiantia@gmail.com", QObject::tr( "GNU Debugger plugin" ) )
+	<< pDatas( "Yannick", "xiantia", QObject::tr( "France" ), "xiantia@gmail.com", QObject::tr( "GNU Debugger Plugin" ) )
 	<< pDatas( "Roper Alexander", "Minirop", QObject::tr( "France" ), "minirop@peyj.com", QObject::tr( "Qt Pro Parser, Some Features/Help" ) )
 	<< pDatas( "Mashin Evgeniy", "evgenM", QObject::tr( "Russia" ), "mashin.zhenya@gmail.com", QObject::tr( "Many shared code between our IDEs" ) )
 	<< pDatas( "Manuel Schmidt", "oversize", QObject::tr( "Germany" ), "manuel@schmidtman.de", QObject::tr( "Web Developer & Web Designer" ) )
 	<< pDatas( "Julien Decologne", "Judd", QObject::tr( "France" ), "judd@hotmail.com", QObject::tr( "Splashscreen & Icons Designer" ) )
-	<< pDatas( "Plano Marc", "Marc31", QObject::tr( "France" ), "marc31boss@gmail.com", QObject::tr( "French translator" ) )
-	<< pDatas( "Lukic Djordje", "rumpl", QObject::tr( "Serbia" ), "rumplstiltzkin@gmail.com", QObject::tr( "SDK Script Generator" ) );
+	<< pDatas( "Plano Marc", "Marc31", QObject::tr( "France" ), "marc31boss@gmail.com", QObject::tr( "French Translator" ) )
+	<< pDatas( "Lukic Djordje", "rumpl", QObject::tr( "Serbia" ), "rumplstiltzkin@gmail.com", QObject::tr( "SDK Script Generator" ) )
+	<< pDatas( QString::fromUtf8( "Aurélien MICHON" ), "aurelien", QObject::tr( "France" ), "aurelien.french@gmail.com", QObject::tr( "Winter Splashscreen Designer" ) );
 
 const QList<pDatas> mDonors = QList<pDatas>()
 	<< pDatas( "Filipe Azevedo", "Nox P@sNox", QObject::tr( "France" ), "pasnox@gmail.com", QObject::tr( "No donations for now, you can use this <a href=\"http://sourceforge.net/project/project_donations.php?group_id=163493\">link</a> to make donation. Donations will help paying host/domain, and relatives things about the projects ( may need a mac book for better mac version :p )." ) );
@@ -94,6 +98,14 @@ UIAbout::UIAbout( QWidget* p )
 	// show informations table
 	lInformations->setTextInteractionFlags( Qt::TextBrowserInteraction | Qt::TextSelectableByKeyboard );
 	lInformations->setText( mInformations.arg( PACKAGE_NAME ).arg( PACKAGE_VERSION ).arg( PACKAGE_COPYRIGHTS ).arg( PACKAGE_DOMAIN ) );
+	
+	// logo
+	bool isXMas = QDate::currentDate().month() == 12;
+	
+	if ( isXMas )
+	{
+		lLogo->setPixmap( pIconManager::pixmap( "splashscreen_christmas.png", ":/application" ) );
+	}
 
 	// team
 	foreach ( pDatas i, mTeamates )
