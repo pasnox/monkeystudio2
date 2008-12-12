@@ -231,6 +231,16 @@ QPoint pEditor::cursorPosition() const
 	return mCursorPosition;
 }
 
+QString pEditor::currentLineText() const
+{
+	int line;
+	int index;
+	
+	getCursorPosition( &line, &index );
+	
+	return text( line );
+}
+
 bool pEditor::markerAtLine( int line, pEditor::MarkerDefineType markerId ) const
 {
 	return QsciScintilla::markersAtLine( line ) & ( 1 << markerId );
