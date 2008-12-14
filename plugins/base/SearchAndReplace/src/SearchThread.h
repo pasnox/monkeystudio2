@@ -1,7 +1,7 @@
 #ifndef SEARCHTHREAD_H
 #define SEARCHTHREAD_H
 
-#include "../consolemanager/pConsoleManager.h"
+#include "pConsoleManager.h"
 
 #include <QThread>
 #include <QStringList>

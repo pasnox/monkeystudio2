@@ -57,7 +57,6 @@
 
 #include "pChild.h"
 #include "../qscintillamanager/pEditor.h"
-#include "../qscintillamanager/ui/pSearch.h"
 
 using namespace pMonkeyStudio;
 
@@ -71,11 +70,6 @@ pWorkspace::pWorkspace( QMainWindow* p )
 	// add dock to main window
 	p->addDockWidget( Qt::LeftDockWidgetArea, listWidget() );
 
-	// add search widget to workspace layout
-	pSearch* ps = MonkeyCore::searchWidget();
-	ps->setVisible( false );
-	mLayout->addWidget( ps );
-	
 	// set background
 	//setBackground( ":/application/icons/application/background.png" );
 
@@ -97,7 +91,6 @@ pWorkspace::pWorkspace( QMainWindow* p )
 	connect( MonkeyCore::projectsManager(), SIGNAL( projectCustomContextMenuRequested( const QPoint& ) ), this, SLOT( internal_projectsManager_customContextMenuRequested( const QPoint& ) ) );
 	connect( MonkeyCore::projectsManager(), SIGNAL( currentProjectChanged( XUPProjectItem*, XUPProjectItem* ) ), this, SLOT( internal_currentProjectChanged( XUPProjectItem*, XUPProjectItem* ) ) );
 	connect( mFileWatcher, SIGNAL( fileChanged( const QString& ) ), this, SLOT( fileWatcher_fileChanged( const QString& ) ) );
-	connect( ps, SIGNAL( clearSearchResults() ), this, SIGNAL( clearSearchResults() ) );
 	
 	QAction* mFocusToEditor = new QAction( this );
 	mFocusToEditor->setIcon( QIcon( ":/edit/icons/edit/text.png" ) );
@@ -134,6 +127,12 @@ QList<pAbstractChild*> pWorkspace::children() const
 	foreach ( QWidget* w, documents() )
 		l << qobject_cast<pAbstractChild*>( w );
 	return l;
+}
+
+void pWorkspace::addSearhReplaceWidget (QWidget* widget)
+{
+	mLayout->addWidget( widget );
+
 }
 
 pAbstractChild* pWorkspace::newTextEditor()

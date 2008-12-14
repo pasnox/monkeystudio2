@@ -1,10 +1,10 @@
 /****************************************************************************
 **
 ** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Monkey Studio IDE
-** FileName  : MonkeyCore.h
-** Date      : 2008-01-14T00:36:52
+** Authors   : Andrei KOPATS aka hlamer <hlamer@tut.by>
+** Project   : Monkey Studio Base Plugins
+** FileName  : SearchResultsDock.h
+** Date      : 2008-01-14T00:39:57
 ** License   : GPL
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
 ** Home Page : http://www.monkeystudio.org
@@ -26,51 +26,52 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
-#ifndef MONKEYCORE_H
-#define MONKEYCORE_H
+/*!
+	\file SearchResultsDock.h
+	\date 
+	\author Andrei KOPATS aka hlamer <hlamer@tut.by>
+	\brief Search results dock
+*/
+
+#ifndef SEARCHRESULTSDOCK_H
+#define SEARCHRESULTSDOCK_H
 
 #include <fresh.h>
+#include "pConsoleManager.h"
 
-#include <QObject>
-#include <QHash>
+class QTreeWidget;
 
-class Settings;
-class PluginsManager;
-class UIMain;
-class pMenuBar;
-class pRecentsManager;
-class pActionsManager;
-class pToolsManager;
-class XUPProjectManager;
-class pFileManager;
-class pWorkspace;
-class QStatusBar;
-class pConsoleManager;
-class QueuedStatusBar;
-
-class Q_MONKEY_EXPORT MonkeyCore : public QObject
+/*!
+	Search results dock
+	
+	Can display results of searching in the dirrectory
+	For replace function, results can be checkable
+*/
+class SearchResultsDock : public pDockWidget
 {
 	Q_OBJECT
+	enum DataRole
+	{
+		FILE_NAME = Qt::UserRole +1,
+		POSITION
+	};
 	
 public:
-	static void init();
-	static Settings* settings();
-	static PluginsManager* pluginsManager();
-	static UIMain* mainWindow();
-	static pMenuBar* menuBar();
-	static pRecentsManager* recentsManager();
-	static pActionsManager* actionsManager();
-	static pToolsManager* toolsManager();
-	static XUPProjectManager* projectsManager();
-	static pFileManager* fileManager();
-	static pWorkspace* workspace();
-	static pConsoleManager* consoleManager();
-	static QueuedStatusBar* statusBar();
-// variablemaanger
-// templates manager
+	SearchResultsDock( QWidget* parent = 0 );
+	
+	void clearSearchResults();
+	
+protected:
+	QTreeWidget* mTree;
 
-private:
-	static QHash<const QMetaObject*, QObject*> mInstances;
+signals:
+	void resultActivated (QString fileName, QPoint position);
+public slots:
+	void appendSearchResult( const pConsoleManager::Step& );
+	
+protected slots:
+	void itemPressed( QTreeWidgetItem* );
+	void itemChanged( QTreeWidgetItem* );
 };
 
-#endif // MONKEYCORE_H
+#endif // SEARCHRESULTSDOCK_H

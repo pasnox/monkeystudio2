@@ -28,7 +28,6 @@
 ****************************************************************************/
 #include "pChild.h"
 #include "../qscintillamanager/pEditor.h"
-#include "../qscintillamanager/ui/pSearch.h"
 #include "../coremanager/MonkeyCore.h"
 
 #include <qscintilla.h>
@@ -106,7 +105,7 @@ bool pChild::isUndoAvailable() const
 { return mEditor->isUndoAvailable(); }
 
 void pChild::invokeSearch () 
-{ MonkeyCore::searchWidget()->showSearchFile ();}
+{ /*MonkeyCore::searchWidget()->showSearchFile ();*/}
 
 void pChild::undo()
 { mEditor->undo(); }

@@ -35,7 +35,6 @@
 #include "../consolemanager/pConsoleManager.h"
 #include "../workspace/pFileManager.h"
 #include "../pluginsmanager/PluginsManager.h"
-#include "../qscintillamanager/ui/pSearch.h"
 #include "../queuedstatusbar/QueuedStatusBar.h"
 
 #include <fresh.h>

@@ -1,9 +1,9 @@
 /****************************************************************************
 **
 ** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
+** Authors   : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
 ** Project   : Monkey Studio IDE
-** FileName  : pSearch.h
+** FileName  : SearchWidget.h
 ** Date      : 2008-01-14T00:37:03
 ** License   : GPL
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
@@ -26,15 +26,15 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
-#ifndef PSEARCH_H
-#define PSEARCH_H
+#ifndef SEARCHWIDGET_H
+#define SEARCHWIDGET_H
 
 #include <QWidget>
 #include <QStringList>
 
-#include <fresh.h>
+#include "SearchAndReplace.h"
 
-#include "../../consolemanager/pConsoleManager.h"
+#include <fresh.h>
 
 class QsciScintilla;
 class SearchThread;
@@ -47,59 +47,35 @@ class QLabel;
 class QCheckBox;
 class QComboBox;
 
-class Q_MONKEY_EXPORT pSearch : public QWidget
+class Q_MONKEY_EXPORT SearchWidget : public QWidget
 {
 	Q_OBJECT
-	friend class MonkeyCore;
-	friend class pWorkspace;
 	
-private:
-	enum OperType 
-	{
-		SEARCH = 0, 
-		REPLACE = 1
-	};
-	enum WhereType
-	{
-		FILE = 0,
-		//PROJECT = 1, 
-		FOLDER = 2
-	};
+public:
+	SearchWidget( QWidget* parent = NULL);
 
-	OperType mOperType;
-	WhereType mWhereType;
+	void show (SearchAndReplace::Mode mode);
 	
-	// Used for counting of occurences when searching in folder/project
-	int mOccurencesFinded;
-	int mFilesProcessed;
-	pDockWidget* fake;
+	void setSearchText (const QString& text);
+	void setNextButtonText (const QString& text);
+	void setNextButtonIcon (const QIcon& icon);
 	
-public slots:
-	void showSearchFile ();
-	void showReplaceFile ();
-	//void showSearchProject ();
-	//void showReplaceProject ();
-	void showSearchFolder ();
-	void showReplaceFolder ();
-
-
-	bool on_tbPrevious_clicked();
-	bool on_tbNext_clicked();
-	void on_tbReplace_clicked();
-	void on_tbReplaceAll_clicked();
-
-protected slots:
-	void threadFinished ();
-	// slot calling, when thread emits search result
-	void occurenceFinded ();
-	// slog calling when thread processed file. 
-	// Parameter - total count of files
-	void fileProcessed (int count);
-
-	void on_tbPath_clicked ();
-
+	bool isRegExp ();
+	bool isCaseSensetive ();
+	
+	QString searchText();
+	QString replaceText();
+	QString path();
+	QString mask();
+	
+	void searchAddToRecents (QString);
+	void replaceAddToRecents (QString);
+	void pathAddToRecents (QString);
+	void maskAddToRecents (QString);
+	
 protected:
-
+	SearchAndReplace::Mode mMode;
+	
 	QGridLayout* layout;
 
 	//search
@@ -124,6 +100,11 @@ protected:
 	QLabel* lMask;
 	QComboBox* cobMask;
 
+	QStringList searchRecents;
+	QStringList replaceRecents;
+	QStringList maskRecents;
+	QStringList pathRecents;
+	
 	void addSearchToLayout (int row);
 	void addReplaceToLayout (int row);
 	void addFolderToLayout (int row);
@@ -132,45 +113,16 @@ protected:
 	void removeReplaceFromLayout ();
 	void removeFolderFromLayout ();
 
-	bool isEditorAvailible ();
-	bool isProjectAvailible ();
-
-	SearchThread* mSearchThread;
-
-	/* Search text in the file. 
-	 * Search Next, if next==true;  Search Previous, if next = false
-	 * Continue from start, when end riched, if wrap = true;
-     */
-	bool searchFile (bool next, bool wrap = true);
-
-	int replace (bool all);
-
-	pSearch( QWidget* parent = 0 );
-	virtual ~pSearch(){};
 	void keyPressEvent( QKeyEvent* );
 
-	void show ();
-    
-    void showMessage (QString status);
+protected slots:
+	void onPathClicked ();
 	
-	QStringList searchRecents;
-	QStringList replaceRecents;
-	QStringList maskRecents;
-	QStringList pathRecents;
-
-	bool isSearchTextValid ();
-	bool isReplaceTextValid ();
-	bool isPathValid ();
-	bool isMaskValid ();
-	
-	void searchAddToRecents (QString);
-	void replaceAddToRecents (QString);
-	void pathAddToRecents (QString);
-	void maskAddToRecents (QString);
-
 signals:
-	void clearSearchResults ();
-
+	bool previousClicked();
+	bool nextClicked();
+	void replaceClicked();
+	void replaceAllClicked();
 };
 
-#endif // PSEARCH_H
+#endif // SEARCHWIDGET_H

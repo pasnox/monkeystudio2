@@ -48,7 +48,9 @@ public:
 	pAbstractChild* currentChild() const;
 	pAbstractChild* child( int ) const;
 	QList<pAbstractChild*> children() const;
-
+	
+	void addSearhReplaceWidget (QWidget* widget);
+	
 protected:
 	QFileSystemWatcher* mFileWatcher;
 	virtual void closeDocument( QWidget* document );

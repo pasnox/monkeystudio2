@@ -37,7 +37,6 @@
 #include "../workspace/pFileManager.h"
 #include "../workspace/pWorkspace.h"
 #include "../consolemanager/pConsoleManager.h"
-#include "../qscintillamanager/ui/pSearch.h"
 #include "../queuedstatusbar/QueuedStatusBar.h"
 
 #include "../maininterface/ui/UISettings.h"
@@ -206,13 +205,6 @@ pConsoleManager* MonkeyCore::consoleManager()
 	if ( !mInstances.contains( &pConsoleManager::staticMetaObject ) )
 		mInstances[&pConsoleManager::staticMetaObject] = new pConsoleManager( qApp );
 	return qobject_cast<pConsoleManager*>( mInstances[&pConsoleManager::staticMetaObject] );
-}
-
-pSearch* MonkeyCore::searchWidget()
-{
-	if ( !mInstances.contains( &pSearch::staticMetaObject ) )
-		mInstances[&pSearch::staticMetaObject] = new pSearch();
-	return qobject_cast<pSearch*>( mInstances[&pSearch::staticMetaObject] );
 }
 
 QueuedStatusBar* MonkeyCore::statusBar()
