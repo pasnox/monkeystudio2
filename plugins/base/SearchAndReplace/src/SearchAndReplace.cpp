@@ -118,6 +118,8 @@ bool SearchAndReplace::setEnabled( bool b )
 	{
 		delete mWidget;
 		mWidget = NULL;
+		delete mDock;
+		mDock = NULL;
 		// set plugin disabled
 		mPluginInfos.Enabled = false;
 	}
