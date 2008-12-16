@@ -102,8 +102,17 @@ bool SearchAndReplace::setEnabled( bool b )
 
 		
 		mDock = new SearchResultsDock ();
+		mDock->setVisible( false );
 		MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mDock, infos().Caption, QIcon(":/icons/tabsearch.png") );
 		
+		MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFile", tr( "&Replace in the file..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+R" ), tr( "Replace in the file..." ) )->setEnabled( true );
+		//MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchProject", tr( "&Search in the project..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "" ), tr( "Search in the project..." ) )->setEnabled( true );
+		//MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceProject", tr( "&Replace in the project..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "" ), tr( "Replace in the project..." ) )->setEnabled( true );
+		MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFolder", tr( "&Search in the folder..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+Alt+F" ), tr( "Search in the folder..." ) )->setEnabled( true );
+		MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFolder", tr( "&Replace in the folder..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+Alt+R" ), tr( "Replace in the folder..." ) )->setEnabled( true );
+		MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchPrevious", tr( "Search Previous" ), QIcon( ":/edit/icons/edit/previous.png" ), tr( "Shift+F3" ), tr( "Search Previous" ) )->setEnabled( true );
+		MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchNext", tr( "Search Next" ), QIcon( ":/edit/icons/edit/next.png" ), tr( "F3" ), tr( "Search Next" ) )->setEnabled( true );
+
 		connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFile" ), SIGNAL( triggered() ), SLOT( showSearchFile() ) );
 		connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFile" ), SIGNAL( triggered() ), SLOT( showReplaceFile() ) );
 		//connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchProject" ), SIGNAL( triggered() ), SLOT( showSearchProject() ) );
@@ -111,7 +120,6 @@ bool SearchAndReplace::setEnabled( bool b )
 		connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFolder" ), SIGNAL( triggered() ), SLOT( showSearchFolder() ) );
 		connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFolder" ), SIGNAL( triggered() ), SLOT( showReplaceFolder() ) );
 		connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchNext" ), SIGNAL( triggered() ), this, SLOT( onNextClicked() ) );		
-		
 		mPluginInfos.Enabled = true;
 	}
 	else if ( !b && isEnabled() )
@@ -120,6 +128,15 @@ bool SearchAndReplace::setEnabled( bool b )
 		mWidget = NULL;
 		delete mDock;
 		mDock = NULL;
+		
+		delete MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFile" );
+		//delete MonkeyCore::menuBar()->deleteAaction( "mEdit/mSearchReplace/aSearchProject" );
+		//delete MonkeyCore::menuBar()->deleteAaction( "mEdit/mSearchReplace/aReplaceProject" );
+		delete MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFolder" );
+		delete MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFolder" );
+		delete MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchPrevious" );
+		delete MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchNext" );
+		
 		// set plugin disabled
 		mPluginInfos.Enabled = false;
 	}
@@ -272,9 +289,12 @@ int SearchAndReplace::replace(bool all)
 
 void SearchAndReplace::showSearchFile () 
 {
-	mMode = SEARCH_FILE;
-	updateSearchTextOnUI ();
-	mWidget->show (mMode);
+	if (dynamic_cast<pChild*> (MonkeyCore::workspace()->currentChild()))
+	{
+		mMode = SEARCH_FILE;
+		updateSearchTextOnUI ();
+		mWidget->show (mMode);
+	}
 };
 
 void SearchAndReplace::showReplaceFile () 

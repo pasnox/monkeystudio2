@@ -345,9 +345,6 @@ void pWorkspace::internal_currentChanged( int i )
 	MonkeyCore::statusBar()->setIndentMode( editor ? ( editor->indentationsUseTabs() ? 1 : 0 ) : -1 );
 	MonkeyCore::statusBar()->setCursorPosition( c ? c->cursorPosition() : QPoint( -1, -1 ) );
 
-	// search dock
-	//MonkeyCore::searchDock()->setEditor( hasChild ? c->currentEditor() : 0 );
-	
 	// update item tooltip
 	if ( hasChild )
 		listWidget()->setItemToolTip( i, c->currentFile() );
