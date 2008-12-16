@@ -44,6 +44,8 @@
 
 #include <QDebug>
 
+#include "pWorkspace.h"
+
 #include "SearchAndReplace.h"
 
 #include "SearchWidget.h"
@@ -188,7 +190,28 @@ void SearchWidget::show (SearchAndReplace::Mode mode)
 	cobPath->lineEdit()->setText (QDir::current().absolutePath());
 	
 	cobSearch->setFocus();
-	cobSearch->lineEdit()->selectAll ();    
+
+	switch (mode)
+	{
+		case SearchAndReplace::REPLACE_FILE:
+			QWidget::setTabOrder (cobSearch->lineEdit(), cobReplace->lineEdit());
+		break;
+#if 0
+		SEARCH_PROJECT = 2,
+		REPLACE_PROJECT = 3
+#endif
+		case SearchAndReplace::SEARCH_DIRRECTORY:
+			QWidget::setTabOrder (cobSearch->lineEdit(), cobPath->lineEdit());
+		break;
+		case SearchAndReplace::REPLACE_DIRRECTORY:
+			QWidget::setTabOrder (cobSearch->lineEdit(), cobReplace->lineEdit());
+			QWidget::setTabOrder (cobReplace->lineEdit(), cobPath->lineEdit());
+		break;
+		default:
+		break;
+	}
+	
+	cobSearch->lineEdit()->selectAll ();
 	
 	QWidget::show ();
 }
@@ -275,7 +298,7 @@ void SearchWidget::keyPressEvent( QKeyEvent* e )
 	{
 		case Qt::Key_Escape:
 			hide();
-			//MonkeyCore::workspace()->focusToEditor_triggered ();
+			MonkeyCore::workspace()->focusToEditor_triggered ();
 		break;
 		case Qt::Key_Enter:
 		case Qt::Key_Return:
