@@ -50,13 +50,11 @@ MessageBoxDocks::MessageBoxDocks( QObject* parent )
 	mBuildStep = new UIBuildStep;
 	mOutput = new UIOutput;
 	mCommand = new UICommand;
-	mSearchResult = new UISearchResult;
 	
 	// set defaultshortcuts
 	pActionsManager::setDefaultShortcut( mBuildStep->toggleViewAction(), QKeySequence( "F9" ) );
 	pActionsManager::setDefaultShortcut( mOutput->toggleViewAction(), QKeySequence( "F10" ) );
 	pActionsManager::setDefaultShortcut( mCommand->toggleViewAction(), QKeySequence( "F11" ) );
-	pActionsManager::setDefaultShortcut( mSearchResult->toggleViewAction(), QKeySequence( "F12" ) );
 	
 	// connections
 	connect( mBuildStep->lwBuildSteps, SIGNAL( itemPressed( QListWidgetItem* ) ), this, SLOT( lwBuildSteps_itemPressed( QListWidgetItem* ) ) );
@@ -68,13 +66,6 @@ MessageBoxDocks::MessageBoxDocks( QObject* parent )
 	connect( MonkeyCore::consoleManager(), SIGNAL( commandStateChanged( const pCommand&, QProcess::ProcessState ) ), this, SLOT( commandStateChanged( const pCommand&, QProcess::ProcessState ) ) );
 	connect( MonkeyCore::consoleManager(), SIGNAL( commandSkipped( const pCommand& ) ), this, SLOT( commandSkipped( const pCommand& ) ) );
 	connect( MonkeyCore::consoleManager(), SIGNAL( newStepAvailable( const pConsoleManager::Step& ) ), this, SLOT( appendStep( const pConsoleManager::Step& ) ) );
-	connect( mSearchResult->twSearchResults, SIGNAL( itemDoubleClicked( QTreeWidgetItem*, int ) ), this, SLOT( twSearchResults_itemPressed( QTreeWidgetItem* ) ) );
-	
-	// NOTE we sometimes disconnect this signal
-	connect( mSearchResult->twSearchResults, SIGNAL( itemChanged( QTreeWidgetItem*, int ) ), this, SLOT( twSearchResults_itemChanged( QTreeWidgetItem* ) ) );
-	
-	connect( MonkeyCore::workspace(), SIGNAL( appendSearchResult( const pConsoleManager::Step& ) ), this, SLOT( appendSearchResult( const pConsoleManager::Step& ) ) );
-	connect( MonkeyCore::workspace(), SIGNAL( clearSearchResults() ), this, SLOT( clearSearchResults() ) );
 }
 
 /*!
@@ -87,7 +78,6 @@ MessageBoxDocks::~MessageBoxDocks()
 	delete mBuildStep;
 	delete mOutput;
 	delete mCommand;
-	delete mSearchResult;
 }
 
 /*!
@@ -265,60 +255,6 @@ void MessageBoxDocks::appendStep( const pConsoleManager::Step& s )
 }
 
 /*!
-	Append search result to Search Results dock
-	
-	Search result representing by same structure, as Build Step
-	\param s Search result to append
-*/
-void MessageBoxDocks::appendSearchResult( const pConsoleManager::Step& s )
-{
-	disconnect( mSearchResult->twSearchResults, SIGNAL( itemChanged( QTreeWidgetItem*, int ) ), this, SLOT( twSearchResults_itemChanged( QTreeWidgetItem* ) ) );
-	
-	showSearchResults();
-	QTreeWidgetItem* it = NULL;
-	QTreeWidgetItem* parentItem = NULL;
-	if (s.mType == pConsoleManager::stResultForReplace)
-	{
-		QString parentItemFile = QString::null;
-		if (mSearchResult->twSearchResults->topLevelItemCount())
-		{
-			parentItem = mSearchResult->twSearchResults->topLevelItem(mSearchResult->twSearchResults->topLevelItemCount()-1);
-			parentItemFile = parentItem->data (0, Qt::UserRole + 2).toString();
-		}
-		if (s.mFileName != parentItemFile) // it's a next file, need create next item (or it's just a first search result)
-		{
-			parentItem = new QTreeWidgetItem (mSearchResult->twSearchResults);
-			parentItem->setData( 0, Qt::UserRole +2, s.mFileName ); // filename
-			parentItem->setFlags (parentItem->flags() | Qt::ItemIsUserCheckable);
-			parentItem->setCheckState (0, Qt::Checked);
-		}
-		it = new QTreeWidgetItem( parentItem );
-	}
-	else
-	{
-		it = new QTreeWidgetItem( mSearchResult->twSearchResults );
-	}
-	
-	if (parentItem) // stResultForReplace
-		parentItem->setText (0, QString ("%1 (%2)").arg (s.mFileName).arg(parentItem->childCount()));
-	
-	// set item infos
-	it->setText( 0, s.mText );
-	it->setToolTip( 0, s.mFullText );
-	it->setData( 0, Qt::UserRole +1, s.mType ); // type
-	it->setData( 0, Qt::UserRole +2, s.mFileName ); // filename
-	it->setData( 0, Qt::UserRole +3, s.mPosition ); // position
-	
-	if (s.mType == pConsoleManager::stResultForReplace)
-	{
-		it->setFlags (it->flags() | Qt::ItemIsUserCheckable);
-		it->setCheckState (0, Qt::Checked);
-	}
-	
-	connect( mSearchResult->twSearchResults, SIGNAL( itemChanged( QTreeWidgetItem*, int ) ), this, SLOT( twSearchResults_itemChanged( QTreeWidgetItem* ) ) );
-}
-
-/*!
 	Show Build Steps dock
 */
 void MessageBoxDocks::showBuild()
@@ -349,16 +285,6 @@ void MessageBoxDocks::showLog()
 }
 
 /*!
-	Show Search Results dock
-*/
-void MessageBoxDocks::showSearchResults()
-{
-	// show it if need
-	if ( !mSearchResult->isVisible() )
-		mSearchResult->show();
-}
-
-/*!
 	Show next error on Build Steps dock
 */
 void MessageBoxDocks::showNextError()
@@ -375,14 +301,6 @@ void MessageBoxDocks::showNextError()
 		mBuildStep->lwBuildSteps->setCurrentRow( i );
 		lwBuildSteps_itemPressed( mBuildStep->lwBuildSteps->item( i ) );
 	}
-}
-
-/*!
-	Clear Search Results dock
-*/
-void MessageBoxDocks::clearSearchResults()
-{
-	mSearchResult->twSearchResults->clear();
 }
 
 /*!
@@ -431,13 +349,8 @@ void MessageBoxDocks::lwBuildSteps_itemPressed( QListWidgetItem* it )
 	{
 		if ( topLevelProject )
 		{
-		qWarning() << "searching file:" << fn;
 			QString findFile = fn;
 			QFileInfoList files = topLevelProject->findFile( findFile );
-			
-			foreach ( const QFileInfo& fi, files )
-				qWarning() << fi.absoluteFilePath();
-			qWarning() << "count" << files.count();
 			
 			switch ( files.count() )
 			{
@@ -469,63 +382,6 @@ void MessageBoxDocks::lwBuildSteps_itemPressed( QListWidgetItem* it )
 		QString codec = project ? project->temporaryValue( "codec" ).toString() : pMonkeyStudio::defaultCodec();
 		MonkeyCore::fileManager()->goToLine( fn, it->data( Qt::UserRole +3 ).toPoint(), true, codec );
 	}
-}
-
-/*!
-	Handler of pressing on item in the Search Results dock
-
-	Opens file/line in the editor
-	\param it Item, which was pressed
-*/
-void MessageBoxDocks::twSearchResults_itemPressed( QTreeWidgetItem* it )
-{
-	// get filename
-	QString s = it->data( 0, Qt::UserRole +2 ).toString();
-	MonkeyCore::fileManager()->goToLine( s, it->data( 0, Qt::UserRole +3 ).toPoint(), true, pMonkeyStudio::defaultCodec() );
-}
-
-/*!
-	Handler of change of item. Will be executed, when user will check/uncheck item
-
-	Need check/uncheck children according with parent, of check-uncheck parent according with state of children
-*/
-void MessageBoxDocks::twSearchResults_itemChanged( QTreeWidgetItem* it )
-{
-	disconnect( mSearchResult->twSearchResults, SIGNAL( itemChanged( QTreeWidgetItem*, int ) ), this, SLOT( twSearchResults_itemChanged( QTreeWidgetItem* ) ) );
-	if (it->childCount()) // It's a parent item (File name). Need update children checked state
-	{
-		for (int i = 0; i < it->childCount(); i++)
-		{
-			it->child (i)->setCheckState (0, it->checkState (0));
-		}
-	}
-	else // It's a child (occurence). Need update parent ceched state
-	{
-		QTreeWidgetItem* parent = it->parent ();
-		if (parent)
-		{
-			bool haveChecked = false;
-			bool haveUnChecked = false;
-			for (int i = 0; i < parent->childCount(); i++)
-			{
-				if (parent->child(i)->checkState (0) == Qt::Checked)
-				{
-					haveChecked = true;
-				}
-				else
-				{
-					haveUnChecked = true;
-				}
-			}
-			if (haveChecked && ! haveUnChecked)
-				parent->setCheckState (0, Qt::Checked);
-			else if (! haveChecked && haveUnChecked)
-				parent->setCheckState (0, Qt::Unchecked);
-			else // both
-				parent->setCheckState (0, Qt::PartiallyChecked);
-		}
-	}
-	connect( mSearchResult->twSearchResults, SIGNAL( itemChanged( QTreeWidgetItem*, int ) ), this, SLOT( twSearchResults_itemChanged( QTreeWidgetItem* ) ) );
 }
 
 /*!

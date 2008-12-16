@@ -12,3 +12,4 @@ SOURCES	= src/SearchAndReplace.cpp \
 	src/SearchResultsDock.cpp \
 	src/SearchThread.cpp
 
+RESOURCES	*= resources/SearchAndReplace.qrc
