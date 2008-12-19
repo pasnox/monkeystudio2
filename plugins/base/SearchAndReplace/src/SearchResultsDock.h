@@ -65,7 +65,8 @@ protected:
 	QTreeWidget* mTree;
 
 signals:
-	void resultActivated (QString fileName, QPoint position);
+	void resultActivated (const QString& fileName, const QPoint& position);
+	
 public slots:
 	void appendSearchResult( const pConsoleManager::Step& );
 	

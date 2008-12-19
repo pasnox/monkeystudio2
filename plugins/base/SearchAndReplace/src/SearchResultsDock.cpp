@@ -131,8 +131,10 @@ void SearchResultsDock::appendSearchResult( const pConsoleManager::Step& s )
 void SearchResultsDock::itemPressed ( QTreeWidgetItem* it )
 {
 	// get filename
+	//qDebug () << "pressed";
 	QString s = it->data( 0, FILE_NAME ).toString();
 	QPoint position = it->data( 0, POSITION ).toPoint();
+	//qDebug () << s << position;
 	emit resultActivated (s, position);
 }
 

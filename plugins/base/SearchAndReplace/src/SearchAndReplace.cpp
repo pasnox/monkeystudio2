@@ -103,6 +103,9 @@ bool SearchAndReplace::setEnabled( bool b )
 		
 		mDock = new SearchResultsDock ();
 		mDock->setVisible( false );
+		
+		connect (mDock, SIGNAL (resultActivated (const QString&, const QPoint&)), this, SLOT (makeGoTo (const QString&, const QPoint&)));
+		
 		MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mDock, infos().Caption, QIcon(":/icons/tabsearch.png") );
 		
 		MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFile", tr( "&Replace in the file..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+R" ), tr( "Replace in the file..." ) )->setEnabled( true );
@@ -382,10 +385,10 @@ void SearchAndReplace::onNextClicked()
 				mWidget->setNextButtonText (tr("&Stop"));
 				mWidget->setNextButtonIcon (QIcon(":/console/icons/console/stop.png"));
 				
-				connect (mSearchThread, SIGNAL (appendSearchResult( const pConsoleManager::Step& )), MonkeyCore::workspace(), SIGNAL (appendSearchResult( const pConsoleManager::Step& )));
-				connect (mSearchThread, SIGNAL (finished ()), this, SLOT (threadFinished()));
+				connect (mSearchThread, SIGNAL (appendSearchResult( const pConsoleManager::Step& )), mDock, SLOT (appendSearchResult( const pConsoleManager::Step& )));
 				connect (mSearchThread, SIGNAL (appendSearchResult( const pConsoleManager::Step& )), this, SLOT (occurenceFound ()));
 				connect (mSearchThread, SIGNAL (changeProgress(int)), this, SLOT (fileProcessed (int)));
+				connect (mSearchThread, SIGNAL (finished ()), this, SLOT (threadFinished()));
 				mSearchThread->start();    
 			}
 		break;
@@ -422,6 +425,11 @@ void SearchAndReplace::onReplaceAllClicked()
 
 	// show occurence number replaced
 	showMessage( count ? tr( "%1 occurences replaced" ).arg( count ) : tr( "Nothing To Repalce" ) );
+}
+
+void SearchAndReplace::makeGoTo (const QString& file, const QPoint& position)
+{
+	MonkeyCore::workspace()->goToLine(file, position, true, pMonkeyStudio::defaultCodec());
 }
 
 void SearchAndReplace::threadFinished ()

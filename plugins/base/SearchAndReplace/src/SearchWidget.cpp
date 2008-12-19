@@ -135,6 +135,7 @@ SearchWidget::SearchWidget( QWidget* parent )
 	connect(tbPath, SIGNAL( clicked() ), this, SLOT( onPathClicked() ));
 	
 	connect (tbNext, SIGNAL (clicked()), this, SIGNAL (nextClicked ()));
+//	connect (cobSearch->lineEdit(), SIGNAL (textEdited (const QString&)), this, SIGNAL (nextClicked ()));
 	
 	connect (tbPrevious, SIGNAL (clicked()), this, SIGNAL (previousClicked ()));
 	connect (tbReplace, SIGNAL (clicked()), this, SIGNAL (replaceClicked ()));
@@ -151,6 +152,8 @@ SearchWidget::SearchWidget( QWidget* parent )
 	mOperType = SEARCH;
 	mWhereType = FILE;
 #endif
+
+	mDefaultEditColor = cobSearch->lineEdit()->palette().color (QPalette::Base);
 }
 
 void SearchWidget::show (SearchAndReplace::Mode mode)
@@ -378,6 +381,23 @@ void SearchWidget::maskAddToRecents (QString text)
 		}
 		cobMask->clear();
 		cobMask->addItems (maskRecents);
+	}
+}
+
+void SearchWidget::setSearchLineEditColor (LineEditColor color)
+{
+	QPalette palette = cobSearch->lineEdit()->palette();
+	switch (color)
+	{
+		case GREEN:
+			palette.setColor (QPalette::Base, Qt::green);
+		break;
+		case RED:
+			palette.setColor (QPalette::Base, Qt::green);
+		break;
+		case DEFAULT:
+			palette.setColor (QPalette::Base, mDefaultEditColor);
+		break;
 	}
 }
 

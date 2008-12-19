@@ -51,6 +51,12 @@ class Q_MONKEY_EXPORT SearchWidget : public QWidget
 {
 	Q_OBJECT
 	
+	enum LineEditColor 
+	{
+		GREEN,
+		RED,
+		DEFAULT
+	};
 public:
 	SearchWidget( QWidget* parent = NULL);
 
@@ -73,8 +79,11 @@ public:
 	void pathAddToRecents (QString);
 	void maskAddToRecents (QString);
 	
+	void setSearchLineEditColor (LineEditColor);
 protected:
 	SearchAndReplace::Mode mMode;
+	
+	QColor mDefaultEditColor;
 	
 	QGridLayout* layout;
 

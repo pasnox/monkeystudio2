@@ -109,6 +109,9 @@ protected slots:
 	void onReplaceClicked();
 	void onReplaceAllClicked();
 	
+	// from search results dock
+	void makeGoTo (const QString& file, const QPoint& position);
+	
 	// from search thread
 	void threadFinished ();
 	void occurenceFound ();
