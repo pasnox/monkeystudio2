@@ -4,6 +4,9 @@
 #include <QLayout>
 #include <QToolBar>
 #include <QFrame>
+#ifdef Q_WS_WIN
+#include <QWindowsXPStyle>
+#endif
 
 #include <QDebug>
 
