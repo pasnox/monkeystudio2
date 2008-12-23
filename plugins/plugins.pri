@@ -46,16 +46,12 @@ CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 	unix:OBJECTS_DIR	= $${PACKAGE_BUILD_PATH}/plugins/debug/.obj/unix
 	win32:OBJECTS_DIR	= $${PACKAGE_BUILD_PATH}/plugins/debug/.obj/win32
 	mac:OBJECTS_DIR	= $${PACKAGE_BUILD_PATH}/plugins/debug/.obj/mac
-	UI_DIR	= $${PACKAGE_BUILD_PATH}/plugins/debug/.ui
 	MOC_DIR	= $${PACKAGE_BUILD_PATH}/plugins/debug/.moc
-	RCC_DIR	= $${PACKAGE_BUILD_PATH}/plugins/debug/.rcc
 } else {
 	#Release
 	win32:LIBS	+= -lmonkeystudio
 	unix:OBJECTS_DIR	= $${PACKAGE_BUILD_PATH}/plugins/release/.obj/unix
 	win32:OBJECTS_DIR	= $${PACKAGE_BUILD_PATH}/plugins/release/.obj/win32
 	mac:OBJECTS_DIR	= $${PACKAGE_BUILD_PATH}/plugins/release/.obj/mac
-	UI_DIR	= $${PACKAGE_BUILD_PATH}/plugins/release/.ui
 	MOC_DIR	= $${PACKAGE_BUILD_PATH}/plugins/release/.moc
-	RCC_DIR	= $${PACKAGE_BUILD_PATH}/plugins/release/.rcc
 }
