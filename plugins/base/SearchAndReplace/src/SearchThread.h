@@ -8,7 +8,7 @@
 
 class QFile;
 
-class Q_MONKEY_EXPORT SearchThread : public QThread
+class SearchThread : public QThread
 {
     Q_OBJECT
 public:

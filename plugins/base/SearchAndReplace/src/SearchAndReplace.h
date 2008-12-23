@@ -44,7 +44,7 @@ class SearchWidget;
 /*!
 	Main class of the SearchAndReplace plugin
 */
-class Q_MONKEY_EXPORT SearchAndReplace : public BasePlugin
+class SearchAndReplace : public BasePlugin
 {
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin )
@@ -70,11 +70,8 @@ public:
 
 protected:
 	Mode mMode;
-	
 	SearchWidget* mWidget;
-	
 	SearchResultsDock* mDock;
-	
 	SearchThread* mSearchThread;
 	
 	// Used for counting of occurences when searching in folder/project	
@@ -116,7 +113,6 @@ protected slots:
 	void threadFinished ();
 	void occurenceFound ();
 	void fileProcessed (int count);
-
 };
 
 #endif

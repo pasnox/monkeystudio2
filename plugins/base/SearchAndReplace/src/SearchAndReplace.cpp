@@ -32,17 +32,17 @@
 	\author Andrei Kopats
 	\brief implementation of main class of SearchAndReplace plugin
 */
+#include "SearchAndReplace.h"
+#include "SearchWidget.h"
+#include "SearchResultsDock.h"
+#include "SearchThread.h"
+
 #include "MonkeyCore.h"
 #include "UIMain.h"
 #include "pWorkspace.h"
 #include "pChild.h"
 #include "pEditor.h"
 #include "QueuedStatusBar.h"
-
-#include "SearchAndReplace.h"
-#include "SearchWidget.h"
-#include "SearchResultsDock.h"
-#include "SearchThread.h"
 
 #include <QDebug>
 
@@ -55,7 +55,6 @@ SearchAndReplace::SearchAndReplace()
 	mSearchThread (NULL),
 	mOccurencesFound (0),
 	mFilesProcessed (0)
-	
 {
 	// set plugin infos
 	mPluginInfos.Caption = tr( "Search and Replace" );
@@ -197,7 +196,7 @@ void SearchAndReplace::showMessage (QString status)
 
 void SearchAndReplace::updateSearchTextOnUI ()
 {
-	pChild* child = dynamic_cast<pChild*> (MonkeyCore::workspace()->currentChild());
+	pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentChild());
 	if (child && child->editor())
 	{
 		pEditor* editor = child->editor ();
@@ -212,7 +211,7 @@ bool SearchAndReplace::searchFile (bool next)
 	QString text = mWidget->searchText();
 	mWidget->searchAddToRecents(text);
 	
-	pChild* child = dynamic_cast<pChild*> (MonkeyCore::workspace()->currentChild());
+	pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentChild());
 	if (!child || !child->editor())
 	{
 		showMessage(tr( "No active editor" ) );
@@ -251,7 +250,7 @@ int SearchAndReplace::replace(bool all)
 	mWidget->searchAddToRecents(mWidget->searchText());
 	mWidget->replaceAddToRecents(rtext);
 	
-	pChild* child = dynamic_cast<pChild*> (MonkeyCore::workspace()->currentChild());
+	pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentChild());
 	if (!child || !child->editor())
 	{
 		showMessage(tr( "No active editor" ) );
@@ -292,49 +291,50 @@ int SearchAndReplace::replace(bool all)
 
 void SearchAndReplace::showSearchFile () 
 {
-	if (dynamic_cast<pChild*> (MonkeyCore::workspace()->currentChild()))
+	if (qobject_cast<pChild*> (MonkeyCore::workspace()->currentChild()))
 	{
 		mMode = SEARCH_FILE;
 		updateSearchTextOnUI ();
 		mWidget->show (mMode);
 	}
-};
+}
 
 void SearchAndReplace::showReplaceFile () 
 {
 	mMode = REPLACE_FILE;
 	updateSearchTextOnUI ();
 	mWidget->show (mMode);
-};
+}
 
 #if 0
-	void SearchAndReplace::showSearchProject () 
-	{
-		mMode = SEARCH_PROJECT;
-		updateSearchTextOnUI ();
-		mWidget->show (mMode);
-	};
+void SearchAndReplace::showSearchProject () 
+{
+	mMode = SEARCH_PROJECT;
+	updateSearchTextOnUI ();
+	mWidget->show (mMode);
+}
 
-	void SearchAndReplace::showReplaceProject () 
-	{
-		mMode = REPLACE_PROJECT;
-		updateSearchTextOnUI ();
-		mWidget->show (mMode);
-	};
+void SearchAndReplace::showReplaceProject () 
+{
+	mMode = REPLACE_PROJECT;
+	updateSearchTextOnUI ();
+	mWidget->show (mMode);
+}
 #endif
 
 void SearchAndReplace::showSearchFolder () 
 {
 	mMode = SEARCH_DIRRECTORY;
 	updateSearchTextOnUI ();
-	mWidget->show (mMode);};
+	mWidget->show (mMode);
+}
 
 void SearchAndReplace::showReplaceFolder () 
 {
 	mMode = REPLACE_DIRRECTORY;
 	updateSearchTextOnUI ();
 	mWidget->show (mMode);
-};
+}
 
 void SearchAndReplace::onPreviousClicked()
 {
@@ -411,7 +411,7 @@ void SearchAndReplace::onReplaceAllClicked()
 	if (!isReplaceTextValid ())
 		return;
 
-	pChild* child = dynamic_cast<pChild*> (MonkeyCore::workspace()->currentChild());
+	pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentChild());
 	if (!child && !child->editor())
 		return;
 	pEditor* editor = child->editor ();

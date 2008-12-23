@@ -47,7 +47,7 @@ class QLabel;
 class QCheckBox;
 class QComboBox;
 
-class Q_MONKEY_EXPORT SearchWidget : public QWidget
+class SearchWidget : public QWidget
 {
 	Q_OBJECT
 	
