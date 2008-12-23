@@ -48,14 +48,24 @@ void Settings::setDefaultSettings()
 	QString apisPath;
 
 #ifdef Q_OS_WIN
-	if ( appIsInstalled && !QFile::exists( QString( "%1/templates" ).arg( PACKAGE_PREFIX ) ) )
+	if ( appIsInstalled && !QFile::exists( QString( "%1/templates" ).arg( appPath ) ) )
 	{
 		appIsInstalled = false;
+	}
+	
+	if ( !appIsInstalled && QFile::exists( QString( "%1/templates" ).arg( appPath ) ) )
+	{
+		appIsInstalled = true;
 	}
 #elif defined Q_OS_MAC
 	if ( appIsInstalled && !QFile::exists( QString( "%1/../Resources/templates" ).arg( appPath ) ) )
 	{
 		appIsInstalled = false;
+	}
+	
+	if ( !appIsInstalled && QFile::exists( QString( "%1/../Resources/templates" ).arg( appPath ) ) )
+	{
+		appIsInstalled = true;
 	}
 #endif
 	
