@@ -35,7 +35,7 @@
 
 class pEditor;
 
-class pChild : public pAbstractChild
+class Q_MONKEY_EXPORT pChild : public pAbstractChild
 {
 	Q_OBJECT
 
