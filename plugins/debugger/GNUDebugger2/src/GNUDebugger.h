@@ -27,7 +27,7 @@
 #ifndef GNUDEBUGGER_H
 #define GNUDEBUGGER_H
 
-#include <pluginsmanager.h>
+#include <DebuggerPlugin.h>
 #include "DockGNUDebugger.h"
 
 // for loading one time the parser file

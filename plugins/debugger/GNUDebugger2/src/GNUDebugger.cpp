@@ -26,17 +26,17 @@
 #include "GNUDebugger.h"
 #include "./ui/UIGNUDebuggerSetting.h"
 
-#include <maininterface.h>
-#include <coremanager.h>
-#include <settingsmanager.h>
-#include <monkey.h>
-#include <queuedstatusbar.h>
+#include <UIMain.h>
+#include <MonkeyCore.h>
+#include <Settings.h>
+#include <pMonkeyStudio.h>
+#include <QueuedStatusBar.h>
 
 #include <QIcon>
- 
+	
 /*!
-	\brief Main class, interface of pluginFactory
-	\details Create main DockGNUDebugger class adn configure this
+		\brief Main class, interface of pluginFactory
+		\details Create main DockGNUDebugger class adn configure this
 */
 GNUDebugger::GNUDebugger()
 {

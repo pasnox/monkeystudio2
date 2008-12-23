@@ -24,6 +24,9 @@ SOURCES	+= QSingleton.cpp
 # psettings
 HEADERS	+= pSettings.h
 SOURCES	+= pSettings.cpp
+# pIconManager
+HEADERS	+= pIconManager.h
+SOURCES	+= pIconManager.cpp
 
 # widgets
 # pTabBar
@@ -38,15 +41,16 @@ SOURCES	+= pTabbedWorkspaceCorner.cpp \
 	pTabbedWorkspaceCornerButton.cpp \
 	pTabbedWorkspace.cpp \
 	pTabbedWorkspaceRightCorner.cpp
+# pGroupPath
+HEADERS	+= pGroupPath.h
+SOURCES	+= pGroupPath.cpp
 # action manager
-HEADERS	+= pAction.h \
-	pActionManager.h \
-	pKeySequenceInput.h \
-	pShortcutsEditor.h
-SOURCES	+= pAction.cpp \
-	pActionManager.cpp \
-	pKeySequenceInput.cpp \
-	pShortcutsEditor.cpp
+HEADERS	+= pActionsShortcutsManager.h \
+	pActionsManager.h \
+	pKeySequenceInput.h
+SOURCES	+= pActionsShortcutsManager.cpp \
+	pActionsManager.cpp \
+	pKeySequenceInput.cpp
 # pmenubar
 HEADERS	+= pMenuBar.h
 SOURCES	+= pMenuBar.cpp
@@ -74,8 +78,10 @@ SOURCES	+= pFileListEditor.cpp
 HEADERS	+= pPathListEditor.h
 SOURCES	+= pPathListEditor.cpp
 # pDockWidget
-HEADERS	+= pDockWidget.h
-SOURCES	+= pDockWidget.cpp
+HEADERS	+= pDockWidget.h \
+	pDockWidgetTitleBar.h
+SOURCES	+= pDockWidget.cpp \
+	pDockWidgetTitleBar.cpp
 # pExtendedWorkspace
 # pFilesList
 HEADERS	+= pFilesListWidget.h \
@@ -88,3 +94,9 @@ SOURCES	+= pQueuedMessageWidget.cpp
 # pQueuedStatusBar
 HEADERS	+= pQueuedStatusBar.h
 SOURCES	+= pQueuedStatusBar.cpp
+# pFileDialog
+HEADERS	+= pFileDialog.h
+SOURCES	+= pFileDialog.cpp
+# pColorButton
+SOURCES	+= widgets/pColorButton.cpp
+HEADERS	+= widgets/pColorButton.h

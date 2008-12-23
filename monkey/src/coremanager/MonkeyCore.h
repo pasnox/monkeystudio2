@@ -39,12 +39,11 @@ class PluginsManager;
 class UIMain;
 class pMenuBar;
 class pRecentsManager;
-class pActionManager;
+class pActionsManager;
 class pToolsManager;
-class UIXUPManager;
+class XUPProjectManager;
 class pFileManager;
 class pWorkspace;
-class pSearch;
 class QStatusBar;
 class pConsoleManager;
 class QueuedStatusBar;
@@ -60,13 +59,12 @@ public:
 	static UIMain* mainWindow();
 	static pMenuBar* menuBar();
 	static pRecentsManager* recentsManager();
-	static pActionManager* actionManager();
+	static pActionsManager* actionsManager();
 	static pToolsManager* toolsManager();
-	static UIXUPManager* projectsManager();
+	static XUPProjectManager* projectsManager();
 	static pFileManager* fileManager();
 	static pWorkspace* workspace();
 	static pConsoleManager* consoleManager();
-	static pSearch* searchWidget();
 	static QueuedStatusBar* statusBar();
 // variablemaanger
 // templates manager

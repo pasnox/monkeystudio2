@@ -9,21 +9,21 @@
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
 ** Home Page : http://www.monkeystudio.org
 **
-    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+		Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
 #include "MonkeyCore.h"
@@ -33,27 +33,35 @@
 #include "../maininterface/UIMain.h"
 #include "../recentsmanager/pRecentsManager.h"
 #include "../toolsmanager/pToolsManager.h"
-#include "../xupmanager/ui/UIXUPManager.h"
+#include "../xupmanager/gui/XUPProjectManager.h"
 #include "../workspace/pFileManager.h"
 #include "../workspace/pWorkspace.h"
 #include "../consolemanager/pConsoleManager.h"
-#include "../qscintillamanager/ui/pSearch.h"
 #include "../queuedstatusbar/QueuedStatusBar.h"
 
 #include "../maininterface/ui/UISettings.h"
 #include "../maininterface/ui/UITranslator.h"
 
+#include <pIconManager.h>
+
 #include <QSplashScreen>
+#include <QPixmap>
+#include <QString>
+#include <QDate>
 
 void showMessage( QSplashScreen* s, const QString& m )
-{ s->showMessage( m, Qt::AlignRight | Qt::AlignBottom, Qt::white ); }
+{ s->showMessage( m, Qt::AlignRight | Qt::AlignBottom, s->property( "isXMas" ).toBool() ? Qt::red : Qt::white ); }
 
 QHash<const QMetaObject*, QObject*> MonkeyCore::mInstances;
 
 void MonkeyCore::init()
 {
 	// create splashscreen
-	QSplashScreen splash( QPixmap( ":/application/icons/application/splashscreen.png" ) );
+	bool isXMas = QDate::currentDate().month() == 12;
+	
+	QSplashScreen splash( pIconManager::pixmap( isXMas ? "splashscreen_christmas.png" : "splashscreen.png", ":/application" ) );
+	splash.setProperty( "isXMas", isXMas );
+	
 	QFont ft( splash.font() );
 #ifndef Q_OS_WIN
 	ft.setPointSize( ft.pointSize() -2 );
@@ -79,6 +87,10 @@ void MonkeyCore::init()
 		UITranslator::instance()->exec();
 	pMonkeyStudio::loadTranslations();
 	
+	// init shortcuts editor
+	showMessage( &splash, tr( "Initializing Actions Manager..." ) );
+	MonkeyCore::actionsManager()->setSettings( settings() );
+	
 	// start console manager
 	showMessage( &splash, tr( "Initializing Console..." ) );
 	consoleManager();
@@ -86,10 +98,6 @@ void MonkeyCore::init()
 	// init main window
 	showMessage( &splash, tr( "Initializing Main Window..." ) );
 	mainWindow()->initGui();
-	
-	// init shortcuts editor
-	showMessage( &splash, tr( "Initializing Shortcuts..." ) );
-	MonkeyCore::actionManager()->setSettings( settings() );
 	
 	// init pluginsmanager
 	showMessage( &splash, tr( "Initializing Plugins..." ) );
@@ -99,13 +107,16 @@ void MonkeyCore::init()
 	showMessage( &splash, tr( "Restoring Workspace..." ) );
 	mainWindow()->setSettings( settings() );
 	
-	// show main window
-	mainWindow()->show();
-	
 	// restore session
 	showMessage( &splash, tr( "Restoring Session..." ) );
 	if ( pMonkeyStudio::restoreSessionOnStartup() )
+	{
 		workspace()->fileSessionRestore_triggered();
+	}
+	
+	// show main window
+	mainWindow()->menu_Docks_aboutToShow();
+	mainWindow()->show();
 	
 	// ready
 	showMessage( &splash, tr( "%1 v%2 Ready !" ).arg( PACKAGE_NAME, PACKAGE_VERSION ) );
@@ -149,8 +160,10 @@ UIMain* MonkeyCore::mainWindow()
 pMenuBar* MonkeyCore::menuBar()
 { return mainWindow()->menuBar(); }
 
-pActionManager* MonkeyCore::actionManager()
-{ return pActionManager::instance(); }
+pActionsManager* MonkeyCore::actionsManager()
+{
+	return menuBar()->actionsManager();
+}
 
 pRecentsManager* MonkeyCore::recentsManager()
 {
@@ -166,11 +179,11 @@ pToolsManager* MonkeyCore::toolsManager()
 	return qobject_cast<pToolsManager*>( mInstances[&pToolsManager::staticMetaObject] );
 }
 
-UIXUPManager* MonkeyCore::projectsManager()
+XUPProjectManager* MonkeyCore::projectsManager()
 {
-	if ( !mInstances.contains( &UIXUPManager::staticMetaObject ) )
-		mInstances[&UIXUPManager::staticMetaObject] = new UIXUPManager( mainWindow() );
-	return qobject_cast<UIXUPManager*>( mInstances[&UIXUPManager::staticMetaObject] );
+	if ( !mInstances.contains( &XUPProjectManager::staticMetaObject ) )
+		mInstances[&XUPProjectManager::staticMetaObject] = new XUPProjectManager( mainWindow() );
+	return qobject_cast<XUPProjectManager*>( mInstances[&XUPProjectManager::staticMetaObject] );
 }
 
 pFileManager* MonkeyCore::fileManager()
@@ -192,13 +205,6 @@ pConsoleManager* MonkeyCore::consoleManager()
 	if ( !mInstances.contains( &pConsoleManager::staticMetaObject ) )
 		mInstances[&pConsoleManager::staticMetaObject] = new pConsoleManager( qApp );
 	return qobject_cast<pConsoleManager*>( mInstances[&pConsoleManager::staticMetaObject] );
-}
-
-pSearch* MonkeyCore::searchWidget()
-{
-	if ( !mInstances.contains( &pSearch::staticMetaObject ) )
-		mInstances[&pSearch::staticMetaObject] = new pSearch();
-	return qobject_cast<pSearch*>( mInstances[&pSearch::staticMetaObject] );
 }
 
 QueuedStatusBar* MonkeyCore::statusBar()

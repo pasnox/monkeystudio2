@@ -28,8 +28,8 @@
 ****************************************************************************/
 #include "UISettingsAStyle.h"
 
-#include <coremanager.h>
-#include <settingsmanager.h>
+#include <MonkeyCore.h>
+#include <Settings.h>
 
 UISettingsAStyle::UISettingsAStyle( QWidget* p )
 	: QWidget( p )

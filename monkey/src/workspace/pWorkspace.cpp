@@ -33,6 +33,8 @@
 #include <QFileSystemWatcher>
 #include <QDir>
 
+#include <QDebug>
+
 #include "pWorkspace.h"
 #include "pAbstractChild.h"
 #include "../recentsmanager/pRecentsManager.h"
@@ -45,16 +47,16 @@
 #include "../abbreviationsmanager/pAbbreviationsManager.h"
 #include "../pMonkeyStudio.h"
 #include "../templatesmanager/pTemplatesManager.h"
-#include "../xupmanager/ui/UIXUPManager.h"
-#include "../xupmanager/XUPItem.h"
+#include "../xupmanager/gui/XUPProjectManager.h"
+#include "../xupmanager/core/XUPProjectItem.h"
 #include "../pluginsmanager/PluginsManager.h"
 #include "../coremanager/MonkeyCore.h"
 #include "../maininterface/UIMain.h"
 #include "../queuedstatusbar/QueuedStatusBar.h"
+#include "MkSFileDialog.h"
 
 #include "pChild.h"
 #include "../qscintillamanager/pEditor.h"
-#include "../qscintillamanager/ui/pSearch.h"
 
 using namespace pMonkeyStudio;
 
@@ -68,11 +70,6 @@ pWorkspace::pWorkspace( QMainWindow* p )
 	// add dock to main window
 	p->addDockWidget( Qt::LeftDockWidgetArea, listWidget() );
 
-	// add search widget to workspace layout
-	pSearch* ps = MonkeyCore::searchWidget();
-	ps->setVisible( false );
-	mLayout->addWidget( ps );
-	
 	// set background
 	//setBackground( ":/application/icons/application/background.png" );
 
@@ -92,16 +89,17 @@ pWorkspace::pWorkspace( QMainWindow* p )
 	connect( listWidget(), SIGNAL( urlsDropped( const QList<QUrl>& ) ), this, SLOT( internal_urlsDropped( const QList<QUrl>& ) ) );
 	connect( listWidget(), SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( internal_listWidget_customContextMenuRequested( const QPoint& ) ) );
 	connect( MonkeyCore::projectsManager(), SIGNAL( projectCustomContextMenuRequested( const QPoint& ) ), this, SLOT( internal_projectsManager_customContextMenuRequested( const QPoint& ) ) );
-	connect( MonkeyCore::projectsManager(), SIGNAL( currentProjectChanged( XUPItem*, XUPItem* ) ), this, SLOT( internal_currentProjectChanged( XUPItem*, XUPItem* ) ) );
-	connect( MonkeyCore::projectsManager(), SIGNAL( projectInstallCommandRequested( const pCommand&, const QString& ) ), this, SLOT( internal_projectInstallCommandRequested( const pCommand&, const QString& ) ) );
-	connect( MonkeyCore::projectsManager(), SIGNAL( projectUninstallCommandRequested( const pCommand&, const QString& ) ), this, SLOT( internal_projectUninstallCommandRequested( const pCommand&, const QString& ) ) );
+	connect( MonkeyCore::projectsManager(), SIGNAL( currentProjectChanged( XUPProjectItem*, XUPProjectItem* ) ), this, SLOT( internal_currentProjectChanged( XUPProjectItem*, XUPProjectItem* ) ) );
 	connect( mFileWatcher, SIGNAL( fileChanged( const QString& ) ), this, SLOT( fileWatcher_fileChanged( const QString& ) ) );
-	connect( ps, SIGNAL( clearSearchResults() ), this, SIGNAL( clearSearchResults() ) );
 	
-	pAction* mFocusToEditor = new pAction( "aFocusToEditor", QIcon( ":/edit/icons/edit/text.png" ), tr( "Set focus to editor" ),  QString("Ins") , "Workspace" );
-	connect (mFocusToEditor, SIGNAL (triggered()), this, SLOT (focusToEditor_triggered ()));	
-	MonkeyCore::mainWindow()->addAction (mFocusToEditor);
-	mFocusToEditor ->setEnabled (true);
+	QAction* mFocusToEditor = new QAction( this );
+	mFocusToEditor->setIcon( QIcon( ":/edit/icons/edit/text.png" ) );
+	mFocusToEditor->setText( tr( "Set Focus to Editor" ) );
+	pActionsManager::setDefaultShortcut( mFocusToEditor, QKeySequence( "Ctrl+Return" ) );
+	
+	MonkeyCore::menuBar()->addAction( "mView", mFocusToEditor );
+	
+	connect( mFocusToEditor, SIGNAL( triggered() ), this, SLOT( focusToEditor_triggered() ) );
 }
 
 void pWorkspace::loadSettings()
@@ -131,26 +129,24 @@ QList<pAbstractChild*> pWorkspace::children() const
 	return l;
 }
 
+void pWorkspace::addSearhReplaceWidget (QWidget* widget)
+{
+	mLayout->addWidget( widget );
+
+}
+
 pAbstractChild* pWorkspace::newTextEditor()
 {
-	// get available filters
-	QString mFilters = availableFilesFilters();
-	
-	// prepend a all in one filter
-	if ( !mFilters.isEmpty() )
-	{
-		QString s;
-		foreach ( QStringList l, availableFilesSuffixes().values() )
-			s.append( l.join( " " ).append( " " ) );
-		mFilters.prepend( QString( "All Supported Files (%1);;" ).arg( s.trimmed() ) );
-	}
+	pFileDialogResult result = MkSFileDialog::getNewEditorFile( window() );
 
 	// open open file dialog
-	QString fileName = getSaveFileName( tr( "New File Name..." ), QString::null, mFilters, window() );
+	QString fileName = result[ "filename" ].toString();
 	
 	// return 0 if user cancel
 	if ( fileName.isEmpty() )
+	{
 		return 0;
+	}
 	
 	// close file if already open
 	mFileWatcher->removePaths( QStringList( fileName ) );
@@ -163,14 +159,46 @@ pAbstractChild* pWorkspace::newTextEditor()
 		MonkeyCore::statusBar()->appendMessage( tr( "Can't create new file '%1'" ).arg( QFileInfo( fileName ).fileName() ), 2000 );
 		return 0;
 	}
+	
 	// reset file
 	file.resize( 0 );
 	file.close();
+	
+	if ( result.value( "addtoproject", false ).toBool() )
+	{
+		// add files to scope
+		MonkeyCore::projectsManager()->addFilesToScope( result[ "scope" ].value<XUPItem*>(), QStringList( fileName ), result[ "operator" ].toString() );
+	}
+	
 	// open file
-	return openFile( fileName );
+	return openFile( fileName, result[ "codec" ].toString() );
 }
 
-pAbstractChild* pWorkspace::openFile( const QString& s )
+void pWorkspace::initChildConnections( pAbstractChild* child )
+{
+	// connections
+	connect( child, SIGNAL( currentFileChanged( const QString& ) ), this, SLOT( internal_currentFileChanged( const QString& ) ) );
+	// closed file
+	connect( child, SIGNAL( fileClosed( const QString& ) ), this, SIGNAL( fileClosed( const QString& ) ) );
+	// update file menu
+	connect( child, SIGNAL( modifiedChanged( bool ) ), MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" ), SLOT( setEnabled( bool ) ) );
+	// update edit menu
+	connect( child, SIGNAL( undoAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aUndo" ), SLOT( setEnabled( bool ) ) );
+	connect( child, SIGNAL( redoAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aRedo" ), SLOT( setEnabled( bool ) ) );
+	connect( child, SIGNAL( copyAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aCut" ), SLOT( setEnabled( bool ) ) );
+	connect( child, SIGNAL( copyAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aCopy" ), SLOT( setEnabled( bool ) ) );
+	connect( child, SIGNAL( pasteAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aPaste" ), SLOT( setEnabled( bool ) ) );
+	//connect( child, SIGNAL( searchReplaceAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aSearchReplace" ), SLOT( setEnabled( bool ) ) );
+	//connect( child, SIGNAL( goToAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aGoTo" ), SLOT( setEnabled( bool ) ) );
+	// update status bar
+	connect( child, SIGNAL( cursorPositionChanged( const QPoint& ) ), MonkeyCore::statusBar(), SLOT( setCursorPosition( const QPoint& ) ) );
+	connect( child, SIGNAL( modifiedChanged( bool ) ), MonkeyCore::statusBar(), SLOT( setModified( bool ) ) );
+	//connect( child, SIGNAL( documentModeChanged( AbstractChild::DocumentMode ) ), statusBar(), SLOT( setDocumentMode( AbstractChild::DocumentMode ) ) );
+	//connect( child, SIGNAL( layoutModeChanged( AbstractChild::LayoutMode ) ), statusBar(), SLOT( setLayoutMode( AbstractChild::LayoutMode ) ) );
+	//connect( child, SIGNAL( currentFileChanged( const QString& ) ), statusBar(), SLOT( setFileName( const QString& ) ) );
+}
+
+pAbstractChild* pWorkspace::openFile( const QString& s, const QString& codec )
 {
 	// if it not exists
 	if ( !QFile::exists( s ) || !QFileInfo( s ).isFile() )
@@ -204,33 +232,14 @@ pAbstractChild* pWorkspace::openFile( const QString& s )
 	bool wasIn = children().contains( c );
 	if ( !wasIn )
 	{
-		// connections
-		connect( c, SIGNAL( currentFileChanged( const QString& ) ), this, SLOT( internal_currentFileChanged( const QString& ) ) );
-		// closed file
-		connect( c, SIGNAL( fileClosed( const QString& ) ), this, SIGNAL( fileClosed( const QString& ) ) );
-		// update file menu
-		connect( c, SIGNAL( modifiedChanged( bool ) ), MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" ), SLOT( setEnabled( bool ) ) );
-		// update edit menu
-		connect( c, SIGNAL( undoAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aUndo" ), SLOT( setEnabled( bool ) ) );
-		connect( c, SIGNAL( redoAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aRedo" ), SLOT( setEnabled( bool ) ) );
-		connect( c, SIGNAL( copyAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aCut" ), SLOT( setEnabled( bool ) ) );
-		connect( c, SIGNAL( copyAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aCopy" ), SLOT( setEnabled( bool ) ) );
-		connect( c, SIGNAL( pasteAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aPaste" ), SLOT( setEnabled( bool ) ) );
-		//connect( c, SIGNAL( searchReplaceAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aSearchReplace" ), SLOT( setEnabled( bool ) ) );
-		//connect( c, SIGNAL( goToAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aGoTo" ), SLOT( setEnabled( bool ) ) );
-		// update status bar
-		connect( c, SIGNAL( cursorPositionChanged( const QPoint& ) ), MonkeyCore::statusBar(), SLOT( setCursorPosition( const QPoint& ) ) );
-		connect( c, SIGNAL( modifiedChanged( bool ) ), MonkeyCore::statusBar(), SLOT( setModified( bool ) ) );
-		//connect( c, SIGNAL( documentModeChanged( AbstractChild::DocumentMode ) ), statusBar(), SLOT( setDocumentMode( AbstractChild::DocumentMode ) ) );
-		//connect( c, SIGNAL( layoutModeChanged( AbstractChild::LayoutMode ) ), statusBar(), SLOT( setLayoutMode( AbstractChild::LayoutMode ) ) );
-		//connect( c, SIGNAL( currentFileChanged( const QString& ) ), statusBar(), SLOT( setFileName( const QString& ) ) );
-		
+		// setups connections
+		initChildConnections( c );
 		// add to workspace
 		addDocument( c, QString() );
 	}
 
 	// open file
-	c->openFile( s );
+	c->openFile( s, codec );
 	
 	// set correct document if needed ( sdi hack )
 	if ( currentDocument() != c )
@@ -266,10 +275,10 @@ void pWorkspace::closeFile( const QString& s )
 	}
 }
 
-void pWorkspace::goToLine( const QString& s, const QPoint& p, bool b )
+void pWorkspace::goToLine( const QString& s, const QPoint& p, bool b, const QString& codec )
 {
 	if ( b )
-		openFile( s );
+		openFile( s, codec );
 	foreach ( pAbstractChild* c, children() )
 	{
 		foreach ( QString f, c->files() )
@@ -284,11 +293,9 @@ void pWorkspace::goToLine( const QString& s, const QPoint& p, bool b )
 	}
 }
 
-#include <QDebug>
 void pWorkspace::internal_currentFileChanged( const QString& file )
 {
 	QDir::setCurrent( QFileInfo( file ).absolutePath() );
-		qDebug () << "cd " << QFileInfo( file ).absolutePath();
 }
 
 void pWorkspace::internal_currentChanged( int i )
@@ -338,9 +345,6 @@ void pWorkspace::internal_currentChanged( int i )
 	MonkeyCore::statusBar()->setIndentMode( editor ? ( editor->indentationsUseTabs() ? 1 : 0 ) : -1 );
 	MonkeyCore::statusBar()->setCursorPosition( c ? c->cursorPosition() : QPoint( -1, -1 ) );
 
-	// search dock
-	//MonkeyCore::searchDock()->setEditor( hasChild ? c->currentEditor() : 0 );
-	
 	// update item tooltip
 	if ( hasChild )
 		listWidget()->setItemToolTip( i, c->currentFile() );
@@ -375,13 +379,13 @@ void pWorkspace::internal_urlsDropped( const QList<QUrl>& l )
 	{
 		foreach ( QUrl u, l )
 			if ( !u.toLocalFile().trimmed().isEmpty() )
-				openFile( u.toLocalFile() );
+				openFile( u.toLocalFile(), pMonkeyStudio::defaultCodec() );
 	}
 	else if ( a == aop )
 	{
 		foreach ( QUrl u, l )
 			if ( !u.toLocalFile().trimmed().isEmpty() )
-				MonkeyCore::projectsManager()->openProject( u.toLocalFile() );
+				MonkeyCore::projectsManager()->openProject( u.toLocalFile(), pMonkeyStudio::defaultCodec() );
 	}
 }
 
@@ -410,15 +414,20 @@ void pWorkspace::internal_projectsManager_customContextMenuRequested( const QPoi
 		m.addSeparator();
 		m.addActions( mb->menu( "mInterpreter" )->actions() );
 		// show menu
-		m.exec( MonkeyCore::projectsManager()->tvProxiedProjects->mapToGlobal( p ) );
+		m.exec( MonkeyCore::projectsManager()->tvFiltered->mapToGlobal( p ) );
 	}
 }
 
-void pWorkspace::internal_currentProjectChanged( XUPItem* currentProject, XUPItem* previousProject )
+void pWorkspace::internal_currentProjectChanged( XUPProjectItem* currentProject, XUPProjectItem* previousProject )
 {
 	// uninstall old commands
 	if ( previousProject )
+	{
 		previousProject->uninstallCommands();
+		
+		disconnect( previousProject, SIGNAL( installCommandRequested( const pCommand&, const QString& ) ), this, SLOT( internal_projectInstallCommandRequested( const pCommand&, const QString& ) ) );
+		disconnect( previousProject, SIGNAL( uninstallCommandRequested( const pCommand&, const QString& ) ), this, SLOT( internal_projectUninstallCommandRequested( const pCommand&, const QString& ) ) );
+	}
 	// get pluginsmanager
 	PluginsManager* pm = MonkeyCore::pluginsManager();
 	// set compiler, debugger and interpreter
@@ -430,9 +439,15 @@ void pWorkspace::internal_currentProjectChanged( XUPItem* currentProject, XUPIte
 	pm->setCurrentCompiler( cp && !cp->neverEnable() ? cp : 0 );
 	pm->setCurrentDebugger( dp && !dp->neverEnable() ? dp : 0 );
 	pm->setCurrentInterpreter( ip && !ip->neverEnable() ? ip : 0 );
+	
 	// install new commands
 	if ( currentProject )
+	{
+		connect( currentProject, SIGNAL( installCommandRequested( const pCommand&, const QString& ) ), this, SLOT( internal_projectInstallCommandRequested( const pCommand&, const QString& ) ) );
+		connect( currentProject, SIGNAL( uninstallCommandRequested( const pCommand&, const QString& ) ), this, SLOT( internal_projectUninstallCommandRequested( const pCommand&, const QString& ) ) );
+		
 		currentProject->installCommands();
+	}
 	// update menu visibility
 	MonkeyCore::mainWindow()->menu_CustomAction_aboutToShow();
 }
@@ -466,14 +481,19 @@ void pWorkspace::projectCustomActionTriggered()
 	{
 		pConsoleManager* cm = MonkeyCore::consoleManager();
 		pCommand cmd = a->data().value<pCommand>();
-		QHash<QString, pCommand>* cmdsHash = reinterpret_cast<QHash<QString, pCommand>*>( cmd.userData().value<quintptr>() );
+		pCommandMap* cmdsHash = cmd.userData().value<pCommandMap*>();
 		const pCommandList cmds = cmdsHash ? cmdsHash->values() : pCommandList();
 		// save project if needed
 		if ( saveProjectsOnCustomAction() )
-			MonkeyCore::projectsManager()->action( UIXUPManager::SaveAll )->trigger();
+		{
+			// TODO: completly remove the save, save all proejct way: project must be save each time they have been edited
+			//MonkeyCore::projectsManager()->action( UIXUPManager::SaveAll )->trigger();
+		}
 		// save project files
 		if ( saveFilesOnCustomAction() )
+		{
 			fileSaveAll_triggered();
+		}
 		// check that command to execute exists, else ask to user if he want to choose another one
 		if ( cmd.project() && a->text().contains( "execute", Qt::CaseInsensitive ) )
 		{
@@ -481,13 +501,19 @@ void pWorkspace::projectCustomActionTriggered()
 			QString s = QString( "%1/%2" ).arg( cmd.workingDirectory() ).arg( cmd.command() );
 			if ( !QFile::exists( s ) )
 			{
+				XUPProjectItem* project = cmd.project();
+				XUPProjectItem* topLevelProject = project->topLevelProject();
 				// try reading already saved binary
-				s = cmd.project()->projectSettingsValue( a->text().replace( ' ', '_' ).toUpper() );
+				s = topLevelProject->projectSettingsValue( a->text().replace( ' ', '_' ).toUpper() );
 				if ( !s.isEmpty() )
-					s = cmd.project()->topLevelProject()->filePath( s );
+				{
+					s = topLevelProject->filePath( s );
+				}
 				// if not exists ask user to select one
 				if ( !QFile::exists( s ) && question( a->text().append( "..." ), tr( "Can't find your executable file, do you want to choose the file ?" ) ) )
+				{
 					s = getOpenFileName( a->text().append( "..." ), cmd.workingDirectory() );
+				}
 				// if file exists execut it
 				if ( QFile::exists( s ) )
 				{
@@ -495,12 +521,15 @@ void pWorkspace::projectCustomActionTriggered()
 					QString f = fi.fileName().prepend( "./" );
 					QString p = fi.absolutePath();
 					if ( p.endsWith( '/' ) )
+					{
 						p.chop( 1 );
+					}
 					// correct command
 					cmd.setCommand( cm->quotedString( cm->nativeSeparators( s ) ) );
 					cmd.setWorkingDirectory( cm->nativeSeparators( p ) );
 					// write in project
-					cmd.project()->setProjectSettingsValue( a->text().replace( ' ', '_' ).toUpper(), cmd.project()->topLevelProject()->relativeFilePath( s ) );
+					topLevelProject->setProjectSettingsValue( a->text().replace( ' ', '_' ).toUpper(), topLevelProject->relativeFilePath( s ) );
+					topLevelProject->save();
 					// add command to console manager
 					cm->addCommand( cmd );
 				}
@@ -510,7 +539,7 @@ void pWorkspace::projectCustomActionTriggered()
 		}
 		// generate commands list
 		pCommandList mCmds = cm->recursiveCommandList( cmds, cm->getCommand( cmds, cmd.text() ) );
-		// teh first one must not be skipped on last error
+		// the first one must not be skipped on last error
 		if ( mCmds.count() > 0 )
 			mCmds.first().setSkipOnError( false );
 		// send command to consolemanager
@@ -533,7 +562,7 @@ void pWorkspace::fileWatcher_ecmReload( const QString& filename, bool force )
 			if ( fn == filename && ( !ac->isModified( fn ) || force ) )
 			{
 				ac->closeFile( fn );
-				ac->openFile( fn );
+				ac->openFile( fn, ac->textCodec() );
 				MonkeyCore::statusBar()->appendMessage( tr( "Reloaded externally modified file: '%1'" ).arg( QFileInfo( filename ).fileName() ), 2000 );
 				return;;
 			}
@@ -605,29 +634,32 @@ void pWorkspace::fileOpen_triggered()
 {
 	// get available filters
 	QString mFilters = availableFilesFilters();
-
-	// prepend a all in one filter
-	if ( !mFilters.isEmpty() )
-	{
-		QString s;
-		foreach ( QStringList l, availableFilesSuffixes().values() )
-			s.append( l.join( " " ).append( " " ) );
-		mFilters.prepend( QString( "All Supported Files (%1);;" ).arg( s.trimmed() ) );
-	}
+	
+	// show filedialog to user
+	pFileDialogResult result = MkSFileDialog::getOpenFileNames( window(), tr( "Choose the file(s) to open" ), QDir::current().absolutePath(), mFilters, true, false );
 
 	// open open file dialog
-	//qWarning () << "current are " << QDir::current();
-	QStringList l = getOpenFileNames( tr( "Choose the file(s) to open" ), QDir::current().absolutePath(), mFilters, window() );
+	QStringList fileNames = result[ "filenames" ].toStringList();
+	
+	// return 0 if user cancel
+	if ( fileNames.isEmpty() )
+	{
+		return;
+	}
 
 	// for each entry, open file
-	foreach ( QString s, l )
+	foreach ( QString file, fileNames )
 	{
-		if ( openFile( s ) )
+		if ( openFile( file, result[ "codec" ].toString() ) )
+		{
 			// append file to recents
-			MonkeyCore::recentsManager()->addRecentFile( s );
+			MonkeyCore::recentsManager()->addRecentFile( file );
+		}
 		else
+		{
 			// remove it from recents files
-			MonkeyCore::recentsManager()->removeRecentFile( s );
+			MonkeyCore::recentsManager()->removeRecentFile( file );
+		}
 	}
 }
 
@@ -636,12 +668,16 @@ void pWorkspace::fileSessionSave_triggered()
 	QStringList l;
 	// saves opened files
 	foreach ( pAbstractChild* c, children() )
+	{
 		l << c->files();
+	}
 	MonkeyCore::settings()->setValue( "Session/Files", l );
 	// saves opened projects
 	l.clear();
-	foreach ( XUPItem* p, MonkeyCore::projectsManager()->topLevelProjects() )
-		l << p->projectFilePath();
+	foreach ( XUPProjectItem* p, MonkeyCore::projectsManager()->topLevelProjects() )
+	{
+		l << p->fileName();
+	}
 	MonkeyCore::settings()->setValue( "Session/Projects", l );
 }
 
@@ -649,11 +685,11 @@ void pWorkspace::fileSessionRestore_triggered()
 {
 	// restore files
 	foreach ( QString s, MonkeyCore::settings()->value( "Session/Files", QStringList() ).toStringList() )
-		if ( !openFile( s ) ) // remove it from recents files
+		if ( !openFile( s, pMonkeyStudio::defaultCodec() ) ) // remove it from recents files
 			MonkeyCore::recentsManager()->removeRecentFile( s );
 	// restore projects
 	foreach ( QString s, MonkeyCore::settings()->value( "Session/Projects", QStringList() ).toStringList() )
-		if ( !MonkeyCore::projectsManager()->openProject( s ) ) // remove it from recents projects
+		if ( !MonkeyCore::projectsManager()->openProject( s, pMonkeyStudio::defaultCodec() ) ) // remove it from recents projects
 			MonkeyCore::recentsManager()->removeRecentProject( s );
 }
 

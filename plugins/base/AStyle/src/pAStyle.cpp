@@ -31,10 +31,11 @@
 #include "astyle.h"
 #include "pFormatterSettings.h"
 
-#include <monkey.h>
-#include <coremanager.h>
-#include <workspacemanager.h>
-#include <qscintillamanager.h>
+#include <pMonkeyStudio.h>
+#include <MonkeyCore.h>
+#include <pWorkspace.h>
+#include <pAbstractChild.h>
+#include <pEditor.h>
 
 pAStyle::pAStyle()
 {

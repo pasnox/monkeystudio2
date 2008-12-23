@@ -29,7 +29,7 @@
 #ifndef PASTYLE_H
 #define PASTYLE_H
 
-#include <pluginsmanager.h>
+#include <BasePlugin.h>
 
 class pAStyle : public BasePlugin
 {

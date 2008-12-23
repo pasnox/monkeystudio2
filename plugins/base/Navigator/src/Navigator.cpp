@@ -1,7 +1,7 @@
 /****************************************************************************
 **
 ** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
+** Authors   : Andrei Kopats aka hlamer <hlamer at tut by>
 ** Project   : Monkey Studio Base Plugins
 ** FileName  : Navigator.cpp
 ** Date      : 2008-01-14T00:40:08
@@ -26,35 +26,54 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file Navigator.cpp
+	\date 2008-01-14T00:40:08
+	\author Andrei Kopats
+	\brief Implementation of main class of MessageBox plugin
+*/
+
 #include <QPushButton>
 #include <QString>
 #include<QStringList>
 #include <QTabWidget>
 #include <QFileInfo>
-#include<QDebug>
 #include<QModelIndex>
 
-#include <coremanager.h>
-#include <workspacemanager.h>
-#include <maininterface.h>
+#include <MonkeyCore.h>
+#include <pFileManager.h>
+#include <pWorkspace.h>
+#include <UIMain.h>
 
 #include "Navigator.h"
 #include "NavigatorSettings.h"
 
-Navigator::Navigator (QObject* )
+/*!
+	Class constructor
+*/
+Navigator::Navigator (QObject* ):
+	dockwgt (NULL)
 {
 	// set plugin infos
 	mPluginInfos.Caption = tr( "Navigator" );
 	mPluginInfos.Description = tr( "Plugin uses Exuberant Ctags library for analizing source files. It's allowing to view file structure, and quickly move cursor to needed place" );
-	mPluginInfos.Author = "Kopats Andrei aka hlamer <hlamer@tut.by>";
+	mPluginInfos.Author = "Andrei Kopats aka hlamer <hlamer@tut.by>";
 	mPluginInfos.Type = BasePlugin::iBase;
 	mPluginInfos.Name =  PLUGIN_NAME;
 	mPluginInfos.Version = "0.0.1";
 	mPluginInfos.Enabled = false;
 	displayMask = settingsValue( "DisplayMask", 65535 ).toInt();
 	expandMask = settingsValue( "ExpandMask", 32771 ).toInt();
+	mAutoHide = settingsValue( "mAutoHide", true ).toBool();
 }
 
+/*!
+	Enable/disable plugin
+	\param e Flag. Enable = true, Disable = false
+	\return Status of process 
+	\retval true Successfully enabled
+	\retval false Some error ocurred
+*/
 bool Navigator::setEnabled (bool e)
 {
 	if (mPluginInfos.Enabled ==e)
@@ -62,14 +81,18 @@ bool Navigator::setEnabled (bool e)
 	mPluginInfos.Enabled = e;
 	if (mPluginInfos.Enabled)
 	{
-		dockwgt = new pDockWidget( MonkeyCore::workspace());
+		QString curFile = MonkeyCore::fileManager()->currentChildFile();
+		dockwgt = new pDockWidget("Navigator", MonkeyCore::workspace());
+		// shortcut
+		dockwgt->toggleViewAction()->setObjectName( "aNavigator" );
+		pActionsManager::setDefaultShortcut( dockwgt->toggleViewAction(), QString( "F8" ) );
 		//dockwgt->hide ();
 		dockwgt->setMinimumWidth (100);
 		fileWidget = new QWidget (dockwgt);
 		fileBox = new QVBoxLayout ( fileWidget);
 		fileBox->setMargin( 5 );
 		fileBox->setSpacing( 3 );
-		currFileTreew = new EntityContainer (fileWidget);
+		currFileTreew = new EntityContainer (fileWidget, this);
 		fileTrees.insert ( NULL, currFileTreew);
 		fileBox->addWidget ( currFileTreew);
 		fileLock = new QPushButton (tr("Lock view"), fileWidget);
@@ -78,38 +101,117 @@ bool Navigator::setEnabled (bool e)
 		dockwgt->setWidget (fileWidget);
 		MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( dockwgt,  tr( "Navigator" ), QPixmap( ":/icons/redo.png" ) );
 		connect ( MonkeyCore::fileManager(), SIGNAL (currentFileChanged( pAbstractChild*, const QString& )) , this, SLOT (currentFileChanged( pAbstractChild*, const QString )));
+		
+		if ( !curFile.isEmpty() )
+		{
+			showFile( curFile );
+		}
 	}
 	else
 	{
 		disconnect ( MonkeyCore::fileManager(), SIGNAL (currentFileChanged( pAbstractChild*, const QString& )) , this, SLOT (currentFileChanged( pAbstractChild*, const QString& )));
 		delete dockwgt;
+#warning memory leak ! can''t delete, cause one can be child of dock that will delete it, causing qDeleteAll to delete an already deleted object
+		//qDeleteAll( fileTrees );
+		fileTrees.clear();	
 	}
 	return true;
 }
 
+/*!
+	Get settings widget for configuring plugin
+	\return Pointer to widget
+*/
 QWidget* Navigator::settingsWidget ()
 {
-	return new NavigatorSettings ();
+	return new NavigatorSettings (this);
 }
 
+/*!
+	Set display mask for displaying items in the tree. 
+	Mask will be stored in the settings
+	
+	\param mask Mask should contain logical OR of types of entityes, which should be 
+		displayed in the tree. See EntityType for description of entity types
+*/
 void Navigator::setDisplayMask (int mask)
 {
 	displayMask = mask;
 	setSettingsValue( "DisplayMask", QVariant( mask ) );
 }
 	
+/*!
+	Get display mask of plugin.
+	\return Display mask
+	\retval Logical OR of types on Entityes, which should be displayed
+*/
 int Navigator::getDisplayMask (void)
-{return displayMask;}
+{
+	return displayMask;
+}
 
+/*!
+	Set expand mask for automatical expanding some nodes in the tree. 
+	Mask will be stored in the settings
+	
+	\param mask Mask should contain logical OR of types of entityes, which should be 
+		automatically expanded. See EntityType for description of entity types
+*/
 void Navigator::setExpandMask (int mask)
 {
 	expandMask = mask;
 	setSettingsValue( "ExpandMask", QVariant( mask ) );	
 }
 
+/*!
+	Get expand mask of plugin.
+	\return Expand mask
+	\retval Logical OR of types on Entityes, which should be automatically expanded
+*/
 int Navigator::getExpandMask (void)
-{return expandMask;}
+{
+	return expandMask;
+}
 
+/*!
+	Set autoHide mode of plugin
+	If autoHide is switched on, dock of the Navigator will be hiden every time,
+	when user selected some item.
+	
+	\param value value of option
+*/
+void Navigator::setAutoHide (bool value)
+{
+	mAutoHide = value;
+	setSettingsValue( "AutoHide", QVariant( value ) );	
+}
+
+/*!
+	Get autoHide mode of plugin.
+	\return option value
+*/
+#include <QDebug> //FIXME
+bool Navigator::getAutoHide (void)
+{
+		qDebug() <<  mAutoHide << this;
+	return mAutoHide;
+}
+
+/*!
+	Set dock visible of hidden
+	\param visible Do dock have to be visible
+*/
+void Navigator::setDockVisible (bool visible)
+{
+	dockwgt->setVisible (visible);
+}
+
+/*!
+	Signal handler, which switches current file in the view, according with 
+	current editing file
+	\param absPath Absolute file path of new file
+*/
+#include <QDebug>
 void Navigator::currentFileChanged(pAbstractChild*, const QString absPath)
 {
 	if (fileLock->isChecked())
@@ -117,6 +219,10 @@ void Navigator::currentFileChanged(pAbstractChild*, const QString absPath)
 	showFile (absPath);
 }
 
+/*!
+	External interface for display file in the Navigator
+	\return Display absPath Absolute path of file, which should be displayed
+*/
 void Navigator::showFile (const QString& absPath)
 {
 	QStringList files (absPath); //  'files' contains list of all paths
@@ -133,11 +239,15 @@ void Navigator::showFile (const QString& absPath)
 // 		return;  //do not need do something, if tab not active
 	EntityContainer* oldWidget = currFileTreew; //save current TreeView
 	currFileTreew = fileTrees [absPath]; //Try to find Treew for requested file in the cache
+	
 	if ( currFileTreew == NULL ) //not finded
 	{
-		currFileTreew = new EntityContainer ( NULL);
+		currFileTreew = new EntityContainer ( NULL, this);
 		fileTrees.insert ( absPath, currFileTreew );
 	}//OK, not currFileTreew - actual for requested file
+	
+	dockwgt->setFocusProxy( currFileTreew );
+	
 	for ( int i = 0; i< files.size(); i++)
 	{
 		currFileTreew->updateFileInfo ( files[i] );	
@@ -153,8 +263,7 @@ void Navigator::showFile (const QString& absPath)
 	else
 		dockwgt->show();
 	*/
-		fileWidget->setUpdatesEnabled(true);
+	fileWidget->setUpdatesEnabled(true);
 }
-
 
 Q_EXPORT_PLUGIN2( BaseNavigator, Navigator )

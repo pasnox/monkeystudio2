@@ -1,8 +1,10 @@
+//TODO make it standalone application
+
 #include "RegExpEditor.h"
 #include "UIRegExpEditor.h"
 
-#include <coremanager.h>
-#include <maininterface.h>
+#include <MonkeyCore.h>
+#include <UIMain.h>
 
 RegExpEditor::RegExpEditor()
 {

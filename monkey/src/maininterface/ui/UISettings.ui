@@ -215,14 +215,6 @@
       <number>0</number>
      </property>
      <widget class="QWidget" name="pGeneral" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>699</height>
-       </rect>
-      </property>
       <layout class="QGridLayout" >
        <property name="margin" >
         <number>0</number>
@@ -242,57 +234,35 @@
           <property name="spacing" >
            <number>3</number>
           </property>
-          <item row="0" column="0" colspan="2" >
-           <widget class="QCheckBox" name="cbRestoreProjectsOnStartup" >
-            <property name="enabled" >
-             <bool>false</bool>
-            </property>
-            <property name="text" >
-             <string>Restore Projects On Startup</string>
-            </property>
-            <property name="checked" >
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0" colspan="2" >
+          <item row="2" column="0" colspan="2" >
            <widget class="QLabel" name="lDefaultProjectsDirectory" >
-            <property name="enabled" >
-             <bool>false</bool>
-            </property>
             <property name="text" >
              <string>Default projects directory :</string>
             </property>
            </widget>
           </item>
-          <item row="4" column="1" >
+          <item row="3" column="1" >
            <widget class="QToolButton" name="tbDefaultProjectsDirectory" >
-            <property name="enabled" >
-             <bool>false</bool>
-            </property>
             <property name="text" >
              <string>...</string>
             </property>
            </widget>
           </item>
-          <item row="4" column="0" >
+          <item row="3" column="0" >
            <widget class="QLineEdit" name="leDefaultProjectsDirectory" >
-            <property name="enabled" >
-             <bool>false</bool>
-            </property>
             <property name="text" >
              <string>%HOME%/.Monkey Studio/Projects</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="0" colspan="2" >
+          <item row="1" column="0" colspan="2" >
            <widget class="QCheckBox" name="cbSaveFiles" >
             <property name="text" >
              <string>Save all files on custom action ( Build, Debugger, Interpreter )</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0" colspan="2" >
+          <item row="0" column="0" colspan="2" >
            <widget class="QCheckBox" name="cbSaveProjects" >
             <property name="text" >
              <string>Save all projects on custom action ( Build, Debugger, Interpreter )</string>
@@ -375,19 +345,14 @@
            </widget>
           </item>
           <item row="3" column="1" colspan="2" >
-           <widget class="QToolButton" name="tbTabsTextColor" >
+           <widget class="pColorButton" name="tbTabsTextColor" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="iconSize" >
-             <size>
-              <width>48</width>
-              <height>16</height>
-             </size>
-            </property>
+            
            </widget>
           </item>
           <item row="3" column="0" >
@@ -405,19 +370,14 @@
            </widget>
           </item>
           <item row="4" column="1" colspan="2" >
-           <widget class="QToolButton" name="tbCurrentTabTextColor" >
+           <widget class="pColorButton" name="tbCurrentTabTextColor" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="iconSize" >
-             <size>
-              <width>48</width>
-              <height>16</height>
-             </size>
-            </property>
+            
            </widget>
           </item>
           <item row="5" column="0" >
@@ -501,14 +461,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pPaths" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>699</height>
-       </rect>
-      </property>
       <layout class="QVBoxLayout" >
        <property name="spacing" >
         <number>3</number>
@@ -540,14 +492,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pEditorGeneral" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>699</height>
-       </rect>
-      </property>
       <layout class="QVBoxLayout" >
        <property name="spacing" >
         <number>3</number>
@@ -602,9 +546,9 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="gbDEncoding" >
+        <widget class="QGroupBox" name="gbDefaultCodec" >
          <property name="title" >
-          <string>Default encoding</string>
+          <string>Default text codec</string>
          </property>
          <layout class="QHBoxLayout" >
           <property name="spacing" >
@@ -614,7 +558,7 @@
            <number>5</number>
           </property>
           <item>
-           <widget class="QComboBox" name="cbDefaultEncoding" />
+           <widget class="QComboBox" name="cbDefaultCodec" />
           </item>
          </layout>
         </widget>
@@ -645,19 +589,14 @@
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="tbSelectionBackground" >
+           <widget class="pColorButton" name="tbSelectionBackground" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="iconSize" >
-             <size>
-              <width>48</width>
-              <height>16</height>
-             </size>
-            </property>
+            
            </widget>
           </item>
           <item>
@@ -668,19 +607,14 @@
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="tbSelectionForeground" >
+           <widget class="pColorButton" name="tbSelectionForeground" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="iconSize" >
-             <size>
-              <width>48</width>
-              <height>16</height>
-             </size>
-            </property>
+            
            </widget>
           </item>
          </layout>
@@ -709,19 +643,14 @@
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="tbDefaultDocumentPen" >
+           <widget class="pColorButton" name="tbDefaultDocumentPen" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="iconSize" >
-             <size>
-              <width>48</width>
-              <height>16</height>
-             </size>
-            </property>
+            
            </widget>
           </item>
           <item>
@@ -732,19 +661,14 @@
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="tbDefaultDocumentPaper" >
+           <widget class="pColorButton" name="tbDefaultDocumentPaper" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="iconSize" >
-             <size>
-              <width>48</width>
-              <height>16</height>
-             </size>
-            </property>
+            
            </widget>
           </item>
          </layout>
@@ -766,14 +690,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pAutoCompletion" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>699</height>
-       </rect>
-      </property>
       <layout class="QVBoxLayout" >
        <property name="spacing" >
         <number>3</number>
@@ -930,14 +846,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pCalltips" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>699</height>
-       </rect>
-      </property>
       <layout class="QVBoxLayout" >
        <property name="spacing" >
         <number>3</number>
@@ -1087,34 +995,23 @@
                </widget>
               </item>
               <item row="2" column="1" >
-               <widget class="QToolButton" name="tbCalltipsHighlight" >
+               <widget class="pColorButton" name="tbCalltipsHighlight" >
                 <property name="sizePolicy" >
                  <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
                 </property>
-                <property name="iconSize" >
-                 <size>
-                  <width>48</width>
-                  <height>16</height>
-                 </size>
-                </property>
+                
                </widget>
               </item>
               <item row="0" column="1" >
-               <widget class="QToolButton" name="tbCalltipsBackground" >
+               <widget class="pColorButton" name="tbCalltipsBackground" >
                 <property name="sizePolicy" >
                  <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
-                </property>
-                <property name="iconSize" >
-                 <size>
-                  <width>48</width>
-                  <height>16</height>
-                 </size>
                 </property>
                </widget>
               </item>
@@ -1126,18 +1023,12 @@
                </widget>
               </item>
               <item row="1" column="1" >
-               <widget class="QToolButton" name="tbCalltipsForeground" >
+               <widget class="pColorButton" name="tbCalltipsForeground" >
                 <property name="sizePolicy" >
                  <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
-                </property>
-                <property name="iconSize" >
-                 <size>
-                  <width>48</width>
-                  <height>16</height>
-                 </size>
                 </property>
                </widget>
               </item>
@@ -1164,14 +1055,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pIndentation" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>699</height>
-       </rect>
-      </property>
       <layout class="QVBoxLayout" >
        <property name="spacing" >
         <number>3</number>
@@ -1366,18 +1249,12 @@
              </widget>
             </item>
             <item>
-             <widget class="QToolButton" name="tbIndentationGuidesBackground" >
+             <widget class="pColorButton" name="tbIndentationGuidesBackground" >
               <property name="sizePolicy" >
                <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
-              </property>
-              <property name="iconSize" >
-               <size>
-                <width>48</width>
-                <height>16</height>
-               </size>
               </property>
              </widget>
             </item>
@@ -1389,18 +1266,12 @@
              </widget>
             </item>
             <item>
-             <widget class="QToolButton" name="tbIndentationGuidesForeground" >
+             <widget class="pColorButton" name="tbIndentationGuidesForeground" >
               <property name="sizePolicy" >
                <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
-              </property>
-              <property name="iconSize" >
-               <size>
-                <width>48</width>
-                <height>16</height>
-               </size>
               </property>
              </widget>
             </item>
@@ -1425,14 +1296,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pBraceMatching" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>699</height>
-       </rect>
-      </property>
       <layout class="QVBoxLayout" >
        <property name="spacing" >
         <number>3</number>
@@ -1464,18 +1327,12 @@
              <number>3</number>
             </property>
             <item row="1" column="1" >
-             <widget class="QToolButton" name="tbMatchedBraceBackground" >
+             <widget class="pColorButton" name="tbMatchedBraceBackground" >
               <property name="sizePolicy" >
                <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
-              </property>
-              <property name="iconSize" >
-               <size>
-                <width>48</width>
-                <height>16</height>
-               </size>
               </property>
              </widget>
             </item>
@@ -1501,18 +1358,12 @@
              </widget>
             </item>
             <item row="0" column="1" >
-             <widget class="QToolButton" name="tbMatchedBraceForeground" >
+             <widget class="pColorButton" name="tbMatchedBraceForeground" >
               <property name="sizePolicy" >
                <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
-              </property>
-              <property name="iconSize" >
-               <size>
-                <width>48</width>
-                <height>16</height>
-               </size>
               </property>
              </widget>
             </item>
@@ -1524,34 +1375,22 @@
              </widget>
             </item>
             <item row="3" column="1" >
-             <widget class="QToolButton" name="tbUnmatchedBraceBackground" >
+             <widget class="pColorButton" name="tbUnmatchedBraceBackground" >
               <property name="sizePolicy" >
                <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
-              </property>
-              <property name="iconSize" >
-               <size>
-                <width>48</width>
-                <height>16</height>
-               </size>
               </property>
              </widget>
             </item>
             <item row="2" column="1" >
-             <widget class="QToolButton" name="tbUnmatchedBraceForeground" >
+             <widget class="pColorButton" name="tbUnmatchedBraceForeground" >
               <property name="sizePolicy" >
                <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
-              </property>
-              <property name="iconSize" >
-               <size>
-                <width>48</width>
-                <height>16</height>
-               </size>
               </property>
              </widget>
             </item>
@@ -1590,14 +1429,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pEdgeMode" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>699</height>
-       </rect>
-      </property>
       <layout class="QVBoxLayout" >
        <property name="spacing" >
         <number>3</number>
@@ -1636,18 +1467,12 @@
              </widget>
             </item>
             <item>
-             <widget class="QToolButton" name="tbEdgeColor" >
+             <widget class="pColorButton" name="tbEdgeColor" >
               <property name="sizePolicy" >
                <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
-              </property>
-              <property name="iconSize" >
-               <size>
-                <width>48</width>
-                <height>16</height>
-               </size>
               </property>
              </widget>
             </item>
@@ -1738,14 +1563,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pCaret" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>699</height>
-       </rect>
-      </property>
       <layout class="QVBoxLayout" >
        <property name="spacing" >
         <number>3</number>
@@ -1769,19 +1586,14 @@
            <number>3</number>
           </property>
           <item row="1" column="1" >
-           <widget class="QToolButton" name="tbCaretForeground" >
+           <widget class="pColorButton" name="tbCaretForeground" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="iconSize" >
-             <size>
-              <width>48</width>
-              <height>16</height>
-             </size>
-            </property>
+            
            </widget>
           </item>
           <item row="0" column="0" >
@@ -1857,19 +1669,14 @@
            </layout>
           </item>
           <item row="0" column="1" >
-           <widget class="QToolButton" name="tbCaretLineBackground" >
+           <widget class="pColorButton" name="tbCaretLineBackground" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="iconSize" >
-             <size>
-              <width>48</width>
-              <height>16</height>
-             </size>
-            </property>
+            
            </widget>
           </item>
          </layout>
@@ -1891,14 +1698,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pMargins" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>699</height>
-       </rect>
-      </property>
       <layout class="QVBoxLayout" >
        <property name="spacing" >
         <number>3</number>
@@ -2044,13 +1843,8 @@
            </layout>
           </item>
           <item row="1" column="2" >
-           <widget class="QToolButton" name="tbFoldMarginBackground" >
-            <property name="iconSize" >
-             <size>
-              <width>48</width>
-              <height>16</height>
-             </size>
-            </property>
+           <widget class="pColorButton" name="tbFoldMarginBackground" >
+            
            </widget>
           </item>
           <item row="1" column="1" >
@@ -2061,13 +1855,8 @@
            </widget>
           </item>
           <item row="0" column="2" >
-           <widget class="QToolButton" name="tbFoldMarginForeground" >
-            <property name="iconSize" >
-             <size>
-              <width>48</width>
-              <height>16</height>
-             </size>
-            </property>
+           <widget class="pColorButton" name="tbFoldMarginForeground" >
+            
            </widget>
           </item>
           <item row="0" column="1" >
@@ -2119,22 +1908,12 @@
             <property name="text" >
              <string>12345</string>
             </property>
-            <property name="iconSize" >
-             <size>
-              <width>48</width>
-              <height>16</height>
-             </size>
-            </property>
+            
            </widget>
           </item>
           <item row="1" column="1" >
-           <widget class="QToolButton" name="tbMarginsBackground" >
-            <property name="iconSize" >
-             <size>
-              <width>48</width>
-              <height>16</height>
-             </size>
-            </property>
+           <widget class="pColorButton" name="tbMarginsBackground" >
+            
            </widget>
           </item>
           <item row="0" column="0" >
@@ -2145,13 +1924,8 @@
            </widget>
           </item>
           <item row="0" column="1" >
-           <widget class="QToolButton" name="tbMarginsForeground" >
-            <property name="iconSize" >
-             <size>
-              <width>48</width>
-              <height>16</height>
-             </size>
-            </property>
+           <widget class="pColorButton" name="tbMarginsForeground" >
+            
            </widget>
           </item>
           <item row="1" column="0" >
@@ -2187,14 +1961,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pEditorVisibility" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>699</height>
-       </rect>
-      </property>
       <layout class="QVBoxLayout" >
        <property name="spacing" >
         <number>3</number>
@@ -2205,7 +1971,7 @@
        <item>
         <widget class="QGroupBox" name="gbEolMode" >
          <property name="title" >
-          <string>Eol Mode</string>
+          <string>EOL Mode</string>
          </property>
          <layout class="QGridLayout" >
           <property name="margin" >
@@ -2214,7 +1980,7 @@
           <property name="spacing" >
            <number>3</number>
           </property>
-          <item row="1" column="0" colspan="3" >
+          <item row="2" column="0" colspan="3" >
            <widget class="QCheckBox" name="cbEolVisibility" >
             <property name="text" >
              <string>Eol Visibility</string>
@@ -2239,6 +2005,13 @@
            <widget class="QRadioButton" name="rbEolUnix" >
             <property name="text" >
              <string>Unix</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" >
+           <widget class="QCheckBox" name="cbAutoDetectEol" >
+            <property name="text" >
+             <string>Autodetect EOL</string>
             </property>
            </widget>
           </item>
@@ -2462,14 +2235,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pSourceAPIs" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>699</height>
-       </rect>
-      </property>
       <layout class="QVBoxLayout" >
        <property name="spacing" >
         <number>3</number>
@@ -2540,14 +2305,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pLexersAssociations" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>699</height>
-       </rect>
-      </property>
       <layout class="QGridLayout" >
        <property name="margin" >
         <number>0</number>
@@ -2624,14 +2381,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pLexersHighlighting" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>699</height>
-       </rect>
-      </property>
       <layout class="QGridLayout" >
        <property name="margin" >
         <number>0</number>
@@ -2937,14 +2686,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="pAbbreviations" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>481</width>
-        <height>699</height>
-       </rect>
-      </property>
       <layout class="QVBoxLayout" >
        <property name="spacing" >
         <number>3</number>
@@ -3075,6 +2816,11 @@
    <extends>QGroupBox</extends>
    <header location="global" >fresh.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>pColorButton</class>
+   <extends>QPushButton</extends>
+   <header location="global" >pColorButton.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

@@ -35,13 +35,7 @@ struct LexerStyle
 {
 	LexerStyle() {}
 	LexerStyle( int i, int c, bool e, const QString& f, int p )
-	{
-		id = i;
-		color = c;
-		eolfill = e;
-		font = f;
-		paper = p;
-	}
+	{ id = i; color = c; eolfill = e; font = f; paper = p; }
 	
 	int id;
 	int color;

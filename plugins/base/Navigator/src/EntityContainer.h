@@ -26,21 +26,37 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file EntityContainer.h
+	\date 2008-01-14T00:40:08
+	\author Andrei Kopats
+	\brief Header file for EntityContainer class
+*/
 #ifndef ENTITYCONTAINER_H
 #define ENTITYCONTAINER_H
 #include <QTreeWidget>
 #include "Entity.h"
 
+class Navigator;
+
+/*!
+	\brief Root root of tree, displaying file items
+	
+	Class herited from QTreeWidget using for build tree for file and for displaying
+	this tree on UI
+*/
 class EntityContainer  : public QTreeWidget 
 {
 Q_OBJECT
 public:
-	EntityContainer ( QWidget* parent);
+	EntityContainer ( QWidget* parent, Navigator* navigator);
 	~EntityContainer ();
 	void updateFileInfo ( QString fileName );	
 	void deleteFileInfo ( QString file, QDateTime olderThan );
 
 private:
+	Navigator* mNavigator;
+	
 	void addTagsFromRecord (QString fileName, FileRecord*  fileRecord);
 
 	Entity* childEntity (int);

@@ -6,9 +6,9 @@ int main( int argc, char** argv )
 	QCoreApplication app( argc, argv );
 
 	// init application
-	app.setApplicationName( "$Application Name$" );
+	app.setApplicationName( "$Project Name$" );
 
-	qWarning( "$Application Name$" );
+	qWarning( "$Project Name$" );
 
 	// start application
 	return app.exec();

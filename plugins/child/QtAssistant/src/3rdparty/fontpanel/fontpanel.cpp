@@ -1,35 +1,40 @@
 /****************************************************************************
 **
-** Copyright (C) 1992-2007 Trolltech ASA. All rights reserved.
+** Copyright (C) 1992-2008 Trolltech ASA. All rights reserved.
 **
 ** This file is part of the tools applications of the Qt Toolkit.
 **
 ** This file may be used under the terms of the GNU General Public
-** License version 2.0 as published by the Free Software Foundation
-** and appearing in the file LICENSE.GPL included in the packaging of
-** this file.  Please review the following information to ensure GNU
-** General Public Licensing requirements will be met:
-** http://trolltech.com/products/qt/licenses/licensing/opensource/
+** License versions 2.0 or 3.0 as published by the Free Software
+** Foundation and appearing in the files LICENSE.GPL2 and LICENSE.GPL3
+** included in the packaging of this file.  Alternatively you may (at
+** your option) use any later version of the GNU General Public
+** License if such license has been publicly approved by Trolltech ASA
+** (or its successors, if any) and the KDE Free Qt Foundation. In
+** addition, as a special exception, Trolltech gives you certain
+** additional rights. These rights are described in the Trolltech GPL
+** Exception version 1.2, which can be found at
+** http://www.trolltech.com/products/qt/gplexception/ and in the file
+** GPL_EXCEPTION.txt in this package.
 **
-** If you are unsure which license is appropriate for your use, please
+** Please review the following information to ensure GNU General
+** Public Licensing requirements will be met:
+** http://trolltech.com/products/qt/licenses/licensing/opensource/. If
+** you are unsure which license is appropriate for your use, please
 ** review the following information:
 ** http://trolltech.com/products/qt/licenses/licensing/licensingoverview
 ** or contact the sales department at sales@trolltech.com.
 **
-** In addition, as a special exception, Trolltech gives you certain
-** additional rights. These rights are described in the Trolltech GPL
-** Exception version 1.0, which can be found at
-** http://www.trolltech.com/products/qt/gplexception/ and in the file
-** GPL_EXCEPTION.txt in this package.
+** In addition, as a special exception, Trolltech, as the sole
+** copyright holder for Qt Designer, grants users of the Qt/Eclipse
+** Integration plug-in the right for the Qt/Eclipse Integration to
+** link to functionality provided by Qt Designer and its related
+** libraries.
 **
-** In addition, as a special exception, Trolltech, as the sole copyright
-** holder for Qt Designer, grants users of the Qt/Eclipse Integration
-** plug-in the right for the Qt/Eclipse Integration to link to
-** functionality provided by Qt Designer and its related libraries.
-**
-** Trolltech reserves all rights not expressly granted herein.
-** 
-** Trolltech ASA (c) 2007
+** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
+** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
+** A PARTICULAR PURPOSE. Trolltech reserves all rights not expressly
+** granted herein.
 **
 ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -40,21 +45,13 @@
 
 #include <QtGui/QLabel>
 #include <QtGui/QComboBox>
-#include <QtGui/QGridLayout>
+#include <QtGui/QFormLayout>
 #include <QtGui/QSpacerItem>
 #include <QtGui/QFontComboBox>
 #include <QtCore/QTimer>
 #include <QtGui/QLineEdit>
 
-
-// Add a row consisting of widget and a description label to a grid.
-static void addGridRow(const QString &description, QGridLayout *gridLayout, QWidget *w, int &row) {
-    QLabel *label = new QLabel(description);
-    label->setBuddy(w);
-    gridLayout->addWidget(label, row, 0);
-    gridLayout->addWidget(w, row, 1);
-    ++row;
-}
+QT_BEGIN_NAMESPACE
 
 FontPanel::FontPanel(QWidget *parentWidget) :
     QGroupBox(parentWidget),
@@ -67,9 +64,7 @@ FontPanel::FontPanel(QWidget *parentWidget) :
 {
     setTitle(tr("Font"));
 
-    QGridLayout *gridLayout = new QGridLayout(this);
-    int row = 0;
-
+    QFormLayout *formLayout = new QFormLayout(this);
     // writing systems
     m_writingSystemComboBox->setEditable(false);
 
@@ -78,21 +73,21 @@ FontPanel::FontPanel(QWidget *parentWidget) :
     foreach (QFontDatabase::WritingSystem ws, writingSystems)
         m_writingSystemComboBox->addItem(QFontDatabase::writingSystemName(ws), QVariant(ws));
     connect(m_writingSystemComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotWritingSystemChanged(int)));
-    addGridRow(tr("&Writing system"), gridLayout, m_writingSystemComboBox, row);
+    formLayout->addRow(tr("&Writing system"), m_writingSystemComboBox);
 
     connect(m_familyComboBox, SIGNAL( currentFontChanged(QFont)), this, SLOT(slotFamilyChanged(QFont)));
-    addGridRow(tr("&Family"), gridLayout, m_familyComboBox, row);
+    formLayout->addRow(tr("&Family"), m_familyComboBox);
 
     m_styleComboBox->setEditable(false);
     connect(m_styleComboBox,  SIGNAL(currentIndexChanged(int)),  this, SLOT(slotStyleChanged(int)));
-    addGridRow(tr("&Style"), gridLayout, m_styleComboBox, row);
+    formLayout->addRow(tr("&Style"), m_styleComboBox);
 
     m_pointSizeComboBox->setEditable(false);
     connect(m_pointSizeComboBox, SIGNAL(currentIndexChanged(int)),  this, SLOT(slotPointSizeChanged(int)));
-    addGridRow(tr("&Point size"), gridLayout, m_pointSizeComboBox, row);
+    formLayout->addRow(tr("&Point size"), m_pointSizeComboBox);
 
     m_previewLineEdit->setReadOnly(true);
-    gridLayout->addWidget (m_previewLineEdit, row, 0, 1, 2);
+    formLayout->addRow(m_previewLineEdit);
 
     setWritingSystem(QFontDatabase::Any);
 }
@@ -305,6 +300,7 @@ void FontPanel::delayedPreviewFontUpdate()
     }
     if (m_previewFontUpdateTimer->isActive())
         return;
-
     m_previewFontUpdateTimer->start();
 }
+
+QT_END_NAMESPACE

@@ -32,67 +32,137 @@
 #include <QStringList>
 #include <QDir>
 
+#include <QDebug>
+
 Settings::Settings( QObject* o )
 	: pSettings( o )
 {}
 
 void Settings::setDefaultSettings()
 {
-	QString mPath;
-	QString s;
-	QStringList l;
-	bool relativePath;
-	bool binContainsPlugins = false;
-#ifdef Q_OS_MAC
-	mPath = "..";
-#elif defined Q_OS_WIN
-	mPath = ".";
-#else
-	mPath = "..";
-	// get app path
 	const QString appPath = qApp->applicationDirPath();
-	// get app folders list
-	const QStringList folders = QDir( appPath ).entryList( QDir::AllDirs | QDir::NoDotAndDotDot );
-	// if it contains at least plugins it can be installed fodler
-	if ( folders.contains( "plugins" ) )
+	bool appIsInstalled = appPath == PACKAGE_PREFIX;
+	QString pluginsPath;
+	QString templatesPath;
+	QString translationsPath;
+	QString apisPath;
+
+#ifdef Q_OS_WIN
+	if ( appIsInstalled && !QFile::exists( QString( "%1/templates" ).arg( appPath ) ) )
 	{
-		// plugin is default build into bin, but datas are .. level
-		mPath = "..";
-		binContainsPlugins = true;
-		// if it contains apis, then all fodlers are there
-		if ( folders.contains( "apis" ) )
-		mPath = ".";
+		appIsInstalled = false;
 	}
-	else if ( QDir( PACKAGE_DATAS ).exists() )
-		mPath = PACKAGE_DATAS;
+	
+	if ( !appIsInstalled && QFile::exists( QString( "%1/templates" ).arg( appPath ) ) )
+	{
+		appIsInstalled = true;
+	}
+#elif defined Q_OS_MAC
+	if ( appIsInstalled && !QFile::exists( QString( "%1/../Resources/templates" ).arg( appPath ) ) )
+	{
+		appIsInstalled = false;
+	}
+	
+	if ( !appIsInstalled && QFile::exists( QString( "%1/../Resources/templates" ).arg( appPath ) ) )
+	{
+		appIsInstalled = true;
+	}
 #endif
-	relativePath = QDir( mPath ).isRelative();
-	// templates
-	l.clear();
-	l << QString( "%1/templates" ).arg( mPath );
-	if ( !l.contains( "../templates" ) )
-		l << "../templates";
-	setValue( "Templates/DefaultDirectories", l );
-	// apis
-	s = QString( "%1/apis" ).arg( mPath );
-	if ( !QDir( s ).exists() )
-		s = QString( "%1/ctags/apis" ).arg( mPath );
-	setValue( "SourceAPIs/CMake", QStringList( s +"/cmake.api" ) );
-	setValue( "SourceAPIs/C#", QStringList( s +"/cs.api" ) );
-	setValue( "SourceAPIs/C++", QStringList() << s +"/c.api" << s +"/cpp.api" << s +"/glut.api" << s +"/opengl.api" << s +"/qt-4.4.0.api" );
-	// translations
-	l.clear();
-	l << QString( "%1/translations" ).arg( mPath );
-	if ( !l.contains( "../translations" ) )
-		l << "../translations";
-	setValue( "Translations/Path", l );
+	
+	if ( !appIsInstalled )
+	{
+#ifdef Q_OS_MAC
+		pluginsPath = "../plugins";
+		templatesPath = "../../../../templates";
+		translationsPath = "../../../../translations";
+		apisPath = "../../../../ctags/apis";
+#elif defined Q_OS_WIN
+		pluginsPath = "plugins";
+		templatesPath = "../templates";
+		translationsPath = "../translations";
+		apisPath = "../ctags/apis";
+#else
+		pluginsPath = "plugins";
+		templatesPath = "../templates";
+		translationsPath = "../translations";
+		apisPath = "../ctags/apis";
+#endif
+	}
+	else
+	{
+#ifdef Q_OS_MAC
+		pluginsPath = "../plugins";
+		templatesPath = "../Resources/templates";
+		translationsPath = "../Resources/translations";
+		apisPath = "../Resources/apis";
+#elif defined Q_OS_WIN
+		pluginsPath = "plugins";
+		templatesPath = "templates";
+		translationsPath = "translations";
+		apisPath = "apis";
+#else
+		pluginsPath = PACKAGE_PLUGINS;
+		templatesPath = QString( "%1/templates" ).arg( PACKAGE_DATAS );
+		translationsPath = QString( "%1/translations" ).arg( PACKAGE_DATAS );
+		apisPath = QString( "%1/apis" ).arg( PACKAGE_DATAS );
+#endif
+	}
+	
+	/*
+	qWarning() << "Settings::setDefaultSettings()" << appPath << PACKAGE_PREFIX << appIsInstalled;
+	qWarning() << "pluginsPath" << pluginsPath;
+	qWarning() << "templatesPath" << templatesPath;
+	qWarning() << "translationsPath" << translationsPath;
+	qWarning() << "apisPath" << apisPath;
+	*/
+	
 	// plugins
-	l.clear();
-	if ( !binContainsPlugins )
-		l << QString( "%1/plugins" ).arg( mPath );
-	if ( !l.contains( "plugins" ) && !l.contains( "./plugins" ) )
-		l << "plugins";
-	setValue( "Plugins/Path", l );
+	if ( !pluginsPath.isEmpty() )
+	{
+		QStringList paths = value( "Plugins/Path" ).toStringList();
+		
+		if ( !paths.contains( pluginsPath ) )
+		{
+			paths << pluginsPath;
+		}
+		
+		setValue( "Plugins/Path", paths );
+	}
+	
+	// templates
+	if ( !templatesPath.isEmpty() )
+	{
+		QStringList paths = value( "Templates/DefaultDirectories" ).toStringList();
+		
+		if ( !paths.contains( templatesPath ) )
+		{
+			paths << templatesPath;
+		}
+		
+		setValue( "Templates/DefaultDirectories", paths );
+	}
+	
+	// translations
+	if ( !translationsPath.isEmpty() )
+	{
+		QStringList paths = value( "Translations/Path" ).toStringList();
+		
+		if ( !paths.contains( translationsPath ) )
+		{
+			paths << translationsPath;
+		}
+		
+		setValue( "Translations/Path", paths );
+	}
+	
+	// apis
+	if ( !apisPath.isEmpty() )
+	{
+		setValue( "SourceAPIs/CMake", QStringList( apisPath +"/cmake.api" ) );
+		setValue( "SourceAPIs/C#", QStringList( apisPath +"/cs.api" ) );
+		setValue( "SourceAPIs/C++", QStringList() << apisPath +"/c.api" << apisPath +"/cpp.api" << apisPath +"/glut.api" << apisPath +"/opengl.api" << apisPath +"/qt-4.4.0.api" );
+	}
+	
 	// syntax highlighter
 	setDefaultCppSyntaxHighlight();
 }
@@ -100,7 +170,7 @@ void Settings::setDefaultSettings()
 void Settings::setDefaultCppSyntaxHighlight()
 {
 #if defined Q_OS_MAC
-	const QString font = "Bitstream Vera Sans Mono, 10";
+	const QString font = "Bitstream Vera Sans Mono, 11";
 #elif defined Q_OS_WIN
 	const QString font = "Courier New, 10";
 #else

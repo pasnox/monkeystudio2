@@ -1,5 +1,0 @@
-#include "../src/workspace/pAbstractChild.h"
-#include "../src/workspace/pChild.h"
-#include "../src/workspace/pFileManager.h"
-#include "../src/workspace/pWorkspace.h"
-#include "../src/workspace/UISaveFiles.h"

@@ -26,6 +26,13 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file pDockFileBrowser.h
+	\date 2008-01-14T00:40:08
+	\author Filipe AZEVEDO, Andrei KOPATS
+	\brief UI of FileBrowser plugin
+*/
+
 #ifndef PDOCKFILEBROWSER_H
 #define PDOCKFILEBROWSER_H
 
@@ -41,6 +48,13 @@ class QListView;
 class QFileSystemModel;
 class QTreeView;
 
+/*!
+	UI interface of FileBrowser plugin. 
+	
+	Dock with file system tree, Combo Box, allowing navigation in a file system
+	tree, buttons for moving root of tree to currently selected dirrectory and
+	up (relatively for current dirrectory)
+*/
 class pDockFileBrowser : public pDockWidget
 {
 	Q_OBJECT
@@ -82,22 +96,30 @@ public:
 	
 	QString currentPath() const;
 	QStringList filters() const;
+	QStringList bookmarks() const;
 
 protected:
-	pTreeComboBox* mCombo;
 	QLineEdit* mLineEdit;
 	QTreeView* mTree;
 	QFileSystemModel* mDirsModel;
 	FileBrowserFilteredModel* mFilteredModel;
+	QStringList mBookmarks;
+	QMenu* mBookmarksMenu;
 
 public slots:
 	void setCurrentPath( const QString& path );
 	void setFilters( const QStringList& filters );
+	void setBookmarks( const QStringList& bookmarks );
+	void updateBookmarks();
 
 protected slots:
-	void tbUp_clicked();
-	void tbRoot_clicked();
-	void cb_currentChanged( const QModelIndex& index );
+	void aUp_triggered();
+	void aGoTo_triggered();
+	void aRoot_triggered();
+	void aAdd_triggered();
+	void aRemove_triggered();
+	void bookmark_triggered( QAction* action );
+	void tv_activated( const QModelIndex& index );
 	void tv_doubleClicked( const QModelIndex& index );
 };
 

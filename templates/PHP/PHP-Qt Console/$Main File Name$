@@ -1,0 +1,17 @@
+<?php
+	// loads phpqt module if needed
+	if ( !extension_loaded( 'php_qt' ) )
+	{
+		dl( 'php_qt.' . PHP_SHLIB_SUFFIX );
+	}
+
+	// create application
+	$app = new QCoreApplication( $argc, $argv );
+	$app->setApplicationName( "$Project Name$" );
+	
+	// create test widget
+	qWarning( "This is your PHP-Qt Console Application: $Project Name$" );
+	
+	// execute application
+	//$app->exec(); // uncomment me if needed
+?>

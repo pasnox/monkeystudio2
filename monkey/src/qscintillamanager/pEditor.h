@@ -61,12 +61,18 @@ public:
 	bool canPaste();
 	QPoint cursorPosition() const;
 	
+	//return the text of the current line
+	QString currentLineText() const;
+	
 	bool markerAtLine( int line, pEditor::MarkerDefineType markerId ) const;
 	int markerFindPrevious( int line, pEditor::MarkerDefineType markerId ) const;
 	int markerFindNext( int line, pEditor::MarkerDefineType markerId ) const;
 	
 	// Set for self indentation according with actual in the file
 	void autoDetectIndent();
+
+	// Set for self EOL mode according with actual in the file
+	void autoDetectEol();
 
 protected:
 	void keyPressEvent( QKeyEvent* );
@@ -87,7 +93,7 @@ public slots:
 	void setLineNumbersMarginEnabled( bool );
 	void setLineNumbersMarginWidth( int );
 	void setLineNumbersMarginAutoWidth( bool );
-	bool openFile( const QString& );
+	bool openFile( const QString& fileName, const QString& codec );
 	bool saveFile( const QString& = QString() );
 	bool saveBackup( const QString& );
 	void closeFile();

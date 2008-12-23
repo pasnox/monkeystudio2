@@ -239,7 +239,7 @@ int pExtendedWorkspace::addDocument(QWidget* widget, const QString& title,  cons
 	\param title The windowTitle to set
 	\param icon The windowIcon to set
 */
-int pExtendedWorkspace::insertDocument( int id, QWidget* widget, const QString& title,  const QIcon& icon )
+int pExtendedWorkspace::insertDocument( int id, QWidget* widget, const QString& /*title*/,  const QIcon& icon )
 {
 	// filter the document
 	widget->installEventFilter( this );

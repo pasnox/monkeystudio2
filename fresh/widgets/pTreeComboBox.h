@@ -1,14 +1,4 @@
 /****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Fresh Framework
-** FileName  : pTreeComboBox.h
-** Date      : 2008-01-14T00:27:56
-** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
-**
 	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
 	This program is free software; you can redistribute it and/or modify
@@ -24,8 +14,13 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
 ****************************************************************************/
+/*!
+	\file pTreeComboBox.h
+	\date 2008-01-14T00:27:56
+	\author Filipe AZEVEDO aka Nox P\@sNox <pasnox@gmail.com>
+	\brief An extended QComboBox
+*/
 #ifndef PTREECOMBOBOX_H
 #define PTREECOMBOBOX_H
 
@@ -39,43 +34,47 @@ class QFrame;
 class QTreeView;
 class QAbstractItemModel;
 
+/*!
+	\brief An extended QComboBox
+	\details that handle a QTreeView
+*/
 class Q_MONKEY_EXPORT pTreeComboBox : public QWidget
 {
 	Q_OBJECT
 
 public:
-	pTreeComboBox( QWidget* = 0 );
+	pTreeComboBox( QWidget* parent = 0 );
 	~pTreeComboBox();
 
-	bool eventFilter( QObject*, QEvent* );
+	bool eventFilter( QObject* object, QEvent* event );
 
 	virtual QSize sizeHint() const;
 	int count() const;
 
 	virtual QSize iconSize() const;
-	virtual void setIconSize( const QSize& );
+	virtual void setIconSize( const QSize& size );
 
 	virtual void hidePopup();
 	virtual void showPopup();
 
 	QTreeView* view() const;
-	void setView( QTreeView* );
+	void setView( QTreeView* view );
 
 	QAbstractItemModel* model() const;
-	void setModel( QAbstractItemModel* );
+	void setModel( QAbstractItemModel* model );
 
 	QModelIndex rootIndex() const;
-	void setRootIndex( const QModelIndex& );
+	void setRootIndex( const QModelIndex& index );
 
 	QModelIndex currentIndex() const;
-	void setCurrentIndex( const QModelIndex& );
+	void setCurrentIndex( const QModelIndex& index );
 	
 	void expandAll();
 
 protected slots:
-	void internal_activated( const QModelIndex& );
-	void internal_clicked( const QModelIndex& );
-	void internal_currentChanged( const QModelIndex&, const QModelIndex& );
+	void internal_activated( const QModelIndex& index );
+	void internal_clicked( const QModelIndex& index );
+	void internal_currentChanged( const QModelIndex& current, const QModelIndex& previous );
 
 protected:
 	QSize mIconSize;
@@ -86,20 +85,19 @@ protected:
 	QModelIndex mIndex;
 	bool mForce;
 
-	void paintEvent( QPaintEvent* );
-	void hideEvent( QHideEvent* );
-	void enterEvent( QEvent* );
-	void leaveEvent( QEvent* );
-	void mousePressEvent( QMouseEvent* );
+	void paintEvent( QPaintEvent* event );
+	void hideEvent( QHideEvent* event );
+	void enterEvent( QEvent* event );
+	void leaveEvent( QEvent* event );
+	void mousePressEvent( QMouseEvent* event );
 
 	void calculPopupGeometry();
 
 signals:
-	void activated( const QModelIndex& );
-	void clicked( const QModelIndex& );
-	void currentChanged( const QModelIndex& );
-	void highlighted( const QModelIndex& );
-
+	void activated( const QModelIndex& index );
+	void clicked( const QModelIndex& index );
+	void currentChanged( const QModelIndex& index );
+	void highlighted( const QModelIndex& index );
 };
 
 #endif // PTREECOMBOBOX_H

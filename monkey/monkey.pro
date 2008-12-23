@@ -32,19 +32,17 @@ else:*-g++:LIBS	*= -Wl,--whole-archive # import all symbols as the not used ones
 mac:*-g++:LIBS	*= -dynamic
 else:unix:*-g++:LIBS	*= -rdynamic
 
-!contains( DEFINES, SYSTEM_QSCINTILLA ) {
-	PRE_TARGETDEPS	*= ../qscintilla
-}
+isEqual( SYSTEM_QSCINTILLA, 1 ):PRE_TARGETDEPS	*= ../qscintilla
 PRE_TARGETDEPS	*= ../fresh ../ctags
 
 CONFIG( debug, debug|release ) {
 	#Debug
-	!contains( DEFINES, SYSTEM_QSCINTILLA ) {
-		unix:LIBS	*= -lqscintilla2_debug -lfresh_debug -lctags_debug
-		else:LIBS	*= -lqscintilla2d -lfreshd -lctagsd
+	!isEqual( SYSTEM_QSCINTILLA, 1 ) {
+		unix:	LIBS	*= -lqscintilla2_debug -lfresh_debug -lctags_debug
+		else:	LIBS	*= -lqscintilla2d -lfreshd -lctagsd
 	} else {
-		unix:LIBS	*= -lqscintilla2 -lfresh_debug -lctags_debug
-		else:LIBS	*= -lqscintilla2 -lfreshd -lctagsd
+		unix:	LIBS	*= -lqscintilla2 -lfresh_debug -lctags_debug
+		else:	LIBS	*= -lqscintilla2 -lfreshd -lctagsd
 	}
 	win32-g++:LIBS	*= -Wl,--out-implib,$${PACKAGE_BUILD_PATH}/lib$${TARGET}.a
 	win32-msvc*:LIBS	*= /IMPLIB:$${PACKAGE_BUILD_PATH}/$${TARGET}.lib -lshell32
@@ -70,18 +68,20 @@ FORMS	*= src/maininterface/ui/UITranslator.ui \
 	src/pluginsmanager/ui/UIBuilderSettings.ui \
 	src/pluginsmanager/ui/UICompilerSettings.ui \
 	src/pluginsmanager/ui/UIPluginsSettingsElement.ui \
-	src/pluginsmanager/ui/UIPluginsSettingsAbout.ui
+	src/pluginsmanager/ui/UIPluginsSettingsAbout.ui \
+	src/xupmanager/gui/UIXUPFindFiles.ui \
+	src/xupmanager/gui/XUPProjectManager.ui \
+	src/xupmanager/gui/XUPAddFiles.ui \
+	src/pluginsmanager/ui/UIInterpreterSettings.ui
 
 HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/maininterface/ui/UIAbout.h \
 	src/maininterface/ui/UISettings.h \
 	src/recentsmanager/pRecentsManager.h \
 	src/workspace/pAbstractChild.h \
-	src/qscintillamanager/ui/pSearch.h \
-	src/qscintillamanager/SearchThread.h \
 	src/qscintillamanager/pEditor.h \
 	src/qscintillamanager/qSciShortcutsManager.h \
-	src/ctagsmanager/Ctags.h \
+	src/ctagsmanager/CtagsManager.h \
 	src/workspace/pChild.h \
 	src/workspace/UISaveFiles.h \
 	src/workspace/pFileManager.h \
@@ -115,17 +115,26 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/coremanager/MonkeyCore.h \
 	src/queuedstatusbar/QueuedStatusBar.h \
 	src/pluginsmanager/ui/UIPluginsSettingsElement.h \
-	src/pluginsmanager/ui/UIPluginsSettingsAbout.h
+	src/pluginsmanager/ui/UIPluginsSettingsAbout.h \
+	src/xupmanager/core/XUPFilteredProjectModel.h \
+	src/xupmanager/core/XUPItem.h \
+	src/xupmanager/core/XUPProjectItem.h \
+	src/xupmanager/core/XUPProjectItemInfos.h \
+	src/xupmanager/core/XUPProjectModel.h \
+	src/xupmanager/gui/UIXUPFindFiles.h \
+	src/xupmanager/gui/XUPProjectManager.h \
+	src/xupmanager/core/XUPProjectModelProxy.h \
+	src/xupmanager/gui/XUPAddFiles.h \
+	src/shared/MkSFileDialog.h \
+	src/pluginsmanager/ui/UIInterpreterSettings.h
 
 SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/maininterface/ui/UIAbout.cpp \
 	src/maininterface/ui/UISettings.cpp \
 	src/recentsmanager/pRecentsManager.cpp \
-	src/qscintillamanager/ui/pSearch.cpp \
-	src/qscintillamanager/SearchThread.cpp \
 	src/qscintillamanager/pEditor.cpp \
 	src/qscintillamanager/qSciShortcutsManager.cpp \
-	src/ctagsmanager/Ctags.cpp \
+	src/ctagsmanager/CtagsManager.cpp \
 	src/workspace/pChild.cpp \
 	src/workspace/UISaveFiles.cpp \
 	src/workspace/pFileManager.cpp \
@@ -153,15 +162,24 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/coremanager/MonkeyCore.cpp \
 	src/queuedstatusbar/QueuedStatusBar.cpp \
 	src/pluginsmanager/ui/UIPluginsSettingsElement.cpp \
-	src/pluginsmanager/ui/UIPluginsSettingsAbout.cpp
+	src/pluginsmanager/ui/UIPluginsSettingsAbout.cpp \
+	src/xupmanager/core/XUPFilteredProjectModel.cpp \
+	src/xupmanager/core/XUPItem.cpp \
+	src/xupmanager/core/XUPProjectItem.cpp \
+	src/xupmanager/core/XUPProjectItemInfos.cpp \
+	src/xupmanager/core/XUPProjectModel.cpp \
+	src/xupmanager/gui/UIXUPFindFiles.cpp \
+	src/xupmanager/gui/XUPProjectManager.cpp \
+	src/xupmanager/core/XUPProjectModelProxy.cpp \
+	src/xupmanager/gui/XUPAddFiles.cpp \
+	src/shared/MkSFileDialog.cpp \
+	src/pluginsmanager/ui/UIInterpreterSettings.cpp
 
 mac:SOURCES	*= src/toolsmanager/pDesktopApplications_mac.cpp
 else:unix:SOURCES	*= src/toolsmanager/pDesktopApplications_unix.cpp
 win32:SOURCES	*= src/toolsmanager/pDesktopApplications_win32.cpp
 
-# include xup framework
-include( src/xupmanager/xupmanager.pri )
-
 TRANSLATIONS	*= ../translations/monkey_french.ts \
 	../translations/monkey_belarusian.ts \
-	../translations/monkey_italian.ts
+	../translations/monkey_italian.ts \
+	../translations/monkey_arabic.ts

@@ -27,9 +27,9 @@
 #define GDBSETTING_H
 
 #include <QObject>
-#include <coremanager.h>
-#include <settingsmanager.h>
-#include "monkey.h"
+#include <MonkeyCore.h>
+#include <Settings.h>
+#include "pMonkeyStudio.h"
 #include "fresh.h"
 
 #include <QMessageBox>

@@ -29,7 +29,7 @@
 #ifndef CTAGS2API_H
 #define CTAGS2API_H
 
-#include <pluginsmanager.h>
+#include <BasePlugin.h>
 
 class Ctags2Api : public BasePlugin
 {

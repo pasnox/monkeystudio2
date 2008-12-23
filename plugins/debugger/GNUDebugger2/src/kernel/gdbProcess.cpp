@@ -24,7 +24,7 @@
 */
 
 #include "gdbProcess.h"
-#include "monkey.h"
+#include "pMonkeyStudio.h"
 
 #include <QTextCodec>
 

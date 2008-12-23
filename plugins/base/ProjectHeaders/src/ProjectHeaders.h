@@ -29,7 +29,7 @@
 #ifndef PROJECTHEADERS_H
 #define PROJECTHEADERS_H
 
-#include <pluginsmanager.h>
+#include <BasePlugin.h>
 
 class ProjectHeaders : public BasePlugin
 {

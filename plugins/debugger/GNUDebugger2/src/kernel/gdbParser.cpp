@@ -36,7 +36,7 @@
 
 #include "gdbParser.h"
 
-#include <monkey.h>
+#include <pMonkeyStudio.h>
 
 
 #define INFO_ID			10000

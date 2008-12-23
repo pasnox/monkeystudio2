@@ -50,6 +50,8 @@ bool pEditor::mPasteAvailable = false;
 pEditor::pEditor( QWidget* p )
 	: QsciScintilla( p )
 {
+	//setFrameStyle( QFrame::NoFrame | QFrame::Plain );
+	
 	const QSize mPixSize = QSize( 16, 16 );
 	// register image for auto completion
 	registerImage( riClass, QPixmap( ":/editor/class.png" ).scaled( mPixSize ) );
@@ -93,6 +95,11 @@ pEditor::pEditor( QWidget* p )
 	SendScintilla( QsciScintillaBase::SCI_ASSIGNCMDKEY, SCK_TAB, SCI_TAB);
 	SendScintilla( QsciScintillaBase::SCI_ASSIGNCMDKEY, SCK_ESCAPE, SCI_CANCEL);
 	SendScintilla( QsciScintillaBase::SCI_ASSIGNCMDKEY, SCK_RETURN, SCI_NEWLINE);
+	SendScintilla( QsciScintillaBase::SCI_ASSIGNCMDKEY, SCK_DOWN, SCI_LINEDOWN);
+	SendScintilla( QsciScintillaBase::SCI_ASSIGNCMDKEY, SCK_UP, SCI_LINEUP);
+	SendScintilla( QsciScintillaBase::SCI_ASSIGNCMDKEY, SCK_RIGHT, SCI_CHARRIGHT);
+	SendScintilla( QsciScintillaBase::SCI_ASSIGNCMDKEY, SCK_LEFT, SCI_CHARLEFT);
+	SendScintilla( QsciScintillaBase::SCI_ASSIGNCMDKEY, SCK_BACK, SCI_DELETEBACK);
 
 	// By default control characters don't do anything (rather than insert the
 	// control character into the text). (c) Phil
@@ -157,6 +164,21 @@ void pEditor::autoDetectIndent ()
 	}
 }
 
+void pEditor::autoDetectEol ()
+{
+	QString currText = text();
+	if (text().indexOf("\r\n") != -1)
+	{
+		setEolMode (QsciScintilla::EolWindows);
+		return;
+	}
+	if (text().indexOf("\n") != -1)
+	{
+		setEolMode (QsciScintilla::EolUnix);
+		return;
+	}
+}
+
 int pEditor::lineNumbersMarginWidth() const
 {
 	return property( "LineNumbersMarginWidth" ).toInt();
@@ -209,6 +231,16 @@ QPoint pEditor::cursorPosition() const
 	return mCursorPosition;
 }
 
+QString pEditor::currentLineText() const
+{
+	int line;
+	int index;
+	
+	getCursorPosition( &line, &index );
+	
+	return text( line );
+}
+
 bool pEditor::markerAtLine( int line, pEditor::MarkerDefineType markerId ) const
 {
 	return QsciScintilla::markersAtLine( line ) & ( 1 << markerId );
@@ -253,7 +285,7 @@ void pEditor::clipboardDataChanged()
 	emit pasteAvailable( canPaste() );
 }
 
-bool pEditor::openFile( const QString& s )
+bool pEditor::openFile( const QString& fileName, const QString& codec )
 {
 	if ( isModified() )
 		return false;
@@ -261,27 +293,27 @@ bool pEditor::openFile( const QString& s )
 	QApplication::setOverrideCursor( Qt::WaitCursor );
 	
 	// open file
-	QFile f( s );
+	QFile f( fileName );
 	if ( !f.open( QFile::ReadOnly ) )
 	{
-		MonkeyCore::statusBar()->appendMessage( tr( "Cannot read file %1:\n%2." ).arg( s ).arg( f.errorString() ) );
+		MonkeyCore::statusBar()->appendMessage( tr( "Cannot read file %1:\n%2." ).arg( fileName ).arg( f.errorString() ) );
 		return false;
 	}
 
 	// remember filename
-	setProperty( "fileName", s );
+	setProperty( "fileName", fileName );
+	setProperty( "codec", codec );
 
 	// set lexer and apis
-	setLexer( pMonkeyStudio::lexerForFileName( s ) );
+	setLexer( pMonkeyStudio::lexerForFileName( fileName ) );
 
 	// set properties
 	pMonkeyStudio::setEditorProperties( this );
 
 	// load file
-	QTextStream i( &f );
-	if ( i.codec()->name() != qPrintable( pMonkeyStudio::defaultEncoding() ) )
-		i.setCodec( qPrintable( pMonkeyStudio::defaultEncoding() ) );
-	setText( i.readAll() );
+	QTextCodec* c = QTextCodec::codecForName( codec.toUtf8() );
+	QString datas = c->toUnicode( f.readAll() );
+	setText( datas );
 	setModified( false );
 
 	// convert tabs if needed
@@ -289,9 +321,15 @@ bool pEditor::openFile( const QString& s )
 		convertTabs();
 	
 	//autodetect indent, if need
-	if (pMonkeyStudio::autoDetectIndent())
+	if ( pMonkeyStudio::autoDetectIndent() )
 	{
 		autoDetectIndent ();
+	}
+	
+	//autodetect eol, if need
+	if ( pMonkeyStudio::autoDetectEol() )
+	{
+		autoDetectEol();
 	}
 	
 	// make backup if needed
@@ -339,17 +377,20 @@ bool pEditor::saveFile( const QString& s )
 
 	// writing file
 	QApplication::setOverrideCursor( Qt::WaitCursor );
-	QTextStream o( &f );
-	if ( o.codec()->name() != qPrintable( pMonkeyStudio::defaultEncoding() ) )
-		o.setCodec( qPrintable( pMonkeyStudio::defaultEncoding() ) );
-	o << text();
-	setModified( false );
+	
+	f.resize( 0 );
+	QTextCodec* c = QTextCodec::codecForName( property( "codec" ).toString().toUtf8() );
+	bool ok = f.write( c->fromUnicode( text() ) ) != -1;
+
+	if ( ok )
+	{
+		setModified( false );
+		setProperty( "fileName", fn );
+	}
+	
 	QApplication::restoreOverrideCursor();
 
-	// remember filename
-	setProperty( "fileName", fn );
-
-	return true;
+	return ok;
 }
 
 bool pEditor::saveBackup( const QString& s )
@@ -384,14 +425,15 @@ bool pEditor::saveBackup( const QString& s )
 	}
 
 	// writing file
-	QTextStream o( &f );
-	if ( o.codec()->name() != qPrintable( pMonkeyStudio::defaultEncoding() ) )
-		o.setCodec( qPrintable( pMonkeyStudio::defaultEncoding() ) );
-	o << text();
+	QApplication::setOverrideCursor( Qt::WaitCursor );
+	
+	f.resize( 0 );
+	QTextCodec* c = QTextCodec::codecForName( property( "codec" ).toString().toUtf8() );
+	bool ok = f.write( c->fromUnicode( text() ) ) != -1;
 	
 	QApplication::restoreOverrideCursor();
 
-	return true;
+	return ok;
 }
 
 void pEditor::closeFile()
@@ -417,7 +459,7 @@ void pEditor::print( bool b )
 		// check if default printer is set
 		if ( p.printerName().isEmpty() )
 		{
-			MonkeyCore::statusBar()->appendMessage( tr( "There is no defaullt printer, please set one before trying quick print" ) );
+			MonkeyCore::statusBar()->appendMessage( tr( "There is no default printer, please set one before trying quick print" ) );
 			return;
 		}
 		

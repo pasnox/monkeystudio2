@@ -1,2 +1,2 @@
 TEMPLATE	= subdirs
-SUBDIRS	= XUPProjectEditor QMakeProjectEditor
+SUBDIRS	= QMake PHP-Qt #QMakeProjectEditor

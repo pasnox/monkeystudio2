@@ -1,14 +1,4 @@
 /****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Monkey Studio Child Plugins
-** FileName  : QtAssistant.cpp
-** Date      : 2008-01-14T00:57:10
-** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
-**
 	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
 	This program is free software; you can redistribute it and/or modify
@@ -24,22 +14,21 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
 ****************************************************************************/
 #include "QtAssistant.h"
-#include "QtAssistantChild.h"
-#include "QtAssistantConfig.h"
+#include "ui/QtAssistantDock.h"
 #include "ui/UIQtAssistantSettings.h"
+#include "3rdparty/preferencesdialog.h"
 
-#include <monkey.h>
-#include <maininterface.h>
-#include <queuedstatusbar.h>
+#include <UIMain.h>
+
+#include <QDebug>
 
 QtAssistant::QtAssistant()
 {
 	// set plugin infos
 	mPluginInfos.Caption = tr( "Qt Assistant" );
-	mPluginInfos.Description = tr( "This plugin embbeded the official Qt Asssitant" );
+	mPluginInfos.Description = tr( "This plugin embedded Qt Assistant" );
 	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
 	mPluginInfos.Type = BasePlugin::iChild;
 	mPluginInfos.Name = PLUGIN_NAME;
@@ -54,32 +43,36 @@ QtAssistant::~QtAssistant()
 }
 
 QWidget* QtAssistant::settingsWidget()
-{ return new UIQtAssistantSettings( this ); }
+{
+	if ( !isEnabled() )
+		return 0;
+	return new PreferencesDialog( mAssistantDock->helpEngine(), QApplication::activeWindow(), false );
+}
 
 bool QtAssistant::setEnabled( bool b )
 {
 	if ( b && !isEnabled() )
 	{
-		// load configuration
-		Config* conf = QtAssistantConfig::instance( this );
-		if ( !conf )
-		{
-			MonkeyCore::statusBar()->appendMessage( tr( "Can't load/create the default profile for Qt Assistant, aborting..." ), 2500 );
-			return false;
-		}
-		// install dock
-		MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( QtAssistantChild::instance()->dock(), infos().Caption, QIcon( ":/trolltech/assistant/images/assistant.png" ) );
+		mAssistantDock = new QtAssistantDock;
+		MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( mAssistantDock, infos().Caption, QIcon( ":/icons/assistant.png" ) );
 		// set plugin enabled
 		mPluginInfos.Enabled = true;
 	}
 	else if ( !b && isEnabled() )
 	{
-		QtAssistantChild::cleanInstance();
+		mAssistantDock->deleteLater();
 		// set plugin disabled
 		mPluginInfos.Enabled = false;
 	}
+	else
+		return false;
 	// return default value
 	return true;
+}
+
+pAbstractChild* QtAssistant::openFile( const QString& /*filename*/, const QPoint& /*pos*/ )
+{
+	return 0;
 }
 
 Q_EXPORT_PLUGIN2( ChildQtAssistant, QtAssistant )

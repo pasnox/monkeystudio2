@@ -1,7 +1,7 @@
 /****************************************************************************
 **
 ** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
+** Authors   : Andrei Kopats aka hlamer <hlamer at tut by>
 ** Project   : Monkey Studio Base Plugins
 ** FileName  : Navigator.h
 ** Date      : 2008-01-14T00:40:08
@@ -26,6 +26,12 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file Navigator.h
+	\date 2008-01-14T00:40:08
+	\author Andrei Kopats
+	\brief Header file for Navigator plugin
+*/
 #ifndef NAVIGATOR_H
 #define NAVIGATOR_H
 
@@ -36,7 +42,7 @@
 #include <QTabWidget>
 #include <QTreeWidget>
 
-#include <pluginsmanager.h>
+#include <BasePlugin.h>
 
 #include "EntityContainer.h"
 
@@ -44,25 +50,34 @@ class ProjectItem;
 class pAbstractChild;
 // I am not sure with the English language terminology, if you ( reader) know it better, correct it
 
-class Navigator : public BasePlugin, public QSingleton<Navigator>
+/*!
+	\brief plugin main class
+
+	Navigator class implements interface of plugin, GUI, stores settings of plugin
+*/
+class Navigator : public BasePlugin
 {
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin )
 	friend class QSingleton<Navigator>;
 	//
-private:
+protected:
+	pDockWidget* dockwgt;
 	QHash <ProjectItem* , EntityContainer*> projectTrees;
 	QHash <QString , EntityContainer*> fileTrees;
-	pDockWidget* dockwgt;
 	QWidget* fileWidget ;
 	QVBoxLayout* fileBox;
 	EntityContainer* currFileTreew;
 	QPushButton* fileLock;
 	int displayMask;
 	int expandMask;
+	
+	// Setting. Hide dock, when user selected something
+	bool mAutoHide;
 
 public:
 	Navigator (QObject* parent = NULL);
+
 	bool setEnabled (bool e);
 	QWidget* settingsWidget ();
 
@@ -70,7 +85,11 @@ public:
 	int getDisplayMask (void);
 	void setExpandMask (int mask);
 	int getExpandMask (void);
-
+	void setAutoHide (bool);
+	bool getAutoHide (void);
+	
+	void setDockVisible (bool);
+	
 public slots:
 	
 	void showFile (const QString&);

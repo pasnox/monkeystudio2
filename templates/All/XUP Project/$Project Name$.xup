@@ -1,0 +1,8 @@
+<!DOCTYPE XUPProject>
+<project name="$Project Name$" >
+	<scope nested="false" name="XUPProjectSettings" >
+		<variable name="EDITOR" operator="=" multiline="false" >
+			<value content="XUP" />
+		</variable>
+	</scope>
+</project>

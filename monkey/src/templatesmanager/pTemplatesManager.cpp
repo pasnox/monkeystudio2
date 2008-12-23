@@ -1,14 +1,4 @@
 /****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.1.0
-** Authors   : Andrei KOPATS aka hlamer <hlamer@tut.by>, Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Monkey Studio IDE
-** FileName  : pTemplatesManager.cpp
-** Date      : 2008-01-14T00:37:12
-** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
-**
 	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
 	This program is free software; you can redistribute it and/or modify
@@ -24,7 +14,6 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
 ****************************************************************************/
 /*!
 	\file pTemplatesManager.cpp
@@ -33,12 +22,16 @@
 	\brief Implementation of pTemplatesManager class
 */
 
-#include "pTemplatesManager.h"
-#include "../pMonkeyStudio.h"
-#include "../workspace/pFileManager.h"
-#include "../xupmanager/XUPItem.h"
-#include "../coremanager/MonkeyCore.h"
-#include "../settingsmanager/Settings.h"
+#include <pTemplatesManager.h>
+#include <pMonkeyStudio.h>
+#include <pFileManager.h>
+#include <XUPItem.h>
+#include <XUPProjectItem.h>
+#include <MonkeyCore.h>
+#include <XUPProjectManager.h>
+#include <Settings.h>
+
+#include <QTextCodec>
 
 using namespace pMonkeyStudio;
 
@@ -120,7 +113,7 @@ TemplateList pTemplatesManager::getTemplates()
 	\retval true All files is created successfully
 	\retval false Some error ocurred
 */
-bool pTemplatesManager::realiseTemplate( XUPItem* scope, const QString& op, const pTemplate& temp, const VariablesManager::Dictionary& dictionnary )
+bool pTemplatesManager::realiseTemplate( XUPItem* scope, const QString& op, const pTemplate& temp, const QString& codec, const VariablesManager::Dictionary& dictionnary )
 {
 	// get destination
 	QString dest = dictionnary["Destination"];
@@ -219,26 +212,30 @@ bool pTemplatesManager::realiseTemplate( XUPItem* scope, const QString& op, cons
 		}
 		
 		// get contents
-		QString c = QString::fromLocal8Bit( file.readAll() );
+		QString c = QString::fromUtf8( file.readAll() );
 		
 		// reset file
 		file.resize( 0 );
 		
 		// write process contents
-		file.write( VariablesManager::instance()->replaceAllVariables( c, dictionnary ).toLocal8Bit() );
+		QTextCodec* textCodec = QTextCodec::codecForName( codec.toUtf8() );
+		c = VariablesManager::instance()->replaceAllVariables( c, dictionnary );
+		file.write( textCodec->fromUnicode( c ) );
 		
 		// close file
 		file.close();
 		
 		// open files if needed
 		if ( fo.contains( files[f] ) )
-			MonkeyCore::fileManager()->openFile( s );
+			MonkeyCore::fileManager()->openFile( s, codec );
 		if ( po.contains( files[f] ) )
-			MonkeyCore::fileManager()->openProject( s );
+			MonkeyCore::fileManager()->openProject( s, codec );
 		
 		// add files to project if needed
 		if ( scope )
-			scope->project()->addFile( s, scope, op );
+		{
+			MonkeyCore::projectsManager()->addFilesToScope( scope, QStringList( s ), op );
+		}
 	}
 	
 	// return process state

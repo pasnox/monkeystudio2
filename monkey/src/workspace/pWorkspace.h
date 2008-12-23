@@ -35,7 +35,7 @@
 
 class pAbstractChild;
 class QMainWindow;
-class XUPItem;
+class XUPProjectItem;
 class QFileSystemWatcher;
 
 class Q_MONKEY_EXPORT pWorkspace : public pExtendedWorkspace
@@ -48,7 +48,9 @@ public:
 	pAbstractChild* currentChild() const;
 	pAbstractChild* child( int ) const;
 	QList<pAbstractChild*> children() const;
-
+	
+	void addSearhReplaceWidget (QWidget* widget);
+	
 protected:
 	QFileSystemWatcher* mFileWatcher;
 	virtual void closeDocument( QWidget* document );
@@ -60,11 +62,12 @@ public slots:
 	// ask the user a filename and create / open the file
 	pAbstractChild* newTextEditor();
 	// open a file and set cursor to position
-	pAbstractChild* openFile( const QString& );
+	void initChildConnections( pAbstractChild* child );
+	pAbstractChild* openFile( const QString& fileName, const QString& codec );
 	// close the file
 	void closeFile( const QString& );
 	// goto to position inside file, highlight line according to bool, opening it if needed
-	void goToLine( const QString&, const QPoint&, bool );
+	void goToLine( const QString& fileName, const QPoint& pos, bool highlight, const QString& codec );
 
 	void closeCurrentDocument();
 	bool closeAllDocuments();
@@ -78,7 +81,7 @@ protected slots:
 	void internal_urlsDropped( const QList<QUrl>& );
 	void internal_listWidget_customContextMenuRequested( const QPoint& );
 	void internal_projectsManager_customContextMenuRequested( const QPoint& pos );
-	void internal_currentProjectChanged( XUPItem* currentProject, XUPItem* previousProject );
+	void internal_currentProjectChanged( XUPProjectItem* currentProject, XUPProjectItem* previousProject );
 	void internal_projectInstallCommandRequested( const pCommand& cmd, const QString& mnu );
 	void internal_projectUninstallCommandRequested( const pCommand& cmd, const QString& mnu );
 	void projectCustomActionTriggered();

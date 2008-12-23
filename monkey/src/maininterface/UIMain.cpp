@@ -29,13 +29,12 @@
 #include "UIMain.h"
 #include "../coremanager/MonkeyCore.h"
 #include "../pMonkeyStudio.h"
-#include "../xupmanager/ui/UIXUPManager.h"
+#include "../xupmanager/gui/XUPProjectManager.h"
 #include "../recentsmanager/pRecentsManager.h"
 #include "../toolsmanager/pToolsManager.h"
 #include "../consolemanager/pConsoleManager.h"
 #include "../workspace/pFileManager.h"
 #include "../pluginsmanager/PluginsManager.h"
-#include "../qscintillamanager/ui/pSearch.h"
 #include "../queuedstatusbar/QueuedStatusBar.h"
 
 #include <fresh.h>
@@ -67,10 +66,6 @@ void UIMain::initGui()
 	dockToolBar( Qt::LeftToolBarArea )->addDock( MonkeyCore::projectsManager(), MonkeyCore::projectsManager()->windowTitle(), QIcon( ":/project/icons/project/project.png" ) );
 	// init workspace
 	setCentralWidget( MonkeyCore::workspace() );
-	// init search dock
-//	addDockWidget( Qt::RightDockWidgetArea, MonkeyCore::searchDock() );
-//	MonkeyCore::searchDock()->setVisible( false );
-//	MonkeyCore::searchDock()->setFloating( true );
 	// init status bar
 	setStatusBar( MonkeyCore::statusBar() );
 	// init connection
@@ -84,6 +79,8 @@ void UIMain::initGui()
 
 void UIMain::closeEvent( QCloseEvent* e )
 {
+	// inform that we close mainwindow
+	emit aboutToClose();
 	// save session if needed
 	if ( pMonkeyStudio::saveSessionOnClose() )
 		MonkeyCore::workspace()->fileSessionSave_triggered();
@@ -94,9 +91,7 @@ void UIMain::closeEvent( QCloseEvent* e )
 		return;
 	}
 	// force to close all projects
-	MonkeyCore::projectsManager()->action( UIXUPManager::CloseAll )->trigger();
-	// inform that we close mainwindow
-	emit aboutToClose();
+	MonkeyCore::projectsManager()->action( XUPProjectManager::atCloseAll )->trigger();
 }
 
 QMenu* UIMain::createPopupMenu()
@@ -160,15 +155,18 @@ void UIMain::initMenuBar()
 		mb->action( "aCut", tr( "Cu&t" ), QIcon( ":/edit/icons/edit/cut.png" ), tr( "Ctrl+X" ), tr( "Cut" ) )->setEnabled( false );
 		mb->action( "aPaste", tr( "&Paste" ), QIcon( ":/edit/icons/edit/paste.png" ), tr( "Ctrl+V" ), tr( "Paste" ) )->setEnabled( false );
 		mb->action( "aSeparator3" );
+
 		mb->menu( "mSearchReplace", tr( "&Search and replace" ) );
 			mb->action( "mSearchReplace/aSearchFile", tr( "&Search in the file..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+F" ), tr( "Search in the file..." ) )->setEnabled( true );
+#if 0			
 			mb->action( "mSearchReplace/aReplaceFile", tr( "&Replace in the file..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+R" ), tr( "Replace in the file..." ) )->setEnabled( true );
 			//mb->action( "mSearchReplace/aSearchProject", tr( "&Search in the project..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "" ), tr( "Search in the project..." ) )->setEnabled( true );
 			//mb->action( "mSearchReplace/aReplaceProject", tr( "&Replace in the project..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "" ), tr( "Replace in the project..." ) )->setEnabled( true );
 			mb->action( "mSearchReplace/aSearchFolder", tr( "&Search in the folder..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+Alt+F" ), tr( "Search in the folder..." ) )->setEnabled( true );
-			//mb->action( "mSearchReplace/aReplaceFolder", tr( "&Replace in the folder..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+Alt+R" ), tr( "Replace in the folder..." ) )->setEnabled( true );
+			mb->action( "mSearchReplace/aReplaceFolder", tr( "&Replace in the folder..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+Alt+R" ), tr( "Replace in the folder..." ) )->setEnabled( true );
 			mb->action( "mSearchReplace/aSearchPrevious", tr( "Search Previous" ), QIcon( ":/edit/icons/edit/previous.png" ), tr( "Shift+F3" ), tr( "Search Previous" ) )->setEnabled( true );
 			mb->action( "mSearchReplace/aSearchNext", tr( "Search Next" ), QIcon( ":/edit/icons/edit/next.png" ), tr( "F3" ), tr( "Search Next" ) )->setEnabled( true );
+#endif
 		mb->action( "aGoTo", tr( "&Go To..." ), QIcon( ":/edit/icons/edit/goto.png" ), tr( "Ctrl+G" ), tr( "Go To..." ) )->setEnabled( false );
 		mb->menu( "mAllCommands", tr( "&All Commands" ), QIcon( ":/edit/icons/edit/commands.png" ) );
 		mb->menu( "mBookmarks", tr( "&Bookmarks" ), QIcon( ":/editor/bookmark.png" ) );
@@ -181,23 +179,19 @@ void UIMain::initMenuBar()
 		mb->menu( "mStyle", tr( "&Style" ), QIcon( ":/view/icons/view/style.png" ) );
 		mb->action( "aNext", tr( "&Next Tab" ), QIcon( ":/view/icons/view/next.png" ), tr( "Ctrl+Tab" ), tr( "Active the next tab" ) )->setEnabled( false );
 		mb->action( "aPrevious", tr( "&Previous Tab" ), QIcon( ":/view/icons/view/previous.png" ), tr( "Ctrl+Shift+Tab" ), tr( "Active the previous tab" ) )->setEnabled( false );
-		mb->menu( "mDocks", tr( "Docks" ) );
 	mb->endGroup();
 	mb->menu( "mProject", tr( "Project" ) );
 	mb->beginGroup( "mProject" );
-		mb->action( "aNew", tr( "&New" ), QIcon( ":/project/icons/project/new.png" ), tr( "Ctrl+Shift+N" ), tr( "New project..." ) );
-		mb->action( "aOpen", tr( "&Open" ), QIcon( ":/project/icons/project/open.png" ), tr( "Ctrl+Shift+O" ), tr( "Open a project..." ) );
-		mb->menu( "mSave", tr( "&Save" ), QIcon( ":/project/icons/project/save.png" ) );
-		mb->action( "mSave/aCurrent", tr( "&Save" ), QIcon( ":/project/icons/project/save.png" ), QString::null, tr( "Save the current project" ) )->setEnabled( false );
-		mb->action( "mSave/aAll", tr( "Save &All" ), QIcon( ":/project/icons/project/saveall.png" ), QString::null, tr( "Save all projects" ) )->setEnabled( false );
-		mb->menu( "mClose", tr( "&Close" ), QIcon( ":/project/icons/project/close.png" ) );
-		mb->action( "mClose/aCurrent", tr( "&Close" ), QIcon( ":/project/icons/project/close.png" ), QString::null, tr( "Close the current project" ) )->setEnabled( false );
-		mb->action( "mClose/aAll", tr( "Close &All" ), QIcon( ":/project/icons/project/closeall.png" ), QString::null, tr( "Close all projects" ) )->setEnabled( false );
+		mb->addAction( QString::null, MonkeyCore::projectsManager()->action( XUPProjectManager::atNew ) );
+		mb->addAction( QString::null, MonkeyCore::projectsManager()->action( XUPProjectManager::atOpen ) );
+		mb->action( "aSeparator1" );
+		mb->addAction( QString::null, MonkeyCore::projectsManager()->action( XUPProjectManager::atClose ) );
+		mb->addAction( QString::null, MonkeyCore::projectsManager()->action( XUPProjectManager::atCloseAll ) );
 		mb->action( "aSeparator2" );
-		mb->action( "aSettings", tr( "Set&tings..." ), QIcon( ":/project/icons/project/settings.png" ), QString::null, tr( "Project settings" ) )->setEnabled( false );
+		mb->addAction( QString::null, MonkeyCore::projectsManager()->action( XUPProjectManager::atEdit ) );
 		mb->action( "aSeparator3" );
-		mb->action( "aAddFiles", tr( "&Add Files..." ), QIcon( ":/project/icons/project/add.png" ), QString::null, tr( "Add existing files/projects to the current project" ) )->setEnabled( false );
-		mb->action( "aRemoveFiles", tr( "&Remove Files..." ), QIcon( ":/project/icons/project/remove.png" ), QString::null, tr( "Remove the current variable/value" ) )->setEnabled( false );
+		mb->addAction( QString::null, MonkeyCore::projectsManager()->action( XUPProjectManager::atAddFiles ) );
+		mb->addAction( QString::null, MonkeyCore::projectsManager()->action( XUPProjectManager::atRemoveFiles ) );
 		mb->action( "aSeparator4" );
 		mb->menu( "mRecents", tr( "&Recents" ), QIcon( ":/project/icons/project/recents.png" ) );
 		mb->action( "mRecents/aClear", tr( "&Clear" ), QIcon( ":/project/icons/project/clear.png" ), QString::null, tr( "Clear the recents projects list" ) );
@@ -239,14 +233,15 @@ void UIMain::initMenuBar()
 		mb->action( "aMinimize", tr( "&Minimize" ), QIcon( "" ), QString::null, tr( "Minimize" ) );
 		mb->action( "aRestore", tr( "&Restore" ), QIcon( "" ), QString::null, tr( "Restore normal size" ) );
 	mb->endGroup();
+	mb->menu( "mDocks", tr( "Docks" ) );
 	mb->menu( "mHelp", tr( "Help" ) );
 	mb->beginGroup( "mHelp" );
-		mb->action( "aManual", tr( "&Manual" ), QIcon( ":/help/icons/help/assistant.png" ), QString::null, tr( "Manual" ) );
-		mb->action( "aSeparator1" );
 		mb->action( "aAbout", tr( "&About..." ), QIcon( ":/application/icons/application/monkey2.png" ), QString::null, tr( "About application..." ) );
 		mb->action( "aAboutQt", tr( "About &Qt..." ), QIcon( ":/help/icons/help/qt.png" ), QString::null, tr( "About Qt..." ) );
+		mb->action( "aSeparator1" );
 #ifdef __COVERAGESCANNER__
 		mb->action( "aTestReport", tr( "&Test Report" ), QIcon( ) , tr( "Pause" ), tr( "Coverage Meter Test Report..." ) );
+		mb->action( "aSeparator2" );
 #endif
 	mb->endGroup();
 	// create action for styles
@@ -260,18 +255,6 @@ void UIMain::initMenuBar()
 	}
 	// add styles action to menu
 	mb->menu( "mView/mStyle" )->addActions( agStyles->actions() );
-	// add actions to uixupmanager
-	UIXUPManager* xm = MonkeyCore::projectsManager();
-	xm->setAction( UIXUPManager::New, mb->action( "mProject/aNew" ) );
-	xm->setAction( UIXUPManager::Open, mb->action( "mProject/aOpen" ) );
-	xm->setAction( UIXUPManager::SaveCurrent, mb->action( "mProject/mSave/aCurrent" ) );
-	xm->setAction( UIXUPManager::SaveAll, mb->action( "mProject/mSave/aAll" ) );
-	xm->setAction( UIXUPManager::CloseCurrent, mb->action( "mProject/mClose/aCurrent" ) );
-	xm->setAction( UIXUPManager::CloseAll, mb->action( "mProject/mClose/aAll" ) );
-	xm->setAction( UIXUPManager::Add, mb->action( "mProject/aAddFiles" ) );
-	xm->setAction( UIXUPManager::Remove, mb->action( "mProject/aRemoveFiles" ) );
-	xm->setAction( UIXUPManager::Settings, mb->action( "mProject/aSettings" ) );
-	xm->initGui();
 }
 
 void UIMain::initToolBar()
@@ -318,7 +301,7 @@ void UIMain::initConnections()
 	connect( menuBar()->action( "mFile/aNew" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileNew_triggered() ) );
 	connect( menuBar()->action( "mFile/aNewTextEditor" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( newTextEditor() ) );
 	connect( menuBar()->action( "mFile/aOpen" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileOpen_triggered() ) );
-	connect( MonkeyCore::recentsManager(), SIGNAL( openFileRequested( const QString& ) ), MonkeyCore::fileManager(), SLOT( openFile( const QString& ) ) );
+	connect( MonkeyCore::recentsManager(), SIGNAL( openFileRequested( const QString&, const QString& ) ), MonkeyCore::fileManager(), SLOT( openFile( const QString&, const QString& ) ) );
 	connect( menuBar()->action( "mFile/mSession/aSave" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileSessionSave_triggered() ) );
 	connect( menuBar()->action( "mFile/mSession/aRestore" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileSessionRestore_triggered() ) );
 	connect( menuBar()->action( "mFile/mSave/aCurrent" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileSaveCurrent_triggered() ) );
@@ -331,7 +314,7 @@ void UIMain::initConnections()
 	connect( menuBar()->action( "mFile/aQuit" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileExit_triggered() ) );
 	// edit connection
 	connect( menuBar()->action( "mEdit/aSettings" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editSettings_triggered() ) );
-	connect( menuBar()->action( "mEdit/aShortcutsEditor" ), SIGNAL( triggered() ), MonkeyCore::actionManager(), SLOT( showSettings() ) );
+	connect( menuBar()->action( "mEdit/aShortcutsEditor" ), SIGNAL( triggered() ), MonkeyCore::actionsManager(), SLOT( editActionsShortcuts() ) );
 	connect( menuBar()->action( "mEdit/aTranslations" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editTranslations_triggered() ) );
 	connect( menuBar()->action( "mEdit/aUndo" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editUndo_triggered() ) );
 	connect( menuBar()->action( "mEdit/aRedo" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editRedo_triggered() ) );
@@ -348,10 +331,10 @@ void UIMain::initConnections()
 	connect( agStyles, SIGNAL( triggered( QAction* ) ), MonkeyCore::workspace(), SLOT( agStyles_triggered( QAction* ) ) );
 	connect( menuBar()->action( "mView/aNext" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( activateNextDocument() ) );
 	connect( menuBar()->action( "mView/aPrevious" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( activatePreviousDocument() ) );
-	connect( menuBar()->menu( "mView/mDocks" ), SIGNAL( aboutToShow() ), this, SLOT( menu_ViewDocks_aboutToShow() ) );
+	connect( menuBar()->menu( "mDocks" ), SIGNAL( aboutToShow() ), this, SLOT( menu_Docks_aboutToShow() ) );
 	// project connection
-	connect( MonkeyCore::recentsManager(), SIGNAL( openProjectRequested( const QString& ) ), MonkeyCore::projectsManager(), SLOT( openProject( const QString& ) ) );
-	connect( MonkeyCore::projectsManager(), SIGNAL( fileDoubleClicked( const QString& ) ), MonkeyCore::workspace(), SLOT( openFile( const QString& ) ) );
+	connect( MonkeyCore::recentsManager(), SIGNAL( openProjectRequested( const QString&, const QString& ) ), MonkeyCore::projectsManager(), SLOT( openProject( const QString&, const QString& ) ) );
+	connect( MonkeyCore::projectsManager(), SIGNAL( fileDoubleClicked( const QString&, const QString& ) ), MonkeyCore::workspace(), SLOT( openFile( const QString&, const QString& ) ) );
 	// builder debugger interpreter menu
 	connect( menuBar()->menu( "mBuilder" ), SIGNAL( aboutToShow() ), this, SLOT( menu_CustomAction_aboutToShow() ) );
 	connect( menuBar()->menu( "mDebugger" ), SIGNAL( aboutToShow() ), this, SLOT( menu_CustomAction_aboutToShow() ) );
@@ -374,15 +357,20 @@ void UIMain::initConnections()
 #endif
 }
 
-void UIMain::menu_ViewDocks_aboutToShow()
+void UIMain::menu_Docks_aboutToShow()
 {
 	// get menu
-	QMenu* menu = menuBar()->menu( "mView/mDocks" );
+	QMenu* menu = menuBar()->menu( "mDocks" );
+	menu->clear();
+	
 	// add actions
 	foreach ( QDockWidget* dw, findChildren<QDockWidget*>() )
 	{
-		dw->toggleViewAction()->setIcon( dw->windowIcon() );
-		menu->addAction( dw->toggleViewAction() );
+		QAction* action = dw->toggleViewAction();
+		
+		action->setIcon( dw->windowIcon() );
+		menu->addAction( action );
+		menuBar()->addAction( "mDocks", action );
 	}
 }
 

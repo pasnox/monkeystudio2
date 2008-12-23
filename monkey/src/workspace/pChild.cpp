@@ -28,7 +28,6 @@
 ****************************************************************************/
 #include "pChild.h"
 #include "../qscintillamanager/pEditor.h"
-#include "../qscintillamanager/ui/pSearch.h"
 #include "../coremanager/MonkeyCore.h"
 
 #include <qscintilla.h>
@@ -106,7 +105,7 @@ bool pChild::isUndoAvailable() const
 { return mEditor->isUndoAvailable(); }
 
 void pChild::invokeSearch () 
-{ MonkeyCore::searchWidget()->showSearchFile ();}
+{ /*MonkeyCore::searchWidget()->showSearchFile ();*/}
 
 void pChild::undo()
 { mEditor->undo(); }
@@ -170,23 +169,28 @@ void pChild::backupCurrentFile( const QString& s )
 void pChild::saveFiles()
 { saveCurrentFile(); }
 
-bool pChild::openFile( const QString& s, QTextCodec* )
+bool pChild::openFile( const QString& fileName, const QString& codec )
 {
 	// if already open file, cancel
 	if ( !currentFile().isNull() )
 		return false;
 
 	// open file
-	if ( !mEditor->openFile( s ) )
+	if ( !mEditor->openFile( fileName, codec ) )
 		return false;
 	
 	// set window modified state
 	setWindowModified( mEditor->isModified() );
 
 	// add filename to list
-	mFiles.append( s );
+	mFiles.append( fileName );
+	
+	if ( !mCodec )
+	{
+		mCodec = QTextCodec::codecForName( codec.toUtf8() );
+	}
 
-	emit fileOpened( s );
+	emit fileOpened( fileName );
 	return true;
 }
 

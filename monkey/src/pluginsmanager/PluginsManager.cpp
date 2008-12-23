@@ -33,6 +33,8 @@
 
 #include <QPluginLoader>
 
+#include <QDebug>
+
 PluginsManager::PluginsManager( QObject* p )
 	: QObject( p )
 {

@@ -26,6 +26,12 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file FileBrowserSettings.h
+	\date 2008-01-14T00:40:08
+	\author Filipe AZEVEDO, Andrei KOPATS
+	\brief Settings widget of FileBrowser plugin
+*/
 #ifndef FILEBROWSERSETTINGS_H
 #define FILEBROWSERSETTINGS_H
 
@@ -34,6 +40,12 @@
 class FileBrowser;
 class pStringListEditor;
 
+/*!
+	Settigs widget of FileBrowser plugin
+	
+	Allows to edit filters for filtering out unneeded files from filesystem 
+	view
+*/
 class FileBrowserSettings : public QWidget
 {
 	Q_OBJECT

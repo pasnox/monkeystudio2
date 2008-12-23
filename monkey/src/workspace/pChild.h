@@ -35,7 +35,7 @@
 
 class pEditor;
 
-class pChild : public pAbstractChild
+class Q_MONKEY_EXPORT pChild : public pAbstractChild
 {
 	Q_OBJECT
 
@@ -121,7 +121,7 @@ public:
 	void backupCurrentFile( const QString& );
 
 	// ask to load file
-	virtual bool openFile( const QString&, QTextCodec* = 0 );
+	virtual bool openFile( const QString& fileName, const QString& codec );
 
 	// ask to close file
 	virtual void closeFile( const QString& );

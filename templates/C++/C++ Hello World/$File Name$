@@ -1,0 +1,7 @@
+#include <cstdio>
+
+int main ( int argc, char** argv )
+{
+	printf( "$What To Print$\n" );
+	return 0;
+}

@@ -26,15 +26,26 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file FileBrowser.h
+	\date 2008-01-14T00:40:08
+	\author Filipe AZEVEDO, Andrei KOPATS
+	\brief Header file for FileBrowser plugin
+*/
 #ifndef FILEBROWSER_H
 #define FILEBROWSER_H
 
-#include <pluginsmanager.h>
+#include <BasePlugin.h>
 
 #include <QPointer>
 
 class pDockFileBrowser;
 
+/*!
+	Main class of FileBrowser plugin
+	
+	Plugin allows to see file system contents and open files
+*/
 class FileBrowser : public BasePlugin
 {
 	Q_OBJECT
@@ -49,6 +60,9 @@ public:
 	
 	QStringList filters() const;
 	void setFilters( const QStringList& filters, bool updateDock = false );
+	
+	QStringList bookmarks() const;
+	void setBookmarks( const QStringList& bookmarks, bool updateDock = false );
 	
 	QString path() const;
 	void setPath( const QString& path, bool updateDock = false );

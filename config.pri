@@ -13,11 +13,12 @@ PACKAGE_BUILD_PATH	= $${PACKAGE_PWD}/build
 
 # build mode
 CONFIG	+= qt warn_on thread x11 windows release
+QT	+= xml
 
 # define config mode paths
 CONFIG( debug, debug|release ) {
 	#Debug
-	message( Building in DEBUG )
+	message( Building in DEBUG for architecture $$QT_ARCH )
 	CONFIG	+= console
 	unix:PACKAGE_TARGET	= $$quote($$join(PACKAGE_TARGET,,,_debug))
 	else:PACKAGE_TARGET	= $$quote($$join(PACKAGE_TARGET,,,d))
@@ -31,7 +32,7 @@ CONFIG( debug, debug|release ) {
 	RCC_DIR	= $${PACKAGE_BUILD_PATH}/debug/.rcc
 } else {
 	#Release
-	message( Building in RELEASE )
+	message( Building in RELEASE for architecture $$QT_ARCH )
 	mac:TARGET	= $$quote($$TARGET)
 	unix:OBJECTS_DIR	= $${PACKAGE_BUILD_PATH}/release/.obj/unix
 	win32:OBJECTS_DIR	= $${PACKAGE_BUILD_PATH}/release/.obj/win32
@@ -47,7 +48,14 @@ QMAKE_TARGET_PRODUCT	= "Monkey Studio"
 QMAKE_TARGET_DESCRIPTION	= "Crossplatform Integrated Development Environment"
 QMAKE_TARGET_COPYRIGHT	= "Copyright (C) 2005 - 2008 Filipe AZEVEDO"
 PACKAGE_DOMAIN	= "www.monkeystudio.org"
-PACKAGE_VERSION	= 1.8.2.2
+
+PACKAGE_VERSION	= 1.8.3.0
+
+CONFIG( debug, debug|release ) {
+	PACKAGE_VERSION	= $${PACKAGE_VERSION}svn_debug
+} else {
+#	PACKAGE_VERSION	= $${PACKAGE_VERSION}svn_release
+}
 
 # define variable for source code
 DEFINES	*= "PACKAGE_NAME=\"\\\"$${QMAKE_TARGET_PRODUCT}\\\"\"" \
@@ -56,26 +64,54 @@ DEFINES	*= "PACKAGE_NAME=\"\\\"$${QMAKE_TARGET_PRODUCT}\\\"\"" \
 	"PACKAGE_COPYRIGHTS=\"\\\"$${QMAKE_TARGET_COPYRIGHT}\\\"\""
 
 # get package install paths
-PACKAGE_PREFIX	= $$(MONKEY_PREFIX)
-PACKAGE_DATAS	= $$(MONKEY_DATAS)
 
-# prefix
-isEmpty( PACKAGE_PREFIX ) {
-	win32:PACKAGE_PREFIX	= $${PACKAGE_DESTDIR}
-	else:mac:PACKAGE_PREFIX	= $${PACKAGE_DESTDIR}/$${PACKAGE_TARGET}.app/Contents
-	else:PACKAGE_PREFIX	= /usr/local
+unix:!mac {
+	# default prefix path
+	isEmpty( prefix ):prefix = /usr/local
+
+	!isEmpty( prefix ) {
+		# plugins path
+		isEmpty( plugins ) {
+			isEqual( QT_ARCH, "i386" ) {
+				plugins	= $$prefix/lib
+			} else {
+				plugins	= $$prefix/lib64
+			}
+		}
+
+		# datas path
+		isEmpty( datas ) {
+			datas	= $$prefix/share
+		}
+	}
+} else:mac {
+	prefix	= $${PACKAGE_DESTDIR}/$${PACKAGE_TARGET}.app/Contents
+	plugins	= $${prefix}/plugins
+	datas	= $${prefix}/Resources
+} else:win32 {
+	prefix	= $${PACKAGE_DESTDIR}
+	plugins	= $${prefix}/plugins
+	datas	= $${prefix}
 }
 
-# datas
-isEmpty( PACKAGE_DATAS ) {
-	win32:PACKAGE_DATAS	= $${PACKAGE_PREFIX}
-	else:mac:PACKAGE_DATAS	= $${PACKAGE_PREFIX}
-	else:PACKAGE_DATAS	= $${PACKAGE_PREFIX}/lib/$${PACKAGE_TARGET}
+unix:!mac {
+	PACKAGE_PREFIX	= $$quote($$prefix/bin)
+	PACKAGE_PLUGINS	= $$quote($$plugins/$$PACKAGE_TARGET)
+	PACKAGE_DATAS	= $$quote($$datas/$$PACKAGE_TARGET)
+} else:mac {
+	PACKAGE_PREFIX	= $$quote($$prefix/MacOS)
+	PACKAGE_PLUGINS	= $$quote($$plugins)
+	PACKAGE_DATAS	= $$quote($$datas)
+} else:win32 {
+	PACKAGE_PREFIX	= $$quote($$prefix)
+	PACKAGE_PLUGINS	= $$quote($$plugins)
+	PACKAGE_DATAS	= $$quote($$datas)
 }
-
-PACKAGE_PREFIX	= $$quote($$PACKAGE_PREFIX)
-PACKAGE_DATAS	= $$quote($$PACKAGE_DATAS)
 
 # define package install paths so source code can use them
 DEFINES	*= "PACKAGE_PREFIX=\"\\\"$${PACKAGE_PREFIX}\\\"\"" \
+	"PACKAGE_PLUGINS=\"\\\"$${PACKAGE_PLUGINS}\\\"\"" \
 	"PACKAGE_DATAS=\"\\\"$${PACKAGE_DATAS}\\\"\""
+
+# qscintilla library
+include( qscintilla/qscintilla_check.pri )

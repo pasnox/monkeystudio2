@@ -26,17 +26,26 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
+/*!
+	\file MessageBox.cpp
+	\date 2008-01-14T00:40:08
+	\author Andrei Kopats
+	\brief implementation of main class of MessageBox plugin
+*/
 #include "MessageBox.h"
 #include "ui/MessageBoxDocks.h"
 #include "ui/UIMessageBoxSettings.h"
 
-#include <coremanager.h>
-#include <maininterface.h>
-#include <consolemanager.h>
+#include <MonkeyCore.h>
+#include <UIMain.h>
+#include <pConsoleManager.h>
 
 #include <QIcon>
 #include <QTabWidget>
 
+/*!
+	Constructor of class
+*/
 MessageBox::MessageBox()
 {
 	mMessageBoxDocks = 0;
@@ -50,12 +59,25 @@ MessageBox::MessageBox()
 	mPluginInfos.Enabled = false;
 }
 
+/*!
+	Destructor of class. Uninstalls plugin from IDE
+*/
 MessageBox::~MessageBox()
 {
 	if ( isEnabled() )
 		setEnabled( false );
 }
 
+/*!
+	Enable/disable plugin
+	
+	If plugin is enabled - it visible on main window and it's actions are in 
+	the main menu
+	\param b Flag. Enable = true, Disable = false
+	\return Status of process 
+	\retval true Successfully enabled
+	\retval false Some error ocurred
+*/
 bool MessageBox::setEnabled( bool b )
 {
 	if ( b && !isEnabled() )
@@ -66,13 +88,8 @@ bool MessageBox::setEnabled( bool b )
 		MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mMessageBoxDocks->mBuildStep, mMessageBoxDocks->mBuildStep->windowTitle(), mMessageBoxDocks->mBuildStep->windowIcon() );
 		MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mMessageBoxDocks->mOutput, mMessageBoxDocks->mOutput->windowTitle(), mMessageBoxDocks->mOutput->windowIcon() );
 		MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mMessageBoxDocks->mCommand, mMessageBoxDocks->mCommand->windowTitle(), mMessageBoxDocks->mCommand->windowIcon() );
-		MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mMessageBoxDocks->mSearchResult, mMessageBoxDocks->mSearchResult->windowTitle(), mMessageBoxDocks->mSearchResult->windowIcon() );
 		// add actions to main window
-		connect( MonkeyCore::menuBar()->action( "mView/aShowBuild", tr( "Show Build Steps" ), QIcon( ":/icons/tabbuild.png" ), tr( "F9" ) ), SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showBuild() ) );
 		connect( MonkeyCore::menuBar()->action( "mView/aShowNextError", tr( "Show Next Error" ), QIcon( ":/icons/goto.png" ), "Shift+F9" ), SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showNextError() ) );
-		connect( MonkeyCore::menuBar()->action( "mView/aShowOutput", tr( "Show Output" ), QIcon( ":/icons/taboutput.png" ) , "F10" ), SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showOutput() ) );
-		connect( MonkeyCore::menuBar()->action( "mView/aShowCommands", tr( "Show Commands" ), QIcon( ":/icons/tablog.png" ), "F11" ), SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showLog() ) );
-		connect( MonkeyCore::menuBar()->action( "mView/aShowSearchResults", tr( "Show Search Results" ), QIcon( ":/icons/tabsearch.png" ), "F12" ), SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showSearchResults() ) );
 		connect( MonkeyCore::consoleManager(), SIGNAL( started() ), this, SLOT( onConsoleStarted() ) );
 		// set plugin enabled
 		mPluginInfos.Enabled = true;
@@ -82,11 +99,7 @@ bool MessageBox::setEnabled( bool b )
 		// disconnect
 		disconnect( MonkeyCore::consoleManager(), SIGNAL( started() ), this, SLOT( onConsoleStarted() ) );
 		// delete actions
-		delete MonkeyCore::menuBar()->action( "mView/aShowBuild" );
 		delete MonkeyCore::menuBar()->action( "mView/aShowNextError" );
-		delete MonkeyCore::menuBar()->action( "mView/aShowOutput" );
-		delete MonkeyCore::menuBar()->action( "mView/aShowCommands" );
-		delete MonkeyCore::menuBar()->action( "mView/aShowSearchResults" );
 		// delete docks
 		delete mMessageBoxDocks;
 		mMessageBoxDocks = 0;
@@ -97,6 +110,10 @@ bool MessageBox::setEnabled( bool b )
 	return true;
 }
 
+/*!
+	Get settings widget for configuring plugin
+	\return Pointer to widget
+*/
 QWidget* MessageBox::settingsWidget()
 { return new UIMessageBoxSettings( this ); }
 

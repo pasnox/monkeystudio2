@@ -41,11 +41,11 @@
 #include <QObject>
 
 #include <fresh.h>
-#include <workspacemanager.h>
+#include <pWorkspace.h>
 
-#include <coremanager.h>
-#include <maininterface.h>
-#include <qscintillamanager.h>
+#include <MonkeyCore.h>
+#include <UIMain.h>
+#include <pEditor.h>
 
 #include "../addon/gdbBreakpoint/gdbBreakpointStruct.h"
 

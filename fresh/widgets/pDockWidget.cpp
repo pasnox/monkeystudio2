@@ -16,8 +16,15 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 #include "pDockWidget.h"
+#include "pDockWidgetTitleBar.h"
+#include "pActionsManager.h"
 
 #include <QStyle>
+#include <QAction>
+#include <QTimer>
+#include <QApplication>
+
+#include <QDebug>
 
 /*!
 	\brief Create a new pDockWidget instance
@@ -27,7 +34,9 @@
 */
 pDockWidget::pDockWidget( const QString& title, QWidget* parent, Qt::WindowFlags flags )
 	: QDockWidget( title, parent, flags )
-{}
+{
+	init();
+}
 
 /*!
 	\brief Create a new pDockWidget instance
@@ -36,7 +45,22 @@ pDockWidget::pDockWidget( const QString& title, QWidget* parent, Qt::WindowFlags
 */
 pDockWidget::pDockWidget( QWidget* parent, Qt::WindowFlags flags )
 	: QDockWidget( parent, flags )
-{}
+{
+	init();
+}
+
+void pDockWidget::init()
+{
+	mTitleBar = new pDockWidgetTitleBar( this );
+	setTitleBarWidget( mTitleBar );
+
+	connect( toggleViewAction(), SIGNAL( toggled( bool ) ), this, SLOT( toggleViewAction_toggled( bool ) ) );
+}
+
+pDockWidget::~pDockWidget()
+{
+	setFocusProxy( 0 );
+}
 
 QSize pDockWidget::contentsSize() const
 {
@@ -50,11 +74,54 @@ QSize pDockWidget::contentsSize() const
 	return contents;
 }
 
+void pDockWidget::toggleViewAction_toggled( bool toggled )
+{
+	if ( toggled && focusProxy() )
+	{
+		if ( isFloating() )
+		{
+			QTimer::singleShot( 25, this, SLOT( handleWindowActivation() ) );
+		}
+		else
+		{
+			QTimer::singleShot( 25, this, SLOT( handleFocusProxy() ) );
+		}
+	}
+}
+
+void pDockWidget::handleWindowActivation()
+{
+	activateWindow();
+	QTimer::singleShot( 25, this, SLOT( handleFocusProxy() ) );
+}
+
+void pDockWidget::handleFocusProxy()
+{
+	focusProxy()->setFocus();
+}
+
 /*!
 	\details Return the dock sizeHint
 */
 QSize pDockWidget::sizeHint() const
-{ return mSize.isValid() && !isFloating() ? mSize : QDockWidget::sizeHint(); }
+{
+	return mSize.isValid() && !isFloating() ? mSize : QDockWidget::sizeHint();
+}
+
+pDockWidgetTitleBar* pDockWidget::titleBar() const
+{
+	return mTitleBar;
+}
+
+void pDockWidget::setActionsManager( pActionsManager* manager )
+{
+	mActionsManager = manager;
+}
+
+pActionsManager* pDockWidget::actionsManager() const
+{
+	return mActionsManager;
+}
 
 /*!
 	\details Set dock visibility
