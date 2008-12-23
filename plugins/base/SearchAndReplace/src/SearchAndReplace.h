@@ -44,7 +44,7 @@ class SearchWidget;
 /*!
 	Main class of the SearchAndReplace plugin
 */
-class SearchAndReplace : public BasePlugin
+class Q_MONKEY_EXPORT SearchAndReplace : public BasePlugin
 {
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin )

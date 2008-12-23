@@ -47,7 +47,7 @@ class QTreeWidget;
 	Can display results of searching in the dirrectory
 	For replace function, results can be checkable
 */
-class SearchResultsDock : public pDockWidget
+class Q_MONKEY_EXPORT SearchResultsDock : public pDockWidget
 {
 	Q_OBJECT
 	enum DataRole
