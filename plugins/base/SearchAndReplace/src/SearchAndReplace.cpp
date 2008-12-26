@@ -65,7 +65,7 @@ SearchAndReplace::SearchAndReplace()
 	mPluginInfos.Version = "1.0.0";
 	mPluginInfos.Enabled = false;
 	
-	qRegisterMetaType<pConsoleManager::Step>("pConsoleManager::Step");
+	qRegisterMetaType<SearchAndReplace::Occurence>("SearchAndReplace::Occurence");
 }
 
 /*!
@@ -385,8 +385,8 @@ void SearchAndReplace::onNextClicked()
 				mWidget->setNextButtonText (tr("&Stop"));
 				mWidget->setNextButtonIcon (QIcon(":/console/icons/console/stop.png"));
 				
-				connect (mSearchThread, SIGNAL (appendSearchResult( const pConsoleManager::Step& )), mDock, SLOT (appendSearchResult( const pConsoleManager::Step& )));
-				connect (mSearchThread, SIGNAL (appendSearchResult( const pConsoleManager::Step& )), this, SLOT (occurenceFound ()));
+				connect (mSearchThread, SIGNAL (appendSearchResult( const SearchAndReplace::Occurence& )), mDock, SLOT (appendSearchResult( const SearchAndReplace::Occurence& )));
+				connect (mSearchThread, SIGNAL (appendSearchResult( const SearchAndReplace::Occurence& )), this, SLOT (occurenceFound ()));
 				connect (mSearchThread, SIGNAL (changeProgress(int)), this, SLOT (fileProcessed (int)));
 				connect (mSearchThread, SIGNAL (finished ()), this, SLOT (threadFinished()));
 				mSearchThread->start();    
@@ -411,20 +411,109 @@ void SearchAndReplace::onReplaceAllClicked()
 	if (!isReplaceTextValid ())
 		return;
 
-	pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentChild());
-	if (!child && !child->editor())
-		return;
-	pEditor* editor = child->editor ();
-	
-	// begin undo global action
-	editor->beginUndoAction();
+	if (mMode == REPLACE_FILE)
+	{
+		pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentChild());
+		if (!child && !child->editor())
+			return;
+		pEditor* editor = child->editor ();
+		
+		// begin undo global action
+		editor->beginUndoAction();
 
-	int count = replace (true);
-	// end undo global action
-	editor->endUndoAction();
+		int count = replace (true);
+		// end undo global action
+		editor->endUndoAction();
 
-	// show occurence number replaced
-	showMessage( count ? tr( "%1 occurences replaced" ).arg( count ) : tr( "Nothing To Repalce" ) );
+		// show occurence number replaced
+		showMessage( count ? tr( "%1 occurences replaced" ).arg( count ) : tr( "Nothing To Repalce" ) );
+	}
+	else
+	{
+		for (int fileIndex = 0; fileIndex < mDock->filesWithOccurencesCount (); fileIndex++) // for files
+		{
+			QFile file;
+			QStringList fileContents;
+			
+			for (int occurenceIndex = 0; occurenceIndex < mDock->oCcurencesCount (fileIndex); occurenceIndex++) // for occurences
+			{
+				Occurence occ = mDock->occurence (fileIndex, occurenceIndex);
+				qDebug () << "Start processing occurence";
+				if (occ.checked)
+				{
+					if (! file.isOpen())  // open file, if nessesary
+					{
+						file.setFileName (occ.fileName);
+						bool stat = file.open (QIODevice::ReadWrite);
+						if (! stat)
+						{
+							QMessageBox::critical (NULL, "Replace in dirrectory", "Failed to open file: " + file.errorString());
+							break;
+						}
+						// read all file to QStringList
+						qDebug () << "Start read";
+						while ((! file.atEnd()) && file.error() == QFile::NoError)
+						{
+							qDebug () << "before read" << file.fileName() << file.pos() << file.size();
+							fileContents << file.readLine();
+							qDebug () << "after read" << file.fileName() << file.pos() << file.size();
+						}
+						qDebug () << "Finish read";
+						if (file.error() != QFile::NoError)
+						{
+							QMessageBox::critical (NULL, "Replace in dirrectory", "Failed to read file: " + file.errorString());
+							break;
+						}
+					}
+					qDebug () << "string list " << fileContents;
+					// Now all file is in the QStringList
+					if (fileContents.size() <= occ.position.y()-1)
+					{
+						QMessageBox::critical (NULL, "Replace in dirrectory", "Line with occurence not found");
+						break;
+					}
+					// line with occurence
+					QString line = fileContents[occ.position.y()-1];
+					
+					Qt::CaseSensitivity cs = mWidget->isCaseSensetive() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+					if (mWidget->isRegExp())  // TODO let's remember parametres in the Occurence, because user can change it on UI
+					{
+						line.replace (QRegExp (mWidget->searchText(), cs), mWidget->replaceText());
+					}
+					else // not a reg exp
+					{
+						line.replace (mWidget->searchText(), mWidget->replaceText(), cs);
+					}
+					
+					fileContents[occ.position.y()-1] = line;
+				}
+				
+				qDebug () << "Finish processing occurence";
+			}
+			// finished processing file. Need to write and close it, if it had been opened
+			if (file.isOpen())
+			{
+				file.resize (0);
+				if (file.error() != QFile::NoError)
+				{
+					QMessageBox::critical (NULL, "Replace in dirrectory", "Failed to write file: " + file.errorString());
+					break;
+				}
+				file.write (fileContents.join("").toUtf8());
+				if (file.error() != QFile::NoError)
+				{
+					QMessageBox::critical (NULL, "Replace in dirrectory", "Failed to write file: " + file.errorString());
+					break;
+				}
+				file.close();
+				if (file.error() != QFile::NoError)
+				{
+					QMessageBox::critical (NULL, "Replace in dirrectory", "Failed to write file: " + file.errorString());
+					break;
+				}
+			}
+		}
+	}
 }
 
 void SearchAndReplace::makeGoTo (const QString& file, const QPoint& position)

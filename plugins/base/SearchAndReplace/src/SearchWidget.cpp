@@ -143,7 +143,7 @@ SearchWidget::SearchWidget( QWidget* parent )
 	
 #if 0	
 
-	qRegisterMetaType<pConsoleManager::Step>("pConsoleManager::Step");
+	qRegisterMetaType<SearchAndReplace::Occurence>("SearchAndReplace::Occurence");
 
 	mSearchThread = NULL;
 	
@@ -185,12 +185,21 @@ void SearchWidget::show (SearchAndReplace::Mode mode)
 		tbNext->setIcon (QIcon(":/edit/icons/edit/search.png"));
 	}
 	
+	if (mode == SearchAndReplace::REPLACE_DIRRECTORY)
+	{
+		tbReplaceAll->setText (tr("&Replace checked"));
+	}
+	else
+	{
+		tbReplaceAll->setText (tr("&Replace all"));
+	}
+	
 	if (mode == SearchAndReplace::REPLACE_FILE)
 	{
 		tbReplace->show ();
 	}
 
-	cobPath->lineEdit()->setText (QDir::current().absolutePath());
+	cobPath->lineEdit()->setText (QDir::current().path());
 	
 	cobSearch->setFocus();
 

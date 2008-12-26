@@ -140,7 +140,7 @@ bool SearchThread::isBinary (QFile& file)
 
 void SearchThread::search (QFile& file)
 {
-	if (!isBinary (file)) // Currently we not supporting binary files
+	if (!isBinary (file)) // Currently we don't support binary files
 	{
 		file.seek (0);
 		QString line;
@@ -161,12 +161,12 @@ void SearchThread::search (QFile& file)
 			}
 			if (ifContains) 
 			{
-				pConsoleManager::Step step;
-				step.mType = pConsoleManager::stSearchResult;
-				step.mFileName = file.fileName();
-				step.mPosition = QPoint (0,i);
-				step.mText = QString("%1[%2]: %3").arg (QFileInfo(file.fileName()).fileName()).arg(i).arg(line.simplified());
-				step.mFullText= file.fileName();
+				SearchAndReplace::Occurence step;
+				step.mode = SearchAndReplace::SEARCH_DIRRECTORY;
+				step.fileName = file.fileName();
+				step.position = QPoint (0,i);
+				step.text = QString("%1[%2]: %3").arg (QFileInfo(file.fileName()).fileName()).arg(i).arg(line.simplified());
+				step.fullText= file.fileName();
 				emit appendSearchResult (step);
 			}
 		}
@@ -196,12 +196,12 @@ void SearchThread::replace (QFile& file)
 			}
 			if (ifContains) 
 			{
-				pConsoleManager::Step step;
-				step.mType = pConsoleManager::stResultForReplace;
-				step.mFileName = file.fileName();
-				step.mPosition = QPoint (0,i);
-				step.mText = QString("%1[%2]: %3").arg (QFileInfo(file.fileName()).fileName()).arg(i).arg(line.simplified());
-				step.mFullText= file.fileName();
+				SearchAndReplace::Occurence step;
+				step.mode = SearchAndReplace::REPLACE_DIRRECTORY;
+				step.fileName = file.fileName();
+				step.position = QPoint (0,i);
+				step.text = QString("%1[%2]: %3").arg (QFileInfo(file.fileName()).fileName()).arg(i).arg(line.simplified());
+				step.fullText= file.fileName();
 				emit appendSearchResult (step);
 			}
 		}

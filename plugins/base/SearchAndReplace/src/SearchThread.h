@@ -1,7 +1,7 @@
 #ifndef SEARCHTHREAD_H
 #define SEARCHTHREAD_H
 
-#include "pConsoleManager.h"
+#include "SearchAndReplace.h"
 
 #include <QThread>
 #include <QStringList>
@@ -47,7 +47,7 @@ private:
 	void replace (QFile& file);
 	
 signals:
-    void appendSearchResult( const pConsoleManager::Step& );
+    void appendSearchResult( const SearchAndReplace::Occurence& );
     void changeProgress(int);
 };
 

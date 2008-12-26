@@ -70,30 +70,63 @@ void SearchResultsDock::clearSearchResults()
 	mTree->clear();
 }
 
+int SearchResultsDock::filesWithOccurencesCount () const
+{
+	return mTree->topLevelItemCount();
+}
+
+int SearchResultsDock::oCcurencesCount (int fileIndex) const
+{
+	QTreeWidgetItem* fileItem = mTree->topLevelItem (fileIndex);
+	if (NULL != fileItem)
+		return fileItem->childCount();
+	
+	return -1;
+}
+
+SearchAndReplace::Occurence SearchResultsDock::occurence (int fileIndex, int occurenceIndex) const
+{
+	SearchAndReplace::Occurence result;
+	
+	QTreeWidgetItem* fileItem = mTree->topLevelItem (fileIndex);
+	if (NULL != fileItem)
+	{
+		QTreeWidgetItem* occurenceItem = fileItem->child (occurenceIndex);
+		if (NULL != occurenceItem)
+		{
+			result.text = occurenceItem->text(0);
+			result.fileName = occurenceItem->data( 0, FILE_NAME ).toString();
+			result.position = occurenceItem->data( 0, POSITION ).toPoint();
+		}
+	}
+	
+	return result;
+}
+
 /*!
 	Append search result to Search Results dock
 	
 	Search result representing by same structure, as Build Step
 	\param s Search result to append
 */
-void SearchResultsDock::appendSearchResult( const pConsoleManager::Step& s )
+void SearchResultsDock::appendSearchResult( const SearchAndReplace::Occurence& s )
 {
 	disconnect( mTree, SIGNAL( itemChanged( QTreeWidgetItem*, int ) ), this, SLOT( itemChanged( QTreeWidgetItem* ) ) );
 	
 	QTreeWidgetItem* it = NULL;
 	QTreeWidgetItem* parentItem = NULL;
-	if (s.mType == pConsoleManager::stResultForReplace)
+	if (s.mode == SearchAndReplace::REPLACE_DIRRECTORY)
 	{
 		QString parentItemFile = QString::null;
 		if (mTree->topLevelItemCount())
 		{
 			parentItem = mTree->topLevelItem(mTree->topLevelItemCount()-1);
-			parentItemFile = parentItem->data (0, Qt::UserRole + 2).toString();
+			parentItemFile = parentItem->data (0, FILE_NAME).toString();
 		}
-		if (s.mFileName != parentItemFile) // it's a next file, need create next item (or it's just a first search result)
+		if (s.fileName != parentItemFile) // it's a next file, need create next item (or it's just a first search result)
 		{
 			parentItem = new QTreeWidgetItem (mTree);
-			parentItem->setData( 0, FILE_NAME, s.mFileName ); // filename
+			parentItem->setData( 0, FILE_NAME, s.fileName ); // filename
 			parentItem->setFlags (parentItem->flags() | Qt::ItemIsUserCheckable);
 			parentItem->setCheckState (0, Qt::Checked);
 		}
@@ -105,15 +138,15 @@ void SearchResultsDock::appendSearchResult( const pConsoleManager::Step& s )
 	}
 	
 	if (parentItem) // stResultForReplace
-		parentItem->setText (0, QString ("%1 (%2)").arg (s.mFileName).arg(parentItem->childCount()));
+		parentItem->setText (0, QString ("%1 (%2)").arg (s.fileName).arg(parentItem->childCount()));
 	
 	// set item infos
-	it->setText( 0, s.mText );
-	it->setToolTip( 0, s.mFullText );
-	it->setData( 0, FILE_NAME, s.mFileName ); // filename
-	it->setData( 0, POSITION, s.mPosition ); // position
+	it->setText( 0, s.text );
+	it->setToolTip( 0, s.fullText );
+	it->setData( 0, FILE_NAME, s.fileName ); // filename
+	it->setData( 0, POSITION, s.position ); // position
 	
-	if (s.mType == pConsoleManager::stResultForReplace)
+	if (s.mode == SearchAndReplace::REPLACE_DIRRECTORY)
 	{
 		it->setFlags (it->flags() | Qt::ItemIsUserCheckable);
 		it->setCheckState (0, Qt::Checked);

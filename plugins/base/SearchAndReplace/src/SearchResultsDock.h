@@ -37,7 +37,7 @@
 #define SEARCHRESULTSDOCK_H
 
 #include <fresh.h>
-#include "pConsoleManager.h"
+#include "SearchAndReplace.h"
 
 class QTreeWidget;
 
@@ -61,6 +61,10 @@ public:
 	
 	void clearSearchResults();
 	
+	int filesWithOccurencesCount () const;
+	int oCcurencesCount (int fileIndex) const;
+	SearchAndReplace::Occurence occurence (int fileIndex, int occurenceIndex) const;
+	
 protected:
 	QTreeWidget* mTree;
 
@@ -68,7 +72,7 @@ signals:
 	void resultActivated (const QString& fileName, const QPoint& position);
 	
 public slots:
-	void appendSearchResult( const pConsoleManager::Step& );
+	void appendSearchResult( const SearchAndReplace::Occurence& );
 	
 protected slots:
 	void itemPressed( QTreeWidgetItem* );

@@ -62,6 +62,16 @@ public:
 		REPLACE_DIRRECTORY = 5
 	};
 
+	struct Occurence
+	{
+		Mode mode;
+		QString fileName;
+		QPoint position;
+		QString text;
+		QString fullText;
+		bool checked;
+	};
+	
 	SearchAndReplace();
 	virtual ~SearchAndReplace();
 	
