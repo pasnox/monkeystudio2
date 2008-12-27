@@ -53,7 +53,12 @@ class SearchResultsDock : public pDockWidget
 	enum DataRole
 	{
 		FILE_NAME = Qt::UserRole +1,
-		POSITION
+		POSITION,
+		// for replacement
+		SEARCH_TEXT,
+		IS_REG_EXP,
+		IS_CASE_SENSETIVE,
+		REPLACE_TEXT
 	};
 	
 public:

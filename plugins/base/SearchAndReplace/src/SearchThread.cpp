@@ -5,8 +5,6 @@
 #include <QList>
 #include <QDir>
 
-#include <QDebug>
-
 class DirWalkIterator
 {
 protected:
@@ -146,7 +144,8 @@ void SearchThread::search (QFile& file)
 		QString line;
 		QTextStream in(&file);
 		int i = 0;
-		QRegExp rex (mSearch);
+		Qt::CaseSensitivity cs = mCaseSensetive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+		QRegExp rex (mSearch, cs);
 		while (!in.atEnd() && !mTerm) 
 		{
 			++i;
@@ -157,7 +156,7 @@ void SearchThread::search (QFile& file)
 				ifContains = line.contains(rex);
 			else
 			{
-				ifContains = line.contains(mSearch);
+				ifContains = line.contains(mSearch, cs);
 			}
 			if (ifContains) 
 			{
@@ -181,7 +180,8 @@ void SearchThread::replace (QFile& file)
 		QString line;
 		QTextStream in(&file);
 		int i = 0;
-		QRegExp rex (mSearch);
+		Qt::CaseSensitivity cs = mCaseSensetive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+		QRegExp rex (mSearch, cs);
 		while (!in.atEnd() && !mTerm) 
 		{
 			++i;
@@ -192,7 +192,7 @@ void SearchThread::replace (QFile& file)
 				ifContains = line.contains(rex);
 			else
 			{
-				ifContains = line.contains(mSearch);
+				ifContains = line.contains(mSearch, cs);
 			}
 			if (ifContains) 
 			{
@@ -202,6 +202,10 @@ void SearchThread::replace (QFile& file)
 				step.position = QPoint (0,i);
 				step.text = QString("%1[%2]: %3").arg (QFileInfo(file.fileName()).fileName()).arg(i).arg(line.simplified());
 				step.fullText= file.fileName();
+				step.searchText = mSearch;
+				step.isRegExp = mIsReg;
+				step.isCaseSensetive = mCaseSensetive;
+				step.replaceText = mReplace;
 				emit appendSearchResult (step);
 			}
 		}

@@ -69,6 +69,10 @@ public:
 		QPoint position;
 		QString text;
 		QString fullText;
+		QString searchText; // filled only for 'replace in dirrectory'
+		bool isRegExp; // filled only for 'replace in dirrectory'
+		bool isCaseSensetive; // filled only for 'replace in dirrectory'
+		QString replaceText; // filled only for 'replace in dirrectory'
 		bool checked;
 	};
 	

@@ -302,6 +302,15 @@ int SearchAndReplace::replace(bool all)
 
 void SearchAndReplace::replaceInDirrectory()
 {
+	QMessageBox::StandardButton answer = 
+		QMessageBox::question (NULL, 
+								tr("Replace in dirrectory"), 
+								tr("Rollback changes for replace in dirrectory is not available. You can permanently corrupt your files. Are you sure?"),
+								(QMessageBox::Yes | QMessageBox::No),
+								QMessageBox::No);
+	if (QMessageBox::Yes != answer)
+		return;
+	
 	int replacementsCount = 0;
 	
 	for (int fileIndex = 0; fileIndex < mDock->filesWithOccurencesCount (); fileIndex++) // for files
@@ -353,14 +362,14 @@ void SearchAndReplace::replaceInDirrectory()
 				// line with occurence
 				QString line = fileContents[occ.position.y()-1];
 				
-				Qt::CaseSensitivity cs = mWidget->isCaseSensetive() ? Qt::CaseSensitive : Qt::CaseInsensitive;
-				if (mWidget->isRegExp())  // TODO let's remember parametres in the Occurence, because user can change it on UI
+				Qt::CaseSensitivity cs = occ.isCaseSensetive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+				if (occ.isRegExp)  // TODO let's remember parametres in the Occurence, because user can change it on UI
 				{
-					line.replace (QRegExp (mWidget->searchText(), cs), mWidget->replaceText());
+					line.replace (QRegExp (occ.searchText, cs), occ.replaceText);
 				}
 				else // not a reg exp
 				{
-					line.replace (mWidget->searchText(), mWidget->replaceText(), cs);
+					line.replace (occ.searchText, occ.replaceText, cs);
 				}
 				replacementsCount ++;
 				
@@ -484,15 +493,16 @@ void SearchAndReplace::onNextClicked()
 				fileProcessed (0);
 				QString path = mWidget->path();
 				QString mask = mWidget->mask();
-				QString text = mWidget->searchText ();
+				QString searchText = mWidget->searchText ();
+				QString replaceText = mWidget->replaceText ();
 				
 				bool caseSensetive = mWidget->isCaseSensetive ();
 				bool regexp = mWidget->isRegExp ();
 				
 				if (mMode == SEARCH_DIRRECTORY)
-					mSearchThread = new SearchThread(SearchThread::SEARCH, path, mask, text, "", caseSensetive, regexp, this);
+					mSearchThread = new SearchThread(SearchThread::SEARCH, path, mask, searchText, "", caseSensetive, regexp, this);
 				else
-					mSearchThread = new SearchThread(SearchThread::REPLACE, path, mask, text, "", caseSensetive, regexp, this);
+					mSearchThread = new SearchThread(SearchThread::REPLACE, path, mask, searchText, replaceText, caseSensetive, regexp, this);
 				
 				mWidget->setNextButtonText (tr("&Stop"));
 				mWidget->setNextButtonIcon (QIcon(":/console/icons/console/stop.png"));

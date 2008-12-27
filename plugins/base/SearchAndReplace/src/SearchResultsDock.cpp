@@ -97,6 +97,10 @@ SearchAndReplace::Occurence SearchResultsDock::occurence (int fileIndex, int occ
 			result.text = occurenceItem->text(0);
 			result.fileName = occurenceItem->data( 0, FILE_NAME ).toString();
 			result.position = occurenceItem->data( 0, POSITION ).toPoint();
+			result.searchText = occurenceItem->data( 0, SEARCH_TEXT ).toString();
+			result.isRegExp = occurenceItem->data( 0, IS_REG_EXP ).toBool();
+			result.isCaseSensetive = occurenceItem->data( 0, IS_CASE_SENSETIVE ).toBool();
+			result.replaceText = occurenceItem->data( 0, REPLACE_TEXT ).toString();
 			result.checked = (occurenceItem->checkState (0) == Qt::Checked);
 		}
 	}
@@ -148,7 +152,10 @@ void SearchResultsDock::appendSearchResult( const SearchAndReplace::Occurence& s
 	it->setToolTip( 0, s.fullText );
 	it->setData( 0, FILE_NAME, s.fileName ); // filename
 	it->setData( 0, POSITION, s.position ); // position
-	
+	it->setData( 0, SEARCH_TEXT, s.searchText ); // position
+	it->setData( 0, IS_REG_EXP, s.isRegExp ); // position
+	it->setData( 0, IS_CASE_SENSETIVE, s.isCaseSensetive ); // position
+	it->setData( 0, REPLACE_TEXT, s.replaceText ); // position
 	if (s.mode == SearchAndReplace::REPLACE_DIRRECTORY)
 	{
 		it->setFlags (it->flags() | Qt::ItemIsUserCheckable);

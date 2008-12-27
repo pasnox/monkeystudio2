@@ -42,8 +42,6 @@
 #include <QCompleter>
 #include <QDirModel>
 
-#include <QDebug>
-
 #include "pWorkspace.h"
 
 #include "SearchAndReplace.h"
