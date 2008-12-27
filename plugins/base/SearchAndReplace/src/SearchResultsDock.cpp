@@ -97,6 +97,7 @@ SearchAndReplace::Occurence SearchResultsDock::occurence (int fileIndex, int occ
 			result.text = occurenceItem->text(0);
 			result.fileName = occurenceItem->data( 0, FILE_NAME ).toString();
 			result.position = occurenceItem->data( 0, POSITION ).toPoint();
+			result.checked = (occurenceItem->checkState (0) == Qt::Checked);
 		}
 	}
 	
@@ -115,6 +116,8 @@ void SearchResultsDock::appendSearchResult( const SearchAndReplace::Occurence& s
 	
 	QTreeWidgetItem* it = NULL;
 	QTreeWidgetItem* parentItem = NULL;
+	
+	bool wasEmpty = (mTree->topLevelItemCount() == 0);
 	if (s.mode == SearchAndReplace::REPLACE_DIRRECTORY)
 	{
 		QString parentItemFile = QString::null;
@@ -153,6 +156,9 @@ void SearchResultsDock::appendSearchResult( const SearchAndReplace::Occurence& s
 	}
 	
 	connect( mTree, SIGNAL( itemChanged( QTreeWidgetItem*, int ) ), this, SLOT( itemChanged( QTreeWidgetItem* ) ) );
+	
+	if (wasEmpty)
+		show();
 }
 
 /*!
@@ -164,10 +170,8 @@ void SearchResultsDock::appendSearchResult( const SearchAndReplace::Occurence& s
 void SearchResultsDock::itemPressed ( QTreeWidgetItem* it )
 {
 	// get filename
-	//qDebug () << "pressed";
 	QString s = it->data( 0, FILE_NAME ).toString();
 	QPoint position = it->data( 0, POSITION ).toPoint();
-	//qDebug () << s << position;
 	emit resultActivated (s, position);
 }
 
@@ -178,7 +182,7 @@ void SearchResultsDock::itemPressed ( QTreeWidgetItem* it )
 */
 void SearchResultsDock::itemChanged( QTreeWidgetItem* it )
 {
-	disconnect( mTree, SIGNAL( itemChanged( QTreeWidgetItem*, int ) ), this, SLOT( twSearchResults_itemChanged( QTreeWidgetItem* ) ) );
+	disconnect( mTree, SIGNAL( itemChanged( QTreeWidgetItem*, int ) ), this, SLOT( itemChanged( QTreeWidgetItem* ) ) );
 	if (it->childCount()) // It's a parent item (File name). Need update children checked state
 	{
 		for (int i = 0; i < it->childCount(); i++)

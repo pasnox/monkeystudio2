@@ -101,6 +101,8 @@ protected:
 	bool searchFile (bool next);
 	int replace(bool all);
 	
+	void replaceInDirrectory();
+	
 protected slots:
 	// from system
 	void showSearchFile ();

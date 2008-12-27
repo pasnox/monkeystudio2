@@ -42,9 +42,8 @@
 #include "pWorkspace.h"
 #include "pChild.h"
 #include "pEditor.h"
+#include "pFileManager.h"
 #include "QueuedStatusBar.h"
-
-#include <QDebug>
 
 /*!
 	Constructor of class
@@ -231,6 +230,13 @@ bool SearchAndReplace::searchFile (bool next)
 
 	// search
 	bool b = editor->findFirst( text, mWidget->isRegExp(), mWidget->isCaseSensetive(), false, false, next, y, x);
+	if (!b) // not found, try from start/end
+	{
+		if (next)
+			b = editor->findFirst( text, mWidget->isRegExp(), mWidget->isCaseSensetive(), false, false, next, 0, 0);
+		else
+			b = editor->findFirst( text, mWidget->isRegExp(), mWidget->isCaseSensetive(), false, false, next, editor->lines(), 0);
+	}
 	// change background acording to found or not
 	//QPalette p = cobSearch->palette();
 	//p.setColor( cobSearch->backgroundRole(), b ? Qt::white : Qt::red );
@@ -287,6 +293,107 @@ int SearchAndReplace::replace(bool all)
 	}
 	
 	return count;
+}
+
+void SearchAndReplace::replaceInDirrectory()
+{
+	int replacementsCount = 0;
+	
+	for (int fileIndex = 0; fileIndex < mDock->filesWithOccurencesCount (); fileIndex++) // for files
+	{
+		Occurence occ = mDock->occurence (fileIndex, 0); // every file has at least one occurence
+		pAbstractChild* currFileChild = MonkeyCore::fileManager()->childForFile (occ.fileName); 
+		if (NULL != currFileChild && currFileChild->isModified(occ.fileName)) // going to replace in modified file
+		{
+			QMessageBox::critical (NULL, tr("Replace in dirrectory"), tr("File %1 is not saved. Save please all files before do replacing").arg (occ.fileName));
+			return;
+		}
+	}
+		
+	for (int fileIndex = 0; fileIndex < mDock->filesWithOccurencesCount (); fileIndex++) // for files
+	{
+		QFile file;
+		QStringList fileContents;
+		
+		for (int occurenceIndex = 0; occurenceIndex < mDock->oCcurencesCount (fileIndex); occurenceIndex++) // for occurences
+		{
+			Occurence occ = mDock->occurence (fileIndex, occurenceIndex);
+			if (occ.checked)
+			{
+				if (! file.isOpen())  // open file, if nessesary
+				{
+					file.setFileName (occ.fileName);
+					bool stat = file.open (QIODevice::ReadWrite);
+					if (! stat)
+					{
+						QMessageBox::critical (NULL, "Replace in dirrectory", "Failed to open file: " + file.errorString());
+						break;
+					}
+					// read all file to QStringList
+					while ((! file.atEnd()) && file.error() == QFile::NoError)
+						fileContents << file.readLine();
+					
+					if (file.error() != QFile::NoError)
+					{
+						QMessageBox::critical (NULL, "Replace in dirrectory", "Failed to read file: " + file.errorString());
+						break;
+					}
+				}
+				// Now all file is in the QStringList
+				if (fileContents.size() <= occ.position.y()-1)
+				{
+					QMessageBox::critical (NULL, "Replace in dirrectory", "Line with occurence not found");
+					break;
+				}
+				// line with occurence
+				QString line = fileContents[occ.position.y()-1];
+				
+				Qt::CaseSensitivity cs = mWidget->isCaseSensetive() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+				if (mWidget->isRegExp())  // TODO let's remember parametres in the Occurence, because user can change it on UI
+				{
+					line.replace (QRegExp (mWidget->searchText(), cs), mWidget->replaceText());
+				}
+				else // not a reg exp
+				{
+					line.replace (mWidget->searchText(), mWidget->replaceText(), cs);
+				}
+				replacementsCount ++;
+				
+				fileContents[occ.position.y()-1] = line;
+			}
+		}
+		// finished processing file. Need to write and close it, if it had been opened
+		if (file.isOpen())
+		{
+			file.resize (0);
+			if (file.error() != QFile::NoError)
+			{
+				QMessageBox::critical (NULL, "Replace in dirrectory", "Failed to write file: " + file.errorString());
+				break;
+			}
+			file.write (fileContents.join("").toUtf8());
+			if (file.error() != QFile::NoError)
+			{
+				QMessageBox::critical (NULL, "Replace in dirrectory", "Failed to write file: " + file.errorString());
+				break;
+			}
+			file.close();
+			if (file.error() != QFile::NoError)
+			{
+				QMessageBox::critical (NULL, "Replace in dirrectory", "Failed to write file: " + file.errorString());
+				break;
+			}
+			// Now reload file automatically, if it is opened
+			pAbstractChild* currFileChild = MonkeyCore::fileManager()->childForFile (file.fileName()); 
+			if (NULL != currFileChild) // file is opened
+			{
+				currFileChild->closeFile(file.fileName());
+				currFileChild->openFile(file.fileName(), currFileChild->textCodec());
+			}
+		}
+	}
+	mDock->clearSearchResults();
+	showMessage (tr("%1 replacements made").arg (replacementsCount));
 }
 
 void SearchAndReplace::showSearchFile () 
@@ -430,89 +537,7 @@ void SearchAndReplace::onReplaceAllClicked()
 	}
 	else
 	{
-		for (int fileIndex = 0; fileIndex < mDock->filesWithOccurencesCount (); fileIndex++) // for files
-		{
-			QFile file;
-			QStringList fileContents;
-			
-			for (int occurenceIndex = 0; occurenceIndex < mDock->oCcurencesCount (fileIndex); occurenceIndex++) // for occurences
-			{
-				Occurence occ = mDock->occurence (fileIndex, occurenceIndex);
-				qDebug () << "Start processing occurence";
-				if (occ.checked)
-				{
-					if (! file.isOpen())  // open file, if nessesary
-					{
-						file.setFileName (occ.fileName);
-						bool stat = file.open (QIODevice::ReadWrite);
-						if (! stat)
-						{
-							QMessageBox::critical (NULL, "Replace in dirrectory", "Failed to open file: " + file.errorString());
-							break;
-						}
-						// read all file to QStringList
-						qDebug () << "Start read";
-						while ((! file.atEnd()) && file.error() == QFile::NoError)
-						{
-							qDebug () << "before read" << file.fileName() << file.pos() << file.size();
-							fileContents << file.readLine();
-							qDebug () << "after read" << file.fileName() << file.pos() << file.size();
-						}
-						qDebug () << "Finish read";
-						if (file.error() != QFile::NoError)
-						{
-							QMessageBox::critical (NULL, "Replace in dirrectory", "Failed to read file: " + file.errorString());
-							break;
-						}
-					}
-					qDebug () << "string list " << fileContents;
-					// Now all file is in the QStringList
-					if (fileContents.size() <= occ.position.y()-1)
-					{
-						QMessageBox::critical (NULL, "Replace in dirrectory", "Line with occurence not found");
-						break;
-					}
-					// line with occurence
-					QString line = fileContents[occ.position.y()-1];
-					
-					Qt::CaseSensitivity cs = mWidget->isCaseSensetive() ? Qt::CaseSensitive : Qt::CaseInsensitive;
-					if (mWidget->isRegExp())  // TODO let's remember parametres in the Occurence, because user can change it on UI
-					{
-						line.replace (QRegExp (mWidget->searchText(), cs), mWidget->replaceText());
-					}
-					else // not a reg exp
-					{
-						line.replace (mWidget->searchText(), mWidget->replaceText(), cs);
-					}
-					
-					fileContents[occ.position.y()-1] = line;
-				}
-				
-				qDebug () << "Finish processing occurence";
-			}
-			// finished processing file. Need to write and close it, if it had been opened
-			if (file.isOpen())
-			{
-				file.resize (0);
-				if (file.error() != QFile::NoError)
-				{
-					QMessageBox::critical (NULL, "Replace in dirrectory", "Failed to write file: " + file.errorString());
-					break;
-				}
-				file.write (fileContents.join("").toUtf8());
-				if (file.error() != QFile::NoError)
-				{
-					QMessageBox::critical (NULL, "Replace in dirrectory", "Failed to write file: " + file.errorString());
-					break;
-				}
-				file.close();
-				if (file.error() != QFile::NoError)
-				{
-					QMessageBox::critical (NULL, "Replace in dirrectory", "Failed to write file: " + file.errorString());
-					break;
-				}
-			}
-		}
+		replaceInDirrectory();
 	}
 }
 
@@ -523,12 +548,12 @@ void SearchAndReplace::makeGoTo (const QString& file, const QPoint& position)
 
 void SearchAndReplace::threadFinished ()
 {
-	mWidget->setNextButtonText (tr("Search"));
+	mWidget->setNextButtonText (tr("&Search"));
 	mWidget->setNextButtonIcon (QIcon(":/edit/icons/edit/search.png"));
 	
 	delete mSearchThread;
 	mSearchThread = NULL;
-	showMessage ("Searching finished");
+	showMessage (QString("Searching finished. %1 occurences").arg (mOccurencesFound));
 }
 
 void SearchAndReplace::occurenceFound ()

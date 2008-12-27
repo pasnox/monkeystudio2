@@ -555,18 +555,13 @@ void pWorkspace::fileWatcher_ecmNothing( const QString& filename )
 void pWorkspace::fileWatcher_ecmReload( const QString& filename, bool force )
 {
 	// try reload
-	foreach ( pAbstractChild* ac, children() )
+	pAbstractChild* ac = MonkeyCore::fileManager()->childForFile (filename);
+	if ( ac && ( !ac->isModified(filename) || force ) )
 	{
-		foreach ( const QString& fn, ac->files() )
-		{
-			if ( fn == filename && ( !ac->isModified( fn ) || force ) )
-			{
-				ac->closeFile( fn );
-				ac->openFile( fn, ac->textCodec() );
-				MonkeyCore::statusBar()->appendMessage( tr( "Reloaded externally modified file: '%1'" ).arg( QFileInfo( filename ).fileName() ), 2000 );
-				return;;
-			}
-		}
+		ac->closeFile(filename);
+		ac->openFile(filename, ac->textCodec());
+		MonkeyCore::statusBar()->appendMessage( tr( "Reloaded externally modified file: '%1'" ).arg( QFileInfo( filename ).fileName() ), 2000 );
+		return;;
 	}
 	// ask user
 	fileWatcher_ecmAlert( filename );

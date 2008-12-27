@@ -554,7 +554,7 @@ int SearchWidget::replace(bool all)
 
 void SearchWidget::threadFinished ()
 {
-	tbNext->setText (tr("Search"));
+	tbNext->setText (tr("&Search"));
 	tbNext->setIcon (QIcon(":/edit/icons/edit/search.png"));
 	delete mSearchThread;
 	mSearchThread = NULL;
