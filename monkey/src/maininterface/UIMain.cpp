@@ -71,7 +71,7 @@ void UIMain::initGui()
 	// init connection
 	initConnections();
 	// init final gui
-	setWindowTitle( QObject::tr( "%1 v%2 - %3 & The Monkey Studio Team" ).arg( PACKAGE_NAME, PACKAGE_VERSION, PACKAGE_COPYRIGHTS ) );
+	setWindowTitle( QObject::tr( "%1 v%2" ).arg( PACKAGE_NAME, PACKAGE_VERSION ) );
 	setUnifiedTitleAndToolBarOnMac( true );
 	setWindowIcon( menuBar()->action( "mHelp/aAbout" )->icon() );
 	setIconSize( QSize( 16, 16 ) );
