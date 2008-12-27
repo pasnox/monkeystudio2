@@ -135,7 +135,7 @@ SearchWidget::SearchWidget( QWidget* parent )
 	connect(tbPath, SIGNAL( clicked() ), this, SLOT( onPathClicked() ));
 	
 	connect (tbNext, SIGNAL (clicked()), this, SIGNAL (nextClicked ()));
-//	connect (cobSearch->lineEdit(), SIGNAL (textEdited (const QString&)), this, SIGNAL (nextClicked ()));
+	connect (cobSearch->lineEdit(), SIGNAL (textEdited (const QString&)), this, SIGNAL (searchTextEdited()));
 	
 	connect (tbPrevious, SIGNAL (clicked()), this, SIGNAL (previousClicked ()));
 	connect (tbReplace, SIGNAL (clicked()), this, SIGNAL (replaceClicked ()));
@@ -224,7 +224,7 @@ void SearchWidget::show (SearchAndReplace::Mode mode)
 	}
 	
 	cobSearch->lineEdit()->selectAll ();
-	
+	setSearchLineEditColor (DEFAULT);
 	QWidget::show ();
 }
 
@@ -402,12 +402,13 @@ void SearchWidget::setSearchLineEditColor (LineEditColor color)
 			palette.setColor (QPalette::Base, Qt::green);
 		break;
 		case RED:
-			palette.setColor (QPalette::Base, Qt::green);
+			palette.setColor (QPalette::Base, Qt::red);
 		break;
 		case DEFAULT:
 			palette.setColor (QPalette::Base, mDefaultEditColor);
 		break;
 	}
+	cobSearch->lineEdit()->setPalette (palette);
 }
 
 void SearchWidget::setSearchText (const QString& text)

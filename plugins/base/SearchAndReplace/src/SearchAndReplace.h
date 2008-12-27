@@ -98,7 +98,7 @@ protected:
 	void showMessage (QString status);
 	void updateSearchTextOnUI ();
 	
-	bool searchFile (bool next);
+	bool searchFile (bool next, bool incremental);
 	int replace(bool all);
 	
 	void replaceInDirrectory();
@@ -117,6 +117,7 @@ protected slots:
 	void onNextClicked();
 	void onReplaceClicked();
 	void onReplaceAllClicked();
+	void onSearchTextEdited();
 	
 	// from search results dock
 	void makeGoTo (const QString& file, const QPoint& position);

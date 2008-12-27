@@ -51,13 +51,14 @@ class SearchWidget : public QWidget
 {
 	Q_OBJECT
 	
+public:
 	enum LineEditColor 
 	{
 		GREEN,
 		RED,
 		DEFAULT
 	};
-public:
+	
 	SearchWidget( QWidget* parent = NULL);
 
 	void show (SearchAndReplace::Mode mode);
@@ -132,6 +133,8 @@ signals:
 	bool nextClicked();
 	void replaceClicked();
 	void replaceAllClicked();
+	
+	void searchTextEdited();
 };
 
 #endif // SEARCHWIDGET_H

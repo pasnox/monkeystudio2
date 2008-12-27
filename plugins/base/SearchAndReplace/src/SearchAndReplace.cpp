@@ -97,6 +97,7 @@ bool SearchAndReplace::setEnabled( bool b )
 		connect (mWidget, SIGNAL (nextClicked()), this, SLOT (onNextClicked()));
 		connect (mWidget, SIGNAL (replaceClicked()), this, SLOT (onReplaceClicked()));
 		connect (mWidget, SIGNAL (replaceAllClicked()), this, SLOT (onReplaceAllClicked()));
+		connect (mWidget, SIGNAL (searchTextEdited()), this, SLOT (onSearchTextEdited()));
 
 		
 		mDock = new SearchResultsDock ();
@@ -205,7 +206,7 @@ void SearchAndReplace::updateSearchTextOnUI ()
 	}
 }
 
-bool SearchAndReplace::searchFile (bool next)
+bool SearchAndReplace::searchFile (bool next, bool incremental)
 {
 	QString text = mWidget->searchText();
 	mWidget->searchAddToRecents(text);
@@ -220,14 +221,16 @@ bool SearchAndReplace::searchFile (bool next)
 
 	// get cursor position
 	int x, y;
-	editor->getCursorPosition( &y, &x );
-
-	if (!next)
+	if (next && !incremental)
+	{
+		editor->getCursorPosition( &y, &x );
+	}
+	else // incremental search, or search backward
 	{
 		int temp;
 		editor->getSelection(&y, &x, &temp, &temp);
 	}
-
+	
 	// search
 	bool b = editor->findFirst( text, mWidget->isRegExp(), mWidget->isCaseSensetive(), false, false, next, y, x);
 	if (!b) // not found, try from start/end
@@ -237,14 +240,16 @@ bool SearchAndReplace::searchFile (bool next)
 		else
 			b = editor->findFirst( text, mWidget->isRegExp(), mWidget->isCaseSensetive(), false, false, next, editor->lines(), 0);
 	}
-	// change background acording to found or not
-	//QPalette p = cobSearch->palette();
-	//p.setColor( cobSearch->backgroundRole(), b ? Qt::white : Qt::red );
-	//cobSearch->setPalette( p ); // FIXME
 	
 	// show message if needed
 	showMessage( b ? QString::null : tr( "Not Found" ) );
-
+	
+	// change background acording to found or not
+	if (b)
+		mWidget->setSearchLineEditColor (SearchWidget::GREEN);
+	else
+		mWidget->setSearchLineEditColor (SearchWidget::RED);
+	
 	// return found state
 	return b;
 }
@@ -271,7 +276,7 @@ int SearchAndReplace::replace(bool all)
 		editor->getCursorPosition(&y, &x);
 
 		editor->setCursorPosition(0, 0);
-		while (searchFile(true)) //search next
+		while (searchFile(true, false)) //search next
 		{
 			editor->replace(rtext);
 			count++;
@@ -284,7 +289,7 @@ int SearchAndReplace::replace(bool all)
 			editor->getSelection(&y, &x, &temp, &temp);
 			editor->setCursorPosition(y, x);
 
-		if (searchFile(true))
+		if (searchFile(true, false))
 			{
 				editor->replace (rtext);
 				count = 1;
@@ -445,7 +450,7 @@ void SearchAndReplace::showReplaceFolder ()
 
 void SearchAndReplace::onPreviousClicked()
 {
-	searchFile (false);
+	searchFile (false, false);
 }
 
 void SearchAndReplace::onNextClicked()
@@ -457,7 +462,7 @@ void SearchAndReplace::onNextClicked()
 			if (! isPathValid ())
 				return;
 			
-			searchFile (true);
+			searchFile (true, false);
 		break;
 		
 		case SEARCH_DIRRECTORY:
@@ -539,6 +544,14 @@ void SearchAndReplace::onReplaceAllClicked()
 	{
 		replaceInDirrectory();
 	}
+}
+
+void SearchAndReplace::onSearchTextEdited()
+{
+	if (mMode != SEARCH_FILE) // incremental search, only for search in file
+		return;
+	
+	searchFile (true, true);
 }
 
 void SearchAndReplace::makeGoTo (const QString& file, const QPoint& position)
