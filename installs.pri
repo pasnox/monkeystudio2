@@ -50,7 +50,7 @@ include( config.pri )
 		monkey_desktop.files	= links/monkeystudio.desktop
 
 		# desktop icon file
-		monkey_desktopicon.path	= $${prefix}/share/icons/hicolor/32x32/apps
+		monkey_desktopicon.path	= $${prefix}/share/pixmaps
 		monkey_desktopicon.files	= links/monkeystudio.png
 
 		INSTALLS	+= monkey_plugins monkey_target monkey_desktop monkey_desktopicon
