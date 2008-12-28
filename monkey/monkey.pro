@@ -126,7 +126,8 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/xupmanager/core/XUPProjectModelProxy.h \
 	src/xupmanager/gui/XUPAddFiles.h \
 	src/shared/MkSFileDialog.h \
-	src/pluginsmanager/ui/UIInterpreterSettings.h
+	src/pluginsmanager/ui/UIInterpreterSettings.h \
+	src/commandlinemanager/CommandLineManager.h
 
 SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/maininterface/ui/UIAbout.cpp \
@@ -173,7 +174,8 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/xupmanager/core/XUPProjectModelProxy.cpp \
 	src/xupmanager/gui/XUPAddFiles.cpp \
 	src/shared/MkSFileDialog.cpp \
-	src/pluginsmanager/ui/UIInterpreterSettings.cpp
+	src/pluginsmanager/ui/UIInterpreterSettings.cpp \
+	src/commandlinemanager/CommandLineManager.cpp
 
 mac:SOURCES	*= src/toolsmanager/pDesktopApplications_mac.cpp
 else:unix:SOURCES	*= src/toolsmanager/pDesktopApplications_unix.cpp
