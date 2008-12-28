@@ -51,9 +51,7 @@
 SearchAndReplace::SearchAndReplace()
   :	mWidget (NULL),
     mDock (NULL),
-	mSearchThread (NULL),
-	mOccurencesFound (0),
-	mFilesProcessed (0)
+	mSearchThread (NULL)
 {
 	// set plugin infos
 	mPluginInfos.Caption = tr( "Search and Replace" );
@@ -488,9 +486,6 @@ void SearchAndReplace::onNextClicked()
 				mDock->clearSearchResults ();
 				mWidget->pathAddToRecents (mWidget->path());
 				mWidget->maskAddToRecents (mWidget->mask());
-				mOccurencesFound = 0;
-				mFilesProcessed = 0;
-				fileProcessed (0);
 				QString path = mWidget->path();
 				QString mask = mWidget->mask();
 				QString searchText = mWidget->searchText ();
@@ -507,9 +502,7 @@ void SearchAndReplace::onNextClicked()
 				mWidget->setNextButtonText (tr("&Stop"));
 				mWidget->setNextButtonIcon (QIcon(":/console/icons/console/stop.png"));
 				
-				connect (mSearchThread, SIGNAL (appendSearchResult( const SearchAndReplace::Occurence& )), mDock, SLOT (appendSearchResult( const SearchAndReplace::Occurence& )));
-				connect (mSearchThread, SIGNAL (appendSearchResult( const SearchAndReplace::Occurence& )), this, SLOT (occurenceFound ()));
-				connect (mSearchThread, SIGNAL (changeProgress(int)), this, SLOT (fileProcessed (int)));
+				connect (mSearchThread, SIGNAL (readPleaseResults ()), this, SLOT (readThreadResults ()));
 				connect (mSearchThread, SIGNAL (finished ()), this, SLOT (threadFinished()));
 				mSearchThread->start();    
 			}
@@ -573,22 +566,23 @@ void SearchAndReplace::threadFinished ()
 {
 	mWidget->setNextButtonText (tr("&Search"));
 	mWidget->setNextButtonIcon (QIcon(":/edit/icons/edit/search.png"));
+
+	mSearchThread->lockResultsAccessMutex ();
+	showMessage (QString("Searching finished. %1 occurences").arg (mSearchThread->foundOccurencesCount()));
+	mSearchThread->unlockResultsAccessMutex ();
 	
 	delete mSearchThread;
 	mSearchThread = NULL;
-	showMessage (QString("Searching finished. %1 occurences").arg (mOccurencesFound));
 }
 
-void SearchAndReplace::occurenceFound ()
+void SearchAndReplace::readThreadResults ()
 {
-	mOccurencesFound ++;
-	showMessage(tr ("%1 files %2 occcurences").arg(mFilesProcessed).arg(mOccurencesFound));
-}
-
-void SearchAndReplace::fileProcessed (int count)
-{
-	mFilesProcessed = count;
-	showMessage (tr ("%1 files %2 occcurences").arg(mFilesProcessed).arg(mOccurencesFound));
+	mSearchThread->lockResultsAccessMutex ();
+	foreach (Occurence occurence, mSearchThread->newFoundOccurences())
+		mDock->appendSearchResult (occurence);
+	mSearchThread->clearNewFoundOccurences();
+	showMessage(tr ("%1 files %2 occcurences").arg(mSearchThread->processedFilesCount()).arg(mSearchThread->foundOccurencesCount()));
+	mSearchThread->unlockResultsAccessMutex ();
 }
 
 Q_EXPORT_PLUGIN2( BaseMessageBox, SearchAndReplace )

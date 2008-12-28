@@ -88,10 +88,6 @@ protected:
 	SearchResultsDock* mDock;
 	SearchThread* mSearchThread;
 	
-	// Used for counting of occurences when searching in folder/project	
-	int mOccurencesFound;
-	int mFilesProcessed;
-	
 protected:
 
 	bool isSearchTextValid ();
@@ -128,8 +124,7 @@ protected slots:
 	
 	// from search thread
 	void threadFinished ();
-	void occurenceFound ();
-	void fileProcessed (int count);
+	void readThreadResults ();
 };
 
 #endif

@@ -5,6 +5,8 @@
 
 #include <QThread>
 #include <QStringList>
+#include <QMutex>
+#include <QTimer>
 
 class QFile;
 
@@ -23,8 +25,15 @@ public:
     void run();
     void setTermEnabled(bool t) {mTerm = t;};
     bool isTermEnabled() {return mTerm;};
-
-		
+	
+	void lockResultsAccessMutex ();
+	void unlockResultsAccessMutex ();
+	// NOTE it's nessesary to lock mutex before use this methods
+	QList<SearchAndReplace::Occurence> newFoundOccurences();
+	void clearNewFoundOccurences();
+	int processedFilesCount();
+	int foundOccurencesCount();
+	
 private:
     QString mDir;
     QString mMask;
@@ -39,6 +48,14 @@ private:
 	
     bool mTerm;
 	
+	// results
+	QMutex mResultsAccessMutex;
+	int mProcessedFilesCount;
+	int mOccurencesFound;
+	QList<SearchAndReplace::Occurence> mNewFoundOccurences;
+	
+	QTimer mReadPleaseResultsTimer;
+	
 	// Heuristics: if first 1k of file contains '\0' - file is binary
 	// NOTE: procedure moving current pos in the file
 	bool isBinary (QFile& file);
@@ -47,8 +64,7 @@ private:
 	void replace (QFile& file);
 	
 signals:
-    void appendSearchResult( const SearchAndReplace::Occurence& );
-    void changeProgress(int);
+    void readPleaseResults ();
 };
 
 #endif //SEARCHTHREAD_H

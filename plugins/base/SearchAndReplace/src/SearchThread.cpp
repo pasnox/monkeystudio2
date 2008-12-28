@@ -65,6 +65,7 @@ SearchThread::SearchThread(Mode _mode, const QString &_dir, QString &_mask, cons
     mReplace = _replace;
     mIsReg = _isReg;
 	mCaseSensetive = _caseSensetive;
+	connect (&mReadPleaseResultsTimer, SIGNAL (timeout()), this, SIGNAL (readPleaseResults()));
 }
 
 SearchThread::~SearchThread()
@@ -75,7 +76,8 @@ void SearchThread::run()
 {
 	setPriority (QThread::LowestPriority);
 	DirWalkIterator dirWalker (mDir);
-    int files_count = 0;
+    mProcessedFilesCount = 0;
+    mOccurencesFound = 0;
     QString fileName = dirWalker.next();
 	
 	/* Prepare masks list */
@@ -83,6 +85,8 @@ void SearchThread::run()
 	QList <QRegExp> maskRexps;
 	foreach (QString m, masks)
 		maskRexps << QRegExp (m.trimmed (), Qt::CaseInsensitive, QRegExp::Wildcard);
+	
+	mReadPleaseResultsTimer.start(200);
 	
     while (!fileName.isNull())
     {
@@ -104,7 +108,9 @@ void SearchThread::run()
 				continue;  // Ignore this file, search in the next
 			}
         }
-        emit changeProgress(++files_count);
+		lockResultsAccessMutex ();
+        mProcessedFilesCount++;
+		unlockResultsAccessMutex ();
         QFile file(fileName);
         if (file.open(QIODevice::ReadOnly)) 
         {
@@ -124,6 +130,50 @@ void SearchThread::run()
         }
         fileName = dirWalker.next();
     } //while has file
+	
+	mReadPleaseResultsTimer.stop();
+	
+	lockResultsAccessMutex();
+	bool empty = mNewFoundOccurences.isEmpty();
+	unlockResultsAccessMutex();
+	
+	while (! empty) // wait until all data will be readed
+	{
+		msleep (20); // It's better to use semaphore, but lazy to write good code
+		lockResultsAccessMutex();
+		empty = mNewFoundOccurences.isEmpty();
+		unlockResultsAccessMutex();
+	}
+}
+
+void SearchThread::lockResultsAccessMutex ()
+{
+	mResultsAccessMutex.lock();
+}
+
+void SearchThread::unlockResultsAccessMutex ()
+{
+	mResultsAccessMutex.unlock();
+}
+
+QList<SearchAndReplace::Occurence> SearchThread::newFoundOccurences()
+{
+	return mNewFoundOccurences;
+}
+
+void SearchThread::clearNewFoundOccurences()
+{
+	mNewFoundOccurences.clear();
+}
+
+int SearchThread::processedFilesCount()
+{
+	return mProcessedFilesCount;
+}
+
+int SearchThread::foundOccurencesCount()
+{
+	return mOccurencesFound;
 }
 
 bool SearchThread::isBinary (QFile& file)
@@ -166,7 +216,10 @@ void SearchThread::search (QFile& file)
 				step.position = QPoint (0,i);
 				step.text = QString("%1[%2]: %3").arg (QFileInfo(file.fileName()).fileName()).arg(i).arg(line.simplified());
 				step.fullText= file.fileName();
-				emit appendSearchResult (step);
+				lockResultsAccessMutex ();
+				mNewFoundOccurences.append (step);
+				mOccurencesFound ++;
+				unlockResultsAccessMutex ();
 			}
 		}
 	} //if not binary
@@ -206,7 +259,11 @@ void SearchThread::replace (QFile& file)
 				step.isRegExp = mIsReg;
 				step.isCaseSensetive = mCaseSensetive;
 				step.replaceText = mReplace;
-				emit appendSearchResult (step);
+				
+				lockResultsAccessMutex ();
+				mNewFoundOccurences.append (step);
+				mOccurencesFound ++;
+				unlockResultsAccessMutex ();
 			}
 		}
 	} //if not binary
