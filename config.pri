@@ -47,7 +47,7 @@ QMAKE_TARGET_COMPANY	= "Monkey Studio Team"
 QMAKE_TARGET_PRODUCT	= "Monkey Studio"
 QMAKE_TARGET_DESCRIPTION	= "Crossplatform Integrated Development Environment"
 QMAKE_TARGET_COPYRIGHT	= "Copyright (C) 2005 - 2008 Filipe AZEVEDO"
-PACKAGE_DOMAIN	= "www.monkeystudio.org"
+PACKAGE_DOMAIN	= "monkeystudio.org"
 
 PACKAGE_VERSION	= 1.8.3.0
 
