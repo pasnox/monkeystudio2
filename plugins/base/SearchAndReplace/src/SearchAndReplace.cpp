@@ -151,7 +151,10 @@ bool SearchAndReplace::setEnabled( bool b )
 QWidget* SearchAndReplace::settingsWidget()
 { return NULL; }
 
-
+/*!
+	Check, if text for search is valid. Important for regular expressions
+	\return true - valid. False - invalid
+*/
 bool SearchAndReplace::isSearchTextValid ()
 {
 	if (mWidget->isRegExp())
@@ -164,11 +167,19 @@ bool SearchAndReplace::isSearchTextValid ()
 	return true;
 }
 
+/*!
+	Check, if text for search is valid. Important for regular expressions
+	\return true - valid. False - invalid
+*/
 bool SearchAndReplace::isReplaceTextValid ()
 {
 	return true;
 }
 
+/*!
+	Check, if text for search is valid. Important for regular expressions
+	\return true - valid. False - invalid
+*/
 bool SearchAndReplace::isPathValid ()
 {
 	if (!QDir (mWidget->path()).exists())
@@ -179,11 +190,18 @@ bool SearchAndReplace::isPathValid ()
 	return true;
 }
 
+/*!
+	Check, if file names mask is valid.
+	\return true - valid. False - invalid
+*/
 bool SearchAndReplace::isMaskValid ()
 {
 	return true;
 }
 
+/*!
+	Show for 5 seconds message on status bar
+*/
 void SearchAndReplace::showMessage (QString status)
 {
 	if (!status.isNull())
@@ -192,6 +210,9 @@ void SearchAndReplace::showMessage (QString status)
 		MonkeyCore::mainWindow()->statusBar()->showMessage ("");
 }
 
+/*!
+	Set on UI (search widget) search text according with text, selected in the current editor. Executed, when search widget appears
+*/
 void SearchAndReplace::updateSearchTextOnUI ()
 {
 	pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentChild());
@@ -204,6 +225,17 @@ void SearchAndReplace::updateSearchTextOnUI ()
 	}
 }
 
+/*!
+	Search text in the file.atEnd
+	Result of search - changed selection and cursor position in the editor.
+	Method also will change color of search text input
+	
+	\param next - search forward. If false - will search backward
+	\param incremental - Incremental search mode. (Search dirrectly when user types something.) 
+			If true - will search from selection (previous search result), if false - from cursor position
+	\return true - something found
+	\return false - nothing found
+*/
 bool SearchAndReplace::searchFile (bool next, bool incremental)
 {
 	QString text = mWidget->searchText();
@@ -252,6 +284,13 @@ bool SearchAndReplace::searchFile (bool next, bool incremental)
 	return b;
 }
 
+/*!
+	Do replacement in the file.
+	Will execute SearchAndReplace::searchFile for find text, which will be replaced
+	
+	\param all If false - one replacement will be made. If true - all possible
+	\return count of replacements
+*/
 int SearchAndReplace::replace(bool all)
 {
 	QString rtext = mWidget->replaceText();
@@ -298,6 +337,9 @@ int SearchAndReplace::replace(bool all)
 	return count;
 }
 
+/*!
+	Apply replacements in the dirrectory, according with selected on dock occcurences
+*/
 void SearchAndReplace::replaceInDirrectory()
 {
 	QMessageBox::StandardButton answer = 
@@ -408,8 +450,14 @@ void SearchAndReplace::replaceInDirrectory()
 	showMessage (tr("%1 replacements made").arg (replacementsCount));
 }
 
-void SearchAndReplace::showSearchFile () 
+/*!
+	Show search widget in SEARCH_FILE mode
+*/
+void SearchAndReplace::showSearchFile ()
 {
+	if (mSearchThread && mSearchThread->isRunning())
+		return;
+	
 	if (qobject_cast<pChild*> (MonkeyCore::workspace()->currentChild()))
 	{
 		mMode = SEARCH_FILE;
@@ -418,48 +466,85 @@ void SearchAndReplace::showSearchFile ()
 	}
 }
 
+/*!
+	Show search widget in SEARCH_FILE mode
+*/
 void SearchAndReplace::showReplaceFile () 
 {
+	if (mSearchThread && mSearchThread->isRunning())
+		return;
+	
 	mMode = REPLACE_FILE;
 	updateSearchTextOnUI ();
 	mWidget->show (mMode);
 }
 
 #if 0
+/*!
+	Show search widget in SEARCH_PROJECT mode
+*/
 void SearchAndReplace::showSearchProject () 
 {
+	if (mSearchThread && mSearchThread->isRunning())
+		return;
+	
 	mMode = SEARCH_PROJECT;
 	updateSearchTextOnUI ();
 	mWidget->show (mMode);
 }
 
+/*!
+	Show search widget in REPLACE_PROJECT mode
+*/
 void SearchAndReplace::showReplaceProject () 
 {
+	if (mSearchThread && mSearchThread->isRunning())
+		return;
+	
 	mMode = REPLACE_PROJECT;
 	updateSearchTextOnUI ();
 	mWidget->show (mMode);
 }
 #endif
 
+/*!
+	Show search widget in SEARCH_DIRRECTORY mode
+*/
 void SearchAndReplace::showSearchFolder () 
 {
+	if (mSearchThread && mSearchThread->isRunning())
+		return;
+	
 	mMode = SEARCH_DIRRECTORY;
 	updateSearchTextOnUI ();
 	mWidget->show (mMode);
 }
 
+/*!
+	Show search widget in REPLACE_DIRRECTORY mode
+*/
 void SearchAndReplace::showReplaceFolder () 
 {
+	if (mSearchThread && mSearchThread->isRunning())
+		return;
+	
 	mMode = REPLACE_DIRRECTORY;
 	updateSearchTextOnUI ();
 	mWidget->show (mMode);
 }
 
+/*!
+	Handler of "search previous" button
+*/
 void SearchAndReplace::onPreviousClicked()
 {
 	searchFile (false, false);
 }
 
+/*!
+	Handler of "search next" button
+	Button used for search next in the file, for start search in the dirrectory
+*/
 void SearchAndReplace::onNextClicked()
 {
 	switch (mMode)
@@ -511,6 +596,9 @@ void SearchAndReplace::onNextClicked()
 	return;
 }
 
+/*!
+	Handler of "replace" button. Need do one replacement in the file
+*/
 void SearchAndReplace::onReplaceClicked()
 {
 	/* Check replace text */
@@ -520,6 +608,9 @@ void SearchAndReplace::onReplaceClicked()
 	replace (false);	
 }
 
+/*!
+	Do all replacements in the file/dirrectory (according with current mode)
+*/
 void SearchAndReplace::onReplaceAllClicked()
 {
 	/* Check replace text */
@@ -549,6 +640,9 @@ void SearchAndReplace::onReplaceAllClicked()
 	}
 }
 
+/*!
+	If mode is SEARCH_FILE - do incremental search
+*/
 void SearchAndReplace::onSearchTextEdited()
 {
 	if (mMode != SEARCH_FILE) // incremental search, only for search in file
@@ -557,11 +651,17 @@ void SearchAndReplace::onSearchTextEdited()
 	searchFile (true, true);
 }
 
+/*!
+	Handler of click on search result. Open file with occurence, set cursor to it
+*/
 void SearchAndReplace::makeGoTo (const QString& file, const QPoint& position)
 {
 	MonkeyCore::workspace()->goToLine(file, position, true, pMonkeyStudio::defaultCodec());
 }
 
+/*!
+	Handler of finish of search thread work
+*/
 void SearchAndReplace::threadFinished ()
 {
 	mWidget->setNextButtonText (tr("&Search"));
@@ -575,6 +675,10 @@ void SearchAndReplace::threadFinished ()
 	mSearchThread = NULL;
 }
 
+/*!
+	Read results from buffer in the search thread. Called by signal from thread (signal comes by timer).
+	Blocks thread using mutex, read data, than unlocks mutex
+*/
 void SearchAndReplace::readThreadResults ()
 {
 	mSearchThread->lockResultsAccessMutex ();

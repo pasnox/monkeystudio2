@@ -43,6 +43,7 @@ class SearchWidget;
 
 /*!
 	Main class of the SearchAndReplace plugin
+	Consists implementation of plugin-system interface, and functionality of plugin
 */
 class SearchAndReplace : public BasePlugin
 {
@@ -50,6 +51,8 @@ class SearchAndReplace : public BasePlugin
 	Q_INTERFACES( BasePlugin )
 
 public:
+	/*! Active mode. Plugin can be used for search/replace in file/dirrectory
+	*/
 	enum Mode
 	{
 		SEARCH_FILE = 0,
@@ -61,19 +64,22 @@ public:
 		SEARCH_DIRRECTORY = 4,
 		REPLACE_DIRRECTORY = 5
 	};
-
+	
+	/*! Used for transfer results of search in dirrectory from search thread to dock,
+		and, in replace in dirrectory mode, for apply replacements
+	*/
 	struct Occurence
 	{
-		Mode mode;
-		QString fileName;
-		QPoint position;
-		QString text;
-		QString fullText;
-		QString searchText; // filled only for 'replace in dirrectory'
-		bool isRegExp; // filled only for 'replace in dirrectory'
-		bool isCaseSensetive; // filled only for 'replace in dirrectory'
-		QString replaceText; // filled only for 'replace in dirrectory'
-		bool checked;
+		Mode mode;				/*! Active mode. Can be SEARCH_DIRRECTORY or REPLACE_DIRRECTORY */
+		QString fileName;		/*! Name of file, where occurence found. With full path */
+		QPoint position;		/*! Position in the file x - column, y - line */
+		QString text;			/*! Text for display occurence on UI */
+		QString fullText;		/*! Full text. For display on hint */
+		QString searchText; 	/*! Search pattern, which was used for searching. Filled only for 'replace in dirrectory' */
+		bool isRegExp; 			/*! Is search pattern regular expression. Filled only for 'replace in dirrectory' */
+		bool isCaseSensetive; 	/*! Is search case sensetive. Filled only for 'replace in dirrectory' */
+		QString replaceText; 	/*! Text, which should be used for replacement. Filled only for 'replace in dirrectory' */
+		bool checked;			/*! Do user checked occurence for replacement on search results dock */
 	};
 	
 	SearchAndReplace();

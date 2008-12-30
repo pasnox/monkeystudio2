@@ -47,6 +47,9 @@ class QLabel;
 class QCheckBox;
 class QComboBox;
 
+/*!
+	Class implements UI of search system
+*/
 class SearchWidget : public QWidget
 {
 	Q_OBJECT

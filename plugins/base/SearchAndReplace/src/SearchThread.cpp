@@ -5,6 +5,9 @@
 #include <QList>
 #include <QDir>
 
+/*! Iterator for get list of all files in the some dirrectory, using minimum memory/time.
+	Every time, when called, will read from file system and return next file name
+*/
 class DirWalkIterator
 {
 protected:
@@ -176,6 +179,11 @@ int SearchThread::foundOccurencesCount()
 	return mOccurencesFound;
 }
 
+/*! 
+	Check, if file is binary. Now we not support binary files, and it will be skipped
+	Heuristics: if first 1k of file contains '\\0' - file is binary
+	NOTE: procedure moving current pos in the file
+*/
 bool SearchThread::isBinary (QFile& file)
 {
 	char data [1024];
@@ -186,6 +194,9 @@ bool SearchThread::isBinary (QFile& file)
 	return false;
 }
 
+/*! 
+	Process file in SEARCH_DIRRECTORY mode (search for occurences, store it to buffer
+*/
 void SearchThread::search (QFile& file)
 {
 	if (!isBinary (file)) // Currently we don't support binary files
@@ -225,6 +236,9 @@ void SearchThread::search (QFile& file)
 	} //if not binary
 }
 
+/*! 
+	Process file in REPLACE_DIRRECTORY mode (search for occurences, store it to buffer
+*/
 void SearchThread::replace (QFile& file)
 {
 	if (!isBinary (file)) // Currently we not supporting binary files
