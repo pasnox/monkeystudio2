@@ -630,8 +630,16 @@ void pWorkspace::fileOpen_triggered()
 	// get available filters
 	QString mFilters = availableFilesFilters();
 	
+	// path to show
+	QString path = MonkeyCore::fileManager()->currentChildFile();
+	if ( path.isEmpty() )
+	{
+		path = QDir::current().absolutePath();
+	}
+	
+	
 	// show filedialog to user
-	pFileDialogResult result = MkSFileDialog::getOpenFileNames( window(), tr( "Choose the file(s) to open" ), QDir::current().absolutePath(), mFilters, true, false );
+	pFileDialogResult result = MkSFileDialog::getOpenFileNames( window(), tr( "Choose the file(s) to open" ), path, mFilters, true, false );
 
 	// open open file dialog
 	QStringList fileNames = result[ "filenames" ].toStringList();
