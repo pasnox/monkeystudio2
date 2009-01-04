@@ -184,4 +184,6 @@ win32:SOURCES	*= src/toolsmanager/pDesktopApplications_win32.cpp
 TRANSLATIONS	*= ../translations/monkey_french.ts \
 	../translations/monkey_belarusian.ts \
 	../translations/monkey_italian.ts \
-	../translations/monkey_arabic.ts
+	../translations/monkey_arabic.ts \
+	../translations/monkey_spanish.ts \
+	../translations/monkey_catalan.ts
