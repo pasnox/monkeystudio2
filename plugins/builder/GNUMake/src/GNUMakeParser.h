@@ -41,8 +41,10 @@ public:
 		mName = PLUGIN_NAME;
 		Pattern ps[] = 
 		{
-		{
-			QRegExp("^make: \\*\\*\\* (No rule to make target `\\w+', needed by `\\w+')\\.  Stop\\.\\n"), //reg exp
+		{   // no rule for make target
+			QRegExp("^((mingw32\\-)?make: \\*\\*\\* No rule to make target.*)  Stop.",
+					Qt::CaseSensitive, 
+					QRegExp::RegExp2), //reg exp
 			//No rule for make target
 			"", //file name
 			"0", //column
