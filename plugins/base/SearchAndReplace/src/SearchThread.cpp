@@ -139,7 +139,7 @@ void SearchThread::run()
 	lockResultsAccessMutex();
 	bool empty = mNewFoundOccurences.isEmpty();
 	unlockResultsAccessMutex();
-	
+	emit readPleaseResults ();
 	while (! empty) // wait until all data will be readed
 	{
 		msleep (20); // It's better to use semaphore, but lazy to write good code
