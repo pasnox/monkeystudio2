@@ -1,2 +1,2 @@
 TEMPLATE	= subdirs
-SUBDIRS	= QMake PHP-Qt #QMakeProjectEditor
+SUBDIRS	= QMake PHP-Qt PyQt

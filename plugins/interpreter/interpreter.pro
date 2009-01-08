@@ -1,2 +1,2 @@
 TEMPLATE	= subdirs
-SUBDIRS	= PHP
+SUBDIRS	= PHP Python
