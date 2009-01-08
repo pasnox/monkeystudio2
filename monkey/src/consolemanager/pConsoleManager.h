@@ -139,6 +139,7 @@ private slots:
 	void stateChanged( QProcess::ProcessState );
 
 signals:
+	void warning( const QString& message );
 	void commandError( const pCommand&, QProcess::ProcessError );
 	void commandFinished( const pCommand&, int, QProcess::ExitStatus );
 	void commandReadyRead( const pCommand&, const QByteArray& );

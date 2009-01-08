@@ -34,20 +34,21 @@
 */
 
 #include <QTimer>
+#include <QDir>
 
 #include "pConsoleManager.h"
 #include "pCommandParser.h"
-#include "../pMonkeyStudio.h"
-#include "../workspace/pFileManager.h"
-#include "../coremanager/MonkeyCore.h"
-#include "pActionsManager.h"
+
+#include <MonkeyCore.h>
+#include <pActionsManager.h>
+#include <VariablesManager.h>
+
+#warning don''t forget to connect warning message with status bar
 
 /*!
 	Defines maximum count of lines, which are storing in the buffer for parsing
 */
 static const int MAX_LINES = 4; //Maximum lines count, that can be parsed by Monkey. Than less - than better perfomance
-
-using namespace pMonkeyStudio;
 
 /*!
 	Constructor of class
@@ -162,20 +163,12 @@ QString pConsoleManager::quotedString( const QString& s )
 /*!
 	Replace internal varibles in the string with it's values
 	
-	FIXME function should be replaced with using of VariablesManager
 	\param s Source string
 	\return Result string
 */
 QString pConsoleManager::processInternalVariables( const QString& s )
 {
-	QString v = s;
-	v.replace( "$cpp$", nativeSeparators( MonkeyCore::fileManager()->currentProjectPath() ) );
-	v.replace( "$cp$", nativeSeparators( MonkeyCore::fileManager()->currentProjectFile() ) );
-	v.replace( "$cfp$", nativeSeparators( MonkeyCore::fileManager()->currentChildPath() ) );
-	v.replace( "$cf$", nativeSeparators( MonkeyCore::fileManager()->currentChildFile() ) );
-	v.replace( "$cip$", nativeSeparators( MonkeyCore::fileManager()->currentItemPath() ) );
-	v.replace( "$ci$", nativeSeparators( MonkeyCore::fileManager()->currentItemFile() ) );
-	return v;
+	return VariablesManager::instance()->replaceAllVariables( s );
 }
 
 /*!
@@ -362,7 +355,7 @@ void pConsoleManager::sendRawData( const QByteArray& a )
 		write( a  );
 	}
 	else
-		warning( tr( "sendRawData..." ), tr( "Can't send raw data to console" ) );
+		emit warning( tr( "Can't send raw data to console" ) );
 }
 
 /*!
