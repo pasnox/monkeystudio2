@@ -46,7 +46,7 @@ void PyQtProjectItem::registerProjectType() const
 		<< qMakePair( QString( "PYTHON_FILES" ), tr( "Python Files" ) );
 	const StringStringList mVariableIcons = StringStringList()
 		<< qMakePair( QString( "FORMS" ), QString( "forms" ) )
-		<< qMakePair( QString( "PYTHON_FILES" ), QString( "py" ) );
+		<< qMakePair( QString( "PYTHON_FILES" ), QString( "python" ) );
 
 	// Variable suffixes
 	const StringStringListList mVariableSuffixes = StringStringListList()
