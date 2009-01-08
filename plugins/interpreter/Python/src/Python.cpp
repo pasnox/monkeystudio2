@@ -25,7 +25,7 @@ Python::Python ()
 	// set plugin infos
 	mPluginInfos.Caption = tr( "Python" );
 	mPluginInfos.Description = tr( "This plugin provide Python interpreter and python parser." );
-	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, Michon Aurelien aka aurelien <aurelien.french@gmail.com>";
 	mPluginInfos.Type = BasePlugin::iInterpreter;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.1.0";
