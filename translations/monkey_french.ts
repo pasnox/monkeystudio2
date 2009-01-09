@@ -5670,7 +5670,7 @@
     <message>
         <location filename="../monkey/src/xupmanager/ui/UIXUPManager.cpp" line="315"/>
         <source>Do you want to delete the associate file ?</source>
-        <translation type="obsolete">Voulez-vous sipprimer ce fichier associé ?</translation>
+        <translation type="obsolete">Voulez-vous supprimer ce fichier associé ?</translation>
     </message>
     <message>
         <location filename="../monkey/src/xupmanager/ui/UIXUPManager.cpp" line="615"/>
@@ -6360,7 +6360,7 @@ please select the variable you want to use for this file :
     <message>
         <location filename="../monkey/src/xupmanager/gui/XUPProjectManager.cpp" line="713"/>
         <source>Do you want to delete the associate file ?</source>
-        <translation type="unfinished">Voulez-vous sipprimer ce fichier associé ?</translation>
+        <translation type="unfinished">Voulez-vous supprimer ce fichier associé ?</translation>
     </message>
     <message>
         <location filename="../monkey/src/xupmanager/gui/XUPProjectManager.cpp" line="717"/>
