@@ -111,6 +111,7 @@ protected:
 	QStringList mCurrentParsers;
 	QHash<QString, pCommandParser*> mParsers;
 	QAction* mStopAction;
+	int mStopAttempt;
 
 	pConsoleManager( QObject* = 0 );
 	~pConsoleManager();
@@ -124,7 +125,7 @@ protected:
 public slots:
 	void sendRawCommand( const QString& );
 	void sendRawData( const QByteArray& );
-	void stopCurrentCommand( bool = false );
+	void stopCurrentCommand();
 	void addCommand( const pCommand& );
 	void addCommands( const pCommandList& );
 	void removeCommand( const pCommand& );

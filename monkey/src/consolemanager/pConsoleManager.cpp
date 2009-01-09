@@ -96,6 +96,7 @@ pConsoleManager::pConsoleManager( QObject* o )
 	// start timerEvent
 	mTimerId = startTimer( 100 );
 	mStringBuffer.reserve (MAX_LINES *200);
+	mStopAttempt = 0;
 }
 
 /*!
@@ -359,25 +360,22 @@ void pConsoleManager::sendRawData( const QByteArray& a )
 }
 
 /*!
-	Try to stop current command. Stop can be forced
-	
-	\param b Force stop. If false - process will just try to terminate child by executing
-		terminate () function, 
-		if true - process will be killed in 30 seconds, if will not terminate self
-	
-	FIXME Check, do it's possible, that process will be terminated correctly, and timer will
-	kill next executed command
+	Try to stop current command. if stop attempt for same commend = 3 the command is killed
 */
-void pConsoleManager::stopCurrentCommand( bool b )
+void pConsoleManager::stopCurrentCommand()
 {
 	if ( state() != QProcess::NotRunning )
 	{
 		// terminate properly
 		terminate();
-		// if force, wait 30 seconds, then kill
-		if ( b )
+		
+		// increment attempt
+		mStopAttempt++;
+		
+		// auto kill if attempt = 3
+		if ( mStopAttempt == 3 )
 		{
-			waitForFinished( 1000 ); // wait 1 seconds for process finish, freeze gui :/
+			mStopAttempt = 0;
 			kill();
 		}
 	}
@@ -451,6 +449,7 @@ void pConsoleManager::executeProcess()
 				if ( !mCurrentParsers.contains( s ) )
 					mCurrentParsers << s;
 		// execute command
+		mStopAttempt = 0;
 		setWorkingDirectory( c.workingDirectory() );
 		start( QString( "%1 %2" ).arg( c.command() ).arg( c.arguments() ) );
 
