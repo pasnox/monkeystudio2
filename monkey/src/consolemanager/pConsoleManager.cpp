@@ -376,7 +376,10 @@ void pConsoleManager::stopCurrentCommand( bool b )
 		terminate();
 		// if force, wait 30 seconds, then kill
 		if ( b )
-			QTimer::singleShot( 30, this, SLOT( kill() ) );
+		{
+			waitForFinished( 1000 ); // wait 1 seconds for process finish, freeze gui :/
+			kill();
+		}
 	}
 }
 
