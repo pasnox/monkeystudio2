@@ -87,8 +87,8 @@ void pToolsManager::initializeTools()
 	// get menu bar
 	pMenuBar* mb = MonkeyCore::menuBar();
 	// clear action
-	mb->menu( "mTools/mUserTools" )->clear();
-	mb->menu( "mTools/mDesktopTools" )->clear();
+	qDeleteAll( mb->menu( "mTools/mUserTools" )->actions() );
+	qDeleteAll( mb->menu( "mTools/mDesktopTools" )->actions() );
 	// initialize tools
 	foreach ( pTool t, tools() )
 	{
