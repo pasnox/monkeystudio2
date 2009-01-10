@@ -30,7 +30,7 @@
     <item>
      <widget class="QTabWidget" name="twPages" >
       <property name="tabPosition" >
-       <enum>QTabWidget::South</enum>
+       <enum>QTabWidget::North</enum>
       </property>
       <property name="currentIndex" >
        <number>1</number>
