@@ -21,7 +21,7 @@
 #include "MonkeyExport.h"
 
 #include <QDialog>
-#include <QHash>
+#include <QMap>
 
 class pActionsManager;
 class QTreeWidget;
@@ -40,7 +40,7 @@ public:
 	static QString strippedText( const QString& text );
 
 protected:
-	QHash<QString, QTreeWidgetItem*> mItems;
+	QMap<QString, QTreeWidgetItem*> mItems;
 	QLineEdit* leFilter;
 	QTreeWidget* twShortcuts;
 	QPushButton* pbRestore;
