@@ -58,7 +58,7 @@ UIMessageBoxSettings::UIMessageBoxSettings( MessageBox* plugin, QWidget* parent 
 	cbActivateDock->addItem( tr( "Output" ), UIMessageBoxSettings::Output );
 	cbActivateDock->addItem( tr( "Commands" ), UIMessageBoxSettings::Command );
 	// restore settings
-	gbActivateDock->setChecked( mPlugin->settingsValue( "ActivateDock", false ).toBool() );
+	gbActivateDock->setChecked( mPlugin->settingsValue( "ActivateDock", true ).toBool() );
 	UIMessageBoxSettings::Dock dock = (UIMessageBoxSettings::Dock)mPlugin->settingsValue( "ActivatedDock", UIMessageBoxSettings::Output ).toInt();
 	cbActivateDock->setCurrentIndex( cbActivateDock->findData( dock ) );
 }

@@ -119,7 +119,7 @@ QWidget* MessageBox::settingsWidget()
 
 void MessageBox::onConsoleStarted()
 {
-	if ( settingsValue( "ActivateDock", false ).toBool() )
+	if ( settingsValue( "ActivateDock", true ).toBool() )
 	{
 		UIMessageBoxSettings::Dock dock = (UIMessageBoxSettings::Dock)settingsValue( "ActivatedDock", UIMessageBoxSettings::Output ).toInt();
 		switch ( dock )
