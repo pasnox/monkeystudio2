@@ -58,7 +58,7 @@ GdbParser::GdbParser (QObject * parent) : QObject (parent), mIsReady(0)
 	if(gdbInterpreter && gdbPatternFile && gdbRestoreLine)
 	{
 	
-		crlf = pMonkeyStudio::getEol();
+		crlf = pMonkeyStudio::getEol(); // NOTE pMonkeyStudio::getEol() is EOL for source files, not for GDB output. Check, how it used
 
 		mEndParsing.clear();
 		mEndParsing << QRegExp(".*\\(gdb\\).$")
