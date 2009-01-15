@@ -112,6 +112,8 @@ public:
 	virtual void handleIncludeItem( XUPItem* function ) const;
 	// reimplement this member to allow custom row count, by example to open subproject
 	virtual void customRowCount( XUPItem* item ) const;
+	// hook item, used to do one time only things.
+	virtual void hookItem( XUPItem* item ) const;
 	// open a project with codec
 	virtual bool open( const QString& fileName, const QString& codec );
 	// save the project
