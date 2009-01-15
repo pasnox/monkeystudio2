@@ -134,16 +134,35 @@ int XUPItem::childIndex( XUPItem* child ) const
 
 void XUPItem::addChild( XUPItem* item )
 {
-	mChildItems[ childCount() ] = item;
-	item->setParent (this);
+	int row = childCount();
+	XUPProjectModel* m = model();
+	
+	// inform begin insert
+	if ( m )
+	{
+		m->beginInsertRows( index(), row, row );
+	}
+	
+	mChildItems[ row ] = item;
+	item->setParent( this );
+	
+	// inform end insert
+	if ( m )
+	{
+		m->endInsertRows();
+	}
 }
 
 int XUPItem::row() const
 {
 	if ( mParentItem )
+	{
 		return mParentItem->childIndex( const_cast<XUPItem*>( this ) );
+	}
 	else
+	{
 		return 0;
+	}
 }
 
 int XUPItem::childCount() const
