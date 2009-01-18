@@ -239,7 +239,18 @@ pAbstractChild* pWorkspace::openFile( const QString& s, const QString& codec )
 	}
 
 	// open file
-	c->openFile( s, codec );
+	if ( !c->openFile( s, codec ) )
+	{
+		MonkeyCore::statusBar()->appendMessage( tr( "An error occur while opening this file: '%1'" ).arg( QFileInfo( s ).fileName() ), -1 );
+		
+		if ( !wasIn )
+		{
+			closeDocument( c );
+			c->deleteLater();
+		}
+		
+		return 0;
+	}
 	
 	// set correct document if needed ( sdi hack )
 	if ( currentDocument() != c )
