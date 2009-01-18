@@ -189,7 +189,7 @@ void SearchWidget::show (SearchAndReplace::Mode mode)
 	}
 	else
 	{
-		tbReplaceAll->setText (tr("&Replace all"));
+		tbReplaceAll->setText (tr("Replace &all"));
 	}
 	
 	if (mode == SearchAndReplace::REPLACE_FILE)
