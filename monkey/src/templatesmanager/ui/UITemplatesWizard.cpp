@@ -164,10 +164,12 @@ void UITemplatesWizard::on_lwTemplates_itemPressed( QListWidgetItem* it )
 	foreach( QString v, t.Variables.keys() )
 	{
 		QComboBox* c = new QComboBox();
+		c->setSizeAdjustPolicy( QComboBox::AdjustToMinimumContentsLength );
 		c->setEditable( true );
 		c->addItems( t.Variables.value( v ) );
 		
 		QLabel* l = new QLabel( v +" :" );
+		l->setSizePolicy( QSizePolicy( QSizePolicy::Maximum, QSizePolicy::Preferred ) );
 		l->setToolTip( v );
 		l->setBuddy( c );
 		
