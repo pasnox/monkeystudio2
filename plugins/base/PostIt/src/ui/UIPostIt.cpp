@@ -16,16 +16,17 @@ UIPostIt::UIPostIt( QWidget* w )
     // init widget
     setupUi( this );
 
-    txtContent->installEventFilter( this );
-
     //init mNotesManager
-    mNotesManager = new notesManager( QFileInfo( MonkeyCore::settings()->fileName() ).absolutePath() + "/postit.xml" );
+    mNotesManager = new notesManager( QString(QFileInfo( MonkeyCore::settings()->fileName() ).absolutePath() + "/postit.xml") );
     mNotesManager->readDocument();
 
     //load note list
     loadNotes();
-
-    mTextChanged = false;
+    
+    if ( lstNotes->currentRow() != -1 ) {
+        lstNotes->setCurrentRow( 0 );
+        txtContent->setFocus();
+    }
 }
 
 //destructor
@@ -37,15 +38,20 @@ UIPostIt::~UIPostIt()
 //interface : add note
 void UIPostIt::on_tbAdd_clicked()
 {
+    //create new note
     bool inputResult;
     QString title = QInputDialog::getText(this, "New note", "Enter new title note :", QLineEdit::Normal, "", &inputResult );
     
     if ( inputResult ) {
         if ( !title.isEmpty() )
-            mNotesManager->addElement( title, "" );
+            mNotesManager->addElement( title, QString("") );
         else
-            mNotesManager->addElement( "New note...", "" );
+            mNotesManager->addElement( QString("New note..."), QString(" ") );
+            
         loadNotes();
+        lstNotes->setCurrentRow( lstNotes->count() - 1 );
+        txtContent->setFocus();
+        this->activateWindow();
     }
 }
 
@@ -62,24 +68,20 @@ void UIPostIt::loadNotes()
     }
 }
 
-//interface : item of list activated
-void UIPostIt::on_lstNotes_itemActivated ( QListWidgetItem *item )
-{
-    //load note content
-    uint i = lstNotes->currentRow();
-    txtContent->setPlainText( mNotesManager->getElement( i ).text() );
-}
-
 //edit title on doubleclicked
 void UIPostIt::on_tbEdit_clicked ()
 {
-    if ( lstNotes->currentRow() != -1 ) {
+    int row = lstNotes->currentRow();
+    if ( row != -1 ) {
         bool inputResult;
         QString title = QInputDialog::getText(this, "Edit title", "Enter new title note :", QLineEdit::Normal, mNotesManager->getTitleElement( lstNotes->currentRow() ), &inputResult );
         
         if ( inputResult ) {
             mNotesManager->setTitleElement( lstNotes->currentRow(), title );
             loadNotes();
+            lstNotes->setCurrentRow( row );
+            txtContent->setFocus();
+            this->activateWindow();
         }
     }
 }
@@ -98,34 +100,8 @@ void UIPostIt::on_tbDelete_clicked()
 //when PostIt closing
 void UIPostIt::closeEvent( QCloseEvent *event )
 {
-    if ( mTextChanged) {
-        mNotesManager->setElement( lstNotes->currentRow(), txtContent->toPlainText() );
-        mTextChanged = false;
-    }
-
     mNotesManager->writeDocument();
 }
-
-//save note modification
-void UIPostIt::on_txtContent_textChanged()
-{
-    mTextChanged = true;
-}
-
-bool UIPostIt::eventFilter( QObject *obj, QEvent *event )
- {
-     if ( (obj == txtContent) && (event->type() == QEvent::FocusOut) && mTextChanged) {
-        //save new value
-        mNotesManager->setElement( lstNotes->currentRow(), txtContent->toPlainText() );
-        loadNotes();
-        mTextChanged = false;
-        //return true;
-     } else {
-        // pass the event on to the parent class
-        return QMainWindow::eventFilter( obj, event );
-        //return false;
-     }
- }
 
 //remove all notes
 void UIPostIt::on_tbClear_clicked()
@@ -142,5 +118,18 @@ void UIPostIt::on_tbClear_clicked()
             txtContent->clear();
             loadNotes();
         }
+    }
+}
+
+//save txtcontent
+void UIPostIt::on_lstNotes_currentItemChanged( QListWidgetItem * current, QListWidgetItem * previous )
+{
+    if ( lstNotes->row( previous ) != -1 )
+        mNotesManager->setElement( lstNotes->row( previous ), txtContent->toPlainText() );
+        
+    if ( lstNotes->row( current ) != -1 ) {
+        txtContent->setPlainText( mNotesManager->getElement( lstNotes->row( current ) ).text() );
+        txtContent->setFocus();
+        txtContent->moveCursor( QTextCursor::End );
     }
 }
