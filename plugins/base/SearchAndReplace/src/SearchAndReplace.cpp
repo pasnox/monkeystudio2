@@ -239,7 +239,8 @@ void SearchAndReplace::updateSearchTextOnUI ()
 bool SearchAndReplace::searchFile (bool next, bool incremental)
 {
 	QString text = mWidget->searchText();
-	mWidget->searchAddToRecents(text);
+	if (!incremental)
+		mWidget->searchAddToRecents(text);
 	
 	pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentChild());
 	if (!child || !child->editor())
