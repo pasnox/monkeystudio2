@@ -44,6 +44,11 @@
 	
 	Allows to find errors and warnings in the output of compiler
 */
+
+
+#define SINGLE_QUOTE [''`]
+#define NOT_SINGLE_QUOTE [^''`]
+
 class Parser : public pCommandParser
 {
 Q_OBJECT
@@ -66,7 +71,7 @@ public:
 		{
 			{
 				//Error in the file/line
-				QRegExp("^([\\w\\./]+\\.\\w+: In [\\w\\s]+ '.+':\\n)?(([^\\n]+/)?([\\w.]+)):(\\d+):(\\d+:)?\\serror:\\s([^\\n]+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				QRegExp("^([\\w\\./]+\\.\\w+: In [\\w\\s]+ SINGLE_QUOTE.+SINGLE_QUOTE:\\n)?(([^\\n]+/)?([\\w.]+)):(\\d+):(\\d+:)?\\serror:\\s([^\\n]+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
 				"%2", //file name
 				"%6", //column
 				"%5", //row
@@ -89,7 +94,7 @@ public:
 			},
 			{
 				//Error in the file/line
-				QRegExp("^([\\w\\./]+\\.\\w+: In [\\w\\s]+ '.+':\\n)?(([^\\n]+/)?([\\w.]+)):(\\d+):(\\d+:)?\\serror:\\s([^\\n]+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				QRegExp("^([\\w\\./]+\\.\\w+: In [\\w\\s]+ SINGLE_QUOTE.+SINGLE_QUOTE:\\n)?(([^\\n]+/)?([\\w.]+)):(\\d+):(\\d+:)?\\serror:\\s([^\\n]+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
 				"%2", //file name
 				"%6", //column
 				"%5", //row
@@ -99,7 +104,7 @@ public:
 			},
 			{
 				//Warning in the file/line
-				QRegExp("^([\\w\\./]+\\.\\w+: In [\\w\\s]+ '.+':\\n)?(([^\\n]+/)?([\\w.]+)):(\\d+):(\\d+:)?\\swarning:\\s([^\\n]+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				QRegExp("^([\\w\\./]+\\.\\w+: In [\\w\\s]+ SINGLE_QUOTE.+SINGLE_QUOTE:\\n)?(([^\\n]+/)?([\\w.]+)):(\\d+):(\\d+:)?\\swarning:\\s([^\\n]+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
 				"%2", //file name
 				"%6", //column
 				"%5", //row
@@ -129,7 +134,7 @@ public:
 			},
 			{
 				//Undedined reference 
-				QRegExp("^([\\w\\./]+\\.o: (In function `[^']+':)\\n)?([\\w\\./]*/([\\w\\.]+)):(\\d+): (undefined reference to `[^']+')\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				QRegExp("^([\\w\\./]+\\.o: (In function SINGLE_QUOTENOT_SINGLE_QUOTE+SINGLE_QUOTE:)\\n)?([\\w\\./]*/([\\w\\.]+)):(\\d+): (undefined reference to SINGLE_QUOTENOT_SINGLE_QUOTE+SINGLE_QUOTE)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
 				"%3", //file name
 				"0", //column
 				"%5", //row
