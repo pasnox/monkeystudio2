@@ -140,6 +140,8 @@ QString pCommandParser::replaceWithMatch(QRegExp& rex, QString s)
 	QString cap = rex.cap(s[i+1].digitValue ());
 	if (cap.endsWith ("\n"))
 		cap.chop(1);
+	if (cap.endsWith ("\r"))
+		cap.chop(1);
 	s.replace (i,2,cap);
 	pos += cap.size ();
 	}

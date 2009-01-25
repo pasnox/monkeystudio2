@@ -107,7 +107,9 @@ public:
 			},
 			{
 				//Building file
-				QRegExp("^[gc]\\+\\+ [^\\n]+ ([^\\n]+\\.\\w+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				QRegExp("^[gc]\\+\\+ [^\\n]+ ([\\w\\\\/\\.]+\\.\\w+)\\n",  
+						Qt::CaseSensitive, 
+						QRegExp::RegExp2), //reg exp
 				"%1", //file name
 				"0", //column
 				"0", //row

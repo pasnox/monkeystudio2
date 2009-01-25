@@ -54,13 +54,13 @@ public:
 			"%0" //full text
 		},
 		{
-			QRegExp("^make\\[\\d\\]: Entering directory\\s`([^\\n]*)'\\n"), //reg exp
+			QRegExp("^(mingw32\\-)?make\\[\\d\\]: Entering directory\\s`([^\\n]*)'\\n"), //reg exp
 			//Entering dirrectory,
 			"", //file name
 			"0", //column
 			"0", //row
 			pConsoleManager::stCompiling, //type
-			"make: Building %1", //text
+			"make: Building %2", //text
 			"%0" //full text
 		},
 		{QRegExp(), "", "", "", pConsoleManager::stUnknown,"",""} //this item must be last
