@@ -107,7 +107,7 @@ public:
 			},
 			{
 				//Building file
-				QRegExp("^[gc]\\+\\+ [^\\n]+ ([\\w\\\\/\\.]+\\.\\w+)\\n",  
+				QRegExp("^[gc]\\+\\+ [^\\n]+ ([\\w\\\\/\\.]+\\.\\w+)()[\\r\\n]",
 						Qt::CaseSensitive, 
 						QRegExp::RegExp2), //reg exp
 				"%1", //file name
@@ -119,7 +119,7 @@ public:
 			},
 			{
 				//Linking file
-				QRegExp("^[gc]\\+\\+\\w+\\-o\\s+([^\\s]+)[^\\n]+\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				QRegExp("^[gc]\\+\\+\\w+\\-o\\s+([^\\s]+)[^\\n]+[\\r\\n]", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
 				"0", //file name
 				"0", //column
 				"0", //row
@@ -129,7 +129,9 @@ public:
 			},
 			{
 				//Undedined reference 
-				QRegExp("^([\\w\\./]+\\.o: (In function `[^']+':)\\n)?([\\w\\./]*/([\\w\\.]+)):(\\d+): (undefined reference to `[^']+')\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				QRegExp("^([\\w\\./]+\\.o: (In function `[^']+':)\\n)?([\\w\\./]*/([\\w\\.]+)):(\\d+): (undefined reference to `[^']+')[\\r\\n]", 
+					Qt::CaseSensitive, 
+					QRegExp::RegExp2), //reg exp
 				"%3", //file name
 				"0", //column
 				"%5", //row
@@ -139,7 +141,7 @@ public:
 			},
 			{
 				//Missing library
-				QRegExp("^/[\\w:/]+ld: cannot find -l(\\w+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				QRegExp("^/[\\w:/]+ld: cannot find -l(\\w+)[\\r\\n]", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
 				"", //file name
 				"", //column
 				"", //row
@@ -149,7 +151,7 @@ public:
 			},
 			{  //FIXME It's moc's error
 				//Class declaration lacks Q_OBJECT macro.
-				QRegExp("^(\\w+\\.\\w){1,3}:(\\d+): Error: Class declarations lacks Q_OBJECT macro\\.\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				QRegExp("^(\\w+\\.\\w){1,3}:(\\d+): Error: Class declarations lacks Q_OBJECT macro\\.[\\r\\n]", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
 				"%1", //file name
 				"", //column
 				"%2", //row
