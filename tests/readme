@@ -1,5 +1,0 @@
-This project used for quick testing of parsers. 
-
-It's better not remove test cases from it, just  add new, so, we will can see, if some regexp/parser will be brokened by latest changes
-
-Kopats Andrei aka hlamer
