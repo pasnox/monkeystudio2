@@ -28,12 +28,12 @@ include( config.pri )
 	monkey_translations.CONFIG += no_check_exist
 
 	# debugger know_list_and_id
-	monkey_debuggerIniFile.path	= $${PACKAGE_PLUGINS}/GNUdbg
-	monkey_debuggerIniFile.files	= plugins/debugger/GNUDebugger/file
-	monkey_debuggerIniFile.CONFIG += no_check_exist
+	#monkey_debuggerIniFile.path	= $${PACKAGE_PLUGINS}/GNUdbg
+	#monkey_debuggerIniFile.files	= plugins/debugger/GNUDebugger/file
+	#monkey_debuggerIniFile.CONFIG += no_check_exist
 
 
-	INSTALLS	= monkey_templates monkey_apis monkey_translations monkey_debuggerIniFile
+	INSTALLS	= monkey_templates monkey_apis monkey_translations #monkey_debuggerIniFile
 
 	unix:!mac {
 		# plugins
