@@ -43,6 +43,7 @@ class SearchWidget;
 
 /*!
 	Main class of the SearchAndReplace plugin
+	Consists implementation of plugin-system interface, and functionality of plugin
 */
 class SearchAndReplace : public BasePlugin
 {
@@ -50,6 +51,8 @@ class SearchAndReplace : public BasePlugin
 	Q_INTERFACES( BasePlugin )
 
 public:
+	/*! Active mode. Plugin can be used for search/replace in file/dirrectory
+	*/
 	enum Mode
 	{
 		SEARCH_FILE = 0,
@@ -61,7 +64,24 @@ public:
 		SEARCH_DIRRECTORY = 4,
 		REPLACE_DIRRECTORY = 5
 	};
-
+	
+	/*! Used for transfer results of search in dirrectory from search thread to dock,
+		and, in replace in dirrectory mode, for apply replacements
+	*/
+	struct Occurence
+	{
+		Mode mode;				/*! Active mode. Can be SEARCH_DIRRECTORY or REPLACE_DIRRECTORY */
+		QString fileName;		/*! Name of file, where occurence found. With full path */
+		QPoint position;		/*! Position in the file x - column, y - line */
+		QString text;			/*! Text for display occurence on UI */
+		QString fullText;		/*! Full text. For display on hint */
+		QString searchText; 	/*! Search pattern, which was used for searching. Filled only for 'replace in dirrectory' */
+		bool isRegExp; 			/*! Is search pattern regular expression. Filled only for 'replace in dirrectory' */
+		bool isCaseSensetive; 	/*! Is search case sensetive. Filled only for 'replace in dirrectory' */
+		QString replaceText; 	/*! Text, which should be used for replacement. Filled only for 'replace in dirrectory' */
+		bool checked;			/*! Do user checked occurence for replacement on search results dock */
+	};
+	
 	SearchAndReplace();
 	virtual ~SearchAndReplace();
 	
@@ -74,10 +94,6 @@ protected:
 	SearchResultsDock* mDock;
 	SearchThread* mSearchThread;
 	
-	// Used for counting of occurences when searching in folder/project	
-	int mOccurencesFound;
-	int mFilesProcessed;
-	
 protected:
 
 	bool isSearchTextValid ();
@@ -88,8 +104,10 @@ protected:
 	void showMessage (QString status);
 	void updateSearchTextOnUI ();
 	
-	bool searchFile (bool next);
+	bool searchFile (bool next, bool incremental);
 	int replace(bool all);
+	
+	void replaceInDirrectory();
 	
 protected slots:
 	// from system
@@ -105,14 +123,14 @@ protected slots:
 	void onNextClicked();
 	void onReplaceClicked();
 	void onReplaceAllClicked();
+	void onSearchTextEdited();
 	
 	// from search results dock
 	void makeGoTo (const QString& file, const QPoint& position);
 	
 	// from search thread
 	void threadFinished ();
-	void occurenceFound ();
-	void fileProcessed (int count);
+	void readThreadResults ();
 };
 
 #endif

@@ -44,11 +44,11 @@ QString QMakeProjectItem::interpretVariable( const QString& variableName, const 
 	}
 	else if ( variableName.startsWith( "$(" ) )
 	{
-		const_cast<QMakeProjectItem*>( this )->setLastError( tr( QT_TR_NOOP( "Don't know how to interpret: %1" ) ).arg( variableName ) );
+		const_cast<QMakeProjectItem*>( this )->setLastError( tr( "Don't know how to interpret: %1" ).arg( variableName ) );
 	}
 	else if ( variableName.startsWith( "$$[" ) )
 	{
-		const_cast<QMakeProjectItem*>( this )->setLastError( tr( QT_TR_NOOP( "Don't know how to interpret: %1" ) ).arg( variableName ) );
+		const_cast<QMakeProjectItem*>( this )->setLastError( tr( "Don't know how to interpret: %1" ).arg( variableName ) );
 	}
 	else
 	{
@@ -88,7 +88,7 @@ QString QMakeProjectItem::interpretVariable( const QString& variableName, const 
 			}
 			else if ( op == "~=" )
 			{
-				const_cast<QMakeProjectItem*>( this )->setLastError( tr( QT_TR_NOOP( "Don't know how to interpret ~= operator" ) ) );
+				const_cast<QMakeProjectItem*>( this )->setLastError( tr( "Don't know how to interpret ~= operator" ) );
 			}
 		}
 	}
@@ -141,26 +141,26 @@ void QMakeProjectItem::registerProjectType() const
 	const QStringList mPathVariables = QStringList( "INCLUDEPATH" ) << "DEPENDPATH"
 		<< "VPATH";
 	const StringStringListList mSuffixes = StringStringListList()
-		<< qMakePair( tr( QT_TR_NOOP( "Qt Project" ) ), QStringList( "*.pro" ) )
-		<< qMakePair( tr( QT_TR_NOOP( "Qt Include Project" ) ), QStringList( "*.pri" ) );
+		<< qMakePair( tr( "Qt Project" ), QStringList( "*.pro" ) )
+		<< qMakePair( tr( "Qt Include Project" ), QStringList( "*.pri" ) );
 	const StringStringList mVariableLabels = StringStringList()
-		<< qMakePair( QString( "FORMS" ), tr( QT_TR_NOOP( "Forms Files" ) ) )
-		<< qMakePair( QString( "FORMS3" ), tr( QT_TR_NOOP( "Forms 3 Files" ) ) )
-		<< qMakePair( QString( "HEADERS" ), tr( QT_TR_NOOP( "Headers Files" ) ) )
-		<< qMakePair( QString( "SOURCES" ), tr( QT_TR_NOOP( "Sources Files" ) ) )
-		<< qMakePair( QString( "OBJECTIVE_SOURCES" ), tr( QT_TR_NOOP( "Objective Sources Files" ) ) )
-		<< qMakePair( QString( "TRANSLATIONS" ), tr( QT_TR_NOOP( "Qt Translations Files" ) ) )
-		<< qMakePair( QString( "RESOURCES" ), tr( QT_TR_NOOP( "Qt Resources Files" ) ) )
-		<< qMakePair( QString( "RC_FILE" ), tr( QT_TR_NOOP( "Resources Files" ) ) )
-		<< qMakePair( QString( "RES_FILE" ), tr( QT_TR_NOOP( "Compiled Resources Files" ) ) )
-		<< qMakePair( QString( "DEF_FILE" ), tr( QT_TR_NOOP( "Definitions Files" ) ) )
-		<< qMakePair( QString( "SUBDIRS" ), tr( QT_TR_NOOP( "Sub Projects" ) ) )
-		<< qMakePair( QString( "INCLUDEPATH" ), tr( QT_TR_NOOP( "Includes Paths" ) ) )
-		<< qMakePair( QString( "DEPENDPATH" ), tr( QT_TR_NOOP( "Depends Paths" ) ) )
-		<< qMakePair( QString( "VPATH" ), tr( QT_TR_NOOP( "Virtuals Paths" ) ) )
-		<< qMakePair( QString( "LIBS" ), tr( QT_TR_NOOP( "Libraries Files" ) ) )
-		<< qMakePair( QString( "DEFINES" ), tr( QT_TR_NOOP( "Defines" ) ) )
-		<< qMakePair( QString( "OTHER_FILES" ), tr( QT_TR_NOOP( "Other Files" ) ) );
+		<< qMakePair( QString( "FORMS" ), tr( "Forms Files" ) )
+		<< qMakePair( QString( "FORMS3" ), tr( "Forms 3 Files" ) )
+		<< qMakePair( QString( "HEADERS" ), tr( "Headers Files" ) )
+		<< qMakePair( QString( "SOURCES" ), tr( "Sources Files" ) )
+		<< qMakePair( QString( "OBJECTIVE_SOURCES" ), tr( "Objective Sources Files" ) )
+		<< qMakePair( QString( "TRANSLATIONS" ), tr( "Qt Translations Files" ) )
+		<< qMakePair( QString( "RESOURCES" ), tr( "Qt Resources Files" ) )
+		<< qMakePair( QString( "RC_FILE" ), tr( "Resources Files" ) )
+		<< qMakePair( QString( "RES_FILE" ), tr( "Compiled Resources Files" ) )
+		<< qMakePair( QString( "DEF_FILE" ), tr( "Definitions Files" ) )
+		<< qMakePair( QString( "SUBDIRS" ), tr( "Sub Projects" ) )
+		<< qMakePair( QString( "INCLUDEPATH" ), tr( "Includes Paths" ) )
+		<< qMakePair( QString( "DEPENDPATH" ), tr( "Depends Paths" ) )
+		<< qMakePair( QString( "VPATH" ), tr( "Virtuals Paths" ) )
+		<< qMakePair( QString( "LIBS" ), tr( "Libraries Files" ) )
+		<< qMakePair( QString( "DEFINES" ), tr( "Defines" ) )
+		<< qMakePair( QString( "OTHER_FILES" ), tr( "Other Files" ) );
 	const StringStringList mVariableIcons = StringStringList()
 		<< qMakePair( QString( "FORMS" ), QString( "forms" ) )
 		<< qMakePair( QString( "FORMS3" ), QString( "forms" ) )
@@ -217,7 +217,8 @@ void QMakeProjectItem::registerProjectType() const
 		<< qMakePair( QString( "RESOURCES" ), QStringList( "*.qrc" ) )
 		<< qMakePair( QString( "DEF_FILE" ), QStringList( "*.def" ) )
 		<< qMakePair( QString( "RC_FILE" ), QStringList( "*.rc" ) )
-		<< qMakePair( QString( "RES_FILE" ), QStringList( "*.res" ) );
+		<< qMakePair( QString( "RES_FILE" ), QStringList( "*.res" ) )
+		<< qMakePair( QString( "SUBDIRS" ), QStringList( "*.pro" ) );
 	
 	// register values
 	mXUPProjectInfos->registerPixmapsPath( pType, mPixmapsPath );
@@ -235,10 +236,10 @@ void QMakeProjectItem::customRowCount( XUPItem* item ) const
 {
 	if ( item->type() == XUPItem::Variable && item->attribute( "name" ) == "SUBDIRS" )
 	{
-		if ( !item->temporaryValue( "subdirsHandled", false ).toBool() )
+		if ( !item->temporaryValue( "subdirsLocked", false ).toBool() )
 		{
-			item->setTemporaryValue( "subdirsHandled", true );
-			QStringList subdirs;
+			item->setTemporaryValue( "subdirsLocked", true );
+			QStringList subdirs, projects;
 			
 			for ( int i = 0; i < item->childCount(); i++ )
 			{
@@ -246,6 +247,10 @@ void QMakeProjectItem::customRowCount( XUPItem* item ) const
 				if ( cit->type() == XUPItem::File )
 				{
 					subdirs << splitMultiLineValue( cit->attribute( "content" ) );
+				}
+				else if ( cit->type() == XUPItem::Project )
+				{
+					projects << cit->project()->fileName();
 				}
 			}
 			
@@ -255,11 +260,30 @@ void QMakeProjectItem::customRowCount( XUPItem* item ) const
 				{
 					// generate project filepath
 					QString fn = subdir;
+					
+					// make path absolute if needed
 					if ( QDir::isRelativePath( subdir ) )
+					{
 						fn = filePath( subdir );
+					}
+					
+					// generate file name is it's a folder shortcut
 					QFileInfo fi( fn );
 					if ( fi.isDir() )
+					{
 						fi.setFile( fn, QString( "%1.pro" ).arg( subdir ) );
+					}
+					
+					// check if project is already handled
+					if ( projects.contains( fi.absoluteFilePath() ) )
+					{
+						continue;
+					}
+					else
+					{
+						projects << fi.absoluteFilePath();
+					}
+					
 					// open project
 					XUPProjectItem* project = newProject();
 					if ( project->open( fi.absoluteFilePath(), temporaryValue( "codec" ).toString() ) )
@@ -274,6 +298,20 @@ void QMakeProjectItem::customRowCount( XUPItem* item ) const
 			}
 		}
 	}
+}
+
+void QMakeProjectItem::hookItem( XUPItem* item ) const
+{
+	bool included = item->temporaryValue( "includeLocked", false ).toBool();
+	bool locked = item->temporaryValue( "subdirsLocked", false ).toBool();
+	
+	item->setTemporaryValue( "includeLocked", false );
+	handleIncludeItem( item );
+	item->setTemporaryValue( "includeLocked", included );
+	
+	item->setTemporaryValue( "subdirsLocked", false );
+	customRowCount( item );
+	item->setTemporaryValue( "subdirsLocked", locked );
 }
 
 bool QMakeProjectItem::open( const QString& fileName, const QString& codec )
@@ -309,11 +347,6 @@ bool QMakeProjectItem::open( const QString& fileName, const QString& codec )
 bool QMakeProjectItem::save()
 {
 	return XUPProjectItem::save();
-	
-	/*
-	setLastError( tr( "Save project: Not yet implemented\n" ) +toString() );
-	return false;
-	*/
 }
 
 BuilderPlugin* QMakeProjectItem::builder( const QString& plugin ) const

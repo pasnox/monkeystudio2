@@ -398,6 +398,9 @@ bool QtDesignerChild::openFile( const QString& fileName, const QString& codec )
 	// set default size
 	QSize mainContainerSize( 400, 300 );
 	
+	// loaded widget
+	QWidget* container = 0;
+	
 	// set contents
 	if ( QFile::exists( fileName ) )
 	{
@@ -405,19 +408,26 @@ bool QtDesignerChild::openFile( const QString& fileName, const QString& codec )
 		QFile f( fileName );
 		w->setContents( &f );
 		
-		// get original size
-		mainContainerSize = w->mainContainer()->geometry().size();
+		// check success load
+		container = w->mainContainer();
 		
-		// set temporary property
-		w->setProperty( "firstGeometryChanged", true );
-		
-		// set clean
-		w->setDirty( false );
+		if ( container )
+		{
+			// get original size
+			mainContainerSize = w->mainContainer()->geometry().size();
+			
+			// set temporary property
+			w->setProperty( "firstGeometryChanged", true );
+			
+			// set clean
+			w->setDirty( false );
+		}
 	}
-	else
+	
+	if ( !container )
 	{
-		w->setMainContainer( new QWidget() );
-		w->setDirty( true );
+		delete w;
+		return false;
 	}
 	
 	// add to mdi area

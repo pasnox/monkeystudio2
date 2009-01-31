@@ -18,11 +18,11 @@ It's extendable with a powerfull plugins system.
 ATTENTION : Monkey Studio require at least Qt 4.4.0 MINIMUM !
 
 Before building, you should know about some rules if you are unix/linux users.
-By default monkey studio will install itself in /usr/local.
-If you want to change this you should do these build step ( assuming you want to install in /usr ) :
+By default monkey studio will install itself in /usr.
+If you want to change this you should do these build step ( assuming you want to install in /usr/local ) :
 
 	* cd to root sources of monkey studio
-	* qmake prefix=/usr
+	* qmake prefix=/usr/local
 	* make
 	* sudo make install
 
@@ -69,8 +69,8 @@ Known Problems:
 
 How to generate Doxygen documentation:
 ======================================
-You should execute command
-doxygen Doxyfile
+You should execute command 
+doxygen doxygen.config
 from root dirrectory of source archive
 (dirrectory, where config storing)
 Directory 'doc/html' with documentation will appear.

@@ -52,6 +52,7 @@
 #include <QTabWidget>
 #include <QTreeView>
 #include <QFileDialog>
+#include <QShortcut>
 
 #include <QDebug>
 
@@ -168,7 +169,12 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	mTree->addAction( aRemove );
 	mTree->addAction( aBookmarks );
 	
+	// shortcut accessible only when mTree has focus
+	QShortcut* aUpShortcut = new QShortcut( QKeySequence( "BackSpace" ), mTree );
+	aUpShortcut->setContext( Qt::WidgetShortcut );
+	
 	// connections
+	connect( aUpShortcut, SIGNAL( activated() ), aUp, SIGNAL( triggered() ) );
 	connect( aUp, SIGNAL( triggered() ), this, SLOT( aUp_triggered() ) );
 	connect( aGoTo, SIGNAL( triggered() ), this, SLOT( aGoTo_triggered() ) );
 	connect( aRoot, SIGNAL( triggered() ), this, SLOT( aRoot_triggered() ) );

@@ -134,6 +134,8 @@ void pAbbreviationsManager::expandAbbreviation( pEditor* e )
 			// set new cursor position is needed
 			if ( !op.isNull() )
 				e->setCursorPosition( op.y(), op.x() );
+			// hide autocompletion combobox
+			e->cancelList();
 			// finish
 			return;
 		}

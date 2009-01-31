@@ -42,8 +42,6 @@
 #include <QCompleter>
 #include <QDirModel>
 
-#include <QDebug>
-
 #include "pWorkspace.h"
 
 #include "SearchAndReplace.h"
@@ -135,7 +133,7 @@ SearchWidget::SearchWidget( QWidget* parent )
 	connect(tbPath, SIGNAL( clicked() ), this, SLOT( onPathClicked() ));
 	
 	connect (tbNext, SIGNAL (clicked()), this, SIGNAL (nextClicked ()));
-//	connect (cobSearch->lineEdit(), SIGNAL (textEdited (const QString&)), this, SIGNAL (nextClicked ()));
+	connect (cobSearch->lineEdit(), SIGNAL (textEdited (const QString&)), this, SIGNAL (searchTextEdited()));
 	
 	connect (tbPrevious, SIGNAL (clicked()), this, SIGNAL (previousClicked ()));
 	connect (tbReplace, SIGNAL (clicked()), this, SIGNAL (replaceClicked ()));
@@ -143,7 +141,7 @@ SearchWidget::SearchWidget( QWidget* parent )
 	
 #if 0	
 
-	qRegisterMetaType<pConsoleManager::Step>("pConsoleManager::Step");
+	qRegisterMetaType<SearchAndReplace::Occurence>("SearchAndReplace::Occurence");
 
 	mSearchThread = NULL;
 	
@@ -185,12 +183,21 @@ void SearchWidget::show (SearchAndReplace::Mode mode)
 		tbNext->setIcon (QIcon(":/edit/icons/edit/search.png"));
 	}
 	
+	if (mode == SearchAndReplace::REPLACE_DIRRECTORY)
+	{
+		tbReplaceAll->setText (tr("&Replace checked"));
+	}
+	else
+	{
+		tbReplaceAll->setText (tr("Replace &all"));
+	}
+	
 	if (mode == SearchAndReplace::REPLACE_FILE)
 	{
 		tbReplace->show ();
 	}
 
-	cobPath->lineEdit()->setText (QDir::current().absolutePath());
+	cobPath->lineEdit()->setText (QDir::current().path());
 	
 	cobSearch->setFocus();
 
@@ -215,7 +222,7 @@ void SearchWidget::show (SearchAndReplace::Mode mode)
 	}
 	
 	cobSearch->lineEdit()->selectAll ();
-	
+	setSearchLineEditColor (DEFAULT);
 	QWidget::show ();
 }
 
@@ -393,12 +400,13 @@ void SearchWidget::setSearchLineEditColor (LineEditColor color)
 			palette.setColor (QPalette::Base, Qt::green);
 		break;
 		case RED:
-			palette.setColor (QPalette::Base, Qt::green);
+			palette.setColor (QPalette::Base, Qt::red);
 		break;
 		case DEFAULT:
 			palette.setColor (QPalette::Base, mDefaultEditColor);
 		break;
 	}
+	cobSearch->lineEdit()->setPalette (palette);
 }
 
 void SearchWidget::setSearchText (const QString& text)
@@ -545,7 +553,7 @@ int SearchWidget::replace(bool all)
 
 void SearchWidget::threadFinished ()
 {
-	tbNext->setText (tr("Search"));
+	tbNext->setText (tr("&Search"));
 	tbNext->setIcon (QIcon(":/edit/icons/edit/search.png"));
 	delete mSearchThread;
 	mSearchThread = NULL;

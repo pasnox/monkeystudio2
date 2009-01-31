@@ -95,6 +95,20 @@ QString pFileManager::currentItemPath() const
 	return QString::null;
 }
 
+pAbstractChild* pFileManager::childForFile (const QString& file) const
+{
+	foreach ( pAbstractChild* ac, MonkeyCore::workspace()->children())
+	{
+		foreach ( const QString& fn, ac->files() )
+		{
+			if (fn == file)
+				return ac;
+		}
+	}
+	
+	return NULL;
+}
+
 pAbstractChild* pFileManager::openFile( const QString& fileName, const QString& codec )
 { return MonkeyCore::workspace()->openFile( fileName, codec ); }
 

@@ -24,6 +24,8 @@
 #include "options.h"
 #include "routines.h"
 
+extern boolean matchRegex (const vString* const line, const langType language);
+
 /*
 *   DATA DEFINITIONS
 */
@@ -358,6 +360,8 @@ static vString *iFileGetLine (void)
 		if (c == '\n'  ||  (c == EOF  &&  vStringLength (File.line) > 0))
 		{
 			vStringTerminate (File.line);
+			if (vStringLength (File.line) > 0)
+				matchRegex (File.line, File.source.language);
 			result = File.line;
 			break;
 		}

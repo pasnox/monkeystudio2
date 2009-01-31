@@ -239,7 +239,18 @@ pAbstractChild* pWorkspace::openFile( const QString& s, const QString& codec )
 	}
 
 	// open file
-	c->openFile( s, codec );
+	if ( !c->openFile( s, codec ) )
+	{
+		MonkeyCore::statusBar()->appendMessage( tr( "An error occur while opening this file: '%1'" ).arg( QFileInfo( s ).fileName() ), -1 );
+		
+		if ( !wasIn )
+		{
+			closeDocument( c );
+			c->deleteLater();
+		}
+		
+		return 0;
+	}
 	
 	// set correct document if needed ( sdi hack )
 	if ( currentDocument() != c )
@@ -555,18 +566,13 @@ void pWorkspace::fileWatcher_ecmNothing( const QString& filename )
 void pWorkspace::fileWatcher_ecmReload( const QString& filename, bool force )
 {
 	// try reload
-	foreach ( pAbstractChild* ac, children() )
+	pAbstractChild* ac = MonkeyCore::fileManager()->childForFile (filename);
+	if ( ac && ( !ac->isModified(filename) || force ) )
 	{
-		foreach ( const QString& fn, ac->files() )
-		{
-			if ( fn == filename && ( !ac->isModified( fn ) || force ) )
-			{
-				ac->closeFile( fn );
-				ac->openFile( fn, ac->textCodec() );
-				MonkeyCore::statusBar()->appendMessage( tr( "Reloaded externally modified file: '%1'" ).arg( QFileInfo( filename ).fileName() ), 2000 );
-				return;;
-			}
-		}
+		ac->closeFile(filename);
+		ac->openFile(filename, ac->textCodec());
+		MonkeyCore::statusBar()->appendMessage( tr( "Reloaded externally modified file: '%1'" ).arg( QFileInfo( filename ).fileName() ), 2000 );
+		return;;
 	}
 	// ask user
 	fileWatcher_ecmAlert( filename );
@@ -635,8 +641,16 @@ void pWorkspace::fileOpen_triggered()
 	// get available filters
 	QString mFilters = availableFilesFilters();
 	
+	// path to show
+	QString path = MonkeyCore::fileManager()->currentChildFile();
+	if ( path.isEmpty() )
+	{
+		path = QDir::current().absolutePath();
+	}
+	
+	
 	// show filedialog to user
-	pFileDialogResult result = MkSFileDialog::getOpenFileNames( window(), tr( "Choose the file(s) to open" ), QDir::current().absolutePath(), mFilters, true, false );
+	pFileDialogResult result = MkSFileDialog::getOpenFileNames( window(), tr( "Choose the file(s) to open" ), path, mFilters, true, false );
 
 	// open open file dialog
 	QStringList fileNames = result[ "filenames" ].toStringList();

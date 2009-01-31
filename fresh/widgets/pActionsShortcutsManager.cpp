@@ -141,6 +141,7 @@ pActionsShortcutsManager::pActionsShortcutsManager( pActionsManager* manager, QW
 		item->setText( 1, action->shortcut().toString() );
 	}
 	
+	twShortcuts->sortItems( 0, Qt::AscendingOrder );
 	twShortcuts->expandAll();
 
 	// connections

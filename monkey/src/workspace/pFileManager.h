@@ -54,6 +54,9 @@ public:
 	XUPItem* currentItem() const;
 	QString currentItemFile() const;
 	QString currentItemPath() const;
+	
+	// Returns pointer to editor, if file is opened. Null - if not opened
+	pAbstractChild* childForFile (const QString& file) const;
 
 protected:
 	pFileManager( QObject* parent = 0 );

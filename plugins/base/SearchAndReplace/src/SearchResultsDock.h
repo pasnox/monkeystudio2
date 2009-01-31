@@ -37,7 +37,7 @@
 #define SEARCHRESULTSDOCK_H
 
 #include <fresh.h>
-#include "pConsoleManager.h"
+#include "SearchAndReplace.h"
 
 class QTreeWidget;
 
@@ -53,13 +53,22 @@ class SearchResultsDock : public pDockWidget
 	enum DataRole
 	{
 		FILE_NAME = Qt::UserRole +1,
-		POSITION
+		POSITION,
+		// for replacement
+		SEARCH_TEXT,
+		IS_REG_EXP,
+		IS_CASE_SENSETIVE,
+		REPLACE_TEXT
 	};
 	
 public:
 	SearchResultsDock( QWidget* parent = 0 );
 	
 	void clearSearchResults();
+	
+	int filesWithOccurencesCount () const;
+	int oCcurencesCount (int fileIndex) const;
+	SearchAndReplace::Occurence occurence (int fileIndex, int occurenceIndex) const;
 	
 protected:
 	QTreeWidget* mTree;
@@ -68,7 +77,7 @@ signals:
 	void resultActivated (const QString& fileName, const QPoint& position);
 	
 public slots:
-	void appendSearchResult( const pConsoleManager::Step& );
+	void appendSearchResult( const SearchAndReplace::Occurence& );
 	
 protected slots:
 	void itemPressed( QTreeWidgetItem* );

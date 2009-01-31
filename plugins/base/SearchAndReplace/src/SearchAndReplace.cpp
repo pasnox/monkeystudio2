@@ -42,9 +42,8 @@
 #include "pWorkspace.h"
 #include "pChild.h"
 #include "pEditor.h"
+#include "pFileManager.h"
 #include "QueuedStatusBar.h"
-
-#include <QDebug>
 
 /*!
 	Constructor of class
@@ -52,9 +51,7 @@
 SearchAndReplace::SearchAndReplace()
   :	mWidget (NULL),
     mDock (NULL),
-	mSearchThread (NULL),
-	mOccurencesFound (0),
-	mFilesProcessed (0)
+	mSearchThread (NULL)
 {
 	// set plugin infos
 	mPluginInfos.Caption = tr( "Search and Replace" );
@@ -65,7 +62,7 @@ SearchAndReplace::SearchAndReplace()
 	mPluginInfos.Version = "1.0.0";
 	mPluginInfos.Enabled = false;
 	
-	qRegisterMetaType<pConsoleManager::Step>("pConsoleManager::Step");
+	qRegisterMetaType<SearchAndReplace::Occurence>("SearchAndReplace::Occurence");
 }
 
 /*!
@@ -98,6 +95,7 @@ bool SearchAndReplace::setEnabled( bool b )
 		connect (mWidget, SIGNAL (nextClicked()), this, SLOT (onNextClicked()));
 		connect (mWidget, SIGNAL (replaceClicked()), this, SLOT (onReplaceClicked()));
 		connect (mWidget, SIGNAL (replaceAllClicked()), this, SLOT (onReplaceAllClicked()));
+		connect (mWidget, SIGNAL (searchTextEdited()), this, SLOT (onSearchTextEdited()));
 
 		
 		mDock = new SearchResultsDock ();
@@ -153,7 +151,10 @@ bool SearchAndReplace::setEnabled( bool b )
 QWidget* SearchAndReplace::settingsWidget()
 { return NULL; }
 
-
+/*!
+	Check, if text for search is valid. Important for regular expressions
+	\return true - valid. False - invalid
+*/
 bool SearchAndReplace::isSearchTextValid ()
 {
 	if (mWidget->isRegExp())
@@ -166,11 +167,19 @@ bool SearchAndReplace::isSearchTextValid ()
 	return true;
 }
 
+/*!
+	Check, if text for search is valid. Important for regular expressions
+	\return true - valid. False - invalid
+*/
 bool SearchAndReplace::isReplaceTextValid ()
 {
 	return true;
 }
 
+/*!
+	Check, if text for search is valid. Important for regular expressions
+	\return true - valid. False - invalid
+*/
 bool SearchAndReplace::isPathValid ()
 {
 	if (!QDir (mWidget->path()).exists())
@@ -181,11 +190,18 @@ bool SearchAndReplace::isPathValid ()
 	return true;
 }
 
+/*!
+	Check, if file names mask is valid.
+	\return true - valid. False - invalid
+*/
 bool SearchAndReplace::isMaskValid ()
 {
 	return true;
 }
 
+/*!
+	Show for 5 seconds message on status bar
+*/
 void SearchAndReplace::showMessage (QString status)
 {
 	if (!status.isNull())
@@ -194,6 +210,9 @@ void SearchAndReplace::showMessage (QString status)
 		MonkeyCore::mainWindow()->statusBar()->showMessage ("");
 }
 
+/*!
+	Set on UI (search widget) search text according with text, selected in the current editor. Executed, when search widget appears
+*/
 void SearchAndReplace::updateSearchTextOnUI ()
 {
 	pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentChild());
@@ -206,10 +225,22 @@ void SearchAndReplace::updateSearchTextOnUI ()
 	}
 }
 
-bool SearchAndReplace::searchFile (bool next)
+/*!
+	Search text in the file.atEnd
+	Result of search - changed selection and cursor position in the editor.
+	Method also will change color of search text input
+	
+	\param next - search forward. If false - will search backward
+	\param incremental - Incremental search mode. (Search dirrectly when user types something.) 
+			If true - will search from selection (previous search result), if false - from cursor position
+	\return true - something found
+	\return false - nothing found
+*/
+bool SearchAndReplace::searchFile (bool next, bool incremental)
 {
 	QString text = mWidget->searchText();
-	mWidget->searchAddToRecents(text);
+	if (!incremental)
+		mWidget->searchAddToRecents(text);
 	
 	pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentChild());
 	if (!child || !child->editor())
@@ -221,28 +252,46 @@ bool SearchAndReplace::searchFile (bool next)
 
 	// get cursor position
 	int x, y;
-	editor->getCursorPosition( &y, &x );
-
-	if (!next)
+	if (next && !incremental)
+	{
+		editor->getCursorPosition( &y, &x );
+	}
+	else // incremental search, or search backward
 	{
 		int temp;
 		editor->getSelection(&y, &x, &temp, &temp);
 	}
-
+	
 	// search
 	bool b = editor->findFirst( text, mWidget->isRegExp(), mWidget->isCaseSensetive(), false, false, next, y, x);
-	// change background acording to found or not
-	//QPalette p = cobSearch->palette();
-	//p.setColor( cobSearch->backgroundRole(), b ? Qt::white : Qt::red );
-	//cobSearch->setPalette( p ); // FIXME
+	if (!b) // not found, try from start/end
+	{
+		if (next)
+			b = editor->findFirst( text, mWidget->isRegExp(), mWidget->isCaseSensetive(), false, false, next, 0, 0);
+		else
+			b = editor->findFirst( text, mWidget->isRegExp(), mWidget->isCaseSensetive(), false, false, next, editor->lines(), 0);
+	}
 	
 	// show message if needed
 	showMessage( b ? QString::null : tr( "Not Found" ) );
-
+	
+	// change background acording to found or not
+	if (b)
+		mWidget->setSearchLineEditColor (SearchWidget::GREEN);
+	else
+		mWidget->setSearchLineEditColor (SearchWidget::RED);
+	
 	// return found state
 	return b;
 }
 
+/*!
+	Do replacement in the file.
+	Will execute SearchAndReplace::searchFile for find text, which will be replaced
+	
+	\param all If false - one replacement will be made. If true - all possible
+	\return count of replacements
+*/
 int SearchAndReplace::replace(bool all)
 {
 	QString rtext = mWidget->replaceText();
@@ -265,7 +314,7 @@ int SearchAndReplace::replace(bool all)
 		editor->getCursorPosition(&y, &x);
 
 		editor->setCursorPosition(0, 0);
-		while (searchFile(true)) //search next
+		while (searchFile(true, false)) //search next
 		{
 			editor->replace(rtext);
 			count++;
@@ -278,7 +327,7 @@ int SearchAndReplace::replace(bool all)
 			editor->getSelection(&y, &x, &temp, &temp);
 			editor->setCursorPosition(y, x);
 
-		if (searchFile(true))
+		if (searchFile(true, false))
 			{
 				editor->replace (rtext);
 				count = 1;
@@ -289,8 +338,127 @@ int SearchAndReplace::replace(bool all)
 	return count;
 }
 
-void SearchAndReplace::showSearchFile () 
+/*!
+	Apply replacements in the dirrectory, according with selected on dock occcurences
+*/
+void SearchAndReplace::replaceInDirrectory()
 {
+	QMessageBox::StandardButton answer = 
+		QMessageBox::question (NULL, 
+								tr("Replace in dirrectory"), 
+								tr("Rollback changes for replace in dirrectory is not available. You can permanently corrupt your files. Are you sure?"),
+								(QMessageBox::Yes | QMessageBox::No),
+								QMessageBox::No);
+	if (QMessageBox::Yes != answer)
+		return;
+	
+	int replacementsCount = 0;
+	
+	for (int fileIndex = 0; fileIndex < mDock->filesWithOccurencesCount (); fileIndex++) // for files
+	{
+		Occurence occ = mDock->occurence (fileIndex, 0); // every file has at least one occurence
+		pAbstractChild* currFileChild = MonkeyCore::fileManager()->childForFile (occ.fileName); 
+		if (NULL != currFileChild && currFileChild->isModified(occ.fileName)) // going to replace in modified file
+		{
+			QMessageBox::critical (NULL, tr("Replace in dirrectory"), tr("File %1 is not saved. Save please all files before do replacing").arg (occ.fileName));
+			return;
+		}
+	}
+		
+	for (int fileIndex = 0; fileIndex < mDock->filesWithOccurencesCount (); fileIndex++) // for files
+	{
+		QFile file;
+		QStringList fileContents;
+		
+		for (int occurenceIndex = 0; occurenceIndex < mDock->oCcurencesCount (fileIndex); occurenceIndex++) // for occurences
+		{
+			Occurence occ = mDock->occurence (fileIndex, occurenceIndex);
+			if (occ.checked)
+			{
+				if (! file.isOpen())  // open file, if nessesary
+				{
+					file.setFileName (occ.fileName);
+					bool stat = file.open (QIODevice::ReadWrite);
+					if (! stat)
+					{
+						QMessageBox::critical (NULL, "Replace in dirrectory", "Failed to open file: " + file.errorString());
+						break;
+					}
+					// read all file to QStringList
+					while ((! file.atEnd()) && file.error() == QFile::NoError)
+						fileContents << file.readLine();
+					
+					if (file.error() != QFile::NoError)
+					{
+						QMessageBox::critical (NULL, "Replace in dirrectory", "Failed to read file: " + file.errorString());
+						break;
+					}
+				}
+				// Now all file is in the QStringList
+				if (fileContents.size() <= occ.position.y()-1)
+				{
+					QMessageBox::critical (NULL, "Replace in dirrectory", "Line with occurence not found");
+					break;
+				}
+				// line with occurence
+				QString line = fileContents[occ.position.y()-1];
+				
+				Qt::CaseSensitivity cs = occ.isCaseSensetive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+				if (occ.isRegExp)  // TODO let's remember parametres in the Occurence, because user can change it on UI
+				{
+					line.replace (QRegExp (occ.searchText, cs), occ.replaceText);
+				}
+				else // not a reg exp
+				{
+					line.replace (occ.searchText, occ.replaceText, cs);
+				}
+				replacementsCount ++;
+				
+				fileContents[occ.position.y()-1] = line;
+			}
+		}
+		// finished processing file. Need to write and close it, if it had been opened
+		if (file.isOpen())
+		{
+			file.resize (0);
+			if (file.error() != QFile::NoError)
+			{
+				QMessageBox::critical (NULL, "Replace in dirrectory", "Failed to write file: " + file.errorString());
+				break;
+			}
+			file.write (fileContents.join("").toUtf8());
+			if (file.error() != QFile::NoError)
+			{
+				QMessageBox::critical (NULL, "Replace in dirrectory", "Failed to write file: " + file.errorString());
+				break;
+			}
+			file.close();
+			if (file.error() != QFile::NoError)
+			{
+				QMessageBox::critical (NULL, "Replace in dirrectory", "Failed to write file: " + file.errorString());
+				break;
+			}
+			// Now reload file automatically, if it is opened
+			pAbstractChild* currFileChild = MonkeyCore::fileManager()->childForFile (file.fileName()); 
+			if (NULL != currFileChild) // file is opened
+			{
+				currFileChild->closeFile(file.fileName());
+				currFileChild->openFile(file.fileName(), currFileChild->textCodec());
+			}
+		}
+	}
+	mDock->clearSearchResults();
+	showMessage (tr("%1 replacements made").arg (replacementsCount));
+}
+
+/*!
+	Show search widget in SEARCH_FILE mode
+*/
+void SearchAndReplace::showSearchFile ()
+{
+	if (mSearchThread && mSearchThread->isRunning())
+		return;
+	
 	if (qobject_cast<pChild*> (MonkeyCore::workspace()->currentChild()))
 	{
 		mMode = SEARCH_FILE;
@@ -299,48 +467,85 @@ void SearchAndReplace::showSearchFile ()
 	}
 }
 
+/*!
+	Show search widget in SEARCH_FILE mode
+*/
 void SearchAndReplace::showReplaceFile () 
 {
+	if (mSearchThread && mSearchThread->isRunning())
+		return;
+	
 	mMode = REPLACE_FILE;
 	updateSearchTextOnUI ();
 	mWidget->show (mMode);
 }
 
 #if 0
+/*!
+	Show search widget in SEARCH_PROJECT mode
+*/
 void SearchAndReplace::showSearchProject () 
 {
+	if (mSearchThread && mSearchThread->isRunning())
+		return;
+	
 	mMode = SEARCH_PROJECT;
 	updateSearchTextOnUI ();
 	mWidget->show (mMode);
 }
 
+/*!
+	Show search widget in REPLACE_PROJECT mode
+*/
 void SearchAndReplace::showReplaceProject () 
 {
+	if (mSearchThread && mSearchThread->isRunning())
+		return;
+	
 	mMode = REPLACE_PROJECT;
 	updateSearchTextOnUI ();
 	mWidget->show (mMode);
 }
 #endif
 
+/*!
+	Show search widget in SEARCH_DIRRECTORY mode
+*/
 void SearchAndReplace::showSearchFolder () 
 {
+	if (mSearchThread && mSearchThread->isRunning())
+		return;
+	
 	mMode = SEARCH_DIRRECTORY;
 	updateSearchTextOnUI ();
 	mWidget->show (mMode);
 }
 
+/*!
+	Show search widget in REPLACE_DIRRECTORY mode
+*/
 void SearchAndReplace::showReplaceFolder () 
 {
+	if (mSearchThread && mSearchThread->isRunning())
+		return;
+	
 	mMode = REPLACE_DIRRECTORY;
 	updateSearchTextOnUI ();
 	mWidget->show (mMode);
 }
 
+/*!
+	Handler of "search previous" button
+*/
 void SearchAndReplace::onPreviousClicked()
 {
-	searchFile (false);
+	searchFile (false, false);
 }
 
+/*!
+	Handler of "search next" button
+	Button used for search next in the file, for start search in the dirrectory
+*/
 void SearchAndReplace::onNextClicked()
 {
 	switch (mMode)
@@ -350,7 +555,7 @@ void SearchAndReplace::onNextClicked()
 			if (! isPathValid ())
 				return;
 			
-			searchFile (true);
+			searchFile (true, false);
 		break;
 		
 		case SEARCH_DIRRECTORY:
@@ -367,27 +572,23 @@ void SearchAndReplace::onNextClicked()
 				mDock->clearSearchResults ();
 				mWidget->pathAddToRecents (mWidget->path());
 				mWidget->maskAddToRecents (mWidget->mask());
-				mOccurencesFound = 0;
-				mFilesProcessed = 0;
-				fileProcessed (0);
 				QString path = mWidget->path();
 				QString mask = mWidget->mask();
-				QString text = mWidget->searchText ();
+				QString searchText = mWidget->searchText ();
+				QString replaceText = mWidget->replaceText ();
 				
 				bool caseSensetive = mWidget->isCaseSensetive ();
 				bool regexp = mWidget->isRegExp ();
 				
 				if (mMode == SEARCH_DIRRECTORY)
-					mSearchThread = new SearchThread(SearchThread::SEARCH, path, mask, text, "", caseSensetive, regexp, this);
+					mSearchThread = new SearchThread(SearchThread::SEARCH, path, mask, searchText, "", caseSensetive, regexp, this);
 				else
-					mSearchThread = new SearchThread(SearchThread::REPLACE, path, mask, text, "", caseSensetive, regexp, this);
+					mSearchThread = new SearchThread(SearchThread::REPLACE, path, mask, searchText, replaceText, caseSensetive, regexp, this);
 				
 				mWidget->setNextButtonText (tr("&Stop"));
 				mWidget->setNextButtonIcon (QIcon(":/console/icons/console/stop.png"));
 				
-				connect (mSearchThread, SIGNAL (appendSearchResult( const pConsoleManager::Step& )), mDock, SLOT (appendSearchResult( const pConsoleManager::Step& )));
-				connect (mSearchThread, SIGNAL (appendSearchResult( const pConsoleManager::Step& )), this, SLOT (occurenceFound ()));
-				connect (mSearchThread, SIGNAL (changeProgress(int)), this, SLOT (fileProcessed (int)));
+				connect (mSearchThread, SIGNAL (readPleaseResults ()), this, SLOT (readThreadResults ()));
 				connect (mSearchThread, SIGNAL (finished ()), this, SLOT (threadFinished()));
 				mSearchThread->start();    
 			}
@@ -396,6 +597,9 @@ void SearchAndReplace::onNextClicked()
 	return;
 }
 
+/*!
+	Handler of "replace" button. Need do one replacement in the file
+*/
 void SearchAndReplace::onReplaceClicked()
 {
 	/* Check replace text */
@@ -405,53 +609,85 @@ void SearchAndReplace::onReplaceClicked()
 	replace (false);	
 }
 
+/*!
+	Do all replacements in the file/dirrectory (according with current mode)
+*/
 void SearchAndReplace::onReplaceAllClicked()
 {
 	/* Check replace text */
 	if (!isReplaceTextValid ())
 		return;
 
-	pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentChild());
-	if (!child && !child->editor())
-		return;
-	pEditor* editor = child->editor ();
-	
-	// begin undo global action
-	editor->beginUndoAction();
+	if (mMode == REPLACE_FILE)
+	{
+		pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentChild());
+		if (!child && !child->editor())
+			return;
+		pEditor* editor = child->editor ();
+		
+		// begin undo global action
+		editor->beginUndoAction();
 
-	int count = replace (true);
-	// end undo global action
-	editor->endUndoAction();
+		int count = replace (true);
+		// end undo global action
+		editor->endUndoAction();
 
-	// show occurence number replaced
-	showMessage( count ? tr( "%1 occurences replaced" ).arg( count ) : tr( "Nothing To Repalce" ) );
+		// show occurence number replaced
+		showMessage( count ? tr( "%1 occurences replaced" ).arg( count ) : tr( "Nothing To Repalce" ) );
+	}
+	else
+	{
+		replaceInDirrectory();
+	}
 }
 
+/*!
+	If mode is SEARCH_FILE - do incremental search
+*/
+void SearchAndReplace::onSearchTextEdited()
+{
+	if (mMode != SEARCH_FILE) // incremental search, only for search in file
+		return;
+	
+	searchFile (true, true);
+}
+
+/*!
+	Handler of click on search result. Open file with occurence, set cursor to it
+*/
 void SearchAndReplace::makeGoTo (const QString& file, const QPoint& position)
 {
 	MonkeyCore::workspace()->goToLine(file, position, true, pMonkeyStudio::defaultCodec());
 }
 
+/*!
+	Handler of finish of search thread work
+*/
 void SearchAndReplace::threadFinished ()
 {
-	mWidget->setNextButtonText (tr("Search"));
+	mWidget->setNextButtonText (tr("&Search"));
 	mWidget->setNextButtonIcon (QIcon(":/edit/icons/edit/search.png"));
+
+	mSearchThread->lockResultsAccessMutex ();
+	showMessage (QString("Searching finished. %1 occurences").arg (mSearchThread->foundOccurencesCount()));
+	mSearchThread->unlockResultsAccessMutex ();
 	
 	delete mSearchThread;
 	mSearchThread = NULL;
-	showMessage ("Searching finished");
 }
 
-void SearchAndReplace::occurenceFound ()
+/*!
+	Read results from buffer in the search thread. Called by signal from thread (signal comes by timer).
+	Blocks thread using mutex, read data, than unlocks mutex
+*/
+void SearchAndReplace::readThreadResults ()
 {
-	mOccurencesFound ++;
-	showMessage(tr ("%1 files %2 occcurences").arg(mFilesProcessed).arg(mOccurencesFound));
-}
-
-void SearchAndReplace::fileProcessed (int count)
-{
-	mFilesProcessed = count;
-	showMessage (tr ("%1 files %2 occcurences").arg(mFilesProcessed).arg(mOccurencesFound));
+	mSearchThread->lockResultsAccessMutex ();
+	foreach (Occurence occurence, mSearchThread->newFoundOccurences())
+		mDock->appendSearchResult (occurence);
+	mSearchThread->clearNewFoundOccurences();
+	showMessage(tr ("%1 files %2 occcurences").arg(mSearchThread->processedFilesCount()).arg(mSearchThread->foundOccurencesCount()));
+	mSearchThread->unlockResultsAccessMutex ();
 }
 
 Q_EXPORT_PLUGIN2( BaseMessageBox, SearchAndReplace )

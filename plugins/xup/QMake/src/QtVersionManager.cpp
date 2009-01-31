@@ -38,18 +38,18 @@ QtVersion QtVersionManager::systemVersion() const
 	QProcess process;
 	QString version;
 	QString datas;
-	bool haveSuffixe = false;
+	bool haveSuffixe = true;
 	
-	process.start( "qmake -v" );
+	process.start( "qmake-qt4 -v" );
 	process.waitForFinished();
 	datas = QString::fromLocal8Bit( process.readAll() );
 	
 	if ( !datas.contains( "Using Qt version 4." ) )
 	{
-		process.start( "qmake-qt4 -v" );
+		process.start( "qmake -v" );
 		process.waitForFinished();
 		datas = QString::fromLocal8Bit( process.readAll() );
-		haveSuffixe = true;
+		haveSuffixe = false;
 	}
 	
 	if ( datas.contains( "Using Qt version 4." ) )

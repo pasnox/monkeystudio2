@@ -7,9 +7,11 @@
 #include <QTextCodec>
 #include <QMessageBox>
 
+#include <QtDebug>
+
 
 //constructor
-notesManager::notesManager(QString filepath)
+notesManager::notesManager(const QString &filepath)
             :mFilepath( filepath ) {}
 
 //destructor
@@ -51,7 +53,7 @@ bool notesManager::writeDocument()
 }
 
 //return "id" node of mXmlDocument
-QDomElement notesManager::getElement( uint id )
+QDomElement notesManager::getElement(const uint id) const
 {
     QDomNodeList list = mXmlDocument.elementsByTagName( "note" );
 
@@ -62,7 +64,7 @@ QDomElement notesManager::getElement( uint id )
 }
 
 //return title of "id" element
-QString notesManager::getTitleElement( uint id )
+QString notesManager::getTitleElement(const uint id) const
 {
     QDomNodeList list = mXmlDocument.elementsByTagName( "note" );
 
@@ -73,7 +75,7 @@ QString notesManager::getTitleElement( uint id )
 }
 
 //add QDomElement with "note" value in mXmlDocument
-void notesManager::addElement(QString title, QString note)
+void notesManager::addElement(const QString &title, const QString &note)
 {
     QDomElement e = mXmlDocument.createElement( "note" );
     e.appendChild( mXmlDocument.createTextNode( note ) );
@@ -83,13 +85,13 @@ void notesManager::addElement(QString title, QString note)
 }
 
 //return number of "note" in document
-uint notesManager::getNotesCount()
+uint notesManager::getNotesCount() const
 {
     return mXmlDocument.firstChildElement( "notes" ).childNodes().length();
 }
 
 //return list of notes in QStringList
-QStringList notesManager::getElements()
+QStringList notesManager::getElements() const
 {
     QStringList listNote;
     QDomNodeList l = mXmlDocument.elementsByTagName( "note" );
@@ -101,7 +103,7 @@ QStringList notesManager::getElements()
 }
 
 //delete node number "id"
-void notesManager::removeElement( uint id )
+void notesManager::removeElement(const uint id)
 {
     QDomNode n = this->getElement( id );
     mXmlDocument.firstChildElement( "notes" ).removeChild( n );
@@ -118,7 +120,7 @@ void notesManager::removeAllElements()
 }
 
 //change title in "id" note
-void notesManager::setTitleElement( uint id, QString title )
+void notesManager::setTitleElement(uint id, const QString &title)
 {
     QDomElement e = this->getElement( id );
     if ( !e.isNull() ) {
@@ -128,9 +130,14 @@ void notesManager::setTitleElement( uint id, QString title )
 }
 
 //set new note in "id" node
-void notesManager::setElement( uint id, QString note )
+void notesManager::setElement( uint id, const QString &note)
 {
+    //qDebug() << "setElement";
     QDomElement e = this->getElement( id );
-    if ( !e.isNull() )
+    if ( e.firstChild().isNull() ) {
+        QDomText textNode = mXmlDocument.createTextNode( note );
+        e.appendChild( textNode );
+    } else {
         e.firstChild().toText().setData( note );
+    }
 }

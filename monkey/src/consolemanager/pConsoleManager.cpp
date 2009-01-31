@@ -34,20 +34,21 @@
 */
 
 #include <QTimer>
+#include <QDir>
 
 #include "pConsoleManager.h"
 #include "pCommandParser.h"
-#include "../pMonkeyStudio.h"
-#include "../workspace/pFileManager.h"
-#include "../coremanager/MonkeyCore.h"
-#include "pActionsManager.h"
+
+#include <MonkeyCore.h>
+#include <pActionsManager.h>
+#include <VariablesManager.h>
+
+#warning don''t forget to connect warning message with status bar
 
 /*!
 	Defines maximum count of lines, which are storing in the buffer for parsing
 */
 static const int MAX_LINES = 4; //Maximum lines count, that can be parsed by Monkey. Than less - than better perfomance
-
-using namespace pMonkeyStudio;
 
 /*!
 	Constructor of class
@@ -95,6 +96,7 @@ pConsoleManager::pConsoleManager( QObject* o )
 	// start timerEvent
 	mTimerId = startTimer( 100 );
 	mStringBuffer.reserve (MAX_LINES *200);
+	mStopAttempt = 0;
 }
 
 /*!
@@ -162,20 +164,12 @@ QString pConsoleManager::quotedString( const QString& s )
 /*!
 	Replace internal varibles in the string with it's values
 	
-	FIXME function should be replaced with using of VariablesManager
 	\param s Source string
 	\return Result string
 */
 QString pConsoleManager::processInternalVariables( const QString& s )
 {
-	QString v = s;
-	v.replace( "$cpp$", nativeSeparators( MonkeyCore::fileManager()->currentProjectPath() ) );
-	v.replace( "$cp$", nativeSeparators( MonkeyCore::fileManager()->currentProjectFile() ) );
-	v.replace( "$cfp$", nativeSeparators( MonkeyCore::fileManager()->currentChildPath() ) );
-	v.replace( "$cf$", nativeSeparators( MonkeyCore::fileManager()->currentChildFile() ) );
-	v.replace( "$cip$", nativeSeparators( MonkeyCore::fileManager()->currentItemPath() ) );
-	v.replace( "$ci$", nativeSeparators( MonkeyCore::fileManager()->currentItemFile() ) );
-	return v;
+	return VariablesManager::instance()->replaceAllVariables( s );
 }
 
 /*!
@@ -362,28 +356,28 @@ void pConsoleManager::sendRawData( const QByteArray& a )
 		write( a  );
 	}
 	else
-		warning( tr( "sendRawData..." ), tr( "Can't send raw data to console" ) );
+		emit warning( tr( "Can't send raw data to console" ) );
 }
 
 /*!
-	Try to stop current command. Stop can be forced
-	
-	\param b Force stop. If false - process will just try to terminate child by executing
-		terminate () function, 
-		if true - process will be killed in 30 seconds, if will not terminate self
-	
-	FIXME Check, do it's possible, that process will be terminated correctly, and timer will
-	kill next executed command
+	Try to stop current command. if stop attempt for same commend = 3 the command is killed
 */
-void pConsoleManager::stopCurrentCommand( bool b )
+void pConsoleManager::stopCurrentCommand()
 {
 	if ( state() != QProcess::NotRunning )
 	{
 		// terminate properly
 		terminate();
-		// if force, wait 30 seconds, then kill
-		if ( b )
-			QTimer::singleShot( 30, this, SLOT( kill() ) );
+		
+		// increment attempt
+		mStopAttempt++;
+		
+		// auto kill if attempt = 3
+		if ( mStopAttempt == 3 )
+		{
+			mStopAttempt = 0;
+			kill();
+		}
 	}
 }
 
@@ -455,6 +449,7 @@ void pConsoleManager::executeProcess()
 				if ( !mCurrentParsers.contains( s ) )
 					mCurrentParsers << s;
 		// execute command
+		mStopAttempt = 0;
 		setWorkingDirectory( c.workingDirectory() );
 		start( QString( "%1 %2" ).arg( c.command() ).arg( c.arguments() ) );
 

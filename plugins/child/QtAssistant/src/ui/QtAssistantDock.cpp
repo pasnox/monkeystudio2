@@ -86,9 +86,6 @@ QtAssistantDock::QtAssistantDock( QWidget* parent )
 	leLookFor->installEventFilter( this );
 	mHelpEngine->indexWidget()->installEventFilter( this );
 
-	// show browser
-	showBrowser();
-
 	// init documentation
 	mDocInstaller = new MkSQtDocInstaller( mHelpEngine );
 	if ( mDocInstaller->checkDocumentation() )

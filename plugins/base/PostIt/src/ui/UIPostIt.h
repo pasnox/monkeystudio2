@@ -17,20 +17,15 @@ private:
         void loadNotes();
 
         notesManager *mNotesManager;
-        bool mTextChanged;
 
 
 protected slots:
         void on_tbAdd_clicked();
-        void on_lstNotes_itemActivated ( QListWidgetItem *item );
 		void on_tbEdit_clicked();
         void on_tbDelete_clicked();
-        void closeEvent( QCloseEvent *event );
-        void on_txtContent_textChanged();
         void on_tbClear_clicked();
-
-protected:
-        bool eventFilter(QObject *obj, QEvent *event);
+        void on_lstNotes_currentItemChanged ( QListWidgetItem * current, QListWidgetItem * previous );
+        void closeEvent( QCloseEvent *event );
 };
 
 #endif // UIPOSTIT

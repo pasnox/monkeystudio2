@@ -66,7 +66,11 @@ public:
 		{
 			{
 				//Error in the file/line
-				QRegExp("^([\\w\\./]+\\.\\w+: In [\\w\\s]+ '.+':\\n)?(([^\\n]+/)?([\\w.]+)):(\\d+):(\\d+:)?\\serror:\\s([^\\n]+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				QRegExp("^([\\w\\./]+\\.\\w+: In [\\w\\s]+ '.+':\\n)?"
+						"(([^\\n]+[\\\\/])?([\\w.]+)):(\\d+):(\\d+:)?"
+						"\\serror:\\s([^\\n]+)\\n", 
+						Qt::CaseSensitive, 
+						QRegExp::RegExp2), //reg exp
 				"%2", //file name
 				"%6", //column
 				"%5", //row
@@ -75,8 +79,25 @@ public:
 				"%0", //full text
 			},
 			{
+				// middle part of error
+				// src/views/TreeViewModel.h:9: note:   because the following virtual functions are pure within 'TreeViewModel':
+				QRegExp("^([\\w\\\\/\\.\\:\\d\\-]+):(\\d+): note:  ([^\\n]+)", 
+						Qt::CaseSensitive, 
+						QRegExp::RegExp2), //reg exp
+				"%1", //file name
+				"0", //column
+				"%2", //row
+				pConsoleManager::stError, //type
+				"%3", //text
+				"%0", //full text
+			},
+			{
 				//Warning in the file/line
-				QRegExp("^([\\w\\./]+\\.\\w+: In [\\w\\s]+ '.+':\\n)?(([^\\n]+/)?([\\w.]+)):(\\d+):(\\d+:)?\\swarning:\\s([^\\n]+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				QRegExp("^([\\w\\./]+\\.\\w+: In [\\w\\s]+ '.+':\\n)?"
+						"(([^\\n]+[\\\\/])?([\\w.]+)):(\\d+):(\\d+:)?"
+						"\\swarning:\\s([^\\n]+)\\n", 
+						Qt::CaseSensitive, 
+						QRegExp::RegExp2), //reg exp
 				"%2", //file name
 				"%6", //column
 				"%5", //row
@@ -86,7 +107,9 @@ public:
 			},
 			{
 				//Building file
-				QRegExp("^[gc]\\+\\+ [^\\n]+ ([^\\n]+\\.\\w+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				QRegExp("^[gc]\\+\\+ [^\\n]+ ([\\w\\\\/\\.]+\\.\\w+)()[\\r\\n]",
+						Qt::CaseSensitive, 
+						QRegExp::RegExp2), //reg exp
 				"%1", //file name
 				"0", //column
 				"0", //row
@@ -96,7 +119,7 @@ public:
 			},
 			{
 				//Linking file
-				QRegExp("^[gc]\\+\\+\\w+\\-o\\s+([^\\s]+)[^\\n]+\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				QRegExp("^[gc]\\+\\+\\w+\\-o\\s+([^\\s]+)[^\\n]+[\\r\\n]", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
 				"0", //file name
 				"0", //column
 				"0", //row
@@ -106,17 +129,19 @@ public:
 			},
 			{
 				//Undedined reference 
-				QRegExp("^[\\w\\./]+\\.o: (In function `[^']+':)\\n([\\w\\./]*/([\\w\\.]+)):(\\d+): (undefined reference to `[^']+')\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
-				"%2", //file name
+				QRegExp("^([\\w\\./]+\\.o: (In function `[^']+':)\\n)?([\\w\\./]*/([\\w\\.]+)):(\\d+): (undefined reference to `[^']+')[\\r\\n]", 
+					Qt::CaseSensitive, 
+					QRegExp::RegExp2), //reg exp
+				"%3", //file name
 				"0", //column
-				"%4", //row
+				"%5", //row
 				pConsoleManager::stError, //type
-				"%3:%4: %5", //text
-				"%2" //full text
+				"%4:%5: %6", //text
+				"%3" //full text
 			},
 			{
 				//Missing library
-				QRegExp("^/[\\w:/]+ld: cannot find -l(\\w+)\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				QRegExp("^/[\\w:/]+ld: cannot find -l(\\w+)[\\r\\n]", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
 				"", //file name
 				"", //column
 				"", //row
@@ -126,7 +151,7 @@ public:
 			},
 			{  //FIXME It's moc's error
 				//Class declaration lacks Q_OBJECT macro.
-				QRegExp("^(\\w+\\.\\w){1,3}:(\\d+): Error: Class declarations lacks Q_OBJECT macro\\.\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				QRegExp("^(\\w+\\.\\w){1,3}:(\\d+): Error: Class declarations lacks Q_OBJECT macro\\.[\\r\\n]", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
 				"%1", //file name
 				"", //column
 				"%2", //row
@@ -137,6 +162,15 @@ public:
 #ifdef Q_OS_MAC
 			{  // MAC specific. Undefined symbol for architecture
 				QRegExp("^(Undefined symbols for architecture \\w+:)\\n\\s+(\"[^\"]+\")[^\\n]+\\n[^\\n]+\\n", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				"", //file name
+				"", //column
+				"", //row
+				pConsoleManager::stError, //type
+				"%1 %2", //text
+				"%0" //full text
+			},
+			{  // MAC specific. Undefined symbol for architecture
+				QRegExp("^(Undefined symbols:)\\n(  \"[\\w:\\(\\)\\, \\*]+\"), referenced from:\\n\\s+[\\w\\:\\(\\)\\, \\*\\.]+", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
 				"", //file name
 				"", //column
 				"", //row

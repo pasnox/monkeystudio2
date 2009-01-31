@@ -41,8 +41,10 @@ public:
 		mName = PLUGIN_NAME;
 		Pattern ps[] = 
 		{
-		{
-			QRegExp("^make: \\*\\*\\* (No rule to make target `\\w+', needed by `\\w+')\\.  Stop\\.\\n"), //reg exp
+		{   // no rule for make target
+			QRegExp("^((mingw32\\-)?make: \\*\\*\\* No rule to make target.*)  Stop.",
+					Qt::CaseSensitive, 
+					QRegExp::RegExp2), //reg exp
 			//No rule for make target
 			"", //file name
 			"0", //column
@@ -52,13 +54,13 @@ public:
 			"%0" //full text
 		},
 		{
-			QRegExp("^make\\[\\d\\]: Entering directory\\s`([^\\n]*)'\\n"), //reg exp
+			QRegExp("^(mingw32\\-)?make\\[\\d\\]: Entering directory\\s`([^\\n]*)'\\n"), //reg exp
 			//Entering dirrectory,
 			"", //file name
 			"0", //column
 			"0", //row
 			pConsoleManager::stCompiling, //type
-			"make: Building %1", //text
+			"make: Building %2", //text
 			"%0" //full text
 		},
 		{QRegExp(), "", "", "", pConsoleManager::stUnknown,"",""} //this item must be last

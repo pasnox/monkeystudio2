@@ -20,20 +20,20 @@
 
 #include <string.h>
 
-#ifdef HAVE_REGCOMP
-# include <ctype.h>
-# include <stddef.h>
-# ifdef HAVE_SYS_TYPES_H
-#  include <sys/types.h>  /* declare off_t (not known to regex.h on FreeBSD) */
-# endif
-# include "regex.h"
-#endif
+#include <ctype.h>
+#include <stddef.h>
+#include <sys/types.h>  /* declare off_t (not known to regex.h on FreeBSD) */
+
+#include <regex.h>
 
 #include "debug.h"
 #include "entry.h"
 #include "parse.h"
 #include "read.h"
 #include "routines.h"
+
+#define HAVE_REGEX
+#define POSIX_REGEX
 
 #ifdef HAVE_REGEX
 
@@ -44,9 +44,7 @@
 /* Back-references \0 through \9 */
 #define BACK_REFERENCE_COUNT 10
 
-#if defined (HAVE_REGCOMP) && !defined (REGCOMP_BROKEN)
 # define POSIX_REGEX
-#endif
 
 #define REGEX_NAME "Regex"
 
@@ -84,6 +82,8 @@ typedef struct {
 	regexPattern *patterns;
 	unsigned int count;
 } patternSet;
+
+extern void addLanguageRegex (const langType language __unused__, const char* const regex __unused__);
 
 /*
 *   DATA DEFINITIONS

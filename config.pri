@@ -12,8 +12,15 @@ PACKAGE_DESTDIR	= $${PACKAGE_PWD}/bin
 PACKAGE_BUILD_PATH	= $${PACKAGE_PWD}/build
 
 # build mode
-CONFIG	+= qt warn_on thread x11 windows release
+CONFIG	+= qt warn_on thread x11 windows debug
 QT	+= xml
+
+# Mac universal build from 10.3 to up to 10.5
+mac {
+	QMAKE_MACOSX_DEPLOYMENT_TARGET	= 10.3
+	QMAKE_MAC_SDK	= /Developer/SDKs/MacOSX10.4u.sdk
+	CONFIG	+= x86 ppc
+}
 
 # define config mode paths
 CONFIG( debug, debug|release ) {
@@ -47,14 +54,14 @@ QMAKE_TARGET_COMPANY	= "Monkey Studio Team"
 QMAKE_TARGET_PRODUCT	= "Monkey Studio"
 QMAKE_TARGET_DESCRIPTION	= "Crossplatform Integrated Development Environment"
 QMAKE_TARGET_COPYRIGHT	= "Copyright (C) 2005 - 2008 Filipe AZEVEDO"
-PACKAGE_DOMAIN	= "www.monkeystudio.org"
+PACKAGE_DOMAIN	= "monkeystudio.org"
 
 PACKAGE_VERSION	= 1.8.3.0
 
 CONFIG( debug, debug|release ) {
 	PACKAGE_VERSION	= $${PACKAGE_VERSION}svn_debug
 } else {
-#	PACKAGE_VERSION	= $${PACKAGE_VERSION}svn_release
+	PACKAGE_VERSION	= $${PACKAGE_VERSION}svn_release
 }
 
 # define variable for source code

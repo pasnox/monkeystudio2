@@ -12,7 +12,7 @@ PostIt::PostIt()
     mPluginInfos.Author = "Alexandre JORDAN <alexandre.jordan@gmail.com>";
     mPluginInfos.Type = BasePlugin::iBase;
     mPluginInfos.Name = PLUGIN_NAME;
-    mPluginInfos.Version = "0.0.2";
+    mPluginInfos.Version = "0.0.3";
     mPluginInfos.Enabled = false;
 }
 

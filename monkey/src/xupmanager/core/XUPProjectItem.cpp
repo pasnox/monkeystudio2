@@ -264,7 +264,7 @@ QString XUPProjectItem::itemDisplayText( XUPItem* item )
 				text = item->attribute( "value" );
 				break;
 			case XUPItem::EmptyLine:
-				text = tr( QT_TR_NOOP( "%1 empty line(s)" ) ).arg( item->attribute( "count" ) );
+				text = tr( "%1 empty line(s)" ).arg( item->attribute( "count" ) );
 				break;
 			case XUPItem::Variable:
 				text = variableDisplayText( item->attribute( "name" ) );
@@ -683,10 +683,10 @@ void XUPProjectItem::registerProjectType() const
 	const QStringList mFilteredVariables = QStringList( "FILES" );
 	const QStringList mFileVariables = QStringList( "FILES" );
 	const StringStringListList mSuffixes = StringStringListList()
-		<< qMakePair( tr( QT_TR_NOOP( "XUP Project" ) ), QStringList( "*.xup" ) )
-		<< qMakePair( tr( QT_TR_NOOP( "XUP Include Project" ) ), QStringList( "*.xui" ) );
+		<< qMakePair( tr( "XUP Project" ), QStringList( "*.xup" ) )
+		<< qMakePair( tr( "XUP Include Project" ), QStringList( "*.xui" ) );
 	const StringStringList mVariableLabels = StringStringList()
-		<< qMakePair( QString( "FILES" ), tr( QT_TR_NOOP( "Files" ) ) );
+		<< qMakePair( QString( "FILES" ), tr( "Files" ) );
 	const StringStringList mVariableIcons = StringStringList()
 		<< qMakePair( QString( "FILES" ), QString( "files" ) );
 	const StringStringListList mVariableSuffixes = StringStringListList()
@@ -713,11 +713,27 @@ void XUPProjectItem::handleIncludeItem( XUPItem* function ) const
 {
 	if ( function->type() == XUPItem::Function && function->attribute( "name" ).toLower() == "include" )
 	{
-		if ( !function->temporaryValue( "includeHandled", false ).toBool() )
+		if ( !function->temporaryValue( "includeLocked", false ).toBool() )
 		{
-			function->setTemporaryValue( "includeHandled", true );
+			function->setTemporaryValue( "includeLocked", true );
 			const QString parameters = function->project()->rootIncludeProject()->interpretValue( function, "parameters" );
 			const QString fn = filePath( parameters );
+			QStringList projects;
+			
+			for ( int i = 0; i < function->childCount(); i++ )
+			{
+				XUPItem* cit = function->child( i );
+				if ( cit->type() == XUPItem::Project )
+				{
+					projects << cit->project()->fileName();
+				}
+			}
+			
+			// check if project is already handled
+			if ( projects.contains( fn ) )
+			{
+				return;
+			}
 			
 			XUPProjectItem* project = newProject();
 			if ( project->open( fn, temporaryValue( "codec" ).toString() ) )
@@ -726,7 +742,7 @@ void XUPProjectItem::handleIncludeItem( XUPItem* function ) const
 			}
 			else
 			{
-				const_cast<XUPProjectItem*>( this )->setLastError( tr( QT_TR_NOOP( "Failed to handle include project %1" ) ).arg( fn ) );
+				const_cast<XUPProjectItem*>( this )->setLastError( tr( "Failed to handle include project %1" ).arg( fn ) );
 				delete project;
 			}
 		}
@@ -736,6 +752,17 @@ void XUPProjectItem::handleIncludeItem( XUPItem* function ) const
 void XUPProjectItem::customRowCount( XUPItem* item ) const
 {
 	Q_UNUSED( item );
+}
+
+void XUPProjectItem::hookItem( XUPItem* item ) const
+{
+	bool included = item->temporaryValue( "includeLocked", false ).toBool();
+	
+	item->setTemporaryValue( "includeLocked", false );
+	handleIncludeItem( item );
+	item->setTemporaryValue( "includeLocked", included );
+	
+	customRowCount( item );
 }
 
 bool XUPProjectItem::open( const QString& fileName, const QString& codec )

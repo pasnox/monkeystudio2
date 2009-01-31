@@ -60,6 +60,8 @@ extern parserDefinition** LanguageTable;
 extern boolean includingDefineTags (void);
 
 /* Language processing and parsing */
+extern void findRegexTags (void);
+
 extern void makeSimpleTag (const vString* const name, kindOption* const kinds, const int kind);
 extern parserDefinition* parserNew (const char* name);
 extern void addTagRegex (const langType language, const char* const regex, const char* const name, const char* const kinds, const char* const flags);

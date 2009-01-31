@@ -18,6 +18,7 @@ public:
 	virtual void registerProjectType() const;
 	inline virtual XUPProjectItem* newProject() const { return new QMakeProjectItem(); }
 	virtual void customRowCount( XUPItem* item ) const;
+	virtual void hookItem( XUPItem* item ) const;
 	virtual bool open( const QString& fileName, const QString& codec );
 	virtual bool save();
 	

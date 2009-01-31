@@ -5,8 +5,9 @@
 #include <QList>
 #include <QDir>
 
-#include <QDebug>
-
+/*! Iterator for get list of all files in the some dirrectory, using minimum memory/time.
+	Every time, when called, will read from file system and return next file name
+*/
 class DirWalkIterator
 {
 protected:
@@ -67,6 +68,7 @@ SearchThread::SearchThread(Mode _mode, const QString &_dir, QString &_mask, cons
     mReplace = _replace;
     mIsReg = _isReg;
 	mCaseSensetive = _caseSensetive;
+	connect (&mReadPleaseResultsTimer, SIGNAL (timeout()), this, SIGNAL (readPleaseResults()));
 }
 
 SearchThread::~SearchThread()
@@ -77,7 +79,8 @@ void SearchThread::run()
 {
 	setPriority (QThread::LowestPriority);
 	DirWalkIterator dirWalker (mDir);
-    int files_count = 0;
+    mProcessedFilesCount = 0;
+    mOccurencesFound = 0;
     QString fileName = dirWalker.next();
 	
 	/* Prepare masks list */
@@ -85,6 +88,8 @@ void SearchThread::run()
 	QList <QRegExp> maskRexps;
 	foreach (QString m, masks)
 		maskRexps << QRegExp (m.trimmed (), Qt::CaseInsensitive, QRegExp::Wildcard);
+	
+	mReadPleaseResultsTimer.start(200);
 	
     while (!fileName.isNull())
     {
@@ -106,7 +111,9 @@ void SearchThread::run()
 				continue;  // Ignore this file, search in the next
 			}
         }
-        emit changeProgress(++files_count);
+		lockResultsAccessMutex ();
+        mProcessedFilesCount++;
+		unlockResultsAccessMutex ();
         QFile file(fileName);
         if (file.open(QIODevice::ReadOnly)) 
         {
@@ -126,8 +133,57 @@ void SearchThread::run()
         }
         fileName = dirWalker.next();
     } //while has file
+	
+	mReadPleaseResultsTimer.stop();
+	
+	lockResultsAccessMutex();
+	bool empty = mNewFoundOccurences.isEmpty();
+	unlockResultsAccessMutex();
+	emit readPleaseResults ();
+	while (! empty) // wait until all data will be readed
+	{
+		msleep (20); // It's better to use semaphore, but lazy to write good code
+		lockResultsAccessMutex();
+		empty = mNewFoundOccurences.isEmpty();
+		unlockResultsAccessMutex();
+	}
 }
 
+void SearchThread::lockResultsAccessMutex ()
+{
+	mResultsAccessMutex.lock();
+}
+
+void SearchThread::unlockResultsAccessMutex ()
+{
+	mResultsAccessMutex.unlock();
+}
+
+QList<SearchAndReplace::Occurence> SearchThread::newFoundOccurences()
+{
+	return mNewFoundOccurences;
+}
+
+void SearchThread::clearNewFoundOccurences()
+{
+	mNewFoundOccurences.clear();
+}
+
+int SearchThread::processedFilesCount()
+{
+	return mProcessedFilesCount;
+}
+
+int SearchThread::foundOccurencesCount()
+{
+	return mOccurencesFound;
+}
+
+/*! 
+	Check, if file is binary. Now we not support binary files, and it will be skipped
+	Heuristics: if first 1k of file contains '\\0' - file is binary
+	NOTE: procedure moving current pos in the file
+*/
 bool SearchThread::isBinary (QFile& file)
 {
 	char data [1024];
@@ -138,15 +194,19 @@ bool SearchThread::isBinary (QFile& file)
 	return false;
 }
 
+/*! 
+	Process file in SEARCH_DIRRECTORY mode (search for occurences, store it to buffer
+*/
 void SearchThread::search (QFile& file)
 {
-	if (!isBinary (file)) // Currently we not supporting binary files
+	if (!isBinary (file)) // Currently we don't support binary files
 	{
 		file.seek (0);
 		QString line;
 		QTextStream in(&file);
 		int i = 0;
-		QRegExp rex (mSearch);
+		Qt::CaseSensitivity cs = mCaseSensetive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+		QRegExp rex (mSearch, cs);
 		while (!in.atEnd() && !mTerm) 
 		{
 			++i;
@@ -157,22 +217,28 @@ void SearchThread::search (QFile& file)
 				ifContains = line.contains(rex);
 			else
 			{
-				ifContains = line.contains(mSearch);
+				ifContains = line.contains(mSearch, cs);
 			}
 			if (ifContains) 
 			{
-				pConsoleManager::Step step;
-				step.mType = pConsoleManager::stSearchResult;
-				step.mFileName = file.fileName();
-				step.mPosition = QPoint (0,i);
-				step.mText = QString("%1[%2]: %3").arg (QFileInfo(file.fileName()).fileName()).arg(i).arg(line.simplified());
-				step.mFullText= file.fileName();
-				emit appendSearchResult (step);
+				SearchAndReplace::Occurence step;
+				step.mode = SearchAndReplace::SEARCH_DIRRECTORY;
+				step.fileName = file.fileName();
+				step.position = QPoint (0,i);
+				step.text = QString("%1[%2]: %3").arg (QFileInfo(file.fileName()).fileName()).arg(i).arg(line.simplified());
+				step.fullText= file.fileName();
+				lockResultsAccessMutex ();
+				mNewFoundOccurences.append (step);
+				mOccurencesFound ++;
+				unlockResultsAccessMutex ();
 			}
 		}
 	} //if not binary
 }
 
+/*! 
+	Process file in REPLACE_DIRRECTORY mode (search for occurences, store it to buffer
+*/
 void SearchThread::replace (QFile& file)
 {
 	if (!isBinary (file)) // Currently we not supporting binary files
@@ -181,7 +247,8 @@ void SearchThread::replace (QFile& file)
 		QString line;
 		QTextStream in(&file);
 		int i = 0;
-		QRegExp rex (mSearch);
+		Qt::CaseSensitivity cs = mCaseSensetive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+		QRegExp rex (mSearch, cs);
 		while (!in.atEnd() && !mTerm) 
 		{
 			++i;
@@ -192,17 +259,25 @@ void SearchThread::replace (QFile& file)
 				ifContains = line.contains(rex);
 			else
 			{
-				ifContains = line.contains(mSearch);
+				ifContains = line.contains(mSearch, cs);
 			}
 			if (ifContains) 
 			{
-				pConsoleManager::Step step;
-				step.mType = pConsoleManager::stResultForReplace;
-				step.mFileName = file.fileName();
-				step.mPosition = QPoint (0,i);
-				step.mText = QString("%1[%2]: %3").arg (QFileInfo(file.fileName()).fileName()).arg(i).arg(line.simplified());
-				step.mFullText= file.fileName();
-				emit appendSearchResult (step);
+				SearchAndReplace::Occurence step;
+				step.mode = SearchAndReplace::REPLACE_DIRRECTORY;
+				step.fileName = file.fileName();
+				step.position = QPoint (0,i);
+				step.text = QString("%1[%2]: %3").arg (QFileInfo(file.fileName()).fileName()).arg(i).arg(line.simplified());
+				step.fullText= file.fileName();
+				step.searchText = mSearch;
+				step.isRegExp = mIsReg;
+				step.isCaseSensetive = mCaseSensetive;
+				step.replaceText = mReplace;
+				
+				lockResultsAccessMutex ();
+				mNewFoundOccurences.append (step);
+				mOccurencesFound ++;
+				unlockResultsAccessMutex ();
 			}
 		}
 	} //if not binary

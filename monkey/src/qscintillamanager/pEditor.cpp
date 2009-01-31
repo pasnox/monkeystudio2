@@ -297,6 +297,7 @@ bool pEditor::openFile( const QString& fileName, const QString& codec )
 	if ( !f.open( QFile::ReadOnly ) )
 	{
 		MonkeyCore::statusBar()->appendMessage( tr( "Cannot read file %1:\n%2." ).arg( fileName ).arg( f.errorString() ) );
+		QApplication::restoreOverrideCursor();
 		return false;
 	}
 
@@ -412,7 +413,10 @@ bool pEditor::saveBackup( const QString& s )
 	// create bak folder
 	if ( !d.exists( fp ) )
 		if ( !d.mkpath( fp ) )
+		{
+			QApplication::restoreOverrideCursor();
 			return false;
+		}
 
 	// set correct path
 	d.setPath( fp );
@@ -421,6 +425,7 @@ bool pEditor::saveBackup( const QString& s )
 	if ( !f.open( QFile::WriteOnly ) )
 	{
 		MonkeyCore::statusBar()->appendMessage( tr( "Cannot write file %1:\n%2." ).arg( s ).arg( f.errorString() ) );
+		QApplication::restoreOverrideCursor();
 		return false;
 	}
 

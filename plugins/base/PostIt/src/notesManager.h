@@ -6,24 +6,24 @@
 class notesManager
 {
     public:
-        notesManager( QString filepath );
+        notesManager( const QString &filepath );
         ~notesManager();
 
         bool readDocument();
         bool writeDocument();
 
-        void removeElement( uint id );
+        void removeElement( const uint id );
         void removeAllElements();
 
-		QString getTitleElement( uint id );
-        QDomElement getElement( uint id );
-        QStringList getElements();
+		QString getTitleElement( const uint id ) const;
+        QDomElement getElement( const uint id ) const;
+        QStringList getElements() const;
 
-        void addElement( QString title, QString note );
-        void setElement( uint id, QString note );
-        void setTitleElement( uint id, QString title );
+        void addElement( const QString &title, const QString &note );
+        void setElement( uint id, const QString &note );
+        void setTitleElement( uint id, const QString &title );
 
-        uint getNotesCount();
+        uint getNotesCount() const;
 
     private:
         QDomDocument mXmlDocument;

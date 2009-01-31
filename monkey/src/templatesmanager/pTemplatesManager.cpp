@@ -126,9 +126,10 @@ bool pTemplatesManager::realiseTemplate( XUPItem* scope, const QString& op, cons
 	}
 	
 	// check destination exists
-	if ( !QDir( dest ).exists() )
+	QDir destdir( dest );
+	if ( !destdir.exists() )
 	{
-		if ( !QDir().mkpath( dest ) )
+		if ( !destdir.mkpath( dest ) )
 		{
 			warning( tr( "Error..." ), tr( "Can't create destination '%1'" ).arg( dest ) );
 			return false;
@@ -140,17 +141,15 @@ bool pTemplatesManager::realiseTemplate( XUPItem* scope, const QString& op, cons
 		dest.append( '/' );
 	
 	// replace values in files/projects to open
-	QStringList fo, po, fa;
+	QStringList fo, po;
 	for ( int i = 0; i < temp.FilesToOpen.count(); i++ )
 		fo << VariablesManager::instance()->replaceAllVariables( temp.FilesToOpen.at( i ), dictionnary );
 	for ( int i = 0; i < temp.ProjectsToOpen.count(); i++ )
 		po << VariablesManager::instance()->replaceAllVariables( temp.ProjectsToOpen.at( i ), dictionnary );
-	for ( int i = 0; i < temp.FilesToAdd.count(); i++ )
-		fa << VariablesManager::instance()->replaceAllVariables( temp.FilesToAdd.at( i ), dictionnary );
 	
 	// get files
 	QHash<QString, QString> files;
-	foreach( QString f, temp.Files )
+	foreach( const QString& f, temp.Files )
 	{
 		// check if sources and destination are differents
 		QString sf, df;
@@ -232,7 +231,7 @@ bool pTemplatesManager::realiseTemplate( XUPItem* scope, const QString& op, cons
 			MonkeyCore::fileManager()->openProject( s, codec );
 		
 		// add files to project if needed
-		if ( scope )
+		if ( scope && temp.FilesToAdd.contains( f ) )
 		{
 			MonkeyCore::projectsManager()->addFilesToScope( scope, QStringList( s ), op );
 		}

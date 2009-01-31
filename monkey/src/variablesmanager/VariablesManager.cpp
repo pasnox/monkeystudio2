@@ -17,10 +17,14 @@
 ****************************************************************************/
 #include "VariablesManager.h"
 
+#include <pFileManager.h>
+#include <MonkeyCore.h>
+
 #include <QStringList>
 #include <QList>
 #include <QRegExp>
 #include <QDateTime>
+#include <QDir>
 
 /*!
 	Class constructor
@@ -39,21 +43,67 @@ VariablesManager::VariablesManager( QObject* o )
 QString VariablesManager::getVariable( QString name, Dictionary locals )
 {
 	QString result = QString::null;
-	// monkeystudio_version
+	
 	if ( name == "editor_version" )
+	// monkeystudio_version
+	{
 		result = PACKAGE_VERSION;
-	// monkeystudio_version_string
+	}
 	else if ( name == "editor_version_string" )
+	// monkeystudio_version_string
+	{
 		result = QString( "%1 v%2" ).arg( PACKAGE_NAME ).arg( PACKAGE_VERSION );
+	}
 	else if ( name == "date" )
+	// current date
+	{
 		result = QDateTime::currentDateTime().toString( Qt::ISODate );
-	if (!result.isEmpty())
+	}
+	else if ( name == "current_project_path" || name == "cpp" )
+	// current project path
+	{
+		result = QDir::toNativeSeparators( MonkeyCore::fileManager()->currentProjectPath() );
+	}
+	else if ( name == "current_project_file" || name == "cp" )
+	// current proejct file
+	{
+		result = QDir::toNativeSeparators( MonkeyCore::fileManager()->currentProjectFile() );
+	}
+	else if ( name == "current_child_path" || name == "cfp" )
+	//
+	{
+		result = QDir::toNativeSeparators( MonkeyCore::fileManager()->currentChildPath() );
+	}
+	else if ( name == "current_child_file" || name == "cf" )
+	//
+	{
+		result = QDir::toNativeSeparators( MonkeyCore::fileManager()->currentChildFile() );
+	}
+	else if ( name == "current_item_path" || name == "cip" )
+	//
+	{
+		result = QDir::toNativeSeparators( MonkeyCore::fileManager()->currentItemPath() );
+	}
+	else if ( name == "current_item_file" || name == "ci" )
+	//
+	{
+		result = QDir::toNativeSeparators( MonkeyCore::fileManager()->currentItemFile() );
+	}
+	
+	if ( !result.isEmpty() )
+	{
 		return result;
-	if ( globals.contains(name))
-		return globals[name];
-	if (locals.contains(name))
-		return locals[name];
-	return QString( "$%1$" ).arg( name ); // was QString::null if not found, it's not a variable to replace! ( ie: php script that contains $variables
+	}
+	else if ( globals.contains( name ) )
+	{
+		return globals[ name ];
+	}
+	else if ( locals.contains( name ) )
+	{
+		return locals[ name ];
+	}
+	
+	return QString( "$%1$" ).arg( name ); // was QString::null if not found, it's not a variable to replace! ( ie: php script that contains $variables )
 }
 
 /*!

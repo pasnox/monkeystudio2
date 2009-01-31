@@ -137,10 +137,6 @@ signals:
 	void fileClosed( const QString& );
 	// current file changed
 	void currentFileChanged( pAbstractChild*, const QString& );
-	
-	// signals for controling search results dock
-	void appendSearchResult( const pConsoleManager::Step& );
-	void clearSearchResults();
 };
 
 #endif // PWORKSPACE_H

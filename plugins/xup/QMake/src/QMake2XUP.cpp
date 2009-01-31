@@ -18,6 +18,22 @@ si "nested" n'existe pas, il vaut "false"
 
 #include <exception>
 
+class MksException : public std::exception
+{
+public:
+	MksException( QString p_s ) throw()
+	{
+		s = p_s;
+	};
+	virtual ~MksException() throw() {};
+	virtual const char* what() const throw()
+	{
+		return qPrintable( s );
+	};
+private:
+	QString s;
+};
+
 const QString mQMakeEditor = "QMake";
 
 QString tabsString( int i )
@@ -431,10 +447,7 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
 			else
 			{
 				qWarning("%s didn't match", qPrintable(v[i]));
-				qWarning("Variable matched length : %d", Variable.matchedLength());
-				qWarning("Bloc matched length : %d", bloc.matchedLength());
-				qWarning("function call matched length : %d", function_call.matchedLength());
-				throw QString( "Erreur parsing project file: %1" ).arg( s );
+				throw MksException( QString("Erreur parsing project file: %1").arg( s ) );
 			}
 		}
 		while(!isNested.isEmpty() && isNested.top())
@@ -443,14 +456,14 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
 			isNested.pop();
 		}
 	}
-	catch ( const QString& s )
+	catch(const std::exception & e)
 	{
 		// re-init the XML output
 		file.append( QString( "<!DOCTYPE XUPProject>\n<project codec=\"%1\" name=\"%2\" editor=\"%3\" expanded=\"false\">\n" ).arg( codec ).arg( QFileInfo( s ).fileName() ).arg( mQMakeEditor ) );
 		// empty both stacks
 		isNested.clear();
-		pile.pop();
-		qWarning( qPrintable( s ) );
+		pile.clear();
+		qWarning( e.what() );
 	}
 	
 	file.append( "</project>\n" );

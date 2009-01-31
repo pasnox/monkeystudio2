@@ -5,6 +5,7 @@
 #include "routines.h"
 #include "options.h"
 #include "debug.h"
+
 /*
 *   DATA DEFINITIONS
 */
@@ -206,10 +207,8 @@ extern void initializeParsing (void)
 				error (FATAL, "parser definition must contain name\n");
 			else if (def->regex)
 			{
-#ifdef HAVE_REGEX
 				def->parser = findRegexTags;
 				accepted = TRUE;
-#endif
 			}
 			else if ((def->parser == NULL)  ==  (def->parser2 == NULL))
 				error (FATAL,

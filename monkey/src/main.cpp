@@ -24,9 +24,10 @@
 #include <QApplication>
 #include <QMessageBox>
 
-#include "coremanager/MonkeyCore.h"
-#include "pluginsmanager/PluginsManager.h"
-#include "settingsmanager/Settings.h"
+#include <MonkeyCore.h>
+#include <PluginsManager.h>
+#include <Settings.h>
+#include <CommandLineManager.h>
 
 int main( int argc, char** argv )
 {
@@ -44,8 +45,32 @@ int main( int argc, char** argv )
 		<< QApplication::libraryPaths();
 	QApplication::setLibraryPaths( pluginsPaths );
 #endif
+
+	// parse command line arguments
+	CommandLineManager clm;
+	clm.parse();
+	
+	const QStringList arguments = clm.arguments().keys();
+	
+	if ( arguments.contains( "-v" ) || arguments.contains( "--version" ) )
+	{
+		clm.showVersion();
+	}
+	
+	if ( arguments.contains( "-h" ) || arguments.contains( "--help" ) )
+	{
+		clm.showHelp();
+	}
+	
+	if ( arguments.contains( "-v" ) || arguments.contains( "--version" ) || arguments.contains( "-h" ) || arguments.contains( "--help" ) )
+	{
+		return 0;
+	}
+	
 	// init monkey studio core
 	MonkeyCore::init();
+	// handle command line arguments
+	clm.process();
 	// execute application
 	int result = a.exec();
 	// some cleanup
