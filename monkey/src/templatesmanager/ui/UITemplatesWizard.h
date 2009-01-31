@@ -61,6 +61,7 @@ private slots:
 	void onFiltersChanged();
 	void on_lwTemplates_itemPressed( QListWidgetItem* item );
 	void on_gbAddToProject_toggled( bool toggled );
+	void on_cbExpert_clicked( bool checked );
 	void on_cbProjects_currentChanged( const QModelIndex& index );
 	void on_tbDestination_clicked();
 

@@ -2,9 +2,10 @@
 #include "XUPProjectModel.h"
 #include "XUPItem.h"
 
-XUPProjectModelProxy::XUPProjectModelProxy( QObject* parent )
+XUPProjectModelProxy::XUPProjectModelProxy( QObject* parent, bool showDisabled )
 	: QSortFilterProxyModel( parent )
 {
+	mShowDisabled = showDisabled;
 	mSourceModel = 0;
 }
 
@@ -36,4 +37,37 @@ Qt::ItemFlags XUPProjectModelProxy::flags( const QModelIndex& index ) const
 	}
 	
 	return enabled ? Qt::ItemIsEnabled | Qt::ItemIsSelectable : Qt::ItemFlags();
+}
+
+bool XUPProjectModelProxy::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const
+{
+	const QModelIndex sourceIndex = mSourceModel->index( sourceRow, 0, sourceParent );
+	XUPItem* item = mSourceModel->itemFromIndex( sourceIndex );
+	
+	bool isEnabled = false;
+	
+	if ( item->type() == XUPItem::Project || item->type() == XUPItem::Scope )
+	{
+		isEnabled = true;
+	}
+	else if ( item->type() == XUPItem::Function && item->attribute( "name" ).toLower() != "include" )
+	{
+		isEnabled = true;
+	}
+	
+	return isEnabled ? true : mShowDisabled;
+}
+
+bool XUPProjectModelProxy::isShowDisabled() const
+{
+	return mShowDisabled;
+}
+
+void XUPProjectModelProxy::setShowDisabled( bool showDisabled )
+{
+	if ( mShowDisabled != showDisabled )
+	{
+		mShowDisabled = showDisabled;
+		reset();
+	}
 }

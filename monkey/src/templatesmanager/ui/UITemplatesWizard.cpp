@@ -64,6 +64,8 @@ UITemplatesWizard::UITemplatesWizard( QWidget* w )
 	cbLanguages->addItem( tr( "All" ), "All" );
 	cbTypes->addItem( tr( "All" ), "All" );
 	
+	cbCodec->addItems( pMonkeyStudio::availableTextCodecs() );
+	
 	// languages/types
 	foreach( pTemplate tp, mTemplates )
 	{
@@ -72,10 +74,18 @@ UITemplatesWizard::UITemplatesWizard( QWidget* w )
 		if ( cbTypes->findData( tp.Type, Qt::UserRole, Qt::MatchFixedString ) == -1 )
 			cbTypes->addItem( tr( qPrintable( tp.Type ) ), tp.Type );
 	}
+	
+	// restore infos
+	pSettings* s = MonkeyCore::settings();
+	cbLanguages->setCurrentIndex( cbLanguages->findText( s->value( "Recents/FileWizard/Language", "C++" ).toString() ) );
+	cbExpert->setChecked( s->value( "Recents/FileWizard/Expert", false ).toBool() );
+	leDestination->setText( s->value( "Recents/FileWizard/Destination" ).toString() );
+	cbOpen->setChecked( s->value( "Recents/FileWizard/Open", true ).toBool() );
+	cbCodec->setCurrentIndex( cbCodec->findText( pMonkeyStudio::defaultCodec() ) );
 
 	// assign projects combobox
 	mModel = MonkeyCore::projectsManager()->currentProjectModel();
-	mProxy = new XUPProjectModelProxy( this );
+	mProxy = new XUPProjectModelProxy( this, cbExpert->isChecked() );
 	XUPProjectItem* project = MonkeyCore::projectsManager()->currentProject();
 	QModelIndex index = project ? project->index() : QModelIndex();
 	
@@ -87,15 +97,6 @@ UITemplatesWizard::UITemplatesWizard( QWidget* w )
 	{
 		cbOperators->addItems( project->projectInfos()->operators( project->projectType() ) );
 	}
-	
-	cbCodec->addItems( pMonkeyStudio::availableTextCodecs() );
-
-	// restore infos
-	pSettings* s = MonkeyCore::settings();
-	cbLanguages->setCurrentIndex( cbLanguages->findText( s->value( "Recents/FileWizard/Language", "C++" ).toString() ) );
-	leDestination->setText( s->value( "Recents/FileWizard/Destination" ).toString() );
-	cbOpen->setChecked( s->value( "Recents/FileWizard/Open", true ).toBool() );
-	cbCodec->setCurrentIndex( cbCodec->findText( pMonkeyStudio::defaultCodec() ) );
 	
 	// connections
 	connect( cbLanguages, SIGNAL( currentIndexChanged( int ) ), this, SLOT( onFiltersChanged() ) );
@@ -197,6 +198,24 @@ void UITemplatesWizard::on_gbAddToProject_toggled( bool toggled )
 	}
 }
 
+void UITemplatesWizard::on_cbExpert_clicked( bool checked )
+{
+	const QModelIndex idx = mProxy->mapToSource( cbProjects->currentIndex() );
+	XUPItem* item = mModel->itemFromIndex( idx );
+	
+	bool blocked = cbProjects->blockSignals( true );
+	mProxy->setShowDisabled( checked );
+	
+	QModelIndex proxyIndex = mProxy->mapFromSource( item->index() );
+	if ( !proxyIndex.isValid() )
+	{
+		proxyIndex = mProxy->mapFromSource( item->project()->index() );
+	}
+	
+	cbProjects->setCurrentIndex( proxyIndex );
+	cbProjects->blockSignals( blocked );
+}
+
 void UITemplatesWizard::on_cbProjects_currentChanged( const QModelIndex& index )
 {
 	const QModelIndex idx = mProxy->mapToSource( index );
@@ -284,6 +303,7 @@ void UITemplatesWizard::on_pbCreate_clicked()
 	// remember some infos
 	pSettings* s = MonkeyCore::settings();
 	s->setValue( "Recents/FileWizard/Language", cbLanguages->currentText() );
+	s->setValue( "Recents/FileWizard/Expert", cbExpert->isChecked() );
 	s->setValue( "Recents/FileWizard/Destination", leDestination->text() );
 	s->setValue( "Recents/FileWizard/Open", cbOpen->isChecked() );
 	
