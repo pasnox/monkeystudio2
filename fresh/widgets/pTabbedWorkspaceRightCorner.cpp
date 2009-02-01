@@ -37,7 +37,11 @@ pTabbedWorkspaceRightCorner::pTabbedWorkspaceRightCorner( pTabbedWorkspace* p )
 	agTabMode = new QActionGroup( menu );
 	agDocumentMode = new QActionGroup( menu );
 
+#ifdef Q_CC_MSVC
+#pragma message("Deprecated, uncomment code if needed")
+#else
 #warning Deprecated, uncomment code if needed
+#endif
 	/*
 	// fill enums in menu
 	QMetaEnum e;

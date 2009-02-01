@@ -70,7 +70,7 @@ Navigator::Navigator (QObject* ):
 /*!
 	Enable/disable plugin
 	\param e Flag. Enable = true, Disable = false
-	\return Status of process 
+	\return Status of process
 	\retval true Successfully enabled
 	\retval false Some error ocurred
 */
@@ -101,7 +101,7 @@ bool Navigator::setEnabled (bool e)
 		dockwgt->setWidget (fileWidget);
 		MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( dockwgt,  tr( "Navigator" ), QPixmap( ":/icons/redo.png" ) );
 		connect ( MonkeyCore::fileManager(), SIGNAL (currentFileChanged( pAbstractChild*, const QString& )) , this, SLOT (currentFileChanged( pAbstractChild*, const QString )));
-		
+
 		if ( !curFile.isEmpty() )
 		{
 			showFile( curFile );
@@ -111,9 +111,13 @@ bool Navigator::setEnabled (bool e)
 	{
 		disconnect ( MonkeyCore::fileManager(), SIGNAL (currentFileChanged( pAbstractChild*, const QString& )) , this, SLOT (currentFileChanged( pAbstractChild*, const QString& )));
 		delete dockwgt;
+#ifdef Q_CC_MSVC
+#pragma message("memory leak ! can''t delete, cause one can be child of dock that will delete it, causing qDeleteAll to delete an already deleted object")
+#else
 #warning memory leak ! can''t delete, cause one can be child of dock that will delete it, causing qDeleteAll to delete an already deleted object
+#endif
 		//qDeleteAll( fileTrees );
-		fileTrees.clear();	
+		fileTrees.clear();
 	}
 	return true;
 }
@@ -128,10 +132,10 @@ QWidget* Navigator::settingsWidget ()
 }
 
 /*!
-	Set display mask for displaying items in the tree. 
+	Set display mask for displaying items in the tree.
 	Mask will be stored in the settings
-	
-	\param mask Mask should contain logical OR of types of entityes, which should be 
+
+	\param mask Mask should contain logical OR of types of entityes, which should be
 		displayed in the tree. See EntityType for description of entity types
 */
 void Navigator::setDisplayMask (int mask)
@@ -139,7 +143,7 @@ void Navigator::setDisplayMask (int mask)
 	displayMask = mask;
 	setSettingsValue( "DisplayMask", QVariant( mask ) );
 }
-	
+
 /*!
 	Get display mask of plugin.
 	\return Display mask
@@ -151,16 +155,16 @@ int Navigator::getDisplayMask (void)
 }
 
 /*!
-	Set expand mask for automatical expanding some nodes in the tree. 
+	Set expand mask for automatical expanding some nodes in the tree.
 	Mask will be stored in the settings
-	
-	\param mask Mask should contain logical OR of types of entityes, which should be 
+
+	\param mask Mask should contain logical OR of types of entityes, which should be
 		automatically expanded. See EntityType for description of entity types
 */
 void Navigator::setExpandMask (int mask)
 {
 	expandMask = mask;
-	setSettingsValue( "ExpandMask", QVariant( mask ) );	
+	setSettingsValue( "ExpandMask", QVariant( mask ) );
 }
 
 /*!
@@ -177,13 +181,13 @@ int Navigator::getExpandMask (void)
 	Set autoHide mode of plugin
 	If autoHide is switched on, dock of the Navigator will be hiden every time,
 	when user selected some item.
-	
+
 	\param value value of option
 */
 void Navigator::setAutoHide (bool value)
 {
 	mAutoHide = value;
-	setSettingsValue( "AutoHide", QVariant( value ) );	
+	setSettingsValue( "AutoHide", QVariant( value ) );
 }
 
 /*!
@@ -207,7 +211,7 @@ void Navigator::setDockVisible (bool visible)
 }
 
 /*!
-	Signal handler, which switches current file in the view, according with 
+	Signal handler, which switches current file in the view, according with
 	current editing file
 	\param absPath Absolute file path of new file
 */
@@ -239,18 +243,18 @@ void Navigator::showFile (const QString& absPath)
 // 		return;  //do not need do something, if tab not active
 	EntityContainer* oldWidget = currFileTreew; //save current TreeView
 	currFileTreew = fileTrees [absPath]; //Try to find Treew for requested file in the cache
-	
+
 	if ( currFileTreew == NULL ) //not finded
 	{
 		currFileTreew = new EntityContainer ( NULL, this);
 		fileTrees.insert ( absPath, currFileTreew );
 	}//OK, not currFileTreew - actual for requested file
-	
+
 	dockwgt->setFocusProxy( currFileTreew );
-	
+
 	for ( int i = 0; i< files.size(); i++)
 	{
-		currFileTreew->updateFileInfo ( files[i] );	
+		currFileTreew->updateFileInfo ( files[i] );
 	}
 	dockwgt->setWindowTitle (tr("Navigator")+": "+ QFileInfo (absPath).fileName());
 	fileWidget->setUpdatesEnabled(false);
