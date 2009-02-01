@@ -43,7 +43,11 @@
 #include <pActionsManager.h>
 #include <VariablesManager.h>
 
+#ifdef Q_CC_MSVC
+#pragma message("don''t forget to connect warning message with status bar")
+#else
 #warning don''t forget to connect warning message with status bar
+#endif
 
 /*!
 	Defines maximum count of lines, which are storing in the buffer for parsing
@@ -68,26 +72,26 @@ pConsoleManager::pConsoleManager( QObject* o )
 	mStopAction->setText( tr( "Stop current command" ) );
 	mStopAction->setToolTip( tr( "Stop current command" ) );
 	mStopAction->setStatusTip( tr( "Stop current command" ) );
-	
+
 	// unset some variables environments
 	int i;
-	/*FIXME need to use environment(), that returns systemEnvironment, 
+	/*FIXME need to use environment(), that returns systemEnvironment,
 	if process env was not changed, but it's not works on Qt 4.3.4 X11 */
 	QStringList l = systemEnvironment();
 	if ( ( i = l.indexOf( QRegExp( "^LANG=.*$" ) ) ) != -1 )
 		l.removeAt( i );
 	setEnvironment( l );
-	
+
 	// set status tip for
 	mStopAction->setStatusTip( tr( "Stop the currently running command" ) );
 	mStopAction->setEnabled( false );
 	// mixe channels
 	setReadChannelMode( QProcess::MergedChannels );
 	// connections
-	
+
 	// :-/
 	connect( this, SIGNAL( error( QProcess::ProcessError ) ), this, SLOT( error( QProcess::ProcessError ) ) );
-	
+
 	connect( this, SIGNAL( finished( int, QProcess::ExitStatus ) ), this, SLOT( finished( int, QProcess::ExitStatus ) ) );
 	connect( this, SIGNAL( readyRead() ), this, SLOT( readyRead() ) );
 	connect( this, SIGNAL( started() ), this, SLOT( started() ) );
@@ -163,7 +167,7 @@ QString pConsoleManager::quotedString( const QString& s )
 
 /*!
 	Replace internal varibles in the string with it's values
-	
+
 	\param s Source string
 	\return Result string
 */
@@ -174,7 +178,7 @@ QString pConsoleManager::processInternalVariables( const QString& s )
 
 /*!
 	Prepare command for starting (set internal variables)
-	
+
 	\param c Command for execution
 	\return Command for execution
 	\retval Command, gived as parameter
@@ -205,7 +209,7 @@ pCommand pConsoleManager::getCommand( const pCommandList& l, const QString& s )
 
 /*!
 	FIXME PasNox, comment please
-	
+
 */
 pCommandList pConsoleManager::recursiveCommandList( const pCommandList& l, pCommand c )
 {
@@ -233,7 +237,7 @@ pCommandList pConsoleManager::recursiveCommandList( const pCommandList& l, pComm
 
 /*!
 	Handler of timer event
-	
+
 	Exucutes next command, if there is available in the list, and no currently running commands
 	FIXME Check, if it's realy nessesery to use timer
 	\param e Timer event
@@ -268,7 +272,7 @@ void pConsoleManager::error( QProcess::ProcessError e )
 
 /*!
 	Handler of finishing of execution of command
-	
+
 	\param i Ask PasNox, what is it
 	\param e Exit status of process
 */
@@ -289,7 +293,7 @@ void pConsoleManager::finished( int i, QProcess::ExitStatus e )
 
 /*!
 	Handler or 'ready read' event from child process
-	
+
 	Reads output from process and tryes to parse it
 */
 void pConsoleManager::readyRead()
@@ -302,14 +306,14 @@ void pConsoleManager::readyRead()
 	// try parse output
 	if (! c.isValid() )
 		return;
-	
+
 	/*Alrorithm is not ideal, need fix, if will be problems with it
 		Some text, that next parser possible to parse, can be removed
 		And, possible, it's not idealy quick.   hlamer
 		*/
-		
+
 		parseOutput (false);
-		
+
 	// emit signal
 	emit commandReadyRead( c, d );
 }
@@ -368,10 +372,10 @@ void pConsoleManager::stopCurrentCommand()
 	{
 		// terminate properly
 		terminate();
-		
+
 		// increment attempt
 		mStopAttempt++;
-		
+
 		// auto kill if attempt = 3
 		if ( mStopAttempt == 3 )
 		{
@@ -403,7 +407,7 @@ void pConsoleManager::addCommands( const pCommandList& l )
 
 /*!
 	Remove command from list of commands for executing
-	
+
 	\param c Command
 */
 void pConsoleManager::removeCommand( const pCommand& c )
@@ -439,7 +443,7 @@ void pConsoleManager::executeProcess()
 			// execute next
 			continue;
 		}
-		
+
 		// set current parsers list
 		// parsers comamnd want to test/check
 		mCurrentParsers = c.parsers();
@@ -461,26 +465,26 @@ void pConsoleManager::executeProcess()
 
 /*!
 	Parse output of command, which are storing in the buffer, using parsers.
-	
+
 	\param commandFinished If command already are finished, make processing while
 	buffer will not be empty. If not finished - wait for further output.
 */
 void pConsoleManager::parseOutput (bool commandFinished)
 {
 	bool finished;
-	do 
+	do
 	{
 		// Fill string buffer
 		while ( mBuffer.canReadLine() && mLinesInStringBuffer < MAX_LINES)
 		{
-			
+
 			mStringBuffer.append ( QString::fromLocal8Bit (mBuffer.readLine()));
 			mLinesInStringBuffer ++;
 		}
-		
+
 		if ( ! mLinesInStringBuffer )
 			return;
-		
+
 		finished = true;
 		int linesToRemove = 0;
 		//try all parsers
@@ -495,12 +499,12 @@ void pConsoleManager::parseOutput (bool commandFinished)
 		}
 		if (linesToRemove == 0 || commandFinished) //need to remove one
 			linesToRemove = 1;
-		
+
 		if ( ! linesToRemove )
 			continue; // do-while
-		
+
 		finished = false; //else one iteration of do-while after it
-		
+
 		//removing of lines
 		mLinesInStringBuffer -= linesToRemove;
 		int posEnd = 0;

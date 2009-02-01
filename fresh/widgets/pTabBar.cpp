@@ -35,7 +35,11 @@ pTabBar::pTabBar( QWidget* parent )
 	mTabsColor = Qt::black;
 	mCurrentTabColor = Qt::blue;
 	
+#ifdef Q_CC_MSVC
+#pragma message("Deprecated uncomment code if needed this class")
+#else
 #warning Deprecated, uncomment code if needed this class
+#endif
 
 	/*
 	// close button
@@ -62,7 +66,11 @@ pTabBar::pTabBar( QWidget* parent )
 	connect( this, SIGNAL( tabsColorChanged( const QColor& ) ), this, SLOT( resetTabsColor() ) );
 	connect( this, SIGNAL( currentTabColorChanged( const QColor& ) ), this, SLOT( resetTabsColor() ) );
 	connect( this, SIGNAL( tabsHaveCloseButtonChanged( bool ) ), this, SLOT( update() ) );
+#ifdef Q_CC_MSVC
+#pragma message("Uncomment")
+#else
 #warning Uncomment
+#endif
 	/*
 	connect( aToggleTabsHaveCloseButton, SIGNAL( toggled( bool ) ), this, SLOT( setTabsHaveCloseButton( bool ) ) );
 	connect( aToggleTabsHaveShortcut, SIGNAL( toggled( bool ) ), this, SLOT( setTabsHaveShortcut( bool ) ) );
