@@ -6,7 +6,8 @@
 ** FileName  : Parser.h
 ** Date      : 2008-01-14T00:53:27
 ** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
+** Comment   : This header has been automatically generated, if you are the original author, or co-author, 
+**             fill free to replace/append with your informations.
 ** Home Page : http://www.monkeystudio.org
 **
 	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
@@ -52,7 +53,7 @@ public:
 		Class constructor. Contatning regular expressions for known errors
 		
 		NOTE DO NOT NEED TO ADD SUPPORT OF ALL POSSIBLE ERRORS OF COMPILER
-		Checking of every regular expression requires some time. Than more expressions - 
+		Checking of every regular expression requires some time. More expressions - more time
 		
 		NOTE Try to avoid using expressions as '.*blabla',  because QRegExp should 
 		check all string for detect, do it's according to regexp. It's requiring HUGE time
@@ -107,7 +108,7 @@ public:
 			},
 			{
 				//Building file
-				QRegExp("^[gc]\\+\\+ [^\\n]+ ([\\w\\\\/\\.]+\\.\\w+)()[\\r\\n]",
+				QRegExp("^[gc][\\+c][\\+c] [^\\n]+ ([\\w\\\\/\\.]+\\.\\w+)()[\\r\\n]",
 						Qt::CaseSensitive, 
 						QRegExp::RegExp2), //reg exp
 				"%1", //file name
@@ -119,7 +120,7 @@ public:
 			},
 			{
 				//Linking file
-				QRegExp("^[gc]\\+\\+\\w+\\-o\\s+([^\\s]+)[^\\n]+[\\r\\n]", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
+				QRegExp("^[gc][\\+c][\\+c]\\w+\\-o\\s+([^\\s]+)[^\\n]+[\\r\\n]", Qt::CaseSensitive, QRegExp::RegExp2), //reg exp
 				"0", //file name
 				"0", //column
 				"0", //row
