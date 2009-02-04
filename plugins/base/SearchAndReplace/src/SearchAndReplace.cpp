@@ -233,10 +233,11 @@ void SearchAndReplace::updateSearchTextOnUI ()
 	\param next - search forward. If false - will search backward
 	\param incremental - Incremental search mode. (Search dirrectly when user types something.) 
 			If true - will search from selection (previous search result), if false - from cursor position
+	\param enableLooping -If true, will try to search from start, if nothing found from cursor to end of file
 	\return true - something found
 	\return false - nothing found
 */
-bool SearchAndReplace::searchFile (bool next, bool incremental)
+bool SearchAndReplace::searchFile (bool next, bool incremental, bool enableLooping)
 {
 	QString text = mWidget->searchText();
 	if (!incremental)
@@ -264,7 +265,7 @@ bool SearchAndReplace::searchFile (bool next, bool incremental)
 	
 	// search
 	bool b = editor->findFirst( text, mWidget->isRegExp(), mWidget->isCaseSensetive(), false, false, next, y, x);
-	if (!b) // not found, try from start/end
+	if (!b && enableLooping) // not found, try from start/end
 	{
 		if (next)
 			b = editor->findFirst( text, mWidget->isRegExp(), mWidget->isCaseSensetive(), false, false, next, 0, 0);
@@ -314,7 +315,7 @@ int SearchAndReplace::replace(bool all)
 		editor->getCursorPosition(&y, &x);
 
 		editor->setCursorPosition(0, 0);
-		while (searchFile(true, false)) //search next
+		while (searchFile(true, false, false)) //search next
 		{
 			editor->replace(rtext);
 			count++;
@@ -327,7 +328,7 @@ int SearchAndReplace::replace(bool all)
 			editor->getSelection(&y, &x, &temp, &temp);
 			editor->setCursorPosition(y, x);
 
-		if (searchFile(true, false))
+		if (searchFile(true, false, true))
 			{
 				editor->replace (rtext);
 				count = 1;
@@ -539,7 +540,7 @@ void SearchAndReplace::showReplaceFolder ()
 */
 void SearchAndReplace::onPreviousClicked()
 {
-	searchFile (false, false);
+	searchFile (false, false, true);
 }
 
 /*!
@@ -555,7 +556,7 @@ void SearchAndReplace::onNextClicked()
 			if (! isPathValid ())
 				return;
 			
-			searchFile (true, false);
+			searchFile (true, false, true);
 		break;
 		
 		case SEARCH_DIRRECTORY:
@@ -649,7 +650,7 @@ void SearchAndReplace::onSearchTextEdited()
 	if (mMode != SEARCH_FILE) // incremental search, only for search in file
 		return;
 	
-	searchFile (true, true);
+	searchFile (true, true, true);
 }
 
 /*!

@@ -104,7 +104,7 @@ protected:
 	void showMessage (QString status);
 	void updateSearchTextOnUI ();
 	
-	bool searchFile (bool next, bool incremental);
+	bool searchFile (bool next, bool incremental, bool enableLooping);
 	int replace(bool all);
 	
 	void replaceInDirrectory();
