@@ -1,8 +1,8 @@
 [Desktop Entry]
-Categories=Qt;Development;
+Categories=Development;Qt;IDE;
 Exec=monkeystudio
 Name=Monkey Studio IDE
-GenericName=IDE
+GenericName=MkS IDE
 Terminal=false
 Type=Application
 Icon=monkeystudio
