@@ -51,8 +51,10 @@ struct Q_MONKEY_EXPORT pAbbreviation
 
 namespace pAbbreviationsManager
 {
+	void registerShellCommand();
 	const QList<pAbbreviation> defaultAbbreviations();
 	const QList<pAbbreviation> availableAbbreviations();
+	const pAbbreviation getAbbreviation( const QString& macro, const QString& language );
 	void expandAbbreviation( pEditor* );
 
 };

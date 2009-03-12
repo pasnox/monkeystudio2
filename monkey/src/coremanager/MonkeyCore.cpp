@@ -39,6 +39,7 @@
 #include "../consolemanager/pConsoleManager.h"
 #include "../queuedstatusbar/QueuedStatusBar.h"
 #include "../shellmanager/MkSShellInterpreter.h"
+#include "../abbreviationsmanager/pAbbreviationsManager.h"
 
 #include "../maininterface/ui/UISettings.h"
 #include "../maininterface/ui/UITranslator.h"
@@ -96,9 +97,10 @@ void MonkeyCore::init()
 	showMessage( &splash, tr( "Initializing Console..." ) );
 	consoleManager();
 	
-	// init shell
+	// init shell && commands
 	showMessage( &splash, tr( "Initializing Shell..." ) );
 	interpreter();
+	pAbbreviationsManager::registerShellCommand();
 
 	// init main window
 	showMessage( &splash, tr( "Initializing Main Window..." ) );

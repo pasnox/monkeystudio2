@@ -5,73 +5,6 @@
 
 QPointer<MkSShellInterpreter> MkSShellInterpreter::mInstance = 0;
 
-QString interpretAbbreviation( const QString&, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter )
-{
-	Q_UNUSED( interpreter );
-	
-	if ( arguments.isEmpty() )
-	{
-		*result = -1;
-		return QString( "Operation not defined. Available operations is 'add', 'del', 'show'" );
-	}
-	
-	if ( "add" != arguments[0] && 
-		"del" != arguments[0] && 
-		"show" != arguments[0] )
-	{
-		if ( result )
-		{
-			*result = MkSShellInterpreter::InvalidCommand;
-		}
-		
-		return QString( "Unknown command: '%1'" ).arg( arguments[0] );
-	}
-	
-	if ( arguments[0] == "add" )
-	{
-		if ( arguments.size() != 4 )
-		{
-			if ( result )
-			{
-				*result = MkSShellInterpreter::InvalidCommand;
-			}
-			
-			return QString("'add' command has 4 arguments, %1 given").arg (arguments.size());
-		}
-		
-		const QString macro = arguments [0];
-		const QString description = arguments [1];
-		const QString language = arguments [2];
-		const QString code = arguments [3];
-		
-		if ( macro.isEmpty() || description.isEmpty() || language.isEmpty() || code.isEmpty())
-		{
-			if ( result )
-			{
-				*result = MkSShellInterpreter::InvalidCommand;
-			}
-			return  QString( "Can't add abbreviation '%1' for language '%2'." ).arg( macro ).arg( language );
-		}
-	}
-	
-	if (arguments[0] == "del")
-	{
-		//TODO
-	}
-	
-	if (arguments[0] == "show")
-	{
-		//TODO
-	}
-	
-	if ( result )
-	{
-		*result = 0;
-	}
-	
-	return QString::null;
-}
-
 QString MkSShellInterpreter::interpretHelp( const QString& command, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter )
 {
 	Q_UNUSED( command );
@@ -95,7 +28,7 @@ QString MkSShellInterpreter::interpretHelp( const QString& command, const QStrin
 		
 		if ( result )
 		{
-			*result = interpreter->mCommandHelps.contains( cmd ) ? 0 : InvalidCommand;
+			*result = interpreter->mCommandHelps.contains( cmd ) ? 0 : MkSShellInterpreter::InvalidCommand;
 		}
 		
 		return usage;
@@ -104,7 +37,7 @@ QString MkSShellInterpreter::interpretHelp( const QString& command, const QStrin
 	// error
 	if ( result )
 	{
-		*result = InvalidCommand;
+		*result = MkSShellInterpreter::InvalidCommand;
 	}
 	
 	return tr( "'help' command accepts only one parameter. %1 given" ).arg( arguments.count() );
@@ -124,7 +57,6 @@ MkSShellInterpreter::MkSShellInterpreter( QObject* parent )
 	: QObject( parent ), pConsoleCommand()
 {
 	addCommandImplementation( "help", interpretHelp, tr( "Type 'help' and name of command" ) );
-	addCommandImplementation( "abbreviation", interpretAbbreviation, tr( "Don't use\nthis funciton!!!" ) );
 }
 
 QString MkSShellInterpreter::usage( const QString& command ) const
@@ -145,7 +77,7 @@ QString MkSShellInterpreter::interpret( const QString& command, int* result ) co
 	{
 		if ( result )
 		{
-			*result = InvalidCommand;
+			*result = MkSShellInterpreter::InvalidCommand;
 		}
 		
 		return tr( "Invalid command: %1" ).arg( command );
@@ -155,7 +87,7 @@ QString MkSShellInterpreter::interpret( const QString& command, int* result ) co
 	const QString cmd = parts.takeFirst();
 	const QString commandOutput = mCommandImplementations[ cmd ]( cmd, parts, result, instance );
 	
-	emit instance->commandExecuted( command, commandOutput, result ? *result : NoResultVariable );
+	emit instance->commandExecuted( command, commandOutput, result ? *result : MkSShellInterpreter::NoResultVariable );
 	
 	return commandOutput;
 }

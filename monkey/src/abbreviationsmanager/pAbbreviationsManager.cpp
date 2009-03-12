@@ -30,8 +30,148 @@
 #include "../qscintillamanager/pEditor.h"
 #include "../coremanager/MonkeyCore.h"
 #include "../settingsmanager/Settings.h"
+#include "../shellmanager/MkSShellInterpreter.h"
 
 #include <qscintilla.h>
+
+#include <QDebug>
+
+QString interpretAbbreviation( const QString& command, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter )
+{
+	Q_UNUSED( command );
+	Q_UNUSED( interpreter );
+	const QStringList allowedOperations = QStringList( "add" ) << "del" << "show" << "list";
+	
+	if ( result )
+	{
+		*result = 0;
+	}
+	
+	if ( arguments.isEmpty() )
+	{
+		if ( result )
+		{
+			*result = MkSShellInterpreter::InvalidCommand;
+		}
+		
+		return MkSShellInterpreter::tr( "Operation not defined. Available operations are: %1." ).arg( allowedOperations.join( ", " ) );
+	}
+	
+	const QString operation = arguments.first();
+	
+	if ( !allowedOperations.contains( operation ) )
+	{
+		if ( result )
+		{
+			*result = MkSShellInterpreter::InvalidCommand;
+		}
+		
+		return MkSShellInterpreter::tr( "Unknown operation: '%1'." ).arg( operation );
+	}
+	
+	if ( operation == "add" )
+	{
+		if ( arguments.size() != 5 )
+		{
+			if ( result )
+			{
+				*result = MkSShellInterpreter::InvalidCommand;
+			}
+			
+			return MkSShellInterpreter::tr( "'add' operation have 4 arguments, %1 given." ).arg( arguments.count() -1 );
+		}
+		
+		const QString macro = arguments.at( 1 );
+		const QString description = arguments.at( 2 );
+		const QString language = arguments.at( 3 );
+		const QString code = arguments.at( 4 );
+	}
+	
+	if ( operation == "del" )
+	{
+		//TODO
+	}
+	
+	if ( operation == "show" )
+	{
+		if ( arguments.size() != 3 )
+		{
+			if ( result )
+			{
+				*result = MkSShellInterpreter::InvalidCommand;
+			}
+			
+			return MkSShellInterpreter::tr( "'show' operation have 2 arguments, %1 given." ).arg( arguments.count() -1 );
+		}
+		
+		const QString macro = arguments.at( 1 );
+		const QString language = arguments.at( 2 );
+		const pAbbreviation abbreviation = pAbbreviationsManager::getAbbreviation( macro, language );
+		
+		if ( abbreviation.Template.isEmpty() )
+		{
+			return MkSShellInterpreter::tr( "Macro not found." );
+		}
+		
+		QStringList output;
+		
+		output << QString( "%1:" ).arg( abbreviation.Description );
+		output << abbreviation.Code;
+		
+		return output.join( "\n" );
+	}
+	
+	if ( operation == "list" )
+	{
+		if ( arguments.size() != 2 )
+		{
+			if ( result )
+			{
+				*result = MkSShellInterpreter::InvalidCommand;
+			}
+			
+			return MkSShellInterpreter::tr( "'list' operation have 1 argument, %1 given." ).arg( arguments.count() -1 );
+		}
+		
+		const QString language = arguments.at( 1 );
+		QStringList output;
+		
+		foreach ( const pAbbreviation& abbreviation, pAbbreviationsManager::availableAbbreviations() )
+		{
+			if ( abbreviation.Language == language )
+			{
+				output << abbreviation.Template;
+			}
+		}
+		
+		if ( !output.isEmpty() )
+		{
+			output.prepend( MkSShellInterpreter::tr( "Found macros:" ) );
+		}
+		else
+		{
+			output << MkSShellInterpreter::tr( "No macros found." );
+		}
+		
+		return output.join( "\n" );
+	}
+	
+	return QString::null;
+}
+
+void pAbbreviationsManager::registerShellCommand()
+{
+	QString help = MkSShellInterpreter::tr
+	(
+		"This command manage the abbreviations, usage:\n"
+		"\tabbreviation add [macro] [description] [language] [code]\n"
+		"\tabbreviation del [macro] [language]\n"
+		"\tabbreviation show [macro] [language]\n"
+		"\tabbreviation list [language]\n"
+	);
+	
+	MonkeyCore::interpreter()->addCommandImplementation( "abbreviation", interpretAbbreviation, help );
+}
 
 const QList<pAbbreviation> pAbbreviationsManager::defaultAbbreviations()
 {
@@ -68,6 +208,19 @@ const QList<pAbbreviation> pAbbreviationsManager::availableAbbreviations()
 		mAbbreviations << defaultAbbreviations();
 	// return abbreviations
 	return mAbbreviations;
+}
+
+const pAbbreviation pAbbreviationsManager::getAbbreviation( const QString& macro, const QString& language )
+{
+	foreach ( const pAbbreviation& abbreviation, availableAbbreviations() )
+	{
+		if ( abbreviation.Template == macro && abbreviation.Language == language )
+		{
+			return abbreviation;
+		}
+	}
+	
+	return pAbbreviation();
 }
 
 void pAbbreviationsManager::expandAbbreviation( pEditor* e )
@@ -141,5 +294,3 @@ void pAbbreviationsManager::expandAbbreviation( pEditor* e )
 		}
 	}
 }
-
-
