@@ -1,6 +1,7 @@
 #include "../objects/MonkeyExport.h"
 #include "../objects/pSettings.h"
 #include "../objects/QSingleton.h"
+#include "../objects/GetOpt.h"
 
 #include "../widgets/pFilesListWidget.h"
 #include "../widgets/pTabBar.h"
@@ -24,3 +25,5 @@
 #include "../widgets/pTreeComboBox.h"
 #include "../widgets/pQueuedMessageWidget.h"
 #include "../widgets/pQueuedStatusBar.h"
+#include "../widgets/pConsole.h"
+#include "../widgets/pConsoleCommand.h"

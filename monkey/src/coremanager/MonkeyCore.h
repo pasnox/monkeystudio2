@@ -47,6 +47,7 @@ class pWorkspace;
 class QStatusBar;
 class pConsoleManager;
 class QueuedStatusBar;
+class MkSShellInterpreter;
 
 class Q_MONKEY_EXPORT MonkeyCore : public QObject
 {
@@ -66,6 +67,7 @@ public:
 	static pWorkspace* workspace();
 	static pConsoleManager* consoleManager();
 	static QueuedStatusBar* statusBar();
+	static MkSShellInterpreter* interpreter();
 // variablemaanger
 // templates manager
 

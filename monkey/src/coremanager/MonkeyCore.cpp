@@ -9,7 +9,7 @@
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
 ** Home Page : http://www.monkeystudio.org
 **
-		Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@
 #include "../workspace/pWorkspace.h"
 #include "../consolemanager/pConsoleManager.h"
 #include "../queuedstatusbar/QueuedStatusBar.h"
+#include "../shellmanager/MkSShellInterpreter.h"
 
 #include "../maininterface/ui/UISettings.h"
 #include "../maininterface/ui/UITranslator.h"
@@ -94,6 +95,10 @@ void MonkeyCore::init()
 	// start console manager
 	showMessage( &splash, tr( "Initializing Console..." ) );
 	consoleManager();
+	
+	// init shell
+	showMessage( &splash, tr( "Initializing Shell..." ) );
+	interpreter();
 
 	// init main window
 	showMessage( &splash, tr( "Initializing Main Window..." ) );
@@ -212,4 +217,11 @@ QueuedStatusBar* MonkeyCore::statusBar()
 	if ( !mInstances.contains( &QueuedStatusBar::staticMetaObject ) )
 		mInstances[&QueuedStatusBar::staticMetaObject] = new QueuedStatusBar( mainWindow() );
 	return qobject_cast<QueuedStatusBar*>( mInstances[&QueuedStatusBar::staticMetaObject] );
+}
+
+MkSShellInterpreter* MonkeyCore::interpreter()
+{
+	if ( !mInstances.contains( &MkSShellInterpreter::staticMetaObject ) )
+		mInstances[&MkSShellInterpreter::staticMetaObject] = MkSShellInterpreter::instance( qApp );
+	return qobject_cast<MkSShellInterpreter*>( mInstances[&MkSShellInterpreter::staticMetaObject] );
 }

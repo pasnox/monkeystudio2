@@ -98,5 +98,13 @@ SOURCES	+= pQueuedStatusBar.cpp
 HEADERS	+= pFileDialog.h
 SOURCES	+= pFileDialog.cpp
 # pColorButton
-SOURCES	+= widgets/pColorButton.cpp
-HEADERS	+= widgets/pColorButton.h
+SOURCES	+= pColorButton.cpp
+HEADERS	+= pColorButton.h
+# GetOpt
+HEADERS	+= GetOpt.h
+SOURCES	+= GetOpt.cpp
+# pConsole
+HEADERS	+= pConsole.h \
+  pConsoleCommand.h
+SOURCES	+= pConsole.cpp \
+  pConsoleCommand.cpp
