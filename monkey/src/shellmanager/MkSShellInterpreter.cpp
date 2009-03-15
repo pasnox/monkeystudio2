@@ -1,8 +1,10 @@
 #include "MkSShellInterpreter.h"
-#include "GetOpt.h"
+#include "../coremanager/MonkeyCore.h"
+#include "../settingsmanager/Settings.h"
 
 #include <QDebug>
 
+const QString MkSShell_DirName = "mks_scripts";
 QPointer<MkSShellInterpreter> MkSShellInterpreter::mInstance = 0;
 
 QString MkSShellInterpreter::interpretHelp( const QString& command, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter )
@@ -51,6 +53,20 @@ MkSShellInterpreter* MkSShellInterpreter::instance( QObject* parent )
 	}
 	
 	return mInstance;
+}
+
+QString MkSShellInterpreter::sourceScriptsPath()
+{
+	//QString path = QString( "%1/%2" ).arg( PACKAGE_DATAS ).arg( MkSShell_DirName );
+}
+
+QString MkSShellInterpreter::targetScriptsPath()
+{
+	/*
+	QString dir = QFileInfo( MonkeyCore::settings()->fileName() ).absoluteFilePath();
+	
+	return QDir::cleanPath( dir +"/" +MkSShell_DirName );
+	*/
 }
 
 MkSShellInterpreter::MkSShellInterpreter( QObject* parent )

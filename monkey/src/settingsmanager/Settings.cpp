@@ -38,6 +38,80 @@ Settings::Settings( QObject* o )
 	: pSettings( o )
 {}
 
+QStringList Settings::storagePaths( StoragePath type ) const
+{
+	const QString appPath = qApp->applicationDirPath();
+	bool appIsInstalled = false;
+	QString basePath;
+
+#ifdef Q_OS_WIN
+	appIsInstalled = QFile::exists( QString( "%1/templates" ).arg( appPath ) );
+	basePath = appPath;
+#elif defined Q_OS_MAC
+	appIsInstalled = QFile::exists( QString( "%1/../Resources/templates" ).arg( appPath ) );
+	basePath = QString( "%1/../Resources" ).arg( appPath );
+#else
+	appIsInstalled = QFile::exists( PACKAGE_PREFIX ) && QFile::exists( PACKAGE_DATAS );
+	basePath = PACKAGE_DATAS;
+#endif
+
+	if ( !appIsInstalled )
+	{
+		return storagePathsOutOfBox( type, appPath );
+	}
+	
+	switch ( type )
+	{
+		case SP_APIS:
+			return QStringList( QDir::cleanPath( QString( "%1/apis" ).arg( basePath ) ) );
+			break;
+		case SP_TEMPLATES:
+			return QStringList( QDir::cleanPath( QString( "%1/templates" ).arg( basePath ) ) );
+			break;
+		case SP_TRANSLATIONS:
+			return QStringList( QDir::cleanPath( QString( "%1/translations" ).arg( basePath ) ) );
+			break;
+		case SP_MKS_SCRIPTS:
+			return QStringList( QDir::cleanPath( QString( "%1/mks_scripts" ).arg( basePath ) ) );
+			break;
+	}
+	
+	return QStringList();
+}
+
+QStringList Settings::storagePathsOutOfBox( StoragePath type, const QString& appPath ) const
+{
+	QString basePath = appPath;
+#ifdef Q_OS_MAC
+	basePath.append( "/../../../.." );
+	/*
+		templatesPath = "../../../../templates";
+		translationsPath = "../../../../translations";
+		apisPath = "../../../../ctags/apis";
+		*/
+#elif defined Q_OS_WIN
+	basePath.append( "/.." );
+#else
+	basePath.append( "/.." );
+#endif
+
+	switch ( type )
+	{
+		case SP_APIS:
+			return QStringList( QDir::cleanPath( QString( "%1/ctags/apis" ).arg( basePath ) ) );
+			break;
+		case SP_TEMPLATES:
+			return QStringList( QDir::cleanPath( QString( "%1/templates" ).arg( basePath ) ) );
+			break;
+		case SP_TRANSLATIONS:
+			return QStringList( QDir::cleanPath( QString( "%1/translations" ).arg( basePath ) ) );
+			break;
+		case SP_MKS_SCRIPTS:
+			return QStringList( QDir::cleanPath( QString( "%1/mks_scripts" ).arg( basePath ) ) );
+			break;
+	}
+}
+
 void Settings::setDefaultSettings()
 {
 	const QString appPath = qApp->applicationDirPath();

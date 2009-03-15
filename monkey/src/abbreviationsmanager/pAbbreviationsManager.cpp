@@ -36,6 +36,73 @@
 
 #include <QDebug>
 
+bool pAbbreviationsManagerV2::writeAbbreviations( const pAbbreviationList& abbreviations ) const
+{
+	return false;
+}
+
+bool pAbbreviationsManagerV2::readAbbreviations( pAbbreviationList& abbreviations ) const
+{
+	/*
+	QString dir = QFileInfo( MonkeyCore::settings()->getIniFile( "fake", "fake" ) ).absoluteFilePath();
+	dir += ""
+	*/
+	return false;
+}
+
+bool pAbbreviationsManagerV2::addAbbreviation( const pAbbreviation& abbreviation )
+{
+	pAbbreviationList list = abbreviations();
+	
+	foreach ( const pAbbreviation& abbr, list )
+	{
+		if ( abbr.Template == abbreviation.Template && abbr.Language == abbreviation.Language )
+		{
+			list.removeOne( abbr );
+			break;
+		}
+	}
+	
+	list << abbreviation;
+	
+	return writeAbbreviations( list );
+}
+
+bool pAbbreviationsManagerV2::addAbbreviations( const pAbbreviationList& abbreviations )
+{
+	pAbbreviationList list = this->abbreviations();
+	
+	foreach ( const pAbbreviation& oAbbr, list )
+	{
+		foreach ( const pAbbreviation& nAbbr, abbreviations )
+		{
+			if ( oAbbr.Template == nAbbr.Template && oAbbr.Language == nAbbr.Language )
+			{
+				list.removeOne( oAbbr );
+				break;
+			}
+		}
+	}
+	
+	list << abbreviations;
+	
+	return writeAbbreviations( list );
+}
+
+bool pAbbreviationsManagerV2::setAbbreviations( const pAbbreviationList& abbreviations )
+{
+	return writeAbbreviations( abbreviations );
+}
+
+pAbbreviationList pAbbreviationsManagerV2::abbreviations() const
+{
+	pAbbreviationList list;
+	
+	readAbbreviations( list );
+	
+	return list;
+}
+
 QString interpretAbbreviation( const QString& command, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter )
 {
 	Q_UNUSED( command );

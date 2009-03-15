@@ -47,6 +47,31 @@ struct Q_MONKEY_EXPORT pAbbreviation
 	QString Language;
 	QString Code;
 
+	bool operator==( const pAbbreviation& other ) const
+	{
+		return Template == other.Template && Description == other.Description &&
+			Language == other.Language && Code == other.Code;
+	}
+	
+	bool operator!=( const pAbbreviation& other ) const
+	{
+		return !operator==( other );
+	}
+};
+
+typedef QList<pAbbreviation> pAbbreviationList;
+
+class pAbbreviationsManagerV2
+{
+public:
+	bool addAbbreviation( const pAbbreviation& abbreviation );
+	bool addAbbreviations( const pAbbreviationList& abbreviations );
+	bool setAbbreviations( const pAbbreviationList& abbreviations );
+	pAbbreviationList abbreviations() const;
+
+protected:
+	bool writeAbbreviations( const pAbbreviationList& abbreviations ) const;
+	bool readAbbreviations( pAbbreviationList& abbreviations ) const;
 };
 
 namespace pAbbreviationsManager
