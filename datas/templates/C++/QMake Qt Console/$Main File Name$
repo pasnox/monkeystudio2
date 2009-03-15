@@ -1,0 +1,15 @@
+#include <QCoreApplication>
+
+int main( int argc, char** argv )
+{
+	// create application
+	QCoreApplication app( argc, argv );
+
+	// init application
+	app.setApplicationName( "$Project Name$" );
+
+	qWarning( "$Project Name$" );
+
+	// start application
+	return app.exec();
+}

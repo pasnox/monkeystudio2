@@ -1,0 +1,21 @@
+#include <QApplication>
+#include <QWidget>
+
+int main( int argc, char** argv )
+{
+	// create application
+	QApplication app( argc, argv );
+
+	// init application
+	app.setApplicationName( "$Project Name$" );
+
+	QWidget w;
+	w.setWindowTitle( "$Project Name$" );
+	w.show();
+
+	// connection
+	QObject::connect( &app, SIGNAL( lastWindowClosed() ), &app, SLOT( quit() ) );
+
+	// start application
+	return app.exec();
+}
