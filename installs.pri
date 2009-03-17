@@ -13,27 +13,16 @@ include( config.pri )
 	message( "You can change this by giving qmake parameters variables: prefix, plugins, datas" )
 
 	# templates
-	monkey_templates.path	= $${PACKAGE_DATAS}
-	monkey_templates.files	= templates
-	monkey_templates.CONFIG += no_check_exist
-
-	# apis
-	monkey_apis.path	= $${PACKAGE_DATAS}/apis
-	monkey_apis.files	= ctags/apis/*.api
-	monkey_apis.CONFIG += no_check_exist
-
-	# translations
-	monkey_translations.path	= $${PACKAGE_DATAS}/translations
-	monkey_translations.files	= translations/*.qm
-	monkey_translations.CONFIG += no_check_exist
+	monkey_datas.path	= $${PACKAGE_DATAS}
+	monkey_datas.files	= datas/*
+	monkey_datas.CONFIG += no_check_exist
 
 	# debugger know_list_and_id
-	monkey_debuggerIniFile.path	= $${PACKAGE_PLUGINS}/GNUdbg
-	monkey_debuggerIniFile.files	= plugins/debugger/GNUDebugger/file
-	monkey_debuggerIniFile.CONFIG += no_check_exist
+	#monkey_debuggerIniFile.path	= $${PACKAGE_PLUGINS}/GNUdbg
+	#monkey_debuggerIniFile.files	= plugins/debugger/GNUDebugger/file
+	#monkey_debuggerIniFile.CONFIG += no_check_exist
 
-
-	INSTALLS	= monkey_templates monkey_apis monkey_translations monkey_debuggerIniFile
+	INSTALLS	= monkey_datas
 
 	unix:!mac {
 		# plugins
