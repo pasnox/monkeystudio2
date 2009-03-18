@@ -181,7 +181,7 @@ UISettings::UISettings( QWidget* p )
 
 void UISettings::loadSettings()
 {
-	pSettings* s = MonkeyCore::settings();
+	Settings* s = MonkeyCore::settings();
 	QString sp;
 	
 	// General
@@ -199,9 +199,9 @@ void UISettings::loadSettings()
 	cbRestoreSession->setChecked( restoreSessionOnStartup() );
 
 	// Paths
-	pleTemplatesPaths->setValues( pTemplatesManager::instance()->templatesPath() );
-	pleTranslationsPaths->setValues( s->value( "Translations/Path" ).toStringList() );
-	plePluginsPaths->setValues( s->value( "Plugins/Path" ).toStringList() );
+	pleTemplatesPaths->setValues( s->storagePaths( Settings::SP_TEMPLATES ) );
+	pleTranslationsPaths->setValues( s->storagePaths( Settings::SP_TRANSLATIONS ) );
+	plePluginsPaths->setValues( s->storagePaths( Settings::SP_PLUGINS ) );
 
 	// Editor
 	//  General
@@ -326,7 +326,7 @@ void UISettings::loadSettings()
 
 void UISettings::saveSettings()
 {
-	pSettings* s = MonkeyCore::settings();
+	Settings* s = MonkeyCore::settings();
 	QString sp;
 
 	// General
@@ -344,9 +344,9 @@ void UISettings::saveSettings()
 	setRestoreSessionOnStartup( cbRestoreSession->isChecked() );
 
 	// Paths
-	pTemplatesManager::instance()->setTemplatesPath( pleTemplatesPaths->values() );
-	s->setValue( "Translations/Path", pleTranslationsPaths->values() );
-	s->setValue( "Plugins/Path", plePluginsPaths->values() );
+	s->setStoragePaths( Settings::SP_TEMPLATES, pleTemplatesPaths->values() );
+	s->setStoragePaths( Settings::SP_TRANSLATIONS, pleTranslationsPaths->values() );
+	s->setStoragePaths( Settings::SP_PLUGINS, plePluginsPaths->values() );
 
 	// Editor
 	//  General

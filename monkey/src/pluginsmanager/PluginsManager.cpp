@@ -55,7 +55,7 @@ void PluginsManager::loadsPlugins()
 			qWarning( qPrintable( tr( "Failed to load static plugin" ) ) );
 	// load dynamic plugins
 	QDir d;
-	foreach ( const QString s, MonkeyCore::settings()->value( "Plugins/Path" ).toStringList() )
+	foreach ( const QString s, MonkeyCore::settings()->storagePaths( Settings::SP_PLUGINS ) )
 	{
 		d.setPath( QDir::isRelativePath( s ) ? qApp->applicationDirPath().append( "/%1" ).arg( s ) : s );
 		// load all plugins

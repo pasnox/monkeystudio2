@@ -64,7 +64,7 @@ GNUDebugger::GNUDebugger()
 		// auto find file
 
 		// load pattern
-		QStringList pluginsPath = MonkeyCore::settings()->value( "Plugins/Path" ).toStringList();
+		QStringList pluginsPath = MonkeyCore::settings()->storagePaths( Settings::SP_PLUGINS );
 		QFileInfoList files;
 		// get all files in plugins path nammed 'gdbparsing.txt'
 		QDir pluginsDir;

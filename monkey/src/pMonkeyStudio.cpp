@@ -83,7 +83,7 @@ void pMonkeyStudio::loadTranslations()
 	if ( mLanguage != "english" )
 	{
 		QTranslator* t = new QTranslator( qApp );
-		foreach ( const QString& path, MonkeyCore::settings()->value( "Translations/Path" ).toStringList() )
+		foreach ( const QString& path, MonkeyCore::settings()->storagePaths( Settings::SP_TRANSLATIONS ) )
 		{
 			QString fn = QString( "%1/monkey_%2" ).arg( path, mLanguage );
 			if ( QFileInfo( fn ).isRelative() )

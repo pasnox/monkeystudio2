@@ -71,6 +71,34 @@ QStringList Settings::storagePaths( StoragePath type ) const
 		return result;
 	}
 	
+	// Compatibility layer with old mks version (before 1.8.3.3)
+	Settings* settings = const_cast<Settings*>( this );
+	
+	if ( type == SP_TEMPLATES && contains( "Templates/DefaultDirectories" ) )
+	{
+		settings->setStoragePaths( type, value( "Templates/DefaultDirectories" ).toStringList() );
+		settings->remove( "Templates/DefaultDirectories" );
+	}
+	else if ( type == SP_TRANSLATIONS && contains( "Translations/Path" ) )
+	{
+		settings->setStoragePaths( type, value( "Translations/Path" ).toStringList() );
+		settings->remove( "Translations/Path" );
+	}
+	else if ( type == SP_PLUGINS && contains( "Plugins/Path" ) )
+	{
+		settings->setStoragePaths( type, value( "Plugins/Path" ).toStringList() );
+		settings->remove( "Plugins/Path" );
+	}
+	
+	result = value( QString( "Paths/%1" ).arg( storageToString( type ) ) ).toStringList();
+	
+	if ( !result.isEmpty() )
+	{
+		return result;
+	}
+	
+	// End compatibility layer
+	
 	const QString appPath = qApp->applicationDirPath();
 	bool appIsInstalled = false;
 	QString basePath;
