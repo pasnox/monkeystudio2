@@ -314,13 +314,13 @@ void UISettings::loadSettings()
 		on_cbLexersHighlightingLanguages_currentIndexChanged( cbLexersHighlightingLanguages->itemText( 0 ) );
 
 	//  Abbreviations
-	foreach ( pAbbreviation a, pAbbreviationsManager::availableAbbreviations() )
+	foreach ( pAbbreviation a, MonkeyCore::abbreviationsManager()->abbreviations() )
 	{
 		QTreeWidgetItem* it = new QTreeWidgetItem( twAbbreviations );
-		it->setText( 0, a.Template );
+		it->setText( 0, a.Macro );
 		it->setText( 1, a.Description );
 		it->setText( 2, a.Language );
-		it->setData( 0, Qt::UserRole, a.Code );
+		it->setData( 0, Qt::UserRole, a.Snippet );
 	}
 }
 
