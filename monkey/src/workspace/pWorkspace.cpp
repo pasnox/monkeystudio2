@@ -827,7 +827,9 @@ void pWorkspace::editExpandAbbreviation_triggered()
 {
 	pAbstractChild* c = currentChild();
 	if ( c )
-		pAbbreviationsManager::expandAbbreviation( c->currentEditor() );
+	{
+		MonkeyCore::abbreviationsManager()->expandMacro( c->currentEditor() );
+	}
 }
 
 void pWorkspace::editPrepareAPIs_triggered()
