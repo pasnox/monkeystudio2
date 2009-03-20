@@ -48,6 +48,7 @@ class QStatusBar;
 class pConsoleManager;
 class QueuedStatusBar;
 class MkSShellInterpreter;
+class pAbbreviationsManager;
 
 class Q_MONKEY_EXPORT MonkeyCore : public QObject
 {
@@ -68,6 +69,7 @@ public:
 	static pConsoleManager* consoleManager();
 	static QueuedStatusBar* statusBar();
 	static MkSShellInterpreter* interpreter();
+	static pAbbreviationsManager* abbreviationsManager();
 // variablemaanger
 // templates manager
 

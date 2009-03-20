@@ -100,7 +100,6 @@ void MonkeyCore::init()
 	// init shell && commands
 	showMessage( &splash, tr( "Initializing Shell..." ) );
 	interpreter();
-	pAbbreviationsManager::registerShellCommand();
 
 	// init main window
 	showMessage( &splash, tr( "Initializing Main Window..." ) );
@@ -109,6 +108,10 @@ void MonkeyCore::init()
 	// init pluginsmanager
 	showMessage( &splash, tr( "Initializing Plugins..." ) );
 	pluginsManager()->loadsPlugins();
+	
+	// init abbreviations manager
+	showMessage( &splash, tr( "Initializing abbreviations manager..." ) );
+	abbreviationsManager()->initialize();
 	
 	// restore window state
 	showMessage( &splash, tr( "Restoring Workspace..." ) );
@@ -226,4 +229,11 @@ MkSShellInterpreter* MonkeyCore::interpreter()
 	if ( !mInstances.contains( &MkSShellInterpreter::staticMetaObject ) )
 		mInstances[&MkSShellInterpreter::staticMetaObject] = MkSShellInterpreter::instance( qApp );
 	return qobject_cast<MkSShellInterpreter*>( mInstances[&MkSShellInterpreter::staticMetaObject] );
+}
+
+pAbbreviationsManager* MonkeyCore::abbreviationsManager()
+{
+	if ( !mInstances.contains( &pAbbreviationsManager::staticMetaObject ) )
+		mInstances[&pAbbreviationsManager::staticMetaObject] = new pAbbreviationsManager( qApp );
+	return qobject_cast<pAbbreviationsManager*>( mInstances[&pAbbreviationsManager::staticMetaObject] );
 }
