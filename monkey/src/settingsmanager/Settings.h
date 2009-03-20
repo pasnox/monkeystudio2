@@ -66,6 +66,8 @@ public:
 	QStringList storagePaths( StoragePath type ) const;
 	void setStoragePaths( StoragePath type, const QStringList& paths );
 	
+	QString homeFilePath( const QString& filePath ) const;
+	
 	virtual void setDefaultSettings();
 	void setDefaultCppSyntaxHighlight();
 

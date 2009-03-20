@@ -139,6 +139,14 @@ void Settings::setStoragePaths( StoragePath type, const QStringList& paths )
 	setValue( QString( "Paths/%1" ).arg( storageToString( type ) ), paths );
 }
 
+QString Settings::homeFilePath( const QString& filePath ) const
+{
+	QString path = QFileInfo( fileName() ).absolutePath();
+	QDir dir( path );
+	
+	return QDir::cleanPath( dir.filePath( filePath ) );
+}
+
 QStringList Settings::storagePathsOutOfBox( StoragePath type, const QString& appPath ) const
 {
 	QString basePath = appPath;
