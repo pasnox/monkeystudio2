@@ -26,9 +26,8 @@ public:
 	};
 	
 	static MkSShellInterpreter* instance( QObject* parent = 0 );
-	static QString sourceScriptsPath();
-	static QString targetScriptsPath();
 	
+	bool loadScript( const QString& fileName );
 	QString usage( const QString& command ) const;
 	QString interpret( const QString& command, int* result ) const;
 	

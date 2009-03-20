@@ -2,6 +2,7 @@
 #include "../coremanager/MonkeyCore.h"
 #include "../settingsmanager/Settings.h"
 
+#include <QFile>
 #include <QDebug>
 
 const QString MkSShell_DirName = "mks_scripts";
@@ -55,24 +56,38 @@ MkSShellInterpreter* MkSShellInterpreter::instance( QObject* parent )
 	return mInstance;
 }
 
-QString MkSShellInterpreter::sourceScriptsPath()
-{
-	//QString path = QString( "%1/%2" ).arg( PACKAGE_DATAS ).arg( MkSShell_DirName );
-}
-
-QString MkSShellInterpreter::targetScriptsPath()
-{
-	/*
-	QString dir = QFileInfo( MonkeyCore::settings()->fileName() ).absoluteFilePath();
-	
-	return QDir::cleanPath( dir +"/" +MkSShell_DirName );
-	*/
-}
-
 MkSShellInterpreter::MkSShellInterpreter( QObject* parent )
 	: QObject( parent ), pConsoleCommand()
 {
 	addCommandImplementation( "help", interpretHelp, tr( "Type 'help' and name of command" ) );
+}
+
+bool MkSShellInterpreter::loadScript( const QString& fileName )
+{
+	QFile file( fileName );
+	
+	// open file in text mode
+	if ( !file.open( QIODevice::ReadOnly | QIODevice::Text ) )
+	{
+		return false;
+	}
+	
+	QString buffer = QString::fromUtf8( file.readAll() );
+	
+	// execute each command line
+	foreach ( const QString& command, buffer.split( "\n" ) )
+	{
+		// ignore comments
+		if ( command.trimmed().startsWith( "#" ) )
+		{
+			continue;
+		}
+		
+		interpret( command, 0 );
+	}
+	
+	file.close();
+	return true;
 }
 
 QString MkSShellInterpreter::usage( const QString& command ) const
