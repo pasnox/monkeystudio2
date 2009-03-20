@@ -35,22 +35,36 @@
 #include <QList>
 
 class pEditor;
+class MkSShellInterpreter;
 
 struct Q_MONKEY_EXPORT pAbbreviation
 {
 	pAbbreviation() {}
-	pAbbreviation( const QString& t, const QString& d, const QString& l, const QString& c )
-		: Template( t ), Description( d ), Language( l ), Code( c ) {}
+	pAbbreviation( const QString& m, const QString& d, const QString& l, const QString& s )
+		: Macro( m ), Description( d ), Language( l ), Snippet( s ) {}
 
-	QString Template;
+	QString Macro;
 	QString Description;
 	QString Language;
-	QString Code;
+	QString Snippet;
+	
+	pAbbreviation& operator=( const pAbbreviation& other )
+	{
+		if ( *this != other )
+		{
+			Macro = other.Macro;
+			Description = other.Description;
+			Language = other.Language;
+			Snippet = other.Snippet;
+		}
+		
+		return *this;
+	}
 
 	bool operator==( const pAbbreviation& other ) const
 	{
-		return Template == other.Template && Description == other.Description &&
-			Language == other.Language && Code == other.Code;
+		return Macro == other.Macro && Description == other.Description &&
+			Language == other.Language && Snippet == other.Snippet;
 	}
 	
 	bool operator!=( const pAbbreviation& other ) const
@@ -61,27 +75,30 @@ struct Q_MONKEY_EXPORT pAbbreviation
 
 typedef QList<pAbbreviation> pAbbreviationList;
 
-class pAbbreviationsManagerV2
+class Q_MONKEY_EXPORT pAbbreviationsManager : public QObject
 {
+	Q_OBJECT
+	friend class MonkeyCore;
+	
 public:
-	bool addAbbreviation( const pAbbreviation& abbreviation );
-	bool addAbbreviations( const pAbbreviationList& abbreviations );
-	bool setAbbreviations( const pAbbreviationList& abbreviations );
-	pAbbreviationList abbreviations() const;
+	pAbbreviationsManager( QObject* parent = 0 );
+	
+	void clear();
+	void add( const pAbbreviation& abbreviation );
+	void add( const pAbbreviationList& abbreviations );
+	void set( const pAbbreviationList& abbreviations );
+	void remove( const pAbbreviation& abbreviation );
+	void remove( const pAbbreviationList& abbreviations );
+	void remove( const QString& macro, const QString& language );
+	const pAbbreviationList& abbreviations() const;
+	pAbbreviation abbreviation( const QString& macro, const QString& language ) const;
+	void expandMacro( pEditor* editor );
 
 protected:
-	bool writeAbbreviations( const pAbbreviationList& abbreviations ) const;
-	bool readAbbreviations( pAbbreviationList& abbreviations ) const;
-};
-
-namespace pAbbreviationsManager
-{
-	void registerShellCommand();
-	const QList<pAbbreviation> defaultAbbreviations();
-	const QList<pAbbreviation> availableAbbreviations();
-	const pAbbreviation getAbbreviation( const QString& macro, const QString& language );
-	void expandAbbreviation( pEditor* );
-
+	pAbbreviationList mAbbreviations;
+	
+	void initialize();
+	static QString commandInterpreter( const QString& command, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter );
 };
 
 #endif // PABBREVIATIONSMANAGER_H

@@ -31,83 +31,66 @@
 #include "../coremanager/MonkeyCore.h"
 #include "../settingsmanager/Settings.h"
 #include "../shellmanager/MkSShellInterpreter.h"
+#include "../queuedstatusbar/QueuedStatusBar.h"
 
 #include <qscintilla.h>
 
+#include <QFile>
+#include <QDir>
 #include <QDebug>
 
-bool pAbbreviationsManagerV2::writeAbbreviations( const pAbbreviationList& abbreviations ) const
+pAbbreviationsManager::pAbbreviationsManager( QObject* parent )
+	: QObject( parent )
 {
-	return false;
 }
 
-bool pAbbreviationsManagerV2::readAbbreviations( pAbbreviationList& abbreviations ) const
+void pAbbreviationsManager::initialize()
 {
-	/*
-	QString dir = QFileInfo( MonkeyCore::settings()->getIniFile( "fake", "fake" ) ).absoluteFilePath();
-	dir += ""
-	*/
-	return false;
-}
-
-bool pAbbreviationsManagerV2::addAbbreviation( const pAbbreviation& abbreviation )
-{
-	pAbbreviationList list = abbreviations();
+	// register command
+	QString help = MkSShellInterpreter::tr
+	(
+		"This command manage the abbreviations, usage:\n"
+		"\tabbreviation add [macro] [description] [language] [code]\n"
+		"\tabbreviation del [macro] [language]\n"
+		"\tabbreviation show [macro] [language]\n"
+		"\tabbreviation list [language]\n"
+		"\tabbreviation clear"
+	);
 	
-	foreach ( const pAbbreviation& abbr, list )
+	MonkeyCore::interpreter()->addCommandImplementation( "abbreviation", pAbbreviationsManager::commandInterpreter, help );
+	
+	// search abbreviations script
+	QString fn = QString( "%1/abbreviations.mks" ).arg( MonkeyCore::settings()->storageToString( Settings::SP_SCRIPTS ) );
+	QString fp = MonkeyCore::settings()->homeFilePath( fn );
+	
+	if ( !QFile::exists( fp ) )
 	{
-		if ( abbr.Template == abbreviation.Template && abbr.Language == abbreviation.Language )
+		foreach ( const QString& path, MonkeyCore::settings()->storagePaths( Settings::SP_SCRIPTS ) )
 		{
-			list.removeOne( abbr );
-			break;
-		}
-	}
-	
-	list << abbreviation;
-	
-	return writeAbbreviations( list );
-}
-
-bool pAbbreviationsManagerV2::addAbbreviations( const pAbbreviationList& abbreviations )
-{
-	pAbbreviationList list = this->abbreviations();
-	
-	foreach ( const pAbbreviation& oAbbr, list )
-	{
-		foreach ( const pAbbreviation& nAbbr, abbreviations )
-		{
-			if ( oAbbr.Template == nAbbr.Template && oAbbr.Language == nAbbr.Language )
+			fp = QDir( path ).filePath( "abbreviations.mks" );
+			
+			if ( !QFile::exists( fp ) )
 			{
-				list.removeOne( oAbbr );
-				break;
+				fp.clear();
 			}
 		}
 	}
 	
-	list << abbreviations;
-	
-	return writeAbbreviations( list );
+	// execute script
+	if ( !fp.isEmpty() )
+	{
+		if ( !MonkeyCore::interpreter()->loadScript( fp ) )
+		{
+			MonkeyCore::statusBar()->appendMessage( tr( "An error occur while loading script: %1" ).arg( fp ) );
+		}
+	}
 }
 
-bool pAbbreviationsManagerV2::setAbbreviations( const pAbbreviationList& abbreviations )
-{
-	return writeAbbreviations( abbreviations );
-}
-
-pAbbreviationList pAbbreviationsManagerV2::abbreviations() const
-{
-	pAbbreviationList list;
-	
-	readAbbreviations( list );
-	
-	return list;
-}
-
-QString interpretAbbreviation( const QString& command, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter )
+QString pAbbreviationsManager::commandInterpreter( const QString& command, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter )
 {
 	Q_UNUSED( command );
 	Q_UNUSED( interpreter );
-	const QStringList allowedOperations = QStringList( "add" ) << "del" << "show" << "list";
+	const QStringList allowedOperations = QStringList( "add" ) << "del" << "show" << "list" << "clear";
 	
 	if ( result )
 	{
@@ -145,18 +128,33 @@ QString interpretAbbreviation( const QString& command, const QStringList& argume
 				*result = MkSShellInterpreter::InvalidCommand;
 			}
 			
-			return MkSShellInterpreter::tr( "'add' operation have 4 arguments, %1 given." ).arg( arguments.count() -1 );
+			return MkSShellInterpreter::tr( "'add' operation take 4 arguments, %1 given." ).arg( arguments.count() -1 );
 		}
 		
 		const QString macro = arguments.at( 1 );
 		const QString description = arguments.at( 2 );
 		const QString language = arguments.at( 3 );
-		const QString code = arguments.at( 4 );
+		const QString snippet = QString( arguments.at( 4 ) ).replace( "\\n", "\n" );
+		
+		MonkeyCore::abbreviationsManager()->add( pAbbreviation( macro, description, language, snippet ) );
 	}
 	
 	if ( operation == "del" )
 	{
-		//TODO
+		if ( arguments.size() != 3 )
+		{
+			if ( result )
+			{
+				*result = MkSShellInterpreter::InvalidCommand;
+			}
+			
+			return MkSShellInterpreter::tr( "'del' operation take 2 arguments, %1 given." ).arg( arguments.count() -1 );
+		}
+		
+		const QString macro = arguments.at( 1 );
+		const QString language = arguments.at( 2 );
+		
+		MonkeyCore::abbreviationsManager()->remove( macro, language );
 	}
 	
 	if ( operation == "show" )
@@ -168,14 +166,14 @@ QString interpretAbbreviation( const QString& command, const QStringList& argume
 				*result = MkSShellInterpreter::InvalidCommand;
 			}
 			
-			return MkSShellInterpreter::tr( "'show' operation have 2 arguments, %1 given." ).arg( arguments.count() -1 );
+			return MkSShellInterpreter::tr( "'show' operation take 2 arguments, %1 given." ).arg( arguments.count() -1 );
 		}
 		
 		const QString macro = arguments.at( 1 );
 		const QString language = arguments.at( 2 );
-		const pAbbreviation abbreviation = pAbbreviationsManager::getAbbreviation( macro, language );
+		const pAbbreviation abbreviation = MonkeyCore::abbreviationsManager()->abbreviation( macro, language );
 		
-		if ( abbreviation.Template.isEmpty() )
+		if ( abbreviation.Macro.isEmpty() )
 		{
 			return MkSShellInterpreter::tr( "Macro not found." );
 		}
@@ -183,7 +181,7 @@ QString interpretAbbreviation( const QString& command, const QStringList& argume
 		QStringList output;
 		
 		output << QString( "%1:" ).arg( abbreviation.Description );
-		output << abbreviation.Code;
+		output << abbreviation.Snippet;
 		
 		return output.join( "\n" );
 	}
@@ -197,17 +195,17 @@ QString interpretAbbreviation( const QString& command, const QStringList& argume
 				*result = MkSShellInterpreter::InvalidCommand;
 			}
 			
-			return MkSShellInterpreter::tr( "'list' operation have 1 argument, %1 given." ).arg( arguments.count() -1 );
+			return MkSShellInterpreter::tr( "'list' operation take 1 argument, %1 given." ).arg( arguments.count() -1 );
 		}
 		
 		const QString language = arguments.at( 1 );
 		QStringList output;
 		
-		foreach ( const pAbbreviation& abbreviation, pAbbreviationsManager::availableAbbreviations() )
+		foreach ( const pAbbreviation& abbreviation, MonkeyCore::abbreviationsManager()->abbreviations() )
 		{
 			if ( abbreviation.Language == language )
 			{
-				output << abbreviation.Template;
+				output << abbreviation.Macro;
 			}
 		}
 		
@@ -223,65 +221,99 @@ QString interpretAbbreviation( const QString& command, const QStringList& argume
 		return output.join( "\n" );
 	}
 	
+	if ( operation == "clear" )
+	{
+		if ( arguments.size() != 1 )
+		{
+			if ( result )
+			{
+				*result = MkSShellInterpreter::InvalidCommand;
+			}
+			
+			return MkSShellInterpreter::tr( "'clear' operation take no arguments, %1 given." ).arg( arguments.count() -1 );
+		}
+		
+		MonkeyCore::abbreviationsManager()->clear();
+	}
+	
 	return QString::null;
 }
 
-void pAbbreviationsManager::registerShellCommand()
+void pAbbreviationsManager::clear()
 {
-	QString help = MkSShellInterpreter::tr
-	(
-		"This command manage the abbreviations, usage:\n"
-		"\tabbreviation add [macro] [description] [language] [code]\n"
-		"\tabbreviation del [macro] [language]\n"
-		"\tabbreviation show [macro] [language]\n"
-		"\tabbreviation list [language]\n"
-	);
-	
-	MonkeyCore::interpreter()->addCommandImplementation( "abbreviation", interpretAbbreviation, help );
+	mAbbreviations.clear();
 }
 
-const QList<pAbbreviation> pAbbreviationsManager::defaultAbbreviations()
-{
-	return QList<pAbbreviation>()
-	// C++
-	<< pAbbreviation( "classd", "class declaration", "C++", "class |\n{\npublic:\n};" )
-	<< pAbbreviation( "forb", "for statement", "C++", "for( |; ; )\n{\n}" )
-	<< pAbbreviation( "ifb", "if statement", "C++", "if( | )\n{\n}" )
-	<< pAbbreviation( "ife", "if else statement", "C++", "if( | )\n{\n}\nelse\n{\n}" )
-	<< pAbbreviation( "pr", "private", "C++", "private|" )
-	<< pAbbreviation( "pro", "protected", "C++", "protected|" )
-	<< pAbbreviation( "pu", "public", "C++", "public|" )
-	<< pAbbreviation( "structd", "struct declaration", "C++", "struct |\n{\n};" )
-	<< pAbbreviation( "switchb", "switch statement", "C++", "switch( | )\n{\n}" )
-	<< pAbbreviation( "whileb", "while statement", "C++", "while( | )\n{\n}" );
-}
-
-const QList<pAbbreviation> pAbbreviationsManager::availableAbbreviations()
-{
-	// get settings
-	pSettings* s = MonkeyCore::settings();
-	// values list
-	QList<pAbbreviation> mAbbreviations;
-	// read abbreviations from settings
-	int size = s->beginReadArray( "Abbreviations" );
-	for ( int i = 0; i < size; i++ )
+void pAbbreviationsManager::add( const pAbbreviation& abbreviation )
+{	
+	foreach ( const pAbbreviation& abbr, mAbbreviations )
 	{
-		s->setArrayIndex( i );
-		mAbbreviations << pAbbreviation( s->value( "Template" ).toString(), s->value( "Description" ).toString(), s->value( "Language" ).toString(), s->value( "Code" ).toString() );
+		if ( abbr.Macro == abbreviation.Macro && abbr.Language == abbreviation.Language )
+		{
+			mAbbreviations.removeOne( abbr );
+			break;
+		}
 	}
-	s->endArray();
-	// get default abbreviations if needed
-	if ( mAbbreviations.isEmpty() )
-		mAbbreviations << defaultAbbreviations();
-	// return abbreviations
+	
+	mAbbreviations << abbreviation;
+}
+
+void pAbbreviationsManager::add( const pAbbreviationList& abbreviations )
+{
+	foreach ( const pAbbreviation& oAbbr, mAbbreviations )
+	{
+		foreach ( const pAbbreviation& nAbbr, abbreviations )
+		{
+			if ( oAbbr.Macro == nAbbr.Macro && oAbbr.Language == nAbbr.Language )
+			{
+				mAbbreviations.removeOne( oAbbr );
+				break;
+			}
+		}
+	}
+	
+	mAbbreviations << abbreviations;
+}
+
+void pAbbreviationsManager::set( const pAbbreviationList& abbreviations )
+{
+	mAbbreviations = abbreviations;
+}
+
+void pAbbreviationsManager::remove( const pAbbreviation& abbreviation )
+{
+	mAbbreviations.removeOne( abbreviation );
+}
+
+void pAbbreviationsManager::remove( const pAbbreviationList& abbreviations )
+{
+	foreach ( const pAbbreviation& abbreviation, abbreviations )
+	{
+		mAbbreviations.removeOne( abbreviation );
+	}
+}
+
+void pAbbreviationsManager::remove( const QString& macro, const QString& language )
+{
+	foreach ( const pAbbreviation& abbreviation, mAbbreviations )
+	{
+		if ( abbreviation.Macro == macro && abbreviation.Language == language )
+		{
+			mAbbreviations.removeOne( abbreviation );
+		}
+	}
+}
+
+const pAbbreviationList& pAbbreviationsManager::abbreviations() const
+{
 	return mAbbreviations;
 }
 
-const pAbbreviation pAbbreviationsManager::getAbbreviation( const QString& macro, const QString& language )
+pAbbreviation pAbbreviationsManager::abbreviation( const QString& macro, const QString& language ) const
 {
-	foreach ( const pAbbreviation& abbreviation, availableAbbreviations() )
+	foreach ( const pAbbreviation& abbreviation, mAbbreviations )
 	{
-		if ( abbreviation.Template == macro && abbreviation.Language == language )
+		if ( abbreviation.Macro == macro && abbreviation.Language == language )
 		{
 			return abbreviation;
 		}
@@ -290,74 +322,117 @@ const pAbbreviation pAbbreviationsManager::getAbbreviation( const QString& macro
 	return pAbbreviation();
 }
 
-void pAbbreviationsManager::expandAbbreviation( pEditor* e )
+void pAbbreviationsManager::expandMacro( pEditor* editor )
 {
-	if ( !e || !e->lexer() )
+	// need valid editor & lexer
+	if ( !editor || !editor->lexer() )
+	{
 		return;
+	}
+	
 	// get current cursor position
-	const QPoint p = e->cursorPosition();
-	// get word template
-	QString t = e->text( p.y() ).left( p.x() );
+	const QPoint pos = editor->cursorPosition();
+	
+	// get macro
+	QString macro = editor->text( pos.y() ).left( pos.x() );
+	
 	// calculate the index
-	int i = t.lastIndexOf( " " );
+	int i = macro.lastIndexOf( " " );
 	if ( i == -1 )
-		i = t.lastIndexOf( "\t" );
-	// get true word template
-	t = t.mid( i ).trimmed();
+	{
+		i = macro.lastIndexOf( "\t" );
+	}
+	
+	// get clean macro
+	macro = macro.mid( i ).trimmed();
+	
+	if ( macro.isEmpty() )
+	{
+		MonkeyCore::statusBar()->appendMessage( tr( "Empty macro !" ), 1000 );
+		return;
+	}
+	
 	// get language
-	const QString lng = e->lexer()->language();
+	const QString lng = editor->lexer()->language();
+	
 	// look for abbreviation and lexer to replace
-	foreach ( pAbbreviation a, availableAbbreviations() )
+	foreach ( const pAbbreviation& abbreviation, mAbbreviations )
 	{
 		// if template is found for language
-		if ( a.Language == lng && a.Template == t )
+		if ( abbreviation.Language == lng && abbreviation.Macro == macro )
 		{
-			// select word template from document
-			e->setSelection( p.y(), i +1, p.y(), i +1 +t.length() );
-			// remove word template from document
-			e->removeSelectedText();
+			// begin undo
+			editor->beginUndoAction();
+			
+			// select macro in document
+			editor->setSelection( pos.y(), i +1, pos.y(), i +1 +macro.length() );
+			
+			// remove macro from document
+			editor->removeSelectedText();
+			
 			// for calculate final cursor position if it found a |
 			QPoint op;
 			int k;
+			
 			// get code lines
-			QStringList l = a.Code.split( "\n" );
+			QStringList lines = abbreviation.Snippet.split( "\n" );
 			int j = 0;
+			
 			// iterating code lines
-			foreach ( QString s, l )
+			foreach ( QString line, lines )
 			{
 				// looking for cursor position
-				k = s.indexOf( "|" );
+				k = line.indexOf( "|" );
+				
 				// calculate cursor position
 				if ( k != -1 )
 				{
-					op.ry() = p.y() +j;
+					op.ry() = pos.y() +j;
 					op.rx() = k +i +1;
-					s.replace( "|", "" );
+					line.replace( "|", "" );
 				}
+				
 				// if no last line
-				if ( j < l.count() -1 )
+				if ( j < lines.count() -1 )
 				{
 					// insert code line and an end of line
-					e->insert( s +"\n" );
+					editor->insert( line +"\n" );
 					// set cursor on next line
-					e->setCursorPosition( p.y() +j +1, 0 );
+					editor->setCursorPosition( pos.y() +j +1, 0 );
 				}
+				
 				// insert codel ine
 				else
-					e->insert( s );
+				{
+					editor->insert( line );
+				}
+				
 				// process indentation for code line if line is not first one
 				if ( j > 0 )
-					e->setIndentation( p.y() +j, e->indentation( p.y() ) +e->indentation( p.y() +j ) );
+				{
+					editor->setIndentation( pos.y() +j, editor->indentation( pos.y() ) +editor->indentation( pos.y() +j ) );
+				}
+				
 				// increment j for calculate correct line
 				j++;
 			}
+			
 			// set new cursor position is needed
 			if ( !op.isNull() )
-				e->setCursorPosition( op.y(), op.x() );
+			{
+				editor->setCursorPosition( op.y(), op.x() );
+			}
+			
+			// end undo
+			editor->endUndoAction();
+			
 			// hide autocompletion combobox
-			e->cancelList();
+			editor->cancelList();
+			
 			// finish
 			return;
 		}
 	}
+	
+	MonkeyCore::statusBar()->appendMessage( tr( "No '%1' macro found for '%2' language" ).arg( macro ).arg( lng ) );
 }
