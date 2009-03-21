@@ -461,22 +461,22 @@ void UISettings::saveSettings()
 	}
 
 	//  Abbreviations
-	sp = "Abbreviations";
-	// remove key
-	s->remove( sp );
-	// write new ones
-	s->beginWriteArray( sp );
+	pAbbreviationList abbreviations;
 	for ( int i = 0; i < twAbbreviations->topLevelItemCount(); i++ )
 	{
-		s->setArrayIndex( i );
 		QTreeWidgetItem* it = twAbbreviations->topLevelItem( i );
-
-		s->setValue( "Template", it->text( 0 ).trimmed() );
-		s->setValue( "Description", it->text( 1 ).trimmed() );
-		s->setValue( "Language", it->text( 2 ) );
-		s->setValue( "Code", it->data( 0, Qt::UserRole ).toString() );
+		
+		pAbbreviation abbreviation;
+		abbreviation.Macro = it->text( 0 );
+		abbreviation.Description = it->text( 1 );
+		abbreviation.Language = it->text( 2 );
+		abbreviation.Snippet = it->data( 0, Qt::UserRole ).toString();
+		
+		abbreviations << abbreviation;
 	}
-	s->endArray();
+	
+	MonkeyCore::abbreviationsManager()->set( abbreviations );
+	MonkeyCore::abbreviationsManager()->generateScript();
 }
 
 void UISettings::on_twMenu_itemSelectionChanged()
