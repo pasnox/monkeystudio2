@@ -62,17 +62,18 @@ public:
 	
 	Settings( QObject* = 0 );
 	
-	QString storageToString( StoragePath type ) const;
-	QStringList storagePaths( StoragePath type ) const;
-	void setStoragePaths( StoragePath type, const QStringList& paths );
+	QString storageToString( Settings::StoragePath type ) const;
+	QStringList storagePaths( Settings::StoragePath type ) const;
+	void setStoragePaths( Settings::StoragePath type, const QStringList& paths );
 	
 	QString homeFilePath( const QString& filePath ) const;
+	QString homePath( Settings::StoragePath type ) const;
 	
 	virtual void setDefaultSettings();
 	void setDefaultCppSyntaxHighlight();
 
 protected:
-	QStringList storagePathsOutOfBox( StoragePath type, const QString& appPath ) const;
+	QStringList storagePathsOutOfBox( Settings::StoragePath type, const QString& appPath ) const;
 };
 
 #endif // SETTINGS_H

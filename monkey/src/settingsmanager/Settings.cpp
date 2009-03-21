@@ -27,6 +27,8 @@
 **
 ****************************************************************************/
 #include "Settings.h"
+#include "../coremanager/MonkeyCore.h"
+#include "../queuedstatusbar/QueuedStatusBar.h"
 
 #include <QApplication>
 #include <QStringList>
@@ -38,7 +40,7 @@ Settings::Settings( QObject* o )
 	: pSettings( o )
 {}
 
-QString Settings::storageToString( StoragePath type ) const
+QString Settings::storageToString( Settings::StoragePath type ) const
 {
 	switch ( type )
 	{
@@ -62,7 +64,7 @@ QString Settings::storageToString( StoragePath type ) const
 	return QString::null;
 }
 
-QStringList Settings::storagePaths( StoragePath type ) const
+QStringList Settings::storagePaths( Settings::StoragePath type ) const
 {
 	QStringList result = value( QString( "Paths/%1" ).arg( storageToString( type ) ) ).toStringList();
 	
@@ -134,7 +136,7 @@ QStringList Settings::storagePaths( StoragePath type ) const
 	return QStringList( QDir::cleanPath( QString( "%1/%2" ).arg( basePath ).arg( storageToString( type ) ) ) );
 }
 
-void Settings::setStoragePaths( StoragePath type, const QStringList& paths )
+void Settings::setStoragePaths( Settings::StoragePath type, const QStringList& paths )
 {
 	setValue( QString( "Paths/%1" ).arg( storageToString( type ) ), paths );
 }
@@ -147,7 +149,22 @@ QString Settings::homeFilePath( const QString& filePath ) const
 	return QDir::cleanPath( dir.filePath( filePath ) );
 }
 
-QStringList Settings::storagePathsOutOfBox( StoragePath type, const QString& appPath ) const
+QString Settings::homePath( Settings::StoragePath type ) const
+{
+	const QString path = QFileInfo( fileName() ).absolutePath();
+	const QString folder = storageToString( type ).append( "-%1" ).arg( PACKAGE_VERSION );
+	QDir dir( path );
+	
+	if ( !dir.exists( folder ) && !dir.mkdir( folder ) )
+	{
+		return QString::null;
+	}
+	
+	dir.cd( folder );
+	return dir.absolutePath();
+}
+
+QStringList Settings::storagePathsOutOfBox( Settings::StoragePath type, const QString& appPath ) const
 {
 	QString basePath = appPath;
 	
@@ -175,11 +192,12 @@ QStringList Settings::storagePathsOutOfBox( StoragePath type, const QString& app
 void Settings::setDefaultSettings()
 {
 	// create default paths
-	QStringList pluginsPaths = storagePaths( SP_PLUGINS );
+	QStringList pluginsPaths = storagePaths( Settings::SP_PLUGINS );
 	QStringList apisPaths = storagePaths( Settings::SP_APIS );
 	QStringList templatesPaths = storagePaths( Settings::SP_TEMPLATES );
 	QStringList translationsPaths = storagePaths( Settings::SP_TRANSLATIONS );
 	QStringList scriptsPaths = storagePaths( Settings::SP_SCRIPTS );
+	QString scriptsPath = homePath( Settings::SP_SCRIPTS );
 	
 	// save default paths
 	setStoragePaths( Settings::SP_PLUGINS, pluginsPaths );
@@ -212,6 +230,27 @@ void Settings::setDefaultSettings()
 			files << QDir::cleanPath( path +"/qt-4.4.x.api" );
 			
 			setValue( "SourceAPIs/C++", files );
+		}
+	}
+	
+	// copy scripts to user's home
+	foreach ( const QString& path, scriptsPaths )
+	{
+		QFileInfoList files = QDir( path ).entryInfoList( QStringList( "*.mks" ) );
+		
+		foreach ( const QFileInfo& file, files )
+		{
+			const QString fn = QDir( scriptsPath ).absoluteFilePath( file.fileName() );
+			
+			if ( !QFile::exists( fn ) )
+			{
+				QFile f( file.absoluteFilePath() );
+				
+				if ( !f.copy( fn ) )
+				{
+					MonkeyCore::statusBar()->appendMessage( tr( "Can't copy script '%1', %2" ).arg( file.fileName() ).arg( f.errorString() ) );
+				}
+			}
 		}
 	}
 	
