@@ -1,8 +1,10 @@
 #include "MkSShellInterpreter.h"
 #include "../coremanager/MonkeyCore.h"
 #include "../settingsmanager/Settings.h"
+#include "../queuedstatusbar/QueuedStatusBar.h"
 
-#include <QFile>
+#include <QFileInfo>
+#include <QDir>
 #include <QDebug>
 
 const QString MkSShell_DirName = "mks_scripts";
@@ -88,6 +90,20 @@ bool MkSShellInterpreter::loadScript( const QString& fileName )
 	
 	file.close();
 	return true;
+}
+
+void MkSShellInterpreter::loadHomeScripts()
+{
+	const QString path = MonkeyCore::settings()->homePath( Settings::SP_SCRIPTS );
+	QFileInfoList files = QDir( path ).entryInfoList( QStringList( "*.mks" ) );
+	
+	foreach ( const QFileInfo& file, files )
+	{
+		if ( !loadScript( file.absoluteFilePath() ) )
+		{
+			MonkeyCore::statusBar()->appendMessage( tr( "An error occur while loading script: '%1'" ).arg( file.fileName() ) );
+		}
+	}
 }
 
 QString MkSShellInterpreter::usage( const QString& command ) const
