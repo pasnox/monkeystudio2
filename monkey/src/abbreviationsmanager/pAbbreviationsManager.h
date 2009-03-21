@@ -93,6 +93,7 @@ public:
 	const pAbbreviationList& abbreviations() const;
 	pAbbreviation abbreviation( const QString& macro, const QString& language ) const;
 	void expandMacro( pEditor* editor );
+	void generateScript();
 
 protected:
 	pAbbreviationList mAbbreviations;

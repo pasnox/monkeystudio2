@@ -58,32 +58,6 @@ void pAbbreviationsManager::initialize()
 	);
 	
 	MonkeyCore::interpreter()->addCommandImplementation( "abbreviation", pAbbreviationsManager::commandInterpreter, help );
-	
-	// search abbreviations script
-	QString fn = QString( "%1/abbreviations.mks" ).arg( MonkeyCore::settings()->storageToString( Settings::SP_SCRIPTS ) );
-	QString fp = MonkeyCore::settings()->homeFilePath( fn );
-	
-	if ( !QFile::exists( fp ) )
-	{
-		foreach ( const QString& path, MonkeyCore::settings()->storagePaths( Settings::SP_SCRIPTS ) )
-		{
-			fp = QDir( path ).filePath( "abbreviations.mks" );
-			
-			if ( !QFile::exists( fp ) )
-			{
-				fp.clear();
-			}
-		}
-	}
-	
-	// execute script
-	if ( !fp.isEmpty() )
-	{
-		if ( !MonkeyCore::interpreter()->loadScript( fp ) )
-		{
-			MonkeyCore::statusBar()->appendMessage( tr( "An error occur while loading script: %1" ).arg( fp ) );
-		}
-	}
 }
 
 QString pAbbreviationsManager::commandInterpreter( const QString& command, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter )
@@ -435,4 +409,55 @@ void pAbbreviationsManager::expandMacro( pEditor* editor )
 	}
 	
 	MonkeyCore::statusBar()->appendMessage( tr( "No '%1' macro found for '%2' language" ).arg( macro ).arg( lng ) );
+}
+
+void pAbbreviationsManager::generateScript()
+{
+	QMap<QString, pAbbreviationList> abbreviations;
+	
+	// group abbreviations by language
+	foreach ( const pAbbreviation& abbreviation, mAbbreviations )
+	{
+		abbreviations[ abbreviation.Language ] << abbreviation;
+	}
+	
+	// write content in utf8
+	const QString fn = MonkeyCore::settings()->homePath( Settings::SP_SCRIPTS ).append( "/abbreviations.mks" );
+	QFile file( fn );
+	QStringList buffer;
+	
+	if ( !file.open( QIODevice::WriteOnly ) )
+	{
+		MonkeyCore::statusBar()->appendMessage( tr( "Can't open file for generating abbreviations script: %1" ).arg( file.errorString() ) );
+		return;
+	}
+	
+	file.resize( 0 );
+	
+	buffer << "# Monkey Studio IDE Code Snippets";
+	buffer << "# reset abbreviations";
+	buffer << "abbreviation clear";
+	buffer << "# introduce new ones per language";
+	buffer << "# abbreviation\tadd\tMacro\tDescription\tLanguage\tSnippet";
+	
+	foreach ( const QString& language, abbreviations.keys() )
+	{
+		buffer << QString( "# %1" ).arg( language );
+		
+		foreach ( const pAbbreviation& abbreviation, abbreviations[ language ] )
+		{
+			buffer << QString( "abbreviation add \"%1\" \"%2\" \"%3\" \"%4\"" )
+				.arg( abbreviation.Macro )
+				.arg( abbreviation.Description )
+				.arg( abbreviation.Language )
+				.arg( QString( abbreviation.Snippet ).replace( "\n", "\\n" ) );
+		}
+	}
+	
+	if ( file.write( buffer.join( "\n" ).toUtf8() ) == -1 )
+	{
+		MonkeyCore::statusBar()->appendMessage( tr( "Can't write generated abbreviations script: %1" ).arg( file.errorString() ) );
+	}
+	
+	file.close();
 }
