@@ -1,6 +1,7 @@
 #include "pDockWidgetTitleBar.h"
 
 #include <QAction>
+#include <QWidgetAction>
 #include <QLayout>
 #include <QToolBar>
 #include <QFrame>
@@ -157,14 +158,29 @@ QWidget* pDockWidgetTitleBar::addAction( QAction* action, int index )
 		index = mBox2->count();
 	}
 	
-	QToolButton* tb = new pDockWidgetButton( this );
-	tb->setFixedSize( buttonSize() );
-	tb->setIconSize( iconSize() );
-	tb->setDefaultAction( action );
-	
-	mBox2->insertWidget( index, tb, 0, Qt::AlignCenter );
-	
-	return tb;
+	if ( action->inherits( "QWidgetAction" ) )
+	{
+		QWidget* w = qobject_cast<QWidgetAction*>( action )->defaultWidget();
+		
+		if ( w )
+		{
+			mBox2->insertWidget( index, w, 0, Qt::AlignCenter );
+			w->setVisible( true );
+		}
+		
+		return w;
+	}
+	else
+	{
+		QToolButton* tb = new pDockWidgetButton( this );
+		tb->setFixedSize( buttonSize() );
+		tb->setIconSize( iconSize() );
+		tb->setDefaultAction( action );
+		
+		mBox2->insertWidget( index, tb, 0, Qt::AlignCenter );
+		
+		return tb;
+	}
 }
 
 void pDockWidgetTitleBar::addSeparator( int index )
@@ -240,4 +256,14 @@ void pDockWidgetTitleBar::featuresChanged( QDockWidget::DockWidgetFeatures featu
 		bFloat->setVisible( features & QDockWidget::DockWidgetFloatable );
 		bClose->setVisible( features & QDockWidget::DockWidgetClosable );
 	}
+}
+
+bool pDockWidgetTitleBar::orientationButtonVisible() const
+{
+	return bOrientation->isVisible();
+}
+
+void pDockWidgetTitleBar::setOrientationButtonVisible( bool visible )
+{
+	bOrientation->setVisible( visible );
 }
