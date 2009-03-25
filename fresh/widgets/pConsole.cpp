@@ -349,7 +349,7 @@ void pConsole::keyPressEvent( QKeyEvent* event )
 		{
 			QString command = currentCommand();
 			QStringList sl = autocompleteCommand( command );
-			QString str = sl.join( "\t" );
+			QString str = sl.join( "    " );
 			
 			if ( sl.count() == 1 )
 			{

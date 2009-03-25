@@ -149,9 +149,9 @@ pAbstractChild* PluginsManager::openChildFile( const QString& s )
 	return 0;
 }
 
-QHash<QString, QStringList> PluginsManager::childSuffixes() const
+QMap<QString, QStringList> PluginsManager::childSuffixes() const
 {
-	QHash<QString, QStringList> l;
+	QMap<QString, QStringList> l;
 	foreach ( ChildPlugin* cp, const_cast<PluginsManager*>( this )->plugins<ChildPlugin*>( PluginsManager::stEnabled ) )
 		foreach ( QString k, cp->suffixes().keys() )
 			l[k] << cp->suffixes().value( k );
@@ -161,7 +161,7 @@ QHash<QString, QStringList> PluginsManager::childSuffixes() const
 QString PluginsManager::childFilters() const
 {
 	QString f;
-	QHash<QString, QStringList> l = childSuffixes();
+	QMap<QString, QStringList> l = childSuffixes();
 	foreach ( QString k, l.keys() )
 		f += QString( "%1 (%2);;" ).arg( k ).arg( l.value( k ).join( " " ) );
 	if ( f.endsWith( ";;" ) )

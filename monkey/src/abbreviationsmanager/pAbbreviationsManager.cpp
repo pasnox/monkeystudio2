@@ -42,6 +42,7 @@
 pAbbreviationsManager::pAbbreviationsManager( QObject* parent )
 	: QObject( parent )
 {
+	initialize();
 }
 
 void pAbbreviationsManager::initialize()
@@ -95,7 +96,7 @@ QString pAbbreviationsManager::commandInterpreter( const QString& command, const
 	
 	if ( operation == "add" )
 	{
-		if ( arguments.size() != 5 )
+		if ( arguments.count() != 5 )
 		{
 			if ( result )
 			{
@@ -115,7 +116,7 @@ QString pAbbreviationsManager::commandInterpreter( const QString& command, const
 	
 	if ( operation == "del" )
 	{
-		if ( arguments.size() != 3 )
+		if ( arguments.count() != 3 )
 		{
 			if ( result )
 			{
@@ -133,7 +134,7 @@ QString pAbbreviationsManager::commandInterpreter( const QString& command, const
 	
 	if ( operation == "show" )
 	{
-		if ( arguments.size() != 3 )
+		if ( arguments.count() != 3 )
 		{
 			if ( result )
 			{
@@ -162,7 +163,7 @@ QString pAbbreviationsManager::commandInterpreter( const QString& command, const
 	
 	if ( operation == "list" )
 	{
-		if ( arguments.size() != 2 )
+		if ( arguments.count() != 2 )
 		{
 			if ( result )
 			{
@@ -197,7 +198,7 @@ QString pAbbreviationsManager::commandInterpreter( const QString& command, const
 	
 	if ( operation == "clear" )
 	{
-		if ( arguments.size() != 1 )
+		if ( arguments.count() != 1 )
 		{
 			if ( result )
 			{

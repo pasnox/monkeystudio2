@@ -296,7 +296,7 @@ void UISettings::loadSettings()
 	if ( cbSourceAPIsLanguages->count() > 0 )
 		cbSourceAPIsLanguages->setCurrentIndex( 0 );
 	//  Lexers Associations
-	QHash<QString, QStringList> l = availableLanguagesSuffixes();
+	QMap<QString, QStringList> l = MonkeyCore::fileManager()->associations();
 	foreach ( QString k, l.keys() )
 	{
 		foreach ( QString e, l.value( k ) )
@@ -442,16 +442,24 @@ void UISettings::saveSettings()
 	sp = "SourceAPIs/";
 	for ( int i = 0; i < cbSourceAPIsLanguages->count(); i++ )
 		s->setValue( sp +cbSourceAPIsLanguages->itemText( i ), cbSourceAPIsLanguages->itemData( i ).toStringList() );
+	
 	//  Lexers Associations
-	sp = "LexersAssociations/";
-	// remove old associations
-	s->remove( sp );
-	// write new ones
+	QMap<QString, QStringList> suffixes;
+	
 	for ( int i = 0; i < twLexersAssociations->topLevelItemCount(); i++ )
 	{
 		QTreeWidgetItem* it = twLexersAssociations->topLevelItem( i );
-		s->setValue( sp +it->text( 0 ), it->text( 1 ) );
+		
+		suffixes[ it->text( 1 ) ] << it->text( 0 );
 	}
+	
+	foreach ( const QString& type, suffixes.keys() )
+	{
+		MonkeyCore::fileManager()->set( type, suffixes[ type ] );
+	}
+	
+	MonkeyCore::fileManager()->generateScript();
+	
 	//  Lexers Highlighting
 	foreach ( QsciLexer* l, mLexers )
 	{

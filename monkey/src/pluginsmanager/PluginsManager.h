@@ -80,7 +80,7 @@ public:
 	}
 	
 	pAbstractChild* openChildFile( const QString& );
-	QHash<QString, QStringList> childSuffixes() const;
+	QMap<QString, QStringList> childSuffixes() const;
 	QString childFilters() const;
 	
 	void setCurrentBuilder( BuilderPlugin* );

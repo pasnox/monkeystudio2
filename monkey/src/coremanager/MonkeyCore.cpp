@@ -117,7 +117,11 @@ void MonkeyCore::init()
 	
 	// init abbreviations manager
 	showMessage( &splash, tr( "Initializing abbreviations manager..." ) );
-	abbreviationsManager()->initialize();
+	abbreviationsManager();
+	
+	// init file manager
+	showMessage( &splash, tr( "Initializing file manager..." ) );
+	fileManager();
 	
 	// load mks scripts
 	showMessage( &splash, tr( "Executing scripts..." ) );

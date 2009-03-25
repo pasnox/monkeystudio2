@@ -37,6 +37,7 @@
 class pAbstractChild;
 class XUPProjectItem;
 class XUPItem;
+class MkSShellInterpreter;
 
 class Q_MONKEY_EXPORT pFileManager : public QObject
 {
@@ -45,6 +46,17 @@ class Q_MONKEY_EXPORT pFileManager : public QObject
 	friend class pWorkspace;
 
 public:
+	void clear( const QString& type = QString::null );
+	void add( const QString& type, const QStringList& suffixes );
+	void add( const QString& type, const QString& suffix );
+	void set( const QString& type, const QStringList& suffixes );
+	void set( const QString& type, const QString& suffix );
+	void remove( const QString& type, const QStringList& suffixes );
+	void remove( const QString& type, const QString& suffix );
+	const QMap<QString, QStringList>& associations() const;
+	QStringList associations( const QString& type ) const;
+	void generateScript();
+
 	XUPProjectItem* currentProject() const;
 	QString currentProjectFile() const;
 	QString currentProjectPath() const;
@@ -59,7 +71,12 @@ public:
 	pAbstractChild* childForFile (const QString& file) const;
 
 protected:
+	QMap<QString, QStringList> mAssociations; // language, suffixes
+	
 	pFileManager( QObject* parent = 0 );
+	
+	void initialize();
+	static QString commandInterpreter( const QString& command, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter );
 
 public slots:
 	pAbstractChild* openFile( const QString& fileName, const QString& codec );

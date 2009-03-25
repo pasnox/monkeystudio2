@@ -20,6 +20,7 @@
 #include "pluginsmanager/PluginsManager.h"
 #include "coremanager/MonkeyCore.h"
 #include "queuedstatusbar/QueuedStatusBar.h"
+#include "workspace/pFileManager.h"
 
 #include "workspace/pAbstractChild.h"
 #include "qscintillamanager/pEditor.h"
@@ -28,7 +29,6 @@
 #include <QImageReader>
 #include <QFileDialog>
 #include <QFileInfo>
-#include <QHash>
 #include <QLibraryInfo>
 #include <QTranslator>
 #include <QLocale>
@@ -412,139 +412,22 @@ QString pMonkeyStudio::unTokenizeHome( const QString& string )
 { return QString( string ).replace( "$HOME$", QDir::homePath() ); }
 
 /*!
-	\details Return all default languages suffixes
-*/
-QHash<QString, QStringList> pMonkeyStudio::defaultLanguagesSuffixes()
-{
-	// suffixes list
-	QHash<QString, QStringList> l;
-	// Bash
-	l["Bash"] << "*.sh";
-	// Batch
-	l["Batch"] << "*.bat";
-	l["Batch"] << "*.cmd";
-	// C#
-	l["C#"] << "*.cs";
-	// C++
-	l["C++"] << "*.c";
-	l["C++"] << "*.cc";
-	l["C++"] << "*.cpp";
-	l["C++"] << "*.cxx";
-	l["C++"] << "*.c++";
-	l["C++"] << "*.h";
-	l["C++"] << "*.hh";
-	l["C++"] << "*.hpp";
-	l["C++"] << "*.hxx";
-	l["C++"] << "*.h++";
-	// CMake
-	l["CMake"] << "*.cmake";
-	l["CMake"] << "CMake.txt";
-	// CSS
-	l["CSS"] << "*.css";
-	// D
-	l["D"] << "*.d";
-	// Diff
-	l["Diff"] << "*.diff";
-	l["Diff"] << "*.patch";
-	// HTML
-	l["HTML"] << "*.asp";
-	l["HTML"] << "*.xml";
-	l["HTML"] << "*.xsd";
-	l["HTML"] << "*.xsl";
-	l["HTML"] << "*.xslt";
-	l["HTML"] << "*.docbook";
-	l["HTML"] << "*.dtd";
-	l["HTML"] << "*.htm";
-	l["HTML"] << "*.html";
-	l["HTML"] << "*.php";
-	l["HTML"] << "*.php3";
-	l["HTML"] << "*.php4";
-	l["HTML"] << "*.php5";
-	l["HTML"] << "*.phtml";
-	l["HTML"] << "*.rdf";
-	l["HTML"] << "*.svg";
-	l["HTML"] << "*.shtml";
-	// IDL
-	l["IDL"] << "*.idl";
-	// Java
-	l["Java"] << "*.java";
-	// JavaScript
-	l["JavaScript"] << "*.js";
-	// Lua
-	l["Lua"] << "*.lua";
-	// Makefile
-	l["Makefile"] << "*.mak";
-	l["Makefile"] << "*makefile";
-	l["Makefile"] << "Makefile*";
-	// POV
-	l["POV"] << "*.pov";
-	// Perl
-	l["Perl"] << "*.ph";
-	l["Perl"] << "*.pl";
-	l["Perl"] << "*.pm";
-	// Properties
-	l["Properties"] << "*.cfg";
-	l["Properties"] << "*.cnf";
-	l["Properties"] << "*.inf";
-	l["Properties"] << "*.ini";
-	l["Properties"] << "*.properties";
-	l["Properties"] << "*.rc";
-	l["Properties"] << "*.reg";
-	// Python
-	l["Python"] << "*.ptl";
-	l["Python"] << "*.py";
-	l["Python"] << "*.pyw";
-	l["Python"] << "*.pyx";
-	// Ruby
-	l["Ruby"] << "*.rb";
-	l["Ruby"] << "*.rbw";
-	// SQL
-	l["SQL"] << "*.sql";
-#if QSCINTILLA_VERSION > 0x020200
-	// TCL
-	l["TCL"] << "*.tcl";
-#endif
-	// TeX
-	l["TeX"] << "*.aux";
-	l["TeX"] << "*.idx";
-	l["TeX"] << "*.sty";
-	l["TeX"] << "*.toc";
-	// VHDL
-	l["VHDL"] << "*.vhdl";
-	// return list
-	return l;
-}
-
-/*!
 	\details Return all available languages suffixes
 */
-QHash<QString, QStringList> pMonkeyStudio::availableLanguagesSuffixes()
+QMap<QString, QStringList> pMonkeyStudio::availableLanguagesSuffixes()
 {
-	// suffixes list
-	QHash<QString, QStringList> l;
-	// get settings
-	pSettings* s = MonkeyCore::settings();
-	// get associations from settings
-	s->beginGroup( "LexersAssociations" );
-	foreach ( QString k, s->childKeys() )
-		l[s->value( k ).toString()] << k;
-	s->endGroup();
-	// if empty get default suffixes
-	if ( l.isEmpty() )
-		l = defaultLanguagesSuffixes();
-	// return list
-	return l;
+	return MonkeyCore::fileManager()->associations();
 }
 
 /*!
 	\details Return all available files suffixes
 */
-QHash<QString, QStringList> pMonkeyStudio::availableFilesSuffixes()
+QMap<QString, QStringList> pMonkeyStudio::availableFilesSuffixes()
 {
 	// get language suffixes
-	QHash<QString, QStringList> l = availableLanguagesSuffixes();
+	QMap<QString, QStringList> l = availableLanguagesSuffixes();
 	// add child plugins suffixes
-	QHash<QString, QStringList> ps = MonkeyCore::pluginsManager()->childSuffixes();
+	QMap<QString, QStringList> ps = MonkeyCore::pluginsManager()->childSuffixes();
 	foreach ( QString k, ps.keys() )
 		foreach ( QString s, ps[k] )
 			if ( !l[k].contains( s ) )
@@ -560,7 +443,7 @@ QString pMonkeyStudio::availableLanguagesFilters()
 {
 	QString f;
 	// get suffixes
-	QHash<QString, QStringList> sl = availableLanguagesSuffixes();
+	QMap<QString, QStringList> sl = availableLanguagesSuffixes();
 	//
 	foreach ( QString k, sl.keys() )
 		f += QString( "%1 Files (%2);;" ).arg( k ).arg( sl.value( k ).join( " " ) );
@@ -578,7 +461,7 @@ QString pMonkeyStudio::availableFilesFilters()
 {
 	QString f;
 	// get suffixes
-	QHash<QString, QStringList> sl = availableFilesSuffixes();
+	QMap<QString, QStringList> sl = availableFilesSuffixes();
 	//
 	foreach ( QString k, sl.keys() )
 		f += QString( "%1 Files (%2);;" ).arg( k ).arg( sl.value( k ).join( " " ) );
@@ -687,7 +570,7 @@ QString pMonkeyStudio::languageForFileName( const QString& fileName )
 QsciLexer* pMonkeyStudio::lexerForFileName( const QString& fileName )
 {
 	// get suffixes
-	QHash<QString, QStringList> l = availableFilesSuffixes();
+	QMap<QString, QStringList> l = availableFilesSuffixes();
 	// check suffixe
 	foreach ( QString k, l.keys() )
 		if ( QDir::match( l.value( k ), fileName ) )
