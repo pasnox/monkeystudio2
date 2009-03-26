@@ -56,6 +56,11 @@ public:
 	const QMap<QString, QStringList>& associations() const;
 	QStringList associations( const QString& type ) const;
 	void generateScript();
+	
+	// Returns pointer to editor, if file is opened. Null - if not opened
+	pAbstractChild* childForFile( const QString& file ) const;
+	// return a file buffer, if file is open, the current live buffer is return, else the physically one.
+	QString fileBuffer( const QString& fileName, const QString& codec ) const;
 
 	XUPProjectItem* currentProject() const;
 	QString currentProjectFile() const;
@@ -66,9 +71,6 @@ public:
 	XUPItem* currentItem() const;
 	QString currentItemFile() const;
 	QString currentItemPath() const;
-	
-	// Returns pointer to editor, if file is opened. Null - if not opened
-	pAbstractChild* childForFile (const QString& file) const;
 
 protected:
 	QMap<QString, QStringList> mAssociations; // language, suffixes

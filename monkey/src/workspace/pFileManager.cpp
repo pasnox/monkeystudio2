@@ -333,6 +333,53 @@ void pFileManager::generateScript()
 	file.close();
 }
 
+pAbstractChild* pFileManager::childForFile( const QString& file ) const
+{
+	foreach ( pAbstractChild* ac, MonkeyCore::workspace()->children() )
+	{
+		foreach ( const QString& fn, ac->files() )
+		{
+			if ( pMonkeyStudio::isSameFile( fn, file ) )
+			{
+				return ac;
+			}
+		}
+	}
+	
+	return 0;
+}
+
+QString pFileManager::fileBuffer( const QString& fileName, const QString& codec ) const
+{
+	QString result;
+	bool ok;
+	
+	foreach ( pAbstractChild* ac, MonkeyCore::workspace()->children() )
+	{
+		result = ac->fileBuffer( fileName, ok );
+		
+		if ( ok )
+		{
+			return result;
+		}
+	}
+	
+	result.clear();
+	QFile file( fileName );
+	
+	if ( file.exists() )
+	{
+		if ( file.open( QIODevice::ReadOnly ) )
+		{
+			QTextCodec* c = QTextCodec::codecForName( codec.toUtf8() );
+			result = c->toUnicode( file.readAll() );
+			file.close();
+		}
+	}
+	
+	return result;
+}
+
 XUPProjectItem* pFileManager::currentProject() const
 { return MonkeyCore::projectsManager()->currentProject(); }
 
@@ -378,20 +425,6 @@ QString pFileManager::currentItemPath() const
 	}
 	
 	return QString::null;
-}
-
-pAbstractChild* pFileManager::childForFile (const QString& file) const
-{
-	foreach ( pAbstractChild* ac, MonkeyCore::workspace()->children())
-	{
-		foreach ( const QString& fn, ac->files() )
-		{
-			if (fn == file)
-				return ac;
-		}
-	}
-	
-	return NULL;
 }
 
 pAbstractChild* pFileManager::openFile( const QString& fileName, const QString& codec )

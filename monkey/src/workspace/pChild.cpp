@@ -83,6 +83,12 @@ QString pChild::language() const
 	return QString();
 }
 
+QString pChild::fileBuffer( const QString& fileName, bool& ok ) const
+{
+	ok = pMonkeyStudio::isSameFile( fileName, mFiles.value( 0 ) );
+	return ok ? mEditor->text() : QString::null;
+}
+
 QPoint pChild::cursorPosition() const
 { return mEditor->cursorPosition(); }
 
