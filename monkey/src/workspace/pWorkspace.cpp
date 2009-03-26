@@ -91,6 +91,7 @@ pWorkspace::pWorkspace( QMainWindow* p )
 	connect( MonkeyCore::projectsManager(), SIGNAL( projectCustomContextMenuRequested( const QPoint& ) ), this, SLOT( internal_projectsManager_customContextMenuRequested( const QPoint& ) ) );
 	connect( MonkeyCore::projectsManager(), SIGNAL( currentProjectChanged( XUPProjectItem*, XUPProjectItem* ) ), this, SLOT( internal_currentProjectChanged( XUPProjectItem*, XUPProjectItem* ) ) );
 	connect( mFileWatcher, SIGNAL( fileChanged( const QString& ) ), this, SLOT( fileWatcher_fileChanged( const QString& ) ) );
+	connect( mFileWatcher, SIGNAL( fileChanged( const QString& ) ), this, SIGNAL( fileChanged( const QString& ) ) );
 	
 	QAction* mFocusToEditor = new QAction( this );
 	mFocusToEditor->setIcon( QIcon( ":/edit/icons/edit/text.png" ) );

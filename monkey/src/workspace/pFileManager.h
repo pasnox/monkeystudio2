@@ -90,6 +90,7 @@ signals:
 	// files
 	void fileOpened( const QString& fileName );
 	void fileClosed( const QString& fileName );
+	void fileChanged( const QString& fileName );
 	void currentFileChanged( pAbstractChild* child, const QString& fileName );
 	// projects
 	void opened( XUPProjectItem* project );

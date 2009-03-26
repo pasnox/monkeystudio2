@@ -45,6 +45,7 @@ pFileManager::pFileManager( QObject* o )
 	// files
 	connect( MonkeyCore::workspace(), SIGNAL( fileOpened( const QString& ) ), this, SIGNAL( fileOpened( const QString& ) ) );
 	connect( MonkeyCore::workspace(), SIGNAL( fileClosed( const QString& ) ), this, SIGNAL( fileClosed( const QString& ) ) );
+	connect( MonkeyCore::workspace(), SIGNAL( fileChanged( const QString& ) ), this, SIGNAL( fileChanged( const QString& ) ) );
 	connect( MonkeyCore::workspace(), SIGNAL( currentFileChanged( pAbstractChild*, const QString& ) ), this, SIGNAL( currentFileChanged( pAbstractChild*, const QString& ) ) );
 	// projects
 	connect( MonkeyCore::projectsManager(), SIGNAL( projectOpened( XUPProjectItem* ) ), this, SIGNAL( opened( XUPProjectItem* ) ) );
