@@ -235,9 +235,11 @@ void pFileManager::add( const QString& type, const QStringList& suffixes )
 {
 	foreach ( const QString& suffix, suffixes )
 	{
-		if ( !mAssociations[ type ].contains( suffix ) )
+		const QString trimmedSuffix = suffix.trimmed();
+		
+		if ( !mAssociations[ type ].contains( trimmedSuffix ) )
 		{
-			mAssociations[ type ] << suffix;
+			mAssociations[ type ] << trimmedSuffix;
 		}
 	}
 }
@@ -264,7 +266,9 @@ void pFileManager::remove( const QString& type, const QStringList& suffixes )
 	
 	foreach ( const QString& suffix, suffixes )
 	{
-		result.removeOne( suffix );
+		const QString trimmedSuffix = suffix.trimmed();
+		
+		result.removeOne( trimmedSuffix );
 	}
 	
 	if ( result.isEmpty() )
