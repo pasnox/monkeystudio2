@@ -1,0 +1,20 @@
+<RCC>
+	<qresource>
+		<file>icons/debugger.png</file>
+		<file>icons/warning.png</file>
+		<file>icons/warningred.png</file>
+		<file>icons/buttonok.png</file>
+		<file>icons/stepover.png</file>
+		<file>icons/stepinto.png</file>
+		<file>icons/stepfinish.png</file>
+		<file>icons/close.png</file>
+		<file>icons/update.png</file>
+		<file>icons/open.png</file>
+		<file>icons/continue.png</file>
+		<file>icons/backtrace.png</file>
+		<file>icons/breakpoint.png</file>
+		<file>icons/cpu.png</file>
+		<file>icons/cli.png</file>
+		<file>icons/watch.png</file>
+	</qresource>
+</RCC>
