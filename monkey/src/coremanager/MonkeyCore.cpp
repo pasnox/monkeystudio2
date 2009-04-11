@@ -9,7 +9,7 @@
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
 ** Home Page : http://www.monkeystudio.org
 **
-		Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -38,6 +38,8 @@
 #include "../workspace/pWorkspace.h"
 #include "../consolemanager/pConsoleManager.h"
 #include "../queuedstatusbar/QueuedStatusBar.h"
+#include "../shellmanager/MkSShellInterpreter.h"
+#include "../abbreviationsmanager/pAbbreviationsManager.h"
 
 #include "../maininterface/ui/UISettings.h"
 #include "../maininterface/ui/UITranslator.h"
@@ -50,14 +52,16 @@
 #include <QDate>
 
 void showMessage( QSplashScreen* s, const QString& m )
-{ s->showMessage( m, Qt::AlignRight | Qt::AlignBottom, s->property( "isXMas" ).toBool() ? Qt::red : Qt::white ); }
+{
+	s->showMessage( m, Qt::AlignRight | Qt::AlignBottom, s->property( "isXMas" ).toBool() ? Qt::red : Qt::white );
+}
 
 QHash<const QMetaObject*, QObject*> MonkeyCore::mInstances;
 
 void MonkeyCore::init()
 {
 	// create splashscreen
-	bool isXMas = QDate::currentDate().month() == 12;
+	bool isXMas = QDate::currentDate().month() == ( 12 || 1 );
 	
 	QSplashScreen splash( pIconManager::pixmap( isXMas ? "splashscreen_christmas.png" : "splashscreen.png", ":/application" ) );
 	splash.setProperty( "isXMas", isXMas );
@@ -79,17 +83,25 @@ void MonkeyCore::init()
 	
 	// set default settings if first time running
 	if ( settings()->value( "FirstTimeRunning", true ).toBool() )
+	{
 		settings()->setDefaultSettings();
+	}
 	
 	// init translation
 	showMessage( &splash, tr( "Initializing Translation..." ) );
 	if ( !settings()->value( "Translations/Accepted" ).toBool() )
+	{
 		UITranslator::instance()->exec();
+	}
 	pMonkeyStudio::loadTranslations();
 	
 	// init shortcuts editor
 	showMessage( &splash, tr( "Initializing Actions Manager..." ) );
 	MonkeyCore::actionsManager()->setSettings( settings() );
+	
+	// init shell && commands
+	showMessage( &splash, tr( "Initializing Shell..." ) );
+	interpreter();
 	
 	// start console manager
 	showMessage( &splash, tr( "Initializing Console..." ) );
@@ -102,6 +114,18 @@ void MonkeyCore::init()
 	// init pluginsmanager
 	showMessage( &splash, tr( "Initializing Plugins..." ) );
 	pluginsManager()->loadsPlugins();
+	
+	// init abbreviations manager
+	showMessage( &splash, tr( "Initializing abbreviations manager..." ) );
+	abbreviationsManager();
+	
+	// init file manager
+	showMessage( &splash, tr( "Initializing file manager..." ) );
+	fileManager();
+	
+	// load mks scripts
+	showMessage( &splash, tr( "Executing scripts..." ) );
+	interpreter()->loadHomeScripts();
 	
 	// restore window state
 	showMessage( &splash, tr( "Restoring Workspace..." ) );
@@ -129,7 +153,9 @@ void MonkeyCore::init()
 	{
 		// execute settings dialog
 		if ( UISettings::instance()->exec() )
+		{
 			settings()->setValue( "FirstTimeRunning", false );
+		}
 	}
 	
 	// prepare apis
@@ -212,4 +238,18 @@ QueuedStatusBar* MonkeyCore::statusBar()
 	if ( !mInstances.contains( &QueuedStatusBar::staticMetaObject ) )
 		mInstances[&QueuedStatusBar::staticMetaObject] = new QueuedStatusBar( mainWindow() );
 	return qobject_cast<QueuedStatusBar*>( mInstances[&QueuedStatusBar::staticMetaObject] );
+}
+
+MkSShellInterpreter* MonkeyCore::interpreter()
+{
+	if ( !mInstances.contains( &MkSShellInterpreter::staticMetaObject ) )
+		mInstances[&MkSShellInterpreter::staticMetaObject] = MkSShellInterpreter::instance( qApp );
+	return qobject_cast<MkSShellInterpreter*>( mInstances[&MkSShellInterpreter::staticMetaObject] );
+}
+
+pAbbreviationsManager* MonkeyCore::abbreviationsManager()
+{
+	if ( !mInstances.contains( &pAbbreviationsManager::staticMetaObject ) )
+		mInstances[&pAbbreviationsManager::staticMetaObject] = new pAbbreviationsManager( qApp );
+	return qobject_cast<pAbbreviationsManager*>( mInstances[&pAbbreviationsManager::staticMetaObject] );
 }

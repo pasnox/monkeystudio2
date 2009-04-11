@@ -27,6 +27,8 @@
 **
 ****************************************************************************/
 #include "Settings.h"
+#include "../coremanager/MonkeyCore.h"
+#include "../queuedstatusbar/QueuedStatusBar.h"
 
 #include <QApplication>
 #include <QStringList>
@@ -38,129 +40,218 @@ Settings::Settings( QObject* o )
 	: pSettings( o )
 {}
 
-void Settings::setDefaultSettings()
+QString Settings::storageToString( Settings::StoragePath type ) const
 {
+	switch ( type )
+	{
+		case SP_PLUGINS:
+			return QString( "plugins" );
+			break;
+		case SP_APIS:
+			return QString( "apis" );
+			break;
+		case SP_TEMPLATES:
+			return QString( "templates" );
+			break;
+		case SP_TRANSLATIONS:
+			return QString( "translations" );
+			break;
+		case SP_SCRIPTS:
+			return QString( "scripts" );
+			break;
+	}
+	
+	return QString::null;
+}
+
+QStringList Settings::storagePaths( Settings::StoragePath type ) const
+{
+	QStringList result = value( QString( "Paths/%1" ).arg( storageToString( type ) ) ).toStringList();
+	
+	if ( !result.isEmpty() )
+	{
+		return result;
+	}
+	
+	// Compatibility layer with old mks version (before 1.8.3.3)
+	Settings* settings = const_cast<Settings*>( this );
+	
+	if ( type == SP_TEMPLATES && contains( "Templates/DefaultDirectories" ) )
+	{
+		settings->setStoragePaths( type, value( "Templates/DefaultDirectories" ).toStringList() );
+		settings->remove( "Templates/DefaultDirectories" );
+	}
+	else if ( type == SP_TRANSLATIONS && contains( "Translations/Path" ) )
+	{
+		settings->setStoragePaths( type, value( "Translations/Path" ).toStringList() );
+		settings->remove( "Translations/Path" );
+	}
+	else if ( type == SP_PLUGINS && contains( "Plugins/Path" ) )
+	{
+		settings->setStoragePaths( type, value( "Plugins/Path" ).toStringList() );
+		settings->remove( "Plugins/Path" );
+	}
+	
+	result = value( QString( "Paths/%1" ).arg( storageToString( type ) ) ).toStringList();
+	
+	if ( !result.isEmpty() )
+	{
+		return result;
+	}
+	
+	// End compatibility layer
+	
 	const QString appPath = qApp->applicationDirPath();
-	bool appIsInstalled = appPath == PACKAGE_PREFIX;
-	QString pluginsPath;
-	QString templatesPath;
-	QString translationsPath;
-	QString apisPath;
+	bool appIsInstalled = false;
+	QString basePath;
 
 #ifdef Q_OS_WIN
-	if ( appIsInstalled && !QFile::exists( QString( "%1/templates" ).arg( appPath ) ) )
-	{
-		appIsInstalled = false;
-	}
-	
-	if ( !appIsInstalled && QFile::exists( QString( "%1/templates" ).arg( appPath ) ) )
-	{
-		appIsInstalled = true;
-	}
+	appIsInstalled = QFile::exists( QString( "%1/datas/templates" ).arg( appPath ) );
+	basePath = QString( "%1/datas" ).arg( appPath );
 #elif defined Q_OS_MAC
-	if ( appIsInstalled && !QFile::exists( QString( "%1/../Resources/templates" ).arg( appPath ) ) )
-	{
-		appIsInstalled = false;
-	}
-	
-	if ( !appIsInstalled && QFile::exists( QString( "%1/../Resources/templates" ).arg( appPath ) ) )
-	{
-		appIsInstalled = true;
-	}
+	appIsInstalled = QFile::exists( QString( "%1/../Resources/datas/templates" ).arg( appPath ) );
+	basePath = QString( "%1/../Resources/datas" ).arg( appPath );
+#else
+	appIsInstalled = QFile::exists( PACKAGE_PREFIX ) && QFile::exists( PACKAGE_DATAS );
+	basePath = PACKAGE_DATAS;
 #endif
-	
+
 	if ( !appIsInstalled )
 	{
-#ifdef Q_OS_MAC
-		pluginsPath = "../plugins";
-		templatesPath = "../../../../templates";
-		translationsPath = "../../../../translations";
-		apisPath = "../../../../ctags/apis";
-#elif defined Q_OS_WIN
-		pluginsPath = "plugins";
-		templatesPath = "../templates";
-		translationsPath = "../translations";
-		apisPath = "../ctags/apis";
+		return storagePathsOutOfBox( type, appPath );
+	}
+	
+	if ( type == Settings::SP_PLUGINS )
+	{
+#ifdef Q_OS_WIN
+		basePath = appPath;
+#elif defined Q_OS_MAC
+		basePath = QString( "%1/.." ).arg( appPath );
 #else
-		pluginsPath = "plugins";
-		templatesPath = "../templates";
-		translationsPath = "../translations";
-		apisPath = "../ctags/apis";
+		return QStringList( PACKAGE_PLUGINS );
 #endif
+		return QStringList( QDir::cleanPath( QString( "%1/%2" ).arg( basePath ).arg( storageToString( type ) ) ) );
 	}
-	else
+	
+	return QStringList( QDir::cleanPath( QString( "%1/%2" ).arg( basePath ).arg( storageToString( type ) ) ) );
+}
+
+void Settings::setStoragePaths( Settings::StoragePath type, const QStringList& paths )
+{
+	setValue( QString( "Paths/%1" ).arg( storageToString( type ) ), paths );
+}
+
+QString Settings::homeFilePath( const QString& filePath ) const
+{
+	QString path = QFileInfo( fileName() ).absolutePath();
+	QDir dir( path );
+	
+	return QDir::cleanPath( dir.filePath( filePath ) );
+}
+
+QString Settings::homePath( Settings::StoragePath type ) const
+{
+	const QString path = QFileInfo( fileName() ).absolutePath();
+	const QString folder = storageToString( type ).append( "-%1" ).arg( PACKAGE_VERSION );
+	QDir dir( path );
+	
+	if ( !dir.exists( folder ) && !dir.mkdir( folder ) )
 	{
+		return QString::null;
+	}
+	
+	dir.cd( folder );
+	return dir.absolutePath();
+}
+
+QStringList Settings::storagePathsOutOfBox( Settings::StoragePath type, const QString& appPath ) const
+{
+	QString basePath = appPath;
+	
 #ifdef Q_OS_MAC
-		pluginsPath = "../plugins";
-		templatesPath = "../Resources/templates";
-		translationsPath = "../Resources/translations";
-		apisPath = "../Resources/apis";
-#elif defined Q_OS_WIN
-		pluginsPath = "plugins";
-		templatesPath = "templates";
-		translationsPath = "translations";
-		apisPath = "apis";
+	basePath.append( "/../../../../datas" );
 #else
-		pluginsPath = PACKAGE_PLUGINS;
-		templatesPath = QString( "%1/templates" ).arg( PACKAGE_DATAS );
-		translationsPath = QString( "%1/translations" ).arg( PACKAGE_DATAS );
-		apisPath = QString( "%1/apis" ).arg( PACKAGE_DATAS );
+	basePath.append( "/../datas" );
 #endif
-	}
 	
-	/*
-	qWarning() << "Settings::setDefaultSettings()" << appPath << PACKAGE_PREFIX << appIsInstalled;
-	qWarning() << "pluginsPath" << pluginsPath;
-	qWarning() << "templatesPath" << templatesPath;
-	qWarning() << "translationsPath" << translationsPath;
-	qWarning() << "apisPath" << apisPath;
-	*/
-	
-	// plugins
-	if ( !pluginsPath.isEmpty() )
+	if ( type == Settings::SP_PLUGINS )
 	{
-		QStringList paths = value( "Plugins/Path" ).toStringList();
-		
-		if ( !paths.contains( pluginsPath ) )
-		{
-			paths << pluginsPath;
-		}
-		
-		setValue( "Plugins/Path", paths );
+#ifdef Q_OS_WIN
+		basePath = appPath;
+#elif defined Q_OS_MAC
+		basePath = QString( "%1/.." ).arg( appPath );
+#else
+		basePath = appPath;
+#endif
+		return QStringList( QDir::cleanPath( QString( "%1/%2" ).arg( basePath ).arg( storageToString( type ) ) ) );
 	}
+
+	return QStringList( QDir::cleanPath( QString( "%1/%2" ).arg( basePath ).arg( storageToString( type ) ) ) );
+}
+
+void Settings::setDefaultSettings()
+{
+	// create default paths
+	QStringList pluginsPaths = storagePaths( Settings::SP_PLUGINS );
+	QStringList apisPaths = storagePaths( Settings::SP_APIS );
+	QStringList templatesPaths = storagePaths( Settings::SP_TEMPLATES );
+	QStringList translationsPaths = storagePaths( Settings::SP_TRANSLATIONS );
+	QStringList scriptsPaths = storagePaths( Settings::SP_SCRIPTS );
+	QString scriptsPath = homePath( Settings::SP_SCRIPTS );
 	
-	// templates
-	if ( !templatesPath.isEmpty() )
-	{
-		QStringList paths = value( "Templates/DefaultDirectories" ).toStringList();
-		
-		if ( !paths.contains( templatesPath ) )
-		{
-			paths << templatesPath;
-		}
-		
-		setValue( "Templates/DefaultDirectories", paths );
-	}
-	
-	// translations
-	if ( !translationsPath.isEmpty() )
-	{
-		QStringList paths = value( "Translations/Path" ).toStringList();
-		
-		if ( !paths.contains( translationsPath ) )
-		{
-			paths << translationsPath;
-		}
-		
-		setValue( "Translations/Path", paths );
-	}
+	// save default paths
+	setStoragePaths( Settings::SP_PLUGINS, pluginsPaths );
+	setStoragePaths( Settings::SP_APIS, apisPaths );
+	setStoragePaths( Settings::SP_TEMPLATES, templatesPaths );
+	setStoragePaths( Settings::SP_TRANSLATIONS, translationsPaths );
+	setStoragePaths( Settings::SP_SCRIPTS, scriptsPaths );
 	
 	// apis
-	if ( !apisPath.isEmpty() )
+	foreach ( const QString& path, apisPaths )
 	{
-		setValue( "SourceAPIs/CMake", QStringList( apisPath +"/cmake.api" ) );
-		setValue( "SourceAPIs/C#", QStringList( apisPath +"/cs.api" ) );
-		setValue( "SourceAPIs/C++", QStringList() << apisPath +"/c.api" << apisPath +"/cpp.api" << apisPath +"/glut.api" << apisPath +"/opengl.api" << apisPath +"/qt-4.4.0.api" );
+		if ( QFile::exists( path +"/cmake.api" ) )
+		{
+			setValue( "SourceAPIs/CMake", QStringList( QDir::cleanPath( path +"/cmake.api" ) ) );
+		}
+		
+		if ( QFile::exists( path +"/cs.api" ) )
+		{
+			setValue( "SourceAPIs/C#", QStringList( QDir::cleanPath( path +"/cs.api" ) ) );
+		}
+		
+		if ( QFile::exists( path +"/c.api" ) )
+		{
+			QStringList files;
+			
+			files << QDir::cleanPath( path +"/c.api" );
+			files << QDir::cleanPath( path +"/cpp.api" );
+			files << QDir::cleanPath( path +"/glut.api" );
+			files << QDir::cleanPath( path +"/opengl.api" );
+			files << QDir::cleanPath( path +"/qt-4.4.x.api" );
+			
+			setValue( "SourceAPIs/C++", files );
+		}
+	}
+	
+	// copy scripts to user's home
+	foreach ( const QString& path, scriptsPaths )
+	{
+		QFileInfoList files = QDir( path ).entryInfoList( QStringList( "*.mks" ) );
+		
+		foreach ( const QFileInfo& file, files )
+		{
+			const QString fn = QDir( scriptsPath ).absoluteFilePath( file.fileName() );
+			
+			if ( !QFile::exists( fn ) )
+			{
+				QFile f( file.absoluteFilePath() );
+				
+				if ( !f.copy( fn ) )
+				{
+					MonkeyCore::statusBar()->appendMessage( tr( "Can't copy script '%1', %2" ).arg( file.fileName() ).arg( f.errorString() ) );
+				}
+			}
+		}
 	}
 	
 	// syntax highlighter

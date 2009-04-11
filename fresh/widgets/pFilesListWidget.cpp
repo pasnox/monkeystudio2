@@ -17,10 +17,13 @@
 ****************************************************************************/
 #include "pFilesListWidget.h"
 #include "pExtendedWorkspace.h"
+#include "pDockWidgetTitleBar.h"
 
+#include <QComboBox>
 #include <QListWidget>
 #include <QMainWindow>
 #include <QDropEvent>
+#include <QWidgetAction>
 
 /*!
 	\details Create a new pFilesListWidget instance
@@ -38,13 +41,26 @@ pFilesListWidget::pFilesListWidget( const QString& title, pExtendedWorkspace* wo
 	setAcceptDrops( true );
 	setContextMenuPolicy( Qt::CustomContextMenu );
 	setWidget( mList = new QListWidget() );
+	mList->setAttribute( Qt::WA_MacShowFocusRect, false );
 	mList->setDragDropMode( QAbstractItemView::InternalMove );
 	mList->installEventFilter( this );
+	
+	mCombo = new QComboBox( titleBar() );
+	mCombo->setAttribute( Qt::WA_MacSmallSize );
+	mCombo->setModel( mList->model() );
+	
+	QWidgetAction* cbAction = new QWidgetAction( this );
+	cbAction->setDefaultWidget( mCombo );
+	titleBar()->addAction( cbAction, 0 );
+	
+	titleBar()->setOrientationButtonVisible( false );
+	
 	// init icons
 	mModifiedIcon = QIcon( QPixmap( ":/file/icons/file/save.png" ) );
 	mNonModifiedIcon = QIcon( QPixmap( ":/file/icons/file/transparent.png" ) );
 	// connection
 	connect( mList, SIGNAL( currentRowChanged( int ) ), mWorkspace, SLOT( setCurrentIndex( int ) ) );
+	connect( mCombo, SIGNAL( currentIndexChanged( int ) ), this, SLOT( setCurrentRow( int ) ) );
 	connect( mWorkspace, SIGNAL( currentChanged( int ) ), this, SLOT( setCurrentRow( int ) ) );
 	connect( mWorkspace, SIGNAL( modifiedChanged( int, bool ) ), this, SLOT( modifiedChanged( int, bool ) ) );
 	connect( mWorkspace, SIGNAL( docTitleChanged( int, const QString& ) ), this, SLOT( docTitleChanged( int, const QString& ) ) );
@@ -67,7 +83,7 @@ bool pFilesListWidget::eventFilter( QObject* object, QEvent* event )
 		if ( i != j )
 		{
 			mWorkspace->moveDocument( i, j );
-			mList->setCurrentRow( j );
+			setCurrentRow( j );
 		}
 	}
 	return QDockWidget::eventFilter( object, event );
@@ -123,4 +139,7 @@ void pFilesListWidget::documentAboutToClose( int id )
 { delete mList->takeItem( id ); }
 
 void pFilesListWidget::setCurrentRow( int id )
-{ mList->setCurrentRow( id ); }
+{
+	mList->setCurrentRow( id );
+	mCombo->setCurrentIndex( id );
+}

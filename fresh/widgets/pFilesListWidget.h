@@ -30,6 +30,7 @@
 #include <QIcon>
 
 class pExtendedWorkspace;
+class QComboBox;
 class QListWidget;
 class QDragEnterEvent;
 class QDropEvent;
@@ -50,6 +51,7 @@ public slots:
 	void setItemToolTip( int id, const QString& toolTip );
 
 protected:
+	QComboBox* mCombo;
 	QListWidget* mList;
 	pExtendedWorkspace* mWorkspace;
 	QIcon mModifiedIcon;

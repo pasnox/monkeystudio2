@@ -101,6 +101,9 @@ public:
 	QSize iconSize() const;
 	QWidget* addAction( QAction* action, int index = -1 );
 	void addSeparator( int index = -1 );
+	
+	bool orientationButtonVisible() const;
+	void setOrientationButtonVisible( bool visible );
 
 protected:
 	pDockWidget* mDock;

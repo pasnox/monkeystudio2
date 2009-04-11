@@ -181,7 +181,7 @@ UISettings::UISettings( QWidget* p )
 
 void UISettings::loadSettings()
 {
-	pSettings* s = MonkeyCore::settings();
+	Settings* s = MonkeyCore::settings();
 	QString sp;
 	
 	// General
@@ -199,9 +199,9 @@ void UISettings::loadSettings()
 	cbRestoreSession->setChecked( restoreSessionOnStartup() );
 
 	// Paths
-	pleTemplatesPaths->setValues( pTemplatesManager::instance()->templatesPath() );
-	pleTranslationsPaths->setValues( s->value( "Translations/Path" ).toStringList() );
-	plePluginsPaths->setValues( s->value( "Plugins/Path" ).toStringList() );
+	pleTemplatesPaths->setValues( s->storagePaths( Settings::SP_TEMPLATES ) );
+	pleTranslationsPaths->setValues( s->storagePaths( Settings::SP_TRANSLATIONS ) );
+	plePluginsPaths->setValues( s->storagePaths( Settings::SP_PLUGINS ) );
 
 	// Editor
 	//  General
@@ -296,7 +296,7 @@ void UISettings::loadSettings()
 	if ( cbSourceAPIsLanguages->count() > 0 )
 		cbSourceAPIsLanguages->setCurrentIndex( 0 );
 	//  Lexers Associations
-	QHash<QString, QStringList> l = availableLanguagesSuffixes();
+	QMap<QString, QStringList> l = MonkeyCore::fileManager()->associations();
 	foreach ( QString k, l.keys() )
 	{
 		foreach ( QString e, l.value( k ) )
@@ -314,19 +314,19 @@ void UISettings::loadSettings()
 		on_cbLexersHighlightingLanguages_currentIndexChanged( cbLexersHighlightingLanguages->itemText( 0 ) );
 
 	//  Abbreviations
-	foreach ( pAbbreviation a, pAbbreviationsManager::availableAbbreviations() )
+	foreach ( pAbbreviation a, MonkeyCore::abbreviationsManager()->abbreviations() )
 	{
 		QTreeWidgetItem* it = new QTreeWidgetItem( twAbbreviations );
-		it->setText( 0, a.Template );
+		it->setText( 0, a.Macro );
 		it->setText( 1, a.Description );
 		it->setText( 2, a.Language );
-		it->setData( 0, Qt::UserRole, a.Code );
+		it->setData( 0, Qt::UserRole, a.Snippet );
 	}
 }
 
 void UISettings::saveSettings()
 {
-	pSettings* s = MonkeyCore::settings();
+	Settings* s = MonkeyCore::settings();
 	QString sp;
 
 	// General
@@ -344,9 +344,9 @@ void UISettings::saveSettings()
 	setRestoreSessionOnStartup( cbRestoreSession->isChecked() );
 
 	// Paths
-	pTemplatesManager::instance()->setTemplatesPath( pleTemplatesPaths->values() );
-	s->setValue( "Translations/Path", pleTranslationsPaths->values() );
-	s->setValue( "Plugins/Path", plePluginsPaths->values() );
+	s->setStoragePaths( Settings::SP_TEMPLATES, pleTemplatesPaths->values() );
+	s->setStoragePaths( Settings::SP_TRANSLATIONS, pleTranslationsPaths->values() );
+	s->setStoragePaths( Settings::SP_PLUGINS, plePluginsPaths->values() );
 
 	// Editor
 	//  General
@@ -442,16 +442,24 @@ void UISettings::saveSettings()
 	sp = "SourceAPIs/";
 	for ( int i = 0; i < cbSourceAPIsLanguages->count(); i++ )
 		s->setValue( sp +cbSourceAPIsLanguages->itemText( i ), cbSourceAPIsLanguages->itemData( i ).toStringList() );
+	
 	//  Lexers Associations
-	sp = "LexersAssociations/";
-	// remove old associations
-	s->remove( sp );
-	// write new ones
+	QMap<QString, QStringList> suffixes;
+	
 	for ( int i = 0; i < twLexersAssociations->topLevelItemCount(); i++ )
 	{
 		QTreeWidgetItem* it = twLexersAssociations->topLevelItem( i );
-		s->setValue( sp +it->text( 0 ), it->text( 1 ) );
+		
+		suffixes[ it->text( 1 ) ] << it->text( 0 );
 	}
+	
+	foreach ( const QString& type, suffixes.keys() )
+	{
+		MonkeyCore::fileManager()->set( type, suffixes[ type ] );
+	}
+	
+	MonkeyCore::fileManager()->generateScript();
+	
 	//  Lexers Highlighting
 	foreach ( QsciLexer* l, mLexers )
 	{
@@ -461,22 +469,22 @@ void UISettings::saveSettings()
 	}
 
 	//  Abbreviations
-	sp = "Abbreviations";
-	// remove key
-	s->remove( sp );
-	// write new ones
-	s->beginWriteArray( sp );
+	pAbbreviationList abbreviations;
 	for ( int i = 0; i < twAbbreviations->topLevelItemCount(); i++ )
 	{
-		s->setArrayIndex( i );
 		QTreeWidgetItem* it = twAbbreviations->topLevelItem( i );
-
-		s->setValue( "Template", it->text( 0 ).trimmed() );
-		s->setValue( "Description", it->text( 1 ).trimmed() );
-		s->setValue( "Language", it->text( 2 ) );
-		s->setValue( "Code", it->data( 0, Qt::UserRole ).toString() );
+		
+		pAbbreviation abbreviation;
+		abbreviation.Macro = it->text( 0 );
+		abbreviation.Description = it->text( 1 );
+		abbreviation.Language = it->text( 2 );
+		abbreviation.Snippet = it->data( 0, Qt::UserRole ).toString();
+		
+		abbreviations << abbreviation;
 	}
-	s->endArray();
+	
+	MonkeyCore::abbreviationsManager()->set( abbreviations );
+	MonkeyCore::abbreviationsManager()->generateScript();
 }
 
 void UISettings::on_twMenu_itemSelectionChanged()

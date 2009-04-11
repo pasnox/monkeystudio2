@@ -51,9 +51,29 @@ class Q_MONKEY_EXPORT Settings : public pSettings
 	Q_OBJECT
 	
 public:
+	enum StoragePath
+	{
+		SP_PLUGINS = -1,
+		SP_APIS,
+		SP_TEMPLATES,
+		SP_TRANSLATIONS,
+		SP_SCRIPTS
+	};
+	
 	Settings( QObject* = 0 );
+	
+	QString storageToString( Settings::StoragePath type ) const;
+	QStringList storagePaths( Settings::StoragePath type ) const;
+	void setStoragePaths( Settings::StoragePath type, const QStringList& paths );
+	
+	QString homeFilePath( const QString& filePath ) const;
+	QString homePath( Settings::StoragePath type ) const;
+	
 	virtual void setDefaultSettings();
 	void setDefaultCppSyntaxHighlight();
+
+protected:
+	QStringList storagePathsOutOfBox( Settings::StoragePath type, const QString& appPath ) const;
 };
 
 #endif // SETTINGS_H

@@ -50,6 +50,8 @@ public:
 
 	// return child language
 	virtual QString language() const;
+	
+	virtual QString fileBuffer( const QString& fileName, bool& ok ) const;
 
 	// return cursor position if available
 	virtual QPoint cursorPosition() const;

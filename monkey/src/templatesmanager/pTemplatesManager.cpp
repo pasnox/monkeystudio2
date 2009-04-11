@@ -44,20 +44,6 @@ pTemplatesManager::pTemplatesManager( QObject* o )
 {}
 
 /*!
-	Set's templates path - dirrectory, on which templates will be searched
-	\param l List of dirrectoryes
-*/
-void pTemplatesManager::setTemplatesPath( const QStringList& l )
-{ MonkeyCore::settings()->setValue( "Templates/DefaultDirectories", l ); }
-
-/*!
-	Get list of dirrectoryes, where templates is searching
-	\return list of dirrectoryes
-*/
-QStringList pTemplatesManager::templatesPath() const
-{ return MonkeyCore::settings()->value( "Templates/DefaultDirectories" ).toStringList(); }
-
-/*!
 	Read template from file
 	\param s Path of template config file (.ini)
 	\return Inmemory representation of template
@@ -97,7 +83,7 @@ pTemplate pTemplatesManager::getTemplate( const QString& s )
 TemplateList pTemplatesManager::getTemplates()
 {
 	TemplateList l;
-	foreach( QString p, templatesPath() )
+	foreach( QString p, MonkeyCore::settings()->storagePaths( Settings::SP_TEMPLATES ) )
 		foreach ( QFileInfo f, getFiles( QDir( unTokenizeHome( QDir::isRelativePath( p ) ? qApp->applicationDirPath().append( "/%1" ).arg( p ) : p ) ), QStringList( "template.ini" ), true ) )
 			l << getTemplate( f.absoluteFilePath() );
 	return l;

@@ -35,26 +35,71 @@
 #include <QList>
 
 class pEditor;
+class MkSShellInterpreter;
 
 struct Q_MONKEY_EXPORT pAbbreviation
 {
 	pAbbreviation() {}
-	pAbbreviation( const QString& t, const QString& d, const QString& l, const QString& c )
-		: Template( t ), Description( d ), Language( l ), Code( c ) {}
+	pAbbreviation( const QString& m, const QString& d, const QString& l, const QString& s )
+		: Macro( m ), Description( d ), Language( l ), Snippet( s ) {}
 
-	QString Template;
+	QString Macro;
 	QString Description;
 	QString Language;
-	QString Code;
+	QString Snippet;
+	
+	pAbbreviation& operator=( const pAbbreviation& other )
+	{
+		if ( *this != other )
+		{
+			Macro = other.Macro;
+			Description = other.Description;
+			Language = other.Language;
+			Snippet = other.Snippet;
+		}
+		
+		return *this;
+	}
 
+	bool operator==( const pAbbreviation& other ) const
+	{
+		return Macro == other.Macro && Description == other.Description &&
+			Language == other.Language && Snippet == other.Snippet;
+	}
+	
+	bool operator!=( const pAbbreviation& other ) const
+	{
+		return !operator==( other );
+	}
 };
 
-namespace pAbbreviationsManager
-{
-	const QList<pAbbreviation> defaultAbbreviations();
-	const QList<pAbbreviation> availableAbbreviations();
-	void expandAbbreviation( pEditor* );
+typedef QList<pAbbreviation> pAbbreviationList;
 
+class Q_MONKEY_EXPORT pAbbreviationsManager : public QObject
+{
+	Q_OBJECT
+	friend class MonkeyCore;
+	
+public:
+	pAbbreviationsManager( QObject* parent = 0 );
+	
+	void clear();
+	void add( const pAbbreviation& abbreviation );
+	void add( const pAbbreviationList& abbreviations );
+	void set( const pAbbreviationList& abbreviations );
+	void remove( const pAbbreviation& abbreviation );
+	void remove( const pAbbreviationList& abbreviations );
+	void remove( const QString& macro, const QString& language );
+	const pAbbreviationList& abbreviations() const;
+	pAbbreviation abbreviation( const QString& macro, const QString& language ) const;
+	void expandMacro( pEditor* editor );
+	void generateScript();
+
+protected:
+	pAbbreviationList mAbbreviations;
+	
+	void initialize();
+	static QString commandInterpreter( const QString& command, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter );
 };
 
 #endif // PABBREVIATIONSMANAGER_H

@@ -132,9 +132,11 @@ public slots:
 
 signals:
 	// a file has been opened
-	void fileOpened( const QString& );
+	void fileOpened( const QString& fileName );
 	// a file has been closed
-	void fileClosed( const QString& );
+	void fileClosed( const QString& fileName );
+	// a file have changed
+	void fileChanged( const QString& fileName );
 	// current file changed
 	void currentFileChanged( pAbstractChild*, const QString& );
 };

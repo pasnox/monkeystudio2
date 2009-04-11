@@ -74,6 +74,14 @@ public:
 	virtual QString language() const
 	{ return QString(); }
 	
+	// return the current buffer of filename, set ok to true if succes, else false
+	virtual QString fileBuffer( const QString& fileName, bool& ok ) const
+	{
+		Q_UNUSED( fileName );
+		ok = false;
+		return QString::null;
+	}
+	
 	// return cursor position if available
 	virtual QPoint cursorPosition() const = 0;
 	// return files that this child manage

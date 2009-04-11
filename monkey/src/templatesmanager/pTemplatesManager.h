@@ -87,9 +87,6 @@ private:
 	pTemplatesManager( QObject* = QApplication::instance() );
 
 public:
-	void setTemplatesPath( const QStringList& );
-	QStringList templatesPath() const;
-
 	pTemplate getTemplate( const QString& );
 	TemplateList getTemplates();
 

@@ -511,6 +511,25 @@ QStringList QtDesignerChild::files() const
 	return l;
 }
 
+QString QtDesignerChild::fileBuffer( const QString& fileName, bool& ok ) const
+{
+	ok = false;
+	
+	foreach ( QMdiSubWindow* w, mArea->subWindowList() )
+	{
+		if ( QDesignerFormWindowInterface* i = qobject_cast<QDesignerFormWindowInterface*>( w->widget() ) )
+		{
+			if ( pMonkeyStudio::isSameFile( fileName, i->fileName() ) )
+			{
+				ok = true;
+				return i->contents();
+			}
+		}
+	}
+	
+	return QString::null;
+}
+
 QPoint QtDesignerChild::cursorPosition() const
 { return QPoint( -1, -1 ); }
 
@@ -616,7 +635,7 @@ void QtDesignerChild::saveFiles()
 			if ( f.open( QIODevice::WriteOnly | QIODevice::Text ) )
 			{
 				f.resize( 0 );
-				f.write( qPrintable( i->contents() ) );
+				f.write( i->contents().toUtf8() );
 				f.close();
 				i->setDirty( false );
 				setModified( i );
@@ -704,7 +723,7 @@ void QtDesignerChild::backupCurrentFile( const QString& s )
 		if ( f.open( QIODevice::WriteOnly | QIODevice::Text ) )
 		{
 			f.resize( 0 );
-			f.write( qPrintable( w->contents() ) );
+			f.write( w->contents().toUtf8() );
 			f.close();
 		}
 		else
