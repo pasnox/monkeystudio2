@@ -46,6 +46,7 @@ class Q_MONKEY_EXPORT pFileManager : public QObject
 	friend class pWorkspace;
 
 public:
+	// associations related members
 	void clear( const QString& type = QString::null );
 	void add( const QString& type, const QStringList& suffixes );
 	void add( const QString& type, const QString& suffix );

@@ -8,8 +8,20 @@ include( ../config.pri )
 
 TEMPLATE	= lib
 CONFIG	*= staticlib
+QT	*= sql
 DEFINES	*= QCTAGSSENSE_EXPORT_BUILD
 DESTDIR	= $${PACKAGE_BUILD_PATH}
+
+PRE_TARGETDEPS	*= ../ctags
+LIBS	*= -L$${PACKAGE_BUILD_PATH}
+CONFIG(debug, debug|release) {
+	#Debug
+	unix:LIBS	*= -lctags_debug
+	else:LIBS	*= -lctagsd
+} else {
+	#Release
+	LIBS	*= -lctags
+}
 
 RESOURCES	= src/resources/qCtagsSense.qrc
 
