@@ -33,7 +33,7 @@ extern TagEntryListItem* createTagEntryListItem( const char* fileName, const cha
 	
 	if ( lang <= 0 )
 	{
-		printf( "Will not parse %s\n",fileName );
+		//printf( "Will not parse %s\n",fileName );
 		return NULL;
 	}
 	
