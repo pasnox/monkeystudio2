@@ -10,6 +10,7 @@ TEMPLATE	= subdirs
 
 SUBDIRS	= fresh \
 	ctags \
+	qCtagsSense \
 	monkey \
 	plugins
 
