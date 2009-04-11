@@ -1,0 +1,104 @@
+#include "qCtagsSenseKindFinder.h"
+#include "qCtagsSenseSQL.h"
+#include "qCtagsSenseUtils.h"
+
+qCtagsSenseKindFinder::qCtagsSenseKindFinder( qCtagsSenseSQL* parent )
+	: QThread( parent )
+{
+	mSQL = parent;
+	mKind = qCtagsSense::Unknow;
+	
+	connect( this, SIGNAL( finished() ), this, SLOT( deleteLater() ) );
+}
+
+qCtagsSenseKindFinder::~qCtagsSenseKindFinder()
+{
+	delete mEntry;
+}
+
+void qCtagsSenseKindFinder::goTo( qCtagsSense::Kind kind, qCtagsSenseEntry* entry )
+{
+	mKind = kind;
+	mEntry = entry;
+	start();
+}
+
+void qCtagsSenseKindFinder::run()
+{
+	QSqlRecord record;
+	const QString sql = QString(
+		"SELECT entries.*, language, filename FROM entries "
+		"INNER JOIN files ON files.id = entries.file_id "
+		"AND name = ? "
+		//"AND scope_value = ? "
+		"AND scope_key = ? "
+		"AND signature = ? "
+		"AND language = ? "
+		"AND kind = ?"
+	);
+	
+	QSqlQuery q = mSQL->query();
+	q.prepare( sql );
+	q.addBindValue( mEntry->name );
+	//q.addBindValue( mEntry->scope.first );
+	q.addBindValue( mEntry->scope.second );
+	q.addBindValue( mEntry->signature );
+	q.addBindValue( mEntry->language );
+	q.addBindValue( mKind );
+	
+	if ( !q.exec() )
+	{
+		qWarning() << "Can't retreive infos for" << mEntry->name << " for kind " << mKind;
+		return;
+	}
+	
+	if ( !q.next() )
+	{
+		// try to find matching member with not same signature (it can differ from header to source in C/C++)
+		const QString sql_less = QString(
+			"SELECT entries.*, language, filename FROM entries "
+			"INNER JOIN files ON files.id = entries.file_id "
+			"AND name = ? "
+			//"AND scope_value = ? "
+			"AND scope_key = ? "
+			//"AND signature = ? "
+			"AND language = ? "
+			"AND kind = ?"
+		);
+		
+		q.prepare( sql_less );
+		q.addBindValue( mEntry->name );
+		//q.addBindValue( mEntry->scope.first );
+		q.addBindValue( mEntry->scope.second );
+		//q.addBindValue( mEntry->signature );
+		q.addBindValue( mEntry->language );
+		q.addBindValue( mKind );
+		
+		if ( !q.exec() )
+		{
+			qWarning() << "Can't retreive infos for" << mEntry->name << " for kind " << mKind;
+			return;
+		}
+		
+		if ( q.next() )
+		{
+			record = q.record();
+		}
+	}
+	else
+	{
+		record = q.record();
+	}
+	
+	if ( record.isEmpty() )
+	{
+		qWarning() << "No entry found" << mEntry->name << " for kind " << mKind;
+		mEntry = 0;
+	}
+	else
+	{
+		mEntry = qCtagsSenseUtils::entryForRecord( record, q.record().value( "filename" ).toString() );
+		
+		emit memberActivated( mEntry );
+	}
+}

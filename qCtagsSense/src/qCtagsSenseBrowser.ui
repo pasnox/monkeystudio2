@@ -1,0 +1,86 @@
+<ui version="4.0" >
+ <class>qCtagsSenseBrowser</class>
+ <widget class="QFrame" name="qCtagsSenseBrowser" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>299</width>
+    <height>440</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout" >
+   <item>
+    <widget class="QWidget" native="1" name="wTopContainer" >
+     <layout class="QGridLayout" name="gridLayout" >
+      <item row="2" column="0" >
+       <widget class="QLabel" name="lMembers" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text" >
+         <string>Member</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" >
+       <widget class="QComboBox" name="cbMembers" />
+      </item>
+      <item row="1" column="1" >
+       <widget class="QComboBox" name="cbFileNames" />
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="lFileNames" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text" >
+         <string>fileName</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" >
+       <widget class="QLabel" name="lLanguages" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text" >
+         <string>Language</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="QComboBox" name="cbLanguages" />
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTreeView" name="tvMembers" />
+   </item>
+   <item>
+    <widget class="QProgressBar" name="pbIndexing" >
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="format" >
+      <string>Indexing at %p%</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="resources/qCtagsSense.qrc" />
+ </resources>
+ <connections/>
+</ui>

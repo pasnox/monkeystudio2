@@ -1,0 +1,22 @@
+<RCC>
+	<qresource prefix="icons" >
+		<file alias="class.png">icons/class.png</file>
+		<file alias="enumerator.png">icons/enumerator.png</file>
+		<file alias="enum.png">icons/enum.png</file>
+		<file alias="function.png">icons/func.png</file>
+		<file alias="function_private.png">icons/func_priv.png</file>
+		<file alias="function_protected.png">icons/func_prot.png</file>
+		<file alias="keyword.png">icons/keyword.png</file>
+		<file alias="macro.png">icons/macro.png</file>
+		<file alias="namespace">icons/namespace.png</file>
+		<file alias="signal.png">icons/signal.png</file>
+		<file alias="slot.png">icons/slot.png</file>
+		<file alias="slot_private.png">icons/slot_priv.png</file>
+		<file alias="slot_protected.png">icons/slot_prot.png</file>
+		<file alias="variable.png">icons/var.png</file>
+		<file alias="variable_private.png">icons/var_priv.png</file>
+		<file alias="variable_protected.png">icons/var_prot.png</file>
+		<file alias="structure.png">icons/struct.png</file>
+		<file alias="typedef.png">icons/typedef.png</file>
+	</qresource>
+</RCC>
