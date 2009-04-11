@@ -205,7 +205,7 @@ void UIProjectHeaders::accept()
 	saveSettings();
 	// get languages filters
 	QStringList filters;
-	QHash<QString, QStringList> l = pMonkeyStudio::availableLanguagesSuffixes();
+	QMap<QString, QStringList> l = pMonkeyStudio::availableLanguagesSuffixes();
 	foreach ( QString k, l.keys() )
 		foreach ( QString e, l.value( k ) )
 			if ( !filters.contains( e ) )
