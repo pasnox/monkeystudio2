@@ -77,7 +77,22 @@ qCtagsSenseBrowser::qCtagsSenseBrowser( QWidget* parent )
 
 qCtagsSenseBrowser::~qCtagsSenseBrowser()
 {
-	qApp->quit();
+}
+
+qCtagsSense* qCtagsSenseBrowser::sense() const
+{
+	return mSense;
+}
+
+void qCtagsSenseBrowser::tagEntry( const QString& fileName )
+{
+	mSense->tagEntry( fileName );
+}
+
+void qCtagsSenseBrowser::setCurrentFileName( const QString& fileName )
+{
+	mFileName = fileName;
+	mMembersModel->refresh( mFileName );
 }
 
 void qCtagsSenseBrowser::on_cbLanguages_currentIndexChanged( int id )

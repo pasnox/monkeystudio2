@@ -34,6 +34,12 @@ class QCTAGSSENSE_EXPORT qCtagsSenseBrowser : public QFrame, public Ui::qCtagsSe
 public:
 	qCtagsSenseBrowser( QWidget* parent = 0 );
 	virtual ~qCtagsSenseBrowser();
+	
+	qCtagsSense* sense() const;
+
+public slots:
+	void setCurrentFileName( const QString& fileName );
+	void tagEntry( const QString& fileName );
 
 protected:
 	qCtagsSense* mSense;
