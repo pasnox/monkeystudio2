@@ -23,8 +23,6 @@ protected:
 	qCtagsSenseLanguagesModel* mLanguagesModel;
 	qCtagsSenseFilesModel* mFilesModel;
 	qCtagsSenseMembersModel* mMembersModel;
-	
-	class FileManager* mFileManager;
 
 protected slots:
 	void on_cbLanguages_currentIndexChanged( int id );

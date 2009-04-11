@@ -5,8 +5,6 @@
 #include "qCtagsSenseMembersModel.h"
 #include "qCtagsSenseKindFinder.h"
 
-#include "FileManager.h"
-
 #include <QMenu>
 #include <QFileInfo>
 #include <QDebug>
@@ -35,18 +33,17 @@ qCtagsSenseBrowser::qCtagsSenseBrowser( QWidget* parent )
 	tvMembers->setHeaderHidden( true );
 	tvMembers->setModel( mMembersModel );
 	
-	mFileManager = new FileManager( this );
-	
 	connect( mSense, SIGNAL( indexingStarted() ), pbIndexing, SLOT( show() ) );
 	connect( mSense, SIGNAL( indexingProgress( int, int ) ), this, SLOT( mSense_indexingProgress( int, int ) ) );
 	connect( mSense, SIGNAL( indexingFinished() ), pbIndexing, SLOT( hide() ) );
 	connect( mSense, SIGNAL( indexingChanged() ), this, SLOT( mSense_indexingChanged() ) );
 	
-	connect( mFileManager, SIGNAL( buffersModified( const QMap<QString, QString>& ) ), mSense, SLOT( tagEntries( const QMap<QString, QString>& ) ) );
-	connect( this, SIGNAL( memberActivated( qCtagsSenseEntry* ) ), mFileManager, SLOT( memberActivated( qCtagsSenseEntry* ) ) );
 	connect( mLanguagesModel, SIGNAL( ready() ), this, SLOT( mLanguagesModel_ready() ) );
 	connect( mFilesModel, SIGNAL( ready() ), this, SLOT( mFilesModel_ready() ) );
 	connect( mMembersModel, SIGNAL( ready() ), this, SLOT( mMembersModel_ready() ) );
+	
+	//connect( mFileManager, SIGNAL( buffersModified( const QMap<QString, QString>& ) ), mSense, SLOT( tagEntries( const QMap<QString, QString>& ) ) );
+	//connect( this, SIGNAL( memberActivated( qCtagsSenseEntry* ) ), mFileManager, SLOT( memberActivated( qCtagsSenseEntry* ) ) );
 	
 	// *********************
 #if defined Q_OS_MAC
