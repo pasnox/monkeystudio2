@@ -3,10 +3,12 @@
 #include "qCtagsSense.h"
 #include "qCtagsSenseUtils.h"
 
+#include <QThread>
+#include <QMutex>
 #include <QSqlRecord>
 #include <QDebug>
 
-class qCtagsSenseMembersThread : public QThread
+class QCTAGSSENSE_EXPORT qCtagsSenseMembersThread : public QThread
 {
 	Q_OBJECT
 	

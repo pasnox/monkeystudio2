@@ -1,16 +1,17 @@
 #ifndef QCTAGSSENSEMEMBERSMODEL_H
 #define QCTAGSSENSEMEMBERSMODEL_H
 
+#include "qCtagsSenseExport.h"
+#include "qCtagsSense.h"
+
 #include <QAbstractItemModel>
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QPixmap>
 
-#include "qCtagsSense.h"
-
 class qCtagsSenseMembersThread;
 
-class qCtagsSenseMembersModel : public QAbstractItemModel
+class QCTAGSSENSE_EXPORT qCtagsSenseMembersModel : public QAbstractItemModel
 {
 	Q_OBJECT
 	

@@ -1,6 +1,7 @@
 #ifndef QCTAGSSENSEBROWSER_H
 #define QCTAGSSENSEBROWSER_H
 
+#include "qCtagsSenseExport.h"
 #include "ui_qCtagsSenseBrowser.h"
 
 class qCtagsSense;
@@ -9,7 +10,7 @@ class qCtagsSenseFilesModel;
 class qCtagsSenseMembersModel;
 class qCtagsSenseEntry;
 
-class qCtagsSenseBrowser : public QFrame, public Ui::qCtagsSenseBrowser
+class QCTAGSSENSE_EXPORT qCtagsSenseBrowser : public QFrame, public Ui::qCtagsSenseBrowser
 {
 	Q_OBJECT
 

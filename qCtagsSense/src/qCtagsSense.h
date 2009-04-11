@@ -1,6 +1,8 @@
 #ifndef QCTAGSSENSE_H
 #define QCTAGSSENSE_H
 
+#include "qCtagsSenseExport.h"
+
 #include <QObject>
 #include <QMap>
 #include <QPair>
@@ -8,7 +10,7 @@
 class qCtagsSenseSQL;
 class qCtagsSenseIndexer;
 
-class qCtagsSense : public QObject
+class QCTAGSSENSE_EXPORT qCtagsSense : public QObject
 {
 	Q_OBJECT
 	
@@ -58,7 +60,7 @@ signals:
 struct qCtagsSenseEntry;
 typedef QList<qCtagsSenseEntry*> qCtagsSenseEntryList;
 
-struct qCtagsSenseEntry
+struct QCTAGSSENSE_EXPORT qCtagsSenseEntry
 {
 	qCtagsSenseEntry( qCtagsSenseEntry* pItem = 0, bool numberEntry = false, ulong number = -1,  bool scope = false, bool entry = false, bool truncate = false, qCtagsSense::Kind _kind = qCtagsSense::Unknow )
 	{
@@ -97,20 +99,6 @@ struct qCtagsSenseEntry
 	QPair<QString, QString> typeRef;
 	// children
 	qCtagsSenseEntryList children;
-};
-
-struct qCtagsSenseFile
-{
-	qCtagsSenseFile();
-	
-	~qCtagsSenseFile()
-	{
-		qDeleteAll( entries );
-	}
-	
-	QString fileName;
-	QString language;
-	qCtagsSenseEntryList entries;
 };
 
 #endif // QCTAGSSENSE_H

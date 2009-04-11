@@ -2,11 +2,14 @@
 #include "qCtagsSenseSQL.h"
 #include "qCtagsSenseUtils.h"
 
+#include <QStringList>
+#include <QThread>
+#include <QMutex>
 #include <QSqlRecord>
 #include <QFileInfo>
 #include <QDebug>
 
-class qCtagsSenseFilesThread : public QThread
+class QCTAGSSENSE_EXPORT qCtagsSenseFilesThread : public QThread
 {
 	Q_OBJECT
 	

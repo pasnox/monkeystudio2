@@ -1,10 +1,12 @@
 #include "qCtagsSenseLanguagesModel.h"
 #include "qCtagsSenseSQL.h"
 
+#include <QThread>
+#include <QMutex>
 #include <QSqlRecord>
 #include <QDebug>
 
-class qCtagsSenseLanguagesThread : public QThread
+class QCTAGSSENSE_EXPORT qCtagsSenseLanguagesThread : public QThread
 {
 	Q_OBJECT
 	

@@ -4,6 +4,8 @@
 #include "qCtagsSenseSQL.h"
 
 #include <QMutexLocker>
+#include <QVariant>
+#include <QSqlError>
 #include <QDebug>
 
 qCtagsSenseIndexer::qCtagsSenseIndexer( qCtagsSenseSQL* parent )

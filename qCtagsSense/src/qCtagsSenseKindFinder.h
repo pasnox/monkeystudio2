@@ -1,13 +1,14 @@
 #ifndef QCTAGSSENSECPP_H
 #define QCTAGSSENSECPP_H
 
-#include <QThread>
-
+#include "qCtagsSenseExport.h"
 #include "qCtagsSense.h"
+
+#include <QThread>
 
 class qCtagsSenseSQL;
 
-class qCtagsSenseKindFinder : public QThread
+class QCTAGSSENSE_EXPORT qCtagsSenseKindFinder : public QThread
 {
 	Q_OBJECT
 	

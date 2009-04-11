@@ -8,6 +8,7 @@ include( ../config.pri )
 
 TEMPLATE	= lib
 CONFIG	*= staticlib
+DEFINES	*= QCTAGSSENSE_EXPORT_BUILD
 DESTDIR	= $${PACKAGE_BUILD_PATH}
 
 RESOURCES	= src/resources/qCtagsSense.qrc
@@ -22,7 +23,8 @@ HEADERS	= src/qCtagsSense.h \
 	src/qCtagsSenseSQL.h \
 	src/qCtagsSenseLanguagesModel.h \
 	src/qCtagsSenseUtils.h \
-	src/qCtagsSenseKindFinder.h
+	src/qCtagsSenseKindFinder.h \
+	src/qCtagsSenseExport.h
 
 SOURCES	= src/qCtagsSense.cpp \
 	src/qCtagsSenseIndexer.cpp \

@@ -1,13 +1,15 @@
 #ifndef QCTAGSSENSELANGUAGESMODEL_H
 #define QCTAGSSENSELANGUAGESMODEL_H
 
+#include "qCtagsSenseExport.h"
+
 #include <QAbstractItemModel>
 #include <QStringList>
 
 class qCtagsSenseSQL;
 class qCtagsSenseLanguagesThread;
 
-class qCtagsSenseLanguagesModel : public QAbstractItemModel
+class QCTAGSSENSE_EXPORT qCtagsSenseLanguagesModel : public QAbstractItemModel
 {
 	Q_OBJECT
 	

@@ -2,6 +2,9 @@
 #include "qCtagsSenseSQL.h"
 #include "qCtagsSenseUtils.h"
 
+#include <QVariant>
+#include <QDebug>
+
 qCtagsSenseKindFinder::qCtagsSenseKindFinder( qCtagsSenseSQL* parent )
 	: QThread( parent )
 {

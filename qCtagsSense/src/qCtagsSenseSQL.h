@@ -1,10 +1,13 @@
 #ifndef QCTAGSSENSESQL_H
 #define QCTAGSSENSESQL_H
 
-#include <QObject>
-#include <QtSql>
+#include "qCtagsSenseExport.h"
 
-class qCtagsSenseSQL : public QObject
+#include <QObject>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+
+class QCTAGSSENSE_EXPORT qCtagsSenseSQL : public QObject
 {
 	Q_OBJECT
 	

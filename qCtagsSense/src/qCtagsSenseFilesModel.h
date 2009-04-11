@@ -1,13 +1,15 @@
 #ifndef QCTAGSSENSEFILESMODEL_H
 #define QCTAGSSENSEFILESMODEL_H
 
+#include "qCtagsSenseExport.h"
+
 #include <QAbstractItemModel>
-#include <QStringList>
 
 class qCtagsSenseSQL;
 class qCtagsSenseFilesThread;
+class QStringList;
 
-class qCtagsSenseFilesModel : public QAbstractItemModel
+class QCTAGSSENSE_EXPORT qCtagsSenseFilesModel : public QAbstractItemModel
 {
 	Q_OBJECT
 	

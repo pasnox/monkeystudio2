@@ -1,6 +1,8 @@
 #ifndef QCTAGSSENSEINDEXER_H
 #define QCTAGSSENSEINDEXER_H
 
+#include "qCtagsSenseExport.h"
+
 #include <QThread>
 #include <QMutex>
 #include <QMap>
@@ -10,7 +12,7 @@
 
 class qCtagsSenseSQL;
 
-class qCtagsSenseIndexer : public QThread
+class QCTAGSSENSE_EXPORT qCtagsSenseIndexer : public QThread
 {
 	Q_OBJECT
 	
