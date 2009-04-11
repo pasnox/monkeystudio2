@@ -8,7 +8,7 @@
 		<file alias="function_protected.png">icons/func_prot.png</file>
 		<file alias="keyword.png">icons/keyword.png</file>
 		<file alias="macro.png">icons/macro.png</file>
-		<file alias="namespace">icons/namespace.png</file>
+		<file alias="namespace.png">icons/namespace.png</file>
 		<file alias="signal.png">icons/signal.png</file>
 		<file alias="slot.png">icons/slot.png</file>
 		<file alias="slot_private.png">icons/slot_priv.png</file>
