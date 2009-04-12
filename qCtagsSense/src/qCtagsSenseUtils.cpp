@@ -117,20 +117,17 @@ Fortran
 
 namespace qCtagsSenseUtils
 {
-	QMap<qCtagsSense::Kind, QChar> mKindChar;
-	QMap<QChar, qCtagsSense::Kind> mCharKind;
-	QMap<qCtagsSense::Kind, QString> mKindText;
-	
-	QMap<QString, QPixmap> mPixmaps;
-	
 	typedef QPair<QChar, qCtagsSense::Kind> CharKindPair; // kind char, kind enum
 	typedef QList<CharKindPair> CharKindPairList;
+	
+	QMap<qCtagsSense::Kind, QString> mKindText;
 	QMap<QString, CharKindPairList> mLanguageChars; // language, list of pair of char/kind
+	QMap<QString, QPixmap> mPixmaps;
 };
 
 void qCtagsSenseUtils::initMaps()
 {
-	if ( mKindChar.isEmpty() )
+	if ( mLanguageChars.isEmpty() )
 	{
 		/*
 		CharKindPairList sqlList = CharKindPairList()
@@ -298,38 +295,7 @@ void qCtagsSenseUtils::initMaps()
 		
 		//mLanguageChars
 	
-		// original
-		
-		mKindChar[ qCtagsSense::Class ] = 'c';
-		mKindChar[ qCtagsSense::Macro ] = 'd';
-		mKindChar[ qCtagsSense::Enumerator ] = 'e';
-		mKindChar[ qCtagsSense::Function ] = 'f';
-		mKindChar[ qCtagsSense::Enum ] = 'g';
-		mKindChar[ qCtagsSense::LocalVariable ] = 'l';
-		mKindChar[ qCtagsSense::Member ] = 'm';
-		mKindChar[ qCtagsSense::Namespace ] = 'n';
-		mKindChar[ qCtagsSense::Prototype ] = 'p';
-		mKindChar[ qCtagsSense::Structure ] = 's';
-		mKindChar[ qCtagsSense::Typedef ] = 't';
-		mKindChar[ qCtagsSense::Union ] = 'u';
-		mKindChar[ qCtagsSense::Variable ] = 'v';
-		mKindChar[ qCtagsSense::ExternVariable ] = 'x';
-		
-		mCharKind[ 'c' ] = qCtagsSense::Class;
-		mCharKind[ 'd' ] = qCtagsSense::Macro;
-		mCharKind[ 'e' ] = qCtagsSense::Enumerator;
-		mCharKind[ 'f' ] = qCtagsSense::Function;
-		mCharKind[ 'g' ] = qCtagsSense::Enum;
-		mCharKind[ 'l' ] = qCtagsSense::LocalVariable;
-		mCharKind[ 'm' ] = qCtagsSense::Member;
-		mCharKind[ 'n' ] = qCtagsSense::Namespace;
-		mCharKind[ 'p' ] = qCtagsSense::Prototype;
-		mCharKind[ 's' ] = qCtagsSense::Structure;
-		mCharKind[ 't' ] = qCtagsSense::Typedef;
-		mCharKind[ 'u' ] = qCtagsSense::Union;
-		mCharKind[ 'v' ] = qCtagsSense::Variable;
-		mCharKind[ 'x' ] = qCtagsSense::ExternVariable;
-		
+		// kind text
 		mKindText[ qCtagsSense::Class ] = QCoreApplication::translate( "qCtagsSense", "Class" );
 		mKindText[ qCtagsSense::Macro ] = QCoreApplication::translate( "qCtagsSense", "Macro" );
 		mKindText[ qCtagsSense::Enumerator ] = QCoreApplication::translate( "qCtagsSense", "Enumerator" );
@@ -348,19 +314,34 @@ void qCtagsSenseUtils::initMaps()
 	}
 }
 
-qCtagsSense::Kind qCtagsSenseUtils::kindType( const QChar& c )
+qCtagsSense::Kind qCtagsSenseUtils::kindType( const QChar& c, const QString& language )
 {
-	if ( mCharKind.contains( c ) )
+	const CharKindPairList kinds = mLanguageChars.value( language );
+	
+	foreach ( const CharKindPair& pair, kinds )
 	{
-		return mCharKind[ c ];
+		if ( c == pair.first )
+		{
+			return pair.second;
+		}
 	}
 	
 	return qCtagsSense::Unknow;
 }
 
-QChar qCtagsSenseUtils::kindChar( qCtagsSense::Kind kind )
+QChar qCtagsSenseUtils::kindChar( qCtagsSense::Kind kind, const QString& language )
 {
-	return mKindChar.value( kind );
+	const CharKindPairList kinds = mLanguageChars.value( language );
+	
+	foreach ( const CharKindPair& pair, kinds )
+	{
+		if ( kind == pair.second )
+		{
+			return pair.first;
+		}
+	}
+	
+	return QChar();
 }
 
 QString qCtagsSenseUtils::kindText( qCtagsSense::Kind kind )
@@ -368,9 +349,9 @@ QString qCtagsSenseUtils::kindText( qCtagsSense::Kind kind )
 	return mKindText.value( kind );
 }
 
-QString qCtagsSenseUtils::kindText( const QChar& c )
+QString qCtagsSenseUtils::kindText( const QChar& c, const QString& language )
 {
-	return kindText( kindType( c ) );
+	return kindText( kindType( c, language ) );
 }
 
 bool qCtagsSenseUtils::caseInsensitiveFilePathLessThan( const QString& s1, const QString& s2 )

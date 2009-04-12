@@ -242,7 +242,7 @@ bool qCtagsSenseIndexer::createEntries( int fileId, TagEntryListItem* item )
 		q.addBindValue( entry->isFileEntry );
 		q.addBindValue( entry->truncateLine );
 		q.addBindValue( entry->name );
-		q.addBindValue( qCtagsSenseUtils::kindType( QChar( entry->kind ) ) );
+		q.addBindValue( qCtagsSenseUtils::kindType( QChar( entry->kind ), entry->language ) );
 		q.addBindValue( entry->extensionFields.access );
 		q.addBindValue( entry->extensionFields.fileScope );
 		q.addBindValue( entry->extensionFields.implementation );

@@ -31,8 +31,12 @@ namespace qCtagsSenseUtils
 	QCTAGSSENSE_EXPORT void initMaps();
 	QCTAGSSENSE_EXPORT qCtagsSense::Kind kindType( const QChar& c );
 	QCTAGSSENSE_EXPORT QChar kindChar( qCtagsSense::Kind kind );
-	QCTAGSSENSE_EXPORT QString kindText( qCtagsSense::Kind kind );
 	QCTAGSSENSE_EXPORT QString kindText( const QChar& c );
+	
+	QCTAGSSENSE_EXPORT qCtagsSense::Kind kindType( const QChar& c, const QString& language );
+	QCTAGSSENSE_EXPORT QChar kindChar( qCtagsSense::Kind kind, const QString& language );
+	QCTAGSSENSE_EXPORT QString kindText( qCtagsSense::Kind kind );
+	QCTAGSSENSE_EXPORT QString kindText( const QChar& c, const QString& language );
 	
 	QCTAGSSENSE_EXPORT bool caseInsensitiveFilePathLessThan( const QString& s1, const QString& s2 );
 	
