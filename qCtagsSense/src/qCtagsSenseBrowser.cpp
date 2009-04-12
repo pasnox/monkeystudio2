@@ -58,21 +58,6 @@ qCtagsSenseBrowser::qCtagsSenseBrowser( QWidget* parent )
 	connect( mLanguagesModel, SIGNAL( ready() ), this, SLOT( mLanguagesModel_ready() ) );
 	connect( mFilesModel, SIGNAL( ready() ), this, SLOT( mFilesModel_ready() ) );
 	connect( mMembersModel, SIGNAL( ready() ), this, SLOT( mMembersModel_ready() ) );
-	
-	//connect( mFileManager, SIGNAL( buffersModified( const QMap<QString, QString>& ) ), mSense, SLOT( tagEntries( const QMap<QString, QString>& ) ) );
-	//connect( this, SIGNAL( memberActivated( qCtagsSenseEntry* ) ), mFileManager, SLOT( memberActivated( qCtagsSenseEntry* ) ) );
-	
-	// *********************
-#if defined Q_OS_MAC
-	mSense->tagEntry( "/Developer/SDKs/MacOSX10.4u.sdk/usr/include" );
-	mSense->tagEntry( "/Users/filipeazevedo/Documents/Development/Qt4/mks/classexplorer/qCtagsSense/src" );
-#elif defined Q_OS_WIN
-#else
-	//mSense->tagEntry( "/usr/include" );
-	//mSense->tagEntry( "/home/pasnox/Development/Qt4/mks/v2/branches/dev" );
-	//mSense->tagEntry( "/usr/include/qt4" );
-	mSense->tagEntry( "/home/pasnox/Development/Qt4/mks/classexplorer/qCtagsSense/src" );
-#endif
 }
 
 qCtagsSenseBrowser::~qCtagsSenseBrowser()
