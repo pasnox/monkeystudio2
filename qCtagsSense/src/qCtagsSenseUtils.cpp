@@ -111,134 +111,7 @@ Fortran
 	p  programs                                              
 	s  subroutines                                           
 	t  derived types and structures                          
-	v  program (global) and module variables                 
-HTML                                                         
-	a  named anchors                                         
-	f  JavaScript functions                                  
-Java                                                         
-	c  classes                                               
-	e  enum constants                                        
-	f  fields                                                
-	g  enum types                                            
-	i  interfaces                                            
-	l  local variables [off]                                 
-	m  methods                                               
-	p  packages                                              
-JavaScript                                                   
-	f  functions                                             
-	c  classes                                               
-	m  methods                                               
-	v  global variables                                      
-Lisp                                                         
-	f  functions                                             
-Lua                                                          
-	f  functions                                             
-Make                                                         
-	m  macros                                                
-Pascal                                                       
-	f  functions                                             
-	p  procedures                                            
-Perl                                                         
-	c  constants                                             
-	f  formats                                               
-	l  labels                                                
-	p  packages                                              
-	s  subroutines                                           
-	d  subroutine declarations [off]                         
-PHP                                                          
-	c  classes                                               
-	i  interfaces                                            
-	d  constant definitions                                  
-	f  functions                                             
-	v  variables                                             
-	j  javascript functions                                  
-	j  javascript functions                                  
-	j  javascript functions                                  
-Python                                                       
-	c  classes                                               
-	f  functions                                             
-	m  class members                                         
-REXX                                                         
-	s  subroutines                                           
-Ruby                                                         
-	c  classes                                               
-	f  methods                                               
-	m  modules                                               
-	F  singleton methods                                     
-Scheme                                                       
-	f  functions                                             
-	s  sets                                                  
-Sh                                                           
-	f  functions                                             
-SLang                                                        
-	f  functions                                             
-	n  namespaces                                            
-SML                                                          
-	e  exception declarations                                
-	f  function definitions                                  
-	c  functor definitions                                   
-	s  signature declarations                                
-	r  structure declarations                                
-	t  type definitions                                      
-	v  value bindings                                        
-SQL                                                          
-	c  cursors                                               
-	d  prototypes [off]                                      
-	f  functions                                             
-	F  record fields                                         
-	l  local variables [off]                                 
-	L  block label                                           
-	P  packages                                              
-	p  procedures                                            
-	r  records [off]                                         
-	s  subtypes                                              
-	t  tables                                                
-	T  triggers                                              
-	v  variables                                             
-	i  indexes                                               
-	e  events                                                
-	U  publications                                          
-	R  services                                              
-	D  domains                                               
-	V  views                                                 
-	n  synonyms                                              
-	x  MobiLink Table Scripts                                
-	y  MobiLink Conn Scripts                                 
-Tcl                                                          
-	c  classes                                               
-	m  methods
-	p  procedures
-Vera
-	c  classes
-	d  macro definitions
-	e  enumerators (values inside an enumeration)
-	f  function definitions
-	g  enumeration names
-	l  local variables [off]
-	m  class, struct, and union members
-	p  programs
-	P  function prototypes [off]
-	t  tasks
-	T  typedefs
-	v  variable definitions
-	x  external variable declarations [off]
-Verilog
-	c  constants (define, parameter, specparam)
-	e  events
-	f  functions
-	m  modules
-	n  net data types
-	p  ports
-	r  register data types
-	t  tasks
-Vim
-	a  autocommand groups
-	c  user-defined commands
-	f  function definitions
-	m  maps
-	v  variable definitions
-YACC
-	l  labels
+	v  program (global) and module variables
 */
 
 
@@ -249,12 +122,184 @@ namespace qCtagsSenseUtils
 	QMap<qCtagsSense::Kind, QString> mKindText;
 	
 	QMap<QString, QPixmap> mPixmaps;
+	
+	typedef QPair<QChar, qCtagsSense::Kind> CharKindPair; // kind char, kind enum
+	typedef QList<CharKindPair> CharKindPairList;
+	QMap<QString, CharKindPairList> mLanguageChars; // language, list of pair of char/kind
 };
 
 void qCtagsSenseUtils::initMaps()
 {
 	if ( mKindChar.isEmpty() )
 	{
+		/*
+		CharKindPairList sqlList = CharKindPairList()
+			<< CharKindPair( '', qCtagsSense:: )
+			<< CharKindPair( '', qCtagsSense:: )
+			<< CharKindPair( '', qCtagsSense:: )
+			<< CharKindPair( '', qCtagsSense:: )
+			<< CharKindPair( '', qCtagsSense:: )
+			<< CharKindPair( '', qCtagsSense:: )
+			<< CharKindPair( '', qCtagsSense:: )
+			<< CharKindPair( '', qCtagsSense:: )
+			<< CharKindPair( '', qCtagsSense:: )
+			<< CharKindPair( '', qCtagsSense:: )
+			<< CharKindPair( '', qCtagsSense:: )
+			<< CharKindPair( '', qCtagsSense:: )
+			<< CharKindPair( '', qCtagsSense:: );
+		*/
+		
+		CharKindPairList htmlList = CharKindPairList()
+			<< CharKindPair( 'a', qCtagsSense::Anchor )
+			<< CharKindPair( 'f', qCtagsSense::JavaScriptFunction );
+		
+		CharKindPairList javaList = CharKindPairList()
+			<< CharKindPair( 'c', qCtagsSense::Class )
+			<< CharKindPair( 'e', qCtagsSense::Enum )
+			<< CharKindPair( 'f', qCtagsSense::Field )
+			<< CharKindPair( 'g', qCtagsSense::EnumType )
+			<< CharKindPair( 'i', qCtagsSense::Interface )
+			<< CharKindPair( 'l', qCtagsSense::LocalVariable ) // off
+			<< CharKindPair( 'm', qCtagsSense::Method )
+			<< CharKindPair( 'p', qCtagsSense::Package );
+		
+		CharKindPairList javascriptList = CharKindPairList()
+			<< CharKindPair( 'f', qCtagsSense::Function )
+			<< CharKindPair( 'c', qCtagsSense::Class )
+			<< CharKindPair( 'm', qCtagsSense::Method )
+			<< CharKindPair( 'v', qCtagsSense::GlobalVariable );
+		
+		CharKindPairList lispList = CharKindPairList()
+			<< CharKindPair( 'f', qCtagsSense::Function );
+		
+		CharKindPairList luaList = CharKindPairList()
+			<< CharKindPair( 'f', qCtagsSense::Function );
+		
+		CharKindPairList makeList = CharKindPairList()
+			<< CharKindPair( 'm', qCtagsSense::Macro );
+		
+		CharKindPairList pascalList = CharKindPairList()
+			<< CharKindPair( 'f', qCtagsSense::Function )
+			<< CharKindPair( 'p', qCtagsSense::Procedure );
+	
+		CharKindPairList perlList = CharKindPairList()
+			<< CharKindPair( 'c', qCtagsSense::Constant )
+			<< CharKindPair( 'f', qCtagsSense::Format )
+			<< CharKindPair( 'l', qCtagsSense::Label )
+			<< CharKindPair( 'p', qCtagsSense::Package )
+			<< CharKindPair( 's', qCtagsSense::SubRoutine )
+			<< CharKindPair( 'd', qCtagsSense::SubRoutineDeclaration ); // off
+		
+		CharKindPairList phpList = CharKindPairList()
+			<< CharKindPair( 'c', qCtagsSense::Class )
+			<< CharKindPair( 'i', qCtagsSense::Interface )
+			<< CharKindPair( 'd', qCtagsSense::Constant )
+			<< CharKindPair( 'f', qCtagsSense::Function )
+			<< CharKindPair( 'v', qCtagsSense::Variable )
+			<< CharKindPair( 'j', qCtagsSense::JavaScriptFunction );
+		
+		CharKindPairList pythonList = CharKindPairList()
+			<< CharKindPair( 'c', qCtagsSense::Class )
+			<< CharKindPair( 'f', qCtagsSense::Function )
+			<< CharKindPair( 'm', qCtagsSense::Member );
+		
+		CharKindPairList rexxList = CharKindPairList()
+			<< CharKindPair( 's', qCtagsSense::SubRoutine );
+		
+		CharKindPairList rubyList = CharKindPairList()
+			<< CharKindPair( 'c', qCtagsSense::Class )
+			<< CharKindPair( 'f', qCtagsSense::Method )
+			<< CharKindPair( 'm', qCtagsSense::Module )
+			<< CharKindPair( 'F', qCtagsSense::SingletonMethod );
+		
+		CharKindPairList schemeList = CharKindPairList()
+			<< CharKindPair( 'f', qCtagsSense::Function )
+			<< CharKindPair( 's', qCtagsSense::Set );
+		
+		CharKindPairList shList = CharKindPairList()
+			<< CharKindPair( 'f', qCtagsSense::Function );
+		
+		CharKindPairList slangList = CharKindPairList()
+			<< CharKindPair( 'f', qCtagsSense::Function )
+			<< CharKindPair( 'n', qCtagsSense::Namespace );
+		
+		CharKindPairList smlList = CharKindPairList()
+			<< CharKindPair( 'e', qCtagsSense::Exception )
+			<< CharKindPair( 'f', qCtagsSense::Function )
+			<< CharKindPair( 'c', qCtagsSense::Functor )
+			<< CharKindPair( 's', qCtagsSense::Signature )
+			<< CharKindPair( 'r', qCtagsSense::Structure )
+			<< CharKindPair( 't', qCtagsSense::Type )
+			<< CharKindPair( 'v', qCtagsSense::ValueBinding );
+		
+		CharKindPairList sqlList = CharKindPairList()
+			<< CharKindPair( 'c', qCtagsSense::Cursor )
+			<< CharKindPair( 'd', qCtagsSense::Prototype ) // off
+			<< CharKindPair( 'f', qCtagsSense::Function )
+			<< CharKindPair( 'F', qCtagsSense::RecordField )
+			<< CharKindPair( 'l', qCtagsSense::LocalVariable ) // off
+			<< CharKindPair( 'L', qCtagsSense::Label )
+			<< CharKindPair( 'P', qCtagsSense::Package )
+			<< CharKindPair( 'p', qCtagsSense::Procedure )
+			<< CharKindPair( 'r', qCtagsSense::Record )
+			<< CharKindPair( 's', qCtagsSense::SubType )
+			<< CharKindPair( 't', qCtagsSense::Table )
+			<< CharKindPair( 'T', qCtagsSense::Trigger )
+			<< CharKindPair( 'v', qCtagsSense::Variable )
+			<< CharKindPair( 'i', qCtagsSense::Index )
+			<< CharKindPair( 'e', qCtagsSense::Event )
+			<< CharKindPair( 'U', qCtagsSense::Publication )
+			<< CharKindPair( 'R', qCtagsSense::Service )
+			<< CharKindPair( 'D', qCtagsSense::Domain )
+			<< CharKindPair( 'V', qCtagsSense::View )
+			<< CharKindPair( 'n', qCtagsSense::Synonym )
+			<< CharKindPair( 'x', qCtagsSense::MobiLinkTableScript )
+			<< CharKindPair( 'y', qCtagsSense::MobiLinkConnScript );
+		
+		CharKindPairList tclList = CharKindPairList()
+			<< CharKindPair( 'c', qCtagsSense::Class )
+			<< CharKindPair( 'm', qCtagsSense::Method )
+			<< CharKindPair( 'p', qCtagsSense::Procedure );
+		
+		CharKindPairList veraList = CharKindPairList()
+			<< CharKindPair( 'c', qCtagsSense::Class )
+			<< CharKindPair( 'd', qCtagsSense::Macro )
+			<< CharKindPair( 'e', qCtagsSense::Enumerator )
+			<< CharKindPair( 'f', qCtagsSense::Function )
+			<< CharKindPair( 'g', qCtagsSense::Enum )
+			<< CharKindPair( 'l', qCtagsSense::LocalVariable )
+			<< CharKindPair( 'm', qCtagsSense::Member )
+			<< CharKindPair( 'p', qCtagsSense::Program )
+			<< CharKindPair( 'P', qCtagsSense::Prototype )
+			<< CharKindPair( 't', qCtagsSense::Task )
+			<< CharKindPair( 'T', qCtagsSense::Typedef )
+			<< CharKindPair( 'v', qCtagsSense::Variable )
+			<< CharKindPair( 'x', qCtagsSense::ExternVariable );
+		
+		CharKindPairList verilogList = CharKindPairList()
+			<< CharKindPair( 'c', qCtagsSense::Constant )
+			<< CharKindPair( 'e', qCtagsSense::Event )
+			<< CharKindPair( 'f', qCtagsSense::Function )
+			<< CharKindPair( 'm', qCtagsSense::Module )
+			<< CharKindPair( 'n', qCtagsSense::NetDataType )
+			<< CharKindPair( 'p', qCtagsSense::Port )
+			<< CharKindPair( 'r', qCtagsSense::RegisterDataType )
+			<< CharKindPair( 't', qCtagsSense::Task );
+		
+		CharKindPairList vimList = CharKindPairList()
+			<< CharKindPair( 'a', qCtagsSense::AutoCommandGroup )
+			<< CharKindPair( 'c', qCtagsSense::UserDefinedCommand )
+			<< CharKindPair( 'f', qCtagsSense::Function )
+			<< CharKindPair( 'm', qCtagsSense::Map )
+			<< CharKindPair( 'v', qCtagsSense::Variable );
+		
+		CharKindPairList yaccList = CharKindPairList()
+			<< CharKindPair( 'l', qCtagsSense::Label );
+		
+		//mLanguageChars
+	
+		// original
+		
 		mKindChar[ qCtagsSense::Class ] = 'c';
 		mKindChar[ qCtagsSense::Macro ] = 'd';
 		mKindChar[ qCtagsSense::Enumerator ] = 'e';

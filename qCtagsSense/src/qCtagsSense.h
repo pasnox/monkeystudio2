@@ -35,20 +35,65 @@ public:
 	enum Kind
 	{
 		Unknow = -1,
-		Class, // c
-		Macro, // d
-		Enumerator, // e
-		Function, // f
-		Enum, // g
-		LocalVariable, // l
-		Member, // m
-		Namespace, // n
-		Prototype, // p
-		Structure, // s
-		Typedef, // t
-		Union, // u
-		Variable, // v
-		ExternVariable // x
+		Class, // Vera, Tcl, Ruby, Python, PHP, JavaScript, Java
+		Macro, // Vera, Make
+		Enumerator, // Vera
+		Function, // Vim, Verilog, Vera, SQL, SML, SLang, Sh, Scheme, Python, PHP, Pascal, Lua, Lisp, JavaScript
+		Enum, // Vera, Java
+		LocalVariable, // Vera, SQL, Java
+		Member, // Vera, Python
+		Namespace, // SLang
+		Prototype, // Vera, SQL
+		Structure, // SML
+		Typedef, // Vera
+		Union,
+		Variable, // Vim, Vera, SQL, PHP
+		ExternVariable, // Vera
+		Label, // YACC, SQL, Perl
+		AutoCommandGroup, // Vim
+		UserDefinedCommand, // Vim
+		Map, // Vim
+		Constant, // Verilog, PHP, Perl
+		Event, // Verilog, SQL
+		Module, // Verilog, Ruby
+		NetDataType, // Verilog
+		Port, // Verilog
+		RegisterDataType, // Verilog
+		Task, // Verilog, Vera
+		Program, // Vera
+		Method, // Tcl, Ruby, JavaScript, Java
+		Procedure, // Tcl, SQL, Pascal
+		Cursor, // SQL
+		RecordField, // SQL
+		Package, // SQL, Perl, Java
+		Record, // SQL
+		SubType, // SQL
+		Table, // SQL
+		Trigger, // SQL
+		Index, // SQL
+		Publication, // SQL
+		Service, // SQL
+		Domain, // SQL
+		View, // SQL
+		Synonym, // SQL
+		MobiLinkTableScript, // SQL
+		MobiLinkConnScript, // SQL
+		Exception, // SML
+		Functor, // SML
+		Signature, // SML
+		Type, // SML
+		ValueBinding, // SML
+		Set, // Scheme
+		SingletonMethod, // Ruby
+		SubRoutine, // REXX, Perl
+		Interface, // PHP, Java
+		JavaScriptFunction, // PHP, HTML
+		Format, // Perl
+		SubRoutineDeclaration, // Perl
+		GlobalVariable, // JavaScript
+		Anchor, // HTML
+		Field, // Java
+		EnumType, // Java
 	};
 	
 	qCtagsSense( QObject* parent = 0 );
