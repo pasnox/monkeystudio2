@@ -62,7 +62,7 @@ void qCtagsSenseUtils::initMaps()
 			<< CharKindPair( 'l', qCtagsSense::Label )
 			<< CharKindPair( 't', qCtagsSense::Type )
 			<< CharKindPair( 'v', qCtagsSense::Variable )
-			<< CharKindPair( 'g', qCtagsSense::Enum );
+			<< CharKindPair( 'g', qCtagsSense::Enumeration );
 		
 		CharKindPairList betaList = CharKindPairList()
 			<< CharKindPair( 'f', qCtagsSense::Fragment )
@@ -75,8 +75,8 @@ void qCtagsSenseUtils::initMaps()
 			<< CharKindPair( 'd', qCtagsSense::Macro )
 			<< CharKindPair( 'e', qCtagsSense::Enumerator )
 			<< CharKindPair( 'f', qCtagsSense::Function )
-			<< CharKindPair( 'g', qCtagsSense::Enum )
-			<< CharKindPair( 'l', qCtagsSense::LocalVariable ) // off
+			<< CharKindPair( 'g', qCtagsSense::Enumeration )
+			<< CharKindPair( 'l', qCtagsSense::VariableLocal ) // off
 			<< CharKindPair( 'm', qCtagsSense::Member )
 			<< CharKindPair( 'n', qCtagsSense::Namespace )
 			<< CharKindPair( 'p', qCtagsSense::Prototype ) // off
@@ -84,15 +84,15 @@ void qCtagsSenseUtils::initMaps()
 			<< CharKindPair( 't', qCtagsSense::Typedef )
 			<< CharKindPair( 'u', qCtagsSense::Union )
 			<< CharKindPair( 'v', qCtagsSense::Variable )
-			<< CharKindPair( 'x', qCtagsSense::ExternVariable ); // off
+			<< CharKindPair( 'x', qCtagsSense::VariableGlobal ); // off
 		
 		CharKindPairList cppList = CharKindPairList()
 			<< CharKindPair( 'c', qCtagsSense::Class )
 			<< CharKindPair( 'd', qCtagsSense::Macro )
 			<< CharKindPair( 'e', qCtagsSense::Enumerator )
 			<< CharKindPair( 'f', qCtagsSense::Function )
-			<< CharKindPair( 'g', qCtagsSense::Enum )
-			<< CharKindPair( 'l', qCtagsSense::LocalVariable ) // off
+			<< CharKindPair( 'g', qCtagsSense::Enumeration )
+			<< CharKindPair( 'l', qCtagsSense::VariableLocal ) // off
 			<< CharKindPair( 'm', qCtagsSense::Member )
 			<< CharKindPair( 'n', qCtagsSense::Namespace )
 			<< CharKindPair( 'p', qCtagsSense::Prototype ) // off
@@ -100,7 +100,7 @@ void qCtagsSenseUtils::initMaps()
 			<< CharKindPair( 't', qCtagsSense::Typedef )
 			<< CharKindPair( 'u', qCtagsSense::Union )
 			<< CharKindPair( 'v', qCtagsSense::Variable )
-			<< CharKindPair( 'x', qCtagsSense::ExternVariable ); // off
+			<< CharKindPair( 'x', qCtagsSense::VariableGlobal ); // off
 		
 		CharKindPairList csharpList = CharKindPairList()
 			<< CharKindPair( 'c', qCtagsSense::Class )
@@ -108,9 +108,9 @@ void qCtagsSenseUtils::initMaps()
 			<< CharKindPair( 'e', qCtagsSense::Enumerator )
 			<< CharKindPair( 'E', qCtagsSense::Event )
 			<< CharKindPair( 'f', qCtagsSense::Field )
-			<< CharKindPair( 'g', qCtagsSense::Enum )
+			<< CharKindPair( 'g', qCtagsSense::Enumeration )
 			<< CharKindPair( 'i', qCtagsSense::Interface )
-			<< CharKindPair( 'l', qCtagsSense::LocalVariable ) // off
+			<< CharKindPair( 'l', qCtagsSense::VariableLocal ) // off
 			<< CharKindPair( 'm', qCtagsSense::Method )
 			<< CharKindPair( 'n', qCtagsSense::Namespace )
 			<< CharKindPair( 'p', qCtagsSense::Property )
@@ -118,9 +118,9 @@ void qCtagsSenseUtils::initMaps()
 			<< CharKindPair( 't', qCtagsSense::Typedef );
 		
 		CharKindPairList cobolList = CharKindPairList()
-			<< CharKindPair( 'd', qCtagsSense::DataItem )
+			<< CharKindPair( 'd', qCtagsSense::ItemData )
 			<< CharKindPair( 'f', qCtagsSense::FileDescriptor )
-			<< CharKindPair( 'g', qCtagsSense::GroupItem )
+			<< CharKindPair( 'g', qCtagsSense::ItemGroup )
 			<< CharKindPair( 'p', qCtagsSense::Paragraph )
 			<< CharKindPair( 'P', qCtagsSense::ProgramId )
 			<< CharKindPair( 's', qCtagsSense::Section );
@@ -128,7 +128,7 @@ void qCtagsSenseUtils::initMaps()
 		CharKindPairList eiffelList = CharKindPairList()
 			<< CharKindPair( 'c', qCtagsSense::Class )
 			<< CharKindPair( 'f', qCtagsSense::Feature )
-			<< CharKindPair( 'l', qCtagsSense::LocalVariable ); // off
+			<< CharKindPair( 'l', qCtagsSense::VariableLocal ); // off
 		
 		CharKindPairList erlangList = CharKindPairList()
 			<< CharKindPair( 'd', qCtagsSense::Macro )
@@ -138,13 +138,13 @@ void qCtagsSenseUtils::initMaps()
 		
 		CharKindPairList fortranList = CharKindPairList()
 			<< CharKindPair( 'b', qCtagsSense::BlockData )
-			<< CharKindPair( 'c', qCtagsSense::CommonBlock )
+			<< CharKindPair( 'c', qCtagsSense::BlockCommon )
 			<< CharKindPair( 'e', qCtagsSense::EntryPoint )
 			<< CharKindPair( 'f', qCtagsSense::Function )
 			<< CharKindPair( 'i', qCtagsSense::Interface ) // off
 			<< CharKindPair( 'k', qCtagsSense::Type )
 			<< CharKindPair( 'l', qCtagsSense::Label )
-			<< CharKindPair( 'L', qCtagsSense::LocalVariable ) // off
+			<< CharKindPair( 'L', qCtagsSense::VariableLocal ) // off
 			<< CharKindPair( 'm', qCtagsSense::Module )
 			<< CharKindPair( 'n', qCtagsSense::NameList )
 			<< CharKindPair( 'p', qCtagsSense::Program )
@@ -158,11 +158,11 @@ void qCtagsSenseUtils::initMaps()
 		
 		CharKindPairList javaList = CharKindPairList()
 			<< CharKindPair( 'c', qCtagsSense::Class )
-			<< CharKindPair( 'e', qCtagsSense::Enum )
+			<< CharKindPair( 'e', qCtagsSense::Enumeration )
 			<< CharKindPair( 'f', qCtagsSense::Field )
 			<< CharKindPair( 'g', qCtagsSense::EnumType )
 			<< CharKindPair( 'i', qCtagsSense::Interface )
-			<< CharKindPair( 'l', qCtagsSense::LocalVariable ) // off
+			<< CharKindPair( 'l', qCtagsSense::VariableLocal ) // off
 			<< CharKindPair( 'm', qCtagsSense::Method )
 			<< CharKindPair( 'p', qCtagsSense::Package );
 		
@@ -170,7 +170,7 @@ void qCtagsSenseUtils::initMaps()
 			<< CharKindPair( 'f', qCtagsSense::Function )
 			<< CharKindPair( 'c', qCtagsSense::Class )
 			<< CharKindPair( 'm', qCtagsSense::Method )
-			<< CharKindPair( 'v', qCtagsSense::GlobalVariable );
+			<< CharKindPair( 'v', qCtagsSense::VariableGlobal );
 		
 		CharKindPairList lispList = CharKindPairList()
 			<< CharKindPair( 'f', qCtagsSense::Function );
@@ -213,7 +213,7 @@ void qCtagsSenseUtils::initMaps()
 			<< CharKindPair( 'c', qCtagsSense::Class )
 			<< CharKindPair( 'f', qCtagsSense::Method )
 			<< CharKindPair( 'm', qCtagsSense::Module )
-			<< CharKindPair( 'F', qCtagsSense::SingletonMethod );
+			<< CharKindPair( 'F', qCtagsSense::MethodSingleton );
 		
 		CharKindPairList schemeList = CharKindPairList()
 			<< CharKindPair( 'f', qCtagsSense::Function )
@@ -239,8 +239,8 @@ void qCtagsSenseUtils::initMaps()
 			<< CharKindPair( 'c', qCtagsSense::Cursor )
 			<< CharKindPair( 'd', qCtagsSense::Prototype ) // off
 			<< CharKindPair( 'f', qCtagsSense::Function )
-			<< CharKindPair( 'F', qCtagsSense::RecordField )
-			<< CharKindPair( 'l', qCtagsSense::LocalVariable ) // off
+			<< CharKindPair( 'F', qCtagsSense::Field )
+			<< CharKindPair( 'l', qCtagsSense::VariableLocal ) // off
 			<< CharKindPair( 'L', qCtagsSense::Label )
 			<< CharKindPair( 'P', qCtagsSense::Package )
 			<< CharKindPair( 'p', qCtagsSense::Procedure )
@@ -269,15 +269,15 @@ void qCtagsSenseUtils::initMaps()
 			<< CharKindPair( 'd', qCtagsSense::Macro )
 			<< CharKindPair( 'e', qCtagsSense::Enumerator )
 			<< CharKindPair( 'f', qCtagsSense::Function )
-			<< CharKindPair( 'g', qCtagsSense::Enum )
-			<< CharKindPair( 'l', qCtagsSense::LocalVariable )
+			<< CharKindPair( 'g', qCtagsSense::Enumeration )
+			<< CharKindPair( 'l', qCtagsSense::VariableLocal )
 			<< CharKindPair( 'm', qCtagsSense::Member )
 			<< CharKindPair( 'p', qCtagsSense::Program )
 			<< CharKindPair( 'P', qCtagsSense::Prototype )
 			<< CharKindPair( 't', qCtagsSense::Task )
 			<< CharKindPair( 'T', qCtagsSense::Typedef )
 			<< CharKindPair( 'v', qCtagsSense::Variable )
-			<< CharKindPair( 'x', qCtagsSense::ExternVariable );
+			<< CharKindPair( 'x', qCtagsSense::VariableGlobal );
 		
 		CharKindPairList verilogList = CharKindPairList()
 			<< CharKindPair( 'c', qCtagsSense::Constant )
@@ -340,8 +340,8 @@ void qCtagsSenseUtils::initMaps()
 		mKindText[ qCtagsSense::Macro ] = QCoreApplication::translate( "qCtagsSense", "Macro" );
 		mKindText[ qCtagsSense::Enumerator ] = QCoreApplication::translate( "qCtagsSense", "Enumerator" );
 		mKindText[ qCtagsSense::Function ] = QCoreApplication::translate( "qCtagsSense", "Function" );
-		mKindText[ qCtagsSense::Enum ] = QCoreApplication::translate( "qCtagsSense", "Enum" );
-		mKindText[ qCtagsSense::LocalVariable ] = QCoreApplication::translate( "qCtagsSense", "Local Variable" );
+		mKindText[ qCtagsSense::Enumeration ] = QCoreApplication::translate( "qCtagsSense", "Enum" );
+		mKindText[ qCtagsSense::VariableLocal ] = QCoreApplication::translate( "qCtagsSense", "Local Variable" );
 		mKindText[ qCtagsSense::Member ] = QCoreApplication::translate( "qCtagsSense", "Member" );
 		mKindText[ qCtagsSense::Namespace ] = QCoreApplication::translate( "qCtagsSense", "Namespace" );
 		mKindText[ qCtagsSense::Prototype ] = QCoreApplication::translate( "qCtagsSense", "Prototype" );
@@ -349,7 +349,7 @@ void qCtagsSenseUtils::initMaps()
 		mKindText[ qCtagsSense::Typedef ] = QCoreApplication::translate( "qCtagsSense", "Typedef" );
 		mKindText[ qCtagsSense::Union ] = QCoreApplication::translate( "qCtagsSense", "Union" );
 		mKindText[ qCtagsSense::Variable ] = QCoreApplication::translate( "qCtagsSense", "Variable" );
-		mKindText[ qCtagsSense::ExternVariable ] = QCoreApplication::translate( "qCtagsSense", "Extern Variable" );
+		mKindText[ qCtagsSense::VariableGlobal ] = QCoreApplication::translate( "qCtagsSense", "Extern Variable" );
 		mKindText[ qCtagsSense::Unknow ] = QCoreApplication::translate( "qCtagsSense", "Unknow" );
 	}
 }
@@ -455,14 +455,14 @@ QString qCtagsSenseUtils::entryDecorationFilePath( qCtagsSenseEntry* entry )
 		case qCtagsSense::Prototype:
 			name = "function";
 			break;
-		case qCtagsSense::Enum:
+		case qCtagsSense::Enumeration:
 			name = "enum";
 			access.clear();
 			break;
-		case qCtagsSense::LocalVariable:
+		case qCtagsSense::VariableLocal:
 		case qCtagsSense::Member:
 		case qCtagsSense::Variable:
-		case qCtagsSense::ExternVariable:
+		case qCtagsSense::VariableGlobal:
 			name = "variable";
 			break;
 		case qCtagsSense::Namespace:
@@ -533,10 +533,10 @@ QString qCtagsSenseUtils::entryDisplay( qCtagsSenseEntry* entry )
 		case qCtagsSense::Prototype:
 			display.append( entry->signature );
 			break;
-		case qCtagsSense::LocalVariable:
+		case qCtagsSense::VariableLocal:
 		case qCtagsSense::Member:
 		case qCtagsSense::Variable:
-		case qCtagsSense::ExternVariable:
+		case qCtagsSense::VariableGlobal:
 			if ( !entry->typeRef.first.isEmpty() )
 			{
 				display.append( QString( ": %1" ).arg( entry->typeRef.first ) );
@@ -547,7 +547,7 @@ QString qCtagsSenseUtils::entryDisplay( qCtagsSenseEntry* entry )
 		case qCtagsSense::Union:
 		case qCtagsSense::Macro:
 		case qCtagsSense::Enumerator:
-		case qCtagsSense::Enum:
+		case qCtagsSense::Enumeration:
 		case qCtagsSense::Namespace:
 		case qCtagsSense::Typedef:
 		case qCtagsSense::Unknow:

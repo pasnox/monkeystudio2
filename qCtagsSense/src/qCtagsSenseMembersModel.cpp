@@ -109,7 +109,7 @@ protected:
 				switch ( entry->kind )
 				{
 					case qCtagsSense::Class:
-					case qCtagsSense::Enum:
+					case qCtagsSense::Enumeration:
 					case qCtagsSense::Namespace:
 					case qCtagsSense::Structure:
 					case qCtagsSense::Union:

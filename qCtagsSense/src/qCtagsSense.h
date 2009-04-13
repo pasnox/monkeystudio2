@@ -35,83 +35,107 @@ public:
 	enum Kind
 	{
 		Unknow = -1,
-		Class, // Vera, Tcl, Ruby, Python, PHP, JavaScript, Java, Eiffel, C#, C, C++
-		Macro, // Vera, Make, Erlang, C#, C, C++, Asm
-		Enumerator, // Vera, C#, C, C++
-		Function, // Vim, Verilog, Vera, SQL, SML, SLang, Sh, Scheme, Python, PHP, Pascal, Lua, Lisp, JavaScript, Fortran, Erlang, C, C++, Basic, Awk, Asp
-		Enum, // Vera, Java, C#, C, C++, Basic
-		LocalVariable, // Vera, SQL, Java, Fortran, Eiffel, C#, C, C++
-		Member, // Vera, Python, C, C++
-		Namespace, // SLang, C#, C, C++
-		Prototype, // Vera, SQL, C, C++
-		Structure, // SML, C#, C, C++
-		Typedef, // Vera, C#, C, C++
-		Union, // C, C++
-		Variable, // Vim, Vera, SQL, PHP, Fortran, C, C++, Basic, Asp
-		ExternVariable, // Vera, C, C++
-		Label, // YACC, SQL, Perl, Fortran, Basic, Asm
+		// A
+		AllPatterns, // BETA
+		Anchor, // HTML
 		AutoCommandGroup, // Vim
-		UserDefinedCommand, // Vim
-		Map, // Vim
+		// B
+		BlockData, // Fortran
+		BlockCommon, // Fortran
+		// C
+		Class, // Vera, Tcl, Ruby, Python, PHP, JavaScript, Java, Eiffel, C#, C, C++
 		Constant, // Verilog, PHP, Perl, Basic, Asp
-		Event, // Verilog, SQL, C#
-		Module, // Verilog, Ruby, Fortran, Erlang
-		NetDataType, // Verilog
-		Port, // Verilog
-		RegisterDataType, // Verilog
-		Task, // Verilog, Vera
-		Program, // Vera, Fortran
-		Method, // Tcl, Ruby, JavaScript, Java, C#
-		Procedure, // Tcl, SQL, Pascal
 		Cursor, // SQL
-		RecordField, // SQL
-		Package, // SQL, Perl, Java
-		Record, // SQL, Erlang
-		SubType, // SQL
-		Table, // SQL
-		Trigger, // SQL
-		Index, // SQL
-		Publication, // SQL
-		Service, // SQL
+		// D
+		Define, // Asm
+		DerivatedType, // Fortran
 		Domain, // SQL
-		View, // SQL
-		Synonym, // SQL
+		// E
+		EntryPoint, // Fortran
+		Enumeration, // Vera, Java, C#, C, C++, Basic
+		Enumerator, // Vera, C#, C, C++
+		EnumType, // Java
+		Event, // Verilog, SQL, C#
+		Exception, // SML
+		// F
+		Feature, // Eiffel
+		Field, // Java, C#, SQL
+		FileDescriptor, // Cobol
+		Format, // Perl
+		Fragment, // BETA
+		Function, // Vim, Verilog, Vera, SQL, SML, SLang, Sh, Scheme, Python, PHP, Pascal, Lua, Lisp, JavaScript, Fortran, Erlang, C, C++, Basic, Awk, Asp
+		Functor, // SML
+		// G
+		// H
+		// I
+		Index, // SQL
+		Interface, // PHP, Java, Fortran, C#
+		ItemData, // Cobol
+		ItemGroup, // Cobol
+		// J
+		JavaScriptFunction, // PHP, HTML
+		// K
+		// L
+		Label, // YACC, SQL, Perl, Fortran, Basic, Asm
+		// M
+		Macro, // Vera, Make, Erlang, C#, C, C++, Asm
+		Map, // Vim
+		Member, // Vera, Python, C, C++
+		Method, // Tcl, Ruby, JavaScript, Java, C#
+		MethodSingleton, // Ruby
 		MobiLinkTableScript, // SQL
 		MobiLinkConnScript, // SQL
-		Exception, // SML
-		Functor, // SML
-		Signature, // SML
-		Type, // SML, Fortran, Basic, Asm
-		ValueBinding, // SML
-		Set, // Scheme
-		SingletonMethod, // Ruby
-		SubRoutine, // REXX, Perl, Fortran, Asp
-		Interface, // PHP, Java, Fortran, C#
-		JavaScriptFunction, // PHP, HTML
-		Format, // Perl
-		SubRoutineDeclaration, // Perl
-		GlobalVariable, // JavaScript
-		Anchor, // HTML
-		Field, // Java, C#
-		EnumType, // Java
-		BlockData, // Fortran
-		CommonBlock, // Fortran
-		EntryPoint, // Fortran
+		Module, // Verilog, Ruby, Fortran, Erlang
+		// N
 		NameList, // Fortran
-		DerivatedType, // Fortran
-		Feature, // Eiffel
-		DataItem, // Cobol
-		FileDescriptor, // Cobol
-		GroupItem, // Cobol
+		Namespace, // SLang, C#, C, C++
+		NetDataType, // Verilog
+		// O
+		// P
+		Package, // SQL, Perl, Java
 		Paragraph, // Cobol
-		ProgramId, // Cobol
-		Section, // Cobol
-		Property, // C#
-		Fragment, // BETA
-		AllPatterns, // BETA
-		Slot, // BETA
 		Pattern, // BETA
-		Define // Asm
+		Port, // Verilog
+		Procedure, // Tcl, SQL, Pascal
+		Program, // Vera, Fortran
+		ProgramId, // Cobol
+		Property, // C#
+		Prototype, // Vera, SQL, C, C++
+		Publication, // SQL
+		// Q
+		// R
+		Record, // SQL, Erlang
+		RegisterDataType, // Verilog
+		// S
+		Section, // Cobol
+		Service, // SQL
+		Set, // Scheme
+		Signature, // SML
+		Slot, // BETA
+		SubRoutine, // REXX, Perl, Fortran, Asp
+		SubRoutineDeclaration, // Perl
+		SubType, // SQL
+		Structure, // SML, C#, C, C++
+		Synonym, // SQL
+		// T
+		Table, // SQL
+		Task, // Verilog, Vera
+		Trigger, // SQL
+		Type, // SML, Fortran, Basic, Asm
+		Typedef, // Vera, C#, C, C++
+		// U
+		Union, // C, C++
+		UserDefinedCommand, // Vim
+		// V
+		ValueBinding, // SML
+		Variable, // Vim, Vera, SQL, PHP, Fortran, C, C++, Basic, Asp
+		VariableLocal, // Vera, SQL, Java, Fortran, Eiffel, C#, C, C++
+		VariableGlobal, // JavaScript, Vera, C, C++
+		View, // SQL
+		// W
+		// X
+		// Y
+		// Z
 	};
 	
 	qCtagsSense( QObject* parent = 0 );
