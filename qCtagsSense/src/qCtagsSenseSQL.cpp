@@ -17,11 +17,12 @@
 ****************************************************************************/
 #include "qCtagsSenseSQL.h"
 
+#include <QDir>
 #include <QStringList>
 #include <QSqlError>
 #include <QDebug>
 
-const QString qCtagsSenseSQL::mDBFilePath = "/home/pasnox/Development/Qt4/mks/classexplorer/qCtagsSense.sqlite";
+const QString qCtagsSenseSQL::mDBFilePath = QDir::tempPath().append( "/qCtagsSense.sqlite" );
 
 qCtagsSenseSQL::qCtagsSenseSQL( QObject* parent )
 	: QObject( parent )
