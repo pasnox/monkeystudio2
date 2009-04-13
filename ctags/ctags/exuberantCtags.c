@@ -137,3 +137,8 @@ extern void setLanguageKinds( const char *const language, const char* kinds )
 {
 	setLanguageTypeKinds( getNamedLanguage( language ), kinds );
 }
+
+extern const char* getFileNameLanguageName( const char* fileName )
+{
+	return getLanguageName( getFileLanguage( fileName ) );
+}

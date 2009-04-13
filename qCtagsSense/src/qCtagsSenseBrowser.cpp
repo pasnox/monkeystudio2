@@ -22,6 +22,8 @@
 #include "qCtagsSenseMembersModel.h"
 #include "qCtagsSenseKindFinder.h"
 
+#include <ctags.h>
+
 #include <QMenu>
 #include <QFileInfo>
 #include <QDebug>
@@ -76,8 +78,32 @@ void qCtagsSenseBrowser::tagEntry( const QString& fileName )
 
 void qCtagsSenseBrowser::setCurrentFileName( const QString& fileName )
 {
+	mLanguage = getFileNameLanguageName( fileName.toLocal8Bit().constData() );
 	mFileName = fileName;
-	mMembersModel->refresh( mFileName );
+	
+	// update languages combo
+	bool languageLocked = cbLanguages->blockSignals( true );
+	int lid = mLanguagesModel->indexOf( mLanguage );
+	
+	cbLanguages->setCurrentIndex( lid );
+	cbLanguages->blockSignals( languageLocked );
+	
+	// update files combo
+	bool fileLocked = cbFileNames->blockSignals( true );
+	int fid = mFilesModel->indexOf( mFileName );
+	
+	cbFileNames->setCurrentIndex( fid );
+	cbFileNames->blockSignals( fileLocked );
+	
+	// update view
+	if ( fid != -1 )
+	{
+		mMembersModel->refresh( mFileName );
+	}
+	else
+	{
+		mFilesModel->refresh( mLanguage );
+	}
 }
 
 void qCtagsSenseBrowser::on_cbLanguages_currentIndexChanged( int id )
@@ -115,8 +141,12 @@ void qCtagsSenseBrowser::mSense_indexingProgress( int value, int total )
 
 void qCtagsSenseBrowser::mSense_indexingChanged()
 {
-	mLanguage = mLanguagesModel->language( cbLanguages->currentIndex() );
-	mFileName = mFilesModel->fileName( cbFileNames->currentIndex() );
+	if ( mLanguage.isEmpty() || mFileName.isEmpty() )
+	{
+		mLanguage = mLanguagesModel->language( cbLanguages->currentIndex() );
+		mFileName = mFilesModel->fileName( cbFileNames->currentIndex() );
+	}
+	
 	mLanguagesModel->refresh();
 }
 

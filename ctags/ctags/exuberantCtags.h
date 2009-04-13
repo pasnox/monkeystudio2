@@ -10,3 +10,9 @@ extern TagEntryListItem* createTagEntryListItem( const char* fileName, const cha
 extern void freeTagEntryListItem( TagEntryListItem* item );
 extern void setLanguageTypeKinds( const langType language, const char* kinds );
 extern void setLanguageKinds( const char* const language, const char* kinds );
+extern const char* getFileNameLanguageName( const char* fileName );
+
+/*
+extern langType getFileLanguage (const char *const fileName)
+extern const char *getLanguageName (const langType language)
+*/
