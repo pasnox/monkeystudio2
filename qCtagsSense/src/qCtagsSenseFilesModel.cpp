@@ -214,6 +214,11 @@ int qCtagsSenseFilesModel::indexOf( const QString& fileName ) const
 	return mFiles ? mFiles->indexOf( fileName ) : -1;
 }
 
+bool qCtagsSenseFilesModel::isRunning() const
+{
+	return mThread->isRunning();
+}
+
 void qCtagsSenseFilesModel::refresh( const QString& language  )
 {
 	const QString sql = QString(

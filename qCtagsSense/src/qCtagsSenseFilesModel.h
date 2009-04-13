@@ -43,6 +43,7 @@ public:
 	
 	QString fileName( int id ) const;
 	int indexOf( const QString& fileName ) const;
+	bool isRunning() const;
 
 public slots:
 	void refresh( const QString& language );

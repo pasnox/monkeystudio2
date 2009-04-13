@@ -57,6 +57,7 @@ bool ClassBrowser::setEnabled( bool b )
 		// create menu action for the dock
 		pActionsManager::setDefaultShortcut( mDock->toggleViewAction(), QKeySequence( "F8" ) );
 		// connections
+		connect( MonkeyCore::fileManager(), SIGNAL( fileOpened( const QString& ) ), this, SLOT( fileOpened( const QString& ) ) );
 		connect( MonkeyCore::fileManager(), SIGNAL( currentFileChanged( pAbstractChild*, const QString& ) ), this, SLOT( currentFileChanged( pAbstractChild*, const QString& ) ) );
 		connect( MonkeyCore::fileManager(), SIGNAL( opened( XUPProjectItem* ) ), this, SLOT( opened( XUPProjectItem* ) ) );
 		connect( mDock->browser(), SIGNAL( memberActivated( qCtagsSenseEntry* ) ), this, SLOT( memberActivated( qCtagsSenseEntry* ) ) );
@@ -67,6 +68,7 @@ bool ClassBrowser::setEnabled( bool b )
 	else if ( !b && isEnabled() )
 	{
 		// disconnections
+		disconnect( MonkeyCore::fileManager(), SIGNAL( fileOpened( const QString& ) ), this, SLOT( fileOpened( const QString& ) ) );
 		disconnect( MonkeyCore::fileManager(), SIGNAL( currentFileChanged( pAbstractChild*, const QString& ) ), this, SLOT( currentFileChanged( pAbstractChild*, const QString& ) ) );
 		disconnect( MonkeyCore::fileManager(), SIGNAL( opened( XUPProjectItem* ) ), this, SLOT( opened( XUPProjectItem* ) ) );
 		disconnect( mDock->browser(), SIGNAL( memberActivated( qCtagsSenseEntry* ) ), this, SLOT( memberActivated( qCtagsSenseEntry* ) ) );
@@ -85,10 +87,23 @@ QPixmap ClassBrowser::pixmap() const
 	return QPixmap( ":/icons/class.png" );
 }
 
+void ClassBrowser::fileOpened( const QString& fileName )
+{
+	if ( !fileName.isEmpty() )
+	{
+		mDock->browser()->tagEntry( fileName );
+		mDock->browser()->setCurrentFileName( fileName );
+	}
+}
+
 void ClassBrowser::currentFileChanged( pAbstractChild* child, const QString& fileName )
 {
 	Q_UNUSED( child );
-	mDock->browser()->setCurrentFileName( fileName );
+	
+	if ( !fileName.isEmpty() )
+	{
+		mDock->browser()->setCurrentFileName( fileName );
+	}
 }
 
 void ClassBrowser::opened( XUPProjectItem* project )

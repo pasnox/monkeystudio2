@@ -211,6 +211,11 @@ int qCtagsSenseLanguagesModel::indexOf( const QString& language ) const
 	return mLanguages ? mLanguages->indexOf( language ) : -1;
 }
 
+bool qCtagsSenseLanguagesModel::isRunning() const
+{
+	return mThread->isRunning();
+}
+
 void qCtagsSenseLanguagesModel::refresh()
 {
 	const QString sql = QString(

@@ -17,6 +17,7 @@
 ****************************************************************************/
 #include "qCtagsSenseBrowser.h"
 #include "qCtagsSense.h"
+#include "qCtagsSenseIndexer.h"
 #include "qCtagsSenseLanguagesModel.h"
 #include "qCtagsSenseFilesModel.h"
 #include "qCtagsSenseMembersModel.h"
@@ -80,6 +81,11 @@ void qCtagsSenseBrowser::setCurrentFileName( const QString& fileName )
 {
 	mLanguage = getFileNameLanguageName( fileName.toLocal8Bit().constData() );
 	mFileName = fileName;
+	
+	if ( mSense->indexer()->isRunning() || mLanguagesModel->isRunning() || mFilesModel->isRunning() )
+	{
+		return;
+	}
 	
 	// update languages combo
 	bool languageLocked = cbLanguages->blockSignals( true );
@@ -160,14 +166,14 @@ void qCtagsSenseBrowser::mLanguagesModel_ready()
 		id = 0;
 	}
 	
-	mLanguage = mLanguagesModel->language( id );
+	//mLanguage = mLanguagesModel->language( id );
 	cbLanguages->setCurrentIndex( id );
 	mFilesModel->refresh( mLanguage );
 	cbLanguages->blockSignals( languageLocked );
 }
 
 void qCtagsSenseBrowser::mFilesModel_ready()
-{	
+{
 	bool fileLocked = cbFileNames->blockSignals( true );
 	int id = mFilesModel->indexOf( mFileName );
 	
@@ -176,7 +182,7 @@ void qCtagsSenseBrowser::mFilesModel_ready()
 		id = 0;
 	}
 	
-	mFileName = mFilesModel->fileName( id );
+	//mFileName = mFilesModel->fileName( id );
 	cbFileNames->setCurrentIndex( id );
 	mMembersModel->refresh( mFileName );
 	cbFileNames->blockSignals( fileLocked );
@@ -192,7 +198,6 @@ void qCtagsSenseBrowser::on_tvMembers_customContextMenuRequested( const QPoint& 
 {
 	QModelIndex index = tvMembers->currentIndex();
 	qCtagsSenseEntry* entry = static_cast<qCtagsSenseEntry*>( index.internalPointer() );
-	//bool isCorCpp = entry->language == "C++" || entry->language == "C";
 	QMenu menu( this );
 	
 	switch ( entry->kind )

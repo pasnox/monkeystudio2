@@ -42,6 +42,7 @@ protected:
 	QPointer<pDockClassBrowser> mDock;
 
 protected slots:
+	void fileOpened( const QString& fileName );
 	void currentFileChanged( pAbstractChild* child, const QString& fileName );
 	void opened( XUPProjectItem* project );
 	void memberActivated( qCtagsSenseEntry* entry );

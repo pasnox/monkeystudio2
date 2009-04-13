@@ -43,6 +43,7 @@ public:
 	
 	QString language( int id ) const;
 	int indexOf( const QString& language ) const;
+	bool isRunning() const;
 	
 public slots:
 	void refresh();
