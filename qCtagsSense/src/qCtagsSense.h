@@ -35,38 +35,38 @@ public:
 	enum Kind
 	{
 		Unknow = -1,
-		Class, // Vera, Tcl, Ruby, Python, PHP, JavaScript, Java
-		Macro, // Vera, Make
-		Enumerator, // Vera
-		Function, // Vim, Verilog, Vera, SQL, SML, SLang, Sh, Scheme, Python, PHP, Pascal, Lua, Lisp, JavaScript
-		Enum, // Vera, Java
-		LocalVariable, // Vera, SQL, Java
-		Member, // Vera, Python
-		Namespace, // SLang
-		Prototype, // Vera, SQL
-		Structure, // SML
-		Typedef, // Vera
-		Union,
-		Variable, // Vim, Vera, SQL, PHP
-		ExternVariable, // Vera
-		Label, // YACC, SQL, Perl
+		Class, // Vera, Tcl, Ruby, Python, PHP, JavaScript, Java, Eiffel, C#, C, C++
+		Macro, // Vera, Make, Erlang, C#, C, C++, Asm
+		Enumerator, // Vera, C#, C, C++
+		Function, // Vim, Verilog, Vera, SQL, SML, SLang, Sh, Scheme, Python, PHP, Pascal, Lua, Lisp, JavaScript, Fortran, Erlang, C, C++, Basic, Awk, Asp
+		Enum, // Vera, Java, C#, C, C++, Basic
+		LocalVariable, // Vera, SQL, Java, Fortran, Eiffel, C#, C, C++
+		Member, // Vera, Python, C, C++
+		Namespace, // SLang, C#, C, C++
+		Prototype, // Vera, SQL, C, C++
+		Structure, // SML, C#, C, C++
+		Typedef, // Vera, C#, C, C++
+		Union, // C, C++
+		Variable, // Vim, Vera, SQL, PHP, Fortran, C, C++, Basic, Asp
+		ExternVariable, // Vera, C, C++
+		Label, // YACC, SQL, Perl, Fortran, Basic, Asm
 		AutoCommandGroup, // Vim
 		UserDefinedCommand, // Vim
 		Map, // Vim
-		Constant, // Verilog, PHP, Perl
-		Event, // Verilog, SQL
-		Module, // Verilog, Ruby
+		Constant, // Verilog, PHP, Perl, Basic, Asp
+		Event, // Verilog, SQL, C#
+		Module, // Verilog, Ruby, Fortran, Erlang
 		NetDataType, // Verilog
 		Port, // Verilog
 		RegisterDataType, // Verilog
 		Task, // Verilog, Vera
-		Program, // Vera
-		Method, // Tcl, Ruby, JavaScript, Java
+		Program, // Vera, Fortran
+		Method, // Tcl, Ruby, JavaScript, Java, C#
 		Procedure, // Tcl, SQL, Pascal
 		Cursor, // SQL
 		RecordField, // SQL
 		Package, // SQL, Perl, Java
-		Record, // SQL
+		Record, // SQL, Erlang
 		SubType, // SQL
 		Table, // SQL
 		Trigger, // SQL
@@ -81,19 +81,37 @@ public:
 		Exception, // SML
 		Functor, // SML
 		Signature, // SML
-		Type, // SML
+		Type, // SML, Fortran, Basic, Asm
 		ValueBinding, // SML
 		Set, // Scheme
 		SingletonMethod, // Ruby
-		SubRoutine, // REXX, Perl
-		Interface, // PHP, Java
+		SubRoutine, // REXX, Perl, Fortran, Asp
+		Interface, // PHP, Java, Fortran, C#
 		JavaScriptFunction, // PHP, HTML
 		Format, // Perl
 		SubRoutineDeclaration, // Perl
 		GlobalVariable, // JavaScript
 		Anchor, // HTML
-		Field, // Java
+		Field, // Java, C#
 		EnumType, // Java
+		BlockData, // Fortran
+		CommonBlock, // Fortran
+		EntryPoint, // Fortran
+		NameList, // Fortran
+		DerivatedType, // Fortran
+		Feature, // Eiffel
+		DataItem, // Cobol
+		FileDescriptor, // Cobol
+		GroupItem, // Cobol
+		Paragraph, // Cobol
+		ProgramId, // Cobol
+		Section, // Cobol
+		Property, // C#
+		Fragment, // BETA
+		AllPatterns, // BETA
+		Slot, // BETA
+		Pattern, // BETA
+		Define // Asm
 	};
 	
 	qCtagsSense( QObject* parent = 0 );

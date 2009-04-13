@@ -26,95 +26,6 @@
 	flags: "afmikKlnsStz") [fks]. 
 */
 
-// Kinds
-/*
-Asm                                        
-	d  defines                             
-	l  labels                              
-	m  macros                              
-	t  types (structs and records)         
-Asp                                        
-	c  constants                           
-	f  functions                           
-	s  subroutines                         
-	v  variables                           
-Awk                                        
-	f  functions                           
-Basic                                      
-	c  constants                           
-	f  functions                           
-	l  labels                              
-	t  types                               
-	v  variables                           
-	g  enumerations                        
-BETA                                       
-	f  fragment definitions                
-	p  all patterns [off]                  
-	s  slots (fragment uses)               
-	v  patterns (virtual or rebound)       
-C / C++                                        
-	c  classes                             
-	d  macro definitions                   
-	e  enumerators (values inside an enumeration)
-	f  function definitions                      
-	g  enumeration names                         
-	l  local variables [off]                     
-	m  class, struct, and union members          
-	n  namespaces                                
-	p  function prototypes [off]                 
-	s  structure names                           
-	t  typedefs                                  
-	u  union names                               
-	v  variable definitions                      
-	x  external and forward variable declarations [off]
-C#                                                     
-	c  classes                                         
-	d  macro definitions                               
-	e  enumerators (values inside an enumeration)      
-	E  events                                          
-	f  fields                                          
-	g  enumeration names                               
-	i  interfaces                                      
-	l  local variables [off]                           
-	m  methods                                         
-	n  namespaces                                      
-	p  properties                                      
-	s  structure names                                 
-	t  typedefs                                        
-Cobol                                                  
-	d  data items                                      
-	f  file descriptions (FD, SD, RD)                  
-	g  group items                                     
-	p  paragraphs                                      
-	P  program ids                                     
-	s  sections                                        
-Eiffel                                                 
-	c  classes                                         
-	f  features                                        
-	l  local entities [off]                            
-Erlang                                                 
-	d  macro definitions                               
-	f  functions                                       
-	m  modules                                         
-	r  record definitions                              
-Fortran                                                
-	b  block data                                      
-	c  common blocks                                   
-	e  entry points                                    
-	f  functions                                       
-	i  interface contents, generic names, and operators [off]
-	k  type and structure components                         
-	l  labels                                                
-	L  local, common block, and namelist variables [off]     
-	m  modules                                               
-	n  namelists                                             
-	p  programs                                              
-	s  subroutines                                           
-	t  derived types and structures                          
-	v  program (global) and module variables
-*/
-
-
 namespace qCtagsSenseUtils
 {
 	typedef QPair<QChar, qCtagsSense::Kind> CharKindPair; // kind char, kind enum
@@ -129,22 +40,117 @@ void qCtagsSenseUtils::initMaps()
 {
 	if ( mLanguageChars.isEmpty() )
 	{
-		/*
-		CharKindPairList sqlList = CharKindPairList()
-			<< CharKindPair( '', qCtagsSense:: )
-			<< CharKindPair( '', qCtagsSense:: )
-			<< CharKindPair( '', qCtagsSense:: )
-			<< CharKindPair( '', qCtagsSense:: )
-			<< CharKindPair( '', qCtagsSense:: )
-			<< CharKindPair( '', qCtagsSense:: )
-			<< CharKindPair( '', qCtagsSense:: )
-			<< CharKindPair( '', qCtagsSense:: )
-			<< CharKindPair( '', qCtagsSense:: )
-			<< CharKindPair( '', qCtagsSense:: )
-			<< CharKindPair( '', qCtagsSense:: )
-			<< CharKindPair( '', qCtagsSense:: )
-			<< CharKindPair( '', qCtagsSense:: );
-		*/
+		// language kinds
+		CharKindPairList asmList = CharKindPairList()
+			<< CharKindPair( 'd', qCtagsSense::Define )
+			<< CharKindPair( 'l', qCtagsSense::Label )
+			<< CharKindPair( 'm', qCtagsSense::Macro )
+			<< CharKindPair( 't', qCtagsSense::Type );
+		
+		CharKindPairList aspList = CharKindPairList()
+			<< CharKindPair( 'c', qCtagsSense::Constant )
+			<< CharKindPair( 'f', qCtagsSense::Function )
+			<< CharKindPair( 's', qCtagsSense::SubRoutine )
+			<< CharKindPair( 'v', qCtagsSense::Variable );
+		
+		CharKindPairList awkList = CharKindPairList()
+			<< CharKindPair( 'f', qCtagsSense::Function );
+		
+		CharKindPairList basicList = CharKindPairList()
+			<< CharKindPair( 'c', qCtagsSense::Constant )
+			<< CharKindPair( 'f', qCtagsSense::Function )
+			<< CharKindPair( 'l', qCtagsSense::Label )
+			<< CharKindPair( 't', qCtagsSense::Type )
+			<< CharKindPair( 'v', qCtagsSense::Variable )
+			<< CharKindPair( 'g', qCtagsSense::Enum );
+		
+		CharKindPairList betaList = CharKindPairList()
+			<< CharKindPair( 'f', qCtagsSense::Fragment )
+			<< CharKindPair( 'p', qCtagsSense::AllPatterns ) // off
+			<< CharKindPair( 's', qCtagsSense::Slot )
+			<< CharKindPair( 'v', qCtagsSense::Pattern );
+		
+		CharKindPairList cList = CharKindPairList()
+			<< CharKindPair( 'c', qCtagsSense::Class )
+			<< CharKindPair( 'd', qCtagsSense::Macro )
+			<< CharKindPair( 'e', qCtagsSense::Enumerator )
+			<< CharKindPair( 'f', qCtagsSense::Function )
+			<< CharKindPair( 'g', qCtagsSense::Enum )
+			<< CharKindPair( 'l', qCtagsSense::LocalVariable ) // off
+			<< CharKindPair( 'm', qCtagsSense::Member )
+			<< CharKindPair( 'n', qCtagsSense::Namespace )
+			<< CharKindPair( 'p', qCtagsSense::Prototype ) // off
+			<< CharKindPair( 's', qCtagsSense::Structure )
+			<< CharKindPair( 't', qCtagsSense::Typedef )
+			<< CharKindPair( 'u', qCtagsSense::Union )
+			<< CharKindPair( 'v', qCtagsSense::Variable )
+			<< CharKindPair( 'x', qCtagsSense::ExternVariable ); // off
+		
+		CharKindPairList cppList = CharKindPairList()
+			<< CharKindPair( 'c', qCtagsSense::Class )
+			<< CharKindPair( 'd', qCtagsSense::Macro )
+			<< CharKindPair( 'e', qCtagsSense::Enumerator )
+			<< CharKindPair( 'f', qCtagsSense::Function )
+			<< CharKindPair( 'g', qCtagsSense::Enum )
+			<< CharKindPair( 'l', qCtagsSense::LocalVariable ) // off
+			<< CharKindPair( 'm', qCtagsSense::Member )
+			<< CharKindPair( 'n', qCtagsSense::Namespace )
+			<< CharKindPair( 'p', qCtagsSense::Prototype ) // off
+			<< CharKindPair( 's', qCtagsSense::Structure )
+			<< CharKindPair( 't', qCtagsSense::Typedef )
+			<< CharKindPair( 'u', qCtagsSense::Union )
+			<< CharKindPair( 'v', qCtagsSense::Variable )
+			<< CharKindPair( 'x', qCtagsSense::ExternVariable ); // off
+		
+		CharKindPairList csharpList = CharKindPairList()
+			<< CharKindPair( 'c', qCtagsSense::Class )
+			<< CharKindPair( 'd', qCtagsSense::Macro )
+			<< CharKindPair( 'e', qCtagsSense::Enumerator )
+			<< CharKindPair( 'E', qCtagsSense::Event )
+			<< CharKindPair( 'f', qCtagsSense::Field )
+			<< CharKindPair( 'g', qCtagsSense::Enum )
+			<< CharKindPair( 'i', qCtagsSense::Interface )
+			<< CharKindPair( 'l', qCtagsSense::LocalVariable ) // off
+			<< CharKindPair( 'm', qCtagsSense::Method )
+			<< CharKindPair( 'n', qCtagsSense::Namespace )
+			<< CharKindPair( 'p', qCtagsSense::Property )
+			<< CharKindPair( 's', qCtagsSense::Structure )
+			<< CharKindPair( 't', qCtagsSense::Typedef );
+		
+		CharKindPairList cobolList = CharKindPairList()
+			<< CharKindPair( 'd', qCtagsSense::DataItem )
+			<< CharKindPair( 'f', qCtagsSense::FileDescriptor )
+			<< CharKindPair( 'g', qCtagsSense::GroupItem )
+			<< CharKindPair( 'p', qCtagsSense::Paragraph )
+			<< CharKindPair( 'P', qCtagsSense::ProgramId )
+			<< CharKindPair( 's', qCtagsSense::Section );
+		
+		CharKindPairList eiffelList = CharKindPairList()
+			<< CharKindPair( 'c', qCtagsSense::Class )
+			<< CharKindPair( 'f', qCtagsSense::Feature )
+			<< CharKindPair( 'l', qCtagsSense::LocalVariable ); // off
+		
+		CharKindPairList erlangList = CharKindPairList()
+			<< CharKindPair( 'd', qCtagsSense::Macro )
+			<< CharKindPair( 'f', qCtagsSense::Function )
+			<< CharKindPair( 'm', qCtagsSense::Module )
+			<< CharKindPair( 'r', qCtagsSense::Record );
+		
+		CharKindPairList fortranList = CharKindPairList()
+			<< CharKindPair( 'b', qCtagsSense::BlockData )
+			<< CharKindPair( 'c', qCtagsSense::CommonBlock )
+			<< CharKindPair( 'e', qCtagsSense::EntryPoint )
+			<< CharKindPair( 'f', qCtagsSense::Function )
+			<< CharKindPair( 'i', qCtagsSense::Interface ) // off
+			<< CharKindPair( 'k', qCtagsSense::Type )
+			<< CharKindPair( 'l', qCtagsSense::Label )
+			<< CharKindPair( 'L', qCtagsSense::LocalVariable ) // off
+			<< CharKindPair( 'm', qCtagsSense::Module )
+			<< CharKindPair( 'n', qCtagsSense::NameList )
+			<< CharKindPair( 'p', qCtagsSense::Program )
+			<< CharKindPair( 's', qCtagsSense::SubRoutine )
+			<< CharKindPair( 't', qCtagsSense::DerivatedType )
+			<< CharKindPair( 'v', qCtagsSense::Variable );
 		
 		CharKindPairList htmlList = CharKindPairList()
 			<< CharKindPair( 'a', qCtagsSense::Anchor )
@@ -293,7 +299,41 @@ void qCtagsSenseUtils::initMaps()
 		CharKindPairList yaccList = CharKindPairList()
 			<< CharKindPair( 'l', qCtagsSense::Label );
 		
-		//mLanguageChars
+		// fill language kinds map
+		mLanguageChars[ "Asm" ] = asmList;
+		mLanguageChars[ "Asp" ] = aspList;
+		mLanguageChars[ "Awk" ] = awkList;
+		mLanguageChars[ "Basic" ] = basicList;
+		mLanguageChars[ "BETA" ] = betaList;
+		mLanguageChars[ "C" ] = cList;
+		mLanguageChars[ "C++" ] = cppList;
+		mLanguageChars[ "C#" ] = csharpList;
+		mLanguageChars[ "Cobol" ] = cobolList;
+		mLanguageChars[ "Eiffel" ] = eiffelList;
+		mLanguageChars[ "Erlang" ] = erlangList;
+		mLanguageChars[ "Fortran" ] = fortranList;
+		mLanguageChars[ "HTML" ] = htmlList;
+		mLanguageChars[ "Java" ] = javaList;
+		mLanguageChars[ "JavaScript" ] = javascriptList;
+		mLanguageChars[ "Lisp" ] = lispList;
+		mLanguageChars[ "Lua" ] = luaList;
+		mLanguageChars[ "Make" ] = makeList;
+		mLanguageChars[ "Pascal" ] = pascalList;
+		mLanguageChars[ "Perl" ] = perlList;
+		mLanguageChars[ "PHP" ] = phpList;
+		mLanguageChars[ "Python" ] = pythonList;
+		mLanguageChars[ "REXX" ] = rexxList;
+		mLanguageChars[ "Ruby" ] = rubyList;
+		mLanguageChars[ "Scheme" ] = schemeList;
+		mLanguageChars[ "Sh" ] = shList;
+		mLanguageChars[ "SLang" ] = slangList;
+		mLanguageChars[ "SML" ] = smlList;
+		mLanguageChars[ "SQL" ] = sqlList;
+		mLanguageChars[ "Tcl" ] = tclList;
+		mLanguageChars[ "Vera" ] = veraList;
+		mLanguageChars[ "Verilog" ] = verilogList;
+		mLanguageChars[ "Vim" ] = vimList;
+		mLanguageChars[ "YACC" ] = yaccList;
 	
 		// kind text
 		mKindText[ qCtagsSense::Class ] = QCoreApplication::translate( "qCtagsSense", "Class" );
@@ -443,6 +483,9 @@ QString qCtagsSenseUtils::entryDecorationFilePath( qCtagsSenseEntry* entry )
 		case qCtagsSense::Unknow:
 			name = "unknow";
 			break;
+		default:
+			#warning handle all enumerator
+			break;
 	}
 	
 	QString fn = name;
@@ -508,6 +551,9 @@ QString qCtagsSenseUtils::entryDisplay( qCtagsSenseEntry* entry )
 		case qCtagsSense::Namespace:
 		case qCtagsSense::Typedef:
 		case qCtagsSense::Unknow:
+			break;
+		default:
+			#warning handle all enumerator
 			break;
 	}
 	
