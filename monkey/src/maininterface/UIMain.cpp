@@ -198,6 +198,7 @@ void UIMain::initMenuBar()
 		mb->action( "mRecents/aSeparator1" );
 	mb->endGroup();
 	mb->menu( "mBuilder", tr( "Build" ) )->setEnabled( false );
+	mb->menu( "mBuilder" )->menuAction()->setVisible( false );
 	mb->beginGroup( "mBuilder" );
 		mb->menu( "mBuild", tr( "&Build" ), QIcon( ":/build/icons/build/build.png" ) );
 		mb->menu( "mRebuild", tr( "&Rebuild" ), QIcon( ":/build/icons/build/rebuild.png" ) );
@@ -207,7 +208,9 @@ void UIMain::initMenuBar()
 		mb->action( "aSeparator1" );
 	mb->endGroup();
 	mb->menu( "mDebugger", tr( "Debugger" ) )->setEnabled( false );
-	mb->menu( "mInterpreter", tr( "&Interpreter" ) )->setEnabled( false );
+	mb->menu( "mDebugger" )->menuAction()->setVisible( false );
+	mb->menu( "mInterpreter", tr( "Interpreter" ) )->setEnabled( false );
+	mb->menu( "mInterpreter" )->menuAction()->setVisible( false );
 	mb->menu( "mTools", tr( "Tools" ) );
 	mb->beginGroup( "mTools" );
 		mb->action( "aEditUser", tr( "&Edit User Tools..." ), QIcon( ":/tools/icons/tools/edit.png" ), QString::null, tr( "Edit tools..." ) );
