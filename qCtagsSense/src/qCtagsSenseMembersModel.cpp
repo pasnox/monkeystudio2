@@ -343,6 +343,24 @@ void qCtagsSenseMembersModel::refresh( const QString& fileName )
 		"AND files.filename = '%1'"
 	).arg( fileName );
 	
+	/* some test for global class browser
+	QStringList kinds = QStringList()
+		<< QString::number( qCtagsSense::Macro )
+		<< QString::number( qCtagsSense::Prototype )
+		<< QString::number( qCtagsSense::Typedef )
+		<< QString::number( qCtagsSense::VariableLocal )
+		<< QString::number( qCtagsSense::VariableGlobal );
+	
+	sql = QString(
+		"SELECT entries.*, language, filename FROM entries "
+		"INNER JOIN files ON files.id = entries.file_id "
+		"AND files.language = 'C++' "
+		"WHERE entries.kind NOT IN( %1 ) "
+		"ORDER BY entries.kind, entries.name "
+	).arg( kinds.join( ", " ) );
+	qWarning() << sql;
+	*/
+	
 	qCtagsSenseEntry* root = mRootEntry;
 	mRootEntry = 0;
 	
