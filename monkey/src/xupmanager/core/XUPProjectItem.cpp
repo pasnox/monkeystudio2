@@ -12,6 +12,7 @@
 #include <QTextCodec>
 #include <QDir>
 #include <QRegExp>
+#include <QProcess>
 
 #include <QDebug>
 
@@ -170,7 +171,7 @@ QFileInfoList XUPProjectItem::findFile( const QString& partialFilePath ) const
 	// get compressed path list
 	paths = compressedPaths( paths );
 	
-	qWarning() << "looking in" << paths;
+	//qWarning() << "looking in" << paths;
 	
 	// get all matching files in paths
 	QFileInfoList files;
@@ -188,6 +189,11 @@ QFileInfoList XUPProjectItem::findFile( const QString& partialFilePath ) const
 XUPProjectItemInfos* XUPProjectItem::projectInfos()
 {
 	return mXUPProjectInfos;
+}
+
+QMap<QString, QString>&  XUPProjectItem::variableCache()
+{
+	return mVariableCache;
 }
 
 XUPProjectItem* XUPProjectItem::parentProject() const
@@ -709,60 +715,98 @@ void XUPProjectItem::unRegisterProjectType() const
 	mXUPProjectInfos->unRegisterType( projectType() );
 }
 
-void XUPProjectItem::handleIncludeItem( XUPItem* function ) const
+QString XUPProjectItem::getVariableContent( const QString& variableName )
 {
-	if ( function->type() == XUPItem::Function && function->attribute( "name" ).toLower() == "include" )
+	/*
+		$$[QT_INSTALL_HEADERS] : read content from qt conf
+		$${QT_INSTALL_HEADERS} or $$QT_INSTALL_HEADERS : read content from var
+		$$(QT_INSTALL_HEADERS) : read from environment when qmake run
+		$(QTDIR) : read from generated makefile
+	*/
+	
+	QString name = QString( variableName ).replace( '$', "" ).replace( '{', "" ).replace( '}', "" ).replace( '[', "" ).replace( ']', "" ).replace( '(', "" ).replace( ')', "" );
+	
+	// environment var
+	if ( variableName.startsWith( "$$(" ) || variableName.startsWith( "$(" ) )
 	{
-		if ( !function->temporaryValue( "includeLocked", false ).toBool() )
+		if ( name == "PWD" )
 		{
-			function->setTemporaryValue( "includeLocked", true );
-			const QString parameters = function->project()->rootIncludeProject()->interpretValue( function, "parameters" );
-			const QString fn = filePath( parameters );
-			QStringList projects;
-			
-			for ( int i = 0; i < function->childCount(); i++ )
-			{
-				XUPItem* cit = function->child( i );
-				if ( cit->type() == XUPItem::Project )
-				{
-					projects << cit->project()->fileName();
-				}
-			}
-			
-			// check if project is already handled
-			if ( projects.contains( fn ) )
-			{
-				return;
-			}
-			
-			XUPProjectItem* project = newProject();
-			if ( project->open( fn, temporaryValue( "codec" ).toString() ) )
-			{
-				function->addChild( project );
-			}
-			else
-			{
-				const_cast<XUPProjectItem*>( this )->setLastError( tr( "Failed to handle include project %1" ).arg( fn ) );
-				delete project;
-			}
+			return rootIncludeProject()->path();
+		}
+		else
+		{
+			return QString::fromLocal8Bit( qgetenv( name.toLocal8Bit().constData() ) );
 		}
 	}
+	else
+	{
+		if ( name == "PWD" )
+		{
+			return project()->path();
+		}
+		else
+		{
+			return rootIncludeProject()->variableCache().value( name );
+		}
+	}
+	
+	return QString::null;
 }
 
-void XUPProjectItem::customRowCount( XUPItem* item ) const
+QString XUPProjectItem::interpretContent( const QString& content )
+{
+	QRegExp rx( "\\$\\$?[\\{\\(\\[]?([\\w\\.]+(?!\\w*\\s*\\{\\[\\(\\)\\]\\}))[\\]\\)\\}]?" );
+	QString value = content;
+	int pos = 0;
+	
+	while ( ( pos = rx.indexIn( content, pos ) ) != -1 )
+	{
+		value.replace( rx.cap( 0 ), getVariableContent( rx.cap( 0 ) ) );
+		pos += rx.matchedLength();
+	}
+	
+	return value;
+}
+
+bool XUPProjectItem::handleIncludeFile( XUPItem* function )
+{
+	const QString parameters = function->cacheValue( "parameters" );
+	const QString fn = filePath( parameters );
+	QStringList projects;
+	
+	foreach ( XUPItem* cit, function->childrenList() )
+	{
+		if ( cit->type() == XUPItem::Project )
+		{
+			projects << cit->project()->fileName();
+		}
+	}
+	
+	// check if project is already handled
+	if ( projects.contains( fn ) )
+	{
+		return true;
+	}
+	
+	// open project
+	XUPProjectItem* project = newProject();
+	function->addChild( project );
+	
+	// remove and delete project if can't open
+	if ( !project->open( fn, temporaryValue( "codec" ).toString() ) )
+	{
+		function->removeChild( project );
+		topLevelProject()->setLastError( tr( "Failed to handle include file %1" ).arg( fn ) );
+		return false;
+	}
+	
+	return true;
+}
+
+bool XUPProjectItem::analyze( XUPItem* item )
 {
 	Q_UNUSED( item );
-}
-
-void XUPProjectItem::hookItem( XUPItem* item ) const
-{
-	bool included = item->temporaryValue( "includeLocked", false ).toBool();
-	
-	item->setTemporaryValue( "includeLocked", false );
-	handleIncludeItem( item );
-	item->setTemporaryValue( "includeLocked", included );
-	
-	customRowCount( item );
+	return true;
 }
 
 bool XUPProjectItem::open( const QString& fileName, const QString& codec )
@@ -773,14 +817,14 @@ bool XUPProjectItem::open( const QString& fileName, const QString& codec )
 	// check existence
 	if ( !file.exists() )
 	{
-		setLastError( "file not exists" );
+		topLevelProject()->setLastError( "file not exists" );
 		return false;
 	}
 	
 	// try open it for reading
 	if ( !file.open( QIODevice::ReadOnly ) )
 	{
-		setLastError( "can't open file for reading" );
+		topLevelProject()->setLastError( "can't open file for reading" );
 		return false;
 	}
 	
@@ -794,7 +838,7 @@ bool XUPProjectItem::open( const QString& fileName, const QString& codec )
 	int errorColumn;
 	if ( !mDocument.setContent( buffer, &errorMsg, &errorLine, &errorColumn ) )
 	{
-		setLastError( QString( "%1 on line: %2, column: %3" ).arg( errorMsg ).arg( errorLine ).arg( errorColumn ) );
+		topLevelProject()->setLastError( QString( "%1 on line: %2, column: %3" ).arg( errorMsg ).arg( errorLine ).arg( errorColumn ) );
 		return false;
 	}
 	
@@ -802,14 +846,14 @@ bool XUPProjectItem::open( const QString& fileName, const QString& codec )
 	mDomElement = mDocument.firstChildElement( "project" );
 	if ( mDomElement.isNull() )
 	{
-		setLastError( "no project node" );
+		topLevelProject()->setLastError( "no project node" );
 		return false;
 	}
 	
 	// all is ok
 	setTemporaryValue( "codec", codec );
 	setTemporaryValue( "fileName", fileName );
-	setLastError( QString::null );
+	topLevelProject()->setLastError( QString::null );
 	file.close();
 	
 	return true;
@@ -842,11 +886,11 @@ bool XUPProjectItem::save()
 	// set error message if needed
 	if ( result )
 	{
-		setLastError( QString::null );
+		topLevelProject()->setLastError( QString::null );
 	}
 	else
 	{
-		setLastError( tr( "Can't write content" ) );
+		topLevelProject()->setLastError( tr( "Can't write content" ) );
 	}
 	
 	return result;

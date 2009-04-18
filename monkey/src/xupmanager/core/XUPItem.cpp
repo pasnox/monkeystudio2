@@ -117,12 +117,6 @@ XUPItemList XUPItem::childrenList() const
 		child( i );
 	}
 	
-	// create fake child if needed
-	XUPItem* item = const_cast<XUPItem*>( this );
-	XUPProjectItem* pItem = project();
-	pItem->handleIncludeItem( item );
-	pItem->customRowCount( item );
-	
 	// return children
 	return mChildItems.values();
 }
@@ -167,12 +161,6 @@ int XUPItem::row() const
 
 int XUPItem::childCount() const
 {
-	// handle include items and custom row count
-	XUPItem* item = const_cast<XUPItem*>( this );
-	XUPProjectItem* pItem = project();
-	pItem->handleIncludeItem( item );
-	pItem->customRowCount( item );
-	
 	int count = mDomElement.childNodes().count();
 	if ( !mChildItems.isEmpty() )
 	{
@@ -426,4 +414,19 @@ void XUPItem::setTemporaryValue( const QString& key, const QVariant& value )
 void XUPItem::clearTemporaryValue( const QString& key )
 {
 	mTemporaryValues.remove( key );
+}
+
+QString XUPItem::cacheValue( const QString& key, const QString& defaultValue ) const
+{
+	return temporaryValue( "cache-" +key, defaultValue ).toString();
+}
+
+void XUPItem::setCacheValue( const QString& key, const QString& value )
+{
+	setTemporaryValue( "cache-" +key, value );
+}
+
+void XUPItem::clearCacheValue( const QString& key )
+{
+	clearTemporaryValue( "cache-" +key );
 }

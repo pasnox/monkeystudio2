@@ -125,7 +125,11 @@ FileRecord* CtagsManager::GetTagsForFile (QString file )
 */
 TagEntryListItem* CtagsManager::get_tags ( QString file )
 {
+#ifdef Q_CC_MSVC
+#pragma message("fix me")
+#else
 #warning fix me
+#endif
 	return 0; //return parseFile ( file.toLocal8Bit().data(), NULL);
 }
 

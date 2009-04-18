@@ -207,7 +207,7 @@ bool XUPProjectModel::open( const QString& fileName, const QString& codec )
 		return true;
 	}
 	
-	setLastError( tr( "Can't open this project file" ) );
+	setLastError( tr( "Can't open this project file: " ).append( tmpProject->lastError() ) );
 	delete tmpProject;
 	return false;
 }

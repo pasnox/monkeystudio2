@@ -484,7 +484,11 @@ QString qCtagsSenseUtils::entryDecorationFilePath( qCtagsSenseEntry* entry )
 			name = "unknow";
 			break;
 		default:
+			#ifdef Q_CC_MSVC
+			#pragma message("handle all enumerator")
+			#else
 			#warning handle all enumerator
+			#endif
 			break;
 	}
 	
@@ -553,7 +557,11 @@ QString qCtagsSenseUtils::entryDisplay( qCtagsSenseEntry* entry )
 		case qCtagsSense::Unknow:
 			break;
 		default:
+			#ifdef Q_CC_MSVC
+			#pragma message("handle all enumerator")
+			#else
 			#warning handle all enumerator
+			#endif
 			break;
 	}
 	
@@ -609,7 +617,11 @@ QString qCtagsSenseUtils::entryToolTip( qCtagsSenseEntry* entry )
 	return tooltip;
 }
 
+#ifdef Q_CC_MSVC
+#pragma message("remove me and use pMonkeyStudio::getFiles")
+#else
 #warning remove me and use pMonkeyStudio::getFiles
+#endif
 
 QFileInfoList qCtagsSenseUtils::getFiles( QDir fromDir, const QStringList& filters, bool recursive )
 {

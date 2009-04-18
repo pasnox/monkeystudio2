@@ -640,13 +640,13 @@ void XUPProjectManager::addFilesToScope( XUPItem* scope, const QStringList& allF
 				XUPItem* value = usedVariable->addChild( XUPItem::File );
 				value->setAttribute( "content", project->relativeFilePath( file ) );
 				
-				// hook for reload include & subproject
-				usedVariable->project()->hookItem( usedVariable );
-				
 				break;
 			}
 		}
 	}
+	
+	// reload include & subproject
+	project->analyze( scope );
 	
 	// save project
 	if ( !project->save() )
