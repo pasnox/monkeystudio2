@@ -516,7 +516,8 @@ void pWorkspace::projectCustomActionTriggered()
 				XUPProjectItem* project = cmd.project();
 				XUPProjectItem* topLevelProject = project->topLevelProject();
 				// try reading already saved binary
-				s = topLevelProject->projectSettingsValue( a->text().replace( ' ', '_' ).toUpper() );
+				const QString psvBin = topLevelProject->projectSettingsValue( a->text().replace( ' ', '_' ).toUpper() );
+				s = psvBin;
 				if ( !s.isEmpty() )
 				{
 					s = topLevelProject->filePath( s );
@@ -540,8 +541,11 @@ void pWorkspace::projectCustomActionTriggered()
 					cmd.setCommand( cm->quotedString( cm->nativeSeparators( s ) ) );
 					cmd.setWorkingDirectory( cm->nativeSeparators( p ) );
 					// write in project
-					topLevelProject->setProjectSettingsValue( a->text().replace( ' ', '_' ).toUpper(), topLevelProject->relativeFilePath( s ) );
-					topLevelProject->save();
+					if ( topLevelProject->relativeFilePath( s ) != psvBin )
+					{
+						topLevelProject->setProjectSettingsValue( a->text().replace( ' ', '_' ).toUpper(), topLevelProject->relativeFilePath( s ) );
+						topLevelProject->save();
+					}
 					// add command to console manager
 					cm->addCommand( cmd );
 				}
