@@ -149,6 +149,7 @@ QStringList XUPProjectItem::compressedPaths( const QStringList& paths ) const
 
 QFileInfoList XUPProjectItem::findFile( const QString& partialFilePath ) const
 {
+	XUPProjectItem* riProject = rootIncludeProject();
 	const QString projectPath = path();
 	const QStringList variablesPath = mXUPProjectInfos->pathVariables( projectType() );
 	QStringList paths;
@@ -157,7 +158,8 @@ QFileInfoList XUPProjectItem::findFile( const QString& partialFilePath ) const
 	paths << projectPath;
 	foreach ( const QString& variable, variablesPath )
 	{
-		QString tmpPaths = interpretVariable( variable );
+		QString tmpPaths = riProject->variableCache().value( variable );
+		
 		foreach ( QString path, splitMultiLineValue( tmpPaths ) )
 		{
 			path = filePath( path.remove( '"' ) );
@@ -400,84 +402,6 @@ XUPItemList XUPProjectItem::getVariables( const XUPItem* root, const QString& va
 	}
 	
 	return variables;
-}
-
-QString XUPProjectItem::interpretVariable( const QString& variableName, const XUPItem* callerItem, const QString& defaultValue ) const
-{
-	/*
-		$${varName} or $$varName : read content from defined variable
-		$$(varName) : read from environment
-	*/
-	
-	QString name = QString( variableName ).replace( '$', "" ).replace( '{', "" ).replace( '}', "" ).replace( '(', "" ).replace( ')', "" );
-	QList<QStringList> value;
-	
-	// environment var
-	if ( variableName.startsWith( "$$(" ) || name == "PWD" )
-	{
-		return name != "PWD" ? qgetenv( name.toLocal8Bit().constData() ) : ( callerItem ? callerItem->project()->path() : path() );
-	}
-	else
-	{
-		XUPItemList variableItems = getVariables( this, name, callerItem );
-		
-		foreach ( XUPItem* variableItem, variableItems )
-		{
-			const QString op = variableItem->attribute( "operator", "=" );
-			QStringList tmp;
-			for ( int i = 0; i < variableItem->childCount(); i++ )
-			{
-				XUPItem* valueItem = variableItem->child( i );
-				if ( valueItem->type() == XUPItem::Value ||
-					valueItem->type() == XUPItem::File ||
-					valueItem->type() == XUPItem::Path
-				)
-				{
-					tmp << interpretValue( valueItem, "content" );
-				}
-			}
-			
-			if ( op == "=" )
-			{
-				value = QList<QStringList>() << QStringList( tmp );
-			}
-			else if ( op == "-=" )
-			{
-				value.removeAll( tmp );
-			}
-			else if ( op == "+=" )
-			{
-				value << tmp;
-			}
-			else if ( op == "*=" )
-			{
-				if ( !value.contains( tmp ) )
-					value << tmp;
-			}
-		}
-	}
-	
-	QStringList result;
-	foreach ( const QStringList& values, value )
-		result << values;
-	
-	return result.isEmpty() ? defaultValue : result.join( " " );
-}
-
-QString XUPProjectItem::interpretValue( XUPItem* callerItem, const QString& attribute ) const
-{
-	QRegExp rx( "\\$\\$[\\{\\(]?(\\w+(?!\\w*\\s*[()]))[\\}\\)]?" );
-	const QString content = callerItem->attribute( attribute );
-	QString value = content;
-	int pos = 0;
-	
-	while ( ( pos = rx.indexIn( content, pos ) ) != -1 )
-	{
-		value.replace( rx.cap( 0 ), interpretVariable( rx.cap( 0 ), callerItem ) );
-		pos += rx.matchedLength();
-	}
-	
-	return value;
 }
 
 QString XUPProjectItem::toString() const
@@ -805,7 +729,85 @@ bool XUPProjectItem::handleIncludeFile( XUPItem* function )
 
 bool XUPProjectItem::analyze( XUPItem* item )
 {
-	Q_UNUSED( item );
+	QStringList values;
+	
+	foreach ( XUPItem* cItem, item->childrenList() )
+	{
+		switch ( cItem->type() )
+		{
+			case XUPItem::Value:
+			case XUPItem::File:
+			case XUPItem::Path:
+			{
+				QString content = interpretContent( cItem->attribute( "content" ) );
+				values << content;
+				
+				cItem->setCacheValue( "content", content );
+				break;
+			}
+			case XUPItem::Function:
+			{
+				QString parameters = interpretContent( cItem->attribute( "parameters" ) );
+				
+				cItem->setCacheValue( "parameters", parameters );
+				break;
+			}
+			case XUPItem::Project:
+			case XUPItem::Comment:
+			case XUPItem::EmptyLine:
+			case XUPItem::Variable:
+			case XUPItem::Scope:
+			case XUPItem::DynamicFolder:
+			case XUPItem::Folder:
+			default:
+				break;
+		}
+		
+		if ( !analyze( cItem ) )
+		{
+			return false;
+		}
+	}
+	
+	if ( item->type() == XUPItem::Variable )
+	{
+		QString name = item->attribute( "name" );
+		QString op = item->attribute( "operator", "=" );
+		XUPProjectItem* proj = rootIncludeProject();
+		
+		if ( op == "=" )
+		{
+			proj->variableCache()[ name ] = values.join( " " );
+		}
+		else if ( op == "-=" )
+		{
+			foreach ( const QString& value, values )
+			{
+				proj->variableCache()[ name ].replace( QRegExp( QString( "\\b%1\\b" ).arg( value ) ), QString::null );
+			}
+		}
+		else if ( op == "+=" )
+		{
+			proj->variableCache()[ name ] += " " +values.join( " " );
+		}
+		else if ( op == "*=" )
+		{
+			//if ( !proj->variableCache()[ name ].contains( content ) )
+			{
+				proj->variableCache()[ name ] += " " +values.join( " " );
+			}
+		}
+	}
+	
+	// handle include projects
+	if ( item->attribute( "name" ).toLower() == "include" )
+	{
+		if ( !handleIncludeFile( item ) )
+		{
+			return false;
+		}
+	}
+	
 	return true;
 }
 

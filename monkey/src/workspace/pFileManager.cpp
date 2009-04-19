@@ -412,7 +412,7 @@ QString pFileManager::currentItemFile() const
 	
 	if ( item && item->type() == XUPItem::File )
 	{
-		QString fn = item->project()->rootIncludeProject()->interpretValue( item, "content" );
+		QString fn = item->cacheValue( "content" );
 		return item->project()->filePath( fn );
 	}
 	
@@ -425,7 +425,7 @@ QString pFileManager::currentItemPath() const
 	
 	if ( item && item->type() == XUPItem::Path )
 	{
-		QString fn = item->project()->rootIncludeProject()->interpretValue( item, "content" );
+		QString fn = item->cacheValue( "content" );
 		return item->project()->filePath( fn );
 	}
 	

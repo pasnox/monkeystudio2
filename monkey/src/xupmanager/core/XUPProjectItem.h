@@ -80,10 +80,6 @@ public:
 	// return all variable items named variableName until caller is found ( if define ) or until the the complete tree is scanned
 	// if recursive is true, then the scan recurse in each item, else not
 	virtual XUPItemList getVariables( const XUPItem* root, const QString& variableName, const XUPItem* callerItem = 0, bool recursive = true ) const;
-	// return the result of interpreting the variable variableName until caller item if defined, or until complete tree is scaned or default value if variable is empty
-	virtual QString interpretVariable( const QString& variableName, const XUPItem* callerItem = 0, const QString& defaultValue = QString::null ) const;
-	// return the result of interpreting the caller attribute
-	virtual QString interpretValue( XUPItem* callerItem, const QString& attribute ) const;
 	// return the project datas as qstring
 	virtual QString toString() const;
 	

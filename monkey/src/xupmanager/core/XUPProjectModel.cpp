@@ -157,7 +157,32 @@ QVariant XUPProjectModel::data( const QModelIndex& index, int role ) const
 				for ( int i = 0; i < attributeMap.count(); i++ )
 				{
 					QDomNode attribute = attributeMap.item( i );
-					attributes << attribute.nodeName() +"=\"" +attribute.nodeValue() +"\"";
+					QString name = attribute.nodeName();
+					attributes << name +"=\"" +attribute.nodeValue() +"\"";
+					
+					switch ( item->type() )
+					{
+						case XUPItem::Value:
+						case XUPItem::File:
+						case XUPItem::Path:
+						{
+							if ( name == "content" )
+							{
+								attributes << QString( "cache-%1" ).arg( name ) +"=\"" +item->cacheValue( name ) +"\"";
+							}
+							break;
+						}
+						case XUPItem::Function:
+						{
+							if ( name == "parameters" )
+							{
+								attributes << QString( "cache-%1" ).arg( name ) +"=\"" +item->cacheValue( name ) +"\"";
+							}
+							break;
+						}
+						default:
+							break;
+					}
 				}
 				
 				return attributes.join( "\n" );
