@@ -60,6 +60,7 @@ bool ClassBrowser::setEnabled( bool b )
 		connect( MonkeyCore::fileManager(), SIGNAL( fileOpened( const QString& ) ), this, SLOT( fileOpened( const QString& ) ) );
 		connect( MonkeyCore::fileManager(), SIGNAL( currentFileChanged( pAbstractChild*, const QString& ) ), this, SLOT( currentFileChanged( pAbstractChild*, const QString& ) ) );
 		connect( MonkeyCore::fileManager(), SIGNAL( opened( XUPProjectItem* ) ), this, SLOT( opened( XUPProjectItem* ) ) );
+		connect( MonkeyCore::fileManager(), SIGNAL( buffersChanged( const QMap<QString, QString>& ) ), this, SLOT( buffersChanged( const QMap<QString, QString>& ) ) );
 		connect( mDock->browser(), SIGNAL( memberActivated( qCtagsSenseEntry* ) ), this, SLOT( memberActivated( qCtagsSenseEntry* ) ) );
 		//connect( mFileManager, SIGNAL( buffersModified( const QMap<QString, QString>& ) ), mSense, SLOT( tagEntries( const QMap<QString, QString>& ) ) );
 		// set plugin enabled
@@ -71,6 +72,7 @@ bool ClassBrowser::setEnabled( bool b )
 		disconnect( MonkeyCore::fileManager(), SIGNAL( fileOpened( const QString& ) ), this, SLOT( fileOpened( const QString& ) ) );
 		disconnect( MonkeyCore::fileManager(), SIGNAL( currentFileChanged( pAbstractChild*, const QString& ) ), this, SLOT( currentFileChanged( pAbstractChild*, const QString& ) ) );
 		disconnect( MonkeyCore::fileManager(), SIGNAL( opened( XUPProjectItem* ) ), this, SLOT( opened( XUPProjectItem* ) ) );
+		disconnect( MonkeyCore::fileManager(), SIGNAL( buffersChanged( const QMap<QString, QString>& ) ), this, SLOT( buffersChanged( const QMap<QString, QString>& ) ) );
 		disconnect( mDock->browser(), SIGNAL( memberActivated( qCtagsSenseEntry* ) ), this, SLOT( memberActivated( qCtagsSenseEntry* ) ) );
 		// it will remove itself from dock toolbar when deleted
 		mDock->deleteLater();
@@ -109,6 +111,11 @@ void ClassBrowser::currentFileChanged( pAbstractChild* child, const QString& fil
 void ClassBrowser::opened( XUPProjectItem* project )
 {
 	mDock->browser()->tagEntry( project->path() );
+}
+
+void ClassBrowser::buffersChanged( const QMap<QString, QString>& entries )
+{
+	mDock->browser()->tagEntries( entries );
 }
 
 void ClassBrowser::memberActivated( qCtagsSenseEntry* entry )

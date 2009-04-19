@@ -77,6 +77,11 @@ void qCtagsSenseBrowser::tagEntry( const QString& fileName )
 	mSense->tagEntry( fileName );
 }
 
+void qCtagsSenseBrowser::tagEntries( const QMap<QString, QString>& entries )
+{
+	mSense->tagEntries( entries );
+}
+
 void qCtagsSenseBrowser::setCurrentFileName( const QString& fileName )
 {
 	mLanguage = getFileNameLanguageName( fileName.toLocal8Bit().constData() );

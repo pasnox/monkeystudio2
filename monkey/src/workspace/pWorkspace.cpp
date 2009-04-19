@@ -60,12 +60,15 @@
 
 using namespace pMonkeyStudio;
 
+#define CONTENT_CHANGED_TIME_OUT 3000
+
 pWorkspace::pWorkspace( QMainWindow* p )
 	: pExtendedWorkspace( p )
 {
 	Q_ASSERT( p );
 	// creaet file watcher
 	mFileWatcher = new QFileSystemWatcher( this );
+	mContentChangedTimer = new QTimer( this );
 	
 	// add dock to main window
 	p->addDockWidget( Qt::LeftDockWidgetArea, listWidget() );
@@ -92,6 +95,7 @@ pWorkspace::pWorkspace( QMainWindow* p )
 	connect( MonkeyCore::projectsManager(), SIGNAL( currentProjectChanged( XUPProjectItem*, XUPProjectItem* ) ), this, SLOT( internal_currentProjectChanged( XUPProjectItem*, XUPProjectItem* ) ) );
 	connect( mFileWatcher, SIGNAL( fileChanged( const QString& ) ), this, SLOT( fileWatcher_fileChanged( const QString& ) ) );
 	connect( mFileWatcher, SIGNAL( fileChanged( const QString& ) ), this, SIGNAL( fileChanged( const QString& ) ) );
+	connect( mContentChangedTimer, SIGNAL( timeout() ), this, SLOT( contentChangedTimer_timeout() ) );
 	
 	QAction* mFocusToEditor = new QAction( this );
 	mFocusToEditor->setIcon( QIcon( ":/edit/icons/edit/text.png" ) );
@@ -179,6 +183,8 @@ void pWorkspace::initChildConnections( pAbstractChild* child )
 {
 	// connections
 	connect( child, SIGNAL( currentFileChanged( const QString& ) ), this, SLOT( internal_currentFileChanged( const QString& ) ) );
+	connect( child, SIGNAL( contentChanged() ), this, SLOT( internal_contentChanged() ) );
+	connect( child, SIGNAL( contentChanged() ), this, SIGNAL( contentChanged() ) );
 	// closed file
 	connect( child, SIGNAL( fileClosed( const QString& ) ), this, SIGNAL( fileClosed( const QString& ) ) );
 	// update file menu
@@ -303,6 +309,11 @@ void pWorkspace::goToLine( const QString& s, const QPoint& p, bool b, const QStr
 			}
 		}
 	}
+}
+
+void pWorkspace::internal_contentChanged()
+{
+	mContentChangedTimer->start( CONTENT_CHANGED_TIME_OUT );
 }
 
 void pWorkspace::internal_currentFileChanged( const QString& file )
@@ -561,6 +572,12 @@ void pWorkspace::projectCustomActionTriggered()
 		// send command to consolemanager
 		cm->addCommands( mCmds );
 	}
+}
+
+void pWorkspace::contentChangedTimer_timeout()
+{
+	mContentChangedTimer->stop();
+	MonkeyCore::fileManager()->computeModifiedBuffers();
 }
 
 void pWorkspace::fileWatcher_ecmNothing( const QString& filename )

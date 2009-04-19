@@ -307,6 +307,7 @@ void QtDesignerChild::formChanged()
 		
 		// emit modified state
 		emit modifiedChanged( w->isDirty() );
+		emit contentChanged();
 	}
 }
 

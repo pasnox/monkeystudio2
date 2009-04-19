@@ -62,6 +62,8 @@ public:
 	pAbstractChild* childForFile( const QString& file ) const;
 	// return a file buffer, if file is open, the current live buffer is return, else the physically one.
 	QString fileBuffer( const QString& fileName, const QString& codec ) const;
+	// compute the modified buffers list
+	void computeModifiedBuffers();
 
 	XUPProjectItem* currentProject() const;
 	QString currentProjectFile() const;
@@ -93,6 +95,8 @@ signals:
 	void fileClosed( const QString& fileName );
 	void fileChanged( const QString& fileName );
 	void currentFileChanged( pAbstractChild* child, const QString& fileName );
+	void contentChanged();
+	void buffersChanged( const QMap<QString, QString>& entries );
 	// projects
 	void opened( XUPProjectItem* project );
 	void aboutToClose( XUPProjectItem* project );

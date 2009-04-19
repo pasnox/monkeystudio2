@@ -217,6 +217,8 @@ signals:
 	void pasteAvailableChanged( bool ); // ok
 	// emit when a file copy available change
 	void copyAvailableChanged( bool ); // ok
+	// emit when a file has changed
+	void contentChanged();
 	// emit when search/replace is available
 	//void searchReplaceAvailableChanged( bool );
 	// emit when goto is available

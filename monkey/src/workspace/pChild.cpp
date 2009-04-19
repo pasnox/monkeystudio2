@@ -59,6 +59,7 @@ pChild::pChild()
 	connect( mEditor, SIGNAL( copyAvailable( bool ) ), this, SIGNAL( copyAvailableChanged( bool ) ) );
 	connect( mEditor, SIGNAL( pasteAvailable( bool ) ), this, SIGNAL( pasteAvailableChanged( bool ) ) );
 	connect( mEditor, SIGNAL( modificationChanged( bool ) ), this, SIGNAL( modifiedChanged( bool ) ) );
+	connect( mEditor, SIGNAL( textChanged() ), this, SIGNAL( contentChanged() ) );
 	connect( this, SIGNAL( modifiedChanged( bool ) ), this, SLOT( setWindowModified( bool ) ) );
 }
 
@@ -85,7 +86,7 @@ QString pChild::language() const
 
 QString pChild::fileBuffer( const QString& fileName, bool& ok ) const
 {
-	ok = pMonkeyStudio::isSameFile( fileName, mFiles.value( 0 ) );
+	ok = fileName == mFiles.value( 0 );
 	return ok ? mEditor->text() : QString::null;
 }
 
