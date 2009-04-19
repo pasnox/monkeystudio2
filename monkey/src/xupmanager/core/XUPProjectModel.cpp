@@ -154,6 +154,11 @@ QVariant XUPProjectModel::data( const QModelIndex& index, int role ) const
 			}
 			else if ( role == Qt::ToolTipRole )
 			{
+				if ( item->type() == XUPItem::Project )
+				{
+					attributes << QString( "Project: %1" ).arg( item->project()->fileName() );
+				}
+				
 				for ( int i = 0; i < attributeMap.count(); i++ )
 				{
 					QDomNode attribute = attributeMap.item( i );
