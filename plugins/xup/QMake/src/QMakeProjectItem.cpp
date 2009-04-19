@@ -528,7 +528,8 @@ void QMakeProjectItem::installCommands()
 	CompilerPlugin* cp = compiler();
 	
 	// config variable
-	QStringList config = splitMultiLineValue( rootIncludeProject()->interpretVariable( "CONFIG" ) );
+	XUPProjectItem* riProject = rootIncludeProject();
+	QStringList config = splitMultiLineValue( riProject->variableCache().value( "CONFIG" ) );
 	bool haveDebug = config.contains( "debug" );
 	bool haveRelease = config.contains( "release" );
 	bool haveDebugRelease = config.contains( "debug_and_release" );
@@ -558,20 +559,19 @@ void QMakeProjectItem::installCommands()
 	
 	// evaluate some variables
 	QString s;
-	s = rootIncludeProject()->interpretVariable( "TARGET" );
+	s = riProject->variableCache().value( "TARGET" );
 	
 	if ( s.isEmpty() )
 	{
 		s = QFileInfo( fileName() ).baseName();
-	
 	}
 	
 	const QString target = s;
-	s = rootIncludeProject()->interpretVariable( "DESTDIR" );
+	s = riProject->variableCache().value( "DESTDIR" );
 	
 	if ( s.isEmpty() )
 	{
-		s = rootIncludeProject()->interpretVariable( "DLLDESTDIR" );
+		s = riProject->variableCache().value( "DLLDESTDIR" );
 	}
 	
 	if ( QDir( s ).isRelative() )
