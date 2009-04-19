@@ -166,9 +166,10 @@ void qCtagsSenseBrowser::mLanguagesModel_ready()
 	bool languageLocked = cbLanguages->blockSignals( true );
 	int id = mLanguagesModel->indexOf( mLanguage );
 	
-	if ( id == -1 && !cbLanguages->count() == 0 )
+	if ( id == -1 && cbLanguages->count() != 0 )
 	{
 		id = 0;
+		mLanguage = mLanguagesModel->language( 0 );
 	}
 	
 	//mLanguage = mLanguagesModel->language( id );
@@ -185,6 +186,7 @@ void qCtagsSenseBrowser::mFilesModel_ready()
 	if ( id == -1 && !cbFileNames->count() == 0 )
 	{
 		id = 0;
+		mFileName = mFilesModel->fileName( 0 );
 	}
 	
 	//mFileName = mFilesModel->fileName( id );
