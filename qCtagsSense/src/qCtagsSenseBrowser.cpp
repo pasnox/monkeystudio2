@@ -65,6 +65,7 @@ qCtagsSenseBrowser::qCtagsSenseBrowser( QWidget* parent )
 
 qCtagsSenseBrowser::~qCtagsSenseBrowser()
 {
+	delete mSense;
 }
 
 qCtagsSense* qCtagsSenseBrowser::sense() const

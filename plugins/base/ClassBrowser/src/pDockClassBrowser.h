@@ -35,6 +35,7 @@ class pDockClassBrowser : public pDockWidget
 
 public:
 	pDockClassBrowser( QWidget* = 0 );
+	~pDockClassBrowser();
 	
 	qCtagsSenseBrowser* browser() const;
 

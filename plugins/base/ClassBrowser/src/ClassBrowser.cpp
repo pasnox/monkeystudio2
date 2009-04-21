@@ -75,7 +75,7 @@ bool ClassBrowser::setEnabled( bool b )
 		disconnect( MonkeyCore::fileManager(), SIGNAL( buffersChanged( const QMap<QString, QString>& ) ), this, SLOT( buffersChanged( const QMap<QString, QString>& ) ) );
 		disconnect( mDock->browser(), SIGNAL( memberActivated( qCtagsSenseEntry* ) ), this, SLOT( memberActivated( qCtagsSenseEntry* ) ) );
 		// it will remove itself from dock toolbar when deleted
-		mDock->deleteLater();
+		delete mDock;
 		// set plugin disabled
 		mPluginInfos.Enabled = false;
 	}

@@ -28,6 +28,7 @@
 qCtagsSenseIndexer::qCtagsSenseIndexer( qCtagsSenseSQL* parent )
 	: QThread( parent )
 {
+	mStop = false;
 	mSQL = parent;
 	mFilteredSuffixes
 		<< "*.gif" << "*.png" << "*.mng" << "*.jpg" << "*.jpeg" << "*.tiff" << "*.ico" << "*.icns"
@@ -38,6 +39,9 @@ qCtagsSenseIndexer::qCtagsSenseIndexer( qCtagsSenseSQL* parent )
 
 qCtagsSenseIndexer::~qCtagsSenseIndexer()
 {
+qWarning( "qctagssenseindexer destructor" );
+	mStop = true;
+	wait();
 }
 
 QStringList qCtagsSenseIndexer::filteredSuffixes() const
@@ -73,6 +77,11 @@ void qCtagsSenseIndexer::setFilteredSuffix( const QString& suffix )
 
 void qCtagsSenseIndexer::removeFile( const QString& fileName )
 {
+	if ( mStop )
+	{
+		return;
+	}
+	
 	QMutexLocker locker( &mMutex );
 
 	if ( !mWaitingDeletion.contains( fileName ) )
@@ -90,6 +99,11 @@ void qCtagsSenseIndexer::removeFile( const QString& fileName )
 
 void qCtagsSenseIndexer::indexFile( const QString& fileName )
 {
+	if ( mStop )
+	{
+		return;
+	}
+	
 	QMutexLocker locker( &mMutex );
 	
 	if ( !mWaitingIndexation.contains( fileName ) )
@@ -107,6 +121,11 @@ void qCtagsSenseIndexer::indexFile( const QString& fileName )
 
 void qCtagsSenseIndexer::indexBuffers( const QMap<QString, QString>& buffers )
 {
+	if ( mStop )
+	{
+		return;
+	}
+	
 	QMutexLocker locker( &mMutex );
 	
 	foreach ( const QString& fileName, buffers.keys() )
@@ -120,6 +139,11 @@ void qCtagsSenseIndexer::indexBuffers( const QMap<QString, QString>& buffers )
 			{
 				mWaitingIndexation[ fileName ] = QString( "" );
 			}
+		}
+		
+		if ( mStop )
+		{
+			return;
 		}
 	}
 	
@@ -175,6 +199,11 @@ bool qCtagsSenseIndexer::indexEntry( const QString& fileName )
 	foreach ( TagEntryListItem* item, entries )
 	{
 		freeTagEntryListItem( item );
+		
+		if ( mStop )
+		{
+			return false;
+		}
 	}
 	
 	entries.clear();
@@ -194,6 +223,11 @@ bool qCtagsSenseIndexer::indexEntries( const QMap<QString, QString>& entries )
 	foreach ( TagEntryListItem* item, tagEntries )
 	{
 		freeTagEntryListItem( item );
+		
+		if ( mStop )
+		{
+			return false;
+		}
 	}
 	
 	tagEntries.clear();
@@ -261,6 +295,11 @@ bool qCtagsSenseIndexer::createEntries( int fileId, TagEntryListItem* item )
 		}
 		
 		item = item->next;
+		
+		if ( mStop )
+		{
+			return false;
+		}
 	}
 	
 	return true;
@@ -295,6 +334,11 @@ bool qCtagsSenseIndexer::indexTags( const QMap<QString, TagEntryListItem*>& tags
 		}
 		
 		if ( !createEntries( fileId, tag ) )
+		{
+			return false;
+		}
+		
+		if ( mStop )
 		{
 			return false;
 		}
@@ -347,6 +391,11 @@ QMap<QString, TagEntryListItem*> qCtagsSenseIndexer::tagPathEntries( const QStri
 	{
 		TagEntryListItem* item = tagFileEntry( file.absoluteFilePath(), ok );
 		
+		if ( mStop )
+		{
+			ok = false;
+		}
+		
 		if ( !ok )
 		{
 			qWarning() << "Failed to index" << file.absoluteFilePath().toLocal8Bit().constData();
@@ -394,6 +443,11 @@ QMap<QString, TagEntryListItem*> qCtagsSenseIndexer::tagBuffersEntries( const QM
 		TagEntryListItem* item = tagFileEntry( file.fileName(), ok );
 		
 		file.remove();
+		
+		if ( mStop )
+		{
+			ok = false;
+		}
 		
 		if ( !ok )
 		{
@@ -450,6 +504,11 @@ void qCtagsSenseIndexer::run()
 					fileNamesToIndex[ file.absoluteFilePath() ] = QString::null;
 				}
 			}
+			
+			if ( mStop )
+			{
+				return;
+			}
 		}
 		
 		// do count
@@ -473,6 +532,11 @@ void qCtagsSenseIndexer::run()
 			
 			value++;
 			emit indexingProgress( value, total );
+			
+			if ( mStop )
+			{
+				return;
+			}
 		}
 		
 		// indexation
@@ -497,6 +561,11 @@ void qCtagsSenseIndexer::run()
 					value++;
 					emit indexingProgress( value, total );
 				}
+				
+				if ( mStop )
+				{
+					return;
+				}
 			}
 			
 			if ( !fileNamesToIndex.isEmpty() )
@@ -516,11 +585,20 @@ void qCtagsSenseIndexer::run()
 				value++;
 				emit indexingProgress( value, total );
 			}
+			
+			if ( mStop )
+			{
+				return;
+			}
 		}
 		
 		locker.relock();
 		
-		if ( !mWaitingDeletion.isEmpty() || !mWaitingIndexation.isEmpty() )
+		if ( mStop )
+		{
+			return;
+		}
+		else if ( !mWaitingDeletion.isEmpty() || !mWaitingIndexation.isEmpty() )
 		{
 			continue;
 		}

@@ -65,6 +65,8 @@ qCtagsSense::qCtagsSense( QObject* parent )
 
 qCtagsSense::~qCtagsSense()
 {
+	delete mIndexer;
+	delete mSQL;
 	deInitCtags();
 }
 

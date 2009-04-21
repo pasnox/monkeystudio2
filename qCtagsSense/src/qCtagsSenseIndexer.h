@@ -55,6 +55,7 @@ protected:
 	QMap<QString, QString> mWaitingIndexation; // fileName, content
 	QList<QString> mWaitingDeletion; // fileNames
 	QMutex mMutex;
+	bool mStop;
 	
 	bool removeEntry( const QString& fileName );
 	bool indexEntry( const QString& fileName );

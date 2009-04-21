@@ -30,6 +30,11 @@ pDockClassBrowser::pDockClassBrowser( QWidget* w )
 	setWidget( mBrowser );
 }
 
+pDockClassBrowser::~pDockClassBrowser()
+{
+	delete mBrowser;
+}
+
 qCtagsSenseBrowser* pDockClassBrowser::browser() const
 {
 	return mBrowser;
