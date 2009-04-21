@@ -39,7 +39,6 @@ qCtagsSenseIndexer::qCtagsSenseIndexer( qCtagsSenseSQL* parent )
 
 qCtagsSenseIndexer::~qCtagsSenseIndexer()
 {
-qWarning( "qctagssenseindexer destructor" );
 	mStop = true;
 	wait();
 }
