@@ -43,15 +43,18 @@ class QDropEvent;
 class pFilesListWidget : public pDockWidget
 {
 	Q_OBJECT
+	friend class FilesComboAction;
 	
 public:
 	pFilesListWidget( const QString& title, pExtendedWorkspace* workspace );
+	
+	QAction* filesComboAction() const;
 
 public slots:
 	void setItemToolTip( int id, const QString& toolTip );
 
 protected:
-	QComboBox* mCombo;
+	QAction* aFilesCombo;
 	QListWidget* mList;
 	pExtendedWorkspace* mWorkspace;
 	QIcon mModifiedIcon;

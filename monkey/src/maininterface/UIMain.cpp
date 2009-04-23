@@ -66,6 +66,10 @@ void UIMain::initGui()
 	dockToolBar( Qt::LeftToolBarArea )->addDock( MonkeyCore::projectsManager(), MonkeyCore::projectsManager()->windowTitle(), QIcon( ":/project/icons/project/project.png" ) );
 	// init workspace
 	setCentralWidget( MonkeyCore::workspace() );
+	// multitoolbar
+	QBoxLayout* bl = qobject_cast<QBoxLayout*>( MonkeyCore::workspace()->layout() );
+	bl->insertWidget( 0, MonkeyCore::multiToolBar() );
+	MonkeyCore::multiToolBar()->toolBar( "General" )->addAction( MonkeyCore::workspace()->listWidget()->filesComboAction() );
 	// init status bar
 	setStatusBar( MonkeyCore::statusBar() );
 	// init connection

@@ -8,6 +8,8 @@
 pMultiToolBar::pMultiToolBar( QWidget* parent )
 	: QStackedWidget( parent )
 {
+	setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Maximum ) );
+	
 	connect( this, SIGNAL( currentChanged( int ) ), this, SLOT( _q_currentChanged( int ) ) );
 	connect( this, SIGNAL( widgetRemoved( int ) ), this, SLOT( _q_widgetRemoved( int ) ) );
 }

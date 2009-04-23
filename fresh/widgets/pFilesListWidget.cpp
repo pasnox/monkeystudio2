@@ -25,6 +25,36 @@
 #include <QDropEvent>
 #include <QWidgetAction>
 
+class FilesComboAction : public QWidgetAction
+{
+	Q_OBJECT
+
+public:
+	FilesComboAction( pFilesListWidget* parent, QAbstractItemModel* model )
+		: QWidgetAction( parent )
+	{
+		mFilesListWidget = parent;
+		mModel = model;
+	}
+
+protected:
+	pFilesListWidget* mFilesListWidget;
+	QAbstractItemModel* mModel;
+	
+	virtual QWidget* createWidget( QWidget* parent )
+	{
+		QComboBox* combo = new QComboBox( parent );
+		combo->setSizeAdjustPolicy( QComboBox::AdjustToContents );
+		combo->setAttribute( Qt::WA_MacSmallSize );
+		combo->setModel( mModel );
+		
+		connect( combo, SIGNAL( currentIndexChanged( int ) ), mFilesListWidget, SLOT( setCurrentRow( int ) ) );
+		connect( mFilesListWidget->mList, SIGNAL( currentRowChanged( int ) ), combo, SLOT( setCurrentIndex( int ) ) );
+		
+		return combo;
+	}
+};
+
 /*!
 	\details Create a new pFilesListWidget instance
 	\param title The dock title
@@ -45,15 +75,9 @@ pFilesListWidget::pFilesListWidget( const QString& title, pExtendedWorkspace* wo
 	mList->setDragDropMode( QAbstractItemView::InternalMove );
 	mList->installEventFilter( this );
 	
-	mCombo = new QComboBox( titleBar() );
-	mCombo->setSizeAdjustPolicy( QComboBox::AdjustToContents );
-	mCombo->setAttribute( Qt::WA_MacSmallSize );
-	mCombo->setModel( mList->model() );
+	aFilesCombo = new FilesComboAction( this, mList->model() );
 	
-	QWidgetAction* cbAction = new QWidgetAction( this );
-	cbAction->setDefaultWidget( mCombo );
-	titleBar()->addAction( cbAction, 0 );
-	
+	titleBar()->addAction( aFilesCombo, 0 );
 	titleBar()->setOrientationButtonVisible( false );
 	
 	// init icons
@@ -61,12 +85,16 @@ pFilesListWidget::pFilesListWidget( const QString& title, pExtendedWorkspace* wo
 	mNonModifiedIcon = QIcon( QPixmap( ":/file/icons/file/transparent.png" ) );
 	// connection
 	connect( mList, SIGNAL( currentRowChanged( int ) ), mWorkspace, SLOT( setCurrentIndex( int ) ) );
-	connect( mCombo, SIGNAL( currentIndexChanged( int ) ), this, SLOT( setCurrentRow( int ) ) );
 	connect( mWorkspace, SIGNAL( currentChanged( int ) ), this, SLOT( setCurrentRow( int ) ) );
 	connect( mWorkspace, SIGNAL( modifiedChanged( int, bool ) ), this, SLOT( modifiedChanged( int, bool ) ) );
 	connect( mWorkspace, SIGNAL( docTitleChanged( int, const QString& ) ), this, SLOT( docTitleChanged( int, const QString& ) ) );
 	connect( mWorkspace, SIGNAL( documentInserted( int, const QString&, const QIcon& ) ), this, SLOT( documentInserted( int, const QString&, const QIcon& ) ) );
 	connect( mWorkspace, SIGNAL( documentAboutToClose( int ) ), this, SLOT( documentAboutToClose( int ) ) );
+}
+
+QAction* pFilesListWidget::filesComboAction() const
+{
+	return aFilesCombo;
 }
 
 bool pFilesListWidget::eventFilter( QObject* object, QEvent* event )
@@ -142,5 +170,6 @@ void pFilesListWidget::documentAboutToClose( int id )
 void pFilesListWidget::setCurrentRow( int id )
 {
 	mList->setCurrentRow( id );
-	mCombo->setCurrentIndex( id );
 }
+
+#include "pFilesListWidget.moc"

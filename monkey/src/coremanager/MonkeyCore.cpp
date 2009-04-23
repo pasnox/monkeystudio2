@@ -45,6 +45,7 @@
 #include "../maininterface/ui/UITranslator.h"
 
 #include <pIconManager.h>
+#include <pMultiToolBar.h>
 
 #include <QSplashScreen>
 #include <QPixmap>
@@ -252,4 +253,11 @@ pAbbreviationsManager* MonkeyCore::abbreviationsManager()
 	if ( !mInstances.contains( &pAbbreviationsManager::staticMetaObject ) )
 		mInstances[&pAbbreviationsManager::staticMetaObject] = new pAbbreviationsManager( qApp );
 	return qobject_cast<pAbbreviationsManager*>( mInstances[&pAbbreviationsManager::staticMetaObject] );
+}
+
+pMultiToolBar* MonkeyCore::multiToolBar()
+{
+	if ( !mInstances.contains( &pMultiToolBar::staticMetaObject ) )
+		mInstances[&pMultiToolBar::staticMetaObject] = new pMultiToolBar( mainWindow() );
+	return qobject_cast<pMultiToolBar*>( mInstances[&pMultiToolBar::staticMetaObject] );
 }
