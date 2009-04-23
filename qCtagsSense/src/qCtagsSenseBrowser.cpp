@@ -36,6 +36,15 @@ qCtagsSenseBrowser::qCtagsSenseBrowser( QWidget* parent )
 	pbIndexing->setVisible( false );
 	setAttribute( Qt::WA_DeleteOnClose );
 	tvMembers->setContextMenuPolicy( Qt::CustomContextMenu );
+	tvMembers->setAttribute( Qt::WA_MacShowFocusRect, false );
+	
+	// layouts
+	QVBoxLayout* vl = qobject_cast<QVBoxLayout*>( layout() );
+	vl->setMargin( 0 );
+	vl->setSpacing( 4 );
+	QGridLayout* gl = qobject_cast<QGridLayout*>( wTopContainer->layout() );
+	gl->setMargin( 6 );
+	gl->setSpacing( 6 );
 	
 	mSense = new qCtagsSense( this );
 	mLanguagesModel = new qCtagsSenseLanguagesModel( mSense->sql() );
