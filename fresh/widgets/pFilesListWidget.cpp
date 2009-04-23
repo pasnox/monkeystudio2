@@ -46,6 +46,7 @@ pFilesListWidget::pFilesListWidget( const QString& title, pExtendedWorkspace* wo
 	mList->installEventFilter( this );
 	
 	mCombo = new QComboBox( titleBar() );
+	mCombo->setSizeAdjustPolicy( QComboBox::AdjustToContents );
 	mCombo->setAttribute( Qt::WA_MacSmallSize );
 	mCombo->setModel( mList->model() );
 	
