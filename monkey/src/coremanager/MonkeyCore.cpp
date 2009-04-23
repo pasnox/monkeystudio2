@@ -111,10 +111,6 @@ void MonkeyCore::init()
 	showMessage( &splash, tr( "Initializing Main Window..." ) );
 	mainWindow()->initGui();
 	
-	// init pluginsmanager
-	showMessage( &splash, tr( "Initializing Plugins..." ) );
-	pluginsManager()->loadsPlugins();
-	
 	// init abbreviations manager
 	showMessage( &splash, tr( "Initializing abbreviations manager..." ) );
 	abbreviationsManager();
@@ -126,6 +122,10 @@ void MonkeyCore::init()
 	// load mks scripts
 	showMessage( &splash, tr( "Executing scripts..." ) );
 	interpreter()->loadHomeScripts();
+	
+	// init pluginsmanager
+	showMessage( &splash, tr( "Initializing Plugins..." ) );
+	pluginsManager()->loadsPlugins();
 	
 	// restore window state
 	showMessage( &splash, tr( "Restoring Workspace..." ) );
