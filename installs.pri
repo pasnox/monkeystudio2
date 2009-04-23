@@ -33,6 +33,7 @@ include( config.pri )
 		# binary
 		monkey_target.path	= $${PACKAGE_PREFIX}
 		monkey_target.files	= bin/$${PACKAGE_TARGET}
+		monkey_target.CONFIG += no_check_exist
 
 		# desktop file
 		monkey_desktop.path	= $${prefix}/share/applications
