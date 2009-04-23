@@ -27,3 +27,4 @@
 #include "../widgets/pQueuedStatusBar.h"
 #include "../widgets/pConsole.h"
 #include "../widgets/pConsoleCommand.h"
+#include "../widgets/pMultiToolBar.h"
