@@ -160,7 +160,7 @@ QWidget* pDockWidgetTitleBar::addAction( QAction* action, int index )
 	
 	if ( action->inherits( "QWidgetAction" ) )
 	{
-		QWidget* w = qobject_cast<QWidgetAction*>( action )->defaultWidget();
+		QWidget* w = qobject_cast<QWidgetAction*>( action )->requestWidget( this );
 		
 		if ( w )
 		{

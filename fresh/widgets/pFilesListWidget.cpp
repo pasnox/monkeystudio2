@@ -44,6 +44,7 @@ protected:
 	virtual QWidget* createWidget( QWidget* parent )
 	{
 		QComboBox* combo = new QComboBox( parent );
+		combo->setMaxVisibleItems( 50 );
 		combo->setSizeAdjustPolicy( QComboBox::AdjustToContents );
 		combo->setAttribute( Qt::WA_MacSmallSize );
 		combo->setModel( mModel );
@@ -67,7 +68,7 @@ pFilesListWidget::pFilesListWidget( const QString& title, pExtendedWorkspace* wo
 	setParent( mWorkspace );
 	setObjectName( "FilesListWidget" );
 	setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
-	setFeatures( QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable );
+	//setFeatures( QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable );
 	setAcceptDrops( true );
 	setContextMenuPolicy( Qt::CustomContextMenu );
 	setWidget( mList = new QListWidget() );
@@ -76,9 +77,6 @@ pFilesListWidget::pFilesListWidget( const QString& title, pExtendedWorkspace* wo
 	mList->installEventFilter( this );
 	
 	aFilesCombo = new FilesComboAction( this, mList->model() );
-	
-	titleBar()->addAction( aFilesCombo, 0 );
-	titleBar()->setOrientationButtonVisible( false );
 	
 	// init icons
 	mModifiedIcon = QIcon( QPixmap( ":/file/icons/file/save.png" ) );
