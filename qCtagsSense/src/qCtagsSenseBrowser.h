@@ -26,6 +26,7 @@ class qCtagsSenseLanguagesModel;
 class qCtagsSenseFilesModel;
 class qCtagsSenseMembersModel;
 class qCtagsSenseEntry;
+class QAction;
 
 class QCTAGSSENSE_EXPORT qCtagsSenseBrowser : public QFrame, public Ui::qCtagsSenseBrowser
 {
@@ -36,6 +37,11 @@ public:
 	virtual ~qCtagsSenseBrowser();
 	
 	qCtagsSense* sense() const;
+	
+	qCtagsSenseLanguagesModel* languagesModel() const;
+	qCtagsSenseFilesModel* filesModel() const;
+	qCtagsSenseMembersModel* membersModel() const;
+	QAction* membersAction() const;
 
 public slots:
 	void setCurrentFileName( const QString& fileName );
@@ -48,6 +54,7 @@ protected:
 	qCtagsSenseLanguagesModel* mLanguagesModel;
 	qCtagsSenseFilesModel* mFilesModel;
 	qCtagsSenseMembersModel* mMembersModel;
+	QAction* aMembers;
 
 protected slots:
 	void on_cbLanguages_currentIndexChanged( int id );

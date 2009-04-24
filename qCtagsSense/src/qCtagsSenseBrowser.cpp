@@ -27,7 +27,100 @@
 
 #include <QMenu>
 #include <QFileInfo>
+#include <QWidgetAction>
 #include <QDebug>
+#include <QScrollBar>
+
+class MembersActionComboBox : public QComboBox
+{
+	Q_OBJECT
+	
+public:
+	MembersActionComboBox( QWidget* parent = 0 )
+		: QComboBox( parent )
+	{
+		mTree = new QTreeView( this );
+		mTree->setHeaderHidden( true );
+		mTree->setMinimumWidth( 600 );
+		setView( mTree );
+		
+		connect( this, SIGNAL( currentIndexChanged( int ) ), this, SLOT( _q_currentIndexChanged( int ) ) );
+	}
+	
+	virtual QSize sizeHint() const
+	{
+		QSize size = QComboBox::sizeHint();
+		
+		if ( mTree )
+		{
+			QFontMetrics fm( font() );
+			QStyleOptionComboBox options;
+			
+			options.initFrom( this );
+			int width = fm.width( mTree->selectionModel()->selectedIndexes().value( 0 ).data().toString() );
+			width += fm.width( mTree->iconSize().width() );
+			width += mTree->indentation();
+			width += style()->subControlRect( QStyle::CC_ComboBox, &options, QStyle::SC_ComboBoxArrow, this ).width() *3;
+			
+			size.setWidth( width );
+		}
+		
+		return size;
+	}
+	
+
+protected:
+	QTreeView* mTree;
+
+protected slots:
+	void membersModel_ready()
+	{
+		if ( mTree )
+		{
+			mTree->expandAll();
+		}
+	}
+	
+	void _q_currentIndexChanged( int id )
+	{
+		Q_UNUSED( id );
+		updateGeometry();
+		QModelIndex index = view()->currentIndex();
+		qCtagsSenseEntry* entry = static_cast<qCtagsSenseEntry*>( index.internalPointer() );
+		emit memberActivated( entry );
+	}
+
+signals:
+	void memberActivated( qCtagsSenseEntry* entry );
+};
+
+class MembersAction : public QWidgetAction
+{
+	Q_OBJECT
+
+public:
+	MembersAction( qCtagsSenseBrowser* browser )
+		: QWidgetAction( browser )
+	{
+		mBrowser = browser;
+	}
+
+protected:
+	qCtagsSenseBrowser* mBrowser;
+	
+	virtual QWidget* createWidget( QWidget* parent )
+	{
+		QComboBox* combo = new MembersActionComboBox( parent );
+		combo->setMaxVisibleItems( 50 );
+		combo->setAttribute( Qt::WA_MacSmallSize );
+		combo->setModel( mBrowser->membersModel() );
+		
+		connect( mBrowser->membersModel(), SIGNAL( ready() ), combo, SLOT( membersModel_ready() ) );
+		connect( combo, SIGNAL( memberActivated( qCtagsSenseEntry* ) ), mBrowser, SIGNAL( memberActivated( qCtagsSenseEntry* ) ) );
+		
+		return combo;
+	}
+};
 
 qCtagsSenseBrowser::qCtagsSenseBrowser( QWidget* parent )
 	: QFrame( parent )
@@ -62,6 +155,8 @@ qCtagsSenseBrowser::qCtagsSenseBrowser( QWidget* parent )
 	tvMembers->setHeaderHidden( true );
 	tvMembers->setModel( mMembersModel );
 	
+	aMembers = new MembersAction( this );
+	
 	connect( mSense, SIGNAL( indexingStarted() ), pbIndexing, SLOT( show() ) );
 	connect( mSense, SIGNAL( indexingProgress( int, int ) ), this, SLOT( mSense_indexingProgress( int, int ) ) );
 	connect( mSense, SIGNAL( indexingFinished() ), pbIndexing, SLOT( hide() ) );
@@ -70,6 +165,8 @@ qCtagsSenseBrowser::qCtagsSenseBrowser( QWidget* parent )
 	connect( mLanguagesModel, SIGNAL( ready() ), this, SLOT( mLanguagesModel_ready() ) );
 	connect( mFilesModel, SIGNAL( ready() ), this, SLOT( mFilesModel_ready() ) );
 	connect( mMembersModel, SIGNAL( ready() ), this, SLOT( mMembersModel_ready() ) );
+	
+	connect( aMembers, SIGNAL( memberActivated( qCtagsSenseEntry* ) ), this, SIGNAL( memberActivated( qCtagsSenseEntry* ) ) );
 }
 
 qCtagsSenseBrowser::~qCtagsSenseBrowser()
@@ -80,6 +177,26 @@ qCtagsSenseBrowser::~qCtagsSenseBrowser()
 qCtagsSense* qCtagsSenseBrowser::sense() const
 {
 	return mSense;
+}
+
+qCtagsSenseLanguagesModel* qCtagsSenseBrowser::languagesModel() const
+{
+	return mLanguagesModel;
+}
+
+qCtagsSenseFilesModel* qCtagsSenseBrowser::filesModel() const
+{
+	return mFilesModel;
+}
+
+qCtagsSenseMembersModel* qCtagsSenseBrowser::membersModel() const
+{
+	return mMembersModel;
+}
+
+QAction* qCtagsSenseBrowser::membersAction() const
+{
+	return aMembers;
 }
 
 void qCtagsSenseBrowser::tagEntry( const QString& fileName )
@@ -254,3 +371,5 @@ void qCtagsSenseBrowser::on_tvMembers_customContextMenuRequested( const QPoint& 
 		}
 	}
 }
+
+#include "qCtagsSenseBrowser.moc"
