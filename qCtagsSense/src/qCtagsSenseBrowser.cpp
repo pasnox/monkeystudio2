@@ -165,8 +165,6 @@ qCtagsSenseBrowser::qCtagsSenseBrowser( QWidget* parent )
 	connect( mLanguagesModel, SIGNAL( ready() ), this, SLOT( mLanguagesModel_ready() ) );
 	connect( mFilesModel, SIGNAL( ready() ), this, SLOT( mFilesModel_ready() ) );
 	connect( mMembersModel, SIGNAL( ready() ), this, SLOT( mMembersModel_ready() ) );
-	
-	connect( aMembers, SIGNAL( memberActivated( qCtagsSenseEntry* ) ), this, SIGNAL( memberActivated( qCtagsSenseEntry* ) ) );
 }
 
 qCtagsSenseBrowser::~qCtagsSenseBrowser()
