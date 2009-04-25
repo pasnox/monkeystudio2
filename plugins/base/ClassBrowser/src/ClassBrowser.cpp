@@ -58,7 +58,7 @@ bool ClassBrowser::setEnabled( bool b )
 		// create menu action for the dock
 		pActionsManager::setDefaultShortcut( mDock->toggleViewAction(), QKeySequence( "F8" ) );
 		// multitoolbar
-		MonkeyCore::multiToolBar()->toolBar( "General" )->addAction( mDock->browser()->membersAction() );
+		MonkeyCore::multiToolBar()->toolBar( "Coding" )->addAction( mDock->browser()->membersAction() );
 		// connections
 		connect( MonkeyCore::fileManager(), SIGNAL( fileOpened( const QString& ) ), this, SLOT( fileOpened( const QString& ) ) );
 		connect( MonkeyCore::fileManager(), SIGNAL( currentFileChanged( pAbstractChild*, const QString& ) ), this, SLOT( currentFileChanged( pAbstractChild*, const QString& ) ) );
