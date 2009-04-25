@@ -53,6 +53,12 @@ public:
 	
 	virtual QString fileBuffer( const QString& fileName, bool& ok ) const;
 
+	// return child context
+	virtual QString context() const;
+	
+	// the context initialization
+	virtual void initializeContext( QToolBar* tb ) const;
+	
 	// return cursor position if available
 	virtual QPoint cursorPosition() const;
 

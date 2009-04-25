@@ -60,7 +60,8 @@
 
 using namespace pMonkeyStudio;
 
-#define CONTENT_CHANGED_TIME_OUT 3000
+int pWorkspace::CONTENT_CHANGED_TIME_OUT = 3000;
+QString pWorkspace::DEFAULT_CONTEXT = QLatin1String( "Default" );
 
 pWorkspace::pWorkspace( QMainWindow* p )
 	: pExtendedWorkspace( p )
@@ -72,6 +73,9 @@ pWorkspace::pWorkspace( QMainWindow* p )
 	
 	// add dock to main window
 	p->addDockWidget( Qt::LeftDockWidgetArea, listWidget() );
+	
+	// multitoolbar
+	mLayout->insertWidget( 0, MonkeyCore::multiToolBar() );
 
 	// set background
 	//setBackground( ":/application/icons/application/background.png" );
@@ -137,7 +141,11 @@ QList<pAbstractChild*> pWorkspace::children() const
 void pWorkspace::addSearhReplaceWidget (QWidget* widget)
 {
 	mLayout->addWidget( widget );
+}
 
+QString pWorkspace::defaultContext()
+{
+	return DEFAULT_CONTEXT;
 }
 
 pAbstractChild* pWorkspace::newTextEditor()
@@ -336,6 +344,34 @@ void pWorkspace::internal_currentChanged( int i )
 	bool paste = hasChild ? c->isPasteAvailable() : false;
 	bool go = hasChild ? c->isGoToAvailable() : false;
 	bool moreThanOneChild = count() > 1;
+	
+	// context toolbar
+	pMultiToolBar* mtb = MonkeyCore::multiToolBar();
+	
+	if ( c )
+	{
+		if ( !mtb->contexts().contains( c->context() ) )
+		{
+			QToolBar* tb = mtb->toolBar( c->context() );
+			
+			initMultiToolBar( tb );
+			c->initializeContext( tb );
+		}
+		
+		mtb->setCurrentContext( c->context() );
+	}
+	else
+	{
+		if ( !mtb->contexts().contains( DEFAULT_CONTEXT ) )
+		{
+			QToolBar* tb = mtb->toolBar( DEFAULT_CONTEXT );
+			
+			initMultiToolBar( tb );
+		}
+		
+		mtb->setCurrentContext( DEFAULT_CONTEXT );
+	}
+	
 
 	// update file menu
 	MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" )->setEnabled( modified );
@@ -917,4 +953,9 @@ void pWorkspace::closeDocument( QWidget* document )
 	mFileWatcher->removePaths( child->files() );
 	// close document
 	pExtendedWorkspace::closeDocument( child );
+}
+
+void pWorkspace::initMultiToolBar( QToolBar* tb )
+{
+	tb->addAction( MonkeyCore::workspace()->listWidget()->filesComboAction() );
 }

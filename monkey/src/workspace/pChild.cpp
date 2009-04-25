@@ -90,6 +90,16 @@ QString pChild::fileBuffer( const QString& fileName, bool& ok ) const
 	return ok ? mEditor->text() : QString::null;
 }
 
+QString pChild::context() const
+{
+	return QLatin1String( "Coding" );
+}
+
+void pChild::initializeContext( QToolBar* tb ) const
+{
+	//
+}
+
 QPoint pChild::cursorPosition() const
 { return mEditor->cursorPosition(); }
 

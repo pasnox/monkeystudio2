@@ -51,10 +51,14 @@ public:
 	QList<pAbstractChild*> children() const;
 	
 	void addSearhReplaceWidget (QWidget* widget);
+	static QString defaultContext();
+	void initMultiToolBar( QToolBar* tb );
 	
 protected:
 	QFileSystemWatcher* mFileWatcher;
 	QTimer* mContentChangedTimer;
+	static int CONTENT_CHANGED_TIME_OUT;
+	static QString DEFAULT_CONTEXT;
 	
 	virtual void closeDocument( QWidget* document );
 
