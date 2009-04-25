@@ -78,6 +78,8 @@ protected slots:
 public:
 	virtual QStringList files() const;
 	virtual QString fileBuffer( const QString& fileName, bool& ok ) const;
+	virtual QString context() const;
+	virtual void initializeContext( QToolBar* tb ) const;
 	virtual QPoint cursorPosition() const;
 	virtual void showFile( const QString& );
 	virtual QString currentFile() const;

@@ -531,6 +531,16 @@ QString QtDesignerChild::fileBuffer( const QString& fileName, bool& ok ) const
 	return QString::null;
 }
 
+QString QtDesignerChild::context() const
+{
+	return PLUGIN_NAME;
+}
+
+void QtDesignerChild::initializeContext( QToolBar* tb ) const
+{
+	//
+}
+
 QPoint QtDesignerChild::cursorPosition() const
 { return QPoint( -1, -1 ); }
 

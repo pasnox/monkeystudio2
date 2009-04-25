@@ -31,6 +31,8 @@ public:
 	QtAssistantBrowser( QHelpEngine* engine, QWidget* parent = 0 );
 	virtual ~QtAssistantBrowser();
 
+	virtual QString context() const;
+	virtual void initializeContext( QToolBar* tb ) const;
 	virtual QPoint cursorPosition() const;
 	virtual QString currentFile() const;
 	virtual QString currentFileName() const;

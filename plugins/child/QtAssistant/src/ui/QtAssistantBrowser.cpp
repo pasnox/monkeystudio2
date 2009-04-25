@@ -149,6 +149,26 @@ void QtAssistantBrowser::hideEvent( QHideEvent* e )
 	pAbstractChild::hideEvent( e );
 }
 
+QString QtAssistantBrowser::context() const
+{
+	return PLUGIN_NAME;
+}
+
+void QtAssistantBrowser::initializeContext( QToolBar* tb ) const
+{
+	tb->addSeparator();
+	tb->addAction( aPrevious );
+	tb->addAction( aNext );
+	tb->addAction( aHome );
+	tb->addSeparator();
+	tb->addAction( aZoomIn );
+	tb->addAction( aZoomOut );
+	tb->addAction( aZoomReset );
+	tb->addAction( aFindInText );
+	tb->addAction( aPreviousTab );
+	tb->addAction( aNextTab );
+}
+
 QPoint QtAssistantBrowser::cursorPosition() const
 {
 	return QPoint( -1, -1 );
