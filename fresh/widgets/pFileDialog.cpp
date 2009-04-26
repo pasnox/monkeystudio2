@@ -114,7 +114,7 @@ QDir::Filters pFileDialog::filterForMode() const
 
 void pFileDialog::setDialog( pFileDialog* dlg, const QString& caption, const QString& dir, const QString& filter, bool enabledTextCodec, bool enabledOpenReadOnly, QString* selectedFilter, Options options )
 {
-#if defined( Q_OS_MAC ) && QT_VERSION <= 0x040500
+#if defined( Q_OS_MAC ) && QT_VERSION < 0x040500
 	if ( !( options & DontUseSheet ) )
 	{
 		// that's impossible to have a sheet in a sheet
