@@ -37,6 +37,7 @@ class QToolBar;
 class QMdiArea;
 class QMdiSubWindow;
 class pEditor;
+class QActionGroup;
 
 class QDesignerFormEditorInterface;
 class QDesignerFormWindowInterface;
@@ -52,6 +53,7 @@ class QtDesignerChild : public pAbstractChild, public QSingleton<QtDesignerChild
 	friend class QSingleton<QtDesignerChild>;
 	
 protected:
+	QActionGroup* aModes;
 	QAction* aPreview;
 	QDesignerFormEditorInterface* mCore;
 	QDesignerWidgetBox* pWidgetBox;
@@ -79,7 +81,7 @@ public:
 	virtual QStringList files() const;
 	virtual QString fileBuffer( const QString& fileName, bool& ok ) const;
 	virtual QString context() const;
-	virtual void initializeContext( QToolBar* tb ) const;
+	virtual void initializeContext( QToolBar* tb );
 	virtual QPoint cursorPosition() const;
 	virtual void showFile( const QString& );
 	virtual QString currentFile() const;
@@ -109,8 +111,7 @@ public:
 private:
 	QtDesignerChild( QObject* = 0 );
 	~QtDesignerChild();
-
-	QToolBar* mToolBar;
+	
 	QMdiArea* mArea;
 	
 public slots:

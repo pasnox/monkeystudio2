@@ -154,7 +154,7 @@ QString QtAssistantBrowser::context() const
 	return PLUGIN_NAME;
 }
 
-void QtAssistantBrowser::initializeContext( QToolBar* tb ) const
+void QtAssistantBrowser::initializeContext( QToolBar* tb )
 {
 	tb->addSeparator();
 	tb->addAction( aPrevious );

@@ -95,7 +95,7 @@ QString pChild::context() const
 	return QLatin1String( "Coding" );
 }
 
-void pChild::initializeContext( QToolBar* tb ) const
+void pChild::initializeContext( QToolBar* tb )
 {
 	//
 }

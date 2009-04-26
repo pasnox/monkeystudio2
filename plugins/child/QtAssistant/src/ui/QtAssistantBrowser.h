@@ -32,7 +32,7 @@ public:
 	virtual ~QtAssistantBrowser();
 
 	virtual QString context() const;
-	virtual void initializeContext( QToolBar* tb ) const;
+	virtual void initializeContext( QToolBar* tb );
 	virtual QPoint cursorPosition() const;
 	virtual QString currentFile() const;
 	virtual QString currentFileName() const;

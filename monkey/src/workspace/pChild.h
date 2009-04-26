@@ -57,7 +57,7 @@ public:
 	virtual QString context() const;
 	
 	// the context initialization
-	virtual void initializeContext( QToolBar* tb ) const;
+	virtual void initializeContext( QToolBar* tb );
 	
 	// return cursor position if available
 	virtual QPoint cursorPosition() const;

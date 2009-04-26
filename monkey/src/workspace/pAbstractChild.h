@@ -85,7 +85,7 @@ public:
 	// return the child context
 	virtual QString context() const = 0;
 	// the context initialization
-	virtual void initializeContext( QToolBar* tb ) const = 0;
+	virtual void initializeContext( QToolBar* tb ) = 0;
 	// return cursor position if available
 	virtual QPoint cursorPosition() const = 0;
 	// return files that this child manage

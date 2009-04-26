@@ -85,10 +85,6 @@ QtDesignerChild::QtDesignerChild( QObject* )
 	vl->setMargin( 0 );
 	vl->setSpacing( 0 );
 	
-	// create toolbar
-	vl->addWidget( mToolBar = new QToolBar );
-	mToolBar->setIconSize( QSize( 16, 16 ) );
-	
 	// create mdiarea
 	vl->addWidget( mArea = new QMdiArea );
 	mArea->setVerticalScrollBarPolicy( Qt::ScrollBarAsNeeded );
@@ -108,21 +104,8 @@ QtDesignerChild::QtDesignerChild( QObject* )
 	(void) QDesignerComponents::createTaskMenu( mCore, this );
 	
 	// action group for modes
-	QActionGroup* aModes = new QActionGroup( this );
+	aModes = new QActionGroup( this );
 	aModes->setExclusive( true );
-	
-	// create edit widget mode action
-	QAction* aEditWidgets = new QAction( tr( "Edit Widgets" ), this );
-	aEditWidgets->setIcon( QIcon( mCore->resourceLocation().append( "/widgettool.png" ) ) );
-	aEditWidgets->setCheckable( true );
-	aEditWidgets->setChecked( true );
-	
-	// add edit widget action to group
-	aModes->addAction( aEditWidgets );
-	
-	// preview action
-	aPreview = new QAction( this );
-	aPreview->setText( tr( "Preview Form" ) );
 	
 	// initialize designer plugins
 	foreach ( QObject* o, QPluginLoader::staticInstances() << mCore->pluginManager()->instances() )
@@ -141,43 +124,7 @@ QtDesignerChild::QtDesignerChild( QObject* )
 		}
 	}
 	
-	// add actions to toolbar
-	QDesignerFormWindowManagerInterface* fwm = mCore->formWindowManager();
-	// edit
-	fwm->actionUndo()->setIcon( QIcon( ":/icons/undo.png" ) );
-	fwm->actionUndo()->setShortcut( MonkeyCore::menuBar()->action( "mEdit/aUndo" )->shortcut() );
-	fwm->actionRedo()->setIcon( QIcon( ":/icons/redo.png" ) );
-	fwm->actionRedo()->setShortcut( MonkeyCore::menuBar()->action( "mEdit/aRedo" )->shortcut() );
-	fwm->actionDelete()->setIcon( QIcon( ":/icons/delete.png" ) );
-	fwm->actionSelectAll()->setIcon( QIcon( ":/icons/selectall.png" ) );
-	fwm->actionDelete()->setShortcut( tr( "Del" ) );
-	mToolBar->addAction( fwm->actionUndo() );
-	mToolBar->addAction( fwm->actionRedo() );
-	mToolBar->addAction( fwm->actionCut() );
-	mToolBar->addAction( fwm->actionCopy() );
-	mToolBar->addAction( fwm->actionPaste() );
-	mToolBar->addAction( fwm->actionLower() );
-	mToolBar->addAction( fwm->actionRaise() );
-	mToolBar->addAction( fwm->actionDelete() );
-	mToolBar->addAction( fwm->actionSelectAll() );
-	mToolBar->addSeparator();
-	// tools
-	mToolBar->addActions( aModes->actions() );
-	mToolBar->addSeparator();
-	// form
-	mToolBar->addAction( fwm->actionHorizontalLayout() );
-	mToolBar->addAction( fwm->actionVerticalLayout() );
-	mToolBar->addAction( fwm->actionSplitHorizontal() );
-	mToolBar->addAction( fwm->actionSplitVertical() );
-	mToolBar->addAction( fwm->actionGridLayout() );
-	mToolBar->addAction( fwm->actionBreakLayout() );
-	mToolBar->addAction( fwm->actionAdjustSize() );
-	// preview
-	mToolBar->addSeparator();
-	aPreview->setIcon( QIcon( ":/icons/preview.png" ) );
-	aPreview->setShortcut( tr( "Ctrl+R" ));
-	mToolBar->addAction( aPreview );
-	
+	// create designer docks
 	pWidgetBox = new QDesignerWidgetBox( this );
 	pWidgetBox->setVisible( false );
 	MonkeyCore::mainWindow()->dockToolBar( Qt::LeftToolBarArea )->addDock( pWidgetBox, tr( "Widget Box" ), QIcon( ":/icons/widget.png" ) );
@@ -205,8 +152,6 @@ QtDesignerChild::QtDesignerChild( QObject* )
 	// connection
 	connect( mArea, SIGNAL( subWindowActivated( QMdiSubWindow* ) ), this, SLOT( subWindowActivated( QMdiSubWindow* ) ) );
 	connect( mCore->formWindowManager(), SIGNAL( activeFormWindowChanged( QDesignerFormWindowInterface* ) ), this, SLOT( activeFormWindowChanged( QDesignerFormWindowInterface* ) ) );
-	connect( aEditWidgets, SIGNAL( triggered() ), this, SLOT( editWidgets() ) );
-	connect( aPreview, SIGNAL( triggered() ), this, SLOT( previewCurrentForm() ) );
 }
 
 QtDesignerChild::~QtDesignerChild()
@@ -544,9 +489,68 @@ QString QtDesignerChild::context() const
 	return PLUGIN_NAME;
 }
 
-void QtDesignerChild::initializeContext( QToolBar* tb ) const
+void QtDesignerChild::initializeContext( QToolBar* tb )
 {
-	//
+	QDesignerFormWindowManagerInterface* fwm = mCore->formWindowManager();
+	
+	// edit actions
+	fwm->actionUndo()->setIcon( QIcon( ":/icons/undo.png" ) );
+	fwm->actionUndo()->setShortcut( MonkeyCore::menuBar()->action( "mEdit/aUndo" )->shortcut() );
+	fwm->actionRedo()->setIcon( QIcon( ":/icons/redo.png" ) );
+	fwm->actionRedo()->setShortcut( MonkeyCore::menuBar()->action( "mEdit/aRedo" )->shortcut() );
+	fwm->actionDelete()->setIcon( QIcon( ":/icons/delete.png" ) );
+	fwm->actionSelectAll()->setIcon( QIcon( ":/icons/selectall.png" ) );
+	fwm->actionDelete()->setShortcut( tr( "Del" ) );
+	
+	// create edit widget mode action
+	QAction* aEditWidgets = new QAction( tr( "Edit Widgets" ), this );
+	aEditWidgets->setIcon( QIcon( mCore->resourceLocation().append( "/widgettool.png" ) ) );
+	aEditWidgets->setCheckable( true );
+	aEditWidgets->setChecked( true );
+	
+	// add edit widget action to group
+	aModes->addAction( aEditWidgets );
+	
+	// preview action
+	aPreview = new QAction( this );
+	aPreview->setText( tr( "Preview Form" ) );
+	
+	// add actions to toolbar
+	tb->addAction( fwm->actionUndo() );
+	tb->addAction( fwm->actionRedo() );
+	tb->addAction( fwm->actionCut() );
+	tb->addAction( fwm->actionCopy() );
+	tb->addAction( fwm->actionPaste() );
+	tb->addAction( fwm->actionLower() );
+	tb->addAction( fwm->actionRaise() );
+	tb->addAction( fwm->actionDelete() );
+	tb->addAction( fwm->actionSelectAll() );
+	tb->addSeparator();
+	
+	// tools
+	tb->addActions( aModes->actions() );
+	tb->addSeparator();
+	
+	// form
+	tb->addAction( fwm->actionHorizontalLayout() );
+	tb->addAction( fwm->actionVerticalLayout() );
+	tb->addAction( fwm->actionSplitHorizontal() );
+	tb->addAction( fwm->actionSplitVertical() );
+	tb->addAction( fwm->actionGridLayout() );
+	tb->addAction( fwm->actionFormLayout() );
+	tb->addAction( fwm->actionSimplifyLayout() );
+	tb->addAction( fwm->actionBreakLayout() );
+	tb->addAction( fwm->actionAdjustSize() );
+	
+	// preview
+	tb->addSeparator();
+	aPreview->setIcon( QIcon( ":/icons/preview.png" ) );
+	aPreview->setShortcut( tr( "Ctrl+R" ));
+	tb->addAction( aPreview );
+	
+	// connections
+	connect( aEditWidgets, SIGNAL( triggered() ), this, SLOT( editWidgets() ) );
+	connect( aPreview, SIGNAL( triggered() ), this, SLOT( previewCurrentForm() ) );
 }
 
 QPoint QtDesignerChild::cursorPosition() const
