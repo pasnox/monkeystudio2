@@ -1,37 +1,41 @@
 /****************************************************************************
 **
-** Copyright (C) 2008 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
 ** Contact: Qt Software Information (qt-info@nokia.com)
 **
 ** This file is part of the Qt Designer of the Qt Toolkit.
 **
+** $QT_BEGIN_LICENSE:LGPL$
 ** Commercial Usage
 ** Licensees holding valid Qt Commercial licenses may use this file in
 ** accordance with the Qt Commercial License Agreement provided with the
 ** Software or, alternatively, in accordance with the terms contained in
 ** a written agreement between you and Nokia.
 **
+** GNU Lesser General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU Lesser
+** General Public License version 2.1 as published by the Free Software
+** Foundation and appearing in the file LICENSE.LGPL included in the
+** packaging of this file.  Please review the following information to
+** ensure the GNU Lesser General Public License version 2.1 requirements
+** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+**
+** In addition, as a special exception, Nokia gives you certain
+** additional rights. These rights are described in the Nokia Qt LGPL
+** Exception version 1.0, included in the file LGPL_EXCEPTION.txt in this
+** package.
 **
 ** GNU General Public License Usage
 ** Alternatively, this file may be used under the terms of the GNU
-** General Public License versions 2.0 or 3.0 as published by the Free
-** Software Foundation and appearing in the file LICENSE.GPL included in
-** the packaging of this file.  Please review the following information
-** to ensure GNU General Public Licensing requirements will be met:
-** http://www.fsf.org/licensing/licenses/info/GPLv2.html and
-** http://www.gnu.org/copyleft/gpl.html.  In addition, as a special
-** exception, Nokia gives you certain additional rights. These rights
-** are described in the Nokia Qt GPL Exception version 1.3, included in
-** the file GPL_EXCEPTION.txt in this package.
-**
-** Qt for Windows(R) Licensees
-** As a special exception, Nokia, as the sole copyright holder for Qt
-** Designer, grants users of the Qt/Eclipse Integration plug-in the
-** right for the Qt/Eclipse Integration to link to functionality
-** provided by Qt Designer and its related libraries.
+** General Public License version 3.0 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.  Please review the following information to
+** ensure the GNU General Public License version 3.0 requirements will be
+** met: http://www.gnu.org/copyleft/gpl.html.
 **
 ** If you are unsure which license is appropriate for your use, please
 ** contact the sales department at qt-sales@nokia.com.
+** $QT_END_LICENSE$
 **
 ****************************************************************************/
 
@@ -51,6 +55,7 @@
 
 #include "shared_global_p.h"
 
+#include <QtCore/QSharedDataPointer>
 #include <QtCore/QMap>
 #include <QtCore/QStringList>
 
@@ -60,10 +65,45 @@ class QDesignerFormEditorInterface;
 class QDesignerCustomWidgetInterface;
 class QDesignerPluginManagerPrivate;
 
+class QDesignerCustomWidgetSharedData;
+
+/* Information contained in the Dom XML of a custom widget. */
+class QDESIGNER_SHARED_EXPORT QDesignerCustomWidgetData {
+public:
+    explicit QDesignerCustomWidgetData(const QString &pluginPath = QString());
+
+    enum ParseResult { ParseOk, ParseWarning, ParseError };
+    ParseResult parseXml(const QString &xml, const QString &name, QString *errorMessage);
+
+    QDesignerCustomWidgetData(const QDesignerCustomWidgetData&);
+    QDesignerCustomWidgetData& operator=(const QDesignerCustomWidgetData&);
+    ~QDesignerCustomWidgetData();
+
+    bool isNull() const;
+
+    QString pluginPath() const;
+
+    // Data as parsed from the widget's domXML().
+    QString xmlClassName() const;
+    // Optional. The language the plugin is supposed to be used with.
+    QString xmlLanguage() const;
+    // Optional. method used to add pages to a container with a container extension
+    QString xmlAddPageMethod() const;
+    // Optional. Base class
+    QString xmlExtends() const;
+    // Optional. The name to be used in the widget box.
+    QString xmlDisplayName() const;
+
+private:
+    QSharedDataPointer<QDesignerCustomWidgetSharedData> m_d;
+};
+
 class QDESIGNER_SHARED_EXPORT QDesignerPluginManager: public QObject
 {
     Q_OBJECT
 public:
+    typedef QList<QDesignerCustomWidgetInterface*> CustomWidgetList;
+
     explicit QDesignerPluginManager(QDesignerFormEditorInterface *core);
     virtual ~QDesignerPluginManager();
 
@@ -84,8 +124,10 @@ public:
     QStringList failedPlugins() const;
     QString failureReason(const QString &pluginName) const;
 
-    QList<QObject*> instances() const;
-    QList<QDesignerCustomWidgetInterface*> registeredCustomWidgets() const;
+    QObjectList instances() const;
+
+    CustomWidgetList registeredCustomWidgets() const;
+    QDesignerCustomWidgetData customWidgetData(QDesignerCustomWidgetInterface *w) const;
 
     bool registerNewPlugins();
 
@@ -100,7 +142,7 @@ private:
 
 private:
     static QStringList defaultPluginPaths();
-    
+
     QDesignerPluginManagerPrivate *m_d;
 };
 

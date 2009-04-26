@@ -100,6 +100,11 @@ QtDesignerChild::QtDesignerChild( QObject* )
 	// init designer core
 	QDesignerComponents::initializeResources();
 	mCore = QDesignerComponents::createFormEditor( this );
+	
+	// initialize plugins
+	QDesignerComponents::initializePlugins( mCore );
+	
+	// init task menus
 	(void) QDesignerComponents::createTaskMenu( mCore, this );
 	
 	// action group for modes
@@ -172,9 +177,6 @@ QtDesignerChild::QtDesignerChild( QObject* )
 	aPreview->setIcon( QIcon( ":/icons/preview.png" ) );
 	aPreview->setShortcut( tr( "Ctrl+R" ));
 	mToolBar->addAction( aPreview );
-	
-	// initialize plugins
-	QDesignerComponents::initializePlugins( mCore );
 	
 	pWidgetBox = new QDesignerWidgetBox( this );
 	pWidgetBox->setVisible( false );
@@ -407,6 +409,12 @@ bool QtDesignerChild::openFile( const QString& fileName, const QString& codec )
 	{
 		// set content
 		QFile f( fileName );
+		
+		if ( !f.open( QIODevice::ReadOnly ) )
+		{
+			return false;
+		}
+		
 		w->setContents( &f );
 		
 		// check success load
