@@ -43,6 +43,7 @@ QDesignerActionEditor::QDesignerActionEditor( QtDesignerChild* p )
 
 	// dock title
 	setWindowTitle( tr( "Action Editor" ) );
+	setWindowIcon( QIcon( ":/icons/action.png" ) );
 
 	// object name
 	setObjectName( "x-designer/actioneditor" );

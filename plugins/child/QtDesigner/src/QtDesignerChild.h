@@ -46,6 +46,7 @@ class QDesignerActionEditor;
 class QDesignerPropertyEditor;
 class QDesignerObjectInspector;
 class QDesignerSignalSlotEditor;
+class QDesignerResourcesEditor;
 
 class QtDesignerChild : public pAbstractChild, public QSingleton<QtDesignerChild>
 {
@@ -61,6 +62,7 @@ protected:
 	QDesignerPropertyEditor* pPropertyEditor;
 	QDesignerObjectInspector* pObjectInspector;
 	QDesignerSignalSlotEditor* pSignalSlotEditor;
+	QDesignerResourcesEditor* pResourcesEditor;
 	
 	QDesignerFormWindowInterface* createForm();
 	bool eventFilter( QObject*, QEvent* );

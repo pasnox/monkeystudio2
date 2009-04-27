@@ -43,6 +43,7 @@ QDesignerObjectInspector::QDesignerObjectInspector( QtDesignerChild* p )
 
 	// dock title
 	setWindowTitle( tr( "Object Inspector" ) );
+	setWindowIcon( QIcon( ":/icons/inspector.png" ) );
 
 	// object name
 	setObjectName( "x-designer/objectinspector" );

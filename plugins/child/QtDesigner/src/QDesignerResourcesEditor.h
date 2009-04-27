@@ -3,7 +3,7 @@
 ** 		Created using Monkey Studio v1.8.1.0
 ** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
 ** Project   : Monkey Studio Child Plugins
-** FileName  : QDesignerSignalSlotEditor.cpp
+** FileName  : QDesignerResourcesEditor.h
 ** Date      : 2008-01-14T00:57:15
 ** License   : GPL
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
@@ -26,30 +26,23 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
-#include "QDesignerSignalSlotEditor.h"
-#include "QtDesignerChild.h"
+#ifndef QDESIGNERRESOURCESEDITOR_H
+#define QDESIGNERRESOURCESEDITOR_H
 
-#include <QDesignerComponents>
-#include <QDesignerFormEditorInterface>
-#include <QDesignerFormWindowInterface>
-#include <QDesignerFormWindowManagerInterface>
+#include <fresh.h>
 
-QDesignerSignalSlotEditor::QDesignerSignalSlotEditor( QtDesignerChild* p )
-	: pDockWidget( 0 )
+class QtDesignerChild;
+
+class QDesignerResourcesEditor : public pDockWidget
 {
-	// need core
-	Q_ASSERT( p && p->core() );
+	Q_OBJECT
 
-	// dock title
-	setWindowTitle( tr( "Signal/Slot Editor" ) );
-	setWindowIcon( QIcon( ":/icons/signal.png" ) );
+public:
+	QDesignerResourcesEditor( QtDesignerChild* );
+	inline QWidget* interface() const { return mInterface; }
+	
+private:
+	QWidget* mInterface;
+};
 
-	// object name
-	setObjectName( "x-designer/signalsloteditor" );
-
-	// create interface
-	mInterface = QDesignerComponents::createSignalSlotEditor( p->core(), this );
-
-	// set dock widget
-	setWidget( mInterface );
-}
+#endif // QDESIGNERRESOURCESEDITOR_H

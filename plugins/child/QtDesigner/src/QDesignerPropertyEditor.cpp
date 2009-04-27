@@ -44,6 +44,7 @@ QDesignerPropertyEditor::QDesignerPropertyEditor( QtDesignerChild* p )
 
 	// dock title
 	setWindowTitle( tr( "Property Editor" ) );
+	setWindowIcon( QIcon( ":/icons/property.png" ) );
 
 	// object name 
 	setObjectName( "x-designer/propertyeditor" );

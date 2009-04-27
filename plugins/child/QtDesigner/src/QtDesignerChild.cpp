@@ -33,6 +33,7 @@
 #include "QDesignerPropertyEditor.h"
 #include "QDesignerObjectInspector.h"
 #include "QDesignerSignalSlotEditor.h"
+#include "QDesignerResourcesEditor.h"
 
 #include <MonkeyCore.h>
 #include <UIMain.h>
@@ -127,27 +128,31 @@ QtDesignerChild::QtDesignerChild( QObject* )
 	// create designer docks
 	pWidgetBox = new QDesignerWidgetBox( this );
 	pWidgetBox->setVisible( false );
-	MonkeyCore::mainWindow()->dockToolBar( Qt::LeftToolBarArea )->addDock( pWidgetBox, tr( "Widget Box" ), QIcon( ":/icons/widget.png" ) );
+	MonkeyCore::mainWindow()->dockToolBar( Qt::LeftToolBarArea )->addDock( pWidgetBox, pWidgetBox->windowTitle(), pWidgetBox->windowIcon() );
 	
 	pObjectInspector = new QDesignerObjectInspector( this );
 	pObjectInspector->setVisible( false );
-	MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( pObjectInspector, tr( "Object Inspector" ), QIcon( ":/icons/inspector.png" ) );
+	MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( pObjectInspector, pObjectInspector->windowTitle(), pObjectInspector->windowIcon() );
 	
 	pPropertyEditor = new QDesignerPropertyEditor( this );
 	pPropertyEditor->setVisible( false );
-	MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( pPropertyEditor, tr( "Property Editor" ), QIcon( ":/icons/property.png" ) );
+	MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( pPropertyEditor, pPropertyEditor->windowTitle(), pPropertyEditor->windowIcon() );
 	
 	pActionEditor = new QDesignerActionEditor( this );
 	pActionEditor->setVisible( false );
-	MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( pActionEditor, tr( "Action Editor" ), QIcon( ":/icons/action.png" ) );
+	MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( pActionEditor, pActionEditor->windowTitle(), pActionEditor->windowIcon() );
 	
 	pSignalSlotEditor = new QDesignerSignalSlotEditor( this );
 	pSignalSlotEditor->setVisible( false );
-	MonkeyCore::mainWindow()->dockToolBar( Qt::TopToolBarArea )->addDock( pSignalSlotEditor, tr( "Signal/Slot Editor" ), QIcon( ":/icons/signal.png" ) );
+	MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( pSignalSlotEditor, pSignalSlotEditor->windowTitle(), pSignalSlotEditor->windowIcon() );
+	
+	pResourcesEditor = new QDesignerResourcesEditor( this );
+	pResourcesEditor->setVisible( false );
+	MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( pResourcesEditor, pResourcesEditor->windowTitle(), pResourcesEditor->windowIcon() );
 	
 	// perform integration
 	new qdesigner_internal::QDesignerIntegration( mCore, this );
-	mCore->setTopLevel( MonkeyCore::mainWindow() );
+	mCore->setTopLevel( MonkeyCore::workspace() );
 	
 	// connection
 	connect( mArea, SIGNAL( subWindowActivated( QMdiSubWindow* ) ), this, SLOT( subWindowActivated( QMdiSubWindow* ) ) );

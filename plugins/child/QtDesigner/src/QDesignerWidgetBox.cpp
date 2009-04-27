@@ -42,6 +42,7 @@ QDesignerWidgetBox::QDesignerWidgetBox( QtDesignerChild* p )
 
 	// set dock title
 	setWindowTitle( tr( "Widget Box" ) );
+	setWindowIcon( QIcon( ":/icons/widget.png" ) );
 
 	// object name
 	setObjectName( "x-designer/widgetbox" );

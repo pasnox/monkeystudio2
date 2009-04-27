@@ -13,7 +13,8 @@ HEADERS	= src/QtDesigner.h \
 	src/QDesignerObjectInspector.h \
 	src/QDesignerPropertyEditor.h \
 	src/QDesignerSignalSlotEditor.h \
-	src/QDesignerWidgetBox.h
+	src/QDesignerWidgetBox.h \
+	src/QDesignerResourcesEditor.h
 
 SOURCES	= src/QtDesigner.cpp \
 	src/QtDesignerChild.cpp \
@@ -21,4 +22,5 @@ SOURCES	= src/QtDesigner.cpp \
 	src/QDesignerObjectInspector.cpp \
 	src/QDesignerPropertyEditor.cpp \
 	src/QDesignerSignalSlotEditor.cpp \
-	src/QDesignerWidgetBox.cpp
+	src/QDesignerWidgetBox.cpp \
+	src/QDesignerResourcesEditor.cpp
