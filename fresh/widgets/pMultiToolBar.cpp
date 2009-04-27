@@ -73,6 +73,7 @@ QToolBar* pMultiToolBar::toolBar( const QString& context ) const
 	
 	QToolBar* tb = new QToolBar( mtb );
 	tb->setObjectName( QString( "pMultiToolBar_%1" ).arg( context ) );
+	tb->setIconSize( QSize( 14, 14 ) );
 	tb->setProperty( PMULTITOOLBAR_CONTEXT, context );
 	
 	int index = mtb->addWidget( tb );
