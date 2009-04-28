@@ -279,6 +279,14 @@ QString QMakeProjectItem::getVariableContent( const QString& variableName )
 		{
 			return project()->path();
 		}
+		else if ( name == "_PRO_FILE_" )
+		{
+			return rootIncludeProject()->fileName();
+		}
+		else if ( name == "_PRO_FILE_PWD_" )
+		{
+			return rootIncludeProject()->path();
+		}
 		else
 		{
 			return rootIncludeProject()->variableCache().value( name );
