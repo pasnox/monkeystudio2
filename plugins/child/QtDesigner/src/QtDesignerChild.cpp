@@ -1,14 +1,4 @@
 /****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Monkey Studio Child Plugins
-** FileName  : QtDesignerChild.cpp
-** Date      : 2008-01-14T00:57:16
-** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
-**
 	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
 	This program is free software; you can redistribute it and/or modify
@@ -24,7 +14,6 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
 ****************************************************************************/
 #include "QtDesignerChild.h"
 #include "QtDesignerManager.h"
@@ -33,25 +22,17 @@
 
 #include <pIconManager.h>
 #include <MonkeyCore.h>
-#include <UIMain.h>
-#include <pMonkeyStudio.h>
+#include <QueuedStatusBar.h>
 
-#include <QKeyEvent>
-#include <QToolBar>
-#include <QPrinter>
-#include <QPrintDialog>
-#include <QPainter>
-#include <QStyle>
-#include <QDebug>
-
-#include <QDesignerFormEditorInterface>
-#include <QDesignerFormWindowInterface>
 #include <QDesignerFormWindowManagerInterface>
-#include <QDesignerPropertySheetExtension>
+#include <QDesignerFormWindowInterface>
+#include <QDesignerFormEditorInterface>
 #include <QDesignerPropertyEditorInterface>
+#include <QDesignerPropertySheetExtension>
 #include <QExtensionManager>
 
-using namespace pMonkeyStudio;
+#include <QPainter>
+#include <QPrintDialog>
 
 QtDesignerChild::QtDesignerChild( QtDesignerManager* manager )
 	: pAbstractChild()
@@ -108,9 +89,9 @@ void QtDesignerChild::formSelectionChanged()
 void QtDesignerChild::formGeometryChanged()
 {
 	// update property
-	QDesignerPropertySheetExtension* s = qt_extension<QDesignerPropertySheetExtension*>( mDesignerManager->core()->extensionManager(), mHostWidget->formWindow() );
+	QDesignerPropertySheetExtension* sheet = qt_extension<QDesignerPropertySheetExtension*>( mDesignerManager->core()->extensionManager(), mHostWidget->formWindow() );
 
-	mDesignerManager->core()->propertyEditor()->setPropertyValue( "geometry", s->property( s->indexOf( "geometry" ) ) );
+	mDesignerManager->core()->propertyEditor()->setPropertyValue( "geometry", sheet->property( sheet->indexOf( "geometry" ) ) );
 
 	// set modified state
 	bool loading = property( "loadingFile" ).toBool();
@@ -122,6 +103,7 @@ void QtDesignerChild::formGeometryChanged()
 	
 	// emit modified state
 	emit modifiedChanged( modified );
+	emit contentChanged();
 }
 
 void QtDesignerChild::formMainContainerChanged( QWidget* widget )
@@ -311,7 +293,7 @@ void QtDesignerChild::saveFile( const QString& s )
 	}
 	else
 	{
-		warning( tr( "Save Form..." ), tr( "An error occurs when saving :\n%1" ).arg( s ) );
+		MonkeyCore::statusBar()->appendMessage( tr( "An error occurs when saving :\n%1" ).arg( s ) );
 	}
 	
 	return;
@@ -322,36 +304,36 @@ void QtDesignerChild::saveFiles()
 	saveFile( mHostWidget->formWindow()->fileName() );
 }
 
-void printForm( QDesignerFormWindowInterface* form, bool b )
+void QtDesignerChild::printFormHelper( QDesignerFormWindowInterface* form, bool quick )
 {
 	// get printer
-	QPrinter p;
+	QPrinter printer;
 
 	// if quick print
-	if ( b )
+	if ( quick )
 	{
 		// check if default printer is set
-		if ( p.printerName().isEmpty() )
+		if ( printer.printerName().isEmpty() )
 		{
-			warning( QObject::tr( "Quick Print..." ), QObject::tr( "There is no default printer, please set one before trying quick print" ), form->window() );
+			MonkeyCore::statusBar()->appendMessage( tr( "There is no default printer, please set one before trying quick print" ) );
 			return;
 		}
 		
 		// print and return
-		QPainter pr( &p );
-		pr.drawPixmap( 0, 0, QPixmap::grabWidget( form ) );
+		QPainter painter( &printer );
+		painter.drawPixmap( 0, 0, QPixmap::grabWidget( form ) );
 	}
 	else
 	{
 		// printer dialog
-		QPrintDialog d( &p );
+		QPrintDialog printDialog( &printer );
 
 		// if ok
-		if ( d.exec() )
+		if ( printDialog.exec() )
 		{
 			// print and return
-			QPainter pr( &p );
-			pr.drawPixmap( 0, 0, QPixmap::grabWidget( form ) );
+			QPainter painter( &printer );
+			painter.drawPixmap( 0, 0, QPixmap::grabWidget( form ) );
 		}
 	}
 }
@@ -359,13 +341,13 @@ void printForm( QDesignerFormWindowInterface* form, bool b )
 void QtDesignerChild::printFile( const QString& s )
 {
 	Q_UNUSED( s );
-	printForm( mHostWidget->formWindow(), false );
+	printFormHelper( mHostWidget->formWindow(), false );
 }
 
 void QtDesignerChild::quickPrintFile( const QString& s )
 {
 	Q_UNUSED( s );
-	printForm( mHostWidget->formWindow(), true );
+	printFormHelper( mHostWidget->formWindow(), true );
 }
 
 void QtDesignerChild::undo() {}
@@ -398,7 +380,7 @@ void QtDesignerChild::backupCurrentFile( const QString& s )
 	}
 	else
 	{
-		warning( tr( "Backup Form..." ), tr( "An error occurs when backuping :\n%1" ).arg( s ) );
+		MonkeyCore::statusBar()->appendMessage( tr( "An error occurs when backuping: %1" ).arg( s ) );
 	}
 }
 

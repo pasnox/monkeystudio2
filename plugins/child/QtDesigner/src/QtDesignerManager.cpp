@@ -1,3 +1,20 @@
+/****************************************************************************
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
 #include "QtDesignerManager.h"
 #include "QDesignerWidgetBox.h"
 #include "QDesignerActionEditor.h"
@@ -9,6 +26,7 @@
 #include <MonkeyCore.h>
 #include <UIMain.h>
 #include <pWorkspace.h>
+#include <QueuedStatusBar.h>
 
 #include <QPluginLoader>
 
@@ -23,10 +41,10 @@
 #include <QDesignerFormWindowCursorInterface>
 #include <QDesignerPropertySheetExtension>
 #include <QExtensionManager>
-#include <QFormBuilder>
 
 #include "pluginmanager_p.h"
 #include "qdesigner_integration_p.h"
+#include <previewmanager_p.h>
 
 QtDesignerManager::QtDesignerManager( QObject* parent )
 	: QObject( parent )
@@ -119,6 +137,9 @@ QtDesignerManager::QtDesignerManager( QObject* parent )
 	new qdesigner_internal::QDesignerIntegration( mCore, MonkeyCore::workspace() );
 	mCore->setTopLevel( MonkeyCore::workspace() );
 	
+	// create previewver
+	mPreviewer = new qdesigner_internal::PreviewManager( qdesigner_internal::PreviewManager::SingleFormNonModalPreview, this );
+	
 	// connections
 	connect( aEditWidgets, SIGNAL( triggered() ), this, SLOT( editWidgets() ) );
 	connect( aPreview, SIGNAL( triggered() ), this, SLOT( previewCurrentForm() ) );
@@ -174,53 +195,37 @@ void QtDesignerManager::editWidgets()
 	}
 }
 
-void QtDesignerManager::previewCurrentForm()
+void QtDesignerManager::previewCurrentForm( const QString& style )
 {
-//finnir filter event + copier preview qtcreator
 	QDesignerFormWindowInterface* form = mCore->formWindowManager()->activeFormWindow();
 	
 	if ( form )
 	{
-		// get buffer
-		QBuffer b;
-		b.setData( form->contents().toUtf8() );
+		QString error;
 		
-		if ( !b.open( QIODevice::ReadOnly ) )
+		if ( !mPreviewer->showPreview( form, style, &error ) )
 		{
-			return;
+			MonkeyCore::statusBar()->appendMessage( tr( "Can't preview form '%1'" ).arg( form->fileName() ) );
 		}
-		
-		// create form
-		QWidget* f = QFormBuilder().load( &b );
-		
-		// delete on close
-		f->setAttribute( Qt::WA_DeleteOnClose );
-		
-		// set flags
-		/*
-		Qt::WindowFlags wf = Qt::Window | Qt::WindowSystemMenuHint;
-		if ( f->windowType() == Qt::Window )
-			wf |= Qt::WindowMaximizeButtonHint;
-		*/
-#ifdef Q_WS_WIN
-		Qt::WindowFlags wf = ( f->windowType() == Qt::Window ) ? Qt::Window | Qt::WindowMaximizeButtonHint : Qt::Dialog;
-#else
-		Qt::WindowFlags wf = Qt::Dialog;
-#endif
-		
-		// set parent
-		f->setParent( MonkeyCore::mainWindow(), wf );
-		
-		// macdialgo have no close button
-		f->setWindowModality( Qt::ApplicationModal );
-		
-		// set position
-		f->move( form->mapToGlobal( QPoint( 10, 10) ) );
-		
-		// track escape key
-		f->installEventFilter( this );
-		
-		// show form
-		f->show();
 	}
+	/*
+	
+	finir preview in different style
+	
+	// Add style actions
+    const QStringList styles = QStyleFactory::keys();
+    const QStringList::const_iterator cend = styles.constEnd();
+    // Make sure ObjectName  is unique in case toolbar solution is used.
+    objNamePrefix = QLatin1String("__qt_designer_style_");
+    // Create styles. Set style name string as action data.
+    for (QStringList::const_iterator it = styles.constBegin(); it !=  cend ;++it) {
+        QAction *a = new QAction(tr("%1 Style").arg(*it), this);
+        QString objName = objNamePrefix;
+        objName += *it;
+        objName += objNamePostfix;
+        a->setObjectName(objName);
+        a->setData(*it);
+        addAction(a);
+    }
+	*/
 }
