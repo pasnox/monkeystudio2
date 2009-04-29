@@ -29,16 +29,16 @@
 #ifndef QDESIGNERRESOURCESEDITOR_H
 #define QDESIGNERRESOURCESEDITOR_H
 
-#include <fresh.h>
+#include <pDockWidget.h>
 
-class QtDesignerChild;
+class QDesignerFormEditorInterface;
 
 class QDesignerResourcesEditor : public pDockWidget
 {
 	Q_OBJECT
 
 public:
-	QDesignerResourcesEditor( QtDesignerChild* );
+	QDesignerResourcesEditor( QDesignerFormEditorInterface* core );
 	inline QWidget* interface() const { return mInterface; }
 	
 private:

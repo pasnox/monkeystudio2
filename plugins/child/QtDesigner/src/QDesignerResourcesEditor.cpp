@@ -27,30 +27,28 @@
 **
 ****************************************************************************/
 #include "QDesignerResourcesEditor.h"
-#include "QtDesignerChild.h"
 
-#include <QDesignerComponents>
+#include <pIconManager.h>
+
 #include <QDesignerFormEditorInterface>
+#include <QDesignerComponents>
 
-QDesignerResourcesEditor::QDesignerResourcesEditor( QtDesignerChild* p )
+QDesignerResourcesEditor::QDesignerResourcesEditor( QDesignerFormEditorInterface* core )
 	: pDockWidget( 0 )
 {
 	// need core
-	Q_ASSERT( p && p->core() );
+	Q_ASSERT( core );
 
 	// dock title
 	setWindowTitle( tr( "Resources Editor" ) );
-	setWindowIcon( QIcon( ":/icons/resource.png" ) );
+	setWindowIcon( pIconManager::icon( "resource.png", ":/icons" ) );
 
 	// object name
 	setObjectName( "x-designer/resourceseditor" );
 
 	// create interface
-	mInterface = QDesignerComponents::createResourceEditor( p->core(), this );
+	mInterface = QDesignerComponents::createResourceEditor( core, this );
 	
 	// set dock widget
 	setWidget( mInterface );
-
-	// assign action editor to core
-	//p->core()->setResourcesEditor( mInterface );
 }

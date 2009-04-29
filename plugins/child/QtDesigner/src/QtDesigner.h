@@ -31,6 +31,10 @@
 
 #include <ChildPlugin.h>
 
+#include <QPointer>
+
+class QtDesignerManager;
+
 class QtDesigner : public ChildPlugin
 {
 	Q_OBJECT
@@ -40,9 +44,11 @@ public:
 	QtDesigner();
 	virtual ~QtDesigner();
 	virtual QWidget* settingsWidget();
-	virtual bool setEnabled( bool );
-	virtual pAbstractChild* openFile( const QString&, const QPoint& = QPoint() );
-	
+	virtual bool setEnabled( bool enabled );
+	virtual pAbstractChild* openFile( const QString& fileName, const QPoint& pos = QPoint() );
+
+protected:
+	QPointer<QtDesignerManager> mDesignerManager;
 };
 
 #endif // QTDESIGNER_H

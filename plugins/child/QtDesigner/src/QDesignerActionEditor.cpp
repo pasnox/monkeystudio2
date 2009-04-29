@@ -27,33 +27,32 @@
 **
 ****************************************************************************/
 #include "QDesignerActionEditor.h"
-#include "QtDesignerChild.h"
 
+#include <pIconManager.h>
+
+#include <QDesignerFormEditorInterface>
 #include <QDesignerComponents>
 #include <QDesignerActionEditorInterface>
-#include <QDesignerFormEditorInterface>
-#include <QDesignerFormWindowInterface>
-#include <QDesignerFormWindowManagerInterface>
 
-QDesignerActionEditor::QDesignerActionEditor( QtDesignerChild* p )
+QDesignerActionEditor::QDesignerActionEditor( QDesignerFormEditorInterface* core )
 	: pDockWidget( 0 )
 {
 	// need core
-	Q_ASSERT( p && p->core() );
+	Q_ASSERT( core );
 
 	// dock title
 	setWindowTitle( tr( "Action Editor" ) );
-	setWindowIcon( QIcon( ":/icons/action.png" ) );
+	setWindowIcon( pIconManager::icon( "action.png", ":/icons" ) );
 
 	// object name
 	setObjectName( "x-designer/actioneditor" );
 
 	// create interface
-	mInterface = QDesignerComponents::createActionEditor( p->core(), this );
+	mInterface = QDesignerComponents::createActionEditor( core, this );
 
 	// set dock widget
 	setWidget( mInterface );
 
 	// assign action editor to core
-	p->core()->setActionEditor( mInterface );
+	core->setActionEditor( mInterface );
 }

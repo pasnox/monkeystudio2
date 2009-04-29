@@ -29,9 +29,9 @@
 #ifndef QDESIGNERACTIONEDITOR_H
 #define QDESIGNERACTIONEDITOR_H
 
-#include <fresh.h>
+#include <pDockWidget.h>
 
-class QtDesignerChild;
+class QDesignerFormEditorInterface;
 class QDesignerActionEditorInterface;
 
 class QDesignerActionEditor : public pDockWidget
@@ -39,7 +39,7 @@ class QDesignerActionEditor : public pDockWidget
 	Q_OBJECT
 
 public:
-	QDesignerActionEditor( QtDesignerChild* );
+	QDesignerActionEditor( QDesignerFormEditorInterface* core );
 	inline QDesignerActionEditorInterface* interface() const { return mInterface; }
 	
 private:

@@ -27,28 +27,30 @@
 **
 ****************************************************************************/
 #include "QDesignerWidgetBox.h"
-#include "QtDesignerChild.h"
+
+#include <pIconManager.h>
 
 #include <QDir>
+
+#include <QDesignerFormEditorInterface>
 #include <QDesignerComponents>
 #include <QDesignerWidgetBoxInterface>
-#include <QDesignerFormEditorInterface>
 
-QDesignerWidgetBox::QDesignerWidgetBox( QtDesignerChild* p )
+QDesignerWidgetBox::QDesignerWidgetBox( QDesignerFormEditorInterface* core )
 	: pDockWidget( 0 )
 {
 	// need core
-	Q_ASSERT( p && p->core() );
+	Q_ASSERT( core );
 
 	// set dock title
 	setWindowTitle( tr( "Widget Box" ) );
-	setWindowIcon( QIcon( ":/icons/widget.png" ) );
+	setWindowIcon( pIconManager::icon( "widget.png", ":/icons" ) );
 
 	// object name
 	setObjectName( "x-designer/widgetbox" );
 
 	// create widget box interface
-	mInterface = QDesignerComponents::createWidgetBox( p->core(), this );
+	mInterface = QDesignerComponents::createWidgetBox( core, this );
 
 	// load defaults widgets
 	mInterface->setFileName( ":/trolltech/widgetbox/widgetbox.xml" );
@@ -62,5 +64,5 @@ QDesignerWidgetBox::QDesignerWidgetBox( QtDesignerChild* p )
 	setWidget( mInterface );
 
 	// assign widget box for core
-	p->core()->setWidgetBox( mInterface );
+	core->setWidgetBox( mInterface );
 }

@@ -27,33 +27,32 @@
 **
 ****************************************************************************/
 #include "QDesignerObjectInspector.h"
-#include "QtDesignerChild.h"
 
+#include <pIconManager.h>
+
+#include <QDesignerFormEditorInterface>
 #include <QDesignerComponents>
 #include <QDesignerObjectInspectorInterface>
-#include <QDesignerFormEditorInterface>
-#include <QDesignerFormWindowManagerInterface>
-#include <QDesignerFormWindowInterface>
 
-QDesignerObjectInspector::QDesignerObjectInspector( QtDesignerChild* p )
+QDesignerObjectInspector::QDesignerObjectInspector( QDesignerFormEditorInterface* core )
 	: pDockWidget( 0 )
 {
 	// need core
-	Q_ASSERT( p && p->core() );
+	Q_ASSERT( core );
 
 	// dock title
 	setWindowTitle( tr( "Object Inspector" ) );
-	setWindowIcon( QIcon( ":/icons/inspector.png" ) );
+	setWindowIcon( pIconManager::icon( "inspector.png", ":/icons" ) );
 
 	// object name
 	setObjectName( "x-designer/objectinspector" );
 
 	// create interface
-	mInterface = QDesignerComponents::createObjectInspector( p->core(), this );
+	mInterface = QDesignerComponents::createObjectInspector( core, this );
 
 	// set dock widget
 	setWidget( mInterface );
 
 	// assign object inspector to core
-	p->core()->setObjectInspector( mInterface );
+	core->setObjectInspector( mInterface );
 }

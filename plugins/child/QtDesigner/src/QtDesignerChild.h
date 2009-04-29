@@ -33,51 +33,33 @@
 #include <pWorkspace.h>
 #include <pAbstractChild.h>
 
+namespace SharedTools {
+	class WidgetHost;
+};
+
 class QToolBar;
-class QMdiArea;
-class QMdiSubWindow;
-class pEditor;
-class QActionGroup;
-
-class QDesignerFormEditorInterface;
+class QtDesignerManager;
 class QDesignerFormWindowInterface;
-class QDesignerWidgetBox;
-class QDesignerActionEditor;
-class QDesignerPropertyEditor;
-class QDesignerObjectInspector;
-class QDesignerSignalSlotEditor;
-class QDesignerResourcesEditor;
 
-class QtDesignerChild : public pAbstractChild, public QSingleton<QtDesignerChild>
+class QtDesignerChild : public pAbstractChild
 {
 	Q_OBJECT
-	friend class QSingleton<QtDesignerChild>;
+	
+public:
+	QtDesignerChild( QtDesignerManager* manager );
+	~QtDesignerChild();
 	
 protected:
-	QActionGroup* aModes;
-	QAction* aPreview;
-	QDesignerFormEditorInterface* mCore;
-	QDesignerWidgetBox* pWidgetBox;
-	QDesignerActionEditor* pActionEditor;
-	QDesignerPropertyEditor* pPropertyEditor;
-	QDesignerObjectInspector* pObjectInspector;
-	QDesignerSignalSlotEditor* pSignalSlotEditor;
-	QDesignerResourcesEditor* pResourcesEditor;
+	QtDesignerManager* mDesignerManager;
+	SharedTools::WidgetHost* mHostWidget;
 	
-	QDesignerFormWindowInterface* createForm();
-	bool eventFilter( QObject*, QEvent* );
-
-public:
-	QDesignerFormEditorInterface* core();
+	void showEvent( QShowEvent* event );
 
 protected slots:
-	void subWindowActivated( QMdiSubWindow* );
-	void activeFormWindowChanged( QDesignerFormWindowInterface* w );
-	void geometryChanged();
 	void formChanged();
-	void editWidgets();
-	void previewCurrentForm();
-	void setModified( QDesignerFormWindowInterface* );
+	void formSelectionChanged();
+	void formGeometryChanged();
+	void formMainContainerChanged( QWidget* widget );
 	
 public:
 	virtual QStringList files() const;
@@ -109,12 +91,6 @@ public:
 	virtual bool isSearchReplaceAvailable() const;
 	virtual bool isGoToAvailable() const;
 	virtual bool isPrintAvailable() const;
-
-private:
-	QtDesignerChild( QObject* = 0 );
-	~QtDesignerChild();
-	
-	QMdiArea* mArea;
 	
 public slots:
 	virtual void searchPrevious() {}

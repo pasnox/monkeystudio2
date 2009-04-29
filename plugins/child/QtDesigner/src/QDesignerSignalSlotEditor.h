@@ -29,14 +29,14 @@
 #ifndef QDESIGNERSIGNALSLOTEDITOR_H
 #define QDESIGNERSIGNALSLOTEDITOR_H
 
-#include <fresh.h>
+#include <pDockWidget.h>
 
-class QtDesignerChild;
+class QDesignerFormEditorInterface;
 
 class QDesignerSignalSlotEditor : public pDockWidget
 {
 public:
-	QDesignerSignalSlotEditor( QtDesignerChild* );
+	QDesignerSignalSlotEditor( QDesignerFormEditorInterface* core );
 	inline QWidget* interface() const { return mInterface; }
 	
 private:

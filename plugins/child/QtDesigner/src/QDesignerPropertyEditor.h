@@ -29,10 +29,9 @@
 #ifndef QDESIGNERPROPERTYEDITOR_H
 #define QDESIGNERPROPERTYEDITOR_H
 
-#include <fresh.h>
+#include <pDockWidget.h>
 
-class QtDesignerChild;
-class QDesignerFormWindowInterface;
+class QDesignerFormEditorInterface;
 class QDesignerPropertyEditorInterface;
 
 class QDesignerPropertyEditor : public pDockWidget
@@ -40,7 +39,7 @@ class QDesignerPropertyEditor : public pDockWidget
 	Q_OBJECT
 	
 public:
-	QDesignerPropertyEditor( QtDesignerChild* );
+	QDesignerPropertyEditor( QDesignerFormEditorInterface* core );
 	inline QDesignerPropertyEditorInterface* interface() const { return mInterface; }
 	
 private:

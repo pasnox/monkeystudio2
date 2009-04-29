@@ -27,6 +27,7 @@
 **
 ****************************************************************************/
 #include "QtDesigner.h"
+#include "QtDesignerManager.h"
 #include "QtDesignerChild.h"
 
 QtDesigner::QtDesigner()
@@ -55,7 +56,9 @@ bool QtDesigner::setEnabled( bool b )
 	if ( b && !isEnabled() )
 	{
 		// set usable suffixes
-		mSuffixes[tr( "Qt Forms" )] = QStringList( "*.ui" );
+		mSuffixes[ tr( "Qt Forms" ) ] = QStringList( "*.ui" );
+		// create designer
+		mDesignerManager = new QtDesignerManager( this );
 		// set plugin enabled
 		mPluginInfos.Enabled = true;
 	}
@@ -64,7 +67,7 @@ bool QtDesigner::setEnabled( bool b )
 		// clear suffixes
 		mSuffixes.clear();
 		// clear designer instance
-		QtDesignerChild::cleanInstance();
+		delete mDesignerManager;
 		// set plugin disabled
 		mPluginInfos.Enabled = false;
 	}
@@ -72,10 +75,16 @@ bool QtDesigner::setEnabled( bool b )
 	return true;
 }
 
-pAbstractChild* QtDesigner::openFile( const QString&, const QPoint& )
+pAbstractChild* QtDesigner::openFile( const QString& fileName, const QPoint& pos )
 {
-	//QtDesignerChild::instance()->openFile( s );
-	return QtDesignerChild::instance();
+	Q_UNUSED( pos );
+	
+	if ( canOpen( fileName ) )
+	{
+		return new QtDesignerChild( mDesignerManager );
+	}
+	
+	return 0;
 }
 
 Q_EXPORT_PLUGIN2( BaseQtDesigner, QtDesigner )

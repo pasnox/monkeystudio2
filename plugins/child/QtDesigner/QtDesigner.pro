@@ -14,7 +14,8 @@ HEADERS	= src/QtDesigner.h \
 	src/QDesignerPropertyEditor.h \
 	src/QDesignerSignalSlotEditor.h \
 	src/QDesignerWidgetBox.h \
-	src/QDesignerResourcesEditor.h
+	src/QDesignerResourcesEditor.h \
+	src/QtDesignerManager.h
 
 SOURCES	= src/QtDesigner.cpp \
 	src/QtDesignerChild.cpp \
@@ -23,4 +24,7 @@ SOURCES	= src/QtDesigner.cpp \
 	src/QDesignerPropertyEditor.cpp \
 	src/QDesignerSignalSlotEditor.cpp \
 	src/QDesignerWidgetBox.cpp \
-	src/QDesignerResourcesEditor.cpp
+	src/QDesignerResourcesEditor.cpp \
+	src/QtDesignerManager.cpp
+
+include( src/3rdparty/qtcreator/designerintegrationv2/designerintegration.pri )

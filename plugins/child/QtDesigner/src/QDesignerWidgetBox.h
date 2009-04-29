@@ -29,15 +29,15 @@
 #ifndef QDESIGNERWIDGETBOX_H
 #define QDESIGNERWIDGETBOX_H
 
-#include <fresh.h>
+#include <pDockWidget.h>
 
-class QtDesignerChild;
+class QDesignerFormEditorInterface;
 class QDesignerWidgetBoxInterface;
 
 class QDesignerWidgetBox : public pDockWidget
 {
 public:
-	QDesignerWidgetBox( QtDesignerChild* ) ;
+	QDesignerWidgetBox( QDesignerFormEditorInterface* core ) ;
 	inline QDesignerWidgetBoxInterface* interface() const { return mInterface; }
 	
 private:

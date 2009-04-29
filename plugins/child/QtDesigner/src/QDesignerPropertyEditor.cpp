@@ -27,34 +27,32 @@
 **
 ****************************************************************************/
 #include "QDesignerPropertyEditor.h"
-#include "QtDesignerChild.h"
 
+#include <pIconManager.h>
+
+#include <QDesignerFormEditorInterface>
 #include <QDesignerComponents>
 #include <QDesignerPropertyEditorInterface>
-#include <QDesignerFormEditorInterface>
-#include <QDesignerFormWindowManagerInterface>
-#include <QDesignerFormWindowInterface>
-#include <QDesignerFormWindowCursorInterface>
 
-QDesignerPropertyEditor::QDesignerPropertyEditor( QtDesignerChild* p )
+QDesignerPropertyEditor::QDesignerPropertyEditor( QDesignerFormEditorInterface* core )
 	: pDockWidget( 0 )
 {
 	// need core
-	Q_ASSERT( p && p->core() );
+	Q_ASSERT( core );
 
 	// dock title
 	setWindowTitle( tr( "Property Editor" ) );
-	setWindowIcon( QIcon( ":/icons/property.png" ) );
+	setWindowIcon( pIconManager::icon( "property.png", ":/icons" ) );
 
 	// object name 
 	setObjectName( "x-designer/propertyeditor" );
 
 	// create interface
-	mInterface = QDesignerComponents::createPropertyEditor( p->core(), this );
+	mInterface = QDesignerComponents::createPropertyEditor( core, this );
 
 	// et dock widget
 	setWidget( mInterface );
 
 	// assign property editor to core
-	p->core()->setPropertyEditor( mInterface );
+	core->setPropertyEditor( mInterface );
 }

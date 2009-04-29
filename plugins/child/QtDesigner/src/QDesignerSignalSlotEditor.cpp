@@ -27,28 +27,27 @@
 **
 ****************************************************************************/
 #include "QDesignerSignalSlotEditor.h"
-#include "QtDesignerChild.h"
 
-#include <QDesignerComponents>
+#include <pIconManager.h>
+
 #include <QDesignerFormEditorInterface>
-#include <QDesignerFormWindowInterface>
-#include <QDesignerFormWindowManagerInterface>
+#include <QDesignerComponents>
 
-QDesignerSignalSlotEditor::QDesignerSignalSlotEditor( QtDesignerChild* p )
+QDesignerSignalSlotEditor::QDesignerSignalSlotEditor( QDesignerFormEditorInterface* core )
 	: pDockWidget( 0 )
 {
 	// need core
-	Q_ASSERT( p && p->core() );
+	Q_ASSERT( core );
 
 	// dock title
 	setWindowTitle( tr( "Signal/Slot Editor" ) );
-	setWindowIcon( QIcon( ":/icons/signal.png" ) );
+	setWindowIcon( pIconManager::icon( "signal.png", ":/icons" ) );
 
 	// object name
 	setObjectName( "x-designer/signalsloteditor" );
 
 	// create interface
-	mInterface = QDesignerComponents::createSignalSlotEditor( p->core(), this );
+	mInterface = QDesignerComponents::createSignalSlotEditor( core, this );
 
 	// set dock widget
 	setWidget( mInterface );
