@@ -29,9 +29,10 @@
 #ifndef UIMAIN_H
 #define UIMAIN_H
 
-#include <fresh.h>
+#include <MonkeyExport.h>
+#include <pMainWindow.h>
 
-class QActionGroup;
+class pStylesActionGroup;
 
 class Q_MONKEY_EXPORT UIMain : public pMainWindow
 {
@@ -42,7 +43,7 @@ public:
 	QMenu* createPopupMenu();
 
 protected:
-	QActionGroup* agStyles;
+	pStylesActionGroup* agStyles;
 
 	UIMain( QWidget* = 0 );
 	void initGui();
@@ -54,6 +55,9 @@ protected:
 public slots:
 	void menu_Docks_aboutToShow();
 	void menu_CustomAction_aboutToShow();
+
+protected slots:
+	void changeStyle( const QString& style );
 
 signals:
 	void aboutToClose();

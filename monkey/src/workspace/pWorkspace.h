@@ -127,9 +127,6 @@ public slots:
 	void editExpandAbbreviation_triggered();
 	void editPrepareAPIs_triggered();
 
-	// view menu
-	void agStyles_triggered( QAction* );
-
 	// help menu
 	void helpAboutApplication_triggered();
 	void helpAboutQt_triggered();

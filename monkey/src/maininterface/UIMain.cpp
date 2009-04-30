@@ -250,16 +250,10 @@ void UIMain::initMenuBar()
 		mb->action( "aSeparator2" );
 #endif
 	mb->endGroup();
+	
 	// create action for styles
-	agStyles = new QActionGroup( mb->menu( "mView/mStyle" ) );
-	foreach ( QString s, QStyleFactory::keys() )
-	{
-		QAction* a = agStyles->addAction( s );
-		a->setCheckable( true );
-		if ( MonkeyCore::settings()->value( "MainWindow/Style" ).toString() == s )
-			a->setChecked( true );
-	}
-	// add styles action to menu
+	agStyles = new pStylesActionGroup( tr( "Use %1 style" ), mb->menu( "mView/mStyle" ) );
+	agStyles->setCurrentStyle( MonkeyCore::settings()->value( "MainWindow/Style" ).toString() );
 	mb->menu( "mView/mStyle" )->addActions( agStyles->actions() );
 }
 
@@ -334,7 +328,7 @@ void UIMain::initConnections()
 	connect( menuBar()->action( "mEdit/aExpandAbbreviation" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editExpandAbbreviation_triggered() ) );
 	connect( menuBar()->action( "mEdit/aPrepareAPIs" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editPrepareAPIs_triggered() ) );
 	// view connection
-	connect( agStyles, SIGNAL( triggered( QAction* ) ), MonkeyCore::workspace(), SLOT( agStyles_triggered( QAction* ) ) );
+	connect( agStyles, SIGNAL( styleSelected( const QString& ) ), this, SLOT( changeStyle( const QString& ) ) );
 	connect( menuBar()->action( "mView/aNext" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( activateNextDocument() ) );
 	connect( menuBar()->action( "mView/aPrevious" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( activatePreviousDocument() ) );
 	connect( menuBar()->menu( "mDocks" ), SIGNAL( aboutToShow() ), this, SLOT( menu_Docks_aboutToShow() ) );
@@ -391,4 +385,11 @@ void UIMain::menu_CustomAction_aboutToShow()
 		foreach ( QAction* a, m->actions() )
 			if ( a->menu() )
 				a->menu()->menuAction()->setVisible( a->menu()->actions().count() );
+}
+
+void UIMain::changeStyle( const QString& style )
+{
+	qApp->setStyle( style );
+	qApp->setPalette( qApp->style()->standardPalette() );
+	settings()->setValue( "MainWindow/Style", style );
 }

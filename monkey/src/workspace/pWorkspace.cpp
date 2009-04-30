@@ -893,14 +893,6 @@ void pWorkspace::editExpandAbbreviation_triggered()
 void pWorkspace::editPrepareAPIs_triggered()
 { prepareAPIs(); }
 
-// view menu
-void pWorkspace::agStyles_triggered( QAction* a )
-{
-	qApp->setStyle( a->text() );
-	qApp->setPalette( qApp->style()->standardPalette() );
-	MonkeyCore::settings()->setValue( "MainWindow/Style", a->text() );
-}
-
 // help menu
 void pWorkspace::helpAboutApplication_triggered()
 { UIAbout::instance( this )->exec(); }
