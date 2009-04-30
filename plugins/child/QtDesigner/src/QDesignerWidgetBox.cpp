@@ -46,7 +46,7 @@ QDesignerWidgetBox::QDesignerWidgetBox( QDesignerFormEditorInterface* core )
 	mInterface->load();
 
 	// laod user widgets
-	mInterface->setFileName( QDir::homePath().append( "/designer/widgetbox.xml" ) );
+	mInterface->setFileName( QDir::homePath().append( "/.designer/widgetbox.xml" ) );
 	mInterface->load();
 
 	// set widget for dock
@@ -54,4 +54,9 @@ QDesignerWidgetBox::QDesignerWidgetBox( QDesignerFormEditorInterface* core )
 
 	// assign widget box for core
 	core->setWidgetBox( mInterface );
+}
+
+QDesignerWidgetBox::~QDesignerWidgetBox()
+{
+	mInterface->save();
 }
