@@ -2,6 +2,7 @@
 #include "../objects/pSettings.h"
 #include "../objects/QSingleton.h"
 #include "../objects/GetOpt.h"
+#include "../objects/pStylesActionGroup.h"
 
 #include "../widgets/pFilesListWidget.h"
 #include "../widgets/pTabBar.h"
@@ -28,3 +29,4 @@
 #include "../widgets/pConsole.h"
 #include "../widgets/pConsoleCommand.h"
 #include "../widgets/pMultiToolBar.h"
+#include "../widgets/pStylesToolButton.h"
