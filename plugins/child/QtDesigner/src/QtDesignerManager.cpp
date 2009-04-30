@@ -27,6 +27,7 @@
 #include <UIMain.h>
 #include <pWorkspace.h>
 #include <QueuedStatusBar.h>
+#include <pStylesToolButton.h>
 
 #include <QPluginLoader>
 
@@ -69,10 +70,12 @@ QtDesignerManager::QtDesignerManager( QObject* parent )
 	aEditWidgets->setChecked( true );
 	
 	// preview action
-	aPreview = new QAction( this );
-	aPreview->setIcon( QIcon( ":/icons/preview.png" ) );
-	aPreview->setShortcut( tr( "Ctrl+R" ));
-	aPreview->setText( tr( "Preview Form" ) );
+	pStylesToolButton* stb = new pStylesToolButton( tr( "Preview in %1..." ) );
+	stb->setCheckableActions( false );
+	stb->defaultAction()->setShortcut( tr( "Ctrl+R" ) );
+	stb->setIcon( QIcon( ":/icons/preview.png" ) );
+	aPreview = new QWidgetAction( this );
+	aPreview->setDefaultWidget( stb );
 	
 	// action group for modes
 	aModes = new QActionGroup( MonkeyCore::workspace() );
@@ -142,7 +145,7 @@ QtDesignerManager::QtDesignerManager( QObject* parent )
 	
 	// connections
 	connect( aEditWidgets, SIGNAL( triggered() ), this, SLOT( editWidgets() ) );
-	connect( aPreview, SIGNAL( triggered() ), this, SLOT( previewCurrentForm() ) );
+	connect( stb, SIGNAL( styleSelected( const QString& ) ), this, SLOT( previewCurrentForm( const QString& ) ) );
 }
 
 QtDesignerManager::~QtDesignerManager()
@@ -184,6 +187,42 @@ void QtDesignerManager::setActiveFormWindow( QDesignerFormWindowInterface* form 
 	aPreview->setEnabled( form );
 }
 
+QWidget* QtDesignerManager::previewWidget( QDesignerFormWindowInterface* form, const QString& style )
+{
+	QWidget* widget = 0;
+	QString error;
+	
+	if ( form )
+	{
+		widget = mPreviewer->showPreview( form, style, &error );
+		
+		if ( !widget )
+		{
+			MonkeyCore::statusBar()->appendMessage( tr( "Can't preview form '%1': %2" ).arg( form->fileName() ).arg( error ) );
+		}
+	}
+	
+	return widget;
+}
+
+QPixmap QtDesignerManager::previewPixmap( QDesignerFormWindowInterface* form, const QString& style )
+{
+	QPixmap pixmap;
+	QString error;
+	
+	if ( form )
+	{
+		pixmap = mPreviewer->createPreviewPixmap( form, style, &error );
+		
+		if ( pixmap.isNull() )
+		{
+			MonkeyCore::statusBar()->appendMessage( tr( "Can't preview form pixmap '%1': %2" ).arg( form->fileName() ).arg( error ) );
+		}
+	}
+	
+	return pixmap;
+}
+
 void QtDesignerManager::editWidgets()
 {
 	// set edit mode for all forms
@@ -197,35 +236,5 @@ void QtDesignerManager::editWidgets()
 
 void QtDesignerManager::previewCurrentForm( const QString& style )
 {
-	QDesignerFormWindowInterface* form = mCore->formWindowManager()->activeFormWindow();
-	
-	if ( form )
-	{
-		QString error;
-		
-		if ( !mPreviewer->showPreview( form, style, &error ) )
-		{
-			MonkeyCore::statusBar()->appendMessage( tr( "Can't preview form '%1'" ).arg( form->fileName() ) );
-		}
-	}
-	/*
-	
-	finir preview in different style
-	
-	// Add style actions
-    const QStringList styles = QStyleFactory::keys();
-    const QStringList::const_iterator cend = styles.constEnd();
-    // Make sure ObjectName  is unique in case toolbar solution is used.
-    objNamePrefix = QLatin1String("__qt_designer_style_");
-    // Create styles. Set style name string as action data.
-    for (QStringList::const_iterator it = styles.constBegin(); it !=  cend ;++it) {
-        QAction *a = new QAction(tr("%1 Style").arg(*it), this);
-        QString objName = objNamePrefix;
-        objName += *it;
-        objName += objNamePostfix;
-        a->setObjectName(objName);
-        a->setData(*it);
-        addAction(a);
-    }
-	*/
+	previewWidget( mCore->formWindowManager()->activeFormWindow(), style );
 }

@@ -23,6 +23,7 @@
 #include <pIconManager.h>
 #include <MonkeyCore.h>
 #include <QueuedStatusBar.h>
+#include <pStylesActionGroup.h>
 
 #include <QDesignerFormWindowManagerInterface>
 #include <QDesignerFormWindowInterface>
@@ -33,6 +34,8 @@
 
 #include <QPainter>
 #include <QPrintDialog>
+#include <QInputDialog>
+#include <QStyleFactory>
 
 QtDesignerChild::QtDesignerChild( QtDesignerManager* manager )
 	: pAbstractChild()
@@ -306,6 +309,16 @@ void QtDesignerChild::saveFiles()
 
 void QtDesignerChild::printFormHelper( QDesignerFormWindowInterface* form, bool quick )
 {
+	bool ok;
+	const QStringList styles = QStyleFactory::keys();
+	const int id = styles.indexOf( pStylesActionGroup::systemStyle() );
+	QString style = QInputDialog::getItem( this, tr( "Choose a style..." ), tr( "Choose a style to render the form:" ), styles, id, false, &ok );
+	
+	if ( !ok )
+	{
+		return;
+	}
+	
 	// get printer
 	QPrinter printer;
 
@@ -321,7 +334,7 @@ void QtDesignerChild::printFormHelper( QDesignerFormWindowInterface* form, bool 
 		
 		// print and return
 		QPainter painter( &printer );
-		painter.drawPixmap( 0, 0, QPixmap::grabWidget( form ) );
+		painter.drawPixmap( 0, 0, mDesignerManager->previewPixmap( form, style ) );
 	}
 	else
 	{
@@ -333,7 +346,7 @@ void QtDesignerChild::printFormHelper( QDesignerFormWindowInterface* form, bool 
 		{
 			// print and return
 			QPainter painter( &printer );
-			painter.drawPixmap( 0, 0, QPixmap::grabWidget( form ) );
+			painter.drawPixmap( 0, 0, mDesignerManager->previewPixmap( form, style ) );
 		}
 	}
 }

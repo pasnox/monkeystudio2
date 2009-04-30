@@ -20,6 +20,7 @@
 
 #include <QObject>
 #include <QActionGroup>
+#include <QWidgetAction>
 
 namespace qdesigner_internal {
 	class PreviewManager;
@@ -45,20 +46,23 @@ public:
 	
 	QDesignerFormEditorInterface* core();
 	inline QAction* editWidgetsAction() const { return aEditWidgets; }
-	inline QAction* previewFormAction() const { return aPreview; }
+	inline QWidgetAction* previewFormAction() const { return aPreview; }
 	inline QList<QAction*> modesActions() const { return aModes->actions(); }
 	
 	QDesignerFormWindowInterface* createNewForm( QWidget* parent = 0 );
 
 	void addFormWindow( QDesignerFormWindowInterface* form );
 	void setActiveFormWindow( QDesignerFormWindowInterface* form );
+	
+	QWidget* previewWidget( QDesignerFormWindowInterface* form, const QString& style = QString::null );
+	QPixmap previewPixmap( QDesignerFormWindowInterface* form, const QString& style = QString::null );
 
 protected:
 	QDesignerFormEditorInterface* mCore;
 	qdesigner_internal::PreviewManager* mPreviewer;
 	
 	QActionGroup* aModes;
-	QAction* aPreview;
+	QWidgetAction* aPreview;
 	QAction* aEditWidgets;
 	
 	QDesignerWidgetBox* pWidgetBox;
