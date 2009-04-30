@@ -130,12 +130,12 @@ bool QtDesignerChild::openFile( const QString& fileName, const QString& codec )
 		}
 		
 		setWindowTitle( fileName +"[*]" );
+		mHostWidget->formWindow()->setFileName( fileName );
 		mHostWidget->formWindow()->setContents( &file );
 		
 		if ( mHostWidget->formWindow()->mainContainer() )
 		{
 			// set clean
-			mHostWidget->formWindow()->setFileName( fileName );
 			mHostWidget->formWindow()->setDirty( false );
 			
 			setWindowModified( false );
@@ -143,6 +143,11 @@ bool QtDesignerChild::openFile( const QString& fileName, const QString& codec )
 			emit fileOpened( fileName );
 			
 			return true;
+		}
+		else
+		{
+			setWindowTitle( QString::null );
+			mHostWidget->formWindow()->setFileName( QString::null );
 		}
 	}
 	
