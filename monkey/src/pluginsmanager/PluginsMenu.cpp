@@ -95,10 +95,10 @@ void PluginsMenu::addPlugin( BasePlugin* plugin )
 
 void PluginsMenu::actionEnable_triggered( bool checked )
 {
-qWarning( "triggered" );
 	QAction* action = qobject_cast<QAction*>( sender() );
 	BasePlugin* plugin = action->data().value<BasePlugin*>();
 	
+	action->setChecked( !checked );
 	plugin->setEnabled( checked );
 }
 

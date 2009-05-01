@@ -60,7 +60,6 @@ QWidget* pAStyle::settingsWidget()
 
 bool pAStyle::setEnabled( bool b )
 {
-qWarning( "setEnabled: %i", b );
 	if ( b && !isEnabled() )
 	{
 		// create action
