@@ -24,7 +24,7 @@ QString pStylesActionGroup::systemStyle()
 		case QSysInfo::WV_2003:
 			style = "windowsxp";
 			break;
-		case QSysInfo::WV_VISTA
+		case QSysInfo::WV_VISTA:
 			style = "windowsvista";
 			break;
 		case QSysInfo::WV_32s:
