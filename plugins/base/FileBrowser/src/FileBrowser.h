@@ -55,6 +55,7 @@ public:
 	FileBrowser();
 	virtual ~FileBrowser();
 	virtual bool setEnabled( bool );
+	virtual bool haveSettingsWidget() const { return true; }
 	virtual QWidget* settingsWidget();
 	virtual QPixmap pixmap() const;
 	

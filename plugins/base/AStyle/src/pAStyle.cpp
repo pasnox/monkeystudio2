@@ -46,7 +46,7 @@ pAStyle::pAStyle()
 	mPluginInfos.Type = BasePlugin::iBase;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "1.0.0";
-	mPluginInfos.Enabled = false;
+	mPluginInfos.FirstStartEnabled = false;
 }
 
 pAStyle::~pAStyle()
@@ -60,20 +60,21 @@ QWidget* pAStyle::settingsWidget()
 
 bool pAStyle::setEnabled( bool b )
 {
+qWarning( "setEnabled: %i", b );
 	if ( b && !isEnabled() )
 	{
 		// create action
 		QAction* a = MonkeyCore::menuBar()->action( "mEdit/aAStyle",  tr( "AStyle Formatter" ), QIcon( ":/icons/astyle.png" ), tr( "Ctrl+Alt+A" ), mPluginInfos.Description );
 		connect( a, SIGNAL( triggered() ), this, SLOT( applyFormatter() ) );
 		// set plugin enabled
-		mPluginInfos.Enabled = true;
+		stateAction()->setChecked( true );
 	}
 	else if ( !b && isEnabled() )
 	{
 		// delete action
 		delete MonkeyCore::menuBar()->action( "mEdit/aAStyle" );
 		// set plugin disabled
-		mPluginInfos.Enabled = false;
+		stateAction()->setChecked( false );
 	}
 	
 	// return default value

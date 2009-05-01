@@ -49,9 +49,9 @@
 	Constructor of class
 */
 SearchAndReplace::SearchAndReplace()
-  :	mWidget (NULL),
-    mDock (NULL),
-	mSearchThread (NULL)
+	:	mWidget (NULL),
+		mDock (NULL),
+		mSearchThread (NULL)
 {
 	// set plugin infos
 	mPluginInfos.Caption = tr( "Search and Replace" );
@@ -60,7 +60,7 @@ SearchAndReplace::SearchAndReplace()
 	mPluginInfos.Type = BasePlugin::iBase;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "1.0.0";
-	mPluginInfos.Enabled = false;
+	mPluginInfos.FirstStartEnabled = true;
 	
 	qRegisterMetaType<SearchAndReplace::Occurence>("SearchAndReplace::Occurence");
 }
@@ -120,7 +120,7 @@ bool SearchAndReplace::setEnabled( bool b )
 		connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFolder" ), SIGNAL( triggered() ), SLOT( showSearchFolder() ) );
 		connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFolder" ), SIGNAL( triggered() ), SLOT( showReplaceFolder() ) );
 		connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchNext" ), SIGNAL( triggered() ), this, SLOT( onNextClicked() ) );		
-		mPluginInfos.Enabled = true;
+		stateAction()->setChecked( true );
 	}
 	else if ( !b && isEnabled() )
 	{
@@ -138,7 +138,7 @@ bool SearchAndReplace::setEnabled( bool b )
 		delete MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchNext" );
 		
 		// set plugin disabled
-		mPluginInfos.Enabled = false;
+		stateAction()->setChecked( false );
 	}
 	// return default value
 	return true;

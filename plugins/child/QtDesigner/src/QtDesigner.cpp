@@ -28,7 +28,7 @@ QtDesigner::QtDesigner()
 	mPluginInfos.Type = BasePlugin::iChild;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "1.0.0";
-	mPluginInfos.Enabled = false;
+	mPluginInfos.FirstStartEnabled = true;
 }
 
 QtDesigner::~QtDesigner()
@@ -53,7 +53,7 @@ bool QtDesigner::setEnabled( bool b )
 		// create designer
 		mDesignerManager = new QtDesignerManager( this );
 		// set plugin enabled
-		mPluginInfos.Enabled = true;
+		stateAction()->setChecked( true );
 	}
 	else if ( !b && isEnabled() )
 	{
@@ -62,7 +62,7 @@ bool QtDesigner::setEnabled( bool b )
 		// clear designer instance
 		delete mDesignerManager;
 		// set plugin disabled
-		mPluginInfos.Enabled = false;
+		stateAction()->setChecked( false );
 	}
 	// return default value
 	return true;

@@ -6,14 +6,14 @@
 
 PostIt::PostIt()
 {
-    // set plugin infos
-    mPluginInfos.Caption = tr( "PostIt" );
-    mPluginInfos.Description = tr( "Write and read notes easly !" );
-    mPluginInfos.Author = "Alexandre JORDAN <alexandre.jordan@gmail.com>";
-    mPluginInfos.Type = BasePlugin::iBase;
-    mPluginInfos.Name = PLUGIN_NAME;
-    mPluginInfos.Version = "0.0.3";
-    mPluginInfos.Enabled = false;
+	// set plugin infos
+	mPluginInfos.Caption = tr( "PostIt" );
+	mPluginInfos.Description = tr( "Write and read notes easly !" );
+	mPluginInfos.Author = "Alexandre JORDAN <alexandre.jordan@gmail.com>";
+	mPluginInfos.Type = BasePlugin::iBase;
+	mPluginInfos.Name = PLUGIN_NAME;
+	mPluginInfos.Version = "0.0.3";
+	mPluginInfos.FirstStartEnabled = false;
 }
 
 PostIt::~PostIt()
@@ -31,7 +31,7 @@ bool PostIt::setEnabled( bool b )
 		// connections
 		connect( a, SIGNAL( triggered() ), this, SLOT( action_triggered() ) );
 		// set plugin enabled
-		mPluginInfos.Enabled = true;
+		stateAction()->setChecked( true );
 	}
 	else if ( !b && isEnabled() )
 	{
@@ -40,7 +40,7 @@ bool PostIt::setEnabled( bool b )
 		// delete action
 		delete MonkeyCore::menuBar()->action( "mTools/aPostIt" );
 		// set plugin disabled
-		mPluginInfos.Enabled = false;
+		stateAction()->setChecked( false );
 	}
 	// return default value
 	return true;

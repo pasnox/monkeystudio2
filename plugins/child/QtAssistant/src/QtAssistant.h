@@ -32,6 +32,7 @@ class QtAssistant : public ChildPlugin
 public:
 	QtAssistant();
 	virtual ~QtAssistant();
+	virtual bool haveSettingsWidget() const { return true; }
 	virtual QWidget* settingsWidget();
 	virtual bool setEnabled( bool );
 	virtual pAbstractChild* openFile( const QString& filename, const QPoint& pos = QPoint() );

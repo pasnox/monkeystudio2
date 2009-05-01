@@ -15,7 +15,7 @@ RegExpEditor::RegExpEditor()
 	mPluginInfos.Type = BasePlugin::iBase;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "1.0.0";
-	mPluginInfos.Enabled = false;
+	mPluginInfos.FirstStartEnabled = false;
 }
 
 RegExpEditor::~RegExpEditor()
@@ -33,7 +33,7 @@ bool RegExpEditor::setEnabled( bool b )
 		// connections
 		connect( a, SIGNAL( triggered() ), this, SLOT( action_triggered() ) );
 		// set plugin enabled
-		mPluginInfos.Enabled = true;
+		stateAction()->setChecked( true );
 	}
 	else if ( !b && isEnabled() )
 	{
@@ -42,7 +42,7 @@ bool RegExpEditor::setEnabled( bool b )
 		// delete action
 		delete MonkeyCore::menuBar()->action( "mTools/aRegExpEditor" );
 		// set plugin disabled
-		mPluginInfos.Enabled = false;
+		stateAction()->setChecked( false );
 	}
 	// return default value
 	return true;

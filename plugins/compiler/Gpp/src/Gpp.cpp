@@ -49,7 +49,7 @@ Gpp::Gpp()
 	mPluginInfos.Type = BasePlugin::iCompiler;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.5.0";
-	mPluginInfos.Enabled = false;
+	mPluginInfos.FirstStartEnabled = false;
 	
 	// install parsers
 	foreach ( QString s, availableParsers() )
@@ -76,9 +76,14 @@ Gpp::~Gpp()
 bool Gpp::setEnabled( bool b)
 {
 	if ( b && !isEnabled() )
-		mPluginInfos.Enabled = true;
+	{
+		stateAction()->setChecked( true );
+	}
 	else if ( !b && isEnabled() )
-		mPluginInfos.Enabled = false;
+	{
+		stateAction()->setChecked( false );
+	}
+	
 	return true;
 }
 

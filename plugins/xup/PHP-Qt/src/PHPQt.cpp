@@ -35,7 +35,7 @@ PHPQt::PHPQt()
 	mPluginInfos.Type = BasePlugin::iXUP;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.1.0";
-	mPluginInfos.Enabled = false;
+	mPluginInfos.FirstStartEnabled = true;
 }
 
 PHPQt::~PHPQt()
@@ -55,7 +55,7 @@ bool PHPQt::setEnabled( bool enabled )
 		mItem->registerProjectType();
 
 		// set plugin enabled
-		mPluginInfos.Enabled = true;
+		stateAction()->setChecked( true );
 	}
 	else if ( !enabled && isEnabled() )
 	{
@@ -64,7 +64,7 @@ bool PHPQt::setEnabled( bool enabled )
 		delete mItem;
 
 		// set plugin disabled
-		mPluginInfos.Enabled = false;
+		stateAction()->setChecked( false );
 	}
 
 	// return default value

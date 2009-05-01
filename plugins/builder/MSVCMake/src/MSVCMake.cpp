@@ -39,7 +39,7 @@ MSVCMake::MSVCMake ()
 	mPluginInfos.Type = BasePlugin::iBuilder;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.5.0";
-	mPluginInfos.Enabled = false;
+	mPluginInfos.FirstStartEnabled = false;
 	// install parsers
 	foreach ( QString s, availableParsers() )
 		MonkeyCore::consoleManager()->addParser( getParser( s ) );
@@ -52,12 +52,17 @@ MSVCMake::~MSVCMake()
 		MonkeyCore::consoleManager()->removeParser( s );
 }
 
-bool MSVCMake::setEnabled( bool b)
+bool MSVCMake::setEnabled( bool b )
 {
 	if ( b && !isEnabled() )
-		mPluginInfos.Enabled = true;
+	{
+		stateAction()->setChecked( true );
+	}
 	else if ( !b && isEnabled() )
-		mPluginInfos.Enabled = false;
+	{
+		stateAction()->setChecked( false );
+	}
+	
 	return true;
 }
 

@@ -53,6 +53,7 @@ public:
 	MessageBox();
 	virtual ~MessageBox();
 	virtual bool setEnabled( bool );
+	virtual bool haveSettingsWidget() const { return true; }
 	virtual QWidget* settingsWidget();
 
 protected:

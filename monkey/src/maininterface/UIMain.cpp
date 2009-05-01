@@ -35,6 +35,7 @@
 #include "../consolemanager/pConsoleManager.h"
 #include "../workspace/pFileManager.h"
 #include "../pluginsmanager/PluginsManager.h"
+#include "../pluginsmanager/PluginsMenu.h"
 #include "../queuedstatusbar/QueuedStatusBar.h"
 
 #include <fresh.h>
@@ -223,7 +224,7 @@ void UIMain::initMenuBar()
 		mb->menu( "mDesktopTools", tr( "Desktop &Tools" ), QIcon( ":/tools/icons/tools/desktop.png" ) );
 		mb->action( "aSeparator2" );
 	mb->endGroup();
-	mb->menu( "mPlugins", tr( "Plugins" ) );
+	mb->menu( "mPlugins", tr( "Plugins" ) )->addAction( MonkeyCore::pluginsManager()->menu()->menuAction() );
 	mb->beginGroup( "mPlugins" );
 		mb->action( "aManage", tr( "&Manage..." ), QIcon( ":/Icons/Icons/toolsedit.png" ), QString::null, tr( "Manage plugins..." ) );
 		mb->action( "aSeparator1" );

@@ -29,7 +29,7 @@ PHP::PHP ()
 	mPluginInfos.Type = BasePlugin::iInterpreter;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.1.0";
-	mPluginInfos.Enabled = false;
+	mPluginInfos.FirstStartEnabled = true;
 
 	// install parsers
 	foreach ( QString s, availableParsers() )
@@ -51,13 +51,13 @@ bool PHP::setEnabled( bool b )
 {
 	if ( b && !isEnabled() )
 	{
-		mPluginInfos.Enabled = true;
+		stateAction()->setChecked( true );
 	}
 	else if ( !b && isEnabled() )
 	{
-		mPluginInfos.Enabled = false;
+		stateAction()->setChecked( false );
 	}
-
+	
 	return true;
 }
 

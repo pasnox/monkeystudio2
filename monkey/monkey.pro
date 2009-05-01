@@ -132,7 +132,8 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/pluginsmanager/ui/UIInterpreterSettings.h \
 	src/commandlinemanager/CommandLineManager.h \
 	src/shellmanager/MkSShellConsole.h \
-	src/shellmanager/MkSShellInterpreter.h
+	src/shellmanager/MkSShellInterpreter.h \
+	src/pluginsmanager/PluginsMenu.h
 
 SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/maininterface/ui/UIAbout.cpp \
@@ -182,7 +183,8 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/pluginsmanager/ui/UIInterpreterSettings.cpp \
 	src/commandlinemanager/CommandLineManager.cpp \
 	src/shellmanager/MkSShellInterpreter.cpp \
-	src/shellmanager/MkSShellConsole.cpp
+	src/shellmanager/MkSShellConsole.cpp \
+	src/pluginsmanager/PluginsMenu.cpp
 
 mac:SOURCES	*= src/toolsmanager/pDesktopApplications_mac.cpp
 else:unix:SOURCES	*= src/toolsmanager/pDesktopApplications_unix.cpp

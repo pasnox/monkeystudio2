@@ -27,6 +27,7 @@
 **
 ****************************************************************************/
 #include "PluginsManager.h"
+#include "PluginsMenu.h"
 #include "../pMonkeyStudio.h"
 #include "ui/UIPluginsSettings.h"
 #include "../coremanager/MonkeyCore.h"
@@ -38,10 +39,18 @@
 PluginsManager::PluginsManager( QObject* p )
 	: QObject( p )
 {
+	mMenu = new PluginsMenu( this );
+	mMenu->setObjectName( "pluginsMenu" );
+	mMenu->setTitle( tr( "Manage" ) );
 	mBuilder = 0;
 	mCompiler = 0;
 	mDebugger = 0;
 	mInterpreter = 0;
+}
+
+PluginsManager::~PluginsManager()
+{
+	delete mMenu;
 }
 
 QList<BasePlugin*> PluginsManager::plugins() const
@@ -117,6 +126,8 @@ bool PluginsManager::addPlugin( QObject* o )
 	// add it to plugins list
 	mPlugins << bp;
 	
+	mMenu->addPlugin( bp );
+	
 	// return
 	return true;
 }
@@ -124,20 +135,37 @@ bool PluginsManager::addPlugin( QObject* o )
 void PluginsManager::enableUserPlugins()
 {
 	foreach ( BasePlugin* bp, mPlugins )
-	{		
+	{
+		// check first start state
+		if ( MonkeyCore::settings()->value( "FirstTimeRunning", true ).toBool() )
+		{
+			if ( !bp->infos().FirstStartEnabled )
+			{
+				MonkeyCore::settings()->setValue( QString( "Plugins/%1" ).arg( bp->infos().Name ), false );
+			}
+		}
+		
 		// check in settings if we must install this plugin
 		if ( !MonkeyCore::settings()->value( QString( "Plugins/%1" ).arg( bp->infos().Name ), true ).toBool() )
+		{
 			qWarning( qPrintable( tr( "User wantn't to intall plugin: %1" ).arg( bp->infos().Name ) ) );
+		}
 		// if not enabled, enable it
 		else if ( !bp->isEnabled() )
 		{
 			if ( bp->setEnabled( true ) )
+			{
 				qWarning( qPrintable( tr( "Successfully enabled plugin: %1" ).arg( bp->infos().Name ) ) );
+			}
 			else
+			{
 				qWarning( qPrintable( tr( "Unsuccessfully enabled plugin: %1" ).arg( bp->infos().Name ) ) );
+			}
 		}
 		else
+		{
 			qWarning( qPrintable( tr( "Already enabled plugin: %1" ).arg( bp->infos().Name ) ) );
+		}
 	}
 }
 

@@ -33,7 +33,7 @@ QtAssistant::QtAssistant()
 	mPluginInfos.Type = BasePlugin::iChild;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "1.0.0";
-	mPluginInfos.Enabled = false;
+	mPluginInfos.FirstStartEnabled = true;
 }
 
 QtAssistant::~QtAssistant()
@@ -56,13 +56,13 @@ bool QtAssistant::setEnabled( bool b )
 		mAssistantDock = new QtAssistantDock;
 		MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( mAssistantDock, infos().Caption, QIcon( ":/icons/assistant.png" ) );
 		// set plugin enabled
-		mPluginInfos.Enabled = true;
+		stateAction()->setChecked( true );
 	}
 	else if ( !b && isEnabled() )
 	{
 		mAssistantDock->deleteLater();
 		// set plugin disabled
-		mPluginInfos.Enabled = false;
+		stateAction()->setChecked( false );
 	}
 	else
 		return false;
