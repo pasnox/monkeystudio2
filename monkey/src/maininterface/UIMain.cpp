@@ -226,7 +226,6 @@ void UIMain::initMenuBar()
 	mb->endGroup();
 	mb->menu( "mPlugins", tr( "Plugins" ) )->addAction( MonkeyCore::pluginsManager()->menu()->menuAction() );
 	mb->beginGroup( "mPlugins" );
-		mb->action( "aManage", tr( "&Manage..." ), QIcon( ":/Icons/Icons/toolsedit.png" ), QString::null, tr( "Manage plugins..." ) );
 		mb->action( "aSeparator1" );
 	mb->endGroup();
 	mb->menu( "mWindow", tr( "Window" ) );
@@ -341,7 +340,6 @@ void UIMain::initConnections()
 	connect( menuBar()->menu( "mDebugger" ), SIGNAL( aboutToShow() ), this, SLOT( menu_CustomAction_aboutToShow() ) );
 	connect( menuBar()->menu( "mInterpreter" ), SIGNAL( aboutToShow() ), this, SLOT( menu_CustomAction_aboutToShow() ) );
 	// plugins menu
-	connect( menuBar()->action( "mPlugins/aManage" ), SIGNAL( triggered() ), MonkeyCore::pluginsManager(), SLOT( manageRequested() ) );
 	// window menu
 	connect( menuBar()->action( "mWindow/aSDI" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( setSDI() ) );
 	connect( menuBar()->action( "mWindow/aMDI" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( setMDI() ) );
