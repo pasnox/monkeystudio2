@@ -33,6 +33,7 @@
 
 #include <QAction>
 #include <QFileInfo>
+#include <QTimer>
 
 pRecentsManager::pRecentsManager( QObject* p )
 	: QObject( p )
@@ -48,6 +49,16 @@ pRecentsManager::pRecentsManager( QObject* p )
 	connect( MonkeyCore::menuBar()->menu( "mProject/mRecents" ), SIGNAL( triggered( QAction* ) ), this, SLOT( recentProjects_triggered( QAction* ) ) );
 }
 
+void pRecentsManager::delayedUpdateRecentFiles()
+{
+	QTimer::singleShot( 0, this, SLOT( updateRecentFiles() ) );
+}
+
+void pRecentsManager::delayedUpdateRecentProjects()
+{
+	QTimer::singleShot( 0, this, SLOT( updateRecentProjects() ) );
+}
+
 int pRecentsManager::maxRecentFiles() const
 { return MonkeyCore::settings()->value( "Recents/MaxFiles", 15 ).toInt(); }
 
@@ -59,7 +70,7 @@ void pRecentsManager::setMaxRecentFiles( int i )
 	if ( i != MonkeyCore::settings()->value( "Recents/MaxFiles" ).toInt() )
 	{
 		MonkeyCore::settings()->setValue( "Recents/MaxFiles", i );
-		updateRecentFiles();
+		delayedUpdateRecentFiles();
 	}
 }
 
@@ -68,7 +79,7 @@ void pRecentsManager::setMaxRecentProjects( int i )
 	if ( i != MonkeyCore::settings()->value( "Recents/MaxProjects" ).toInt() )
 	{
 		MonkeyCore::settings()->setValue( "Recents/MaxProjects", i );
-		updateRecentProjects();
+		delayedUpdateRecentProjects();
 	}
 }
 
@@ -79,7 +90,7 @@ void pRecentsManager::recentFiles_triggered( QAction* a )
 	else if ( a->objectName() == "aClear" )
 	{
 		MonkeyCore::settings()->setValue( "Recents/Files", QStringList() );
-		updateRecentFiles();
+		delayedUpdateRecentFiles();
 	}
 }
 
@@ -123,7 +134,7 @@ void pRecentsManager::addRecentFile( const QString& s )
 	// store recents files
 	MonkeyCore::settings()->setValue( "Recents/Files", f );
 	// update menu
-	updateRecentFiles();
+	delayedUpdateRecentFiles();
 }
 
 void pRecentsManager::removeRecentFile( const QString& s )
@@ -138,7 +149,7 @@ void pRecentsManager::removeRecentFile( const QString& s )
 	// store recents files
 	MonkeyCore::settings()->setValue( "Recents/Files", f );
 	// update menu
-	updateRecentFiles();
+	delayedUpdateRecentFiles();
 }
 
 void pRecentsManager::recentProjects_triggered( QAction* a )
@@ -148,7 +159,7 @@ void pRecentsManager::recentProjects_triggered( QAction* a )
 	else if ( a->objectName() == "aClear" )
 	{
 		MonkeyCore::settings()->setValue( "Recents/Projects", QStringList() );
-		updateRecentProjects();
+		delayedUpdateRecentProjects();
 	}
 }
 
@@ -192,7 +203,7 @@ void pRecentsManager::addRecentProject( const QString& s )
 	// store recents projects
 	MonkeyCore::settings()->setValue( "Recents/Projects", f );
 	// update menu
-	updateRecentProjects();
+	delayedUpdateRecentProjects();
 }
 
 void pRecentsManager::removeRecentProject( const QString& s )
@@ -207,5 +218,5 @@ void pRecentsManager::removeRecentProject( const QString& s )
 	// store recents proejcts
 	MonkeyCore::settings()->setValue( "Recents/Projects", f );
 	// update menu
-	updateRecentProjects();
+	delayedUpdateRecentProjects();
 }
