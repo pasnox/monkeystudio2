@@ -88,9 +88,6 @@ public:
 	virtual PluginInfos infos() const
 	{ return mPluginInfos; }
 	
-	bool neverEnable() const
-	{ return settingsValue( "NeverEnable", false ).toBool(); }
-	
 	static QString typeToString( BasePlugin::Type type )
 	{
 		switch ( type )
@@ -162,6 +159,12 @@ public:
 		
 		return mAction;
 	}
+	
+	bool neverEnable() const
+	{ return settingsValue( "NeverEnable", false ).toBool(); }
+	
+	void setNeverEnable( bool never )
+	{ return setSettingsValue( "NeverEnable", never ); }
 	
 	virtual QPixmap pixmap() const
 	{ return QPixmap( ":/build/icons/build/misc.png" ); }
