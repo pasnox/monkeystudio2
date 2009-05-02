@@ -29,7 +29,8 @@
 #ifndef BASEPLUGIN_H
 #define BASEPLUGIN_H
 
-#include <fresh.h>
+#include <MonkeyExport.h>
+#include <pIconManager.h>
 
 #include "../coremanager/MonkeyCore.h"
 #include "../settingsmanager/Settings.h"
@@ -167,7 +168,7 @@ public:
 	{ return setSettingsValue( "NeverEnable", never ); }
 	
 	virtual QPixmap pixmap() const
-	{ return QPixmap( ":/build/icons/build/misc.png" ); }
+	{ return pIconManager::pixmap( "misc.png", ":/build/icons/build" ); }
 	
 	virtual bool haveSettingsWidget() const
 	{ return false; }
