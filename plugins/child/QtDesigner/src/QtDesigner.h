@@ -32,8 +32,9 @@ class QtDesigner : public ChildPlugin
 public:
 	QtDesigner();
 	virtual ~QtDesigner();
-	virtual QWidget* settingsWidget();
 	virtual bool setEnabled( bool enabled );
+	virtual QPixmap pixmap() const { return pIconManager::pixmap( "designer.png", ":/icons" ); }
+	virtual QWidget* settingsWidget();
 	virtual pAbstractChild* openFile( const QString& fileName, const QPoint& pos = QPoint() );
 
 protected:

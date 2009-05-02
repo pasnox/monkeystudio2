@@ -39,6 +39,7 @@ class pAStyle : public BasePlugin
 public:
 	pAStyle();
 	~pAStyle();
+	virtual QPixmap pixmap() const { return pIconManager::pixmap( "astyle.png", ":/icons" ); }
 	virtual bool haveSettingsWidget() const { return true; }
 	virtual QWidget* settingsWidget();
 	virtual bool setEnabled( bool );

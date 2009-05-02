@@ -14,6 +14,7 @@ public:
 	PostIt();
 	~PostIt();
 	virtual bool setEnabled( bool );
+	virtual QPixmap pixmap() const { return pIconManager::pixmap( "knotes.png", ":/icons" ); }
 
 protected:
 	QPointer<UIPostIt> mPostIt;

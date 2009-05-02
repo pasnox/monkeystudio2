@@ -5,6 +5,8 @@ INCLUDEPATH	*= src src/ui
 
 QT	+= xml
 
+RESOURCES	= src/resources/PostIt.qrc
+
 FORMS	= src/ui/UIPostIt.ui
 
 HEADERS	= src/PostIt.h \

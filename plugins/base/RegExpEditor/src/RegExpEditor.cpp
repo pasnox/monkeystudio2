@@ -48,9 +48,6 @@ bool RegExpEditor::setEnabled( bool b )
 	return true;
 }
 
-QPixmap RegExpEditor::pixmap() const
-{ return QPixmap( ":/edit/icons/edit/search.png" ); }
-
 void RegExpEditor::action_triggered()
 {
 	if ( !mEditor )

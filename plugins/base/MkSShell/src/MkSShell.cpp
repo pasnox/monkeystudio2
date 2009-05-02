@@ -54,7 +54,4 @@ bool MkSShell::setEnabled( bool b )
 	return true;
 }
 
-QPixmap MkSShell::pixmap() const
-{ return QPixmap( ":/edit/icons/edit/search.png" ); }
-
 Q_EXPORT_PLUGIN2( BaseMkSShell, MkSShell )
