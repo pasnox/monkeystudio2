@@ -160,6 +160,7 @@ void PluginsMenu::actionAbout_triggered()
 	QAction* action = qobject_cast<QAction*>( sender() );
 	BasePlugin* plugin = action->data().value<BasePlugin*>();
 	UIPluginsSettingsAbout about( plugin, qApp->activeWindow() );
+	about.adjustSize();
 	
 	about.exec();
 }
