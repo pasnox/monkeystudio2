@@ -67,13 +67,13 @@ void UIPluginsSettingsElement::on_pbSettings_clicked()
 void UIPluginsSettingsElement::on_pbAbout_clicked()
 {
 	UIPluginsSettingsAbout psa( mPlugin, window() );
-	psa.resize( psa.sizeHint() );
+	psa.adjustSize();
 	psa.exec();
 }
 
 void UIPluginsSettingsElement::on_cbNeverEnable_toggled( bool checked )
 {
-	if( checked )
+	if ( checked )
 		cbEnabled->setChecked( false );
-	MonkeyCore::settings()->setValue( QString( "Plugins/%1/NeverEnable" ).arg( mPlugin->infos().Name ), checked );
+	mPlugin->setNeverEnable( checked );
 }

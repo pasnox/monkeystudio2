@@ -3,6 +3,8 @@
 #include "UIPluginsSettingsAbout.h"
 
 #include <pIconManager.h>
+#include <MonkeyCore.h>
+#include <Settings.h>
 
 #include <QDesktopWidget>
 
@@ -116,6 +118,8 @@ void PluginsMenu::actionEnable_triggered( bool checked )
 	
 	action->setChecked( !checked );
 	plugin->setEnabled( checked );
+	
+	MonkeyCore::settings()->setValue( QString( "Plugins/%1" ).arg( plugin->infos().Name ), checked );
 }
 
 void PluginsMenu::actionNeverEnable_triggered( bool checked )
