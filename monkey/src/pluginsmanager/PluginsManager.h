@@ -107,7 +107,6 @@ protected:
 	InterpreterPlugin* mInterpreter;
 
 	PluginsManager( QObject* = 0 );
-	~PluginsManager();
 	bool addPlugin( QObject* );
 	void enableUserPlugins();
 	

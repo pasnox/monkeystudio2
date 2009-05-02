@@ -2,6 +2,8 @@
 #include "PluginsManager.h"
 #include "UIPluginsSettingsAbout.h"
 
+#include <pIconManager.h>
+
 #include <QDesktopWidget>
 
 PluginsMenu::PluginsMenu( PluginsManager* manager )
@@ -10,6 +12,14 @@ PluginsMenu::PluginsMenu( PluginsManager* manager )
 	Q_ASSERT( manager );
 	
 	mManager = manager;
+	
+	mManageDialogAction = addAction( pIconManager::icon( "settings.png", ":/edit" ), tr( "&Manage using dialog..." ) );
+	mManageDialogAction->setObjectName( "aManageDialogAction" );
+	mManageDialogAction->setToolTip( tr( "Manage plugins using a dialog..." ) );
+	
+	addSeparator();
+	
+	connect( mManageDialogAction, SIGNAL( triggered() ), mManager, SLOT( manageRequested() ) );
 }
 
 PluginsMenu::~PluginsMenu()
@@ -46,6 +56,12 @@ void PluginsMenu::initPluginMenusActions( BasePlugin* plugin, BasePlugin::Type t
 		}
 		
 		menu->addSeparator();
+		
+		QAction* actionNeverEnable = menu->addAction( tr( "No auto enable" ) );
+		actionNeverEnable->setCheckable( true );
+		actionNeverEnable->setChecked( plugin->neverEnable() );
+		actionNeverEnable->setData( QVariant::fromValue( plugin ) );
+		connect( actionNeverEnable, SIGNAL( triggered( bool ) ), this, SLOT( actionNeverEnable_triggered( bool ) ) );
 		
 		QAction* actionAbout = menu->addAction( tr( "About..." ) );
 		actionAbout->setData( QVariant::fromValue( plugin ) );
@@ -102,6 +118,14 @@ void PluginsMenu::actionEnable_triggered( bool checked )
 	plugin->setEnabled( checked );
 }
 
+void PluginsMenu::actionNeverEnable_triggered( bool checked )
+{
+	QAction* action = qobject_cast<QAction*>( sender() );
+	BasePlugin* plugin = action->data().value<BasePlugin*>();
+	
+	plugin->setNeverEnable( checked );
+}
+
 void PluginsMenu::actionConfigure_triggered()
 {
 	QAction* action = qobject_cast<QAction*>( sender() );
@@ -115,6 +139,8 @@ void PluginsMenu::actionConfigure_triggered()
 #endif
 	widget->setWindowModality( Qt::ApplicationModal );
 	widget->setAttribute( Qt::WA_DeleteOnClose );
+	widget->setWindowIcon( plugin->pixmap() );
+	widget->setWindowTitle( tr( "Settings - %1" ).arg( plugin->infos().Caption ) );
 	widget->adjustSize();
 	
 	QRect rect = widget->frameGeometry();

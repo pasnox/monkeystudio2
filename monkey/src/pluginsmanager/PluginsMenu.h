@@ -21,6 +21,7 @@ public:
 
 protected:
 	PluginsManager* mManager;
+	QAction* mManageDialogAction;
 	QMap<BasePlugin::Type, QMenu*> mTypeMenus;
 	QMap<TypeStringPair, QMenu*> mMenus;
 	
@@ -28,6 +29,7 @@ protected:
 
 protected slots:
 	void actionEnable_triggered( bool checked );
+	void actionNeverEnable_triggered( bool checked );
 	void actionConfigure_triggered();
 	void actionAbout_triggered();
 };

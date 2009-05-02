@@ -48,11 +48,6 @@ PluginsManager::PluginsManager( QObject* p )
 	mInterpreter = 0;
 }
 
-PluginsManager::~PluginsManager()
-{
-	delete mMenu;
-}
-
 QList<BasePlugin*> PluginsManager::plugins() const
 { return mPlugins; }
 
