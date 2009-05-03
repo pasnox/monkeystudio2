@@ -63,16 +63,16 @@ using namespace pMonkeyStudio;
 int pWorkspace::CONTENT_CHANGED_TIME_OUT = 3000;
 QString pWorkspace::DEFAULT_CONTEXT = QLatin1String( "Default" );
 
-pWorkspace::pWorkspace( QMainWindow* p )
-	: pExtendedWorkspace( p )
+pWorkspace::pWorkspace( QMainWindow* parent )
+	: pExtendedWorkspace( parent )
 {
-	Q_ASSERT( p );
+	Q_ASSERT( parent );
 	// creaet file watcher
 	mFileWatcher = new QFileSystemWatcher( this );
 	mContentChangedTimer = new QTimer( this );
 	
 	// add dock to main window
-	p->addDockWidget( Qt::LeftDockWidgetArea, listWidget() );
+	parent->addDockWidget( Qt::LeftDockWidgetArea, listWidget() );
 	
 	// multitoolbar
 	mLayout->insertWidget( 0, MonkeyCore::multiToolBar() );
@@ -91,9 +91,8 @@ pWorkspace::pWorkspace( QMainWindow* p )
 	/*
 	connect( this, SIGNAL( aboutToCloseTab( int, QCloseEvent* ) ), this, SLOT( internal_aboutToCloseTab( int, QCloseEvent* ) ) );
 	connect( this, SIGNAL( closeAllRequested() ), this, SLOT( fileCloseAll_triggered() ) );
-	connect( tabBar(), SIGNAL( urlsDropped( const QList<QUrl>& ) ), this, SLOT( internal_urlsDropped( const QList<QUrl>& ) ) );
 	*/
-	connect( listWidget(), SIGNAL( urlsDropped( const QList<QUrl>& ) ), this, SLOT( internal_urlsDropped( const QList<QUrl>& ) ) );
+	connect( parent, SIGNAL( urlsDropped( const QList<QUrl>& ) ), this, SLOT( internal_urlsDropped( const QList<QUrl>& ) ) );
 	connect( listWidget(), SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( internal_listWidget_customContextMenuRequested( const QPoint& ) ) );
 	connect( MonkeyCore::projectsManager(), SIGNAL( projectCustomContextMenuRequested( const QPoint& ) ), this, SLOT( internal_projectsManager_customContextMenuRequested( const QPoint& ) ) );
 	connect( MonkeyCore::projectsManager(), SIGNAL( currentProjectChanged( XUPProjectItem*, XUPProjectItem* ) ), this, SLOT( internal_currentProjectChanged( XUPProjectItem*, XUPProjectItem* ) ) );

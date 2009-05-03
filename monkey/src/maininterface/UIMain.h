@@ -32,6 +32,8 @@
 #include <MonkeyExport.h>
 #include <pMainWindow.h>
 
+#include <QUrl>
+
 class pStylesActionGroup;
 
 class Q_MONKEY_EXPORT UIMain : public pMainWindow
@@ -46,6 +48,10 @@ protected:
 	pStylesActionGroup* agStyles;
 
 	UIMain( QWidget* = 0 );
+	
+	virtual void dragEnterEvent( QDragEnterEvent* event );
+	virtual void dropEvent( QDropEvent* event );
+	
 	void initGui();
 	void closeEvent( QCloseEvent* );
 	void initMenuBar();
@@ -55,12 +61,11 @@ protected:
 public slots:
 	void menu_Docks_aboutToShow();
 	void menu_CustomAction_aboutToShow();
-
-protected slots:
 	void changeStyle( const QString& style );
 
 signals:
 	void aboutToClose();
+	void urlsDropped( const QList<QUrl>& urls );
 };
 
 #endif // UIMAIN_H

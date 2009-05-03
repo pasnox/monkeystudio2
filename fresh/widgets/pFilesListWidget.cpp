@@ -69,7 +69,6 @@ pFilesListWidget::pFilesListWidget( const QString& title, pExtendedWorkspace* wo
 	setObjectName( "FilesListWidget" );
 	setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
 	//setFeatures( QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable );
-	setAcceptDrops( true );
 	setContextMenuPolicy( Qt::CustomContextMenu );
 	setWidget( mList = new QListWidget() );
 	mList->setAttribute( Qt::WA_MacShowFocusRect, false );
@@ -114,26 +113,6 @@ bool pFilesListWidget::eventFilter( QObject* object, QEvent* event )
 		}
 	}
 	return QDockWidget::eventFilter( object, event );
-}
-
-void pFilesListWidget::dragEnterEvent( QDragEnterEvent* event )
-{
-	// if correct mime and same tabbar
-	if ( event->mimeData()->hasUrls() )
-	{
-		// accept drag
-		event->acceptProposedAction();
-	}
-	// default event
-	QDockWidget::dragEnterEvent( event );
-}
-
-void pFilesListWidget::dropEvent( QDropEvent* event )
-{
-	if ( event->mimeData()->hasUrls() )
-		emit urlsDropped( event->mimeData()->urls () );
-	// default event
-	QDockWidget::dropEvent( event );
 }
 
 /*!

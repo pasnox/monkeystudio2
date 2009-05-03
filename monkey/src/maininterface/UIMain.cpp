@@ -47,10 +47,35 @@
 UIMain::UIMain( QWidget* p )
 	: pMainWindow( p )
 {
+	setAcceptDrops( true );
 	setCorner( Qt::TopLeftCorner, Qt::LeftDockWidgetArea );
 	setCorner( Qt::TopRightCorner, Qt::RightDockWidgetArea );
 	setCorner( Qt::BottomLeftCorner, Qt::LeftDockWidgetArea );
 	setCorner( Qt::BottomRightCorner, Qt::RightDockWidgetArea );
+}
+
+void UIMain::dragEnterEvent( QDragEnterEvent* event )
+{
+	// if correct mime and same tabbar
+	if ( event->mimeData()->hasUrls() )
+	{
+		// accept drag
+		event->acceptProposedAction();
+	}
+	
+	// default event
+	pMainWindow::dragEnterEvent( event );
+}
+
+void UIMain::dropEvent( QDropEvent* event )
+{
+	if ( event->mimeData()->hasUrls() )
+	{
+		emit urlsDropped( event->mimeData()->urls () );
+	}
+	
+	// default event
+	pMainWindow::dropEvent( event );
 }
 
 void UIMain::initGui()
