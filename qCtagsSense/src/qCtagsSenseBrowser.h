@@ -27,6 +27,7 @@ class qCtagsSenseFilesModel;
 class qCtagsSenseMembersModel;
 class qCtagsSenseEntry;
 class QAction;
+class QMovie;
 
 class QCTAGSSENSE_EXPORT qCtagsSenseBrowser : public QFrame, public Ui::qCtagsSenseBrowser
 {
@@ -42,6 +43,7 @@ public:
 	qCtagsSenseFilesModel* filesModel() const;
 	qCtagsSenseMembersModel* membersModel() const;
 	QAction* membersAction() const;
+	void popupMenu( QTreeView* view, const QPoint& pos );
 
 public slots:
 	void setCurrentFileName( const QString& fileName );
@@ -55,16 +57,13 @@ protected:
 	qCtagsSenseFilesModel* mFilesModel;
 	qCtagsSenseMembersModel* mMembersModel;
 	QAction* aMembers;
+	QMovie* mLoading;
 
 protected slots:
-	void on_cbLanguages_currentIndexChanged( int id );
-	void on_cbFileNames_currentIndexChanged( int id );
-	void on_cbMembers_currentIndexChanged( int id );
+	//void on_cbLanguages_currentIndexChanged( int id );
 	void on_tvMembers_activated( const QModelIndex& index );
 	void mSense_indexingProgress( int value, int total );
 	void mSense_indexingChanged();
-	void mLanguagesModel_ready();
-	void mFilesModel_ready();
 	void mMembersModel_ready();
 	void on_tvMembers_customContextMenuRequested( const QPoint& pos );
 

@@ -30,6 +30,7 @@
 #include <QWidgetAction>
 #include <QDebug>
 #include <QScrollBar>
+#include <QMovie>
 
 class MembersActionComboBox : public QComboBox
 {
@@ -42,6 +43,8 @@ public:
 		mTree = new QTreeView( this );
 		mTree->setHeaderHidden( true );
 		mTree->setMinimumWidth( 600 );
+		mTree->setContextMenuPolicy( Qt::CustomContextMenu );
+		
 		setView( mTree );
 		
 		connect( this, SIGNAL( currentIndexChanged( int ) ), this, SLOT( _q_currentIndexChanged( int ) ) );
@@ -67,7 +70,6 @@ public:
 		
 		return size;
 	}
-	
 
 protected:
 	QTreeView* mTree;
@@ -117,8 +119,17 @@ protected:
 		
 		connect( mBrowser->membersModel(), SIGNAL( ready() ), combo, SLOT( membersModel_ready() ) );
 		connect( combo, SIGNAL( memberActivated( qCtagsSenseEntry* ) ), mBrowser, SIGNAL( memberActivated( qCtagsSenseEntry* ) ) );
+		connect( combo->view(), SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( _q_tree_customContextMenuRequested( const QPoint& ) ) );
 		
 		return combo;
+	}
+
+protected slots:
+	void _q_tree_customContextMenuRequested( const QPoint& pos )
+	{
+		QTreeView* view = qobject_cast<QTreeView*>( sender() );
+		
+		mBrowser->popupMenu( view, pos );
 	}
 };
 
@@ -128,42 +139,38 @@ qCtagsSenseBrowser::qCtagsSenseBrowser( QWidget* parent )
 	setupUi( this );
 	pbIndexing->setVisible( false );
 	setAttribute( Qt::WA_DeleteOnClose );
-	tvMembers->setContextMenuPolicy( Qt::CustomContextMenu );
 	tvMembers->setAttribute( Qt::WA_MacShowFocusRect, false );
 	
 	// layouts
-	QVBoxLayout* vl = qobject_cast<QVBoxLayout*>( layout() );
+	QLayout* vl = verticalLayout;
 	vl->setMargin( 0 );
 	vl->setSpacing( 4 );
-	QGridLayout* gl = qobject_cast<QGridLayout*>( wTopContainer->layout() );
-	gl->setMargin( 6 );
-	gl->setSpacing( 6 );
+	
+	QLayout* hl = gridLayout;
+	hl->setMargin( 6 );
+	hl->setSpacing( 6 );
 	
 	mSense = new qCtagsSense( this );
 	mLanguagesModel = new qCtagsSenseLanguagesModel( mSense->sql() );
 	mFilesModel = new qCtagsSenseFilesModel( mSense->sql() );
 	mMembersModel = new qCtagsSenseMembersModel( mSense->sql() );
 	
-	cbLanguages->setModel( mLanguagesModel );
-	cbFileNames->setModel( mFilesModel );
-	
-	QTreeView* tv = new QTreeView( cbMembers );
-	tv->setHeaderHidden( true );
-	cbMembers->setView( tv );
-	cbMembers->setModel( mMembersModel );
-	
-	tvMembers->setHeaderHidden( true );
 	tvMembers->setModel( mMembersModel );
 	
 	aMembers = new MembersAction( this );
+	
+	mLoading = new QMovie( this );
+	mLoading->setFileName( ":/icons/loading.gif" );
+	mLoading->setScaledSize( QSize( 16, 16 ) );
+	mLoading->jumpToFrame( 0 );
+	
+	lLoading->setMovie( mLoading );
 	
 	connect( mSense, SIGNAL( indexingStarted() ), pbIndexing, SLOT( show() ) );
 	connect( mSense, SIGNAL( indexingProgress( int, int ) ), this, SLOT( mSense_indexingProgress( int, int ) ) );
 	connect( mSense, SIGNAL( indexingFinished() ), pbIndexing, SLOT( hide() ) );
 	connect( mSense, SIGNAL( indexingChanged() ), this, SLOT( mSense_indexingChanged() ) );
 	
-	connect( mLanguagesModel, SIGNAL( ready() ), this, SLOT( mLanguagesModel_ready() ) );
-	connect( mFilesModel, SIGNAL( ready() ), this, SLOT( mFilesModel_ready() ) );
 	connect( mMembersModel, SIGNAL( ready() ), this, SLOT( mMembersModel_ready() ) );
 }
 
@@ -192,143 +199,9 @@ qCtagsSenseMembersModel* qCtagsSenseBrowser::membersModel() const
 	return mMembersModel;
 }
 
-QAction* qCtagsSenseBrowser::membersAction() const
+void qCtagsSenseBrowser::popupMenu( QTreeView* view, const QPoint& pos )
 {
-	return aMembers;
-}
-
-void qCtagsSenseBrowser::tagEntry( const QString& fileName )
-{
-	mSense->tagEntry( fileName );
-}
-
-void qCtagsSenseBrowser::tagEntries( const QMap<QString, QString>& entries )
-{
-	mSense->tagEntries( entries );
-}
-
-void qCtagsSenseBrowser::setCurrentFileName( const QString& fileName )
-{
-	mLanguage = getFileNameLanguageName( fileName.toLocal8Bit().constData() );
-	mFileName = fileName;
-	
-	if ( mSense->indexer()->isRunning() || mLanguagesModel->isRunning() || mFilesModel->isRunning() )
-	{
-		return;
-	}
-	
-	// update languages combo
-	bool languageLocked = cbLanguages->blockSignals( true );
-	int lid = mLanguagesModel->indexOf( mLanguage );
-	
-	cbLanguages->setCurrentIndex( lid );
-	cbLanguages->blockSignals( languageLocked );
-	
-	// update files combo
-	bool fileLocked = cbFileNames->blockSignals( true );
-	int fid = mFilesModel->indexOf( mFileName );
-	
-	cbFileNames->setCurrentIndex( fid );
-	cbFileNames->blockSignals( fileLocked );
-	
-	// update view
-	if ( fid != -1 )
-	{
-		mMembersModel->refresh( mFileName );
-	}
-	else
-	{
-		mFilesModel->refresh( mLanguage );
-	}
-}
-
-void qCtagsSenseBrowser::on_cbLanguages_currentIndexChanged( int id )
-{
-	mLanguage = mLanguagesModel->language( id );
-	mFileName.clear();
-	mFilesModel->refresh( mLanguage );
-}
-
-void qCtagsSenseBrowser::on_cbFileNames_currentIndexChanged( int id )
-{
-	mFileName = mFilesModel->fileName( id );
-	mMembersModel->refresh( mFileName );
-}
-
-void qCtagsSenseBrowser::on_cbMembers_currentIndexChanged( int id )
-{
-	Q_UNUSED( id );
-	QModelIndex index = cbMembers->view()->currentIndex();
-	qCtagsSenseEntry* entry = static_cast<qCtagsSenseEntry*>( index.internalPointer() );
-	emit memberActivated( entry );
-}
-
-void qCtagsSenseBrowser::on_tvMembers_activated( const QModelIndex& index )
-{
-	qCtagsSenseEntry* entry = static_cast<qCtagsSenseEntry*>( index.internalPointer() );
-	emit memberActivated( entry );
-}
-
-void qCtagsSenseBrowser::mSense_indexingProgress( int value, int total )
-{
-	pbIndexing->setValue( value );
-	pbIndexing->setMaximum( total );
-}
-
-void qCtagsSenseBrowser::mSense_indexingChanged()
-{
-	if ( mLanguage.isEmpty() || mFileName.isEmpty() )
-	{
-		mLanguage = mLanguagesModel->language( cbLanguages->currentIndex() );
-		mFileName = mFilesModel->fileName( cbFileNames->currentIndex() );
-	}
-	
-	mLanguagesModel->refresh();
-}
-
-void qCtagsSenseBrowser::mLanguagesModel_ready()
-{
-	bool languageLocked = cbLanguages->blockSignals( true );
-	int id = mLanguagesModel->indexOf( mLanguage );
-	
-	if ( id == -1 && cbLanguages->count() != 0 )
-	{
-		id = 0;
-		mLanguage = mLanguagesModel->language( 0 );
-	}
-	
-	//mLanguage = mLanguagesModel->language( id );
-	cbLanguages->setCurrentIndex( id );
-	mFilesModel->refresh( mLanguage );
-	cbLanguages->blockSignals( languageLocked );
-}
-
-void qCtagsSenseBrowser::mFilesModel_ready()
-{
-	bool fileLocked = cbFileNames->blockSignals( true );
-	int id = mFilesModel->indexOf( mFileName );
-	
-	if ( id == -1 && !cbFileNames->count() == 0 )
-	{
-		id = 0;
-		mFileName = mFilesModel->fileName( 0 );
-	}
-	
-	//mFileName = mFilesModel->fileName( id );
-	cbFileNames->setCurrentIndex( id );
-	mMembersModel->refresh( mFileName );
-	cbFileNames->blockSignals( fileLocked );
-}
-
-void qCtagsSenseBrowser::mMembersModel_ready()
-{
-	qobject_cast<QTreeView*>( cbMembers->view() )->expandAll();
-	tvMembers->expandAll();
-}
-
-void qCtagsSenseBrowser::on_tvMembers_customContextMenuRequested( const QPoint& pos )
-{
-	QModelIndex index = tvMembers->currentIndex();
+	QModelIndex index = view->currentIndex();
 	qCtagsSenseEntry* entry = static_cast<qCtagsSenseEntry*>( index.internalPointer() );
 	QMenu menu( this );
 	
@@ -351,7 +224,7 @@ void qCtagsSenseBrowser::on_tvMembers_customContextMenuRequested( const QPoint& 
 		}
 	}
 	
-	QAction* aTriggered = menu.exec( tvMembers->mapToGlobal( pos ) );
+	QAction* aTriggered = menu.exec( view->mapToGlobal( pos ) );
 	
 	if ( aTriggered )
 	{
@@ -368,6 +241,67 @@ void qCtagsSenseBrowser::on_tvMembers_customContextMenuRequested( const QPoint& 
 			cpp->goTo( kind, entry );
 		}
 	}
+}
+
+QAction* qCtagsSenseBrowser::membersAction() const
+{
+	return aMembers;
+}
+
+void qCtagsSenseBrowser::tagEntry( const QString& fileName )
+{
+	mSense->tagEntry( fileName );
+}
+
+void qCtagsSenseBrowser::tagEntries( const QMap<QString, QString>& entries )
+{
+	mSense->tagEntries( entries );
+}
+
+void qCtagsSenseBrowser::setCurrentFileName( const QString& fileName )
+{
+	if ( cbLocked->isChecked() )
+	{
+		return;
+	}
+	
+	mLanguage = getFileNameLanguageName( fileName.toLocal8Bit().constData() );
+	mFileName = fileName;
+	
+	if ( mSense->indexer()->isRunning() || mLanguagesModel->isRunning() || mFilesModel->isRunning() )
+	{
+		return;
+	}
+	
+	// update model
+	mMembersModel->refresh( mFileName );
+}
+
+void qCtagsSenseBrowser::on_tvMembers_activated( const QModelIndex& index )
+{
+	qCtagsSenseEntry* entry = static_cast<qCtagsSenseEntry*>( index.internalPointer() );
+	emit memberActivated( entry );
+}
+
+void qCtagsSenseBrowser::mSense_indexingProgress( int value, int total )
+{
+	pbIndexing->setValue( value );
+	pbIndexing->setMaximum( total );
+}
+
+void qCtagsSenseBrowser::mSense_indexingChanged()
+{
+	mMembersModel->refresh( mFileName );
+}
+
+void qCtagsSenseBrowser::mMembersModel_ready()
+{
+	tvMembers->expandAll();
+}
+
+void qCtagsSenseBrowser::on_tvMembers_customContextMenuRequested( const QPoint& pos )
+{
+	popupMenu( tvMembers, pos );
 }
 
 #include "qCtagsSenseBrowser.moc"

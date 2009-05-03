@@ -18,5 +18,6 @@
 		<file alias="variable_protected.png">icons/var_prot.png</file>
 		<file alias="structure.png">icons/struct.png</file>
 		<file alias="typedef.png">icons/typedef.png</file>
+		<file alias="loading.gif">icons/loading.gif</file>
 	</qresource>
 </RCC>
