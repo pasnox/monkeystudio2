@@ -85,6 +85,25 @@ qCtagsSenseIndexer* qCtagsSense::indexer() const
 	return mIndexer;
 }
 
+void qCtagsSense::setSystemPaths( const QStringList& paths, const QStringList& oldPaths )
+{
+	if ( !mInitialized )
+	{
+		qWarning() << "qCtagsSense instance not initialized";
+		return;
+	}
+	
+	foreach ( const QString& path, oldPaths )
+	{
+		mIndexer->removeFile( path );
+	}
+	
+	foreach ( const QString& path, paths )
+	{
+		mIndexer->indexFile( path );
+	}
+}
+
 void qCtagsSense::tagEntry( const QString& fileName )
 {	
 	if ( !mInitialized )

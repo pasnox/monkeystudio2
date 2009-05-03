@@ -146,6 +146,7 @@ public:
 	qCtagsSenseIndexer* indexer() const;
 
 public slots:
+	void setSystemPaths( const QStringList& paths, const QStringList& oldPaths );
 	void tagEntry( const QString& fileName );
 	void tagEntries( const QMap<QString, QString>& entries );
 

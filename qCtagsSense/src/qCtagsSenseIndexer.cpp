@@ -156,15 +156,34 @@ void qCtagsSenseIndexer::indexBuffers( const QMap<QString, QString>& buffers )
 
 // PROTECTED
 
-bool qCtagsSenseIndexer::removeEntry( const QString& fileName )
-{	
+bool qCtagsSenseIndexer::removeEntries( const QStringList& fileNames )
+{
 	QSqlQuery q = mSQL->query();
-	QString del_sql = QString( "DELETE FROM Files WHERE filename = '%1'" ).arg( fileName );
+	QString del_sql;
 	
-	if ( !q.exec( del_sql ) )
+	foreach ( QString fileName, fileNames )
 	{
-		qWarning() << "Can't delete file entry for" << fileName.toLocal8Bit().constData();
-		return false;
+		QFileInfo file( fileName );
+		
+		if ( file.isFile() )
+		{
+			del_sql = QString( "DELETE FROM Files WHERE filename = '%1'" ).arg( fileName );
+		}
+		else
+		{
+			del_sql = QString( "DELETE FROM Files WHERE filename LIKE '%1/%'" ).arg( fileName );
+		}
+		
+		if ( !q.exec( del_sql ) )
+		{
+			qWarning() << "Can't delete file entry for" << fileName.toLocal8Bit().constData();
+			return false;
+		}
+		
+		if ( mStop )
+		{
+			return false;
+		}
 	}
 	
 	return true;
@@ -307,20 +326,13 @@ bool qCtagsSenseIndexer::createEntries( int fileId, TagEntryListItem* item )
 bool qCtagsSenseIndexer::indexTags( const QMap<QString, TagEntryListItem*>& tags )
 {
 	// remove already existing files entries
-	QString sql = QString(
-		"DELETE FROM files WHERE filename in ( %1 )"
-	);
-	
-	QStringList list = QStringList( tags.keys() ).replaceInStrings( QRegExp( "^(.*)$" ), "'\\1'" );
-	QSqlQuery q = mSQL->query();
-	sql = sql.arg( list.join( ", " ) );
-	
-	if ( !q.exec( sql ) )
+	if ( !removeEntries( tags.keys() ) )
 	{
-		qWarning() << "Can't remove entries for" << list;
+		qWarning() << "Can't remove entries for" << tags.keys();
 		return false;
 	}
 	
+	// index new ones
 	foreach ( const QString& fileName, tags.keys() )
 	{
 		TagEntryListItem* tag = tags[ fileName ];
@@ -517,25 +529,22 @@ void qCtagsSenseIndexer::run()
 		emit indexingProgress( value, total );
 		
 		// deletion
-		while ( !fileNamesToRemove.isEmpty() )
+		if ( removeEntries( fileNamesToRemove ) )
 		{
-			if ( removeEntry( fileNamesToRemove.takeFirst() ) )
-			{
-				changed = true;
-			}
-			else if ( !error )
-			{
-				qWarning() << "Error while removing file";
-				error = true;
-			}
-			
-			value++;
-			emit indexingProgress( value, total );
-			
-			if ( mStop )
-			{
-				return;
-			}
+			changed = true;
+		}
+		else if ( !error )
+		{
+			qWarning() << "Error while removing file";
+			error = true;
+		}
+		
+		value += fileNamesToRemove.count();
+		emit indexingProgress( value, total );
+		
+		if ( mStop )
+		{
+			return;
 		}
 		
 		// indexation

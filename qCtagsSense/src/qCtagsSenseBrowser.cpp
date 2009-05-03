@@ -258,6 +258,11 @@ void qCtagsSenseBrowser::tagEntries( const QMap<QString, QString>& entries )
 	mSense->tagEntries( entries );
 }
 
+void qCtagsSenseBrowser::setSystemPaths( const QStringList& paths, const QStringList& oldPaths )
+{
+	mSense->setSystemPaths( paths, oldPaths );
+}
+
 void qCtagsSenseBrowser::setCurrentFileName( const QString& fileName )
 {
 	if ( cbLocked->isChecked() )

@@ -57,7 +57,7 @@ protected:
 	QMutex mMutex;
 	bool mStop;
 	
-	bool removeEntry( const QString& fileName );
+	bool removeEntries( const QStringList& fileNames );
 	bool indexEntry( const QString& fileName );
 	bool indexEntries( const QMap<QString, QString>& entries );
 	int createFileEntry( const QString& fileName, const QString& language );

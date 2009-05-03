@@ -17,6 +17,7 @@
 ****************************************************************************/
 #include "ClassBrowser.h"
 #include "pDockClassBrowser.h"
+#include "ClassBrowserSettings.h"
 
 #include <MonkeyCore.h>
 #include <UIMain.h>
@@ -65,8 +66,11 @@ bool ClassBrowser::setEnabled( bool b )
 		connect( MonkeyCore::fileManager(), SIGNAL( opened( XUPProjectItem* ) ), this, SLOT( opened( XUPProjectItem* ) ) );
 		connect( MonkeyCore::fileManager(), SIGNAL( buffersChanged( const QMap<QString, QString>& ) ), this, SLOT( buffersChanged( const QMap<QString, QString>& ) ) );
 		connect( mDock->browser(), SIGNAL( memberActivated( qCtagsSenseEntry* ) ), this, SLOT( memberActivated( qCtagsSenseEntry* ) ) );
+		connect( this, SIGNAL( systemPathsChanged( const QStringList& , const QStringList& ) ), mDock->browser(), SLOT( setSystemPaths( const QStringList& , const QStringList& ) ) );
 		// set plugin enabled
 		stateAction()->setChecked( true );
+		// index system paths
+		emit systemPathsChanged( systemPaths(), QStringList() );
 	}
 	else if ( !b && isEnabled() )
 	{
@@ -76,6 +80,7 @@ bool ClassBrowser::setEnabled( bool b )
 		disconnect( MonkeyCore::fileManager(), SIGNAL( opened( XUPProjectItem* ) ), this, SLOT( opened( XUPProjectItem* ) ) );
 		disconnect( MonkeyCore::fileManager(), SIGNAL( buffersChanged( const QMap<QString, QString>& ) ), this, SLOT( buffersChanged( const QMap<QString, QString>& ) ) );
 		disconnect( mDock->browser(), SIGNAL( memberActivated( qCtagsSenseEntry* ) ), this, SLOT( memberActivated( qCtagsSenseEntry* ) ) );
+		disconnect( this, SIGNAL( systemPathsChanged( const QStringList& , const QStringList& ) ), mDock->browser(), SLOT( setSystemPaths( const QStringList& , const QStringList& ) ) );
 		// it will remove itself from dock toolbar when deleted
 		delete mDock;
 		// set plugin disabled
@@ -89,6 +94,33 @@ bool ClassBrowser::setEnabled( bool b )
 QPixmap ClassBrowser::pixmap() const
 {
 	return QPixmap( ":/icons/class.png" );
+}
+
+bool ClassBrowser::haveSettingsWidget() const
+{
+	return true;
+}
+
+QWidget* ClassBrowser::settingsWidget()
+{
+	return new ClassBrowserSettings( this, qApp->activeWindow() );
+}
+
+QStringList ClassBrowser::systemPaths() const
+{
+	return settingsValue( "SystemPaths" ).toStringList();
+}
+
+void ClassBrowser::setSystemPaths( const QStringList& paths )
+{
+	const QStringList oldPaths = systemPaths();
+	
+	if ( oldPaths != paths )
+	{
+		setSettingsValue( "SystemPaths", paths );
+		
+		emit systemPathsChanged( paths, oldPaths );
+	}
 }
 
 void ClassBrowser::fileOpened( const QString& fileName )

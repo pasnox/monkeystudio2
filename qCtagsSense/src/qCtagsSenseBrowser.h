@@ -46,6 +46,7 @@ public:
 	void popupMenu( QTreeView* view, const QPoint& pos );
 
 public slots:
+	void setSystemPaths( const QStringList& paths, const QStringList& oldPaths );
 	void setCurrentFileName( const QString& fileName );
 	void tagEntry( const QString& fileName );
 	void tagEntries( const QMap<QString, QString>& entries );

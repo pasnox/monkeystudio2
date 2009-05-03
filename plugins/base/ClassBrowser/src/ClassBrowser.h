@@ -37,6 +37,11 @@ public:
 	virtual ~ClassBrowser();
 	virtual bool setEnabled( bool );
 	virtual QPixmap pixmap() const;
+	virtual bool haveSettingsWidget() const;
+	virtual QWidget* settingsWidget();
+	
+	QStringList systemPaths() const;
+	void setSystemPaths( const QStringList& paths );
 
 protected:
 	QPointer<pDockClassBrowser> mDock;
@@ -47,6 +52,9 @@ protected slots:
 	void opened( XUPProjectItem* project );
 	void buffersChanged( const QMap<QString, QString>& entries );
 	void memberActivated( qCtagsSenseEntry* entry );
+
+signals:
+	void systemPathsChanged( const QStringList& paths, const QStringList& oldPaths );
 };
 
 #endif // CLASSBROWSER_H
