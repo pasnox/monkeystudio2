@@ -67,8 +67,11 @@ bool ClassBrowser::setEnabled( bool b )
 		connect( MonkeyCore::fileManager(), SIGNAL( buffersChanged( const QMap<QString, QString>& ) ), this, SLOT( buffersChanged( const QMap<QString, QString>& ) ) );
 		connect( mDock->browser(), SIGNAL( memberActivated( qCtagsSenseEntry* ) ), this, SLOT( memberActivated( qCtagsSenseEntry* ) ) );
 		connect( this, SIGNAL( systemPathsChanged( const QStringList& , const QStringList& ) ), mDock->browser(), SLOT( setSystemPaths( const QStringList& , const QStringList& ) ) );
+		connect( this, SIGNAL( filteredSuffixesChanged( const QStringList& ) ), mDock->browser(), SLOT( setFilteredSuffixes( const QStringList& ) ) );
 		// set plugin enabled
 		stateAction()->setChecked( true );
+		// update filtered suffixes
+		emit filteredSuffixesChanged( filteredSuffixes() );
 		// index system paths
 		emit systemPathsChanged( systemPaths(), QStringList() );
 	}
@@ -81,6 +84,7 @@ bool ClassBrowser::setEnabled( bool b )
 		disconnect( MonkeyCore::fileManager(), SIGNAL( buffersChanged( const QMap<QString, QString>& ) ), this, SLOT( buffersChanged( const QMap<QString, QString>& ) ) );
 		disconnect( mDock->browser(), SIGNAL( memberActivated( qCtagsSenseEntry* ) ), this, SLOT( memberActivated( qCtagsSenseEntry* ) ) );
 		disconnect( this, SIGNAL( systemPathsChanged( const QStringList& , const QStringList& ) ), mDock->browser(), SLOT( setSystemPaths( const QStringList& , const QStringList& ) ) );
+		disconnect( this, SIGNAL( filteredSuffixesChanged( const QStringList& ) ), mDock->browser(), SLOT( setFilteredSuffixes( const QStringList& ) ) );
 		// it will remove itself from dock toolbar when deleted
 		delete mDock;
 		// set plugin disabled
@@ -121,6 +125,24 @@ void ClassBrowser::setSystemPaths( const QStringList& paths )
 		
 		emit systemPathsChanged( paths, oldPaths );
 	}
+}
+
+QStringList ClassBrowser::filteredSuffixes() const
+{
+	const QStringList suffixes = QStringList()
+		<< "*.gif" << "*.png" << "*.mng" << "*.jpg" << "*.jpeg" << "*.tiff" << "*.ico" << "*.icns"
+		<< "*.pri" << "*.pro" << "*.qrc" << "*.ui" << "*.ts" << "*.qm" << "*.qch" << "*.xup" << "*.mks"
+		<< "*.txt" << "*.iss" << "*.api" << "*.sip" << "*.ini" << "*.css" << "*.bak" << "*.old"
+		<< "*.db" << "*.so" << "*.a" << "*.desktop"  << "*.gpl";
+	
+	return settingsValue( "FilteredSuffixes", suffixes ).toStringList();
+}
+
+void ClassBrowser::setFilteredSuffixes( const QStringList& suffixes )
+{
+	setSettingsValue( "FilteredSuffixes", suffixes );
+	
+	emit filteredSuffixesChanged( suffixes );
 }
 
 void ClassBrowser::fileOpened( const QString& fileName )

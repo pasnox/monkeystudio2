@@ -28,6 +28,7 @@
 
 class ClassBrowser;
 class pPathListEditor;
+class pStringListEditor;
 
 /*!
 	Settigs widget of ClassBrowser plugin
@@ -43,7 +44,8 @@ public:
 
 protected:
 	ClassBrowser* mPlugin;
-	pPathListEditor* mEditor;
+	pPathListEditor* mPathEditor;
+	pStringListEditor* mStringEditor;
 
 protected slots:
 	void applySettings();

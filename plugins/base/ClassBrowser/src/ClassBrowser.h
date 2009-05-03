@@ -42,6 +42,9 @@ public:
 	
 	QStringList systemPaths() const;
 	void setSystemPaths( const QStringList& paths );
+	
+	QStringList filteredSuffixes() const;
+	void setFilteredSuffixes( const QStringList& suffixes );
 
 protected:
 	QPointer<pDockClassBrowser> mDock;
@@ -55,6 +58,7 @@ protected slots:
 
 signals:
 	void systemPathsChanged( const QStringList& paths, const QStringList& oldPaths );
+	void filteredSuffixesChanged( const QStringList& filteredSuffixes );
 };
 
 #endif // CLASSBROWSER_H

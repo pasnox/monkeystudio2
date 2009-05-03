@@ -47,6 +47,7 @@ public:
 
 public slots:
 	void setSystemPaths( const QStringList& paths, const QStringList& oldPaths );
+	void setFilteredSuffixes( const QStringList& suffixes );
 	void setCurrentFileName( const QString& fileName );
 	void tagEntry( const QString& fileName );
 	void tagEntries( const QMap<QString, QString>& entries );

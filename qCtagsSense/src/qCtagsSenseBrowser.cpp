@@ -141,15 +141,6 @@ qCtagsSenseBrowser::qCtagsSenseBrowser( QWidget* parent )
 	setAttribute( Qt::WA_DeleteOnClose );
 	tvMembers->setAttribute( Qt::WA_MacShowFocusRect, false );
 	
-	// layouts
-	QLayout* vl = verticalLayout;
-	vl->setMargin( 0 );
-	vl->setSpacing( 4 );
-	
-	QLayout* hl = gridLayout;
-	hl->setMargin( 6 );
-	hl->setSpacing( 6 );
-	
 	mSense = new qCtagsSense( this );
 	mLanguagesModel = new qCtagsSenseLanguagesModel( mSense->sql() );
 	mFilesModel = new qCtagsSenseFilesModel( mSense->sql() );
@@ -261,6 +252,11 @@ void qCtagsSenseBrowser::tagEntries( const QMap<QString, QString>& entries )
 void qCtagsSenseBrowser::setSystemPaths( const QStringList& paths, const QStringList& oldPaths )
 {
 	mSense->setSystemPaths( paths, oldPaths );
+}
+
+void qCtagsSenseBrowser::setFilteredSuffixes( const QStringList& suffixes )
+{
+	mSense->indexer()->setFilteredSuffixes( suffixes );
 }
 
 void qCtagsSenseBrowser::setCurrentFileName( const QString& fileName )

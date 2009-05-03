@@ -40,8 +40,11 @@ ClassBrowserSettings::ClassBrowserSettings( ClassBrowser* plugin, QWidget* paren
 	mPlugin = plugin;
 	
 	// list editor
-	mEditor = new pPathListEditor( this, tr( "System include paths" ) );
-	mEditor->setValues( plugin->systemPaths() );
+	mPathEditor = new pPathListEditor( this, tr( "System include paths" ) );
+	mPathEditor->setValues( plugin->systemPaths() );
+	
+	mStringEditor = new pStringListEditor( this, tr( "Filtered file suffixes" ) );
+	mStringEditor->setValues( plugin->filteredSuffixes() );
 	
 	// apply button
 	QDialogButtonBox* dbbApply = new QDialogButtonBox( this );
@@ -49,7 +52,8 @@ ClassBrowserSettings::ClassBrowserSettings( ClassBrowser* plugin, QWidget* paren
 	
 	// global layout
 	QVBoxLayout* vbox = new QVBoxLayout( this );
-	vbox->addWidget( mEditor );
+	vbox->addWidget( mPathEditor );
+	vbox->addWidget( mStringEditor );
 	vbox->addWidget( dbbApply );
 	
 	// connections
@@ -61,5 +65,6 @@ ClassBrowserSettings::ClassBrowserSettings( ClassBrowser* plugin, QWidget* paren
 */
 void ClassBrowserSettings::applySettings()
 {
-	mPlugin->setSystemPaths( mEditor->values() );
+	mPlugin->setSystemPaths( mPathEditor->values() );
+	mPlugin->setFilteredSuffixes( mStringEditor->values() );
 }

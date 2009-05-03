@@ -30,11 +30,6 @@ qCtagsSenseIndexer::qCtagsSenseIndexer( qCtagsSenseSQL* parent )
 {
 	mStop = false;
 	mSQL = parent;
-	mFilteredSuffixes
-		<< "*.gif" << "*.png" << "*.mng" << "*.jpg" << "*.jpeg" << "*.tiff" << "*.ico" << "*.icns"
-		<< "*.pri" << "*.pro" << "*.qrc" << "*.ui" << "*.ts" << "*.qm" << "*.qch" << "*.xup" << "*.mks"
-		<< "*.txt" << "*.iss" << "*.api" << "*.sip" << "*.ini" << "*.css" << "*.bak" << "*.old"
-		<< "*.db" << "*.so" << "*.a" << "*.desktop"  << "*.gpl";
 }
 
 qCtagsSenseIndexer::~qCtagsSenseIndexer()
@@ -45,11 +40,15 @@ qCtagsSenseIndexer::~qCtagsSenseIndexer()
 
 QStringList qCtagsSenseIndexer::filteredSuffixes() const
 {
+	QMutexLocker locker( &const_cast<qCtagsSenseIndexer*>( this )->mMutex );
+	
 	return mFilteredSuffixes;
 }
 
 void qCtagsSenseIndexer::addFilteredSuffixes( const QStringList& suffixes )
 {
+	QMutexLocker locker( &mMutex );
+	
 	foreach ( const QString& suffix, suffixes )
 	{
 		if ( !mFilteredSuffixes.contains( suffix ) )
@@ -66,6 +65,8 @@ void qCtagsSenseIndexer::addFilteredSuffix( const QString& suffix )
 
 void qCtagsSenseIndexer::setFilteredSuffixes( const QStringList& suffixes )
 {
+	QMutexLocker locker( &mMutex );
+	
 	mFilteredSuffixes = suffixes;
 }
 
@@ -367,11 +368,15 @@ TagEntryListItem* qCtagsSenseIndexer::tagFileEntry( const QString& fileName, boo
 		return 0;
 	}
 	
-	if ( QDir::match( mFilteredSuffixes, fileName ) )
 	{
-		// skipping file is not an error
-		ok = true;
-		return 0;
+		QMutexLocker locker( &mMutex );
+		
+		if ( QDir::match( mFilteredSuffixes, fileName ) )
+		{
+			// skipping file is not an error
+			ok = true;
+			return 0;
+		}
 	}
 	
 	// files with no suffixes can't be parsed
