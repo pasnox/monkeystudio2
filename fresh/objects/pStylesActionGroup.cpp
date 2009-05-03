@@ -92,11 +92,11 @@ void pStylesActionGroup::refreshActions()
 		//objName += objNamePostfix;
 		
 		a->setObjectName( objName );
-		a->setData( *it );
+		a->setData( ( *it ).toLower() );
 		a->setCheckable( true );
 		a->setChecked( *it == curStyle );
 		
-		mActions[ (*it).toLower() ] = a;
+		mActions[ ( *it ).toLower() ] = a;
 		
 		addAction( a );
 	}
@@ -124,7 +124,7 @@ void pStylesActionGroup::actionTriggered( QAction* action )
 
 void pStylesActionGroup::setCurrentStyle( const QString& style )
 {
-	QAction* action = mActions.value( style );
+	QAction* action = mActions.value( style.toLower() );
 	
 	if ( action )
 	{

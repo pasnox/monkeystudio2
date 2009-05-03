@@ -131,9 +131,6 @@
      <property name="frameShadow">
       <enum>QFrame::Plain</enum>
      </property>
-     <property name="rootIsDecorated">
-      <bool>false</bool>
-     </property>
      <property name="uniformRowHeights">
       <bool>true</bool>
      </property>

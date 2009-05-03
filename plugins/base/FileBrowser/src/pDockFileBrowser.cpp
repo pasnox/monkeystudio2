@@ -66,8 +66,6 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	// restrict areas
 	setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
 	
-	layout()->setMargin( 0 );
-	
 	// actions
 	// cdup action
 	QAction* aUp = new QAction( tr( "Go Up" ), this );
@@ -120,13 +118,18 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	
 	// vertical layout
 	QVBoxLayout* vl = new QVBoxLayout( wdg );
-	vl->setMargin( 0 );
-	vl->setSpacing( 2 );
+	vl->setMargin( 5 );
+	vl->setSpacing( 3 );
 	
 	// lineedit
 	mLineEdit = new QLineEdit;
 	mLineEdit->setReadOnly( true );
 	vl->addWidget( mLineEdit );
+	
+	// hline
+	QFrame* hline = new QFrame( this );
+	hline->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+	vl->addWidget( hline );
 	
 	// dir model
 	mDirsModel = new QFileSystemModel( this );
@@ -139,14 +142,19 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	
 	// files view
 	mTree = new QTreeView;
+	mTree->setFrameStyle( QFrame::NoFrame | QFrame::Plain );
 	mTree->setContextMenuPolicy( Qt::ActionsContextMenu );
+	mTree->setHeaderHidden( true );
+	mTree->setUniformRowHeights( true );
 	vl->addWidget( mTree );
 	
 	// assign model to views
 	mTree->setModel( mFilteredModel );
 	
-	// custom view
-	mTree->setHeaderHidden( true );
+	// set tree palette
+	QPalette pal = mTree->palette();
+	pal.setColor( QPalette::Base, QColor( Qt::transparent ) );
+	mTree->setPalette( pal );
 	
 	// set root index
 #ifndef Q_OS_WIN

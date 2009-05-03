@@ -24,6 +24,7 @@
 #include <QMainWindow>
 #include <QDropEvent>
 #include <QWidgetAction>
+#include <QHBoxLayout>
 
 class FilesComboAction : public QWidgetAction
 {
@@ -70,10 +71,24 @@ pFilesListWidget::pFilesListWidget( const QString& title, pExtendedWorkspace* wo
 	setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
 	//setFeatures( QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable );
 	setContextMenuPolicy( Qt::CustomContextMenu );
-	setWidget( mList = new QListWidget() );
+	
+	mList = new QListWidget();
+	mList->setFrameStyle( QFrame::NoFrame | QFrame::Plain );
 	mList->setAttribute( Qt::WA_MacShowFocusRect, false );
 	mList->setDragDropMode( QAbstractItemView::InternalMove );
 	mList->installEventFilter( this );
+	
+	QPalette pal = mList->palette();
+	pal.setColor( QPalette::Base, QColor( Qt::transparent ) );
+	mList->setPalette( pal );
+	
+	QWidget* central = new QWidget( this );
+	QHBoxLayout* hl = new QHBoxLayout( central );
+	hl->setMargin( 5 );
+	hl->setSpacing( 3 );
+	hl->addWidget( mList );
+	
+	setWidget( central );
 	
 	aFilesCombo = new FilesComboAction( this, mList->model() );
 	
