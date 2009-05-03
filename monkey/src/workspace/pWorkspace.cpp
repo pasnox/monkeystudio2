@@ -75,6 +75,9 @@ pWorkspace::pWorkspace( QMainWindow* parent )
 	parent->addDockWidget( Qt::LeftDockWidgetArea, listWidget() );
 	
 	// multitoolbar
+	QFrame* hline = new QFrame( this );
+	hline->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+	mLayout->insertWidget( 0, hline );
 	mLayout->insertWidget( 0, MonkeyCore::multiToolBar() );
 
 	// set background
@@ -140,6 +143,7 @@ QList<pAbstractChild*> pWorkspace::children() const
 void pWorkspace::addSearhReplaceWidget (QWidget* widget)
 {
 	mLayout->addWidget( widget );
+	widget->setVisible( false );
 }
 
 QString pWorkspace::defaultContext()

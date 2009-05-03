@@ -51,7 +51,8 @@ QtDesignerChild::QtDesignerChild( QtDesignerManager* manager )
 	mDesignerManager->addFormWindow( form );
 	
 	mHostWidget = new SharedTools::WidgetHost( this, form );
-	mHostWidget->setFocusPolicy( Qt::NoFocus );
+	mHostWidget->setFrameStyle( QFrame::NoFrame | QFrame::Plain );
+	mHostWidget->setFocusProxy( form );
 	
 	QVBoxLayout* vl = new QVBoxLayout( this );
 	vl->setMargin( 0 );

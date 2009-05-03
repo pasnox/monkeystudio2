@@ -46,7 +46,7 @@ void UIPluginsSettingsElement::on_pbSettings_clicked()
 	QWidget* widget = mPlugin->settingsWidget();
 	
 #ifdef Q_OS_MAC
-	widget->setParent( qApp->activeWindow(), Qt::Sheet );
+	widget->setParent( qApp->activeWindow(), Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint );
 #else
 	widget->setParent( qApp->activeWindow(), Qt::Dialog );
 #endif

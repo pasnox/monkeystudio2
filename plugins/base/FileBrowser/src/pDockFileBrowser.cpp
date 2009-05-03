@@ -123,6 +123,8 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	
 	// lineedit
 	mLineEdit = new QLineEdit;
+	mLineEdit->setAttribute( Qt::WA_MacShowFocusRect, false );
+	mLineEdit->setAttribute( Qt::WA_MacSmallSize );
 	mLineEdit->setReadOnly( true );
 	vl->addWidget( mLineEdit );
 	
@@ -142,6 +144,8 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	
 	// files view
 	mTree = new QTreeView;
+	mTree->setAttribute( Qt::WA_MacShowFocusRect, false );
+	mTree->setAttribute( Qt::WA_MacSmallSize );
 	mTree->setFrameStyle( QFrame::NoFrame | QFrame::Plain );
 	mTree->setContextMenuPolicy( Qt::ActionsContextMenu );
 	mTree->setHeaderHidden( true );

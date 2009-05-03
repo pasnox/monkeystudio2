@@ -43,6 +43,11 @@ pChild::pChild()
 {
 	// create textedit
 	mEditor = new pEditor;
+	
+#ifdef Q_OS_MAC
+	mEditor->setFrameStyle( QFrame::NoFrame | QFrame::Plain );
+	mEditor->setAttribute( Qt::WA_MacSmallSize );
+#endif
 
 	// create layout
 	QVBoxLayout* vl = new QVBoxLayout( this );

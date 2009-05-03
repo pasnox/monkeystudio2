@@ -56,7 +56,11 @@ class UIBuildStep : public pDockWidget, public Ui::UIBuildStep
 public:
 	UIBuildStep( QWidget* parent = 0 )
 		: pDockWidget( parent )
-	{ setupUi( this ); }
+	{
+		setupUi( this );
+		lwBuildSteps->setAttribute( Qt::WA_MacShowFocusRect, false );
+		lwBuildSteps->setAttribute( Qt::WA_MacSmallSize );
+	}
 };
 
 /*!
@@ -67,7 +71,15 @@ class UIOutput : public pDockWidget, public Ui::UIOutput
 public:
 	UIOutput( QWidget* parent = 0 )
 		: pDockWidget( parent )
-	{ setupUi( this ); }
+	{
+		setupUi( this );
+		lRawCommand->setAttribute( Qt::WA_MacShowFocusRect, false );
+		lRawCommand->setAttribute( Qt::WA_MacSmallSize );
+		cbRawCommand->setAttribute( Qt::WA_MacShowFocusRect, false );
+		cbRawCommand->setAttribute( Qt::WA_MacSmallSize );
+		tbOutput->setAttribute( Qt::WA_MacShowFocusRect, false );
+		tbOutput->setAttribute( Qt::WA_MacSmallSize );
+	}
 };
 
 /*!
@@ -78,7 +90,11 @@ class UICommand : public pDockWidget, public Ui::UICommand
 public:
 	UICommand( QWidget* parent = 0 )
 		: pDockWidget( parent )
-	{ setupUi( this ); }
+	{
+		setupUi( this );
+		teLog->setAttribute( Qt::WA_MacShowFocusRect, false );
+		teLog->setAttribute( Qt::WA_MacSmallSize );
+	}
 };
 
 /*!

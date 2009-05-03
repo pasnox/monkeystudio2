@@ -42,6 +42,7 @@ pStringListEditor::pStringListEditor( QWidget* parent, const QString& title )
 	tb->layout()->setSpacing( 0 );
 	tb->setIconSize( QSize( 16, 16 ) );
 	vbox->addWidget( tb );
+
 	
 	// create listwidget
 	mList = new QListWidget;

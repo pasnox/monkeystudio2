@@ -75,6 +75,7 @@ pFilesListWidget::pFilesListWidget( const QString& title, pExtendedWorkspace* wo
 	mList = new QListWidget();
 	mList->setFrameStyle( QFrame::NoFrame | QFrame::Plain );
 	mList->setAttribute( Qt::WA_MacShowFocusRect, false );
+	mList->setAttribute( Qt::WA_MacSmallSize );
 	mList->setDragDropMode( QAbstractItemView::InternalMove );
 	mList->installEventFilter( this );
 	

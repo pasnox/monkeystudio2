@@ -23,6 +23,12 @@ XUPProjectManager::XUPProjectManager( QWidget* parent )
 	: pDockWidget( parent )
 {
 	setupUi( this );
+	cbProjects->setAttribute( Qt::WA_MacShowFocusRect, false );
+	cbProjects->setAttribute( Qt::WA_MacSmallSize );
+	tvNative->setAttribute( Qt::WA_MacShowFocusRect, false );
+	tvNative->setAttribute( Qt::WA_MacSmallSize );
+	tvFiltered->setAttribute( Qt::WA_MacShowFocusRect, false );
+	tvFiltered->setAttribute( Qt::WA_MacSmallSize );
 	
 	setActionsManager( MonkeyCore::actionsManager() );
 

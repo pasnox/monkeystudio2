@@ -138,8 +138,14 @@ qCtagsSenseBrowser::qCtagsSenseBrowser( QWidget* parent )
 {
 	setupUi( this );
 	pbIndexing->setVisible( false );
-	setAttribute( Qt::WA_DeleteOnClose );
+	lSearch->setAttribute( Qt::WA_MacShowFocusRect, false );
+	lSearch->setAttribute( Qt::WA_MacSmallSize );
+	cbSearchs->setAttribute( Qt::WA_MacShowFocusRect, false );
+	cbSearchs->setAttribute( Qt::WA_MacSmallSize );
+	cbLocked->setAttribute( Qt::WA_MacShowFocusRect, false );
+	cbLocked->setAttribute( Qt::WA_MacSmallSize );
 	tvMembers->setAttribute( Qt::WA_MacShowFocusRect, false );
+	tvMembers->setAttribute( Qt::WA_MacSmallSize );
 	
 	mSense = new qCtagsSense( this );
 	mLanguagesModel = new qCtagsSenseLanguagesModel( mSense->sql() );

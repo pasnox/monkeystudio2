@@ -38,7 +38,7 @@ QString pStylesActionGroup::systemStyle()
 			break;
 	}
 #elif defined( Q_OS_MAC )
-	style = "macintosh";
+	style = "macintosh (aqua)";
 #else
 	const QString desktop = qgetenv( "DESKTOP_SESSION" ).toLower();
 	const QString version = qgetenv( QString( "%1_SESSION_VERSION" ).arg( desktop.toUpper() ).toLocal8Bit() );
