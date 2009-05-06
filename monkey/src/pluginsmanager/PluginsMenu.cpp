@@ -30,8 +30,7 @@ PluginsMenu::~PluginsMenu()
 
 void PluginsMenu::initPluginMenusActions( BasePlugin* plugin, BasePlugin::Type type )
 {
-	const TypeStringPair pair = qMakePair( type, plugin->captionVersionString() );
-	QMenu* menu = mMenus[ pair ];
+	QMenu* menu = mMenus[ plugin ];
 	
 	if ( !menu )
 	{
@@ -44,10 +43,9 @@ void PluginsMenu::initPluginMenusActions( BasePlugin* plugin, BasePlugin::Type t
 		}
 		
 		menu = tmenu->addMenu( plugin->pixmap(), plugin->infos().Caption );
-		mMenus[ pair ] = menu;
+		mMenus[ plugin ] = menu;
 		
 		menu->addAction( plugin->stateAction() );
-		plugin->stateAction()->disconnect( this );
 		connect( plugin->stateAction(), SIGNAL( triggered( bool ) ), this, SLOT( actionEnable_triggered( bool ) ) );
 		
 		if ( plugin->haveSettingsWidget() )
@@ -68,6 +66,18 @@ void PluginsMenu::initPluginMenusActions( BasePlugin* plugin, BasePlugin::Type t
 		QAction* actionAbout = menu->addAction( tr( "About..." ) );
 		actionAbout->setData( QVariant::fromValue( plugin ) );
 		connect( actionAbout, SIGNAL( triggered() ), this, SLOT( actionAbout_triggered() ) );
+	}
+	else
+	{
+		QMenu* tmenu = mTypeMenus[ type ];
+		
+		if ( !tmenu )
+		{
+			tmenu = addMenu( BasePlugin::typeToString( type ) );
+			mTypeMenus[ type ] = tmenu;
+		}
+		
+		tmenu->addMenu( menu );
 	}
 }
 

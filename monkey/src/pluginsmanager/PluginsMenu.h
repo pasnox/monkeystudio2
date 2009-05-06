@@ -7,8 +7,6 @@
 
 class PluginsManager;
 
-typedef QPair<BasePlugin::Type, QString> TypeStringPair;
-
 class PluginsMenu : public QMenu
 {
 	Q_OBJECT
@@ -23,7 +21,7 @@ protected:
 	PluginsManager* mManager;
 	QAction* mManageDialogAction;
 	QMap<BasePlugin::Type, QMenu*> mTypeMenus;
-	QMap<TypeStringPair, QMenu*> mMenus;
+	QMap<BasePlugin*, QMenu*> mMenus;
 	
 	void initPluginMenusActions( BasePlugin* plugin, BasePlugin::Type type );
 
