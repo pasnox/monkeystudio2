@@ -48,7 +48,7 @@ GccParser::GccParser()
 	mPluginInfos.Type = BasePlugin::iBase;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.1.0";
-	mPluginInfos.Enabled = false;
+	mPluginInfos.FirstStartEnabled = false;
 }
 
 /*!
@@ -66,13 +66,19 @@ GccParser::~GccParser()
 	\retval true Successfully enabled
 	\retval false Some error ocurred
 */
-bool GccParser::setEnabled( bool b)
+bool GccParser::setEnabled( bool b )
 {
-	mPluginInfos.Enabled = b;
+	stateAction()->setChecked( b );
+	
 	if ( b )
-		MonkeyCore::consoleManager()->addParser( new Parser(this) );
+	{
+		MonkeyCore::consoleManager()->addParser( new Parser( this ) );
+	}
 	else
+	{
 		MonkeyCore::consoleManager()->removeParser( PLUGIN_NAME );
+	}
+	
 	return true;
 }
 

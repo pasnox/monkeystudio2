@@ -11,6 +11,7 @@ UISettingsQMake::UISettingsQMake( QWidget* parent )
 {
 	// set up dialog
 	setupUi( this );
+	
 	lwPages->setCurrentRow( 0 );
 	dbbButtons->button( QDialogButtonBox::Help )->setIcon( QIcon( ":/help/icons/help/keyword.png" ) );
 	dbbButtons->button( QDialogButtonBox::Save )->setIcon( QIcon( ":/file/icons/file/save.png" ) );

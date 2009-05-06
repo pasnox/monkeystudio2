@@ -41,6 +41,7 @@ public:
 	~MSVCMake();
 	// BasePlugin
 	virtual bool setEnabled( bool );
+	virtual bool haveSettingsWidget() const { return true; }
 	virtual QWidget* settingsWidget();
 	// CLIToolPlugin
 	virtual pCommandList defaultCommands() const;

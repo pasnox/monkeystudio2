@@ -57,7 +57,7 @@ FileBrowser::FileBrowser()
 	mPluginInfos.Type = BasePlugin::iBase;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "1.0.0";
-	mPluginInfos.Enabled = false;
+	mPluginInfos.FirstStartEnabled = true;
 }
 
 /*!
@@ -89,7 +89,7 @@ bool FileBrowser::setEnabled( bool b )
 		// restore settings
 		restoreSettings();
 		// set plugin enabled
-		mPluginInfos.Enabled = true;
+		stateAction()->setChecked( true );
 	}
 	else if ( !b && isEnabled() )
 	{
@@ -98,7 +98,7 @@ bool FileBrowser::setEnabled( bool b )
 		// it will remove itself from dock toolbar when deleted
 		mDock->deleteLater();
 		// set plugin disabled
-		mPluginInfos.Enabled = false;
+		stateAction()->setChecked( false );
 	}
 	// return default value
 	return true;

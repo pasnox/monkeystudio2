@@ -49,6 +49,9 @@ protected:
 
 	QList<QAction*> mRecentFiles;
 	QList<QAction*> mRecentProjects;
+	
+	void delayedUpdateRecentFiles();
+	void delayedUpdateRecentProjects();
 
 public slots:
 	void setMaxRecentFiles( int );

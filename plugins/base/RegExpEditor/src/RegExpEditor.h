@@ -16,7 +16,7 @@ public:
 	RegExpEditor();
 	~RegExpEditor();
 	virtual bool setEnabled( bool );
-	virtual QPixmap pixmap() const;
+	virtual QPixmap pixmap() const { return pIconManager::pixmap( "regexp.png", ":/icons" ); }
 
 protected:
 	QPointer<UIRegExpEditor> mEditor;

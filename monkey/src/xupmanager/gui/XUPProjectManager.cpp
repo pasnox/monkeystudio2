@@ -23,6 +23,12 @@ XUPProjectManager::XUPProjectManager( QWidget* parent )
 	: pDockWidget( parent )
 {
 	setupUi( this );
+	cbProjects->setAttribute( Qt::WA_MacShowFocusRect, false );
+	cbProjects->setAttribute( Qt::WA_MacSmallSize );
+	tvNative->setAttribute( Qt::WA_MacShowFocusRect, false );
+	tvNative->setAttribute( Qt::WA_MacSmallSize );
+	tvFiltered->setAttribute( Qt::WA_MacShowFocusRect, false );
+	tvFiltered->setAttribute( Qt::WA_MacSmallSize );
 	
 	setActionsManager( MonkeyCore::actionsManager() );
 
@@ -138,7 +144,7 @@ void XUPProjectManager::debugMenu_triggered( QAction* action )
 		if ( item->type() == XUPItem::Value )
 		{
 			addError( item->attribute( attribute ).prepend( "Interpret value '" ).append( "'" ) );
-			addError( item->project()->rootIncludeProject()->interpretValue( item, attribute ) );
+			addError( item->cacheValue( attribute ) );
 		}
 	}
 	else if ( action->text() == "interpretVariable" )
@@ -146,7 +152,7 @@ void XUPProjectManager::debugMenu_triggered( QAction* action )
 		if ( item->type() == XUPItem::Variable )
 		{
 			addError( item->attribute( attribute ).prepend( "Interpret variable '" ).append( "'" ) );
-			addError( item->project()->rootIncludeProject()->interpretVariable( item->attribute( attribute ), item, "#Null" ) );
+			addError( item->project()->rootIncludeProject()->variableCache().value( item->attribute( attribute ) ) );
 		}
 	}
 	else if ( action->text() == "project" )
@@ -271,7 +277,7 @@ void XUPProjectManager::on_tvFiltered_doubleClicked( const QModelIndex& index )
 		{
 			XUPProjectItem* project = item->project();
 			XUPProjectItem* rootIncludeProject = project->rootIncludeProject();
-			QString fn = rootIncludeProject->filePath( rootIncludeProject->interpretValue( item, "content" ) );
+			QString fn = rootIncludeProject->filePath( item->cacheValue( "content" ) );
 			
 			if ( !QFile::exists( fn ) )
 			{
@@ -607,7 +613,7 @@ void XUPProjectManager::addFilesToScope( XUPItem* scope, const QStringList& allF
 							continue;
 						}
 						
-						const QString fn = rootIncludeProject->filePath( rootIncludeProject->interpretValue( child, "content" ) );
+						const QString fn = rootIncludeProject->filePath( child->cacheValue( "content" ) );
 						
 						if ( fn == file )
 						{
@@ -640,13 +646,13 @@ void XUPProjectManager::addFilesToScope( XUPItem* scope, const QStringList& allF
 				XUPItem* value = usedVariable->addChild( XUPItem::File );
 				value->setAttribute( "content", project->relativeFilePath( file ) );
 				
-				// hook for reload include & subproject
-				usedVariable->project()->hookItem( usedVariable );
-				
 				break;
 			}
 		}
 	}
+	
+	// reload include & subproject
+	project->analyze( scope );
 	
 	// save project
 	if ( !project->save() )
@@ -710,7 +716,7 @@ void XUPProjectManager::removeFiles()
 		if ( curItem->type() == XUPItem::File )
 		{
 			XUPProjectItem* rootIncludeProject = project->rootIncludeProject();
-			const QString fp = rootIncludeProject->filePath( rootIncludeProject->interpretValue( curItem, "content" ) );
+			const QString fp = rootIncludeProject->filePath( curItem->cacheValue( "content" ) );
 			
 			// ask removing file
 			if ( QFile::exists( fp ) && pMonkeyStudio::question( tr( "Delete associations..." ), tr( "Do you want to delete the associate file ?" ), window() ) )

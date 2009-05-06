@@ -10,6 +10,10 @@ pFileDialog::pFileDialog( QWidget* parent, const QString& caption, const QString
 	: QFileDialog( parent, caption, directory, filter )
 {
 	setFileMode( QFileDialog::AnyFile );
+
+#if QT_VERSION >= 0x040500
+	setOption( QFileDialog::DontUseNativeDialog, true );
+#endif
 	
 	// get grid layout
 	glDialog = qobject_cast<QGridLayout*>( layout() );
@@ -110,11 +114,7 @@ QDir::Filters pFileDialog::filterForMode() const
 
 void pFileDialog::setDialog( pFileDialog* dlg, const QString& caption, const QString& dir, const QString& filter, bool enabledTextCodec, bool enabledOpenReadOnly, QString* selectedFilter, Options options )
 {
-	/* unused flags:
-		DontUseNativeDialog;
-	*/
-
-#ifdef Q_OS_MAC
+#if defined( Q_OS_MAC ) && QT_VERSION < 0x040500
 	if ( !( options & DontUseSheet ) )
 	{
 		// that's impossible to have a sheet in a sheet

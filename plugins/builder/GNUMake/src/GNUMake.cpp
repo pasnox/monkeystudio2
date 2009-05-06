@@ -40,7 +40,7 @@ GNUMake::GNUMake ()
 	mPluginInfos.Type = BasePlugin::iBuilder;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.5.0";
-	mPluginInfos.Enabled = false;
+	mPluginInfos.FirstStartEnabled = false;
 	// install parsers
 	foreach ( QString s, availableParsers() )
 		MonkeyCore::consoleManager()->addParser( getParser( s ) );
@@ -53,12 +53,17 @@ GNUMake::~GNUMake()
 		MonkeyCore::consoleManager()->removeParser( s );
 }
 
-bool GNUMake::setEnabled( bool b)
+bool GNUMake::setEnabled( bool b )
 {
 	if ( b && !isEnabled() )
-		mPluginInfos.Enabled = true;
+	{
+		stateAction()->setChecked( true );
+	}
 	else if ( !b && isEnabled() )
-		mPluginInfos.Enabled = false;
+	{
+		stateAction()->setChecked( false );
+	}
+	
 	return true;
 }
 

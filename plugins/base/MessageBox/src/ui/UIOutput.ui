@@ -1,70 +1,119 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>UIOutput</class>
- <widget class="pDockWidget" name="UIOutput" >
-  <property name="geometry" >
+ <widget class="pDockWidget" name="UIOutput">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>140</height>
+    <height>160</height>
    </rect>
   </property>
-  <property name="windowIcon" >
-   <iconset resource="../resources/MessageBox.qrc" >
+  <property name="windowIcon">
+   <iconset resource="../resources/MessageBox.qrc">
     <normaloff>:/icons/taboutput.png</normaloff>:/icons/taboutput.png</iconset>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Output</string>
   </property>
-  <widget class="QWidget" name="centralwidget" >
-   <property name="geometry" >
-    <rect>
-     <x>2</x>
-     <y>22</y>
-     <width>396</width>
-     <height>116</height>
-    </rect>
-   </property>
-   <layout class="QGridLayout" >
-    <item row="0" column="0" >
-     <widget class="QLabel" name="lRawCommand" >
-      <property name="sizePolicy" >
-       <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout">
+    <property name="margin">
+     <number>5</number>
+    </property>
+    <property name="spacing">
+     <number>3</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QLabel" name="lRawCommand">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>Send Raw Command :</string>
       </property>
-      <property name="indent" >
+      <property name="indent">
        <number>5</number>
       </property>
      </widget>
     </item>
-    <item row="0" column="1" >
-     <widget class="QComboBox" name="cbRawCommand" >
-      <property name="toolTip" >
+    <item row="0" column="1">
+     <widget class="QComboBox" name="cbRawCommand">
+      <property name="toolTip">
        <string>You can enter here a command and press return to execute it.</string>
       </property>
-      <property name="editable" >
+      <property name="editable">
        <bool>true</bool>
       </property>
      </widget>
     </item>
-    <item row="1" column="0" colspan="2" >
-     <widget class="QPlainTextEdit" name="tbOutput" >
-      <property name="verticalScrollBarPolicy" >
+    <item row="2" column="0" colspan="2">
+     <widget class="QPlainTextEdit" name="tbOutput">
+      <property name="palette">
+       <palette>
+        <active>
+         <colorrole role="Base">
+          <brush brushstyle="SolidPattern">
+           <color alpha="0">
+            <red>255</red>
+            <green>255</green>
+            <blue>255</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </active>
+        <inactive>
+         <colorrole role="Base">
+          <brush brushstyle="SolidPattern">
+           <color alpha="0">
+            <red>255</red>
+            <green>255</green>
+            <blue>255</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </inactive>
+        <disabled>
+         <colorrole role="Base">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>212</red>
+            <green>208</green>
+            <blue>200</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </disabled>
+       </palette>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <property name="verticalScrollBarPolicy">
        <enum>Qt::ScrollBarAlwaysOn</enum>
       </property>
-      <property name="undoRedoEnabled" >
+      <property name="undoRedoEnabled">
        <bool>false</bool>
       </property>
-      <property name="readOnly" >
+      <property name="readOnly">
        <bool>true</bool>
       </property>
-      <property name="tabStopWidth" >
+      <property name="tabStopWidth">
        <number>20</number>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0" colspan="2">
+     <widget class="Line" name="line">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
       </property>
      </widget>
     </item>
@@ -75,12 +124,12 @@
   <customwidget>
    <class>pDockWidget</class>
    <extends>QDockWidget</extends>
-   <header location="global" >fresh.h</header>
+   <header location="global">pDockWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../resources/MessageBox.qrc" />
+  <include location="../resources/MessageBox.qrc"/>
  </resources>
  <connections/>
 </ui>

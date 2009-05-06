@@ -32,8 +32,10 @@ class QtAssistant : public ChildPlugin
 public:
 	QtAssistant();
 	virtual ~QtAssistant();
-	virtual QWidget* settingsWidget();
 	virtual bool setEnabled( bool );
+	virtual QPixmap pixmap() const { return pIconManager::pixmap( "assistant.png", ":/icons" ); }
+	virtual bool haveSettingsWidget() const { return true; }
+	virtual QWidget* settingsWidget();
 	virtual pAbstractChild* openFile( const QString& filename, const QPoint& pos = QPoint() );
 
 protected:

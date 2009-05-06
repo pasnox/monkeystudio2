@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>XUPProjectManager</class>
- <widget class="pDockWidget" name="XUPProjectManager" >
-  <property name="geometry" >
+ <widget class="pDockWidget" name="XUPProjectManager">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,58 +10,58 @@
     <height>573</height>
    </rect>
   </property>
-  <property name="allowedAreas" >
+  <property name="allowedAreas">
    <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Projects</string>
   </property>
-  <widget class="QWidget" name="wCentral" >
-   <layout class="QVBoxLayout" name="verticalLayout_3" >
-    <property name="spacing" >
+  <widget class="QWidget" name="wCentral">
+   <layout class="QVBoxLayout" name="verticalLayout_3">
+    <property name="spacing">
+     <number>3</number>
+    </property>
+    <property name="margin">
      <number>5</number>
     </property>
-    <property name="margin" >
-     <number>0</number>
-    </property>
     <item>
-     <widget class="QWidget" native="1" name="wDebug" >
-      <layout class="QHBoxLayout" name="horizontalLayout" >
-       <property name="spacing" >
-        <number>5</number>
+     <widget class="QWidget" name="wDebug" native="true">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <property name="spacing">
+        <number>0</number>
        </property>
-       <property name="margin" >
+       <property name="margin">
         <number>0</number>
        </property>
        <item>
-        <widget class="QPushButton" name="pbFiltered" >
-         <property name="text" >
+        <widget class="QPushButton" name="pbFiltered">
+         <property name="text">
           <string>Filtered</string>
          </property>
-         <property name="checkable" >
+         <property name="checkable">
           <bool>true</bool>
          </property>
-         <property name="checked" >
+         <property name="checked">
           <bool>true</bool>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pbNative" >
-         <property name="text" >
+        <widget class="QPushButton" name="pbNative">
+         <property name="text">
           <string>Native</string>
          </property>
-         <property name="checkable" >
+         <property name="checkable">
           <bool>true</bool>
          </property>
         </widget>
        </item>
        <item>
-        <spacer name="horizontalSpacer" >
-         <property name="orientation" >
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
-         <property name="sizeHint" stdset="0" >
+         <property name="sizeHint" stdset="0">
           <size>
            <width>40</width>
            <height>20</height>
@@ -72,59 +73,149 @@
      </widget>
     </item>
     <item>
-     <widget class="QComboBox" name="cbProjects" />
+     <widget class="QComboBox" name="cbProjects"/>
     </item>
     <item>
-     <widget class="QStackedWidget" name="swPages" >
-      <widget class="QWidget" name="wFiltered" >
-       <layout class="QVBoxLayout" name="verticalLayout" >
-        <property name="spacing" >
-         <number>5</number>
+     <widget class="Line" name="line">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QStackedWidget" name="swPages">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="wFiltered">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="spacing">
+         <number>0</number>
         </property>
-        <property name="margin" >
+        <property name="margin">
          <number>0</number>
         </property>
         <item>
-         <widget class="QTreeView" name="tvFiltered" >
-          <property name="contextMenuPolicy" >
+         <widget class="QTreeView" name="tvFiltered">
+          <property name="palette">
+           <palette>
+            <active>
+             <colorrole role="Base">
+              <brush brushstyle="SolidPattern">
+               <color alpha="0">
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+              </brush>
+             </colorrole>
+            </active>
+            <inactive>
+             <colorrole role="Base">
+              <brush brushstyle="SolidPattern">
+               <color alpha="0">
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+              </brush>
+             </colorrole>
+            </inactive>
+            <disabled>
+             <colorrole role="Base">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+              </brush>
+             </colorrole>
+            </disabled>
+           </palette>
+          </property>
+          <property name="contextMenuPolicy">
            <enum>Qt::CustomContextMenu</enum>
           </property>
-          <property name="uniformRowHeights" >
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Plain</enum>
+          </property>
+          <property name="uniformRowHeights">
            <bool>true</bool>
           </property>
-          <property name="allColumnsShowFocus" >
+          <property name="headerHidden">
            <bool>true</bool>
           </property>
-          <property name="headerHidden" >
-           <bool>true</bool>
-          </property>
-          <property name="expandsOnDoubleClick" >
+          <property name="expandsOnDoubleClick">
            <bool>false</bool>
           </property>
          </widget>
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="wNative" >
-       <layout class="QVBoxLayout" name="verticalLayout_2" >
-        <property name="spacing" >
-         <number>5</number>
+      <widget class="QWidget" name="wNative">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="spacing">
+         <number>0</number>
         </property>
-        <property name="margin" >
+        <property name="margin">
          <number>0</number>
         </property>
         <item>
-         <widget class="QTreeView" name="tvNative" >
-          <property name="uniformRowHeights" >
+         <widget class="QTreeView" name="tvNative">
+          <property name="palette">
+           <palette>
+            <active>
+             <colorrole role="Base">
+              <brush brushstyle="SolidPattern">
+               <color alpha="0">
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+              </brush>
+             </colorrole>
+            </active>
+            <inactive>
+             <colorrole role="Base">
+              <brush brushstyle="SolidPattern">
+               <color alpha="0">
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+              </brush>
+             </colorrole>
+            </inactive>
+            <disabled>
+             <colorrole role="Base">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+              </brush>
+             </colorrole>
+            </disabled>
+           </palette>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Plain</enum>
+          </property>
+          <property name="uniformRowHeights">
            <bool>true</bool>
           </property>
-          <property name="allColumnsShowFocus" >
+          <property name="headerHidden">
            <bool>true</bool>
           </property>
-          <property name="headerHidden" >
-           <bool>true</bool>
-          </property>
-          <property name="expandsOnDoubleClick" >
+          <property name="expandsOnDoubleClick">
            <bool>false</bool>
           </property>
          </widget>
@@ -134,27 +225,66 @@
      </widget>
     </item>
     <item>
-     <widget class="QPlainTextEdit" name="pteLog" >
-      <property name="maximumSize" >
+     <widget class="QPlainTextEdit" name="pteLog">
+      <property name="maximumSize">
        <size>
         <width>16777215</width>
         <height>100</height>
        </size>
       </property>
+      <property name="palette">
+       <palette>
+        <active>
+         <colorrole role="Base">
+          <brush brushstyle="SolidPattern">
+           <color alpha="0">
+            <red>255</red>
+            <green>255</green>
+            <blue>255</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </active>
+        <inactive>
+         <colorrole role="Base">
+          <brush brushstyle="SolidPattern">
+           <color alpha="0">
+            <red>255</red>
+            <green>255</green>
+            <blue>255</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </inactive>
+        <disabled>
+         <colorrole role="Base">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>255</red>
+            <green>255</green>
+            <blue>255</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </disabled>
+       </palette>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
      </widget>
     </item>
    </layout>
-   <zorder>cbProjects</zorder>
-   <zorder>swPages</zorder>
-   <zorder>pteLog</zorder>
-   <zorder>wDebug</zorder>
   </widget>
-  <action name="aDebug" >
-   <property name="icon" >
-    <iconset resource="../../resources/resources.qrc" >
+  <action name="aDebug">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
      <normaloff>:/temp/icons/temp/kcmsystem.png</normaloff>:/temp/icons/temp/kcmsystem.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Debug</string>
    </property>
   </action>
@@ -163,12 +293,12 @@
   <customwidget>
    <class>pDockWidget</class>
    <extends>QDockWidget</extends>
-   <header location="global" >pDockWidget.h</header>
+   <header location="global">pDockWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../../resources/resources.qrc" />
+  <include location="../../resources/resources.qrc"/>
  </resources>
  <connections/>
 </ui>

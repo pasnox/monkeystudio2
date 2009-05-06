@@ -50,9 +50,6 @@ FileBrowserSettings::FileBrowserSettings( FileBrowser* plugin, QWidget* parent )
 	// retain plugin
 	mPlugin = plugin;
 	
-	// window attribute
-	setAttribute( Qt::WA_DeleteOnClose );
-	
 	// list editor
 	mEditor = new pStringListEditor( this, tr( "Except Suffixes" ) );
 	mEditor->setValues( plugin->filters() );

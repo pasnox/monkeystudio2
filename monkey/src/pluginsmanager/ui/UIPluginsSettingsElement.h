@@ -13,13 +13,11 @@ class Q_MONKEY_EXPORT UIPluginsSettingsElement : public QWidget, public Ui::UIPl
 	
 public:
 	UIPluginsSettingsElement( BasePlugin* plugin, QWidget* parent = 0 );
-	~UIPluginsSettingsElement();
 	
 	BasePlugin* plugin() const;
 
 protected:
 	BasePlugin* mPlugin;
-	QWidget* mSettingsWidget;
 
 protected slots:
 	void on_cbEnabled_toggled( bool checked );

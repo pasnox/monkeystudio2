@@ -1,37 +1,41 @@
 /****************************************************************************
 **
-** Copyright (C) 2008 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
 ** Contact: Qt Software Information (qt-info@nokia.com)
 **
 ** This file is part of the Qt Designer of the Qt Toolkit.
 **
+** $QT_BEGIN_LICENSE:LGPL$
 ** Commercial Usage
 ** Licensees holding valid Qt Commercial licenses may use this file in
 ** accordance with the Qt Commercial License Agreement provided with the
 ** Software or, alternatively, in accordance with the terms contained in
 ** a written agreement between you and Nokia.
 **
+** GNU Lesser General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU Lesser
+** General Public License version 2.1 as published by the Free Software
+** Foundation and appearing in the file LICENSE.LGPL included in the
+** packaging of this file.  Please review the following information to
+** ensure the GNU Lesser General Public License version 2.1 requirements
+** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+**
+** In addition, as a special exception, Nokia gives you certain
+** additional rights. These rights are described in the Nokia Qt LGPL
+** Exception version 1.0, included in the file LGPL_EXCEPTION.txt in this
+** package.
 **
 ** GNU General Public License Usage
 ** Alternatively, this file may be used under the terms of the GNU
-** General Public License versions 2.0 or 3.0 as published by the Free
-** Software Foundation and appearing in the file LICENSE.GPL included in
-** the packaging of this file.  Please review the following information
-** to ensure GNU General Public Licensing requirements will be met:
-** http://www.fsf.org/licensing/licenses/info/GPLv2.html and
-** http://www.gnu.org/copyleft/gpl.html.  In addition, as a special
-** exception, Nokia gives you certain additional rights. These rights
-** are described in the Nokia Qt GPL Exception version 1.3, included in
-** the file GPL_EXCEPTION.txt in this package.
-**
-** Qt for Windows(R) Licensees
-** As a special exception, Nokia, as the sole copyright holder for Qt
-** Designer, grants users of the Qt/Eclipse Integration plug-in the
-** right for the Qt/Eclipse Integration to link to functionality
-** provided by Qt Designer and its related libraries.
+** General Public License version 3.0 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.  Please review the following information to
+** ensure the GNU General Public License version 3.0 requirements will be
+** met: http://www.gnu.org/copyleft/gpl.html.
 **
 ** If you are unsure which license is appropriate for your use, please
 ** contact the sales department at qt-sales@nokia.com.
+** $QT_END_LICENSE$
 **
 ****************************************************************************/
 
@@ -81,24 +85,44 @@ public:
 
     // Load plugins into widget database and factory.
     static void initializePlugins(QDesignerFormEditorInterface *formEditor);
-    void emitObjectNameChanged(QDesignerFormWindowInterface *formWindow, QObject *object, const QString &newName, const QString &oldName);
+    void emitObjectNameChanged(QDesignerFormWindowInterface *formWindow, QObject *object,
+                               const QString &newName, const QString &oldName);
+    void emitNavigateToSlot(const QString &objectName, const QString &signalSignature, const QStringList &parameterNames);
+    void emitNavigateToSlot(const QString &slotSignature);
 
     // Create a resource browser specific to integration. Language integration takes precedence
     virtual QDesignerResourceBrowserInterface *createResourceBrowser(QWidget *parent = 0);
+
+    enum ResourceFileWatcherBehaviour {
+        NoWatcher,
+        ReloadSilently,
+        PromptAndReload
+    };
+
+    ResourceFileWatcherBehaviour resourceFileWatcherBehaviour() const;
+    bool isResourceEditingEnabled() const;
+    bool isSlotNavigationEnabled() const;
+
+protected:
+
+    void setResourceFileWatcherBehaviour(ResourceFileWatcherBehaviour behaviour); // PromptAndReload by default
+    void setResourceEditingEnabled(bool enable); // true by default
+    void setSlotNavigationEnabled(bool enable); // false by default
 
 signals:
     void propertyChanged(QDesignerFormWindowInterface *formWindow, const QString &name, const QVariant &value);
     void objectNameChanged(QDesignerFormWindowInterface *formWindow, QObject *object, const QString &newName, const QString &oldName);
     void helpRequested(const QString &manual, const QString &document);
 
+    void navigateToSlot(const QString &objectName, const QString &signalSignature, const QStringList &parameterNames);
+    void navigateToSlot(const QString &slotSignature);
+
 public slots:
     virtual void updateProperty(const QString &name, const QVariant &value, bool enableSubPropertyHandling);
     // Additional signals of designer property editor
-    virtual void updatePropertyComment(const QString &name, const QString &value);
     virtual void resetProperty(const QString &name);
     virtual void addDynamicProperty(const QString &name, const QVariant &value);
     virtual void removeDynamicProperty(const QString &name);
-
 
     virtual void updateActiveFormWindow(QDesignerFormWindowInterface *formWindow);
     virtual void setupFormWindow(QDesignerFormWindowInterface *formWindow);

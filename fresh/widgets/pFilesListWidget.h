@@ -43,23 +43,24 @@ class QDropEvent;
 class pFilesListWidget : public pDockWidget
 {
 	Q_OBJECT
+	friend class FilesComboAction;
 	
 public:
 	pFilesListWidget( const QString& title, pExtendedWorkspace* workspace );
+	
+	QAction* filesComboAction() const;
 
 public slots:
 	void setItemToolTip( int id, const QString& toolTip );
 
 protected:
-	QComboBox* mCombo;
+	QAction* aFilesCombo;
 	QListWidget* mList;
 	pExtendedWorkspace* mWorkspace;
 	QIcon mModifiedIcon;
 	QIcon mNonModifiedIcon;
 
 	bool eventFilter( QObject* object, QEvent* event );
-	void dragEnterEvent( QDragEnterEvent* event );
-	void dropEvent( QDropEvent* event );
 
 protected slots:
 	void modifiedChanged( int id, bool modified );
@@ -67,9 +68,6 @@ protected slots:
 	void documentInserted( int id, const QString& title, const QIcon& icon );
 	void documentAboutToClose( int id );
 	void setCurrentRow( int id );
-
-signals:
-	void urlsDropped( const QList<QUrl>& urls );
 };
 
 #endif // PFILESLISTWIDGET_H

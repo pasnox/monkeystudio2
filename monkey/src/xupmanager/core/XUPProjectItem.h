@@ -32,6 +32,9 @@ public:
 	// return the global static proejcts types informations
 	static XUPProjectItemInfos* projectInfos();
 	
+	// the variable cache
+	QMap<QString, QString>& variableCache();
+	
 	// set last encounter error
 	void setLastError( const QString& error );
 	// return the last encounter error
@@ -77,10 +80,6 @@ public:
 	// return all variable items named variableName until caller is found ( if define ) or until the the complete tree is scanned
 	// if recursive is true, then the scan recurse in each item, else not
 	virtual XUPItemList getVariables( const XUPItem* root, const QString& variableName, const XUPItem* callerItem = 0, bool recursive = true ) const;
-	// return the result of interpreting the variable variableName until caller item if defined, or until complete tree is scaned or default value if variable is empty
-	virtual QString interpretVariable( const QString& variableName, const XUPItem* callerItem = 0, const QString& defaultValue = QString::null ) const;
-	// return the result of interpreting the caller attribute
-	virtual QString interpretValue( XUPItem* callerItem, const QString& attribute ) const;
 	// return the project datas as qstring
 	virtual QString toString() const;
 	
@@ -108,12 +107,14 @@ public:
 	// return a new instance of this kind of projecttype
 	// FIXME AK in future I think XUPProject will be abstract class
 	inline virtual XUPProjectItem* newProject() const { return new XUPProjectItem(); }
-	// if the given item is a include function, try handling it if needed
-	virtual void handleIncludeItem( XUPItem* function ) const;
-	// reimplement this member to allow custom row count, by example to open subproject
-	virtual void customRowCount( XUPItem* item ) const;
-	// hook item, used to do one time only things.
-	virtual void hookItem( XUPItem* item ) const;
+	// get a variable content in the project at the call instant
+	virtual QString getVariableContent( const QString& variableName );
+	// interpret the content, ie, replace variables by their content
+	virtual QString interpretContent( const QString& content );
+	// handle the inclusion of include files
+	virtual bool handleIncludeFile( XUPItem* function );
+	// analyze a project for caching the variables keys
+	virtual bool analyze( XUPItem* item );
 	// open a project with codec
 	virtual bool open( const QString& fileName, const QString& codec );
 	// save the project
@@ -137,6 +138,8 @@ protected:
 	pCommandMap mCommands;
 	static XUPProjectItemInfos* mXUPProjectInfos;
 	static bool mFoundCallerItem;
+	
+	QMap<QString, QString> mVariableCache;
 
 signals:
 	void installCommandRequested( const pCommand& cmd, const QString& mnu );

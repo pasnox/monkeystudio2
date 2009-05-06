@@ -15,6 +15,9 @@ include( $${PACKAGE_PWD}/fresh/fresh.pri )
 # include ctags framework
 include( $${PACKAGE_PWD}/ctags/ctags.pri )
 
+# include qCtagsSense framework
+include( $${PACKAGE_PWD}/qCtagsSense/qCtagsSense.pri )
+
 # include monkey framework
 include( $${PACKAGE_PWD}/monkey/monkey.pri )
 

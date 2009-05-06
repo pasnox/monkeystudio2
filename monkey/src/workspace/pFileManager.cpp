@@ -47,6 +47,7 @@ pFileManager::pFileManager( QObject* o )
 	connect( MonkeyCore::workspace(), SIGNAL( fileClosed( const QString& ) ), this, SIGNAL( fileClosed( const QString& ) ) );
 	connect( MonkeyCore::workspace(), SIGNAL( fileChanged( const QString& ) ), this, SIGNAL( fileChanged( const QString& ) ) );
 	connect( MonkeyCore::workspace(), SIGNAL( currentFileChanged( pAbstractChild*, const QString& ) ), this, SIGNAL( currentFileChanged( pAbstractChild*, const QString& ) ) );
+	connect( MonkeyCore::workspace(), SIGNAL( contentChanged() ), this, SIGNAL( contentChanged() ) );
 	// projects
 	connect( MonkeyCore::projectsManager(), SIGNAL( projectOpened( XUPProjectItem* ) ), this, SIGNAL( opened( XUPProjectItem* ) ) );
 	connect( MonkeyCore::projectsManager(), SIGNAL( projectAboutToClose( XUPProjectItem* ) ), this, SIGNAL( aboutToClose( XUPProjectItem* ) ) );
@@ -235,9 +236,11 @@ void pFileManager::add( const QString& type, const QStringList& suffixes )
 {
 	foreach ( const QString& suffix, suffixes )
 	{
-		if ( !mAssociations[ type ].contains( suffix ) )
+		const QString trimmedSuffix = suffix.trimmed();
+		
+		if ( !mAssociations[ type ].contains( trimmedSuffix ) )
 		{
-			mAssociations[ type ] << suffix;
+			mAssociations[ type ] << trimmedSuffix;
 		}
 	}
 }
@@ -264,7 +267,9 @@ void pFileManager::remove( const QString& type, const QStringList& suffixes )
 	
 	foreach ( const QString& suffix, suffixes )
 	{
-		result.removeOne( suffix );
+		const QString trimmedSuffix = suffix.trimmed();
+		
+		result.removeOne( trimmedSuffix );
 	}
 	
 	if ( result.isEmpty() )
@@ -366,6 +371,7 @@ QString pFileManager::fileBuffer( const QString& fileName, const QString& codec 
 	}
 	
 	result.clear();
+	ok = false;
 	QFile file( fileName );
 	
 	if ( file.exists() )
@@ -374,11 +380,36 @@ QString pFileManager::fileBuffer( const QString& fileName, const QString& codec 
 		{
 			QTextCodec* c = QTextCodec::codecForName( codec.toUtf8() );
 			result = c->toUnicode( file.readAll() );
+			ok = true;
 			file.close();
 		}
 	}
 	
 	return result;
+}
+
+void pFileManager::computeModifiedBuffers()
+{
+	QMap<QString, QString> entries;
+	
+	foreach ( pAbstractChild* ac, MonkeyCore::workspace()->children() )
+	{
+		foreach ( const QString& fileName, ac->files() )
+		{
+			if ( ac->isModified( fileName ) )
+			{
+				bool ok;
+				QString content = ac->fileBuffer( fileName, ok );
+				
+				if ( ok )
+				{
+					entries[ fileName ] = content;
+				}
+			}
+		}
+	}
+	
+	emit buffersChanged( entries );
 }
 
 XUPProjectItem* pFileManager::currentProject() const
@@ -408,7 +439,7 @@ QString pFileManager::currentItemFile() const
 	
 	if ( item && item->type() == XUPItem::File )
 	{
-		QString fn = item->project()->rootIncludeProject()->interpretValue( item, "content" );
+		QString fn = item->cacheValue( "content" );
 		return item->project()->filePath( fn );
 	}
 	
@@ -421,7 +452,7 @@ QString pFileManager::currentItemPath() const
 	
 	if ( item && item->type() == XUPItem::Path )
 	{
-		QString fn = item->project()->rootIncludeProject()->interpretValue( item, "content" );
+		QString fn = item->cacheValue( "content" );
 		return item->project()->filePath( fn );
 	}
 	

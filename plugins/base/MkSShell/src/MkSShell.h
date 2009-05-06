@@ -14,7 +14,7 @@ public:
 	MkSShell();
 	~MkSShell();
 	virtual bool setEnabled( bool );
-	virtual QPixmap pixmap() const;
+	virtual QPixmap pixmap() const { return pIconManager::pixmap( "konsole.png", ":/icons" ); }
 
 protected:
 	QPointer<MkSShellDock> mDock;

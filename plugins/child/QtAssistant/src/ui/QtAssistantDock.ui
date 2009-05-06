@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>QtAssistantDock</class>
- <widget class="pDockWidget" name="QtAssistantDock" >
-  <property name="geometry" >
+ <widget class="pDockWidget" name="QtAssistantDock">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,80 +10,80 @@
     <height>374</height>
    </rect>
   </property>
-  <property name="windowIcon" >
-   <iconset resource="../resources/QtAssistant.qrc" >
+  <property name="windowIcon">
+   <iconset>
     <normaloff>:/icons/assistant.png</normaloff>:/icons/assistant.png</iconset>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Qt Assistant</string>
   </property>
-  <widget class="QWidget" name="wCentral" >
-   <layout class="QVBoxLayout" name="vlCentral" >
-    <property name="spacing" >
-     <number>5</number>
+  <widget class="QWidget" name="wCentral">
+   <layout class="QVBoxLayout" name="vlCentral">
+    <property name="spacing">
+     <number>3</number>
     </property>
-    <property name="margin" >
+    <property name="margin">
      <number>5</number>
     </property>
     <item>
-     <widget class="QComboBox" name="cbFilter" />
+     <widget class="QComboBox" name="cbFilter"/>
     </item>
     <item>
-     <widget class="QTabWidget" name="twPages" >
-      <property name="tabPosition" >
+     <widget class="QTabWidget" name="twPages">
+      <property name="tabPosition">
        <enum>QTabWidget::North</enum>
       </property>
-      <property name="currentIndex" >
-       <number>1</number>
+      <property name="currentIndex">
+       <number>0</number>
       </property>
-      <widget class="QWidget" name="wContents" >
-       <attribute name="title" >
+      <widget class="QWidget" name="wContents">
+       <attribute name="title">
         <string>&amp;Contents</string>
        </attribute>
-       <layout class="QVBoxLayout" name="vlContents" >
-        <property name="spacing" >
-         <number>5</number>
+       <layout class="QVBoxLayout" name="vlContents">
+        <property name="spacing">
+         <number>3</number>
         </property>
-        <property name="margin" >
+        <property name="margin">
          <number>5</number>
         </property>
        </layout>
       </widget>
-      <widget class="QWidget" name="wIndex" >
-       <attribute name="title" >
+      <widget class="QWidget" name="wIndex">
+       <attribute name="title">
         <string>&amp;Index</string>
        </attribute>
-       <layout class="QVBoxLayout" name="vlIndex" >
-        <property name="spacing" >
-         <number>5</number>
+       <layout class="QVBoxLayout" name="vlIndex">
+        <property name="spacing">
+         <number>3</number>
         </property>
-        <property name="margin" >
+        <property name="margin">
          <number>5</number>
         </property>
         <item>
-         <widget class="QLabel" name="lLookFor" >
-          <property name="text" >
+         <widget class="QLabel" name="lLookFor">
+          <property name="text">
            <string>&amp;Look for:</string>
           </property>
-          <property name="buddy" >
+          <property name="buddy">
            <cstring>leLookFor</cstring>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="leLookFor" />
+         <widget class="QLineEdit" name="leLookFor"/>
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="wBookmarks" >
-       <attribute name="title" >
+      <widget class="QWidget" name="wBookmarks">
+       <attribute name="title">
         <string>&amp;Bookmarks</string>
        </attribute>
-       <layout class="QVBoxLayout" name="vlBookmarks" >
-        <property name="spacing" >
-         <number>0</number>
+       <layout class="QVBoxLayout" name="vlBookmarks">
+        <property name="spacing">
+         <number>3</number>
         </property>
-        <property name="margin" >
+        <property name="margin">
          <number>0</number>
         </property>
        </layout>
@@ -90,7 +91,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QProgressBar" name="pbProgress" />
+     <widget class="QProgressBar" name="pbProgress"/>
     </item>
    </layout>
   </widget>
@@ -99,12 +100,12 @@
   <customwidget>
    <class>pDockWidget</class>
    <extends>QDockWidget</extends>
-   <header>fresh.h</header>
+   <header location="global">pDockWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../resources/QtAssistant.qrc" />
+  <include location="../resources/QtAssistant.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -82,6 +82,10 @@ public:
 		return QString::null;
 	}
 	
+	// return the child context
+	virtual QString context() const = 0;
+	// the context initialization
+	virtual void initializeContext( QToolBar* tb ) = 0;
 	// return cursor position if available
 	virtual QPoint cursorPosition() const = 0;
 	// return files that this child manage
@@ -217,6 +221,8 @@ signals:
 	void pasteAvailableChanged( bool ); // ok
 	// emit when a file copy available change
 	void copyAvailableChanged( bool ); // ok
+	// emit when a file has changed
+	void contentChanged();
 	// emit when search/replace is available
 	//void searchReplaceAvailableChanged( bool );
 	// emit when goto is available

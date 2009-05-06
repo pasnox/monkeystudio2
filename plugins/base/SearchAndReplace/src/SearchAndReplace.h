@@ -86,6 +86,7 @@ public:
 	virtual ~SearchAndReplace();
 	
 	virtual bool setEnabled( bool );
+	virtual QPixmap pixmap() const { return pIconManager::pixmap( "tabsearch.png", ":/icons" ); }
 	virtual QWidget* settingsWidget();
 
 protected:

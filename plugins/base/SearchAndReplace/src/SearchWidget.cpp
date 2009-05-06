@@ -52,8 +52,8 @@ SearchWidget::SearchWidget( QWidget* parent )
 	: QWidget( parent )
 {
 	layout = new QGridLayout (this);
-	layout->setContentsMargins (0, 0, 0, 0);
-	layout->setSpacing (2);
+	layout->setMargin( 5 );
+	layout->setSpacing( 3 );
 
 	//search
 	lSearchText = new QLabel (tr("Searc&h:"));
@@ -71,12 +71,18 @@ SearchWidget::SearchWidget( QWidget* parent )
 	tbPrevious->setIcon (QIcon (":/edit/icons/edit/previous.png"));
 	tbPrevious->setSizePolicy (QSizePolicy::Fixed, QSizePolicy::Fixed);
 	tbPrevious->setFlat (true);
+#ifdef Q_OS_MAC
+	tbPrevious->setMaximumHeight( 21 );
+#endif
 	
 	tbNext = new QPushButton ();
 	tbNext->setText (tr("&Next"));
 	tbNext->setIcon (QIcon(":/edit/icons/edit/next.png"));
 	tbNext->setSizePolicy (QSizePolicy::Fixed, QSizePolicy::Fixed);
 	tbNext->setFlat (true);
+#ifdef Q_OS_MAC
+	tbNext->setMaximumHeight( 21 );
+#endif
 	
 	cbCaseSensitive = new QCheckBox ();
 	cbCaseSensitive->setText (tr("&Case"));
@@ -101,12 +107,18 @@ SearchWidget::SearchWidget( QWidget* parent )
 	tbReplace->setIcon (QIcon (":/edit/icons/edit/replace.png"));
 	tbReplace->setSizePolicy (QSizePolicy::Fixed, QSizePolicy::Fixed);
 	tbReplace->setFlat (true);
+#ifdef Q_OS_MAC
+	tbReplace->setMaximumHeight( 21 );
+#endif
 	
 	tbReplaceAll = new QPushButton ();
 	tbReplaceAll->setText (tr("Replace &all"));
 	tbReplaceAll->setIcon (QIcon (":/edit/icons/edit/replace.png"));
 	tbReplaceAll->setSizePolicy (QSizePolicy::Fixed, QSizePolicy::Fixed);
 	tbReplaceAll->setFlat (true);
+#ifdef Q_OS_MAC
+	tbReplaceAll->setMaximumHeight( 21 );
+#endif
 
 	//folder
 	lPath = new QLabel  (tr("&Path:"));
@@ -152,6 +164,17 @@ SearchWidget::SearchWidget( QWidget* parent )
 #endif
 
 	mDefaultEditColor = cobSearch->lineEdit()->palette().color (QPalette::Base);
+	
+	QList<QWidget*> widgets;
+	widgets << lSearchText << cobSearch << tbNext << tbPrevious << cbCaseSensitive
+		<< cbRegExp << lReplaceText << cobReplace << tbReplace << tbReplaceAll
+		<< lPath << cobPath << tbPath << lMask << cobMask;
+	
+	foreach ( QWidget* widget, widgets )
+	{
+		widget->setAttribute( Qt::WA_MacShowFocusRect, false );
+		widget->setAttribute( Qt::WA_MacSmallSize );
+	}
 }
 
 void SearchWidget::show (SearchAndReplace::Mode mode)

@@ -37,6 +37,7 @@ class pAbstractChild;
 class QMainWindow;
 class XUPProjectItem;
 class QFileSystemWatcher;
+class QTimer;
 
 class Q_MONKEY_EXPORT pWorkspace : public pExtendedWorkspace
 {
@@ -50,9 +51,15 @@ public:
 	QList<pAbstractChild*> children() const;
 	
 	void addSearhReplaceWidget (QWidget* widget);
+	static QString defaultContext();
+	void initMultiToolBar( QToolBar* tb );
 	
 protected:
 	QFileSystemWatcher* mFileWatcher;
+	QTimer* mContentChangedTimer;
+	static int CONTENT_CHANGED_TIME_OUT;
+	static QString DEFAULT_CONTEXT;
+	
 	virtual void closeDocument( QWidget* document );
 
 private:
@@ -75,6 +82,7 @@ public slots:
 	void fileWatcher_alertClicked( QDialogButtonBox::StandardButton button, const pQueuedMessage& message );
 
 protected slots:
+	void internal_contentChanged();
 	void internal_currentFileChanged( const QString& fileName );
 	void internal_currentChanged( int id );
 	//void internal_aboutToCloseTab( int, QCloseEvent* );
@@ -85,6 +93,7 @@ protected slots:
 	void internal_projectInstallCommandRequested( const pCommand& cmd, const QString& mnu );
 	void internal_projectUninstallCommandRequested( const pCommand& cmd, const QString& mnu );
 	void projectCustomActionTriggered();
+	void contentChangedTimer_timeout();
 	void fileWatcher_ecmNothing( const QString& filename );
 	void fileWatcher_ecmReload( const QString& filename, bool force = false );
 	void fileWatcher_ecmAlert( const QString& filename );
@@ -118,9 +127,6 @@ public slots:
 	void editExpandAbbreviation_triggered();
 	void editPrepareAPIs_triggered();
 
-	// view menu
-	void agStyles_triggered( QAction* );
-
 	// help menu
 	void helpAboutApplication_triggered();
 	void helpAboutQt_triggered();
@@ -139,6 +145,8 @@ signals:
 	void fileChanged( const QString& fileName );
 	// current file changed
 	void currentFileChanged( pAbstractChild*, const QString& );
+	// content changed
+	void contentChanged();
 };
 
 #endif // PWORKSPACE_H

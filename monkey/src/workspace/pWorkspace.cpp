@@ -60,15 +60,25 @@
 
 using namespace pMonkeyStudio;
 
-pWorkspace::pWorkspace( QMainWindow* p )
-	: pExtendedWorkspace( p )
+int pWorkspace::CONTENT_CHANGED_TIME_OUT = 3000;
+QString pWorkspace::DEFAULT_CONTEXT = QLatin1String( "Default" );
+
+pWorkspace::pWorkspace( QMainWindow* parent )
+	: pExtendedWorkspace( parent )
 {
-	Q_ASSERT( p );
+	Q_ASSERT( parent );
 	// creaet file watcher
 	mFileWatcher = new QFileSystemWatcher( this );
+	mContentChangedTimer = new QTimer( this );
 	
 	// add dock to main window
-	p->addDockWidget( Qt::LeftDockWidgetArea, listWidget() );
+	parent->addDockWidget( Qt::LeftDockWidgetArea, listWidget() );
+	
+	// multitoolbar
+	QFrame* hline = new QFrame( this );
+	hline->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+	mLayout->insertWidget( 0, hline );
+	mLayout->insertWidget( 0, MonkeyCore::multiToolBar() );
 
 	// set background
 	//setBackground( ":/application/icons/application/background.png" );
@@ -84,14 +94,14 @@ pWorkspace::pWorkspace( QMainWindow* p )
 	/*
 	connect( this, SIGNAL( aboutToCloseTab( int, QCloseEvent* ) ), this, SLOT( internal_aboutToCloseTab( int, QCloseEvent* ) ) );
 	connect( this, SIGNAL( closeAllRequested() ), this, SLOT( fileCloseAll_triggered() ) );
-	connect( tabBar(), SIGNAL( urlsDropped( const QList<QUrl>& ) ), this, SLOT( internal_urlsDropped( const QList<QUrl>& ) ) );
 	*/
-	connect( listWidget(), SIGNAL( urlsDropped( const QList<QUrl>& ) ), this, SLOT( internal_urlsDropped( const QList<QUrl>& ) ) );
+	connect( parent, SIGNAL( urlsDropped( const QList<QUrl>& ) ), this, SLOT( internal_urlsDropped( const QList<QUrl>& ) ) );
 	connect( listWidget(), SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( internal_listWidget_customContextMenuRequested( const QPoint& ) ) );
 	connect( MonkeyCore::projectsManager(), SIGNAL( projectCustomContextMenuRequested( const QPoint& ) ), this, SLOT( internal_projectsManager_customContextMenuRequested( const QPoint& ) ) );
 	connect( MonkeyCore::projectsManager(), SIGNAL( currentProjectChanged( XUPProjectItem*, XUPProjectItem* ) ), this, SLOT( internal_currentProjectChanged( XUPProjectItem*, XUPProjectItem* ) ) );
 	connect( mFileWatcher, SIGNAL( fileChanged( const QString& ) ), this, SLOT( fileWatcher_fileChanged( const QString& ) ) );
 	connect( mFileWatcher, SIGNAL( fileChanged( const QString& ) ), this, SIGNAL( fileChanged( const QString& ) ) );
+	connect( mContentChangedTimer, SIGNAL( timeout() ), this, SLOT( contentChangedTimer_timeout() ) );
 	
 	QAction* mFocusToEditor = new QAction( this );
 	mFocusToEditor->setIcon( QIcon( ":/edit/icons/edit/text.png" ) );
@@ -133,7 +143,12 @@ QList<pAbstractChild*> pWorkspace::children() const
 void pWorkspace::addSearhReplaceWidget (QWidget* widget)
 {
 	mLayout->addWidget( widget );
+	widget->setVisible( false );
+}
 
+QString pWorkspace::defaultContext()
+{
+	return DEFAULT_CONTEXT;
 }
 
 pAbstractChild* pWorkspace::newTextEditor()
@@ -179,6 +194,8 @@ void pWorkspace::initChildConnections( pAbstractChild* child )
 {
 	// connections
 	connect( child, SIGNAL( currentFileChanged( const QString& ) ), this, SLOT( internal_currentFileChanged( const QString& ) ) );
+	connect( child, SIGNAL( contentChanged() ), this, SLOT( internal_contentChanged() ) );
+	connect( child, SIGNAL( contentChanged() ), this, SIGNAL( contentChanged() ) );
 	// closed file
 	connect( child, SIGNAL( fileClosed( const QString& ) ), this, SIGNAL( fileClosed( const QString& ) ) );
 	// update file menu
@@ -305,6 +322,11 @@ void pWorkspace::goToLine( const QString& s, const QPoint& p, bool b, const QStr
 	}
 }
 
+void pWorkspace::internal_contentChanged()
+{
+	mContentChangedTimer->start( CONTENT_CHANGED_TIME_OUT );
+}
+
 void pWorkspace::internal_currentFileChanged( const QString& file )
 {
 	QDir::setCurrent( QFileInfo( file ).absolutePath() );
@@ -325,6 +347,34 @@ void pWorkspace::internal_currentChanged( int i )
 	bool paste = hasChild ? c->isPasteAvailable() : false;
 	bool go = hasChild ? c->isGoToAvailable() : false;
 	bool moreThanOneChild = count() > 1;
+	
+	// context toolbar
+	pMultiToolBar* mtb = MonkeyCore::multiToolBar();
+	
+	if ( c )
+	{
+		if ( !mtb->contexts().contains( c->context() ) )
+		{
+			QToolBar* tb = mtb->toolBar( c->context() );
+			
+			initMultiToolBar( tb );
+			c->initializeContext( tb );
+		}
+		
+		mtb->setCurrentContext( c->context() );
+	}
+	else
+	{
+		if ( !mtb->contexts().contains( DEFAULT_CONTEXT ) )
+		{
+			QToolBar* tb = mtb->toolBar( DEFAULT_CONTEXT );
+			
+			initMultiToolBar( tb );
+		}
+		
+		mtb->setCurrentContext( DEFAULT_CONTEXT );
+	}
+	
 
 	// update file menu
 	MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" )->setEnabled( modified );
@@ -516,7 +566,8 @@ void pWorkspace::projectCustomActionTriggered()
 				XUPProjectItem* project = cmd.project();
 				XUPProjectItem* topLevelProject = project->topLevelProject();
 				// try reading already saved binary
-				s = topLevelProject->projectSettingsValue( a->text().replace( ' ', '_' ).toUpper() );
+				const QString psvBin = topLevelProject->projectSettingsValue( a->text().replace( ' ', '_' ).toUpper() );
+				s = psvBin;
 				if ( !s.isEmpty() )
 				{
 					s = topLevelProject->filePath( s );
@@ -540,8 +591,11 @@ void pWorkspace::projectCustomActionTriggered()
 					cmd.setCommand( cm->quotedString( cm->nativeSeparators( s ) ) );
 					cmd.setWorkingDirectory( cm->nativeSeparators( p ) );
 					// write in project
-					topLevelProject->setProjectSettingsValue( a->text().replace( ' ', '_' ).toUpper(), topLevelProject->relativeFilePath( s ) );
-					topLevelProject->save();
+					if ( topLevelProject->relativeFilePath( s ) != psvBin )
+					{
+						topLevelProject->setProjectSettingsValue( a->text().replace( ' ', '_' ).toUpper(), topLevelProject->relativeFilePath( s ) );
+						topLevelProject->save();
+					}
 					// add command to console manager
 					cm->addCommand( cmd );
 				}
@@ -557,6 +611,12 @@ void pWorkspace::projectCustomActionTriggered()
 		// send command to consolemanager
 		cm->addCommands( mCmds );
 	}
+}
+
+void pWorkspace::contentChangedTimer_timeout()
+{
+	mContentChangedTimer->stop();
+	MonkeyCore::fileManager()->computeModifiedBuffers();
 }
 
 void pWorkspace::fileWatcher_ecmNothing( const QString& filename )
@@ -836,14 +896,6 @@ void pWorkspace::editExpandAbbreviation_triggered()
 void pWorkspace::editPrepareAPIs_triggered()
 { prepareAPIs(); }
 
-// view menu
-void pWorkspace::agStyles_triggered( QAction* a )
-{
-	qApp->setStyle( a->text() );
-	qApp->setPalette( qApp->style()->standardPalette() );
-	MonkeyCore::settings()->setValue( "MainWindow/Style", a->text() );
-}
-
 // help menu
 void pWorkspace::helpAboutApplication_triggered()
 { UIAbout::instance( this )->exec(); }
@@ -896,4 +948,9 @@ void pWorkspace::closeDocument( QWidget* document )
 	mFileWatcher->removePaths( child->files() );
 	// close document
 	pExtendedWorkspace::closeDocument( child );
+}
+
+void pWorkspace::initMultiToolBar( QToolBar* tb )
+{
+	tb->addAction( MonkeyCore::workspace()->listWidget()->filesComboAction() );
 }

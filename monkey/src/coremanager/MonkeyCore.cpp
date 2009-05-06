@@ -45,6 +45,7 @@
 #include "../maininterface/ui/UITranslator.h"
 
 #include <pIconManager.h>
+#include <pMultiToolBar.h>
 
 #include <QSplashScreen>
 #include <QPixmap>
@@ -111,10 +112,6 @@ void MonkeyCore::init()
 	showMessage( &splash, tr( "Initializing Main Window..." ) );
 	mainWindow()->initGui();
 	
-	// init pluginsmanager
-	showMessage( &splash, tr( "Initializing Plugins..." ) );
-	pluginsManager()->loadsPlugins();
-	
 	// init abbreviations manager
 	showMessage( &splash, tr( "Initializing abbreviations manager..." ) );
 	abbreviationsManager();
@@ -126,6 +123,10 @@ void MonkeyCore::init()
 	// load mks scripts
 	showMessage( &splash, tr( "Executing scripts..." ) );
 	interpreter()->loadHomeScripts();
+	
+	// init pluginsmanager
+	showMessage( &splash, tr( "Initializing Plugins..." ) );
+	pluginsManager()->loadsPlugins();
 	
 	// restore window state
 	showMessage( &splash, tr( "Restoring Workspace..." ) );
@@ -252,4 +253,11 @@ pAbbreviationsManager* MonkeyCore::abbreviationsManager()
 	if ( !mInstances.contains( &pAbbreviationsManager::staticMetaObject ) )
 		mInstances[&pAbbreviationsManager::staticMetaObject] = new pAbbreviationsManager( qApp );
 	return qobject_cast<pAbbreviationsManager*>( mInstances[&pAbbreviationsManager::staticMetaObject] );
+}
+
+pMultiToolBar* MonkeyCore::multiToolBar()
+{
+	if ( !mInstances.contains( &pMultiToolBar::staticMetaObject ) )
+		mInstances[&pMultiToolBar::staticMetaObject] = new pMultiToolBar( mainWindow() );
+	return qobject_cast<pMultiToolBar*>( mInstances[&pMultiToolBar::staticMetaObject] );
 }

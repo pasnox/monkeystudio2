@@ -32,6 +32,7 @@ public:
 	virtual ~QMake();
 	
 	virtual bool setEnabled( bool enabled );
+	virtual bool haveSettingsWidget() const { return true; }
 	virtual QWidget* settingsWidget();
 	virtual bool editProject( XUPProjectItem* project );
 

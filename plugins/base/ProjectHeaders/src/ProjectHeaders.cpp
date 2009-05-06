@@ -42,7 +42,7 @@ ProjectHeaders::ProjectHeaders()
 	mPluginInfos.Type = BasePlugin::iBase;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.5.0";
-	mPluginInfos.Enabled = false;
+	mPluginInfos.FirstStartEnabled = false;
 }
 
 ProjectHeaders::~ProjectHeaders()
@@ -59,12 +59,12 @@ bool ProjectHeaders::setEnabled( bool b )
 		QAction* a = MonkeyCore::menuBar()->action( "mEdit/aProjectHeaders", tr( "Project Licensing..." ), pixmap() );
 		connect( a, SIGNAL( triggered() ), this, SLOT( processLicensing() ) );
 		// set plugin enabled
-		mPluginInfos.Enabled = true;
+		stateAction()->setChecked( true );
 	}
 	else if ( !b && isEnabled() )
 	{
 		// set plugin disabled
-		mPluginInfos.Enabled = false;
+		stateAction()->setChecked( false );
 	}
 	
 	// return default value

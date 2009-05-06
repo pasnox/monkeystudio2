@@ -40,6 +40,7 @@
 
 class XUPItem;
 class pAbstractChild;
+class PluginsMenu;
 
 class Q_MONKEY_EXPORT PluginsManager : public QObject
 {
@@ -95,7 +96,10 @@ public:
 	void setCurrentInterpreter( InterpreterPlugin* );
 	InterpreterPlugin* currentInterpreter();
 	
+	inline PluginsMenu* menu() const { return mMenu; }
+	
 protected:
+	PluginsMenu* mMenu;
 	QList<BasePlugin*> mPlugins;
 	BuilderPlugin* mBuilder;
 	CompilerPlugin* mCompiler;

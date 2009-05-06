@@ -1,14 +1,4 @@
 /****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Monkey Studio Child Plugins
-** FileName  : QtDesignerChild.cpp
-** Date      : 2008-01-14T00:57:16
-** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
-**
 	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
 	This program is free software; you can redistribute it and/or modify
@@ -24,678 +14,359 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
 ****************************************************************************/
 #include "QtDesignerChild.h"
+#include "QtDesignerManager.h"
 
-#include "QDesignerWidgetBox.h"
-#include "QDesignerActionEditor.h"
-#include "QDesignerPropertyEditor.h"
-#include "QDesignerObjectInspector.h"
-#include "QDesignerSignalSlotEditor.h"
+#include "widgethost.h"
 
+#include <pIconManager.h>
 #include <MonkeyCore.h>
-#include <UIMain.h>
-#include <pMonkeyStudio.h>
+#include <QueuedStatusBar.h>
+#include <pStylesActionGroup.h>
 
-#include <QKeyEvent>
-#include <QVBoxLayout>
-#include <QToolBar>
-#include <QAction>
-#include <QMdiArea>
-#include <QMdiSubWindow>
-#include <QPluginLoader>
-#include <QPrinter>
-#include <QPrintDialog>
-#include <QPainter>
-#include <QBuffer>
-#include <QFormBuilder>
-
-#include <QDesignerComponents>
-#include <QDesignerFormEditorInterface>
-#include <QDesignerFormWindowInterface>
 #include <QDesignerFormWindowManagerInterface>
-#include <QDesignerFormEditorPluginInterface>
-#include <QDesignerObjectInspectorInterface>
+#include <QDesignerFormWindowInterface>
+#include <QDesignerFormEditorInterface>
 #include <QDesignerPropertyEditorInterface>
-#include <QDesignerActionEditorInterface>
-#include <QDesignerFormWindowCursorInterface>
 #include <QDesignerPropertySheetExtension>
 #include <QExtensionManager>
 
-#include "pluginmanager_p.h"
-#include "qdesigner_integration_p.h"
+#include <QPainter>
+#include <QPrintDialog>
+#include <QInputDialog>
+#include <QStyleFactory>
 
-using namespace pMonkeyStudio;
-
-QtDesignerChild::QtDesignerChild( QObject* )
+QtDesignerChild::QtDesignerChild( QtDesignerManager* manager )
 	: pAbstractChild()
 {
-	// set icon
-	setWindowIcon( QIcon( ":/icons/designer" ) );
+	Q_ASSERT( manager );
+	mDesignerManager = manager;
 	
-	// set title
-	setWindowTitle( tr( "Qt Designer" ) );
+	// set up ui
+	setWindowIcon( pIconManager::icon( "designer.png", ":/icons" ) );
 	
-	// set frame style
-	setFrameStyle( QFrame::StyledPanel | QFrame::Raised );
+	// create form host widget
+	QDesignerFormWindowInterface* form = mDesignerManager->createNewForm( this );
+	mDesignerManager->addFormWindow( form );
 	
-	// create layout
+	mHostWidget = new SharedTools::WidgetHost( this, form );
+	mHostWidget->setFrameStyle( QFrame::NoFrame | QFrame::Plain );
+	mHostWidget->setFocusProxy( form );
+	
 	QVBoxLayout* vl = new QVBoxLayout( this );
 	vl->setMargin( 0 );
 	vl->setSpacing( 0 );
+	vl->addWidget( mHostWidget );
 	
-	// create toolbar
-	vl->addWidget( mToolBar = new QToolBar );
-	mToolBar->setIconSize( QSize( 16, 16 ) );
-	
-	// create mdiarea
-	vl->addWidget( mArea = new QMdiArea );
-	mArea->setVerticalScrollBarPolicy( Qt::ScrollBarAsNeeded );
-	mArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
-	
-	// set auto destroy
-	setAttribute( Qt::WA_DeleteOnClose );
-	
-	// init designer core
-	QDesignerComponents::initializeResources();
-	mCore = QDesignerComponents::createFormEditor( this );
-	(void) QDesignerComponents::createTaskMenu( mCore, this );
-	
-	// action group for modes
-	QActionGroup* aModes = new QActionGroup( this );
-	aModes->setExclusive( true );
-	
-	// create edit widget mode action
-	QAction* aEditWidgets = new QAction( tr( "Edit Widgets" ), this );
-	aEditWidgets->setIcon( QIcon( mCore->resourceLocation().append( "/widgettool.png" ) ) );
-	aEditWidgets->setCheckable( true );
-	aEditWidgets->setChecked( true );
-	
-	// add edit widget action to group
-	aModes->addAction( aEditWidgets );
-	
-	// preview action
-	aPreview = new QAction( this );
-	aPreview->setText( tr( "Preview Form" ) );
-	
-	// initialize designer plugins
-	foreach ( QObject* o, QPluginLoader::staticInstances() << mCore->pluginManager()->instances() )
-	{
-		if (  QDesignerFormEditorPluginInterface* fep = qobject_cast<QDesignerFormEditorPluginInterface*>( o ) )
-		{
-			// initialize plugin if needed
-			if ( !fep->isInitialized() )
-				fep->initialize( mCore );
-			
-			// set action chackable
-			fep->action()->setCheckable( true );
-			
-			// add action mode to group
-			aModes->addAction( fep->action() );
-		}
-	}
-	
-	// add actions to toolbar
-	QDesignerFormWindowManagerInterface* fwm = mCore->formWindowManager();
-	// edit
-	fwm->actionUndo()->setIcon( QIcon( ":/icons/undo.png" ) );
-	fwm->actionUndo()->setShortcut( MonkeyCore::menuBar()->action( "mEdit/aUndo" )->shortcut() );
-	fwm->actionRedo()->setIcon( QIcon( ":/icons/redo.png" ) );
-	fwm->actionRedo()->setShortcut( MonkeyCore::menuBar()->action( "mEdit/aRedo" )->shortcut() );
-	fwm->actionDelete()->setIcon( QIcon( ":/icons/delete.png" ) );
-	fwm->actionSelectAll()->setIcon( QIcon( ":/icons/selectall.png" ) );
-	fwm->actionDelete()->setShortcut( tr( "Del" ) );
-	mToolBar->addAction( fwm->actionUndo() );
-	mToolBar->addAction( fwm->actionRedo() );
-	mToolBar->addAction( fwm->actionCut() );
-	mToolBar->addAction( fwm->actionCopy() );
-	mToolBar->addAction( fwm->actionPaste() );
-	mToolBar->addAction( fwm->actionLower() );
-	mToolBar->addAction( fwm->actionRaise() );
-	mToolBar->addAction( fwm->actionDelete() );
-	mToolBar->addAction( fwm->actionSelectAll() );
-	mToolBar->addSeparator();
-	// tools
-	mToolBar->addActions( aModes->actions() );
-	mToolBar->addSeparator();
-	// form
-	mToolBar->addAction( fwm->actionHorizontalLayout() );
-	mToolBar->addAction( fwm->actionVerticalLayout() );
-	mToolBar->addAction( fwm->actionSplitHorizontal() );
-	mToolBar->addAction( fwm->actionSplitVertical() );
-	mToolBar->addAction( fwm->actionGridLayout() );
-	mToolBar->addAction( fwm->actionBreakLayout() );
-	mToolBar->addAction( fwm->actionAdjustSize() );
-	// preview
-	mToolBar->addSeparator();
-	aPreview->setIcon( QIcon( ":/icons/preview.png" ) );
-	aPreview->setShortcut( tr( "Ctrl+R" ));
-	mToolBar->addAction( aPreview );
-	
-	// initialize plugins
-	QDesignerComponents::initializePlugins( mCore );
-	
-	pWidgetBox = new QDesignerWidgetBox( this );
-	pWidgetBox->setVisible( false );
-	MonkeyCore::mainWindow()->dockToolBar( Qt::LeftToolBarArea )->addDock( pWidgetBox, tr( "Widget Box" ), QIcon( ":/icons/widget.png" ) );
-	
-	pObjectInspector = new QDesignerObjectInspector( this );
-	pObjectInspector->setVisible( false );
-	MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( pObjectInspector, tr( "Object Inspector" ), QIcon( ":/icons/inspector.png" ) );
-	
-	pPropertyEditor = new QDesignerPropertyEditor( this );
-	pPropertyEditor->setVisible( false );
-	MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( pPropertyEditor, tr( "Property Editor" ), QIcon( ":/icons/property.png" ) );
-	
-	pActionEditor = new QDesignerActionEditor( this );
-	pActionEditor->setVisible( false );
-	MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( pActionEditor, tr( "Action Editor" ), QIcon( ":/icons/action.png" ) );
-	
-	pSignalSlotEditor = new QDesignerSignalSlotEditor( this );
-	pSignalSlotEditor->setVisible( false );
-	MonkeyCore::mainWindow()->dockToolBar( Qt::TopToolBarArea )->addDock( pSignalSlotEditor, tr( "Signal/Slot Editor" ), QIcon( ":/icons/signal.png" ) );
-	
-	// perform integration
-	new qdesigner_internal::QDesignerIntegration( mCore, this );
-	mCore->setTopLevel( MonkeyCore::mainWindow() );
-	
-	// connection
-	connect( mArea, SIGNAL( subWindowActivated( QMdiSubWindow* ) ), this, SLOT( subWindowActivated( QMdiSubWindow* ) ) );
-	connect( mCore->formWindowManager(), SIGNAL( activeFormWindowChanged( QDesignerFormWindowInterface* ) ), this, SLOT( activeFormWindowChanged( QDesignerFormWindowInterface* ) ) );
-	connect( aEditWidgets, SIGNAL( triggered() ), this, SLOT( editWidgets() ) );
-	connect( aPreview, SIGNAL( triggered() ), this, SLOT( previewCurrentForm() ) );
+	connect( mHostWidget->formWindow(), SIGNAL( changed() ), this, SLOT( formChanged() ) );
+	connect( mHostWidget->formWindow(), SIGNAL( selectionChanged() ), this, SLOT( formSelectionChanged() ) );
+	connect( mHostWidget->formWindow(), SIGNAL( geometryChanged() ), this, SLOT( formGeometryChanged() ) );
+	connect( mHostWidget->formWindow(), SIGNAL( mainContainerChanged( QWidget* ) ), this, SLOT( formMainContainerChanged( QWidget* ) ) );
 }
 
 QtDesignerChild::~QtDesignerChild()
 {
 	// close all files
 	closeFiles();
-	
-	// delete designer docks
-	delete pWidgetBox;
-	delete pActionEditor;
-	delete pPropertyEditor;
-	delete pObjectInspector;
-	delete pSignalSlotEditor;
 }
 
-QDesignerFormEditorInterface* QtDesignerChild::core()
-{ return mCore; }
-
-QDesignerFormWindowInterface* QtDesignerChild::createForm()
+void QtDesignerChild::showEvent( QShowEvent* event )
 {
-	// create form instance
-	QDesignerFormWindowInterface* w = mCore->formWindowManager()->createFormWindow();
+	pAbstractChild::showEvent( event );
 	
-	// set form default features
-	w->setFeatures( QDesignerFormWindowInterface::DefaultFeature );
-	
-	// return form instance
-	return w;
-}
-
-bool QtDesignerChild::eventFilter( QObject* o, QEvent* e )
-{
-	if ( o )
-	{
-		if ( QDesignerFormWindowInterface* w = qobject_cast<QDesignerFormWindowInterface*>( o ) )
-		{
-			if ( e->type() == QEvent::Close )
-				if ( w->property( "askSave" ).toBool() && w->isDirty() )
-					if ( question( tr( "Form Modified..." ), tr( "The form has been modified, do you want to save it ?" ), window() ) )
-						saveFile( w->fileName() );
-		}
-		else if ( e->type() == QEvent::KeyPress )
-			if ( static_cast<QKeyEvent*>( e )->key() == Qt::Key_Escape )
-				qobject_cast<QWidget*>( o )->close();
-	}
-	return pAbstractChild::eventFilter( o, e );
-}
-
-void QtDesignerChild::subWindowActivated( QMdiSubWindow* w )
-{
-	// update current form
-	if ( w && mCore->formWindowManager()->activeFormWindow() != w->widget() )
-		mCore->formWindowManager()->setActiveFormWindow( qobject_cast<QDesignerFormWindowInterface*>( w->widget() ) );
-	
-	// update preview actino state
-	aPreview->setEnabled( w );
-}
-
-void QtDesignerChild::activeFormWindowChanged( QDesignerFormWindowInterface* w )
-{
-	// update window state
-	setModified( w );
-	
-	// emit signals
-	emit currentFileChanged( w ? w->fileName() : QString() );
-}
-
-void QtDesignerChild::geometryChanged()
-{
-	// update widget property
-	if ( QDesignerFormWindowInterface* w = qobject_cast<QDesignerFormWindowInterface*>( sender() ) )
-	{
-		// don t take care of first geometry changed
-		if ( w->property( "firstGeometryChanged" ).toBool() )
-		{
-			w->setProperty( "firstGeometryChanged", false );
-			return;
-		}
-		
-		// update property
-		QDesignerPropertySheetExtension* s = qt_extension<QDesignerPropertySheetExtension*>( mCore->extensionManager(), w );
-
-		mCore->propertyEditor()->setPropertyValue( "geometry", s->property( s->indexOf( "geometry" ) ) );
-
-		// set modified state
-		w->setDirty( true );
-		setModified( w );
-		
-		// emit modified state
-		emit modifiedChanged( true );
-	}
+	mDesignerManager->setActiveFormWindow( mHostWidget->formWindow() );
 }
 
 void QtDesignerChild::formChanged()
 {
-	if ( QDesignerFormWindowInterface* w = qobject_cast<QDesignerFormWindowInterface*>( sender() ) )
-	{
-		// update window state
-		setModified( w );
-		
-		// emit modified state
-		emit modifiedChanged( w->isDirty() );
-	}
+	setWindowModified( mHostWidget->formWindow()->isDirty() );
+	emit modifiedChanged( mHostWidget->formWindow()->isDirty() );
+	emit contentChanged();
 }
 
-void QtDesignerChild::editWidgets()
+void QtDesignerChild::formSelectionChanged()
 {
-	// set edit mode for all forms
-	foreach ( QMdiSubWindow* w, mArea->subWindowList() )
-		if ( QDesignerFormWindowInterface* i = qobject_cast<QDesignerFormWindowInterface*>( w->widget() ) )
-			i->editWidgets();
+	mHostWidget->updateFormWindowSelectionHandles( true );
 }
 
-void QtDesignerChild::previewCurrentForm()
+void QtDesignerChild::formGeometryChanged()
 {
-	QDesignerFormWindowInterface* w = mArea->activeSubWindow() ? qobject_cast<QDesignerFormWindowInterface*>( mArea->activeSubWindow()->widget() ) : 0;
-	if ( w )
-	{
-		// get buffer
-		QBuffer b;
-		b.setData( qPrintable( w->contents() ) );
-		
-		// create form
-		QWidget* f = QFormBuilder().load( &b );
-		
-		// delete on close
-		f->setAttribute( Qt::WA_DeleteOnClose );
-		
-		// set flags
-		/*
-		Qt::WindowFlags wf = Qt::Window | Qt::WindowSystemMenuHint;
-		if ( f->windowType() == Qt::Window )
-			wf |= Qt::WindowMaximizeButtonHint;
-		*/
-#ifdef Q_WS_WIN
-		Qt::WindowFlags wf = ( f->windowType() == Qt::Window ) ? Qt::Window | Qt::WindowMaximizeButtonHint : Qt::Dialog;
-#else
-		Qt::WindowFlags wf = Qt::Dialog;
-#endif
-		
-		// set parent
-		f->setParent( mArea->activeSubWindow(), wf );
-		
-		// macdialgo have no close button
-		f->setWindowModality( Qt::ApplicationModal );
-		
-		// set position
-		f->move( w->mapToGlobal( QPoint( 10, 10) ) );
-		
-		// track escape key
-		f->installEventFilter( this );
-		
-		// show form
-		f->show();
-	}
-}
+	// update property
+	QDesignerPropertySheetExtension* sheet = qt_extension<QDesignerPropertySheetExtension*>( mDesignerManager->core()->extensionManager(), mHostWidget->formWindow() );
 
-void QtDesignerChild::setModified( QDesignerFormWindowInterface* w )
-{
-	// update designer title
-	setWindowTitle( tr( "Qt Designer" ).append( w ? QFileInfo( w->fileName() ).fileName().append( "][*]" ).prepend( " [" ) : "[*]" ) );
+	mDesignerManager->core()->propertyEditor()->setPropertyValue( "geometry", sheet->property( sheet->indexOf( "geometry" ) ) );
+
+	// set modified state
+	bool loading = property( "loadingFile" ).toBool();
+	bool modified = !loading;
 	
-	// update designer state
-	setWindowModified( w && mCore->formWindowManager()->activeFormWindow() == w ? w->isDirty() : false );
+	mHostWidget->formWindow()->setDirty( modified );
+	setWindowModified( modified );
+	setProperty( "loadingFile", false );
 	
-	// update form mdi state
-	if ( w )
-		w->parentWidget()->setWindowModified( w->isDirty() );
+	// emit modified state
+	emit modifiedChanged( modified );
+	emit contentChanged();
+}
+
+void QtDesignerChild::formMainContainerChanged( QWidget* widget )
+{
+	Q_UNUSED( widget );
+	setProperty( "loadingFile", true );
 }
 
 bool QtDesignerChild::openFile( const QString& fileName, const QString& codec )
 {
 	Q_UNUSED( codec );
 	
-	foreach ( const QString file, files() )
-		if ( isSameFile( file, fileName ) )
-			return true;
-	
-	// create form
-	QDesignerFormWindowInterface* w = createForm();
-	
-	// set property to tell ask to save in filter event
-	w->setProperty( "askSave", true );
-	
-	// track close event 
-	w->installEventFilter( this );
-	
-	// assign file name
-	w->setFileName( fileName );
-	
-	// set default size
-	QSize mainContainerSize( 400, 300 );
-	
-	// loaded widget
-	QWidget* container = 0;
-	
-	// set contents
 	if ( QFile::exists( fileName ) )
 	{
 		// set content
-		QFile f( fileName );
-		w->setContents( &f );
+		QFile file( fileName );
 		
-		// check success load
-		container = w->mainContainer();
-		
-		if ( container )
+		if ( !file.open( QIODevice::ReadOnly ) )
 		{
-			// get original size
-			mainContainerSize = w->mainContainer()->geometry().size();
-			
-			// set temporary property
-			w->setProperty( "firstGeometryChanged", true );
-			
+			return false;
+		}
+		
+		setWindowTitle( fileName +"[*]" );
+		mHostWidget->formWindow()->setFileName( fileName );
+		mHostWidget->formWindow()->setContents( &file );
+		
+		if ( mHostWidget->formWindow()->mainContainer() )
+		{
 			// set clean
-			w->setDirty( false );
+			mHostWidget->formWindow()->setDirty( false );
+			
+			setWindowModified( false );
+			
+			emit fileOpened( fileName );
+			
+			return true;
+		}
+		else
+		{
+			setWindowTitle( QString::null );
+			mHostWidget->formWindow()->setFileName( QString::null );
 		}
 	}
 	
-	if ( !container )
-	{
-		delete w;
-		return false;
-	}
-	
-	// add to mdi area
-	mArea->addSubWindow( w, Qt::CustomizeWindowHint | Qt::SubWindow | Qt::WindowShadeButtonHint | Qt::WindowSystemMenuHint );
-	
-	// resize to original container size
-	QMdiSubWindow* mw = qobject_cast<QMdiSubWindow*>( w->parentWidget() );
-	const QSize decorationSize = mw->size() -mw->contentsRect().size();
-	mw->resize( mainContainerSize +decorationSize );
-	
-	// set it visible
-	w->setVisible( true );
-
-	// track form changement
-	connect( w, SIGNAL( geometryChanged() ), this, SLOT( geometryChanged() ) );
-	connect( w, SIGNAL( changed() ), this, SLOT( formChanged() ) );
-	
-	// set window title
-	mw->setWindowTitle( QFileInfo( fileName ).fileName() +"[*]" );
-	
-	// set modified state
-	setModified( w );
-	
-	// emit not modified state
-	emit modifiedChanged( w->isDirty() );
-	
-	// emit file opened
-	emit fileOpened( fileName );
-	return true;
+	return false;
 }
 
 void QtDesignerChild::closeFile( const QString& s )
 {
-	// find file
-	foreach ( QMdiSubWindow* w, mArea->subWindowList() )
-	{
-		if ( QDesignerFormWindowInterface* i = qobject_cast<QDesignerFormWindowInterface*>( w->widget() ) )
-		{
-			if ( isSameFile( i->fileName(), s ) )
-			{
-				// set property to tell don t ask to save in filter event
-				i->setProperty( "askSave", false );
-				
-				// close form
-				w->close();
-				
-				// emit file closed
-				emit fileClosed( s );
-			}
-		}
-	}
+	emit fileClosed( s );
 }
 
 void QtDesignerChild::closeFiles()
 {
-	foreach ( QMdiSubWindow* w, mArea->subWindowList() )
-	{
-		if ( QDesignerFormWindowInterface* i = qobject_cast<QDesignerFormWindowInterface*>( w->widget() ) )
-		{
-			// get filename
-			const QString s = i->fileName();
-			
-			// set property to tell don t ask to save in filter event
-			i->setProperty( "askSave", false );
-			
-			// close form
-			w->close();
-			
-			// emit file closed
-			emit fileClosed( s );
-		}
-	}
+	closeFile( mHostWidget->formWindow()->fileName() );
 }
 
 QStringList QtDesignerChild::files() const
 {
-	QStringList l;
-	foreach ( QMdiSubWindow* w, mArea->subWindowList() )
-		if ( QDesignerFormWindowInterface* i = qobject_cast<QDesignerFormWindowInterface*>( w->widget() ) )
-			l << i->fileName();
-	return l;
+	return QStringList( mHostWidget->formWindow()->fileName() );
 }
 
 QString QtDesignerChild::fileBuffer( const QString& fileName, bool& ok ) const
 {
+	Q_UNUSED( fileName );
 	ok = false;
 	
-	foreach ( QMdiSubWindow* w, mArea->subWindowList() )
+	if ( mHostWidget->formWindow()->mainContainer() )
 	{
-		if ( QDesignerFormWindowInterface* i = qobject_cast<QDesignerFormWindowInterface*>( w->widget() ) )
-		{
-			if ( pMonkeyStudio::isSameFile( fileName, i->fileName() ) )
-			{
-				ok = true;
-				return i->contents();
-			}
-		}
+		ok = true;
+		return mHostWidget->formWindow()->contents();
 	}
 	
 	return QString::null;
 }
 
+QString QtDesignerChild::context() const
+{
+	return PLUGIN_NAME;
+}
+
+void QtDesignerChild::initializeContext( QToolBar* tb )
+{
+	QDesignerFormWindowManagerInterface* fwm = mDesignerManager->core()->formWindowManager();
+	
+	// add actions to toolbar
+	tb->addAction( fwm->actionUndo() );
+	tb->addAction( fwm->actionRedo() );
+	tb->addAction( fwm->actionCut() );
+	tb->addAction( fwm->actionCopy() );
+	tb->addAction( fwm->actionPaste() );
+	tb->addAction( fwm->actionLower() );
+	tb->addAction( fwm->actionRaise() );
+	tb->addAction( fwm->actionDelete() );
+	tb->addAction( fwm->actionSelectAll() );
+	tb->addSeparator();
+	
+	// tools
+	tb->addActions( mDesignerManager->modesActions() );
+	tb->addSeparator();
+	
+	// form
+	tb->addAction( fwm->actionHorizontalLayout() );
+	tb->addAction( fwm->actionVerticalLayout() );
+	tb->addAction( fwm->actionSplitHorizontal() );
+	tb->addAction( fwm->actionSplitVertical() );
+	tb->addAction( fwm->actionGridLayout() );
+	tb->addAction( fwm->actionFormLayout() );
+	tb->addAction( fwm->actionSimplifyLayout() );
+	tb->addAction( fwm->actionBreakLayout() );
+	tb->addAction( fwm->actionAdjustSize() );
+	
+	// preview
+	tb->addSeparator();
+	tb->addAction( mDesignerManager->previewFormAction() );
+}
+
 QPoint QtDesignerChild::cursorPosition() const
-{ return QPoint( -1, -1 ); }
+{
+	return QPoint( -1, -1 );
+}
 
 void QtDesignerChild::showFile( const QString& s )
 {
-	foreach ( QMdiSubWindow* w, mArea->subWindowList() )
-	{
-		if ( QDesignerFormWindowInterface* i = qobject_cast<QDesignerFormWindowInterface*>( w->widget() ) )
-		{
-			if ( isSameFile( i->fileName(), s ) )
-			{
-				mArea->setActiveSubWindow( w );
-				break;
-			}
-		}
-	}
+	Q_UNUSED( s );
 }
 
 QString QtDesignerChild::currentFile() const
 {
-	if ( mArea->currentSubWindow() )
-		if ( QDesignerFormWindowInterface* i = qobject_cast<QDesignerFormWindowInterface*>( mArea->currentSubWindow()->widget() ) )
-			return i->fileName();
-	return QString();
+	return mHostWidget->formWindow()->fileName();
 }
 
 QString QtDesignerChild::currentFileName() const
-{ return QFileInfo( currentFile() ).fileName(); }
+{
+	return QFileInfo( currentFile() ).fileName();
+}
 
 bool QtDesignerChild::isModified() const
 {
-	if ( mArea->currentSubWindow() )
-		if ( QDesignerFormWindowInterface* i = qobject_cast<QDesignerFormWindowInterface*>( mArea->currentSubWindow()->widget() ) )
-			return i->isDirty();
-	return false;
+	return mHostWidget->formWindow()->isDirty();
 }
 
 bool QtDesignerChild::isUndoAvailable() const
-{ return false; }
+{
+	return false;
+}
 
 bool QtDesignerChild::isRedoAvailable() const
-{ return false; }
+{
+	return false;
+}
 
 bool QtDesignerChild::isPasteAvailable() const
-{ return false; }
+{
+	return false;
+}
 
 bool QtDesignerChild::isCopyAvailable() const
-{ return false; }
+{
+	return false;
+}
 
 bool QtDesignerChild::isModified( const QString& s ) const
 {
-	// find file
-	foreach ( QMdiSubWindow* w, mArea->subWindowList() )
-		if ( QDesignerFormWindowInterface* i = qobject_cast<QDesignerFormWindowInterface*>( w->widget() ) )
-			if ( isSameFile( i->fileName(), s ) )
-				return i->isDirty();
-	return false;
+	Q_UNUSED( s );
+	return isModified();
 }
 
 void QtDesignerChild::saveFile( const QString& s )
 {
-	foreach ( QMdiSubWindow* w, mArea->subWindowList() )
+	Q_UNUSED( s );
+
+	// cancel if not modified
+	if ( !mHostWidget->formWindow()->isDirty() )
 	{
-		if ( QDesignerFormWindowInterface* i = qobject_cast<QDesignerFormWindowInterface*>( w->widget() ) )
-		{
-			if ( isSameFile( i->fileName(), s ) )
-			{
-				// cancel if not modified
-				if ( !i->isDirty() )
-					return;
-				
-				// write file
-				QFile f( i->fileName() );
-				if ( f.open( QIODevice::WriteOnly | QIODevice::Text ) )
-				{
-					f.resize( 0 );
-					f.write( i->contents().toUtf8() );
-					f.close();
-					i->setDirty( false );
-					setModified( i );
-					emit modifiedChanged( false );
-				}
-				else
-					warning( tr( "Save Form..." ), tr( "An error occurs when saving :\n%1" ).arg( s ) );
-				return;
-			}
-		}
+		return;
 	}
+	
+	// write file
+	QFile file( mHostWidget->formWindow()->fileName() );
+	
+	if ( file.open( QIODevice::WriteOnly ) )
+	{
+		file.resize( 0 );
+		file.write( mHostWidget->formWindow()->contents().toUtf8() );
+		file.close();
+		
+		mHostWidget->formWindow()->setDirty( false );
+		setWindowModified( false );
+		
+		emit modifiedChanged( false );
+	}
+	else
+	{
+		MonkeyCore::statusBar()->appendMessage( tr( "An error occurs when saving :\n%1" ).arg( s ) );
+	}
+	
+	return;
 }
 
 void QtDesignerChild::saveFiles()
 {
-	foreach ( QMdiSubWindow* w, mArea->subWindowList() )
-	{
-		if ( QDesignerFormWindowInterface* i = qobject_cast<QDesignerFormWindowInterface*>( w->widget() ) )
-		{
-			// check next if not modified
-			if ( !i->isDirty() )
-				continue;
-			
-			// save file
-			QFile f( i->fileName() );
-			if ( f.open( QIODevice::WriteOnly | QIODevice::Text ) )
-			{
-				f.resize( 0 );
-				f.write( i->contents().toUtf8() );
-				f.close();
-				i->setDirty( false );
-				setModified( i );
-				if ( mArea->currentSubWindow() == w )
-					emit modifiedChanged( false );
-			}
-			else
-				warning( tr( "Save Form..." ), tr( "An error occurs when saving :\n%1" ).arg( i->fileName() ) );
-		}
-	}
+	saveFile( mHostWidget->formWindow()->fileName() );
 }
 
-void printForm( QMdiSubWindow* w, bool b )
+void QtDesignerChild::printFormHelper( QDesignerFormWindowInterface* form, bool quick )
 {
+	bool ok;
+	const QStringList styles = QStyleFactory::keys();
+	const int id = styles.indexOf( pStylesActionGroup::systemStyle() );
+	QString style = QInputDialog::getItem( this, tr( "Choose a style..." ), tr( "Choose a style to render the form:" ), styles, id, false, &ok );
+	
+	if ( !ok )
+	{
+		return;
+	}
+	
 	// get printer
-	QPrinter p;
+	QPrinter printer;
 
 	// if quick print
-	if ( b )
+	if ( quick )
 	{
 		// check if default printer is set
-		if ( p.printerName().isEmpty() )
+		if ( printer.printerName().isEmpty() )
 		{
-			warning( QObject::tr( "Quick Print..." ), QObject::tr( "There is no default printer, please set one before trying quick print" ), w->window() );
+			MonkeyCore::statusBar()->appendMessage( tr( "There is no default printer, please set one before trying quick print" ) );
 			return;
 		}
 		
 		// print and return
-		QPainter pr( &p );
-		pr.drawPixmap( 0, 0, QPixmap::grabWidget( w ) );
+		QPainter painter( &printer );
+		painter.drawPixmap( 0, 0, mDesignerManager->previewPixmap( form, style ) );
 	}
 	else
 	{
 		// printer dialog
-		QPrintDialog d( &p );
+		QPrintDialog printDialog( &printer );
 
 		// if ok
-		if ( d.exec() )
+		if ( printDialog.exec() )
 		{
 			// print and return
-			QPainter pr( &p );
-			pr.drawPixmap( 0, 0, QPixmap::grabWidget( w ) );
+			QPainter painter( &printer );
+			painter.drawPixmap( 0, 0, mDesignerManager->previewPixmap( form, style ) );
 		}
 	}
 }
 
 void QtDesignerChild::printFile( const QString& s )
 {
-	foreach ( QMdiSubWindow* w, mArea->subWindowList() )
-		if ( QDesignerFormWindowInterface* i = qobject_cast<QDesignerFormWindowInterface*>( w->widget() ) )
-			if ( isSameFile( i->fileName(), s ) )
-				printForm( w, false );
+	Q_UNUSED( s );
+	printFormHelper( mHostWidget->formWindow(), false );
 }
 
 void QtDesignerChild::quickPrintFile( const QString& s )
 {
-	foreach ( QMdiSubWindow* w, mArea->subWindowList() )
-		if ( QDesignerFormWindowInterface* i = qobject_cast<QDesignerFormWindowInterface*>( w->widget() ) )
-			if ( isSameFile( i->fileName(), s ) )
-				printForm( w, true );
+	Q_UNUSED( s );
+	printFormHelper( mHostWidget->formWindow(), true );
 }
 
 void QtDesignerChild::undo() {}
@@ -713,29 +384,36 @@ void QtDesignerChild::searchReplace() {}
 void QtDesignerChild::goTo() {}
 
 void QtDesignerChild::goTo( const QString& s, const QPoint&, bool )
-{ showFile( s ); }
+{
+	showFile( s );
+}
 
 void QtDesignerChild::backupCurrentFile( const QString& s )
 {
-	if ( QDesignerFormWindowInterface* w = qobject_cast<QDesignerFormWindowInterface*>( mArea->currentSubWindow()->widget() ) )
+	QFile f( s );
+	if ( f.open( QIODevice::WriteOnly ) )
 	{
-		QFile f( s );
-		if ( f.open( QIODevice::WriteOnly | QIODevice::Text ) )
-		{
-			f.resize( 0 );
-			f.write( w->contents().toUtf8() );
-			f.close();
-		}
-		else
-			warning( tr( "Backup Form..." ), tr( "An error occurs when backuping :\n%1" ).arg( s ) );
+		f.resize( 0 );
+		f.write( mHostWidget->formWindow()->contents().toUtf8() );
+		f.close();
+	}
+	else
+	{
+		MonkeyCore::statusBar()->appendMessage( tr( "An error occurs when backuping: %1" ).arg( s ) );
 	}
 }
 
 bool QtDesignerChild::isSearchReplaceAvailable() const
-{ return false; }
+{
+	return false;
+}
 
 bool QtDesignerChild::isGoToAvailable() const
-{ return false; }
+{
+	return false;
+}
 
 bool QtDesignerChild::isPrintAvailable() const
-{ return mArea->subWindowList().count(); }
+{
+	return true;
+}

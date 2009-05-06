@@ -11,9 +11,11 @@ UIQtAssistantSettings::UIQtAssistantSettings( QtAssistant* plugin, QWidget* pare
 {
 	mPlugin = plugin;
 	setupUi( this );
+	
 	dbbButtons->button( QDialogButtonBox::Help )->setIcon( QIcon( ":/help/icons/help/keyword.png" ) );
 	dbbButtons->button( QDialogButtonBox::RestoreDefaults )->setIcon( QIcon( ":/file/icons/file/backup.png" ) );
 	dbbButtons->button( QDialogButtonBox::Apply )->setIcon( QIcon( ":/file/icons/file/save.png" ) );
+	
 	// init gui
 	const QString docPath = mPlugin->settingsValue( "DocPath", QLibraryInfo::location( QLibraryInfo::DocumentationPath ) ).toString();
 	leDocPath->setText( docPath );

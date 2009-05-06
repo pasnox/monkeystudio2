@@ -18,6 +18,10 @@ QtAssistantDock::QtAssistantDock( QWidget* parent )
 	setupUi( this );
 	pbProgress->setVisible( false );
 
+#ifdef Q_OS_MAC
+	widget()->layout()->setSpacing( 10 );
+#endif
+
 	// create help engine with default collection
 	MkSQtDocInstaller::collectionFileDirectory( true );
 	mHelpEngine = new QHelpEngine( MkSQtDocInstaller::defaultHelpCollectionFileName(), this );
@@ -29,12 +33,17 @@ QtAssistantDock::QtAssistantDock( QWidget* parent )
 	mBookmarkManager = new BookmarkManager( mHelpEngine );
 	bwBookmarks = new BookmarkWidget( mBookmarkManager, this );
 	bwBookmarks->layout()->setMargin( 5 );
-	bwBookmarks->layout()->setSpacing( 5 );
+	bwBookmarks->layout()->setSpacing( 3 );
 
 	// create dock pages
 	vlContents->addWidget( mHelpEngine->contentWidget() );
 	vlIndex->addWidget( mHelpEngine->indexWidget() );
 	vlBookmarks->addWidget( bwBookmarks );
+	
+	QPalette pal = mHelpEngine->contentWidget()->palette();
+	pal.setColor( QPalette::Base, QColor( Qt::transparent ) );
+	mHelpEngine->contentWidget()->setPalette( pal );
+	mHelpEngine->contentWidget()->setFrameStyle( QFrame::NoFrame | QFrame::Plain );
 
 	// create content actions
 	mHelpEngine->contentWidget()->setContextMenuPolicy( Qt::ActionsContextMenu );
@@ -91,6 +100,12 @@ QtAssistantDock::QtAssistantDock( QWidget* parent )
 	if ( mDocInstaller->checkDocumentation() )
 	{
 		mBrowser->restoreLastShownPages();
+	}
+	
+	foreach ( QWidget* widget, findChildren<QWidget*>() )
+	{
+		widget->setAttribute( Qt::WA_MacShowFocusRect, false );
+		widget->setAttribute( Qt::WA_MacSmallSize );
 	}
 }
 

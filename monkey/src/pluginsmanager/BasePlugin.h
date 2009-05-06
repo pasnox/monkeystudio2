@@ -29,13 +29,14 @@
 #ifndef BASEPLUGIN_H
 #define BASEPLUGIN_H
 
-#include <fresh.h>
+#include <MonkeyExport.h>
+#include <pIconManager.h>
 
 #include "../coremanager/MonkeyCore.h"
 #include "../settingsmanager/Settings.h"
 
 #include <QtPlugin>
-#include <QLabel>
+#include <QPointer>
 
 #ifdef __COVERAGESCANNER__
 #include <QCoreApplication>
@@ -50,7 +51,8 @@ class Q_MONKEY_EXPORT BasePlugin : public QObject
 public:
 	// plugin type enums
 	enum Type
-	{	iAll = 0x0,
+	{
+		iAll = 0x0,
 		iBase = 0x1,
 		iChild = 0x2,
 		iCLITool = 0x4,
@@ -59,7 +61,8 @@ public:
 		iDebugger = 0x20,
 		iInterpreter = 0x40,
 		iXUP = 0x80,
-		iLast = 0x100 };
+		iLast = 0x100
+	};
 	
 	Q_DECLARE_FLAGS( Types, Type )
 		
@@ -69,24 +72,22 @@ public:
 		QString Caption; // the string to show as caption
 		QString Description; // the plugin description
 		QString Author; // the plugin author
-		BasePlugin::Types Type; // the plugin type ( can be or-ded
+		BasePlugin::Types Type; // the plugin type ( can be or-ded )
 		QStringList Languages; // language this plugin is for, default empty mean all
 		QString Name; // the plugin name for version control
 		QString Version; // the plugin version for version control
 		QString License; // the plugin license
-		bool Enabled; // to know if this plugin is enabled
+		bool FirstStartEnabled; // to know if this plugin is enabled
 	};
 	
 	BasePlugin()
-	{ mPluginInfos.Enabled = false; }
+	{ mPluginInfos.FirstStartEnabled = false; }
+	
 	virtual ~BasePlugin()
 	{ if ( isEnabled() ) setEnabled( false ); }
 	
 	virtual PluginInfos infos() const
 	{ return mPluginInfos; }
-	
-	bool neverEnable() const
-	{ return settingsValue( "NeverEnable", false ).toBool(); }
 	
 	static QString typeToString( BasePlugin::Type type )
 	{
@@ -141,14 +142,42 @@ public:
 		return types.join( ", " );
 	}
 	
+	QString captionVersionString() const
+	{
+		return QString( "%1 (%2)" ).arg( mPluginInfos.Caption ).arg( mPluginInfos.Version );
+	}
+	
+	QAction* stateAction() const
+	{
+		if ( !mAction )
+		{
+			mAction = new QAction( const_cast<BasePlugin*>( this ) );
+			mAction->setCheckable( true );
+			mAction->setText( tr( "Enabled" ) );
+			mAction->setObjectName( captionVersionString().replace( " ", "_" ) );
+			mAction->setData( QVariant::fromValue( const_cast<BasePlugin*>( this ) ) );
+		}
+		
+		return mAction;
+	}
+	
+	bool neverEnable() const
+	{ return settingsValue( "NeverEnable", false ).toBool(); }
+	
+	void setNeverEnable( bool never )
+	{ return setSettingsValue( "NeverEnable", never ); }
+	
 	virtual QPixmap pixmap() const
-	{ return QPixmap( ":/build/icons/build/misc.png" ); }
+	{ return pIconManager::pixmap( "misc.png", ":/build/icons/build" ); }
+	
+	virtual bool haveSettingsWidget() const
+	{ return false; }
 	
 	virtual QWidget* settingsWidget()
 	{ return 0; }
 	
 	virtual bool isEnabled() const
-	{ return mPluginInfos.Enabled; }
+	{ return stateAction()->isChecked(); }
 	
 	virtual bool setEnabled( bool )
 	{ return false; }
@@ -191,9 +220,11 @@ public:
 	
 protected:
 	PluginInfos mPluginInfos;
+	mutable QPointer<QAction> mAction;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS( BasePlugin::Types )
+Q_DECLARE_METATYPE( BasePlugin* )
 Q_DECLARE_METATYPE( BasePlugin::PluginInfos )
 Q_DECLARE_INTERFACE( BasePlugin, "org.monkeystudio.MonkeyStudio.BasePlugin/1.0" )
 

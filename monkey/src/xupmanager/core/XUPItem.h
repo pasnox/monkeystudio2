@@ -84,6 +84,13 @@ public:
 	// clear temporary data represented by key
 	void clearTemporaryValue( const QString& key );
 	
+	// return the stored cache value for key or defaultValue
+	QString cacheValue( const QString& key, const QString& defaultValue = QString::null ) const;
+	// set the cache value for key
+	void setCacheValue( const QString& key, const QString& value );
+	// clear cache data represented by key
+	void clearCacheValue( const QString& key );
+	
 	// view text, the text to shown in the item view
 	QString displayText() const;
 	// view icon, the icon to shown in the item view

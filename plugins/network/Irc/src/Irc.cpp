@@ -19,7 +19,7 @@ Irc::Irc()
 	mPluginInfos.Type = BasePlugin::iBase;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "1.0.0";
-	mPluginInfos.Enabled = false;
+	mPluginInfos.FirstStartEnabled = false;
 }
 
 Irc::~Irc()
@@ -44,7 +44,7 @@ bool Irc::setEnabled( bool b )
 //		connect( MonkeyCore::menuBar()->action( "mView/aShowSearchResults", tr( "Show Search Results" ), QIcon( ":/icons/tabsearch.png" ), "F12" ), SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showSearchResults() ) );
 //		connect( MonkeyCore::consoleManager(), SIGNAL( started() ), this, SLOT( onConsoleStarted() ) );
 		// set plugin enabled
-		mPluginInfos.Enabled = true;
+		stateAction()->setChecked( true );
 	}
 	else if ( !b && isEnabled() )
 	{
@@ -59,7 +59,7 @@ bool Irc::setEnabled( bool b )
 		// delete docks
 		delete mIrcDock;
 		// set plugin disabled
-		mPluginInfos.Enabled = false;
+		stateAction()->setChecked( false );
 	}
 	// return default value
 	return true;

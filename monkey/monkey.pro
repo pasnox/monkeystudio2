@@ -9,6 +9,9 @@ include( ../fresh/fresh.pri )
 # include ctags framework
 include( ../ctags/ctags.pri )
 
+# include qCtagsSense framework
+include( ../qCtagsSense/qCtagsSense.pri )
+
 # include monkey framework
 include( monkey.pri )
 
@@ -33,22 +36,22 @@ mac:*-g++:LIBS	*= -dynamic
 else:unix:*-g++:LIBS	*= -rdynamic
 
 isEqual( SYSTEM_QSCINTILLA, 1 ):PRE_TARGETDEPS	*= ../qscintilla
-PRE_TARGETDEPS	*= ../fresh ../ctags
+PRE_TARGETDEPS	*= ../fresh ../ctags ../qCtagsSense
 
 CONFIG( debug, debug|release ) {
 	#Debug
 	!isEqual( SYSTEM_QSCINTILLA, 1 ) {
-		unix:	LIBS	*= -lqscintilla2_debug -lfresh_debug -lctags_debug
-		else:	LIBS	*= -lqscintilla2d -lfreshd -lctagsd
+		unix:	LIBS	*= -lqscintilla2_debug -lfresh_debug -lctags_debug -lqCtagsSense_debug
+		else:	LIBS	*= -lqscintilla2d -lfreshd -lctagsd -lqCtagsSensed
 	} else {
-		unix:	LIBS	*= -lqscintilla2 -lfresh_debug -lctags_debug
-		else:	LIBS	*= -lqscintilla2 -lfreshd -lctagsd
+		unix:	LIBS	*= -lqscintilla2 -lfresh_debug -lctags_debug -lqCtagsSense_debug
+		else:	LIBS	*= -lqscintilla2 -lfreshd -lctagsd -lqCtagsSensed
 	}
 	win32-g++:LIBS	*= -Wl,--out-implib,$${PACKAGE_BUILD_PATH}/lib$${TARGET}.a
 	win32-msvc*:LIBS	*= /IMPLIB:$${PACKAGE_BUILD_PATH}/$${TARGET}.lib -lshell32
 } else {
 	#Release
-	LIBS	*= -lqscintilla2 -lctags -lfresh
+	LIBS	*= -lqscintilla2 -lctags -lfresh -lqCtagsSense
 	win32-g++:LIBS	*= -Wl,--out-implib,$${PACKAGE_BUILD_PATH}/lib$${TARGET}.a
 	win32-msvc*:LIBS	*= /IMPLIB:$${PACKAGE_BUILD_PATH}/$${TARGET}.lib -lshell32
 }
@@ -129,7 +132,8 @@ HEADERS	*= src/maininterface/ui/UITranslator.h \
 	src/pluginsmanager/ui/UIInterpreterSettings.h \
 	src/commandlinemanager/CommandLineManager.h \
 	src/shellmanager/MkSShellConsole.h \
-	src/shellmanager/MkSShellInterpreter.h
+	src/shellmanager/MkSShellInterpreter.h \
+	src/pluginsmanager/PluginsMenu.h
 
 SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/maininterface/ui/UIAbout.cpp \
@@ -179,7 +183,8 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/pluginsmanager/ui/UIInterpreterSettings.cpp \
 	src/commandlinemanager/CommandLineManager.cpp \
 	src/shellmanager/MkSShellInterpreter.cpp \
-	src/shellmanager/MkSShellConsole.cpp
+	src/shellmanager/MkSShellConsole.cpp \
+	src/pluginsmanager/PluginsMenu.cpp
 
 mac:SOURCES	*= src/toolsmanager/pDesktopApplications_mac.cpp
 else:unix:SOURCES	*= src/toolsmanager/pDesktopApplications_unix.cpp

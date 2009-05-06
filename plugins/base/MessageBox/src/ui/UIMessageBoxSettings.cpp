@@ -50,13 +50,16 @@ UIMessageBoxSettings::UIMessageBoxSettings( MessageBox* plugin, QWidget* parent 
 {
 	mPlugin = plugin;
 	setupUi( this );
+	
 	dbbButtons->button( QDialogButtonBox::Help )->setIcon( QIcon( ":/help/icons/help/keyword.png" ) );
 	dbbButtons->button( QDialogButtonBox::RestoreDefaults )->setIcon( QIcon( ":/file/icons/file/backup.png" ) );
 	dbbButtons->button( QDialogButtonBox::Apply )->setIcon( QIcon( ":/file/icons/file/save.png" ) );
+	
 	// fill combobox
 	cbActivateDock->addItem( tr( "Build Step" ), UIMessageBoxSettings::BuildStep );
 	cbActivateDock->addItem( tr( "Output" ), UIMessageBoxSettings::Output );
 	cbActivateDock->addItem( tr( "Commands" ), UIMessageBoxSettings::Command );
+	
 	// restore settings
 	gbActivateDock->setChecked( mPlugin->settingsValue( "ActivateDock", true ).toBool() );
 	UIMessageBoxSettings::Dock dock = (UIMessageBoxSettings::Dock)mPlugin->settingsValue( "ActivatedDock", UIMessageBoxSettings::Output ).toInt();

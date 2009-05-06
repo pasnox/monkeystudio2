@@ -27,6 +27,7 @@
 **
 ****************************************************************************/
 #include "PluginsManager.h"
+#include "PluginsMenu.h"
 #include "../pMonkeyStudio.h"
 #include "ui/UIPluginsSettings.h"
 #include "../coremanager/MonkeyCore.h"
@@ -38,6 +39,9 @@
 PluginsManager::PluginsManager( QObject* p )
 	: QObject( p )
 {
+	mMenu = new PluginsMenu( this );
+	mMenu->setObjectName( "pluginsMenu" );
+	mMenu->setTitle( tr( "Manage" ) );
 	mBuilder = 0;
 	mCompiler = 0;
 	mDebugger = 0;
@@ -117,6 +121,8 @@ bool PluginsManager::addPlugin( QObject* o )
 	// add it to plugins list
 	mPlugins << bp;
 	
+	mMenu->addPlugin( bp );
+	
 	// return
 	return true;
 }
@@ -124,20 +130,37 @@ bool PluginsManager::addPlugin( QObject* o )
 void PluginsManager::enableUserPlugins()
 {
 	foreach ( BasePlugin* bp, mPlugins )
-	{		
+	{
+		// check first start state
+		if ( MonkeyCore::settings()->value( "FirstTimeRunning", true ).toBool() )
+		{
+			if ( !bp->infos().FirstStartEnabled )
+			{
+				MonkeyCore::settings()->setValue( QString( "Plugins/%1" ).arg( bp->infos().Name ), false );
+			}
+		}
+		
 		// check in settings if we must install this plugin
 		if ( !MonkeyCore::settings()->value( QString( "Plugins/%1" ).arg( bp->infos().Name ), true ).toBool() )
+		{
 			qWarning( qPrintable( tr( "User wantn't to intall plugin: %1" ).arg( bp->infos().Name ) ) );
+		}
 		// if not enabled, enable it
 		else if ( !bp->isEnabled() )
 		{
 			if ( bp->setEnabled( true ) )
+			{
 				qWarning( qPrintable( tr( "Successfully enabled plugin: %1" ).arg( bp->infos().Name ) ) );
+			}
 			else
+			{
 				qWarning( qPrintable( tr( "Unsuccessfully enabled plugin: %1" ).arg( bp->infos().Name ) ) );
+			}
 		}
 		else
+		{
 			qWarning( qPrintable( tr( "Already enabled plugin: %1" ).arg( bp->infos().Name ) ) );
+		}
 	}
 }
 
@@ -186,6 +209,7 @@ void PluginsManager::setCurrentBuilder( BuilderPlugin* b )
 	
 	// enable menu according to current builder
 	MonkeyCore::menuBar()->menu( "mBuilder" )->setEnabled( mBuilder || mCompiler );
+	MonkeyCore::menuBar()->menu( "mBuilder" )->menuAction()->setVisible( mBuilder || mCompiler );
 }
 
 BuilderPlugin* PluginsManager::currentBuilder()
@@ -208,6 +232,7 @@ void PluginsManager::setCurrentCompiler( CompilerPlugin* c )
 	
 	// enable menu according to current compiler
 	MonkeyCore::menuBar()->menu( "mBuilder" )->setEnabled( mCompiler || mBuilder );
+	MonkeyCore::menuBar()->menu( "mBuilder" )->menuAction()->setVisible( mBuilder || mCompiler );
 }
 
 CompilerPlugin* PluginsManager::currentCompiler()
@@ -230,6 +255,7 @@ void PluginsManager::setCurrentDebugger( DebuggerPlugin* d )
 	
 	// enable menu according to current debugger
 	MonkeyCore::menuBar()->menu( "mDebugger" )->setEnabled( mDebugger );
+	MonkeyCore::menuBar()->menu( "mDebugger" )->menuAction()->setVisible( mDebugger );
 }
 
 DebuggerPlugin* PluginsManager::currentDebugger()
@@ -252,6 +278,7 @@ void PluginsManager::setCurrentInterpreter( InterpreterPlugin* i )
 	
 	// enable menu according to current interpreter
 	MonkeyCore::menuBar()->menu( "mInterpreter" )->setEnabled( mInterpreter );
+	MonkeyCore::menuBar()->menu( "mInterpreter" )->menuAction()->setVisible( mInterpreter );
 }
 
 InterpreterPlugin* PluginsManager::currentInterpreter()

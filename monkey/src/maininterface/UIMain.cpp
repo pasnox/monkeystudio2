@@ -35,6 +35,7 @@
 #include "../consolemanager/pConsoleManager.h"
 #include "../workspace/pFileManager.h"
 #include "../pluginsmanager/PluginsManager.h"
+#include "../pluginsmanager/PluginsMenu.h"
 #include "../queuedstatusbar/QueuedStatusBar.h"
 
 #include <fresh.h>
@@ -46,10 +47,35 @@
 UIMain::UIMain( QWidget* p )
 	: pMainWindow( p )
 {
+	setAcceptDrops( true );
 	setCorner( Qt::TopLeftCorner, Qt::LeftDockWidgetArea );
 	setCorner( Qt::TopRightCorner, Qt::RightDockWidgetArea );
 	setCorner( Qt::BottomLeftCorner, Qt::LeftDockWidgetArea );
 	setCorner( Qt::BottomRightCorner, Qt::RightDockWidgetArea );
+}
+
+void UIMain::dragEnterEvent( QDragEnterEvent* event )
+{
+	// if correct mime and same tabbar
+	if ( event->mimeData()->hasUrls() )
+	{
+		// accept drag
+		event->acceptProposedAction();
+	}
+	
+	// default event
+	pMainWindow::dragEnterEvent( event );
+}
+
+void UIMain::dropEvent( QDropEvent* event )
+{
+	if ( event->mimeData()->hasUrls() )
+	{
+		emit urlsDropped( event->mimeData()->urls () );
+	}
+	
+	// default event
+	pMainWindow::dropEvent( event );
 }
 
 void UIMain::initGui()
@@ -66,6 +92,9 @@ void UIMain::initGui()
 	dockToolBar( Qt::LeftToolBarArea )->addDock( MonkeyCore::projectsManager(), MonkeyCore::projectsManager()->windowTitle(), QIcon( ":/project/icons/project/project.png" ) );
 	// init workspace
 	setCentralWidget( MonkeyCore::workspace() );
+	// init multitoolbar
+	MonkeyCore::workspace()->initMultiToolBar( MonkeyCore::multiToolBar()->toolBar( pWorkspace::defaultContext() ) );
+	MonkeyCore::workspace()->initMultiToolBar( MonkeyCore::multiToolBar()->toolBar( "Coding" ) );
 	// init status bar
 	setStatusBar( MonkeyCore::statusBar() );
 	// init connection
@@ -198,6 +227,7 @@ void UIMain::initMenuBar()
 		mb->action( "mRecents/aSeparator1" );
 	mb->endGroup();
 	mb->menu( "mBuilder", tr( "Build" ) )->setEnabled( false );
+	mb->menu( "mBuilder" )->menuAction()->setVisible( false );
 	mb->beginGroup( "mBuilder" );
 		mb->menu( "mBuild", tr( "&Build" ), QIcon( ":/build/icons/build/build.png" ) );
 		mb->menu( "mRebuild", tr( "&Rebuild" ), QIcon( ":/build/icons/build/rebuild.png" ) );
@@ -207,7 +237,9 @@ void UIMain::initMenuBar()
 		mb->action( "aSeparator1" );
 	mb->endGroup();
 	mb->menu( "mDebugger", tr( "Debugger" ) )->setEnabled( false );
-	mb->menu( "mInterpreter", tr( "&Interpreter" ) )->setEnabled( false );
+	mb->menu( "mDebugger" )->menuAction()->setVisible( false );
+	mb->menu( "mInterpreter", tr( "Interpreter" ) )->setEnabled( false );
+	mb->menu( "mInterpreter" )->menuAction()->setVisible( false );
 	mb->menu( "mTools", tr( "Tools" ) );
 	mb->beginGroup( "mTools" );
 		mb->action( "aEditUser", tr( "&Edit User Tools..." ), QIcon( ":/tools/icons/tools/edit.png" ), QString::null, tr( "Edit tools..." ) );
@@ -217,9 +249,8 @@ void UIMain::initMenuBar()
 		mb->menu( "mDesktopTools", tr( "Desktop &Tools" ), QIcon( ":/tools/icons/tools/desktop.png" ) );
 		mb->action( "aSeparator2" );
 	mb->endGroup();
-	mb->menu( "mPlugins", tr( "Plugins" ) );
+	mb->menu( "mPlugins", tr( "Plugins" ) )->addAction( MonkeyCore::pluginsManager()->menu()->menuAction() );
 	mb->beginGroup( "mPlugins" );
-		mb->action( "aManage", tr( "&Manage..." ), QIcon( ":/Icons/Icons/toolsedit.png" ), QString::null, tr( "Manage plugins..." ) );
 		mb->action( "aSeparator1" );
 	mb->endGroup();
 	mb->menu( "mWindow", tr( "Window" ) );
@@ -244,16 +275,10 @@ void UIMain::initMenuBar()
 		mb->action( "aSeparator2" );
 #endif
 	mb->endGroup();
+	
 	// create action for styles
-	agStyles = new QActionGroup( mb->menu( "mView/mStyle" ) );
-	foreach ( QString s, QStyleFactory::keys() )
-	{
-		QAction* a = agStyles->addAction( s );
-		a->setCheckable( true );
-		if ( MonkeyCore::settings()->value( "MainWindow/Style" ).toString() == s )
-			a->setChecked( true );
-	}
-	// add styles action to menu
+	agStyles = new pStylesActionGroup( tr( "Use %1 style" ), mb->menu( "mView/mStyle" ) );
+	agStyles->setCurrentStyle( MonkeyCore::settings()->value( "MainWindow/Style" ).toString() );
 	mb->menu( "mView/mStyle" )->addActions( agStyles->actions() );
 }
 
@@ -328,7 +353,7 @@ void UIMain::initConnections()
 	connect( menuBar()->action( "mEdit/aExpandAbbreviation" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editExpandAbbreviation_triggered() ) );
 	connect( menuBar()->action( "mEdit/aPrepareAPIs" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( editPrepareAPIs_triggered() ) );
 	// view connection
-	connect( agStyles, SIGNAL( triggered( QAction* ) ), MonkeyCore::workspace(), SLOT( agStyles_triggered( QAction* ) ) );
+	connect( agStyles, SIGNAL( styleSelected( const QString& ) ), this, SLOT( changeStyle( const QString& ) ) );
 	connect( menuBar()->action( "mView/aNext" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( activateNextDocument() ) );
 	connect( menuBar()->action( "mView/aPrevious" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( activatePreviousDocument() ) );
 	connect( menuBar()->menu( "mDocks" ), SIGNAL( aboutToShow() ), this, SLOT( menu_Docks_aboutToShow() ) );
@@ -340,7 +365,6 @@ void UIMain::initConnections()
 	connect( menuBar()->menu( "mDebugger" ), SIGNAL( aboutToShow() ), this, SLOT( menu_CustomAction_aboutToShow() ) );
 	connect( menuBar()->menu( "mInterpreter" ), SIGNAL( aboutToShow() ), this, SLOT( menu_CustomAction_aboutToShow() ) );
 	// plugins menu
-	connect( menuBar()->action( "mPlugins/aManage" ), SIGNAL( triggered() ), MonkeyCore::pluginsManager(), SLOT( manageRequested() ) );
 	// window menu
 	connect( menuBar()->action( "mWindow/aSDI" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( setSDI() ) );
 	connect( menuBar()->action( "mWindow/aMDI" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( setMDI() ) );
@@ -385,4 +409,11 @@ void UIMain::menu_CustomAction_aboutToShow()
 		foreach ( QAction* a, m->actions() )
 			if ( a->menu() )
 				a->menu()->menuAction()->setVisible( a->menu()->actions().count() );
+}
+
+void UIMain::changeStyle( const QString& style )
+{
+	qApp->setStyle( style );
+	qApp->setPalette( qApp->style()->standardPalette() );
+	settings()->setValue( "MainWindow/Style", style );
 }

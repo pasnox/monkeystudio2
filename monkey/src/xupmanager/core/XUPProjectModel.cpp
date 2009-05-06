@@ -154,10 +154,40 @@ QVariant XUPProjectModel::data( const QModelIndex& index, int role ) const
 			}
 			else if ( role == Qt::ToolTipRole )
 			{
+				if ( item->type() == XUPItem::Project )
+				{
+					attributes << QString( "Project: %1" ).arg( item->project()->fileName() );
+				}
+				
 				for ( int i = 0; i < attributeMap.count(); i++ )
 				{
 					QDomNode attribute = attributeMap.item( i );
-					attributes << attribute.nodeName() +"=\"" +attribute.nodeValue() +"\"";
+					QString name = attribute.nodeName();
+					attributes << name +"=\"" +attribute.nodeValue() +"\"";
+					
+					switch ( item->type() )
+					{
+						case XUPItem::Value:
+						case XUPItem::File:
+						case XUPItem::Path:
+						{
+							if ( name == "content" )
+							{
+								attributes << QString( "cache-%1" ).arg( name ) +"=\"" +item->cacheValue( name ) +"\"";
+							}
+							break;
+						}
+						case XUPItem::Function:
+						{
+							if ( name == "parameters" )
+							{
+								attributes << QString( "cache-%1" ).arg( name ) +"=\"" +item->cacheValue( name ) +"\"";
+							}
+							break;
+						}
+						default:
+							break;
+					}
 				}
 				
 				return attributes.join( "\n" );
@@ -207,7 +237,7 @@ bool XUPProjectModel::open( const QString& fileName, const QString& codec )
 		return true;
 	}
 	
-	setLastError( tr( "Can't open this project file" ) );
+	setLastError( tr( "Can't open this project file: " ).append( tmpProject->lastError() ) );
 	delete tmpProject;
 	return false;
 }

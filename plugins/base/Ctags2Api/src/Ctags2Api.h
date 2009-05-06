@@ -40,6 +40,7 @@ public:
 	Ctags2Api();
 	~Ctags2Api();
 	virtual bool setEnabled( bool );
+	virtual QPixmap pixmap() const { return pIconManager::pixmap( "Ctags2Api.png", ":/icons" ); }
 
 protected slots:
 	void UICtags2Api_show();
