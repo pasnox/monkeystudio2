@@ -142,8 +142,6 @@ qCtagsSenseBrowser::qCtagsSenseBrowser( QWidget* parent )
 	lSearch->setAttribute( Qt::WA_MacSmallSize );
 	cbSearchs->setAttribute( Qt::WA_MacShowFocusRect, false );
 	cbSearchs->setAttribute( Qt::WA_MacSmallSize );
-	cbLocked->setAttribute( Qt::WA_MacShowFocusRect, false );
-	cbLocked->setAttribute( Qt::WA_MacSmallSize );
 	tvMembers->setAttribute( Qt::WA_MacShowFocusRect, false );
 	tvMembers->setAttribute( Qt::WA_MacSmallSize );
 	
@@ -266,12 +264,7 @@ void qCtagsSenseBrowser::setFilteredSuffixes( const QStringList& suffixes )
 }
 
 void qCtagsSenseBrowser::setCurrentFileName( const QString& fileName )
-{
-	if ( cbLocked->isChecked() )
-	{
-		return;
-	}
-	
+{	
 	mLanguage = getFileNameLanguageName( fileName.toLocal8Bit().constData() );
 	mFileName = fileName;
 	
