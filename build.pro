@@ -1,3 +1,8 @@
+XUPProjectSettings {
+	EXECUTE_DEBUG	= bin/monkeystudio_debug
+	QT_VERSION	= Qt System (4.4.3)
+}
+
 # include install script
 include( installs.pri )
 
