@@ -53,14 +53,13 @@ public:
 	}
 
 public slots:
-	void executeQuery( const QString& sql, SearchMapEntries* entries )
+	void executeQuery( const QString& sql )
 	{
 		{
 			QMutexLocker locker( &mMutex );
 			mRestart = isRunning();
 			mStop = false;
 			mQuery = sql;
-			mEntriesList << entries;
 		}
 		
 		if ( !isRunning() )
@@ -128,24 +127,12 @@ protected:
 					
 					if ( mStop )
 					{
-						return;
+						break;
 					}
 					else if ( mRestart )
 					{
 						break;
 					}
-				}
-			}
-			
-			{
-				QMutexLocker locker( &mMutex );
-				
-				if ( mRestart )
-				{
-					mRestart = false;
-					locker.unlock();
-					clearEntries();
-					continue;
 				}
 			}
 			
@@ -185,7 +172,7 @@ qCtagsSenseSearchModel::qCtagsSenseSearchModel( qCtagsSenseSQL* parent )
 
 qCtagsSenseSearchModel::~qCtagsSenseSearchModel()
 {
-	delete mEntries;
+	clear();
 }
 
 int qCtagsSenseSearchModel::columnCount( const QModelIndex& parent ) const
@@ -231,6 +218,12 @@ QVariant qCtagsSenseSearchModel::data( const QModelIndex& index, int role ) cons
 			case Qt::ToolTipRole:
 				return qCtagsSenseUtils::entryToolTip( entry );
 				break;
+			case qCtagsSenseSearchModel::TypeRole:
+				return qCtagsSenseSearchModel::Entry;
+				break;
+			case qCtagsSenseSearchModel::DataRole:
+				return QVariant::fromValue( entry );
+				break;
 			default:
 				break;
 		}
@@ -247,6 +240,12 @@ QVariant qCtagsSenseSearchModel::data( const QModelIndex& index, int role ) cons
 				return QFileInfo( fileName ).fileName();
 				break;
 			case Qt::ToolTipRole:
+				return fileName;
+				break;
+			case qCtagsSenseSearchModel::TypeRole:
+				return qCtagsSenseSearchModel::FileName;
+				break;
+			case qCtagsSenseSearchModel::DataRole:
 				return fileName;
 				break;
 			default:
@@ -342,11 +341,8 @@ void qCtagsSenseSearchModel::refresh( const QString& search )
 		"AND entries.name LIKE '%%1%'"
 	).arg( search );
 	
-	SearchMapEntries* entries = mEntries;
-	mEntries = 0;
-	
-	reset();
-	mThread->executeQuery( sql, entries );
+	clear();
+	mThread->executeQuery( sql );
 }
 
 void qCtagsSenseSearchModel::queryFinished( SearchMapEntries* entries )
@@ -357,4 +353,4 @@ void qCtagsSenseSearchModel::queryFinished( SearchMapEntries* entries )
 	emit ready();
 }
 
-#include "qCtagsSenseSearch.moc"
+#include "qCtagsSenseSearchModel.moc"

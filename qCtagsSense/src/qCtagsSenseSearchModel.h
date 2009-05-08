@@ -35,6 +35,9 @@ class QCTAGSSENSE_EXPORT qCtagsSenseSearchModel : public QAbstractItemModel
 	Q_OBJECT
 	
 public:
+	enum Types { FileName, Entry };
+	enum Roles { TypeRole = Qt::UserRole, DataRole };
+	
 	qCtagsSenseSearchModel( qCtagsSenseSQL* parent );
 	virtual ~qCtagsSenseSearchModel();
 	

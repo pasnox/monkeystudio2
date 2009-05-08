@@ -78,6 +78,7 @@ protected slots:
 
 signals:
 	void memberActivated( qCtagsSenseEntry* entry );
+	void fileNameActivated( const QString& fileName );
 };
 
 #endif // QCTAGSSENSEBROWSER_H

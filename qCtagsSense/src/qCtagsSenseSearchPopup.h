@@ -3,6 +3,8 @@
 
 #include <QTreeView>
 
+class qCtagsSenseEntry;
+
 class qCtagsSenseSearchPopup : public QTreeView
 {
 	Q_OBJECT
@@ -22,6 +24,13 @@ protected:
 	
 	virtual bool eventFilter( QObject* object, QEvent* event );
 	bool searchPopupEventFilter( QEvent* event );
+
+protected slots:
+	void _q_activated( const QModelIndex& index );
+
+signals:
+	void fileNameActivated( const QString& fileName );
+	void entryActivated( qCtagsSenseEntry* entry );
 };
 
 #endif // QCTAGSSENSESEARCHPOPUP_H

@@ -178,6 +178,9 @@ qCtagsSenseBrowser::qCtagsSenseBrowser( QWidget* parent )
 	connect( leSearch, SIGNAL( textChanged( const QString& ) ), this, SLOT( mSearchModel_refresh( const QString& ) ) );
 	connect( mSearchModel, SIGNAL( ready() ), this, SLOT( mSearchModel_ready() ) );
 	connect( mSearchModel, SIGNAL( searching( bool ) ), this, SLOT( mSearchModel_searching( bool ) ) );
+	
+	connect( mSearchTreeView, SIGNAL( entryActivated( qCtagsSenseEntry* ) ), this, SIGNAL( memberActivated( qCtagsSenseEntry* ) ) );
+	connect( mSearchTreeView, SIGNAL( fileNameActivated( const QString& ) ), this, SIGNAL( fileNameActivated( const QString& ) ) );
 }
 
 qCtagsSenseBrowser::~qCtagsSenseBrowser()

@@ -1,4 +1,5 @@
 #include "qCtagsSenseSearchPopup.h"
+#include "qCtagsSenseSearchModel.h"
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -23,6 +24,8 @@ qCtagsSenseSearchPopup::qCtagsSenseSearchPopup( QWidget* widget )
 	
 	installEventFilter( this );
 	setWidget( widget );
+	
+	connect( this, SIGNAL( activated( const QModelIndex& ) ), this, SLOT( _q_activated( const QModelIndex& ) ) );
 }
 
 qCtagsSenseSearchPopup::~qCtagsSenseSearchPopup()
@@ -217,6 +220,21 @@ bool qCtagsSenseSearchPopup::searchPopupEventFilter( QEvent* e )
     }
 	
     return false;
+}
+
+void qCtagsSenseSearchPopup::_q_activated( const QModelIndex& index )
+{
+	switch ( index.data( qCtagsSenseSearchModel::TypeRole ).toInt() )
+	{
+		case qCtagsSenseSearchModel::FileName:
+			emit fileNameActivated( index.data( qCtagsSenseSearchModel::DataRole ).toString() );
+			break;
+		case qCtagsSenseSearchModel::Entry:
+			emit entryActivated( index.data( qCtagsSenseSearchModel::DataRole ).value<qCtagsSenseEntry*>() );
+			break;
+	}
+	
+	hide();
 }
 
 void qCtagsSenseSearchPopup::setWidget( QWidget* widget )
