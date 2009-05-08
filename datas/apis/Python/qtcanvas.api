@@ -1,0 +1,261 @@
+qtcanvas.QCanvasItem.RttiValues
+qtcanvas.QCanvasItem.Rtti_Item
+qtcanvas.QCanvasItem.Rtti_Sprite
+qtcanvas.QCanvasItem.Rtti_PolygonalItem
+qtcanvas.QCanvasItem.Rtti_Text
+qtcanvas.QCanvasItem.Rtti_Polygon
+qtcanvas.QCanvasItem.Rtti_Rectangle
+qtcanvas.QCanvasItem.Rtti_Ellipse
+qtcanvas.QCanvasItem.Rtti_Line
+qtcanvas.QCanvasItem.Rtti_Spline
+qtcanvas.QCanvasItem(QCanvas)
+qtcanvas.QCanvasItem.__init__(self, QCanvas)
+qtcanvas.QCanvasItem(QCanvasItem other)
+qtcanvas.QCanvasItem.__init__(self, QCanvasItem other)
+qtcanvas.QCanvasItem.x() -> float
+qtcanvas.QCanvasItem.y() -> float
+qtcanvas.QCanvasItem.z() -> float
+qtcanvas.QCanvasItem.moveBy(float, float)
+qtcanvas.QCanvasItem.move(float, float)
+qtcanvas.QCanvasItem.setX(float)
+qtcanvas.QCanvasItem.setY(float)
+qtcanvas.QCanvasItem.setZ(float)
+qtcanvas.QCanvasItem.animated() -> bool
+qtcanvas.QCanvasItem.setAnimated(bool)
+qtcanvas.QCanvasItem.setVelocity(float, float)
+qtcanvas.QCanvasItem.setXVelocity(float)
+qtcanvas.QCanvasItem.setYVelocity(float)
+qtcanvas.QCanvasItem.xVelocity() -> float
+qtcanvas.QCanvasItem.yVelocity() -> float
+qtcanvas.QCanvasItem.advance(int)
+qtcanvas.QCanvasItem.collidesWith(QCanvasItem) -> bool
+qtcanvas.QCanvasItem.collisions(bool) -> 
+qtcanvas.QCanvasItem.setCanvas(QCanvas)
+qtcanvas.QCanvasItem.draw(QPainter)
+qtcanvas.QCanvasItem.show()
+qtcanvas.QCanvasItem.hide()
+qtcanvas.QCanvasItem.setVisible(bool)
+qtcanvas.QCanvasItem.isVisible() -> bool
+qtcanvas.QCanvasItem.setSelected(bool)
+qtcanvas.QCanvasItem.isSelected() -> bool
+qtcanvas.QCanvasItem.setEnabled(bool)
+qtcanvas.QCanvasItem.isEnabled() -> bool
+qtcanvas.QCanvasItem.setActive(bool)
+qtcanvas.QCanvasItem.isActive() -> bool
+qtcanvas.QCanvasItem.rtti() -> int
+qtcanvas.QCanvasItem.boundingRect() -> QRect
+qtcanvas.QCanvasItem.boundingRectAdvanced() -> QRect
+qtcanvas.QCanvasItem.canvas() -> QCanvas
+qtcanvas.QCanvasItem.update()
+qtcanvas.QCanvas(QObject=None, str=None)
+qtcanvas.QCanvas.__init__(self, QObject=None, str=None)
+qtcanvas.QCanvas(int, int)
+qtcanvas.QCanvas.__init__(self, int, int)
+qtcanvas.QCanvas(QPixmap, int, int, int, int)
+qtcanvas.QCanvas.__init__(self, QPixmap, int, int, int, int)
+qtcanvas.QCanvas.metaObject() -> QMetaObject
+qtcanvas.QCanvas.setTiles(QPixmap, int, int, int, int)
+qtcanvas.QCanvas.setBackgroundPixmap(QPixmap)
+qtcanvas.QCanvas.backgroundPixmap() -> QPixmap
+qtcanvas.QCanvas.setBackgroundColor(QColor)
+qtcanvas.QCanvas.backgroundColor() -> QColor
+qtcanvas.QCanvas.setTile(int, int, int)
+qtcanvas.QCanvas.tile(int, int) -> int
+qtcanvas.QCanvas.tilesHorizontally() -> int
+qtcanvas.QCanvas.tilesVertically() -> int
+qtcanvas.QCanvas.tileWidth() -> int
+qtcanvas.QCanvas.tileHeight() -> int
+qtcanvas.QCanvas.resize(int, int)
+qtcanvas.QCanvas.width() -> int
+qtcanvas.QCanvas.height() -> int
+qtcanvas.QCanvas.size() -> QSize
+qtcanvas.QCanvas.rect() -> QRect
+qtcanvas.QCanvas.onCanvas(int, int) -> bool
+qtcanvas.QCanvas.onCanvas(QPoint) -> bool
+qtcanvas.QCanvas.validChunk(int, int) -> bool
+qtcanvas.QCanvas.validChunk(QPoint) -> bool
+qtcanvas.QCanvas.chunkSize() -> int
+qtcanvas.QCanvas.retune(int, int=100)
+qtcanvas.QCanvas.setAllChanged()
+qtcanvas.QCanvas.setChanged(QRect)
+qtcanvas.QCanvas.setUnchanged(QRect)
+qtcanvas.QCanvas.allItems() -> 
+qtcanvas.QCanvas.collisions(QPoint) -> 
+qtcanvas.QCanvas.collisions(QRect) -> 
+qtcanvas.QCanvas.collisions(QPointArray, QCanvasItem, bool) -> 
+qtcanvas.QCanvas.drawArea(QRect, QPainter, bool=False)
+qtcanvas.QCanvas.setAdvancePeriod(int)
+qtcanvas.QCanvas.setUpdatePeriod(int)
+qtcanvas.QCanvas.setDoubleBuffering(bool)
+qtcanvas.QCanvas.resized()
+qtcanvas.QCanvas.advance()
+qtcanvas.QCanvas.update()
+qtcanvas.QCanvas.drawBackground(QPainter, QRect)
+qtcanvas.QCanvas.drawForeground(QPainter, QRect)
+qtcanvas.QCanvasView(QWidget=None, str=None, unsigned long=0)
+qtcanvas.QCanvasView.__init__(self, QWidget=None, str=None, unsigned long=0)
+qtcanvas.QCanvasView(QCanvas, QWidget=None, str=None, unsigned long=0)
+qtcanvas.QCanvasView.__init__(self, QCanvas, QWidget=None, str=None, unsigned long=0)
+qtcanvas.QCanvasView.metaObject() -> QMetaObject
+qtcanvas.QCanvasView.canvas() -> QCanvas
+qtcanvas.QCanvasView.setCanvas(QCanvas)
+qtcanvas.QCanvasView.worldMatrix() -> QWMatrix
+qtcanvas.QCanvasView.inverseWorldMatrix() -> QWMatrix
+qtcanvas.QCanvasView.setWorldMatrix(QWMatrix) -> bool
+qtcanvas.QCanvasView.drawContents(QPainter, int, int, int, int)
+qtcanvas.QCanvasView.sizeHint() -> QSize
+qtcanvas.QCanvasPixmap(QString)
+qtcanvas.QCanvasPixmap.__init__(self, QString)
+qtcanvas.QCanvasPixmap(QImage)
+qtcanvas.QCanvasPixmap.__init__(self, QImage)
+qtcanvas.QCanvasPixmap(QPixmap, QPoint)
+qtcanvas.QCanvasPixmap.__init__(self, QPixmap, QPoint)
+qtcanvas.QCanvasPixmap.offsetX() -> int
+qtcanvas.QCanvasPixmap.offsetY() -> int
+qtcanvas.QCanvasPixmap.setOffset(int, int)
+qtcanvas.QCanvasPixmapArray()
+qtcanvas.QCanvasPixmapArray.__init__(self)
+qtcanvas.QCanvasPixmapArray(QString, int=0)
+qtcanvas.QCanvasPixmapArray.__init__(self, QString, int=0)
+qtcanvas.QCanvasPixmapArray(QPointArray=QPointArray())
+qtcanvas.QCanvasPixmapArray.__init__(self, QPointArray=QPointArray())
+qtcanvas.QCanvasPixmapArray.readPixmaps(QString, int=0) -> bool
+qtcanvas.QCanvasPixmapArray.readCollisionMasks(QString) -> bool
+qtcanvas.QCanvasPixmapArray.isValid() -> bool
+qtcanvas.QCanvasPixmapArray.image(int) -> QCanvasPixmap
+qtcanvas.QCanvasPixmapArray.setImage(int, QCanvasPixmap)
+qtcanvas.QCanvasPixmapArray.count() -> unsigned long
+qtcanvas.QCanvasSprite.FrameAnimationType
+qtcanvas.QCanvasSprite.Cycle
+qtcanvas.QCanvasSprite.Oscillate
+qtcanvas.QCanvasSprite(QCanvasPixmapArray, QCanvas)
+qtcanvas.QCanvasSprite.__init__(self, QCanvasPixmapArray, QCanvas)
+qtcanvas.QCanvasSprite.setSequence(QCanvasPixmapArray)
+qtcanvas.QCanvasSprite.move(float, float)
+qtcanvas.QCanvasSprite.move(float, float, int)
+qtcanvas.QCanvasSprite.setFrame(int)
+qtcanvas.QCanvasSprite.setFrameAnimation(QCanvasSprite.FrameAnimationType=QCanvasSprite.Cycle, int=1, int=0)
+qtcanvas.QCanvasSprite.frame() -> int
+qtcanvas.QCanvasSprite.frameCount() -> int
+qtcanvas.QCanvasSprite.rtti() -> int
+qtcanvas.QCanvasSprite.collidesWith(QCanvasItem) -> bool
+qtcanvas.QCanvasSprite.boundingRect() -> QRect
+qtcanvas.QCanvasSprite.width() -> int
+qtcanvas.QCanvasSprite.height() -> int
+qtcanvas.QCanvasSprite.leftEdge() -> int
+qtcanvas.QCanvasSprite.topEdge() -> int
+qtcanvas.QCanvasSprite.rightEdge() -> int
+qtcanvas.QCanvasSprite.bottomEdge() -> int
+qtcanvas.QCanvasSprite.leftEdge(int) -> int
+qtcanvas.QCanvasSprite.topEdge(int) -> int
+qtcanvas.QCanvasSprite.rightEdge(int) -> int
+qtcanvas.QCanvasSprite.bottomEdge(int) -> int
+qtcanvas.QCanvasSprite.image() -> QCanvasPixmap
+qtcanvas.QCanvasSprite.imageAdvanced() -> QCanvasPixmap
+qtcanvas.QCanvasSprite.image(int) -> QCanvasPixmap
+qtcanvas.QCanvasSprite.advance(int)
+qtcanvas.QCanvasSprite.draw(QPainter)
+qtcanvas.QCanvasPolygonalItem(QCanvas)
+qtcanvas.QCanvasPolygonalItem.__init__(self, QCanvas)
+qtcanvas.QCanvasPolygonalItem(QCanvasPolygonalItem other)
+qtcanvas.QCanvasPolygonalItem.__init__(self, QCanvasPolygonalItem other)
+qtcanvas.QCanvasPolygonalItem.collidesWith(QCanvasItem) -> bool
+qtcanvas.QCanvasPolygonalItem.setPen(QPen)
+qtcanvas.QCanvasPolygonalItem.setBrush(QBrush)
+qtcanvas.QCanvasPolygonalItem.pen() -> QPen
+qtcanvas.QCanvasPolygonalItem.brush() -> QBrush
+qtcanvas.QCanvasPolygonalItem.areaPoints() -> QPointArray
+qtcanvas.QCanvasPolygonalItem.areaPointsAdvanced() -> QPointArray
+qtcanvas.QCanvasPolygonalItem.boundingRect() -> QRect
+qtcanvas.QCanvasPolygonalItem.rtti() -> int
+qtcanvas.QCanvasPolygonalItem.draw(QPainter)
+qtcanvas.QCanvasPolygonalItem.drawShape(QPainter)
+qtcanvas.QCanvasPolygonalItem.winding() -> bool
+qtcanvas.QCanvasPolygonalItem.setWinding(bool)
+qtcanvas.QCanvasPolygonalItem.invalidate()
+qtcanvas.QCanvasPolygonalItem.isValid() -> bool
+qtcanvas.QCanvasRectangle(QCanvas)
+qtcanvas.QCanvasRectangle.__init__(self, QCanvas)
+qtcanvas.QCanvasRectangle(QRect, QCanvas)
+qtcanvas.QCanvasRectangle.__init__(self, QRect, QCanvas)
+qtcanvas.QCanvasRectangle(int, int, int, int, QCanvas)
+qtcanvas.QCanvasRectangle.__init__(self, int, int, int, int, QCanvas)
+qtcanvas.QCanvasRectangle(QCanvasRectangle other)
+qtcanvas.QCanvasRectangle.__init__(self, QCanvasRectangle other)
+qtcanvas.QCanvasRectangle.width() -> int
+qtcanvas.QCanvasRectangle.height() -> int
+qtcanvas.QCanvasRectangle.setSize(int, int)
+qtcanvas.QCanvasRectangle.size() -> QSize
+qtcanvas.QCanvasRectangle.areaPoints() -> QPointArray
+qtcanvas.QCanvasRectangle.rect() -> QRect
+qtcanvas.QCanvasRectangle.collidesWith(QCanvasItem) -> bool
+qtcanvas.QCanvasRectangle.rtti() -> int
+qtcanvas.QCanvasRectangle.drawShape(QPainter)
+qtcanvas.QCanvasRectangle.chunks() -> QPointArray
+qtcanvas.QCanvasPolygon(QCanvas)
+qtcanvas.QCanvasPolygon.__init__(self, QCanvas)
+qtcanvas.QCanvasPolygon(QCanvasPolygon other)
+qtcanvas.QCanvasPolygon.__init__(self, QCanvasPolygon other)
+qtcanvas.QCanvasPolygon.setPoints(QPointArray)
+qtcanvas.QCanvasPolygon.points() -> QPointArray
+qtcanvas.QCanvasPolygon.moveBy(float, float)
+qtcanvas.QCanvasPolygon.areaPoints() -> QPointArray
+qtcanvas.QCanvasPolygon.rtti() -> int
+qtcanvas.QCanvasPolygon.drawShape(QPainter)
+qtcanvas.QCanvasSpline(QCanvas)
+qtcanvas.QCanvasSpline.__init__(self, QCanvas)
+qtcanvas.QCanvasSpline(QCanvasSpline other)
+qtcanvas.QCanvasSpline.__init__(self, QCanvasSpline other)
+qtcanvas.QCanvasSpline.setControlPoints(QPointArray, bool=True)
+qtcanvas.QCanvasSpline.controlPoints() -> QPointArray
+qtcanvas.QCanvasSpline.closed() -> bool
+qtcanvas.QCanvasSpline.rtti() -> int
+qtcanvas.QCanvasLine(QCanvas)
+qtcanvas.QCanvasLine.__init__(self, QCanvas)
+qtcanvas.QCanvasLine(QCanvasLine other)
+qtcanvas.QCanvasLine.__init__(self, QCanvasLine other)
+qtcanvas.QCanvasLine.setPoints(int, int, int, int)
+qtcanvas.QCanvasLine.startPoint() -> QPoint
+qtcanvas.QCanvasLine.endPoint() -> QPoint
+qtcanvas.QCanvasLine.rtti() -> int
+qtcanvas.QCanvasLine.setPen(QPen)
+qtcanvas.QCanvasLine.moveBy(float, float)
+qtcanvas.QCanvasLine.drawShape(QPainter)
+qtcanvas.QCanvasLine.areaPoints() -> QPointArray
+qtcanvas.QCanvasEllipse(QCanvas)
+qtcanvas.QCanvasEllipse.__init__(self, QCanvas)
+qtcanvas.QCanvasEllipse(int, int, QCanvas)
+qtcanvas.QCanvasEllipse.__init__(self, int, int, QCanvas)
+qtcanvas.QCanvasEllipse(int, int, int, int, QCanvas)
+qtcanvas.QCanvasEllipse.__init__(self, int, int, int, int, QCanvas)
+qtcanvas.QCanvasEllipse(QCanvasEllipse other)
+qtcanvas.QCanvasEllipse.__init__(self, QCanvasEllipse other)
+qtcanvas.QCanvasEllipse.width() -> int
+qtcanvas.QCanvasEllipse.height() -> int
+qtcanvas.QCanvasEllipse.setSize(int, int)
+qtcanvas.QCanvasEllipse.setAngles(int, int)
+qtcanvas.QCanvasEllipse.angleStart() -> int
+qtcanvas.QCanvasEllipse.angleLength() -> int
+qtcanvas.QCanvasEllipse.areaPoints() -> QPointArray
+qtcanvas.QCanvasEllipse.collidesWith(QCanvasItem) -> bool
+qtcanvas.QCanvasEllipse.rtti() -> int
+qtcanvas.QCanvasEllipse.drawShape(QPainter)
+qtcanvas.QCanvasText(QCanvas)
+qtcanvas.QCanvasText.__init__(self, QCanvas)
+qtcanvas.QCanvasText(QString, QCanvas)
+qtcanvas.QCanvasText.__init__(self, QString, QCanvas)
+qtcanvas.QCanvasText(QString, QFont, QCanvas)
+qtcanvas.QCanvasText.__init__(self, QString, QFont, QCanvas)
+qtcanvas.QCanvasText.setText(QString)
+qtcanvas.QCanvasText.setFont(QFont)
+qtcanvas.QCanvasText.setColor(QColor)
+qtcanvas.QCanvasText.text() -> QString
+qtcanvas.QCanvasText.font() -> QFont
+qtcanvas.QCanvasText.color() -> QColor
+qtcanvas.QCanvasText.moveBy(float, float)
+qtcanvas.QCanvasText.textFlags() -> int
+qtcanvas.QCanvasText.setTextFlags(int)
+qtcanvas.QCanvasText.boundingRect() -> QRect
+qtcanvas.QCanvasText.collidesWith(QCanvasItem) -> bool
+qtcanvas.QCanvasText.rtti() -> int
+qtcanvas.QCanvasText.draw(QPainter)

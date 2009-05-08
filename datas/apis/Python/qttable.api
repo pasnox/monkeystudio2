@@ -1,0 +1,252 @@
+qttable.QTableSelection()
+qttable.QTableSelection.__init__(self)
+qttable.QTableSelection(int, int, int, int)
+qttable.QTableSelection.__init__(self, int, int, int, int)
+qttable.QTableSelection(QTableSelection other)
+qttable.QTableSelection.__init__(self, QTableSelection other)
+qttable.QTableSelection.init(int, int)
+qttable.QTableSelection.expandTo(int, int)
+qttable.QTableSelection.topRow() -> int
+qttable.QTableSelection.bottomRow() -> int
+qttable.QTableSelection.leftCol() -> int
+qttable.QTableSelection.rightCol() -> int
+qttable.QTableSelection.anchorRow() -> int
+qttable.QTableSelection.anchorCol() -> int
+qttable.QTableSelection.numRows() -> int
+qttable.QTableSelection.numCols() -> int
+qttable.QTableSelection.isActive() -> bool
+qttable.QTableSelection.isEmpty() -> bool
+qttable.QTableItem.EditType
+qttable.QTableItem.Never
+qttable.QTableItem.OnTyping
+qttable.QTableItem.WhenCurrent
+qttable.QTableItem.Always
+qttable.QTableItem(QTable, QTableItem.EditType)
+qttable.QTableItem.__init__(self, QTable, QTableItem.EditType)
+qttable.QTableItem(QTable, QTableItem.EditType, QString)
+qttable.QTableItem.__init__(self, QTable, QTableItem.EditType, QString)
+qttable.QTableItem(QTable, QTableItem.EditType, QString, QPixmap)
+qttable.QTableItem.__init__(self, QTable, QTableItem.EditType, QString, QPixmap)
+qttable.QTableItem(QTableItem other)
+qttable.QTableItem.__init__(self, QTableItem other)
+qttable.QTableItem.pixmap() -> QPixmap
+qttable.QTableItem.text() -> QString
+qttable.QTableItem.setPixmap(QPixmap)
+qttable.QTableItem.setText(QString)
+qttable.QTableItem.table() -> QTable
+qttable.QTableItem.alignment() -> int
+qttable.QTableItem.setWordWrap(bool)
+qttable.QTableItem.wordWrap() -> bool
+qttable.QTableItem.editType() -> QTableItem.EditType
+qttable.QTableItem.createEditor() -> QWidget
+qttable.QTableItem.setContentFromEditor(QWidget)
+qttable.QTableItem.setReplaceable(bool)
+qttable.QTableItem.isReplaceable() -> bool
+qttable.QTableItem.key() -> QString
+qttable.QTableItem.sizeHint() -> QSize
+qttable.QTableItem.setSpan(int, int)
+qttable.QTableItem.rowSpan() -> int
+qttable.QTableItem.colSpan() -> int
+qttable.QTableItem.setRow(int)
+qttable.QTableItem.setCol(int)
+qttable.QTableItem.row() -> int
+qttable.QTableItem.col() -> int
+qttable.QTableItem.paint(QPainter, QColorGroup, QRect, bool)
+qttable.QTableItem.updateEditor(int, int)
+qttable.QTableItem.setEnabled(bool)
+qttable.QTableItem.isEnabled() -> bool
+qttable.QTableItem.rtti() -> int
+qttable.QComboTableItem(QTable, QStringList, bool=False)
+qttable.QComboTableItem.__init__(self, QTable, QStringList, bool=False)
+qttable.QComboTableItem(QComboTableItem other)
+qttable.QComboTableItem.__init__(self, QComboTableItem other)
+qttable.QComboTableItem.createEditor() -> QWidget
+qttable.QComboTableItem.setContentFromEditor(QWidget)
+qttable.QComboTableItem.paint(QPainter, QColorGroup, QRect, bool)
+qttable.QComboTableItem.setCurrentItem(int)
+qttable.QComboTableItem.setCurrentItem(QString)
+qttable.QComboTableItem.currentItem() -> int
+qttable.QComboTableItem.currentText() -> QString
+qttable.QComboTableItem.count() -> int
+qttable.QComboTableItem.text(int) -> QString
+qttable.QComboTableItem.setEditable(bool)
+qttable.QComboTableItem.isEditable() -> bool
+qttable.QComboTableItem.setStringList(QStringList)
+qttable.QComboTableItem.rtti() -> int
+qttable.QComboTableItem.sizeHint() -> QSize
+qttable.QCheckTableItem(QTable, QString)
+qttable.QCheckTableItem.__init__(self, QTable, QString)
+qttable.QCheckTableItem(QCheckTableItem other)
+qttable.QCheckTableItem.__init__(self, QCheckTableItem other)
+qttable.QCheckTableItem.setText(QString)
+qttable.QCheckTableItem.createEditor() -> QWidget
+qttable.QCheckTableItem.setContentFromEditor(QWidget)
+qttable.QCheckTableItem.paint(QPainter, QColorGroup, QRect, bool)
+qttable.QCheckTableItem.setChecked(bool)
+qttable.QCheckTableItem.isChecked() -> bool
+qttable.QCheckTableItem.rtti() -> int
+qttable.QCheckTableItem.sizeHint() -> QSize
+qttable.QTable.EditMode
+qttable.QTable.NotEditing
+qttable.QTable.Editing
+qttable.QTable.Replacing
+qttable.QTable.FocusStyle
+qttable.QTable.FollowStyle
+qttable.QTable.SpreadSheet
+qttable.QTable.SelectionMode
+qttable.QTable.Single
+qttable.QTable.Multi
+qttable.QTable.SingleRow
+qttable.QTable.MultiRow
+qttable.QTable.NoSelection
+qttable.QTable(QWidget=None, str=None)
+qttable.QTable.__init__(self, QWidget=None, str=None)
+qttable.QTable(int, int, QWidget=None, str=None)
+qttable.QTable.__init__(self, int, int, QWidget=None, str=None)
+qttable.QTable.metaObject() -> QMetaObject
+qttable.QTable.horizontalHeader() -> QHeader
+qttable.QTable.verticalHeader() -> QHeader
+qttable.QTable.setSelectionMode(QTable.SelectionMode)
+qttable.QTable.selectionMode() -> QTable.SelectionMode
+qttable.QTable.setItem(int, int, QTableItem)
+qttable.QTable.setText(int, int, QString)
+qttable.QTable.setPixmap(int, int, QPixmap)
+qttable.QTable.item(int, int) -> QTableItem
+qttable.QTable.text(int, int) -> QString
+qttable.QTable.pixmap(int, int) -> QPixmap
+qttable.QTable.clearCell(int, int)
+qttable.QTable.cellGeometry(int, int) -> QRect
+qttable.QTable.columnWidth(int) -> int
+qttable.QTable.rowHeight(int) -> int
+qttable.QTable.columnPos(int) -> int
+qttable.QTable.rowPos(int) -> int
+qttable.QTable.columnAt(int) -> int
+qttable.QTable.rowAt(int) -> int
+qttable.QTable.numRows() -> int
+qttable.QTable.numCols() -> int
+qttable.QTable.updateCell(int, int)
+qttable.QTable.eventFilter(QObject, QEvent) -> bool
+qttable.QTable.currentRow() -> int
+qttable.QTable.currentColumn() -> int
+qttable.QTable.ensureCellVisible(int, int)
+qttable.QTable.isSelected(int, int) -> bool
+qttable.QTable.isRowSelected(int, bool=False) -> bool
+qttable.QTable.isColumnSelected(int, bool=False) -> bool
+qttable.QTable.numSelections() -> int
+qttable.QTable.selection(int) -> QTableSelection
+qttable.QTable.addSelection(QTableSelection) -> int
+qttable.QTable.removeSelection(QTableSelection)
+qttable.QTable.removeSelection(int)
+qttable.QTable.currentSelection() -> int
+qttable.QTable.selectCells(int, int, int, int)
+qttable.QTable.selectRow(int)
+qttable.QTable.selectColumn(int)
+qttable.QTable.showGrid() -> bool
+qttable.QTable.columnMovingEnabled() -> bool
+qttable.QTable.rowMovingEnabled() -> bool
+qttable.QTable.sortColumn(int, bool=True, bool=False)
+qttable.QTable.sorting() -> bool
+qttable.QTable.takeItem(QTableItem)
+qttable.QTable.setCellWidget(int, int, QWidget)
+qttable.QTable.cellWidget(int, int) -> QWidget
+qttable.QTable.clearCellWidget(int, int)
+qttable.QTable.cellRect(int, int) -> QRect
+qttable.QTable.paintCell(QPainter, int, int, QRect, bool)
+qttable.QTable.paintCell(QPainter, int, int, QRect, bool, QColorGroup)
+qttable.QTable.paintFocus(QPainter, QRect)
+qttable.QTable.sizeHint() -> QSize
+qttable.QTable.isReadOnly() -> bool
+qttable.QTable.isRowReadOnly(int) -> bool
+qttable.QTable.isColumnReadOnly(int) -> bool
+qttable.QTable.setEnabled(bool)
+qttable.QTable.repaintSelections()
+qttable.QTable.setFocusStyle(QTable.FocusStyle)
+qttable.QTable.focusStyle() -> QTable.FocusStyle
+qttable.QTable.updateHeaderStates()
+qttable.QTable.setNumRows(int)
+qttable.QTable.setNumCols(int)
+qttable.QTable.setShowGrid(bool)
+qttable.QTable.hideRow(int)
+qttable.QTable.hideColumn(int)
+qttable.QTable.showRow(int)
+qttable.QTable.showColumn(int)
+qttable.QTable.isRowHidden(int) -> bool
+qttable.QTable.isColumnHidden(int) -> bool
+qttable.QTable.setColumnWidth(int, int)
+qttable.QTable.setRowHeight(int, int)
+qttable.QTable.adjustColumn(int)
+qttable.QTable.adjustRow(int)
+qttable.QTable.setColumnStretchable(int, bool)
+qttable.QTable.setRowStretchable(int, bool)
+qttable.QTable.isColumnStretchable(int) -> bool
+qttable.QTable.isRowStretchable(int) -> bool
+qttable.QTable.setSorting(bool)
+qttable.QTable.swapRows(int, int, bool=False)
+qttable.QTable.swapColumns(int, int, bool=False)
+qttable.QTable.swapCells(int, int, int, int)
+qttable.QTable.setLeftMargin(int)
+qttable.QTable.setTopMargin(int)
+qttable.QTable.setCurrentCell(int, int)
+qttable.QTable.clearSelection(bool=True)
+qttable.QTable.setColumnMovingEnabled(bool)
+qttable.QTable.setRowMovingEnabled(bool)
+qttable.QTable.setReadOnly(bool)
+qttable.QTable.setRowReadOnly(int, bool)
+qttable.QTable.setColumnReadOnly(int, bool)
+qttable.QTable.setDragEnabled(bool)
+qttable.QTable.dragEnabled() -> bool
+qttable.QTable.insertRows(int, int=1)
+qttable.QTable.insertColumns(int, int=1)
+qttable.QTable.removeRow(int)
+qttable.QTable.removeRows()
+qttable.QTable.removeColumn(int)
+qttable.QTable.removeColumns()
+qttable.QTable.editCell(int, int, bool=False)
+qttable.QTable.setRowLabels(QStringList)
+qttable.QTable.setColumnLabels(QStringList)
+qttable.QTable.drawContents(QPainter, int, int, int, int)
+qttable.QTable.contentsMousePressEvent(QMouseEvent)
+qttable.QTable.contentsMouseMoveEvent(QMouseEvent)
+qttable.QTable.contentsMouseDoubleClickEvent(QMouseEvent)
+qttable.QTable.contentsMouseReleaseEvent(QMouseEvent)
+qttable.QTable.contentsContextMenuEvent(QContextMenuEvent)
+qttable.QTable.keyPressEvent(QKeyEvent)
+qttable.QTable.focusInEvent(QFocusEvent)
+qttable.QTable.focusOutEvent(QFocusEvent)
+qttable.QTable.viewportResizeEvent(QResizeEvent)
+qttable.QTable.showEvent(QShowEvent)
+qttable.QTable.paintEvent(QPaintEvent)
+qttable.QTable.setEditMode(QTable.EditMode, int, int)
+qttable.QTable.contentsDragEnterEvent(QDragEnterEvent)
+qttable.QTable.contentsDragMoveEvent(QDragMoveEvent)
+qttable.QTable.contentsDragLeaveEvent(QDragLeaveEvent)
+qttable.QTable.contentsDropEvent(QDropEvent)
+qttable.QTable.dragObject() -> QDragObject
+qttable.QTable.startDrag()
+qttable.QTable.paintEmptyArea(QPainter, int, int, int, int)
+qttable.QTable.activateNextCell()
+qttable.QTable.createEditor(int, int, bool) -> QWidget
+qttable.QTable.setCellContentFromEditor(int, int)
+qttable.QTable.beginEdit(int, int, bool) -> QWidget
+qttable.QTable.endEdit(int, int, bool, bool)
+qttable.QTable.resizeData(int)
+qttable.QTable.insertWidget(int, int, QWidget)
+qttable.QTable.indexOf(int, int) -> int
+qttable.QTable.windowActivationChange(bool)
+qttable.QTable.isEditing() -> bool
+qttable.QTable.editMode() -> QTable.EditMode
+qttable.QTable.currEditRow() -> int
+qttable.QTable.currEditCol() -> int
+qttable.QTable.columnWidthChanged(int)
+qttable.QTable.rowHeightChanged(int)
+qttable.QTable.columnIndexChanged(int, int, int)
+qttable.QTable.rowIndexChanged(int, int, int)
+qttable.QTable.columnClicked(int)
+qttable.QTable.currentChanged(int, int)
+qttable.QTable.clicked(int, int, int, QPoint)
+qttable.QTable.doubleClicked(int, int, int, QPoint)
+qttable.QTable.pressed(int, int, int, QPoint)
+qttable.QTable.selectionChanged()
+qttable.QTable.valueChanged(int, int)
+qttable.QTable.contextMenuRequested(int, int, QPoint)
+qttable.QTable.dropped(QDropEvent)

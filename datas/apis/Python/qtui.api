@@ -1,0 +1,11 @@
+qtui.QWidgetFactory()
+qtui.QWidgetFactory.__init__(self)
+qtui.QWidgetFactory(QWidgetFactory other)
+qtui.QWidgetFactory.__init__(self, QWidgetFactory other)
+qtui.QWidgetFactory.create(QString, QObject=None, QWidget=None, str=None) -> QWidget
+qtui.QWidgetFactory.create(QIODevice, QObject=None, QWidget=None, str=None) -> QWidget
+qtui.QWidgetFactory.addWidgetFactory(QWidgetFactory)
+qtui.QWidgetFactory.loadImages(QString)
+qtui.QWidgetFactory.createWidget(QString, QWidget, str) -> QWidget
+qtui.QWidgetFactory.widgets() -> QStringList
+qtui.QWidgetFactory.supportsWidget(QString) -> bool
