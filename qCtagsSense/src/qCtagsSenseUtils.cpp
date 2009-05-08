@@ -426,7 +426,7 @@ qCtagsSenseEntry* qCtagsSenseUtils::entryForRecord( const QSqlRecord& rec, const
 	return entry;
 }
 
-QString qCtagsSenseUtils::entryDecorationFilePath( qCtagsSenseEntry* entry )
+QString qCtagsSenseUtils::entryDecorationFilePath( const qCtagsSenseEntry* entry )
 {
 	qCtagsSense::Kind kind = entry->kind;
 	QString access = entry->access;
@@ -512,12 +512,12 @@ QString qCtagsSenseUtils::entryDecorationFilePath( qCtagsSenseEntry* entry )
 	return fn;
 }
 
-QPixmap qCtagsSenseUtils::entryDecoration( qCtagsSenseEntry* entry )
+QPixmap qCtagsSenseUtils::entryDecoration( const qCtagsSenseEntry* entry )
 {
 	return mPixmaps.value( entryDecorationFilePath( entry ) );
 }
 
-QString qCtagsSenseUtils::entryDisplay( qCtagsSenseEntry* entry )
+QString qCtagsSenseUtils::entryDisplay( const qCtagsSenseEntry* entry )
 {
 	qCtagsSenseEntry* parent = entry->parent;
 	qCtagsSenseEntry* granParent = parent ? parent->parent : 0;
@@ -568,7 +568,7 @@ QString qCtagsSenseUtils::entryDisplay( qCtagsSenseEntry* entry )
 	return display;
 }
 
-QString qCtagsSenseUtils::entryToolTip( qCtagsSenseEntry* entry )
+QString qCtagsSenseUtils::entryToolTip( const qCtagsSenseEntry* entry )
 {
 	QString tooltip;
 	

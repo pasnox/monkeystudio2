@@ -22,6 +22,8 @@
 #include "qCtagsSenseFilesModel.h"
 #include "qCtagsSenseMembersModel.h"
 #include "qCtagsSenseKindFinder.h"
+#include "qCtagsSenseSearchModel.h"
+#include "qCtagsSenseSearchPopup.h"
 
 #include <ctags.h>
 
@@ -31,6 +33,7 @@
 #include <QDebug>
 #include <QScrollBar>
 #include <QMovie>
+#include <QComboBox>
 
 class MembersActionComboBox : public QComboBox
 {
@@ -140,8 +143,8 @@ qCtagsSenseBrowser::qCtagsSenseBrowser( QWidget* parent )
 	pbIndexing->setVisible( false );
 	lSearch->setAttribute( Qt::WA_MacShowFocusRect, false );
 	lSearch->setAttribute( Qt::WA_MacSmallSize );
-	cbSearchs->setAttribute( Qt::WA_MacShowFocusRect, false );
-	cbSearchs->setAttribute( Qt::WA_MacSmallSize );
+	leSearch->setAttribute( Qt::WA_MacShowFocusRect, false );
+	leSearch->setAttribute( Qt::WA_MacSmallSize );
 	tvMembers->setAttribute( Qt::WA_MacShowFocusRect, false );
 	tvMembers->setAttribute( Qt::WA_MacSmallSize );
 	
@@ -149,6 +152,7 @@ qCtagsSenseBrowser::qCtagsSenseBrowser( QWidget* parent )
 	mLanguagesModel = new qCtagsSenseLanguagesModel( mSense->sql() );
 	mFilesModel = new qCtagsSenseFilesModel( mSense->sql() );
 	mMembersModel = new qCtagsSenseMembersModel( mSense->sql() );
+	mSearchModel = new qCtagsSenseSearchModel( mSense->sql() );
 	
 	tvMembers->setModel( mMembersModel );
 	
@@ -160,6 +164,10 @@ qCtagsSenseBrowser::qCtagsSenseBrowser( QWidget* parent )
 	mLoading->jumpToFrame( 0 );
 	
 	lLoading->setMovie( mLoading );
+	lLoading->setVisible( false );
+	
+	mSearchTreeView = new qCtagsSenseSearchPopup( leSearch );
+	mSearchTreeView->setModel( mSearchModel );
 	
 	connect( mSense, SIGNAL( indexingStarted() ), pbIndexing, SLOT( show() ) );
 	connect( mSense, SIGNAL( indexingProgress( int, int ) ), this, SLOT( mSense_indexingProgress( int, int ) ) );
@@ -167,6 +175,9 @@ qCtagsSenseBrowser::qCtagsSenseBrowser( QWidget* parent )
 	connect( mSense, SIGNAL( indexingChanged() ), this, SLOT( mSense_indexingChanged() ) );
 	
 	connect( mMembersModel, SIGNAL( ready() ), this, SLOT( mMembersModel_ready() ) );
+	connect( leSearch, SIGNAL( textChanged( const QString& ) ), this, SLOT( mSearchModel_refresh( const QString& ) ) );
+	connect( mSearchModel, SIGNAL( ready() ), this, SLOT( mSearchModel_ready() ) );
+	connect( mSearchModel, SIGNAL( searching( bool ) ), this, SLOT( mSearchModel_searching( bool ) ) );
 }
 
 qCtagsSenseBrowser::~qCtagsSenseBrowser()
@@ -297,6 +308,39 @@ void qCtagsSenseBrowser::mSense_indexingChanged()
 void qCtagsSenseBrowser::mMembersModel_ready()
 {
 	tvMembers->expandAll();
+}
+
+void qCtagsSenseBrowser::mSearchModel_searching( bool searching )
+{
+	lLoading->setVisible( searching );
+	
+	if ( searching )
+	{
+		mLoading->start();
+	}
+	else
+	{
+		mLoading->stop();
+		mLoading->jumpToFrame( 0 );
+	}
+}
+
+void qCtagsSenseBrowser::mSearchModel_refresh( const QString& search )
+{
+	if ( search.length() < 3 )
+	{
+		mSearchModel->clear();
+	}
+	else
+	{
+		mSearchModel->refresh( search );
+	}
+}
+
+void qCtagsSenseBrowser::mSearchModel_ready()
+{
+	//mSearchTreeView->expandAll();
+	mSearchTreeView->showPopup();
 }
 
 void qCtagsSenseBrowser::on_tvMembers_customContextMenuRequested( const QPoint& pos )
