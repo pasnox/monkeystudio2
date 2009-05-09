@@ -29,7 +29,6 @@ class qCtagsSenseSearchModel;
 class qCtagsSenseEntry;
 class QAction;
 class QMovie;
-class qCtagsSenseSearchPopup;
 
 class QCTAGSSENSE_EXPORT qCtagsSenseBrowser : public QFrame, public Ui::qCtagsSenseBrowser
 {
@@ -63,11 +62,11 @@ protected:
 	qCtagsSenseSearchModel* mSearchModel;
 	QAction* aMembers;
 	QMovie* mLoading;
-	qCtagsSenseSearchPopup* mSearchTreeView;
 
 protected slots:
 	//void on_cbLanguages_currentIndexChanged( int id );
 	void on_tvMembers_activated( const QModelIndex& index );
+	void on_tvSearchResult_activated( const QModelIndex& index );
 	void mSense_indexingProgress( int value, int total );
 	void mSense_indexingChanged();
 	void mMembersModel_ready();
@@ -77,7 +76,7 @@ protected slots:
 	void on_tvMembers_customContextMenuRequested( const QPoint& pos );
 
 signals:
-	void memberActivated( qCtagsSenseEntry* entry );
+	void entryActivated( qCtagsSenseEntry* entry );
 	void fileNameActivated( const QString& fileName );
 };
 
