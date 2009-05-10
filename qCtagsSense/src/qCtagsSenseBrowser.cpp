@@ -33,6 +33,9 @@
 #include <QScrollBar>
 #include <QMovie>
 #include <QComboBox>
+#include <QTimer>
+
+#define SEARCH_TIMEOUT 500
 
 class MembersActionComboBox : public QComboBox
 {
@@ -167,13 +170,15 @@ qCtagsSenseBrowser::qCtagsSenseBrowser( QWidget* parent )
 	tvMembers->setModel( mMembersModel );
 	tvSearchResult->setModel( mSearchModel );
 	
+	mSearchTimer = new QTimer( this );
+	
 	connect( mSense, SIGNAL( indexingStarted() ), pbIndexing, SLOT( show() ) );
 	connect( mSense, SIGNAL( indexingProgress( int, int ) ), this, SLOT( mSense_indexingProgress( int, int ) ) );
 	connect( mSense, SIGNAL( indexingFinished() ), pbIndexing, SLOT( hide() ) );
 	connect( mSense, SIGNAL( indexingChanged() ), this, SLOT( mSense_indexingChanged() ) );
 	
 	connect( mMembersModel, SIGNAL( ready() ), this, SLOT( mMembersModel_ready() ) );
-	connect( leSearch, SIGNAL( textChanged( const QString& ) ), this, SLOT( mSearchModel_refresh( const QString& ) ) );
+	connect( mSearchTimer, SIGNAL( timeout() ), this, SLOT( mSearchTimer_timeout() ) );
 	connect( mSearchModel, SIGNAL( ready() ), this, SLOT( mSearchModel_ready() ) );
 	connect( mSearchModel, SIGNAL( searching( bool ) ), this, SLOT( mSearchModel_searching( bool ) ) );
 }
@@ -323,6 +328,18 @@ void qCtagsSenseBrowser::mMembersModel_ready()
 	tvMembers->expandAll();
 }
 
+void qCtagsSenseBrowser::on_leSearch_textChanged( const QString& search )
+{
+	if ( search.length() < 3 )
+	{
+		mSearchModel->clear();
+	}
+	else
+	{
+		mSearchTimer->start( SEARCH_TIMEOUT );
+	}
+}
+
 void qCtagsSenseBrowser::mSearchModel_searching( bool searching )
 {
 	lLoading->setVisible( searching );
@@ -338,16 +355,10 @@ void qCtagsSenseBrowser::mSearchModel_searching( bool searching )
 	}
 }
 
-void qCtagsSenseBrowser::mSearchModel_refresh( const QString& search )
+void qCtagsSenseBrowser::mSearchTimer_timeout()
 {
-	if ( search.length() < 3 )
-	{
-		mSearchModel->clear();
-	}
-	else
-	{
-		mSearchModel->refresh( search );
-	}
+	mSearchTimer->stop();
+	mSearchModel->refresh( leSearch->text() );
 }
 
 void qCtagsSenseBrowser::mSearchModel_ready()

@@ -160,10 +160,8 @@ void ClassBrowser::currentFileChanged( pAbstractChild* child, const QString& fil
 {
 	Q_UNUSED( child );
 	
-	if ( !fileName.isEmpty() )
-	{
-		mDock->browser()->setCurrentFileName( fileName );
-	}
+	qWarning() << fileName;
+	mDock->browser()->setCurrentFileName( fileName );
 }
 
 void ClassBrowser::opened( XUPProjectItem* project )

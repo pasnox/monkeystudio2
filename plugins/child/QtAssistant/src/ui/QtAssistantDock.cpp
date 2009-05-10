@@ -39,11 +39,6 @@ QtAssistantDock::QtAssistantDock( QWidget* parent )
 	vlContents->addWidget( mHelpEngine->contentWidget() );
 	vlIndex->addWidget( mHelpEngine->indexWidget() );
 	vlBookmarks->addWidget( bwBookmarks );
-	
-	QPalette pal = mHelpEngine->contentWidget()->palette();
-	pal.setColor( QPalette::Base, QColor( Qt::transparent ) );
-	mHelpEngine->contentWidget()->setPalette( pal );
-	mHelpEngine->contentWidget()->setFrameStyle( QFrame::NoFrame | QFrame::Plain );
 
 	// create content actions
 	mHelpEngine->contentWidget()->setContextMenuPolicy( Qt::ActionsContextMenu );

@@ -146,7 +146,6 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	mTree = new QTreeView;
 	mTree->setAttribute( Qt::WA_MacShowFocusRect, false );
 	mTree->setAttribute( Qt::WA_MacSmallSize );
-	mTree->setFrameStyle( QFrame::NoFrame | QFrame::Plain );
 	mTree->setContextMenuPolicy( Qt::ActionsContextMenu );
 	mTree->setHeaderHidden( true );
 	mTree->setUniformRowHeights( true );
@@ -154,11 +153,6 @@ pDockFileBrowser::pDockFileBrowser( QWidget* w )
 	
 	// assign model to views
 	mTree->setModel( mFilteredModel );
-	
-	// set tree palette
-	QPalette pal = mTree->palette();
-	pal.setColor( QPalette::Base, QColor( Qt::transparent ) );
-	mTree->setPalette( pal );
 	
 	// set root index
 #ifndef Q_OS_WIN

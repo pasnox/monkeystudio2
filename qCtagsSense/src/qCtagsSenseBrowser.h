@@ -29,6 +29,7 @@ class qCtagsSenseSearchModel;
 class qCtagsSenseEntry;
 class QAction;
 class QMovie;
+class QTimer;
 
 class QCTAGSSENSE_EXPORT qCtagsSenseBrowser : public QFrame, public Ui::qCtagsSenseBrowser
 {
@@ -62,6 +63,7 @@ protected:
 	qCtagsSenseSearchModel* mSearchModel;
 	QAction* aMembers;
 	QMovie* mLoading;
+	QTimer* mSearchTimer;
 
 protected slots:
 	//void on_cbLanguages_currentIndexChanged( int id );
@@ -70,8 +72,9 @@ protected slots:
 	void mSense_indexingProgress( int value, int total );
 	void mSense_indexingChanged();
 	void mMembersModel_ready();
+	void on_leSearch_textChanged( const QString& search );
 	void mSearchModel_searching( bool searching );
-	void mSearchModel_refresh( const QString& search );
+	void mSearchTimer_timeout();
 	void mSearchModel_ready();
 	void on_tvMembers_customContextMenuRequested( const QPoint& pos );
 
