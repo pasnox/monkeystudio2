@@ -76,9 +76,13 @@
         <x>0</x>
         <y>0</y>
         <width>279</width>
-        <height>313</height>
+        <height>311</height>
        </rect>
       </property>
+      <attribute name="icon">
+       <iconset resource="resources/qCtagsSense.qrc">
+        <normaloff>:/icons/class.png</normaloff>:/icons/class.png</iconset>
+      </attribute>
       <attribute name="label">
        <string>Browser</string>
       </attribute>
@@ -153,9 +157,13 @@
         <x>0</x>
         <y>0</y>
         <width>279</width>
-        <height>313</height>
+        <height>311</height>
        </rect>
       </property>
+      <attribute name="icon">
+       <iconset resource="../../monkey/src/resources/resources.qrc">
+        <normaloff>:/edit/icons/edit/replace.png</normaloff>:/edit/icons/edit/replace.png</iconset>
+      </attribute>
       <attribute name="label">
        <string>Search Results</string>
       </attribute>
@@ -246,6 +254,7 @@
  </widget>
  <resources>
   <include location="resources/qCtagsSense.qrc"/>
+  <include location="../../monkey/src/resources/resources.qrc"/>
  </resources>
  <connections/>
 </ui>
