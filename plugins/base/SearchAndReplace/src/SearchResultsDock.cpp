@@ -48,15 +48,11 @@ SearchResultsDock::SearchResultsDock( QWidget* w )
 	
 	// files view
 	mTree = new QTreeWidget;
-	mTree->setFrameStyle( QFrame::NoFrame | QFrame::Plain );
 	mTree->setAttribute( Qt::WA_MacShowFocusRect, false );
 	mTree->setAttribute( Qt::WA_MacSmallSize );
 	setWidget ( mTree );
 	
 	mTree->setHeaderHidden( true );
-	QPalette pal = mTree->palette();
-	pal.setColor( QPalette::Base, QColor( Qt::transparent ) );
-	mTree->setPalette( pal );
 	
 	connect( mTree, SIGNAL( itemDoubleClicked( QTreeWidgetItem*, int ) ), this, SLOT( itemPressed( QTreeWidgetItem* ) ) );
 	

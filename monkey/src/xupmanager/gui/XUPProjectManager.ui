@@ -84,9 +84,6 @@
     </item>
     <item>
      <widget class="QStackedWidget" name="swPages">
-      <property name="currentIndex">
-       <number>0</number>
-      </property>
       <widget class="QWidget" name="wFiltered">
        <layout class="QVBoxLayout" name="verticalLayout">
         <property name="spacing">
@@ -97,51 +94,8 @@
         </property>
         <item>
          <widget class="QTreeView" name="tvFiltered">
-          <property name="palette">
-           <palette>
-            <active>
-             <colorrole role="Base">
-              <brush brushstyle="SolidPattern">
-               <color alpha="0">
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-               </color>
-              </brush>
-             </colorrole>
-            </active>
-            <inactive>
-             <colorrole role="Base">
-              <brush brushstyle="SolidPattern">
-               <color alpha="0">
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-               </color>
-              </brush>
-             </colorrole>
-            </inactive>
-            <disabled>
-             <colorrole role="Base">
-              <brush brushstyle="SolidPattern">
-               <color alpha="255">
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-               </color>
-              </brush>
-             </colorrole>
-            </disabled>
-           </palette>
-          </property>
           <property name="contextMenuPolicy">
            <enum>Qt::CustomContextMenu</enum>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Plain</enum>
           </property>
           <property name="uniformRowHeights">
            <bool>true</bool>
@@ -166,49 +120,6 @@
         </property>
         <item>
          <widget class="QTreeView" name="tvNative">
-          <property name="palette">
-           <palette>
-            <active>
-             <colorrole role="Base">
-              <brush brushstyle="SolidPattern">
-               <color alpha="0">
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-               </color>
-              </brush>
-             </colorrole>
-            </active>
-            <inactive>
-             <colorrole role="Base">
-              <brush brushstyle="SolidPattern">
-               <color alpha="0">
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-               </color>
-              </brush>
-             </colorrole>
-            </inactive>
-            <disabled>
-             <colorrole role="Base">
-              <brush brushstyle="SolidPattern">
-               <color alpha="255">
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-               </color>
-              </brush>
-             </colorrole>
-            </disabled>
-           </palette>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Plain</enum>
-          </property>
           <property name="uniformRowHeights">
            <bool>true</bool>
           </property>
@@ -281,7 +192,7 @@
   </widget>
   <action name="aDebug">
    <property name="icon">
-    <iconset resource="../../resources/resources.qrc">
+    <iconset>
      <normaloff>:/temp/icons/temp/kcmsystem.png</normaloff>:/temp/icons/temp/kcmsystem.png</iconset>
    </property>
    <property name="text">

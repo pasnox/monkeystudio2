@@ -22,6 +22,7 @@
 #include "qCtagsSenseFilesModel.h"
 #include "qCtagsSenseMembersModel.h"
 #include "qCtagsSenseKindFinder.h"
+#include "qCtagsSenseSearchModel.h"
 
 #include <ctags.h>
 
@@ -31,6 +32,10 @@
 #include <QDebug>
 #include <QScrollBar>
 #include <QMovie>
+#include <QComboBox>
+#include <QTimer>
+
+#define SEARCH_TIMEOUT 500
 
 class MembersActionComboBox : public QComboBox
 {
@@ -89,11 +94,11 @@ protected slots:
 		updateGeometry();
 		QModelIndex index = view()->currentIndex();
 		qCtagsSenseEntry* entry = static_cast<qCtagsSenseEntry*>( index.internalPointer() );
-		emit memberActivated( entry );
+		emit entryActivated( entry );
 	}
 
 signals:
-	void memberActivated( qCtagsSenseEntry* entry );
+	void entryActivated( qCtagsSenseEntry* entry );
 };
 
 class MembersAction : public QWidgetAction
@@ -118,7 +123,7 @@ protected:
 		combo->setModel( mBrowser->membersModel() );
 		
 		connect( mBrowser->membersModel(), SIGNAL( ready() ), combo, SLOT( membersModel_ready() ) );
-		connect( combo, SIGNAL( memberActivated( qCtagsSenseEntry* ) ), mBrowser, SIGNAL( memberActivated( qCtagsSenseEntry* ) ) );
+		connect( combo, SIGNAL( entryActivated( qCtagsSenseEntry* ) ), mBrowser, SIGNAL( entryActivated( qCtagsSenseEntry* ) ) );
 		connect( combo->view(), SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( _q_tree_customContextMenuRequested( const QPoint& ) ) );
 		
 		return combo;
@@ -137,22 +142,12 @@ qCtagsSenseBrowser::qCtagsSenseBrowser( QWidget* parent )
 	: QFrame( parent )
 {
 	setupUi( this );
-	pbIndexing->setVisible( false );
 	lSearch->setAttribute( Qt::WA_MacShowFocusRect, false );
 	lSearch->setAttribute( Qt::WA_MacSmallSize );
-	cbSearchs->setAttribute( Qt::WA_MacShowFocusRect, false );
-	cbSearchs->setAttribute( Qt::WA_MacSmallSize );
+	leSearch->setAttribute( Qt::WA_MacShowFocusRect, false );
+	leSearch->setAttribute( Qt::WA_MacSmallSize );
 	tvMembers->setAttribute( Qt::WA_MacShowFocusRect, false );
 	tvMembers->setAttribute( Qt::WA_MacSmallSize );
-	
-	mSense = new qCtagsSense( this );
-	mLanguagesModel = new qCtagsSenseLanguagesModel( mSense->sql() );
-	mFilesModel = new qCtagsSenseFilesModel( mSense->sql() );
-	mMembersModel = new qCtagsSenseMembersModel( mSense->sql() );
-	
-	tvMembers->setModel( mMembersModel );
-	
-	aMembers = new MembersAction( this );
 	
 	mLoading = new QMovie( this );
 	mLoading->setFileName( ":/icons/loading.gif" );
@@ -161,12 +156,31 @@ qCtagsSenseBrowser::qCtagsSenseBrowser( QWidget* parent )
 	
 	lLoading->setMovie( mLoading );
 	
+	pbIndexing->setVisible( false );
+	lLoading->setVisible( false );
+	
+	mSense = new qCtagsSense( this );
+	mLanguagesModel = new qCtagsSenseLanguagesModel( mSense->sql() );
+	mFilesModel = new qCtagsSenseFilesModel( mSense->sql() );
+	mMembersModel = new qCtagsSenseMembersModel( mSense->sql() );
+	mSearchModel = new qCtagsSenseSearchModel( mSense->sql() );
+	
+	aMembers = new MembersAction( this );
+	
+	tvMembers->setModel( mMembersModel );
+	tvSearchResult->setModel( mSearchModel );
+	
+	mSearchTimer = new QTimer( this );
+	
 	connect( mSense, SIGNAL( indexingStarted() ), pbIndexing, SLOT( show() ) );
 	connect( mSense, SIGNAL( indexingProgress( int, int ) ), this, SLOT( mSense_indexingProgress( int, int ) ) );
 	connect( mSense, SIGNAL( indexingFinished() ), pbIndexing, SLOT( hide() ) );
 	connect( mSense, SIGNAL( indexingChanged() ), this, SLOT( mSense_indexingChanged() ) );
 	
 	connect( mMembersModel, SIGNAL( ready() ), this, SLOT( mMembersModel_ready() ) );
+	connect( mSearchTimer, SIGNAL( timeout() ), this, SLOT( mSearchTimer_timeout() ) );
+	connect( mSearchModel, SIGNAL( ready() ), this, SLOT( mSearchModel_ready() ) );
+	connect( mSearchModel, SIGNAL( searching( bool ) ), this, SLOT( mSearchModel_searching( bool ) ) );
 }
 
 qCtagsSenseBrowser::~qCtagsSenseBrowser()
@@ -227,12 +241,12 @@ void qCtagsSenseBrowser::popupMenu( QTreeView* view, const QPoint& pos )
 		
 		if ( entry->kind == kind )
 		{
-			emit memberActivated( entry );
+			emit entryActivated( entry );
 		}
 		else
 		{
 			qCtagsSenseKindFinder* cpp = new qCtagsSenseKindFinder( mSense->sql() );
-			connect( cpp, SIGNAL( memberActivated( qCtagsSenseEntry* ) ), this, SIGNAL( memberActivated( qCtagsSenseEntry* ) ) );
+			connect( cpp, SIGNAL( entryActivated( qCtagsSenseEntry* ) ), this, SIGNAL( entryActivated( qCtagsSenseEntry* ) ) );
 			cpp->goTo( kind, entry );
 		}
 	}
@@ -264,15 +278,17 @@ void qCtagsSenseBrowser::setFilteredSuffixes( const QStringList& suffixes )
 }
 
 void qCtagsSenseBrowser::setCurrentFileName( const QString& fileName )
-{	
+{
+	tbPages->setCurrentIndex( 0 );
+	
 	mLanguage = getFileNameLanguageName( fileName.toLocal8Bit().constData() );
 	mFileName = fileName;
-	
+	/*
 	if ( mSense->indexer()->isRunning() || mLanguagesModel->isRunning() || mFilesModel->isRunning() )
 	{
 		return;
 	}
-	
+	*/
 	// update model
 	mMembersModel->refresh( mFileName );
 }
@@ -280,7 +296,20 @@ void qCtagsSenseBrowser::setCurrentFileName( const QString& fileName )
 void qCtagsSenseBrowser::on_tvMembers_activated( const QModelIndex& index )
 {
 	qCtagsSenseEntry* entry = static_cast<qCtagsSenseEntry*>( index.internalPointer() );
-	emit memberActivated( entry );
+	emit entryActivated( entry );
+}
+
+void qCtagsSenseBrowser::on_tvSearchResult_activated( const QModelIndex& index )
+{
+	switch ( index.data( qCtagsSenseSearchModel::TypeRole ).toInt() )
+	{
+		case qCtagsSenseSearchModel::FileName:
+			emit fileNameActivated( index.data( qCtagsSenseSearchModel::DataRole ).toString() );
+			break;
+		case qCtagsSenseSearchModel::Entry:
+			emit entryActivated( index.data( qCtagsSenseSearchModel::DataRole ).value<qCtagsSenseEntry*>() );
+			break;
+	}
 }
 
 void qCtagsSenseBrowser::mSense_indexingProgress( int value, int total )
@@ -297,6 +326,44 @@ void qCtagsSenseBrowser::mSense_indexingChanged()
 void qCtagsSenseBrowser::mMembersModel_ready()
 {
 	tvMembers->expandAll();
+}
+
+void qCtagsSenseBrowser::on_leSearch_textChanged( const QString& search )
+{
+	if ( search.length() < 3 )
+	{
+		mSearchModel->clear();
+	}
+	else
+	{
+		mSearchTimer->start( SEARCH_TIMEOUT );
+	}
+}
+
+void qCtagsSenseBrowser::mSearchModel_searching( bool searching )
+{
+	lLoading->setVisible( searching );
+	
+	if ( searching )
+	{
+		mLoading->start();
+	}
+	else
+	{
+		mLoading->stop();
+		mLoading->jumpToFrame( 0 );
+	}
+}
+
+void qCtagsSenseBrowser::mSearchTimer_timeout()
+{
+	mSearchTimer->stop();
+	mSearchModel->refresh( leSearch->text() );
+}
+
+void qCtagsSenseBrowser::mSearchModel_ready()
+{
+	tbPages->setCurrentIndex( 1 );
 }
 
 void qCtagsSenseBrowser::on_tvMembers_customContextMenuRequested( const QPoint& pos )

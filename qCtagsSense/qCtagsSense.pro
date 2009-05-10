@@ -36,7 +36,8 @@ HEADERS	= src/qCtagsSense.h \
 	src/qCtagsSenseLanguagesModel.h \
 	src/qCtagsSenseUtils.h \
 	src/qCtagsSenseKindFinder.h \
-	src/qCtagsSenseExport.h
+	src/qCtagsSenseExport.h \
+	src/qCtagsSenseSearchModel.h
 
 SOURCES	= src/qCtagsSense.cpp \
 	src/qCtagsSenseIndexer.cpp \
@@ -46,4 +47,5 @@ SOURCES	= src/qCtagsSense.cpp \
 	src/qCtagsSenseSQL.cpp \
 	src/qCtagsSenseLanguagesModel.cpp \
 	src/qCtagsSenseUtils.cpp \
-	src/qCtagsSenseKindFinder.cpp
+	src/qCtagsSenseKindFinder.cpp \
+	src/qCtagsSenseSearchModel.cpp

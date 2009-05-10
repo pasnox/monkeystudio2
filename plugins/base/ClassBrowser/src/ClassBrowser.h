@@ -54,7 +54,8 @@ protected slots:
 	void currentFileChanged( pAbstractChild* child, const QString& fileName );
 	void opened( XUPProjectItem* project );
 	void buffersChanged( const QMap<QString, QString>& entries );
-	void memberActivated( qCtagsSenseEntry* entry );
+	void entryActivated( qCtagsSenseEntry* entry );
+	void fileNameActivated( const QString& fileName );
 
 signals:
 	void systemPathsChanged( const QStringList& paths, const QStringList& oldPaths );

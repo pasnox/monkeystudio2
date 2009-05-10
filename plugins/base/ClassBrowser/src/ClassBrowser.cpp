@@ -65,7 +65,8 @@ bool ClassBrowser::setEnabled( bool b )
 		connect( MonkeyCore::fileManager(), SIGNAL( currentFileChanged( pAbstractChild*, const QString& ) ), this, SLOT( currentFileChanged( pAbstractChild*, const QString& ) ) );
 		connect( MonkeyCore::fileManager(), SIGNAL( opened( XUPProjectItem* ) ), this, SLOT( opened( XUPProjectItem* ) ) );
 		connect( MonkeyCore::fileManager(), SIGNAL( buffersChanged( const QMap<QString, QString>& ) ), this, SLOT( buffersChanged( const QMap<QString, QString>& ) ) );
-		connect( mDock->browser(), SIGNAL( memberActivated( qCtagsSenseEntry* ) ), this, SLOT( memberActivated( qCtagsSenseEntry* ) ) );
+		connect( mDock->browser(), SIGNAL( entryActivated( qCtagsSenseEntry* ) ), this, SLOT( entryActivated( qCtagsSenseEntry* ) ) );
+		connect( mDock->browser(), SIGNAL( fileNameActivated( const QString& ) ), this, SLOT( fileNameActivated( const QString& ) ) );
 		connect( this, SIGNAL( systemPathsChanged( const QStringList& , const QStringList& ) ), mDock->browser(), SLOT( setSystemPaths( const QStringList& , const QStringList& ) ) );
 		connect( this, SIGNAL( filteredSuffixesChanged( const QStringList& ) ), mDock->browser(), SLOT( setFilteredSuffixes( const QStringList& ) ) );
 		// set plugin enabled
@@ -82,7 +83,8 @@ bool ClassBrowser::setEnabled( bool b )
 		disconnect( MonkeyCore::fileManager(), SIGNAL( currentFileChanged( pAbstractChild*, const QString& ) ), this, SLOT( currentFileChanged( pAbstractChild*, const QString& ) ) );
 		disconnect( MonkeyCore::fileManager(), SIGNAL( opened( XUPProjectItem* ) ), this, SLOT( opened( XUPProjectItem* ) ) );
 		disconnect( MonkeyCore::fileManager(), SIGNAL( buffersChanged( const QMap<QString, QString>& ) ), this, SLOT( buffersChanged( const QMap<QString, QString>& ) ) );
-		disconnect( mDock->browser(), SIGNAL( memberActivated( qCtagsSenseEntry* ) ), this, SLOT( memberActivated( qCtagsSenseEntry* ) ) );
+		disconnect( mDock->browser(), SIGNAL( entryActivated( qCtagsSenseEntry* ) ), this, SLOT( entryActivated( qCtagsSenseEntry* ) ) );
+		disconnect( mDock->browser(), SIGNAL( fileNameActivated( const QString& ) ), this, SLOT( fileNameActivated( const QString& ) ) );
 		disconnect( this, SIGNAL( systemPathsChanged( const QStringList& , const QStringList& ) ), mDock->browser(), SLOT( setSystemPaths( const QStringList& , const QStringList& ) ) );
 		disconnect( this, SIGNAL( filteredSuffixesChanged( const QStringList& ) ), mDock->browser(), SLOT( setFilteredSuffixes( const QStringList& ) ) );
 		// it will remove itself from dock toolbar when deleted
@@ -158,10 +160,8 @@ void ClassBrowser::currentFileChanged( pAbstractChild* child, const QString& fil
 {
 	Q_UNUSED( child );
 	
-	if ( !fileName.isEmpty() )
-	{
-		mDock->browser()->setCurrentFileName( fileName );
-	}
+	qWarning() << fileName;
+	mDock->browser()->setCurrentFileName( fileName );
 }
 
 void ClassBrowser::opened( XUPProjectItem* project )
@@ -174,13 +174,18 @@ void ClassBrowser::buffersChanged( const QMap<QString, QString>& entries )
 	mDock->browser()->tagEntries( entries );
 }
 
-void ClassBrowser::memberActivated( qCtagsSenseEntry* entry )
+void ClassBrowser::entryActivated( qCtagsSenseEntry* entry )
 {
 	// need to stock parameters as they are temporary
 	const QString fileName = entry->fileName;
 	const int line = entry->lineNumber;
 	
 	MonkeyCore::fileManager()->goToLine( fileName, QPoint( 0, line ), true, pMonkeyStudio::defaultCodec() );
+}
+
+void ClassBrowser::fileNameActivated( const QString& fileName )
+{
+	MonkeyCore::fileManager()->openFile( fileName, pMonkeyStudio::defaultCodec() );
 }
 
 Q_EXPORT_PLUGIN2( BaseClassBrowser, ClassBrowser )

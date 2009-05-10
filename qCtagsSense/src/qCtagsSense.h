@@ -23,6 +23,7 @@
 #include <QObject>
 #include <QMap>
 #include <QPair>
+#include <QMetaType>
 
 class qCtagsSenseSQL;
 class qCtagsSenseIndexer;
@@ -205,5 +206,7 @@ struct QCTAGSSENSE_EXPORT qCtagsSenseEntry
 	// children
 	qCtagsSenseEntryList children;
 };
+
+Q_DECLARE_METATYPE( qCtagsSenseEntry* )
 
 #endif // QCTAGSSENSE_H

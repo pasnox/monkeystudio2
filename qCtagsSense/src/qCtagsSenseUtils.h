@@ -41,10 +41,10 @@ namespace qCtagsSenseUtils
 	QCTAGSSENSE_EXPORT bool caseInsensitiveFilePathLessThan( const QString& s1, const QString& s2 );
 	
 	QCTAGSSENSE_EXPORT qCtagsSenseEntry* entryForRecord( const QSqlRecord& rec, const QString& fileName );
-	QCTAGSSENSE_EXPORT QString entryDecorationFilePath( qCtagsSenseEntry* entry );
-	QCTAGSSENSE_EXPORT QPixmap entryDecoration( qCtagsSenseEntry* entry );
-	QCTAGSSENSE_EXPORT QString entryDisplay( qCtagsSenseEntry* entry );
-	QCTAGSSENSE_EXPORT QString entryToolTip( qCtagsSenseEntry* entry );
+	QCTAGSSENSE_EXPORT QString entryDecorationFilePath( const qCtagsSenseEntry* entry );
+	QCTAGSSENSE_EXPORT QPixmap entryDecoration( const qCtagsSenseEntry* entry );
+	QCTAGSSENSE_EXPORT QString entryDisplay( const qCtagsSenseEntry* entry );
+	QCTAGSSENSE_EXPORT QString entryToolTip( const qCtagsSenseEntry* entry );
 	
 	QCTAGSSENSE_EXPORT QFileInfoList getFiles( QDir fromDir, const QStringList& filters, bool recursive = true );
 };

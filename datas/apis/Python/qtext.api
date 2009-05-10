@@ -1,0 +1,1660 @@
+qtext.QSCINTILLA_BUILD
+qtext.QSCINTILLA_VERSION_STR
+qtext.QSCINTILLA_VERSION
+qtext.QextScintillaAPIs()
+qtext.QextScintillaAPIs.__init__(self)
+qtext.QextScintillaAPIs.add(QString)
+qtext.QextScintillaAPIs.load(QString) -> bool
+qtext.QextScintillaAPIs.clear()
+qtext.QextScintillaBase.SCLEX_CONTAINER
+qtext.QextScintillaBase.SCLEX_NULL
+qtext.QextScintillaBase.SCLEX_PYTHON
+qtext.QextScintillaBase.SCLEX_CPP
+qtext.QextScintillaBase.SCLEX_HTML
+qtext.QextScintillaBase.SCLEX_XML
+qtext.QextScintillaBase.SCLEX_PERL
+qtext.QextScintillaBase.SCLEX_SQL
+qtext.QextScintillaBase.SCLEX_VB
+qtext.QextScintillaBase.SCLEX_PROPERTIES
+qtext.QextScintillaBase.SCLEX_ERRORLIST
+qtext.QextScintillaBase.SCLEX_MAKEFILE
+qtext.QextScintillaBase.SCLEX_BATCH
+qtext.QextScintillaBase.SCLEX_LATEX
+qtext.QextScintillaBase.SCLEX_LUA
+qtext.QextScintillaBase.SCLEX_DIFF
+qtext.QextScintillaBase.SCLEX_CONF
+qtext.QextScintillaBase.SCLEX_PASCAL
+qtext.QextScintillaBase.SCLEX_AVE
+qtext.QextScintillaBase.SCLEX_ADA
+qtext.QextScintillaBase.SCLEX_LISP
+qtext.QextScintillaBase.SCLEX_RUBY
+qtext.QextScintillaBase.SCLEX_EIFFEL
+qtext.QextScintillaBase.SCLEX_EIFFELKW
+qtext.QextScintillaBase.SCLEX_TCL
+qtext.QextScintillaBase.SCLEX_NNCRONTAB
+qtext.QextScintillaBase.SCLEX_BULLANT
+qtext.QextScintillaBase.SCLEX_VBSCRIPT
+qtext.QextScintillaBase.SCLEX_ASP
+qtext.QextScintillaBase.SCLEX_PHP
+qtext.QextScintillaBase.SCLEX_BAAN
+qtext.QextScintillaBase.SCLEX_MATLAB
+qtext.QextScintillaBase.SCLEX_SCRIPTOL
+qtext.QextScintillaBase.SCLEX_ASM
+qtext.QextScintillaBase.SCLEX_CPPNOCASE
+qtext.QextScintillaBase.SCLEX_FORTRAN
+qtext.QextScintillaBase.SCLEX_F77
+qtext.QextScintillaBase.SCLEX_CSS
+qtext.QextScintillaBase.SCLEX_POV
+qtext.QextScintillaBase.SCLEX_LOUT
+qtext.QextScintillaBase.SCLEX_ESCRIPT
+qtext.QextScintillaBase.SCLEX_PS
+qtext.QextScintillaBase.SCLEX_NSIS
+qtext.QextScintillaBase.SCLEX_MMIXAL
+qtext.QextScintillaBase.SCLEX_CLW
+qtext.QextScintillaBase.SCLEX_CLWNOCASE
+qtext.QextScintillaBase.SCLEX_LOT
+qtext.QextScintillaBase.SCLEX_YAML
+qtext.QextScintillaBase.SCLEX_TEX
+qtext.QextScintillaBase.SCLEX_METAPOST
+qtext.QextScintillaBase.SCLEX_POWERBASIC
+qtext.QextScintillaBase.SCLEX_FORTH
+qtext.QextScintillaBase.SCLEX_ERLANG
+qtext.QextScintillaBase.SCLEX_OCTAVE
+qtext.QextScintillaBase.SCLEX_MSSQL
+qtext.QextScintillaBase.SCLEX_VERILOG
+qtext.QextScintillaBase.SCLEX_KIX
+qtext.QextScintillaBase.SCLEX_GUI4CLI
+qtext.QextScintillaBase.SCLEX_SPECMAN
+qtext.QextScintillaBase.SCLEX_AU3
+qtext.QextScintillaBase.SCLEX_APDL
+qtext.QextScintillaBase.SCLEX_BASH
+qtext.QextScintillaBase.SCLEX_ASN1
+qtext.QextScintillaBase.SCLEX_VHDL
+qtext.QextScintillaBase.SCLEX_CAML
+qtext.QextScintillaBase.SCLEX_BLITZBASIC
+qtext.QextScintillaBase.SCLEX_PUREBASIC
+qtext.QextScintillaBase.SCLEX_HASKELL
+qtext.QextScintillaBase.SCLEX_PHPSCRIPT
+qtext.QextScintillaBase.SCLEX_TADS3
+qtext.QextScintillaBase.SCLEX_REBOL
+qtext.QextScintillaBase.SCLEX_SMALLTALK
+qtext.QextScintillaBase.SCLEX_FLAGSHIP
+qtext.QextScintillaBase.SCLEX_CSOUND
+qtext.QextScintillaBase.SCLEX_FREEBASIC
+qtext.QextScintillaBase.SCLEX_INNOSETUP
+qtext.QextScintillaBase.SCLEX_OPAL
+qtext.QextScintillaBase.SCLEX_SPICE
+qtext.QextScintillaBase.SCMOD_NORM
+qtext.QextScintillaBase.SCMOD_SHIFT
+qtext.QextScintillaBase.SCMOD_CTRL
+qtext.QextScintillaBase.SCMOD_ALT
+qtext.QextScintillaBase.SCK_DOWN
+qtext.QextScintillaBase.SCK_UP
+qtext.QextScintillaBase.SCK_LEFT
+qtext.QextScintillaBase.SCK_RIGHT
+qtext.QextScintillaBase.SCK_HOME
+qtext.QextScintillaBase.SCK_END
+qtext.QextScintillaBase.SCK_PRIOR
+qtext.QextScintillaBase.SCK_NEXT
+qtext.QextScintillaBase.SCK_DELETE
+qtext.QextScintillaBase.SCK_INSERT
+qtext.QextScintillaBase.SCK_ESCAPE
+qtext.QextScintillaBase.SCK_BACK
+qtext.QextScintillaBase.SCK_TAB
+qtext.QextScintillaBase.SCK_RETURN
+qtext.QextScintillaBase.SCK_ADD
+qtext.QextScintillaBase.SCK_SUBTRACT
+qtext.QextScintillaBase.SCK_DIVIDE
+qtext.QextScintillaBase.SC_MOD_INSERTTEXT
+qtext.QextScintillaBase.SC_MOD_DELETETEXT
+qtext.QextScintillaBase.SC_MOD_CHANGESTYLE
+qtext.QextScintillaBase.SC_MOD_CHANGEFOLD
+qtext.QextScintillaBase.SC_PERFORMED_USER
+qtext.QextScintillaBase.SC_PERFORMED_UNDO
+qtext.QextScintillaBase.SC_PERFORMED_REDO
+qtext.QextScintillaBase.SC_MULTISTEPUNDOREDO
+qtext.QextScintillaBase.SC_LASTSTEPINUNDOREDO
+qtext.QextScintillaBase.SC_MOD_CHANGEMARKER
+qtext.QextScintillaBase.SC_MOD_BEFOREINSERT
+qtext.QextScintillaBase.SC_MOD_BEFOREDELETE
+qtext.QextScintillaBase.SC_MULTILINEUNDOREDO
+qtext.QextScintillaBase.SC_MODEVENTMASKALL
+qtext.QextScintillaBase.CARET_SLOP
+qtext.QextScintillaBase.CARET_STRICT
+qtext.QextScintillaBase.CARET_JUMPS
+qtext.QextScintillaBase.CARET_EVEN
+qtext.QextScintillaBase.VISIBLE_SLOP
+qtext.QextScintillaBase.VISIBLE_STRICT
+qtext.QextScintillaBase.SC_CURSORNORMAL
+qtext.QextScintillaBase.SC_CURSORWAIT
+qtext.QextScintillaBase.EDGE_NONE
+qtext.QextScintillaBase.EDGE_LINE
+qtext.QextScintillaBase.EDGE_BACKGROUND
+qtext.QextScintillaBase.SC_CACHE_NONE
+qtext.QextScintillaBase.SC_CACHE_CARET
+qtext.QextScintillaBase.SC_CACHE_PAGE
+qtext.QextScintillaBase.SC_CACHE_DOCUMENT
+qtext.QextScintillaBase.SC_WRAP_NONE
+qtext.QextScintillaBase.SC_WRAP_WORD
+qtext.QextScintillaBase.SC_WRAP_CHAR
+qtext.QextScintillaBase.SC_TIME_FOREVER
+qtext.QextScintillaBase.SC_FOLDFLAG_BOX
+qtext.QextScintillaBase.SC_FOLDFLAG_LINEBEFORE_EXPANDED
+qtext.QextScintillaBase.SC_FOLDFLAG_LINEBEFORE_CONTRACTED
+qtext.QextScintillaBase.SC_FOLDFLAG_LINEAFTER_EXPANDED
+qtext.QextScintillaBase.SC_FOLDFLAG_LINEAFTER_CONTRACTED
+qtext.QextScintillaBase.SC_FOLDFLAG_LEVELNUMBERS
+qtext.QextScintillaBase.SC_FOLDLEVELBASE
+qtext.QextScintillaBase.SC_FOLDLEVELWHITEFLAG
+qtext.QextScintillaBase.SC_FOLDLEVELHEADERFLAG
+qtext.QextScintillaBase.SC_FOLDLEVELBOXHEADERFLAG
+qtext.QextScintillaBase.SC_FOLDLEVELBOXFOOTERFLAG
+qtext.QextScintillaBase.SC_FOLDLEVELCONTRACTED
+qtext.QextScintillaBase.SC_FOLDLEVELUNINDENT
+qtext.QextScintillaBase.SC_FOLDLEVELNUMBERMASK
+qtext.QextScintillaBase.SCFIND_WHOLEWORD
+qtext.QextScintillaBase.SCFIND_MATCHCASE
+qtext.QextScintillaBase.SCFIND_WORDSTART
+qtext.QextScintillaBase.SCFIND_REGEXP
+qtext.QextScintillaBase.SCFIND_POSIX
+qtext.QextScintillaBase.SC_PRINT_NORMAL
+qtext.QextScintillaBase.SC_PRINT_INVERTLIGHT
+qtext.QextScintillaBase.SC_PRINT_BLACKONWHITE
+qtext.QextScintillaBase.SC_PRINT_COLOURONWHITE
+qtext.QextScintillaBase.SC_PRINT_COLOURONWHITEDEFAULTBG
+qtext.QextScintillaBase.INDIC_MAX
+qtext.QextScintillaBase.INDIC_PLAIN
+qtext.QextScintillaBase.INDIC_SQUIGGLE
+qtext.QextScintillaBase.INDIC_TT
+qtext.QextScintillaBase.INDIC_DIAGONAL
+qtext.QextScintillaBase.INDIC_STRIKE
+qtext.QextScintillaBase.INDIC_HIDDEN
+qtext.QextScintillaBase.INDIC_BOX
+qtext.QextScintillaBase.INDIC_ROUNDBOX
+qtext.QextScintillaBase.INDIC0_MASK
+qtext.QextScintillaBase.INDIC1_MASK
+qtext.QextScintillaBase.INDIC2_MASK
+qtext.QextScintillaBase.INDICS_MASK
+qtext.QextScintillaBase.SC_CASE_MIXED
+qtext.QextScintillaBase.SC_CASE_UPPER
+qtext.QextScintillaBase.SC_CASE_LOWER
+qtext.QextScintillaBase.SC_CHARSET_ANSI
+qtext.QextScintillaBase.SC_CHARSET_DEFAULT
+qtext.QextScintillaBase.SC_CHARSET_BALTIC
+qtext.QextScintillaBase.SC_CHARSET_CHINESEBIG5
+qtext.QextScintillaBase.SC_CHARSET_EASTEUROPE
+qtext.QextScintillaBase.SC_CHARSET_GB2312
+qtext.QextScintillaBase.SC_CHARSET_GREEK
+qtext.QextScintillaBase.SC_CHARSET_HANGUL
+qtext.QextScintillaBase.SC_CHARSET_MAC
+qtext.QextScintillaBase.SC_CHARSET_OEM
+qtext.QextScintillaBase.SC_CHARSET_RUSSIAN
+qtext.QextScintillaBase.SC_CHARSET_SHIFTJIS
+qtext.QextScintillaBase.SC_CHARSET_SYMBOL
+qtext.QextScintillaBase.SC_CHARSET_TURKISH
+qtext.QextScintillaBase.SC_CHARSET_JOHAB
+qtext.QextScintillaBase.SC_CHARSET_HEBREW
+qtext.QextScintillaBase.SC_CHARSET_ARABIC
+qtext.QextScintillaBase.SC_CHARSET_VIETNAMESE
+qtext.QextScintillaBase.SC_CHARSET_THAI
+qtext.QextScintillaBase.SC_CHARSET_8859_15
+qtext.QextScintillaBase.STYLE_DEFAULT
+qtext.QextScintillaBase.STYLE_LINENUMBER
+qtext.QextScintillaBase.STYLE_BRACELIGHT
+qtext.QextScintillaBase.STYLE_BRACEBAD
+qtext.QextScintillaBase.STYLE_CONTROLCHAR
+qtext.QextScintillaBase.STYLE_INDENTGUIDE
+qtext.QextScintillaBase.STYLE_CALLTIP
+qtext.QextScintillaBase.STYLE_LASTPREDEFINED
+qtext.QextScintillaBase.STYLE_MAX
+qtext.QextScintillaBase.SC_MARGIN_SYMBOL
+qtext.QextScintillaBase.SC_MARGIN_NUMBER
+qtext.QextScintillaBase.SC_MARGIN_BACK
+qtext.QextScintillaBase.SC_MARGIN_FORE
+qtext.QextScintillaBase.SC_MARKNUM_FOLDEREND
+qtext.QextScintillaBase.SC_MARKNUM_FOLDEROPENMID
+qtext.QextScintillaBase.SC_MARKNUM_FOLDERMIDTAIL
+qtext.QextScintillaBase.SC_MARKNUM_FOLDERTAIL
+qtext.QextScintillaBase.SC_MARKNUM_FOLDERSUB
+qtext.QextScintillaBase.SC_MARKNUM_FOLDER
+qtext.QextScintillaBase.SC_MARKNUM_FOLDEROPEN
+qtext.QextScintillaBase.SC_MASK_FOLDERS
+qtext.QextScintillaBase.SC_MARK_CIRCLE
+qtext.QextScintillaBase.SC_MARK_ROUNDRECT
+qtext.QextScintillaBase.SC_MARK_ARROW
+qtext.QextScintillaBase.SC_MARK_SMALLRECT
+qtext.QextScintillaBase.SC_MARK_SHORTARROW
+qtext.QextScintillaBase.SC_MARK_EMPTY
+qtext.QextScintillaBase.SC_MARK_ARROWDOWN
+qtext.QextScintillaBase.SC_MARK_MINUS
+qtext.QextScintillaBase.SC_MARK_PLUS
+qtext.QextScintillaBase.SC_MARK_VLINE
+qtext.QextScintillaBase.SC_MARK_LCORNER
+qtext.QextScintillaBase.SC_MARK_TCORNER
+qtext.QextScintillaBase.SC_MARK_BOXPLUS
+qtext.QextScintillaBase.SC_MARK_BOXPLUSCONNECTED
+qtext.QextScintillaBase.SC_MARK_BOXMINUS
+qtext.QextScintillaBase.SC_MARK_BOXMINUSCONNECTED
+qtext.QextScintillaBase.SC_MARK_LCORNERCURVE
+qtext.QextScintillaBase.SC_MARK_TCORNERCURVE
+qtext.QextScintillaBase.SC_MARK_CIRCLEPLUS
+qtext.QextScintillaBase.SC_MARK_CIRCLEPLUSCONNECTED
+qtext.QextScintillaBase.SC_MARK_CIRCLEMINUS
+qtext.QextScintillaBase.SC_MARK_CIRCLEMINUSCONNECTED
+qtext.QextScintillaBase.SC_MARK_BACKGROUND
+qtext.QextScintillaBase.SC_MARK_DOTDOTDOT
+qtext.QextScintillaBase.SC_MARK_ARROWS
+qtext.QextScintillaBase.SC_MARK_PIXMAP
+qtext.QextScintillaBase.SC_MARK_FULLRECT
+qtext.QextScintillaBase.SC_MARK_CHARACTER
+qtext.QextScintillaBase.SC_CP_DBCS
+qtext.QextScintillaBase.SC_CP_UTF8
+qtext.QextScintillaBase.SC_EOL_CRLF
+qtext.QextScintillaBase.SC_EOL_CR
+qtext.QextScintillaBase.SC_EOL_LF
+qtext.QextScintillaBase.SCWS_INVISIBLE
+qtext.QextScintillaBase.SCWS_VISIBLEALWAYS
+qtext.QextScintillaBase.SCWS_VISIBLEAFTERINDENT
+qtext.QextScintillaBase.SC_SEL_STREAM
+qtext.QextScintillaBase.SC_SEL_RECTANGLE
+qtext.QextScintillaBase.SC_SEL_LINES
+qtext.QextScintillaBase.SC_WRAPVISUALFLAGLOC_DEFAULT
+qtext.QextScintillaBase.SC_WRAPVISUALFLAGLOC_END_BY_TEXT
+qtext.QextScintillaBase.SC_WRAPVISUALFLAGLOC_START_BY_TEXT
+qtext.QextScintillaBase.SC_WRAPVISUALFLAG_NONE
+qtext.QextScintillaBase.SC_WRAPVISUALFLAG_END
+qtext.QextScintillaBase.SC_WRAPVISUALFLAG_START
+qtext.QextScintillaBase.SC_ALPHA_TRANSPARENT
+qtext.QextScintillaBase.SC_ALPHA_OPAQUE
+qtext.QextScintillaBase.SC_ALPHA_NOALPHA
+qtext.QextScintillaBase.SCI_START
+qtext.QextScintillaBase.SCI_OPTIONAL_START
+qtext.QextScintillaBase.SCI_LEXER_START
+qtext.QextScintillaBase.SCI_ADDTEXT
+qtext.QextScintillaBase.SCI_ADDSTYLEDTEXT
+qtext.QextScintillaBase.SCI_INSERTTEXT
+qtext.QextScintillaBase.SCI_CLEARALL
+qtext.QextScintillaBase.SCI_CLEARDOCUMENTSTYLE
+qtext.QextScintillaBase.SCI_GETLENGTH
+qtext.QextScintillaBase.SCI_GETCHARAT
+qtext.QextScintillaBase.SCI_GETCURRENTPOS
+qtext.QextScintillaBase.SCI_GETANCHOR
+qtext.QextScintillaBase.SCI_GETSTYLEAT
+qtext.QextScintillaBase.SCI_REDO
+qtext.QextScintillaBase.SCI_SETUNDOCOLLECTION
+qtext.QextScintillaBase.SCI_SELECTALL
+qtext.QextScintillaBase.SCI_SETSAVEPOINT
+qtext.QextScintillaBase.SCI_GETSTYLEDTEXT
+qtext.QextScintillaBase.SCI_CANREDO
+qtext.QextScintillaBase.SCI_MARKERLINEFROMHANDLE
+qtext.QextScintillaBase.SCI_MARKERDELETEHANDLE
+qtext.QextScintillaBase.SCI_GETUNDOCOLLECTION
+qtext.QextScintillaBase.SCI_GETVIEWWS
+qtext.QextScintillaBase.SCI_SETVIEWWS
+qtext.QextScintillaBase.SCI_POSITIONFROMPOINT
+qtext.QextScintillaBase.SCI_POSITIONFROMPOINTCLOSE
+qtext.QextScintillaBase.SCI_GOTOLINE
+qtext.QextScintillaBase.SCI_GOTOPOS
+qtext.QextScintillaBase.SCI_SETANCHOR
+qtext.QextScintillaBase.SCI_GETCURLINE
+qtext.QextScintillaBase.SCI_GETENDSTYLED
+qtext.QextScintillaBase.SCI_CONVERTEOLS
+qtext.QextScintillaBase.SCI_GETEOLMODE
+qtext.QextScintillaBase.SCI_SETEOLMODE
+qtext.QextScintillaBase.SCI_STARTSTYLING
+qtext.QextScintillaBase.SCI_SETSTYLING
+qtext.QextScintillaBase.SCI_GETBUFFEREDDRAW
+qtext.QextScintillaBase.SCI_SETBUFFEREDDRAW
+qtext.QextScintillaBase.SCI_SETTABWIDTH
+qtext.QextScintillaBase.SCI_GETTABWIDTH
+qtext.QextScintillaBase.SCI_SETCODEPAGE
+qtext.QextScintillaBase.SCI_SETUSEPALETTE
+qtext.QextScintillaBase.SCI_MARKERDEFINE
+qtext.QextScintillaBase.SCI_MARKERSETFORE
+qtext.QextScintillaBase.SCI_MARKERSETBACK
+qtext.QextScintillaBase.SCI_MARKERADD
+qtext.QextScintillaBase.SCI_MARKERDELETE
+qtext.QextScintillaBase.SCI_MARKERDELETEALL
+qtext.QextScintillaBase.SCI_MARKERGET
+qtext.QextScintillaBase.SCI_MARKERNEXT
+qtext.QextScintillaBase.SCI_MARKERPREVIOUS
+qtext.QextScintillaBase.SCI_MARKERDEFINEPIXMAP
+qtext.QextScintillaBase.SCI_SETMARGINTYPEN
+qtext.QextScintillaBase.SCI_GETMARGINTYPEN
+qtext.QextScintillaBase.SCI_SETMARGINWIDTHN
+qtext.QextScintillaBase.SCI_GETMARGINWIDTHN
+qtext.QextScintillaBase.SCI_SETMARGINMASKN
+qtext.QextScintillaBase.SCI_GETMARGINMASKN
+qtext.QextScintillaBase.SCI_SETMARGINSENSITIVEN
+qtext.QextScintillaBase.SCI_GETMARGINSENSITIVEN
+qtext.QextScintillaBase.SCI_STYLECLEARALL
+qtext.QextScintillaBase.SCI_STYLESETFORE
+qtext.QextScintillaBase.SCI_STYLESETBACK
+qtext.QextScintillaBase.SCI_STYLESETBOLD
+qtext.QextScintillaBase.SCI_STYLESETITALIC
+qtext.QextScintillaBase.SCI_STYLESETSIZE
+qtext.QextScintillaBase.SCI_STYLESETFONT
+qtext.QextScintillaBase.SCI_STYLESETEOLFILLED
+qtext.QextScintillaBase.SCI_STYLERESETDEFAULT
+qtext.QextScintillaBase.SCI_STYLESETUNDERLINE
+qtext.QextScintillaBase.SCI_STYLESETCASE
+qtext.QextScintillaBase.SCI_STYLESETCHARACTERSET
+qtext.QextScintillaBase.SCI_SETSELFORE
+qtext.QextScintillaBase.SCI_SETSELBACK
+qtext.QextScintillaBase.SCI_SETCARETFORE
+qtext.QextScintillaBase.SCI_ASSIGNCMDKEY
+qtext.QextScintillaBase.SCI_CLEARCMDKEY
+qtext.QextScintillaBase.SCI_CLEARALLCMDKEYS
+qtext.QextScintillaBase.SCI_SETSTYLINGEX
+qtext.QextScintillaBase.SCI_STYLESETVISIBLE
+qtext.QextScintillaBase.SCI_GETCARETPERIOD
+qtext.QextScintillaBase.SCI_SETCARETPERIOD
+qtext.QextScintillaBase.SCI_SETWORDCHARS
+qtext.QextScintillaBase.SCI_BEGINUNDOACTION
+qtext.QextScintillaBase.SCI_ENDUNDOACTION
+qtext.QextScintillaBase.SCI_INDICSETSTYLE
+qtext.QextScintillaBase.SCI_INDICGETSTYLE
+qtext.QextScintillaBase.SCI_INDICSETFORE
+qtext.QextScintillaBase.SCI_INDICGETFORE
+qtext.QextScintillaBase.SCI_SETWHITESPACEFORE
+qtext.QextScintillaBase.SCI_SETWHITESPACEBACK
+qtext.QextScintillaBase.SCI_SETSTYLEBITS
+qtext.QextScintillaBase.SCI_GETSTYLEBITS
+qtext.QextScintillaBase.SCI_SETLINESTATE
+qtext.QextScintillaBase.SCI_GETLINESTATE
+qtext.QextScintillaBase.SCI_GETMAXLINESTATE
+qtext.QextScintillaBase.SCI_GETCARETLINEVISIBLE
+qtext.QextScintillaBase.SCI_SETCARETLINEVISIBLE
+qtext.QextScintillaBase.SCI_GETCARETLINEBACK
+qtext.QextScintillaBase.SCI_SETCARETLINEBACK
+qtext.QextScintillaBase.SCI_STYLESETCHANGEABLE
+qtext.QextScintillaBase.SCI_AUTOCSHOW
+qtext.QextScintillaBase.SCI_AUTOCCANCEL
+qtext.QextScintillaBase.SCI_AUTOCACTIVE
+qtext.QextScintillaBase.SCI_AUTOCPOSSTART
+qtext.QextScintillaBase.SCI_AUTOCCOMPLETE
+qtext.QextScintillaBase.SCI_AUTOCSTOPS
+qtext.QextScintillaBase.SCI_AUTOCSETSEPARATOR
+qtext.QextScintillaBase.SCI_AUTOCGETSEPARATOR
+qtext.QextScintillaBase.SCI_AUTOCSELECT
+qtext.QextScintillaBase.SCI_AUTOCSETCANCELATSTART
+qtext.QextScintillaBase.SCI_AUTOCGETCANCELATSTART
+qtext.QextScintillaBase.SCI_AUTOCSETFILLUPS
+qtext.QextScintillaBase.SCI_AUTOCSETCHOOSESINGLE
+qtext.QextScintillaBase.SCI_AUTOCGETCHOOSESINGLE
+qtext.QextScintillaBase.SCI_AUTOCSETIGNORECASE
+qtext.QextScintillaBase.SCI_AUTOCGETIGNORECASE
+qtext.QextScintillaBase.SCI_USERLISTSHOW
+qtext.QextScintillaBase.SCI_AUTOCSETAUTOHIDE
+qtext.QextScintillaBase.SCI_AUTOCGETAUTOHIDE
+qtext.QextScintillaBase.SCI_AUTOCSETDROPRESTOFWORD
+qtext.QextScintillaBase.SCI_AUTOCGETDROPRESTOFWORD
+qtext.QextScintillaBase.SCI_SETINDENT
+qtext.QextScintillaBase.SCI_GETINDENT
+qtext.QextScintillaBase.SCI_SETUSETABS
+qtext.QextScintillaBase.SCI_GETUSETABS
+qtext.QextScintillaBase.SCI_SETLINEINDENTATION
+qtext.QextScintillaBase.SCI_GETLINEINDENTATION
+qtext.QextScintillaBase.SCI_GETLINEINDENTPOSITION
+qtext.QextScintillaBase.SCI_GETCOLUMN
+qtext.QextScintillaBase.SCI_SETHSCROLLBAR
+qtext.QextScintillaBase.SCI_GETHSCROLLBAR
+qtext.QextScintillaBase.SCI_SETINDENTATIONGUIDES
+qtext.QextScintillaBase.SCI_GETINDENTATIONGUIDES
+qtext.QextScintillaBase.SCI_SETHIGHLIGHTGUIDE
+qtext.QextScintillaBase.SCI_GETHIGHLIGHTGUIDE
+qtext.QextScintillaBase.SCI_GETLINEENDPOSITION
+qtext.QextScintillaBase.SCI_GETCODEPAGE
+qtext.QextScintillaBase.SCI_GETCARETFORE
+qtext.QextScintillaBase.SCI_GETUSEPALETTE
+qtext.QextScintillaBase.SCI_GETREADONLY
+qtext.QextScintillaBase.SCI_SETCURRENTPOS
+qtext.QextScintillaBase.SCI_SETSELECTIONSTART
+qtext.QextScintillaBase.SCI_GETSELECTIONSTART
+qtext.QextScintillaBase.SCI_SETSELECTIONEND
+qtext.QextScintillaBase.SCI_GETSELECTIONEND
+qtext.QextScintillaBase.SCI_SETPRINTMAGNIFICATION
+qtext.QextScintillaBase.SCI_GETPRINTMAGNIFICATION
+qtext.QextScintillaBase.SCI_SETPRINTCOLOURMODE
+qtext.QextScintillaBase.SCI_GETPRINTCOLOURMODE
+qtext.QextScintillaBase.SCI_FINDTEXT
+qtext.QextScintillaBase.SCI_FORMATRANGE
+qtext.QextScintillaBase.SCI_GETFIRSTVISIBLELINE
+qtext.QextScintillaBase.SCI_GETLINE
+qtext.QextScintillaBase.SCI_GETLINECOUNT
+qtext.QextScintillaBase.SCI_SETMARGINLEFT
+qtext.QextScintillaBase.SCI_GETMARGINLEFT
+qtext.QextScintillaBase.SCI_SETMARGINRIGHT
+qtext.QextScintillaBase.SCI_GETMARGINRIGHT
+qtext.QextScintillaBase.SCI_GETMODIFY
+qtext.QextScintillaBase.SCI_SETSEL
+qtext.QextScintillaBase.SCI_GETSELTEXT
+qtext.QextScintillaBase.SCI_GETTEXTRANGE
+qtext.QextScintillaBase.SCI_HIDESELECTION
+qtext.QextScintillaBase.SCI_POINTXFROMPOSITION
+qtext.QextScintillaBase.SCI_POINTYFROMPOSITION
+qtext.QextScintillaBase.SCI_LINEFROMPOSITION
+qtext.QextScintillaBase.SCI_POSITIONFROMLINE
+qtext.QextScintillaBase.SCI_LINESCROLL
+qtext.QextScintillaBase.SCI_SCROLLCARET
+qtext.QextScintillaBase.SCI_REPLACESEL
+qtext.QextScintillaBase.SCI_SETREADONLY
+qtext.QextScintillaBase.SCI_NULL
+qtext.QextScintillaBase.SCI_CANPASTE
+qtext.QextScintillaBase.SCI_CANUNDO
+qtext.QextScintillaBase.SCI_EMPTYUNDOBUFFER
+qtext.QextScintillaBase.SCI_UNDO
+qtext.QextScintillaBase.SCI_CUT
+qtext.QextScintillaBase.SCI_COPY
+qtext.QextScintillaBase.SCI_PASTE
+qtext.QextScintillaBase.SCI_CLEAR
+qtext.QextScintillaBase.SCI_SETTEXT
+qtext.QextScintillaBase.SCI_GETTEXT
+qtext.QextScintillaBase.SCI_GETTEXTLENGTH
+qtext.QextScintillaBase.SCI_GETDIRECTFUNCTION
+qtext.QextScintillaBase.SCI_GETDIRECTPOINTER
+qtext.QextScintillaBase.SCI_SETOVERTYPE
+qtext.QextScintillaBase.SCI_GETOVERTYPE
+qtext.QextScintillaBase.SCI_SETCARETWIDTH
+qtext.QextScintillaBase.SCI_GETCARETWIDTH
+qtext.QextScintillaBase.SCI_SETTARGETSTART
+qtext.QextScintillaBase.SCI_GETTARGETSTART
+qtext.QextScintillaBase.SCI_SETTARGETEND
+qtext.QextScintillaBase.SCI_GETTARGETEND
+qtext.QextScintillaBase.SCI_REPLACETARGET
+qtext.QextScintillaBase.SCI_REPLACETARGETRE
+qtext.QextScintillaBase.SCI_SEARCHINTARGET
+qtext.QextScintillaBase.SCI_SETSEARCHFLAGS
+qtext.QextScintillaBase.SCI_GETSEARCHFLAGS
+qtext.QextScintillaBase.SCI_CALLTIPSHOW
+qtext.QextScintillaBase.SCI_CALLTIPCANCEL
+qtext.QextScintillaBase.SCI_CALLTIPACTIVE
+qtext.QextScintillaBase.SCI_CALLTIPPOSSTART
+qtext.QextScintillaBase.SCI_CALLTIPSETHLT
+qtext.QextScintillaBase.SCI_CALLTIPSETBACK
+qtext.QextScintillaBase.SCI_CALLTIPSETFORE
+qtext.QextScintillaBase.SCI_CALLTIPSETFOREHLT
+qtext.QextScintillaBase.SCI_AUTOCSETMAXWIDTH
+qtext.QextScintillaBase.SCI_AUTOCGETMAXWIDTH
+qtext.QextScintillaBase.SCI_AUTOCSETMAXHEIGHT
+qtext.QextScintillaBase.SCI_AUTOCGETMAXHEIGHT
+qtext.QextScintillaBase.SCI_CALLTIPUSESTYLE
+qtext.QextScintillaBase.SCI_VISIBLEFROMDOCLINE
+qtext.QextScintillaBase.SCI_DOCLINEFROMVISIBLE
+qtext.QextScintillaBase.SCI_SETFOLDLEVEL
+qtext.QextScintillaBase.SCI_GETFOLDLEVEL
+qtext.QextScintillaBase.SCI_GETLASTCHILD
+qtext.QextScintillaBase.SCI_GETFOLDPARENT
+qtext.QextScintillaBase.SCI_SHOWLINES
+qtext.QextScintillaBase.SCI_HIDELINES
+qtext.QextScintillaBase.SCI_GETLINEVISIBLE
+qtext.QextScintillaBase.SCI_SETFOLDEXPANDED
+qtext.QextScintillaBase.SCI_GETFOLDEXPANDED
+qtext.QextScintillaBase.SCI_TOGGLEFOLD
+qtext.QextScintillaBase.SCI_ENSUREVISIBLE
+qtext.QextScintillaBase.SCI_SETFOLDFLAGS
+qtext.QextScintillaBase.SCI_ENSUREVISIBLEENFORCEPOLICY
+qtext.QextScintillaBase.SCI_WRAPCOUNT
+qtext.QextScintillaBase.SCI_SETTABINDENTS
+qtext.QextScintillaBase.SCI_GETTABINDENTS
+qtext.QextScintillaBase.SCI_SETBACKSPACEUNINDENTS
+qtext.QextScintillaBase.SCI_GETBACKSPACEUNINDENTS
+qtext.QextScintillaBase.SCI_SETMOUSEDWELLTIME
+qtext.QextScintillaBase.SCI_GETMOUSEDWELLTIME
+qtext.QextScintillaBase.SCI_WORDSTARTPOSITION
+qtext.QextScintillaBase.SCI_WORDENDPOSITION
+qtext.QextScintillaBase.SCI_SETWRAPMODE
+qtext.QextScintillaBase.SCI_GETWRAPMODE
+qtext.QextScintillaBase.SCI_SETLAYOUTCACHE
+qtext.QextScintillaBase.SCI_GETLAYOUTCACHE
+qtext.QextScintillaBase.SCI_SETSCROLLWIDTH
+qtext.QextScintillaBase.SCI_GETSCROLLWIDTH
+qtext.QextScintillaBase.SCI_TEXTWIDTH
+qtext.QextScintillaBase.SCI_SETENDATLASTLINE
+qtext.QextScintillaBase.SCI_GETENDATLASTLINE
+qtext.QextScintillaBase.SCI_TEXTHEIGHT
+qtext.QextScintillaBase.SCI_SETVSCROLLBAR
+qtext.QextScintillaBase.SCI_GETVSCROLLBAR
+qtext.QextScintillaBase.SCI_APPENDTEXT
+qtext.QextScintillaBase.SCI_GETTWOPHASEDRAW
+qtext.QextScintillaBase.SCI_SETTWOPHASEDRAW
+qtext.QextScintillaBase.SCI_AUTOCGETTYPESEPARATOR
+qtext.QextScintillaBase.SCI_AUTOCSETTYPESEPARATOR
+qtext.QextScintillaBase.SCI_TARGETFROMSELECTION
+qtext.QextScintillaBase.SCI_LINESJOIN
+qtext.QextScintillaBase.SCI_LINESSPLIT
+qtext.QextScintillaBase.SCI_SETFOLDMARGINCOLOUR
+qtext.QextScintillaBase.SCI_SETFOLDMARGINHICOLOUR
+qtext.QextScintillaBase.SCI_LINEDOWN
+qtext.QextScintillaBase.SCI_LINEDOWNEXTEND
+qtext.QextScintillaBase.SCI_LINEUP
+qtext.QextScintillaBase.SCI_LINEUPEXTEND
+qtext.QextScintillaBase.SCI_CHARLEFT
+qtext.QextScintillaBase.SCI_CHARLEFTEXTEND
+qtext.QextScintillaBase.SCI_CHARRIGHT
+qtext.QextScintillaBase.SCI_CHARRIGHTEXTEND
+qtext.QextScintillaBase.SCI_WORDLEFT
+qtext.QextScintillaBase.SCI_WORDLEFTEXTEND
+qtext.QextScintillaBase.SCI_WORDRIGHT
+qtext.QextScintillaBase.SCI_WORDRIGHTEXTEND
+qtext.QextScintillaBase.SCI_HOME
+qtext.QextScintillaBase.SCI_HOMEEXTEND
+qtext.QextScintillaBase.SCI_LINEEND
+qtext.QextScintillaBase.SCI_LINEENDEXTEND
+qtext.QextScintillaBase.SCI_DOCUMENTSTART
+qtext.QextScintillaBase.SCI_DOCUMENTSTARTEXTEND
+qtext.QextScintillaBase.SCI_DOCUMENTEND
+qtext.QextScintillaBase.SCI_DOCUMENTENDEXTEND
+qtext.QextScintillaBase.SCI_PAGEUP
+qtext.QextScintillaBase.SCI_PAGEUPEXTEND
+qtext.QextScintillaBase.SCI_PAGEDOWN
+qtext.QextScintillaBase.SCI_PAGEDOWNEXTEND
+qtext.QextScintillaBase.SCI_EDITTOGGLEOVERTYPE
+qtext.QextScintillaBase.SCI_CANCEL
+qtext.QextScintillaBase.SCI_DELETEBACK
+qtext.QextScintillaBase.SCI_TAB
+qtext.QextScintillaBase.SCI_BACKTAB
+qtext.QextScintillaBase.SCI_NEWLINE
+qtext.QextScintillaBase.SCI_FORMFEED
+qtext.QextScintillaBase.SCI_VCHOME
+qtext.QextScintillaBase.SCI_VCHOMEEXTEND
+qtext.QextScintillaBase.SCI_ZOOMIN
+qtext.QextScintillaBase.SCI_ZOOMOUT
+qtext.QextScintillaBase.SCI_DELWORDLEFT
+qtext.QextScintillaBase.SCI_DELWORDRIGHT
+qtext.QextScintillaBase.SCI_LINECUT
+qtext.QextScintillaBase.SCI_LINEDELETE
+qtext.QextScintillaBase.SCI_LINETRANSPOSE
+qtext.QextScintillaBase.SCI_LOWERCASE
+qtext.QextScintillaBase.SCI_UPPERCASE
+qtext.QextScintillaBase.SCI_LINESCROLLDOWN
+qtext.QextScintillaBase.SCI_LINESCROLLUP
+qtext.QextScintillaBase.SCI_DELETEBACKNOTLINE
+qtext.QextScintillaBase.SCI_HOMEDISPLAY
+qtext.QextScintillaBase.SCI_HOMEDISPLAYEXTEND
+qtext.QextScintillaBase.SCI_LINEENDDISPLAY
+qtext.QextScintillaBase.SCI_LINEENDDISPLAYEXTEND
+qtext.QextScintillaBase.SCI_MOVECARETINSIDEVIEW
+qtext.QextScintillaBase.SCI_LINELENGTH
+qtext.QextScintillaBase.SCI_BRACEHIGHLIGHT
+qtext.QextScintillaBase.SCI_BRACEBADLIGHT
+qtext.QextScintillaBase.SCI_BRACEMATCH
+qtext.QextScintillaBase.SCI_GETVIEWEOL
+qtext.QextScintillaBase.SCI_SETVIEWEOL
+qtext.QextScintillaBase.SCI_GETDOCPOINTER
+qtext.QextScintillaBase.SCI_SETDOCPOINTER
+qtext.QextScintillaBase.SCI_SETMODEVENTMASK
+qtext.QextScintillaBase.SCI_GETEDGECOLUMN
+qtext.QextScintillaBase.SCI_SETEDGECOLUMN
+qtext.QextScintillaBase.SCI_GETEDGEMODE
+qtext.QextScintillaBase.SCI_SETEDGEMODE
+qtext.QextScintillaBase.SCI_GETEDGECOLOUR
+qtext.QextScintillaBase.SCI_SETEDGECOLOUR
+qtext.QextScintillaBase.SCI_SEARCHANCHOR
+qtext.QextScintillaBase.SCI_SEARCHNEXT
+qtext.QextScintillaBase.SCI_SEARCHPREV
+qtext.QextScintillaBase.SCI_LINESONSCREEN
+qtext.QextScintillaBase.SCI_USEPOPUP
+qtext.QextScintillaBase.SCI_SELECTIONISRECTANGLE
+qtext.QextScintillaBase.SCI_SETZOOM
+qtext.QextScintillaBase.SCI_GETZOOM
+qtext.QextScintillaBase.SCI_CREATEDOCUMENT
+qtext.QextScintillaBase.SCI_ADDREFDOCUMENT
+qtext.QextScintillaBase.SCI_RELEASEDOCUMENT
+qtext.QextScintillaBase.SCI_GETMODEVENTMASK
+qtext.QextScintillaBase.SCI_SETFOCUS
+qtext.QextScintillaBase.SCI_GETFOCUS
+qtext.QextScintillaBase.SCI_SETSTATUS
+qtext.QextScintillaBase.SCI_GETSTATUS
+qtext.QextScintillaBase.SCI_SETMOUSEDOWNCAPTURES
+qtext.QextScintillaBase.SCI_GETMOUSEDOWNCAPTURES
+qtext.QextScintillaBase.SCI_SETCURSOR
+qtext.QextScintillaBase.SCI_GETCURSOR
+qtext.QextScintillaBase.SCI_SETCONTROLCHARSYMBOL
+qtext.QextScintillaBase.SCI_GETCONTROLCHARSYMBOL
+qtext.QextScintillaBase.SCI_WORDPARTLEFT
+qtext.QextScintillaBase.SCI_WORDPARTLEFTEXTEND
+qtext.QextScintillaBase.SCI_WORDPARTRIGHT
+qtext.QextScintillaBase.SCI_WORDPARTRIGHTEXTEND
+qtext.QextScintillaBase.SCI_SETVISIBLEPOLICY
+qtext.QextScintillaBase.SCI_DELLINELEFT
+qtext.QextScintillaBase.SCI_DELLINERIGHT
+qtext.QextScintillaBase.SCI_SETXOFFSET
+qtext.QextScintillaBase.SCI_GETXOFFSET
+qtext.QextScintillaBase.SCI_CHOOSECARETX
+qtext.QextScintillaBase.SCI_GRABFOCUS
+qtext.QextScintillaBase.SCI_SETXCARETPOLICY
+qtext.QextScintillaBase.SCI_SETYCARETPOLICY
+qtext.QextScintillaBase.SCI_LINEDUPLICATE
+qtext.QextScintillaBase.SCI_REGISTERIMAGE
+qtext.QextScintillaBase.SCI_SETPRINTWRAPMODE
+qtext.QextScintillaBase.SCI_GETPRINTWRAPMODE
+qtext.QextScintillaBase.SCI_CLEARREGISTEREDIMAGES
+qtext.QextScintillaBase.SCI_STYLESETHOTSPOT
+qtext.QextScintillaBase.SCI_SETHOTSPOTACTIVEFORE
+qtext.QextScintillaBase.SCI_SETHOTSPOTACTIVEBACK
+qtext.QextScintillaBase.SCI_SETHOTSPOTACTIVEUNDERLINE
+qtext.QextScintillaBase.SCI_PARADOWN
+qtext.QextScintillaBase.SCI_PARADOWNEXTEND
+qtext.QextScintillaBase.SCI_PARAUP
+qtext.QextScintillaBase.SCI_PARAUPEXTEND
+qtext.QextScintillaBase.SCI_POSITIONBEFORE
+qtext.QextScintillaBase.SCI_POSITIONAFTER
+qtext.QextScintillaBase.SCI_COPYRANGE
+qtext.QextScintillaBase.SCI_COPYTEXT
+qtext.QextScintillaBase.SCI_SETSELECTIONMODE
+qtext.QextScintillaBase.SCI_GETSELECTIONMODE
+qtext.QextScintillaBase.SCI_GETLINESELSTARTPOSITION
+qtext.QextScintillaBase.SCI_GETLINESELENDPOSITION
+qtext.QextScintillaBase.SCI_LINEDOWNRECTEXTEND
+qtext.QextScintillaBase.SCI_LINEUPRECTEXTEND
+qtext.QextScintillaBase.SCI_CHARLEFTRECTEXTEND
+qtext.QextScintillaBase.SCI_CHARRIGHTRECTEXTEND
+qtext.QextScintillaBase.SCI_HOMERECTEXTEND
+qtext.QextScintillaBase.SCI_VCHOMERECTEXTEND
+qtext.QextScintillaBase.SCI_LINEENDRECTEXTEND
+qtext.QextScintillaBase.SCI_PAGEUPRECTEXTEND
+qtext.QextScintillaBase.SCI_PAGEDOWNRECTEXTEND
+qtext.QextScintillaBase.SCI_STUTTEREDPAGEUP
+qtext.QextScintillaBase.SCI_STUTTEREDPAGEUPEXTEND
+qtext.QextScintillaBase.SCI_STUTTEREDPAGEDOWN
+qtext.QextScintillaBase.SCI_STUTTEREDPAGEDOWNEXTEND
+qtext.QextScintillaBase.SCI_WORDLEFTEND
+qtext.QextScintillaBase.SCI_WORDLEFTENDEXTEND
+qtext.QextScintillaBase.SCI_WORDRIGHTEND
+qtext.QextScintillaBase.SCI_WORDRIGHTENDEXTEND
+qtext.QextScintillaBase.SCI_SETWHITESPACECHARS
+qtext.QextScintillaBase.SCI_SETCHARSDEFAULT
+qtext.QextScintillaBase.SCI_AUTOCGETCURRENT
+qtext.QextScintillaBase.SCI_ALLOCATE
+qtext.QextScintillaBase.SCI_HOMEWRAP
+qtext.QextScintillaBase.SCI_HOMEWRAPEXTEND
+qtext.QextScintillaBase.SCI_LINEENDWRAP
+qtext.QextScintillaBase.SCI_LINEENDWRAPEXTEND
+qtext.QextScintillaBase.SCI_VCHOMEWRAP
+qtext.QextScintillaBase.SCI_VCHOMEWRAPEXTEND
+qtext.QextScintillaBase.SCI_LINECOPY
+qtext.QextScintillaBase.SCI_FINDCOLUMN
+qtext.QextScintillaBase.SCI_GETCARETSTICKY
+qtext.QextScintillaBase.SCI_SETCARETSTICKY
+qtext.QextScintillaBase.SCI_TOGGLECARETSTICKY
+qtext.QextScintillaBase.SCI_SETWRAPVISUALFLAGS
+qtext.QextScintillaBase.SCI_GETWRAPVISUALFLAGS
+qtext.QextScintillaBase.SCI_SETWRAPVISUALFLAGSLOCATION
+qtext.QextScintillaBase.SCI_GETWRAPVISUALFLAGSLOCATION
+qtext.QextScintillaBase.SCI_SETWRAPSTARTINDENT
+qtext.QextScintillaBase.SCI_GETWRAPSTARTINDENT
+qtext.QextScintillaBase.SCI_MARKERADDSET
+qtext.QextScintillaBase.SCI_SETPASTECONVERTENDINGS
+qtext.QextScintillaBase.SCI_GETPASTECONVERTENDINGS
+qtext.QextScintillaBase.SCI_SELECTIONDUPLICATE
+qtext.QextScintillaBase.SCI_SETCARETLINEBACKALPHA
+qtext.QextScintillaBase.SCI_GETCARETLINEBACKALPHA
+qtext.QextScintillaBase.SCI_MARKERSETALPHA
+qtext.QextScintillaBase.SCI_GETSELALPHA
+qtext.QextScintillaBase.SCI_SETSELALPHA
+qtext.QextScintillaBase.SCI_STARTRECORD
+qtext.QextScintillaBase.SCI_STOPRECORD
+qtext.QextScintillaBase.SCI_SETLEXER
+qtext.QextScintillaBase.SCI_GETLEXER
+qtext.QextScintillaBase.SCI_COLOURISE
+qtext.QextScintillaBase.SCI_SETPROPERTY
+qtext.QextScintillaBase.SCI_SETKEYWORDS
+qtext.QextScintillaBase.SCI_SETLEXERLANGUAGE
+qtext.QextScintillaBase.SCI_LOADLEXERLIBRARY
+qtext.QextScintillaBase.SCI_GETPROPERTY
+qtext.QextScintillaBase.SCI_GETPROPERTYEXPANDED
+qtext.QextScintillaBase.SCI_GETPROPERTYINT
+qtext.QextScintillaBase.SCI_GETSTYLEBITSNEEDED
+qtext.QextScintillaBase(QWidget, str, unsigned long=0)
+qtext.QextScintillaBase.__init__(self, QWidget, str, unsigned long=0)
+qtext.QextScintillaBase.metaObject() -> QMetaObject
+qtext.QextScintillaBase.pool() -> QextScintillaBase
+qtext.QextScintillaBase.SendScintilla(unsigned long, unsigned long=0, long=0) -> long
+qtext.QextScintillaBase.SendScintilla(unsigned long, unsigned long, str) -> long
+qtext.QextScintillaBase.SendScintilla(unsigned long, str) -> long
+qtext.QextScintillaBase.SendScintilla(unsigned long, str, str) -> long
+qtext.QextScintillaBase.SendScintilla(unsigned long, long) -> long
+qtext.QextScintillaBase.SendScintilla(unsigned long, long, long, str) -> long
+qtext.QextScintillaBase.SendScintilla(unsigned long, unsigned long, QColor) -> long
+qtext.QextScintillaBase.SendScintilla(unsigned long, QColor) -> long
+qtext.QextScintillaBase.SendScintilla(unsigned long, unsigned long, QPainter, QRect, long, long) -> long
+qtext.QextScintillaBase.SendScintilla(unsigned long, unsigned long, QPixmap) -> long
+qtext.QextScintillaBase.sizeHint() -> QSize
+qtext.QextScintillaBase.viewport() -> QWidget
+qtext.QextScintillaBase.QSCN_SELCHANGED(bool)
+qtext.QextScintillaBase.SCEN_CHANGE()
+qtext.QextScintillaBase.SCN_AUTOCSELECTION(str, int)
+qtext.QextScintillaBase.SCN_CHARADDED(int)
+qtext.QextScintillaBase.SCN_CALLTIPCLICK(int)
+qtext.QextScintillaBase.SCN_DOUBLECLICK()
+qtext.QextScintillaBase.SCN_DWELLEND(int, int, int)
+qtext.QextScintillaBase.SCN_DWELLSTART(int, int, int)
+qtext.QextScintillaBase.SCN_HOTSPOTCLICK(int, int)
+qtext.QextScintillaBase.SCN_HOTSPOTDOUBLECLICK(int, int)
+qtext.QextScintillaBase.SCN_MACRORECORD(unsigned long, unsigned long, long)
+qtext.QextScintillaBase.SCN_MARGINCLICK(int, int, int)
+qtext.QextScintillaBase.SCN_MODIFIED(int, int, str, int, int, int, int, int)
+qtext.QextScintillaBase.SCN_MODIFYATTEMPTRO()
+qtext.QextScintillaBase.SCN_NEEDSHOWN(int, int)
+qtext.QextScintillaBase.SCN_PAINTED()
+qtext.QextScintillaBase.SCN_SAVEPOINTLEFT()
+qtext.QextScintillaBase.SCN_SAVEPOINTREACHED()
+qtext.QextScintillaBase.SCN_STYLENEEDED(int)
+qtext.QextScintillaBase.SCN_UPDATEUI()
+qtext.QextScintillaBase.SCN_USERLISTSELECTION(str, int)
+qtext.QextScintillaBase.SCN_ZOOM()
+qtext.QextScintillaBase.eventFilter(QObject, QEvent) -> bool
+qtext.QextScintillaBase.keyPressEvent(QKeyEvent)
+qtext.QextScintillaBase.focusInEvent(QFocusEvent)
+qtext.QextScintillaBase.focusOutEvent(QFocusEvent)
+qtext.QextScintillaBase.focusNextPrevChild(bool) -> bool
+qtext.QextScintillaBase.startDrag()
+qtext.QextScintilla.WrapVisualFlag
+qtext.QextScintilla.WrapFlagNone
+qtext.QextScintilla.WrapFlagByText
+qtext.QextScintilla.WrapFlagByBorder
+qtext.QextScintilla.WrapMode
+qtext.QextScintilla.WrapNone
+qtext.QextScintilla.WrapWord
+qtext.QextScintilla.WrapCharacter
+qtext.QextScintilla.WhitespaceVisibility
+qtext.QextScintilla.WsInvisible
+qtext.QextScintilla.WsVisible
+qtext.QextScintilla.WsVisibleAfterIndent
+qtext.QextScintilla.MarkerSymbol
+qtext.QextScintilla.Circle
+qtext.QextScintilla.Rectangle
+qtext.QextScintilla.RightTriangle
+qtext.QextScintilla.SmallRectangle
+qtext.QextScintilla.RightArrow
+qtext.QextScintilla.Invisible
+qtext.QextScintilla.DownTriangle
+qtext.QextScintilla.Minus
+qtext.QextScintilla.Plus
+qtext.QextScintilla.VerticalLine
+qtext.QextScintilla.BottomLeftCorner
+qtext.QextScintilla.LeftSideSplitter
+qtext.QextScintilla.BoxedPlus
+qtext.QextScintilla.BoxedPlusConnected
+qtext.QextScintilla.BoxedMinus
+qtext.QextScintilla.BoxedMinusConnected
+qtext.QextScintilla.RoundedBottomLeftCorner
+qtext.QextScintilla.LeftSideRoundedSplitter
+qtext.QextScintilla.CircledPlus
+qtext.QextScintilla.CircledPlusConnected
+qtext.QextScintilla.CircledMinus
+qtext.QextScintilla.CircledMinusConnected
+qtext.QextScintilla.Background
+qtext.QextScintilla.ThreeDots
+qtext.QextScintilla.ThreeRightArrows
+qtext.QextScintilla.FoldStyle
+qtext.QextScintilla.NoFoldStyle
+qtext.QextScintilla.PlainFoldStyle
+qtext.QextScintilla.CircledFoldStyle
+qtext.QextScintilla.BoxedFoldStyle
+qtext.QextScintilla.CircledTreeFoldStyle
+qtext.QextScintilla.BoxedTreeFoldStyle
+qtext.QextScintilla.EolMode
+qtext.QextScintilla.EolWindows
+qtext.QextScintilla.EolUnix
+qtext.QextScintilla.EolMac
+qtext.QextScintilla.EdgeMode
+qtext.QextScintilla.EdgeNone
+qtext.QextScintilla.EdgeLine
+qtext.QextScintilla.EdgeBackground
+qtext.QextScintilla.BraceMatch
+qtext.QextScintilla.NoBraceMatch
+qtext.QextScintilla.StrictBraceMatch
+qtext.QextScintilla.SloppyBraceMatch
+qtext.QextScintilla.AutoCompletionSource
+qtext.QextScintilla.AcsDocument
+qtext.QextScintilla.AcsAPIs
+qtext.QextScintilla.AcsAll
+qtext.QextScintilla.AiMaintain
+qtext.QextScintilla.AiOpening
+qtext.QextScintilla.AiClosing
+qtext.QextScintilla(QWidget=None, str=None, unsigned long=0)
+qtext.QextScintilla.__init__(self, QWidget=None, str=None, unsigned long=0)
+qtext.QextScintilla.metaObject() -> QMetaObject
+qtext.QextScintilla.autoCompletionCaseSensitivity() -> bool
+qtext.QextScintilla.autoCompletionFillupsEnabled() -> bool
+qtext.QextScintilla.autoCompletionReplaceWord() -> bool
+qtext.QextScintilla.autoCompletionShowSingle() -> bool
+qtext.QextScintilla.autoCompletionSource() -> QextScintilla.AutoCompletionSource
+qtext.QextScintilla.autoCompletionThreshold() -> int
+qtext.QextScintilla.autoIndent() -> bool
+qtext.QextScintilla.backspaceUnindents() -> bool
+qtext.QextScintilla.beginUndoAction()
+qtext.QextScintilla.braceMatching() -> QextScintilla.BraceMatch
+qtext.QextScintilla.callTipsVisible() -> int
+qtext.QextScintilla.cancelList()
+qtext.QextScintilla.clearRegisteredImages()
+qtext.QextScintilla.convertEols(QextScintilla.EolMode)
+qtext.QextScintilla.document() -> QextScintillaDocument
+qtext.QextScintilla.endUndoAction()
+qtext.QextScintilla.edgeColor() -> QColor
+qtext.QextScintilla.edgeColumn() -> int
+qtext.QextScintilla.edgeMode() -> QextScintilla.EdgeMode
+qtext.QextScintilla.eolMode() -> QextScintilla.EolMode
+qtext.QextScintilla.eolVisibility() -> bool
+qtext.QextScintilla.color() -> QColor
+qtext.QextScintilla.paper() -> QColor
+qtext.QextScintilla.findFirst(QString, bool, bool, bool, bool, bool=True, int=-1, int=-1, bool=True) -> bool
+qtext.QextScintilla.findNext() -> bool
+qtext.QextScintilla.firstVisibleLine() -> int
+qtext.QextScintilla.folding() -> QextScintilla.FoldStyle
+qtext.QextScintilla.getCursorPosition() -> (int, int)
+qtext.QextScintilla.getSelection() -> (int, int, int, int)
+qtext.QextScintilla.hasSelectedText() -> bool
+qtext.QextScintilla.indentation(int) -> int
+qtext.QextScintilla.indentationGuides() -> bool
+qtext.QextScintilla.indentationsUseTabs() -> bool
+qtext.QextScintilla.indentationWidth() -> int
+qtext.QextScintilla.isCallTipActive() -> bool
+qtext.QextScintilla.isListActive() -> bool
+qtext.QextScintilla.isModified() -> bool
+qtext.QextScintilla.isReadOnly() -> bool
+qtext.QextScintilla.isRedoAvailable() -> bool
+qtext.QextScintilla.isUndoAvailable() -> bool
+qtext.QextScintilla.isUtf8() -> bool
+qtext.QextScintilla.lineAt(QPoint) -> int
+qtext.QextScintilla.lineLength(int) -> int
+qtext.QextScintilla.lines() -> int
+qtext.QextScintilla.length() -> int
+qtext.QextScintilla.lexer() -> QextScintillaLexer
+qtext.QextScintilla.marginLineNumbers(int) -> bool
+qtext.QextScintilla.marginMarkerMask(int) -> int
+qtext.QextScintilla.marginSensitivity(int) -> bool
+qtext.QextScintilla.marginWidth(int) -> int
+qtext.QextScintilla.markerDefine(QextScintilla.MarkerSymbol, int=-1) -> int
+qtext.QextScintilla.markerDefine(char, int=-1) -> int
+qtext.QextScintilla.markerDefine(QPixmap, int=-1) -> int
+qtext.QextScintilla.markerAdd(int, int) -> int
+qtext.QextScintilla.markersAtLine(int) -> unsigned long
+qtext.QextScintilla.markerDelete(int, int=-1)
+qtext.QextScintilla.markerDeleteAll(int=-1)
+qtext.QextScintilla.markerDeleteHandle(int)
+qtext.QextScintilla.markerLine(int) -> int
+qtext.QextScintilla.markerFindNext(int, unsigned long) -> int
+qtext.QextScintilla.markerFindPrevious(int, unsigned long) -> int
+qtext.QextScintilla.recolor(int=0, int=-1)
+qtext.QextScintilla.registerImage(int, QPixmap)
+qtext.QextScintilla.replace(QString)
+qtext.QextScintilla.resetFoldMarginColors()
+qtext.QextScintilla.setFoldMarginColors(QColor, QColor)
+qtext.QextScintilla.setAutoCompletionAPIs(QextScintillaAPIs=None)
+qtext.QextScintilla.setAutoCompletionFillups(str)
+qtext.QextScintilla.setAutoCompletionFillupsEnabled(bool)
+qtext.QextScintilla.setAutoCompletionStartCharacters(str)
+qtext.QextScintilla.setCallTipsAPIs(QextScintillaAPIs=None)
+qtext.QextScintilla.setCallTipsBackgroundColor(QColor)
+qtext.QextScintilla.setCallTipsForegroundColor(QColor)
+qtext.QextScintilla.setCallTipsHighlightColor(QColor)
+qtext.QextScintilla.setCallTipsVisible(int)
+qtext.QextScintilla.setDocument(QextScintillaDocument)
+qtext.QextScintilla.setEdgeColor(QColor)
+qtext.QextScintilla.setEdgeColumn(int)
+qtext.QextScintilla.setEdgeMode(QextScintilla.EdgeMode)
+qtext.QextScintilla.setFont(QFont)
+qtext.QextScintilla.setMarkerBackgroundColor(QColor, int=-1)
+qtext.QextScintilla.setMarkerForegroundColor(QColor, int=-1)
+qtext.QextScintilla.setMatchedBraceBackgroundColor(QColor)
+qtext.QextScintilla.setMatchedBraceForegroundColor(QColor)
+qtext.QextScintilla.setUnmatchedBraceBackgroundColor(QColor)
+qtext.QextScintilla.setUnmatchedBraceForegroundColor(QColor)
+qtext.QextScintilla.setWrapVisualFlags(QextScintilla.WrapVisualFlag, QextScintilla.WrapVisualFlag=QextScintilla.WrapFlagNone, int=0)
+qtext.QextScintilla.selectedText() -> QString
+qtext.QextScintilla.showUserList(int, QStringList)
+qtext.QextScintilla.standardCommands() -> QextScintillaCommandSet
+qtext.QextScintilla.tabIndents() -> bool
+qtext.QextScintilla.tabWidth() -> int
+qtext.QextScintilla.text() -> QString
+qtext.QextScintilla.text(int) -> QString
+qtext.QextScintilla.textHeight(int) -> int
+qtext.QextScintilla.whitespaceVisibility() -> QextScintilla.WhitespaceVisibility
+qtext.QextScintilla.wrapMode() -> QextScintilla.WrapMode
+qtext.QextScintilla.append(QString)
+qtext.QextScintilla.autoCompleteFromAll()
+qtext.QextScintilla.autoCompleteFromAPIs()
+qtext.QextScintilla.autoCompleteFromDocument()
+qtext.QextScintilla.callTip()
+qtext.QextScintilla.clear()
+qtext.QextScintilla.copy()
+qtext.QextScintilla.cut()
+qtext.QextScintilla.ensureCursorVisible()
+qtext.QextScintilla.ensureLineVisible(int)
+qtext.QextScintilla.foldAll(bool=False)
+qtext.QextScintilla.foldLine(int)
+qtext.QextScintilla.indent(int)
+qtext.QextScintilla.insert(QString)
+qtext.QextScintilla.insertAt(QString, int, int)
+qtext.QextScintilla.moveToMatchingBrace()
+qtext.QextScintilla.paste()
+qtext.QextScintilla.redo()
+qtext.QextScintilla.removeSelectedText()
+qtext.QextScintilla.resetSelectionBackgroundColor()
+qtext.QextScintilla.resetSelectionForegroundColor()
+qtext.QextScintilla.selectAll(bool=True)
+qtext.QextScintilla.selectToMatchingBrace()
+qtext.QextScintilla.setAutoCompletionCaseSensitivity(bool)
+qtext.QextScintilla.setAutoCompletionReplaceWord(bool)
+qtext.QextScintilla.setAutoCompletionShowSingle(bool)
+qtext.QextScintilla.setAutoCompletionSource(QextScintilla.AutoCompletionSource)
+qtext.QextScintilla.setAutoCompletionThreshold(int)
+qtext.QextScintilla.setAutoIndent(bool)
+qtext.QextScintilla.setBraceMatching(QextScintilla.BraceMatch)
+qtext.QextScintilla.setBackspaceUnindents(bool)
+qtext.QextScintilla.setCaretForegroundColor(QColor)
+qtext.QextScintilla.setCaretLineBackgroundColor(QColor)
+qtext.QextScintilla.setCaretLineVisible(bool)
+qtext.QextScintilla.setCaretWidth(int)
+qtext.QextScintilla.setColor(QColor)
+qtext.QextScintilla.setCursorPosition(int, int)
+qtext.QextScintilla.setEolMode(QextScintilla.EolMode)
+qtext.QextScintilla.setEolVisibility(bool)
+qtext.QextScintilla.setFolding(QextScintilla.FoldStyle)
+qtext.QextScintilla.setIndentation(int, int)
+qtext.QextScintilla.setIndentationGuides(bool)
+qtext.QextScintilla.setIndentationGuidesBackgroundColor(QColor)
+qtext.QextScintilla.setIndentationGuidesForegroundColor(QColor)
+qtext.QextScintilla.setIndentationsUseTabs(bool)
+qtext.QextScintilla.setIndentationWidth(int)
+qtext.QextScintilla.setLexer(QextScintillaLexer=None)
+qtext.QextScintilla.setMarginsBackgroundColor(QColor)
+qtext.QextScintilla.setMarginsFont(QFont)
+qtext.QextScintilla.setMarginsForegroundColor(QColor)
+qtext.QextScintilla.setMarginLineNumbers(int, bool)
+qtext.QextScintilla.setMarginMarkerMask(int, int)
+qtext.QextScintilla.setMarginSensitivity(int, bool)
+qtext.QextScintilla.setMarginWidth(int, int)
+qtext.QextScintilla.setMarginWidth(int, QString)
+qtext.QextScintilla.setModified(bool)
+qtext.QextScintilla.setPaper(QColor)
+qtext.QextScintilla.setReadOnly(bool)
+qtext.QextScintilla.setSelection(int, int, int, int)
+qtext.QextScintilla.setSelectionBackgroundColor(QColor)
+qtext.QextScintilla.setSelectionForegroundColor(QColor)
+qtext.QextScintilla.setTabIndents(bool)
+qtext.QextScintilla.setTabWidth(int)
+qtext.QextScintilla.setText(QString)
+qtext.QextScintilla.setUtf8(bool)
+qtext.QextScintilla.setWhitespaceVisibility(QextScintilla.WhitespaceVisibility)
+qtext.QextScintilla.setWrapMode(QextScintilla.WrapMode)
+qtext.QextScintilla.undo()
+qtext.QextScintilla.unindent(int)
+qtext.QextScintilla.zoomIn(int)
+qtext.QextScintilla.zoomIn()
+qtext.QextScintilla.zoomOut(int)
+qtext.QextScintilla.zoomOut()
+qtext.QextScintilla.zoomTo(int)
+qtext.QextScintilla.cursorPositionChanged(int, int)
+qtext.QextScintilla.copyAvailable(bool)
+qtext.QextScintilla.marginClicked(int, int, Qt.ButtonState)
+qtext.QextScintilla.modificationAttempted()
+qtext.QextScintilla.modificationChanged(bool)
+qtext.QextScintilla.selectionChanged()
+qtext.QextScintilla.textChanged()
+qtext.QextScintilla.userListActivated(int, QString)
+qtext.QextScintillaCommand.setKey(int)
+qtext.QextScintillaCommand.setAlternateKey(int)
+qtext.QextScintillaCommand.key() -> int
+qtext.QextScintillaCommand.alternateKey() -> int
+qtext.QextScintillaCommand.validKey(int) -> bool
+qtext.QextScintillaCommand.description() -> QString
+qtext.QextScintillaCommandSet.readSettings(QSettings, str="/Scintilla") -> bool
+qtext.QextScintillaCommandSet.writeSettings(QSettings, str="/Scintilla") -> bool
+qtext.QextScintillaCommandSet.commands() -> 
+qtext.QextScintillaCommandSet.clearKeys()
+qtext.QextScintillaCommandSet.clearAlternateKeys()
+qtext.QextScintillaDocument()
+qtext.QextScintillaDocument.__init__(self)
+qtext.QextScintillaDocument(QextScintillaDocument)
+qtext.QextScintillaDocument.__init__(self, QextScintillaDocument)
+qtext.QextScintillaLexer(QObject=None, str=None)
+qtext.QextScintillaLexer.__init__(self, QObject=None, str=None)
+qtext.QextScintillaLexer.metaObject() -> QMetaObject
+qtext.QextScintillaLexer.language() -> str
+qtext.QextScintillaLexer.lexer() -> str
+qtext.QextScintillaLexer.autoIndentStyle() -> int
+qtext.QextScintillaLexer.color(int) -> QColor
+qtext.QextScintillaLexer.eolFill(int) -> bool
+qtext.QextScintillaLexer.font(int) -> QFont
+qtext.QextScintillaLexer.keywords(int) -> str
+qtext.QextScintillaLexer.description(int) -> QString
+qtext.QextScintillaLexer.paper(int) -> QColor
+qtext.QextScintillaLexer.defaultFont() -> QFont
+qtext.QextScintillaLexer.defaultColor() -> QColor
+qtext.QextScintillaLexer.defaultPaper() -> QColor
+qtext.QextScintillaLexer.refreshProperties()
+qtext.QextScintillaLexer.readSettings(QSettings, str="/Scintilla") -> bool
+qtext.QextScintillaLexer.writeSettings(QSettings, str="/Scintilla") -> bool
+qtext.QextScintillaLexer.setAutoIndentStyle(int)
+qtext.QextScintillaLexer.setColor(QColor, int=-1)
+qtext.QextScintillaLexer.setDefaultFont(QFont)
+qtext.QextScintillaLexer.setDefaultColor(QColor)
+qtext.QextScintillaLexer.setDefaultPaper(QColor)
+qtext.QextScintillaLexer.setEolFill(bool, int=-1)
+qtext.QextScintillaLexer.setFont(QFont, int=-1)
+qtext.QextScintillaLexer.setPaper(QColor, int=-1)
+qtext.QextScintillaLexer.colorChanged(QColor, int)
+qtext.QextScintillaLexer.eolFillChanged(bool, int)
+qtext.QextScintillaLexer.fontChanged(QFont, int)
+qtext.QextScintillaLexer.paperChanged(QColor, int)
+qtext.QextScintillaLexer.propertyChanged(str, str)
+qtext.QextScintillaLexer.readProperties(QSettings, QString) -> bool
+qtext.QextScintillaLexer.writeProperties(QSettings, QString) -> bool
+qtext.QextScintillaLexerBash.Default
+qtext.QextScintillaLexerBash.Error
+qtext.QextScintillaLexerBash.Comment
+qtext.QextScintillaLexerBash.Number
+qtext.QextScintillaLexerBash.Keyword
+qtext.QextScintillaLexerBash.DoubleQuotedString
+qtext.QextScintillaLexerBash.SingleQuotedString
+qtext.QextScintillaLexerBash.Operator
+qtext.QextScintillaLexerBash.Identifier
+qtext.QextScintillaLexerBash.Scalar
+qtext.QextScintillaLexerBash.ParameterExpansion
+qtext.QextScintillaLexerBash.Backticks
+qtext.QextScintillaLexerBash.HereDocumentDelimiter
+qtext.QextScintillaLexerBash.SingleQuotedHereDocument
+qtext.QextScintillaLexerBash(QObject=None, str=None)
+qtext.QextScintillaLexerBash.__init__(self, QObject=None, str=None)
+qtext.QextScintillaLexerBash.metaObject() -> QMetaObject
+qtext.QextScintillaLexerBash.language() -> str
+qtext.QextScintillaLexerBash.lexer() -> str
+qtext.QextScintillaLexerBash.color(int) -> QColor
+qtext.QextScintillaLexerBash.eolFill(int) -> bool
+qtext.QextScintillaLexerBash.font(int) -> QFont
+qtext.QextScintillaLexerBash.keywords(int) -> str
+qtext.QextScintillaLexerBash.description(int) -> QString
+qtext.QextScintillaLexerBash.paper(int) -> QColor
+qtext.QextScintillaLexerBash.refreshProperties()
+qtext.QextScintillaLexerBash.foldComments() -> bool
+qtext.QextScintillaLexerBash.foldCompact() -> bool
+qtext.QextScintillaLexerBash.setFoldComments(bool)
+qtext.QextScintillaLexerBash.setFoldCompact(bool)
+qtext.QextScintillaLexerBash.readProperties(QSettings, QString) -> bool
+qtext.QextScintillaLexerBash.writeProperties(QSettings, QString) -> bool
+qtext.QextScintillaLexerBatch.Default
+qtext.QextScintillaLexerBatch.Comment
+qtext.QextScintillaLexerBatch.Keyword
+qtext.QextScintillaLexerBatch.Label
+qtext.QextScintillaLexerBatch.HideCommandChar
+qtext.QextScintillaLexerBatch.ExternalCommand
+qtext.QextScintillaLexerBatch.Variable
+qtext.QextScintillaLexerBatch.Operator
+qtext.QextScintillaLexerBatch(QObject=None, str=None)
+qtext.QextScintillaLexerBatch.__init__(self, QObject=None, str=None)
+qtext.QextScintillaLexerBatch.metaObject() -> QMetaObject
+qtext.QextScintillaLexerBatch.language() -> str
+qtext.QextScintillaLexerBatch.lexer() -> str
+qtext.QextScintillaLexerBatch.color(int) -> QColor
+qtext.QextScintillaLexerBatch.eolFill(int) -> bool
+qtext.QextScintillaLexerBatch.font(int) -> QFont
+qtext.QextScintillaLexerBatch.keywords(int) -> str
+qtext.QextScintillaLexerBatch.description(int) -> QString
+qtext.QextScintillaLexerBatch.paper(int) -> QColor
+qtext.QextScintillaLexerCPP.Default
+qtext.QextScintillaLexerCPP.WhiteSpace
+qtext.QextScintillaLexerCPP.Comment
+qtext.QextScintillaLexerCPP.CommentLine
+qtext.QextScintillaLexerCPP.CommentDoc
+qtext.QextScintillaLexerCPP.Number
+qtext.QextScintillaLexerCPP.Keyword
+qtext.QextScintillaLexerCPP.DoubleQuotedString
+qtext.QextScintillaLexerCPP.SingleQuotedString
+qtext.QextScintillaLexerCPP.UUID
+qtext.QextScintillaLexerCPP.PreProcessor
+qtext.QextScintillaLexerCPP.Operator
+qtext.QextScintillaLexerCPP.Identifier
+qtext.QextScintillaLexerCPP.UnclosedString
+qtext.QextScintillaLexerCPP.VerbatimString
+qtext.QextScintillaLexerCPP.Regex
+qtext.QextScintillaLexerCPP.CommentLineDoc
+qtext.QextScintillaLexerCPP.KeywordSet2
+qtext.QextScintillaLexerCPP.CommentDocKeyword
+qtext.QextScintillaLexerCPP.CommentDocKeywordError
+qtext.QextScintillaLexerCPP.GlobalClass
+qtext.QextScintillaLexerCPP(QObject=None, str=None, bool=False)
+qtext.QextScintillaLexerCPP.__init__(self, QObject=None, str=None, bool=False)
+qtext.QextScintillaLexerCPP.metaObject() -> QMetaObject
+qtext.QextScintillaLexerCPP.language() -> str
+qtext.QextScintillaLexerCPP.lexer() -> str
+qtext.QextScintillaLexerCPP.color(int) -> QColor
+qtext.QextScintillaLexerCPP.eolFill(int) -> bool
+qtext.QextScintillaLexerCPP.font(int) -> QFont
+qtext.QextScintillaLexerCPP.keywords(int) -> str
+qtext.QextScintillaLexerCPP.description(int) -> QString
+qtext.QextScintillaLexerCPP.paper(int) -> QColor
+qtext.QextScintillaLexerCPP.refreshProperties()
+qtext.QextScintillaLexerCPP.foldAtElse() -> bool
+qtext.QextScintillaLexerCPP.foldComments() -> bool
+qtext.QextScintillaLexerCPP.foldCompact() -> bool
+qtext.QextScintillaLexerCPP.foldPreprocessor() -> bool
+qtext.QextScintillaLexerCPP.stylePreprocessor() -> bool
+qtext.QextScintillaLexerCPP.setFoldAtElse(bool)
+qtext.QextScintillaLexerCPP.setFoldComments(bool)
+qtext.QextScintillaLexerCPP.setFoldCompact(bool)
+qtext.QextScintillaLexerCPP.setFoldPreprocessor(bool)
+qtext.QextScintillaLexerCPP.setStylePreprocessor(bool)
+qtext.QextScintillaLexerCPP.readProperties(QSettings, QString) -> bool
+qtext.QextScintillaLexerCPP.writeProperties(QSettings, QString) -> bool
+qtext.QextScintillaLexerCSharp(QObject=None, str=None)
+qtext.QextScintillaLexerCSharp.__init__(self, QObject=None, str=None)
+qtext.QextScintillaLexerCSharp.metaObject() -> QMetaObject
+qtext.QextScintillaLexerCSharp.language() -> str
+qtext.QextScintillaLexerCSharp.color(int) -> QColor
+qtext.QextScintillaLexerCSharp.eolFill(int) -> bool
+qtext.QextScintillaLexerCSharp.font(int) -> QFont
+qtext.QextScintillaLexerCSharp.keywords(int) -> str
+qtext.QextScintillaLexerCSharp.description(int) -> QString
+qtext.QextScintillaLexerCSharp.paper(int) -> QColor
+qtext.QextScintillaLexerCSS.Default
+qtext.QextScintillaLexerCSS.Tag
+qtext.QextScintillaLexerCSS.ClassSelector
+qtext.QextScintillaLexerCSS.PseudoClass
+qtext.QextScintillaLexerCSS.UnknownPseudoClass
+qtext.QextScintillaLexerCSS.Operator
+qtext.QextScintillaLexerCSS.CSS1Property
+qtext.QextScintillaLexerCSS.UnknownProperty
+qtext.QextScintillaLexerCSS.Value
+qtext.QextScintillaLexerCSS.Comment
+qtext.QextScintillaLexerCSS.IDSelector
+qtext.QextScintillaLexerCSS.Important
+qtext.QextScintillaLexerCSS.AtRule
+qtext.QextScintillaLexerCSS.DoubleQuotedString
+qtext.QextScintillaLexerCSS.SingleQuotedString
+qtext.QextScintillaLexerCSS.CSS2Property
+qtext.QextScintillaLexerCSS.Attribute
+qtext.QextScintillaLexerCSS(QObject=None, str=None)
+qtext.QextScintillaLexerCSS.__init__(self, QObject=None, str=None)
+qtext.QextScintillaLexerCSS.metaObject() -> QMetaObject
+qtext.QextScintillaLexerCSS.language() -> str
+qtext.QextScintillaLexerCSS.lexer() -> str
+qtext.QextScintillaLexerCSS.color(int) -> QColor
+qtext.QextScintillaLexerCSS.font(int) -> QFont
+qtext.QextScintillaLexerCSS.keywords(int) -> str
+qtext.QextScintillaLexerCSS.description(int) -> QString
+qtext.QextScintillaLexerCSS.refreshProperties()
+qtext.QextScintillaLexerCSS.foldComments() -> bool
+qtext.QextScintillaLexerCSS.foldCompact() -> bool
+qtext.QextScintillaLexerCSS.setFoldComments(bool)
+qtext.QextScintillaLexerCSS.setFoldCompact(bool)
+qtext.QextScintillaLexerCSS.readProperties(QSettings, QString) -> bool
+qtext.QextScintillaLexerCSS.writeProperties(QSettings, QString) -> bool
+qtext.QextScintillaLexerDiff.Default
+qtext.QextScintillaLexerDiff.Comment
+qtext.QextScintillaLexerDiff.Command
+qtext.QextScintillaLexerDiff.Header
+qtext.QextScintillaLexerDiff.Position
+qtext.QextScintillaLexerDiff.LineRemoved
+qtext.QextScintillaLexerDiff.LineAdded
+qtext.QextScintillaLexerDiff(QObject=None, str=None)
+qtext.QextScintillaLexerDiff.__init__(self, QObject=None, str=None)
+qtext.QextScintillaLexerDiff.metaObject() -> QMetaObject
+qtext.QextScintillaLexerDiff.language() -> str
+qtext.QextScintillaLexerDiff.lexer() -> str
+qtext.QextScintillaLexerDiff.color(int) -> QColor
+qtext.QextScintillaLexerDiff.description(int) -> QString
+qtext.QextScintillaLexerHTML.Default
+qtext.QextScintillaLexerHTML.Tag
+qtext.QextScintillaLexerHTML.UnknownTag
+qtext.QextScintillaLexerHTML.Attribute
+qtext.QextScintillaLexerHTML.UnknownAttribute
+qtext.QextScintillaLexerHTML.HTMLNumber
+qtext.QextScintillaLexerHTML.HTMLDoubleQuotedString
+qtext.QextScintillaLexerHTML.HTMLSingleQuotedString
+qtext.QextScintillaLexerHTML.OtherInTag
+qtext.QextScintillaLexerHTML.HTMLComment
+qtext.QextScintillaLexerHTML.Entity
+qtext.QextScintillaLexerHTML.XMLTagEnd
+qtext.QextScintillaLexerHTML.XMLStart
+qtext.QextScintillaLexerHTML.XMLEnd
+qtext.QextScintillaLexerHTML.Script
+qtext.QextScintillaLexerHTML.ASPAtStart
+qtext.QextScintillaLexerHTML.ASPStart
+qtext.QextScintillaLexerHTML.CDATA
+qtext.QextScintillaLexerHTML.PHPStart
+qtext.QextScintillaLexerHTML.HTMLValue
+qtext.QextScintillaLexerHTML.ASPXCComment
+qtext.QextScintillaLexerHTML.SGMLDefault
+qtext.QextScintillaLexerHTML.SGMLCommand
+qtext.QextScintillaLexerHTML.SGMLParameter
+qtext.QextScintillaLexerHTML.SGMLDoubleQuotedString
+qtext.QextScintillaLexerHTML.SGMLSingleQuotedString
+qtext.QextScintillaLexerHTML.SGMLError
+qtext.QextScintillaLexerHTML.SGMLSpecial
+qtext.QextScintillaLexerHTML.SGMLEntity
+qtext.QextScintillaLexerHTML.SGMLComment
+qtext.QextScintillaLexerHTML.SGMLParameterComment
+qtext.QextScintillaLexerHTML.SGMLBlockDefault
+qtext.QextScintillaLexerHTML.JavaScriptStart
+qtext.QextScintillaLexerHTML.JavaScriptDefault
+qtext.QextScintillaLexerHTML.JavaScriptComment
+qtext.QextScintillaLexerHTML.JavaScriptCommentLine
+qtext.QextScintillaLexerHTML.JavaScriptCommentDoc
+qtext.QextScintillaLexerHTML.JavaScriptNumber
+qtext.QextScintillaLexerHTML.JavaScriptWord
+qtext.QextScintillaLexerHTML.JavaScriptKeyword
+qtext.QextScintillaLexerHTML.JavaScriptDoubleQuotedString
+qtext.QextScintillaLexerHTML.JavaScriptSingleQuotedString
+qtext.QextScintillaLexerHTML.JavaScriptSymbol
+qtext.QextScintillaLexerHTML.JavaScriptUnclosedString
+qtext.QextScintillaLexerHTML.JavaScriptRegex
+qtext.QextScintillaLexerHTML.ASPJavaScriptStart
+qtext.QextScintillaLexerHTML.ASPJavaScriptDefault
+qtext.QextScintillaLexerHTML.ASPJavaScriptComment
+qtext.QextScintillaLexerHTML.ASPJavaScriptCommentLine
+qtext.QextScintillaLexerHTML.ASPJavaScriptCommentDoc
+qtext.QextScintillaLexerHTML.ASPJavaScriptNumber
+qtext.QextScintillaLexerHTML.ASPJavaScriptWord
+qtext.QextScintillaLexerHTML.ASPJavaScriptKeyword
+qtext.QextScintillaLexerHTML.ASPJavaScriptDoubleQuotedString
+qtext.QextScintillaLexerHTML.ASPJavaScriptSingleQuotedString
+qtext.QextScintillaLexerHTML.ASPJavaScriptSymbol
+qtext.QextScintillaLexerHTML.ASPJavaScriptUnclosedString
+qtext.QextScintillaLexerHTML.ASPJavaScriptRegex
+qtext.QextScintillaLexerHTML.VBScriptStart
+qtext.QextScintillaLexerHTML.VBScriptDefault
+qtext.QextScintillaLexerHTML.VBScriptComment
+qtext.QextScintillaLexerHTML.VBScriptNumber
+qtext.QextScintillaLexerHTML.VBScriptKeyword
+qtext.QextScintillaLexerHTML.VBScriptString
+qtext.QextScintillaLexerHTML.VBScriptIdentifier
+qtext.QextScintillaLexerHTML.VBScriptUnclosedString
+qtext.QextScintillaLexerHTML.ASPVBScriptStart
+qtext.QextScintillaLexerHTML.ASPVBScriptDefault
+qtext.QextScintillaLexerHTML.ASPVBScriptComment
+qtext.QextScintillaLexerHTML.ASPVBScriptNumber
+qtext.QextScintillaLexerHTML.ASPVBScriptKeyword
+qtext.QextScintillaLexerHTML.ASPVBScriptString
+qtext.QextScintillaLexerHTML.ASPVBScriptIdentifier
+qtext.QextScintillaLexerHTML.ASPVBScriptUnclosedString
+qtext.QextScintillaLexerHTML.PythonStart
+qtext.QextScintillaLexerHTML.PythonDefault
+qtext.QextScintillaLexerHTML.PythonComment
+qtext.QextScintillaLexerHTML.PythonNumber
+qtext.QextScintillaLexerHTML.PythonDoubleQuotedString
+qtext.QextScintillaLexerHTML.PythonSingleQuotedString
+qtext.QextScintillaLexerHTML.PythonKeyword
+qtext.QextScintillaLexerHTML.PythonTripleSingleQuotedString
+qtext.QextScintillaLexerHTML.PythonTripleDoubleQuotedString
+qtext.QextScintillaLexerHTML.PythonClassName
+qtext.QextScintillaLexerHTML.PythonFunctionMethodName
+qtext.QextScintillaLexerHTML.PythonOperator
+qtext.QextScintillaLexerHTML.PythonIdentifier
+qtext.QextScintillaLexerHTML.ASPPythonStart
+qtext.QextScintillaLexerHTML.ASPPythonDefault
+qtext.QextScintillaLexerHTML.ASPPythonComment
+qtext.QextScintillaLexerHTML.ASPPythonNumber
+qtext.QextScintillaLexerHTML.ASPPythonDoubleQuotedString
+qtext.QextScintillaLexerHTML.ASPPythonSingleQuotedString
+qtext.QextScintillaLexerHTML.ASPPythonKeyword
+qtext.QextScintillaLexerHTML.ASPPythonTripleSingleQuotedString
+qtext.QextScintillaLexerHTML.ASPPythonTripleDoubleQuotedString
+qtext.QextScintillaLexerHTML.ASPPythonClassName
+qtext.QextScintillaLexerHTML.ASPPythonFunctionMethodName
+qtext.QextScintillaLexerHTML.ASPPythonOperator
+qtext.QextScintillaLexerHTML.ASPPythonIdentifier
+qtext.QextScintillaLexerHTML.PHPDefault
+qtext.QextScintillaLexerHTML.PHPDoubleQuotedString
+qtext.QextScintillaLexerHTML.PHPSingleQuotedString
+qtext.QextScintillaLexerHTML.PHPKeyword
+qtext.QextScintillaLexerHTML.PHPNumber
+qtext.QextScintillaLexerHTML.PHPVariable
+qtext.QextScintillaLexerHTML.PHPComment
+qtext.QextScintillaLexerHTML.PHPCommentLine
+qtext.QextScintillaLexerHTML.PHPDoubleQuotedVariable
+qtext.QextScintillaLexerHTML.PHPOperator
+qtext.QextScintillaLexerHTML(QObject=None, str=None)
+qtext.QextScintillaLexerHTML.__init__(self, QObject=None, str=None)
+qtext.QextScintillaLexerHTML.metaObject() -> QMetaObject
+qtext.QextScintillaLexerHTML.language() -> str
+qtext.QextScintillaLexerHTML.lexer() -> str
+qtext.QextScintillaLexerHTML.color(int) -> QColor
+qtext.QextScintillaLexerHTML.eolFill(int) -> bool
+qtext.QextScintillaLexerHTML.font(int) -> QFont
+qtext.QextScintillaLexerHTML.keywords(int) -> str
+qtext.QextScintillaLexerHTML.description(int) -> QString
+qtext.QextScintillaLexerHTML.paper(int) -> QColor
+qtext.QextScintillaLexerHTML.refreshProperties()
+qtext.QextScintillaLexerHTML.foldCompact() -> bool
+qtext.QextScintillaLexerHTML.foldPreprocessor() -> bool
+qtext.QextScintillaLexerHTML.caseSensitiveTags() -> bool
+qtext.QextScintillaLexerHTML.setFoldCompact(bool)
+qtext.QextScintillaLexerHTML.setFoldPreprocessor(bool)
+qtext.QextScintillaLexerHTML.setCaseSensitiveTags(bool)
+qtext.QextScintillaLexerHTML.readProperties(QSettings, QString) -> bool
+qtext.QextScintillaLexerHTML.writeProperties(QSettings, QString) -> bool
+qtext.QextScintillaLexerIDL(QObject=None, str=None)
+qtext.QextScintillaLexerIDL.__init__(self, QObject=None, str=None)
+qtext.QextScintillaLexerIDL.metaObject() -> QMetaObject
+qtext.QextScintillaLexerIDL.language() -> str
+qtext.QextScintillaLexerIDL.color(int) -> QColor
+qtext.QextScintillaLexerIDL.keywords(int) -> str
+qtext.QextScintillaLexerIDL.description(int) -> QString
+qtext.QextScintillaLexerJava(QObject=None, str=None)
+qtext.QextScintillaLexerJava.__init__(self, QObject=None, str=None)
+qtext.QextScintillaLexerJava.metaObject() -> QMetaObject
+qtext.QextScintillaLexerJava.language() -> str
+qtext.QextScintillaLexerJava.keywords(int) -> str
+qtext.QextScintillaLexerJavaScript(QObject=None, str=None)
+qtext.QextScintillaLexerJavaScript.__init__(self, QObject=None, str=None)
+qtext.QextScintillaLexerJavaScript.metaObject() -> QMetaObject
+qtext.QextScintillaLexerJavaScript.language() -> str
+qtext.QextScintillaLexerJavaScript.color(int) -> QColor
+qtext.QextScintillaLexerJavaScript.eolFill(int) -> bool
+qtext.QextScintillaLexerJavaScript.font(int) -> QFont
+qtext.QextScintillaLexerJavaScript.keywords(int) -> str
+qtext.QextScintillaLexerJavaScript.description(int) -> QString
+qtext.QextScintillaLexerJavaScript.paper(int) -> QColor
+qtext.QextScintillaLexerLua.Default
+qtext.QextScintillaLexerLua.Comment
+qtext.QextScintillaLexerLua.LineComment
+qtext.QextScintillaLexerLua.Number
+qtext.QextScintillaLexerLua.Keyword
+qtext.QextScintillaLexerLua.String
+qtext.QextScintillaLexerLua.Character
+qtext.QextScintillaLexerLua.LiteralString
+qtext.QextScintillaLexerLua.Preprocessor
+qtext.QextScintillaLexerLua.Operator
+qtext.QextScintillaLexerLua.Identifier
+qtext.QextScintillaLexerLua.UnclosedString
+qtext.QextScintillaLexerLua.BasicFunctions
+qtext.QextScintillaLexerLua.StringTableMathsFunctions
+qtext.QextScintillaLexerLua.CoroutinesIOSystemFacilities
+qtext.QextScintillaLexerLua(QObject=None, str=None)
+qtext.QextScintillaLexerLua.__init__(self, QObject=None, str=None)
+qtext.QextScintillaLexerLua.metaObject() -> QMetaObject
+qtext.QextScintillaLexerLua.language() -> str
+qtext.QextScintillaLexerLua.lexer() -> str
+qtext.QextScintillaLexerLua.color(int) -> QColor
+qtext.QextScintillaLexerLua.eolFill(int) -> bool
+qtext.QextScintillaLexerLua.font(int) -> QFont
+qtext.QextScintillaLexerLua.keywords(int) -> str
+qtext.QextScintillaLexerLua.description(int) -> QString
+qtext.QextScintillaLexerLua.paper(int) -> QColor
+qtext.QextScintillaLexerLua.refreshProperties()
+qtext.QextScintillaLexerLua.foldCompact() -> bool
+qtext.QextScintillaLexerLua.setFoldCompact(bool)
+qtext.QextScintillaLexerLua.readProperties(QSettings, QString) -> bool
+qtext.QextScintillaLexerLua.writeProperties(QSettings, QString) -> bool
+qtext.QextScintillaLexerMakefile.Default
+qtext.QextScintillaLexerMakefile.Comment
+qtext.QextScintillaLexerMakefile.Preprocessor
+qtext.QextScintillaLexerMakefile.Variable
+qtext.QextScintillaLexerMakefile.Operator
+qtext.QextScintillaLexerMakefile.Target
+qtext.QextScintillaLexerMakefile.Error
+qtext.QextScintillaLexerMakefile(QObject=None, str=None)
+qtext.QextScintillaLexerMakefile.__init__(self, QObject=None, str=None)
+qtext.QextScintillaLexerMakefile.metaObject() -> QMetaObject
+qtext.QextScintillaLexerMakefile.language() -> str
+qtext.QextScintillaLexerMakefile.lexer() -> str
+qtext.QextScintillaLexerMakefile.color(int) -> QColor
+qtext.QextScintillaLexerMakefile.eolFill(int) -> bool
+qtext.QextScintillaLexerMakefile.font(int) -> QFont
+qtext.QextScintillaLexerMakefile.description(int) -> QString
+qtext.QextScintillaLexerMakefile.paper(int) -> QColor
+qtext.QextScintillaLexerPerl.Default
+qtext.QextScintillaLexerPerl.Error
+qtext.QextScintillaLexerPerl.Comment
+qtext.QextScintillaLexerPerl.POD
+qtext.QextScintillaLexerPerl.Number
+qtext.QextScintillaLexerPerl.Keyword
+qtext.QextScintillaLexerPerl.DoubleQuotedString
+qtext.QextScintillaLexerPerl.SingleQuotedString
+qtext.QextScintillaLexerPerl.Operator
+qtext.QextScintillaLexerPerl.Identifier
+qtext.QextScintillaLexerPerl.Scalar
+qtext.QextScintillaLexerPerl.Array
+qtext.QextScintillaLexerPerl.Hash
+qtext.QextScintillaLexerPerl.SymbolTable
+qtext.QextScintillaLexerPerl.Regex
+qtext.QextScintillaLexerPerl.Substitution
+qtext.QextScintillaLexerPerl.Backticks
+qtext.QextScintillaLexerPerl.DataSection
+qtext.QextScintillaLexerPerl.HereDocumentDelimiter
+qtext.QextScintillaLexerPerl.SingleQuotedHereDocument
+qtext.QextScintillaLexerPerl.DoubleQuotedHereDocument
+qtext.QextScintillaLexerPerl.BacktickHereDocument
+qtext.QextScintillaLexerPerl.QuotedStringQ
+qtext.QextScintillaLexerPerl.QuotedStringQQ
+qtext.QextScintillaLexerPerl.QuotedStringQX
+qtext.QextScintillaLexerPerl.QuotedStringQR
+qtext.QextScintillaLexerPerl.QuotedStringQW
+qtext.QextScintillaLexerPerl.PODVerbatim
+qtext.QextScintillaLexerPerl(QObject=None, str=None)
+qtext.QextScintillaLexerPerl.__init__(self, QObject=None, str=None)
+qtext.QextScintillaLexerPerl.metaObject() -> QMetaObject
+qtext.QextScintillaLexerPerl.language() -> str
+qtext.QextScintillaLexerPerl.lexer() -> str
+qtext.QextScintillaLexerPerl.color(int) -> QColor
+qtext.QextScintillaLexerPerl.eolFill(int) -> bool
+qtext.QextScintillaLexerPerl.font(int) -> QFont
+qtext.QextScintillaLexerPerl.keywords(int) -> str
+qtext.QextScintillaLexerPerl.description(int) -> QString
+qtext.QextScintillaLexerPerl.paper(int) -> QColor
+qtext.QextScintillaLexerPerl.refreshProperties()
+qtext.QextScintillaLexerPerl.foldComments() -> bool
+qtext.QextScintillaLexerPerl.foldCompact() -> bool
+qtext.QextScintillaLexerPerl.setFoldComments(bool)
+qtext.QextScintillaLexerPerl.setFoldCompact(bool)
+qtext.QextScintillaLexerPerl.readProperties(QSettings, QString) -> bool
+qtext.QextScintillaLexerPerl.writeProperties(QSettings, QString) -> bool
+qtext.QextScintillaLexerPOV.Default
+qtext.QextScintillaLexerPOV.Comment
+qtext.QextScintillaLexerPOV.CommentLine
+qtext.QextScintillaLexerPOV.Number
+qtext.QextScintillaLexerPOV.Operator
+qtext.QextScintillaLexerPOV.Identifier
+qtext.QextScintillaLexerPOV.String
+qtext.QextScintillaLexerPOV.UnclosedString
+qtext.QextScintillaLexerPOV.Directive
+qtext.QextScintillaLexerPOV.BadDirective
+qtext.QextScintillaLexerPOV.ObjectsCSGAppearance
+qtext.QextScintillaLexerPOV.TypesModifiersItems
+qtext.QextScintillaLexerPOV.PredefinedIdentifiers
+qtext.QextScintillaLexerPOV.PredefinedFunctions
+qtext.QextScintillaLexerPOV.KeywordSet6
+qtext.QextScintillaLexerPOV.KeywordSet7
+qtext.QextScintillaLexerPOV.KeywordSet8
+qtext.QextScintillaLexerPOV(QObject=None, str=None)
+qtext.QextScintillaLexerPOV.__init__(self, QObject=None, str=None)
+qtext.QextScintillaLexerPOV.metaObject() -> QMetaObject
+qtext.QextScintillaLexerPOV.language() -> str
+qtext.QextScintillaLexerPOV.lexer() -> str
+qtext.QextScintillaLexerPOV.color(int) -> QColor
+qtext.QextScintillaLexerPOV.eolFill(int) -> bool
+qtext.QextScintillaLexerPOV.font(int) -> QFont
+qtext.QextScintillaLexerPOV.keywords(int) -> str
+qtext.QextScintillaLexerPOV.description(int) -> QString
+qtext.QextScintillaLexerPOV.paper(int) -> QColor
+qtext.QextScintillaLexerPOV.refreshProperties()
+qtext.QextScintillaLexerPOV.foldComments() -> bool
+qtext.QextScintillaLexerPOV.foldCompact() -> bool
+qtext.QextScintillaLexerPOV.foldDirectives() -> bool
+qtext.QextScintillaLexerPOV.setFoldComments(bool)
+qtext.QextScintillaLexerPOV.setFoldCompact(bool)
+qtext.QextScintillaLexerPOV.setFoldDirectives(bool)
+qtext.QextScintillaLexerPOV.readProperties(QSettings, QString) -> bool
+qtext.QextScintillaLexerPOV.writeProperties(QSettings, QString) -> bool
+qtext.QextScintillaLexerProperties.Default
+qtext.QextScintillaLexerProperties.Comment
+qtext.QextScintillaLexerProperties.Section
+qtext.QextScintillaLexerProperties.Assignment
+qtext.QextScintillaLexerProperties.DefaultValue
+qtext.QextScintillaLexerProperties(QObject=None, str=None)
+qtext.QextScintillaLexerProperties.__init__(self, QObject=None, str=None)
+qtext.QextScintillaLexerProperties.metaObject() -> QMetaObject
+qtext.QextScintillaLexerProperties.language() -> str
+qtext.QextScintillaLexerProperties.lexer() -> str
+qtext.QextScintillaLexerProperties.color(int) -> QColor
+qtext.QextScintillaLexerProperties.eolFill(int) -> bool
+qtext.QextScintillaLexerProperties.font(int) -> QFont
+qtext.QextScintillaLexerProperties.description(int) -> QString
+qtext.QextScintillaLexerProperties.paper(int) -> QColor
+qtext.QextScintillaLexerProperties.refreshProperties()
+qtext.QextScintillaLexerProperties.foldCompact() -> bool
+qtext.QextScintillaLexerProperties.setFoldCompact(bool)
+qtext.QextScintillaLexerProperties.readProperties(QSettings, QString) -> bool
+qtext.QextScintillaLexerProperties.writeProperties(QSettings, QString) -> bool
+qtext.QextScintillaLexerPython.IndentationWarning
+qtext.QextScintillaLexerPython.NoWarning
+qtext.QextScintillaLexerPython.Inconsistent
+qtext.QextScintillaLexerPython.TabsAfterSpaces
+qtext.QextScintillaLexerPython.Spaces
+qtext.QextScintillaLexerPython.Tabs
+qtext.QextScintillaLexerPython.Default
+qtext.QextScintillaLexerPython.WhiteSpace
+qtext.QextScintillaLexerPython.Comment
+qtext.QextScintillaLexerPython.Number
+qtext.QextScintillaLexerPython.DoubleQuotedString
+qtext.QextScintillaLexerPython.SingleQuotedString
+qtext.QextScintillaLexerPython.Keyword
+qtext.QextScintillaLexerPython.TripleSingleQuotedString
+qtext.QextScintillaLexerPython.TripleDoubleQuotedString
+qtext.QextScintillaLexerPython.ClassName
+qtext.QextScintillaLexerPython.FunctionMethodName
+qtext.QextScintillaLexerPython.Operator
+qtext.QextScintillaLexerPython.Identifier
+qtext.QextScintillaLexerPython.CommentBlock
+qtext.QextScintillaLexerPython.UnclosedString
+qtext.QextScintillaLexerPython.HighlightedIdentifier
+qtext.QextScintillaLexerPython.Decorator
+qtext.QextScintillaLexerPython(QObject=None, str=None)
+qtext.QextScintillaLexerPython.__init__(self, QObject=None, str=None)
+qtext.QextScintillaLexerPython.metaObject() -> QMetaObject
+qtext.QextScintillaLexerPython.language() -> str
+qtext.QextScintillaLexerPython.lexer() -> str
+qtext.QextScintillaLexerPython.color(int) -> QColor
+qtext.QextScintillaLexerPython.eolFill(int) -> bool
+qtext.QextScintillaLexerPython.font(int) -> QFont
+qtext.QextScintillaLexerPython.keywords(int) -> str
+qtext.QextScintillaLexerPython.description(int) -> QString
+qtext.QextScintillaLexerPython.paper(int) -> QColor
+qtext.QextScintillaLexerPython.refreshProperties()
+qtext.QextScintillaLexerPython.foldComments() -> bool
+qtext.QextScintillaLexerPython.foldQuotes() -> bool
+qtext.QextScintillaLexerPython.indentationWarning() -> QextScintillaLexerPython.IndentationWarning
+qtext.QextScintillaLexerPython.setFoldComments(bool)
+qtext.QextScintillaLexerPython.setFoldQuotes(bool)
+qtext.QextScintillaLexerPython.setIndentationWarning(QextScintillaLexerPython.IndentationWarning)
+qtext.QextScintillaLexerPython.readProperties(QSettings, QString) -> bool
+qtext.QextScintillaLexerPython.writeProperties(QSettings, QString) -> bool
+qtext.QextScintillaLexerRuby.Default
+qtext.QextScintillaLexerRuby.Comment
+qtext.QextScintillaLexerRuby.POD
+qtext.QextScintillaLexerRuby.Number
+qtext.QextScintillaLexerRuby.Keyword
+qtext.QextScintillaLexerRuby.DoubleQuotedString
+qtext.QextScintillaLexerRuby.SingleQuotedString
+qtext.QextScintillaLexerRuby.ClassName
+qtext.QextScintillaLexerRuby.FunctionMethodName
+qtext.QextScintillaLexerRuby.Operator
+qtext.QextScintillaLexerRuby.Identifier
+qtext.QextScintillaLexerRuby.Regex
+qtext.QextScintillaLexerRuby.Global
+qtext.QextScintillaLexerRuby.Symbol
+qtext.QextScintillaLexerRuby.ModuleName
+qtext.QextScintillaLexerRuby.InstanceVariable
+qtext.QextScintillaLexerRuby.ClassVariable
+qtext.QextScintillaLexerRuby.Backticks
+qtext.QextScintillaLexerRuby.DataSection
+qtext.QextScintillaLexerRuby.HereDocumentDelimiter
+qtext.QextScintillaLexerRuby.HereDocument
+qtext.QextScintillaLexerRuby.PercentStringq
+qtext.QextScintillaLexerRuby.PercentStringQ
+qtext.QextScintillaLexerRuby.PercentStringx
+qtext.QextScintillaLexerRuby.PercentStringr
+qtext.QextScintillaLexerRuby.PercentStringw
+qtext.QextScintillaLexerRuby.DemotedKeyword
+qtext.QextScintillaLexerRuby.Stdin
+qtext.QextScintillaLexerRuby.Stdout
+qtext.QextScintillaLexerRuby.Stderr
+qtext.QextScintillaLexerRuby(QObject=None, str=None)
+qtext.QextScintillaLexerRuby.__init__(self, QObject=None, str=None)
+qtext.QextScintillaLexerRuby.metaObject() -> QMetaObject
+qtext.QextScintillaLexerRuby.language() -> str
+qtext.QextScintillaLexerRuby.lexer() -> str
+qtext.QextScintillaLexerRuby.color(int) -> QColor
+qtext.QextScintillaLexerRuby.eolFill(int) -> bool
+qtext.QextScintillaLexerRuby.font(int) -> QFont
+qtext.QextScintillaLexerRuby.keywords(int) -> str
+qtext.QextScintillaLexerRuby.description(int) -> QString
+qtext.QextScintillaLexerRuby.paper(int) -> QColor
+qtext.QextScintillaLexerSQL.Default
+qtext.QextScintillaLexerSQL.Comment
+qtext.QextScintillaLexerSQL.CommentLine
+qtext.QextScintillaLexerSQL.CommentDoc
+qtext.QextScintillaLexerSQL.LineComment
+qtext.QextScintillaLexerSQL.Number
+qtext.QextScintillaLexerSQL.Keyword
+qtext.QextScintillaLexerSQL.DoubleQuotedString
+qtext.QextScintillaLexerSQL.SingleQuotedString
+qtext.QextScintillaLexerSQL.PlusKeyword
+qtext.QextScintillaLexerSQL.PlusPrompt
+qtext.QextScintillaLexerSQL.Operator
+qtext.QextScintillaLexerSQL.Identifier
+qtext.QextScintillaLexerSQL.PlusComment
+qtext.QextScintillaLexerSQL.CommentLineHash
+qtext.QextScintillaLexerSQL.CommentDocKeyword
+qtext.QextScintillaLexerSQL.CommentDocKeywordError
+qtext.QextScintillaLexerSQL.KeywordSet5
+qtext.QextScintillaLexerSQL.KeywordSet6
+qtext.QextScintillaLexerSQL.KeywordSet7
+qtext.QextScintillaLexerSQL.KeywordSet8
+qtext.QextScintillaLexerSQL(QObject=None, str=None)
+qtext.QextScintillaLexerSQL.__init__(self, QObject=None, str=None)
+qtext.QextScintillaLexerSQL.metaObject() -> QMetaObject
+qtext.QextScintillaLexerSQL.language() -> str
+qtext.QextScintillaLexerSQL.lexer() -> str
+qtext.QextScintillaLexerSQL.color(int) -> QColor
+qtext.QextScintillaLexerSQL.eolFill(int) -> bool
+qtext.QextScintillaLexerSQL.font(int) -> QFont
+qtext.QextScintillaLexerSQL.keywords(int) -> str
+qtext.QextScintillaLexerSQL.description(int) -> QString
+qtext.QextScintillaLexerSQL.paper(int) -> QColor
+qtext.QextScintillaLexerSQL.refreshProperties()
+qtext.QextScintillaLexerSQL.foldComments() -> bool
+qtext.QextScintillaLexerSQL.foldCompact() -> bool
+qtext.QextScintillaLexerSQL.backslashEscapes() -> bool
+qtext.QextScintillaLexerSQL.setFoldComments(bool)
+qtext.QextScintillaLexerSQL.setFoldCompact(bool)
+qtext.QextScintillaLexerSQL.setBackslashEscapes(bool)
+qtext.QextScintillaLexerSQL.readProperties(QSettings, QString) -> bool
+qtext.QextScintillaLexerSQL.writeProperties(QSettings, QString) -> bool
+qtext.QextScintillaLexerTeX.Default
+qtext.QextScintillaLexerTeX.Special
+qtext.QextScintillaLexerTeX.Group
+qtext.QextScintillaLexerTeX.Symbol
+qtext.QextScintillaLexerTeX.Command
+qtext.QextScintillaLexerTeX.Text
+qtext.QextScintillaLexerTeX(QObject=None, str=None)
+qtext.QextScintillaLexerTeX.__init__(self, QObject=None, str=None)
+qtext.QextScintillaLexerTeX.metaObject() -> QMetaObject
+qtext.QextScintillaLexerTeX.language() -> str
+qtext.QextScintillaLexerTeX.lexer() -> str
+qtext.QextScintillaLexerTeX.color(int) -> QColor
+qtext.QextScintillaLexerTeX.keywords(int) -> str
+qtext.QextScintillaLexerTeX.description(int) -> QString
+qtext.QextScintillaMacro(QextScintilla, str=None)
+qtext.QextScintillaMacro.__init__(self, QextScintilla, str=None)
+qtext.QextScintillaMacro(QCString, QextScintilla, str=None)
+qtext.QextScintillaMacro.__init__(self, QCString, QextScintilla, str=None)
+qtext.QextScintillaMacro.metaObject() -> QMetaObject
+qtext.QextScintillaMacro.clear()
+qtext.QextScintillaMacro.load(QCString) -> bool
+qtext.QextScintillaMacro.save() -> QCString
+qtext.QextScintillaMacro.play()
+qtext.QextScintillaMacro.startRecording()
+qtext.QextScintillaMacro.endRecording()
+qtext.QextScintillaPrinter(QPrinter.PrinterMode=QPrinter.ScreenResolution)
+qtext.QextScintillaPrinter.__init__(self, QPrinter.PrinterMode=QPrinter.ScreenResolution)
+qtext.QextScintillaPrinter.formatPage(QPainter, bool, QRect, int)
+qtext.QextScintillaPrinter.printRange(QextScintillaBase, int=-1, int=-1) -> int
+qtext.QextScintillaPrinter.magnification() -> int
+qtext.QextScintillaPrinter.setMagnification(int)
+qtext.QextScintillaPrinter.wrapMode() -> QextScintilla.WrapMode
+qtext.QextScintillaPrinter.setWrapMode(QextScintilla.WrapMode)

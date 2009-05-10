@@ -73,15 +73,10 @@ pFilesListWidget::pFilesListWidget( const QString& title, pExtendedWorkspace* wo
 	setContextMenuPolicy( Qt::CustomContextMenu );
 	
 	mList = new QListWidget();
-	mList->setFrameStyle( QFrame::NoFrame | QFrame::Plain );
 	mList->setAttribute( Qt::WA_MacShowFocusRect, false );
 	mList->setAttribute( Qt::WA_MacSmallSize );
 	mList->setDragDropMode( QAbstractItemView::InternalMove );
 	mList->installEventFilter( this );
-	
-	QPalette pal = mList->palette();
-	pal.setColor( QPalette::Base, QColor( Qt::transparent ) );
-	mList->setPalette( pal );
 	
 	QWidget* central = new QWidget( this );
 	QHBoxLayout* hl = new QHBoxLayout( central );

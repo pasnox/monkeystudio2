@@ -1,0 +1,144 @@
+qtgl.QGL_VERSION_STR
+qtgl.QGL_VERSION
+qtgl.qGLVersion() -> str
+qtgl.QGL.FormatOption
+qtgl.QGL.DoubleBuffer
+qtgl.QGL.DepthBuffer
+qtgl.QGL.Rgba
+qtgl.QGL.AlphaChannel
+qtgl.QGL.AccumBuffer
+qtgl.QGL.StencilBuffer
+qtgl.QGL.StereoBuffers
+qtgl.QGL.DirectRendering
+qtgl.QGL.HasOverlay
+qtgl.QGL.SingleBuffer
+qtgl.QGL.NoDepthBuffer
+qtgl.QGL.ColorIndex
+qtgl.QGL.NoAlphaChannel
+qtgl.QGL.NoAccumBuffer
+qtgl.QGL.NoStencilBuffer
+qtgl.QGL.NoStereoBuffers
+qtgl.QGL.IndirectRendering
+qtgl.QGL.NoOverlay
+qtgl.QGL()
+qtgl.QGL.__init__(self)
+qtgl.QGL(QGL other)
+qtgl.QGL.__init__(self, QGL other)
+qtgl.QGLFormat()
+qtgl.QGLFormat.__init__(self)
+qtgl.QGLFormat(int, int=0)
+qtgl.QGLFormat.__init__(self, int, int=0)
+qtgl.QGLFormat(QGLFormat other)
+qtgl.QGLFormat.__init__(self, QGLFormat other)
+qtgl.QGLFormat.doubleBuffer() -> bool
+qtgl.QGLFormat.setDoubleBuffer(bool)
+qtgl.QGLFormat.depth() -> bool
+qtgl.QGLFormat.setDepth(bool)
+qtgl.QGLFormat.rgba() -> bool
+qtgl.QGLFormat.setRgba(bool)
+qtgl.QGLFormat.alpha() -> bool
+qtgl.QGLFormat.setAlpha(bool)
+qtgl.QGLFormat.accum() -> bool
+qtgl.QGLFormat.setAccum(bool)
+qtgl.QGLFormat.stencil() -> bool
+qtgl.QGLFormat.setStencil(bool)
+qtgl.QGLFormat.stereo() -> bool
+qtgl.QGLFormat.setStereo(bool)
+qtgl.QGLFormat.directRendering() -> bool
+qtgl.QGLFormat.setDirectRendering(bool)
+qtgl.QGLFormat.hasOverlay() -> bool
+qtgl.QGLFormat.setOverlay(bool)
+qtgl.QGLFormat.plane() -> int
+qtgl.QGLFormat.setPlane(int)
+qtgl.QGLFormat.setOption(QGL.FormatOption)
+qtgl.QGLFormat.testOption(QGL.FormatOption) -> bool
+qtgl.QGLFormat.defaultFormat() -> QGLFormat
+qtgl.QGLFormat.setDefaultFormat(QGLFormat)
+qtgl.QGLFormat.defaultOverlayFormat() -> QGLFormat
+qtgl.QGLFormat.setDefaultOverlayFormat(QGLFormat)
+qtgl.QGLFormat.hasOpenGL() -> bool
+qtgl.QGLFormat.hasOpenGLOverlays() -> bool
+qtgl.QGLContext(QGLFormat, QPaintDevice)
+qtgl.QGLContext.__init__(self, QGLFormat, QPaintDevice)
+qtgl.QGLContext(QGLFormat)
+qtgl.QGLContext.__init__(self, QGLFormat)
+qtgl.QGLContext.create(QGLContext=None) -> bool
+qtgl.QGLContext.isValid() -> bool
+qtgl.QGLContext.isSharing() -> bool
+qtgl.QGLContext.reset()
+qtgl.QGLContext.format() -> QGLFormat
+qtgl.QGLContext.requestedFormat() -> QGLFormat
+qtgl.QGLContext.setFormat(QGLFormat)
+qtgl.QGLContext.makeCurrent()
+qtgl.QGLContext.swapBuffers()
+qtgl.QGLContext.device() -> QPaintDevice
+qtgl.QGLContext.overlayTransparentColor() -> QColor
+qtgl.QGLContext.currentContext() -> QGLContext
+qtgl.QGLContext.chooseContext(QGLContext=None) -> bool
+qtgl.QGLContext.doneCurrent()
+qtgl.QGLContext.tryVisual(QGLFormat, int=1) -> sip.voidptr
+qtgl.QGLContext.chooseVisual() -> sip.voidptr
+qtgl.QGLContext.deviceIsPixmap() -> bool
+qtgl.QGLContext.windowCreated() -> bool
+qtgl.QGLContext.setWindowCreated(bool)
+qtgl.QGLContext.initialized() -> bool
+qtgl.QGLContext.setInitialized(bool)
+qtgl.QGLContext.generateFontDisplayLists(QFont, int)
+qtgl.QGLContext.colorIndex(QColor) -> unsigned long
+qtgl.QGLContext.setValid(bool)
+qtgl.QGLContext.setDevice(QPaintDevice)
+qtgl.QGLWidget(QWidget=None, str=None, QGLWidget=None, unsigned long=0)
+qtgl.QGLWidget.__init__(self, QWidget=None, str=None, QGLWidget=None, unsigned long=0)
+qtgl.QGLWidget(QGLContext, QWidget=None, str=None, QGLWidget=None, unsigned long=0)
+qtgl.QGLWidget.__init__(self, QGLContext, QWidget=None, str=None, QGLWidget=None, unsigned long=0)
+qtgl.QGLWidget(QGLFormat, QWidget=None, str=None, QGLWidget=None, unsigned long=0)
+qtgl.QGLWidget.__init__(self, QGLFormat, QWidget=None, str=None, QGLWidget=None, unsigned long=0)
+qtgl.QGLWidget.metaObject() -> QMetaObject
+qtgl.QGLWidget.qglColor(QColor)
+qtgl.QGLWidget.qglClearColor(QColor)
+qtgl.QGLWidget.isValid() -> bool
+qtgl.QGLWidget.isSharing() -> bool
+qtgl.QGLWidget.makeCurrent()
+qtgl.QGLWidget.doneCurrent()
+qtgl.QGLWidget.doubleBuffer() -> bool
+qtgl.QGLWidget.swapBuffers()
+qtgl.QGLWidget.format() -> QGLFormat
+qtgl.QGLWidget.context() -> QGLContext
+qtgl.QGLWidget.renderPixmap(int=0, int=0, bool=False) -> QPixmap
+qtgl.QGLWidget.grabFrameBuffer(bool=False) -> QImage
+qtgl.QGLWidget.makeOverlayCurrent()
+qtgl.QGLWidget.overlayContext() -> QGLContext
+qtgl.QGLWidget.convertToGLFormat(QImage) -> QImage
+qtgl.QGLWidget.setMouseTracking(bool)
+qtgl.QGLWidget.reparent(QWidget, unsigned long, QPoint, bool=False)
+qtgl.QGLWidget.colormap() -> QGLColormap
+qtgl.QGLWidget.setColormap(QGLColormap)
+qtgl.QGLWidget.renderText(int, int, QString, QFont=QFont(), int=2000)
+qtgl.QGLWidget.renderText(float, float, float, QString, QFont=QFont(), int=2000)
+qtgl.QGLWidget.updateGL()
+qtgl.QGLWidget.updateOverlayGL()
+qtgl.QGLWidget.initializeGL()
+qtgl.QGLWidget.resizeGL(int, int)
+qtgl.QGLWidget.paintGL()
+qtgl.QGLWidget.initializeOverlayGL()
+qtgl.QGLWidget.resizeOverlayGL(int, int)
+qtgl.QGLWidget.paintOverlayGL()
+qtgl.QGLWidget.setAutoBufferSwap(bool)
+qtgl.QGLWidget.autoBufferSwap() -> bool
+qtgl.QGLWidget.paintEvent(QPaintEvent)
+qtgl.QGLWidget.resizeEvent(QResizeEvent)
+qtgl.QGLWidget.glInit()
+qtgl.QGLWidget.glDraw()
+qtgl.QGLColormap()
+qtgl.QGLColormap.__init__(self)
+qtgl.QGLColormap(QGLColormap)
+qtgl.QGLColormap.__init__(self, QGLColormap)
+qtgl.QGLColormap.isEmpty() -> bool
+qtgl.QGLColormap.size() -> int
+qtgl.QGLColormap.detach()
+qtgl.QGLColormap.setEntry(int, unsigned long)
+qtgl.QGLColormap.setEntry(int, QColor)
+qtgl.QGLColormap.entryRgb(int) -> unsigned long
+qtgl.QGLColormap.entryColor(int) -> QColor
+qtgl.QGLColormap.find(unsigned long) -> int
+qtgl.QGLColormap.findNearest(unsigned long) -> int

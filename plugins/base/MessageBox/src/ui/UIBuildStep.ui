@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources/MessageBox.qrc">
+   <iconset>
     <normaloff>:/icons/tabbuild.png</normaloff>:/icons/tabbuild.png</iconset>
   </property>
   <property name="windowTitle">
@@ -26,51 +26,7 @@
      <number>5</number>
     </property>
     <item>
-     <widget class="QListWidget" name="lwBuildSteps">
-      <property name="palette">
-       <palette>
-        <active>
-         <colorrole role="Base">
-          <brush brushstyle="SolidPattern">
-           <color alpha="0">
-            <red>255</red>
-            <green>255</green>
-            <blue>255</blue>
-           </color>
-          </brush>
-         </colorrole>
-        </active>
-        <inactive>
-         <colorrole role="Base">
-          <brush brushstyle="SolidPattern">
-           <color alpha="0">
-            <red>255</red>
-            <green>255</green>
-            <blue>255</blue>
-           </color>
-          </brush>
-         </colorrole>
-        </inactive>
-        <disabled>
-         <colorrole role="Base">
-          <brush brushstyle="SolidPattern">
-           <color alpha="255">
-            <red>212</red>
-            <green>208</green>
-            <blue>200</blue>
-           </color>
-          </brush>
-         </colorrole>
-        </disabled>
-       </palette>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::NoFrame</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Plain</enum>
-      </property>
-     </widget>
+     <widget class="QListWidget" name="lwBuildSteps"/>
     </item>
    </layout>
   </widget>
