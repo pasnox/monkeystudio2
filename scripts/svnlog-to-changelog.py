@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-""" Script for convert svn log to MkS changelog.
-Reformats text, skips commit without comments
+"""Script for convert svn log to MkS changelog.
+Reformats text, skips commits without comments
 Usage:
-	svn log 
+	svn log > svnlog-to-changelog.py
 """
+
 import sys
 import re
-import time
 
 def main():
 	separator = ('-' * 72 + '\n')
@@ -16,19 +16,23 @@ def main():
 	
 	while len(line):
 		line = sys.stdin.readline()
-		rex = re.compile ('r\d+ \| (\w+) \|[ \d\-:\+]+\(([\w,\d ]+)\) \| (\d+)')
+		rex = re.compile ('(r\d+) \| (\w+) \|[ \d\-:\+]+\(([\w,\d ]+)\) \| (\d+)')
 		match = rex.match (line)
 		if match:
-			who, when, comment_len = match.groups()
+			revision, who, when, comment_len = match.groups()
 			comment_len = int (comment_len) -1
 			if comment_len:
 				sys.stdin.readline() # skip empty line
 				comment = ''
 				for i in range (int(comment_len)):
 					comment += sys.stdin.readline()
-				print '------------------------------------------------------------------------\n%s    (%s)\n%s' % (who, when, comment)
+				print '-------- %s    %s(%s) --------\n%s' % (who, revision, when, comment)
 			else:
 				pass #skip entries without comment
 				#print who, when, 'no comment'
 
-main()
+if __name__ == '__main__':
+	if len(sys.argv) > 1:
+		print __doc__
+	else:
+		main()
