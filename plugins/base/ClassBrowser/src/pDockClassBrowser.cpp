@@ -16,18 +16,37 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 #include "pDockClassBrowser.h"
+#include "ClassBrowser.h"
 
 #include <qCtagsSenseBrowser.h>
+#include <pDockWidgetTitleBar.h>
+#include <MonkeyCore.h>
+#include <pActionsManager.h>
 
-pDockClassBrowser::pDockClassBrowser( QWidget* w )
+pDockClassBrowser::pDockClassBrowser( ClassBrowser* plugin, QWidget* w )
 	: pDockWidget( w )
 {
+	Q_ASSERT( plugin );
+	mPlugin = plugin;
+	
 	// restrict areas
 	setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
 	
 	// create browser and set it as central widget
 	mBrowser = new qCtagsSenseBrowser( this );
 	setWidget( mBrowser );
+	
+	// set actions manager
+	setActionsManager( MonkeyCore::actionsManager() );
+	pActionsManager::setPathPartTranslation( "Plugins", tr( "Plugins" ) );
+	pActionsManager::setActionsManager( mBrowser->viewBrowserAction(), actionsManager() );
+	pActionsManager::setActionPath( mBrowser->viewBrowserAction(), QString( "Plugins/%1" ).arg( mPlugin->infos().Caption ) );
+	pActionsManager::setActionsManager( mBrowser->viewSearchResultsAction(), actionsManager() );
+	pActionsManager::setActionPath( mBrowser->viewSearchResultsAction(), QString( "Plugins/%1" ).arg( mPlugin->infos().Caption ) );
+	
+	// set dock actions
+	titleBar()->addAction( mBrowser->viewBrowserAction(), 0 );
+	titleBar()->addAction( mBrowser->viewSearchResultsAction(), 1 );
 }
 
 pDockClassBrowser::~pDockClassBrowser()
