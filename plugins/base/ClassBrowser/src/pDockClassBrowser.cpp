@@ -47,6 +47,7 @@ pDockClassBrowser::pDockClassBrowser( ClassBrowser* plugin, QWidget* w )
 	// set dock actions
 	titleBar()->addAction( mBrowser->viewBrowserAction(), 0 );
 	titleBar()->addAction( mBrowser->viewSearchResultsAction(), 1 );
+	titleBar()->addSeparator( 2 );
 }
 
 pDockClassBrowser::~pDockClassBrowser()
