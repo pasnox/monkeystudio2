@@ -164,6 +164,7 @@ qCtagsSenseSearchModel::qCtagsSenseSearchModel( qCtagsSenseSQL* parent )
 {
 	mSQL = parent;
 	mEntries = 0;
+	mCacheCount = 0;
 	mThread = new qCtagsSenseSearchThread( mSQL );
 	
 	connect( mThread, SIGNAL( searching( bool ) ), this, SIGNAL( searching( bool ) ) );
@@ -230,7 +231,7 @@ QVariant qCtagsSenseSearchModel::data( const QModelIndex& index, int role ) cons
 	}
 	else
 	{
-		QString fileName = mEntries->keys().at( index.row() );
+		QString fileName = mCacheKeys.key( index.row() );
 		
 		switch ( role )
 		{
@@ -262,13 +263,13 @@ QModelIndex qCtagsSenseSearchModel::index( int row, int column, const QModelInde
 	{
 		if ( parent.isValid() )
 		{
-			QString key = mEntries->keys().at( parent.row() );
+			QString key = mCacheKeys.key( parent.row() );
 			
 			return createIndex( row, column, (*mEntries)[ key ].at( row ) );
 		}
 		else
 		{
-			return createIndex( row, column, 0 );
+			return createIndex( row, column );
 		}
 	}
 	
@@ -282,9 +283,9 @@ QModelIndex qCtagsSenseSearchModel::parent( const QModelIndex& index ) const
 		if ( index.internalPointer() )
 		{
 			qCtagsSenseEntry* entry = static_cast<qCtagsSenseEntry*>( index.internalPointer() );
-			int row = mEntries->keys().indexOf( entry->fileName );
+			int row = mCacheKeys[ entry->fileName ];
 			
-			return createIndex( row, index.column(), 0 );
+			return createIndex( row, index.column() );
 		}
 	}
 	
@@ -297,7 +298,7 @@ int qCtagsSenseSearchModel::rowCount( const QModelIndex& parent ) const
 	{
 		if ( !parent.internalPointer() )
 		{
-			const QString key = mEntries->keys().at( parent.row() );
+			const QString key = mCacheKeys.key( parent.row() );
 			
 			return (*mEntries)[ key ].count();
 		}
@@ -305,7 +306,7 @@ int qCtagsSenseSearchModel::rowCount( const QModelIndex& parent ) const
 		return 0;
 	}
 	
-	return mEntries ? mEntries->count() : 0;
+	return mCacheCount;
 }
 
 bool qCtagsSenseSearchModel::hasChildren( const QModelIndex& parent ) const
@@ -314,7 +315,7 @@ bool qCtagsSenseSearchModel::hasChildren( const QModelIndex& parent ) const
 	{
 		if ( !parent.internalPointer() )
 		{
-			const QString key = mEntries->keys().at( parent.row() );
+			const QString key = mCacheKeys.key( parent.row() );
 			
 			return !(*mEntries)[ key ].isEmpty();
 		}
@@ -329,16 +330,23 @@ QModelIndex qCtagsSenseSearchModel::index( const QString& fileName ) const
 {
 	if ( mEntries && mEntries->contains( fileName ) )
 	{
-		return createIndex( mEntries->keys().indexOf( fileName ), 0 );
+		return createIndex( mCacheKeys[ fileName ], 0 );
 	}
 	
 	return QModelIndex();
+}
+
+bool qCtagsSenseSearchModel::caseInsensitiveFileNameLessThan( const QString& s1, const QString& s2 )
+{
+	return QFileInfo( s1.toLower() ).fileName() < QFileInfo( s2.toLower() ).fileName();
 }
 
 void qCtagsSenseSearchModel::clear()
 {
 	mThread->addMapToDelete( mEntries );
 	mEntries = 0;
+	mCacheKeys.clear();
+	mCacheCount = 0;
 	reset();
 	emit ready();
 }
@@ -357,8 +365,21 @@ void qCtagsSenseSearchModel::refresh( const QString& search )
 
 void qCtagsSenseSearchModel::queryFinished( SearchMapEntries* entries )
 {
+	// get datas
 	mEntries = entries;
 	
+	// compute cache jeys
+	mCacheCount = mEntries->count();
+	mCacheKeys.clear();
+	
+	QStringList keys = mEntries->keys();
+	qSort( keys.begin(), keys.end(), caseInsensitiveFileNameLessThan );
+	for ( int i = 0; i < mCacheCount; i++ )
+	{
+		mCacheKeys[ keys.at( i ) ] = i;
+	}
+	
+	// inform finish
 	reset();
 	emit ready();
 }

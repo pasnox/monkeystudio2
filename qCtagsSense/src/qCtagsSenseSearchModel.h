@@ -50,6 +50,8 @@ public:
 	virtual bool hasChildren( const QModelIndex& parent = QModelIndex() ) const;
 	
 	QModelIndex index( const QString& fileName ) const;
+	
+	static bool caseInsensitiveFileNameLessThan( const QString& s1, const QString& s2 );
 
 public slots:
 	void clear();
@@ -59,6 +61,8 @@ protected:
 	qCtagsSenseSearchThread* mThread;
 	qCtagsSenseSQL* mSQL;
 	SearchMapEntries* mEntries;
+	QHash<QString, int> mCacheKeys;
+	int mCacheCount;
 
 protected slots:
 	void queryFinished( SearchMapEntries* entries );
