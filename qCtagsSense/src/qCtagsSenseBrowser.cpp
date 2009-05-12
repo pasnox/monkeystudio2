@@ -34,6 +34,7 @@
 #include <QMovie>
 #include <QComboBox>
 #include <QTimer>
+#include <QActionGroup>
 
 #define SEARCH_TIMEOUT 500
 
@@ -149,6 +150,10 @@ qCtagsSenseBrowser::qCtagsSenseBrowser( QWidget* parent )
 	tvMembers->setAttribute( Qt::WA_MacShowFocusRect, false );
 	tvMembers->setAttribute( Qt::WA_MacSmallSize );
 	
+	QActionGroup* group = new QActionGroup( this );
+	group->addAction( aBrowser );
+	group->addAction( aSearchResults );
+	
 	mLoading = new QMovie( this );
 	mLoading->setFileName( ":/icons/loading.gif" );
 	mLoading->setScaledSize( QSize( 16, 16 ) );
@@ -208,6 +213,21 @@ qCtagsSenseMembersModel* qCtagsSenseBrowser::membersModel() const
 	return mMembersModel;
 }
 
+QAction* qCtagsSenseBrowser::membersAction() const
+{
+	return aMembers;
+}
+
+QAction* qCtagsSenseBrowser::viewBrowserAction() const
+{
+	return aBrowser;
+}
+
+QAction* qCtagsSenseBrowser::viewSearchResultsAction() const
+{
+	return aSearchResults;
+}
+
 void qCtagsSenseBrowser::popupMenu( QTreeView* view, const QPoint& pos )
 {
 	QModelIndex index = view->currentIndex();
@@ -252,11 +272,6 @@ void qCtagsSenseBrowser::popupMenu( QTreeView* view, const QPoint& pos )
 	}
 }
 
-QAction* qCtagsSenseBrowser::membersAction() const
-{
-	return aMembers;
-}
-
 void qCtagsSenseBrowser::tagEntry( const QString& fileName )
 {
 	mSense->tagEntry( fileName );
@@ -279,18 +294,23 @@ void qCtagsSenseBrowser::setFilteredSuffixes( const QStringList& suffixes )
 
 void qCtagsSenseBrowser::setCurrentFileName( const QString& fileName )
 {
-	tbPages->setCurrentIndex( 0 );
-	
 	mLanguage = getFileNameLanguageName( fileName.toLocal8Bit().constData() );
 	mFileName = fileName;
-	/*
-	if ( mSense->indexer()->isRunning() || mLanguagesModel->isRunning() || mFilesModel->isRunning() )
-	{
-		return;
-	}
-	*/
+	
 	// update model
 	mMembersModel->refresh( mFileName );
+}
+
+void qCtagsSenseBrowser::on_aBrowser_toggled( bool checked )
+{
+	Q_UNUSED( checked );
+	swPages->setCurrentIndex( 0 );
+}
+
+void qCtagsSenseBrowser::on_aSearchResults_toggled( bool checked )
+{
+	Q_UNUSED( checked );
+	swPages->setCurrentIndex( 1 );
 }
 
 void qCtagsSenseBrowser::on_tvMembers_activated( const QModelIndex& index )
@@ -326,6 +346,7 @@ void qCtagsSenseBrowser::mSense_indexingChanged()
 void qCtagsSenseBrowser::mMembersModel_ready()
 {
 	tvMembers->expandAll();
+	aBrowser->setChecked( true );
 }
 
 void qCtagsSenseBrowser::on_leSearch_textChanged( const QString& search )
@@ -363,7 +384,16 @@ void qCtagsSenseBrowser::mSearchTimer_timeout()
 
 void qCtagsSenseBrowser::mSearchModel_ready()
 {
-	tbPages->setCurrentIndex( 1 );
+	const QModelIndex index = mSearchModel->index( mFileName );
+	
+	if ( index.isValid() )
+	{
+		tvSearchResult->expand( index );
+		tvSearchResult->setCurrentIndex( index );
+		tvSearchResult->scrollTo( index );
+	}
+	
+	aSearchResults->setChecked( true );
 }
 
 void qCtagsSenseBrowser::on_tvMembers_customContextMenuRequested( const QPoint& pos )

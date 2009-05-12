@@ -45,6 +45,8 @@ public:
 	qCtagsSenseFilesModel* filesModel() const;
 	qCtagsSenseMembersModel* membersModel() const;
 	QAction* membersAction() const;
+	QAction* viewBrowserAction() const;
+	QAction* viewSearchResultsAction() const;
 	void popupMenu( QTreeView* view, const QPoint& pos );
 
 public slots:
@@ -66,7 +68,8 @@ protected:
 	QTimer* mSearchTimer;
 
 protected slots:
-	//void on_cbLanguages_currentIndexChanged( int id );
+	void on_aBrowser_toggled( bool checked );
+	void on_aSearchResults_toggled( bool checked );
 	void on_tvMembers_activated( const QModelIndex& index );
 	void on_tvSearchResult_activated( const QModelIndex& index );
 	void mSense_indexingProgress( int value, int total );

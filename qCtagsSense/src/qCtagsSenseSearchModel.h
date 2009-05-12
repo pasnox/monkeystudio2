@@ -48,6 +48,8 @@ public:
 	virtual QModelIndex parent( const QModelIndex& index ) const;
 	virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
 	virtual bool hasChildren( const QModelIndex& parent = QModelIndex() ) const;
+	
+	QModelIndex index( const QString& fileName ) const;
 
 public slots:
 	void clear();

@@ -325,6 +325,16 @@ bool qCtagsSenseSearchModel::hasChildren( const QModelIndex& parent ) const
 	return mEntries ? !mEntries->isEmpty() : false;
 }
 
+QModelIndex qCtagsSenseSearchModel::index( const QString& fileName ) const
+{
+	if ( mEntries && mEntries->contains( fileName ) )
+	{
+		return createIndex( mEntries->keys().indexOf( fileName ), 0 );
+	}
+	
+	return QModelIndex();
+}
+
 void qCtagsSenseSearchModel::clear()
 {
 	mThread->addMapToDelete( mEntries );
