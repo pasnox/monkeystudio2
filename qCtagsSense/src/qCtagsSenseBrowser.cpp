@@ -390,7 +390,7 @@ void qCtagsSenseBrowser::mSearchModel_ready()
 	{
 		tvSearchResult->expand( index );
 		tvSearchResult->setCurrentIndex( index );
-		tvSearchResult->scrollTo( index );
+		tvSearchResult->scrollTo( index, QAbstractItemView::PositionAtTop );
 	}
 	
 	aSearchResults->setChecked( true );
