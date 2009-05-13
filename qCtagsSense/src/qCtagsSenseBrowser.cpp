@@ -149,6 +149,8 @@ qCtagsSenseBrowser::qCtagsSenseBrowser( QWidget* parent )
 	leSearch->setAttribute( Qt::WA_MacSmallSize );
 	tvMembers->setAttribute( Qt::WA_MacShowFocusRect, false );
 	tvMembers->setAttribute( Qt::WA_MacSmallSize );
+	tvSearchResult->setAttribute( Qt::WA_MacShowFocusRect, false );
+	tvSearchResult->setAttribute( Qt::WA_MacSmallSize );
 	
 	QActionGroup* group = new QActionGroup( this );
 	group->addAction( aBrowser );
