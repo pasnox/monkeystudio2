@@ -25,6 +25,7 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QPixmap>
+#include <QHash>
 
 class qCtagsSenseSearchThread;
 
