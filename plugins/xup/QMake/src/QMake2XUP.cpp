@@ -65,13 +65,13 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
 	QString inVarComment;
 	int nbEmptyLine = 0;
 	
-	QRegExp Variable("^(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?[ \\t]*[:|][ \\t]*)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*([*+-]?=)[ \\t]*((?:\\\\\\\\\\\\\\\"|\\\\\\\"|[^\\\\#])+)?[ \\t]*(\\\\)?[ \t]*(#.*)?");
+	QRegExp Variable("^(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?[ \\t]*[:|][ \\t]*)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*([*+-]?=)[ \\t]*((?:\\\\'|\\\\\\$|\\\\\\\\\\\\\\\"|\\\\\\\"|[^\\\\#])+)?[ \\t]*(\\\\)?[ \t]*(#.*)?");
 	QRegExp RegexVar("^(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?[ \\t]*[:|][ \\t]*)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*~=([^#]+)(#.*)?");
 	//QRegExp bloc("^(\\})?[ \\t]*((?:(?:[-\\.a-zA-Z0-9*|_!+]+(?:\\((?:[^\\)]*)\\))?[ \\t]*[:|][ \\t]*)+)?([-a-zA-Z0-9*|_!+]+(?:\\((?:[^\\)]*)\\))?))[ \\t]*(\\{)[ \\t]*(#.*)?");
 	QRegExp bloc("^(\\})?[ \\t]*((?:(?:[-\\.a-zA-Z0-9*|_!+]+(?:\\((?:.*)\\))?[ \\t]*[:|][ \\t]*)+)?([-\\.a-zA-Z0-9*|_!+]+(?:\\((?:.*)\\))?))[:]*[ \\t]*(\\{)[ \\t]*(#.*)?");
 	QRegExp function_call("^((?:!?[-\\.a-zA-Z0-9*!_|+]+(?:[ \\t]*\\((?:.*)\\))?[ \\t]*[|:][ \\t]*)+)?([a-zA-Z]+[ \\t]*\\((.*)\\))[ \\t]*(#.*)?");
 	QRegExp end_bloc("^(\\})[ \t]*(#.*)?");
-	QRegExp end_bloc_continuing("^(\\})[ \\t]*(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?[ \\t]*[:|][ \\t]*)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*([~*+-]?=)[ \\t]*((?:\\\\\\\\\\\\\\\"|\\\\\\\"|[^\\\\#])+)?[ \\t]*(\\\\)?[ \t]*(#.*)?");
+	QRegExp end_bloc_continuing("^(\\})[ \\t]*(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?[ \\t]*[:|][ \\t]*)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*([~*+-]?=)[ \\t]*((?:\\\\'|\\\\\\$|\\\\\\\\\\\\\\\"|\\\\\\\"|[^\\\\#])+)?[ \\t]*(\\\\)?[ \t]*(#.*)?");
 	QRegExp comments("^#(.*)");
 	QRegExp varLine("^(.*)[ \\t]*\\\\[ \\t]*(#.*)?");
 	
@@ -136,6 +136,7 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
 				// liste[2] = la variable
 				// liste[3] = la ligne (ne pas oublier trimmed())
 				// liste[4] = le commentaire
+				file.append("<comment value=\"#"+MyEscape(liste[2])+"\" />\n");
 			}
 			else if(Variable.exactMatch(v[i]))
 			{
@@ -144,14 +145,17 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
 				QStringList liste2 = liste[1].trimmed().split(QChar(':'), QString::SkipEmptyParts);
 				if(liste[1] == "else" || (liste2.size() > 0 && liste2[0] == "else"))
 				{
-					// pop the last scope of the bloc
-					file.append(pile.pop());
-					isNested.pop();
-					// pop the nested scope of the bloc
-					while(!isNested.isEmpty() && isNested.top())
+					if(isNested.size())
 					{
+						// pop the last scope of the bloc
 						file.append(pile.pop());
 						isNested.pop();
+						// pop the nested scope of the bloc
+						while(!isNested.isEmpty() && isNested.top())
+						{
+							file.append(pile.pop());
+							isNested.pop();
+						}
 					}
 				}
 				else
@@ -406,25 +410,154 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
 					pile += "</scope>\n";
 					isNested.push(true);
 				}
+				QString isMulti = (liste[6].trimmed() == "\\" ? " multiline=\"true\"" : "");
 				QString theOp = (liste[4].trimmed() == "=" ? "" : " operator=\""+liste[4].trimmed()+"\"");
 				file.append("<variable name=\""+MyEscape(liste[3].trimmed())+"\""+theOp+">\n");
 				if ( liste[7].trimmed().startsWith( "#" ) )
 					file.append( QString( "<comment value=\"%1\" />\n" ).arg( QString( liste[7].trimmed() ) ) );
 				else
 					file.append("<value"+(liste[7].trimmed() != "" ? " comment=\""+MyEscape(liste[7].trimmed())+"\"" : "")+" content=\""+MyEscape(liste[5].trimmed())+"\" />\n");
+				if(isMulti == " multiline=\"true\"")
+				{
+					i++;
+					while(varLine.exactMatch(v[i]))
+					{
+						QStringList liste3 = varLine.capturedTexts();
+						bool isFile = fileVariables.contains(liste[2].trimmed());
+						bool isPath = pathVariables.contains(liste[2].trimmed());
+						if ( isFile || isPath )
+						{
+							QStringList tmpValues = liste3[1].trimmed().split(" ");
+							QStringList multivalues = QStringList();
+							QString ajout = "";
+							bool inStr = false;
+							for(int ku = 0;ku < tmpValues.size();ku++)
+							{
+								if(tmpValues.value(ku).startsWith('"') )
+									inStr = true;
+								if(inStr)
+								{
+									if(ajout != "")
+										ajout += " ";
+									ajout += tmpValues.value(ku);
+									if(tmpValues.value(ku).endsWith('"') )
+									{
+										multivalues += ajout;
+										ajout = "";
+										inStr = false;
+									}
+								}
+								else
+								{
+									multivalues += tmpValues.value(ku);
+								}
+							}
+							for(int ku = 0;ku < multivalues.size();ku++)
+							{
+								inVarComment = multivalues.value(ku).trimmed();
+								if ( inVarComment.startsWith( "#" ) )
+								{
+									if ( inVarComment == "#" && ku < multivalues.size() )
+									{
+										ku++;
+										inVarComment = "# " +multivalues.value(ku).trimmed();
+									}
+									file.append( QString( "<comment value=\"%1\" />\n" ).arg( QString( inVarComment ) ) );
+								}
+								else
+								{
+									if ( isFile )
+									{
+										file.append("<file"+(liste3[2].trimmed() != "" && ku+1 == multivalues.size() ? " comment=\""+MyEscape(liste3[2].trimmed())+"\"" : "")+" content=\""+MyEscape(multivalues.value(ku)).remove( '"' )+"\" />\n");
+									}
+									else if ( isPath )
+									{
+										file.append("<path"+(liste3[2].trimmed() != "" && ku+1 == multivalues.size() ? " comment=\""+MyEscape(liste3[2].trimmed())+"\"" : "")+" content=\""+MyEscape(multivalues.value(ku)).remove( '"' )+"\" />\n");
+									}
+								}
+							}
+						}
+						else
+							file.append("<value"+(liste3[2].trimmed() != "" ? " comment=\""+MyEscape(liste3[2].trimmed())+"\"" : "")+" content=\""+MyEscape(liste3[1].trimmed())+"\" />\n");
+						i++;
+					}
+					QStringList liste3 = v[i].split( "#" );
+					QString comment;
+					if(liste3.size() == 2)
+						comment = "#"+liste3[1];
+					bool isFile = fileVariables.contains(liste[2].trimmed());
+					bool isPath = pathVariables.contains(liste[2].trimmed());
+					if ( isFile || isPath )
+					{
+						QStringList tmpValues = liste3[0].trimmed().split(" ");
+						QStringList multivalues = QStringList();
+						QString ajout = "";
+						bool inStr = false;
+						for(int ku = 0;ku < tmpValues.size();ku++)
+						{
+							if(tmpValues.value(ku).startsWith('"') )
+								inStr = true;
+							if(inStr)
+							{
+								if(ajout != "")
+									ajout += " ";
+								ajout += tmpValues.value(ku);
+								if(tmpValues.value(ku).endsWith('"') )
+								{
+									multivalues += ajout;
+									ajout = "";
+									inStr = false;
+								}
+							}
+							else
+							{
+								multivalues += tmpValues.value(ku);
+							}
+						}
+						for(int ku = 0;ku < multivalues.size();ku++)
+						{
+							inVarComment = multivalues.value(ku).trimmed();
+							if ( inVarComment.startsWith( "#" ) )
+							{
+								if ( inVarComment == "#" && ku < multivalues.size() )
+								{
+									ku++;
+									inVarComment = "# " +MyEscape(multivalues.value(ku).trimmed());
+								}
+								file.append( QString( "<comment content=\"%1\" />\n" ).arg( QString( inVarComment ) ) );
+							}
+							else
+							{
+								if ( isFile )
+								{
+									file.append("<file"+(comment.trimmed() != "" && ku+1 == multivalues.size() ? " comment=\""+MyEscape(comment.trimmed())+"\"" : "")+" content=\""+MyEscape(multivalues.value(ku)).remove( '"' )+"\" />\n");
+								}
+								else if ( isPath )
+								{
+									file.append("<path"+(comment.trimmed() != "" && ku+1 == multivalues.size() ? " comment=\""+MyEscape(comment.trimmed())+"\"" : "")+" content=\""+MyEscape(multivalues.value(ku)).remove( '"' )+"\" />\n");
+								}
+							}
+						}
+					}
+					else
+						file.append("<value"+(comment.trimmed() != "" ? " comment=\""+MyEscape(comment.trimmed())+"\"" : "")+" content=\""+MyEscape(liste3[0].trimmed())+"\" />\n");
+				}
 				file.append("</variable>\n");
 			}
 			else if(end_bloc.exactMatch(v[i]))
 			{
 				while(!isNested.isEmpty() && isNested.top())
 				{
+					qDebug() << isNested.top();
 					file.append(pile.pop());
 					isNested.pop();
 				}
+				qDebug() << isNested.top();
 				file.append(pile.pop());
 				isNested.pop();
 				if(!isNested.isEmpty() && isNested.top())
 				{
+					qDebug() << isNested.top();
 					file.append(pile.pop());
 					isNested.pop();
 				}
@@ -477,12 +610,12 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
 	
 	file.append( "</project>\n" );
 	// to output the xml in a file
-	/*QFile apt("debug.xml");
+	QFile apt(s+".xml");
 	if( apt.open( QIODevice::WriteOnly | QIODevice::Text ) )
 	{
-		apt.write(file);
+		apt.write(file.toAscii());
 		apt.close();
-	}*/
+	}
 	
 	return file;
 }
