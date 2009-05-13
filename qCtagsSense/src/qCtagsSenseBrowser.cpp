@@ -37,6 +37,7 @@
 #include <QActionGroup>
 
 #define SEARCH_TIMEOUT 500
+#define SEARCH_MIN_CHARS 3
 
 class MembersActionComboBox : public QComboBox
 {
@@ -353,7 +354,7 @@ void qCtagsSenseBrowser::mMembersModel_ready()
 
 void qCtagsSenseBrowser::on_leSearch_textChanged( const QString& search )
 {
-	if ( search.length() < 3 )
+	if ( search.length() < SEARCH_MIN_CHARS )
 	{
 		mSearchModel->clear();
 	}
@@ -395,7 +396,14 @@ void qCtagsSenseBrowser::mSearchModel_ready()
 		tvSearchResult->scrollTo( index, QAbstractItemView::PositionAtTop );
 	}
 	
-	aSearchResults->setChecked( true );
+	if ( mSearchModel->rowCount() > 0 )
+	{
+		aSearchResults->setChecked( true );
+	}
+	else
+	{
+		aBrowser->setChecked( true );
+	}
 }
 
 void qCtagsSenseBrowser::on_tvMembers_customContextMenuRequested( const QPoint& pos )
