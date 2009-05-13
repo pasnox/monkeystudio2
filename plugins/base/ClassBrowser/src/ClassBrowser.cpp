@@ -160,7 +160,6 @@ void ClassBrowser::currentFileChanged( pAbstractChild* child, const QString& fil
 {
 	Q_UNUSED( child );
 	
-	qWarning() << fileName;
 	mDock->browser()->setCurrentFileName( fileName );
 }
 
