@@ -65,7 +65,8 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
 	QString inVarComment;
 	int nbEmptyLine = 0;
 	
-	QRegExp Variable("^(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?[ \\t]*[:|][ \\t]*)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*([~*+-]?=)[ \\t]*((?:\\\\\\\\\\\\\\\"|\\\\\\\"|[^\\\\#])+)?[ \\t]*(\\\\)?[ \t]*(#.*)?");
+	QRegExp Variable("^(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?[ \\t]*[:|][ \\t]*)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*([*+-]?=)[ \\t]*((?:\\\\\\\\\\\\\\\"|\\\\\\\"|[^\\\\#])+)?[ \\t]*(\\\\)?[ \t]*(#.*)?");
+	QRegExp RegexVar("^(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?[ \\t]*[:|][ \\t]*)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*~=([^#]+)(#.*)?");
 	//QRegExp bloc("^(\\})?[ \\t]*((?:(?:[-\\.a-zA-Z0-9*|_!+]+(?:\\((?:[^\\)]*)\\))?[ \\t]*[:|][ \\t]*)+)?([-a-zA-Z0-9*|_!+]+(?:\\((?:[^\\)]*)\\))?))[ \\t]*(\\{)[ \\t]*(#.*)?");
 	QRegExp bloc("^(\\})?[ \\t]*((?:(?:[-\\.a-zA-Z0-9*|_!+]+(?:\\((?:.*)\\))?[ \\t]*[:|][ \\t]*)+)?([-\\.a-zA-Z0-9*|_!+]+(?:\\((?:.*)\\))?))[:]*[ \\t]*(\\{)[ \\t]*(#.*)?");
 	QRegExp function_call("^((?:!?[-\\.a-zA-Z0-9*!_|+]+(?:[ \\t]*\\((?:.*)\\))?[ \\t]*[|:][ \\t]*)+)?([a-zA-Z]+[ \\t]*\\((.*)\\))[ \\t]*(#.*)?");
@@ -128,11 +129,19 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
 				pile += "</scope>\n";
 				isNested.push(false);
 			}
+			else if(RegexVar.exactMatch(v[i]))
+			{
+				QStringList liste = RegexVar.capturedTexts();
+				// liste[1] = scopes
+				// liste[2] = la variable
+				// liste[3] = la ligne (ne pas oublier trimmed())
+				// liste[4] = le commentaire
+			}
 			else if(Variable.exactMatch(v[i]))
 			{
 				QString tmp_end;
 				QStringList liste = Variable.capturedTexts();
-				QStringList liste2 = liste[1].trimmed().split(QChar(':'),QString::SkipEmptyParts);
+				QStringList liste2 = liste[1].trimmed().split(QChar(':'), QString::SkipEmptyParts);
 				if(liste[1] == "else" || (liste2.size() > 0 && liste2[0] == "else"))
 				{
 					// pop the last scope of the bloc
