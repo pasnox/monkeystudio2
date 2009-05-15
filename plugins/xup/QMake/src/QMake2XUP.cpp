@@ -65,7 +65,7 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
 	QString inVarComment;
 	int nbEmptyLine = 0;
 	
-	QRegExp Variable("^(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?[ \\t]*[:|][ \\t]*)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*([*+-]?=)[ \\t]*((?:\\\\'|\\\\\\$|\\\\\\\\\\\\\\\"|\\\\\\\"|[^\\\\#])+)?[ \\t]*(\\\\)?[ \t]*(#.*)?");
+	QRegExp Variable("^(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?[ \\t]*[:|][ \\t]*)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*([*+-]?=)[ \\t]*((?:\\\\'|\\\\\\$|\\\\\\\\\\\\\\\"|\\\\\\\"|[^#])+)?[ \\t]*(#.*)?");
 	QRegExp RegexVar("^(?:((?:[-\\.a-zA-Z0-9*!_|+]+(?:\\((?:.*)\\))?[ \\t]*[:|][ \\t]*)+)?([\\.a-zA-Z0-9*!_]+))[ \\t]*~=([^#]+)(#.*)?");
 	//QRegExp bloc("^(\\})?[ \\t]*((?:(?:[-\\.a-zA-Z0-9*|_!+]+(?:\\((?:[^\\)]*)\\))?[ \\t]*[:|][ \\t]*)+)?([-a-zA-Z0-9*|_!+]+(?:\\((?:[^\\)]*)\\))?))[ \\t]*(\\{)[ \\t]*(#.*)?");
 	QRegExp bloc("^(\\})?[ \\t]*((?:(?:[-\\.a-zA-Z0-9*|_!+]+(?:\\((?:.*)\\))?[ \\t]*[:|][ \\t]*)+)?([-\\.a-zA-Z0-9*|_!+]+(?:\\((?:.*)\\))?))[:]*[ \\t]*(\\{)[ \\t]*(#.*)?");
@@ -176,7 +176,14 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
 					}
 				}
 				
-				QString isMulti = (liste[5].trimmed() == "\\" ? " multiline=\"true\"" : "");
+				QString isMulti;
+				if(liste[4].trimmed().endsWith(" \\") || liste[4].trimmed() == "\\")
+				{
+					isMulti = " multiline=\"true\"";
+					QString tmppp = liste[4].trimmed();
+					tmppp.chop(1);
+					liste[4] = tmppp;
+				}
 				QString theOp = (liste[3].trimmed() == "=" ? "" : " operator=\""+liste[3].trimmed()+"\"");
 				file.append("<variable name=\""+MyEscape(liste[2].trimmed())+"\""+theOp+isMulti+">\n");
 				bool isFile = fileVariables.contains(liste[2].trimmed());
@@ -224,17 +231,17 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
 						{
 							if ( isFile )
 							{
-								file.append("<file"+(liste[6].trimmed() != "" && ku+1 == multivalues.size() ? " comment=\""+MyEscape(liste[6].trimmed())+"\"" : "")+" content=\""+MyEscape(multivalues.value(ku)).remove( '"' )+"\" />\n");
+								file.append("<file"+(liste[5].trimmed() != "" && ku+1 == multivalues.size() ? " comment=\""+MyEscape(liste[5].trimmed())+"\"" : "")+" content=\""+MyEscape(multivalues.value(ku)).remove( '"' )+"\" />\n");
 							}
 							else if ( isPath )
 							{
-								file.append("<path"+(liste[6].trimmed() != "" && ku+1 == multivalues.size() ? " comment=\""+MyEscape(liste[6].trimmed())+"\"" : "")+" content=\""+MyEscape(multivalues.value(ku)).remove( '"' )+"\" />\n");
+								file.append("<path"+(liste[5].trimmed() != "" && ku+1 == multivalues.size() ? " comment=\""+MyEscape(liste[5].trimmed())+"\"" : "")+" content=\""+MyEscape(multivalues.value(ku)).remove( '"' )+"\" />\n");
 							}
 						}
 					}
 				}
 				else
-					file.append("<value"+(liste[6].trimmed() != "" ? " comment=\""+MyEscape(liste[6].trimmed())+"\"" : "")+" content=\""+MyEscape(liste[4].trimmed())+"\" />\n");
+					file.append("<value"+(liste[5].trimmed() != "" ? " comment=\""+MyEscape(liste[5].trimmed())+"\"" : "")+" content=\""+MyEscape(liste[4].trimmed())+"\" />\n");
 				if(isMulti == " multiline=\"true\"")
 				{
 					i++;
