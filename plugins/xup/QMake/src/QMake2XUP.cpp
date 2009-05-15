@@ -555,16 +555,16 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
 			{
 				while(!isNested.isEmpty() && isNested.top())
 				{
-					qDebug() << isNested.top();
+					isNested.top();
 					file.append(pile.pop());
 					isNested.pop();
 				}
-				qDebug() << isNested.top();
+				isNested.top();
 				file.append(pile.pop());
 				isNested.pop();
 				if(!isNested.isEmpty() && isNested.top())
 				{
-					qDebug() << isNested.top();
+					isNested.top();
 					file.append(pile.pop());
 					isNested.pop();
 				}
