@@ -617,12 +617,12 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
 	
 	file.append( "</project>\n" );
 	// to output the xml in a file
-	QFile apt(s+".xml");
+	/*QFile apt(s+".xml");
 	if( apt.open( QIODevice::WriteOnly | QIODevice::Text ) )
 	{
 		apt.write(file.toAscii());
 		apt.close();
-	}
+	}*/
 	
 	return file;
 }
