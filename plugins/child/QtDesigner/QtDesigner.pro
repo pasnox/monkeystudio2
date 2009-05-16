@@ -1,7 +1,7 @@
 TARGET	= QtDesigner
 include( ../../plugins.pri )
 DESTDIR	= $$MONKEY_PLUGINS_DIR/child
-INCLUDEPATH	*= src/3rdparty/designer
+INCLUDEPATH	*= src/3rdparty/designer/$${QT_MAJOR_VERSION}.$${QT_MINOR_VERSION}
 CONFIG	*= designer
 qtAddLibrary( QtDesignerComponents )
 

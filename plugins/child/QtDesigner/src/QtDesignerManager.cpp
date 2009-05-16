@@ -45,7 +45,9 @@
 
 #include "pluginmanager_p.h"
 #include "qdesigner_integration_p.h"
+#if QT_VERSION >= 0x040500
 #include <previewmanager_p.h>
+#endif
 
 QtDesignerManager::QtDesignerManager( QObject* parent )
 	: QObject( parent )
@@ -140,8 +142,10 @@ QtDesignerManager::QtDesignerManager( QObject* parent )
 	new qdesigner_internal::QDesignerIntegration( mCore, MonkeyCore::workspace() );
 	mCore->setTopLevel( MonkeyCore::workspace() );
 	
+#if QT_VERSION >= 0x040500
 	// create previewver
 	mPreviewer = new qdesigner_internal::PreviewManager( qdesigner_internal::PreviewManager::SingleFormNonModalPreview, this );
+#endif
 	
 	// connections
 	connect( aEditWidgets, SIGNAL( triggered() ), this, SLOT( editWidgets() ) );
@@ -194,7 +198,9 @@ QWidget* QtDesignerManager::previewWidget( QDesignerFormWindowInterface* form, c
 	
 	if ( form )
 	{
+#if QT_VERSION >= 0x040500
 		widget = mPreviewer->showPreview( form, style, &error );
+#endif
 		
 		if ( !widget )
 		{
@@ -212,7 +218,9 @@ QPixmap QtDesignerManager::previewPixmap( QDesignerFormWindowInterface* form, co
 	
 	if ( form )
 	{
+#if QT_VERSION >= 0x040500
 		pixmap = mPreviewer->createPreviewPixmap( form, style, &error );
+#endif
 		
 		if ( pixmap.isNull() )
 		{

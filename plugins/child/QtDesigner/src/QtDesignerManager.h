@@ -22,9 +22,11 @@
 #include <QActionGroup>
 #include <QWidgetAction>
 
+#if QT_VERSION >= 0x040500
 namespace qdesigner_internal {
 	class PreviewManager;
 };
+#endif
 
 class QDesignerFormBuilder;
 class QDesignerFormEditorInterface;
@@ -59,7 +61,9 @@ public:
 
 protected:
 	QDesignerFormEditorInterface* mCore;
+#if QT_VERSION >= 0x040500
 	qdesigner_internal::PreviewManager* mPreviewer;
+#endif
 	
 	QActionGroup* aModes;
 	QWidgetAction* aPreview;
