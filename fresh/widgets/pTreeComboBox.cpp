@@ -91,7 +91,7 @@ bool pTreeComboBox::eventFilter( QObject* object, QEvent* event )
 	}
 	else if ( t == QEvent::MouseMove )
 	{
-		if ( QMouseEvent* me = dynamic_cast<QMouseEvent*>( event ) )
+		if ( QMouseEvent* me = static_cast<QMouseEvent*>( event ) )
 		{
 			QModelIndex i = mView->indexAt( mView->mapFromGlobal( me->globalPos() ) );
 			if ( mView->currentIndex() != i )
