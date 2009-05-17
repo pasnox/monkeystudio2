@@ -4,11 +4,18 @@
 #### app name ###################################################
 
 APP_NAME=$1
+QMAKE=$2
+
+if [ ! -f "$QMAKE" ] ; then
+	QMAKE=qmake
+fi
 
 ### get system configuration ########################################
 
 # as long as we can find qmake, we don't need QTDIR
-QT_LIBS_PATH=`qmake -query QT_INSTALL_LIBS`
+QT_LIBS_PATH=`$QMAKE -query QT_INSTALL_LIBS`
+QT_PLUGINS_PATH=`$QMAKE -query QT_INSTALL_PLUGINS`
+
 if [ ! -d $QT_LIBS_PATH/QtCore.framework ] ; then
 	echo "ERROR: cannot find the Qt frameworks. Make sure Qt is installed"
 	echo "and qmake is in your environment path."
@@ -35,7 +42,6 @@ APP_BIN="$BUNDLE/Contents/MacOS/`basename \"${APP_NAME}\"`"
 APP_PLUGINS_PATH="$BUNDLE/Contents/plugins"
 APP_QT_PLUGINS_PATH="$BUNDLE/Contents/plugins/qt"
 APP_FRAMEWORKS_PATH="$BUNDLE/Contents/Frameworks"
-QT_PLUGINS_PATH=`qmake -query QT_INSTALL_PLUGINS`
 
 if [ ! -d "${BUNDLE}" ] ; then
 	echo "ERROR: cannot find application bundle \"$BUNDLE\" in current directory"
@@ -55,9 +61,13 @@ echo
 copyPlugins()
 {
 	path="$2/$1"
-	if [ ! -d "${path}" ] ; then
+	if [ ! -d "$QT_PLUGINS_PATH/${1}" ] ; then
+		echo "Skipping $1 plugins, folder does not exists"
+	else
 		echo "Copying $1 plugins..."
-		mkdir -p "${path}"
+		if [ ! -d "${path}" ] ; then
+			mkdir -p "${path}"
+		fi
 		cp -R "$QT_PLUGINS_PATH/${1}" "${2}"
 	fi
 }
@@ -67,6 +77,7 @@ copyAllPlugins()
 	copyPlugins "accessible" "$APP_QT_PLUGINS_PATH"
 	copyPlugins "codecs" "$APP_QT_PLUGINS_PATH"
 	copyPlugins "designer" "$APP_QT_PLUGINS_PATH"
+	copyPlugins "graphicssystems" "$APP_QT_PLUGINS_PATH"
 	copyPlugins "iconengines" "$APP_QT_PLUGINS_PATH"
 	copyPlugins "imageformats" "$APP_QT_PLUGINS_PATH"
 	copyPlugins "inputmethods" "$APP_QT_PLUGINS_PATH"
@@ -157,7 +168,7 @@ relinkPlugins()
 makeInstall()
 {
 	echo "Running make install..."
-	qmake
+	$QMAKE
 	if [ -e Makefile.Release ] ; then
 		make -f Makefile.Release && make -f Makefile.Release install
 	elif [ -e Makefile ] ; then
