@@ -99,8 +99,14 @@ QWidget* LegacyDesigner::createPreview( const QDesignerFormWindowInterface* fw, 
 	QStyle* pstyle = QStyleFactory::create( style );
 	if ( pstyle )
 	{
+		pstyle->setParent( widget );
 		widget->setStyle( pstyle );
 		widget->setPalette( pstyle->standardPalette() );
+		
+		foreach ( QWidget* child, widget->findChildren<QWidget*>() )
+		{
+			child->setStyle( pstyle );
+		}
 	}
 	
 	return widget;
