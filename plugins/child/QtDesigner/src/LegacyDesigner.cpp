@@ -66,16 +66,15 @@ QWidget* LegacyDesigner::createPreview( const QDesignerFormWindowInterface* fw, 
 		return widget;
 	}
 	
-	QStyle* pstyle = QStyleFactory::create( style );
+	widget = fakeContainer( widget );
+	widget->setParent( fw->window(), previewWindowFlags( widget ) );
 	
+	QStyle* pstyle = QStyleFactory::create( style );
 	if ( pstyle )
 	{
 		widget->setStyle( pstyle );
 		widget->setPalette( pstyle->standardPalette() );
 	}
-	
-	widget = fakeContainer( widget );
-	widget->setParent( fw->window(), previewWindowFlags( widget ) );
 	
 	return widget;
 }
