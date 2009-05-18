@@ -47,6 +47,8 @@
 #include "qdesigner_integration_p.h"
 #if QT_VERSION >= 0x040500
 #include <previewmanager_p.h>
+#else
+#include "LegacyDesigner.h"
 #endif
 
 QtDesignerManager::QtDesignerManager( QObject* parent )
@@ -200,6 +202,8 @@ QWidget* QtDesignerManager::previewWidget( QDesignerFormWindowInterface* form, c
 	{
 #if QT_VERSION >= 0x040500
 		widget = mPreviewer->showPreview( form, style, &error );
+#else
+		widget = LegacyDesigner::showPreview( form, style, &error );
 #endif
 		
 		if ( !widget )

@@ -28,7 +28,6 @@ namespace qdesigner_internal {
 };
 #endif
 
-class QDesignerFormBuilder;
 class QDesignerFormEditorInterface;
 class QDesignerFormWindowInterface;
 class QDesignerWidgetBox;
