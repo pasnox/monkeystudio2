@@ -7,6 +7,7 @@
 #include <QStyle>
 #include <QStyleFactory>
 
+#include <QCoreApplication>
 #include <QDockWidget>
 #include <QMainWindow>
 #include <QBuffer>
@@ -51,16 +52,17 @@ QWidget* LegacyDesigner::fakeContainer( QWidget* w )
 
 QWidget* LegacyDesigner::createPreview( const QDesignerFormWindowInterface* fw, const QString& style, QString* errorMessage )
 {
-	Q_UNUSED( errorMessage );
 	QByteArray array = fw->contents().toUtf8();
 	QBuffer buffer;
 	buffer.setData( array );
 	
 	QFormBuilder builder;
+	builder.setWorkingDirectory( fw->absoluteDir() );
 	QWidget* widget = builder.load( &buffer );
 	
 	if ( !widget )
 	{
+		*errorMessage = QCoreApplication::translate( "LegacyDesigner", "The preview failed to build." );
 		return widget;
 	}
 	
