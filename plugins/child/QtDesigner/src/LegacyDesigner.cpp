@@ -1,5 +1,7 @@
 #include "LegacyDesigner.h"
 
+#include "pluginmanager_p.h"
+
 #include <QFormBuilder>
 #include <QDesignerFormEditorInterface>
 #include <QDesignerFormWindowManagerInterface>
@@ -11,6 +13,30 @@
 #include <QDockWidget>
 #include <QMainWindow>
 #include <QBuffer>
+
+QStringList LegacyDesigner::defaultPluginPaths()
+{
+    QStringList result;
+
+    const QStringList path_list = QCoreApplication::libraryPaths();
+
+    const QString designer = QLatin1String("designer");
+    foreach (const QString &path, path_list) {
+        QString libPath = path;
+        libPath += QDir::separator();
+        libPath += designer;
+        result.append(libPath);
+    }
+
+    QString homeLibPath = QDir::homePath();
+    homeLibPath += QDir::separator();
+    homeLibPath += QLatin1String(".designer");
+    homeLibPath += QDir::separator();
+    homeLibPath += QLatin1String("plugins");
+
+    result.append(homeLibPath);
+    return result;
+}
 
 Qt::WindowFlags LegacyDesigner::previewWindowFlags( const QWidget* widget )
 {
@@ -57,6 +83,7 @@ QWidget* LegacyDesigner::createPreview( const QDesignerFormWindowInterface* fw, 
 	buffer.setData( array );
 	
 	QFormBuilder builder;
+	builder.setPluginPath( defaultPluginPaths() );
 	builder.setWorkingDirectory( fw->absoluteDir() );
 	QWidget* widget = builder.load( &buffer );
 	

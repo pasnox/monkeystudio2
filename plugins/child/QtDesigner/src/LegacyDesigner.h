@@ -5,6 +5,7 @@
 
 namespace LegacyDesigner
 {
+	QStringList defaultPluginPaths();
 	Qt::WindowFlags previewWindowFlags( const QWidget* widget );
 	QWidget* fakeContainer( QWidget* w );
 	QWidget* createPreview( const QDesignerFormWindowInterface* fw, const QString& style, QString* errorMessage );
