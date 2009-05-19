@@ -16,6 +16,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 #include "QtDesignerManager.h"
+#include "MkSDesignerIntegration.h"
 #include "QDesignerWidgetBox.h"
 #include "QDesignerActionEditor.h"
 #include "QDesignerPropertyEditor.h"
@@ -44,7 +45,6 @@
 #include <QExtensionManager>
 
 #include "pluginmanager_p.h"
-#include "qdesigner_integration_p.h"
 #if QT_VERSION >= 0x040500
 #include <previewmanager_p.h>
 #else
@@ -141,8 +141,8 @@ QtDesignerManager::QtDesignerManager( QObject* parent )
 	MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( pResourcesEditor, pResourcesEditor->windowTitle(), pResourcesEditor->windowIcon() );
 	
 	// perform integration
-	new qdesigner_internal::QDesignerIntegration( mCore, MonkeyCore::workspace() );
-	mCore->setTopLevel( MonkeyCore::workspace() );
+	mIntegration = new MkSDesignerIntegration( mCore, MonkeyCore::mainWindow() );
+	mCore->setTopLevel( MonkeyCore::mainWindow() );
 	
 #if QT_VERSION >= 0x040500
 	// create previewver

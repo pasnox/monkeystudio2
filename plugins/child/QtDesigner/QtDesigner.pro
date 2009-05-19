@@ -16,7 +16,8 @@ HEADERS	= src/QtDesigner.h \
 	src/QDesignerWidgetBox.h \
 	src/QDesignerResourcesEditor.h \
 	src/QtDesignerManager.h \
-	src/LegacyDesigner.h
+	src/LegacyDesigner.h \
+	src/MkSDesignerIntegration.h
 
 SOURCES	= src/QtDesigner.cpp \
 	src/QtDesignerChild.cpp \
@@ -27,6 +28,7 @@ SOURCES	= src/QtDesigner.cpp \
 	src/QDesignerWidgetBox.cpp \
 	src/QDesignerResourcesEditor.cpp \
 	src/QtDesignerManager.cpp \
-	src/LegacyDesigner.cpp
+	src/LegacyDesigner.cpp \
+	src/MkSDesignerIntegration.cpp
 
 include( src/3rdparty/qtcreator/designerintegrationv2/designerintegration.pri )

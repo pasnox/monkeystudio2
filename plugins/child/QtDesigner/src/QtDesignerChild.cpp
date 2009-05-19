@@ -92,15 +92,19 @@ void QtDesignerChild::formSelectionChanged()
 
 void QtDesignerChild::formGeometryChanged()
 {
-	// update property
-	QDesignerPropertySheetExtension* sheet = qt_extension<QDesignerPropertySheetExtension*>( mDesignerManager->core()->extensionManager(), mHostWidget->formWindow() );
-
-	mDesignerManager->core()->propertyEditor()->setPropertyValue( "geometry", sheet->property( sheet->indexOf( "geometry" ) ) );
-
 	// set modified state
 	bool loading = property( "loadingFile" ).toBool();
 	bool modified = !loading;
 	
+	// update property
+	QDesignerPropertySheetExtension* sheet = qt_extension<QDesignerPropertySheetExtension*>( mDesignerManager->core()->extensionManager(), mHostWidget->formWindow() );
+	QRect geo = sheet->property( sheet->indexOf( "geometry" ) ).toRect();
+	geo.moveTopLeft( QPoint( 0, 0 ) );
+	
+	// update property
+	mDesignerManager->core()->propertyEditor()->setPropertyValue( "geometry", geo, modified );
+	
+	// update state
 	mHostWidget->formWindow()->setDirty( modified );
 	setWindowModified( modified );
 	setProperty( "loadingFile", false );
