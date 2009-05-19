@@ -16,26 +16,26 @@
 
 QStringList LegacyDesigner::defaultPluginPaths()
 {
-    QStringList result;
+	QStringList result;
 
-    const QStringList path_list = QCoreApplication::libraryPaths();
+	const QStringList path_list = QCoreApplication::libraryPaths();
 
-    const QString designer = QLatin1String("designer");
-    foreach (const QString &path, path_list) {
-        QString libPath = path;
-        libPath += QDir::separator();
-        libPath += designer;
-        result.append(libPath);
-    }
+	const QString designer = QLatin1String("designer");
+	foreach (const QString &path, path_list) {
+		QString libPath = path;
+		libPath += QDir::separator();
+		libPath += designer;
+		result.append(libPath);
+	}
 
-    QString homeLibPath = QDir::homePath();
-    homeLibPath += QDir::separator();
-    homeLibPath += QLatin1String(".designer");
-    homeLibPath += QDir::separator();
-    homeLibPath += QLatin1String("plugins");
+	QString homeLibPath = QDir::homePath();
+	homeLibPath += QDir::separator();
+	homeLibPath += QLatin1String(".designer");
+	homeLibPath += QDir::separator();
+	homeLibPath += QLatin1String("plugins");
 
-    result.append(homeLibPath);
-    return result;
+	result.append(homeLibPath);
+	return result;
 }
 
 Qt::WindowFlags LegacyDesigner::previewWindowFlags( const QWidget* widget )
