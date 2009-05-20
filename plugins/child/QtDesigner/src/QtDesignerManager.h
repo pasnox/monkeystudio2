@@ -79,6 +79,9 @@ protected:
 	QDesignerObjectInspector* pObjectInspector;
 	QDesignerSignalSlotEditor* pSignalSlotEditor;
 	QDesignerResourcesEditor* pResourcesEditor;
+	
+	void setToolBarsIconSize( const QSize& size );
+	void updateMacAttributes();
 
 protected slots:
 	void editWidgets();

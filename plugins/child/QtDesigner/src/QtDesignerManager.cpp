@@ -148,6 +148,9 @@ QtDesignerManager::QtDesignerManager( QObject* parent )
 	// create previewver
 	mPreviewer = new qdesigner_internal::PreviewManager( qdesigner_internal::PreviewManager::SingleFormNonModalPreview, this );
 #endif
+
+	setToolBarsIconSize( QSize( 16, 16 ) );
+	updateMacAttributes();
 	
 	// connections
 	connect( aEditWidgets, SIGNAL( triggered() ), this, SLOT( editWidgets() ) );
@@ -233,6 +236,35 @@ QPixmap QtDesignerManager::previewPixmap( QDesignerFormWindowInterface* form, co
 	}
 	
 	return pixmap;
+}
+
+void QtDesignerManager::setToolBarsIconSize( const QSize& size )
+{
+	QList<QWidget*> widgets;
+	widgets << pWidgetBox << pActionEditor << pPropertyEditor << pObjectInspector << pSignalSlotEditor << pResourcesEditor;
+	
+	foreach ( QWidget* widget, widgets )
+	{
+		foreach ( QToolBar* tb, widget->findChildren<QToolBar*>() )
+		{
+			tb->setIconSize( size );
+		}
+	}
+}
+
+void QtDesignerManager::updateMacAttributes()
+{
+	QList<QWidget*> widgets;
+	widgets << pWidgetBox << pActionEditor << pPropertyEditor << pObjectInspector << pSignalSlotEditor << pResourcesEditor;
+	
+	foreach ( QWidget* widget, widgets )
+	{
+		foreach ( QWidget* child, widget->findChildren<QWidget*>() )
+		{
+			child->setAttribute( Qt::WA_MacShowFocusRect, false );
+			child->setAttribute( Qt::WA_MacSmallSize );
+		}
+	}
 }
 
 void QtDesignerManager::editWidgets()
