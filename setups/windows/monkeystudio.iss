@@ -6,9 +6,11 @@ MKS_NAME=Monkey Studio IDE
 MKS_COPYRIGHTS=2005 - 2009 Azevedo Filipe & The Monkey Studio Team
 MKS_URL=http://monkeystudio.org
 MKS_FORUMS_URL=http://monkeystudio.org/forum
+QT_PATH=C:\Development\Qt\4.5.1
+
 [Setup]
-OutputDir=..\setups
-SourceDir=..\bin
+OutputDir=..
+SourceDir=..\..\bin
 OutputBaseFilename=setup_mks_VERSION-svnREVISION-win32.exe
 VersionInfoVersion=2.0.0.0
 VersionInfoCompany=Monkey Studio Team
@@ -37,28 +39,43 @@ AppComments=Thanks using {cm:MKS_NAME}
 AppContact={cm:MKS_FORUMS_URL}
 UninstallDisplayName={cm:MKS_NAME}
 ShowLanguageDialog=yes
+
 [_ISTool]
 UseAbsolutePaths=false
+
 [Files]
+; MkS related files
 Source: monkeystudio.exe; DestDir: {app}; Flags: confirmoverwrite promptifolder
+Source: ..\setups\windows\qt.conf; DestDir: {app}; Flags: confirmoverwrite promptifolder
 Source: ..\GPL-2; DestDir: {app}; Flags: confirmoverwrite promptifolder
 Source: ..\GPL-3; DestDir: {app}; Flags: confirmoverwrite promptifolder
 Source: ..\LGPL-3; DestDir: {app}; Flags: confirmoverwrite promptifolder
 Source: ..\dev-readme; DestDir: {app}; Flags: confirmoverwrite promptifolder
 Source: ..\readme.txt; DestDir: {app}; Flags: confirmoverwrite promptifolder
 Source: plugins\*.dll; DestDir: {app}\plugins; Flags: promptifolder recursesubdirs
-;Source: *.dll; DestDir: {app}; Flags: promptifolder
-Source: translations\monkey_*.qm; DestDir: {app}\translations; Flags: promptifolder
+Source: scripts\*.*; DestDir: {app}\scripts; Flags: promptifolder
+Source: translations\*.*; DestDir: {app}\translations; Flags: promptifolder
 Source: templates\*.*; DestDir: {app}\templates; Flags: promptifolder recursesubdirs createallsubdirs
 Source: apis\*.*; DestDir: {app}\apis; Flags: promptifolder recursesubdirs createallsubdirs
+; Qt related files
+Source: C:\Development\Qt\4.5.1\bin\*.dll; DestDir: {app}; Flags: confirmoverwrite promptifolder; Excludes: *d4.dll
+Source: C:\Development\Qt\4.5.1\doc\qch\*.qch; DestDir: {app}\qt\doc\qch; Flags: promptifolder recursesubdirs
+Source: C:\Development\Qt\4.5.1\plugins\*.dll; DestDir: {app}\qt\plugins; Flags: promptifolder recursesubdirs; Excludes: *d4.dll
+Source: C:\Development\Qt\4.5.1\translations\*.*; DestDir: {app}\qt\translations; Flags: promptifolder recursesubdirs; Excludes: *.pri README
+
 [Icons]
 Name: {group}\{cm:MKS_NAME}; Filename: {app}\monkeystudio.exe; WorkingDir: {app}; IconFilename: {app}\monkeystudio.exe; IconIndex: 0
 Name: {userdesktop}\{cm:MKS_NAME}; Filename: {app}\monkeystudio.exe; WorkingDir: {app}; IconFilename: {app}\monkeystudio.exe; IconIndex: 0
 Name: {group}\Home Page; Filename: {app}\Home Page.url; WorkingDir: {app}
 Name: {group}\Forums; Filename: {app}\Forums.url; WorkingDir: {app}
+
 [INI]
 Filename: {app}\Home Page.url; Section: InternetShortcut; Key: URL; String: {cm:MKS_URL}; Flags: createkeyifdoesntexist uninsdeleteentry uninsdeletesectionifempty; Components: 
 Filename: {app}\Forums.url; Section: InternetShortcut; Key: URL; String: {cm:MKS_FORUMS_URL}; Flags: createkeyifdoesntexist uninsdeleteentry uninsdeletesectionifempty
+
 [UninstallDelete]
-Type: files; Name: {app}\Home Page.url; Components: 
-Type: files; Name: {app}\Forums.url
+Name: {app}\Home Page.url; Type: files
+Name: {app}\Forums.url; Type: files
+Name: {app}\*.ini; Type: files
+Name: {app}\scripts-*; Type: filesandordirs
+Name: {app}; Type: dirifempty
