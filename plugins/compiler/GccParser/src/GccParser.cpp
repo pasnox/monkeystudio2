@@ -48,7 +48,11 @@ GccParser::GccParser()
 	mPluginInfos.Type = BasePlugin::iBase;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.1.0";
+#ifdef Q_CC_GNU
+	mPluginInfos.FirstStartEnabled = true;
+#else
 	mPluginInfos.FirstStartEnabled = false;
+#endif
 }
 
 /*!
