@@ -106,11 +106,11 @@ QStringList Settings::storagePaths( Settings::StoragePath type ) const
 	QString basePath;
 
 #ifdef Q_OS_WIN
-	appIsInstalled = QFile::exists( QString( "%1/datas/templates" ).arg( appPath ) );
-	basePath = QString( "%1/datas" ).arg( appPath );
+	appIsInstalled = QFile::exists( QString( "%1/templates" ).arg( appPath ) );
+	basePath = appPath;
 #elif defined Q_OS_MAC
-	appIsInstalled = QFile::exists( QString( "%1/../Resources/datas/templates" ).arg( appPath ) );
-	basePath = QString( "%1/../Resources/datas" ).arg( appPath );
+	appIsInstalled = QFile::exists( QString( "%1/../Resources/templates" ).arg( appPath ) );
+	basePath = QString( "%1/../Resources" ).arg( appPath );
 #else
 	appIsInstalled = QFile::exists( PACKAGE_PREFIX ) && QFile::exists( PACKAGE_DATAS );
 	basePath = PACKAGE_DATAS;
