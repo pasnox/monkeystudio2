@@ -144,15 +144,12 @@ pFileDialogResult MkSFileDialog::getProjectAddFiles( QWidget* parent, bool allow
 		fd.setTextCodec( pMonkeyStudio::defaultCodec() );
 		fd.mAddFiles->setModel( model );
 		fd.mAddFiles->setCurrentScope( curProject );
-		fd.mAddFiles->setOperators( operators );
-		fd.mAddFiles->setCurrentOperator( operators.first() );
 		fd.mAddFiles->setScopeChoiceEnabled( allowChooseScope );
 		
 		if ( fd.exec() == QDialog::Accepted )
 		{
 			result[ "filenames" ] = fd.selectedFiles();
 			result[ "scope" ] = QVariant::fromValue<XUPItem*>( fd.mAddFiles->currentScope() );
-			result[ "operator" ] = fd.mAddFiles->currentOperator();
 			result[ "import" ] = fd.mAddFiles->importExternalFiles();
 			result[ "importpath" ] = fd.mAddFiles->importExternalFilesPath();
 			result[ "directory" ] = fd.directory().absolutePath();
@@ -183,8 +180,6 @@ pFileDialogResult MkSFileDialog::getNewEditorFile( QWidget* parent )
 		fd.mAddFiles->setAddToProjectChoice( true );
 		fd.mAddFiles->setAddToProject( false );
 		fd.mAddFiles->setCurrentScope( curProject );
-		fd.mAddFiles->setOperators( operators );
-		fd.mAddFiles->setCurrentOperator( operators.value( 0 ) );
 	}
 	else
 	{
@@ -200,7 +195,6 @@ pFileDialogResult MkSFileDialog::getNewEditorFile( QWidget* parent )
 		{
 			result[ "addtoproject" ] = fd.mAddFiles->addToProject();
 			result[ "scope" ] = QVariant::fromValue<XUPItem*>( fd.mAddFiles->currentScope() );
-			result[ "operator" ] = fd.mAddFiles->currentOperator();
 		}
 	}
 	

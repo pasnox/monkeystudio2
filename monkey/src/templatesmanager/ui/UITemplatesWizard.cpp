@@ -93,10 +93,7 @@ UITemplatesWizard::UITemplatesWizard( QWidget* w )
 	cbProjects->setModel( mProxy );
 	cbProjects->setCurrentIndex( mProxy->mapFromSource( index ) );
 	
-	if ( project )
-	{
-		cbOperators->addItems( project->projectInfos()->operators( project->projectType() ) );
-	}
+	gbAddToProject->setEnabled( mModel && mModel->rowCount() > 0 );
 	
 	// connections
 	connect( cbLanguages, SIGNAL( currentIndexChanged( int ) ), this, SLOT( onFiltersChanged() ) );
@@ -297,7 +294,7 @@ void UITemplatesWizard::on_pbCreate_clicked()
 	XUPItem* si = t.FilesToAdd.isEmpty() ? 0 : mModel->itemFromIndex( index );
 	
 	// process templates
-	if ( !pTemplatesManager::instance()->realiseTemplate( si, cbOperators->currentText(), t, cbCodec->currentText(), v ) )
+	if ( !pTemplatesManager::instance()->realiseTemplate( si, t, cbCodec->currentText(), v ) )
 		return;
 	
 	// remember some infos

@@ -541,12 +541,13 @@ void XUPProjectManager::editProject()
 	}
 }
 
-void XUPProjectManager::addFilesToScope( XUPItem* scope, const QStringList& allFiles, const QString& op )
+void XUPProjectManager::addFilesToScope( XUPItem* scope, const QStringList& allFiles, const QString& ope )
 {
 	QStringList files = allFiles;
 	XUPProjectItem* project = scope->project();
 	XUPProjectItem* rootIncludeProject = project->rootIncludeProject();
 	const StringStringListList mVariableSuffixes = project->projectInfos()->variableSuffixes( project->projectType() );
+	QMap<QString, QString> variablesOperator; // variableName, operator
 	QMap<QString, QStringList> suffixeVariables; // suffixe, variable
 	
 	// this map allow to know if a suffixe can be handled by more than one variable
@@ -596,6 +597,12 @@ void XUPProjectManager::addFilesToScope( XUPItem* scope, const QStringList& allF
 				
 				bool foundFile = false;
 				XUPItem* usedVariable = 0;
+				QString op = ope.isEmpty() ? variablesOperator[ variableName ] : ope;
+				
+				if ( op.isEmpty() )
+				{
+					op = checkForBestAddOperator( variables );
+				}
 				
 				foreach ( XUPItem* variable, variables )
 				{
@@ -661,6 +668,48 @@ void XUPProjectManager::addFilesToScope( XUPItem* scope, const QStringList& allF
 	}
 }
 
+QString XUPProjectManager::checkForBestAddOperator( const XUPItemList& variables ) const
+{
+	bool haveSet = false;
+	bool haveAdd = false;
+	bool haveAddIfNotExists = false;
+	
+	foreach ( const XUPItem* variable, variables )
+	{
+		const QString op = variable->attribute( "operator", "=" );
+		
+		if ( op == "*=" )
+		{
+			haveAddIfNotExists = true;
+		}
+		else if ( op == "+=" )
+		{
+			haveAdd = true;
+		}
+		else if ( op == "=" )
+		{
+			haveSet = true;
+		}
+	}
+	
+	if ( haveAddIfNotExists )
+	{
+		return "*=";
+	}
+	
+	if ( haveAdd )
+	{
+		return "+=";
+	}
+	
+	if ( haveSet )
+	{
+		return "=";
+	}
+	
+	return "+=";
+}
+
 void XUPProjectManager::addFiles()
 {
 	pFileDialogResult result = MkSFileDialog::getProjectAddFiles( window() );
@@ -694,7 +743,7 @@ void XUPProjectManager::addFiles()
 		}
 		
 		// add files to scope
-		addFilesToScope( scope, files, result[ "operator" ].toString() );
+		addFilesToScope( scope, files );
 	}
 }
 

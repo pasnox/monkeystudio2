@@ -183,7 +183,7 @@ pAbstractChild* pWorkspace::newTextEditor()
 	if ( result.value( "addtoproject", false ).toBool() )
 	{
 		// add files to scope
-		MonkeyCore::projectsManager()->addFilesToScope( result[ "scope" ].value<XUPItem*>(), QStringList( fileName ), result[ "operator" ].toString() );
+		MonkeyCore::projectsManager()->addFilesToScope( result[ "scope" ].value<XUPItem*>(), QStringList( fileName ) );
 	}
 	
 	// open file

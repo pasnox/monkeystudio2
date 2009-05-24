@@ -114,22 +114,6 @@ XUPItem* XUPAddFiles::currentScope() const
 	return mModel->itemFromIndex( index );
 }
 
-void XUPAddFiles::setOperators( const QStringList& operators )
-{
-	cbOperators->clear();
-	cbOperators->addItems( operators );
-}
-
-void XUPAddFiles::setCurrentOperator( const QString& op )
-{
-	cbOperators->setCurrentIndex( cbOperators->findText( op ) );
-}
-
-QString XUPAddFiles::currentOperator() const
-{
-	return cbOperators->currentText();
-}
-
 void XUPAddFiles::setImportExternalFiles( bool import )
 {
 	gbImport->setChecked( import );
@@ -164,7 +148,6 @@ QString XUPAddFiles::importExternalFilesPath() const
 void XUPAddFiles::setScopeChoiceEnabled( bool enabled )
 {
 	gbScopes->setEnabled( enabled );
-	gbOperators->setEnabled( enabled );
 }
 
 void XUPAddFiles::setImportExternalFilesPathEnabled( bool enabled )
