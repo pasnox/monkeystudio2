@@ -112,6 +112,15 @@ QWidget* LegacyDesigner::createPreview( const QDesignerFormWindowInterface* fw, 
 	return widget;
 }
 
+QPixmap LegacyDesigner::createPreviewPixmap( const QDesignerFormWindowInterface* fw, const QString& style, QString* errorMessage )
+{
+	QWidget* widget = createPreview( fw, style, errorMessage );
+	QPixmap pixmap = QPixmap::grabWidget( widget );
+	
+	delete widget;
+	return pixmap;
+}
+
 QWidget* LegacyDesigner::showPreview( const QDesignerFormWindowInterface* fw, const QString& style, QString* errorMessage )
 {
 	enum { Spacing = 10 };
