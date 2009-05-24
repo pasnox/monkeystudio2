@@ -22,8 +22,6 @@
 #include <QActionGroup>
 #include <QWidgetAction>
 
-#include <QDebug>
-
 namespace qdesigner_internal {
 	class QDesignerIntegration;
 #if QT_VERSION >= 0x040500
@@ -43,22 +41,22 @@ class QDesignerResourcesEditor;
 class QtDesignerManager : public QObject
 {
 	Q_OBJECT
-	
+
 public:
 	QtDesignerManager( QObject* parent = 0 );
 	virtual ~QtDesignerManager();
-	
+
 	QDesignerFormEditorInterface* core();
 	inline qdesigner_internal::QDesignerIntegration* integration() const { return mIntegration; }
 	inline QAction* editWidgetsAction() const { return aEditWidgets; }
 	inline QWidgetAction* previewFormAction() const { return aPreview; }
 	inline QList<QAction*> modesActions() const { return aModes->actions(); }
-	
+
 	QDesignerFormWindowInterface* createNewForm( QWidget* parent = 0 );
 
 	void addFormWindow( QDesignerFormWindowInterface* form );
 	void setActiveFormWindow( QDesignerFormWindowInterface* form );
-	
+
 	QWidget* previewWidget( QDesignerFormWindowInterface* form, const QString& style = QString::null );
 	QPixmap previewPixmap( QDesignerFormWindowInterface* form, const QString& style = QString::null );
 
@@ -68,18 +66,18 @@ protected:
 #if QT_VERSION >= 0x040500
 	qdesigner_internal::PreviewManager* mPreviewer;
 #endif
-	
+
 	QActionGroup* aModes;
 	QWidgetAction* aPreview;
 	QAction* aEditWidgets;
-	
+
 	QDesignerWidgetBox* pWidgetBox;
 	QDesignerActionEditor* pActionEditor;
 	QDesignerPropertyEditor* pPropertyEditor;
 	QDesignerObjectInspector* pObjectInspector;
 	QDesignerSignalSlotEditor* pSignalSlotEditor;
 	QDesignerResourcesEditor* pResourcesEditor;
-	
+
 	void setToolBarsIconSize( const QSize& size );
 	void updateMacAttributes();
 
