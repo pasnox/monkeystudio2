@@ -180,7 +180,8 @@ pFileDialogResult MkSFileDialog::getNewEditorFile( QWidget* parent )
 	if ( curProject )
 	{
 		fd.mAddFiles->setModel( model );
-	fd.mAddFiles->setAddToProjectChoice( true );
+		fd.mAddFiles->setAddToProjectChoice( true );
+		fd.mAddFiles->setAddToProject( false );
 		fd.mAddFiles->setCurrentScope( curProject );
 		fd.mAddFiles->setOperators( operators );
 		fd.mAddFiles->setCurrentOperator( operators.value( 0 ) );

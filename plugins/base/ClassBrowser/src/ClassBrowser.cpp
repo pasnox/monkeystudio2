@@ -53,7 +53,7 @@ bool ClassBrowser::setEnabled( bool b )
 	if ( b && !isEnabled() )
 	{
 		// create dock
-		mDock = new pDockClassBrowser();
+		mDock = new pDockClassBrowser( this );
 		// add dock to dock toolbar entry
 		MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( mDock, infos().Caption, QIcon( pixmap() ) );
 		// create menu action for the dock
@@ -160,7 +160,6 @@ void ClassBrowser::currentFileChanged( pAbstractChild* child, const QString& fil
 {
 	Q_UNUSED( child );
 	
-	qWarning() << fileName;
 	mDock->browser()->setCurrentFileName( fileName );
 }
 

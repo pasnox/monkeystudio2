@@ -12,7 +12,7 @@ include( config.pri )
 	message( "MkS datas will be installed to : $$PACKAGE_DATAS" )
 	message( "You can change this by giving qmake parameters variables: prefix, plugins, datas" )
 
-	# templates
+	# datas
 	monkey_datas.path	= $${PACKAGE_DATAS}
 	monkey_datas.files	= datas/*
 	monkey_datas.CONFIG += no_check_exist

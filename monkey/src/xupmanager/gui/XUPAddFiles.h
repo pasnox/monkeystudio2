@@ -20,6 +20,8 @@ public:
 	
 	void setAddToProjectChoice( bool choice );
 	bool addToProjectChoice() const;
+	
+	void setAddToProject( bool add );
 	bool addToProject() const;
 	
 	void setCurrentScope( XUPItem* item );

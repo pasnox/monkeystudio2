@@ -497,12 +497,17 @@ void pEditor::selectNone()
 
 void pEditor::invokeGoToLine()
 {
-	bool b;
-	int l, i;
-	getCursorPosition( &l, &i );
-	int j = QInputDialog::getInteger( this, tr( "Go To Line..." ), tr( "Enter the line you want to go:" ), l +1, 1, lines(), 1, &b );
-	if ( b )
-		setCursorPosition( j -1, 0 );
+	bool ok;
+	int line, column, gotoLine;
+	
+	getCursorPosition( &line, &column );
+	gotoLine = QInputDialog::getInteger( this, tr( "Go To Line..." ), tr( "Enter the line you want to go:" ), line +1, 1, lines(), 1, &ok );
+	
+	if ( ok )
+	{
+		setCursorPosition( gotoLine -1, 0 );
+		setFocus();
+	}
 }
 
 void pEditor::convertTabs()

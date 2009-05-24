@@ -47,12 +47,12 @@ CONFIG( debug, debug|release ) {
 		unix:	LIBS	*= -lqscintilla2 -lfresh_debug -lctags_debug -lqCtagsSense_debug
 		else:	LIBS	*= -lqscintilla2 -lfreshd -lctagsd -lqCtagsSensed
 	}
-	win32-g++:LIBS	*= -Wl,--out-implib,$${PACKAGE_BUILD_PATH}/lib$${TARGET}.a
+	win32-*g++:LIBS	*= -Wl,--out-implib,$${PACKAGE_BUILD_PATH}/lib$${TARGET}.a
 	win32-msvc*:LIBS	*= /IMPLIB:$${PACKAGE_BUILD_PATH}/$${TARGET}.lib -lshell32
 } else {
 	#Release
 	LIBS	*= -lqscintilla2 -lctags -lfresh -lqCtagsSense
-	win32-g++:LIBS	*= -Wl,--out-implib,$${PACKAGE_BUILD_PATH}/lib$${TARGET}.a
+	win32-*g++:LIBS	*= -Wl,--out-implib,$${PACKAGE_BUILD_PATH}/lib$${TARGET}.a
 	win32-msvc*:LIBS	*= /IMPLIB:$${PACKAGE_BUILD_PATH}/$${TARGET}.lib -lshell32
 }
 

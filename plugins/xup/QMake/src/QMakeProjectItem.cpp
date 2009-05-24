@@ -806,6 +806,16 @@ void QMakeProjectItem::installCommands()
 			cmd.setWorkingDirectory( destdir != "$cpp$" ? destdir : destdir +"/release" );
 			addCommand( cmd, "mBuilder/mExecute" );
 		}
+		
+		if ( !( haveDebug || haveDebugRelease ) && !( haveRelease || haveDebugRelease ) )
+		{
+			cmd = cmdBuild;
+			cmd.setText( tr( "Execute" ) );
+			cmd.setCommand( target );
+			cmd.setArguments( QString() );
+			cmd.setWorkingDirectory( destdir != "$cpp$" ? destdir : destdir );
+			addCommand( cmd, "mBuilder/mExecute" );
+		}
 	}
 	
 	// install defaults commands

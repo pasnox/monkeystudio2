@@ -27,6 +27,7 @@
 
 #include <pDockWidget.h>
 
+class ClassBrowser;
 class qCtagsSenseBrowser;
 
 class pDockClassBrowser : public pDockWidget
@@ -34,12 +35,13 @@ class pDockClassBrowser : public pDockWidget
 	Q_OBJECT
 
 public:
-	pDockClassBrowser( QWidget* = 0 );
+	pDockClassBrowser( ClassBrowser* plugin, QWidget* = 0 );
 	~pDockClassBrowser();
 	
 	qCtagsSenseBrowser* browser() const;
 
 protected:
+	ClassBrowser* mPlugin;
 	qCtagsSenseBrowser* mBrowser;
 
 protected slots:

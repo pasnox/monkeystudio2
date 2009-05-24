@@ -84,6 +84,12 @@ bool XUPAddFiles::addToProjectChoice() const
 	return gbScopes->isCheckable();
 }
 
+void XUPAddFiles::setAddToProject( bool add )
+{
+	setAddToProjectChoice( true );
+	gbScopes->setChecked( add );
+}
+
 bool XUPAddFiles::addToProject() const
 {
 	if ( gbScopes->isCheckable() )
