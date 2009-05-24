@@ -227,6 +227,8 @@ QPixmap QtDesignerManager::previewPixmap( QDesignerFormWindowInterface* form, co
 	{
 #if QT_VERSION >= 0x040500
 		pixmap = mPreviewer->createPreviewPixmap( form, style, &error );
+#else
+		pixmap = LegacyDesigner::createPreviewPixmap( form, style, &error );
 #endif
 		
 		if ( pixmap.isNull() )
