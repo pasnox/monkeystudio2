@@ -54,12 +54,8 @@ bool ClassBrowser::setEnabled( bool b )
 	{
 		// create dock
 		mDock = new pDockClassBrowser( this );
-		// add dock to dock toolbar entry
-		MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( mDock, infos().Caption, QIcon( pixmap() ) );
 		// create menu action for the dock
 		pActionsManager::setDefaultShortcut( mDock->toggleViewAction(), QKeySequence( "F8" ) );
-		// multitoolbar
-		MonkeyCore::multiToolBar()->toolBar( "Coding" )->addAction( mDock->browser()->membersAction() );
 		// connections
 		connect( MonkeyCore::fileManager(), SIGNAL( fileOpened( const QString& ) ), this, SLOT( fileOpened( const QString& ) ) );
 		connect( MonkeyCore::fileManager(), SIGNAL( currentFileChanged( pAbstractChild*, const QString& ) ), this, SLOT( currentFileChanged( pAbstractChild*, const QString& ) ) );
@@ -69,8 +65,11 @@ bool ClassBrowser::setEnabled( bool b )
 		connect( mDock->browser(), SIGNAL( fileNameActivated( const QString& ) ), this, SLOT( fileNameActivated( const QString& ) ) );
 		connect( this, SIGNAL( systemPathsChanged( const QStringList& , const QStringList& ) ), mDock->browser(), SLOT( setSystemPaths( const QStringList& , const QStringList& ) ) );
 		connect( this, SIGNAL( filteredSuffixesChanged( const QStringList& ) ), mDock->browser(), SLOT( setFilteredSuffixes( const QStringList& ) ) );
+		connect( this, SIGNAL( integrationModeChanged( ClassBrowser::IntegrationMode ) ), this, SLOT( setIntegrationMode( ClassBrowser::IntegrationMode ) ) );
 		// set plugin enabled
 		stateAction()->setChecked( true );
+		// update integration mode
+		emit integrationModeChanged( integrationMode() );
 		// update filtered suffixes
 		emit filteredSuffixesChanged( filteredSuffixes() );
 		// index system paths
@@ -87,6 +86,7 @@ bool ClassBrowser::setEnabled( bool b )
 		disconnect( mDock->browser(), SIGNAL( fileNameActivated( const QString& ) ), this, SLOT( fileNameActivated( const QString& ) ) );
 		disconnect( this, SIGNAL( systemPathsChanged( const QStringList& , const QStringList& ) ), mDock->browser(), SLOT( setSystemPaths( const QStringList& , const QStringList& ) ) );
 		disconnect( this, SIGNAL( filteredSuffixesChanged( const QStringList& ) ), mDock->browser(), SLOT( setFilteredSuffixes( const QStringList& ) ) );
+		disconnect( this, SIGNAL( integrationModeChanged( ClassBrowser::IntegrationMode ) ), this, SLOT( setIntegrationMode( ClassBrowser::IntegrationMode ) ) );
 		// it will remove itself from dock toolbar when deleted
 		delete mDock;
 		// set plugin disabled
@@ -110,6 +110,41 @@ bool ClassBrowser::haveSettingsWidget() const
 QWidget* ClassBrowser::settingsWidget()
 {
 	return new ClassBrowserSettings( this, qApp->activeWindow() );
+}
+
+ClassBrowser::IntegrationMode ClassBrowser::integrationMode() const
+{
+	return (ClassBrowser::IntegrationMode)settingsValue( "IntegrationMode", ClassBrowser::imBoth ).toInt();
+}
+
+void ClassBrowser::setIntegrationMode( ClassBrowser::IntegrationMode mode )
+{
+	if ( mDock )
+	{
+		switch ( mode )
+		{
+			case ClassBrowser::imDock:
+				MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( mDock, infos().Caption, QIcon( pixmap() ) );
+				MonkeyCore::multiToolBar()->toolBar( "Coding" )->removeAction( mDock->browser()->membersAction() );
+				break;
+			case ClassBrowser::imCombo:
+				MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->removeDock( mDock );
+				mDock->hide();
+				MonkeyCore::multiToolBar()->toolBar( "Coding" )->addAction( mDock->browser()->membersAction() );
+				break;
+			case ClassBrowser::imBoth:
+				MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( mDock, infos().Caption, QIcon( pixmap() ) );
+				MonkeyCore::multiToolBar()->toolBar( "Coding" )->addAction( mDock->browser()->membersAction() );
+				break;
+		}
+	}
+	
+	if ( integrationMode() != mode )
+	{
+		setSettingsValue( "IntegrationMode", mode );
+		
+		emit integrationModeChanged( mode );
+	}
 }
 
 QStringList ClassBrowser::systemPaths() const

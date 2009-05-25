@@ -24,7 +24,9 @@
 #include "ClassBrowserSettings.h"
 #include "ClassBrowser.h"
 
-#include <QVBoxLayout>
+#include <QBoxLayout>
+#include <QLabel>
+#include <QComboBox>
 #include <QDialogButtonBox>
 #include <QPushButton>
 
@@ -39,6 +41,17 @@ ClassBrowserSettings::ClassBrowserSettings( ClassBrowser* plugin, QWidget* paren
 	// retain plugin
 	mPlugin = plugin;
 	
+	// integration
+	QLabel* label = new QLabel( tr( "Integration Mode:" ) );
+	cbIntegrationMode = new QComboBox;
+	QHBoxLayout* hbox = new QHBoxLayout;
+	cbIntegrationMode->addItem( tr( "Dock" ), ClassBrowser::imDock );
+	cbIntegrationMode->addItem( tr( "Combo" ), ClassBrowser::imCombo );
+	cbIntegrationMode->addItem( tr( "Both" ), ClassBrowser::imBoth );
+	cbIntegrationMode->setCurrentIndex( cbIntegrationMode->findData( plugin->integrationMode() ) );
+	hbox->addWidget( label );
+	hbox->addWidget( cbIntegrationMode );
+	
 	// list editor
 	mPathEditor = new pPathListEditor( this, tr( "System include paths" ) );
 	mPathEditor->setValues( plugin->systemPaths() );
@@ -52,6 +65,7 @@ ClassBrowserSettings::ClassBrowserSettings( ClassBrowser* plugin, QWidget* paren
 	
 	// global layout
 	QVBoxLayout* vbox = new QVBoxLayout( this );
+	vbox->addLayout( hbox );
 	vbox->addWidget( mPathEditor );
 	vbox->addWidget( mStringEditor );
 	vbox->addWidget( dbbApply );
@@ -65,6 +79,7 @@ ClassBrowserSettings::ClassBrowserSettings( ClassBrowser* plugin, QWidget* paren
 */
 void ClassBrowserSettings::applySettings()
 {
+	mPlugin->setIntegrationMode( (ClassBrowser::IntegrationMode)cbIntegrationMode->itemData( cbIntegrationMode->currentIndex() ).toInt() );
 	mPlugin->setSystemPaths( mPathEditor->values() );
 	mPlugin->setFilteredSuffixes( mStringEditor->values() );
 }
