@@ -624,19 +624,24 @@ void pWorkspace::fileWatcher_ecmNothing( const QString& filename )
 	MonkeyCore::statusBar()->appendMessage( tr( "File externally modified: '%1'" ).arg( QFileInfo( filename ).fileName() ), 2000 );
 }
 
-void pWorkspace::fileWatcher_ecmReload( const QString& filename, bool force )
+void pWorkspace::fileWatcher_ecmReload( const QString& fileName, bool force )
 {
 	// try reload
-	pAbstractChild* ac = MonkeyCore::fileManager()->childForFile (filename);
-	if ( ac && ( !ac->isModified(filename) || force ) )
+	pAbstractChild* ac = MonkeyCore::fileManager()->childForFile( fileName );
+	
+	if ( ac && ( !ac->isModified( fileName ) || force ) )
 	{
-		ac->closeFile(filename);
-		ac->openFile(filename, ac->textCodec());
-		MonkeyCore::statusBar()->appendMessage( tr( "Reloaded externally modified file: '%1'" ).arg( QFileInfo( filename ).fileName() ), 2000 );
-		return;;
+		const QPoint pos = ac->cursorPosition();
+		
+		ac->closeFile( fileName );
+		ac->openFile( fileName, ac->textCodec() );
+		ac->goTo( fileName, pos, true );
+		
+		return;
 	}
+	
 	// ask user
-	fileWatcher_ecmAlert( filename );
+	fileWatcher_ecmAlert( fileName );
 }
 
 void pWorkspace::fileWatcher_ecmAlert( const QString& filename )
