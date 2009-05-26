@@ -102,6 +102,7 @@ pWorkspace::pWorkspace( QMainWindow* parent )
 	connect( mFileWatcher, SIGNAL( fileChanged( const QString& ) ), this, SLOT( fileWatcher_fileChanged( const QString& ) ) );
 	connect( mFileWatcher, SIGNAL( fileChanged( const QString& ) ), this, SIGNAL( fileChanged( const QString& ) ) );
 	connect( mContentChangedTimer, SIGNAL( timeout() ), this, SLOT( contentChangedTimer_timeout() ) );
+	connect( MonkeyCore::multiToolBar(), SIGNAL( notifyChanges() ), this, SLOT( multitoolbar_notifyChanges() ) );
 	
 	QAction* mFocusToEditor = new QAction( this );
 	mFocusToEditor->setIcon( QIcon( ":/edit/icons/edit/text.png" ) );
@@ -124,6 +125,17 @@ void pWorkspace::loadSettings()
 	tabBar()->setCurrentTabColor( currentTabTextColor() );
 	*/
 	setDocMode( pMonkeyStudio::docMode() );
+	
+	pMultiToolBar* mtb = MonkeyCore::multiToolBar();
+	
+	foreach ( const QString& context, mtb->contexts() )
+	{
+		QToolBar* tb = mtb->toolBar( context );
+		
+		initMultiToolBar( tb );
+	}
+	
+	multitoolbar_notifyChanges();
 }
 
 pAbstractChild* pWorkspace::currentChild() const
@@ -375,6 +387,7 @@ void pWorkspace::internal_currentChanged( int i )
 		mtb->setCurrentContext( DEFAULT_CONTEXT );
 	}
 	
+	multitoolbar_notifyChanges();
 
 	// update file menu
 	MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" )->setEnabled( modified );
@@ -694,6 +707,15 @@ void pWorkspace::fileWatcher_fileChanged( const QString& filename )
 	}
 }
 
+void pWorkspace::multitoolbar_notifyChanges()
+{
+	pMultiToolBar* mtb = MonkeyCore::multiToolBar();
+	QToolBar* tb = mtb->currentToolBar();
+	bool show = tb && !tb->actions().isEmpty();
+	
+	mtb->setVisible( show );
+}
+
 // file menu
 void pWorkspace::fileNew_triggered()
 {
@@ -957,5 +979,12 @@ void pWorkspace::closeDocument( QWidget* document )
 
 void pWorkspace::initMultiToolBar( QToolBar* tb )
 {
-	tb->addAction( MonkeyCore::workspace()->listWidget()->filesComboAction() );
+	if ( showQuickFileAccess() )
+	{
+		tb->insertAction( tb->actions().value( 0 ), MonkeyCore::workspace()->listWidget()->filesComboAction() );
+	}
+	else
+	{
+		tb->removeAction( MonkeyCore::workspace()->listWidget()->filesComboAction() );
+	}
 }

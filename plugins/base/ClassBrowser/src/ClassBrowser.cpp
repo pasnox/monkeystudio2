@@ -66,6 +66,8 @@ bool ClassBrowser::setEnabled( bool b )
 		connect( this, SIGNAL( systemPathsChanged( const QStringList& , const QStringList& ) ), mDock->browser(), SLOT( setSystemPaths( const QStringList& , const QStringList& ) ) );
 		connect( this, SIGNAL( filteredSuffixesChanged( const QStringList& ) ), mDock->browser(), SLOT( setFilteredSuffixes( const QStringList& ) ) );
 		connect( this, SIGNAL( integrationModeChanged( ClassBrowser::IntegrationMode ) ), this, SLOT( setIntegrationMode( ClassBrowser::IntegrationMode ) ) );
+		connect( this, SIGNAL( integrationModeChanged( ClassBrowser::IntegrationMode ) ), MonkeyCore::multiToolBar(), SIGNAL( notifyChanges() ) );
+		
 		// set plugin enabled
 		stateAction()->setChecked( true );
 		// update integration mode

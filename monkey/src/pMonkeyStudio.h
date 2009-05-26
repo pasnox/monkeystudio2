@@ -117,6 +117,8 @@ namespace pMonkeyStudio
 	Q_MONKEY_EXPORT bool saveSessionOnClose();
 	Q_MONKEY_EXPORT void setRestoreSessionOnStartup( bool restore );
 	Q_MONKEY_EXPORT bool restoreSessionOnStartup();
+	Q_MONKEY_EXPORT void setShowQuickFileAccess( bool show );
+	Q_MONKEY_EXPORT bool showQuickFileAccess();
 	
 	/******	EDITOR ******/
 	// General

@@ -265,6 +265,9 @@
           </item>
           <item row="0" column="0" colspan="2">
            <widget class="QCheckBox" name="cbSaveProjects">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Save all projects on custom action ( Build, Debugger, Interpreter )</string>
             </property>
@@ -324,29 +327,41 @@
           <property name="spacing">
            <number>3</number>
           </property>
-          <item row="0" column="0" colspan="3">
+          <item row="1" column="0" colspan="3">
            <widget class="QCheckBox" name="cbTabsHaveCloseButton">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Tabs Have Close Button</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0" colspan="3">
+          <item row="2" column="0" colspan="3">
            <widget class="QCheckBox" name="cbTabsHaveShortcut">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Tabs Have Shortcut</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="0" colspan="3">
+          <item row="3" column="0" colspan="3">
            <widget class="QCheckBox" name="cbTabsElided">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Tabs Are Elided</string>
             </property>
            </widget>
           </item>
-          <item row="3" column="1" colspan="2">
+          <item row="4" column="1" colspan="2">
            <widget class="pColorButton" name="tbTabsTextColor">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -355,22 +370,31 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
+          <item row="4" column="0">
            <widget class="QLabel" name="lTabsTextColor">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Tabs Text Color :</string>
             </property>
            </widget>
           </item>
-          <item row="4" column="0">
+          <item row="5" column="0">
            <widget class="QLabel" name="lCurrentTabTextColor">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Current Tab Text Color :</string>
             </property>
            </widget>
           </item>
-          <item row="4" column="1" colspan="2">
+          <item row="5" column="1" colspan="2">
            <widget class="pColorButton" name="tbCurrentTabTextColor">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -379,20 +403,30 @@
             </property>
            </widget>
           </item>
-          <item row="5" column="0">
+          <item row="6" column="0">
            <widget class="QLabel" name="lTabMode">
             <property name="text">
              <string>Tab Mode :</string>
             </property>
            </widget>
           </item>
-          <item row="5" column="1" colspan="2">
+          <item row="6" column="1" colspan="2">
            <widget class="QComboBox" name="cbTabModes">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="3">
+           <widget class="QCheckBox" name="cbQuickFileAccess">
+            <property name="toolTip">
+             <string>Add a combobox in the context toolbar that allow quick file change</string>
+            </property>
+            <property name="text">
+             <string>Show Quick File Acess</string>
             </property>
            </widget>
           </item>
