@@ -116,7 +116,7 @@ QWidget* ClassBrowser::settingsWidget()
 
 ClassBrowser::IntegrationMode ClassBrowser::integrationMode() const
 {
-	return (ClassBrowser::IntegrationMode)settingsValue( "IntegrationMode", ClassBrowser::imBoth ).toInt();
+	return (ClassBrowser::IntegrationMode)settingsValue( "IntegrationMode", ClassBrowser::imDock ).toInt();
 }
 
 void ClassBrowser::setIntegrationMode( ClassBrowser::IntegrationMode mode )

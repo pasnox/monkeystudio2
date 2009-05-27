@@ -1134,7 +1134,7 @@ void pMonkeyStudio::setShowQuickFileAccess( bool show )
 	\details Return true if a quick file access combobox is visible in the child context toolbar
 */
 bool pMonkeyStudio::showQuickFileAccess()
-{ return MonkeyCore::settings()->value( settingsPath() +"/ShowQuickFileAccess", true ).toBool(); }
+{ return MonkeyCore::settings()->value( settingsPath() +"/ShowQuickFileAccess", false ).toBool(); }
 
 /*!
 	\details Set if auto syntax check is performed
