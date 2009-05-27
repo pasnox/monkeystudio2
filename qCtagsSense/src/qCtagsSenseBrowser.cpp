@@ -396,13 +396,16 @@ void qCtagsSenseBrowser::mSearchModel_ready()
 		tvSearchResult->scrollTo( index, QAbstractItemView::PositionAtTop );
 	}
 	
-	if ( mSearchModel->rowCount() > 0 )
+	const int countResult = mSearchModel->rowCount();
+	const int countSearchLetters = leSearch->text().length();
+	
+	if ( countSearchLetters == 0 )
 	{
-		aSearchResults->setChecked( true );
+		aBrowser->setChecked( true );
 	}
 	else
 	{
-		aBrowser->setChecked( true );
+		aSearchResults->setChecked( true );
 	}
 }
 

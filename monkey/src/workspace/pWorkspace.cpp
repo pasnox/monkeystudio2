@@ -247,9 +247,6 @@ pAbstractChild* pWorkspace::openFile( const QString& s, const QString& codec )
 			}
 		}
 	}
-	
-	// track file
-	mFileWatcher->addPath( s );
 
 	// try opening file with child plugins
 	pAbstractChild* c = MonkeyCore::pluginsManager()->openChildFile( s ); // TODO: repalce by a childForFileName member witch will return a child that will open file
@@ -289,6 +286,9 @@ pAbstractChild* pWorkspace::openFile( const QString& s, const QString& codec )
 		c->showFile( s );
 	}
 	
+	// track file
+	mFileWatcher->addPath( s );
+	
 	// temporary hack
 	internal_currentChanged( indexOf( c ) );
 
@@ -319,7 +319,17 @@ void pWorkspace::closeFile( const QString& s )
 void pWorkspace::goToLine( const QString& s, const QPoint& p, bool b, const QString& codec )
 {
 	if ( b )
-		openFile( s, codec );
+	{
+		pAbstractChild* child = openFile( s, codec );
+		
+		if ( child )
+		{
+			child->goTo( s, p, b );
+		}
+		
+		return;
+	}
+	
 	foreach ( pAbstractChild* c, children() )
 	{
 		foreach ( QString f, c->files() )
@@ -969,10 +979,20 @@ bool pWorkspace::closeAllDocuments()
 void pWorkspace::closeDocument( QWidget* document )
 {
 	pAbstractChild* child = qobject_cast<pAbstractChild*>( document );
+	
 	if ( UISaveFiles::saveDocument( window(), child, false ) == UISaveFiles::bCancelClose )
+	{
 		return;
+	}
+	
 	// stop watching files
-	mFileWatcher->removePaths( child->files() );
+	const QStringList files = child->files();
+	
+	if ( !files.isEmpty() )
+	{
+		mFileWatcher->removePaths( child->files() );
+	}
+	
 	// close document
 	pExtendedWorkspace::closeDocument( child );
 }
