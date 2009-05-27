@@ -151,23 +151,27 @@ void MessageBoxDocks::appendInBox( const QString& s, const QColor& c )
 */
 void MessageBoxDocks::appendStep( const pConsoleManager::Step& s )
 {
-	// scrollbar position
-	int scrollValue = mBuildStep->lwBuildSteps->verticalScrollBar()->value();
-	bool scrollMaximum = scrollValue == mBuildStep->lwBuildSteps->verticalScrollBar()->maximum();
+	// remember current selection
+	QListWidgetItem* selItem = mBuildStep->lwBuildSteps->selectedItems().value( 0 );
+	
 	// get last type
 	pConsoleManager::StepType t = pConsoleManager::stUnknown;
 	QListWidgetItem* lastIt = mBuildStep->lwBuildSteps->item( mBuildStep->lwBuildSteps->count() -1 );
+	
 	if ( lastIt )
+	{
 		t = ( pConsoleManager::StepType )lastIt->data( Qt::UserRole +1 ).toInt();
+	}
 	
 	// create new/update item
 	QListWidgetItem* it;
-	switch( t )
+	
+	switch ( t )
 	{
 		case pConsoleManager::stCompiling:
 		case pConsoleManager::stLinking:
 			if ( s.mType == pConsoleManager::stWarning || s.mType == pConsoleManager::stError )
-			{   /* move down */
+			{   // move down
 				lastIt = mBuildStep->lwBuildSteps->takeItem( mBuildStep->lwBuildSteps->count() -1 );
 				it = new QListWidgetItem( mBuildStep->lwBuildSteps );
 				mBuildStep->lwBuildSteps->addItem( lastIt );
@@ -176,10 +180,10 @@ void MessageBoxDocks::appendStep( const pConsoleManager::Step& s )
 			{
 				it = lastIt; /* overwrite */
 			}
-		break;
+			break;
 		default:
 			it = new QListWidgetItem( mBuildStep->lwBuildSteps );
-		break;
+			break;
 	}
 	
 	// set item infos
@@ -250,8 +254,9 @@ void MessageBoxDocks::appendStep( const pConsoleManager::Step& s )
 			break;
 	}
 	
-	// get back scrollbar position
-	mBuildStep->lwBuildSteps->verticalScrollBar()->setValue( scrollMaximum ? mBuildStep->lwBuildSteps->verticalScrollBar()->maximum() : scrollValue );
+	// restore selection/scroll
+	selItem = selItem ? selItem : it;
+	mBuildStep->lwBuildSteps->scrollToItem( selItem );
 }
 
 /*!
