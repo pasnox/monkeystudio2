@@ -42,6 +42,9 @@ contains( DEFINES, __COVERAGESCANNER__ ) {
 	QMAKE_CC	= cs$$QMAKE_CC
 }
 
+isEqual( SYSTEM_QSCINTILLA, 1 ):PRE_TARGETDEPS	*= $${PACKAGE_PWD}/qscintilla
+PRE_TARGETDEPS	*= $${PACKAGE_PWD}/fresh $${PACKAGE_PWD}/ctags $${PACKAGE_PWD}/qCtagsSense
+
 CONFIG(DebugBuild)|CONFIG(debug, debug|release) {
 	#Debug
 	#unix:LIBS += -lmonkeystudio_debug
