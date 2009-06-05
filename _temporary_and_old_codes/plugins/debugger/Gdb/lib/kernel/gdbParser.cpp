@@ -63,15 +63,19 @@ GdbParser::GdbParser (QObject * parent) : QObject (parent), mIsReady(0)
 	T_EVENT("^Breakpoint\\s\\d+,\\s.*at\\s+[^:]+:\\d+$", TARGET_STOPPED);
 	T_EVENT("^Continuing.$", TARGET_RUNNING, true);	
 	T_EVENT("^Program exited normally." , TARGET_EXITED);
+	T_EVENT("^The program is not being run." , TARGET_EXITED);
+	T_EVENT("^The program is not running." , TARGET_EXITED);
+
 	T_EVENT("^\"finish\" not meaningful in the outermost frame.", NOT_EXEC_COMMAND);
 	// Program exited with code 030000000005.
 	T_EVENT("^Program exited with code\\s\\w+.$", TARGET_EXITED);
 	T_EVENT(".* not in executable format: File format not recognized$", TARGET_NOLOADED);
 
 	T_EVENT("\\d+\\s+.*", TARGET_STOPPED);
-	// when target crash
-	T_EVENT("^Program received signal SIGSEGV, Segmentation fault.$", TARGET_CRASHED);
-	T_EVENT("^Program received signal SIGTRAP, Trace/breakpoint trap.$", TARGET_CRASHED);
+	// when target crash Program terminated with signal SIGSEGV, Segmentation fault.
+	T_EVENT("^Program\\s.*\\ssignal\\s.*,\\s.*", TARGET_CRASHED);
+	//T_EVENT("^Program received signal SIGSEGV, Segmentation fault.$", TARGET_CRASHED);
+	//T_EVENT("^Program received signal SIGTRAP, Trace/breakpoint trap.$", TARGET_CRASHED);
 
 	// warning: Source file is more recent than executable.
 	T_EVENT("^warning: Source file is more recent than executable.$", TARGET_NOLOADED);
