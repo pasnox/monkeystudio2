@@ -1,0 +1,10 @@
+<RCC>
+	<qresource>
+		<file>icons/debugger.png</file>
+		<file>icons/sablier.png</file>
+		<file>icons/normalbreakpoint.png</file>
+		<file>icons/conditionbreakpoint.png</file>
+		<file>icons/play.png</file>
+
+	</qresource>
+</RCC>
