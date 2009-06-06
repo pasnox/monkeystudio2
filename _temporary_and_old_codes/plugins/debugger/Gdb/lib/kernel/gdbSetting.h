@@ -102,8 +102,8 @@ public :
 	/*!
 		\details Get list of AddOns
 	*/
-	void setAddons(QString , bool);
-	QHash<QString, bool> getAddons();
+	void setAddonsAvailable(QString , bool);
+	QHash<QString, bool> getAddonsAvailable();
 
 //	QList<GdbAddOn> * getAddOnList() { return &gdbSettings.addOnList;}
 private :

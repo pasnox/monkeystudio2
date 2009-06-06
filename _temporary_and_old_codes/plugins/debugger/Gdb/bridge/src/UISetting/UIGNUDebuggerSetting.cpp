@@ -58,7 +58,7 @@ UIGNUDebuggerSetting::UIGNUDebuggerSetting( QWidget* parent )
 
 	// show all addOn
 	vb = new QVBoxLayout(groupPlugins);
-	QHash<QString, bool > l = GdbCore::Setting()->getAddons();
+	QHash<QString, bool > l = GdbCore::Setting()->getAddonsAvailable();
 	QHashIterator<QString, bool> i(l);
 	while (i.hasNext()) 
 	{

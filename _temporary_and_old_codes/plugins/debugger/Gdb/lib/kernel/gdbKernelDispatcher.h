@@ -73,7 +73,7 @@ public :
 	/*!
 		\details Return all AddOn list
 	*/
-	QHash<QString, QPointer< class GdbAddonBase > >  list() { return mAddonList;}
+	QHash<QString, QPointer< class GdbAddonBase > >  getAddonslist() { return mAddonList;}
 
 private :
 

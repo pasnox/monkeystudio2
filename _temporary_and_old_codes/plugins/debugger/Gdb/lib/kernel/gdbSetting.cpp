@@ -108,12 +108,12 @@ QString GdbSetting::getPathScript(){ return pathScript;}
 */
 void GdbSetting::setPathScript(QString s) { pathScript = s;}
 
-void GdbSetting::setAddons(QString s, bool b)
+void GdbSetting::setAddonsAvailable(QString s, bool b)
 {
 	mAddonList[s] = b;
 }
 
-QHash<QString, bool>  GdbSetting::getAddons()
+QHash<QString, bool>  GdbSetting::getAddonsAvailable()
 {
 	return mAddonList;
 }

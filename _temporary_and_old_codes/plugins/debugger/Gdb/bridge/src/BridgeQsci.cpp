@@ -162,9 +162,9 @@ void BridgeQsci::addEditor(const QString & fileName)
 	
 	if(MonkeyCore::fileManager() && MonkeyCore::fileManager()->currentChild())
 	{
-		// get new file opened
+		// get new file opened 
 		pEditor *e = MonkeyCore::fileManager()->currentChild()->currentEditor();
-		if(e)
+		if(qobject_cast<pEditor*>( e))
 		{
 			setIconContext(e);
 			setMarginContext(e);

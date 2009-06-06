@@ -77,7 +77,7 @@ void DockGNUDebugger::loadSettings()
 		if(k.startsWith("AddOn/"))
 		{	
 			bool e = s->value(k, true ).toBool();
-			GdbCore::Setting()->setAddons( k.remove("AddOn/"),  e);
+			GdbCore::Setting()->setAddonsAvailable( k.remove("AddOn/"),  e);
 		}
 	}
 	s->endGroup();
@@ -93,7 +93,7 @@ void DockGNUDebugger::saveSettings()
 		s->setValue( "PathGdb", GdbCore::Setting()->getPathGdb());
 		s->setValue( "PathScript", GdbCore::Setting()->getPathScript() );
 
-	QHashIterator<QString, bool> i(GdbCore::Setting()->getAddons());
+	QHashIterator<QString, bool> i(GdbCore::Setting()->getAddonsAvailable());
 	while (i.hasNext()) 
 	{
 		i.next();
@@ -149,7 +149,7 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 	connect(GdbCore::Controler(),SIGNAL(defaultMessage(QString)), this , SLOT(onDefaultMessage(QString)));
 
 	/* add button for remote gdb in toolBar */
-	mActionList = GdbCore::Controler()->getActions();
+	mActionList = GdbCore::Controler()->getActionsAvailable();
 	foreach ( QAction* a, mActionList )
 		MonkeyCore::mainWindow()->dockToolBar( Qt::TopToolBarArea )->addAction( a );
 
@@ -158,7 +158,7 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 	if(mMenu) foreach(QAction *a, mActionList) mMenu->addAction(a);
 
 	/* add addOn in QTabWidget */
-	foreach(QPointer< class GdbAddonBase> r, GdbCore::KernelDispatcher()->list())
+	foreach(QPointer< class GdbAddonBase> r, GdbCore::KernelDispatcher()->getAddonslist())
 	{	// find if addOn is enable ?
 		if(r) // make sure r is valid
 		{
@@ -173,10 +173,10 @@ DockGNUDebugger::DockGNUDebugger( QWidget * w )
 	GdbCore::Process()->setEof(s);
 	GdbCore::Parser()->setEof(s);
 
-// for restore breakpoint
-  connect (MonkeyCore::projectsManager(), SIGNAL(projectOpened( XUPProjectItem*  )) ,SLOT(projectOpened( XUPProjectItem*  )));
-  connect (this, SIGNAL(setBreakpointOpened(QStringList)), GdbCore::KernelDispatcher()->findAddon("GdbBreakpoint"), SLOT(restoreBreakpoint(QStringList)));
-connect (GdbCore::KernelDispatcher()->findAddon("GdbBreakpoint"), SIGNAL(saveBreakpoint(QStringList)), SLOT(saveBreakpoint(QStringList)));
+	// for restorering breakpoint
+	connect (MonkeyCore::projectsManager(), SIGNAL(projectOpened( XUPProjectItem*  )) ,SLOT(projectOpened( XUPProjectItem*  )));
+	connect (this, SIGNAL(setBreakpointOpened(QStringList)), GdbCore::KernelDispatcher()->findAddon("GdbBreakpoint"), SLOT(restoreBreakpoint(QStringList)));
+	connect (GdbCore::KernelDispatcher()->findAddon("GdbBreakpoint"), SIGNAL(saveBreakpoint(QStringList)), SLOT(saveBreakpoint(QStringList)));
 }
 
 /*!

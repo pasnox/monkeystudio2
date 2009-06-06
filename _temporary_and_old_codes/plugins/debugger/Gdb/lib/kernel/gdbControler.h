@@ -59,7 +59,7 @@ public slots:
 	void onGdbFinished( int , QProcess::ExitStatus);
 	void onGdbError(QProcess::ProcessError);
 
-	QHash<QString , QAction*> getActions(){return mActionList;}
+	QHash<QString , QAction*> getActionsAvailable(){return mActionList;}
 	
 private:
 
