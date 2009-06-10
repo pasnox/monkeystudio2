@@ -78,7 +78,6 @@ public:
 		QString searchText; 	/*! Search pattern, which was used for searching. Filled only for 'replace in dirrectory' */
 		bool isRegExp; 			/*! Is search pattern regular expression. Filled only for 'replace in dirrectory' */
 		bool isCaseSensetive; 	/*! Is search case sensetive. Filled only for 'replace in dirrectory' */
-		QString replaceText; 	/*! Text, which should be used for replacement. Filled only for 'replace in dirrectory' */
 		bool checked;			/*! Do user checked occurence for replacement on search results dock */
 	};
 	
