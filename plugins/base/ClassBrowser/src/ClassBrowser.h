@@ -33,6 +33,8 @@ class ClassBrowser : public BasePlugin
 	Q_INTERFACES( BasePlugin )
 
 public:
+	enum IntegrationMode { imDock, imCombo, imBoth };
+	
 	ClassBrowser();
 	virtual ~ClassBrowser();
 	virtual bool setEnabled( bool );
@@ -40,10 +42,13 @@ public:
 	virtual bool haveSettingsWidget() const;
 	virtual QWidget* settingsWidget();
 	
-	QStringList systemPaths() const;
-	void setSystemPaths( const QStringList& paths );
-	
+	ClassBrowser::IntegrationMode integrationMode() const;
+	QStringList systemPaths() const;	
 	QStringList filteredSuffixes() const;
+
+public slots:
+	void setIntegrationMode( ClassBrowser::IntegrationMode mode );
+	void setSystemPaths( const QStringList& paths );
 	void setFilteredSuffixes( const QStringList& suffixes );
 
 protected:
@@ -60,6 +65,7 @@ protected slots:
 signals:
 	void systemPathsChanged( const QStringList& paths, const QStringList& oldPaths );
 	void filteredSuffixesChanged( const QStringList& filteredSuffixes );
+	void integrationModeChanged( ClassBrowser::IntegrationMode mode );
 };
 
 #endif // CLASSBROWSER_H

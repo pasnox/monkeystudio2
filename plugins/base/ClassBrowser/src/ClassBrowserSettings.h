@@ -27,13 +27,14 @@
 #include <QWidget>
 
 class ClassBrowser;
+class QComboBox;
 class pPathListEditor;
 class pStringListEditor;
 
 /*!
 	Settigs widget of ClassBrowser plugin
 	
-	Allows to edit the system include paths
+	Allows to edit the system include paths etc
 */
 class ClassBrowserSettings : public QWidget
 {
@@ -44,6 +45,7 @@ public:
 
 protected:
 	ClassBrowser* mPlugin;
+	QComboBox* cbIntegrationMode;
 	pPathListEditor* mPathEditor;
 	pStringListEditor* mStringEditor;
 

@@ -61,9 +61,13 @@ QStringList pMultiToolBar::contexts() const
 
 QToolBar* pMultiToolBar::toolBar( const QString& context ) const
 {
+	Q_ASSERT( !context.isEmpty() );
+	
 	foreach ( QToolBar* tb, mToolBars )
 	{
-		if ( tb->property( PMULTITOOLBAR_CONTEXT ).toString() == context )
+		const QString tbContext = tb->property( PMULTITOOLBAR_CONTEXT ).toString();
+		
+		if ( tbContext == context )
 		{
 			return tb;
 		}
@@ -81,6 +85,13 @@ QToolBar* pMultiToolBar::toolBar( const QString& context ) const
 	mToolBars[ index ] = tb;
 	
 	return tb;
+}
+
+QToolBar* pMultiToolBar::currentToolBar() const
+{
+	const QString curContext = currentContext();
+	
+	return curContext.isEmpty() ? 0 : toolBar( curContext );
 }
 
 void pMultiToolBar::updateMaps()

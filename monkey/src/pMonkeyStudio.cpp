@@ -1124,6 +1124,19 @@ bool pMonkeyStudio::restoreSessionOnStartup()
 { return MonkeyCore::settings()->value( settingsPath() +"/RestoreSessionOnStartup", true ).toBool(); }
 
 /*!
+	\details Set if quick file access combobox is visible in context toolbar
+	\param show If true, combobox is visible, else it's not visible
+*/
+void pMonkeyStudio::setShowQuickFileAccess( bool show )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/ShowQuickFileAccess", show ); }
+
+/*!
+	\details Return true if a quick file access combobox is visible in the child context toolbar
+*/
+bool pMonkeyStudio::showQuickFileAccess()
+{ return MonkeyCore::settings()->value( settingsPath() +"/ShowQuickFileAccess", false ).toBool(); }
+
+/*!
 	\details Set if auto syntax check is performed
 	\param activate If true, automatic syntax check will be performed, else not
 */

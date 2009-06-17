@@ -22,6 +22,7 @@ public:
 	void removeContext( const QString& context );
 	QStringList contexts() const;
 	QToolBar* toolBar( const QString& context ) const;
+	QToolBar* currentToolBar() const;
 
 protected:
 	mutable QMap<int, QToolBar*> mToolBars;
@@ -35,6 +36,7 @@ protected slots:
 signals:
 	void currentContextChanged( const QString& context );
 	void contextRemoved( const QString& context );
+	void notifyChanges();
 };
 
 #endif // PMULTITOOLBAR_H

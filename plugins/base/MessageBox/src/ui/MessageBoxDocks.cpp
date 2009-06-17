@@ -57,7 +57,7 @@ MessageBoxDocks::MessageBoxDocks( QObject* parent )
 	pActionsManager::setDefaultShortcut( mCommand->toggleViewAction(), QKeySequence( "F11" ) );
 	
 	// connections
-	connect( mBuildStep->lwBuildSteps, SIGNAL( itemPressed( QListWidgetItem* ) ), this, SLOT( lwBuildSteps_itemPressed( QListWidgetItem* ) ) );
+	connect( mBuildStep->lwBuildSteps, SIGNAL( itemActivated( QListWidgetItem* ) ), this, SLOT( lwBuildSteps_itemActivated( QListWidgetItem* ) ) );
 	connect( mOutput->cbRawCommand->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( cbRawCommand_returnPressed() ) );
 	connect( MonkeyCore::consoleManager(), SIGNAL( commandError( const pCommand&, QProcess::ProcessError ) ), this, SLOT( commandError( const pCommand&, QProcess::ProcessError ) ) );
 	connect( MonkeyCore::consoleManager(), SIGNAL( commandFinished( const pCommand&, int, QProcess::ExitStatus ) ), this, SLOT( commandFinished( const pCommand&, int, QProcess::ExitStatus ) ) );
@@ -151,23 +151,27 @@ void MessageBoxDocks::appendInBox( const QString& s, const QColor& c )
 */
 void MessageBoxDocks::appendStep( const pConsoleManager::Step& s )
 {
-	// scrollbar position
-	int scrollValue = mBuildStep->lwBuildSteps->verticalScrollBar()->value();
-	bool scrollMaximum = scrollValue == mBuildStep->lwBuildSteps->verticalScrollBar()->maximum();
+	// remember current selection
+	QListWidgetItem* selItem = mBuildStep->lwBuildSteps->selectedItems().value( 0 );
+	
 	// get last type
 	pConsoleManager::StepType t = pConsoleManager::stUnknown;
 	QListWidgetItem* lastIt = mBuildStep->lwBuildSteps->item( mBuildStep->lwBuildSteps->count() -1 );
+	
 	if ( lastIt )
+	{
 		t = ( pConsoleManager::StepType )lastIt->data( Qt::UserRole +1 ).toInt();
+	}
 	
 	// create new/update item
 	QListWidgetItem* it;
-	switch( t )
+	
+	switch ( t )
 	{
 		case pConsoleManager::stCompiling:
 		case pConsoleManager::stLinking:
 			if ( s.mType == pConsoleManager::stWarning || s.mType == pConsoleManager::stError )
-			{   /* move down */
+			{   // move down
 				lastIt = mBuildStep->lwBuildSteps->takeItem( mBuildStep->lwBuildSteps->count() -1 );
 				it = new QListWidgetItem( mBuildStep->lwBuildSteps );
 				mBuildStep->lwBuildSteps->addItem( lastIt );
@@ -176,10 +180,10 @@ void MessageBoxDocks::appendStep( const pConsoleManager::Step& s )
 			{
 				it = lastIt; /* overwrite */
 			}
-		break;
+			break;
 		default:
 			it = new QListWidgetItem( mBuildStep->lwBuildSteps );
-		break;
+			break;
 	}
 	
 	// set item infos
@@ -250,8 +254,9 @@ void MessageBoxDocks::appendStep( const pConsoleManager::Step& s )
 			break;
 	}
 	
-	// get back scrollbar position
-	mBuildStep->lwBuildSteps->verticalScrollBar()->setValue( scrollMaximum ? mBuildStep->lwBuildSteps->verticalScrollBar()->maximum() : scrollValue );
+	// restore selection/scroll
+	selItem = selItem ? selItem : it;
+	mBuildStep->lwBuildSteps->scrollToItem( selItem );
 }
 
 /*!
@@ -299,7 +304,7 @@ void MessageBoxDocks::showNextError()
 	if ( i < mBuildStep->lwBuildSteps->count() ) //finded item with setted file name
 	{
 		mBuildStep->lwBuildSteps->setCurrentRow( i );
-		lwBuildSteps_itemPressed( mBuildStep->lwBuildSteps->item( i ) );
+		lwBuildSteps_itemActivated( mBuildStep->lwBuildSteps->item( i ) );
 	}
 }
 
@@ -310,7 +315,7 @@ void MessageBoxDocks::showNextError()
 	If there are more than one file, which possible are target file, (same name, 
 	but different path) - user will asked, which file should be opened
 */
-void MessageBoxDocks::lwBuildSteps_itemPressed( QListWidgetItem* it )
+void MessageBoxDocks::lwBuildSteps_itemActivated( QListWidgetItem* it )
 {
 	// get filename
 	QString fn = it->data( Qt::UserRole +2 ).toString();
@@ -323,9 +328,8 @@ void MessageBoxDocks::lwBuildSteps_itemPressed( QListWidgetItem* it )
 	
 	XUPProjectItem* project = MonkeyCore::fileManager()->currentProject();
 	XUPProjectItem* topLevelProject = project ? project->topLevelProject() : 0;
-	bool isRelative = QFileInfo( fn ).isRelative();
 	
-	if ( project && isRelative )
+	if ( project && QFileInfo( fn ).isRelative() )
 	{
 		QString filePath = project->filePath( fn );
 		
@@ -333,19 +337,18 @@ void MessageBoxDocks::lwBuildSteps_itemPressed( QListWidgetItem* it )
 		{
 			fn = filePath;
 		}
-	}
-	
-	if ( !QFile::exists( fn ) && topLevelProject && isRelative )
-	{
-		QString filePath = topLevelProject->filePath( fn );
-		
-		if ( QFile::exists( filePath ) )
+		else if ( topLevelProject )
 		{
-			fn = filePath;
+			filePath = topLevelProject->filePath( fn );
+			
+			if ( QFile::exists( filePath ) )
+			{
+				fn = filePath;
+			}
 		}
 	}
 	
-	if ( !QFile::exists( fn ) )
+	if ( !QFile::exists( fn ) || QFileInfo( fn ).isRelative() )
 	{
 		if ( topLevelProject )
 		{
@@ -377,9 +380,16 @@ void MessageBoxDocks::lwBuildSteps_itemPressed( QListWidgetItem* it )
 		}
 	}
 	
+	if ( QFileInfo( fn ).isRelative() )
+	{
+		qWarning( "Can't open relative file: %s", fn.toLocal8Bit().constData() );
+		return;
+	}
+	
 	if ( QFile::exists( fn ) )
 	{
 		QString codec = project ? project->temporaryValue( "codec" ).toString() : pMonkeyStudio::defaultCodec();
+		qWarning() << "point" << it->data( Qt::UserRole +3 ).toPoint();
 		MonkeyCore::fileManager()->goToLine( fn, it->data( Qt::UserRole +3 ).toPoint(), true, codec );
 	}
 }

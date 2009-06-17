@@ -272,7 +272,6 @@ void SearchThread::replace (QFile& file)
 				step.searchText = mSearch;
 				step.isRegExp = mIsReg;
 				step.isCaseSensetive = mCaseSensetive;
-				step.replaceText = mReplace;
 				
 				lockResultsAccessMutex ();
 				mNewFoundOccurences.append (step);

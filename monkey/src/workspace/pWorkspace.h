@@ -98,6 +98,7 @@ protected slots:
 	void fileWatcher_ecmReload( const QString& filename, bool force = false );
 	void fileWatcher_ecmAlert( const QString& filename );
 	void fileWatcher_fileChanged( const QString& path );
+	void multitoolbar_notifyChanges();
 
 public slots:
 	// file menu

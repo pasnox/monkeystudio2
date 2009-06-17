@@ -131,7 +131,7 @@ public slots:
 	void showNextError();
 
 protected slots:
-	void lwBuildSteps_itemPressed( QListWidgetItem* );
+	void lwBuildSteps_itemActivated( QListWidgetItem* );
 	void cbRawCommand_returnPressed();
 	void commandError( const pCommand&, QProcess::ProcessError );
 	void commandFinished( const pCommand&, int, QProcess::ExitStatus );

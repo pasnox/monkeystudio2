@@ -102,6 +102,7 @@ pWorkspace::pWorkspace( QMainWindow* parent )
 	connect( mFileWatcher, SIGNAL( fileChanged( const QString& ) ), this, SLOT( fileWatcher_fileChanged( const QString& ) ) );
 	connect( mFileWatcher, SIGNAL( fileChanged( const QString& ) ), this, SIGNAL( fileChanged( const QString& ) ) );
 	connect( mContentChangedTimer, SIGNAL( timeout() ), this, SLOT( contentChangedTimer_timeout() ) );
+	connect( MonkeyCore::multiToolBar(), SIGNAL( notifyChanges() ), this, SLOT( multitoolbar_notifyChanges() ) );
 	
 	QAction* mFocusToEditor = new QAction( this );
 	mFocusToEditor->setIcon( QIcon( ":/edit/icons/edit/text.png" ) );
@@ -124,6 +125,17 @@ void pWorkspace::loadSettings()
 	tabBar()->setCurrentTabColor( currentTabTextColor() );
 	*/
 	setDocMode( pMonkeyStudio::docMode() );
+	
+	pMultiToolBar* mtb = MonkeyCore::multiToolBar();
+	
+	foreach ( const QString& context, mtb->contexts() )
+	{
+		QToolBar* tb = mtb->toolBar( context );
+		
+		initMultiToolBar( tb );
+	}
+	
+	multitoolbar_notifyChanges();
 }
 
 pAbstractChild* pWorkspace::currentChild() const
@@ -183,7 +195,7 @@ pAbstractChild* pWorkspace::newTextEditor()
 	if ( result.value( "addtoproject", false ).toBool() )
 	{
 		// add files to scope
-		MonkeyCore::projectsManager()->addFilesToScope( result[ "scope" ].value<XUPItem*>(), QStringList( fileName ), result[ "operator" ].toString() );
+		MonkeyCore::projectsManager()->addFilesToScope( result[ "scope" ].value<XUPItem*>(), QStringList( fileName ) );
 	}
 	
 	// open file
@@ -235,9 +247,6 @@ pAbstractChild* pWorkspace::openFile( const QString& s, const QString& codec )
 			}
 		}
 	}
-	
-	// track file
-	mFileWatcher->addPath( s );
 
 	// try opening file with child plugins
 	pAbstractChild* c = MonkeyCore::pluginsManager()->openChildFile( s ); // TODO: repalce by a childForFileName member witch will return a child that will open file
@@ -277,6 +286,9 @@ pAbstractChild* pWorkspace::openFile( const QString& s, const QString& codec )
 		c->showFile( s );
 	}
 	
+	// track file
+	mFileWatcher->addPath( s );
+	
 	// temporary hack
 	internal_currentChanged( indexOf( c ) );
 
@@ -307,7 +319,17 @@ void pWorkspace::closeFile( const QString& s )
 void pWorkspace::goToLine( const QString& s, const QPoint& p, bool b, const QString& codec )
 {
 	if ( b )
-		openFile( s, codec );
+	{
+		pAbstractChild* child = openFile( s, codec );
+		
+		if ( child )
+		{
+			child->goTo( s, p, b );
+		}
+		
+		return;
+	}
+	
 	foreach ( pAbstractChild* c, children() )
 	{
 		foreach ( QString f, c->files() )
@@ -375,6 +397,7 @@ void pWorkspace::internal_currentChanged( int i )
 		mtb->setCurrentContext( DEFAULT_CONTEXT );
 	}
 	
+	multitoolbar_notifyChanges();
 
 	// update file menu
 	MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" )->setEnabled( modified );
@@ -624,19 +647,24 @@ void pWorkspace::fileWatcher_ecmNothing( const QString& filename )
 	MonkeyCore::statusBar()->appendMessage( tr( "File externally modified: '%1'" ).arg( QFileInfo( filename ).fileName() ), 2000 );
 }
 
-void pWorkspace::fileWatcher_ecmReload( const QString& filename, bool force )
+void pWorkspace::fileWatcher_ecmReload( const QString& fileName, bool force )
 {
 	// try reload
-	pAbstractChild* ac = MonkeyCore::fileManager()->childForFile (filename);
-	if ( ac && ( !ac->isModified(filename) || force ) )
+	pAbstractChild* ac = MonkeyCore::fileManager()->childForFile( fileName );
+	
+	if ( ac && ( !ac->isModified( fileName ) || force ) )
 	{
-		ac->closeFile(filename);
-		ac->openFile(filename, ac->textCodec());
-		MonkeyCore::statusBar()->appendMessage( tr( "Reloaded externally modified file: '%1'" ).arg( QFileInfo( filename ).fileName() ), 2000 );
-		return;;
+		const QPoint pos = ac->cursorPosition();
+		
+		ac->closeFile( fileName );
+		ac->openFile( fileName, ac->textCodec() );
+		ac->goTo( fileName, pos, true );
+		
+		return;
 	}
+	
 	// ask user
-	fileWatcher_ecmAlert( filename );
+	fileWatcher_ecmAlert( fileName );
 }
 
 void pWorkspace::fileWatcher_ecmAlert( const QString& filename )
@@ -687,6 +715,15 @@ void pWorkspace::fileWatcher_fileChanged( const QString& filename )
 			fileWatcher_ecmAlert( filename );
 			break;
 	}
+}
+
+void pWorkspace::multitoolbar_notifyChanges()
+{
+	pMultiToolBar* mtb = MonkeyCore::multiToolBar();
+	QToolBar* tb = mtb->currentToolBar();
+	bool show = tb && !tb->actions().isEmpty();
+	
+	mtb->setVisible( show );
 }
 
 // file menu
@@ -942,15 +979,32 @@ bool pWorkspace::closeAllDocuments()
 void pWorkspace::closeDocument( QWidget* document )
 {
 	pAbstractChild* child = qobject_cast<pAbstractChild*>( document );
+	
 	if ( UISaveFiles::saveDocument( window(), child, false ) == UISaveFiles::bCancelClose )
+	{
 		return;
+	}
+	
 	// stop watching files
-	mFileWatcher->removePaths( child->files() );
+	const QStringList files = child->files();
+	
+	if ( !files.isEmpty() )
+	{
+		mFileWatcher->removePaths( child->files() );
+	}
+	
 	// close document
 	pExtendedWorkspace::closeDocument( child );
 }
 
 void pWorkspace::initMultiToolBar( QToolBar* tb )
 {
-	tb->addAction( MonkeyCore::workspace()->listWidget()->filesComboAction() );
+	if ( showQuickFileAccess() )
+	{
+		tb->insertAction( tb->actions().value( 0 ), MonkeyCore::workspace()->listWidget()->filesComboAction() );
+	}
+	else
+	{
+		tb->removeAction( MonkeyCore::workspace()->listWidget()->filesComboAction() );
+	}
 }

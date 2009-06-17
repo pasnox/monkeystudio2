@@ -99,7 +99,7 @@ TemplateList pTemplatesManager::getTemplates()
 	\retval true All files is created successfully
 	\retval false Some error ocurred
 */
-bool pTemplatesManager::realiseTemplate( XUPItem* scope, const QString& op, const pTemplate& temp, const QString& codec, const VariablesManager::Dictionary& dictionnary )
+bool pTemplatesManager::realiseTemplate( XUPItem* scope, const pTemplate& temp, const QString& codec, const VariablesManager::Dictionary& dictionnary )
 {
 	// get destination
 	QString dest = dictionnary["Destination"];
@@ -219,7 +219,7 @@ bool pTemplatesManager::realiseTemplate( XUPItem* scope, const QString& op, cons
 		// add files to project if needed
 		if ( scope && temp.FilesToAdd.contains( f ) )
 		{
-			MonkeyCore::projectsManager()->addFilesToScope( scope, QStringList( s ), op );
+			MonkeyCore::projectsManager()->addFilesToScope( scope, QStringList( s ) );
 		}
 	}
 	

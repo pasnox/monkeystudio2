@@ -27,10 +27,6 @@ public:
 	void setCurrentScope( XUPItem* item );
 	XUPItem* currentScope() const;
 	
-	void setOperators( const QStringList& operators );
-	void setCurrentOperator( const QString& op );
-	QString currentOperator() const;
-	
 	void setImportExternalFiles( bool import );
 	bool importExternalFiles() const;
 	

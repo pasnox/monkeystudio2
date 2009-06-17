@@ -407,11 +407,11 @@ void SearchAndReplace::replaceInDirrectory()
 				Qt::CaseSensitivity cs = occ.isCaseSensetive ? Qt::CaseSensitive : Qt::CaseInsensitive;
 				if (occ.isRegExp)  // TODO let's remember parametres in the Occurence, because user can change it on UI
 				{
-					line.replace (QRegExp (occ.searchText, cs), occ.replaceText);
+					line.replace (QRegExp (occ.searchText, cs), mWidget->replaceText());
 				}
 				else // not a reg exp
 				{
-					line.replace (occ.searchText, occ.replaceText, cs);
+					line.replace (occ.searchText, mWidget->replaceText(), cs);
 				}
 				replacementsCount ++;
 				

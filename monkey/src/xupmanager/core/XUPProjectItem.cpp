@@ -517,6 +517,7 @@ void XUPProjectItem::setProjectSettingsValues( const QString& variableName, cons
 		{
 			variable = scope->addChild( XUPItem::Variable );
 			variable->setAttribute( "name", variableName );
+			variable->setAttribute( "multiline", "true" );
 		}
 		
 		QStringList cleanValues = values;
@@ -575,6 +576,7 @@ void XUPProjectItem::addProjectSettingsValues( const QString& variableName, cons
 		{
 			variable = scope->addChild( XUPItem::Variable );
 			variable->setAttribute( "name", variableName );
+			variable->setAttribute( "multiline", "true" );
 		}
 		
 		QStringList cleanValues = values;

@@ -197,6 +197,7 @@ void UISettings::loadSettings()
 	bgExternalChanges->button( externalchanges() )->setChecked( true );
 	cbSaveSession->setChecked( saveSessionOnClose() );
 	cbRestoreSession->setChecked( restoreSessionOnStartup() );
+	cbQuickFileAccess->setChecked( showQuickFileAccess() );
 
 	// Paths
 	pleTemplatesPaths->setValues( s->storagePaths( Settings::SP_TEMPLATES ) );
@@ -342,6 +343,7 @@ void UISettings::saveSettings()
 	setExternalChanges( (pMonkeyStudio::ExternalChangesMode)bgExternalChanges->checkedId() );
 	setSaveSessionOnClose( cbSaveSession->isChecked() );
 	setRestoreSessionOnStartup( cbRestoreSession->isChecked() );
+	setShowQuickFileAccess( cbQuickFileAccess->isChecked() );
 
 	// Paths
 	s->setStoragePaths( Settings::SP_TEMPLATES, pleTemplatesPaths->values() );

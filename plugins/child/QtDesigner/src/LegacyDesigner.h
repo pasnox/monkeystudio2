@@ -9,6 +9,7 @@ namespace LegacyDesigner
 	Qt::WindowFlags previewWindowFlags( const QWidget* widget );
 	QWidget* fakeContainer( QWidget* w );
 	QWidget* createPreview( const QDesignerFormWindowInterface* fw, const QString& style, QString* errorMessage );
+	QPixmap createPreviewPixmap( const QDesignerFormWindowInterface* fw, const QString& style, QString* errorMessage );
 	QWidget* showPreview( const QDesignerFormWindowInterface* fw, const QString& style, QString* errorMessage );
 };
 

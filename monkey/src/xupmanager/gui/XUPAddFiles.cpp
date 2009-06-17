@@ -33,11 +33,19 @@ void XUPAddFiles::on_tcbScopes_currentChanged( const QModelIndex& index )
 		
 		foreach ( const QFileInfo& fi, pMonkeyStudio::getFolders( dir, QStringList() ) )
 		{
-			cbImport->addItem( dir.relativeFilePath( fi.filePath() ) );
+			cbImport->addItem( fi.filePath(), dir.relativeFilePath( fi.filePath() ) );
 		}
 		
-		int id = cbImport->findText( curText );
-		cbImport->setCurrentIndex( id );
+		int id = cbImport->findData( curText );
+		
+		if ( id == -1 )
+		{
+			cbImport->setEditText( curText );
+		}
+		else
+		{
+			cbImport->setCurrentIndex( id );
+		}
 	}
 	
 	emit currentScopeChanged( scope );
@@ -114,22 +122,6 @@ XUPItem* XUPAddFiles::currentScope() const
 	return mModel->itemFromIndex( index );
 }
 
-void XUPAddFiles::setOperators( const QStringList& operators )
-{
-	cbOperators->clear();
-	cbOperators->addItems( operators );
-}
-
-void XUPAddFiles::setCurrentOperator( const QString& op )
-{
-	cbOperators->setCurrentIndex( cbOperators->findText( op ) );
-}
-
-QString XUPAddFiles::currentOperator() const
-{
-	return cbOperators->currentText();
-}
-
 void XUPAddFiles::setImportExternalFiles( bool import )
 {
 	gbImport->setChecked( import );
@@ -142,29 +134,32 @@ bool XUPAddFiles::importExternalFiles() const
 
 void XUPAddFiles::setImportExternalFilesPath( const QString& path )
 {
-	int id = cbImport->findText( path );
+	int id = cbImport->findData( path );
 	
-	if ( id == -1 && QFileInfo( path ).isRelative() )
+	if ( id == -1 )
 	{
-		cbImport->addItem( path );
-		id = cbImport->findText( path );
+		cbImport->addItem( path, path );
+		id = cbImport->findData( path );
 	}
 	
-	if ( id != -1 )
-	{
-		cbImport->setCurrentIndex( id );
-	}
+	cbImport->setCurrentIndex( id );
 }
 
 QString XUPAddFiles::importExternalFilesPath() const
 {
-	return cbImport->currentText();
+	const int id = cbImport->currentIndex();
+	
+	if ( id == -1 )
+	{
+		return cbImport->currentText();
+	}
+	
+	return cbImport->itemData( id ).toString();
 }
 
 void XUPAddFiles::setScopeChoiceEnabled( bool enabled )
 {
 	gbScopes->setEnabled( enabled );
-	gbOperators->setEnabled( enabled );
 }
 
 void XUPAddFiles::setImportExternalFilesPathEnabled( bool enabled )
