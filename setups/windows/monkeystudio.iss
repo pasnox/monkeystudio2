@@ -11,7 +11,7 @@ QT_PATH=C:\Development\Qt\4.5.1
 [Setup]
 OutputDir=..
 SourceDir=..\..\bin
-OutputBaseFilename=setup_mks_VERSION-svnREVISION-win32.exe
+OutputBaseFilename=setups\setup_mks_VERSION-svnREVISION-win32.exe
 VersionInfoVersion=2.0.0.0
 VersionInfoCompany=Monkey Studio Team
 VersionInfoDescription=Free, Fast and Flexible cross-platform IDE
