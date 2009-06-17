@@ -23,7 +23,7 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Scopes</string>
+      <string>Scope in which files would be added</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
@@ -38,7 +38,7 @@
       <string>Imported files will by default be copied to project path unless you provide a relative only path from project path</string>
      </property>
      <property name="title">
-      <string>Import external files</string>
+      <string>Copy external files to directory</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
