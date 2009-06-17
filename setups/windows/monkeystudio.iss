@@ -45,7 +45,7 @@ UseAbsolutePaths=false
 
 [Files]
 ; MkS related files
-Source: monkeystudio*.exe; DestDir: {app}; Flags: confirmoverwrite promptifolder
+Source: monkeystudio.exe; DestDir: {app}; Flags: confirmoverwrite promptifolder
 Source: ..\setups\windows\qt.conf; DestDir: {app}; Flags: confirmoverwrite promptifolder
 Source: ..\GPL-2; DestDir: {app}; Flags: confirmoverwrite promptifolder
 Source: ..\GPL-3; DestDir: {app}; Flags: confirmoverwrite promptifolder
