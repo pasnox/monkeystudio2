@@ -61,8 +61,8 @@ public:
 		SEARCH_PROJECT = 2,
 		REPLACE_PROJECT = 3
 #endif
-		SEARCH_DIRRECTORY = 4,
-		REPLACE_DIRRECTORY = 5
+		SEARCH_DIRECTORY = 4,
+		REPLACE_DIRECTORY = 5
 	};
 	
 	/*! Used for transfer results of search in dirrectory from search thread to dock,
@@ -101,7 +101,7 @@ protected:
 	bool isPathValid ();
 	bool isMaskValid ();
 	
-	void showMessage (QString status);
+	void showMessage (const QString& status);
 	void updateSearchTextOnUI ();
 	
 	bool searchFile (bool next, bool incremental, bool enableLooping);

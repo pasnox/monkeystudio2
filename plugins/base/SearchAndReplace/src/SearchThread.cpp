@@ -59,14 +59,14 @@ public:
 };
 
 SearchThread::SearchThread(Mode _mode, const QString &_dir, QString &_mask, const QString &_search, const QString& _replace, bool _caseSensetive, bool _isReg, QObject* parent)
-    : QThread(parent), mTerm(false)
+	: QThread(parent), mTerm(false)
 {
 	mMode = _mode;
-    mDir = _dir;
-    mMask = _mask;
-    mSearch = _search;
-    mReplace = _replace;
-    mIsReg = _isReg;
+	mDir = _dir;
+	mMask = _mask;
+	mSearch = _search;
+	mReplace = _replace;
+	mIsReg = _isReg;
 	mCaseSensetive = _caseSensetive;
 	connect (&mReadPleaseResultsTimer, SIGNAL (timeout()), this, SIGNAL (readPleaseResults()));
 }
@@ -79,9 +79,9 @@ void SearchThread::run()
 {
 	setPriority (QThread::LowestPriority);
 	DirWalkIterator dirWalker (mDir);
-    mProcessedFilesCount = 0;
-    mOccurencesFound = 0;
-    QString fileName = dirWalker.next();
+	mProcessedFilesCount = 0;
+	mOccurencesFound = 0;
+	QString fileName = dirWalker.next();
 	
 	/* Prepare masks list */
 	QStringList masks = mMask.split (' ');
@@ -91,10 +91,10 @@ void SearchThread::run()
 	
 	mReadPleaseResultsTimer.start(200);
 	
-    while (!fileName.isNull())
-    {
-        if (!mMask.isEmpty())
-        {   // Check file for mask
+	while (!fileName.isNull())
+	{
+		if (!mMask.isEmpty())
+		{   // Check file for mask
 			QString name = QFileInfo (fileName).fileName(); // Just name, no path
 			bool matching = false;
 			foreach (QRegExp maskRe, maskRexps)
@@ -110,13 +110,13 @@ void SearchThread::run()
 				fileName = dirWalker.next();            
 				continue;  // Ignore this file, search in the next
 			}
-        }
+		}
 		lockResultsAccessMutex ();
-        mProcessedFilesCount++;
+		mProcessedFilesCount++;
 		unlockResultsAccessMutex ();
-        QFile file(fileName);
-        if (file.open(QIODevice::ReadOnly)) 
-        {
+		QFile file(fileName);
+		if (file.open(QIODevice::ReadOnly)) 
+		{
 			if (mMode == SEARCH)
 			{
 				search (file);
@@ -125,14 +125,14 @@ void SearchThread::run()
 			{
 				replace (file);
 			}
-        } //if open
-        if (mTerm)
-        {
-            quit();
-            break;
-        }
-        fileName = dirWalker.next();
-    } //while has file
+		} //if open
+		if (mTerm)
+		{
+			quit();
+			break;
+		}
+		fileName = dirWalker.next();
+	} //while has file
 	
 	mReadPleaseResultsTimer.stop();
 	
@@ -195,7 +195,7 @@ bool SearchThread::isBinary (QFile& file)
 }
 
 /*! 
-	Process file in SEARCH_DIRRECTORY mode (search for occurences, store it to buffer
+	Process file in SEARCH_DIRECTORY mode (search for occurences, store it to buffer
 */
 void SearchThread::search (QFile& file)
 {
@@ -222,7 +222,7 @@ void SearchThread::search (QFile& file)
 			if (ifContains) 
 			{
 				SearchAndReplace::Occurence step;
-				step.mode = SearchAndReplace::SEARCH_DIRRECTORY;
+				step.mode = SearchAndReplace::SEARCH_DIRECTORY;
 				step.fileName = file.fileName();
 				step.position = QPoint (0,i);
 				step.text = QString("%1[%2]: %3").arg (QFileInfo(file.fileName()).fileName()).arg(i).arg(line.simplified());
@@ -237,7 +237,7 @@ void SearchThread::search (QFile& file)
 }
 
 /*! 
-	Process file in REPLACE_DIRRECTORY mode (search for occurences, store it to buffer
+	Process file in REPLACE_DIRECTORY mode (search for occurences, store it to buffer
 */
 void SearchThread::replace (QFile& file)
 {
@@ -264,7 +264,7 @@ void SearchThread::replace (QFile& file)
 			if (ifContains) 
 			{
 				SearchAndReplace::Occurence step;
-				step.mode = SearchAndReplace::REPLACE_DIRRECTORY;
+				step.mode = SearchAndReplace::REPLACE_DIRECTORY;
 				step.fileName = file.fileName();
 				step.position = QPoint (0,i);
 				step.text = QString("%1[%2]: %3").arg (QFileInfo(file.fileName()).fileName()).arg(i).arg(line.simplified());

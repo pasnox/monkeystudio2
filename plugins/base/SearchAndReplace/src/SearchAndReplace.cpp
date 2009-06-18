@@ -202,12 +202,12 @@ bool SearchAndReplace::isMaskValid ()
 /*!
 	Show for 5 seconds message on status bar
 */
-void SearchAndReplace::showMessage (QString status)
+void SearchAndReplace::showMessage (const QString& status)
 {
 	if (!status.isNull())
 		MonkeyCore::mainWindow()->statusBar()->showMessage (tr ("Search: %1").arg (status), 5000);
 	else
-		MonkeyCore::mainWindow()->statusBar()->showMessage ("");
+		MonkeyCore::mainWindow()->statusBar()->clearMessage();
 }
 
 /*!
@@ -517,7 +517,7 @@ void SearchAndReplace::showSearchFolder ()
 	if (mSearchThread && mSearchThread->isRunning())
 		return;
 	
-	mMode = SEARCH_DIRRECTORY;
+	mMode = SEARCH_DIRECTORY;
 	updateSearchTextOnUI ();
 	mWidget->show (mMode);
 }
@@ -530,7 +530,7 @@ void SearchAndReplace::showReplaceFolder ()
 	if (mSearchThread && mSearchThread->isRunning())
 		return;
 	
-	mMode = REPLACE_DIRRECTORY;
+	mMode = REPLACE_DIRECTORY;
 	updateSearchTextOnUI ();
 	mWidget->show (mMode);
 }
@@ -559,8 +559,8 @@ void SearchAndReplace::onNextClicked()
 			searchFile (true, false, true);
 		break;
 		
-		case SEARCH_DIRRECTORY:
-		case REPLACE_DIRRECTORY:
+		case SEARCH_DIRECTORY:
+		case REPLACE_DIRECTORY:
 			if (!isSearchTextValid () || !isPathValid ())
 				return;
 			
@@ -581,7 +581,7 @@ void SearchAndReplace::onNextClicked()
 				bool caseSensetive = mWidget->isCaseSensetive ();
 				bool regexp = mWidget->isRegExp ();
 				
-				if (mMode == SEARCH_DIRRECTORY)
+				if (mMode == SEARCH_DIRECTORY)
 					mSearchThread = new SearchThread(SearchThread::SEARCH, path, mask, searchText, "", caseSensetive, regexp, this);
 				else
 					mSearchThread = new SearchThread(SearchThread::REPLACE, path, mask, searchText, replaceText, caseSensetive, regexp, this);

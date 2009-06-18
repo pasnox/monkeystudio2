@@ -121,7 +121,7 @@ void SearchResultsDock::appendSearchResult( const SearchAndReplace::Occurence& s
 	QTreeWidgetItem* parentItem = NULL;
 	
 	bool wasEmpty = (mTree->topLevelItemCount() == 0);
-	if (s.mode == SearchAndReplace::REPLACE_DIRRECTORY)
+	if (s.mode == SearchAndReplace::REPLACE_DIRECTORY)
 	{
 		QString parentItemFile = QString::null;
 		if (mTree->topLevelItemCount())
@@ -154,7 +154,7 @@ void SearchResultsDock::appendSearchResult( const SearchAndReplace::Occurence& s
 	it->setData( 0, SEARCH_TEXT, s.searchText ); // position
 	it->setData( 0, IS_REG_EXP, s.isRegExp ); // position
 	it->setData( 0, IS_CASE_SENSETIVE, s.isCaseSensetive ); // position
-	if (s.mode == SearchAndReplace::REPLACE_DIRRECTORY)
+	if (s.mode == SearchAndReplace::REPLACE_DIRECTORY)
 	{
 		it->setFlags (it->flags() | Qt::ItemIsUserCheckable);
 		it->setCheckState (0, Qt::Checked);

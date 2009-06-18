@@ -186,9 +186,9 @@ void SearchWidget::show (SearchAndReplace::Mode mode)
 	
 	addSearchToLayout (0);
 	int i = 1;
-	if (mode == SearchAndReplace::REPLACE_FILE || mode == SearchAndReplace::REPLACE_DIRRECTORY)
+	if (mode == SearchAndReplace::REPLACE_FILE || mode == SearchAndReplace::REPLACE_DIRECTORY)
 		addReplaceToLayout (i++);
-	if (mode == SearchAndReplace::SEARCH_DIRRECTORY || mode == SearchAndReplace::REPLACE_DIRRECTORY)
+	if (mode == SearchAndReplace::SEARCH_DIRECTORY || mode == SearchAndReplace::REPLACE_DIRECTORY)
 		addFolderToLayout (i++);
 
 	tbPrevious->hide();
@@ -206,7 +206,7 @@ void SearchWidget::show (SearchAndReplace::Mode mode)
 		tbNext->setIcon (QIcon(":/edit/icons/edit/search.png"));
 	}
 	
-	if (mode == SearchAndReplace::REPLACE_DIRRECTORY)
+	if (mode == SearchAndReplace::REPLACE_DIRECTORY)
 	{
 		tbReplaceAll->setText (tr("&Replace checked"));
 	}
@@ -233,10 +233,10 @@ void SearchWidget::show (SearchAndReplace::Mode mode)
 		SEARCH_PROJECT = 2,
 		REPLACE_PROJECT = 3
 #endif
-		case SearchAndReplace::SEARCH_DIRRECTORY:
+		case SearchAndReplace::SEARCH_DIRECTORY:
 			QWidget::setTabOrder (cobSearch->lineEdit(), cobPath->lineEdit());
 		break;
-		case SearchAndReplace::REPLACE_DIRRECTORY:
+		case SearchAndReplace::REPLACE_DIRECTORY:
 			QWidget::setTabOrder (cobSearch->lineEdit(), cobReplace->lineEdit());
 			QWidget::setTabOrder (cobReplace->lineEdit(), cobPath->lineEdit());
 		break;
@@ -336,8 +336,8 @@ void SearchWidget::keyPressEvent( QKeyEvent* e )
 		case Qt::Key_Enter:
 		case Qt::Key_Return:
 			if (mMode == SearchAndReplace::SEARCH_FILE || 
-				mMode == SearchAndReplace::SEARCH_DIRRECTORY ||
-				mMode == SearchAndReplace::REPLACE_DIRRECTORY)
+				mMode == SearchAndReplace::SEARCH_DIRECTORY ||
+				mMode == SearchAndReplace::REPLACE_DIRECTORY)
 					emit nextClicked();
 			else /* replace */
 				emit replaceClicked();
