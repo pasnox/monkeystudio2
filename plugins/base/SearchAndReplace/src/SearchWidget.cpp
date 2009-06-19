@@ -114,33 +114,9 @@ SearchWidget::SearchWidget( QWidget* parent )
 	cbRegExp->setText (tr("Re&gExp"));
 	cbRegExp->setSizePolicy (QSizePolicy::Maximum, QSizePolicy::Fixed);
 	
-	QToolButton* tbCodec = new QToolButton ();
-	tbCodec->setText (tr("Codec"));
-	tbCodec->setPopupMode (QToolButton::InstantPopup);
-	tbCodec->setSizePolicy (QSizePolicy::Maximum, QSizePolicy::Fixed);
-	
-	agCodec = new QActionGroup (tbCodec);
-	const QString defaultCodec = pMonkeyStudio::defaultCodec();
-	
-	foreach (const QString& codec, pMonkeyStudio::availableTextCodecs())
-	{
-		QAction* action = agCodec->addAction (codec);
-		action->setCheckable (true);
-		
-		if (codec == defaultCodec)
-		{
-			action->setChecked (true);
-		}
-	}
-	
-	QMenu* menuCodec = new QMenu (tbCodec);
-	menuCodec->addActions (agCodec->actions());
-	
 	scSearchOptions = new SearchContainer ();
 	scSearchOptions->addWidget (cbCaseSensitive);
 	scSearchOptions->addWidget (cbRegExp);
-	scSearchOptions->addWidget (tbCodec);
-	tbCodec->setMenu (menuCodec);
 	
 	//replace
 	lReplaceText = new QLabel (tr("R&eplace:"));
@@ -195,9 +171,33 @@ SearchWidget::SearchWidget( QWidget* parent )
 	cobMask->completer()->setCaseSensitivity (Qt::CaseSensitive);
 	lMask->setBuddy (cobMask);
 	
+	QToolButton* tbCodec = new QToolButton ();
+	tbCodec->setText (tr("Codec"));
+	tbCodec->setPopupMode (QToolButton::InstantPopup);
+	tbCodec->setSizePolicy (QSizePolicy::Maximum, QSizePolicy::Fixed);
+	
+	agCodec = new QActionGroup (tbCodec);
+	const QString defaultCodec = pMonkeyStudio::defaultCodec();
+	
+	foreach (const QString& codec, pMonkeyStudio::availableTextCodecs())
+	{
+		QAction* action = agCodec->addAction (codec);
+		action->setCheckable (true);
+		
+		if (codec == defaultCodec)
+		{
+			action->setChecked (true);
+		}
+	}
+	
+	QMenu* menuCodec = new QMenu (tbCodec);
+	menuCodec->addActions (agCodec->actions());
+	tbCodec->setMenu (menuCodec);
+	
 	scMask = new SearchContainer ();
 	scMask->addWidget (lMask);
 	scMask->addWidget (cobMask);
+	scMask->addWidget (tbCodec);
 
 	connect(tbPath, SIGNAL( clicked() ), this, SLOT( onPathClicked() ));
 	

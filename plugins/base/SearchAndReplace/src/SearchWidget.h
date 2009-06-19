@@ -102,7 +102,6 @@ protected:
 	
 	QCheckBox* cbCaseSensitive;
 	QCheckBox* cbRegExp;
-	QActionGroup* agCodec;
 	SearchContainer* scSearchOptions;
 
 	//replace
@@ -115,6 +114,7 @@ protected:
 	QLabel* lPath;
 	QComboBox* cobPath;
 	QToolButton* tbPath;
+	QActionGroup* agCodec;
 	SearchContainer* scFolder;
 	
 	QLabel* lMask;
