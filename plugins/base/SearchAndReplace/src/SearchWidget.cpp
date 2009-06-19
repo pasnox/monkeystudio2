@@ -41,6 +41,7 @@
 #include <QComboBox>
 #include <QCompleter>
 #include <QDirModel>
+#include <QActionGroup>
 
 #include "pWorkspace.h"
 #include "pMonkeyStudio.h"
@@ -113,15 +114,33 @@ SearchWidget::SearchWidget( QWidget* parent )
 	cbRegExp->setText (tr("Re&gExp"));
 	cbRegExp->setSizePolicy (QSizePolicy::Maximum, QSizePolicy::Fixed);
 	
-	cbCodec = new QComboBox ();
-	cbCodec->addItems (pMonkeyStudio::availableTextCodecs());
-	cbCodec->setCurrentIndex (cbCodec->findText(pMonkeyStudio::defaultCodec()));
-	cbCodec->setSizePolicy (QSizePolicy::Maximum, QSizePolicy::Fixed);
+	QToolButton* tbCodec = new QToolButton ();
+	tbCodec->setText (tr("Codec"));
+	tbCodec->setPopupMode (QToolButton::InstantPopup);
+	tbCodec->setSizePolicy (QSizePolicy::Maximum, QSizePolicy::Fixed);
+	
+	agCodec = new QActionGroup (tbCodec);
+	const QString defaultCodec = pMonkeyStudio::defaultCodec();
+	
+	foreach (const QString& codec, pMonkeyStudio::availableTextCodecs())
+	{
+		QAction* action = agCodec->addAction (codec);
+		action->setCheckable (true);
+		
+		if (codec == defaultCodec)
+		{
+			action->setChecked (true);
+		}
+	}
+	
+	QMenu* menuCodec = new QMenu (tbCodec);
+	menuCodec->addActions (agCodec->actions());
 	
 	scSearchOptions = new SearchContainer ();
 	scSearchOptions->addWidget (cbCaseSensitive);
 	scSearchOptions->addWidget (cbRegExp);
-	scSearchOptions->addWidget (cbCodec);
+	scSearchOptions->addWidget (tbCodec);
+	tbCodec->setMenu (menuCodec);
 	
 	//replace
 	lReplaceText = new QLabel (tr("R&eplace:"));
@@ -489,7 +508,7 @@ bool SearchWidget::isCaseSensetive ()
 
 QString SearchWidget::codec ()
 {
-	return cbCodec->currentText();
+	return agCodec->checkedAction()->text ();
 }
 
 QString SearchWidget::searchText()

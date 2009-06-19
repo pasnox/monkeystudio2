@@ -46,6 +46,7 @@ class QLineEdit;
 class QLabel;
 class QCheckBox;
 class QComboBox;
+class QActionGroup;
 class SearchContainer;
 
 /*!
@@ -101,7 +102,7 @@ protected:
 	
 	QCheckBox* cbCaseSensitive;
 	QCheckBox* cbRegExp;
-	QComboBox* cbCodec;
+	QActionGroup* agCodec;
 	SearchContainer* scSearchOptions;
 
 	//replace
