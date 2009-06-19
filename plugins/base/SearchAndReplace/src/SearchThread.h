@@ -60,7 +60,7 @@ public:
 		REPLACE
 	};
 	
-	SearchThread(Mode mode, const QString &dir, QString &mask, const QString &text, const QString& replace, bool caseSensitive, bool regExp, QObject* parent);
+	SearchThread(Mode mode, const QString &dir, QString &mask, const QString &text, const QString& replace, bool caseSensitive, bool regExp, const QString& codec, QObject* parent);
 	~SearchThread();
 	void run();
 	void setTermEnabled(bool t) {mTerm = t;};
@@ -83,6 +83,7 @@ private:
 	bool mIsMatch;
 	bool mIsReg;
 	bool mCaseSensetive;
+	QString mCodec;
 	
 	Mode mMode;
 	

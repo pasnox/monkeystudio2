@@ -46,6 +46,7 @@ class QLineEdit;
 class QLabel;
 class QCheckBox;
 class QComboBox;
+class SearchContainer;
 
 /*!
 	Class implements UI of search system
@@ -72,6 +73,7 @@ public:
 	
 	bool isRegExp ();
 	bool isCaseSensetive ();
+	QString codec ();
 	
 	QString searchText();
 	QString replaceText();
@@ -94,11 +96,13 @@ protected:
 	//search
 	QLabel* lSearchText;
 	QComboBox* cobSearch;
-
 	QPushButton* tbNext;
 	QPushButton* tbPrevious;
+	
 	QCheckBox* cbCaseSensitive;
 	QCheckBox* cbRegExp;
+	QComboBox* cbCodec;
+	SearchContainer* scSearchOptions;
 
 	//replace
 	QLabel* lReplaceText;
@@ -110,8 +114,11 @@ protected:
 	QLabel* lPath;
 	QComboBox* cobPath;
 	QToolButton* tbPath;
+	SearchContainer* scFolder;
+	
 	QLabel* lMask;
 	QComboBox* cobMask;
+	SearchContainer* scMask;
 
 	QStringList searchRecents;
 	QStringList replaceRecents;

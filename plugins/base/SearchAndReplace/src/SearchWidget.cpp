@@ -43,10 +43,33 @@
 #include <QDirModel>
 
 #include "pWorkspace.h"
+#include "pMonkeyStudio.h"
 
 #include "SearchAndReplace.h"
 
 #include "SearchWidget.h"
+
+class SearchContainer : public QWidget
+{
+public:
+	SearchContainer( QWidget* parent = 0, QList<QWidget*> widgets = QList<QWidget*>() )
+		: QWidget( parent )
+	{
+		QHBoxLayout* hblLayout = new QHBoxLayout( this );
+		hblLayout->setMargin( 0 );
+		hblLayout->setSpacing( 3 );
+		
+		foreach ( QWidget* widget, widgets )
+		{
+			hblLayout->addWidget( widget );
+		}
+	}
+	
+	void addWidget( QWidget* widget )
+	{
+		layout()->addWidget( widget );
+	}
+};
 
 SearchWidget::SearchWidget( QWidget* parent )
 	: QWidget( parent )
@@ -69,7 +92,6 @@ SearchWidget::SearchWidget( QWidget* parent )
 	tbPrevious = new QPushButton ();
 	tbPrevious->setText (tr("&Previous"));
 	tbPrevious->setIcon (QIcon (":/edit/icons/edit/previous.png"));
-	tbPrevious->setSizePolicy (QSizePolicy::Fixed, QSizePolicy::Fixed);
 	tbPrevious->setFlat (true);
 #ifdef Q_OS_MAC
 	tbPrevious->setMaximumHeight( 21 );
@@ -78,7 +100,6 @@ SearchWidget::SearchWidget( QWidget* parent )
 	tbNext = new QPushButton ();
 	tbNext->setText (tr("&Next"));
 	tbNext->setIcon (QIcon(":/edit/icons/edit/next.png"));
-	tbNext->setSizePolicy (QSizePolicy::Fixed, QSizePolicy::Fixed);
 	tbNext->setFlat (true);
 #ifdef Q_OS_MAC
 	tbNext->setMaximumHeight( 21 );
@@ -91,6 +112,16 @@ SearchWidget::SearchWidget( QWidget* parent )
 	cbRegExp = new QCheckBox ();
 	cbRegExp->setText (tr("Re&gExp"));
 	cbRegExp->setSizePolicy (QSizePolicy::Maximum, QSizePolicy::Fixed);
+	
+	cbCodec = new QComboBox ();
+	cbCodec->addItems (pMonkeyStudio::availableTextCodecs());
+	cbCodec->setCurrentIndex (cbCodec->findText(pMonkeyStudio::defaultCodec()));
+	cbCodec->setSizePolicy (QSizePolicy::Maximum, QSizePolicy::Fixed);
+	
+	scSearchOptions = new SearchContainer ();
+	scSearchOptions->addWidget (cbCaseSensitive);
+	scSearchOptions->addWidget (cbRegExp);
+	scSearchOptions->addWidget (cbCodec);
 	
 	//replace
 	lReplaceText = new QLabel (tr("R&eplace:"));
@@ -105,7 +136,6 @@ SearchWidget::SearchWidget( QWidget* parent )
 	tbReplace = new QPushButton ();
 	tbReplace->setText (tr("&Replace"));
 	tbReplace->setIcon (QIcon (":/edit/icons/edit/replace.png"));
-	tbReplace->setSizePolicy (QSizePolicy::Fixed, QSizePolicy::Fixed);
 	tbReplace->setFlat (true);
 #ifdef Q_OS_MAC
 	tbReplace->setMaximumHeight( 21 );
@@ -114,7 +144,6 @@ SearchWidget::SearchWidget( QWidget* parent )
 	tbReplaceAll = new QPushButton ();
 	tbReplaceAll->setText (tr("Replace &all"));
 	tbReplaceAll->setIcon (QIcon (":/edit/icons/edit/replace.png"));
-	tbReplaceAll->setSizePolicy (QSizePolicy::Fixed, QSizePolicy::Fixed);
 	tbReplaceAll->setFlat (true);
 #ifdef Q_OS_MAC
 	tbReplaceAll->setMaximumHeight( 21 );
@@ -132,15 +161,24 @@ SearchWidget::SearchWidget( QWidget* parent )
 	
 	tbPath = new QToolButton ();
 	tbPath->setText ("...");
+	
+	scFolder = new SearchContainer ();
+	scFolder->addWidget (cobPath);
+	scFolder->addWidget (tbPath);
+	
 	lMask = new QLabel  (tr("&Mask:"));
 	lMask->setAlignment (Qt::AlignVCenter | Qt::AlignRight);
 	
 	cobMask = new QComboBox ();
 	cobMask->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
 	cobMask->setEditable (true);
-	cobMask->setToolTip (tr("Spase separated list of wildcards. Example:<br> <i>*.h *.cpp file???.txt</i>"));
+	cobMask->setToolTip (tr("Space separated list of wildcards. Example:<br> <i>*.h *.cpp file???.txt</i>"));
 	cobMask->completer()->setCaseSensitivity (Qt::CaseSensitive);
 	lMask->setBuddy (cobMask);
+	
+	scMask = new SearchContainer ();
+	scMask->addWidget (lMask);
+	scMask->addWidget (cobMask);
 
 	connect(tbPath, SIGNAL( clicked() ), this, SLOT( onPathClicked() ));
 	
@@ -165,16 +203,17 @@ SearchWidget::SearchWidget( QWidget* parent )
 
 	mDefaultEditColor = cobSearch->lineEdit()->palette().color (QPalette::Base);
 	
+	/*
 	QList<QWidget*> widgets;
-	widgets << lSearchText << cobSearch << tbNext << tbPrevious << cbCaseSensitive
+	widgets << cbCodec << lSearchText << cobSearch << tbNext << tbPrevious << cbCaseSensitive
 		<< cbRegExp << lReplaceText << cobReplace << tbReplace << tbReplaceAll
 		<< lPath << cobPath << tbPath << lMask << cobMask;
 	
 	foreach ( QWidget* widget, widgets )
-	{
-		widget->setAttribute( Qt::WA_MacShowFocusRect, false );
-		widget->setAttribute( Qt::WA_MacSmallSize );
-	}
+	{*/
+		/*widget->*/setAttribute( Qt::WA_MacShowFocusRect, false );
+		/*widget->*/setAttribute( Qt::WA_MacSmallSize );
+	//}
 }
 
 void SearchWidget::show (SearchAndReplace::Mode mode)
@@ -252,49 +291,43 @@ void SearchWidget::show (SearchAndReplace::Mode mode)
 void SearchWidget::addSearchToLayout (int row)
 {
 	layout->addWidget (lSearchText, row, 0, 1, 1);
-	layout->addWidget (cobSearch, row, 1, 1, 2);
-	layout->addWidget (tbPrevious, row, 3, 1, 1);
-	layout->addWidget (tbNext, row, 4, 1, 1);
-	layout->addWidget (cbCaseSensitive, row, 5, 1, 1);
-	layout->addWidget (cbRegExp, row, 6, 1, 1);
+	layout->addWidget (cobSearch, row, 1, 1, 1);
+	layout->addWidget (tbPrevious, row, 2, 1, 1);
+	layout->addWidget (tbNext, row, 3, 1, 1);
+	layout->addWidget (scSearchOptions, row, 4, 1, 1);
 }
 
 void SearchWidget::addReplaceToLayout (int row)
 {
 	layout->addWidget (lReplaceText, row, 0, 1, 1);
-	layout->addWidget (cobReplace, row, 1, 1, 2);
-	layout->addWidget (tbReplace, row, 3, 1, 1);
-	layout->addWidget (tbReplaceAll, row, 4, 1, 1);
+	layout->addWidget (cobReplace, row, 1, 1, 1);
+	layout->addWidget (tbReplace, row, 2, 1, 1);
+	layout->addWidget (tbReplaceAll, row, 3, 1, 1);
 	
-	lReplaceText->show();
-	cobReplace->show();
-	tbReplace->show();
-	tbReplaceAll->show();
+	lReplaceText->show ();
+	cobReplace->show ();
+	tbReplace->show ();
+	tbReplaceAll->show ();
 }
 
 void SearchWidget::addFolderToLayout (int row)
 {
 	layout->addWidget (lPath, row, 0, 1, 1);
-	layout->addWidget (cobPath, row, 1, 1, 1);
-	layout->addWidget (tbPath, row, 2, 1, 1);
-	layout->addWidget (lMask, row, 3, 1, 1);
-	layout->addWidget (cobMask, row, 4, 1, 3);
+	layout->addWidget (scFolder, row, 1, 1, 1);
+	layout->addWidget (scMask, row, 3, 1, 2);
 	
 	lPath->show ();
-	cobPath->show ();
-	tbPath->show ();
-	lMask->show ();
-	cobMask->show ();
+	scFolder->show ();
+	scMask->show ();
 }
 
 void SearchWidget::removeSearchFromLayout ()
 {
 	layout->removeWidget (lSearchText);
-	layout->removeWidget(cobSearch);
+	layout->removeWidget (cobSearch);
 	layout->removeWidget (tbPrevious);
 	layout->removeWidget (tbNext);
-	layout->removeWidget (cbCaseSensitive);
-	layout->removeWidget (cbRegExp);
+	layout->removeWidget (scSearchOptions);
 }
 
 void SearchWidget::removeReplaceFromLayout ()
@@ -313,16 +346,13 @@ void SearchWidget::removeReplaceFromLayout ()
 void SearchWidget::removeFolderFromLayout ()
 {
 	layout->removeWidget (lPath);
-	layout->removeWidget (cobPath);
-	layout->removeWidget (tbPath);
+	layout->removeWidget (scFolder);
 	layout->removeWidget (lMask);
 	layout->removeWidget (cobMask);
 	
 	lPath->hide ();
-	cobPath->hide ();
-	tbPath->hide ();
-	lMask->hide ();
-	cobMask->hide ();
+	scFolder->hide ();
+	scMask->hide ();
 }
 
 void SearchWidget::keyPressEvent( QKeyEvent* e )
@@ -455,6 +485,11 @@ bool SearchWidget::isRegExp ()
 bool SearchWidget::isCaseSensetive ()
 {
 	return cbCaseSensitive->isChecked();
+}
+
+QString SearchWidget::codec ()
+{
+	return cbCodec->currentText();
 }
 
 QString SearchWidget::searchText()
