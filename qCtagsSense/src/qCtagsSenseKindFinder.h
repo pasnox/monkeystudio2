@@ -43,7 +43,7 @@ protected:
 	virtual void run();
 
 signals:
-	void memberActivated( qCtagsSenseEntry* entry );
+	void entryActivated( qCtagsSenseEntry* entry );
 };
 
 #endif // QCTAGSSENSECPP_H
