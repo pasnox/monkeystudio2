@@ -114,6 +114,7 @@ protected:
 	QLabel* lPath;
 	QComboBox* cobPath;
 	QToolButton* tbPath;
+	QToolButton* tbCodec;
 	QActionGroup* agCodec;
 	SearchContainer* scFolder;
 	
@@ -138,6 +139,7 @@ protected:
 
 protected slots:
 	void onPathClicked ();
+	void onCodecActionTriggered (QAction* action);
 	
 signals:
 	bool previousClicked();

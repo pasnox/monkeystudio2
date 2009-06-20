@@ -171,8 +171,9 @@ SearchWidget::SearchWidget( QWidget* parent )
 	cobMask->completer()->setCaseSensitivity (Qt::CaseSensitive);
 	lMask->setBuddy (cobMask);
 	
-	QToolButton* tbCodec = new QToolButton ();
+	tbCodec = new QToolButton ();
 	tbCodec->setText (tr("Codec"));
+	tbCodec->setStatusTip (tr("The codec is use to decode/encode the file buffer when searching/replacing in directories"));
 	tbCodec->setPopupMode (QToolButton::InstantPopup);
 	tbCodec->setSizePolicy (QSizePolicy::Maximum, QSizePolicy::Fixed);
 	
@@ -200,6 +201,7 @@ SearchWidget::SearchWidget( QWidget* parent )
 	scMask->addWidget (tbCodec);
 
 	connect(tbPath, SIGNAL( clicked() ), this, SLOT( onPathClicked() ));
+	connect (agCodec, SIGNAL(triggered(QAction*)), this, SLOT(onCodecActionTriggered(QAction*)));
 	
 	connect (tbNext, SIGNAL (clicked()), this, SIGNAL (nextClicked ()));
 	connect (cobSearch->lineEdit(), SIGNAL (textEdited (const QString&)), this, SIGNAL (searchTextEdited()));
@@ -221,6 +223,7 @@ SearchWidget::SearchWidget( QWidget* parent )
 #endif
 
 	mDefaultEditColor = cobSearch->lineEdit()->palette().color (QPalette::Base);
+	onCodecActionTriggered (agCodec->checkedAction());
 	
 	/*
 	QList<QWidget*> widgets;
@@ -665,4 +668,9 @@ void SearchWidget::onPathClicked ()
 	QString text = QFileDialog::getExistingDirectory ( this, tr("Search path"), cobPath->currentText(), 0);
 	if (!text.isNull())
 		cobPath->lineEdit ()->setText (text);
+}
+
+void SearchWidget::onCodecActionTriggered( QAction* action )
+{
+	tbCodec->setToolTip( action->text() );
 }
