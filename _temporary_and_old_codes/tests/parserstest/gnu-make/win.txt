@@ -1,5 +1,0 @@
-mingw32-make[3]: Entering directory `C:/Development/Projects/monkeyrepos/v2/branches/dev/plugins/interpreter/PHP'
-mingw32-make -f Makefile.Release
-mingw32-make[4]: Entering directory `C:/Development/Projects/monkeyrepos/v2/branches/dev/plugins/interpreter/PHP'
-mingw32-make[4]: Nothing to be done for `first'.
-mingw32-make[4]: Leaving directory

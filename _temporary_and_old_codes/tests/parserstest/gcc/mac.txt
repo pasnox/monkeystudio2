@@ -1,7 +1,0 @@
-############ MacOS, undefined symbol
-
-Undefined symbols:
-  "CollectionArea::view(CollectionArea::View) const", referenced from:
-      UIMain::UIMain(QWidget*)in UIMain.o
-ld: symbol(s) not found
-collect2: ld returned 1 exit status
