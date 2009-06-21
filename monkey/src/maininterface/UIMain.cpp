@@ -27,6 +27,7 @@
 **
 ****************************************************************************/
 #include "UIMain.h"
+#include "main.h"
 #include "../coremanager/MonkeyCore.h"
 #include "../pMonkeyStudio.h"
 #include "../xupmanager/gui/XUPProjectManager.h"
@@ -62,7 +63,7 @@ void UIMain::dragEnterEvent( QDragEnterEvent* event )
 		// accept drag
 		event->acceptProposedAction();
 	}
-	
+
 	// default event
 	pMainWindow::dragEnterEvent( event );
 }
@@ -73,7 +74,7 @@ void UIMain::dropEvent( QDropEvent* event )
 	{
 		emit urlsDropped( event->mimeData()->urls () );
 	}
-	
+
 	// default event
 	pMainWindow::dropEvent( event );
 }
@@ -187,7 +188,7 @@ void UIMain::initMenuBar()
 
 		mb->menu( "mSearchReplace", tr( "&Search and replace" ) );
 			mb->action( "mSearchReplace/aSearchFile", tr( "&Search in the file..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+F" ), tr( "Search in the file..." ) )->setEnabled( true );
-#if 0			
+#if 0
 			mb->action( "mSearchReplace/aReplaceFile", tr( "&Replace in the file..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+R" ), tr( "Replace in the file..." ) )->setEnabled( true );
 			//mb->action( "mSearchReplace/aSearchProject", tr( "&Search in the project..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "" ), tr( "Search in the project..." ) )->setEnabled( true );
 			//mb->action( "mSearchReplace/aReplaceProject", tr( "&Replace in the project..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "" ), tr( "Replace in the project..." ) )->setEnabled( true );
@@ -275,7 +276,7 @@ void UIMain::initMenuBar()
 		mb->action( "aSeparator2" );
 #endif
 	mb->endGroup();
-	
+
 	// create action for styles
 	agStyles = new pStylesActionGroup( tr( "Use %1 style" ), mb->menu( "mView/mStyle" ) );
 	agStyles->setCurrentStyle( MonkeyCore::settings()->value( "MainWindow/Style" ).toString() );
@@ -386,12 +387,12 @@ void UIMain::menu_Docks_aboutToShow()
 	// get menu
 	QMenu* menu = menuBar()->menu( "mDocks" );
 	menu->clear();
-	
+
 	// add actions
 	foreach ( QDockWidget* dw, findChildren<QDockWidget*>() )
 	{
 		QAction* action = dw->toggleViewAction();
-		
+
 		action->setIcon( dw->windowIcon() );
 		menu->addAction( action );
 		menuBar()->addAction( "mDocks", action );

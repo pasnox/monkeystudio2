@@ -27,6 +27,7 @@
 **
 ****************************************************************************/
 #include "Settings.h"
+#include "main.h"
 #include "../coremanager/MonkeyCore.h"
 #include "../queuedstatusbar/QueuedStatusBar.h"
 

@@ -27,6 +27,7 @@
 **
 ****************************************************************************/
 #include "UIAbout.h"
+#include "main.h"
 
 #include <pIconManager.h>
 
@@ -98,10 +99,10 @@ UIAbout::UIAbout( QWidget* p )
 	// show informations table
 	lInformations->setTextInteractionFlags( Qt::TextBrowserInteraction | Qt::TextSelectableByKeyboard );
 	lInformations->setText( mInformations.arg( PACKAGE_NAME ).arg( PACKAGE_VERSION ).arg( PACKAGE_COPYRIGHTS ).arg( PACKAGE_DOMAIN ) );
-	
+
 	// logo
 	bool isXMas = QDate::currentDate().month() == ( 12 || 1 );
-	
+
 	if ( isXMas )
 	{
 		lLogo->setPixmap( pIconManager::pixmap( "splashscreen_christmas.png", ":/application" ) );

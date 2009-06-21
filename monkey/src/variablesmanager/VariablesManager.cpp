@@ -16,6 +16,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 #include "VariablesManager.h"
+#include "main.h"
 
 #include <pFileManager.h>
 #include <MonkeyCore.h>
@@ -43,7 +44,7 @@ VariablesManager::VariablesManager( QObject* o )
 QString VariablesManager::getVariable( QString name, Dictionary locals )
 {
 	QString result = QString::null;
-	
+
 	if ( name == "editor_version" )
 	// monkeystudio_version
 	{
@@ -89,7 +90,7 @@ QString VariablesManager::getVariable( QString name, Dictionary locals )
 	{
 		result = QDir::toNativeSeparators( MonkeyCore::fileManager()->currentItemFile() );
 	}
-	
+
 	if ( !result.isEmpty() )
 	{
 		return result;
@@ -102,7 +103,7 @@ QString VariablesManager::getVariable( QString name, Dictionary locals )
 	{
 		return locals[ name ];
 	}
-	
+
 	return QString( "$%1$" ).arg( name ); // was QString::null if not found, it's not a variable to replace! ( ie: php script that contains $variables )
 }
 

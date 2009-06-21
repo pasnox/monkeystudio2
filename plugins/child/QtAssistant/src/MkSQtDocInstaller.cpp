@@ -1,4 +1,5 @@
 #include "MkSQtDocInstaller.h"
+#include "main.h"
 #include "3rdparty/qtdocinstaller.h"
 
 #include <MonkeyCore.h>
@@ -87,7 +88,7 @@ bool MkSQtDocInstaller::initHelpDB()
 					MonkeyCore::statusBar()->appendMessage( tr( "Could not write assistant.qch" ) +" (Qt Assistant )" );
 				file.close();
 			}
-		}        
+		}
 		QHelpEngineCore hc( fi.absoluteFilePath() );
 		hc.setupData();
 		hc.registerDocumentation( helpFile );
@@ -104,7 +105,7 @@ bool MkSQtDocInstaller::initHelpDB()
 			hc.setCustomValue( QLatin1String( "UnfilteredFilterInserted" ), 1 );
 		}
 		bool block = mHelpEngine->blockSignals( true );
-		mHelpEngine->setCurrentFilter( tr( "Unfiltered" ) );        
+		mHelpEngine->setCurrentFilter( tr( "Unfiltered" ) );
 		mHelpEngine->blockSignals( block );
 		needsSetup = true;
 	}
@@ -119,7 +120,7 @@ void MkSQtDocInstaller::lookForNewQtDocumentation()
 	mQtDocInstaller = new QtDocInstaller( mHelpEngine->collectionFile() );
 	connect( mQtDocInstaller, SIGNAL( errorMessage( const QString& ) ), this, SLOT( displayInstallationError( const QString& ) ) );
 	connect( mQtDocInstaller, SIGNAL( docsInstalled( bool ) ), this, SLOT( qtDocumentationInstalled( bool ) ) );
-	
+
 	QString versionKey = QString( QLatin1String( "qtVersion%1$$$qt" ) ).arg( QLatin1String( QT_VERSION_STR ) );
 	if ( mHelpEngine->customValue( versionKey, 0 ).toInt() != 1 )
 		MonkeyCore::statusBar()->appendMessage( tr( "Looking for Qt Documentation..." ), 3000 );

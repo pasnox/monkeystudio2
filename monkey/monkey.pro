@@ -77,7 +77,8 @@ FORMS	*= src/maininterface/ui/UITranslator.ui \
 	src/xupmanager/gui/XUPAddFiles.ui \
 	src/pluginsmanager/ui/UIInterpreterSettings.ui
 
-HEADERS	*= src/maininterface/ui/UITranslator.h \
+HEADERS	*= src/main.h \
+	src/maininterface/ui/UITranslator.h \
 	src/maininterface/ui/UIAbout.h \
 	src/maininterface/ui/UISettings.h \
 	src/recentsmanager/pRecentsManager.h \
