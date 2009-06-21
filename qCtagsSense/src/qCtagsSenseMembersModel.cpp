@@ -31,7 +31,7 @@ class QCTAGSSENSE_EXPORT qCtagsSenseMembersThread : public QThread
 	
 public:
 	qCtagsSenseMembersThread( qCtagsSenseSQL* parent )
-		: QThread( parent )
+		: QThread( parent ), mRootPair( StringKind( QString::null, qCtagsSense::Unknow ) )
 	{
 		mSQL = parent;
 		mStop = false;
@@ -73,6 +73,104 @@ protected:
 	qCtagsSenseEntry* mRootEntry;
 	bool mRestart;
 	
+	typedef QPair<QString, qCtagsSense::Kind> StringKind;
+	typedef QMap<StringKind, qCtagsSenseEntry*> MapStringKindEntry;
+	
+	const StringKind mRootPair;
+	
+	void addScope( MapStringKindEntry& scopeItems, qCtagsSenseEntry* entry )
+	{
+		switch ( entry->kind )
+		{
+			/*
+				- C
+				- C++
+			*/
+			case qCtagsSense::Class:
+			case qCtagsSense::Enumeration:
+			case qCtagsSense::Function:
+			case qCtagsSense::Namespace:
+			case qCtagsSense::Structure:
+			case qCtagsSense::Union:
+			{
+				QString scope = entry->scope.second;
+				
+				if ( !scope.isEmpty() )
+				{
+					scope.append( "::" );
+				}
+				
+				scope.append( entry->name );
+				const StringKind pair = StringKind( scope, entry->kind );
+				
+				scopeItems[ pair ] = entry;
+				
+				break;
+			}
+			default:
+				break;
+		}
+	}
+	
+	qCtagsSenseEntry* getScope( MapStringKindEntry& scopeItems, qCtagsSenseEntryList& entries, qCtagsSenseEntry* entry )
+	{
+		QStringList kinds = QStringList()
+			<< QString::number( qCtagsSense::Class ) << QString::number( qCtagsSense::Enumeration )
+			<< QString::number( qCtagsSense::Function ) << QString::number( qCtagsSense::Namespace )
+			<< QString::number( qCtagsSense::Structure ) << QString::number( qCtagsSense::Union );
+			
+		kinds.removeAll( QString::number( entry->kind ) );
+		
+		if ( entry->kind == qCtagsSense::Member )
+		{
+			kinds.removeAll( QString::number( qCtagsSense::Function ) );
+			kinds.removeAll( QString::number( qCtagsSense::Enumeration ) );
+		}
+		
+		const StringKind scopePair = StringKind( entry->scope.second, qCtagsSenseUtils::kindType( entry->scope.first ) );
+		qCtagsSenseEntry* scope = 0;
+		
+		foreach ( const StringKind& pair, scopeItems.keys() )
+		{
+			if ( pair == scopePair || pair.first == scopePair.first )
+			{
+				scope = scopeItems[ pair ];
+				break;
+			}
+		}
+		
+		if ( !scope && !entry->scope.second.isEmpty() )
+		{
+			QSqlQuery q = mSQL->query();
+			q.setForwardOnly( true );
+			const QString sql = QString(
+				"SELECT entries.*, language, fileName FROM entries "
+				"INNER JOIN files ON files.id = entries.file_id "
+				"AND entries.name = '%1' AND entries.kind IN( %2 )"
+			).arg( entry->scope.second ).arg( kinds.join( ", " ) );
+			
+			if ( q.exec( sql ) && q.next() )
+			{
+				scope = qCtagsSenseUtils::entryForRecord( q.record(), QString::null );
+			}
+			
+			if ( !scope )
+			{
+				scope = new qCtagsSenseEntry();
+				scope->fileName = entry->fileName;
+				scope->language = entry->language;
+				scope->lineNumber = entry->lineNumber;
+				scope->name = entry->scope.second;
+				scope->kind = qCtagsSenseUtils::kindType( entry->scope.first );
+			}
+			
+			entries.prepend( scope );
+			addScope( scopeItems, scope );
+		}
+		
+		return scope ? scope : scopeItems[ mRootPair ];
+	}
+	
 	virtual void run()
 	{
 		{
@@ -95,9 +193,9 @@ protected:
 			}
 			
 			mRootEntry = new qCtagsSenseEntry;
-			QMap<QString, qCtagsSenseEntry*> scopeItems;
-			scopeItems[ QString::null ] = mRootEntry;
-			QList<qCtagsSenseEntry*> entries;
+			MapStringKindEntry scopeItems;
+			scopeItems[ mRootPair ] = mRootEntry;
+			qCtagsSenseEntryList entries;
 			
 			mRootEntry->name = mFileName;
 			
@@ -105,30 +203,7 @@ protected:
 			{
 				qCtagsSenseEntry* entry = qCtagsSenseUtils::entryForRecord( q.record(), mFileName );
 				entries << entry;
-				
-				switch ( entry->kind )
-				{
-					case qCtagsSense::Class:
-					case qCtagsSense::Enumeration:
-					case qCtagsSense::Namespace:
-					case qCtagsSense::Structure:
-					case qCtagsSense::Union:
-					{
-						QString scope = entry->scope.second;
-						
-						if ( !scope.isEmpty() )
-						{
-							scope += "::";
-						}
-						
-						scope += entry->name;
-						scopeItems[ scope ] = entry;
-						
-						break;
-					}
-					default:
-						break;
-				}
+				addScope( scopeItems, entry );
 				
 				{
 					QMutexLocker locker( &mMutex );
@@ -156,16 +231,10 @@ protected:
 				}
 			}
 			
-			foreach ( qCtagsSenseEntry* entry, entries )
+			while ( !entries.isEmpty() )
 			{
-				entries.removeAll( entry );
-				
-				qCtagsSenseEntry* parentEntry = scopeItems.value( entry->scope.second );
-				
-				if ( !parentEntry )
-				{
-					parentEntry = scopeItems.value( QString::null );
-				}
+				qCtagsSenseEntry* entry = entries.takeFirst();
+				qCtagsSenseEntry* parentEntry = getScope( scopeItems, entries, entry );
 				
 				entry->parent = parentEntry;
 				parentEntry->children << entry;
@@ -342,24 +411,6 @@ void qCtagsSenseMembersModel::refresh( const QString& fileName )
 		"INNER JOIN files ON files.id = entries.file_id "
 		"AND files.filename = '%1'"
 	).arg( fileName );
-	
-	/* some test for global class browser
-	QStringList kinds = QStringList()
-		<< QString::number( qCtagsSense::Macro )
-		<< QString::number( qCtagsSense::Prototype )
-		<< QString::number( qCtagsSense::Typedef )
-		<< QString::number( qCtagsSense::VariableLocal )
-		<< QString::number( qCtagsSense::VariableGlobal );
-	
-	sql = QString(
-		"SELECT entries.*, language, filename FROM entries "
-		"INNER JOIN files ON files.id = entries.file_id "
-		"AND files.language = 'C++' "
-		"WHERE entries.kind NOT IN( %1 ) "
-		"ORDER BY entries.kind, entries.name "
-	).arg( kinds.join( ", " ) );
-	qWarning() << sql;
-	*/
 	
 	qCtagsSenseEntry* root = mRootEntry;
 	mRootEntry = 0;

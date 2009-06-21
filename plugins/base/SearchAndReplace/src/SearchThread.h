@@ -52,7 +52,7 @@ class QFile;
 */
 class SearchThread : public QThread
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
 	enum Mode
 	{
@@ -60,11 +60,11 @@ public:
 		REPLACE
 	};
 	
-    SearchThread(Mode mode, const QString &dir, QString &mask, const QString &text, const QString& replace, bool caseSensitive, bool regExp, QObject* parent);
-    ~SearchThread();
-    void run();
-    void setTermEnabled(bool t) {mTerm = t;};
-    bool isTermEnabled() {return mTerm;};
+	SearchThread(Mode mode, const QString &dir, QString &mask, const QString &text, const QString& replace, bool caseSensitive, bool regExp, const QString& codec, QObject* parent);
+	~SearchThread();
+	void run();
+	void setTermEnabled(bool t) {mTerm = t;};
+	bool isTermEnabled() {return mTerm;};
 	
 	void lockResultsAccessMutex ();
 	void unlockResultsAccessMutex ();
@@ -75,18 +75,19 @@ public:
 	int foundOccurencesCount();
 	
 private:
-    QString mDir;
-    QString mMask;
-    QString mSearch;
+	QString mDir;
+	QString mMask;
+	QString mSearch;
 	QString mReplace;
-    bool mIsWhole;
-    bool mIsMatch;
-    bool mIsReg;
+	bool mIsWhole;
+	bool mIsMatch;
+	bool mIsReg;
 	bool mCaseSensetive;
+	QString mCodec;
 	
 	Mode mMode;
 	
-    bool mTerm;
+	bool mTerm;
 	
 	// results
 	QMutex mResultsAccessMutex;
@@ -102,7 +103,7 @@ private:
 	void replace (QFile& file);
 	
 signals:
-    void readPleaseResults ();
+	void readPleaseResults ();
 };
 
 #endif //SEARCHTHREAD_H

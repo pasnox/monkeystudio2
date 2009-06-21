@@ -9,21 +9,21 @@
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
 ** Home Page : http://www.monkeystudio.org
 **
-    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
 #ifndef SEARCHWIDGET_H
@@ -46,6 +46,8 @@ class QLineEdit;
 class QLabel;
 class QCheckBox;
 class QComboBox;
+class QActionGroup;
+class SearchContainer;
 
 /*!
 	Class implements UI of search system
@@ -72,6 +74,7 @@ public:
 	
 	bool isRegExp ();
 	bool isCaseSensetive ();
+	QString codec ();
 	
 	QString searchText();
 	QString replaceText();
@@ -94,11 +97,12 @@ protected:
 	//search
 	QLabel* lSearchText;
 	QComboBox* cobSearch;
-
 	QPushButton* tbNext;
 	QPushButton* tbPrevious;
+	
 	QCheckBox* cbCaseSensitive;
 	QCheckBox* cbRegExp;
+	SearchContainer* scSearchOptions;
 
 	//replace
 	QLabel* lReplaceText;
@@ -110,8 +114,13 @@ protected:
 	QLabel* lPath;
 	QComboBox* cobPath;
 	QToolButton* tbPath;
+	QToolButton* tbCodec;
+	QActionGroup* agCodec;
+	SearchContainer* scFolder;
+	
 	QLabel* lMask;
 	QComboBox* cobMask;
+	SearchContainer* scMask;
 
 	QStringList searchRecents;
 	QStringList replaceRecents;
@@ -130,6 +139,7 @@ protected:
 
 protected slots:
 	void onPathClicked ();
+	void onCodecActionTriggered (QAction* action);
 	
 signals:
 	bool previousClicked();

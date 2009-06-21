@@ -15,35 +15,23 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
-#ifndef QCTAGSSENSECPP_H
-#define QCTAGSSENSECPP_H
+/*!
+	\file main.h
+	\date 2009-06-21T11:37:22
+	\author Filipe AZEVEDO aka Nox P\@sNox <pasnox@gmail.com>
+	\brief General application defines
+*/
+#ifndef MAIN_H
+#define MAIN_H
 
-#include "qCtagsSenseExport.h"
-#include "qCtagsSense.h"
+#define PACKAGE_NAME _PACKAGE_NAME
+#define PACKAGE_VERSION _PACKAGE_VERSION
+#define PACKAGE_DOMAIN _PACKAGE_DOMAIN
+#define PACKAGE_COPYRIGHTS _PACKAGE_COPYRIGHTS
+#define PACKAGE_DOWNLOAD_FEED "http://code.google.com/feeds/p/monkeystudio/downloads/basic"
 
-#include <QThread>
+#define PACKAGE_PREFIX _PACKAGE_PREFIX
+#define PACKAGE_PLUGINS _PACKAGE_PLUGINS
+#define PACKAGE_DATAS _PACKAGE_DATAS
 
-class qCtagsSenseSQL;
-
-class QCTAGSSENSE_EXPORT qCtagsSenseKindFinder : public QThread
-{
-	Q_OBJECT
-	
-public:
-	qCtagsSenseKindFinder( qCtagsSenseSQL* parent );
-	virtual ~qCtagsSenseKindFinder();
-	
-	void goTo( qCtagsSense::Kind kind, qCtagsSenseEntry* entry );
-
-protected:
-	qCtagsSenseSQL* mSQL;
-	qCtagsSense::Kind mKind;
-	qCtagsSenseEntry* mEntry;
-	
-	virtual void run();
-
-signals:
-	void entryActivated( qCtagsSenseEntry* entry );
-};
-
-#endif // QCTAGSSENSECPP_H
+#endif // MAIN_H

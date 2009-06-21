@@ -45,6 +45,8 @@
 #include "pFileManager.h"
 #include "QueuedStatusBar.h"
 
+#include <QTextStream>
+
 /*!
 	Constructor of class
 */
@@ -101,7 +103,7 @@ bool SearchAndReplace::setEnabled( bool b )
 		mDock = new SearchResultsDock ();
 		mDock->setVisible( false );
 		
-		connect (mDock, SIGNAL (resultActivated (const QString&, const QPoint&)), this, SLOT (makeGoTo (const QString&, const QPoint&)));
+		connect (mDock, SIGNAL (resultActivated (const QString&, const QPoint&, const QString&)), this, SLOT (makeGoTo (const QString&, const QPoint&, const QString&)));
 		
 		MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mDock, infos().Caption, QIcon(":/icons/tabsearch.png") );
 		
@@ -202,12 +204,12 @@ bool SearchAndReplace::isMaskValid ()
 /*!
 	Show for 5 seconds message on status bar
 */
-void SearchAndReplace::showMessage (QString status)
+void SearchAndReplace::showMessage (const QString& status)
 {
 	if (!status.isNull())
 		MonkeyCore::mainWindow()->statusBar()->showMessage (tr ("Search: %1").arg (status), 5000);
 	else
-		MonkeyCore::mainWindow()->statusBar()->showMessage ("");
+		MonkeyCore::mainWindow()->statusBar()->clearMessage();
 }
 
 /*!
@@ -223,6 +225,20 @@ void SearchAndReplace::updateSearchTextOnUI ()
 		if (!text.isNull() && text.indexOf ('\n') == -1)
 			mWidget->setSearchText (text);
 	}
+}
+
+QString SearchAndReplace::eolForContent (const QString& content)
+{
+	if (content.indexOf("\r\n") != -1)
+	{
+		return "\r\n";
+	}
+	else if (content.indexOf("\n") != -1)
+	{
+		return "\n";
+	}
+	
+	return "\r"; // old mac os x
 }
 
 /*!
@@ -342,7 +358,7 @@ int SearchAndReplace::replace(bool all)
 /*!
 	Apply replacements in the dirrectory, according with selected on dock occcurences
 */
-void SearchAndReplace::replaceInDirrectory()
+void SearchAndReplace::replaceInDirectory()
 {
 	QMessageBox::StandardButton answer = 
 		QMessageBox::question (NULL, 
@@ -370,10 +386,13 @@ void SearchAndReplace::replaceInDirrectory()
 	{
 		QFile file;
 		QStringList fileContents;
+		QString eol;
+		QString codec;
 		
 		for (int occurenceIndex = 0; occurenceIndex < mDock->oCcurencesCount (fileIndex); occurenceIndex++) // for occurences
 		{
 			Occurence occ = mDock->occurence (fileIndex, occurenceIndex);
+			codec = occ.codec;
 			if (occ.checked)
 			{
 				if (! file.isOpen())  // open file, if nessesary
@@ -382,18 +401,18 @@ void SearchAndReplace::replaceInDirrectory()
 					bool stat = file.open (QIODevice::ReadWrite);
 					if (! stat)
 					{
-						QMessageBox::critical (NULL, "Replace in dirrectory", "Failed to open file: " + file.errorString());
+						QMessageBox::critical (NULL, "Replace in directory", "Failed to open file: " + file.errorString());
 						break;
 					}
-					// read all file to QStringList
-					while ((! file.atEnd()) && file.error() == QFile::NoError)
-						fileContents << file.readLine();
 					
-					if (file.error() != QFile::NoError)
-					{
-						QMessageBox::critical (NULL, "Replace in dirrectory", "Failed to read file: " + file.errorString());
-						break;
-					}
+					QTextStream out(&file);
+					out.setCodec( codec.toLocal8Bit() );
+					
+					// read all file to QStringList
+					eol = eolForContent (out.readAll());
+					out.seek (0);
+					while ((! out.atEnd()) /*&& file.error() == QFile::NoError*/)
+						fileContents << out.readLine();
 				}
 				// Now all file is in the QStringList
 				if (fileContents.size() <= occ.position.y()-1)
@@ -402,7 +421,7 @@ void SearchAndReplace::replaceInDirrectory()
 					break;
 				}
 				// line with occurence
-				QString line = fileContents[occ.position.y()-1];
+				QString& line = fileContents[occ.position.y()-1];
 				
 				Qt::CaseSensitivity cs = occ.isCaseSensetive ? Qt::CaseSensitive : Qt::CaseInsensitive;
 				if (occ.isRegExp)  // TODO let's remember parametres in the Occurence, because user can change it on UI
@@ -414,8 +433,6 @@ void SearchAndReplace::replaceInDirrectory()
 					line.replace (occ.searchText, mWidget->replaceText(), cs);
 				}
 				replacementsCount ++;
-				
-				fileContents[occ.position.y()-1] = line;
 			}
 		}
 		// finished processing file. Need to write and close it, if it had been opened
@@ -424,13 +441,17 @@ void SearchAndReplace::replaceInDirrectory()
 			file.resize (0);
 			if (file.error() != QFile::NoError)
 			{
-				QMessageBox::critical (NULL, "Replace in dirrectory", "Failed to write file: " + file.errorString());
+				QMessageBox::critical (NULL, "Replace in directory", "Failed to write file: " + file.errorString());
 				break;
 			}
-			file.write (fileContents.join("").toUtf8());
+			
+			const QString contents = fileContents.join (eol);
+			const QByteArray datas = QTextCodec::codecForName (codec.toLocal8Bit())->fromUnicode (contents);
+			
+			file.write (datas);
 			if (file.error() != QFile::NoError)
 			{
-				QMessageBox::critical (NULL, "Replace in dirrectory", "Failed to write file: " + file.errorString());
+				QMessageBox::critical (NULL, "Replace in directory", "Failed to write file: " + file.errorString());
 				break;
 			}
 			file.close();
@@ -444,7 +465,7 @@ void SearchAndReplace::replaceInDirrectory()
 			if (NULL != currFileChild) // file is opened
 			{
 				currFileChild->closeFile(file.fileName());
-				currFileChild->openFile(file.fileName(), currFileChild->textCodec());
+				currFileChild->openFile(file.fileName(), codec);
 			}
 		}
 	}
@@ -517,7 +538,7 @@ void SearchAndReplace::showSearchFolder ()
 	if (mSearchThread && mSearchThread->isRunning())
 		return;
 	
-	mMode = SEARCH_DIRRECTORY;
+	mMode = SEARCH_DIRECTORY;
 	updateSearchTextOnUI ();
 	mWidget->show (mMode);
 }
@@ -530,7 +551,7 @@ void SearchAndReplace::showReplaceFolder ()
 	if (mSearchThread && mSearchThread->isRunning())
 		return;
 	
-	mMode = REPLACE_DIRRECTORY;
+	mMode = REPLACE_DIRECTORY;
 	updateSearchTextOnUI ();
 	mWidget->show (mMode);
 }
@@ -559,8 +580,8 @@ void SearchAndReplace::onNextClicked()
 			searchFile (true, false, true);
 		break;
 		
-		case SEARCH_DIRRECTORY:
-		case REPLACE_DIRRECTORY:
+		case SEARCH_DIRECTORY:
+		case REPLACE_DIRECTORY:
 			if (!isSearchTextValid () || !isPathValid ())
 				return;
 			
@@ -580,11 +601,12 @@ void SearchAndReplace::onNextClicked()
 				
 				bool caseSensetive = mWidget->isCaseSensetive ();
 				bool regexp = mWidget->isRegExp ();
+				QString codec = mWidget->codec();
 				
-				if (mMode == SEARCH_DIRRECTORY)
-					mSearchThread = new SearchThread(SearchThread::SEARCH, path, mask, searchText, "", caseSensetive, regexp, this);
+				if (mMode == SEARCH_DIRECTORY)
+					mSearchThread = new SearchThread(SearchThread::SEARCH, path, mask, searchText, "", caseSensetive, regexp, codec, this);
 				else
-					mSearchThread = new SearchThread(SearchThread::REPLACE, path, mask, searchText, replaceText, caseSensetive, regexp, this);
+					mSearchThread = new SearchThread(SearchThread::REPLACE, path, mask, searchText, replaceText, caseSensetive, regexp, codec, this);
 				
 				mWidget->setNextButtonText (tr("&Stop"));
 				mWidget->setNextButtonIcon (QIcon(":/console/icons/console/stop.png"));
@@ -638,7 +660,7 @@ void SearchAndReplace::onReplaceAllClicked()
 	}
 	else
 	{
-		replaceInDirrectory();
+		replaceInDirectory();
 	}
 }
 
@@ -656,9 +678,9 @@ void SearchAndReplace::onSearchTextEdited()
 /*!
 	Handler of click on search result. Open file with occurence, set cursor to it
 */
-void SearchAndReplace::makeGoTo (const QString& file, const QPoint& position)
+void SearchAndReplace::makeGoTo (const QString& file, const QPoint& position, const QString& codec)
 {
-	MonkeyCore::workspace()->goToLine(file, position, true, pMonkeyStudio::defaultCodec());
+	MonkeyCore::workspace()->goToLine(file, position, true, codec);
 }
 
 /*!

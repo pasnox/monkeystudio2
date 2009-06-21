@@ -1,5 +1,6 @@
 #include "CommandLineManager.h"
 
+#include <main.h>
 #include <MonkeyCore.h>
 #include <pFileManager.h>
 #include <pMonkeyStudio.h>

@@ -2,3 +2,4 @@
 
 # include path
 INCLUDEPATH	*= $$PWD/sdk
+DEPENDPATH	*= $$PWD/src

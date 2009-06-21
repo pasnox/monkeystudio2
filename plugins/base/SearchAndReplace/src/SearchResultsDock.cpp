@@ -54,7 +54,7 @@ SearchResultsDock::SearchResultsDock( QWidget* w )
 	
 	mTree->setHeaderHidden( true );
 	
-	connect( mTree, SIGNAL( itemDoubleClicked( QTreeWidgetItem*, int ) ), this, SLOT( itemPressed( QTreeWidgetItem* ) ) );
+	connect( mTree, SIGNAL( itemActivated( QTreeWidgetItem*, int ) ), this, SLOT( itemActivated( QTreeWidgetItem* ) ) );
 	
 	// NOTE we sometimes disconnect this signal
 	connect( mTree, SIGNAL( itemChanged( QTreeWidgetItem*, int ) ), this, SLOT( itemChanged( QTreeWidgetItem* ) ) );
@@ -121,7 +121,7 @@ void SearchResultsDock::appendSearchResult( const SearchAndReplace::Occurence& s
 	QTreeWidgetItem* parentItem = NULL;
 	
 	bool wasEmpty = (mTree->topLevelItemCount() == 0);
-	if (s.mode == SearchAndReplace::REPLACE_DIRRECTORY)
+	if (s.mode == SearchAndReplace::REPLACE_DIRECTORY)
 	{
 		QString parentItemFile = QString::null;
 		if (mTree->topLevelItemCount())
@@ -133,6 +133,7 @@ void SearchResultsDock::appendSearchResult( const SearchAndReplace::Occurence& s
 		{
 			parentItem = new QTreeWidgetItem (mTree);
 			parentItem->setData( 0, FILE_NAME, s.fileName ); // filename
+			parentItem->setData( 0, TEXT_CODEC, s.codec ); // text codec
 			parentItem->setFlags (parentItem->flags() | Qt::ItemIsUserCheckable);
 			parentItem->setCheckState (0, Qt::Checked);
 		}
@@ -151,10 +152,11 @@ void SearchResultsDock::appendSearchResult( const SearchAndReplace::Occurence& s
 	it->setToolTip( 0, s.fullText );
 	it->setData( 0, FILE_NAME, s.fileName ); // filename
 	it->setData( 0, POSITION, s.position ); // position
+	it->setData( 0, TEXT_CODEC, s.codec ); // text codec
 	it->setData( 0, SEARCH_TEXT, s.searchText ); // position
 	it->setData( 0, IS_REG_EXP, s.isRegExp ); // position
 	it->setData( 0, IS_CASE_SENSETIVE, s.isCaseSensetive ); // position
-	if (s.mode == SearchAndReplace::REPLACE_DIRRECTORY)
+	if (s.mode == SearchAndReplace::REPLACE_DIRECTORY)
 	{
 		it->setFlags (it->flags() | Qt::ItemIsUserCheckable);
 		it->setCheckState (0, Qt::Checked);
@@ -172,12 +174,14 @@ void SearchResultsDock::appendSearchResult( const SearchAndReplace::Occurence& s
 	Opens file/line in the editor
 	\param it Item, which was pressed
 */
-void SearchResultsDock::itemPressed ( QTreeWidgetItem* it )
+void SearchResultsDock::itemActivated ( QTreeWidgetItem* it )
 {
 	// get filename
 	QString s = it->data( 0, FILE_NAME ).toString();
 	QPoint position = it->data( 0, POSITION ).toPoint();
-	emit resultActivated (s, position);
+	QString codec = it->data( 0, TEXT_CODEC ).toString();
+	
+	emit resultActivated (s, position, codec);
 }
 
 /*!

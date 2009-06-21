@@ -30,6 +30,7 @@ namespace qCtagsSenseUtils
 {
 	QCTAGSSENSE_EXPORT void initMaps();
 	QCTAGSSENSE_EXPORT qCtagsSense::Kind kindType( const QChar& c );
+	QCTAGSSENSE_EXPORT qCtagsSense::Kind kindType( const QString& string );
 	QCTAGSSENSE_EXPORT QChar kindChar( qCtagsSense::Kind kind );
 	QCTAGSSENSE_EXPORT QString kindText( const QChar& c );
 	

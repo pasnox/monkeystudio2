@@ -61,8 +61,8 @@ public:
 		SEARCH_PROJECT = 2,
 		REPLACE_PROJECT = 3
 #endif
-		SEARCH_DIRRECTORY = 4,
-		REPLACE_DIRRECTORY = 5
+		SEARCH_DIRECTORY = 4,
+		REPLACE_DIRECTORY = 5
 	};
 	
 	/*! Used for transfer results of search in dirrectory from search thread to dock,
@@ -73,6 +73,7 @@ public:
 		Mode mode;				/*! Active mode. Can be SEARCH_DIRRECTORY or REPLACE_DIRRECTORY */
 		QString fileName;		/*! Name of file, where occurence found. With full path */
 		QPoint position;		/*! Position in the file x - column, y - line */
+		QString codec;			/*! The text codec use to decode/encode the file */
 		QString text;			/*! Text for display occurence on UI */
 		QString fullText;		/*! Full text. For display on hint */
 		QString searchText; 	/*! Search pattern, which was used for searching. Filled only for 'replace in dirrectory' */
@@ -101,13 +102,14 @@ protected:
 	bool isPathValid ();
 	bool isMaskValid ();
 	
-	void showMessage (QString status);
+	void showMessage (const QString& status);
 	void updateSearchTextOnUI ();
 	
+	QString eolForContent (const QString& content);
 	bool searchFile (bool next, bool incremental, bool enableLooping);
 	int replace(bool all);
 	
-	void replaceInDirrectory();
+	void replaceInDirectory();
 	
 protected slots:
 	// from system
@@ -126,7 +128,7 @@ protected slots:
 	void onSearchTextEdited();
 	
 	// from search results dock
-	void makeGoTo (const QString& file, const QPoint& position);
+	void makeGoTo (const QString& file, const QPoint& position, const QString& codec);
 	
 	// from search thread
 	void threadFinished ();

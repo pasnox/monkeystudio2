@@ -156,14 +156,16 @@ bool pMonkeyStudio::isSameFile( const QString& left, const QString& right )
 */
 QStringList pMonkeyStudio::availableTextCodecs()
 {
-	static QStringList l;
-	if ( l.isEmpty() )
+	static QMap<QString, QString> codecs;
+	
+	if ( codecs.isEmpty() )
 	{
-		foreach ( QByteArray a, QTextCodec::availableCodecs() )
-			l << a;
-		l.sort();
+		foreach ( const QByteArray& codec, QTextCodec::availableCodecs() )
+		{
+			codecs[ codec.toLower() ] = codec;
+		}
 	}
-	return l;
+	return codecs.values();
 }
 
 /*!

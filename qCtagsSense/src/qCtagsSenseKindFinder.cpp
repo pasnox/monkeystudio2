@@ -119,6 +119,6 @@ void qCtagsSenseKindFinder::run()
 	{
 		mEntry = qCtagsSenseUtils::entryForRecord( record, q.record().value( "filename" ).toString() );
 		
-		emit memberActivated( mEntry );
+		emit entryActivated( mEntry );
 	}
 }

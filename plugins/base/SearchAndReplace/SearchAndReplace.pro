@@ -1,4 +1,4 @@
-TARGET	= SearchEndReplace
+TARGET	= SearchAndReplace
 include( ../../plugins.pri )
 DESTDIR = $$MONKEY_PLUGINS_DIR/base
 

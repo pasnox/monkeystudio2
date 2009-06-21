@@ -54,6 +54,7 @@ class SearchResultsDock : public pDockWidget
 	{
 		FILE_NAME = Qt::UserRole +1,
 		POSITION,
+		TEXT_CODEC,
 		// for replacement
 		SEARCH_TEXT,
 		IS_REG_EXP,
@@ -74,13 +75,13 @@ protected:
 	QTreeWidget* mTree;
 
 signals:
-	void resultActivated (const QString& fileName, const QPoint& position);
+	void resultActivated (const QString& fileName, const QPoint& position, const QString& codec);
 	
 public slots:
 	void appendSearchResult( const SearchAndReplace::Occurence& );
 	
 protected slots:
-	void itemPressed( QTreeWidgetItem* );
+	void itemActivated( QTreeWidgetItem* );
 	void itemChanged( QTreeWidgetItem* );
 };
 

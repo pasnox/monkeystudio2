@@ -27,6 +27,7 @@
 **
 ****************************************************************************/
 #include "UITranslator.h"
+#include "main.h"
 #include "../../coremanager/MonkeyCore.h"
 #include "../../settingsmanager/Settings.h"
 #include "../../queuedstatusbar/QueuedStatusBar.h"

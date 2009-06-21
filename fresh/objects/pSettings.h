@@ -28,18 +28,18 @@
 
 #include <QSettings>
 
-#ifndef PACKAGE_NAME
+#ifndef _PACKAGE_NAME
 /*!
 	\details Default used variable for application name
 */
-#define PACKAGE_NAME "My Application"
+#define _PACKAGE_NAME "My Application"
 #endif
 
-#ifndef PACKAGE_VERSION
+#ifndef _PACKAGE_VERSION
 /*!
 	\details Default used variable for application version
 */
-#define PACKAGE_VERSION "1.0.0"
+#define _PACKAGE_VERSION "1.0.0"
 #endif
 
 class QMainWindow;
@@ -54,7 +54,7 @@ class Q_MONKEY_EXPORT pSettings : public QSettings
 
 public:
 	pSettings( QObject* parent = 0, const QString& name  = mProgramName, const QString& version = mProgramVersion );
-	static void setIniInformations( const QString& name = PACKAGE_NAME, const QString& version = PACKAGE_VERSION );
+	static void setIniInformations( const QString& name = _PACKAGE_NAME, const QString& version = _PACKAGE_VERSION );
 	static QString programName();
 	static QString programVersion();
 	static QString getIniFile( const QString& name, const QString& version );

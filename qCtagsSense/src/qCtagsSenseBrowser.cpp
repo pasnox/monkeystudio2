@@ -396,7 +396,6 @@ void qCtagsSenseBrowser::mSearchModel_ready()
 		tvSearchResult->scrollTo( index, QAbstractItemView::PositionAtTop );
 	}
 	
-	const int countResult = mSearchModel->rowCount();
 	const int countSearchLetters = leSearch->text().length();
 	
 	if ( countSearchLetters == 0 )

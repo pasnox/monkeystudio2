@@ -33,6 +33,7 @@ namespace qCtagsSenseUtils
 	
 	QMap<qCtagsSense::Kind, QString> mKindText;
 	QMap<QString, CharKindPairList> mLanguageChars; // language, list of pair of char/kind
+	QMap<QString, qCtagsSense::Kind> mKindStrings; // kind string, kind enum
 	QMap<QString, QPixmap> mPixmaps;
 };
 
@@ -334,6 +335,14 @@ void qCtagsSenseUtils::initMaps()
 		mLanguageChars[ "Verilog" ] = verilogList;
 		mLanguageChars[ "Vim" ] = vimList;
 		mLanguageChars[ "YACC" ] = yaccList;
+		
+		// kind strings
+		mKindStrings[ "class" ] = qCtagsSense::Class;
+		mKindStrings[ "enum" ] = qCtagsSense::Enumeration;
+		mKindStrings[ "function" ] = qCtagsSense::Function;
+		mKindStrings[ "namespace" ] = qCtagsSense::Namespace;
+		mKindStrings[ "struct" ] = qCtagsSense::Structure;
+		mKindStrings[ "union" ] = qCtagsSense::Union;
 	
 		// kind text
 		mKindText[ qCtagsSense::Class ] = QCoreApplication::translate( "qCtagsSense", "Class" );
@@ -369,6 +378,11 @@ qCtagsSense::Kind qCtagsSenseUtils::kindType( const QChar& c, const QString& lan
 	return qCtagsSense::Unknow;
 }
 
+qCtagsSense::Kind qCtagsSenseUtils::kindType( const QString& string )
+{
+	return mKindStrings.value( string, qCtagsSense::Unknow );
+}
+
 QChar qCtagsSenseUtils::kindChar( qCtagsSense::Kind kind, const QString& language )
 {
 	const CharKindPairList kinds = mLanguageChars.value( language );
@@ -386,7 +400,7 @@ QChar qCtagsSenseUtils::kindChar( qCtagsSense::Kind kind, const QString& languag
 
 QString qCtagsSenseUtils::kindText( qCtagsSense::Kind kind )
 {
-	return mKindText.value( kind );
+	return mKindText.value( kind, "Unknow kind - please update the map" );
 }
 
 QString qCtagsSenseUtils::kindText( const QChar& c, const QString& language )
@@ -535,7 +549,7 @@ QString qCtagsSenseUtils::entryDisplay( const qCtagsSenseEntry* entry )
 	{
 		case qCtagsSense::Function:
 		case qCtagsSense::Prototype:
-			display.append( entry->signature );
+			//display.append( entry->signature );
 			break;
 		case qCtagsSense::VariableLocal:
 		case qCtagsSense::Member:
@@ -612,16 +626,10 @@ QString qCtagsSenseUtils::entryToolTip( const qCtagsSenseEntry* entry )
 		tooltip += QString( "%1::%2" ).arg( entry->scope.second ).arg( entry->name );
 	}
 	
-	tooltip += entry->signature;
+	tooltip += QString( "<i><b>%1</b></i>" ).arg( entry->signature );
 	
 	return tooltip;
 }
-
-#ifdef Q_CC_MSVC
-#pragma message("remove me and use pMonkeyStudio::getFiles")
-#else
-#warning remove me and use pMonkeyStudio::getFiles
-#endif
 
 QFileInfoList qCtagsSenseUtils::getFiles( QDir fromDir, const QStringList& filters, bool recursive )
 {

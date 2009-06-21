@@ -27,6 +27,7 @@
 **
 ****************************************************************************/
 #include "MonkeyCore.h"
+#include "main.h"
 #include "../pMonkeyStudio.h"
 #include "../settingsmanager/Settings.h"
 #include "../pluginsmanager/PluginsManager.h"
@@ -63,10 +64,10 @@ void MonkeyCore::init()
 {
 	// create splashscreen
 	bool isXMas = QDate::currentDate().month() == ( 12 || 1 );
-	
+
 	QSplashScreen splash( pIconManager::pixmap( isXMas ? "splashscreen_christmas.png" : "splashscreen.png", ":/application" ) );
 	splash.setProperty( "isXMas", isXMas );
-	
+
 	QFont ft( splash.font() );
 #ifndef Q_OS_WIN
 	ft.setPointSize( ft.pointSize() -2 );
@@ -74,20 +75,20 @@ void MonkeyCore::init()
 	ft.setBold( true );
 	splash.setFont( ft );
 	splash.show();
-	
+
 	// init pSettings
 	pSettings::setIniInformations();
-	
+
 	// restore application style
 	showMessage( &splash, tr( "Initializing Style..." ) );
 	qApp->setStyle( settings()->value( "MainWindow/Style", "system" ).toString() );
-	
+
 	// set default settings if first time running
 	if ( settings()->value( "FirstTimeRunning", true ).toBool() )
 	{
 		settings()->setDefaultSettings();
 	}
-	
+
 	// init translation
 	showMessage( &splash, tr( "Initializing Translation..." ) );
 	if ( !settings()->value( "Translations/Accepted" ).toBool() )
@@ -95,15 +96,15 @@ void MonkeyCore::init()
 		UITranslator::instance()->exec();
 	}
 	pMonkeyStudio::loadTranslations();
-	
+
 	// init shortcuts editor
 	showMessage( &splash, tr( "Initializing Actions Manager..." ) );
 	MonkeyCore::actionsManager()->setSettings( settings() );
-	
+
 	// init shell && commands
 	showMessage( &splash, tr( "Initializing Shell..." ) );
 	interpreter();
-	
+
 	// start console manager
 	showMessage( &splash, tr( "Initializing Console..." ) );
 	consoleManager();
@@ -111,44 +112,44 @@ void MonkeyCore::init()
 	// init main window
 	showMessage( &splash, tr( "Initializing Main Window..." ) );
 	mainWindow()->initGui();
-	
+
 	// init abbreviations manager
 	showMessage( &splash, tr( "Initializing abbreviations manager..." ) );
 	abbreviationsManager();
-	
+
 	// init file manager
 	showMessage( &splash, tr( "Initializing file manager..." ) );
 	fileManager();
-	
+
 	// load mks scripts
 	showMessage( &splash, tr( "Executing scripts..." ) );
 	interpreter()->loadHomeScripts();
-	
+
 	// init pluginsmanager
 	showMessage( &splash, tr( "Initializing Plugins..." ) );
 	pluginsManager()->loadsPlugins();
-	
+
 	// restore window state
 	showMessage( &splash, tr( "Restoring Workspace..." ) );
 	mainWindow()->setSettings( settings() );
-	
+
 	// restore session
 	showMessage( &splash, tr( "Restoring Session..." ) );
 	if ( pMonkeyStudio::restoreSessionOnStartup() )
 	{
 		workspace()->fileSessionRestore_triggered();
 	}
-	
+
 	// show main window
 	mainWindow()->menu_Docks_aboutToShow();
 	mainWindow()->show();
-	
+
 	// ready
 	showMessage( &splash, tr( "%1 v%2 Ready !" ).arg( PACKAGE_NAME, PACKAGE_VERSION ) );
 
 	// finish splashscreen
 	splash.finish( mainWindow() );
-	
+
 	// show settings dialog the first time user start program
 	if ( settings()->value( "FirstTimeRunning", true ).toBool() )
 	{
@@ -158,7 +159,7 @@ void MonkeyCore::init()
 			settings()->setValue( "FirstTimeRunning", false );
 		}
 	}
-	
+
 	// prepare apis
 	pMonkeyStudio::prepareAPIs();
 }
