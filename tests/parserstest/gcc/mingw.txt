@@ -1,0 +1,5 @@
+I"build\release\.moc" -I"build\release\.ui" -I"..\..\Qt\4.4.3\mkspecs\win32-g++" -o build\release\.obj\win32\CmlLineManager.o src\CmlLineManager.cpp
+src\CmlLineManager.cpp: In constructor `CmlLineManager::CmlLineManager()':
+src\CmlLineManager.cpp:11: warning: unused variable 'i'
+src\CmlLineManager.cpp:11: warning: unused variable 'y'
+src\CmlLineManager.cpp:11: warning: unused variable 'z'

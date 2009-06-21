@@ -1,0 +1,112 @@
+<ui version="4.0" >
+ <class>UIItemSettings</class>
+ <widget class="QDialog" name="UIItemSettings" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>320</width>
+    <height>240</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Edit item value...</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="spacing" >
+    <number>3</number>
+   </property>
+   <property name="leftMargin" >
+    <number>5</number>
+   </property>
+   <property name="topMargin" >
+    <number>5</number>
+   </property>
+   <property name="rightMargin" >
+    <number>5</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>5</number>
+   </property>
+   <item>
+    <widget class="QTreeWidget" name="twValueRoles" >
+     <property name="editTriggers" >
+      <set>QAbstractItemView::CurrentChanged</set>
+     </property>
+     <property name="alternatingRowColors" >
+      <bool>true</bool>
+     </property>
+     <property name="selectionBehavior" >
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
+     <property name="rootIsDecorated" >
+      <bool>false</bool>
+     </property>
+     <property name="itemsExpandable" >
+      <bool>false</bool>
+     </property>
+     <property name="allColumnsShowFocus" >
+      <bool>true</bool>
+     </property>
+     <column>
+      <property name="text" >
+       <string>Role</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Value</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="dbbButtons" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons" >
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../../../../monkey/src/resources/resources.qrc" />
+ </resources>
+ <connections>
+  <connection>
+   <sender>dbbButtons</sender>
+   <signal>accepted()</signal>
+   <receiver>UIItemSettings</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>351</x>
+     <y>117</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>390</x>
+     <y>167</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dbbButtons</sender>
+   <signal>rejected()</signal>
+   <receiver>UIItemSettings</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>381</x>
+     <y>139</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>387</x>
+     <y>167</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

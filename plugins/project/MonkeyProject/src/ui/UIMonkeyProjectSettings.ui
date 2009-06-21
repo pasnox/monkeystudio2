@@ -1,0 +1,220 @@
+<ui version="4.0" >
+ <class>UIMonkeyProjectSettings</class>
+ <widget class="QDialog" name="UIMonkeyProjectSettings" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>320</width>
+    <height>240</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle" >
+   <string>Settings</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="spacing" >
+    <number>3</number>
+   </property>
+   <property name="leftMargin" >
+    <number>5</number>
+   </property>
+   <property name="topMargin" >
+    <number>5</number>
+   </property>
+   <property name="rightMargin" >
+    <number>5</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>5</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout" >
+     <property name="spacing" >
+      <number>3</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="label_3" >
+       <property name="text" >
+        <string>Project name</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="projectName" />
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" >
+     <property name="spacing" >
+      <number>3</number>
+     </property>
+     <item>
+      <layout class="QVBoxLayout" >
+       <property name="spacing" >
+        <number>3</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label_6" >
+         <property name="text" >
+          <string>Actions:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QListWidget" name="actionsList" />
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" >
+       <property name="spacing" >
+        <number>3</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label_8" >
+         <property name="text" >
+          <string>Action name:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="actionName" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="addActionBtn" >
+         <property name="text" >
+          <string>Add action</string>
+         </property>
+         <property name="autoDefault" >
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="removeActionBtn" >
+         <property name="text" >
+          <string>Remove action</string>
+         </property>
+         <property name="autoDefault" >
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" >
+     <property name="spacing" >
+      <number>3</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="label_2" >
+       <property name="text" >
+        <string>Action commands:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QTextEdit" name="commandsEdit" >
+       <property name="enabled" >
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" >
+     <property name="spacing" >
+      <number>3</number>
+     </property>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>191</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="acceptBtn" >
+       <property name="text" >
+        <string>OK</string>
+       </property>
+       <property name="default" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_4" >
+       <property name="text" >
+        <string>Cansel</string>
+       </property>
+       <property name="autoDefault" >
+        <bool>false</bool>
+       </property>
+       <property name="default" >
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pushButton_4</sender>
+   <signal>clicked()</signal>
+   <receiver>UIMonkeyProjectSettings</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>308</x>
+     <y>354</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>422</x>
+     <y>300</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionName</sender>
+   <signal>returnPressed()</signal>
+   <receiver>addActionBtn</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>255</x>
+     <y>114</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>260</x>
+     <y>136</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
