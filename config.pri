@@ -59,14 +59,15 @@ PACKAGE_DOMAIN	= "monkeystudio.org"
 PACKAGE_VERSION	= 1.8.4.0b
 
 CONFIG( debug, debug|release ) {
-	PACKAGE_VERSION	= $${PACKAGE_VERSION}svn_debug
+	PACKAGE_VERSION_STR	= $${PACKAGE_VERSION}svn_debug
 } else {
-	PACKAGE_VERSION	= $${PACKAGE_VERSION}svn_release
+	PACKAGE_VERSION_STR	= $${PACKAGE_VERSION}svn_release
 }
 
 # define variable for source code
 DEFINES	*= "_PACKAGE_NAME=\"\\\"$${QMAKE_TARGET_PRODUCT}\\\"\"" \
 	"_PACKAGE_VERSION=\"\\\"$${PACKAGE_VERSION}\\\"\"" \
+	"_PACKAGE_VERSION_STR=\"\\\"$${PACKAGE_VERSION_STR}\\\"\"" \
 	"_PACKAGE_DOMAIN=\"\\\"$${PACKAGE_DOMAIN}\\\"\"" \
 	"_PACKAGE_COPYRIGHTS=\"\\\"$${QMAKE_TARGET_COPYRIGHT}\\\"\""
 

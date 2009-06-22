@@ -153,7 +153,7 @@ QString Settings::homeFilePath( const QString& filePath ) const
 QString Settings::homePath( Settings::StoragePath type ) const
 {
 	const QString path = QFileInfo( fileName() ).absolutePath();
-	const QString folder = storageToString( type ).append( "-%1" ).arg( PACKAGE_VERSION );
+	const QString folder = storageToString( type ).append( "-%1" ).arg( PACKAGE_VERSION_STR );
 	QDir dir( path );
 	
 	if ( !dir.exists( folder ) && !dir.mkdir( folder ) )

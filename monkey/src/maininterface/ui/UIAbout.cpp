@@ -40,7 +40,7 @@ const QString mInformations =
 "<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"font-size:small;\">"
 "	<tr>"
 "		<td align=\"center\"><br /><img src=\":/application/icons/application/monkey2.png\" width=\"32\" height=\"32\"></td>"
-"		<td>%2 v%3<br />%4<br />The Monkey Studio Team<br /><a href=\"http://%6\">Home page</a></td>"
+"		<td>%2 v%3 (%4)<br />%5<br />The Monkey Studio Team<br /><a href=\"http://%6\">Home page</a></td>"
 "	</tr>"
 "</table>";
 
@@ -98,7 +98,7 @@ UIAbout::UIAbout( QWidget* p )
 
 	// show informations table
 	lInformations->setTextInteractionFlags( Qt::TextBrowserInteraction | Qt::TextSelectableByKeyboard );
-	lInformations->setText( mInformations.arg( PACKAGE_NAME ).arg( PACKAGE_VERSION ).arg( PACKAGE_COPYRIGHTS ).arg( PACKAGE_DOMAIN ) );
+	lInformations->setText( mInformations.arg( PACKAGE_NAME ).arg( PACKAGE_VERSION ).arg( PACKAGE_VERSION_STR ).arg( PACKAGE_COPYRIGHTS ).arg( PACKAGE_DOMAIN ) );
 
 	// logo
 	bool isXMas = QDate::currentDate().month() == ( 12 || 1 );

@@ -96,7 +96,7 @@ void CommandLineManager::showVersion()
 	if ( !mVersionShown )
 	{
 		mVersionShown = true;
-		qWarning( "%s version %s", PACKAGE_NAME, PACKAGE_VERSION );
+		qWarning( "%s version %s (%s)", PACKAGE_NAME, PACKAGE_VERSION, PACKAGE_VERSION_STR );
 		qWarning( "%s & The Monkey Studio Team", PACKAGE_COPYRIGHTS );
 		qWarning( "http://%s", PACKAGE_DOMAIN );
 	}
