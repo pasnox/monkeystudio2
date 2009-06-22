@@ -145,7 +145,7 @@ void MonkeyCore::init()
 	mainWindow()->show();
 
 	// ready
-	showMessage( &splash, tr( "%1 v%2 Ready !" ).arg( PACKAGE_NAME, PACKAGE_VERSION ) );
+	showMessage( &splash, tr( "%1 v%2 (%3) Ready !" ).arg( PACKAGE_NAME, PACKAGE_VERSION, PACKAGE_VERSION_STR ) );
 
 	// finish splashscreen
 	splash.finish( mainWindow() );

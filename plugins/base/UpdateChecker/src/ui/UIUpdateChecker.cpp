@@ -40,6 +40,58 @@
 
 const QString UIUpdateChecker::mDownloadsUrl = PACKAGE_DOWNLOAD_FEED;
 
+// UpdateItem::Version
+
+UpdateItem::Version::Version( const QString& version )
+{
+	const QStringList parts = version.split( "." );
+	const int index = parts.value( 3 ).indexOf( QRegExp( "[A-Z|a-z]" ) );
+	
+	major = parts.value( 0 ).toInt();
+	minor = parts.value( 1 ).toInt();
+	patch = parts.value( 2 ).toInt();
+	
+	if ( index != -1 )
+	{
+		build = parts.value( 3 ).mid( 0, index ).toInt();
+		extra = parts.value( 3 ).mid( index );
+	}
+	else
+	{
+		build = parts.value( 3 ).toInt();
+	}
+}
+
+bool UpdateItem::Version::operator<( const Version& other ) const
+{
+	if ( major < other.major )
+		return true;
+	else if ( major > other.major )
+		return false;
+	
+	if ( minor < other.minor )
+		return true;
+	else if ( minor > other.minor )
+		return false;
+	
+	if ( patch < other.patch )
+		return true;
+	else if ( patch > other.patch )
+		return false;
+	
+	if ( build < other.build )
+		return true;
+	else if ( build > other.build )
+		return false;
+	
+	return extra < other.extra; // not the best but afaik ;)
+}
+
+bool UpdateItem::Version::operator>( const Version& other ) const
+{
+	return !operator<( other );
+}
+
 // UpdateItem
 
 UpdateItem::UpdateItem( const QDomElement& element )
@@ -76,6 +128,26 @@ UpdateItem::UpdateItem( const QDomElement& element )
 			mDatas[ UpdateItem::Content ] = el.firstChild().toText().data().trimmed();
 		}
 	}
+}
+
+bool UpdateItem::operator<( const UpdateItem& other ) const
+{
+	return Version( version() ) < Version( other.version() );
+}
+
+bool UpdateItem::operator>( const UpdateItem& other ) const
+{
+	return Version( version() ) > Version( other.version() );
+}
+
+bool UpdateItem::operator<( const Version& other ) const
+{
+	return Version( version() ) < other;
+}
+
+bool UpdateItem::operator>( const Version& other ) const
+{
+	return Version( version() ) > other;
 }
 
 QDateTime UpdateItem::updated() const
@@ -127,6 +199,29 @@ QString UpdateItem::displayText() const
 	return content().split( "\n" ).value( 1 ).trimmed().append( " ( " ).append( title() ).append( " ) " );
 }
 
+QString UpdateItem::versionString() const
+{
+	const QString text = title();
+	QRegExp rx( ".*mks_([\\d\\.\\d\\.\\d\\.\\d]{1,}[\\w]*)-svn.*" );
+	
+	if ( rx.exactMatch( text ) )
+	{
+		return rx.cap( 1 );
+	}
+	
+	return QString::null;
+}
+
+UpdateItem::Version UpdateItem::version() const
+{
+	return Version( versionString() );
+}
+
+bool UpdateItem::isValid() const
+{
+	return !mDatas.isEmpty();
+}
+
 // UIUpdateChecker
 
 UIUpdateChecker::UIUpdateChecker( UpdateChecker* plugin, QWidget* w )
@@ -139,7 +234,7 @@ UIUpdateChecker::UIUpdateChecker( UpdateChecker* plugin, QWidget* w )
 	setupUi( this );
 	setAttribute( Qt::WA_DeleteOnClose );
 	setAttribute( Qt::WA_MacSmallSize );
-	lVersion->setText( tr( "You are using version <b>%1</b>." ).arg( PACKAGE_VERSION ) );
+	lVersion->setText( tr( "You are using version <b>%1</b> (%2)." ).arg( PACKAGE_VERSION ).arg( PACKAGE_VERSION_STR ) );
 	dbbButtons->button( QDialogButtonBox::Yes )->setText( tr( "Download" ) );
 	dbbButtons->button( QDialogButtonBox::Yes )->setEnabled( false );
 	
@@ -161,6 +256,7 @@ UIUpdateChecker::~UIUpdateChecker()
 
 void UIUpdateChecker::accessManager_finished( QNetworkReply* reply )
 {
+	const UpdateItem::Version currentVersion( PACKAGE_VERSION );
 	const QDateTime lastUpdated = mPlugin->settingsValue( "LastUpdated" ).toDateTime();
 	const QDateTime lastCheck = mPlugin->settingsValue( "LastCheck" ).toDateTime();
 	
@@ -184,7 +280,7 @@ void UIUpdateChecker::accessManager_finished( QNetworkReply* reply )
 				
 				const UpdateItem updateItem( element );
 				
-				if ( updateItem.isFeatured() )
+				if ( updateItem.isFeatured() && updateItem > currentVersion )
 				{
 					QListWidgetItem* item = new QListWidgetItem( updateItem.displayText() );
 					
@@ -196,15 +292,20 @@ void UIUpdateChecker::accessManager_finished( QNetworkReply* reply )
 			
 			mPlugin->setSettingsValue( "LastUpdated", updated );
 			
-			if ( lastUpdated < updated /*&& lastCheck < updated*/ )
+			if ( lwVersions->count() > 0 )
 			{				
-				if ( !isVisible() )
+				if ( !isVisible() && lastUpdated < updated )
 				{
 					open();
 				}
 			}
 			else
 			{
+				QListWidgetItem* item = new QListWidgetItem( tr( "You are running the last available version." ) );
+				
+				item->setFlags( Qt::NoItemFlags );
+				lwVersions->addItem( item );
+				
 				if ( !isVisible() )
 				{
 					close();
@@ -213,7 +314,7 @@ void UIUpdateChecker::accessManager_finished( QNetworkReply* reply )
 		}
 		else
 		{
-			lwVersions->addItem( new QListWidgetItem( tr( "An error occur while parsing xml." ) ) );
+			lwVersions->addItem( new QListWidgetItem( tr( "An error occur while parsing xml, retry later." ) ) );
 		}
 	}
 	
@@ -222,7 +323,10 @@ void UIUpdateChecker::accessManager_finished( QNetworkReply* reply )
 
 void UIUpdateChecker::on_lwVersions_itemSelectionChanged()
 {
-	dbbButtons->button( QDialogButtonBox::Yes )->setEnabled( lwVersions->selectedItems().value( 0 ) );
+	QListWidgetItem* item = lwVersions->selectedItems().value( 0 );
+	const UpdateItem updateItem = item ? item->data( Qt::UserRole ).value<UpdateItem>() : UpdateItem();
+	
+	dbbButtons->button( QDialogButtonBox::Yes )->setEnabled( updateItem.isValid() );
 }
 
 void UIUpdateChecker::accept()

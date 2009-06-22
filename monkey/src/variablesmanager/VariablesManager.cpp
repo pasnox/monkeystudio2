@@ -48,12 +48,12 @@ QString VariablesManager::getVariable( QString name, Dictionary locals )
 	if ( name == "editor_version" )
 	// monkeystudio_version
 	{
-		result = PACKAGE_VERSION;
+		result = PACKAGE_VERSION_STR;
 	}
 	else if ( name == "editor_version_string" )
 	// monkeystudio_version_string
 	{
-		result = QString( "%1 v%2" ).arg( PACKAGE_NAME ).arg( PACKAGE_VERSION );
+		result = QString( "%1 v%2 (%3)" ).arg( PACKAGE_NAME ).arg( PACKAGE_VERSION ).arg( PACKAGE_VERSION_STR );
 	}
 	else if ( name == "date" )
 	// current date

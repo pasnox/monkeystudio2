@@ -101,7 +101,7 @@ void UIMain::initGui()
 	// init connection
 	initConnections();
 	// init final gui
-	setWindowTitle( QObject::tr( "%1 v%2" ).arg( PACKAGE_NAME, PACKAGE_VERSION ) );
+	setWindowTitle( QObject::tr( "%1 v%2 (%3)" ).arg( PACKAGE_NAME, PACKAGE_VERSION, PACKAGE_VERSION_STR ) );
 	setUnifiedTitleAndToolBarOnMac( true );
 	setWindowIcon( menuBar()->action( "mHelp/aAbout" )->icon() );
 	setIconSize( QSize( 16, 16 ) );
