@@ -138,9 +138,15 @@ UIUpdateChecker::UIUpdateChecker( UpdateChecker* plugin, QWidget* w )
 	
 	setupUi( this );
 	setAttribute( Qt::WA_DeleteOnClose );
+	setAttribute( Qt::WA_MacSmallSize );
 	lVersion->setText( tr( "You are using version <b>%1</b>." ).arg( PACKAGE_VERSION ) );
 	dbbButtons->button( QDialogButtonBox::Yes )->setText( tr( "Download" ) );
 	dbbButtons->button( QDialogButtonBox::Yes )->setEnabled( false );
+	
+	foreach ( QWidget* widget, findChildren<QWidget*>() )
+	{
+		widget->setAttribute( Qt::WA_MacSmallSize );
+	}
 	
 	mAccessManager = new QNetworkAccessManager( this );
 	
