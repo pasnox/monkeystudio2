@@ -393,6 +393,8 @@ void SearchAndReplace::replaceInDirectory()
 		{
 			Occurence occ = mDock->occurence (fileIndex, occurenceIndex);
 			codec = occ.codec;
+			Q_ASSERT( !codec.isNull() );
+			
 			if (occ.checked)
 			{
 				if (! file.isOpen())  // open file, if nessesary
@@ -435,6 +437,7 @@ void SearchAndReplace::replaceInDirectory()
 				replacementsCount ++;
 			}
 		}
+		
 		// finished processing file. Need to write and close it, if it had been opened
 		if (file.isOpen())
 		{

@@ -96,6 +96,7 @@ SearchAndReplace::Occurence SearchResultsDock::occurence (int fileIndex, int occ
 		{
 			result.text = occurenceItem->text(0);
 			result.fileName = occurenceItem->data( 0, FILE_NAME ).toString();
+			result.codec = occurenceItem->data( 0, TEXT_CODEC ).toString();
 			result.position = occurenceItem->data( 0, POSITION ).toPoint();
 			result.searchText = occurenceItem->data( 0, SEARCH_TEXT ).toString();
 			result.isRegExp = occurenceItem->data( 0, IS_REG_EXP ).toBool();
