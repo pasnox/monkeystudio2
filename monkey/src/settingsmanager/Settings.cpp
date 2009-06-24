@@ -35,8 +35,6 @@
 #include <QStringList>
 #include <QDir>
 
-#include <QDebug>
-
 Settings::Settings( QObject* o )
 	: pSettings( o )
 {}
@@ -152,17 +150,16 @@ QString Settings::homeFilePath( const QString& filePath ) const
 
 QString Settings::homePath( Settings::StoragePath type ) const
 {
-	const QString path = QFileInfo( fileName() ).absolutePath();
 	const QString folder = storageToString( type ).append( "-%1" ).arg( PACKAGE_VERSION_STR );
+	const QString path = QFileInfo( fileName() ).absolutePath().append( QString( "/%1" ).arg( folder ) );
 	QDir dir( path );
 	
-	if ( !dir.exists( folder ) && !dir.mkdir( folder ) )
+	if ( !dir.exists() && !dir.mkpath( path ) )
 	{
 		return QString::null;
 	}
 	
-	dir.cd( folder );
-	return dir.absolutePath();
+	return path;
 }
 
 QStringList Settings::storagePathsOutOfBox( Settings::StoragePath type, const QString& appPath ) const
