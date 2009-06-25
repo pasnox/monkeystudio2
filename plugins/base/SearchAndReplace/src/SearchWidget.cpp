@@ -225,17 +225,16 @@ SearchWidget::SearchWidget( QWidget* parent )
 	mDefaultEditColor = cobSearch->lineEdit()->palette().color (QPalette::Base);
 	onCodecActionTriggered (agCodec->checkedAction());
 	
-	/*
 	QList<QWidget*> widgets;
-	widgets << cbCodec << lSearchText << cobSearch << tbNext << tbPrevious << cbCaseSensitive
+	widgets << tbCodec << menuCodec << lSearchText << cobSearch << tbNext << tbPrevious << cbCaseSensitive
 		<< cbRegExp << lReplaceText << cobReplace << tbReplace << tbReplaceAll
 		<< lPath << cobPath << tbPath << lMask << cobMask;
 	
 	foreach ( QWidget* widget, widgets )
-	{*/
-		/*widget->*/setAttribute( Qt::WA_MacShowFocusRect, false );
-		/*widget->*/setAttribute( Qt::WA_MacSmallSize );
-	//}
+	{
+		widget->setAttribute( Qt::WA_MacShowFocusRect, false );
+		widget->setAttribute( Qt::WA_MacSmallSize );
+	}
 }
 
 void SearchWidget::show (SearchAndReplace::Mode mode)
