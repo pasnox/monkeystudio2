@@ -1,3 +1,39 @@
+-------- pasnox    r3203(Mon, 22 Jun 2009) --------
+Fix some qscintilla shortcut conflitc ( pgup, pgdown, home, end ).
+Fix UpdateChecker being able to compare version.
+Some code update due to new defines.
+
+-------- pasnox    r3192(Sun, 21 Jun 2009) --------
+Added a main.h file that generalize the defines, this allow dependencies to be rebuild when this file change, whitch not allow the qmake defines.
+
+-------- pasnox    r3190(Sat, 20 Jun 2009) --------
+Fix a bug that cause tag finder to not work ( goto declaration/implementation ).
+
+-------- pasnox    r3179(Wed, 17 Jun 2009) --------
+Fix a bug that can cause a debug package to not package correctly.
+
+-------- pasnox    r3159(Wed, 27 May 2009) --------
+Fix a bug that can cause a relative file to be opened when triggered by a build step.
+
+-------- pasnox    r3157(Wed, 27 May 2009) --------
+Add a new option in UISettings that allow to activate/deactivate the files combobox ( Quick File Access ) in the top toolbar.
+Some code rework for enabling dynamic notify check of the multitoolbar.
+
+-------- pasnox    r3149(Mon, 25 May 2009) --------
+MkS no longer need to ask the user for an operator when creating/adding new projects/files !
+
+-------- pasnox    r3099(Wed, 13 May 2009) --------
+Switch back on browser when search input is empty.
+
+-------- pasnox    r3093(Wed, 13 May 2009) --------
+Search model is now sorted by insensible case filename.
+
+-------- pasnox    r3089(Tue, 12 May 2009) --------
+Rework the gui to make it more usable.
+
+-------- pasnox    r3079(Sun, 10 May 2009) --------
+Fix some bugs in the qCtagsSense framework.
+
 -------- pasnox    r3052(Wed, 06 May 2009) --------
 Remove the  "locked view" option in the class browser.
 remove the frame in pChild class.
