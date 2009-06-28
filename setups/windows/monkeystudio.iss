@@ -1,5 +1,5 @@
 [CustomMessages]
-MKS_VERSION=1.8.3.3
+MKS_VERSION=1.8.4.0b1
 MKS_REVISION=3083
 MKS_SETUP_NAME={cm:setup_mks_{cm:MKS_VERSION}-svn{cm:MKS_REVISION}-win32.exe}
 MKS_NAME=Monkey Studio IDE
@@ -70,7 +70,7 @@ Name: {group}\Home Page; Filename: {app}\Home Page.url; WorkingDir: {app}
 Name: {group}\Forums; Filename: {app}\Forums.url; WorkingDir: {app}
 
 [INI]
-Filename: {app}\Home Page.url; Section: InternetShortcut; Key: URL; String: {cm:MKS_URL}; Flags: createkeyifdoesntexist uninsdeleteentry uninsdeletesectionifempty; Components: 
+Filename: {app}\Home Page.url; Section: InternetShortcut; Key: URL; String: {cm:MKS_URL}; Flags: createkeyifdoesntexist uninsdeleteentry uninsdeletesectionifempty; Components:
 Filename: {app}\Forums.url; Section: InternetShortcut; Key: URL; String: {cm:MKS_FORUMS_URL}; Flags: createkeyifdoesntexist uninsdeleteentry uninsdeletesectionifempty
 
 [UninstallDelete]
