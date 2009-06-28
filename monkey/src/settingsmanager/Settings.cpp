@@ -59,22 +59,22 @@ QString Settings::storageToString( Settings::StoragePath type ) const
 			return QString( "scripts" );
 			break;
 	}
-	
+
 	return QString::null;
 }
 
 QStringList Settings::storagePaths( Settings::StoragePath type ) const
 {
 	QStringList result = value( QString( "Paths/%1" ).arg( storageToString( type ) ) ).toStringList();
-	
+
 	if ( !result.isEmpty() )
 	{
 		return result;
 	}
-	
+
 	// Compatibility layer with old mks version (before 1.8.3.3)
 	Settings* settings = const_cast<Settings*>( this );
-	
+
 	if ( type == SP_TEMPLATES && contains( "Templates/DefaultDirectories" ) )
 	{
 		settings->setStoragePaths( type, value( "Templates/DefaultDirectories" ).toStringList() );
@@ -90,16 +90,16 @@ QStringList Settings::storagePaths( Settings::StoragePath type ) const
 		settings->setStoragePaths( type, value( "Plugins/Path" ).toStringList() );
 		settings->remove( "Plugins/Path" );
 	}
-	
+
 	result = value( QString( "Paths/%1" ).arg( storageToString( type ) ) ).toStringList();
-	
+
 	if ( !result.isEmpty() )
 	{
 		return result;
 	}
-	
+
 	// End compatibility layer
-	
+
 	const QString appPath = qApp->applicationDirPath();
 	bool appIsInstalled = false;
 	QString basePath;
@@ -119,7 +119,7 @@ QStringList Settings::storagePaths( Settings::StoragePath type ) const
 	{
 		return storagePathsOutOfBox( type, appPath );
 	}
-	
+
 	if ( type == Settings::SP_PLUGINS )
 	{
 #ifdef Q_OS_WIN
@@ -131,7 +131,7 @@ QStringList Settings::storagePaths( Settings::StoragePath type ) const
 #endif
 		return QStringList( QDir::cleanPath( QString( "%1/%2" ).arg( basePath ).arg( storageToString( type ) ) ) );
 	}
-	
+
 	return QStringList( QDir::cleanPath( QString( "%1/%2" ).arg( basePath ).arg( storageToString( type ) ) ) );
 }
 
@@ -144,7 +144,7 @@ QString Settings::homeFilePath( const QString& filePath ) const
 {
 	QString path = QFileInfo( fileName() ).absolutePath();
 	QDir dir( path );
-	
+
 	return QDir::cleanPath( dir.filePath( filePath ) );
 }
 
@@ -153,25 +153,25 @@ QString Settings::homePath( Settings::StoragePath type ) const
 	const QString folder = storageToString( type ).append( "-%1" ).arg( PACKAGE_VERSION_STR );
 	const QString path = QFileInfo( fileName() ).absolutePath().append( QString( "/%1" ).arg( folder ) );
 	QDir dir( path );
-	
+
 	if ( !dir.exists() && !dir.mkpath( path ) )
 	{
 		return QString::null;
 	}
-	
+
 	return path;
 }
 
 QStringList Settings::storagePathsOutOfBox( Settings::StoragePath type, const QString& appPath ) const
 {
 	QString basePath = appPath;
-	
+
 #ifdef Q_OS_MAC
 	basePath.append( "/../../../../datas" );
 #else
 	basePath.append( "/../datas" );
 #endif
-	
+
 	if ( type == Settings::SP_PLUGINS )
 	{
 #ifdef Q_OS_WIN
@@ -196,14 +196,14 @@ void Settings::setDefaultSettings()
 	QStringList translationsPaths = storagePaths( Settings::SP_TRANSLATIONS );
 	QStringList scriptsPaths = storagePaths( Settings::SP_SCRIPTS );
 	QString scriptsPath = homePath( Settings::SP_SCRIPTS );
-	
+
 	// save default paths
 	setStoragePaths( Settings::SP_PLUGINS, pluginsPaths );
 	setStoragePaths( Settings::SP_APIS, apisPaths );
 	setStoragePaths( Settings::SP_TEMPLATES, templatesPaths );
 	setStoragePaths( Settings::SP_TRANSLATIONS, translationsPaths );
 	setStoragePaths( Settings::SP_SCRIPTS, scriptsPaths );
-	
+
 	// apis
 	foreach ( const QString& path, apisPaths )
 	{
@@ -211,39 +211,39 @@ void Settings::setDefaultSettings()
 		{
 			setValue( "SourceAPIs/CMake", QStringList( QDir::cleanPath( path +"/cmake.api" ) ) );
 		}
-		
+
 		if ( QFile::exists( path +"/cs.api" ) )
 		{
 			setValue( "SourceAPIs/C#", QStringList( QDir::cleanPath( path +"/cs.api" ) ) );
 		}
-		
+
 		if ( QFile::exists( path +"/c.api" ) )
 		{
 			QStringList files;
-			
+
 			files << QDir::cleanPath( path +"/c.api" );
 			files << QDir::cleanPath( path +"/cpp.api" );
 			files << QDir::cleanPath( path +"/glut.api" );
 			files << QDir::cleanPath( path +"/opengl.api" );
-			files << QDir::cleanPath( path +"/qt-4.4.x.api" );
-			
+			files << QDir::cleanPath( path +"/qt-4.5.x.api" );
+
 			setValue( "SourceAPIs/C++", files );
 		}
 	}
-	
+
 	// copy scripts to user's home
 	foreach ( const QString& path, scriptsPaths )
 	{
 		QFileInfoList files = QDir( path ).entryInfoList( QStringList( "*.mks" ) );
-		
+
 		foreach ( const QFileInfo& file, files )
 		{
 			const QString fn = QDir( scriptsPath ).absoluteFilePath( file.fileName() );
-			
+
 			if ( !QFile::exists( fn ) )
 			{
 				QFile f( file.absoluteFilePath() );
-				
+
 				if ( !f.copy( fn ) )
 				{
 					MonkeyCore::statusBar()->appendMessage( tr( "Can't copy script '%1', %2" ).arg( file.fileName() ).arg( f.errorString() ) );
@@ -251,7 +251,7 @@ void Settings::setDefaultSettings()
 			}
 		}
 	}
-	
+
 	// syntax highlighter
 	setDefaultCppSyntaxHighlight();
 }
@@ -266,7 +266,7 @@ void Settings::setDefaultCppSyntaxHighlight()
 	const QString font = "Bitstream Vera Sans Mono, 9";
 #endif
 	// configure styles
-	LexerStyleList styles;	
+	LexerStyleList styles;
 	styles << LexerStyle( 0, 0, false, "%1, 0, 0, 0", 16777215 );
 	styles << LexerStyle( 1, 10526880, false, "%1, 0, 0, 0", 16777215 );
 	styles << LexerStyle( 2, 10526880, false, "%1, 0, 0, 0", 16777215 );
