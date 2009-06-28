@@ -2,7 +2,7 @@
 """Script for convert svn log to MkS changelog.
 Reformats text, skips commits without comments
 Usage:
-	svn log > svnlog-to-changelog.py
+	svn log | svnlog-to-changelog.py
 """
 
 import sys
