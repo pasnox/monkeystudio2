@@ -56,13 +56,15 @@ QMAKE_TARGET_DESCRIPTION	= "Crossplatform Integrated Development Environment"
 QMAKE_TARGET_COPYRIGHT	= "Copyright (C) 2005 - 2009 Filipe AZEVEDO"
 PACKAGE_DOMAIN	= "monkeystudio.org"
 
-PACKAGE_VERSION	= 1.8.4.0b
+PACKAGE_VERSION	= 1.8.4.0b1
 
-CONFIG( debug, debug|release ) {
-	PACKAGE_VERSION_STR	= $${PACKAGE_VERSION}svn_debug
-} else {
-	PACKAGE_VERSION_STR	= $${PACKAGE_VERSION}svn_release
-}
+#CONFIG( debug, debug|release ) {
+#	PACKAGE_VERSION_STR	= $${PACKAGE_VERSION}svn_debug
+#} else {
+#	PACKAGE_VERSION_STR	= $${PACKAGE_VERSION}svn_release
+#}
+
+PACKAGE_VERSION_STR	= $${PACKAGE_VERSION}
 
 # define variable for source code
 DEFINES	*= "_PACKAGE_NAME=\"\\\"$${QMAKE_TARGET_PRODUCT}\\\"\"" \
