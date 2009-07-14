@@ -49,8 +49,6 @@ CONFIG( debug, debug|release ) {
 	RCC_DIR	= $${PACKAGE_BUILD_PATH}/release/.rcc
 }
 
-INCLUDEPATH	*= $${UI_DIR}
-
 # define some usefull values
 QMAKE_TARGET_COMPANY	= "Monkey Studio Team"
 QMAKE_TARGET_PRODUCT	= "Monkey Studio"
