@@ -48,6 +48,7 @@ CONFIG( debug, debug|release ) {
 	MOC_DIR	= $${PACKAGE_BUILD_PATH}/release/.moc
 	RCC_DIR	= $${PACKAGE_BUILD_PATH}/release/.rcc
 }
+INCLUDEPATH *= MOC_DIR
 
 # define some usefull values
 QMAKE_TARGET_COMPANY	= "Monkey Studio Team"
