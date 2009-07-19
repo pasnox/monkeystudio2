@@ -48,7 +48,6 @@ CONFIG( debug, debug|release ) {
 	MOC_DIR	= $${PACKAGE_BUILD_PATH}/release/.moc
 	RCC_DIR	= $${PACKAGE_BUILD_PATH}/release/.rcc
 }
-INCLUDEPATH *= $${UI_DIR}
 
 # define some usefull values
 QMAKE_TARGET_COMPANY	= "Monkey Studio Team"
@@ -59,11 +58,11 @@ PACKAGE_DOMAIN	= "monkeystudio.org"
 
 PACKAGE_VERSION	= 1.8.4.0b1
 
-#CONFIG( debug, debug|release ) {
-#	PACKAGE_VERSION_STR	= $${PACKAGE_VERSION}svn_debug
-#} else {
-#	PACKAGE_VERSION_STR	= $${PACKAGE_VERSION}svn_release
-#}
+CONFIG( debug, debug|release ) {
+	PACKAGE_VERSION_STR	= $${PACKAGE_VERSION}svn_debug
+} else {
+	PACKAGE_VERSION_STR	= $${PACKAGE_VERSION}svn_release
+}
 
 PACKAGE_VERSION_STR	= $${PACKAGE_VERSION}
 
