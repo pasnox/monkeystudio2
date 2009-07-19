@@ -5,3 +5,4 @@ include( ../ctags/ctags.pri )
 
 # include path
 INCLUDEPATH	*= $$PWD/sdk
+INCLUDEPATH	*= $${UI_DIR}
