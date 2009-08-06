@@ -26,7 +26,7 @@ class qCtagsSenseLanguagesModel;
 class qCtagsSenseFilesModel;
 class qCtagsSenseMembersModel;
 class qCtagsSenseSearchModel;
-class qCtagsSenseEntry;
+struct qCtagsSenseEntry;
 class QAction;
 class QMovie;
 class QTimer;

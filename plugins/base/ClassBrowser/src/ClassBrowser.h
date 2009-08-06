@@ -25,7 +25,7 @@
 class pDockClassBrowser;
 class pAbstractChild;
 class XUPProjectItem;
-class qCtagsSenseEntry;
+struct qCtagsSenseEntry;
 
 class ClassBrowser : public BasePlugin
 {
