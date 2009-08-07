@@ -1,4 +1,4 @@
-# Monkey Studio 2 project file
+# Monkey Studio 2 project file - 2005 - 2009
 
 # include qscintilla framework
 include( ../qscintilla/qscintilla.pri )
