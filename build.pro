@@ -1,6 +1,6 @@
 XUPProjectSettings {
 	EXECUTE_DEBUG	= bin/monkeystudio_debug
-	QT_VERSION	= Qt System (4.5.0)
+	QT_VERSION	= Qt System (4.5.2)
 }
 
 # include install script
