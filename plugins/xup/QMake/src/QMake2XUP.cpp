@@ -612,7 +612,7 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
 		// empty both stacks
 		isNested.clear();
 		pile.clear();
-		qWarning( e.what() );
+		qWarning("%s", e.what() );
 	}
 	
 	file.append( "</project>\n" );

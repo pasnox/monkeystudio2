@@ -56,7 +56,7 @@ void PluginsManager::loadsPlugins()
 	// loads static plugins
 	foreach ( QObject* o, QPluginLoader::staticInstances() )
 		if ( !addPlugin( o ) )
-			qWarning( qPrintable( tr( "Failed to load static plugin" ) ) );
+			qWarning("%s", qPrintable( tr( "Failed to load static plugin" ) ) );
 	// load dynamic plugins
 	QDir d;
 	foreach ( const QString s, MonkeyCore::settings()->storagePaths( Settings::SP_PLUGINS ) )
@@ -84,7 +84,7 @@ void PluginsManager::loadsPlugins()
 			// continue on no plugin
 			if ( !l.instance() )
 			{
-				qWarning( qPrintable( tr( "Failed to load plugin ( %1 ): Error: %2" ).arg( f.absoluteFilePath(), l.errorString() ) ) );
+				qWarning("%s", qPrintable( tr( "Failed to load plugin ( %1 ): Error: %2" ).arg( f.absoluteFilePath(), l.errorString() ) ) );
 				continue;
 			}
 			// try to add plugin to plugins list, else unload it
@@ -110,13 +110,13 @@ bool PluginsManager::addPlugin( QObject* o )
 	{
 		if ( p->infos().Name == bp->infos().Name )
 		{
-			qWarning( qPrintable( tr( "Skipping duplicate plugin: %1, type: %2" ).arg( p->infos().Name ).arg( p->infos().Type ) ) );
+			qWarning("%s", qPrintable( tr( "Skipping duplicate plugin: %1, type: %2" ).arg( p->infos().Name ).arg( p->infos().Type ) ) );
 			return false;
 		}
 	}
 	
 	// show plugin infos
-	qWarning( qPrintable( tr( "Found plugin: %1, type: %2" ).arg( bp->infos().Name ).arg( bp->infos().Type ) ) );
+	qWarning("%s", qPrintable( tr( "Found plugin: %1, type: %2" ).arg( bp->infos().Name ).arg( bp->infos().Type ) ) );
 	
 	// add it to plugins list
 	mPlugins << bp;
@@ -143,23 +143,23 @@ void PluginsManager::enableUserPlugins()
 		// check in settings if we must install this plugin
 		if ( !MonkeyCore::settings()->value( QString( "Plugins/%1" ).arg( bp->infos().Name ), true ).toBool() )
 		{
-			qWarning( qPrintable( tr( "User wantn't to intall plugin: %1" ).arg( bp->infos().Name ) ) );
+			qWarning("%s", qPrintable( tr( "User wantn't to intall plugin: %1" ).arg( bp->infos().Name ) ) );
 		}
 		// if not enabled, enable it
 		else if ( !bp->isEnabled() )
 		{
 			if ( bp->setEnabled( true ) )
 			{
-				qWarning( qPrintable( tr( "Successfully enabled plugin: %1" ).arg( bp->infos().Name ) ) );
+				qWarning("%s", qPrintable( tr( "Successfully enabled plugin: %1" ).arg( bp->infos().Name ) ) );
 			}
 			else
 			{
-				qWarning( qPrintable( tr( "Unsuccessfully enabled plugin: %1" ).arg( bp->infos().Name ) ) );
+				qWarning("%s", qPrintable( tr( "Unsuccessfully enabled plugin: %1" ).arg( bp->infos().Name ) ) );
 			}
 		}
 		else
 		{
-			qWarning( qPrintable( tr( "Already enabled plugin: %1" ).arg( bp->infos().Name ) ) );
+			qWarning("%s", qPrintable( tr( "Already enabled plugin: %1" ).arg( bp->infos().Name ) ) );
 		}
 	}
 }
@@ -291,7 +291,7 @@ void PluginsManager::clearPlugins()
 {
 	foreach ( BasePlugin* bp, mPlugins )
 	{
-		qWarning( "Clearing plugin...%s", qPrintable( bp->infos().Name ) );
+		qWarning("%s", "Clearing plugin...%s", qPrintable( bp->infos().Name ) );
 		bp->setEnabled( false );
 	}
 	qDeleteAll( mPlugins );
