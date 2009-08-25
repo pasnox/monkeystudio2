@@ -19,9 +19,9 @@
 #define QCTAGSSENSEBROWSER_H
 
 #include "qCtagsSenseExport.h"
+#include "qCtagsSense.h"
 #include "ui_qCtagsSenseBrowser.h"
 
-class qCtagsSense;
 class qCtagsSenseLanguagesModel;
 class qCtagsSenseFilesModel;
 class qCtagsSenseMembersModel;
@@ -50,8 +50,7 @@ public:
 	void popupMenu( QTreeView* view, const QPoint& pos );
 
 public slots:
-	void setSystemPaths( const QStringList& paths, const QStringList& oldPaths );
-	void setFilteredSuffixes( const QStringList& suffixes );
+	void setProperties( const qCtagsSenseProperties& properties );
 	void setCurrentFileName( const QString& fileName );
 	void tagEntry( const QString& fileName );
 	void tagEntries( const QMap<QString, QString>& entries );

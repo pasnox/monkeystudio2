@@ -28,6 +28,7 @@
 #include <qCtagsSense.h>
 #include <pMultiToolBar.h>
 
+#include <QDesktopServices>
 #include <QDebug>
 
 ClassBrowser::ClassBrowser()
@@ -63,19 +64,22 @@ bool ClassBrowser::setEnabled( bool b )
 		connect( MonkeyCore::fileManager(), SIGNAL( buffersChanged( const QMap<QString, QString>& ) ), this, SLOT( buffersChanged( const QMap<QString, QString>& ) ) );
 		connect( mDock->browser(), SIGNAL( entryActivated( qCtagsSenseEntry* ) ), this, SLOT( entryActivated( qCtagsSenseEntry* ) ) );
 		connect( mDock->browser(), SIGNAL( fileNameActivated( const QString& ) ), this, SLOT( fileNameActivated( const QString& ) ) );
+		connect( this, SIGNAL( propertiesChanged( const qCtagsSenseProperties& ) ), mDock->browser(), SLOT( setProperties( const qCtagsSenseProperties& ) ) );
+		connect( this, SIGNAL( integrationModeChanged( ClassBrowser::IntegrationMode ) ), MonkeyCore::multiToolBar(), SIGNAL( notifyChanges() ) );
+		/*
 		connect( this, SIGNAL( systemPathsChanged( const QStringList& , const QStringList& ) ), mDock->browser(), SLOT( setSystemPaths( const QStringList& , const QStringList& ) ) );
 		connect( this, SIGNAL( filteredSuffixesChanged( const QStringList& ) ), mDock->browser(), SLOT( setFilteredSuffixes( const QStringList& ) ) );
+		connect( this, SIGNAL( usePhysicalDatabaseChanged( bool ) ), mDock->browser(), SLOT( setUsePhysicalDatabase( bool ) ) );
+		connect( this, SIGNAL( databaseFileNameChanged( const QString& ) ), mDock->browser(), SLOT( setDatabaseFileName( const QString& ) ) );
 		connect( this, SIGNAL( integrationModeChanged( ClassBrowser::IntegrationMode ) ), this, SLOT( setIntegrationMode( ClassBrowser::IntegrationMode ) ) );
-		connect( this, SIGNAL( integrationModeChanged( ClassBrowser::IntegrationMode ) ), MonkeyCore::multiToolBar(), SIGNAL( notifyChanges() ) );
+		*/
 		
 		// set plugin enabled
 		stateAction()->setChecked( true );
 		// update integration mode
-		emit integrationModeChanged( integrationMode() );
-		// update filtered suffixes
-		emit filteredSuffixesChanged( filteredSuffixes() );
-		// index system paths
-		emit systemPathsChanged( systemPaths(), QStringList() );
+		setIntegrationMode( integrationMode() );
+		// update properties
+		emit propertiesChanged( properties() );
 	}
 	else if ( !b && isEnabled() )
 	{
@@ -86,9 +90,15 @@ bool ClassBrowser::setEnabled( bool b )
 		disconnect( MonkeyCore::fileManager(), SIGNAL( buffersChanged( const QMap<QString, QString>& ) ), this, SLOT( buffersChanged( const QMap<QString, QString>& ) ) );
 		disconnect( mDock->browser(), SIGNAL( entryActivated( qCtagsSenseEntry* ) ), this, SLOT( entryActivated( qCtagsSenseEntry* ) ) );
 		disconnect( mDock->browser(), SIGNAL( fileNameActivated( const QString& ) ), this, SLOT( fileNameActivated( const QString& ) ) );
+		disconnect( this, SIGNAL( propertiesChanged( const qCtagsSenseProperties& ) ), mDock->browser(), SLOT( setProperties( const qCtagsSenseProperties& ) ) );
+		disconnect( this, SIGNAL( integrationModeChanged( ClassBrowser::IntegrationMode ) ), MonkeyCore::multiToolBar(), SIGNAL( notifyChanges() ) );
+		/*
 		disconnect( this, SIGNAL( systemPathsChanged( const QStringList& , const QStringList& ) ), mDock->browser(), SLOT( setSystemPaths( const QStringList& , const QStringList& ) ) );
 		disconnect( this, SIGNAL( filteredSuffixesChanged( const QStringList& ) ), mDock->browser(), SLOT( setFilteredSuffixes( const QStringList& ) ) );
+		disconnect( this, SIGNAL( usePhysicalDatabaseChanged( bool ) ), mDock->browser(), SLOT( setUsePhysicalDatabase( bool ) ) );
+		disconnect( this, SIGNAL( databaseFileNameChanged( const QString& ) ), mDock->browser(), SLOT( setDatabaseFileName( const QString& ) ) );
 		disconnect( this, SIGNAL( integrationModeChanged( ClassBrowser::IntegrationMode ) ), this, SLOT( setIntegrationMode( ClassBrowser::IntegrationMode ) ) );
+		*/
 		// it will remove itself from dock toolbar when deleted
 		delete mDock;
 		// set plugin disabled
@@ -114,6 +124,37 @@ QWidget* ClassBrowser::settingsWidget()
 	return new ClassBrowserSettings( this, qApp->activeWindow() );
 }
 
+qCtagsSenseProperties ClassBrowser::properties() const
+{
+	const QStringList suffixes = QStringList()
+		<< "*.gif" << "*.png" << "*.mng" << "*.jpg" << "*.jpeg" << "*.tiff" << "*.ico" << "*.icns"
+		<< "*.pri" << "*.pro" << "*.qrc" << "*.ui" << "*.ts" << "*.qm" << "*.qch" << "*.xup" << "*.mks"
+		<< "*.txt" << "*.iss" << "*.api" << "*.sip" << "*.ini" << "*.css" << "*.bak" << "*.old"
+		<< "*.db" << "*.so" << "*.a" << "*.desktop"  << "*.gpl";
+	
+	qCtagsSenseProperties properties;
+	
+	properties.SystemPaths = settingsValue( "SystemPaths" ).toStringList();
+	properties.FilteredSuffixes = settingsValue( "FilteredSuffixes", suffixes ).toStringList();
+	properties.UsePhysicalDatabase = settingsValue( "UsePhysicalDatabase", false ).toBool();
+	properties.DatabaseFileName = settingsValue( "DatabaseFileName", defaultDatabase() ).toString();
+	
+	return properties;
+}
+
+void ClassBrowser::setProperties( const qCtagsSenseProperties& properties )
+{
+	if ( this->properties() != properties )
+	{
+		setSettingsValue( "SystemPaths", properties.SystemPaths );
+		setSettingsValue( "FilteredSuffixes", properties.FilteredSuffixes );
+		setSettingsValue( "UsePhysicalDatabase", properties.UsePhysicalDatabase );
+		setSettingsValue( "DatabaseFileName", properties.DatabaseFileName );
+		
+		emit propertiesChanged( properties );
+	}
+}
+
 ClassBrowser::IntegrationMode ClassBrowser::integrationMode() const
 {
 	return (ClassBrowser::IntegrationMode)settingsValue( "IntegrationMode", ClassBrowser::imDock ).toInt();
@@ -121,6 +162,11 @@ ClassBrowser::IntegrationMode ClassBrowser::integrationMode() const
 
 void ClassBrowser::setIntegrationMode( ClassBrowser::IntegrationMode mode )
 {
+	if ( integrationMode() == mode )
+	{
+		//return;
+	}
+	
 	if ( mDock )
 	{
 		switch ( mode )
@@ -149,39 +195,9 @@ void ClassBrowser::setIntegrationMode( ClassBrowser::IntegrationMode mode )
 	}
 }
 
-QStringList ClassBrowser::systemPaths() const
+QString ClassBrowser::defaultDatabase()
 {
-	return settingsValue( "SystemPaths" ).toStringList();
-}
-
-void ClassBrowser::setSystemPaths( const QStringList& paths )
-{
-	const QStringList oldPaths = systemPaths();
-	
-	if ( oldPaths != paths )
-	{
-		setSettingsValue( "SystemPaths", paths );
-		
-		emit systemPathsChanged( paths, oldPaths );
-	}
-}
-
-QStringList ClassBrowser::filteredSuffixes() const
-{
-	const QStringList suffixes = QStringList()
-		<< "*.gif" << "*.png" << "*.mng" << "*.jpg" << "*.jpeg" << "*.tiff" << "*.ico" << "*.icns"
-		<< "*.pri" << "*.pro" << "*.qrc" << "*.ui" << "*.ts" << "*.qm" << "*.qch" << "*.xup" << "*.mks"
-		<< "*.txt" << "*.iss" << "*.api" << "*.sip" << "*.ini" << "*.css" << "*.bak" << "*.old"
-		<< "*.db" << "*.so" << "*.a" << "*.desktop"  << "*.gpl";
-	
-	return settingsValue( "FilteredSuffixes", suffixes ).toStringList();
-}
-
-void ClassBrowser::setFilteredSuffixes( const QStringList& suffixes )
-{
-	setSettingsValue( "FilteredSuffixes", suffixes );
-	
-	emit filteredSuffixesChanged( suffixes );
+	return QDir::cleanPath( QString( "%1/MkS_qCtagsSense.sqlite3" ).arg( QDesktopServices::storageLocation( QDesktopServices::TempLocation ) ) );
 }
 
 void ClassBrowser::fileOpened( const QString& fileName )
@@ -210,6 +226,7 @@ void ClassBrowser::buffersChanged( const QMap<QString, QString>& entries )
 	mDock->browser()->tagEntries( entries );
 }
 
+#warning update to a reference
 void ClassBrowser::entryActivated( qCtagsSenseEntry* entry )
 {
 	// need to stock parameters as they are temporary

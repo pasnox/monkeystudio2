@@ -38,6 +38,19 @@ qCtagsSenseIndexer::~qCtagsSenseIndexer()
 	wait();
 }
 
+void qCtagsSenseIndexer::clear()
+{
+	QMutexLocker locker( &mMutex );
+	
+	const bool wasStopped = mStop;
+	mFilteredSuffixes.clear();
+	mWaitingDeletion.clear();
+	mWaitingIndexation.clear();
+	mStop = true;
+	wait();
+	mStop = wasStopped;
+}
+
 QStringList qCtagsSenseIndexer::filteredSuffixes() const
 {
 	QMutexLocker locker( &const_cast<qCtagsSenseIndexer*>( this )->mMutex );

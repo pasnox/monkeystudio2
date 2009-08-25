@@ -52,10 +52,9 @@ qCtagsSense::qCtagsSense( QObject* parent )
 	
 	//setLanguageKinds( "C++", "cdefglmnpstuvx" );
 	
+	mInitialized = false;
 	mSQL = new qCtagsSenseSQL( this );
 	mIndexer = new qCtagsSenseIndexer( mSQL );
-	
-	mInitialized = mSQL->initializeDatabase();
 	
 	connect( mIndexer, SIGNAL( indexingStarted() ), this, SIGNAL( indexingStarted() ) );
 	connect( mIndexer, SIGNAL( indexingProgress( int, int ) ), this, SIGNAL( indexingProgress( int, int ) ) );
@@ -75,6 +74,11 @@ bool qCtagsSense::isValid() const
 	return mInitialized;
 }
 
+qCtagsSenseProperties qCtagsSense::properties() const
+{
+	return mProperties;
+}
+
 qCtagsSenseSQL* qCtagsSense::sql() const
 {
 	return mSQL;
@@ -85,22 +89,23 @@ qCtagsSenseIndexer* qCtagsSense::indexer() const
 	return mIndexer;
 }
 
-void qCtagsSense::setSystemPaths( const QStringList& paths, const QStringList& oldPaths )
+void qCtagsSense::setProperties( const qCtagsSenseProperties& properties )
 {
-	if ( !mInitialized )
+	if ( properties != mProperties )
 	{
-		qWarning() << "qCtagsSense instance not initialized";
-		return;
-	}
-	
-	foreach ( const QString& path, oldPaths )
-	{
-		mIndexer->removeFile( path );
-	}
-	
-	foreach ( const QString& path, paths )
-	{
-		mIndexer->indexFile( path );
+		mIndexer->clear();
+		mInitialized = mSQL->initializeDatabase( properties.UsePhysicalDatabase ? properties.DatabaseFileName : QString::null );
+		
+		if ( mInitialized )
+		{
+			mProperties = properties;
+			mIndexer->setFilteredSuffixes( properties.FilteredSuffixes );
+			
+			foreach ( const QString& path, properties.SystemPaths )
+			{
+				mIndexer->indexFile( path );
+			}
+		}
 	}
 }
 

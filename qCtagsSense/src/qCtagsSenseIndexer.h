@@ -37,6 +37,7 @@ public:
 	qCtagsSenseIndexer( qCtagsSenseSQL* parent );
 	virtual ~qCtagsSenseIndexer();
 	
+	void clear();
 	QStringList filteredSuffixes() const;
 
 public slots:

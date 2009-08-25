@@ -291,7 +291,7 @@ void PluginsManager::clearPlugins()
 {
 	foreach ( BasePlugin* bp, mPlugins )
 	{
-		qWarning("%s", "Clearing plugin...%s", qPrintable( bp->infos().Name ) );
+		qWarning("Clearing plugin...%s", qPrintable( bp->infos().Name ) );
 		bp->setEnabled( false );
 	}
 	qDeleteAll( mPlugins );

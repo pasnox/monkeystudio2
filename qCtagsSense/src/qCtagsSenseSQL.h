@@ -32,15 +32,15 @@ public:
 	qCtagsSenseSQL( QObject* parent = 0 );
 	virtual ~qCtagsSenseSQL();
 	
-	bool initializeDatabase();
+	bool initializeDatabase( const QString& fileName = QString::null );
 	bool initializeTables() const;
+	bool removeCurrentDatabase();
 	
 	QSqlDatabase database() const;
 	QSqlQuery query() const;
 
 protected:
 	QString mDBConnectionName;
-	static const QString mDBFilePath;
 };
 
 #endif // QCTAGSSENSESQL_H

@@ -22,8 +22,6 @@
 #include <QSqlError>
 #include <QDebug>
 
-const QString qCtagsSenseSQL::mDBFilePath = QDir::tempPath().append( "/qCtagsSense.sqlite" );
-
 qCtagsSenseSQL::qCtagsSenseSQL( QObject* parent )
 	: QObject( parent )
 {
@@ -32,14 +30,27 @@ qCtagsSenseSQL::qCtagsSenseSQL( QObject* parent )
 
 qCtagsSenseSQL::~qCtagsSenseSQL()
 {
+	removeCurrentDatabase();
 }
 
-bool qCtagsSenseSQL::initializeDatabase()
+bool qCtagsSenseSQL::initializeDatabase( const QString& fileName )
 {
+	if ( !removeCurrentDatabase() )
+	{
+		return false;
+	}
+	
+	if ( QFile::exists( fileName ) )
+	{
+		if ( !QFile::remove( fileName ) )
+		{
+			return false;
+		}
+	}
+	
 	QSqlDatabase db = QSqlDatabase::addDatabase( "QSQLITE", mDBConnectionName );
 	
-	//db.setDatabaseName( qCtagsSenseSQL::mDBFilePath );
-	db.setDatabaseName( ":memory:" );
+	db.setDatabaseName( fileName.isEmpty() ? ":memory:" : fileName );
 	//db.setConnectOptions( "QSQLITE_BUSY_TIMEOUT=500" ); // in milliseconds
 	
 	if ( !db.open() )
@@ -176,6 +187,30 @@ bool qCtagsSenseSQL::initializeTables() const
 	}
 	
 	return false;
+}
+
+bool qCtagsSenseSQL::removeCurrentDatabase()
+{
+	// clear database if needed
+	if ( QSqlDatabase::contains( mDBConnectionName ) )
+	{
+		{
+			QSqlDatabase db = QSqlDatabase::database( mDBConnectionName );
+			db.close();
+			
+			if ( QFile::exists( db.databaseName() ) )
+			{
+				if ( !QFile::remove( db.databaseName() ) )
+				{
+					return false;
+				}
+			}
+		}
+		
+		QSqlDatabase::removeDatabase( mDBConnectionName );
+	}
+	
+	return true;
 }
 
 QSqlDatabase qCtagsSenseSQL::database() const
