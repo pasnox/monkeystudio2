@@ -66,20 +66,12 @@ bool ClassBrowser::setEnabled( bool b )
 		connect( mDock->browser(), SIGNAL( fileNameActivated( const QString& ) ), this, SLOT( fileNameActivated( const QString& ) ) );
 		connect( this, SIGNAL( propertiesChanged( const qCtagsSenseProperties& ) ), mDock->browser(), SLOT( setProperties( const qCtagsSenseProperties& ) ) );
 		connect( this, SIGNAL( integrationModeChanged( ClassBrowser::IntegrationMode ) ), MonkeyCore::multiToolBar(), SIGNAL( notifyChanges() ) );
-		/*
-		connect( this, SIGNAL( systemPathsChanged( const QStringList& , const QStringList& ) ), mDock->browser(), SLOT( setSystemPaths( const QStringList& , const QStringList& ) ) );
-		connect( this, SIGNAL( filteredSuffixesChanged( const QStringList& ) ), mDock->browser(), SLOT( setFilteredSuffixes( const QStringList& ) ) );
-		connect( this, SIGNAL( usePhysicalDatabaseChanged( bool ) ), mDock->browser(), SLOT( setUsePhysicalDatabase( bool ) ) );
-		connect( this, SIGNAL( databaseFileNameChanged( const QString& ) ), mDock->browser(), SLOT( setDatabaseFileName( const QString& ) ) );
-		connect( this, SIGNAL( integrationModeChanged( ClassBrowser::IntegrationMode ) ), this, SLOT( setIntegrationMode( ClassBrowser::IntegrationMode ) ) );
-		*/
-		
-		// set plugin enabled
-		stateAction()->setChecked( true );
 		// update integration mode
 		setIntegrationMode( integrationMode() );
 		// update properties
 		emit propertiesChanged( properties() );
+		// set plugin enabled
+		stateAction()->setChecked( true );
 	}
 	else if ( !b && isEnabled() )
 	{
@@ -92,13 +84,6 @@ bool ClassBrowser::setEnabled( bool b )
 		disconnect( mDock->browser(), SIGNAL( fileNameActivated( const QString& ) ), this, SLOT( fileNameActivated( const QString& ) ) );
 		disconnect( this, SIGNAL( propertiesChanged( const qCtagsSenseProperties& ) ), mDock->browser(), SLOT( setProperties( const qCtagsSenseProperties& ) ) );
 		disconnect( this, SIGNAL( integrationModeChanged( ClassBrowser::IntegrationMode ) ), MonkeyCore::multiToolBar(), SIGNAL( notifyChanges() ) );
-		/*
-		disconnect( this, SIGNAL( systemPathsChanged( const QStringList& , const QStringList& ) ), mDock->browser(), SLOT( setSystemPaths( const QStringList& , const QStringList& ) ) );
-		disconnect( this, SIGNAL( filteredSuffixesChanged( const QStringList& ) ), mDock->browser(), SLOT( setFilteredSuffixes( const QStringList& ) ) );
-		disconnect( this, SIGNAL( usePhysicalDatabaseChanged( bool ) ), mDock->browser(), SLOT( setUsePhysicalDatabase( bool ) ) );
-		disconnect( this, SIGNAL( databaseFileNameChanged( const QString& ) ), mDock->browser(), SLOT( setDatabaseFileName( const QString& ) ) );
-		disconnect( this, SIGNAL( integrationModeChanged( ClassBrowser::IntegrationMode ) ), this, SLOT( setIntegrationMode( ClassBrowser::IntegrationMode ) ) );
-		*/
 		// it will remove itself from dock toolbar when deleted
 		delete mDock;
 		// set plugin disabled
