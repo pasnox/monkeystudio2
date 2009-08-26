@@ -141,13 +141,18 @@ protected:
 		
 		if ( !scope && !entry->scope.second.isEmpty() )
 		{
+			const QString path = QFileInfo( entry->fileName ).absolutePath();
+			const QString baseName = QFileInfo( entry->fileName ).baseName();
+			const QString baseFilePath = QString( "%1/%2" ).arg( path ).arg( baseName );
 			QSqlQuery q = mSQL->query();
 			q.setForwardOnly( true );
 			const QString sql = QString(
 				"SELECT entries.*, language, fileName FROM entries "
 				"INNER JOIN files ON files.id = entries.file_id "
-				"AND entries.name = '%1' AND entries.kind IN( %2 )"
-			).arg( entry->scope.second ).arg( kinds.join( ", " ) );
+				"AND entries.name = '%1' AND entries.kind IN( %2 ) "
+				"AND files.language = '%3' "
+				"AND ( files.filename LIKE '%4%' OR files.filename LIKE '%%5%' )"
+			).arg( entry->scope.second ).arg( kinds.join( ", " ) ).arg( entry->language ).arg( baseFilePath ).arg( baseName );
 			
 			if ( q.exec( sql ) && q.next() )
 			{
