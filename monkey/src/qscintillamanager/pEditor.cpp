@@ -400,9 +400,9 @@ bool pEditor::saveBackup( const QString& s )
 {
 	// if not filename, cancel
 	if ( s.isEmpty() )
+	{
 		return false;
-	
-	QApplication::setOverrideCursor( Qt::WaitCursor );
+	}
 	
 	// get path
 	QString fp = QFileInfo( s ).path();
@@ -414,15 +414,18 @@ bool pEditor::saveBackup( const QString& s )
 	QDir d;
 	// create bak folder
 	if ( !d.exists( fp ) )
+	{
 		if ( !d.mkpath( fp ) )
 		{
-			QApplication::restoreOverrideCursor();
 			return false;
 		}
-
+	}
+	
+	QApplication::setOverrideCursor( Qt::WaitCursor );
+	
 	// set correct path
 	d.setPath( fp );
-		
+	
 	// try open file to write in
 	if ( !f.open( QFile::WriteOnly ) )
 	{
@@ -430,9 +433,6 @@ bool pEditor::saveBackup( const QString& s )
 		QApplication::restoreOverrideCursor();
 		return false;
 	}
-
-	// writing file
-	QApplication::setOverrideCursor( Qt::WaitCursor );
 	
 	f.resize( 0 );
 	QTextCodec* c = QTextCodec::codecForName( property( "codec" ).toString().toUtf8() );
