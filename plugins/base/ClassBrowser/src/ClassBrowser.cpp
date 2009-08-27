@@ -203,7 +203,8 @@ void ClassBrowser::currentFileChanged( pAbstractChild* child, const QString& fil
 
 void ClassBrowser::opened( XUPProjectItem* project )
 {
-	mDock->browser()->tagEntry( project->path() );
+	const QStringList files = project->topLevelProjectSourceFiles();
+	mDock->browser()->tagEntries( files );
 }
 
 void ClassBrowser::buffersChanged( const QMap<QString, QString>& entries )
