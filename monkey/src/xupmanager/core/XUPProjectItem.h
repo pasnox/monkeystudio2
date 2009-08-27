@@ -48,6 +48,10 @@ public:
 	QString filePath( const QString& fileName ) const;
 	// return a filepath relative to project path
 	QString relativeFilePath( const QString& fileName ) const;
+	// return the list of all source files for this project
+	QStringList sourceFiles() const;
+	// return the list of all source files for all projects from the root project
+	QStringList topLevelProjectSourceFiles() const;
 	
 	// return the direct parent proejct if one, else return itself
 	XUPProjectItem* parentProject() const;
@@ -55,6 +59,8 @@ public:
 	XUPProjectItem* topLevelProject() const;
 	// return the parent project for include project ( recursive parent project for include project, else return project itself )
 	XUPProjectItem* rootIncludeProject() const;
+	// return children project recursively according to bool
+	XUPProjectItemList childrenProjects( bool recursive ) const;
 	
 	// return icon filename for item
 	QString iconFileName( XUPItem* item ) const;

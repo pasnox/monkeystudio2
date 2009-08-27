@@ -137,8 +137,14 @@ QVariant XUPProjectModel::data( const QModelIndex& index, int role ) const
 		case Qt::DecorationRole:
 		case Qt::DisplayRole:
 		case Qt::ToolTipRole:
+		case XUPProjectModel::TypeRole:
 		{
 			XUPItem* item = static_cast<XUPItem*>( index.internalPointer() );
+			
+			if ( role == XUPProjectModel::TypeRole )
+			{
+				return item->type();
+			}
 
 			QDomNode node = item->node();
 			QStringList attributes;
