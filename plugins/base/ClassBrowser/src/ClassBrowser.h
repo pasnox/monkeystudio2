@@ -19,13 +19,14 @@
 #define CLASSBROWSER_H
 
 #include <BasePlugin.h>
+#include <qCtagsSense.h>
 
 #include <QPointer>
 
 class pDockClassBrowser;
 class pAbstractChild;
 class XUPProjectItem;
-class qCtagsSenseEntry;
+struct qCtagsSenseEntry;
 
 class ClassBrowser : public BasePlugin
 {
@@ -42,14 +43,14 @@ public:
 	virtual bool haveSettingsWidget() const;
 	virtual QWidget* settingsWidget();
 	
+	qCtagsSenseProperties properties() const;
 	ClassBrowser::IntegrationMode integrationMode() const;
-	QStringList systemPaths() const;	
-	QStringList filteredSuffixes() const;
+	
+	static QString defaultDatabase();
 
 public slots:
+	void setProperties( const qCtagsSenseProperties& properties );
 	void setIntegrationMode( ClassBrowser::IntegrationMode mode );
-	void setSystemPaths( const QStringList& paths );
-	void setFilteredSuffixes( const QStringList& suffixes );
 
 protected:
 	QPointer<pDockClassBrowser> mDock;
@@ -63,8 +64,7 @@ protected slots:
 	void fileNameActivated( const QString& fileName );
 
 signals:
-	void systemPathsChanged( const QStringList& paths, const QStringList& oldPaths );
-	void filteredSuffixesChanged( const QStringList& filteredSuffixes );
+	void propertiesChanged( const qCtagsSenseProperties& properties );
 	void integrationModeChanged( ClassBrowser::IntegrationMode mode );
 };
 

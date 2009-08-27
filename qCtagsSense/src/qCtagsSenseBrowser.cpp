@@ -16,7 +16,6 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 #include "qCtagsSenseBrowser.h"
-#include "qCtagsSense.h"
 #include "qCtagsSenseIndexer.h"
 #include "qCtagsSenseLanguagesModel.h"
 #include "qCtagsSenseFilesModel.h"
@@ -280,19 +279,19 @@ void qCtagsSenseBrowser::tagEntry( const QString& fileName )
 	mSense->tagEntry( fileName );
 }
 
+void qCtagsSenseBrowser::tagEntries( const QStringList& fileNames )
+{
+	mSense->tagEntries( fileNames );
+}
+
 void qCtagsSenseBrowser::tagEntries( const QMap<QString, QString>& entries )
 {
 	mSense->tagEntries( entries );
 }
 
-void qCtagsSenseBrowser::setSystemPaths( const QStringList& paths, const QStringList& oldPaths )
+void qCtagsSenseBrowser::setProperties( const qCtagsSenseProperties& properties )
 {
-	mSense->setSystemPaths( paths, oldPaths );
-}
-
-void qCtagsSenseBrowser::setFilteredSuffixes( const QStringList& suffixes )
-{
-	mSense->indexer()->setFilteredSuffixes( suffixes );
+	mSense->setProperties( properties );
 }
 
 void qCtagsSenseBrowser::setCurrentFileName( const QString& fileName )

@@ -9,7 +9,7 @@ void XUPFilteredProjectModel::debug( XUPItem* root, int mode )
 	{
 		static int prof = 0;
 		QString prep = QString().fill( ' ', prof );
-		qWarning( root->displayText().prepend( prep ).toLocal8Bit().constData() );
+		qWarning("%s", root->displayText().prepend( prep ).toLocal8Bit().constData() );
 		XUPItemMappingIterator it = mItemsMapping.constFind( root );
 		Q_ASSERT( it != mItemsMapping.constEnd() );
 		Q_ASSERT( it.value() );

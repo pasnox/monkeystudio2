@@ -23,10 +23,39 @@
 #include <QObject>
 #include <QMap>
 #include <QPair>
+#include <QStringList>
 #include <QMetaType>
 
 class qCtagsSenseSQL;
 class qCtagsSenseIndexer;
+
+struct QCTAGSSENSE_EXPORT qCtagsSenseProperties
+{
+	qCtagsSenseProperties( const QStringList& systemPaths = QStringList(), const QStringList filteredSuffixes = QStringList(),
+		bool usePhysicalDatabase = false, const QString& databaseFileName = QString::null )
+	{
+		SystemPaths = systemPaths;
+		FilteredSuffixes = filteredSuffixes;
+		UsePhysicalDatabase = usePhysicalDatabase;
+		DatabaseFileName = databaseFileName;
+	}
+	
+	bool operator==( const qCtagsSenseProperties& other ) const
+	{
+		return SystemPaths == other.SystemPaths && FilteredSuffixes == other.FilteredSuffixes &&
+			UsePhysicalDatabase == other.UsePhysicalDatabase && DatabaseFileName == other.DatabaseFileName;
+	}
+	
+	bool operator!=( const qCtagsSenseProperties& other ) const
+	{
+		return !operator==( other );
+	}
+	
+	QStringList SystemPaths;
+	QStringList FilteredSuffixes;
+	bool UsePhysicalDatabase;
+	QString DatabaseFileName;
+};
 
 class QCTAGSSENSE_EXPORT qCtagsSense : public QObject
 {
@@ -143,16 +172,19 @@ public:
 	virtual ~qCtagsSense();
 	
 	bool isValid() const;
+	qCtagsSenseProperties properties() const;
 	qCtagsSenseSQL* sql() const;
 	qCtagsSenseIndexer* indexer() const;
 
 public slots:
-	void setSystemPaths( const QStringList& paths, const QStringList& oldPaths );
+	void setProperties( const qCtagsSenseProperties& properties );
 	void tagEntry( const QString& fileName );
+	void tagEntries( const QStringList& fileNames );
 	void tagEntries( const QMap<QString, QString>& entries );
 
 protected:
 	bool mInitialized;
+	qCtagsSenseProperties mProperties;
 	qCtagsSenseSQL* mSQL;
 	qCtagsSenseIndexer* mIndexer;
 

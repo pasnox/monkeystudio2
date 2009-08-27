@@ -1,4 +1,4 @@
-# Monkey Studio 2 project file
+# Monkey Studio 2 project file - 2005 - 2009
 
 # include qscintilla framework
 include( ../qscintilla/qscintilla.pri )
@@ -189,9 +189,9 @@ mac:SOURCES	*= src/toolsmanager/pDesktopApplications_mac.cpp
 else:unix:SOURCES	*= src/toolsmanager/pDesktopApplications_unix.cpp
 win32:SOURCES	*= src/toolsmanager/pDesktopApplications_win32.cpp
 
-TRANSLATIONS	*= ../translations/monkey_french.ts \
-	../translations/monkey_belarusian.ts \
-	../translations/monkey_italian.ts \
-	../translations/monkey_arabic.ts \
-	../translations/monkey_spanish.ts \
-	../translations/monkey_catalan.ts
+TRANSLATIONS	*= ../datas/translations/monkey_french.ts \
+	../datas/translations/monkey_belarusian.ts \
+	../datas/translations/monkey_italian.ts \
+	../datas/translations/monkey_arabic.ts \
+	../datas/translations/monkey_spanish.ts \
+	../datas/translations/monkey_catalan.ts

@@ -24,12 +24,18 @@
 #ifndef FILEBROWSERSETTINGS_H
 #define FILEBROWSERSETTINGS_H
 
+#include <qCtagsSense.h>
+
 #include <QWidget>
 
 class ClassBrowser;
 class QComboBox;
 class pPathListEditor;
 class pStringListEditor;
+class QGroupBox;
+class QLabel;
+class QLineEdit;
+class QToolButton;
 
 /*!
 	Settigs widget of ClassBrowser plugin
@@ -48,9 +54,17 @@ protected:
 	QComboBox* cbIntegrationMode;
 	pPathListEditor* mPathEditor;
 	pStringListEditor* mStringEditor;
+	QGroupBox* gbUseDBFileName;
+	QLabel* lDBFileName;
+	QLineEdit* leDBFileName;
+	QToolButton* tbDBFileName;
 
 protected slots:
+	void tbDBFileName_clicked();
 	void applySettings();
+
+signals:
+	void propertiesChanged( const qCtagsSenseProperties& properties );
 };
 
 #endif // FILEBROWSERSETTINGS_H

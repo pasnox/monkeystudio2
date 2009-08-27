@@ -24,11 +24,14 @@
 #include "ClassBrowserSettings.h"
 #include "ClassBrowser.h"
 
+#include <pIconManager.h>
+
 #include <QBoxLayout>
 #include <QLabel>
 #include <QComboBox>
 #include <QDialogButtonBox>
 #include <QPushButton>
+#include <QFileDialog>
 
 /*!
 	Creates settings widget
@@ -41,6 +44,8 @@ ClassBrowserSettings::ClassBrowserSettings( ClassBrowser* plugin, QWidget* paren
 	// retain plugin
 	mPlugin = plugin;
 	
+	qCtagsSenseProperties properties = mPlugin->properties();
+	
 	// integration
 	QLabel* label = new QLabel( tr( "Integration Mode:" ) );
 	cbIntegrationMode = new QComboBox;
@@ -52,12 +57,26 @@ ClassBrowserSettings::ClassBrowserSettings( ClassBrowser* plugin, QWidget* paren
 	hbox->addWidget( label );
 	hbox->addWidget( cbIntegrationMode );
 	
+	// db filename
+	gbUseDBFileName = new QGroupBox( tr( "Use a physical database" ), this );
+	gbUseDBFileName->setCheckable( true );
+	gbUseDBFileName->setChecked( properties.UsePhysicalDatabase );
+	lDBFileName = new QLabel( tr( "Database file name" ), this );
+	leDBFileName = new QLineEdit( this );
+	leDBFileName->setText( properties.DatabaseFileName );
+	tbDBFileName = new QToolButton( this );
+	tbDBFileName->setIcon( pIconManager::icon( "file.png", ":/listeditor" ) );
+	QGridLayout* hbox2 = new QGridLayout( gbUseDBFileName );
+	hbox2->addWidget( lDBFileName, 0, 0, 1, 2 );
+	hbox2->addWidget( leDBFileName, 1, 0 );
+	hbox2->addWidget( tbDBFileName, 1, 1 );
+	
 	// list editor
 	mPathEditor = new pPathListEditor( this, tr( "System include paths" ) );
-	mPathEditor->setValues( plugin->systemPaths() );
+	mPathEditor->setValues( properties.SystemPaths );
 	
 	mStringEditor = new pStringListEditor( this, tr( "Filtered file suffixes" ) );
-	mStringEditor->setValues( plugin->filteredSuffixes() );
+	mStringEditor->setValues( properties.FilteredSuffixes );
 	
 	// apply button
 	QDialogButtonBox* dbbApply = new QDialogButtonBox( this );
@@ -66,12 +85,24 @@ ClassBrowserSettings::ClassBrowserSettings( ClassBrowser* plugin, QWidget* paren
 	// global layout
 	QVBoxLayout* vbox = new QVBoxLayout( this );
 	vbox->addLayout( hbox );
+	vbox->addWidget( gbUseDBFileName );
 	vbox->addWidget( mPathEditor );
 	vbox->addWidget( mStringEditor );
 	vbox->addWidget( dbbApply );
 	
 	// connections
+	connect( tbDBFileName, SIGNAL( clicked() ), this, SLOT( tbDBFileName_clicked() ) );
 	connect( dbbApply->button( QDialogButtonBox::Apply ), SIGNAL( clicked() ), this, SLOT( applySettings() ) );
+}
+
+void ClassBrowserSettings::tbDBFileName_clicked()
+{
+	const QString fn = QFileDialog::getSaveFileName( this, tr( "Select a filename to use for the temporary database" ), leDBFileName->text() );
+	
+	if ( !fn.isNull() )
+	{
+		leDBFileName->setText( fn );
+	}
 }
 
 /*!
@@ -79,7 +110,12 @@ ClassBrowserSettings::ClassBrowserSettings( ClassBrowser* plugin, QWidget* paren
 */
 void ClassBrowserSettings::applySettings()
 {
+	qCtagsSenseProperties properties;
+	properties.SystemPaths = mPathEditor->values();
+	properties.FilteredSuffixes = mStringEditor->values();
+	properties.UsePhysicalDatabase = gbUseDBFileName->isChecked();
+	properties.DatabaseFileName = leDBFileName->text();
+	
 	mPlugin->setIntegrationMode( (ClassBrowser::IntegrationMode)cbIntegrationMode->itemData( cbIntegrationMode->currentIndex() ).toInt() );
-	mPlugin->setSystemPaths( mPathEditor->values() );
-	mPlugin->setFilteredSuffixes( mStringEditor->values() );
+	mPlugin->setProperties( properties );
 }

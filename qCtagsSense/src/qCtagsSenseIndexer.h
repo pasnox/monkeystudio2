@@ -37,6 +37,7 @@ public:
 	qCtagsSenseIndexer( qCtagsSenseSQL* parent );
 	virtual ~qCtagsSenseIndexer();
 	
+	void clear();
 	QStringList filteredSuffixes() const;
 
 public slots:
@@ -47,6 +48,7 @@ public slots:
 	
 	void removeFile( const QString& fileName );
 	void indexFile( const QString& fileName );
+	void indexFiles( const QStringList& fileNames );
 	void indexBuffers( const QMap<QString, QString>& buffers );
 
 protected:

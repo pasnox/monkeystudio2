@@ -80,16 +80,30 @@ void qCtagsSenseKindFinder::run()
 			"INNER JOIN files ON files.id = entries.file_id "
 			"AND name = ? "
 			//"AND scope_value = ? "
-			"AND scope_key = ? "
+			"AND ( scope_key = ? OR scope_key LIKE ? ) "
 			//"AND signature = ? "
 			"AND language = ? "
 			"AND kind = ?"
 		);
 		
+		QString scope = mEntry->scope.second;
+	
+		if ( !scope.isEmpty() )
+		{
+			// may need to use different char for other language
+			const QStringList parts = scope.split( "::" );
+			
+			if ( !parts.isEmpty() )
+			{
+				scope = parts.last();
+			}
+		}
+		
 		q.prepare( sql_less );
 		q.addBindValue( mEntry->name );
 		//q.addBindValue( mEntry->scope.first );
 		q.addBindValue( mEntry->scope.second );
+		q.addBindValue( scope.prepend( "%" ) );
 		//q.addBindValue( mEntry->signature );
 		q.addBindValue( mEntry->language );
 		q.addBindValue( mKind );

@@ -71,6 +71,7 @@ extern void freeTagEntryListItem( TagEntryListItem* item )
 {
 	while ( item != NULL )
 	{
+		TagEntryListItem* temp = 0;
 		tagEntryInfo* entry = &item->tag;
 		
 		if ( entry->language )
@@ -112,7 +113,7 @@ extern void freeTagEntryListItem( TagEntryListItem* item )
 		if ( entry->extensionFields.signature )
 			free( (char*)entry->extensionFields.signature );
 		
-		TagEntryListItem* temp = item->next;
+		temp = item->next;
 		free( item );
 		item = temp;
 	}

@@ -16,6 +16,11 @@ class Q_MONKEY_EXPORT XUPProjectModel : public QAbstractItemModel
 	friend class XUPItem;
 	
 public:
+	enum CustomRole
+	{
+		TypeRole = Qt::UserRole
+	};
+	
 	XUPProjectModel( QObject* parent = 0 );
 	virtual ~XUPProjectModel();
 
