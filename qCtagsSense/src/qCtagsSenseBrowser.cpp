@@ -279,6 +279,11 @@ void qCtagsSenseBrowser::tagEntry( const QString& fileName )
 	mSense->tagEntry( fileName );
 }
 
+void qCtagsSenseBrowser::tagEntries( const QStringList& fileNames )
+{
+	mSense->tagEntries( fileNames );
+}
+
 void qCtagsSenseBrowser::tagEntries( const QMap<QString, QString>& entries )
 {
 	mSense->tagEntries( entries );

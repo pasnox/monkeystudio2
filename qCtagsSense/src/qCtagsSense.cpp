@@ -120,6 +120,17 @@ void qCtagsSense::tagEntry( const QString& fileName )
 	mIndexer->indexFile( fileName );
 }
 
+void qCtagsSense::tagEntries( const QStringList& fileNames )
+{
+	if ( !mInitialized )
+	{
+		qWarning() << "qCtagsSense instance not initialized";
+		return;
+	}
+	
+	mIndexer->indexFiles( fileNames );
+}
+
 void qCtagsSense::tagEntries( const QMap<QString, QString>& entries )
 {
 	if ( !mInitialized )

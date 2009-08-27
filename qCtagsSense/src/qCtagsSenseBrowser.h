@@ -53,6 +53,7 @@ public slots:
 	void setProperties( const qCtagsSenseProperties& properties );
 	void setCurrentFileName( const QString& fileName );
 	void tagEntry( const QString& fileName );
+	void tagEntries( const QStringList& fileNames );
 	void tagEntries( const QMap<QString, QString>& entries );
 
 protected:

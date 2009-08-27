@@ -132,7 +132,8 @@ protected:
 		
 		foreach ( const StringKind& pair, scopeItems.keys() )
 		{
-			if ( pair == scopePair || pair.first == scopePair.first )
+			if ( pair == scopePair || pair.first == scopePair.first ||
+				( pair.first.endsWith( scopePair.first ) && kinds.contains(QString::number(  pair.second ) ) ) )
 			{
 				scope = scopeItems[ pair ];
 				break;

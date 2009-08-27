@@ -119,9 +119,34 @@ void qCtagsSenseIndexer::indexFile( const QString& fileName )
 	
 	QMutexLocker locker( &mMutex );
 	
-	if ( !mWaitingIndexation.contains( fileName ) )
+	if ( !mWaitingIndexation.contains( fileName ) && QFile::exists( fileName ) )
 	{
 		mWaitingIndexation[ fileName ] = QString::null;
+	}
+	
+	locker.unlock();
+
+	if ( !isRunning() )
+	{
+		start();
+	}
+}
+
+void qCtagsSenseIndexer::indexFiles( const QStringList& fileNames )
+{
+	if ( mStop )
+	{
+		return;
+	}
+	
+	QMutexLocker locker( &mMutex );
+	
+	foreach ( const QString& fileName, fileNames )
+	{
+		if ( !mWaitingIndexation.contains( fileName ) && QFile::exists( fileName ) )
+		{
+			mWaitingIndexation[ fileName ] = QString::null;
+		}
 	}
 	
 	locker.unlock();
@@ -578,7 +603,7 @@ void qCtagsSenseIndexer::run()
 					}
 					else if ( !error )
 					{
-						qWarning() << "Error while indexing files";
+						qWarning() << "Error while indexing files (" << fileName << ")";
 						error = true;
 					}
 					
