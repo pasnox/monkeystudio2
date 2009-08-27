@@ -415,7 +415,7 @@ bool XUPProjectManager::openProject( const QString& fileName, const QString& cod
 			MonkeyCore::recentsManager()->removeRecentProject( fileName );
 			
 			// inform user about error
-			MonkeyCore::statusBar()->appendMessage( tr( "An error occur while opening project : %1" ).arg( fileName ) );
+			MonkeyCore::statusBar()->appendMessage( tr( "An error occur while opening project '%1': %2" ).arg( fileName ).arg( model->lastError() ) );
 			
 			pteLog->appendPlainText( model->lastError() );
 			delete model;
