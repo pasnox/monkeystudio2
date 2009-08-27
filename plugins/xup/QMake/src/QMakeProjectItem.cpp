@@ -299,6 +299,8 @@ QString QMakeProjectItem::getVariableContent( const QString& variableName )
 bool QMakeProjectItem::analyze( XUPItem* item )
 {
 	QStringList values;
+	XUPProjectItem* project = item->project();
+	XUPProjectItem* riProject = rootIncludeProject();
 	
 	foreach ( XUPItem* cItem, item->childrenList() )
 	{
@@ -309,6 +311,19 @@ bool QMakeProjectItem::analyze( XUPItem* item )
 			case XUPItem::Path:
 			{
 				QString content = interpretContent( cItem->attribute( "content" ) );
+				
+				if ( cItem->type() != XUPItem::Value )
+				{
+					QString fn = project->filePath( content );
+					
+					if ( QFile::exists( fn ) )
+					{
+						fn = riProject->relativeFilePath( fn );
+					}
+					
+					content = fn;
+				}
+				
 				values << content;
 				
 				cItem->setCacheValue( "content", content );
@@ -342,28 +357,27 @@ bool QMakeProjectItem::analyze( XUPItem* item )
 	{
 		QString name = item->attribute( "name" );
 		QString op = item->attribute( "operator", "=" );
-		XUPProjectItem* proj = rootIncludeProject();
 		
 		if ( op == "=" )
 		{
-			proj->variableCache()[ name ] = values.join( " " );
+			riProject->variableCache()[ name ] = values.join( " " );
 		}
 		else if ( op == "-=" )
 		{
 			foreach ( const QString& value, values )
 			{
-				proj->variableCache()[ name ].replace( QRegExp( QString( "\\b%1\\b" ).arg( value ) ), QString::null );
+				riProject->variableCache()[ name ].replace( QRegExp( QString( "\\b%1\\b" ).arg( value ) ), QString::null );
 			}
 		}
 		else if ( op == "+=" )
 		{
-			proj->variableCache()[ name ] += " " +values.join( " " );
+			riProject->variableCache()[ name ] += " " +values.join( " " );
 		}
 		else if ( op == "*=" )
 		{
-			//if ( !proj->variableCache()[ name ].contains( content ) )
+			//if ( !riProject->variableCache()[ name ].contains( content ) )
 			{
-				proj->variableCache()[ name ] += " " +values.join( " " );
+				riProject->variableCache()[ name ] += " " +values.join( " " );
 			}
 		}
 		else if ( op == "~=" )
