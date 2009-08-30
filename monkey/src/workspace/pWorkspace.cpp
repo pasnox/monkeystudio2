@@ -540,7 +540,7 @@ void pWorkspace::internal_currentProjectChanged( XUPProjectItem* currentProject,
 void pWorkspace::internal_projectInstallCommandRequested( const pCommand& cmd, const QString& mnu )
 {
 	// create action
-	QAction* a = MonkeyCore::menuBar()->action( QString( "%1/%2" ).arg( mnu, cmd.text() ) , cmd.text() );
+	QAction* a = MonkeyCore::menuBar()->action( QString( "%1/%2" ).arg( mnu ).arg( cmd.text() ) , cmd.text() );
 	a->setStatusTip( cmd.text() );
 	// set action custom data contain the command to execute
 	a->setData( QVariant::fromValue( cmd ) );

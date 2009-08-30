@@ -99,8 +99,8 @@ TypeCommandListMap XUPProjectItemHelper::projectCommands( XUPProjectItem* projec
 			
 			if ( values.count() != 8 )
 			{
-				Q_ASSERT( 0 );
 				qWarning() << "Skip reading incomplete command";
+				Q_ASSERT( 0 );
 				continue;
 			}
 			
@@ -119,4 +119,34 @@ TypeCommandListMap XUPProjectItemHelper::projectCommands( XUPProjectItem* projec
 	}
 	
 	return commands;
+}
+
+void XUPProjectItemHelper::installProjectCommands( XUPProjectItem* project )
+{
+	const TypeCommandListMap commands = projectCommands( project );
+	
+	foreach ( const BasePlugin::Type& type, commands.keys() )
+	{
+		foreach ( pCommand command, commands[ type ] )
+		{
+			switch ( type )
+			{
+				case BasePlugin::iBuilder:
+					project->addCommand( command, "mBuilder" );
+					break;
+				case BasePlugin::iCompiler:
+					project->addCommand( command, "mBuilder/mBuild" );
+					break;
+				case BasePlugin::iDebugger:
+					project->addCommand( command, "mDebugger" );
+					break;
+				case BasePlugin::iInterpreter:
+					project->addCommand( command, "mInterpreter" );
+					break;
+				default:
+					Q_ASSERT( 0 );
+					break;
+			}
+		}
+	}
 }

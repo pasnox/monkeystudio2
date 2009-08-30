@@ -44,6 +44,7 @@
 #include <QCloseEvent>
 #include <QMenu>
 #include <QStyleFactory>
+#include <QDebug>
 
 UIMain::UIMain( QWidget* p )
 	: pMainWindow( p )
@@ -227,7 +228,7 @@ void UIMain::initMenuBar()
 		mb->action( "mRecents/aClear", tr( "&Clear" ), QIcon( ":/project/icons/project/clear.png" ), QString::null, tr( "Clear the recents projects list" ) );
 		mb->action( "mRecents/aSeparator1" );
 	mb->endGroup();
-	mb->menu( "mBuilder", tr( "Build" ) )->setEnabled( false );
+	mb->menu( "mBuilder", tr( "Build" ) )->menuAction()->setEnabled( false );
 	mb->menu( "mBuilder" )->menuAction()->setVisible( false );
 	mb->beginGroup( "mBuilder" );
 		mb->menu( "mBuild", tr( "&Build" ), QIcon( ":/build/icons/build/build.png" ) );
@@ -237,9 +238,9 @@ void UIMain::initMenuBar()
 		mb->menu( "mUserCommands", tr( "&User Commands" ), QIcon( ":/build/icons/build/misc.png" ) );
 		mb->action( "aSeparator1" );
 	mb->endGroup();
-	mb->menu( "mDebugger", tr( "Debugger" ) )->setEnabled( false );
+	mb->menu( "mDebugger", tr( "Debugger" ) )->menuAction()->setEnabled( false );
 	mb->menu( "mDebugger" )->menuAction()->setVisible( false );
-	mb->menu( "mInterpreter", tr( "Interpreter" ) )->setEnabled( false );
+	mb->menu( "mInterpreter", tr( "Interpreter" ) )->menuAction()->setEnabled( false );
 	mb->menu( "mInterpreter" )->menuAction()->setVisible( false );
 	mb->menu( "mTools", tr( "Tools" ) );
 	mb->beginGroup( "mTools" );
@@ -399,17 +400,56 @@ void UIMain::menu_Docks_aboutToShow()
 	}
 }
 
+bool UIMain::updateMenuVisibility( QMenu* menu )
+{
+	QAction* menuAction = menu->menuAction();
+	bool menuVisible = false;
+	
+	foreach ( QAction* action, menu->actions() )
+	{
+		if ( action->isSeparator() )
+		{
+			continue;
+		}
+		
+		QMenu* subMenu = action->menu();
+		
+		if ( subMenu )
+		{
+			if ( updateMenuVisibility( subMenu ) )
+			{
+				menuVisible = true;
+			}
+		}
+		else
+		{
+			menuVisible = true;
+		}
+	}
+	
+	menuAction->setVisible( menuVisible );
+	menuAction->setEnabled( menuVisible );
+	
+	return menuVisible;
+}
+
 void UIMain::menu_CustomAction_aboutToShow()
 {
 	QList<QMenu*> menus;
+	
 	if ( sender() )
+	{
 		menus << qobject_cast<QMenu*>( sender() );
+	}
 	else
+	{
 		menus << menuBar()->menu( "mBuilder" ) << menuBar()->menu( "mDebugger" ) << menuBar()->menu( "mInterpreter" );
+	}
+	
 	foreach ( QMenu* m, menus )
-		foreach ( QAction* a, m->actions() )
-			if ( a->menu() )
-				a->menu()->menuAction()->setVisible( a->menu()->actions().count() );
+	{
+		updateMenuVisibility( m );
+	}
 }
 
 void UIMain::changeStyle( const QString& style )

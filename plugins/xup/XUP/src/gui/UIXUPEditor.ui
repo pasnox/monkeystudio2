@@ -87,7 +87,7 @@
    <item row="1" column="1">
     <widget class="QStackedWidget" name="swPages">
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="wProject">
       <layout class="QVBoxLayout" name="verticalLayout_6">

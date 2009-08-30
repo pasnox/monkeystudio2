@@ -139,7 +139,7 @@ void CommandsEditor::on_cbCommandTypes_currentIndexChanged( int index )
 	
 	on_lwCommands_currentItemChanged( current, current );
 	
-	if ( mCommands.contains( mLastCommandType ) )
+	if ( mCommandTypes.contains( mLastCommandType ) )
 	{
 		pCommandList commands;
 		

@@ -19,6 +19,7 @@ namespace XUPProjectItemHelper
 	void addCommandProperty( XUPItem* variableItem, const QString& value );
 	void setProjectCommands( XUPProjectItem* project, const TypeCommandListMap& commands );
 	TypeCommandListMap projectCommands( XUPProjectItem* project );
+	void installProjectCommands( XUPProjectItem* project );
 };
 
 #endif // XUPPROJECTITEMHELPER_H

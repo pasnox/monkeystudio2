@@ -206,10 +206,6 @@ void PluginsManager::setCurrentBuilder( BuilderPlugin* b )
 	mBuilder = b;
 	if ( mBuilder )
 		mBuilder->setEnabled( true );
-	
-	// enable menu according to current builder
-	MonkeyCore::menuBar()->menu( "mBuilder" )->setEnabled( mBuilder || mCompiler );
-	MonkeyCore::menuBar()->menu( "mBuilder" )->menuAction()->setVisible( mBuilder || mCompiler );
 }
 
 BuilderPlugin* PluginsManager::currentBuilder()
@@ -229,10 +225,6 @@ void PluginsManager::setCurrentCompiler( CompilerPlugin* c )
 	mCompiler = c;
 	if ( mCompiler )
 		mCompiler->setEnabled( true );
-	
-	// enable menu according to current compiler
-	MonkeyCore::menuBar()->menu( "mBuilder" )->setEnabled( mCompiler || mBuilder );
-	MonkeyCore::menuBar()->menu( "mBuilder" )->menuAction()->setVisible( mBuilder || mCompiler );
 }
 
 CompilerPlugin* PluginsManager::currentCompiler()
@@ -252,10 +244,6 @@ void PluginsManager::setCurrentDebugger( DebuggerPlugin* d )
 	mDebugger = d;
 	if ( mDebugger )
 		mDebugger->setEnabled( true );
-	
-	// enable menu according to current debugger
-	MonkeyCore::menuBar()->menu( "mDebugger" )->setEnabled( mDebugger );
-	MonkeyCore::menuBar()->menu( "mDebugger" )->menuAction()->setVisible( mDebugger );
 }
 
 DebuggerPlugin* PluginsManager::currentDebugger()
@@ -275,10 +263,6 @@ void PluginsManager::setCurrentInterpreter( InterpreterPlugin* i )
 	mInterpreter = i;
 	if ( mInterpreter )
 		mInterpreter->setEnabled( true );
-	
-	// enable menu according to current interpreter
-	MonkeyCore::menuBar()->menu( "mInterpreter" )->setEnabled( mInterpreter );
-	MonkeyCore::menuBar()->menu( "mInterpreter" )->menuAction()->setVisible( mInterpreter );
 }
 
 InterpreterPlugin* PluginsManager::currentInterpreter()

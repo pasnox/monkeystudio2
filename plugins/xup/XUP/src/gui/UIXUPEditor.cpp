@@ -46,7 +46,7 @@ UIXUPEditor::UIXUPEditor( XUPProjectItem* project, QWidget* parent )
 	aOthersValuesEditPath = editMenu->addAction( tr( "As Path..." ) );
 	tbOthersValuesEdit->setMenu( editMenu );
 	
-	//
+	// commands
 	const BasePluginTypeList types = BasePluginTypeList() << BasePlugin::iBuilder << BasePlugin::iCompiler << BasePlugin::iDebugger << BasePlugin::iInterpreter;
 	const QStringList parsers = MonkeyCore::consoleManager()->parsersName();
 	
@@ -58,23 +58,6 @@ UIXUPEditor::UIXUPEditor( XUPProjectItem* project, QWidget* parent )
 	
 	// set correct page
 	lwPages->setCurrentRow( 0 );
-	
-	// temporary tests
-	/*
-	TypeCommandListMap commands;
-	
-	foreach ( const BasePlugin::Type& type, types )
-	{
-		for ( int i = 0; i < 5; i++ )
-		{
-			pCommand command;
-			
-			command.setText( QString::fromUtf8( "%1 command N°%2" ).arg( BasePlugin::typeToString( type ) ).arg( i ) );
-			
-			commands[ type ] << command;
-		}
-	}
-	*/
 }
 
 UIXUPEditor::~UIXUPEditor()
