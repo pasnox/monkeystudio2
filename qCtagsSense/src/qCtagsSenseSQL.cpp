@@ -215,7 +215,7 @@ bool qCtagsSenseSQL::removeCurrentDatabase()
 
 QSqlDatabase qCtagsSenseSQL::database() const
 {
-	return QSqlDatabase::database( mDBConnectionName, true );
+	return QSqlDatabase::database( mDBConnectionName, false );
 }
 
 QSqlQuery qCtagsSenseSQL::query() const
