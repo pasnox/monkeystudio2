@@ -1,4 +1,5 @@
 #include "XUPProjectItem.h"
+#include "XUPProjectItemHelper.h"
 #include "XUPProjectModel.h"
 #include "pIconManager.h"
 #include "BuilderPlugin.h"
@@ -1008,10 +1009,13 @@ InterpreterPlugin* XUPProjectItem::interpreter( const QString& plugin ) const
 	return MonkeyCore::pluginsManager()->plugin<InterpreterPlugin*>( PluginsManager::stAll, projectSettingsValue( "INTERPRETER", plugin ) );
 }
 
-void XUPProjectItem::addCommand( const pCommand& cmd, const QString& mnu )
+void XUPProjectItem::addCommand( pCommand& cmd, const QString& mnu )
 {
 	if ( cmd.isValid() )
 	{
+		cmd.setUserData( QVariant::fromValue( &mCommands ) );
+		cmd.setProject( this );
+		
 		emit installCommandRequested( cmd, mnu );
 		mCommands.insertMulti( mnu, cmd );
 	}
@@ -1037,9 +1041,7 @@ void XUPProjectItem::installCommands()
 		{
 			cmd.addParsers( cp->compileCommand().parsers() );
 		}
-
-		cmd.setUserData( QVariant::fromValue( &mCommands ) );
-		cmd.setProject( this );
+		
 		cmd.setSkipOnError( false );
 		addCommand( cmd, "mBuilder/mBuild" );
 
@@ -1064,8 +1066,6 @@ void XUPProjectItem::installCommands()
 	if ( cp && emptyBuilderBuildMenu )
 	{
 		pCommand cmd = cp->compileCommand();
-		cmd.setUserData( QVariant::fromValue( &mCommands ) );
-		cmd.setProject( this );
 		cmd.setSkipOnError( false );
 		addCommand( cmd, "mBuilder/mBuild" );
 	}
@@ -1074,8 +1074,6 @@ void XUPProjectItem::installCommands()
 	if ( ip && emptyInterpreterMenu )
 	{
 		pCommand cmd = ip->interpretCommand();
-		cmd.setUserData( QVariant::fromValue( &mCommands ) );
-		cmd.setProject( this );
 		cmd.setSkipOnError( false );
 		addCommand( cmd, "mInterpreter" );
 	}
@@ -1087,8 +1085,6 @@ void XUPProjectItem::installCommands()
 		{
 			if ( cp )
 				cmd.addParsers( cp->compileCommand().parsers() );
-			cmd.setUserData( QVariant::fromValue( &mCommands ) );
-			cmd.setProject( this );
 			cmd.setSkipOnError( false );
 			addCommand( cmd, "mBuilder/mUserCommands" );
 		}
@@ -1099,8 +1095,6 @@ void XUPProjectItem::installCommands()
 	{
 		foreach ( pCommand cmd, cp->userCommands() )
 		{
-			cmd.setUserData( QVariant::fromValue( &mCommands ) );
-			cmd.setProject( this );
 			cmd.setSkipOnError( false );
 			addCommand( cmd, "mBuilder/mUserCommands" );
 		}
@@ -1111,8 +1105,6 @@ void XUPProjectItem::installCommands()
 	{
 		foreach ( pCommand cmd, dp->userCommands() )
 		{
-			cmd.setUserData( QVariant::fromValue( &mCommands ) );
-			cmd.setProject( this );
 			cmd.setSkipOnError( false );
 			addCommand( cmd, "mDebugger/mUserCommands" );
 		}
@@ -1123,12 +1115,13 @@ void XUPProjectItem::installCommands()
 	{
 		foreach ( pCommand cmd, ip->userCommands() )
 		{
-			cmd.setUserData( QVariant::fromValue( &mCommands ) );
-			cmd.setProject( this );
 			cmd.setSkipOnError( false );
 			addCommand( cmd, "mInterpreter/mUserCommands" );
 		}
 	}
+	
+	// install custom project commands
+	XUPProjectItemHelper::installProjectCommands( this );
 }
 
 void XUPProjectItem::uninstallCommands()

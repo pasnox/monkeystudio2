@@ -43,6 +43,7 @@ class Q_MONKEY_EXPORT UIMain : public pMainWindow
 
 public:
 	QMenu* createPopupMenu();
+	bool updateMenuVisibility( QMenu* menu );
 
 protected:
 	pStylesActionGroup* agStyles;

@@ -55,6 +55,7 @@ public:
 	{
 		Version( const QString& version );
 		
+		bool operator==( const Version& other ) const;
 		bool operator<( const Version& other ) const;
 		bool operator>( const Version& other ) const;
 		

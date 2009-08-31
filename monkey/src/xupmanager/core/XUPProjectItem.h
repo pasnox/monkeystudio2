@@ -133,7 +133,7 @@ public:
 	virtual InterpreterPlugin* interpreter( const QString& plugin = QString() ) const;
 
 	// add a pCommand in menu
-	virtual void addCommand( const pCommand& cmd, const QString& mnu );
+	virtual void addCommand( pCommand& cmd, const QString& mnu );
 	// install custom project actions in menus
 	virtual void installCommands();
 	// uninstall custom project actions in menus

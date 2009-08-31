@@ -62,8 +62,17 @@ UpdateItem::Version::Version( const QString& version )
 	}
 }
 
+bool UpdateItem::Version::operator==( const Version& other ) const
+{
+	return major == other.major && minor == other.minor &&
+		patch == other.patch && build == other.build && extra == other.extra;
+}
+
 bool UpdateItem::Version::operator<( const Version& other ) const
 {
+	if ( *this == other )
+		return true;
+	
 	if ( major < other.major )
 		return true;
 	else if ( major > other.major )

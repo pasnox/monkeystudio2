@@ -533,19 +533,19 @@ void pWorkspace::internal_currentProjectChanged( XUPProjectItem* currentProject,
 		
 		currentProject->installCommands();
 	}
-	// update menu visibility
-	MonkeyCore::mainWindow()->menu_CustomAction_aboutToShow();
 }
 
 void pWorkspace::internal_projectInstallCommandRequested( const pCommand& cmd, const QString& mnu )
 {
 	// create action
-	QAction* a = MonkeyCore::menuBar()->action( QString( "%1/%2" ).arg( mnu, cmd.text() ) , cmd.text() );
+	QAction* a = MonkeyCore::menuBar()->action( QString( "%1/%2" ).arg( mnu ).arg( cmd.text() ) , cmd.text() );
 	a->setStatusTip( cmd.text() );
 	// set action custom data contain the command to execute
 	a->setData( QVariant::fromValue( cmd ) );
 	// connect to signal
 	connect( a, SIGNAL( triggered() ), this, SLOT( projectCustomActionTriggered() ) );
+	// update menu visibility
+	MonkeyCore::mainWindow()->menu_CustomAction_aboutToShow();
 }
 
 void pWorkspace::internal_projectUninstallCommandRequested( const pCommand& cmd, const QString& mnu )
@@ -554,10 +554,16 @@ void pWorkspace::internal_projectUninstallCommandRequested( const pCommand& cmd,
 	foreach ( QAction* a, menu->actions() )
 	{
 		if ( a->menu() )
+		{
 			internal_projectUninstallCommandRequested( cmd, QString( "%1/%2" ).arg( mnu ).arg( a->menu()->objectName() ) );
+		}
 		else if ( !a->isSeparator() && a->data().value<pCommand>() == cmd )
+		{
 			delete a;
+		}
 	}
+	// update menu visibility
+	MonkeyCore::mainWindow()->menu_CustomAction_aboutToShow();
 }
 
 void pWorkspace::projectCustomActionTriggered()
