@@ -152,6 +152,11 @@ QList<pAbstractChild*> pWorkspace::children() const
 	return l;
 }
 
+QFileSystemWatcher* pWorkspace::fileWatcher() const
+{
+	return mFileWatcher;
+}
+
 void pWorkspace::addSearhReplaceWidget (QWidget* widget)
 {
 	mLayout->addWidget( widget );

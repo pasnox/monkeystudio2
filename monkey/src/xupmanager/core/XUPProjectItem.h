@@ -139,6 +139,10 @@ public:
 	// uninstall custom project actions in menus
 	virtual void uninstallCommands();
 
+public slots:
+	// called when a watched path of a DynamicFolder have changed
+	void directoryChanged( const QString& path );
+
 protected:
 	QDomDocument mDocument;
 	pCommandMap mCommands;

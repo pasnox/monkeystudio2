@@ -7,6 +7,7 @@
 #include "pMonkeyStudio.h"
 #include "MonkeyCore.h"
 #include "PluginsManager.h"
+#include "pWorkspace.h"
 #include "XUPPlugin.h"
 #include "UITemplatesWizard.h"
 #include "pRecentsManager.h"
@@ -18,6 +19,7 @@
 #include <QTextCodec>
 #include <QMenu>
 #include <QInputDialog>
+#include <QFileSystemWatcher>
 
 XUPProjectManager::XUPProjectManager( QWidget* parent )
 	: pDockWidget( parent )
@@ -401,10 +403,12 @@ bool XUPProjectManager::openProject( const QString& fileName, const QString& cod
 			// append file to recents project
 			MonkeyCore::recentsManager()->addRecentProject( fileName );
 			
+			model->registerWithFileWatcher( MonkeyCore::workspace()->fileWatcher() );
+			
 			int id = cbProjects->count();
 			cbProjects->addItem( model->headerData( 0, Qt::Horizontal, Qt::DisplayRole ).toString(), QVariant::fromValue<XUPProjectModel*>( model ) );
 			cbProjects->setItemIcon( id, model->headerData( 0, Qt::Horizontal, Qt::DecorationRole ).value<QIcon>() );
-			setCurrentProject( model->mRootProject, currentProject() );
+			setCurrentProject( model->rootProject(), currentProject() );
 			emit projectOpened( currentProject() );
 			
 			return true;
@@ -450,6 +454,7 @@ bool XUPProjectManager::openProject()
 void XUPProjectManager::closeProject()
 {
 	XUPProjectModel* curModel = currentProjectModel();
+	
 	if ( curModel )
 	{
 		XUPProjectItem* preProject = currentProject();
@@ -467,6 +472,7 @@ void XUPProjectManager::closeProject()
 		
 		emit projectAboutToClose( preProject );
 		
+		curModel->unregisterWithFileWatcher( MonkeyCore::workspace()->fileWatcher() );
 		curModel->close();
 		delete curModel;
 	}

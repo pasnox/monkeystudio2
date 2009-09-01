@@ -362,7 +362,7 @@ QString XUPProjectItem::itemDisplayText( XUPItem* item )
 				text = item->attribute( "name" );
 				break;
 			case XUPItem::DynamicFolder:
-				text = item->attribute( "name" );
+				text = tr( "Dynamic Folder" );
 				break;
 			case XUPItem::Folder:
 				text = item->attribute( "name" );
@@ -481,7 +481,7 @@ XUPItemList XUPProjectItem::getVariables( const XUPItem* root, const QString& va
 
 QString XUPProjectItem::toString() const
 {
-	return mDocument.toString( 4 );
+	return XUPProjectItemHelper::stripDynamicFolderFiles( mDocument ).toString( 4 );
 }
 
 XUPItem* XUPProjectItem::projectSettingsScope( bool create ) const
@@ -1129,4 +1129,9 @@ void XUPProjectItem::uninstallCommands()
 	foreach ( const pCommand& cmd, mCommands.values() )
 		emit uninstallCommandRequested( cmd, mCommands.key( cmd ) );
 	mCommands.clear();
+}
+
+void XUPProjectItem::directoryChanged( const QString& path )
+{
+	XUPProjectItemHelper::updateDynamicFolder( this, path );
 }

@@ -49,6 +49,7 @@ public:
 	pAbstractChild* currentChild() const;
 	pAbstractChild* child( int ) const;
 	QList<pAbstractChild*> children() const;
+	QFileSystemWatcher* fileWatcher() const;
 	
 	void addSearhReplaceWidget (QWidget* widget);
 	static QString defaultContext();

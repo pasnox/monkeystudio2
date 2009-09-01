@@ -26,7 +26,8 @@ struct Q_MONKEY_EXPORT Mapping
 	{
 		foreach ( XUPItem* item, mMappedChildren )
 		{
-			if ( item->type() == XUPItem::Variable && item->attribute( "name" ) == name )
+			if ( ( item->type() == XUPItem::Variable || XUPItem::DynamicFolder ) &&
+				item->attribute( "name" ) == name )
 			{
 				return item;
 			}

@@ -1,5 +1,6 @@
 #include "UIXUPEditor.h"
 #include "XUPProjectItem.h"
+#include "XUPProjectModel.h"
 
 #include <MkSFileDialog.h>
 #include <pMonkeyStudio.h>
@@ -146,8 +147,9 @@ void UIXUPEditor::init( XUPProjectItem* project )
 	mProject = project;
 	mValues.clear();
 	mManagedVariables.clear();
-	mManagedVariables << mFileVariables;
+	mManagedVariables << mFileVariables << XUPProjectItemHelper::DynamicFolderSettingsName << XUPProjectItemHelper::DynamicFolderName;
 	mVariablesToRemove.clear();
+	const XUPDynamicFolderSettings folder = XUPProjectItemHelper::projectDynamicFolderSettings( mProject );
 
 	// loading datas from variable of root scope having operator =, += or *= only
 	foreach ( XUPItem* child, mProject->childrenList() )
@@ -157,7 +159,7 @@ void UIXUPEditor::init( XUPProjectItem* project )
 			QString variableName = child->attribute( "name" );
 			QString op = child->attribute( "operator", "=" );
 			
-			if ( op != "=" && op != "+=" && op != "*=" )
+			if ( ( op != "=" && op != "+=" && op != "*=" ) || mManagedVariables.contains( variableName ) )
 			{
 				continue;
 			}
@@ -180,8 +182,10 @@ void UIXUPEditor::init( XUPProjectItem* project )
 	}
 
 	leProjectName->setText( mProject->attribute( "name" ) );
-	gbDynamicFilesPatterns->setChecked( mProject->projectSettingsValue( "use_dynamic_files" ) == "1" );
-	gbDynamicFilesPatterns->setValues( mProject->projectSettingsValue( "dynamic_files_patterns" ).split( ";", QString::SkipEmptyParts ) );
+	gbDynamicFolder->setChecked( folder.Active );
+	leDynamicFolder->setText( folder.AbsolutePath );
+	gbDynamicFilesPatterns->setValues( folder.FilesPatterns );
+	
 	updateProjectFiles();
 	updateValuesEditorVariables();
 	
@@ -609,10 +613,18 @@ void UIXUPEditor::on_tbOthersValuesClear_clicked()
 
 void UIXUPEditor::accept()
 {
+	QFileSystemWatcher* watcher = MonkeyCore::workspace()->fileWatcher();
+	XUPProjectModel* model = mProject->model();
+	XUPDynamicFolderSettings folder;
+	folder.Active = gbDynamicFolder->isChecked();
+	folder.AbsolutePath = leDynamicFolder->text();
+	folder.FilesPatterns = gbDynamicFilesPatterns->values();
+	
 	// project
 	mProject->setAttribute( "name", leProjectName->text() );
-	mProject->setProjectSettingsValue( "use_dynamic_files", gbDynamicFilesPatterns->isChecked() ? "1" : "" );
-	mProject->setProjectSettingsValue( "dynamic_files_patterns", gbDynamicFilesPatterns->values().join( ";" ) );
+	model->unregisterWithFileWatcher( watcher, mProject );
+	XUPProjectItemHelper::setProjectDynamicFolderSettings( mProject, folder );
+	model->registerWithFileWatcher( watcher, mProject );
 	
 	// save current variable if needed
 	QListWidgetItem* curItem = lwOthersVariables->currentItem();
