@@ -91,6 +91,20 @@ QStringList XUPProjectItem::sourceFiles() const
 			files << file;
 		}
 	}
+	
+	// get dynamic files
+	XUPItem* dynamicFolderItem = XUPProjectItemHelper::projectDynamicFolderItem( const_cast<XUPProjectItem*>( this ), false );
+	
+	if ( dynamicFolderItem )
+	{
+		foreach ( XUPItem* valueItem, dynamicFolderItem->childrenList() )
+		{
+			if ( valueItem->type() == XUPItem::File )
+			{
+				files << valueItem->attribute( "content" );
+			}
+		}
+	}
 
 	return files;
 }
@@ -407,6 +421,13 @@ QIcon XUPProjectItem::itemDisplayIcon( XUPItem* item )
 	}
 
 	return icon;
+}
+
+void XUPProjectItem::rebuildCache()
+{
+	XUPProjectItem* riProject = rootIncludeProject();
+	riProject->mVariableCache.clear();
+	analyze( riProject );
 }
 
 XUPItemList XUPProjectItem::getVariables( const XUPItem* root, const QString& variableName, const XUPItem* callerItem, bool recursive ) const
@@ -949,7 +970,7 @@ bool XUPProjectItem::open( const QString& fileName, const QString& codec )
 	topLevelProject()->setLastError( QString::null );
 	file.close();
 
-	return true;
+	return analyze( this );
 }
 
 bool XUPProjectItem::save()

@@ -528,6 +528,11 @@ void XUPProjectManager::editProject()
 	
 	if ( plugin )
 	{
+		XUPProjectModel* model = currentProjectModel();
+		QFileSystemWatcher* watcher = MonkeyCore::workspace()->fileWatcher();
+		
+		model->unregisterWithFileWatcher( watcher, project );
+		
 		// edit project and save it if needed
 		if ( plugin->editProject( project ) )
 		{
@@ -543,7 +548,16 @@ void XUPProjectManager::editProject()
 			{
 				addError( project->lastError() );
 			}
+			
+			// rebuild cache
+			project->rebuildCache();
+			
+			// update menu actions
+			project->uninstallCommands();
+			project->installCommands();
 		}
+		
+		model->registerWithFileWatcher( watcher, project );
 	}
 }
 
@@ -664,8 +678,8 @@ void XUPProjectManager::addFilesToScope( XUPItem* scope, const QStringList& allF
 		}
 	}
 	
-	// reload include & subproject
-	project->analyze( scope );
+	// rebuild cache
+	project->rebuildCache();
 	
 	// save project
 	if ( !project->save() )
@@ -793,6 +807,9 @@ void XUPProjectManager::removeFiles()
 		{
 			variableParent->removeChild( variable );
 		}
+		
+		// rebuild cache
+		project->rebuildCache();
 		
 		// save project
 		if ( !project->save() )

@@ -1202,10 +1202,6 @@ void UISimpleQMakeEditor::accept()
 		
 	mProject->setProjectSettingsValue( "INTERPRETER", plugin );
 	
-	// update menu actions
-	mProject->uninstallCommands();
-	mProject->installCommands();
-	
 	// close dialog
 	QDialog::accept();
 }

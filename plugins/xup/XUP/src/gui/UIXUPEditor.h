@@ -33,6 +33,7 @@ protected:
 	QAction* aOthersValuesEditFile;
 	QAction* aOthersValuesEditPath;
 	
+	void updateMainFileComboBox( const QString& selectFile );
 	void updateProjectFiles();
 	void updateValuesEditorVariables();
 	void updateValuesEditorValues( const QString& variable = QString::null );
@@ -40,6 +41,9 @@ protected:
 	XUPItem* getUniqueVariableItem( const QString& variableName, bool create );
 
 protected slots:
+	// dynamic folder
+	void on_tbDynamicFolder_clicked();
+	
 	// files
 	void on_tbAddFile_clicked();
 	void on_tbEditFile_clicked();

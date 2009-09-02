@@ -1,19 +1,14 @@
 #include "UIXUPEditor.h"
 #include "XUPProjectItem.h"
-#include "XUPProjectModel.h"
 
 #include <MkSFileDialog.h>
 #include <pMonkeyStudio.h>
 #include <MonkeyCore.h>
 #include <PluginsManager.h>
-#include <pConsoleManager.h>
 #include <XUPProjectItemHelper.h>
 
 #include <QInputDialog>
-#include <QMessageBox>
 #include <QDebug>
-
-//leCustomConfig
 
 UIXUPEditor::UIXUPEditor( XUPProjectItem* project, QWidget* parent )
 	: QDialog( parent )
@@ -23,7 +18,7 @@ UIXUPEditor::UIXUPEditor( XUPProjectItem* project, QWidget* parent )
 	
 	// set dialog infos
 	setWindowIcon( project->displayIcon() );
-	setWindowTitle( windowTitle().append( " - " ).append( project->displayText() ) );
+	setWindowTitle( tr( "%1 Project Editor - %2" ).arg( PLUGIN_NAME ).arg( project->displayText() ) );
 	
 	// set size hint for page item ( left panel )
 	for ( int i = 0; i < lwPages->count(); i++ )
@@ -63,6 +58,25 @@ UIXUPEditor::UIXUPEditor( XUPProjectItem* project, QWidget* parent )
 
 UIXUPEditor::~UIXUPEditor()
 {
+}
+
+void UIXUPEditor::updateMainFileComboBox( const QString& selectFile )
+{
+	cbMainFile->clear();
+	
+	const QStringList sources = mProject->sourceFiles();
+	QMap<QString, QString> files;
+	
+	foreach ( const QString& file, sources )
+	{
+		const QString fileName = mProject->relativeFilePath( file );
+		
+		files[ fileName.toLower() ] = fileName;
+	}
+	
+	cbMainFile->addItems( files.values() );
+	const int index = cbMainFile->findText( mProject->relativeFilePath( selectFile ) );
+	cbMainFile->setCurrentIndex( index );
 }
 
 void UIXUPEditor::updateProjectFiles()
@@ -147,7 +161,7 @@ void UIXUPEditor::init( XUPProjectItem* project )
 	mProject = project;
 	mValues.clear();
 	mManagedVariables.clear();
-	mManagedVariables << mFileVariables << XUPProjectItemHelper::DynamicFolderSettingsName << XUPProjectItemHelper::DynamicFolderName;
+	mManagedVariables << mFileVariables << XUPProjectItemHelper::DynamicFolderName << XUPProjectItemHelper::DynamicFolderSettingsName;
 	mVariablesToRemove.clear();
 	const XUPDynamicFolderSettings folder = XUPProjectItemHelper::projectDynamicFolderSettings( mProject );
 
@@ -159,7 +173,13 @@ void UIXUPEditor::init( XUPProjectItem* project )
 			QString variableName = child->attribute( "name" );
 			QString op = child->attribute( "operator", "=" );
 			
-			if ( ( op != "=" && op != "+=" && op != "*=" ) || mManagedVariables.contains( variableName ) )
+			if ( op != "=" && op != "+=" && op != "*=" )
+			{
+				continue;
+			}
+			
+			if ( variableName == XUPProjectItemHelper::DynamicFolderSettingsName ||
+				variableName == XUPProjectItemHelper::DynamicFolderName )
 			{
 				continue;
 			}
@@ -180,6 +200,9 @@ void UIXUPEditor::init( XUPProjectItem* project )
 			}
 		}
 	}
+	
+	// fill main file combobox
+	updateMainFileComboBox( mProject->projectSettingsValue( "MAIN_FILE" ) );
 
 	leProjectName->setText( mProject->attribute( "name" ) );
 	gbDynamicFolder->setChecked( folder.Active );
@@ -223,6 +246,19 @@ XUPItem* UIXUPEditor::getUniqueVariableItem( const QString& variableName, bool c
 	
 	// return item
 	return variableItem;
+}
+
+void UIXUPEditor::on_tbDynamicFolder_clicked()
+{
+	QString path = leDynamicFolder->text();
+	path = QFileDialog::getExistingDirectory( this, tr( "Select the folder to monitor" ), path );
+	
+	if ( path.isEmpty() )
+	{
+		return;
+	}
+	
+	leDynamicFolder->setText( path );
 }
 
 void UIXUPEditor::on_tbAddFile_clicked()
@@ -613,18 +649,13 @@ void UIXUPEditor::on_tbOthersValuesClear_clicked()
 
 void UIXUPEditor::accept()
 {
-	QFileSystemWatcher* watcher = MonkeyCore::workspace()->fileWatcher();
-	XUPProjectModel* model = mProject->model();
 	XUPDynamicFolderSettings folder;
 	folder.Active = gbDynamicFolder->isChecked();
 	folder.AbsolutePath = leDynamicFolder->text();
 	folder.FilesPatterns = gbDynamicFilesPatterns->values();
 	
-	// project
-	mProject->setAttribute( "name", leProjectName->text() );
-	model->unregisterWithFileWatcher( watcher, mProject );
-	XUPProjectItemHelper::setProjectDynamicFolderSettings( mProject, folder );
-	model->registerWithFileWatcher( watcher, mProject );
+	// save current commands if needed
+	ceEditor->finalize();
 	
 	// save current variable if needed
 	QListWidgetItem* curItem = lwOthersVariables->currentItem();
@@ -742,14 +773,11 @@ void UIXUPEditor::accept()
 		}
 	}
 	
-	// xup settings
-	//mProject->setProjectSettingsValue( "QT_VERSION", mQtVersion.Version );
-	ceEditor->finalize();
+	// project
+	mProject->setAttribute( "name", leProjectName->text() );
+	mProject->setProjectSettingsValue( "MAIN_FILE", cbMainFile->currentText() );
+	XUPProjectItemHelper::setProjectDynamicFolderSettings( mProject, folder );
 	XUPProjectItemHelper::setProjectCommands( mProject, ceEditor->commands() );
-	
-	// update menu actions
-	mProject->uninstallCommands();
-	mProject->installCommands();
 	
 	// close dialog
 	QDialog::accept();

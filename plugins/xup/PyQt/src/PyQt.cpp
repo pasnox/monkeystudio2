@@ -17,7 +17,7 @@
 ****************************************************************************/
 #include "PyQt.h"
 #include "PyQtProjectItem.h"
-#include "UIPyQtEditor.h"
+#include "../XUP/src/gui/UIXUPEditor.h"
 
 #include <MonkeyCore.h>
 #include <UIMain.h>
@@ -82,7 +82,7 @@ bool PyQt::editProject( XUPProjectItem* project )
 		return false;
 	}
 
-	return UIPyQtEditor( project, MonkeyCore::mainWindow() ).exec() == QDialog::Accepted;
+	return UIXUPEditor( project, MonkeyCore::mainWindow() ).exec() == QDialog::Accepted;
 }
 
 Q_EXPORT_PLUGIN2( ProjectPyQt, PyQt )

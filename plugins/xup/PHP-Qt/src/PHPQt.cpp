@@ -18,7 +18,7 @@
 #include "PHPQt.h"
 #include "PHPQtProjectItem.h"
 //#include "UISettingsPHPQt.h"
-#include "UIPHPQtEditor.h"
+#include "../XUP/src/gui/UIXUPEditor.h"
 
 #include <MonkeyCore.h>
 #include <UIMain.h>
@@ -83,7 +83,7 @@ bool PHPQt::editProject( XUPProjectItem* project )
 		return false;
 	}
 
-	return UIPHPQtEditor( project, MonkeyCore::mainWindow() ).exec() == QDialog::Accepted;
+	return UIXUPEditor( project, MonkeyCore::mainWindow() ).exec() == QDialog::Accepted;
 }
 
 Q_EXPORT_PLUGIN2( ProjectPHPQt, PHPQt )

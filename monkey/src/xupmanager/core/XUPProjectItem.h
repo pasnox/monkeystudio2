@@ -75,6 +75,9 @@ public:
 	// return the display icon for the project item
 	QIcon itemDisplayIcon( XUPItem* item );
 	
+	// rebuild the project cache by clearing values and analyzing again the project
+	void rebuildCache();
+	
 	// split a multi line value into QStringList
 	QStringList splitMultiLineValue( const QString& value ) const;
 	// return the matching path ( from start ) between left and right string or null string if result isa drive on windows, or / on unix like
