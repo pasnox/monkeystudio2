@@ -211,9 +211,9 @@ public:
 		s = QDir::toNativeSeparators( s.append( "/monkey_cov" ) ); 
 		
 		// deal with coverage meter
-		__coveragescanner_filename( qPrintable( s ) );
-		__coveragescanner_teststate( qPrintable( s ) );
-		__coveragescanner_testname( qPrintable( QString( "%1/%2" ).arg( n, infos().Name ) ) );
+		__coveragescanner_filename( s.toLocal8Bit().constData() );
+		__coveragescanner_teststate( s.toLocal8Bit().constData() );
+		__coveragescanner_testname( QString( "%1/%2" ).arg( n ).arg( infos().Name ).toLocal8Bit().constData() );
 		__coveragescanner_save();
 	}
 #endif

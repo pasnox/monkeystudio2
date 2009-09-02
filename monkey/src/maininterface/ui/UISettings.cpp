@@ -309,7 +309,7 @@ void UISettings::loadSettings()
 	}
 	//  Lexers Highlighting
 	foreach ( QsciLexer* l, mLexers )
-		l->readSettings( *s, qPrintable( scintillaSettingsPath() ) );
+		l->readSettings( *s, scintillaSettingsPath().toLocal8Bit().constData() );
 	
 	if ( cbLexersHighlightingLanguages->count() )
 		on_cbLexersHighlightingLanguages_currentIndexChanged( cbLexersHighlightingLanguages->itemText( 0 ) );
@@ -467,7 +467,7 @@ void UISettings::saveSettings()
 	{
 		l->setDefaultPaper( tbDefaultDocumentPaper->color() );
 		l->setDefaultColor( tbDefaultDocumentPen->color() );
-		l->writeSettings( *s, qPrintable( scintillaSettingsPath() ) );
+		l->writeSettings( *s, scintillaSettingsPath().toLocal8Bit().constData() );
 	}
 
 	//  Abbreviations
