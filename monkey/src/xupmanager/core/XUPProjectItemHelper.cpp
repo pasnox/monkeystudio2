@@ -230,7 +230,7 @@ XUPDynamicFolderSettings XUPProjectItemHelper::projectDynamicFolderSettings( XUP
 
 void XUPProjectItemHelper::setProjectDynamicFolderSettings( XUPProjectItem* project, const XUPDynamicFolderSettings& folder )
 {
-	XUPItem* dynamicFolderSettingsItem = projectDynamicFolderSettingsItem( project, folder.isNull() );
+	XUPItem* dynamicFolderSettingsItem = projectDynamicFolderSettingsItem( project, !folder.isNull() );
 	
 	if ( dynamicFolderSettingsItem )
 	{
