@@ -1,10 +1,11 @@
 #ifndef COMMANDSEDITOR_H
 #define COMMANDSEDITOR_H
 
+#include "MonkeyExport.h"
 #include "ui_CommandsEditor.h"
 #include "XUPProjectItemHelper.h"
 
-class CommandsEditor : public QFrame, public Ui::CommandsEditor
+class Q_MONKEY_EXPORT CommandsEditor : public QFrame, public Ui::CommandsEditor
 {
 	Q_OBJECT
 
