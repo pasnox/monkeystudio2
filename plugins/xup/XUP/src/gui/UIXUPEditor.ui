@@ -45,7 +45,7 @@
        <string>Project</string>
       </property>
       <property name="icon">
-       <iconset>
+       <iconset resource="../../../../../monkey/src/resources/resources.qrc">
         <normaloff>:/xupeditor/icons/xupeditor/project.png</normaloff>:/xupeditor/icons/xupeditor/project.png</iconset>
       </property>
      </item>
@@ -54,7 +54,7 @@
        <string>Project Files</string>
       </property>
       <property name="icon">
-       <iconset>
+       <iconset resource="../../../../../monkey/src/resources/resources.qrc">
         <normaloff>:/xupeditor/icons/xupeditor/files.png</normaloff>:/xupeditor/icons/xupeditor/files.png</iconset>
       </property>
      </item>
@@ -63,7 +63,7 @@
        <string>Values Editor</string>
       </property>
       <property name="icon">
-       <iconset>
+       <iconset resource="../../../../../monkey/src/resources/resources.qrc">
         <normaloff>:/xupeditor/icons/xupeditor/values.png</normaloff>:/xupeditor/icons/xupeditor/values.png</iconset>
       </property>
      </item>
@@ -72,7 +72,7 @@
        <string>Commands</string>
       </property>
       <property name="icon">
-       <iconset>
+       <iconset resource="../../../../../monkey/src/resources/resources.qrc">
         <normaloff>:/xupeditor/icons/xupeditor/compiler.png</normaloff>:/xupeditor/icons/xupeditor/compiler.png</iconset>
       </property>
      </item>
@@ -163,7 +163,7 @@
             <item>
              <widget class="QToolButton" name="tbDynamicFolder">
               <property name="icon">
-               <iconset>
+               <iconset resource="../../../../../monkey/src/resources/resources.qrc">
                 <normaloff>:/listeditor/icons/listeditor/folder.png</normaloff>:/listeditor/icons/listeditor/folder.png</iconset>
               </property>
              </widget>
@@ -225,7 +225,7 @@
        <item row="0" column="1">
         <widget class="QToolButton" name="tbAddFile">
          <property name="icon">
-          <iconset>
+          <iconset resource="../../../../../monkey/src/resources/resources.qrc">
            <normaloff>:/listeditor/icons/listeditor/add.png</normaloff>:/listeditor/icons/listeditor/add.png</iconset>
          </property>
         </widget>
@@ -233,7 +233,7 @@
        <item row="0" column="2">
         <widget class="QToolButton" name="tbEditFile">
          <property name="icon">
-          <iconset>
+          <iconset resource="../../../../../monkey/src/resources/resources.qrc">
            <normaloff>:/listeditor/icons/listeditor/edit.png</normaloff>:/listeditor/icons/listeditor/edit.png</iconset>
          </property>
         </widget>
@@ -244,7 +244,7 @@
           <string>-</string>
          </property>
          <property name="icon">
-          <iconset>
+          <iconset resource="../../../../../monkey/src/resources/resources.qrc">
            <normaloff>:/listeditor/icons/listeditor/remove.png</normaloff>:/listeditor/icons/listeditor/remove.png</iconset>
          </property>
         </widget>

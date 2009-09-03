@@ -240,10 +240,8 @@ void XUPProjectItemHelper::setProjectDynamicFolderSettings( XUPProjectItem* proj
 			dynamicFolderSettingsItem->removeChild( child );
 		}
 		
-		const bool samePath = QDir::cleanPath( project->path() ) == QDir::cleanPath( folder.AbsolutePath );
-		
 		addDynamicFolderSettingsProperty( dynamicFolderSettingsItem, folder.Active ? "1" : "0" );
-		addDynamicFolderSettingsProperty( dynamicFolderSettingsItem, samePath ? "." : project->relativeFilePath( folder.AbsolutePath ) );
+		addDynamicFolderSettingsProperty( dynamicFolderSettingsItem, folder.AbsolutePath );
 		addDynamicFolderSettingsProperty( dynamicFolderSettingsItem, folder.FilesPatterns.join( ";" ) );
 	}
 }

@@ -27,6 +27,9 @@ UIXUPEditor::UIXUPEditor( XUPProjectItem* project, QWidget* parent )
 		item->setSizeHint( QSize( 154, 40 ) );
 	}
 	
+	// does not show variable editor by defaultAction
+	setVariableEditorVisible( false );
+	
 	// commands
 	const BasePluginTypeList types = BasePluginTypeList() << BasePlugin::iBuilder << BasePlugin::iCompiler << BasePlugin::iDebugger << BasePlugin::iInterpreter;
 	const QStringList parsers = MonkeyCore::consoleManager()->parsersName();
@@ -44,6 +47,16 @@ UIXUPEditor::UIXUPEditor( XUPProjectItem* project, QWidget* parent )
 
 UIXUPEditor::~UIXUPEditor()
 {
+}
+
+void UIXUPEditor::setVariableEditorVisible( bool visible )
+{
+	lwPages->item( 2 )->setHidden( !visible );
+}
+
+bool UIXUPEditor::isVariableEditorVisible() const
+{
+	return !lwPages->item( 2 )->isHidden();
 }
 
 void UIXUPEditor::updateMainFileComboBox( const QString& selectFile )
