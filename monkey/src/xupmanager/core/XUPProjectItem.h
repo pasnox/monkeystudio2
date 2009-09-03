@@ -79,7 +79,7 @@ public:
 	void rebuildCache();
 	
 	// split a multi line value into QStringList
-	QStringList splitMultiLineValue( const QString& value ) const;
+	static QStringList splitMultiLineValue( const QString& value );
 	// return the matching path ( from start ) between left and right string or null string if result isa drive on windows, or / on unix like
 	QString matchingPath( const QString& left, const QString& right ) const;
 	// return the compressed result list of paths list given in parameter

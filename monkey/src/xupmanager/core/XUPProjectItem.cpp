@@ -128,7 +128,7 @@ QStringList XUPProjectItem::topLevelProjectSourceFiles() const
 	return files.toList();
 }
 
-QStringList XUPProjectItem::splitMultiLineValue( const QString& value ) const
+QStringList XUPProjectItem::splitMultiLineValue( const QString& value )
 {
 	QStringList tmpValues = value.split( " ", QString::SkipEmptyParts );
 	bool inStr = false;
