@@ -648,7 +648,7 @@ QsciLexer* pMonkeyStudio::lexerForLanguage( const QString& language )
 		mGlobalsLexers[l->language()] = l;
 		// read settings
 		pSettings* ss = MonkeyCore::settings();
-		l->readSettings( *ss, qPrintable( scintillaSettingsPath() ) );
+		l->readSettings( *ss, scintillaSettingsPath().toLocal8Bit().constData() );
 		// set apis
 		l->setAPIs( apisForLexer( l ) );
 	}
@@ -669,10 +669,10 @@ bool pMonkeyStudio::setLexerProperty( const QString& property, QsciLexer* lexer,
 		return false;
 	// if bool
 	if ( value.type() == QVariant::Bool )
-		return QMetaObject::invokeMethod( lexer, qPrintable( property ), Q_ARG( bool, value.toBool() ) );
+		return QMetaObject::invokeMethod( lexer, property.toLocal8Bit().constData(), Q_ARG( bool, value.toBool() ) );
 	// if int
 	else if ( value.type() == QVariant::Int )
-		return QMetaObject::invokeMethod( lexer, qPrintable( property ), Q_ARG( QsciLexerPython::IndentationWarning, (QsciLexerPython::IndentationWarning)value.toInt() ) );
+		return QMetaObject::invokeMethod( lexer, property.toLocal8Bit().constData(), Q_ARG( QsciLexerPython::IndentationWarning, (QsciLexerPython::IndentationWarning)value.toInt() ) );
 	// return default value
 	return false;
 }
@@ -857,7 +857,7 @@ void pMonkeyStudio::resetLexer( QsciLexer* lexer )
 		}
 	}
 	// re read properties
-	lexer->readSettings( *settings, qPrintable( scintillaSettingsPath() ) );
+	lexer->readSettings( *settings, scintillaSettingsPath().toLocal8Bit().constData() );
 }
 
 /*!
@@ -874,7 +874,7 @@ void pMonkeyStudio::applyProperties()
 	foreach ( QsciLexer* l, mGlobalsLexers.values() )
 	{
 		// refresh properties
-		l->readSettings( *ss, qPrintable( scintillaSettingsPath() ) );
+		l->readSettings( *ss, scintillaSettingsPath().toLocal8Bit().constData() );
 		// refresh default pen/paper if needed
 		if ( defaultDocumentColours() )
 		{

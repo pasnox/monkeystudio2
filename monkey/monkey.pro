@@ -76,7 +76,8 @@ FORMS	*= src/maininterface/ui/UITranslator.ui \
 	src/xupmanager/gui/XUPProjectManager.ui \
 	src/xupmanager/gui/XUPAddFiles.ui \
 	src/pluginsmanager/ui/UIInterpreterSettings.ui \
-	src/xupmanager/gui/CommandsEditor.ui
+	src/xupmanager/gui/CommandsEditor.ui \
+	src/xupmanager/gui/VariablesEditor.ui
 
 HEADERS	*= src/main.h \
 	src/maininterface/ui/UITranslator.h \
@@ -136,7 +137,8 @@ HEADERS	*= src/main.h \
 	src/shellmanager/MkSShellInterpreter.h \
 	src/pluginsmanager/PluginsMenu.h \
 	src/xupmanager/gui/CommandsEditor.h \
-	src/xupmanager/core/XUPProjectItemHelper.h
+	src/xupmanager/core/XUPProjectItemHelper.h \
+	src/xupmanager/gui/VariablesEditor.h
 
 SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/maininterface/ui/UIAbout.cpp \
@@ -188,7 +190,8 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/shellmanager/MkSShellConsole.cpp \
 	src/pluginsmanager/PluginsMenu.cpp \
 	src/xupmanager/gui/CommandsEditor.cpp \
-	src/xupmanager/core/XUPProjectItemHelper.cpp
+	src/xupmanager/core/XUPProjectItemHelper.cpp \
+	src/xupmanager/gui/VariablesEditor.cpp
 
 mac:SOURCES	*= src/toolsmanager/pDesktopApplications_mac.cpp
 else:unix:SOURCES	*= src/toolsmanager/pDesktopApplications_unix.cpp

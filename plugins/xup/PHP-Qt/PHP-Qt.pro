@@ -8,9 +8,9 @@ RESOURCES	= src/resources/PHP-Qt.qrc
 
 HEADERS	= src/PHPQt.h \
 	src/PHPQtProjectItem.h \
-	src/gui/UIPHPQtEditor.h
+	../XUP/src/gui/UIXUPEditor.h
 
 SOURCES	= src/PHPQt.cpp \
 	src/PHPQtProjectItem.cpp \
-	src/gui/UIPHPQtEditor.cpp
-FORMS	= src/gui/UIPHPQtEditor.ui
+	../XUP/src/gui/UIXUPEditor.cpp
+FORMS	+= ../XUP/src/gui/UIXUPEditor.ui

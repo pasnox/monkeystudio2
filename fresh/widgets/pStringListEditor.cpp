@@ -32,22 +32,22 @@ pStringListEditor::pStringListEditor( QWidget* parent, const QString& title )
 	: QGroupBox( title, parent )
 {
 	// create layout
-	QVBoxLayout* vbox = new QVBoxLayout( this );
-	vbox->setMargin( 5 );
-	vbox->setSpacing( 3 );
+	mLayout = new QVBoxLayout( this );
+	mLayout->setMargin( 5 );
+	mLayout->setSpacing( 3 );
 	
 	// create toolbar
 	QToolBar* tb = new QToolBar;
 	tb->layout()->setMargin( 0 );
 	tb->layout()->setSpacing( 0 );
 	tb->setIconSize( QSize( 16, 16 ) );
-	vbox->addWidget( tb );
+	mLayout->addWidget( tb );
 
 	
 	// create listwidget
 	mList = new QListWidget;
 	mList->setMinimumHeight( 40 );
-	vbox->addWidget( mList );
+	mLayout->addWidget( mList );
 	
 	// create actions
 	QAction* aAdd = new QAction( QIcon( ":/listeditor/icons/listeditor/add.png" ), tr( "Add Item" ), tb );
@@ -73,6 +73,11 @@ pStringListEditor::pStringListEditor( QWidget* parent, const QString& title )
 	connect( aDown, SIGNAL( triggered() ), this, SLOT( onMoveDownItem() ) );
 	connect( aEdit, SIGNAL( triggered() ), this, SLOT( onEditItem() ) );
 	connect( mList, SIGNAL( itemChanged( QListWidgetItem* ) ), this, SIGNAL( edited() ) );
+}
+
+QVBoxLayout* pStringListEditor::verticalLayout() const
+{
+	return mLayout;
 }
 
 /*!

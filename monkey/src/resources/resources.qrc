@@ -1,6 +1,7 @@
 <RCC>
 	<qresource prefix="/items" >
 		<file alias="comment.png" >icons/items/comment.png</file>
+		<file alias="dynamicfolder.png" >icons/items/dynamicfolder.png</file>
 		<file alias="emptyline.png" >icons/items/emptyline.png</file>
 		<file alias="file.png" >icons/items/file.png</file>
 		<file alias="folder.png" >icons/items/folder.png</file>

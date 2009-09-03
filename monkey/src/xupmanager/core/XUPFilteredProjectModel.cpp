@@ -317,6 +317,9 @@ XUPItemList XUPFilteredProjectModel::getFilteredVariables( const XUPItem* root )
 				}
 				variables << getFilteredVariables( child );
 				break;
+			case XUPItem::DynamicFolder:
+				variables << child;
+				break;
 			case XUPItem::Value:
 				break;
 			case XUPItem::Function:
@@ -426,10 +429,14 @@ void XUPFilteredProjectModel::internal_rowsInserted( const QModelIndex& parent, 
 					populateVariable( item );
 				}
 				break;
+			case XUPItem::DynamicFolder:
+				populateVariable( item );
+				break;
 			case XUPItem::Value:
 			case XUPItem::File:
 			case XUPItem::Path:
-				if ( item->parent()->type() == XUPItem::Variable && filteredVariables.contains( item->parent()->attribute( "name" ) ) )
+				if ( ( item->parent()->type() == XUPItem::Variable && filteredVariables.contains( item->parent()->attribute( "name" ) ) ) ||
+					item->parent()->type() == XUPItem::DynamicFolder )
 				{
 					populateVariable( item->parent() );
 				}

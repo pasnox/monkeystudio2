@@ -6,12 +6,13 @@ INCLUDEPATH	*= src/gui
 
 RESOURCES	= src/resources/PyQt.qrc
 
-FORMS	= src/gui/UIPyQtEditor.ui
 
 HEADERS	= src/PyQt.h \
 	src/PyQtProjectItem.h \
-	src/gui/UIPyQtEditor.h
+	../XUP/src/gui/UIXUPEditor.h
 
 SOURCES	= src/PyQt.cpp \
 	src/PyQtProjectItem.cpp \
-	src/gui/UIPyQtEditor.cpp
+	../XUP/src/gui/UIXUPEditor.cpp
+
+FORMS	+= ../XUP/src/gui/UIXUPEditor.ui

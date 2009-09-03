@@ -1,29 +1,29 @@
-#ifndef UIPYQTEDITOR_H
-#define UIPYQTEDITOR_H
+#ifndef VARIABLESEDITOR_H
+#define VARIABLESEDITOR_H
 
-#include "ui_UIPyQtEditor.h"
-
-#include <QMap>
+#include "ui_VariablesEditor.h"
 
 class XUPProjectItem;
 class XUPItem;
 
-class UIPyQtEditor : public QDialog, public Ui::UIPyQtEditor
+class VariablesEditor : public QFrame, public Ui::VariablesEditor
 {
 	Q_OBJECT
-	
+
 public:
-	UIPyQtEditor( XUPProjectItem* project, QWidget* parent = 0 );
-	virtual ~UIPyQtEditor();
+	VariablesEditor( QWidget* parent = 0 );
+	virtual ~VariablesEditor();
+	
+	inline QStringList& fileVariables() { return mFileVariables; }
+	inline QStringList& pathVariables() { return mPathVariables; }
+	inline QStringList& managedVariables() { return mManagedVariables; }
+	inline QStringList& variablesToRemove() { return mVariablesToRemove; }
+	inline QMap<QString, QString>& values() { return mValues; }
+	
+	void init( XUPProjectItem* project );
+	void finalize();
 
 protected:
-	XUPProjectItem* mProject;
-	QStringList mFileVariables;
-	QMap<QString, QStringList> mValues;
-	QMap<QString, QTreeWidgetItem*> mProjectFilesItems;
-	QStringList mManagedVariables;
-	QStringList mVariablesToRemove;
-	
 	QAction* aOthersValuesAddValue;
 	QAction* aOthersValuesAddFile;
 	QAction* aOthersValuesAddPath;
@@ -31,17 +31,18 @@ protected:
 	QAction* aOthersValuesEditFile;
 	QAction* aOthersValuesEditPath;
 	
-	void updateProjectFiles();
+	XUPProjectItem* mProject;
+	QStringList mFileVariables;
+	QStringList mPathVariables;
+	QStringList mManagedVariables;
+	QStringList mVariablesToRemove;
+	QMap<QString, QString> mValues;
+	
+	XUPItem* getUniqueVariableItem( const QString& variableName, bool create );
 	void updateValuesEditorVariables();
 	void updateValuesEditorValues( const QString& variable = QString::null );
-	void init( XUPProjectItem* project );
-	XUPItem* getUniqueVariableItem( const QString& variableName, bool create );
 
 protected slots:
-	void on_tbAddFile_clicked();
-	void on_tbEditFile_clicked();
-	void on_tbRemoveFile_clicked();
-	
 	// variables
 	void on_lwOthersVariables_currentItemChanged( QListWidgetItem* current, QListWidgetItem* previous );
 	void on_tbOthersVariablesAdd_clicked();
@@ -56,8 +57,6 @@ protected slots:
 	void on_tbOthersValuesEdit_triggered( QAction* action );
 	void on_tbOthersValuesRemove_clicked();
 	void on_tbOthersValuesClear_clicked();
-	
-	void accept();
 };
 
-#endif // UIPYQTEDITOR_H
+#endif // VARIABLESEDITOR_H

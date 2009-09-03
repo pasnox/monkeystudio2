@@ -7,16 +7,10 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>400</height>
+    <height>422</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="spacing">
-    <number>3</number>
-   </property>
-   <property name="margin">
-    <number>0</number>
-   </property>
    <item>
     <widget class="QGroupBox" name="gbCommands">
      <property name="sizePolicy">
@@ -35,7 +29,7 @@
          <string>Add</string>
         </property>
         <property name="icon">
-         <iconset resource="../../resources/resources.qrc">
+         <iconset>
           <normaloff>:/tools/icons/tools/add.png</normaloff>:/tools/icons/tools/add.png</iconset>
         </property>
        </widget>
@@ -46,7 +40,7 @@
          <string>Remove</string>
         </property>
         <property name="icon">
-         <iconset resource="../../resources/resources.qrc">
+         <iconset>
           <normaloff>:/tools/icons/tools/remove.png</normaloff>:/tools/icons/tools/remove.png</iconset>
         </property>
        </widget>
@@ -57,7 +51,7 @@
          <string>Up</string>
         </property>
         <property name="icon">
-         <iconset resource="../../resources/resources.qrc">
+         <iconset>
           <normaloff>:/tools/icons/tools/up.png</normaloff>:/tools/icons/tools/up.png</iconset>
         </property>
        </widget>
@@ -68,7 +62,7 @@
          <string>Down</string>
         </property>
         <property name="icon">
-         <iconset resource="../../resources/resources.qrc">
+         <iconset>
           <normaloff>:/tools/icons/tools/down.png</normaloff>:/tools/icons/tools/down.png</iconset>
         </property>
        </widget>
@@ -154,7 +148,7 @@
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset resource="../../resources/resources.qrc">
+           <iconset>
             <normaloff>:/tools/icons/tools/file.png</normaloff>:/tools/icons/tools/file.png</iconset>
           </property>
          </widget>
@@ -197,7 +191,7 @@
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset resource="../../resources/resources.qrc">
+           <iconset>
             <normaloff>:/tools/icons/tools/icon.png</normaloff>:/tools/icons/tools/icon.png</iconset>
           </property>
          </widget>

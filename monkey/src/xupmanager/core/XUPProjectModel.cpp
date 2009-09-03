@@ -1,6 +1,8 @@
 #include "XUPProjectModel.h"
 #include "XUPProjectItem.h"
+#include "XUPProjectItemHelper.h"
 
+#include <QFileSystemWatcher>
 #include <QDebug>
 
 XUPProjectModel::XUPProjectModel( QObject* parent )
@@ -35,6 +37,11 @@ XUPItem* XUPProjectModel::itemFromIndex( const QModelIndex& index ) const
 	}
 	
 	return 0;
+}
+
+XUPProjectItem* XUPProjectModel::rootProject() const
+{
+	return mRootProject;
 }
 
 QModelIndex XUPProjectModel::index( int row, int column, const QModelIndex& parent ) const
@@ -224,6 +231,55 @@ void XUPProjectModel::setLastError( const QString& error )
 QString XUPProjectModel::lastError() const
 {
 	return mLastError;
+}
+
+void XUPProjectModel::registerWithFileWatcher( QFileSystemWatcher* watcher, XUPProjectItem* project )
+{
+	const XUPDynamicFolderSettings folder = XUPProjectItemHelper::projectDynamicFolderSettings( project );
+	
+	if ( folder.isNull() || !folder.Active )
+	{
+		return;
+	}
+	
+	connect( watcher, SIGNAL( directoryChanged( const QString& ) ), project, SLOT( directoryChanged( const QString& ) ) );
+	
+	const QString path = project->path();
+	
+	if ( !watcher->directories().contains( path ) )
+	{
+		watcher->addPath( path );
+	}
+	
+	project->directoryChanged( path );
+}
+
+void XUPProjectModel::registerWithFileWatcher( QFileSystemWatcher* watcher )
+{
+	foreach ( XUPProjectItem* project, mRootProject->childrenProjects( true ) )
+	{
+		registerWithFileWatcher( watcher, project );
+	}
+}
+
+void XUPProjectModel::unregisterWithFileWatcher( QFileSystemWatcher* watcher, XUPProjectItem* project )
+{
+	disconnect( watcher, SIGNAL( directoryChanged( const QString& ) ), project, SLOT( directoryChanged( const QString& ) ) );
+	
+	const QString path = project->path();
+	
+	if ( watcher->directories().contains( path ) )
+	{
+		watcher->removePath( path );
+	}
+}
+
+void XUPProjectModel::unregisterWithFileWatcher( QFileSystemWatcher* watcher )
+{
+	foreach ( XUPProjectItem* project, mRootProject->childrenProjects( true ) )
+	{
+		unregisterWithFileWatcher( watcher, project );
+	}
 }
 
 bool XUPProjectModel::open( const QString& fileName, const QString& codec )

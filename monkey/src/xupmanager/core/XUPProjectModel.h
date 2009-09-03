@@ -7,6 +7,7 @@
 
 class XUPProjectItem;
 class XUPItem;
+class QFileSystemWatcher;
 
 class Q_MONKEY_EXPORT XUPProjectModel : public QAbstractItemModel
 {
@@ -36,10 +37,17 @@ public:
 	//
 	QModelIndex indexFromItem( XUPItem* item ) const;
 	XUPItem* itemFromIndex( const QModelIndex& index ) const;
+	XUPProjectItem* rootProject() const;
 	
 	// error handler
 	void setLastError( const QString& error );
 	QString lastError() const;
+	
+	// file watcher
+	void registerWithFileWatcher( QFileSystemWatcher* watcher, XUPProjectItem* project );
+	void registerWithFileWatcher( QFileSystemWatcher* watcher );
+	void unregisterWithFileWatcher( QFileSystemWatcher* watcher, XUPProjectItem* project );
+	void unregisterWithFileWatcher( QFileSystemWatcher* watcher );
 	
 	// XUP Project members
 	virtual bool open( const QString& fileName, const QString& codec );

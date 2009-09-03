@@ -28,7 +28,7 @@ public:
 	virtual ~MksException() throw() {};
 	virtual const char* what() const throw()
 	{
-		return qPrintable( s );
+		return s.toLocal8Bit().constData();
 	};
 private:
 	QString s;
@@ -595,7 +595,7 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
 			}
 			else
 			{
-				qWarning("%s didn't match", qPrintable(v[i]));
+				qWarning( "%s didn't match", v[i].toLocal8Bit().constData());
 				throw MksException( QString("Erreur parsing project file: %1").arg( s ) );
 			}
 		}

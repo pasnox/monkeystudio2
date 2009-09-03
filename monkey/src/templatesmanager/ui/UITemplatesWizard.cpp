@@ -70,9 +70,9 @@ UITemplatesWizard::UITemplatesWizard( QWidget* w )
 	foreach( pTemplate tp, mTemplates )
 	{
 		if ( cbLanguages->findData( tp.Language, Qt::UserRole, Qt::MatchFixedString ) == -1 )
-			cbLanguages->addItem( tr( qPrintable( tp.Language ) ), tp.Language );
+			cbLanguages->addItem( tr( tp.Language.toLocal8Bit().constData() ), tp.Language );
 		if ( cbTypes->findData( tp.Type, Qt::UserRole, Qt::MatchFixedString ) == -1 )
-			cbTypes->addItem( tr( qPrintable( tp.Type ) ), tp.Type );
+			cbTypes->addItem( tr( tp.Type.toLocal8Bit().constData() ), tp.Type );
 	}
 	
 	// restore infos

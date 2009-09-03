@@ -75,8 +75,11 @@ public:
 	// return the display icon for the project item
 	QIcon itemDisplayIcon( XUPItem* item );
 	
+	// rebuild the project cache by clearing values and analyzing again the project
+	void rebuildCache();
+	
 	// split a multi line value into QStringList
-	QStringList splitMultiLineValue( const QString& value ) const;
+	static QStringList splitMultiLineValue( const QString& value );
 	// return the matching path ( from start ) between left and right string or null string if result isa drive on windows, or / on unix like
 	QString matchingPath( const QString& left, const QString& right ) const;
 	// return the compressed result list of paths list given in parameter
@@ -138,6 +141,10 @@ public:
 	virtual void installCommands();
 	// uninstall custom project actions in menus
 	virtual void uninstallCommands();
+
+public slots:
+	// called when a watched path of a DynamicFolder have changed
+	void directoryChanged( const QString& path );
 
 protected:
 	QDomDocument mDocument;

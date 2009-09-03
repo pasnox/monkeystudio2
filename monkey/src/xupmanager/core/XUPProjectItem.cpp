@@ -91,6 +91,20 @@ QStringList XUPProjectItem::sourceFiles() const
 			files << file;
 		}
 	}
+	
+	// get dynamic files
+	XUPItem* dynamicFolderItem = XUPProjectItemHelper::projectDynamicFolderItem( const_cast<XUPProjectItem*>( this ), false );
+	
+	if ( dynamicFolderItem )
+	{
+		foreach ( XUPItem* valueItem, dynamicFolderItem->childrenList() )
+		{
+			if ( valueItem->type() == XUPItem::File )
+			{
+				files << valueItem->attribute( "content" );
+			}
+		}
+	}
 
 	return files;
 }
@@ -114,7 +128,7 @@ QStringList XUPProjectItem::topLevelProjectSourceFiles() const
 	return files.toList();
 }
 
-QStringList XUPProjectItem::splitMultiLineValue( const QString& value ) const
+QStringList XUPProjectItem::splitMultiLineValue( const QString& value )
 {
 	QStringList tmpValues = value.split( " ", QString::SkipEmptyParts );
 	bool inStr = false;
@@ -362,7 +376,7 @@ QString XUPProjectItem::itemDisplayText( XUPItem* item )
 				text = item->attribute( "name" );
 				break;
 			case XUPItem::DynamicFolder:
-				text = item->attribute( "name" );
+				text = tr( "Dynamic Folder" );
 				break;
 			case XUPItem::Folder:
 				text = item->attribute( "name" );
@@ -407,6 +421,13 @@ QIcon XUPProjectItem::itemDisplayIcon( XUPItem* item )
 	}
 
 	return icon;
+}
+
+void XUPProjectItem::rebuildCache()
+{
+	XUPProjectItem* riProject = rootIncludeProject();
+	riProject->mVariableCache.clear();
+	analyze( riProject );
 }
 
 XUPItemList XUPProjectItem::getVariables( const XUPItem* root, const QString& variableName, const XUPItem* callerItem, bool recursive ) const
@@ -481,7 +502,7 @@ XUPItemList XUPProjectItem::getVariables( const XUPItem* root, const QString& va
 
 QString XUPProjectItem::toString() const
 {
-	return mDocument.toString( 4 );
+	return XUPProjectItemHelper::stripDynamicFolderFiles( mDocument ).toString( 4 );
 }
 
 XUPItem* XUPProjectItem::projectSettingsScope( bool create ) const
@@ -949,7 +970,7 @@ bool XUPProjectItem::open( const QString& fileName, const QString& codec )
 	topLevelProject()->setLastError( QString::null );
 	file.close();
 
-	return true;
+	return analyze( this );
 }
 
 bool XUPProjectItem::save()
@@ -1129,4 +1150,9 @@ void XUPProjectItem::uninstallCommands()
 	foreach ( const pCommand& cmd, mCommands.values() )
 		emit uninstallCommandRequested( cmd, mCommands.key( cmd ) );
 	mCommands.clear();
+}
+
+void XUPProjectItem::directoryChanged( const QString& path )
+{
+	XUPProjectItemHelper::updateDynamicFolder( this, path );
 }

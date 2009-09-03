@@ -28,6 +28,7 @@
 
 #include <QGroupBox>
 
+class QVBoxLayout;
 class QListWidget;
 
 /*!
@@ -40,11 +41,13 @@ class Q_MONKEY_EXPORT pStringListEditor : public QGroupBox
 	
 public:
 	pStringListEditor( QWidget* paret = 0, const QString& title = QString() );
+	QVBoxLayout* verticalLayout() const;
 
 	void setValues( const QStringList& values );
 	QStringList values() const;
 
 protected:
+	QVBoxLayout* mLayout;
 	QListWidget* mList;
 
 protected slots:
