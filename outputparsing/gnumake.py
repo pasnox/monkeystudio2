@@ -2,7 +2,7 @@ import parsing
 
 noRule = parsing.RegEx(r"^((mingw32\-)?make: \*\*\* No rule to make target.*)  Stop.",
 								type = 'error',
-								text = 'FUCK %1')
+								text = '%1')
 noRule.setComment('No rule for make target')
 
 noRule.test("mingw32-make: *** No rule to make target `release'.  Stop.", 
