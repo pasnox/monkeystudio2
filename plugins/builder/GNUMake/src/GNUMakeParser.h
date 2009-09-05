@@ -41,7 +41,7 @@ public:
 		mName = PLUGIN_NAME;
 		Pattern ps[] = 
 		{
-#include <GnuMakePatterns.h>
+#include "GnuMakePatterns.h"
 		{QRegExp(), "", "", "", pConsoleManager::stUnknown,"",""} //this item must be last
 		};
 		for ( int i = 0; !ps[i].regExp.isEmpty(); i++)
