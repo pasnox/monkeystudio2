@@ -2,7 +2,7 @@ TARGET	= PHP-Qt
 include( ../../plugins.pri )
 DESTDIR	= $$MONKEY_PLUGINS_DIR/xup
 
-INCLUDEPATH	*= src/gui
+INCLUDEPATH	*= src/gui .
 
 RESOURCES	= src/resources/PHP-Qt.qrc
 

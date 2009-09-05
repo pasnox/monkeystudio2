@@ -1,12 +1,13 @@
 #ifndef VARIABLESEDITOR_H
 #define VARIABLESEDITOR_H
 
+#include "MonkeyExport.h"
 #include "ui_VariablesEditor.h"
 
 class XUPProjectItem;
 class XUPItem;
 
-class VariablesEditor : public QFrame, public Ui::VariablesEditor
+class Q_MONKEY_EXPORT VariablesEditor : public QFrame, public Ui::VariablesEditor
 {
 	Q_OBJECT
 
