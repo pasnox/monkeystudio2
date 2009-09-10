@@ -4,7 +4,7 @@
 
 #include <XUPProjectItemInfos.h>
 #include <pMonkeyStudio.h>
-#include <QueuedStatusBar.h>
+#include <pQueuedMessageToolBar.h>
 #include <BuilderPlugin.h>
 #include <CompilerPlugin.h>
 
@@ -796,7 +796,7 @@ void QMakeProjectItem::installCommands()
 		{
 			setProjectSettingsValue( "SHOW_QT_VERSION_WARNING", "0" );
 			topLevelProject()->save();
-			MonkeyCore::statusBar()->appendMessage( tr( "Some actions can't be created, because there is no default Qt version setted, please go in your project settings ( %1 ) to fix this." ).arg( displayText() ) );
+			MonkeyCore::messageManager()->appendMessage( tr( "Some actions can't be created, because there is no default Qt version setted, please go in your project settings ( %1 ) to fix this." ).arg( displayText() ) );
 		}
 		
 		// execute debug

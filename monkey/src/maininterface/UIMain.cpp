@@ -39,7 +39,7 @@
 #include "../pluginsmanager/PluginsMenu.h"
 #include "../queuedstatusbar/QueuedStatusBar.h"
 
-#include <fresh.h>
+#include <pQueuedMessageToolBar.h>
 
 #include <QCloseEvent>
 #include <QMenu>
@@ -90,6 +90,14 @@ void UIMain::initGui()
 	MonkeyCore::toolsManager();
 	// init toolbar
 	initToolBar();
+	// init message toolbar
+	pQueuedMessageToolBar* messageTb = MonkeyCore::messageManager();
+	messageTb->setObjectName( "pQueuedMessageToolBar" );
+	messageTb->setVisible( false );
+	messageTb->setWindowTitle( tr( "Message ToolBar" ) );
+	addToolBarBreak();
+	addToolBar( messageTb );
+	addToolBarBreak();
 	// init projects manager
 	dockToolBar( Qt::LeftToolBarArea )->addDock( MonkeyCore::projectsManager(), MonkeyCore::projectsManager()->windowTitle(), QIcon( ":/project/icons/project/project.png" ) );
 	// init workspace

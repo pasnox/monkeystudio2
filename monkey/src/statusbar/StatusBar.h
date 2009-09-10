@@ -1,34 +1,28 @@
 #ifndef QUEUEDSTATUSBAR_H
 #define QUEUEDSTATUSBAR_H
 
-#include "fresh.h"
-#include "qscintilla.h"
+#include <MonkeyExport.h>
+#include <qsciscintilla.h>
+
+#include <QStatusBar>
 
 class QLabel;
-class QStackedWidget;
 
-class Q_MONKEY_EXPORT QueuedStatusBar : public pQueuedStatusBar
+class Q_MONKEY_EXPORT StatusBar : public QStatusBar
 {
 	Q_OBJECT
 	
 public:
 	enum LabelType { ltMessage = 0, ltCursorPosition, ltSaveState, ltEOLMode, ltIndentMode };
-	QueuedStatusBar( QWidget* parent = 0 );
+	StatusBar( QWidget* parent = 0 );
 	
-	QLabel* label( QueuedStatusBar::LabelType type );
-	virtual QSize sizeHint() const;
+	QLabel* label( StatusBar::LabelType type );
 
 protected:
-	QStackedWidget* mStacked;
 	QWidget* mWidgetLabels;
 	QLabel* mLabels[5];
-	int mHeight;
-	
-	void resizeEvent( QResizeEvent* event );
 
 public slots:
-	void messageShown( const pQueuedMessage& message );
-	void messageFinished();
 	void setMessage( const QString& message );
 	void setModified( bool modified );
 	void setEOLMode( QsciScintilla::EolMode mode ); // -1 for none

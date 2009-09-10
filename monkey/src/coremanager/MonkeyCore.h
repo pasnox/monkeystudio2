@@ -29,7 +29,7 @@
 #ifndef MONKEYCORE_H
 #define MONKEYCORE_H
 
-#include <fresh.h>
+#include <MonkeyExport.h>
 
 #include <QObject>
 #include <QHash>
@@ -46,7 +46,8 @@ class pFileManager;
 class pWorkspace;
 class QStatusBar;
 class pConsoleManager;
-class QueuedStatusBar;
+class StatusBar;
+class pQueuedMessageToolBar;
 class MkSShellInterpreter;
 class pAbbreviationsManager;
 class pMultiToolBar;
@@ -68,7 +69,8 @@ public:
 	static pFileManager* fileManager();
 	static pWorkspace* workspace();
 	static pConsoleManager* consoleManager();
-	static QueuedStatusBar* statusBar();
+	static pQueuedMessageToolBar* messageManager();
+	static StatusBar* statusBar();
 	static MkSShellInterpreter* interpreter();
 	static pAbbreviationsManager* abbreviationsManager();
 	static pMultiToolBar* multiToolBar();

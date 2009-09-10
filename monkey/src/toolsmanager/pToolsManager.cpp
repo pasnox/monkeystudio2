@@ -33,7 +33,8 @@
 #include "../coremanager/MonkeyCore.h"
 #include "../settingsmanager/Settings.h"
 #include "../consolemanager/pConsoleManager.h"
-#include "../queuedstatusbar/QueuedStatusBar.h"
+
+#include <pQueuedMessageToolBar.h>
 
 #include <QProcess>
 #include <QDesktopServices>
@@ -143,5 +144,5 @@ void pToolsManager::toolsMenu_triggered( QAction* a )
 		b = p->waitForStarted();
 	}
 	if ( !b )
-		MonkeyCore::statusBar()->appendMessage( tr( "Error trying to start tool :\n'%1'" ).arg( filePath ), 2500 );
+		MonkeyCore::messageManager()->appendMessage( tr( "Error trying to start tool :\n'%1'" ).arg( filePath ), 2500 );
 }

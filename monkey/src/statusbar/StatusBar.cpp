@@ -1,14 +1,12 @@
 #include "QueuedStatusBar.h"
 
 #include <QLabel>
-#include <QStackedWidget>
+#include <QHBoxLayout>
+#include <QIcon>
 
-QueuedStatusBar::QueuedStatusBar( QWidget* parent )
-	: pQueuedStatusBar( parent )
+StatusBar::StatusBar( QWidget* parent )
+	: QStatusBar( parent )
 {
-	layout()->setMargin( 0 );
-	mStacked = new QStackedWidget;
-	//mStacked->setFrameStyle( QFrame::Sunken | QFrame::StyledPanel );
 	// create labels
 	QLabel* l;
 	l = ( mLabels[ltCursorPosition] = new QLabel( this ) );
@@ -27,7 +25,7 @@ QueuedStatusBar::QueuedStatusBar( QWidget* parent )
 	l->setToolTip( tr( "Indentation mode" ) );
 	// may need fix for some styles
 	for ( int i = ltMessage; i < ltIndentMode +1; ++i )
-		label( (QueuedStatusBar::LabelType)i )->setFrameStyle( QFrame::StyledPanel );
+		label( (StatusBar::LabelType)i )->setFrameStyle( QFrame::StyledPanel );
 	//
 	mWidgetLabels = new QWidget;
 	QHBoxLayout* hlayout = new QHBoxLayout( mWidgetLabels );
@@ -40,47 +38,17 @@ QueuedStatusBar::QueuedStatusBar( QWidget* parent )
 	hlayout->addWidget( mLabels[ltIndentMode] );
 	hlayout->setStretchFactor( mLabels[ltMessage], 255 );
 	// add widgets to stacked
-	mStacked->addWidget( mWidgetLabels );
-	mStacked->addWidget( mQueuedWidget );
+	addWidget( mWidgetLabels );
 	// add labels to status bar as permanent widgets
-	addPermanentWidget( mStacked, 255 );
+	addPermanentWidget( mWidgetLabels, 255 );
 	// connections
-	connect( mQueuedWidget, SIGNAL( messageShown( const pQueuedMessage& ) ), this, SLOT( messageShown( const pQueuedMessage& ) ) );
-	connect( mQueuedWidget, SIGNAL( finished() ), this, SLOT( messageFinished() ) );
 	connect( this, SIGNAL( messageChanged( const QString& ) ), this, SLOT( setMessage( const QString& ) ) );
-	// remember default sizeHint height
-	mHeight = sizeHint().height();
 }
 
-QLabel* QueuedStatusBar::label( QueuedStatusBar::LabelType type )
+QLabel* StatusBar::label( StatusBar::LabelType type )
 { return mLabels[type]; }
 
-QSize QueuedStatusBar::sizeHint() const
-{
-	QSize size = pQueuedStatusBar::sizeHint();
-	size.setHeight( mHeight );
-	return size;
-}
-
-void QueuedStatusBar::resizeEvent( QResizeEvent* event )
-{
-	pQueuedStatusBar::resizeEvent( event );
-	QLabel* label = mLabels[ltMessage];
-	if ( label->text() != currentMessage() )
-	{
-		QFontMetrics fm( font() );
-		label->setText( fm.elidedText( currentMessage(), Qt::ElideRight, label->rect().width() ) );
-		label->setToolTip( currentMessage() );
-	}
-}
-
-void QueuedStatusBar::messageShown( const pQueuedMessage& /*message*/ )
-{ mStacked->setCurrentIndex( mStacked->indexOf( mQueuedWidget ) ); }
-
-void QueuedStatusBar::messageFinished()
-{ mStacked->setCurrentIndex( mStacked->indexOf( mWidgetLabels ) ); }
-
-void QueuedStatusBar::setMessage( const QString& message )
+void StatusBar::setMessage( const QString& message )
 {
 	QFontMetrics fm( font() );
 	QLabel* label = mLabels[ltMessage];
@@ -88,10 +56,10 @@ void QueuedStatusBar::setMessage( const QString& message )
 	label->setToolTip( message );
 }
 
-void QueuedStatusBar::setModified( bool modified )
+void StatusBar::setModified( bool modified )
 { label( ltSaveState )->setPixmap( QIcon( QPixmap( ":/file/icons/file/save.png" ) ).pixmap( QSize( 16, 16 ), modified ? QIcon::Normal : QIcon::Disabled ) ); }
 
-void QueuedStatusBar::setEOLMode( QsciScintilla::EolMode mode )
+void StatusBar::setEOLMode( QsciScintilla::EolMode mode )
 {
 	switch ( mode )
 	{
@@ -110,7 +78,7 @@ void QueuedStatusBar::setEOLMode( QsciScintilla::EolMode mode )
 	}
 }
 
-void QueuedStatusBar::setIndentMode( int mode )
+void StatusBar::setIndentMode( int mode )
 {
 	switch ( mode )
 	{
@@ -126,7 +94,7 @@ void QueuedStatusBar::setIndentMode( int mode )
 	}
 }
 
-void QueuedStatusBar::setCursorPosition( const QPoint& pos )
+void StatusBar::setCursorPosition( const QPoint& pos )
 {
 	QString s = tr( "Line: %1 Column: %2" );
 	label( ltCursorPosition )->setText( pos == QPoint( -1, -1 ) ? s.arg( "-" ).arg( "-" ) : s.arg( pos.y() ).arg( pos.x() ) );

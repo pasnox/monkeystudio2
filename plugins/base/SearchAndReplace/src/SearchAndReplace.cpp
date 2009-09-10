@@ -37,13 +37,13 @@
 #include "SearchResultsDock.h"
 #include "SearchThread.h"
 
-#include "MonkeyCore.h"
-#include "UIMain.h"
-#include "pWorkspace.h"
-#include "pChild.h"
-#include "pEditor.h"
-#include "pFileManager.h"
-#include "QueuedStatusBar.h"
+#include <MonkeyCore.h>
+#include <UIMain.h>
+#include <pWorkspace.h>
+#include <pChild.h>
+#include <pEditor.h>
+#include <pFileManager.h>
+#include <pQueuedMessageToolBar.h>
 
 #include <QTextStream>
 
@@ -162,7 +162,7 @@ bool SearchAndReplace::isSearchTextValid ()
 	if (mWidget->isRegExp())
 		if (!QRegExp (mWidget->searchText()).isValid())
 		{
-			MonkeyCore::statusBar()->appendMessage( tr( "Regular expression is invalid" ), 2500 );
+			MonkeyCore::messageManager()->appendMessage( tr( "Regular expression is invalid" ), 2500 );
 			return false;
 		}
 	
@@ -186,7 +186,7 @@ bool SearchAndReplace::isPathValid ()
 {
 	if (!QDir (mWidget->path()).exists())
 	{
-		MonkeyCore::statusBar()->appendMessage( tr( "Search path not exist" ), 2500 );
+		MonkeyCore::messageManager()->appendMessage( tr( "Search path not exist" ), 2500 );
 		return false;
 	}
 	return true;

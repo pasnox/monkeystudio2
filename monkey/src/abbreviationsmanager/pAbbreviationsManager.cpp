@@ -31,8 +31,8 @@
 #include "../coremanager/MonkeyCore.h"
 #include "../settingsmanager/Settings.h"
 #include "../shellmanager/MkSShellInterpreter.h"
-#include "../queuedstatusbar/QueuedStatusBar.h"
 
+#include <pQueuedMessageToolBar.h>
 #include <qscintilla.h>
 
 #include <QFile>
@@ -323,7 +323,7 @@ void pAbbreviationsManager::expandMacro( pEditor* editor )
 	
 	if ( macro.isEmpty() )
 	{
-		MonkeyCore::statusBar()->appendMessage( tr( "Empty macro !" ), 1000 );
+		MonkeyCore::messageManager()->appendMessage( tr( "Empty macro !" ), 1000 );
 		return;
 	}
 	
@@ -409,7 +409,7 @@ void pAbbreviationsManager::expandMacro( pEditor* editor )
 		}
 	}
 	
-	MonkeyCore::statusBar()->appendMessage( tr( "No '%1' macro found for '%2' language" ).arg( macro ).arg( lng ) );
+	MonkeyCore::messageManager()->appendMessage( tr( "No '%1' macro found for '%2' language" ).arg( macro ).arg( lng ) );
 }
 
 void pAbbreviationsManager::generateScript()
@@ -429,7 +429,7 @@ void pAbbreviationsManager::generateScript()
 	
 	if ( !file.open( QIODevice::WriteOnly ) )
 	{
-		MonkeyCore::statusBar()->appendMessage( tr( "Can't open file for generating abbreviations script: %1" ).arg( file.errorString() ) );
+		MonkeyCore::messageManager()->appendMessage( tr( "Can't open file for generating abbreviations script: %1" ).arg( file.errorString() ) );
 		return;
 	}
 	
@@ -457,7 +457,7 @@ void pAbbreviationsManager::generateScript()
 	
 	if ( file.write( buffer.join( "\n" ).toUtf8() ) == -1 )
 	{
-		MonkeyCore::statusBar()->appendMessage( tr( "Can't write generated abbreviations script: %1" ).arg( file.errorString() ) );
+		MonkeyCore::messageManager()->appendMessage( tr( "Can't write generated abbreviations script: %1" ).arg( file.errorString() ) );
 	}
 	
 	file.close();

@@ -58,6 +58,8 @@
 #include "pChild.h"
 #include "../qscintillamanager/pEditor.h"
 
+#include <pQueuedMessageToolBar.h>
+
 using namespace pMonkeyStudio;
 
 int pWorkspace::CONTENT_CHANGED_TIME_OUT = 3000;
@@ -189,7 +191,7 @@ pAbstractChild* pWorkspace::newTextEditor()
 	QFile file( fileName );
 	if ( !file.open( QIODevice::WriteOnly ) )
 	{
-		MonkeyCore::statusBar()->appendMessage( tr( "Can't create new file '%1'" ).arg( QFileInfo( fileName ).fileName() ), 2000 );
+		MonkeyCore::messageManager()->appendMessage( tr( "Can't create new file '%1'" ).arg( QFileInfo( fileName ).fileName() ), 2000 );
 		return 0;
 	}
 	
@@ -273,7 +275,7 @@ pAbstractChild* pWorkspace::openFile( const QString& s, const QString& codec )
 	// open file
 	if ( !c->openFile( s, codec ) )
 	{
-		MonkeyCore::statusBar()->appendMessage( tr( "An error occur while opening this file: '%1'" ).arg( QFileInfo( s ).fileName() ), -1 );
+		MonkeyCore::messageManager()->appendMessage( tr( "An error occur while opening this file: '%1'" ).arg( QFileInfo( s ).fileName() ), -1 );
 		
 		if ( !wasIn )
 		{
@@ -655,7 +657,7 @@ void pWorkspace::contentChangedTimer_timeout()
 
 void pWorkspace::fileWatcher_ecmNothing( const QString& filename )
 {
-	MonkeyCore::statusBar()->appendMessage( tr( "File externally modified: '%1'" ).arg( QFileInfo( filename ).fileName() ), 2000 );
+	MonkeyCore::messageManager()->appendMessage( tr( "File externally modified: '%1'" ).arg( QFileInfo( filename ).fileName() ), 2000 );
 }
 
 void pWorkspace::fileWatcher_ecmReload( const QString& fileName, bool force )
@@ -691,7 +693,7 @@ void pWorkspace::fileWatcher_ecmAlert( const QString& filename )
 	m.Object = this;
 	m.Slot = "fileWatcher_alertClicked";
 	m.UserData = filename;
-	MonkeyCore::statusBar()->appendMessage( m );
+	MonkeyCore::messageManager()->appendMessage( m );
 }
 
 void pWorkspace::fileWatcher_alertClicked( QDialogButtonBox::StandardButton button, const pQueuedMessage& message )

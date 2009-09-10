@@ -22,7 +22,7 @@
 
 #include <pIconManager.h>
 #include <MonkeyCore.h>
-#include <QueuedStatusBar.h>
+#include <pQueuedMessageToolBar.h>
 #include <pStylesActionGroup.h>
 
 #include <QDesignerFormWindowManagerInterface>
@@ -306,7 +306,7 @@ void QtDesignerChild::saveFile( const QString& s )
 	}
 	else
 	{
-		MonkeyCore::statusBar()->appendMessage( tr( "An error occurs when saving :\n%1" ).arg( s ) );
+		MonkeyCore::messageManager()->appendMessage( tr( "An error occurs when saving :\n%1" ).arg( s ) );
 	}
 	
 	return;
@@ -338,7 +338,7 @@ void QtDesignerChild::printFormHelper( QDesignerFormWindowInterface* form, bool 
 		// check if default printer is set
 		if ( printer.printerName().isEmpty() )
 		{
-			MonkeyCore::statusBar()->appendMessage( tr( "There is no default printer, please set one before trying quick print" ) );
+			MonkeyCore::messageManager()->appendMessage( tr( "There is no default printer, please set one before trying quick print" ) );
 			return;
 		}
 		
@@ -403,7 +403,7 @@ void QtDesignerChild::backupCurrentFile( const QString& s )
 	}
 	else
 	{
-		MonkeyCore::statusBar()->appendMessage( tr( "An error occurs when backuping: %1" ).arg( s ) );
+		MonkeyCore::messageManager()->appendMessage( tr( "An error occurs when backuping: %1" ).arg( s ) );
 	}
 }
 

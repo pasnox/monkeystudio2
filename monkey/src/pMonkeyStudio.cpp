@@ -19,11 +19,12 @@
 #include "maininterface/ui/UITranslator.h"
 #include "pluginsmanager/PluginsManager.h"
 #include "coremanager/MonkeyCore.h"
-#include "queuedstatusbar/QueuedStatusBar.h"
 #include "workspace/pFileManager.h"
 
 #include "workspace/pAbstractChild.h"
 #include "qscintillamanager/pEditor.h"
+
+#include <pQueuedMessageToolBar.h>
 
 #include <QTextCodec>
 #include <QImageReader>
@@ -515,7 +516,7 @@ void pMonkeyStudio::prepareAPIs()
 		mGlobalsAPIs.clear();
 	}
 	// get monkey status bar
-	QueuedStatusBar* sbar = MonkeyCore::statusBar();
+	pQueuedMessageToolBar* sbar = MonkeyCore::messageManager();
 	// iterate each language
 	foreach ( QString ln, availableLanguages() )
 	{

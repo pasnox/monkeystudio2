@@ -3,12 +3,13 @@
 #include "3rdparty/qtdocinstaller.h"
 
 #include <MonkeyCore.h>
-#include <QueuedStatusBar.h>
+#include <pQueuedMessageToolBar.h>
 
 #include <QDesktopServices>
 #include <QDir>
 #include <QHelpEngine>
 #include <QResource>
+#include <QTimer>
 
 MkSQtDocInstaller::MkSQtDocInstaller( QHelpEngine* engine )
 {
@@ -54,7 +55,7 @@ bool MkSQtDocInstaller::checkDocumentation()
 	if ( b )
 		QTimer::singleShot( 0, this, SLOT( lookForNewQtDocumentation() ) );
 	else
-		MonkeyCore::statusBar()->appendMessage( tr( "Can't initialize documentation database" ) +" (Qt Assistant)" );
+		MonkeyCore::messageManager()->appendMessage( tr( "Can't initialize documentation database" ) +" (Qt Assistant)" );
 	return b;
 }
 
@@ -85,7 +86,7 @@ bool MkSQtDocInstaller::initHelpDB()
 			{
 				QResource res( QLatin1String( ":/documentation/assistant.qch" ) );
 				if ( file.write( (const char*)res.data(), res.size() ) != res.size() )
-					MonkeyCore::statusBar()->appendMessage( tr( "Could not write assistant.qch" ) +" (Qt Assistant )" );
+					MonkeyCore::messageManager()->appendMessage( tr( "Could not write assistant.qch" ) +" (Qt Assistant )" );
 				file.close();
 			}
 		}
@@ -123,13 +124,13 @@ void MkSQtDocInstaller::lookForNewQtDocumentation()
 
 	QString versionKey = QString( QLatin1String( "qtVersion%1$$$qt" ) ).arg( QLatin1String( QT_VERSION_STR ) );
 	if ( mHelpEngine->customValue( versionKey, 0 ).toInt() != 1 )
-		MonkeyCore::statusBar()->appendMessage( tr( "Looking for Qt Documentation..." ), 3000 );
+		MonkeyCore::messageManager()->appendMessage( tr( "Looking for Qt Documentation..." ), 3000 );
 	mQtDocInstaller->installDocs();
 }
 
 void MkSQtDocInstaller::displayInstallationError( const QString& errorMessage )
 {
-	MonkeyCore::statusBar()->appendMessage( errorMessage );
+	MonkeyCore::messageManager()->appendMessage( errorMessage );
 }
 
 void MkSQtDocInstaller::qtDocumentationInstalled( bool newDocsInstalled )
