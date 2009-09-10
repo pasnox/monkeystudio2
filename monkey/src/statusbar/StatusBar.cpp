@@ -1,4 +1,4 @@
-#include "QueuedStatusBar.h"
+#include "StatusBar.h"
 
 #include <QLabel>
 #include <QHBoxLayout>

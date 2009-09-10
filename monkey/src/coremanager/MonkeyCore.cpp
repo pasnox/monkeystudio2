@@ -38,7 +38,7 @@
 #include "../workspace/pFileManager.h"
 #include "../workspace/pWorkspace.h"
 #include "../consolemanager/pConsoleManager.h"
-#include "../queuedstatusbar/QueuedStatusBar.h"
+#include "../statusbar/StatusBar.h"
 #include "../shellmanager/MkSShellInterpreter.h"
 #include "../abbreviationsmanager/pAbbreviationsManager.h"
 

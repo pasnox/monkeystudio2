@@ -52,7 +52,7 @@
 #include "../pluginsmanager/PluginsManager.h"
 #include "../coremanager/MonkeyCore.h"
 #include "../maininterface/UIMain.h"
-#include "../queuedstatusbar/QueuedStatusBar.h"
+#include "../statusbar/StatusBar.h"
 #include "MkSFileDialog.h"
 
 #include "pChild.h"

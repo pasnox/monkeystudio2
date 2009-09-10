@@ -37,7 +37,7 @@
 #include "../workspace/pFileManager.h"
 #include "../pluginsmanager/PluginsManager.h"
 #include "../pluginsmanager/PluginsMenu.h"
-#include "../queuedstatusbar/QueuedStatusBar.h"
+#include "../statusbar/StatusBar.h"
 
 #include <pQueuedMessageToolBar.h>
 
