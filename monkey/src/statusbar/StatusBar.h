@@ -13,14 +13,13 @@ class Q_MONKEY_EXPORT StatusBar : public QStatusBar
 	Q_OBJECT
 	
 public:
-	enum LabelType { ltMessage = 0, ltCursorPosition, ltSaveState, ltEOLMode, ltIndentMode };
+	enum LabelType { ltCursorPosition, ltSaveState, ltEOLMode, ltIndentMode };
 	StatusBar( QWidget* parent = 0 );
 	
 	QLabel* label( StatusBar::LabelType type );
 
 protected:
-	QWidget* mWidgetLabels;
-	QLabel* mLabels[5];
+	QLabel* mLabels[4];
 
 public slots:
 	void setMessage( const QString& message );
