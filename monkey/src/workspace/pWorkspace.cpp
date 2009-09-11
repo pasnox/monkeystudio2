@@ -685,9 +685,9 @@ void pWorkspace::fileWatcher_ecmAlert( const QString& filename )
 	pQueuedMessage m;
 	m.Message = tr( "The file '%1' has been modified externally, what you do ?" ).arg( QFileInfo( filename ).fileName() );
 	m.MilliSeconds = 0;
-	m.Pixmap = QPixmap();
-	m.Background = QBrush( QColor( 255, 0, 0, 20 ) );
-	m.Foreground = QBrush();
+	m.Pixmap = pQueuedMessageToolBar::defaultPixmap();
+	m.Background = pQueuedMessageToolBar::defaultBackground();
+	m.Foreground = pQueuedMessageToolBar::defaultForeground();
 	m.Buttons[ QDialogButtonBox::Ignore ] = QString();
 	m.Buttons[ QDialogButtonBox::Reset ] = tr( "Reload" );
 	m.Object = this;

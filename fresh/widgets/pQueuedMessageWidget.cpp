@@ -35,7 +35,7 @@ pQueuedMessageWidget::pQueuedMessageWidget( QWidget* parent )
 	: QWidget( parent )
 {
 	QFont font = this->font();
-	font.setPointSize( 8 );
+	font.setPointSize( 9 );
 	setFont( font );
 	// pixmap
 	lPixmap = new QLabel( this );
