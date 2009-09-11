@@ -48,7 +48,7 @@ int pQueuedStatusBar::appendMessage( const pQueuedMessage& message )
 	\param background The background of the message
 	\param foreground The foreground of the message
 */
-int pQueuedStatusBar::appendMessage( const QString& message, int milliseconds, const QPixmap pixmap, const QBrush& background, const QBrush& foreground )
+int pQueuedStatusBar::appendMessage( const QString& message, int milliseconds, const QPixmap& pixmap, const QBrush& background, const QBrush& foreground )
 { return mQueuedWidget->append( message, milliseconds, pixmap, background, foreground ); }
 
 /*!

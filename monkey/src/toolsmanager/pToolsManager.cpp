@@ -144,5 +144,5 @@ void pToolsManager::toolsMenu_triggered( QAction* a )
 		b = p->waitForStarted();
 	}
 	if ( !b )
-		MonkeyCore::messageManager()->appendMessage( tr( "Error trying to start tool :\n'%1'" ).arg( filePath ), 2500 );
+		MonkeyCore::messageManager()->appendMessage( tr( "Error trying to start tool :\n'%1'" ).arg( filePath ) );
 }

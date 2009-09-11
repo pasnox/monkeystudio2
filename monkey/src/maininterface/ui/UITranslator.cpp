@@ -56,7 +56,7 @@ void UITranslator::accept()
 		s->setValue( "Translations/Accepted", true );
 		s->setStoragePaths( Settings::SP_TRANSLATIONS, mTranslationsPath );
 		if ( parentWidget() )
-			MonkeyCore::messageManager()->appendMessage( tr( "You need to restart %1 for the new translations be applied" ).arg( PACKAGE_NAME ), 2500 );
+			MonkeyCore::messageManager()->appendMessage( tr( "You need to restart %1 for the new translations be applied" ).arg( PACKAGE_NAME ) );
 		QDialog::accept();
 	}
 }

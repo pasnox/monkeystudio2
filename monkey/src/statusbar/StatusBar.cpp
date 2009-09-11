@@ -8,24 +8,32 @@ StatusBar::StatusBar( QWidget* parent )
 	: QStatusBar( parent )
 {
 	// create labels
-	QLabel* l;
-	l = ( mLabels[ltCursorPosition] = new QLabel( this ) );
-	l->setMargin( 2 );
-	l->setToolTip( tr( "Cursor position" ) );
-	l = ( mLabels[ltSaveState] = new QLabel( this ) );
-	l->setMargin( 2 );
-	l->setToolTip( tr( "Modification state of file" ) );
-	l = ( mLabels[ltEOLMode] = new QLabel( this ) );
-	l->setMargin( 2 );
-	l->setToolTip( tr( "EOL mode" ) );
-	l = ( mLabels[ltIndentMode] = new QLabel( this ) );
-	l->setMargin( 2 );
-	l->setToolTip( tr( "Indentation mode" ) );
+	QLabel* label;
+	
+	label = ( mLabels[ltCursorPosition] = new QLabel( this ) );
+	label->setMargin( 2 );
+	label->setToolTip( tr( "Cursor position" ) );
+	
+	label = ( mLabels[ltSaveState] = new QLabel( this ) );
+	label->setMargin( 2 );
+	label->setToolTip( tr( "Modification state of file" ) );
+	
+	label = ( mLabels[ltEOLMode] = new QLabel( this ) );
+	label->setMargin( 2 );
+	label->setToolTip( tr( "EOL mode" ) );
+	
+	label = ( mLabels[ltIndentMode] = new QLabel( this ) );
+	label->setMargin( 2 );
+	label->setToolTip( tr( "Indentation mode" ) );
+	
 	// add labels
-	addPermanentWidget( mLabels[ltCursorPosition] );
-	addPermanentWidget( mLabels[ltSaveState] );
-	addPermanentWidget( mLabels[ltEOLMode] );
-	addPermanentWidget( mLabels[ltIndentMode] );
+	for ( int i = ltCursorPosition; i < ltIndentMode +1; i++ )
+	{
+		label = mLabels[ i ];
+		addPermanentWidget( label );
+		label->setFrameStyle( QFrame::NoFrame | QFrame::Plain );
+	}
+	
 	// connections
 	connect( this, SIGNAL( messageChanged( const QString& ) ), this, SLOT( setMessage( const QString& ) ) );
 }

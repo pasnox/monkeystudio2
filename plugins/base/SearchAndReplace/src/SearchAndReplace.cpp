@@ -162,7 +162,7 @@ bool SearchAndReplace::isSearchTextValid ()
 	if (mWidget->isRegExp())
 		if (!QRegExp (mWidget->searchText()).isValid())
 		{
-			MonkeyCore::messageManager()->appendMessage( tr( "Regular expression is invalid" ), 2500 );
+			MonkeyCore::messageManager()->appendMessage( tr( "Regular expression is invalid" ) );
 			return false;
 		}
 	
@@ -186,7 +186,7 @@ bool SearchAndReplace::isPathValid ()
 {
 	if (!QDir (mWidget->path()).exists())
 	{
-		MonkeyCore::messageManager()->appendMessage( tr( "Search path not exist" ), 2500 );
+		MonkeyCore::messageManager()->appendMessage( tr( "Search path not exist" ) );
 		return false;
 	}
 	return true;

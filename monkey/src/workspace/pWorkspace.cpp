@@ -191,7 +191,7 @@ pAbstractChild* pWorkspace::newTextEditor()
 	QFile file( fileName );
 	if ( !file.open( QIODevice::WriteOnly ) )
 	{
-		MonkeyCore::messageManager()->appendMessage( tr( "Can't create new file '%1'" ).arg( QFileInfo( fileName ).fileName() ), 2000 );
+		MonkeyCore::messageManager()->appendMessage( tr( "Can't create new file '%1'" ).arg( QFileInfo( fileName ).fileName() ) );
 		return 0;
 	}
 	
@@ -275,7 +275,7 @@ pAbstractChild* pWorkspace::openFile( const QString& s, const QString& codec )
 	// open file
 	if ( !c->openFile( s, codec ) )
 	{
-		MonkeyCore::messageManager()->appendMessage( tr( "An error occur while opening this file: '%1'" ).arg( QFileInfo( s ).fileName() ), -1 );
+		MonkeyCore::messageManager()->appendMessage( tr( "An error occur while opening this file: '%1'" ).arg( QFileInfo( s ).fileName() ) );
 		
 		if ( !wasIn )
 		{
@@ -657,7 +657,7 @@ void pWorkspace::contentChangedTimer_timeout()
 
 void pWorkspace::fileWatcher_ecmNothing( const QString& filename )
 {
-	MonkeyCore::messageManager()->appendMessage( tr( "File externally modified: '%1'" ).arg( QFileInfo( filename ).fileName() ), 2000 );
+	MonkeyCore::messageManager()->appendMessage( tr( "File externally modified: '%1'" ).arg( QFileInfo( filename ).fileName() ) );
 }
 
 void pWorkspace::fileWatcher_ecmReload( const QString& fileName, bool force )

@@ -358,7 +358,7 @@ void QtAssistantDock::keywordHelp()
 		
 		if ( !mHelpEngine->indexWidget()->currentIndex().isValid() )
 		{
-			MonkeyCore::messageManager()->appendMessage( tr( "No help found for: %1" ).arg( selectedText ), 1000 );
+			MonkeyCore::messageManager()->appendMessage( tr( "No help found for: %1" ).arg( selectedText ) );
 		}
 	}
 }

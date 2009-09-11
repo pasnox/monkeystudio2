@@ -323,7 +323,7 @@ void pAbbreviationsManager::expandMacro( pEditor* editor )
 	
 	if ( macro.isEmpty() )
 	{
-		MonkeyCore::messageManager()->appendMessage( tr( "Empty macro !" ), 1000 );
+		MonkeyCore::messageManager()->appendMessage( tr( "Empty macro !" ) );
 		return;
 	}
 	

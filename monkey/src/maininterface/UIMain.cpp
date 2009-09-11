@@ -95,6 +95,7 @@ void UIMain::initGui()
 	messageTb->setObjectName( "pQueuedMessageToolBar" );
 	messageTb->setVisible( false );
 	messageTb->setWindowTitle( tr( "Message ToolBar" ) );
+	messageTb->setDefaultPixmap( pIconManager::pixmap( "messages_infos.png", ":/messages" ) );
 	addToolBarBreak();
 	addToolBar( messageTb );
 	addToolBarBreak();

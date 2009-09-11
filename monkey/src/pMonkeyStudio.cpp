@@ -528,7 +528,7 @@ void pMonkeyStudio::prepareAPIs()
 		foreach ( QString f, MonkeyCore::settings()->value( QString( "SourceAPIs/" ).append( ln ) ).toStringList() )
 		{
 			if ( !a->load( QDir::isRelativePath( f ) ? qApp->applicationDirPath().append( "/%1" ).arg( f ) : f ) )
-				sbar->appendMessage( QObject::tr( "Can't load api file: '%1'" ).arg( QFileInfo( f ).fileName() ), 2000 );
+				sbar->appendMessage( QObject::tr( "Can't load api file: '%1'" ).arg( QFileInfo( f ).fileName() ) );
 		}
 		// start prepare for apis
 		a->prepare();
