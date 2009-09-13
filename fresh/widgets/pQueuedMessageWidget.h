@@ -94,6 +94,7 @@ public:
 	pQueuedMessageWidget( QWidget* parent = 0 );
 	
 	int messagesCount() const;
+	pQueuedMessage currentMessage() const;
 
 protected:
 	QHash<int,pQueuedMessage> mMessages;
@@ -104,7 +105,7 @@ protected:
 
 public slots:
 	int append( const pQueuedMessage& message );
-	int append( const QString& message, int milliseconds = 0, const QPixmap pixmap = QPixmap(), const QBrush& background = QBrush( QColor( 255, 0, 0, 20 ) ), const QBrush& foreground = QBrush() );
+	int append( const QString& message, int milliseconds = 0, const QPixmap& pixmap = QPixmap(), const QBrush& background = QBrush( QColor( 255, 0, 0, 20 ) ), const QBrush& foreground = QBrush() );
 	void remove( const pQueuedMessage& message );
 	void remove( int id );
 	void clear();

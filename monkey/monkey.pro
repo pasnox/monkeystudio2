@@ -118,7 +118,7 @@ HEADERS	*= src/main.h \
 	src/pluginsmanager/ui/UICompilerSettings.h \
 	src/settingsmanager/Settings.h \
 	src/coremanager/MonkeyCore.h \
-	src/queuedstatusbar/QueuedStatusBar.h \
+	src/statusbar/StatusBar.h \
 	src/pluginsmanager/ui/UIPluginsSettingsElement.h \
 	src/pluginsmanager/ui/UIPluginsSettingsAbout.h \
 	src/xupmanager/core/XUPFilteredProjectModel.h \
@@ -171,7 +171,7 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/pluginsmanager/ui/UICompilerSettings.cpp \
 	src/settingsmanager/Settings.cpp \
 	src/coremanager/MonkeyCore.cpp \
-	src/queuedstatusbar/QueuedStatusBar.cpp \
+	src/statusbar/StatusBar.cpp \
 	src/pluginsmanager/ui/UIPluginsSettingsElement.cpp \
 	src/pluginsmanager/ui/UIPluginsSettingsAbout.cpp \
 	src/xupmanager/core/XUPFilteredProjectModel.cpp \

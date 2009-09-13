@@ -34,6 +34,9 @@ int pQueuedMessageWidget::pQueuedMessageUniqueId = 0;
 pQueuedMessageWidget::pQueuedMessageWidget( QWidget* parent )
 	: QWidget( parent )
 {
+	QFont font = this->font();
+	font.setPointSize( 9 );
+	setFont( font );
 	// pixmap
 	lPixmap = new QLabel( this );
 	lPixmap->setAlignment( Qt::AlignCenter );
@@ -60,7 +63,14 @@ pQueuedMessageWidget::pQueuedMessageWidget( QWidget* parent )
 	\details Return the number of message currently queued
 */
 int pQueuedMessageWidget::messagesCount() const
-{ return mMessages.count(); }
+{
+	return mMessages.count();
+}
+
+pQueuedMessage pQueuedMessageWidget::currentMessage() const
+{
+	return mMessages.values().value( 0 );
+}
 
 /*!
 	\details Append a message to the queued and return it's unique \c id
@@ -86,7 +96,7 @@ int pQueuedMessageWidget::append( const pQueuedMessage& message )
 	\param background The brush background
 	\param foreground The brush foreground
 */
-int pQueuedMessageWidget::append( const QString& message, int milliseconds, const QPixmap pixmap, const QBrush& background, const QBrush& foreground )
+int pQueuedMessageWidget::append( const QString& message, int milliseconds, const QPixmap& pixmap, const QBrush& background, const QBrush& foreground )
 {
 	pQueuedMessage m;
 	m.Message = message;

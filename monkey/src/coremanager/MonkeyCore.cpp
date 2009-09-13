@@ -38,7 +38,7 @@
 #include "../workspace/pFileManager.h"
 #include "../workspace/pWorkspace.h"
 #include "../consolemanager/pConsoleManager.h"
-#include "../queuedstatusbar/QueuedStatusBar.h"
+#include "../statusbar/StatusBar.h"
 #include "../shellmanager/MkSShellInterpreter.h"
 #include "../abbreviationsmanager/pAbbreviationsManager.h"
 
@@ -47,6 +47,7 @@
 
 #include <pIconManager.h>
 #include <pMultiToolBar.h>
+#include <pQueuedMessageToolBar.h>
 
 #include <QSplashScreen>
 #include <QPixmap>
@@ -235,11 +236,18 @@ pConsoleManager* MonkeyCore::consoleManager()
 	return qobject_cast<pConsoleManager*>( mInstances[&pConsoleManager::staticMetaObject] );
 }
 
-QueuedStatusBar* MonkeyCore::statusBar()
+pQueuedMessageToolBar* MonkeyCore::messageManager()
 {
-	if ( !mInstances.contains( &QueuedStatusBar::staticMetaObject ) )
-		mInstances[&QueuedStatusBar::staticMetaObject] = new QueuedStatusBar( mainWindow() );
-	return qobject_cast<QueuedStatusBar*>( mInstances[&QueuedStatusBar::staticMetaObject] );
+	if ( !mInstances.contains( &pQueuedMessageToolBar::staticMetaObject ) )
+		mInstances[&pQueuedMessageToolBar::staticMetaObject] = new pQueuedMessageToolBar( mainWindow() );
+	return qobject_cast<pQueuedMessageToolBar*>( mInstances[&pQueuedMessageToolBar::staticMetaObject] );
+}
+
+StatusBar* MonkeyCore::statusBar()
+{
+	if ( !mInstances.contains( &StatusBar::staticMetaObject ) )
+		mInstances[&StatusBar::staticMetaObject] = new StatusBar( mainWindow() );
+	return qobject_cast<StatusBar*>( mInstances[&StatusBar::staticMetaObject] );
 }
 
 MkSShellInterpreter* MonkeyCore::interpreter()

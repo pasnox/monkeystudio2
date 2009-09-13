@@ -34,8 +34,9 @@
 #include "../coremanager/MonkeyCore.h"
 #include "pMonkeyStudio.h"
 #include "../settingsmanager/Settings.h"
-#include "../queuedstatusbar/QueuedStatusBar.h"
 #include "../shellmanager/MkSShellInterpreter.h"
+
+#include <pQueuedMessageToolBar.h>
 
 pFileManager::pFileManager( QObject* o )
 	: QObject( o )
@@ -306,7 +307,7 @@ void pFileManager::generateScript()
 	
 	if ( !file.open( QIODevice::WriteOnly ) )
 	{
-		MonkeyCore::statusBar()->appendMessage( tr( "Can't open file for generating associations script: %1" ).arg( file.errorString() ) );
+		MonkeyCore::messageManager()->appendMessage( tr( "Can't open file for generating associations script: %1" ).arg( file.errorString() ) );
 		return;
 	}
 	
@@ -333,7 +334,7 @@ void pFileManager::generateScript()
 	
 	if ( file.write( buffer.join( "\n" ).toUtf8() ) == -1 )
 	{
-		MonkeyCore::statusBar()->appendMessage( tr( "Can't write generated associations script: %1" ).arg( file.errorString() ) );
+		MonkeyCore::messageManager()->appendMessage( tr( "Can't write generated associations script: %1" ).arg( file.errorString() ) );
 	}
 	
 	file.close();

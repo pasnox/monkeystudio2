@@ -1,7 +1,8 @@
 #include "MkSShellInterpreter.h"
 #include "../coremanager/MonkeyCore.h"
 #include "../settingsmanager/Settings.h"
-#include "../queuedstatusbar/QueuedStatusBar.h"
+
+#include <pQueuedMessageToolBar.h>
 
 #include <QFileInfo>
 #include <QDir>
@@ -101,7 +102,7 @@ void MkSShellInterpreter::loadHomeScripts()
 	{
 		if ( !loadScript( file.absoluteFilePath() ) )
 		{
-			MonkeyCore::statusBar()->appendMessage( tr( "An error occur while loading script: '%1'" ).arg( file.fileName() ) );
+			MonkeyCore::messageManager()->appendMessage( tr( "An error occur while loading script: '%1'" ).arg( file.fileName() ) );
 		}
 	}
 }

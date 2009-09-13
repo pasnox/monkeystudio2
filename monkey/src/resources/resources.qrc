@@ -13,6 +13,9 @@
 		<file alias="value.png" >icons/items/value.png</file>
 		<file alias="variable.png" >icons/items/variable.png</file>
 	</qresource>
+	<qresource prefix="/messages" >
+		<file alias="messages_infos.png" >icons/messages/infos.png</file>
+	</qresource>
 	<qresource prefix="/xupeditor" >
 		<file>icons/xupeditor/about.png</file>
 		<file>icons/xupeditor/builder.png</file>

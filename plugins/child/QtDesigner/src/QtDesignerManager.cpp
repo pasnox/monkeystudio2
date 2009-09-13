@@ -27,7 +27,7 @@
 #include <MonkeyCore.h>
 #include <UIMain.h>
 #include <pWorkspace.h>
-#include <QueuedStatusBar.h>
+#include <pQueuedMessageToolBar.h>
 #include <pStylesToolButton.h>
 
 #include <QPluginLoader>
@@ -211,7 +211,7 @@ QWidget* QtDesignerManager::previewWidget( QDesignerFormWindowInterface* form, c
 		
 		if ( !widget )
 		{
-			MonkeyCore::statusBar()->appendMessage( tr( "Can't preview form '%1': %2" ).arg( form->fileName() ).arg( error ) );
+			MonkeyCore::messageManager()->appendMessage( tr( "Can't preview form '%1': %2" ).arg( form->fileName() ).arg( error ) );
 		}
 	}
 	
@@ -233,7 +233,7 @@ QPixmap QtDesignerManager::previewPixmap( QDesignerFormWindowInterface* form, co
 		
 		if ( pixmap.isNull() )
 		{
-			MonkeyCore::statusBar()->appendMessage( tr( "Can't preview form pixmap '%1': %2" ).arg( form->fileName() ).arg( error ) );
+			MonkeyCore::messageManager()->appendMessage( tr( "Can't preview form pixmap '%1': %2" ).arg( form->fileName() ).arg( error ) );
 		}
 	}
 	

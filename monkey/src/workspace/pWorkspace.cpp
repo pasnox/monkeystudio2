@@ -52,11 +52,13 @@
 #include "../pluginsmanager/PluginsManager.h"
 #include "../coremanager/MonkeyCore.h"
 #include "../maininterface/UIMain.h"
-#include "../queuedstatusbar/QueuedStatusBar.h"
+#include "../statusbar/StatusBar.h"
 #include "MkSFileDialog.h"
 
 #include "pChild.h"
 #include "../qscintillamanager/pEditor.h"
+
+#include <pQueuedMessageToolBar.h>
 
 using namespace pMonkeyStudio;
 
@@ -189,7 +191,7 @@ pAbstractChild* pWorkspace::newTextEditor()
 	QFile file( fileName );
 	if ( !file.open( QIODevice::WriteOnly ) )
 	{
-		MonkeyCore::statusBar()->appendMessage( tr( "Can't create new file '%1'" ).arg( QFileInfo( fileName ).fileName() ), 2000 );
+		MonkeyCore::messageManager()->appendMessage( tr( "Can't create new file '%1'" ).arg( QFileInfo( fileName ).fileName() ) );
 		return 0;
 	}
 	
@@ -273,7 +275,7 @@ pAbstractChild* pWorkspace::openFile( const QString& s, const QString& codec )
 	// open file
 	if ( !c->openFile( s, codec ) )
 	{
-		MonkeyCore::statusBar()->appendMessage( tr( "An error occur while opening this file: '%1'" ).arg( QFileInfo( s ).fileName() ), -1 );
+		MonkeyCore::messageManager()->appendMessage( tr( "An error occur while opening this file: '%1'" ).arg( QFileInfo( s ).fileName() ) );
 		
 		if ( !wasIn )
 		{
@@ -655,7 +657,7 @@ void pWorkspace::contentChangedTimer_timeout()
 
 void pWorkspace::fileWatcher_ecmNothing( const QString& filename )
 {
-	MonkeyCore::statusBar()->appendMessage( tr( "File externally modified: '%1'" ).arg( QFileInfo( filename ).fileName() ), 2000 );
+	MonkeyCore::messageManager()->appendMessage( tr( "File externally modified: '%1'" ).arg( QFileInfo( filename ).fileName() ) );
 }
 
 void pWorkspace::fileWatcher_ecmReload( const QString& fileName, bool force )
@@ -683,15 +685,15 @@ void pWorkspace::fileWatcher_ecmAlert( const QString& filename )
 	pQueuedMessage m;
 	m.Message = tr( "The file '%1' has been modified externally, what you do ?" ).arg( QFileInfo( filename ).fileName() );
 	m.MilliSeconds = 0;
-	m.Pixmap = QPixmap();
-	m.Background = QBrush( QColor( 255, 0, 0, 20 ) );
-	m.Foreground = QBrush();
+	m.Pixmap = pQueuedMessageToolBar::defaultPixmap();
+	m.Background = pQueuedMessageToolBar::defaultBackground();
+	m.Foreground = pQueuedMessageToolBar::defaultForeground();
 	m.Buttons[ QDialogButtonBox::Ignore ] = QString();
 	m.Buttons[ QDialogButtonBox::Reset ] = tr( "Reload" );
 	m.Object = this;
 	m.Slot = "fileWatcher_alertClicked";
 	m.UserData = filename;
-	MonkeyCore::statusBar()->appendMessage( m );
+	MonkeyCore::messageManager()->appendMessage( m );
 }
 
 void pWorkspace::fileWatcher_alertClicked( QDialogButtonBox::StandardButton button, const pQueuedMessage& message )

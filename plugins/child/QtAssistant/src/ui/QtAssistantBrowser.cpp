@@ -19,7 +19,7 @@
 #include "../HelpViewer.h"
 
 #include <MonkeyCore.h>
-#include <QueuedStatusBar.h>
+#include <pQueuedMessageToolBar.h>
 
 #include <QTextBrowser>
 #include <QClipboard>
@@ -309,14 +309,14 @@ void QtAssistantBrowser::backupCurrentFile( const QString& filename )
 	QFile file( filename );
 	if ( !file.open( QIODevice::WriteOnly ) )
 	{
-		MonkeyCore::statusBar()->appendMessage( tr( "Can't open file for writing when creating backup file." ) );
+		MonkeyCore::messageManager()->appendMessage( tr( "Can't open file for writing when creating backup file." ) );
 		return;
 	}
 	file.resize( 0 );
 	if ( file.write( hv->page()->mainFrame()->toHtml().toUtf8() ) != -1 )
 		file.close();
 	else
-		MonkeyCore::statusBar()->appendMessage( tr( "Can't write file content when creating backup." ) );
+		MonkeyCore::messageManager()->appendMessage( tr( "Can't write file content when creating backup." ) );
 }
 
 void QtAssistantBrowser::saveFiles()
@@ -374,7 +374,7 @@ void QtAssistantBrowser::quickPrintFile( const QString& /*filename*/ )
 		
 	QPrinter printer( QPrinter::HighResolution );
 	if ( printer.printerName().isEmpty() )
-		MonkeyCore::statusBar()->appendMessage( tr( "There is no default printer, please set one before trying quick print" ) );
+		MonkeyCore::messageManager()->appendMessage( tr( "There is no default printer, please set one before trying quick print" ) );
 	else
 		hv->print( &printer );
 }

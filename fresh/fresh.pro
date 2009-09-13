@@ -48,7 +48,8 @@ HEADERS	= objects/GetOpt.h \
 	widgets/pTabbedWorkspaceRightCorner.h \
 	widgets/pTreeComboBox.h \
 	objects/pStylesActionGroup.h \
-	widgets/pStylesToolButton.h
+	widgets/pStylesToolButton.h \
+	widgets/pQueuedMessageToolBar.h
 
 SOURCES	= objects/GetOpt.cpp \
 	objects/pIconManager.cpp \
@@ -84,4 +85,5 @@ SOURCES	= objects/GetOpt.cpp \
 	widgets/pTabbedWorkspaceRightCorner.cpp \
 	widgets/pTreeComboBox.cpp \
 	objects/pStylesActionGroup.cpp \
-	widgets/pStylesToolButton.cpp
+	widgets/pStylesToolButton.cpp \
+	widgets/pQueuedMessageToolBar.cpp

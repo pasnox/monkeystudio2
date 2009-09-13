@@ -29,7 +29,8 @@
 #include "Settings.h"
 #include "main.h"
 #include "../coremanager/MonkeyCore.h"
-#include "../queuedstatusbar/QueuedStatusBar.h"
+
+#include <pQueuedMessageToolBar.h>
 
 #include <QApplication>
 #include <QStringList>
@@ -246,7 +247,7 @@ void Settings::setDefaultSettings()
 
 				if ( !f.copy( fn ) )
 				{
-					MonkeyCore::statusBar()->appendMessage( tr( "Can't copy script '%1', %2" ).arg( file.fileName() ).arg( f.errorString() ) );
+					MonkeyCore::messageManager()->appendMessage( tr( "Can't copy script '%1', %2" ).arg( file.fileName() ).arg( f.errorString() ) );
 				}
 			}
 		}

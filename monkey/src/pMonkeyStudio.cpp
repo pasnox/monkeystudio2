@@ -19,11 +19,12 @@
 #include "maininterface/ui/UITranslator.h"
 #include "pluginsmanager/PluginsManager.h"
 #include "coremanager/MonkeyCore.h"
-#include "queuedstatusbar/QueuedStatusBar.h"
 #include "workspace/pFileManager.h"
 
 #include "workspace/pAbstractChild.h"
 #include "qscintillamanager/pEditor.h"
+
+#include <pQueuedMessageToolBar.h>
 
 #include <QTextCodec>
 #include <QImageReader>
@@ -515,7 +516,7 @@ void pMonkeyStudio::prepareAPIs()
 		mGlobalsAPIs.clear();
 	}
 	// get monkey status bar
-	QueuedStatusBar* sbar = MonkeyCore::statusBar();
+	pQueuedMessageToolBar* sbar = MonkeyCore::messageManager();
 	// iterate each language
 	foreach ( QString ln, availableLanguages() )
 	{
@@ -527,7 +528,7 @@ void pMonkeyStudio::prepareAPIs()
 		foreach ( QString f, MonkeyCore::settings()->value( QString( "SourceAPIs/" ).append( ln ) ).toStringList() )
 		{
 			if ( !a->load( QDir::isRelativePath( f ) ? qApp->applicationDirPath().append( "/%1" ).arg( f ) : f ) )
-				sbar->appendMessage( QObject::tr( "Can't load api file: '%1'" ).arg( QFileInfo( f ).fileName() ), 2000 );
+				sbar->appendMessage( QObject::tr( "Can't load api file: '%1'" ).arg( QFileInfo( f ).fileName() ) );
 		}
 		// start prepare for apis
 		a->prepare();

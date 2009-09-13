@@ -2,7 +2,6 @@
 
 #include <XUPProjectItemInfos.h>
 #include <pMonkeyStudio.h>
-#include <QueuedStatusBar.h>
 #include <BuilderPlugin.h>
 #include <CompilerPlugin.h>
 #include <InterpreterPlugin.h>

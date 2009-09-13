@@ -8,7 +8,7 @@
 #include <MonkeyCore.h>
 #include <pWorkspace.h>
 #include <pEditor.h>
-#include <QueuedStatusBar.h>
+#include <pQueuedMessageToolBar.h>
 
 #include <QKeyEvent>
 
@@ -358,7 +358,7 @@ void QtAssistantDock::keywordHelp()
 		
 		if ( !mHelpEngine->indexWidget()->currentIndex().isValid() )
 		{
-			MonkeyCore::statusBar()->appendMessage( tr( "No help found for: %1" ).arg( selectedText ), 1000 );
+			MonkeyCore::messageManager()->appendMessage( tr( "No help found for: %1" ).arg( selectedText ) );
 		}
 	}
 }
