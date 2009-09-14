@@ -1037,6 +1037,11 @@ void XUPProjectItem::addCommand( pCommand& cmd, const QString& mnu )
 		cmd.setUserData( QVariant::fromValue( &mCommands ) );
 		cmd.setProject( this );
 		
+		if ( cmd.workingDirectory().isEmpty() )
+		{
+			cmd.setWorkingDirectory( path() );
+		}
+		
 		emit installCommandRequested( cmd, mnu );
 		mCommands.insertMulti( mnu, cmd );
 	}
