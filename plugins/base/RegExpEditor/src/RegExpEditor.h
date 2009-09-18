@@ -13,10 +13,9 @@ class RegExpEditor : public BasePlugin
 	Q_INTERFACES( BasePlugin )
 	
 public:
-	RegExpEditor();
+	PluginInfos infos() const;
 	~RegExpEditor();
 	virtual bool setEnabled( bool );
-	virtual QPixmap pixmap() const { return pIconManager::pixmap( "regexp.png", ":/icons" ); }
 
 protected:
 	QPointer<UIRegExpEditor> mEditor;

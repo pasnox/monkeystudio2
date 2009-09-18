@@ -27,11 +27,10 @@ class Python : public InterpreterPlugin
 
 public:
 	Python();
+	PluginInfos infos() const;
 	~Python();
 	// BasePlugin
 	virtual bool setEnabled( bool );
-	virtual QPixmap pixmap() const { return pIconManager::pixmap( "python.png", ":/icons" ); }
-	virtual bool haveSettingsWidget() const { return true; }
 	virtual QWidget* settingsWidget();
 	// CLIToolPlugin
 	virtual pCommandList defaultCommands() const;

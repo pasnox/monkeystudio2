@@ -38,28 +38,20 @@
 
 #include "pMonkeyStudio.h"
 
-/*!
-	Class constructor. Initialises information about plugin for user and core
-*/
-BeaverDebugger::BeaverDebugger()
+BasePlugin::PluginInfos BeaverDebugger::infos() const
 {
-	// set plugin infos
-	mPluginInfos.Caption = tr( "Beaver Debugger" );
-	mPluginInfos.Description = tr( "Plugin for use Beaver Debugger together with MkS" );
-	mPluginInfos.Author = "Andei Kopats aka hlamer <hlamer@tut.by>";
-	mPluginInfos.Type = BasePlugin::iDebugger;
-	mPluginInfos.Name = PLUGIN_NAME;
-	mPluginInfos.Version = "1.0.0";
-	mPluginInfos.FirstStartEnabled = true;
-}
-
-/*!
-	Destructor. Uninstalls plugin from the system.
-*/
-BeaverDebugger::~BeaverDebugger()
-{
-	if ( isEnabled() )
-		setEnabled( false );
+	PluginInfos pluginInfos;
+	pluginInfos.Caption = tr( "Beaver Debugger" );
+	pluginInfos.Description = tr( "Plugin for use Beaver Debugger together with MkS" );
+	pluginInfos.Author = "Andei Kopats aka hlamer <hlamer@tut.by>";
+	pluginInfos.Type = BasePlugin::iDebugger;
+	pluginInfos.Name = PLUGIN_NAME;
+	pluginInfos.Version = "1.0.0";
+	pluginInfos.FirstStartEnabled = true;
+	pluginInfos.HaveSettingsWidget = false;
+	pluginInfos.Pixmap = QPixmap( ":/icons/beaverdbg.png" );
+	
+	return pluginInfos;
 }
 
 /*!
@@ -102,13 +94,6 @@ bool BeaverDebugger::setEnabled( bool b )
 */
 QWidget* BeaverDebugger::settingsWidget()
 { return NULL; }
-
-/*!
-	Get icon for plugin
-	\return Pixmap
-*/
-QPixmap BeaverDebugger::pixmap() const
-{ return QPixmap( ":/icons/beaverdbg.png" ); }
 
 void BeaverDebugger::explainWhyCannot() const
 {

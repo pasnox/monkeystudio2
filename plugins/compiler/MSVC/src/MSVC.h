@@ -49,10 +49,10 @@ class MSVC : public CompilerPlugin
 
 public:
 	MSVC();
+	PluginInfos infos() const;
 	~MSVC();
 	// BasePlugin
 	virtual bool setEnabled( bool );
-	virtual bool haveSettingsWidget() const { return true; }
 	virtual QWidget* settingsWidget();
 	// CompilerPlugin
 	virtual pCommand defaultCompileCommand() const;

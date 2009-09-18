@@ -22,15 +22,6 @@
 
 Python::Python ()
 {
-	// set plugin infos
-	mPluginInfos.Caption = tr( "Python" );
-	mPluginInfos.Description = tr( "This plugin provide Python interpreter and python parser." );
-	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, Michon Aurelien aka aurelien <aurelien.french@gmail.com>";
-	mPluginInfos.Type = BasePlugin::iInterpreter;
-	mPluginInfos.Name = PLUGIN_NAME;
-	mPluginInfos.Version = "0.1.0";
-	mPluginInfos.FirstStartEnabled = true;
-
 	// install parsers
 	foreach ( QString s, availableParsers() )
 	{
@@ -38,8 +29,24 @@ Python::Python ()
 	}
 }
 
-Python::~Python()
+BasePlugin::PluginInfos Python::infos() const
 {
+	PluginInfos pluginInfos;
+	pluginInfos.Caption = tr( "Python" );
+	pluginInfos.Description = tr( "This plugin provide Python interpreter and python parser." );
+	pluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, Michon Aurelien aka aurelien <aurelien.french@gmail.com>";
+	pluginInfos.Type = BasePlugin::iInterpreter;
+	pluginInfos.Name = PLUGIN_NAME;
+	pluginInfos.Version = "0.1.0";
+	pluginInfos.FirstStartEnabled = true;
+	pluginInfos.HaveSettingsWidget = true;
+	pluginInfos.Pixmap = pIconManager::pixmap( "python.png", ":/icons" );
+	
+	return pluginInfos;
+}
+
+Python::~Python()
+{ // TODO move to uninstall
 	// uninstall parsers
 	foreach ( QString s, availableParsers() )
 	{
@@ -137,12 +144,12 @@ void Python::setUserCommands( const pCommandList& commands ) const
 
 QStringList Python::availableParsers() const
 {
-	return QStringList( mPluginInfos.Name );
+	return QStringList( infos().Name );
 }
 
 pCommandParser* Python::getParser( const QString& s )
 {
-	return s == mPluginInfos.Name ? new PythonParser( this ) : 0;
+	return s == infos().Name ? new PythonParser( this ) : 0;
 }
 
 pCommand Python::defaultInterpretCommand() const

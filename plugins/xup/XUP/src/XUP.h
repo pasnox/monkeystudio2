@@ -26,12 +26,9 @@ class XUP : public XUPPlugin
 	Q_INTERFACES( BasePlugin XUPPlugin )
 
 public:
-	XUP();
-	virtual ~XUP();
+	PluginInfos infos() const;
 	
 	virtual bool setEnabled( bool enabled );
-	virtual bool haveSettingsWidget() const { return false; }
-	virtual QWidget* settingsWidget();
 	virtual bool editProject( XUPProjectItem* project );
 };
 

@@ -78,100 +78,26 @@ public:
 		QString Version; // the plugin version for version control
 		QString License; // the plugin license
 		bool FirstStartEnabled; // to know if this plugin is enabled
+		bool HaveSettingsWidget; // plugin has settings widget
+		QPixmap Pixmap; // plugin icon
 	};
 	
-	BasePlugin()
-	{ mPluginInfos.FirstStartEnabled = false; }
+	virtual ~BasePlugin();
 	
-	virtual ~BasePlugin()
-	{ if ( isEnabled() ) setEnabled( false ); }
+	virtual PluginInfos infos() const = 0;
 	
-	virtual PluginInfos infos() const
-	{ return mPluginInfos; }
+	static QString typeToString( BasePlugin::Type type );	
+	static QString completeTypeToString( BasePlugin::Types type );
 	
-	static QString typeToString( BasePlugin::Type type )
-	{
-		switch ( type )
-		{
-			case BasePlugin::iAll:
-				return QCoreApplication::translate( "BasePlugin", "All" );
-				break;
-			case BasePlugin::iBase:
-				return QCoreApplication::translate( "BasePlugin", "Basic" );
-				break;
-			case BasePlugin::iChild:
-				return QCoreApplication::translate( "BasePlugin", "Child" );
-				break;
-			case BasePlugin::iCLITool:
-				return QCoreApplication::translate( "BasePlugin", "Command Line Tool" );
-				break;
-			case BasePlugin::iBuilder:
-				return QCoreApplication::translate( "BasePlugin", "Builder" );
-				break;
-			case BasePlugin::iCompiler:
-				return QCoreApplication::translate( "BasePlugin", "Compiler" );
-				break;
-			case BasePlugin::iDebugger:
-				return QCoreApplication::translate( "BasePlugin", "Debugger" );
-				break;
-			case BasePlugin::iInterpreter:
-				return QCoreApplication::translate( "BasePlugin", "Interpreter" );
-				break;
-			case BasePlugin::iXUP:
-				return QCoreApplication::translate( "BasePlugin", "XUP Project" );
-				break;
-			case BasePlugin::iLast:
-				return QCoreApplication::translate( "BasePlugin", "NaN" );
-				break;
-			default:
-				return QString::null;
-				break;
-		}
-	}
+	QString captionVersionString() const;
 	
-	static QString completeTypeToString( BasePlugin::Types type )
-	{
-		QStringList types;
-		for ( int i = BasePlugin::iAll; i < BasePlugin::iLast; i++ )
-		{
-			const QString s = typeToString( (BasePlugin::Type)i );
-			if ( !s.isEmpty() && !types.contains( s ) )
-				if ( type.testFlag( (BasePlugin::Type)i ) )
-					types << s;
-		}
-		return types.join( ", " );
-	}
-	
-	QString captionVersionString() const
-	{
-		return QString( "%1 (%2)" ).arg( mPluginInfos.Caption ).arg( mPluginInfos.Version );
-	}
-	
-	QAction* stateAction() const
-	{
-		if ( !mAction )
-		{
-			mAction = new QAction( const_cast<BasePlugin*>( this ) );
-			mAction->setCheckable( true );
-			mAction->setText( tr( "Enabled" ) );
-			mAction->setObjectName( captionVersionString().replace( " ", "_" ) );
-			mAction->setData( QVariant::fromValue( const_cast<BasePlugin*>( this ) ) );
-		}
-		
-		return mAction;
-	}
+	QAction* stateAction() const;
 	
 	bool neverEnable() const
 	{ return settingsValue( "NeverEnable", false ).toBool(); }
 	
 	void setNeverEnable( bool never )
 	{ return setSettingsValue( "NeverEnable", never ); }
-	
-	virtual QPixmap pixmap() const
-	{ return pIconManager::pixmap( "misc.png", ":/build/icons/build" ); }
-	
-	virtual bool haveSettingsWidget() const
-	{ return false; }
 	
 	virtual QWidget* settingsWidget()
 	{ return 0; }
@@ -182,44 +108,16 @@ public:
 	virtual bool setEnabled( bool )
 	{ return false; }
 	
-	virtual QString settingsKey( const QString& k ) const
-	{ return QString( "Plugins/%1/%2" ).arg( mPluginInfos.Name ).arg(  k ); }
-	
-	virtual QVariant settingsValue( const QString& k, const QVariant& v = QVariant() ) const
-	{ return MonkeyCore::settings()->value( settingsKey( k ), v ); }
-	
-	virtual void setSettingsValue( const QString& k, const QVariant& v ) const
-	{ MonkeyCore::settings()->setValue( settingsKey( k ), v ); }
+	virtual QString settingsKey( const QString& k ) const;
+	virtual QVariant settingsValue( const QString& k, const QVariant& v = QVariant() ) const;
+	virtual void setSettingsValue( const QString& k, const QVariant& v ) const;
 	
 	// coverage support members
 #ifdef __COVERAGESCANNER__
-	virtual void saveCodeCoverage( const QString& n, const QString& s )
-	{
-		// set path
-		QString s = QCoreApplication::applicationDirPath();
-#ifndef Q_OS_WIN
-		s = QDir::homePath();
-#endif
-		s.append( "/monkeystudio_tests" );
-		
-		// create path if it not exists
-		QDir d( s );
-		if ( !d.exists() )
-			d.mkdir( s );
-		
-		// set os specific filename
-		s = QDir::toNativeSeparators( s.append( "/monkey_cov" ) ); 
-		
-		// deal with coverage meter
-		__coveragescanner_filename( s.toLocal8Bit().constData() );
-		__coveragescanner_teststate( s.toLocal8Bit().constData() );
-		__coveragescanner_testname( QString( "%1/%2" ).arg( n ).arg( infos().Name ).toLocal8Bit().constData() );
-		__coveragescanner_save();
-	}
+	virtual void saveCodeCoverage( const QString& n, const QString& s );
 #endif
 	
 protected:
-	PluginInfos mPluginInfos;
 	mutable QPointer<QAction> mAction;
 };
 

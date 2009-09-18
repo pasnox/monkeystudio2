@@ -33,22 +33,19 @@
 
 using namespace pMonkeyStudio;
 
-ProjectHeaders::ProjectHeaders()
+BasePlugin::PluginInfos ProjectHeaders::infos() const
 {
-	// set plugin infos
-	mPluginInfos.Caption = tr( "Project Headers" );
-	mPluginInfos.Description = tr( "Plugin for managing the license headers of your sources" );
-	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
-	mPluginInfos.Type = BasePlugin::iBase;
-	mPluginInfos.Name = PLUGIN_NAME;
-	mPluginInfos.Version = "0.5.0";
-	mPluginInfos.FirstStartEnabled = false;
-}
-
-ProjectHeaders::~ProjectHeaders()
-{
-	if ( isEnabled() )
-		setEnabled( false );
+	PluginInfos pluginInfos;
+	pluginInfos.Caption = tr( "Project Headers" );
+	pluginInfos.Description = tr( "Plugin for managing the license headers of your sources" );
+	pluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	pluginInfos.Type = BasePlugin::iBase;
+	pluginInfos.Name = PLUGIN_NAME;
+	pluginInfos.Version = "0.5.0";
+	pluginInfos.FirstStartEnabled = false;
+	pluginInfos.Pixmap = QPixmap( ":/icons/licensing.png" );
+	
+	return pluginInfos;
 }
 
 bool ProjectHeaders::setEnabled( bool b )
@@ -56,7 +53,7 @@ bool ProjectHeaders::setEnabled( bool b )
 	if ( b && !isEnabled() )
 	{
 		// add dock to dock toolbar entry
-		QAction* a = MonkeyCore::menuBar()->action( "mEdit/aProjectHeaders", tr( "Project Licensing..." ), pixmap() );
+		QAction* a = MonkeyCore::menuBar()->action( "mEdit/aProjectHeaders", tr( "Project Licensing..." ), infos().Pixmap );
 		connect( a, SIGNAL( triggered() ), this, SLOT( processLicensing() ) );
 		// set plugin enabled
 		stateAction()->setChecked( true );
@@ -70,9 +67,6 @@ bool ProjectHeaders::setEnabled( bool b )
 	// return default value
 	return true;
 }
-
-QPixmap ProjectHeaders::pixmap() const
-{ return QPixmap( ":/icons/licensing.png" ); }
 
 void ProjectHeaders::processLicensing()
 { UIProjectHeaders( QApplication::activeWindow(), this ).exec(); }

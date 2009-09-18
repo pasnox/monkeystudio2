@@ -6,16 +6,19 @@
 #include <MonkeyCore.h>
 #include <UIMain.h>
 
-RegExpEditor::RegExpEditor()
+BasePlugin::PluginInfos RegExpEditor::infos() const
 {
-	// set plugin infos
-	mPluginInfos.Caption = tr( "Regular Expression Editor" );
-	mPluginInfos.Description = tr( "This plugin allow you to test regular expression for a given buffer." );
-	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
-	mPluginInfos.Type = BasePlugin::iBase;
-	mPluginInfos.Name = PLUGIN_NAME;
-	mPluginInfos.Version = "1.0.0";
-	mPluginInfos.FirstStartEnabled = false;
+	PluginInfos pluginInfos;
+	pluginInfos.Caption = tr( "Regular Expression Editor" );
+	pluginInfos.Description = tr( "This plugin allow you to test regular expression for a given buffer." );
+	pluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	pluginInfos.Type = BasePlugin::iBase;
+	pluginInfos.Name = PLUGIN_NAME;
+	pluginInfos.Version = "1.0.0";
+	pluginInfos.FirstStartEnabled = false;
+	pluginInfos.Pixmap = pIconManager::pixmap( "regexp.png", ":/icons" );
+	
+	return pluginInfos;
 }
 
 RegExpEditor::~RegExpEditor()
@@ -29,7 +32,7 @@ bool RegExpEditor::setEnabled( bool b )
 	if ( b && !isEnabled() )
 	{
 		// create action
-		QAction* a = MonkeyCore::menuBar()->action( "mTools/aRegExpEditor", infos().Caption, pixmap(), QString::null, mPluginInfos.Description );
+		QAction* a = MonkeyCore::menuBar()->action( "mTools/aRegExpEditor", infos().Caption, infos().Pixmap, QString::null, infos().Description );
 		// connections
 		connect( a, SIGNAL( triggered() ), this, SLOT( action_triggered() ) );
 		// set plugin enabled

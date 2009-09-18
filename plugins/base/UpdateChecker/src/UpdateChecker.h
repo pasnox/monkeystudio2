@@ -37,11 +37,9 @@ class UpdateChecker : public BasePlugin
 	Q_INTERFACES( BasePlugin )
 	
 public:
-	UpdateChecker();
-	~UpdateChecker();
+	PluginInfos infos() const;
 	virtual bool setEnabled( bool );
-	virtual QPixmap pixmap() const { return pIconManager::pixmap( "UpdateChecker.png", ":/icons" ); }
-
+	
 protected slots:
 	void checkForUpdate();
 	void checkForUpdate_triggered( bool show = true );

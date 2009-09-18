@@ -49,10 +49,10 @@ class Gcc : public CompilerPlugin
 
 public:
 	Gcc();
+	PluginInfos infos() const;
 	~Gcc();
 	// BasePlugin
 	virtual bool setEnabled( bool );
-	virtual bool haveSettingsWidget() const { return true; }
 	virtual QWidget* settingsWidget();
 	// CompilerPlugin
 	virtual pCommand defaultCompileCommand() const;

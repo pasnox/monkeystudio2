@@ -49,12 +49,9 @@ class BeaverDebugger : public BasePlugin
 	Q_INTERFACES( BasePlugin )
 
 public:
-	BeaverDebugger();
-	virtual ~BeaverDebugger();
+	PluginInfos infos() const;
 	virtual bool setEnabled( bool );
-	virtual bool haveSettingsWidget() const { return false; }
 	virtual QWidget* settingsWidget();
-	virtual QPixmap pixmap() const;	
 protected slots:
 	void explainWhyCannot() const;
 };

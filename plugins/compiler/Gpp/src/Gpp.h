@@ -49,10 +49,10 @@ class Gpp : public CompilerPlugin
 
 public:
 	Gpp();
+	PluginInfos infos() const;
 	~Gpp();
 	// BasePlugin
 	virtual bool setEnabled( bool );
-	virtual bool haveSettingsWidget() const { return true; }
 	virtual QWidget* settingsWidget();
 	// CompilerPlugin
 	virtual pCommand defaultCompileCommand() const;

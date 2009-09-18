@@ -42,13 +42,13 @@ void PluginsMenu::initPluginMenusActions( BasePlugin* plugin, BasePlugin::Type t
 			mTypeMenus[ type ] = tmenu;
 		}
 		
-		menu = tmenu->addMenu( plugin->pixmap(), plugin->infos().Caption );
+		menu = tmenu->addMenu( plugin->infos().Pixmap, plugin->infos().Caption );
 		mMenus[ plugin ] = menu;
 		
 		menu->addAction( plugin->stateAction() );
 		connect( plugin->stateAction(), SIGNAL( triggered( bool ) ), this, SLOT( actionEnable_triggered( bool ) ) );
 		
-		if ( plugin->haveSettingsWidget() )
+		if ( plugin->infos().HaveSettingsWidget )
 		{
 			QAction* action = menu->addAction( tr( "Configure..." ) );
 			action->setData( QVariant::fromValue( plugin ) );
@@ -157,7 +157,7 @@ void PluginsMenu::actionConfigure_triggered()
 #endif
 	widget->setWindowModality( Qt::ApplicationModal );
 	widget->setAttribute( Qt::WA_DeleteOnClose );
-	widget->setWindowIcon( plugin->pixmap() );
+	widget->setWindowIcon( plugin->infos().Pixmap );
 	widget->setWindowTitle( tr( "Settings - %1" ).arg( plugin->infos().Caption ) );
 	widget->adjustSize();
 	

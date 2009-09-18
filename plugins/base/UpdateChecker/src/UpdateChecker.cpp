@@ -34,22 +34,19 @@
 
 #include <QTimer>
 
-UpdateChecker::UpdateChecker()
+BasePlugin::PluginInfos UpdateChecker::infos() const
 {
-	// set plugin infos
-	mPluginInfos.Caption = tr( "Update Checker" );
-	mPluginInfos.Description = tr( "This plugin allow to activate the update checker." );
-	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
-	mPluginInfos.Type = BasePlugin::iBase;
-	mPluginInfos.Name = PLUGIN_NAME;
-	mPluginInfos.Version = "1.0.0";
-	mPluginInfos.FirstStartEnabled = true;
-}
-
-UpdateChecker::~UpdateChecker()
-{
-	if ( isEnabled() )
-		setEnabled( false );
+	PluginInfos pluginInfos;
+	pluginInfos.Caption = tr( "Update Checker" );
+	pluginInfos.Description = tr( "This plugin allow to activate the update checker." );
+	pluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	pluginInfos.Type = BasePlugin::iBase;
+	pluginInfos.Name = PLUGIN_NAME;
+	pluginInfos.Version = "1.0.0";
+	pluginInfos.FirstStartEnabled = true;
+	pluginInfos.Pixmap = pIconManager::pixmap( "UpdateChecker.png", ":/icons" );
+	
+	return pluginInfos;
 }
 
 bool UpdateChecker::setEnabled( bool b )
@@ -57,7 +54,7 @@ bool UpdateChecker::setEnabled( bool b )
 	if ( b && !isEnabled() )
 	{
 		// create action
-		QAction* a = MonkeyCore::menuBar()->action( "mHelp/aUpdateChecker",  tr( "Check for update..." ), QIcon( ":/icons/UpdateChecker.png" ), QString::null, mPluginInfos.Description );
+		QAction* a = MonkeyCore::menuBar()->action( "mHelp/aUpdateChecker",  tr( "Check for update..." ), QIcon( ":/icons/UpdateChecker.png" ), QString::null, infos().Description );
 		connect( a, SIGNAL( triggered() ), this, SLOT( checkForUpdate_triggered() ) );
 		QTimer::singleShot( 15000, this, SLOT( checkForUpdate() ) );
 		// set plugin enabled

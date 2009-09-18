@@ -36,31 +36,22 @@
 #include "GccParser.h"
 #include "Parser.h"
 
-/*!
-	Class constructor
-*/
-GccParser::GccParser()
+BasePlugin::PluginInfos GccParser::infos() const
 {
-	// set plugin infos
-	mPluginInfos.Caption = tr( "GccParser" );
-	mPluginInfos.Description = tr( "Plugin for parsing output of GNU Compiler Collection" );
-	mPluginInfos.Author = "Kopats Andrei aka hlamer <hlamer@tut.by>";
-	mPluginInfos.Type = BasePlugin::iBase;
-	mPluginInfos.Name = PLUGIN_NAME;
-	mPluginInfos.Version = "0.1.0";
+	PluginInfos pluginInfos;
+	pluginInfos.Caption = tr( "GccParser" );
+	pluginInfos.Description = tr( "Plugin for parsing output of GNU Copiler Collection" );
+	pluginInfos.Author = "Kopats Andrei aka hlamer <hlamer@tut.by>";
+	pluginInfos.Type = BasePlugin::iBase;
+	pluginInfos.Name = PLUGIN_NAME;
+	pluginInfos.Version = "0.1.0";
 #ifdef Q_CC_GNU
-	mPluginInfos.FirstStartEnabled = true;
+	pluginInfos.FirstStartEnabled = true;
 #else
-	mPluginInfos.FirstStartEnabled = false;
+	pluginInfos.FirstStartEnabled = false;
 #endif
-}
-
-/*!
-	Class destructor
-*/
-GccParser::~GccParser()
-{
-	setEnabled (false);
+	
+	return pluginInfos;
 }
 
 /*!

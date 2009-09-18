@@ -29,10 +29,9 @@ class QMake : public XUPPlugin
 
 public:
 	QMake();
-	virtual ~QMake();
+	PluginInfos infos() const;
 	
 	virtual bool setEnabled( bool enabled );
-	virtual bool haveSettingsWidget() const { return true; }
 	virtual QWidget* settingsWidget();
 	virtual bool editProject( XUPProjectItem* project );
 

@@ -49,9 +49,8 @@ class GccParser : public BasePlugin
 	Q_INTERFACES( BasePlugin )
 
 public:
-	GccParser();
-	~GccParser();
 	// BasePlugin
+	PluginInfos infos() const;
 	virtual bool setEnabled( bool );
 
 };

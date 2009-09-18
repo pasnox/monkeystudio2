@@ -33,21 +33,28 @@
 
 GNUMake::GNUMake ()
 {
-	// set plugin infos
-	mPluginInfos.Caption = tr( "GNUMake" );
-	mPluginInfos.Description = tr( "Plugin for execute GNU Make in console and parse it's output" );
-	mPluginInfos.Author = "Kopats Andrei aka hlamer <hlamer@tut.by>, Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
-	mPluginInfos.Type = BasePlugin::iBuilder;
-	mPluginInfos.Name = PLUGIN_NAME;
-	mPluginInfos.Version = "0.5.0";
-	mPluginInfos.FirstStartEnabled = false;
 	// install parsers
 	foreach ( QString s, availableParsers() )
 		MonkeyCore::consoleManager()->addParser( getParser( s ) );
 }
 
-GNUMake::~GNUMake()
+BasePlugin::PluginInfos GNUMake::infos() const
 {
+	PluginInfos pluginInfos;
+	pluginInfos.Caption = tr( "GNUMake" );
+	pluginInfos.Description = tr( "Plugin for execute GNU Make in console and parse it's output" );
+	pluginInfos.Author = "Kopats Andrei aka hlamer <hlamer@tut.by>, Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	pluginInfos.Type = BasePlugin::iBuilder;
+	pluginInfos.Name = PLUGIN_NAME;
+	pluginInfos.Version = "0.5.0";
+	pluginInfos.FirstStartEnabled = false;
+	pluginInfos.HaveSettingsWidget = true;
+	
+	return pluginInfos;
+}
+
+GNUMake::~GNUMake()
+{ // TODO move to uninstall
 	// uninstall parsers
 	foreach ( QString s, availableParsers() )
 		MonkeyCore::consoleManager()->removeParser( s );
@@ -132,10 +139,10 @@ void GNUMake::setUserCommands( const pCommandList& l ) const
 }
 
 QStringList GNUMake::availableParsers() const
-{ return QStringList( mPluginInfos.Name ); }
+{ return QStringList( infos().Name ); }
 
 pCommandParser* GNUMake::getParser( const QString& s )
-{ return s == mPluginInfos.Name ? new GNUMakeParser(this) : 0; }
+{ return s == infos().Name ? new GNUMakeParser(this) : 0; }
 
 pCommand GNUMake::defaultBuildCommand() const
 {

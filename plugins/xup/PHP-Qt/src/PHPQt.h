@@ -29,10 +29,8 @@ class PHPQt : public XUPPlugin
 
 public:
 	PHPQt();
-	virtual ~PHPQt();
-
+	PluginInfos infos() const;
 	virtual bool setEnabled( bool enabled );
-	virtual QWidget* settingsWidget();
 	virtual bool editProject( XUPProjectItem* project );
 
 protected:

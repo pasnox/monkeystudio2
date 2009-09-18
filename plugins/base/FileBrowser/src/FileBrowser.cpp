@@ -45,29 +45,22 @@
 
 #include <QIcon>
 
-/*!
-	Class constructor. Initialises information about plugin for user and core
-*/
-FileBrowser::FileBrowser()
+BasePlugin::PluginInfos FileBrowser::infos() const
 {
-	// set plugin infos
-	mPluginInfos.Caption = tr( "File Browser" );
-	mPluginInfos.Description = tr( "Plugin for browsing file outside the project" );
-	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, Kopats Andei aka hlamer <hlamer@tut.by>";
-	mPluginInfos.Type = BasePlugin::iBase;
-	mPluginInfos.Name = PLUGIN_NAME;
-	mPluginInfos.Version = "1.0.0";
-	mPluginInfos.FirstStartEnabled = true;
+	PluginInfos pluginInfos;
+	pluginInfos.Caption = tr( "File Browser" );
+	pluginInfos.Description = tr( "Plugin for browsing file outside the project" );
+	pluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, Kopats Andei aka hlamer <hlamer@tut.by>";
+	pluginInfos.Type = BasePlugin::iBase;
+	pluginInfos.Name = PLUGIN_NAME;
+	pluginInfos.Version = "1.0.0";
+	pluginInfos.FirstStartEnabled = true;
+	pluginInfos.HaveSettingsWidget = true;
+	pluginInfos.Pixmap = QPixmap( ":/icons/browser.png" );
+	
+	return pluginInfos;
 }
 
-/*!
-	Destructor. Uninstalls plugin from the system.
-*/
-FileBrowser::~FileBrowser()
-{
-	if ( isEnabled() )
-		setEnabled( false );
-}
 
 /*!
 	Install/uninstall plugin from system
@@ -83,7 +76,7 @@ bool FileBrowser::setEnabled( bool b )
 		// create dock
 		mDock = new pDockFileBrowser();
 		// add dock to dock toolbar entry
-		MonkeyCore::mainWindow()->dockToolBar( Qt::LeftToolBarArea )->addDock( mDock, infos().Caption, QIcon( pixmap() ) );
+		MonkeyCore::mainWindow()->dockToolBar( Qt::LeftToolBarArea )->addDock( mDock, infos().Caption, QIcon( infos().Pixmap ) );
 		// create menu action for the dock
 		pActionsManager::setDefaultShortcut( mDock->toggleViewAction(), QKeySequence( "F7" ) );
 		// restore settings
@@ -110,13 +103,6 @@ bool FileBrowser::setEnabled( bool b )
 */
 QWidget* FileBrowser::settingsWidget()
 { return new FileBrowserSettings( this ); }
-
-/*!
-	Get icon for plugin
-	\return Pixmap
-*/
-QPixmap FileBrowser::pixmap() const
-{ return QPixmap( ":/icons/browser.png" ); }
 
 /*!
 	Get filter wildcards, which using for filtering out some files, which should be removed

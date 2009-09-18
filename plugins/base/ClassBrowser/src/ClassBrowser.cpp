@@ -32,22 +32,20 @@
 #include <QDesktopServices>
 #include <QDebug>
 
-ClassBrowser::ClassBrowser()
+BasePlugin::PluginInfos ClassBrowser::infos() const
 {
-	// set plugin infos
-	mPluginInfos.Caption = tr( "Class Browser" );
-	mPluginInfos.Description = tr( "Plugin for browsing classes members" );
-	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
-	mPluginInfos.Type = BasePlugin::iBase;
-	mPluginInfos.Name = PLUGIN_NAME;
-	mPluginInfos.Version = "0.5.0";
-	mPluginInfos.FirstStartEnabled = true;
-}
-
-ClassBrowser::~ClassBrowser()
-{
-	if ( isEnabled() )
-		setEnabled( false );
+	PluginInfos pluginInfos;
+	pluginInfos.Caption = tr( "Class Browser" );
+	pluginInfos.Description = tr( "Plugin for browsing classes members" );
+	pluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	pluginInfos.Type = BasePlugin::iBase;
+	pluginInfos.Name = PLUGIN_NAME;
+	pluginInfos.Version = "0.5.0";
+	pluginInfos.FirstStartEnabled = true;
+	pluginInfos.HaveSettingsWidget = true;
+	pluginInfos.Pixmap = QPixmap( ":/icons/class.png" );;
+	
+	return pluginInfos;
 }
 
 bool ClassBrowser::setEnabled( bool b )
@@ -92,16 +90,6 @@ bool ClassBrowser::setEnabled( bool b )
 	}
 	
 	// return default value
-	return true;
-}
-
-QPixmap ClassBrowser::pixmap() const
-{
-	return QPixmap( ":/icons/class.png" );
-}
-
-bool ClassBrowser::haveSettingsWidget() const
-{
 	return true;
 }
 
@@ -158,7 +146,7 @@ void ClassBrowser::setIntegrationMode( ClassBrowser::IntegrationMode mode )
 		switch ( mode )
 		{
 			case ClassBrowser::imDock:
-				MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( mDock, infos().Caption, QIcon( pixmap() ) );
+				MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( mDock, infos().Caption, QIcon( infos().Pixmap ) );
 				MonkeyCore::multiToolBar()->toolBar( "Coding" )->removeAction( mDock->browser()->membersAction() );
 				break;
 			case ClassBrowser::imCombo:
@@ -167,7 +155,7 @@ void ClassBrowser::setIntegrationMode( ClassBrowser::IntegrationMode mode )
 				MonkeyCore::multiToolBar()->toolBar( "Coding" )->addAction( mDock->browser()->membersAction() );
 				break;
 			case ClassBrowser::imBoth:
-				MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( mDock, infos().Caption, QIcon( pixmap() ) );
+				MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( mDock, infos().Caption, QIcon( infos().Pixmap ) );
 				MonkeyCore::multiToolBar()->toolBar( "Coding" )->addAction( mDock->browser()->membersAction() );
 				break;
 		}

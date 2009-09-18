@@ -37,10 +37,7 @@ class pAStyle : public BasePlugin
 	Q_INTERFACES( BasePlugin )
 	
 public:
-	pAStyle();
-	~pAStyle();
-	virtual QPixmap pixmap() const { return pIconManager::pixmap( "astyle.png", ":/icons" ); }
-	virtual bool haveSettingsWidget() const { return true; }
+	PluginInfos infos() const;
 	virtual QWidget* settingsWidget();
 	virtual bool setEnabled( bool );
 	

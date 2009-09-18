@@ -30,11 +30,8 @@ class QtAssistant : public ChildPlugin
 	Q_INTERFACES( BasePlugin ChildPlugin )
 	
 public:
-	QtAssistant();
-	virtual ~QtAssistant();
+	PluginInfos infos() const;
 	virtual bool setEnabled( bool );
-	virtual QPixmap pixmap() const { return pIconManager::pixmap( "assistant.png", ":/icons" ); }
-	virtual bool haveSettingsWidget() const { return true; }
 	virtual QWidget* settingsWidget();
 	virtual pAbstractChild* createDocument( const QString& fileName );
 

@@ -37,22 +37,21 @@
 #include <pAbstractChild.h>
 #include <pEditor.h>
 
-pAStyle::pAStyle()
+BasePlugin::PluginInfos pAStyle::infos() const
 {
+	PluginInfos pluginInfos;
 	// set plugin infos
-	mPluginInfos.Caption = tr( "AStyle Formatter" );
-	mPluginInfos.Description = tr( "Uses AStyle to reformat your sources. Useful when copying code from the net or if you just want to reformat your sources based on a specific style" );
-	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
-	mPluginInfos.Type = BasePlugin::iBase;
-	mPluginInfos.Name = PLUGIN_NAME;
-	mPluginInfos.Version = "1.0.0";
-	mPluginInfos.FirstStartEnabled = false;
-}
-
-pAStyle::~pAStyle()
-{
-	if ( isEnabled() )
-		setEnabled( false );
+	pluginInfos.Caption = tr( "AStyle Formatter" );
+	pluginInfos.Description = tr( "Uses AStyle to reformat your sources. Useful when copying code from the net or if you just want to reformat your sources based on a specific style" );
+	pluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	pluginInfos.Type = BasePlugin::iBase;
+	pluginInfos.Name = PLUGIN_NAME;
+	pluginInfos.Version = "1.0.0";
+	pluginInfos.FirstStartEnabled = false;
+	pluginInfos.HaveSettingsWidget = true;
+	pluginInfos.Pixmap = pIconManager::pixmap( "astyle.png", ":/icons" );
+	
+	return pluginInfos;
 }
 
 QWidget* pAStyle::settingsWidget()
@@ -63,7 +62,7 @@ bool pAStyle::setEnabled( bool b )
 	if ( b && !isEnabled() )
 	{
 		// create action
-		QAction* a = MonkeyCore::menuBar()->action( "mEdit/aAStyle",  tr( "AStyle Formatter" ), QIcon( ":/icons/astyle.png" ), tr( "Ctrl+Alt+A" ), mPluginInfos.Description );
+		QAction* a = MonkeyCore::menuBar()->action( "mEdit/aAStyle",  tr( "AStyle Formatter" ), QIcon( ":/icons/astyle.png" ), tr( "Ctrl+Alt+A" ), infos().Description );
 		connect( a, SIGNAL( triggered() ), this, SLOT( applyFormatter() ) );
 		// set plugin enabled
 		stateAction()->setChecked( true );

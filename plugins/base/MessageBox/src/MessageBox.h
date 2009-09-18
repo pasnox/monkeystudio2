@@ -51,10 +51,8 @@ class MessageBox : public BasePlugin
 
 public:
 	MessageBox();
-	virtual ~MessageBox();
+	PluginInfos infos() const;
 	virtual bool setEnabled( bool );
-	virtual QPixmap pixmap() const { return pIconManager::pixmap( "warning.png", ":/icons" ); }
-	virtual bool haveSettingsWidget() const { return true; }
 	virtual QWidget* settingsWidget();
 
 protected:

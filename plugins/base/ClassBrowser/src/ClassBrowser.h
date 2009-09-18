@@ -36,11 +36,9 @@ class ClassBrowser : public BasePlugin
 public:
 	enum IntegrationMode { imDock, imCombo, imBoth };
 	
-	ClassBrowser();
-	virtual ~ClassBrowser();
+	PluginInfos infos() const;
+	
 	virtual bool setEnabled( bool );
-	virtual QPixmap pixmap() const;
-	virtual bool haveSettingsWidget() const;
 	virtual QWidget* settingsWidget();
 	
 	qCtagsSenseProperties properties() const;

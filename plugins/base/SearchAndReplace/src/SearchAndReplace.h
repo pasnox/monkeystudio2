@@ -83,11 +83,9 @@ public:
 	};
 	
 	SearchAndReplace();
-	virtual ~SearchAndReplace();
+	PluginInfos infos() const;
 	
 	virtual bool setEnabled( bool );
-	virtual QPixmap pixmap() const { return pIconManager::pixmap( "tabsearch.png", ":/icons" ); }
-	virtual QWidget* settingsWidget();
 
 protected:
 	Mode mMode;

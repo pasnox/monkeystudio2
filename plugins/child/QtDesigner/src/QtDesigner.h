@@ -30,11 +30,8 @@ class QtDesigner : public ChildPlugin
 	Q_INTERFACES( BasePlugin ChildPlugin )
 	
 public:
-	QtDesigner();
-	virtual ~QtDesigner();
+	PluginInfos infos() const;
 	virtual bool setEnabled( bool enabled );
-	virtual QPixmap pixmap() const { return pIconManager::pixmap( "designer.png", ":/icons" ); }
-	virtual QWidget* settingsWidget();
 	virtual pAbstractChild* createDocument( const QString& fileName );
 
 protected:

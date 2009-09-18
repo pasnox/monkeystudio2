@@ -31,30 +31,28 @@
 
 #include <MonkeyCore.h>
 
-Ctags2Api::Ctags2Api()
+BasePlugin::PluginInfos Ctags2Api::infos() const
 {
-	// set plugin infos
-	mPluginInfos.Caption = tr( "Api File Generator" );
-	mPluginInfos.Description = tr( "This plugin allow to generate api file using ctags." );
-	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
-	mPluginInfos.Type = BasePlugin::iBase;
-	mPluginInfos.Name = PLUGIN_NAME;
-	mPluginInfos.Version = "1.0.0";
-	mPluginInfos.FirstStartEnabled = false;
+	PluginInfos pluginInfos;
+	pluginInfos.Caption = tr( "Api File Generator" );
+	pluginInfos.Description = tr( "This plugin allow to generate api file using ctags." );
+	pluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	pluginInfos.Type = BasePlugin::iBase;
+	pluginInfos.Name = PLUGIN_NAME;
+	pluginInfos.Version = "1.0.0";
+	pluginInfos.FirstStartEnabled = false;
+	pluginInfos.Pixmap = pIconManager::pixmap( "Ctags2Api.png", ":/icons" );
+	
+	return pluginInfos;
 }
 
-Ctags2Api::~Ctags2Api()
-{
-	if ( isEnabled() )
-		setEnabled( false );
-}
 
 bool Ctags2Api::setEnabled( bool b )
 {
 	if ( b && !isEnabled() )
 	{
 		// create action
-		QAction* a = MonkeyCore::menuBar()->action( "mEdit/aCtags2Api",  tr( "Api File Generator" ), QIcon( ":/icons/Ctags2Api.png" ), tr( "Ctrl+Alt+G" ), mPluginInfos.Description );
+		QAction* a = MonkeyCore::menuBar()->action( "mEdit/aCtags2Api",  tr( "Api File Generator" ), QIcon( ":/icons/Ctags2Api.png" ), tr( "Ctrl+Alt+G" ), infos().Description );
 		connect( a, SIGNAL( triggered() ), this, SLOT( UICtags2Api_show() ) );
 		// set plugin enabled
 		stateAction()->setChecked( true );

@@ -22,15 +22,6 @@
 
 PHP::PHP ()
 {
-	// set plugin infos
-	mPluginInfos.Caption = tr( "PHP" );
-	mPluginInfos.Description = tr( "This plugin provide PHP interpreter and php parser." );
-	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
-	mPluginInfos.Type = BasePlugin::iInterpreter;
-	mPluginInfos.Name = PLUGIN_NAME;
-	mPluginInfos.Version = "0.1.0";
-	mPluginInfos.FirstStartEnabled = true;
-
 	// install parsers
 	foreach ( QString s, availableParsers() )
 	{
@@ -38,8 +29,24 @@ PHP::PHP ()
 	}
 }
 
-PHP::~PHP()
+BasePlugin::PluginInfos PHP::infos() const
 {
+	PluginInfos pluginInfos;
+	pluginInfos.Caption = tr( "PHP" );
+	pluginInfos.Description = tr( "This plugin provide PHP interpreter and php parser." );
+	pluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	pluginInfos.Type = BasePlugin::iInterpreter;
+	pluginInfos.Name = PLUGIN_NAME;
+	pluginInfos.Version = "0.1.0";
+	pluginInfos.FirstStartEnabled = true;
+	pluginInfos.HaveSettingsWidget = true;
+	pluginInfos.Pixmap = pIconManager::pixmap( "php.png", ":/icons" );
+	
+	return pluginInfos;
+}
+
+PHP::~PHP()
+{//TODO move to uninstall
 	// uninstall parsers
 	foreach ( QString s, availableParsers() )
 	{
@@ -137,12 +144,12 @@ void PHP::setUserCommands( const pCommandList& commands ) const
 
 QStringList PHP::availableParsers() const
 {
-	return QStringList( mPluginInfos.Name );
+	return QStringList( infos().Name );
 }
 
 pCommandParser* PHP::getParser( const QString& s )
 {
-	return s == mPluginInfos.Name ? new PHPParser( this ) : 0;
+	return s == infos().Name ? new PHPParser( this ) : 0;
 }
 
 pCommand PHP::defaultInterpretCommand() const

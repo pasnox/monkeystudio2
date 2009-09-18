@@ -14,22 +14,19 @@ public:
 	}
 };
 
-MkSShell::MkSShell()
+BasePlugin::PluginInfos MkSShell::infos() const
 {
-	// set plugin infos
-	mPluginInfos.Caption = tr( "MkS Shell" );
-	mPluginInfos.Description = tr( "This plugin allow you to manually use the MkS Shell interpreter" );
-	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
-	mPluginInfos.Type = BasePlugin::iBase;
-	mPluginInfos.Name = PLUGIN_NAME;
-	mPluginInfos.Version = "1.0.0";
-	mPluginInfos.FirstStartEnabled = false;
-}
-
-MkSShell::~MkSShell()
-{
-	if ( isEnabled() )
-		setEnabled( false );
+	PluginInfos pluginInfos;
+	pluginInfos.Caption = tr( "MkS Shell" );
+	pluginInfos.Description = tr( "This plugin allow you to manually use the MkS Shell interpreter" );
+	pluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	pluginInfos.Type = BasePlugin::iBase;
+	pluginInfos.Name = PLUGIN_NAME;
+	pluginInfos.Version = "1.0.0";
+	pluginInfos.FirstStartEnabled = false;
+	pluginInfos.Pixmap = pIconManager::pixmap( "konsole.png", ":/icons" );
+	
+	return pluginInfos;
 }
 
 bool MkSShell::setEnabled( bool b )
@@ -38,7 +35,7 @@ bool MkSShell::setEnabled( bool b )
 	{
 		mDock = new MkSShellDock( MonkeyCore::mainWindow() );
 		// add dock to dock toolbar entry
-		MonkeyCore::mainWindow()->dockToolBar( Qt::TopToolBarArea )->addDock( mDock, infos().Caption, QIcon( pixmap() ) );
+		MonkeyCore::mainWindow()->dockToolBar( Qt::TopToolBarArea )->addDock( mDock, infos().Caption, QIcon( infos().Pixmap ) );
 		// create menu action for the dock
 		pActionsManager::setDefaultShortcut( mDock->toggleViewAction(), QKeySequence( "F6" ) );
 		// set plugin enabled

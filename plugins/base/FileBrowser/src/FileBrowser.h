@@ -52,12 +52,9 @@ class FileBrowser : public BasePlugin
 	Q_INTERFACES( BasePlugin )
 
 public:
-	FileBrowser();
-	virtual ~FileBrowser();
+	PluginInfos infos() const;
 	virtual bool setEnabled( bool );
-	virtual bool haveSettingsWidget() const { return true; }
 	virtual QWidget* settingsWidget();
-	virtual QPixmap pixmap() const;
 	
 	QStringList filters() const;
 	void setFilters( const QStringList& filters, bool updateDock = false );

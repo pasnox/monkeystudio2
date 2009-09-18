@@ -17,15 +17,15 @@ UIPluginsSettingsElement::UIPluginsSettingsElement( BasePlugin* plugin, QWidget*
 	setupUi( this );
 	cbEnabled->setChecked( mPlugin->isEnabled() );
 	
-	if ( !mPlugin->pixmap().isNull() )
+	if ( !mPlugin->infos().Pixmap.isNull() )
 	{
-		lIcon->setPixmap( mPlugin->pixmap().scaledToWidth( lIcon->maximumWidth(), Qt::SmoothTransformation ) );
+		lIcon->setPixmap( mPlugin->infos().Pixmap.scaledToWidth( lIcon->maximumWidth(), Qt::SmoothTransformation ) );
 	}
 	
 	lIcon->setEnabled( cbEnabled->isChecked() );
 	lTitle->setText( infos.Caption );
 	lDescription->setText( infos.Description );
-	pbSettings->setVisible( mPlugin->haveSettingsWidget() );
+	pbSettings->setVisible( mPlugin->infos().HaveSettingsWidget );
 	cbNeverEnable->setChecked( mPlugin->neverEnable() );
 }
 
@@ -56,7 +56,7 @@ void UIPluginsSettingsElement::on_pbSettings_clicked()
 #endif
 	widget->setWindowModality( Qt::ApplicationModal );
 	widget->setAttribute( Qt::WA_DeleteOnClose );
-	widget->setWindowIcon( mPlugin->pixmap() );
+	widget->setWindowIcon( mPlugin->infos().Pixmap );
 	widget->setWindowTitle( tr( "Settings - %1" ).arg( mPlugin->infos().Caption ) );
 	widget->adjustSize();
 	

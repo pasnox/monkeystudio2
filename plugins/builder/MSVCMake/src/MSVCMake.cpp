@@ -32,21 +32,28 @@
 
 MSVCMake::MSVCMake ()
 {
-	// set plugin infos
-	mPluginInfos.Caption = tr( "MSVCMake" );
-	mPluginInfos.Description = tr( "Plugin for execute MSVC Make in console and parse it's output" );
-	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
-	mPluginInfos.Type = BasePlugin::iBuilder;
-	mPluginInfos.Name = PLUGIN_NAME;
-	mPluginInfos.Version = "0.5.0";
-	mPluginInfos.FirstStartEnabled = false;
 	// install parsers
 	foreach ( QString s, availableParsers() )
 		MonkeyCore::consoleManager()->addParser( getParser( s ) );
 }
 
-MSVCMake::~MSVCMake()
+BasePlugin::PluginInfos MSVCMake::infos() const
 {
+	PluginInfos pluginInfos;
+	pluginInfos.Caption = tr( "MSVCMake" );
+	pluginInfos.Description = tr( "Plugin for execute MSVC Make in console and parse it's output" );
+	pluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	pluginInfos.Type = BasePlugin::iBuilder;
+	pluginInfos.Name = PLUGIN_NAME;
+	pluginInfos.Version = "0.5.0";
+	pluginInfos.FirstStartEnabled = false;
+	pluginInfos.HaveSettingsWidget = true;
+	
+	return pluginInfos;
+}
+
+MSVCMake::~MSVCMake()
+{//TODO move to uninstall
 	// uninstall parsers
 	foreach ( QString s, availableParsers() )
 		MonkeyCore::consoleManager()->removeParser( s );

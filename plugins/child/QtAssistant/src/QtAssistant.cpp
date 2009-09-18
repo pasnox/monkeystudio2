@@ -24,28 +24,24 @@
 
 #include <QDebug>
 
-QtAssistant::QtAssistant()
+BasePlugin::PluginInfos QtAssistant::infos() const
 {
-	// set plugin infos
-	mPluginInfos.Caption = tr( "Qt Assistant" );
-	mPluginInfos.Description = tr( "This plugin embedded Qt Assistant" );
-	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
-	mPluginInfos.Type = BasePlugin::iChild;
-	mPluginInfos.Name = PLUGIN_NAME;
-	mPluginInfos.Version = "1.0.0";
-	mPluginInfos.FirstStartEnabled = true;
-}
-
-QtAssistant::~QtAssistant()
-{
-	if ( isEnabled() )
-		setEnabled( false );
+	PluginInfos pluginInfos;
+	pluginInfos.Caption = tr( "Qt Assistant" );
+	pluginInfos.Description = tr( "This plugin embedded Qt Assistant" );
+	pluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	pluginInfos.Type = BasePlugin::iChild;
+	pluginInfos.Name = PLUGIN_NAME;
+	pluginInfos.Version = "1.0.0";
+	pluginInfos.FirstStartEnabled = true;
+	pluginInfos.HaveSettingsWidget = true;
+	pluginInfos.Pixmap = pIconManager::pixmap( "assistant.png", ":/icons" );
+	
+	return pluginInfos;
 }
 
 QWidget* QtAssistant::settingsWidget()
 {
-	if ( !isEnabled() )
-		return 0;
 	return new PreferencesDialog( mAssistantDock->helpEngine(), QApplication::activeWindow(), false );
 }
 

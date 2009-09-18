@@ -42,18 +42,24 @@
 */
 Gcc::Gcc()
 {
-	// set plugin infos
-	mPluginInfos.Caption = tr( "Gcc" );
-	mPluginInfos.Description = tr( "Plugin for execute Gcc in console" );
-	mPluginInfos.Author = "Kopats Andrei aka hlamer <hlamer@tut.by>, Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
-	mPluginInfos.Type = BasePlugin::iCompiler;
-	mPluginInfos.Name = PLUGIN_NAME;
-	mPluginInfos.Version = "0.5.0";
-	mPluginInfos.FirstStartEnabled = false;
-	
 	// install parsers
 	foreach ( QString s, availableParsers() )
 		MonkeyCore::consoleManager()->addParser( getParser( s ) );
+}
+
+BasePlugin::PluginInfos Gcc::infos() const
+{
+	PluginInfos pluginInfos;
+	pluginInfos.Caption = tr( "Gcc" );
+	pluginInfos.Description = tr( "Plugin for execute Gcc in console" );
+	pluginInfos.Author = "Kopats Andrei aka hlamer <hlamer@tut.by>, Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	pluginInfos.Type = BasePlugin::iCompiler;
+	pluginInfos.Name = PLUGIN_NAME;
+	pluginInfos.Version = "0.5.0";
+	pluginInfos.FirstStartEnabled = false;
+	pluginInfos.HaveSettingsWidget	= true;
+	
+	return pluginInfos;
 }
 
 /*!

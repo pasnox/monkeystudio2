@@ -25,26 +25,24 @@
 
 #include <QDir>
 
-PHPQt::PHPQt()
+PHPQt::PHPQt():
+	mItem(0)
+{}
+
+BasePlugin::PluginInfos PHPQt::infos() const
 {
-	mItem = 0;
-	// set plugin infos
-	mPluginInfos.Caption = tr( "PHP-Qt Project" );
-	mPluginInfos.Description = tr( "PHP-Qt Project support for XUPManager" );
-	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
-	mPluginInfos.Type = BasePlugin::iXUP;
-	mPluginInfos.Name = PLUGIN_NAME;
-	mPluginInfos.Version = "0.1.0";
-	mPluginInfos.FirstStartEnabled = true;
+	PluginInfos pluginInfos;
+	pluginInfos.Caption = tr( "PHP-Qt Project" );
+	pluginInfos.Description = tr( "PHP-Qt Project support for XUPManager" );
+	pluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	pluginInfos.Type = BasePlugin::iXUP;
+	pluginInfos.Name = PLUGIN_NAME;
+	pluginInfos.Version = "0.1.0";
+	pluginInfos.FirstStartEnabled = true;
+	
+	return pluginInfos;
 }
 
-PHPQt::~PHPQt()
-{
-	if ( isEnabled() )
-	{
-		setEnabled( false );
-	}
-}
 
 bool PHPQt::setEnabled( bool enabled )
 {
@@ -69,11 +67,6 @@ bool PHPQt::setEnabled( bool enabled )
 
 	// return default value
 	return true;
-}
-
-QWidget* PHPQt::settingsWidget()
-{
-	return 0/*new UISettingsPHPQt()*/;
 }
 
 bool PHPQt::editProject( XUPProjectItem* project )

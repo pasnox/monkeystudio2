@@ -27,11 +27,10 @@ class PHP : public InterpreterPlugin
 
 public:
 	PHP();
+	PluginInfos infos() const;
 	~PHP();
 	// BasePlugin
 	virtual bool setEnabled( bool );
-	virtual QPixmap pixmap() const { return pIconManager::pixmap( "php.png", ":/icons" ); }
-	virtual bool haveSettingsWidget() const { return true; }
 	virtual QWidget* settingsWidget();
 	// CLIToolPlugin
 	virtual pCommandList defaultCommands() const;
