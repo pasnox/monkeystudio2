@@ -54,21 +54,12 @@ QtDesignerChild::QtDesignerChild( QtDesignerManager* manager )
 	mHostWidget->setFrameStyle( QFrame::NoFrame | QFrame::Plain );
 	mHostWidget->setFocusProxy( form );
 	
-	QVBoxLayout* vl = new QVBoxLayout( this );
-	vl->setMargin( 0 );
-	vl->setSpacing( 0 );
-	vl->addWidget( mHostWidget );
+	setWidget( mHostWidget );
 	
 	connect( mHostWidget->formWindow(), SIGNAL( changed() ), this, SLOT( formChanged() ) );
 	connect( mHostWidget->formWindow(), SIGNAL( selectionChanged() ), this, SLOT( formSelectionChanged() ) );
 	connect( mHostWidget->formWindow(), SIGNAL( geometryChanged() ), this, SLOT( formGeometryChanged() ) );
 	connect( mHostWidget->formWindow(), SIGNAL( mainContainerChanged( QWidget* ) ), this, SLOT( formMainContainerChanged( QWidget* ) ) );
-}
-
-QtDesignerChild::~QtDesignerChild()
-{
-	// close all files
-	closeFiles();
 }
 
 void QtDesignerChild::showEvent( QShowEvent* event )
@@ -134,7 +125,7 @@ bool QtDesignerChild::openFile( const QString& fileName, const QString& codec )
 			return false;
 		}
 		
-		setWindowTitle( fileName +"[*]" );
+		setFilePath( fileName );
 		mHostWidget->formWindow()->setFileName( fileName );
 		mHostWidget->formWindow()->setContents( &file );
 		
@@ -145,13 +136,12 @@ bool QtDesignerChild::openFile( const QString& fileName, const QString& codec )
 			
 			setWindowModified( false );
 			
-			emit fileOpened( fileName );
-			
+			emit fileOpened();
 			return true;
 		}
 		else
 		{
-			setWindowTitle( QString::null );
+			setFilePath( QString::null );
 			mHostWidget->formWindow()->setFileName( QString::null );
 		}
 	}
@@ -159,29 +149,16 @@ bool QtDesignerChild::openFile( const QString& fileName, const QString& codec )
 	return false;
 }
 
-void QtDesignerChild::closeFile( const QString& s )
+void QtDesignerChild::closeFile()
 {
-	emit fileClosed( s );
+	setFilePath( QString::null );
+	emit fileClosed();
 }
 
-void QtDesignerChild::closeFiles()
+QString QtDesignerChild::fileBuffer() const
 {
-	closeFile( mHostWidget->formWindow()->fileName() );
-}
-
-QStringList QtDesignerChild::files() const
-{
-	return QStringList( mHostWidget->formWindow()->fileName() );
-}
-
-QString QtDesignerChild::fileBuffer( const QString& fileName, bool& ok ) const
-{
-	Q_UNUSED( fileName );
-	ok = false;
-	
 	if ( mHostWidget->formWindow()->mainContainer() )
 	{
-		ok = true;
 		return mHostWidget->formWindow()->contents();
 	}
 	
@@ -234,21 +211,6 @@ QPoint QtDesignerChild::cursorPosition() const
 	return QPoint( -1, -1 );
 }
 
-void QtDesignerChild::showFile( const QString& s )
-{
-	Q_UNUSED( s );
-}
-
-QString QtDesignerChild::currentFile() const
-{
-	return mHostWidget->formWindow()->fileName();
-}
-
-QString QtDesignerChild::currentFileName() const
-{
-	return QFileInfo( currentFile() ).fileName();
-}
-
 bool QtDesignerChild::isModified() const
 {
 	return mHostWidget->formWindow()->isDirty();
@@ -274,16 +236,9 @@ bool QtDesignerChild::isCopyAvailable() const
 	return false;
 }
 
-bool QtDesignerChild::isModified( const QString& s ) const
-{
-	Q_UNUSED( s );
-	return isModified();
-}
 
-void QtDesignerChild::saveFile( const QString& s )
+void QtDesignerChild::saveFile()
 {
-	Q_UNUSED( s );
-
 	// cancel if not modified
 	if ( !mHostWidget->formWindow()->isDirty() )
 	{
@@ -306,15 +261,10 @@ void QtDesignerChild::saveFile( const QString& s )
 	}
 	else
 	{
-		MonkeyCore::messageManager()->appendMessage( tr( "An error occurs when saving :\n%1" ).arg( s ) );
+		MonkeyCore::messageManager()->appendMessage( tr( "An error occurs when saving :\n%1" ).arg( mHostWidget->formWindow()->fileName() ) );
 	}
 	
 	return;
-}
-
-void QtDesignerChild::saveFiles()
-{
-	saveFile( mHostWidget->formWindow()->fileName() );
 }
 
 void QtDesignerChild::printFormHelper( QDesignerFormWindowInterface* form, bool quick )
@@ -361,15 +311,13 @@ void QtDesignerChild::printFormHelper( QDesignerFormWindowInterface* form, bool 
 	}
 }
 
-void QtDesignerChild::printFile( const QString& s )
+void QtDesignerChild::printFile()
 {
-	Q_UNUSED( s );
 	printFormHelper( mHostWidget->formWindow(), false );
 }
 
-void QtDesignerChild::quickPrintFile( const QString& s )
+void QtDesignerChild::quickPrintFile()
 {
-	Q_UNUSED( s );
 	printFormHelper( mHostWidget->formWindow(), true );
 }
 
@@ -387,23 +335,25 @@ void QtDesignerChild::searchReplace() {}
 
 void QtDesignerChild::goTo() {}
 
-void QtDesignerChild::goTo( const QString& s, const QPoint&, bool )
+void QtDesignerChild::goTo( const QPoint& pos, bool highlight )
 {
-	showFile( s );
+	Q_UNUSED( pos );
+	Q_UNUSED( highlight );
 }
 
-void QtDesignerChild::backupCurrentFile( const QString& s )
+void QtDesignerChild::backupFileAs( const QString& fileName )
 {
-	QFile f( s );
-	if ( f.open( QIODevice::WriteOnly ) )
+	QFile file( fileName );
+	
+	if ( file.open( QIODevice::WriteOnly ) )
 	{
-		f.resize( 0 );
-		f.write( mHostWidget->formWindow()->contents().toUtf8() );
-		f.close();
+		file.resize( 0 );
+		file.write( mHostWidget->formWindow()->contents().toUtf8() );
+		file.close();
 	}
 	else
 	{
-		MonkeyCore::messageManager()->appendMessage( tr( "An error occurs when backuping: %1" ).arg( s ) );
+		MonkeyCore::messageManager()->appendMessage( tr( "An error occurs when backuping: %1" ).arg( fileName ) );
 	}
 }
 

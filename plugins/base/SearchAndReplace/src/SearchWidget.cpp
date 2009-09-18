@@ -382,7 +382,7 @@ void SearchWidget::keyPressEvent( QKeyEvent* e )
 	{
 		case Qt::Key_Escape:
 			hide();
-			MonkeyCore::workspace()->focusToEditor_triggered ();
+			MonkeyCore::workspace()->focusEditor();
 		break;
 		case Qt::Key_Enter:
 		case Qt::Key_Return:

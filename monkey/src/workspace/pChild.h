@@ -39,19 +39,14 @@ class Q_MONKEY_EXPORT pChild : public pAbstractChild
 {
 	Q_OBJECT
 
-protected:
-	pEditor* mEditor;
-
 public:
 	pChild();
 	virtual ~pChild();
 
-	pEditor* editor();
-
 	// return child language
 	virtual QString language() const;
 	
-	virtual QString fileBuffer( const QString& fileName, bool& ok ) const;
+	virtual QString fileBuffer() const;
 
 	// return child context
 	virtual QString context() const;
@@ -62,17 +57,8 @@ public:
 	// return cursor position if available
 	virtual QPoint cursorPosition() const;
 
-	// show/focus the file in child
-	virtual void showFile( const QString& );
-
-	// the current visible / focused file
-	virtual QString currentFile() const;
-
-	// the current visible / focused file name ( without path )
-	virtual QString currentFileName() const;
-
 	// the current visible editor
-	virtual pEditor* currentEditor() const;
+	virtual pEditor* editor() const;
 
 	// return the current file modified flag
 	virtual bool isModified() const;
@@ -102,7 +88,7 @@ public:
 	virtual void goTo();
 
 	// go to position for file and highlight line according to bool
-	virtual void goTo( const QString&, const QPoint&, bool = false );
+	virtual void goTo( const QPoint&, bool = false );
 
 	// return the current file copy available
 	virtual bool isCopyAvailable() const;
@@ -113,42 +99,35 @@ public:
 	// return is goto is available
 	virtual bool isGoToAvailable() const;
 
-	// return the modified state of file
-	virtual bool isModified( const QString& ) const;
-
 	// return if print is available
 	virtual bool isPrintAvailable() const;
 
 	// ask to save file
-	virtual void saveFile( const QString& );
-
-	// ask to save all files
-	virtual void saveFiles();
+	virtual void saveFile();
 	
 	// ask to backup the current file
-	void backupCurrentFile( const QString& );
+	void backupFileAs( const QString& fileName );
 
 	// ask to load file
 	virtual bool openFile( const QString& fileName, const QString& codec );
 
 	// ask to close file
-	virtual void closeFile( const QString& );
-
-	// ask to close all files
-	virtual void closeFiles();
+	virtual void closeFile();
 
 	// ask to print this file
-	virtual void printFile( const QString& );
+	virtual void printFile();
 
 	// ask to quick print this file
-	virtual void quickPrintFile( const QString& );
+	virtual void quickPrintFile();
+
+protected:
+	pEditor* mEditor;
 
 protected slots:
 	void cursorPositionChanged();
 
 public slots:
-	void setWindowModified( bool moodified );
-	void invokeSearch ();
+	void invokeSearch();
 };
 
 #endif // PCHILD_H

@@ -70,8 +70,9 @@ bool QtAssistant::setEnabled( bool b )
 	return true;
 }
 
-pAbstractChild* QtAssistant::openFile( const QString& /*filename*/, const QPoint& /*pos*/ )
+pAbstractChild* QtAssistant::createDocument( const QString& fileName )
 {
+	Q_UNUSED( fileName );
 	return 0;
 }
 

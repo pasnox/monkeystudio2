@@ -27,6 +27,7 @@
 #include <pMonkeyStudio.h>
 #include <qCtagsSense.h>
 #include <pMultiToolBar.h>
+#include <pAbstractChild.h>
 
 #include <QDesktopServices>
 #include <QDebug>
@@ -58,8 +59,8 @@ bool ClassBrowser::setEnabled( bool b )
 		// create menu action for the dock
 		pActionsManager::setDefaultShortcut( mDock->toggleViewAction(), QKeySequence( "F8" ) );
 		// connections
-		connect( MonkeyCore::fileManager(), SIGNAL( fileOpened( const QString& ) ), this, SLOT( fileOpened( const QString& ) ) );
-		connect( MonkeyCore::fileManager(), SIGNAL( currentFileChanged( pAbstractChild*, const QString& ) ), this, SLOT( currentFileChanged( pAbstractChild*, const QString& ) ) );
+		connect( MonkeyCore::fileManager(), SIGNAL( documentOpened( pAbstractChild* ) ), this, SLOT( documentOpened( pAbstractChild* ) ) );
+		connect( MonkeyCore::fileManager(), SIGNAL( currentDocumentChanged( pAbstractChild* ) ), this, SLOT( currentDocumentChanged( pAbstractChild* ) ) );
 		connect( MonkeyCore::fileManager(), SIGNAL( opened( XUPProjectItem* ) ), this, SLOT( opened( XUPProjectItem* ) ) );
 		connect( MonkeyCore::fileManager(), SIGNAL( buffersChanged( const QMap<QString, QString>& ) ), this, SLOT( buffersChanged( const QMap<QString, QString>& ) ) );
 		connect( mDock->browser(), SIGNAL( entryActivated( qCtagsSenseEntry* ) ), this, SLOT( entryActivated( qCtagsSenseEntry* ) ) );
@@ -76,8 +77,8 @@ bool ClassBrowser::setEnabled( bool b )
 	else if ( !b && isEnabled() )
 	{
 		// disconnections
-		disconnect( MonkeyCore::fileManager(), SIGNAL( fileOpened( const QString& ) ), this, SLOT( fileOpened( const QString& ) ) );
-		disconnect( MonkeyCore::fileManager(), SIGNAL( currentFileChanged( pAbstractChild*, const QString& ) ), this, SLOT( currentFileChanged( pAbstractChild*, const QString& ) ) );
+		disconnect( MonkeyCore::fileManager(), SIGNAL( documentOpened( pAbstractChild* ) ), this, SLOT( documentOpened( pAbstractChild* ) ) );
+		disconnect( MonkeyCore::fileManager(), SIGNAL( currentDocumentChanged( pAbstractChild* ) ), this, SLOT( currentDocumentChanged( pAbstractChild* ) ) );
 		disconnect( MonkeyCore::fileManager(), SIGNAL( opened( XUPProjectItem* ) ), this, SLOT( opened( XUPProjectItem* ) ) );
 		disconnect( MonkeyCore::fileManager(), SIGNAL( buffersChanged( const QMap<QString, QString>& ) ), this, SLOT( buffersChanged( const QMap<QString, QString>& ) ) );
 		disconnect( mDock->browser(), SIGNAL( entryActivated( qCtagsSenseEntry* ) ), this, SLOT( entryActivated( qCtagsSenseEntry* ) ) );
@@ -185,20 +186,22 @@ QString ClassBrowser::defaultDatabase()
 	return QDir::cleanPath( QString( "%1/MkS_qCtagsSense.sqlite3" ).arg( QDesktopServices::storageLocation( QDesktopServices::TempLocation ) ) );
 }
 
-void ClassBrowser::fileOpened( const QString& fileName )
+void ClassBrowser::documentOpened( pAbstractChild* document )
 {
-	if ( !fileName.isEmpty() )
+	if ( !document->filePath().isEmpty() )
 	{
-		mDock->browser()->tagEntry( fileName );
-		mDock->browser()->setCurrentFileName( fileName );
+		mDock->browser()->tagEntry( document->filePath() );
 	}
+	
+	mDock->browser()->setCurrentFileName( document->filePath() );
 }
 
-void ClassBrowser::currentFileChanged( pAbstractChild* child, const QString& fileName )
+void ClassBrowser::currentDocumentChanged( pAbstractChild* document )
 {
-	Q_UNUSED( child );
-	
-	mDock->browser()->setCurrentFileName( fileName );
+	if ( document )
+	{
+		mDock->browser()->setCurrentFileName( document->filePath() );
+	}
 }
 
 void ClassBrowser::opened( XUPProjectItem* project )
@@ -212,14 +215,9 @@ void ClassBrowser::buffersChanged( const QMap<QString, QString>& entries )
 	mDock->browser()->tagEntries( entries );
 }
 
-#warning update to a reference
 void ClassBrowser::entryActivated( qCtagsSenseEntry* entry )
-{
-	// need to stock parameters as they are temporary
-	const QString fileName = entry->fileName;
-	const int line = entry->lineNumber;
-	
-	MonkeyCore::fileManager()->goToLine( fileName, QPoint( 0, line ), true, pMonkeyStudio::defaultCodec() );
+{	
+	MonkeyCore::fileManager()->goToLine( entry->fileName, QPoint( 0, entry->lineNumber ), true, pMonkeyStudio::defaultCodec() );
 }
 
 void ClassBrowser::fileNameActivated( const QString& fileName )

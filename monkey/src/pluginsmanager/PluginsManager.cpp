@@ -164,11 +164,18 @@ void PluginsManager::enableUserPlugins()
 	}
 }
 
-pAbstractChild* PluginsManager::openChildFile( const QString& s )
+pAbstractChild* PluginsManager::documentForFileName( const QString& fileName )
 {
-	foreach ( ChildPlugin* cp, plugins<ChildPlugin*>( PluginsManager::stEnabled ) )
-		if ( cp->canOpen( s ) )
-			return cp->openFile( s );
+	foreach ( ChildPlugin* plugin, plugins<ChildPlugin*>( PluginsManager::stEnabled ) )
+	{
+		pAbstractChild* document = plugin->createDocument( fileName );
+		
+		if ( document )
+		{
+			return document;
+		}
+	}
+	
 	return 0;
 }
 

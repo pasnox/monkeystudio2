@@ -82,9 +82,9 @@ bool pAStyle::setEnabled( bool b )
 
 void pAStyle::applyFormatter()
 {
-	if ( pAbstractChild* c = MonkeyCore::workspace()->currentChild() )
+	if ( pAbstractChild* c = MonkeyCore::workspace()->currentDocument() )
 	{
-		if ( pEditor* e = c->currentEditor() )
+		if ( pEditor* e = c->editor() )
 		{
 			// vars
 			QString s1 = e->text();

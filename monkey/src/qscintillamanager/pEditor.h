@@ -39,19 +39,11 @@ class Q_MONKEY_EXPORT pEditor : public QsciScintilla
 public:
 	pEditor( QWidget* = 0 );
 	virtual ~pEditor();
-
-	enum RegisterImageType
-	{
-		// completion
-		riClass = 0, riEnum, riFunction, riMember, riNamespace, riStruct, riTypedef, riVariable
-	};
 	
 	enum MarkerDefineType
 	{
 		// bookmarks
 		mdBookmark = 0,
-		// debugger
-		mdEnabledBreak, mdDisabledBreak, mdEnabledConditionalBreak, mdDisabledConditionalBreak, mdPlay
 	};
 
 	bool lineNumbersMarginEnabled() const;

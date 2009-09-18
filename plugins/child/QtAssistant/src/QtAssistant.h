@@ -36,7 +36,7 @@ public:
 	virtual QPixmap pixmap() const { return pIconManager::pixmap( "assistant.png", ":/icons" ); }
 	virtual bool haveSettingsWidget() const { return true; }
 	virtual QWidget* settingsWidget();
-	virtual pAbstractChild* openFile( const QString& filename, const QPoint& pos = QPoint() );
+	virtual pAbstractChild* createDocument( const QString& fileName );
 
 protected:
 	QPointer<QtAssistantDock> mAssistantDock;

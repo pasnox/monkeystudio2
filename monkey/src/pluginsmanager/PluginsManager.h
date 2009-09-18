@@ -80,7 +80,7 @@ public:
 		return plugins<T>( type, name, version ).value( 0 );
 	}
 	
-	pAbstractChild* openChildFile( const QString& );
+	pAbstractChild* documentForFileName( const QString& fileName );
 	QMap<QString, QStringList> childSuffixes() const;
 	QString childFilters() const;
 	

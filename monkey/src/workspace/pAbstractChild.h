@@ -29,17 +29,17 @@
 #ifndef PABSTRACTCHILD_H
 #define PABSTRACTCHILD_H
 
-#include <QFrame>
+#include <QMdiSubWindow>
 #include <QFileInfo>
 #include <QTextCodec>
 
-#include <fresh.h>
+#include <MonkeyExport.h>
 
 #include "pMonkeyStudio.h"
 
 class pEditor;
 
-class Q_MONKEY_EXPORT pAbstractChild : public QFrame
+class Q_MONKEY_EXPORT pAbstractChild : public QMdiSubWindow
 {
 	Q_OBJECT
 	Q_ENUMS( DocumentMode LayoutMode )
@@ -50,7 +50,7 @@ public:
 
 	// constructor
 	pAbstractChild( QWidget* parent = 0 )
-		: QFrame( parent )
+		: QMdiSubWindow( parent )
 	{
 		mCodec = 0;
 		setAttribute( Qt::WA_DeleteOnClose );
@@ -74,13 +74,28 @@ public:
 	virtual QString language() const
 	{ return QString(); }
 	
-	// return the current buffer of filename, set ok to true if succes, else false
-	virtual QString fileBuffer( const QString& fileName, bool& ok ) const
+	// set the file path of the document
+	void setFilePath( const QString& filePath )
 	{
-		Q_UNUSED( fileName );
-		ok = false;
-		return QString::null;
+		setWindowFilePath( filePath );
+		setWindowTitle( fileName().append( "[*]" ) );
 	}
+	
+	// return the document file path
+	QString filePath() const
+	{ return windowFilePath(); }
+	
+	// return the filename of the document
+	QString fileName() const
+	{ return QFileInfo( windowFilePath() ).fileName(); }
+	
+	// return the absolute path of the document
+	QString path() const
+	{ return QFileInfo( windowFilePath() ).absolutePath(); }
+	
+	// return the current buffer of filename
+	virtual QString fileBuffer() const
+	{ return QString::null; }
 	
 	// return the child context
 	virtual QString context() const = 0;
@@ -88,15 +103,8 @@ public:
 	virtual void initializeContext( QToolBar* tb ) = 0;
 	// return cursor position if available
 	virtual QPoint cursorPosition() const = 0;
-	// return files that this child manage
-	virtual QStringList files() const
-	{ return mFiles; }
-	// the current visible / focused file
-	virtual QString currentFile() const = 0;
-	// the current visible / focused file name ( without path )
-	virtual QString currentFileName() const = 0;
 	// the current visible editor
-	virtual pEditor* currentEditor() const = 0;
+	virtual pEditor* editor() const = 0;
 	// return the current file modified flag
 	virtual bool isModified() const = 0;
 	// return the current file undo flag
@@ -109,8 +117,6 @@ public:
 	virtual bool isPasteAvailable() const = 0;
 	// return is goto is available
 	virtual bool isGoToAvailable() const = 0;
-	// return the modified state of file
-	virtual bool isModified( const QString& ) const = 0;
 	// return if print is available
 	virtual bool isPrintAvailable() const = 0;
 
@@ -132,16 +138,10 @@ public slots:
 		mLayout = m;
 		emit layoutModeChanged( mLayout );
 	}
-
-	// set window title
-	virtual void setWindowTitle( const QString& s )
-	{ QWidget::setWindowTitle( QFileInfo( s.isEmpty() ? currentFile() : s ).fileName() ); }
 	
 	virtual QString textCodec() const
 	{ return mCodec ? mCodec->name() : pMonkeyStudio::defaultCodec(); }
 	
-	// show/focus the file in child
-	virtual void showFile( const QString& ) = 0;
 	// undo
 	virtual void undo() = 0;
 	// redo
@@ -154,63 +154,40 @@ public slots:
 	virtual void paste() = 0;
 	// go to in the current child
 	virtual void goTo() = 0;
-	// go to position for file and highlight line according to bool
-	virtual void goTo( const QString&, const QPoint&, bool = false ) = 0;
+	// go to position and highlight line according to bool
+	virtual void goTo( const QPoint& pos, bool highlight = false ) = 0;
 	// search in the file
 	virtual void invokeSearch () {};
 	// ask to save file
-	virtual void saveFile( const QString& ) = 0;
+	virtual void saveFile() = 0;
 	// ask to backup current file
-	virtual void backupCurrentFile( const QString& ) = 0;
-	// ask to save the current file
-	virtual void saveCurrentFile()
-	{ saveFile( currentFile() ); }
-	// ask to save all files
-	virtual void saveFiles() = 0;
+	virtual void backupFileAs( const QString& ) = 0;
 	// ask to load file
 	virtual bool openFile( const QString& fileName, const QString& codec ) = 0;
-	// ask to load these files
-	virtual void openFiles( const QStringList& fileNames, const QString& codec )
-	{
-		foreach ( const QString& file, fileNames )
-			openFile( file, codec );
-	}
 	// ask to close file
-	virtual void closeFile( const QString& ) = 0;
-	// ask to close the current file
-	virtual void closeCurrentFile()
-	{ closeFile( currentFile() ); }
-	// ask to close all files
-	virtual void closeFiles() = 0;
+	virtual void closeFile() = 0;
 	// ask to print this file
-	virtual void printFile( const QString& ) = 0;
+	virtual void printFile() = 0;
 	// ask to quick print this file
-	virtual void quickPrintFile( const QString& ) = 0;
-	// ask to print the current file
-	virtual void printCurrentFile()
-	{ printFile( currentFile() ); }
-	// ask to quick print the current file
-	virtual void quickPrintCurrentFile()
-	{ quickPrintFile( currentFile() ); }
+	virtual void quickPrintFile() = 0;
 
 protected:
-	// files list this child manage
-	QStringList mFiles;
+	// the codec the document was open with
 	QTextCodec* mCodec;
 
 signals:
 	// emit when a file is opened
-	void fileOpened( const QString& ); // ok
+	void fileOpened(); // ok
 	// emit when a file is closed
-	void fileClosed( const QString& ); // ok
+	void fileClosed(); // ok
+	// emit when the content changed
+	void contentChanged();
 	// emit when the child layout mode has changed
 	void layoutModeChanged( pAbstractChild::LayoutMode );
 	// emit when the child document mode has changed
 	void documentModeChanged( pAbstractChild::DocumentMode );
 	// emit when cursor position changed
 	void cursorPositionChanged( const QPoint& ); // ok
-	// emit when current file changed
-	void currentFileChanged( const QString& );
 	// emit when a file is modified
 	void modifiedChanged( bool ); // ok
 	// emit when undo has changed
@@ -221,8 +198,6 @@ signals:
 	void pasteAvailableChanged( bool ); // ok
 	// emit when a file copy available change
 	void copyAvailableChanged( bool ); // ok
-	// emit when a file has changed
-	void contentChanged();
 	// emit when search/replace is available
 	//void searchReplaceAvailableChanged( bool );
 	// emit when goto is available
@@ -235,5 +210,7 @@ signals:
 	//void updateWorkspaceRequested();
 
 };
+
+Q_DECLARE_METATYPE( pAbstractChild* )
 
 #endif // PABSTRACTCHILD_H

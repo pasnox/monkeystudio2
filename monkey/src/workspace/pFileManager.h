@@ -59,18 +59,18 @@ public:
 	void generateScript();
 	
 	// Returns pointer to editor, if file is opened. Null - if not opened
-	pAbstractChild* childForFile( const QString& file ) const;
+	pAbstractChild* openedDocument( const QString& fileName ) const;
 	// return a file buffer, if file is open, the current live buffer is return, else the physically one.
-	QString fileBuffer( const QString& fileName, const QString& codec ) const;
+	QString fileBuffer( const QString& fileName, const QString& codec, bool& ok ) const;
 	// compute the modified buffers list
 	void computeModifiedBuffers();
 
 	XUPProjectItem* currentProject() const;
 	QString currentProjectFile() const;
 	QString currentProjectPath() const;
-	pAbstractChild* currentChild() const;
-	QString currentChildFile() const;
-	QString currentChildPath() const;
+	pAbstractChild* currentDocument() const;
+	QString currentDocumentFile() const;
+	QString currentDocumentPath() const;
 	XUPItem* currentItem() const;
 	QString currentItemFile() const;
 	QString currentItemPath() const;
@@ -91,17 +91,17 @@ public slots:
 
 signals:
 	// files
-	void fileOpened( const QString& fileName );
-	void fileClosed( const QString& fileName );
-	void fileChanged( const QString& fileName );
-	void currentFileChanged( pAbstractChild* child, const QString& fileName );
-	void contentChanged();
+	void documentOpened( pAbstractChild* document );
+	void documentChanged( pAbstractChild* document );
+	void documentAboutToClose( pAbstractChild* document );
+	void documentClosed( pAbstractChild* document );
+	void currentDocumentChanged( pAbstractChild* document );
 	void buffersChanged( const QMap<QString, QString>& entries );
 	// projects
 	void opened( XUPProjectItem* project );
 	void aboutToClose( XUPProjectItem* project );
-	void currentChanged( XUPProjectItem* );
-	void currentChanged( XUPProjectItem*, XUPProjectItem* );
+	void currentChanged( XUPProjectItem* project );
+	void currentChanged( XUPProjectItem* currentProject, XUPProjectItem* previousProject );
 };
 
 #endif // PFILEMANAGER_H

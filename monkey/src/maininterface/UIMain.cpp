@@ -219,6 +219,7 @@ void UIMain::initMenuBar()
 		mb->menu( "mStyle", tr( "&Style" ), QIcon( ":/view/icons/view/style.png" ) );
 		mb->action( "aNext", tr( "&Next Tab" ), QIcon( ":/view/icons/view/next.png" ), tr( "Ctrl+Tab" ), tr( "Active the next tab" ) )->setEnabled( false );
 		mb->action( "aPrevious", tr( "&Previous Tab" ), QIcon( ":/view/icons/view/previous.png" ), tr( "Ctrl+Shift+Tab" ), tr( "Active the previous tab" ) )->setEnabled( false );
+		mb->action( "aFocusToEditor", tr( "Focus Editor" ), QIcon( ":/edit/icons/edit/text.png" ), tr( "Ctrl+Return" ), tr( "Set the focus to the current document editor" ) );
 	mb->endGroup();
 	mb->menu( "mProject", tr( "Project" ) );
 	mb->beginGroup( "mProject" );
@@ -266,9 +267,8 @@ void UIMain::initMenuBar()
 	mb->endGroup();
 	mb->menu( "mWindow", tr( "Window" ) );
 	mb->beginGroup( "mWindow" );
-		mb->action( "aSDI", tr( "&Single Document Interface" ), QIcon( "" ), QString::null, tr( "Single Document Interface" ) );
-		mb->action( "aMDI", tr( "&Multiple Document Interface" ), QIcon( "" ), QString::null, tr( "Multiple Document Interface" ) );
-		mb->action( "aTopLevel", tr( "&Top Level Windows Interface" ), QIcon( "" ), QString::null, tr( "Top Level Windows Interface" ) );
+		mb->action( "aSDI", tr( "&Single Document Interface" ), QIcon( "" ), QString::null, tr( "Single Document Interface" ) )->setData( QMdiArea::TabbedView );
+		mb->action( "aMDI", tr( "&Multiple Document Interface" ), QIcon( "" ), QString::null, tr( "Multiple Document Interface" ) )->setData( QMdiArea::SubWindowView );
 		mb->action( "aSeparator1" );
 		mb->action( "aCascase", tr( "&Cascade" ), QIcon( "" ), QString::null, tr( "Cascade" ) );
 		mb->action( "aTile", tr( "&Tile" ), QIcon( "" ), QString::null, tr( "Tile" ) );
@@ -335,7 +335,7 @@ void UIMain::initConnections()
 {
 	// file connection
 	connect( menuBar()->action( "mFile/aNew" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileNew_triggered() ) );
-	connect( menuBar()->action( "mFile/aNewTextEditor" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( newTextEditor() ) );
+	connect( menuBar()->action( "mFile/aNewTextEditor" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( createNewTextEditor() ) );
 	connect( menuBar()->action( "mFile/aOpen" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileOpen_triggered() ) );
 	connect( MonkeyCore::recentsManager(), SIGNAL( openFileRequested( const QString&, const QString& ) ), MonkeyCore::fileManager(), SLOT( openFile( const QString&, const QString& ) ) );
 	connect( menuBar()->action( "mFile/mSession/aSave" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileSessionSave_triggered() ) );
@@ -367,6 +367,8 @@ void UIMain::initConnections()
 	connect( agStyles, SIGNAL( styleSelected( const QString& ) ), this, SLOT( changeStyle( const QString& ) ) );
 	connect( menuBar()->action( "mView/aNext" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( activateNextDocument() ) );
 	connect( menuBar()->action( "mView/aPrevious" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( activatePreviousDocument() ) );
+	connect( menuBar()->action( "mView/aFocusToEditor" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( focusEditor() ) );
+	// docks
 	connect( menuBar()->menu( "mDocks" ), SIGNAL( aboutToShow() ), this, SLOT( menu_Docks_aboutToShow() ) );
 	// project connection
 	connect( MonkeyCore::recentsManager(), SIGNAL( openProjectRequested( const QString&, const QString& ) ), MonkeyCore::projectsManager(), SLOT( openProject( const QString&, const QString& ) ) );
@@ -377,9 +379,8 @@ void UIMain::initConnections()
 	connect( menuBar()->menu( "mInterpreter" ), SIGNAL( aboutToShow() ), this, SLOT( menu_CustomAction_aboutToShow() ) );
 	// plugins menu
 	// window menu
-	connect( menuBar()->action( "mWindow/aSDI" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( setSDI() ) );
-	connect( menuBar()->action( "mWindow/aMDI" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( setMDI() ) );
-	connect( menuBar()->action( "mWindow/aTopLevel" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( setTopLevel() ) );
+	connect( menuBar()->action( "mWindow/aSDI" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( windowChangeDocumentMode() ) );
+	connect( menuBar()->action( "mWindow/aMDI" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( windowChangeDocumentMode() ) );
 	connect( menuBar()->action( "mWindow/aTile" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( tile() ) );
 	connect( menuBar()->action( "mWindow/aCascase" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( cascade() ) );
 	connect( menuBar()->action( "mWindow/aMinimize" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( minimize() ) );

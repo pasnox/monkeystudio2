@@ -68,10 +68,8 @@ bool QtDesigner::setEnabled( bool b )
 	return true;
 }
 
-pAbstractChild* QtDesigner::openFile( const QString& fileName, const QPoint& pos )
+pAbstractChild* QtDesigner::createDocument( const QString& fileName )
 {
-	Q_UNUSED( pos );
-	
 	if ( canOpen( fileName ) )
 	{
 		return new QtDesignerChild( mDesignerManager );

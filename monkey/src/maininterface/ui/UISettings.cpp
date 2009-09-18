@@ -75,9 +75,8 @@ UISettings::UISettings( QWidget* p )
 	bgExternalChanges->addButton( rbReloadAutomatically, pMonkeyStudio::ecmReload );
 	
 	// tab mode
-	cbTabModes->addItem( tr( "SDI" ), pExtendedWorkspace::dmSDI );
-	cbTabModes->addItem( tr( "MDI" ), pExtendedWorkspace::dmMDI );
-	cbTabModes->addItem( tr( "Top Level" ), pExtendedWorkspace::dmTopLevel );
+	cbTabModes->addItem( tr( "SDI" ), QMdiArea::TabbedView );
+	cbTabModes->addItem( tr( "MDI" ), QMdiArea::SubWindowView );
 
 	// loads text codecs
 	cbDefaultCodec->addItems( availableTextCodecs() );
@@ -193,7 +192,7 @@ void UISettings::loadSettings()
 	cbTabsElided->setChecked( tabsElided() );
 	tbTabsTextColor->setColor( tabsTextColor() );
 	tbCurrentTabTextColor->setColor( currentTabTextColor() );
-	cbTabModes->setCurrentIndex( cbTabModes->findData( docMode() ) );
+	cbTabModes->setCurrentIndex( cbTabModes->findData( documentMode() ) );
 	bgExternalChanges->button( externalchanges() )->setChecked( true );
 	cbSaveSession->setChecked( saveSessionOnClose() );
 	cbRestoreSession->setChecked( restoreSessionOnStartup() );
@@ -339,7 +338,7 @@ void UISettings::saveSettings()
 	setTabsElided( cbTabsElided->isChecked() );
 	setTabsTextColor( tbTabsTextColor->color() );
 	setCurrentTabTextColor( tbCurrentTabTextColor->color() );
-	setDocMode( (pExtendedWorkspace::DocumentMode)cbTabModes->itemData( cbTabModes->currentIndex() ).toInt() );
+	setDocumentMode( (QMdiArea::ViewMode)cbTabModes->itemData( cbTabModes->currentIndex() ).toInt() );
 	setExternalChanges( (pMonkeyStudio::ExternalChangesMode)bgExternalChanges->checkedId() );
 	setSaveSessionOnClose( cbSaveSession->isChecked() );
 	setRestoreSessionOnStartup( cbRestoreSession->isChecked() );

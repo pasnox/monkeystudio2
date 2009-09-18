@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>QtAssistantBrowser</class>
- <widget class="pAbstractChild" name="QtAssistantBrowser">
+ <widget class="QWidget" name="QtAssistantBrowser">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -142,12 +142,6 @@
   </action>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>pAbstractChild</class>
-   <extends>QWidget</extends>
-   <header>pAbstractChild.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>QtAssistantInlineSearch</class>
    <extends>QWidget</extends>

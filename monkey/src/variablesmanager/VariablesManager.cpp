@@ -73,12 +73,12 @@ QString VariablesManager::getVariable( QString name, Dictionary locals )
 	else if ( name == "current_child_path" || name == "cfp" )
 	//
 	{
-		result = QDir::toNativeSeparators( MonkeyCore::fileManager()->currentChildPath() );
+		result = QDir::toNativeSeparators( MonkeyCore::fileManager()->currentDocumentPath() );
 	}
 	else if ( name == "current_child_file" || name == "cf" )
 	//
 	{
-		result = QDir::toNativeSeparators( MonkeyCore::fileManager()->currentChildFile() );
+		result = QDir::toNativeSeparators( MonkeyCore::fileManager()->currentDocumentFile() );
 	}
 	else if ( name == "current_item_path" || name == "cip" )
 	//

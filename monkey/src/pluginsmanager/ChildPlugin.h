@@ -45,17 +45,23 @@ public:
 	// the suffixes this project can manage
 	virtual QHash<QString, QStringList> suffixes() const
 	{ return mSuffixes; }
+	
 	// tell if this plugin can open this file
-	virtual bool canOpen( const QString& f )
+	virtual bool canOpen( const QString& fileName )
 	{
-		foreach ( const QString k, mSuffixes.keys() )
-			foreach ( const QString s, mSuffixes[k] )
-				if ( QDir::match( s, f ) )
-					return true;
+		foreach ( const QStringList& suffixes, mSuffixes.values() )
+		{
+			if ( QDir::match( suffixes, fileName ) )
+			{
+				return true;
+			}
+		}
+		
 		return false;
 	}
+	
 	// try opening this file
-	virtual pAbstractChild* openFile( const QString&, const QPoint& = QPoint() ) = 0;
+	virtual pAbstractChild* createDocument( const QString& fileName ) = 0;
 	
 protected:
 	QHash<QString, QStringList> mSuffixes;

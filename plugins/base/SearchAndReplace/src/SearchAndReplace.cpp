@@ -92,7 +92,7 @@ bool SearchAndReplace::setEnabled( bool b )
 	{
 		// create docks
 		mWidget = new SearchWidget ();
-		MonkeyCore::workspace()->addSearhReplaceWidget (mWidget);
+		MonkeyCore::workspace()->addSearchReplaceWidget( mWidget );
 		connect (mWidget, SIGNAL (previousClicked()), this, SLOT (onPreviousClicked()));
 		connect (mWidget, SIGNAL (nextClicked()), this, SLOT (onNextClicked()));
 		connect (mWidget, SIGNAL (replaceClicked()), this, SLOT (onReplaceClicked()));
@@ -217,7 +217,7 @@ void SearchAndReplace::showMessage (const QString& status)
 */
 void SearchAndReplace::updateSearchTextOnUI ()
 {
-	pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentChild());
+	pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentDocument());
 	if (child && child->editor())
 	{
 		pEditor* editor = child->editor ();
@@ -259,7 +259,7 @@ bool SearchAndReplace::searchFile (bool next, bool incremental, bool enableLoopi
 	if (!incremental)
 		mWidget->searchAddToRecents(text);
 	
-	pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentChild());
+	pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentDocument());
 	if (!child || !child->editor())
 	{
 		showMessage(tr( "No active editor" ) );
@@ -316,7 +316,7 @@ int SearchAndReplace::replace(bool all)
 	mWidget->searchAddToRecents(mWidget->searchText());
 	mWidget->replaceAddToRecents(rtext);
 	
-	pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentChild());
+	pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentDocument());
 	if (!child || !child->editor())
 	{
 		showMessage(tr( "No active editor" ) );
@@ -374,8 +374,8 @@ void SearchAndReplace::replaceInDirectory()
 	for (int fileIndex = 0; fileIndex < mDock->filesWithOccurencesCount (); fileIndex++) // for files
 	{
 		Occurence occ = mDock->occurence (fileIndex, 0); // every file has at least one occurence
-		pAbstractChild* currFileChild = MonkeyCore::fileManager()->childForFile (occ.fileName); 
-		if (NULL != currFileChild && currFileChild->isModified(occ.fileName)) // going to replace in modified file
+		pAbstractChild* currFileChild = MonkeyCore::fileManager()->openedDocument (occ.fileName); 
+		if (NULL != currFileChild && currFileChild->isModified()) // going to replace in modified file
 		{
 			QMessageBox::critical (NULL, tr("Replace in dirrectory"), tr("File %1 is not saved. Save please all files before do replacing").arg (occ.fileName));
 			return;
@@ -464,10 +464,10 @@ void SearchAndReplace::replaceInDirectory()
 				break;
 			}
 			// Now reload file automatically, if it is opened
-			pAbstractChild* currFileChild = MonkeyCore::fileManager()->childForFile (file.fileName()); 
+			pAbstractChild* currFileChild = MonkeyCore::fileManager()->openedDocument (file.fileName()); 
 			if (NULL != currFileChild) // file is opened
 			{
-				currFileChild->closeFile(file.fileName());
+				currFileChild->closeFile();
 				currFileChild->openFile(file.fileName(), codec);
 			}
 		}
@@ -484,7 +484,7 @@ void SearchAndReplace::showSearchFile ()
 	if (mSearchThread && mSearchThread->isRunning())
 		return;
 	
-	if (qobject_cast<pChild*> (MonkeyCore::workspace()->currentChild()))
+	if (qobject_cast<pChild*> (MonkeyCore::workspace()->currentDocument()))
 	{
 		mMode = SEARCH_FILE;
 		updateSearchTextOnUI ();
@@ -646,7 +646,7 @@ void SearchAndReplace::onReplaceAllClicked()
 
 	if (mMode == REPLACE_FILE)
 	{
-		pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentChild());
+		pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentDocument());
 		if (!child && !child->editor())
 			return;
 		pEditor* editor = child->editor ();

@@ -24,13 +24,13 @@
 #ifndef PMONKEYSTUDIO_H
 #define PMONKEYSTUDIO_H
 
-#include <fresh.h>
 #include <qscintilla.h>
 
 #include "workspace/pWorkspace.h"
 
 #include <QApplication>
 #include <QMessageBox>
+#include <QMdiArea>
 #include <QDir>
 
 class QTranslator;
@@ -109,8 +109,8 @@ namespace pMonkeyStudio
 	Q_MONKEY_EXPORT void setTabMode( pTabbedWorkspace::TabMode );
 	Q_MONKEY_EXPORT pTabbedWorkspace::TabMode tabMode();
 	*/
-	Q_MONKEY_EXPORT void setDocMode( pExtendedWorkspace::DocumentMode mode );
-	Q_MONKEY_EXPORT pExtendedWorkspace::DocumentMode docMode();
+	Q_MONKEY_EXPORT void setDocumentMode( QMdiArea::ViewMode mode );
+	Q_MONKEY_EXPORT QMdiArea::ViewMode documentMode();
 	Q_MONKEY_EXPORT void setExternalChanges( pMonkeyStudio::ExternalChangesMode mode );
 	Q_MONKEY_EXPORT pMonkeyStudio::ExternalChangesMode externalchanges();
 	Q_MONKEY_EXPORT void setSaveSessionOnClose( bool save );

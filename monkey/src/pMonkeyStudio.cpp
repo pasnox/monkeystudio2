@@ -867,7 +867,7 @@ void pMonkeyStudio::resetLexer( QsciLexer* lexer )
 void pMonkeyStudio::applyProperties()
 {
 	// apply editor properties
-	foreach ( pAbstractChild* c, MonkeyCore::workspace()->children() )
+	foreach ( pAbstractChild* c, MonkeyCore::workspace()->documents() )
 		foreach ( pEditor* e, c->findChildren<pEditor*>() )
 			setEditorProperties( e );
 	// apply lexers properties
@@ -1078,14 +1078,14 @@ const pTabbedWorkspace::TabMode pMonkeyStudio::tabMode()
 	\details Set the workspace doc mode
 	\param mode The mode to apply
 */
-void pMonkeyStudio::setDocMode( pExtendedWorkspace::DocumentMode mode )
+void pMonkeyStudio::setDocumentMode( QMdiArea::ViewMode mode )
 { MonkeyCore::settings()->setValue( settingsPath() +"/DocMode", mode ); }
 
 /*!
 	\details Return the mod used by the workspace
 */
-pExtendedWorkspace::DocumentMode pMonkeyStudio::docMode()
-{ return (pExtendedWorkspace::DocumentMode)MonkeyCore::settings()->value( settingsPath() +"/DocMode", pExtendedWorkspace::dmSDI ).toInt(); }
+QMdiArea::ViewMode pMonkeyStudio::documentMode()
+{ return (QMdiArea::ViewMode)MonkeyCore::settings()->value( settingsPath() +"/DocMode", QMdiArea::TabbedView ).toInt(); }
 
 /*!
 	\details Set the external changes react mode

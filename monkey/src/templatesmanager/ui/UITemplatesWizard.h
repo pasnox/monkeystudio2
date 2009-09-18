@@ -29,7 +29,7 @@
 #ifndef UITEMPLATESWIZARD
 #define UITEMPLATESWIZARD
 
-#include <fresh.h>
+#include <MonkeyExport.h>
 #include <pTemplatesManager.h>
 
 #include "ui_UITemplatesWizard.h"
@@ -37,13 +37,13 @@
 class XUPProjectModelProxy;
 class XUPProjectModel;
 
-class Q_MONKEY_EXPORT UITemplatesWizard : public QDialog, public Ui::UITemplatesWizard, public QSingleton<UITemplatesWizard>
+class Q_MONKEY_EXPORT UITemplatesWizard : public QDialog, public Ui::UITemplatesWizard
 {
-	friend class QSingleton<UITemplatesWizard>;
 	Q_OBJECT
 	
 public:
-	void setType( const QString& );
+	UITemplatesWizard( QWidget* parent = 0 );
+	void setType( const QString& type );
 	
 private:
 	QGridLayout* gridLayout;
@@ -53,7 +53,6 @@ private:
 	XUPProjectModelProxy* mProxy;
 	XUPProjectModel* mModel;
 
-	UITemplatesWizard( QWidget* = 0 );
 	QStringList getLanguages();
 	QStringList getTypes();
 

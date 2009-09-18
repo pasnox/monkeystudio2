@@ -82,9 +82,6 @@ QtAssistantDock::QtAssistantDock( QWidget* parent )
 	connect( bwBookmarks, SIGNAL( addBookmark() ), this, SLOT( addBookmark() ) );
 	connect( aKeywordHelp, SIGNAL( triggered() ), this, SLOT( keywordHelp() ) );
 	connect( aSearchHelp, SIGNAL( triggered() ), this, SLOT( searchHelp() ) );
-	
-	// browser child connection
-	MonkeyCore::workspace()->initChildConnections( mBrowser );
 
 	// install event filters
 	leLookFor->installEventFilter( this );
@@ -157,13 +154,12 @@ bool QtAssistantDock::eventFilter( QObject* obj, QEvent* e )
 void QtAssistantDock::showBrowser()
 {
 	pWorkspace* workspace = MonkeyCore::workspace();
-	if ( !workspace->children().contains( mBrowser ) )
+	if ( !workspace->documents().contains( mBrowser ) )
 	{
-		workspace->addDocument( mBrowser, tr( "Qt Assistant" ) );
+		workspace->handleDocument( mBrowser );
 		mBrowser->setAttribute( Qt::WA_DeleteOnClose, false );
 	}
-	if ( workspace->currentChild() != mBrowser )
-		workspace->setCurrentDocument( mBrowser );
+	workspace->setCurrentDocument( mBrowser );
 }
 
 void QtAssistantDock::onCurrentFilterChanged( const QString& filter )
