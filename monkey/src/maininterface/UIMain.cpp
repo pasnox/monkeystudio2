@@ -38,6 +38,7 @@
 #include "../pluginsmanager/PluginsManager.h"
 #include "../pluginsmanager/PluginsMenu.h"
 #include "../statusbar/StatusBar.h"
+#include "../workspace/pOpenedFileExplorer.h"
 
 #include <pQueuedMessageToolBar.h>
 
@@ -99,10 +100,13 @@ void UIMain::initGui()
 	addToolBarBreak();
 	addToolBar( messageTb );
 	addToolBarBreak();
-	// init projects manager
-	dockToolBar( Qt::LeftToolBarArea )->addDock( MonkeyCore::projectsManager(), MonkeyCore::projectsManager()->windowTitle(), QIcon( ":/project/icons/project/project.png" ) );
 	// init workspace
 	setCentralWidget( MonkeyCore::workspace() );
+	// init projects manager
+	dockToolBar( Qt::LeftToolBarArea )->addDock( MonkeyCore::projectsManager(), MonkeyCore::projectsManager()->windowTitle(), QIcon( ":/project/icons/project/project.png" ) );
+	// init opened files dock
+	pOpenedFileExplorer* openedFileExplorer = MonkeyCore::workspace()->dockWidget();
+	dockToolBar( Qt::LeftToolBarArea )->addDock( openedFileExplorer, openedFileExplorer->windowTitle(), openedFileExplorer->windowIcon() );
 	// init multitoolbar
 	MonkeyCore::workspace()->initMultiToolBar( MonkeyCore::multiToolBar()->toolBar( pWorkspace::defaultContext() ) );
 	MonkeyCore::workspace()->initMultiToolBar( MonkeyCore::multiToolBar()->toolBar( "Coding" ) );

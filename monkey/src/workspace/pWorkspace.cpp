@@ -38,6 +38,7 @@
 #include <QDebug>
 
 #include "pWorkspace.h"
+#include "pOpenedFileExplorer.h"
 #include "pAbstractChild.h"
 #include "../recentsmanager/pRecentsManager.h"
 #include "pFileManager.h"
@@ -69,6 +70,8 @@ pWorkspace::pWorkspace( QMainWindow* parent )
 	: QFrame( parent )
 {
 	Q_ASSERT( parent );
+	
+	mOpenedFileExplorer = new pOpenedFileExplorer( this );
 	
 	// layout
 	mLayout = new QVBoxLayout( this );
@@ -169,6 +172,11 @@ void pWorkspace::addSearchReplaceWidget( QWidget* widget )
 {
 	mLayout->addWidget( widget );
 	widget->setVisible( false );
+}
+
+pOpenedFileExplorer* pWorkspace::dockWidget() const
+{
+	return mOpenedFileExplorer;
 }
 
 QFileSystemWatcher* pWorkspace::fileWatcher() const
@@ -327,11 +335,8 @@ pAbstractChild* pWorkspace::openFile( const QString& fileName, const QString& co
 		return 0;
 	}
 	
-	// track file
-	mFileWatcher->addPath( fileName );
-	
 	// update gui state
-	mdiArea_subWindowActivated( document );
+	//mdiArea_subWindowActivated( document );
 
 	// return child instance
 	return document;
@@ -453,7 +458,6 @@ pAbstractChild* pWorkspace::createNewTextEditor()
 	}
 	
 	// close file if already open
-	mFileWatcher->removePaths( QStringList( fileName ) );
 	closeFile( fileName );
 
 	// create/reset file
@@ -563,6 +567,7 @@ void pWorkspace::fileWatcher_fileChanged( const QString& fileName )
 void pWorkspace::document_fileOpened()
 {
 	pAbstractChild* document = qobject_cast<pAbstractChild*>( sender() );
+	mFileWatcher->addPath( document->filePath() );
 	documentOpened( document );
 }
 
@@ -675,13 +680,6 @@ void pWorkspace::mdiArea_subWindowActivated( QMdiSubWindow* docu )
 	
 	// emit file changed
 	emit currentDocumentChanged( document );
-	
-	// update item tooltip
-	/*
-	if ( hasDocument )
-		listWidget()->setItemToolTip( i, document->currentFile() );
-	*/
-	#warning fix me when having new model for opened files
 }
 
 void pWorkspace::internal_urlsDropped( const QList<QUrl>& urls )

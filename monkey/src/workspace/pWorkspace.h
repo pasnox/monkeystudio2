@@ -42,6 +42,7 @@ class XUPProjectItem;
 class QFileSystemWatcher;
 class QTimer;
 class QVBoxLayout;
+class pOpenedFileExplorer;
 
 class Q_MONKEY_EXPORT pWorkspace : public QFrame
 {
@@ -55,6 +56,7 @@ public:
 	void loadSettings();
 	void initMultiToolBar( QToolBar* tb );
 	void addSearchReplaceWidget( QWidget* widget );
+	pOpenedFileExplorer* dockWidget() const;
 	QFileSystemWatcher* fileWatcher() const;
 	
 	pAbstractChild* document( int index ) const;
@@ -90,6 +92,7 @@ public slots:
 protected:
 	QVBoxLayout* mLayout;
 	QMdiArea* mMdiArea;
+	pOpenedFileExplorer* mOpenedFileExplorer;
 	QFileSystemWatcher* mFileWatcher;
 	QTimer* mContentChangedTimer;
 	static int CONTENT_CHANGED_TIME_OUT;
@@ -168,7 +171,7 @@ signals:
 	// a file has been closed
 	void documentClosed( pAbstractChild* document );
 	// current file changed
-	void currentDocumentChanged( pAbstractChild* );
+	void currentDocumentChanged( pAbstractChild* document );
 };
 
 #endif // PWORKSPACE_H
