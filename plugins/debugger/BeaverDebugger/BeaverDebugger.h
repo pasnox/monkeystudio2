@@ -55,6 +55,8 @@ public:
 	virtual bool haveSettingsWidget() const { return false; }
 	virtual QWidget* settingsWidget();
 	virtual QPixmap pixmap() const;	
+protected slots:
+	void explainWhyCannot() const;
 };
 
 #endif

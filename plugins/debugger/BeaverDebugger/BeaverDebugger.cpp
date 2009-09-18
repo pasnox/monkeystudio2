@@ -36,6 +36,8 @@
 
 #include <QIcon>
 
+#include "pMonkeyStudio.h"
+
 /*!
 	Class constructor. Initialises information about plugin for user and core
 */
@@ -71,9 +73,24 @@ bool BeaverDebugger::setEnabled( bool b )
 {
 	if ( b && !isEnabled() )
 	{
+		// create action
+		MonkeyCore::menuBar()->menu( "mDebugger" )->menuAction()->setVisible( true ); // FIXME is it good?
+		MonkeyCore::menuBar()->menu( "mDebugger" )->menuAction()->setEnabled( true ); // FIXME is it good?
+		QAction* a = MonkeyCore::menuBar()->action( "mDebugger/aWhyCannot",  
+													tr( "Why can't I debug my app" ), 
+													QIcon( ":/icons/beaverdbg.png" ), 
+													"", // shortcut
+													"Check Beaver Debugger status" );
+		connect( a, SIGNAL( triggered() ), this, SLOT( explainWhyCannot() ) );
+		// set plugin enabled
+		stateAction()->setChecked( true );
+
 	}
 	else if ( !b && isEnabled() )
 	{
+		delete MonkeyCore::menuBar()->action( "mDebugger/aWhyCannot");
+		
+		stateAction()->setChecked( false );
 	}
 	// return default value
 	return true;
@@ -92,5 +109,10 @@ QWidget* BeaverDebugger::settingsWidget()
 */
 QPixmap BeaverDebugger::pixmap() const
 { return QPixmap( ":/icons/beaverdbg.png" ); }
+
+void BeaverDebugger::explainWhyCannot() const
+{
+	pMonkeyStudio::information("Beaver Debugger", "Beaver Debugger not found", NULL );
+}
 
 Q_EXPORT_PLUGIN2( BaseBeaverDebugger, BeaverDebugger )
