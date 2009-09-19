@@ -43,11 +43,13 @@ protected:
 	pOpenedFileModel::SortMode mSortMode;
 	QList<pAbstractChild*> mDocuments;
 	QIcon mTransparentIcon;
+	QIcon mModifiedIcon;
 	
 	void sortDocuments();
 
 protected slots:
 	void documentOpened( pAbstractChild* document );
+	void documentModifiedChanged( pAbstractChild* document, bool modified );
 	void documentClosed( pAbstractChild* document );
 };
 

@@ -110,6 +110,7 @@ protected slots:
 	
 	void document_fileOpened();
 	void document_contentChanged();
+	void document_modifiedChanged( bool modified );
 	void document_fileClosed();
 
 	void contentChangedTimer_timeout();
@@ -167,6 +168,8 @@ signals:
 	void documentOpened( pAbstractChild* document );
 	// a file have changed
 	void documentChanged( pAbstractChild* document );
+	// a file modified state changed
+	void documentModifiedChanged( pAbstractChild* document, bool modified );
 	// document about to close
 	void documentAboutToClose( pAbstractChild* document );
 	// a file has been closed

@@ -50,7 +50,6 @@ pOpenedFileExplorer::pOpenedFileExplorer( pWorkspace* workspace )
 	
 	connect( group, SIGNAL( triggered ( QAction* ) ), this, SLOT( sortTriggered ( QAction* ) ) );
 	connect( workspace, SIGNAL( documentChanged( pAbstractChild* ) ), this, SLOT( documentChanged( pAbstractChild* ) ) );
-	connect( workspace, SIGNAL( documentAboutToClose( pAbstractChild* ) ), this, SLOT( documentAboutToClose( pAbstractChild* ) ) );
 	connect( workspace, SIGNAL( currentDocumentChanged( pAbstractChild* ) ), this, SLOT( currentDocumentChanged( pAbstractChild* ) ) );
 	connect( tvFiles->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ), this, SLOT( selectionModel_selectionChanged( const QItemSelection&, const QItemSelection& ) ) );
 }
@@ -66,11 +65,6 @@ void pOpenedFileExplorer::sortTriggered ( QAction* action )
 }
 
 void pOpenedFileExplorer::documentChanged( pAbstractChild* document )
-{
-	//
-}
-
-void pOpenedFileExplorer::documentAboutToClose( pAbstractChild* document )
 {
 	//
 }

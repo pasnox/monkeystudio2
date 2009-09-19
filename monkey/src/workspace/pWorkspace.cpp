@@ -279,6 +279,7 @@ void pWorkspace::handleDocument( pAbstractChild* document )
 	// init document connections
 	connect( document, SIGNAL( fileOpened() ), this, SLOT( document_fileOpened() ) );
 	connect( document, SIGNAL( contentChanged() ), this, SLOT( document_contentChanged() ) );
+	connect( document, SIGNAL( modifiedChanged( bool ) ), this, SLOT( document_modifiedChanged( bool ) ) );
 	connect( document, SIGNAL( fileClosed() ), this, SLOT( document_fileClosed() ) );
 	// update file menu
 	connect( document, SIGNAL( modifiedChanged( bool ) ), MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" ), SLOT( setEnabled( bool ) ) );
@@ -304,6 +305,7 @@ void pWorkspace::unhandleDocument( pAbstractChild* document )
 	// init document connections
 	disconnect( document, SIGNAL( fileOpened() ), this, SLOT( document_fileOpened() ) );
 	disconnect( document, SIGNAL( contentChanged() ), this, SLOT( document_contentChanged() ) );
+	disconnect( document, SIGNAL( modifiedChanged( bool ) ), this, SLOT( document_modifiedChanged( bool ) ) );
 	disconnect( document, SIGNAL( fileClosed() ), this, SLOT( document_fileClosed() ) );
 	// update file menu
 	disconnect( document, SIGNAL( modifiedChanged( bool ) ), MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" ), SLOT( setEnabled( bool ) ) );
@@ -610,20 +612,26 @@ void pWorkspace::document_fileOpened()
 		mFileWatcher->addPath( document->filePath() );
 	}
 	
-	documentOpened( document );
+	emit documentOpened( document );
 }
 
 void pWorkspace::document_contentChanged()
 {
 	mContentChangedTimer->start( CONTENT_CHANGED_TIME_OUT );
 	pAbstractChild* document = qobject_cast<pAbstractChild*>( sender() );
-	documentChanged( document );
+	emit documentChanged( document );
+}
+
+void pWorkspace::document_modifiedChanged( bool modified )
+{
+	pAbstractChild* document = qobject_cast<pAbstractChild*>( sender() );
+	emit documentModifiedChanged( document, modified );
 }
 
 void pWorkspace::document_fileClosed()
 {
 	pAbstractChild* document = qobject_cast<pAbstractChild*>( sender() );
-	documentClosed( document );
+	emit documentClosed( document );
 }
 
 void pWorkspace::contentChangedTimer_timeout()

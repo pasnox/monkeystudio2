@@ -2,6 +2,8 @@
 #include "pWorkspace.h"
 #include "pAbstractChild.h"
 
+#include <pIconManager.h>
+
 #include <QDebug>
 
 struct OpeningOrderSorter
@@ -61,9 +63,11 @@ pOpenedFileModel::pOpenedFileModel( pWorkspace* workspace )
 	Q_ASSERT( workspace );
 	mWorkspace = workspace;
 	mSortMode = pOpenedFileModel::OpeningOrder;
-	mTransparentIcon = QIcon( ":/file/icons/file/transparent.png" );
+	mTransparentIcon = pIconManager::icon( "transparent.png" );
+	mModifiedIcon = pIconManager::icon( "save.png" );
 	
 	connect( workspace, SIGNAL( documentOpened( pAbstractChild* ) ), this, SLOT( documentOpened( pAbstractChild* ) ) );
+	connect( workspace, SIGNAL( documentModifiedChanged( pAbstractChild*, bool ) ), this, SLOT( documentModifiedChanged( pAbstractChild*, bool ) ) );
 	connect( workspace, SIGNAL( documentClosed( pAbstractChild* ) ), this, SLOT( documentClosed( pAbstractChild* ) ) );
 }
 
@@ -113,11 +117,18 @@ QVariant pOpenedFileModel::data( const QModelIndex& index, int role ) const
 		return QVariant();
 	}
 	
+	pAbstractChild* document = this->document( index );
+	
 	switch ( role )
 	{
 		case Qt::DecorationRole:
 		{
-			QIcon icon = document( index )->windowIcon();
+			QIcon icon = document->windowIcon();
+			
+			if ( document->isModified() )
+			{
+				icon = mModifiedIcon;
+			}
 			
 			if ( icon.isNull() )
 			{
@@ -128,10 +139,10 @@ QVariant pOpenedFileModel::data( const QModelIndex& index, int role ) const
 			break;
 		}
 		case Qt::DisplayRole:
-			return document( index )->fileName();
+			return document->fileName();
 			break;
 		case Qt::ToolTipRole:
-			return document( index )->filePath();
+			return document->filePath();
 			break;
 		default:
 			break;
@@ -276,6 +287,13 @@ void pOpenedFileModel::documentOpened( pAbstractChild* document )
 	mDocuments << document;
 	endInsertRows();
 	sortDocuments();
+}
+
+void pOpenedFileModel::documentModifiedChanged( pAbstractChild* document, bool modified )
+{
+	Q_UNUSED( modified );
+	const QModelIndex index = this->index( document );
+	emit dataChanged( index, index );
 }
 
 void pOpenedFileModel::documentClosed( pAbstractChild* document )
