@@ -16,27 +16,21 @@ void PostIt::fillPluginInfos()
 	mPluginInfos.Pixmap = pIconManager::pixmap( "knotes.png", ":/icons" );
 }
 
-bool PostIt::setEnabled( bool b )
+bool PostIt::install()
 {
-	if ( b && !isEnabled() )
-	{
-		// create action
-		QAction* a = MonkeyCore::menuBar()->action( "mTools/aPostIt", infos().Caption, infos().Pixmap, QString::null, infos().Description );
-		// connections
-		connect( a, SIGNAL( triggered() ), this, SLOT( action_triggered() ) );
-		// set plugin enabled
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		// delete widget
-		delete mPostIt;
-		// delete action
-		delete MonkeyCore::menuBar()->action( "mTools/aPostIt" );
-		// set plugin disabled
-		stateAction()->setChecked( false );
-	}
-	// return default value
+	// create action
+	QAction* a = MonkeyCore::menuBar()->action( "mTools/aPostIt", infos().Caption, infos().Pixmap, QString::null, infos().Description );
+	// connections
+	connect( a, SIGNAL( triggered() ), this, SLOT( action_triggered() ) );
+	return true;
+}
+
+bool PostIt::uninstall()
+{
+	// delete widget
+	delete mPostIt;
+	// delete action
+	delete MonkeyCore::menuBar()->action( "mTools/aPostIt" );
 	return true;
 }
 

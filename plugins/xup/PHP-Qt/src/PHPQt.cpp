@@ -25,10 +25,6 @@
 
 #include <QDir>
 
-PHPQt::PHPQt():
-	mItem(0)
-{}
-
 void PHPQt::fillPluginInfos()
 {
 	mPluginInfos.Caption = tr( "PHP-Qt Project" );
@@ -41,28 +37,19 @@ void PHPQt::fillPluginInfos()
 }
 
 
-bool PHPQt::setEnabled( bool enabled )
+bool PHPQt::install()
 {
-	if ( enabled && !isEnabled() )
-	{
-		// register phpqt item
-		mItem = new PHPQtProjectItem;
-		mItem->registerProjectType();
+	// register phpqt item
+	mItem = new PHPQtProjectItem;
+	mItem->registerProjectType();
+	return true;
+}
 
-		// set plugin enabled
-		stateAction()->setChecked( true );
-	}
-	else if ( !enabled && isEnabled() )
-	{
-		// unregister qmake item, unregistering auto delete the item
-		mItem->unRegisterProjectType();
-		delete mItem;
-
-		// set plugin disabled
-		stateAction()->setChecked( false );
-	}
-
-	// return default value
+bool PHPQt::uninstall()
+{
+	// unregister qmake item, unregistering auto delete the item
+	mItem->unRegisterProjectType();
+	delete mItem;
 	return true;
 }
 

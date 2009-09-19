@@ -52,36 +52,34 @@ void BeaverDebugger::fillPluginInfos()
 }
 
 /*!
-	Install/uninstall plugin from system
-	\param b Flag of action a - install; b - uninstall
+	Install plugin to the system
 	\return Status code of action
 	\retval true Successfull
 	\retval false Some error ocurred
 */
-bool BeaverDebugger::setEnabled( bool b )
+bool BeaverDebugger::install()
 {
-	if ( b && !isEnabled() )
-	{
-		// create action
-		MonkeyCore::menuBar()->menu( "mDebugger" )->menuAction()->setVisible( true ); // FIXME is it good?
-		MonkeyCore::menuBar()->menu( "mDebugger" )->menuAction()->setEnabled( true ); // FIXME is it good?
-		QAction* a = MonkeyCore::menuBar()->action( "mDebugger/aWhyCannot",  
-													tr( "Why can't I debug my app" ), 
-													QIcon( ":/icons/beaverdbg.png" ), 
-													"", // shortcut
-													"Check Beaver Debugger status" );
-		connect( a, SIGNAL( triggered() ), this, SLOT( explainWhyCannot() ) );
-		// set plugin enabled
-		stateAction()->setChecked( true );
+	// create action
+	MonkeyCore::menuBar()->menu( "mDebugger" )->menuAction()->setVisible( true ); // FIXME is it good?
+	MonkeyCore::menuBar()->menu( "mDebugger" )->menuAction()->setEnabled( true ); // FIXME is it good?
+	QAction* a = MonkeyCore::menuBar()->action( "mDebugger/aWhyCannot",  
+												tr( "Why can't I debug my app" ), 
+												QIcon( ":/icons/beaverdbg.png" ), 
+												"", // shortcut
+												"Check Beaver Debugger status" );
+	connect( a, SIGNAL( triggered() ), this, SLOT( explainWhyCannot() ) );
+	return true;
+}
 
-	}
-	else if ( !b && isEnabled() )
-	{
-		delete MonkeyCore::menuBar()->action( "mDebugger/aWhyCannot");
-		
-		stateAction()->setChecked( false );
-	}
-	// return default value
+/*!
+	Unnstall plugin from the system
+	\return Status code of action
+	\retval true Successfull
+	\retval false Some error ocurred
+*/
+bool BeaverDebugger::uninstall()
+{
+	delete MonkeyCore::menuBar()->action( "mDebugger/aWhyCannot");
 	return true;
 }
 

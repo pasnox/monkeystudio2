@@ -56,17 +56,13 @@ MSVCMake::~MSVCMake()
 		MonkeyCore::consoleManager()->removeParser( s );
 }
 
-bool MSVCMake::setEnabled( bool b )
+bool MSVCMake::install()
 {
-	if ( b && !isEnabled() )
-	{
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		stateAction()->setChecked( false );
-	}
-	
+	return true;
+}
+
+bool MSVCMake::uninstall()
+{
 	return true;
 }
 

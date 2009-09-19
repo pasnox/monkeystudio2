@@ -44,25 +44,18 @@ void Ctags2Api::fillPluginInfos()
 }
 
 
-bool Ctags2Api::setEnabled( bool b )
+bool Ctags2Api::install()
 {
-	if ( b && !isEnabled() )
-	{
-		// create action
-		QAction* a = MonkeyCore::menuBar()->action( "mEdit/aCtags2Api",  tr( "Api File Generator" ), QIcon( ":/icons/Ctags2Api.png" ), tr( "Ctrl+Alt+G" ), infos().Description );
-		connect( a, SIGNAL( triggered() ), this, SLOT( UICtags2Api_show() ) );
-		// set plugin enabled
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		// delete action
-		delete MonkeyCore::menuBar()->action( "mEdit/aCtags2Api" );
-		// set plugin disabled
-		stateAction()->setChecked( false );
-	}
-	
-	// return default value
+	// create action
+	QAction* a = MonkeyCore::menuBar()->action( "mEdit/aCtags2Api",  tr( "Api File Generator" ), QIcon( ":/icons/Ctags2Api.png" ), tr( "Ctrl+Alt+G" ), infos().Description );
+	connect( a, SIGNAL( triggered() ), this, SLOT( UICtags2Api_show() ) );
+	return true;
+}
+
+bool Ctags2Api::uninstall()
+{
+	// delete action
+	delete MonkeyCore::menuBar()->action( "mEdit/aCtags2Api" );
 	return true;
 }
 

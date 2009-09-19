@@ -26,25 +26,19 @@ void MkSShell::fillPluginInfos()
 	mPluginInfos.Pixmap = pIconManager::pixmap( "konsole.png", ":/icons" );
 }
 
-bool MkSShell::setEnabled( bool b )
+bool MkSShell::install()
 {
-	if ( b && !isEnabled() )
-	{
-		mDock = new MkSShellDock( MonkeyCore::mainWindow() );
-		// add dock to dock toolbar entry
-		MonkeyCore::mainWindow()->dockToolBar( Qt::TopToolBarArea )->addDock( mDock, infos().Caption, QIcon( infos().Pixmap ) );
-		// create menu action for the dock
-		pActionsManager::setDefaultShortcut( mDock->toggleViewAction(), QKeySequence( "F6" ) );
-		// set plugin enabled
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		mDock->deleteLater();
-		// set plugin disabled
-		stateAction()->setChecked( false );
-	}
-	// return default value
+	mDock = new MkSShellDock( MonkeyCore::mainWindow() );
+	// add dock to dock toolbar entry
+	MonkeyCore::mainWindow()->dockToolBar( Qt::TopToolBarArea )->addDock( mDock, infos().Caption, QIcon( infos().Pixmap ) );
+	// create menu action for the dock
+	pActionsManager::setDefaultShortcut( mDock->toggleViewAction(), QKeySequence( "F6" ) );
+	return true;
+}
+
+bool MkSShell::uninstall()
+{
+	mDock->deleteLater();
 	return true;
 }
 

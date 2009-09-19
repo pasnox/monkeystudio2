@@ -40,7 +40,8 @@ protected:
 	virtual void fillPluginInfos();
 public:
 	virtual QWidget* settingsWidget();
-	virtual bool setEnabled( bool );
+	virtual bool install();
+	virtual bool uninstall();
 	
 protected slots:
 	void applyFormatter();

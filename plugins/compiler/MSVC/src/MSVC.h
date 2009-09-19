@@ -53,7 +53,8 @@ public:
 	MSVC();
 	~MSVC();
 	// BasePlugin
-	virtual bool setEnabled( bool );
+	virtual bool install();
+	virtual bool uninstall();
 	virtual QWidget* settingsWidget();
 	// CompilerPlugin
 	virtual pCommand defaultCompileCommand() const;

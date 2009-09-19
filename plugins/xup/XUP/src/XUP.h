@@ -27,8 +27,8 @@ class XUP : public XUPPlugin
 
 protected:	
 	void fillPluginInfos();
-	
-	virtual bool setEnabled( bool enabled );
+	virtual bool install();
+	virtual bool uninstall();
 	virtual bool editProject( XUPProjectItem* project );
 };
 

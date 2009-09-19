@@ -25,11 +25,6 @@
 
 #include <QDir>
 
-QMake::QMake()
-{
-	mItem = 0;
-}
-
 void QMake::fillPluginInfos()
 {
 	mPluginInfos.Caption = tr( "QMake Project" );
@@ -42,27 +37,19 @@ void QMake::fillPluginInfos()
 	mPluginInfos.HaveSettingsWidget = true;
 }
 
-bool QMake::setEnabled( bool enabled )
+bool QMake::install()
 {
-	if ( enabled && !isEnabled() )
-	{
-		// register qmake item
-		mItem = new QMakeProjectItem;
-		mItem->registerProjectType();
-		
-		// set plugin enabled
-		stateAction()->setChecked( true );
-	}
-	else if ( !enabled && isEnabled() )
-	{
-		// unregister qmake item, unregistering auto delete the item
-		mItem->unRegisterProjectType();
-		delete mItem;
-		
-		// set plugin disabled
-		stateAction()->setChecked( false );
-	}
-	
+	// register qmake item
+	mItem = new QMakeProjectItem;
+	mItem->registerProjectType();
+	return true;
+}
+
+bool QMake::uninstall()
+{
+	// unregister qmake item, unregistering auto delete the item
+	mItem->unRegisterProjectType();
+	delete mItem;
 	// return default value
 	return true;
 }

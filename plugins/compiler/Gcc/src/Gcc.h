@@ -53,7 +53,8 @@ public:
 	Gcc();
 	~Gcc();
 	// BasePlugin
-	virtual bool setEnabled( bool );
+	virtual bool install();
+	virtual bool uninstall();
 	virtual QWidget* settingsWidget();
 	// CompilerPlugin
 	virtual pCommand defaultCompileCommand() const;

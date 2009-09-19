@@ -57,17 +57,13 @@ GNUMake::~GNUMake()
 		MonkeyCore::consoleManager()->removeParser( s );
 }
 
-bool GNUMake::setEnabled( bool b )
+bool GNUMake::install()
 {
-	if ( b && !isEnabled() )
-	{
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		stateAction()->setChecked( false );
-	}
-	
+	return true;
+}
+
+bool GNUMake::uninstall()
+{
 	return true;
 }
 

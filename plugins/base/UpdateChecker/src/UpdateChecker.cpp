@@ -46,25 +46,19 @@ void UpdateChecker::fillPluginInfos()
 	mPluginInfos.Pixmap = pIconManager::pixmap( "UpdateChecker.png", ":/icons" );
 }
 
-bool UpdateChecker::setEnabled( bool b )
+bool UpdateChecker::install()
 {
-	if ( b && !isEnabled() )
-	{
-		// create action
-		QAction* a = MonkeyCore::menuBar()->action( "mHelp/aUpdateChecker",  tr( "Check for update..." ), QIcon( ":/icons/UpdateChecker.png" ), QString::null, infos().Description );
-		connect( a, SIGNAL( triggered() ), this, SLOT( checkForUpdate_triggered() ) );
-		QTimer::singleShot( 15000, this, SLOT( checkForUpdate() ) );
-		// set plugin enabled
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		// delete action
-		delete MonkeyCore::menuBar()->action( "mHelp/aUpdateChecker" );
-		// set plugin disabled
-		stateAction()->setChecked( false );
-	}
-	
+	// create action
+	QAction* a = MonkeyCore::menuBar()->action( "mHelp/aUpdateChecker",  tr( "Check for update..." ), QIcon( ":/icons/UpdateChecker.png" ), QString::null, infos().Description );
+	connect( a, SIGNAL( triggered() ), this, SLOT( checkForUpdate_triggered() ) );
+	QTimer::singleShot( 15000, this, SLOT( checkForUpdate() ) );
+	return true;
+}
+
+bool UpdateChecker::uninstall()
+{
+	// delete action
+	delete MonkeyCore::menuBar()->action( "mHelp/aUpdateChecker" );
 	// return default value
 	return true;
 }

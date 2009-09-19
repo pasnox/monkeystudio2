@@ -14,11 +14,9 @@ class RegExpEditor : public BasePlugin
 	
 protected:	
 	void fillPluginInfos();
-public:
-	~RegExpEditor();
-	virtual bool setEnabled( bool );
+	virtual bool install();
+	virtual bool uninstall();
 
-protected:
 	QPointer<UIRegExpEditor> mEditor;
 
 protected slots:

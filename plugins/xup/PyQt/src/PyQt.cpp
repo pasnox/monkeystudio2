@@ -24,11 +24,6 @@
 
 #include <QDir>
 
-PyQt::PyQt()
-{
-	mItem = 0;
-}
-
 void PyQt::fillPluginInfos()
 {
 	mPluginInfos.Caption = tr( "PyQt Project" );
@@ -40,27 +35,19 @@ void PyQt::fillPluginInfos()
 	mPluginInfos.FirstStartEnabled = true;
 }
 
-bool PyQt::setEnabled( bool enabled )
+bool PyQt::install()
 {
-	if ( enabled && !isEnabled() )
-	{
-		// register pythonqt item
-		mItem = new PyQtProjectItem;
-		mItem->registerProjectType();
+	// register pythonqt item
+	mItem = new PyQtProjectItem;
+	mItem->registerProjectType();
+	return true;
+}
 
-		// set plugin enabled
-		stateAction()->setChecked( true );
-	}
-	else if ( !enabled && isEnabled() )
-	{
-		// unregister item, unregistering auto delete the item
-		mItem->unRegisterProjectType();
-		delete mItem;
-
-		// set plugin disabled
-		stateAction()->setChecked( false );
-	}
-
+bool PyQt::uninstall()
+{
+	// unregister item, unregistering auto delete the item
+	mItem->unRegisterProjectType();
+	delete mItem;
 	// return default value
 	return true;
 }

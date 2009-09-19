@@ -84,11 +84,11 @@ public:
 	
 protected:	
 	void fillPluginInfos();
+	virtual bool install();
+	virtual bool uninstall();
 public:
 	SearchAndReplace();
 	
-	virtual bool setEnabled( bool );
-
 protected:
 	Mode mMode;
 	SearchWidget* mWidget;

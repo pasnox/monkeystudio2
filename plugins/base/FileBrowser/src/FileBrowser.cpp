@@ -60,37 +60,36 @@ void FileBrowser::fillPluginInfos()
 
 
 /*!
-	Install/uninstall plugin from system
-	\param b Flag of action a - install; b - uninstall
+	Install plugin to the system
 	\return Status code of action
 	\retval true Successfull
 	\retval false Some error ocurred
 */
-bool FileBrowser::setEnabled( bool b )
+bool FileBrowser::install()
 {
-	if ( b && !isEnabled() )
-	{
-		// create dock
-		mDock = new pDockFileBrowser();
-		// add dock to dock toolbar entry
-		MonkeyCore::mainWindow()->dockToolBar( Qt::LeftToolBarArea )->addDock( mDock, infos().Caption, QIcon( infos().Pixmap ) );
-		// create menu action for the dock
-		pActionsManager::setDefaultShortcut( mDock->toggleViewAction(), QKeySequence( "F7" ) );
-		// restore settings
-		restoreSettings();
-		// set plugin enabled
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		// save settings
-		saveSettings();
-		// it will remove itself from dock toolbar when deleted
-		mDock->deleteLater();
-		// set plugin disabled
-		stateAction()->setChecked( false );
-	}
-	// return default value
+	// create dock
+	mDock = new pDockFileBrowser();
+	// add dock to dock toolbar entry
+	MonkeyCore::mainWindow()->dockToolBar( Qt::LeftToolBarArea )->addDock( mDock, infos().Caption, QIcon( infos().Pixmap ) );
+	// create menu action for the dock
+	pActionsManager::setDefaultShortcut( mDock->toggleViewAction(), QKeySequence( "F7" ) );
+	// restore settings
+	restoreSettings();
+	return true;
+}
+
+/*!
+	Uninstall plugin from the system
+	\return Status code of action
+	\retval true Successfull
+	\retval false Some error ocurred
+*/
+bool FileBrowser::uninstall()
+{
+	// save settings
+	saveSettings();
+	// it will remove itself from dock toolbar when deleted
+	mDock->deleteLater();
 	return true;
 }
 

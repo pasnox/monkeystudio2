@@ -45,22 +45,17 @@ void ProjectHeaders::fillPluginInfos()
 	mPluginInfos.Pixmap = QPixmap( ":/icons/licensing.png" );
 }
 
-bool ProjectHeaders::setEnabled( bool b )
+bool ProjectHeaders::install()
 {
-	if ( b && !isEnabled() )
-	{
-		// add dock to dock toolbar entry
-		QAction* a = MonkeyCore::menuBar()->action( "mEdit/aProjectHeaders", tr( "Project Licensing..." ), infos().Pixmap );
-		connect( a, SIGNAL( triggered() ), this, SLOT( processLicensing() ) );
-		// set plugin enabled
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		// set plugin disabled
-		stateAction()->setChecked( false );
-	}
-	
+	// add dock to dock toolbar entry
+	QAction* a = MonkeyCore::menuBar()->action( "mEdit/aProjectHeaders", tr( "Project Licensing..." ), infos().Pixmap );
+	connect( a, SIGNAL( triggered() ), this, SLOT( processLicensing() ) );
+	return true;
+}
+
+bool ProjectHeaders::uninstall()
+{
+	delete MonkeyCore::menuBar()->action( "mEdit/aProjectHeaders");
 	// return default value
 	return true;
 }

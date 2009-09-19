@@ -71,71 +71,74 @@ void SearchAndReplace::fillPluginInfos()
 }
 
 /*!
-	Enable/disable plugin
+	Install plugin to the system
 	
-	If plugin is enabled - it visible on main window and it's actions are in 
+	If plugin is installed - it visible on main window and it's actions are in 
 	the main menu
-	\param b Flag. Enable = true, Disable = false
 	\return Status of process 
 	\retval true Successfully enabled
 	\retval false Some error ocurred
 */
-bool SearchAndReplace::setEnabled( bool b )
+bool SearchAndReplace::install()
 {
-	if ( b && !isEnabled() )
-	{
-		// create docks
-		mWidget = new SearchWidget ();
-		MonkeyCore::workspace()->addSearchReplaceWidget( mWidget );
-		connect (mWidget, SIGNAL (previousClicked()), this, SLOT (onPreviousClicked()));
-		connect (mWidget, SIGNAL (nextClicked()), this, SLOT (onNextClicked()));
-		connect (mWidget, SIGNAL (replaceClicked()), this, SLOT (onReplaceClicked()));
-		connect (mWidget, SIGNAL (replaceAllClicked()), this, SLOT (onReplaceAllClicked()));
-		connect (mWidget, SIGNAL (searchTextEdited()), this, SLOT (onSearchTextEdited()));
+	// create docks
+	mWidget = new SearchWidget ();
+	MonkeyCore::workspace()->addSearchReplaceWidget( mWidget );
+	connect (mWidget, SIGNAL (previousClicked()), this, SLOT (onPreviousClicked()));
+	connect (mWidget, SIGNAL (nextClicked()), this, SLOT (onNextClicked()));
+	connect (mWidget, SIGNAL (replaceClicked()), this, SLOT (onReplaceClicked()));
+	connect (mWidget, SIGNAL (replaceAllClicked()), this, SLOT (onReplaceAllClicked()));
+	connect (mWidget, SIGNAL (searchTextEdited()), this, SLOT (onSearchTextEdited()));
 
-		
-		mDock = new SearchResultsDock ();
-		mDock->setVisible( false );
-		
-		connect (mDock, SIGNAL (resultActivated (const QString&, const QPoint&, const QString&)), this, SLOT (makeGoTo (const QString&, const QPoint&, const QString&)));
-		
-		MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mDock, infos().Caption, QIcon(":/icons/tabsearch.png") );
-		
-		MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFile", tr( "&Replace in the file..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+R" ), tr( "Replace in the file..." ) )->setEnabled( true );
-		//MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchProject", tr( "&Search in the project..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "" ), tr( "Search in the project..." ) )->setEnabled( true );
-		//MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceProject", tr( "&Replace in the project..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "" ), tr( "Replace in the project..." ) )->setEnabled( true );
-		MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFolder", tr( "&Search in the folder..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+Alt+F" ), tr( "Search in the folder..." ) )->setEnabled( true );
-		MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFolder", tr( "&Replace in the folder..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+Alt+R" ), tr( "Replace in the folder..." ) )->setEnabled( true );
-		MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchPrevious", tr( "Search Previous" ), QIcon( ":/edit/icons/edit/previous.png" ), tr( "Shift+F3" ), tr( "Search Previous" ) )->setEnabled( true );
-		MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchNext", tr( "Search Next" ), QIcon( ":/edit/icons/edit/next.png" ), tr( "F3" ), tr( "Search Next" ) )->setEnabled( true );
+	
+	mDock = new SearchResultsDock ();
+	mDock->setVisible( false );
+	
+	connect (mDock, SIGNAL (resultActivated (const QString&, const QPoint&, const QString&)), this, SLOT (makeGoTo (const QString&, const QPoint&, const QString&)));
+	
+	MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mDock, infos().Caption, QIcon(":/icons/tabsearch.png") );
+	
+	MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFile", tr( "&Replace in the file..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+R" ), tr( "Replace in the file..." ) )->setEnabled( true );
+	//MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchProject", tr( "&Search in the project..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "" ), tr( "Search in the project..." ) )->setEnabled( true );
+	//MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceProject", tr( "&Replace in the project..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "" ), tr( "Replace in the project..." ) )->setEnabled( true );
+	MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFolder", tr( "&Search in the folder..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+Alt+F" ), tr( "Search in the folder..." ) )->setEnabled( true );
+	MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFolder", tr( "&Replace in the folder..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+Alt+R" ), tr( "Replace in the folder..." ) )->setEnabled( true );
+	MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchPrevious", tr( "Search Previous" ), QIcon( ":/edit/icons/edit/previous.png" ), tr( "Shift+F3" ), tr( "Search Previous" ) )->setEnabled( true );
+	MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchNext", tr( "Search Next" ), QIcon( ":/edit/icons/edit/next.png" ), tr( "F3" ), tr( "Search Next" ) )->setEnabled( true );
 
-		connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFile" ), SIGNAL( triggered() ), SLOT( showSearchFile() ) );
-		connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFile" ), SIGNAL( triggered() ), SLOT( showReplaceFile() ) );
-		//connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchProject" ), SIGNAL( triggered() ), SLOT( showSearchProject() ) );
-		//connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceProject" ), SIGNAL( triggered() ), SLOT( showReplaceProject() ) );
-		connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFolder" ), SIGNAL( triggered() ), SLOT( showSearchFolder() ) );
-		connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFolder" ), SIGNAL( triggered() ), SLOT( showReplaceFolder() ) );
-		connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchNext" ), SIGNAL( triggered() ), this, SLOT( onNextClicked() ) );		
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		delete mWidget;
-		mWidget = NULL;
-		delete mDock;
-		mDock = NULL;
-		
-		delete MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFile" );
-		//delete MonkeyCore::menuBar()->deleteAaction( "mEdit/mSearchReplace/aSearchProject" );
-		//delete MonkeyCore::menuBar()->deleteAaction( "mEdit/mSearchReplace/aReplaceProject" );
-		delete MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFolder" );
-		delete MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFolder" );
-		delete MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchPrevious" );
-		delete MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchNext" );
-		
-		// set plugin disabled
-		stateAction()->setChecked( false );
-	}
+	connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFile" ), SIGNAL( triggered() ), SLOT( showSearchFile() ) );
+	connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFile" ), SIGNAL( triggered() ), SLOT( showReplaceFile() ) );
+	//connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchProject" ), SIGNAL( triggered() ), SLOT( showSearchProject() ) );
+	//connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceProject" ), SIGNAL( triggered() ), SLOT( showReplaceProject() ) );
+	connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFolder" ), SIGNAL( triggered() ), SLOT( showSearchFolder() ) );
+	connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFolder" ), SIGNAL( triggered() ), SLOT( showReplaceFolder() ) );
+	connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchNext" ), SIGNAL( triggered() ), this, SLOT( onNextClicked() ) );		
+	return true;
+}
+
+/*!
+	Uninstall plugin to the system
+	
+	If plugin is installed - it visible on main window and it's actions are in 
+	the main menu
+	\return Status of process 
+	\retval true Successfully enabled
+	\retval false Some error ocurred
+*/
+bool SearchAndReplace::uninstall()
+{
+	delete mWidget;
+	mWidget = NULL;
+	delete mDock;
+	mDock = NULL;
+	
+	delete MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFile" );
+	//delete MonkeyCore::menuBar()->deleteAaction( "mEdit/mSearchReplace/aSearchProject" );
+	//delete MonkeyCore::menuBar()->deleteAaction( "mEdit/mSearchReplace/aReplaceProject" );
+	delete MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFolder" );
+	delete MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFolder" );
+	delete MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchPrevious" );
+	delete MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchNext" );
 	// return default value
 	return true;
 }

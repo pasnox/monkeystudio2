@@ -31,27 +31,21 @@ void QtDesigner::fillPluginInfos()
 	mPluginInfos.Pixmap = pIconManager::pixmap( "designer.png", ":/icons" );
 }
 
-bool QtDesigner::setEnabled( bool b )
+bool QtDesigner::install()
 {
-	if ( b && !isEnabled() )
-	{
-		// set usable suffixes
-		mSuffixes[ tr( "Qt Forms" ) ] = QStringList( "*.ui" );
-		// create designer
-		mDesignerManager = new QtDesignerManager( this );
-		// set plugin enabled
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		// clear suffixes
-		mSuffixes.clear();
-		// clear designer instance
-		delete mDesignerManager;
-		// set plugin disabled
-		stateAction()->setChecked( false );
-	}
-	// return default value
+	// set usable suffixes
+	mSuffixes[ tr( "Qt Forms" ) ] = QStringList( "*.ui" );
+	// create designer
+	mDesignerManager = new QtDesignerManager( this );
+	return true;
+}
+
+bool QtDesigner::uninstall()
+{
+	// clear suffixes
+	mSuffixes.clear();
+	// clear designer instance
+	delete mDesignerManager;
 	return true;
 }
 

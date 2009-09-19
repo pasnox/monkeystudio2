@@ -53,25 +53,17 @@ void pAStyle::fillPluginInfos()
 QWidget* pAStyle::settingsWidget()
 { return new UISettingsAStyle; }
 
-bool pAStyle::setEnabled( bool b )
+bool pAStyle::install()
 {
-	if ( b && !isEnabled() )
-	{
-		// create action
-		QAction* a = MonkeyCore::menuBar()->action( "mEdit/aAStyle",  tr( "AStyle Formatter" ), QIcon( ":/icons/astyle.png" ), tr( "Ctrl+Alt+A" ), infos().Description );
-		connect( a, SIGNAL( triggered() ), this, SLOT( applyFormatter() ) );
-		// set plugin enabled
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		// delete action
-		delete MonkeyCore::menuBar()->action( "mEdit/aAStyle" );
-		// set plugin disabled
-		stateAction()->setChecked( false );
-	}
-	
-	// return default value
+	// create action
+	QAction* a = MonkeyCore::menuBar()->action( "mEdit/aAStyle",  tr( "AStyle Formatter" ), QIcon( ":/icons/astyle.png" ), tr( "Ctrl+Alt+A" ), infos().Description );
+	connect( a, SIGNAL( triggered() ), this, SLOT( applyFormatter() ) );
+	return true;
+}
+
+bool pAStyle::uninstall()
+{
+	delete MonkeyCore::menuBar()->action( "mEdit/aAStyle" );
 	return true;
 }
 

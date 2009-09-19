@@ -32,7 +32,8 @@ class QtDesigner : public ChildPlugin
 protected:	
 	void fillPluginInfos();
 public:
-	virtual bool setEnabled( bool enabled );
+	virtual bool install();
+	virtual bool uninstall();
 	virtual pAbstractChild* createDocument( const QString& fileName );
 
 protected:

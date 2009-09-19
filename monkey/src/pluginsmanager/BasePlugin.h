@@ -107,8 +107,9 @@ public:
 	virtual bool isEnabled() const
 	{ return stateAction()->isChecked(); }
 	
-	virtual bool setEnabled( bool )
-	{ return false; }
+	virtual bool setEnabled( bool );
+	virtual bool install() = 0;
+	virtual bool uninstall() = 0;
 	
 	virtual QString settingsKey( const QString& k ) const;
 	virtual QVariant settingsValue( const QString& k, const QVariant& v = QVariant() ) const;

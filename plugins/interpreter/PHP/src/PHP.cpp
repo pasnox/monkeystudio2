@@ -51,17 +51,13 @@ PHP::~PHP()
 	}
 }
 
-bool PHP::setEnabled( bool b )
+bool PHP::install()
 {
-	if ( b && !isEnabled() )
-	{
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		stateAction()->setChecked( false );
-	}
-	
+	return true;
+}
+
+bool PHP::uninstall()
+{
 	return true;
 }
 

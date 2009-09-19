@@ -51,17 +51,13 @@ Python::~Python()
 	}
 }
 
-bool Python::setEnabled( bool b )
+bool Python::install()
 {
-	if ( b && !isEnabled() )
-	{
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		stateAction()->setChecked( false );
-	}
-	
+	return true;
+}
+
+bool Python::uninstall()
+{
 	return true;
 }
 

@@ -16,8 +16,8 @@ class Irc : public BasePlugin
 
 protected:	
 	void fillPluginInfos();
-	
-	virtual bool setEnabled( bool );
+	virtual bool install();
+	virtual bool uninstall();
 private:
 	IrcDock *mIrcDock;
 };

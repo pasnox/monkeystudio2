@@ -29,10 +29,8 @@ class PyQt : public XUPPlugin
 
 protected:	
 	void fillPluginInfos();
-public:
-	PyQt();
-
-	virtual bool setEnabled( bool enabled );
+	virtual bool install();
+	virtual bool uninstall();
 	virtual bool editProject( XUPProjectItem* project );
 
 protected:

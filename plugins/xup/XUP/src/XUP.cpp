@@ -36,20 +36,13 @@ void XUP::fillPluginInfos()
 	mPluginInfos.HaveSettingsWidget = true;
 }
 
-bool XUP::setEnabled( bool enabled )
+bool XUP::install()
 {
-	if ( enabled && !isEnabled() )
-	{
-		// set plugin enabled
-		stateAction()->setChecked( true );
-	}
-	else if ( !enabled && isEnabled() )
-	{
-		// set plugin disabled
-		stateAction()->setChecked( false );
-	}
-	
-	// return default value
+	return true;
+}
+
+bool XUP::uninstall()
+{
 	return true;
 }
 

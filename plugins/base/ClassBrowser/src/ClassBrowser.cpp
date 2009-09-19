@@ -45,48 +45,43 @@ void ClassBrowser::fillPluginInfos()
 	mPluginInfos.Pixmap = QPixmap( ":/icons/class.png" );;
 }
 
-bool ClassBrowser::setEnabled( bool b )
+bool ClassBrowser::install()
 {
-	if ( b && !isEnabled() )
-	{
-		// create dock
-		mDock = new pDockClassBrowser( this );
-		// create menu action for the dock
-		pActionsManager::setDefaultShortcut( mDock->toggleViewAction(), QKeySequence( "F8" ) );
-		// connections
-		connect( MonkeyCore::fileManager(), SIGNAL( documentOpened( pAbstractChild* ) ), this, SLOT( documentOpened( pAbstractChild* ) ) );
-		connect( MonkeyCore::fileManager(), SIGNAL( currentDocumentChanged( pAbstractChild* ) ), this, SLOT( currentDocumentChanged( pAbstractChild* ) ) );
-		connect( MonkeyCore::fileManager(), SIGNAL( opened( XUPProjectItem* ) ), this, SLOT( opened( XUPProjectItem* ) ) );
-		connect( MonkeyCore::fileManager(), SIGNAL( buffersChanged( const QMap<QString, QString>& ) ), this, SLOT( buffersChanged( const QMap<QString, QString>& ) ) );
-		connect( mDock->browser(), SIGNAL( entryActivated( qCtagsSenseEntry* ) ), this, SLOT( entryActivated( qCtagsSenseEntry* ) ) );
-		connect( mDock->browser(), SIGNAL( fileNameActivated( const QString& ) ), this, SLOT( fileNameActivated( const QString& ) ) );
-		connect( this, SIGNAL( propertiesChanged( const qCtagsSenseProperties& ) ), mDock->browser(), SLOT( setProperties( const qCtagsSenseProperties& ) ) );
-		connect( this, SIGNAL( integrationModeChanged( ClassBrowser::IntegrationMode ) ), MonkeyCore::multiToolBar(), SIGNAL( notifyChanges() ) );
-		// update integration mode
-		setIntegrationMode( integrationMode() );
-		// update properties
-		emit propertiesChanged( properties() );
-		// set plugin enabled
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		// disconnections
-		disconnect( MonkeyCore::fileManager(), SIGNAL( documentOpened( pAbstractChild* ) ), this, SLOT( documentOpened( pAbstractChild* ) ) );
-		disconnect( MonkeyCore::fileManager(), SIGNAL( currentDocumentChanged( pAbstractChild* ) ), this, SLOT( currentDocumentChanged( pAbstractChild* ) ) );
-		disconnect( MonkeyCore::fileManager(), SIGNAL( opened( XUPProjectItem* ) ), this, SLOT( opened( XUPProjectItem* ) ) );
-		disconnect( MonkeyCore::fileManager(), SIGNAL( buffersChanged( const QMap<QString, QString>& ) ), this, SLOT( buffersChanged( const QMap<QString, QString>& ) ) );
-		disconnect( mDock->browser(), SIGNAL( entryActivated( qCtagsSenseEntry* ) ), this, SLOT( entryActivated( qCtagsSenseEntry* ) ) );
-		disconnect( mDock->browser(), SIGNAL( fileNameActivated( const QString& ) ), this, SLOT( fileNameActivated( const QString& ) ) );
-		disconnect( this, SIGNAL( propertiesChanged( const qCtagsSenseProperties& ) ), mDock->browser(), SLOT( setProperties( const qCtagsSenseProperties& ) ) );
-		disconnect( this, SIGNAL( integrationModeChanged( ClassBrowser::IntegrationMode ) ), MonkeyCore::multiToolBar(), SIGNAL( notifyChanges() ) );
-		// it will remove itself from dock toolbar when deleted
-		delete mDock;
-		// set plugin disabled
-		stateAction()->setChecked( false );
-	}
+	// create dock
+	mDock = new pDockClassBrowser( this );
+	// create menu action for the dock
+	pActionsManager::setDefaultShortcut( mDock->toggleViewAction(), QKeySequence( "F8" ) );
+	// connections
+	connect( MonkeyCore::fileManager(), SIGNAL( documentOpened( pAbstractChild* ) ), this, SLOT( documentOpened( pAbstractChild* ) ) );
+	connect( MonkeyCore::fileManager(), SIGNAL( currentDocumentChanged( pAbstractChild* ) ), this, SLOT( currentDocumentChanged( pAbstractChild* ) ) );
+	connect( MonkeyCore::fileManager(), SIGNAL( opened( XUPProjectItem* ) ), this, SLOT( opened( XUPProjectItem* ) ) );
+	connect( MonkeyCore::fileManager(), SIGNAL( buffersChanged( const QMap<QString, QString>& ) ), this, SLOT( buffersChanged( const QMap<QString, QString>& ) ) );
+	connect( mDock->browser(), SIGNAL( entryActivated( qCtagsSenseEntry* ) ), this, SLOT( entryActivated( qCtagsSenseEntry* ) ) );
+	connect( mDock->browser(), SIGNAL( fileNameActivated( const QString& ) ), this, SLOT( fileNameActivated( const QString& ) ) );
+	connect( this, SIGNAL( propertiesChanged( const qCtagsSenseProperties& ) ), mDock->browser(), SLOT( setProperties( const qCtagsSenseProperties& ) ) );
+	connect( this, SIGNAL( integrationModeChanged( ClassBrowser::IntegrationMode ) ), MonkeyCore::multiToolBar(), SIGNAL( notifyChanges() ) );
+	// update integration mode
+	setIntegrationMode( integrationMode() );
+	// update properties
+	emit propertiesChanged( properties() );
 	
-	// return default value
+	return true;
+}
+
+bool ClassBrowser::uninstall()
+{
+	// disconnections
+	disconnect( MonkeyCore::fileManager(), SIGNAL( documentOpened( pAbstractChild* ) ), this, SLOT( documentOpened( pAbstractChild* ) ) );
+	disconnect( MonkeyCore::fileManager(), SIGNAL( currentDocumentChanged( pAbstractChild* ) ), this, SLOT( currentDocumentChanged( pAbstractChild* ) ) );
+	disconnect( MonkeyCore::fileManager(), SIGNAL( opened( XUPProjectItem* ) ), this, SLOT( opened( XUPProjectItem* ) ) );
+	disconnect( MonkeyCore::fileManager(), SIGNAL( buffersChanged( const QMap<QString, QString>& ) ), this, SLOT( buffersChanged( const QMap<QString, QString>& ) ) );
+	disconnect( mDock->browser(), SIGNAL( entryActivated( qCtagsSenseEntry* ) ), this, SLOT( entryActivated( qCtagsSenseEntry* ) ) );
+	disconnect( mDock->browser(), SIGNAL( fileNameActivated( const QString& ) ), this, SLOT( fileNameActivated( const QString& ) ) );
+	disconnect( this, SIGNAL( propertiesChanged( const qCtagsSenseProperties& ) ), mDock->browser(), SLOT( setProperties( const qCtagsSenseProperties& ) ) );
+	disconnect( this, SIGNAL( integrationModeChanged( ClassBrowser::IntegrationMode ) ), MonkeyCore::multiToolBar(), SIGNAL( notifyChanges() ) );
+	// it will remove itself from dock toolbar when deleted
+	delete mDock;
+	
 	return true;
 }
 

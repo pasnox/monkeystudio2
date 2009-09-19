@@ -70,23 +70,24 @@ Gpp::~Gpp()
 }
 
 /*!
-	Enable/disable plugin
-	\param b Flag. Enable = true, Disable = false
+	Install plugin to the system
 	\return Status of process 
 	\retval true Successfully enabled
 	\retval false Some error ocurred
 */
-bool Gpp::setEnabled( bool b)
+bool Gpp::install()
 {
-	if ( b && !isEnabled() )
-	{
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		stateAction()->setChecked( false );
-	}
-	
+	return true;
+}
+
+/*!
+	Uninstall plugin from the system
+	\return Status of process 
+	\retval true Successfully enabled
+	\retval false Some error ocurred
+*/
+bool Gpp::uninstall()
+{
 	return true;
 }
 

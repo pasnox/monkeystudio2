@@ -50,8 +50,8 @@ class GccParser : public BasePlugin
 
 protected:	
 	void fillPluginInfos();
-public:
-	virtual bool setEnabled( bool );
+	virtual bool install();
+	virtual bool uninstall();
 
 };
 

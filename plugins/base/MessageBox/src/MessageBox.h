@@ -53,7 +53,8 @@ protected:
 	void fillPluginInfos();
 public:
 	MessageBox();
-	virtual bool setEnabled( bool );
+	virtual bool install();
+	virtual bool uninstall();
 	virtual QWidget* settingsWidget();
 
 protected:

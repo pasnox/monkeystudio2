@@ -42,24 +42,16 @@ QWidget* QtAssistant::settingsWidget()
 	return new PreferencesDialog( mAssistantDock->helpEngine(), QApplication::activeWindow(), false );
 }
 
-bool QtAssistant::setEnabled( bool b )
+bool QtAssistant::install()
 {
-	if ( b && !isEnabled() )
-	{
-		mAssistantDock = new QtAssistantDock;
-		MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( mAssistantDock, infos().Caption, QIcon( ":/icons/assistant.png" ) );
-		// set plugin enabled
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		mAssistantDock->deleteLater();
-		// set plugin disabled
-		stateAction()->setChecked( false );
-	}
-	else
-		return false;
-	// return default value
+	mAssistantDock = new QtAssistantDock;
+	MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( mAssistantDock, infos().Caption, QIcon( ":/icons/assistant.png" ) );
+	return true;
+}
+
+bool QtAssistant::uninstall()
+{
+	mAssistantDock->deleteLater();
 	return true;
 }
 

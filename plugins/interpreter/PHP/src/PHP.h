@@ -31,7 +31,8 @@ public:
 	PHP();
 	~PHP();
 	// BasePlugin
-	virtual bool setEnabled( bool );
+	virtual bool install();
+	virtual bool uninstall();
 	virtual QWidget* settingsWidget();
 	// CLIToolPlugin
 	virtual pCommandList defaultCommands() const;

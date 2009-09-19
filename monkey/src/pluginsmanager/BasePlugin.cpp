@@ -107,6 +107,21 @@ QAction* BasePlugin::stateAction() const
 	return mAction;
 }
 
+bool BasePlugin::setEnabled(bool enabled)
+{
+	if (enabled && !isEnabled())
+	{
+		stateAction()->setChecked(true);
+		return install();
+	}
+	else if (isEnabled())
+	{
+		stateAction()->setChecked(false);
+		return uninstall();
+	}
+	return true;
+}
+
 QString BasePlugin::settingsKey( const QString& k ) const
 {
 	return QString( "Plugins/%1/%2" ).arg( infos().Name ).arg(  k );

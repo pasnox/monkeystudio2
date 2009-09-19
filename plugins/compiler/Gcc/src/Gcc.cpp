@@ -70,23 +70,24 @@ Gcc::~Gcc()
 }
 
 /*!
-	Enable/disable plugin
-	\param b Flag. Enable = true, Disable = false
+	Install plugin
 	\return Status of process 
 	\retval true Successfully enabled
 	\retval false Some error ocurred
 */
-bool Gcc::setEnabled( bool b)
+bool Gcc::install()
 {
-	if ( b && !isEnabled() )
-	{
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		stateAction()->setChecked( false );
-	}
-	
+	return true;
+}
+
+/*!
+	Unnstall plugin
+	\return Status of process 
+	\retval true Successfully enabled
+	\retval false Some error ocurred
+*/
+bool Gcc::uninstall()
+{
 	return true;
 }
 

@@ -66,44 +66,44 @@ void MessageBox::fillPluginInfos()
 
 
 /*!
-	Enable/disable plugin
+	Install plugin
 	
-	If plugin is enabled - it visible on main window and it's actions are in 
-	the main menu
-	\param b Flag. Enable = true, Disable = false
+	If plugin is installed - it visible on main window and it's actions are in the main menu
 	\return Status of process 
 	\retval true Successfully enabled
 	\retval false Some error ocurred
 */
-bool MessageBox::setEnabled( bool b )
+bool MessageBox::install()
 {
-	if ( b && !isEnabled() )
-	{
-		// create docks
-		mMessageBoxDocks = new MessageBoxDocks( this );
-		// add docks to main window
-		MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mMessageBoxDocks->mBuildStep, mMessageBoxDocks->mBuildStep->windowTitle(), mMessageBoxDocks->mBuildStep->windowIcon() );
-		MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mMessageBoxDocks->mOutput, mMessageBoxDocks->mOutput->windowTitle(), mMessageBoxDocks->mOutput->windowIcon() );
-		MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mMessageBoxDocks->mCommand, mMessageBoxDocks->mCommand->windowTitle(), mMessageBoxDocks->mCommand->windowIcon() );
-		// add actions to main window
-		connect( MonkeyCore::menuBar()->action( "mView/aShowNextError", tr( "Show Next Error" ), QIcon( ":/icons/goto.png" ), "Shift+F9" ), SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showNextError() ) );
-		connect( MonkeyCore::consoleManager(), SIGNAL( started() ), this, SLOT( onConsoleStarted() ) );
-		// set plugin enabled
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		// disconnect
-		disconnect( MonkeyCore::consoleManager(), SIGNAL( started() ), this, SLOT( onConsoleStarted() ) );
-		// delete actions
-		delete MonkeyCore::menuBar()->action( "mView/aShowNextError" );
-		// delete docks
-		delete mMessageBoxDocks;
-		mMessageBoxDocks = 0;
-		// set plugin disabled
-		stateAction()->setChecked( false );
-	}
-	// return default value
+	// create docks
+	mMessageBoxDocks = new MessageBoxDocks( this );
+	// add docks to main window
+	MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mMessageBoxDocks->mBuildStep, mMessageBoxDocks->mBuildStep->windowTitle(), mMessageBoxDocks->mBuildStep->windowIcon() );
+	MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mMessageBoxDocks->mOutput, mMessageBoxDocks->mOutput->windowTitle(), mMessageBoxDocks->mOutput->windowIcon() );
+	MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mMessageBoxDocks->mCommand, mMessageBoxDocks->mCommand->windowTitle(), mMessageBoxDocks->mCommand->windowIcon() );
+	// add actions to main window
+	connect( MonkeyCore::menuBar()->action( "mView/aShowNextError", tr( "Show Next Error" ), QIcon( ":/icons/goto.png" ), "Shift+F9" ), SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showNextError() ) );
+	connect( MonkeyCore::consoleManager(), SIGNAL( started() ), this, SLOT( onConsoleStarted() ) );
+	return true;
+}
+
+/*!
+	Unnstall plugin
+	
+	If plugin is installed - it visible on main window and it's actions are in the main menu
+	\return Status of process 
+	\retval true Successfully enabled
+	\retval false Some error ocurred
+*/
+bool MessageBox::uninstall()
+{
+	// disconnect
+	disconnect( MonkeyCore::consoleManager(), SIGNAL( started() ), this, SLOT( onConsoleStarted() ) );
+	// delete actions
+	delete MonkeyCore::menuBar()->action( "mView/aShowNextError" );
+	// delete docks
+	delete mMessageBoxDocks;
+	mMessageBoxDocks = 0;
 	return true;
 }
 
