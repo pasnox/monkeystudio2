@@ -24,7 +24,8 @@ protected slots:
 	void sortTriggered( QAction* action );
 	void documentChanged( pAbstractChild* document );
 	void documentAboutToClose( pAbstractChild* document );
-	void currentDocumentChanged( pAbstractChild* );
+	void currentDocumentChanged( pAbstractChild* document );
+	void selectionModel_selectionChanged( const QItemSelection& selected, const QItemSelection& deselected );
 };
 
 #endif // POPENEDFILEEXPLORER_H

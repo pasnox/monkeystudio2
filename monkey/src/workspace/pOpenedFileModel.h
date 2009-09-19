@@ -32,6 +32,9 @@ public:
 	virtual QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const;
 	virtual QModelIndex parent( const QModelIndex& index ) const;
 	
+	pAbstractChild* document( const QModelIndex& index ) const;
+	QModelIndex index( pAbstractChild* document ) const;
+	
 	pOpenedFileModel::SortMode sortMode() const;
 	void setSortMode( pOpenedFileModel::SortMode mode );
 

@@ -12,6 +12,7 @@ pOpenedFileExplorer::pOpenedFileExplorer( pWorkspace* workspace )
 	mWorkspace = workspace;
 	mModel = new pOpenedFileModel( workspace );
 	setupUi( this );
+	setFocusProxy( tvFiles );
 	tvFiles->setModel( mModel );
 	setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
 	
@@ -51,6 +52,7 @@ pOpenedFileExplorer::pOpenedFileExplorer( pWorkspace* workspace )
 	connect( workspace, SIGNAL( documentChanged( pAbstractChild* ) ), this, SLOT( documentChanged( pAbstractChild* ) ) );
 	connect( workspace, SIGNAL( documentAboutToClose( pAbstractChild* ) ), this, SLOT( documentAboutToClose( pAbstractChild* ) ) );
 	connect( workspace, SIGNAL( currentDocumentChanged( pAbstractChild* ) ), this, SLOT( currentDocumentChanged( pAbstractChild* ) ) );
+	connect( tvFiles->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ), this, SLOT( selectionModel_selectionChanged( const QItemSelection&, const QItemSelection& ) ) );
 }
 
 pOpenedFileExplorer::~pOpenedFileExplorer()
@@ -73,7 +75,18 @@ void pOpenedFileExplorer::documentAboutToClose( pAbstractChild* document )
 	//
 }
 
-void pOpenedFileExplorer::currentDocumentChanged( pAbstractChild* )
+void pOpenedFileExplorer::currentDocumentChanged( pAbstractChild* document )
 {
-	//
+	const QModelIndex index = mModel->index( document );
+	tvFiles->setCurrentIndex( index );
+}
+
+void pOpenedFileExplorer::selectionModel_selectionChanged( const QItemSelection& selected, const QItemSelection& deselected )
+{
+	Q_UNUSED( deselected );
+	const QModelIndex index = selected.indexes().value( 0 );
+	pAbstractChild* document = mModel->document( index );
+	tvFiles->setCurrentIndex( index );
+	mWorkspace->setCurrentDocument( document );
+	setFocus(); // setting active mdi window still the focus
 }

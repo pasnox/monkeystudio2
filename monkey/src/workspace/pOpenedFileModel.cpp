@@ -117,7 +117,7 @@ QVariant pOpenedFileModel::data( const QModelIndex& index, int role ) const
 	{
 		case Qt::DecorationRole:
 		{
-			QIcon icon = mDocuments.at( index.row() )->windowIcon();
+			QIcon icon = document( index )->windowIcon();
 			
 			if ( icon.isNull() )
 			{
@@ -128,10 +128,10 @@ QVariant pOpenedFileModel::data( const QModelIndex& index, int role ) const
 			break;
 		}
 		case Qt::DisplayRole:
-			return mDocuments.at( index.row() )->fileName();
+			return document( index )->fileName();
 			break;
 		case Qt::ToolTipRole:
-			return mDocuments.at( index.row() )->filePath();
+			return document( index )->filePath();
 			break;
 		default:
 			break;
@@ -153,6 +153,28 @@ QModelIndex pOpenedFileModel::index( int row, int column, const QModelIndex& par
 QModelIndex pOpenedFileModel::parent( const QModelIndex& index ) const
 {
 	Q_UNUSED( index );
+	return QModelIndex();
+}
+
+pAbstractChild* pOpenedFileModel::document( const QModelIndex& index ) const
+{
+	if ( !index.isValid() )
+	{
+		return 0;
+	}
+	
+	return static_cast<pAbstractChild*>( index.internalPointer() );
+}
+
+QModelIndex pOpenedFileModel::index( pAbstractChild* document ) const
+{
+	const int row = mDocuments.indexOf( document );
+	
+	if ( row != -1 )
+	{
+		return createIndex( row, 0, document );
+	}
+	
 	return QModelIndex();
 }
 
