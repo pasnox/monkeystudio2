@@ -55,6 +55,9 @@ protected slots:
 	void indexingFinished();
 	void keywordHelp();
 	void searchHelp();
+
+signals:
+	void browserShown();
 };
 
 #endif // QTASSISTANTDOCK_H

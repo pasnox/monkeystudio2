@@ -248,15 +248,17 @@ void pOpenedFileModel::sortDocuments()
 
 void pOpenedFileModel::documentOpened( pAbstractChild* document )
 {
+	Q_ASSERT( !mDocuments.contains( document ) );
 	const int index = mDocuments.count();
 	beginInsertRows( QModelIndex(), index, index );
 	mDocuments << document;
 	endInsertRows();
+	sortDocuments();
 }
 
 void pOpenedFileModel::documentClosed( pAbstractChild* document )
 {
-	const int index = mDocuments.count();
+	const int index = mDocuments.indexOf( document );
 	beginRemoveRows( QModelIndex(), index, index );
 	mDocuments.removeOne( document );
 	endRemoveRows();

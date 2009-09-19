@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Qt Assistant</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resources/QtAssistant.qrc">
+    <normaloff>:/icons/assistant.png</normaloff>:/icons/assistant.png</iconset>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>5</number>

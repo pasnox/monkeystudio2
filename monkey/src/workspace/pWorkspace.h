@@ -69,6 +69,7 @@ public:
 	void closeDocument( pAbstractChild* document, bool showDialog = true );
 	QMdiArea::ViewMode documentMode() const;
 	void handleDocument( pAbstractChild* document );
+	void unhandleDocument( pAbstractChild* document );
 
 public slots:
 	pAbstractChild* openFile( const QString& fileName, const QString& codec );

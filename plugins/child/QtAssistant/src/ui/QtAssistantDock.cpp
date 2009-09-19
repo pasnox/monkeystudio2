@@ -63,6 +63,7 @@ QtAssistantDock::QtAssistantDock( QWidget* parent )
 
 	// connections
 	connect( mBrowser, SIGNAL( showBrowserRequested() ), this, SLOT( showBrowser() ) );
+	connect( this, SIGNAL( browserShown() ), mBrowser, SIGNAL( fileOpened() ) );
 	connect( mHelpEngine, SIGNAL( currentFilterChanged( const QString& ) ), this, SLOT( onCurrentFilterChanged( const QString& ) ) );
 	connect( mHelpEngine->indexModel(), SIGNAL( indexCreationStarted() ),this, SLOT( disableSearchLineEdit() ) );
 	connect( mHelpEngine->indexModel(), SIGNAL( indexCreated() ),this, SLOT( enableSearchLineEdit() ) );
@@ -157,7 +158,7 @@ void QtAssistantDock::showBrowser()
 	if ( !workspace->documents().contains( mBrowser ) )
 	{
 		workspace->handleDocument( mBrowser );
-		mBrowser->setAttribute( Qt::WA_DeleteOnClose, false );
+		emit browserShown();
 	}
 	workspace->setCurrentDocument( mBrowser );
 }

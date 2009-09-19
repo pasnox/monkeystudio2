@@ -250,7 +250,7 @@ void pWorkspace::closeDocument( pAbstractChild* document, bool showDialog )
 	// stop watching files
 	const QString file = document->filePath();
 	
-	if ( !file.isEmpty() )
+	if ( QFileInfo( file ).isFile() )
 	{
 		mFileWatcher->removePath( file );
 	}
@@ -258,7 +258,15 @@ void pWorkspace::closeDocument( pAbstractChild* document, bool showDialog )
 	// close document
 	emit documentAboutToClose( document );
 	document->closeFile();
-	document->deleteLater();
+	
+	if ( document->testAttribute( Qt::WA_DeleteOnClose ) )
+	{
+		document->deleteLater();
+	}
+	else
+	{
+		unhandleDocument( document );
+	}
 }
 
 QMdiArea::ViewMode pWorkspace::documentMode() const
@@ -287,8 +295,37 @@ void pWorkspace::handleDocument( pAbstractChild* document )
 	// add to workspace
 	document->installEventFilter( this );
 	mMdiArea->addSubWindow( document );
-	document->show();
+	document->showMaximized();
 	mMdiArea->setActiveSubWindow( document );
+}
+
+void pWorkspace::unhandleDocument( pAbstractChild* document )
+{
+	// init document connections
+	disconnect( document, SIGNAL( fileOpened() ), this, SLOT( document_fileOpened() ) );
+	disconnect( document, SIGNAL( contentChanged() ), this, SLOT( document_contentChanged() ) );
+	disconnect( document, SIGNAL( fileClosed() ), this, SLOT( document_fileClosed() ) );
+	// update file menu
+	disconnect( document, SIGNAL( modifiedChanged( bool ) ), MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" ), SLOT( setEnabled( bool ) ) );
+	// update edit menu
+	disconnect( document, SIGNAL( undoAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aUndo" ), SLOT( setEnabled( bool ) ) );
+	disconnect( document, SIGNAL( redoAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aRedo" ), SLOT( setEnabled( bool ) ) );
+	disconnect( document, SIGNAL( copyAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aCut" ), SLOT( setEnabled( bool ) ) );
+	disconnect( document, SIGNAL( copyAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aCopy" ), SLOT( setEnabled( bool ) ) );
+	disconnect( document, SIGNAL( pasteAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aPaste" ), SLOT( setEnabled( bool ) ) );
+	// update status bar
+	disconnect( document, SIGNAL( cursorPositionChanged( const QPoint& ) ), MonkeyCore::statusBar(), SLOT( setCursorPosition( const QPoint& ) ) );
+	disconnect( document, SIGNAL( modifiedChanged( bool ) ), MonkeyCore::statusBar(), SLOT( setModified( bool ) ) );
+	
+	// add to workspace
+	document->removeEventFilter( this );
+	mMdiArea->removeSubWindow( document );
+	document->hide();
+	
+	if ( !mMdiArea->subWindowList().isEmpty() )
+	{
+		mMdiArea->currentSubWindow()->showMaximized();
+	}
 }
 
 pAbstractChild* pWorkspace::openFile( const QString& fileName, const QString& codec )
@@ -567,7 +604,12 @@ void pWorkspace::fileWatcher_fileChanged( const QString& fileName )
 void pWorkspace::document_fileOpened()
 {
 	pAbstractChild* document = qobject_cast<pAbstractChild*>( sender() );
-	mFileWatcher->addPath( document->filePath() );
+	
+	if ( QFileInfo( document->filePath() ).isFile() )
+	{
+		mFileWatcher->addPath( document->filePath() );
+	}
+	
 	documentOpened( document );
 }
 

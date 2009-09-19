@@ -34,10 +34,14 @@
 QtAssistantBrowser::QtAssistantBrowser( QHelpEngine* engine, QWidget* parent )
 	: pAbstractChild( parent ), mHelpEngine( engine )
 {
+	setAttribute( Qt::WA_DeleteOnClose, false );
 	mLastHelpView = -1;
 	mSearchZoomCount = 0;
 	QWidget* widget = new QWidget( this );
 	setupUi( widget );
+	setWindowTitle( widget->windowTitle() );
+	setWindowIcon( widget->windowIcon() );
+	setFilePath( windowTitle() );
 	setWidget( widget );
 	isSearch->setVisible( false );
 	
@@ -344,9 +348,10 @@ void QtAssistantBrowser::closeFile()
 		{
 			twPages->removeTab( twPages->indexOf( hv ) );
 			hv->deleteLater();
-			return;
 		}
 	}
+	
+	emit fileClosed();
 }
 
 void QtAssistantBrowser::printFile()
