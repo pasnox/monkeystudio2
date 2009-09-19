@@ -19,19 +19,16 @@
 #include "QtDesignerManager.h"
 #include "QtDesignerChild.h"
 
-BasePlugin::PluginInfos QtDesigner::infos() const
+void QtDesigner::fillPluginInfos()
 {
-	PluginInfos pluginInfos;
-	pluginInfos.Caption = tr( "Qt Designer" );
-	pluginInfos.Description = tr( "This plugin embeds Qt Designer" );
-	pluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, Luc Bruant aka fullmetalcoder <fullmetalcoder@hotmail.fr>";
-	pluginInfos.Type = BasePlugin::iChild;
-	pluginInfos.Name = PLUGIN_NAME;
-	pluginInfos.Version = "1.0.0";
-	pluginInfos.FirstStartEnabled = true;
-	pluginInfos.Pixmap = pIconManager::pixmap( "designer.png", ":/icons" );
-	
-	return pluginInfos;
+	mPluginInfos.Caption = tr( "Qt Designer" );
+	mPluginInfos.Description = tr( "This plugin embeds Qt Designer" );
+	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, Luc Bruant aka fullmetalcoder <fullmetalcoder@hotmail.fr>";
+	mPluginInfos.Type = BasePlugin::iChild;
+	mPluginInfos.Name = PLUGIN_NAME;
+	mPluginInfos.Version = "1.0.0";
+	mPluginInfos.FirstStartEnabled = true;
+	mPluginInfos.Pixmap = pIconManager::pixmap( "designer.png", ":/icons" );
 }
 
 bool QtDesigner::setEnabled( bool b )

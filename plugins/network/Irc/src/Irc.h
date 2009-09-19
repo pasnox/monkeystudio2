@@ -14,8 +14,8 @@ class Irc : public BasePlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin )
 
-public:
-	PluginInfos infos() const;
+protected:	
+	void fillPluginInfos();
 	
 	virtual bool setEnabled( bool );
 private:

@@ -47,9 +47,10 @@ class Gcc : public CompilerPlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin CompilerPlugin CLIToolPlugin )
 
+protected:	
+	void fillPluginInfos();
 public:
 	Gcc();
-	PluginInfos infos() const;
 	~Gcc();
 	// BasePlugin
 	virtual bool setEnabled( bool );

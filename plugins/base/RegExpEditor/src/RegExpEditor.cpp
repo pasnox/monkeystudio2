@@ -6,19 +6,16 @@
 #include <MonkeyCore.h>
 #include <UIMain.h>
 
-BasePlugin::PluginInfos RegExpEditor::infos() const
+void RegExpEditor::fillPluginInfos()
 {
-	PluginInfos pluginInfos;
-	pluginInfos.Caption = tr( "Regular Expression Editor" );
-	pluginInfos.Description = tr( "This plugin allow you to test regular expression for a given buffer." );
-	pluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
-	pluginInfos.Type = BasePlugin::iBase;
-	pluginInfos.Name = PLUGIN_NAME;
-	pluginInfos.Version = "1.0.0";
-	pluginInfos.FirstStartEnabled = false;
-	pluginInfos.Pixmap = pIconManager::pixmap( "regexp.png", ":/icons" );
-	
-	return pluginInfos;
+	mPluginInfos.Caption = tr( "Regular Expression Editor" );
+	mPluginInfos.Description = tr( "This plugin allow you to test regular expression for a given buffer." );
+	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	mPluginInfos.Type = BasePlugin::iBase;
+	mPluginInfos.Name = PLUGIN_NAME;
+	mPluginInfos.Version = "1.0.0";
+	mPluginInfos.FirstStartEnabled = false;
+	mPluginInfos.Pixmap = pIconManager::pixmap( "regexp.png", ":/icons" );
 }
 
 RegExpEditor::~RegExpEditor()

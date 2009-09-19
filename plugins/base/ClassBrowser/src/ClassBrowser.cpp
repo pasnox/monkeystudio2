@@ -32,20 +32,17 @@
 #include <QDesktopServices>
 #include <QDebug>
 
-BasePlugin::PluginInfos ClassBrowser::infos() const
+void ClassBrowser::fillPluginInfos()
 {
-	PluginInfos pluginInfos;
-	pluginInfos.Caption = tr( "Class Browser" );
-	pluginInfos.Description = tr( "Plugin for browsing classes members" );
-	pluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
-	pluginInfos.Type = BasePlugin::iBase;
-	pluginInfos.Name = PLUGIN_NAME;
-	pluginInfos.Version = "0.5.0";
-	pluginInfos.FirstStartEnabled = true;
-	pluginInfos.HaveSettingsWidget = true;
-	pluginInfos.Pixmap = QPixmap( ":/icons/class.png" );;
-	
-	return pluginInfos;
+	mPluginInfos.Caption = tr( "Class Browser" );
+	mPluginInfos.Description = tr( "Plugin for browsing classes members" );
+	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	mPluginInfos.Type = BasePlugin::iBase;
+	mPluginInfos.Name = PLUGIN_NAME;
+	mPluginInfos.Version = "0.5.0";
+	mPluginInfos.FirstStartEnabled = true;
+	mPluginInfos.HaveSettingsWidget = true;
+	mPluginInfos.Pixmap = QPixmap( ":/icons/class.png" );;
 }
 
 bool ClassBrowser::setEnabled( bool b )

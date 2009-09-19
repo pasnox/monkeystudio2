@@ -35,9 +35,10 @@ class pAStyle : public BasePlugin
 {
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin )
-	
+
+protected:	
+	virtual void fillPluginInfos();
 public:
-	PluginInfos infos() const;
 	virtual QWidget* settingsWidget();
 	virtual bool setEnabled( bool );
 	

@@ -29,20 +29,17 @@ Python::Python ()
 	}
 }
 
-BasePlugin::PluginInfos Python::infos() const
+void Python::fillPluginInfos()
 {
-	PluginInfos pluginInfos;
-	pluginInfos.Caption = tr( "Python" );
-	pluginInfos.Description = tr( "This plugin provide Python interpreter and python parser." );
-	pluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, Michon Aurelien aka aurelien <aurelien.french@gmail.com>";
-	pluginInfos.Type = BasePlugin::iInterpreter;
-	pluginInfos.Name = PLUGIN_NAME;
-	pluginInfos.Version = "0.1.0";
-	pluginInfos.FirstStartEnabled = true;
-	pluginInfos.HaveSettingsWidget = true;
-	pluginInfos.Pixmap = pIconManager::pixmap( "python.png", ":/icons" );
-	
-	return pluginInfos;
+	mPluginInfos.Caption = tr( "Python" );
+	mPluginInfos.Description = tr( "This plugin provide Python interpreter and python parser." );
+	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, Michon Aurelien aka aurelien <aurelien.french@gmail.com>";
+	mPluginInfos.Type = BasePlugin::iInterpreter;
+	mPluginInfos.Name = PLUGIN_NAME;
+	mPluginInfos.Version = "0.1.0";
+	mPluginInfos.FirstStartEnabled = true;
+	mPluginInfos.HaveSettingsWidget = true;
+	mPluginInfos.Pixmap = pIconManager::pixmap( "python.png", ":/icons" );
 }
 
 Python::~Python()

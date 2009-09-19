@@ -58,19 +58,16 @@ SearchAndReplace::SearchAndReplace()
 	qRegisterMetaType<SearchAndReplace::Occurence>("SearchAndReplace::Occurence");
 }
 
-BasePlugin::PluginInfos SearchAndReplace::infos() const
+void SearchAndReplace::fillPluginInfos()
 {
-	PluginInfos pluginInfos;
-	pluginInfos.Caption = tr( "Search and Replace" );
-	pluginInfos.Description = tr( "Plugin for searching and replacing text" );
-	pluginInfos.Author = "Andrei Kopats aka hlamer <hlamer at tut by>";
-	pluginInfos.Type = BasePlugin::iBase;
-	pluginInfos.Name = PLUGIN_NAME;
-	pluginInfos.Version = "1.0.0";
-	pluginInfos.FirstStartEnabled = true;
-	pluginInfos.Pixmap = pIconManager::pixmap( "tabsearch.png", ":/icons" );
-	
-	return pluginInfos;
+	mPluginInfos.Caption = tr( "Search and Replace" );
+	mPluginInfos.Description = tr( "Plugin for searching and replacing text" );
+	mPluginInfos.Author = "Andrei Kopats aka hlamer <hlamer at tut by>";
+	mPluginInfos.Type = BasePlugin::iBase;
+	mPluginInfos.Name = PLUGIN_NAME;
+	mPluginInfos.Version = "1.0.0";
+	mPluginInfos.FirstStartEnabled = true;
+	mPluginInfos.Pixmap = pIconManager::pixmap( "tabsearch.png", ":/icons" );
 }
 
 /*!

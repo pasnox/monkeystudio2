@@ -25,9 +25,10 @@ class Python : public InterpreterPlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin InterpreterPlugin CLIToolPlugin )
 
+protected:	
+	void fillPluginInfos();
 public:
 	Python();
-	PluginInfos infos() const;
 	~Python();
 	// BasePlugin
 	virtual bool setEnabled( bool );

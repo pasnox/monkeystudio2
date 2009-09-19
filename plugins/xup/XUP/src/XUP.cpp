@@ -24,19 +24,16 @@
 
 #include <QDir>
 
-BasePlugin::PluginInfos XUP::infos() const
+void XUP::fillPluginInfos()
 {
-	PluginInfos pluginInfos;
-	pluginInfos.Caption = tr( "XUP Project" );
-	pluginInfos.Description = tr( "XUP Project support for XUPManager" );
-	pluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
-	pluginInfos.Type = BasePlugin::iXUP;
-	pluginInfos.Name = PLUGIN_NAME;
-	pluginInfos.Version = "0.1.0";
-	pluginInfos.FirstStartEnabled = true;
-	pluginInfos.HaveSettingsWidget = true;
-	
-	return pluginInfos;
+	mPluginInfos.Caption = tr( "XUP Project" );
+	mPluginInfos.Description = tr( "XUP Project support for XUPManager" );
+	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	mPluginInfos.Type = BasePlugin::iXUP;
+	mPluginInfos.Name = PLUGIN_NAME;
+	mPluginInfos.Version = "0.1.0";
+	mPluginInfos.FirstStartEnabled = true;
+	mPluginInfos.HaveSettingsWidget = true;
 }
 
 bool XUP::setEnabled( bool enabled )

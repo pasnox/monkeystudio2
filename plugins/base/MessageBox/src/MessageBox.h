@@ -49,9 +49,10 @@ class MessageBox : public BasePlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin )
 
+protected:	
+	void fillPluginInfos();
 public:
 	MessageBox();
-	PluginInfos infos() const;
 	virtual bool setEnabled( bool );
 	virtual QWidget* settingsWidget();
 

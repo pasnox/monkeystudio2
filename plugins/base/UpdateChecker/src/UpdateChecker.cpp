@@ -34,19 +34,16 @@
 
 #include <QTimer>
 
-BasePlugin::PluginInfos UpdateChecker::infos() const
+void UpdateChecker::fillPluginInfos()
 {
-	PluginInfos pluginInfos;
-	pluginInfos.Caption = tr( "Update Checker" );
-	pluginInfos.Description = tr( "This plugin allow to activate the update checker." );
-	pluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
-	pluginInfos.Type = BasePlugin::iBase;
-	pluginInfos.Name = PLUGIN_NAME;
-	pluginInfos.Version = "1.0.0";
-	pluginInfos.FirstStartEnabled = true;
-	pluginInfos.Pixmap = pIconManager::pixmap( "UpdateChecker.png", ":/icons" );
-	
-	return pluginInfos;
+	mPluginInfos.Caption = tr( "Update Checker" );
+	mPluginInfos.Description = tr( "This plugin allow to activate the update checker." );
+	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	mPluginInfos.Type = BasePlugin::iBase;
+	mPluginInfos.Name = PLUGIN_NAME;
+	mPluginInfos.Version = "1.0.0";
+	mPluginInfos.FirstStartEnabled = true;
+	mPluginInfos.Pixmap = pIconManager::pixmap( "UpdateChecker.png", ":/icons" );
 }
 
 bool UpdateChecker::setEnabled( bool b )

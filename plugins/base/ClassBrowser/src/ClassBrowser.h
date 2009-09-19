@@ -33,10 +33,9 @@ class ClassBrowser : public BasePlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin )
 
+	void fillPluginInfos();
 public:
 	enum IntegrationMode { imDock, imCombo, imBoth };
-	
-	PluginInfos infos() const;
 	
 	virtual bool setEnabled( bool );
 	virtual QWidget* settingsWidget();

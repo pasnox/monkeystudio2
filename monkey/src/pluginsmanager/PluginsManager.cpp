@@ -101,6 +101,9 @@ bool PluginsManager::addPlugin( QObject* o )
 	// try to cast instance to BasePlugin
 	BasePlugin* bp = qobject_cast<BasePlugin*>( o );
 	
+	// generally it should be called from constructor, but can't call virtual method
+	bp->fillPluginInfos();
+	
 	// if not return
 	if ( !bp )
 		return false;

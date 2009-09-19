@@ -38,20 +38,17 @@
 
 #include "pMonkeyStudio.h"
 
-BasePlugin::PluginInfos BeaverDebugger::infos() const
+void BeaverDebugger::fillPluginInfos()
 {
-	PluginInfos pluginInfos;
-	pluginInfos.Caption = tr( "Beaver Debugger" );
-	pluginInfos.Description = tr( "Plugin for use Beaver Debugger together with MkS" );
-	pluginInfos.Author = "Andei Kopats aka hlamer <hlamer@tut.by>";
-	pluginInfos.Type = BasePlugin::iDebugger;
-	pluginInfos.Name = PLUGIN_NAME;
-	pluginInfos.Version = "1.0.0";
-	pluginInfos.FirstStartEnabled = true;
-	pluginInfos.HaveSettingsWidget = false;
-	pluginInfos.Pixmap = QPixmap( ":/icons/beaverdbg.png" );
-	
-	return pluginInfos;
+	mPluginInfos.Caption = tr( "Beaver Debugger" );
+	mPluginInfos.Description = tr( "Plugin for use Beaver Debugger together with MkS" );
+	mPluginInfos.Author = "Andei Kopats aka hlamer <hlamer@tut.by>";
+	mPluginInfos.Type = BasePlugin::iDebugger;
+	mPluginInfos.Name = PLUGIN_NAME;
+	mPluginInfos.Version = "1.0.0";
+	mPluginInfos.FirstStartEnabled = true;
+	mPluginInfos.HaveSettingsWidget = false;
+	mPluginInfos.Pixmap = QPixmap( ":/icons/beaverdbg.png" );
 }
 
 /*!

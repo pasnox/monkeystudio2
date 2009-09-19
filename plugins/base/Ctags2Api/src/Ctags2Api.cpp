@@ -31,19 +31,16 @@
 
 #include <MonkeyCore.h>
 
-BasePlugin::PluginInfos Ctags2Api::infos() const
+void Ctags2Api::fillPluginInfos()
 {
-	PluginInfos pluginInfos;
-	pluginInfos.Caption = tr( "Api File Generator" );
-	pluginInfos.Description = tr( "This plugin allow to generate api file using ctags." );
-	pluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
-	pluginInfos.Type = BasePlugin::iBase;
-	pluginInfos.Name = PLUGIN_NAME;
-	pluginInfos.Version = "1.0.0";
-	pluginInfos.FirstStartEnabled = false;
-	pluginInfos.Pixmap = pIconManager::pixmap( "Ctags2Api.png", ":/icons" );
-	
-	return pluginInfos;
+	mPluginInfos.Caption = tr( "Api File Generator" );
+	mPluginInfos.Description = tr( "This plugin allow to generate api file using ctags." );
+	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	mPluginInfos.Type = BasePlugin::iBase;
+	mPluginInfos.Name = PLUGIN_NAME;
+	mPluginInfos.Version = "1.0.0";
+	mPluginInfos.FirstStartEnabled = false;
+	mPluginInfos.Pixmap = pIconManager::pixmap( "Ctags2Api.png", ":/icons" );
 }
 
 

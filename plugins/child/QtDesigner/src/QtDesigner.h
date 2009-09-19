@@ -29,8 +29,9 @@ class QtDesigner : public ChildPlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin ChildPlugin )
 	
+protected:	
+	void fillPluginInfos();
 public:
-	PluginInfos infos() const;
 	virtual bool setEnabled( bool enabled );
 	virtual pAbstractChild* createDocument( const QString& fileName );
 

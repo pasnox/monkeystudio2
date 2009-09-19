@@ -37,19 +37,16 @@ MSVCMake::MSVCMake ()
 		MonkeyCore::consoleManager()->addParser( getParser( s ) );
 }
 
-BasePlugin::PluginInfos MSVCMake::infos() const
+void MSVCMake::fillPluginInfos()
 {
-	PluginInfos pluginInfos;
-	pluginInfos.Caption = tr( "MSVCMake" );
-	pluginInfos.Description = tr( "Plugin for execute MSVC Make in console and parse it's output" );
-	pluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
-	pluginInfos.Type = BasePlugin::iBuilder;
-	pluginInfos.Name = PLUGIN_NAME;
-	pluginInfos.Version = "0.5.0";
-	pluginInfos.FirstStartEnabled = false;
-	pluginInfos.HaveSettingsWidget = true;
-	
-	return pluginInfos;
+	mPluginInfos.Caption = tr( "MSVCMake" );
+	mPluginInfos.Description = tr( "Plugin for execute MSVC Make in console and parse it's output" );
+	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	mPluginInfos.Type = BasePlugin::iBuilder;
+	mPluginInfos.Name = PLUGIN_NAME;
+	mPluginInfos.Version = "0.5.0";
+	mPluginInfos.FirstStartEnabled = false;
+	mPluginInfos.HaveSettingsWidget = true;
 }
 
 MSVCMake::~MSVCMake()
@@ -177,4 +174,3 @@ void MSVCMake::setBuildCommand( const pCommand& c )
 }
 
 Q_EXPORT_PLUGIN2( BuilderMSVCMake, MSVCMake )
-

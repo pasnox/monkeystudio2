@@ -25,9 +25,10 @@ class PHP : public InterpreterPlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin InterpreterPlugin CLIToolPlugin )
 
+protected:	
+	void fillPluginInfos();
 public:
 	PHP();
-	PluginInfos infos() const;
 	~PHP();
 	// BasePlugin
 	virtual bool setEnabled( bool );

@@ -29,8 +29,9 @@ class QtAssistant : public ChildPlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin ChildPlugin )
 	
+protected:	
+	void fillPluginInfos();
 public:
-	PluginInfos infos() const;
 	virtual bool setEnabled( bool );
 	virtual QWidget* settingsWidget();
 	virtual pAbstractChild* createDocument( const QString& fileName );

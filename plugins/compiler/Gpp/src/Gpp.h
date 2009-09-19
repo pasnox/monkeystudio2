@@ -47,9 +47,10 @@ class Gpp : public CompilerPlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin CompilerPlugin CLIToolPlugin )
 
+protected:	
+	void fillPluginInfos();
 public:
 	Gpp();
-	PluginInfos infos() const;
 	~Gpp();
 	// BasePlugin
 	virtual bool setEnabled( bool );

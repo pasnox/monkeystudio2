@@ -51,20 +51,17 @@ MessageBox::MessageBox()
 	mMessageBoxDocks = 0;
 }
 
-BasePlugin::PluginInfos MessageBox::infos() const
+void MessageBox::fillPluginInfos()
 {
-	PluginInfos pluginInfos;
-	pluginInfos.Caption = tr( "Message Box" );
-	pluginInfos.Description = tr( "Plugin for catching internal command console" );
-	pluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
-	pluginInfos.Type = BasePlugin::iBase;
-	pluginInfos.Name = PLUGIN_NAME;
-	pluginInfos.Version = "1.0.0";
-	pluginInfos.FirstStartEnabled = true;
-	pluginInfos.HaveSettingsWidget = true;
-	pluginInfos.Pixmap = pIconManager::pixmap( "warning.png", ":/icons" );
-	
-	return pluginInfos;
+	mPluginInfos.Caption = tr( "Message Box" );
+	mPluginInfos.Description = tr( "Plugin for catching internal command console" );
+	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	mPluginInfos.Type = BasePlugin::iBase;
+	mPluginInfos.Name = PLUGIN_NAME;
+	mPluginInfos.Version = "1.0.0";
+	mPluginInfos.FirstStartEnabled = true;
+	mPluginInfos.HaveSettingsWidget = true;
+	mPluginInfos.Pixmap = pIconManager::pixmap( "warning.png", ":/icons" );
 }
 
 

@@ -10,8 +10,9 @@ class PostIt : public BasePlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin )
 	
+protected:	
+	void fillPluginInfos();
 public:
-	PluginInfos infos() const;
 	virtual bool setEnabled( bool );
 
 protected:

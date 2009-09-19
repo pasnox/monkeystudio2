@@ -9,19 +9,16 @@
 #include <QIcon>
 #include <QTabWidget>
 
-BasePlugin::PluginInfos Irc::infos() const
+void Irc::fillPluginInfos()
 {
-	PluginInfos pluginInfos;
-	pluginInfos.Caption = tr( "Chat Irc" );
-	pluginInfos.Description = tr( "Plugin Irc for Monkey studio live" );
-	pluginInfos.Author = "Pinon yannick aka Xiantia <private mail>";
-	pluginInfos.Type = BasePlugin::iBase;
-	pluginInfos.Name = PLUGIN_NAME;
-	pluginInfos.Version = "1.0.0";
-	pluginInfos.FirstStartEnabled = false;
-	pluginInfos.Pixmap = QPixmap( ":/icons/irc.png" );
-	
-	return pluginInfos;
+	mPluginInfos.Caption = tr( "Chat Irc" );
+	mPluginInfos.Description = tr( "Plugin Irc for Monkey studio live" );
+	mPluginInfos.Author = "Pinon yannick aka Xiantia <private mail>";
+	mPluginInfos.Type = BasePlugin::iBase;
+	mPluginInfos.Name = PLUGIN_NAME;
+	mPluginInfos.Version = "1.0.0";
+	mPluginInfos.FirstStartEnabled = false;
+	mPluginInfos.Pixmap = QPixmap( ":/icons/irc.png" );
 }
 
 bool Irc::setEnabled( bool b )

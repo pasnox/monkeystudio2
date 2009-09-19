@@ -36,9 +36,10 @@ class GNUMake : public BuilderPlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin BuilderPlugin CLIToolPlugin )
 
+protected:	
+	void fillPluginInfos();
 public:
 	GNUMake();
-	PluginInfos infos() const;
 	~GNUMake();
 	// BasePlugin
 	virtual bool setEnabled( bool );

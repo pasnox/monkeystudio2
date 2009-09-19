@@ -36,22 +36,19 @@
 #include "GccParser.h"
 #include "Parser.h"
 
-BasePlugin::PluginInfos GccParser::infos() const
+void GccParser::fillPluginInfos()
 {
-	PluginInfos pluginInfos;
-	pluginInfos.Caption = tr( "GccParser" );
-	pluginInfos.Description = tr( "Plugin for parsing output of GNU Copiler Collection" );
-	pluginInfos.Author = "Kopats Andrei aka hlamer <hlamer@tut.by>";
-	pluginInfos.Type = BasePlugin::iBase;
-	pluginInfos.Name = PLUGIN_NAME;
-	pluginInfos.Version = "0.1.0";
+	mPluginInfos.Caption = tr( "GccParser" );
+	mPluginInfos.Description = tr( "Plugin for parsing output of GNU Copiler Collection" );
+	mPluginInfos.Author = "Kopats Andrei aka hlamer <hlamer@tut.by>";
+	mPluginInfos.Type = BasePlugin::iBase;
+	mPluginInfos.Name = PLUGIN_NAME;
+	mPluginInfos.Version = "0.1.0";
 #ifdef Q_CC_GNU
-	pluginInfos.FirstStartEnabled = true;
+	mPluginInfos.FirstStartEnabled = true;
 #else
-	pluginInfos.FirstStartEnabled = false;
+	mPluginInfos.FirstStartEnabled = false;
 #endif
-	
-	return pluginInfos;
 }
 
 /*!

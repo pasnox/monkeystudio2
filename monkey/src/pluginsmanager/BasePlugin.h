@@ -48,6 +48,7 @@ class Q_MONKEY_EXPORT BasePlugin : public QObject
 	Q_OBJECT
 	Q_ENUMS( Type )
 	
+	friend class PluginsManager; // for call fillPluginInfo()
 public:
 	// plugin type enums
 	enum Type
@@ -84,7 +85,8 @@ public:
 	
 	virtual ~BasePlugin();
 	
-	virtual PluginInfos infos() const = 0;
+	virtual PluginInfos infos() const
+	{ return mPluginInfos; };
 	
 	static QString typeToString( BasePlugin::Type type );	
 	static QString completeTypeToString( BasePlugin::Types type );
@@ -119,6 +121,10 @@ public:
 	
 protected:
 	mutable QPointer<QAction> mAction;
+	PluginInfos mPluginInfos;
+	
+	// Must be implemented by plugin, fills plugin info */
+	virtual void fillPluginInfos() = 0;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS( BasePlugin::Types )

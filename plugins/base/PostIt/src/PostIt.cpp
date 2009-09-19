@@ -4,19 +4,16 @@
 #include <MonkeyCore.h>
 #include <UIMain.h>
 
-BasePlugin::PluginInfos PostIt::infos() const
+void PostIt::fillPluginInfos()
 {
-	PluginInfos pluginInfos;
-	pluginInfos.Caption = tr( "PostIt" );
-	pluginInfos.Description = tr( "Write and read notes easly !" );
-	pluginInfos.Author = "Alexandre JORDAN <alexandre.jordan@gmail.com>";
-	pluginInfos.Type = BasePlugin::iBase;
-	pluginInfos.Name = PLUGIN_NAME;
-	pluginInfos.Version = "0.0.3";
-	pluginInfos.FirstStartEnabled = false;
-	pluginInfos.Pixmap = pIconManager::pixmap( "knotes.png", ":/icons" );
-	
-	return pluginInfos;
+	mPluginInfos.Caption = tr( "PostIt" );
+	mPluginInfos.Description = tr( "Write and read notes easly !" );
+	mPluginInfos.Author = "Alexandre JORDAN <alexandre.jordan@gmail.com>";
+	mPluginInfos.Type = BasePlugin::iBase;
+	mPluginInfos.Name = PLUGIN_NAME;
+	mPluginInfos.Version = "0.0.3";
+	mPluginInfos.FirstStartEnabled = false;
+	mPluginInfos.Pixmap = pIconManager::pixmap( "knotes.png", ":/icons" );
 }
 
 bool PostIt::setEnabled( bool b )

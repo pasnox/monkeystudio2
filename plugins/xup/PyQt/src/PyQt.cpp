@@ -29,18 +29,15 @@ PyQt::PyQt()
 	mItem = 0;
 }
 
-BasePlugin::PluginInfos PyQt::infos() const
+void PyQt::fillPluginInfos()
 {
-	PluginInfos pluginInfos;
-	pluginInfos.Caption = tr( "PyQt Project" );
-	pluginInfos.Description = tr( "PyQt Project support for XUPManager" );
-	pluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, Michon Aurelien aka aurelien <aurelien.french@gmail.com>";
-	pluginInfos.Type = BasePlugin::iXUP;
-	pluginInfos.Name = PLUGIN_NAME;
-	pluginInfos.Version = "0.1.0";
-	pluginInfos.FirstStartEnabled = true;
-	
-	return pluginInfos;
+	mPluginInfos.Caption = tr( "PyQt Project" );
+	mPluginInfos.Description = tr( "PyQt Project support for XUPManager" );
+	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, Michon Aurelien aka aurelien <aurelien.french@gmail.com>";
+	mPluginInfos.Type = BasePlugin::iXUP;
+	mPluginInfos.Name = PLUGIN_NAME;
+	mPluginInfos.Version = "0.1.0";
+	mPluginInfos.FirstStartEnabled = true;
 }
 
 bool PyQt::setEnabled( bool enabled )

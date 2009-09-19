@@ -36,9 +36,10 @@ class MSVCMake : public BuilderPlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin BuilderPlugin CLIToolPlugin )
 
+protected:	
+	void fillPluginInfos();
 public:
 	MSVCMake();
-	PluginInfos infos() const;
 	~MSVCMake();
 	// BasePlugin
 	virtual bool setEnabled( bool );

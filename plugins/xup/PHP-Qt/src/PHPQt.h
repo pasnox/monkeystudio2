@@ -27,9 +27,10 @@ class PHPQt : public XUPPlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin XUPPlugin )
 
+protected:	
+	void fillPluginInfos();
 public:
 	PHPQt();
-	PluginInfos infos() const;
 	virtual bool setEnabled( bool enabled );
 	virtual bool editProject( XUPProjectItem* project );
 

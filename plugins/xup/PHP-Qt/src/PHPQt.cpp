@@ -29,18 +29,15 @@ PHPQt::PHPQt():
 	mItem(0)
 {}
 
-BasePlugin::PluginInfos PHPQt::infos() const
+void PHPQt::fillPluginInfos()
 {
-	PluginInfos pluginInfos;
-	pluginInfos.Caption = tr( "PHP-Qt Project" );
-	pluginInfos.Description = tr( "PHP-Qt Project support for XUPManager" );
-	pluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
-	pluginInfos.Type = BasePlugin::iXUP;
-	pluginInfos.Name = PLUGIN_NAME;
-	pluginInfos.Version = "0.1.0";
-	pluginInfos.FirstStartEnabled = true;
-	
-	return pluginInfos;
+	mPluginInfos.Caption = tr( "PHP-Qt Project" );
+	mPluginInfos.Description = tr( "PHP-Qt Project support for XUPManager" );
+	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	mPluginInfos.Type = BasePlugin::iXUP;
+	mPluginInfos.Name = PLUGIN_NAME;
+	mPluginInfos.Version = "0.1.0";
+	mPluginInfos.FirstStartEnabled = true;
 }
 
 

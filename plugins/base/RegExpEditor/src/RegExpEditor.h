@@ -12,8 +12,9 @@ class RegExpEditor : public BasePlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin )
 	
+protected:	
+	void fillPluginInfos();
 public:
-	PluginInfos infos() const;
 	~RegExpEditor();
 	virtual bool setEnabled( bool );
 

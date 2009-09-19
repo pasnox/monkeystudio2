@@ -27,9 +27,10 @@ class QMake : public XUPPlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin XUPPlugin )
 
+protected:	
+	void fillPluginInfos();
 public:
 	QMake();
-	PluginInfos infos() const;
 	
 	virtual bool setEnabled( bool enabled );
 	virtual QWidget* settingsWidget();

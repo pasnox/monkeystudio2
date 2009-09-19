@@ -45,20 +45,17 @@
 
 #include <QIcon>
 
-BasePlugin::PluginInfos FileBrowser::infos() const
+void FileBrowser::fillPluginInfos()
 {
-	PluginInfos pluginInfos;
-	pluginInfos.Caption = tr( "File Browser" );
-	pluginInfos.Description = tr( "Plugin for browsing file outside the project" );
-	pluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, Kopats Andei aka hlamer <hlamer@tut.by>";
-	pluginInfos.Type = BasePlugin::iBase;
-	pluginInfos.Name = PLUGIN_NAME;
-	pluginInfos.Version = "1.0.0";
-	pluginInfos.FirstStartEnabled = true;
-	pluginInfos.HaveSettingsWidget = true;
-	pluginInfos.Pixmap = QPixmap( ":/icons/browser.png" );
-	
-	return pluginInfos;
+	mPluginInfos.Caption = tr( "File Browser" );
+	mPluginInfos.Description = tr( "Plugin for browsing file outside the project" );
+	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, Kopats Andei aka hlamer <hlamer@tut.by>";
+	mPluginInfos.Type = BasePlugin::iBase;
+	mPluginInfos.Name = PLUGIN_NAME;
+	mPluginInfos.Version = "1.0.0";
+	mPluginInfos.FirstStartEnabled = true;
+	mPluginInfos.HaveSettingsWidget = true;
+	mPluginInfos.Pixmap = QPixmap( ":/icons/browser.png" );
 }
 
 

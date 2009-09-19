@@ -30,19 +30,16 @@ QMake::QMake()
 	mItem = 0;
 }
 
-BasePlugin::PluginInfos QMake::infos() const
+void QMake::fillPluginInfos()
 {
-	PluginInfos pluginInfos;
-	pluginInfos.Caption = tr( "QMake Project" );
-	pluginInfos.Description = tr( "QMake Project support for XUPManager" );
-	pluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, Roper Alexander aka minirop <minirop@peyj.com>";
-	pluginInfos.Type = BasePlugin::iXUP;
-	pluginInfos.Name = PLUGIN_NAME;
-	pluginInfos.Version = "0.1.0";
-	pluginInfos.FirstStartEnabled = true;
-	pluginInfos.HaveSettingsWidget = true;
-	
-	return pluginInfos;
+	mPluginInfos.Caption = tr( "QMake Project" );
+	mPluginInfos.Description = tr( "QMake Project support for XUPManager" );
+	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, Roper Alexander aka minirop <minirop@peyj.com>";
+	mPluginInfos.Type = BasePlugin::iXUP;
+	mPluginInfos.Name = PLUGIN_NAME;
+	mPluginInfos.Version = "0.1.0";
+	mPluginInfos.FirstStartEnabled = true;
+	mPluginInfos.HaveSettingsWidget = true;
 }
 
 bool QMake::setEnabled( bool enabled )

@@ -25,8 +25,8 @@ class XUP : public XUPPlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin XUPPlugin )
 
-public:
-	PluginInfos infos() const;
+protected:	
+	void fillPluginInfos();
 	
 	virtual bool setEnabled( bool enabled );
 	virtual bool editProject( XUPProjectItem* project );

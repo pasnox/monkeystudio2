@@ -47,9 +47,10 @@ class MSVC : public CompilerPlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin CompilerPlugin CLIToolPlugin )
 
+protected:	
+	void fillPluginInfos();
 public:
 	MSVC();
-	PluginInfos infos() const;
 	~MSVC();
 	// BasePlugin
 	virtual bool setEnabled( bool );

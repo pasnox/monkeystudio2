@@ -82,8 +82,10 @@ public:
 		bool checked;			/*! Do user checked occurence for replacement on search results dock */
 	};
 	
+protected:	
+	void fillPluginInfos();
+public:
 	SearchAndReplace();
-	PluginInfos infos() const;
 	
 	virtual bool setEnabled( bool );
 

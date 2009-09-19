@@ -14,19 +14,16 @@ public:
 	}
 };
 
-BasePlugin::PluginInfos MkSShell::infos() const
+void MkSShell::fillPluginInfos()
 {
-	PluginInfos pluginInfos;
-	pluginInfos.Caption = tr( "MkS Shell" );
-	pluginInfos.Description = tr( "This plugin allow you to manually use the MkS Shell interpreter" );
-	pluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
-	pluginInfos.Type = BasePlugin::iBase;
-	pluginInfos.Name = PLUGIN_NAME;
-	pluginInfos.Version = "1.0.0";
-	pluginInfos.FirstStartEnabled = false;
-	pluginInfos.Pixmap = pIconManager::pixmap( "konsole.png", ":/icons" );
-	
-	return pluginInfos;
+	mPluginInfos.Caption = tr( "MkS Shell" );
+	mPluginInfos.Description = tr( "This plugin allow you to manually use the MkS Shell interpreter" );
+	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	mPluginInfos.Type = BasePlugin::iBase;
+	mPluginInfos.Name = PLUGIN_NAME;
+	mPluginInfos.Version = "1.0.0";
+	mPluginInfos.FirstStartEnabled = false;
+	mPluginInfos.Pixmap = pIconManager::pixmap( "konsole.png", ":/icons" );
 }
 
 bool MkSShell::setEnabled( bool b )
