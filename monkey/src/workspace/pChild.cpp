@@ -30,6 +30,7 @@
 #include "../qscintillamanager/pEditor.h"
 #include "../coremanager/MonkeyCore.h"
 
+#include <pIconManager.h>
 #include <qscintilla.h>
 
 #include <QFileInfo>
@@ -47,7 +48,7 @@ pChild::pChild()
 
 	setWidget( mEditor );
 	setFocusProxy( mEditor );
-	setWindowIcon( QIcon() );
+	setWindowIcon( pIconManager::icon( "text.png" ) );
 
 	// connections
 	connect( mEditor, SIGNAL( cursorPositionChanged( const QPoint& ) ), this, SIGNAL( cursorPositionChanged( const QPoint& ) ) );
