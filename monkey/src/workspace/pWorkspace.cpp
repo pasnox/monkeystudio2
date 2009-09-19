@@ -927,16 +927,6 @@ void pWorkspace::internal_projectCustomActionTriggered()
 	}
 }
 
-void pWorkspace::internal_listWidget_customContextMenuRequested( const QPoint& pos )
-{
-	/*
-	QMenu menu;
-	menu.addAction( MonkeyCore::menuBar()->action( "mFile/mClose/aCurrent" ) );
-	menu.addAction( MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" ) );
-	menu.exec( listWidget()->mapToGlobal( pos ) );
-	*/
-}
-
 // file menu
 void pWorkspace::fileNew_triggered()
 {

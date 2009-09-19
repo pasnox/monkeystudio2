@@ -2,6 +2,8 @@
 #include "pWorkspace.h"
 #include "pOpenedFileModel.h"
 
+#include <MonkeyCore.h>
+
 #include <pIconManager.h>
 #include <pDockWidgetTitleBar.h>
 
@@ -83,4 +85,14 @@ void pOpenedFileExplorer::selectionModel_selectionChanged( const QItemSelection&
 	tvFiles->setCurrentIndex( index );
 	mWorkspace->setCurrentDocument( document );
 	setFocus(); // setting active mdi window still the focus
+}
+
+void pOpenedFileExplorer::on_tvFiles_customContextMenuRequested( const QPoint& pos )
+{
+	QMenu menu;
+	menu.addAction( MonkeyCore::menuBar()->action( "mFile/mClose/aCurrent" ) );
+	menu.addAction( MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" ) );
+	menu.addSeparator();
+	menu.addAction( mSortMenu->menuAction() );
+	menu.exec( tvFiles->mapToGlobal( pos ) );
 }

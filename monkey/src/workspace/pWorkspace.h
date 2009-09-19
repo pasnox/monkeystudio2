@@ -122,8 +122,6 @@ protected slots:
 	void internal_projectInstallCommandRequested( const pCommand& cmd, const QString& mnu );
 	void internal_projectUninstallCommandRequested( const pCommand& cmd, const QString& mnu );
 	void internal_projectCustomActionTriggered();
-	
-	void internal_listWidget_customContextMenuRequested( const QPoint& );
 
 public slots:
 	// file menu
