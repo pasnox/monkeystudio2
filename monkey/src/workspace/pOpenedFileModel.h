@@ -47,6 +47,8 @@ public:
 protected:
 	pWorkspace* mWorkspace;
 	pOpenedFileModel::SortMode mSortMode;
+	QTimer* mSortDocumentsTimer;
+	int mSortDocumentsTimeout;
 	QList<pAbstractChild*> mDocuments;
 	QIcon mTransparentIcon;
 	QIcon mModifiedIcon;
@@ -55,6 +57,7 @@ protected:
 	void insertDocument( pAbstractChild* document, int index );
 
 protected slots:
+	void sortDocuments_timeout();
 	void documentOpened( pAbstractChild* document );
 	void documentModifiedChanged( pAbstractChild* document, bool modified );
 	void documentClosed( pAbstractChild* document );

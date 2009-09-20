@@ -15,7 +15,7 @@
     <normaloff>:/file/icons/file/open.png</normaloff>:/file/icons/file/open.png</iconset>
   </property>
   <property name="windowTitle">
-   <string>Opened File Explorer</string>
+   <string>Opened Files List</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">

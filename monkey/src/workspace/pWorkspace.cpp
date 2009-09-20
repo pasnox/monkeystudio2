@@ -156,16 +156,14 @@ void pWorkspace::loadSettings()
 
 void pWorkspace::initMultiToolBar( QToolBar* tb )
 {
-	/*
-	if ( showQuickFileAccess() )
+	if ( pMonkeyStudio::showQuickFileAccess() )
 	{
-		tb->insertAction( tb->actions().value( 0 ), MonkeyCore::workspace()->listWidget()->filesComboAction() );
+		tb->insertAction( tb->actions().value( 0 ), MonkeyCore::workspace()->dockWidget()->comboBoxAction() );
 	}
 	else
 	{
-		tb->removeAction( MonkeyCore::workspace()->listWidget()->filesComboAction() );
+		tb->removeAction( MonkeyCore::workspace()->dockWidget()->comboBoxAction() );
 	}
-	*/
 }
 
 void pWorkspace::addSearchReplaceWidget( QWidget* widget )

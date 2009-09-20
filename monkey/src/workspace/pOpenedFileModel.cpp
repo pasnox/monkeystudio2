@@ -62,9 +62,12 @@ pOpenedFileModel::pOpenedFileModel( pWorkspace* workspace )
 	Q_ASSERT( workspace );
 	mWorkspace = workspace;
 	mSortMode = pOpenedFileModel::OpeningOrder;
+	mSortDocumentsTimer = new QTimer( this );
+	mSortDocumentsTimeout = 250;
 	mTransparentIcon = pIconManager::icon( "transparent.png" );
 	mModifiedIcon = pIconManager::icon( "save.png" );
 	
+	connect( mSortDocumentsTimer, SIGNAL( timeout() ), this, SLOT( sortDocuments_timeout() ) );
 	connect( workspace, SIGNAL( documentOpened( pAbstractChild* ) ), this, SLOT( documentOpened( pAbstractChild* ) ) );
 	connect( workspace, SIGNAL( documentModifiedChanged( pAbstractChild*, bool ) ), this, SLOT( documentModifiedChanged( pAbstractChild*, bool ) ) );
 	connect( workspace, SIGNAL( documentClosed( pAbstractChild* ) ), this, SLOT( documentClosed( pAbstractChild* ) ) );
@@ -164,7 +167,7 @@ Qt::ItemFlags pOpenedFileModel::flags( const QModelIndex& index ) const
 
 QModelIndex pOpenedFileModel::index( int row, int column, const QModelIndex& parent ) const
 {
-	if ( parent.isValid() || column > 0 || row >= mDocuments.count() )
+	if ( parent.isValid() || column > 0 || column < 0 || row < 0 || row >= mDocuments.count() )
 	{
 		return QModelIndex();
 	}
@@ -264,6 +267,22 @@ void pOpenedFileModel::setSortMode( pOpenedFileModel::SortMode mode )
 
 void pOpenedFileModel::sortDocuments()
 {
+	mSortDocumentsTimer->start( mSortDocumentsTimeout );
+}
+
+void pOpenedFileModel::insertDocument( pAbstractChild* document, int index )
+{
+	Q_ASSERT( !mDocuments.contains( document ) );
+	beginInsertRows( QModelIndex(), index, index );
+	mDocuments.insert( index, document );
+	endInsertRows();
+	sortDocuments();
+}
+
+void pOpenedFileModel::sortDocuments_timeout()
+{
+	mSortDocumentsTimer->stop();
+	
 	emit layoutAboutToBeChanged();
 	const QModelIndexList pOldIndexes = persistentIndexList();
 	QModelIndexList pIndexes;
@@ -331,15 +350,6 @@ void pOpenedFileModel::sortDocuments()
 	
 	changePersistentIndexList( pOldIndexes, pIndexes );
 	emit layoutChanged();
-}
-
-void pOpenedFileModel::insertDocument( pAbstractChild* document, int index )
-{
-	Q_ASSERT( !mDocuments.contains( document ) );
-	beginInsertRows( QModelIndex(), index, index );
-	mDocuments.insert( index, document );
-	endInsertRows();
-	sortDocuments();
 }
 
 void pOpenedFileModel::documentOpened( pAbstractChild* document )

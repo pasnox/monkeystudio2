@@ -2,9 +2,42 @@
 #include "pWorkspace.h"
 
 #include <MonkeyCore.h>
-
 #include <pIconManager.h>
 #include <pDockWidgetTitleBar.h>
+
+#include <QWidgetAction>
+#include <QComboBox>
+
+class pOpenedFileAction : public QWidgetAction
+{
+	Q_OBJECT
+
+public:
+	pOpenedFileAction( pOpenedFileExplorer* parent, QAbstractItemModel* model )
+		: QWidgetAction( parent )
+	{
+		mOpenedFileExplorer = parent;
+		mModel = model;
+	}
+
+protected:
+	pOpenedFileExplorer* mOpenedFileExplorer;
+	QAbstractItemModel* mModel;
+	
+	virtual QWidget* createWidget( QWidget* parent )
+	{
+		QComboBox* combo = new QComboBox( parent );
+		combo->setMaxVisibleItems( 50 );
+		combo->setSizeAdjustPolicy( QComboBox::AdjustToContents );
+		combo->setAttribute( Qt::WA_MacSmallSize );
+		combo->setModel( mModel );
+		
+		connect( combo, SIGNAL( currentIndexChanged( int ) ), mOpenedFileExplorer, SLOT( setCurrentIndex( int ) ) );
+		connect( mOpenedFileExplorer, SIGNAL( currentIndexChanged( int ) ), combo, SLOT( setCurrentIndex( int ) ) );
+		
+		return combo;
+	}
+};
 
 pOpenedFileExplorer::pOpenedFileExplorer( pWorkspace* workspace )
 	: pDockWidget( workspace )
@@ -12,10 +45,14 @@ pOpenedFileExplorer::pOpenedFileExplorer( pWorkspace* workspace )
 	Q_ASSERT( workspace );
 	mWorkspace = workspace;
 	mModel = new pOpenedFileModel( workspace );
+	aComboBox = new pOpenedFileAction( this, mModel );
 	setupUi( this );
 	setFocusProxy( tvFiles );
-	tvFiles->setModel( mModel );
 	setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
+	tvFiles->setModel( mModel );
+	tvFiles->setAttribute( Qt::WA_MacShowFocusRect, false );
+	tvFiles->setAttribute( Qt::WA_MacSmallSize );
+	
 	
 	// sort menu
 	mSortMenu = new QMenu( this );
@@ -59,6 +96,17 @@ pOpenedFileExplorer::pOpenedFileExplorer( pWorkspace* workspace )
 	connect( tvFiles->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ), this, SLOT( selectionModel_selectionChanged( const QItemSelection&, const QItemSelection& ) ) );
 }
 
+QAction* pOpenedFileExplorer::comboBoxAction() const
+{
+	return aComboBox;
+}
+
+void pOpenedFileExplorer::setCurrentIndex( int row )
+{
+	const QModelIndex index = mModel->index( row, 0 );
+	selectedIndexChanged( index );
+}
+
 void pOpenedFileExplorer::sortTriggered ( QAction* action )
 {
 	pOpenedFileModel::SortMode mode = (pOpenedFileModel::SortMode)action->data().toInt();
@@ -92,14 +140,26 @@ void pOpenedFileExplorer::sortModeChanged( pOpenedFileModel::SortMode mode )
 	}
 }
 
+void pOpenedFileExplorer::selectedIndexChanged( const QModelIndex& index )
+{
+	pAbstractChild* document = mModel->document( index );
+	
+	if ( tvFiles->currentIndex() != index )
+	{
+		tvFiles->setCurrentIndex( index );
+	}
+	
+	mWorkspace->setCurrentDocument( document );
+	setFocus(); // setting active mdi window still the focus
+	emit currentIndexChanged( index );
+	emit currentIndexChanged( index.row() );
+}
+
 void pOpenedFileExplorer::selectionModel_selectionChanged( const QItemSelection& selected, const QItemSelection& deselected )
 {
 	Q_UNUSED( deselected );
 	const QModelIndex index = selected.indexes().value( 0 );
-	pAbstractChild* document = mModel->document( index );
-	tvFiles->setCurrentIndex( index );
-	mWorkspace->setCurrentDocument( document );
-	setFocus(); // setting active mdi window still the focus
+	selectedIndexChanged( index );
 }
 
 void pOpenedFileExplorer::on_tvFiles_customContextMenuRequested( const QPoint& pos )
@@ -111,3 +171,5 @@ void pOpenedFileExplorer::on_tvFiles_customContextMenuRequested( const QPoint& p
 	menu.addAction( mSortMenu->menuAction() );
 	menu.exec( tvFiles->mapToGlobal( pos ) );
 }
+
+#include "pOpenedFileExplorer.moc"
