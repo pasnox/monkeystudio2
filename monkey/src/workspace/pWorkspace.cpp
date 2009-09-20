@@ -75,6 +75,8 @@ pWorkspace::pWorkspace( QMainWindow* parent )
 	
 	// layout
 	mLayout = new QVBoxLayout( this );
+	mLayout->setMargin( 0 );
+	mLayout->setSpacing( 0 );
 	
 	// multitoolbar
 	QFrame* hline = new QFrame( this );
@@ -483,7 +485,13 @@ void pWorkspace::restore()
 
 void pWorkspace::setDocumentMode( QMdiArea::ViewMode mode )
 {
+	QMdiSubWindow* document = mMdiArea->currentSubWindow();
 	mMdiArea->setViewMode( mode );
+	
+	if ( document )
+	{
+		document->showMaximized();
+	}
 }
 
 pAbstractChild* pWorkspace::createNewTextEditor()
@@ -1198,7 +1206,7 @@ void pWorkspace::editPrepareAPIs_triggered()
 void pWorkspace::windowChangeDocumentMode()
 {
 	QAction* action = qobject_cast<QAction*>( sender() );
-	mMdiArea->setViewMode( (QMdiArea::ViewMode)action->data().toInt() );
+	setDocumentMode( (QMdiArea::ViewMode)action->data().toInt() );
 }
 
 // help menu
