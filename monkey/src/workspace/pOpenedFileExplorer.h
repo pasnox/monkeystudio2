@@ -2,9 +2,9 @@
 #define POPENEDFILEEXPLORER_H
 
 #include "ui_pOpenedFileExplorer.h"
+#include "pOpenedFileModel.h"
 
 class pWorkspace;
-class pOpenedFileModel;
 class pAbstractChild;
 
 class pOpenedFileExplorer : public pDockWidget, public Ui::pOpenedFileExplorer
@@ -13,7 +13,6 @@ class pOpenedFileExplorer : public pDockWidget, public Ui::pOpenedFileExplorer
 
 public:
 	pOpenedFileExplorer( pWorkspace* workspace );
-	virtual ~pOpenedFileExplorer();
 
 protected:
 	pWorkspace* mWorkspace;
@@ -24,6 +23,7 @@ protected slots:
 	void sortTriggered( QAction* action );
 	void documentChanged( pAbstractChild* document );
 	void currentDocumentChanged( pAbstractChild* document );
+	void sortModeChanged( pOpenedFileModel::SortMode mode );
 	void selectionModel_selectionChanged( const QItemSelection& selected, const QItemSelection& deselected );
 	void on_tvFiles_customContextMenuRequested( const QPoint& pos );
 };

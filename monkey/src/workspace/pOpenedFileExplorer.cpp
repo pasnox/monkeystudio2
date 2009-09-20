@@ -1,6 +1,5 @@
 #include "pOpenedFileExplorer.h"
 #include "pWorkspace.h"
-#include "pOpenedFileModel.h"
 
 #include <MonkeyCore.h>
 
@@ -50,14 +49,14 @@ pOpenedFileExplorer::pOpenedFileExplorer( pWorkspace* workspace )
 	tb->setPopupMode( QToolButton::InstantPopup );
 	titleBar()->addSeparator( 1 );
 	
+	tvFiles->viewport()->setAcceptDrops( true );
+	
 	connect( group, SIGNAL( triggered ( QAction* ) ), this, SLOT( sortTriggered ( QAction* ) ) );
 	connect( workspace, SIGNAL( documentChanged( pAbstractChild* ) ), this, SLOT( documentChanged( pAbstractChild* ) ) );
 	connect( workspace, SIGNAL( currentDocumentChanged( pAbstractChild* ) ), this, SLOT( currentDocumentChanged( pAbstractChild* ) ) );
+	connect( mModel, SIGNAL( documentMoved( pAbstractChild* ) ), this, SLOT( currentDocumentChanged( pAbstractChild* ) ) );
+	connect( mModel, SIGNAL( sortModeChanged( pOpenedFileModel::SortMode ) ), this, SLOT( sortModeChanged( pOpenedFileModel::SortMode ) ) );
 	connect( tvFiles->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ), this, SLOT( selectionModel_selectionChanged( const QItemSelection&, const QItemSelection& ) ) );
-}
-
-pOpenedFileExplorer::~pOpenedFileExplorer()
-{
 }
 
 void pOpenedFileExplorer::sortTriggered ( QAction* action )
@@ -68,13 +67,29 @@ void pOpenedFileExplorer::sortTriggered ( QAction* action )
 
 void pOpenedFileExplorer::documentChanged( pAbstractChild* document )
 {
-	//
+	Q_UNUSED( document );
 }
 
 void pOpenedFileExplorer::currentDocumentChanged( pAbstractChild* document )
 {
 	const QModelIndex index = mModel->index( document );
 	tvFiles->setCurrentIndex( index );
+}
+
+void pOpenedFileExplorer::sortModeChanged( pOpenedFileModel::SortMode mode )
+{
+	foreach ( QAction* action, mSortMenu->actions() )
+	{
+		if ( action->data().toInt() == mode )
+		{
+			if ( !action->isChecked() )
+			{
+				action->setChecked( true );
+			}
+			
+			return;
+		}
+	}
 }
 
 void pOpenedFileExplorer::selectionModel_selectionChanged( const QItemSelection& selected, const QItemSelection& deselected )

@@ -60,6 +60,7 @@ public:
 	QFileSystemWatcher* fileWatcher() const;
 	
 	pAbstractChild* document( int index ) const;
+	int indexOfDocument( pAbstractChild* document ) const;
 	QList<pAbstractChild*> documents() const;
 	
 	void setCurrentDocument( pAbstractChild* document );

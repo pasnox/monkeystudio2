@@ -190,6 +190,11 @@ pAbstractChild* pWorkspace::document( int index ) const
 	return qobject_cast<pAbstractChild*>( window );
 }
 
+int pWorkspace::indexOfDocument( pAbstractChild* document ) const
+{
+	return mMdiArea->subWindowList().indexOf( document );
+}
+
 QList<pAbstractChild*> pWorkspace::documents() const
 {
 	QList<pAbstractChild*> documents;

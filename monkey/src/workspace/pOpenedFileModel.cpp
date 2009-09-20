@@ -1,6 +1,5 @@
 #include "pOpenedFileModel.h"
 #include "pWorkspace.h"
-#include "pAbstractChild.h"
 
 #include <pIconManager.h>
 
@@ -151,6 +150,18 @@ QVariant pOpenedFileModel::data( const QModelIndex& index, int role ) const
 	return QVariant();
 }
 
+Qt::ItemFlags pOpenedFileModel::flags( const QModelIndex& index ) const
+{
+	if ( index.isValid() )
+	{
+		return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled;
+	}
+	else
+	{
+		return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDropEnabled;
+	}
+}
+
 QModelIndex pOpenedFileModel::index( int row, int column, const QModelIndex& parent ) const
 {
 	if ( parent.isValid() || column > 0 || row >= mDocuments.count() )
@@ -165,6 +176,53 @@ QModelIndex pOpenedFileModel::parent( const QModelIndex& index ) const
 {
 	Q_UNUSED( index );
 	return QModelIndex();
+}
+
+QStringList pOpenedFileModel::mimeTypes() const
+{
+	return QStringList( "application/x-modelindexrow" );
+}
+
+QMimeData* pOpenedFileModel::mimeData( const QModelIndexList& indexes ) const
+{
+	if ( indexes.count() != 1 )
+	{
+		return 0;
+	}
+	
+	QMimeData* data = new QMimeData();
+	data->setData( mimeTypes().first(), QByteArray::number( indexes.first().row() ) );
+	return data;
+}
+
+Qt::DropActions pOpenedFileModel::supportedDropActions() const
+{
+	return Qt::MoveAction;
+}
+
+bool pOpenedFileModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent )
+{
+	if ( parent.isValid() || ( row == -1 && column == -1 ) || action != Qt::MoveAction || !data || !data->hasFormat( mimeTypes().first() ) )
+	{
+		return false;
+	}
+	
+	const int fromRow = data->data( mimeTypes().first() ).toInt();
+	const QPersistentModelIndex toIndex = index( row, column );
+	const QPersistentModelIndex fromIndex = index( fromRow, 0 );
+	
+	if ( fromIndex == toIndex || toIndex == index( fromRow +1, 0 ) )
+	{
+		return false;
+	}
+	
+	setSortMode( pOpenedFileModel::Custom );
+	pAbstractChild* document = this->document( fromIndex );
+	documentClosed( document );
+	insertDocument( document, toIndex.isValid() ? toIndex.row() : row -1 );
+	emit documentMoved( document );
+	emit documentMoved( index( document ) );
+	return true;
 }
 
 pAbstractChild* pOpenedFileModel::document( const QModelIndex& index ) const
@@ -200,16 +258,12 @@ void pOpenedFileModel::setSortMode( pOpenedFileModel::SortMode mode )
 	{
 		mSortMode = mode;
 		sortDocuments();
+		emit sortModeChanged( mSortMode );
 	}
 }
 
 void pOpenedFileModel::sortDocuments()
 {
-	if ( mSortMode == pOpenedFileModel::Custom )
-	{
-		return;
-	}
-	
 	emit layoutAboutToBeChanged();
 	const QModelIndexList pOldIndexes = persistentIndexList();
 	QModelIndexList pIndexes;
@@ -279,14 +333,19 @@ void pOpenedFileModel::sortDocuments()
 	emit layoutChanged();
 }
 
-void pOpenedFileModel::documentOpened( pAbstractChild* document )
+void pOpenedFileModel::insertDocument( pAbstractChild* document, int index )
 {
 	Q_ASSERT( !mDocuments.contains( document ) );
-	const int index = mDocuments.count();
 	beginInsertRows( QModelIndex(), index, index );
-	mDocuments << document;
+	mDocuments.insert( index, document );
 	endInsertRows();
 	sortDocuments();
+}
+
+void pOpenedFileModel::documentOpened( pAbstractChild* document )
+{
+	const int index = mDocuments.count();
+	insertDocument( document, index );
 }
 
 void pOpenedFileModel::documentModifiedChanged( pAbstractChild* document, bool modified )
@@ -302,4 +361,5 @@ void pOpenedFileModel::documentClosed( pAbstractChild* document )
 	beginRemoveRows( QModelIndex(), index, index );
 	mDocuments.removeOne( document );
 	endRemoveRows();
+	sortDocuments();
 }
