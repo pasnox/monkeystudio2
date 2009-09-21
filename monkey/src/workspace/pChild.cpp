@@ -203,20 +203,15 @@ bool pChild::openFile( const QString& fileName, const QString& codec )
 		return false;
 	}
 	
-	const bool locked = mEditor->blockSignals( true );
+	// set filename of the owned document
+	setFilePath( fileName );
 
 	// open file
 	if ( !mEditor->openFile( fileName, codec ) )
 	{
-		mEditor->blockSignals( locked );
+		setFilePath( QString::null );
 		return false;
 	}
-	
-	mEditor->blockSignals( locked );
-	
-	// set window modified state
-	setFilePath( fileName );
-	setWindowModified( mEditor->isModified() );
 	
 	if ( !mCodec )
 	{

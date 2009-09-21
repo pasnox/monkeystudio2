@@ -380,7 +380,7 @@ pAbstractChild* pWorkspace::openFile( const QString& fileName, const QString& co
 	}
 	
 	// update gui state
-	//mdiArea_subWindowActivated( document );
+	mdiArea_subWindowActivated( document );
 
 	// return child instance
 	return document;
