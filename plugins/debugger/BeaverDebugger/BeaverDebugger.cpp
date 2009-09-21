@@ -62,12 +62,20 @@ bool BeaverDebugger::install()
 	// create action
 	MonkeyCore::menuBar()->menu( "mDebugger" )->menuAction()->setVisible( true ); // FIXME is it good?
 	MonkeyCore::menuBar()->menu( "mDebugger" )->menuAction()->setEnabled( true ); // FIXME is it good?
-	QAction* a = MonkeyCore::menuBar()->action( "mDebugger/aWhyCannot",  
-												tr( "Why can't I debug my app" ), 
-												QIcon( ":/icons/beaverdbg.png" ), 
-												"", // shortcut
-												"Check Beaver Debugger status" );
-	connect( a, SIGNAL( triggered() ), this, SLOT( explainWhyCannot() ) );
+	
+	if (0) // FIXME debugger found
+	{
+		mWhyCannot = NULL;
+	}
+	else // debugger not found
+	{
+		mWhyCannot = MonkeyCore::menuBar()->action( "mDebugger/aWhyCannot",  
+													tr( "Why can't I debug my app" ), 
+													QIcon( ":/icons/beaverdbg.png" ), 
+													"", // shortcut
+													"Check Beaver Debugger status" );
+	}
+	connect( mWhyCannot, SIGNAL( triggered() ), this, SLOT( explainWhyCannot() ) );
 	return true;
 }
 
@@ -79,7 +87,9 @@ bool BeaverDebugger::install()
 */
 bool BeaverDebugger::uninstall()
 {
-	delete MonkeyCore::menuBar()->action( "mDebugger/aWhyCannot");
+	if (mWhyCannot)
+		delete mWhyCannot;
+	
 	return true;
 }
 
@@ -92,7 +102,16 @@ QWidget* BeaverDebugger::settingsWidget()
 
 void BeaverDebugger::explainWhyCannot() const
 {
-	pMonkeyStudio::information("Beaver Debugger", "Beaver Debugger not found", NULL );
+	QString fullText;
+	fullText += tr("Beaver debugger not found\n");
+	fullText += tr("It might be not installed in the system, or path to it configured not correctly\n");
+	fullText += tr("For install, download it from http://beaverdbg.googlecode.com and follow installation instructions\n");
+	fullText += tr("If you use Linux distribution, Beaver Debugger might be included to it. Package name probably is 'beaverdbg'\n");
+	fullText += "\n";
+	fullText += tr("If Beaver Debugger is installed, but not found, go to \n");
+	fullText += tr("Plugins->Manage->Debugger->Beaver Debugger->Configure...\n");
+	fullText += tr("and configure path to it");
+	pMonkeyStudio::information(tr("Beaver Debugger not found"), fullText, NULL);;
 }
 
 Q_EXPORT_PLUGIN2( BaseBeaverDebugger, BeaverDebugger )

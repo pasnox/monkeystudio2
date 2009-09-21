@@ -51,11 +51,14 @@ class BeaverDebugger : public BasePlugin
 protected:	
 	void fillPluginInfos();
 public:
-	virtual bool install();
+	virtual bool install(); // FIXME make protected for all plugins
 	virtual bool uninstall();
 	virtual QWidget* settingsWidget();
 protected slots:
 	void explainWhyCannot() const;
+	
+protected:
+	QAction *mWhyCannot;
 };
 
 #endif
