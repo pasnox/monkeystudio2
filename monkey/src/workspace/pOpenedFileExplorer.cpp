@@ -121,7 +121,7 @@ void pOpenedFileExplorer::documentChanged( pAbstractChild* document )
 void pOpenedFileExplorer::currentDocumentChanged( pAbstractChild* document )
 {
 	const QModelIndex index = mModel->index( document );
-	tvFiles->setCurrentIndex( index );
+	selectedIndexChanged( index );
 }
 
 void pOpenedFileExplorer::sortModeChanged( pOpenedFileModel::SortMode mode )

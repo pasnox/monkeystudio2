@@ -209,7 +209,12 @@ QList<pAbstractChild*> pWorkspace::documents() const
 
 void pWorkspace::setCurrentDocument( pAbstractChild* document )
 {
-	mMdiArea->setActiveSubWindow( document );
+	pAbstractChild* curDocument = currentDocument();
+	
+	if ( curDocument != document )
+	{
+		mMdiArea->setActiveSubWindow( document );
+	}
 }
 
 pAbstractChild* pWorkspace::currentDocument() const
