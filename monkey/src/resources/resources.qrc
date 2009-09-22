@@ -16,6 +16,9 @@
 	<qresource prefix="/messages" >
 		<file alias="messages_infos.png" >icons/messages/infos.png</file>
 	</qresource>
+	<qresource prefix="/openedfileexplorer" >
+		<file alias="view-list-tree.png" >icons/openedfileexplorer/view-list-tree.png</file>
+	</qresource>
 	<qresource prefix="/xupeditor" >
 		<file>icons/xupeditor/about.png</file>
 		<file>icons/xupeditor/builder.png</file>
