@@ -47,7 +47,16 @@ class BeaverDebugger : public BasePlugin
 {
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin )
-
+	enum TryFindResult
+	{
+		OK,
+		NOT_FINISHED,
+		FAILED_TO_START,
+		CRASHED,
+		UNKNOWN_ERROR,
+		NOT_BEAVER,
+	};
+	
 protected:	
 	void fillPluginInfos();
 public:
@@ -59,6 +68,8 @@ protected slots:
 	
 protected:
 	QAction *mWhyCannot;
+	// Returns QString::null if found, or error, if not
+	TryFindResult tryFindBeaver() const;
 };
 
 #endif
