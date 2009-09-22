@@ -81,11 +81,11 @@ pOpenedFileExplorer::pOpenedFileExplorer( pWorkspace* workspace )
 	aSortMenu->setMenu( mSortMenu );
 	aSortMenu->setIcon( pIconManager::icon( "sort.png" ) );
 	aSortMenu->setToolTip( aSortMenu->text() );
-	
+	/*
 	QToolButton* tb = qobject_cast<QToolButton*>( titleBar()->addAction( aSortMenu, 0 ) );
 	tb->setPopupMode( QToolButton::InstantPopup );
 	titleBar()->addSeparator( 1 );
-	
+	*/
 	tvFiles->viewport()->setAcceptDrops( true );
 	
 	connect( group, SIGNAL( triggered ( QAction* ) ), this, SLOT( sortTriggered ( QAction* ) ) );
@@ -101,6 +101,16 @@ QAction* pOpenedFileExplorer::comboBoxAction() const
 	return aComboBox;
 }
 
+pOpenedFileModel::SortMode pOpenedFileExplorer::sortMode() const
+{
+	return mModel->sortMode();
+}
+
+void pOpenedFileExplorer::setSortMode( pOpenedFileModel::SortMode mode )
+{
+	mModel->setSortMode( mode );
+}
+
 void pOpenedFileExplorer::setCurrentIndex( int row )
 {
 	const QModelIndex index = mModel->index( row, 0 );
@@ -110,7 +120,7 @@ void pOpenedFileExplorer::setCurrentIndex( int row )
 void pOpenedFileExplorer::sortTriggered ( QAction* action )
 {
 	pOpenedFileModel::SortMode mode = (pOpenedFileModel::SortMode)action->data().toInt();
-	mModel->setSortMode( mode );
+	setSortMode( mode );
 }
 
 void pOpenedFileExplorer::documentChanged( pAbstractChild* document )

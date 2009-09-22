@@ -70,6 +70,59 @@ pWorkspace::pWorkspace( QMainWindow* parent )
 	: QFrame( parent )
 {
 	Q_ASSERT( parent );
+	mViewMode = pWorkspace::NoTabs;
+	
+	pMenuBar* mb = MonkeyCore::menuBar();
+	
+	// action group for view modes
+	mViewModesGroup = new QActionGroup( this );
+	mViewModesGroup->addAction( mb->action( "mWindow/aNoTabs" ) );
+	mViewModesGroup->addAction( mb->action( "mWindow/aTopTabs" ) );
+	mViewModesGroup->addAction( mb->action( "mWindow/aBottomTabs" ) );
+	mViewModesGroup->addAction( mb->action( "mWindow/aLeftTabs" ) );
+	mViewModesGroup->addAction( mb->action( "mWindow/aRightTabs" ) );
+	mb->action( "mWindow/aSeparator1" );
+	
+	mb->menu( "mWindow" )->insertActions( mb->action( "mWindow/aCascase" ), mViewModesGroup->actions() );
+	mb->menu( "mWindow" )->insertAction( mb->action( "mWindow/aCascase" ), mb->action( "mWindow/aSeparator1" ) );
+	
+	QList<QAction*> actions = mViewModesGroup->actions();
+	
+	for ( int i = pWorkspace::NoTabs; i < pWorkspace::RightTabs +1; i++ )
+	{
+		QAction* action = actions.at( i );
+		action->setCheckable( true );
+		action->setData( i );
+		
+		if ( mViewMode == i )
+		{
+			action->setChecked( true );
+		}
+		
+		switch ( (pWorkspace::ViewMode)i )
+		{
+			case pWorkspace::NoTabs:
+				action->setText( tr( "No Tabs" ) );
+				action->setToolTip( tr( "No tabs, use 'Oopened Files List' to have a list of opened documents" ) );
+				break;
+			case pWorkspace::TopTabs:
+				action->setText( tr( "Tabs at &Top" ) );
+				action->setToolTip( action->text() );
+				break;
+			case pWorkspace::BottomTabs:
+				action->setText( tr( "Tabs at &Bottom" ) );
+				action->setToolTip( action->text() );
+				break;
+			case pWorkspace::LeftTabs:
+				action->setText( tr( "Tabs at &Left" ) );
+				action->setToolTip( action->text() );
+				break;
+			case pWorkspace::RightTabs:
+				action->setText( tr( "Tabs at &Right" ) );
+				action->setToolTip( action->text() );
+				break;
+		}
+	}
 	
 	mOpenedFileExplorer = new pOpenedFileExplorer( this );
 	
@@ -85,7 +138,6 @@ pWorkspace::pWorkspace( QMainWindow* parent )
 	// document area
 	mMdiArea = new QMdiArea( this );
 	mMdiArea->setActivationOrder( QMdiArea::CreationOrder );
-	mMdiArea->setViewMode( QMdiArea::TabbedView );
 	mMdiArea->setDocumentMode( true );
 	
 	// add widgets to layout
@@ -101,6 +153,7 @@ pWorkspace::pWorkspace( QMainWindow* parent )
 	loadSettings();
 
 	// connections
+	connect( mViewModesGroup, SIGNAL( triggered( QAction* ) ), this, SLOT( viewModes_triggered( QAction* ) ) );
 	connect( mMdiArea, SIGNAL( subWindowActivated( QMdiSubWindow* ) ), this, SLOT( mdiArea_subWindowActivated( QMdiSubWindow* ) ) );
 	connect( parent, SIGNAL( urlsDropped( const QList<QUrl>& ) ), this, SLOT( internal_urlsDropped( const QList<QUrl>& ) ) );
 	connect( MonkeyCore::projectsManager(), SIGNAL( currentProjectChanged( XUPProjectItem*, XUPProjectItem* ) ), this, SLOT( internal_currentProjectChanged( XUPProjectItem*, XUPProjectItem* ) ) );
@@ -142,6 +195,8 @@ void pWorkspace::loadSettings()
 	tabBar()->setTabsColor( tabsTextColor() );
 	tabBar()->setCurrentTabColor( currentTabTextColor() );
 	*/
+	
+	mOpenedFileExplorer->setSortMode( pMonkeyStudio::openedFileSortingMode() );
 	setDocumentMode( pMonkeyStudio::documentMode() );
 	
 	pMultiToolBar* mtb = MonkeyCore::multiToolBar();
@@ -279,9 +334,9 @@ void pWorkspace::closeDocument( pAbstractChild* document, bool showDialog )
 	}
 }
 
-QMdiArea::ViewMode pWorkspace::documentMode() const
+pWorkspace::ViewMode pWorkspace::documentMode() const
 {
-	return mMdiArea->viewMode();
+	return mViewMode;
 }
 
 void pWorkspace::handleDocument( pAbstractChild* document )
@@ -470,7 +525,7 @@ void pWorkspace::cascade()
 
 void pWorkspace::minimize()
 {
-	setDocumentMode( QMdiArea::SubWindowView );
+	setDocumentMode( pWorkspace::NoTabs );
 	
 	foreach ( QMdiSubWindow* window, mMdiArea->subWindowList() )
 	{
@@ -480,7 +535,7 @@ void pWorkspace::minimize()
 
 void pWorkspace::restore()
 {
-	setDocumentMode( QMdiArea::SubWindowView );
+	setDocumentMode( pWorkspace::NoTabs );
 	
 	foreach ( QMdiSubWindow* window, mMdiArea->subWindowList() )
 	{
@@ -488,14 +543,55 @@ void pWorkspace::restore()
 	}
 }
 
-void pWorkspace::setDocumentMode( QMdiArea::ViewMode mode )
+void pWorkspace::setDocumentMode( pWorkspace::ViewMode mode )
 {
-	QMdiSubWindow* document = mMdiArea->currentSubWindow();
-	mMdiArea->setViewMode( mode );
+	if ( mViewMode == mode )
+	{
+		return;
+	}
 	
-	if ( document )
+	QMdiSubWindow* document = mMdiArea->currentSubWindow();
+	mViewMode = mode;
+	
+	switch ( mViewMode )
+	{
+		case pWorkspace::NoTabs:
+			mMdiArea->setViewMode( QMdiArea::SubWindowView );
+			break;
+		case pWorkspace::TopTabs:
+			mMdiArea->setTabPosition( QTabWidget::North );
+			mMdiArea->setViewMode( QMdiArea::TabbedView );
+			break;
+		case pWorkspace::BottomTabs:
+			mMdiArea->setTabPosition( QTabWidget::South );
+			mMdiArea->setViewMode( QMdiArea::TabbedView );
+			break;
+		case pWorkspace::LeftTabs:
+			mMdiArea->setTabPosition( QTabWidget::West );
+			mMdiArea->setViewMode( QMdiArea::TabbedView );
+			break;
+		case pWorkspace::RightTabs:
+			mMdiArea->setTabPosition( QTabWidget::East );
+			mMdiArea->setViewMode( QMdiArea::TabbedView );
+			break;
+	}
+	
+	if ( document && !document->isMaximized() )
 	{
 		document->showMaximized();
+	}
+	
+	foreach ( QAction* action, mViewModesGroup->actions() )
+	{
+		if ( action->data().toInt() == mViewMode )
+		{
+			if ( !action->isChecked() )
+			{
+				action->setChecked( true );
+			}
+			
+			return;
+		}
 	}
 }
 
@@ -663,6 +759,11 @@ void pWorkspace::multitoolbar_notifyChanges()
 	bool show = tb && !tb->actions().isEmpty();
 	
 	mtb->setVisible( show );
+}
+
+void pWorkspace::viewModes_triggered( QAction* action )
+{
+	setDocumentMode( (pWorkspace::ViewMode)action->data().toInt() );
 }
 
 void pWorkspace::mdiArea_subWindowActivated( QMdiSubWindow* docu )
@@ -1205,13 +1306,6 @@ void pWorkspace::editExpandAbbreviation_triggered()
 void pWorkspace::editPrepareAPIs_triggered()
 {
 	pMonkeyStudio::prepareAPIs();
-}
-
-// window
-void pWorkspace::windowChangeDocumentMode()
-{
-	QAction* action = qobject_cast<QAction*>( sender() );
-	setDocumentMode( (QMdiArea::ViewMode)action->data().toInt() );
 }
 
 // help menu

@@ -1,5 +1,6 @@
 #include "pOpenedFileModel.h"
 #include "pWorkspace.h"
+#include "pAbstractChild.h"
 
 #include <pIconManager.h>
 

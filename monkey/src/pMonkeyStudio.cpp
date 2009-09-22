@@ -963,19 +963,6 @@ void pMonkeyStudio::setEditorProperties( pEditor* editor )
 }
 
 /*!
-	\details Save projects on custom actions triggered ( builder, compiler, debugger, interpreter )
-	\param save True to save, else false
-*/
-void pMonkeyStudio::setSaveProjectsOnCustomAction( bool save )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/SaveProjectsOnCustomAction", save ); }
-
-/*!
-	\details Return true if projects are saved on custom actions triggered, else false
-*/
-bool pMonkeyStudio::saveProjectsOnCustomAction()
-{ return MonkeyCore::settings()->value( settingsPath() +"/SaveProjectsOnCustomAction", false ).toBool(); }
-
-/*!
 	\details Save files on custom actions triggered ( builder, compiler, debugger, interpreter )
 	\param save True to save, else false
 */
@@ -1066,26 +1053,18 @@ void pMonkeyStudio::setCurrentTabTextColor( const QColor& color )
 QColor pMonkeyStudio::currentTabTextColor()
 { return MonkeyCore::settings()->value( settingsPath() +"/CurrentTabTextColor", QColor( Qt::blue ) ).value<QColor>(); }
 
-/*
-void pMonkeyStudio::setTabMode( pTabbedWorkspace::TabMode m )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/TabMode", m ); }
-
-const pTabbedWorkspace::TabMode pMonkeyStudio::tabMode()
-{ return (pTabbedWorkspace::TabMode)MonkeyCore::settings()->value( settingsPath() +"/TabMode", pTabbedWorkspace::tmMDI ).toInt(); }
-*/
-
 /*!
 	\details Set the workspace doc mode
 	\param mode The mode to apply
 */
-void pMonkeyStudio::setDocumentMode( QMdiArea::ViewMode mode )
+void pMonkeyStudio::setDocumentMode( pWorkspace::ViewMode mode )
 { MonkeyCore::settings()->setValue( settingsPath() +"/DocMode", mode ); }
 
 /*!
 	\details Return the mod used by the workspace
 */
-QMdiArea::ViewMode pMonkeyStudio::documentMode()
-{ return (QMdiArea::ViewMode)MonkeyCore::settings()->value( settingsPath() +"/DocMode", QMdiArea::TabbedView ).toInt(); }
+pWorkspace::ViewMode pMonkeyStudio::documentMode()
+{ return (pWorkspace::ViewMode)MonkeyCore::settings()->value( settingsPath() +"/DocMode", pWorkspace::NoTabs ).toInt(); }
 
 /*!
 	\details Set the external changes react mode
@@ -1138,6 +1117,19 @@ void pMonkeyStudio::setShowQuickFileAccess( bool show )
 */
 bool pMonkeyStudio::showQuickFileAccess()
 { return MonkeyCore::settings()->value( settingsPath() +"/ShowQuickFileAccess", false ).toBool(); }
+
+/*!
+	\details Set the sorting mode used by the Opened Files List dock
+	\param mode Specify the used mode
+*/
+void pMonkeyStudio::setOpenedFileSortingMode( pOpenedFileModel::SortMode mode )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/OpenedFileSortingMode", mode ); }
+
+/*!
+	\details Return the sorting mode used by the Opened Files List dock
+*/
+pOpenedFileModel::SortMode pMonkeyStudio::openedFileSortingMode()
+{ return (pOpenedFileModel::SortMode)MonkeyCore::settings()->value( settingsPath() +"/OpenedFileSortingMode", pOpenedFileModel::OpeningOrder ).toInt(); }
 
 /*!
 	\details Set if auto syntax check is performed

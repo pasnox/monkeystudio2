@@ -4,9 +4,8 @@
 #include <QAbstractItemModel>
 #include <QIcon>
 
-#include "pAbstractChild.h"
-
 class pWorkspace;
+class pAbstractChild;
 
 class pOpenedFileModel : public QAbstractItemModel
 {

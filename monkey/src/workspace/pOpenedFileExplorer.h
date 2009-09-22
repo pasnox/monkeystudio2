@@ -15,6 +15,9 @@ public:
 	pOpenedFileExplorer( pWorkspace* workspace );
 	
 	QAction* comboBoxAction() const;
+	
+	pOpenedFileModel::SortMode sortMode() const;
+	void setSortMode( pOpenedFileModel::SortMode mode );
 
 public slots:
 	void setCurrentIndex( int row );

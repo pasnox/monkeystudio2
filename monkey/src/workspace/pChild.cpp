@@ -48,7 +48,8 @@ pChild::pChild()
 
 	setWidget( mEditor );
 	setFocusProxy( mEditor );
-	setWindowIcon( pIconManager::icon( "text.png" ) );
+	//setWindowIcon( pIconManager::icon( "text.png" ) );
+	setWindowIcon( QIcon() );
 
 	// connections
 	connect( mEditor, SIGNAL( cursorPositionChanged( const QPoint& ) ), this, SIGNAL( cursorPositionChanged( const QPoint& ) ) );

@@ -74,9 +74,19 @@ UISettings::UISettings( QWidget* p )
 	bgExternalChanges->addButton( rbAlertUser, pMonkeyStudio::ecmAlert );
 	bgExternalChanges->addButton( rbReloadAutomatically, pMonkeyStudio::ecmReload );
 	
+	// sorting mode
+	cbSortingMode->addItem( tr( "Opening order" ), pOpenedFileModel::OpeningOrder );
+	cbSortingMode->addItem( tr( "File name" ), pOpenedFileModel::FileName );
+	cbSortingMode->addItem( tr( "Url" ), pOpenedFileModel::URL );
+	cbSortingMode->addItem( tr( "Suffixes" ), pOpenedFileModel::Suffixes );
+	cbSortingMode->addItem( tr( "Custom" ), pOpenedFileModel::Custom );
+	
 	// tab mode
-	cbTabModes->addItem( tr( "SDI" ), QMdiArea::TabbedView );
-	cbTabModes->addItem( tr( "MDI" ), QMdiArea::SubWindowView );
+	cbTabModes->addItem( tr( "No Tabs" ), pWorkspace::NoTabs );
+	cbTabModes->addItem( tr( "Tabs at Top" ), pWorkspace::TopTabs );
+	cbTabModes->addItem( tr( "Tabs at Bottom" ), pWorkspace::BottomTabs );
+	cbTabModes->addItem( tr( "Tabs at Left" ), pWorkspace::LeftTabs );
+	cbTabModes->addItem( tr( "Tabs at Right" ), pWorkspace::RightTabs );
 
 	// loads text codecs
 	cbDefaultCodec->addItems( availableTextCodecs() );
@@ -184,7 +194,6 @@ void UISettings::loadSettings()
 	QString sp;
 	
 	// General
-	cbSaveProjects->setChecked( saveProjectsOnCustomAction() );
 	cbSaveFiles->setChecked( saveFilesOnCustomAction() );
 	leDefaultProjectsDirectory->setText( defaultProjectsDirectory() );
 	cbTabsHaveCloseButton->setChecked( tabsHaveCloseButton() );
@@ -197,6 +206,7 @@ void UISettings::loadSettings()
 	cbSaveSession->setChecked( saveSessionOnClose() );
 	cbRestoreSession->setChecked( restoreSessionOnStartup() );
 	cbQuickFileAccess->setChecked( showQuickFileAccess() );
+	cbSortingMode->setCurrentIndex( cbSortingMode->findData( openedFileSortingMode() ) );
 
 	// Paths
 	pleTemplatesPaths->setValues( s->storagePaths( Settings::SP_TEMPLATES ) );
@@ -330,7 +340,6 @@ void UISettings::saveSettings()
 	QString sp;
 
 	// General
-	setSaveProjectsOnCustomAction( cbSaveProjects->isChecked() );
 	setSaveFilesOnCustomAction( cbSaveFiles->isChecked() );
 	setDefaultProjectsDirectory( leDefaultProjectsDirectory->text() );
 	setTabsHaveCloseButton( cbTabsHaveCloseButton->isChecked() );
@@ -338,11 +347,12 @@ void UISettings::saveSettings()
 	setTabsElided( cbTabsElided->isChecked() );
 	setTabsTextColor( tbTabsTextColor->color() );
 	setCurrentTabTextColor( tbCurrentTabTextColor->color() );
-	setDocumentMode( (QMdiArea::ViewMode)cbTabModes->itemData( cbTabModes->currentIndex() ).toInt() );
+	setDocumentMode( (pWorkspace::ViewMode)cbTabModes->itemData( cbTabModes->currentIndex() ).toInt() );
 	setExternalChanges( (pMonkeyStudio::ExternalChangesMode)bgExternalChanges->checkedId() );
 	setSaveSessionOnClose( cbSaveSession->isChecked() );
 	setRestoreSessionOnStartup( cbRestoreSession->isChecked() );
 	setShowQuickFileAccess( cbQuickFileAccess->isChecked() );
+	setOpenedFileSortingMode( (pOpenedFileModel::SortMode)cbSortingMode->itemData( cbSortingMode->currentIndex() ).toInt() );
 
 	// Paths
 	s->setStoragePaths( Settings::SP_TEMPLATES, pleTemplatesPaths->values() );
@@ -486,6 +496,9 @@ void UISettings::saveSettings()
 	
 	MonkeyCore::abbreviationsManager()->set( abbreviations );
 	MonkeyCore::abbreviationsManager()->generateScript();
+	
+	// flush settings to diskfree_t
+	s->sync();
 }
 
 void UISettings::on_twMenu_itemSelectionChanged()

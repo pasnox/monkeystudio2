@@ -49,6 +49,15 @@ class Q_MONKEY_EXPORT pWorkspace : public QFrame
 	Q_OBJECT
 
 public:
+	enum ViewMode
+	{
+		NoTabs,
+		TopTabs,
+		BottomTabs,
+		LeftTabs,
+		RightTabs
+	};
+	
 	pWorkspace( QMainWindow* parent = 0 );
 	
 	static QString defaultContext();
@@ -68,7 +77,7 @@ public:
 	
 	void goToLine( const QString& fileName, const QPoint& pos, bool highlight, const QString& codec );
 	void closeDocument( pAbstractChild* document, bool showDialog = true );
-	QMdiArea::ViewMode documentMode() const;
+	pWorkspace::ViewMode documentMode() const;
 	void handleDocument( pAbstractChild* document );
 	void unhandleDocument( pAbstractChild* document );
 
@@ -88,12 +97,14 @@ public slots:
 	void minimize();
 	void restore();
 	
-	void setDocumentMode( QMdiArea::ViewMode mode );
+	void setDocumentMode( pWorkspace::ViewMode mode );
 	pAbstractChild* createNewTextEditor();
 	
 protected:
 	QVBoxLayout* mLayout;
 	QMdiArea* mMdiArea;
+	QActionGroup* mViewModesGroup;
+	pWorkspace::ViewMode mViewMode;
 	pOpenedFileExplorer* mOpenedFileExplorer;
 	QFileSystemWatcher* mFileWatcher;
 	QTimer* mContentChangedTimer;
@@ -116,6 +127,7 @@ protected slots:
 
 	void contentChangedTimer_timeout();
 	void multitoolbar_notifyChanges();
+	void viewModes_triggered( QAction* action );
 	void mdiArea_subWindowActivated( QMdiSubWindow* document );
 	
 	void internal_urlsDropped( const QList<QUrl>& urls );
@@ -151,9 +163,6 @@ public slots:
 	void editGoTo_triggered();
 	void editExpandAbbreviation_triggered();
 	void editPrepareAPIs_triggered();
-	
-	// window
-	void windowChangeDocumentMode();
 
 	// help menu
 	void helpAboutApplication_triggered();

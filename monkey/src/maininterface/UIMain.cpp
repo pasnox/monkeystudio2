@@ -158,6 +158,8 @@ void UIMain::initMenuBar()
 {
 	// create menubar menus and actions
 	pMenuBar* mb = menuBar();
+	QAction* action = 0;
+	
 	mb->setDefaultShortcutContext( Qt::ApplicationShortcut );
 	mb->menu( "mFile", tr( "File" ) );
 	mb->beginGroup( "mFile" );
@@ -201,15 +203,15 @@ void UIMain::initMenuBar()
 		mb->action( "aSeparator3" );
 
 		mb->menu( "mSearchReplace", tr( "&Search and replace" ) );
-			mb->action( "mSearchReplace/aSearchFile", tr( "&Search in the file..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+F" ), tr( "Search in the file..." ) )->setEnabled( true );
+		mb->action( "mSearchReplace/aSearchFile", tr( "&Search in the file..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+F" ), tr( "Search in the file..." ) )->setEnabled( true );
 #if 0
-			mb->action( "mSearchReplace/aReplaceFile", tr( "&Replace in the file..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+R" ), tr( "Replace in the file..." ) )->setEnabled( true );
-			//mb->action( "mSearchReplace/aSearchProject", tr( "&Search in the project..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "" ), tr( "Search in the project..." ) )->setEnabled( true );
-			//mb->action( "mSearchReplace/aReplaceProject", tr( "&Replace in the project..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "" ), tr( "Replace in the project..." ) )->setEnabled( true );
-			mb->action( "mSearchReplace/aSearchFolder", tr( "&Search in the folder..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+Alt+F" ), tr( "Search in the folder..." ) )->setEnabled( true );
-			mb->action( "mSearchReplace/aReplaceFolder", tr( "&Replace in the folder..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+Alt+R" ), tr( "Replace in the folder..." ) )->setEnabled( true );
-			mb->action( "mSearchReplace/aSearchPrevious", tr( "Search Previous" ), QIcon( ":/edit/icons/edit/previous.png" ), tr( "Shift+F3" ), tr( "Search Previous" ) )->setEnabled( true );
-			mb->action( "mSearchReplace/aSearchNext", tr( "Search Next" ), QIcon( ":/edit/icons/edit/next.png" ), tr( "F3" ), tr( "Search Next" ) )->setEnabled( true );
+		mb->action( "mSearchReplace/aReplaceFile", tr( "&Replace in the file..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+R" ), tr( "Replace in the file..." ) )->setEnabled( true );
+		//mb->action( "mSearchReplace/aSearchProject", tr( "&Search in the project..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "" ), tr( "Search in the project..." ) )->setEnabled( true );
+		//mb->action( "mSearchReplace/aReplaceProject", tr( "&Replace in the project..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "" ), tr( "Replace in the project..." ) )->setEnabled( true );
+		mb->action( "mSearchReplace/aSearchFolder", tr( "&Search in the folder..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+Alt+F" ), tr( "Search in the folder..." ) )->setEnabled( true );
+		mb->action( "mSearchReplace/aReplaceFolder", tr( "&Replace in the folder..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+Alt+R" ), tr( "Replace in the folder..." ) )->setEnabled( true );
+		mb->action( "mSearchReplace/aSearchPrevious", tr( "Search Previous" ), QIcon( ":/edit/icons/edit/previous.png" ), tr( "Shift+F3" ), tr( "Search Previous" ) )->setEnabled( true );
+		mb->action( "mSearchReplace/aSearchNext", tr( "Search Next" ), QIcon( ":/edit/icons/edit/next.png" ), tr( "F3" ), tr( "Search Next" ) )->setEnabled( true );
 #endif
 		mb->action( "aGoTo", tr( "&Go To..." ), QIcon( ":/edit/icons/edit/goto.png" ), tr( "Ctrl+G" ), tr( "Go To..." ) )->setEnabled( false );
 		mb->menu( "mAllCommands", tr( "&All Commands" ), QIcon( ":/edit/icons/edit/commands.png" ) );
@@ -271,9 +273,6 @@ void UIMain::initMenuBar()
 	mb->endGroup();
 	mb->menu( "mWindow", tr( "Window" ) );
 	mb->beginGroup( "mWindow" );
-		mb->action( "aSDI", tr( "&Single Document Interface" ), QIcon( "" ), QString::null, tr( "Single Document Interface" ) )->setData( QMdiArea::TabbedView );
-		mb->action( "aMDI", tr( "&Multiple Document Interface" ), QIcon( "" ), QString::null, tr( "Multiple Document Interface" ) )->setData( QMdiArea::SubWindowView );
-		mb->action( "aSeparator1" );
 		mb->action( "aCascase", tr( "&Cascade" ), QIcon( "" ), QString::null, tr( "Cascade" ) );
 		mb->action( "aTile", tr( "&Tile" ), QIcon( "" ), QString::null, tr( "Tile" ) );
 		mb->action( "aMinimize", tr( "&Minimize" ), QIcon( "" ), QString::null, tr( "Minimize" ) );
@@ -383,8 +382,6 @@ void UIMain::initConnections()
 	connect( menuBar()->menu( "mInterpreter" ), SIGNAL( aboutToShow() ), this, SLOT( menu_CustomAction_aboutToShow() ) );
 	// plugins menu
 	// window menu
-	connect( menuBar()->action( "mWindow/aSDI" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( windowChangeDocumentMode() ) );
-	connect( menuBar()->action( "mWindow/aMDI" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( windowChangeDocumentMode() ) );
 	connect( menuBar()->action( "mWindow/aTile" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( tile() ) );
 	connect( menuBar()->action( "mWindow/aCascase" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( cascade() ) );
 	connect( menuBar()->action( "mWindow/aMinimize" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( minimize() ) );
