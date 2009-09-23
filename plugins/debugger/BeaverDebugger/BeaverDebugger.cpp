@@ -33,6 +33,7 @@
 */
 
 #include "BeaverDebugger.h"
+#include "BeaverDebuggerSettings.h"
 
 #include <QDebug>
 #include <QIcon>
@@ -48,7 +49,7 @@ void BeaverDebugger::fillPluginInfos()
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "1.0.0";
 	mPluginInfos.FirstStartEnabled = true;
-	mPluginInfos.HaveSettingsWidget = false;
+	mPluginInfos.HaveSettingsWidget = true;
 	mPluginInfos.Pixmap = QPixmap( ":/icons/beaverdbg.png" );
 }
 
@@ -100,7 +101,26 @@ bool BeaverDebugger::uninstall()
 	\return Pointer to created settings widget for plugin
 */
 QWidget* BeaverDebugger::settingsWidget()
-{ return NULL; }
+{
+	return new BeaverDebuggerSettings(this);
+}
+
+QString BeaverDebugger::beaverPath()
+{
+	if (mBeaverPath.isNull())
+		mBeaverPath = "beaverdbg";
+	
+	return mBeaverPath;
+}
+
+void BeaverDebugger::setBeaverPath(const QString& path)
+{
+	mBeaverPath = path;
+}
+
+/*!
+	Shows Beaver Debugger detection dialog
+*/
 
 void BeaverDebugger::explainWhyCannot() const
 {

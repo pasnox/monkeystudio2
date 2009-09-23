@@ -1,11 +1,12 @@
 /****************************************************************************
 **
+** 		Created using Monkey Studio
 ** Authors   : Andrei KOPATS aka hlamer <hlamer@tut.by>
-** Project   : Beaver Debugger plugin
-** FileName  : BeaverDebugger.h
-** Date      : 
+** Project   : Monkey Studio Beaver integration
+** FileName  : BeaverDebuggerSettings.cpp
+** Date      : 2009-09-23T19:02:00
 ** License   : GPL
-** Comment   : 
+** Comment   : Settings widget of BeaverDebugger plugin
 ** Home Page : http://www.monkeystudio.org
 **
 	Copyright (C) 2005 - 2008  Andrei KOPATS & The Monkey Studio Team
@@ -26,56 +27,36 @@
 **
 ****************************************************************************/
 /*!
-	\file BeaverDebugger.h
-	\date 2008-01-14T00:40:08
-	\author Filipe AZEVEDO, Andrei KOPATS
-	\brief Header file for BeaverDebugger plugin
+	\file BeaverDebuggerSettings.cpp
+	\date 2009-09-23T19:02:00
+	\author Andrei KOPATS
+	\brief Settings widget of BeaverDebugger plugin
 */
-#ifndef BEAVER_DEBUGGER
-#define BEAVER_DEBUGGER
+#ifndef BEAVERDEBUGGERSETTINGS_H
+#define BEAVERDEBUGGERSETTINGS_H
 
-#include <BasePlugin.h>
+#include <QDialog>
 
-#include <QPointer>
+class BeaverDebugger;
 
+class QLineEdit;
 /*!
-	Main class of BeaverDebugger plugin
-	
-	Plugin allows to use Beaver Debugger with MkS
+	Settigs widget of BeaverDebugger plugin
 */
-class BeaverDebugger : public BasePlugin
+class BeaverDebuggerSettings : public QDialog
 {
 	Q_OBJECT
-	Q_INTERFACES( BasePlugin )
-	enum TryFindResult
-	{
-		OK,
-		NOT_FINISHED,
-		FAILED_TO_START,
-		CRASHED,
-		UNKNOWN_ERROR,
-		NOT_BEAVER,
-	};
 	
-protected:	
-	void fillPluginInfos();
 public:
-	virtual bool install(); // FIXME make protected for all plugins
-	virtual bool uninstall();
-	virtual QWidget* settingsWidget();
-	
-	// plugin <-> settings API
-	QString beaverPath(); //FIXME make const
-	void setBeaverPath(const QString& path);
-	
-protected slots:
-	void explainWhyCannot() const;
-	
+	BeaverDebuggerSettings( BeaverDebugger* plugin);
+
 protected:
-	QString mBeaverPath;
-	QAction *mWhyCannot;
-	// Returns QString::null if found, or error, if not
-	TryFindResult tryFindBeaver() const;
+	BeaverDebugger* mPlugin;
+	QLineEdit* mPath;
+
+protected slots:
+	void applySettings();
+	void openPathDialog();
 };
 
-#endif
+#endif // BEAVERDEBUGGERSETTINGS_H
