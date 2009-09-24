@@ -768,6 +768,12 @@ void pWorkspace::viewModes_triggered( QAction* action )
 
 void pWorkspace::mdiArea_subWindowActivated( QMdiSubWindow* docu )
 {
+	// fix fucking flickering due to window activation change on application gain / lost focus.
+	if ( !docu && currentDocument() )
+	{
+		return;
+	}
+	
 	// get child
 	pAbstractChild* document = qobject_cast<pAbstractChild*>( docu );
 	pEditor* editor = document ? document->editor() : 0;
