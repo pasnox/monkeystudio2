@@ -29,9 +29,9 @@ class QMake : public XUPPlugin
 
 protected:	
 	void fillPluginInfos();
-public:
 	virtual bool install();
 	virtual bool uninstall();
+public:
 	virtual QWidget* settingsWidget();
 	virtual bool editProject( XUPProjectItem* project );
 

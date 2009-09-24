@@ -51,10 +51,10 @@ class MessageBox : public BasePlugin
 
 protected:	
 	void fillPluginInfos();
-public:
-	MessageBox();
 	virtual bool install();
 	virtual bool uninstall();
+public:
+	MessageBox();
 	virtual QWidget* settingsWidget();
 
 protected:

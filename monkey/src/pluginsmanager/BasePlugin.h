@@ -107,9 +107,8 @@ public:
 	virtual bool isEnabled() const
 	{ return stateAction()->isChecked(); }
 	
+	// Method does some work and calls install() or uninstall()
 	virtual bool setEnabled( bool );
-	virtual bool install() = 0;
-	virtual bool uninstall() = 0;
 	
 	virtual QString settingsKey( const QString& k ) const;
 	virtual QVariant settingsValue( const QString& k, const QVariant& v = QVariant() ) const;
@@ -123,6 +122,10 @@ public:
 protected:
 	mutable QPointer<QAction> mAction;
 	PluginInfos mPluginInfos;
+	
+	// Internal functions for install/uninstall plugin. Called by setEnabled()
+	virtual bool install() = 0;
+	virtual bool uninstall() = 0;
 	
 	// Must be implemented by plugin, fills plugin info */
 	virtual void fillPluginInfos() = 0;

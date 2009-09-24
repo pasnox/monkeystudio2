@@ -18,7 +18,7 @@ protected:
 	void fillPluginInfos();
 	virtual bool install();
 	virtual bool uninstall();
-private:
+	
 	IrcDock *mIrcDock;
 };
 

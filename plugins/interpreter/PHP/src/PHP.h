@@ -27,12 +27,12 @@ class PHP : public InterpreterPlugin
 
 protected:	
 	void fillPluginInfos();
+	virtual bool install();
+	virtual bool uninstall();
 public:
 	PHP();
 	~PHP();
 	// BasePlugin
-	virtual bool install();
-	virtual bool uninstall();
 	virtual QWidget* settingsWidget();
 	// CLIToolPlugin
 	virtual pCommandList defaultCommands() const;

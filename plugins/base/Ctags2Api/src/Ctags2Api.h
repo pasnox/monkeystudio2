@@ -37,9 +37,9 @@ class Ctags2Api : public BasePlugin
 	Q_INTERFACES( BasePlugin )
 protected:	
 	void fillPluginInfos();
-public:
 	virtual bool install();
 	virtual bool uninstall();
+public:
 
 protected slots:
 	void UICtags2Api_show();

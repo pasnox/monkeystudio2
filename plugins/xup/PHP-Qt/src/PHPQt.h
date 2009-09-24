@@ -29,7 +29,6 @@ class PHPQt : public XUPPlugin
 
 protected:	
 	void fillPluginInfos();
-public:
 	virtual bool install();
 	virtual bool uninstall();
 	virtual bool editProject( XUPProjectItem* project );

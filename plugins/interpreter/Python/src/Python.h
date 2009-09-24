@@ -27,12 +27,12 @@ class Python : public InterpreterPlugin
 
 protected:	
 	void fillPluginInfos();
+	virtual bool install();
+	virtual bool uninstall();
 public:
 	Python();
 	~Python();
 	// BasePlugin
-	virtual bool install();
-	virtual bool uninstall();
 	virtual QWidget* settingsWidget();
 	// CLIToolPlugin
 	virtual pCommandList defaultCommands() const;

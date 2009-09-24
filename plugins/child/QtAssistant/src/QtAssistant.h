@@ -31,9 +31,9 @@ class QtAssistant : public ChildPlugin
 	
 protected:	
 	void fillPluginInfos();
-public:
 	virtual bool install();
 	virtual bool uninstall();
+public:
 	virtual QWidget* settingsWidget();
 	virtual pAbstractChild* createDocument( const QString& fileName );
 

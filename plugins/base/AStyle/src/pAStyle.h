@@ -38,10 +38,10 @@ class pAStyle : public BasePlugin
 
 protected:	
 	virtual void fillPluginInfos();
-public:
-	virtual QWidget* settingsWidget();
 	virtual bool install();
 	virtual bool uninstall();
+public:
+	virtual QWidget* settingsWidget();
 	
 protected slots:
 	void applyFormatter();

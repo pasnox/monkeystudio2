@@ -38,7 +38,6 @@ class ProjectHeaders : public BasePlugin
 
 protected:	
 	void fillPluginInfos();
-public:
 	virtual bool install();
 	virtual bool uninstall();
 

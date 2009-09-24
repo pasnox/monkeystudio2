@@ -31,9 +31,9 @@ class QtDesigner : public ChildPlugin
 	
 protected:	
 	void fillPluginInfos();
-public:
 	virtual bool install();
 	virtual bool uninstall();
+public:
 	virtual pAbstractChild* createDocument( const QString& fileName );
 
 protected:

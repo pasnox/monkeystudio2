@@ -38,12 +38,12 @@ class MSVCMake : public BuilderPlugin
 
 protected:	
 	void fillPluginInfos();
+	virtual bool install();
+	virtual bool uninstall();
 public:
 	MSVCMake();
 	~MSVCMake();
 	// BasePlugin
-	virtual bool install();
-	virtual bool uninstall();
 	virtual QWidget* settingsWidget();
 	// CLIToolPlugin
 	virtual pCommandList defaultCommands() const;

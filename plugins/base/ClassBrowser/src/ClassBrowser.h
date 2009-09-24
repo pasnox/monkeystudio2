@@ -34,12 +34,11 @@ class ClassBrowser : public BasePlugin
 	Q_INTERFACES( BasePlugin )
 
 	void fillPluginInfos();
+	virtual bool install();
+	virtual bool uninstall();
 public:
 	enum IntegrationMode { imDock, imCombo, imBoth };
 	
-	virtual bool install();
-	virtual bool uninstall();
-
 	virtual QWidget* settingsWidget();
 	
 	qCtagsSenseProperties properties() const;

@@ -49,12 +49,12 @@ class Gcc : public CompilerPlugin
 
 protected:	
 	void fillPluginInfos();
+	virtual bool install();
+	virtual bool uninstall();
 public:
 	Gcc();
 	~Gcc();
 	// BasePlugin
-	virtual bool install();
-	virtual bool uninstall();
 	virtual QWidget* settingsWidget();
 	// CompilerPlugin
 	virtual pCommand defaultCompileCommand() const;

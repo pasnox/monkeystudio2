@@ -53,9 +53,9 @@ class FileBrowser : public BasePlugin
 
 protected:	
 	void fillPluginInfos();
-public:
 	virtual bool install();
 	virtual bool uninstall();
+public:
 	virtual QWidget* settingsWidget();
 	
 	QStringList filters() const;

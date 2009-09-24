@@ -15,7 +15,6 @@ protected:
 	virtual bool install();
 	virtual bool uninstall();
 
-protected:
 	QPointer<UIPostIt> mPostIt;
 
 protected slots:
