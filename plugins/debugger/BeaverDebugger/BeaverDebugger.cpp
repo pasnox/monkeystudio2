@@ -61,13 +61,23 @@ void BeaverDebugger::fillPluginInfos()
 */
 bool BeaverDebugger::install()
 {
+#ifdef Q_OS_WIN
+	mBeaverPath = settingsValue("BeaverPath", "C:\\Programm Files\\Beaver Debugger\\beaverdbg.exe").toString();
+#else
+	mBeaverPath = settingsValue("BeaverPath", "beaverdbg").toString();
+#endif
 	// create action
 	MonkeyCore::menuBar()->menu( "mDebugger" )->menuAction()->setVisible( true ); // FIXME is it good?
 	MonkeyCore::menuBar()->menu( "mDebugger" )->menuAction()->setEnabled( true ); // FIXME is it good?
 	
-	if (0) // FIXME debugger found
+	if (OK == tryFindBeaver()) // FIXME debugger found
 	{
 		mWhyCannot = NULL;
+		mRunBeaver = MonkeyCore::menuBar()->action( "mDebugger/aRunBeaver",  
+													tr( "Run Beaver" ), 
+													QIcon( ":/icons/beaverdbg.png" ), 
+													"", // shortcut
+													"Start debugging session with the external debugger");
 	}
 	else // debugger not found
 	{
@@ -76,6 +86,7 @@ bool BeaverDebugger::install()
 													QIcon( ":/icons/beaverdbg.png" ), 
 													"", // shortcut
 													"Check Beaver Debugger status" );
+		mRunBeaver = NULL;
 	}
 	connect( mWhyCannot, SIGNAL( triggered() ), this, SLOT( explainWhyCannot() ) );
 	
@@ -92,6 +103,8 @@ bool BeaverDebugger::uninstall()
 {
 	if (mWhyCannot)
 		delete mWhyCannot;
+	if (mRunBeaver)
+		delete mRunBeaver;
 	
 	return true;
 }
@@ -116,13 +129,14 @@ QString BeaverDebugger::beaverPath()
 void BeaverDebugger::setBeaverPath(const QString& path)
 {
 	mBeaverPath = path;
+	setSettingsValue("BeaverPath", mBeaverPath);
 }
 
 /*!
 	Shows Beaver Debugger detection dialog
 */
 
-void BeaverDebugger::explainWhyCannot() const
+void BeaverDebugger::explainWhyCannot()
 {
 	bool try_again = true;
 	
@@ -147,10 +161,10 @@ void BeaverDebugger::explainWhyCannot() const
 			case FAILED_TO_START:
 				fullText += tr("Failed to start Beaver Debugger. Executable file not found, "
 								"or you have no permissions to execute it.\n\n");
-	#ifdef Q_OS_LINUX	
+#ifdef Q_OS_LINUX	
 				fullText += tr("Beaver Debugger might be included to your Linux distribution."
 							   "Package name probably is 'beaverdbg'.\n");
-	#endif
+#endif
 				fullText += tr("For install it using official release, download installer or sources from "
 							   "http://beaverdbg.googlecode.com and follow installation instructions.\n");
 				fullText += "\n";
@@ -186,7 +200,7 @@ void BeaverDebugger::explainWhyCannot() const
 					try_again = true;
 				break;
 				case QMessageBox::Open:
-					QMessageBox::information(NULL, "Dialog", "Configuration dialog");
+					dynamic_cast<QDialog*>(settingsWidget())->exec();
 					try_again = true;
 				break;
 				default:
@@ -199,7 +213,8 @@ void BeaverDebugger::explainWhyCannot() const
 									 tr("Beaver Debugger"),
 									 fullText,
 									 QMessageBox::Ok);
-		
+			uninstall();
+			install();
 		}
 	}
 }
@@ -207,7 +222,7 @@ void BeaverDebugger::explainWhyCannot() const
 BeaverDebugger::TryFindResult BeaverDebugger::tryFindBeaver() const
 {
 	QProcess beaver(NULL);
-	beaver.start("beaverdbg", QStringList() << "--version");
+	beaver.start(mBeaverPath, QStringList() << "--version");
 	beaver.waitForFinished(200);
 	if (beaver.state() != QProcess::NotRunning) // hmm, strange
 	{

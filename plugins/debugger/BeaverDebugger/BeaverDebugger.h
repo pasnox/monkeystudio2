@@ -69,11 +69,12 @@ public:
 	void setBeaverPath(const QString& path);
 	
 protected slots:
-	void explainWhyCannot() const;
+	void explainWhyCannot();
 	
 protected:
 	QString mBeaverPath;
 	QAction *mWhyCannot;
+	QAction *mRunBeaver;
 	// Returns QString::null if found, or error, if not
 	TryFindResult tryFindBeaver() const;
 };
