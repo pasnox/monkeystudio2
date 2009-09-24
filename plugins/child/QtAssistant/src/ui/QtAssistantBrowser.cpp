@@ -39,6 +39,7 @@ QtAssistantBrowser::QtAssistantBrowser( QHelpEngine* engine, QWidget* parent )
 	mSearchZoomCount = 0;
 	QWidget* widget = new QWidget( this );
 	setupUi( widget );
+	QMetaObject::connectSlotsByName( this );
 	setWindowTitle( widget->windowTitle() );
 	setWindowIcon( widget->windowIcon() );
 	setFilePath( windowTitle() );
@@ -99,13 +100,16 @@ QtAssistantBrowser::QtAssistantBrowser( QHelpEngine* engine, QWidget* parent )
 	// layouts
 	foreach ( QLayout* l, findChildren<QLayout*>() )
 	{
+		if ( l == layout() || l == widget->layout() || l == twPages->widget( 0 )->layout() )
+		{
+			l->setMargin( 0 );
+			l->setSpacing( 0 );
+			continue;
+		}
+		
 		l->setMargin( 5 );
 		l->setSpacing( 5 );
 	}
-	
-	QLayout* l = twPages->widget( 0 )->layout();
-	l->setMargin( 0 );
-	l->setSpacing( 0 );
 	
 	// connections
 	connect( aPrevious, SIGNAL( triggered() ), this, SLOT( previousPage() ) );
