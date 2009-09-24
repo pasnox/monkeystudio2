@@ -576,6 +576,8 @@ void pWorkspace::setDocumentMode( pWorkspace::ViewMode mode )
 			break;
 	}
 	
+	mOpenedFileExplorer->setVisible( mViewMode == pWorkspace::NoTabs );
+	
 	if ( document && !document->isMaximized() )
 	{
 		document->showMaximized();
