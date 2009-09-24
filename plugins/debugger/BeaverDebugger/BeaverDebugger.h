@@ -37,6 +37,7 @@
 #include <BasePlugin.h>
 
 #include <QPointer>
+#include <QProcess>
 
 /*!
 	Main class of BeaverDebugger plugin
@@ -70,13 +71,16 @@ public:
 	
 protected slots:
 	void explainWhyCannot();
+	void runBeaver();
 	
 protected:
 	QString mBeaverPath;
 	QAction *mWhyCannot;
 	QAction *mRunBeaver;
+	QProcess mBeaverProcess;
 	// Returns QString::null if found, or error, if not
 	TryFindResult tryFindBeaver() const;
+	void updateRunActionText();
 };
 
 #endif

@@ -73,11 +73,14 @@ bool BeaverDebugger::install()
 	if (OK == tryFindBeaver()) // FIXME debugger found
 	{
 		mWhyCannot = NULL;
+		
 		mRunBeaver = MonkeyCore::menuBar()->action( "mDebugger/aRunBeaver",  
 													tr( "Run Beaver" ), 
 													QIcon( ":/icons/beaverdbg.png" ), 
 													"", // shortcut
 													"Start debugging session with the external debugger");
+		updateRunActionText();
+		connect( mRunBeaver, SIGNAL( triggered() ), this, SLOT( runBeaver() ) );
 	}
 	else // debugger not found
 	{
@@ -86,9 +89,9 @@ bool BeaverDebugger::install()
 													QIcon( ":/icons/beaverdbg.png" ), 
 													"", // shortcut
 													"Check Beaver Debugger status" );
+		connect( mWhyCannot, SIGNAL( triggered() ), this, SLOT( explainWhyCannot() ) );
 		mRunBeaver = NULL;
 	}
-	connect( mWhyCannot, SIGNAL( triggered() ), this, SLOT( explainWhyCannot() ) );
 	
 	return true;
 }
@@ -219,6 +222,19 @@ void BeaverDebugger::explainWhyCannot()
 	}
 }
 
+void BeaverDebugger::runBeaver()
+{
+	if (mBeaverProcess.state() == QProcess::NotRunning)
+	{
+		mBeaverProcess.start(mBeaverPath, QStringList());
+	}
+	else
+	{
+		mBeaverProcess.terminate();
+	}
+	updateRunActionText();
+}
+
 BeaverDebugger::TryFindResult BeaverDebugger::tryFindBeaver() const
 {
 	QProcess beaver(NULL);
@@ -248,6 +264,22 @@ BeaverDebugger::TryFindResult BeaverDebugger::tryFindBeaver() const
 #endif
 	
 	return OK;
+}
+
+void BeaverDebugger::updateRunActionText()
+{
+	if (mBeaverProcess.state() == QProcess::NotRunning)
+	{
+		mRunBeaver->setText(tr("Run Beaver"));
+		mRunBeaver->setToolTip(tr("Start debugging session with the external debugger"));
+		mRunBeaver->setStatusTip(tr("Start debugging session with the external debugger"));
+	}
+	else
+	{
+		mRunBeaver->setText(tr("Stop Beaver"));
+		mRunBeaver->setToolTip(tr("Stop executed debugger"));
+		mRunBeaver->setStatusTip(tr("Stop executed debugger"));
+	}
 }
 
 Q_EXPORT_PLUGIN2( BaseBeaverDebugger, BeaverDebugger )
