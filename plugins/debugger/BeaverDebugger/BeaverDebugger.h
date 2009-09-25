@@ -58,11 +58,13 @@ class BeaverDebugger : public BasePlugin
 		NOT_BEAVER,
 	};
 	
+public:
+	BeaverDebugger();
 protected:	
 	void fillPluginInfos();
-public:
 	virtual bool install(); // FIXME make protected for all plugins
 	virtual bool uninstall();
+public:
 	virtual QWidget* settingsWidget();
 	
 	// plugin <-> settings API
@@ -72,12 +74,14 @@ public:
 protected slots:
 	void explainWhyCannot();
 	void runBeaver();
+	void beaverStateChanged(QProcess::ProcessState);
 	
 protected:
 	QString mBeaverPath;
 	QAction *mWhyCannot;
 	QAction *mRunBeaver;
 	QProcess mBeaverProcess;
+	QLabel *mStatusLabel;
 	// Returns QString::null if found, or error, if not
 	TryFindResult tryFindBeaver() const;
 	void updateRunActionText();

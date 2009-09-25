@@ -32,13 +32,22 @@
 	\brief Header file for BeaverDebugger plugin
 */
 
-#include "BeaverDebugger.h"
-#include "BeaverDebuggerSettings.h"
 
 #include <QDebug>
 #include <QIcon>
+#include <QLabel>
 
+#include "StatusBar.h"
 #include "pMonkeyStudio.h"
+
+#include "BeaverDebugger.h"
+#include "BeaverDebuggerSettings.h"
+
+BeaverDebugger::BeaverDebugger()
+{
+	connect(&mBeaverProcess, SIGNAL(stateChanged(QProcess::ProcessState)),
+			this, SLOT(beaverStateChanged(QProcess::ProcessState)));
+}
 
 void BeaverDebugger::fillPluginInfos()
 {
@@ -92,7 +101,7 @@ bool BeaverDebugger::install()
 		connect( mWhyCannot, SIGNAL( triggered() ), this, SLOT( explainWhyCannot() ) );
 		mRunBeaver = NULL;
 	}
-	
+	mStatusLabel = NULL;
 	return true;
 }
 
@@ -108,7 +117,8 @@ bool BeaverDebugger::uninstall()
 		delete mWhyCannot;
 	if (mRunBeaver)
 		delete mRunBeaver;
-	
+	if (mStatusLabel)
+		delete mStatusLabel;
 	return true;
 }
 
@@ -233,6 +243,29 @@ void BeaverDebugger::runBeaver()
 		mBeaverProcess.terminate();
 	}
 	updateRunActionText();
+}
+
+void BeaverDebugger::beaverStateChanged(QProcess::ProcessState state)
+{
+	switch (state)
+	{
+		case QProcess::NotRunning:
+			if (mStatusLabel)
+			{
+				delete mStatusLabel;
+				mStatusLabel = NULL;
+			}
+		break;
+		case QProcess::Starting:
+			if (! mStatusLabel)
+			{
+				mStatusLabel = new QLabel(tr("Beaver is running"));
+				MonkeyCore::statusBar()->addWidget(mStatusLabel);
+			}
+		break;
+		default:
+		break;			
+	}
 }
 
 BeaverDebugger::TryFindResult BeaverDebugger::tryFindBeaver() const
