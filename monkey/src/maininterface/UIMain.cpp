@@ -158,7 +158,6 @@ void UIMain::initMenuBar()
 {
 	// create menubar menus and actions
 	pMenuBar* mb = menuBar();
-	QAction* action = 0;
 	
 	mb->setDefaultShortcutContext( Qt::ApplicationShortcut );
 	mb->menu( "mFile", tr( "File" ) );

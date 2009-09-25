@@ -49,6 +49,7 @@ class Q_MONKEY_EXPORT BasePlugin : public QObject
 	Q_ENUMS( Type )
 	
 	friend class PluginsManager; // for call fillPluginInfo()
+	
 public:
 	// plugin type enums
 	enum Type
@@ -66,7 +67,7 @@ public:
 	};
 	
 	Q_DECLARE_FLAGS( Types, Type )
-		
+	
 	// plugin info structure
 	struct Q_MONKEY_EXPORT PluginInfos
 	{
@@ -81,8 +82,10 @@ public:
 		bool FirstStartEnabled; // to know if this plugin is enabled
 		bool HaveSettingsWidget; // plugin has settings widget
 		QPixmap Pixmap; // plugin icon
+		QString ApplicationVersionRequired; // the minimum mks version this plugin require, plugin must not enable itself if minimum version is not reached !
 	};
 	
+	BasePlugin();
 	virtual ~BasePlugin();
 	
 	virtual PluginInfos infos() const
@@ -110,9 +113,9 @@ public:
 	// Method does some work and calls install() or uninstall()
 	virtual bool setEnabled( bool );
 	
-	virtual QString settingsKey( const QString& k ) const;
-	virtual QVariant settingsValue( const QString& k, const QVariant& v = QVariant() ) const;
-	virtual void setSettingsValue( const QString& k, const QVariant& v ) const;
+	virtual QString settingsKey( const QString& key ) const;
+	virtual QVariant settingsValue( const QString& key, const QVariant& value = QVariant() ) const;
+	virtual void setSettingsValue( const QString& key, const QVariant& value ) const;
 	
 	// coverage support members
 #ifdef __COVERAGESCANNER__

@@ -26,8 +26,14 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
-
 #include "BasePlugin.h"
+#include "main.h"
+
+BasePlugin::BasePlugin()
+{
+	// auto fill minimum version required using compil time version
+	mPluginInfos.ApplicationVersionRequired = PACKAGE_VERSION;
+}
 
 BasePlugin::~BasePlugin()
 {
@@ -70,21 +76,30 @@ QString BasePlugin::typeToString( BasePlugin::Type type )
 			return QCoreApplication::translate( "BasePlugin", "NaN" );
 			break;
 		default:
+			Q_ASSERT( 0 );
 			return QString::null;
 			break;
 	}
 }
 
-QString BasePlugin::completeTypeToString( BasePlugin::Types type )
+QString BasePlugin::completeTypeToString( BasePlugin::Types _type )
 {
 	QStringList types;
+	
 	for ( int i = BasePlugin::iAll; i < BasePlugin::iLast; i++ )
 	{
-		const QString s = typeToString( (BasePlugin::Type)i );
-		if ( !s.isEmpty() && !types.contains( s ) )
-			if ( type.testFlag( (BasePlugin::Type)i ) )
-				types << s;
+		const BasePlugin::Type type = (BasePlugin::Type)i;
+		const QString typeString = typeToString( type );
+		
+		if ( !typeString.isEmpty() && !types.contains( typeString ) )
+		{
+			if ( _type.testFlag( type ) )
+			{
+				types << typeString;
+			}
+		}
 	}
+	
 	return types.join( ", " );
 }
 
@@ -109,32 +124,31 @@ QAction* BasePlugin::stateAction() const
 
 bool BasePlugin::setEnabled(bool enabled)
 {
-	if (enabled && !isEnabled())
+	if ( enabled && !isEnabled() )
 	{
-		stateAction()->setChecked(true);
-		return install();
+		stateAction()->setChecked( install() );
 	}
-	else if (isEnabled())
+	else if ( isEnabled() )
 	{
-		stateAction()->setChecked(false);
-		return uninstall();
+		stateAction()->setChecked( !uninstall() );
 	}
-	return true;
+	
+	return stateAction()->isChecked();
 }
 
-QString BasePlugin::settingsKey( const QString& k ) const
+QString BasePlugin::settingsKey( const QString& key ) const
 {
-	return QString( "Plugins/%1/%2" ).arg( infos().Name ).arg(  k );
+	return QString( "Plugins/%1/%2" ).arg( infos().Name ).arg(  key );
 }
 
-QVariant BasePlugin::settingsValue( const QString& k, const QVariant& v) const
+QVariant BasePlugin::settingsValue( const QString& key, const QVariant& value ) const
 {
-	return MonkeyCore::settings()->value( settingsKey( k ), v );
+	return MonkeyCore::settings()->value( settingsKey( key ), value );
 }
 
-void BasePlugin::setSettingsValue( const QString& k, const QVariant& v ) const
+void BasePlugin::setSettingsValue( const QString& key, const QVariant& value ) const
 {
-	MonkeyCore::settings()->setValue( settingsKey( k ), v );
+	MonkeyCore::settings()->setValue( settingsKey( key ), value );
 }
 
 #ifdef __COVERAGESCANNER__
