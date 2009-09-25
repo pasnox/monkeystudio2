@@ -40,67 +40,6 @@
 
 const QString UIUpdateChecker::mDownloadsUrl = PACKAGE_DOWNLOAD_FEED;
 
-// UpdateItem::Version
-
-UpdateItem::Version::Version( const QString& version )
-{
-	const QStringList parts = version.split( "." );
-	const int index = parts.value( 3 ).indexOf( QRegExp( "[A-Z|a-z]" ) );
-	
-	major = parts.value( 0 ).toInt();
-	minor = parts.value( 1 ).toInt();
-	patch = parts.value( 2 ).toInt();
-	
-	if ( index != -1 )
-	{
-		build = parts.value( 3 ).mid( 0, index ).toInt();
-		extra = parts.value( 3 ).mid( index );
-	}
-	else
-	{
-		build = parts.value( 3 ).toInt();
-	}
-}
-
-bool UpdateItem::Version::operator==( const Version& other ) const
-{
-	return major == other.major && minor == other.minor &&
-		patch == other.patch && build == other.build && extra == other.extra;
-}
-
-bool UpdateItem::Version::operator<( const Version& other ) const
-{
-	if ( *this == other )
-		return true;
-	
-	if ( major < other.major )
-		return true;
-	else if ( major > other.major )
-		return false;
-	
-	if ( minor < other.minor )
-		return true;
-	else if ( minor > other.minor )
-		return false;
-	
-	if ( patch < other.patch )
-		return true;
-	else if ( patch > other.patch )
-		return false;
-	
-	if ( build < other.build )
-		return true;
-	else if ( build > other.build )
-		return false;
-	
-	return extra < other.extra; // not the best but afaik ;)
-}
-
-bool UpdateItem::Version::operator>( const Version& other ) const
-{
-	return !operator<( other );
-}
-
 // UpdateItem
 
 UpdateItem::UpdateItem( const QDomElement& element )
@@ -141,22 +80,22 @@ UpdateItem::UpdateItem( const QDomElement& element )
 
 bool UpdateItem::operator<( const UpdateItem& other ) const
 {
-	return Version( version() ) < Version( other.version() );
+	return pVersion( version() ) < pVersion( other.version() );
 }
 
 bool UpdateItem::operator>( const UpdateItem& other ) const
 {
-	return Version( version() ) > Version( other.version() );
+	return pVersion( version() ) > pVersion( other.version() );
 }
 
-bool UpdateItem::operator<( const Version& other ) const
+bool UpdateItem::operator<( const pVersion& other ) const
 {
-	return Version( version() ) < other;
+	return pVersion( version() ) < other;
 }
 
-bool UpdateItem::operator>( const Version& other ) const
+bool UpdateItem::operator>( const pVersion& other ) const
 {
-	return Version( version() ) > other;
+	return pVersion( version() ) > other;
 }
 
 QDateTime UpdateItem::updated() const
@@ -221,9 +160,9 @@ QString UpdateItem::versionString() const
 	return QString::null;
 }
 
-UpdateItem::Version UpdateItem::version() const
+pVersion UpdateItem::version() const
 {
-	return Version( versionString() );
+	return pVersion( versionString() );
 }
 
 bool UpdateItem::isValid() const
@@ -265,7 +204,7 @@ UIUpdateChecker::~UIUpdateChecker()
 
 void UIUpdateChecker::accessManager_finished( QNetworkReply* reply )
 {
-	const UpdateItem::Version currentVersion( PACKAGE_VERSION );
+	const pVersion currentVersion( PACKAGE_VERSION );
 	const QDateTime lastUpdated = mPlugin->settingsValue( "LastUpdated" ).toDateTime();
 	const QDateTime lastCheck = mPlugin->settingsValue( "LastCheck" ).toDateTime();
 	

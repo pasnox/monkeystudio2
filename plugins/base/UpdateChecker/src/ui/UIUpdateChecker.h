@@ -31,6 +31,8 @@
 
 #include "ui_UIUpdateChecker.h"
 
+#include <pVersion.h>
+
 #include <QDomDocument>
 #include <QDateTime>
 
@@ -51,27 +53,12 @@ public:
 		Content
 	};
 	
-	struct Version
-	{
-		Version( const QString& version );
-		
-		bool operator==( const Version& other ) const;
-		bool operator<( const Version& other ) const;
-		bool operator>( const Version& other ) const;
-		
-		int major;
-		int minor;
-		int patch;
-		int build;
-		QString extra;
-	};
-	
 	UpdateItem( const QDomElement& element = QDomElement() );
 	
 	bool operator<( const UpdateItem& other ) const;
 	bool operator>( const UpdateItem& other ) const;
-	bool operator<( const Version& other ) const;
-	bool operator>( const Version& other ) const;
+	bool operator<( const pVersion& other ) const;
+	bool operator>( const pVersion& other ) const;
 	
 	QDateTime updated() const;
 	QString id() const;
@@ -83,7 +70,7 @@ public:
 	bool isFeatured() const;
 	QString displayText() const;
 	QString versionString() const;
-	Version version() const;
+	pVersion version() const;
 	bool isValid() const;
 
 protected:
