@@ -21,6 +21,7 @@ public:
 	virtual bool analyze( XUPItem* item );
 	virtual bool open( const QString& fileName, const QString& codec );
 	virtual bool save();
+	virtual QString targetFilePath() const;
 	
 	virtual BuilderPlugin* builder( const QString& plugin = QString() ) const;
 	virtual CompilerPlugin* compiler( const QString& plugin = QString() ) const;

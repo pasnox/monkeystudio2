@@ -128,6 +128,8 @@ public:
 	virtual bool open( const QString& fileName, const QString& codec );
 	// save the project
 	virtual bool save();
+	// return the project target file, ie the binary / library file path
+	virtual QString targetFilePath() const;
 	
 	// return plugin associated with the project
 	virtual BuilderPlugin* builder( const QString& plugin = QString() ) const;

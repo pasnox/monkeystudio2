@@ -442,6 +442,37 @@ bool QMakeProjectItem::save()
 	return XUPProjectItem::save();
 }
 
+QString QMakeProjectItem::targetFilePath() const
+{
+	XUPProjectItem* riProject = rootIncludeProject();
+	
+	QString target = riProject->variableCache().value( "TARGET" );
+	
+	if ( target.isEmpty() )
+	{
+		target = QFileInfo( fileName() ).baseName();
+	}
+	
+	QString destdir = riProject->variableCache().value( "DESTDIR" );
+	
+	if ( destdir.isEmpty() )
+	{
+		destdir = riProject->variableCache().value( "DLLDESTDIR" );
+	}
+	
+	if ( destdir.isEmpty() )
+	{
+		destdir = riProject->path();
+	}
+	
+	if ( QDir( destdir ).isRelative() )
+	{
+		destdir == riProject->filePath( destdir );
+	}
+	
+	return QDir::cleanPath( QString( "%1/%2" ).arg( destdir ).arg( target ) );
+}
+
 BuilderPlugin* QMakeProjectItem::builder( const QString& plugin ) const
 {
 	QString plug = plugin;

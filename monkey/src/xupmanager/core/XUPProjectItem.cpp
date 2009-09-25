@@ -1010,6 +1010,11 @@ bool XUPProjectItem::save()
 	return result;
 }
 
+QString XUPProjectItem::targetFilePath() const
+{
+	return QString::null;
+}
+
 BuilderPlugin* XUPProjectItem::builder( const QString& plugin ) const
 {
 	return MonkeyCore::pluginsManager()->plugin<BuilderPlugin*>( PluginsManager::stAll, projectSettingsValue( "BUILDER", plugin ) );
