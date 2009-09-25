@@ -38,6 +38,7 @@
 #include "../pluginsmanager/PluginsManager.h"
 #include "../pluginsmanager/PluginsMenu.h"
 #include "../statusbar/StatusBar.h"
+#include "../workspace/pOpenedFileExplorer.h"
 
 #include <pQueuedMessageToolBar.h>
 
@@ -99,10 +100,13 @@ void UIMain::initGui()
 	addToolBarBreak();
 	addToolBar( messageTb );
 	addToolBarBreak();
-	// init projects manager
-	dockToolBar( Qt::LeftToolBarArea )->addDock( MonkeyCore::projectsManager(), MonkeyCore::projectsManager()->windowTitle(), QIcon( ":/project/icons/project/project.png" ) );
 	// init workspace
 	setCentralWidget( MonkeyCore::workspace() );
+	// init projects manager
+	dockToolBar( Qt::LeftToolBarArea )->addDock( MonkeyCore::projectsManager(), MonkeyCore::projectsManager()->windowTitle(), QIcon( ":/project/icons/project/project.png" ) );
+	// init opened files dock
+	pOpenedFileExplorer* openedFileExplorer = MonkeyCore::workspace()->dockWidget();
+	dockToolBar( Qt::LeftToolBarArea )->addDock( openedFileExplorer, openedFileExplorer->windowTitle(), openedFileExplorer->windowIcon() );
 	// init multitoolbar
 	MonkeyCore::workspace()->initMultiToolBar( MonkeyCore::multiToolBar()->toolBar( pWorkspace::defaultContext() ) );
 	MonkeyCore::workspace()->initMultiToolBar( MonkeyCore::multiToolBar()->toolBar( "Coding" ) );
@@ -154,6 +158,8 @@ void UIMain::initMenuBar()
 {
 	// create menubar menus and actions
 	pMenuBar* mb = menuBar();
+	QAction* action = 0;
+	
 	mb->setDefaultShortcutContext( Qt::ApplicationShortcut );
 	mb->menu( "mFile", tr( "File" ) );
 	mb->beginGroup( "mFile" );
@@ -197,15 +203,15 @@ void UIMain::initMenuBar()
 		mb->action( "aSeparator3" );
 
 		mb->menu( "mSearchReplace", tr( "&Search and replace" ) );
-			mb->action( "mSearchReplace/aSearchFile", tr( "&Search in the file..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+F" ), tr( "Search in the file..." ) )->setEnabled( true );
+		mb->action( "mSearchReplace/aSearchFile", tr( "&Search in the file..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+F" ), tr( "Search in the file..." ) )->setEnabled( true );
 #if 0
-			mb->action( "mSearchReplace/aReplaceFile", tr( "&Replace in the file..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+R" ), tr( "Replace in the file..." ) )->setEnabled( true );
-			//mb->action( "mSearchReplace/aSearchProject", tr( "&Search in the project..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "" ), tr( "Search in the project..." ) )->setEnabled( true );
-			//mb->action( "mSearchReplace/aReplaceProject", tr( "&Replace in the project..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "" ), tr( "Replace in the project..." ) )->setEnabled( true );
-			mb->action( "mSearchReplace/aSearchFolder", tr( "&Search in the folder..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+Alt+F" ), tr( "Search in the folder..." ) )->setEnabled( true );
-			mb->action( "mSearchReplace/aReplaceFolder", tr( "&Replace in the folder..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+Alt+R" ), tr( "Replace in the folder..." ) )->setEnabled( true );
-			mb->action( "mSearchReplace/aSearchPrevious", tr( "Search Previous" ), QIcon( ":/edit/icons/edit/previous.png" ), tr( "Shift+F3" ), tr( "Search Previous" ) )->setEnabled( true );
-			mb->action( "mSearchReplace/aSearchNext", tr( "Search Next" ), QIcon( ":/edit/icons/edit/next.png" ), tr( "F3" ), tr( "Search Next" ) )->setEnabled( true );
+		mb->action( "mSearchReplace/aReplaceFile", tr( "&Replace in the file..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+R" ), tr( "Replace in the file..." ) )->setEnabled( true );
+		//mb->action( "mSearchReplace/aSearchProject", tr( "&Search in the project..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "" ), tr( "Search in the project..." ) )->setEnabled( true );
+		//mb->action( "mSearchReplace/aReplaceProject", tr( "&Replace in the project..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "" ), tr( "Replace in the project..." ) )->setEnabled( true );
+		mb->action( "mSearchReplace/aSearchFolder", tr( "&Search in the folder..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+Alt+F" ), tr( "Search in the folder..." ) )->setEnabled( true );
+		mb->action( "mSearchReplace/aReplaceFolder", tr( "&Replace in the folder..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+Alt+R" ), tr( "Replace in the folder..." ) )->setEnabled( true );
+		mb->action( "mSearchReplace/aSearchPrevious", tr( "Search Previous" ), QIcon( ":/edit/icons/edit/previous.png" ), tr( "Shift+F3" ), tr( "Search Previous" ) )->setEnabled( true );
+		mb->action( "mSearchReplace/aSearchNext", tr( "Search Next" ), QIcon( ":/edit/icons/edit/next.png" ), tr( "F3" ), tr( "Search Next" ) )->setEnabled( true );
 #endif
 		mb->action( "aGoTo", tr( "&Go To..." ), QIcon( ":/edit/icons/edit/goto.png" ), tr( "Ctrl+G" ), tr( "Go To..." ) )->setEnabled( false );
 		mb->menu( "mAllCommands", tr( "&All Commands" ), QIcon( ":/edit/icons/edit/commands.png" ) );
@@ -219,6 +225,7 @@ void UIMain::initMenuBar()
 		mb->menu( "mStyle", tr( "&Style" ), QIcon( ":/view/icons/view/style.png" ) );
 		mb->action( "aNext", tr( "&Next Tab" ), QIcon( ":/view/icons/view/next.png" ), tr( "Ctrl+Tab" ), tr( "Active the next tab" ) )->setEnabled( false );
 		mb->action( "aPrevious", tr( "&Previous Tab" ), QIcon( ":/view/icons/view/previous.png" ), tr( "Ctrl+Shift+Tab" ), tr( "Active the previous tab" ) )->setEnabled( false );
+		mb->action( "aFocusToEditor", tr( "Focus Editor" ), QIcon( ":/edit/icons/edit/text.png" ), tr( "Ctrl+Return" ), tr( "Set the focus to the current document editor" ) );
 	mb->endGroup();
 	mb->menu( "mProject", tr( "Project" ) );
 	mb->beginGroup( "mProject" );
@@ -266,10 +273,6 @@ void UIMain::initMenuBar()
 	mb->endGroup();
 	mb->menu( "mWindow", tr( "Window" ) );
 	mb->beginGroup( "mWindow" );
-		mb->action( "aSDI", tr( "&Single Document Interface" ), QIcon( "" ), QString::null, tr( "Single Document Interface" ) );
-		mb->action( "aMDI", tr( "&Multiple Document Interface" ), QIcon( "" ), QString::null, tr( "Multiple Document Interface" ) );
-		mb->action( "aTopLevel", tr( "&Top Level Windows Interface" ), QIcon( "" ), QString::null, tr( "Top Level Windows Interface" ) );
-		mb->action( "aSeparator1" );
 		mb->action( "aCascase", tr( "&Cascade" ), QIcon( "" ), QString::null, tr( "Cascade" ) );
 		mb->action( "aTile", tr( "&Tile" ), QIcon( "" ), QString::null, tr( "Tile" ) );
 		mb->action( "aMinimize", tr( "&Minimize" ), QIcon( "" ), QString::null, tr( "Minimize" ) );
@@ -335,7 +338,7 @@ void UIMain::initConnections()
 {
 	// file connection
 	connect( menuBar()->action( "mFile/aNew" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileNew_triggered() ) );
-	connect( menuBar()->action( "mFile/aNewTextEditor" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( newTextEditor() ) );
+	connect( menuBar()->action( "mFile/aNewTextEditor" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( createNewTextEditor() ) );
 	connect( menuBar()->action( "mFile/aOpen" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileOpen_triggered() ) );
 	connect( MonkeyCore::recentsManager(), SIGNAL( openFileRequested( const QString&, const QString& ) ), MonkeyCore::fileManager(), SLOT( openFile( const QString&, const QString& ) ) );
 	connect( menuBar()->action( "mFile/mSession/aSave" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileSessionSave_triggered() ) );
@@ -367,6 +370,8 @@ void UIMain::initConnections()
 	connect( agStyles, SIGNAL( styleSelected( const QString& ) ), this, SLOT( changeStyle( const QString& ) ) );
 	connect( menuBar()->action( "mView/aNext" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( activateNextDocument() ) );
 	connect( menuBar()->action( "mView/aPrevious" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( activatePreviousDocument() ) );
+	connect( menuBar()->action( "mView/aFocusToEditor" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( focusEditor() ) );
+	// docks
 	connect( menuBar()->menu( "mDocks" ), SIGNAL( aboutToShow() ), this, SLOT( menu_Docks_aboutToShow() ) );
 	// project connection
 	connect( MonkeyCore::recentsManager(), SIGNAL( openProjectRequested( const QString&, const QString& ) ), MonkeyCore::projectsManager(), SLOT( openProject( const QString&, const QString& ) ) );
@@ -377,9 +382,6 @@ void UIMain::initConnections()
 	connect( menuBar()->menu( "mInterpreter" ), SIGNAL( aboutToShow() ), this, SLOT( menu_CustomAction_aboutToShow() ) );
 	// plugins menu
 	// window menu
-	connect( menuBar()->action( "mWindow/aSDI" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( setSDI() ) );
-	connect( menuBar()->action( "mWindow/aMDI" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( setMDI() ) );
-	connect( menuBar()->action( "mWindow/aTopLevel" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( setTopLevel() ) );
 	connect( menuBar()->action( "mWindow/aTile" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( tile() ) );
 	connect( menuBar()->action( "mWindow/aCascase" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( cascade() ) );
 	connect( menuBar()->action( "mWindow/aMinimize" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( minimize() ) );

@@ -34,18 +34,25 @@
 QtAssistantBrowser::QtAssistantBrowser( QHelpEngine* engine, QWidget* parent )
 	: pAbstractChild( parent ), mHelpEngine( engine )
 {
+	setAttribute( Qt::WA_DeleteOnClose, false );
 	mLastHelpView = -1;
 	mSearchZoomCount = 0;
-	setupUi( this );
+	QWidget* widget = new QWidget( this );
+	setupUi( widget );
+	QMetaObject::connectSlotsByName( this );
+	setWindowTitle( widget->windowTitle() );
+	setWindowIcon( widget->windowIcon() );
+	setFilePath( windowTitle() );
+	setWidget( widget );
 	isSearch->setVisible( false );
 	
 	//setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
 	
 	// corner widgets
-	tbCloneTab = new QToolButton( this );
+	tbCloneTab = new QToolButton( widget );
 	tbCloneTab->setAutoRaise( true );
 	tbCloneTab->setDefaultAction( aAddNewPage );
-	tbCloseTab = new QToolButton( this );
+	tbCloseTab = new QToolButton( widget );
 	tbCloseTab->setAutoRaise( true );
 	tbCloseTab->setDefaultAction( aCloseCurrentPage );
 	
@@ -93,13 +100,16 @@ QtAssistantBrowser::QtAssistantBrowser( QHelpEngine* engine, QWidget* parent )
 	// layouts
 	foreach ( QLayout* l, findChildren<QLayout*>() )
 	{
+		if ( l == layout() || l == widget->layout() || l == twPages->widget( 0 )->layout() )
+		{
+			l->setMargin( 0 );
+			l->setSpacing( 0 );
+			continue;
+		}
+		
 		l->setMargin( 5 );
 		l->setSpacing( 5 );
 	}
-	
-	QLayout* l = twPages->widget( 0 )->layout();
-	l->setMargin( 0 );
-	l->setSpacing( 0 );
 	
 	// connections
 	connect( aPrevious, SIGNAL( triggered() ), this, SLOT( previousPage() ) );
@@ -173,7 +183,7 @@ QPoint QtAssistantBrowser::cursorPosition() const
 {
 	return QPoint( -1, -1 );
 }
-
+/*
 QString QtAssistantBrowser::currentFile() const
 {
 	HelpViewer* hv = qobject_cast<HelpViewer*>( twPages->currentWidget() );
@@ -181,13 +191,9 @@ QString QtAssistantBrowser::currentFile() const
 		return hv->source().toString();
 	return QString::null;
 }
+*/
 
-QString QtAssistantBrowser::currentFileName() const
-{
-	return QFileInfo( currentFile() ).fileName();
-}
-
-pEditor* QtAssistantBrowser::currentEditor() const
+pEditor* QtAssistantBrowser::editor() const
 {
 	return 0;
 }
@@ -211,7 +217,9 @@ bool QtAssistantBrowser::isCopyAvailable() const
 {
 	HelpViewer* hv = qobject_cast<HelpViewer*>( twPages->currentWidget() );
 	if ( hv )
+	{
 		return hv->pageAction( QWebPage::Copy )->isEnabled();
+	}
 	return false;
 }
 
@@ -219,7 +227,9 @@ bool QtAssistantBrowser::isPasteAvailable() const
 {
 	HelpViewer* hv = qobject_cast<HelpViewer*>( twPages->currentWidget() );
 	if ( hv )
+	{
 		return hv->pageAction( QWebPage::Paste )->isEnabled();
+	}
 	return false;
 }
 
@@ -228,16 +238,11 @@ bool QtAssistantBrowser::isGoToAvailable() const
 	return false;
 }
 
-bool QtAssistantBrowser::isModified( const QString& /*filename*/ ) const
-{
-	return false;
-}
-
 bool QtAssistantBrowser::isPrintAvailable() const
 {
 	return true;
 }
-
+/*
 void QtAssistantBrowser::showFile( const QString& filename )
 {
 	for ( int i = 1; i < twPages->count(); i++ )
@@ -250,7 +255,7 @@ void QtAssistantBrowser::showFile( const QString& filename )
 		}
 	}
 }
-
+*/
 void QtAssistantBrowser::undo()
 {}
 
@@ -261,27 +266,33 @@ void QtAssistantBrowser::cut()
 {
 	HelpViewer* hv = qobject_cast<HelpViewer*>( twPages->currentWidget() );
 	if ( hv )
+	{
 		hv->pageAction( QWebPage::Cut )->trigger();
+	}
 }
 
 void QtAssistantBrowser::copy()
 {
 	HelpViewer* hv = qobject_cast<HelpViewer*>( twPages->currentWidget() );
 	if ( hv )
+	{
 		hv->pageAction( QWebPage::Copy )->trigger();
+	}
 }
 
 void QtAssistantBrowser::paste()
 {
 	HelpViewer* hv = qobject_cast<HelpViewer*>( twPages->currentWidget() );
 	if ( hv )
+	{
 		hv->pageAction( QWebPage::Paste )->trigger();
+	}
 }
 
 void QtAssistantBrowser::goTo()
 {}
 
-void QtAssistantBrowser::goTo( const QString& /*filename*/, const QPoint& /*pos*/, bool /*highlight*/ )
+void QtAssistantBrowser::goTo( const QPoint& /*pos*/, bool /*highlight*/ )
 {}
 
 void QtAssistantBrowser::invokeSearch()
@@ -294,17 +305,21 @@ void QtAssistantBrowser::invokeSearch()
 		isSearch->editFind->setFocus( Qt::ShortcutFocusReason );
 	}
 	else if ( twPages->currentIndex() == 0 )
+	{
 		mHelpEngine->searchEngine()->queryWidget()->setFocus( Qt::ShortcutFocusReason );
+	}
 }
 
-void QtAssistantBrowser::saveFile( const QString& /*filename*/ )
+void QtAssistantBrowser::saveFile()
 {}
 
-void QtAssistantBrowser::backupCurrentFile( const QString& filename )
+void QtAssistantBrowser::backupFileAs( const QString& filename )
 {
 	HelpViewer* hv = qobject_cast<HelpViewer*>( twPages->currentWidget() );
 	if ( !hv )
+	{
 		return;
+	}
 
 	QFile file( filename );
 	if ( !file.open( QIODevice::WriteOnly ) )
@@ -314,48 +329,42 @@ void QtAssistantBrowser::backupCurrentFile( const QString& filename )
 	}
 	file.resize( 0 );
 	if ( file.write( hv->page()->mainFrame()->toHtml().toUtf8() ) != -1 )
+	{
 		file.close();
+	}
 	else
+	{
 		MonkeyCore::messageManager()->appendMessage( tr( "Can't write file content when creating backup." ) );
+	}
 }
-
-void QtAssistantBrowser::saveFiles()
-{}
 
 bool QtAssistantBrowser::openFile( const QString& /*filename*/, const QString& /*codec*/ )
 {
 	return false;
 }
 
-void QtAssistantBrowser::closeFile( const QString& filename )
+void QtAssistantBrowser::closeFile()
 {
 	for ( int i = 1; i < twPages->count(); i++ )
 	{
 		HelpViewer* hv = qobject_cast<HelpViewer*>( twPages->widget( i ) );
-		if ( hv && hv->source().toString() == filename )
+		//if ( hv && hv->source().toString() == filename )
 		{
 			twPages->removeTab( twPages->indexOf( hv ) );
 			hv->deleteLater();
-			return;
 		}
 	}
+	
+	emit fileClosed();
 }
 
-void QtAssistantBrowser::closeFiles()
-{
-	while ( twPages->count() != 1 )
-	{
-		QWidget* w = twPages->widget( 1 );
-		twPages->removeTab( 1 );
-		w->deleteLater();
-	}
-}
-
-void QtAssistantBrowser::printFile( const QString& /*filename*/ )
+void QtAssistantBrowser::printFile()
 {
 	HelpViewer* hv = qobject_cast<HelpViewer*>( twPages->currentWidget() );
 	if ( !hv )
+	{
 		return;
+	}
 
 	QPrinter printer( QPrinter::HighResolution );
 	QPrintDialog dlg( &printer, this );
@@ -363,20 +372,28 @@ void QtAssistantBrowser::printFile( const QString& /*filename*/ )
 	dlg.addEnabledOption( QAbstractPrintDialog::PrintCollateCopies );
 	dlg.setWindowTitle( tr( "Print Document" ) );
 	if ( dlg.exec() == QDialog::Accepted )
+	{
 		hv->print( &printer );
+	}
 }
 
-void QtAssistantBrowser::quickPrintFile( const QString& /*filename*/ )
+void QtAssistantBrowser::quickPrintFile()
 {
 	HelpViewer* hv = qobject_cast<HelpViewer*>( twPages->currentWidget() );
 	if ( !hv )
+	{
 		return;
+	}
 		
 	QPrinter printer( QPrinter::HighResolution );
 	if ( printer.printerName().isEmpty() )
+	{
 		MonkeyCore::messageManager()->appendMessage( tr( "There is no default printer, please set one before trying quick print" ) );
+	}
 	else
+	{
 		hv->print( &printer );
+	}
 }
 
 bool QtAssistantBrowser::eventFilter( QObject* obj, QEvent* e )
@@ -598,7 +615,7 @@ void QtAssistantBrowser::on_twPages_currentChanged( int index )
 	
 	updateActions();
 	
-	emit currentFileChanged( currentFile() );
+	//emit currentFileChanged( currentFile() );
 }
 
 void QtAssistantBrowser::helpViewer_sourceChanged( const QUrl& )

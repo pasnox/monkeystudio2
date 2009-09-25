@@ -317,6 +317,28 @@ void XUPProjectManager::on_tvFiltered_doubleClicked( const QModelIndex& index )
 	}
 }
 
+void XUPProjectManager::on_tvFiltered_customContextMenuRequested( const QPoint& pos )
+{
+	if ( currentProject() )
+	{
+		// get menubar
+		pMenuBar* mb = MonkeyCore::menuBar();
+		QMenu menu;
+		
+		// add menu commands
+		menu.addActions( mb->menu( "mProject" )->actions() );
+		menu.addSeparator();
+		menu.addActions( mb->menu( "mBuilder" )->actions() );
+		menu.addSeparator();
+		menu.addActions( mb->menu( "mDebugger" )->actions() );
+		menu.addSeparator();
+		menu.addActions( mb->menu( "mInterpreter" )->actions() );
+		
+		// show menu
+		menu.exec( tvFiltered->mapToGlobal( pos ) );
+	}
+}
+
 QAction* XUPProjectManager::action( XUPProjectManager::ActionType type )
 {
 	if ( mActions.contains( type ) )
@@ -376,9 +398,9 @@ void XUPProjectManager::addError( const QString& error )
 
 void XUPProjectManager::newProject()
 {
-	UITemplatesWizard* dlg = UITemplatesWizard::instance( this );
-	dlg->setType( "Projects" );
-	dlg->exec();
+	UITemplatesWizard wizard( this );
+	wizard.setType( "Projects" );
+	wizard.exec();
 }
 
 bool XUPProjectManager::openProject( const QString& fileName, const QString& codec )

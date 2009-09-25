@@ -55,7 +55,11 @@ SearchAndReplace::SearchAndReplace()
 		mDock (NULL),
 		mSearchThread (NULL)
 {
-	// set plugin infos
+	qRegisterMetaType<SearchAndReplace::Occurence>("SearchAndReplace::Occurence");
+}
+
+void SearchAndReplace::fillPluginInfos()
+{
 	mPluginInfos.Caption = tr( "Search and Replace" );
 	mPluginInfos.Description = tr( "Plugin for searching and replacing text" );
 	mPluginInfos.Author = "Andrei Kopats aka hlamer <hlamer at tut by>";
@@ -63,95 +67,81 @@ SearchAndReplace::SearchAndReplace()
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "1.0.0";
 	mPluginInfos.FirstStartEnabled = true;
-	
-	qRegisterMetaType<SearchAndReplace::Occurence>("SearchAndReplace::Occurence");
+	mPluginInfos.Pixmap = pIconManager::pixmap( "tabsearch.png", ":/icons" );
 }
 
 /*!
-	Destructor of class. Uninstalls plugin from IDE
-*/
-SearchAndReplace::~SearchAndReplace()
-{
-	if ( isEnabled() )
-		setEnabled( false );
-}
-
-/*!
-	Enable/disable plugin
+	Install plugin to the system
 	
-	If plugin is enabled - it visible on main window and it's actions are in 
+	If plugin is installed - it visible on main window and it's actions are in 
 	the main menu
-	\param b Flag. Enable = true, Disable = false
 	\return Status of process 
 	\retval true Successfully enabled
 	\retval false Some error ocurred
 */
-bool SearchAndReplace::setEnabled( bool b )
+bool SearchAndReplace::install()
 {
-	if ( b && !isEnabled() )
-	{
-		// create docks
-		mWidget = new SearchWidget ();
-		MonkeyCore::workspace()->addSearhReplaceWidget (mWidget);
-		connect (mWidget, SIGNAL (previousClicked()), this, SLOT (onPreviousClicked()));
-		connect (mWidget, SIGNAL (nextClicked()), this, SLOT (onNextClicked()));
-		connect (mWidget, SIGNAL (replaceClicked()), this, SLOT (onReplaceClicked()));
-		connect (mWidget, SIGNAL (replaceAllClicked()), this, SLOT (onReplaceAllClicked()));
-		connect (mWidget, SIGNAL (searchTextEdited()), this, SLOT (onSearchTextEdited()));
+	// create docks
+	mWidget = new SearchWidget ();
+	MonkeyCore::workspace()->addSearchReplaceWidget( mWidget );
+	connect (mWidget, SIGNAL (previousClicked()), this, SLOT (onPreviousClicked()));
+	connect (mWidget, SIGNAL (nextClicked()), this, SLOT (onNextClicked()));
+	connect (mWidget, SIGNAL (replaceClicked()), this, SLOT (onReplaceClicked()));
+	connect (mWidget, SIGNAL (replaceAllClicked()), this, SLOT (onReplaceAllClicked()));
+	connect (mWidget, SIGNAL (searchTextEdited()), this, SLOT (onSearchTextEdited()));
 
-		
-		mDock = new SearchResultsDock ();
-		mDock->setVisible( false );
-		
-		connect (mDock, SIGNAL (resultActivated (const QString&, const QPoint&, const QString&)), this, SLOT (makeGoTo (const QString&, const QPoint&, const QString&)));
-		
-		MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mDock, infos().Caption, QIcon(":/icons/tabsearch.png") );
-		
-		MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFile", tr( "&Replace in the file..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+R" ), tr( "Replace in the file..." ) )->setEnabled( true );
-		//MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchProject", tr( "&Search in the project..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "" ), tr( "Search in the project..." ) )->setEnabled( true );
-		//MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceProject", tr( "&Replace in the project..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "" ), tr( "Replace in the project..." ) )->setEnabled( true );
-		MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFolder", tr( "&Search in the folder..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+Alt+F" ), tr( "Search in the folder..." ) )->setEnabled( true );
-		MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFolder", tr( "&Replace in the folder..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+Alt+R" ), tr( "Replace in the folder..." ) )->setEnabled( true );
-		MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchPrevious", tr( "Search Previous" ), QIcon( ":/edit/icons/edit/previous.png" ), tr( "Shift+F3" ), tr( "Search Previous" ) )->setEnabled( true );
-		MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchNext", tr( "Search Next" ), QIcon( ":/edit/icons/edit/next.png" ), tr( "F3" ), tr( "Search Next" ) )->setEnabled( true );
+	
+	mDock = new SearchResultsDock ();
+	mDock->setVisible( false );
+	
+	connect (mDock, SIGNAL (resultActivated (const QString&, const QPoint&, const QString&)), this, SLOT (makeGoTo (const QString&, const QPoint&, const QString&)));
+	
+	MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mDock, infos().Caption, QIcon(":/icons/tabsearch.png") );
+	
+	MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFile", tr( "&Replace in the file..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+R" ), tr( "Replace in the file..." ) )->setEnabled( true );
+	//MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchProject", tr( "&Search in the project..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "" ), tr( "Search in the project..." ) )->setEnabled( true );
+	//MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceProject", tr( "&Replace in the project..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "" ), tr( "Replace in the project..." ) )->setEnabled( true );
+	MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFolder", tr( "&Search in the folder..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+Alt+F" ), tr( "Search in the folder..." ) )->setEnabled( true );
+	MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFolder", tr( "&Replace in the folder..." ), QIcon( ":/edit/icons/edit/search.png" ), tr( "Ctrl+Alt+R" ), tr( "Replace in the folder..." ) )->setEnabled( true );
+	MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchPrevious", tr( "Search Previous" ), QIcon( ":/edit/icons/edit/previous.png" ), tr( "Shift+F3" ), tr( "Search Previous" ) )->setEnabled( true );
+	MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchNext", tr( "Search Next" ), QIcon( ":/edit/icons/edit/next.png" ), tr( "F3" ), tr( "Search Next" ) )->setEnabled( true );
 
-		connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFile" ), SIGNAL( triggered() ), SLOT( showSearchFile() ) );
-		connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFile" ), SIGNAL( triggered() ), SLOT( showReplaceFile() ) );
-		//connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchProject" ), SIGNAL( triggered() ), SLOT( showSearchProject() ) );
-		//connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceProject" ), SIGNAL( triggered() ), SLOT( showReplaceProject() ) );
-		connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFolder" ), SIGNAL( triggered() ), SLOT( showSearchFolder() ) );
-		connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFolder" ), SIGNAL( triggered() ), SLOT( showReplaceFolder() ) );
-		connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchNext" ), SIGNAL( triggered() ), this, SLOT( onNextClicked() ) );		
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		delete mWidget;
-		mWidget = NULL;
-		delete mDock;
-		mDock = NULL;
-		
-		delete MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFile" );
-		//delete MonkeyCore::menuBar()->deleteAaction( "mEdit/mSearchReplace/aSearchProject" );
-		//delete MonkeyCore::menuBar()->deleteAaction( "mEdit/mSearchReplace/aReplaceProject" );
-		delete MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFolder" );
-		delete MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFolder" );
-		delete MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchPrevious" );
-		delete MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchNext" );
-		
-		// set plugin disabled
-		stateAction()->setChecked( false );
-	}
-	// return default value
+	connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFile" ), SIGNAL( triggered() ), SLOT( showSearchFile() ) );
+	connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFile" ), SIGNAL( triggered() ), SLOT( showReplaceFile() ) );
+	//connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchProject" ), SIGNAL( triggered() ), SLOT( showSearchProject() ) );
+	//connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceProject" ), SIGNAL( triggered() ), SLOT( showReplaceProject() ) );
+	connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFolder" ), SIGNAL( triggered() ), SLOT( showSearchFolder() ) );
+	connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFolder" ), SIGNAL( triggered() ), SLOT( showReplaceFolder() ) );
+	connect( MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchNext" ), SIGNAL( triggered() ), this, SLOT( onNextClicked() ) );		
 	return true;
 }
 
 /*!
-	Get settings widget for configuring plugin
-	\return Pointer to widget
+	Uninstall plugin to the system
+	
+	If plugin is installed - it visible on main window and it's actions are in 
+	the main menu
+	\return Status of process 
+	\retval true Successfully enabled
+	\retval false Some error ocurred
 */
-QWidget* SearchAndReplace::settingsWidget()
-{ return NULL; }
+bool SearchAndReplace::uninstall()
+{
+	delete mWidget;
+	mWidget = NULL;
+	delete mDock;
+	mDock = NULL;
+	
+	delete MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFile" );
+	//delete MonkeyCore::menuBar()->deleteAaction( "mEdit/mSearchReplace/aSearchProject" );
+	//delete MonkeyCore::menuBar()->deleteAaction( "mEdit/mSearchReplace/aReplaceProject" );
+	delete MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchFolder" );
+	delete MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aReplaceFolder" );
+	delete MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchPrevious" );
+	delete MonkeyCore::menuBar()->action( "mEdit/mSearchReplace/aSearchNext" );
+	// return default value
+	return true;
+}
 
 /*!
 	Check, if text for search is valid. Important for regular expressions
@@ -217,7 +207,7 @@ void SearchAndReplace::showMessage (const QString& status)
 */
 void SearchAndReplace::updateSearchTextOnUI ()
 {
-	pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentChild());
+	pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentDocument());
 	if (child && child->editor())
 	{
 		pEditor* editor = child->editor ();
@@ -259,7 +249,7 @@ bool SearchAndReplace::searchFile (bool next, bool incremental, bool enableLoopi
 	if (!incremental)
 		mWidget->searchAddToRecents(text);
 	
-	pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentChild());
+	pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentDocument());
 	if (!child || !child->editor())
 	{
 		showMessage(tr( "No active editor" ) );
@@ -316,7 +306,7 @@ int SearchAndReplace::replace(bool all)
 	mWidget->searchAddToRecents(mWidget->searchText());
 	mWidget->replaceAddToRecents(rtext);
 	
-	pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentChild());
+	pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentDocument());
 	if (!child || !child->editor())
 	{
 		showMessage(tr( "No active editor" ) );
@@ -374,8 +364,8 @@ void SearchAndReplace::replaceInDirectory()
 	for (int fileIndex = 0; fileIndex < mDock->filesWithOccurencesCount (); fileIndex++) // for files
 	{
 		Occurence occ = mDock->occurence (fileIndex, 0); // every file has at least one occurence
-		pAbstractChild* currFileChild = MonkeyCore::fileManager()->childForFile (occ.fileName); 
-		if (NULL != currFileChild && currFileChild->isModified(occ.fileName)) // going to replace in modified file
+		pAbstractChild* currFileChild = MonkeyCore::fileManager()->openedDocument (occ.fileName); 
+		if (NULL != currFileChild && currFileChild->isModified()) // going to replace in modified file
 		{
 			QMessageBox::critical (NULL, tr("Replace in dirrectory"), tr("File %1 is not saved. Save please all files before do replacing").arg (occ.fileName));
 			return;
@@ -464,10 +454,10 @@ void SearchAndReplace::replaceInDirectory()
 				break;
 			}
 			// Now reload file automatically, if it is opened
-			pAbstractChild* currFileChild = MonkeyCore::fileManager()->childForFile (file.fileName()); 
+			pAbstractChild* currFileChild = MonkeyCore::fileManager()->openedDocument (file.fileName()); 
 			if (NULL != currFileChild) // file is opened
 			{
-				currFileChild->closeFile(file.fileName());
+				currFileChild->closeFile();
 				currFileChild->openFile(file.fileName(), codec);
 			}
 		}
@@ -484,7 +474,7 @@ void SearchAndReplace::showSearchFile ()
 	if (mSearchThread && mSearchThread->isRunning())
 		return;
 	
-	if (qobject_cast<pChild*> (MonkeyCore::workspace()->currentChild()))
+	if (qobject_cast<pChild*> (MonkeyCore::workspace()->currentDocument()))
 	{
 		mMode = SEARCH_FILE;
 		updateSearchTextOnUI ();
@@ -646,7 +636,7 @@ void SearchAndReplace::onReplaceAllClicked()
 
 	if (mMode == REPLACE_FILE)
 	{
-		pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentChild());
+		pChild* child = qobject_cast<pChild*> (MonkeyCore::workspace()->currentDocument());
 		if (!child && !child->editor())
 			return;
 		pEditor* editor = child->editor ();

@@ -35,14 +35,13 @@ class pAStyle : public BasePlugin
 {
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin )
-	
+
+protected:	
+	virtual void fillPluginInfos();
+	virtual bool install();
+	virtual bool uninstall();
 public:
-	pAStyle();
-	~pAStyle();
-	virtual QPixmap pixmap() const { return pIconManager::pixmap( "astyle.png", ":/icons" ); }
-	virtual bool haveSettingsWidget() const { return true; }
 	virtual QWidget* settingsWidget();
-	virtual bool setEnabled( bool );
 	
 protected slots:
 	void applyFormatter();

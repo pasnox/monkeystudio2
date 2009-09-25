@@ -24,9 +24,8 @@
 
 #include <QDir>
 
-XUP::XUP()
+void XUP::fillPluginInfos()
 {
-	// set plugin infos
 	mPluginInfos.Caption = tr( "XUP Project" );
 	mPluginInfos.Description = tr( "XUP Project support for XUPManager" );
 	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
@@ -34,36 +33,17 @@ XUP::XUP()
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.1.0";
 	mPluginInfos.FirstStartEnabled = true;
+	mPluginInfos.HaveSettingsWidget = true;
 }
 
-XUP::~XUP()
+bool XUP::install()
 {
-	if ( isEnabled() )
-	{
-		setEnabled( false );
-	}
-}
-
-bool XUP::setEnabled( bool enabled )
-{
-	if ( enabled && !isEnabled() )
-	{
-		// set plugin enabled
-		stateAction()->setChecked( true );
-	}
-	else if ( !enabled && isEnabled() )
-	{
-		// set plugin disabled
-		stateAction()->setChecked( false );
-	}
-	
-	// return default value
 	return true;
 }
 
-QWidget* XUP::settingsWidget()
+bool XUP::uninstall()
 {
-	return 0; //new UISettingsQMake();
+	return true;
 }
 
 bool XUP::editProject( XUPProjectItem* project )

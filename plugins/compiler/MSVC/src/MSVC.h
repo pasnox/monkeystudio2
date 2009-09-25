@@ -47,12 +47,14 @@ class MSVC : public CompilerPlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin CompilerPlugin CLIToolPlugin )
 
+protected:	
+	void fillPluginInfos();
+	virtual bool install();
+	virtual bool uninstall();
 public:
 	MSVC();
 	~MSVC();
 	// BasePlugin
-	virtual bool setEnabled( bool );
-	virtual bool haveSettingsWidget() const { return true; }
 	virtual QWidget* settingsWidget();
 	// CompilerPlugin
 	virtual pCommand defaultCompileCommand() const;

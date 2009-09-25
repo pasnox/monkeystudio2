@@ -24,10 +24,8 @@
 
 #include <QDir>
 
-PyQt::PyQt()
+void PyQt::fillPluginInfos()
 {
-	mItem = 0;
-	// set plugin infos
 	mPluginInfos.Caption = tr( "PyQt Project" );
 	mPluginInfos.Description = tr( "PyQt Project support for XUPManager" );
 	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, Michon Aurelien aka aurelien <aurelien.french@gmail.com>";
@@ -37,42 +35,21 @@ PyQt::PyQt()
 	mPluginInfos.FirstStartEnabled = true;
 }
 
-PyQt::~PyQt()
+bool PyQt::install()
 {
-	if ( isEnabled() )
-	{
-		setEnabled( false );
-	}
-}
-
-bool PyQt::setEnabled( bool enabled )
-{
-	if ( enabled && !isEnabled() )
-	{
-		// register pythonqt item
-		mItem = new PyQtProjectItem;
-		mItem->registerProjectType();
-
-		// set plugin enabled
-		stateAction()->setChecked( true );
-	}
-	else if ( !enabled && isEnabled() )
-	{
-		// unregister item, unregistering auto delete the item
-		mItem->unRegisterProjectType();
-		delete mItem;
-
-		// set plugin disabled
-		stateAction()->setChecked( false );
-	}
-
-	// return default value
+	// register pythonqt item
+	mItem = new PyQtProjectItem;
+	mItem->registerProjectType();
 	return true;
 }
 
-QWidget* PyQt::settingsWidget()
+bool PyQt::uninstall()
 {
-	return 0;
+	// unregister item, unregistering auto delete the item
+	mItem->unRegisterProjectType();
+	delete mItem;
+	// return default value
+	return true;
 }
 
 bool PyQt::editProject( XUPProjectItem* project )

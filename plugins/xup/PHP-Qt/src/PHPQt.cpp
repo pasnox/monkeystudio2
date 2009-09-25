@@ -25,10 +25,8 @@
 
 #include <QDir>
 
-PHPQt::PHPQt()
+void PHPQt::fillPluginInfos()
 {
-	mItem = 0;
-	// set plugin infos
 	mPluginInfos.Caption = tr( "PHP-Qt Project" );
 	mPluginInfos.Description = tr( "PHP-Qt Project support for XUPManager" );
 	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
@@ -38,42 +36,21 @@ PHPQt::PHPQt()
 	mPluginInfos.FirstStartEnabled = true;
 }
 
-PHPQt::~PHPQt()
+
+bool PHPQt::install()
 {
-	if ( isEnabled() )
-	{
-		setEnabled( false );
-	}
-}
-
-bool PHPQt::setEnabled( bool enabled )
-{
-	if ( enabled && !isEnabled() )
-	{
-		// register phpqt item
-		mItem = new PHPQtProjectItem;
-		mItem->registerProjectType();
-
-		// set plugin enabled
-		stateAction()->setChecked( true );
-	}
-	else if ( !enabled && isEnabled() )
-	{
-		// unregister qmake item, unregistering auto delete the item
-		mItem->unRegisterProjectType();
-		delete mItem;
-
-		// set plugin disabled
-		stateAction()->setChecked( false );
-	}
-
-	// return default value
+	// register phpqt item
+	mItem = new PHPQtProjectItem;
+	mItem->registerProjectType();
 	return true;
 }
 
-QWidget* PHPQt::settingsWidget()
+bool PHPQt::uninstall()
 {
-	return 0/*new UISettingsPHPQt()*/;
+	// unregister qmake item, unregistering auto delete the item
+	mItem->unRegisterProjectType();
+	delete mItem;
+	return true;
 }
 
 bool PHPQt::editProject( XUPProjectItem* project )

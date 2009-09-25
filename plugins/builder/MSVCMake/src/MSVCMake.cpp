@@ -32,7 +32,13 @@
 
 MSVCMake::MSVCMake ()
 {
-	// set plugin infos
+	// install parsers
+	foreach ( QString s, availableParsers() )
+		MonkeyCore::consoleManager()->addParser( getParser( s ) );
+}
+
+void MSVCMake::fillPluginInfos()
+{
 	mPluginInfos.Caption = tr( "MSVCMake" );
 	mPluginInfos.Description = tr( "Plugin for execute MSVC Make in console and parse it's output" );
 	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
@@ -40,29 +46,23 @@ MSVCMake::MSVCMake ()
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.5.0";
 	mPluginInfos.FirstStartEnabled = false;
-	// install parsers
-	foreach ( QString s, availableParsers() )
-		MonkeyCore::consoleManager()->addParser( getParser( s ) );
+	mPluginInfos.HaveSettingsWidget = true;
 }
 
 MSVCMake::~MSVCMake()
-{
+{//TODO move to uninstall
 	// uninstall parsers
 	foreach ( QString s, availableParsers() )
 		MonkeyCore::consoleManager()->removeParser( s );
 }
 
-bool MSVCMake::setEnabled( bool b )
+bool MSVCMake::install()
 {
-	if ( b && !isEnabled() )
-	{
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		stateAction()->setChecked( false );
-	}
-	
+	return true;
+}
+
+bool MSVCMake::uninstall()
+{
 	return true;
 }
 
@@ -170,4 +170,3 @@ void MSVCMake::setBuildCommand( const pCommand& c )
 }
 
 Q_EXPORT_PLUGIN2( BuilderMSVCMake, MSVCMake )
-

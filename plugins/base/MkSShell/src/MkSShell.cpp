@@ -14,9 +14,8 @@ public:
 	}
 };
 
-MkSShell::MkSShell()
+void MkSShell::fillPluginInfos()
 {
-	// set plugin infos
 	mPluginInfos.Caption = tr( "MkS Shell" );
 	mPluginInfos.Description = tr( "This plugin allow you to manually use the MkS Shell interpreter" );
 	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
@@ -24,33 +23,22 @@ MkSShell::MkSShell()
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "1.0.0";
 	mPluginInfos.FirstStartEnabled = false;
+	mPluginInfos.Pixmap = pIconManager::pixmap( "konsole.png", ":/icons" );
 }
 
-MkSShell::~MkSShell()
+bool MkSShell::install()
 {
-	if ( isEnabled() )
-		setEnabled( false );
+	mDock = new MkSShellDock( MonkeyCore::mainWindow() );
+	// add dock to dock toolbar entry
+	MonkeyCore::mainWindow()->dockToolBar( Qt::TopToolBarArea )->addDock( mDock, infos().Caption, QIcon( infos().Pixmap ) );
+	// create menu action for the dock
+	pActionsManager::setDefaultShortcut( mDock->toggleViewAction(), QKeySequence( "F6" ) );
+	return true;
 }
 
-bool MkSShell::setEnabled( bool b )
+bool MkSShell::uninstall()
 {
-	if ( b && !isEnabled() )
-	{
-		mDock = new MkSShellDock( MonkeyCore::mainWindow() );
-		// add dock to dock toolbar entry
-		MonkeyCore::mainWindow()->dockToolBar( Qt::TopToolBarArea )->addDock( mDock, infos().Caption, QIcon( pixmap() ) );
-		// create menu action for the dock
-		pActionsManager::setDefaultShortcut( mDock->toggleViewAction(), QKeySequence( "F6" ) );
-		// set plugin enabled
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		mDock->deleteLater();
-		// set plugin disabled
-		stateAction()->setChecked( false );
-	}
-	// return default value
+	mDock->deleteLater();
 	return true;
 }
 

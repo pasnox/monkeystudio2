@@ -10,13 +10,11 @@ class MkSShell : public BasePlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin )
 	
-public:
-	MkSShell();
-	~MkSShell();
-	virtual bool setEnabled( bool );
-	virtual QPixmap pixmap() const { return pIconManager::pixmap( "konsole.png", ":/icons" ); }
+protected:	
+	void fillPluginInfos();
+	virtual bool install();
+	virtual bool uninstall();
 
-protected:
 	QPointer<MkSShellDock> mDock;
 };
 

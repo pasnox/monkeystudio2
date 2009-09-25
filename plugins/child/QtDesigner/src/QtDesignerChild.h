@@ -34,7 +34,6 @@ class QtDesignerChild : public pAbstractChild
 	
 public:
 	QtDesignerChild( QtDesignerManager* manager );
-	~QtDesignerChild();
 	
 protected:
 	QtDesignerManager* mDesignerManager;
@@ -50,45 +49,35 @@ protected slots:
 	void formMainContainerChanged( QWidget* widget );
 	
 public:
-	virtual QStringList files() const;
-	virtual QString fileBuffer( const QString& fileName, bool& ok ) const;
+	virtual QString fileBuffer() const;
 	virtual QString context() const;
 	virtual void initializeContext( QToolBar* tb );
 	virtual QPoint cursorPosition() const;
-	virtual void showFile( const QString& );
-	virtual QString currentFile() const;
-	virtual QString currentFileName() const;
-	inline virtual pEditor* currentEditor() const { return 0; }
+	inline virtual pEditor* editor() const { return 0; }
 	virtual bool isModified() const;
 	virtual bool isUndoAvailable() const;
 	virtual bool isRedoAvailable() const;
-	virtual bool isPasteAvailable() const;
 	virtual bool isCopyAvailable() const;
-	virtual bool isModified( const QString& ) const;
-	virtual void saveFile( const QString& );
-	virtual void saveFiles();
-	virtual void printFile( const QString& );
-	virtual void quickPrintFile( const QString& );
+	virtual bool isPasteAvailable() const;
+	virtual bool isGoToAvailable() const;
+	virtual bool isPrintAvailable() const;
+
+public slots:
 	virtual void undo();
 	virtual void redo();
 	virtual void cut();
 	virtual void copy();
 	virtual void paste();
-	virtual void searchReplace();
 	virtual void goTo();
+	virtual void goTo( const QPoint& pos, bool highlight = false );
+	virtual void searchReplace();
 	virtual bool isSearchReplaceAvailable() const;
-	virtual bool isGoToAvailable() const;
-	virtual bool isPrintAvailable() const;
-	
-public slots:
-	virtual void searchPrevious() {}
-	virtual void searchNext() {}
-	virtual void goTo( const QString&, const QPoint&, bool = false );
-	virtual void backupCurrentFile( const QString& );
+	virtual void saveFile();
+	virtual void backupFileAs( const QString& fileName );
 	virtual bool openFile( const QString& fileName, const QString& codec );
-	virtual void closeFile( const QString& );
-	virtual void closeFiles();
-	
+	virtual void closeFile();
+	virtual void printFile();
+	virtual void quickPrintFile();
 };
 
 #endif // QTDESIGNERCHILD_H

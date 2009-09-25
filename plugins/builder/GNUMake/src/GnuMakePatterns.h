@@ -8,7 +8,7 @@
 			"-1", //column
 			"-1", //row
 			pConsoleManager::stError, //type
-			"FUCK %1", //text
+			"%1", //text
 			"%0" //full text
 		},
 		

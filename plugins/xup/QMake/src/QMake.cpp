@@ -25,10 +25,8 @@
 
 #include <QDir>
 
-QMake::QMake()
+void QMake::fillPluginInfos()
 {
-	mItem = 0;
-	// set plugin infos
 	mPluginInfos.Caption = tr( "QMake Project" );
 	mPluginInfos.Description = tr( "QMake Project support for XUPManager" );
 	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, Roper Alexander aka minirop <minirop@peyj.com>";
@@ -36,37 +34,22 @@ QMake::QMake()
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.1.0";
 	mPluginInfos.FirstStartEnabled = true;
+	mPluginInfos.HaveSettingsWidget = true;
 }
 
-QMake::~QMake()
+bool QMake::install()
 {
-	if ( isEnabled() )
-	{
-		setEnabled( false );
-	}
+	// register qmake item
+	mItem = new QMakeProjectItem;
+	mItem->registerProjectType();
+	return true;
 }
 
-bool QMake::setEnabled( bool enabled )
+bool QMake::uninstall()
 {
-	if ( enabled && !isEnabled() )
-	{
-		// register qmake item
-		mItem = new QMakeProjectItem;
-		mItem->registerProjectType();
-		
-		// set plugin enabled
-		stateAction()->setChecked( true );
-	}
-	else if ( !enabled && isEnabled() )
-	{
-		// unregister qmake item, unregistering auto delete the item
-		mItem->unRegisterProjectType();
-		delete mItem;
-		
-		// set plugin disabled
-		stateAction()->setChecked( false );
-	}
-	
+	// unregister qmake item, unregistering auto delete the item
+	mItem->unRegisterProjectType();
+	delete mItem;
 	// return default value
 	return true;
 }

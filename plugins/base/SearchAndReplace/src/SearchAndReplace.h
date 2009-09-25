@@ -82,13 +82,13 @@ public:
 		bool checked;			/*! Do user checked occurence for replacement on search results dock */
 	};
 	
+protected:	
+	void fillPluginInfos();
+	virtual bool install();
+	virtual bool uninstall();
+public:
 	SearchAndReplace();
-	virtual ~SearchAndReplace();
 	
-	virtual bool setEnabled( bool );
-	virtual QPixmap pixmap() const { return pIconManager::pixmap( "tabsearch.png", ":/icons" ); }
-	virtual QWidget* settingsWidget();
-
 protected:
 	Mode mMode;
 	SearchWidget* mWidget;

@@ -22,15 +22,6 @@
 
 PHP::PHP ()
 {
-	// set plugin infos
-	mPluginInfos.Caption = tr( "PHP" );
-	mPluginInfos.Description = tr( "This plugin provide PHP interpreter and php parser." );
-	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
-	mPluginInfos.Type = BasePlugin::iInterpreter;
-	mPluginInfos.Name = PLUGIN_NAME;
-	mPluginInfos.Version = "0.1.0";
-	mPluginInfos.FirstStartEnabled = true;
-
 	// install parsers
 	foreach ( QString s, availableParsers() )
 	{
@@ -38,8 +29,21 @@ PHP::PHP ()
 	}
 }
 
-PHP::~PHP()
+void PHP::fillPluginInfos()
 {
+	mPluginInfos.Caption = tr( "PHP" );
+	mPluginInfos.Description = tr( "This plugin provide PHP interpreter and php parser." );
+	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	mPluginInfos.Type = BasePlugin::iInterpreter;
+	mPluginInfos.Name = PLUGIN_NAME;
+	mPluginInfos.Version = "0.1.0";
+	mPluginInfos.FirstStartEnabled = true;
+	mPluginInfos.HaveSettingsWidget = true;
+	mPluginInfos.Pixmap = pIconManager::pixmap( "php.png", ":/icons" );
+}
+
+PHP::~PHP()
+{//TODO move to uninstall
 	// uninstall parsers
 	foreach ( QString s, availableParsers() )
 	{
@@ -47,17 +51,13 @@ PHP::~PHP()
 	}
 }
 
-bool PHP::setEnabled( bool b )
+bool PHP::install()
 {
-	if ( b && !isEnabled() )
-	{
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		stateAction()->setChecked( false );
-	}
-	
+	return true;
+}
+
+bool PHP::uninstall()
+{
 	return true;
 }
 
@@ -137,12 +137,12 @@ void PHP::setUserCommands( const pCommandList& commands ) const
 
 QStringList PHP::availableParsers() const
 {
-	return QStringList( mPluginInfos.Name );
+	return QStringList( infos().Name );
 }
 
 pCommandParser* PHP::getParser( const QString& s )
 {
-	return s == mPluginInfos.Name ? new PHPParser( this ) : 0;
+	return s == infos().Name ? new PHPParser( this ) : 0;
 }
 
 pCommand PHP::defaultInterpretCommand() const

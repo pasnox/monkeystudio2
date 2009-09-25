@@ -9,21 +9,21 @@
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
 ** Home Page : http://www.monkeystudio.org
 **
-    Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
 #include "UISaveFiles.h"
@@ -87,13 +87,12 @@ UISaveFiles::UISaveFiles( QWidget* w, bool b )
 	dbbButtons->button( QDialogButtonBox::Discard )->setFocus();
 }
 
-void UISaveFiles::addFile( const QString& s, pAbstractChild* c )
+void UISaveFiles::addFile( pAbstractChild* c )
 {
 	// create file item
-	QListWidgetItem* i = new QListWidgetItem( QFileInfo( s ).fileName(), lwFiles );
-	i->setToolTip( s );
-	i->setData( Qt::UserRole, s );
-	i->setData( Qt::UserRole +1, reinterpret_cast<quintptr>( c ) );
+	QListWidgetItem* i = new QListWidgetItem( c->fileName(), lwFiles );
+	i->setToolTip( c->filePath() );
+	i->setData( Qt::UserRole, QVariant::fromValue( c ) );
 	i->setCheckState( Qt::Checked );
 	
 	// change dialog window modified if needed
@@ -109,7 +108,7 @@ void UISaveFiles::clicked( QAbstractButton* ab )
 		setProperty( "ClickedButton", UISaveFiles::bSaveSelected );
 		for ( int i = 0; i < lwFiles->count(); i++ )
 			if ( lwFiles->item( i )->checkState() != Qt::Unchecked )
-				reinterpret_cast<pAbstractChild*>( lwFiles->item( i )->data( Qt::UserRole +1 ).value<quintptr>() )->saveFile( lwFiles->item( i )->data( Qt::UserRole ).toString() );
+				lwFiles->item( i )->data( Qt::UserRole ).value<pAbstractChild*>()->saveFile();
 	}
 	// else cancel changing child event
 	else if ( ab == dbbButtons->button( QDialogButtonBox::Cancel ) )
@@ -126,9 +125,8 @@ UISaveFiles::Buttons UISaveFiles::saveDocuments( QWidget* w, QList<pAbstractChil
 	
 	// add files
 	foreach ( pAbstractChild* c, l )
-		foreach ( QString s, c->files() )
-			if ( c->isModified( s ) )
-				d.addFile( s, c );
+		if ( c->isModified() )
+			d.addFile( c );
 	
 	// if at least one file is modified, ChildsModified is true, show it if needed
 	if ( d.property( "ChildsModified" ).toBool() )

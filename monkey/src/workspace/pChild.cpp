@@ -30,9 +30,9 @@
 #include "../qscintillamanager/pEditor.h"
 #include "../coremanager/MonkeyCore.h"
 
+#include <pIconManager.h>
 #include <qscintilla.h>
 
-#include <QVBoxLayout>
 #include <QFileInfo>
 #include <QTextStream>
 #include <QTextCodec>
@@ -46,13 +46,10 @@ pChild::pChild()
 	mEditor->setAttribute( Qt::WA_MacSmallSize );
 	mEditor->setFrameStyle( QFrame::NoFrame | QFrame::Plain );
 
-	// create layout
-	QVBoxLayout* vl = new QVBoxLayout( this );
-	vl->setMargin( 0 );
-	vl->setSpacing( 0 );
-
-	// add textedit
-	vl->addWidget( mEditor );
+	setWidget( mEditor );
+	setFocusProxy( mEditor );
+	//setWindowIcon( pIconManager::icon( "text.png" ) );
+	setWindowIcon( QIcon() );
 
 	// connections
 	connect( mEditor, SIGNAL( cursorPositionChanged( const QPoint& ) ), this, SIGNAL( cursorPositionChanged( const QPoint& ) ) );
@@ -60,36 +57,35 @@ pChild::pChild()
 	connect( mEditor, SIGNAL( redoAvailable( bool ) ), this, SIGNAL( redoAvailableChanged( bool ) ) );
 	connect( mEditor, SIGNAL( copyAvailable( bool ) ), this, SIGNAL( copyAvailableChanged( bool ) ) );
 	connect( mEditor, SIGNAL( pasteAvailable( bool ) ), this, SIGNAL( pasteAvailableChanged( bool ) ) );
+	connect( mEditor, SIGNAL( modificationChanged( bool ) ), this, SLOT( setWindowModified( bool ) ) );
 	connect( mEditor, SIGNAL( modificationChanged( bool ) ), this, SIGNAL( modifiedChanged( bool ) ) );
 	connect( mEditor, SIGNAL( textChanged() ), this, SIGNAL( contentChanged() ) );
-	connect( this, SIGNAL( modifiedChanged( bool ) ), this, SLOT( setWindowModified( bool ) ) );
 }
 
 pChild::~pChild()
-{}
-
-pEditor* pChild::editor()
 {
-	return mEditor;
 }
 
 void pChild::cursorPositionChanged()
-{ emit pAbstractChild::cursorPositionChanged( cursorPosition() ); }
+{
+	emit pAbstractChild::cursorPositionChanged( cursorPosition() );
+}
 
 QString pChild::language() const
 {
 	// return the editor language
 	if ( mEditor->lexer() )
+	{
 		return mEditor->lexer()->language();
+	}
 
 	// return nothing
 	return QString();
 }
 
-QString pChild::fileBuffer( const QString& fileName, bool& ok ) const
+QString pChild::fileBuffer() const
 {
-	ok = fileName == mFiles.value( 0 );
-	return ok ? mEditor->text() : QString::null;
+	return mEditor->text();
 }
 
 QString pChild::context() const
@@ -99,170 +95,149 @@ QString pChild::context() const
 
 void pChild::initializeContext( QToolBar* tb )
 {
-	//
+	Q_UNUSED( tb );
 }
 
 QPoint pChild::cursorPosition() const
-{ return mEditor->cursorPosition(); }
+{
+	return mEditor->cursorPosition();
+}
 
-void pChild::showFile( const QString& )
-{}
-
-QString pChild::currentFile() const
-{ return mFiles.value( 0 ); }
-
-QString pChild::currentFileName() const
-{ return QFileInfo( currentFile() ).fileName(); }
-
-pEditor* pChild::currentEditor() const
-{ return mEditor; }
+pEditor* pChild::editor() const
+{
+	return mEditor;
+}
 
 bool pChild::isModified() const
-{ return mEditor->isModified(); }
+{
+	return mEditor->isModified();
+}
 
 bool pChild::isUndoAvailable() const
-{ return mEditor->isUndoAvailable(); }
+{
+	return mEditor->isUndoAvailable();
+}
 
 void pChild::invokeSearch () 
-{ /*MonkeyCore::searchWidget()->showSearchFile ();*/}
+{
+	/*MonkeyCore::searchWidget()->showSearchFile ();*/
+}
 
 void pChild::undo()
-{ mEditor->undo(); }
+{
+	mEditor->undo();
+}
 
 bool pChild::isRedoAvailable() const
-{ return mEditor->isRedoAvailable(); }
+{
+	return mEditor->isRedoAvailable();
+}
 
 void pChild::redo()
-{ mEditor->redo(); }
+{
+	mEditor->redo();
+}
 
 void pChild::cut()
-{ mEditor->cut(); }
+{
+	mEditor->cut();
+}
 
 void pChild::copy()
-{ mEditor->copy(); }
+{
+	mEditor->copy();
+}
 
 void pChild::paste()
-{ mEditor->paste(); }
+{
+	mEditor->paste();
+}
 
 void pChild::goTo()
-{ mEditor->invokeGoToLine(); }
-
-void pChild::goTo( const QString& s, const QPoint& p, bool )
 {
-	// if not exists cancel
-	if ( !mFiles.contains( s ) )
-		return;
+	mEditor->invokeGoToLine();
+}
 
-	mEditor->setCursorPosition( p.y() -1, p.x() );
-	mEditor->ensureLineVisible( p.y() -1 );
+void pChild::goTo( const QPoint& pos, bool highlight )
+{
+	Q_UNUSED( highlight );
+	mEditor->setCursorPosition( pos.y() -1, pos.x() );
+	mEditor->ensureLineVisible( pos.y() -1 );
 	mEditor->setFocus();
 }
 
 bool pChild::isCopyAvailable() const
-{ return mEditor->copyAvailable(); }
-
-bool pChild::isPasteAvailable() const
-{ return mEditor->canPaste(); }
-
-bool pChild::isGoToAvailable() const
-{ return true; }
-
-bool pChild::isModified( const QString& ) const
-{ return isModified(); }
-
-bool pChild::isPrintAvailable() const
-{ return true; }
-
-void pChild::saveFile( const QString& s )
 {
-	// if not exists cancel
-	if ( !mFiles.contains( s ) )
-		return;
-
-	mEditor->saveFile( s );
+	return mEditor->copyAvailable();
 }
 
-void pChild::backupCurrentFile( const QString& s )
-{ mEditor->saveBackup( s ); }
+bool pChild::isPasteAvailable() const
+{
+	return mEditor->canPaste();
+}
 
-void pChild::saveFiles()
-{ saveCurrentFile(); }
+bool pChild::isGoToAvailable() const
+{
+	return true;
+}
+
+bool pChild::isPrintAvailable() const
+{
+	return true;
+}
+
+void pChild::saveFile()
+{
+	mEditor->saveFile( filePath() );
+}
+
+void pChild::backupFileAs( const QString& s )
+{
+	mEditor->saveBackup( s );
+}
 
 bool pChild::openFile( const QString& fileName, const QString& codec )
 {
 	// if already open file, cancel
-	if ( !currentFile().isNull() )
+	if ( !filePath().isEmpty() )
+	{
 		return false;
+	}
+	
+	// set filename of the owned document
+	setFilePath( fileName );
 
 	// open file
 	if ( !mEditor->openFile( fileName, codec ) )
+	{
+		setFilePath( QString::null );
 		return false;
-	
-	// set window modified state
-	setWindowModified( mEditor->isModified() );
-
-	// add filename to list
-	mFiles.append( fileName );
+	}
 	
 	if ( !mCodec )
 	{
 		mCodec = QTextCodec::codecForName( codec.toUtf8() );
 	}
 
-	emit fileOpened( fileName );
+	emit fileOpened();
 	return true;
 }
 
-void pChild::closeFile( const QString& s )
+void pChild::closeFile()
 {
-	// if not exists cancel
-	if ( !mFiles.contains( s ) )
-		return;
-
 	mEditor->closeFile();
+	setFilePath( QString::null );
 
-	// remove from files list
-	mFiles.removeAll( s );
-
-	// change window title
-	setWindowTitle( QString() );
-
-	emit fileClosed( s );
+	emit fileClosed();
 }
 
-void pChild::closeFiles()
-{ closeCurrentFile(); }
-
-void pChild::printFile( const QString& s )
+void pChild::printFile()
 {
-	// if not exists cancel
-	if ( !mFiles.contains( s ) )
-		return;
-
-	// print file
 	mEditor->print();
 }
 
-void pChild::quickPrintFile( const QString& s )
+void pChild::quickPrintFile()
 {
-	// if not exists cancel
-	if ( !mFiles.contains( s ) )
-		return;
-
 	// print file
 	mEditor->quickPrint();
-}
-
-void pChild::setWindowModified( bool moodified )
-{
-	// update windowtitle if needed
-	if ( !windowTitle().contains( "[*]" ) )
-	{
-		if ( windowTitle().isEmpty() )
-			setWindowTitle( mEditor->property( "fileName" ).toString() +"[*]" );
-		else
-			setWindowTitle( windowTitle() +"[*]" );
-	}
-	// set windowmodified
-	pAbstractChild::setWindowModified( moodified );
 }

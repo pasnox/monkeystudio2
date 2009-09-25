@@ -42,7 +42,13 @@
 */
 Gpp::Gpp()
 {
-	// set plugin infos
+	// install parsers
+	foreach ( QString s, availableParsers() )
+		MonkeyCore::consoleManager()->addParser( getParser( s ) );
+}
+
+void Gpp::fillPluginInfos()
+{
 	mPluginInfos.Caption = tr( "G++" );
 	mPluginInfos.Description = tr( "Plugin for execute G++ in console" );
 	mPluginInfos.Author = "Kopats Andrei aka hlamer <hlamer@tut.by>, Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
@@ -50,10 +56,7 @@ Gpp::Gpp()
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.5.0";
 	mPluginInfos.FirstStartEnabled = false;
-	
-	// install parsers
-	foreach ( QString s, availableParsers() )
-		MonkeyCore::consoleManager()->addParser( getParser( s ) );
+	mPluginInfos.HaveSettingsWidget = true;
 }
 
 /*!
@@ -67,23 +70,24 @@ Gpp::~Gpp()
 }
 
 /*!
-	Enable/disable plugin
-	\param b Flag. Enable = true, Disable = false
+	Install plugin to the system
 	\return Status of process 
 	\retval true Successfully enabled
 	\retval false Some error ocurred
 */
-bool Gpp::setEnabled( bool b)
+bool Gpp::install()
 {
-	if ( b && !isEnabled() )
-	{
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		stateAction()->setChecked( false );
-	}
-	
+	return true;
+}
+
+/*!
+	Uninstall plugin from the system
+	\return Status of process 
+	\retval true Successfully enabled
+	\retval false Some error ocurred
+*/
+bool Gpp::uninstall()
+{
 	return true;
 }
 

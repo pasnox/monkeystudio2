@@ -33,14 +33,12 @@ class ClassBrowser : public BasePlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin )
 
+	void fillPluginInfos();
+	virtual bool install();
+	virtual bool uninstall();
 public:
 	enum IntegrationMode { imDock, imCombo, imBoth };
 	
-	ClassBrowser();
-	virtual ~ClassBrowser();
-	virtual bool setEnabled( bool );
-	virtual QPixmap pixmap() const;
-	virtual bool haveSettingsWidget() const;
 	virtual QWidget* settingsWidget();
 	
 	qCtagsSenseProperties properties() const;
@@ -56,8 +54,8 @@ protected:
 	QPointer<pDockClassBrowser> mDock;
 
 protected slots:
-	void fileOpened( const QString& fileName );
-	void currentFileChanged( pAbstractChild* child, const QString& fileName );
+	void documentOpened( pAbstractChild* document );
+	void currentDocumentChanged( pAbstractChild* document );
 	void opened( XUPProjectItem* project );
 	void buffersChanged( const QMap<QString, QString>& entries );
 	void entryActivated( qCtagsSenseEntry* entry );

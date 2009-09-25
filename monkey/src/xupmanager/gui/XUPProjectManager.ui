@@ -205,7 +205,7 @@
    <class>pDockWidget</class>
    <extends>QDockWidget</extends>
    <header location="global">pDockWidget.h</header>
-   <container>1</container>
+   <container>0</container>
   </customwidget>
  </customwidgets>
  <resources>

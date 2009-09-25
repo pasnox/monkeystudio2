@@ -19,9 +19,8 @@
 #include "QtDesignerManager.h"
 #include "QtDesignerChild.h"
 
-QtDesigner::QtDesigner()
+void QtDesigner::fillPluginInfos()
 {
-	// set plugin infos
 	mPluginInfos.Caption = tr( "Qt Designer" );
 	mPluginInfos.Description = tr( "This plugin embeds Qt Designer" );
 	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, Luc Bruant aka fullmetalcoder <fullmetalcoder@hotmail.fr>";
@@ -29,49 +28,29 @@ QtDesigner::QtDesigner()
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "1.0.0";
 	mPluginInfos.FirstStartEnabled = true;
+	mPluginInfos.Pixmap = pIconManager::pixmap( "designer.png", ":/icons" );
 }
 
-QtDesigner::~QtDesigner()
+bool QtDesigner::install()
 {
-	if ( isEnabled() )
-	{
-		setEnabled( false );
-	}
-}
-
-QWidget* QtDesigner::settingsWidget()
-{
-	return BasePlugin::settingsWidget();
-}
-
-bool QtDesigner::setEnabled( bool b )
-{
-	if ( b && !isEnabled() )
-	{
-		// set usable suffixes
-		mSuffixes[ tr( "Qt Forms" ) ] = QStringList( "*.ui" );
-		// create designer
-		mDesignerManager = new QtDesignerManager( this );
-		// set plugin enabled
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		// clear suffixes
-		mSuffixes.clear();
-		// clear designer instance
-		delete mDesignerManager;
-		// set plugin disabled
-		stateAction()->setChecked( false );
-	}
-	// return default value
+	// set usable suffixes
+	mSuffixes[ tr( "Qt Forms" ) ] = QStringList( "*.ui" );
+	// create designer
+	mDesignerManager = new QtDesignerManager( this );
 	return true;
 }
 
-pAbstractChild* QtDesigner::openFile( const QString& fileName, const QPoint& pos )
+bool QtDesigner::uninstall()
 {
-	Q_UNUSED( pos );
-	
+	// clear suffixes
+	mSuffixes.clear();
+	// clear designer instance
+	delete mDesignerManager;
+	return true;
+}
+
+pAbstractChild* QtDesigner::createDocument( const QString& fileName )
+{
 	if ( canOpen( fileName ) )
 	{
 		return new QtDesignerChild( mDesignerManager );

@@ -301,10 +301,10 @@ void qSciShortcutsManager::keyBoardShortcutPressed ()
 	Q_ASSERT( sender() );
 	int messageCode = qobject_cast<QAction*>( sender() )->data().toInt();
 	Q_ASSERT( messageCode );
-	pAbstractChild* child = MonkeyCore::workspace()->currentChild();
+	pAbstractChild* child = MonkeyCore::workspace()->currentDocument();
 	if ( child )
 	{
-		pEditor* editor = child->currentEditor();
+		pEditor* editor = child->editor();
 		if ( editor && ( editor->hasFocus() || child->isWindow() ) )
 		{
 			const QPoint mCursorPos = editor->cursorPosition();

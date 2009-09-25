@@ -10,13 +10,11 @@ class PostIt : public BasePlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin )
 	
-public:
-	PostIt();
-	~PostIt();
-	virtual bool setEnabled( bool );
-	virtual QPixmap pixmap() const { return pIconManager::pixmap( "knotes.png", ":/icons" ); }
+protected:	
+	void fillPluginInfos();
+	virtual bool install();
+	virtual bool uninstall();
 
-protected:
 	QPointer<UIPostIt> mPostIt;
 
 protected slots:

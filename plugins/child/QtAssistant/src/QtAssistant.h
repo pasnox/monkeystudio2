@@ -29,14 +29,13 @@ class QtAssistant : public ChildPlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin ChildPlugin )
 	
+protected:	
+	void fillPluginInfos();
+	virtual bool install();
+	virtual bool uninstall();
 public:
-	QtAssistant();
-	virtual ~QtAssistant();
-	virtual bool setEnabled( bool );
-	virtual QPixmap pixmap() const { return pIconManager::pixmap( "assistant.png", ":/icons" ); }
-	virtual bool haveSettingsWidget() const { return true; }
 	virtual QWidget* settingsWidget();
-	virtual pAbstractChild* openFile( const QString& filename, const QPoint& pos = QPoint() );
+	virtual pAbstractChild* createDocument( const QString& fileName );
 
 protected:
 	QPointer<QtAssistantDock> mAssistantDock;

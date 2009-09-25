@@ -24,9 +24,8 @@
 
 #include <QDebug>
 
-QtAssistant::QtAssistant()
+void QtAssistant::fillPluginInfos()
 {
-	// set plugin infos
 	mPluginInfos.Caption = tr( "Qt Assistant" );
 	mPluginInfos.Description = tr( "This plugin embedded Qt Assistant" );
 	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
@@ -34,44 +33,31 @@ QtAssistant::QtAssistant()
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "1.0.0";
 	mPluginInfos.FirstStartEnabled = true;
-}
-
-QtAssistant::~QtAssistant()
-{
-	if ( isEnabled() )
-		setEnabled( false );
+	mPluginInfos.HaveSettingsWidget = true;
+	mPluginInfos.Pixmap = pIconManager::pixmap( "assistant.png", ":/icons" );
 }
 
 QWidget* QtAssistant::settingsWidget()
 {
-	if ( !isEnabled() )
-		return 0;
 	return new PreferencesDialog( mAssistantDock->helpEngine(), QApplication::activeWindow(), false );
 }
 
-bool QtAssistant::setEnabled( bool b )
+bool QtAssistant::install()
 {
-	if ( b && !isEnabled() )
-	{
-		mAssistantDock = new QtAssistantDock;
-		MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( mAssistantDock, infos().Caption, QIcon( ":/icons/assistant.png" ) );
-		// set plugin enabled
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		mAssistantDock->deleteLater();
-		// set plugin disabled
-		stateAction()->setChecked( false );
-	}
-	else
-		return false;
-	// return default value
+	mAssistantDock = new QtAssistantDock;
+	MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( mAssistantDock, infos().Caption, QIcon( ":/icons/assistant.png" ) );
 	return true;
 }
 
-pAbstractChild* QtAssistant::openFile( const QString& /*filename*/, const QPoint& /*pos*/ )
+bool QtAssistant::uninstall()
 {
+	mAssistantDock->deleteLater();
+	return true;
+}
+
+pAbstractChild* QtAssistant::createDocument( const QString& fileName )
+{
+	Q_UNUSED( fileName );
 	return 0;
 }
 

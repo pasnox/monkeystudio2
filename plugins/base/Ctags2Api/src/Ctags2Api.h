@@ -35,12 +35,11 @@ class Ctags2Api : public BasePlugin
 {
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin )
-	
+protected:	
+	void fillPluginInfos();
+	virtual bool install();
+	virtual bool uninstall();
 public:
-	Ctags2Api();
-	~Ctags2Api();
-	virtual bool setEnabled( bool );
-	virtual QPixmap pixmap() const { return pIconManager::pixmap( "Ctags2Api.png", ":/icons" ); }
 
 protected slots:
 	void UICtags2Api_show();

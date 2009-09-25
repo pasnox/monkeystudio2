@@ -56,6 +56,7 @@ protected slots:
 	void on_pbNative_toggled( bool checked );
 	void tvFiltered_currentChanged( const QModelIndex& current, const QModelIndex& previous );
 	void on_tvFiltered_doubleClicked( const QModelIndex& index );
+	void on_tvFiltered_customContextMenuRequested( const QPoint& pos );
 
 signals:
 	void projectCustomContextMenuRequested( const QPoint& pos );

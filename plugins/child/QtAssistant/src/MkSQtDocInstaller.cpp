@@ -122,9 +122,11 @@ void MkSQtDocInstaller::lookForNewQtDocumentation()
 	connect( mQtDocInstaller, SIGNAL( errorMessage( const QString& ) ), this, SLOT( displayInstallationError( const QString& ) ) );
 	connect( mQtDocInstaller, SIGNAL( docsInstalled( bool ) ), this, SLOT( qtDocumentationInstalled( bool ) ) );
 
+	/*
 	QString versionKey = QString( QLatin1String( "qtVersion%1$$$qt" ) ).arg( QLatin1String( QT_VERSION_STR ) );
 	if ( mHelpEngine->customValue( versionKey, 0 ).toInt() != 1 )
 		MonkeyCore::messageManager()->appendMessage( tr( "Looking for Qt Documentation..." ) );
+	*/
 	mQtDocInstaller->installDocs();
 }
 

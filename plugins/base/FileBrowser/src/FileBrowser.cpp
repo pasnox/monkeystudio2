@@ -45,12 +45,8 @@
 
 #include <QIcon>
 
-/*!
-	Class constructor. Initialises information about plugin for user and core
-*/
-FileBrowser::FileBrowser()
+void FileBrowser::fillPluginInfos()
 {
-	// set plugin infos
 	mPluginInfos.Caption = tr( "File Browser" );
 	mPluginInfos.Description = tr( "Plugin for browsing file outside the project" );
 	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, Kopats Andei aka hlamer <hlamer@tut.by>";
@@ -58,49 +54,42 @@ FileBrowser::FileBrowser()
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "1.0.0";
 	mPluginInfos.FirstStartEnabled = true;
+	mPluginInfos.HaveSettingsWidget = true;
+	mPluginInfos.Pixmap = QPixmap( ":/icons/browser.png" );
 }
 
-/*!
-	Destructor. Uninstalls plugin from the system.
-*/
-FileBrowser::~FileBrowser()
-{
-	if ( isEnabled() )
-		setEnabled( false );
-}
 
 /*!
-	Install/uninstall plugin from system
-	\param b Flag of action a - install; b - uninstall
+	Install plugin to the system
 	\return Status code of action
 	\retval true Successfull
 	\retval false Some error ocurred
 */
-bool FileBrowser::setEnabled( bool b )
+bool FileBrowser::install()
 {
-	if ( b && !isEnabled() )
-	{
-		// create dock
-		mDock = new pDockFileBrowser();
-		// add dock to dock toolbar entry
-		MonkeyCore::mainWindow()->dockToolBar( Qt::LeftToolBarArea )->addDock( mDock, infos().Caption, QIcon( pixmap() ) );
-		// create menu action for the dock
-		pActionsManager::setDefaultShortcut( mDock->toggleViewAction(), QKeySequence( "F7" ) );
-		// restore settings
-		restoreSettings();
-		// set plugin enabled
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		// save settings
-		saveSettings();
-		// it will remove itself from dock toolbar when deleted
-		mDock->deleteLater();
-		// set plugin disabled
-		stateAction()->setChecked( false );
-	}
-	// return default value
+	// create dock
+	mDock = new pDockFileBrowser();
+	// add dock to dock toolbar entry
+	MonkeyCore::mainWindow()->dockToolBar( Qt::LeftToolBarArea )->addDock( mDock, infos().Caption, QIcon( infos().Pixmap ) );
+	// create menu action for the dock
+	pActionsManager::setDefaultShortcut( mDock->toggleViewAction(), QKeySequence( "F7" ) );
+	// restore settings
+	restoreSettings();
+	return true;
+}
+
+/*!
+	Uninstall plugin from the system
+	\return Status code of action
+	\retval true Successfull
+	\retval false Some error ocurred
+*/
+bool FileBrowser::uninstall()
+{
+	// save settings
+	saveSettings();
+	// it will remove itself from dock toolbar when deleted
+	mDock->deleteLater();
 	return true;
 }
 
@@ -110,13 +99,6 @@ bool FileBrowser::setEnabled( bool b )
 */
 QWidget* FileBrowser::settingsWidget()
 { return new FileBrowserSettings( this ); }
-
-/*!
-	Get icon for plugin
-	\return Pixmap
-*/
-QPixmap FileBrowser::pixmap() const
-{ return QPixmap( ":/icons/browser.png" ); }
 
 /*!
 	Get filter wildcards, which using for filtering out some files, which should be removed

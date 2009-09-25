@@ -36,14 +36,10 @@
 #include "GccParser.h"
 #include "Parser.h"
 
-/*!
-	Class constructor
-*/
-GccParser::GccParser()
+void GccParser::fillPluginInfos()
 {
-	// set plugin infos
 	mPluginInfos.Caption = tr( "GccParser" );
-	mPluginInfos.Description = tr( "Plugin for parsing output of GNU Compiler Collection" );
+	mPluginInfos.Description = tr( "Plugin for parsing output of GNU Copiler Collection" );
 	mPluginInfos.Author = "Kopats Andrei aka hlamer <hlamer@tut.by>";
 	mPluginInfos.Type = BasePlugin::iBase;
 	mPluginInfos.Name = PLUGIN_NAME;
@@ -56,33 +52,26 @@ GccParser::GccParser()
 }
 
 /*!
-	Class destructor
-*/
-GccParser::~GccParser()
-{
-	setEnabled (false);
-}
-
-/*!
-	Enable/disable plugin
-	\param b Flag. Enable = true, Disable = false
+	Install plugin to the system
 	\return Status of process 
 	\retval true Successfully enabled
 	\retval false Some error ocurred
 */
-bool GccParser::setEnabled( bool b )
+bool GccParser::install()
 {
-	stateAction()->setChecked( b );
-	
-	if ( b )
-	{
-		MonkeyCore::consoleManager()->addParser( new Parser( this ) );
-	}
-	else
-	{
-		MonkeyCore::consoleManager()->removeParser( PLUGIN_NAME );
-	}
-	
+	MonkeyCore::consoleManager()->addParser( new Parser( this ) );
+	return true;
+}
+
+/*!
+	Uninstall plugin to the system
+	\return Status of process 
+	\retval true Successfully enabled
+	\retval false Some error ocurred
+*/
+bool GccParser::uninstall()
+{
+	MonkeyCore::consoleManager()->removeParser( PLUGIN_NAME );
 	return true;
 }
 

@@ -22,15 +22,6 @@
 
 Python::Python ()
 {
-	// set plugin infos
-	mPluginInfos.Caption = tr( "Python" );
-	mPluginInfos.Description = tr( "This plugin provide Python interpreter and python parser." );
-	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, Michon Aurelien aka aurelien <aurelien.french@gmail.com>";
-	mPluginInfos.Type = BasePlugin::iInterpreter;
-	mPluginInfos.Name = PLUGIN_NAME;
-	mPluginInfos.Version = "0.1.0";
-	mPluginInfos.FirstStartEnabled = true;
-
 	// install parsers
 	foreach ( QString s, availableParsers() )
 	{
@@ -38,8 +29,21 @@ Python::Python ()
 	}
 }
 
-Python::~Python()
+void Python::fillPluginInfos()
 {
+	mPluginInfos.Caption = tr( "Python" );
+	mPluginInfos.Description = tr( "This plugin provide Python interpreter and python parser." );
+	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>, Michon Aurelien aka aurelien <aurelien.french@gmail.com>";
+	mPluginInfos.Type = BasePlugin::iInterpreter;
+	mPluginInfos.Name = PLUGIN_NAME;
+	mPluginInfos.Version = "0.1.0";
+	mPluginInfos.FirstStartEnabled = true;
+	mPluginInfos.HaveSettingsWidget = true;
+	mPluginInfos.Pixmap = pIconManager::pixmap( "python.png", ":/icons" );
+}
+
+Python::~Python()
+{ // TODO move to uninstall
 	// uninstall parsers
 	foreach ( QString s, availableParsers() )
 	{
@@ -47,17 +51,13 @@ Python::~Python()
 	}
 }
 
-bool Python::setEnabled( bool b )
+bool Python::install()
 {
-	if ( b && !isEnabled() )
-	{
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		stateAction()->setChecked( false );
-	}
-	
+	return true;
+}
+
+bool Python::uninstall()
+{
 	return true;
 }
 
@@ -137,12 +137,12 @@ void Python::setUserCommands( const pCommandList& commands ) const
 
 QStringList Python::availableParsers() const
 {
-	return QStringList( mPluginInfos.Name );
+	return QStringList( infos().Name );
 }
 
 pCommandParser* Python::getParser( const QString& s )
 {
-	return s == mPluginInfos.Name ? new PythonParser( this ) : 0;
+	return s == infos().Name ? new PythonParser( this ) : 0;
 }
 
 pCommand Python::defaultInterpretCommand() const

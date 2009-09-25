@@ -47,12 +47,14 @@ class Gcc : public CompilerPlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin CompilerPlugin CLIToolPlugin )
 
+protected:	
+	void fillPluginInfos();
+	virtual bool install();
+	virtual bool uninstall();
 public:
 	Gcc();
 	~Gcc();
 	// BasePlugin
-	virtual bool setEnabled( bool );
-	virtual bool haveSettingsWidget() const { return true; }
 	virtual QWidget* settingsWidget();
 	// CompilerPlugin
 	virtual pCommand defaultCompileCommand() const;

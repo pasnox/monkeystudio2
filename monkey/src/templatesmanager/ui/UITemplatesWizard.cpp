@@ -40,14 +40,11 @@
 
 #include <QDir>
 
-using namespace pMonkeyStudio;
-
-UITemplatesWizard::UITemplatesWizard( QWidget* w )
-	: QDialog( w )
+UITemplatesWizard::UITemplatesWizard( QWidget* parent )
+	: QDialog( parent )
 {
 	// init dialog
 	setupUi( this );
-	setAttribute( Qt::WA_DeleteOnClose );
 	saWidgets->setWidgetResizable( true );
 	
 	// create scrollarea widget
@@ -103,8 +100,8 @@ UITemplatesWizard::UITemplatesWizard( QWidget* w )
 	onFiltersChanged();
 }
 
-void UITemplatesWizard::setType( const QString& s )
-{ cbTypes->setCurrentIndex( cbTypes->findData( s ) ); }
+void UITemplatesWizard::setType( const QString& type )
+{ cbTypes->setCurrentIndex( cbTypes->findData( type ) ); }
 
 void UITemplatesWizard::onFiltersChanged()
 {
@@ -238,7 +235,7 @@ void UITemplatesWizard::on_cbProjects_currentChanged( const QModelIndex& index )
 
 void UITemplatesWizard::on_tbDestination_clicked()
 {
-	QString s = getExistingDirectory( tr( "Select the file(s) destination" ), leDestination->text(), window() );
+	QString s = pMonkeyStudio::getExistingDirectory( tr( "Select the file(s) destination" ), leDestination->text(), window() );
 	if ( !s.isNull() )
 		leDestination->setText( s );
 }
@@ -248,7 +245,7 @@ bool UITemplatesWizard::checkTemplate()
 	// check item available
 	if ( !lwTemplates->selectedItems().count() )
 	{
-		information( tr( "Template..." ), tr( "You need to select a template." ), window() );
+		pMonkeyStudio::information( tr( "Template..." ), tr( "You need to select a template." ), window() );
 		return false;
 	}
 	

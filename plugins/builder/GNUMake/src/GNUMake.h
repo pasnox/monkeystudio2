@@ -36,12 +36,14 @@ class GNUMake : public BuilderPlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin BuilderPlugin CLIToolPlugin )
 
+protected:	
+	void fillPluginInfos();
+	virtual bool install();
+	virtual bool uninstall();
 public:
 	GNUMake();
 	~GNUMake();
 	// BasePlugin
-	virtual bool setEnabled( bool );
-	virtual bool haveSettingsWidget() const { return true; }
 	virtual QWidget* settingsWidget();
 	// CLIToolPlugin
 	virtual pCommandList defaultCommands() const;

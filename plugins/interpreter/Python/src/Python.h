@@ -25,13 +25,14 @@ class Python : public InterpreterPlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin InterpreterPlugin CLIToolPlugin )
 
+protected:	
+	void fillPluginInfos();
+	virtual bool install();
+	virtual bool uninstall();
 public:
 	Python();
 	~Python();
 	// BasePlugin
-	virtual bool setEnabled( bool );
-	virtual QPixmap pixmap() const { return pIconManager::pixmap( "python.png", ":/icons" ); }
-	virtual bool haveSettingsWidget() const { return true; }
 	virtual QWidget* settingsWidget();
 	// CLIToolPlugin
 	virtual pCommandList defaultCommands() const;

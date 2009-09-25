@@ -18,6 +18,8 @@
 #ifndef QTASSISTANTBROWSER_H
 #define QTASSISTANTBROWSER_H
 
+#include <pAbstractChild.h>
+
 #include "ui_QtAssistantBrowser.h"
 
 class QHelpEngine;
@@ -34,36 +36,30 @@ public:
 	virtual QString context() const;
 	virtual void initializeContext( QToolBar* tb );
 	virtual QPoint cursorPosition() const;
-	virtual QString currentFile() const;
-	virtual QString currentFileName() const;
-	virtual pEditor* currentEditor() const;
+	virtual pEditor* editor() const;
 	virtual bool isModified() const;
 	virtual bool isUndoAvailable() const;
 	virtual bool isRedoAvailable() const;
 	virtual bool isCopyAvailable() const;
 	virtual bool isPasteAvailable() const;
 	virtual bool isGoToAvailable() const;
-	virtual bool isModified( const QString& filename ) const;
 	virtual bool isPrintAvailable() const;
 
 public slots:
-	virtual void showFile( const QString& filename );
 	virtual void undo();
 	virtual void redo();
 	virtual void cut();
 	virtual void copy();
 	virtual void paste();
 	virtual void goTo();
-	virtual void goTo( const QString& filename, const QPoint& pos, bool highlight = false );
+	virtual void goTo( const QPoint& pos, bool highlight = false );
 	virtual void invokeSearch();
-	virtual void saveFile( const QString& filename );
-	virtual void backupCurrentFile( const QString& filename );
-	virtual void saveFiles();
+	virtual void saveFile();
+	virtual void backupFileAs( const QString& filename );
 	virtual bool openFile( const QString& filename, const QString& codec );
-	virtual void closeFile( const QString& filename );
-	virtual void closeFiles();
-	virtual void printFile( const QString& filename );
-	virtual void quickPrintFile( const QString& filename );
+	virtual void closeFile();
+	virtual void printFile();
+	virtual void quickPrintFile();
 
 	HelpViewer* newEmptyTab( qreal zoom = 1.0 );
 	HelpViewer* currentTab( bool create );

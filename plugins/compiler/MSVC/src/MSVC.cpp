@@ -42,7 +42,13 @@
 */
 MSVC::MSVC()
 {
-	// set plugin infos
+	// install parsers
+	foreach ( QString s, availableParsers() )
+		MonkeyCore::consoleManager()->addParser( getParser( s ) );
+}
+
+void MSVC::fillPluginInfos()
+{
 	mPluginInfos.Caption = tr( "MSVC" );
 	mPluginInfos.Description = tr( "Plugin for execute MSVC in console" );
 	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
@@ -50,40 +56,39 @@ MSVC::MSVC()
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.5.0";
 	mPluginInfos.FirstStartEnabled = false;
-	
-	// install parsers
-	foreach ( QString s, availableParsers() )
-		MonkeyCore::consoleManager()->addParser( getParser( s ) );
+	mPluginInfos.HaveSettingsWidget = true;
+	mPluginInfos.HaveSettingsWidget = true;
 }
 
 /*!
 	Destructor of class
 */
 MSVC::~MSVC()
-{
+{//TODO move to uninstall
 	// uninstall parsers
 	foreach ( QString s, availableParsers() )
 		MonkeyCore::consoleManager()->removeParser( s );
 }
 
 /*!
-	Enable/disable plugin
-	\param b Flag. Enable = true, Disable = false
+	Install plugin to the system
 	\return Status of process 
 	\retval true Successfully enabled
 	\retval false Some error ocurred
 */
-bool MSVC::setEnabled( bool b)
+bool MSVC::install()
 {
-	if ( b && !isEnabled() )
-	{
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		stateAction()->setChecked( false );
-	}
-	
+	return true;
+}
+
+/*!
+	Unnstall plugin from the system
+	\return Status of process 
+	\retval true Successfully enabled
+	\retval false Some error ocurred
+*/
+bool MSVC::uninstall()
+{
 	return true;
 }
 

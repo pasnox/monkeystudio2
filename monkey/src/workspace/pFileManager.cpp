@@ -44,11 +44,12 @@ pFileManager::pFileManager( QObject* o )
 	initialize();
 	
 	// files
-	connect( MonkeyCore::workspace(), SIGNAL( fileOpened( const QString& ) ), this, SIGNAL( fileOpened( const QString& ) ) );
-	connect( MonkeyCore::workspace(), SIGNAL( fileClosed( const QString& ) ), this, SIGNAL( fileClosed( const QString& ) ) );
-	connect( MonkeyCore::workspace(), SIGNAL( fileChanged( const QString& ) ), this, SIGNAL( fileChanged( const QString& ) ) );
-	connect( MonkeyCore::workspace(), SIGNAL( currentFileChanged( pAbstractChild*, const QString& ) ), this, SIGNAL( currentFileChanged( pAbstractChild*, const QString& ) ) );
-	connect( MonkeyCore::workspace(), SIGNAL( contentChanged() ), this, SIGNAL( contentChanged() ) );
+	connect( MonkeyCore::workspace(), SIGNAL( documentOpened( pAbstractChild* ) ), this, SIGNAL( documentOpened( pAbstractChild* ) ) );
+	connect( MonkeyCore::workspace(), SIGNAL( documentChanged( pAbstractChild* ) ), this, SIGNAL( documentChanged( pAbstractChild* ) ) );
+	connect( MonkeyCore::workspace(), SIGNAL( documentAboutToClose( pAbstractChild* ) ), this, SIGNAL( documentAboutToClose( pAbstractChild* ) ) );
+	connect( MonkeyCore::workspace(), SIGNAL( documentClosed( pAbstractChild* ) ), this, SIGNAL( documentClosed( pAbstractChild* ) ) );
+	connect( MonkeyCore::workspace(), SIGNAL( currentDocumentChanged( pAbstractChild* ) ), this, SIGNAL( currentDocumentChanged( pAbstractChild* ) ) );
+	
 	// projects
 	connect( MonkeyCore::projectsManager(), SIGNAL( projectOpened( XUPProjectItem* ) ), this, SIGNAL( opened( XUPProjectItem* ) ) );
 	connect( MonkeyCore::projectsManager(), SIGNAL( projectAboutToClose( XUPProjectItem* ) ), this, SIGNAL( aboutToClose( XUPProjectItem* ) ) );
@@ -340,38 +341,30 @@ void pFileManager::generateScript()
 	file.close();
 }
 
-pAbstractChild* pFileManager::childForFile( const QString& file ) const
+pAbstractChild* pFileManager::openedDocument( const QString& fileName ) const
 {
-	foreach ( pAbstractChild* ac, MonkeyCore::workspace()->children() )
+	foreach ( pAbstractChild* document, MonkeyCore::workspace()->documents() )
 	{
-		foreach ( const QString& fn, ac->files() )
+		if ( pMonkeyStudio::isSameFile( document->filePath(), fileName ) )
 		{
-			if ( pMonkeyStudio::isSameFile( fn, file ) )
-			{
-				return ac;
-			}
+			return document;
 		}
 	}
 	
 	return 0;
 }
 
-QString pFileManager::fileBuffer( const QString& fileName, const QString& codec ) const
+QString pFileManager::fileBuffer( const QString& fileName, const QString& codec, bool& ok ) const
 {
-	QString result;
-	bool ok;
+	pAbstractChild* document = openedDocument( fileName );
 	
-	foreach ( pAbstractChild* ac, MonkeyCore::workspace()->children() )
+	if ( document )
 	{
-		result = ac->fileBuffer( fileName, ok );
-		
-		if ( ok )
-		{
-			return result;
-		}
+		ok = true;
+		return document->fileBuffer();
 	}
 	
-	result.clear();
+	QString result;
 	ok = false;
 	QFile file( fileName );
 	
@@ -393,20 +386,12 @@ void pFileManager::computeModifiedBuffers()
 {
 	QMap<QString, QString> entries;
 	
-	foreach ( pAbstractChild* ac, MonkeyCore::workspace()->children() )
+	foreach ( pAbstractChild* document, MonkeyCore::workspace()->documents() )
 	{
-		foreach ( const QString& fileName, ac->files() )
+		if ( document->isModified() )
 		{
-			if ( ac->isModified( fileName ) )
-			{
-				bool ok;
-				QString content = ac->fileBuffer( fileName, ok );
-				
-				if ( ok )
-				{
-					entries[ fileName ] = content;
-				}
-			}
+			const QString content = document->fileBuffer();
+			entries[ document->filePath() ] = content;
 		}
 	}
 	
@@ -414,25 +399,42 @@ void pFileManager::computeModifiedBuffers()
 }
 
 XUPProjectItem* pFileManager::currentProject() const
-{ return MonkeyCore::projectsManager()->currentProject(); }
+{
+	return MonkeyCore::projectsManager()->currentProject();
+}
 
 QString pFileManager::currentProjectFile() const
-{ return currentProject() ? currentProject()->fileName() : QString(); }
+{
+	XUPProjectItem* curProject = currentProject();
+	return curProject ? curProject->fileName() : QString::null;
+}
 
 QString pFileManager::currentProjectPath() const
-{ return currentProject() ? currentProject()->path() : QString(); }
+{
+	XUPProjectItem* curProject = currentProject();
+	return curProject ? curProject->path() : QString::null;
+}
 
-pAbstractChild* pFileManager::currentChild() const
-{ return MonkeyCore::workspace()->currentChild(); }
+pAbstractChild* pFileManager::currentDocument() const
+{
+	return MonkeyCore::workspace()->currentDocument();
+}
 
-QString pFileManager::currentChildFile() const
-{ return currentChild() ? currentChild()->currentFile() : QString(); }
+QString pFileManager::currentDocumentFile() const
+{
+	pAbstractChild* document = currentDocument();
+	return document ? document->filePath() : QString::null;
+}
 
-QString pFileManager::currentChildPath() const
-{ return QFileInfo( currentChildFile() ).path(); }
+QString pFileManager::currentDocumentPath() const
+{
+	return QFileInfo( currentDocumentFile() ).path();
+}
 
 XUPItem* pFileManager::currentItem() const
-{ return MonkeyCore::projectsManager()->currentItem(); }
+{
+	return MonkeyCore::projectsManager()->currentItem();
+}
 
 QString pFileManager::currentItemFile() const
 {
@@ -461,13 +463,19 @@ QString pFileManager::currentItemPath() const
 }
 
 pAbstractChild* pFileManager::openFile( const QString& fileName, const QString& codec )
-{ return MonkeyCore::workspace()->openFile( fileName, codec ); }
+{
+	return MonkeyCore::workspace()->openFile( fileName, codec );
+}
 
-void pFileManager::closeFile( const QString& s )
-{ MonkeyCore::workspace()->closeFile( s ); }
+void pFileManager::closeFile( const QString& fileName )
+{
+	MonkeyCore::workspace()->closeFile( fileName );
+}
 
-void pFileManager::goToLine( const QString& s, const QPoint& p, bool b, const QString& codec )
-{ MonkeyCore::workspace()->goToLine( s, p, b, codec ); }
+void pFileManager::goToLine( const QString& fileName, const QPoint& pos, bool highlight, const QString& codec )
+{
+	MonkeyCore::workspace()->goToLine( fileName, pos, highlight, codec );
+}
 
 void pFileManager::openProject( const QString& fileName, const QString& codec )
 {

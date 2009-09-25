@@ -32,10 +32,13 @@
 #include <QFileInfo>
 #include <QFileSystemWatcher>
 #include <QDir>
+#include <QMdiSubWindow>
+#include <QVBoxLayout>
 
 #include <QDebug>
 
 #include "pWorkspace.h"
+#include "pOpenedFileExplorer.h"
 #include "pAbstractChild.h"
 #include "../recentsmanager/pRecentsManager.h"
 #include "pFileManager.h"
@@ -60,60 +63,126 @@
 
 #include <pQueuedMessageToolBar.h>
 
-using namespace pMonkeyStudio;
-
 int pWorkspace::CONTENT_CHANGED_TIME_OUT = 3000;
 QString pWorkspace::DEFAULT_CONTEXT = QLatin1String( "Default" );
 
 pWorkspace::pWorkspace( QMainWindow* parent )
-	: pExtendedWorkspace( parent )
+	: QFrame( parent )
 {
 	Q_ASSERT( parent );
-	// creaet file watcher
-	mFileWatcher = new QFileSystemWatcher( this );
-	mContentChangedTimer = new QTimer( this );
+	mViewMode = pWorkspace::NoTabs;
 	
-	// add dock to main window
-	parent->addDockWidget( Qt::LeftDockWidgetArea, listWidget() );
+	pMenuBar* mb = MonkeyCore::menuBar();
+	
+	// action group for view modes
+	mViewModesGroup = new QActionGroup( this );
+	mViewModesGroup->addAction( mb->action( "mWindow/aNoTabs" ) );
+	mViewModesGroup->addAction( mb->action( "mWindow/aTopTabs" ) );
+	mViewModesGroup->addAction( mb->action( "mWindow/aBottomTabs" ) );
+	mViewModesGroup->addAction( mb->action( "mWindow/aLeftTabs" ) );
+	mViewModesGroup->addAction( mb->action( "mWindow/aRightTabs" ) );
+	mb->action( "mWindow/aSeparator1" );
+	
+	mb->menu( "mWindow" )->insertActions( mb->action( "mWindow/aCascase" ), mViewModesGroup->actions() );
+	mb->menu( "mWindow" )->insertAction( mb->action( "mWindow/aCascase" ), mb->action( "mWindow/aSeparator1" ) );
+	
+	QList<QAction*> actions = mViewModesGroup->actions();
+	
+	for ( int i = pWorkspace::NoTabs; i < pWorkspace::RightTabs +1; i++ )
+	{
+		QAction* action = actions.at( i );
+		action->setCheckable( true );
+		action->setData( i );
+		
+		if ( mViewMode == i )
+		{
+			action->setChecked( true );
+		}
+		
+		switch ( (pWorkspace::ViewMode)i )
+		{
+			case pWorkspace::NoTabs:
+				action->setText( tr( "No Tabs" ) );
+				action->setToolTip( tr( "No tabs, use 'Oopened Files List' to have a list of opened documents" ) );
+				break;
+			case pWorkspace::TopTabs:
+				action->setText( tr( "Tabs at &Top" ) );
+				action->setToolTip( action->text() );
+				break;
+			case pWorkspace::BottomTabs:
+				action->setText( tr( "Tabs at &Bottom" ) );
+				action->setToolTip( action->text() );
+				break;
+			case pWorkspace::LeftTabs:
+				action->setText( tr( "Tabs at &Left" ) );
+				action->setToolTip( action->text() );
+				break;
+			case pWorkspace::RightTabs:
+				action->setText( tr( "Tabs at &Right" ) );
+				action->setToolTip( action->text() );
+				break;
+		}
+	}
+	
+	mOpenedFileExplorer = new pOpenedFileExplorer( this );
+	
+	// layout
+	mLayout = new QVBoxLayout( this );
+	mLayout->setMargin( 0 );
+	mLayout->setSpacing( 0 );
 	
 	// multitoolbar
 	QFrame* hline = new QFrame( this );
 	hline->setFrameStyle( QFrame::HLine | QFrame::Sunken );
-	mLayout->insertWidget( 0, hline );
-	mLayout->insertWidget( 0, MonkeyCore::multiToolBar() );
-
-	// set background
-	//setBackground( ":/application/icons/application/background.png" );
-
-	// set right corner button pixmap
-	//cornerWidget()->findChild<QToolButton*>()->defaultAction()->setIcon( QPixmap( ":/application/icons/application/closetab.png" ) );
+	
+	// document area
+	mMdiArea = new QMdiArea( this );
+	mMdiArea->setActivationOrder( QMdiArea::CreationOrder );
+	mMdiArea->setDocumentMode( true );
+	
+	// add widgets to layout
+	mLayout->addWidget( MonkeyCore::multiToolBar() );
+	mLayout->addWidget( hline );
+	mLayout->addWidget( mMdiArea );
+	
+	// creaet file watcher
+	mFileWatcher = new QFileSystemWatcher( this );
+	mContentChangedTimer = new QTimer( this );
 	
 	// load settings
 	loadSettings();
 
 	// connections
-	connect( this, SIGNAL( currentChanged( int ) ), this, SLOT( internal_currentChanged( int ) ) );
-	/*
-	connect( this, SIGNAL( aboutToCloseTab( int, QCloseEvent* ) ), this, SLOT( internal_aboutToCloseTab( int, QCloseEvent* ) ) );
-	connect( this, SIGNAL( closeAllRequested() ), this, SLOT( fileCloseAll_triggered() ) );
-	*/
+	connect( mViewModesGroup, SIGNAL( triggered( QAction* ) ), this, SLOT( viewModes_triggered( QAction* ) ) );
+	connect( mMdiArea, SIGNAL( subWindowActivated( QMdiSubWindow* ) ), this, SLOT( mdiArea_subWindowActivated( QMdiSubWindow* ) ) );
 	connect( parent, SIGNAL( urlsDropped( const QList<QUrl>& ) ), this, SLOT( internal_urlsDropped( const QList<QUrl>& ) ) );
-	connect( listWidget(), SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( internal_listWidget_customContextMenuRequested( const QPoint& ) ) );
-	connect( MonkeyCore::projectsManager(), SIGNAL( projectCustomContextMenuRequested( const QPoint& ) ), this, SLOT( internal_projectsManager_customContextMenuRequested( const QPoint& ) ) );
 	connect( MonkeyCore::projectsManager(), SIGNAL( currentProjectChanged( XUPProjectItem*, XUPProjectItem* ) ), this, SLOT( internal_currentProjectChanged( XUPProjectItem*, XUPProjectItem* ) ) );
 	connect( mFileWatcher, SIGNAL( fileChanged( const QString& ) ), this, SLOT( fileWatcher_fileChanged( const QString& ) ) );
-	connect( mFileWatcher, SIGNAL( fileChanged( const QString& ) ), this, SIGNAL( fileChanged( const QString& ) ) );
 	connect( mContentChangedTimer, SIGNAL( timeout() ), this, SLOT( contentChangedTimer_timeout() ) );
 	connect( MonkeyCore::multiToolBar(), SIGNAL( notifyChanges() ), this, SLOT( multitoolbar_notifyChanges() ) );
+}
+
+bool pWorkspace::eventFilter( QObject* object, QEvent* event )
+{
+	// get document
+	if ( object->isWidgetType() )
+	{
+		pAbstractChild* document = qobject_cast<pAbstractChild*>( object );
+		
+		if ( document && event->type() == QEvent::Close )
+		{
+			event->ignore();
+			closeDocument( document );
+			return true;
+		}
+	}
 	
-	QAction* mFocusToEditor = new QAction( this );
-	mFocusToEditor->setIcon( QIcon( ":/edit/icons/edit/text.png" ) );
-	mFocusToEditor->setText( tr( "Set Focus to Editor" ) );
-	pActionsManager::setDefaultShortcut( mFocusToEditor, QKeySequence( "Ctrl+Return" ) );
-	
-	MonkeyCore::menuBar()->addAction( "mView", mFocusToEditor );
-	
-	connect( mFocusToEditor, SIGNAL( triggered() ), this, SLOT( focusToEditor_triggered() ) );
+	return QFrame::eventFilter( object, event );
+}
+
+QString pWorkspace::defaultContext()
+{
+	return DEFAULT_CONTEXT;
 }
 
 void pWorkspace::loadSettings()
@@ -126,7 +195,9 @@ void pWorkspace::loadSettings()
 	tabBar()->setTabsColor( tabsTextColor() );
 	tabBar()->setCurrentTabColor( currentTabTextColor() );
 	*/
-	setDocMode( pMonkeyStudio::docMode() );
+	
+	mOpenedFileExplorer->setSortMode( pMonkeyStudio::openedFileSortingMode() );
+	setDocumentMode( pMonkeyStudio::documentMode() );
 	
 	pMultiToolBar* mtb = MonkeyCore::multiToolBar();
 	
@@ -140,18 +211,27 @@ void pWorkspace::loadSettings()
 	multitoolbar_notifyChanges();
 }
 
-pAbstractChild* pWorkspace::currentChild() const
-{ return qobject_cast<pAbstractChild*>( currentDocument() ); }
-
-pAbstractChild* pWorkspace::child( int i ) const
-{ return qobject_cast<pAbstractChild*>( document( i ) ); }
-
-QList<pAbstractChild*> pWorkspace::children() const
+void pWorkspace::initMultiToolBar( QToolBar* tb )
 {
-	QList<pAbstractChild*> l;
-	foreach ( QWidget* w, documents() )
-		l << qobject_cast<pAbstractChild*>( w );
-	return l;
+	if ( pMonkeyStudio::showQuickFileAccess() )
+	{
+		tb->insertAction( tb->actions().value( 0 ), MonkeyCore::workspace()->dockWidget()->comboBoxAction() );
+	}
+	else
+	{
+		tb->removeAction( MonkeyCore::workspace()->dockWidget()->comboBoxAction() );
+	}
+}
+
+void pWorkspace::addSearchReplaceWidget( QWidget* widget )
+{
+	mLayout->addWidget( widget );
+	widget->setVisible( false );
+}
+
+pOpenedFileExplorer* pWorkspace::dockWidget() const
+{
+	return mOpenedFileExplorer;
 }
 
 QFileSystemWatcher* pWorkspace::fileWatcher() const
@@ -159,18 +239,365 @@ QFileSystemWatcher* pWorkspace::fileWatcher() const
 	return mFileWatcher;
 }
 
-void pWorkspace::addSearhReplaceWidget (QWidget* widget)
+pAbstractChild* pWorkspace::document( int index ) const
 {
-	mLayout->addWidget( widget );
-	widget->setVisible( false );
+	QMdiSubWindow* window = mMdiArea->subWindowList().value( index );
+	return qobject_cast<pAbstractChild*>( window );
 }
 
-QString pWorkspace::defaultContext()
+int pWorkspace::indexOfDocument( pAbstractChild* document ) const
 {
-	return DEFAULT_CONTEXT;
+	return mMdiArea->subWindowList().indexOf( document );
 }
 
-pAbstractChild* pWorkspace::newTextEditor()
+QList<pAbstractChild*> pWorkspace::documents() const
+{
+	QList<pAbstractChild*> documents;
+	
+	foreach ( QMdiSubWindow* window, mMdiArea->subWindowList() )
+	{
+		documents << qobject_cast<pAbstractChild*>( window );
+	}
+	
+	return documents;
+}
+
+void pWorkspace::setCurrentDocument( pAbstractChild* document )
+{
+	pAbstractChild* curDocument = currentDocument();
+	
+	if ( curDocument != document )
+	{
+		mMdiArea->setActiveSubWindow( document );
+	}
+}
+
+pAbstractChild* pWorkspace::currentDocument() const
+{
+	QMdiSubWindow* window = mMdiArea->currentSubWindow();
+	return qobject_cast<pAbstractChild*>( window );
+}
+
+void pWorkspace::goToLine( const QString& fileName, const QPoint& pos, bool highlight, const QString& codec )
+{
+	if ( highlight )
+	{
+		pAbstractChild* document = openFile( fileName, codec );
+		
+		if ( document )
+		{
+			document->goTo( pos, highlight );
+		}
+		
+		return;
+	}
+	
+	foreach ( QMdiSubWindow* window, mMdiArea->subWindowList() )
+	{
+		pAbstractChild* document = qobject_cast<pAbstractChild*>( window );
+		
+		if ( pMonkeyStudio::isSameFile( document->filePath(), fileName ) )
+		{
+			setCurrentDocument( document );
+			document->goTo( pos, highlight );
+			return;
+		}
+	}
+}
+
+void pWorkspace::closeDocument( pAbstractChild* document, bool showDialog )
+{
+	if ( showDialog && UISaveFiles::saveDocument( window(), document, false ) == UISaveFiles::bCancelClose )
+	{
+		return;
+	}
+	
+	// stop watching files
+	const QString file = document->filePath();
+	
+	if ( QFileInfo( file ).isFile() )
+	{
+		mFileWatcher->removePath( file );
+	}
+	
+	// close document
+	emit documentAboutToClose( document );
+	document->closeFile();
+	
+	if ( document->testAttribute( Qt::WA_DeleteOnClose ) )
+	{
+		document->deleteLater();
+	}
+	else
+	{
+		unhandleDocument( document );
+	}
+}
+
+pWorkspace::ViewMode pWorkspace::documentMode() const
+{
+	return mViewMode;
+}
+
+void pWorkspace::handleDocument( pAbstractChild* document )
+{
+	// init document connections
+	connect( document, SIGNAL( fileOpened() ), this, SLOT( document_fileOpened() ) );
+	connect( document, SIGNAL( contentChanged() ), this, SLOT( document_contentChanged() ) );
+	connect( document, SIGNAL( modifiedChanged( bool ) ), this, SLOT( document_modifiedChanged( bool ) ) );
+	connect( document, SIGNAL( fileClosed() ), this, SLOT( document_fileClosed() ) );
+	// update file menu
+	connect( document, SIGNAL( modifiedChanged( bool ) ), MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" ), SLOT( setEnabled( bool ) ) );
+	// update edit menu
+	connect( document, SIGNAL( undoAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aUndo" ), SLOT( setEnabled( bool ) ) );
+	connect( document, SIGNAL( redoAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aRedo" ), SLOT( setEnabled( bool ) ) );
+	connect( document, SIGNAL( copyAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aCut" ), SLOT( setEnabled( bool ) ) );
+	connect( document, SIGNAL( copyAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aCopy" ), SLOT( setEnabled( bool ) ) );
+	connect( document, SIGNAL( pasteAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aPaste" ), SLOT( setEnabled( bool ) ) );
+	// update status bar
+	connect( document, SIGNAL( cursorPositionChanged( const QPoint& ) ), MonkeyCore::statusBar(), SLOT( setCursorPosition( const QPoint& ) ) );
+	connect( document, SIGNAL( modifiedChanged( bool ) ), MonkeyCore::statusBar(), SLOT( setModified( bool ) ) );
+	
+	// add to workspace
+	document->installEventFilter( this );
+	mMdiArea->addSubWindow( document );
+	document->showMaximized();
+	mMdiArea->setActiveSubWindow( document );
+}
+
+void pWorkspace::unhandleDocument( pAbstractChild* document )
+{
+	// init document connections
+	disconnect( document, SIGNAL( fileOpened() ), this, SLOT( document_fileOpened() ) );
+	disconnect( document, SIGNAL( contentChanged() ), this, SLOT( document_contentChanged() ) );
+	disconnect( document, SIGNAL( modifiedChanged( bool ) ), this, SLOT( document_modifiedChanged( bool ) ) );
+	disconnect( document, SIGNAL( fileClosed() ), this, SLOT( document_fileClosed() ) );
+	// update file menu
+	disconnect( document, SIGNAL( modifiedChanged( bool ) ), MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" ), SLOT( setEnabled( bool ) ) );
+	// update edit menu
+	disconnect( document, SIGNAL( undoAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aUndo" ), SLOT( setEnabled( bool ) ) );
+	disconnect( document, SIGNAL( redoAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aRedo" ), SLOT( setEnabled( bool ) ) );
+	disconnect( document, SIGNAL( copyAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aCut" ), SLOT( setEnabled( bool ) ) );
+	disconnect( document, SIGNAL( copyAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aCopy" ), SLOT( setEnabled( bool ) ) );
+	disconnect( document, SIGNAL( pasteAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aPaste" ), SLOT( setEnabled( bool ) ) );
+	// update status bar
+	disconnect( document, SIGNAL( cursorPositionChanged( const QPoint& ) ), MonkeyCore::statusBar(), SLOT( setCursorPosition( const QPoint& ) ) );
+	disconnect( document, SIGNAL( modifiedChanged( bool ) ), MonkeyCore::statusBar(), SLOT( setModified( bool ) ) );
+	
+	// add to workspace
+	document->removeEventFilter( this );
+	mMdiArea->removeSubWindow( document );
+	document->hide();
+	
+	if ( !mMdiArea->subWindowList().isEmpty() )
+	{
+		mMdiArea->currentSubWindow()->showMaximized();
+	}
+}
+
+pAbstractChild* pWorkspace::openFile( const QString& fileName, const QString& codec )
+{
+	// if it not exists
+	if ( !QFile::exists( fileName ) || !QFileInfo( fileName ).isFile() )
+	{
+		return 0;
+	}
+	
+	// check if file is already opened
+	foreach ( QMdiSubWindow* window, mMdiArea->subWindowList() )
+	{
+		pAbstractChild* document = qobject_cast<pAbstractChild*>( window );
+		
+		if ( pMonkeyStudio::isSameFile( document->filePath(), fileName ) )
+		{
+			setCurrentDocument( document );
+			return document;
+		}
+	}
+
+	// get a document interface that can handle the file
+	pAbstractChild* document = MonkeyCore::pluginsManager()->documentForFileName( fileName );
+	
+	// open it with pChild instance if no document
+	if ( !document )
+	{
+		document = new pChild;
+	}
+	
+	// make connection if worksapce don t contains this document
+	if ( !mMdiArea->subWindowList().contains( document ) )
+	{
+		handleDocument( document );
+	}
+
+	// open file
+	if ( !document->openFile( fileName, codec ) )
+	{
+		MonkeyCore::messageManager()->appendMessage( tr( "An error occur while opening this file: '%1'" ).arg( QFileInfo( fileName ).fileName() ) );
+		closeDocument( document );
+		
+		return 0;
+	}
+	
+	// update gui state
+	mdiArea_subWindowActivated( document );
+
+	// return child instance
+	return document;
+}
+
+void pWorkspace::closeFile( const QString& filePath )
+{
+	foreach ( QMdiSubWindow* window, mMdiArea->subWindowList() )
+	{
+		pAbstractChild* document = qobject_cast<pAbstractChild*>( window );
+		
+		if ( pMonkeyStudio::isSameFile( document->filePath(), filePath ) )
+		{
+			closeDocument( document );
+			return;
+		}
+	}
+}
+
+void pWorkspace::closeCurrentDocument()
+{
+	pAbstractChild* document = currentDocument();
+	
+	if ( document )
+	{
+		closeDocument( document );
+	}
+}
+
+bool pWorkspace::closeAllDocuments()
+{
+	// try save documents
+	UISaveFiles::Buttons button = UISaveFiles::saveDocuments( window(), documents(), false );
+	
+	// close all object, disconnecting them
+	if ( button != UISaveFiles::bCancelClose )
+	{
+		// stop watching files
+		foreach ( QMdiSubWindow* window, mMdiArea->subWindowList() )
+		{
+			pAbstractChild* document = qobject_cast<pAbstractChild*>( window );
+			closeDocument( document, false );
+		}
+		
+		return true;
+	}
+	else
+	{
+		return false; //not close IDE
+	}
+}
+
+void pWorkspace::activateNextDocument()
+{
+	mMdiArea->activateNextSubWindow();
+}
+
+void pWorkspace::activatePreviousDocument()
+{
+	mMdiArea->activatePreviousSubWindow();
+}
+
+void pWorkspace::focusEditor()
+{
+	pAbstractChild* document = currentDocument();
+	
+	if ( document )
+	{
+		document->setFocus();
+	}
+}
+
+void pWorkspace::tile()
+{
+	mMdiArea->tileSubWindows();
+}
+
+void pWorkspace::cascade()
+{
+	mMdiArea->cascadeSubWindows();
+}
+
+void pWorkspace::minimize()
+{
+	setDocumentMode( pWorkspace::NoTabs );
+	
+	foreach ( QMdiSubWindow* window, mMdiArea->subWindowList() )
+	{
+		window->showMinimized();
+	}
+}
+
+void pWorkspace::restore()
+{
+	setDocumentMode( pWorkspace::NoTabs );
+	
+	foreach ( QMdiSubWindow* window, mMdiArea->subWindowList() )
+	{
+		window->showNormal();
+	}
+}
+
+void pWorkspace::setDocumentMode( pWorkspace::ViewMode mode )
+{
+	if ( mViewMode == mode )
+	{
+		return;
+	}
+	
+	QMdiSubWindow* document = mMdiArea->currentSubWindow();
+	mViewMode = mode;
+	
+	switch ( mViewMode )
+	{
+		case pWorkspace::NoTabs:
+			mMdiArea->setViewMode( QMdiArea::SubWindowView );
+			break;
+		case pWorkspace::TopTabs:
+			mMdiArea->setTabPosition( QTabWidget::North );
+			mMdiArea->setViewMode( QMdiArea::TabbedView );
+			break;
+		case pWorkspace::BottomTabs:
+			mMdiArea->setTabPosition( QTabWidget::South );
+			mMdiArea->setViewMode( QMdiArea::TabbedView );
+			break;
+		case pWorkspace::LeftTabs:
+			mMdiArea->setTabPosition( QTabWidget::West );
+			mMdiArea->setViewMode( QMdiArea::TabbedView );
+			break;
+		case pWorkspace::RightTabs:
+			mMdiArea->setTabPosition( QTabWidget::East );
+			mMdiArea->setViewMode( QMdiArea::TabbedView );
+			break;
+	}
+	
+	mOpenedFileExplorer->setVisible( mViewMode == pWorkspace::NoTabs );
+	
+	if ( document && !document->isMaximized() )
+	{
+		document->showMaximized();
+	}
+	
+	foreach ( QAction* action, mViewModesGroup->actions() )
+	{
+		if ( action->data().toInt() == mViewMode )
+		{
+			if ( !action->isChecked() )
+			{
+				action->setChecked( true );
+			}
+			
+			return;
+		}
+	}
+}
+
+pAbstractChild* pWorkspace::createNewTextEditor()
 {
 	pFileDialogResult result = MkSFileDialog::getNewEditorFile( window() );
 
@@ -184,11 +611,11 @@ pAbstractChild* pWorkspace::newTextEditor()
 	}
 	
 	// close file if already open
-	mFileWatcher->removePaths( QStringList( fileName ) );
 	closeFile( fileName );
 
 	// create/reset file
 	QFile file( fileName );
+	
 	if ( !file.open( QIODevice::WriteOnly ) )
 	{
 		MonkeyCore::messageManager()->appendMessage( tr( "Can't create new file '%1'" ).arg( QFileInfo( fileName ).fileName() ) );
@@ -209,188 +636,174 @@ pAbstractChild* pWorkspace::newTextEditor()
 	return openFile( fileName, result[ "codec" ].toString() );
 }
 
-void pWorkspace::initChildConnections( pAbstractChild* child )
+void pWorkspace::fileWatcher_ecmNothing( const QString& fileName )
 {
-	// connections
-	connect( child, SIGNAL( currentFileChanged( const QString& ) ), this, SLOT( internal_currentFileChanged( const QString& ) ) );
-	connect( child, SIGNAL( contentChanged() ), this, SLOT( internal_contentChanged() ) );
-	connect( child, SIGNAL( contentChanged() ), this, SIGNAL( contentChanged() ) );
-	// closed file
-	connect( child, SIGNAL( fileClosed( const QString& ) ), this, SIGNAL( fileClosed( const QString& ) ) );
-	// update file menu
-	connect( child, SIGNAL( modifiedChanged( bool ) ), MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" ), SLOT( setEnabled( bool ) ) );
-	// update edit menu
-	connect( child, SIGNAL( undoAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aUndo" ), SLOT( setEnabled( bool ) ) );
-	connect( child, SIGNAL( redoAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aRedo" ), SLOT( setEnabled( bool ) ) );
-	connect( child, SIGNAL( copyAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aCut" ), SLOT( setEnabled( bool ) ) );
-	connect( child, SIGNAL( copyAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aCopy" ), SLOT( setEnabled( bool ) ) );
-	connect( child, SIGNAL( pasteAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aPaste" ), SLOT( setEnabled( bool ) ) );
-	//connect( child, SIGNAL( searchReplaceAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aSearchReplace" ), SLOT( setEnabled( bool ) ) );
-	//connect( child, SIGNAL( goToAvailableChanged( bool ) ), MonkeyCore::menuBar()->action( "mEdit/aGoTo" ), SLOT( setEnabled( bool ) ) );
-	// update status bar
-	connect( child, SIGNAL( cursorPositionChanged( const QPoint& ) ), MonkeyCore::statusBar(), SLOT( setCursorPosition( const QPoint& ) ) );
-	connect( child, SIGNAL( modifiedChanged( bool ) ), MonkeyCore::statusBar(), SLOT( setModified( bool ) ) );
-	//connect( child, SIGNAL( documentModeChanged( AbstractChild::DocumentMode ) ), statusBar(), SLOT( setDocumentMode( AbstractChild::DocumentMode ) ) );
-	//connect( child, SIGNAL( layoutModeChanged( AbstractChild::LayoutMode ) ), statusBar(), SLOT( setLayoutMode( AbstractChild::LayoutMode ) ) );
-	//connect( child, SIGNAL( currentFileChanged( const QString& ) ), statusBar(), SLOT( setFileName( const QString& ) ) );
+	Q_UNUSED( fileName );
+	//MonkeyCore::messageManager()->appendMessage( tr( "File externally modified: '%1'" ).arg( QFileInfo( fileName ).fileName() ) );
 }
 
-pAbstractChild* pWorkspace::openFile( const QString& s, const QString& codec )
+void pWorkspace::fileWatcher_ecmReload( const QString& fileName, bool force )
 {
-	// if it not exists
-	if ( !QFile::exists( s ) || !QFileInfo( s ).isFile() )
-		return 0;
+	// try reload
+	pAbstractChild* document = MonkeyCore::fileManager()->openedDocument( fileName );
 	
-	// check if file is already opened
-	foreach ( pAbstractChild* c, children() )
+	if ( document && ( !document->isModified() || force ) )
 	{
-		foreach ( QString f, c->files() )
-		{
-			if ( isSameFile( f, s ) )
-			{
-				setCurrentDocument( c );
-				c->showFile( f );
-				return c;
-			}
-		}
-	}
-
-	// try opening file with child plugins
-	pAbstractChild* c = MonkeyCore::pluginsManager()->openChildFile( s ); // TODO: repalce by a childForFileName member witch will return a child that will open file
-	
-	// open it with pChild instance if no c
-	if ( !c )
-		c = new pChild;
-	
-	// made connection if worksapce don t contains this child
-	bool wasIn = children().contains( c );
-	if ( !wasIn )
-	{
-		// setups connections
-		initChildConnections( c );
-		// add to workspace
-		addDocument( c, QString() );
-	}
-
-	// open file
-	if ( !c->openFile( s, codec ) )
-	{
-		MonkeyCore::messageManager()->appendMessage( tr( "An error occur while opening this file: '%1'" ).arg( QFileInfo( s ).fileName() ) );
+		const QPoint pos = document->cursorPosition();
 		
-		if ( !wasIn )
-		{
-			closeDocument( c );
-			c->deleteLater();
-		}
-		
-		return 0;
-	}
-	
-	// set correct document if needed ( sdi hack )
-	if ( currentDocument() != c )
-	{
-		setCurrentDocument( c );
-		c->showFile( s );
-	}
-	
-	// track file
-	mFileWatcher->addPath( s );
-	
-	// temporary hack
-	internal_currentChanged( indexOf( c ) );
-
-	// emit file open
-	emit fileOpened( s );
-
-	// return child instance
-	return c;
-}
-
-void pWorkspace::closeFile( const QString& s )
-{
-	foreach ( pAbstractChild* c, children() )
-	{
-		foreach ( QString f, c->files() )
-		{
-			if ( isSameFile( f, s ) )
-			{
-				c->closeFile( f );
-				if ( c->files().isEmpty() )
-					closeDocument( c );
-				return;
-			}
-		}
-	}
-}
-
-void pWorkspace::goToLine( const QString& s, const QPoint& p, bool b, const QString& codec )
-{
-	if ( b )
-	{
-		pAbstractChild* child = openFile( s, codec );
-		
-		if ( child )
-		{
-			child->goTo( s, p, b );
-		}
+		document->closeFile();
+		document->openFile( fileName, document->textCodec() );
+		document->goTo( pos, true );
 		
 		return;
 	}
 	
-	foreach ( pAbstractChild* c, children() )
+	// ask user
+	fileWatcher_ecmAlert( fileName );
+}
+
+void pWorkspace::fileWatcher_ecmAlert( const QString& fileName )
+{
+	pQueuedMessage msg;
+	msg.Message = tr( "The file '%1' has been modified externally, what you do ?" ).arg( QFileInfo( fileName ).fileName() );
+	msg.MilliSeconds = 0;
+	msg.Pixmap = pQueuedMessageToolBar::defaultPixmap();
+	msg.Background = pQueuedMessageToolBar::defaultBackground();
+	msg.Foreground = pQueuedMessageToolBar::defaultForeground();
+	msg.Buttons[ QDialogButtonBox::Ignore ] = QString();
+	msg.Buttons[ QDialogButtonBox::Reset ] = tr( "Reload" );
+	msg.Object = this;
+	msg.Slot = "fileWatcher_alertClicked";
+	msg.UserData = fileName;
+	MonkeyCore::messageManager()->appendMessage( msg );
+}
+
+void pWorkspace::fileWatcher_alertClicked( QDialogButtonBox::StandardButton button, const pQueuedMessage& message )
+{
+	switch ( button )
 	{
-		foreach ( QString f, c->files() )
-		{
-			if ( isSameFile( f, s ) )
-			{
-				setCurrentDocument( c );
-				c->goTo( s, p, b );
-				return;
-			}
-		}
+		case QDialogButtonBox::Ignore:
+			fileWatcher_ecmNothing( message.UserData.toString() );
+			break;
+		case QDialogButtonBox::Reset:
+			fileWatcher_ecmReload( message.UserData.toString(), true );
+			break;
+		default:
+			break;
 	}
 }
 
-void pWorkspace::internal_contentChanged()
+void pWorkspace::fileWatcher_fileChanged( const QString& fileName )
+{
+	if ( !QFileInfo( fileName ).isFile() )
+	{
+		return;
+	}
+	
+	switch ( pMonkeyStudio::externalchanges() )
+	{
+		// silently inform user
+		case pMonkeyStudio::ecmNothing:
+			fileWatcher_ecmNothing( fileName );
+			break;
+		// check if file is open, if open and modified goto alert, else reload it
+		case pMonkeyStudio::ecmReload:
+			fileWatcher_ecmReload( fileName );
+			break;
+		// ask user what to do
+		case pMonkeyStudio::ecmAlert:
+			fileWatcher_ecmAlert( fileName );
+			break;
+	}
+}
+
+void pWorkspace::document_fileOpened()
+{
+	pAbstractChild* document = qobject_cast<pAbstractChild*>( sender() );
+	
+	if ( QFileInfo( document->filePath() ).isFile() )
+	{
+		mFileWatcher->addPath( document->filePath() );
+	}
+	
+	emit documentOpened( document );
+}
+
+void pWorkspace::document_contentChanged()
 {
 	mContentChangedTimer->start( CONTENT_CHANGED_TIME_OUT );
+	pAbstractChild* document = qobject_cast<pAbstractChild*>( sender() );
+	emit documentChanged( document );
 }
 
-void pWorkspace::internal_currentFileChanged( const QString& file )
+void pWorkspace::document_modifiedChanged( bool modified )
 {
-	QDir::setCurrent( QFileInfo( file ).absolutePath() );
+	pAbstractChild* document = qobject_cast<pAbstractChild*>( sender() );
+	emit documentModifiedChanged( document, modified );
 }
 
-void pWorkspace::internal_currentChanged( int i )
+void pWorkspace::document_fileClosed()
 {
+	pAbstractChild* document = qobject_cast<pAbstractChild*>( sender() );
+	emit documentClosed( document );
+}
+
+void pWorkspace::contentChangedTimer_timeout()
+{
+	mContentChangedTimer->stop();
+	MonkeyCore::fileManager()->computeModifiedBuffers();
+}
+
+void pWorkspace::multitoolbar_notifyChanges()
+{
+	pMultiToolBar* mtb = MonkeyCore::multiToolBar();
+	QToolBar* tb = mtb->currentToolBar();
+	bool show = tb && !tb->actions().isEmpty();
+	
+	mtb->setVisible( show );
+}
+
+void pWorkspace::viewModes_triggered( QAction* action )
+{
+	setDocumentMode( (pWorkspace::ViewMode)action->data().toInt() );
+}
+
+void pWorkspace::mdiArea_subWindowActivated( QMdiSubWindow* docu )
+{
+	// fix fucking flickering due to window activation change on application gain / lost focus.
+	if ( !docu && currentDocument() )
+	{
+		return;
+	}
+	
 	// get child
-	pAbstractChild* c = child( i );
-	pEditor* editor = c ? c->currentEditor() : 0;
-	bool hasChild = c;
+	pAbstractChild* document = qobject_cast<pAbstractChild*>( docu );
+	pEditor* editor = document ? document->editor() : 0;
+	bool hasDocument = document;
 	bool hasEditor = editor;
-	bool modified = hasChild ? c->isModified() : false;
-	bool print = hasChild ? c->isPrintAvailable() : false;
-	bool undo = hasChild ? c->isUndoAvailable() : false;
-	bool redo = hasChild ? c->isRedoAvailable() : false;
-	bool copy = hasChild ? c->isCopyAvailable() : false;
-	bool paste = hasChild ? c->isPasteAvailable() : false;
-	bool go = hasChild ? c->isGoToAvailable() : false;
-	bool moreThanOneChild = count() > 1;
+	bool modified = hasDocument ? document->isModified() : false;
+	bool print = hasDocument ? document->isPrintAvailable() : false;
+	bool undo = hasDocument ? document->isUndoAvailable() : false;
+	bool redo = hasDocument ? document->isRedoAvailable() : false;
+	bool copy = hasDocument ? document->isCopyAvailable() : false;
+	bool paste = hasDocument ? document->isPasteAvailable() : false;
+	bool go = hasDocument ? document->isGoToAvailable() : false;
+	bool moreThanOneDocument = mMdiArea->subWindowList().count() > 1;
 	
 	// context toolbar
 	pMultiToolBar* mtb = MonkeyCore::multiToolBar();
 	
-	if ( c )
+	if ( document )
 	{
-		if ( !mtb->contexts().contains( c->context() ) )
+		if ( !mtb->contexts().contains( document->context() ) )
 		{
-			QToolBar* tb = mtb->toolBar( c->context() );
+			QToolBar* tb = mtb->toolBar( document->context() );
 			
 			initMultiToolBar( tb );
-			c->initializeContext( tb );
+			document->initializeContext( tb );
 		}
 		
-		mtb->setCurrentContext( c->context() );
+		mtb->setCurrentContext( document->context() );
 	}
 	else
 	{
@@ -408,10 +821,10 @@ void pWorkspace::internal_currentChanged( int i )
 
 	// update file menu
 	MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" )->setEnabled( modified );
-	MonkeyCore::menuBar()->action( "mFile/mSave/aAll" )->setEnabled( hasChild );
-	MonkeyCore::menuBar()->action( "mFile/mClose/aCurrent" )->setEnabled( hasChild );
-	MonkeyCore::menuBar()->action( "mFile/mClose/aAll" )->setEnabled( hasChild );
-	MonkeyCore::menuBar()->action( "mFile/aSaveAsBackup" )->setEnabled( hasChild );
+	MonkeyCore::menuBar()->action( "mFile/mSave/aAll" )->setEnabled( hasDocument );
+	MonkeyCore::menuBar()->action( "mFile/mClose/aCurrent" )->setEnabled( hasDocument );
+	MonkeyCore::menuBar()->action( "mFile/mClose/aAll" )->setEnabled( hasDocument );
+	MonkeyCore::menuBar()->action( "mFile/aSaveAsBackup" )->setEnabled( hasDocument );
 	MonkeyCore::menuBar()->action( "mFile/aQuickPrint" )->setEnabled( print );
 	MonkeyCore::menuBar()->action( "mFile/aPrint" )->setEnabled( print );
 
@@ -423,90 +836,59 @@ void pWorkspace::internal_currentChanged( int i )
 	MonkeyCore::menuBar()->action( "mEdit/aPaste" )->setEnabled( paste );
 	
 	MonkeyCore::menuBar()->action( "mEdit/aGoTo" )->setEnabled( go );
-	MonkeyCore::menuBar()->action( "mEdit/aExpandAbbreviation" )->setEnabled( hasChild );
+	MonkeyCore::menuBar()->action( "mEdit/aExpandAbbreviation" )->setEnabled( hasDocument );
 	MonkeyCore::menuBar()->setMenuEnabled( MonkeyCore::menuBar()->menu( "mEdit/mAllCommands" ), hasEditor );
 	MonkeyCore::menuBar()->setMenuEnabled( MonkeyCore::menuBar()->menu( "mEdit/mBookmarks" ), hasEditor );
 
 	// update view menu
-	MonkeyCore::menuBar()->action( "mView/aNext" )->setEnabled( moreThanOneChild );
-	MonkeyCore::menuBar()->action( "mView/aPrevious" )->setEnabled( moreThanOneChild );
+	MonkeyCore::menuBar()->action( "mView/aNext" )->setEnabled( moreThanOneDocument );
+	MonkeyCore::menuBar()->action( "mView/aPrevious" )->setEnabled( moreThanOneDocument );
 
 	// update status bar
-	MonkeyCore::statusBar()->setModified( c ? c->isModified() : false );
+	MonkeyCore::statusBar()->setModified( modified );
 	MonkeyCore::statusBar()->setEOLMode( editor ? editor->eolMode() : (QsciScintilla::EolMode)-1 );
 	MonkeyCore::statusBar()->setIndentMode( editor ? ( editor->indentationsUseTabs() ? 1 : 0 ) : -1 );
-	MonkeyCore::statusBar()->setCursorPosition( c ? c->cursorPosition() : QPoint( -1, -1 ) );
-
-	// update item tooltip
-	if ( hasChild )
-		listWidget()->setItemToolTip( i, c->currentFile() );
+	MonkeyCore::statusBar()->setCursorPosition( document ? document->cursorPosition() : QPoint( -1, -1 ) );
 	
 	// internal update
-	internal_currentFileChanged( hasChild ? c->currentFile() : QString() );
+	QDir::setCurrent( hasDocument ? document->path() : pMonkeyStudio::defaultProjectsDirectory() );
 	
 	// emit file changed
-	emit currentFileChanged( c, hasChild ? c->currentFile() : QString() );
+	emit currentDocumentChanged( document );
 }
-/*
-void pWorkspace::internal_aboutToCloseTab( int i, QCloseEvent* e )
-{
-	if ( UISaveFiles::saveDocument( window(), child( i ), false ) == UISaveFiles::bCancelClose )
-		e->ignore();
-}
-*/
-void pWorkspace::internal_urlsDropped( const QList<QUrl>& l )
+
+void pWorkspace::internal_urlsDropped( const QList<QUrl>& urls )
 {
 	// create menu
-	QMenu m( this );
-	QAction* aof = m.addAction( tr( "Open As &File" ) );
-	QAction* aop = m.addAction( tr( "Open As &Project" ) );
-	m.addSeparator();
-	m.addAction( tr( "Cancel" ) );
+	QMenu menu;
+	QAction* aof = menu.addAction( tr( "Open As &File" ) );
+	QAction* aop = menu.addAction( tr( "Open As &Project" ) );
+	menu.addSeparator();
+	menu.addAction( tr( "Cancel" ) );
 	
 	// execute menu
-	QAction* a = m.exec( QCursor::pos() );
+	QAction* action = menu.exec( QCursor::pos() );
 	
 	// check triggered action
-	if ( a == aof )
+	if ( action == aof )
 	{
-		foreach ( QUrl u, l )
-			if ( !u.toLocalFile().trimmed().isEmpty() )
-				openFile( u.toLocalFile(), pMonkeyStudio::defaultCodec() );
+		foreach ( const QUrl& url, urls )
+		{
+			if ( !url.toLocalFile().trimmed().isEmpty() )
+			{
+				openFile( url.toLocalFile(), pMonkeyStudio::defaultCodec() );
+			}
+		}
 	}
-	else if ( a == aop )
+	else if ( action == aop )
 	{
-		foreach ( QUrl u, l )
-			if ( !u.toLocalFile().trimmed().isEmpty() )
-				MonkeyCore::projectsManager()->openProject( u.toLocalFile(), pMonkeyStudio::defaultCodec() );
-	}
-}
-
-void pWorkspace::internal_listWidget_customContextMenuRequested( const QPoint& p )
-{
-	QMenu m;
-	m.addAction( MonkeyCore::menuBar()->action( "mFile/mClose/aCurrent" ) );
-	m.addAction( MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" ) );
-	m.exec( listWidget()->mapToGlobal( p ) );
-}
-
-void pWorkspace::internal_projectsManager_customContextMenuRequested( const QPoint& p )
-{
-	if ( MonkeyCore::projectsManager()->currentProject() )
-	{
-		// get menubar
-		pMenuBar* mb = MonkeyCore::menuBar();
-		// create menu
-		QMenu m( this );
-		// add menu commands
-		m.addActions( mb->menu( "mProject" )->actions() );
-		m.addSeparator();
-		m.addActions( mb->menu( "mBuilder" )->actions() );
-		m.addSeparator();
-		m.addActions( mb->menu( "mDebugger" )->actions() );
-		m.addSeparator();
-		m.addActions( mb->menu( "mInterpreter" )->actions() );
-		// show menu
-		m.exec( MonkeyCore::projectsManager()->tvFiltered->mapToGlobal( p ) );
+		foreach ( const QUrl& url, urls )
+		{
+			if ( !url.toLocalFile().trimmed().isEmpty() )
+			{
+				MonkeyCore::projectsManager()->openProject( url.toLocalFile(), pMonkeyStudio::defaultCodec() );
+			}
+		}
 	}
 }
 
@@ -520,13 +902,16 @@ void pWorkspace::internal_currentProjectChanged( XUPProjectItem* currentProject,
 		disconnect( previousProject, SIGNAL( installCommandRequested( const pCommand&, const QString& ) ), this, SLOT( internal_projectInstallCommandRequested( const pCommand&, const QString& ) ) );
 		disconnect( previousProject, SIGNAL( uninstallCommandRequested( const pCommand&, const QString& ) ), this, SLOT( internal_projectUninstallCommandRequested( const pCommand&, const QString& ) ) );
 	}
+	
 	// get pluginsmanager
 	PluginsManager* pm = MonkeyCore::pluginsManager();
+	
 	// set compiler, debugger and interpreter
 	BuilderPlugin* bp = currentProject ? currentProject->builder() : 0;
 	CompilerPlugin* cp = currentProject ? currentProject->compiler() : 0;
 	DebuggerPlugin* dp = currentProject ? currentProject->debugger() : 0;
 	InterpreterPlugin* ip = currentProject ? currentProject->interpreter() : 0;
+	
 	pm->setCurrentBuilder( bp && !bp->neverEnable() ? bp : 0 );
 	pm->setCurrentCompiler( cp && !cp->neverEnable() ? cp : 0 );
 	pm->setCurrentDebugger( dp && !dp->neverEnable() ? dp : 0 );
@@ -545,12 +930,15 @@ void pWorkspace::internal_currentProjectChanged( XUPProjectItem* currentProject,
 void pWorkspace::internal_projectInstallCommandRequested( const pCommand& cmd, const QString& mnu )
 {
 	// create action
-	QAction* a = MonkeyCore::menuBar()->action( QString( "%1/%2" ).arg( mnu ).arg( cmd.text() ) , cmd.text() );
-	a->setStatusTip( cmd.text() );
+	QAction* action = MonkeyCore::menuBar()->action( QString( "%1/%2" ).arg( mnu ).arg( cmd.text() ) , cmd.text() );
+	action->setStatusTip( cmd.text() );
+	
 	// set action custom data contain the command to execute
-	a->setData( QVariant::fromValue( cmd ) );
+	action->setData( QVariant::fromValue( cmd ) );
+	
 	// connect to signal
-	connect( a, SIGNAL( triggered() ), this, SLOT( projectCustomActionTriggered() ) );
+	connect( action, SIGNAL( triggered() ), this, SLOT( internal_projectCustomActionTriggered() ) );
+	
 	// update menu visibility
 	MonkeyCore::mainWindow()->menu_CustomAction_aboutToShow();
 }
@@ -558,213 +946,136 @@ void pWorkspace::internal_projectInstallCommandRequested( const pCommand& cmd, c
 void pWorkspace::internal_projectUninstallCommandRequested( const pCommand& cmd, const QString& mnu )
 {
 	QMenu* menu = MonkeyCore::menuBar()->menu( mnu );
-	foreach ( QAction* a, menu->actions() )
+	
+	foreach ( QAction* action, menu->actions() )
 	{
-		if ( a->menu() )
+		if ( action->menu() )
 		{
-			internal_projectUninstallCommandRequested( cmd, QString( "%1/%2" ).arg( mnu ).arg( a->menu()->objectName() ) );
+			internal_projectUninstallCommandRequested( cmd, QString( "%1/%2" ).arg( mnu ).arg( action->menu()->objectName() ) );
 		}
-		else if ( !a->isSeparator() && a->data().value<pCommand>() == cmd )
+		else if ( !action->isSeparator() && action->data().value<pCommand>() == cmd )
 		{
-			delete a;
+			delete action;
 		}
 	}
+	
 	// update menu visibility
 	MonkeyCore::mainWindow()->menu_CustomAction_aboutToShow();
 }
 
-void pWorkspace::projectCustomActionTriggered()
+void pWorkspace::internal_projectCustomActionTriggered()
 {
-	if ( QAction* a = qobject_cast<QAction*>( sender() ) )
+	QAction* action = qobject_cast<QAction*>( sender() );
+	
+	if ( action )
 	{
 		pConsoleManager* cm = MonkeyCore::consoleManager();
-		pCommand cmd = a->data().value<pCommand>();
+		pCommand cmd = action->data().value<pCommand>();
 		pCommandMap* cmdsHash = cmd.userData().value<pCommandMap*>();
 		const pCommandList cmds = cmdsHash ? cmdsHash->values() : pCommandList();
-		// save project if needed
-		if ( saveProjectsOnCustomAction() )
-		{
-			// TODO: completly remove the save, save all proejct way: project must be save each time they have been edited
-			//MonkeyCore::projectsManager()->action( UIXUPManager::SaveAll )->trigger();
-		}
+		
 		// save project files
-		if ( saveFilesOnCustomAction() )
+		if ( pMonkeyStudio::saveFilesOnCustomAction() )
 		{
 			fileSaveAll_triggered();
 		}
+		
 		// check that command to execute exists, else ask to user if he want to choose another one
-		if ( cmd.project() && a->text().contains( "execute", Qt::CaseInsensitive ) )
+		if ( cmd.project() && action->text().contains( "execute", Qt::CaseInsensitive ) )
 		{
 			cmd = cm->processCommand( cm->getCommand( cmds, cmd.text() ) );
-			QString s = QString( "%1/%2" ).arg( cmd.workingDirectory() ).arg( cmd.command() );
-			if ( !QFile::exists( s ) )
+			QString fileName = QString( "%1/%2" ).arg( cmd.workingDirectory() ).arg( cmd.command() );
+			
+			if ( !QFile::exists( fileName ) )
 			{
 				XUPProjectItem* project = cmd.project();
 				XUPProjectItem* topLevelProject = project->topLevelProject();
-				// try reading already saved binary
-				const QString psvBin = topLevelProject->projectSettingsValue( a->text().replace( ' ', '_' ).toUpper() );
-				s = psvBin;
-				if ( !s.isEmpty() )
+				const QString psvBin = project->projectSettingsValue( action->text().replace( ' ', '_' ).toUpper() );
+				fileName = psvBin;
+				
+				if ( !fileName.isEmpty() )
 				{
-					s = topLevelProject->filePath( s );
+					fileName = topLevelProject->filePath( fileName );
 				}
+				
 				// if not exists ask user to select one
-				if ( !QFile::exists( s ) && question( a->text().append( "..." ), tr( "Can't find your executable file, do you want to choose the file ?" ) ) )
+				if ( !QFile::exists( fileName ) && pMonkeyStudio::question( action->text().append( "..." ), tr( "Can't find your executable file, do you want to choose the file ?" ) ) )
 				{
-					s = getOpenFileName( a->text().append( "..." ), cmd.workingDirectory() );
+					fileName = pMonkeyStudio::getOpenFileName( action->text().append( "..." ), cmd.workingDirectory() );
 				}
+				
 				// if file exists execut it
-				if ( QFile::exists( s ) )
+				if ( QFile::exists( fileName ) )
 				{
-					QFileInfo fi( s );
-					QString f = fi.fileName().prepend( "./" );
-					QString p = fi.absolutePath();
-					if ( p.endsWith( '/' ) )
+					QFileInfo fi( fileName );
+					QString fn = fi.fileName().prepend( "./" );
+					QString path = fi.absolutePath();
+					
+					if ( path.endsWith( '/' ) )
 					{
-						p.chop( 1 );
+						path.chop( 1 );
 					}
+					
 					// correct command
-					cmd.setCommand( cm->quotedString( cm->nativeSeparators( s ) ) );
-					cmd.setWorkingDirectory( cm->nativeSeparators( p ) );
+					cmd.setCommand( cm->quotedString( cm->nativeSeparators( fn ) ) );
+					cmd.setWorkingDirectory( cm->nativeSeparators( path ) );
+					
 					// write in project
-					if ( topLevelProject->relativeFilePath( s ) != psvBin )
+					fileName = topLevelProject->relativeFilePath( fileName );
+					
+					if ( fileName != psvBin )
 					{
-						topLevelProject->setProjectSettingsValue( a->text().replace( ' ', '_' ).toUpper(), topLevelProject->relativeFilePath( s ) );
+						topLevelProject->setProjectSettingsValue( action->text().replace( ' ', '_' ).toUpper(), fileName );
 						topLevelProject->save();
 					}
+					
 					// add command to console manager
 					cm->addCommand( cmd );
 				}
 			}
+			
 			// return
 			return;
 		}
+		
 		// generate commands list
 		pCommandList mCmds = cm->recursiveCommandList( cmds, cm->getCommand( cmds, cmd.text() ) );
+		
 		// the first one must not be skipped on last error
-		if ( mCmds.count() > 0 )
+		if ( !mCmds.isEmpty() )
+		{
 			mCmds.first().setSkipOnError( false );
+		}
+		
 		// send command to consolemanager
 		cm->addCommands( mCmds );
 	}
 }
 
-void pWorkspace::contentChangedTimer_timeout()
-{
-	mContentChangedTimer->stop();
-	MonkeyCore::fileManager()->computeModifiedBuffers();
-}
-
-void pWorkspace::fileWatcher_ecmNothing( const QString& filename )
-{
-	MonkeyCore::messageManager()->appendMessage( tr( "File externally modified: '%1'" ).arg( QFileInfo( filename ).fileName() ) );
-}
-
-void pWorkspace::fileWatcher_ecmReload( const QString& fileName, bool force )
-{
-	// try reload
-	pAbstractChild* ac = MonkeyCore::fileManager()->childForFile( fileName );
-	
-	if ( ac && ( !ac->isModified( fileName ) || force ) )
-	{
-		const QPoint pos = ac->cursorPosition();
-		
-		ac->closeFile( fileName );
-		ac->openFile( fileName, ac->textCodec() );
-		ac->goTo( fileName, pos, true );
-		
-		return;
-	}
-	
-	// ask user
-	fileWatcher_ecmAlert( fileName );
-}
-
-void pWorkspace::fileWatcher_ecmAlert( const QString& filename )
-{
-	pQueuedMessage m;
-	m.Message = tr( "The file '%1' has been modified externally, what you do ?" ).arg( QFileInfo( filename ).fileName() );
-	m.MilliSeconds = 0;
-	m.Pixmap = pQueuedMessageToolBar::defaultPixmap();
-	m.Background = pQueuedMessageToolBar::defaultBackground();
-	m.Foreground = pQueuedMessageToolBar::defaultForeground();
-	m.Buttons[ QDialogButtonBox::Ignore ] = QString();
-	m.Buttons[ QDialogButtonBox::Reset ] = tr( "Reload" );
-	m.Object = this;
-	m.Slot = "fileWatcher_alertClicked";
-	m.UserData = filename;
-	MonkeyCore::messageManager()->appendMessage( m );
-}
-
-void pWorkspace::fileWatcher_alertClicked( QDialogButtonBox::StandardButton button, const pQueuedMessage& message )
-{
-	switch ( button )
-	{
-		case QDialogButtonBox::Ignore:
-			fileWatcher_ecmNothing( message.UserData.toString() );
-			break;
-		case QDialogButtonBox::Reset:
-			fileWatcher_ecmReload( message.UserData.toString(), true );
-			break;
-		default:
-			break;
-	}
-}
-
-void pWorkspace::fileWatcher_fileChanged( const QString& filename )
-{
-	switch ( pMonkeyStudio::externalchanges() )
-	{
-		// silently inform user
-		case pMonkeyStudio::ecmNothing:
-			fileWatcher_ecmNothing( filename );
-			break;
-		// check if file is open, if open and modified goto alert, else reload it
-		case pMonkeyStudio::ecmReload:
-			fileWatcher_ecmReload( filename );
-			break;
-		// ask user what to do
-		case pMonkeyStudio::ecmAlert:
-			fileWatcher_ecmAlert( filename );
-			break;
-	}
-}
-
-void pWorkspace::multitoolbar_notifyChanges()
-{
-	pMultiToolBar* mtb = MonkeyCore::multiToolBar();
-	QToolBar* tb = mtb->currentToolBar();
-	bool show = tb && !tb->actions().isEmpty();
-	
-	mtb->setVisible( show );
-}
-
 // file menu
 void pWorkspace::fileNew_triggered()
 {
-	UITemplatesWizard* d = UITemplatesWizard::instance( this );
-	d->setType( "Files" );
-	d->exec();
+	UITemplatesWizard wizard( this );
+	wizard.setType( "Files" );
+	wizard.exec();
 }
 
 void pWorkspace::fileOpen_triggered()
 {
-	// get available filters
-	QString mFilters = availableFilesFilters();
+	const QString mFilters = pMonkeyStudio::availableFilesFilters(); // get available filters
+	QString path = MonkeyCore::fileManager()->currentDocumentFile(); // path to show
 	
-	// path to show
-	QString path = MonkeyCore::fileManager()->currentChildFile();
 	if ( path.isEmpty() )
 	{
-		path = QDir::current().absolutePath();
+		XUPProjectItem* curProject = MonkeyCore::projectsManager()->currentProject();
+		path = curProject ? curProject->path() : pMonkeyStudio::defaultProjectsDirectory();
 	}
-	
 	
 	// show filedialog to user
 	pFileDialogResult result = MkSFileDialog::getOpenFileNames( window(), tr( "Choose the file(s) to open" ), path, mFilters, true, false );
 
 	// open open file dialog
-	QStringList fileNames = result[ "filenames" ].toStringList();
+	const QStringList fileNames = result[ "filenames" ].toStringList();
 	
 	// return 0 if user cancel
 	if ( fileNames.isEmpty() )
@@ -773,7 +1084,7 @@ void pWorkspace::fileOpen_triggered()
 	}
 
 	// for each entry, open file
-	foreach ( QString file, fileNames )
+	foreach ( const QString& file, fileNames )
 	{
 		if ( openFile( file, result[ "codec" ].toString() ) )
 		{
@@ -790,234 +1101,235 @@ void pWorkspace::fileOpen_triggered()
 
 void pWorkspace::fileSessionSave_triggered()
 {
-	QStringList l;
-	// saves opened files
-	foreach ( pAbstractChild* c, children() )
+	QStringList files, projects;
+	
+	// files
+	foreach ( QMdiSubWindow* window, mMdiArea->subWindowList() )
 	{
-		l << c->files();
+		pAbstractChild* document = qobject_cast<pAbstractChild*>( window );
+		files << document->filePath();
 	}
-	MonkeyCore::settings()->setValue( "Session/Files", l );
-	// saves opened projects
-	l.clear();
-	foreach ( XUPProjectItem* p, MonkeyCore::projectsManager()->topLevelProjects() )
+	
+	MonkeyCore::settings()->setValue( "Session/Files", files );
+	
+	// projects
+	foreach ( XUPProjectItem* project, MonkeyCore::projectsManager()->topLevelProjects() )
 	{
-		l << p->fileName();
+		projects << project->fileName();
 	}
-	MonkeyCore::settings()->setValue( "Session/Projects", l );
+	
+	MonkeyCore::settings()->setValue( "Session/Projects", projects );
 }
 
 void pWorkspace::fileSessionRestore_triggered()
 {
 	// restore files
-	foreach ( QString s, MonkeyCore::settings()->value( "Session/Files", QStringList() ).toStringList() )
-		if ( !openFile( s, pMonkeyStudio::defaultCodec() ) ) // remove it from recents files
-			MonkeyCore::recentsManager()->removeRecentFile( s );
+	foreach ( const QString& file, MonkeyCore::settings()->value( "Session/Files", QStringList() ).toStringList() )
+	{
+		if ( !openFile( file, pMonkeyStudio::defaultCodec() ) ) // remove it from recents files
+		{
+			MonkeyCore::recentsManager()->removeRecentFile( file );
+		}
+	}
+	
 	// restore projects
-	foreach ( QString s, MonkeyCore::settings()->value( "Session/Projects", QStringList() ).toStringList() )
-		if ( !MonkeyCore::projectsManager()->openProject( s, pMonkeyStudio::defaultCodec() ) ) // remove it from recents projects
-			MonkeyCore::recentsManager()->removeRecentProject( s );
+	foreach ( const QString& project, MonkeyCore::settings()->value( "Session/Projects", QStringList() ).toStringList() )
+	{
+		if ( !MonkeyCore::projectsManager()->openProject( project, pMonkeyStudio::defaultCodec() ) ) // remove it from recents projects
+		{
+			MonkeyCore::recentsManager()->removeRecentProject( project );
+		}
+	}
 }
 
 void pWorkspace::fileSaveCurrent_triggered()
 {
-	pAbstractChild* c = currentChild();
-	if ( c )
+	pAbstractChild* document = currentDocument();
+	
+	if ( document )
 	{
-		const QString fn = c->currentFile();
+		const QString fn = document->filePath();
 		mFileWatcher->removePath( fn );
-		c->saveCurrentFile();
+		document->saveFile();
 		mFileWatcher->addPath( fn );
 	}
 }
 
 void pWorkspace::fileSaveAll_triggered()
 {
-	foreach ( pAbstractChild* c, children() )
+	foreach ( QMdiSubWindow* window, mMdiArea->subWindowList() )
 	{
-		const QStringList fns = c->files();
-		mFileWatcher->removePaths( fns );
-		c->saveFiles();
-		mFileWatcher->addPaths( fns );
+		pAbstractChild* document = qobject_cast<pAbstractChild*>( window );
+		const QString fn = document->filePath();
+		mFileWatcher->removePath( fn );
+		document->saveFile();
+		mFileWatcher->addPath( fn );
 	}
 }
 
 void pWorkspace::fileCloseCurrent_triggered()
-{ closeCurrentDocument(); }
+{
+	closeCurrentDocument();
+}
 
 void pWorkspace::fileCloseAll_triggered()
-{ closeAllDocuments(); }
+{
+	closeAllDocuments();
+}
 
 void pWorkspace::fileSaveAsBackup_triggered()
 {
-	pAbstractChild* c = currentChild();
-	if ( c )
+	pAbstractChild* document = currentDocument();
+	
+	if ( document )
 	{
-		const QString s = getSaveFileName( tr( "Choose a filename to backup your file" ), QFileInfo( c->currentFile() ).fileName(), QString::null, this );
-		if ( !s.isEmpty() )
-			c->backupCurrentFile( s );
+		const QString fileName = pMonkeyStudio::getSaveFileName( tr( "Choose a filename to backup your file" ), document->fileName(), QString::null, this );
+		
+		if ( !fileName.isEmpty() )
+		{
+			document->backupFileAs( fileName );
+		}
 	}
 }
 
 void pWorkspace::fileQuickPrint_triggered()
 {
-	pAbstractChild* c = currentChild();
-	if ( c )
-		c->quickPrintCurrentFile();
+	pAbstractChild* document = currentDocument();
+	
+	if ( document )
+	{
+		document->quickPrintFile();
+	}
 }
 
 void pWorkspace::filePrint_triggered()
 {
-	pAbstractChild* c = currentChild();
-	if ( c )
-		c->printCurrentFile();
+	pAbstractChild* document = currentDocument();
+	
+	if ( document )
+	{
+		document->printFile();
+	}
 }
 
 void pWorkspace::fileExit_triggered()
-{ window()->close(); }
+{
+	window()->close();
+}
 
 // edit menu
 void pWorkspace::editSettings_triggered()
-{ UISettings::instance( this )->exec(); }
+{
+	UISettings::instance( this )->exec();
+}
 
 void pWorkspace::editTranslations_triggered()
 {
 	if ( UITranslator::instance( this )->exec() )
-		loadTranslations();
+	{
+		pMonkeyStudio::loadTranslations();
+	}
 }
 
 void pWorkspace::editUndo_triggered()
 {
-	pAbstractChild* c = currentChild();
-	if ( c )
-		c->undo();
+	pAbstractChild* document = currentDocument();
+	
+	if ( document )
+	{
+		document->undo();
+	}
 }
 
 void pWorkspace::editRedo_triggered()
 {
-	pAbstractChild* c = currentChild();
-	if ( c )
-		c->redo();
+	pAbstractChild* document = currentDocument();
+	
+	if ( document )
+	{
+		document->redo();
+	}
 }
 
 void pWorkspace::editCut_triggered()
 {
-	pAbstractChild* c = currentChild();
-	if ( c )
-		c->cut();
+	pAbstractChild* document = currentDocument();
+	
+	if ( document )
+	{
+		document->cut();
+	}
 }
 
 void pWorkspace::editCopy_triggered()
 {
-	pAbstractChild* c = currentChild();
-	if ( c )
-		c->copy();
+	pAbstractChild* document = currentDocument();
+	
+	if ( document )
+	{
+		document->copy();
+	}
 }
 
 void pWorkspace::editPaste_triggered()
 {
-	pAbstractChild* c = currentChild();
-	if ( c )
-		c->paste();
+	pAbstractChild* document = currentDocument();
+	
+	if ( document )
+	{
+		document->paste();
+	}
 }
 
 void pWorkspace::editSearch_triggered()
 {
-	pAbstractChild* c = currentChild();
-	if ( c )
-		c->invokeSearch();
+	pAbstractChild* document = currentDocument();
+	
+	if ( document )
+	{
+		document->invokeSearch();
+	}
 }
 
 void pWorkspace::editGoTo_triggered()
 {
-	pAbstractChild* c = currentChild();
-	if ( c )
-		c->goTo();
+	pAbstractChild* document = currentDocument();
+	
+	if ( document )
+	{
+		document->goTo();
+	}
 }
 
 void pWorkspace::editExpandAbbreviation_triggered()
 {
-	pAbstractChild* c = currentChild();
-	if ( c )
+	pAbstractChild* document = currentDocument();
+	
+	if ( document )
 	{
-		MonkeyCore::abbreviationsManager()->expandMacro( c->currentEditor() );
+		MonkeyCore::abbreviationsManager()->expandMacro( document->editor() );
 	}
 }
 
 void pWorkspace::editPrepareAPIs_triggered()
-{ prepareAPIs(); }
+{
+	pMonkeyStudio::prepareAPIs();
+}
 
 // help menu
 void pWorkspace::helpAboutApplication_triggered()
-{ UIAbout::instance( this )->exec(); }
+{
+	UIAbout::instance( this )->exec();
+}
 
 void pWorkspace::helpAboutQt_triggered()
-{ qApp->aboutQt(); }
+{
+	qApp->aboutQt();
+}
 
 #ifdef __COVERAGESCANNER__
 void pWorkspace::helpTestReport_triggered()
-{ UITestReport::instance( this )->exec(); }
+{
+	UITestReport::instance( this )->exec();
+}
 #endif
-
-void pWorkspace::focusToEditor_triggered ()
-{
-	if (currentChild() && currentChild()->currentEditor())
-		currentChild()->currentEditor()->setFocus();
-}
-
-void pWorkspace::closeCurrentDocument()
-{
-	// close document
-	if ( pAbstractChild* ac = currentChild() )
-		closeDocument( ac );
-}
-
-bool pWorkspace::closeAllDocuments()
-{
-	// try save documents
-	UISaveFiles::Buttons cb = UISaveFiles::saveDocuments( window(), children(), false );
-	// close all object, disconnecting them
-	if ( cb != UISaveFiles::bCancelClose )
-	{
-		// stop watching files
-		foreach ( pAbstractChild* ac, children() )
-			mFileWatcher->removePaths( ac->files() );
-		// close all documents
-		pExtendedWorkspace::closeAllDocuments();
-		return true;
-	}
-	else
-		return false; //not close IDE
-}
-
-void pWorkspace::closeDocument( QWidget* document )
-{
-	pAbstractChild* child = qobject_cast<pAbstractChild*>( document );
-	
-	if ( UISaveFiles::saveDocument( window(), child, false ) == UISaveFiles::bCancelClose )
-	{
-		return;
-	}
-	
-	// stop watching files
-	const QStringList files = child->files();
-	
-	if ( !files.isEmpty() )
-	{
-		mFileWatcher->removePaths( child->files() );
-	}
-	
-	// close document
-	pExtendedWorkspace::closeDocument( child );
-}
-
-void pWorkspace::initMultiToolBar( QToolBar* tb )
-{
-	if ( showQuickFileAccess() )
-	{
-		tb->insertAction( tb->actions().value( 0 ), MonkeyCore::workspace()->listWidget()->filesComboAction() );
-	}
-	else
-	{
-		tb->removeAction( MonkeyCore::workspace()->listWidget()->filesComboAction() );
-	}
-}

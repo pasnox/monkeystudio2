@@ -49,12 +49,12 @@ class MessageBox : public BasePlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin )
 
+protected:	
+	void fillPluginInfos();
+	virtual bool install();
+	virtual bool uninstall();
 public:
 	MessageBox();
-	virtual ~MessageBox();
-	virtual bool setEnabled( bool );
-	virtual QPixmap pixmap() const { return pIconManager::pixmap( "warning.png", ":/icons" ); }
-	virtual bool haveSettingsWidget() const { return true; }
 	virtual QWidget* settingsWidget();
 
 protected:

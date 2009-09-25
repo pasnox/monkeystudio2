@@ -101,6 +101,9 @@ bool PluginsManager::addPlugin( QObject* o )
 	// try to cast instance to BasePlugin
 	BasePlugin* bp = qobject_cast<BasePlugin*>( o );
 	
+	// generally it should be called from constructor, but can't call virtual method
+	bp->fillPluginInfos();
+	
 	// if not return
 	if ( !bp )
 		return false;
@@ -164,11 +167,18 @@ void PluginsManager::enableUserPlugins()
 	}
 }
 
-pAbstractChild* PluginsManager::openChildFile( const QString& s )
+pAbstractChild* PluginsManager::documentForFileName( const QString& fileName )
 {
-	foreach ( ChildPlugin* cp, plugins<ChildPlugin*>( PluginsManager::stEnabled ) )
-		if ( cp->canOpen( s ) )
-			return cp->openFile( s );
+	foreach ( ChildPlugin* plugin, plugins<ChildPlugin*>( PluginsManager::stEnabled ) )
+	{
+		pAbstractChild* document = plugin->createDocument( fileName );
+		
+		if ( document )
+		{
+			return document;
+		}
+	}
+	
 	return 0;
 }
 

@@ -36,11 +36,10 @@ class ProjectHeaders : public BasePlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin )
 
-public:
-	ProjectHeaders();
-	virtual ~ProjectHeaders();
-	virtual bool setEnabled( bool );
-	virtual QPixmap pixmap() const;
+protected:	
+	void fillPluginInfos();
+	virtual bool install();
+	virtual bool uninstall();
 
 protected slots:
 	void processLicensing();

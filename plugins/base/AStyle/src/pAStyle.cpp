@@ -37,9 +37,8 @@
 #include <pAbstractChild.h>
 #include <pEditor.h>
 
-pAStyle::pAStyle()
+void pAStyle::fillPluginInfos()
 {
-	// set plugin infos
 	mPluginInfos.Caption = tr( "AStyle Formatter" );
 	mPluginInfos.Description = tr( "Uses AStyle to reformat your sources. Useful when copying code from the net or if you just want to reformat your sources based on a specific style" );
 	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
@@ -47,44 +46,32 @@ pAStyle::pAStyle()
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "1.0.0";
 	mPluginInfos.FirstStartEnabled = false;
-}
-
-pAStyle::~pAStyle()
-{
-	if ( isEnabled() )
-		setEnabled( false );
+	mPluginInfos.HaveSettingsWidget = true;
+	mPluginInfos.Pixmap = pIconManager::pixmap( "astyle.png", ":/icons" );
 }
 
 QWidget* pAStyle::settingsWidget()
 { return new UISettingsAStyle; }
 
-bool pAStyle::setEnabled( bool b )
+bool pAStyle::install()
 {
-	if ( b && !isEnabled() )
-	{
-		// create action
-		QAction* a = MonkeyCore::menuBar()->action( "mEdit/aAStyle",  tr( "AStyle Formatter" ), QIcon( ":/icons/astyle.png" ), tr( "Ctrl+Alt+A" ), mPluginInfos.Description );
-		connect( a, SIGNAL( triggered() ), this, SLOT( applyFormatter() ) );
-		// set plugin enabled
-		stateAction()->setChecked( true );
-	}
-	else if ( !b && isEnabled() )
-	{
-		// delete action
-		delete MonkeyCore::menuBar()->action( "mEdit/aAStyle" );
-		// set plugin disabled
-		stateAction()->setChecked( false );
-	}
-	
-	// return default value
+	// create action
+	QAction* a = MonkeyCore::menuBar()->action( "mEdit/aAStyle",  tr( "AStyle Formatter" ), QIcon( ":/icons/astyle.png" ), tr( "Ctrl+Alt+A" ), infos().Description );
+	connect( a, SIGNAL( triggered() ), this, SLOT( applyFormatter() ) );
+	return true;
+}
+
+bool pAStyle::uninstall()
+{
+	delete MonkeyCore::menuBar()->action( "mEdit/aAStyle" );
 	return true;
 }
 
 void pAStyle::applyFormatter()
 {
-	if ( pAbstractChild* c = MonkeyCore::workspace()->currentChild() )
+	if ( pAbstractChild* c = MonkeyCore::workspace()->currentDocument() )
 	{
-		if ( pEditor* e = c->currentEditor() )
+		if ( pEditor* e = c->editor() )
 		{
 			// vars
 			QString s1 = e->text();

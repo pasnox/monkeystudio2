@@ -24,13 +24,14 @@
 #ifndef PMONKEYSTUDIO_H
 #define PMONKEYSTUDIO_H
 
-#include <fresh.h>
 #include <qscintilla.h>
 
 #include "workspace/pWorkspace.h"
+#include "workspace/pOpenedFileModel.h"
 
 #include <QApplication>
 #include <QMessageBox>
+#include <QMdiArea>
 #include <QDir>
 
 class QTranslator;
@@ -89,8 +90,6 @@ namespace pMonkeyStudio
 	Q_MONKEY_EXPORT void setEditorProperties( pEditor* editor );
 	
 	/***** GENERAL *****/
-	Q_MONKEY_EXPORT void setSaveProjectsOnCustomAction( bool save );
-	Q_MONKEY_EXPORT bool saveProjectsOnCustomAction();
 	Q_MONKEY_EXPORT void setSaveFilesOnCustomAction( bool save );
 	Q_MONKEY_EXPORT bool saveFilesOnCustomAction();
 	Q_MONKEY_EXPORT void setDefaultProjectsDirectory( const QString& dirName );
@@ -105,12 +104,8 @@ namespace pMonkeyStudio
 	Q_MONKEY_EXPORT QColor tabsTextColor();
 	Q_MONKEY_EXPORT void setCurrentTabTextColor( const QColor& color );
 	Q_MONKEY_EXPORT QColor currentTabTextColor();
-	/*
-	Q_MONKEY_EXPORT void setTabMode( pTabbedWorkspace::TabMode );
-	Q_MONKEY_EXPORT pTabbedWorkspace::TabMode tabMode();
-	*/
-	Q_MONKEY_EXPORT void setDocMode( pExtendedWorkspace::DocumentMode mode );
-	Q_MONKEY_EXPORT pExtendedWorkspace::DocumentMode docMode();
+	Q_MONKEY_EXPORT void setDocumentMode( pWorkspace::ViewMode mode );
+	Q_MONKEY_EXPORT pWorkspace::ViewMode documentMode();
 	Q_MONKEY_EXPORT void setExternalChanges( pMonkeyStudio::ExternalChangesMode mode );
 	Q_MONKEY_EXPORT pMonkeyStudio::ExternalChangesMode externalchanges();
 	Q_MONKEY_EXPORT void setSaveSessionOnClose( bool save );
@@ -119,6 +114,8 @@ namespace pMonkeyStudio
 	Q_MONKEY_EXPORT bool restoreSessionOnStartup();
 	Q_MONKEY_EXPORT void setShowQuickFileAccess( bool show );
 	Q_MONKEY_EXPORT bool showQuickFileAccess();
+	Q_MONKEY_EXPORT void setOpenedFileSortingMode( pOpenedFileModel::SortMode mode );
+	Q_MONKEY_EXPORT pOpenedFileModel::SortMode openedFileSortingMode();
 	
 	/******	EDITOR ******/
 	// General

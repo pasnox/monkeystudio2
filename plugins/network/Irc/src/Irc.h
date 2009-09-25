@@ -14,14 +14,11 @@ class Irc : public BasePlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin )
 
-public:
-	Irc();
-	virtual ~Irc();
-
-	virtual bool setEnabled( bool );
-	virtual QWidget* settingsWidget();
-	virtual QPixmap pixmap() const;
-private:
+protected:	
+	void fillPluginInfos();
+	virtual bool install();
+	virtual bool uninstall();
+	
 	IrcDock *mIrcDock;
 };
 
