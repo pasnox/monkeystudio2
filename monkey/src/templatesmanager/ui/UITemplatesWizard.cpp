@@ -39,6 +39,7 @@
 #include <VariablesManager.h>
 
 #include <QDir>
+#include <QMessageBox>
 
 UITemplatesWizard::UITemplatesWizard( QWidget* parent )
 	: QDialog( parent )
@@ -245,7 +246,7 @@ bool UITemplatesWizard::checkTemplate()
 	// check item available
 	if ( !lwTemplates->selectedItems().count() )
 	{
-		pMonkeyStudio::information( tr( "Template..." ), tr( "You need to select a template." ), window() );
+		QMessageBox::information( window(), tr( "Template..." ), tr( "You need to select a template." ) );
 		return false;
 	}
 	

@@ -34,6 +34,7 @@
 #include <QDir>
 #include <QMdiSubWindow>
 #include <QVBoxLayout>
+#include <QMessageBox>
 
 #include <QDebug>
 
@@ -999,7 +1000,7 @@ void pWorkspace::internal_projectCustomActionTriggered()
 				}
 				
 				// if not exists ask user to select one
-				if ( !QFile::exists( fileName ) && pMonkeyStudio::question( action->text().append( "..." ), tr( "Can't find your executable file, do you want to choose the file ?" ) ) )
+				if ( !QFile::exists( fileName ) && QMessageBox::question( QApplication::activeWindow(), action->text().append( "..." ), tr( "Can't find your executable file, do you want to choose the file ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::Yes )
 				{
 					fileName = pMonkeyStudio::getOpenFileName( action->text().append( "..." ), cmd.workingDirectory() );
 				}

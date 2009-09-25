@@ -30,6 +30,7 @@
 #include "../../pMonkeyStudio.h"
 
 #include <QTreeWidget>
+#include <QMessageBox>
 
 void UIAddAbbreviation::edit( QTreeWidget* t )
 {
@@ -73,5 +74,5 @@ void UIAddAbbreviation::accept()
 		QDialog::accept();
 	}
 	else
-		pMonkeyStudio::warning( tr( "Warning..." ), tr( "This template already exists for this language." ), window() );
+		QMessageBox::warning( window(), tr( "Warning..." ), tr( "This template already exists for this language." ) );
 }

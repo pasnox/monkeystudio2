@@ -22,6 +22,7 @@
 #include <QStringList>
 #include <QPushButton>
 #include <QDateTime>
+#include <QMessageBox>
 #include <QDebug>
 
 #include <pMonkeyStudio.h>

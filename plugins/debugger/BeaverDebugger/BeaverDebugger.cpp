@@ -36,6 +36,7 @@
 #include <QDebug>
 #include <QIcon>
 #include <QLabel>
+#include <QMessageBox>
 
 #include "StatusBar.h"
 #include "pMonkeyStudio.h"
@@ -169,20 +170,20 @@ void BeaverDebugger::explainWhyCannot()
 			break;
 			case NOT_FINISHED:
 				fullText += tr("Failed to identify Beaver Debugger. "
-							   "System is too slow, or applications works incorrectly.\n");
-			break;
-			case FAILED_TO_START:
+								"System is too slow, or applications works incorrectly.\n");
+				break;
+				case FAILED_TO_START:
 				fullText += tr("Failed to start Beaver Debugger. Executable file not found, "
 								"or you have no permissions to execute it.\n\n");
 #ifdef Q_OS_LINUX	
 				fullText += tr("Beaver Debugger might be included to your Linux distribution."
-							   "Package name probably is 'beaverdbg'.\n");
+								"Package name probably is 'beaverdbg'.\n");
 #endif
 				fullText += tr("For install it using official release, download installer or sources from "
-							   "http://beaverdbg.googlecode.com and follow installation instructions.\n");
+							"http://beaverdbg.googlecode.com and follow installation instructions.\n");
 				fullText += "\n";
 				fullText += tr("If Beaver Debugger is installed, but not found, "
-							   "go to plugin configuration dialog and configure path to it.\n");
+							"go to plugin configuration dialog and configure path to it.\n");
 				fullText += "\n";
 			break;
 			case CRASHED:
@@ -193,8 +194,8 @@ void BeaverDebugger::explainWhyCannot()
 			break;
 			case NOT_BEAVER:
 				fullText += tr("Beaver Debugger executable found, but not identified as Beaver Debugger. "
-							   "It might be not a Beaver Debugger, or version is unsupported.\n");
-			break;
+								"It might be not a Beaver Debugger, or version is unsupported.\n");
+				break;
 		}
 		
 		if (res != OK)
@@ -223,11 +224,11 @@ void BeaverDebugger::explainWhyCannot()
 		else // found, OK
 		{
 			QMessageBox::information(NULL,
-									 tr("Beaver Debugger"),
-									 fullText,
-									 QMessageBox::Ok);
-			uninstall();
-			install();
+										tr("Beaver Debugger"),
+										fullText,
+										QMessageBox::Ok);
+				uninstall();
+				install();
 		}
 	}
 }
@@ -292,7 +293,7 @@ BeaverDebugger::TryFindResult BeaverDebugger::tryFindBeaver() const
 	}
 	
 #if 0
-    do something
+	do something
 		return NOT_BEAVER;
 #endif
 	

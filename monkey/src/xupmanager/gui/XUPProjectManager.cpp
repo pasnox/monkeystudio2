@@ -19,6 +19,7 @@
 #include <QTextCodec>
 #include <QMenu>
 #include <QInputDialog>
+#include <QMessageBox>
 #include <QFileSystemWatcher>
 
 XUPProjectManager::XUPProjectManager( QWidget* parent )
@@ -542,7 +543,7 @@ void XUPProjectManager::editProject()
 	// edit project settings
 	if ( topLevelProject->projectSettingsValue( "EDITOR" ).isEmpty() )
 	{
-		pMonkeyStudio::warning( tr( "Warning..." ), tr( "The project can't be edited because there is no associate project settings plugin." ) );
+		QMessageBox::warning( QApplication::activeWindow(), tr( "Warning..." ), tr( "The project can't be edited because there is no associate project settings plugin." ) );
 		return;
 	}
 	
@@ -799,7 +800,7 @@ void XUPProjectManager::removeFiles()
 		return;
 	}
 	
-	if ( pMonkeyStudio::question( tr( "Remove Value..." ), tr( "Are you sur you want to remove this value ?" ), window() ) )
+	if ( QMessageBox::question( window(), tr( "Remove Value..." ), tr( "Are you sur you want to remove this value ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::Yes )
 	{
 		XUPProjectItem* project = curItem->project();
 		
@@ -810,11 +811,11 @@ void XUPProjectManager::removeFiles()
 			const QString fp = rootIncludeProject->filePath( curItem->cacheValue( "content" ) );
 			
 			// ask removing file
-			if ( QFile::exists( fp ) && pMonkeyStudio::question( tr( "Delete associations..." ), tr( "Do you want to delete the associate file ?" ), window() ) )
+			if ( QFile::exists( fp ) && QMessageBox::question( window(), tr( "Delete associations..." ), tr( "Do you want to delete the associate file ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::Yes )
 			{
 				if ( !QFile::remove( fp ) )
 				{
-					pMonkeyStudio::warning( tr( "Error..." ), tr( "Can't delete file: %1" ).arg( fp ), window() );
+					QMessageBox::warning( window(), tr( "Error..." ), tr( "Can't delete file: %1" ).arg( fp ) );
 				}
 			}
 		}

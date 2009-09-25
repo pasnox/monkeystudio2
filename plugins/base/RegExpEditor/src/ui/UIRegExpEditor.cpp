@@ -37,6 +37,7 @@
 #include <pMonkeyStudio.h>
 
 #include <QTime>
+#include <QMessageBox>
 #include <QDebug>
 
 /*!
@@ -113,7 +114,7 @@ void UIRegExpEditor::on_tbFind_clicked()
 		++count;
 		pos += regexp.matchedLength();
 		// check infinite loop
-		if ( count %1000 == 0 && pMonkeyStudio::question( tr( "Freeze ?!" ), tr( "The regular expression seem to recurse infinitely, do you want to stop searching ?" ), window() ) )
+		if ( count %1000 == 0 && QMessageBox::question( window(), tr( "Freeze ?!" ), tr( "The regular expression seem to recurse infinitely, do you want to stop searching ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::Yes )
 			break;
 	}
 	// tell about time
