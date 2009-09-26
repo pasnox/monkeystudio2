@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources/resources.qrc">
+   <iconset>
     <normaloff>:/openedfileexplorer/view-list-tree.png</normaloff>:/openedfileexplorer/view-list-tree.png</iconset>
   </property>
   <property name="windowTitle">
@@ -19,6 +19,12 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>3</number>
+    </property>
+    <property name="margin">
+     <number>5</number>
+    </property>
     <item>
      <widget class="QTreeView" name="tvFiles">
       <property name="contextMenuPolicy">
