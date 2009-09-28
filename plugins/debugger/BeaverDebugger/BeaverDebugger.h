@@ -39,6 +39,8 @@
 #include <QPointer>
 #include <QProcess>
 
+class XUPProjectItem;
+
 /*!
 	Main class of BeaverDebugger plugin
 	
@@ -75,6 +77,8 @@ protected slots:
 	void explainWhyCannot();
 	void runBeaver();
 	void beaverStateChanged(QProcess::ProcessState);
+	// action can have text "run" and "stop" and be enabled and disabled
+	void updateRunAction();
 	
 protected:
 	QString mBeaverPath;
@@ -84,7 +88,6 @@ protected:
 	QLabel *mStatusLabel;
 	// Returns QString::null if found, or error, if not
 	TryFindResult tryFindBeaver() const;
-	void updateRunActionText();
 };
 
 #endif

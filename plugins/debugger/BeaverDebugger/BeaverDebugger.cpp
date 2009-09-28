@@ -40,6 +40,8 @@
 
 #include "StatusBar.h"
 #include "pMonkeyStudio.h"
+#include "pFileManager.h"
+#include "XUPProjectItem.h"
 
 #include "BeaverDebugger.h"
 #include "BeaverDebuggerSettings.h"
@@ -89,7 +91,7 @@ bool BeaverDebugger::install()
 													QIcon( ":/icons/beaverdbg.png" ), 
 													"", // shortcut
 													"Start debugging session with the external debugger");
-		updateRunActionText();
+		updateRunAction();
 		connect( mRunBeaver, SIGNAL( triggered() ), this, SLOT( runBeaver() ) );
 	}
 	else // debugger not found
@@ -102,6 +104,9 @@ bool BeaverDebugger::install()
 		connect( mWhyCannot, SIGNAL( triggered() ), this, SLOT( explainWhyCannot() ) );
 		mRunBeaver = NULL;
 	}
+	connect(MonkeyCore::fileManager(), SIGNAL(currentChanged(XUPProjectItem*)),
+			this, SLOT(updateRunAction()));
+	
 	mStatusLabel = NULL;
 	return true;
 }
@@ -114,6 +119,9 @@ bool BeaverDebugger::install()
 */
 bool BeaverDebugger::uninstall()
 {
+	disconnect(MonkeyCore::fileManager(), SIGNAL(currentChanged(XUPProjectItem*)),
+			   this, SLOT(updateRunAction()));
+	
 	if (mWhyCannot)
 		delete mWhyCannot;
 	if (mRunBeaver)
@@ -237,13 +245,52 @@ void BeaverDebugger::runBeaver()
 {
 	if (mBeaverProcess.state() == QProcess::NotRunning)
 	{
-		mBeaverProcess.start(mBeaverPath, QStringList());
+		XUPProjectItem* project = MonkeyCore::fileManager()->currentProject();
+		if (project)
+		{
+			QString target = project->targetFilePath();
+			QFileInfo finfo(target);
+			if (target.isEmpty())
+			{
+				QMessageBox::critical(NULL,
+									 tr("Beaver Debugger"),
+									 tr("Target file for the project is unknown."),
+									 QMessageBox::Ok);
+				return;
+			}
+			else if (!finfo.exists())
+			{
+				QMessageBox::critical(NULL,
+									 tr("Beaver Debugger"),
+									 tr("Target file '%1' not found.").arg(target),
+									 QMessageBox::Ok);
+				return;
+			}
+			else if (!finfo.isExecutable())
+			{
+				QMessageBox::critical(NULL,
+									 tr("Beaver Debugger"),
+									 tr("Target file '%11 is not an executable.").arg(target),
+									 QMessageBox::Ok);
+				return;
+			}
+			
+			QMessageBox::information(NULL, //FIXME remove it
+									 tr("Beaver Debugger"),
+									 QString("Atempt to run <%1 %2>").arg(mBeaverPath).arg(target),
+									 QMessageBox::Ok);
+			
+			mBeaverProcess.start(mBeaverPath, QStringList() << target);
+		}
+		else
+		{
+			Q_ASSERT_X(0, "BeaverDebugger", "Atempt to run debugger without active project");
+		}
 	}
 	else
 	{
 		mBeaverProcess.terminate();
 	}
-	updateRunActionText();
 }
 
 void BeaverDebugger::beaverStateChanged(QProcess::ProcessState state)
@@ -267,6 +314,8 @@ void BeaverDebugger::beaverStateChanged(QProcess::ProcessState state)
 		default:
 		break;			
 	}
+	
+	updateRunAction();
 }
 
 BeaverDebugger::TryFindResult BeaverDebugger::tryFindBeaver() const
@@ -300,13 +349,13 @@ BeaverDebugger::TryFindResult BeaverDebugger::tryFindBeaver() const
 	return OK;
 }
 
-void BeaverDebugger::updateRunActionText()
+void BeaverDebugger::updateRunAction()
 {
 	if (mBeaverProcess.state() == QProcess::NotRunning)
 	{
-		mRunBeaver->setText(tr("Run Beaver"));
-		mRunBeaver->setToolTip(tr("Start debugging session with the external debugger"));
-		mRunBeaver->setStatusTip(tr("Start debugging session with the external debugger"));
+		mRunBeaver->setText(tr("Debug current project"));
+		mRunBeaver->setToolTip(tr("Start debugging session with the Beaver Debugger"));
+		mRunBeaver->setStatusTip(tr("Start debugging session with the Beaver Debugger"));
 	}
 	else
 	{
@@ -314,6 +363,7 @@ void BeaverDebugger::updateRunActionText()
 		mRunBeaver->setToolTip(tr("Stop executed debugger"));
 		mRunBeaver->setStatusTip(tr("Stop executed debugger"));
 	}
+	mRunBeaver->setEnabled(MonkeyCore::fileManager()->currentProject() != NULL);
 }
 
 Q_EXPORT_PLUGIN2( BaseBeaverDebugger, BeaverDebugger )
