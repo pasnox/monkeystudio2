@@ -8,6 +8,8 @@ include( installs.pri )
 
 TEMPLATE	= subdirs
 
+CONFIG += ordered # can't build plugins before core is builded
+
 SUBDIRS	= fresh \
 	ctags \
 	qCtagsSense \
