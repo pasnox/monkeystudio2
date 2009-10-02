@@ -442,7 +442,7 @@ bool QMakeProjectItem::save()
 	return XUPProjectItem::save();
 }
 
-QString QMakeProjectItem::targetFilePath() const
+QString QMakeProjectItem::targetFilePath(bool allowToAskUser)
 {
 	XUPProjectItem* riProject = rootIncludeProject();
 	
@@ -469,8 +469,15 @@ QString QMakeProjectItem::targetFilePath() const
 	{
 		destdir == riProject->filePath( destdir );
 	}
+	QString result = QDir::cleanPath( QString( "%1/%2" ).arg( destdir ).arg( target ) );
 	
-	return QDir::cleanPath( QString( "%1/%2" ).arg( destdir ).arg( target ) );
+	// fix target name. Step 1 - try to use settings
+	if (! QFileInfo(result).exists())
+	{
+		result = XUPProjectItem::targetFilePath(allowToAskUser);
+	}
+	
+	return result;
 }
 
 BuilderPlugin* QMakeProjectItem::builder( const QString& plugin ) const

@@ -95,9 +95,13 @@ public:
 	// return the project settings scope, creating it if needed
 	XUPItem* projectSettingsScope( bool create ) const;
 	// return a project settings value
+	/* FIXME hlamer:
+	   it seems default project settings value has type QStringList. 
+	   It might be conformable for QMake, but, looks strange for Universal project
+	   For universal, I think QString, or QVariant is suitable
+	*/
 	virtual QStringList projectSettingsValues( const QString& variable, const QStringList& defaultValues = QStringList() ) const;
-	virtual QString projectSettingsValue( const QString& variable, const QString& defaultValue = QString() ) const 
-	{ return projectSettingsValues( variable, defaultValue.isEmpty() ? QStringList() : QStringList( defaultValue ) ).join( " " ); }
+	virtual QString projectSettingsValue( const QString& variable, const QString& defaultValue = QString() ) const;
 	// set a project setting value
 	virtual void setProjectSettingsValues( const QString& variable, const QStringList& values );
 	virtual void setProjectSettingsValue( const QString& variable, const QString& value ) 
@@ -128,8 +132,13 @@ public:
 	virtual bool open( const QString& fileName, const QString& codec );
 	// save the project
 	virtual bool save();
-	// return the project target file, ie the binary / library file path
-	virtual QString targetFilePath() const;
+	/* return the project target file, ie the binary / library file path
+	   if allowToAskUser is set to true - user might be asked for it via doalog
+	 */
+	/* FIXME hlamer: let's this code return only executable, it would be simpler.for use
+	  If later we will need to get .dll target name - we will rework it
+	 */
+	virtual QString targetFilePath(bool allowToAskUser = false);
 	
 	// return plugin associated with the project
 	virtual BuilderPlugin* builder( const QString& plugin = QString() ) const;

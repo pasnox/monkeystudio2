@@ -982,60 +982,46 @@ void pWorkspace::internal_projectCustomActionTriggered()
 		}
 		
 		// check that command to execute exists, else ask to user if he want to choose another one
+		/* FIXME: hlamer: 
+				...action->text().contains( "execute"...
+			would be broken if action text translated
+		   we should find better way
+		   (of course we can use 
+				...contains( tr("execute") ...
+			but it is even more dirty hack
+		 */
 		if ( cmd.project() && action->text().contains( "execute", Qt::CaseInsensitive ) )
 		{
 			cmd = cm->processCommand( cm->getCommand( cmds, cmd.text() ) );
 			QString fileName = QString( "%1/%2" ).arg( cmd.workingDirectory() ).arg( cmd.command() );
 			
+			// Try to correct command by asking user
 			if ( !QFile::exists( fileName ) )
 			{
 				XUPProjectItem* project = cmd.project();
-				XUPProjectItem* topLevelProject = project->topLevelProject();
-				const QString psvBin = project->projectSettingsValue( action->text().replace( ' ', '_' ).toUpper() );
-				fileName = psvBin;
+				fileName = project->targetFilePath(true);
 				
-				if ( !fileName.isEmpty() )
-				{
-					fileName = topLevelProject->filePath( fileName );
-				}
+				if (fileName.isEmpty())
+					return;
 				
 				// if not exists ask user to select one
-				if ( !QFile::exists( fileName ) && QMessageBox::question( QApplication::activeWindow(), action->text().append( "..." ), tr( "Can't find your executable file, do you want to choose the file ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::Yes )
+				if ( !QFileInfo(fileName).exists())
 				{
-					fileName = pMonkeyStudio::getOpenFileName( action->text().append( "..." ), cmd.workingDirectory() );
+					QMessageBox::critical(this, tr("Executable file not found"), tr("Target \"%1\" does not exists").arg(fileName));
+					return;
 				}
 				
-				// if file exists execut it
-				if ( QFile::exists( fileName ) )
+				if ( !QFileInfo(fileName).isExecutable())
 				{
-					QFileInfo fi( fileName );
-					QString fn = fi.fileName().prepend( "./" );
-					QString path = fi.absolutePath();
-					
-					if ( path.endsWith( '/' ) )
-					{
-						path.chop( 1 );
-					}
-					
-					// correct command
-					cmd.setCommand( cm->quotedString( cm->nativeSeparators( fn ) ) );
-					cmd.setWorkingDirectory( cm->nativeSeparators( path ) );
-					
-					// write in project
-					fileName = topLevelProject->relativeFilePath( fileName );
-					
-					if ( fileName != psvBin )
-					{
-						topLevelProject->setProjectSettingsValue( action->text().replace( ' ', '_' ).toUpper(), fileName );
-						topLevelProject->save();
-					}
-					
-					// add command to console manager
-					cm->addCommand( cmd );
+					QMessageBox::critical(this, tr("Can't to execute target"), tr("Target \"%1\" is not an executable").arg(fileName));
+					return;
 				}
+				
+				// file found, and it is executable. Correct command
+				cmd.setCommand(fileName);				
 			}
+			cm->addCommand( cmd );
 			
-			// return
 			return;
 		}
 		

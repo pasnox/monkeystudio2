@@ -15,8 +15,13 @@
 #include <QDir>
 #include <QRegExp>
 #include <QProcess>
+#include <QFileDialog>
+#include <UIMain.h>
 
 #include <QDebug>
+
+// Debug target, used by debugger, "Execute Debug" menu action. May be set by XUPProjectItem after asking user via GUI dialog
+#define DEBUG_TARGET_VAR_NAME "DEBUG_TARGET"
 
 const QString XUP_VERSION = "1.1.0";
 
@@ -581,8 +586,14 @@ QStringList XUPProjectItem::projectSettingsValues( const QString& variableName, 
 	return values;
 }
 
+QString XUPProjectItem::projectSettingsValue( const QString& variableName, const QString& defaultValue ) const 
+{
+	return projectSettingsValues(variableName, QStringList() << defaultValue).join("");
+}
+
 void XUPProjectItem::setProjectSettingsValues( const QString& variableName, const QStringList& values )
 {
+	qDebug() << "set" << variableName << values;
 	XUPProjectItem* project = topLevelProject();
 
 	if ( project )
@@ -1010,9 +1021,27 @@ bool XUPProjectItem::save()
 	return result;
 }
 
-QString XUPProjectItem::targetFilePath() const
+QString XUPProjectItem::targetFilePath(bool allowToAskUser)
 {
-	return QString::null;
+	QString result = projectSettingsValue(DEBUG_TARGET_VAR_NAME);
+	
+	if (! QFileInfo(result).exists() ||
+		! QFileInfo(result).isExecutable())
+	{
+		if (allowToAskUser)
+		{
+			result = QFileDialog::getOpenFileName (MonkeyCore::mainWindow(),
+												   tr("Point please project target"),
+												   path());
+			if (QFileInfo(result).exists()) // got existing target
+			{
+				setProjectSettingsValue(DEBUG_TARGET_VAR_NAME, result);
+				save();
+			}
+		}
+	}
+	
+	return result;
 }
 
 BuilderPlugin* XUPProjectItem::builder( const QString& plugin ) const
