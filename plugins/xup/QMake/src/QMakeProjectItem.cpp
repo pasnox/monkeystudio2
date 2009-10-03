@@ -442,18 +442,24 @@ bool QMakeProjectItem::save()
 	return XUPProjectItem::save();
 }
 
-QString QMakeProjectItem::targetFilePath(bool allowToAskUser)
+QString QMakeProjectItem::targetFilePath( bool allowToAskUser, XUPProjectItem::TargetType targetType, XUPProjectItem::PlatformType platformType )
 {
-	XUPProjectItem* riProject = rootIncludeProject();
+	return XUPProjectItem::targetFilePath( allowToAskUser, targetType, platformType );
 	
+	/*
+	if ( QFile::exists( target ) )
+	{
+		return target;
+	}
+	
+	XUPProjectItem* riProject = rootIncludeProject();
 	QString target = riProject->variableCache().value( "TARGET" );
+	QString destdir = riProject->variableCache().value( "DESTDIR" );
 	
 	if ( target.isEmpty() )
 	{
 		target = QFileInfo( fileName() ).baseName();
 	}
-	
-	QString destdir = riProject->variableCache().value( "DESTDIR" );
 	
 	if ( destdir.isEmpty() )
 	{
@@ -467,17 +473,19 @@ QString QMakeProjectItem::targetFilePath(bool allowToAskUser)
 	
 	if ( QDir( destdir ).isRelative() )
 	{
-		destdir == riProject->filePath( destdir );
+		destdir = riProject->filePath( destdir );
 	}
-	QString result = QDir::cleanPath( QString( "%1/%2" ).arg( destdir ).arg( target ) );
+	
+	target = QDir::cleanPath( QString( "%1/%2" ).arg( destdir ).arg( target ) );
 	
 	// fix target name. Step 1 - try to use settings
-	if (! QFileInfo(result).exists())
+	if ( !QFile::exists( target ))
 	{
-		result = XUPProjectItem::targetFilePath(allowToAskUser);
+		target = XUPProjectItem::targetFilePath( allowToAskUser, targetType, platformType );
 	}
 	
-	return result;
+	return target;
+	*/
 }
 
 BuilderPlugin* QMakeProjectItem::builder( const QString& plugin ) const
