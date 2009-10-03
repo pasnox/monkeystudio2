@@ -89,7 +89,7 @@ bool BeaverDebugger::install()
 		mRunBeaver = MonkeyCore::menuBar()->action( "mDebugger/aRunBeaver",  
 													tr( "Run Beaver" ), 
 													QIcon( ":/icons/beaverdbg.png" ), 
-													"", // shortcut
+													"F5", // shortcut
 													"Start debugging session with the external debugger");
 		updateRunAction();
 		connect( mRunBeaver, SIGNAL( triggered() ), this, SLOT( runBeaver() ) );
@@ -275,11 +275,7 @@ void BeaverDebugger::runBeaver()
 				return;
 			}
 			
-			QMessageBox::information(NULL, //FIXME remove it
-									 tr("Beaver Debugger"),
-									 QString("Atempt to run <%1 %2>").arg(mBeaverPath).arg(target),
-									 QMessageBox::Ok);
-			
+			qDebug() << "atempt to run" << target;
 			mBeaverProcess.start(mBeaverPath, QStringList() << target);
 		}
 		else
