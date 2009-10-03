@@ -1081,16 +1081,35 @@ QString XUPProjectItem::targetFilePath( bool allowToAskUser, XUPProjectItem::Tar
 	QString target = tlProject->filePath( projectSettingsValue( key ) );
 	QFileInfo targetInfo( target );
 	
-	if ( !targetInfo.exists() || !targetInfo.isExecutable() || !QLibrary::isLibrary( target ) )
+	if ( !targetInfo.exists() || ( !targetInfo.isExecutable() && !QLibrary::isLibrary( target ) ) )
 	{
 		if ( allowToAskUser )
 		{
-			target = QFileDialog::getOpenFileName( MonkeyCore::mainWindow(), tr( "Point please project target" ), path() );
-			targetInfo.setFile( target );
+			QString type;
+			
+			switch ( targetType )
+			{
+				case XUPProjectItem::DebugTarget:
+					type = tr( "debug" ) +" ";
+					break;
+				case XUPProjectItem::ReleaseTarget:
+					type = tr( "release" ) +" ";
+					break;
+				default:
+					break;
+			}
+			
+			const QString userTarget = QFileDialog::getOpenFileName( MonkeyCore::mainWindow(), tr( "Point please project %1target" ).arg( type ), tlProject->path() );
+			targetInfo.setFile( userTarget );
+			
+			if ( !userTarget.isEmpty() )
+			{
+				target = userTarget;
+			}
 			
 			if ( targetInfo.exists() )
 			{
-				setProjectSettingsValue( key, tlProject->relativeFilePath( target ) );
+				setProjectSettingsValue( key, tlProject->relativeFilePath( userTarget ) );
 				save();
 			}
 		}
