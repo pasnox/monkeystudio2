@@ -982,44 +982,42 @@ void pWorkspace::internal_projectCustomActionTriggered()
 		}
 		
 		// check that command to execute exists, else ask to user if he want to choose another one
-		/* FIXME: hlamer: 
-				...action->text().contains( "execute"...
-			would be broken if action text translated
-		   we should find better way
-		   (of course we can use 
-				...contains( tr("execute") ...
-			but it is even more dirty hack
-		 */
-		if ( cmd.project() && action->text().contains( "execute", Qt::CaseInsensitive ) )
+		if ( cmd.targetExecution().isActive && cmd.project() )
 		{
 			cmd = cm->processCommand( cm->getCommand( cmds, cmd.text() ) );
-			QString fileName = QString( "%1/%2" ).arg( cmd.workingDirectory() ).arg( cmd.command() );
+			QString fileName = cmd.command();
 			
 			// Try to correct command by asking user
 			if ( !QFile::exists( fileName ) )
 			{
 				XUPProjectItem* project = cmd.project();
-				fileName = project->targetFilePath(true);
+				fileName = project->targetFilePath( cmd.targetExecution() );
 				
-				if (fileName.isEmpty())
-					return;
-				
-				// if not exists ask user to select one
-				if ( !QFileInfo(fileName).exists())
+				if ( fileName.isEmpty() )
 				{
-					QMessageBox::critical(this, tr("Executable file not found"), tr("Target \"%1\" does not exists").arg(fileName));
 					return;
 				}
 				
-				if ( !QFileInfo(fileName).isExecutable())
+				const QFileInfo fileInfo( fileName );
+				
+				// if not exists ask user to select one
+				if ( !fileInfo.exists() )
 				{
-					QMessageBox::critical(this, tr("Can't to execute target"), tr("Target \"%1\" is not an executable").arg(fileName));
+					QMessageBox::critical( window(), tr( "Executable file not found" ), tr( "Target '%1' does not exists" ).arg( fileName ) );
+					return;
+				}
+				
+				if ( !fileInfo.isExecutable() )
+				{
+					QMessageBox::critical( window(), tr( "Can't execute target" ), tr( "Target '%1' is not an executable" ).arg( fileName ) );
 					return;
 				}
 				
 				// file found, and it is executable. Correct command
-				cmd.setCommand(fileName);				
+				cmd.setCommand( fileName );
+				cmd.setWorkingDirectory( fileInfo.absolutePath() );
 			}
+			
 			cm->addCommand( cmd );
 			
 			return;

@@ -1074,10 +1074,11 @@ bool XUPProjectItem::save()
 
 QString XUPProjectItem::targetFilePath( bool allowToAskUser, XUPProjectItem::TargetType targetType, XUPProjectItem::PlatformType platformType )
 {
+	XUPProjectItem* tlProject = topLevelProject();
 	const QString targetTypeString = this->targetTypeString( targetType );
 	const QString platformTypeString = this->platformTypeString( platformType );
-	const QString key = QString( "%1-%2" ).arg( platformTypeString ).arg( targetTypeString );
-	QString target = projectSettingsValue( key );
+	const QString key = QString( "%1_%2" ).arg( platformTypeString ).arg( targetTypeString );
+	QString target = tlProject->filePath( projectSettingsValue( key ) );
 	QFileInfo targetInfo( target );
 	
 	if ( !targetInfo.exists() || !targetInfo.isExecutable() || !QLibrary::isLibrary( target ) )
@@ -1089,13 +1090,18 @@ QString XUPProjectItem::targetFilePath( bool allowToAskUser, XUPProjectItem::Tar
 			
 			if ( targetInfo.exists() )
 			{
-				setProjectSettingsValue( key, target );
+				setProjectSettingsValue( key, tlProject->relativeFilePath( target ) );
 				save();
 			}
 		}
 	}
 	
 	return target;
+}
+
+QString XUPProjectItem::targetFilePath( const pCommandTargetExecution& execution )
+{
+	return targetFilePath( true, (XUPProjectItem::TargetType)execution.targetType, (XUPProjectItem::PlatformType)execution.platformType );
 }
 
 BuilderPlugin* XUPProjectItem::builder( const QString& plugin ) const

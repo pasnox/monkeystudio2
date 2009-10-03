@@ -848,32 +848,47 @@ void QMakeProjectItem::installCommands()
 		// execute debug
 		if ( haveDebug || haveDebugRelease )
 		{
+			const QString debugTarget = targetFilePath( false, XUPProjectItem::DebugTarget, XUPProjectItem::CurrentPlatform );
+			
 			cmd = cmdBuild;
+			cmd.targetExecution().isActive = true;
+			cmd.targetExecution().targetType = XUPProjectItem::DebugTarget;
+			cmd.targetExecution().platformType = XUPProjectItem::CurrentPlatform;
 			cmd.setText( tr( "Execute Debug" ) );
-			cmd.setCommand( target );
+			cmd.setCommand( debugTarget );
 			cmd.setArguments( QString() );
-			cmd.setWorkingDirectory( destdir != "$cpp$" ? destdir : destdir +"/debug" );
+			cmd.setWorkingDirectory( QFileInfo( debugTarget ).absolutePath() );
 			addCommand( cmd, "mBuilder/mExecute" );
 		}
 		
 		// execute release
 		if ( haveRelease || haveDebugRelease )
 		{
+			const QString releaseTarget = targetFilePath( false, XUPProjectItem::ReleaseTarget, XUPProjectItem::CurrentPlatform );
+			
 			cmd = cmdBuild;
+			cmd.targetExecution().isActive = true;
+			cmd.targetExecution().targetType = XUPProjectItem::ReleaseTarget;
+			cmd.targetExecution().platformType = XUPProjectItem::CurrentPlatform;
 			cmd.setText( tr( "Execute Release" ) );
-			cmd.setCommand( target );
+			cmd.setCommand( releaseTarget );
 			cmd.setArguments( QString() );
-			cmd.setWorkingDirectory( destdir != "$cpp$" ? destdir : destdir +"/release" );
+			cmd.setWorkingDirectory( QFileInfo( releaseTarget ).absolutePath() );
 			addCommand( cmd, "mBuilder/mExecute" );
 		}
 		
 		if ( !( haveDebug || haveDebugRelease ) && !( haveRelease || haveDebugRelease ) )
 		{
+			const QString defaultTarget = targetFilePath( false, XUPProjectItem::DefaultTarget, XUPProjectItem::CurrentPlatform );
+			
 			cmd = cmdBuild;
+			cmd.targetExecution().isActive = true;
+			cmd.targetExecution().targetType = XUPProjectItem::DefaultTarget;
+			cmd.targetExecution().platformType = XUPProjectItem::CurrentPlatform;
 			cmd.setText( tr( "Execute" ) );
-			cmd.setCommand( target );
+			cmd.setCommand( defaultTarget );
 			cmd.setArguments( QString() );
-			cmd.setWorkingDirectory( destdir != "$cpp$" ? destdir : destdir );
+			cmd.setWorkingDirectory( QFileInfo( defaultTarget ).absolutePath() );
 			addCommand( cmd, "mBuilder/mExecute" );
 		}
 	}
