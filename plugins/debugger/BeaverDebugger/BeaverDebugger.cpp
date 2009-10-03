@@ -248,7 +248,7 @@ void BeaverDebugger::runBeaver()
 		XUPProjectItem* project = MonkeyCore::fileManager()->currentProject();
 		if (project)
 		{
-			QString target = project->targetFilePath(true);
+			QString target = project->targetFilePath(true,XUPProjectItem::DebugTarget,XUPProjectItem::CurrentPlatform);
 			QFileInfo finfo(target);
 			if (target.isEmpty())
 			{
