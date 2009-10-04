@@ -546,16 +546,7 @@ DebuggerPlugin* QMakeProjectItem::debugger( const QString& plugin ) const
 	
 	if ( plug.isEmpty() )
 	{
-		QtVersionManager mQtManager;
-		QtVersion mQtVersion = mQtManager.version( projectSettingsValue( "QT_VERSION" ) );
-		
-		if ( mQtVersion.isValid() )
-		{
-			if ( !mQtVersion.QMakeSpec.contains( "msvc", Qt::CaseInsensitive ) )
-			{
-				plug = "GNUDebugger";
-			}
-		}
+		plug = "BeaverDebugger";
 	}
 	
 	return XUPProjectItem::debugger( plug );

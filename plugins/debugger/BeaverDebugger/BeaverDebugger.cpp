@@ -48,8 +48,6 @@
 
 BeaverDebugger::BeaverDebugger()
 {
-	connect(&mBeaverProcess, SIGNAL(stateChanged(QProcess::ProcessState)),
-			this, SLOT(beaverStateChanged(QProcess::ProcessState)));
 }
 
 void BeaverDebugger::fillPluginInfos()
@@ -60,7 +58,7 @@ void BeaverDebugger::fillPluginInfos()
 	mPluginInfos.Type = BasePlugin::iDebugger;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "1.0.0";
-	mPluginInfos.FirstStartEnabled = true;
+	mPluginInfos.FirstStartEnabled = false;
 	mPluginInfos.HaveSettingsWidget = true;
 	mPluginInfos.Pixmap = QPixmap( ":/icons/beaverdbg.png" );
 }
@@ -78,14 +76,14 @@ bool BeaverDebugger::install()
 #else
 	mBeaverPath = settingsValue("BeaverPath", "beaverdbg").toString();
 #endif
-	// create action
-	MonkeyCore::menuBar()->menu( "mDebugger" )->menuAction()->setVisible( true ); // FIXME is it good?
-	MonkeyCore::menuBar()->menu( "mDebugger" )->menuAction()->setEnabled( true ); // FIXME is it good?
+
+	mBeaverProcess = new QProcess( this );
+	
+	connect(mBeaverProcess, SIGNAL(stateChanged(QProcess::ProcessState)),
+			this, SLOT(beaverStateChanged(QProcess::ProcessState)));
 	
 	if (OK == tryFindBeaver()) // FIXME debugger found
 	{
-		mWhyCannot = NULL;
-		
 		mRunBeaver = MonkeyCore::menuBar()->action( "mDebugger/aRunBeaver",  
 													tr( "Run Beaver" ), 
 													QIcon( ":/icons/beaverdbg.png" ), 
@@ -102,12 +100,10 @@ bool BeaverDebugger::install()
 													"", // shortcut
 													"Check Beaver Debugger status" );
 		connect( mWhyCannot, SIGNAL( triggered() ), this, SLOT( explainWhyCannot() ) );
-		mRunBeaver = NULL;
 	}
 	connect(MonkeyCore::fileManager(), SIGNAL(currentChanged(XUPProjectItem*)),
 			this, SLOT(updateRunAction()));
 	
-	mStatusLabel = NULL;
 	return true;
 }
 
@@ -122,12 +118,10 @@ bool BeaverDebugger::uninstall()
 	disconnect(MonkeyCore::fileManager(), SIGNAL(currentChanged(XUPProjectItem*)),
 			   this, SLOT(updateRunAction()));
 	
-	if (mWhyCannot)
-		delete mWhyCannot;
-	if (mRunBeaver)
-		delete mRunBeaver;
-	if (mStatusLabel)
-		delete mStatusLabel;
+	delete mBeaverProcess;
+	delete mWhyCannot;
+	delete mRunBeaver;
+	delete mStatusLabel;
 	return true;
 }
 
@@ -243,7 +237,7 @@ void BeaverDebugger::explainWhyCannot()
 
 void BeaverDebugger::runBeaver()
 {
-	if (mBeaverProcess.state() == QProcess::NotRunning)
+	if (mBeaverProcess->state() == QProcess::NotRunning)
 	{
 		XUPProjectItem* project = MonkeyCore::fileManager()->currentProject();
 		if (project)
@@ -276,7 +270,7 @@ void BeaverDebugger::runBeaver()
 			}
 			
 			qDebug() << "atempt to run" << target;
-			mBeaverProcess.start(mBeaverPath, QStringList() << target);
+			mBeaverProcess->start(mBeaverPath, QStringList() << target);
 		}
 		else
 		{
@@ -285,7 +279,7 @@ void BeaverDebugger::runBeaver()
 	}
 	else
 	{
-		mBeaverProcess.terminate();
+		mBeaverProcess->terminate();
 	}
 }
 
@@ -304,7 +298,7 @@ void BeaverDebugger::beaverStateChanged(QProcess::ProcessState state)
 			if (! mStatusLabel)
 			{
 				mStatusLabel = new QLabel(tr("Beaver is running"));
-				MonkeyCore::statusBar()->addWidget(mStatusLabel);
+				MonkeyCore::statusBar()->addPermanentWidget(mStatusLabel);
 			}
 		break;
 		default:
@@ -347,7 +341,7 @@ BeaverDebugger::TryFindResult BeaverDebugger::tryFindBeaver() const
 
 void BeaverDebugger::updateRunAction()
 {
-	if (mBeaverProcess.state() == QProcess::NotRunning)
+	if (mBeaverProcess->state() == QProcess::NotRunning)
 	{
 		mRunBeaver->setText(tr("Debug current project"));
 		mRunBeaver->setToolTip(tr("Start debugging session with the Beaver Debugger"));
