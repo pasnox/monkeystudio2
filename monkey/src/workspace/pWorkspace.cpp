@@ -926,6 +926,9 @@ void pWorkspace::internal_currentProjectChanged( XUPProjectItem* currentProject,
 		
 		currentProject->installCommands();
 	}
+	
+	// update menu visibility
+	MonkeyCore::mainWindow()->menu_CustomAction_aboutToShow();
 }
 
 void pWorkspace::internal_projectInstallCommandRequested( const pCommand& cmd, const QString& mnu )
