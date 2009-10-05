@@ -76,7 +76,7 @@ QString BasePlugin::typeToString( BasePlugin::Type type )
 			return QCoreApplication::translate( "BasePlugin", "NaN" );
 			break;
 		default:
-			Q_ASSERT( 0 );
+			//Q_ASSERT( 0 ); // comment assert as in debug it will always assert as i do a loop that contains bad type in the compelteTypeToString() member.
 			return QString::null;
 			break;
 	}
