@@ -91,6 +91,8 @@ bool BeaverDebugger::install()
 													"Start debugging session with the external debugger");
 		updateRunAction();
 		connect( mRunBeaver, SIGNAL( triggered() ), this, SLOT( runBeaver() ) );
+		connect(MonkeyCore::fileManager(), SIGNAL(currentChanged(XUPProjectItem*)),
+			this, SLOT(updateRunAction()));
 	}
 	else // debugger not found
 	{
@@ -101,8 +103,6 @@ bool BeaverDebugger::install()
 													"Check Beaver Debugger status" );
 		connect( mWhyCannot, SIGNAL( triggered() ), this, SLOT( explainWhyCannot() ) );
 	}
-	connect(MonkeyCore::fileManager(), SIGNAL(currentChanged(XUPProjectItem*)),
-			this, SLOT(updateRunAction()));
 	
 	return true;
 }
