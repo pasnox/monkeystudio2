@@ -521,7 +521,9 @@ void XUPProjectManager::editProject()
 	XUPProjectItem* topLevelProject = project->topLevelProject();
 	
 	// get plugin name that can manage this project
-	if ( topLevelProject->projectSettingsValue( "EDITOR" ).isEmpty() || !MonkeyCore::pluginsManager()->plugins<XUPPlugin*>( PluginsManager::stAll, topLevelProject->projectSettingsValue( "EDITOR" ) ).value( 0 ) )
+	const QString pluginName = topLevelProject->projectSettingsValue( "EDITOR" );
+	
+	if ( pluginName.isEmpty() || !MonkeyCore::pluginsManager()->plugins<XUPPlugin*>( PluginsManager::stAll, pluginName ).value( 0 ) )
 	{
 		// get xup plugins
 		QHash<QString, XUPPlugin*> plugins;
