@@ -96,6 +96,11 @@ pOpenedFileExplorer::pOpenedFileExplorer( pWorkspace* workspace )
 	connect( tvFiles->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ), this, SLOT( selectionModel_selectionChanged( const QItemSelection&, const QItemSelection& ) ) );
 }
 
+pOpenedFileModel* pOpenedFileExplorer::model() const
+{
+	return mModel;
+}
+
 QAction* pOpenedFileExplorer::comboBoxAction() const
 {
 	return aComboBox;
