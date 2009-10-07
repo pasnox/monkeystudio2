@@ -208,7 +208,11 @@ bool pChild::openFile( const QString& fileName, const QString& codec )
 	setFilePath( fileName );
 
 	// open file
-	if ( !mEditor->openFile( fileName, codec ) )
+	const bool locked = blockSignals( true );
+	const bool opened = mEditor->openFile( fileName, codec );
+	blockSignals( locked );
+	
+	if ( !opened )
 	{
 		setFilePath( QString::null );
 		return false;
