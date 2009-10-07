@@ -586,7 +586,8 @@ QStringList XUPProjectItem::projectSettingsValues( const QString& variableName, 
 
 QString XUPProjectItem::projectSettingsValue( const QString& variableName, const QString& defaultValue ) const 
 {
-	return projectSettingsValues(variableName, defaultValue.isEmpty() ? QStringList() : QStringList( defaultValue ) ).join( " " );
+	const QStringList dvalue = defaultValue.isEmpty() ? QStringList() : QStringList( defaultValue );
+	return projectSettingsValues(variableName, dvalue ).join( " " );
 }
 
 void XUPProjectItem::setProjectSettingsValues( const QString& variableName, const QStringList& values )
