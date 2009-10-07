@@ -122,18 +122,20 @@ QAction* BasePlugin::stateAction() const
 	return mAction;
 }
 
-bool BasePlugin::setEnabled(bool enabled)
+bool BasePlugin::setEnabled( bool enabled )
 {
 	if ( enabled && !isEnabled() )
 	{
 		stateAction()->setChecked( install() );
+		return stateAction()->isChecked();
 	}
-	else if ( isEnabled() )
+	else if ( !enabled && isEnabled() )
 	{
 		stateAction()->setChecked( !uninstall() );
+		return !stateAction()->isChecked();
 	}
 	
-	return stateAction()->isChecked();
+	return true;
 }
 
 QString BasePlugin::settingsKey( const QString& key ) const
