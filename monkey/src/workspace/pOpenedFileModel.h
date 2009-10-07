@@ -42,6 +42,8 @@ public:
 	
 	pOpenedFileModel::SortMode sortMode() const;
 	void setSortMode( pOpenedFileModel::SortMode mode );
+	
+	void setDocumentIcon( pAbstractChild* document, const QIcon& icon );
 
 protected:
 	pWorkspace* mWorkspace;
@@ -49,6 +51,7 @@ protected:
 	QTimer* mSortDocumentsTimer;
 	int mSortDocumentsTimeout;
 	QList<pAbstractChild*> mDocuments;
+	QMap<pAbstractChild*, QIcon> mDocumentsIcons;
 	QIcon mTransparentIcon;
 	QIcon mModifiedIcon;
 	

@@ -128,7 +128,11 @@ QVariant pOpenedFileModel::data( const QModelIndex& index, int role ) const
 		{
 			QIcon icon = document->windowIcon();
 			
-			if ( document->isModified() )
+			if ( !mDocumentsIcons.value( document ).isNull() )
+			{
+				icon = mDocumentsIcons[ document ];
+			}
+			else if ( document->isModified() )
 			{
 				icon = mModifiedIcon;
 			}
@@ -266,6 +270,13 @@ void pOpenedFileModel::setSortMode( pOpenedFileModel::SortMode mode )
 	}
 }
 
+void pOpenedFileModel::setDocumentIcon( pAbstractChild* document, const QIcon& icon )
+{
+	mDocumentsIcons[ document ] = icon;
+	const QModelIndex index = this->index( document );
+	emit dataChanged( index, index );
+}
+
 void pOpenedFileModel::sortDocuments()
 {
 	mSortDocumentsTimer->start( mSortDocumentsTimeout );
@@ -371,6 +382,7 @@ void pOpenedFileModel::documentClosed( pAbstractChild* document )
 	const int index = mDocuments.indexOf( document );
 	beginRemoveRows( QModelIndex(), index, index );
 	mDocuments.removeOne( document );
+	mDocumentsIcons.remove( document );
 	endRemoveRows();
 	sortDocuments();
 }
