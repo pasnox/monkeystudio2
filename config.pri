@@ -48,6 +48,7 @@ CONFIG( debug, debug|release ) {
 	MOC_DIR	= $${PACKAGE_BUILD_PATH}/release/.moc
 	RCC_DIR	= $${PACKAGE_BUILD_PATH}/release/.rcc
 }
+INCLUDEPATH	*= $${UI_DIR} # some qmake versions has bug and do not do it automaticaly
 
 # define some usefull values
 QMAKE_TARGET_COMPANY	= "Monkey Studio Team"
