@@ -121,13 +121,26 @@ void FileWatcher::fileChanged( const QString& path )
 		}
 	}
 	
+	qWarning() << "changed" << QFile::exists( document->filePath() ) << mExternallyModified[ path ];
+	
 	documentChanged( document );
 }
 
 void FileWatcher::documentOpened( pAbstractChild* document )
 {
-	mFileWatcher->addPath( document->filePath() );
-	mExternallyModified[ document->filePath() ] = FileWatcher::None;
+	const QString path = document->filePath();
+	pOpenedFileExplorer* dock = MonkeyCore::workspace()->dockWidget();
+	pOpenedFileModel* model = dock->model();
+	mExternallyModified[ path ] = FileWatcher::None;
+	mFileWatcher->addPath( path );
+	
+	const QString toolTip = tr( "File Path: %1\nLocally Modified: %2\nExternally Modified: %3\nExternally Deleted: %4" )
+		.arg( path )
+		.arg( QVariant( document->isModified() ).toString() )
+		.arg( QVariant( mExternallyModified[ path ] == FileWatcher::Modified ).toString() )
+		.arg( QVariant( mExternallyModified[ path ] == FileWatcher::Deleted ).toString() );
+	
+	model->setDocumentToolTip( document, toolTip );
 }
 
 void FileWatcher::documentChanged( pAbstractChild* document )
@@ -136,6 +149,12 @@ void FileWatcher::documentChanged( pAbstractChild* document )
 	pOpenedFileExplorer* dock = MonkeyCore::workspace()->dockWidget();
 	pOpenedFileModel* model = dock->model();
 	QIcon icon;
+	
+	// externally deleted files make the filewatcher to no longer watch them
+	if ( !mFileWatcher->files().contains( path ) )
+	{
+		mFileWatcher->addPath( path );
+	}
 	
 	switch ( mExternallyModified[ path ] )
 	{
@@ -152,7 +171,14 @@ void FileWatcher::documentChanged( pAbstractChild* document )
 		icon = pIconManager::icon( "modified-locally-externally.png" );
 	}
 	
+	const QString toolTip = tr( "File Path: %1\nLocally Modified: %2\nExternally Modified: %3\nExternally Deleted: %4" )
+		.arg( path )
+		.arg( QVariant( document->isModified() ).toString() )
+		.arg( QVariant( mExternallyModified[ path ] == FileWatcher::Modified ).toString() )
+		.arg( QVariant( mExternallyModified[ path ] == FileWatcher::Deleted ).toString() );
+	
 	model->setDocumentIcon( document, icon );
+	model->setDocumentToolTip( document, toolTip );
 }
 
 void FileWatcher::documentModifiedChanged( pAbstractChild* document, bool modified )

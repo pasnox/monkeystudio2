@@ -149,8 +149,12 @@ QVariant pOpenedFileModel::data( const QModelIndex& index, int role ) const
 			return document->fileName();
 			break;
 		case Qt::ToolTipRole:
-			return document->filePath();
+		{
+			const QString customToolTip = mDocumentsToolTips.value( document );
+			const QString toolTip = document->filePath();
+			return customToolTip.isEmpty() ? toolTip : customToolTip;
 			break;
+		}
 		default:
 			break;
 	}
@@ -277,6 +281,13 @@ void pOpenedFileModel::setDocumentIcon( pAbstractChild* document, const QIcon& i
 	emit dataChanged( index, index );
 }
 
+void pOpenedFileModel::setDocumentToolTip( pAbstractChild* document, const QString& toolTip )
+{
+	mDocumentsToolTips[ document ] = toolTip;
+	const QModelIndex index = this->index( document );
+	emit dataChanged( index, index );
+}
+
 void pOpenedFileModel::sortDocuments()
 {
 	mSortDocumentsTimer->start( mSortDocumentsTimeout );
@@ -383,6 +394,7 @@ void pOpenedFileModel::documentClosed( pAbstractChild* document )
 	beginRemoveRows( QModelIndex(), index, index );
 	mDocuments.removeOne( document );
 	mDocumentsIcons.remove( document );
+	mDocumentsToolTips.remove( document );
 	endRemoveRows();
 	sortDocuments();
 }
