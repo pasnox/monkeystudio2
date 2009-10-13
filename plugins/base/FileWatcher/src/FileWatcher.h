@@ -58,6 +58,8 @@ protected:
 	virtual void fillPluginInfos();
 	virtual bool install();
 	virtual bool uninstall();
+	
+	void updateDocumentState( pAbstractChild* document );
 
 protected slots:
 	void fileChanged( const QString& path );
