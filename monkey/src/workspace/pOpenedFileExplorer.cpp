@@ -183,6 +183,7 @@ void pOpenedFileExplorer::on_tvFiles_customContextMenuRequested( const QPoint& p
 	QMenu menu;
 	menu.addAction( MonkeyCore::menuBar()->action( "mFile/mClose/aCurrent" ) );
 	menu.addAction( MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" ) );
+	menu.addAction( MonkeyCore::menuBar()->action( "mFile/aReload" ) );
 	menu.addSeparator();
 	menu.addAction( mSortMenu->menuAction() );
 	menu.exec( tvFiles->mapToGlobal( pos ) );

@@ -218,10 +218,7 @@ bool pChild::openFile( const QString& fileName, const QString& codec )
 		return false;
 	}
 	
-	if ( !mCodec )
-	{
-		mCodec = QTextCodec::codecForName( codec.toUtf8() );
-	}
+	mCodec = QTextCodec::codecForName( codec.toUtf8() );
 
 	emit fileOpened();
 	return true;

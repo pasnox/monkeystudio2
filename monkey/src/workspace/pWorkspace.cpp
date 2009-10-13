@@ -316,7 +316,7 @@ void pWorkspace::closeDocument( pAbstractChild* document, bool showDialog )
 	// stop watching files
 	const QString file = document->filePath();
 	
-	if ( QFileInfo( file ).isFile() )
+	if ( QFileInfo( file ).isFile() && mFileWatcher->files().contains( file ) )
 	{
 		mFileWatcher->removePath( file );
 	}
@@ -722,7 +722,7 @@ void pWorkspace::document_fileOpened()
 {
 	pAbstractChild* document = qobject_cast<pAbstractChild*>( sender() );
 	
-	if ( QFileInfo( document->filePath() ).isFile() )
+	if ( QFileInfo( document->filePath() ).isFile() && !mFileWatcher->files().contains( document->filePath() ) )
 	{
 		mFileWatcher->addPath( document->filePath() );
 	}
@@ -825,6 +825,7 @@ void pWorkspace::mdiArea_subWindowActivated( QMdiSubWindow* docu )
 	MonkeyCore::menuBar()->action( "mFile/mSave/aAll" )->setEnabled( hasDocument );
 	MonkeyCore::menuBar()->action( "mFile/mClose/aCurrent" )->setEnabled( hasDocument );
 	MonkeyCore::menuBar()->action( "mFile/mClose/aAll" )->setEnabled( hasDocument );
+	MonkeyCore::menuBar()->action( "mFile/aReload" )->setEnabled( hasDocument );
 	MonkeyCore::menuBar()->action( "mFile/aSaveAsBackup" )->setEnabled( hasDocument );
 	MonkeyCore::menuBar()->action( "mFile/aQuickPrint" )->setEnabled( print );
 	MonkeyCore::menuBar()->action( "mFile/aPrint" )->setEnabled( print );
@@ -1163,6 +1164,30 @@ void pWorkspace::fileCloseCurrent_triggered()
 void pWorkspace::fileCloseAll_triggered()
 {
 	closeAllDocuments();
+}
+
+void pWorkspace::fileReload_triggered()
+{
+	pAbstractChild* document = currentDocument();
+	
+	if ( document )
+	{
+		QMessageBox::StandardButton button = QMessageBox::Yes;
+		
+		if ( document->isModified() )
+		{
+			//button = QMessageBox::question( this, tr( "Confirmation needed..." ), tr( "The file has been modified, reload anyway ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No );
+		}
+		
+		if ( button == QMessageBox::Yes )
+		{
+			const QString fileName = document->filePath();
+			const QString codec = document->textCodec();
+			
+			closeDocument( document );
+			openFile( fileName, codec );
+		}
+	}
 }
 
 void pWorkspace::fileSaveAsBackup_triggered()

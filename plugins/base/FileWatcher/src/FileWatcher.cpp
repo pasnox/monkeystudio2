@@ -63,7 +63,7 @@ void FileWatcher::fillPluginInfos()
 */
 bool FileWatcher::install()
 {
-	mFileWatcher = new QFileSystemWatcher( this );
+	mFileWatcher = MonkeyCore::workspace()->fileWatcher();
 	pFileManager* fm = MonkeyCore::fileManager();
 	
 	connect( mFileWatcher, SIGNAL( fileChanged( const QString& ) ), this, SLOT( fileChanged( const QString& ) ) );
@@ -95,7 +95,7 @@ bool FileWatcher::uninstall()
 	disconnect( fm, SIGNAL( documentClosed( pAbstractChild* ) ), this, SLOT( documentClosed( pAbstractChild* ) ) );
 	disconnect( fm, SIGNAL( currentDocumentChanged( pAbstractChild* ) ), this, SLOT( currentDocumentChanged( pAbstractChild* ) ) );
 	
-	mFileWatcher->deleteLater();
+	mFileWatcher = 0;
 	
 	return true;
 }
@@ -177,7 +177,7 @@ void FileWatcher::documentOpened( pAbstractChild* document )
 {
 	const QString path = document->filePath();
 	mExternallyModified[ path ] = FileWatcher::None;
-	mFileWatcher->addPath( path );
+	
 	updateDocumentState( document );
 }
 
@@ -202,7 +202,6 @@ void FileWatcher::documentModifiedChanged( pAbstractChild* document, bool modifi
 
 void FileWatcher::documentAboutToClose( pAbstractChild* document )
 {
-	mFileWatcher->removePath( document->filePath() );
 	mExternallyModified.remove( document->filePath() );
 }
 
