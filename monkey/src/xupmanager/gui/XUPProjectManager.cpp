@@ -267,7 +267,7 @@ void XUPProjectManager::tvFiltered_currentChanged( const QModelIndex& current, c
 	setCurrentProject( curProject, preProject );
 }
 
-void XUPProjectManager::on_tvFiltered_doubleClicked( const QModelIndex& index )
+void XUPProjectManager::on_tvFiltered_activated( const QModelIndex& index )
 {
 	XUPItem* item = mFilteredModel->mapToSource( index );
 	if ( item )
