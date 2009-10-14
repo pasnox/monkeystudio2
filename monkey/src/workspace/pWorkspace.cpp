@@ -734,6 +734,15 @@ void pWorkspace::document_contentChanged()
 {
 	mContentChangedTimer->start( CONTENT_CHANGED_TIME_OUT );
 	pAbstractChild* document = qobject_cast<pAbstractChild*>( sender() );
+	
+	// externally deleted files make the filewatcher to no longer watch them
+	const QString path = document->filePath();
+	
+	if ( !mFileWatcher->files().contains( path ) )
+	{
+		mFileWatcher->addPath( path );
+	}
+	
 	emit documentChanged( document );
 }
 

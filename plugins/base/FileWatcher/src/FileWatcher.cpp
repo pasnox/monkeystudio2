@@ -183,14 +183,6 @@ void FileWatcher::documentOpened( pAbstractChild* document )
 
 void FileWatcher::documentChanged( pAbstractChild* document )
 {
-	const QString path = document->filePath();
-	
-	// externally deleted files make the filewatcher to no longer watch them
-	if ( !mFileWatcher->files().contains( path ) )
-	{
-		mFileWatcher->addPath( path );
-	}
-	
 	updateDocumentState( document );
 }
 
