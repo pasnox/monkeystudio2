@@ -51,7 +51,7 @@ void FileWatcher::fillPluginInfos()
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "1.0.0";
 	mPluginInfos.FirstStartEnabled = true;
-	mPluginInfos.HaveSettingsWidget = true;
+	mPluginInfos.HaveSettingsWidget = false;
 	mPluginInfos.Pixmap = pIconManager::pixmap( "filewatcher.png" );
 }
 
