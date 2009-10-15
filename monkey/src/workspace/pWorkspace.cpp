@@ -496,12 +496,52 @@ bool pWorkspace::closeAllDocuments()
 
 void pWorkspace::activateNextDocument()
 {
-	mMdiArea->activateNextSubWindow();
+	if ( mViewMode == pWorkspace::NoTabs )
+	{
+		pAbstractChild* document = currentDocument();
+		const QModelIndex curIndex = mOpenedFileExplorer->model()->index( document );
+		QModelIndex index = mOpenedFileExplorer->model()->index( document );
+		
+		index = curIndex.sibling( curIndex.row() +1, curIndex.column() );
+		
+		if ( !index.isValid() )
+		{
+			index = curIndex.sibling( 0, curIndex.column() );
+		}
+		
+		document = mOpenedFileExplorer->model()->document( index );
+		
+		setCurrentDocument( document );
+	}
+	else
+	{
+		mMdiArea->activateNextSubWindow();
+	}
 }
 
 void pWorkspace::activatePreviousDocument()
 {
-	mMdiArea->activatePreviousSubWindow();
+	if ( mViewMode == pWorkspace::NoTabs )
+	{
+		pAbstractChild* document = currentDocument();
+		const QModelIndex curIndex = mOpenedFileExplorer->model()->index( document );
+		QModelIndex index = mOpenedFileExplorer->model()->index( document );
+		
+		index = curIndex.sibling( curIndex.row() -1, curIndex.column() );
+		
+		if ( !index.isValid() )
+		{
+			index = curIndex.sibling( mOpenedFileExplorer->model()->rowCount() -1, curIndex.column() );
+		}
+		
+		document = mOpenedFileExplorer->model()->document( index );
+		
+		setCurrentDocument( document );
+	}
+	else
+	{
+		mMdiArea->activatePreviousSubWindow();
+	}
 }
 
 void pWorkspace::focusEditor()

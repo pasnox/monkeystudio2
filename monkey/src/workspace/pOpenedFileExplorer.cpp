@@ -164,7 +164,7 @@ void pOpenedFileExplorer::selectedIndexChanged( const QModelIndex& index )
 		tvFiles->setCurrentIndex( index );
 	}
 	
-	tvFiles->scrollTo( index, QAbstractItemView::PositionAtTop );
+	tvFiles->scrollTo( index );
 	mWorkspace->setCurrentDocument( document );
 	setFocus(); // setting active mdi window steal the focus
 	emit currentIndexChanged( index );
