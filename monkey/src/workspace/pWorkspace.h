@@ -114,12 +114,6 @@ protected:
 	bool eventFilter( QObject* object, QEvent* event );
 
 protected slots:
-	void fileWatcher_ecmNothing( const QString& fileName );
-	void fileWatcher_ecmReload( const QString& fileName, bool force = false );
-	void fileWatcher_ecmAlert( const QString& fileName );
-	void fileWatcher_alertClicked( QDialogButtonBox::StandardButton button, const pQueuedMessage& message );
-	void fileWatcher_fileChanged( const QString& fileName );
-	
 	void document_fileOpened();
 	void document_contentChanged();
 	void document_modifiedChanged( bool modified );

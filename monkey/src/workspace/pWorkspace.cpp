@@ -158,7 +158,6 @@ pWorkspace::pWorkspace( QMainWindow* parent )
 	connect( mMdiArea, SIGNAL( subWindowActivated( QMdiSubWindow* ) ), this, SLOT( mdiArea_subWindowActivated( QMdiSubWindow* ) ) );
 	connect( parent, SIGNAL( urlsDropped( const QList<QUrl>& ) ), this, SLOT( internal_urlsDropped( const QList<QUrl>& ) ) );
 	connect( MonkeyCore::projectsManager(), SIGNAL( currentProjectChanged( XUPProjectItem*, XUPProjectItem* ) ), this, SLOT( internal_currentProjectChanged( XUPProjectItem*, XUPProjectItem* ) ) );
-	connect( mFileWatcher, SIGNAL( fileChanged( const QString& ) ), this, SLOT( fileWatcher_fileChanged( const QString& ) ) );
 	connect( mContentChangedTimer, SIGNAL( timeout() ), this, SLOT( contentChangedTimer_timeout() ) );
 	connect( MonkeyCore::multiToolBar(), SIGNAL( notifyChanges() ), this, SLOT( multitoolbar_notifyChanges() ) );
 }
@@ -675,87 +674,6 @@ pAbstractChild* pWorkspace::createNewTextEditor()
 	
 	// open file
 	return openFile( fileName, result[ "codec" ].toString() );
-}
-
-void pWorkspace::fileWatcher_ecmNothing( const QString& fileName )
-{
-	Q_UNUSED( fileName );
-	//MonkeyCore::messageManager()->appendMessage( tr( "File externally modified: '%1'" ).arg( QFileInfo( fileName ).fileName() ) );
-}
-
-void pWorkspace::fileWatcher_ecmReload( const QString& fileName, bool force )
-{
-	// try reload
-	pAbstractChild* document = MonkeyCore::fileManager()->openedDocument( fileName );
-	
-	if ( document && ( !document->isModified() || force ) )
-	{
-		const QPoint pos = document->cursorPosition();
-		
-		document->closeFile();
-		document->openFile( fileName, document->textCodec() );
-		document->goTo( pos, true );
-		
-		return;
-	}
-	
-	// ask user
-	fileWatcher_ecmAlert( fileName );
-}
-
-void pWorkspace::fileWatcher_ecmAlert( const QString& fileName )
-{
-	pQueuedMessage msg;
-	msg.Message = tr( "The file '%1' has been modified externally, what you do ?" ).arg( QFileInfo( fileName ).fileName() );
-	msg.MilliSeconds = 0;
-	msg.Pixmap = pQueuedMessageToolBar::defaultPixmap();
-	msg.Background = pQueuedMessageToolBar::defaultBackground();
-	msg.Foreground = pQueuedMessageToolBar::defaultForeground();
-	msg.Buttons[ QDialogButtonBox::Ignore ] = QString();
-	msg.Buttons[ QDialogButtonBox::Reset ] = tr( "Reload" );
-	msg.Object = this;
-	msg.Slot = "fileWatcher_alertClicked";
-	msg.UserData = fileName;
-	MonkeyCore::messageManager()->appendMessage( msg );
-}
-
-void pWorkspace::fileWatcher_alertClicked( QDialogButtonBox::StandardButton button, const pQueuedMessage& message )
-{
-	switch ( button )
-	{
-		case QDialogButtonBox::Ignore:
-			fileWatcher_ecmNothing( message.UserData.toString() );
-			break;
-		case QDialogButtonBox::Reset:
-			fileWatcher_ecmReload( message.UserData.toString(), true );
-			break;
-		default:
-			break;
-	}
-}
-
-void pWorkspace::fileWatcher_fileChanged( const QString& fileName )
-{
-	if ( !QFileInfo( fileName ).isFile() )
-	{
-		return;
-	}
-	
-	switch ( pMonkeyStudio::externalchanges() )
-	{
-		// silently inform user
-		case pMonkeyStudio::ecmNothing:
-			fileWatcher_ecmNothing( fileName );
-			break;
-		// check if file is open, if open and modified goto alert, else reload it
-		case pMonkeyStudio::ecmReload:
-			fileWatcher_ecmReload( fileName );
-			break;
-		// ask user what to do
-		case pMonkeyStudio::ecmAlert:
-			fileWatcher_ecmAlert( fileName );
-			break;
-	}
 }
 
 void pWorkspace::document_fileOpened()

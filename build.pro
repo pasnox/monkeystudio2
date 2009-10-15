@@ -1,6 +1,7 @@
 XUPProjectSettings {
 	EXECUTE_DEBUG	= bin/monkeystudio_debug
 	QT_VERSION	= Qt System (4.5.2)
+	OTHERS_PLATFORM_TARGET_DEBUG	= bin/monkeystudio_debug
 }
 
 # include install script
@@ -8,7 +9,7 @@ include( installs.pri )
 
 TEMPLATE	= subdirs
 
-CONFIG += ordered # can't build plugins before core is builded
+CONFIG	+= ordered
 
 SUBDIRS	= fresh \
 	ctags \
