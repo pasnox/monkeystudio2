@@ -378,21 +378,24 @@ void SearchWidget::removeFolderFromLayout ()
 
 void SearchWidget::keyPressEvent( QKeyEvent* e )
 {
-	switch (e->key())
+	if ( e->modifiers() == Qt::NoModifier )
 	{
-		case Qt::Key_Escape:
-			hide();
-			MonkeyCore::workspace()->focusEditor();
-		break;
-		case Qt::Key_Enter:
-		case Qt::Key_Return:
-			if (mMode == SearchAndReplace::SEARCH_FILE || 
-				mMode == SearchAndReplace::SEARCH_DIRECTORY ||
-				mMode == SearchAndReplace::REPLACE_DIRECTORY)
-					emit nextClicked();
-			else /* replace */
-				emit replaceClicked();
-		break;
+		switch (e->key())
+		{
+			case Qt::Key_Escape:
+				MonkeyCore::workspace()->focusEditor();
+				hide();
+			break;
+			case Qt::Key_Enter:
+			case Qt::Key_Return:
+				if (mMode == SearchAndReplace::SEARCH_FILE || 
+					mMode == SearchAndReplace::SEARCH_DIRECTORY ||
+					mMode == SearchAndReplace::REPLACE_DIRECTORY)
+						emit nextClicked();
+				else /* replace */
+					emit replaceClicked();
+			break;
+		}
 	}
 	QWidget::keyPressEvent( e );
 }
