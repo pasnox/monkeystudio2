@@ -14,6 +14,7 @@ class pOpenedFileExplorer : public pDockWidget, public Ui::pOpenedFileExplorer
 public:
 	pOpenedFileExplorer( pWorkspace* workspace );
 	
+	pOpenedFileModel* model() const;
 	QAction* comboBoxAction() const;
 	
 	pOpenedFileModel::SortMode sortMode() const;

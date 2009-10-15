@@ -38,6 +38,7 @@
 #include <QFileInfo>
 #include <QUrl>
 #include <QMimeData>
+#include <QMessageBox>
 
 UIToolsEdit::UIToolsEdit( QWidget* p )
 	: QDialog( p )
@@ -64,7 +65,7 @@ UIToolsEdit::UIToolsEdit( QWidget* p )
 
 void UIToolsEdit::closeEvent( QCloseEvent* e )
 {
-	if ( isWindowModified() && !pMonkeyStudio::question( tr( "Tools Editor..." ), tr( "You're about to discard all changes. Are you sure ?" ), this ) )
+	if ( isWindowModified() && QMessageBox::question( QApplication::activeWindow(), tr( "Tools Editor..." ), tr( "You're about to discard all changes. Are you sure ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::No )
 		e->ignore();
 }
 
@@ -83,7 +84,7 @@ bool UIToolsEdit::eventFilter( QObject* o, QEvent* e )
 		return QDialog::eventFilter( o, e );
 	// if there is no current item selected, ask to create one
 	QListWidgetItem* it = lwTools->selectedItems().value( 0 );
-	if ( !it && !pMonkeyStudio::question( tr( "Adding..." ), tr( "There is no current tool, do you want to add a new one ?" ), this ) )
+	if ( !it && QMessageBox::question( this, tr( "Adding..." ), tr( "There is no current tool, do you want to add a new one ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::No )
 		return true; // true else the default drop event will be call
 	else if ( !it )
 		it = new QListWidgetItem( tr( "new Tool" ), lwTools );

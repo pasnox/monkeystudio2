@@ -142,6 +142,9 @@ public slots:
 	virtual QString textCodec() const
 	{ return mCodec ? mCodec->name() : pMonkeyStudio::defaultCodec(); }
 	
+	virtual QTextCodec* codec() const
+	{ return mCodec ? mCodec : QTextCodec::codecForName( pMonkeyStudio::defaultCodec().toLocal8Bit().constData() ); }
+	
 	// undo
 	virtual void undo() = 0;
 	// redo

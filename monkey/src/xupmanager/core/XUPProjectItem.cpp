@@ -10,11 +10,14 @@
 #include "pMenuBar.h"
 #include "PluginsManager.h"
 #include "pMonkeyStudio.h"
+#include "UIMain.h"
 
 #include <QTextCodec>
 #include <QDir>
 #include <QRegExp>
 #include <QProcess>
+#include <QFileDialog>
+#include <QLibrary>
 
 #include <QDebug>
 
@@ -581,6 +584,12 @@ QStringList XUPProjectItem::projectSettingsValues( const QString& variableName, 
 	return values;
 }
 
+QString XUPProjectItem::projectSettingsValue( const QString& variableName, const QString& defaultValue ) const 
+{
+	const QStringList dvalue = defaultValue.isEmpty() ? QStringList() : QStringList( defaultValue );
+	return projectSettingsValues(variableName, dvalue ).join( " " );
+}
+
 void XUPProjectItem::setProjectSettingsValues( const QString& variableName, const QStringList& values )
 {
 	XUPProjectItem* project = topLevelProject();
@@ -641,6 +650,11 @@ void XUPProjectItem::setProjectSettingsValues( const QString& variableName, cons
 	}
 }
 
+void XUPProjectItem::setProjectSettingsValue( const QString& variable, const QString& value ) 
+{
+	setProjectSettingsValues( variable, value.isEmpty() ? QStringList() : QStringList( value ) );
+}
+
 void XUPProjectItem::addProjectSettingsValues( const QString& variableName, const QStringList& values )
 {
 	XUPProjectItem* project = topLevelProject();
@@ -696,6 +710,62 @@ void XUPProjectItem::addProjectSettingsValues( const QString& variableName, cons
 	}
 }
 
+void XUPProjectItem::addProjectSettingsValue( const QString& variable, const QString& value )
+{
+	addProjectSettingsValues( variable, value.isEmpty() ? QStringList() : QStringList( value ) );
+}
+
+int XUPProjectItem::projectType() const
+{
+	return XUPProjectItem::XUPProject;
+}
+
+QString XUPProjectItem::targetTypeString( XUPProjectItem::TargetType type ) const
+{
+	switch ( type )
+	{
+		case XUPProjectItem::DefaultTarget:
+			return QLatin1String( "TARGET_DEFAULT" );
+			break;
+		case XUPProjectItem::DebugTarget:
+			return QLatin1String( "TARGET_DEBUG" );
+			break;
+		case XUPProjectItem::ReleaseTarget:
+			return QLatin1String( "TARGET_RELEASE" );
+			break;
+	}
+	
+	Q_ASSERT( 0 );
+	return QString::null;
+}
+
+XUPProjectItem::TargetType XUPProjectItem::projectTargetType() const
+{
+	return (XUPProjectItem::TargetType)projectSettingsValue( "TARGET_TYPE", QString::number( XUPProjectItem::DefaultTarget ) ).toInt();
+}
+
+QString XUPProjectItem::platformTypeString( XUPProjectItem::PlatformType type ) const
+{
+	switch ( type )
+	{
+		case XUPProjectItem::AnyPlatform:
+			return QLatin1String( "ANY_PLATFORM" );
+			break;
+		case XUPProjectItem::WindowsPlatform:
+			return QLatin1String( "WINDOWS_PLATFORM" );
+			break;
+		case XUPProjectItem::MacPlatform:
+			return QLatin1String( "MAC_PLATFORM" );
+			break;
+		case XUPProjectItem::OthersPlatform:
+			return QLatin1String( "OTHERS_PLATFORM" );
+			break;
+	}
+	
+	Q_ASSERT( 0 );
+	return QString::null;
+}
+
 void XUPProjectItem::registerProjectType() const
 {
 	// get proejct type
@@ -739,13 +809,6 @@ void XUPProjectItem::unRegisterProjectType() const
 
 QString XUPProjectItem::getVariableContent( const QString& variableName )
 {
-	/*
-		$$[QT_INSTALL_HEADERS] : read content from qt conf
-		$${QT_INSTALL_HEADERS} or $$QT_INSTALL_HEADERS : read content from var
-		$$(QT_INSTALL_HEADERS) : read from environment when qmake run
-		$(QTDIR) : read from generated makefile
-	*/
-
 	QString name = QString( variableName ).replace( '$', "" ).replace( '{', "" ).replace( '}', "" ).replace( '[', "" ).replace( ']', "" ).replace( '(', "" ).replace( ')', "" );
 
 	// environment var
@@ -1008,6 +1071,57 @@ bool XUPProjectItem::save()
 	}
 
 	return result;
+}
+
+QString XUPProjectItem::targetFilePath( bool allowToAskUser, XUPProjectItem::TargetType targetType, XUPProjectItem::PlatformType platformType )
+{
+	XUPProjectItem* tlProject = topLevelProject();
+	const QString targetTypeString = this->targetTypeString( targetType );
+	const QString platformTypeString = this->platformTypeString( platformType );
+	const QString key = QString( "%1_%2" ).arg( platformTypeString ).arg( targetTypeString );
+	QString target = tlProject->filePath( projectSettingsValue( key ) );
+	QFileInfo targetInfo( target );
+	
+	if ( !targetInfo.exists() || ( !targetInfo.isExecutable() && !QLibrary::isLibrary( target ) ) )
+	{
+		if ( allowToAskUser )
+		{
+			QString type;
+			
+			switch ( targetType )
+			{
+				case XUPProjectItem::DebugTarget:
+					type = tr( "debug" ) +" ";
+					break;
+				case XUPProjectItem::ReleaseTarget:
+					type = tr( "release" ) +" ";
+					break;
+				default:
+					break;
+			}
+			
+			const QString userTarget = QFileDialog::getOpenFileName( MonkeyCore::mainWindow(), tr( "Point please project %1target" ).arg( type ), tlProject->path() );
+			targetInfo.setFile( userTarget );
+			
+			if ( !userTarget.isEmpty() )
+			{
+				target = userTarget;
+			}
+			
+			if ( targetInfo.exists() )
+			{
+				setProjectSettingsValue( key, tlProject->relativeFilePath( userTarget ) );
+				save();
+			}
+		}
+	}
+	
+	return target;
+}
+
+QString XUPProjectItem::targetFilePath( const pCommandTargetExecution& execution )
+{
+	return targetFilePath( true, (XUPProjectItem::TargetType)execution.targetType, (XUPProjectItem::PlatformType)execution.platformType );
 }
 
 BuilderPlugin* XUPProjectItem::builder( const QString& plugin ) const

@@ -31,6 +31,9 @@
 #include "../pMonkeyStudio.h"
 #include "ui/UIPluginsSettings.h"
 #include "../coremanager/MonkeyCore.h"
+#include "main.h"
+
+#include <pVersion.h>
 
 #include <QPluginLoader>
 
@@ -101,12 +104,22 @@ bool PluginsManager::addPlugin( QObject* o )
 	// try to cast instance to BasePlugin
 	BasePlugin* bp = qobject_cast<BasePlugin*>( o );
 	
-	// generally it should be called from constructor, but can't call virtual method
-	bp->fillPluginInfos();
-	
 	// if not return
 	if ( !bp )
 		return false;
+	
+	// generally it should be called from constructor, but can't call virtual method
+	bp->fillPluginInfos();
+	
+	// inforce application minimum requirement
+	const pVersion appVersion( PACKAGE_VERSION );
+	const pVersion pluginVersion( bp->infos().ApplicationVersionRequired );
+	
+	if ( appVersion < pluginVersion )
+	{
+		qWarning( "Uncompatible plugin %s: require version %s, found version %s", bp->infos().Name.toLocal8Bit().constData(), pluginVersion.toString().toLocal8Bit().constData(), appVersion.toString().toLocal8Bit().constData() );
+		return false;
+	}
 
 	// check dupplicates
 	foreach ( BasePlugin* p, mPlugins )

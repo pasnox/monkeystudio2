@@ -158,7 +158,6 @@ void UIMain::initMenuBar()
 {
 	// create menubar menus and actions
 	pMenuBar* mb = menuBar();
-	QAction* action = 0;
 	
 	mb->setDefaultShortcutContext( Qt::ApplicationShortcut );
 	mb->menu( "mFile", tr( "File" ) );
@@ -181,6 +180,7 @@ void UIMain::initMenuBar()
 		mb->action( "mClose/aCurrent", tr( "&Close" ), QIcon( ":/file/icons/file/close.png" ), tr( "Ctrl+W" ), tr( "Close the current file" ) )->setEnabled( false );
 		mb->action( "mClose/aAll", tr( "Close &All" ), QIcon( ":/file/icons/file/closeall.png" ), QString::null, tr( "Close all files" ) )->setEnabled( false );
 		mb->action( "aSeparator3" );
+		mb->action( "aReload", tr( "Reload" ), QIcon( ":/file/icons/file/reload.png" ), QString::null, tr( "Reload the current file asking user confirmation if needed" ) )->setEnabled( false );
 		mb->action( "aSaveAsBackup", tr( "Save As &Backup" ), QIcon( ":/file/icons/file/backup.png" ), QString::null, tr( "Save a backup of the current file" ) )->setEnabled( false );
 		mb->action( "aSeparator4" );
 		mb->action( "aQuickPrint", tr( "Quic&k Print" ), QIcon( ":/file/icons/file/quickprint.png" ), QString::null, tr( "Quick print the current file" ) )->setEnabled( false );
@@ -347,6 +347,7 @@ void UIMain::initConnections()
 	connect( menuBar()->action( "mFile/mSave/aAll" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileSaveAll_triggered() ) );
 	connect( menuBar()->action( "mFile/mClose/aCurrent" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileCloseCurrent_triggered() ) );
 	connect( menuBar()->action( "mFile/mClose/aAll" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileCloseAll_triggered() ) );
+	connect( menuBar()->action( "mFile/aReload" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileReload_triggered() ) );
 	connect( menuBar()->action( "mFile/aSaveAsBackup" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileSaveAsBackup_triggered() ) );
 	connect( menuBar()->action( "mFile/aQuickPrint" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( fileQuickPrint_triggered() ) );
 	connect( menuBar()->action( "mFile/aPrint" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( filePrint_triggered() ) );

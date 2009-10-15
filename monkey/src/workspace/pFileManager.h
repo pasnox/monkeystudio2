@@ -93,6 +93,7 @@ signals:
 	// files
 	void documentOpened( pAbstractChild* document );
 	void documentChanged( pAbstractChild* document );
+	void documentModifiedChanged( pAbstractChild* document, bool modified );
 	void documentAboutToClose( pAbstractChild* document );
 	void documentClosed( pAbstractChild* document );
 	void currentDocumentChanged( pAbstractChild* document );

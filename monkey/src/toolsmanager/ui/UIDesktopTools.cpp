@@ -34,6 +34,7 @@
 
 #include <QTimer>
 #include <QCloseEvent>
+#include <QMessageBox>
 
 UIDesktopTools::UIDesktopTools( QWidget* w )
 	: QDialog( w )
@@ -66,7 +67,7 @@ void UIDesktopTools::showEvent( QShowEvent* e )
 
 void UIDesktopTools::closeEvent( QCloseEvent* e )
 {
-	if ( property( "Modified" ).toBool() && !pMonkeyStudio::question( tr( "Tools Editor..." ), tr( "You're about to discard all changes. Are you sure ?" ), this ) )
+	if ( property( "Modified" ).toBool() && QMessageBox::question( this, tr( "Tools Editor..." ), tr( "You're about to discard all changes. Are you sure ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::No )
 		e->ignore();
 }
 
@@ -229,7 +230,7 @@ void UIDesktopTools::on_pbUp_clicked()
 {
 	if ( lwRight->selectedItems().count() > 1 )
 	{
-		pMonkeyStudio::warning( tr( "Move Up..." ), tr( "Only one item can be move up, please select only one item." ) );
+		QMessageBox::warning( QApplication::activeWindow(), tr( "Move Up..." ), tr( "Only one item can be move up, please select only one item." ) );
 		return;
 	}
 	
@@ -248,7 +249,7 @@ void UIDesktopTools::on_pbDown_clicked()
 {
 	if ( lwRight->selectedItems().count() > 1 )
 	{
-		pMonkeyStudio::warning( tr( "Move Down..." ), tr( "Only one item can be move down, please select only one item." ) );
+		QMessageBox::warning( QApplication::activeWindow(), tr( "Move Down..." ), tr( "Only one item can be move down, please select only one item." ) );
 		return;
 	}
 	

@@ -23,6 +23,23 @@ class Q_MONKEY_EXPORT XUPProjectItem : public QObject, public XUPItem
 public:
 	// project type id
 	enum ProjectType { InvalidProject = -1, XUPProject = 0 };
+	// target type
+	enum TargetType { DefaultTarget = 0, DebugTarget, ReleaseTarget };
+	// platform type
+	enum PlatformType
+	{
+		AnyPlatform = 0,
+		WindowsPlatform,
+		MacPlatform,
+		OthersPlatform,
+#if defined( Q_OS_WIN )
+		CurrentPlatform = WindowsPlatform
+#elif defined( Q_OS_MAC )
+		CurrentPlatform = MacPlatform
+#else
+		CurrentPlatform = OthersPlatform
+#endif
+	};
 	
 	// ctor
 	XUPProjectItem();
@@ -94,21 +111,24 @@ public:
 	
 	// return the project settings scope, creating it if needed
 	XUPItem* projectSettingsScope( bool create ) const;
-	// return a project settings value
+	// return a project settings value as stringlist or string.
 	virtual QStringList projectSettingsValues( const QString& variable, const QStringList& defaultValues = QStringList() ) const;
-	virtual QString projectSettingsValue( const QString& variable, const QString& defaultValue = QString() ) const 
-	{ return projectSettingsValues( variable, defaultValue.isEmpty() ? QStringList() : QStringList( defaultValue ) ).join( " " ); }
+	virtual QString projectSettingsValue( const QString& variable, const QString& defaultValue = QString() ) const;
 	// set a project setting value
 	virtual void setProjectSettingsValues( const QString& variable, const QStringList& values );
-	virtual void setProjectSettingsValue( const QString& variable, const QString& value ) 
-	{ setProjectSettingsValues( variable, value.isEmpty() ? QStringList() : QStringList( value ) ); }
+	virtual void setProjectSettingsValue( const QString& variable, const QString& value );
 	// add project setting value
 	virtual void addProjectSettingsValues( const QString& variable, const QStringList& values );
-	virtual void addProjectSettingsValue( const QString& variable, const QString& value ) 
-	{ addProjectSettingsValues( variable, value.isEmpty() ? QStringList() : QStringList( value ) ); }
+	virtual void addProjectSettingsValue( const QString& variable, const QString& value );
 	
 	// return the project type id
-	inline virtual int projectType() const { return XUPProjectItem::XUPProject; }
+	virtual int projectType() const;
+	// return the textual representation key for target type
+	virtual QString targetTypeString( XUPProjectItem::TargetType type ) const;
+	// return the current project target type
+	virtual XUPProjectItem::TargetType projectTargetType() const;
+	// return the textual representation key for platform type
+	virtual QString platformTypeString( XUPProjectItem::PlatformType type ) const;
 	// register the project type
 	virtual void registerProjectType() const;
 	// unregister the project type
@@ -128,6 +148,9 @@ public:
 	virtual bool open( const QString& fileName, const QString& codec );
 	// save the project
 	virtual bool save();
+	// return the project target file, ie the binary / library file path, if allowToAskUser is set to true - user might be asked for it via doalog
+	virtual QString targetFilePath( bool allowToAskUser = false, XUPProjectItem::TargetType type = XUPProjectItem::DefaultTarget, XUPProjectItem::PlatformType = XUPProjectItem::CurrentPlatform );
+	QString targetFilePath( const pCommandTargetExecution& execution );
 	
 	// return plugin associated with the project
 	virtual BuilderPlugin* builder( const QString& plugin = QString() ) const;

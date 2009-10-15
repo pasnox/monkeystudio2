@@ -146,6 +146,7 @@ public slots:
 	void fileSaveAll_triggered();
 	void fileCloseCurrent_triggered();
 	void fileCloseAll_triggered();
+	void fileReload_triggered();
 	void fileSaveAsBackup_triggered();
 	void fileQuickPrint_triggered();
 	void filePrint_triggered();

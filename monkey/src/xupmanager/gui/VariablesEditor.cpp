@@ -5,6 +5,7 @@
 
 #include <QMenu>
 #include <QInputDialog>
+#include <QMessageBox>
 #include <QFileDialog>
 
 VariablesEditor::VariablesEditor( QWidget* parent )
@@ -306,7 +307,7 @@ void VariablesEditor::on_tbOthersVariablesAdd_clicked()
 		}
 		else
 		{
-			pMonkeyStudio::information( tr( "Information..." ), tr( "This variable already exists or is filtered out." ), window() );
+			QMessageBox::information( window(), tr( "Information..." ), tr( "This variable already exists or is filtered out." ) );
 		}
 	}
 }
@@ -338,7 +339,7 @@ void VariablesEditor::on_tbOthersVariablesEdit_clicked()
 		}
 		else
 		{
-			pMonkeyStudio::information( tr( "Information..." ), tr( "This variable already exists or is filtered out." ), window() );
+			QMessageBox::information( QApplication::activeWindow(), tr( "Information..." ), tr( "This variable already exists or is filtered out." ) );
 		}
 	}
 }
@@ -353,7 +354,7 @@ void VariablesEditor::on_tbOthersVariablesRemove_clicked()
 	}
 	
 	// confirm user request
-	if ( pMonkeyStudio::question( tr( "Remove a variable..." ), tr( "A you sure you want to remove this variable and all its content ?" ) ) )
+	if ( QMessageBox::question( QApplication::activeWindow(), tr( "Remove a variable..." ), tr( "A you sure you want to remove this variable and all its content ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::Yes )
 	{
 		QString variable = item->text();
 		
@@ -517,7 +518,7 @@ void VariablesEditor::on_tbOthersValuesRemove_clicked()
 	if ( valueItem )
 	{
 		// confirm user request
-		if ( !pMonkeyStudio::question( tr( "Remove a value..." ), tr( "A you sure you want to remove this value ?" ) ) )
+		if ( QMessageBox::question( QApplication::activeWindow(), tr( "Remove a value..." ), tr( "A you sure you want to remove this value ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::No )
 		{
 			return;
 		}
@@ -534,7 +535,7 @@ void VariablesEditor::on_tbOthersValuesClear_clicked()
 	if ( variableItem )
 	{
 		// request user confirm
-		if ( pMonkeyStudio::question( tr( "Clear values..." ), tr( "A you sure you want to clear these values ?" ) ) )
+		if ( QMessageBox::question( QApplication::activeWindow(), tr( "Clear values..." ), tr( "A you sure you want to clear these values ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::Yes )
 		{
 			lwOthersValues->clear();
 		}

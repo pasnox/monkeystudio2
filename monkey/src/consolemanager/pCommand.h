@@ -35,11 +35,31 @@
 #ifndef PCOMMAND_H
 #define PCOMMAND_H
 
-#include <fresh.h>
+#include <MonkeyExport.h>
 
 #include <QStringList>
 
 class XUPProjectItem;
+
+struct Q_MONKEY_EXPORT pCommandTargetExecution
+{
+	pCommandTargetExecution()
+	{
+		isActive = false;
+		targetType = -1;
+		platformType = -1;
+	}
+	
+	bool operator==( const pCommandTargetExecution& other ) const
+	{
+		return isActive == other.isActive &&
+			targetType == other.targetType && platformType == other.platformType;
+	}
+	
+	bool isActive;
+	int targetType;
+	int platformType;
+};
 
 /*!
 	Container for storing console command
@@ -73,12 +93,13 @@ public:
 	~pCommand() {}
 	
 	bool isValid() const
-	{ return !text().isEmpty() && !command().isEmpty(); }
+	{ return !text().isEmpty() && ( !command().isEmpty() || mTargetExecution.isActive ); }
 	
 	bool operator==( const pCommand& t ) const
-	{ return text() == t.text() && command() == t.command() && arguments() == t.arguments() &&
-			workingDirectory() == t.workingDirectory() && parsers() == t.parsers() && skipOnError() == t.skipOnError() &&
-			tryAllParsers() == t.tryAllParsers() && userData() == t.userData() && project() == t.project(); }
+	{ return mText == t.mText && mCommand == t.mCommand && mArguments == t.mArguments &&
+			mWorkingDirectory == t.mWorkingDirectory && mParsers == t.mParsers && mSkipOnError == t.mSkipOnError &&
+			mTryAllParsers == t.mTryAllParsers && mUserData == t.mUserData && mProject == t.mProject &&
+			mTargetExecution == t.mTargetExecution; }
 
 	QString text() const { return mText; }
 	QString command() const { return mCommand; }
@@ -89,6 +110,7 @@ public:
 	bool tryAllParsers() const { return mTryAllParsers; }
 	QVariant userData() const { return mUserData; }
 	XUPProjectItem* project() const { return mProject; }
+	pCommandTargetExecution& targetExecution() { return mTargetExecution; }
 
 	void setText( const QString& s ) { mText = s; }
 	void setCommand( const QString& s ) { mCommand = s; }
@@ -121,15 +143,16 @@ public:
 	{ qWarning( "%s", toString().toLocal8Bit().constData() ); }
 
 protected:
-	QString mText; 				/**< Comment about command */
-	QString mCommand;			/**< Console command */
-	QString mArguments;			/**< Arguments */
-	QString mWorkingDirectory;	/**< Working dirrectory of process */
-	bool mSkipOnError;			/**< Skip command, if error ocurred */
-	QStringList mParsers;		/**< List of parsers, which should be used for command. Position in the list is not ignored */
-	bool mTryAllParsers;		/**< Try to use all availible parsers after parsers from list */
-	QVariant mUserData;			/**< Ask PasNox, hot to use it */
-	XUPProjectItem* mProject;	/**< Project, for which command is executing */
+	QString mText; 								/**< Comment about command */
+	QString mCommand;							/**< Console command */
+	QString mArguments;							/**< Arguments */
+	QString mWorkingDirectory;					/**< Working dirrectory of process */
+	bool mSkipOnError;							/**< Skip command, if error ocurred */
+	QStringList mParsers;						/**< List of parsers, which should be used for command. Position in the list is not ignored */
+	bool mTryAllParsers;						/**< Try to use all availible parsers after parsers from list */
+	XUPProjectItem* mProject;					/**< Project, for which command is executing */
+	QVariant mUserData;							/**< User custom placeholder to stock customdata, currently it's internally used to store commands map */
+	pCommandTargetExecution mTargetExecution;	/**< Determine if the command is the result of proejct target execution */
 };
 
 /*!

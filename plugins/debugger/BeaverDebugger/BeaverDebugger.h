@@ -34,20 +34,22 @@
 #ifndef BEAVER_DEBUGGER
 #define BEAVER_DEBUGGER
 
-#include <BasePlugin.h>
+#include <DebuggerPlugin.h>
 
 #include <QPointer>
 #include <QProcess>
+
+class XUPProjectItem;
 
 /*!
 	Main class of BeaverDebugger plugin
 	
 	Plugin allows to use Beaver Debugger with MkS
 */
-class BeaverDebugger : public BasePlugin
+class BeaverDebugger : public DebuggerPlugin
 {
 	Q_OBJECT
-	Q_INTERFACES( BasePlugin )
+	Q_INTERFACES( BasePlugin DebuggerPlugin )
 	enum TryFindResult
 	{
 		OK,
@@ -75,16 +77,17 @@ protected slots:
 	void explainWhyCannot();
 	void runBeaver();
 	void beaverStateChanged(QProcess::ProcessState);
+	// action can have text "run" and "stop" and be enabled and disabled
+	void updateRunAction();
 	
 protected:
 	QString mBeaverPath;
-	QAction *mWhyCannot;
-	QAction *mRunBeaver;
-	QProcess mBeaverProcess;
-	QLabel *mStatusLabel;
+	QPointer<QAction> mWhyCannot;
+	QPointer<QAction> mRunBeaver;
+	QPointer<QProcess> mBeaverProcess;
+	QPointer<QLabel> mStatusLabel;
 	// Returns QString::null if found, or error, if not
 	TryFindResult tryFindBeaver() const;
-	void updateRunActionText();
 };
 
 #endif

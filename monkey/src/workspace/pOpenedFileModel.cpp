@@ -128,7 +128,11 @@ QVariant pOpenedFileModel::data( const QModelIndex& index, int role ) const
 		{
 			QIcon icon = document->windowIcon();
 			
-			if ( document->isModified() )
+			if ( !mDocumentsIcons.value( document ).isNull() )
+			{
+				icon = mDocumentsIcons[ document ];
+			}
+			else if ( document->isModified() )
 			{
 				icon = mModifiedIcon;
 			}
@@ -145,8 +149,12 @@ QVariant pOpenedFileModel::data( const QModelIndex& index, int role ) const
 			return document->fileName();
 			break;
 		case Qt::ToolTipRole:
-			return document->filePath();
+		{
+			const QString customToolTip = mDocumentsToolTips.value( document );
+			const QString toolTip = document->filePath();
+			return customToolTip.isEmpty() ? toolTip : customToolTip;
 			break;
+		}
 		default:
 			break;
 	}
@@ -266,6 +274,20 @@ void pOpenedFileModel::setSortMode( pOpenedFileModel::SortMode mode )
 	}
 }
 
+void pOpenedFileModel::setDocumentIcon( pAbstractChild* document, const QIcon& icon )
+{
+	mDocumentsIcons[ document ] = icon;
+	const QModelIndex index = this->index( document );
+	emit dataChanged( index, index );
+}
+
+void pOpenedFileModel::setDocumentToolTip( pAbstractChild* document, const QString& toolTip )
+{
+	mDocumentsToolTips[ document ] = toolTip;
+	const QModelIndex index = this->index( document );
+	emit dataChanged( index, index );
+}
+
 void pOpenedFileModel::sortDocuments()
 {
 	mSortDocumentsTimer->start( mSortDocumentsTimeout );
@@ -371,6 +393,8 @@ void pOpenedFileModel::documentClosed( pAbstractChild* document )
 	const int index = mDocuments.indexOf( document );
 	beginRemoveRows( QModelIndex(), index, index );
 	mDocuments.removeOne( document );
+	mDocumentsIcons.remove( document );
+	mDocumentsToolTips.remove( document );
 	endRemoveRows();
 	sortDocuments();
 }

@@ -99,35 +99,6 @@ void pMonkeyStudio::loadTranslations()
 }
 
 /*!
-	\details A short for QMessageBox::warning static method
-	\param c The window title
-	\param s The text to show
-	\param w The parent widget defaulted to the current active window
-*/
-void pMonkeyStudio::warning( const QString& c, const QString& s, QWidget* w )
-{ QMessageBox::warning( w, c, s ); }
-
-/*!
-	\details A short for QMessageBox::information static method
-	\param c The window title
-	\param s The text to show
-	\param w The parent widget defaulted to the current active window
-*/
-void pMonkeyStudio::information( const QString& c, const QString& s, QWidget* w )
-{ QMessageBox::information( w, c, s ); }
-
-/*!
-	\details A short for QMessageBox::question static method thant return true if user accept or false if he reject
-	\param c The window title
-	\param s The text to show
-	\param w The parent widget defaulted to the current active window
-	\param b The shown buttons
-	\param d The default button
-*/
-bool pMonkeyStudio::question( const QString& c, const QString& s, QWidget* w, QMessageBox::StandardButtons b, QMessageBox::StandardButton d )
-{ return QMessageBox::question( w, c, s, b, d ) == QMessageBox::Yes; }
-
-/*!
 	\details Return true if files point to same file, usefull when files are symbolic link, or windows link
 	\param left The left file
 	\param right The right file

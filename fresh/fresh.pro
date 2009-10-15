@@ -49,7 +49,8 @@ HEADERS	= objects/GetOpt.h \
 	widgets/pTreeComboBox.h \
 	objects/pStylesActionGroup.h \
 	widgets/pStylesToolButton.h \
-	widgets/pQueuedMessageToolBar.h
+	widgets/pQueuedMessageToolBar.h \
+	objects/pVersion.h
 
 SOURCES	= objects/GetOpt.cpp \
 	objects/pIconManager.cpp \
@@ -86,4 +87,5 @@ SOURCES	= objects/GetOpt.cpp \
 	widgets/pTreeComboBox.cpp \
 	objects/pStylesActionGroup.cpp \
 	widgets/pStylesToolButton.cpp \
-	widgets/pQueuedMessageToolBar.cpp
+	widgets/pQueuedMessageToolBar.cpp \
+	objects/pVersion.cpp

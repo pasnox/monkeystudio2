@@ -30,8 +30,6 @@
 #include "workspace/pOpenedFileModel.h"
 
 #include <QApplication>
-#include <QMessageBox>
-#include <QMdiArea>
 #include <QDir>
 
 class QTranslator;
@@ -44,10 +42,6 @@ namespace pMonkeyStudio
 	Q_MONKEY_EXPORT void addTranslator( QTranslator* translator );
 	Q_MONKEY_EXPORT void loadTranslations();
 
-	Q_MONKEY_EXPORT void warning( const QString& title, const QString& message, QWidget* parent = QApplication::activeWindow() );
-	Q_MONKEY_EXPORT void information( const QString& title, const QString& message, QWidget* parent = QApplication::activeWindow() );
-	Q_MONKEY_EXPORT bool question( const QString& title, const QString& message, QWidget* parent = QApplication::activeWindow(), QMessageBox::StandardButtons buttons = QMessageBox::Yes | QMessageBox::No, QMessageBox::StandardButton defaultButton = QMessageBox::No );
-	
 	Q_MONKEY_EXPORT bool isSameFile( const QString& left, const QString& right );
 
 	Q_MONKEY_EXPORT QStringList availableTextCodecs();

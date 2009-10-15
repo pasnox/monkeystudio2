@@ -8,6 +8,7 @@
 #include <XUPProjectItemHelper.h>
 
 #include <QInputDialog>
+#include <QMessageBox>
 #include <QDebug>
 
 UIXUPEditor::UIXUPEditor( XUPProjectItem* project, QWidget* parent )

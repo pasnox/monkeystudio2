@@ -34,6 +34,7 @@
 #include <QDir>
 #include <QMdiSubWindow>
 #include <QVBoxLayout>
+#include <QMessageBox>
 
 #include <QDebug>
 
@@ -315,7 +316,7 @@ void pWorkspace::closeDocument( pAbstractChild* document, bool showDialog )
 	// stop watching files
 	const QString file = document->filePath();
 	
-	if ( QFileInfo( file ).isFile() )
+	if ( QFileInfo( file ).isFile() && mFileWatcher->files().contains( file ) )
 	{
 		mFileWatcher->removePath( file );
 	}
@@ -495,12 +496,52 @@ bool pWorkspace::closeAllDocuments()
 
 void pWorkspace::activateNextDocument()
 {
-	mMdiArea->activateNextSubWindow();
+	if ( mViewMode == pWorkspace::NoTabs )
+	{
+		pAbstractChild* document = currentDocument();
+		const QModelIndex curIndex = mOpenedFileExplorer->model()->index( document );
+		QModelIndex index = mOpenedFileExplorer->model()->index( document );
+		
+		index = curIndex.sibling( curIndex.row() +1, curIndex.column() );
+		
+		if ( !index.isValid() )
+		{
+			index = curIndex.sibling( 0, curIndex.column() );
+		}
+		
+		document = mOpenedFileExplorer->model()->document( index );
+		
+		setCurrentDocument( document );
+	}
+	else
+	{
+		mMdiArea->activateNextSubWindow();
+	}
 }
 
 void pWorkspace::activatePreviousDocument()
 {
-	mMdiArea->activatePreviousSubWindow();
+	if ( mViewMode == pWorkspace::NoTabs )
+	{
+		pAbstractChild* document = currentDocument();
+		const QModelIndex curIndex = mOpenedFileExplorer->model()->index( document );
+		QModelIndex index = mOpenedFileExplorer->model()->index( document );
+		
+		index = curIndex.sibling( curIndex.row() -1, curIndex.column() );
+		
+		if ( !index.isValid() )
+		{
+			index = curIndex.sibling( mOpenedFileExplorer->model()->rowCount() -1, curIndex.column() );
+		}
+		
+		document = mOpenedFileExplorer->model()->document( index );
+		
+		setCurrentDocument( document );
+	}
+	else
+	{
+		mMdiArea->activatePreviousSubWindow();
+	}
 }
 
 void pWorkspace::focusEditor()
@@ -721,7 +762,7 @@ void pWorkspace::document_fileOpened()
 {
 	pAbstractChild* document = qobject_cast<pAbstractChild*>( sender() );
 	
-	if ( QFileInfo( document->filePath() ).isFile() )
+	if ( QFileInfo( document->filePath() ).isFile() && !mFileWatcher->files().contains( document->filePath() ) )
 	{
 		mFileWatcher->addPath( document->filePath() );
 	}
@@ -733,6 +774,15 @@ void pWorkspace::document_contentChanged()
 {
 	mContentChangedTimer->start( CONTENT_CHANGED_TIME_OUT );
 	pAbstractChild* document = qobject_cast<pAbstractChild*>( sender() );
+	
+	// externally deleted files make the filewatcher to no longer watch them
+	const QString path = document->filePath();
+	
+	if ( !mFileWatcher->files().contains( path ) )
+	{
+		mFileWatcher->addPath( path );
+	}
+	
 	emit documentChanged( document );
 }
 
@@ -824,6 +874,7 @@ void pWorkspace::mdiArea_subWindowActivated( QMdiSubWindow* docu )
 	MonkeyCore::menuBar()->action( "mFile/mSave/aAll" )->setEnabled( hasDocument );
 	MonkeyCore::menuBar()->action( "mFile/mClose/aCurrent" )->setEnabled( hasDocument );
 	MonkeyCore::menuBar()->action( "mFile/mClose/aAll" )->setEnabled( hasDocument );
+	MonkeyCore::menuBar()->action( "mFile/aReload" )->setEnabled( hasDocument );
 	MonkeyCore::menuBar()->action( "mFile/aSaveAsBackup" )->setEnabled( hasDocument );
 	MonkeyCore::menuBar()->action( "mFile/aQuickPrint" )->setEnabled( print );
 	MonkeyCore::menuBar()->action( "mFile/aPrint" )->setEnabled( print );
@@ -925,6 +976,9 @@ void pWorkspace::internal_currentProjectChanged( XUPProjectItem* currentProject,
 		
 		currentProject->installCommands();
 	}
+	
+	// update menu visibility
+	MonkeyCore::mainWindow()->menu_CustomAction_aboutToShow();
 }
 
 void pWorkspace::internal_projectInstallCommandRequested( const pCommand& cmd, const QString& mnu )
@@ -981,60 +1035,44 @@ void pWorkspace::internal_projectCustomActionTriggered()
 		}
 		
 		// check that command to execute exists, else ask to user if he want to choose another one
-		if ( cmd.project() && action->text().contains( "execute", Qt::CaseInsensitive ) )
+		if ( cmd.targetExecution().isActive && cmd.project() )
 		{
 			cmd = cm->processCommand( cm->getCommand( cmds, cmd.text() ) );
-			QString fileName = QString( "%1/%2" ).arg( cmd.workingDirectory() ).arg( cmd.command() );
+			QString fileName = cmd.command();
 			
+			// Try to correct command by asking user
 			if ( !QFile::exists( fileName ) )
 			{
 				XUPProjectItem* project = cmd.project();
-				XUPProjectItem* topLevelProject = project->topLevelProject();
-				const QString psvBin = project->projectSettingsValue( action->text().replace( ' ', '_' ).toUpper() );
-				fileName = psvBin;
+				fileName = project->targetFilePath( cmd.targetExecution() );
 				
-				if ( !fileName.isEmpty() )
+				if ( fileName.isEmpty() )
 				{
-					fileName = topLevelProject->filePath( fileName );
+					return;
 				}
+				
+				const QFileInfo fileInfo( fileName );
 				
 				// if not exists ask user to select one
-				if ( !QFile::exists( fileName ) && pMonkeyStudio::question( action->text().append( "..." ), tr( "Can't find your executable file, do you want to choose the file ?" ) ) )
+				if ( !fileInfo.exists() )
 				{
-					fileName = pMonkeyStudio::getOpenFileName( action->text().append( "..." ), cmd.workingDirectory() );
+					QMessageBox::critical( window(), tr( "Executable file not found" ), tr( "Target '%1' does not exists" ).arg( fileName ) );
+					return;
 				}
 				
-				// if file exists execut it
-				if ( QFile::exists( fileName ) )
+				if ( !fileInfo.isExecutable() )
 				{
-					QFileInfo fi( fileName );
-					QString fn = fi.fileName().prepend( "./" );
-					QString path = fi.absolutePath();
-					
-					if ( path.endsWith( '/' ) )
-					{
-						path.chop( 1 );
-					}
-					
-					// correct command
-					cmd.setCommand( cm->quotedString( cm->nativeSeparators( fn ) ) );
-					cmd.setWorkingDirectory( cm->nativeSeparators( path ) );
-					
-					// write in project
-					fileName = topLevelProject->relativeFilePath( fileName );
-					
-					if ( fileName != psvBin )
-					{
-						topLevelProject->setProjectSettingsValue( action->text().replace( ' ', '_' ).toUpper(), fileName );
-						topLevelProject->save();
-					}
-					
-					// add command to console manager
-					cm->addCommand( cmd );
+					QMessageBox::critical( window(), tr( "Can't execute target" ), tr( "Target '%1' is not an executable" ).arg( fileName ) );
+					return;
 				}
+				
+				// file found, and it is executable. Correct command
+				cmd.setCommand( fileName );
+				cmd.setWorkingDirectory( fileInfo.absolutePath() );
 			}
 			
-			// return
+			cm->addCommand( cmd );
+			
 			return;
 		}
 		
@@ -1175,6 +1213,30 @@ void pWorkspace::fileCloseCurrent_triggered()
 void pWorkspace::fileCloseAll_triggered()
 {
 	closeAllDocuments();
+}
+
+void pWorkspace::fileReload_triggered()
+{
+	pAbstractChild* document = currentDocument();
+	
+	if ( document )
+	{
+		QMessageBox::StandardButton button = QMessageBox::Yes;
+		
+		if ( document->isModified() )
+		{
+			//button = QMessageBox::question( this, tr( "Confirmation needed..." ), tr( "The file has been modified, reload anyway ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No );
+		}
+		
+		if ( button == QMessageBox::Yes )
+		{
+			const QString fileName = document->filePath();
+			const QString codec = document->textCodec();
+			
+			closeDocument( document );
+			openFile( fileName, codec );
+		}
+	}
 }
 
 void pWorkspace::fileSaveAsBackup_triggered()

@@ -46,6 +46,7 @@
 #include <pQueuedMessageToolBar.h>
 
 #include <QTextStream>
+#include <QMessageBox>
 
 /*!
 	Constructor of class

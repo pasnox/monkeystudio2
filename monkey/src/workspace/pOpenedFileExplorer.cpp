@@ -96,6 +96,11 @@ pOpenedFileExplorer::pOpenedFileExplorer( pWorkspace* workspace )
 	connect( tvFiles->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ), this, SLOT( selectionModel_selectionChanged( const QItemSelection&, const QItemSelection& ) ) );
 }
 
+pOpenedFileModel* pOpenedFileExplorer::model() const
+{
+	return mModel;
+}
+
 QAction* pOpenedFileExplorer::comboBoxAction() const
 {
 	return aComboBox;
@@ -159,8 +164,9 @@ void pOpenedFileExplorer::selectedIndexChanged( const QModelIndex& index )
 		tvFiles->setCurrentIndex( index );
 	}
 	
+	tvFiles->scrollTo( index );
 	mWorkspace->setCurrentDocument( document );
-	setFocus(); // setting active mdi window still the focus
+	setFocus(); // setting active mdi window steal the focus
 	emit currentIndexChanged( index );
 	emit currentIndexChanged( index.row() );
 }
@@ -177,6 +183,7 @@ void pOpenedFileExplorer::on_tvFiles_customContextMenuRequested( const QPoint& p
 	QMenu menu;
 	menu.addAction( MonkeyCore::menuBar()->action( "mFile/mClose/aCurrent" ) );
 	menu.addAction( MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" ) );
+	menu.addAction( MonkeyCore::menuBar()->action( "mFile/aReload" ) );
 	menu.addSeparator();
 	menu.addAction( mSortMenu->menuAction() );
 	menu.exec( tvFiles->mapToGlobal( pos ) );

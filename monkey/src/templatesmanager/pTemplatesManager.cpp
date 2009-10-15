@@ -32,6 +32,7 @@
 #include <Settings.h>
 
 #include <QTextCodec>
+#include <QMessageBox>
 
 using namespace pMonkeyStudio;
 
@@ -107,7 +108,7 @@ bool pTemplatesManager::realiseTemplate( XUPItem* scope, const pTemplate& temp, 
 	// check destination
 	if ( dest.isEmpty() )
 	{
-		warning( tr( "Error..." ), tr( "Destination not set." ) );
+		QMessageBox::warning( 0, tr( "Error..." ), tr( "Destination not set." ) );
 		return false;
 	}
 	
@@ -117,7 +118,7 @@ bool pTemplatesManager::realiseTemplate( XUPItem* scope, const pTemplate& temp, 
 	{
 		if ( !destdir.mkpath( dest ) )
 		{
-			warning( tr( "Error..." ), tr( "Can't create destination '%1'" ).arg( dest ) );
+			QMessageBox::warning( 0, tr( "Error..." ), tr( "Can't create destination '%1'" ).arg( dest ) );
 			return false;
 		}
 	}
@@ -153,7 +154,7 @@ bool pTemplatesManager::realiseTemplate( XUPItem* scope, const pTemplate& temp, 
 		// check value validity
 		if ( s.isEmpty() )
 		{
-			warning( tr( "Error..." ), tr( "Empty filename detected for file %1" ).arg( sf ) );
+			QMessageBox::warning( 0, tr( "Error..." ), tr( "Empty filename detected for file %1" ).arg( sf ) );
 			return false;
 		}
 		
@@ -176,7 +177,7 @@ bool pTemplatesManager::realiseTemplate( XUPItem* scope, const pTemplate& temp, 
 		{
 			if ( !fd.mkpath( fd.path() ) )
 			{
-				warning( tr( "Error..." ), tr( "Can't create destination '%1'" ).arg( fd.path() ) );
+				QMessageBox::warning( 0, tr( "Error..." ), tr( "Can't create destination '%1'" ).arg( fd.path() ) );
 				return false;
 			}
 		}
@@ -184,7 +185,7 @@ bool pTemplatesManager::realiseTemplate( XUPItem* scope, const pTemplate& temp, 
 		// copy file
 		if ( !QFile::copy( QString( "%1%2" ).arg( temp.DirPath, k ), s ) )
 		{
-			warning( tr( "Error..." ), tr( "Can't copy '%1%2' to '%3'" ).arg( temp.DirPath, k, s ) );
+			QMessageBox::warning( 0, tr( "Error..." ), tr( "Can't copy '%1%2' to '%3'" ).arg( temp.DirPath, k, s ) );
 			return false;
 		}
 		
@@ -192,7 +193,7 @@ bool pTemplatesManager::realiseTemplate( XUPItem* scope, const pTemplate& temp, 
 		QFile file( s );
 		if ( !file.open( QIODevice::ReadWrite | QIODevice::Text ) )
 		{
-			warning( tr( "Error..." ), tr ( "Can't edit file %1: %2" ).arg( s, file.errorString() ) );
+			QMessageBox::warning( 0, tr( "Error..." ), tr ( "Can't edit file %1: %2" ).arg( s, file.errorString() ) );
 			return false;
 		}
 		

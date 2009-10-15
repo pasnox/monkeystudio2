@@ -57,7 +57,7 @@ QMAKE_TARGET_DESCRIPTION	= "Crossplatform Integrated Development Environment"
 QMAKE_TARGET_COPYRIGHT	= "Copyright (C) 2005 - 2009 Filipe AZEVEDO"
 PACKAGE_DOMAIN	= "monkeystudio.org"
 
-PACKAGE_VERSION	= 1.8.4.0b3
+PACKAGE_VERSION	= 1.8.4.0b2
 
 CONFIG( debug, debug|release ) {
 	PACKAGE_VERSION_STR	= $${PACKAGE_VERSION}svn_debug

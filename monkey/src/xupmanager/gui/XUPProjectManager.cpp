@@ -19,6 +19,7 @@
 #include <QTextCodec>
 #include <QMenu>
 #include <QInputDialog>
+#include <QMessageBox>
 #include <QFileSystemWatcher>
 
 XUPProjectManager::XUPProjectManager( QWidget* parent )
@@ -266,7 +267,7 @@ void XUPProjectManager::tvFiltered_currentChanged( const QModelIndex& current, c
 	setCurrentProject( curProject, preProject );
 }
 
-void XUPProjectManager::on_tvFiltered_doubleClicked( const QModelIndex& index )
+void XUPProjectManager::on_tvFiltered_activated( const QModelIndex& index )
 {
 	XUPItem* item = mFilteredModel->mapToSource( index );
 	if ( item )
@@ -520,7 +521,9 @@ void XUPProjectManager::editProject()
 	XUPProjectItem* topLevelProject = project->topLevelProject();
 	
 	// get plugin name that can manage this project
-	if ( topLevelProject->projectSettingsValue( "EDITOR" ).isEmpty() || !MonkeyCore::pluginsManager()->plugins<XUPPlugin*>( PluginsManager::stAll, topLevelProject->projectSettingsValue( "EDITOR" ) ).value( 0 ) )
+	const QString pluginName = topLevelProject->projectSettingsValue( "EDITOR" );
+	
+	if ( pluginName.isEmpty() || !MonkeyCore::pluginsManager()->plugins<XUPPlugin*>( PluginsManager::stAll, pluginName ).value( 0 ) )
 	{
 		// get xup plugins
 		QHash<QString, XUPPlugin*> plugins;
@@ -542,7 +545,7 @@ void XUPProjectManager::editProject()
 	// edit project settings
 	if ( topLevelProject->projectSettingsValue( "EDITOR" ).isEmpty() )
 	{
-		pMonkeyStudio::warning( tr( "Warning..." ), tr( "The project can't be edited because there is no associate project settings plugin." ) );
+		QMessageBox::warning( QApplication::activeWindow(), tr( "Warning..." ), tr( "The project can't be edited because there is no associate project settings plugin." ) );
 		return;
 	}
 	
@@ -799,7 +802,7 @@ void XUPProjectManager::removeFiles()
 		return;
 	}
 	
-	if ( pMonkeyStudio::question( tr( "Remove Value..." ), tr( "Are you sur you want to remove this value ?" ), window() ) )
+	if ( QMessageBox::question( window(), tr( "Remove Value..." ), tr( "Are you sur you want to remove this value ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::Yes )
 	{
 		XUPProjectItem* project = curItem->project();
 		
@@ -810,11 +813,11 @@ void XUPProjectManager::removeFiles()
 			const QString fp = rootIncludeProject->filePath( curItem->cacheValue( "content" ) );
 			
 			// ask removing file
-			if ( QFile::exists( fp ) && pMonkeyStudio::question( tr( "Delete associations..." ), tr( "Do you want to delete the associate file ?" ), window() ) )
+			if ( QFile::exists( fp ) && QMessageBox::question( window(), tr( "Delete associations..." ), tr( "Do you want to delete the associate file ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::Yes )
 			{
 				if ( !QFile::remove( fp ) )
 				{
-					pMonkeyStudio::warning( tr( "Error..." ), tr( "Can't delete file: %1" ).arg( fp ), window() );
+					QMessageBox::warning( window(), tr( "Error..." ), tr( "Can't delete file: %1" ).arg( fp ) );
 				}
 			}
 		}

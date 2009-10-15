@@ -45,6 +45,7 @@ pFileManager::pFileManager( QObject* o )
 	
 	// files
 	connect( MonkeyCore::workspace(), SIGNAL( documentOpened( pAbstractChild* ) ), this, SIGNAL( documentOpened( pAbstractChild* ) ) );
+	connect( MonkeyCore::workspace(), SIGNAL( documentModifiedChanged( pAbstractChild*, bool ) ), this, SIGNAL( documentModifiedChanged( pAbstractChild*, bool ) ) );
 	connect( MonkeyCore::workspace(), SIGNAL( documentChanged( pAbstractChild* ) ), this, SIGNAL( documentChanged( pAbstractChild* ) ) );
 	connect( MonkeyCore::workspace(), SIGNAL( documentAboutToClose( pAbstractChild* ) ), this, SIGNAL( documentAboutToClose( pAbstractChild* ) ) );
 	connect( MonkeyCore::workspace(), SIGNAL( documentClosed( pAbstractChild* ) ), this, SIGNAL( documentClosed( pAbstractChild* ) ) );
