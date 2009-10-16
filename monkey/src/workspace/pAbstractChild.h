@@ -32,6 +32,7 @@
 #include <QMdiSubWindow>
 #include <QFileInfo>
 #include <QTextCodec>
+#include <QShortcut>
 
 #include <MonkeyExport.h>
 
@@ -56,6 +57,18 @@ public:
 		setAttribute( Qt::WA_DeleteOnClose );
 		mDocument = mNone;
 		mLayout = lNone;
+		
+		// clear Close shortcut that conflict with menu one on some platform
+		QMenu* menu = systemMenu();
+		const QKeySequence closeSequence( QKeySequence::Close );
+		
+		foreach ( QAction* action, menu->actions() )
+		{
+			if ( action->shortcut() == closeSequence )
+			{
+				action->setShortcut( QKeySequence() );
+			}
+		}
 	}
 	
 	// return defaultsize for child
