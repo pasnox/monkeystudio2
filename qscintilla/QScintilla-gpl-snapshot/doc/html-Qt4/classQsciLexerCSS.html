@@ -52,7 +52,14 @@ Inherits <a class="el" href="classQsciLexer.html">QsciLexer</a>.
 <a class="el" href="classQsciLexerCSS.html#aab76609891d9dda77ab63065aa403b60e475783c35d0707225bfc28edd36d2e">SingleQuotedString</a> =  14, 
 <br>
 &nbsp;&nbsp;<a class="el" href="classQsciLexerCSS.html#aab76609891d9dda77ab63065aa403b6ae08a7b509d7f18df60133b2e204291b">CSS2Property</a> =  15, 
-<a class="el" href="classQsciLexerCSS.html#aab76609891d9dda77ab63065aa403b6c1a1825aa643819ef0ed1c3a23ce48ee">Attribute</a> =  16
+<a class="el" href="classQsciLexerCSS.html#aab76609891d9dda77ab63065aa403b6c1a1825aa643819ef0ed1c3a23ce48ee">Attribute</a> =  16, 
+<a class="el" href="classQsciLexerCSS.html#aab76609891d9dda77ab63065aa403b6de6d6fd36b5e81bcca8ce404d915a16b">CSS3Property</a> =  17, 
+<br>
+&nbsp;&nbsp;<a class="el" href="classQsciLexerCSS.html#aab76609891d9dda77ab63065aa403b6aad0b9e8982d95504f3fdeac29c01d68">PseudoElement</a> =  18, 
+<a class="el" href="classQsciLexerCSS.html#aab76609891d9dda77ab63065aa403b6ea3a8406f16545255905240042c4954b">ExtendedCSSProperty</a> =  19, 
+<a class="el" href="classQsciLexerCSS.html#aab76609891d9dda77ab63065aa403b6eee973f3f30ab97b97903de6de2dfca5">ExtendedPseudoClass</a> =  20, 
+<br>
+&nbsp;&nbsp;<a class="el" href="classQsciLexerCSS.html#aab76609891d9dda77ab63065aa403b6220432c41649811f99607624ddb568e6">ExtendedPseudoElement</a> =  21
 <br>
  }
 </ul>
@@ -109,13 +116,13 @@ A tag. </td></tr>
 <tr><td valign="top"><em><a class="anchor" name="aab76609891d9dda77ab63065aa403b6afd65314dc8f5e87697c987a8a3d1037"></a><!-- doxytag: member="ClassSelector" ref="aab76609891d9dda77ab63065aa403b6afd65314dc8f5e87697c987a8a3d1037" args="" -->ClassSelector</em>&nbsp;</td><td>
 A class selector. </td></tr>
 <tr><td valign="top"><em><a class="anchor" name="aab76609891d9dda77ab63065aa403b6d9a4a9e2945073685158769a62e16cda"></a><!-- doxytag: member="PseudoClass" ref="aab76609891d9dda77ab63065aa403b6d9a4a9e2945073685158769a62e16cda" args="" -->PseudoClass</em>&nbsp;</td><td>
-A pseudo-class. </td></tr>
+A pseudo class. The list of pseudo classes is defined by keyword set 2. </td></tr>
 <tr><td valign="top"><em><a class="anchor" name="aab76609891d9dda77ab63065aa403b66ae93503184d2ba66879daeefaeb4b23"></a><!-- doxytag: member="UnknownPseudoClass" ref="aab76609891d9dda77ab63065aa403b66ae93503184d2ba66879daeefaeb4b23" args="" -->UnknownPseudoClass</em>&nbsp;</td><td>
-An pseudo-class. </td></tr>
+An unknown pseudo class. </td></tr>
 <tr><td valign="top"><em><a class="anchor" name="aab76609891d9dda77ab63065aa403b6b7ce96396ee8eff4196b5b9d5bf53afc"></a><!-- doxytag: member="Operator" ref="aab76609891d9dda77ab63065aa403b6b7ce96396ee8eff4196b5b9d5bf53afc" args="" -->Operator</em>&nbsp;</td><td>
 An operator. </td></tr>
 <tr><td valign="top"><em><a class="anchor" name="aab76609891d9dda77ab63065aa403b6729b64d3f84347da91167d421302a76d"></a><!-- doxytag: member="CSS1Property" ref="aab76609891d9dda77ab63065aa403b6729b64d3f84347da91167d421302a76d" args="" -->CSS1Property</em>&nbsp;</td><td>
-A CSS1 property. </td></tr>
+A CSS1 property. The list of CSS1 properties is defined by keyword set 1. </td></tr>
 <tr><td valign="top"><em><a class="anchor" name="aab76609891d9dda77ab63065aa403b6f3110ffc53b23fa5dbe17151dc7a5e75"></a><!-- doxytag: member="UnknownProperty" ref="aab76609891d9dda77ab63065aa403b6f3110ffc53b23fa5dbe17151dc7a5e75" args="" -->UnknownProperty</em>&nbsp;</td><td>
 An unknown property. </td></tr>
 <tr><td valign="top"><em><a class="anchor" name="aab76609891d9dda77ab63065aa403b6cdf1ff5843500ebbfe209bff6c0e4370"></a><!-- doxytag: member="Value" ref="aab76609891d9dda77ab63065aa403b6cdf1ff5843500ebbfe209bff6c0e4370" args="" -->Value</em>&nbsp;</td><td>
@@ -133,9 +140,19 @@ A double-quoted string. </td></tr>
 <tr><td valign="top"><em><a class="anchor" name="aab76609891d9dda77ab63065aa403b60e475783c35d0707225bfc28edd36d2e"></a><!-- doxytag: member="SingleQuotedString" ref="aab76609891d9dda77ab63065aa403b60e475783c35d0707225bfc28edd36d2e" args="" -->SingleQuotedString</em>&nbsp;</td><td>
 A single-quoted string. </td></tr>
 <tr><td valign="top"><em><a class="anchor" name="aab76609891d9dda77ab63065aa403b6ae08a7b509d7f18df60133b2e204291b"></a><!-- doxytag: member="CSS2Property" ref="aab76609891d9dda77ab63065aa403b6ae08a7b509d7f18df60133b2e204291b" args="" -->CSS2Property</em>&nbsp;</td><td>
-A CSS2 property. </td></tr>
+A CSS2 property. The list of CSS2 properties is defined by keyword set 3. </td></tr>
 <tr><td valign="top"><em><a class="anchor" name="aab76609891d9dda77ab63065aa403b6c1a1825aa643819ef0ed1c3a23ce48ee"></a><!-- doxytag: member="Attribute" ref="aab76609891d9dda77ab63065aa403b6c1a1825aa643819ef0ed1c3a23ce48ee" args="" -->Attribute</em>&nbsp;</td><td>
 An attribute. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="aab76609891d9dda77ab63065aa403b6de6d6fd36b5e81bcca8ce404d915a16b"></a><!-- doxytag: member="CSS3Property" ref="aab76609891d9dda77ab63065aa403b6de6d6fd36b5e81bcca8ce404d915a16b" args="" -->CSS3Property</em>&nbsp;</td><td>
+A CSS3 property. The list of CSS3 properties is defined by keyword set 4. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="aab76609891d9dda77ab63065aa403b6aad0b9e8982d95504f3fdeac29c01d68"></a><!-- doxytag: member="PseudoElement" ref="aab76609891d9dda77ab63065aa403b6aad0b9e8982d95504f3fdeac29c01d68" args="" -->PseudoElement</em>&nbsp;</td><td>
+A pseudo element. The list of pseudo elements is defined by keyword set 5. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="aab76609891d9dda77ab63065aa403b6ea3a8406f16545255905240042c4954b"></a><!-- doxytag: member="ExtendedCSSProperty" ref="aab76609891d9dda77ab63065aa403b6ea3a8406f16545255905240042c4954b" args="" -->ExtendedCSSProperty</em>&nbsp;</td><td>
+An extended (browser specific) CSS property. The list of extended CSS properties is defined by keyword set 6. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="aab76609891d9dda77ab63065aa403b6eee973f3f30ab97b97903de6de2dfca5"></a><!-- doxytag: member="ExtendedPseudoClass" ref="aab76609891d9dda77ab63065aa403b6eee973f3f30ab97b97903de6de2dfca5" args="" -->ExtendedPseudoClass</em>&nbsp;</td><td>
+An extended (browser specific) pseudo class. The list of extended pseudo classes is defined by keyword set 7. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="aab76609891d9dda77ab63065aa403b6220432c41649811f99607624ddb568e6"></a><!-- doxytag: member="ExtendedPseudoElement" ref="aab76609891d9dda77ab63065aa403b6220432c41649811f99607624ddb568e6" args="" -->ExtendedPseudoElement</em>&nbsp;</td><td>
+An extended (browser specific) pseudo element. The list of extended pseudo elements is defined by keyword set 8. </td></tr>
 </table>
 </dl>
 
@@ -224,7 +241,7 @@ Returns the name of the language.
 
 <p>
 Returns the name of the lexer. Some lexers support a number of languages. 
-<p>Implements <a class="el" href="classQsciLexer.html#3e16c38f4cdbb64c218cf7efb5c042ff">QsciLexer</a>.</p>
+<p>Reimplemented from <a class="el" href="classQsciLexer.html#ddf8b4d6eb61737395004281360de9a3">QsciLexer</a>.</p>
 
 </div>
 </div><p>
@@ -489,7 +506,7 @@ The lexer's properties are written to the settings <em>qs</em>. <em>prefix</em> 
 
 </div>
 </div><p>
-<hr size="1"><address style="text-align: right;"><small>Generated on Fri Apr 11 03:44:27 2008 for QScintilla by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Thu Aug 20 03:46:55 2009 for QScintilla by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.4 </small></address>
 </body>

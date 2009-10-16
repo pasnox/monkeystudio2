@@ -1,6 +1,6 @@
 // This module implements the portability layer for the Qt port of Scintilla.
 //
-// Copyright (c) 2008 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2009 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -23,11 +23,6 @@
 // review the following information:
 // http://trolltech.com/products/qt/licenses/licensing/licensingoverview
 // or contact the sales department at sales@riverbankcomputing.com.
-// 
-// This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
-// INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE. Trolltech reserves all rights not expressly
-// granted herein.
 // 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -211,6 +206,8 @@ public:
     void DrawXPM(PRectangle rc, const XPM *xpm);
 
 private:
+    void drawText(PRectangle rc, Font &font_, int ybase, const char *s,
+            int len, ColourAllocated fore);
     QFontMetrics metrics(Font &font_);
     QString convertText(const char *s, int len);
     static QRgb convertQRgb(const ColourAllocated &col, unsigned alpha);
@@ -436,7 +433,7 @@ void SurfaceImpl::DrawTextNoClip(PRectangle rc, Font &font_, int ybase,
     Q_ASSERT(painter);
 
     FillRectangle(rc, back);
-    DrawTextTransparent(rc, font_, ybase, s, len, fore);
+    drawText(rc, font_, ybase, s, len, fore);
 }
 
 void SurfaceImpl::DrawTextClipped(PRectangle rc, Font &font_, int ybase,
@@ -452,8 +449,18 @@ void SurfaceImpl::DrawTextClipped(PRectangle rc, Font &font_, int ybase,
 void SurfaceImpl::DrawTextTransparent(PRectangle rc, Font &font_, int ybase,
         const char *s, int len, ColourAllocated fore)
 {
-    Q_ASSERT(painter);
+    // Only draw if there is a non-space.
+    for (int i = 0; i < len; ++i)
+        if (s[i] != ' ')
+        {
+            drawText(rc, font_, ybase, s, len, fore);
+            return;
+        }
+}
 
+void SurfaceImpl::drawText(PRectangle rc, Font &font_, int ybase,
+        const char *s, int len, ColourAllocated fore)
+{
     QString qs = convertText(s, len);
 
     QFont *f = PFont(font_.GetID());
@@ -483,24 +490,32 @@ void SurfaceImpl::MeasureWidths(Font &font_, const char *s, int len,
 {
     QFontMetrics fm = metrics(font_);
     QString qs = convertText(s, len);
-    int totalWidth = 0, ui = 0;
 
-    for (int i = 0; i < qs.length(); ++i)
+    // The position for each byte of a character is the offset from the start
+    // where the following character should be drawn.
+    int i_byte = 0;
+
+    for (int i_char = 0; i_char < qs.length(); ++i_char)
     {
-        totalWidth += fm.width(qs[i]);
+        int width = fm.width(qs, i_char + 1);
 
-        int l = (unicodeMode ? QString(qs[i]).toUtf8().length() : 1);
+        if (unicodeMode)
+        {
+            // Set the same position for each byte of the character.
+            int nbytes = qs.mid(i_char, 1).toUtf8().length();
 
-        while (l--)
-            positions[ui++] = totalWidth;
+            while (nbytes--)
+                positions[i_byte++] = width;
+        }
+        else
+            positions[i_byte++] = width;
     }
 }
 
 int SurfaceImpl::WidthText(Font &font_, const char *s, int len)
 {
-    QString qs = convertText(s, len);
+    return metrics(font_).width(convertText(s, len));
 
-    return metrics(font_).width(qs, qs.length());
 }
 
 int SurfaceImpl::WidthChar(Font &font_, char ch)

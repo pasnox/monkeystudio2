@@ -1,7 +1,7 @@
 // This is the SIP interface definition for the parts of the Qsci module common
 // to the Qt v3 and v4 versions.
 //
-// Copyright (c) 2008 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2009 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -25,11 +25,6 @@
 // http://trolltech.com/products/qt/licenses/licensing/licensingoverview
 // or contact the sales department at sales@riverbankcomputing.com.
 // 
-// This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
-// INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE. Trolltech reserves all rights not expressly
-// granted herein.
-// 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
@@ -38,7 +33,7 @@
 
 
 %Copying
-Copyright (c) 2008 Riverbank Computing Limited <info@riverbankcomputing.com>
+Copyright (c) 2009 Riverbank Computing Limited <info@riverbankcomputing.com>
 
 This file is part of QScintilla.
 
@@ -62,11 +57,6 @@ review the following information:
 http://trolltech.com/products/qt/licenses/licensing/licensingoverview
 or contact the sales department at sales@riverbankcomputing.com.
 
-This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
-INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
-A PARTICULAR PURPOSE. Trolltech reserves all rights not expressly
-granted herein.
-
 This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 %End
@@ -77,6 +67,7 @@ const char *QSCINTILLA_VERSION_STR;
 
 
 %Include qsciscintilla.sip
+%Include qsciabstractapis.sip
 %Include qsciapis.sip
 %Include qscicommand.sip
 %Include qscicommandset.sip
@@ -88,22 +79,33 @@ const char *QSCINTILLA_VERSION_STR;
 %Include qscilexercpp.sip
 %Include qscilexercsharp.sip
 %Include qscilexercss.sip
+%Include qscilexercustom.sip
 %Include qscilexerd.sip
 %Include qscilexerdiff.sip
+%Include qscilexerfortran.sip
+%Include qscilexerfortran77.sip
 %Include qscilexerhtml.sip
 %Include qscilexeridl.sip
 %Include qscilexerjava.sip
 %Include qscilexerjavascript.sip
 %Include qscilexerlua.sip
 %Include qscilexermakefile.sip
+%Include qscilexerpascal.sip
 %Include qscilexerperl.sip
+%Include qscilexerpostscript.sip
 %Include qscilexerpov.sip
 %Include qscilexerproperties.sip
 %Include qscilexerpython.sip
 %Include qscilexerruby.sip
+%Include qscilexerspice.sip
 %Include qscilexersql.sip
 %Include qscilexertcl.sip
 %Include qscilexertex.sip
+%Include qscilexerverilog.sip
 %Include qscilexervhdl.sip
+%Include qscilexerxml.sip
+%Include qscilexeryaml.sip
 %Include qscimacro.sip
 %Include qsciprinter.sip
+%Include qscistyle.sip
+%Include qscistyledtext.sip

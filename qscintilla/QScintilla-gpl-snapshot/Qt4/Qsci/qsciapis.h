@@ -1,6 +1,6 @@
 // This module defines interface to the QsciAPIs class.
 //
-// Copyright (c) 2008 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2009 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -24,11 +24,6 @@
 // http://trolltech.com/products/qt/licenses/licensing/licensingoverview
 // or contact the sales department at sales@riverbankcomputing.com.
 // 
-// This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
-// INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE. Trolltech reserves all rights not expressly
-// granted herein.
-// 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
@@ -46,6 +41,7 @@ extern "C++" {
 
 #include <QList>
 
+#include <Qsci/qsciabstractapis.h>
 #include <Qsci/qsciglobal.h>
 #include <Qsci/qsciscintilla.h>
 
@@ -55,10 +51,8 @@ class QsciAPIsWorker;
 class QsciLexer;
 
 
-//! \brief The QsciAPIs class represents the textual API information used in
-//! call tips and for auto-completion.  API information is specific to a
-//! particular language lexer but can be shared by multiple instances of the
-//! lexer.
+//! \brief The QsciAPIs class provies an implementation of the textual API
+//! information used in call tips and for auto-completion.
 //!
 //! Raw API information is read from one or more files.  Each API function is
 //! described by a single line of text comprising the function's name, followed
@@ -75,7 +69,7 @@ class QsciLexer;
 //! information described above.  This is done so that large APIs can be
 //! handled while still being responsive to user input.  The conversion of raw
 //! information to prepared information is time consuming (think tens of
-//! seconds) and implemented in a separate thread.  Processed information can
+//! seconds) and implemented in a separate thread.  Prepared information can
 //! be quickly saved to and loaded from files.  Such files are portable between
 //! different architectures.
 //!
@@ -83,7 +77,7 @@ class QsciLexer;
 //! normally provide the user with the ability to specify a set of, possibly
 //! project specific, raw API files and convert them to prepared files that are
 //! loaded quickly when the application is invoked.
-class QSCINTILLA_EXPORT QsciAPIs : public QObject
+class QSCINTILLA_EXPORT QsciAPIs : public QsciAbstractAPIs
 {
     Q_OBJECT
 
@@ -154,20 +148,17 @@ public:
     //! $HOME/.qsci is used.  Returns true if successful, otherwise false.
     bool savePrepared(const QString &fname = QString()) const;
 
-    //! \internal Updates an auto-completion list with API entries based on the
-    //! context from the user.
-    void autoCompletionList(const QStringList &context, QStringList &wlist);
+    //! \reimp
+    virtual void updateAutoCompletionList(const QStringList &context,
+            QStringList &list);
 
-    //! \internal Handle the selection of an entry in the auto-completion list.
-    void autoCompletionSelected(const QString &sel);
+    //! \reimp
+    virtual void autoCompletionSelected(const QString &sel);
 
-    //! \internal Return the call tips valid for the given context.
-    QString callTips(const QStringList &context,
-            QsciScintilla::CallTipsStyle style, int maxnr, int commas,
-            int &ctshift);
-
-    //! \internal
-    QString callTipsNextPrev(int dir, int &ctshift);
+    //! \reimp
+    virtual QStringList callTips(const QStringList &context, int commas,
+            QsciScintilla::CallTipsStyle style,
+            QList<int> &shifts);
 
     //! \internal Reimplemented to receive termination events from the worker
     //! thread.
@@ -208,17 +199,13 @@ private:
     // This is a list of word indexes.
     typedef QList<WordIndex> WordIndexList;
 
-    const QsciLexer *lex;
     QsciAPIsWorker *worker;
-    int ctcursor;
     QStringList old_context;
     QStringList::const_iterator origin;
     int origin_len;
     QString unambiguous_context;
     QStringList apis;
     QsciAPIsPrepared *prep;
-    QStringList ctlist;
-    QList<int> ctshifts;
 
     static bool enoughCommas(const QString &s, int commas);
 

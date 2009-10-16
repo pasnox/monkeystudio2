@@ -100,6 +100,8 @@ const char * <b>wordCharacters</b> () const
 <li>bool <a class="el" href="classQsciLexerCPP.html#8dcbd7b0863e3f9efbc5a5ed7baf326f">foldCompact</a> () const 
 <li>bool <a class="el" href="classQsciLexerCPP.html#a63537ac818f5b54b74b5b83d3ac8b06">foldPreprocessor</a> () const 
 <li>bool <a class="el" href="classQsciLexerCPP.html#ace6bc3a27beb875d9180b970817a9b1">stylePreprocessor</a> () const 
+<li>void <a class="el" href="classQsciLexerCPP.html#06315a18051184926fe21459fc75b4cc">setDollarsAllowed</a> (bool allowed)
+<li>bool <a class="el" href="classQsciLexerCPP.html#e47001a4e804205527baa1032e70add6">dollarsAllowed</a> () const 
 </ul>
 <h2>Protected Member Functions</h2>
 <ul>
@@ -261,7 +263,7 @@ Returns the name of the language.
 
 <p>
 Returns the name of the lexer. Some lexers support a number of languages. 
-<p>Implements <a class="el" href="classQsciLexer.html#3e16c38f4cdbb64c218cf7efb5c042ff">QsciLexer</a>.</p>
+<p>Reimplemented from <a class="el" href="classQsciLexer.html#ddf8b4d6eb61737395004281360de9a3">QsciLexer</a>.</p>
 
 </div>
 </div><p>
@@ -543,6 +545,49 @@ Returns true if preprocessor lines (after the preprocessor directive) are styled
 
 </div>
 </div><p>
+<a class="anchor" name="06315a18051184926fe21459fc75b4cc"></a><!-- doxytag: member="QsciLexerCPP::setDollarsAllowed" ref="06315a18051184926fe21459fc75b4cc" args="(bool allowed)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QsciLexerCPP::setDollarsAllowed           </td>
+          <td>(</td>
+          <td class="paramtype">bool&nbsp;</td>
+          <td class="paramname"> <em>allowed</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+If <em>allowed</em> is true then '$' characters are allowed in identifier names. The default is true.<p>
+<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciLexerCPP.html#e47001a4e804205527baa1032e70add6">dollarsAllowed()</a> </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="e47001a4e804205527baa1032e70add6"></a><!-- doxytag: member="QsciLexerCPP::dollarsAllowed" ref="e47001a4e804205527baa1032e70add6" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool QsciLexerCPP::dollarsAllowed           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Returns true if '$' characters are allowed in identifier names.<p>
+<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciLexerCPP.html#06315a18051184926fe21459fc75b4cc">setDollarsAllowed()</a> </dd></dl>
+
+</div>
+</div><p>
 <a class="anchor" name="d0a3dd6dfb77a069303bfeeeed43773f"></a><!-- doxytag: member="QsciLexerCPP::setFoldAtElse" ref="d0a3dd6dfb77a069303bfeeeed43773f" args="(bool fold)" -->
 <div class="memitem">
 <div class="memproto">
@@ -719,7 +764,7 @@ The lexer's properties are written to the settings <em>qs</em>. <em>prefix</em> 
 
 </div>
 </div><p>
-<hr size="1"><address style="text-align: right;"><small>Generated on Fri Apr 11 03:44:27 2008 for QScintilla by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Thu Aug 20 03:46:55 2009 for QScintilla by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.4 </small></address>
 </body>

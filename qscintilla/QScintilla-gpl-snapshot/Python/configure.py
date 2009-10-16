@@ -1,6 +1,6 @@
 # This script configures QScintilla for PyQt v3 and/or v4.
 #
-# Copyright (c) 2008 Riverbank Computing Limited <info@riverbankcomputing.com>
+# Copyright (c) 2009 Riverbank Computing Limited <info@riverbankcomputing.com>
 # 
 # This file is part of QScintilla.
 # 
@@ -24,11 +24,6 @@
 # http://trolltech.com/products/qt/licenses/licensing/licensingoverview
 # or contact the sales department at sales@riverbankcomputing.com.
 # 
-# This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
-# INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
-# A PARTICULAR PURPOSE. Trolltech reserves all rights not expressly
-# granted herein.
-# 
 # This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 # WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
@@ -36,7 +31,7 @@
 import sys
 import os
 import glob
-import getopt
+import optparse
 
 
 # Import SIP's configuration module so that we have access to the error
@@ -69,52 +64,74 @@ else:
 
 
 # This must be kept in sync with qscintilla.pro.
-QSCI_API_MAJOR = 3
+QSCI_API_MAJOR = 5
 
 
 # Initialise the globals.
 sip_min_version = 0x040400
 
-opt_qscimoddir = None
-opt_qscisipdir = None
-opt_qsciincdir = None
-opt_qscilibdir = None
-opt_qscidir = None
-opt_concat = False
-opt_split = 1
-opt_static = False
-opt_tracing = False
-opt_debug = False
-
 if sys.platform == "win32":
-    qsci_define = "QEXTSCINTILLA_DLL"
+    qsci_define = "QSCINTILLA_DLL"
 else:
     qsci_define = ""
 
 
-def usage(rcode = 2):
-    """Display a usage message and exit.
-
-    rcode is the return code passed back to the calling process.
+def create_optparser():
+    """Create the parser for the command line.
     """
-    print "Usage:"
-    print "    python configure.py [-h] [-a dir] [-c] [-d dir] [-j #] [-k] [-n dir] [-o dir] [-p 3|4] [-r] [-s] [-u] [-v dir]"
-    print "where:"
-    print "  -h      display this help message"
-    print "  -a dir  where QScintilla's API file will be installed [default QTDIR/qsci]"
-    print "  -c      concatenate the C++ source files"
-    print "  -d dir  where the QScintilla module will be installed [default %s]" % pyqt.pyqt_mod_dir
-    print "  -j #    split the concatenated C++ source files into # pieces [default 1]"
-    print "  -k      build the QScintilla module as a static library"
-    print "  -n dir  the directory containing the QScintilla Qsci header file directory [default %s]" % pyqt.qt_inc_dir
-    print "  -o dir  the directory containing the QScintilla library [default %s]" % pyqt.qt_lib_dir
-    print "  -p 3|4  specifically configure for PyQt v3 or v4 [default v4, if found]"
-    print "  -r      generate code with tracing enabled [default disabled]"
-    print "  -s      QScintilla is a static library and not a DLL (Windows only)"
-    print "  -u      build with debugging symbols (requires a debug build of Python on Windows"
-    print "  -v dir  where the QScintilla .sip files will be installed [default %s]" % pyqt.pyqt_sip_dir
 
-    sys.exit(rcode)
+    def store_abspath(option, opt_str, value, parser):
+        setattr(parser.values, option.dest, os.path.abspath(value))
+
+    def store_abspath_dir(option, opt_str, value, parser):
+        if not os.path.isdir(value):
+            raise optparse.OptionValueError("'%s' is not a directory" % value)
+        setattr(parser.values, option.dest, os.path.abspath(value))
+
+    p = optparse.OptionParser(usage="python %prog [options]",
+            version="2.4.1-snapshot-20090819")
+
+    p.add_option("-a", "--apidir", action="callback", default=None,
+            type="string", metavar="DIR", dest="qscidir",
+            callback=store_abspath, help="where QScintilla's API file will be "
+            "installed [default: QTDIR/qsci]")
+    p.add_option("-c", "--concatenate", action="store_true", default=False,
+            dest="concat", help="concatenate the C++ source files")
+    p.add_option("-d", "--destdir", action="callback",
+            default=pyqt.pyqt_mod_dir, type="string", metavar="DIR",
+            dest="qscimoddir", callback=store_abspath, help="where the "
+            "QScintilla module will be installed [default: %s]" %
+            pyqt.pyqt_mod_dir)
+    p.add_option("-j", "--concatenate-split", type="int", default=1,
+            metavar="N", dest="split", help="split the concatenated C++ "
+            "source files into N pieces [default: 1]")
+    p.add_option("-k", "--static", action="store_true", default=False,
+            dest="static", help="build the QScintilla module as a static "
+            "library")
+    p.add_option("-n", action="callback", default=None, type="string",
+            metavar="DIR", dest="qsciincdir", callback=store_abspath_dir,
+            help="the directory containing the QScintilla Qsci header file "
+            "directory [default: %s]" % pyqt.qt_inc_dir)
+    p.add_option("-o", action="callback", default=None, type="string",
+            metavar="DIR", dest="qscilibdir", callback=store_abspath_dir,
+            help="the directory containing the QScintilla library [default: "
+            "%s]" % pyqt.qt_lib_dir)
+    p.add_option("-p", type="int", default=-1, metavar="3|4", dest="pyqt_major",
+            help="specifically configure for PyQt v3 or v4 [default v4, if "
+            "found]")
+    p.add_option("-r", "--trace", action="store_true", default=False,
+            dest="tracing", help="build the QScintilla module with tracing "
+            "enabled")
+    p.add_option("-s", action="store_true", default=False, dest="not_dll",
+            help="QScintilla is a static library and not a DLL (Windows only)")
+    p.add_option("-u", "--debug", action="store_true", default=False,
+            help="build the QScintilla module with debugging symbols")
+    p.add_option("-v", "--sipdir", action="callback", default=None,
+            metavar="DIR", dest="qscisipdir", callback=store_abspath,
+            type="string", help="where the QScintilla .sip files will be "
+            "installed [default: %s]" % pyqt.pyqt_sip_dir)
+
+    return p
 
 
 def inform_user():
@@ -124,33 +141,33 @@ def inform_user():
     sipconfig.inform("Qt v%s %s edition is being used." % (sipconfig.version_to_string(pyqt.qt_version), pyqt.qt_edition))
     sipconfig.inform("SIP %s is being used." % pyqt.sip_version_str)
 
-    sipconfig.inform("The QScintilla module will be installed in %s." % opt_qscimoddir)
-    sipconfig.inform("The QScintilla API file will be installed in %s." % os.path.join(opt_qscidir, "api", "python"))
-    sipconfig.inform("The QScintilla .sip files will be installed in %s." % opt_qscisipdir)
+    sipconfig.inform("The QScintilla module will be installed in %s." % opts.qscimoddir)
+    sipconfig.inform("The QScintilla API file will be installed in %s." % os.path.join(opts.qscidir, "api", "python"))
+    sipconfig.inform("The QScintilla .sip files will be installed in %s." % opts.qscisipdir)
 
 
 def check_qscintilla():
     """See if QScintilla can be found and what its version is.
     """
     # Find the QScintilla header files.
-    sciglobal = os.path.join(opt_qsciincdir, "Qsci", "qsciglobal.h")
+    sciglobal = os.path.join(opts.qsciincdir, "Qsci", "qsciglobal.h")
 
     if os.access(sciglobal, os.F_OK):
         # Get the QScintilla version string.
         _, sciversstr = sipconfig.read_version(sciglobal, "QScintilla", "QSCINTILLA_VERSION", "QSCINTILLA_VERSION_STR")
 
-        if glob.glob(os.path.join(opt_qscilibdir, "*qscintilla2*")):
+        if glob.glob(os.path.join(opts.qscilibdir, "*qscintilla2*")):
             # Because we include the Python bindings with the C++ code we can
             # reasonably force the same version to be used and not bother about
             # versioning.
-            if sciversstr != "2.2.1-snapshot-20080309":
-                sipconfig.error("QScintilla %s is being used but the Python bindings 2.2.1-snapshot-20080309 are being built.  Please use matching versions." % sciversstr)
+            if sciversstr != "2.4.1-snapshot-20090819":
+                sipconfig.error("QScintilla %s is being used but the Python bindings 2.4.1-snapshot-20090819 are being built.  Please use matching versions." % sciversstr)
 
             sipconfig.inform("QScintilla %s is being used." % sciversstr)
         else:
-            sipconfig.error("The QScintilla library could not be found in %s. If QScintilla is installed then use the -o argument to explicitly specify the correct directory." % opt_qscilibdir)
+            sipconfig.error("The QScintilla library could not be found in %s. If QScintilla is installed then use the -o argument to explicitly specify the correct directory." % opts.qscilibdir)
     else:
-        sipconfig.error("Qsci/qsciglobal.h could not be found in %s. If QScintilla is installed then use the -n argument to explicitly specify the correct directory." % opt_qsciincdir)
+        sipconfig.error("Qsci/qsciglobal.h could not be found in %s. If QScintilla is installed then use the -n argument to explicitly specify the correct directory." % opts.qsciincdir)
 
 
 def sip_flags():
@@ -190,11 +207,11 @@ def generate_code():
 
     argv.extend(sip_flags())
 
-    if opt_concat:
+    if opts.concat:
         argv.append("-j")
-        argv.append(str(opt_split))
+        argv.append(str(opts.split))
 
-    if opt_tracing:
+    if opts.tracing:
         argv.append("-r")
 
     argv.append("-c")
@@ -219,10 +236,10 @@ def generate_code():
     sipconfig.inform("Creating the Makefile for the %s module..." % mname)
 
     def fix_install(mfile):
-        if sys.platform != "darwin" or opt_static:
+        if sys.platform != "darwin" or opts.static:
             return
 
-        mfile.write("\tinstall_name_tool -change libqscintilla2.%u.dylib %s/libqscintilla2.%u.dylib $(DESTDIR)%s/$(TARGET)\n" % (QSCI_API_MAJOR, opt_qscilibdir, QSCI_API_MAJOR, opt_qscimoddir))
+        mfile.write("\tinstall_name_tool -change libqscintilla2.%u.dylib %s/libqscintilla2.%u.dylib $(DESTDIR)%s/$(TARGET)\n" % (QSCI_API_MAJOR, opts.qscilibdir, QSCI_API_MAJOR, opts.qscimoddir))
 
     if pyqt.pyqt_version >= 0x040000:
         class Makefile(pyqt4.QtGuiModuleMakefile):
@@ -241,33 +258,36 @@ def generate_code():
     for s in glob.glob("sip/*.sip"):
         sipfiles.append(os.path.join("sip", os.path.basename(s)))
 
-    installs.append([sipfiles, os.path.join(opt_qscisipdir, mname)])
+    installs.append([sipfiles, os.path.join(opts.qscisipdir, mname)])
 
-    installs.append(("QScintilla2.api", os.path.join(opt_qscidir, "api", "python")))
+    installs.append(("QScintilla2.api", os.path.join(opts.qscidir, "api", "python")))
 
     # PyQt v4.2 and later can handle MacOS/X universal binaries.
     if pyqt.pyqt_version >= 0x040200:
         makefile = Makefile(
             configuration=pyqt,
             build_file="qsci.sbf",
-            install_dir=opt_qscimoddir,
+            install_dir=opts.qscimoddir,
             installs=installs,
-            static=opt_static,
-            debug=opt_debug,
+            static=opts.static,
+            debug=opts.debug,
             universal=pyqt.universal
         )
     else:
         makefile = Makefile(
             configuration=pyqt,
             build_file="qsci.sbf",
-            install_dir=opt_qscimoddir,
+            install_dir=opts.qscimoddir,
             installs=installs,
-            static=opt_static,
-            debug=opt_debug
+            static=opts.static,
+            debug=opts.debug
         )
 
-    makefile.extra_include_dirs.append(opt_qsciincdir)
-    makefile.extra_lib_dirs.append(opt_qscilibdir)
+    if qsci_define:
+        makefile.extra_defines.append(qsci_define)
+
+    makefile.extra_include_dirs.append(opts.qsciincdir)
+    makefile.extra_lib_dirs.append(opts.qscilibdir)
     makefile.extra_libs.append("qscintilla2")
 
     makefile.generate()
@@ -286,80 +306,53 @@ def main(argv):
             sipconfig.error("This version of QScintilla requires SIP v%s or later" % sipconfig.version_to_string(sip_min_version))
 
     # Parse the command line.
-    try:
-        optlist, args = getopt.getopt(argv[1:], "a:hcd:j:kn:o:p:rsuv:")
-    except getopt.GetoptError:
-        usage()
+    global opts
+
+    p = create_optparser()
+    opts, args = p.parse_args()
 
     if args:
-        usage()
+        p.print_help()
+        sys.exit(2)
 
-    global opt_qscimoddir, opt_qscisipdir, opt_qsciincdir, opt_qscilibdir
-    global opt_concat, opt_split, opt_static, opt_tracing, opt_debug
-    global qsci_define, qt_data_dir, opt_qscidir
+    if opts.not_dll:
+        global qsci_define
+        qsci_define = ""
 
-    for opt, arg in optlist:
-        if opt == "-h":
-            usage(0)
-        elif opt == "-a":
-            opt_qscidir = os.path.abspath(arg)
-        elif opt == "-c":
-            opt_concat = True
-        elif opt == "-d":
-            opt_qscimoddir = os.path.abspath(arg)
-        elif opt == "-j":
-            try:
-                opt_split = int(arg)
-            except:
-                usage()
-        elif opt == "-k":
-            opt_static = True
-        elif opt == "-n":
-            opt_qsciincdir = os.path.abspath(arg)
-        elif opt == "-o":
-            opt_qscilibdir = os.path.abspath(arg)
-        elif opt == "-p":
-            if arg == "4":
-                if pyqt4 is None:
-                    sipconfig.error("PyQt v4 was specified with the -p argument but doesn't seem to be installed.")
-                else:
-                    pyqt = pyqt4.Configuration()
-                    qt_data_dir = pyqt.qt_data_dir
-            elif arg == "3":
-                if pyqt3 is None:
-                    sipconfig.error("PyQt v3 was specified with the -p argument but doesn't seem to be installed.")
-                else:
-                    pyqt = pyqt3.Configuration()
-                    qt_data_dir = pyqt.qt_dir
-            else:
-                usage()
-        elif opt == "-r":
-            opt_tracing = True
-        elif opt == "-s":
-            qsci_define = ""
-        elif opt == "-u":
-            opt_debug = True
-        elif opt == "-v":
-            opt_qscisipdir = os.path.abspath(arg)
+    # Set the version of PyQt explicitly.
+    global qt_data_dir
+
+    if opts.pyqt_major == 4:
+        if pyqt4 is None:
+            sipconfig.error("PyQt v4 was specified with the -p argument but doesn't seem to be installed.")
         else:
-            usage()
+            pyqt = pyqt4.Configuration()
+            qt_data_dir = pyqt.qt_data_dir
+    elif opts.pyqt_major == 3:
+        if pyqt3 is None:
+            sipconfig.error("PyQt v3 was specified with the -p argument but doesn't seem to be installed.")
+        else:
+            pyqt = pyqt3.Configuration()
+            qt_data_dir = pyqt.qt_dir
+    elif opts.pyqt_major >= 0:
+        sipconfig.error("Specify either 3 or 4 with the -p argument.")
 
     # Now we know which version of PyQt to use we can set defaults for those
     # arguments that weren't specified.
-    if opt_qscimoddir is None:
-        opt_qscimoddir = pyqt.pyqt_mod_dir
+    if opts.qscimoddir is None:
+        opts.qscimoddir = pyqt.pyqt_mod_dir
 
-    if opt_qsciincdir is None:
-        opt_qsciincdir = pyqt.qt_inc_dir
+    if opts.qsciincdir is None:
+        opts.qsciincdir = pyqt.qt_inc_dir
 
-    if opt_qscilibdir is None:
-        opt_qscilibdir = pyqt.qt_lib_dir
+    if opts.qscilibdir is None:
+        opts.qscilibdir = pyqt.qt_lib_dir
 
-    if opt_qscisipdir is None:
-        opt_qscisipdir = pyqt.pyqt_sip_dir
+    if opts.qscisipdir is None:
+        opts.qscisipdir = pyqt.pyqt_sip_dir
 
-    if opt_qscidir is None:
-        opt_qscidir = os.path.join(qt_data_dir, "qsci")
+    if opts.qscidir is None:
+        opts.qscidir = os.path.join(qt_data_dir, "qsci")
 
     # Check for QScintilla.
     check_qscintilla()
@@ -381,8 +374,8 @@ if __name__ == "__main__":
     except SystemExit:
         raise
     except:
-        print \
+        sys.stderr.write(
 """An internal error occured.  Please report all the output from the program,
 including the following traceback, to support@riverbankcomputing.com.
-"""
+""")
         raise

@@ -1,7 +1,7 @@
 // This module implements the specialisation of QListBox that handles the
 // Scintilla double-click callback.
 //
-// Copyright (c) 2008 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2009 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -25,11 +25,6 @@
 // http://trolltech.com/products/qt/licenses/licensing/licensingoverview
 // or contact the sales department at sales@riverbankcomputing.com.
 // 
-// This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
-// INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE. Trolltech reserves all rights not expressly
-// granted herein.
-// 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
@@ -39,10 +34,7 @@
 #include <stdlib.h>
 
 #include "SciClasses.h"
-
-
-// The backdoor through which the full text of the selected item is passed.
-QString ListBoxQt::backdoor;
+#include "Qsci/qsciscintilla.h"
 
 
 ListBoxQt::ListBoxQt()
@@ -193,9 +185,24 @@ void ListBoxQt::GetValue(int n, char *value, int len)
 {
     Q_ASSERT(slb);
 
-    backdoor = slb->text(n);
+    QString selection = slb->text(n);
 
-    if (backdoor.isEmpty() || len <= 0)
+    bool trim_selection = false;
+    QObject *sci_obj = slb->parent();
+
+    if (sci_obj->inherits("QsciScintilla"))
+    {
+        QsciScintilla *sci = static_cast<QsciScintilla *>(sci_obj);
+
+        if (sci->isAutoCompletionList())
+        {
+            // Save the full selection and trim the value we return.
+            sci->acSelection = selection;
+            trim_selection = true;
+        }
+    }
+
+    if (selection.isEmpty() || len <= 0)
         value[0] = '\0';
     else
     {
@@ -205,18 +212,20 @@ void ListBoxQt::GetValue(int n, char *value, int len)
         QByteArray bytes;
 
         if (utf8)
-            bytes = backdoor.toUtf8();
+            bytes = selection.toUtf8();
         else
-            bytes = backdoor.toLatin1();
+            bytes = selection.toLatin1();
 
         s = bytes.data();
         slen = bytes.length();
 
-        // Copy everything up to the first space.  We assume everything
-        // afterwards is additional descriptive information which shouldn't
-        // be inserted into the text.
-        while (slen-- && len-- && *s != ' ')
+        while (slen-- && len--)
+        {
+            if (trim_selection && *s == ' ')
+                break;
+
             *value++ = *s++;
+        }
 
         *value = '\0';
     }

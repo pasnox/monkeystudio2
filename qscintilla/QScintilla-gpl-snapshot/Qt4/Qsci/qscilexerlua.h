@@ -1,6 +1,6 @@
 // This defines the interface to the QsciLexerLua class.
 //
-// Copyright (c) 2008 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2009 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -23,11 +23,6 @@
 // review the following information:
 // http://trolltech.com/products/qt/licenses/licensing/licensingoverview
 // or contact the sales department at sales@riverbankcomputing.com.
-// 
-// This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
-// INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE. Trolltech reserves all rights not expressly
-// granted herein.
 // 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -115,6 +110,10 @@ public:
     //! Returns the name of the lexer.  Some lexers support a number of
     //! languages.
     const char *lexer() const;
+
+    //! \internal Returns the character sequences that can separate
+    //! auto-completion words.
+    QStringList autoCompletionWordSeparators() const;
 
     //! \internal Returns a space separated list of words or characters in
     //! a particular style that define the start of a block for

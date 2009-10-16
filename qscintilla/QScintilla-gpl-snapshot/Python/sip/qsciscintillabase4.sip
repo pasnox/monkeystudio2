@@ -1,6 +1,6 @@
 // This is the SIP interface definition for QsciScintillaBase.
 //
-// Copyright (c) 2008 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2009 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -23,11 +23,6 @@
 // review the following information:
 // http://trolltech.com/products/qt/licenses/licensing/licensingoverview
 // or contact the sales department at sales@riverbankcomputing.com.
-// 
-// This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
-// INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE. Trolltech reserves all rights not expressly
-// granted herein.
 // 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -505,6 +500,39 @@ public:
         SCI_SETSCROLLWIDTHTRACKING,
         SCI_GETSCROLLWIDTHTRACKING,
         SCI_DELWORDRIGHTEND,
+        SCI_COPYALLOWLINE,
+        SCI_GETCHARACTERPOINTER,
+        SCI_SETKEYSUNICODE,
+        SCI_GETKEYSUNICODE,
+        SCI_INDICSETALPHA,
+        SCI_INDICGETALPHA,
+        SCI_SETEXTRAASCENT,
+        SCI_GETEXTRAASCENT,
+        SCI_SETEXTRADESCENT,
+        SCI_GETEXTRADESCENT,
+        SCI_MARKERSYMBOLDEFINED,
+        SCI_MARGINSETTEXT,
+        SCI_MARGINGETTEXT,
+        SCI_MARGINSETSTYLE,
+        SCI_MARGINGETSTYLE,
+        SCI_MARGINSETSTYLES,
+        SCI_MARGINGETSTYLES,
+        SCI_MARGINTEXTCLEARALL,
+        SCI_MARGINSETSTYLEOFFSET,
+        SCI_MARGINGETSTYLEOFFSET,
+        SCI_ANNOTATIONSETTEXT,
+        SCI_ANNOTATIONGETTEXT,
+        SCI_ANNOTATIONSETSTYLE,
+        SCI_ANNOTATIONGETSTYLE,
+        SCI_ANNOTATIONSETSTYLES,
+        SCI_ANNOTATIONGETSTYLES,
+        SCI_ANNOTATIONGETLINES,
+        SCI_ANNOTATIONCLEARALL,
+        SCI_ANNOTATIONSETVISIBLE,
+        SCI_ANNOTATIONGETVISIBLE,
+        SCI_ANNOTATIONSETSTYLEOFFSET,
+        SCI_ANNOTATIONGETSTYLEOFFSET,
+        SCI_ADDUNDOACTION,
         SCI_STARTRECORD,
         SCI_STOPRECORD,
         SCI_SETLEXER,
@@ -592,6 +620,8 @@ public:
         SC_MARK_ARROWS,
         SC_MARK_PIXMAP,
         SC_MARK_FULLRECT,
+        SC_MARK_LEFTRECT,
+        SC_MARK_AVAILABLE,
         SC_MARK_CHARACTER
     };
 
@@ -611,6 +641,8 @@ public:
         SC_MARGIN_NUMBER,
         SC_MARGIN_BACK,
         SC_MARGIN_FORE,
+        SC_MARGIN_TEXT,
+        SC_MARGIN_RTEXT,
     };
 
     enum {
@@ -699,16 +731,11 @@ public:
         SC_FOLDLEVELBASE,
         SC_FOLDLEVELWHITEFLAG,
         SC_FOLDLEVELHEADERFLAG,
-        SC_FOLDLEVELBOXHEADERFLAG,
-        SC_FOLDLEVELBOXFOOTERFLAG,
-        SC_FOLDLEVELCONTRACTED,
-        SC_FOLDLEVELUNINDENT,
         SC_FOLDLEVELNUMBERMASK
     };
 
     enum
     {
-        SC_FOLDFLAG_BOX,
         SC_FOLDFLAG_LINEBEFORE_EXPANDED,
         SC_FOLDFLAG_LINEBEFORE_CONTRACTED,
         SC_FOLDFLAG_LINEAFTER_EXPANDED,
@@ -734,6 +761,12 @@ public:
     };
 
     enum {
+        ANNOTATION_HIDDEN,
+        ANNOTATION_STANDARD,
+        ANNOTATION_BOXED,
+    };
+
+    enum {
         EDGE_NONE,
         EDGE_LINE,
         EDGE_BACKGROUND
@@ -742,6 +775,10 @@ public:
     enum {
         SC_CURSORNORMAL,
         SC_CURSORWAIT
+    };
+
+    enum {
+        UNDO_MAY_COALESCE,
     };
 
     enum {
@@ -780,6 +817,9 @@ public:
         SC_STARTACTION,
         SC_MOD_CHANGEINDICATOR,
         SC_MOD_CHANGELINESTATE,
+        SC_MOD_CHANGEMARGIN,
+        SC_MOD_CHANGEANNOTATION,
+        SC_MOD_CONTAINER,
         SC_MODEVENTMASKALL
     };
 
@@ -900,63 +940,82 @@ public:
         SCLEX_ABAQUS,
         SCLEX_ASYMPTOTE,
         SCLEX_R,
+        SCLEX_MAGIK,
+        SCLEX_POWERSHELL,
+        SCLEX_MYSQL,
+        SCLEX_PO,
+        SCLEX_TAL,
+        SCLEX_COBOL,
+        SCLEX_TACL,
+        SCLEX_SORCUS,
+        SCLEX_POWERPRO,
+        SCLEX_NIMROD,
+        SCLEX_SML,
     };
 
     explicit QsciScintillaBase(QWidget *parent /TransferThis/ = 0);
     virtual ~QsciScintillaBase();
 
 %ConvertToSubClassCode
-    static struct class_graph {
-        char *name;
-        sipWrapperType **type;
-        int yes, no;
-    } graph[] = {
-        {sipName_QsciMacro,	&sipClass_QsciMacro,	-1, 1},
-        {sipName_QsciScintillaBase,	&sipClass_QsciScintillaBase,	4, 2},
-        {sipName_QsciAPIs,	&sipClass_QsciAPIs,	-1, 3},
-        {sipName_QsciLexer,	&sipClass_QsciLexer,	5, -1},
-        {sipName_QsciScintilla,	&sipClass_QsciScintilla,	-1, -1},
-        {sipName_QsciLexerCSS,	&sipClass_QsciLexerCSS,	-1, 6},
-        {sipName_QsciLexerCMake,	&sipClass_QsciLexerCMake,	-1, 7},
-        {sipName_QsciLexerProperties,	&sipClass_QsciLexerProperties,	-1, 8},
-        {sipName_QsciLexerHTML,	&sipClass_QsciLexerHTML,	-1, 9},
-        {sipName_QsciLexerPerl,	&sipClass_QsciLexerPerl,	-1, 10},
-        {sipName_QsciLexerD,	&sipClass_QsciLexerD,	-1, 11},
-        {sipName_QsciLexerTeX,	&sipClass_QsciLexerTeX,	-1, 12},
-        {sipName_QsciLexerLua,	&sipClass_QsciLexerLua,	-1, 13},
-        {sipName_QsciLexerRuby,	&sipClass_QsciLexerRuby,	-1, 14},
-        {sipName_QsciLexerCPP,	&sipClass_QsciLexerCPP,	23, 15},
-        {sipName_QsciLexerDiff,	&sipClass_QsciLexerDiff,	-1, 16},
-        {sipName_QsciLexerMakefile,	&sipClass_QsciLexerMakefile,	-1, 17},
-        {sipName_QsciLexerPython,	&sipClass_QsciLexerPython,	-1, 18},
-        {sipName_QsciLexerBash,	&sipClass_QsciLexerBash,	-1, 19},
-        {sipName_QsciLexerBatch,	&sipClass_QsciLexerBatch,	-1, 20},
-        {sipName_QsciLexerPOV,	&sipClass_QsciLexerPOV,	-1, 21},
-        {sipName_QsciLexerSQL,	&sipClass_QsciLexerSQL,	-1, 22},
-        {sipName_QsciLexerVHDL,	&sipClass_QsciLexerVHDL,	-1, -1},
-        {sipName_QsciLexerJavaScript,	&sipClass_QsciLexerJavaScript,	-1, 24},
-        {sipName_QsciLexerCSharp,	&sipClass_QsciLexerCSharp,	-1, 25},
-        {sipName_QsciLexerJava,	&sipClass_QsciLexerJava,	-1, 26},
-        {sipName_QsciLexerIDL,	&sipClass_QsciLexerIDL,	-1, -1},
-    };
+static struct class_graph {
+    const char *name;
+    sipWrapperType **type;
+    int yes, no;
+} graph[] = {
+    {sipName_QsciMacro, &sipClass_QsciMacro, -1, 1},
+    {sipName_QsciAbstractAPIs, &sipClass_QsciAbstractAPIs, 4, 2},
+    {sipName_QsciScintillaBase, &sipClass_QsciScintillaBase, 5, 3},
+    {sipName_QsciLexer, &sipClass_QsciLexer, 6, -1},
+    {sipName_QsciAPIs, &sipClass_QsciAPIs, -1, -1},
+    {sipName_QsciScintilla, &sipClass_QsciScintilla, -1, -1},
+    {sipName_QsciLexerBash, &sipClass_QsciLexerBash, -1, 7},
+    {sipName_QsciLexerMakefile, &sipClass_QsciLexerMakefile, -1, 8},
+    {sipName_QsciLexerCSS, &sipClass_QsciLexerCSS, -1, 9},
+    {sipName_QsciLexerPerl, &sipClass_QsciLexerPerl, -1, 10},
+    {sipName_QsciLexerBatch, &sipClass_QsciLexerBatch, -1, 11},
+    {sipName_QsciLexerDiff, &sipClass_QsciLexerDiff, -1, 12},
+    {sipName_QsciLexerD, &sipClass_QsciLexerD, -1, 13},
+    {sipName_QsciLexerYAML, &sipClass_QsciLexerYAML, -1, 14},
+    {sipName_QsciLexerSQL, &sipClass_QsciLexerSQL, -1, 15},
+    {sipName_QsciLexerVHDL, &sipClass_QsciLexerVHDL, -1, 16},
+    {sipName_QsciLexerLua, &sipClass_QsciLexerLua, -1, 17},
+    {sipName_QsciLexerRuby, &sipClass_QsciLexerRuby, -1, 18},
+    {sipName_QsciLexerCMake, &sipClass_QsciLexerCMake, -1, 19},
+    {sipName_QsciLexerFortran77, &sipClass_QsciLexerFortran77, 29, 20},
+    {sipName_QsciLexerPostScript, &sipClass_QsciLexerPostScript, -1, 21},
+    {sipName_QsciLexerPOV, &sipClass_QsciLexerPOV, -1, 22},
+    {sipName_QsciLexerPascal, &sipClass_QsciLexerPascal, -1, 23},
+    {sipName_QsciLexerPython, &sipClass_QsciLexerPython, -1, 24},
+    {sipName_QsciLexerTeX, &sipClass_QsciLexerTeX, -1, 25},
+    {sipName_QsciLexerHTML, &sipClass_QsciLexerHTML, 30, 26},
+    {sipName_QsciLexerCPP, &sipClass_QsciLexerCPP, 31, 27},
+    {sipName_QsciLexerProperties, &sipClass_QsciLexerProperties, -1, 28},
+    {sipName_QsciLexerTCL, &sipClass_QsciLexerTCL, -1, -1},
+    {sipName_QsciLexerFortran, &sipClass_QsciLexerFortran, -1, -1},
+    {sipName_QsciLexerXML, &sipClass_QsciLexerXML, -1, -1},
+    {sipName_QsciLexerCSharp, &sipClass_QsciLexerCSharp, -1, 32},
+    {sipName_QsciLexerIDL, &sipClass_QsciLexerIDL, -1, 33},
+    {sipName_QsciLexerJava, &sipClass_QsciLexerJava, -1, 34},
+    {sipName_QsciLexerJavaScript, &sipClass_QsciLexerJavaScript, -1, -1},
+};
 
-    int i = 0;
+int i = 0;
 
-    sipClass = NULL;
+sipClass = NULL;
 
-    do
+do
+{
+    struct class_graph *cg = &graph[i];
+
+    if (cg->name != NULL && sipCpp->inherits(cg->name))
     {
-        struct class_graph *cg = &graph[i];
-
-        if (cg->name != NULL && sipCpp->inherits(cg->name))
-        {
-            sipClass = *cg->type;
-            i = cg->yes;
-        }
-        else
-            i = cg->no;
+        sipClass = *cg->type;
+        i = cg->yes;
     }
-    while (i >= 0);
+    else
+        i = cg->no;
+}
+while (i >= 0);
 %End
 
     static QsciScintillaBase *pool();
@@ -990,6 +1049,8 @@ signals:
 
     void SCEN_CHANGE();
 
+    void SCN_AUTOCCANCELLED();
+    void SCN_AUTOCCHARDELETED();
     void SCN_AUTOCSELECTION(const char *selection, int position);
     void SCN_CALLTIPCLICK(int direction);
     void SCN_CHARADDED(int charadded);
@@ -1002,7 +1063,7 @@ signals:
     void SCN_INDICATORRELEASE(int position, int modifiers);
     void SCN_MACRORECORD(unsigned int, unsigned long, void *);
     void SCN_MARGINCLICK(int position, int modifiers, int margin);
-    void SCN_MODIFIED(int, int, const char *, int, int, int, int, int);
+    void SCN_MODIFIED(int, int, const char *, int, int, int, int, int, int, int);
     void SCN_MODIFYATTEMPTRO();
     void SCN_NEEDSHOWN(int, int);
     void SCN_PAINTED();

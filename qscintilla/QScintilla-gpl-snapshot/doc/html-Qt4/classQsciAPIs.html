@@ -19,10 +19,12 @@
     <li><a href="functions.html"><span>Class&nbsp;Members</span></a></li>
   </ul>
 </div>
-<h1>QsciAPIs Class Reference</h1><!-- doxytag: class="QsciAPIs" -->The <a class="el" href="classQsciAPIs.html" title="The QsciAPIs class represents the textual API information used in call tips and for...">QsciAPIs</a> class represents the textual API information used in call tips and for auto-completion. API information is specific to a particular language lexer but can be shared by multiple instances of the lexer.  
+<h1>QsciAPIs Class Reference</h1><!-- doxytag: class="QsciAPIs" --><!-- doxytag: inherits="QsciAbstractAPIs" -->The <a class="el" href="classQsciAPIs.html" title="The QsciAPIs class provies an implementation of the textual API information used...">QsciAPIs</a> class provies an implementation of the textual API information used in call tips and for auto-completion.  
 <a href="#_details">More...</a>
 <p>
 <code>#include &lt;qsciapis.h&gt;</code>
+<p>
+Inherits <a class="el" href="classQsciAbstractAPIs.html">QsciAbstractAPIs</a>.
 <p>
 
 <p>
@@ -46,25 +48,20 @@
 <li>bool <a class="el" href="classQsciAPIs.html#c7ac08654f4cea03cb15a951a310d606">isPrepared</a> (const QString &amp;fname=QString()) const 
 <li>bool <a class="el" href="classQsciAPIs.html#68767739f2a23715f243e5b4b70f81e3">loadPrepared</a> (const QString &amp;fname=QString())
 <li>bool <a class="el" href="classQsciAPIs.html#341c212308f1a79de81819bd32c2d077">savePrepared</a> (const QString &amp;fname=QString()) const 
-<li><a class="anchor" name="73f93b1d73ada32c3fc10e5894ea2a90"></a><!-- doxytag: member="QsciAPIs::autoCompletionList" ref="73f93b1d73ada32c3fc10e5894ea2a90" args="(const QStringList &amp;context, QStringList &amp;wlist)" -->
-void <b>autoCompletionList</b> (const QStringList &amp;context, QStringList &amp;wlist)
-<li><a class="anchor" name="eabefa43c31aef8b27d16c0930fd8e16"></a><!-- doxytag: member="QsciAPIs::autoCompletionSelected" ref="eabefa43c31aef8b27d16c0930fd8e16" args="(const QString &amp;sel)" -->
-void <b>autoCompletionSelected</b> (const QString &amp;sel)
-<li><a class="anchor" name="047ef480780bc27e9ed045df45ad3442"></a><!-- doxytag: member="QsciAPIs::callTips" ref="047ef480780bc27e9ed045df45ad3442" args="(const QStringList &amp;context, QsciScintilla::CallTipsStyle style, int maxnr, int commas, int &amp;ctshift)" -->
-QString <b>callTips</b> (const QStringList &amp;context, <a class="el" href="classQsciScintilla.html#62d0174cb0a07e3f2d48fc0603192668">QsciScintilla::CallTipsStyle</a> style, int maxnr, int commas, int &amp;ctshift)
-<li><a class="anchor" name="048f9eaa0586533d681c248f6934eff8"></a><!-- doxytag: member="QsciAPIs::callTipsNextPrev" ref="048f9eaa0586533d681c248f6934eff8" args="(int dir, int &amp;ctshift)" -->
-QString <b>callTipsNextPrev</b> (int dir, int &amp;ctshift)
+<li>virtual void <a class="el" href="classQsciAPIs.html#b0f824492bb0f3ca54edb4d46945a3de">updateAutoCompletionList</a> (const QStringList &amp;context, QStringList &amp;list)
+<li>virtual void <a class="el" href="classQsciAPIs.html#dff0073d1f4ee2e0ea8b3bf234ff2dd3">autoCompletionSelected</a> (const QString &amp;sel)
+<li>virtual QStringList <a class="el" href="classQsciAPIs.html#6a75974235c5e8d263bf962c778b3a3e">callTips</a> (const QStringList &amp;context, int commas, <a class="el" href="classQsciScintilla.html#62d0174cb0a07e3f2d48fc0603192668">QsciScintilla::CallTipsStyle</a> style, QList&lt; int &gt; &amp;shifts)
 <li><a class="anchor" name="ade407551cb7e9e116e098f08ef5d26c"></a><!-- doxytag: member="QsciAPIs::event" ref="ade407551cb7e9e116e098f08ef5d26c" args="(QEvent *e)" -->
 virtual bool <b>event</b> (QEvent *e)
 <li>QStringList <a class="el" href="classQsciAPIs.html#f46f094f729bf246a2ffad6dbadf7f65">installedAPIFiles</a> () const 
 </ul>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
-The <a class="el" href="classQsciAPIs.html" title="The QsciAPIs class represents the textual API information used in call tips and for...">QsciAPIs</a> class represents the textual API information used in call tips and for auto-completion. API information is specific to a particular language lexer but can be shared by multiple instances of the lexer. 
+The <a class="el" href="classQsciAPIs.html" title="The QsciAPIs class provies an implementation of the textual API information used...">QsciAPIs</a> class provies an implementation of the textual API information used in call tips and for auto-completion. 
 <p>
 Raw API information is read from one or more files. Each API function is described by a single line of text comprising the function's name, followed by the function's optional comma separated parameters enclosed in parenthesis, and finally followed by optional explanatory text.<p>
 A function name may be followed by a `?' and a number. The number is used by auto-completion to display a registered QPixmap with the function name.<p>
 All function names are used by auto-completion, but only those that include function parameters are used in call tips.<p>
-QScintilla only deals with prepared API information and not the raw information described above. This is done so that large APIs can be handled while still being responsive to user input. The conversion of raw information to prepared information is time consuming (think tens of seconds) and implemented in a separate thread. Processed information can be quickly saved to and loaded from files. Such files are portable between different architectures.<p>
+QScintilla only deals with prepared API information and not the raw information described above. This is done so that large APIs can be handled while still being responsive to user input. The conversion of raw information to prepared information is time consuming (think tens of seconds) and implemented in a separate thread. Prepared information can be quickly saved to and loaded from files. Such files are portable between different architectures.<p>
 QScintilla based applications that want to support large APIs would normally provide the user with the ability to specify a set of, possibly project specific, raw API files and convert them to prepared files that are loaded quickly when the application is invoked. <hr><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" name="af185d65d1034087b77995d8490b6475"></a><!-- doxytag: member="QsciAPIs::QsciAPIs" ref="af185d65d1034087b77995d8490b6475" args="(QsciLexer *lexer)" -->
 <div class="memitem">
@@ -83,7 +80,7 @@ QScintilla based applications that want to support large APIs would normally pro
 <div class="memdoc">
 
 <p>
-Constructs a <a class="el" href="classQsciAPIs.html" title="The QsciAPIs class represents the textual API information used in call tips and for...">QsciAPIs</a> instance attached to lexer <em>lexer</em>. <em>lexer</em> becomes the instance's parent object although the instance can also be subsequently attached to other lexers. 
+Constructs a <a class="el" href="classQsciAPIs.html" title="The QsciAPIs class provies an implementation of the textual API information used...">QsciAPIs</a> instance attached to lexer <em>lexer</em>. <em>lexer</em> becomes the instance's parent object although the instance can also be subsequently attached to other lexers. 
 </div>
 </div><p>
 <a class="anchor" name="07bc73b7a67f8f405578992bae29528c"></a><!-- doxytag: member="QsciAPIs::~QsciAPIs" ref="07bc73b7a67f8f405578992bae29528c" args="()" -->
@@ -102,7 +99,7 @@ Constructs a <a class="el" href="classQsciAPIs.html" title="The QsciAPIs class r
 <div class="memdoc">
 
 <p>
-Destroy the <a class="el" href="classQsciAPIs.html" title="The QsciAPIs class represents the textual API information used in call tips and for...">QsciAPIs</a> instance. 
+Destroy the <a class="el" href="classQsciAPIs.html" title="The QsciAPIs class provies an implementation of the textual API information used...">QsciAPIs</a> instance. 
 <p>
 
 </div>
@@ -316,6 +313,108 @@ Load the prepared API information from the file named <em>fname</em>. If <em>fna
 Save the prepared API information to the file named <em>fname</em>. If <em>fname</em> is empty then a name is constructed based on the name of the associated lexer and saved in the directory defined by the QSCIDIR environment variable. If the environment variable isn't set then $HOME/.qsci is used. Returns true if successful, otherwise false. 
 </div>
 </div><p>
+<a class="anchor" name="b0f824492bb0f3ca54edb4d46945a3de"></a><!-- doxytag: member="QsciAPIs::updateAutoCompletionList" ref="b0f824492bb0f3ca54edb4d46945a3de" args="(const QStringList &amp;context, QStringList &amp;list)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void QsciAPIs::updateAutoCompletionList           </td>
+          <td>(</td>
+          <td class="paramtype">const QStringList &amp;&nbsp;</td>
+          <td class="paramname"> <em>context</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QStringList &amp;&nbsp;</td>
+          <td class="paramname"> <em>list</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+<p>
+
+<p>Implements <a class="el" href="classQsciAbstractAPIs.html#62a50642b0b058016ed2fdf0922bdee8">QsciAbstractAPIs</a>.</p>
+
+</div>
+</div><p>
+<a class="anchor" name="dff0073d1f4ee2e0ea8b3bf234ff2dd3"></a><!-- doxytag: member="QsciAPIs::autoCompletionSelected" ref="dff0073d1f4ee2e0ea8b3bf234ff2dd3" args="(const QString &amp;sel)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void QsciAPIs::autoCompletionSelected           </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&nbsp;</td>
+          <td class="paramname"> <em>sel</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+<p>
+
+<p>Reimplemented from <a class="el" href="classQsciAbstractAPIs.html#90fa0f912b748b707967ccb722f04ddc">QsciAbstractAPIs</a>.</p>
+
+</div>
+</div><p>
+<a class="anchor" name="6a75974235c5e8d263bf962c778b3a3e"></a><!-- doxytag: member="QsciAPIs::callTips" ref="6a75974235c5e8d263bf962c778b3a3e" args="(const QStringList &amp;context, int commas, QsciScintilla::CallTipsStyle style, QList&lt; int &gt; &amp;shifts)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual QStringList QsciAPIs::callTips           </td>
+          <td>(</td>
+          <td class="paramtype">const QStringList &amp;&nbsp;</td>
+          <td class="paramname"> <em>context</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>commas</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classQsciScintilla.html#62d0174cb0a07e3f2d48fc0603192668">QsciScintilla::CallTipsStyle</a>&nbsp;</td>
+          <td class="paramname"> <em>style</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QList&lt; int &gt; &amp;&nbsp;</td>
+          <td class="paramname"> <em>shifts</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+<p>
+
+<p>Implements <a class="el" href="classQsciAbstractAPIs.html#f9c6c3f8dc068371398a50c6b23dcbf4">QsciAbstractAPIs</a>.</p>
+
+</div>
+</div><p>
 <a class="anchor" name="f46f094f729bf246a2ffad6dbadf7f65"></a><!-- doxytag: member="QsciAPIs::installedAPIFiles" ref="f46f094f729bf246a2ffad6dbadf7f65" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -398,7 +497,7 @@ This signal is emitted when the conversion of raw API information to prepared AP
 
 </div>
 </div><p>
-<hr size="1"><address style="text-align: right;"><small>Generated on Fri Apr 11 03:44:27 2008 for QScintilla by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Thu Aug 20 03:46:55 2009 for QScintilla by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.4 </small></address>
 </body>

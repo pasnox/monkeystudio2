@@ -1,6 +1,6 @@
 // This module implements the QsciMacro class.
 //
-// Copyright (c) 2008 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2009 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -23,11 +23,6 @@
 // review the following information:
 // http://trolltech.com/products/qt/licenses/licensing/licensingoverview
 // or contact the sales department at sales@riverbankcomputing.com.
-// 
-// This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
-// INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE. Trolltech reserves all rights not expressly
-// granted herein.
 // 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -246,8 +241,8 @@ void QsciMacro::startRecording()
 
     macro.clear();
 
-    connect(qsci, SIGNAL(SCN_MACRORECORD(unsigned int, unsigned long, long)),
-            SLOT(record(unsigned int, unsigned long, long)));
+    connect(qsci, SIGNAL(SCN_MACRORECORD(unsigned int, unsigned long, void *)),
+            SLOT(record(unsigned int, unsigned long, void *)));
 
     qsci->SendScintilla(QsciScintillaBase::SCI_STARTRECORD);
 }
@@ -265,7 +260,7 @@ void QsciMacro::endRecording()
 
 
 // Record a command.
-void QsciMacro::record(unsigned int msg, unsigned long wParam, long lParam)
+void QsciMacro::record(unsigned int msg, unsigned long wParam, void *lParam)
 {
     Macro m;
 

@@ -30,9 +30,13 @@ Inherits <a class="el" href="classQsciScintillaBase.html">QsciScintillaBase</a>.
 <p>
 <a href="classQsciScintilla-members.html">List of all members.</a><h2>Public Types</h2>
 <ul>
-<li>enum { <a class="el" href="classQsciScintilla.html#de819882be1ccefd8d3037288db1b47b63083d9a621b8dc11de24e63f2ccdef6">AiMaintain</a> =  0x01, 
-<a class="el" href="classQsciScintilla.html#de819882be1ccefd8d3037288db1b47b4644ed0f2bb211f82d6ceec31cf0b1ad">AiOpening</a> =  0x02, 
-<a class="el" href="classQsciScintilla.html#de819882be1ccefd8d3037288db1b47bcae08c8d6e6cc73fcd5492d46e2432eb">AiClosing</a> =  0x04
+<li>enum { <a class="el" href="classQsciScintilla.html#df33d646f596b6362948d036f9ad04f163083d9a621b8dc11de24e63f2ccdef6">AiMaintain</a> =  0x01, 
+<a class="el" href="classQsciScintilla.html#df33d646f596b6362948d036f9ad04f14644ed0f2bb211f82d6ceec31cf0b1ad">AiOpening</a> =  0x02, 
+<a class="el" href="classQsciScintilla.html#df33d646f596b6362948d036f9ad04f1cae08c8d6e6cc73fcd5492d46e2432eb">AiClosing</a> =  0x04
+ }
+<li>enum <a class="el" href="classQsciScintilla.html#3793111b6e2a86351c798c68deda7d0c">AnnotationDisplay</a> { <a class="el" href="classQsciScintilla.html#3793111b6e2a86351c798c68deda7d0cf708fc8c6c5b70daf1e03d5286a699f6">AnnotationHidden</a> =  ANNOTATION_HIDDEN, 
+<a class="el" href="classQsciScintilla.html#3793111b6e2a86351c798c68deda7d0c9127adc556d20a38d87055264228b121">AnnotationStandard</a> =  ANNOTATION_STANDARD, 
+<a class="el" href="classQsciScintilla.html#3793111b6e2a86351c798c68deda7d0c3b77a53cb3bc889bb98c4d0b79884709">AnnotationBoxed</a> =  ANNOTATION_BOXED
  }
 <li>enum <a class="el" href="classQsciScintilla.html#c466f32c3d7e51790b6b25c864783179">AutoCompletionSource</a> { <br>
 &nbsp;&nbsp;<a class="el" href="classQsciScintilla.html#c466f32c3d7e51790b6b25c864783179c66171d5698c13fb78053b1cccc4024a">AcsNone</a>, 
@@ -70,6 +74,16 @@ Inherits <a class="el" href="classQsciScintillaBase.html">QsciScintillaBase</a>.
 &nbsp;&nbsp;<a class="el" href="classQsciScintilla.html#e478a896ae32a30e8a375049a3d477e0facc823b3e29ee1611ede83d0c8fabbd">BoxedFoldStyle</a>, 
 <a class="el" href="classQsciScintilla.html#e478a896ae32a30e8a375049a3d477e0bd0dcc4e3cbdb15d7ce2076c3f2f1c1c">CircledTreeFoldStyle</a>, 
 <a class="el" href="classQsciScintilla.html#e478a896ae32a30e8a375049a3d477e0c22ee26a39d4661a59f0a2d285ad27e2">BoxedTreeFoldStyle</a>
+<br>
+ }
+<li>enum <a class="el" href="classQsciScintilla.html#edab060e87e0533083ea8f1398302090">MarginType</a> { <br>
+&nbsp;&nbsp;<a class="el" href="classQsciScintilla.html#edab060e87e0533083ea8f1398302090c77614e4b9956e3c44fface749ff6602">SymbolMargin</a> =  SC_MARGIN_SYMBOL, 
+<a class="el" href="classQsciScintilla.html#edab060e87e0533083ea8f13983020900e3a004e5eebb910f8329a48e7721e03">SymbolMarginDefaultForegroundColor</a> =  SC_MARGIN_FORE, 
+<a class="el" href="classQsciScintilla.html#edab060e87e0533083ea8f1398302090d60eb277ce18f3c7baa28721ab5dc834">SymbolMarginDefaultBackgroundColor</a> =  SC_MARGIN_BACK, 
+<br>
+&nbsp;&nbsp;<a class="el" href="classQsciScintilla.html#edab060e87e0533083ea8f1398302090f2e3b128abc692ae0b1b6c835a90537e">NumberMargin</a> =  SC_MARGIN_NUMBER, 
+<a class="el" href="classQsciScintilla.html#edab060e87e0533083ea8f1398302090067796489486bcc1573cb0951a4199a9">TextMargin</a> =  SC_MARGIN_TEXT, 
+<a class="el" href="classQsciScintilla.html#edab060e87e0533083ea8f13983020907445fe74d90bd62eceb5311b1f7f52fc">TextMarginRightJustified</a> =  SC_MARGIN_RTEXT
 <br>
  }
 <li>enum <a class="el" href="classQsciScintilla.html#08467ef528d3048db763979f42664496">MarkerSymbol</a> { <br>
@@ -162,7 +176,7 @@ Inherits <a class="el" href="classQsciScintillaBase.html">QsciScintillaBase</a>.
 <li>virtual void <a class="el" href="classQsciScintilla.html#ea97c6fb0079a6e3e647443b6101ae9d">setCursorPosition</a> (int line, int index)
 <li>virtual void <a class="el" href="classQsciScintilla.html#0f2353468d2c37abe9c933d4ac0478ad">setEolMode</a> (<a class="el" href="classQsciScintilla.html#b4b6b4286a74e173a86de0a7f55241d5">EolMode</a> mode)
 <li>virtual void <a class="el" href="classQsciScintilla.html#b98db9f5166ccc23792aea15a19c2294">setEolVisibility</a> (bool visible)
-<li>virtual void <a class="el" href="classQsciScintilla.html#720a6b3d648435d6928cc68a2553d31e">setFolding</a> (<a class="el" href="classQsciScintilla.html#e478a896ae32a30e8a375049a3d477e0">FoldStyle</a> fold)
+<li>virtual void <a class="el" href="classQsciScintilla.html#340cd78e46fb58fc9b3b78ed158ba56e">setFolding</a> (<a class="el" href="classQsciScintilla.html#e478a896ae32a30e8a375049a3d477e0">FoldStyle</a> fold, int margin=2)
 <li>virtual void <a class="el" href="classQsciScintilla.html#a46e60536be6297de6ca1fb16d36cd51">setIndentation</a> (int line, int indentation)
 <li>virtual void <a class="el" href="classQsciScintilla.html#1b4591eb73dcef0153861f698edc8726">setIndentationGuides</a> (bool enable)
 <li>virtual void <a class="el" href="classQsciScintilla.html#18d150beb0cd818ebcbcee886217de6a">setIndentationGuidesBackgroundColor</a> (const QColor &amp;col)
@@ -214,6 +228,14 @@ Inherits <a class="el" href="classQsciScintillaBase.html">QsciScintillaBase</a>.
 <ul>
 <li><a class="el" href="classQsciScintilla.html#978b6679ccd9d9edb6091502001a5f45">QsciScintilla</a> (QWidget *parent=0)
 <li>virtual <a class="el" href="classQsciScintilla.html#bb3418e72ca4479b276276d652048461">~QsciScintilla</a> ()
+<li>virtual QStringList <a class="el" href="classQsciScintilla.html#b8bfeae44abd61659d207a86660b100c">apiContext</a> (int pos, int &amp;context_start, int &amp;last_word_start)
+<li>void <a class="el" href="classQsciScintilla.html#dacd79ec5e25430f0cbff34e6584afe7">annotate</a> (int line, const QString &amp;text, int style)
+<li>void <a class="el" href="classQsciScintilla.html#8ec9b9a33f698fab59f46864ee9a2267">annotate</a> (int line, const QString &amp;text, const <a class="el" href="classQsciStyle.html">QsciStyle</a> &amp;style)
+<li>void <a class="el" href="classQsciScintilla.html#b3721e1af5d7a71efff5a35b63ed1174">annotate</a> (int line, const <a class="el" href="classQsciStyledText.html">QsciStyledText</a> &amp;text)
+<li>void <a class="el" href="classQsciScintilla.html#cc3981a1149b87b38f93195bb0e00f34">annotate</a> (int line, const QList&lt; <a class="el" href="classQsciStyledText.html">QsciStyledText</a> &gt; &amp;text)
+<li>QString <a class="el" href="classQsciScintilla.html#09dd1d79b3a361f15d124b40015d109d">annotation</a> (int line) const 
+<li><a class="el" href="classQsciScintilla.html#3793111b6e2a86351c798c68deda7d0c">AnnotationDisplay</a> <a class="el" href="classQsciScintilla.html#510bb95352468501e3d8699898b7db24">annotationDisplay</a> () const 
+<li>void <a class="el" href="classQsciScintilla.html#3ad17d87cb436e0f6da52a68cd14750e">clearAnnotations</a> (int line=-1)
 <li>bool <a class="el" href="classQsciScintilla.html#28eed8ae496e09582f06d64559e0c2b5">autoCompletionCaseSensitivity</a> () const 
 <li>bool <a class="el" href="classQsciScintilla.html#9db700b1856ba48df81efd79d6f7a405">autoCompletionFillupsEnabled</a> () const 
 <li>bool <a class="el" href="classQsciScintilla.html#eb48b6602d6056336453438780d4f839">autoCompletionReplaceWord</a> () const 
@@ -259,6 +281,7 @@ Inherits <a class="el" href="classQsciScintillaBase.html">QsciScintillaBase</a>.
 <li>bool <a class="el" href="classQsciScintilla.html#b2c87aaa284b13135879791c62f85ae9">isUtf8</a> () const 
 <li>bool <a class="el" href="classQsciScintilla.html#b9aad10b1a020287656850de5170837c">isWordCharacter</a> (char ch) const 
 <li>int <a class="el" href="classQsciScintilla.html#cab1c596641233d25d32187547c37e42">lineAt</a> (const QPoint &amp;pos) const 
+<li>void <a class="el" href="classQsciScintilla.html#56aae6ef4721bae8016cce0b7beeb0a4">lineIndexFromPosition</a> (int position, int *line, int *index) const 
 <li>int <a class="el" href="classQsciScintilla.html#3170a1a681fd7189aaefd39d1efec5e8">lineLength</a> (int line) const 
 <li>int <a class="el" href="classQsciScintilla.html#ad42b7161eb9e4b3ad5dedecf12249a8">lines</a> () const 
 <li>int <a class="el" href="classQsciScintilla.html#1de31f610748a5e8a6e896864a617f79">length</a> () const 
@@ -266,6 +289,7 @@ Inherits <a class="el" href="classQsciScintillaBase.html">QsciScintillaBase</a>.
 <li>bool <a class="el" href="classQsciScintilla.html#48298e4278b089cbd3dd6071e5247800">marginLineNumbers</a> (int margin) const 
 <li>int <a class="el" href="classQsciScintilla.html#adff28b3fad66d120ebc9898d85d87fb">marginMarkerMask</a> (int margin) const 
 <li>bool <a class="el" href="classQsciScintilla.html#de82b8972f547fdc9cd3e1b99d9c287e">marginSensitivity</a> (int margin) const 
+<li><a class="el" href="classQsciScintilla.html#edab060e87e0533083ea8f1398302090">MarginType</a> <a class="el" href="classQsciScintilla.html#4b5213e02b1a26012f961cc4f175b0b6">marginType</a> (int margin) const 
 <li>int <a class="el" href="classQsciScintilla.html#7897f4352ff3a31dc855970fc773f2b3">marginWidth</a> (int margin) const 
 <li>int <a class="el" href="classQsciScintilla.html#270a4ed88aaf7cf312c6c5e871a6cc65">markerDefine</a> (<a class="el" href="classQsciScintilla.html#08467ef528d3048db763979f42664496">MarkerSymbol</a> sym, int mnr=-1)
 <li>int <a class="el" href="classQsciScintilla.html#2d99b2b725d1749eb8801df03a65b109">markerDefine</a> (char ch, int mnr=-1)
@@ -279,11 +303,14 @@ Inherits <a class="el" href="classQsciScintillaBase.html">QsciScintillaBase</a>.
 <li>int <a class="el" href="classQsciScintilla.html#a9d417194083656115b2ce7028040835">markerFindNext</a> (int linenr, unsigned mask) const 
 <li>int <a class="el" href="classQsciScintilla.html#55aeeb0e0dd0700cf9b248bbc9ac77f1">markerFindPrevious</a> (int linenr, unsigned mask) const 
 <li>QColor <a class="el" href="classQsciScintilla.html#58b875bb9976807c1b52ee4ec54e7963">paper</a> () const 
+<li>int <a class="el" href="classQsciScintilla.html#540654e6e1bf1d2f8953e6260ba3121c">positionFromLineIndex</a> (int line, int index) const 
+<li>bool <a class="el" href="classQsciScintilla.html#89e46329c110449b2e7334ccf623ceed">read</a> (QIODevice *io)
 <li>virtual void <a class="el" href="classQsciScintilla.html#07fe5007913f0001a473d92f4c3fdbe6">recolor</a> (int start=0, int end=-1)
 <li>void <a class="el" href="classQsciScintilla.html#38bf5a8680df52675e5299fccbbc7181">registerImage</a> (int id, const QPixmap &amp;pm)
 <li>virtual void <a class="el" href="classQsciScintilla.html#d8a7afc4f25e04e805b7e291d5df1d35">replace</a> (const QString &amp;replaceStr)
 <li>void <a class="el" href="classQsciScintilla.html#e1d3703631c9113a4309da17332ca180">resetFoldMarginColors</a> ()
 <li>void <a class="el" href="classQsciScintilla.html#6bdcf192822a31094e680ffb2f142aab">setFoldMarginColors</a> (const QColor &amp;fore, const QColor &amp;back)
+<li>void <a class="el" href="classQsciScintilla.html#eda9c17a6e746e177fa6f5311d96dc03">setAnnotationDisplay</a> (<a class="el" href="classQsciScintilla.html#3793111b6e2a86351c798c68deda7d0c">AnnotationDisplay</a> display)
 <li>void <a class="el" href="classQsciScintilla.html#0d273a0573088d9fb6d66d7b2633ea4b">setAutoCompletionFillupsEnabled</a> (bool enabled)
 <li>void <a class="el" href="classQsciScintilla.html#9851c2349b4140faa129b7125bee416d">setAutoCompletionFillups</a> (const char *fillups)
 <li>void <a class="el" href="classQsciScintilla.html#4ba18e98a98310113fb30d8ada30fe14">setAutoCompletionWordSeparators</a> (const QStringList &amp;separators)
@@ -296,6 +323,12 @@ Inherits <a class="el" href="classQsciScintillaBase.html">QsciScintillaBase</a>.
 <li>void <a class="el" href="classQsciScintilla.html#ec296526c86ae02deb561b4b4836a886">setEdgeColor</a> (const QColor &amp;col)
 <li>void <a class="el" href="classQsciScintilla.html#8e88f3f4369b73980bb40d5d3a8caf26">setEdgeColumn</a> (int colnr)
 <li>void <a class="el" href="classQsciScintilla.html#3493e72e97607270ca64c01b521f933f">setEdgeMode</a> (<a class="el" href="classQsciScintilla.html#40b8ec37e068b12d9c83ee497929a00e">EdgeMode</a> mode)
+<li>void <a class="el" href="classQsciScintilla.html#7677d42ce77cb5a150dc961d12da92e1">setMarginText</a> (int line, const QString &amp;text, int style)
+<li>void <a class="el" href="classQsciScintilla.html#d1b6838e763eb9d7c0b3562b6c2a96ae">setMarginText</a> (int line, const QString &amp;text, const <a class="el" href="classQsciStyle.html">QsciStyle</a> &amp;style)
+<li>void <a class="el" href="classQsciScintilla.html#d85546712df2387738e63be38dc41d61">setMarginText</a> (int line, const <a class="el" href="classQsciStyledText.html">QsciStyledText</a> &amp;text)
+<li>void <a class="el" href="classQsciScintilla.html#2b148c2c2065f1ef1563421303a02225">setMarginText</a> (int line, const QList&lt; <a class="el" href="classQsciStyledText.html">QsciStyledText</a> &gt; &amp;text)
+<li>void <a class="el" href="classQsciScintilla.html#4dd046074be580fbde318ba2ae343d39">setMarginType</a> (int margin, <a class="el" href="classQsciScintilla.html#edab060e87e0533083ea8f1398302090">MarginType</a> type)
+<li>void <a class="el" href="classQsciScintilla.html#eadb693affb5816e24d28432d8dc240f">clearMarginText</a> (int line=-1)
 <li>void <a class="el" href="classQsciScintilla.html#daeed2e8a40a5ef7251a19ef78cf6fb4">setMarkerBackgroundColor</a> (const QColor &amp;col, int mnr=-1)
 <li>void <a class="el" href="classQsciScintilla.html#a782574cf2237458a9bf7171acc10276">setMarkerForegroundColor</a> (const QColor &amp;col, int mnr=-1)
 <li>void <a class="el" href="classQsciScintilla.html#bf85680f914ee631aa3a513ba823271f">setMatchedBraceBackgroundColor</a> (const QColor &amp;col)
@@ -314,8 +347,10 @@ Inherits <a class="el" href="classQsciScintillaBase.html">QsciScintillaBase</a>.
 <li>QString <a class="el" href="classQsciScintilla.html#e7ad66e5c3ff4bf3f93feeb5cc535716">text</a> (int line) const 
 <li>int <a class="el" href="classQsciScintilla.html#a8e248aa86d5ddce7ef3988170011b65">textHeight</a> (int linenr) const 
 <li><a class="el" href="classQsciScintilla.html#b83469cc9550eadcd5d4e8ca3d20d07b">WhitespaceVisibility</a> <a class="el" href="classQsciScintilla.html#929dbacaee4791154de7f5cf188d467d">whitespaceVisibility</a> () const 
+<li>QString <a class="el" href="classQsciScintilla.html#f6ff6d63f13aab28979985135203df70">wordAtPoint</a> (const QPoint &amp;point) const 
 <li>const char * <a class="el" href="classQsciScintilla.html#e6c5175bf8e8097ccbaedb5bcdb53610">wordCharacters</a> () const 
 <li><a class="el" href="classQsciScintilla.html#7081c7ff25b5f6bd5b3a6cbd478a9f42">WrapMode</a> <a class="el" href="classQsciScintilla.html#451b68f1559d5e64e6c7cbb2c6b7dfe5">wrapMode</a> () const 
+<li>bool <a class="el" href="classQsciScintilla.html#cde630a95754aa5d519919148db74874">write</a> (QIODevice *io) const 
 </ul>
 <h2>Classes</h2>
 <ul>
@@ -325,7 +360,7 @@ Inherits <a class="el" href="classQsciScintillaBase.html">QsciScintillaBase</a>.
 The <a class="el" href="classQsciScintilla.html" title="The QsciScintilla class implements a higher level, more Qt-like, API to the Scintilla...">QsciScintilla</a> class implements a higher level, more Qt-like, API to the Scintilla editor widget. 
 <p>
 <a class="el" href="classQsciScintilla.html" title="The QsciScintilla class implements a higher level, more Qt-like, API to the Scintilla...">QsciScintilla</a> implements methods, signals and slots similar to those found in other Qt editor classes. It also provides a higher level interface to features specific to Scintilla such as syntax styling, call tips, auto-indenting and auto-completion than that provided by <a class="el" href="classQsciScintillaBase.html" title="The QsciScintillaBase class implements the Scintilla editor widget and its low-level...">QsciScintillaBase</a>. <hr><h2>Member Enumeration Documentation</h2>
-<a class="anchor" name="de819882be1ccefd8d3037288db1b47b"></a><!-- doxytag: member="QsciScintilla::@19" ref="de819882be1ccefd8d3037288db1b47b" args="" -->
+<a class="anchor" name="df33d646f596b6362948d036f9ad04f1"></a><!-- doxytag: member="QsciScintilla::@25" ref="df33d646f596b6362948d036f9ad04f1" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -341,12 +376,39 @@ This enum defines the different auto-indentation styles.
 <p>
 <dl compact><dt><b>Enumerator: </b></dt><dd>
 <table border="0" cellspacing="2" cellpadding="0">
-<tr><td valign="top"><em><a class="anchor" name="de819882be1ccefd8d3037288db1b47b63083d9a621b8dc11de24e63f2ccdef6"></a><!-- doxytag: member="AiMaintain" ref="de819882be1ccefd8d3037288db1b47b63083d9a621b8dc11de24e63f2ccdef6" args="" -->AiMaintain</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="df33d646f596b6362948d036f9ad04f163083d9a621b8dc11de24e63f2ccdef6"></a><!-- doxytag: member="AiMaintain" ref="df33d646f596b6362948d036f9ad04f163083d9a621b8dc11de24e63f2ccdef6" args="" -->AiMaintain</em>&nbsp;</td><td>
 A line is automatically indented to match the previous line. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="de819882be1ccefd8d3037288db1b47b4644ed0f2bb211f82d6ceec31cf0b1ad"></a><!-- doxytag: member="AiOpening" ref="de819882be1ccefd8d3037288db1b47b4644ed0f2bb211f82d6ceec31cf0b1ad" args="" -->AiOpening</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="df33d646f596b6362948d036f9ad04f14644ed0f2bb211f82d6ceec31cf0b1ad"></a><!-- doxytag: member="AiOpening" ref="df33d646f596b6362948d036f9ad04f14644ed0f2bb211f82d6ceec31cf0b1ad" args="" -->AiOpening</em>&nbsp;</td><td>
 If the language supported by the current lexer has a specific start of block character (e.g. { in C++), then a line that begins with that character is indented as well as the lines that make up the block. It may be logically ored with AiClosing. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="de819882be1ccefd8d3037288db1b47bcae08c8d6e6cc73fcd5492d46e2432eb"></a><!-- doxytag: member="AiClosing" ref="de819882be1ccefd8d3037288db1b47bcae08c8d6e6cc73fcd5492d46e2432eb" args="" -->AiClosing</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="df33d646f596b6362948d036f9ad04f1cae08c8d6e6cc73fcd5492d46e2432eb"></a><!-- doxytag: member="AiClosing" ref="df33d646f596b6362948d036f9ad04f1cae08c8d6e6cc73fcd5492d46e2432eb" args="" -->AiClosing</em>&nbsp;</td><td>
 If the language supported by the current lexer has a specific end of block character (e.g. } in C++), then a line that begins with that character is indented as well as the lines that make up the block. It may be logically ored with AiOpening. </td></tr>
+</table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="3793111b6e2a86351c798c68deda7d0c"></a><!-- doxytag: member="QsciScintilla::AnnotationDisplay" ref="3793111b6e2a86351c798c68deda7d0c" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classQsciScintilla.html#3793111b6e2a86351c798c68deda7d0c">QsciScintilla::AnnotationDisplay</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+This enum defines the different annotation display styles. 
+<p>
+<dl compact><dt><b>Enumerator: </b></dt><dd>
+<table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" name="3793111b6e2a86351c798c68deda7d0cf708fc8c6c5b70daf1e03d5286a699f6"></a><!-- doxytag: member="AnnotationHidden" ref="3793111b6e2a86351c798c68deda7d0cf708fc8c6c5b70daf1e03d5286a699f6" args="" -->AnnotationHidden</em>&nbsp;</td><td>
+Annotations are not displayed. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="3793111b6e2a86351c798c68deda7d0c9127adc556d20a38d87055264228b121"></a><!-- doxytag: member="AnnotationStandard" ref="3793111b6e2a86351c798c68deda7d0c9127adc556d20a38d87055264228b121" args="" -->AnnotationStandard</em>&nbsp;</td><td>
+Annotations are drawn left justified with no adornment. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="3793111b6e2a86351c798c68deda7d0c3b77a53cb3bc889bb98c4d0b79884709"></a><!-- doxytag: member="AnnotationBoxed" ref="3793111b6e2a86351c798c68deda7d0c3b77a53cb3bc889bb98c4d0b79884709" args="" -->AnnotationBoxed</em>&nbsp;</td><td>
+Annotations are surrounded by a box. </td></tr>
 </table>
 </dl>
 
@@ -517,6 +579,39 @@ Boxed folding style using boxed plus and minus symbols. </td></tr>
 Circled tree style using a flattened tree with circled plus and minus symbols and rounded corners. </td></tr>
 <tr><td valign="top"><em><a class="anchor" name="e478a896ae32a30e8a375049a3d477e0c22ee26a39d4661a59f0a2d285ad27e2"></a><!-- doxytag: member="BoxedTreeFoldStyle" ref="e478a896ae32a30e8a375049a3d477e0c22ee26a39d4661a59f0a2d285ad27e2" args="" -->BoxedTreeFoldStyle</em>&nbsp;</td><td>
 Boxed tree style using a flattened tree with boxed plus and minus symbols and right-angled corners. </td></tr>
+</table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="edab060e87e0533083ea8f1398302090"></a><!-- doxytag: member="QsciScintilla::MarginType" ref="edab060e87e0533083ea8f1398302090" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classQsciScintilla.html#edab060e87e0533083ea8f1398302090">QsciScintilla::MarginType</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+This enum defined the different margin types. 
+<p>
+<dl compact><dt><b>Enumerator: </b></dt><dd>
+<table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" name="edab060e87e0533083ea8f1398302090c77614e4b9956e3c44fface749ff6602"></a><!-- doxytag: member="SymbolMargin" ref="edab060e87e0533083ea8f1398302090c77614e4b9956e3c44fface749ff6602" args="" -->SymbolMargin</em>&nbsp;</td><td>
+The margin contains symbols, including those used for folding. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="edab060e87e0533083ea8f13983020900e3a004e5eebb910f8329a48e7721e03"></a><!-- doxytag: member="SymbolMarginDefaultForegroundColor" ref="edab060e87e0533083ea8f13983020900e3a004e5eebb910f8329a48e7721e03" args="" -->SymbolMarginDefaultForegroundColor</em>&nbsp;</td><td>
+The margin contains symbols and uses the default foreground color as its background color. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="edab060e87e0533083ea8f1398302090d60eb277ce18f3c7baa28721ab5dc834"></a><!-- doxytag: member="SymbolMarginDefaultBackgroundColor" ref="edab060e87e0533083ea8f1398302090d60eb277ce18f3c7baa28721ab5dc834" args="" -->SymbolMarginDefaultBackgroundColor</em>&nbsp;</td><td>
+The margin contains symbols and uses the default background color as its background color. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="edab060e87e0533083ea8f1398302090f2e3b128abc692ae0b1b6c835a90537e"></a><!-- doxytag: member="NumberMargin" ref="edab060e87e0533083ea8f1398302090f2e3b128abc692ae0b1b6c835a90537e" args="" -->NumberMargin</em>&nbsp;</td><td>
+The margin contains line numbers. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="edab060e87e0533083ea8f1398302090067796489486bcc1573cb0951a4199a9"></a><!-- doxytag: member="TextMargin" ref="edab060e87e0533083ea8f1398302090067796489486bcc1573cb0951a4199a9" args="" -->TextMargin</em>&nbsp;</td><td>
+The margin contains styled text. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="edab060e87e0533083ea8f13983020907445fe74d90bd62eceb5311b1f7f52fc"></a><!-- doxytag: member="TextMarginRightJustified" ref="edab060e87e0533083ea8f13983020907445fe74d90bd62eceb5311b1f7f52fc" args="" -->TextMarginRightJustified</em>&nbsp;</td><td>
+The margin contains right justified styled text. </td></tr>
 </table>
 </dl>
 
@@ -717,6 +812,236 @@ Destroys the <a class="el" href="classQsciScintilla.html" title="The QsciScintil
 </div>
 </div><p>
 <hr><h2>Member Function Documentation</h2>
+<a class="anchor" name="b8bfeae44abd61659d207a86660b100c"></a><!-- doxytag: member="QsciScintilla::apiContext" ref="b8bfeae44abd61659d207a86660b100c" args="(int pos, int &amp;context_start, int &amp;last_word_start)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual QStringList QsciScintilla::apiContext           </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>pos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int &amp;&nbsp;</td>
+          <td class="paramname"> <em>context_start</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int &amp;&nbsp;</td>
+          <td class="paramname"> <em>last_word_start</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Returns the API context, which is a list of words, before the position <em>pos</em> in the document. The context can be used by auto-completion and call tips to help to identify which API call the user is referring to. In the default implementation the current lexer determines what characters make up a word, and what characters determine the boundaries of words (ie. the start characters). If there is no current lexer then the context will consist of a single word. On return <em>context_start</em> will contain the position in the document of the start of the context and <em>last_word_start</em> will contain the position in the document of the start of the last word of the context. 
+</div>
+</div><p>
+<a class="anchor" name="dacd79ec5e25430f0cbff34e6584afe7"></a><!-- doxytag: member="QsciScintilla::annotate" ref="dacd79ec5e25430f0cbff34e6584afe7" args="(int line, const QString &amp;text, int style)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QsciScintilla::annotate           </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&nbsp;</td>
+          <td class="paramname"> <em>text</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>style</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Annotate the line <em>line</em> with the text <em>text</em> using the style number <em>style</em>. 
+</div>
+</div><p>
+<a class="anchor" name="8ec9b9a33f698fab59f46864ee9a2267"></a><!-- doxytag: member="QsciScintilla::annotate" ref="8ec9b9a33f698fab59f46864ee9a2267" args="(int line, const QString &amp;text, const QsciStyle &amp;style)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QsciScintilla::annotate           </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&nbsp;</td>
+          <td class="paramname"> <em>text</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classQsciStyle.html">QsciStyle</a> &amp;&nbsp;</td>
+          <td class="paramname"> <em>style</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Annotate the line <em>line</em> with the text <em>text</em> using the style <em>style</em>. 
+</div>
+</div><p>
+<a class="anchor" name="b3721e1af5d7a71efff5a35b63ed1174"></a><!-- doxytag: member="QsciScintilla::annotate" ref="b3721e1af5d7a71efff5a35b63ed1174" args="(int line, const QsciStyledText &amp;text)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QsciScintilla::annotate           </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classQsciStyledText.html">QsciStyledText</a> &amp;&nbsp;</td>
+          <td class="paramname"> <em>text</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Annotate the line <em>line</em> with the styled text <em>text</em>. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="cc3981a1149b87b38f93195bb0e00f34"></a><!-- doxytag: member="QsciScintilla::annotate" ref="cc3981a1149b87b38f93195bb0e00f34" args="(int line, const QList&lt; QsciStyledText &gt; &amp;text)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QsciScintilla::annotate           </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QList&lt; <a class="el" href="classQsciStyledText.html">QsciStyledText</a> &gt; &amp;&nbsp;</td>
+          <td class="paramname"> <em>text</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Annotate the line <em>line</em> with the list of styled text <em>text</em>. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="09dd1d79b3a361f15d124b40015d109d"></a><!-- doxytag: member="QsciScintilla::annotation" ref="09dd1d79b3a361f15d124b40015d109d" args="(int line) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString QsciScintilla::annotation           </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>line</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Returns the annotation on line <em>line</em>, if any. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="510bb95352468501e3d8699898b7db24"></a><!-- doxytag: member="QsciScintilla::annotationDisplay" ref="510bb95352468501e3d8699898b7db24" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classQsciScintilla.html#3793111b6e2a86351c798c68deda7d0c">AnnotationDisplay</a> QsciScintilla::annotationDisplay           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Returns the display style for annotations.<p>
+<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#eda9c17a6e746e177fa6f5311d96dc03">setAnnotationDisplay()</a> </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="3ad17d87cb436e0f6da52a68cd14750e"></a><!-- doxytag: member="QsciScintilla::clearAnnotations" ref="3ad17d87cb436e0f6da52a68cd14750e" args="(int line=-1)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QsciScintilla::clearAnnotations           </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>line</em> = <code>-1</code>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+The annotations on line <em>line</em> are removed. If <em>line</em> is negative then all annotations are removed. 
+</div>
+</div><p>
 <a class="anchor" name="28eed8ae496e09582f06d64559e0c2b5"></a><!-- doxytag: member="QsciScintilla::autoCompletionCaseSensitivity" ref="28eed8ae496e09582f06d64559e0c2b5" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -1380,7 +1705,7 @@ Returns the number of the first visible line.
 
 <p>
 Returns the current folding style.<p>
-<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#720a6b3d648435d6928cc68a2553d31e">setFolding()</a> </dd></dl>
+<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#340cd78e46fb58fc9b3b78ed158ba56e">setFolding()</a> </dd></dl>
 
 </div>
 </div><p>
@@ -1751,6 +2076,43 @@ Returns true if character <em>ch</em> is a valid word character.<p>
 Returns the line which is at position <em>pos</em> or -1 if there is no line at that position. 
 </div>
 </div><p>
+<a class="anchor" name="56aae6ef4721bae8016cce0b7beeb0a4"></a><!-- doxytag: member="QsciScintilla::lineIndexFromPosition" ref="56aae6ef4721bae8016cce0b7beeb0a4" args="(int position, int *line, int *index) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QsciScintilla::lineIndexFromPosition           </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>position</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&nbsp;</td>
+          <td class="paramname"> <em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&nbsp;</td>
+          <td class="paramname"> <em>index</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+QScintilla uses the combination of a line number and a character index from the start of that line to specify the position of a character within the text. The underlying Scintilla instead uses a byte index from the start of the text. This will convert the <em>position</em> byte index to the <em>*line</em> line number and <em>*index</em> character index.<p>
+<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#540654e6e1bf1d2f8953e6260ba3121c">positionFromLineIndex()</a> </dd></dl>
+
+</div>
+</div><p>
 <a class="anchor" name="3170a1a681fd7189aaefd39d1efec5e8"></a><!-- doxytag: member="QsciScintilla::lineLength" ref="3170a1a681fd7189aaefd39d1efec5e8" args="(int line) const " -->
 <div class="memitem">
 <div class="memproto">
@@ -1850,7 +2212,7 @@ Returns the current language lexer used to style text. If it is 0 then syntax st
 
 <p>
 Returns true if line numbers are enabled for margin <em>margin</em>.<p>
-<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#5fddd1e6e19cf2e2b40c15a39e62d198">setMarginLineNumbers()</a>, <a class="el" href="classQsciScintillaBase.html#e0d96e140124f18e23b27f32f67001f1919cf8a6d08d570e00ece099ff62010c">SCI_GETMARGINTYPEN</a> </dd></dl>
+<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#5fddd1e6e19cf2e2b40c15a39e62d198">setMarginLineNumbers()</a>, <a class="el" href="classQsciScintilla.html#4b5213e02b1a26012f961cc4f175b0b6">marginType()</a>, <a class="el" href="classQsciScintillaBase.html#b7ed107d6ace096e9026c31145c48b41919cf8a6d08d570e00ece099ff62010c">SCI_GETMARGINTYPEN</a> </dd></dl>
 
 </div>
 </div><p>
@@ -1872,7 +2234,7 @@ Returns true if line numbers are enabled for margin <em>margin</em>.<p>
 
 <p>
 Returns the marker mask of margin <em>margin</em>.<p>
-<dl class="see" compact><dt><b>See also:</b></dt><dd>setMarginMask(), QsciMarker, <a class="el" href="classQsciScintillaBase.html#e0d96e140124f18e23b27f32f67001f1dbd2eceef7f59bcda7d7db01a4aa7c7b">SCI_GETMARGINMASKN</a> </dd></dl>
+<dl class="see" compact><dt><b>See also:</b></dt><dd>setMarginMask(), QsciMarker, <a class="el" href="classQsciScintillaBase.html#b7ed107d6ace096e9026c31145c48b41dbd2eceef7f59bcda7d7db01a4aa7c7b">SCI_GETMARGINMASKN</a> </dd></dl>
 
 </div>
 </div><p>
@@ -1894,7 +2256,29 @@ Returns the marker mask of margin <em>margin</em>.<p>
 
 <p>
 Returns true if margin <em>margin</em> is sensitive to mouse clicks.<p>
-<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#064b51eca1ab2d32d4c4c328e69a395d">setMarginSensitivity()</a>, <a class="el" href="classQsciScintilla.html#5afec2f913c2a46d661c5fdda29f5e87">marginClicked()</a>, <a class="el" href="classQsciScintillaBase.html#e0d96e140124f18e23b27f32f67001f1919cf8a6d08d570e00ece099ff62010c">SCI_GETMARGINTYPEN</a> </dd></dl>
+<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#064b51eca1ab2d32d4c4c328e69a395d">setMarginSensitivity()</a>, <a class="el" href="classQsciScintilla.html#5afec2f913c2a46d661c5fdda29f5e87">marginClicked()</a>, <a class="el" href="classQsciScintillaBase.html#b7ed107d6ace096e9026c31145c48b41919cf8a6d08d570e00ece099ff62010c">SCI_GETMARGINTYPEN</a> </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="4b5213e02b1a26012f961cc4f175b0b6"></a><!-- doxytag: member="QsciScintilla::marginType" ref="4b5213e02b1a26012f961cc4f175b0b6" args="(int margin) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classQsciScintilla.html#edab060e87e0533083ea8f1398302090">MarginType</a> QsciScintilla::marginType           </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>margin</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Returns the type of margin <em>margin</em>.<p>
+<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#4dd046074be580fbde318ba2ae343d39">setMarginType()</a>, <a class="el" href="classQsciScintillaBase.html#b7ed107d6ace096e9026c31145c48b41919cf8a6d08d570e00ece099ff62010c">SCI_GETMARGINTYPEN</a> </dd></dl>
 
 </div>
 </div><p>
@@ -1916,7 +2300,7 @@ Returns true if margin <em>margin</em> is sensitive to mouse clicks.<p>
 
 <p>
 Returns the width in pixels of margin <em>margin</em>.<p>
-<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#1a8b798b6b36db2b5f60b0cdccba88a1">setMarginWidth()</a>, <a class="el" href="classQsciScintillaBase.html#e0d96e140124f18e23b27f32f67001f13654140951ae95d75f21c43cdcd91a43">SCI_GETMARGINWIDTHN</a> </dd></dl>
+<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#1a8b798b6b36db2b5f60b0cdccba88a1">setMarginWidth()</a>, <a class="el" href="classQsciScintillaBase.html#b7ed107d6ace096e9026c31145c48b413654140951ae95d75f21c43cdcd91a43">SCI_GETMARGINWIDTHN</a> </dd></dl>
 
 </div>
 </div><p>
@@ -2241,6 +2625,59 @@ Returns the widget's paper (ie. background) colour.<p>
 
 </div>
 </div><p>
+<a class="anchor" name="540654e6e1bf1d2f8953e6260ba3121c"></a><!-- doxytag: member="QsciScintilla::positionFromLineIndex" ref="540654e6e1bf1d2f8953e6260ba3121c" args="(int line, int index) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int QsciScintilla::positionFromLineIndex           </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>index</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+QScintilla uses the combination of a line number and a character index from the start of that line to specify the position of a character within the text. The underlying Scintilla instead uses a byte index from the start of the text. This will return the byte index corresponding to the <em>line</em> line number and <em>index</em> character index.<p>
+<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#56aae6ef4721bae8016cce0b7beeb0a4">lineIndexFromPosition()</a> </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="89e46329c110449b2e7334ccf623ceed"></a><!-- doxytag: member="QsciScintilla::read" ref="89e46329c110449b2e7334ccf623ceed" args="(QIODevice *io)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool QsciScintilla::read           </td>
+          <td>(</td>
+          <td class="paramtype">QIODevice *&nbsp;</td>
+          <td class="paramname"> <em>io</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Reads the current document from the <em>io</em> device and returns true if there was no error.<p>
+<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#cde630a95754aa5d519919148db74874">write()</a> </dd></dl>
+
+</div>
+</div><p>
 <a class="anchor" name="07fe5007913f0001a473d92f4c3fdbe6"></a><!-- doxytag: member="QsciScintilla::recolor" ref="07fe5007913f0001a473d92f4c3fdbe6" args="(int start=0, int end=-1)" -->
 <div class="memitem">
 <div class="memproto">
@@ -2372,6 +2809,28 @@ Reset the fold margin colours to their defaults.<p>
 <p>
 The fold margin may be drawn as a one pixel sized checkerboard pattern of two colours, <em>fore</em> and <em>back</em>.<p>
 <dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#e1d3703631c9113a4309da17332ca180">resetFoldMarginColors()</a> </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="eda9c17a6e746e177fa6f5311d96dc03"></a><!-- doxytag: member="QsciScintilla::setAnnotationDisplay" ref="eda9c17a6e746e177fa6f5311d96dc03" args="(AnnotationDisplay display)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QsciScintilla::setAnnotationDisplay           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classQsciScintilla.html#3793111b6e2a86351c798c68deda7d0c">AnnotationDisplay</a>&nbsp;</td>
+          <td class="paramname"> <em>display</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Set the display style for annotations. The default is AnnotationStandard.<p>
+<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#510bb95352468501e3d8699898b7db24">annotationDisplay()</a> </dd></dl>
 
 </div>
 </div><p>
@@ -2632,6 +3091,187 @@ Set the number of the column after which lines are considered to be long.<p>
 Set the edge mode which determines how long lines are marked.<p>
 <dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#9642dca6ed1984c1b09b2e41d4aac521">edgeMode()</a> </dd></dl>
 
+</div>
+</div><p>
+<a class="anchor" name="7677d42ce77cb5a150dc961d12da92e1"></a><!-- doxytag: member="QsciScintilla::setMarginText" ref="7677d42ce77cb5a150dc961d12da92e1" args="(int line, const QString &amp;text, int style)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QsciScintilla::setMarginText           </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&nbsp;</td>
+          <td class="paramname"> <em>text</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>style</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Set the margin text of line <em>line</em> with the text <em>text</em> using the style number <em>style</em>. 
+</div>
+</div><p>
+<a class="anchor" name="d1b6838e763eb9d7c0b3562b6c2a96ae"></a><!-- doxytag: member="QsciScintilla::setMarginText" ref="d1b6838e763eb9d7c0b3562b6c2a96ae" args="(int line, const QString &amp;text, const QsciStyle &amp;style)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QsciScintilla::setMarginText           </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&nbsp;</td>
+          <td class="paramname"> <em>text</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classQsciStyle.html">QsciStyle</a> &amp;&nbsp;</td>
+          <td class="paramname"> <em>style</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Set the margin text of line <em>line</em> with the text <em>text</em> using the style <em>style</em>. 
+</div>
+</div><p>
+<a class="anchor" name="d85546712df2387738e63be38dc41d61"></a><!-- doxytag: member="QsciScintilla::setMarginText" ref="d85546712df2387738e63be38dc41d61" args="(int line, const QsciStyledText &amp;text)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QsciScintilla::setMarginText           </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classQsciStyledText.html">QsciStyledText</a> &amp;&nbsp;</td>
+          <td class="paramname"> <em>text</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Set the margin text of line <em>line</em> with the styled text <em>text</em>. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="2b148c2c2065f1ef1563421303a02225"></a><!-- doxytag: member="QsciScintilla::setMarginText" ref="2b148c2c2065f1ef1563421303a02225" args="(int line, const QList&lt; QsciStyledText &gt; &amp;text)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QsciScintilla::setMarginText           </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QList&lt; <a class="el" href="classQsciStyledText.html">QsciStyledText</a> &gt; &amp;&nbsp;</td>
+          <td class="paramname"> <em>text</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Set the margin text of line <em>line</em> with the list of styled text <em>text</em>. 
+</div>
+</div><p>
+<a class="anchor" name="4dd046074be580fbde318ba2ae343d39"></a><!-- doxytag: member="QsciScintilla::setMarginType" ref="4dd046074be580fbde318ba2ae343d39" args="(int margin, MarginType type)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QsciScintilla::setMarginType           </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>margin</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classQsciScintilla.html#edab060e87e0533083ea8f1398302090">MarginType</a>&nbsp;</td>
+          <td class="paramname"> <em>type</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Set the type of margin <em>margin</em> to type <em>type</em>.<p>
+<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#4b5213e02b1a26012f961cc4f175b0b6">marginType()</a>, <a class="el" href="classQsciScintillaBase.html#b7ed107d6ace096e9026c31145c48b410ee188f4bfe7289f454f99af191d1523">SCI_SETMARGINTYPEN</a> </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="eadb693affb5816e24d28432d8dc240f"></a><!-- doxytag: member="QsciScintilla::clearMarginText" ref="eadb693affb5816e24d28432d8dc240f" args="(int line=-1)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QsciScintilla::clearMarginText           </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>line</em> = <code>-1</code>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+The margin text on line <em>line</em> is removed. If <em>line</em> is negative then all margin text is removed. 
 </div>
 </div><p>
 <a class="anchor" name="daeed2e8a40a5ef7251a19ef78cf6fb4"></a><!-- doxytag: member="QsciScintilla::setMarkerBackgroundColor" ref="daeed2e8a40a5ef7251a19ef78cf6fb4" args="(const QColor &amp;col, int mnr=-1)" -->
@@ -2993,7 +3633,7 @@ Returns the tab width in characters. The default is 8.<p>
 <div class="memdoc">
 
 <p>
-Returns the text edit's text.<p>
+Returns the text of the current document.<p>
 <dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#5786917722e156e26d6afca807d05fee">setText()</a> </dd></dl>
 
 </div>
@@ -3063,6 +3703,28 @@ Returns the visibility of whitespace.<p>
 
 </div>
 </div><p>
+<a class="anchor" name="f6ff6d63f13aab28979985135203df70"></a><!-- doxytag: member="QsciScintilla::wordAtPoint" ref="f6ff6d63f13aab28979985135203df70" args="(const QPoint &amp;point) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString QsciScintilla::wordAtPoint           </td>
+          <td>(</td>
+          <td class="paramtype">const QPoint &amp;&nbsp;</td>
+          <td class="paramname"> <em>point</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Returns the word at the <em>point</em> screen coordinates. 
+<p>
+
+</div>
+</div><p>
 <a class="anchor" name="e6c5175bf8e8097ccbaedb5bcdb53610"></a><!-- doxytag: member="QsciScintilla::wordCharacters" ref="e6c5175bf8e8097ccbaedb5bcdb53610" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -3102,6 +3764,28 @@ Returns the set of valid word character as defined by the current language lexer
 <p>
 Returns the line wrap mode.<p>
 <dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#c04428d2f90c36458d68a673f107e40c">setWrapMode()</a> </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="cde630a95754aa5d519919148db74874"></a><!-- doxytag: member="QsciScintilla::write" ref="cde630a95754aa5d519919148db74874" args="(QIODevice *io) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool QsciScintilla::write           </td>
+          <td>(</td>
+          <td class="paramtype">QIODevice *&nbsp;</td>
+          <td class="paramname"> <em>io</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Writes the current document to the <em>io</em> device and returns true if there was no error.<p>
+<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#89e46329c110449b2e7334ccf623ceed">read()</a> </dd></dl>
 
 </div>
 </div><p>
@@ -3954,7 +4638,7 @@ If <em>visible</em> is true then end-of-lines are made visible. The default is t
 
 </div>
 </div><p>
-<a class="anchor" name="720a6b3d648435d6928cc68a2553d31e"></a><!-- doxytag: member="QsciScintilla::setFolding" ref="720a6b3d648435d6928cc68a2553d31e" args="(FoldStyle fold)" -->
+<a class="anchor" name="340cd78e46fb58fc9b3b78ed158ba56e"></a><!-- doxytag: member="QsciScintilla::setFolding" ref="340cd78e46fb58fc9b3b78ed158ba56e" args="(FoldStyle fold, int margin=2)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -3962,16 +4646,25 @@ If <em>visible</em> is true then end-of-lines are made visible. The default is t
           <td class="memname">virtual void QsciScintilla::setFolding           </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classQsciScintilla.html#e478a896ae32a30e8a375049a3d477e0">FoldStyle</a>&nbsp;</td>
-          <td class="paramname"> <em>fold</em>          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td width="100%"><code> [virtual, slot]</code></td>
+          <td class="paramname"> <em>fold</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>margin</em> = <code>2</code></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"><code> [virtual, slot]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
 <p>
-Sets the folding style for margin 2 to <em>fold</em>. The default is NoFoldStyle (ie. folding is disabled).<p>
+Sets the folding style for margin <em>margin</em> to <em>fold</em>. The default style is NoFoldStyle (ie. folding is disabled) and the default margin is 2.<p>
 <dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#acc9c4793e8a9c2225e3c73d929093d6">folding()</a> </dd></dl>
 
 </div>
@@ -4232,7 +4925,7 @@ Set the foreground colour of all margins to <em>col</em>. The default is black.<
 
 <p>
 Enables or disables, according to <em>lnrs</em>, the display of line numbers in margin <em>margin</em>.<p>
-<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#48298e4278b089cbd3dd6071e5247800">marginLineNumbers()</a>, <a class="el" href="classQsciScintillaBase.html#e0d96e140124f18e23b27f32f67001f10ee188f4bfe7289f454f99af191d1523">SCI_SETMARGINTYPEN</a> </dd></dl>
+<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#48298e4278b089cbd3dd6071e5247800">marginLineNumbers()</a>, <a class="el" href="classQsciScintilla.html#4dd046074be580fbde318ba2ae343d39">setMarginType()</a>, <a class="el" href="classQsciScintillaBase.html#b7ed107d6ace096e9026c31145c48b410ee188f4bfe7289f454f99af191d1523">SCI_SETMARGINTYPEN</a> </dd></dl>
 
 </div>
 </div><p>
@@ -4263,7 +4956,7 @@ Enables or disables, according to <em>lnrs</em>, the display of line numbers in 
 
 <p>
 Sets the marker mask of margin <em>margin</em> to <em>mask</em>. Only those markers whose bit is set in the mask are displayed in the margin.<p>
-<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#adff28b3fad66d120ebc9898d85d87fb">marginMarkerMask()</a>, QsciMarker, <a class="el" href="classQsciScintillaBase.html#e0d96e140124f18e23b27f32f67001f1d1cec6e4e0ad45ce7d7edad7acb8a3b5">SCI_SETMARGINMASKN</a> </dd></dl>
+<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#adff28b3fad66d120ebc9898d85d87fb">marginMarkerMask()</a>, QsciMarker, <a class="el" href="classQsciScintillaBase.html#b7ed107d6ace096e9026c31145c48b41d1cec6e4e0ad45ce7d7edad7acb8a3b5">SCI_SETMARGINMASKN</a> </dd></dl>
 
 </div>
 </div><p>
@@ -4294,7 +4987,7 @@ Sets the marker mask of margin <em>margin</em> to <em>mask</em>. Only those mark
 
 <p>
 Enables or disables, according to <em>sens</em>, the sensitivity of margin <em>margin</em> to mouse clicks. If the user clicks in a sensitive margin the <a class="el" href="classQsciScintilla.html#5afec2f913c2a46d661c5fdda29f5e87">marginClicked()</a> signal is emitted.<p>
-<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#de82b8972f547fdc9cd3e1b99d9c287e">marginSensitivity()</a>, <a class="el" href="classQsciScintilla.html#5afec2f913c2a46d661c5fdda29f5e87">marginClicked()</a>, <a class="el" href="classQsciScintillaBase.html#e0d96e140124f18e23b27f32f67001f164b07178255dc95b19a7c8feabaac1b2">SCI_SETMARGINSENSITIVEN</a> </dd></dl>
+<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#de82b8972f547fdc9cd3e1b99d9c287e">marginSensitivity()</a>, <a class="el" href="classQsciScintilla.html#5afec2f913c2a46d661c5fdda29f5e87">marginClicked()</a>, <a class="el" href="classQsciScintillaBase.html#b7ed107d6ace096e9026c31145c48b4164b07178255dc95b19a7c8feabaac1b2">SCI_SETMARGINSENSITIVEN</a> </dd></dl>
 
 </div>
 </div><p>
@@ -4325,7 +5018,7 @@ Enables or disables, according to <em>sens</em>, the sensitivity of margin <em>m
 
 <p>
 Sets the width of margin <em>margin</em> to <em>width</em> pixels. If the width of a margin is 0 then it is not displayed.<p>
-<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#7897f4352ff3a31dc855970fc773f2b3">marginWidth()</a>, <a class="el" href="classQsciScintillaBase.html#e0d96e140124f18e23b27f32f67001f11195d46181a565b14806d94595fc7aa6">SCI_SETMARGINWIDTHN</a> </dd></dl>
+<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#7897f4352ff3a31dc855970fc773f2b3">marginWidth()</a>, <a class="el" href="classQsciScintillaBase.html#b7ed107d6ace096e9026c31145c48b411195d46181a565b14806d94595fc7aa6">SCI_SETMARGINWIDTHN</a> </dd></dl>
 
 </div>
 </div><p>
@@ -4356,7 +5049,7 @@ Sets the width of margin <em>margin</em> to <em>width</em> pixels. If the width 
 
 <p>
 Sets the width of margin <em>margin</em> so that it is wide enough to display <em>s</em> in the current margin font.<p>
-<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#7897f4352ff3a31dc855970fc773f2b3">marginWidth()</a>, <a class="el" href="classQsciScintillaBase.html#e0d96e140124f18e23b27f32f67001f11195d46181a565b14806d94595fc7aa6">SCI_SETMARGINWIDTHN</a> </dd></dl>
+<dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#7897f4352ff3a31dc855970fc773f2b3">marginWidth()</a>, <a class="el" href="classQsciScintillaBase.html#b7ed107d6ace096e9026c31145c48b411195d46181a565b14806d94595fc7aa6">SCI_SETMARGINWIDTHN</a> </dd></dl>
 
 </div>
 </div><p>
@@ -4464,7 +5157,7 @@ Sets the read-only state of the text edit to <em>ro</em>.<p>
 <div class="memdoc">
 
 <p>
-Sets the selection which starts at position <em>indexFrom</em> in line <em>lineFrom</em> and ends at position <em>indexTo</em> in line <em>lineTo</em>. The cursor is moved to the end of the selection.<p>
+Sets the selection which starts at position <em>indexFrom</em> in line <em>lineFrom</em> and ends at position <em>indexTo</em> in line <em>lineTo</em>. The cursor is moved to position <em>indexTo</em> in <em>lineTo</em>.<p>
 <dl class="see" compact><dt><b>See also:</b></dt><dd><a class="el" href="classQsciScintilla.html#8d1f84e7ff2967518a812c494f9997bb">getSelection()</a> </dd></dl>
 
 </div>
@@ -5018,7 +5711,7 @@ This signal is emitted when an item in a user defined list is activated (selecte
 
 </div>
 </div><p>
-<hr size="1"><address style="text-align: right;"><small>Generated on Fri Apr 11 03:44:28 2008 for QScintilla by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Thu Aug 20 03:46:55 2009 for QScintilla by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.4 </small></address>
 </body>

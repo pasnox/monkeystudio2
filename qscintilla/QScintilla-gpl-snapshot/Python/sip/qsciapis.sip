@@ -1,6 +1,6 @@
 // This is the SIP interface definition for QsciAPIs.
 //
-// Copyright (c) 2008 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2009 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -24,16 +24,11 @@
 // http://trolltech.com/products/qt/licenses/licensing/licensingoverview
 // or contact the sales department at sales@riverbankcomputing.com.
 // 
-// This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
-// INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE. Trolltech reserves all rights not expressly
-// granted herein.
-// 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
 
-class QsciAPIs : QObject
+class QsciAPIs : QsciAbstractAPIs
 {
 %TypeHeaderCode
 #include <Qsci/qsciapis.h>
@@ -61,6 +56,19 @@ public:
     bool savePrepared(const QString &fname = QString()) const;
     virtual bool event(QEvent *e);
     QStringList installedAPIFiles() const;
+
+    virtual void updateAutoCompletionList(const QStringList &context,
+                QStringList &list);
+    virtual void autoCompletionSelected(const QString &selection);
+
+%If (Qsci_Qt4)
+    virtual QStringList callTips(const QStringList &context, int commas,
+            QsciScintilla::CallTipsStyle style, QList<int> &shifts);
+%End
+%If (!Qsci_Qt4)
+    virtual QStringList callTips(const QStringList &context, int commas,
+            QsciScintilla::CallTipsStyle style, QValueList<int> &shifts);
+%End
 
 signals:
     void apiPreparationCancelled();

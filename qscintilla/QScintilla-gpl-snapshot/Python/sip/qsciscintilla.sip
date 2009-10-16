@@ -1,6 +1,6 @@
 // This is the SIP interface definition for QsciScintilla.
 //
-// Copyright (c) 2008 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2009 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -24,11 +24,6 @@
 // http://trolltech.com/products/qt/licenses/licensing/licensingoverview
 // or contact the sales department at sales@riverbankcomputing.com.
 // 
-// This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
-// INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE. Trolltech reserves all rights not expressly
-// granted herein.
-// 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
@@ -46,11 +41,17 @@ public:
         AiClosing
     };
 
+    enum AnnotationDisplay {
+        AnnotationHidden,
+        AnnotationStandard,
+        AnnotationBoxed
+    };
+
     enum AutoCompletionSource {
         AcsNone,
         AcsAll,
         AcsDocument,
-        AcsAPIs,
+        AcsAPIs
     };
 
     enum BraceMatch {
@@ -85,6 +86,15 @@ public:
         BoxedFoldStyle,
         CircledTreeFoldStyle,
         BoxedTreeFoldStyle
+    };
+
+    enum MarginType {
+        SymbolMargin,
+        SymbolMarginDefaultForegroundColor,
+        SymbolMarginDefaultBackgroundColor,
+        NumberMargin,
+        TextMargin,
+        TextMarginRightJustified
     };
 
     enum MarkerSymbol {
@@ -143,6 +153,22 @@ public:
 
     virtual ~QsciScintilla();
 
+    virtual QStringList apiContext(int pos, int &context_start,
+            int &last_word_start);
+
+    void annotate(int line, const QString &text, int style);
+    void annotate(int line, const QString &text, const QsciStyle &style);
+    void annotate(int line, const QsciStyledText &text);
+%If (Qsci_Qt4)
+    void annotate(int line, const QList<QsciStyledText> &text);
+%End
+%If (!Qsci_Qt4)
+    void annotate(int line, const QValueList<QsciStyledText> &text);
+%End
+    QString annotation(int line) const;
+    AnnotationDisplay annotationDisplay() const;
+    void clearAnnotations(int line = -1);
+
     bool autoCompletionCaseSensitivity() const;
     bool autoCompletionFillupsEnabled() const;
     bool autoCompletionReplaceWord() const;
@@ -199,6 +225,7 @@ public:
     bool isWordCharacter(char ch) const;
 
     int lineAt(const QPoint &pos) const;
+    void lineIndexFromPosition(int position, int *line, int *index) const;
     int lineLength(int line) const;
     int lines() const;
     int length() const;
@@ -207,6 +234,7 @@ public:
     bool marginLineNumbers(int margin) const;
     int marginMarkerMask(int margin) const;
     bool marginSensitivity(int margin) const;
+    MarginType marginType(int margin) const;
     int marginWidth(int margin) const;
 
     int markerDefine(MarkerSymbol sym, int mnr = -1);
@@ -222,12 +250,16 @@ public:
     int markerFindPrevious(int linenr, unsigned mask) const;
 
     QColor paper() const;
+    int positionFromLineIndex(int line, int index) const;
 
+    bool read(QIODevice *io) /ReleaseGIL/;
     virtual void recolor(int start = 0, int end = -1);
     void registerImage(int id, const QPixmap &pm);
     virtual void replace(const QString &replaceStr);
     void resetFoldMarginColors();
     void setFoldMarginColors(const QColor &fore, const QColor &back);
+
+    void setAnnotationDisplay(AnnotationDisplay display);
 
     void setAutoCompletionFillupsEnabled(bool enabled);
     void setAutoCompletionFillups(const char *fillups);
@@ -247,6 +279,18 @@ public:
 
     void setFont(const QFont &f);
 
+    void setMarginText(int line, const QString &text, int style);
+    void setMarginText(int line, const QString &text, const QsciStyle &style);
+    void setMarginText(int line, const QsciStyledText &text);
+%If (Qsci_Qt4)
+    void setMarginText(int line, const QList<QsciStyledText> &text);
+%End
+%If (!Qsci_Qt4)
+    void setMarginText(int line, const QValueList<QsciStyledText> &text);
+%End
+    void setMarginType(int margin, MarginType type);
+    void clearMarginText(int line = -1);
+
     void setMarkerBackgroundColor(const QColor &col, int mnr = -1);
     void setMarkerForegroundColor(const QColor &col, int mnr = -1);
 
@@ -264,14 +308,18 @@ public:
     void setSelectionToEol(bool filled);
     void showUserList(int id, const QStringList &list);
     QsciCommandSet *standardCommands() const;
+
     bool tabIndents() const;
     int tabWidth() const;
     QString text() const;
     QString text(int line) const;
     int textHeight(int linenr) const;
+
     WhitespaceVisibility whitespaceVisibility() const;
+    QString wordAtPoint(const QPoint &point) const;
     const char *wordCharacters() const;
     WrapMode wrapMode() const;
+    bool write(QIODevice *io) const /ReleaseGIL/;
 
 public slots:
     virtual void append(const QString &text);
@@ -315,7 +363,7 @@ public slots:
     virtual void setCursorPosition(int line, int index);
     virtual void setEolMode(EolMode mode);
     virtual void setEolVisibility(bool visible);
-    virtual void setFolding(FoldStyle fold);
+    virtual void setFolding(FoldStyle fold, int margin=2);
 
     virtual void setIndentation(int line, int indentation);
     virtual void setIndentationGuides(bool enable);

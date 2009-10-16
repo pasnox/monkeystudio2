@@ -1,6 +1,6 @@
 // This is the SIP interface definition for QsciLexer.
 //
-// Copyright (c) 2008 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2009 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -24,11 +24,6 @@
 // http://trolltech.com/products/qt/licenses/licensing/licensingoverview
 // or contact the sales department at sales@riverbankcomputing.com.
 // 
-// This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
-// INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE. Trolltech reserves all rights not expressly
-// granted herein.
-// 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
@@ -50,8 +45,9 @@ public:
     virtual ~QsciLexer();
 
     virtual const char *language() const = 0;
-    virtual const char *lexer() const = 0;
-    QsciAPIs *apis() const;
+    virtual const char *lexer() const;
+    virtual int lexerId() const;
+    QsciAbstractAPIs *apis() const;
     int autoIndentStyle();
     virtual QColor color(int style) const;
     virtual bool eolFill(int style) const;
@@ -66,11 +62,13 @@ public:
     virtual QFont defaultFont(int style) const;
     QColor defaultPaper() const;
     virtual QColor defaultPaper(int style) const;
+    QsciScintilla *editor() const;
     virtual void refreshProperties();
-    void setAPIs(QsciAPIs *apis);
+    void setAPIs(QsciAbstractAPIs *apis);
     void setDefaultColor(const QColor &c);
     void setDefaultFont(const QFont &f);
     void setDefaultPaper(const QColor &c);
+    virtual int styleBitsNeeded() const;
     bool readSettings(QSettings &qs, const char * = "/Scintilla");
     bool writeSettings(QSettings &qs, const char * = "/Scintilla") const;
 
