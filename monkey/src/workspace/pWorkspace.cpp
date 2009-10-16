@@ -367,6 +367,8 @@ void pWorkspace::handleDocument( pAbstractChild* document )
 
 void pWorkspace::unhandleDocument( pAbstractChild* document )
 {
+	const bool maximized = document->isMaximized();
+	
 	// init document connections
 	disconnect( document, SIGNAL( fileOpened() ), this, SLOT( document_fileOpened() ) );
 	disconnect( document, SIGNAL( contentChanged() ), this, SLOT( document_contentChanged() ) );
@@ -389,9 +391,15 @@ void pWorkspace::unhandleDocument( pAbstractChild* document )
 	mMdiArea->removeSubWindow( document );
 	document->hide();
 	
-	if ( !mMdiArea->subWindowList().isEmpty() )
+	// maximize current winow if needed
+	if ( maximized )
 	{
-		mMdiArea->currentSubWindow()->showMaximized();
+		pAbstractChild* doc = currentDocument();
+		
+		if ( doc )
+		{
+			doc->showMaximized();
+		}
 	}
 }
 
