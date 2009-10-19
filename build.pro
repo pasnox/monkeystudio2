@@ -1,7 +1,7 @@
 XUPProjectSettings {
-	EXECUTE_DEBUG	= bin/monkeystudio_debug
-	QT_VERSION	= Qt System (4.5.2)
+	QT_VERSION	= 4.5.1 LGPL
 	OTHERS_PLATFORM_TARGET_DEBUG	= bin/monkeystudio_debug
+	MAC_PLATFORM_TARGET_RELEASE	= bin/Monkey Studio.app
 }
 
 # include install script
