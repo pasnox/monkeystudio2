@@ -1,10 +1,10 @@
 /****************************************************************************
 **
 ** 		Created using Monkey Studio v1.8.1.0
-** Authors   : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Monkey Studio Compiler Plugins
-** FileName  : Gcc.h
-** Date      : 2008-01-14T00:53:21
+** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
+** Project   : Monkey Studio Builder Plugins
+** FileName  : MSVCMakeParser.h
+** Date      : 2008-01-14T00:52:27
 ** License   : GPL
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
 ** Home Page : http://www.monkeystudio.org
@@ -26,45 +26,41 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
-/*!
-	\file Gcc.h
-	\date 2008-01-14T00:53:21
-	\author Filipe AZEVEDO
-	\brief Header for Gcc compiler plugin class
-*/
-#ifndef GCC_H
-#define GCC_H
-
-#include <CompilerPlugin.h>
-
-/*!
-	\brief Gcc compiler plugin
-	
-	Allows to compile current file using gcc compiler and configure parsers for output
-*/
-class Gcc : public CompilerPlugin
-{
-	Q_OBJECT
-	Q_INTERFACES( BasePlugin CompilerPlugin CLIToolPlugin )
-
-protected:	
-	void fillPluginInfos();
-	virtual bool install();
-	virtual bool uninstall();
-public:
-	Gcc();
-	~Gcc();
-	// BasePlugin
-	virtual QWidget* settingsWidget();
-	// CompilerPlugin
-	virtual pCommand defaultCompileCommand() const;
-	virtual pCommand compileCommand() const;
-	virtual void setCompileCommand( const pCommand& );
-	virtual QString setUp( const QString& ) const { return QString(); }
-	// CLIToolPlugin
-	virtual pCommandList defaultCommands() const;
-	virtual pCommandList userCommands() const;
-	virtual void setUserCommands( const pCommandList& ) const;
-};
-
-#endif // GCC_H
+// #ifndef MSVCMAKEPARSER_H
+// #define MSVCMAKEPARSER_H
+// 
+// #include <QProcess>
+// #include <QList>
+// #include <QRegExp>
+// 
+// #include "pCommandParser.h"
+// 
+// class MSVCMakeParser : public pCommandParser
+// {
+// struct Pattern
+// {
+// 	QRegExp regExp;
+// 	QString about;
+// 	QString FileName;
+// 	QString col;
+// 	QString row;
+// 	pConsoleManager::StepType Type;
+// 	QString Text;
+// 	QString FullText;
+// };
+// 
+// Q_OBJECT
+// protected:
+// 	QRegExp rxErrWarn, rxBuild, rxUndefRef, rxNoRule;
+// 	QList <Pattern> patterns;
+// 	QString replaceWithMatch(QRegExp, QString);
+// public:
+// 	MSVCMakeParser();
+// 	~MSVCMakeParser();
+// 
+// 	QString name() const;
+// 	bool processParsing(const QByteArray&);
+// 
+// };
+// 
+// #endif

@@ -2,9 +2,9 @@
 **
 ** 		Created using Monkey Studio v1.8.1.0
 ** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Monkey Studio Compiler Plugins
-** FileName  : Gcc.cpp
-** Date      : 2008-01-14T00:53:21
+** Project   : Monkey Studio Builder Plugins
+** FileName  : MSVCMake.cpp
+** Date      : 2008-01-14T00:52:27
 ** License   : GPL
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
 ** Home Page : http://www.monkeystudio.org
@@ -26,140 +26,59 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **
 ****************************************************************************/
-/*!
-	\file Gcc.cpp
-	\date 2008-01-14T00:53:21
-	\author Filipe AZEVEDO
-	\brief Gcc compiler plugin class
-*/
-
-#include "Gcc.h"
-
 #include <QTabWidget>
+#include "MSVCMake.h"
+#include "MSVCMakeParser.h"
 
-/*!
-	Class constructor
-*/
-Gcc::Gcc()
+MSVCMake::MSVCMake ()
 {
 	// install parsers
 	foreach ( QString s, availableParsers() )
 		MonkeyCore::consoleManager()->addParser( getParser( s ) );
 }
 
-void Gcc::fillPluginInfos()
+void MSVCMake::fillPluginInfos()
 {
-	mPluginInfos.Caption = tr( "Gcc" );
-	mPluginInfos.Description = tr( "Plugin for execute Gcc in console" );
-	mPluginInfos.Author = "Kopats Andrei aka hlamer <hlamer@tut.by>, Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
-	mPluginInfos.Type = BasePlugin::iCompiler;
+	mPluginInfos.Caption = tr( "MSVCMake" );
+	mPluginInfos.Description = tr( "Plugin for execute MSVC Make in console and parse it's output" );
+	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	mPluginInfos.Type = BasePlugin::iBuilder;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.5.0";
 	mPluginInfos.FirstStartEnabled = false;
-	mPluginInfos.HaveSettingsWidget	= true;
+	mPluginInfos.HaveSettingsWidget = true;
 }
 
-/*!
-	Destructor of class
-*/
-Gcc::~Gcc()
-{
+MSVCMake::~MSVCMake()
+{//TODO move to uninstall
 	// uninstall parsers
 	foreach ( QString s, availableParsers() )
 		MonkeyCore::consoleManager()->removeParser( s );
 }
 
-/*!
-	Install plugin
-	\return Status of process 
-	\retval true Successfully enabled
-	\retval false Some error ocurred
-*/
-bool Gcc::install()
+bool MSVCMake::install()
 {
 	return true;
 }
 
-/*!
-	Unnstall plugin
-	\return Status of process 
-	\retval true Successfully enabled
-	\retval false Some error ocurred
-*/
-bool Gcc::uninstall()
+bool MSVCMake::uninstall()
 {
 	return true;
 }
 
-/*!
-	Get settings widget for configuring plugin
-	\return Pointer to widget
-*/
-QWidget* Gcc::settingsWidget()
+QWidget* MSVCMake::settingsWidget()
 {
 	QTabWidget* tw = new QTabWidget;
 	tw->setAttribute( Qt::WA_DeleteOnClose );
-	tw->addTab( compilerSettingsWidget(), tr( "Compile Command" ) );
+	tw->addTab( builderSettingsWidget(), tr( "Build Command" ) );
 	tw->addTab( cliToolSettingsWidget( this ), tr( "User Commands" ) );
 	return tw;
 }
 
-/*!
-	Get default compiler command 
-	\return pCommand object
-*/
-pCommand Gcc::defaultCompileCommand() const
-{ return pCommand( "Compile Current File", "gcc", "-w \"$cf$\"", false, QStringList( "GccParser" ), "$cfp$" ); }
-
-/*!
-	Get compile command according with settings
-	\return pCommand object
-*/
-pCommand Gcc::compileCommand() const
-{
-	// get settings object
-	pSettings* s = MonkeyCore::settings();
-	pCommand c;
-	c.setText( s->value( settingsKey( "CompileCommand/Text" ) ).toString() );
-	c.setCommand( s->value( settingsKey( "CompileCommand/Command" ) ).toString() );
-	c.setArguments( s->value( settingsKey( "CompileCommand/Arguments" ) ).toString() );
-	c.setWorkingDirectory( s->value( settingsKey( "CompileCommand/WorkingDirectory" ) ).toString() );
-	c.setParsers( s->value( settingsKey( "CompileCommand/Parsers" ) ).toStringList() );
-	c.setTryAllParsers( s->value( settingsKey( "CompileCommand/TryAll" ), false ).toBool() );
-	c.setSkipOnError( s->value( settingsKey( "CompileCommand/SkipOnError" ), false ).toBool() );
-	// if no user commands get global ones
-	if ( !c.isValid() )
-		c = defaultCompileCommand();
-	return c;
-}
-
-/*!
-	Set command for compiling file
-*/
-void Gcc::setCompileCommand( const pCommand& c )
-{
-	pSettings* s = MonkeyCore::settings();
-	s->setValue( settingsKey( "CompileCommand/Text" ), c.text() );
-	s->setValue( settingsKey( "CompileCommand/Command" ), c.command() );
-	s->setValue( settingsKey( "CompileCommand/Arguments" ), c.arguments() );
-	s->setValue( settingsKey( "CompileCommand/WorkingDirectory" ), c.workingDirectory() );
-	s->setValue( settingsKey( "CompileCommand/Parsers" ), c.parsers() );
-	s->setValue( settingsKey( "CompileCommand/TryAll" ), c.tryAllParsers() );
-	s->setValue( settingsKey( "CompileCommand/SkipOnError" ), c.skipOnError() );
-}
-
-/*!
-	Get predefined commands list of compiler
-	\return list of pCommand objects
-*/
-pCommandList Gcc::defaultCommands() const
+pCommandList MSVCMake::defaultCommands() const
 { return pCommandList(); }
 
-/*!
-	Get user defined commands
-	\return list of pCommand objects
-*/
-pCommandList Gcc::userCommands() const
+pCommandList MSVCMake::userCommands() const
 {
 	// commands list
 	pCommandList l;
@@ -188,11 +107,7 @@ pCommandList Gcc::userCommands() const
 	return l;
 }
 
-/*!
-	Set user definded list of commands
-	\param l List of commands
-*/
-void Gcc::setUserCommands( const pCommandList& l ) const
+void MSVCMake::setUserCommands( const pCommandList& l ) const
 {
 	// get settings object
 	pSettings* s = MonkeyCore::settings();
@@ -215,4 +130,43 @@ void Gcc::setUserCommands( const pCommandList& l ) const
 	s->endArray();
 }
 
-Q_EXPORT_PLUGIN2( CompilerGcc, Gcc )
+QStringList MSVCMake::availableParsers() const
+{ return QStringList( /*mPluginInfos->Name*/ ); }
+
+pCommandParser* MSVCMake::getParser( const QString& )
+{ return NULL/*s == mPluginInfos->Name ? new MSVCMakeParser : 0*/; }
+
+pCommand MSVCMake::defaultBuildCommand() const
+{ return pCommand( "Build", "nmake", "", false, availableParsers(), "$cpp$" ); }
+
+pCommand MSVCMake::buildCommand() const
+{
+	// get settings object
+	pSettings* s = MonkeyCore::settings();
+	pCommand c;
+	c.setText( s->value( settingsKey( "BuildCommand/Text" ) ).toString() );
+	c.setCommand( s->value( settingsKey( "BuildCommand/Command" ) ).toString() );
+	c.setArguments( s->value( settingsKey( "BuildCommand/Arguments" ) ).toString() );
+	c.setWorkingDirectory( s->value( settingsKey( "BuildCommand/WorkingDirectory" ) ).toString() );
+	c.setParsers( s->value( settingsKey( "BuildCommand/Parsers" ) ).toStringList() );
+	c.setTryAllParsers( s->value( settingsKey( "BuildCommand/TryAll" ), false ).toBool() );
+	c.setSkipOnError( s->value( settingsKey( "BuildCommand/SkipOnError" ), false ).toBool() );
+	// if no user commands get global ones
+	if ( !c.isValid() )
+		c = defaultBuildCommand();
+	return c;
+}
+
+void MSVCMake::setBuildCommand( const pCommand& c )
+{
+	pSettings* s = MonkeyCore::settings();
+	s->setValue( settingsKey( "BuildCommand/Text" ), c.text() );
+	s->setValue( settingsKey( "BuildCommand/Command" ), c.command() );
+	s->setValue( settingsKey( "BuildCommand/Arguments" ), c.arguments() );
+	s->setValue( settingsKey( "BuildCommand/WorkingDirectory" ), c.workingDirectory() );
+	s->setValue( settingsKey( "BuildCommand/Parsers" ), c.parsers() );
+	s->setValue( settingsKey( "BuildCommand/TryAll" ), c.tryAllParsers() );
+	s->setValue( settingsKey( "BuildCommand/SkipOnError" ), c.skipOnError() );
+}
+
+Q_EXPORT_PLUGIN2( BuilderMSVCMake, MSVCMake )
