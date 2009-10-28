@@ -30,22 +30,21 @@
 #define GNUMAKEPARSER_H
 
 #include <pConsoleManager.h>
-#include <pCommandParser.h>
+#include <../../../monkey/src/consolemanager/CommandParser.h>
 
-class GNUMakeParser : public pCommandParser
+class GNUMakeParser : public CommandParser
 {
 Q_OBJECT
 public:
-	GNUMakeParser(QObject* parent ) :pCommandParser (parent)
+	GNUMakeParser(QObject* parent ) :CommandParser (parent, PLUGIN_NAME)
 	{
-		mName = PLUGIN_NAME;
 		Pattern ps[] = 
 		{
 #include "GnuMakePatterns.h"
 		{QRegExp(), "", "", "", pConsoleManager::stUnknown,"",""} //this item must be last
 		};
 		for ( int i = 0; !ps[i].regExp.isEmpty(); i++)
-			patterns.append (ps[i]);
+			addPattern(ps[i]);
 	};
 
 };

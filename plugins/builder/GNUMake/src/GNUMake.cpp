@@ -134,7 +134,7 @@ void GNUMake::setUserCommands( const pCommandList& l ) const
 QStringList GNUMake::availableParsers() const
 { return QStringList( infos().Name ); }
 
-pCommandParser* GNUMake::getParser( const QString& s )
+AbstractCommandParser* GNUMake::getParser( const QString& s )
 { return s == infos().Name ? new GNUMakeParser(this) : 0; }
 
 pCommand GNUMake::defaultBuildCommand() const

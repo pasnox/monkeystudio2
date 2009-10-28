@@ -50,7 +50,7 @@ public:
 	virtual pCommandList userCommands() const;
 	virtual void setUserCommands( const pCommandList& ) const;
 	virtual QStringList availableParsers() const;
-	virtual pCommandParser* getParser( const QString& );
+	virtual AbstractCommandParser* getParser( const QString& );
 	// BuilderPlugin
 	virtual pCommand defaultBuildCommand() const;
 	virtual pCommand buildCommand() const;
