@@ -1,2 +1,2 @@
 TEMPLATE	= subdirs
-SUBDIRS	= GccParser Gcc
+SUBDIRS	= GccParser

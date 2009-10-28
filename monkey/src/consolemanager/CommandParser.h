@@ -79,9 +79,6 @@ public:
 	void addPattern(const Pattern& pattern);
 	void removePattern(const QString& regExp);
 	int processParsing(QString* text);
-	
-signals:
-	void newStepAvailable( const pConsoleManager::Step& );
 };
 
 #endif // COMMANDPARSER_H
