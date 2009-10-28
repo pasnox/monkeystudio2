@@ -48,7 +48,8 @@
 	#include <QTime>
 #endif
 
-CommandParser::CommandParser(const QString& name):
+CommandParser::CommandParser(QObject* parent, const QString& name):
+	AbstractCommandParser(parent),
 	mName(name)
 {
 }

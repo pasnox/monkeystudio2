@@ -16,7 +16,7 @@ UISimpleQMakeEditor::UISimpleQMakeEditor( XUPProjectItem* project, QWidget* pare
 	: QDialog( parent )
 {
 	// init dialog
-	setupUi( this );
+	setupUi( this )
 	
 	// set dialog infos
 	setWindowIcon( project->displayIcon() );

@@ -42,7 +42,7 @@
 	It is used by the majority of parsers used in MkS (all parsers on 28-10-2009)
 	See \ref CommandParser::Pattern
 */
-class Q_MONKEY_EXPORT CommandParser : public QObject
+class Q_MONKEY_EXPORT CommandParser : public AbstractCommandParser
 {
 	Q_OBJECT
 
@@ -73,7 +73,7 @@ protected:
 	
 	QString replaceWithMatch(QRegExp&, QString);
 public:
-	CommandParser(const QString& name);
+	CommandParser(QObject* parent, const QString& name);
 	QString name() const
 		{	return mName;	};
 	void addPattern(const Pattern& pattern);

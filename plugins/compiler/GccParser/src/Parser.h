@@ -38,14 +38,14 @@
 #define PARSER_H
 
 #include <pConsoleManager.h>
-#include <pCommandParser.h>
+#include <../../../monkey/src/consolemanager/CommandParser.h>
 
 /*!
 	\brief Set of regular expressions for parsing output of gcc and g++ compiler
 	
 	Allows to find errors and warnings in the output of compiler
 */
-class Parser : public pCommandParser
+class Parser : public CommandParser
 {
 Q_OBJECT
 public:
@@ -60,9 +60,9 @@ public:
 		Try always use something as  'blabla...'. For such regular expressions need to
 		test just few symbols for understand, that string not according to pattern
 	*/
-	Parser(QObject* parent ) :pCommandParser (parent)
+	Parser(QObject* parent):
+		CommandParser (parent, PLUGIN_NAME)
 	{
-		mName = PLUGIN_NAME;
 		Pattern ps[] = 
 		{
 			{
@@ -183,7 +183,7 @@ public:
 			{QRegExp(), "", "", "", pConsoleManager::stUnknown,"",""} //this item must be last
 		};
 		for ( int i = 0; !ps[i].regExp.isEmpty(); i++)
-			patterns.append (ps[i]);
+			addPattern(ps[i]);
 		
 	};
 

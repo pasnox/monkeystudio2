@@ -53,6 +53,9 @@ public:
 	virtual QString name() const = 0;
 
 public :
+	AbstractCommandParser(QObject* parent): QObject(parent) {};
+	
+	
 	/**
 	 *\bfief Parse text
 	 *\param text Text to parse
