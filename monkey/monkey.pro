@@ -103,7 +103,8 @@ HEADERS	*= src/main.h \
 	src/toolsmanager/ui/UIDesktopTools.h \
 	src/toolsmanager/ui/UIToolsEdit.h \
 	src/consolemanager/pConsoleManager.h \
-	src/consolemanager/pCommandParser.h \
+	src/consolemanager/AbstractCommandParser.h \
+	src/consolemanager/CommandParser.h \
 	src/consolemanager/pCommand.h \
 	src/toolsmanager/pToolsManager.h \
 	src/pluginsmanager/BasePlugin.h \
@@ -165,7 +166,7 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/toolsmanager/ui/UIToolsEdit.cpp \
 	src/toolsmanager/pToolsManager.cpp \
 	src/consolemanager/pConsoleManager.cpp \
-	src/consolemanager/pCommandParser.cpp \
+	src/consolemanager/CommandParser.cpp \
 	src/pluginsmanager/PluginsManager.cpp \
 	src/pluginsmanager/BasePlugin.cpp \
 	src/pluginsmanager/ui/UIPluginsSettings.cpp \

@@ -16,7 +16,6 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 #include "Python.h"
-#include "PythonParser.h"
 
 #include <QTabWidget>
 
@@ -138,11 +137,6 @@ void Python::setUserCommands( const pCommandList& commands ) const
 QStringList Python::availableParsers() const
 {
 	return QStringList( infos().Name );
-}
-
-pCommandParser* Python::getParser( const QString& s )
-{
-	return s == infos().Name ? new PythonParser( this ) : 0;
 }
 
 pCommand Python::defaultInterpretCommand() const

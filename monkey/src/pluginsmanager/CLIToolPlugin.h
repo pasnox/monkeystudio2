@@ -34,7 +34,7 @@
 #include "../consolemanager/pCommand.h"
 #include "BasePlugin.h"
 #include "ui/UICLIToolSettings.h"
-#include "../consolemanager/pCommandParser.h"
+#include "../consolemanager/AbstractCommandParser.h"
 
 class Q_MONKEY_EXPORT CLIToolPlugin
 {
@@ -46,7 +46,7 @@ public:
 	virtual QWidget* cliToolSettingsWidget( BasePlugin* p )
 	{ return new UICLIToolSettings( p, defaultCommands(), userCommands(), QApplication::activeWindow() ); }
 	virtual QStringList availableParsers() const { return QStringList(); }
-	virtual pCommandParser* getParser( const QString& ) { return 0; }
+	virtual AbstractCommandParser* getParser( const QString& ) { return 0; }
 };
 
 Q_DECLARE_INTERFACE( CLIToolPlugin, "org.monkeystudio.MonkeyStudio.CLIToolPlugin/1.0" )

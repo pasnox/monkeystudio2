@@ -45,7 +45,7 @@
 #include <QPoint>
 #include <QHash>
 
-class pCommandParser;
+class AbstractCommandParser;
 class QAction;
 
 /*!
@@ -91,8 +91,8 @@ public:
 	inline QStringList parsersName() const { return mParsers.keys(); }
 	inline QAction* stopAction() const { return mStopAction; }
 	
-	void addParser( pCommandParser* );
-	void removeParser( pCommandParser* );
+	void addParser( AbstractCommandParser* );
+	void removeParser( AbstractCommandParser* );
 	void removeParser( const QString& );
 	
 	QString nativeSeparators( const QString& );
@@ -109,7 +109,7 @@ protected:
 	int mLinesInStringBuffer;
 	pCommandList mCommands;
 	QStringList mCurrentParsers;
-	QHash<QString, pCommandParser*> mParsers;
+	QHash<QString, AbstractCommandParser*> mParsers;
 	QAction* mStopAction;
 	int mStopAttempt;
 

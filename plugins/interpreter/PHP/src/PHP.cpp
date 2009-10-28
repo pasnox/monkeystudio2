@@ -16,7 +16,6 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 #include "PHP.h"
-#include "PHPParser.h"
 
 #include <QTabWidget>
 
@@ -138,11 +137,6 @@ void PHP::setUserCommands( const pCommandList& commands ) const
 QStringList PHP::availableParsers() const
 {
 	return QStringList( infos().Name );
-}
-
-pCommandParser* PHP::getParser( const QString& s )
-{
-	return s == infos().Name ? new PHPParser( this ) : 0;
 }
 
 pCommand PHP::defaultInterpretCommand() const

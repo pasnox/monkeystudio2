@@ -3,7 +3,7 @@
 **         Created using Monkey Studio v1.8.1.0
 ** Authors   : Andrei Kopats aka hlamer <hlamer@tut.by>
 ** Project   : Monkey Studio IDE
-** FileName  : pCommandParser.cpp
+** FileName  : CommandParser.cpp
 ** Date      : 2008-01-14T00:36:50
 ** License   : GPL
 ** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
@@ -27,12 +27,15 @@
 **
 ****************************************************************************/
 /*!
-	\file pCommandParser.h
+	\file CommandParser.h
 	\date 2008-01-14T00:36:50
 	\author Andrei Kopats
-	\brief Implementation of pCommandParser class
+	\brief Implementation of CommandParser class
 */
-#include "pCommandParser.h"
+
+#include <QDebug>
+
+#include "CommandParser.h"
 
 /*!
 	Change value of this macro, if you need to debug parsing or parsers, 
@@ -41,27 +44,40 @@
 */
 #define PARSERS_DEBUG 0
 
-/*!
-	Destructor of class
-*/
-pCommandParser::~pCommandParser()
-{
-}
-
 #if PARSERS_DEBUG
-	#include <QDebug>
 	#include <QTime>
 #endif
 
+CommandParser::CommandParser(const QString& name):
+	mName(name)
+{
+}
+
+void CommandParser::addPattern(const Pattern& pattern)
+{
+	foreach(Pattern p, mPatterns)
+		if (p.regExp.pattern() == pattern.regExp.pattern())
+			qWarning() << "Duplicating regular expression " << p.regExp << "for" << name();
+	
+	mPatterns.append(pattern);
+}
+
+void CommandParser::removePattern(const QString& regExp)
+{
+	for (int i = 0; i < mPatterns.size(); i++)
+	{
+		if (mPatterns[i].regExp.pattern() == regExp)
+		{
+			mPatterns.removeAt(i);
+			i--;
+		}
+	}
+}
+
 /*!
-		Try to parse string buffer.
-		
-		If parsing will successfull, signals with results will be emited
-		\param buf string buffer
-		\return count of chars, which are recognised
-		\retval 0 - String not recognised
+	see \ref AbstractCommandParser::processParsing
 */
-int pCommandParser::processParsing(QString* buf)
+int CommandParser::processParsing(QString* buf)
 {
 #if PARSERS_DEBUG
 	static int allTime;
@@ -69,7 +85,7 @@ int pCommandParser::processParsing(QString* buf)
 	QTime time1;
 	time1.start();
 #endif
-	foreach ( Pattern p, patterns)
+	foreach ( Pattern p, mPatterns)
 	{
 		int pos = p.regExp.indexIn(*buf);
 #if PARSERS_DEBUG
@@ -108,15 +124,6 @@ int pCommandParser::processParsing(QString* buf)
 }
 
 /*!
-	Get name of parser
-	\return Name of parser
-*/
-QString pCommandParser::name() const
-{
-	return mName;
-}
-
-/*!
 	Function replaces sequences "%d" (where d is number) with matches 
 	from regular expression. 
 
@@ -128,22 +135,22 @@ QString pCommandParser::name() const
 		Patterns will be replaced with according submatch of string
 	\return Resulting string
 */
-QString pCommandParser::replaceWithMatch(QRegExp& rex, QString s)
+QString CommandParser::replaceWithMatch(QRegExp& rex, QString s)
 {
 	int pos = 0; 
 	int i = 0;
 	while ( (i = s.indexOf("%", pos)) != -1)
 	{
-	pos = i;
-	if ( ! s[i+1].isDigit () )
-		continue;
-	QString cap = rex.cap(s[i+1].digitValue ());
-	if (cap.endsWith ("\n"))
-		cap.chop(1);
-	if (cap.endsWith ("\r"))
-		cap.chop(1);
-	s.replace (i,2,cap);
-	pos += cap.size ();
+		pos = i;
+		if ( ! s[i+1].isDigit () )
+			continue;
+		QString cap = rex.cap(s[i+1].digitValue ());
+		if (cap.endsWith ("\n"))
+			cap.chop(1);
+		if (cap.endsWith ("\r"))
+			cap.chop(1);
+		s.replace (i,2,cap);
+		pos += cap.size ();
 	}
 	return s;
 }
