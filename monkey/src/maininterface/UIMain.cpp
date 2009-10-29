@@ -97,6 +97,11 @@ void UIMain::initGui()
 	messageTb->setVisible( false );
 	messageTb->setWindowTitle( tr( "Message ToolBar" ) );
 	messageTb->setDefaultPixmap( pIconManager::pixmap( "messages_infos.png", ":/messages" ) );
+	messageTb->setAttribute( Qt::WA_MacSmallSize );
+	foreach ( QWidget* widget, messageTb->findChildren<QWidget*>() )
+	{
+		widget->setAttribute( Qt::WA_MacSmallSize );
+	}
 	addToolBarBreak();
 	addToolBar( messageTb );
 	addToolBarBreak();
