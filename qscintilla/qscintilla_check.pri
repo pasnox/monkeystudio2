@@ -1,3 +1,3 @@
-SYSTEM_QSCINTILLA	= $$system_qscintilla
+SYSTEM_QSCINTILLA	= $$[system_qscintilla]
 unix:!mac:isEmpty( SYSTEM_QSCINTILLA ):SYSTEM_QSCINTILLA	= 1
 isEqual( SYSTEM_QSCINTILLA, 1 ):DEFINES	*= SYSTEM_QSCINTILLA
