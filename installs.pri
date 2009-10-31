@@ -5,7 +5,7 @@ include( config.pri )
 !build_pass {
 	isEqual( SYSTEM_QSCINTILLA, 1 ):message( "Using system QScintilla library" )
 	else:message( "Using integrated QScintilla library" )
-	message( "You can change qscintilla link type by giving the qmake parameter variable: system_qscintilla=0 or system_qscintilla=1" )
+	message( "You can change qscintilla link type by giving the qmake parameter variable: ('qmake -set system_qscintilla 0' or qmake -set system_qscintilla 1'" )
 	message( "Defining system_qscintilla=1 will use system wide qscintilla installation, else the integrated one." )
 	message( "MkS binary will be installed to : $$PACKAGE_PREFIX" )
 	message( "MkS plugins will be installed to : $$PACKAGE_PLUGINS" )
