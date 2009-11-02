@@ -170,6 +170,7 @@
 		<file>icons/templates/static_lib.png</file>
 		<file>icons/templates/qt_static_lib.png</file>
 		<file>icons/templates/qwidget.png</file>
+		<file>icons/templates/mks.png</file>
 	</qresource>
 	<qresource prefix="/tools" >
 		<file>icons/tools/add.png</file>
