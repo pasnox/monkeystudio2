@@ -43,12 +43,6 @@
 #include <pActionsManager.h>
 #include <VariablesManager.h>
 
-#ifdef Q_CC_MSVC
-#pragma message("don''t forget to connect warning message with status bar")
-#else
-#warning don''t forget to connect warning message with status bar
-#endif
-
 /*!
 	Defines maximum count of lines, which are storing in the buffer for parsing
 */
@@ -456,8 +450,6 @@ void pConsoleManager::executeProcess()
 		// execute command
 		mStopAttempt = 0;
 		setWorkingDirectory( c.workingDirectory() );
-qDebug() << c.command();
-qDebug() << c.arguments();
 
 		start( QString( "%1 %2" ).arg( c.command() ).arg( c.arguments() ) );
 

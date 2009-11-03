@@ -35,6 +35,7 @@
 class Q_MONKEY_EXPORT InterpreterPlugin : public BasePlugin, public CLIToolPlugin
 {
 public:
+	InterpreterPlugin() : BasePlugin(), CLIToolPlugin( this ) {}
 	virtual pCommand defaultInterpretCommand() const = 0;
 	virtual pCommand interpretCommand() const = 0;
 	virtual void setInterpretCommand( const pCommand& ) = 0;

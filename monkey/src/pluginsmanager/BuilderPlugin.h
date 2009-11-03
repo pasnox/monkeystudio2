@@ -30,15 +30,15 @@
 #define BUILDERPLUGIN_H
 
 #include "CLIToolPlugin.h"
-#include "ui/UIBuilderSettings.h"
 
 class Q_MONKEY_EXPORT BuilderPlugin : public BasePlugin, public CLIToolPlugin
 {	
 public:
+	BuilderPlugin();
+	virtual pCommand buildCommand() const;
+	virtual void setBuildCommand( const pCommand& cmd );
+	virtual QWidget* builderSettingsWidget();
 	virtual pCommand defaultBuildCommand() const = 0;
-	virtual pCommand buildCommand() const = 0;
-	virtual void setBuildCommand( const pCommand& ) = 0;
-	virtual QWidget* builderSettingsWidget() { return new UIBuilderSettings( this, QApplication::activeWindow() ); }
 };
 
 Q_DECLARE_INTERFACE( BuilderPlugin, "org.monkeystudio.MonkeyStudio.BuilderPlugin/1.0" )

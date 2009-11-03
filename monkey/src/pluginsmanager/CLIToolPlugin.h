@@ -33,20 +33,21 @@
 
 #include "../consolemanager/pCommand.h"
 #include "BasePlugin.h"
-#include "ui/UICLIToolSettings.h"
 #include "../consolemanager/AbstractCommandParser.h"
 
 class Q_MONKEY_EXPORT CLIToolPlugin
 {
 public:
-	virtual ~CLIToolPlugin() {}
+	CLIToolPlugin( BasePlugin* plugin );
 	virtual pCommandList defaultCommands() const = 0;
-	virtual pCommandList userCommands() const = 0;
-	virtual void setUserCommands( const pCommandList& ) const = 0;
-	virtual QWidget* cliToolSettingsWidget( BasePlugin* p )
-	{ return new UICLIToolSettings( p, defaultCommands(), userCommands(), QApplication::activeWindow() ); }
-	virtual QStringList availableParsers() const { return QStringList(); }
-	virtual AbstractCommandParser* getParser( const QString& ) { return 0; }
+	virtual pCommandList userCommands() const;
+	virtual void setUserCommands( const pCommandList& cmds ) const;
+	virtual QWidget* cliToolSettingsWidget();
+	virtual QStringList availableParsers() const;
+	virtual AbstractCommandParser* getParser( const QString& name );
+
+protected:
+	BasePlugin* mPlugin;
 };
 
 Q_DECLARE_INTERFACE( CLIToolPlugin, "org.monkeystudio.MonkeyStudio.CLIToolPlugin/1.0" )

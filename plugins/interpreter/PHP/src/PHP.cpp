@@ -65,7 +65,7 @@ QWidget* PHP::settingsWidget()
 	QTabWidget* tw = new QTabWidget;
 	tw->setAttribute( Qt::WA_DeleteOnClose );
 	tw->addTab( interpreterSettingsWidget(), tr( "Interpret Command" ) );
-	tw->addTab( cliToolSettingsWidget( this ), tr( "User Commands" ) );
+	tw->addTab( cliToolSettingsWidget(), tr( "User Commands" ) );
 	return tw;
 }
 
