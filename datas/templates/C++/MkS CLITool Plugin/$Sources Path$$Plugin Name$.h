@@ -12,5 +12,3 @@ public:
 };
 
 #endif // $Plugin Name.upper$_H
-
-

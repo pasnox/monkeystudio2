@@ -20,5 +20,3 @@ protected:
 };
 
 #endif // $Plugin Name.upper$_H
-
-
