@@ -74,66 +74,6 @@ pCommandList PHP::defaultCommands() const
 	return pCommandList();
 }
 
-pCommandList PHP::userCommands() const
-{
-	// commands list
-	pCommandList commands;
-
-	// get settings object
-	pSettings* settings = MonkeyCore::settings();
-
-	// read user commands for this plugin
-	int size = settings->beginReadArray( settingsKey( "Commands" ) );
-	for ( int i = 0; i < size; i++ )
-	{
-		settings->setArrayIndex( i );
-		pCommand cmd;
-		cmd.setText( settings->value( "Text" ).toString() );
-		cmd.setCommand( settings->value( "Command" ).toString() );
-		cmd.setArguments( settings->value( "Arguments" ).toString() );
-		cmd.setWorkingDirectory( settings->value( "WorkingDirectory" ).toString() );
-		cmd.setParsers( settings->value( "Parsers" ).toStringList() );
-		cmd.setTryAllParsers( settings->value( "TryAll" ).toBool() );
-		cmd.setSkipOnError( settings->value( "SkipOnError" ).toBool() );
-		commands << cmd;
-	}
-	settings->endArray();
-
-	// if no user commands get global ones
-	if ( commands.isEmpty() )
-	{
-		commands << defaultCommands();
-	}
-
-	// return list
-	return commands;
-}
-
-void PHP::setUserCommands( const pCommandList& commands ) const
-{
-	// get settings object
-	pSettings* settings = MonkeyCore::settings();
-
-	// remove old key
-	settings->remove( settingsKey( "Commands" ) );
-
-	// write user commands for this plugin
-	settings->beginWriteArray( settingsKey( "Commands" ) );
-	for ( int i = 0; i < commands.count(); i++ )
-	{
-		settings->setArrayIndex( i );
-		const pCommand& cmd = commands[i];
-		settings->setValue( "Text", cmd.text() );
-		settings->setValue( "Command", cmd.command() );
-		settings->setValue( "Arguments", cmd.arguments() );
-		settings->setValue( "WorkingDirectory", cmd.workingDirectory() );
-		settings->setValue( "Parsers", cmd.parsers() );
-		settings->setValue( "TryAll", cmd.tryAllParsers() );
-		settings->setValue( "SkipOnError", cmd.skipOnError() );
-	}
-	settings->endArray();
-}
-
 QStringList PHP::availableParsers() const
 {
 	return QStringList( infos().Name );
@@ -141,43 +81,8 @@ QStringList PHP::availableParsers() const
 
 pCommand PHP::defaultInterpretCommand() const
 {
-		const QString mPHP = "php";
-		return pCommand( "Interpret", mPHP, QString::null, false, availableParsers(), "$cpp$" );
-}
-
-pCommand PHP::interpretCommand() const
-{
-	// get settings object
-	pSettings* settings = MonkeyCore::settings();
-	pCommand cmd;
-
-	cmd.setText( settings->value( settingsKey( "InterpretCommand/Text" ) ).toString() );
-	cmd.setCommand( settings->value( settingsKey( "InterpretCommand/Command" ) ).toString() );
-	cmd.setArguments( settings->value( settingsKey( "InterpretCommand/Arguments" ) ).toString() );
-	cmd.setWorkingDirectory( settings->value( settingsKey( "InterpretCommand/WorkingDirectory" ) ).toString() );
-	cmd.setParsers( settings->value( settingsKey( "InterpretCommand/Parsers" ) ).toStringList() );
-	cmd.setTryAllParsers( settings->value( settingsKey( "InterpretCommand/TryAll" ), false ).toBool() );
-	cmd.setSkipOnError( settings->value( settingsKey( "InterpretCommand/SkipOnError" ), false ).toBool() );
-
-	// if no user commands get global ones
-	if ( !cmd.isValid() )
-	{
-		cmd = defaultInterpretCommand();
-	}
-
-	return cmd;
-}
-
-void PHP::setInterpretCommand( const pCommand& cmd )
-{
-	pSettings* settings = MonkeyCore::settings();
-	settings->setValue( settingsKey( "InterpretCommand/Text" ), cmd.text() );
-	settings->setValue( settingsKey( "InterpretCommand/Command" ), cmd.command() );
-	settings->setValue( settingsKey( "InterpretCommand/Arguments" ), cmd.arguments() );
-	settings->setValue( settingsKey( "InterpretCommand/WorkingDirectory" ), cmd.workingDirectory() );
-	settings->setValue( settingsKey( "InterpretCommand/Parsers" ), cmd.parsers() );
-	settings->setValue( settingsKey( "InterpretCommand/TryAll" ), cmd.tryAllParsers() );
-	settings->setValue( settingsKey( "InterpretCommand/SkipOnError" ), cmd.skipOnError() );
+	const QString mPHP = "php";
+	return pCommand( "Interpret", mPHP, QString::null, false, availableParsers(), "$cpp$" );
 }
 
 Q_EXPORT_PLUGIN2( InterpreterPHP, PHP )

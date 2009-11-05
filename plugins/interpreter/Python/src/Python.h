@@ -36,13 +36,9 @@ public:
 	virtual QWidget* settingsWidget();
 	// CLIToolPlugin
 	virtual pCommandList defaultCommands() const;
-	virtual pCommandList userCommands() const;
-	virtual void setUserCommands( const pCommandList& ) const;
 	virtual QStringList availableParsers() const;
 	// InterpreterPlugin
 	virtual pCommand defaultInterpretCommand() const;
-	virtual pCommand interpretCommand() const;
-	virtual void setInterpretCommand( const pCommand& );
 };
 
 #endif // PYTHON_H

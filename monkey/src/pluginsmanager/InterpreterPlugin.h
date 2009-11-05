@@ -30,16 +30,15 @@
 #define INTERPRETERPLUGIN_H
 
 #include "CLIToolPlugin.h"
-#include "ui/UIInterpreterSettings.h"
 
 class Q_MONKEY_EXPORT InterpreterPlugin : public BasePlugin, public CLIToolPlugin
 {
 public:
-	InterpreterPlugin() : BasePlugin(), CLIToolPlugin( this ) {}
+	InterpreterPlugin();
+	virtual pCommand interpretCommand() const;
+	virtual void setInterpretCommand( const pCommand& cmd );
+	virtual QWidget* interpreterSettingsWidget();
 	virtual pCommand defaultInterpretCommand() const = 0;
-	virtual pCommand interpretCommand() const = 0;
-	virtual void setInterpretCommand( const pCommand& ) = 0;
-	virtual QWidget* interpreterSettingsWidget() { return new UIInterpreterSettings( this, QApplication::activeWindow() ); }
 };
 
 Q_DECLARE_INTERFACE( InterpreterPlugin, "org.monkeystudio.MonkeyStudio.InterpreterPlugin/1.0" )
