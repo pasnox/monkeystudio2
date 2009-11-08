@@ -1038,19 +1038,6 @@ pWorkspace::ViewMode pMonkeyStudio::documentMode()
 { return (pWorkspace::ViewMode)MonkeyCore::settings()->value( settingsPath() +"/DocMode", pWorkspace::NoTabs ).toInt(); }
 
 /*!
-	\details Set the external changes react mode
-	\param mode The mode to apply
-*/
-void pMonkeyStudio::setExternalChanges( pMonkeyStudio::ExternalChangesMode mode )
-{ MonkeyCore::settings()->setValue( settingsPath() +"/ExternalChanges", mode ); }
-
-/*!
-	\details Return the external changes react mode
-*/
-pMonkeyStudio::ExternalChangesMode pMonkeyStudio::externalchanges()
-{ return (pMonkeyStudio::ExternalChangesMode)MonkeyCore::settings()->value( settingsPath() +"/ExternalChanges", pMonkeyStudio::ecmAlert ).toInt(); }
-
-/*!
 	\details Set if session must be save on close
 	\param save If true, session is saved, else not
 */

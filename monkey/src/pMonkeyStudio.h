@@ -36,9 +36,7 @@ class QTranslator;
 class pEditor;
 
 namespace pMonkeyStudio
-{
-	enum ExternalChangesMode { ecmNothing = 0, ecmAlert, ecmReload };
-	
+{	
 	Q_MONKEY_EXPORT void addTranslator( QTranslator* translator );
 	Q_MONKEY_EXPORT void loadTranslations();
 
@@ -100,8 +98,6 @@ namespace pMonkeyStudio
 	Q_MONKEY_EXPORT QColor currentTabTextColor();
 	Q_MONKEY_EXPORT void setDocumentMode( pWorkspace::ViewMode mode );
 	Q_MONKEY_EXPORT pWorkspace::ViewMode documentMode();
-	Q_MONKEY_EXPORT void setExternalChanges( pMonkeyStudio::ExternalChangesMode mode );
-	Q_MONKEY_EXPORT pMonkeyStudio::ExternalChangesMode externalchanges();
 	Q_MONKEY_EXPORT void setSaveSessionOnClose( bool save );
 	Q_MONKEY_EXPORT bool saveSessionOnClose();
 	Q_MONKEY_EXPORT void setRestoreSessionOnStartup( bool restore );

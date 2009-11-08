@@ -198,15 +198,19 @@ bool pTemplatesManager::realiseTemplate( XUPItem* scope, const pTemplate& temp, 
 		}
 		
 		// get contents
-		QString c = QString::fromUtf8( file.readAll() );
-		
-		// reset file
-		file.resize( 0 );
+		const QString originalData = QString::fromUtf8( file.readAll() );
+		QString c = originalData;
 		
 		// write process contents
 		QTextCodec* textCodec = QTextCodec::codecForName( codec.toUtf8() );
 		c = VariablesManager::instance()->replaceAllVariables( c, dictionnary );
-		file.write( textCodec->fromUnicode( c ) );
+		
+		if ( originalData != c )
+		{
+			// reset file
+			file.resize( 0 );
+			file.write( textCodec->fromUnicode( c ) );
+		}
 		
 		// close file
 		file.close();

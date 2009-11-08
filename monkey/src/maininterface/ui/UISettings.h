@@ -44,7 +44,6 @@ private:
 	UISettings( QWidget* = 0 );
 	void loadSettings();
 	void saveSettings();
-	QButtonGroup* bgExternalChanges;
 	QButtonGroup* bgAutoCompletionSource;
 	QButtonGroup* bgCallTipsStyle;
 	QButtonGroup* bgBraceMatch;

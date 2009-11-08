@@ -42,19 +42,15 @@ protected:
 	virtual bool uninstall();
 public:
 	GNUMake();
-	~GNUMake();
+	virtual ~GNUMake();
 	// BasePlugin
 	virtual QWidget* settingsWidget();
 	// CLIToolPlugin
 	virtual pCommandList defaultCommands() const;
-	virtual pCommandList userCommands() const;
-	virtual void setUserCommands( const pCommandList& ) const;
 	virtual QStringList availableParsers() const;
-	virtual pCommandParser* getParser( const QString& );
+	virtual AbstractCommandParser* getParser( const QString& name );
 	// BuilderPlugin
 	virtual pCommand defaultBuildCommand() const;
-	virtual pCommand buildCommand() const;
-	virtual void setBuildCommand( const pCommand& );
 };
 
 #endif // GNUMAKE_H

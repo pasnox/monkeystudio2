@@ -11,19 +11,15 @@ StatusBar::StatusBar( QWidget* parent )
 	QLabel* label;
 	
 	label = ( mLabels[ltCursorPosition] = new QLabel( this ) );
-	label->setMargin( 2 );
 	label->setToolTip( tr( "Cursor position" ) );
 	
 	label = ( mLabels[ltSaveState] = new QLabel( this ) );
-	label->setMargin( 2 );
 	label->setToolTip( tr( "Modification state of file" ) );
 	
 	label = ( mLabels[ltEOLMode] = new QLabel( this ) );
-	label->setMargin( 2 );
 	label->setToolTip( tr( "EOL mode" ) );
 	
 	label = ( mLabels[ltIndentMode] = new QLabel( this ) );
-	label->setMargin( 2 );
 	label->setToolTip( tr( "Indentation mode" ) );
 	
 	// add labels
@@ -31,8 +27,13 @@ StatusBar::StatusBar( QWidget* parent )
 	{
 		label = mLabels[ i ];
 		addPermanentWidget( label );
-		label->setFrameStyle( QFrame::NoFrame | QFrame::Plain );
+		label->setMargin( 2 );
+		label->setFrameStyle( QFrame::NoFrame );
+		label->setAttribute( Qt::WA_MacSmallSize );
 	}
+	
+	// force remove statusbar label frame
+	setStyleSheet( "QStatusBar::item { border: 0px; }" );
 	
 	// connections
 	connect( this, SIGNAL( messageChanged( const QString& ) ), this, SLOT( setMessage( const QString& ) ) );

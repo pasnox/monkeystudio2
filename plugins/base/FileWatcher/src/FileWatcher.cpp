@@ -151,8 +151,14 @@ void FileWatcher::updateDocumentState( pAbstractChild* document )
 
 void FileWatcher::fileChanged( const QString& path )
 {
-	mExternallyModified[ path ] = QFile::exists( path ) ? FileWatcher::Modified : FileWatcher::Deleted;
 	pAbstractChild* document = MonkeyCore::fileManager()->openedDocument( path );
+	
+	if ( !document )
+	{
+		return;
+	}
+	
+	mExternallyModified[ path ] = QFile::exists( path ) ? FileWatcher::Modified : FileWatcher::Deleted;
 	
 	if ( mExternallyModified[ path ] == FileWatcher::Modified )
 	{

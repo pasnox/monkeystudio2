@@ -37,17 +37,11 @@
 #include <QDir>
 
 #include "pConsoleManager.h"
-#include "pCommandParser.h"
+#include "AbstractCommandParser.h"
 
 #include <MonkeyCore.h>
 #include <pActionsManager.h>
 #include <VariablesManager.h>
-
-#ifdef Q_CC_MSVC
-#pragma message("don''t forget to connect warning message with status bar")
-#else
-#warning don''t forget to connect warning message with status bar
-#endif
 
 /*!
 	Defines maximum count of lines, which are storing in the buffer for parsing
@@ -117,7 +111,7 @@ pConsoleManager::~pConsoleManager()
 	Append parser to list of alailable parsers (which could be used for some commands)
 	\param p Pointer to parser
 */
-void pConsoleManager::addParser( pCommandParser* p )
+void pConsoleManager::addParser( AbstractCommandParser* p )
 {
 	if ( p && !mParsers.contains( p->name() ) )
 	{
@@ -130,7 +124,7 @@ void pConsoleManager::addParser( pCommandParser* p )
 	Remove parser to list of available parsers (which could be used for some commands)
 	\param p Pointer to parser
 */
-void pConsoleManager::removeParser( pCommandParser* p )
+void pConsoleManager::removeParser( AbstractCommandParser* p )
 {
 	if ( p && mParsers.contains( p->name() ) )
 	{
@@ -183,6 +177,7 @@ QString pConsoleManager::processInternalVariables( const QString& s )
 	\return Command for execution
 	\retval Command, gived as parameter
 */
+#include <QDebug>
 pCommand pConsoleManager::processCommand( pCommand c )
 {
 	// process variables
@@ -455,6 +450,7 @@ void pConsoleManager::executeProcess()
 		// execute command
 		mStopAttempt = 0;
 		setWorkingDirectory( c.workingDirectory() );
+
 		start( QString( "%1 %2" ).arg( c.command() ).arg( c.arguments() ) );
 
 		mBuffer.open( QBuffer::ReadOnly );
@@ -490,7 +486,7 @@ void pConsoleManager::parseOutput (bool commandFinished)
 		//try all parsers
 		foreach ( QString s, mCurrentParsers )
 		{
-			pCommandParser* p = mParsers.value( s );
+			AbstractCommandParser* p = mParsers.value( s );
 			if ( ! p )
 				continue; //for
 			linesToRemove =  p->processParsing(&mStringBuffer);

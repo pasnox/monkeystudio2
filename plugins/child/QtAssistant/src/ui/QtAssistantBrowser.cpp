@@ -462,7 +462,7 @@ void QtAssistantBrowser::closeTab()
 
 void QtAssistantBrowser::openUrl( const QUrl& url )
 {
-	if ( !isVisible() )
+	//if ( !isVisible() )
 		emit showBrowserRequested();
 	HelpViewer* hv = currentTab( true );
 	hv->setSource( url );
@@ -471,7 +471,7 @@ void QtAssistantBrowser::openUrl( const QUrl& url )
 
 void QtAssistantBrowser::openInNewTabUrl( const QUrl& url )
 {
-	if ( !isVisible() )
+	//if ( !isVisible() )
 		emit showBrowserRequested();
 	HelpViewer* hv = newEmptyTab();
 	hv->setSource( url );

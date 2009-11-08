@@ -67,12 +67,6 @@ UISettings::UISettings( QWidget* p )
 
 	foreach ( QString s, availableLanguages() )
 		mLexers[s] = lexerForLanguage( s );
-
-	// externalchanges
-	bgExternalChanges = new QButtonGroup( gbOnExternalChanges );
-	bgExternalChanges->addButton( rbDoNothing, pMonkeyStudio::ecmNothing );
-	bgExternalChanges->addButton( rbAlertUser, pMonkeyStudio::ecmAlert );
-	bgExternalChanges->addButton( rbReloadAutomatically, pMonkeyStudio::ecmReload );
 	
 	// sorting mode
 	cbSortingMode->addItem( tr( "Opening order" ), pOpenedFileModel::OpeningOrder );
@@ -196,13 +190,7 @@ void UISettings::loadSettings()
 	// General
 	cbSaveFiles->setChecked( saveFilesOnCustomAction() );
 	leDefaultProjectsDirectory->setText( defaultProjectsDirectory() );
-	cbTabsHaveCloseButton->setChecked( tabsHaveCloseButton() );
-	cbTabsHaveShortcut->setChecked( tabsHaveShortcut() );
-	cbTabsElided->setChecked( tabsElided() );
-	tbTabsTextColor->setColor( tabsTextColor() );
-	tbCurrentTabTextColor->setColor( currentTabTextColor() );
 	cbTabModes->setCurrentIndex( cbTabModes->findData( documentMode() ) );
-	bgExternalChanges->button( externalchanges() )->setChecked( true );
 	cbSaveSession->setChecked( saveSessionOnClose() );
 	cbRestoreSession->setChecked( restoreSessionOnStartup() );
 	cbQuickFileAccess->setChecked( showQuickFileAccess() );
@@ -342,13 +330,7 @@ void UISettings::saveSettings()
 	// General
 	setSaveFilesOnCustomAction( cbSaveFiles->isChecked() );
 	setDefaultProjectsDirectory( leDefaultProjectsDirectory->text() );
-	setTabsHaveCloseButton( cbTabsHaveCloseButton->isChecked() );
-	setTabsHaveShortcut( cbTabsHaveShortcut->isChecked() );
-	setTabsElided( cbTabsElided->isChecked() );
-	setTabsTextColor( tbTabsTextColor->color() );
-	setCurrentTabTextColor( tbCurrentTabTextColor->color() );
 	setDocumentMode( (pWorkspace::ViewMode)cbTabModes->itemData( cbTabModes->currentIndex() ).toInt() );
-	setExternalChanges( (pMonkeyStudio::ExternalChangesMode)bgExternalChanges->checkedId() );
 	setSaveSessionOnClose( cbSaveSession->isChecked() );
 	setRestoreSessionOnStartup( cbRestoreSession->isChecked() );
 	setShowQuickFileAccess( cbQuickFileAccess->isChecked() );

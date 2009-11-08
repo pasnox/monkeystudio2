@@ -266,46 +266,7 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="0" colspan="2">
-        <widget class="QGroupBox" name="gbOnExternalChanges">
-         <property name="title">
-          <string>On External &amp;Changes</string>
-         </property>
-         <layout class="QVBoxLayout">
-          <property name="spacing">
-           <number>3</number>
-          </property>
-          <property name="margin">
-           <number>5</number>
-          </property>
-          <item>
-           <widget class="QRadioButton" name="rbDoNothing">
-            <property name="text">
-             <string>Do nothing</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="rbAlertUser">
-            <property name="text">
-             <string>Alert the user</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="rbReloadAutomatically">
-            <property name="text">
-             <string>Automatically reload the file if safe, alert the user if not</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="2" column="0">
+       <item row="1" column="0">
         <widget class="QGroupBox" name="gbWorkspace">
          <property name="title">
           <string>&amp;Workspace</string>
@@ -317,110 +278,17 @@
           <property name="spacing">
            <number>3</number>
           </property>
-          <item row="2" column="0" colspan="3">
-           <widget class="QCheckBox" name="cbTabsHaveCloseButton">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>Tabs Have Close Button</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0" colspan="3">
-           <widget class="QCheckBox" name="cbTabsHaveShortcut">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>Tabs Have Shortcut</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0" colspan="3">
-           <widget class="QCheckBox" name="cbTabsElided">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>Tabs Are Elided</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1" colspan="2">
-           <widget class="pColorButton" name="tbTabsTextColor">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="lTabsTextColor">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>Tabs Text Color :</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="0">
-           <widget class="QLabel" name="lCurrentTabTextColor">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>Current Tab Text Color :</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="1" colspan="2">
-           <widget class="pColorButton" name="tbCurrentTabTextColor">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="0">
+          <item row="3" column="0">
            <widget class="QLabel" name="lTabMode">
             <property name="text">
              <string>Tab Mode :</string>
             </property>
            </widget>
           </item>
-          <item row="7" column="1" colspan="2">
-           <widget class="QComboBox" name="cbTabModes">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
+          <item row="3" column="1" colspan="2">
+           <widget class="QComboBox" name="cbTabModes"/>
           </item>
-          <item row="1" column="0" colspan="3">
-           <widget class="QCheckBox" name="cbQuickFileAccess">
-            <property name="toolTip">
-             <string>Add a combobox in the context toolbar that allow quick file change</string>
-            </property>
-            <property name="text">
-             <string>Show Quick File Acess</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
+          <item row="1" column="0">
            <widget class="QLabel" name="lSortingMode">
             <property name="toolTip">
              <string>The sorting mode apply to the &quot;Opened Files List&quot; dock.
@@ -431,7 +299,7 @@ You can quickly change it using the dock context menu.</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1" colspan="2">
+          <item row="1" column="1" colspan="2">
            <widget class="QComboBox" name="cbSortingMode">
             <property name="toolTip">
              <string>The sorting mode apply to the &quot;Opened Files List&quot; dock.
@@ -439,10 +307,33 @@ You can quickly change it using the dock context menu.</string>
             </property>
            </widget>
           </item>
+          <item row="4" column="0" colspan="3">
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="0" colspan="3">
+           <widget class="QCheckBox" name="cbQuickFileAccess">
+            <property name="toolTip">
+             <string>Add a combobox in the context toolbar that allow quick file change</string>
+            </property>
+            <property name="text">
+             <string>Show Quick File Acess</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item row="1" column="1">
         <widget class="QGroupBox" name="gbSession">
          <property name="title">
           <string>&amp;Session</string>
@@ -484,7 +375,7 @@ You can quickly change it using the dock context menu.</string>
          </layout>
         </widget>
        </item>
-       <item row="3" column="0" colspan="2">
+       <item row="2" column="0" colspan="2">
         <spacer>
          <property name="orientation">
           <enum>Qt::Vertical</enum>

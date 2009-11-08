@@ -103,7 +103,8 @@ HEADERS	*= src/main.h \
 	src/toolsmanager/ui/UIDesktopTools.h \
 	src/toolsmanager/ui/UIToolsEdit.h \
 	src/consolemanager/pConsoleManager.h \
-	src/consolemanager/pCommandParser.h \
+	src/consolemanager/AbstractCommandParser.h \
+	src/consolemanager/CommandParser.h \
 	src/consolemanager/pCommand.h \
 	src/toolsmanager/pToolsManager.h \
 	src/pluginsmanager/BasePlugin.h \
@@ -165,7 +166,7 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/toolsmanager/ui/UIToolsEdit.cpp \
 	src/toolsmanager/pToolsManager.cpp \
 	src/consolemanager/pConsoleManager.cpp \
-	src/consolemanager/pCommandParser.cpp \
+	src/consolemanager/CommandParser.cpp \
 	src/pluginsmanager/PluginsManager.cpp \
 	src/pluginsmanager/BasePlugin.cpp \
 	src/pluginsmanager/ui/UIPluginsSettings.cpp \
@@ -197,7 +198,11 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/xupmanager/core/XUPProjectItemHelper.cpp \
 	src/xupmanager/gui/VariablesEditor.cpp \
 	src/workspace/pOpenedFileExplorer.cpp \
-	src/workspace/pOpenedFileModel.cpp
+	src/workspace/pOpenedFileModel.cpp \
+	src/pluginsmanager/BuilderPlugin.cpp \
+	src/pluginsmanager/CLIToolPlugin.cpp \
+	src/pluginsmanager/CompilerPlugin.cpp \
+	src/pluginsmanager/InterpreterPlugin.cpp
 
 mac:SOURCES	*= src/toolsmanager/pDesktopApplications_mac.cpp
 else:unix:SOURCES	*= src/toolsmanager/pDesktopApplications_unix.cpp
