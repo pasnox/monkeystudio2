@@ -6,7 +6,6 @@ SUBDIRS	= FileBrowser \
 	ClassBrowser \
 	ProjectHeaders \
 	RegExpEditor \
-	PostIt \
 	SearchAndReplace \
 	MkSShell \
 	UpdateChecker \

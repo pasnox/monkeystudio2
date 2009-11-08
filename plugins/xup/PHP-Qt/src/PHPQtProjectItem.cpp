@@ -14,13 +14,9 @@
 
 #include <QDebug>
 
-PHPQtProjectItem::PHPQtProjectItem()
-	: XUPProjectItem()
+int PHPQtProjectItem::projectType() const
 {
-}
-
-PHPQtProjectItem::~PHPQtProjectItem()
-{
+	return PHPQtProjectItem::PHPQtProject;
 }
 
 void PHPQtProjectItem::registerProjectType() const
@@ -64,19 +60,9 @@ void PHPQtProjectItem::registerProjectType() const
 	mXUPProjectInfos->registerVariableSuffixes( pType, mVariableSuffixes );
 }
 
-BuilderPlugin* PHPQtProjectItem::builder( const QString& plugin ) const
+XUPProjectItem* PHPQtProjectItem::newProject() const
 {
-	return XUPProjectItem::builder( plugin );
-}
-
-CompilerPlugin* PHPQtProjectItem::compiler( const QString& plugin ) const
-{
-	return XUPProjectItem::compiler( plugin );
-}
-
-DebuggerPlugin* PHPQtProjectItem::debugger( const QString& plugin ) const
-{
-	return XUPProjectItem::debugger( plugin );
+	return new PHPQtProjectItem();
 }
 
 InterpreterPlugin* PHPQtProjectItem::interpreter( const QString& plugin ) const
