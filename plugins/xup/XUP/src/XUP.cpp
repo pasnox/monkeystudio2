@@ -33,7 +33,7 @@ void XUP::fillPluginInfos()
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.1.0";
 	mPluginInfos.FirstStartEnabled = true;
-	mPluginInfos.HaveSettingsWidget = true;
+	mPluginInfos.HaveSettingsWidget = false;
 }
 
 bool XUP::install()

@@ -10,9 +10,6 @@ class PyQtProjectItem : public XUPProjectItem
 public:
 	enum ProjectType { PyQtProject = 3 };
 
-	PyQtProjectItem();
-	virtual ~PyQtProjectItem();
-
 	virtual int projectType() const;
 	virtual void registerProjectType() const;
 	virtual XUPProjectItem* newProject() const;
