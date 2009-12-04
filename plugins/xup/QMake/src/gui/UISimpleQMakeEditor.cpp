@@ -27,11 +27,6 @@ UISimpleQMakeEditor::UISimpleQMakeEditor( XUPProjectItem* project, QWidget* pare
 	{
 		QListWidgetItem* item = lwPages->item( i );
 		item->setSizeHint( QSize( 154, 40 ) );
-		
-		if ( i > 5 ) // plugins not visible
-		{
-			item->setHidden( true );
-		}
 	}
 	
 	// values editor actions
@@ -48,37 +43,6 @@ UISimpleQMakeEditor::UISimpleQMakeEditor( XUPProjectItem* project, QWidget* pare
 	aOthersValuesEditFile = editMenu->addAction( tr( "As File..." ) );
 	aOthersValuesEditPath = editMenu->addAction( tr( "As Path..." ) );
 	tbOthersValuesEdit->setMenu( editMenu );
-	
-	// plugins
-	/*
-	// builders
-	foreach ( BuilderPlugin* bp, MonkeyCore::pluginsManager()->plugins<BuilderPlugin*>( PluginsManager::stAll ) )
-	{
-		cbBuilders->addItem( bp->infos().Name );
-		swBuilders->addWidget( bp->settingsWidget() );
-	}
-	
-	// compilers
-	foreach ( CompilerPlugin* cp, MonkeyCore::pluginsManager()->plugins<CompilerPlugin*>( PluginsManager::stAll ) )
-	{
-		cbCompilers->addItem( cp->infos().Name );
-		swCompilers->addWidget( cp->settingsWidget() );
-	}
-	
-	// debuggers
-	foreach ( DebuggerPlugin* dp, MonkeyCore::pluginsManager()->plugins<DebuggerPlugin*>( PluginsManager::stAll ) )
-	{
-		cbDebuggers->addItem( dp->infos().Name );
-		swDebuggers->addWidget( dp->settingsWidget() );
-	}
-	
-	// interpreters
-	foreach ( InterpreterPlugin* ip, MonkeyCore::pluginsManager()->plugins<InterpreterPlugin*>( PluginsManager::stAll ) )
-	{
-		cbInterpreters->addItem( ip->infos().Name );
-		swInterpreters->addWidget( ip->settingsWidget() );
-	}
-	*/
 	
 	// connections
 	connect( lwQtModules, SIGNAL( itemSelectionChanged() ), this, SLOT( modules_itemSelectionChanged() ) );
@@ -185,8 +149,6 @@ void UISimpleQMakeEditor::init( XUPProjectItem* project )
 	mValues.clear();
 	mManagedVariables.clear();
 	mManagedVariables << "TEMPLATE" << "CONFIG" << "TARGET" << "DESTDIR" << "DLLDESTDIR" << "QT" << mFileVariables;
-	QString plugin;
-	int id;
 	
 	foreach ( QAbstractButton* ab, wCompilerSettings->findChildren<QAbstractButton*>() )
 	{
@@ -408,60 +370,6 @@ void UISimpleQMakeEditor::init( XUPProjectItem* project )
 
 	updateProjectFiles();
 	updateValuesEditorVariables();
-	
-	// plugins
-	
-	// choose project builder
-	plugin = mProject->projectSettingsValue( "BUILDER" );
-	id = cbBuilders->findText( plugin );
-	
-	if ( id == -1 && cbBuilders->count() )
-	{
-		id = 0;
-	}
-	
-	cbBuilders->setCurrentIndex( id );
-	swBuilders->setCurrentIndex( id );
-	gbBuilders->setChecked( !plugin.isEmpty() );
-	
-	// choose project compiler
-	plugin = mProject->projectSettingsValue( "COMPILER" );
-	id = cbCompilers->findText( plugin );
-	
-	if ( id == -1 && cbCompilers->count() )
-	{
-		id = 0;
-	}
-	
-	cbCompilers->setCurrentIndex( id );
-	swCompilers->setCurrentIndex( id );
-	gbCompilers->setChecked( !plugin.isEmpty() );
-	
-	// choose project debugger
-	plugin = mProject->projectSettingsValue( "DEBUGGER" );
-	id = cbDebuggers->findText( plugin );
-	
-	if ( id == -1 && cbDebuggers->count() )
-	{
-		id = 0;
-	}
-	
-	cbDebuggers->setCurrentIndex( id );
-	swDebuggers->setCurrentIndex( id );
-	gbDebuggers->setChecked( !plugin.isEmpty() );
-	
-	// choose project interpreter
-	plugin = mProject->projectSettingsValue( "INTERPRETER" );
-	id = cbInterpreters->findText( plugin );
-	
-	if ( id == -1 && cbInterpreters->count() )
-	{
-		id = 0;
-	}
-	
-	cbInterpreters->setCurrentIndex( id );
-	swInterpreters->setCurrentIndex( id );
-	gbInterpreters->setChecked( !plugin.isEmpty() );
 }
 
 XUPItem* UISimpleQMakeEditor::getUniqueVariableItem( const QString& variableName, bool create )
@@ -1159,48 +1067,6 @@ void UISimpleQMakeEditor::accept()
 	}
 
 	mProject->setProjectSettingsValue( "QT_VERSION", mQtVersion.Version );
-	
-	// plugins
-	
-	// builder
-	plugin = cbBuilders->currentText();
-	
-	if ( !gbBuilders->isChecked() )
-	{
-		plugin.clear();
-	}
-	
-	mProject->setProjectSettingsValue( "BUILDER", plugin );
-	
-	// compiler
-	plugin = cbCompilers->currentText();
-	
-	if ( !gbCompilers->isChecked() )
-	{
-		plugin.clear();
-	}
-		
-	mProject->setProjectSettingsValue( "COMPILER", plugin );
-	
-	// debugger
-	plugin = cbDebuggers->currentText();
-	
-	if ( !gbDebuggers->isChecked() )
-	{
-		plugin.clear();
-	}
-		
-	mProject->setProjectSettingsValue( "DEBUGGER", plugin );
-	
-	// interpreter
-	plugin = cbInterpreters->currentText();
-	
-	if ( !gbInterpreters->isChecked() )
-	{
-		plugin.clear();
-	}
-		
-	mProject->setProjectSettingsValue( "INTERPRETER", plugin );
 	
 	// close dialog
 	QDialog::accept();
