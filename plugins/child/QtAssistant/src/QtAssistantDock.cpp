@@ -38,8 +38,6 @@ QtAssistantDock::QtAssistantDock( QWidget* parent )
 	MkSQtDocInstaller::collectionFileDirectory( true );
 	mHelpEngine = new QHelpEngine( MkSQtDocInstaller::defaultHelpCollectionFileName(), this );
 	
-	qWarning() << MkSQtDocInstaller::defaultHelpCollectionFileName();
-	
 	// create bookmarks manager
 	mBookmarkManager = new BookmarkManager( mHelpEngine );
 	mBookmarkManager->setupBookmarkModels();
