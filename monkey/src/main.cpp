@@ -23,6 +23,7 @@
 */
 #include <QApplication>
 #include <QMessageBox>
+#include <QPluginLoader>
 
 #include <main.h>
 #include <MonkeyCore.h>
@@ -44,24 +45,27 @@ int main( int argc, char** argv )
 	// parse command line arguments
 	CommandLineManager clm;
 	clm.parse();
-	
+
 	const QStringList arguments = clm.arguments().keys();
-	
+
 	if ( arguments.contains( "-v" ) || arguments.contains( "--version" ) )
 	{
 		clm.showVersion();
 	}
-	
+
 	if ( arguments.contains( "-h" ) || arguments.contains( "--help" ) )
 	{
 		clm.showHelp();
 	}
-	
+
 	if ( arguments.contains( "-v" ) || arguments.contains( "--version" ) || arguments.contains( "-h" ) || arguments.contains( "--help" ) )
 	{
 		return 0;
 	}
-	
+
+	// create static plugin instances - avoid QtDesigner/QtAssistant QThread parenting errors.
+	QPluginLoader::staticInstances();
+
 	// init monkey studio core
 	MonkeyCore::init();
 	// handle command line arguments
