@@ -11,7 +11,7 @@ class QToolButton;
 class QtAssistantInlineSearch : public QWidget
 {
 	Q_OBJECT
-	friend class QtAssistantBrowser;
+	friend class QtAssistantChild;
 
 public:
 	QtAssistantInlineSearch( QWidget* parent = 0 );

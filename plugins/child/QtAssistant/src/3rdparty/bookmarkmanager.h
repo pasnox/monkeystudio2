@@ -1,43 +1,41 @@
 /****************************************************************************
 **
-** Copyright (C) 2008-2008 Trolltech ASA. All rights reserved.
+** Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
 **
 ** This file is part of the Qt Assistant of the Qt Toolkit.
 **
-** This file may be used under the terms of the GNU General Public
-** License versions 2.0 or 3.0 as published by the Free Software
-** Foundation and appearing in the files LICENSE.GPL2 and LICENSE.GPL3
-** included in the packaging of this file.  Alternatively you may (at
-** your option) use any later version of the GNU General Public
-** License if such license has been publicly approved by Trolltech ASA
-** (or its successors, if any) and the KDE Free Qt Foundation. In
-** addition, as a special exception, Trolltech gives you certain
-** additional rights. These rights are described in the Trolltech GPL
-** Exception version 1.2, which can be found at
-** http://www.trolltech.com/products/qt/gplexception/ and in the file
-** GPL_EXCEPTION.txt in this package.
+** $QT_BEGIN_LICENSE:LGPL$
+** No Commercial Usage
+** This file contains pre-release code and may not be distributed.
+** You may use this file in accordance with the terms and conditions
+** contained in the Technology Preview License Agreement accompanying
+** this package.
 **
-** Please review the following information to ensure GNU General
-** Public Licensing requirements will be met:
-** http://trolltech.com/products/qt/licenses/licensing/opensource/. If
-** you are unsure which license is appropriate for your use, please
-** review the following information:
-** http://trolltech.com/products/qt/licenses/licensing/licensingoverview
-** or contact the sales department at sales@trolltech.com.
+** GNU Lesser General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU Lesser
+** General Public License version 2.1 as published by the Free Software
+** Foundation and appearing in the file LICENSE.LGPL included in the
+** packaging of this file.  Please review the following information to
+** ensure the GNU Lesser General Public License version 2.1 requirements
+** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
 **
-** In addition, as a special exception, Trolltech, as the sole
-** copyright holder for Qt Designer, grants users of the Qt/Eclipse
-** Integration plug-in the right for the Qt/Eclipse Integration to
-** link to functionality provided by Qt Designer and its related
-** libraries.
+** In addition, as a special exception, Nokia gives you certain additional
+** rights.  These rights are described in the Nokia Qt LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
 **
-** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
-** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
-** A PARTICULAR PURPOSE. Trolltech reserves all rights not expressly
-** granted herein.
+** If you have questions regarding the use of this file, please contact
+** Nokia at qt-info@nokia.com.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+**
+**
+**
+**
+**
+**
+** $QT_END_LICENSE$
 **
 ****************************************************************************/
 
@@ -76,7 +74,7 @@ class BookmarkDialog : public QDialog
     Q_OBJECT
 
 public:
-    BookmarkDialog(BookmarkManager *manager, const QString &title, 
+    BookmarkDialog(BookmarkManager *manager, const QString &title,
         const QString &url, QWidget *parent = 0);
     ~BookmarkDialog();
 
@@ -88,8 +86,8 @@ private slots:
     void textChanged(const QString& string);
     void selectBookmarkFolder(const QString &folderName);
     void customContextMenuRequested(const QPoint &point);
-    void currentChanged(const QModelIndex& current, const QModelIndex& previous);
-    
+    void currentChanged(const QModelIndex& current);
+
 private:
     bool eventFilter(QObject *object, QEvent *e);
 
@@ -120,13 +118,15 @@ class BookmarkWidget : public QWidget
     Q_OBJECT
 
 public:
-    BookmarkWidget(BookmarkManager *manager, QWidget *parent = 0);
+    BookmarkWidget(BookmarkManager *manager, QWidget *parent = 0,
+        bool showButtons = true);
     ~BookmarkWidget();
 
 signals:
     void addBookmark();
     void requestShowLink(const QUrl &url);
-	void requestShowLinkInNewTab(const QUrl &url);
+    void requestShowLinkInNewTab(const QUrl &url);
+    void escapePressed();
 
 private slots:
     void removeClicked();
@@ -136,7 +136,7 @@ private slots:
     void customContextMenuRequested(const QPoint &point);
 
 private:
-    void setup();
+    void setup(bool showButtons);
     void expandItems();
     void focusInEvent(QFocusEvent *e);
     bool eventFilter(QObject *object, QEvent *event);
@@ -178,28 +178,37 @@ public:
     QStringList bookmarkFolders() const;
     QModelIndex addNewFolder(const QModelIndex& index);
     void removeBookmarkItem(QTreeView *treeView, const QModelIndex& index);
-    void showBookmarkDialog(QWidget* parent, const QString &name, const QString &url);
-    void addNewBookmark(const QModelIndex& index, const QString &name, const QString &url);
+    void showBookmarkDialog(QWidget* parent, const QString &name,
+        const QString &url);
+    void addNewBookmark(const QModelIndex& index, const QString &name,
+        const QString &url);
+    void setupBookmarkModels();
+
+    void fillBookmarkMenu(QMenu *menu);
+    QUrl urlForAction(QAction* action) const;
+
+signals:
+    void bookmarksChanged();
 
 private slots:
     void itemChanged(QStandardItem *item);
 
 private:
-    void setupBookmarkModels();
     QString uniqueFolderName() const;
     void removeBookmarkFolderItems(QStandardItem *item);
     void readBookmarksRecursive(const QStandardItem *item, QDataStream &stream,
         const qint32 depth) const;
+    void fillBookmarkMenu(QMenu *menu, QStandardItem *root);
 
 private:
     QString oldText;
     QIcon folderIcon;
-    QByteArray m_bookmarks;
 
     BookmarkModel *treeModel;
     BookmarkModel *listModel;
     QStandardItem *renameItem;
     QHelpEngineCore *helpEngine;
+    QMap<QAction*, QModelIndex> map;
 };
 
 QT_END_NAMESPACE

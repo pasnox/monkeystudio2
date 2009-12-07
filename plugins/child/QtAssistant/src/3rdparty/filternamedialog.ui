@@ -10,7 +10,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>FilterNameDialog</string>
+   <string>Add Filter Name</string>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >

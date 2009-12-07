@@ -1,64 +1,70 @@
-/****************************************************************************
-	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
-
-	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; either version 2 of the License, or
-	(at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-****************************************************************************/
 #include "QtAssistant.h"
-#include "ui/QtAssistantDock.h"
-#include "ui/UIQtAssistantSettings.h"
+#include "QtAssistantDock.h"
+#include "QtAssistantChild.h"
+#include "MkSQtDocInstaller.h"
 #include "3rdparty/preferencesdialog.h"
 
 #include <UIMain.h>
+#include <pWorkspace.h>
 
-#include <QDebug>
+#include <QHelpEngine>
+
+QWidget* QtAssistant::settingsWidget()
+{
+	MkSQtDocInstaller::collectionFileDirectory( true );
+	QHelpEngine* engine = new QHelpEngine( MkSQtDocInstaller::defaultHelpCollectionFileName() );
+	
+	QWidget* widget = new PreferencesDialog( engine, QApplication::activeWindow() );
+	engine->setParent( widget );
+	
+	return widget;
+}
+
+pAbstractChild* QtAssistant::createDocument( const QString& fileName )
+{
+	// return your own widget documentd
+	return 0;
+}
 
 void QtAssistant::fillPluginInfos()
 {
 	mPluginInfos.Caption = tr( "Qt Assistant" );
-	mPluginInfos.Description = tr( "This plugin embedded Qt Assistant" );
-	mPluginInfos.Author = "Azevedo Filipe aka Nox P@sNox <pasnox@gmail.com>";
+	mPluginInfos.Description = tr( "Qt Assistant Integration" );
+	mPluginInfos.Author = "Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>";
 	mPluginInfos.Type = BasePlugin::iChild;
 	mPluginInfos.Name = PLUGIN_NAME;
-	mPluginInfos.Version = "1.0.0";
+	mPluginInfos.Version = "0.5.0";
 	mPluginInfos.FirstStartEnabled = true;
 	mPluginInfos.HaveSettingsWidget = true;
-	mPluginInfos.Pixmap = pIconManager::pixmap( "assistant.png", ":/icons" );
-}
-
-QWidget* QtAssistant::settingsWidget()
-{
-	return new PreferencesDialog( mAssistantDock->helpEngine(), QApplication::activeWindow(), false );
+	mPluginInfos.Pixmap = pIconManager::pixmap( "QtAssistant.png", ":/assistant-icons" );
 }
 
 bool QtAssistant::install()
 {
-	mAssistantDock = new QtAssistantDock;
-	MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( mAssistantDock, infos().Caption, QIcon( ":/icons/assistant.png" ) );
+	mDock = new QtAssistantDock;
+	connect( mDock, SIGNAL( helpShown() ), this, SLOT( helpShown() ) );
+	MonkeyCore::mainWindow()->dockToolBar( Qt::RightToolBarArea )->addDock( mDock, infos().Caption, pIconManager::icon( "QtAssistant.png", ":/assistant-icons" ) );
 	return true;
 }
 
 bool QtAssistant::uninstall()
 {
-	mAssistantDock->deleteLater();
+	delete mDock;
 	return true;
 }
 
-pAbstractChild* QtAssistant::createDocument( const QString& fileName )
+void QtAssistant::helpShown()
 {
-	Q_UNUSED( fileName );
-	return 0;
+	QtAssistantChild* child = mDock->child();
+	pWorkspace* workspace = MonkeyCore::workspace();
+	
+	if ( !workspace->documents().contains( child ) )
+	{
+		workspace->handleDocument( child );
+		emit child->fileOpened();
+	}
+	
+	workspace->setCurrentDocument( child );
 }
 
 Q_EXPORT_PLUGIN2( ChildQtAssistant, QtAssistant )
