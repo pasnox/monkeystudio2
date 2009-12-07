@@ -101,7 +101,15 @@ UIAbout::UIAbout( QWidget* p )
 	lInformations->setText( mInformations.arg( PACKAGE_NAME ).arg( PACKAGE_VERSION ).arg( PACKAGE_VERSION_STR ).arg( PACKAGE_COPYRIGHTS ).arg( PACKAGE_DOMAIN ) );
 
 	// logo
-	bool isXMas = QDate::currentDate().month() == ( 12 || 1 );
+	bool isXMas = false;
+	
+	switch ( QDate::currentDate().month() )
+	{
+		case 11:
+		case 12:
+		case 1:
+			isXMas = true;
+	}
 
 	if ( isXMas )
 	{
