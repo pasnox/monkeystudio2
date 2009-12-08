@@ -101,7 +101,6 @@ QtAssistantChild::QtAssistantChild( QHelpEngine* engine, QWidget* parent )
 QtAssistantChild::~QtAssistantChild()
 {
 	saveSession();
-	//delete cbUrl; // QToolBar take ownership of added widgets.
 }
 
 QString QtAssistantChild::context() const
@@ -111,7 +110,6 @@ QString QtAssistantChild::context() const
 
 void QtAssistantChild::initializeContext( QToolBar* tb )
 {
-	tb->addSeparator();
 	tb->addAction( aPrevious );
 	tb->addAction( aNext );
 	tb->addAction( aHome );
@@ -123,7 +121,7 @@ void QtAssistantChild::initializeContext( QToolBar* tb )
 	tb->addAction( aPreviousTab );
 	tb->addAction( aNextTab );
 	tb->addSeparator();
-	tb->addWidget( cbUrl );
+	tb->addWidget( cbUrl ); // QToolBar take ownership of added widgets.
 }
 
 QPoint QtAssistantChild::cursorPosition() const
