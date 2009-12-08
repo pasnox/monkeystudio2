@@ -109,6 +109,7 @@ UIAbout::UIAbout( QWidget* p )
 		case 12:
 		case 1:
 			isXMas = true;
+			break;
 	}
 
 	if ( isXMas )
