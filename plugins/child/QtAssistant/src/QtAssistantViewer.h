@@ -49,6 +49,7 @@ protected:
 
 private slots:
 	void actionChanged();
+	void loadFinished( bool ok );
 
 private:
 	QHelpEngine* mEngine;

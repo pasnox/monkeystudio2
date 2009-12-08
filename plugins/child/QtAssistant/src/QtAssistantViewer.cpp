@@ -161,7 +161,7 @@ QtAssistantViewer::QtAssistantViewer( QHelpEngine* engine, QtAssistantChild* chi
 	connect( pageAction( QWebPage::Back ), SIGNAL( changed() ), this, SLOT( actionChanged() ) );
 	connect( pageAction( QWebPage::Forward ), SIGNAL( changed() ), this, SLOT( actionChanged() ) );
 	connect( page(), SIGNAL( linkHovered( const QString&, const QString&, const QString& ) ), this, SIGNAL( highlighted( const QString& ) ) );
-	connect( this, SIGNAL( urlChanged( const QUrl& ) ), this, SIGNAL( sourceChanged( const QUrl& ) ) );
+	connect( this, SIGNAL( loadFinished( bool ) ), this, SLOT( loadFinished( bool ) ) );
 }
 
 void QtAssistantViewer::setSource( const QUrl& url )
@@ -247,4 +247,10 @@ void QtAssistantViewer::actionChanged()
 		emit forwardAvailable( a->isEnabled() );
 	
 	emit actionsChanged();
+}
+
+void QtAssistantViewer::loadFinished( bool ok )
+{
+	Q_UNUSED( ok );
+	emit sourceChanged( url() );
 }
