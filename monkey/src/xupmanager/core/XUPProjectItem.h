@@ -151,6 +151,7 @@ public:
 	// return the project target file, ie the binary / library file path, if allowToAskUser is set to true - user might be asked for it via doalog
 	virtual QString targetFilePath( bool allowToAskUser = false, XUPProjectItem::TargetType type = XUPProjectItem::DefaultTarget, XUPProjectItem::PlatformType = XUPProjectItem::CurrentPlatform );
 	QString targetFilePath( const pCommandTargetExecution& execution );
+	QString quoteFilePath( const QString& filePath ) const;
 	
 	// return plugin associated with the project
 	virtual BuilderPlugin* builder( const QString& plugin = QString() ) const;

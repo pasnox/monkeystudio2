@@ -770,7 +770,7 @@ void QMakeProjectItem::installCommands()
 			cmd = pCommand();
 			cmd.setText( tr( "QMake" ) );
 			cmd.setCommand( mQtVersion.qmake() );
-			cmd.setArguments( mQtVersion.qmakeParameters()/*.append( " $cp$" )*/ );
+			cmd.setArguments( mQtVersion.qmakeParameters().append( " \"$cp$\"" ) );
 			cmd.setWorkingDirectory( "$cpp$" );
 			cmd.setUserData( QVariant::fromValue( &mCommands ) );
 			cmd.setProject( this );
@@ -781,7 +781,7 @@ void QMakeProjectItem::installCommands()
 			cmd = pCommand();
 			cmd.setText( tr( "lupdate" ) );
 			cmd.setCommand( mQtVersion.lupdate() );
-			cmd.setArguments( "$cp$" );
+			cmd.setArguments( "\"$cp$\"" );
 			cmd.setWorkingDirectory( "$cpp$" );
 			cmd.setUserData( QVariant::fromValue( &mCommands ) );
 			cmd.setProject( this );
@@ -792,7 +792,7 @@ void QMakeProjectItem::installCommands()
 			cmd = pCommand();
 			cmd.setText( tr( "lrelease" ) );
 			cmd.setCommand( mQtVersion.lrelease() );
-			cmd.setArguments( "$cp$" );
+			cmd.setArguments( "\"$cp$\"" );
 			cmd.setWorkingDirectory( "$cpp$" );
 			cmd.setUserData( QVariant::fromValue( &mCommands ) );
 			cmd.setProject( this );
@@ -846,7 +846,7 @@ void QMakeProjectItem::installCommands()
 			cmd.targetExecution().targetType = XUPProjectItem::DebugTarget;
 			cmd.targetExecution().platformType = XUPProjectItem::CurrentPlatform;
 			cmd.setText( tr( "Execute Debug" ) );
-			cmd.setCommand( debugTarget );
+			cmd.setCommand( quoteFilePath( debugTarget ) );
 			cmd.setArguments( QString() );
 			cmd.setWorkingDirectory( QFileInfo( debugTarget ).absolutePath() );
 			addCommand( cmd, "mBuilder/mExecute" );
@@ -862,7 +862,7 @@ void QMakeProjectItem::installCommands()
 			cmd.targetExecution().targetType = XUPProjectItem::ReleaseTarget;
 			cmd.targetExecution().platformType = XUPProjectItem::CurrentPlatform;
 			cmd.setText( tr( "Execute Release" ) );
-			cmd.setCommand( releaseTarget );
+			cmd.setCommand( quoteFilePath( releaseTarget ) );
 			cmd.setArguments( QString() );
 			cmd.setWorkingDirectory( QFileInfo( releaseTarget ).absolutePath() );
 			addCommand( cmd, "mBuilder/mExecute" );
@@ -877,7 +877,7 @@ void QMakeProjectItem::installCommands()
 			cmd.targetExecution().targetType = XUPProjectItem::DefaultTarget;
 			cmd.targetExecution().platformType = XUPProjectItem::CurrentPlatform;
 			cmd.setText( tr( "Execute" ) );
-			cmd.setCommand( defaultTarget );
+			cmd.setCommand( quoteFilePath( defaultTarget ) );
 			cmd.setArguments( QString() );
 			cmd.setWorkingDirectory( QFileInfo( defaultTarget ).absolutePath() );
 			addCommand( cmd, "mBuilder/mExecute" );

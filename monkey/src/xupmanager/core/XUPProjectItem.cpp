@@ -1119,6 +1119,16 @@ QString XUPProjectItem::targetFilePath( bool allowToAskUser, XUPProjectItem::Tar
 	return target;
 }
 
+QString XUPProjectItem::quoteFilePath( const QString& filePath ) const
+{
+	if ( filePath.startsWith( '"' ) && filePath.endsWith( '"' ) )
+	{
+		return filePath;
+	}
+	
+	return QString( filePath ).prepend( '"' ).append( '"' );
+}
+
 QString XUPProjectItem::targetFilePath( const pCommandTargetExecution& execution )
 {
 	return targetFilePath( true, (XUPProjectItem::TargetType)execution.targetType, (XUPProjectItem::PlatformType)execution.platformType );
