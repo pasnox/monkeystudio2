@@ -116,7 +116,7 @@
      </property>
      <property name="maximumSize">
       <size>
-       <width>150</width>
+       <width>180</width>
        <height>16777215</height>
       </size>
      </property>
@@ -667,9 +667,6 @@ You can quickly change it using the dock context menu.</string>
             <property name="spacing">
              <number>3</number>
             </property>
-            <property name="margin">
-             <number>0</number>
-            </property>
             <item>
              <widget class="QLabel" name="lAutoCompletionThreshold">
               <property name="text">
@@ -802,9 +799,6 @@ You can quickly change it using the dock context menu.</string>
             <property name="spacing">
              <number>3</number>
             </property>
-            <property name="margin">
-             <number>0</number>
-            </property>
             <item>
              <widget class="QLabel" name="lCallTipsVisible">
               <property name="text">
@@ -860,15 +854,9 @@ You can quickly change it using the dock context menu.</string>
             <property name="spacing">
              <number>3</number>
             </property>
-            <property name="margin">
-             <number>0</number>
-            </property>
             <item>
              <layout class="QVBoxLayout">
               <property name="spacing">
-               <number>0</number>
-              </property>
-              <property name="margin">
                <number>0</number>
               </property>
               <item>
@@ -903,9 +891,6 @@ You can quickly change it using the dock context menu.</string>
             </item>
             <item>
              <layout class="QGridLayout">
-              <property name="margin">
-               <number>0</number>
-              </property>
               <property name="spacing">
                <number>3</number>
               </property>
@@ -1043,9 +1028,6 @@ You can quickly change it using the dock context menu.</string>
             <property name="spacing">
              <number>3</number>
             </property>
-            <property name="margin">
-             <number>0</number>
-            </property>
             <item>
              <widget class="QLabel" name="lIndentationTabWidth">
               <property name="text">
@@ -1100,9 +1082,6 @@ You can quickly change it using the dock context menu.</string>
            <layout class="QHBoxLayout">
             <property name="spacing">
              <number>3</number>
-            </property>
-            <property name="margin">
-             <number>0</number>
             </property>
             <item>
              <widget class="QLabel" name="lIndentationWidth">
@@ -1165,9 +1144,6 @@ You can quickly change it using the dock context menu.</string>
            <layout class="QHBoxLayout">
             <property name="spacing">
              <number>3</number>
-            </property>
-            <property name="margin">
-             <number>0</number>
             </property>
             <item>
              <widget class="QLabel" name="lIndentationGuidesBackground">
@@ -1248,9 +1224,6 @@ You can quickly change it using the dock context menu.</string>
           </property>
           <item row="1" column="0" colspan="2">
            <layout class="QGridLayout">
-            <property name="margin">
-             <number>0</number>
-            </property>
             <property name="spacing">
              <number>3</number>
             </property>
@@ -1384,9 +1357,6 @@ You can quickly change it using the dock context menu.</string>
             <property name="spacing">
              <number>3</number>
             </property>
-            <property name="margin">
-             <number>0</number>
-            </property>
             <item>
              <widget class="QLabel" name="lEdgeColor">
               <property name="text">
@@ -1410,9 +1380,6 @@ You can quickly change it using the dock context menu.</string>
            <layout class="QHBoxLayout">
             <property name="spacing">
              <number>3</number>
-            </property>
-            <property name="margin">
-             <number>0</number>
             </property>
             <item>
              <widget class="QLabel" name="lEdgeColumnNumber">
@@ -1542,9 +1509,6 @@ You can quickly change it using the dock context menu.</string>
             <property name="spacing">
              <number>3</number>
             </property>
-            <property name="margin">
-             <number>0</number>
-            </property>
             <item>
              <widget class="QLabel" name="lCaretWidth">
               <property name="text">
@@ -1651,9 +1615,6 @@ You can quickly change it using the dock context menu.</string>
             <property name="spacing">
              <number>3</number>
             </property>
-            <property name="margin">
-             <number>0</number>
-            </property>
             <item>
              <widget class="QLabel" name="lLineNumbersMarginWidth">
               <property name="text">
@@ -1721,9 +1682,6 @@ You can quickly change it using the dock context menu.</string>
            <layout class="QVBoxLayout">
             <property name="spacing">
              <number>3</number>
-            </property>
-            <property name="margin">
-             <number>0</number>
             </property>
             <item>
              <widget class="QRadioButton" name="rbPlainFoldStyle">
@@ -2043,9 +2001,6 @@ You can quickly change it using the dock context menu.</string>
             <property name="spacing">
              <number>3</number>
             </property>
-            <property name="margin">
-             <number>0</number>
-            </property>
             <item>
              <widget class="QLabel" name="lWrappedLineIndentWidth">
               <property name="text">
@@ -2349,16 +2304,10 @@ You can quickly change it using the dock context menu.</string>
             <property name="spacing">
              <number>0</number>
             </property>
-            <property name="margin">
-             <number>0</number>
-            </property>
             <item>
              <layout class="QVBoxLayout">
               <property name="spacing">
                <number>2</number>
-              </property>
-              <property name="margin">
-               <number>0</number>
               </property>
               <item>
                <widget class="QPushButton" name="pbLexersHighlightingForeground">
@@ -2553,9 +2502,6 @@ You can quickly change it using the dock context menu.</string>
               <property name="spacing">
                <number>2</number>
               </property>
-              <property name="margin">
-               <number>0</number>
-              </property>
               <item>
                <widget class="QPushButton" name="pbLexersHighlightingAllForeground">
                 <property name="text">
@@ -2643,9 +2589,6 @@ You can quickly change it using the dock context menu.</string>
        </item>
        <item>
         <layout class="QGridLayout">
-         <property name="margin">
-          <number>0</number>
-         </property>
          <property name="spacing">
           <number>3</number>
          </property>
