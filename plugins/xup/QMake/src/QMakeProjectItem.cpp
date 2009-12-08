@@ -849,6 +849,8 @@ void QMakeProjectItem::installCommands()
 			cmd.setCommand( quoteFilePath( debugTarget ) );
 			cmd.setArguments( QString() );
 			cmd.setWorkingDirectory( QFileInfo( debugTarget ).absolutePath() );
+			cmd.setParsers( QStringList() );
+			cmd.setTryAllParsers( false );
 			addCommand( cmd, "mBuilder/mExecute" );
 		}
 		
@@ -865,6 +867,8 @@ void QMakeProjectItem::installCommands()
 			cmd.setCommand( quoteFilePath( releaseTarget ) );
 			cmd.setArguments( QString() );
 			cmd.setWorkingDirectory( QFileInfo( releaseTarget ).absolutePath() );
+			cmd.setParsers( QStringList() );
+			cmd.setTryAllParsers( false );
 			addCommand( cmd, "mBuilder/mExecute" );
 		}
 		
@@ -880,6 +884,8 @@ void QMakeProjectItem::installCommands()
 			cmd.setCommand( quoteFilePath( defaultTarget ) );
 			cmd.setArguments( QString() );
 			cmd.setWorkingDirectory( QFileInfo( defaultTarget ).absolutePath() );
+			cmd.setParsers( QStringList() );
+			cmd.setTryAllParsers( false );
 			addCommand( cmd, "mBuilder/mExecute" );
 		}
 	}

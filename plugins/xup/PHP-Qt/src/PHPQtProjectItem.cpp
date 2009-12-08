@@ -111,6 +111,8 @@ void PHPQtProjectItem::installCommands()
 		cmd = cmdInterpret;
 		cmd.setText( tr( "Start" ) );
 		cmd.setArguments( mainFile );
+		cmd.setParsers( QStringList() );
+		cmd.setTryAllParsers( false );
 		addCommand( cmd, "mInterpreter" );
 		
 	}
