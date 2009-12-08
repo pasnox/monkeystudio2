@@ -22,7 +22,7 @@ QWidget* QtAssistant::settingsWidget()
 
 pAbstractChild* QtAssistant::createDocument( const QString& fileName )
 {
-	// return your own widget documentd
+	Q_UNUSED( fileName );
 	return 0;
 }
 
