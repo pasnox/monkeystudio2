@@ -19,7 +19,7 @@ public:
 	QString currentContext() const;
 	void setCurrentContext( const QString& context );
 	
-	void removeContext( const QString& context );
+	void removeContext( const QString& context, bool del = false );
 	QStringList contexts() const;
 	QToolBar* toolBar( const QString& context ) const;
 	QToolBar* currentToolBar() const;
