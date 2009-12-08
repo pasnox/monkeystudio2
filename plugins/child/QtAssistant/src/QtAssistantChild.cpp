@@ -47,9 +47,8 @@ QtAssistantChild::QtAssistantChild( QHelpEngine* engine, QWidget* parent )
 	centralLayout->addWidget( isSearch );
 	setWidget( wCentral );
 	
-	setWindowTitle( "Qt Assistant" );
 	setWindowIcon( pIconManager::icon( "QtAssistant.png", ":/assistant-icons" ) );
-	setFilePath( windowTitle() );
+	setFilePath( "Qt Assistant" );
 	
 	// actions
 	cbUrl = new QComboBox( this );
@@ -67,7 +66,6 @@ QtAssistantChild::QtAssistantChild( QHelpEngine* engine, QWidget* parent )
 	aAddNewPage->setEnabled( false );
 	aNextTab = new QAction( pIconManager::icon( "nexttab.png", ":/assistant-icons" ), tr( "Next tab" ), this );
 	aPreviousTab = new QAction( pIconManager::icon( "previoustab.png", ":/assistant-icons" ), tr( "Previous tab" ), this );
-	aUrl = 0;
 	
 	// corner widgets
 	tbCloneTab = new QToolButton( this );
@@ -103,8 +101,7 @@ QtAssistantChild::QtAssistantChild( QHelpEngine* engine, QWidget* parent )
 QtAssistantChild::~QtAssistantChild()
 {
 	saveSession();
-	delete cbUrl;
-	delete aUrl;
+	//delete cbUrl; // QToolBar take ownership of added widgets.
 }
 
 QString QtAssistantChild::context() const
@@ -126,7 +123,7 @@ void QtAssistantChild::initializeContext( QToolBar* tb )
 	tb->addAction( aPreviousTab );
 	tb->addAction( aNextTab );
 	tb->addSeparator();
-	aUrl = tb->addWidget( cbUrl );
+	tb->addWidget( cbUrl );
 }
 
 QPoint QtAssistantChild::cursorPosition() const

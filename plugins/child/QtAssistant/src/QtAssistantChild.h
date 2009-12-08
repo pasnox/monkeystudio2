@@ -49,7 +49,6 @@ protected:
 	QAction* aAddNewPage;
 	QAction* aNextTab;
 	QAction* aPreviousTab;
-	QAction* aUrl;
 	QComboBox* cbUrl;
 	bool mFirstOpenUrl;
 	
