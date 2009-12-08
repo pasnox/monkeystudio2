@@ -51,6 +51,7 @@ protected:
 	QListWidget* mList;
 
 protected slots:
+	virtual void onEdited();
 	virtual void onAddItem();
 	virtual void onRemoveItem();
 	virtual void onClearItem();
