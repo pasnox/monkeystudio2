@@ -721,6 +721,9 @@ void pWorkspace::document_modifiedChanged( bool modified )
 void pWorkspace::document_fileClosed()
 {
 	pAbstractChild* document = qobject_cast<pAbstractChild*>( sender() );
+	pMultiToolBar* mtb = MonkeyCore::multiToolBar();
+	
+	mtb->removeContext( document->context(), true );
 	emit documentClosed( document );
 }
 
