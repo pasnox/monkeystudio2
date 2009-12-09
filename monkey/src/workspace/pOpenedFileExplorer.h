@@ -1,13 +1,15 @@
 #ifndef POPENEDFILEEXPLORER_H
 #define POPENEDFILEEXPLORER_H
 
+#include <MonkeyExport.h>
+
 #include "ui_pOpenedFileExplorer.h"
 #include "pOpenedFileModel.h"
 
 class pWorkspace;
 class pAbstractChild;
 
-class pOpenedFileExplorer : public pDockWidget, public Ui::pOpenedFileExplorer
+class Q_MONKEY_EXPORT pOpenedFileExplorer : public pDockWidget, public Ui::pOpenedFileExplorer
 {
 	Q_OBJECT
 
