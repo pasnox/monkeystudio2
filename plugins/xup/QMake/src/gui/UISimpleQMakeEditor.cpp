@@ -972,7 +972,7 @@ void UISimpleQMakeEditor::accept()
 				QStringList values = mProject->splitMultiLineValue( mValues[ variable ] );
 				
 				// update variable
-				variableItem->setAttribute( "operator", "=" );
+				variableItem->setAttribute( "operator", "+=" );
 				variableItem->setAttribute( "multiline", "true" );
 				
 				// remove all child
