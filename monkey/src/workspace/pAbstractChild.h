@@ -33,6 +33,7 @@
 #include <QFileInfo>
 #include <QTextCodec>
 #include <QShortcut>
+#include <QDebug>
 
 #include <MonkeyExport.h>
 
@@ -90,8 +91,16 @@ public:
 	// set the file path of the document
 	void setFilePath( const QString& filePath )
 	{
-		setWindowFilePath( filePath );
-		setWindowTitle( fileName().append( "[*]" ) );
+		if ( filePath.isEmpty() )
+		{
+			setWindowFilePath( QString::null );
+			setWindowTitle( QString::null );
+		}
+		else
+		{
+			setWindowFilePath( filePath );
+			setWindowTitle( fileName().append( "[*]" ) );
+		}
 	}
 	
 	// return the document file path
