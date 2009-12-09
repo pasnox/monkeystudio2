@@ -73,6 +73,7 @@ void MonkeyCore::init()
 		case 12:
 		case 1:
 			isXMas = true;
+			break;
 	}
 
 	QSplashScreen splash( pIconManager::pixmap( isXMas ? "splashscreen_christmas.png" : "splashscreen.png", ":/application" ) );
@@ -153,6 +154,7 @@ void MonkeyCore::init()
 	// show main window
 	mainWindow()->menu_Docks_aboutToShow();
 	mainWindow()->show();
+	mainWindow()->finalyzeGuiInit();
 
 	// ready
 	showMessage( &splash, tr( "%1 v%2 (%3) Ready !" ).arg( PACKAGE_NAME, PACKAGE_VERSION, PACKAGE_VERSION_STR ) );
