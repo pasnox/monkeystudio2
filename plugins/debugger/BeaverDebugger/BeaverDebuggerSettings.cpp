@@ -58,8 +58,8 @@ BeaverDebuggerSettings::BeaverDebuggerSettings(BeaverDebugger* plugin):
 								  "Example: C:\\Programm Files\\Beaver Debugger\\beaverdbg.exe"
 #else
 								  "Example: /usr/local/bin/beaverdbg"
-								  ));
 #endif
+								  ));
 	
 	mPath = new QLineEdit(mPlugin->beaverPath(), NULL);
 	mPath->setCompleter(new QCompleter(new QDirModel(mPath)));
