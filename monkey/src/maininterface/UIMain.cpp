@@ -119,11 +119,6 @@ void UIMain::initGui()
 	setStatusBar( MonkeyCore::statusBar() );
 	// init connection
 	initConnections();
-	// init final gui
-	setWindowTitle( QObject::tr( "%1 v%2 (%3)" ).arg( PACKAGE_NAME, PACKAGE_VERSION, PACKAGE_VERSION_STR ) );
-	setWindowIcon( menuBar()->action( "mHelp/aAbout" )->icon() );
-	setUnifiedTitleAndToolBarOnMac( true );
-	setIconSize( QSize( 16, 16 ) );
 }
 
 void UIMain::closeEvent( QCloseEvent* e )
@@ -398,6 +393,14 @@ void UIMain::initConnections()
 #ifdef __COVERAGESCANNER__
 	connect( menuBar()->action( "mHelp/aTestReport" ), SIGNAL( triggered() ), MonkeyCore::workspace(), SLOT( helpTestReport_triggered() ) );
 #endif
+}
+
+void UIMain::finalyzeGuiInit()
+{
+	setWindowTitle( QObject::tr( "%1 v%2 (%3)" ).arg( PACKAGE_NAME, PACKAGE_VERSION, PACKAGE_VERSION_STR ) );
+	setWindowIcon( menuBar()->action( "mHelp/aAbout" )->icon() );
+	setUnifiedTitleAndToolBarOnMac( true );
+	setIconSize( QSize( 16, 16 ) );
 }
 
 void UIMain::menu_Docks_aboutToShow()
