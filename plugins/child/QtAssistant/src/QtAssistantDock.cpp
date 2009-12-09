@@ -44,9 +44,9 @@ QtAssistantDock::QtAssistantDock( QWidget* parent )
 	bwBookmarks = new BookmarkWidget( mBookmarkManager, this );
 	bwBookmarks->layout()->setMargin( 0 );
 #ifdef Q_WS_MAC
-	bwBookmarks->layout()->setSpacing( 3 );
+	bwBookmarks->layout()->setSpacing( 5 );
 #else
-	bwBookmarks->layout()->setSpacing( 0 );
+	bwBookmarks->layout()->setSpacing( 3 );
 #endif
 	
 	// areas
