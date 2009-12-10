@@ -967,10 +967,10 @@ void pWorkspace::internal_projectCustomActionTriggered()
 		if ( cmd.targetExecution().isActive && cmd.project() )
 		{
 			cmd = cm->processCommand( cm->getCommand( cmds, cmd.text() ) );
-			QString fileName = cmd.command();
+			QString fileName = cmd.project()->filePath( cmd.command() );
+			QString workDir = cmd.workingDirectory();
 			
 			// Try to correct command by asking user
-			/*
 			if ( !QFile::exists( fileName ) )
 			{
 				XUPProjectItem* project = cmd.project();
@@ -1000,7 +1000,7 @@ void pWorkspace::internal_projectCustomActionTriggered()
 				cmd.setCommand( fileName );
 				cmd.setWorkingDirectory( fileInfo.absolutePath() );
 			}
-			*/
+			
 			cm->addCommand( cmd );
 			
 			return;
