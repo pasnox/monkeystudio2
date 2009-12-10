@@ -159,7 +159,7 @@ void UISimpleQMakeEditor::init( XUPProjectItem* project )
 	}
 	
 	mConfigGui << "app_bundle" << "lib_bundle" << "embed_manifest_exe" << "embed_manifest_dll"
-		<< "designer" << "plugin" << "shared" << "dll" << "static" << "staticlib";
+		/*<< "designer"*/ << "plugin" << "shared" << "dll" << "static" << "staticlib";
 	
 	QtVersionManager mQtManager;
 	lwQtVersion->clear();

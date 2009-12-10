@@ -51,7 +51,7 @@
        <string>About</string>
       </property>
       <property name="icon">
-       <iconset>
+       <iconset resource="../../../../../monkey/src/resources/resources.qrc">
         <normaloff>:/xupeditor/icons/xupeditor/about.png</normaloff>:/xupeditor/icons/xupeditor/about.png</iconset>
       </property>
      </item>
@@ -60,7 +60,7 @@
        <string>Project</string>
       </property>
       <property name="icon">
-       <iconset>
+       <iconset resource="../../../../../monkey/src/resources/resources.qrc">
         <normaloff>:/xupeditor/icons/xupeditor/project.png</normaloff>:/xupeditor/icons/xupeditor/project.png</iconset>
       </property>
      </item>
@@ -69,7 +69,7 @@
        <string>Modules</string>
       </property>
       <property name="icon">
-       <iconset>
+       <iconset resource="../../../../../monkey/src/resources/resources.qrc">
         <normaloff>:/xupeditor/icons/xupeditor/modules.png</normaloff>:/xupeditor/icons/xupeditor/modules.png</iconset>
       </property>
      </item>
@@ -78,7 +78,7 @@
        <string>Compiler Settings</string>
       </property>
       <property name="icon">
-       <iconset>
+       <iconset resource="../../../../../monkey/src/resources/resources.qrc">
         <normaloff>:/xupeditor/icons/xupeditor/settings.png</normaloff>:/xupeditor/icons/xupeditor/settings.png</iconset>
       </property>
      </item>
@@ -87,7 +87,7 @@
        <string>Project Files</string>
       </property>
       <property name="icon">
-       <iconset>
+       <iconset resource="../../../../../monkey/src/resources/resources.qrc">
         <normaloff>:/xupeditor/icons/xupeditor/files.png</normaloff>:/xupeditor/icons/xupeditor/files.png</iconset>
       </property>
      </item>
@@ -96,7 +96,7 @@
        <string>Values Editor</string>
       </property>
       <property name="icon">
-       <iconset>
+       <iconset resource="../../../../../monkey/src/resources/resources.qrc">
         <normaloff>:/xupeditor/icons/xupeditor/values.png</normaloff>:/xupeditor/icons/xupeditor/values.png</iconset>
       </property>
      </item>
@@ -229,7 +229,7 @@ p, li { white-space: pre-wrap; }
          <item row="1" column="2">
           <widget class="QToolButton" name="tbProjectTarget">
            <property name="icon">
-            <iconset>
+            <iconset resource="../../../../../monkey/src/resources/resources.qrc">
              <normaloff>:/listeditor/icons/listeditor/folder.png</normaloff>:/listeditor/icons/listeditor/folder.png</iconset>
            </property>
           </widget>
@@ -667,12 +667,32 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item>
+           <widget class="QCheckBox" name="cbX86_64">
+            <property name="statusTip">
+             <string>x86_64</string>
+            </property>
+            <property name="text">
+             <string>Build version for x86 64 bits</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QCheckBox" name="cbPpc">
             <property name="statusTip">
              <string>ppc</string>
             </property>
             <property name="text">
              <string>Build for PowerPC</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="cbPpc64">
+            <property name="statusTip">
+             <string>ppc64</string>
+            </property>
+            <property name="text">
+             <string>Build for PowerPC 64 bits</string>
             </property>
            </widget>
           </item>
@@ -730,7 +750,7 @@ p, li { white-space: pre-wrap; }
        <item row="0" column="1">
         <widget class="QToolButton" name="tbAddFile">
          <property name="icon">
-          <iconset>
+          <iconset resource="../../../../../monkey/src/resources/resources.qrc">
            <normaloff>:/listeditor/icons/listeditor/add.png</normaloff>:/listeditor/icons/listeditor/add.png</iconset>
          </property>
         </widget>
@@ -738,7 +758,7 @@ p, li { white-space: pre-wrap; }
        <item row="0" column="2">
         <widget class="QToolButton" name="tbEditFile">
          <property name="icon">
-          <iconset>
+          <iconset resource="../../../../../monkey/src/resources/resources.qrc">
            <normaloff>:/listeditor/icons/listeditor/edit.png</normaloff>:/listeditor/icons/listeditor/edit.png</iconset>
          </property>
         </widget>
@@ -749,7 +769,7 @@ p, li { white-space: pre-wrap; }
           <string>-</string>
          </property>
          <property name="icon">
-          <iconset>
+          <iconset resource="../../../../../monkey/src/resources/resources.qrc">
            <normaloff>:/listeditor/icons/listeditor/remove.png</normaloff>:/listeditor/icons/listeditor/remove.png</iconset>
          </property>
         </widget>
@@ -813,7 +833,7 @@ p, li { white-space: pre-wrap; }
              <string>Add...</string>
             </property>
             <property name="icon">
-             <iconset>
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc">
               <normaloff>:/listeditor/icons/listeditor/add.png</normaloff>:/listeditor/icons/listeditor/add.png</iconset>
             </property>
            </widget>
@@ -824,7 +844,7 @@ p, li { white-space: pre-wrap; }
              <string>Edit...</string>
             </property>
             <property name="icon">
-             <iconset>
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc">
               <normaloff>:/listeditor/icons/listeditor/edit.png</normaloff>:/listeditor/icons/listeditor/edit.png</iconset>
             </property>
            </widget>
@@ -835,7 +855,7 @@ p, li { white-space: pre-wrap; }
              <string>Remove...</string>
             </property>
             <property name="icon">
-             <iconset>
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc">
               <normaloff>:/listeditor/icons/listeditor/remove.png</normaloff>:/listeditor/icons/listeditor/remove.png</iconset>
             </property>
            </widget>
@@ -878,7 +898,7 @@ p, li { white-space: pre-wrap; }
              <string>Add...</string>
             </property>
             <property name="icon">
-             <iconset>
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc">
               <normaloff>:/listeditor/icons/listeditor/add.png</normaloff>:/listeditor/icons/listeditor/add.png</iconset>
             </property>
             <property name="popupMode">
@@ -892,7 +912,7 @@ p, li { white-space: pre-wrap; }
              <string>Edit...</string>
             </property>
             <property name="icon">
-             <iconset>
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc">
               <normaloff>:/listeditor/icons/listeditor/edit.png</normaloff>:/listeditor/icons/listeditor/edit.png</iconset>
             </property>
             <property name="popupMode">
@@ -906,7 +926,7 @@ p, li { white-space: pre-wrap; }
              <string>Remove...</string>
             </property>
             <property name="icon">
-             <iconset>
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc">
               <normaloff>:/listeditor/icons/listeditor/remove.png</normaloff>:/listeditor/icons/listeditor/remove.png</iconset>
             </property>
            </widget>
@@ -917,7 +937,7 @@ p, li { white-space: pre-wrap; }
              <string>Clear...</string>
             </property>
             <property name="icon">
-             <iconset>
+             <iconset resource="../../../../../monkey/src/resources/resources.qrc">
               <normaloff>:/listeditor/icons/listeditor/clear.png</normaloff>:/listeditor/icons/listeditor/clear.png</iconset>
             </property>
            </widget>
