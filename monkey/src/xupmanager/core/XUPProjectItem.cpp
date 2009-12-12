@@ -1081,9 +1081,10 @@ QString XUPProjectItem::targetFilePath( bool allowToAskUser, XUPProjectItem::Tar
 	const QString key = QString( "%1_%2" ).arg( platformTypeString ).arg( targetTypeString );
 	QString target = tlProject->filePath( projectSettingsValue( key ) );
 	QFileInfo targetInfo( target );
-	
+	qWarning() << "1/ " <<target;
 	if ( !targetInfo.exists() || ( !targetInfo.isExecutable() && !QLibrary::isLibrary( target ) ) )
 	{
+	qWarning() << "2/ " <<target;
 		if ( allowToAskUser )
 		{
 			QString type;
@@ -1113,20 +1114,12 @@ QString XUPProjectItem::targetFilePath( bool allowToAskUser, XUPProjectItem::Tar
 				setProjectSettingsValue( key, tlProject->relativeFilePath( userTarget ) );
 				save();
 			}
+			
+			qWarning() << "3/ " <<target;
 		}
 	}
-	
+	qWarning() << "4/ " <<target;
 	return target;
-}
-
-QString XUPProjectItem::quoteFilePath( const QString& filePath ) const
-{
-	if ( filePath.startsWith( '"' ) && filePath.endsWith( '"' ) )
-	{
-		return filePath;
-	}
-	
-	return QString( filePath ).prepend( '"' ).append( '"' );
 }
 
 QString XUPProjectItem::targetFilePath( const pCommandTargetExecution& execution )
