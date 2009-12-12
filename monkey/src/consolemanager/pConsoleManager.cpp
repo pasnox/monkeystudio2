@@ -170,7 +170,6 @@ QString pConsoleManager::processInternalVariables( const QString& s )
 	\return Command for execution
 	\retval Command, gived as parameter
 */
-#include <QDebug>
 pCommand pConsoleManager::processCommand( pCommand c )
 {
 	// process variables
@@ -345,7 +344,7 @@ void pConsoleManager::sendRawData( const QByteArray& a )
 		while ( state() == QProcess::Starting )
 			QApplication::processEvents( QEventLoop::ExcludeUserInputEvents );
 		// send raw command to process
-		write( a  );
+		write( a );
 	}
 	else
 		emit warning( tr( "Can't send raw data to console" ) );
