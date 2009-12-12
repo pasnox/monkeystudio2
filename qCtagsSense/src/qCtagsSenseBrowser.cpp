@@ -94,6 +94,12 @@ protected slots:
 		Q_UNUSED( id );
 		updateGeometry();
 		QModelIndex index = view()->currentIndex();
+		
+		if ( !index.isValid() )
+		{
+			return;
+		}
+		
 		qCtagsSenseEntry* entry = static_cast<qCtagsSenseEntry*>( index.internalPointer() );
 		emit entryActivated( entry );
 	}
@@ -233,6 +239,12 @@ QAction* qCtagsSenseBrowser::viewSearchResultsAction() const
 void qCtagsSenseBrowser::popupMenu( QTreeView* view, const QPoint& pos )
 {
 	QModelIndex index = view->currentIndex();
+	
+	if ( !index.isValid() )
+	{
+		return;
+	}
+	
 	qCtagsSenseEntry* entry = static_cast<qCtagsSenseEntry*>( index.internalPointer() );
 	QMenu menu( this );
 	
