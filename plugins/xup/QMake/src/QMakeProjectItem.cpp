@@ -846,7 +846,7 @@ void QMakeProjectItem::installCommands()
 			cmd.targetExecution().targetType = XUPProjectItem::DebugTarget;
 			cmd.targetExecution().platformType = XUPProjectItem::CurrentPlatform;
 			cmd.setText( tr( "Execute Debug" ) );
-			cmd.setCommand( quoteFilePath( debugTarget ) );
+			cmd.setCommand( debugTarget );
 			cmd.setArguments( QString() );
 			cmd.setWorkingDirectory( QFileInfo( debugTarget ).absolutePath() );
 			cmd.setParsers( QStringList() );
@@ -864,7 +864,7 @@ void QMakeProjectItem::installCommands()
 			cmd.targetExecution().targetType = XUPProjectItem::ReleaseTarget;
 			cmd.targetExecution().platformType = XUPProjectItem::CurrentPlatform;
 			cmd.setText( tr( "Execute Release" ) );
-			cmd.setCommand( quoteFilePath( releaseTarget ) );
+			cmd.setCommand( releaseTarget );
 			cmd.setArguments( QString() );
 			cmd.setWorkingDirectory( QFileInfo( releaseTarget ).absolutePath() );
 			cmd.setParsers( QStringList() );
@@ -881,7 +881,7 @@ void QMakeProjectItem::installCommands()
 			cmd.targetExecution().targetType = XUPProjectItem::DefaultTarget;
 			cmd.targetExecution().platformType = XUPProjectItem::CurrentPlatform;
 			cmd.setText( tr( "Execute" ) );
-			cmd.setCommand( quoteFilePath( defaultTarget ) );
+			cmd.setCommand( defaultTarget );
 			cmd.setArguments( QString() );
 			cmd.setWorkingDirectory( QFileInfo( defaultTarget ).absolutePath() );
 			cmd.setParsers( QStringList() );
