@@ -1,10 +1,12 @@
 #include "QtVersionManager.h"
 
 #include <QProcess>
+#include <QDir>
 
 const QString QtVersionManager::mQtVersionKey = "Versions";
 const QString QtVersionManager::mQtModuleKey = "Modules";
 const QString QtVersionManager::mQtConfigurationKey = "Configurations";
+const QRegExp QtVersionManager::mQtVersionRegExp( "QMake version (?:[\\d\\w-_\\.]+)[\\r|\\n|\\r\\n]Using Qt version (4\\.[\\d\\w-_\\.]+) in (.*)" );
 
 QtVersionManager::QtVersionManager( QObject* owner )
 	: pSettings( owner, "QtVersions", "1.0.0" )
@@ -36,40 +38,31 @@ QtVersion QtVersionManager::systemVersion() const
 {
 	QtVersion sysQt;
 	QProcess process;
-	QString version;
 	QString datas;
 	bool haveSuffixe = true;
 	
 	process.start( "qmake-qt4 -v" );
 	process.waitForFinished();
-	datas = QString::fromLocal8Bit( process.readAll() );
+	datas = QString::fromLocal8Bit( process.readAll() ).trimmed();
 	
-	if ( !datas.contains( "Using Qt version 4." ) )
+	if ( !mQtVersionRegExp.exactMatch( datas ) )
 	{
 		process.start( "qmake -v" );
 		process.waitForFinished();
-		datas = QString::fromLocal8Bit( process.readAll() );
+		datas = QString::fromLocal8Bit( process.readAll() ).trimmed();
 		haveSuffixe = false;
 	}
 	
-	if ( datas.contains( "Using Qt version 4." ) )
+	if ( mQtVersionRegExp.exactMatch( datas ) )
 	{
-		datas = datas.trimmed().split( "\n" ).last();
-		datas.remove( "Using Qt version " );
+		const QString version = mQtVersionRegExp.cap( 1 );
+		const QString path = QDir::toNativeSeparators( mQtVersionRegExp.cap( 2 ).replace( "\\", "/" ).section( '/', 0, -2 ) );
 		
-		version = datas.left( 5 );
-		datas = datas.mid( 9 ).replace( "\\", "/" );
-		
-		QStringList parts = datas.split( "/" );
-		parts.removeLast();
-		
-		datas = parts.join( "/" );
-		
-		sysQt.Version = tr( "Qt System (%1)" ).arg( version );
-		sysQt.Path = datas;
+		sysQt.Version = QString( "Qt System (%1)" ).arg( version );
+		sysQt.Path = path;
 		sysQt.Default = const_cast<QtVersionManager*>( this )->versions().isEmpty();
 		sysQt.QMakeSpec = QString::null;
-		sysQt.QMakeParameters = QString::null;
+		sysQt.QMakeParameters = "\"$cp$\"";
 		sysQt.HaveQt4Suffixe = haveSuffixe;
 	}
 	

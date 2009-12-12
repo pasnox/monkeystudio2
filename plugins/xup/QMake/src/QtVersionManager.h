@@ -93,6 +93,7 @@ protected:
 	static const QString mQtVersionKey;
 	static const QString mQtModuleKey;
 	static const QString mQtConfigurationKey;
+	static const QRegExp mQtVersionRegExp;
 };
 
 #endif // QTVERSIONMANAGER_H
