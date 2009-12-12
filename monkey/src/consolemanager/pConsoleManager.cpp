@@ -144,10 +144,12 @@ QString pConsoleManager::nativeSeparators( const QString& s )
 */
 QString pConsoleManager::quotedString( const QString& s )
 {
-	QString t = s;
-	if ( t.contains( " " ) && !t.startsWith( '"' ) && !t.endsWith( '"' ) )
-		t.prepend( '"' ).append( '"' );
-	return t;
+	if ( s.contains( " " ) && !s.startsWith( '"' ) /*&& !s.endsWith( '"' )*/ )
+	{
+		return QString( s ).prepend( '"' ).append( '"' );
+	}
+	
+	return s;
 }
 
 /*!
@@ -456,7 +458,7 @@ void pConsoleManager::executeProcess()
 			}
 		}
 
-		start( QString( "%1 %2" ).arg( c.command() ).arg( c.arguments() ) );
+		start( QString( "%1 %2" ).arg( quotedString( c.command() ) ).arg( c.arguments() ) );
 
 		mBuffer.open( QBuffer::ReadOnly );
 		// exit
