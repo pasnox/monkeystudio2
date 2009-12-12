@@ -1,9 +1,9 @@
 XUPProjectSettings {
 	QT_VERSION	= Qt System (4.5.2)
-	OTHERS_PLATFORM_TARGET_DEBUG	= bin/monkeystudio_debug
 	MAC_PLATFORM_TARGET_RELEASE	= bin/Monkey Studio.app
-	OTHERS_PLATFORM_TARGET_RELEASE	= bin/monkeystudio
 	MAC_PLATFORM_TARGET_DEBUG	= bin/Monkey Studio_debug.app
+	OTHERS_PLATFORM_TARGET_RELEASE	= bin/monkeystudio
+	OTHERS_PLATFORM_TARGET_DEBUG	= bin/monkeystudio_debug
 }
 
 # include install script
@@ -13,7 +13,7 @@ TEMPLATE	= subdirs
 
 CONFIG	+= ordered
 
-SUBDIRS	= fresh \
+SUBDIRS	+= fresh \
 	ctags \
 	qCtagsSense \
 	monkey \
