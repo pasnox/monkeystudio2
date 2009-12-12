@@ -3,6 +3,7 @@ XUPProjectSettings {
 	OTHERS_PLATFORM_TARGET_DEBUG	= bin/monkeystudio_debug
 	MAC_PLATFORM_TARGET_RELEASE	= bin/Monkey Studio.app
 	OTHERS_PLATFORM_TARGET_RELEASE	= bin/monkeystudio
+	MAC_PLATFORM_TARGET_DEBUG	= bin/Monkey Studio_debug.app
 }
 
 # include install script
