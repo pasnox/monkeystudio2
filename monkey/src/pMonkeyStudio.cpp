@@ -160,31 +160,25 @@ QStringList pMonkeyStudio::availableImageFormats()
 */
 QStringList pMonkeyStudio::availableLanguages()
 {
-	static QStringList l = QStringList() << "Bash" << "Batch" << "C#" << "C++" << "CMake" << "CSS"
-		<< "D" << "Diff"
+	static QStringList languages;
+
+	if ( languages.isEmpty() )
+	{
+		languages = QStringList() << "Bash" << "Batch" << "C#" << "C++" << "CMake" << "CSS"
+			<< "D" << "Diff" << "HTML" << "IDL" << "Java" << "JavaScript" << "Lua" << "Makefile" << "Perl"
+			<< "POV" << "Properties" << "Ruby" << "Python" << "SQL" << "TeX" << "VHDL"
 #if QSCINTILLA_VERSION >= 0x020300
-		<< "Fortran" << "Fortran77"
+			<< "Fortran" << "Fortran77" << "Pascal" << "PostScript" << "TCL" << "XML" << "YAML"
 #endif
-		<< "HTML" << "IDL" << "Java" << "JavaScript" << "Lua"
-		<< "Makefile"
-#if QSCINTILLA_VERSION >= 0x020300
-		<< "Pascal"
-#endif
-		<< "Perl"
-#if QSCINTILLA_VERSION >= 0x020300
-		<< "PostScript"
-#endif
-		<< "POV" << "Properties" << "Ruby" << "Python"
-		<< "SQL"
-#if QSCINTILLA_VERSION >= 0x020300
-		<< "TCL"
-#endif
-		<< "TeX" << "VHDL"
-#if QSCINTILLA_VERSION >= 0x020300
-		<< "XML" << "YAML"
+#if QSCINTILLA_VERSION > 0x020400
+			<< "Verilog" << "Spice"
 #endif
 		;
-	return l;
+
+		languages.sort();
+	}
+
+	return languages;
 }
 
 /*!
@@ -621,6 +615,10 @@ QsciLexer* pMonkeyStudio::lexerForLanguage( const QString& language )
 		l = new QsciLexerRuby( QApplication::instance() );
 	else if ( ln == "sql" )
 		l = new QsciLexerSQL( QApplication::instance() );
+	else if ( ln == "tex" )
+		l = new QsciLexerTeX( QApplication::instance() );
+	else if ( ln == "vhdl" )
+		l = new QsciLexerVHDL( QApplication::instance() );
 #if QSCINTILLA_VERSION >= 0x020300
 	else if ( ln == "tcl" )
 		l = new QsciLexerTCL( QApplication::instance() );
@@ -637,10 +635,12 @@ QsciLexer* pMonkeyStudio::lexerForLanguage( const QString& language )
 	else if ( ln == "yaml" )
 		l = new QsciLexerYAML( QApplication::instance() );
 #endif
-	else if ( ln == "tex" )
-		l = new QsciLexerTeX( QApplication::instance() );
-	else if ( ln == "vhdl" )
-		l = new QsciLexerVHDL( QApplication::instance() );
+#if QSCINTILLA_VERSION > 0x020400
+	else if ( ln == "verilog" )
+		l = new QsciLexerVerilog( QApplication::instance() );
+	else if ( ln == "spice" )
+		l = new QsciLexerSpice( QApplication::instance() );
+#endif
 	// init lexer settings
 	if ( l )
 	{
@@ -722,6 +722,10 @@ QVariant pMonkeyStudio::lexerProperty( const QString& property, QsciLexer* lexer
 		else if ( lng == "yaml" )
 			return qobject_cast<QsciLexerYAML*>( lexer )->foldComments();
 #endif
+#if QSCINTILLA_VERSION > 0x020400
+		else if ( lng == "verilog" )
+			return qobject_cast<QsciLexerVerilog*>( lexer )->foldComments();
+#endif
 	}
 	else if ( property == "foldCompact" )
 	{
@@ -767,6 +771,10 @@ QVariant pMonkeyStudio::lexerProperty( const QString& property, QsciLexer* lexer
 		else if ( lng == "xml" )
 			return qobject_cast<QsciLexerXML*>( lexer )->foldCompact();
 #endif
+#if QSCINTILLA_VERSION > 0x020400
+		else if ( lng == "verilog" )
+			return qobject_cast<QsciLexerVerilog*>( lexer )->foldCompact();
+#endif
 	}
 	else if ( property == "foldQuotes" )
 	{
@@ -808,6 +816,17 @@ QVariant pMonkeyStudio::lexerProperty( const QString& property, QsciLexer* lexer
 		else if ( lng == "postscript" )
 			return qobject_cast<QsciLexerPostScript*>( lexer )->foldAtElse();
 #endif
+#if QSCINTILLA_VERSION > 0x020400
+		else if ( lng == "verilog" )
+			return qobject_cast<QsciLexerVerilog*>( lexer )->foldAtElse();
+#endif
+	}
+	else if ( property == "foldAtModule" )
+	{
+#if QSCINTILLA_VERSION > 0x020400
+		if ( lng == "verilog" )
+			return qobject_cast<QsciLexerVerilog*>( lexer )->foldAtModule();
+#endif
 	}
 	else if ( property == "foldPreprocessor" )
 	{
@@ -826,6 +845,10 @@ QVariant pMonkeyStudio::lexerProperty( const QString& property, QsciLexer* lexer
 			return qobject_cast<QsciLexerPascal*>( lexer )->foldPreprocessor();
 		else if ( lng == "xml" )
 			return qobject_cast<QsciLexerXML*>( lexer )->foldPreprocessor();
+#endif
+#if QSCINTILLA_VERSION > 0x020400
+		else if ( lng == "verilog" )
+			return qobject_cast<QsciLexerVerilog*>( lexer )->foldPreprocessor();
 #endif
 	}
 	else if ( property == "stylePreprocessor" )
