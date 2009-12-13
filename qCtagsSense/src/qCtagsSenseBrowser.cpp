@@ -100,12 +100,12 @@ protected slots:
 			return;
 		}
 		
-		qCtagsSenseEntry* entry = static_cast<qCtagsSenseEntry*>( index.internalPointer() );
-		emit entryActivated( entry );
+		const qCtagsSenseEntry* entry = static_cast<qCtagsSenseEntry*>( index.internalPointer() );
+		emit entryActivated( *entry );
 	}
 
 signals:
-	void entryActivated( qCtagsSenseEntry* entry );
+	void entryActivated( const qCtagsSenseEntry& entry );
 };
 
 class MembersAction : public QWidgetAction
@@ -130,7 +130,7 @@ protected:
 		combo->setModel( mBrowser->membersModel() );
 		
 		connect( mBrowser->membersModel(), SIGNAL( ready() ), combo, SLOT( membersModel_ready() ) );
-		connect( combo, SIGNAL( entryActivated( qCtagsSenseEntry* ) ), mBrowser, SIGNAL( entryActivated( qCtagsSenseEntry* ) ) );
+		connect( combo, SIGNAL( entryActivated( const qCtagsSenseEntry& ) ), mBrowser, SIGNAL( entryActivated( const qCtagsSenseEntry& ) ) );
 		connect( combo->view(), SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( _q_tree_customContextMenuRequested( const QPoint& ) ) );
 		
 		return combo;
@@ -245,7 +245,7 @@ void qCtagsSenseBrowser::popupMenu( QTreeView* view, const QPoint& pos )
 		return;
 	}
 	
-	qCtagsSenseEntry* entry = static_cast<qCtagsSenseEntry*>( index.internalPointer() );
+	const qCtagsSenseEntry* entry = static_cast<qCtagsSenseEntry*>( index.internalPointer() );
 	QMenu menu( this );
 	
 	switch ( entry->kind )
@@ -275,12 +275,12 @@ void qCtagsSenseBrowser::popupMenu( QTreeView* view, const QPoint& pos )
 		
 		if ( entry->kind == kind )
 		{
-			emit entryActivated( entry );
+			emit entryActivated( *entry );
 		}
 		else
 		{
 			qCtagsSenseKindFinder* cpp = new qCtagsSenseKindFinder( mSense->sql() );
-			connect( cpp, SIGNAL( entryActivated( qCtagsSenseEntry* ) ), this, SIGNAL( entryActivated( qCtagsSenseEntry* ) ) );
+			connect( cpp, SIGNAL( entryActivated( const qCtagsSenseEntry& ) ), this, SIGNAL( entryActivated( const qCtagsSenseEntry& ) ) );
 			cpp->goTo( kind, entry );
 		}
 	}
@@ -329,8 +329,8 @@ void qCtagsSenseBrowser::on_aSearchResults_toggled( bool checked )
 
 void qCtagsSenseBrowser::on_tvMembers_activated( const QModelIndex& index )
 {
-	qCtagsSenseEntry* entry = static_cast<qCtagsSenseEntry*>( index.internalPointer() );
-	emit entryActivated( entry );
+	const qCtagsSenseEntry* entry = static_cast<qCtagsSenseEntry*>( index.internalPointer() );
+	emit entryActivated( *entry );
 }
 
 void qCtagsSenseBrowser::on_tvSearchResult_activated( const QModelIndex& index )
@@ -341,8 +341,11 @@ void qCtagsSenseBrowser::on_tvSearchResult_activated( const QModelIndex& index )
 			emit fileNameActivated( index.data( qCtagsSenseSearchModel::DataRole ).toString() );
 			break;
 		case qCtagsSenseSearchModel::Entry:
-			emit entryActivated( index.data( qCtagsSenseSearchModel::DataRole ).value<qCtagsSenseEntry*>() );
+		{
+			const qCtagsSenseEntry* entry = index.data( qCtagsSenseSearchModel::DataRole ).value<qCtagsSenseEntry*>();
+			emit entryActivated( *entry );
 			break;
+		}
 	}
 }
 

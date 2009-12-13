@@ -58,7 +58,7 @@ protected slots:
 	void currentDocumentChanged( pAbstractChild* document );
 	void opened( XUPProjectItem* project );
 	void buffersChanged( const QMap<QString, QString>& entries );
-	void entryActivated( qCtagsSenseEntry* entry );
+	void entryActivated( const qCtagsSenseEntry& entry );
 	void fileNameActivated( const QString& fileName );
 
 signals:

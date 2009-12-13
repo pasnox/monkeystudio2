@@ -240,5 +240,6 @@ struct QCTAGSSENSE_EXPORT qCtagsSenseEntry
 };
 
 Q_DECLARE_METATYPE( qCtagsSenseEntry* )
+Q_DECLARE_METATYPE( qCtagsSenseEntry )
 
 #endif // QCTAGSSENSE_H
