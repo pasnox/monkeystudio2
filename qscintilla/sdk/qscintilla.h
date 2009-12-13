@@ -40,3 +40,8 @@
 #include "qscilexerxml.h"
 #include "qscilexeryaml.h"
 #endif
+
+#if QSCINTILLA_VERSION > 0x020400
+#include "qscilexerverilog.h"
+#include "qscilexerspice.h"
+#endif
