@@ -1561,6 +1561,8 @@ private slots:
 private:
     typedef QCString ScintillaString;
 
+    void detachLexer();
+
     enum IndentState {
         isNone,
         isKeywordStart,

@@ -414,7 +414,7 @@ bool QsciAPIs::originStartsWith(const QString &path, const QString &wsep)
     // follows in the origin is either a word separator or a (.
     QString tail = orig.mid(path.length());
 
-    return (tail.startsWith(wsep) || tail.at(0) == '(');
+    return (!tail.isEmpty() && (tail.startsWith(wsep) || tail.at(0) == '('));
 }
 
 

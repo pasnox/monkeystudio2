@@ -113,6 +113,68 @@ void SciPopup::on_triggered(int cmd)
 }
 
 
+    setWindowFlags(Qt::Tool|Qt::FramelessWindowHint);
+    setAttribute(Qt::WA_StaticContents);
+
+    setFocusProxy(parent);
+
+    setFrameShape(StyledPanel);
+    setFrameShadow(Plain);
+
+    connect(this, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
+            SLOT(handleSelection()));
+    connect(this, SIGNAL(itemActivated(QListWidgetItem *)),
+            SLOT(handleSelection()));
+}
+
+
+void SciListBox::addItemPixmap(const QPixmap &pm, const QString &txt)
+{
+    new QListWidgetItem(pm, txt, this);
+}
+
+
+int SciListBox::find(const QString &prefix)
+{
+    QList<QListWidgetItem *> itms = findItems(prefix,
+            Qt::MatchStartsWith|Qt::MatchCaseSensitive);
+
+    if (itms.size() == 0)
+        return -1;
+
+    return row(itms[0]);
+}
+
+
+QString SciListBox::text(int n)
+{
+    QListWidgetItem *itm = item(n);
+
+    if (!itm)
+        return QString();
+
+    return itm->text();
+}
+
+
+// Reimplemented to close the list when the user presses Escape.
+void SciListBox::keyPressEvent(QKeyEvent *e)
+{
+    if (e->key() == Qt::Key_Escape)
+    {
+        e->accept();
+        close();
+    }
+    else
+    {
+        QListWidget::keyPressEvent(e);
+
+        if (!e->isAccepted())
+            QCoreApplication::sendEvent(parent(), e);
+    }
+}
+
+#else
 
 SciListBox::SciListBox(QWidget *parent, ListBoxQt *lbx_)
     : QListBox(parent,0,Qt::WType_Popup|Qt::WStyle_Customize|Qt::WStyle_NoBorder|Qt::WStaticContents), lbx(lbx_)
@@ -135,6 +197,7 @@ int SciListBox::find(const QString &prefix)
     return index(findItem(prefix, Qt::CaseSensitive|Qt::BeginsWith));
 }
 
+#endif
 
 
 SciListBox::~SciListBox()

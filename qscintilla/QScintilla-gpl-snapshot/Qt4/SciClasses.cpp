@@ -123,7 +123,13 @@ void SciPopup::on_triggered(int cmd)
 SciListBox::SciListBox(QWidget *parent, ListBoxQt *lbx_)
     : QListWidget(parent), lbx(lbx_)
 {
-    setWindowFlags(Qt::Tool|Qt::FramelessWindowHint);
+    // This is the root of the focus problems under Gnome's window manager.  We
+    // have tried many flag combinations in the past.  The consensus now seems
+    // to be that the following works.  However it might now work because of a
+    // change in Qt so we only enable it for recent versions in order to
+    // reduce the risk of breaking something that works with earlier versions.
+#if QT_VERSION >= 0x040500
+    setWindowFlags(Qt::ToolTip|Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_StaticContents);
 
     setFocusProxy(parent);
@@ -184,6 +190,30 @@ void SciListBox::keyPressEvent(QKeyEvent *e)
     }
 }
 
+#else
+
+SciListBox::SciListBox(QWidget *parent, ListBoxQt *lbx_)
+    : QListBox(parent,0,Qt::WType_Popup|Qt::WStyle_Customize|Qt::WStyle_NoBorder|Qt::WStaticContents), lbx(lbx_)
+{
+    setFocusProxy(parent);
+
+    setFrameShape(StyledPanel);
+    setFrameShadow(Plain);
+
+    connect(this,SIGNAL(doubleClicked(QListBoxItem *)),
+        SLOT(handleSelection()));
+
+    connect(this,SIGNAL(highlighted(QListBoxItem *)),
+        SLOT(ensureCurrentVisible()));
+}
+
+
+int SciListBox::find(const QString &prefix)
+{
+    return index(findItem(prefix, Qt::CaseSensitive|Qt::BeginsWith));
+}
+
+#endif
 
 
 SciListBox::~SciListBox()

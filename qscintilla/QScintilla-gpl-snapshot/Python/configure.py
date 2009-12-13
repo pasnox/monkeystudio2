@@ -89,7 +89,7 @@ def create_optparser():
         setattr(parser.values, option.dest, os.path.abspath(value))
 
     p = optparse.OptionParser(usage="python %prog [options]",
-            version="2.4.1-snapshot-20090819")
+            version="2.4.1-snapshot-20091211")
 
     p.add_option("-a", "--apidir", action="callback", default=None,
             type="string", metavar="DIR", dest="qscidir",
@@ -160,8 +160,8 @@ def check_qscintilla():
             # Because we include the Python bindings with the C++ code we can
             # reasonably force the same version to be used and not bother about
             # versioning.
-            if sciversstr != "2.4.1-snapshot-20090819":
-                sipconfig.error("QScintilla %s is being used but the Python bindings 2.4.1-snapshot-20090819 are being built.  Please use matching versions." % sciversstr)
+            if sciversstr != "2.4.1-snapshot-20091211":
+                sipconfig.error("QScintilla %s is being used but the Python bindings 2.4.1-snapshot-20091211 are being built.  Please use matching versions." % sciversstr)
 
             sipconfig.inform("QScintilla %s is being used." % sciversstr)
         else:

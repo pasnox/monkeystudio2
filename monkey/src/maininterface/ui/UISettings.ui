@@ -2417,6 +2417,16 @@ You can quickly change it using the dock context menu.</string>
              </widget>
             </item>
             <item>
+             <widget class="QCheckBox" name="cbLexersHighlightingFoldAtModule">
+              <property name="statusTip">
+               <string>setFoldAtModule</string>
+              </property>
+              <property name="text">
+               <string>Fold at module</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QCheckBox" name="cbLexersHighlightingFoldPreprocessor">
               <property name="statusTip">
                <string>setFoldPreprocessor</string>

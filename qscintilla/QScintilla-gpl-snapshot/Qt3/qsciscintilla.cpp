@@ -140,6 +140,9 @@ QsciScintilla::QsciScintilla(QWidget *parent, const char *name, Qt::WFlags f)
 // The dtor.
 QsciScintilla::~QsciScintilla()
 {
+    // Detach any current lexer.
+    detachLexer();
+
     doc.undisplay(this);
     delete stdCmds;
 }
@@ -2651,10 +2654,9 @@ void QsciScintilla::setUnmatchedBraceForegroundColor(const QColor &col)
 }
 
 
-// Set the lexer.
-void QsciScintilla::setLexer(QsciLexer *lexer)
+// Detach any lexer.
+void QsciScintilla::detachLexer()
 {
-    // Disconnect any previous lexer.
     if (!lex.isNull())
     {
         lex->setEditor(0);
@@ -2664,6 +2666,14 @@ void QsciScintilla::setLexer(QsciLexer *lexer)
         SendScintilla(SCI_STYLECLEARALL);
         SendScintilla(SCI_CLEARDOCUMENTSTYLE);
     }
+}
+
+
+// Set the lexer.
+void QsciScintilla::setLexer(QsciLexer *lexer)
+{
+    // Detach any current lexer.
+    detachLexer();
 
     // Connect up the new lexer.
     lex = lexer;

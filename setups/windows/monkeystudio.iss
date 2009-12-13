@@ -6,7 +6,7 @@ MKS_COPYRIGHTS=2005 - 2009 Azevedo Filipe & The Monkey Studio Team
 MKS_URL=http://monkeystudio.org
 MKS_FORUMS_URL=http://monkeystudio.org/forum
 
-#define MKS_VERSION "1.8.4.0b1"
+#define MKS_VERSION "1.8.4.0b2"
 #define MKS_REVISION "3231"
 #define MKS_SETUP_NAME "setup_mks_" +MKS_VERSION +"-svn" +MKS_REVISION +"-win32"
 #define QT_PATH "C:\Development\Qt\4.5.1"
@@ -75,7 +75,7 @@ Name: {group}\Home Page; Filename: {app}\Home Page.url; WorkingDir: {app}
 Name: {group}\Forums; Filename: {app}\Forums.url; WorkingDir: {app}
 
 [INI]
-Filename: {app}\Home Page.url; Section: InternetShortcut; Key: URL; String: {cm:MKS_URL}; Flags: createkeyifdoesntexist uninsdeleteentry uninsdeletesectionifempty; Components: 
+Filename: {app}\Home Page.url; Section: InternetShortcut; Key: URL; String: {cm:MKS_URL}; Flags: createkeyifdoesntexist uninsdeleteentry uninsdeletesectionifempty; Components:
 Filename: {app}\Forums.url; Section: InternetShortcut; Key: URL; String: {cm:MKS_FORUMS_URL}; Flags: createkeyifdoesntexist uninsdeleteentry uninsdeletesectionifempty
 
 [UninstallDelete]

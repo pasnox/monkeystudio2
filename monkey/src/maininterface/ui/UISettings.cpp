@@ -53,16 +53,16 @@ UISettings::UISettings( QWidget* p )
 	: QDialog( p )
 {
 	setupUi( this );
-	
+
 #ifdef Q_WS_MAC
 	layout()->setMargin( 9 );
 	layout()->setSpacing( 9 );
 #endif
-	
+
 	setAttribute( Qt::WA_DeleteOnClose );
 	twMenu->topLevelItem( 2 )->setExpanded( true );
 	twMenu->setCurrentItem( twMenu->topLevelItem( 0 ) );
-	
+
 	foreach ( pColorButton* b, findChildren<pColorButton*>() )
 	{
 		b->setColorNameHidden( true );
@@ -77,14 +77,14 @@ UISettings::UISettings( QWidget* p )
 
 	foreach ( QString s, availableLanguages() )
 		mLexers[s] = lexerForLanguage( s );
-	
+
 	// sorting mode
 	cbSortingMode->addItem( tr( "Opening order" ), pOpenedFileModel::OpeningOrder );
 	cbSortingMode->addItem( tr( "File name" ), pOpenedFileModel::FileName );
 	cbSortingMode->addItem( tr( "Url" ), pOpenedFileModel::URL );
 	cbSortingMode->addItem( tr( "Suffixes" ), pOpenedFileModel::Suffixes );
 	cbSortingMode->addItem( tr( "Custom" ), pOpenedFileModel::Custom );
-	
+
 	// tab mode
 	cbTabModes->addItem( tr( "No Tabs" ), pWorkspace::NoTabs );
 	cbTabModes->addItem( tr( "Tabs at Top" ), pWorkspace::TopTabs );
@@ -187,7 +187,7 @@ UISettings::UISettings( QWidget* p )
 			connect( cb, SIGNAL( clicked( bool ) ), this, SLOT( cbLexersHighlightingProperties_clicked( bool ) ) );
 	// apply button
 	connect( dbbButtons->button( QDialogButtonBox::Apply ), SIGNAL( clicked() ), this, SLOT( apply() ) );
-	
+
 	foreach ( QWidget* widget, findChildren<QWidget*>() )
 	{
 		widget->setAttribute( Qt::WA_MacSmallSize, true );
@@ -202,7 +202,7 @@ void UISettings::loadSettings()
 {
 	Settings* s = MonkeyCore::settings();
 	QString sp;
-	
+
 	// General
 	cbSaveFiles->setChecked( saveFilesOnCustomAction() );
 	leDefaultProjectsDirectory->setText( defaultProjectsDirectory() );
@@ -323,7 +323,7 @@ void UISettings::loadSettings()
 	//  Lexers Highlighting
 	foreach ( QsciLexer* l, mLexers )
 		l->readSettings( *s, scintillaSettingsPath().toLocal8Bit().constData() );
-	
+
 	if ( cbLexersHighlightingLanguages->count() )
 		on_cbLexersHighlightingLanguages_currentIndexChanged( cbLexersHighlightingLanguages->itemText( 0 ) );
 
@@ -451,24 +451,24 @@ void UISettings::saveSettings()
 	sp = "SourceAPIs/";
 	for ( int i = 0; i < cbSourceAPIsLanguages->count(); i++ )
 		s->setValue( sp +cbSourceAPIsLanguages->itemText( i ), cbSourceAPIsLanguages->itemData( i ).toStringList() );
-	
+
 	//  Lexers Associations
 	QMap<QString, QStringList> suffixes;
-	
+
 	for ( int i = 0; i < twLexersAssociations->topLevelItemCount(); i++ )
 	{
 		QTreeWidgetItem* it = twLexersAssociations->topLevelItem( i );
-		
+
 		suffixes[ it->text( 1 ) ] << it->text( 0 );
 	}
-	
+
 	foreach ( const QString& type, suffixes.keys() )
 	{
 		MonkeyCore::fileManager()->set( type, suffixes[ type ] );
 	}
-	
+
 	MonkeyCore::fileManager()->generateScript();
-	
+
 	//  Lexers Highlighting
 	foreach ( QsciLexer* l, mLexers )
 	{
@@ -482,19 +482,19 @@ void UISettings::saveSettings()
 	for ( int i = 0; i < twAbbreviations->topLevelItemCount(); i++ )
 	{
 		QTreeWidgetItem* it = twAbbreviations->topLevelItem( i );
-		
+
 		pAbbreviation abbreviation;
 		abbreviation.Macro = it->text( 0 );
 		abbreviation.Description = it->text( 1 );
 		abbreviation.Language = it->text( 2 );
 		abbreviation.Snippet = it->data( 0, Qt::UserRole ).toString();
-		
+
 		abbreviations << abbreviation;
 	}
-	
+
 	MonkeyCore::abbreviationsManager()->set( abbreviations );
 	MonkeyCore::abbreviationsManager()->generateScript();
-	
+
 	// flush settings to diskfree_t
 	s->sync();
 }
@@ -693,6 +693,11 @@ void UISettings::on_cbLexersHighlightingLanguages_currentIndexChanged( const QSt
 	cbLexersHighlightingFoldAtElse->setVisible( v.isValid() );
 	if ( v.isValid() )
 		cbLexersHighlightingFoldAtElse->setChecked( v.toBool() );
+	// fold at module
+	v = lexerProperty( "foldAtModule", l );
+	cbLexersHighlightingFoldAtModule->setVisible( v.isValid() );
+	if ( v.isValid() )
+		cbLexersHighlightingFoldAtModule->setChecked( v.toBool() );
 	// fold preprocessor
 	v = lexerProperty( "foldPreprocessor", l );
 	cbLexersHighlightingFoldPreprocessor->setVisible( v.isValid() );
