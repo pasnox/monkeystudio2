@@ -14,13 +14,9 @@
 
 #include <QDebug>
 
-PyQtProjectItem::PyQtProjectItem()
-	: XUPProjectItem()
+int PyQtProjectItem::projectType() const
 {
-}
-
-PyQtProjectItem::~PyQtProjectItem()
-{
+	return PyQtProjectItem::PyQtProject;
 }
 
 void PyQtProjectItem::registerProjectType() const
@@ -64,19 +60,9 @@ void PyQtProjectItem::registerProjectType() const
 	mXUPProjectInfos->registerVariableSuffixes( pType, mVariableSuffixes );
 }
 
-BuilderPlugin* PyQtProjectItem::builder( const QString& plugin ) const
+XUPProjectItem* PyQtProjectItem::newProject() const
 {
-	return XUPProjectItem::builder( plugin );
-}
-
-CompilerPlugin* PyQtProjectItem::compiler( const QString& plugin ) const
-{
-	return XUPProjectItem::compiler( plugin );
-}
-
-DebuggerPlugin* PyQtProjectItem::debugger( const QString& plugin ) const
-{
-	return XUPProjectItem::debugger( plugin );
+	return new PyQtProjectItem();
 }
 
 InterpreterPlugin* PyQtProjectItem::interpreter( const QString& plugin ) const
@@ -125,6 +111,8 @@ void PyQtProjectItem::installCommands()
 		cmd = cmdInterpret;
 		cmd.setText( tr( "Start" ) );
 		cmd.setArguments( mainFile );
+		cmd.setParsers( QStringList() );
+		cmd.setTryAllParsers( false );
 		addCommand( cmd, "mInterpreter" );
 		
 	}

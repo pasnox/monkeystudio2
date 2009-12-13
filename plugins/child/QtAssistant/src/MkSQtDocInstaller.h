@@ -15,12 +15,13 @@ public:
 	
 	static QString collectionFileDirectory( bool createDir = false, const QString& cacheDir = QString() );
 	static QString defaultHelpCollectionFileName();
-	
-	bool checkDocumentation();
 
 protected:
 	QHelpEngine* mHelpEngine;
 	QtDocInstaller* mQtDocInstaller;
+
+public slots:
+	bool checkDocumentation();
 
 protected slots:
 	bool initHelpDB();

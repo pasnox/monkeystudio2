@@ -67,15 +67,6 @@ pConsoleManager::pConsoleManager( QObject* o )
 	mStopAction->setToolTip( tr( "Stop current command" ) );
 	mStopAction->setStatusTip( tr( "Stop current command" ) );
 
-	// unset some variables environments
-	int i;
-	/*FIXME need to use environment(), that returns systemEnvironment,
-	if process env was not changed, but it's not works on Qt 4.3.4 X11 */
-	QStringList l = systemEnvironment();
-	if ( ( i = l.indexOf( QRegExp( "^LANG=.*$" ) ) ) != -1 )
-		l.removeAt( i );
-	setEnvironment( l );
-
 	// set status tip for
 	mStopAction->setStatusTip( tr( "Stop the currently running command" ) );
 	mStopAction->setEnabled( false );
@@ -153,10 +144,12 @@ QString pConsoleManager::nativeSeparators( const QString& s )
 */
 QString pConsoleManager::quotedString( const QString& s )
 {
-	QString t = s;
-	if ( t.contains( " " ) && !t.startsWith( '"' ) && !t.endsWith( '"' ) )
-		t.prepend( '"' ).append( '"' );
-	return t;
+	if ( s.contains( " " ) && !s.startsWith( '"' ) /*&& !s.endsWith( '"' )*/ )
+	{
+		return QString( s ).prepend( '"' ).append( '"' );
+	}
+	
+	return s;
 }
 
 /*!
@@ -177,7 +170,6 @@ QString pConsoleManager::processInternalVariables( const QString& s )
 	\return Command for execution
 	\retval Command, gived as parameter
 */
-#include <QDebug>
 pCommand pConsoleManager::processCommand( pCommand c )
 {
 	// process variables
@@ -352,7 +344,7 @@ void pConsoleManager::sendRawData( const QByteArray& a )
 		while ( state() == QProcess::Starting )
 			QApplication::processEvents( QEventLoop::ExcludeUserInputEvents );
 		// send raw command to process
-		write( a  );
+		write( a );
 	}
 	else
 		emit warning( tr( "Can't send raw data to console" ) );
@@ -442,6 +434,7 @@ void pConsoleManager::executeProcess()
 		// set current parsers list
 		// parsers comamnd want to test/check
 		mCurrentParsers = c.parsers();
+		
 		// check if need tryall, and had all other parsers if needed at end
 		if ( c.tryAllParsers() )
 			foreach ( QString s, parsersName() )
@@ -450,8 +443,21 @@ void pConsoleManager::executeProcess()
 		// execute command
 		mStopAttempt = 0;
 		setWorkingDirectory( c.workingDirectory() );
+		
+		// unset some variables environments when no parsers is defined
+		if ( !mCurrentParsers.isEmpty() )
+		{
+			QStringList values = systemEnvironment();
+			const int index = values.indexOf( QRegExp( "^LANG=.*$" ) );
+			
+			if ( index != -1 )
+			{
+				values.removeAt( index );
+				setEnvironment( values );
+			}
+		}
 
-		start( QString( "%1 %2" ).arg( c.command() ).arg( c.arguments() ) );
+		start( QString( "%1 %2" ).arg( quotedString( c.command() ) ).arg( c.arguments() ) );
 
 		mBuffer.open( QBuffer::ReadOnly );
 		// exit

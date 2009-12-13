@@ -1,13 +1,15 @@
 #ifndef POPENEDFILEMODEL_H
 #define POPENEDFILEMODEL_H
 
+#include <MonkeyExport.h>
+
 #include <QAbstractItemModel>
 #include <QIcon>
 
 class pWorkspace;
 class pAbstractChild;
 
-class pOpenedFileModel : public QAbstractItemModel
+class Q_MONKEY_EXPORT pOpenedFileModel : public QAbstractItemModel
 {
 	Q_OBJECT
 	

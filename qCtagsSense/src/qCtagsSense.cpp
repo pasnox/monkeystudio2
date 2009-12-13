@@ -22,6 +22,7 @@
 
 #include <ctags.h>
 
+#include <QMetaType>
 #include <QDebug>
 
 qCtagsSense::qCtagsSense( QObject* parent )
@@ -29,6 +30,9 @@ qCtagsSense::qCtagsSense( QObject* parent )
 {
 	initCtags();
 	qCtagsSenseUtils::initMaps();
+	
+	qRegisterMetaType<qCtagsSenseEntry>( "qCtagsSenseEntry" );
+	qRegisterMetaType<qCtagsSenseEntry*>( "qCtagsSenseEntry*" );
 	
 	Option.include.fileNames = 1;
 	Option.include.qualifiedTags = 0;

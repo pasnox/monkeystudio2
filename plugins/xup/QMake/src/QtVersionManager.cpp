@@ -1,10 +1,12 @@
 #include "QtVersionManager.h"
 
 #include <QProcess>
+#include <QDir>
 
 const QString QtVersionManager::mQtVersionKey = "Versions";
 const QString QtVersionManager::mQtModuleKey = "Modules";
 const QString QtVersionManager::mQtConfigurationKey = "Configurations";
+const QRegExp QtVersionManager::mQtVersionRegExp( "QMake version (?:[\\d\\w-_\\.]+)[\\r|\\n|\\r\\n]Using Qt version (4\\.[\\d\\w-_\\.]+) in (.*)" );
 
 QtVersionManager::QtVersionManager( QObject* owner )
 	: pSettings( owner, "QtVersions", "1.0.0" )
@@ -36,40 +38,31 @@ QtVersion QtVersionManager::systemVersion() const
 {
 	QtVersion sysQt;
 	QProcess process;
-	QString version;
 	QString datas;
 	bool haveSuffixe = true;
 	
 	process.start( "qmake-qt4 -v" );
 	process.waitForFinished();
-	datas = QString::fromLocal8Bit( process.readAll() );
+	datas = QString::fromLocal8Bit( process.readAll() ).trimmed();
 	
-	if ( !datas.contains( "Using Qt version 4." ) )
+	if ( !mQtVersionRegExp.exactMatch( datas ) )
 	{
 		process.start( "qmake -v" );
 		process.waitForFinished();
-		datas = QString::fromLocal8Bit( process.readAll() );
+		datas = QString::fromLocal8Bit( process.readAll() ).trimmed();
 		haveSuffixe = false;
 	}
 	
-	if ( datas.contains( "Using Qt version 4." ) )
+	if ( mQtVersionRegExp.exactMatch( datas ) )
 	{
-		datas = datas.trimmed().split( "\n" ).last();
-		datas.remove( "Using Qt version " );
+		const QString version = mQtVersionRegExp.cap( 1 );
+		const QString path = QDir::toNativeSeparators( mQtVersionRegExp.cap( 2 ).replace( "\\", "/" ).section( '/', 0, -2 ) );
 		
-		version = datas.left( 5 );
-		datas = datas.mid( 9 ).replace( "\\", "/" );
-		
-		QStringList parts = datas.split( "/" );
-		parts.removeLast();
-		
-		datas = parts.join( "/" );
-		
-		sysQt.Version = tr( "Qt System (%1)" ).arg( version );
-		sysQt.Path = datas;
+		sysQt.Version = QString( "Qt System (%1)" ).arg( version );
+		sysQt.Path = path;
 		sysQt.Default = const_cast<QtVersionManager*>( this )->versions().isEmpty();
 		sysQt.QMakeSpec = QString::null;
-		sysQt.QMakeParameters = QString::null;
+		sysQt.QMakeParameters = "\"$cp$\"";
 		sysQt.HaveQt4Suffixe = haveSuffixe;
 	}
 	
@@ -133,9 +126,11 @@ QtItemList QtVersionManager::defaultModules()
 	return QtItemList()
 	<< QtItem( "QtCore", "core", "QT", "Add support for Qt Core classes" )
 	<< QtItem( "QtGui", "gui", "QT", "Add support for Qt Gui classes" )
+	<< QtItem( "QtMultimedia", "multimedia", "QT", "Add support for Qt Multimedia classes" )
 	<< QtItem( "QtNetwork", "network", "QT", "Add support for Qt Network classes" )
 	<< QtItem( "QtOpenGL", "opengl", "QT", "Add support for Qt OpenGL classes" )
 	<< QtItem( "QtScript", "script", "QT", "Add support for Qt Script classes" )
+	<< QtItem( "QtScriptTools", "scripttools", "QT", "Add support for Qt Script Tools classes" )
 	<< QtItem( "QtSql", "sql", "QT", "Add support for Qt Sql classes" )
 	<< QtItem( "QtSvg", "svg", "QT", "Add support for Qt Svg classes" )
 	<< QtItem( "QtWebKit", "webkit", "QT", "Add support for Qt WebKit classes" )
@@ -144,6 +139,8 @@ QtItemList QtVersionManager::defaultModules()
 	<< QtItem( "Phonon", "phonon", "QT", "Add support for Qt Xml Patterns classes (XQuery & XPath)" )
 	<< QtItem( "QtDBus", "dbus", "QT", "Add support for Qt DBus classes (unix like only)" )
 	<< QtItem( "Qt3Support", "qt3support", "QT", "Add support for Qt Qt3Support classes" );
+	
+	//QtOpenVG Module
 }
 
 QtItemList QtVersionManager::modules()
@@ -191,7 +188,9 @@ QtItemList QtVersionManager::defaultConfigurations()
 	<< QtItem( "x11", "x11", "CONFIG", "The target is a X11 application or library. The proper include paths and libraries will automatically be added to the project." )
 	<< QtItem( "MAC OS X ONLY", QString::null, QString::null, "Options for Mac OS X only" )
 	<< QtItem( "ppc", "ppc", "CONFIG", "Builds a PowerPC binary." )
+	<< QtItem( "ppc64", "ppc64", "CONFIG", "Builds a 64 bits PowerPC binary." )
 	<< QtItem( "x86", "x86", "CONFIG", "Builds an i386 compatible binary." )
+	<< QtItem( "x86_64", "x86_64", "CONFIG", "Builds an x86 64 bits compatible binary." )
 	<< QtItem( "app_bundle", "app_bundle", "CONFIG", "Puts the executable into a bundle (this is the default)." )
 	<< QtItem( "lib_bundle", "lib_bundle", "CONFIG", "Puts the library into a library bundle." )
 	<< QtItem( "WINDOWS ONLY", QString::null, QString::null, "Options for Windows only" )
@@ -203,6 +202,7 @@ QtItemList QtVersionManager::defaultConfigurations()
 	<< QtItem( "ACTIVEQT ONLY", QString::null, QString::null, "Option for Windows/Active Qt only" )
 	<< QtItem( "qaxserver_no_postlink", "qaxserver_no_postlink", "CONFIG", "No help available" )
 	<< QtItem( "Qt ONLY", QString::null, QString::null, "Options for Qt only" )
+	<< QtItem( "ordered", "ordered", "CONFIG", "Sub project are built in defined order." )
 	<< QtItem( "qt", "qt", "CONFIG", "The target is a Qt application/library and requires the Qt library and header files. The proper include and library paths for the Qt library will automatically be added to the project. This is defined by default, and can be fine-tuned with the QT variable." )
 	<< QtItem( "resources", "resources", "CONFIG", "Configures qmake to run rcc on the content of RESOURCES if defined." )
 	<< QtItem( "uic3", "uic3", "CONFIG", "Configures qmake to run uic3 on the content of FORMS3 if defined; otherwise the contents of FORMS will be processed instead." )

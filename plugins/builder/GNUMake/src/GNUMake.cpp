@@ -92,7 +92,7 @@ pCommand GNUMake::defaultBuildCommand() const
 #else
 	const QString mMake = "make";
 #endif
-	return pCommand( "Build", mMake, "-w", false, availableParsers(), "$cpp$" );
+	return pCommand( "Build", mMake, "-w", false, availableParsers(), "$cpp$", true );
 }
 
 Q_EXPORT_PLUGIN2( BuilderGNUMake, GNUMake )

@@ -721,6 +721,9 @@ void pWorkspace::document_modifiedChanged( bool modified )
 void pWorkspace::document_fileClosed()
 {
 	pAbstractChild* document = qobject_cast<pAbstractChild*>( sender() );
+	pMultiToolBar* mtb = MonkeyCore::multiToolBar();
+	
+	mtb->removeContext( document->context(), true );
 	emit documentClosed( document );
 }
 
@@ -964,7 +967,8 @@ void pWorkspace::internal_projectCustomActionTriggered()
 		if ( cmd.targetExecution().isActive && cmd.project() )
 		{
 			cmd = cm->processCommand( cm->getCommand( cmds, cmd.text() ) );
-			QString fileName = cmd.command();
+			QString fileName = cmd.project()->filePath( cmd.command() );
+			QString workDir = cmd.workingDirectory();
 			
 			// Try to correct command by asking user
 			if ( !QFile::exists( fileName ) )

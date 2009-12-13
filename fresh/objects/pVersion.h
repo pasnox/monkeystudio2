@@ -1,9 +1,11 @@
 #ifndef PVERSION_H
 #define PVERSION_H
 
+#include <MonkeyExport.h>
+
 #include <QString>
 
-class pVersion
+class Q_MONKEY_EXPORT pVersion
 {
 public:
 	pVersion( const QString& version );

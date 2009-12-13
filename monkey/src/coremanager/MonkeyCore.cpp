@@ -53,6 +53,7 @@
 #include <QPixmap>
 #include <QString>
 #include <QDate>
+#include <QDebug>
 
 void showMessage( QSplashScreen* s, const QString& m )
 {
@@ -64,7 +65,16 @@ QHash<const QMetaObject*, QObject*> MonkeyCore::mInstances;
 void MonkeyCore::init()
 {
 	// create splashscreen
-	bool isXMas = QDate::currentDate().month() == ( 12 || 1 );
+	bool isXMas = false;
+	
+	switch ( QDate::currentDate().month() )
+	{
+		case 11:
+		case 12:
+		case 1:
+			isXMas = true;
+			break;
+	}
 
 	QSplashScreen splash( pIconManager::pixmap( isXMas ? "splashscreen_christmas.png" : "splashscreen.png", ":/application" ) );
 	splash.setProperty( "isXMas", isXMas );
@@ -144,6 +154,7 @@ void MonkeyCore::init()
 	// show main window
 	mainWindow()->menu_Docks_aboutToShow();
 	mainWindow()->show();
+	mainWindow()->finalyzeGuiInit();
 
 	// ready
 	showMessage( &splash, tr( "%1 v%2 (%3) Ready !" ).arg( PACKAGE_NAME, PACKAGE_VERSION, PACKAGE_VERSION_STR ) );

@@ -1,26 +1,19 @@
-#ifndef HELPVIEWER_H
-#define HELPVIEWER_H
+#ifndef QTASSISTANTVIEWER_H
+#define QTASSISTANTVIEWER_H
 
 #include <QWebView>
-#include <QUrl>
-#include <QVariant>
 #include <QAction>
 
 class QHelpEngine;
-class QtAssistantBrowser;
+class QtAssistantChild;
 
-class QPoint;
-class QString;
-class QKeyEvent;
-class QMouseEvent;
-class QContextMenuEvent;
-
-class HelpViewer : public QWebView
+class QtAssistantViewer : public QWebView
 {
 	Q_OBJECT
-
+	
 public:
-	HelpViewer( QHelpEngine* helpEngine, QtAssistantBrowser* parent = 0 );
+	QtAssistantViewer( QHelpEngine* engine, QtAssistantChild* child, const QUrl& homeUrl = QUrl() );
+	
 	void setSource( const QUrl& url );
 
 	inline QUrl source() const
@@ -37,7 +30,7 @@ public:
 	void zoomOut( int range = 1 );
 
 	inline void copy()
-	{ return triggerPageAction( QWebPage::Copy ); }
+	{ triggerPageAction( QWebPage::Copy ); }
 
 	inline bool isForwardAvailable() const
 	{ return pageAction( QWebPage::Forward )->isEnabled(); }
@@ -52,18 +45,23 @@ public slots:
 
 protected:
 	virtual void wheelEvent( QWheelEvent* event );
-	void mouseReleaseEvent( QMouseEvent* event );
+	virtual void mouseReleaseEvent( QMouseEvent* event );
 
 private slots:
 	void actionChanged();
+	void loadFinished( bool ok );
 
 private:
-	QHelpEngine* mHelpEngine;
-	QtAssistantBrowser* mBrowser;
-	QUrl homeUrl;
+	QHelpEngine* mEngine;
+	QtAssistantChild* mChild;
+	QUrl mHomeUrl;
 
 signals:
 	void copyAvailable( bool enabled );
+	void cutAvailable( bool enabled );
+	void pasteAvailable( bool enabled );
+	void undoAvailable( bool enabled );
+	void redoAvailable( bool enabled );
 	void forwardAvailable( bool enabled );
 	void backwardAvailable( bool enabled );
 	void actionsChanged();
@@ -71,4 +69,4 @@ signals:
 	void sourceChanged( const QUrl& );
 };
 
-#endif // HELPVIEWER_H
+#endif // QTASSISTANTVIEWER_H

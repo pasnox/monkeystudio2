@@ -53,6 +53,12 @@ UISettings::UISettings( QWidget* p )
 	: QDialog( p )
 {
 	setupUi( this );
+	
+#ifdef Q_WS_MAC
+	layout()->setMargin( 9 );
+	layout()->setSpacing( 9 );
+#endif
+	
 	setAttribute( Qt::WA_DeleteOnClose );
 	twMenu->topLevelItem( 2 )->setExpanded( true );
 	twMenu->setCurrentItem( twMenu->topLevelItem( 0 ) );
@@ -60,7 +66,11 @@ UISettings::UISettings( QWidget* p )
 	foreach ( pColorButton* b, findChildren<pColorButton*>() )
 	{
 		b->setColorNameHidden( true );
+#ifdef Q_WS_MAC
+		b->setIconSize( QSize( 32, 12 ) );
+#else
 		b->setIconSize( QSize( 32, 16 ) );
+#endif
 	}
 
 	QStringList l;
@@ -177,6 +187,12 @@ UISettings::UISettings( QWidget* p )
 			connect( cb, SIGNAL( clicked( bool ) ), this, SLOT( cbLexersHighlightingProperties_clicked( bool ) ) );
 	// apply button
 	connect( dbbButtons->button( QDialogButtonBox::Apply ), SIGNAL( clicked() ), this, SLOT( apply() ) );
+	
+	foreach ( QWidget* widget, findChildren<QWidget*>() )
+	{
+		widget->setAttribute( Qt::WA_MacSmallSize, true );
+		widget->setAttribute( Qt::WA_MacShowFocusRect, false );
+	}
 
 	// resize to minimum size
 	resize( minimumSizeHint() );

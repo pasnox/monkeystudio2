@@ -58,6 +58,7 @@ protected:
 	void initMenuBar();
 	void initToolBar();
 	void initConnections();
+	void finalyzeGuiInit();
 
 public slots:
 	void menu_Docks_aboutToShow();

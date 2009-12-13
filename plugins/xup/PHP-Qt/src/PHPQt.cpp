@@ -34,6 +34,7 @@ void PHPQt::fillPluginInfos()
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.1.0";
 	mPluginInfos.FirstStartEnabled = true;
+	mPluginInfos.HaveSettingsWidget = false;
 }
 
 

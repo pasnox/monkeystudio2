@@ -33,6 +33,7 @@
 #include <QFileInfo>
 #include <QTextCodec>
 #include <QShortcut>
+#include <QDebug>
 
 #include <MonkeyExport.h>
 
@@ -85,13 +86,21 @@ public:
 
 	// return child language
 	virtual QString language() const
-	{ return QString(); }
+	{ return QString::null; }
 	
 	// set the file path of the document
 	void setFilePath( const QString& filePath )
 	{
-		setWindowFilePath( filePath );
-		setWindowTitle( fileName().append( "[*]" ) );
+		if ( filePath.isEmpty() )
+		{
+			setWindowFilePath( QString::null );
+			setWindowTitle( QString::null );
+		}
+		else
+		{
+			setWindowFilePath( filePath );
+			setWindowTitle( fileName().append( "[*]" ) );
+		}
 	}
 	
 	// return the document file path
@@ -173,11 +182,11 @@ public slots:
 	// go to position and highlight line according to bool
 	virtual void goTo( const QPoint& pos, bool highlight = false ) = 0;
 	// search in the file
-	virtual void invokeSearch () {};
+	virtual void invokeSearch() {};
 	// ask to save file
 	virtual void saveFile() = 0;
 	// ask to backup current file
-	virtual void backupFileAs( const QString& ) = 0;
+	virtual void backupFileAs( const QString& fileName ) = 0;
 	// ask to load file
 	virtual bool openFile( const QString& fileName, const QString& codec ) = 0;
 	// ask to close file

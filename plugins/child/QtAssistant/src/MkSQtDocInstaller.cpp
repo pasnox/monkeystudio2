@@ -12,6 +12,7 @@
 #include <QTimer>
 
 MkSQtDocInstaller::MkSQtDocInstaller( QHelpEngine* engine )
+	: QObject( engine )
 {
 	mHelpEngine = engine;
 	mQtDocInstaller = 0;

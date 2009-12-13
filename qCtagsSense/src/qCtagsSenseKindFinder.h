@@ -31,19 +31,18 @@ class QCTAGSSENSE_EXPORT qCtagsSenseKindFinder : public QThread
 	
 public:
 	qCtagsSenseKindFinder( qCtagsSenseSQL* parent );
-	virtual ~qCtagsSenseKindFinder();
 	
-	void goTo( qCtagsSense::Kind kind, qCtagsSenseEntry* entry );
+	void goTo( qCtagsSense::Kind kind, const qCtagsSenseEntry* entry );
 
 protected:
 	qCtagsSenseSQL* mSQL;
 	qCtagsSense::Kind mKind;
-	qCtagsSenseEntry* mEntry;
+	const qCtagsSenseEntry* mEntry;
 	
 	virtual void run();
 
 signals:
-	void entryActivated( qCtagsSenseEntry* entry );
+	void entryActivated( const qCtagsSenseEntry& entry );
 };
 
 #endif // QCTAGSSENSECPP_H

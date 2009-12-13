@@ -36,13 +36,18 @@ void pMultiToolBar::setCurrentContext( const QString& context )
 	}
 }
 
-void pMultiToolBar::removeContext( const QString& context )
+void pMultiToolBar::removeContext( const QString& context, bool del )
 {
 	foreach ( QToolBar* tb, mToolBars )
 	{
 		if ( tb->property( PMULTITOOLBAR_CONTEXT ).toString() == context )
 		{
 			removeWidget( tb );
+			
+			if ( del )
+			{
+				delete tb;
+			}
 		}
 	}
 }

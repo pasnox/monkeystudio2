@@ -10,16 +10,10 @@ class PHPQtProjectItem : public XUPProjectItem
 public:
 	enum ProjectType { PHPQtProject = 2 };
 
-	PHPQtProjectItem();
-	virtual ~PHPQtProjectItem();
-
-	inline virtual int projectType() const { return PHPQtProjectItem::PHPQtProject; }
+	virtual int projectType() const;
 	virtual void registerProjectType() const;
-	inline virtual XUPProjectItem* newProject() const { return new PHPQtProjectItem(); }
+	virtual XUPProjectItem* newProject() const;
 
-	virtual BuilderPlugin* builder( const QString& plugin = QString() ) const;
-	virtual CompilerPlugin* compiler( const QString& plugin = QString() ) const;
-	virtual DebuggerPlugin* debugger( const QString& plugin = QString() ) const;
 	virtual InterpreterPlugin* interpreter( const QString& plugin = QString() ) const;
 	virtual void installCommands();
 };

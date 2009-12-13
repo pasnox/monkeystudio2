@@ -32,8 +32,9 @@
 #include <MonkeyExport.h>
 #include <pIconManager.h>
 
-#include "../coremanager/MonkeyCore.h"
-#include "../settingsmanager/Settings.h"
+#include "main.h"
+#include "MonkeyCore.h"
+#include "Settings.h"
 
 #include <QtPlugin>
 #include <QPointer>
@@ -71,6 +72,14 @@ public:
 	// plugin info structure
 	struct Q_MONKEY_EXPORT PluginInfos
 	{
+		PluginInfos()
+		{
+			Type = BasePlugin::iAll;
+			FirstStartEnabled = false;
+			HaveSettingsWidget = false;
+			ApplicationVersionRequired = PACKAGE_VERSION;
+		}
+		
 		QString Caption; // the string to show as caption
 		QString Description; // the plugin description
 		QString Author; // the plugin author

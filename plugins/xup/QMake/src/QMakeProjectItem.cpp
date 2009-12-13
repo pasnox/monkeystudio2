@@ -770,7 +770,7 @@ void QMakeProjectItem::installCommands()
 			cmd = pCommand();
 			cmd.setText( tr( "QMake" ) );
 			cmd.setCommand( mQtVersion.qmake() );
-			cmd.setArguments( mQtVersion.qmakeParameters()/*.append( " $cp$" )*/ );
+			cmd.setArguments( mQtVersion.qmakeParameters().append( " \"$cp$\"" ) );
 			cmd.setWorkingDirectory( "$cpp$" );
 			cmd.setUserData( QVariant::fromValue( &mCommands ) );
 			cmd.setProject( this );
@@ -781,7 +781,7 @@ void QMakeProjectItem::installCommands()
 			cmd = pCommand();
 			cmd.setText( tr( "lupdate" ) );
 			cmd.setCommand( mQtVersion.lupdate() );
-			cmd.setArguments( "$cp$" );
+			cmd.setArguments( "\"$cp$\"" );
 			cmd.setWorkingDirectory( "$cpp$" );
 			cmd.setUserData( QVariant::fromValue( &mCommands ) );
 			cmd.setProject( this );
@@ -792,7 +792,7 @@ void QMakeProjectItem::installCommands()
 			cmd = pCommand();
 			cmd.setText( tr( "lrelease" ) );
 			cmd.setCommand( mQtVersion.lrelease() );
-			cmd.setArguments( "$cp$" );
+			cmd.setArguments( "\"$cp$\"" );
 			cmd.setWorkingDirectory( "$cpp$" );
 			cmd.setUserData( QVariant::fromValue( &mCommands ) );
 			cmd.setProject( this );
@@ -849,6 +849,8 @@ void QMakeProjectItem::installCommands()
 			cmd.setCommand( debugTarget );
 			cmd.setArguments( QString() );
 			cmd.setWorkingDirectory( QFileInfo( debugTarget ).absolutePath() );
+			cmd.setParsers( QStringList() );
+			cmd.setTryAllParsers( false );
 			addCommand( cmd, "mBuilder/mExecute" );
 		}
 		
@@ -865,6 +867,8 @@ void QMakeProjectItem::installCommands()
 			cmd.setCommand( releaseTarget );
 			cmd.setArguments( QString() );
 			cmd.setWorkingDirectory( QFileInfo( releaseTarget ).absolutePath() );
+			cmd.setParsers( QStringList() );
+			cmd.setTryAllParsers( false );
 			addCommand( cmd, "mBuilder/mExecute" );
 		}
 		
@@ -880,6 +884,8 @@ void QMakeProjectItem::installCommands()
 			cmd.setCommand( defaultTarget );
 			cmd.setArguments( QString() );
 			cmd.setWorkingDirectory( QFileInfo( defaultTarget ).absolutePath() );
+			cmd.setParsers( QStringList() );
+			cmd.setTryAllParsers( false );
 			addCommand( cmd, "mBuilder/mExecute" );
 		}
 	}

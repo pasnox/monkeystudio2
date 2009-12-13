@@ -56,7 +56,7 @@ bool ClassBrowser::install()
 	connect( MonkeyCore::fileManager(), SIGNAL( currentDocumentChanged( pAbstractChild* ) ), this, SLOT( currentDocumentChanged( pAbstractChild* ) ) );
 	connect( MonkeyCore::fileManager(), SIGNAL( opened( XUPProjectItem* ) ), this, SLOT( opened( XUPProjectItem* ) ) );
 	connect( MonkeyCore::fileManager(), SIGNAL( buffersChanged( const QMap<QString, QString>& ) ), this, SLOT( buffersChanged( const QMap<QString, QString>& ) ) );
-	connect( mDock->browser(), SIGNAL( entryActivated( qCtagsSenseEntry* ) ), this, SLOT( entryActivated( qCtagsSenseEntry* ) ) );
+	connect( mDock->browser(), SIGNAL( entryActivated( const qCtagsSenseEntry& ) ), this, SLOT( entryActivated( const qCtagsSenseEntry& ) ) );
 	connect( mDock->browser(), SIGNAL( fileNameActivated( const QString& ) ), this, SLOT( fileNameActivated( const QString& ) ) );
 	connect( this, SIGNAL( propertiesChanged( const qCtagsSenseProperties& ) ), mDock->browser(), SLOT( setProperties( const qCtagsSenseProperties& ) ) );
 	connect( this, SIGNAL( integrationModeChanged( ClassBrowser::IntegrationMode ) ), MonkeyCore::multiToolBar(), SIGNAL( notifyChanges() ) );
@@ -75,7 +75,7 @@ bool ClassBrowser::uninstall()
 	disconnect( MonkeyCore::fileManager(), SIGNAL( currentDocumentChanged( pAbstractChild* ) ), this, SLOT( currentDocumentChanged( pAbstractChild* ) ) );
 	disconnect( MonkeyCore::fileManager(), SIGNAL( opened( XUPProjectItem* ) ), this, SLOT( opened( XUPProjectItem* ) ) );
 	disconnect( MonkeyCore::fileManager(), SIGNAL( buffersChanged( const QMap<QString, QString>& ) ), this, SLOT( buffersChanged( const QMap<QString, QString>& ) ) );
-	disconnect( mDock->browser(), SIGNAL( entryActivated( qCtagsSenseEntry* ) ), this, SLOT( entryActivated( qCtagsSenseEntry* ) ) );
+	disconnect( mDock->browser(), SIGNAL( entryActivated( const qCtagsSenseEntry& ) ), this, SLOT( entryActivated( const qCtagsSenseEntry& ) ) );
 	disconnect( mDock->browser(), SIGNAL( fileNameActivated( const QString& ) ), this, SLOT( fileNameActivated( const QString& ) ) );
 	disconnect( this, SIGNAL( propertiesChanged( const qCtagsSenseProperties& ) ), mDock->browser(), SLOT( setProperties( const qCtagsSenseProperties& ) ) );
 	disconnect( this, SIGNAL( integrationModeChanged( ClassBrowser::IntegrationMode ) ), MonkeyCore::multiToolBar(), SIGNAL( notifyChanges() ) );
@@ -195,9 +195,9 @@ void ClassBrowser::buffersChanged( const QMap<QString, QString>& entries )
 	mDock->browser()->tagEntries( entries );
 }
 
-void ClassBrowser::entryActivated( qCtagsSenseEntry* entry )
+void ClassBrowser::entryActivated( const qCtagsSenseEntry& entry )
 {	
-	MonkeyCore::fileManager()->goToLine( entry->fileName, QPoint( 0, entry->lineNumber ), true, pMonkeyStudio::defaultCodec() );
+	MonkeyCore::fileManager()->goToLine( entry.fileName, QPoint( 0, entry.lineNumber ), true, pMonkeyStudio::defaultCodec() );
 }
 
 void ClassBrowser::fileNameActivated( const QString& fileName )

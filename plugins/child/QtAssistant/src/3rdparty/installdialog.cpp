@@ -1,43 +1,41 @@
 /****************************************************************************
 **
-** Copyright (C) 2007-2008 Trolltech ASA. All rights reserved.
+** Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
 **
 ** This file is part of the Qt Assistant of the Qt Toolkit.
 **
-** This file may be used under the terms of the GNU General Public
-** License versions 2.0 or 3.0 as published by the Free Software
-** Foundation and appearing in the files LICENSE.GPL2 and LICENSE.GPL3
-** included in the packaging of this file.  Alternatively you may (at
-** your option) use any later version of the GNU General Public
-** License if such license has been publicly approved by Trolltech ASA
-** (or its successors, if any) and the KDE Free Qt Foundation. In
-** addition, as a special exception, Trolltech gives you certain
-** additional rights. These rights are described in the Trolltech GPL
-** Exception version 1.2, which can be found at
-** http://www.trolltech.com/products/qt/gplexception/ and in the file
-** GPL_EXCEPTION.txt in this package.
+** $QT_BEGIN_LICENSE:LGPL$
+** No Commercial Usage
+** This file contains pre-release code and may not be distributed.
+** You may use this file in accordance with the terms and conditions
+** contained in the Technology Preview License Agreement accompanying
+** this package.
 **
-** Please review the following information to ensure GNU General
-** Public Licensing requirements will be met:
-** http://trolltech.com/products/qt/licenses/licensing/opensource/. If
-** you are unsure which license is appropriate for your use, please
-** review the following information:
-** http://trolltech.com/products/qt/licenses/licensing/licensingoverview
-** or contact the sales department at sales@trolltech.com.
+** GNU Lesser General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU Lesser
+** General Public License version 2.1 as published by the Free Software
+** Foundation and appearing in the file LICENSE.LGPL included in the
+** packaging of this file.  Please review the following information to
+** ensure the GNU Lesser General Public License version 2.1 requirements
+** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
 **
-** In addition, as a special exception, Trolltech, as the sole
-** copyright holder for Qt Designer, grants users of the Qt/Eclipse
-** Integration plug-in the right for the Qt/Eclipse Integration to
-** link to functionality provided by Qt Designer and its related
-** libraries.
+** In addition, as a special exception, Nokia gives you certain additional
+** rights.  These rights are described in the Nokia Qt LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
 **
-** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
-** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
-** A PARTICULAR PURPOSE. Trolltech reserves all rights not expressly
-** granted herein.
+** If you have questions regarding the use of this file, please contact
+** Nokia at qt-info@nokia.com.
 **
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+**
+**
+**
+**
+**
+**
+** $QT_END_LICENSE$
 **
 ****************************************************************************/
 
@@ -58,6 +56,7 @@
 #include <QtNetwork/QHttp>
 
 QT_BEGIN_NAMESPACE
+#ifndef QT_NO_HTTP
 
 #define QCH_FILENAME  92943
 #define QCH_NAMESPACE 92944
@@ -107,7 +106,7 @@ void InstallDialog::init()
     m_ui.statusLabel->setText(tr("Downloading documentation info..."));
     m_ui.progressBar->show();
     
-    QUrl url(QLatin1String("http://doc.trolltech.com/assistantdocs/docs.txt"));
+    QUrl url(QLatin1String("http://qt.nokia.com/doc/assistantdocs/docs.txt"));
     m_buffer = new QBuffer();
     m_buffer->open(QBuffer::ReadWrite);
 
@@ -215,7 +214,7 @@ void InstallDialog::downloadNextFile()
     m_ui.statusLabel->setText(tr("Downloading %1...").arg(fileName));
     m_ui.progressBar->show();
 
-    QLatin1String urlStr("http://doc.trolltech.com/assistantdocs/%1");
+    QLatin1String urlStr("http://qt.nokia.com/doc/assistantdocs/%1");
     QUrl url(QString(urlStr).arg(fileName));    
     
     m_httpAborted = false;
@@ -337,4 +336,5 @@ void InstallDialog::browseDirectories()
         m_ui.pathLineEdit->setText(dir);
 }
 
+#endif
 QT_END_NAMESPACE

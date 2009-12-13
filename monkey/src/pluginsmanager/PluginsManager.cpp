@@ -66,7 +66,7 @@ void PluginsManager::loadsPlugins()
 	{
 		d.setPath( QDir::isRelativePath( s ) ? qApp->applicationDirPath().append( "/%1" ).arg( s ) : s );
 		// load all plugins
-		foreach ( QFileInfo f, pMonkeyStudio::getFiles( d ) )
+		foreach ( const QFileInfo& f, pMonkeyStudio::getFiles( d ) )
 		{
 			// don't proced no library file
 			if ( !QLibrary::isLibrary( f.absoluteFilePath() ) )

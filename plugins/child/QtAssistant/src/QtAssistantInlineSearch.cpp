@@ -1,5 +1,7 @@
 #include "QtAssistantInlineSearch.h"
 
+#include <pIconManager.h>
+
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QLabel>
@@ -17,7 +19,7 @@ QtAssistantInlineSearch::QtAssistantInlineSearch( QWidget* parent )
 #endif
 
 	toolClose = new QToolButton( this );
-	toolClose->setIcon( QIcon( ":/icons/closetab.png" ) );
+	toolClose->setIcon( pIconManager::icon( "closetab.png", ":/assistant-icons" ) );
 	toolClose->setAutoRaise( true );
 	connect( toolClose, SIGNAL( clicked() ), this, SLOT( hide() ) );
 	hboxLayout->addWidget( toolClose );
@@ -26,19 +28,28 @@ QtAssistantInlineSearch::QtAssistantInlineSearch( QWidget* parent )
 	editFind->setMinimumSize( QSize( 150, 0 ) );
 	connect( editFind, SIGNAL( textChanged( const QString& ) ), this, SLOT( updateButtons() ) );
 	hboxLayout->addWidget (editFind );
+	
+	labelWrapped = new QLabel( this );
+	labelWrapped->setSizePolicy( QSizePolicy( QSizePolicy::Maximum, QSizePolicy::Preferred ) );
+	labelWrapped->setTextFormat( Qt::RichText );
+	labelWrapped->setScaledContents( true );
+	labelWrapped->setAlignment( Qt::AlignLeading | Qt::AlignLeft | Qt::AlignVCenter );
+	labelWrapped->setText( tr( "<img src=\":/assistant-icons/wrap.png\">&nbsp;Search wrapped" ) );
+	labelWrapped->setVisible( false );
+	hboxLayout->addWidget( labelWrapped );
 
 	toolPrevious = new QToolButton( this );
 	toolPrevious->setAutoRaise( true );
 	toolPrevious->setText( tr( "Previous" ) );
 	toolPrevious->setToolButtonStyle( Qt::ToolButtonTextBesideIcon );
-	toolPrevious->setIcon( QIcon( ":/icons/previous.png" ) );
+	toolPrevious->setIcon( pIconManager::icon( "previous.png", ":/assistant-icons" ) );
 	hboxLayout->addWidget( toolPrevious );
 
 	toolNext = new QToolButton( this );
 	toolNext->setAutoRaise( true );
 	toolNext->setText( tr( "Next" ) );
 	toolNext->setToolButtonStyle( Qt::ToolButtonTextBesideIcon );
-	toolNext->setIcon( QIcon( ":/icons/next.png" ) );
+	toolNext->setIcon( pIconManager::icon( "next.png", ":/assistant-icons" ) );
 	hboxLayout->addWidget( toolNext );
 
 	checkCase = new QCheckBox( tr( "Case Sensitive" ), this );
@@ -48,21 +59,15 @@ QtAssistantInlineSearch::QtAssistantInlineSearch( QWidget* parent )
 	hboxLayout->addWidget( checkWholeWords );
 	checkWholeWords->hide();
 
-	labelWrapped = new QLabel( this );
-	labelWrapped->setSizePolicy( QSizePolicy( QSizePolicy::Maximum, QSizePolicy::Preferred ) );
-	labelWrapped->setTextFormat( Qt::RichText );
-	labelWrapped->setScaledContents( true );
-	labelWrapped->setAlignment( Qt::AlignLeading | Qt::AlignLeft | Qt::AlignVCenter );
-	labelWrapped->setText( tr( "<img src=\":/icons/wrap.png\">&nbsp;Search wrapped" ) );
-	hboxLayout->addWidget( labelWrapped );
-
 	updateButtons();
 }
 
 void QtAssistantInlineSearch::keyPressEvent( QKeyEvent* event )
 {
 	if ( event->key() == Qt::Key_Escape )
+	{
 		hide();
+	}
 }
 
 void QtAssistantInlineSearch::updateButtons()

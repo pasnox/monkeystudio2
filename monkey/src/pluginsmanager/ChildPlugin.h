@@ -47,7 +47,7 @@ public:
 	{ return mSuffixes; }
 	
 	// tell if this plugin can open this file
-	virtual bool canOpen( const QString& fileName )
+	virtual bool canOpen( const QString& fileName ) const
 	{
 		foreach ( const QStringList& suffixes, mSuffixes.values() )
 		{

@@ -47,6 +47,7 @@ pStringListEditor::pStringListEditor( QWidget* parent, const QString& title )
 	// create listwidget
 	mList = new QListWidget;
 	mList->setMinimumHeight( 40 );
+	mList->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 	mLayout->addWidget( mList );
 	
 	// create actions
@@ -73,6 +74,7 @@ pStringListEditor::pStringListEditor( QWidget* parent, const QString& title )
 	connect( aDown, SIGNAL( triggered() ), this, SLOT( onMoveDownItem() ) );
 	connect( aEdit, SIGNAL( triggered() ), this, SLOT( onEditItem() ) );
 	connect( mList, SIGNAL( itemChanged( QListWidgetItem* ) ), this, SIGNAL( edited() ) );
+	connect( this, SIGNAL( edited() ), this, SLOT( onEdited() ) );
 }
 
 QVBoxLayout* pStringListEditor::verticalLayout() const
@@ -106,6 +108,15 @@ QStringList pStringListEditor::values() const
 	foreach ( QListWidgetItem* it, mList->findItems( "*", Qt::MatchWildcard | Qt::MatchRecursive ) )
 		values << it->text();
 	return values;
+}
+
+void pStringListEditor::onEdited()
+{
+	for ( int i = 0; i < mList->count(); i++ )
+	{
+		QListWidgetItem* item = mList->item( i );
+		item->setToolTip( item->text() );
+	}
 }
 
 void pStringListEditor::onAddItem()

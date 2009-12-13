@@ -20,6 +20,10 @@ CLIToolPlugin::CLIToolPlugin( BasePlugin* plugin )
 	mPlugin = plugin;
 }
 
+CLIToolPlugin::~CLIToolPlugin()
+{
+}
+
 pCommandList CLIToolPlugin::userCommands() const
 {
 	// commands list

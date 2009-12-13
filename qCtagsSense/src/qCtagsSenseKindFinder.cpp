@@ -27,16 +27,12 @@ qCtagsSenseKindFinder::qCtagsSenseKindFinder( qCtagsSenseSQL* parent )
 {
 	mSQL = parent;
 	mKind = qCtagsSense::Unknow;
+	mEntry = 0;
 	
 	connect( this, SIGNAL( finished() ), this, SLOT( deleteLater() ) );
 }
 
-qCtagsSenseKindFinder::~qCtagsSenseKindFinder()
-{
-	delete mEntry;
-}
-
-void qCtagsSenseKindFinder::goTo( qCtagsSense::Kind kind, qCtagsSenseEntry* entry )
+void qCtagsSenseKindFinder::goTo( qCtagsSense::Kind kind, const qCtagsSenseEntry* entry )
 {
 	mKind = kind;
 	mEntry = entry;
@@ -127,12 +123,11 @@ void qCtagsSenseKindFinder::run()
 	if ( record.isEmpty() )
 	{
 		qWarning() << "No entry found" << mEntry->name << " for kind " << mKind;
-		mEntry = 0;
 	}
 	else
 	{
-		mEntry = qCtagsSenseUtils::entryForRecord( record, q.record().value( "filename" ).toString() );
-		
-		emit entryActivated( mEntry );
+		const qCtagsSenseEntry* entry = qCtagsSenseUtils::entryForRecord( record, q.record().value( "filename" ).toString() );
+		emit entryActivated( *entry );
+		delete entry;
 	}
 }

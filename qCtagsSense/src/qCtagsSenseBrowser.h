@@ -82,7 +82,7 @@ protected slots:
 	void on_tvMembers_customContextMenuRequested( const QPoint& pos );
 
 signals:
-	void entryActivated( qCtagsSenseEntry* entry );
+	void entryActivated( const qCtagsSenseEntry& entry );
 	void fileNameActivated( const QString& fileName );
 };
 
