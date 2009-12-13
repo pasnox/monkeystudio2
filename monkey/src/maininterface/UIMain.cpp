@@ -50,7 +50,10 @@
 UIMain::UIMain( QWidget* p )
 	: pMainWindow( p )
 {
+	setUnifiedTitleAndToolBarOnMac( true );
+	setIconSize( QSize( 16, 16 ) );
 	setAcceptDrops( true );
+	
 	setCorner( Qt::TopLeftCorner, Qt::LeftDockWidgetArea );
 	setCorner( Qt::TopRightCorner, Qt::RightDockWidgetArea );
 	setCorner( Qt::BottomLeftCorner, Qt::LeftDockWidgetArea );
@@ -399,8 +402,6 @@ void UIMain::finalyzeGuiInit()
 {
 	setWindowTitle( QObject::tr( "%1 v%2 (%3)" ).arg( PACKAGE_NAME, PACKAGE_VERSION, PACKAGE_VERSION_STR ) );
 	setWindowIcon( menuBar()->action( "mHelp/aAbout" )->icon() );
-	setUnifiedTitleAndToolBarOnMac( true );
-	setIconSize( QSize( 16, 16 ) );
 }
 
 void UIMain::menu_Docks_aboutToShow()
