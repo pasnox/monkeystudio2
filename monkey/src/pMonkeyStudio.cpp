@@ -59,28 +59,28 @@ void pMonkeyStudio::loadTranslations()
 		qApp->removeTranslator( t );
 	qDeleteAll( mTranslators );
 	mTranslators.clear();
-	
+
 	// get user translation setted
 	QString mLanguage = MonkeyCore::settings()->value( "Translations/Language", "english" ).toString();
 	QLocale l( mLanguage );
 	// qt translation path
 	QString resourceDir = QLibraryInfo::location( QLibraryInfo::TranslationsPath );
-	
+
 	// setting qt translation
 	QTranslator* qtTranslator = new QTranslator( qApp );
 	if ( qtTranslator->load( QString( "qt_" ) + l.name(), resourceDir ) )
 		addTranslator( qtTranslator );
-	
+
 	// setting assistant translation
 	QTranslator* assistantTranslator = new QTranslator( qApp );
 	if ( assistantTranslator->load( QString( "assistant_" ) + l.name(), resourceDir ) )
 		addTranslator( assistantTranslator );
-	
+
 	// setting designer translation
 	QTranslator* designerTranslator = new QTranslator( qApp );
 	if ( designerTranslator->load( QString( "designer_" ) + l.name(), resourceDir ) )
 		addTranslator( designerTranslator );
-	
+
 	if ( mLanguage != "english" )
 	{
 		QTranslator* t = new QTranslator( qApp );
@@ -108,17 +108,17 @@ bool pMonkeyStudio::isSameFile( const QString& left, const QString& right )
 	// get file info
 	QFileInfo fif( left );
 	QFileInfo fio( right );
-	
+
 	// check files exists
 	if ( fif.exists() != fio.exists() )
 		return false;
-	
+
 	// check simlink
 	if ( fif.isSymLink() )
 		fif.setFile( fif.symLinkTarget() );
 	if ( fio.isSymLink() )
 		fio.setFile( fio.symLinkTarget() );
-	
+
 	// check canonical file path
 	return fif.canonicalFilePath() == fio.canonicalFilePath();
 }
@@ -129,7 +129,7 @@ bool pMonkeyStudio::isSameFile( const QString& left, const QString& right )
 QStringList pMonkeyStudio::availableTextCodecs()
 {
 	static QMap<QString, QString> codecs;
-	
+
 	if ( codecs.isEmpty() )
 	{
 		foreach ( const QByteArray& codec, QTextCodec::availableCodecs() )
@@ -161,13 +161,29 @@ QStringList pMonkeyStudio::availableImageFormats()
 QStringList pMonkeyStudio::availableLanguages()
 {
 	static QStringList l = QStringList() << "Bash" << "Batch" << "C#" << "C++" << "CMake" << "CSS"
-		<< "D" << "Diff" << "HTML" << "IDL" << "Java" << "JavaScript" << "Lua"
-		<< "Makefile" << "POV" << "Perl" << "Properties" << "Python" << "Ruby"
+		<< "D" << "Diff"
+#if QSCINTILLA_VERSION >= 0x020300
+		<< "Fortran" << "Fortran77"
+#endif
+		<< "HTML" << "IDL" << "Java" << "JavaScript" << "Lua"
+		<< "Makefile"
+#if QSCINTILLA_VERSION >= 0x020300
+		<< "Pascal"
+#endif
+		<< "Perl"
+#if QSCINTILLA_VERSION >= 0x020300
+		<< "PostScript"
+#endif
+		<< "POV" << "Properties" << "Ruby" << "Python"
 		<< "SQL"
-#if QSCINTILLA_VERSION > 0x020200
+#if QSCINTILLA_VERSION >= 0x020300
 		<< "TCL"
 #endif
-		<< "TeX" << "VHDL";
+		<< "TeX" << "VHDL"
+#if QSCINTILLA_VERSION >= 0x020300
+		<< "XML" << "YAML"
+#endif
+		;
 	return l;
 }
 
@@ -442,7 +458,7 @@ QString pMonkeyStudio::availableFilesFilters()
 	// remove trailing ;;
 	if ( f.endsWith( ";;" ) )
 		f.chop( 2 );
-	
+
 	if ( !f.isEmpty() )
 	{
 		QString s;
@@ -451,7 +467,7 @@ QString pMonkeyStudio::availableFilesFilters()
 		f.prepend( QString( "All Files (*);;" ));
 		f.prepend( QString( "All Supported Files (%1);;" ).arg( s.trimmed() ) );
 	}
-	
+
 	// return filters list
 	return f;
 }
@@ -605,9 +621,21 @@ QsciLexer* pMonkeyStudio::lexerForLanguage( const QString& language )
 		l = new QsciLexerRuby( QApplication::instance() );
 	else if ( ln == "sql" )
 		l = new QsciLexerSQL( QApplication::instance() );
-#if QSCINTILLA_VERSION > 0x020200
+#if QSCINTILLA_VERSION >= 0x020300
 	else if ( ln == "tcl" )
 		l = new QsciLexerTCL( QApplication::instance() );
+	else if ( ln == "fortran" )
+		l = new QsciLexerFortran( QApplication::instance() );
+	else if ( ln == "fortran77" )
+		l = new QsciLexerFortran77( QApplication::instance() );
+	else if ( ln == "pascal" )
+		l = new QsciLexerPascal( QApplication::instance() );
+	else if ( ln == "postscript" )
+		l = new QsciLexerPostScript( QApplication::instance() );
+	else if ( ln == "xml" )
+		l = new QsciLexerXML( QApplication::instance() );
+	else if ( ln == "yaml" )
+		l = new QsciLexerYAML( QApplication::instance() );
 #endif
 	else if ( ln == "tex" )
 		l = new QsciLexerTeX( QApplication::instance() );
@@ -660,144 +688,174 @@ QVariant pMonkeyStudio::lexerProperty( const QString& property, QsciLexer* lexer
 	if ( !lexer || property.isEmpty() )
 		return QVariant();
 	// get language
-	const QString lng = QString( lexer->language() );
+	const QString lng = QString( lexer->language() ).toLower();
 	// checking property
 	if ( property == "foldComments" )
 	{
-		if ( lng == "Bash" )
+		if ( lng == "bash" )
 			return qobject_cast<QsciLexerBash*>( lexer )->foldComments();
-		else if ( lng == "CSS" )
+		else if ( lng == "css" )
 			return qobject_cast<QsciLexerCSS*>( lexer )->foldComments();
-		else if ( lng == "D" )
+		else if ( lng == "d" )
 			return qobject_cast<QsciLexerD*>( lexer )->foldComments();
-		else if ( lng == "Perl" )
+		else if ( lng == "perl" )
 			return qobject_cast<QsciLexerPerl*>( lexer )->foldComments();
-		else if ( lng == "POV" )
+		else if ( lng == "pov" )
 			return qobject_cast<QsciLexerPOV*>( lexer )->foldComments();
-		else if ( lng == "Python" )
+		else if ( lng == "python" )
 			return qobject_cast<QsciLexerPython*>( lexer )->foldComments();
-		else if ( lng == "SQL" )
+		else if ( lng == "sql" )
 			return qobject_cast<QsciLexerSQL*>( lexer )->foldComments();
-		else if ( lng == "VHDL" )
+		else if ( lng == "vhdl" )
 			return qobject_cast<QsciLexerVHDL*>( lexer )->foldComments();
-		else if ( lng == "JavaScript" )
+		else if ( lng == "javascript" )
 			return qobject_cast<QsciLexerJavaScript*>( lexer )->foldComments();
-		else if ( lng == "Java" )
+		else if ( lng == "java" )
 			return qobject_cast<QsciLexerJava*>( lexer )->foldComments();
-		else if ( lng == "C#" )
+		else if ( lng == "c#" )
 			return qobject_cast<QsciLexerCSharp*>( lexer )->foldComments();
-		else if ( lng == "C++" )
+		else if ( lng == "c++" )
 			return qobject_cast<QsciLexerCPP*>( lexer )->foldComments();
+#if QSCINTILLA_VERSION >= 0x020300
+		else if ( lng == "pascal" )
+			return qobject_cast<QsciLexerPascal*>( lexer )->foldComments();
+		else if ( lng == "yaml" )
+			return qobject_cast<QsciLexerYAML*>( lexer )->foldComments();
+#endif
 	}
 	else if ( property == "foldCompact" )
 	{
-		if ( lng == "Bash" )
+		if ( lng == "bash" )
 			return qobject_cast<QsciLexerBash*>( lexer )->foldCompact();
-		else if ( lng == "CSS" )
+		else if ( lng == "css" )
 			return qobject_cast<QsciLexerCSS*>( lexer )->foldCompact();
-		else if ( lng == "D" )
+		else if ( lng == "d" )
 			return qobject_cast<QsciLexerD*>( lexer )->foldCompact();
-		else if ( lng == "HTML" )
+		else if ( lng == "html" )
 			return qobject_cast<QsciLexerHTML*>( lexer )->foldCompact();
-		else if ( lng == "Lua" )
+		else if ( lng == "lua" )
 			return qobject_cast<QsciLexerLua*>( lexer )->foldCompact();
-		else if ( lng == "Perl" )
+		else if ( lng == "perl" )
 			return qobject_cast<QsciLexerPerl*>( lexer )->foldCompact();
-		else if ( lng == "POV" )
+		else if ( lng == "pov" )
 			return qobject_cast<QsciLexerPOV*>( lexer )->foldCompact();
-		else if ( lng == "Properties" )
+		else if ( lng == "properties" )
 			return qobject_cast<QsciLexerProperties*>( lexer )->foldCompact();
-		else if ( lng == "SQL" )
+		else if ( lng == "sql" )
 			return qobject_cast<QsciLexerSQL*>( lexer )->foldCompact();
-		else if ( lng == "VHDL" )
+		else if ( lng == "vhdl" )
 			return qobject_cast<QsciLexerVHDL*>( lexer )->foldCompact();
-		else if ( lng == "JavaScript" )
+		else if ( lng == "javascript" )
 			return qobject_cast<QsciLexerJavaScript*>( lexer )->foldCompact();
-		else if ( lng == "Java" )
+		else if ( lng == "java" )
 			return qobject_cast<QsciLexerJava*>( lexer )->foldCompact();
-		else if ( lng == "C#" )
+		else if ( lng == "c#" )
 			return qobject_cast<QsciLexerCSharp*>( lexer )->foldCompact();
-		else if ( lng == "C++" )
+		else if ( lng == "c++" )
 			return qobject_cast<QsciLexerCPP*>( lexer )->foldCompact();
-#if QSCINTILLA_VERSION > 0x020200
-		else if ( lng == "TCL" )
+#if QSCINTILLA_VERSION >= 0x020300
+		else if ( lng == "tcl" )
 			return qobject_cast<QsciLexerTCL*>( lexer )->foldCompact();
+		else if ( lng == "fortran" )
+			return qobject_cast<QsciLexerFortran*>( lexer )->foldCompact();
+		else if ( lng == "fortran77" )
+			return qobject_cast<QsciLexerFortran77*>( lexer )->foldCompact();
+		else if ( lng == "pascal" )
+			return qobject_cast<QsciLexerPascal*>( lexer )->foldCompact();
+		else if ( lng == "postscript" )
+			return qobject_cast<QsciLexerPostScript*>( lexer )->foldCompact();
+		else if ( lng == "xml" )
+			return qobject_cast<QsciLexerXML*>( lexer )->foldCompact();
 #endif
 	}
 	else if ( property == "foldQuotes" )
 	{
-		if ( lng == "Python" )
+		if ( lng == "python" )
 			return qobject_cast<QsciLexerPython*>( lexer )->foldQuotes();
 	}
 	else if ( property == "foldDirectives" )
 	{
-		if ( lng == "POV" )
+		if ( lng == "pov" )
 			return qobject_cast<QsciLexerPOV*>( lexer )->foldDirectives();
 	}
 	else if ( property == "foldAtBegin" )
 	{
-		if ( lng == "VHDL" )
+		if ( lng == "vhdl" )
 			return qobject_cast<QsciLexerVHDL*>( lexer )->foldAtBegin();
 	}
 	else if ( property == "foldAtParenthesis" )
 	{
-		if ( lng == "VHDL" )
+		if ( lng == "vhdl" )
 			return qobject_cast<QsciLexerVHDL*>( lexer )->foldAtParenthesis();
 	}
 	else if ( property == "foldAtElse" )
 	{
-		if ( lng == "CMake" )
+		if ( lng == "cmake" )
 			return qobject_cast<QsciLexerCMake*>( lexer )->foldAtElse();
-		else if ( lng == "D" )
+		else if ( lng == "d" )
 			return qobject_cast<QsciLexerD*>( lexer )->foldAtElse();
-		else if ( lng == "VHDL" )
+		else if ( lng == "vhdl" )
 			return qobject_cast<QsciLexerVHDL*>( lexer )->foldAtElse();
-		else if ( lng == "JavaScript" )
+		else if ( lng == "javascript" )
 			return qobject_cast<QsciLexerJavaScript*>( lexer )->foldAtElse();
-		else if ( lng == "Java" )
+		else if ( lng == "java" )
 			return qobject_cast<QsciLexerJava*>( lexer )->foldAtElse();
-		else if ( lng == "C#" )
+		else if ( lng == "c#" )
 			return qobject_cast<QsciLexerCSharp*>( lexer )->foldAtElse();
-		else if ( lng == "C++" )
+		else if ( lng == "c++" )
 			return qobject_cast<QsciLexerCPP*>( lexer )->foldAtElse();
+#if QSCINTILLA_VERSION >= 0x020300
+		else if ( lng == "postscript" )
+			return qobject_cast<QsciLexerPostScript*>( lexer )->foldAtElse();
+#endif
 	}
 	else if ( property == "foldPreprocessor" )
 	{
-		if ( lng == "HTML" )
+		if ( lng == "html" )
 			return qobject_cast<QsciLexerHTML*>( lexer )->foldPreprocessor();
-		else if ( lng == "JavaScript" )
+		else if ( lng == "javascript" )
 			return qobject_cast<QsciLexerJavaScript*>( lexer )->foldPreprocessor();
-		else if ( lng == "Java" )
+		else if ( lng == "java" )
 			return qobject_cast<QsciLexerJava*>( lexer )->foldPreprocessor();
-		else if ( lng == "C#" )
+		else if ( lng == "c#" )
 			return qobject_cast<QsciLexerCSharp*>( lexer )->foldPreprocessor();
-		else if ( lng == "C++" )
+		else if ( lng == "c++" )
 			return qobject_cast<QsciLexerCPP*>( lexer )->foldPreprocessor();
+#if QSCINTILLA_VERSION >= 0x020300
+		else if ( lng == "pascal" )
+			return qobject_cast<QsciLexerPascal*>( lexer )->foldPreprocessor();
+		else if ( lng == "xml" )
+			return qobject_cast<QsciLexerXML*>( lexer )->foldPreprocessor();
+#endif
 	}
 	else if ( property == "stylePreprocessor" )
 	{
-		if ( lng == "JavaScript" )
+		if ( lng == "javascript" )
 			return qobject_cast<QsciLexerJavaScript*>( lexer )->stylePreprocessor();
-		else if ( lng == "Java" )
+		else if ( lng == "java" )
 			return qobject_cast<QsciLexerJava*>( lexer )->stylePreprocessor();
-		else if ( lng == "C#" )
+		else if ( lng == "c#" )
 			return qobject_cast<QsciLexerCSharp*>( lexer )->stylePreprocessor();
-		else if ( lng == "C++" )
+		else if ( lng == "c++" )
 			return qobject_cast<QsciLexerCPP*>( lexer )->stylePreprocessor();
 	}
 	else if ( property == "caseSensitiveTags" )
 	{
-		if ( lng == "HTML" )
+		if ( lng == "html" )
 			return qobject_cast<QsciLexerHTML*>( lexer )->caseSensitiveTags();
+#if QSCINTILLA_VERSION >= 0x020300
+		else if ( lng == "xml" )
+			return qobject_cast<QsciLexerXML*>( lexer )->caseSensitiveTags();
+#endif
 	}
 	else if ( property == "backslashEscapes" )
 	{
-		if ( lng == "SQL" )
+		if ( lng == "sql" )
 			return qobject_cast<QsciLexerSQL*>( lexer )->backslashEscapes();
 	}
 	else if ( property == "indentationWarning" )
 	{
-		if ( lng == "Python" )
+		if ( lng == "python" )
 			return qobject_cast<QsciLexerPython*>( lexer )->indentationWarning();
 	}
 	// default return value

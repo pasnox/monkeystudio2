@@ -31,6 +31,12 @@
 #include "qsciscintillabase.h"
 #include "qsciscintilla.h"
 
-#if QSCINTILLA_VERSION > 0x020200
+#if QSCINTILLA_VERSION >= 0x020300
 #include "qscilexertcl.h"
+#include "qscilexerfortran.h"
+#include "qscilexerfortran77.h"
+#include "qscilexerpascal.h"
+#include "qscilexerpostscript.h"
+#include "qscilexerxml.h"
+#include "qscilexeryaml.h"
 #endif
