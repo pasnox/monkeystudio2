@@ -1,6 +1,6 @@
 # The project file for the QScintilla library.
 #
-# Copyright (c) 2008 Riverbank Computing Limited <info@riverbankcomputing.com>
+# Copyright (c) 2009 Riverbank Computing Limited <info@riverbankcomputing.com>
 # 
 # This file is part of QScintilla.
 # 
@@ -24,17 +24,12 @@
 # http://trolltech.com/products/qt/licenses/licensing/licensingoverview
 # or contact the sales department at sales@riverbankcomputing.com.
 # 
-# This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
-# INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
-# A PARTICULAR PURPOSE. Trolltech reserves all rights not expressly
-# granted herein.
-# 
 # This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 # WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
 
 # This must be kept in sync with configure.py.
-!win32:VERSION = 5.1.0
+!win32:VERSION = 5.2.0
 
 TEMPLATE = lib
 TARGET = qscintilla2
@@ -103,9 +98,11 @@ HEADERS = \
 	./Qsci/qscilexerproperties.h \
 	./Qsci/qscilexerpython.h \
 	./Qsci/qscilexerruby.h \
+	./Qsci/qscilexerspice.h \
 	./Qsci/qscilexersql.h \
 	./Qsci/qscilexertcl.h \
 	./Qsci/qscilexertex.h \
+	./Qsci/qscilexerverilog.h \
 	./Qsci/qscilexervhdl.h \
 	./Qsci/qscilexerxml.h \
 	./Qsci/qscilexeryaml.h \
@@ -183,9 +180,11 @@ SOURCES = \
 	qscilexerproperties.cpp \
 	qscilexerpython.cpp \
 	qscilexerruby.cpp \
+	qscilexerspice.cpp \
 	qscilexersql.cpp \
 	qscilexertcl.cpp \
 	qscilexertex.cpp \
+	qscilexerverilog.cpp \
 	qscilexervhdl.cpp \
 	qscilexerxml.cpp \
 	qscilexeryaml.cpp \

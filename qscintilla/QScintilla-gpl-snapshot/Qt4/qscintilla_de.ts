@@ -2456,6 +2456,54 @@
     </message>
 </context>
 <context>
+    <name>QsciLexerSpice</name>
+    <message>
+        <location filename="qscilexerspice.cpp" line="179"/>
+        <source>Default</source>
+        <translation>Standard</translation>
+    </message>
+    <message>
+        <location filename="qscilexerspice.cpp" line="182"/>
+        <source>Identifier</source>
+        <translation>Bezeichner</translation>
+    </message>
+    <message>
+        <location filename="qscilexerspice.cpp" line="185"/>
+        <source>Command</source>
+        <translation>Befehl</translation>
+    </message>
+    <message>
+        <location filename="qscilexerspice.cpp" line="188"/>
+        <source>Function</source>
+        <translation>Funktion</translation>
+    </message>
+    <message>
+        <location filename="qscilexerspice.cpp" line="191"/>
+        <source>Parameter</source>
+        <translation>Parameter</translation>
+    </message>
+    <message>
+        <location filename="qscilexerspice.cpp" line="194"/>
+        <source>Number</source>
+        <translation>Zahl</translation>
+    </message>
+    <message>
+        <location filename="qscilexerspice.cpp" line="197"/>
+        <source>Delimiter</source>
+        <translation>Delimiter</translation>
+    </message>
+    <message>
+        <location filename="qscilexerspice.cpp" line="200"/>
+        <source>Value</source>
+        <translation>Wert</translation>
+    </message>
+    <message>
+        <location filename="qscilexerspice.cpp" line="203"/>
+        <source>Comment</source>
+        <translation>Kommentar</translation>
+    </message>
+</context>
+<context>
     <name>QsciLexerTCL</name>
     <message>
         <location filename="qscilexertcl.cpp" line="303"/>
@@ -2677,6 +2725,74 @@
         <location filename="qscilexervhdl.cpp" line="262"/>
         <source>User defined</source>
         <translation>Nutzer definiert</translation>
+    </message>
+</context>
+<context>
+    <name>QsciLexerVerilog</name>
+    <message>
+        <location filename="qscilexerverilog.cpp" line="232"/>
+        <source>Default</source>
+        <translation>Standard</translation>
+    </message>
+    <message>
+        <location filename="qscilexerverilog.cpp" line="235"/>
+        <source>Comment</source>
+        <translation>Kommentar</translation>
+    </message>
+    <message>
+        <location filename="qscilexerverilog.cpp" line="238"/>
+        <source>Line comment</source>
+        <translation>Zeilenkommentar</translation>
+    </message>
+    <message>
+        <location filename="qscilexerverilog.cpp" line="241"/>
+        <source>Bang comment</source>
+        <translation>Bang Kommentar</translation>
+    </message>
+    <message>
+        <location filename="qscilexerverilog.cpp" line="244"/>
+        <source>Number</source>
+        <translation>Zahl</translation>
+    </message>
+    <message>
+        <location filename="qscilexerverilog.cpp" line="247"/>
+        <source>String</source>
+        <translation>Zeichenkette</translation>
+    </message>
+    <message>
+        <location filename="qscilexerverilog.cpp" line="250"/>
+        <source>Secondary keywords and identifiers</source>
+        <translation>Sekundäre Schlusselwörter und Bezeichner</translation>
+    </message>
+    <message>
+        <location filename="qscilexerverilog.cpp" line="253"/>
+        <source>System task</source>
+        <translation>Systemtask</translation>
+    </message>
+    <message>
+        <location filename="qscilexerverilog.cpp" line="256"/>
+        <source>Preprocessor block</source>
+        <translation>Präprozessorblock</translation>
+    </message>
+    <message>
+        <location filename="qscilexerverilog.cpp" line="259"/>
+        <source>Operator</source>
+        <translation>Operator</translation>
+    </message>
+    <message>
+        <location filename="qscilexerverilog.cpp" line="262"/>
+        <source>Identifier</source>
+        <translation>Bezeichner</translation>
+    </message>
+    <message>
+        <location filename="qscilexerverilog.cpp" line="265"/>
+        <source>Unclosed string</source>
+        <translation>Unbeendete Zeichenkette</translation>
+    </message>
+    <message>
+        <location filename="qscilexerverilog.cpp" line="268"/>
+        <source>User defined tasks and identifiers</source>
+        <translation>Nutzerdefinierte Tasks und Bezeichner</translation>
     </message>
 </context>
 <context>
