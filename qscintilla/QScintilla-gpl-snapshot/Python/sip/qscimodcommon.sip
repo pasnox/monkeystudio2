@@ -1,7 +1,7 @@
 // This is the SIP interface definition for the parts of the Qsci module common
 // to the Qt v3 and v4 versions.
 //
-// Copyright (c) 2009 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2008 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -25,6 +25,11 @@
 // http://trolltech.com/products/qt/licenses/licensing/licensingoverview
 // or contact the sales department at sales@riverbankcomputing.com.
 // 
+// This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
+// INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE. Trolltech reserves all rights not expressly
+// granted herein.
+// 
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
@@ -33,7 +38,7 @@
 
 
 %Copying
-Copyright (c) 2009 Riverbank Computing Limited <info@riverbankcomputing.com>
+Copyright (c) 2008 Riverbank Computing Limited <info@riverbankcomputing.com>
 
 This file is part of QScintilla.
 
@@ -56,6 +61,11 @@ you are unsure which license is appropriate for your use, please
 review the following information:
 http://trolltech.com/products/qt/licenses/licensing/licensingoverview
 or contact the sales department at sales@riverbankcomputing.com.
+
+This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
+INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE. Trolltech reserves all rights not expressly
+granted herein.
 
 This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
@@ -97,11 +107,9 @@ const char *QSCINTILLA_VERSION_STR;
 %Include qscilexerproperties.sip
 %Include qscilexerpython.sip
 %Include qscilexerruby.sip
-%Include qscilexerspice.sip
 %Include qscilexersql.sip
 %Include qscilexertcl.sip
 %Include qscilexertex.sip
-%Include qscilexerverilog.sip
 %Include qscilexervhdl.sip
 %Include qscilexerxml.sip
 %Include qscilexeryaml.sip
