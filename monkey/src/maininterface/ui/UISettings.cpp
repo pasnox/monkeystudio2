@@ -534,6 +534,21 @@ void UISettings::on_tbDefaultProjectsDirectory_clicked()
 		leDefaultProjectsDirectory->setText( s );
 }
 
+void UISettings::on_gbAutoCompletionEnabled_clicked( bool checked )
+{
+	if ( checked && bgAutoCompletionSource->checkedId() == -1 )
+	{
+		QsciScintilla::AutoCompletionSource mode = autoCompletionSource();
+		
+		if ( mode == QsciScintilla::AcsNone )
+		{
+			mode = QsciScintilla::AcsAll;
+		}
+		
+		bgAutoCompletionSource->button( mode )->setChecked( true );
+	}
+}
+
 void UISettings::tbFonts_clicked()
 {
 	QToolButton* tb = qobject_cast<QToolButton*>( sender() );

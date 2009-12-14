@@ -63,6 +63,7 @@ public slots:
 private slots:
 	void on_twMenu_itemSelectionChanged();
 	void on_tbDefaultProjectsDirectory_clicked();
+	void on_gbAutoCompletionEnabled_clicked( bool checked );
 	void tbFonts_clicked();
 	void cbSourceAPIsLanguages_beforeChanged( int );
 	void on_cbSourceAPIsLanguages_currentIndexChanged( int );
