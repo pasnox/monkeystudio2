@@ -69,22 +69,26 @@ pDockToolBar* pDockToolBarManager::bar( Qt::ToolBarArea area )
 		case Qt::TopToolBarArea:
 			mBars[area] = new pDockToolBar( this, Qt::Horizontal, mMain );
 			mBars[area]->setObjectName( "pDockToolBarTop" );
-			mBars[area]->setWindowTitle( tr( "Top DockToolBar" ) );
+			mBars[area]->setWindowTitle( tr( "Top toolbar" ) );
+			mBars[area]->toggleViewAction()->setText( tr( "Top toolbar visible" ) );
 			break;
 		case Qt::BottomToolBarArea:
 			mBars[area] = new pDockToolBar( this, Qt::Horizontal, mMain );
 			mBars[area]->setObjectName( "pDockToolBarBottom" );
-			mBars[area]->setWindowTitle( tr( "Bottom DockToolBar" ) );
+			mBars[area]->setWindowTitle( tr( "Bottom toolbar" ) );
+			mBars[area]->toggleViewAction()->setText( tr( "Bottom toolbar visible" ) );
 			break;
 		case Qt::LeftToolBarArea:
 			mBars[area] = new pDockToolBar( this, Qt::Vertical, mMain );
 			mBars[area]->setObjectName( "pDockToolBarLeft" );
-			mBars[area]->setWindowTitle( tr( "Left DockToolBar" ) );
+			mBars[area]->setWindowTitle( tr( "Left toolbar" ) );
+			mBars[area]->toggleViewAction()->setText( tr( "Left toolbar visible" ) );
 			break;
 		case Qt::RightToolBarArea:
 			mBars[area] = new pDockToolBar( this, Qt::Vertical, mMain );
 			mBars[area]->setObjectName( "pDockToolBarRight" );
-			mBars[area]->setWindowTitle( tr( "Right DockToolBar" ) );
+			mBars[area]->setWindowTitle( tr( "Right toolbar" ) );
+			mBars[area]->toggleViewAction()->setText( tr( "Right toolbar visible" ) );
 			break;
 		default:
 			return 0;

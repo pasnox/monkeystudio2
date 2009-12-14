@@ -1,5 +1,7 @@
 #include "pQueuedMessageToolBar.h"
 
+#include <QAction>
+
 int pQueuedMessageToolBar::mDefaultTimeout = 5000;
 QPixmap* pQueuedMessageToolBar::mDefaultPixmap = 0;
 QBrush pQueuedMessageToolBar::mDefaultBackground = QBrush( QColor( 250, 230, 147 ) );
@@ -15,6 +17,8 @@ pQueuedMessageToolBar::pQueuedMessageToolBar( QWidget* parent )
 	setMovable( false );
 	setFloatable( false );
 	setAllowedAreas( Qt::TopToolBarArea );
+	toggleViewAction()->setEnabled( false );
+	toggleViewAction()->setVisible( false );
 	mDefaultPalette = palette();
 	// create pQueuedMessageWidget
 	mQueuedWidget = new pQueuedMessageWidget( this );
