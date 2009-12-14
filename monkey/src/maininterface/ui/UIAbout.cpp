@@ -37,7 +37,7 @@
 #include <QDate>
 
 const QString mInformations =
-"<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"font-size:small;\">"
+"<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"font-size:medium;\">"
 "	<tr>"
 "		<td align=\"center\"><br /><img src=\":/application/icons/application/monkey2.png\" width=\"32\" height=\"32\"></td>"
 "		<td>%2 v%3 (%4)<br />%5<br />The Monkey Studio Team<br /><a href=\"http://%6\">Home page</a></td>"
@@ -45,7 +45,7 @@ const QString mInformations =
 "</table>";
 
 const QString mDatasMask =
-"<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"font-size:small;\">"
+"<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"font-size:medium;\">"
 "	<tr>"
 "		<td>"
 "			<b>%1</b><br />"
@@ -68,16 +68,16 @@ const QList<pDatas> mTeamates = QList<pDatas>()
 	<< pDatas( QString::fromUtf8( "Aurélien MICHON" ), "aurelien", QObject::tr( "France" ), "aurelien.french@gmail.com", QObject::tr( "Winter Splashscreen Designer" ) );
 
 const QList<pDatas> mDonors = QList<pDatas>()
-	<< pDatas( "Filipe Azevedo", "Nox P@sNox", QObject::tr( "France" ), "pasnox@gmail.com", QObject::tr( "No donations for now, you can use this <a href=\"http://sourceforge.net/project/project_donations.php?group_id=163493\">link</a> to make donation. Donations will help paying host/domain, and relatives things about the projects ( may need a mac book for better mac version :p )." ) );
+	<< pDatas( "Filipe Azevedo", "Nox P@sNox", QObject::tr( "France" ), "pasnox@gmail.com", QObject::tr( "No donations for now, you can use this <a href=\"http://sourceforge.net/project/project_donations.php?group_id=163493\">link</a> to make donation. Donations will help paying host/domain, and relatives things about the project." ) );
 
 const QList<pDatas> mLinks = QList<pDatas>()
-	<< pDatas( "", "", QObject::tr( "Location" ), "http://www.trolltech.com", QObject::tr( "Trolltech's Qt homepage." ) )
+	<< pDatas( "", "", QObject::tr( "Location" ), "http://qt.nokia.com", QObject::tr( "Nokia's Qt homepage." ) )
 	<< pDatas( "", "", QObject::tr( "Location" ), "http://webissues.mimec.org", QObject::tr( "Team collaboration across the Internet." ) )
-	<< pDatas( "", "", QObject::tr( "Location" ), "http://webissues.monkeystudio.org", QObject::tr( "Our webissues server ( login: anonymous, password: anonymous )." ) )
-	<< pDatas( "", "", QObject::tr( "Location" ), "http://trac.monkeystudio.org", QObject::tr( "You can send bug/patch/ideas/what ever you want to our tracker." ) )
-	<< pDatas( "", "", QObject::tr( "Location" ), "http://forums.monkeystudio.org", QObject::tr( "A forum is at your disposition." ) )
-	<< pDatas( "", "", QObject::tr( "Location" ), "http://www.monkeystudio.org/feeds/latest", QObject::tr( "Get the latest news using the rss feed." ) )
-	<< pDatas( "", "", QObject::tr( "Location" ), "http://trac.monkeystudio.org/wiki/MeetTheMonkeys", QObject::tr( "Meet the Monkeys ( All team including testers )." ) );
+	<< pDatas( "", "", QObject::tr( "Location" ), "http://webissues.monkeystudio.org", QObject::tr( "Our webissues server (login: anonymous, password: anonymous)." ) )
+	<< pDatas( "", "", QObject::tr( "Location" ), "https://launchpad.net/monkeystudio", QObject::tr( "You can send bug/patch/ideas/what ever you want to our bug tracker." ) )
+	<< pDatas( "", "", QObject::tr( "Location" ), "http://monkeystudio.org/forum", QObject::tr( "Forums are at your disposition." ) )
+	<< pDatas( "", "", QObject::tr( "Location" ), "http://monkeystudio.org/rss.xml", QObject::tr( "Get the latest news using the rss feed." ) )
+	<< pDatas( "", "", QObject::tr( "Location" ), "http://monkeystudio.org/team", QObject::tr( "Meet the Monkeys (Team's members)." ) );
 
 UIAbout::UIAbout( QWidget* p )
 	: QDialog( p )
