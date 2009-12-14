@@ -177,7 +177,7 @@ QString QMake2XUP::convertFromPro( const QString& s, const QString& codec )
 				}
 				
 				QString isMulti;
-				if(liste[4].trimmed().endsWith(" \\") || liste[4].trimmed() == "\\")
+				if(liste[4].trimmed().endsWith("\\") || liste[4].trimmed() == "\\")
 				{
 					isMulti = " multiline=\"true\"";
 					QString tmppp = liste[4].trimmed();
