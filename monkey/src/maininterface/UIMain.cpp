@@ -144,17 +144,21 @@ void UIMain::closeEvent( QCloseEvent* e )
 QMenu* UIMain::createPopupMenu()
 {
 	// create default menu
-	QMenu* m = QMainWindow::createPopupMenu();
+	QMenu* menu = new QMenu( this ); //QMainWindow::createPopupMenu();
 	// add exclusive action of pDockToolBar
-	QList<pDockToolBar*> l;
-	if ( ( l = findChildren<pDockToolBar*>() ).count() )
+	QList<pDockToolBar*> tbs = findChildren<pDockToolBar*>();
+	
+	foreach ( pDockToolBar* tb, tbs )
 	{
-		m->addSeparator();
-		foreach ( pDockToolBar* tb, l )
-			m->addAction( tb->toggleExclusiveAction() );
+		if ( tb->parent() != this )
+		{
+			continue;
+		}
+		
+		menu->addAction( tb->toggleExclusiveAction() );
 	}
-	// return menu
-	return m;
+	
+	return menu;
 }
 
 void UIMain::initMenuBar()

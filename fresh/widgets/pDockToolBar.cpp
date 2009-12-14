@@ -41,6 +41,9 @@ pDockToolBar::pDockToolBar( pDockToolBarManager* manager, Qt::Orientation orient
 	Q_ASSERT( manager != 0 );
 	Q_UNUSED( manager );
 	
+	toggleViewAction()->setEnabled( false );
+	toggleViewAction()->setVisible( false );
+	
 	// always show button text
 	mTextAlwaysVisible = true;
 
@@ -467,7 +470,7 @@ int pDockToolBar::count() const
 QAction* pDockToolBar::toggleExclusiveAction() const 
 {
 	// set action text
-	aToggleExclusive->setText( tr( "%1 - Exclusive" ).arg( windowTitle() ) );
+	aToggleExclusive->setText( tr( "%1 exclusive" ).arg( windowTitle() ) );
 	return aToggleExclusive;
 }
 
