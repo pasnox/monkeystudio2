@@ -18,6 +18,7 @@
 #include <ctype.h>        /* to define isspace () */
 #include <errno.h>
 #include <stdlib.h>
+#include <string.h>
 
 /*  These header files provide for the functions necessary to do file
  *  truncation.
