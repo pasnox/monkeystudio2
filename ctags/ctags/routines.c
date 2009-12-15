@@ -1,5 +1,5 @@
 /*
-*   $Id: routines.c,v 1.22 2006/05/30 04:37:12 darren Exp $
+*   $Id: routines.c 536 2007-06-02 06:09:00Z elliotth $
 *
 *   Copyright (c) 2002-2003, Darren Hiebert
 *
@@ -13,28 +13,71 @@
 *   INCLUDE FILES
 */
 #include "general.h"  /* must always come first */
-# include <sys/types.h>
+
+#ifdef HAVE_STDLIB_H
 # include <stdlib.h>  /* to declare malloc (), realloc () */
+#endif
 #include <ctype.h>
 #include <string.h>
 #include <stdarg.h>
+#include <errno.h>
 #include <stdio.h>  /* to declare tempnam(), and SEEK_SET (hopefully) */
-#include <sys/stat.h>
 
-#include "routines.h"
+#ifdef HAVE_FCNTL_H
+# include <fcntl.h>  /* to declar O_RDWR, O_CREAT, O_EXCL */
+#endif
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>  /* to declare mkstemp () */
+#endif
+
+/*  To declare "struct stat" and stat ().
+ */
+#if defined (HAVE_SYS_TYPES_H)
+# include <sys/types.h>
+#else
+# if defined (HAVE_TYPES_H)
+#  include <types.h>
+# endif
+#endif
+#ifdef HAVE_SYS_STAT_H
+# include <sys/stat.h>
+#else
+# ifdef HAVE_STAT_H
+#  include <stat.h>
+# endif
+#endif
+
+#ifdef HAVE_DOS_H
+# include <dos.h>  /* to declare MAXPATH */
+#endif
+#ifdef HAVE_DIRECT_H
+# include <direct.h>  /* to _getcwd */
+#endif
+#ifdef HAVE_DIR_H
+# include <dir.h>  /* to declare findfirst() and findnext() */
+#endif
+#ifdef HAVE_IO_H
+# include <io.h>  /* to declare open() */
+#endif
 #include "debug.h"
-#include "keyword.h"
-#include "options.h"
-#include "read.h"
-
+#include "routines.h"
 
 /*
 *   MACROS
 */
+#ifndef TMPDIR
+# define TMPDIR "/tmp"
+#endif
 
 /*  File type tests.
  */
-#  define S_ISREG(mode)		TRUE  /* assume regular file */ //FIXME
+#ifndef S_ISREG
+# if defined (S_IFREG) && ! defined (AMIGA)
+#  define S_ISREG(mode)		((mode) & S_IFREG)
+# else
+#  define S_ISREG(mode)		TRUE  /* assume regular file */
+# endif
+#endif
 
 #ifndef S_ISLNK
 # ifdef S_IFLNK
@@ -77,6 +120,24 @@
 # define S_ISUID 0
 #endif
 
+/*  Hack for rediculous practice of Microsoft Visual C++.
+ */
+#if defined (WIN32)
+# if defined (_MSC_VER)
+#  define stat    _stat
+#  define getcwd  _getcwd
+#  define currentdrive() (_getdrive() + 'A' - 1)
+#  define PATH_MAX  _MAX_PATH
+# elif defined (__BORLANDC__)
+#  define PATH_MAX  MAXPATH
+#  define currentdrive() (getdisk() + 'A')
+# elif defined (DJGPP)
+#  define currentdrive() (getdisk() + 'A')
+# else
+#  define currentdrive() 'C'
+# endif
+#endif
+
 #ifndef PATH_MAX
 # define PATH_MAX 256
 #endif
@@ -89,23 +150,63 @@
 /*
 *   DATA DEFINITIONS
 */
-#if defined (WIN32)
+#if defined (MSDOS_STYLE_PATH)
 const char *const PathDelimiters = ":/\\";
+#elif defined (VMS)
+const char *const PathDelimiters = ":]>";
 #endif
 
 char *CurrentDirectory;
 
+static const char *ExecutableProgram;
+static const char *ExecutableName;
+
 /*
 *   FUNCTION PROTOTYPES
 */
-#if defined WIN32
+#ifdef NEED_PROTO_STAT
+extern int stat (const char *, struct stat *);
+#endif
+#ifdef NEED_PROTO_LSTAT
+extern int lstat (const char *, struct stat *);
+#endif
+#if defined (MSDOS) || defined (WIN32) || defined (VMS) || defined (__EMX__) || defined (AMIGA)
 # define lstat(fn,buf) stat(fn,buf)
 #endif
-
 
 /*
 *   FUNCTION DEFINITIONS
 */
+
+extern void freeRoutineResources (void)
+{
+	if (CurrentDirectory != NULL)
+		eFree (CurrentDirectory);
+}
+
+extern void setExecutableName (const char *const path)
+{
+	ExecutableProgram = path;
+	ExecutableName = baseFilename (path);
+#ifdef VAXC
+{
+	/* remove filetype from executable name */
+	char *p = strrchr (ExecutableName, '.');
+	if (p != NULL)
+		*p = '\0';
+}
+#endif
+}
+
+extern const char *getExecutableName (void)
+{
+	return ExecutableName;
+}
+
+extern const char *getExecutablePath (void)
+{
+	return ExecutableProgram;
+}
 
 extern void error (
 		const errorSelection selection, const char *const format, ...)
@@ -113,11 +214,15 @@ extern void error (
 	va_list ap;
 
 	va_start (ap, format);
-	fprintf (errout, "%s: %s", "ctags lib",
+	fprintf (errout, "%s: %s", getExecutableName (),
 			selected (selection, WARNING) ? "Warning: " : "");
 	vfprintf (errout, format, ap);
 	if (selected (selection, PERROR))
+#ifdef HAVE_STRERROR
 		fprintf (errout, " : %s", strerror (errno));
+#else
+		perror (" ");
+#endif
 	fputs ("\n", errout);
 	va_end (ap);
 	if (selected (selection, FATAL))
@@ -199,6 +304,19 @@ extern int strnuppercmp (const char *s1, const char *s2, size_t n)
 	return result;
 }
 
+#ifndef HAVE_STRSTR
+extern char* strstr (const char *str, const char *substr)
+{
+	const size_t length = strlen (substr);
+	const char *match = NULL;
+	const char *p;
+
+	for (p = str  ;  *p != '\0'  &&  match == NULL  ;  ++p)
+		if (strncmp (p, substr, length) == 0)
+			match = p;
+	return (char*) match;
+}
+#endif
 
 extern char* eStrdup (const char* str)
 {
@@ -252,6 +370,50 @@ extern char* newUpperString (const char* str)
 /*
  * File system functions
  */
+
+extern void setCurrentDirectory (void)
+{
+#ifndef AMIGA
+	char* buf;
+#endif
+	if (CurrentDirectory == NULL)
+		CurrentDirectory = xMalloc ((size_t) (PATH_MAX + 1), char);
+#ifdef AMIGA
+	strcpy (CurrentDirectory, ".");
+#else
+	buf = getcwd (CurrentDirectory, PATH_MAX);
+	if (buf == NULL)
+		perror ("");
+#endif
+	if (CurrentDirectory [strlen (CurrentDirectory) - (size_t) 1] !=
+			PATH_SEPARATOR)
+	{
+		sprintf (CurrentDirectory + strlen (CurrentDirectory), "%c",
+				OUTPUT_PATH_SEPARATOR);
+	}
+}
+
+#ifdef AMIGA
+static boolean isAmigaDirectory (const char *const name)
+{
+	boolean result = FALSE;
+	struct FileInfoBlock *const fib = xMalloc (1, struct FileInfoBlock);
+	if (fib != NULL)
+	{
+		const BPTR flock = Lock ((UBYTE *) name, (long) ACCESS_READ);
+
+		if (flock != (BPTR) NULL)
+		{
+			if (Examine (flock, fib))
+				result = ((fib->fib_DirEntryType >= 0) ? TRUE : FALSE);
+			UnLock (flock);
+		}
+		eFree (fib);
+	}
+	return result;
+}
+#endif
+
 /* For caching of stat() calls */
 extern fileStatus *eStat (const char *const fileName)
 {
@@ -271,7 +433,11 @@ extern fileStatus *eStat (const char *const fileName)
 			else
 			{
 				file.exists = TRUE;
+#ifdef AMIGA
+				file.isDirectory = isAmigaDirectory (file.name);
+#else
 				file.isDirectory = (boolean) S_ISDIR (status.st_mode);
+#endif
 				file.isNormalFile = (boolean) (S_ISREG (status.st_mode));
 				file.isExecutable = (boolean) ((status.st_mode &
 					(S_IXUSR | S_IXGRP | S_IXOTH)) != 0);
@@ -290,7 +456,7 @@ extern void eStatFree (fileStatus *status)
 		eFree (status->name);
 		status->name = NULL;
 	}
-} 
+}
 
 extern boolean doesFileExist (const char *const fileName)
 {
@@ -298,6 +464,50 @@ extern boolean doesFileExist (const char *const fileName)
 	return status->exists;
 }
 
+extern boolean isRecursiveLink (const char* const dirName)
+{
+	boolean result = FALSE;
+	fileStatus *status = eStat (dirName);
+	if (status->isSymbolicLink)
+	{
+		char* const path = absoluteFilename (dirName);
+		while (path [strlen (path) - 1] == PATH_SEPARATOR)
+			path [strlen (path) - 1] = '\0';
+		while (! result  &&  strlen (path) > (size_t) 1)
+		{
+			char *const separator = strrchr (path, PATH_SEPARATOR);
+			if (separator == NULL)
+				break;
+			else if (separator == path)  /* backed up to root directory */
+				*(separator + 1) = '\0';
+			else
+				*separator = '\0';
+			result = isSameFile (path, dirName);
+		}
+		eFree (path);
+	}
+	return result;
+}
+
+#ifndef HAVE_FGETPOS
+
+extern int fgetpos (FILE *stream, fpos_t *pos)
+{
+	int result = 0;
+
+	*pos = ftell (stream);
+	if (*pos == -1L)
+		result = -1;
+
+	return result;
+}
+
+extern int fsetpos (FILE *stream, fpos_t const *pos)
+{
+	return fseek (stream, *pos, SEEK_SET);
+}
+
+#endif
 
 /*
  *  Pathname manipulation (O/S dependent!!!)
@@ -306,7 +516,7 @@ extern boolean doesFileExist (const char *const fileName)
 static boolean isPathSeparator (const int c)
 {
 	boolean result;
-#if defined (WIN32)
+#if defined (MSDOS_STYLE_PATH) || defined (VMS)
 	result = (boolean) (strchr (PathDelimiters, c) != NULL);
 #else
 	result = (boolean) (c == PATH_SEPARATOR);
@@ -314,9 +524,49 @@ static boolean isPathSeparator (const int c)
 	return result;
 }
 
+#if ! defined (HAVE_STAT_ST_INO)
+
+static void canonicalizePath (char *const path __unused__)
+{
+#if defined (MSDOS_STYLE_PATH)
+	char *p;
+	for (p = path  ;  *p != '\0'  ;  ++p)
+		if (isPathSeparator (*p)  &&  *p != ':')
+			*p = PATH_SEPARATOR;
+#endif
+}
+
+#endif
+
+extern boolean isSameFile (const char *const name1, const char *const name2)
+{
+	boolean result = FALSE;
+#if defined (HAVE_STAT_ST_INO)
+	struct stat stat1, stat2;
+
+	if (stat (name1, &stat1) == 0  &&  stat (name2, &stat2) == 0)
+		result = (boolean) (stat1.st_ino == stat2.st_ino);
+#else
+	{
+		char *const n1 = absoluteFilename (name1);
+		char *const n2 = absoluteFilename (name2);
+		canonicalizePath (n1);
+		canonicalizePath (n2);
+# if defined (CASE_INSENSITIVE_FILENAMES)
+		result = (boolean) (strcasecmp (n1, n2) == 0);
+#else
+		result = (boolean) (strcmp (n1, n2) == 0);
+#endif
+		free (n1);
+		free (n2);
+	}
+#endif
+	return result;
+}
+
 extern const char *baseFilename (const char *const filePath)
 {
-#if defined (WIN32)
+#if defined (MSDOS_STYLE_PATH) || defined (VMS)
 	const char *tail = NULL;
 	unsigned int i;
 
@@ -336,6 +586,15 @@ extern const char *baseFilename (const char *const filePath)
 		tail = filePath;
 	else
 		++tail;  /* step past last delimiter */
+#ifdef VAXC
+	{
+		/* remove version number from filename */
+		char *p = strrchr ((char *) tail, ';');
+		if (p != NULL)
+			*p = '\0';
+	}
+#endif
+
 	return tail;
 }
 
@@ -344,6 +603,9 @@ extern const char *fileExtension (const char *const fileName)
 	const char *extension;
 	const char *pDelimiter = NULL;
 	const char *const base = baseFilename (fileName);
+#ifdef QDOS
+	pDelimiter = strrchr (base, '_');
+#endif
 	if (pDelimiter == NULL)
 	    pDelimiter = strrchr (base, '.');
 
@@ -358,7 +620,7 @@ extern const char *fileExtension (const char *const fileName)
 extern boolean isAbsolutePath (const char *const path)
 {
 	boolean result = FALSE;
-#if defined (WIN32)
+#if defined (MSDOS_STYLE_PATH)
 	if (isPathSeparator (path [0]))
 		result = TRUE;
 	else if (isalpha (path [0])  &&  path [1] == ':')
@@ -373,6 +635,8 @@ extern boolean isAbsolutePath (const char *const path)
 				"%s: relative file names with drive letters not supported",
 				path);
 	}
+#elif defined (VMS)
+	result = (boolean) (strchr (path, ':') != NULL);
 #else
 	result = isPathSeparator (path [0]);
 #endif
@@ -383,6 +647,35 @@ extern vString *combinePathAndFile (
 	const char *const path, const char *const file)
 {
 	vString *const filePath = vStringNew ();
+#ifdef VMS
+	const char *const directoryId = strstr (file, ".DIR;1");
+
+	if (directoryId == NULL)
+	{
+		const char *const versionId = strchr (file, ';');
+
+		vStringCopyS (filePath, path);
+		if (versionId == NULL)
+			vStringCatS (filePath, file);
+		else
+			vStringNCatS (filePath, file, versionId - file);
+		vStringCopyToLower (filePath, filePath);
+	}
+	else
+	{
+		/*  File really is a directory; append it to the path.
+		 *  Gotcha: doesn't work with logical names.
+		 */
+		vStringNCopyS (filePath, path, strlen (path) - 1);
+		vStringPut (filePath, '.');
+		vStringNCatS (filePath, file, directoryId - file);
+		if (strchr (path, '[') != NULL)
+			vStringPut (filePath, ']');
+		else
+			vStringPut (filePath, '>');
+		vStringTerminate (filePath);
+	}
+#else
 	const int lastChar = path [strlen (path) - 1];
 	boolean terminated = isPathSeparator (lastChar);
 
@@ -393,6 +686,7 @@ extern vString *combinePathAndFile (
 		vStringTerminate (filePath);
 	}
 	vStringCatS (filePath, file);
+#endif
 
 	return filePath;
 }
@@ -424,7 +718,7 @@ extern char* absoluteFilename (const char *file)
 	char *res = NULL;
 	if (isAbsolutePath (file))
 	{
-#ifdef WIN32
+#ifdef MSDOS_STYLE_PATH
 		if (file [1] == ':')
 			res = eStrdup (file);
 		else
@@ -455,7 +749,7 @@ extern char* absoluteFilename (const char *file)
 				while (cp >= res  &&  ! isAbsolutePath (cp));
 				if (cp < res)
 					cp = slashp;/* the absolute name begins with "/.." */
-#ifdef WIN32
+#ifdef MSDOS_STYLE_PATH
 				/* Under MSDOS and NT we get `d:/NAME' as absolute file name,
 				 * so the luser could say `d:/../NAME'. We silently treat this
 				 * as `d:/NAME'.
@@ -480,7 +774,7 @@ extern char* absoluteFilename (const char *file)
 		return eStrdup ("/");
 	else
 	{
-#ifdef WIN32
+#ifdef MSDOS_STYLE_PATH
 		/* Canonicalize drive letter case. */
 		if (res [1] == ':'  &&  islower (res [0]))
 			res [0] = toupper (res [0]);
@@ -552,6 +846,46 @@ extern char* relativeFilename (const char *file, const char *dir)
 	free (absdir);
 
 	return res;
+}
+
+extern FILE *tempFile (const char *const mode, char **const pName)
+{
+	char *name;
+	FILE *fp;
+	int fd;
+#if defined(HAVE_MKSTEMP)
+	const char *const pattern = "tags.XXXXXX";
+	const char *tmpdir = NULL;
+	fileStatus *file = eStat (ExecutableProgram);
+	if (! file->isSetuid)
+		tmpdir = getenv ("TMPDIR");
+	if (tmpdir == NULL)
+		tmpdir = TMPDIR;
+	name = xMalloc (strlen (tmpdir) + 1 + strlen (pattern) + 1, char);
+	sprintf (name, "%s%c%s", tmpdir, OUTPUT_PATH_SEPARATOR, pattern);
+	fd = mkstemp (name);
+	eStatFree (file);
+#elif defined(HAVE_TEMPNAM)
+	name = tempnam (TMPDIR, "tags");
+	if (name == NULL)
+		error (FATAL | PERROR, "cannot allocate temporary file name");
+	fd = open (name, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
+#else
+	name = xMalloc (L_tmpnam, char);
+	if (tmpnam (name) != name)
+		error (FATAL | PERROR, "cannot assign temporary file name");
+	fd = open (name, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
+#endif
+	if (fd == -1)
+		error (FATAL | PERROR, "cannot open temporary file");
+	fp = fdopen (fd, mode);
+	if (fp == NULL)
+		error (FATAL | PERROR, "cannot open temporary file");
+	DebugStatement (
+		debugPrintf (DEBUG_STATUS, "opened temporary file %s\n", name); )
+	Assert (*pName == NULL);
+	*pName = name;
+	return fp;
 }
 
 /* vi:set tabstop=4 shiftwidth=4: */

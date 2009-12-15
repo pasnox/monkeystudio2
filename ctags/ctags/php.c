@@ -54,8 +54,13 @@ static kindOption PhpKinds [] = {
  * end of an identifier, and we need something like iconv to take into
  * account the user's locale (or an override on the command-line.)
  */
+#ifdef __CYGWIN__
 #define ALPHA "[:alpha:]"
 #define ALNUM "[:alnum:]"
+#else
+#define ALPHA "A-Za-z\x7f-\xff"
+#define ALNUM "0-9A-Za-z\x7f-\xff"
+#endif
 
 static void installPHPRegex (const langType language)
 {

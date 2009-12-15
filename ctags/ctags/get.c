@@ -1,5 +1,5 @@
 /*
-*   $Id: get.c,v 1.9 2006/05/30 04:37:12 darren Exp $
+*   $Id: get.c 559 2007-06-17 03:30:09Z elliotth $
 *
 *   Copyright (c) 1996-2002, Darren Hiebert
 *
@@ -72,10 +72,6 @@ typedef struct sCppState {
 		conditionalInfo ifdef [MaxCppNestingLevel];
 	} directive;
 } cppState;
-
-/*
-*   DATA DEFINITIONS
-*/
 
 /*
 *   DATA DEFINITIONS
@@ -484,13 +480,13 @@ static int skipOverCplusComment (void)
 /*  Skips to the end of a string, returning a special character to
  *  symbolically represent a generic string.
  */
-static int skipToEndOfString (void)
+static int skipToEndOfString (boolean ignoreBackslash)
 {
 	int c;
 
 	while ((c = fileGetc ()) != EOF)
 	{
-		if (c == BACKSLASH)
+		if (c == BACKSLASH && ! ignoreBackslash)
 			fileGetc ();  /* throw away next character, too */
 		else if (c == DOUBLE_QUOTE)
 			break;
@@ -571,7 +567,7 @@ process:
 
 			case DOUBLE_QUOTE:
 				Cpp.directive.accept = FALSE;
-				c = skipToEndOfString ();
+				c = skipToEndOfString (FALSE);
 				break;
 
 			case '#':
@@ -646,6 +642,16 @@ process:
 			} break;
 
 			default:
+				if (c == '@' && Cpp.hasAtLiteralStrings)
+				{
+					int next = fileGetc ();
+					if (next == DOUBLE_QUOTE)
+					{
+						Cpp.directive.accept = FALSE;
+						c = skipToEndOfString (TRUE);
+						break;
+					}
+				}
 				Cpp.directive.accept = FALSE;
 				if (directive)
 					ignore = handleDirective (c);

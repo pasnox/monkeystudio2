@@ -2,6 +2,7 @@
 #define  _READ_H
 
 #include <stdio.h>
+#include <ctype.h>
 #include "vstring.h"
 #include "parse.h"
 
