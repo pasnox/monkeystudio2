@@ -93,13 +93,10 @@
 typedef enum { FALSE, TRUE } booleanType;
 typedef int boolean;
 #else
-# ifdef __cplusplus
-typedef bool boolean;
-#define FALSE false
-#define TRUE true
-# else
-typedef enum { FALSE, TRUE } boolean;
-# endif
+# include <stdbool.h>
+  typedef bool boolean;
+# define FALSE false
+# define TRUE true
 #endif
 
 #if ! defined (HAVE_FGETPOS) && ! defined (fpos_t)

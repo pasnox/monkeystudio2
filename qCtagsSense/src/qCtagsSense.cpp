@@ -34,26 +34,6 @@ qCtagsSense::qCtagsSense( QObject* parent )
 	qRegisterMetaType<qCtagsSenseEntry>( "qCtagsSenseEntry" );
 	qRegisterMetaType<qCtagsSenseEntry*>( "qCtagsSenseEntry*" );
 	
-	Option.include.fileNames = 1;
-	Option.include.qualifiedTags = 0;
-	Option.include.fileScope = 1;
-	
-	Option.extensionFields.access = 1;
-	Option.extensionFields.fileScope = 1;
-	Option.extensionFields.implementation = 1;
-	Option.extensionFields.inheritance = 1;
-	Option.extensionFields.kind = 1;
-	Option.extensionFields.kindKey = 1;
-	Option.extensionFields.kindLong = 1;
-	Option.extensionFields.language = 1;
-	Option.extensionFields.lineNumber = 1;
-	Option.extensionFields.scope = 1;
-	Option.extensionFields.signature = 1;
-	Option.extensionFields.typeRef = 1;
-	
-	Option.if0 = 1;
-	Option.kindLong = 1;
-	
 	//setLanguageKinds( "C++", "cdefglmnpstuvx" );
 	
 	mInitialized = false;

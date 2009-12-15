@@ -4,22 +4,22 @@
 
 optionValues Option = {
 	{
-		FALSE,  /* --extra=f */
+		TRUE,  /* --extra=f */
 		FALSE,  /* --extra=q */
 		TRUE,   /* --file-scope */
 	},
 	{
-		FALSE,  /* -fields=a */
+		TRUE,  /* -fields=a */
 		TRUE,   /* -fields=f */
-		FALSE,  /* -fields=m */
-		FALSE,  /* -fields=i */
+		TRUE,  /* -fields=m */
+		TRUE,  /* -fields=i */
 		TRUE,   /* -fields=k */
-		FALSE,  /* -fields=z */
-		FALSE,  /* -fields=K */
-		FALSE,  /* -fields=l */
-		FALSE,  /* -fields=n */
+		TRUE,  /* -fields=z */
+		TRUE,  /* -fields=K */
+		TRUE,  /* -fields=l */
+		TRUE,  /* -fields=n */
 		TRUE,   /* -fields=s */
-		FALSE,  /* -fields=S */
+		TRUE,  /* -fields=S */
 		TRUE    /* -fields=t */
 	},
 	NULL,       /* -I */
@@ -40,8 +40,8 @@ optionValues Option = {
 	NULL,       /* -h */
 	NULL,       /* --etags-include */
 	0,/* --format */
-	FALSE,      /* --if0 */
-	FALSE,      /* --kind-long */
+	TRUE,      /* --if0 */
+	TRUE,      /* --kind-long */
 	LANG_AUTO,  /* --lang */
 	TRUE,       /* --links */
 	FALSE,      /* --filter */
