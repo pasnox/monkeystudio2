@@ -25,10 +25,6 @@ CONFIG(debug, debug|release) {
 
 RESOURCES	= src/resources/qCtagsSense.qrc
 
-# For correctly include ctags headers
-unix:DEFINES *=HAVE_FGETPOS
-
-
 FORMS	= src/qCtagsSenseBrowser.ui
 
 HEADERS	= src/qCtagsSense.h \
