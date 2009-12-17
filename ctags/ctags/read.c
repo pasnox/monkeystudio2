@@ -18,6 +18,7 @@
 #include <string.h>
 #include <ctype.h>
 
+#define FILE_WRITE
 #include "read.h"
 #include "entry.h"
 #include "debug.h"
