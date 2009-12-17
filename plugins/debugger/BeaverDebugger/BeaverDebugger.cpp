@@ -216,7 +216,7 @@ void BeaverDebugger::explainWhyCannot()
 					try_again = true;
 				break;
 				case QMessageBox::Open:
-					dynamic_cast<QDialog*>(settingsWidget())->exec();
+					static_cast<QDialog*>(settingsWidget())->exec();
 					try_again = true;
 				break;
 				default:
