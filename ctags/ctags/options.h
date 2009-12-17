@@ -108,8 +108,6 @@ typedef struct sOptionValues {
 	boolean tagRelative;    /* --tag-relative file paths relative to tag file */
 	boolean printTotals;    /* --totals  print cumulative statistics */
 	boolean lineDirectives; /* --linedirectives  process #line directives */
-	boolean entryList;      /* This used in the library mode, for generate just 
-								list of the entryes, without file */
 #ifdef DEBUG
 	long debugLevel;        /* -D  debugging output */
 	unsigned long breakLine;/* -b  source line at which to call lineBreak() */
