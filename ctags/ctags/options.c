@@ -2,7 +2,7 @@
 #include "string.h"
 #include "routines.h"
 
-optionValues Option = {
+CONST_OPTION optionValues Option = {
 	{
 		TRUE,  /* --extra=f */
 		FALSE,  /* --extra=q */
