@@ -16,6 +16,8 @@
 */
 #include "general.h"  /* must always come first */
 
+#include "ctags.h"  /* to define langType */
+
 /*
 *   MACROS
 */
