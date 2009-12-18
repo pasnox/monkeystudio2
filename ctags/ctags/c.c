@@ -1055,31 +1055,6 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 		}
 		tag->extensionFields.typeRef [1] = p;
 	}
-	else if (type == TAG_VARIABLE || type == TAG_MEMBER)
-	{
-		/* Variable declaration. Not a union, struct, etc. 
-		 * Works for declarations like 'int i;' 'unsigned int i;', 
-		 * 'userstype var;', but not sure will work fine for all
-		 */
-		int i ;
-		int namePos; 
-		
-		/* find, where is name of variable */
-		namePos = NumTokens-1; /* last tocken */
-		while (namePos > 0 && st->token[namePos]->type != TOKEN_NAME)
-		{
-			namePos--;
-		}
-		/* Let's all, that are placed before name, will be a type */
-		for (i = 0; i < namePos; i++)
-		{
-			if (vStringLength (st->token[i]->name) > 0)
-			{
-				tag->extensionFields.typeRef [0] = vStringValue (st->token[i]->name);
-				break;
-			}
-		}
-	}
 }
 
 static void findScopeHierarchy (vString *const string,
