@@ -1,5 +1,5 @@
 /*
-*   $Id: read.c 616 2007-09-05 03:17:50Z dhiebert $
+*   $Id: read.c 708 2009-07-04 05:29:02Z dhiebert $
 *
 *   Copyright (c) 1996-2002, Darren Hiebert
 *
@@ -451,6 +451,16 @@ extern int fileGetc (void)
 	} while (c == '\0');
 	DebugStatement ( debugPutc (DEBUG_READ, c); )
 	return c;
+}
+
+extern int fileSkipToCharacter (int c)
+{
+	int d;
+	do
+	{
+		d = fileGetc ();
+	} while (d != EOF && d != c);
+	return d;
 }
 
 /*  An alternative interface to fileGetc (). Do not mix use of fileReadLine()

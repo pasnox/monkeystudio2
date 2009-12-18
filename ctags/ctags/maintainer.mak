@@ -1,6 +1,6 @@
-#	$Id: maintainer.mak 618 2007-09-05 03:59:11Z dhiebert $
+#	$Id: maintainer.mak 722 2009-07-09 16:10:35Z dhiebert $
 #
-#	Copyright (c) 1996-2007, Darren Hiebert
+#	Copyright (c) 1996-2009, Darren Hiebert
 #
 #	Development makefile for Exuberant Ctags. Also used to build releases.
 #	Requires GNU make.
@@ -16,7 +16,7 @@ VERSION_FILES:= ctags.h ctags.1 NEWS
 LIB_FILES    := readtags.c readtags.h
 
 ENVIRONMENT_MAKEFILES := \
-				mk_bc3.mak mk_bc5.mak mk_djg.mak mk_manx.mak mk_ming.mak \
+				mk_bc3.mak mk_bc5.mak mk_djg.mak mk_manx.mak mk_mingw.mak \
 				mk_mpw.mak mk_mvc.mak mk_os2.mak mk_qdos.mak mk_sas.mak \
 
 COMMON_FILES := COPYING EXTENDING.html FAQ INSTALL.oth MAINTAINERS NEWS README \
@@ -25,15 +25,22 @@ COMMON_FILES := COPYING EXTENDING.html FAQ INSTALL.oth MAINTAINERS NEWS README \
 				$(ENVIRONMENT_SOURCES) $(ENVIRONMENT_HEADERS)
 
 UNIX_FILES   := $(COMMON_FILES) \
-				.indent.pro INSTALL acconfig.h configure.in \
+				.indent.pro INSTALL configure.ac \
 				Makefile.in maintainer.mak \
 				descrip.mms mkinstalldirs magic.diff \
 				ctags.spec ctags.1
 
+REGEX_DIR    := gnu_regex
+
 WIN_FILES    := $(COMMON_FILES) $(VERSION_FILES)
-WIN_REGEX    := regex.c regex.h
  
 SVN_FILES    := $(UNIX_FILES)
+
+DEP_DIR := .deps
+
+OBJECTS      := $(patsubst %.c,%.o,$(notdir $(SOURCES)))
+DOBJECTS     := $(patsubst %.c,%.od,$(notdir $(DSOURCES)))
+DEPS         := $(patsubst %.c,$(DEP_DIR)/%.d,$(notdir $(SOURCES)))
 
 WARNINGS     := -Wall -W -Wpointer-arith -Wcast-align -Wwrite-strings \
 				-Wmissing-prototypes -Wmissing-declarations \
@@ -50,7 +57,6 @@ WINDOWS_DIR := win32
 RELEASE_DIR := releases
 CTAGS_WEBDIR := website
 win_version = $(subst .,,$(version))
-DEP_DIR := .deps
 HOST_ARCH := $(shell uname -p)
 
 ifneq ($(findstring $(HOST_ARCH),i386 i686),)
@@ -80,6 +86,7 @@ MAN2HTML := tbl | groff -Wall -mtty-char -mandoc -Thtml -c
 #
 # Targets
 #
+default: all
 ifeq ($(findstring clean,$(MAKECMDGOALS)),)
 ifeq ($(wildcard config.h),)
 ctags dctags ctags.prof ctags.cov:
@@ -88,16 +95,16 @@ ctags dctags ctags.prof ctags.cov:
 else
 all: dctags tags syntax.vim
 
--include $(DSOURCES:%.c=$(DEP_DIR)/%.d) $(DEP_DIR)/readtags.d
+-include $(DEPS) $(DEP_DIR)/readtags.d
 
 #
 # Executable targets
 #
-ctags: $(SOURCES:.c=.o)
+ctags: $(OBJECTS)
 	@ echo "-- Linking $@"
 	@ $(LD) -o $@ $(LDFLAGS) $^
 
-dctags: $(SOURCES:.c=.od) debug.od
+dctags: $(DOBJECTS) debug.od
 	@ echo "-- Building $@"
 	$(LD) -o $@ $(LDFLAGS) $^
 
@@ -129,11 +136,11 @@ endif
 #
 FORCE:
 
-config.h.in: acconfig.h configure.in
+config.h.in: configure.ac
 	autoheader
 	@ touch $@
 
-configure: configure.in
+configure: configure.ac
 	autoconf
 
 config.status: configure
@@ -144,7 +151,7 @@ config.h: config.h.in config.status
 	touch $@
 
 depclean:
-	rm -f $(DEP_DIR)/*.d
+	rm -f $(DEPS)
 
 profclean:
 	rm -f $(PROF_GEN)
@@ -188,16 +195,25 @@ syntax.vim: $(DSOURCES) $(HEADERS) $(LIB_FILES)
 -include testing.mak
 
 #
+# Help
+#
+help:
+	@ echo "Major targets:"
+	@ echo "default     : Build dctags, with debugging support"
+	@ echo "ctags       : Build optimized binary"
+	@ echo "help-release: Print help on releasing ctags"
+
+#
 # Release management
 #
 
-release-help:
+help-release:
 	@ echo "1. make release-svn-X.Y"
 	@ echo "2. make release-source-X.Y"
 	@ echo "3. move ctags-X.Y.tar.gz to Linux"
-	@ echo "4. On Linux: Extract tar and compile; make -f maintainer.mak release-rpm-X.Y"
+	@ echo "4. On Linux: Extract tar; make -f maintainer.mak release-rpm-X.Y"
 	@ echo "5. On Windows: cd $(WINDOWS_DIR)/winXY; nmake -f mk_mvc.mak ctags.exe mostlyclean"
-	@ echo "6. make version=X.Y win-bin"
+	@ echo "6. make version=X.Y win-zip"
 	@ echo "7. make website-X.Y"
 
 .SECONDARY:
@@ -249,13 +265,15 @@ $(RELEASE_DIR)/ctags-%.tar.gz: $(UNIX_FILES) | $(RELEASE_DIR)
 	@ echo "---------- Building tar ball"
 	if [ -d $(@D)/dirs/ctags-$* ]; then rm -fr $(@D)/dirs/ctags-$*; fi
 	mkdir -p $(@D)/dirs/ctags-$*
-	cp -p $(UNIX_FILES) $(@D)/dirs/ctags-$*/
+	cp -pr $(UNIX_FILES) $(REGEX_DIR) $(@D)/dirs/ctags-$*/
 	sed -e 's/\(PROGRAM_VERSION\) "\([^ ]*\)"/\1 "$*"/' ctags.h > $(@D)/dirs/ctags-$*/ctags.h
 	sed -e 's/"\(Version\) \([^ ]*\)"/"\1 $*"/' ctags.1 > $(@D)/dirs/ctags-$*/ctags.1
 	sed -e 's/\(Current Version:\) [^ ]*/\1 $*/' -e 's/@VERSION@/$*/' -e "s/@DATE@/`date +'%d %b %Y'`/" NEWS > $(@D)/dirs/ctags-$*/NEWS
 	(cd $(@D)/dirs/ctags-$* ;\
 		chmod 644 * ;\
 		chmod 755 mkinstalldirs ;\
+		chmod 755 $(REGEX_DIR) ;\
+		chmod 644 $(REGEX_DIR)/* ;\
 		autoheader ;\
 		chmod 644 config.h.in ;\
 		autoconf ;\
@@ -287,9 +305,13 @@ $(WINDOWS_DIR)/ctags$(win_version): \
 	for file in $(WIN_FILES) ctags.html; do \
 		$(UNIX2DOS) < "$(RELEASE_DIR)/dirs/ctags-$(version)/$${file}" > $@/$${file} ;\
 	done
-	for file in $(WIN_REGEX); do \
-		$(UNIX2DOS) < "gnu_regex/$${file}" > $@/$${file} ;\
+	mkdir $@/$(REGEX_DIR)
+	for file in $(REGEX_DIR)/*; do \
+		$(UNIX2DOS) < "$${file}" > $@/$(REGEX_DIR)/`basename $${file}` ;\
 	done
+	chmod 644 $@/*
+	chmod 755 $@/$(REGEX_DIR)
+	chmod 644 $@/$(REGEX_DIR)/*
 
 $(RELEASE_DIR)/ctags%.zip: \
 		check-version-% \
@@ -299,7 +321,7 @@ $(RELEASE_DIR)/ctags%.zip: \
 
 win-source: $(WINDOWS_DIR)/ctags$(win_version)
 
-win-bin: $(RELEASE_DIR)/ctags$(win_version).zip
+win-zip: $(RELEASE_DIR)/ctags$(win_version).zip
 
 release-win-%:
 	$(MAKE) version="$*" win-source
@@ -316,7 +338,7 @@ release-source-%: $(RELEASE_DIR)/ctags-%.tar.gz
 	$(MAKE) version="$*" win-source
 
 release-bin-%: release-rpm-%
-	$(MAKE) version="$*" win-bin
+	$(MAKE) version="$*" win-zip
 
 $(WINDOWS_DIR):
 	mkdir -p $@
@@ -384,7 +406,7 @@ svn-files:
 #
 # Dependency file generation
 #
-$(DEP_DIR)/%.d: %.c maintainer.mak
+$(DEPS): %.c maintainer.mak
 	@ if [ ! -d $(DEP_DIR) ] ;then mkdir -p $(DEP_DIR) ;fi
 	@ $(CC) -M $(DCFLAGS) $< | sed 's/\($*\.o\)\([ :]\)/\1 $*.od $(@F)\2/g' > $@
 
@@ -395,6 +417,10 @@ $(DEP_DIR)/%.d: %.c maintainer.mak
 #
 # Compilation rules
 #
+%.o %.od: gnu_regex/%.c
+#	@ echo "-- Compiling $<"
+	$(CC) $(CFLAGS) -D__USE_GNU -Dbool=int -Dfalse=0 -Dtrue=1 -I$(REGEX_DIR) $(OPT) -c $<
+
 %.o: %.c
 	@ echo "-- Compiling $<"
 	@ $(CC) $(COMP_FLAGS) -DEXTERNAL_SORT $(OPT) $(WARNINGS) -Wuninitialized -c $<

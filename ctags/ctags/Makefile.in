@@ -1,4 +1,4 @@
-# $Id: Makefile.in 359 2003-07-27 22:09:58Z darren $
+# $Id: Makefile.in 709 2009-07-04 05:29:28Z dhiebert $
 #
 # Makefile for UNIX-like platforms.
 #
@@ -17,6 +17,7 @@ SHELL = /bin/sh
 # runs.
 #
 exec_prefix = @exec_prefix@
+datarootdir = @datarootdir@
 prefix	= @prefix@
 bindir	= @bindir@
 srcdir	= @srcdir@

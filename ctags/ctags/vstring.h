@@ -1,5 +1,5 @@
 /*
-*   $Id: vstring.h 550 2007-06-07 05:50:32Z dhiebert $
+*   $Id: vstring.h 719 2009-07-07 03:46:59Z dhiebert $
 *
 *   Copyright (c) 1998-2002, Darren Hiebert
 *
@@ -35,6 +35,7 @@
 
 #define vStringValue(vs)      ((vs)->buffer)
 #define vStringItem(vs,i)     ((vs)->buffer[i])
+#define vStringLast(vs)       ((vs)->buffer[(vs)->length - 1])
 #define vStringLength(vs)     ((vs)->length)
 #define vStringSize(vs)       ((vs)->size)
 #define vStringCat(vs,s)      vStringCatS((vs), vStringValue((s)))

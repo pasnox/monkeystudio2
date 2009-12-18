@@ -1,5 +1,5 @@
 /*
-*   $Id: php.c 557 2007-06-15 17:20:04Z elliotth $
+*   $Id: php.c 624 2007-09-15 22:53:31Z jafl $
 *
 *   Copyright (c) 2000, Jesus Castagnetto <jmcastagnetto@zkey.com>
 *
@@ -72,8 +72,10 @@ static void installPHPRegex (const langType language)
 		"\\2", "d,define,constant definitions", NULL);
 	addTagRegex(language, "(^|[ \t])function[ \t]+&?[ \t]*([" ALPHA "_][" ALNUM "_]*)",
 		"\\2", "f,function,functions", NULL);
-	addTagRegex(language, "(^|[ \t])\\$([" ALPHA "_][" ALNUM "_]*)[ \t]*=",
-		"\\2", "v,variable,variables", NULL);
+	addTagRegex(language, "(^|[ \t])(\\$|::\\$|\\$this->)([" ALPHA "_][" ALNUM "_]*)[ \t]*=",
+		"\\3", "v,variable,variables", NULL);
+	addTagRegex(language, "(^|[ \t])(var|public|protected|private|static)[ \t]+\\$([" ALPHA "_][" ALNUM "_]*)[ \t]*[=;]",
+		"\\3", "v,variable,variables", NULL);
 
 	/* function regex is covered by PHP regex */
 	addTagRegex (language, "(^|[ \t])([A-Za-z0-9_]+)[ \t]*[=:][ \t]*function[ \t]*\\(",

@@ -1,5 +1,5 @@
 /*
-*   $Id: keyword.h 443 2006-05-30 04:37:13Z darren $
+*   $Id: keyword.h 658 2008-04-20 23:21:35Z elliotth $
 *
 *   Copyright (c) 1998-2002, Darren Hiebert
 *
@@ -27,6 +27,7 @@ extern void freeKeywordTable (void);
 #ifdef DEBUG
 extern void printKeywordTable (void);
 #endif
+extern int analyzeToken (vString *const name, langType language);
 
 #endif  /* _KEYWORD_H */
 
