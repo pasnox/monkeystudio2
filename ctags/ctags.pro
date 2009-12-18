@@ -82,21 +82,13 @@ SOURCES	= $${CTAGS_VERSION}/asm.c \
 	$${CTAGS_VERSION}/vim.c \
 	$${CTAGS_VERSION}/vstring.c \
 	$${CTAGS_VERSION}/yacc.c \
-	#	$${CTAGS_VERSION}/readtags.c \
-	#	$${CTAGS_VERSION}/sort.c \
-	#	$${CTAGS_VERSION}/args.c \
-	#	$${CTAGS_VERSION}/argproc.c \
-	#	$${CTAGS_VERSION}/mac.c \
-	#	$${CTAGS_VERSION}/qdos.c \
-	#	$${CTAGS_VERSION}/e_amiga.h \
-	#	$${CTAGS_VERSION}/e_djgpp.h \
-	#	$${CTAGS_VERSION}/e_mac.h \
-	#	$${CTAGS_VERSION}/e_msoft.h \
-	#	$${CTAGS_VERSION}/e_os2.h \
-	#	$${CTAGS_VERSION}/e_qdos.h \
-	#	$${CTAGS_VERSION}/e_riscos.h \
-	#	$${CTAGS_VERSION}/e_vms.h \
-	#	$${CTAGS_VERSION}/main.c \
+	$${CTAGS_VERSION}/tex.c \
+	$${CTAGS_VERSION}/flex.c \
+	$${CTAGS_VERSION}/vhdl.c \
+	$${CTAGS_VERSION}/matlab.c \
+	$${CTAGS_VERSION}/ant.c \
+	$${CTAGS_VERSION}/ocaml.c \
+	$${CTAGS_VERSION}/dosbatch.c \
 	$${CTAGS_VERSION}/exuberantCtags.c
 
 win32:SOURCES	*= $${CTAGS_VERSION}/regex.c
