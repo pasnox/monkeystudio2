@@ -40,8 +40,6 @@ HEADERS	=  \
 	$${CTAGS_VERSION}/ctags.h \
 	$${CTAGS_VERSION}/exuberantCtags.h
 
-win32:HEADERS	*= $${CTAGS_VERSION}/regex.h
-
 SOURCES	= $${CTAGS_VERSION}/asm.c \
 	$${CTAGS_VERSION}/asp.c \
 	$${CTAGS_VERSION}/awk.c \
