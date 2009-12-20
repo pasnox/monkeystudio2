@@ -5,12 +5,28 @@
 #include <QPushButton>
 #include <QDir>
 #include <QWhatsThis>
+#include <QFileSystemModel>
+#include <QDirModel>
+#include <QCompleter>
+#include <QMessageBox>
+#include <QDebug>
 
 UISettingsQMake::UISettingsQMake( QWidget* parent )
 	: QWidget( parent )
 {
 	// set up dialog
 	setupUi( this );
+	
+	// completer of paths
+#ifdef Q_CC_GNU
+	#warning *** USING QDirModel is deprecated but QCompleter does not handle QFileSystemModel... please fix me when possible.
+#endif
+	QCompleter* completer = new QCompleter( leQtVersionPath );
+	QDirModel* model = new QDirModel( completer );
+	
+	model->setFilter( QDir::AllDirs | QDir::NoDotAndDotDot | QDir::Hidden | QDir::Readable );
+	completer->setModel( model );
+	leQtVersionPath->setCompleter( completer );
 	
 	lwPages->setCurrentRow( 0 );
 	dbbButtons->button( QDialogButtonBox::Help )->setIcon( QIcon( ":/help/icons/help/keyword.png" ) );
@@ -321,20 +337,49 @@ void UISettingsQMake::on_dbbButtons_clicked( QAbstractButton* b )
 {
 	// only accept save button
 	if ( dbbButtons->standardButton( b )  != QDialogButtonBox::Save )
+	{
 		return;
+	}
+	
 	// save qt versions
 	QtVersionList versions;
+	
 	for ( int i = 0; i < lwQtVersions->count(); i++ )
-		versions << lwQtVersions->item( i )->data( Qt::UserRole ).value<QtVersion>();
+	{
+		QListWidgetItem* item = lwQtVersions->item( i );
+		
+		const QtVersion& version = item->data( Qt::UserRole ).value<QtVersion>();
+		
+		if ( !version.isValid() )
+		{
+			lwQtVersions->setCurrentItem( item );
+			QMessageBox::warning( this, tr( "Error..." ), tr( "A Qt Version is not valid and has been selected, please correct it and save again." ) );
+			lwQtVersions->setFocus();
+			return;
+		}
+		
+		versions << version;
+	}
+	
 	mQtManager.setVersions( versions );
+	
 	// save modules
 	QtItemList modules;
+	
 	for ( int i = 0; i < lwQtModules->count(); i++ )
+	{
 		modules << lwQtModules->item( i )->data( Qt::UserRole ).value<QtItem>();
+	}
+	
 	mQtManager.setModules( modules );
+	
 	// save configurations
 	QtItemList configurations;
+	
 	for ( int i = 0; i < lwQtConfigurations->count(); i++ )
+	{
 		configurations << lwQtConfigurations->item( i )->data( Qt::UserRole ).value<QtItem>();
+	}
+	
 	mQtManager.setConfigurations( configurations );
 }

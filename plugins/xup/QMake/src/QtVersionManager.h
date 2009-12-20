@@ -3,6 +3,8 @@
 
 #include <pSettings.h>
 
+#include <QFile>
+
 struct QtVersion
 {
 	QtVersion() { Default = false; HaveQt4Suffixe = false; }
@@ -10,7 +12,7 @@ struct QtVersion
 	{ Version = version; Path = path; Default = def; QMakeSpec = qmakeSpec; QMakeParameters = qmakeParams; HaveQt4Suffixe = haveSuffixe; }
 	
 	bool isValid() const
-	{ return !( Version.isEmpty() && Path.isEmpty() ); }
+	{ return !Version.isEmpty() && !Path.isEmpty() && QFile::exists( Path ); }
 	
 	QString qmake() const
 	{ return QString( "%1/bin/qmake%2" ).arg( Path ).arg( binarySuffixe() ); }
