@@ -402,10 +402,17 @@ void SearchAndReplace::replaceInDirectory()
 					out.setCodec( codec.toLocal8Bit() );
 					
 					// read all file to QStringList
-					eol = eolForContent (out.readAll());
+					const QString buffer = out.readAll();
+					const bool haveTrailingEol = buffer.endsWith( "\r\n" ) || buffer.endsWith( "\n" ) || buffer.endsWith( "\r" );
+					eol = eolForContent (buffer);
 					out.seek (0);
 					while ((! out.atEnd()) /*&& file.error() == QFile::NoError*/)
 						fileContents << out.readLine();
+					
+					if ( haveTrailingEol )
+					{
+						fileContents << QString::null;
+					}
 				}
 				// Now all file is in the QStringList
 				if (fileContents.size() <= occ.position.y()-1)
@@ -438,6 +445,8 @@ void SearchAndReplace::replaceInDirectory()
 				QMessageBox::critical (NULL, "Replace in directory", "Failed to write file: " + file.errorString());
 				break;
 			}
+			
+			qWarning() << fileContents;
 			
 			const QString contents = fileContents.join (eol);
 			const QByteArray datas = QTextCodec::codecForName (codec.toLocal8Bit())->fromUnicode (contents);
