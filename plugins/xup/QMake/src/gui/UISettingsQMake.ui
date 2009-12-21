@@ -56,6 +56,9 @@
    </item>
    <item row="1" column="1" rowspan="3">
     <widget class="QStackedWidget" name="swPages">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
      <widget class="QWidget" name="wQtVersions">
       <layout class="QGridLayout" name="gridLayout">
        <property name="margin">
@@ -152,6 +155,9 @@
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Expanding</enum>
+           </property>
            <property name="sizeHint" stdset="0">
             <size>
              <width>16</width>
@@ -162,7 +168,7 @@
          </item>
         </layout>
        </item>
-       <item row="1" column="0" rowspan="3">
+       <item row="1" column="0">
         <widget class="QListWidget" name="lwQtVersions">
          <property name="maximumSize">
           <size>
@@ -172,7 +178,7 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1" rowspan="3">
+       <item row="1" column="1">
         <widget class="QWidget" name="wQtVersion" native="true">
          <property name="enabled">
           <bool>false</bool>
@@ -306,48 +312,6 @@
            </spacer>
           </item>
          </layout>
-        </widget>
-       </item>
-       <item row="5" column="0" colspan="2">
-        <widget class="QPlainTextEdit" name="pteHelp">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>140</height>
-          </size>
-         </property>
-         <property name="tabChangesFocus">
-          <bool>true</bool>
-         </property>
-         <property name="undoRedoEnabled">
-          <bool>false</bool>
-         </property>
-         <property name="readOnly">
-          <bool>true</bool>
-         </property>
-         <property name="plainText">
-          <string>To add a new Qt version, simply click the &quot;Add a new Qt Version&quot; button at top and fill needed fields.
-The minimum required fields are:
-- Version: it define a human label across a Qt version.
-- Path: it define the path where is located your Qt installation (the path from where you can see bin/qmake)
-
-You can get more help about fields reading there tooltips.
-
-The green item is the default Qt Version used. if there is no green item, the default Qt Version used will be the first one available. You can explicitely set the default Qt Version selecting an item and clicking the set default button.</string>
-         </property>
-         <property name="tabStopWidth">
-          <number>40</number>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0" colspan="2">
-        <widget class="QLabel" name="lHelp">
-         <property name="text">
-          <string>&amp;Help :</string>
-         </property>
-         <property name="buddy">
-          <cstring>pteHelp</cstring>
-         </property>
         </widget>
        </item>
       </layout>
@@ -500,10 +464,7 @@ The green item is the default Qt Version used. if there is no green item, the de
           <item>
            <widget class="QLabel" name="lHelp_2">
             <property name="text">
-             <string>&amp;Help :</string>
-            </property>
-            <property name="buddy">
-             <cstring>pteHelp</cstring>
+             <string>&amp;Description :</string>
             </property>
            </widget>
           </item>
@@ -667,10 +628,7 @@ The green item is the default Qt Version used. if there is no green item, the de
           <item>
            <widget class="QLabel" name="lHelp_3">
             <property name="text">
-             <string>&amp;Help :</string>
-            </property>
-            <property name="buddy">
-             <cstring>pteHelp</cstring>
+             <string>&amp;Description :</string>
             </property>
            </widget>
           </item>
