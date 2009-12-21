@@ -50,6 +50,7 @@ UISettingsQMake::UISettingsQMake( QWidget* parent )
 	foreach ( QToolButton* tb, findChildren<QToolButton*>( QRegExp( "tbDown*" ) ) )
 		connect( tb, SIGNAL( clicked() ), this, SLOT( tbDown_clicked() ) );
 	connect( leQtVersionVersion, SIGNAL( editingFinished() ), this, SLOT( qtVersionChanged() ) );
+	connect( leQtVersionVersion, SIGNAL( textChanged( const QString& ) ), this, SLOT( qtVersionChanged() ) );
 	connect( leQtVersionPath, SIGNAL( editingFinished() ), this, SLOT( qtVersionChanged() ) );
 	connect( cbQtVersionQMakeSpec->lineEdit(), SIGNAL( editingFinished() ), this, SLOT( qtVersionChanged() ) );
 	connect( leQtVersionQMakeParameters, SIGNAL( editingFinished() ), this, SLOT( qtVersionChanged() ) );
