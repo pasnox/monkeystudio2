@@ -96,10 +96,10 @@ public:
 	void setCurrentInterpreter( InterpreterPlugin* );
 	InterpreterPlugin* currentInterpreter();
 	
-	inline PluginsMenu* menu() const { return mMenu; }
+	inline PluginsMenu* menuHandler() const { return mMenuHandler; }
 	
 protected:
-	PluginsMenu* mMenu;
+	PluginsMenu* mMenuHandler;
 	QList<BasePlugin*> mPlugins;
 	BuilderPlugin* mBuilder;
 	CompilerPlugin* mCompiler;

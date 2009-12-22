@@ -7,7 +7,7 @@
 
 class PluginsManager;
 
-class PluginsMenu : public QMenu
+class PluginsMenu : public QObject
 {
 	Q_OBJECT
 	
@@ -15,10 +15,14 @@ public:
 	PluginsMenu( PluginsManager* manager );
 	virtual ~PluginsMenu();
 	
+	QMenu* menu() const;
+	void setMenu( QMenu* menu );
+	
 	void addPlugin( BasePlugin* plugin );
 
 protected:
 	PluginsManager* mManager;
+	QMenu* mMenu;
 	QAction* mManageDialogAction;
 	QMap<BasePlugin::Type, QMenu*> mTypeMenus;
 	QMap<BasePlugin*, QMenu*> mMenus;

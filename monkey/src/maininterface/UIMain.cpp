@@ -274,7 +274,7 @@ void UIMain::initMenuBar()
 		mb->menu( "mDesktopTools", tr( "Desktop &Tools" ), QIcon( ":/tools/icons/tools/desktop.png" ) );
 		mb->action( "aSeparator2" );
 	mb->endGroup();
-	mb->menu( "mPlugins", tr( "Plugins" ) )->addAction( MonkeyCore::pluginsManager()->menu()->menuAction() );
+	mb->menu( "mPlugins", tr( "Plugins" ) );
 	mb->beginGroup( "mPlugins" );
 		mb->action( "aSeparator1" );
 	mb->endGroup();
@@ -301,6 +301,9 @@ void UIMain::initMenuBar()
 	agStyles = new pStylesActionGroup( tr( "Use %1 style" ), mb->menu( "mView/mStyle" ) );
 	agStyles->setCurrentStyle( MonkeyCore::settings()->value( "MainWindow/Style" ).toString() );
 	mb->menu( "mView/mStyle" )->addActions( agStyles->actions() );
+	
+	// create plugins actions
+	MonkeyCore::pluginsManager()->menuHandler()->setMenu( mb->menu( "mPlugins" ) );
 }
 
 void UIMain::initToolBar()
