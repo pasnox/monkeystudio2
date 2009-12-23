@@ -373,18 +373,23 @@ void QtVersionManager::synchronizeVersions()
 	{
 		const QtVersion& version = versions.at( i );
 		
-		items[ version.Version ] = version;
+		items[ version.Path ] = version;
 	}
 	
 	// add new ones if needed
 	foreach ( const QtVersion& newVersion, newVersions )
 	{
-		if ( items.contains( newVersion.Version ) )
+		if ( items.contains( newVersion.Path ) )
 		{
-			continue;
+			const QtVersion& v = items[ newVersion.Path ];
+			
+			if ( v.Version == newVersion.Version )
+			{
+				continue;
+			}
 		}
 		
-		items[ newVersion.Version ] = newVersion;
+		items[ newVersion.Path ] = newVersion;
 	}
 	
 	// update qt versions
