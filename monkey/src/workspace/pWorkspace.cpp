@@ -223,12 +223,6 @@ void pWorkspace::initMultiToolBar( QToolBar* tb )
 	}
 }
 
-void pWorkspace::addSearchReplaceWidget( QWidget* widget )
-{
-	mLayout->addWidget( widget );
-	widget->setVisible( false );
-}
-
 pOpenedFileExplorer* pWorkspace::dockWidget() const
 {
 	return mOpenedFileExplorer;

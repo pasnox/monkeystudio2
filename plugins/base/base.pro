@@ -6,7 +6,8 @@ SUBDIRS	= FileBrowser \
 	ClassBrowser \
 	ProjectHeaders \
 	RegExpEditor \
-	SearchAndReplace \
+#	SearchAndReplace \
 	MkSShell \
 	UpdateChecker \
-	FileWatcher
+	FileWatcher \
+	SearchAndReplaceV2/SearchAndReplaceV2.pro

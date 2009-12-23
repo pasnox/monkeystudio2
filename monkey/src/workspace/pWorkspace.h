@@ -64,7 +64,6 @@ public:
 	
 	void loadSettings();
 	void initMultiToolBar( QToolBar* tb );
-	void addSearchReplaceWidget( QWidget* widget );
 	pOpenedFileExplorer* dockWidget() const;
 	QFileSystemWatcher* fileWatcher() const;
 	
