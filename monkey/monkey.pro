@@ -197,7 +197,6 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/workspace/pOpenedFileModel.cpp \
 	src/pluginsmanager/BuilderPlugin.cpp \
 	src/pluginsmanager/CLIToolPlugin.cpp \
-	src/pluginsmanager/CompilerPlugin.cpp \
 	src/pluginsmanager/InterpreterPlugin.cpp
 
 mac:SOURCES	*= src/toolsmanager/pDesktopApplications_mac.cpp
