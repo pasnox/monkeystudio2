@@ -76,7 +76,7 @@ pCommandList PHP::defaultCommands() const
 
 QStringList PHP::availableParsers() const
 {
-	return QStringList( infos().Name );
+	return QStringList();
 }
 
 pCommand PHP::defaultInterpretCommand() const

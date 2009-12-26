@@ -34,7 +34,6 @@
 #include "BasePlugin.h"
 #include "ChildPlugin.h"
 #include "BuilderPlugin.h"
-#include "CompilerPlugin.h"
 #include "DebuggerPlugin.h"
 #include "InterpreterPlugin.h"
 
@@ -87,9 +86,6 @@ public:
 	void setCurrentBuilder( BuilderPlugin* );
 	BuilderPlugin* currentBuilder();
 	
-	void setCurrentCompiler( CompilerPlugin* );
-	CompilerPlugin* currentCompiler();
-	
 	void setCurrentDebugger( DebuggerPlugin* );
 	DebuggerPlugin* currentDebugger();
 	
@@ -102,7 +98,6 @@ protected:
 	PluginsMenu* mMenuHandler;
 	QList<BasePlugin*> mPlugins;
 	BuilderPlugin* mBuilder;
-	CompilerPlugin* mCompiler;
 	DebuggerPlugin* mDebugger;
 	InterpreterPlugin* mInterpreter;
 

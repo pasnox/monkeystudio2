@@ -27,15 +27,11 @@
 **
 ****************************************************************************/
 #include "GNUMake.h"
-#include "GNUMakeParser.h"
 
 #include <QTabWidget>
 
 GNUMake::GNUMake()
 {
-	// install parsers
-	foreach ( QString s, availableParsers() )
-		MonkeyCore::consoleManager()->addParser( getParser( s ) );
 }
 
 void GNUMake::fillPluginInfos()
@@ -80,10 +76,14 @@ pCommandList GNUMake::defaultCommands() const
 { return pCommandList(); }
 
 QStringList GNUMake::availableParsers() const
-{ return QStringList( infos().Name ); }
+{
+	QStringList list;
+	list << "GNU Make" << "GCC";
+	return list;
+}
 
 AbstractCommandParser* GNUMake::getParser( const QString& name )
-{ return name == infos().Name ? new GNUMakeParser(this) : 0; }
+{ return 0; } /* FIXME */
 
 pCommand GNUMake::defaultBuildCommand() const
 {
@@ -93,6 +93,36 @@ pCommand GNUMake::defaultBuildCommand() const
 	const QString mMake = "make";
 #endif
 	return pCommand( "Build", mMake, "-w", false, availableParsers(), "$cpp$", true );
+}
+
+pCommand GNUMake::buildCommand() const
+{
+	// get settings object
+	pSettings* s = MonkeyCore::settings();
+	pCommand c;
+	c.setText( s->value( settingsKey( "BuildCommand/Text" ) ).toString() );
+	c.setCommand( s->value( settingsKey( "BuildCommand/Command" ) ).toString() );
+	c.setArguments( s->value( settingsKey( "BuildCommand/Arguments" ) ).toString() );
+	c.setWorkingDirectory( s->value( settingsKey( "BuildCommand/WorkingDirectory" ) ).toString() );
+	c.setParsers( availableParsers() );
+	c.setTryAllParsers( s->value( settingsKey( "BuildCommand/TryAll" ), true ).toBool() );
+	c.setSkipOnError( s->value( settingsKey( "BuildCommand/SkipOnError" ), false ).toBool() );
+	// if no user commands get global ones
+	if ( !c.isValid() )
+		c = defaultBuildCommand();
+	return c;
+}
+
+void GNUMake::setBuildCommand( const pCommand& c )
+{
+	pSettings* s = MonkeyCore::settings();
+	s->setValue( settingsKey( "BuildCommand/Text" ), c.text() );
+	s->setValue( settingsKey( "BuildCommand/Command" ), c.command() );
+	s->setValue( settingsKey( "BuildCommand/Arguments" ), c.arguments() );
+	s->setValue( settingsKey( "BuildCommand/WorkingDirectory" ), c.workingDirectory() );
+	s->setValue( settingsKey( "BuildCommand/Parsers" ), c.parsers() );
+	s->setValue( settingsKey( "BuildCommand/TryAll" ), c.tryAllParsers() );
+	s->setValue( settingsKey( "BuildCommand/SkipOnError" ), c.skipOnError() );
 }
 
 Q_EXPORT_PLUGIN2( BuilderGNUMake, GNUMake )

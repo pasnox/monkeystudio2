@@ -169,7 +169,6 @@ void MessageBoxDocks::appendStep( const pConsoleManager::Step& s )
 	switch ( t )
 	{
 		case pConsoleManager::stCompiling:
-		case pConsoleManager::stLinking:
 			if ( s.mType == pConsoleManager::stWarning || s.mType == pConsoleManager::stError )
 			{   // move down
 				lastIt = mBuildStep->lwBuildSteps->takeItem( mBuildStep->lwBuildSteps->count() -1 );
@@ -232,10 +231,6 @@ void MessageBoxDocks::appendStep( const pConsoleManager::Step& s )
 		case pConsoleManager::stCompiling:
 			it->setIcon( QIcon( ":/icons/clock.png" ) );
 			it->setBackground( QColor( 0, 0, 255, 20 ) );
-			break;
-		case pConsoleManager::stLinking:
-			it->setIcon( QIcon( ":/icons/clock.png" ) );
-			it->setBackground( QColor( 0, 0, 125, 20 ) );
 			break;
 		case pConsoleManager::stGood:
 			it->setIcon( QIcon( ":/icons/warning.png" ) );
@@ -319,6 +314,7 @@ void MessageBoxDocks::lwBuildSteps_itemActivated( QListWidgetItem* it )
 {
 	// get filename
 	QString fn = it->data( Qt::UserRole +2 ).toString();
+	qDebug() << "fn " << fn;
 	
 	// cancel if no file
 	if ( fn.isEmpty() )

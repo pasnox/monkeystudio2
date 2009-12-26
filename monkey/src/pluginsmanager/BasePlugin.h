@@ -60,7 +60,6 @@ public:
 		iChild = 0x2,
 		iCLITool = 0x4,
 		iBuilder = 0x8,
-		iCompiler = 0x10,
 		iDebugger = 0x20,
 		iInterpreter = 0x40,
 		iXUP = 0x80,

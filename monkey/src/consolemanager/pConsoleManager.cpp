@@ -35,8 +35,10 @@
 
 #include <QTimer>
 #include <QDir>
+#include <QDebug>
 
 #include "pConsoleManager.h"
+#include "CommandParser.h"
 #include "AbstractCommandParser.h"
 
 #include <MonkeyCore.h>
@@ -86,6 +88,8 @@ pConsoleManager::pConsoleManager( QObject* o )
 	mTimerId = startTimer( 100 );
 	mStringBuffer.reserve (MAX_LINES *200);
 	mStopAttempt = 0;
+	
+	CommandParser::installParserCommand();
 }
 
 /*!
@@ -104,11 +108,15 @@ pConsoleManager::~pConsoleManager()
 */
 void pConsoleManager::addParser( AbstractCommandParser* p )
 {
-	if ( p && !mParsers.contains( p->name() ) )
+	Q_ASSERT(p);
+	if (mParsers.contains(p->name()))
 	{
-		mParsers[p->name()] = p;
-		connect( p, SIGNAL( newStepAvailable( const pConsoleManager::Step& ) ), this, SIGNAL( newStepAvailable( const pConsoleManager::Step& ) ) );
+		qDebug() << QString("Parser '%1' already had been added").arg(p->name());
+		return;
 	}
+	
+	mParsers[p->name()] = p;
+	connect( p, SIGNAL( newStepAvailable( const pConsoleManager::Step& ) ), this, SIGNAL( newStepAvailable( const pConsoleManager::Step& ) ) );
 }
 
 /*!
@@ -132,10 +140,12 @@ void pConsoleManager::removeParser( const QString& s )
 { removeParser( mParsers.value( s ) ); }
 
 /*!
-	Convert path separators to native for OS
-*/
-QString pConsoleManager::nativeSeparators( const QString& s )
-{ return QDir::toNativeSeparators( s ); }
+	Returns pointer to parser, or NULL if not found
+ */
+AbstractCommandParser* pConsoleManager::getParser(const QString& name)
+{
+	return mParsers.value(name);
+}
 
 /*!
 	Check, if string contains spaces, and, if it do - add quotes <"> to start and end of it
@@ -293,7 +303,7 @@ void pConsoleManager::readyRead()
 	// try parse output
 	if (! c.isValid() )
 		return;
-
+	
 	/*Alrorithm is not ideal, need fix, if will be problems with it
 		Some text, that next parser possible to parse, can be removed
 		And, possible, it's not idealy quick.   hlamer
@@ -494,7 +504,11 @@ void pConsoleManager::parseOutput (bool commandFinished)
 		{
 			AbstractCommandParser* p = mParsers.value( s );
 			if ( ! p )
+			{
+				qWarning() << "Invalid parser" << s;
 				continue; //for
+			}
+			
 			linesToRemove =  p->processParsing(&mStringBuffer);
 			if (linesToRemove)
 				break; //for

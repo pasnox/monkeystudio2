@@ -49,6 +49,16 @@ QString MkSShellInterpreter::interpretHelp( const QString& command, const QStrin
 	return tr( "'help' command accepts only one parameter. %1 given" ).arg( arguments.count() );
 }
 
+QString MkSShellInterpreter::interpretEcho( const QString& command, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter )
+{
+	Q_UNUSED( command );
+	*result = 0;
+	QString answer;
+	foreach (QString arg, arguments)
+		answer += QString("Argument: <%1>\n").arg(arg);
+	return answer;
+}
+
 MkSShellInterpreter* MkSShellInterpreter::instance( QObject* parent )
 {
 	if ( !mInstance )
@@ -63,6 +73,7 @@ MkSShellInterpreter::MkSShellInterpreter( QObject* parent )
 	: QObject( parent ), pConsoleCommand()
 {
 	addCommandImplementation( "help", interpretHelp, tr( "Type 'help' and name of command" ) );
+	addCommandImplementation( "echo", interpretEcho, tr( "Print back arguments" ) );
 }
 
 bool MkSShellInterpreter::loadScript( const QString& fileName )
@@ -85,8 +96,8 @@ bool MkSShellInterpreter::loadScript( const QString& fileName )
 		{
 			continue;
 		}
-		
-		interpret( command, 0 );
+		int status;
+		interpret( command, &status );
 	}
 	
 	file.close();

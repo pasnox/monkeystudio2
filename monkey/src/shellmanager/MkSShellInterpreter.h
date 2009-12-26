@@ -42,6 +42,7 @@ protected:
 	
 	MkSShellInterpreter( QObject* parent = 0 );
 	static QString interpretHelp( const QString&, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter );
+	static QString interpretEcho( const QString&, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter );
 	
 signals:
 	void commandExecuted( const QString& command, const QString& output, int result );
