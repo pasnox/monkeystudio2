@@ -22,7 +22,7 @@ QString MkSShellInterpreter::interpretHelp( const QString& command, const QStrin
 		
 		if ( result )
 		{
-			*result = 0;
+			*result = MkSShellInterpreter::NoError;
 		}
 		
 		return answer.join( "\n" );
@@ -34,7 +34,7 @@ QString MkSShellInterpreter::interpretHelp( const QString& command, const QStrin
 		
 		if ( result )
 		{
-			*result = interpreter->mCommandHelps.contains( cmd ) ? 0 : MkSShellInterpreter::InvalidCommand;
+			*result = interpreter->mCommandHelps.contains( cmd ) ? MkSShellInterpreter::NoError : MkSShellInterpreter::InvalidCommand;
 		}
 		
 		return usage;
@@ -52,11 +52,21 @@ QString MkSShellInterpreter::interpretHelp( const QString& command, const QStrin
 QString MkSShellInterpreter::interpretEcho( const QString& command, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter )
 {
 	Q_UNUSED( command );
-	*result = 0;
-	QString answer;
-	foreach (QString arg, arguments)
-		answer += QString("Argument: <%1>\n").arg(arg);
-	return answer;
+	Q_UNUSED( interpreter );
+	
+	if ( result )
+	{
+		*result = MkSShellInterpreter::NoError;
+	}
+	
+	QStringList answer;
+	
+	foreach ( const QString& arg, arguments )
+	{
+		answer << QString( "Argument: <%1>" ).arg( arg );
+	}
+	
+	return answer.join( "\n" );
 }
 
 MkSShellInterpreter* MkSShellInterpreter::instance( QObject* parent )
@@ -96,8 +106,8 @@ bool MkSShellInterpreter::loadScript( const QString& fileName )
 		{
 			continue;
 		}
-		int status;
-		interpret( command, &status );
+		
+		interpret( command, 0 );
 	}
 	
 	file.close();

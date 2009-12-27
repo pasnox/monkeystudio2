@@ -1,2 +1,2 @@
 TEMPLATE	= subdirs
-SUBDIRS	= QMake XUP
+SUBDIRS	= XUP QMake PHP-Qt PyQt

@@ -21,8 +21,10 @@ class Q_MONKEY_EXPORT MkSShellInterpreter : public QObject, public pConsoleComma
 public:
 	enum Error
 	{
+		NoError = 0,
 		InvalidCommand = -1,
-		NoResultVariable = -2
+		NoResultVariable = -2,
+		UnknowError = -3
 	};
 	
 	static MkSShellInterpreter* instance( QObject* parent = 0 );

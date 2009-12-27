@@ -51,13 +51,18 @@
 #endif
 
 //! Implementation for 'parser' MkS scripting interface command
-QString parserCommandImplementation(const QString& command, const QStringList& arguments, int* status, class MkSShellInterpreter*)
+QString CommandParser::parserCommandImplementation( const QString& command, const QStringList& arguments, int* status, class MkSShellInterpreter* interpreter )
 {
+	Q_UNUSED( interpreter );
 	CommandParser::Pattern pattern;
 	
 	if (9 != arguments.size())
 	{
-		*status = -1;
+		if ( status )
+		{
+			*status = MkSShellInterpreter::InvalidCommand;
+		}
+		
 		return QString("Command '%1' has 9 arguments").arg(command);
 	}
 	
@@ -82,7 +87,11 @@ QString parserCommandImplementation(const QString& command, const QStringList& a
 			pattern.Type = pConsoleManager::stBad;
 		else
 		{
-			*status = -1;
+			if ( status )
+			{
+				*status = MkSShellInterpreter::InvalidCommand;
+			}
+			
 			return QString("Invalid type '%1'").arg(arguments[6]);
 		}
 		
@@ -92,13 +101,17 @@ QString parserCommandImplementation(const QString& command, const QStringList& a
 		AbstractCommandParser* parser = MonkeyCore::consoleManager()->getParser(arguments[1]);
 		if (parser) // Already exists, add pattern
 		{
-			if (dynamic_cast<CommandParser*>(parser))
+			if (static_cast<CommandParser*>(parser))
 			{
-				dynamic_cast<CommandParser*>(parser)->addPattern(pattern);
+				static_cast<CommandParser*>(parser)->addPattern(pattern);
 			}
 			else
 			{
-				*status = -1;
+				if ( status )
+				{
+					*status = MkSShellInterpreter::InvalidCommand;
+				}
+				
 				return QString("Parser '%1' has invalid type").arg(arguments[1]);
 			}
 		}
@@ -111,21 +124,29 @@ QString parserCommandImplementation(const QString& command, const QStringList& a
 	}
 	else // Command is not "add"
 	{
-		*status = -1;
+		if ( status )
+		{
+			*status = MkSShellInterpreter::InvalidCommand;
+		}
+		
 		return QString("Invalid command %1").arg(arguments[0]);
 	}
 	
-	*status = 0;
+	if ( status )
+	{
+		*status = MkSShellInterpreter::NoError;
+	}
+	
 	return QString::null;
 }
 
 void CommandParser::installParserCommand()
 {
-	QString help = tr(	"This command allows to add and remove console output parsing patterns. Usage:\n"
+	QString help = tr( "This command allows to add and remove console output parsing patterns. Usage:\n"
 						"\tparser add <name> <regular expression> <file name> <column> <row> <pattern type> <pattern text> <full text>\n"
-						"\tparser remove <name> <regular expression>\n");
+						"\tparser remove <name> <regular expression>\n" );
 	
-	MkSShellInterpreter::instance()->addCommandImplementation( "parser", parserCommandImplementation, help);
+	MkSShellInterpreter::instance()->addCommandImplementation( "parser", parserCommandImplementation, help );
 }
 
 CommandParser::CommandParser(QObject* parent, const QString& name):
