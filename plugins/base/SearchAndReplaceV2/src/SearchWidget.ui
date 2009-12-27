@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>695</width>
-    <height>111</height>
+    <height>119</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -73,10 +73,10 @@
          <item>
           <widget class="QPushButton" name="pbPrevious">
            <property name="text">
-            <string>Previous</string>
+            <string>&amp;Previous</string>
            </property>
            <property name="icon">
-            <iconset resource="../../../../monkey/src/resources/resources.qrc">
+            <iconset>
              <normaloff>:/edit/icons/edit/previous.png</normaloff>:/edit/icons/edit/previous.png</iconset>
            </property>
           </widget>
@@ -84,10 +84,10 @@
          <item>
           <widget class="QPushButton" name="pbNext">
            <property name="text">
-            <string>Next</string>
+            <string>&amp;Next</string>
            </property>
            <property name="icon">
-            <iconset resource="../../../../monkey/src/resources/resources.qrc">
+            <iconset>
              <normaloff>:/edit/icons/edit/next.png</normaloff>:/edit/icons/edit/next.png</iconset>
            </property>
           </widget>
@@ -95,10 +95,10 @@
          <item>
           <widget class="QPushButton" name="pbSearch">
            <property name="text">
-            <string>Search</string>
+            <string>Searc&amp;h</string>
            </property>
            <property name="icon">
-            <iconset resource="../../../../monkey/src/resources/resources.qrc">
+            <iconset>
              <normaloff>:/edit/icons/edit/search.png</normaloff>:/edit/icons/edit/search.png</iconset>
            </property>
           </widget>
@@ -159,10 +159,10 @@
          <item>
           <widget class="QPushButton" name="pbReplace">
            <property name="text">
-            <string>Replace</string>
+            <string>Rep&amp;lace</string>
            </property>
            <property name="icon">
-            <iconset resource="../../../../monkey/src/resources/resources.qrc">
+            <iconset>
              <normaloff>:/edit/icons/edit/replace.png</normaloff>:/edit/icons/edit/replace.png</iconset>
            </property>
           </widget>
@@ -170,17 +170,17 @@
          <item>
           <widget class="QPushButton" name="pbReplaceAll">
            <property name="text">
-            <string>Replace All</string>
+            <string>Replace &amp;All</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="pbReplaceChecked">
            <property name="text">
-            <string>Replace Checked</string>
+            <string>Replace Chec&amp;ked</string>
            </property>
            <property name="icon">
-            <iconset resource="../../../../monkey/src/resources/resources.qrc">
+            <iconset>
              <normaloff>:/edit/icons/edit/replace.png</normaloff>:/edit/icons/edit/replace.png</iconset>
            </property>
           </widget>
@@ -240,8 +240,11 @@
          </property>
          <item>
           <widget class="QPushButton" name="pbBrowse">
+           <property name="text">
+            <string>&amp;Browse</string>
+           </property>
            <property name="icon">
-            <iconset resource="../../../../monkey/src/resources/resources.qrc">
+            <iconset>
              <normaloff>:/listeditor/icons/listeditor/folder.png</normaloff>:/listeditor/icons/listeditor/folder.png</iconset>
            </property>
           </widget>
@@ -271,10 +274,10 @@
       <item>
        <widget class="QPushButton" name="pbMode">
         <property name="text">
-         <string>Mode</string>
+         <string>Mo&amp;de</string>
         </property>
         <property name="icon">
-         <iconset resource="../../../../monkey/src/resources/resources.qrc">
+         <iconset>
           <normaloff>:/build/icons/build/misc.png</normaloff>:/build/icons/build/misc.png</iconset>
         </property>
        </widget>
@@ -374,10 +377,10 @@ You can use language name too so the search will only apply to the language suff
       <item>
        <widget class="QPushButton" name="pbOptions">
         <property name="text">
-         <string>Options</string>
+         <string>&amp;Options</string>
         </property>
         <property name="icon">
-         <iconset resource="../../../../monkey/src/resources/resources.qrc">
+         <iconset>
           <normaloff>:/edit/icons/edit/settings.png</normaloff>:/edit/icons/edit/settings.png</iconset>
         </property>
        </widget>

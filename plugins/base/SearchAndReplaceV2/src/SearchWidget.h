@@ -44,6 +44,8 @@ protected:
 	QMap<SearchAndReplaceV2::Option, QAction*> mOptionActions;
 	SearchWidget::Properties mProperties;
 	
+	virtual void keyPressEvent( QKeyEvent* event );
+	
 	void updateLabels();
 	void updateWidgets();
 	void initializeProperties();

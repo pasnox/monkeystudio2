@@ -17,14 +17,14 @@ SearchWidget::SearchWidget( QWidget* parent )
 	QMenu* menuMode = new QMenu( pbMode );
 	QActionGroup* groupMode = new QActionGroup( menuMode );
 	
-	mModeActions[ SearchAndReplaceV2::ModeSearch ] = menuMode->addAction( tr( "Search in File" ) );
-	mModeActions[ SearchAndReplaceV2::ModeReplace ] = menuMode->addAction( tr( "Replace in File" ) );
-	mModeActions[ SearchAndReplaceV2::ModeSearchDirectory ] = menuMode->addAction( tr( "Search in Directory" ) );
-	mModeActions[ SearchAndReplaceV2::ModeReplaceDirectory ] = menuMode->addAction( tr( "Replace in Directory" ) );
-	mModeActions[ SearchAndReplaceV2::ModeSearchProject ] = menuMode->addAction( tr( "Search in Project" ) );
-	mModeActions[ SearchAndReplaceV2::ModeReplaceProject ] = menuMode->addAction( tr( "Replace in Project" ) );
-	mModeActions[ SearchAndReplaceV2::ModeSearchOpenedFiles ] = menuMode->addAction( tr( "Search in Opened Files" ) );
-	mModeActions[ SearchAndReplaceV2::ModeReplaceOpenedFiles ] = menuMode->addAction( tr( "Replace in Opened Files" ) );
+	mModeActions[ SearchAndReplaceV2::ModeSearch ] = menuMode->addAction( tr( "&Search in File" ) );
+	mModeActions[ SearchAndReplaceV2::ModeReplace ] = menuMode->addAction( tr( "&Replace in File" ) );
+	mModeActions[ SearchAndReplaceV2::ModeSearchDirectory ] = menuMode->addAction( tr( "Search in &Directory" ) );
+	mModeActions[ SearchAndReplaceV2::ModeReplaceDirectory ] = menuMode->addAction( tr( "Repla&ce in Directory" ) );
+	mModeActions[ SearchAndReplaceV2::ModeSearchProject ] = menuMode->addAction( tr( "Search in &Project" ) );
+	mModeActions[ SearchAndReplaceV2::ModeReplaceProject ] = menuMode->addAction( tr( "R&eplace in Project" ) );
+	mModeActions[ SearchAndReplaceV2::ModeSearchOpenedFiles ] = menuMode->addAction( tr( "Search in &Opened Files" ) );
+	mModeActions[ SearchAndReplaceV2::ModeReplaceOpenedFiles ] = menuMode->addAction( tr( "Replace in Opened &Files" ) );
 	
 	foreach ( QAction* action, menuMode->actions() )
 	{
@@ -37,8 +37,8 @@ SearchWidget::SearchWidget( QWidget* parent )
 	// options actions
 	QMenu* menuOptions = new QMenu( pbOptions );
 	
-	mOptionActions[ SearchAndReplaceV2::OptionCaseSensitive ] = menuOptions->addAction( tr( "Case Sensitive" ) );
-	mOptionActions[ SearchAndReplaceV2::OptionRegularExpression ] = menuOptions->addAction( tr( "Regular Expression" ) );
+	mOptionActions[ SearchAndReplaceV2::OptionCaseSensitive ] = menuOptions->addAction( tr( "&Case Sensitive" ) );
+	mOptionActions[ SearchAndReplaceV2::OptionRegularExpression ] = menuOptions->addAction( tr( "&Regular Expression" ) );
 	
 	foreach ( QAction* action, menuOptions->actions() )
 	{
@@ -152,8 +152,6 @@ void SearchWidget::setMode( SearchAndReplaceV2::Mode mode )
 			wMask->setVisible( true );
 			wCodec->setVisible( true );
 			break;
-		
-		
 		case SearchAndReplaceV2::ModeSearchProject:
 			wSearch->setVisible( true );
 			pbPrevious->setVisible( false );
@@ -188,7 +186,6 @@ void SearchWidget::setMode( SearchAndReplaceV2::Mode mode )
 			wMask->setVisible( true );
 			wCodec->setVisible( true );
 			break;
-		
 		case SearchAndReplaceV2::ModeSearchOpenedFiles:
 			wSearch->setVisible( true );
 			pbPrevious->setVisible( false );
@@ -227,6 +224,52 @@ void SearchWidget::setMode( SearchAndReplaceV2::Mode mode )
 	
 	updateLabels();
 	updateWidgets();
+}
+
+void SearchWidget::keyPressEvent( QKeyEvent* event )
+{
+	if ( event->modifiers() == Qt::NoModifier )
+	{
+		switch ( event->key() )
+		{
+			case Qt::Key_Escape:
+			{
+				MonkeyCore::workspace()->focusEditor();
+				hide();
+				
+				break;
+			}
+			case Qt::Key_Enter:
+			case Qt::Key_Return:
+			{
+				switch ( mMode )
+				{
+					case SearchAndReplaceV2::ModeNo:
+						break;
+					case SearchAndReplaceV2::ModeSearch:
+						pbNext->click();
+						break;
+					case SearchAndReplaceV2::ModeSearchDirectory:
+					case SearchAndReplaceV2::ModeSearchProject:
+					case SearchAndReplaceV2::ModeSearchOpenedFiles:
+						pbSearch->click();
+						break;
+					case SearchAndReplaceV2::ModeReplace:
+						pbReplace->click();
+						break;
+					case SearchAndReplaceV2::ModeReplaceDirectory:
+					case SearchAndReplaceV2::ModeReplaceProject:
+					case SearchAndReplaceV2::ModeReplaceOpenedFiles:
+						pbReplaceChecked->click();
+						break;
+				}
+				
+				break;
+			}
+		}
+	}
+	
+	QWidget::keyPressEvent( event );
 }
 
 void SearchWidget::updateLabels()
