@@ -28,9 +28,9 @@ public:
 	{
 		OptionNo = 0x0,
 		OptionCaseSensitive = 0x1,
-		OptionRegularExpression = 0x2,
-		OptionSearchOpenedFiles = 0x4,
-		OptionSearchProjectFiles = 0x8
+		OptionWholeWord = 0x2,
+		OptionWrap = 0x4,
+		OptionRegularExpression = 0x8,
 	};
 	
 	Q_DECLARE_FLAGS( Options, Option );

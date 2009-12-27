@@ -1,10 +1,13 @@
 #include "SearchWidget.h"
 
 #include <MonkeyCore.h>
+#include <UIMain.h>
 #include <pFileManager.h>
 #include <XUPProjectItem.h>
 #include <pWorkspace.h>
 #include <pAbstractChild.h>
+#include <pChild.h>
+#include <pEditor.h>
 
 #include <QTextCodec>
 
@@ -38,6 +41,8 @@ SearchWidget::SearchWidget( QWidget* parent )
 	QMenu* menuOptions = new QMenu( pbOptions );
 	
 	mOptionActions[ SearchAndReplaceV2::OptionCaseSensitive ] = menuOptions->addAction( tr( "&Case Sensitive" ) );
+	mOptionActions[ SearchAndReplaceV2::OptionWholeWord ] = menuOptions->addAction( tr( "&Whole Word" ) );
+	mOptionActions[ SearchAndReplaceV2::OptionWrap ] = menuOptions->addAction( tr( "Wra&p" ) );
 	mOptionActions[ SearchAndReplaceV2::OptionRegularExpression ] = menuOptions->addAction( tr( "&Regular Expression" ) );
 	
 	foreach ( QAction* action, menuOptions->actions() )
@@ -224,6 +229,7 @@ void SearchWidget::setMode( SearchAndReplaceV2::Mode mode )
 	
 	updateLabels();
 	updateWidgets();
+	initializeProperties();
 }
 
 void SearchWidget::keyPressEvent( QKeyEvent* event )
@@ -363,6 +369,86 @@ void SearchWidget::initializeProperties()
 	mProperties.sourcesFiles = mProperties.project ? mProperties.project->topLevelProjectSourceFiles() : QStringList();
 }
 
+void SearchWidget::showMessage( const QString& status )
+{
+	if ( !status.isNull() )
+	{
+		MonkeyCore::mainWindow()->statusBar()->showMessage( tr( "Search: %1" ).arg( status ), 30000 );
+	}
+	else
+	{
+		MonkeyCore::mainWindow()->statusBar()->clearMessage();
+	}
+}
+
+void SearchWidget::setState( SearchWidget::InputField field, SearchWidget::State state )
+{
+	QWidget* widget = 0;
+	QColor color = QColor( Qt::white );
+	
+	switch ( field )
+	{
+		case SearchWidget::Search:
+			widget = cbSearch->lineEdit();
+			break;
+		case SearchWidget::Replace:
+			widget = cbReplace->lineEdit();
+			break;
+	}
+	
+	switch ( state )
+	{
+		case SearchWidget::Normal:
+			color = QColor( Qt::white );
+			break;
+		case SearchWidget::Good:
+			color = QColor( Qt::green );
+			break;
+		case SearchWidget::Bad:
+			color = QColor( Qt::red );
+			break;
+	}
+	
+	QPalette pal = widget->palette();
+	pal.setColor( widget->backgroundRole(), color );
+	widget->setPalette( pal );
+}
+
+bool SearchWidget::searchFile( bool forward )
+{
+	pAbstractChild* document = MonkeyCore::workspace()->currentDocument();
+	pChild* child = document ? static_cast<pChild*>( document ) : 0;
+	pEditor* editor = child ? child->editor() : 0;
+	
+	if ( !document || !editor )
+	{
+		showMessage( tr( "No active editor" ) );
+		return false;
+	}
+
+	// get cursor position
+	int x, y;
+	editor->getCursorPosition( &y, &x );
+
+	if ( !forward )
+	{
+		int temp;
+		editor->getSelection( &y, &x, &temp, &temp );
+	}
+
+	// search
+	const bool found = editor->findFirst( mProperties.searchText, mProperties.options & SearchAndReplaceV2::OptionRegularExpression, mProperties.options & SearchAndReplaceV2::OptionCaseSensitive, mProperties.options & SearchAndReplaceV2::OptionWholeWord, mProperties.options & SearchAndReplaceV2::OptionWrap, forward, y, x );
+
+	// change background acording to found or not
+	setState( SearchWidget::Search, found ? SearchWidget::Good : SearchWidget::Bad );
+	
+	// show message if needed
+	showMessage( found ? QString::null : tr( "Not Found" ) );
+
+	// return found state
+	return found;
+}
+
 void SearchWidget::groupMode_triggered( QAction* action )
 {
 	setMode( mModeActions.key( action ) );
@@ -371,11 +457,13 @@ void SearchWidget::groupMode_triggered( QAction* action )
 void SearchWidget::on_pbPrevious_clicked()
 {
 	initializeProperties();
+	searchFile( false );
 }
 
 void SearchWidget::on_pbNext_clicked()
 {
 	initializeProperties();
+	searchFile( true );
 }
 
 void SearchWidget::on_pbSearch_clicked()

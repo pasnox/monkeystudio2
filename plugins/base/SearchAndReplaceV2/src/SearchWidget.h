@@ -30,6 +30,19 @@ public:
 		QStringList sourcesFiles;
 	};
 	
+	enum InputField
+	{
+		Search,
+		Replace
+	};
+	
+	enum State
+	{
+		Normal,
+		Good,
+		Bad
+	};
+	
 	SearchWidget( QWidget* parent = 0 );
 	virtual ~SearchWidget();
 	
@@ -49,6 +62,9 @@ protected:
 	void updateLabels();
 	void updateWidgets();
 	void initializeProperties();
+	void showMessage( const QString& status );
+	void setState( SearchWidget::InputField field, SearchWidget::State state );
+	bool searchFile( bool forward );
 
 protected slots:
 	void groupMode_triggered( QAction* action );
