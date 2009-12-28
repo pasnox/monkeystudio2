@@ -273,9 +273,12 @@ void SearchThread::search( const QString& fileName, const QString& content ) con
 
 void SearchThread::run()
 {
+	QTime tracker;
+	
 	forever
 	{
 		emit reset();
+		tracker.restart();
 		
 		QStringList files = getFilesToScan();
 		files.sort();
@@ -323,4 +326,6 @@ void SearchThread::run()
 		
 		break;
 	}
+	
+	qWarning() << "Search finished in " << tracker.elapsed() /1000.0;
 }

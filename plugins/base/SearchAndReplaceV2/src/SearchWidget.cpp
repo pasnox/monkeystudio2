@@ -11,7 +11,6 @@
 #include <pEditor.h>
 
 #include <QTextCodec>
-#include <QTime>
 
 SearchWidget::SearchWidget( QWidget* parent )
 	: QFrame( parent )
@@ -67,7 +66,7 @@ SearchWidget::SearchWidget( QWidget* parent )
 	foreach ( QAbstractButton* button, findChildren<QAbstractButton*>() )
 	{
 		button->setIconSize( size );
-		button->setMaximumHeight( 25 );
+		button->setFixedHeight( 24 );
 	}
 	
 	vlMain->setSpacing( 0 );
@@ -356,9 +355,6 @@ void SearchWidget::updateWidgets()
 
 void SearchWidget::initializeProperties()
 {
-	QTime tracker;
-	tracker.start();
-	
 	mProperties.searchText = cbSearch->currentText();
 	mProperties.replaceText = cbReplace->currentText();
 	mProperties.searchPath = cbPath->currentText();
@@ -398,8 +394,6 @@ void SearchWidget::initializeProperties()
 	
 	// update sources files
 	mProperties.sourcesFiles = mProperties.project ? mProperties.project->topLevelProjectSourceFiles() : QStringList();
-	
-	qWarning() << "Initialize properties in:" << tracker.elapsed() /1000.0;
 }
 
 void SearchWidget::showMessage( const QString& status )
