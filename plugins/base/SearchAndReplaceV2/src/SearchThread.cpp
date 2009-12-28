@@ -237,11 +237,11 @@ void SearchThread::search( const QString& fileName, const QString& content ) con
 		const int eolStart = content.left( pos ).lastIndexOf( eolRx );
 		const int eolEnd = content.indexOf( eolRx, pos );
 		const QString capture = content.mid( eolStart, eolEnd -eolStart ).simplified();
-		SearchResultsModel::Result result( fileName, capture );
-		result.position = pos;
-		result.line = -1;
-		result.checkable = false;
-		result.checkState = Qt::Unchecked;
+		SearchResultsModel::Result* result = new SearchResultsModel::Result( fileName, capture );
+		result->position = pos;
+		result->line = -1;
+		result->checkable = false;
+		result->checkState = Qt::Unchecked;
 		
 		results << result;
 		
@@ -307,8 +307,17 @@ void SearchThread::run()
 				}
 				else if ( mReset )
 				{
-					continue;
+					break;
 				}
+			}
+		}
+		
+		{
+			QMutexLocker locker( &mMutex );
+			
+			if ( mReset )
+			{
+				continue;
 			}
 		}
 		

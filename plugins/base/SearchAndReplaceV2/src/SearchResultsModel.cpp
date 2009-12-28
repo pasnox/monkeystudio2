@@ -65,10 +65,10 @@ QModelIndex SearchResultsModel::index( int row, int column, const QModelIndex& p
 	
 	if ( result )
 	{
-		return createIndex( row, column, &(_this->mResults[ result ][ row ]) );
+		return createIndex( row, column, _this->mResults[ result ][ row ] );
 	}
 	
-	return createIndex( row, column, &(_this->mParents.begin() +row).value() );
+	return createIndex( row, column, (_this->mParents.begin() +row).value() );
 }
 
 QModelIndex SearchResultsModel::parent( const QModelIndex& index ) const
@@ -80,13 +80,13 @@ QModelIndex SearchResultsModel::parent( const QModelIndex& index ) const
 	
 	SearchResultsModel::Result* result = static_cast<SearchResultsModel::Result*>( index.internalPointer() );
 	
-	if ( mParents.values().contains( *result ) )
+	if ( mParents.values().contains( result ) )
 	{
 		return QModelIndex();
 	}
 	
 	SearchResultsModel* _this = const_cast<SearchResultsModel*>( this );
-	result = &_this->mParents[ result->fileName ];
+	result = _this->mParents[ result->fileName ];
 	return createIndex( mParents.keys().indexOf( result->fileName ), index.column(), result );
 }
 
@@ -115,16 +115,27 @@ bool SearchResultsModel::hasChildren( const QModelIndex& parent ) const
 }
 
 void SearchResultsModel::thread_reset()
-{
-	mParents.clear();
+{	
+	foreach ( const SearchResultsModel::ResultList& results, mResults )
+	{
+		qDeleteAll( results );
+	}
 	mResults.clear();
+	qDeleteAll( mParents );
+	mParents.clear();
 	emit reset();
 }
 
 void SearchResultsModel::thread_resultsAvailable( const QString& fileName, const SearchResultsModel::ResultList& results )
 {
-	SearchResultsModel::Result& result = mParents[ fileName ];
-	result.fileName = fileName;
-	mResults[ &result ] << results;
+	SearchResultsModel::Result* result = mParents.value( fileName );
+	
+	if ( !result )
+	{
+		result = new SearchResultsModel::Result( fileName );
+		mParents[ fileName ] = result;
+	}
+	
+	mResults[ result ] << results;
 	emit reset();
 }

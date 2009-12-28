@@ -41,7 +41,7 @@ public:
 		Qt::CheckState checkState;
 	};
 	
-	typedef QList<SearchResultsModel::Result> ResultList;
+	typedef QList<SearchResultsModel::Result*> ResultList;
 	
 	SearchResultsModel( /*SearchWidget::Properties* properties,*/ QObject* parent = 0 );
 	virtual ~SearchResultsModel();
@@ -55,7 +55,7 @@ public:
 	virtual bool hasChildren( const QModelIndex& parent = QModelIndex() ) const;
 
 protected:
-	QMap<QString, SearchResultsModel::Result> mParents; // fileName, result
+	QMap<QString, SearchResultsModel::Result*> mParents; // fileName, result
 	QMap<SearchResultsModel::Result*, SearchResultsModel::ResultList> mResults; // parent result, results
 	SearchWidget::Properties* mProperties;
 
