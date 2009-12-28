@@ -3,6 +3,7 @@
 #include "SearchThread.h"
 
 #include <pIconManager.h>
+#include <pMonkeyStudio.h>
 
 #include <QHBoxLayout>
 #include <QTreeView>
@@ -20,6 +21,7 @@ SearchResultsDock::SearchResultsDock( SearchThread* searchThread, QWidget* paren
 	mModel = new SearchResultsModel( this );
 	mView = new QTreeView( this );
 	mView->setHeaderHidden( true );
+	mView->setUniformRowHeights( true );
 	mView->setModel( mModel );
 	mLayout = new QHBoxLayout( widget );
 	mLayout->setMargin( 5 );
@@ -27,6 +29,10 @@ SearchResultsDock::SearchResultsDock( SearchThread* searchThread, QWidget* paren
 	mLayout->addWidget( mView );
 	
 	setWidget( widget );
+	
+	// mac
+	pMonkeyStudio::showMacFocusRect( this, false, true );
+	pMonkeyStudio::setMacSmallSize( this, true, true );
 	
 	connect( searchThread, SIGNAL( reset() ), mModel, SLOT( thread_reset() ) );
 	connect( searchThread, SIGNAL( resultsAvailable( const QString&, const SearchResultsModel::ResultList& ) ), mModel, SLOT( thread_resultsAvailable( const QString&, const SearchResultsModel::ResultList& ) ) );
