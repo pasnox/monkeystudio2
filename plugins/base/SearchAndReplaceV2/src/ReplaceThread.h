@@ -10,6 +10,9 @@ class ReplaceThread : public QThread
 public:
 	ReplaceThread( QObject* parent = 0 );
 	virtual ~ReplaceThread();
+
+protected:
+	void run();
 };
 
 #endif // REPLACETHREAD_H

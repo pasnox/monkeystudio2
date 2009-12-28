@@ -4,6 +4,7 @@
 #include <BasePlugin.h>
 
 class SearchWidget;
+class SearchResultsDock;
 
 class SearchAndReplaceV2 : public BasePlugin
 {
@@ -37,6 +38,7 @@ public:
 
 protected:
 	QPointer<SearchWidget> mWidget;
+	QPointer<SearchResultsDock> mDock;
 	
 	virtual void fillPluginInfos();
 

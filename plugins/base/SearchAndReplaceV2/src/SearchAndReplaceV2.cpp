@@ -1,8 +1,10 @@
 #include "SearchAndReplaceV2.h"
 #include "SearchWidget.h"
+#include "SearchResultsDock.h"
 
 #include <MonkeyCore.h>
 #include <pWorkspace.h>
+#include <UIMain.h>
 
 void SearchAndReplaceV2::fillPluginInfos()
 {
@@ -22,12 +24,16 @@ bool SearchAndReplaceV2::install()
 	mWidget = new SearchWidget;
 	MonkeyCore::workspace()->layout()->addWidget( mWidget );
 	//mWidget->setVisible( false );
+	mDock = new SearchResultsDock( mWidget->searchThread() );
+	MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mDock, mDock->windowTitle(), mDock->windowIcon() );
+	mDock->setVisible( false );
 	return true;
 }
 
 bool SearchAndReplaceV2::uninstall()
 {
 	delete mWidget;
+	delete mDock;
 	return true;
 }
 

@@ -1,4 +1,5 @@
 #include "SearchWidget.h"
+#include "SearchThread.h"
 
 #include <MonkeyCore.h>
 #include <UIMain.h>
@@ -10,11 +11,15 @@
 #include <pEditor.h>
 
 #include <QTextCodec>
+#include <QTime>
 
 SearchWidget::SearchWidget( QWidget* parent )
 	: QFrame( parent )
 {
 	setupUi( this );
+	
+	// threads
+	mSearchThread = new SearchThread( this );
 	
 	// mode actions
 	QMenu* menuMode = new QMenu( pbMode );
@@ -61,6 +66,8 @@ SearchWidget::SearchWidget( QWidget* parent )
 	codecs.sort();
 	cbCodec->addItems( codecs );
 	
+	cbCodec->setCurrentIndex( cbCodec->findText( pMonkeyStudio::defaultCodec() ) );
+	
 	// connections
 	connect( groupMode, SIGNAL( triggered( QAction* ) ), this, SLOT( groupMode_triggered( QAction* ) ) );
 	
@@ -74,6 +81,11 @@ SearchWidget::~SearchWidget()
 SearchAndReplaceV2::Mode SearchWidget::mode() const
 {
 	return mMode;
+}
+
+SearchThread* SearchWidget::searchThread() const
+{
+	return mSearchThread;
 }
 
 void SearchWidget::setMode( SearchAndReplaceV2::Mode mode )
@@ -328,6 +340,9 @@ void SearchWidget::updateWidgets()
 
 void SearchWidget::initializeProperties()
 {
+	QTime tracker;
+	tracker.start();
+	
 	mProperties.searchText = cbSearch->currentText();
 	mProperties.replaceText = cbReplace->currentText();
 	mProperties.searchPath = cbPath->currentText();
@@ -367,6 +382,8 @@ void SearchWidget::initializeProperties()
 	
 	// update sources files
 	mProperties.sourcesFiles = mProperties.project ? mProperties.project->topLevelProjectSourceFiles() : QStringList();
+	
+	qWarning() << "Initialize properties in:" << tracker.elapsed() /1000.0;
 }
 
 void SearchWidget::showMessage( const QString& status )
@@ -420,8 +437,9 @@ bool SearchWidget::searchFile( bool forward )
 	pChild* child = document ? static_cast<pChild*>( document ) : 0;
 	pEditor* editor = child ? child->editor() : 0;
 	
-	if ( !document || !editor )
+	if ( !editor )
 	{
+		setState( SearchWidget::Search, SearchWidget::Normal );
 		showMessage( tr( "No active editor" ) );
 		return false;
 	}
@@ -469,6 +487,7 @@ void SearchWidget::on_pbNext_clicked()
 void SearchWidget::on_pbSearch_clicked()
 {
 	initializeProperties();
+	mSearchThread->search( mProperties );
 }
 
 void SearchWidget::on_pbReplace_clicked()

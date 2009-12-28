@@ -53,6 +53,11 @@
         <property name="editable">
          <bool>true</bool>
         </property>
+        <item>
+         <property name="text">
+          <string>int</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item>
@@ -76,7 +81,7 @@
             <string>&amp;Previous</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="../../../../monkey/src/resources/resources.qrc">
              <normaloff>:/edit/icons/edit/previous.png</normaloff>:/edit/icons/edit/previous.png</iconset>
            </property>
           </widget>
@@ -87,7 +92,7 @@
             <string>&amp;Next</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="../../../../monkey/src/resources/resources.qrc">
              <normaloff>:/edit/icons/edit/next.png</normaloff>:/edit/icons/edit/next.png</iconset>
            </property>
           </widget>
@@ -98,7 +103,7 @@
             <string>Searc&amp;h</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="../../../../monkey/src/resources/resources.qrc">
              <normaloff>:/edit/icons/edit/search.png</normaloff>:/edit/icons/edit/search.png</iconset>
            </property>
           </widget>
@@ -162,7 +167,7 @@
             <string>Rep&amp;lace</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="../../../../monkey/src/resources/resources.qrc">
              <normaloff>:/edit/icons/edit/replace.png</normaloff>:/edit/icons/edit/replace.png</iconset>
            </property>
           </widget>
@@ -180,7 +185,7 @@
             <string>Replace Chec&amp;ked</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="../../../../monkey/src/resources/resources.qrc">
              <normaloff>:/edit/icons/edit/replace.png</normaloff>:/edit/icons/edit/replace.png</iconset>
            </property>
           </widget>
@@ -221,6 +226,11 @@
         <property name="editable">
          <bool>true</bool>
         </property>
+        <item>
+         <property name="text">
+          <string>/usr/include</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item>
@@ -244,7 +254,7 @@
             <string>&amp;Browse</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="../../../../monkey/src/resources/resources.qrc">
              <normaloff>:/listeditor/icons/listeditor/folder.png</normaloff>:/listeditor/icons/listeditor/folder.png</iconset>
            </property>
           </widget>
@@ -277,7 +287,7 @@
          <string>Mo&amp;de</string>
         </property>
         <property name="icon">
-         <iconset>
+         <iconset resource="../../../../monkey/src/resources/resources.qrc">
           <normaloff>:/build/icons/build/misc.png</normaloff>:/build/icons/build/misc.png</iconset>
         </property>
        </widget>
@@ -338,6 +348,11 @@ You can use language name too so the search will only apply to the language suff
            <property name="editable">
             <bool>true</bool>
            </property>
+           <item>
+            <property name="text">
+             <string>*.h</string>
+            </property>
+           </item>
           </widget>
          </item>
         </layout>
@@ -380,7 +395,7 @@ You can use language name too so the search will only apply to the language suff
          <string>&amp;Options</string>
         </property>
         <property name="icon">
-         <iconset>
+         <iconset resource="../../../../monkey/src/resources/resources.qrc">
           <normaloff>:/edit/icons/edit/settings.png</normaloff>:/edit/icons/edit/settings.png</iconset>
         </property>
        </widget>

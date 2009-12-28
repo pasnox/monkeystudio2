@@ -4,6 +4,8 @@
 #include "ui_SearchWidget.h"
 #include "SearchAndReplaceV2.h"
 
+class SearchThread;
+
 class SearchWidget : public QFrame, public Ui::SearchWidget
 {
 	Q_OBJECT
@@ -47,11 +49,13 @@ public:
 	virtual ~SearchWidget();
 	
 	SearchAndReplaceV2::Mode mode() const;
+	SearchThread* searchThread() const;
 
 public slots:
 	void setMode( SearchAndReplaceV2::Mode mode );
 
 protected:
+	SearchThread* mSearchThread;
 	SearchAndReplaceV2::Mode mMode;
 	QMap<SearchAndReplaceV2::Mode, QAction*> mModeActions;
 	QMap<SearchAndReplaceV2::Option, QAction*> mOptionActions;

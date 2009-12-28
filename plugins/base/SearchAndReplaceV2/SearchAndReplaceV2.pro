@@ -22,10 +22,14 @@ RESOURCES	= src/resources/SearchAndReplaceV2.qrc
 HEADERS	= src/SearchAndReplaceV2.h \
 	src/SearchThread.h \
 	src/ReplaceThread.h \
-	src/SearchWidget.h
+	src/SearchWidget.h \
+	src/SearchResultsDock.h \
+	src/SearchResultsModel.h
 
 SOURCES	= src/SearchAndReplaceV2.cpp \
 	src/SearchThread.cpp \
 	src/ReplaceThread.cpp \
-	src/SearchWidget.cpp
+	src/SearchWidget.cpp \
+	src/SearchResultsDock.cpp \
+	src/SearchResultsModel.cpp
 FORMS	+= src/SearchWidget.ui
