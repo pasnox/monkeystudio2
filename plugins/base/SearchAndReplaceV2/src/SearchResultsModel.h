@@ -60,7 +60,7 @@ public:
 protected:
 	int mRowCount;
 	QHash<QString, SearchResultsModel::Result*> mParents; // fileName, result
-	QHash<int, SearchResultsModel::Result*> mParentsRows;
+	QHash<int, SearchResultsModel::Result*> mParentsRows; // row, result
 	QList<SearchResultsModel::ResultList> mResults;
 	SearchWidget::Properties* mProperties;
 
