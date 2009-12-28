@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>695</width>
-    <height>119</height>
+    <height>169</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -16,7 +16,7 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="vlMain">
    <property name="spacing">
     <number>2</number>
    </property>
@@ -25,7 +25,7 @@
    </property>
    <item>
     <widget class="QWidget" name="wSearch" native="true">
-     <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <layout class="QHBoxLayout" name="hlSearch">
       <property name="spacing">
        <number>5</number>
       </property>
@@ -116,7 +116,7 @@
    </item>
    <item>
     <widget class="QWidget" name="wReplace" native="true">
-     <layout class="QHBoxLayout" name="horizontalLayout_6">
+     <layout class="QHBoxLayout" name="hlReplace">
       <property name="spacing">
        <number>5</number>
       </property>
@@ -198,7 +198,7 @@
    </item>
    <item>
     <widget class="QWidget" name="wPath" native="true">
-     <layout class="QHBoxLayout" name="horizontalLayout_7">
+     <layout class="QHBoxLayout" name="hlPath">
       <property name="spacing">
        <number>5</number>
       </property>
@@ -274,7 +274,7 @@
    </item>
    <item>
     <widget class="QWidget" name="wOptions" native="true">
-     <layout class="QHBoxLayout" name="horizontalLayout_9">
+     <layout class="QHBoxLayout" name="hlOptions">
       <property name="spacing">
        <number>5</number>
       </property>

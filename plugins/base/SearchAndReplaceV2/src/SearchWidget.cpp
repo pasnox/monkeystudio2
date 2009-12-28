@@ -57,6 +57,22 @@ SearchWidget::SearchWidget( QWidget* parent )
 	
 	pbOptions->setMenu( menuOptions );
 	
+	// mac
+	pMonkeyStudio::showMacFocusRect( this, false, true );
+	pMonkeyStudio::setMacSmallSize( this, true, true );
+
+#ifdef Q_OS_MAC
+	const QSize size( 12, 12 );
+	
+	foreach ( QAbstractButton* button, findChildren<QAbstractButton*>() )
+	{
+		button->setIconSize( size );
+		button->setMaximumHeight( 25 );
+	}
+	
+	vlMain->setSpacing( 0 );
+#endif
+	
 	// codecs
 	QStringList codecs;
 	foreach ( const QString& codec, QTextCodec::availableCodecs() )
