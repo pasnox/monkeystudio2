@@ -7,6 +7,7 @@ SearchResultsModel::SearchResultsModel( /*SearchWidget::Properties* properties,*
 {
 	//Q_ASSERT( properties );
 	mProperties = 0;//properties;
+	mRowCount = 0;
 }
 
 SearchResultsModel::~SearchResultsModel()
@@ -34,11 +35,13 @@ QVariant SearchResultsModel::data( const QModelIndex& index, int role ) const
 			SearchResultsModel::Result* result = static_cast<SearchResultsModel::Result*>( index.internalPointer() );
 			QString text = result->fileName;
 			
+			// parent
 			if ( !pIndex.isValid() )
 			{
 				const int count = rowCount( index );
 				text.append( QString( " (%1)" ).arg( count ) );
 			}
+			// child
 			else
 			{
 				text = tr( "At position %1: %2" ).arg( result->position ).arg( result->capture );
@@ -65,10 +68,13 @@ QModelIndex SearchResultsModel::index( int row, int column, const QModelIndex& p
 	
 	if ( result )
 	{
-		return createIndex( row, column, _this->mResults[ result ][ row ] );
+		// child
+		const int pRow = result->row;
+		return createIndex( row, column, _this->mResults.at( pRow ).at( row ) );
 	}
 	
-	return createIndex( row, column, (_this->mParents.begin() +row).value() );
+	// parent
+	return createIndex( row, column, mParentsRows[ row ] );
 }
 
 QModelIndex SearchResultsModel::parent( const QModelIndex& index ) const
@@ -80,38 +86,36 @@ QModelIndex SearchResultsModel::parent( const QModelIndex& index ) const
 	
 	SearchResultsModel::Result* result = static_cast<SearchResultsModel::Result*>( index.internalPointer() );
 	
-	if ( mParents.values().contains( result ) )
+	if ( result->row != -1 )
 	{
 		return QModelIndex();
 	}
 	
 	SearchResultsModel* _this = const_cast<SearchResultsModel*>( this );
 	result = _this->mParents[ result->fileName ];
-	return createIndex( mParents.keys().indexOf( result->fileName ), index.column(), result );
+	return createIndex( result->row, index.column(), result );
 }
 
 int SearchResultsModel::rowCount( const QModelIndex& parent ) const
 {
+	// root
 	if ( !parent.isValid() )
 	{
-		return mParents.count();
+		return mRowCount;
 	}
 	
-	SearchResultsModel::Result* result = static_cast<SearchResultsModel::Result*>( parent.internalPointer() );
-	
-	return mResults[ result ].count();
+	return parent.parent().isValid() ? 0 : mResults.at( parent.row() ).count();
 }
 
 bool SearchResultsModel::hasChildren( const QModelIndex& parent ) const
 {
+	// root
 	if ( !parent.isValid() )
 	{
-		return !mParents.isEmpty();
+		return mRowCount != 0;
 	}
 	
-	SearchResultsModel::Result* result = static_cast<SearchResultsModel::Result*>( parent.internalPointer() );
-	
-	return !mResults[ result ].isEmpty();
+	return parent.parent().isValid() ? false : !mResults.at( parent.row() ).isEmpty();
 }
 
 void SearchResultsModel::thread_reset()
@@ -121,21 +125,31 @@ void SearchResultsModel::thread_reset()
 		qDeleteAll( results );
 	}
 	mResults.clear();
+	mParentsRows.clear();
 	qDeleteAll( mParents );
 	mParents.clear();
+	mRowCount = 0;
 	emit reset();
 }
 
 void SearchResultsModel::thread_resultsAvailable( const QString& fileName, const SearchResultsModel::ResultList& results )
 {
-	SearchResultsModel::Result* result = mParents.value( fileName );
+	SearchResultsModel::Result* result = mParents[ fileName ];
 	
 	if ( !result )
 	{
 		result = new SearchResultsModel::Result( fileName );
+		result->row = mRowCount;
 		mParents[ fileName ] = result;
+		mParentsRows[ mRowCount ] = result;
+		mRowCount++;
+		
+		mResults << results;
+	}
+	else
+	{
+		mResults[ result->row ] << results;
 	}
 	
-	mResults[ result ] << results;
 	emit reset();
 }

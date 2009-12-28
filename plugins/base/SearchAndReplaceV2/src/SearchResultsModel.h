@@ -21,6 +21,7 @@ public:
 			line = _line;
 			checkable = _checkable;
 			checkState = _checkState;
+			row = -1;
 		}
 		
 		bool operator==( const SearchResultsModel::Result& other ) const
@@ -30,7 +31,8 @@ public:
 				position == other.position &&
 				line == other.line &&
 				checkable == other.checkable/* &&
-				checked == other.checked*/;
+				checked == other.checked*/ &&
+				row == other.row;
 		}
 		
 		QString fileName;
@@ -39,6 +41,7 @@ public:
 		int line;
 		bool checkable;
 		Qt::CheckState checkState;
+		int row; // internally used by the model for parent indexes, must not be modified.
 	};
 	
 	typedef QList<SearchResultsModel::Result*> ResultList;
@@ -55,8 +58,10 @@ public:
 	virtual bool hasChildren( const QModelIndex& parent = QModelIndex() ) const;
 
 protected:
-	QMap<QString, SearchResultsModel::Result*> mParents; // fileName, result
-	QMap<SearchResultsModel::Result*, SearchResultsModel::ResultList> mResults; // parent result, results
+	int mRowCount;
+	QHash<QString, SearchResultsModel::Result*> mParents; // fileName, result
+	QHash<int, SearchResultsModel::Result*> mParentsRows;
+	QList<SearchResultsModel::ResultList> mResults;
 	SearchWidget::Properties* mProperties;
 
 protected slots:
