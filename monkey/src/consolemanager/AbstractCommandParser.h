@@ -59,7 +59,8 @@ public :
 	/**
 	 *\bfief Parse text
 	 *\param text Text to parse
-	 *\retval Count of line sucessfully parsed (text recognised, line can be discarded
+	 *\retval Count of lines, which was sucessfully parsed (text recognised). 
+	 * This lines can be discarded, won't be parsed by other parsers
 	 */
 	virtual int processParsing(QString* text) = 0;
 
