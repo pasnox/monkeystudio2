@@ -1015,6 +1015,52 @@ void pMonkeyStudio::setEditorProperties( pEditor* editor )
 }
 
 /*!
+	\details control if mac widgets show their focus rect or not.
+	\param widget The widget to apply
+	\param show Control focus rect visibility
+	\param recursive If true, children are updated too, else not
+*/
+void pMonkeyStudio::showMacFocusRect( QWidget* widget, bool show, bool recursive )
+{
+	QList<QWidget*> widgets;
+	
+	widgets << widget;
+	
+	if ( recursive )
+	{
+		widgets << widget->findChildren<QWidget*>();
+	}
+	
+	foreach ( QWidget* w, widgets )
+	{
+		w->setAttribute( Qt::WA_MacShowFocusRect, show );
+	}
+}
+
+/*!
+	\details control if mac widgets use small size.
+	\param widget The widget to apply
+	\param small Control small activation
+	\param recursive If true, children are updated too, else not
+*/
+void pMonkeyStudio::setMacSmallSize( QWidget* widget, bool small, bool recursive )
+{
+	QList<QWidget*> widgets;
+	
+	widgets << widget;
+	
+	if ( recursive )
+	{
+		widgets << widget->findChildren<QWidget*>();
+	}
+	
+	foreach ( QWidget* w, widgets )
+	{
+		w->setAttribute( Qt::WA_MacSmallSize, small );
+	}
+}
+
+/*!
 	\details Save files on custom actions triggered ( builder, debugger, interpreter )
 	\param save True to save, else false
 */
