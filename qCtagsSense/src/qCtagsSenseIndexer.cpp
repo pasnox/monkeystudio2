@@ -327,8 +327,8 @@ bool qCtagsSenseIndexer::createEntries( int fileId, TagEntryListItem* item )
 		
 		q.prepare( sql );
 		q.addBindValue( fileId );
-		q.addBindValue( entry->lineNumberEntry );
-		q.addBindValue( QVariant::fromValue( entry->lineNumber ) );
+		q.addBindValue( entry->lineNumberEntry -1 );
+		q.addBindValue( QVariant::fromValue( entry->lineNumber -1 ) );
 		q.addBindValue( entry->isFileScope );
 		q.addBindValue( entry->isFileEntry );
 		q.addBindValue( entry->truncateLine );

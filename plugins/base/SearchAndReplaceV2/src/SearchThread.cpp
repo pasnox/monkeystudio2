@@ -210,7 +210,7 @@ QString SearchThread::fileContent( const QString& fileName ) const
 
 void SearchThread::search( const QString& fileName, const QString& content ) const
 {
-	static const QRegExp eolRx( "(?:^|\\r\\n|\\n|\\r|$)" );
+	static QRegExp eolRx( "(?:\\r\\n|\\n|\\r)" );
 	bool checkable = false;
 	QRegExp rx;
 	
@@ -245,9 +245,11 @@ void SearchThread::search( const QString& fileName, const QString& content ) con
 		const int eolStart = content.left( pos ).lastIndexOf( eolRx );
 		const int eolEnd = content.indexOf( eolRx, pos );
 		const QString capture = content.mid( eolStart, eolEnd -eolStart ).simplified();
+		const int line = content.left( eolEnd ).count( eolRx );
+		const int column = ( pos -eolStart ) -( eolStart != 0 ? 1 : 0 );
 		SearchResultsModel::Result* result = new SearchResultsModel::Result( fileName, capture );
-		result->position = pos;
-		result->line = -1;
+		result->position = QPoint( column, line );
+		result->offset = pos;
 		result->checkable = checkable;
 		result->checkState = checkable ? Qt::Checked : Qt::Unchecked;
 		

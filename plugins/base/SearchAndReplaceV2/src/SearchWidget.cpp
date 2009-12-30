@@ -357,6 +357,8 @@ void SearchWidget::updateWidgets()
 
 void SearchWidget::initializeProperties()
 {
+	const QMap<QString, QStringList> suffixes = pMonkeyStudio::availableLanguagesSuffixes();
+	const QStringList keys = suffixes.keys();
 	mProperties.searchText = cbSearch->currentText();
 	mProperties.replaceText = cbReplace->currentText();
 	mProperties.searchPath = cbPath->currentText();
@@ -371,7 +373,22 @@ void SearchWidget::initializeProperties()
 	// update masks
 	foreach ( const QString& part, cbMask->currentText().split( " ", QString::SkipEmptyParts ) )
 	{
-		mProperties.mask << part;
+		const int index = keys.indexOf( QRegExp( QRegExp::escape( part ), Qt::CaseInsensitive ) );
+		
+		if ( index != -1 )
+		{
+			foreach ( const QString& suffixe, suffixes[ keys.at( index ) ] )
+			{
+				if ( !mProperties.mask.contains( suffixe ) )
+				{
+					mProperties.mask << suffixe;
+				}
+			}
+		}
+		else
+		{
+			mProperties.mask << part;
+		}
 	}
 	
 	// update options
@@ -498,6 +515,7 @@ void SearchWidget::on_pbNext_clicked()
 
 void SearchWidget::on_pbSearch_clicked()
 {
+	setState( SearchWidget::Search, SearchWidget::Normal );
 	initializeProperties();
 	mSearchThread->search( mProperties );
 }

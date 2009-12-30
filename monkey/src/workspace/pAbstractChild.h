@@ -179,8 +179,8 @@ public slots:
 	virtual void paste() = 0;
 	// go to in the current child
 	virtual void goTo() = 0;
-	// go to position and highlight line according to bool
-	virtual void goTo( const QPoint& pos, bool highlight = false ) = 0;
+	// go to position and select by selection length from position
+	virtual void goTo( const QPoint& position, int selectionLength = -1 ) = 0;
 	// search in the file
 	virtual void invokeSearch() {};
 	// ask to save file

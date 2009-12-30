@@ -201,7 +201,7 @@ void ClassBrowser::buffersChanged( const QMap<QString, QString>& entries )
 
 void ClassBrowser::entryActivated( const qCtagsSenseEntry& entry )
 {	
-	MonkeyCore::fileManager()->goToLine( entry.fileName, QPoint( 0, entry.lineNumber ), true, pMonkeyStudio::defaultCodec() );
+	MonkeyCore::fileManager()->goToLine( entry.fileName, QPoint( 0, entry.lineNumber ), pMonkeyStudio::defaultCodec() );
 }
 
 void ClassBrowser::fileNameActivated( const QString& fileName )

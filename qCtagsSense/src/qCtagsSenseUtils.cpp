@@ -590,7 +590,7 @@ QString qCtagsSenseUtils::entryToolTip( const qCtagsSenseEntry* entry )
 		.arg( QString( "<img src=\"%1\" /> " ).arg( entryDecorationFilePath( entry ) ) )
 		.arg( kindText( entry->kind ) )
 		.arg( QFileInfo( entry->fileName ).fileName() )
-		.arg( entry->lineNumber );
+		.arg( entry->lineNumber +1 );
 	
 	if ( !entry->inheritance.isEmpty() )
 	{

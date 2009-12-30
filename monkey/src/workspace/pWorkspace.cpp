@@ -272,20 +272,8 @@ pAbstractChild* pWorkspace::currentDocument() const
 	return qobject_cast<pAbstractChild*>( window );
 }
 
-void pWorkspace::goToLine( const QString& fileName, const QPoint& pos, bool highlight, const QString& codec )
+void pWorkspace::goToLine( const QString& fileName, const QPoint& pos, const QString& codec, int selectionLength )
 {
-	if ( highlight )
-	{
-		pAbstractChild* document = openFile( fileName, codec );
-		
-		if ( document )
-		{
-			document->goTo( pos, highlight );
-		}
-		
-		return;
-	}
-	
 	foreach ( QMdiSubWindow* window, mMdiArea->subWindowList() )
 	{
 		pAbstractChild* document = qobject_cast<pAbstractChild*>( window );
@@ -293,9 +281,16 @@ void pWorkspace::goToLine( const QString& fileName, const QPoint& pos, bool high
 		if ( pMonkeyStudio::isSameFile( document->filePath(), fileName ) )
 		{
 			setCurrentDocument( document );
-			document->goTo( pos, highlight );
+			document->goTo( pos, selectionLength );
 			return;
 		}
+	}
+
+	pAbstractChild* document = openFile( fileName, codec );
+
+	if ( document )
+	{
+		document->goTo( pos, selectionLength );
 	}
 }
 

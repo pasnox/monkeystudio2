@@ -87,8 +87,8 @@ public:
 	// go to in the current child
 	virtual void goTo();
 
-	// go to position for file and highlight line according to bool
-	virtual void goTo( const QPoint&, bool = false );
+	// go to position and select by selection length from position
+	virtual void goTo( const QPoint& position, int selectionLength = -1 );
 
 	// return the current file copy available
 	virtual bool isCopyAvailable() const;

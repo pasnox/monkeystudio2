@@ -45,7 +45,7 @@ QVariant SearchResultsModel::data( const QModelIndex& index, int role ) const
 			// child
 			else
 			{
-				text = tr( "At position %1: %2" ).arg( result->position ).arg( result->capture );
+				text = tr( "Line: %1, Column: %2 (offset %3) %4" ).arg( result->position.y() +1 ).arg( result->position.x() ).arg( result->offset ).arg( result->capture );
 			}
 			
 			return text;
@@ -248,5 +248,7 @@ void SearchResultsModel::thread_resultsAvailable( const QString& fileName, const
 		beginInsertRows( index, count, count +results.count() -1 );
 		mResults[ result->row ] << results;
 		endInsertRows();
+		
+		emit dataChanged( index, index );
 	}
 }

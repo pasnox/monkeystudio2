@@ -15,12 +15,12 @@ class SearchResultsModel : public QAbstractItemModel
 public:
 	struct Result
 	{
-		Result( const QString& _fileName = QString::null, const QString& _capture = QString::null, int _position = -1, int _line = -1, bool _checkable = false, Qt::CheckState _checkState = Qt::Unchecked )
+		Result( const QString& _fileName = QString::null, const QString& _capture = QString::null, const QPoint& _position = QPoint(), int _offset = -1, bool _checkable = false, Qt::CheckState _checkState = Qt::Unchecked )
 		{
 			fileName = _fileName;
 			capture = _capture;
 			position = _position;
-			line = _line;
+			offset = _offset;
 			checkable = _checkable;
 			checkState = _checkState;
 			row = -1;
@@ -31,7 +31,7 @@ public:
 			return fileName == other.fileName &&
 				capture == other.capture &&
 				position == other.position &&
-				line == other.line &&
+				offset == other.offset &&
 				checkable == other.checkable/* &&
 				checked == other.checked*/ &&
 				row == other.row;
@@ -39,8 +39,8 @@ public:
 		
 		QString fileName;
 		QString capture;
-		int position;
-		int line;
+		QPoint position;
+		int offset;
 		bool checkable;
 		Qt::CheckState checkState;
 		int row; // internally used by the model for parent indexes, must not be modified.

@@ -86,7 +86,7 @@ protected:
 public slots:
 	pAbstractChild* openFile( const QString& fileName, const QString& codec );
 	void closeFile( const QString& fileName );
-	void goToLine( const QString& fileName, const QPoint& position, bool highlight, const QString& codec );
+	void goToLine( const QString& fileName, const QPoint& position, const QString& codec, int selectionLength = 0 );
 	void openProject( const QString& fileName, const QString& codec );
 
 signals:

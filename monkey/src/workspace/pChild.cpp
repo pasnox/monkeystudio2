@@ -52,7 +52,7 @@ pChild::pChild()
 	setWindowIcon( QIcon() );
 
 	// connections
-	connect( mEditor, SIGNAL( cursorPositionChanged( const QPoint& ) ), this, SIGNAL( cursorPositionChanged( const QPoint& ) ) );
+	connect( mEditor, SIGNAL( cursorPositionChanged( const QPoint& ) ), this, SLOT( cursorPositionChanged() ) );
 	connect( mEditor, SIGNAL( undoAvailable( bool ) ), this, SIGNAL( undoAvailableChanged( bool ) ) );
 	connect( mEditor, SIGNAL( redoAvailable( bool ) ), this, SIGNAL( redoAvailableChanged( bool ) ) );
 	connect( mEditor, SIGNAL( copyAvailable( bool ) ), this, SIGNAL( copyAvailableChanged( bool ) ) );
@@ -100,7 +100,7 @@ void pChild::initializeContext( QToolBar* tb )
 
 QPoint pChild::cursorPosition() const
 {
-	return mEditor->cursorPosition();
+	return mEditor->cursorPosition() +QPoint( 0, 1 );
 }
 
 pEditor* pChild::editor() const
@@ -158,11 +158,14 @@ void pChild::goTo()
 	mEditor->invokeGoToLine();
 }
 
-void pChild::goTo( const QPoint& pos, bool highlight )
+void pChild::goTo( const QPoint& pos, int selectionLength )
 {
-	Q_UNUSED( highlight );
-	mEditor->setCursorPosition( pos.y() -1, pos.x() );
-	mEditor->ensureLineVisible( pos.y() -1 );
+	const int column = pos.x();
+	const int line = pos.y();
+	
+	mEditor->setCursorPosition( line, column );
+	mEditor->setSelection( line, column, line, column +selectionLength );
+	mEditor->ensureLineVisible( line );
 	mEditor->setFocus();
 }
 
