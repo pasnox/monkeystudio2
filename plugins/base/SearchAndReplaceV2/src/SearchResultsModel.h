@@ -11,6 +11,7 @@ class SearchThread;
 class SearchResultsModel : public QAbstractItemModel
 {
 	Q_OBJECT
+	friend class SearchWidget;
 	
 public:
 	struct Result
@@ -23,7 +24,6 @@ public:
 			offset = _offset;
 			checkable = _checkable;
 			checkState = _checkState;
-			row = -1;
 		}
 		
 		bool operator==( const SearchResultsModel::Result& other ) const
@@ -33,8 +33,7 @@ public:
 				position == other.position &&
 				offset == other.offset &&
 				checkable == other.checkable/* &&
-				checked == other.checked*/ &&
-				row == other.row;
+				checked == other.checked*/;
 		}
 		
 		QString fileName;
@@ -43,7 +42,6 @@ public:
 		int offset;
 		bool checkable;
 		Qt::CheckState checkState;
-		int row; // internally used by the model for parent indexes, must not be modified.
 	};
 	
 	typedef QList<SearchResultsModel::Result*> ResultList;
@@ -59,17 +57,20 @@ public:
 	virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
 	virtual bool hasChildren( const QModelIndex& parent = QModelIndex() ) const;
 	virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
+	
+	const QList<SearchResultsModel::ResultList>& results() const;
 
 protected:
 	int mRowCount;
-	QHash<QString, SearchResultsModel::Result*> mParents; // fileName, result
-	QHash<int, SearchResultsModel::Result*> mParentsRows; // row, result
-	QList<SearchResultsModel::ResultList> mResults;
+	mutable QHash<QString, SearchResultsModel::Result*> mParents; // fileName, result
+	mutable QList<SearchResultsModel::Result*> mParentsList; // ordered parents
+	mutable QList<SearchResultsModel::ResultList> mResults; // parents children
 	SearchThread* mSearchThread;
 
 protected slots:
 	void thread_reset();
 	void thread_resultsAvailable( const QString& fileName, const SearchResultsModel::ResultList& results );
+	void thread_resultsHandled( const QString& fileName, const SearchResultsModel::ResultList& results );
 };
 
 #endif // SEARCHRESULTSMODEL_H

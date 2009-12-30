@@ -258,6 +258,13 @@ void SearchThread::search( const QString& fileName, const QString& content ) con
 		pos += rx.matchedLength();
 		lastEol = eolEnd;
 		
+		if ( tracker.elapsed() >= mMaxTime )
+		{
+			emit const_cast<SearchThread*>( this )->resultsAvailable( fileName, results );
+			results.clear();
+			tracker.restart();
+		}
+		
 		{
 			QMutexLocker locker( const_cast<QMutex*>( &mMutex ) );
 			
@@ -265,13 +272,6 @@ void SearchThread::search( const QString& fileName, const QString& content ) con
 			{
 				return;
 			}
-		}
-		
-		if ( tracker.elapsed() >= mMaxTime )
-		{
-			emit const_cast<SearchThread*>( this )->resultsAvailable( fileName, results );
-			results.clear();
-			tracker.restart();
 		}
 	}
 	

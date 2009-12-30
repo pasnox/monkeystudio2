@@ -43,6 +43,11 @@ SearchResultsDock::SearchResultsDock( SearchThread* searchThread, QWidget* paren
 	connect( mView, SIGNAL( activated( const QModelIndex& ) ), this, SLOT( view_activated( const QModelIndex& ) ) );
 }
 
+SearchResultsModel* SearchResultsDock::model() const
+{
+	return mModel;
+}
+
 void SearchResultsDock::view_activated( const QModelIndex& index )
 {
 	SearchResultsModel::Result* result = static_cast<SearchResultsModel::Result*>( index.internalPointer() );

@@ -16,6 +16,8 @@ class SearchResultsDock : public pDockWidget
 	
 public:
 	SearchResultsDock( SearchThread* searchThread, QWidget* parent = 0 );
+	
+	SearchResultsModel* model() const;
 
 protected:
 	SearchThread* mSearchThread;

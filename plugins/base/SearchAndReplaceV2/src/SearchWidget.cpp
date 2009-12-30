@@ -1,5 +1,7 @@
 #include "SearchWidget.h"
 #include "SearchThread.h"
+#include "ReplaceThread.h"
+#include "SearchResultsDock.h"
 
 #include <MonkeyCore.h>
 #include <UIMain.h>
@@ -20,8 +22,11 @@ SearchWidget::SearchWidget( QWidget* parent )
 	pbSearchStop->setVisible( false );
 	pbReplaceCheckedStop->setVisible( false );
 	
-	// search thread
+	// threads
 	mSearchThread = new SearchThread( this );
+	mReplaceThread = new ReplaceThread( this );
+	
+	mDock = 0;
 	
 	// mode actions
 	QMenu* menuMode = new QMenu( pbMode );
@@ -91,9 +96,12 @@ SearchWidget::SearchWidget( QWidget* parent )
 	connect( cbSearch->lineEdit(), SIGNAL( textChanged( const QString& ) ), mSearchThread, SLOT( clear() ) );
 	connect( mSearchThread, SIGNAL( started() ), this, SLOT( searchThread_stateChanged() ) );
 	connect( mSearchThread, SIGNAL( finished() ), this, SLOT( searchThread_stateChanged() ) );
-	/*
 	connect( mReplaceThread, SIGNAL( started() ), this, SLOT( replaceThread_stateChanged() ) );
 	connect( mReplaceThread, SIGNAL( finished() ), this, SLOT( replaceThread_stateChanged() ) );
+	
+	/*
+	void openedFilesHandled( const QHash<QString, QString>& filesContent );
+	void error( const QString& error );
 	*/
 	
 	setMode( SearchAndReplaceV2::ModeSearch );
@@ -102,6 +110,7 @@ SearchWidget::SearchWidget( QWidget* parent )
 SearchWidget::~SearchWidget()
 {
 	delete mSearchThread;
+	delete mReplaceThread;
 }
 
 SearchAndReplaceV2::Mode SearchWidget::mode() const
@@ -114,8 +123,24 @@ SearchThread* SearchWidget::searchThread() const
 	return mSearchThread;
 }
 
+void SearchWidget::setResultsDock( SearchResultsDock* dock )
+{
+	if ( mDock == dock )
+	{
+		return;
+	}
+	
+	mDock = dock;
+	
+	// connections
+	connect( mReplaceThread, SIGNAL( resultsHandled( const QString&, const SearchResultsModel::ResultList& ) ), mDock->model(), SLOT( thread_resultsHandled( const QString&, const SearchResultsModel::ResultList& ) ) );
+}
+
 void SearchWidget::setMode( SearchAndReplaceV2::Mode mode )
 {
+	mSearchThread->stop();
+	mReplaceThread->stop();
+	
 	mMode = mode;
 	mModeActions[ mMode ]->setChecked( true );
 	
@@ -513,10 +538,8 @@ void SearchWidget::searchThread_stateChanged()
 
 void SearchWidget::replaceThread_stateChanged()
 {
-	/*
 	pbReplaceCheckedStop->setVisible( mReplaceThread->isRunning() );
 	updateWidgets();
-	*/
 }
 
 void SearchWidget::groupMode_triggered( QAction* action )
@@ -560,12 +583,30 @@ void SearchWidget::on_pbReplaceAll_clicked()
 
 void SearchWidget::on_pbReplaceChecked_clicked()
 {
+	QHash<QString, SearchResultsModel::ResultList> items;
+	SearchResultsModel* model = mDock ? mDock->model() : 0;
+	
+	Q_ASSERT( model );
+	
 	initializeProperties();
+	
+	foreach ( const SearchResultsModel::ResultList& results, model->results() )
+	{
+		foreach ( SearchResultsModel::Result* result, results )
+		{
+			if ( result->checkState == Qt::Checked )
+			{
+				items[ result->fileName ] << result;
+			}
+		}
+	}
+	
+	mReplaceThread->replace( mProperties, items );
 }
 
 void SearchWidget::on_pbReplaceCheckedStop_clicked()
 {
-	//mReplaceThread->stop();
+	mReplaceThread->stop();
 }
 
 void SearchWidget::on_pbBrowse_clicked()
@@ -575,5 +616,43 @@ void SearchWidget::on_pbBrowse_clicked()
 	if ( !path.isEmpty() )
 	{
 		cbPath->setEditText( path );
+	}
+}
+
+void printChildren( SearchResultsModel* model, const QModelIndex& parent )
+{
+	qWarning() << parent.data().toString().toLocal8Bit().constData();// << parent;
+	int count = model->rowCount( parent );
+	
+	for ( int i = 0; i < count; i++ )
+	{
+		const QModelIndex index = model->index( i, parent.column(), parent );
+		const QModelIndex pIndex = index.parent();
+		qWarning() << "\t" << index.data().toString().toLocal8Bit().constData();// << index;
+		
+		if ( pIndex != parent )
+		{
+			Q_ASSERT( 0 );
+		}
+		
+		if ( model->hasChildren( index ) )
+		{
+			printChildren( model, index );
+		}
+	}
+}
+
+void SearchWidget::on_pbDebug_clicked()
+{
+	SearchResultsModel* model = mDock->model();
+	model->reset();
+	
+	int count = model->rowCount( QModelIndex() );
+	
+	for ( int i = 0; i < count; i++ )
+	{
+		const QModelIndex index = model->index( i, 0, QModelIndex() );
+		
+		printChildren( model, index );
 	}
 }

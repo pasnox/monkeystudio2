@@ -27,6 +27,7 @@ bool SearchAndReplaceV2::install()
 	mDock = new SearchResultsDock( mWidget->searchThread() );
 	MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mDock, mDock->windowTitle(), mDock->windowIcon() );
 	mDock->setVisible( false );
+	mWidget->setResultsDock( mDock );
 	return true;
 }
 

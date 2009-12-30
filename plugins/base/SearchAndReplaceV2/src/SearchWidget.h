@@ -5,6 +5,8 @@
 #include "SearchAndReplaceV2.h"
 
 class SearchThread;
+class ReplaceThread;
+class SearchResultsDock;
 
 class SearchWidget : public QFrame, public Ui::SearchWidget
 {
@@ -50,6 +52,8 @@ public:
 	
 	SearchAndReplaceV2::Mode mode() const;
 	SearchThread* searchThread() const;
+	
+	void setResultsDock( SearchResultsDock* dock );
 
 public slots:
 	void setMode( SearchAndReplaceV2::Mode mode );
@@ -60,6 +64,8 @@ protected:
 	QMap<SearchAndReplaceV2::Option, QAction*> mOptionActions;
 	SearchWidget::Properties mProperties;
 	SearchThread* mSearchThread;
+	ReplaceThread* mReplaceThread;
+	SearchResultsDock* mDock;
 	
 	virtual void keyPressEvent( QKeyEvent* event );
 	
@@ -83,6 +89,8 @@ protected slots:
 	void on_pbReplaceChecked_clicked();
 	void on_pbReplaceCheckedStop_clicked();
 	void on_pbBrowse_clicked();
+	
+	void on_pbDebug_clicked();
 };
 
 #endif // SEARCHWIDGET_H
