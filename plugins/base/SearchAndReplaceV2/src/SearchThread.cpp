@@ -287,6 +287,12 @@ void SearchThread::run()
 	
 	forever
 	{
+		{
+			QMutexLocker locker( &mMutex );
+			mReset = false;
+			mExit = false;
+		}
+		
 		emit reset();
 		tracker.restart();
 		
@@ -338,4 +344,10 @@ void SearchThread::run()
 	}
 	
 	qWarning() << "Search finished in " << tracker.elapsed() /1000.0;
+}
+
+void SearchThread::clear()
+{
+	stop();
+	emit reset();
 }

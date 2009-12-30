@@ -17,6 +17,8 @@ SearchWidget::SearchWidget( QWidget* parent )
 	: QFrame( parent )
 {
 	setupUi( this );
+	pbSearchStop->setVisible( false );
+	pbReplaceCheckedStop->setVisible( false );
 	
 	// search thread
 	mSearchThread = new SearchThread( this );
@@ -86,6 +88,13 @@ SearchWidget::SearchWidget( QWidget* parent )
 	
 	// connections
 	connect( groupMode, SIGNAL( triggered( QAction* ) ), this, SLOT( groupMode_triggered( QAction* ) ) );
+	connect( cbSearch->lineEdit(), SIGNAL( textChanged( const QString& ) ), mSearchThread, SLOT( clear() ) );
+	connect( mSearchThread, SIGNAL( started() ), this, SLOT( searchThread_stateChanged() ) );
+	connect( mSearchThread, SIGNAL( finished() ), this, SLOT( searchThread_stateChanged() ) );
+	/*
+	connect( mReplaceThread, SIGNAL( started() ), this, SLOT( replaceThread_stateChanged() ) );
+	connect( mReplaceThread, SIGNAL( finished() ), this, SLOT( replaceThread_stateChanged() ) );
+	*/
 	
 	setMode( SearchAndReplaceV2::ModeSearch );
 }
@@ -496,6 +505,20 @@ bool SearchWidget::searchFile( bool forward )
 	return found;
 }
 
+void SearchWidget::searchThread_stateChanged()
+{
+	pbSearchStop->setVisible( mSearchThread->isRunning() );
+	updateWidgets();
+}
+
+void SearchWidget::replaceThread_stateChanged()
+{
+	/*
+	pbReplaceCheckedStop->setVisible( mReplaceThread->isRunning() );
+	updateWidgets();
+	*/
+}
+
 void SearchWidget::groupMode_triggered( QAction* action )
 {
 	setMode( mModeActions.key( action ) );
@@ -520,6 +543,11 @@ void SearchWidget::on_pbSearch_clicked()
 	mSearchThread->search( mProperties );
 }
 
+void SearchWidget::on_pbSearchStop_clicked()
+{
+	mSearchThread->stop();
+}
+
 void SearchWidget::on_pbReplace_clicked()
 {
 	initializeProperties();
@@ -533,6 +561,11 @@ void SearchWidget::on_pbReplaceAll_clicked()
 void SearchWidget::on_pbReplaceChecked_clicked()
 {
 	initializeProperties();
+}
+
+void SearchWidget::on_pbReplaceCheckedStop_clicked()
+{
+	//mReplaceThread->stop();
 }
 
 void SearchWidget::on_pbBrowse_clicked()

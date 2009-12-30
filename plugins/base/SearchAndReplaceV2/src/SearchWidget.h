@@ -71,13 +71,17 @@ protected:
 	bool searchFile( bool forward );
 
 protected slots:
+	void searchThread_stateChanged();
+	void replaceThread_stateChanged();
 	void groupMode_triggered( QAction* action );
 	void on_pbPrevious_clicked();
 	void on_pbNext_clicked();
 	void on_pbSearch_clicked();
+	void on_pbSearchStop_clicked();
 	void on_pbReplace_clicked();
 	void on_pbReplaceAll_clicked();
 	void on_pbReplaceChecked_clicked();
+	void on_pbReplaceCheckedStop_clicked();
 	void on_pbBrowse_clicked();
 };
 

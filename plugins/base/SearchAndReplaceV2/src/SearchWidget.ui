@@ -108,6 +108,17 @@
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QPushButton" name="pbSearchStop">
+           <property name="text">
+            <string>S&amp;top</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../../../../monkey/src/resources/resources.qrc">
+             <normaloff>:/console/icons/console/stop.png</normaloff>:/console/icons/console/stop.png</iconset>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
       </item>
@@ -187,6 +198,17 @@
            <property name="icon">
             <iconset resource="../../../../monkey/src/resources/resources.qrc">
              <normaloff>:/edit/icons/edit/replace.png</normaloff>:/edit/icons/edit/replace.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pbReplaceCheckedStop">
+           <property name="text">
+            <string>S&amp;top</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../../../../monkey/src/resources/resources.qrc">
+             <normaloff>:/console/icons/console/stop.png</normaloff>:/console/icons/console/stop.png</iconset>
            </property>
           </widget>
          </item>

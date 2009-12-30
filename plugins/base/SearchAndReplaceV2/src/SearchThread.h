@@ -34,6 +34,9 @@ protected:
 	void search( const QString& fileName, const QString& content ) const;
 	virtual void run();
 
+public slots:
+	void clear();
+
 signals:
 	void reset();
 	void resultsAvailable( const QString& fileName, const SearchResultsModel::ResultList& results );
