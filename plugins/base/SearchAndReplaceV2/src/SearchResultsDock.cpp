@@ -50,6 +50,7 @@ SearchResultsModel* SearchResultsDock::model() const
 
 void SearchResultsDock::view_activated( const QModelIndex& index )
 {
+	const int selectionLength = mSearchThread->properties()->searchText.length();
 	SearchResultsModel::Result* result = static_cast<SearchResultsModel::Result*>( index.internalPointer() );
-	MonkeyCore::fileManager()->goToLine( result->fileName, result->position, mSearchThread->properties()->codec, result->offset == -1 ? 0 : 3 );
+	MonkeyCore::fileManager()->goToLine( result->fileName, result->position, mSearchThread->properties()->codec, result->offset == -1 ? 0 : selectionLength );
 }

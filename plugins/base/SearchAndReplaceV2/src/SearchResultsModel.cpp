@@ -268,28 +268,35 @@ void SearchResultsModel::thread_resultsAvailable( const QString& fileName, const
 
 void SearchResultsModel::thread_resultsHandled( const QString& fileName, const SearchResultsModel::ResultList& results )
 {
-	SearchResultsModel::Result* result = mParents.value( fileName );
+	SearchResultsModel::Result* pResult = mParents.value( fileName );
 	
-	Q_ASSERT( result );
+	Q_ASSERT( pResult );
 	
-	const int pRow = mParentsList.indexOf( result );
+	const int pRow = mParentsList.indexOf( pResult );
 	SearchResultsModel::ResultList& children = mResults[ pRow ];
-	const QModelIndex index = createIndex( pRow, 0, result );
+	const QModelIndex pIndex = createIndex( pRow, 0, pResult );
 	
-	foreach ( SearchResultsModel::Result* r, results )
+	foreach ( SearchResultsModel::Result* result, results )
 	{
-		const int id = children.indexOf( r );
-		beginRemoveRows( index, id, id );
-		delete children.takeAt( id );
+		const int index = children.indexOf( result );
+		beginRemoveRows( pIndex, index, index );
+		delete children.takeAt( index );
 		endRemoveRows();
 	}
 	
 	if ( children.isEmpty() )
 	{
 		beginRemoveRows( QModelIndex(), pRow, pRow );
-		mParentsList.removeAt( pRow );
 		mResults.removeAt( pRow );
+		mParentsList.removeAt( pRow );
 		delete mParents.take( fileName );
 		endRemoveRows();
 	}
+	else
+	{
+		pResult->checkState = Qt::Unchecked;
+		emit dataChanged( pIndex, pIndex );
+	}
+	
+	//qWarning() << mParents.count() << mParentsList.count() << mResults.count();
 }

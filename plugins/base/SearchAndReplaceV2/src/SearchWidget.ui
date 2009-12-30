@@ -155,6 +155,11 @@
         <property name="editable">
          <bool>true</bool>
         </property>
+        <item>
+         <property name="text">
+          <string>KKK</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item>
@@ -250,7 +255,7 @@
         </property>
         <item>
          <property name="text">
-          <string>/usr/include</string>
+          <string>/home/pasnox/Temporaire/phpqt</string>
          </property>
         </item>
        </widget>
@@ -379,7 +384,7 @@ You can use language name too so the search will only apply to the language suff
            </property>
            <item>
             <property name="text">
-             <string>*config*</string>
+             <string>c++</string>
             </property>
            </item>
           </widget>
