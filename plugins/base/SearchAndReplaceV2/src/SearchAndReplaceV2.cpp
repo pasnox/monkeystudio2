@@ -32,8 +32,8 @@ bool SearchAndReplaceV2::install()
 
 bool SearchAndReplaceV2::uninstall()
 {
-	delete mWidget;
 	delete mDock;
+	delete mWidget;
 	return true;
 }
 

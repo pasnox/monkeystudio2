@@ -11,13 +11,14 @@
 #include <pEditor.h>
 
 #include <QTextCodec>
+#include <QFileDialog>
 
 SearchWidget::SearchWidget( QWidget* parent )
 	: QFrame( parent )
 {
 	setupUi( this );
 	
-	// threads
+	// search thread
 	mSearchThread = new SearchThread( this );
 	
 	// mode actions
@@ -28,8 +29,8 @@ SearchWidget::SearchWidget( QWidget* parent )
 	mModeActions[ SearchAndReplaceV2::ModeReplace ] = menuMode->addAction( tr( "&Replace in File" ) );
 	mModeActions[ SearchAndReplaceV2::ModeSearchDirectory ] = menuMode->addAction( tr( "Search in &Directory" ) );
 	mModeActions[ SearchAndReplaceV2::ModeReplaceDirectory ] = menuMode->addAction( tr( "Repla&ce in Directory" ) );
-	mModeActions[ SearchAndReplaceV2::ModeSearchProject ] = menuMode->addAction( tr( "Search in &Project" ) );
-	mModeActions[ SearchAndReplaceV2::ModeReplaceProject ] = menuMode->addAction( tr( "R&eplace in Project" ) );
+	mModeActions[ SearchAndReplaceV2::ModeSearchProjectFiles ] = menuMode->addAction( tr( "Search in &Project" ) );
+	mModeActions[ SearchAndReplaceV2::ModeReplaceProjectFiles ] = menuMode->addAction( tr( "R&eplace in Project" ) );
 	mModeActions[ SearchAndReplaceV2::ModeSearchOpenedFiles ] = menuMode->addAction( tr( "Search in &Opened Files" ) );
 	mModeActions[ SearchAndReplaceV2::ModeReplaceOpenedFiles ] = menuMode->addAction( tr( "Replace in Opened &Files" ) );
 	
@@ -91,6 +92,7 @@ SearchWidget::SearchWidget( QWidget* parent )
 
 SearchWidget::~SearchWidget()
 {
+	delete mSearchThread;
 }
 
 SearchAndReplaceV2::Mode SearchWidget::mode() const
@@ -184,7 +186,7 @@ void SearchWidget::setMode( SearchAndReplaceV2::Mode mode )
 			wMask->setVisible( true );
 			wCodec->setVisible( true );
 			break;
-		case SearchAndReplaceV2::ModeSearchProject:
+		case SearchAndReplaceV2::ModeSearchProjectFiles:
 			wSearch->setVisible( true );
 			pbPrevious->setVisible( false );
 			pbNext->setVisible( false );
@@ -201,7 +203,7 @@ void SearchWidget::setMode( SearchAndReplaceV2::Mode mode )
 			wMask->setVisible( true );
 			wCodec->setVisible( true );
 			break;
-		case SearchAndReplaceV2::ModeReplaceProject:
+		case SearchAndReplaceV2::ModeReplaceProjectFiles:
 			wSearch->setVisible( true );
 			pbPrevious->setVisible( false );
 			pbNext->setVisible( false );
@@ -283,7 +285,7 @@ void SearchWidget::keyPressEvent( QKeyEvent* event )
 						pbNext->click();
 						break;
 					case SearchAndReplaceV2::ModeSearchDirectory:
-					case SearchAndReplaceV2::ModeSearchProject:
+					case SearchAndReplaceV2::ModeSearchProjectFiles:
 					case SearchAndReplaceV2::ModeSearchOpenedFiles:
 						pbSearch->click();
 						break;
@@ -291,7 +293,7 @@ void SearchWidget::keyPressEvent( QKeyEvent* event )
 						pbReplace->click();
 						break;
 					case SearchAndReplaceV2::ModeReplaceDirectory:
-					case SearchAndReplaceV2::ModeReplaceProject:
+					case SearchAndReplaceV2::ModeReplaceProjectFiles:
 					case SearchAndReplaceV2::ModeReplaceOpenedFiles:
 						pbReplaceChecked->click();
 						break;
@@ -517,4 +519,10 @@ void SearchWidget::on_pbReplaceChecked_clicked()
 
 void SearchWidget::on_pbBrowse_clicked()
 {
+	const QString path = QFileDialog::getExistingDirectory( this, tr( "Search path" ), cbPath->currentText() );
+	
+	if ( !path.isEmpty() )
+	{
+		cbPath->setEditText( path );
+	}
 }

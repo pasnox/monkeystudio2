@@ -14,7 +14,6 @@ class SearchResultsDock : public pDockWidget
 	
 public:
 	SearchResultsDock( SearchThread* searchThread, QWidget* parent = 0 );
-	virtual ~SearchResultsDock();
 
 protected:
 	QHBoxLayout* mLayout;

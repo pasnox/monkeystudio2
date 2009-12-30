@@ -12,17 +12,26 @@ class SearchAndReplaceV2 : public BasePlugin
 	Q_INTERFACES( BasePlugin )
 
 public:
+	enum ModeFlag
+	{
+		ModeFlagSearch = 0x1,
+		ModeFlagReplace = 0x2,
+		ModeFlagDirectory = 0x4,
+		ModeFlagProjectFiles = 0x8,
+		ModeFlagOpenedFiles = 0x10
+	};
+	
 	enum Mode
 	{
 		ModeNo = 0,
-		ModeSearch,
-		ModeReplace,
-		ModeSearchDirectory,
-		ModeReplaceDirectory,
-		ModeSearchProject,
-		ModeReplaceProject,
-		ModeSearchOpenedFiles,
-		ModeReplaceOpenedFiles
+		ModeSearch = ModeFlagSearch,
+		ModeReplace = ModeFlagReplace,
+		ModeSearchDirectory = ModeFlagSearch | ModeFlagDirectory,
+		ModeReplaceDirectory = ModeFlagReplace | ModeFlagDirectory,
+		ModeSearchProjectFiles = ModeFlagSearch | ModeFlagProjectFiles,
+		ModeReplaceProjectFiles = ModeFlagReplace | ModeFlagProjectFiles,
+		ModeSearchOpenedFiles = ModeFlagSearch | ModeFlagOpenedFiles,
+		ModeReplaceOpenedFiles = ModeFlagReplace | ModeFlagOpenedFiles
 	};
 	
 	enum Option

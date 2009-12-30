@@ -46,6 +46,12 @@ void SearchThread::stop()
 	}
 }
 
+SearchWidget::Properties* SearchThread::properties() const
+{
+	QMutexLocker locker( const_cast<QMutex*>( &mMutex ) );
+	return &const_cast<SearchThread*>( this )->mProperties;
+}
+
 QStringList SearchThread::getFiles( QDir fromDir, const QStringList& filters, bool recursive ) const
 {
 	QStringList files;
@@ -110,8 +116,8 @@ QStringList SearchThread::getFilesToScan() const
 			files = getFiles( dir, mask, true ).toSet();
 			break;
 		}
-		case SearchAndReplaceV2::ModeSearchProject:
-		case SearchAndReplaceV2::ModeReplaceProject:
+		case SearchAndReplaceV2::ModeSearchProjectFiles:
+		case SearchAndReplaceV2::ModeReplaceProjectFiles:
 		{
 			QStringList sources;
 			QStringList mask;
@@ -205,6 +211,7 @@ QString SearchThread::fileContent( const QString& fileName ) const
 void SearchThread::search( const QString& fileName, const QString& content ) const
 {
 	static const QRegExp eolRx( "(?:^|\\r\\n|\\n|\\r|$)" );
+	bool checkable = false;
 	QRegExp rx;
 	
 	{
@@ -214,6 +221,7 @@ void SearchThread::search( const QString& fileName, const QString& content ) con
 		const bool isWw = mProperties.options & SearchAndReplaceV2::OptionWholeWord;
 		const bool isCS = mProperties.options & SearchAndReplaceV2::OptionCaseSensitive;
 		const Qt::CaseSensitivity sensitivity = isCS ? Qt::CaseSensitive : Qt::CaseInsensitive;
+		checkable = mProperties.mode & SearchAndReplaceV2::ModeFlagReplace;
 		QString pattern = isRE ? mProperties.searchText : QRegExp::escape( mProperties.searchText );
 		
 		if ( !isRE && isWw )
@@ -240,8 +248,8 @@ void SearchThread::search( const QString& fileName, const QString& content ) con
 		SearchResultsModel::Result* result = new SearchResultsModel::Result( fileName, capture );
 		result->position = pos;
 		result->line = -1;
-		result->checkable = false;
-		result->checkState = Qt::Unchecked;
+		result->checkable = checkable;
+		result->checkState = checkable ? Qt::Checked : Qt::Unchecked;
 		
 		results << result;
 		

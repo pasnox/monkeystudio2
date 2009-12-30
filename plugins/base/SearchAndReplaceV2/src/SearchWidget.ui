@@ -350,7 +350,7 @@ You can use language name too so the search will only apply to the language suff
            </property>
            <item>
             <property name="text">
-             <string>*.h</string>
+             <string>*config*</string>
             </property>
            </item>
           </widget>

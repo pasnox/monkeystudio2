@@ -6,6 +6,8 @@
 
 #include "SearchWidget.h"
 
+class SearchThread;
+
 class SearchResultsModel : public QAbstractItemModel
 {
 	Q_OBJECT
@@ -46,8 +48,7 @@ public:
 	
 	typedef QList<SearchResultsModel::Result*> ResultList;
 	
-	SearchResultsModel( /*SearchWidget::Properties* properties,*/ QObject* parent = 0 );
-	virtual ~SearchResultsModel();
+	SearchResultsModel( SearchThread* searchThread, QObject* parent = 0 );
 	
 	virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
 	virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
@@ -55,14 +56,16 @@ public:
 	virtual QModelIndex parent( const QModelIndex& index ) const;
 	virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
 	
+	virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
 	virtual bool hasChildren( const QModelIndex& parent = QModelIndex() ) const;
+	virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
 
 protected:
 	int mRowCount;
 	QHash<QString, SearchResultsModel::Result*> mParents; // fileName, result
 	QHash<int, SearchResultsModel::Result*> mParentsRows; // row, result
 	QList<SearchResultsModel::ResultList> mResults;
-	SearchWidget::Properties* mProperties;
+	SearchThread* mSearchThread;
 
 protected slots:
 	void thread_reset();

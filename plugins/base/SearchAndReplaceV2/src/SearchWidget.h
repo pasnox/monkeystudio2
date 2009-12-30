@@ -55,11 +55,11 @@ public slots:
 	void setMode( SearchAndReplaceV2::Mode mode );
 
 protected:
-	SearchThread* mSearchThread;
 	SearchAndReplaceV2::Mode mMode;
 	QMap<SearchAndReplaceV2::Mode, QAction*> mModeActions;
 	QMap<SearchAndReplaceV2::Option, QAction*> mOptionActions;
 	SearchWidget::Properties mProperties;
+	SearchThread* mSearchThread;
 	
 	virtual void keyPressEvent( QKeyEvent* event );
 	

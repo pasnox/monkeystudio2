@@ -18,6 +18,8 @@ public:
 	
 	void search( const SearchWidget::Properties& properties );
 	void stop();
+	
+	SearchWidget::Properties* properties() const;
 
 protected:
 	static int mMaxTime;
