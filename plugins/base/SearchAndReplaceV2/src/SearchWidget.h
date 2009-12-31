@@ -75,6 +75,7 @@ protected:
 	void showMessage( const QString& status );
 	void setState( SearchWidget::InputField field, SearchWidget::State state );
 	bool searchFile( bool forward );
+	bool replaceFile( bool all );
 
 protected slots:
 	void searchThread_stateChanged();

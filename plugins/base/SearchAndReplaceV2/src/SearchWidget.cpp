@@ -500,7 +500,7 @@ bool SearchWidget::searchFile( bool forward )
 	
 	if ( !editor )
 	{
-		setState( SearchWidget::Search, SearchWidget::Normal );
+		setState( SearchWidget::Search, SearchWidget::Bad );
 		showMessage( tr( "No active editor" ) );
 		return false;
 	}
@@ -526,6 +526,60 @@ bool SearchWidget::searchFile( bool forward )
 
 	// return found state
 	return found;
+}
+
+bool SearchWidget::replaceFile( bool all )
+{
+	pAbstractChild* document = MonkeyCore::workspace()->currentDocument();
+	pChild* child = document ? static_cast<pChild*>( document ) : 0;
+	pEditor* editor = child ? child->editor() : 0;
+	
+	if ( !editor )
+	{
+		setState( SearchWidget::Search, SearchWidget::Bad );
+		showMessage( tr( "No active editor" ) );
+		return false;
+	}
+
+	int count = 0;
+	
+	if ( all )
+	{
+		int x, y;
+		
+		editor->getCursorPosition( &y, &x );
+		
+		if ( mProperties.options & SearchAndReplaceV2::OptionWrap )
+		{
+			editor->setCursorPosition( 0, 0 );
+		}
+		
+		while ( searchFile( true/*, false, false*/ ) ) // search next
+		{
+			editor->replace( mProperties.replaceText );
+			count++;
+		}
+		
+		editor->setCursorPosition( y, x ); // restore cursor position
+	}
+	else
+	{
+		int x, y, temp;
+		
+		editor->getSelection( &y, &x, &temp, &temp );
+		editor->setCursorPosition( y, x );
+
+		if ( searchFile( true/*, false, true*/ ) )
+		{
+			editor->replace( mProperties.replaceText );
+			count++;
+			pbNext->click(); // move selection to next item
+		}
+	}
+	
+	showMessage( tr( "%1 occurrence(s) replaced." ).arg( count ) );
+	
+	return true;
 }
 
 void SearchWidget::searchThread_stateChanged()
@@ -591,11 +645,13 @@ void SearchWidget::on_pbSearchStop_clicked()
 void SearchWidget::on_pbReplace_clicked()
 {
 	initializeProperties();
+	replaceFile( false );
 }
 
 void SearchWidget::on_pbReplaceAll_clicked()
 {
 	initializeProperties();
+	replaceFile( true );
 }
 
 void SearchWidget::on_pbReplaceChecked_clicked()
