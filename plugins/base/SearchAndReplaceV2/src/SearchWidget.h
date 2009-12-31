@@ -79,6 +79,8 @@ protected:
 protected slots:
 	void searchThread_stateChanged();
 	void replaceThread_stateChanged();
+	void replaceThread_openedFileHandled( const QString& fileName, const QString& content, const QString& codec );
+	void replaceThread_error( const QString& error );
 	void groupMode_triggered( QAction* action );
 	void on_pbPrevious_clicked();
 	void on_pbNext_clicked();

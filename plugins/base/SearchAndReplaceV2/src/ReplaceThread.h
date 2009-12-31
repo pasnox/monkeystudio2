@@ -32,7 +32,7 @@ protected:
 
 signals:
 	void resultsHandled( const QString& fileName, const SearchResultsModel::ResultList& results );
-	void openedFilesHandled( const QHash<QString, QString>& filesContent );
+	void openedFileHandled( const QString& fileName, const QString& content, const QString& codec );
 	void error( const QString& error );
 };
 

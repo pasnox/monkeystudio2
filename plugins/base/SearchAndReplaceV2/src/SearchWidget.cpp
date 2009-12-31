@@ -11,6 +11,7 @@
 #include <pAbstractChild.h>
 #include <pChild.h>
 #include <pEditor.h>
+#include <pQueuedMessageToolBar.h>
 
 #include <QTextCodec>
 #include <QFileDialog>
@@ -98,11 +99,8 @@ SearchWidget::SearchWidget( QWidget* parent )
 	connect( mSearchThread, SIGNAL( finished() ), this, SLOT( searchThread_stateChanged() ) );
 	connect( mReplaceThread, SIGNAL( started() ), this, SLOT( replaceThread_stateChanged() ) );
 	connect( mReplaceThread, SIGNAL( finished() ), this, SLOT( replaceThread_stateChanged() ) );
-	
-	/*
-	void openedFilesHandled( const QHash<QString, QString>& filesContent );
-	void error( const QString& error );
-	*/
+	connect( mReplaceThread, SIGNAL( openedFileHandled( const QString&, const QString&, const QString& ) ), this, SLOT( replaceThread_openedFileHandled( const QString&, const QString&, const QString& ) ) );
+	connect( mReplaceThread, SIGNAL( error( const QString& ) ), this, SLOT( replaceThread_error( const QString& ) ) );
 	
 	setMode( SearchAndReplaceV2::ModeSearch );
 }
@@ -540,6 +538,25 @@ void SearchWidget::replaceThread_stateChanged()
 {
 	pbReplaceCheckedStop->setVisible( mReplaceThread->isRunning() );
 	updateWidgets();
+}
+
+void SearchWidget::replaceThread_openedFileHandled( const QString& fileName, const QString& content, const QString& codec )
+{
+	pAbstractChild* document = MonkeyCore::fileManager()->openFile( fileName, codec );
+	pEditor* editor = document->editor();
+	
+	Q_ASSERT( editor );
+	
+	editor->beginUndoAction();
+	editor->selectAll();
+	editor->removeSelectedText();
+	editor->insert( content );
+	editor->endUndoAction();
+}
+
+void SearchWidget::replaceThread_error( const QString& error )
+{
+	MonkeyCore::messageManager()->appendMessage( error, 0 );
 }
 
 void SearchWidget::groupMode_triggered( QAction* action )

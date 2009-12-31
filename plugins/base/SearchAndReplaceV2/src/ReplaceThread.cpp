@@ -105,7 +105,6 @@ void ReplaceThread::replace( const QString& fileName, QString content )
 	SearchResultsModel::ResultList results;
 	bool isOpenedFile = false;
 	SearchResultsModel::ResultList handledResults;
-	QHash<QString, QString> handledOpenedFiles;
 	
 	{
 		QMutexLocker locker( &mMutex );
@@ -128,11 +127,6 @@ void ReplaceThread::replace( const QString& fileName, QString content )
 		
 		handledResults << result;
 		
-		if ( isOpenedFile )
-		{
-			handledOpenedFiles[ fileName ] = content;
-		}
-		
 		if ( tracker.elapsed() >= mMaxTime )
 		{
 			if ( !handledResults.isEmpty() )
@@ -145,13 +139,12 @@ void ReplaceThread::replace( const QString& fileName, QString content )
 				emit resultsHandled( fileName, handledResults );
 			}
 			
-			if ( !handledOpenedFiles.isEmpty() )
+			if ( isOpenedFile )
 			{
-				emit openedFilesHandled( handledOpenedFiles );
+				emit openedFileHandled( fileName, content, codec );
 			}
 			
 			handledResults.clear();
-			handledOpenedFiles.clear();
 			tracker.restart();
 		}
 		
@@ -179,9 +172,9 @@ void ReplaceThread::replace( const QString& fileName, QString content )
 		emit resultsHandled( fileName, handledResults );
 	}
 	
-	if ( !handledOpenedFiles.isEmpty() )
+	if ( isOpenedFile )
 	{
-		emit openedFilesHandled( handledOpenedFiles );
+		emit openedFileHandled( fileName, content, codec );
 	}
 }
 
