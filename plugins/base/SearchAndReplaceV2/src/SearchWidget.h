@@ -92,8 +92,6 @@ protected slots:
 	void on_pbReplaceChecked_clicked();
 	void on_pbReplaceCheckedStop_clicked();
 	void on_pbBrowse_clicked();
-	
-	void on_pbDebug_clicked();
 };
 
 #endif // SEARCHWIDGET_H

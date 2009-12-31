@@ -53,16 +53,6 @@
         <property name="editable">
          <bool>true</bool>
         </property>
-        <item>
-         <property name="text">
-          <string>pMonkeyStudio</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>MKS</string>
-         </property>
-        </item>
        </widget>
       </item>
       <item>
@@ -160,16 +150,6 @@
         <property name="editable">
          <bool>true</bool>
         </property>
-        <item>
-         <property name="text">
-          <string>MKS</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>pMonkeyStudio</string>
-         </property>
-        </item>
        </widget>
       </item>
       <item>
@@ -202,6 +182,10 @@
           <widget class="QPushButton" name="pbReplaceAll">
            <property name="text">
             <string>Replace &amp;All</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../../../../monkey/src/resources/resources.qrc">
+             <normaloff>:/edit/icons/edit/replace.png</normaloff>:/edit/icons/edit/replace.png</iconset>
            </property>
           </widget>
          </item>
@@ -263,11 +247,6 @@
         <property name="editable">
          <bool>true</bool>
         </property>
-        <item>
-         <property name="text">
-          <string>/home/pasnox/Temporaire</string>
-         </property>
-        </item>
        </widget>
       </item>
       <item>
@@ -330,13 +309,6 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pbDebug">
-        <property name="text">
-         <string>Debug</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <spacer name="horizontalSpacer_4">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -392,11 +364,6 @@ You can use language name too so the search will only apply to the language suff
            <property name="editable">
             <bool>true</bool>
            </property>
-           <item>
-            <property name="text">
-             <string>pMonkey*</string>
-            </property>
-           </item>
           </widget>
          </item>
         </layout>

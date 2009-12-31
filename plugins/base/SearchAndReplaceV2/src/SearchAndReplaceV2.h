@@ -53,6 +53,10 @@ protected:
 
 	virtual bool install();
 	virtual bool uninstall();
+
+protected slots:
+	void searchFile_triggered();
+	void replaceFile_triggered();
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS( SearchAndReplaceV2::Options )

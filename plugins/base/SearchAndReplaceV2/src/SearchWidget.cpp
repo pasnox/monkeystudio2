@@ -449,13 +449,13 @@ void SearchWidget::initializeProperties()
 
 void SearchWidget::showMessage( const QString& status )
 {
-	if ( !status.isNull() )
+	if ( status.isEmpty() )
 	{
-		MonkeyCore::mainWindow()->statusBar()->showMessage( tr( "Search: %1" ).arg( status ), 30000 );
+		MonkeyCore::mainWindow()->statusBar()->clearMessage();
 	}
 	else
 	{
-		MonkeyCore::mainWindow()->statusBar()->clearMessage();
+		MonkeyCore::mainWindow()->statusBar()->showMessage( status, 30000 );
 	}
 }
 
@@ -694,43 +694,5 @@ void SearchWidget::on_pbBrowse_clicked()
 	if ( !path.isEmpty() )
 	{
 		cbPath->setEditText( path );
-	}
-}
-
-void printChildren( SearchResultsModel* model, const QModelIndex& parent )
-{
-	qWarning() << parent.data().toString().toLocal8Bit().constData();// << parent;
-	int count = model->rowCount( parent );
-	
-	for ( int i = 0; i < count; i++ )
-	{
-		const QModelIndex index = model->index( i, parent.column(), parent );
-		const QModelIndex pIndex = index.parent();
-		qWarning() << "\t" << index.data().toString().toLocal8Bit().constData();// << index;
-		
-		if ( pIndex != parent )
-		{
-			Q_ASSERT( 0 );
-		}
-		
-		if ( model->hasChildren( index ) )
-		{
-			printChildren( model, index );
-		}
-	}
-}
-
-void SearchWidget::on_pbDebug_clicked()
-{
-	SearchResultsModel* model = mDock->model();
-	model->reset();
-	
-	int count = model->rowCount( QModelIndex() );
-	
-	for ( int i = 0; i < count; i++ )
-	{
-		const QModelIndex index = model->index( i, 0, QModelIndex() );
-		
-		printChildren( model, index );
 	}
 }

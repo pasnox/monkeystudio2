@@ -1264,7 +1264,7 @@ void pWorkspace::editSearch_triggered()
 {
 	pAbstractChild* document = currentDocument();
 	
-	if ( document )
+	if ( document && !document->editor() )
 	{
 		document->invokeSearch();
 	}
