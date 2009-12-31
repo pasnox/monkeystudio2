@@ -16,7 +16,9 @@ class SearchResultsModel : public QAbstractItemModel
 public:
 	struct Result
 	{
-		Result( const QString& _fileName = QString::null, const QString& _capture = QString::null, const QPoint& _position = QPoint(), int _offset = -1, bool _checkable = false, Qt::CheckState _checkState = Qt::Unchecked )
+		Result( const QString& _fileName = QString::null, const QString& _capture = QString::null,
+			const QPoint& _position = QPoint(), int _offset = -1, bool _checkable = false,
+			Qt::CheckState _checkState = Qt::Unchecked, bool _enabled = true )
 		{
 			fileName = _fileName;
 			capture = _capture;
@@ -24,16 +26,18 @@ public:
 			offset = _offset;
 			checkable = _checkable;
 			checkState = _checkState;
+			enabled = _enabled;
 		}
 		
 		bool operator==( const SearchResultsModel::Result& other ) const
 		{
 			return fileName == other.fileName &&
-				capture == other.capture &&
+				//capture == other.capture &&
 				position == other.position &&
-				offset == other.offset &&
-				checkable == other.checkable/* &&
-				checked == other.checked*/;
+				offset == other.offset /*&&
+				checkable == other.checkable &&
+				checkState == other.checkState &&
+				enabled == other.enabled*/;
 		}
 		
 		QString fileName;
@@ -42,9 +46,15 @@ public:
 		int offset;
 		bool checkable;
 		Qt::CheckState checkState;
+		bool enabled;
 	};
 	
 	typedef QList<SearchResultsModel::Result*> ResultList;
+	
+	enum CustomRoles
+	{
+		EnabledRole = Qt::UserRole
+	};
 	
 	SearchResultsModel( SearchThread* searchThread, QObject* parent = 0 );
 	
@@ -57,6 +67,9 @@ public:
 	virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
 	virtual bool hasChildren( const QModelIndex& parent = QModelIndex() ) const;
 	virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
+	
+	QModelIndex index( SearchResultsModel::Result* result ) const;
+	SearchResultsModel::Result* result( const QModelIndex& index ) const;
 	
 	const QList<SearchResultsModel::ResultList>& results() const;
 

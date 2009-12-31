@@ -100,7 +100,7 @@ QString ReplaceThread::fileContent( const QString& fileName ) const
 void ReplaceThread::replace( const QString& fileName, QString content )
 {
 	QString replaceText;
-	int replaceLength = 0;
+	int searchLength = 0;
 	QString codec;
 	SearchResultsModel::ResultList results;
 	bool isOpenedFile = false;
@@ -110,7 +110,7 @@ void ReplaceThread::replace( const QString& fileName, QString content )
 	{
 		QMutexLocker locker( &mMutex );
 		replaceText = mProperties.replaceText;
-		replaceLength = replaceText.length();
+		searchLength = mProperties.searchText.length();
 		codec = mProperties.codec;
 		results = mResults[ fileName ];
 		isOpenedFile = mProperties.openedFiles.contains( fileName );
@@ -124,7 +124,7 @@ void ReplaceThread::replace( const QString& fileName, QString content )
 	{
 		SearchResultsModel::Result* result = results.at( i );
 		
-		content.replace( result->offset, replaceLength, replaceText );
+		content.replace( result->offset, searchLength, replaceText );
 		
 		handledResults << result;
 		
@@ -187,24 +187,6 @@ void ReplaceThread::replace( const QString& fileName, QString content )
 
 void ReplaceThread::run()
 {
-	/*
-	switch ( mProperties.mode )
-	{
-		case SearchAndReplaceV2::ModeNo:
-		case SearchAndReplaceV2::ModeSearch:
-		case SearchAndReplaceV2::ModeReplace:
-		case SearchAndReplaceV2::ModeSearchDirectory:
-		case SearchAndReplaceV2::ModeSearchProjectFiles:
-		case SearchAndReplaceV2::ModeSearchOpenedFiles:
-			Q_ASSERT( 0 );
-			break;
-		case SearchAndReplaceV2::ModeReplaceDirectory:
-		case SearchAndReplaceV2::ModeReplaceProjectFiles:
-		case SearchAndReplaceV2::ModeReplaceOpenedFiles:
-			break;
-	}
-	*/
-	
 	QTime tracker;
 	
 	forever

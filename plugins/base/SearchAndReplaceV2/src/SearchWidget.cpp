@@ -594,9 +594,14 @@ void SearchWidget::on_pbReplaceChecked_clicked()
 	{
 		foreach ( SearchResultsModel::Result* result, results )
 		{
-			if ( result->checkState == Qt::Checked )
+			if ( result->enabled && result->checkState == Qt::Checked )
 			{
 				items[ result->fileName ] << result;
+			}
+			else
+			{
+				const QModelIndex index = mDock->model()->index( result );
+				mDock->model()->setData( index, false, SearchResultsModel::EnabledRole );
 			}
 		}
 	}

@@ -55,7 +55,12 @@
         </property>
         <item>
          <property name="text">
-          <string>int</string>
+          <string>pMonkeyStudio</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>MKS</string>
          </property>
         </item>
        </widget>
@@ -157,7 +162,12 @@
         </property>
         <item>
          <property name="text">
-          <string>KKK</string>
+          <string>MKS</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>pMonkeyStudio</string>
          </property>
         </item>
        </widget>
@@ -255,7 +265,7 @@
         </property>
         <item>
          <property name="text">
-          <string>/home/pasnox/Temporaire/phpqt</string>
+          <string>/home/pasnox/Temporaire</string>
          </property>
         </item>
        </widget>
@@ -384,7 +394,7 @@ You can use language name too so the search will only apply to the language suff
            </property>
            <item>
             <property name="text">
-             <string>c++</string>
+             <string>pMonkey*</string>
             </property>
            </item>
           </widget>
