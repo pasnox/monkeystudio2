@@ -87,11 +87,6 @@ void SearchAndReplaceV2::searchFile_triggered()
 	if ( ( document && document->editor() ) || !document )
 	{
 		mWidget->setMode( SearchAndReplaceV2::ModeSearch );
-		mWidget->show();
-	}
-	else
-	{
-		mWidget->hide();
 	}
 }
 
@@ -102,11 +97,6 @@ void SearchAndReplaceV2::replaceFile_triggered()
 	if ( ( document && document->editor() ) || !document )
 	{
 		mWidget->setMode( SearchAndReplaceV2::ModeReplace );
-		mWidget->show();
-	}
-	else
-	{
-		mWidget->hide();
 	}
 }
 

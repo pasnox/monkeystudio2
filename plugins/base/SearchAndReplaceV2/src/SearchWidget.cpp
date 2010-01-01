@@ -15,11 +15,17 @@
 
 #include <QTextCodec>
 #include <QFileDialog>
+#include <QCompleter>
+#include <QDirModel>
 
 SearchWidget::SearchWidget( QWidget* parent )
 	: QFrame( parent )
 {
 	setupUi( this );
+	cbSearch->completer()->setCaseSensitivity( Qt::CaseSensitive );
+	cbReplace->completer()->setCaseSensitivity( Qt::CaseSensitive );
+	cbPath->lineEdit()->setCompleter( new QCompleter( new QDirModel( this ) ) );
+	cbMask->completer()->setCaseSensitivity( Qt::CaseSensitive );
 	pbSearchStop->setVisible( false );
 	pbReplaceCheckedStop->setVisible( false );
 	
@@ -135,12 +141,33 @@ void SearchWidget::setResultsDock( SearchResultsDock* dock )
 }
 
 void SearchWidget::setMode( SearchAndReplaceV2::Mode mode )
-{
+{	
 	mSearchThread->stop();
 	mReplaceThread->stop();
 	
 	mMode = mode;
 	mModeActions[ mMode ]->setChecked( true );
+	
+	pAbstractChild* document = MonkeyCore::workspace()->currentDocument();
+	pEditor* editor = document ? document->editor() : 0;
+	const QString searchText = editor ? editor->selectedText() : QString::null;
+	
+	setVisible( mode != SearchAndReplaceV2::ModeNo );
+	
+	if ( isVisible() )
+	{
+		cbSearch->setEditText( searchText );
+		cbSearch->lineEdit()->selectAll();
+		
+		if ( mode & SearchAndReplaceV2::ModeFlagSearch )
+		{
+			cbSearch->setFocus();
+		}
+		else
+		{
+			cbReplace->setFocus();
+		}
+	}
 	
 	switch ( mMode )
 	{
