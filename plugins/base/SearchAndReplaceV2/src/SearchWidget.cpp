@@ -99,6 +99,7 @@ SearchWidget::SearchWidget( QWidget* parent )
 	cbCodec->setCurrentIndex( cbCodec->findText( pMonkeyStudio::defaultCodec() ) );
 	
 	// connections
+	connect( cbSearch->lineEdit(), SIGNAL( textEdited( const QString& ) ), this, SLOT( search_textChanged() ) );
 	connect( groupMode, SIGNAL( triggered( QAction* ) ), this, SLOT( groupMode_triggered( QAction* ) ) );
 	connect( cbSearch->lineEdit(), SIGNAL( textChanged( const QString& ) ), mSearchThread, SLOT( clear() ) );
 	connect( mSearchThread, SIGNAL( started() ), this, SLOT( searchThread_stateChanged() ) );
@@ -519,7 +520,7 @@ void SearchWidget::setState( SearchWidget::InputField field, SearchWidget::State
 	widget->setPalette( pal );
 }
 
-bool SearchWidget::searchFile( bool forward )
+bool SearchWidget::searchFile( bool forward, bool incremental )
 {
 	pAbstractChild* document = MonkeyCore::workspace()->currentDocument();
 	pChild* child = document ? static_cast<pChild*>( document ) : 0;
@@ -534,9 +535,12 @@ bool SearchWidget::searchFile( bool forward )
 
 	// get cursor position
 	int x, y;
-	editor->getCursorPosition( &y, &x );
-
-	if ( !forward )
+	
+	if ( forward && !incremental )
+	{
+		editor->getCursorPosition( &y, &x );
+	}
+	else // incremental search, or search backward
 	{
 		int temp;
 		editor->getSelection( &y, &x, &temp, &temp );
@@ -581,7 +585,7 @@ bool SearchWidget::replaceFile( bool all )
 			editor->setCursorPosition( 0, 0 );
 		}
 		
-		while ( searchFile( true/*, false, false*/ ) ) // search next
+		while ( searchFile( true, false ) ) // search next
 		{
 			editor->replace( mProperties.replaceText );
 			count++;
@@ -596,7 +600,7 @@ bool SearchWidget::replaceFile( bool all )
 		editor->getSelection( &y, &x, &temp, &temp );
 		editor->setCursorPosition( y, x );
 
-		if ( searchFile( true/*, false, true*/ ) )
+		if ( searchFile( true, false ) )
 		{
 			editor->replace( mProperties.replaceText );
 			count++;
@@ -640,6 +644,12 @@ void SearchWidget::replaceThread_error( const QString& error )
 	MonkeyCore::messageManager()->appendMessage( error, 0 );
 }
 
+void SearchWidget::search_textChanged()
+{
+	initializeProperties();
+	searchFile( true, true );
+}
+
 void SearchWidget::groupMode_triggered( QAction* action )
 {
 	setMode( mModeActions.key( action ) );
@@ -648,13 +658,13 @@ void SearchWidget::groupMode_triggered( QAction* action )
 void SearchWidget::on_pbPrevious_clicked()
 {
 	initializeProperties();
-	searchFile( false );
+	searchFile( false, false );
 }
 
 void SearchWidget::on_pbNext_clicked()
 {
 	initializeProperties();
-	searchFile( true );
+	searchFile( true, false );
 }
 
 void SearchWidget::on_pbSearch_clicked()

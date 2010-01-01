@@ -74,7 +74,7 @@ protected:
 	void initializeProperties();
 	void showMessage( const QString& status );
 	void setState( SearchWidget::InputField field, SearchWidget::State state );
-	bool searchFile( bool forward );
+	bool searchFile( bool forward, bool incremental );
 	bool replaceFile( bool all );
 
 protected slots:
@@ -82,6 +82,7 @@ protected slots:
 	void replaceThread_stateChanged();
 	void replaceThread_openedFileHandled( const QString& fileName, const QString& content, const QString& codec );
 	void replaceThread_error( const QString& error );
+	void search_textChanged();
 	void groupMode_triggered( QAction* action );
 	void on_pbPrevious_clicked();
 	void on_pbNext_clicked();
