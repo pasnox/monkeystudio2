@@ -9,7 +9,7 @@ SearchResultsModel::SearchResultsModel( SearchThread* searchThread, QObject* par
 	Q_ASSERT( searchThread );
 	mRowCount = 0;
 	mSearchThread = searchThread;
-	
+
 	// connections
 	connect( mSearchThread, SIGNAL( reset() ), this, SLOT( thread_reset() ) );
 	connect( mSearchThread, SIGNAL( resultsAvailable( const QString&, const SearchResultsModel::ResultList& ) ), this, SLOT( thread_resultsAvailable( const QString&, const SearchResultsModel::ResultList& ) ) );
@@ -27,17 +27,17 @@ QVariant SearchResultsModel::data( const QModelIndex& index, int role ) const
 	{
 		return QVariant();
 	}
-	
+
 	SearchResultsModel::Result* result = this->result( index );
-	
+
 	Q_ASSERT( result );
-	
+
 	switch ( role )
 	{
 		case Qt::DisplayRole:
 		{
 			QString text = result->fileName;
-			
+
 			// index is a root parent
 			if ( mParentsList.value( index.row() ) == result )
 			{
@@ -49,7 +49,7 @@ QVariant SearchResultsModel::data( const QModelIndex& index, int role ) const
 			{
 				text = tr( "Line: %1, Column: %2 (offset %3) %4" ).arg( result->position.y() +1 ).arg( result->position.x() ).arg( result->offset ).arg( result->capture );
 			}
-			
+
 			return text;
 		}
 		case Qt::ToolTipRole:
@@ -62,11 +62,11 @@ QVariant SearchResultsModel::data( const QModelIndex& index, int role ) const
 			{
 				return result->checkState;
 			}
-			
+
 			break;
 		}
 	}
-	
+
 	return QVariant();
 }
 
@@ -76,18 +76,18 @@ QModelIndex SearchResultsModel::index( int row, int column, const QModelIndex& p
 	{
 		return QModelIndex();
 	}
-	
+
 	SearchResultsModel::Result* result = this->result( parent );
-	
+
 	// parent is a root parent
 	if ( result && mParentsList.value( parent.row() ) == result )
 	{
 		result = mResults.at( parent.row() ).at( row );
 		return createIndex( row, column, result );
 	}
-	
+
 	Q_ASSERT( !parent.isValid() );
-	
+
 	// parent is invalid
 	return createIndex( row, column, mParentsList[ row ] );
 }
@@ -98,20 +98,20 @@ QModelIndex SearchResultsModel::parent( const QModelIndex& index ) const
 	{
 		return QModelIndex();
 	}
-	
+
 	SearchResultsModel::Result* result = this->result( index );
-	
+
 	// index is a root parent
 	if ( result && mParentsList.value( index.row() ) == result )
 	{
 		return QModelIndex();
 	}
-	
+
 	Q_ASSERT( index.isValid() );
-	
+
 	result = mParents[ result->fileName ];
 	const int row = mParentsList.indexOf( result );
-	
+
 	// index is a root parent child
 	return createIndex( row, index.column(), result );
 }
@@ -123,7 +123,7 @@ int SearchResultsModel::rowCount( const QModelIndex& parent ) const
 	{
 		return mRowCount;
 	}
-	
+
 	return parent.parent().isValid() ? 0 : mResults.at( parent.row() ).count();
 }
 
@@ -131,14 +131,14 @@ Qt::ItemFlags SearchResultsModel::flags( const QModelIndex& index ) const
 {
 	Qt::ItemFlags flags = QAbstractItemModel::flags( index );
 	SearchWidget::Properties* properties = mSearchThread->properties();
-	
-	if ( properties->mode & SearchAndReplaceV2::ModeFlagReplace )
+
+	if ( properties->mode & SearchAndReplace::ModeFlagReplace )
 	{
 		flags |= Qt::ItemIsUserCheckable;
 	}
-	
+
 	SearchResultsModel::Result* result = this->result( index );
-	
+
 	if ( result )
 	{
 		if ( !result->enabled )
@@ -147,7 +147,7 @@ Qt::ItemFlags SearchResultsModel::flags( const QModelIndex& index ) const
 			flags &= ~Qt::ItemIsSelectable;
 		}
 	}
-	
+
 	return flags;
 }
 
@@ -158,7 +158,7 @@ bool SearchResultsModel::hasChildren( const QModelIndex& parent ) const
 	{
 		return mRowCount != 0;
 	}
-	
+
 	return parent.parent().isValid() ? false : !mResults.at( parent.row() ).isEmpty();
 }
 
@@ -166,7 +166,7 @@ bool SearchResultsModel::setData( const QModelIndex& index, const QVariant& valu
 {
 	SearchResultsModel::Result* result = this->result( index );
 	bool ok = false;
-	
+
 	switch ( role )
 	{
 		case Qt::CheckStateRole:
@@ -181,29 +181,29 @@ bool SearchResultsModel::setData( const QModelIndex& index, const QVariant& valu
 			break;
 		}
 	}
-	
+
 	if ( role != Qt::CheckStateRole )
 	{
 		if ( ok )
 		{
 			emit dataChanged( index, index );
 		}
-		
+
 		return ok;
 	}
-	
+
 	const Qt::CheckState state = Qt::CheckState( value.toInt() );
 	const QModelIndex pIndex = index.parent();
 	const bool isParent = !pIndex.isValid();
 	SearchResultsModel::Result* pResult = this->result( pIndex );
-	
+
 	Q_ASSERT( result );
-	
+
 	if ( isParent )
 	{
 		const int pRow = mParentsList.indexOf( result );
 		int checkedCount = 0;
-		
+
 		// update all children to same state as parent
 		foreach ( SearchResultsModel::Result* r, mResults.at( pRow ) )
 		{
@@ -213,22 +213,22 @@ bool SearchResultsModel::setData( const QModelIndex& index, const QVariant& valu
 				checkedCount++;
 			}
 		}
-		
+
 		const QModelIndex left = index.child( 0, 0 );
 		const QModelIndex right = index.child( rowCount( index ) -1, columnCount( index ) -1 );
 		// update root parent children
 		emit dataChanged( left, right );
-		
+
 		if ( state == Qt::Unchecked )
 		{
 			checkedCount = 0;
 		}
-		
+
 		if ( ( checkedCount == 0 && state == Qt::Checked ) || result->checkState == state )
 		{
 			ok = false;
 		}
-		
+
 		if ( ok )
 		{
 			result->checkState = state;
@@ -239,17 +239,17 @@ bool SearchResultsModel::setData( const QModelIndex& index, const QVariant& valu
 		const int pRow = mParentsList.indexOf( pResult );
 		int count = 0;
 		int checkedCount = 0;
-		
+
 		foreach ( SearchResultsModel::Result* r, mResults.at( pRow ) )
 		{
 			count++;
-			
+
 			if ( r->checkState == Qt::Checked )
 			{
 				checkedCount++;
 			}
 		}
-		
+
 		if ( state == Qt::Checked )
 		{
 			checkedCount++;
@@ -258,9 +258,9 @@ bool SearchResultsModel::setData( const QModelIndex& index, const QVariant& valu
 		{
 			checkedCount--;
 		}
-		
+
 		result->checkState = state;
-		
+
 		// update parent
 		if ( checkedCount == 0 )
 		{
@@ -274,14 +274,14 @@ bool SearchResultsModel::setData( const QModelIndex& index, const QVariant& valu
 		{
 			pResult->checkState = Qt::PartiallyChecked;
 		}
-		
+
 		// update root parent index
 		emit dataChanged( pIndex, pIndex );
 	}
-	
+
 	// update clicked index
 	emit dataChanged( index, index );
-	
+
 	return ok;
 }
 
@@ -289,7 +289,7 @@ QModelIndex SearchResultsModel::index( SearchResultsModel::Result* result ) cons
 {
 	const QModelIndex index;
 	int row = mParentsList.indexOf( result );
-	
+
 	if ( row != -1 )
 	{
 		return createIndex( row, 0, result );
@@ -297,11 +297,11 @@ QModelIndex SearchResultsModel::index( SearchResultsModel::Result* result ) cons
 	else if ( result )
 	{
 		SearchResultsModel::Result* pResult = mParents.value( result->fileName );
-		
+
 		if ( pResult )
 		{
 			row = mParentsList.indexOf( pResult );
-			
+
 			if ( row != -1 )
 			{
 				row = mResults.at( row ).indexOf( result );
@@ -309,7 +309,7 @@ QModelIndex SearchResultsModel::index( SearchResultsModel::Result* result ) cons
 			}
 		}
 	}
-	
+
 	return index;
 }
 
@@ -324,7 +324,7 @@ const QList<SearchResultsModel::ResultList>& SearchResultsModel::results() const
 }
 
 void SearchResultsModel::thread_reset()
-{	
+{
 	foreach ( const SearchResultsModel::ResultList& results, mResults )
 	{
 		qDeleteAll( results );
@@ -341,13 +341,13 @@ void SearchResultsModel::thread_resultsAvailable( const QString& fileName, const
 {
 	SearchResultsModel::Result* result = mParents[ fileName ];
 	SearchWidget::Properties* properties = mSearchThread->properties();
-	
+
 	if ( !result )
 	{
 		result = new SearchResultsModel::Result( fileName );
-		result->checkable = properties->mode & SearchAndReplaceV2::ModeFlagReplace;
+		result->checkable = properties->mode & SearchAndReplace::ModeFlagReplace;
 		result->checkState = result->checkable ? Qt::Checked : Qt::Unchecked;
-		
+
 		beginInsertRows( QModelIndex(), mRowCount, mRowCount );
 		mParents[ fileName ] = result;
 		mParentsList << result;
@@ -360,11 +360,11 @@ void SearchResultsModel::thread_resultsAvailable( const QString& fileName, const
 		const int pRow = mParentsList.indexOf( result );
 		const int count = mResults.at( pRow ).count();
 		const QModelIndex index = createIndex( pRow, 0, result );
-		
+
 		beginInsertRows( index, count, count +results.count() -1 );
 		mResults[ pRow ] << results;
 		endInsertRows();
-		
+
 		emit dataChanged( index, index );
 	}
 }
@@ -372,13 +372,13 @@ void SearchResultsModel::thread_resultsAvailable( const QString& fileName, const
 void SearchResultsModel::thread_resultsHandled( const QString& fileName, const SearchResultsModel::ResultList& results )
 {
 	SearchResultsModel::Result* pResult = mParents.value( fileName );
-	
+
 	Q_ASSERT( pResult );
-	
+
 	const int pRow = mParentsList.indexOf( pResult );
 	SearchResultsModel::ResultList& children = mResults[ pRow ];
 	const QModelIndex pIndex = createIndex( pRow, 0, pResult );
-	
+
 	// remove root parent children
 	foreach ( SearchResultsModel::Result* result, results )
 	{
@@ -387,7 +387,7 @@ void SearchResultsModel::thread_resultsHandled( const QString& fileName, const S
 		delete children.takeAt( index );
 		endRemoveRows();
 	}
-	
+
 	// remove root parent
 	if ( children.isEmpty() )
 	{

@@ -417,7 +417,7 @@ You can use language name too so the search will only apply to the language suff
   </layout>
  </widget>
  <resources>
-  <include location="resources/SearchAndReplaceV2.qrc"/>
+  <include location="resources/SearchAndReplace.qrc"/>
   <include location="../../../../monkey/src/resources/resources.qrc"/>
  </resources>
  <connections/>

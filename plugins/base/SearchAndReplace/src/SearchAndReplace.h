@@ -1,12 +1,12 @@
-#ifndef SEARCHANDREPLACEV2_H
-#define SEARCHANDREPLACEV2_H
+#ifndef SEARCHANDREPLACE_H
+#define SEARCHANDREPLACE_H
 
 #include <BasePlugin.h>
 
 class SearchWidget;
 class SearchResultsDock;
 
-class SearchAndReplaceV2 : public BasePlugin
+class SearchAndReplace : public BasePlugin
 {
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin )
@@ -20,7 +20,7 @@ public:
 		ModeFlagProjectFiles = 0x8,
 		ModeFlagOpenedFiles = 0x10
 	};
-	
+
 	enum Mode
 	{
 		ModeNo = 0,
@@ -33,7 +33,7 @@ public:
 		ModeSearchOpenedFiles = ModeFlagSearch | ModeFlagOpenedFiles,
 		ModeReplaceOpenedFiles = ModeFlagReplace | ModeFlagOpenedFiles
 	};
-	
+
 	enum Option
 	{
 		OptionNo = 0x0,
@@ -42,13 +42,13 @@ public:
 		OptionWrap = 0x4,
 		OptionRegularExpression = 0x8,
 	};
-	
+
 	Q_DECLARE_FLAGS( Options, Option );
 
 protected:
 	QPointer<SearchWidget> mWidget;
 	QPointer<SearchResultsDock> mDock;
-	
+
 	virtual void fillPluginInfos();
 
 	virtual bool install();
@@ -59,6 +59,6 @@ protected slots:
 	void replaceFile_triggered();
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( SearchAndReplaceV2::Options )
+Q_DECLARE_OPERATORS_FOR_FLAGS( SearchAndReplace::Options )
 
-#endif // SEARCHANDREPLACEV2_H
+#endif // SEARCHANDREPLACE_H

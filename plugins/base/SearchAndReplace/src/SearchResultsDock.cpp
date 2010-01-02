@@ -14,13 +14,13 @@ SearchResultsDock::SearchResultsDock( SearchThread* searchThread, QWidget* paren
 	: pDockWidget( parent )
 {
 	Q_ASSERT( searchThread );
-	
+
 	mSearchThread = searchThread;
-	
+
 	setObjectName( metaObject()->className() );
 	setWindowTitle( tr( "Search Results" ) );
-	setWindowIcon( pIconManager::icon( "SearchAndReplaceV2.png", ":/icons" ) );
-	
+	setWindowIcon( pIconManager::icon( "SearchAndReplace.png", ":/icons" ) );
+
 	QWidget* widget = new QWidget( this );
 	mModel = new SearchResultsModel( searchThread, this );
 	mView = new QTreeView( this );
@@ -31,13 +31,13 @@ SearchResultsDock::SearchResultsDock( SearchThread* searchThread, QWidget* paren
 	mLayout->setMargin( 5 );
 	mLayout->setSpacing( 5 );
 	mLayout->addWidget( mView );
-	
+
 	setWidget( widget );
-	
+
 	// mac
 	pMonkeyStudio::showMacFocusRect( this, false, true );
 	pMonkeyStudio::setMacSmallSize( this, true, true );
-	
+
 	// connections
 	connect( mSearchThread, SIGNAL( resultsAvailable( const QString&, const SearchResultsModel::ResultList& ) ), this, SLOT( show() ) );
 	connect( mView, SIGNAL( activated( const QModelIndex& ) ), this, SLOT( view_activated( const QModelIndex& ) ) );

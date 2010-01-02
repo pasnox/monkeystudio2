@@ -2,7 +2,7 @@
 #define SEARCHWIDGET_H
 
 #include "ui_SearchWidget.h"
-#include "SearchAndReplaceV2.h"
+#include "SearchAndReplace.h"
 
 class SearchThread;
 class ReplaceThread;
@@ -17,58 +17,58 @@ public:
 	{
 		Properties()
 		{
-			mode = SearchAndReplaceV2::ModeNo;
-			options = SearchAndReplaceV2::OptionNo;
+			mode = SearchAndReplace::ModeNo;
+			options = SearchAndReplace::OptionNo;
 			project = 0;
 		}
-		
+
 		QString searchText;
 		QString replaceText;
 		QString searchPath;
-		SearchAndReplaceV2::Mode mode;
+		SearchAndReplace::Mode mode;
 		QStringList mask;
 		QString codec;
-		SearchAndReplaceV2::Options options;
+		SearchAndReplace::Options options;
 		QMap<QString, QString> openedFiles; // filename, content
 		class XUPProjectItem* project;
 		QStringList sourcesFiles;
 	};
-	
+
 	enum InputField
 	{
 		Search,
 		Replace
 	};
-	
+
 	enum State
 	{
 		Normal,
 		Good,
 		Bad
 	};
-	
+
 	SearchWidget( QWidget* parent = 0 );
 	virtual ~SearchWidget();
-	
-	SearchAndReplaceV2::Mode mode() const;
+
+	SearchAndReplace::Mode mode() const;
 	SearchThread* searchThread() const;
-	
+
 	void setResultsDock( SearchResultsDock* dock );
 
 public slots:
-	void setMode( SearchAndReplaceV2::Mode mode );
+	void setMode( SearchAndReplace::Mode mode );
 
 protected:
-	SearchAndReplaceV2::Mode mMode;
-	QMap<SearchAndReplaceV2::Mode, QAction*> mModeActions;
-	QMap<SearchAndReplaceV2::Option, QAction*> mOptionActions;
+	SearchAndReplace::Mode mMode;
+	QMap<SearchAndReplace::Mode, QAction*> mModeActions;
+	QMap<SearchAndReplace::Option, QAction*> mOptionActions;
 	SearchWidget::Properties mProperties;
 	SearchThread* mSearchThread;
 	ReplaceThread* mReplaceThread;
 	SearchResultsDock* mDock;
-	
+
 	virtual void keyPressEvent( QKeyEvent* event );
-	
+
 	void updateLabels();
 	void updateWidgets();
 	void initializeProperties();
