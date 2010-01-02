@@ -19,12 +19,12 @@
 QtAssistantChild* QtAssistantChild::instance( QHelpEngine* engine, QWidget* parent, bool create )
 {
 	static QPointer<QtAssistantChild> _instance = 0;
-	
+
 	if ( !_instance && create )
 	{
 		_instance = new QtAssistantChild( engine, parent );
 	}
-	
+
 	return _instance;
 }
 
@@ -32,7 +32,7 @@ QtAssistantChild::QtAssistantChild( QHelpEngine* engine, QWidget* parent )
 	: pAbstractChild( parent )
 {
 	Q_ASSERT( engine );
-	
+
 	mEngine = engine;
 	twPages = new QTabWidget( this );
 	twPages->setDocumentMode( true );
@@ -46,15 +46,15 @@ QtAssistantChild::QtAssistantChild( QHelpEngine* engine, QWidget* parent )
 	centralLayout->addWidget( twPages );
 	centralLayout->addWidget( isSearch );
 	setWidget( wCentral );
-	
+
 	setWindowIcon( pIconManager::icon( "QtAssistant.png", ":/assistant-icons" ) );
 	setFilePath( "Qt Assistant" );
-	
+
 	// actions
 	cbUrl = new QComboBox( this );
 	cbUrl->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred ) );
 	cbUrl->setEditable( true );
-	
+
 	aPrevious = new QAction( pIconManager::icon( "previous.png", ":/assistant-icons" ), tr( "Previous page" ), this );
 	aNext = new QAction( pIconManager::icon( "next.png", ":/assistant-icons" ), tr( "Next page" ), this );
 	aHome = new QAction( pIconManager::icon( "home.png", ":/assistant-icons" ), tr( "Home page" ), this );
@@ -66,15 +66,15 @@ QtAssistantChild::QtAssistantChild( QHelpEngine* engine, QWidget* parent )
 	aAddNewPage->setEnabled( false );
 	aNextTab = new QAction( pIconManager::icon( "nexttab.png", ":/assistant-icons" ), tr( "Next tab" ), this );
 	aPreviousTab = new QAction( pIconManager::icon( "previoustab.png", ":/assistant-icons" ), tr( "Previous tab" ), this );
-	
+
 	// corner widgets
 	tbCloneTab = new QToolButton( this );
 	tbCloneTab->setAutoRaise( true );
 	tbCloneTab->setDefaultAction( aAddNewPage );
 	twPages->setCornerWidget( tbCloneTab, Qt::TopLeftCorner );
-	
+
 	mFirstOpenUrl = true;
-	
+
 	// connections
 	connect( aPrevious, SIGNAL( triggered() ), this, SLOT( previousPage() ) );
 	connect( aNext, SIGNAL( triggered() ), this, SLOT( nextPage() ) );
@@ -93,7 +93,7 @@ QtAssistantChild::QtAssistantChild( QHelpEngine* engine, QWidget* parent )
 	connect( isSearch->toolPrevious, SIGNAL( clicked() ), this, SLOT( findPrevious() ) );
 	connect( twPages, SIGNAL( currentChanged( int ) ), this, SLOT( updateContextActions() ) );
 	connect( twPages, SIGNAL( tabCloseRequested( int ) ), this, SLOT( closeTab( int ) ) );
-	
+
 	updateContextActions();
 	restoreSession();
 }
@@ -181,21 +181,21 @@ QtAssistantViewer* QtAssistantChild::viewer( int index ) const
 QtAssistantViewer* QtAssistantChild::newEmptyViewer( qreal zoom )
 {
 	QtAssistantViewer* viewer = new QtAssistantViewer( mEngine, this );
-	
+
 	if ( mEngine->customValue( QLatin1String( "useBrowserFont" ) ).toBool() )
 	{
 		QFont font = qVariantValue<QFont>( mEngine->customValue( QLatin1String( "browserFont" ) ) );
 		viewer->setFont( font );
 	}
-	
+
 	viewer->setTextSizeMultiplier( zoom );
-	
+
 	twPages->addTab( viewer, tr( "Loading..." ) );
 	twPages->setCurrentWidget( viewer );
-	
+
 	connect( viewer, SIGNAL( sourceChanged( const QUrl& ) ), this, SLOT( viewer_sourceChanged( const QUrl& ) ) );
 	connect( viewer, SIGNAL( actionsChanged() ), this, SLOT( viewer_actionsChanged() ) );
-	
+
 	return viewer;
 }
 
@@ -210,7 +210,7 @@ void QtAssistantChild::find( QString ttf, bool forward, bool backward )
 	if ( viewer )
 	{
 		QWebPage::FindFlags options;
-		
+
 		if ( !forward )
 		{
 			options |= QWebPage::FindBackward;
@@ -282,16 +282,16 @@ void QtAssistantChild::goTo()
 {
 }
 
-void QtAssistantChild::goTo( const QPoint& pos, bool highlight )
+void QtAssistantChild::goTo( const QPoint& pos, int selectionLength )
 {
 	Q_UNUSED( pos );
-	Q_UNUSED( highlight );
+	Q_UNUSED( selectionLength );
 }
 
 void QtAssistantChild::invokeSearch()
 {
 	QtAssistantViewer* viewer = this->viewer();
-	
+
 	if ( viewer )
 	{
 		isSearch->show();
@@ -307,29 +307,29 @@ void QtAssistantChild::saveFile()
 void QtAssistantChild::backupFileAs( const QString& fileName )
 {
 	QtAssistantViewer* viewer = this->viewer();
-	
+
 	if ( !viewer )
 	{
 		return;
 	}
 
 	QFile file( fileName );
-	
+
 	if ( !file.open( QIODevice::WriteOnly ) )
 	{
 		MonkeyCore::messageManager()->appendMessage( tr( "Can't open file for writing when creating backup file." ) );
 		return;
 	}
-	
+
 	file.resize( 0 );
 	QTextCodec* codec = this->codec();
 	const QByteArray data = codec->fromUnicode( viewer->page()->mainFrame()->toHtml() );
-	
+
 	if ( file.write( data ) == -1 )
 	{
 		MonkeyCore::messageManager()->appendMessage( tr( "Can't write file content when creating backup." ) );
 	}
-	
+
 	file.close();
 }
 
@@ -341,14 +341,14 @@ bool QtAssistantChild::openFile( const QString& fileName, const QString& codec )
 	for ( int i = 1; i < twPages->count(); i++ )
 	{
 		QtAssistantViewer* viewer = this->viewer( i );
-		
+
 		if ( viewer->source() == QUrl( fileName ) )
 		{
 			twPages->setCurrentWidget( viewer );
 			return true;
 		}
 	}
-	
+
 	openUrlInNewTab( QUrl( fileName ) );
 	return true;
 	*/
@@ -356,14 +356,14 @@ bool QtAssistantChild::openFile( const QString& fileName, const QString& codec )
 }
 
 void QtAssistantChild::closeFile()
-{	
+{
 	emit fileClosed();
 }
 
 void QtAssistantChild::printFile()
 {
 	QtAssistantViewer* viewer = this->viewer();
-	
+
 	if ( !viewer )
 	{
 		return;
@@ -374,7 +374,7 @@ void QtAssistantChild::printFile()
 	dlg.addEnabledOption( QAbstractPrintDialog::PrintPageRange );
 	dlg.addEnabledOption( QAbstractPrintDialog::PrintCollateCopies );
 	dlg.setWindowTitle( tr( "Print Document" ) );
-	
+
 	if ( dlg.exec() == QDialog::Accepted )
 	{
 		viewer->print( &printer );
@@ -384,14 +384,14 @@ void QtAssistantChild::printFile()
 void QtAssistantChild::quickPrintFile()
 {
 	QtAssistantViewer* viewer = this->viewer();
-	
+
 	if ( !viewer )
 	{
 		return;
 	}
-		
+
 	QPrinter printer( QPrinter::HighResolution );
-	
+
 	if ( printer.printerName().isEmpty() )
 	{
 		MonkeyCore::messageManager()->appendMessage( tr( "There is no default printer, please set one before trying quick print" ) );
@@ -405,7 +405,7 @@ void QtAssistantChild::quickPrintFile()
 void QtAssistantChild::openUrl( const QUrl& url )
 {
 	QtAssistantViewer* viewer = this->viewer();
-	
+
 	if ( viewer && !mFirstOpenUrl )
 	{
 		viewer->setSource( url );
@@ -426,7 +426,7 @@ void QtAssistantChild::openUrlInNewTab( const QUrl& url )
 void QtAssistantChild::cloneTab()
 {
 	QtAssistantViewer* viewer = this->viewer();
-	
+
 	if ( viewer )
 	{
 		const QUrl url = viewer->source();
@@ -455,18 +455,18 @@ void QtAssistantChild::saveSession()
 	QString zoomCount;
 	QString currentPages;
 	QLatin1Char sep( '|' );
-	
+
 	for ( int i = 0; i < twPages->count(); ++i )
 	{
 		QtAssistantViewer* viewer = this->viewer( i );
-		
+
 		if ( !viewer->source().isEmpty() && viewer->source().isValid() )
 		{
 			currentPages.append( viewer->source().toString() ).append( sep );
 			zoomCount.append( QString::number( viewer->textSizeMultiplier() ) ).append( sep );
 		}
 	}
-	
+
 	mEngine->setCustomValue( QLatin1String( "LastTabPage" ), twPages->currentIndex() );
 	mEngine->setCustomValue( QLatin1String( "LastShownPages" ), currentPages );
 	mEngine->setCustomValue( QLatin1String( "LastPagesZoomWebView" ), zoomCount );
@@ -480,12 +480,12 @@ void QtAssistantChild::restoreSession()
 	if ( !lastShownPageList.isEmpty() )
 	{
 		QVector<QString> zoomList = mEngine->customValue( zoom ).toString().split( QLatin1Char( '|' ), QString::SkipEmptyParts ).toVector();
-		
+
 		if ( zoomList.isEmpty() )
 		{
 			zoomList.fill( QLatin1String( "1.0" ), lastShownPageList.size() );
 		}
-		
+
 		if ( zoomList.count() < lastShownPageList.count() )
 		{
 			for ( int i = 0; i < lastShownPageList.count(); i++ )
@@ -497,16 +497,16 @@ void QtAssistantChild::restoreSession()
 		{
 			zoomList.resize( lastShownPageList.count() );
 		}
-		
+
 		QVector<QString>::const_iterator zIt = zoomList.constBegin();
 		QStringList::const_iterator it = lastShownPageList.constBegin();
-		
+
 		for ( ; it != lastShownPageList.constEnd(); ++it, ++zIt )
 		{
 			QtAssistantViewer* viewer = newEmptyViewer( (*zIt).toFloat() );
 			viewer->setSource( (*it) );
 		}
-		
+
 		twPages->setCurrentIndex( mEngine->customValue( QLatin1String( "LastTabPage" ), 0 ).toInt() );
 	}
 	/*
@@ -543,7 +543,7 @@ void QtAssistantChild::homePage()
 {
 	viewer()->home();
 }
-	
+
 void QtAssistantChild::zoomIn()
 {
 	viewer()->zoomIn();
@@ -577,7 +577,7 @@ void QtAssistantChild::findCurrentText(const QString &text)
 void QtAssistantChild::updateContextActions()
 {
 	QtAssistantViewer* viewer = this->viewer();
-	
+
 	aAddNewPage->setEnabled( viewer );
 	aPrevious->setEnabled( viewer && twPages->currentWidget() == viewer ? viewer->isBackwardAvailable() : false );
 	aNext->setEnabled( viewer && twPages->currentWidget() == viewer ? viewer->isForwardAvailable() : false );
@@ -588,15 +588,15 @@ void QtAssistantChild::updateContextActions()
 	aSearchText->setEnabled( viewer && twPages->currentWidget() == viewer ? true : false );
 	aPreviousTab->setEnabled( twPages->count() > 1 );
 	aNextTab->setEnabled( twPages->count() > 1 );
-	
+
 	const bool locked = cbUrl->blockSignals( true );
-	
+
 	cbUrl->clear();
-	
+
 	if ( viewer && twPages->currentWidget() )
 	{
 		QSet<QString> entries;
-		
+
 		foreach ( const QWebHistoryItem& item, viewer->history()->items() )
 		{
 			if ( !entries.contains( item.url().toString() ) )
@@ -606,14 +606,14 @@ void QtAssistantChild::updateContextActions()
 				cbUrl->setItemData( cbUrl->count() -1, item.url().toString(), Qt::ToolTipRole );
 			}
 		}
-		
+
 		cbUrl->setCurrentIndex( cbUrl->findData( viewer->history()->currentItem().url() ) );
 	}
-	
+
 	cbUrl->blockSignals( locked );
-	
+
 	cbUrl->setEnabled( viewer && twPages->currentWidget() == viewer );
-	
+
 	viewer_actionsChanged();
 }
 
@@ -623,7 +623,7 @@ void QtAssistantChild::viewer_sourceChanged( const QUrl& url )
 	QtAssistantViewer* viewer = qobject_cast<QtAssistantViewer*>( sender() );
 	const int index = twPages->indexOf( viewer );
 	twPages->setTabText( index, viewer->documentTitle() );
-	
+
 	if ( twPages->currentWidget() == viewer )
 	{
 		updateContextActions();
@@ -633,7 +633,7 @@ void QtAssistantChild::viewer_sourceChanged( const QUrl& url )
 void QtAssistantChild::viewer_actionsChanged()
 {
 	QtAssistantViewer* viewer = qobject_cast<QtAssistantViewer*>( sender() );
-	
+
 	emit undoAvailableChanged( viewer && twPages->currentWidget() == viewer ? viewer->pageAction( QWebPage::Undo )->isEnabled() : false );
 	emit redoAvailableChanged( viewer && twPages->currentWidget() == viewer ? viewer->pageAction( QWebPage::Redo )->isEnabled() : false );
 	emit pasteAvailableChanged( viewer && twPages->currentWidget() == viewer ? viewer->pageAction( QWebPage::Paste )->isEnabled() : false );

@@ -31,14 +31,14 @@ class QDesignerFormWindowInterface;
 class QtDesignerChild : public pAbstractChild
 {
 	Q_OBJECT
-	
+
 public:
 	QtDesignerChild( QtDesignerManager* manager );
-	
+
 protected:
 	QtDesignerManager* mDesignerManager;
 	SharedTools::WidgetHost* mHostWidget;
-	
+
 	void showEvent( QShowEvent* event );
 	void printFormHelper( QDesignerFormWindowInterface* form, bool quick );
 
@@ -47,7 +47,7 @@ protected slots:
 	void formSelectionChanged();
 	void formGeometryChanged();
 	void formMainContainerChanged( QWidget* widget );
-	
+
 public:
 	virtual QString fileBuffer() const;
 	virtual QString context() const;
@@ -69,7 +69,7 @@ public slots:
 	virtual void copy();
 	virtual void paste();
 	virtual void goTo();
-	virtual void goTo( const QPoint& pos, bool highlight = false );
+	virtual void goTo( const QPoint& position, int selectionLength = -1 );
 	virtual void searchReplace();
 	virtual bool isSearchReplaceAvailable() const;
 	virtual void saveFile();

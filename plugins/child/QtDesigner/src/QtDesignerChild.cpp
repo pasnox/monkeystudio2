@@ -42,20 +42,20 @@ QtDesignerChild::QtDesignerChild( QtDesignerManager* manager )
 {
 	Q_ASSERT( manager );
 	mDesignerManager = manager;
-	
+
 	// set up ui
 	setWindowIcon( pIconManager::icon( "designer.png", ":/icons" ) );
-	
+
 	// create form host widget
 	QDesignerFormWindowInterface* form = mDesignerManager->createNewForm( this );
 	mDesignerManager->addFormWindow( form );
-	
+
 	mHostWidget = new SharedTools::WidgetHost( this, form );
 	mHostWidget->setFrameStyle( QFrame::NoFrame | QFrame::Plain );
 	mHostWidget->setFocusProxy( form );
-	
+
 	setWidget( mHostWidget );
-	
+
 	connect( mHostWidget->formWindow(), SIGNAL( changed() ), this, SLOT( formChanged() ) );
 	connect( mHostWidget->formWindow(), SIGNAL( selectionChanged() ), this, SLOT( formSelectionChanged() ) );
 	connect( mHostWidget->formWindow(), SIGNAL( geometryChanged() ), this, SLOT( formGeometryChanged() ) );
@@ -65,7 +65,7 @@ QtDesignerChild::QtDesignerChild( QtDesignerManager* manager )
 void QtDesignerChild::showEvent( QShowEvent* event )
 {
 	pAbstractChild::showEvent( event );
-	
+
 	mDesignerManager->setActiveFormWindow( mHostWidget->formWindow() );
 }
 
@@ -86,20 +86,20 @@ void QtDesignerChild::formGeometryChanged()
 	// set modified state
 	bool loading = property( "loadingFile" ).toBool();
 	bool modified = !loading;
-	
+
 	// update property
 	QDesignerPropertySheetExtension* sheet = qt_extension<QDesignerPropertySheetExtension*>( mDesignerManager->core()->extensionManager(), mHostWidget->formWindow() );
 	QRect geo = sheet->property( sheet->indexOf( "geometry" ) ).toRect();
 	geo.moveTopLeft( QPoint( 0, 0 ) );
-	
+
 	// update property
 	mDesignerManager->core()->propertyEditor()->setPropertyValue( "geometry", geo, modified );
-	
+
 	// update state
 	mHostWidget->formWindow()->setDirty( modified );
 	setWindowModified( modified );
 	setProperty( "loadingFile", false );
-	
+
 	// emit modified state
 	emit modifiedChanged( modified );
 	emit contentChanged();
@@ -114,28 +114,28 @@ void QtDesignerChild::formMainContainerChanged( QWidget* widget )
 bool QtDesignerChild::openFile( const QString& fileName, const QString& codec )
 {
 	Q_UNUSED( codec );
-	
+
 	if ( QFile::exists( fileName ) )
 	{
 		// set content
 		QFile file( fileName );
-		
+
 		if ( !file.open( QIODevice::ReadOnly ) )
 		{
 			return false;
 		}
-		
+
 		setFilePath( fileName );
 		mHostWidget->formWindow()->setFileName( fileName );
 		mHostWidget->formWindow()->setContents( &file );
-		
+
 		if ( mHostWidget->formWindow()->mainContainer() )
 		{
 			// set clean
 			mHostWidget->formWindow()->setDirty( false );
-			
+
 			setWindowModified( false );
-			
+
 			emit fileOpened();
 			return true;
 		}
@@ -145,7 +145,7 @@ bool QtDesignerChild::openFile( const QString& fileName, const QString& codec )
 			mHostWidget->formWindow()->setFileName( QString::null );
 		}
 	}
-	
+
 	return false;
 }
 
@@ -161,7 +161,7 @@ QString QtDesignerChild::fileBuffer() const
 	{
 		return mHostWidget->formWindow()->contents();
 	}
-	
+
 	return QString::null;
 }
 
@@ -173,7 +173,7 @@ QString QtDesignerChild::context() const
 void QtDesignerChild::initializeContext( QToolBar* tb )
 {
 	QDesignerFormWindowManagerInterface* fwm = mDesignerManager->core()->formWindowManager();
-	
+
 	// add actions to toolbar
 	tb->addAction( fwm->actionUndo() );
 	tb->addAction( fwm->actionRedo() );
@@ -185,11 +185,11 @@ void QtDesignerChild::initializeContext( QToolBar* tb )
 	tb->addAction( fwm->actionDelete() );
 	tb->addAction( fwm->actionSelectAll() );
 	tb->addSeparator();
-	
+
 	// tools
 	tb->addActions( mDesignerManager->modesActions() );
 	tb->addSeparator();
-	
+
 	// form
 	tb->addAction( fwm->actionHorizontalLayout() );
 	tb->addAction( fwm->actionVerticalLayout() );
@@ -200,7 +200,7 @@ void QtDesignerChild::initializeContext( QToolBar* tb )
 	tb->addAction( fwm->actionSimplifyLayout() );
 	tb->addAction( fwm->actionBreakLayout() );
 	tb->addAction( fwm->actionAdjustSize() );
-	
+
 	// preview
 	tb->addSeparator();
 	tb->addAction( mDesignerManager->previewFormAction() );
@@ -244,26 +244,26 @@ void QtDesignerChild::saveFile()
 	{
 		return;
 	}
-	
+
 	// write file
 	QFile file( mHostWidget->formWindow()->fileName() );
-	
+
 	if ( file.open( QIODevice::WriteOnly ) )
 	{
 		file.resize( 0 );
 		file.write( mHostWidget->formWindow()->contents().toUtf8() );
 		file.close();
-		
+
 		mHostWidget->formWindow()->setDirty( false );
 		setWindowModified( false );
-		
+
 		emit modifiedChanged( false );
 	}
 	else
 	{
 		MonkeyCore::messageManager()->appendMessage( tr( "An error occurs when saving :\n%1" ).arg( mHostWidget->formWindow()->fileName() ) );
 	}
-	
+
 	return;
 }
 
@@ -273,12 +273,12 @@ void QtDesignerChild::printFormHelper( QDesignerFormWindowInterface* form, bool 
 	const QStringList styles = QStyleFactory::keys();
 	const int id = styles.indexOf( pStylesActionGroup::systemStyle() );
 	QString style = QInputDialog::getItem( this, tr( "Choose a style..." ), tr( "Choose a style to render the form:" ), styles, id, false, &ok );
-	
+
 	if ( !ok )
 	{
 		return;
 	}
-	
+
 	// get printer
 	QPrinter printer;
 
@@ -291,7 +291,7 @@ void QtDesignerChild::printFormHelper( QDesignerFormWindowInterface* form, bool 
 			MonkeyCore::messageManager()->appendMessage( tr( "There is no default printer, please set one before trying quick print" ) );
 			return;
 		}
-		
+
 		// print and return
 		QPainter painter( &printer );
 		painter.drawPixmap( 0, 0, mDesignerManager->previewPixmap( form, style ) );
@@ -335,16 +335,16 @@ void QtDesignerChild::searchReplace() {}
 
 void QtDesignerChild::goTo() {}
 
-void QtDesignerChild::goTo( const QPoint& pos, bool highlight )
+void QtDesignerChild::goTo( const QPoint& pos, int selectionLength )
 {
 	Q_UNUSED( pos );
-	Q_UNUSED( highlight );
+	Q_UNUSED( selectionLength );
 }
 
 void QtDesignerChild::backupFileAs( const QString& fileName )
 {
 	QFile file( fileName );
-	
+
 	if ( file.open( QIODevice::WriteOnly ) )
 	{
 		file.resize( 0 );

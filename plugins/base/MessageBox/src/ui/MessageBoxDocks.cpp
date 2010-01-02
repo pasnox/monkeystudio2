@@ -37,10 +37,10 @@
 
 /*!
 	Constructor of class
-	
-	Installs plugin to IDE, creates GUI, connects self to signals from sources 
+
+	Installs plugin to IDE, creates GUI, connects self to signals from sources
 	on informations.
-	
+
 	\param parent Parent object
 */
 MessageBoxDocks::MessageBoxDocks( QObject* parent )
@@ -50,12 +50,12 @@ MessageBoxDocks::MessageBoxDocks( QObject* parent )
 	mBuildStep = new UIBuildStep;
 	mOutput = new UIOutput;
 	mCommand = new UICommand;
-	
+
 	// set defaultshortcuts
 	pActionsManager::setDefaultShortcut( mBuildStep->toggleViewAction(), QKeySequence( "F9" ) );
 	pActionsManager::setDefaultShortcut( mOutput->toggleViewAction(), QKeySequence( "F10" ) );
 	pActionsManager::setDefaultShortcut( mCommand->toggleViewAction(), QKeySequence( "F11" ) );
-	
+
 	// connections
 	connect( mBuildStep->lwBuildSteps, SIGNAL( itemActivated( QListWidgetItem* ) ), this, SLOT( lwBuildSteps_itemActivated( QListWidgetItem* ) ) );
 	connect( mOutput->cbRawCommand->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( cbRawCommand_returnPressed() ) );
@@ -82,7 +82,7 @@ MessageBoxDocks::~MessageBoxDocks()
 
 /*!
 	Make text colored by adding HTML tags before and after text
-	
+
 	\param s Source string
 	\param c Desired color
 	\return String, containing color tags at start and end
@@ -153,19 +153,19 @@ void MessageBoxDocks::appendStep( const pConsoleManager::Step& s )
 {
 	// remember current selection
 	QListWidgetItem* selItem = mBuildStep->lwBuildSteps->selectedItems().value( 0 );
-	
+
 	// get last type
 	pConsoleManager::StepType t = pConsoleManager::stUnknown;
 	QListWidgetItem* lastIt = mBuildStep->lwBuildSteps->item( mBuildStep->lwBuildSteps->count() -1 );
-	
+
 	if ( lastIt )
 	{
 		t = ( pConsoleManager::StepType )lastIt->data( Qt::UserRole +1 ).toInt();
 	}
-	
+
 	// create new/update item
 	QListWidgetItem* it;
-	
+
 	switch ( t )
 	{
 		case pConsoleManager::stCompiling:
@@ -184,14 +184,14 @@ void MessageBoxDocks::appendStep( const pConsoleManager::Step& s )
 			it = new QListWidgetItem( mBuildStep->lwBuildSteps );
 			break;
 	}
-	
+
 	// set item infos
 	it->setText( s.mText );
 	it->setToolTip( s.mFullText );
 	it->setData( Qt::UserRole +1, s.mType ); // type
 	it->setData( Qt::UserRole +2, s.mFileName ); // filename
 	it->setData( Qt::UserRole +3, s.mPosition ); // position
-	
+
 	// if item is finish, need calculate error, warning
 	if ( s.mType == pConsoleManager::stFinish )
 	{
@@ -216,7 +216,7 @@ void MessageBoxDocks::appendStep( const pConsoleManager::Step& s )
 			it->setText( s.mText );
 		}
 	}
-	
+
 	// set icon and color
 	switch ( it->data( Qt::UserRole +1 ).toInt() )
 	{
@@ -248,7 +248,7 @@ void MessageBoxDocks::appendStep( const pConsoleManager::Step& s )
 			it->setBackground( QColor( 125, 125, 125, 20 ) );
 			break;
 	}
-	
+
 	// restore selection/scroll
 	selItem = selItem ? selItem : it;
 	mBuildStep->lwBuildSteps->scrollToItem( selItem );
@@ -307,7 +307,7 @@ void MessageBoxDocks::showNextError()
 	Handler of pressing on step in the Build Steps dock
 
 	Trying to open file/line according to step in the editor
-	If there are more than one file, which possible are target file, (same name, 
+	If there are more than one file, which possible are target file, (same name,
 	but different path) - user will asked, which file should be opened
 */
 void MessageBoxDocks::lwBuildSteps_itemActivated( QListWidgetItem* it )
@@ -315,20 +315,20 @@ void MessageBoxDocks::lwBuildSteps_itemActivated( QListWidgetItem* it )
 	// get filename
 	QString fn = it->data( Qt::UserRole +2 ).toString();
 	qDebug() << "fn " << fn;
-	
+
 	// cancel if no file
 	if ( fn.isEmpty() )
 	{
 		return;
 	}
-	
+
 	XUPProjectItem* project = MonkeyCore::fileManager()->currentProject();
 	XUPProjectItem* topLevelProject = project ? project->topLevelProject() : 0;
-	
+
 	if ( project && QFileInfo( fn ).isRelative() )
 	{
 		QString filePath = project->filePath( fn );
-		
+
 		if ( QFile::exists( filePath ) )
 		{
 			fn = filePath;
@@ -336,21 +336,21 @@ void MessageBoxDocks::lwBuildSteps_itemActivated( QListWidgetItem* it )
 		else if ( topLevelProject )
 		{
 			filePath = topLevelProject->filePath( fn );
-			
+
 			if ( QFile::exists( filePath ) )
 			{
 				fn = filePath;
 			}
 		}
 	}
-	
+
 	if ( !QFile::exists( fn ) || QFileInfo( fn ).isRelative() )
 	{
 		if ( topLevelProject )
 		{
 			QString findFile = fn;
 			QFileInfoList files = topLevelProject->findFile( findFile );
-			
+
 			switch ( files.count() )
 			{
 				case 0:
@@ -364,34 +364,34 @@ void MessageBoxDocks::lwBuildSteps_itemActivated( QListWidgetItem* it )
 					UIXUPFindFiles dlg( findFile, mBuildStep->parentWidget()->window() );
 					dlg.setFiles( files, topLevelProject->path() );
 					fn.clear();
-					
+
 					if ( dlg.exec() == QDialog::Accepted )
 					{
 						fn = dlg.selectedFile();
 					}
-					
+
 					break;
 				}
 			}
 		}
 	}
-	
+
 	if ( QFileInfo( fn ).isRelative() )
 	{
 		qWarning( "Can't open relative file: %s", fn.toLocal8Bit().constData() );
 		return;
 	}
-	
+
 	if ( QFile::exists( fn ) )
 	{
 		QString codec = project ? project->temporaryValue( "codec" ).toString() : pMonkeyStudio::defaultCodec();
 		qWarning() << "point" << it->data( Qt::UserRole +3 ).toPoint();
-		MonkeyCore::fileManager()->goToLine( fn, it->data( Qt::UserRole +3 ).toPoint(), true, codec );
+		MonkeyCore::fileManager()->goToLine( fn, it->data( Qt::UserRole +3 ).toPoint(), codec );
 	}
 }
 
 /*!
-	Handler of pressing return in the edit of Raw Command. Executes command 
+	Handler of pressing return in the edit of Raw Command. Executes command
 	using console manager
 */
 void MessageBoxDocks::cbRawCommand_returnPressed()
@@ -403,7 +403,7 @@ void MessageBoxDocks::cbRawCommand_returnPressed()
 }
 
 /*!
-	Handler of finishing command with error. Prints information about error 
+	Handler of finishing command with error. Prints information about error
 	to Commands dock
 	\param c Command, which are finished
 	\param e Error type
@@ -474,11 +474,11 @@ void MessageBoxDocks::commandFinished( const pCommand& c, int exitCode, QProcess
 		st.mText = tr("Process finished with exit code %1").arg(exitCode);
 		appendStep(st);
 	}
-	
+
 }
 
 /*!
-	Handler of Ready Read event from runned command. 
+	Handler of Ready Read event from runned command.
 
 	Appends text, readed from process to Output dock
 	\param a Text in the QByteArray format
@@ -523,7 +523,7 @@ void MessageBoxDocks::commandStarted( const pCommand& c )
 
 /*!
 	Handler of State Changed event from executed process.
-	
+
 	Prints information about change to Commands dock
 	\param c Command
 	\param s State of process
@@ -553,8 +553,8 @@ void MessageBoxDocks::commandStateChanged( const pCommand& c, QProcess::ProcessS
 }
 
 /*!
-	Handler of Command Skipped event. 
-	
+	Handler of Command Skipped event.
+
 	Prints information to Commands dock
 	\param c Command, which was skipped
 */
