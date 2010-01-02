@@ -1,6 +1,9 @@
 #include "general.h"
 #include "string.h"
 #include "read.h"
+#include "entry.h"
+
+extern parserDefinition** LanguageTable;
 
 extern void initCtags()
 {

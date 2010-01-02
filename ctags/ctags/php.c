@@ -1,5 +1,5 @@
 /*
-*   $Id: php.c 557 2007-06-15 17:20:04Z elliotth $
+*   $Id: php.c 624 2007-09-15 22:53:31Z jafl $
 *
 *   Copyright (c) 2000, Jesus Castagnetto <jmcastagnetto@zkey.com>
 *
@@ -54,8 +54,13 @@ static kindOption PhpKinds [] = {
  * end of an identifier, and we need something like iconv to take into
  * account the user's locale (or an override on the command-line.)
  */
+//#ifdef __CYGWIN__
 #define ALPHA "[:alpha:]"
 #define ALNUM "[:alnum:]"
+//#else
+//#define ALPHA "A-Za-z\x7f-\xff"
+//#define ALNUM "0-9A-Za-z\x7f-\xff"
+//#endif
 
 static void installPHPRegex (const langType language)
 {
@@ -67,8 +72,10 @@ static void installPHPRegex (const langType language)
 		"\\2", "d,define,constant definitions", NULL);
 	addTagRegex(language, "(^|[ \t])function[ \t]+&?[ \t]*([" ALPHA "_][" ALNUM "_]*)",
 		"\\2", "f,function,functions", NULL);
-	addTagRegex(language, "(^|[ \t])\\$([" ALPHA "_][" ALNUM "_]*)[ \t]*=",
-		"\\2", "v,variable,variables", NULL);
+	addTagRegex(language, "(^|[ \t])(\\$|::\\$|\\$this->)([" ALPHA "_][" ALNUM "_]*)[ \t]*=",
+		"\\3", "v,variable,variables", NULL);
+	addTagRegex(language, "(^|[ \t])(var|public|protected|private|static)[ \t]+\\$([" ALPHA "_][" ALNUM "_]*)[ \t]*[=;]",
+		"\\3", "v,variable,variables", NULL);
 
 	/* function regex is covered by PHP regex */
 	addTagRegex (language, "(^|[ \t])([A-Za-z0-9_]+)[ \t]*[=:][ \t]*function[ \t]*\\(",

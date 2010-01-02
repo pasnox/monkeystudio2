@@ -1,5 +1,5 @@
 /*
- *	 $Id: jscript.c 587 2007-07-16 14:24:10Z dfishburn $
+ *	 $Id: jscript.c 666 2008-05-15 17:47:31Z dfishburn $
  *
  *	 Copyright (c) 2003, Darren Hiebert
  *
@@ -11,6 +11,8 @@
  *
  *	 This is a good reference for different forms of the function statement:
  *		 http://www.permadi.com/tutorial/jsFunc/
+ *   Another good reference:
+ *       http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Guide
  */
 
 /*
@@ -124,15 +126,17 @@ typedef enum {
 	JSTAG_FUNCTION,
 	JSTAG_CLASS,
 	JSTAG_METHOD,
+	JSTAG_PROPERTY,
 	JSTAG_VARIABLE,
 	JSTAG_COUNT
 } jsKind;
 
 static kindOption JsKinds [] = {
-	{ TRUE,  'f', "function",	  "functions"			   },
+	{ TRUE,  'f', "function",	  "functions"		   },
 	{ TRUE,  'c', "class",		  "classes"			   },
 	{ TRUE,  'm', "method",		  "methods"			   },
-	{ TRUE,  'v', "variable",	  "global variables"	   }
+	{ TRUE,  'p', "property",	  "properties"		   },
+	{ TRUE,  'v', "variable",	  "global variables"   }
 };
 
 static const keywordDesc JsKeywordTable [] = {
@@ -165,18 +169,6 @@ static void parseFunction (tokenInfo *const token);
 static boolean parseBlock (tokenInfo *const token, tokenInfo *const parent);
 static boolean parseLine (tokenInfo *const token, boolean is_inside_class);
 
-static boolean isIdentChar1 (const int c)
-{
-	/*
-	 * Other databases are less restrictive on the first character of
-	 * an identifier.
-	 * isIdentChar1 is used to identify the first character of an 
-	 * identifier, so we are removing some restrictions.
-	 */
-	return (boolean)
-		(isalpha (c) || c == '@' || c == '_' );
-}
-
 static boolean isIdentChar (const int c)
 {
 	return (boolean)
@@ -206,6 +198,8 @@ static tokenInfo *newToken (void)
 	token->scope		= vStringNew ();
 	token->nestLevel	= 0;
 	token->ignoreTag	= FALSE;
+	token->lineNumber   = getSourceLineNumber ();
+	token->filePosition = getInputFilePosition ();
 
 	return token;
 }
@@ -264,25 +258,55 @@ static void makeJsTag (tokenInfo *const token, const jsKind kind)
 
 static void makeClassTag (tokenInfo *const token)
 { 
+	vString *	fulltag;
+
 	if ( ! token->ignoreTag )
 	{
-		if ( ! stringListHas(ClassNames, vStringValue (token->string)) )
+		fulltag = vStringNew ();
+		if (vStringLength (token->scope) > 0)
 		{
-			stringListAdd (ClassNames, vStringNewCopy (token->string));
+			vStringCopy(fulltag, token->scope);
+			vStringCatS (fulltag, ".");
+			vStringCatS (fulltag, vStringValue(token->string));
+		}
+		else
+		{
+			vStringCopy(fulltag, token->string);
+		}
+		vStringTerminate(fulltag);
+		if ( ! stringListHas(ClassNames, vStringValue (fulltag)) )
+		{
+			stringListAdd (ClassNames, vStringNewCopy (fulltag));
 			makeJsTag (token, JSTAG_CLASS);
 		}
+		vStringDelete (fulltag);
 	}
 }
 
 static void makeFunctionTag (tokenInfo *const token)
 { 
+	vString *	fulltag;
+
 	if ( ! token->ignoreTag )
 	{
-		if ( ! stringListHas(FunctionNames, vStringValue (token->string)) )
+		fulltag = vStringNew ();
+		if (vStringLength (token->scope) > 0)
 		{
-			stringListAdd (FunctionNames, vStringNewCopy (token->string));
+			vStringCopy(fulltag, token->scope);
+			vStringCatS (fulltag, ".");
+			vStringCatS (fulltag, vStringValue(token->string));
+		}
+		else
+		{
+			vStringCopy(fulltag, token->string);
+		}
+		vStringTerminate(fulltag);
+		if ( ! stringListHas(FunctionNames, vStringValue (fulltag)) )
+		{
+			stringListAdd (FunctionNames, vStringNewCopy (fulltag));
 			makeJsTag (token, JSTAG_FUNCTION);
 		}
+		vStringDelete (fulltag);
 	}
 }
 
@@ -290,25 +314,19 @@ static void makeFunctionTag (tokenInfo *const token)
  *	 Parsing functions
  */
 
-static int skipToCharacter (const int c)
-{
-	int d;
-	do
-	{
-		d = fileGetc ();
-	} while (d != EOF  &&  d != c);
-	return d;
-}
-
 static void parseString (vString *const string, const int delimiter)
 {
 	boolean end = FALSE;
-	int c;
 	while (! end)
 	{
-		c = fileGetc ();
+		int c = fileGetc ();
 		if (c == EOF)
 			end = TRUE;
+		else if (c == '\\')
+		{
+			c = fileGetc(); /* This maybe a ' or ". */
+			vStringPut(string, c);
+		}
 		else if (c == delimiter)
 			end = TRUE;
 		else
@@ -323,7 +341,7 @@ static void parseString (vString *const string, const int delimiter)
 static void parseIdentifier (vString *const string, const int firstChar)
 {
 	int c = firstChar;
-	Assert (isIdentChar1 (c));
+	Assert (isIdentChar (c));
 	do
 	{
 		vStringPut (string, c);
@@ -332,16 +350,6 @@ static void parseIdentifier (vString *const string, const int firstChar)
 	vStringTerminate (string);
 	if (!isspace (c))
 		fileUngetc (c);		/* unget non-identifier character */
-}
-
-static keywordId analyzeToken (vString *const name)
-{
-	vString *keyword = vStringNew ();
-	keywordId result;
-	vStringCopyToLower (keyword, name);
-	result = (keywordId) lookupKeyword (vStringValue (keyword), Lang_js);
-	vStringDelete (keyword);
-	return result;
 }
 
 static void readToken (tokenInfo *const token)
@@ -356,11 +364,8 @@ getNextChar:
 	do
 	{
 		c = fileGetc ();
-		/* 
-		 * Added " to the list of ignores, not sure what this 
-		 * might break but it gets by this issue:
-		 *	  create table "t1" (...)
-		 */
+		token->lineNumber   = getSourceLineNumber ();
+		token->filePosition = getInputFilePosition ();
 	}
 	while (c == '\t'  ||  c == ' ' ||  c == '\n');
 
@@ -387,6 +392,15 @@ getNextChar:
 				  token->filePosition = getInputFilePosition ();
 				  break;
 
+		case '\\':
+				  c = fileGetc ();
+				  if (c != '\\'  && c != '"'  &&  !isspace (c))
+					  fileUngetc (c);
+				  token->type = TOKEN_CHARACTER;
+				  token->lineNumber = getSourceLineNumber ();
+				  token->filePosition = getInputFilePosition ();
+				  break;
+
 		case '/':
 				  {
 					  int d = fileGetc ();
@@ -402,7 +416,7 @@ getNextChar:
 						  {
 							  do
 							  {
-								  skipToCharacter ('*');
+								  fileSkipToCharacter ('*');
 								  c = fileGetc ();
 								  if (c == '/')
 									  break;
@@ -413,7 +427,7 @@ getNextChar:
 						  }
 						  else if (d == '/')	/* is this the start of a comment?  */
 						  {
-							  skipToCharacter ('\n');
+							  fileSkipToCharacter ('\n');
 							  goto getNextChar;
 						  }
 					  }
@@ -421,14 +435,14 @@ getNextChar:
 				  }
 
 		default:
-				  if (! isIdentChar1 (c))
+				  if (! isIdentChar (c))
 					  token->type = TOKEN_UNDEFINED;
 				  else
 				  {
 					  parseIdentifier (token->string, c);
 					  token->lineNumber = getSourceLineNumber ();
 					  token->filePosition = getInputFilePosition ();
-					  token->keyword = analyzeToken (token->string);
+					  token->keyword = analyzeToken (token->string, Lang_js);
 					  if (isKeyword (token, KEYWORD_NONE))
 						  token->type = TOKEN_IDENTIFIER;
 					  else
@@ -694,21 +708,39 @@ static void parseLoop (tokenInfo *const token)
 	}
 }
 
-static void parseIf (tokenInfo *const token)
+static boolean parseIf (tokenInfo *const token)
 {
+	boolean read_next_token = TRUE;
 	/*
 	 * If statements have two forms
 	 *	   if ( ... )
 	 *		   one line;
 	 *
+	 *	   if ( ... )  
+	 *		  statement;
+	 *	   else
+	 *		  statement
+	 *	    
 	 *	   if ( ... ) {
 	 *		  multiple;
 	 *		  statements;
 	 *	   }
 	 *
+	 *
 	 *	   if ( ... ) {
 	 *		  return elem
 	 *	   }
+	 *
+	 *     This example if correctly written, but the
+	 *     else contains only 1 statement without a terminator
+	 *     since the function finishes with the closing brace.
+	 *
+     *     function a(flag){
+     *         if(flag)
+     *             test(1);
+     *         else
+     *             test(2)
+     *     }
 	 *
 	 * TODO:  Deal with statements that can optional end
 	 *		  without a semi-colon.  Currently this messes up
@@ -720,6 +752,14 @@ static void parseIf (tokenInfo *const token)
 	 */
 
 	readToken (token);
+
+	if (isKeyword (token, KEYWORD_if))
+	{
+		/*
+		 * Check for an "else if" and consume the "if"
+		 */
+		readToken (token);
+	}
 
 	if (isType (token, TOKEN_OPEN_PAREN)) 
 	{
@@ -743,7 +783,39 @@ static void parseIf (tokenInfo *const token)
 	else 
 	{
 		findCmdTerm (token);
+
+		/*
+		 * The IF could be followed by an ELSE statement.
+		 * This too could have two formats, a curly braced
+		 * multiline section, or another single line.
+		 */
+
+		if (isType (token, TOKEN_CLOSE_CURLY)) 
+		{
+			/*
+			 * This statement did not have a line terminator.
+			 */
+			read_next_token = FALSE;
+		} 
+		else 
+		{
+			readToken (token);
+
+			if (isType (token, TOKEN_CLOSE_CURLY)) 
+			{
+				/*
+				* This statement did not have a line terminator.
+				*/
+				read_next_token = FALSE;
+			} 
+			else
+			{
+				if (isKeyword (token, KEYWORD_else))
+					read_next_token = parseIf (token); 
+			}
+		} 
 	}
+	return read_next_token;
 }
 
 static void parseFunction (tokenInfo *const token)
@@ -893,13 +965,16 @@ static void parseMethods (tokenInfo *const token, tokenInfo *const class)
 
 	/*
 	 * This deals with these formats
-	 *	   'validMethod' : function(a,b) {}
+	 *	   validProperty  : 2,
+	 *	   validMethod    : function(a,b) {}
+	 *	   'validMethod2' : function(a,b) {}
+     *     container.dirtyTab = {'url': false, 'title':false, 'snapshot':false, '*': false}		
 	 */
 
 	do
 	{
 		readToken (token);
-		if (isType (token, TOKEN_STRING))
+		if (isType (token, TOKEN_STRING) || isKeyword(token, KEYWORD_NONE))
 		{
 			copyToken(name, token);
 
@@ -923,10 +998,21 @@ static void parseMethods (tokenInfo *const token, tokenInfo *const class)
 
 						/*
 						 * Read to the closing curly, check next
-						 * token, if comma, we must loop again
+						 * token, if a comma, we must loop again
 						 */
 						readToken (token);
 					}
+				}
+				else
+				{
+						addToScope (name, class->string);
+						makeJsTag (name, JSTAG_PROPERTY);
+
+						/*
+						 * Read the next token, if a comma
+						 * we must loop again
+						 */
+						readToken (token);
 				}
 			}
 		}
@@ -946,6 +1032,7 @@ static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
 	boolean is_terminated = TRUE;
 	boolean is_global = FALSE;
 	boolean is_prototype = FALSE;
+	vString *	fulltag;
 
 	vStringClear(saveScope);
 	/*
@@ -1260,6 +1347,14 @@ static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
 			 *     }
 			 */
 			parseMethods(token, name);
+			if (isType (token, TOKEN_CLOSE_CURLY)) 
+			{
+				/*
+				 * Assume the closing parantheses terminates
+				 * this statements.
+				 */
+				is_terminated = TRUE;
+			}
 		}
 		else if (isKeyword (token, KEYWORD_new))
 		{
@@ -1279,11 +1374,14 @@ static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
 
 				if (isType (token, TOKEN_SEMICOLON)) 
 				{
-					if ( is_class )
+					if ( token->nestLevel == 0 )
 					{
-						makeClassTag (name);
-					} else {
-						makeFunctionTag (name);
+						if ( is_class )
+						{
+							makeClassTag (name);
+						} else {
+							makeFunctionTag (name);
+						}
 					}
 				}
 			}
@@ -1308,13 +1406,26 @@ static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
 				 * This is a global variable:
 				 *	   var g_var = different_var_name;
 				 */
-				if ( ! stringListHas(FunctionNames, vStringValue (token->string)) &&
-						! stringListHas(ClassNames, vStringValue (token->string)) )
+				fulltag = vStringNew ();
+				if (vStringLength (token->scope) > 0)
+				{
+					vStringCopy(fulltag, token->scope);
+					vStringCatS (fulltag, ".");
+					vStringCatS (fulltag, vStringValue(token->string));
+				}
+				else
+				{
+					vStringCopy(fulltag, token->string);
+				}
+				vStringTerminate(fulltag);
+				if ( ! stringListHas(FunctionNames, vStringValue (fulltag)) &&
+						! stringListHas(ClassNames, vStringValue (fulltag)) )
 				{
 					findCmdTerm (token);
 					if (isType (token, TOKEN_SEMICOLON)) 
 						makeJsTag (name, JSTAG_VARIABLE);
 				}
+				vStringDelete (fulltag);
 			}
 		}
 	}
@@ -1332,7 +1443,7 @@ static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
 	 *	   return 1;
 	 * }
 	 */
-	if (isType (token, TOKEN_CLOSE_CURLY)) 
+	if ( ! is_terminated && isType (token, TOKEN_CLOSE_CURLY)) 
 		is_terminated = FALSE;
 
 
@@ -1373,7 +1484,7 @@ static boolean parseLine (tokenInfo *const token, boolean is_inside_class)
 			case KEYWORD_catch:
 			case KEYWORD_finally:
 				/* Common semantics */
-				parseIf (token); 
+				is_terminated = parseIf (token); 
 				break;
 			case KEYWORD_switch:
 				parseSwitch (token); 
@@ -1387,7 +1498,7 @@ static boolean parseLine (tokenInfo *const token, boolean is_inside_class)
 	{
 		/*
 		 * Special case where single line statements may not be
-		 * SEMICOLON termianted.  parseBlock needs to know this
+		 * SEMICOLON terminated.  parseBlock needs to know this
 		 * so that it does not read the next token.
 		 */
 		is_terminated = parseStatement (token, is_inside_class); 

@@ -1,5 +1,5 @@
 /*
-*   $Id: c.c 614 2007-08-19 22:46:13Z elliotth $
+*   $Id: c.c 689 2008-12-13 21:17:36Z elliotth $
 *
 *   Copyright (c) 1996-2003, Darren Hiebert
 *
@@ -68,7 +68,8 @@ typedef enum eKeywordId {
 	KEYWORD_DOUBLE,
 	KEYWORD_ELSE, KEYWORD_ENUM, KEYWORD_EXPLICIT, KEYWORD_EXTERN,
 	KEYWORD_EXTENDS, KEYWORD_EVENT,
-	KEYWORD_FINAL, KEYWORD_FLOAT, KEYWORD_FOR, KEYWORD_FRIEND, KEYWORD_FUNCTION,
+	KEYWORD_FINAL, KEYWORD_FLOAT, KEYWORD_FOR, KEYWORD_FOREACH,
+	KEYWORD_FRIEND, KEYWORD_FUNCTION,
 	KEYWORD_GOTO,
 	KEYWORD_IF, KEYWORD_IMPLEMENTS, KEYWORD_IMPORT, KEYWORD_INLINE, KEYWORD_INT,
 	KEYWORD_INOUT, KEYWORD_INPUT, KEYWORD_INTEGER, KEYWORD_INTERFACE,
@@ -381,7 +382,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "delegate",       KEYWORD_DELEGATE,       { 0, 0, 1, 0, 0 } },
 	{ "delete",         KEYWORD_DELETE,         { 0, 1, 0, 0, 0 } },
 	{ "double",         KEYWORD_DOUBLE,         { 1, 1, 1, 1, 0 } },
-	{ "else",           KEYWORD_ELSE,           { 1, 1, 0, 1, 0 } },
+	{ "else",           KEYWORD_ELSE,           { 1, 1, 1, 1, 0 } },
 	{ "enum",           KEYWORD_ENUM,           { 1, 1, 1, 1, 1 } },
 	{ "event",          KEYWORD_EVENT,          { 0, 0, 1, 0, 1 } },
 	{ "explicit",       KEYWORD_EXPLICIT,       { 0, 1, 1, 0, 0 } },
@@ -390,6 +391,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "final",          KEYWORD_FINAL,          { 0, 0, 0, 1, 0 } },
 	{ "float",          KEYWORD_FLOAT,          { 1, 1, 1, 1, 0 } },
 	{ "for",            KEYWORD_FOR,            { 1, 1, 1, 1, 0 } },
+	{ "foreach",        KEYWORD_FOREACH,        { 0, 0, 1, 0, 0 } },
 	{ "friend",         KEYWORD_FRIEND,         { 0, 1, 0, 0, 0 } },
 	{ "function",       KEYWORD_FUNCTION,       { 0, 0, 0, 0, 1 } },
 	{ "goto",           KEYWORD_GOTO,           { 1, 1, 1, 1, 0 } },
@@ -685,6 +687,7 @@ static boolean isContextualStatement (const statementInfo *const st)
 		case DECL_CLASS:
 		case DECL_ENUM:
 		case DECL_INTERFACE:
+		case DECL_NAMESPACE:
 		case DECL_STRUCT:
 		case DECL_UNION:
 			result = TRUE;
@@ -1054,31 +1057,6 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 			p = vStringValue (typeRef);
 		}
 		tag->extensionFields.typeRef [1] = p;
-	}
-	else if (type == TAG_VARIABLE || type == TAG_MEMBER)
-	{
-		/* Variable declaration. Not a union, struct, etc. 
-		 * Works for declarations like 'int i;' 'unsigned int i;', 
-		 * 'userstype var;', but not sure will work fine for all
-		 */
-		int i ;
-		int namePos; 
-		
-		/* find, where is name of variable */
-		namePos = NumTokens-1; /* last tocken */
-		while (namePos > 0 && st->token[namePos]->type != TOKEN_NAME)
-		{
-			namePos--;
-		}
-		/* Let's all, that are placed before name, will be a type */
-		for (i = 0; i < namePos; i++)
-		{
-			if (vStringLength (st->token[i]->name) > 0)
-			{
-				tag->extensionFields.typeRef [0] = vStringValue (st->token[i]->name);
-				break;
-			}
-		}
 	}
 }
 
@@ -1513,7 +1491,7 @@ static void readIdentifier (tokenInfo *const token, const int firstChar)
 			first = FALSE;
 		}
 		c = cppGetc ();
-	} while (isident (c) || (isLanguage (Lang_java) && (isHighChar (c) || c == '.')));
+	} while (isident (c) || ((isLanguage (Lang_java) || isLanguage (Lang_csharp)) && (isHighChar (c) || c == '.')));
 	vStringTerminate (name);
 	cppUngetc (c);        /* unget non-identifier character */
 
@@ -1817,6 +1795,7 @@ static void processToken (tokenInfo *const token, statementInfo *const st)
 			break;
 
 		case KEYWORD_FOR:
+		case KEYWORD_FOREACH:
 		case KEYWORD_IF:
 		case KEYWORD_SWITCH:
 		case KEYWORD_WHILE:
@@ -2072,12 +2051,18 @@ static void analyzePostParens (statementInfo *const st, parenInfo *const info)
 	}
 }
 
+static boolean languageSupportsGenerics (void)
+{
+	return (boolean) (isLanguage (Lang_cpp) || isLanguage (Lang_csharp) ||
+		isLanguage (Lang_java));
+}
+
 static void processAngleBracket (void)
 {
 	int c = cppGetc ();
 	if (c == '>') {
 		/* already found match for template */
-	} else if ((isLanguage (Lang_cpp) || isLanguage (Lang_java)) && c != '<' && c != '=') {
+	} else if (languageSupportsGenerics () && c != '<' && c != '=') {
 		/* this is a template */
 		cppUngetc (c);
 		skipToMatch ("<>");
@@ -2089,6 +2074,31 @@ static void processAngleBracket (void)
 		}
 	} else {
 		cppUngetc (c);
+	}
+}
+
+static void parseJavaAnnotation (statementInfo *const st)
+{
+	/*
+	 * @Override
+	 * @Target(ElementType.METHOD)
+	 * @SuppressWarnings(value = "unchecked")
+	 *
+	 * But watch out for "@interface"!
+	 */
+	tokenInfo *const token = activeToken (st);
+	
+	int c = skipToNonWhite ();
+	readIdentifier (token, c);
+	if (token->keyword == KEYWORD_INTERFACE)
+	{
+		/* Oops. This was actually "@interface" defining a new annotation. */
+		processInterface (st);
+	}
+	else
+	{
+		/* Bug #1691412: skip any annotation arguments. */
+		skipParens ();
 	}
 }
 
@@ -2216,7 +2226,11 @@ static int parseParens (statementInfo *const st, parenInfo *const info)
 				break;
 
 			default:
-				if (isident1 (c))
+				if (c == '@' && isLanguage (Lang_java))
+				{
+					parseJavaAnnotation(st);
+				}
+				else if (isident1 (c))
 				{
 					if (++identifierCount > 1)
 						info->isKnrParamList = FALSE;
@@ -2339,6 +2353,11 @@ static void addContext (statementInfo *const st, const tokenInfo* const token)
 
 static boolean inheritingDeclaration (declType decl)
 {
+	/* C# supports inheritance for enums. C++0x will too, but not yet. */
+	if (decl == DECL_ENUM)
+	{
+		return (boolean) (isLanguage (Lang_csharp));
+	}
 	return (boolean) (
 		decl == DECL_CLASS ||
 		decl == DECL_STRUCT ||
@@ -2347,7 +2366,7 @@ static boolean inheritingDeclaration (declType decl)
 
 static void processColon (statementInfo *const st)
 {
-	int c = skipToNonWhite ();
+	int c = (isLanguage (Lang_cpp) ? cppGetc () : skipToNonWhite ());
 	const boolean doubleColon = (boolean) (c == ':');
 
 	if (doubleColon)
@@ -2462,31 +2481,6 @@ static void parseIdentifier (statementInfo *const st, const int c)
 	readIdentifier (token, c);
 	if (! isType (token, TOKEN_NONE))
 		processToken (token, st);
-}
-
-static void parseJavaAnnotation (statementInfo *const st)
-{
-	/*
-	 * @Override
-	 * @Target(ElementType.METHOD)
-	 * @SuppressWarnings(value = "unchecked")
-	 *
-	 * But watch out for "@interface"!
-	 */
-	tokenInfo *const token = activeToken (st);
-	
-	int c = skipToNonWhite ();
-	readIdentifier (token, c);
-	if (token->keyword == KEYWORD_INTERFACE)
-	{
-		/* Oops. This was actually "@interface" defining a new annotation. */
-		processInterface (st);
-	}
-	else
-	{
-		/* Bug #1691412: skip any annotation arguments. */
-		skipParens ();
-	}
 }
 
 static void parseGeneralToken (statementInfo *const st, const int c)

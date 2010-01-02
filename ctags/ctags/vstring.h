@@ -1,5 +1,5 @@
 /*
-*   $Id: vstring.h,v 1.7 2006/05/30 04:37:13 darren Exp $
+*   $Id: vstring.h 719 2009-07-07 03:46:59Z dhiebert $
 *
 *   Copyright (c) 1998-2002, Darren Hiebert
 *
@@ -15,14 +15,27 @@
 *   INCLUDE FILES
 */
 #include "general.h"  /* must always come first */
-# include <stdlib.h>  /* to define size_t */
 
-#define boolean int //Can't understand, why it's need there, but not building with msvc
+#if defined(HAVE_STDLIB_H)
+# include <stdlib.h>  /* to define size_t */
+#endif
+
 /*
 *   MACROS
 */
+#ifndef DEBUG
+# define VSTRING_PUTC_MACRO 1
+#endif
+#ifdef VSTRING_PUTC_MACRO
+#define vStringPut(s,c) \
+	(void)(((s)->length + 1 == (s)->size ? vStringAutoResize (s) : 0), \
+	((s)->buffer [(s)->length] = (c)), \
+	((c) == '\0' ? 0 : ((s)->buffer [++(s)->length] = '\0')))
+#endif
+
 #define vStringValue(vs)      ((vs)->buffer)
 #define vStringItem(vs,i)     ((vs)->buffer[i])
+#define vStringLast(vs)       ((vs)->buffer[(vs)->length - 1])
 #define vStringLength(vs)     ((vs)->length)
 #define vStringSize(vs)       ((vs)->size)
 #define vStringCat(vs,s)      vStringCatS((vs), vStringValue((s)))
@@ -33,16 +46,6 @@
 #define vStringTerminate(vs)  vStringPut(vs, '\0')
 #define vStringLower(vs)      toLowerString((vs)->buffer)
 #define vStringUpper(vs)      toUpperString((vs)->buffer)
-
-#ifndef DEBUG
-# define VSTRING_PUTC_MACRO 1
-#endif
-#ifdef VSTRING_PUTC_MACRO
-#define vStringPut(s,c) \
-	(void)(((s)->length == (s)->size ? vStringAutoResize (s) : 0), \
-	((s)->buffer [(s)->length++] = (c)), \
-	((c) == '\0' ? (s)->length-- : 0))
-#endif
 
 /*
 *   DATA DECLARATIONS
@@ -57,7 +60,6 @@ typedef struct sVString {
 /*
 *   FUNCTION PROTOTYPES
 */
-
 extern boolean vStringAutoResize (vString *const string);
 extern void vStringClear (vString *const string);
 extern vString *vStringNew (void);
@@ -71,7 +73,7 @@ extern void vStringChop (vString *const string);
 extern void vStringStripTrailing (vString *const string);
 extern void vStringCatS (vString *const string, const char *const s);
 extern void vStringNCatS (vString *const string, const char *const s, const size_t length);
-extern vString *vStringNewCopy (vString *const string);
+extern vString *vStringNewCopy (const vString *const string);
 extern vString *vStringNewInit (const char *const s);
 extern void vStringCopyS (vString *const string, const char *const s);
 extern void vStringNCopyS (vString *const string, const char *const s, const size_t length);

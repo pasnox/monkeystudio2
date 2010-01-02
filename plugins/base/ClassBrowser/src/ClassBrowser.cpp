@@ -182,6 +182,10 @@ void ClassBrowser::currentDocumentChanged( pAbstractChild* document )
 	{
 		mDock->browser()->setCurrentFileName( document->filePath() );
 	}
+	else
+	{
+		mDock->browser()->setCurrentFileName( QString::null );
+	}
 }
 
 void ClassBrowser::opened( XUPProjectItem* project )

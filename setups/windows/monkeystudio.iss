@@ -7,7 +7,7 @@ MKS_URL=http://monkeystudio.org
 MKS_FORUMS_URL=http://monkeystudio.org/forum
 
 #define MKS_VERSION "1.8.4.0b2"
-#define MKS_REVISION "3231"
+#define MKS_REVISION "3482"
 #define MKS_SETUP_NAME "setup_mks_" +MKS_VERSION +"-svn" +MKS_REVISION +"-win32"
 #define QT_PATH "C:\Development\Qt\4.5.1"
 
@@ -56,17 +56,17 @@ Source: ..\LGPL-3; DestDir: {app}; Flags: confirmoverwrite promptifolder
 Source: ..\dev-readme; DestDir: {app}; Flags: confirmoverwrite promptifolder
 Source: ..\readme.txt; DestDir: {app}; Flags: confirmoverwrite promptifolder
 Source: plugins\*.dll; DestDir: {app}\plugins; Flags: promptifolder recursesubdirs
-Source: scripts\*.*; DestDir: {app}\scripts; Flags: promptifolder
-Source: translations\*.*; DestDir: {app}\translations; Flags: promptifolder
-Source: templates\*.*; DestDir: {app}\templates; Flags: promptifolder recursesubdirs createallsubdirs
-Source: apis\*.*; DestDir: {app}\apis; Flags: promptifolder recursesubdirs createallsubdirs
+Source: ..\datas\scripts\*.*; DestDir: {app}\scripts; Flags: promptifolder
+Source: ..\datas\translations\*.*; DestDir: {app}\translations; Flags: promptifolder
+Source: ..\datas\templates\*.*; DestDir: {app}\templates; Flags: promptifolder recursesubdirs createallsubdirs
+Source: ..\datas\apis\*.*; DestDir: {app}\apis; Flags: promptifolder recursesubdirs createallsubdirs
 ; Qt related files
 Source: {#QT_PATH}\bin\*.dll; DestDir: {app}; Flags: confirmoverwrite promptifolder; Excludes: *d4.dll
 Source: {#QT_PATH}\doc\qch\*.qch; DestDir: {app}\qt\doc\qch; Flags: promptifolder recursesubdirs
 Source: {#QT_PATH}\plugins\*.dll; DestDir: {app}\qt\plugins; Flags: promptifolder recursesubdirs; Excludes: *d4.dll
 Source: {#QT_PATH}\translations\*.*; DestDir: {app}\qt\translations; Flags: promptifolder recursesubdirs; Excludes: *.pri README
 ; MinGW related files
-Source: D:\pasnox\Wine's Drive\windows\system32\mingwm10.dll; DestDir: {app}; Flags: confirmoverwrite promptifolder
+Source: D:\pasnox\Disk Wine\windows\system32\mingwm10.dll; DestDir: {app}; Flags: confirmoverwrite promptifolder
 
 [Icons]
 Name: {group}\{cm:MKS_NAME}; Filename: {app}\monkeystudio.exe; WorkingDir: {app}; IconFilename: {app}\monkeystudio.exe; IconIndex: 0

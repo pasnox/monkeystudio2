@@ -799,7 +799,7 @@ void QMakeProjectItem::installCommands()
 		{
 			setProjectSettingsValue( "SHOW_QT_VERSION_WARNING", "0" );
 			topLevelProject()->save();
-			MonkeyCore::messageManager()->appendMessage( tr( "Some actions can't be created, because there is no default Qt version setted, please go in your project settings ( %1 ) to fix this." ).arg( displayText() ) );
+			MonkeyCore::messageManager()->appendMessage( tr( "Some actions can't be created, because there is no default Qt version setted, please go in your project settings ( %1 ) to fix this." ).arg( displayText() ), 0 );
 		}
 		
 		// execute debug

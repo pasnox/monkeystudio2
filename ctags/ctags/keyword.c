@@ -1,11 +1,29 @@
-#include <stddef.h>
+/*
+*   $Id: keyword.c 715 2009-07-06 03:31:00Z dhiebert $
+*
+*   Copyright (c) 1998-2002, Darren Hiebert
+*
+*   This source code is released for free distribution under the terms of the
+*   GNU General Public License.
+*
+*   Manages a keyword hash.
+*/
 
-#include  <string.h>
-#include "general.h"
-#include "keyword.h"
-#include "routines.h"
+/*
+*   INCLUDE FILES
+*/
+#include "general.h"  /* must always come first */
+
+#include <string.h>
+
 #include "debug.h"
+#include "keyword.h"
+#include "options.h"
+#include "routines.h"
 
+/*
+*   MACROS
+*/
 #define HASH_EXPONENT 7  /* must be less than 17 */
 
 /*
@@ -22,10 +40,7 @@ typedef struct sHashEntry {
 *   DATA DEFINITIONS
 */
 static const unsigned int TableSize = 1 << HASH_EXPONENT;
-
-static hashEntry **HashTable = NULL ;
-
-
+static hashEntry **HashTable = NULL;
 
 /*
 *   FUNCTION DEFINITIONS
@@ -105,12 +120,10 @@ static hashEntry *newEntry (
  *  should be added in lower case. If we encounter a case-sensitive language
  *  whose keywords are in upper case, we will need to redesign this.
  */
-
 extern void addKeyword (const char *const string, langType language, int value)
 {
 	const unsigned long hashedValue = hashValue (string);
-	hashEntry *tableEntry = getHashTableEntry (hashedValue);
-	hashEntry *entry = tableEntry;
+	hashEntry *entry = getHashTableEntry (hashedValue);
 
 	if (entry == NULL)
 	{
@@ -177,3 +190,69 @@ extern void freeKeywordTable (void)
 		eFree (HashTable);
 	}
 }
+
+extern int analyzeToken (vString *const name, langType language)
+{
+	vString *keyword = vStringNew ();
+	int result;
+	vStringCopyToLower (keyword, name);
+	result = lookupKeyword (vStringValue (keyword), language);
+	vStringDelete (keyword);
+	return result;
+}
+
+#ifdef DEBUG
+
+static void printEntry (const hashEntry *const entry)
+{
+	printf ("  %-15s %-7s\n", entry->string, getLanguageName (entry->language));
+}
+
+static unsigned int printBucket (const unsigned int i)
+{
+	hashEntry **const table = getHashTable ();
+	hashEntry *entry = table [i];
+	unsigned int measure = 1;
+	boolean first = TRUE;
+
+	printf ("%2d:", i);
+	if (entry == NULL)
+		printf ("\n");
+	else while (entry != NULL)
+	{
+		if (! first)
+			printf ("    ");
+		else
+		{
+			printf (" ");
+			first = FALSE;
+		}
+		printEntry (entry);
+		entry = entry->next;
+		measure = 2 * measure;
+	}
+	return measure - 1;
+}
+
+extern void printKeywordTable (void)
+{
+	unsigned long emptyBucketCount = 0;
+	unsigned long measure = 0;
+	unsigned int i;
+
+	for (i = 0  ;  i < TableSize  ;  ++i)
+	{
+		const unsigned int pass = printBucket (i);
+
+		measure += pass;
+		if (pass == 0)
+			++emptyBucketCount;
+	}
+
+	printf ("spread measure = %ld\n", measure);
+	printf ("%ld empty buckets\n", emptyBucketCount);
+}
+
+#endif
+
+/* vi:set tabstop=4 shiftwidth=4: */

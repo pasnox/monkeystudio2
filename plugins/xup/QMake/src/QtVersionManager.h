@@ -3,6 +3,8 @@
 
 #include <pSettings.h>
 
+#include <QFile>
+
 struct QtVersion
 {
 	QtVersion() { Default = false; HaveQt4Suffixe = false; }
@@ -10,7 +12,7 @@ struct QtVersion
 	{ Version = version; Path = path; Default = def; QMakeSpec = qmakeSpec; QMakeParameters = qmakeParams; HaveQt4Suffixe = haveSuffixe; }
 	
 	bool isValid() const
-	{ return !( Version.isEmpty() && Path.isEmpty() ); }
+	{ return !Version.isEmpty() && !Path.isEmpty() && QFile::exists( Path ); }
 	
 	bool isSystem() const
 	{ return Version.startsWith( "Qt System", Qt::CaseInsensitive ); }
@@ -76,20 +78,19 @@ class QtVersionManager : public pSettings
 	
 public:
 	QtVersionManager( QObject* owner = 0 );
-
-	void checkForSystemVersion();
-	QtVersion systemVersion() const;
-	QtVersionList versions();
+	
+	QtVersionList versions() const;
 	void setVersions( const QtVersionList& versions );
-	QtVersion defaultVersion();
-	QtVersion version( const QString& version );
+	
+	QtVersion defaultVersion() const;
+	QtVersion version( const QString& versionString ) const;
 
-	QtItemList defaultModules();
-	QtItemList modules();
+	QtItemList defaultModules() const;
+	QtItemList modules() const;
 	void setModules( const QtItemList& modules );
 
-	QtItemList defaultConfigurations();
-	QtItemList configurations();
+	QtItemList defaultConfigurations() const;
+	QtItemList configurations() const;
 	void setConfigurations( const QtItemList& configurations );
 
 protected:
@@ -97,6 +98,12 @@ protected:
 	static const QString mQtModuleKey;
 	static const QString mQtConfigurationKey;
 	static const QRegExp mQtVersionRegExp;
+	static const QRegExp mQtQMakeRegExp;
+	static const QRegExp mQtUninstallRegExp;
+	
+	QStringList possibleQtPaths() const;
+	QtVersionList getQtVersions( const QStringList& paths ) const;
+	void synchronizeVersions();
 };
 
 #endif // QTVERSIONMANAGER_H

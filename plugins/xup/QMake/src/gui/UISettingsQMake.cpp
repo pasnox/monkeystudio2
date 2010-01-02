@@ -5,12 +5,28 @@
 #include <QPushButton>
 #include <QDir>
 #include <QWhatsThis>
+#include <QFileSystemModel>
+#include <QDirModel>
+#include <QCompleter>
+#include <QMessageBox>
+#include <QDebug>
 
 UISettingsQMake::UISettingsQMake( QWidget* parent )
 	: QWidget( parent )
 {
 	// set up dialog
 	setupUi( this );
+	
+	// completer of paths
+#ifdef Q_CC_GNU
+	#warning *** USING QDirModel is deprecated but QCompleter does not handle QFileSystemModel... please fix me when possible.
+#endif
+	QCompleter* completer = new QCompleter( leQtVersionPath );
+	QDirModel* model = new QDirModel( completer );
+	
+	model->setFilter( QDir::AllDirs | QDir::NoDotAndDotDot | QDir::Hidden | QDir::Readable );
+	completer->setModel( model );
+	leQtVersionPath->setCompleter( completer );
 	
 	lwPages->setCurrentRow( 0 );
 	dbbButtons->button( QDialogButtonBox::Help )->setIcon( QIcon( ":/help/icons/help/keyword.png" ) );
@@ -34,6 +50,7 @@ UISettingsQMake::UISettingsQMake( QWidget* parent )
 	foreach ( QToolButton* tb, findChildren<QToolButton*>( QRegExp( "tbDown*" ) ) )
 		connect( tb, SIGNAL( clicked() ), this, SLOT( tbDown_clicked() ) );
 	connect( leQtVersionVersion, SIGNAL( editingFinished() ), this, SLOT( qtVersionChanged() ) );
+	connect( leQtVersionVersion, SIGNAL( textChanged( const QString& ) ), this, SLOT( qtVersionChanged() ) );
 	connect( leQtVersionPath, SIGNAL( editingFinished() ), this, SLOT( qtVersionChanged() ) );
 	connect( cbQtVersionQMakeSpec->lineEdit(), SIGNAL( editingFinished() ), this, SLOT( qtVersionChanged() ) );
 	connect( leQtVersionQMakeParameters, SIGNAL( editingFinished() ), this, SLOT( qtVersionChanged() ) );
@@ -296,24 +313,45 @@ void UISettingsQMake::loadSettings()
 
 void UISettingsQMake::on_dbbButtons_helpRequested()
 {
-	QString s;
+	QString help;
 	
 	switch ( swPages->currentIndex() )
 	{
 		case 0:
-			s = tr( "<b>Qt Versions</b>: You can register one or more Qt Version to use in your Qt projects, so you can easily select the one to use in project settings." );
+		{
+			help = tr( "You can register one or more Qt Version to use in your Qt projects, so you can easily select the one to use in project settings.<br /><br />"
+						"The green item is the default Qt Version used. if there is no green item, the default Qt Version used will be the first one available. You can explicitely set the default Qt Version selecting an item and clicking the set default button.<br /><br />"
+						"To add a new Qt version, simply click the <b>Add a new Qt Version</b> button at top and fill needed fields.<br /><br />"
+						"The minimum required fields are:<br />"
+						"- <b>Version</b>: it define a human label across a Qt version.<br />"
+						"- <b>Path</b>: it define the path where is located your Qt installation (the path from where you can see bin/qmake).<br /><br />"
+						"You can get more help about fields reading there tooltips." );
 			break;
+		}
 		case 1:
-			s = tr( "<b>Qt Modules</b>: This list contains differents modules available with Qt, you can add your own module if you want, so you can easily check them in project settings." );
+		{
+			help = tr( "You can register one or more Qt Modules for your Qt projects, so you can easily use them in the project settings dialog.<br />"
+						"Qt Modules are components available by your Qt installation, like QtCore, GtGui...<br />"
+						"This editor allow you to edit the available modules in case of by example a new Qt version is released and MkS did not yet support the new modules in the project settings.<br />"
+						"A concrete example is the release of Qt 4.6.0 that has added QtMultimedia, you had notified that this module was not available in the project settings, so you can't use it.<br />"
+						"By adding a new module by clicking <b>Add a new module</b> button, you can define the module caption and its associated value, this will make it available in the project settings !<br />"
+						"The minimum required fields are <b>caption</b> and <b>value</b>, while <b>help</b> is an optional description of the module and will be shown as tooltip in the project settings.<br />"
+						"Typically, the module value goes into the QT variable of your project file."	);
 			break;
+		}
 		case 2:
-			s = tr( "<b>Settings</b>: This list contains differents settings available with Qt, you can add your own if you want, so you can easily check them in project settings." );
+		{
+			help = tr( "Qt Configuration works like <b>Qt Modules</b> except that the content is shown in the <b>Others Modules</b> list and that values goes into the CONFIG variable of your project.<br /><br />"
+						"Configurations having the word '<b>only</b>' as caption will be considerated as group separators and must have no value associated (they will be ignored).");
 			break;
+		}
 	}
 	
-	if ( !s.isEmpty() )
+	if ( !help.isEmpty() )
 	{
-		QWhatsThis::showText( mapToGlobal( rect().center() ), s );
+		QPoint point = rect().center();
+		point.setY( 35 );
+		QWhatsThis::showText( mapToGlobal( point ), help );
 	}
 }
 
@@ -321,20 +359,49 @@ void UISettingsQMake::on_dbbButtons_clicked( QAbstractButton* b )
 {
 	// only accept save button
 	if ( dbbButtons->standardButton( b )  != QDialogButtonBox::Save )
+	{
 		return;
+	}
+	
 	// save qt versions
 	QtVersionList versions;
+	
 	for ( int i = 0; i < lwQtVersions->count(); i++ )
-		versions << lwQtVersions->item( i )->data( Qt::UserRole ).value<QtVersion>();
+	{
+		QListWidgetItem* item = lwQtVersions->item( i );
+		
+		const QtVersion& version = item->data( Qt::UserRole ).value<QtVersion>();
+		
+		if ( !version.isValid() )
+		{
+			lwQtVersions->setCurrentItem( item );
+			QMessageBox::warning( this, tr( "Error..." ), tr( "A Qt Version is not valid and has been selected, please correct it and save again." ) );
+			lwQtVersions->setFocus();
+			return;
+		}
+		
+		versions << version;
+	}
+	
 	mQtManager.setVersions( versions );
+	
 	// save modules
 	QtItemList modules;
+	
 	for ( int i = 0; i < lwQtModules->count(); i++ )
+	{
 		modules << lwQtModules->item( i )->data( Qt::UserRole ).value<QtItem>();
+	}
+	
 	mQtManager.setModules( modules );
+	
 	// save configurations
 	QtItemList configurations;
+	
 	for ( int i = 0; i < lwQtConfigurations->count(); i++ )
+	{
 		configurations << lwQtConfigurations->item( i )->data( Qt::UserRole ).value<QtItem>();
+	}
+	
 	mQtManager.setConfigurations( configurations );
 }

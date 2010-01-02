@@ -9,12 +9,21 @@ TEMPLATE	= lib
 CONFIG	*= staticlib
 CONFIG	-= qt
 DESTDIR	= $${PACKAGE_BUILD_PATH}
-win32:DEFINES	*= WIN32 HAVE_REGCOMP REGEX_MALLOC STDC_HEADERS=1
-unix:DEFINES	*= HAVE_STDLIB_H HAVE_FGETPOS HAVE_SYS_STAT_H HAVE_FCNTL_H
-win32:INCLUDEPATH	*= $$CTAGS_VERSION
+
+DEFINES *= HAVE_REGCOMP 
+win32:DEFINES	*= WIN32 REGEX_MALLOC STDC_HEADERS=1
+unix:DEFINES	*= HAVE_STDLIB_H \
+							HAVE_FGETPOS \
+							HAVE_SYS_STAT_H \
+							HAVE_FCNTL_H \
+							HAVE_REGEX \
+							HAVE_UNISTD_H \
+							HAVE_STRSTR
+
+win32:INCLUDEPATH	*= $$CTAGS_VERSION $$CTAGS_VERSION\gnu_regex
 
 HEADERS	=  \
-	#	$${CTAGS_VERSION}/debug.h \
+	$${CTAGS_VERSION}/debug.h \
 	$${CTAGS_VERSION}/entry.h \
 	$${CTAGS_VERSION}/general.h \
 	$${CTAGS_VERSION}/get.h \
@@ -25,13 +34,11 @@ HEADERS	=  \
 	$${CTAGS_VERSION}/routines.h \
 	$${CTAGS_VERSION}/strlist.h \
 	$${CTAGS_VERSION}/vstring.h \
-	#	$${CTAGS_VERSION}/readtags.h \
-	#	$${CTAGS_VERSION}/sort.h \
-	#	$${CTAGS_VERSION}/args.h \
-	#	$${CTAGS_VERSION}/ctags.h \
+	$${CTAGS_VERSION}/readtags.h \
+	$${CTAGS_VERSION}/sort.h \
+	$${CTAGS_VERSION}/args.h \
+	$${CTAGS_VERSION}/ctags.h \
 	$${CTAGS_VERSION}/exuberantCtags.h
-
-win32:HEADERS	*= $${CTAGS_VERSION}/regex.h
 
 SOURCES	= $${CTAGS_VERSION}/asm.c \
 	$${CTAGS_VERSION}/asp.c \
@@ -74,21 +81,22 @@ SOURCES	= $${CTAGS_VERSION}/asm.c \
 	$${CTAGS_VERSION}/vim.c \
 	$${CTAGS_VERSION}/vstring.c \
 	$${CTAGS_VERSION}/yacc.c \
-	#	$${CTAGS_VERSION}/readtags.c \
-	#	$${CTAGS_VERSION}/sort.c \
-	#	$${CTAGS_VERSION}/args.c \
-	#	$${CTAGS_VERSION}/argproc.c \
-	#	$${CTAGS_VERSION}/mac.c \
-	#	$${CTAGS_VERSION}/qdos.c \
-	#	$${CTAGS_VERSION}/e_amiga.h \
-	#	$${CTAGS_VERSION}/e_djgpp.h \
-	#	$${CTAGS_VERSION}/e_mac.h \
-	#	$${CTAGS_VERSION}/e_msoft.h \
-	#	$${CTAGS_VERSION}/e_os2.h \
-	#	$${CTAGS_VERSION}/e_qdos.h \
-	#	$${CTAGS_VERSION}/e_riscos.h \
-	#	$${CTAGS_VERSION}/e_vms.h \
-	#	$${CTAGS_VERSION}/main.c \
+	$${CTAGS_VERSION}/tex.c \
+	$${CTAGS_VERSION}/flex.c \
+	$${CTAGS_VERSION}/vhdl.c \
+	$${CTAGS_VERSION}/matlab.c \
+	$${CTAGS_VERSION}/ant.c \
+	$${CTAGS_VERSION}/ocaml.c \
+	$${CTAGS_VERSION}/dosbatch.c \
 	$${CTAGS_VERSION}/exuberantCtags.c
 
-win32:SOURCES	*= $${CTAGS_VERSION}/regex.c
+win32:DEFINES *= __USE_GNU HAVE_STDBOOL_H
+win32:SOURCES	*= \
+		$${CTAGS_VERSION}/gnu_regex/regex.c \
+		$${CTAGS_VERSION}/gnu_regex/regcomp.c \
+		$${CTAGS_VERSION}/gnu_regex/regexec.c \
+		$${CTAGS_VERSION}/gnu_regex/regex_internal.c
+
+win32:HEADERS	*= \
+		$${CTAGS_VERSION}/gnu_regex/regex.h \
+		$${CTAGS_VERSION}/gnu_regex/regex_internal.h

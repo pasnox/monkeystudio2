@@ -5,3 +5,6 @@ CTAGS_VERSION	= ctags
 
 # include path
 INCLUDEPATH	*= $$PWD/sdk
+
+# For correctly include ctags headers
+unix:DEFINES *=HAVE_FGETPOS
