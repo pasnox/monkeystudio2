@@ -15,7 +15,7 @@ void SearchAndReplace::fillPluginInfos()
 	mPluginInfos.Type = BasePlugin::iBase;
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "0.5.0";
-	mPluginInfos.FirstStartEnabled = false;
+	mPluginInfos.FirstStartEnabled = true;
 	mPluginInfos.HaveSettingsWidget = false;
 	mPluginInfos.Pixmap = pIconManager::pixmap( "SearchAndReplace.png", ":/icons" );
 }
