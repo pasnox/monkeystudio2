@@ -27,7 +27,6 @@
 **
 ****************************************************************************/
 #include "UICLIToolSettings.h"
-#include "../CompilerPlugin.h"
 #include  "../../consolemanager/pConsoleManager.h"
 #include "../../pMonkeyStudio.h"
 #include "../CLIToolPlugin.h"

@@ -1,153 +1,98 @@
-/****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.1.0
-** Authors   : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Monkey Studio IDE
-** FileName  : SearchWidget.h
-** Date      : 2008-01-14T00:37:03
-** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
-**
-	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
-
-	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; either version 2 of the License, or
-	(at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
-****************************************************************************/
 #ifndef SEARCHWIDGET_H
 #define SEARCHWIDGET_H
 
-#include <QWidget>
-#include <QStringList>
-
+#include "ui_SearchWidget.h"
 #include "SearchAndReplace.h"
 
-#include <fresh.h>
-
-class QsciScintilla;
 class SearchThread;
+class ReplaceThread;
+class SearchResultsDock;
 
-class QGridLayout;
-class QToolButton;
-class QPushButton;
-class QLineEdit;
-class QLabel;
-class QCheckBox;
-class QComboBox;
-class QActionGroup;
-class SearchContainer;
-
-/*!
-	Class implements UI of search system
-*/
-class SearchWidget : public QWidget
+class SearchWidget : public QFrame, public Ui::SearchWidget
 {
 	Q_OBJECT
-	
-public:
-	enum LineEditColor 
-	{
-		GREEN,
-		RED,
-		DEFAULT
-	};
-	
-	SearchWidget( QWidget* parent = NULL);
 
-	void show (SearchAndReplace::Mode mode);
-	
-	void setSearchText (const QString& text);
-	void setNextButtonText (const QString& text);
-	void setNextButtonIcon (const QIcon& icon);
-	
-	bool isRegExp ();
-	bool isCaseSensetive ();
-	QString codec ();
-	
-	QString searchText();
-	QString replaceText();
-	QString path();
-	QString mask();
-	
-	void searchAddToRecents (QString);
-	void replaceAddToRecents (QString);
-	void pathAddToRecents (QString);
-	void maskAddToRecents (QString);
-	
-	void setSearchLineEditColor (LineEditColor);
+public:
+	struct Properties
+	{
+		Properties()
+		{
+			mode = SearchAndReplace::ModeNo;
+			options = SearchAndReplace::OptionNo;
+			project = 0;
+		}
+
+		QString searchText;
+		QString replaceText;
+		QString searchPath;
+		SearchAndReplace::Mode mode;
+		QStringList mask;
+		QString codec;
+		SearchAndReplace::Options options;
+		QMap<QString, QString> openedFiles; // filename, content
+		class XUPProjectItem* project;
+		QStringList sourcesFiles;
+	};
+
+	enum InputField
+	{
+		Search,
+		Replace
+	};
+
+	enum State
+	{
+		Normal,
+		Good,
+		Bad
+	};
+
+	SearchWidget( QWidget* parent = 0 );
+	virtual ~SearchWidget();
+
+	SearchAndReplace::Mode mode() const;
+	SearchThread* searchThread() const;
+
+	void setResultsDock( SearchResultsDock* dock );
+
+public slots:
+	void setMode( SearchAndReplace::Mode mode );
+
 protected:
 	SearchAndReplace::Mode mMode;
-	
-	QColor mDefaultEditColor;
-	
-	QGridLayout* layout;
+	QMap<SearchAndReplace::Mode, QAction*> mModeActions;
+	QMap<SearchAndReplace::Option, QAction*> mOptionActions;
+	SearchWidget::Properties mProperties;
+	SearchThread* mSearchThread;
+	ReplaceThread* mReplaceThread;
+	SearchResultsDock* mDock;
 
-	//search
-	QLabel* lSearchText;
-	QComboBox* cobSearch;
-	QPushButton* tbNext;
-	QPushButton* tbPrevious;
-	
-	QCheckBox* cbCaseSensitive;
-	QCheckBox* cbRegExp;
-	SearchContainer* scSearchOptions;
+	virtual void keyPressEvent( QKeyEvent* event );
 
-	//replace
-	QLabel* lReplaceText;
-	QComboBox* cobReplace;
-	QPushButton* tbReplace;
-	QPushButton* tbReplaceAll;
-
-	//folder
-	QLabel* lPath;
-	QComboBox* cobPath;
-	QToolButton* tbPath;
-	QToolButton* tbCodec;
-	QActionGroup* agCodec;
-	SearchContainer* scFolder;
-	
-	QLabel* lMask;
-	QComboBox* cobMask;
-	SearchContainer* scMask;
-
-	QStringList searchRecents;
-	QStringList replaceRecents;
-	QStringList maskRecents;
-	QStringList pathRecents;
-	
-	void addSearchToLayout (int row);
-	void addReplaceToLayout (int row);
-	void addFolderToLayout (int row);
-
-	void removeSearchFromLayout ();
-	void removeReplaceFromLayout ();
-	void removeFolderFromLayout ();
-
-	void keyPressEvent( QKeyEvent* );
+	void updateLabels();
+	void updateWidgets();
+	void initializeProperties();
+	void showMessage( const QString& status );
+	void setState( SearchWidget::InputField field, SearchWidget::State state );
+	bool searchFile( bool forward, bool incremental );
+	bool replaceFile( bool all );
 
 protected slots:
-	void onPathClicked ();
-	void onCodecActionTriggered (QAction* action);
-	
-signals:
-	bool previousClicked();
-	bool nextClicked();
-	void replaceClicked();
-	void replaceAllClicked();
-	
-	void searchTextEdited();
+	void searchThread_stateChanged();
+	void replaceThread_stateChanged();
+	void replaceThread_openedFileHandled( const QString& fileName, const QString& content, const QString& codec );
+	void replaceThread_error( const QString& error );
+	void search_textChanged();
+	void groupMode_triggered( QAction* action );
+	void on_pbPrevious_clicked();
+	void on_pbNext_clicked();
+	void on_pbSearch_clicked();
+	void on_pbSearchStop_clicked();
+	void on_pbReplace_clicked();
+	void on_pbReplaceAll_clicked();
+	void on_pbReplaceChecked_clicked();
+	void on_pbReplaceCheckedStop_clicked();
+	void on_pbBrowse_clicked();
 };
 
 #endif // SEARCHWIDGET_H

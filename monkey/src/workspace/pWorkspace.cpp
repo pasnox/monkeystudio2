@@ -223,12 +223,6 @@ void pWorkspace::initMultiToolBar( QToolBar* tb )
 	}
 }
 
-void pWorkspace::addSearchReplaceWidget( QWidget* widget )
-{
-	mLayout->addWidget( widget );
-	widget->setVisible( false );
-}
-
 pOpenedFileExplorer* pWorkspace::dockWidget() const
 {
 	return mOpenedFileExplorer;
@@ -278,20 +272,8 @@ pAbstractChild* pWorkspace::currentDocument() const
 	return qobject_cast<pAbstractChild*>( window );
 }
 
-void pWorkspace::goToLine( const QString& fileName, const QPoint& pos, bool highlight, const QString& codec )
+void pWorkspace::goToLine( const QString& fileName, const QPoint& pos, const QString& codec, int selectionLength )
 {
-	if ( highlight )
-	{
-		pAbstractChild* document = openFile( fileName, codec );
-		
-		if ( document )
-		{
-			document->goTo( pos, highlight );
-		}
-		
-		return;
-	}
-	
 	foreach ( QMdiSubWindow* window, mMdiArea->subWindowList() )
 	{
 		pAbstractChild* document = qobject_cast<pAbstractChild*>( window );
@@ -299,9 +281,16 @@ void pWorkspace::goToLine( const QString& fileName, const QPoint& pos, bool high
 		if ( pMonkeyStudio::isSameFile( document->filePath(), fileName ) )
 		{
 			setCurrentDocument( document );
-			document->goTo( pos, highlight );
+			document->goTo( pos, selectionLength );
 			return;
 		}
+	}
+
+	pAbstractChild* document = openFile( fileName, codec );
+
+	if ( document )
+	{
+		document->goTo( pos, selectionLength );
 	}
 }
 
@@ -886,14 +875,12 @@ void pWorkspace::internal_currentProjectChanged( XUPProjectItem* currentProject,
 	// get pluginsmanager
 	PluginsManager* pm = MonkeyCore::pluginsManager();
 	
-	// set compiler, debugger and interpreter
+	// set debugger and interpreter
 	BuilderPlugin* bp = currentProject ? currentProject->builder() : 0;
-	CompilerPlugin* cp = currentProject ? currentProject->compiler() : 0;
 	DebuggerPlugin* dp = currentProject ? currentProject->debugger() : 0;
 	InterpreterPlugin* ip = currentProject ? currentProject->interpreter() : 0;
 	
 	pm->setCurrentBuilder( bp && !bp->neverEnable() ? bp : 0 );
-	pm->setCurrentCompiler( cp && !cp->neverEnable() ? cp : 0 );
 	pm->setCurrentDebugger( dp && !dp->neverEnable() ? dp : 0 );
 	pm->setCurrentInterpreter( ip && !ip->neverEnable() ? ip : 0 );
 	
@@ -1277,7 +1264,7 @@ void pWorkspace::editSearch_triggered()
 {
 	pAbstractChild* document = currentDocument();
 	
-	if ( document )
+	if ( document && !document->editor() )
 	{
 		document->invokeSearch();
 	}

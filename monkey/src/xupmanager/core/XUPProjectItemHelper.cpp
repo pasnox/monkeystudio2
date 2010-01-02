@@ -149,9 +149,6 @@ void XUPProjectItemHelper::installProjectCommands( XUPProjectItem* project )
 				case BasePlugin::iBuilder:
 					project->addCommand( command, "mBuilder" );
 					break;
-				case BasePlugin::iCompiler:
-					project->addCommand( command, "mBuilder/mBuild" );
-					break;
 				case BasePlugin::iDebugger:
 					project->addCommand( command, "mDebugger" );
 					break;

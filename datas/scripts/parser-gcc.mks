@@ -1,0 +1,17 @@
+# It is a machine generated file. Do not edit it manualy!
+
+# Error (usualy syntax)
+parser add "GCC" "^([\w\d\./\\\-]+):(\d+): (error:|undefined reference) [^\n]+" "%1" "-1" "%2" "error" "%0" "%0"
+		
+# Warning
+parser add "GCC" "^([\w\d\./\\\-]+):(\d+): warning: [^\n]+" "%1" "-1" "%2" "warning" "%0" "%0"
+		
+# Compiling
+parser add "GCC" "^(gcc|g\+\+|mingw32-gcc|mingw32-g\+\+)[\-\d\.]*[^\n]+ ([\w\d\./\\\-]+\.c(pp)?)" "%2" "-1" "-1" "compiling" "Compiling %2..." "%0"
+		
+# Linker cannot find library
+parser add "GCC" "^/usr/bin/ld: cannot find -l([\w]+)" "" "-1" "-1" "error" "Cannot find library \"%1\"" "%0"
+		
+# Linking failed
+parser add "GCC" "^collect2: ld returned 1 exit status" "" "-1" "-1" "error" "Linking failed. Check Output dock for more info" "%0"
+		

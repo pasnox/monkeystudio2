@@ -1,291 +1,353 @@
 #include "SearchThread.h"
-#include <QFile>
-#include <QTextStream>
-#include <QStringList>
-#include <QList>
-#include <QDir>
+
+#include <QMutexLocker>
 #include <QTextCodec>
+#include <QTime>
+#include <QDebug>
 
-/*! Iterator for get list of all files in the some dirrectory, using minimum memory/time.
-	Every time, when called, will read from file system and return next file name
-*/
-class DirWalkIterator
+int SearchThread::mMaxTime = 125;
+
+SearchThread::SearchThread( QObject* parent )
+	: QThread( parent )
 {
-protected:
-	QList<QStringList> mDirStack;
-	QStringList mFilesList;
-	QStringList mDirList;
-	QString currentDir;
-	
-	void enterDirrectory (QString dir)
-	{
-		QStringList dirs = QDir(dir).entryList (QDir::Dirs | QDir::NoDotAndDotDot);
-		currentDir = dir;
-		for (int i = 0; i < dirs.size (); i++)
-			dirs[i] = currentDir +'/'+ dirs[i];
-		mDirStack.prepend (dirs);
-		mFilesList = QDir(dir).entryList (QDir::Files);
-	}
-	
-	bool findDirWithFiles ()
-	{
-		while (!mDirStack.isEmpty() && mFilesList.isEmpty())
-		{
-			if (!mDirStack.first().isEmpty()) // 1 level down
-			{
-				enterDirrectory (mDirStack.first().takeFirst());
-			}
-			else // one level up. Will enter next dir on next WHILE iteration
-				mDirStack.takeFirst ();
-		}
-		return !mFilesList.isEmpty();
-	}
+	mReset = false;
+	mExit = false;
 
-public:
-	DirWalkIterator (QString dir)
-	{
-		enterDirrectory (dir);
-	}
-	
-	QString next()
-	{
-		// Find dirrectory with files, return "", if finished search
-		if (!findDirWithFiles ())
-		{
-			return QString::null;
-		}
-		
-		return currentDir + '/' + mFilesList.takeFirst();
-	}
-};
-
-SearchThread::SearchThread(Mode _mode, const QString &_dir, QString &_mask, const QString &_search, const QString& _replace, bool _caseSensetive, bool _isReg, const QString& _codec, QObject* parent)
-	: QThread(parent), mTerm(false)
-{
-	mMode = _mode;
-	mDir = _dir;
-	mMask = _mask;
-	mSearch = _search;
-	mReplace = _replace;
-	mIsReg = _isReg;
-	mCaseSensetive = _caseSensetive;
-	mCodec = _codec;
-	connect (&mReadPleaseResultsTimer, SIGNAL (timeout()), this, SIGNAL (readPleaseResults()));
+	qRegisterMetaType<SearchResultsModel::ResultList>( "SearchResultsModel::ResultList" );
 }
 
 SearchThread::~SearchThread()
 {
+	stop();
+	wait();
+}
+
+void SearchThread::search( const SearchWidget::Properties& properties )
+{
+	{
+		QMutexLocker locker( &mMutex );
+		mProperties = properties;
+		mReset = isRunning() ? true : false;
+		mExit = false;
+	}
+
+	if ( !isRunning() )
+	{
+		start();
+	}
+}
+
+void SearchThread::stop()
+{
+	{
+		QMutexLocker locker( &mMutex );
+		mReset = false;
+		mExit = true;
+	}
+}
+
+SearchWidget::Properties* SearchThread::properties() const
+{
+	QMutexLocker locker( const_cast<QMutex*>( &mMutex ) );
+	return &const_cast<SearchThread*>( this )->mProperties;
+}
+
+QStringList SearchThread::getFiles( QDir fromDir, const QStringList& filters, bool recursive ) const
+{
+	QStringList files;
+
+	foreach ( const QFileInfo& file, fromDir.entryInfoList( QDir::AllEntries | QDir::NoDotAndDotDot, QDir::DirsFirst | QDir::Name ) )
+	{
+		if ( file.isFile() && ( filters.isEmpty() || QDir::match( filters, file.fileName() ) ) )
+		{
+			files << file.absoluteFilePath();
+		}
+		else if ( file.isDir() && recursive )
+		{
+			fromDir.cd( file.filePath() );
+			files << getFiles( fromDir, filters, recursive );
+			fromDir.cdUp();
+		}
+
+		{
+			QMutexLocker locker( const_cast<QMutex*>( &mMutex ) );
+
+			if ( mReset || mExit )
+			{
+				return files;
+			}
+		}
+	}
+
+	return files;
+}
+
+QStringList SearchThread::getFilesToScan() const
+{
+	QSet<QString> files;
+	SearchAndReplace::Mode mode = SearchAndReplace::ModeNo;
+
+	{
+		QMutexLocker locker( const_cast<QMutex*>( &mMutex ) );
+		mode = mProperties.mode;
+	}
+
+	switch ( mode )
+	{
+		case SearchAndReplace::ModeNo:
+		case SearchAndReplace::ModeSearch:
+		case SearchAndReplace::ModeReplace:
+			qWarning() << "Invalid mode used.";
+			Q_ASSERT( 0 );
+			return files.toList();
+		case SearchAndReplace::ModeSearchDirectory:
+		case SearchAndReplace::ModeReplaceDirectory:
+		{
+			QString path;
+			QStringList mask;
+
+			{
+				QMutexLocker locker( const_cast<QMutex*>( &mMutex ) );
+				path = mProperties.searchPath;
+				mask = mProperties.mask;
+			}
+
+			QDir dir( path );
+			files = getFiles( dir, mask, true ).toSet();
+			break;
+		}
+		case SearchAndReplace::ModeSearchProjectFiles:
+		case SearchAndReplace::ModeReplaceProjectFiles:
+		{
+			QStringList sources;
+			QStringList mask;
+
+			{
+				QMutexLocker locker( const_cast<QMutex*>( &mMutex ) );
+				sources = mProperties.sourcesFiles;
+				mask = mProperties.mask;
+			}
+
+			foreach ( const QString& fileName, sources )
+			{
+				if ( QDir::match( mask, fileName ) )
+				{
+					files << fileName;
+				}
+
+				{
+					QMutexLocker locker( const_cast<QMutex*>( &mMutex ) );
+
+					if ( mReset || mExit )
+					{
+						return files.toList();
+					}
+				}
+			}
+			break;
+		}
+		case SearchAndReplace::ModeSearchOpenedFiles:
+		case SearchAndReplace::ModeReplaceOpenedFiles:
+		{
+			QStringList sources;
+			QStringList mask;
+
+			{
+				QMutexLocker locker( const_cast<QMutex*>( &mMutex ) );
+				sources = mProperties.openedFiles.keys();
+				mask = mProperties.mask;
+			}
+
+			foreach ( const QString& fileName, sources )
+			{
+				if ( QDir::match( mask, fileName ) )
+				{
+					files << fileName;
+				}
+
+				{
+					QMutexLocker locker( const_cast<QMutex*>( &mMutex ) );
+
+					if ( mReset || mExit )
+					{
+						return files.toList();
+					}
+				}
+			}
+			break;
+		}
+	}
+
+	return files.toList();
+}
+
+QString SearchThread::fileContent( const QString& fileName ) const
+{
+	QTextCodec* codec = 0;
+
+	{
+		QMutexLocker locker( const_cast<QMutex*>( &mMutex ) );
+
+		codec = QTextCodec::codecForName( mProperties.codec.toLocal8Bit() );
+
+		if ( mProperties.openedFiles.contains( fileName ) )
+		{
+			return mProperties.openedFiles[ fileName ];
+		}
+	}
+
+	Q_ASSERT( codec );
+
+	QFile file( fileName );
+
+	if ( !file.open( QIODevice::ReadOnly ) )
+	{
+		return QString::null;
+	}
+
+	return codec->toUnicode( file.readAll() );
+}
+
+void SearchThread::search( const QString& fileName, const QString& content ) const
+{
+	static QRegExp eolRx( "(?:\\r\\n|\\n|\\r)" );
+	bool checkable = false;
+	QRegExp rx;
+
+	{
+		QMutexLocker locker( const_cast<QMutex*>( &mMutex ) );
+
+		const bool isRE = mProperties.options & SearchAndReplace::OptionRegularExpression;
+		const bool isWw = mProperties.options & SearchAndReplace::OptionWholeWord;
+		const bool isCS = mProperties.options & SearchAndReplace::OptionCaseSensitive;
+		const Qt::CaseSensitivity sensitivity = isCS ? Qt::CaseSensitive : Qt::CaseInsensitive;
+		checkable = mProperties.mode & SearchAndReplace::ModeFlagReplace;
+		QString pattern = isRE ? mProperties.searchText : QRegExp::escape( mProperties.searchText );
+
+		if ( !isRE && isWw )
+		{
+			pattern.prepend( "\\b" ).append( "\\b" );
+		}
+
+		rx.setPattern( pattern );
+		rx.setCaseSensitivity( sensitivity );
+	}
+
+	int pos = 0;
+	int lastEol = 0;
+	SearchResultsModel::ResultList results;
+	QTime tracker;
+
+	tracker.start();
+
+	while ( ( pos = rx.indexIn( content, pos ) ) != -1 )
+	{
+		const int eolStart = content.left( pos ).lastIndexOf( eolRx );
+		const int eolEnd = content.indexOf( eolRx, pos );
+		const QString capture = content.mid( eolStart, eolEnd -eolStart ).simplified();
+		const int line = content.left( eolEnd ).count( eolRx );
+		const int column = ( pos -eolStart ) -( eolStart != 0 ? 1 : 0 );
+		SearchResultsModel::Result* result = new SearchResultsModel::Result( fileName, capture );
+		result->position = QPoint( column, line );
+		result->offset = pos;
+		result->checkable = checkable;
+		result->checkState = checkable ? Qt::Checked : Qt::Unchecked;
+
+		results << result;
+
+		pos += rx.matchedLength();
+		lastEol = eolEnd;
+
+		if ( tracker.elapsed() >= mMaxTime )
+		{
+			emit const_cast<SearchThread*>( this )->resultsAvailable( fileName, results );
+			results.clear();
+			tracker.restart();
+		}
+
+		{
+			QMutexLocker locker( const_cast<QMutex*>( &mMutex ) );
+
+			if ( mReset || mExit )
+			{
+				return;
+			}
+		}
+	}
+
+	if ( !results.isEmpty() )
+	{
+		emit const_cast<SearchThread*>( this )->resultsAvailable( fileName, results );
+	}
 }
 
 void SearchThread::run()
 {
-	setPriority (QThread::LowestPriority);
-	DirWalkIterator dirWalker (mDir);
-	mProcessedFilesCount = 0;
-	mOccurencesFound = 0;
-	QString fileName = dirWalker.next();
-	
-	/* Prepare masks list */
-	QStringList masks = mMask.split (' ');
-	QList <QRegExp> maskRexps;
-	foreach (QString m, masks)
-		maskRexps << QRegExp (m.trimmed (), Qt::CaseInsensitive, QRegExp::Wildcard);
-	
-	mReadPleaseResultsTimer.start(200);
-	
-	while (!fileName.isNull())
+	QTime tracker;
+
+	forever
 	{
-		if (!mMask.isEmpty())
-		{   // Check file for mask
-			QString name = QFileInfo (fileName).fileName(); // Just name, no path
-			bool matching = false;
-			foreach (QRegExp maskRe, maskRexps)
+		{
+			QMutexLocker locker( &mMutex );
+			mReset = false;
+			mExit = false;
+		}
+
+		emit reset();
+		tracker.restart();
+
+		QStringList files = getFilesToScan();
+		files.sort();
+
+		{
+			QMutexLocker locker( &mMutex );
+
+			if ( mExit )
 			{
-				if (maskRe.exactMatch (name))
+				return;
+			}
+			else if ( mReset )
+			{
+				continue;
+			}
+		}
+
+		foreach ( const QString& fileName, files )
+		{
+			const QString content = fileContent( fileName );
+			search( fileName, content );
+
+			{
+				QMutexLocker locker( &mMutex );
+
+				if ( mExit )
 				{
-					matching = true;
+					return;
+				}
+				else if ( mReset )
+				{
 					break;
 				}
 			}
-			if (!matching)
+		}
+
+		{
+			QMutexLocker locker( &mMutex );
+
+			if ( mReset )
 			{
-				fileName = dirWalker.next();            
-				continue;  // Ignore this file, search in the next
+				continue;
 			}
 		}
-		lockResultsAccessMutex ();
-		mProcessedFilesCount++;
-		unlockResultsAccessMutex ();
-		QFile file(fileName);
-		if (file.open(QIODevice::ReadOnly)) 
-		{
-			if (mMode == SEARCH)
-			{
-				search (file);
-			}
-			else
-			{
-				replace (file);
-			}
-		} //if open
-		if (mTerm)
-		{
-			quit();
-			break;
-		}
-		fileName = dirWalker.next();
-	} //while has file
-	
-	mReadPleaseResultsTimer.stop();
-	
-	lockResultsAccessMutex();
-	bool empty = mNewFoundOccurences.isEmpty();
-	unlockResultsAccessMutex();
-	emit readPleaseResults ();
-	while (! empty) // wait until all data will be readed
-	{
-		msleep (20); // It's better to use semaphore, but lazy to write good code
-		lockResultsAccessMutex();
-		empty = mNewFoundOccurences.isEmpty();
-		unlockResultsAccessMutex();
+
+		break;
 	}
+
+	qWarning() << "Search finished in " << tracker.elapsed() /1000.0;
 }
 
-void SearchThread::lockResultsAccessMutex ()
+void SearchThread::clear()
 {
-	mResultsAccessMutex.lock();
-}
-
-void SearchThread::unlockResultsAccessMutex ()
-{
-	mResultsAccessMutex.unlock();
-}
-
-QList<SearchAndReplace::Occurence> SearchThread::newFoundOccurences()
-{
-	return mNewFoundOccurences;
-}
-
-void SearchThread::clearNewFoundOccurences()
-{
-	mNewFoundOccurences.clear();
-}
-
-int SearchThread::processedFilesCount()
-{
-	return mProcessedFilesCount;
-}
-
-int SearchThread::foundOccurencesCount()
-{
-	return mOccurencesFound;
-}
-
-/*! 
-	Check, if file is binary. Now we not support binary files, and it will be skipped
-	Heuristics: if first 1k of file contains '\\0' - file is binary
-	NOTE: procedure moving current pos in the file
-*/
-bool SearchThread::isBinary (QFile& file)
-{
-	char data [1024];
-	int count = file.read (data, 1024);
-	while (count--)
-		if (data[count] == '\0')
-			return true;
-	return false;
-}
-
-/*! 
-	Process file in SEARCH_DIRECTORY mode (search for occurences, store it to buffer
-*/
-void SearchThread::search (QFile& file)
-{
-	if (!isBinary (file)) // Currently we don't support binary files
-	{
-		file.seek (0);
-		QString line;
-		QTextStream in(&file);
-		in.setCodec( QTextCodec::codecForName( mCodec.toLocal8Bit() ) );
-		
-		int i = 0;
-		Qt::CaseSensitivity cs = mCaseSensetive ? Qt::CaseSensitive : Qt::CaseInsensitive;
-		QRegExp rex (mSearch, cs);
-		while (!in.atEnd() && !mTerm) 
-		{
-			++i;
-			line = in.readLine();
-			
-			bool ifContains = false;
-			if (mIsReg)
-				ifContains = line.contains(rex);
-			else
-			{
-				ifContains = line.contains(mSearch, cs);
-			}
-			if (ifContains) 
-			{
-				SearchAndReplace::Occurence step;
-				step.mode = SearchAndReplace::SEARCH_DIRECTORY;
-				step.fileName = file.fileName();
-				step.codec = mCodec;
-				step.position = QPoint (0,i);
-				step.text = QString("%1[%2]: %3").arg (QFileInfo(file.fileName()).fileName()).arg(i).arg(line.simplified());
-				step.fullText= file.fileName();
-				lockResultsAccessMutex ();
-				mNewFoundOccurences.append (step);
-				mOccurencesFound ++;
-				unlockResultsAccessMutex ();
-			}
-		}
-	} //if not binary
-}
-
-/*! 
-	Process file in REPLACE_DIRECTORY mode (search for occurences, store it to buffer
-*/
-void SearchThread::replace (QFile& file)
-{
-	if (!isBinary (file)) // Currently we not supporting binary files
-	{
-		file.seek (0);
-		QString line;
-		QTextStream in(&file);
-		in.setCodec( QTextCodec::codecForName( mCodec.toLocal8Bit() ) );
-		
-		int i = 0;
-		Qt::CaseSensitivity cs = mCaseSensetive ? Qt::CaseSensitive : Qt::CaseInsensitive;
-		QRegExp rex (mSearch, cs);
-		while (!in.atEnd() && !mTerm) 
-		{
-			++i;
-			line = in.readLine();
-			
-			bool ifContains = false;
-			if (mIsReg)
-				ifContains = line.contains(rex);
-			else
-			{
-				ifContains = line.contains(mSearch, cs);
-			}
-			if (ifContains) 
-			{
-				SearchAndReplace::Occurence step;
-				step.mode = SearchAndReplace::REPLACE_DIRECTORY;
-				step.fileName = file.fileName();
-				step.position = QPoint (0,i);
-				step.codec = mCodec;
-				step.text = QString("%1[%2]: %3").arg (QFileInfo(file.fileName()).fileName()).arg(i).arg(line.simplified());
-				step.fullText= file.fileName();
-				step.searchText = mSearch;
-				step.isRegExp = mIsReg;
-				step.isCaseSensetive = mCaseSensetive;
-				
-				lockResultsAccessMutex ();
-				mNewFoundOccurences.append (step);
-				mOccurencesFound ++;
-				unlockResultsAccessMutex ();
-			}
-		}
-	} //if not binary
+	stop();
+	emit reset();
 }

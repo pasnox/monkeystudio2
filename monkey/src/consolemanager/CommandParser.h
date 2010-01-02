@@ -45,8 +45,11 @@
 class Q_MONKEY_EXPORT CommandParser : public AbstractCommandParser
 {
 	Q_OBJECT
+	
+public:
+	//! Install 'parser' command of MkS scripting interface
+	static void installParserCommand();
 
-protected:
 	/*!
 		Structure contains regular expression for searching some phrase
 		in a console output of programm, and also information, how it should be 
@@ -68,10 +71,14 @@ protected:
 		QString FullText;
 	};
 	
+protected:
+	
 	QString mName;
 	QList <Pattern> mPatterns;
 	
 	QString replaceWithMatch(QRegExp&, QString);
+	static QString parserCommandImplementation( const QString& command, const QStringList& arguments, int* status, class MkSShellInterpreter* interpreter );
+	
 public:
 	CommandParser(QObject* parent, const QString& name);
 	QString name() const

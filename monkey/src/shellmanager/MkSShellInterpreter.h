@@ -21,8 +21,10 @@ class Q_MONKEY_EXPORT MkSShellInterpreter : public QObject, public pConsoleComma
 public:
 	enum Error
 	{
+		NoError = 0,
 		InvalidCommand = -1,
-		NoResultVariable = -2
+		NoResultVariable = -2,
+		UnknowError = -3
 	};
 	
 	static MkSShellInterpreter* instance( QObject* parent = 0 );
@@ -42,6 +44,7 @@ protected:
 	
 	MkSShellInterpreter( QObject* parent = 0 );
 	static QString interpretHelp( const QString&, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter );
+	static QString interpretEcho( const QString&, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter );
 	
 signals:
 	void commandExecuted( const QString& command, const QString& output, int result );

@@ -3,7 +3,6 @@
 #include "XUPProjectModel.h"
 #include "pIconManager.h"
 #include "BuilderPlugin.h"
-#include "CompilerPlugin.h"
 #include "DebuggerPlugin.h"
 #include "InterpreterPlugin.h"
 #include "MonkeyCore.h"
@@ -1129,11 +1128,6 @@ BuilderPlugin* XUPProjectItem::builder( const QString& plugin ) const
 	return MonkeyCore::pluginsManager()->plugin<BuilderPlugin*>( PluginsManager::stAll, projectSettingsValue( "BUILDER", plugin ) );
 }
 
-CompilerPlugin* XUPProjectItem::compiler( const QString& plugin ) const
-{
-	return MonkeyCore::pluginsManager()->plugin<CompilerPlugin*>( PluginsManager::stAll, projectSettingsValue( "COMPILER", plugin ) );
-}
-
 DebuggerPlugin* XUPProjectItem::debugger( const QString& plugin ) const
 {
 	return MonkeyCore::pluginsManager()->plugin<DebuggerPlugin*>( PluginsManager::stAll, projectSettingsValue( "DEBUGGER", plugin ) );
@@ -1165,7 +1159,6 @@ void XUPProjectItem::installCommands()
 {
 	// get plugins
 	BuilderPlugin* bp = builder();
-	CompilerPlugin* cp = compiler();
 	//DebuggerPlugin* dp = debugger();
 	InterpreterPlugin* ip = interpreter();
 
@@ -1177,11 +1170,6 @@ void XUPProjectItem::installCommands()
 	{
 		pCommand cmd = bp->buildCommand();
 
-		if ( cp )
-		{
-			cmd.addParsers( cp->compileCommand().parsers() );
-		}
-		
 		cmd.setSkipOnError( false );
 		addCommand( cmd, "mBuilder/mBuild" );
 
@@ -1201,15 +1189,7 @@ void XUPProjectItem::installCommands()
 		cmd.setArguments( QString() );
 		addCommand( cmd, "mBuilder/mRebuild" );
 	}
-
-	// compile file command
-	if ( cp && emptyBuilderBuildMenu )
-	{
-		pCommand cmd = cp->compileCommand();
-		cmd.setSkipOnError( false );
-		addCommand( cmd, "mBuilder/mBuild" );
-	}
-
+	
 	// interprete file command
 	if ( ip && emptyInterpreterMenu )
 	{
@@ -1223,22 +1203,11 @@ void XUPProjectItem::installCommands()
 	{
 		foreach ( pCommand cmd, bp->userCommands() )
 		{
-			if ( cp )
-				cmd.addParsers( cp->compileCommand().parsers() );
 			cmd.setSkipOnError( false );
 			addCommand( cmd, "mBuilder/mUserCommands" );
 		}
 	}
 
-	// install compiler user command
-	if ( cp )
-	{
-		foreach ( pCommand cmd, cp->userCommands() )
-		{
-			cmd.setSkipOnError( false );
-			addCommand( cmd, "mBuilder/mUserCommands" );
-		}
-	}
 	/*
 	// install debugger user command
 	if ( dp )

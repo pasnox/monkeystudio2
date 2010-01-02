@@ -6,7 +6,6 @@
 #include <pMonkeyStudio.h>
 #include <pQueuedMessageToolBar.h>
 #include <BuilderPlugin.h>
-#include <CompilerPlugin.h>
 
 #include <QApplication>
 #include <QTextCodec>
@@ -514,32 +513,6 @@ BuilderPlugin* QMakeProjectItem::builder( const QString& plugin ) const
 	return XUPProjectItem::builder( plug );
 }
 
-CompilerPlugin* QMakeProjectItem::compiler( const QString& plugin ) const
-{
-	QString plug = plugin;
-	
-	if ( plug.isEmpty() )
-	{
-		QtVersionManager mQtManager;
-		QtVersion mQtVersion = mQtManager.version( projectSettingsValue( "QT_VERSION" ) );
-		
-		if ( mQtVersion.isValid() )
-		{
-			if ( mQtVersion.QMakeSpec.contains( "msvc", Qt::CaseInsensitive ) )
-			{
-				plug = "MSVC";
-			}
-		}
-		
-		if ( plug.isEmpty() )
-		{
-			plug = "G++";
-		}
-	}
-	
-	return XUPProjectItem::compiler( plug );
-}
-
 DebuggerPlugin* QMakeProjectItem::debugger( const QString& plugin ) const
 {
 	QString plug = plugin;
@@ -584,8 +557,7 @@ void QMakeProjectItem::installCommands()
 {
 	// get plugins
 	BuilderPlugin* bp = builder();
-	CompilerPlugin* cp = compiler();
-	
+		
 	// config variable
 	XUPProjectItem* riProject = rootIncludeProject();
 	QStringList config = splitMultiLineValue( riProject->variableCache().value( "CONFIG" ) );
@@ -600,13 +572,7 @@ void QMakeProjectItem::installCommands()
 	if ( bp )
 	{
 		cmd = bp->buildCommand();
-		
-		if ( cp )
-		{
-			cmd.addParsers( cp->compileCommand().parsers() );
-		}
 	}
-	
 	cmd.setUserData( QVariant::fromValue( &mCommands ) );
 	cmd.setProject( this );
 	cmd.setSkipOnError( false );

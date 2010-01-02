@@ -12,6 +12,9 @@ struct QtVersion
 	bool isValid() const
 	{ return !( Version.isEmpty() && Path.isEmpty() ); }
 	
+	bool isSystem() const
+	{ return Version.startsWith( "Qt System", Qt::CaseInsensitive ); }
+	
 	QString qmake() const
 	{ return QString( "%1/bin/qmake%2" ).arg( Path ).arg( binarySuffixe() ); }
 	QString qmakeSpec() const

@@ -243,3 +243,15 @@ void QtVersionManager::setConfigurations( const QtItemList& configurations )
 	}
 	endArray();
 }
+
+		items[ version.Path ] = version;
+		if ( items.contains( newVersion.Path ) )
+		{
+			const QtVersion& v = items[ newVersion.Path ];
+			
+			if ( v.Version == newVersion.Version )
+			{
+				continue;
+			}
+		}
+		items[ newVersion.Path ] = newVersion;

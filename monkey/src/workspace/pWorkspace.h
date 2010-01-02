@@ -64,7 +64,6 @@ public:
 	
 	void loadSettings();
 	void initMultiToolBar( QToolBar* tb );
-	void addSearchReplaceWidget( QWidget* widget );
 	pOpenedFileExplorer* dockWidget() const;
 	QFileSystemWatcher* fileWatcher() const;
 	
@@ -75,7 +74,7 @@ public:
 	void setCurrentDocument( pAbstractChild* document );
 	pAbstractChild* currentDocument() const;
 	
-	void goToLine( const QString& fileName, const QPoint& pos, bool highlight, const QString& codec );
+	void goToLine( const QString& fileName, const QPoint& pos, const QString& codec, int selectionLength = -1 );
 	void closeDocument( pAbstractChild* document, bool showDialog = true );
 	pWorkspace::ViewMode documentMode() const;
 	void handleDocument( pAbstractChild* document );

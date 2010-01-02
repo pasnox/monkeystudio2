@@ -473,9 +473,9 @@ void pFileManager::closeFile( const QString& fileName )
 	MonkeyCore::workspace()->closeFile( fileName );
 }
 
-void pFileManager::goToLine( const QString& fileName, const QPoint& pos, bool highlight, const QString& codec )
+void pFileManager::goToLine( const QString& fileName, const QPoint& pos, const QString& codec, int selectionLength )
 {
-	MonkeyCore::workspace()->goToLine( fileName, pos, highlight, codec );
+	MonkeyCore::workspace()->goToLine( fileName, pos, codec, selectionLength );
 }
 
 void pFileManager::openProject( const QString& fileName, const QString& codec )

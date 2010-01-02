@@ -9,23 +9,35 @@
 #include <QDesktopWidget>
 
 PluginsMenu::PluginsMenu( PluginsManager* manager )
-	: QMenu()
+	: QObject( manager )
 {
 	Q_ASSERT( manager );
 	
 	mManager = manager;
-	
-	mManageDialogAction = addAction( pIconManager::icon( "settings.png", ":/edit" ), tr( "&Manage using dialog..." ) );
-	mManageDialogAction->setObjectName( "aManageDialogAction" );
-	mManageDialogAction->setToolTip( tr( "Manage plugins using a dialog..." ) );
-	
-	addSeparator();
-	
-	connect( mManageDialogAction, SIGNAL( triggered() ), mManager, SLOT( manageRequested() ) );
+	mMenu = 0;
+	mManageDialogAction = 0;
 }
 
 PluginsMenu::~PluginsMenu()
 {
+}
+
+QMenu* PluginsMenu::menu() const
+{
+	return mMenu;
+}
+
+void PluginsMenu::setMenu( QMenu* menu )
+{
+	mMenu = menu;
+	
+	mManageDialogAction = mMenu->addAction( pIconManager::icon( "settings.png", ":/edit" ), tr( "&Manage using dialog..." ) );
+	mManageDialogAction->setObjectName( "aManageDialogAction" );
+	mManageDialogAction->setToolTip( tr( "Manage plugins using a dialog..." ) );
+	
+	mMenu->addSeparator();
+	
+	connect( mManageDialogAction, SIGNAL( triggered() ), mManager, SLOT( manageRequested() ) );
 }
 
 void PluginsMenu::initPluginMenusActions( BasePlugin* plugin, BasePlugin::Type type )
@@ -38,7 +50,7 @@ void PluginsMenu::initPluginMenusActions( BasePlugin* plugin, BasePlugin::Type t
 		
 		if ( !tmenu )
 		{
-			tmenu = addMenu( BasePlugin::typeToString( type ) );
+			tmenu = mMenu->addMenu( BasePlugin::typeToString( type ) );
 			mTypeMenus[ type ] = tmenu;
 		}
 		
@@ -73,7 +85,7 @@ void PluginsMenu::initPluginMenusActions( BasePlugin* plugin, BasePlugin::Type t
 		
 		if ( !tmenu )
 		{
-			tmenu = addMenu( BasePlugin::typeToString( type ) );
+			tmenu = mMenu->addMenu( BasePlugin::typeToString( type ) );
 			mTypeMenus[ type ] = tmenu;
 		}
 		
@@ -102,10 +114,6 @@ void PluginsMenu::addPlugin( BasePlugin* plugin )
 	else if ( type & BasePlugin::iBuilder )
 	{
 		initPluginMenusActions( plugin, BasePlugin::iBuilder );
-	}
-	else if ( type & BasePlugin::iCompiler )
-	{
-		initPluginMenusActions( plugin, BasePlugin::iCompiler );
 	}
 	else if ( type & BasePlugin::iDebugger )
 	{

@@ -3,7 +3,6 @@
 #include <XUPProjectItemInfos.h>
 #include <pMonkeyStudio.h>
 #include <BuilderPlugin.h>
-#include <CompilerPlugin.h>
 #include <InterpreterPlugin.h>
 
 #include <QApplication>

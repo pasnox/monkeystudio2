@@ -60,9 +60,6 @@ QString BasePlugin::typeToString( BasePlugin::Type type )
 		case BasePlugin::iBuilder:
 			return QCoreApplication::translate( "BasePlugin", "Builder" );
 			break;
-		case BasePlugin::iCompiler:
-			return QCoreApplication::translate( "BasePlugin", "Compiler" );
-			break;
 		case BasePlugin::iDebugger:
 			return QCoreApplication::translate( "BasePlugin", "Debugger" );
 			break;

@@ -32,7 +32,7 @@ UIXUPEditor::UIXUPEditor( XUPProjectItem* project, QWidget* parent )
 	setVariableEditorVisible( false );
 	
 	// commands
-	const BasePluginTypeList types = BasePluginTypeList() << BasePlugin::iBuilder << BasePlugin::iCompiler << BasePlugin::iDebugger << BasePlugin::iInterpreter;
+	const BasePluginTypeList types = BasePluginTypeList() << BasePlugin::iBuilder << BasePlugin::iDebugger << BasePlugin::iInterpreter;
 	const QStringList parsers = MonkeyCore::consoleManager()->parsersName();
 	
 	// commands editor

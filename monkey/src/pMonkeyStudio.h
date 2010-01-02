@@ -81,6 +81,9 @@ namespace pMonkeyStudio
 	Q_MONKEY_EXPORT void applyProperties();
 	Q_MONKEY_EXPORT void setEditorProperties( pEditor* editor );
 	
+	Q_MONKEY_EXPORT void showMacFocusRect( QWidget* widget, bool show, bool recursive );
+	Q_MONKEY_EXPORT void setMacSmallSize( QWidget* widget, bool small, bool recursive );
+	
 	/***** GENERAL *****/
 	Q_MONKEY_EXPORT void setSaveFilesOnCustomAction( bool save );
 	Q_MONKEY_EXPORT bool saveFilesOnCustomAction();

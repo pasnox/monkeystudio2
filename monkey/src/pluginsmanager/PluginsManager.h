@@ -34,7 +34,6 @@
 #include "BasePlugin.h"
 #include "ChildPlugin.h"
 #include "BuilderPlugin.h"
-#include "CompilerPlugin.h"
 #include "DebuggerPlugin.h"
 #include "InterpreterPlugin.h"
 
@@ -87,22 +86,18 @@ public:
 	void setCurrentBuilder( BuilderPlugin* );
 	BuilderPlugin* currentBuilder();
 	
-	void setCurrentCompiler( CompilerPlugin* );
-	CompilerPlugin* currentCompiler();
-	
 	void setCurrentDebugger( DebuggerPlugin* );
 	DebuggerPlugin* currentDebugger();
 	
 	void setCurrentInterpreter( InterpreterPlugin* );
 	InterpreterPlugin* currentInterpreter();
 	
-	inline PluginsMenu* menu() const { return mMenu; }
+	inline PluginsMenu* menuHandler() const { return mMenuHandler; }
 	
 protected:
-	PluginsMenu* mMenu;
+	PluginsMenu* mMenuHandler;
 	QList<BasePlugin*> mPlugins;
 	BuilderPlugin* mBuilder;
-	CompilerPlugin* mCompiler;
 	DebuggerPlugin* mDebugger;
 	InterpreterPlugin* mInterpreter;
 

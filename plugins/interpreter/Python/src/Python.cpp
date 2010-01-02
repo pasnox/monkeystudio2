@@ -76,7 +76,7 @@ pCommandList Python::defaultCommands() const
 
 QStringList Python::availableParsers() const
 {
-	return QStringList( infos().Name );
+	return QStringList();
 }
 
 pCommand Python::defaultInterpretCommand() const

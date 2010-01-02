@@ -124,7 +124,7 @@ public:
 				"0", //file name
 				"0", //column
 				"0", //row
-				pConsoleManager::stLinking, //type
+				pConsoleManager::stCompiling, //type
 				"Linking %1...", //text
 				"%0" //full text
 			},
