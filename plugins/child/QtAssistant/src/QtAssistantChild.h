@@ -9,16 +9,16 @@ class QtAssistantInlineSearch;
 class QtAssistantChild : public pAbstractChild
 {
 	Q_OBJECT
-	
+
 	friend class QtAssistant;
 	friend class QtAssistantDock;
-	
+
 public:
 	static QtAssistantChild* instance( QHelpEngine* engine, QWidget* parent = 0, bool create = true );
-	
+
 	QtAssistantChild( QHelpEngine* engine, QWidget* parent = 0 );
 	virtual ~QtAssistantChild();
-	
+
 	virtual QString context() const;
 	virtual void initializeContext( QToolBar* tb );
 	virtual QPoint cursorPosition() const;
@@ -30,7 +30,7 @@ public:
 	virtual bool isPasteAvailable() const;
 	virtual bool isGoToAvailable() const;
 	virtual bool isPrintAvailable() const;
-	
+
 	class QtAssistantViewer* viewer( int index = -1 ) const;
 	QtAssistantViewer* newEmptyViewer( qreal zoom = 1.0 );
 
@@ -51,7 +51,7 @@ protected:
 	QAction* aPreviousTab;
 	QComboBox* cbUrl;
 	bool mFirstOpenUrl;
-	
+
 	void find( QString ttf, bool forward, bool backward );
 
 public slots:
@@ -61,7 +61,7 @@ public slots:
 	virtual void copy();
 	virtual void paste();
 	virtual void goTo();
-	virtual void goTo( const QPoint& pos, bool highlight = false );
+	virtual void goTo( const QPoint& position, int selectionLength = -1 );
 	virtual void invokeSearch();
 	virtual void saveFile();
 	virtual void backupFileAs( const QString& fileName );
@@ -69,16 +69,16 @@ public slots:
 	virtual void closeFile();
 	virtual void printFile();
 	virtual void quickPrintFile();
-	
+
 	void openUrl( const QUrl& url );
 	void openUrlInNewTab( const QUrl& url );
 	void cloneTab();
 	void closeTab( int index );
-	
+
 	void focusCurrentTab();
 	void saveSession();
 	void restoreSession();
-	
+
 	void previousTab();
 	void nextTab();
 	void previousPage();
@@ -87,7 +87,7 @@ public slots:
 	void zoomIn();
 	void zoomOut();
 	void zoomReset();
-	
+
 	void findNext();
 	void findPrevious();
 	void findCurrentText( const QString& text );
