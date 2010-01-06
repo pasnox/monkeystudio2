@@ -102,7 +102,6 @@ SearchWidget::SearchWidget( QWidget* parent )
 	// connections
 	connect( cbSearch->lineEdit(), SIGNAL( textEdited( const QString& ) ), this, SLOT( search_textChanged() ) );
 	connect( groupMode, SIGNAL( triggered( QAction* ) ), this, SLOT( groupMode_triggered( QAction* ) ) );
-	connect( cbSearch->lineEdit(), SIGNAL( textChanged( const QString& ) ), mSearchThread, SLOT( clear() ) );
 	connect( mSearchThread, SIGNAL( started() ), this, SLOT( searchThread_stateChanged() ) );
 	connect( mSearchThread, SIGNAL( finished() ), this, SLOT( searchThread_stateChanged() ) );
 	connect( mReplaceThread, SIGNAL( started() ), this, SLOT( replaceThread_stateChanged() ) );
@@ -142,10 +141,30 @@ void SearchWidget::setResultsDock( SearchResultsDock* dock )
 	connect( mReplaceThread, SIGNAL( resultsHandled( const QString&, const SearchResultsModel::ResultList& ) ), mDock->model(), SLOT( thread_resultsHandled( const QString&, const SearchResultsModel::ResultList& ) ) );
 }
 
+bool SearchWidget::isBinary( QFile& file )
+{
+	const qint64 position = file.pos();
+	file.seek( 0 );
+	const bool binary = file.read( 1024 ).contains( '\0' );
+	file.seek( position );
+	return binary;
+}
+
 void SearchWidget::setMode( SearchAndReplace::Mode mode )
 {
 	mSearchThread->stop();
 	mReplaceThread->stop();
+	
+	// clear search results if needed.
+	switch ( mode )
+	{
+		case SearchAndReplace::ModeSearch:
+		case SearchAndReplace::ModeReplace:
+			break;
+		default:
+			mSearchThread->clear();
+			break;
+	}
 
 	mMode = mode;
 	mModeActions[ mMode ]->setChecked( true );
@@ -158,7 +177,11 @@ void SearchWidget::setMode( SearchAndReplace::Mode mode )
 
 	if ( isVisible() )
 	{
-		cbSearch->setEditText( searchText );
+		if ( !searchText.isEmpty() )
+		{
+			cbSearch->setEditText( searchText );
+		}
+		
 		cbSearch->lineEdit()->selectAll();
 
 		if ( mode & SearchAndReplace::ModeFlagSearch )
@@ -451,6 +474,12 @@ void SearchWidget::initializeProperties()
 			mProperties.mask << part;
 		}
 	}
+	
+	// set default mask if needed
+	if ( mProperties.mask.isEmpty() )
+	{
+		mProperties.mask << "*";
+	}
 
 	// update options
 	foreach ( const SearchAndReplace::Option& option, mOptionActions.keys() )
@@ -648,7 +677,18 @@ void SearchWidget::replaceThread_error( const QString& error )
 void SearchWidget::search_textChanged()
 {
 	initializeProperties();
-	searchFile( true, true );
+	
+	// clear search results if needed.
+	switch ( mMode )
+	{
+		case SearchAndReplace::ModeSearch:
+			searchFile( true, true );
+		case SearchAndReplace::ModeReplace:
+			break;
+		default:
+			mSearchThread->clear();
+			break;
+	}
 }
 
 void SearchWidget::groupMode_triggered( QAction* action )

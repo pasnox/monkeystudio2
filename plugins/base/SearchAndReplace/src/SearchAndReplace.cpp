@@ -86,7 +86,16 @@ void SearchAndReplace::searchFile_triggered()
 
 	if ( ( document && document->editor() ) || !document )
 	{
-		mWidget->setMode( SearchAndReplace::ModeSearch );
+		/*
+		SearchAndReplace::Mode mode = mWidget->mode();
+		
+		if ( !(mode & SearchAndReplace::ModeFlagSearch) )
+		{
+			mode = SearchAndReplace::ModeSearch;
+		}
+		*/
+		
+		mWidget->setMode( SearchAndReplace::ModeSearch/*mode*/ );
 	}
 }
 
@@ -96,7 +105,16 @@ void SearchAndReplace::replaceFile_triggered()
 
 	if ( ( document && document->editor() ) || !document )
 	{
-		mWidget->setMode( SearchAndReplace::ModeReplace );
+		/*
+		SearchAndReplace::Mode mode = mWidget->mode();
+		
+		if ( !(mode & SearchAndReplace::ModeFlagReplace) )
+		{
+			mode = SearchAndReplace::ModeReplace;
+		}
+		*/
+		
+		mWidget->setMode( SearchAndReplace::ModeReplace/*mode*/ );
 	}
 }
 

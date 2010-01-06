@@ -204,6 +204,11 @@ QString SearchThread::fileContent( const QString& fileName ) const
 	{
 		return QString::null;
 	}
+	
+	if ( SearchWidget::isBinary( file ) )
+	{
+		return QString::null;
+	}
 
 	return codec->toUnicode( file.readAll() );
 }

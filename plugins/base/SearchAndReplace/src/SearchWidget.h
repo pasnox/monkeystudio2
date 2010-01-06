@@ -4,6 +4,8 @@
 #include "ui_SearchWidget.h"
 #include "SearchAndReplace.h"
 
+#include <QFile>
+
 class SearchThread;
 class ReplaceThread;
 class SearchResultsDock;
@@ -54,6 +56,8 @@ public:
 	SearchThread* searchThread() const;
 
 	void setResultsDock( SearchResultsDock* dock );
+	
+	static bool isBinary( QFile& file );
 
 public slots:
 	void setMode( SearchAndReplace::Mode mode );
