@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>695</width>
+    <width>726</width>
     <height>169</height>
    </rect>
   </property>
@@ -298,17 +298,45 @@
        <number>0</number>
       </property>
       <item>
+       <widget class="QCheckBox" name="cbCaseSensitive">
+        <property name="text">
+         <string>&amp;Case Sensitive</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="cbWholeWord">
+        <property name="text">
+         <string>Wh&amp;ole Word</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="cbWrap">
+        <property name="text">
+         <string>&amp;Wrap</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="cbRegularExpression">
+        <property name="text">
+         <string>Re&amp;gular Expression</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="horizontalSpacer_4">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::Expanding</enum>
+         <enum>QSizePolicy::MinimumExpanding</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>16</width>
-          <height>16</height>
+          <width>0</width>
+          <height>0</height>
          </size>
         </property>
        </spacer>
@@ -376,7 +404,7 @@ You can use language name too so the search will only apply to the language suff
             </sizepolicy>
            </property>
            <property name="text">
-            <string>&amp;Codec</string>
+            <string>Co&amp;dec</string>
            </property>
            <property name="buddy">
             <cstring>cbCodec</cstring>
@@ -387,17 +415,6 @@ You can use language name too so the search will only apply to the language suff
           <widget class="QComboBox" name="cbCodec"/>
          </item>
         </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pbOptions">
-        <property name="text">
-         <string>&amp;Options</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../../../../monkey/src/resources/resources.qrc">
-          <normaloff>:/edit/icons/edit/settings.png</normaloff>:/edit/icons/edit/settings.png</iconset>
-        </property>
        </widget>
       </item>
      </layout>

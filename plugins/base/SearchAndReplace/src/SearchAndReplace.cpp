@@ -49,19 +49,19 @@ bool SearchAndReplace::install()
 		action = mb->action( "aSearchNext", tr( "Search &Next" ), pIconManager::icon( "next.png", ":/edit" ), tr( "F3" ), tr( "Search next occurrence" ) );
 		connect( action, SIGNAL( triggered() ), mWidget, SLOT( on_pbNext_clicked() ) );
 		
-		action = mb->action( "aSearchDirectory", tr( "Search in &Directory..." ), pIconManager::icon( "search-replace-directory.png" ), tr( "Ctrl+Shift+S" ), tr( "Search in directory..." ) );
+		action = mb->action( "aSearchDirectory", tr( "Search in &Directory..." ), pIconManager::icon( "search-replace-directory.png" ), tr( "Ctrl+Shift+F" ), tr( "Search in directory..." ) );
 		connect( action, SIGNAL( triggered() ), this, SLOT( searchDirectory_triggered() ) );
 		
 		action = mb->action( "aReplaceDirectory", tr( "Replace in Director&y..." ), pIconManager::icon( "search-replace-directory.png" ), tr( "Ctrl+Shift+R" ), tr( "Replace in directory..." ) );
 		connect( action, SIGNAL( triggered() ), this, SLOT( replaceDirectory_triggered() ) );
 		
-		action = mb->action( "aSearchProjectFiles", tr( "Search in Project &Files..." ), pIconManager::icon( "search-replace-project-files.png" ), tr( "Ctrl+Meta+S" ), tr( "Search in the current project files.." ) );
+		action = mb->action( "aSearchProjectFiles", tr( "Search in Project &Files..." ), pIconManager::icon( "search-replace-project-files.png" ), tr( "Ctrl+Meta+F" ), tr( "Search in the current project files.." ) );
 		connect( action, SIGNAL( triggered() ), this, SLOT( searchProjectFiles_triggered() ) );
 		
 		action = mb->action( "aReplaceProjectFiles", tr( "Replace in Projec&t Files..." ), pIconManager::icon( "search-replace-project-files.png" ), tr( "Ctrl+Meta+R" ), tr( "Replace in the current project files..." ) );
 		connect( action, SIGNAL( triggered() ), this, SLOT( replaceProjectFiles_triggered() ) );
 		
-		action = mb->action( "aSearchOpenedFiles", tr( "Search in &Opened Files..." ), pIconManager::icon( "search-replace-opened-files.png" ), tr( "Ctrl+Alt+Meta+S" ), tr( "Search in opened files..." ) );
+		action = mb->action( "aSearchOpenedFiles", tr( "Search in &Opened Files..." ), pIconManager::icon( "search-replace-opened-files.png" ), tr( "Ctrl+Alt+Meta+F" ), tr( "Search in opened files..." ) );
 		connect( action, SIGNAL( triggered() ), this, SLOT( searchOpenedFiles_triggered() ) );
 		
 		action = mb->action( "aReplaceOpenedFiles", tr( "Replace in Open&ed Files..." ), pIconManager::icon( "search-replace-opened-files.png" ), tr( "Ctrl+Alt+Meta+R" ), tr( "Replace in opened files..." ) );
@@ -125,7 +125,6 @@ bool SearchAndReplace::uninstall()
 
 void SearchAndReplace::searchFile_triggered()
 {
-qWarning() << Q_FUNC_INFO;
 	pAbstractChild* document = MonkeyCore::workspace()->currentDocument();
 
 	if ( ( document && document->editor() ) || !document )
@@ -136,7 +135,6 @@ qWarning() << Q_FUNC_INFO;
 
 void SearchAndReplace::replaceFile_triggered()
 {
-qWarning() << Q_FUNC_INFO;
 	pAbstractChild* document = MonkeyCore::workspace()->currentDocument();
 
 	if ( ( document && document->editor() ) || !document )
@@ -147,7 +145,6 @@ qWarning() << Q_FUNC_INFO;
 
 void SearchAndReplace::searchDirectory_triggered()
 {
-qWarning() << Q_FUNC_INFO;
 	pAbstractChild* document = MonkeyCore::workspace()->currentDocument();
 
 	if ( ( document && document->editor() ) || !document )
@@ -158,7 +155,6 @@ qWarning() << Q_FUNC_INFO;
 
 void SearchAndReplace::replaceDirectory_triggered()
 {
-qWarning() << Q_FUNC_INFO;
 	pAbstractChild* document = MonkeyCore::workspace()->currentDocument();
 
 	if ( ( document && document->editor() ) || !document )
@@ -169,7 +165,6 @@ qWarning() << Q_FUNC_INFO;
 
 void SearchAndReplace::searchProjectFiles_triggered()
 {
-qWarning() << Q_FUNC_INFO;
 	pAbstractChild* document = MonkeyCore::workspace()->currentDocument();
 
 	if ( ( document && document->editor() ) || !document )
@@ -180,7 +175,6 @@ qWarning() << Q_FUNC_INFO;
 
 void SearchAndReplace::replaceProjectFiles_triggered()
 {
-qWarning() << Q_FUNC_INFO;
 	pAbstractChild* document = MonkeyCore::workspace()->currentDocument();
 
 	if ( ( document && document->editor() ) || !document )
@@ -191,7 +185,6 @@ qWarning() << Q_FUNC_INFO;
 
 void SearchAndReplace::searchOpenedFiles_triggered()
 {
-qWarning() << Q_FUNC_INFO;
 	pAbstractChild* document = MonkeyCore::workspace()->currentDocument();
 
 	if ( ( document && document->editor() ) || !document )
@@ -202,7 +195,6 @@ qWarning() << Q_FUNC_INFO;
 
 void SearchAndReplace::replaceOpenedFiles_triggered()
 {
-qWarning() << Q_FUNC_INFO;
 	pAbstractChild* document = MonkeyCore::workspace()->currentDocument();
 
 	if ( ( document && document->editor() ) || !document )

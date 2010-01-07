@@ -37,21 +37,30 @@ SearchWidget::SearchWidget( QWidget* parent )
 	mDock = 0;
 
 	// options actions
-	QMenu* menuOptions = new QMenu( pbOptions );
+	QAction* action;
 
-	mOptionActions[ SearchAndReplace::OptionCaseSensitive ] = menuOptions->addAction( tr( "&Case Sensitive" ) );
-	mOptionActions[ SearchAndReplace::OptionWholeWord ] = menuOptions->addAction( tr( "&Whole Word" ) );
-	mOptionActions[ SearchAndReplace::OptionWrap ] = menuOptions->addAction( tr( "Wra&p" ) );
-	mOptionActions[ SearchAndReplace::OptionRegularExpression ] = menuOptions->addAction( tr( "&Regular Expression" ) );
-
-	foreach ( QAction* action, menuOptions->actions() )
-	{
-		action->setCheckable( true );
-	}
+	action = new QAction( cbCaseSensitive );
+	action->setCheckable( true );
+	connect( cbCaseSensitive, SIGNAL( toggled( bool ) ), action, SLOT( setChecked( bool ) ) );
+	mOptionActions[ SearchAndReplace::OptionCaseSensitive ] = action;
 	
-	mOptionActions[ SearchAndReplace::OptionWrap ]->setChecked( true );
-
-	pbOptions->setMenu( menuOptions );
+	action = new QAction( cbWholeWord );
+	action->setCheckable( true );
+	connect( cbWholeWord, SIGNAL( toggled( bool ) ), action, SLOT( setChecked( bool ) ) );
+	mOptionActions[ SearchAndReplace::OptionWholeWord ] = action;
+	
+	action = new QAction( cbWrap );
+	action->setCheckable( true );
+	connect( cbWrap, SIGNAL( toggled( bool ) ), action, SLOT( setChecked( bool ) ) );
+	mOptionActions[ SearchAndReplace::OptionWrap ] = action;
+	
+	action = new QAction( cbRegularExpression );
+	action->setCheckable( true );
+	connect( cbRegularExpression, SIGNAL( toggled( bool ) ), action, SLOT( setChecked( bool ) ) );
+	mOptionActions[ SearchAndReplace::OptionRegularExpression ] = action;
+	
+	// init default options
+	cbWrap->setChecked( true );
 
 	// mac
 	pMonkeyStudio::showMacFocusRect( this, false, true );
