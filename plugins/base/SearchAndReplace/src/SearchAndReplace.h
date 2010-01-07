@@ -57,6 +57,12 @@ protected:
 protected slots:
 	void searchFile_triggered();
 	void replaceFile_triggered();
+	void searchDirectory_triggered();
+	void replaceDirectory_triggered();
+	void searchProjectFiles_triggered();
+	void replaceProjectFiles_triggered();
+	void searchOpenedFiles_triggered();
+	void replaceOpenedFiles_triggered();
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS( SearchAndReplace::Options )

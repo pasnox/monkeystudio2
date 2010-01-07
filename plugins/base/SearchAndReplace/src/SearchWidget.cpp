@@ -36,27 +36,6 @@ SearchWidget::SearchWidget( QWidget* parent )
 
 	mDock = 0;
 
-	// mode actions
-	QMenu* menuMode = new QMenu( pbMode );
-	QActionGroup* groupMode = new QActionGroup( menuMode );
-
-	mModeActions[ SearchAndReplace::ModeSearch ] = menuMode->addAction( tr( "&Search in File" ) );
-	mModeActions[ SearchAndReplace::ModeReplace ] = menuMode->addAction( tr( "&Replace in File" ) );
-	mModeActions[ SearchAndReplace::ModeSearchDirectory ] = menuMode->addAction( tr( "Search in &Directory" ) );
-	mModeActions[ SearchAndReplace::ModeReplaceDirectory ] = menuMode->addAction( tr( "Repla&ce in Directory" ) );
-	mModeActions[ SearchAndReplace::ModeSearchProjectFiles ] = menuMode->addAction( tr( "Search in &Project" ) );
-	mModeActions[ SearchAndReplace::ModeReplaceProjectFiles ] = menuMode->addAction( tr( "R&eplace in Project" ) );
-	mModeActions[ SearchAndReplace::ModeSearchOpenedFiles ] = menuMode->addAction( tr( "Search in &Opened Files" ) );
-	mModeActions[ SearchAndReplace::ModeReplaceOpenedFiles ] = menuMode->addAction( tr( "Replace in Opened &Files" ) );
-
-	foreach ( QAction* action, menuMode->actions() )
-	{
-		action->setCheckable( true );
-		groupMode->addAction( action );
-	}
-
-	pbMode->setMenu( menuMode );
-
 	// options actions
 	QMenu* menuOptions = new QMenu( pbOptions );
 
@@ -69,6 +48,8 @@ SearchWidget::SearchWidget( QWidget* parent )
 	{
 		action->setCheckable( true );
 	}
+	
+	mOptionActions[ SearchAndReplace::OptionWrap ]->setChecked( true );
 
 	pbOptions->setMenu( menuOptions );
 
@@ -101,7 +82,6 @@ SearchWidget::SearchWidget( QWidget* parent )
 
 	// connections
 	connect( cbSearch->lineEdit(), SIGNAL( textEdited( const QString& ) ), this, SLOT( search_textChanged() ) );
-	connect( groupMode, SIGNAL( triggered( QAction* ) ), this, SLOT( groupMode_triggered( QAction* ) ) );
 	connect( mSearchThread, SIGNAL( started() ), this, SLOT( searchThread_stateChanged() ) );
 	connect( mSearchThread, SIGNAL( finished() ), this, SLOT( searchThread_stateChanged() ) );
 	connect( mReplaceThread, SIGNAL( started() ), this, SLOT( replaceThread_stateChanged() ) );
@@ -167,7 +147,6 @@ void SearchWidget::setMode( SearchAndReplace::Mode mode )
 	}
 
 	mMode = mode;
-	mModeActions[ mMode ]->setChecked( true );
 
 	pAbstractChild* document = MonkeyCore::workspace()->currentDocument();
 	pEditor* editor = document ? document->editor() : 0;
@@ -439,6 +418,47 @@ void SearchWidget::updateWidgets()
 	wPathRight->setMinimumWidth( width );
 }
 
+void SearchWidget::updateComboBoxes()
+{
+	const QString searchText = cbSearch->currentText();
+	const QString replaceText = cbReplace->currentText();
+	const QString maskText = cbMask->currentText();
+	int index;
+	
+	// search
+	if ( !searchText.isEmpty() )
+	{
+		index = cbSearch->findText( searchText );
+		
+		if ( index == -1 )
+		{
+			cbSearch->addItem( searchText );
+		}
+	}
+	
+	// replace
+	if ( !replaceText.isEmpty() )
+	{
+		index = cbReplace->findText( replaceText );
+		
+		if ( index == -1 )
+		{
+			cbReplace->addItem( replaceText );
+		}
+	}
+	
+	// mask
+	if ( !maskText.isEmpty() )
+	{
+		index = cbMask->findText( maskText );
+		
+		if ( index == -1 )
+		{
+			cbMask->addItem( maskText );
+		}
+	}
+}
+
 void SearchWidget::initializeProperties()
 {
 	const QMap<QString, QStringList> suffixes = pMonkeyStudio::availableLanguagesSuffixes();
@@ -691,19 +711,16 @@ void SearchWidget::search_textChanged()
 	}
 }
 
-void SearchWidget::groupMode_triggered( QAction* action )
-{
-	setMode( mModeActions.key( action ) );
-}
-
 void SearchWidget::on_pbPrevious_clicked()
 {
+	updateComboBoxes();
 	initializeProperties();
 	searchFile( false, false );
 }
 
 void SearchWidget::on_pbNext_clicked()
 {
+	updateComboBoxes();
 	initializeProperties();
 	searchFile( true, false );
 }
@@ -711,6 +728,7 @@ void SearchWidget::on_pbNext_clicked()
 void SearchWidget::on_pbSearch_clicked()
 {
 	setState( SearchWidget::Search, SearchWidget::Normal );
+	updateComboBoxes();
 	initializeProperties();
 	mSearchThread->search( mProperties );
 }
@@ -722,12 +740,14 @@ void SearchWidget::on_pbSearchStop_clicked()
 
 void SearchWidget::on_pbReplace_clicked()
 {
+	updateComboBoxes();
 	initializeProperties();
 	replaceFile( false );
 }
 
 void SearchWidget::on_pbReplaceAll_clicked()
 {
+	updateComboBoxes();
 	initializeProperties();
 	replaceFile( true );
 }
@@ -739,6 +759,7 @@ void SearchWidget::on_pbReplaceChecked_clicked()
 
 	Q_ASSERT( model );
 
+	updateComboBoxes();
 	initializeProperties();
 
 	foreach ( const SearchResultsModel::ResultList& results, model->results() )

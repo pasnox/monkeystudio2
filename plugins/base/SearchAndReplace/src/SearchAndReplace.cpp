@@ -6,6 +6,7 @@
 #include <pWorkspace.h>
 #include <pAbstractChild.h>
 #include <UIMain.h>
+#include <pIconManager.h>
 
 void SearchAndReplace::fillPluginInfos()
 {
@@ -39,14 +40,32 @@ bool SearchAndReplace::install()
 		action = mb->action( "aSearchFile" );
 		connect( action, SIGNAL( triggered() ), this, SLOT( searchFile_triggered() ) );
 
-		action = mb->action( "aReplaceFile", tr( "&Replace..." ), QIcon( ":/edit/icons/edit/replace.png" ), tr( "Ctrl+R" ), tr( "Replace in the current file..." ) );
+		action = mb->action( "aReplaceFile", tr( "&Replace..." ), pIconManager::icon( "replace.png", ":/edit" ), tr( "Ctrl+R" ), tr( "Replace in the current file..." ) );
 		connect( action, SIGNAL( triggered() ), this, SLOT( replaceFile_triggered() ) );
 
-		action = mb->action( "aSearchPrevious", tr( "Search Previous" ), QIcon( ":/edit/icons/edit/previous.png" ), tr( "Shift+F3" ), tr( "Search previous occurrence" ) );
+		action = mb->action( "aSearchPrevious", tr( "Search &Previous" ), pIconManager::icon( "previous.png", ":/edit" ), tr( "Shift+F3" ), tr( "Search previous occurrence" ) );
 		connect( action, SIGNAL( triggered() ), mWidget, SLOT( on_pbPrevious_clicked() ) );
 
-		action = mb->action( "aSearchNext", tr( "Search Next" ), QIcon( ":/edit/icons/edit/next.png" ), tr( "F3" ), tr( "Search next occurrence" ) );
+		action = mb->action( "aSearchNext", tr( "Search &Next" ), pIconManager::icon( "next.png", ":/edit" ), tr( "F3" ), tr( "Search next occurrence" ) );
 		connect( action, SIGNAL( triggered() ), mWidget, SLOT( on_pbNext_clicked() ) );
+		
+		action = mb->action( "aSearchDirectory", tr( "Search in &Directory..." ), pIconManager::icon( "search-replace-directory.png" ), tr( "Ctrl+Shift+S" ), tr( "Search in directory..." ) );
+		connect( action, SIGNAL( triggered() ), this, SLOT( searchDirectory_triggered() ) );
+		
+		action = mb->action( "aReplaceDirectory", tr( "Replace in Director&y..." ), pIconManager::icon( "search-replace-directory.png" ), tr( "Ctrl+Shift+R" ), tr( "Replace in directory..." ) );
+		connect( action, SIGNAL( triggered() ), this, SLOT( replaceDirectory_triggered() ) );
+		
+		action = mb->action( "aSearchProjectFiles", tr( "Search in Project &Files..." ), pIconManager::icon( "search-replace-project-files.png" ), tr( "Ctrl+Meta+S" ), tr( "Search in the current project files.." ) );
+		connect( action, SIGNAL( triggered() ), this, SLOT( searchProjectFiles_triggered() ) );
+		
+		action = mb->action( "aReplaceProjectFiles", tr( "Replace in Projec&t Files..." ), pIconManager::icon( "search-replace-project-files.png" ), tr( "Ctrl+Meta+R" ), tr( "Replace in the current project files..." ) );
+		connect( action, SIGNAL( triggered() ), this, SLOT( replaceProjectFiles_triggered() ) );
+		
+		action = mb->action( "aSearchOpenedFiles", tr( "Search in &Opened Files..." ), pIconManager::icon( "search-replace-opened-files.png" ), tr( "Ctrl+Alt+Meta+S" ), tr( "Search in opened files..." ) );
+		connect( action, SIGNAL( triggered() ), this, SLOT( searchOpenedFiles_triggered() ) );
+		
+		action = mb->action( "aReplaceOpenedFiles", tr( "Replace in Open&ed Files..." ), pIconManager::icon( "search-replace-opened-files.png" ), tr( "Ctrl+Alt+Meta+R" ), tr( "Replace in opened files..." ) );
+		connect( action, SIGNAL( triggered() ), this, SLOT( replaceOpenedFiles_triggered() ) );
 	mb->endGroup();
 
 	return true;
@@ -72,6 +91,30 @@ bool SearchAndReplace::uninstall()
 		action = mb->action( "aSearchNext" );
 		disconnect( action, SIGNAL( triggered() ), mWidget, SLOT( on_pbNext_clicked() ) );
 		delete action;
+		
+		action = mb->action( "aSearchDirectory" );
+		disconnect( action, SIGNAL( triggered() ), this, SLOT( searchDirectory_triggered() ) );
+		delete action;
+		
+		action = mb->action( "aReplaceDirectory" );
+		disconnect( action, SIGNAL( triggered() ), this, SLOT( replaceDirectory_triggered() ) );
+		delete action;
+		
+		action = mb->action( "aSearchProjectFiles" );
+		disconnect( action, SIGNAL( triggered() ), this, SLOT( searchProjectFiles_triggered() ) );
+		delete action;
+		
+		action = mb->action( "aReplaceProjectFiles" );
+		disconnect( action, SIGNAL( triggered() ), this, SLOT( replaceProjectFiles_triggered() ) );
+		delete action;
+		
+		action = mb->action( "aSearchOpenedFiles" );
+		disconnect( action, SIGNAL( triggered() ), this, SLOT( searchOpenedFiles_triggered() ) );
+		delete action;
+		
+		action = mb->action( "aReplaceOpenedFiles" );
+		disconnect( action, SIGNAL( triggered() ), this, SLOT( replaceOpenedFiles_triggered() ) );
+		delete action;
 	mb->endGroup();
 
 	delete mDock;
@@ -82,39 +125,89 @@ bool SearchAndReplace::uninstall()
 
 void SearchAndReplace::searchFile_triggered()
 {
+qWarning() << Q_FUNC_INFO;
 	pAbstractChild* document = MonkeyCore::workspace()->currentDocument();
 
 	if ( ( document && document->editor() ) || !document )
 	{
-		/*
-		SearchAndReplace::Mode mode = mWidget->mode();
-		
-		if ( !(mode & SearchAndReplace::ModeFlagSearch) )
-		{
-			mode = SearchAndReplace::ModeSearch;
-		}
-		*/
-		
-		mWidget->setMode( SearchAndReplace::ModeSearch/*mode*/ );
+		mWidget->setMode( SearchAndReplace::ModeSearch );
 	}
 }
 
 void SearchAndReplace::replaceFile_triggered()
 {
+qWarning() << Q_FUNC_INFO;
 	pAbstractChild* document = MonkeyCore::workspace()->currentDocument();
 
 	if ( ( document && document->editor() ) || !document )
 	{
-		/*
-		SearchAndReplace::Mode mode = mWidget->mode();
-		
-		if ( !(mode & SearchAndReplace::ModeFlagReplace) )
-		{
-			mode = SearchAndReplace::ModeReplace;
-		}
-		*/
-		
-		mWidget->setMode( SearchAndReplace::ModeReplace/*mode*/ );
+		mWidget->setMode( SearchAndReplace::ModeReplace );
+	}
+}
+
+void SearchAndReplace::searchDirectory_triggered()
+{
+qWarning() << Q_FUNC_INFO;
+	pAbstractChild* document = MonkeyCore::workspace()->currentDocument();
+
+	if ( ( document && document->editor() ) || !document )
+	{
+		mWidget->setMode( SearchAndReplace::ModeSearchDirectory );
+	}
+}
+
+void SearchAndReplace::replaceDirectory_triggered()
+{
+qWarning() << Q_FUNC_INFO;
+	pAbstractChild* document = MonkeyCore::workspace()->currentDocument();
+
+	if ( ( document && document->editor() ) || !document )
+	{
+		mWidget->setMode( SearchAndReplace::ModeReplaceDirectory );
+	}
+}
+
+void SearchAndReplace::searchProjectFiles_triggered()
+{
+qWarning() << Q_FUNC_INFO;
+	pAbstractChild* document = MonkeyCore::workspace()->currentDocument();
+
+	if ( ( document && document->editor() ) || !document )
+	{
+		mWidget->setMode( SearchAndReplace::ModeSearchProjectFiles );
+	}
+}
+
+void SearchAndReplace::replaceProjectFiles_triggered()
+{
+qWarning() << Q_FUNC_INFO;
+	pAbstractChild* document = MonkeyCore::workspace()->currentDocument();
+
+	if ( ( document && document->editor() ) || !document )
+	{
+		mWidget->setMode( SearchAndReplace::ModeReplaceProjectFiles );
+	}
+}
+
+void SearchAndReplace::searchOpenedFiles_triggered()
+{
+qWarning() << Q_FUNC_INFO;
+	pAbstractChild* document = MonkeyCore::workspace()->currentDocument();
+
+	if ( ( document && document->editor() ) || !document )
+	{
+		mWidget->setMode( SearchAndReplace::ModeSearchOpenedFiles );
+	}
+}
+
+void SearchAndReplace::replaceOpenedFiles_triggered()
+{
+qWarning() << Q_FUNC_INFO;
+	pAbstractChild* document = MonkeyCore::workspace()->currentDocument();
+
+	if ( ( document && document->editor() ) || !document )
+	{
+		mWidget->setMode( SearchAndReplace::ModeReplaceOpenedFiles );
 	}
 }
 

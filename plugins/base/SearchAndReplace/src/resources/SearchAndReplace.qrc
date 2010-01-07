@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/icons" >
         <file>SearchAndReplace.png</file>
+        <file>search-replace-directory.png</file>
+        <file>search-replace-opened-files.png</file>
+        <file>search-replace-project-files.png</file>
     </qresource>
 </RCC>

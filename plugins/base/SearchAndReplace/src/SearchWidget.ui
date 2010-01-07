@@ -298,17 +298,6 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QPushButton" name="pbMode">
-        <property name="text">
-         <string>Mo&amp;de</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../../../../monkey/src/resources/resources.qrc">
-          <normaloff>:/build/icons/build/misc.png</normaloff>:/build/icons/build/misc.png</iconset>
-        </property>
-       </widget>
-      </item>
-      <item>
        <spacer name="horizontalSpacer_4">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>

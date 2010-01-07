@@ -64,7 +64,6 @@ public slots:
 
 protected:
 	SearchAndReplace::Mode mMode;
-	QMap<SearchAndReplace::Mode, QAction*> mModeActions;
 	QMap<SearchAndReplace::Option, QAction*> mOptionActions;
 	SearchWidget::Properties mProperties;
 	SearchThread* mSearchThread;
@@ -75,6 +74,7 @@ protected:
 
 	void updateLabels();
 	void updateWidgets();
+	void updateComboBoxes();
 	void initializeProperties();
 	void showMessage( const QString& status );
 	void setState( SearchWidget::InputField field, SearchWidget::State state );
@@ -87,7 +87,6 @@ protected slots:
 	void replaceThread_openedFileHandled( const QString& fileName, const QString& content, const QString& codec );
 	void replaceThread_error( const QString& error );
 	void search_textChanged();
-	void groupMode_triggered( QAction* action );
 	void on_pbPrevious_clicked();
 	void on_pbNext_clicked();
 	void on_pbSearch_clicked();
