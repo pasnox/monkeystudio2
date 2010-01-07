@@ -331,6 +331,19 @@ void SearchWidget::setMode( SearchAndReplace::Mode mode )
 	updateLabels();
 	updateWidgets();
 	initializeProperties();
+	
+	if ( mMode & SearchAndReplace::ModeFlagProjectFiles )
+	{
+		if ( mProperties.project )
+		{
+			const QString codec = mProperties.project->temporaryValue( "codec", pMonkeyStudio::defaultCodec() ).toString();
+			
+			mProperties.codec = codec;
+			cbCodec->setCurrentIndex( cbCodec->findText( codec ) );
+		}
+	}
+	
+	Q_ASSERT( !mProperties.codec.isEmpty() );
 }
 
 void SearchWidget::keyPressEvent( QKeyEvent* event )
