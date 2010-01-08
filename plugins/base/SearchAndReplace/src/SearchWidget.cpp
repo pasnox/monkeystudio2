@@ -35,6 +35,21 @@ SearchWidget::SearchWidget( QWidget* parent )
 	mReplaceThread = new ReplaceThread( this );
 
 	mDock = 0;
+	
+	// mode actions
+	const int height = cbSearch->height() -4;
+	QRect rect( QPoint(), QSize( height, height ) );
+	rect.moveCenter( cbSearch->rect().center() );
+	rect.moveLeft( 2 );
+	
+	tbMode = new QToolButton( cbSearch );
+	tbMode->setPopupMode( QToolButton::InstantPopup );
+	tbMode->setAutoRaise( true );
+	tbMode->setMenu( MonkeyCore::mainWindow()->menuBar()->menu( "mEdit/mSearchReplace" ) );
+	tbMode->setGeometry( rect );
+	
+	QLineEdit* lineEdit = cbSearch->lineEdit();
+	lineEdit->setContentsMargins( tbMode->width() -5, 0, 0, 0 );
 
 	// options actions
 	QAction* action;

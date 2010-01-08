@@ -69,6 +69,7 @@ protected:
 	SearchThread* mSearchThread;
 	ReplaceThread* mReplaceThread;
 	SearchResultsDock* mDock;
+	QToolButton* tbMode;
 
 	virtual void keyPressEvent( QKeyEvent* event );
 
