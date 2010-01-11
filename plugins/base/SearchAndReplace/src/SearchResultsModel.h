@@ -76,7 +76,7 @@ public:
 protected:
 	int mRowCount;
 	mutable QHash<QString, SearchResultsModel::Result*> mParents; // fileName, result
-	mutable QList<SearchResultsModel::Result*> mParentsList; // ordered parents
+	mutable SearchResultsModel::ResultList mParentsList; // ordered parents
 	mutable QList<SearchResultsModel::ResultList> mResults; // parents children
 	SearchThread* mSearchThread;
 

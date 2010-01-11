@@ -71,6 +71,7 @@ protected:
 	SearchResultsDock* mDock;
 	QToolButton* tbMode;
 
+	virtual bool eventFilter( QObject* object, QEvent* event );
 	virtual void keyPressEvent( QKeyEvent* event );
 
 	void updateLabels();

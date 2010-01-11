@@ -4,6 +4,7 @@
 #include "SearchResultsDock.h"
 
 #include <MonkeyCore.h>
+#include <pIconManager.h>
 #include <UIMain.h>
 #include <pFileManager.h>
 #include <XUPProjectItem.h>
@@ -17,6 +18,7 @@
 #include <QFileDialog>
 #include <QCompleter>
 #include <QDirModel>
+#include <QPainter>
 
 SearchWidget::SearchWidget( QWidget* parent )
 	: QFrame( parent )
@@ -43,8 +45,8 @@ SearchWidget::SearchWidget( QWidget* parent )
 	rect.moveLeft( 2 );
 	
 	tbMode = new QToolButton( cbSearch );
+	tbMode->installEventFilter( this );
 	tbMode->setPopupMode( QToolButton::InstantPopup );
-	tbMode->setAutoRaise( true );
 	tbMode->setMenu( MonkeyCore::mainWindow()->menuBar()->menu( "mEdit/mSearchReplace" ) );
 	tbMode->setGeometry( rect );
 	
@@ -359,6 +361,25 @@ void SearchWidget::setMode( SearchAndReplace::Mode mode )
 	}
 	
 	Q_ASSERT( !mProperties.codec.isEmpty() );
+}
+
+bool SearchWidget::eventFilter( QObject* object, QEvent* event )
+{
+	if ( event->type() == QEvent::Paint )
+	{
+		const QIcon icon = pIconManager::icon( "misc.png" );
+		QRect rect = tbMode->rect();
+		
+		rect.setSize( rect.size() -QSize( 8, 8 ) );
+		rect.moveCenter( tbMode->rect().center() );
+		
+		QPainter painter( tbMode );
+		icon.paint( &painter, rect );
+		
+		return true;
+	}
+	
+	return QWidget::eventFilter( object, event );
 }
 
 void SearchWidget::keyPressEvent( QKeyEvent* event )
