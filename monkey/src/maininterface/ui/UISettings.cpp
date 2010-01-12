@@ -35,6 +35,7 @@
 #include "../../workspace/pWorkspace.h"
 #include "../../coremanager/MonkeyCore.h"
 #include "../../settingsmanager/Settings.h"
+#include "../../consolemanager/pConsoleManager.h"
 
 #include <qscintilla.h>
 
@@ -336,6 +337,9 @@ void UISettings::loadSettings()
 		it->setText( 2, a.Language );
 		it->setData( 0, Qt::UserRole, a.Snippet );
 	}
+	
+	// environment variables editor
+	eveVariables->setVariables( MonkeyCore::consoleManager()->environmentVariablesManager()->variables(), true );
 }
 
 void UISettings::saveSettings()
@@ -494,8 +498,11 @@ void UISettings::saveSettings()
 
 	MonkeyCore::abbreviationsManager()->set( abbreviations );
 	MonkeyCore::abbreviationsManager()->generateScript();
+	
+	// environment variables editor
+	MonkeyCore::consoleManager()->environmentVariablesManager()->setVariables( eveVariables->variables() );
 
-	// flush settings to diskfree_t
+	// flush settings to disk
 	s->sync();
 }
 

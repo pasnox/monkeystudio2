@@ -454,18 +454,20 @@ void pConsoleManager::executeProcess()
 		mStopAttempt = 0;
 		setWorkingDirectory( c.workingDirectory() );
 		
+		QStringList variables = mEnvironmentVariablesManager.variables( false );
+		
 		// unset some variables environments when no parsers is defined
 		if ( !mCurrentParsers.isEmpty() )
 		{
-			QStringList values = systemEnvironment();
-			const int index = values.indexOf( QRegExp( "^LANG=.*$" ) );
+			const int index = variables.indexOf( QRegExp( "^LANG=.*$" ) );
 			
 			if ( index != -1 )
 			{
-				values.removeAt( index );
-				setEnvironment( values );
+				variables.removeAt( index );
 			}
 		}
+		
+		setEnvironment( variables );
 
 		start( QString( "%1 %2" ).arg( quotedString( c.command() ) ).arg( c.arguments() ) );
 

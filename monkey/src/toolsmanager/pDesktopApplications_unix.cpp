@@ -31,6 +31,8 @@
 
 #include <QSettings>
 
+#include <limits.h>
+
 struct Q_MONKEY_EXPORT pThemeFolder
 {
 	pThemeFolder()	{}

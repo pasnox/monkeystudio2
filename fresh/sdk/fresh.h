@@ -30,3 +30,7 @@
 #include "../widgets/pConsoleCommand.h"
 #include "../widgets/pMultiToolBar.h"
 #include "../widgets/pStylesToolButton.h"
+#include "../widgets/pEnvironmentVariableEditor.h"
+#include "../widgets/pEnvironmentVariablesEditor.h"
+#include "../widgets/pEnvironmentVariablesModel.h"
+#include "../widgets/pEnvironmentVariablesManager.h"

@@ -4,9 +4,11 @@
 #include <MonkeyCore.h>
 #include <pIconManager.h>
 #include <pDockWidgetTitleBar.h>
+#include <pMenuBar.h>
 
 #include <QWidgetAction>
 #include <QComboBox>
+#include <QMenu>
 
 class pOpenedFileAction : public QWidgetAction
 {

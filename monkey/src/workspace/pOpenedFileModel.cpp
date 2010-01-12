@@ -4,6 +4,7 @@
 
 #include <pIconManager.h>
 
+#include <QMimeData>
 #include <QDebug>
 
 struct OpeningOrderSorter
