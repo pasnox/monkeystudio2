@@ -26,7 +26,9 @@ SearchWidget::SearchWidget( QWidget* parent )
 	setupUi( this );
 	cbSearch->completer()->setCaseSensitivity( Qt::CaseSensitive );
 	cbReplace->completer()->setCaseSensitivity( Qt::CaseSensitive );
-	cbPath->lineEdit()->setCompleter( new QCompleter( new QDirModel( this ) ) );
+	QDirModel* fsModel = new QDirModel( this );
+	fsModel->setFilter( QDir::AllDirs | QDir::NoDotAndDotDot );
+	cbPath->lineEdit()->setCompleter( new QCompleter( fsModel ) );
 #warning QDirModel is deprecated but QCompleter does not yet handle QFileSystemModel - please update when possible.
 	cbMask->completer()->setCaseSensitivity( Qt::CaseSensitive );
 	pbSearchStop->setVisible( false );
@@ -173,9 +175,26 @@ void SearchWidget::setMode( SearchAndReplace::Mode mode )
 	}
 
 	mMode = mode;
+	
+	initializeProperties();
+	
+	if ( mMode & SearchAndReplace::ModeFlagProjectFiles )
+	{
+		if ( mProperties.project )
+		{
+			const QString codec = mProperties.project->temporaryValue( "codec", pMonkeyStudio::defaultCodec() ).toString();
+			
+			mProperties.codec = codec;
+			cbCodec->setCurrentIndex( cbCodec->findText( codec ) );
+		}
+	}
+	
+	Q_ASSERT( !mProperties.codec.isEmpty() );
 
 	pAbstractChild* document = MonkeyCore::workspace()->currentDocument();
 	pEditor* editor = document ? document->editor() : 0;
+	const QString path = mProperties.project ? mProperties.project->path() : QDir::currentPath();
+	const QString searchPath = document ? QFileInfo( document->filePath() ).absolutePath() : path;
 	const QString searchText = editor ? editor->selectedText() : QString::null;
 
 	setVisible( mode != SearchAndReplace::ModeNo );
@@ -196,6 +215,11 @@ void SearchWidget::setMode( SearchAndReplace::Mode mode )
 		else
 		{
 			cbReplace->setFocus();
+		}
+		
+		if ( mode & SearchAndReplace::ModeFlagDirectory )
+		{
+			cbPath->setEditText( searchPath );
 		}
 	}
 
@@ -347,20 +371,6 @@ void SearchWidget::setMode( SearchAndReplace::Mode mode )
 
 	updateLabels();
 	updateWidgets();
-	initializeProperties();
-	
-	if ( mMode & SearchAndReplace::ModeFlagProjectFiles )
-	{
-		if ( mProperties.project )
-		{
-			const QString codec = mProperties.project->temporaryValue( "codec", pMonkeyStudio::defaultCodec() ).toString();
-			
-			mProperties.codec = codec;
-			cbCodec->setCurrentIndex( cbCodec->findText( codec ) );
-		}
-	}
-	
-	Q_ASSERT( !mProperties.codec.isEmpty() );
 }
 
 bool SearchWidget::eventFilter( QObject* object, QEvent* event )
