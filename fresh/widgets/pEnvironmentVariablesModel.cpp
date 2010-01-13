@@ -1,6 +1,7 @@
 #include "pEnvironmentVariablesModel.h"
 
 #include <QStringList>
+#include <QFont>
 #include <QProcess>
 #include <QDebug>
 
@@ -28,6 +29,12 @@ QVariant pEnvironmentVariablesModel::data( const QModelIndex& index, int role ) 
 	{
 		case Qt::DisplayRole:
 			return index.column() == 0 ? variable->name : variable->value;
+		case Qt::FontRole:
+		{
+			QFont font;
+			font.setStrikeOut( !variable->enabled );
+			return font;
+		}
 		case Qt::CheckStateRole:
 		{
 			if ( index.column() != 0 )
