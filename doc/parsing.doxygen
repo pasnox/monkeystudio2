@@ -1,6 +1,9 @@
-Creating console output parser
+/*!
+ \page parsing "Console output parsing"
 
-Introduction
+This atricle describes, how does MkS parses console output of a compiler, interpreter, etc; and how can you create own parser.
+
+\section introduction "Introduction"
 
 MkS cabable to parse output from console probramms, such as builders, compilers, interpreters, running applications and others, executed by it.
 Output parsed for display it in good readable form on "Build steps" dock, and, probably may be used for some other reasons.
@@ -178,3 +181,5 @@ This script will create in "datas/scripts" dirrectory files with parsers. For GN
 and it copied only during first start. So, you might need copy it manualy, for make sure it is installed, and MkS will find it on first start.
 
 Remember, that Python language allows you to make parsers generation easier, if you know it. Probably you can find few usable examples at outputparsing/gcc.py
+
+*/
