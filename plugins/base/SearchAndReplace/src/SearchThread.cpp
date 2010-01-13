@@ -215,7 +215,7 @@ QString SearchThread::fileContent( const QString& fileName ) const
 
 void SearchThread::search( const QString& fileName, const QString& content ) const
 {
-	static QRegExp eolRx( "(?:\\r\\n|\\n|\\r)" );
+	static QRegExp eolRx( "(?:\\n)" );
 	bool checkable = false;
 	QRegExp rx;
 
