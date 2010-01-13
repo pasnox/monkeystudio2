@@ -5,7 +5,7 @@
 #include <QTime>
 #include <QDebug>
 
-int SearchThread::mMaxTime = 125;
+int SearchThread::mMaxTime = 250;
 
 SearchThread::SearchThread( QObject* parent )
 	: QThread( parent )
@@ -22,7 +22,7 @@ SearchThread::~SearchThread()
 	wait();
 }
 
-void SearchThread::search( const SearchWidget::Properties& properties )
+void SearchThread::search( const SearchAndReplace::Properties& properties )
 {
 	{
 		QMutexLocker locker( &mMutex );
@@ -46,7 +46,7 @@ void SearchThread::stop()
 	}
 }
 
-SearchWidget::Properties* SearchThread::properties() const
+SearchAndReplace::Properties* SearchThread::properties() const
 {
 	QMutexLocker locker( const_cast<QMutex*>( &mMutex ) );
 	return &const_cast<SearchThread*>( this )->mProperties;
@@ -316,11 +316,17 @@ void SearchThread::run()
 				continue;
 			}
 		}
+		
+		const int total = files.count();
+		int value = 0;
 
 		foreach ( const QString& fileName, files )
 		{
 			const QString content = fileContent( fileName );
 			search( fileName, content );
+			value++;
+			
+			emit progressChanged( value, total );
 
 			{
 				QMutexLocker locker( &mMutex );

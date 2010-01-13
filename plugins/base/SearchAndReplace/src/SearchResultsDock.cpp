@@ -39,7 +39,7 @@ SearchResultsDock::SearchResultsDock( SearchThread* searchThread, QWidget* paren
 	pMonkeyStudio::setMacSmallSize( this, true, true );
 
 	// connections
-	connect( mSearchThread, SIGNAL( resultsAvailable( const QString&, const SearchResultsModel::ResultList& ) ), this, SLOT( show() ) );
+	connect( mModel, SIGNAL( firstResultsAvailable() ), this, SLOT( show() ) );
 	connect( mView, SIGNAL( activated( const QModelIndex& ) ), this, SLOT( view_activated( const QModelIndex& ) ) );
 }
 

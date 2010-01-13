@@ -1,11 +1,12 @@
 #include "ReplaceThread.h"
+#include "SearchWidget.h"
 
 #include <QMutexLocker>
 #include <QTextCodec>
 #include <QTime>
 #include <QDebug>
 
-int ReplaceThread::mMaxTime = 125;
+int ReplaceThread::mMaxTime = 250;
 
 ReplaceThread::ReplaceThread( QObject* parent )
 	: QThread( parent )
@@ -20,7 +21,7 @@ ReplaceThread::~ReplaceThread()
 	wait();
 }
 
-void ReplaceThread::replace( const SearchWidget::Properties& properties, const QHash<QString, SearchResultsModel::ResultList>& results )
+void ReplaceThread::replace( const SearchAndReplace::Properties& properties, const QHash<QString, SearchResultsModel::ResultList>& results )
 {
 	{
 		QMutexLocker locker( &mMutex );

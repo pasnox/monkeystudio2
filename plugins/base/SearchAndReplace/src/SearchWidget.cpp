@@ -19,6 +19,8 @@
 #include <QCompleter>
 #include <QDirModel>
 #include <QPainter>
+#include <QStatusBar>
+#include <QProgressBar>
 
 SearchWidget::SearchWidget( QWidget* parent )
 	: QFrame( parent )
@@ -33,6 +35,12 @@ SearchWidget::SearchWidget( QWidget* parent )
 	cbMask->completer()->setCaseSensitivity( Qt::CaseSensitive );
 	pbSearchStop->setVisible( false );
 	pbReplaceCheckedStop->setVisible( false );
+	
+	mProgress = new QProgressBar( this );
+	mProgress->setToolTip( tr( "Search in progress..." ) );
+	mProgress->setMaximumSize( QSize( 80, 16 ) );
+	MonkeyCore::mainWindow()->statusBar()->addPermanentWidget( mProgress );
+	mProgress->setVisible( false );
 
 	// threads
 	mSearchThread = new SearchThread( this );
@@ -112,6 +120,7 @@ SearchWidget::SearchWidget( QWidget* parent )
 	connect( cbSearch->lineEdit(), SIGNAL( textEdited( const QString& ) ), this, SLOT( search_textChanged() ) );
 	connect( mSearchThread, SIGNAL( started() ), this, SLOT( searchThread_stateChanged() ) );
 	connect( mSearchThread, SIGNAL( finished() ), this, SLOT( searchThread_stateChanged() ) );
+	connect( mSearchThread, SIGNAL( progressChanged( int, int ) ), this, SLOT( searchThread_progressChanged( int, int ) ) );
 	connect( mReplaceThread, SIGNAL( started() ), this, SLOT( replaceThread_stateChanged() ) );
 	connect( mReplaceThread, SIGNAL( finished() ), this, SLOT( replaceThread_stateChanged() ) );
 	connect( mReplaceThread, SIGNAL( openedFileHandled( const QString&, const QString&, const QString& ) ), this, SLOT( replaceThread_openedFileHandled( const QString&, const QString&, const QString& ) ) );
@@ -124,6 +133,7 @@ SearchWidget::~SearchWidget()
 {
 	delete mSearchThread;
 	delete mReplaceThread;
+	delete mProgress;
 }
 
 SearchAndReplace::Mode SearchWidget::mode() const
@@ -735,6 +745,13 @@ void SearchWidget::searchThread_stateChanged()
 {
 	pbSearchStop->setVisible( mSearchThread->isRunning() );
 	updateWidgets();
+	mProgress->setVisible( mSearchThread->isRunning() );
+}
+
+void SearchWidget::searchThread_progressChanged( int value, int total )
+{
+	mProgress->setValue( value );
+	mProgress->setMaximum( total );
 }
 
 void SearchWidget::replaceThread_stateChanged()
@@ -798,6 +815,19 @@ void SearchWidget::on_pbSearch_clicked()
 	setState( SearchWidget::Search, SearchWidget::Normal );
 	updateComboBoxes();
 	initializeProperties();
+	
+	if ( mProperties.searchText.isEmpty() )
+	{
+		MonkeyCore::messageManager()->appendMessage( tr( "You can't search for NULL text." ), 0 );
+		return;
+	}
+	
+	if ( mProperties.mode & SearchAndReplace::ModeFlagProjectFiles && !mProperties.project )
+	{
+		MonkeyCore::messageManager()->appendMessage( tr( "You can't search in project files because there is no opened projet." ), 0 );
+		return;
+	}
+	
 	mSearchThread->search( mProperties );
 }
 
@@ -829,6 +859,12 @@ void SearchWidget::on_pbReplaceChecked_clicked()
 
 	updateComboBoxes();
 	initializeProperties();
+	
+	if ( mProperties.mode & SearchAndReplace::ModeFlagProjectFiles && !mProperties.project )
+	{
+		MonkeyCore::messageManager()->appendMessage( tr( "You can't replace in project files because there is no opened projet." ), 0 );
+		return;
+	}
 
 	foreach ( const SearchResultsModel::ResultList& results, model->results() )
 	{

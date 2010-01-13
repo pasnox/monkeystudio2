@@ -130,7 +130,7 @@ int SearchResultsModel::rowCount( const QModelIndex& parent ) const
 Qt::ItemFlags SearchResultsModel::flags( const QModelIndex& index ) const
 {
 	Qt::ItemFlags flags = QAbstractItemModel::flags( index );
-	SearchWidget::Properties* properties = mSearchThread->properties();
+	SearchAndReplace::Properties* properties = mSearchThread->properties();
 
 	if ( properties->mode & SearchAndReplace::ModeFlagReplace )
 	{
@@ -339,8 +339,13 @@ void SearchResultsModel::thread_reset()
 
 void SearchResultsModel::thread_resultsAvailable( const QString& fileName, const SearchResultsModel::ResultList& results )
 {
+	if ( mRowCount == 0 )
+	{
+		emit firstResultsAvailable();
+	}
+	
 	SearchResultsModel::Result* result = mParents[ fileName ];
-	SearchWidget::Properties* properties = mSearchThread->properties();
+	SearchAndReplace::Properties* properties = mSearchThread->properties();
 
 	if ( !result )
 	{

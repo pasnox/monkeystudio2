@@ -3,8 +3,7 @@
 
 #include <QAbstractItemModel>
 #include <QFileInfo>
-
-#include "SearchWidget.h"
+#include <QPoint>
 
 class SearchThread;
 
@@ -84,6 +83,9 @@ protected slots:
 	void thread_reset();
 	void thread_resultsAvailable( const QString& fileName, const SearchResultsModel::ResultList& results );
 	void thread_resultsHandled( const QString& fileName, const SearchResultsModel::ResultList& results );
+
+signals:
+	void firstResultsAvailable();
 };
 
 #endif // SEARCHRESULTSMODEL_H

@@ -6,8 +6,8 @@
 #include <QModelIndex>
 
 class SearchThread;
-class QHBoxLayout;
 class SearchResultsModel;
+class QHBoxLayout;
 class QTreeView;
 
 class SearchResultsDock : public pDockWidget

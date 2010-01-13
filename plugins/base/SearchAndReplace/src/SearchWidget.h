@@ -3,39 +3,20 @@
 
 #include "ui_SearchWidget.h"
 #include "SearchAndReplace.h"
+#include "SearchResultsModel.h"
 
 #include <QFile>
 
 class SearchThread;
 class ReplaceThread;
 class SearchResultsDock;
+class QProgressBar;
 
 class SearchWidget : public QFrame, public Ui::SearchWidget
 {
 	Q_OBJECT
 
 public:
-	struct Properties
-	{
-		Properties()
-		{
-			mode = SearchAndReplace::ModeNo;
-			options = SearchAndReplace::OptionNo;
-			project = 0;
-		}
-
-		QString searchText;
-		QString replaceText;
-		QString searchPath;
-		SearchAndReplace::Mode mode;
-		QStringList mask;
-		QString codec;
-		SearchAndReplace::Options options;
-		QMap<QString, QString> openedFiles; // filename, content
-		class XUPProjectItem* project;
-		QStringList sourcesFiles;
-	};
-
 	enum InputField
 	{
 		Search,
@@ -65,11 +46,12 @@ public slots:
 protected:
 	SearchAndReplace::Mode mMode;
 	QMap<SearchAndReplace::Option, QAction*> mOptionActions;
-	SearchWidget::Properties mProperties;
+	SearchAndReplace::Properties mProperties;
 	SearchThread* mSearchThread;
 	ReplaceThread* mReplaceThread;
 	SearchResultsDock* mDock;
 	QToolButton* tbMode;
+	QProgressBar* mProgress;
 
 	virtual bool eventFilter( QObject* object, QEvent* event );
 	virtual void keyPressEvent( QKeyEvent* event );
@@ -85,6 +67,7 @@ protected:
 
 protected slots:
 	void searchThread_stateChanged();
+	void searchThread_progressChanged( int value, int total );
 	void replaceThread_stateChanged();
 	void replaceThread_openedFileHandled( const QString& fileName, const QString& content, const QString& codec );
 	void replaceThread_error( const QString& error );
