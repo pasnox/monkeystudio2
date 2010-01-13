@@ -265,6 +265,14 @@
           <number>0</number>
          </property>
          <item>
+          <widget class="QPushButton" name="pbGoUp">
+           <property name="icon">
+            <iconset resource="../../../../monkey/src/resources/resources.qrc">
+             <normaloff>:/listeditor/icons/listeditor/go-up.png</normaloff>:/listeditor/icons/listeditor/go-up.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="pbBrowse">
            <property name="text">
             <string>&amp;Browse</string>

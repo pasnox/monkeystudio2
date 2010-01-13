@@ -854,6 +854,20 @@ void SearchWidget::on_pbReplaceCheckedStop_clicked()
 	mReplaceThread->stop();
 }
 
+void SearchWidget::on_pbGoUp_clicked()
+{
+	QDir dir( cbPath->currentText() );
+	
+	if ( !dir.exists() )
+	{
+		return;
+	}
+	
+	dir.cdUp();
+	
+	cbPath->setEditText( dir.absolutePath() );
+}
+
 void SearchWidget::on_pbBrowse_clicked()
 {
 	const QString path = QFileDialog::getExistingDirectory( this, tr( "Search path" ), cbPath->currentText() );

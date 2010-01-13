@@ -6,6 +6,7 @@
 #include <MonkeyCore.h>
 #include <pQueuedMessageToolBar.h>
 
+#include <QVBoxLayout>
 #include <QTabWidget>
 #include <QWebFrame>
 #include <QPrintDialog>
@@ -13,7 +14,9 @@
 #include <QWebHistory>
 #include <QCheckBox>
 #include <QLabel>
+#include <QLineEdit>
 #include <QHelpEngine>
+#include <QToolButton>
 #include <QDebug>
 
 QtAssistantChild* QtAssistantChild::instance( QHelpEngine* engine, QWidget* parent, bool create )

@@ -97,6 +97,7 @@ protected slots:
 	void on_pbReplaceAll_clicked();
 	void on_pbReplaceChecked_clicked();
 	void on_pbReplaceCheckedStop_clicked();
+	void on_pbGoUp_clicked();
 	void on_pbBrowse_clicked();
 };
 

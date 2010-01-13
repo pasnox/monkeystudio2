@@ -141,6 +141,7 @@
 		<file>icons/listeditor/folder.png</file>
 		<file>icons/listeditor/remove.png</file>
 		<file>icons/listeditor/up.png</file>
+		<file>icons/listeditor/go-up.png</file>
 	</qresource>
 	<qresource prefix="/stylesheets" >
 		<file>stylesheets/default.css</file>
