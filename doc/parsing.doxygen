@@ -7,26 +7,38 @@ This atricle describes, how does MkS parses console output of a compiler, interp
 
 MkS cabable to parse output from console probramms, such as builders, compilers, interpreters, running applications and others, executed by it.
 Output parsed for display it in good readable form on "Build steps" dock, and, probably may be used for some other reasons.
+
 For example, when project C++ builded on Linux, "GNU Make" and "GCC" parsers collects errors from build output and display it in good readable form.
 An extension module, which supports parsing output of some programm, named "Parser".
+
 This guide gives hint, how to develop own parsers. As base, used MkS revison 3518, at svn//svn.tuxfamily.org/svnroot/monkeystudio/mks/v2/branches/parsing. Remeber, that some things may be changed at the time, when you reading this guide.
 
-There are two ways for create own parser:
+\section creating "Creating own parsers"
+There are two ways for create own parser.
 
-1. The most powerfull.
+\subsection subclassabstraceparser "Subclass AbstractCommandParser"
+The most powerfull way.
+
 Subclass AbstractCommandParser, implement own 
+	\code
 	virtual int AbstractCommandParser::processParsing(QString* text) = 0;
+	\endcode
 Then add parser using
+	\code
 	void pConsoleManager::addParser( AbstractCommandParser* p )
+	\endcode
 
 Advance of this method - you are able to do with console output whatever you won't in your parser.
 
-2. CommandParser class.
+\subsection useCommandParser "Use CommandParser class"
 Easier.
+
 This class it implementation of AbstractCommandParser, currently (23-12-2009) used for parse GCC and GNU Make output.
 It is based on idea of "pattern".
+
 Pattern is regular expression, which searches some phrases in output, and set of ruses, which allows to convert regular expression capture to message, displayable on "Build Steps" dock. See structure CommandParser::Pattern.
 Example of contents of such structure:
+\code
 			{
 				// middle part of error
 				// src/views/TreeViewModel.h:9: note:   because the following virtual functions are pure within 'TreeViewModel':
@@ -40,51 +52,71 @@ Example of contents of such structure:
 				"%3", //text
 				"%0", //full text
 			},
+\endcode
+
 This pattern intended for search string 
+	\verbatim
 	src/views/TreeViewModel.h:9: note:   because the following virtual functions are pure within 'TreeViewModel':
+	\endverbatim
 extract from it filename, "src/views/TreeViewModel.h", line "9", text of note "because the following virtual functions are pure within 'TreeViewModel'"
+
 When processing pattern, %<number> (%1, %2, ...) replaced with subcapture from regular expression, and %0 replaced with full text of capture.
 
 As result, when parsing
+	\verbatim
 	src/views/TreeViewModel.h:9: note:   because the following virtual functions are pure within 'TreeViewModel':
+	\endverbatim
 will be generated entry for "Build steps" dock, with text "because the following virtual functions are pure within 'TreeViewModel'", and hint "src/views/TreeViewModel.h:9: note:   because the following virtual functions are pure within 'TreeViewModel':". When entry clicked, src/views/TreeViewModel.h file will be opened, cursor will jump to line 9 column 0.
 
 For create own parser, create CommandParser instance, and fill it with patterns, using function 
+	\code
 	void CommandParser::addPattern(const Pattern& pattern);
+	\endcode
 Than install parser, using 
+	\code
 	void pConsoleManager::addParser( AbstractCommandParser* p )
+	\endcode
 
-3. MkS script
+
+
+\subsection MkSScript "MkS script"
 Even easier, do not requires any C++ programming.
 
 MkS scripting interface supports adding parsers by .mks scripts. Internaly, script creates CommandParser and fills it with Patterns.
+
 You can create scripts dirrectly, but, I think, it's easier to use framework, writen in Python, for generate it. Framework allows to create patterns, test it, and generate resulting MkS script with parser. It requires only minimal Python knowlege (I think, it's possible to create parsers even without Python knowlege, bug with examples.)
+
 Here is step-by-step instruction, which uses existing GNU Make parser as example. You can find full file in outputparsing/gnumake.py
 
-1. Creating Python file gnumake.py with next contents:
-
+- Creating Python file gnumake.py with next contents:
+	\code
 	import parsing
-	
 	print '# It is a machine generated file. Do not edit it manualy!'
+	\endcode
 
 First line imports framework functionality, last - prints text to standard output.
 
-2. Adding first pattern. 
+- Adding first pattern. 
+	\code
 	# No rule for make target
 
 	noRule = parsing.Pattern(r"^((mingw32\-)?make: \*\*\* No rule to make target.*)  Stop.",
 									type = 'error',
 									text = '%1')
 	noRule.setComment('No rule for make target')
+	\endcode
 Line creates parsing.Pattern class instance. It requires one mandatory parameter - regular expression, and few named  optional parameters, having default values:
+	\code
 	file = '', 
 	line = '-1', 
 	column = '-1', 
 	type = 'error', 
 	text = '%0', 
 	hint = '%0'
+	\endcode
 
 In this case, created pattern (CommandParser::Pattern), having next values:
+	\code
 	regExp = "^((mingw32\-)?make: \*\*\* No rule to make target.*)  Stop."
 	FileName = ""  // empty
 	col = "-1" // default value for the framework
@@ -92,55 +124,75 @@ In this case, created pattern (CommandParser::Pattern), having next values:
 	Type = pConsoleManager::stError
 	Text = "%0"
 	FullText = "%0"
+	\endcode
 
-3. Set comment for this pattern
+- Set comment for this pattern
+	\code
 	noRule.setComment('No rule for make target')
+	\endcode
 
 Comment used for better .mks script readability
 
-4. Let's test the pattern:
+- Let's test the pattern:
+	\code
 	noRule.test("mingw32-make: *** No rule to make target `release'.  Stop.\n", 
 				type = 'error', 
 				text = "mingw32-make: *** No rule to make target `release'.",
 				hint = "mingw32-make: *** No rule to make target `release'.  Stop.")
-Input string 
+	\endcode
+Input string
+	\verbatim
 	"mingw32-make: *** No rule to make target `release'.  Stop.\n"
+	\endverbatim
 passed to the parser, and checked, that result (capture) is:
+	\verbatim
 	type = pConsoleManager::stError
 	text = "mingw32-make: *** No rule to make target `release'."
 	"mingw32-make: *** No rule to make target `release'.  Stop."
+	\endverbatim
 Every pattern can have as much tests, as needed
 
-5. Creating second parser:
+- Creating second parser:
+	\code
 	# Entering directory
 	
 	entering = parsing.Pattern(r"^(mingw32\-)?make\[\d\]: Entering directory\s`([^\n]*)'",
 											type = 'compiling',
 											text = 'make: Building %2')
 	entering.setComment('Entering dirrectory')
+	\endcode
 
-6. Print created patterns to console:
+- Print created patterns to console:
+	\code
 	print noRule.generateMkSScript('GNU Make')
 	print entering.generateMkSScript('GNU Make')
+	\endcode
 'GNU Make' is name for parser
 	
-7. OK, now let's test created parser:
+- OK, now let's test created parser (console command):
+	\code
 	python gnumake.py
+	\endcode
 Output:
+	\verbatim
 	# It is a machine generated file. Do not edit it manualy!
 	# No rule for make target
 	parser add "GNU Make" "^((mingw32\-)?make: \*\*\* No rule to make target.*)  Stop." "" "-1" "-1" "error" "%1" "%0"
 			
 	# Entering dirrectory
 	parser add "GNU Make" "^(mingw32\-)?make\[\d\]: Entering directory\s`([^\n]*)'" "" "-1" "-1" "compiling" "make: Building %2" "%0"
+	\endverbatim
 
-8. Now let's change first pattern, for make it incorrect:
+- Now let's change first pattern, for make it incorrect:
+	\code
 	noRule = parsing.Pattern(r"^((mingw32\-)?make: \*\*\* No rule to make target.*)  Stop",
 									type = 'error',
 									text = '%1')
 	(Removed "." from the end of the regular expression)
+	\endcode
 
-9. Trying to generate MkS script:
+- Trying to generate MkS script:
+	\code
 	a@a-laptop:~/code/mks/v2/branches/parsing/outputparsing$ python gnumake.py 
 	hint <mingw32-make: *** No rule to make target `release'.  Stop> != <mingw32-make: *** No rule to make target `release'.  Stop.>
 	Traceback (most recent call last):
@@ -149,9 +201,11 @@ Output:
 	  File "/home/a/code/mks/v2/branches/parsing/outputparsing/parsing.py", line 82, in test
 		assert(not failed)
 	AssertionError
+	\endcode
 At the second line we can see, that new regular expression gave invalid hint. Dot at the output hint is missing.
 
-10. When running script with "--debug" parameter, output contains more usefull info:
+- When running script with "--debug" parameter, output contains more usefull info:
+	\verbatim
 	a@a-laptop:~/code/mks/v2/branches/parsing/outputparsing$ python gnumake.py  --debug
 	For <No rule for make target>
 	Full match: < mingw32-make: *** No rule to make target `release'.  Stop >
@@ -163,11 +217,15 @@ At the second line we can see, that new regular expression gave invalid hint. Do
 	  File "/home/a/code/mks/v2/branches/parsing/outputparsing/parsing.py", line 82, in test
 		assert(not failed)
 	AssertionError
+	\endverbatim
 MkS script won't be printed, if any of unit tests for any of parsers failed.
 
-11. Restore valid regular expression, and let's generate all parsers:
+- Restore valid regular expression, and let's generate all parsers:
+	\code
 	a@a-laptop:~/code/mks/v2/branches/parsing/outputparsing$ ./generate-parsers.sh 
+	\endcode
 This script will create in "datas/scripts" dirrectory files with parsers. For GNU Make output is:
+	\verbatim
 	a@a-laptop:~/code/mks/v2/branches/parsing/outputparsing$ cat ../datas/scripts/parser-gnumake.mks 
 	# It is a machine generated file. Do not edit it manualy!
 	# No rule for make target
@@ -175,9 +233,12 @@ This script will create in "datas/scripts" dirrectory files with parsers. For GN
 			
 	# Entering dirrectory
 	parser add "GNU Make" "^(mingw32\-)?make\[\d\]: Entering directory\s`([^\n]*)'" "" "-1" "-1" "compiling" "make: Building %2" "%0"
+	\endverbatim
 
-12. Remember, that MkS stores it's scripts in 
+- Remember, that MkS stores it's scripts in 
+	\verbatim
 	{HOME DIRECTORY}.Monkey\ Studio/scripts-{VERSION}/
+	\endverbatim
 and it copied only during first start. So, you might need copy it manualy, for make sure it is installed, and MkS will find it on first start.
 
 Remember, that Python language allows you to make parsers generation easier, if you know it. Probably you can find few usable examples at outputparsing/gcc.py
