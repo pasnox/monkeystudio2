@@ -40,12 +40,16 @@ pEnvironmentVariablesModel::Variables pEnvironmentVariablesManager::variables() 
 
 void pEnvironmentVariablesManager::setVariables( const pEnvironmentVariablesModel::Variables& variables )
 {
+	const pEnvironmentVariablesModel::Variables items = removeUnmodifiedVariables( variables );
+	
+	remove( mSettingsKey );
+	
 	beginWriteArray( mSettingsKey );
 	
-	for ( int i = 0; i < variables.count(); i++ )
+	for ( int i = 0; i < items.count(); i++ )
 	{
 		setArrayIndex( i );
-		const pEnvironmentVariablesModel::Variable& variable = (variables.begin() +i).value();
+		const pEnvironmentVariablesModel::Variable& variable = (items.begin() +i).value();
 		
 		setValue( "Name", variable.name );
 		setValue( "Value", variable.value );
@@ -58,7 +62,7 @@ void pEnvironmentVariablesManager::setVariables( const pEnvironmentVariablesMode
 bool pEnvironmentVariablesManager::mergeNewVariables( pEnvironmentVariablesModel::Variables& variables ) const
 {
 	const pEnvironmentVariablesModel::Variables newVariables = pEnvironmentVariablesModel::stringListToVariables( QProcess::systemEnvironment() );
-	bool hasNew = false;
+	bool modified = false;
 	
 	foreach ( const QString& name, newVariables.keys() )
 	{
@@ -67,11 +71,47 @@ bool pEnvironmentVariablesManager::mergeNewVariables( pEnvironmentVariablesModel
 			continue;
 		}
 		
-		hasNew = true;
+		modified = true;
 		variables[ name ] = newVariables[ name ];
 	}
 	
-	return hasNew;
+	return modified;
+}
+
+pEnvironmentVariablesModel::Variables pEnvironmentVariablesManager::mergeNewVariables( const pEnvironmentVariablesModel::Variables& variables ) const
+{
+	pEnvironmentVariablesModel::Variables items = variables;
+	mergeNewVariables( items );
+	return items;
+}
+
+bool pEnvironmentVariablesManager::removeUnmodifiedVariables( pEnvironmentVariablesModel::Variables& variables ) const
+{
+	const pEnvironmentVariablesModel::Variables sysVariables = pEnvironmentVariablesModel::stringListToVariables( QProcess::systemEnvironment() );
+	bool modified = false;
+	
+	foreach ( const pEnvironmentVariablesModel::Variable& variable, variables )
+	{
+		if ( !variable.enabled )
+		{
+			continue;
+		}
+		
+		if ( sysVariables.contains( variable.name ) && variable.value == sysVariables[ variable.name ].value )
+		{
+			variables.remove( variable.name );
+			modified = true;
+		}
+	}
+	
+	return modified;
+}
+
+pEnvironmentVariablesModel::Variables pEnvironmentVariablesManager::removeUnmodifiedVariables( const pEnvironmentVariablesModel::Variables& variables ) const
+{
+	pEnvironmentVariablesModel::Variables items = variables;
+	removeUnmodifiedVariables( items );
+	return items;
 }
 
 QStringList pEnvironmentVariablesManager::variables( bool keepDisabled ) const
