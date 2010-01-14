@@ -173,11 +173,14 @@ void SearchWidget::setMode( SearchAndReplace::Mode mode )
 	mSearchThread->stop();
 	mReplaceThread->stop();
 	
+	bool currentDocumentOnly = false;
+	
 	// clear search results if needed.
 	switch ( mode )
 	{
 		case SearchAndReplace::ModeSearch:
 		case SearchAndReplace::ModeReplace:
+			currentDocumentOnly = true;
 			break;
 		default:
 			mSearchThread->clear();
@@ -186,7 +189,7 @@ void SearchWidget::setMode( SearchAndReplace::Mode mode )
 
 	mMode = mode;
 	
-	initializeProperties();
+	initializeProperties( currentDocumentOnly );
 	
 	if ( mMode & SearchAndReplace::ModeFlagProjectFiles )
 	{
@@ -537,7 +540,7 @@ void SearchWidget::updateComboBoxes()
 	}
 }
 
-void SearchWidget::initializeProperties()
+void SearchWidget::initializeProperties( bool currentDocumentOnly )
 {
 	const QMap<QString, QStringList> suffixes = pMonkeyStudio::availableLanguagesSuffixes();
 	const QStringList keys = suffixes.keys();
@@ -589,15 +592,20 @@ void SearchWidget::initializeProperties()
 			mProperties.options |= option;
 		}
 	}
+	
+	// update project
+	mProperties.project = mProperties.project ? mProperties.project->topLevelProject() : 0;
+	
+	if ( currentDocumentOnly )
+	{
+		return;
+	}
 
 	// update opened files
 	foreach ( pAbstractChild* document, MonkeyCore::workspace()->documents() )
 	{
 		mProperties.openedFiles[ document->filePath() ] = document->fileBuffer();
 	}
-
-	// update project
-	mProperties.project = mProperties.project ? mProperties.project->topLevelProject() : 0;
 
 	// update sources files
 	mProperties.sourcesFiles = mProperties.project ? mProperties.project->topLevelProjectSourceFiles() : QStringList();
@@ -781,7 +789,7 @@ void SearchWidget::replaceThread_error( const QString& error )
 
 void SearchWidget::search_textChanged()
 {
-	initializeProperties();
+	initializeProperties( true );
 	
 	// clear search results if needed.
 	switch ( mMode )
@@ -799,14 +807,14 @@ void SearchWidget::search_textChanged()
 void SearchWidget::on_pbPrevious_clicked()
 {
 	updateComboBoxes();
-	initializeProperties();
+	initializeProperties( true );
 	searchFile( false, false );
 }
 
 void SearchWidget::on_pbNext_clicked()
 {
 	updateComboBoxes();
-	initializeProperties();
+	initializeProperties( true );
 	searchFile( true, false );
 }
 
@@ -814,7 +822,7 @@ void SearchWidget::on_pbSearch_clicked()
 {
 	setState( SearchWidget::Search, SearchWidget::Normal );
 	updateComboBoxes();
-	initializeProperties();
+	initializeProperties( false );
 	
 	if ( mProperties.searchText.isEmpty() )
 	{
@@ -839,14 +847,14 @@ void SearchWidget::on_pbSearchStop_clicked()
 void SearchWidget::on_pbReplace_clicked()
 {
 	updateComboBoxes();
-	initializeProperties();
+	initializeProperties( true );
 	replaceFile( false );
 }
 
 void SearchWidget::on_pbReplaceAll_clicked()
 {
 	updateComboBoxes();
-	initializeProperties();
+	initializeProperties( true );
 	replaceFile( true );
 }
 
@@ -858,7 +866,7 @@ void SearchWidget::on_pbReplaceChecked_clicked()
 	Q_ASSERT( model );
 
 	updateComboBoxes();
-	initializeProperties();
+	initializeProperties( false );
 	
 	if ( mProperties.mode & SearchAndReplace::ModeFlagProjectFiles && !mProperties.project )
 	{

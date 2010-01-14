@@ -47,7 +47,7 @@ QVariant SearchResultsModel::data( const QModelIndex& index, int role ) const
 			// index is a root parent child
 			else
 			{
-				text = tr( "Line: %1, Column: %2 (offset %3) %4" ).arg( result->position.y() +1 ).arg( result->position.x() ).arg( result->offset ).arg( result->capture );
+				text = tr( "Line: %1, Column: %2: %3" ).arg( result->position.y() +1 ).arg( result->position.x() ).arg( result->capture );
 			}
 
 			return text;

@@ -59,7 +59,7 @@ protected:
 	void updateLabels();
 	void updateWidgets();
 	void updateComboBoxes();
-	void initializeProperties();
+	void initializeProperties( bool currentDocumentOnly );
 	void showMessage( const QString& status );
 	void setState( SearchWidget::InputField field, SearchWidget::State state );
 	bool searchFile( bool forward, bool incremental );
