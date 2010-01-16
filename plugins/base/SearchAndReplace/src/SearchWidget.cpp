@@ -37,6 +37,7 @@ SearchWidget::SearchWidget( QWidget* parent )
 	pbReplaceCheckedStop->setVisible( false );
 	
 	mProgress = new QProgressBar( this );
+	mProgress->setAlignment( Qt::AlignCenter );
 	mProgress->setToolTip( tr( "Search in progress..." ) );
 	mProgress->setMaximumSize( QSize( 80, 16 ) );
 	MonkeyCore::mainWindow()->statusBar()->addPermanentWidget( mProgress );

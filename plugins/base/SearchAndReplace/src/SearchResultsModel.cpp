@@ -329,6 +329,7 @@ void SearchResultsModel::thread_reset()
 	{
 		qDeleteAll( results );
 	}
+	
 	mResults.clear();
 	qDeleteAll( mParents );
 	mParents.clear();

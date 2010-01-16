@@ -215,7 +215,7 @@ QString SearchThread::fileContent( const QString& fileName ) const
 
 void SearchThread::search( const QString& fileName, const QString& content ) const
 {
-	static QRegExp eolRx( "(?:\\n)" );
+	static const QString eol( "\n" );
 	bool checkable = false;
 	QRegExp rx;
 
@@ -239,7 +239,8 @@ void SearchThread::search( const QString& fileName, const QString& content ) con
 	}
 
 	int pos = 0;
-	int lastEol = 0;
+	int lastPos = 0;
+	int eolCount = 0;
 	SearchResultsModel::ResultList results;
 	QTime tracker;
 
@@ -247,21 +248,21 @@ void SearchThread::search( const QString& fileName, const QString& content ) con
 
 	while ( ( pos = rx.indexIn( content, pos ) ) != -1 )
 	{
-		const int eolStart = content.left( pos ).lastIndexOf( eolRx );
-		const int eolEnd = content.indexOf( eolRx, pos );
-		const QString capture = content.mid( eolStart, eolEnd -eolStart ).simplified();
-		const int line = content.left( eolEnd ).count( eolRx );
+		const int eolStart = content.lastIndexOf( eol, pos );
+		const int eolEnd = content.indexOf( eol, pos );
+		const QString capture = content.mid( eolStart +1, eolEnd -1 -eolStart -1 ).simplified();
+		eolCount += content.mid( lastPos, pos -lastPos ).count( eol );
 		const int column = ( pos -eolStart ) -( eolStart != 0 ? 1 : 0 );
 		SearchResultsModel::Result* result = new SearchResultsModel::Result( fileName, capture );
-		result->position = QPoint( column, line );
+		result->position = QPoint( column, eolCount );
 		result->offset = pos;
 		result->checkable = checkable;
 		result->checkState = checkable ? Qt::Checked : Qt::Unchecked;
 
 		results << result;
 
+		lastPos = pos;
 		pos += rx.matchedLength();
-		lastEol = eolEnd;
 
 		if ( tracker.elapsed() >= mMaxTime )
 		{
@@ -299,6 +300,7 @@ void SearchThread::run()
 		}
 
 		emit reset();
+		emit progressChanged( -1, 0 );
 		tracker.restart();
 
 		QStringList files = getFilesToScan();
