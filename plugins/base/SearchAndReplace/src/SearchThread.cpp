@@ -250,7 +250,7 @@ void SearchThread::search( const QString& fileName, const QString& content ) con
 	{
 		const int eolStart = content.lastIndexOf( eol, pos );
 		const int eolEnd = content.indexOf( eol, pos );
-		const QString capture = content.mid( eolStart +1, eolEnd -1 -eolStart -1 ).simplified();
+		const QString capture = content.mid( eolStart +1, eolEnd -1 -eolStart ).simplified();
 		eolCount += content.mid( lastPos, pos -lastPos ).count( eol );
 		const int column = ( pos -eolStart ) -( eolStart != 0 ? 1 : 0 );
 		SearchResultsModel::Result* result = new SearchResultsModel::Result( fileName, capture );
