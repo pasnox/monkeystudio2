@@ -5,7 +5,7 @@
 #include <QTime>
 #include <QDebug>
 
-int SearchThread::mMaxTime = 250;
+int SearchThread::mMaxTime = 125;
 
 SearchThread::SearchThread( QObject* parent )
 	: QThread( parent )

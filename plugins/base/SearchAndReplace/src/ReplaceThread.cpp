@@ -6,7 +6,7 @@
 #include <QTime>
 #include <QDebug>
 
-int ReplaceThread::mMaxTime = 250;
+int ReplaceThread::mMaxTime = 125;
 
 ReplaceThread::ReplaceThread( QObject* parent )
 	: QThread( parent )

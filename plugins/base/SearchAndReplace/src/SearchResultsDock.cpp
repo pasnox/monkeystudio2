@@ -6,6 +6,7 @@
 #include <pMonkeyStudio.h>
 #include <MonkeyCore.h>
 #include <pFileManager.h>
+#include <pDockWidgetTitleBar.h>
 
 #include <QHBoxLayout>
 #include <QTreeView>
@@ -20,6 +21,16 @@ SearchResultsDock::SearchResultsDock( SearchThread* searchThread, QWidget* paren
 	setObjectName( metaObject()->className() );
 	setWindowTitle( tr( "Search Results" ) );
 	setWindowIcon( pIconManager::icon( "SearchAndReplace.png", ":/icons" ) );
+	
+	// actions
+	// clear action
+	QAction* aClear = new QAction( tr( "Clear results list" ), this );
+	aClear->setIcon( pIconManager::icon( "clear-list.png", ":/icons" ) );
+	aClear->setToolTip( aClear->text() );
+	titleBar()->addAction( aClear, 0 );
+	
+	// add separator
+	titleBar()->addSeparator( 1 );
 
 	QWidget* widget = new QWidget( this );
 	mModel = new SearchResultsModel( searchThread, this );
@@ -39,6 +50,7 @@ SearchResultsDock::SearchResultsDock( SearchThread* searchThread, QWidget* paren
 	pMonkeyStudio::setMacSmallSize( this, true, true );
 
 	// connections
+	connect( aClear, SIGNAL( triggered() ), mModel, SLOT( clear() ) );
 	connect( mModel, SIGNAL( firstResultsAvailable() ), this, SLOT( show() ) );
 	connect( mView, SIGNAL( activated( const QModelIndex& ) ), this, SLOT( view_activated( const QModelIndex& ) ) );
 }

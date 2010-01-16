@@ -323,8 +323,15 @@ const QList<SearchResultsModel::ResultList>& SearchResultsModel::results() const
 	return mResults;
 }
 
-void SearchResultsModel::thread_reset()
+void SearchResultsModel::clear()
 {
+	if ( mRowCount == 0 )
+	{
+		return;
+	}
+	
+	beginRemoveRows( QModelIndex(), 0, mRowCount -1 );
+	
 	foreach ( const SearchResultsModel::ResultList& results, mResults )
 	{
 		qDeleteAll( results );
@@ -335,7 +342,13 @@ void SearchResultsModel::thread_reset()
 	mParents.clear();
 	mParentsList.clear();
 	mRowCount = 0;
-	emit reset();
+	
+	endRemoveRows();
+}
+
+void SearchResultsModel::thread_reset()
+{
+	clear();
 }
 
 void SearchResultsModel::thread_resultsAvailable( const QString& fileName, const SearchResultsModel::ResultList& results )

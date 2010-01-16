@@ -50,19 +50,12 @@ SearchWidget::SearchWidget( QWidget* parent )
 	mDock = 0;
 	
 	// mode actions
-	const int height = cbSearch->height() -4;
-	QRect rect( QPoint(), QSize( height, height ) );
-	rect.moveCenter( cbSearch->rect().center() );
-	rect.moveLeft( 2 );
-	
-	tbMode = new QToolButton( cbSearch );
-	tbMode->installEventFilter( this );
+	tbMode = new QToolButton( cbSearch->lineEdit() );
+	tbMode->setIcon( pIconManager::icon( "misc.png" ) );
 	tbMode->setPopupMode( QToolButton::InstantPopup );
-	tbMode->setMenu( MonkeyCore::mainWindow()->menuBar()->menu( "mEdit/mSearchReplace" ) );
-	tbMode->setGeometry( rect );
-	
-	QLineEdit* lineEdit = cbSearch->lineEdit();
-	lineEdit->setContentsMargins( tbMode->width() -5, 0, 0, 0 );
+	tbMode->setMenu( MonkeyCore::menuBar()->menu( "mEdit/mSearchReplace" ) );
+	tbMode->setCursor( Qt::ArrowCursor );
+	tbMode->installEventFilter( this );
 
 	// options actions
 	QAction* action;
@@ -391,14 +384,19 @@ bool SearchWidget::eventFilter( QObject* object, QEvent* event )
 {
 	if ( event->type() == QEvent::Paint )
 	{
-		const QIcon icon = pIconManager::icon( "misc.png" );
-		QRect rect = tbMode->rect();
+		QLineEdit* lineEdit = cbSearch->lineEdit();
+		lineEdit->setContentsMargins( lineEdit->height(), 0, 0, 0 );
 		
-		rect.setSize( rect.size() -QSize( 8, 8 ) );
-		rect.moveCenter( tbMode->rect().center() );
+		const int height = lineEdit->height();
+		const QRect availableRect( 0, 0, height, height );
+		
+		if ( tbMode->rect() != availableRect )
+		{
+			tbMode->setGeometry( availableRect );
+		}
 		
 		QPainter painter( tbMode );
-		icon.paint( &painter, rect );
+		tbMode->icon().paint( &painter, availableRect );
 		
 		return true;
 	}

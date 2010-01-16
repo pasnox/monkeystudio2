@@ -15,7 +15,7 @@ void SearchAndReplace::fillPluginInfos()
 	mPluginInfos.Author = "Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>, Andrei KOPATS aka hlamer <hlamer@tut.by>";
 	mPluginInfos.Type = BasePlugin::iBase;
 	mPluginInfos.Name = PLUGIN_NAME;
-	mPluginInfos.Version = "0.5.0";
+	mPluginInfos.Version = "1.0.0";
 	mPluginInfos.FirstStartEnabled = true;
 	mPluginInfos.HaveSettingsWidget = false;
 	mPluginInfos.Pixmap = pIconManager::pixmap( "SearchAndReplace.png", ":/icons" );

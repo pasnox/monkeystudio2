@@ -79,6 +79,9 @@ protected:
 	mutable QList<SearchResultsModel::ResultList> mResults; // parents children
 	SearchThread* mSearchThread;
 
+public slots:
+	void clear();
+
 protected slots:
 	void thread_reset();
 	void thread_resultsAvailable( const QString& fileName, const SearchResultsModel::ResultList& results );
