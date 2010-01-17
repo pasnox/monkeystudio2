@@ -29,6 +29,8 @@
 #include <pWorkspace.h>
 #include <pQueuedMessageToolBar.h>
 #include <pStylesToolButton.h>
+#include <pMenuBar.h>
+#include <pDockToolBar.h>
 
 #include <QPluginLoader>
 

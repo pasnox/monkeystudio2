@@ -5,6 +5,8 @@
 
 class QHelpEngine;
 class QtAssistantInlineSearch;
+class QToolButton;
+class QComboBox;
 
 class QtAssistantChild : public pAbstractChild
 {

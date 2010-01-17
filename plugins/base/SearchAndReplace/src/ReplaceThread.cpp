@@ -1,4 +1,5 @@
 #include "ReplaceThread.h"
+#include "SearchWidget.h"
 
 #include <QMutexLocker>
 #include <QTextCodec>
@@ -20,7 +21,7 @@ ReplaceThread::~ReplaceThread()
 	wait();
 }
 
-void ReplaceThread::replace( const SearchWidget::Properties& properties, const QHash<QString, SearchResultsModel::ResultList>& results )
+void ReplaceThread::replace( const SearchAndReplace::Properties& properties, const QHash<QString, SearchResultsModel::ResultList>& results )
 {
 	{
 		QMutexLocker locker( &mMutex );
@@ -90,6 +91,11 @@ QString ReplaceThread::fileContent( const QString& fileName ) const
 	QFile file( fileName );
 	
 	if ( !file.open( QIODevice::ReadOnly ) )
+	{
+		return QString::null;
+	}
+	
+	if ( SearchWidget::isBinary( file ) )
 	{
 		return QString::null;
 	}

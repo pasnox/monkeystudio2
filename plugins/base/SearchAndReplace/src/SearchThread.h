@@ -16,14 +16,14 @@ public:
 	SearchThread( QObject* parent = 0 );
 	virtual ~SearchThread();
 	
-	void search( const SearchWidget::Properties& properties );
+	void search( const SearchAndReplace::Properties& properties );
 	void stop();
 	
-	SearchWidget::Properties* properties() const;
+	SearchAndReplace::Properties* properties() const;
 
 protected:
 	static int mMaxTime;
-	SearchWidget::Properties mProperties;
+	SearchAndReplace::Properties mProperties;
 	QMutex mMutex;
 	bool mReset;
 	bool mExit;
@@ -40,6 +40,7 @@ public slots:
 signals:
 	void reset();
 	void resultsAvailable( const QString& fileName, const SearchResultsModel::ResultList& results );
+	void progressChanged( int value, int total );
 };
 
 #endif // SEARCHTHREAD_H

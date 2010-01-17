@@ -3,37 +3,20 @@
 
 #include "ui_SearchWidget.h"
 #include "SearchAndReplace.h"
+#include "SearchResultsModel.h"
+
+#include <QFile>
 
 class SearchThread;
 class ReplaceThread;
 class SearchResultsDock;
+class QProgressBar;
 
 class SearchWidget : public QFrame, public Ui::SearchWidget
 {
 	Q_OBJECT
 
 public:
-	struct Properties
-	{
-		Properties()
-		{
-			mode = SearchAndReplace::ModeNo;
-			options = SearchAndReplace::OptionNo;
-			project = 0;
-		}
-
-		QString searchText;
-		QString replaceText;
-		QString searchPath;
-		SearchAndReplace::Mode mode;
-		QStringList mask;
-		QString codec;
-		SearchAndReplace::Options options;
-		QMap<QString, QString> openedFiles; // filename, content
-		class XUPProjectItem* project;
-		QStringList sourcesFiles;
-	};
-
 	enum InputField
 	{
 		Search,
@@ -54,24 +37,29 @@ public:
 	SearchThread* searchThread() const;
 
 	void setResultsDock( SearchResultsDock* dock );
+	
+	static bool isBinary( QFile& file );
 
 public slots:
 	void setMode( SearchAndReplace::Mode mode );
 
 protected:
 	SearchAndReplace::Mode mMode;
-	QMap<SearchAndReplace::Mode, QAction*> mModeActions;
 	QMap<SearchAndReplace::Option, QAction*> mOptionActions;
-	SearchWidget::Properties mProperties;
+	SearchAndReplace::Properties mProperties;
 	SearchThread* mSearchThread;
 	ReplaceThread* mReplaceThread;
 	SearchResultsDock* mDock;
+	QToolButton* tbMode;
+	QProgressBar* mProgress;
 
+	virtual bool eventFilter( QObject* object, QEvent* event );
 	virtual void keyPressEvent( QKeyEvent* event );
 
 	void updateLabels();
 	void updateWidgets();
-	void initializeProperties();
+	void updateComboBoxes();
+	void initializeProperties( bool currentDocumentOnly );
 	void showMessage( const QString& status );
 	void setState( SearchWidget::InputField field, SearchWidget::State state );
 	bool searchFile( bool forward, bool incremental );
@@ -79,11 +67,11 @@ protected:
 
 protected slots:
 	void searchThread_stateChanged();
+	void searchThread_progressChanged( int value, int total );
 	void replaceThread_stateChanged();
 	void replaceThread_openedFileHandled( const QString& fileName, const QString& content, const QString& codec );
 	void replaceThread_error( const QString& error );
 	void search_textChanged();
-	void groupMode_triggered( QAction* action );
 	void on_pbPrevious_clicked();
 	void on_pbNext_clicked();
 	void on_pbSearch_clicked();
@@ -92,6 +80,7 @@ protected slots:
 	void on_pbReplaceAll_clicked();
 	void on_pbReplaceChecked_clicked();
 	void on_pbReplaceCheckedStop_clicked();
+	void on_pbGoUp_clicked();
 	void on_pbBrowse_clicked();
 };
 

@@ -3,8 +3,7 @@
 
 #include <QAbstractItemModel>
 #include <QFileInfo>
-
-#include "SearchWidget.h"
+#include <QPoint>
 
 class SearchThread;
 
@@ -76,14 +75,20 @@ public:
 protected:
 	int mRowCount;
 	mutable QHash<QString, SearchResultsModel::Result*> mParents; // fileName, result
-	mutable QList<SearchResultsModel::Result*> mParentsList; // ordered parents
+	mutable SearchResultsModel::ResultList mParentsList; // ordered parents
 	mutable QList<SearchResultsModel::ResultList> mResults; // parents children
 	SearchThread* mSearchThread;
+
+public slots:
+	void clear();
 
 protected slots:
 	void thread_reset();
 	void thread_resultsAvailable( const QString& fileName, const SearchResultsModel::ResultList& results );
 	void thread_resultsHandled( const QString& fileName, const SearchResultsModel::ResultList& results );
+
+signals:
+	void firstResultsAvailable();
 };
 
 #endif // SEARCHRESULTSMODEL_H

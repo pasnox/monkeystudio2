@@ -6,6 +6,7 @@
 #include <QTimer>
 #include <QDesktopServices>
 #include <QWebHistory>
+#include <QWheelEvent>
 
 class HelpNetworkReply : public QNetworkReply
 {

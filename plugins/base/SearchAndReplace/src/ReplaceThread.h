@@ -4,6 +4,7 @@
 #include <QThread>
 #include <QMutex>
 
+#include "SearchAndReplace.h"
 #include "SearchResultsModel.h"
 
 class ReplaceThread : public QThread
@@ -14,12 +15,12 @@ public:
 	ReplaceThread( QObject* parent = 0 );
 	virtual ~ReplaceThread();
 	
-	void replace( const SearchWidget::Properties& properties, const QHash<QString, SearchResultsModel::ResultList>& results );
+	void replace( const SearchAndReplace::Properties& properties, const QHash<QString, SearchResultsModel::ResultList>& results );
 	void stop();
 
 protected:
 	static int mMaxTime;
-	SearchWidget::Properties mProperties;
+	SearchAndReplace::Properties mProperties;
 	QHash<QString, SearchResultsModel::ResultList> mResults;
 	QMutex mMutex;
 	bool mReset;

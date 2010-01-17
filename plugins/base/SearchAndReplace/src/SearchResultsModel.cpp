@@ -47,7 +47,7 @@ QVariant SearchResultsModel::data( const QModelIndex& index, int role ) const
 			// index is a root parent child
 			else
 			{
-				text = tr( "Line: %1, Column: %2 (offset %3) %4" ).arg( result->position.y() +1 ).arg( result->position.x() ).arg( result->offset ).arg( result->capture );
+				text = tr( "Line: %1, Column: %2: %3" ).arg( result->position.y() +1 ).arg( result->position.x() ).arg( result->capture );
 			}
 
 			return text;
@@ -130,7 +130,7 @@ int SearchResultsModel::rowCount( const QModelIndex& parent ) const
 Qt::ItemFlags SearchResultsModel::flags( const QModelIndex& index ) const
 {
 	Qt::ItemFlags flags = QAbstractItemModel::flags( index );
-	SearchWidget::Properties* properties = mSearchThread->properties();
+	SearchAndReplace::Properties* properties = mSearchThread->properties();
 
 	if ( properties->mode & SearchAndReplace::ModeFlagReplace )
 	{
@@ -323,24 +323,43 @@ const QList<SearchResultsModel::ResultList>& SearchResultsModel::results() const
 	return mResults;
 }
 
-void SearchResultsModel::thread_reset()
+void SearchResultsModel::clear()
 {
+	if ( mRowCount == 0 )
+	{
+		return;
+	}
+	
+	beginRemoveRows( QModelIndex(), 0, mRowCount -1 );
+	
 	foreach ( const SearchResultsModel::ResultList& results, mResults )
 	{
 		qDeleteAll( results );
 	}
+	
 	mResults.clear();
 	qDeleteAll( mParents );
 	mParents.clear();
 	mParentsList.clear();
 	mRowCount = 0;
-	emit reset();
+	
+	endRemoveRows();
+}
+
+void SearchResultsModel::thread_reset()
+{
+	clear();
 }
 
 void SearchResultsModel::thread_resultsAvailable( const QString& fileName, const SearchResultsModel::ResultList& results )
 {
+	if ( mRowCount == 0 )
+	{
+		emit firstResultsAvailable();
+	}
+	
 	SearchResultsModel::Result* result = mParents[ fileName ];
-	SearchWidget::Properties* properties = mSearchThread->properties();
+	SearchAndReplace::Properties* properties = mSearchThread->properties();
 
 	if ( !result )
 	{

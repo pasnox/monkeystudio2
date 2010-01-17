@@ -33,6 +33,7 @@
 #include <QFileInfo>
 #include <QTextCodec>
 #include <QShortcut>
+#include <QMenu>
 #include <QDebug>
 
 #include <MonkeyExport.h>

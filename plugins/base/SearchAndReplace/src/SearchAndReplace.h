@@ -44,6 +44,27 @@ public:
 	};
 
 	Q_DECLARE_FLAGS( Options, Option );
+	
+	struct Properties
+	{
+		Properties()
+		{
+			mode = SearchAndReplace::ModeNo;
+			options = SearchAndReplace::OptionNo;
+			project = 0;
+		}
+
+		QString searchText;
+		QString replaceText;
+		QString searchPath;
+		SearchAndReplace::Mode mode;
+		QStringList mask;
+		QString codec;
+		SearchAndReplace::Options options;
+		QMap<QString, QString> openedFiles; // filename, content
+		class XUPProjectItem* project;
+		QStringList sourcesFiles;
+	};
 
 protected:
 	QPointer<SearchWidget> mWidget;
@@ -57,6 +78,12 @@ protected:
 protected slots:
 	void searchFile_triggered();
 	void replaceFile_triggered();
+	void searchDirectory_triggered();
+	void replaceDirectory_triggered();
+	void searchProjectFiles_triggered();
+	void replaceProjectFiles_triggered();
+	void searchOpenedFiles_triggered();
+	void replaceOpenedFiles_triggered();
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS( SearchAndReplace::Options )

@@ -43,6 +43,8 @@ class QFileSystemWatcher;
 class QTimer;
 class QVBoxLayout;
 class pOpenedFileExplorer;
+class QActionGroup;
+class QToolBar;
 
 class Q_MONKEY_EXPORT pWorkspace : public QFrame
 {

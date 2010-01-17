@@ -4,6 +4,7 @@
 #include "SearchResultsDock.h"
 
 #include <MonkeyCore.h>
+#include <pIconManager.h>
 #include <UIMain.h>
 #include <pFileManager.h>
 #include <XUPProjectItem.h>
@@ -17,6 +18,9 @@
 #include <QFileDialog>
 #include <QCompleter>
 #include <QDirModel>
+#include <QPainter>
+#include <QStatusBar>
+#include <QProgressBar>
 
 SearchWidget::SearchWidget( QWidget* parent )
 	: QFrame( parent )
@@ -24,53 +28,60 @@ SearchWidget::SearchWidget( QWidget* parent )
 	setupUi( this );
 	cbSearch->completer()->setCaseSensitivity( Qt::CaseSensitive );
 	cbReplace->completer()->setCaseSensitivity( Qt::CaseSensitive );
-	cbPath->lineEdit()->setCompleter( new QCompleter( new QDirModel( this ) ) );
+	QDirModel* fsModel = new QDirModel( this );
+	fsModel->setFilter( QDir::AllDirs | QDir::NoDotAndDotDot );
+	cbPath->lineEdit()->setCompleter( new QCompleter( fsModel ) );
 #warning QDirModel is deprecated but QCompleter does not yet handle QFileSystemModel - please update when possible.
 	cbMask->completer()->setCaseSensitivity( Qt::CaseSensitive );
 	pbSearchStop->setVisible( false );
 	pbReplaceCheckedStop->setVisible( false );
+	
+	mProgress = new QProgressBar( this );
+	mProgress->setAlignment( Qt::AlignCenter );
+	mProgress->setToolTip( tr( "Search in progress..." ) );
+	mProgress->setMaximumSize( QSize( 80, 16 ) );
+	MonkeyCore::mainWindow()->statusBar()->addPermanentWidget( mProgress );
+	mProgress->setVisible( false );
 
 	// threads
 	mSearchThread = new SearchThread( this );
 	mReplaceThread = new ReplaceThread( this );
 
 	mDock = 0;
-
+	
 	// mode actions
-	QMenu* menuMode = new QMenu( pbMode );
-	QActionGroup* groupMode = new QActionGroup( menuMode );
-
-	mModeActions[ SearchAndReplace::ModeSearch ] = menuMode->addAction( tr( "&Search in File" ) );
-	mModeActions[ SearchAndReplace::ModeReplace ] = menuMode->addAction( tr( "&Replace in File" ) );
-	mModeActions[ SearchAndReplace::ModeSearchDirectory ] = menuMode->addAction( tr( "Search in &Directory" ) );
-	mModeActions[ SearchAndReplace::ModeReplaceDirectory ] = menuMode->addAction( tr( "Repla&ce in Directory" ) );
-	mModeActions[ SearchAndReplace::ModeSearchProjectFiles ] = menuMode->addAction( tr( "Search in &Project" ) );
-	mModeActions[ SearchAndReplace::ModeReplaceProjectFiles ] = menuMode->addAction( tr( "R&eplace in Project" ) );
-	mModeActions[ SearchAndReplace::ModeSearchOpenedFiles ] = menuMode->addAction( tr( "Search in &Opened Files" ) );
-	mModeActions[ SearchAndReplace::ModeReplaceOpenedFiles ] = menuMode->addAction( tr( "Replace in Opened &Files" ) );
-
-	foreach ( QAction* action, menuMode->actions() )
-	{
-		action->setCheckable( true );
-		groupMode->addAction( action );
-	}
-
-	pbMode->setMenu( menuMode );
+	tbMode = new QToolButton( cbSearch->lineEdit() );
+	tbMode->setIcon( pIconManager::icon( "misc.png" ) );
+	tbMode->setPopupMode( QToolButton::InstantPopup );
+	tbMode->setMenu( MonkeyCore::menuBar()->menu( "mEdit/mSearchReplace" ) );
+	tbMode->setCursor( Qt::ArrowCursor );
+	tbMode->installEventFilter( this );
 
 	// options actions
-	QMenu* menuOptions = new QMenu( pbOptions );
+	QAction* action;
 
-	mOptionActions[ SearchAndReplace::OptionCaseSensitive ] = menuOptions->addAction( tr( "&Case Sensitive" ) );
-	mOptionActions[ SearchAndReplace::OptionWholeWord ] = menuOptions->addAction( tr( "&Whole Word" ) );
-	mOptionActions[ SearchAndReplace::OptionWrap ] = menuOptions->addAction( tr( "Wra&p" ) );
-	mOptionActions[ SearchAndReplace::OptionRegularExpression ] = menuOptions->addAction( tr( "&Regular Expression" ) );
-
-	foreach ( QAction* action, menuOptions->actions() )
-	{
-		action->setCheckable( true );
-	}
-
-	pbOptions->setMenu( menuOptions );
+	action = new QAction( cbCaseSensitive );
+	action->setCheckable( true );
+	connect( cbCaseSensitive, SIGNAL( toggled( bool ) ), action, SLOT( setChecked( bool ) ) );
+	mOptionActions[ SearchAndReplace::OptionCaseSensitive ] = action;
+	
+	action = new QAction( cbWholeWord );
+	action->setCheckable( true );
+	connect( cbWholeWord, SIGNAL( toggled( bool ) ), action, SLOT( setChecked( bool ) ) );
+	mOptionActions[ SearchAndReplace::OptionWholeWord ] = action;
+	
+	action = new QAction( cbWrap );
+	action->setCheckable( true );
+	connect( cbWrap, SIGNAL( toggled( bool ) ), action, SLOT( setChecked( bool ) ) );
+	mOptionActions[ SearchAndReplace::OptionWrap ] = action;
+	
+	action = new QAction( cbRegularExpression );
+	action->setCheckable( true );
+	connect( cbRegularExpression, SIGNAL( toggled( bool ) ), action, SLOT( setChecked( bool ) ) );
+	mOptionActions[ SearchAndReplace::OptionRegularExpression ] = action;
+	
+	// init default options
+	cbWrap->setChecked( true );
 
 	// mac
 	pMonkeyStudio::showMacFocusRect( this, false, true );
@@ -101,10 +112,9 @@ SearchWidget::SearchWidget( QWidget* parent )
 
 	// connections
 	connect( cbSearch->lineEdit(), SIGNAL( textEdited( const QString& ) ), this, SLOT( search_textChanged() ) );
-	connect( groupMode, SIGNAL( triggered( QAction* ) ), this, SLOT( groupMode_triggered( QAction* ) ) );
-	connect( cbSearch->lineEdit(), SIGNAL( textChanged( const QString& ) ), mSearchThread, SLOT( clear() ) );
 	connect( mSearchThread, SIGNAL( started() ), this, SLOT( searchThread_stateChanged() ) );
 	connect( mSearchThread, SIGNAL( finished() ), this, SLOT( searchThread_stateChanged() ) );
+	connect( mSearchThread, SIGNAL( progressChanged( int, int ) ), this, SLOT( searchThread_progressChanged( int, int ) ) );
 	connect( mReplaceThread, SIGNAL( started() ), this, SLOT( replaceThread_stateChanged() ) );
 	connect( mReplaceThread, SIGNAL( finished() ), this, SLOT( replaceThread_stateChanged() ) );
 	connect( mReplaceThread, SIGNAL( openedFileHandled( const QString&, const QString&, const QString& ) ), this, SLOT( replaceThread_openedFileHandled( const QString&, const QString&, const QString& ) ) );
@@ -117,6 +127,7 @@ SearchWidget::~SearchWidget()
 {
 	delete mSearchThread;
 	delete mReplaceThread;
+	delete mProgress;
 }
 
 SearchAndReplace::Mode SearchWidget::mode() const
@@ -142,23 +153,66 @@ void SearchWidget::setResultsDock( SearchResultsDock* dock )
 	connect( mReplaceThread, SIGNAL( resultsHandled( const QString&, const SearchResultsModel::ResultList& ) ), mDock->model(), SLOT( thread_resultsHandled( const QString&, const SearchResultsModel::ResultList& ) ) );
 }
 
+bool SearchWidget::isBinary( QFile& file )
+{
+	const qint64 position = file.pos();
+	file.seek( 0 );
+	const bool binary = file.read( 1024 ).contains( '\0' );
+	file.seek( position );
+	return binary;
+}
+
 void SearchWidget::setMode( SearchAndReplace::Mode mode )
 {
 	mSearchThread->stop();
 	mReplaceThread->stop();
+	
+	bool currentDocumentOnly = false;
+	
+	// clear search results if needed.
+	switch ( mode )
+	{
+		case SearchAndReplace::ModeSearch:
+		case SearchAndReplace::ModeReplace:
+			currentDocumentOnly = true;
+			break;
+		default:
+			mSearchThread->clear();
+			break;
+	}
 
 	mMode = mode;
-	mModeActions[ mMode ]->setChecked( true );
+	
+	initializeProperties( currentDocumentOnly );
+	
+	if ( mMode & SearchAndReplace::ModeFlagProjectFiles )
+	{
+		if ( mProperties.project )
+		{
+			const QString codec = mProperties.project->temporaryValue( "codec", pMonkeyStudio::defaultCodec() ).toString();
+			
+			mProperties.codec = codec;
+			cbCodec->setCurrentIndex( cbCodec->findText( codec ) );
+		}
+	}
+	
+	Q_ASSERT( !mProperties.codec.isEmpty() );
 
 	pAbstractChild* document = MonkeyCore::workspace()->currentDocument();
 	pEditor* editor = document ? document->editor() : 0;
+	const QString path = mProperties.project ? mProperties.project->path() : QDir::currentPath();
+	const QString searchPath = document ? QFileInfo( document->filePath() ).absolutePath() : path;
 	const QString searchText = editor ? editor->selectedText() : QString::null;
 
 	setVisible( mode != SearchAndReplace::ModeNo );
 
 	if ( isVisible() )
 	{
-		cbSearch->setEditText( searchText );
+		if ( !searchText.isEmpty() )
+		{
+			cbSearch->setEditText( searchText );
+		}
+		
 		cbSearch->lineEdit()->selectAll();
 
 		if ( mode & SearchAndReplace::ModeFlagSearch )
@@ -168,6 +222,11 @@ void SearchWidget::setMode( SearchAndReplace::Mode mode )
 		else
 		{
 			cbReplace->setFocus();
+		}
+		
+		if ( mode & SearchAndReplace::ModeFlagDirectory )
+		{
+			cbPath->setEditText( searchPath );
 		}
 	}
 
@@ -319,7 +378,30 @@ void SearchWidget::setMode( SearchAndReplace::Mode mode )
 
 	updateLabels();
 	updateWidgets();
-	initializeProperties();
+}
+
+bool SearchWidget::eventFilter( QObject* object, QEvent* event )
+{
+	if ( event->type() == QEvent::Paint )
+	{
+		QLineEdit* lineEdit = cbSearch->lineEdit();
+		lineEdit->setContentsMargins( lineEdit->height(), 0, 0, 0 );
+		
+		const int height = lineEdit->height();
+		const QRect availableRect( 0, 0, height, height );
+		
+		if ( tbMode->rect() != availableRect )
+		{
+			tbMode->setGeometry( availableRect );
+		}
+		
+		QPainter painter( tbMode );
+		tbMode->icon().paint( &painter, availableRect );
+		
+		return true;
+	}
+	
+	return QWidget::eventFilter( object, event );
 }
 
 void SearchWidget::keyPressEvent( QKeyEvent* event )
@@ -416,7 +498,48 @@ void SearchWidget::updateWidgets()
 	wPathRight->setMinimumWidth( width );
 }
 
-void SearchWidget::initializeProperties()
+void SearchWidget::updateComboBoxes()
+{
+	const QString searchText = cbSearch->currentText();
+	const QString replaceText = cbReplace->currentText();
+	const QString maskText = cbMask->currentText();
+	int index;
+	
+	// search
+	if ( !searchText.isEmpty() )
+	{
+		index = cbSearch->findText( searchText );
+		
+		if ( index == -1 )
+		{
+			cbSearch->addItem( searchText );
+		}
+	}
+	
+	// replace
+	if ( !replaceText.isEmpty() )
+	{
+		index = cbReplace->findText( replaceText );
+		
+		if ( index == -1 )
+		{
+			cbReplace->addItem( replaceText );
+		}
+	}
+	
+	// mask
+	if ( !maskText.isEmpty() )
+	{
+		index = cbMask->findText( maskText );
+		
+		if ( index == -1 )
+		{
+			cbMask->addItem( maskText );
+		}
+	}
+}
+
+void SearchWidget::initializeProperties( bool currentDocumentOnly )
 {
 	const QMap<QString, QStringList> suffixes = pMonkeyStudio::availableLanguagesSuffixes();
 	const QStringList keys = suffixes.keys();
@@ -451,6 +574,12 @@ void SearchWidget::initializeProperties()
 			mProperties.mask << part;
 		}
 	}
+	
+	// set default mask if needed
+	if ( mProperties.mask.isEmpty() )
+	{
+		mProperties.mask << "*";
+	}
 
 	// update options
 	foreach ( const SearchAndReplace::Option& option, mOptionActions.keys() )
@@ -462,15 +591,20 @@ void SearchWidget::initializeProperties()
 			mProperties.options |= option;
 		}
 	}
+	
+	// update project
+	mProperties.project = mProperties.project ? mProperties.project->topLevelProject() : 0;
+	
+	if ( currentDocumentOnly )
+	{
+		return;
+	}
 
 	// update opened files
 	foreach ( pAbstractChild* document, MonkeyCore::workspace()->documents() )
 	{
 		mProperties.openedFiles[ document->filePath() ] = document->fileBuffer();
 	}
-
-	// update project
-	mProperties.project = mProperties.project ? mProperties.project->topLevelProject() : 0;
 
 	// update sources files
 	mProperties.sourcesFiles = mProperties.project ? mProperties.project->topLevelProjectSourceFiles() : QStringList();
@@ -618,6 +752,13 @@ void SearchWidget::searchThread_stateChanged()
 {
 	pbSearchStop->setVisible( mSearchThread->isRunning() );
 	updateWidgets();
+	mProgress->setVisible( mSearchThread->isRunning() );
+}
+
+void SearchWidget::searchThread_progressChanged( int value, int total )
+{
+	mProgress->setValue( value );
+	mProgress->setMaximum( total );
 }
 
 void SearchWidget::replaceThread_stateChanged()
@@ -647,31 +788,53 @@ void SearchWidget::replaceThread_error( const QString& error )
 
 void SearchWidget::search_textChanged()
 {
-	initializeProperties();
-	searchFile( true, true );
-}
-
-void SearchWidget::groupMode_triggered( QAction* action )
-{
-	setMode( mModeActions.key( action ) );
+	initializeProperties( true );
+	
+	// clear search results if needed.
+	switch ( mMode )
+	{
+		case SearchAndReplace::ModeSearch:
+			searchFile( true, true );
+		case SearchAndReplace::ModeReplace:
+			break;
+		default:
+			mSearchThread->clear();
+			break;
+	}
 }
 
 void SearchWidget::on_pbPrevious_clicked()
 {
-	initializeProperties();
+	updateComboBoxes();
+	initializeProperties( true );
 	searchFile( false, false );
 }
 
 void SearchWidget::on_pbNext_clicked()
 {
-	initializeProperties();
+	updateComboBoxes();
+	initializeProperties( true );
 	searchFile( true, false );
 }
 
 void SearchWidget::on_pbSearch_clicked()
 {
 	setState( SearchWidget::Search, SearchWidget::Normal );
-	initializeProperties();
+	updateComboBoxes();
+	initializeProperties( false );
+	
+	if ( mProperties.searchText.isEmpty() )
+	{
+		MonkeyCore::messageManager()->appendMessage( tr( "You can't search for NULL text." ), 0 );
+		return;
+	}
+	
+	if ( mProperties.mode & SearchAndReplace::ModeFlagProjectFiles && !mProperties.project )
+	{
+		MonkeyCore::messageManager()->appendMessage( tr( "You can't search in project files because there is no opened projet." ), 0 );
+		return;
+	}
+	
 	mSearchThread->search( mProperties );
 }
 
@@ -682,13 +845,15 @@ void SearchWidget::on_pbSearchStop_clicked()
 
 void SearchWidget::on_pbReplace_clicked()
 {
-	initializeProperties();
+	updateComboBoxes();
+	initializeProperties( true );
 	replaceFile( false );
 }
 
 void SearchWidget::on_pbReplaceAll_clicked()
 {
-	initializeProperties();
+	updateComboBoxes();
+	initializeProperties( true );
 	replaceFile( true );
 }
 
@@ -699,7 +864,14 @@ void SearchWidget::on_pbReplaceChecked_clicked()
 
 	Q_ASSERT( model );
 
-	initializeProperties();
+	updateComboBoxes();
+	initializeProperties( false );
+	
+	if ( mProperties.mode & SearchAndReplace::ModeFlagProjectFiles && !mProperties.project )
+	{
+		MonkeyCore::messageManager()->appendMessage( tr( "You can't replace in project files because there is no opened projet." ), 0 );
+		return;
+	}
 
 	foreach ( const SearchResultsModel::ResultList& results, model->results() )
 	{
@@ -723,6 +895,20 @@ void SearchWidget::on_pbReplaceChecked_clicked()
 void SearchWidget::on_pbReplaceCheckedStop_clicked()
 {
 	mReplaceThread->stop();
+}
+
+void SearchWidget::on_pbGoUp_clicked()
+{
+	QDir dir( cbPath->currentText() );
+	
+	if ( !dir.exists() )
+	{
+		return;
+	}
+	
+	dir.cdUp();
+	
+	cbPath->setEditText( dir.absolutePath() );
 }
 
 void SearchWidget::on_pbBrowse_clicked()
