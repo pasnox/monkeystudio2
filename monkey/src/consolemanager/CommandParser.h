@@ -77,7 +77,7 @@ protected:
 	QList <Pattern> mPatterns;
 	
 	QString replaceWithMatch(QRegExp&, QString);
-	static QString parserCommandImplementation( const QString& command, const QStringList& arguments, int* status, class MkSShellInterpreter* interpreter );
+	static QString parserCommandImplementation( const QString& command, const QStringList& arguments, int* status, class MkSShellInterpreter* interpreter, void* data );
 	
 public:
 	CommandParser(QObject* parent, const QString& name);

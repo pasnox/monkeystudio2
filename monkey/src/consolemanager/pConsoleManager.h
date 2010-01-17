@@ -37,9 +37,9 @@
 #define PCONSOLEMANAGER_H
 
 #include <MonkeyExport.h>
-#include <pEnvironmentVariablesManager.h>
 
 #include "pCommand.h"
+#include "EnvironmentVariablesManager.h"
 
 #include <QProcess>
 #include <QBuffer>
@@ -90,7 +90,7 @@ public:
 	inline pCommand currentCommand() const { return mCommands.value( 0 ); }
 	inline QStringList parsersName() const { return mParsers.keys(); }
 	inline QAction* stopAction() const { return mStopAction; }
-	inline pEnvironmentVariablesManager* environmentVariablesManager() const { return &mEnvironmentVariablesManager; }
+	inline EnvironmentVariablesManager* environmentVariablesManager() const { return &mEnvironmentVariablesManager; }
 	
 	void addParser( AbstractCommandParser* );
 	void removeParser( AbstractCommandParser* );
@@ -113,7 +113,7 @@ protected:
 	QHash<QString, AbstractCommandParser*> mParsers;
 	QAction* mStopAction;
 	int mStopAttempt;
-	mutable pEnvironmentVariablesManager mEnvironmentVariablesManager;
+	mutable EnvironmentVariablesManager mEnvironmentVariablesManager;
 
 	pConsoleManager( QObject* = 0 );
 	~pConsoleManager();

@@ -83,7 +83,7 @@ QStringList GNUMake::availableParsers() const
 }
 
 AbstractCommandParser* GNUMake::getParser( const QString& name )
-{ return 0; } /* FIXME */
+{ Q_UNUSED( name ); return 0; } /* FIXME */
 
 pCommand GNUMake::defaultBuildCommand() const
 {

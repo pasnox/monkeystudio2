@@ -99,7 +99,7 @@ protected:
 	pAbbreviationList mAbbreviations;
 	
 	void initialize();
-	static QString commandInterpreter( const QString& command, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter );
+	static QString commandInterpreter( const QString& command, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter, void* data );
 };
 
 #endif // PABBREVIATIONSMANAGER_H

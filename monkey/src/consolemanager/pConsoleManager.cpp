@@ -59,24 +59,22 @@ pConsoleManager::pConsoleManager( QObject* o )
 {
 	pActionsManager* am = MonkeyCore::actionsManager();
 	am->setPathPartTranslation( "Console Manager", tr( "Console Manager" ) );
+	
 #ifndef Q_OS_MAC
 	mStopAction = MonkeyCore::actionsManager()->newAction( "Console Manager", tr( "Pause" ), "aStopAction" );
 #else
 	mStopAction = MonkeyCore::actionsManager()->newAction( "Console Manager", tr( "Alt+End" ), "aStopAction" );
 #endif
 	mStopAction->setIcon( QIcon( ":/console/icons/console/stop.png" ) );
-	mStopAction->setText( tr( "Stop current command" ) );
-	mStopAction->setToolTip( tr( "Stop current command" ) );
-	mStopAction->setStatusTip( tr( "Stop current command" ) );
-
-	// set status tip for
-	mStopAction->setStatusTip( tr( "Stop the currently running command" ) );
+	mStopAction->setText( tr( "Stop the currenttly running command" ) );
+	mStopAction->setToolTip( mStopAction->text() );
+	mStopAction->setStatusTip( mStopAction->text() );
 	mStopAction->setEnabled( false );
+	
 	// mixe channels
 	setReadChannelMode( QProcess::MergedChannels );
+	
 	// connections
-
-	// :-/
 	connect( this, SIGNAL( error( QProcess::ProcessError ) ), this, SLOT( error( QProcess::ProcessError ) ) );
 
 	connect( this, SIGNAL( finished( int, QProcess::ExitStatus ) ), this, SLOT( finished( int, QProcess::ExitStatus ) ) );

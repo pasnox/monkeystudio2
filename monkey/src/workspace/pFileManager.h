@@ -47,13 +47,13 @@ class Q_MONKEY_EXPORT pFileManager : public QObject
 
 public:
 	// associations related members
-	void clear( const QString& type = QString::null );
-	void add( const QString& type, const QStringList& suffixes );
-	void add( const QString& type, const QString& suffix );
-	void set( const QString& type, const QStringList& suffixes );
-	void set( const QString& type, const QString& suffix );
-	void remove( const QString& type, const QStringList& suffixes );
-	void remove( const QString& type, const QString& suffix );
+	void clearCommand( const QString& type = QString::null );
+	void addCommand( const QString& type, const QStringList& suffixes );
+	void addCommand( const QString& type, const QString& suffix );
+	void setCommand( const QString& type, const QStringList& suffixes );
+	void setCommand( const QString& type, const QString& suffix );
+	void removeCommand( const QString& type, const QStringList& suffixes );
+	void removeCommand( const QString& type, const QString& suffix );
 	const QMap<QString, QStringList>& associations() const;
 	QStringList associations( const QString& type ) const;
 	void generateScript();
@@ -80,8 +80,8 @@ protected:
 	
 	pFileManager( QObject* parent = 0 );
 	
-	void initialize();
-	static QString commandInterpreter( const QString& command, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter );
+	void initializeInterpreterCommands();
+	static QString commandInterpreter( const QString& command, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter, void* data );
 
 public slots:
 	pAbstractChild* openFile( const QString& fileName, const QString& codec );

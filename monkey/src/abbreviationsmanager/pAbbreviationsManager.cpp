@@ -58,13 +58,14 @@ void pAbbreviationsManager::initialize()
 		"\tabbreviation clear"
 	);
 	
-	MonkeyCore::interpreter()->addCommandImplementation( "abbreviation", pAbbreviationsManager::commandInterpreter, help );
+	MonkeyCore::interpreter()->addCommandImplementation( "abbreviation", pAbbreviationsManager::commandInterpreter, help, this );
 }
 
-QString pAbbreviationsManager::commandInterpreter( const QString& command, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter )
+QString pAbbreviationsManager::commandInterpreter( const QString& command, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter, void* data )
 {
 	Q_UNUSED( command );
 	Q_UNUSED( interpreter );
+	pAbbreviationsManager* manager = static_cast<pAbbreviationsManager*>( data );
 	const QStringList allowedOperations = QStringList( "add" ) << "del" << "show" << "list" << "clear";
 	
 	if ( result )
@@ -111,7 +112,7 @@ QString pAbbreviationsManager::commandInterpreter( const QString& command, const
 		const QString language = arguments.at( 3 );
 		const QString snippet = QString( arguments.at( 4 ) ).replace( "\\n", "\n" );
 		
-		MonkeyCore::abbreviationsManager()->add( pAbbreviation( macro, description, language, snippet ) );
+		manager->add( pAbbreviation( macro, description, language, snippet ) );
 	}
 	
 	if ( operation == "del" )
@@ -129,7 +130,7 @@ QString pAbbreviationsManager::commandInterpreter( const QString& command, const
 		const QString macro = arguments.at( 1 );
 		const QString language = arguments.at( 2 );
 		
-		MonkeyCore::abbreviationsManager()->remove( macro, language );
+		manager->remove( macro, language );
 	}
 	
 	if ( operation == "show" )
@@ -146,7 +147,7 @@ QString pAbbreviationsManager::commandInterpreter( const QString& command, const
 		
 		const QString macro = arguments.at( 1 );
 		const QString language = arguments.at( 2 );
-		const pAbbreviation abbreviation = MonkeyCore::abbreviationsManager()->abbreviation( macro, language );
+		const pAbbreviation abbreviation = manager->abbreviation( macro, language );
 		
 		if ( abbreviation.Macro.isEmpty() )
 		{
@@ -176,7 +177,7 @@ QString pAbbreviationsManager::commandInterpreter( const QString& command, const
 		const QString language = arguments.at( 1 );
 		QStringList output;
 		
-		foreach ( const pAbbreviation& abbreviation, MonkeyCore::abbreviationsManager()->abbreviations() )
+		foreach ( const pAbbreviation& abbreviation, manager->abbreviations() )
 		{
 			if ( abbreviation.Language == language )
 			{
@@ -208,7 +209,7 @@ QString pAbbreviationsManager::commandInterpreter( const QString& command, const
 			return MkSShellInterpreter::tr( "'clear' operation take no arguments, %1 given." ).arg( arguments.count() -1 );
 		}
 		
-		MonkeyCore::abbreviationsManager()->clear();
+		manager->clear();
 	}
 	
 	return QString::null;

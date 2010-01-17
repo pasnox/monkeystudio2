@@ -38,6 +38,7 @@
 #include <MonkeyExport.h>
 
 #include <QStringList>
+#include <QVariant>
 
 class XUPProjectItem;
 

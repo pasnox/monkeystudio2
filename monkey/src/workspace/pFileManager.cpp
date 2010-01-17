@@ -41,7 +41,7 @@
 pFileManager::pFileManager( QObject* o )
 	: QObject( o )
 {
-	initialize();
+	initializeInterpreterCommands();
 	
 	// files
 	connect( MonkeyCore::workspace(), SIGNAL( documentOpened( pAbstractChild* ) ), this, SIGNAL( documentOpened( pAbstractChild* ) ) );
@@ -58,7 +58,7 @@ pFileManager::pFileManager( QObject* o )
 	connect( MonkeyCore::projectsManager(), SIGNAL( currentProjectChanged( XUPProjectItem*, XUPProjectItem* ) ), this, SIGNAL( currentChanged( XUPProjectItem*, XUPProjectItem* ) ) );
 }
 
-void pFileManager::initialize()
+void pFileManager::initializeInterpreterCommands()
 {
 	// register command
 	QString help = MkSShellInterpreter::tr
@@ -72,13 +72,14 @@ void pFileManager::initialize()
 		"\tassociation clear [type] -- If type is missing, all suffixes will be cleared."
 	);
 	
-	MonkeyCore::interpreter()->addCommandImplementation( "association", pFileManager::commandInterpreter, help );
+	MonkeyCore::interpreter()->addCommandImplementation( "association", pFileManager::commandInterpreter, help, this );
 }
 
-QString pFileManager::commandInterpreter( const QString& command, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter )
+QString pFileManager::commandInterpreter( const QString& command, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter, void* data )
 {
 	Q_UNUSED( command );
 	Q_UNUSED( interpreter );
+	pFileManager* manager = static_cast<pFileManager*>( data );
 	const QStringList allowedOperations = QStringList( "add" ) << "set" << "del" << "list" << "clear";
 	
 	if ( result )
@@ -123,7 +124,7 @@ QString pFileManager::commandInterpreter( const QString& command, const QStringL
 		const QString type = arguments.at( 1 );
 		const QStringList suffixes = arguments.at( 2 ).split( ",", QString::SkipEmptyParts );
 		
-		MonkeyCore::fileManager()->add( type, suffixes );
+		manager->addCommand( type, suffixes );
 	}
 	
 	if ( operation == "set" )
@@ -141,7 +142,7 @@ QString pFileManager::commandInterpreter( const QString& command, const QStringL
 		const QString type = arguments.at( 1 );
 		const QStringList suffixes = arguments.at( 2 ).split( ",", QString::SkipEmptyParts );
 		
-		MonkeyCore::fileManager()->set( type, suffixes );
+		manager->setCommand( type, suffixes );
 	}
 	
 	if ( operation == "del" )
@@ -159,7 +160,7 @@ QString pFileManager::commandInterpreter( const QString& command, const QStringL
 		const QString type = arguments.at( 1 );
 		const QStringList suffixes = arguments.at( 2 ).split( ",", QString::SkipEmptyParts );
 		
-		MonkeyCore::fileManager()->remove( type, suffixes );
+		manager->removeCommand( type, suffixes );
 	}
 	
 	if ( operation == "list" )
@@ -179,16 +180,16 @@ QString pFileManager::commandInterpreter( const QString& command, const QStringL
 		
 		if ( type.isNull() )
 		{
-			foreach ( const QString& ctype, MonkeyCore::fileManager()->associations().keys() )
+			foreach ( const QString& ctype, manager->associations().keys() )
 			{
 				output << QString( "%1:" ).arg( ctype );
-				output << QString( "\t%1" ).arg( MonkeyCore::fileManager()->associations( ctype ).join( ", " ) );
+				output << QString( "\t%1" ).arg( manager->associations( ctype ).join( ", " ) );
 			}
 		}
 		else
 		{
 			output << QString( "%1:" ).arg( type );
-			output << QString( "\t%1" ).arg( MonkeyCore::fileManager()->associations( type ).join( ", " ) );
+			output << QString( "\t%1" ).arg( manager->associations( type ).join( ", " ) );
 		}
 		
 		if ( !output.isEmpty() )
@@ -217,13 +218,13 @@ QString pFileManager::commandInterpreter( const QString& command, const QStringL
 		
 		const QString type = arguments.value( 1 );
 		
-		MonkeyCore::fileManager()->clear( type );
+		manager->clearCommand( type );
 	}
 	
 	return QString::null;
 }
 
-void pFileManager::clear( const QString& type )
+void pFileManager::clearCommand( const QString& type )
 {
 	if ( type.isNull() )
 	{
@@ -235,7 +236,7 @@ void pFileManager::clear( const QString& type )
 	}
 }
 
-void pFileManager::add( const QString& type, const QStringList& suffixes )
+void pFileManager::addCommand( const QString& type, const QStringList& suffixes )
 {
 	foreach ( const QString& suffix, suffixes )
 	{
@@ -248,23 +249,23 @@ void pFileManager::add( const QString& type, const QStringList& suffixes )
 	}
 }
 
-void pFileManager::add( const QString& type, const QString& suffix )
+void pFileManager::addCommand( const QString& type, const QString& suffix )
 {
-	add( type, QStringList( suffix ) );
+	addCommand( type, QStringList( suffix ) );
 }
 
-void pFileManager::set( const QString& type, const QStringList& suffixes )
+void pFileManager::setCommand( const QString& type, const QStringList& suffixes )
 {
-	clear( type );
-	add( type, suffixes );
+	clearCommand( type );
+	addCommand( type, suffixes );
 }
 
-void pFileManager::set( const QString& type, const QString& suffix )
+void pFileManager::setCommand( const QString& type, const QString& suffix )
 {
-	set( type, QStringList( suffix ) );
+	setCommand( type, QStringList( suffix ) );
 }
 
-void pFileManager::remove( const QString& type, const QStringList& suffixes )
+void pFileManager::removeCommand( const QString& type, const QStringList& suffixes )
 {
 	QStringList result = associations( type );
 	
@@ -277,7 +278,7 @@ void pFileManager::remove( const QString& type, const QStringList& suffixes )
 	
 	if ( result.isEmpty() )
 	{
-		clear( type );
+		clearCommand( type );
 	}
 	else
 	{
@@ -285,9 +286,9 @@ void pFileManager::remove( const QString& type, const QStringList& suffixes )
 	}
 }
 
-void pFileManager::remove( const QString& type, const QString& suffix )
+void pFileManager::removeCommand( const QString& type, const QString& suffix )
 {
-	remove( type, QStringList( suffix ) );
+	removeCommand( type, QStringList( suffix ) );
 }
 
 const QMap<QString, QStringList>& pFileManager::associations() const

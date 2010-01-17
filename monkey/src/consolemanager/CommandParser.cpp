@@ -51,9 +51,10 @@
 #endif
 
 //! Implementation for 'parser' MkS scripting interface command
-QString CommandParser::parserCommandImplementation( const QString& command, const QStringList& arguments, int* status, class MkSShellInterpreter* interpreter )
+QString CommandParser::parserCommandImplementation( const QString& command, const QStringList& arguments, int* status, class MkSShellInterpreter* interpreter, void* data )
 {
 	Q_UNUSED( interpreter );
+	Q_UNUSED( data );
 	CommandParser::Pattern pattern;
 	
 	if (9 != arguments.size())
@@ -146,7 +147,7 @@ void CommandParser::installParserCommand()
 						"\tparser add <name> <regular expression> <file name> <column> <row> <pattern type> <pattern text> <full text>\n"
 						"\tparser remove <name> <regular expression>\n" );
 	
-	MkSShellInterpreter::instance()->addCommandImplementation( "parser", parserCommandImplementation, help );
+	MkSShellInterpreter::instance()->addCommandImplementation( "parser", parserCommandImplementation, help, 0 );
 }
 
 CommandParser::CommandParser(QObject* parent, const QString& name):
