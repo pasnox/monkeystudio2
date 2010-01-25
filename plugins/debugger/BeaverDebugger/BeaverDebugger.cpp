@@ -312,7 +312,7 @@ BeaverDebugger::TryFindResult BeaverDebugger::tryFindBeaver() const
 {
 	QProcess beaver(NULL);
 	beaver.start(mBeaverPath, QStringList() << "--version");
-	beaver.waitForFinished(200);
+	beaver.waitForFinished(1000);
 	if (beaver.state() != QProcess::NotRunning) // hmm, strange
 	{
 		beaver.close();
