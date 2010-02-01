@@ -163,6 +163,7 @@ void MessageBoxDocks::appendStep( const pConsoleManagerStep& step )
 
 	// restore selection/scroll
 	mBuildStep->lvBuildSteps->scrollTo( selectedIndex.isValid() ? selectedIndex : mStepModel->index( step ) );
+	#warning this is causing the freeze
 }
 
 void MessageBoxDocks::appendSteps( const pConsoleManagerStepList& steps )
