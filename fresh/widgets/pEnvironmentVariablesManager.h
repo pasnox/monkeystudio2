@@ -6,6 +6,8 @@
 class pEnvironmentVariablesManager
 {	
 public:
+	virtual ~pEnvironmentVariablesManager();
+	
 	bool load();
 	bool save();
 	
