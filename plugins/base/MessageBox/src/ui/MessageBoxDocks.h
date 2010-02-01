@@ -48,6 +48,8 @@
 #include <fresh.h>
 #include <pConsoleManager.h>
 
+class pConsoleManagerStepModel;
+
 /*!
 	Implementation of Build Steps tab of Message box
 */
@@ -58,8 +60,8 @@ public:
 		: pDockWidget( parent )
 	{
 		setupUi( this );
-		lwBuildSteps->setAttribute( Qt::WA_MacShowFocusRect, false );
-		lwBuildSteps->setAttribute( Qt::WA_MacSmallSize );
+		lvBuildSteps->setAttribute( Qt::WA_MacShowFocusRect, false );
+		lvBuildSteps->setAttribute( Qt::WA_MacSmallSize );
 	}
 };
 
@@ -119,26 +121,29 @@ protected:
 	UIBuildStep* mBuildStep;
 	UIOutput* mOutput;
 	UICommand* mCommand;
+	pConsoleManagerStepModel* mStepModel;
 
 public slots:
 	void appendOutput( const QString& );
 	void appendLog( const QString& );
 	void appendInBox( const QString&, const QColor& = Qt::red );
-	void appendStep( const pConsoleManager::Step& );
+	void appendStep( const pConsoleManagerStep& step );
+	void appendSteps( const pConsoleManagerStepList& steps );
 	void showBuild();
 	void showOutput();
 	void showLog();
+	void showNextWarning();
 	void showNextError();
 
 protected slots:
-	void lwBuildSteps_itemActivated( QListWidgetItem* );
+	void lvBuildSteps_activated( const QModelIndex& index );
 	void cbRawCommand_returnPressed();
-	void commandError( const pCommand&, QProcess::ProcessError );
-	void commandFinished( const pCommand&, int, QProcess::ExitStatus );
-	void commandReadyRead( const pCommand&, const QByteArray& );
-	void commandStarted( const pCommand& );
-	void commandStateChanged( const pCommand&, QProcess::ProcessState );
-	void commandSkipped( const pCommand& );
+	void commandError( const pCommand& command, QProcess::ProcessError error );
+	void commandFinished( const pCommand& command, int exitCode, QProcess::ExitStatus exitStatus );
+	void commandReadyRead( const pCommand& command, const QByteArray& data );
+	void commandStarted( const pCommand& command );
+	void commandStateChanged( const pCommand& command, QProcess::ProcessState state );
+	void commandSkipped( const pCommand& command );
 };
 
 #endif // MESSAGEBOXDOCKS_H

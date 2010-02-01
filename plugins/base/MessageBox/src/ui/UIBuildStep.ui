@@ -26,7 +26,11 @@
      <number>5</number>
     </property>
     <item>
-     <widget class="QListWidget" name="lwBuildSteps"/>
+     <widget class="QListView" name="lvBuildSteps">
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

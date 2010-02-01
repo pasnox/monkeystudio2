@@ -32,6 +32,7 @@
 #include <pFileManager.h>
 #include <XUPProjectItem.h>
 #include <UIXUPFindFiles.h>
+#include <pConsoleManagerStepModel.h>
 
 #include <QDebug>
 
@@ -50,6 +51,8 @@ MessageBoxDocks::MessageBoxDocks( QObject* parent )
 	mBuildStep = new UIBuildStep;
 	mOutput = new UIOutput;
 	mCommand = new UICommand;
+	mStepModel = new pConsoleManagerStepModel( this );
+	mBuildStep->lvBuildSteps->setModel( mStepModel );
 
 	// set defaultshortcuts
 	pActionsManager::setDefaultShortcut( mBuildStep->toggleViewAction(), QKeySequence( "F9" ) );
@@ -57,7 +60,7 @@ MessageBoxDocks::MessageBoxDocks( QObject* parent )
 	pActionsManager::setDefaultShortcut( mCommand->toggleViewAction(), QKeySequence( "F11" ) );
 
 	// connections
-	connect( mBuildStep->lwBuildSteps, SIGNAL( itemActivated( QListWidgetItem* ) ), this, SLOT( lwBuildSteps_itemActivated( QListWidgetItem* ) ) );
+	connect( mBuildStep->lvBuildSteps, SIGNAL( activated( const QModelIndex& ) ), this, SLOT( lvBuildSteps_activated( const QModelIndex& ) ) );
 	connect( mOutput->cbRawCommand->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( cbRawCommand_returnPressed() ) );
 	connect( MonkeyCore::consoleManager(), SIGNAL( commandError( const pCommand&, QProcess::ProcessError ) ), this, SLOT( commandError( const pCommand&, QProcess::ProcessError ) ) );
 	connect( MonkeyCore::consoleManager(), SIGNAL( commandFinished( const pCommand&, int, QProcess::ExitStatus ) ), this, SLOT( commandFinished( const pCommand&, int, QProcess::ExitStatus ) ) );
@@ -65,7 +68,8 @@ MessageBoxDocks::MessageBoxDocks( QObject* parent )
 	connect( MonkeyCore::consoleManager(), SIGNAL( commandStarted( const pCommand& ) ), this, SLOT( commandStarted( const pCommand& ) ) );
 	connect( MonkeyCore::consoleManager(), SIGNAL( commandStateChanged( const pCommand&, QProcess::ProcessState ) ), this, SLOT( commandStateChanged( const pCommand&, QProcess::ProcessState ) ) );
 	connect( MonkeyCore::consoleManager(), SIGNAL( commandSkipped( const pCommand& ) ), this, SLOT( commandSkipped( const pCommand& ) ) );
-	connect( MonkeyCore::consoleManager(), SIGNAL( newStepAvailable( const pConsoleManager::Step& ) ), this, SLOT( appendStep( const pConsoleManager::Step& ) ) );
+	connect( MonkeyCore::consoleManager(), SIGNAL( newStepAvailable( const pConsoleManagerStep& ) ), this, SLOT( appendStep( const pConsoleManagerStep& ) ) );
+	connect( MonkeyCore::consoleManager(), SIGNAL( newStepsAvailable( const pConsoleManagerStepList& ) ), this, SLOT( appendSteps( const pConsoleManagerStepList& ) ) );
 }
 
 /*!
@@ -149,109 +153,21 @@ void MessageBoxDocks::appendInBox( const QString& s, const QColor& c )
 	Append build step to Build Steps dock
 	\param s Build step to append
 */
-void MessageBoxDocks::appendStep( const pConsoleManager::Step& s )
+void MessageBoxDocks::appendStep( const pConsoleManagerStep& step )
 {
-	// remember current selection
-	QListWidgetItem* selItem = mBuildStep->lwBuildSteps->selectedItems().value( 0 );
-
-	// get last type
-	pConsoleManager::StepType t = pConsoleManager::stUnknown;
-	QListWidgetItem* lastIt = mBuildStep->lwBuildSteps->item( mBuildStep->lwBuildSteps->count() -1 );
-
-	if ( lastIt )
-	{
-		t = ( pConsoleManager::StepType )lastIt->data( Qt::UserRole +1 ).toInt();
-	}
-
-	// create new/update item
-	QListWidgetItem* it;
-
-	switch ( t )
-	{
-		case pConsoleManager::stCompiling:
-			if ( s.mType == pConsoleManager::stWarning || s.mType == pConsoleManager::stError )
-			{   // move down
-				lastIt = mBuildStep->lwBuildSteps->takeItem( mBuildStep->lwBuildSteps->count() -1 );
-				it = new QListWidgetItem( mBuildStep->lwBuildSteps );
-				mBuildStep->lwBuildSteps->addItem( lastIt );
-			}
-			else
-			{
-				it = lastIt; /* overwrite */
-			}
-			break;
-		default:
-			it = new QListWidgetItem( mBuildStep->lwBuildSteps );
-			break;
-	}
-
-	// set item infos
-	it->setText( s.mText );
-	it->setToolTip( s.mFullText );
-	it->setData( Qt::UserRole +1, s.mType ); // type
-	it->setData( Qt::UserRole +2, s.mFileName ); // filename
-	it->setData( Qt::UserRole +3, s.mPosition ); // position
-
-	// if item is finish, need calculate error, warning
-	if ( s.mType == pConsoleManager::stFinish )
-	{
-		if ( s.mText.isNull() )
-		{ //No own text
-			// count error, warning
-			int e = 0, w = 0;
-			for ( int i = 0; i < mBuildStep->lwBuildSteps->count() -1; i++ )
-			{
-				lastIt = mBuildStep->lwBuildSteps->item( i );
-				if ( lastIt->data( Qt::UserRole +1 ).toInt() == pConsoleManager::stError )
-					e++;
-				if ( lastIt->data( Qt::UserRole +1 ).toInt() == pConsoleManager::stWarning )
-					w++;
-			}
-			it->setData( Qt::UserRole +1, e ? pConsoleManager::stBad : pConsoleManager::stGood );
-			it->setText( tr( "Command terminated, error(s): %1, warning(s): %2" ).arg( e ).arg( w ) );
-		}
-		else //own text present
-		{
-			it->setData( Qt::UserRole +1,pConsoleManager::stBad );
-			it->setText( s.mText );
-		}
-	}
-
-	// set icon and color
-	switch ( it->data( Qt::UserRole +1 ).toInt() )
-	{
-		case pConsoleManager::stError:
-			it->setIcon( QIcon( ":/icons/error.png" ) );
-			it->setBackground( QColor( 255, 0, 0, 20 ) );
-			break;
-		case pConsoleManager::stWarning:
-			it->setIcon( QIcon( ":/icons/warning.png" ) );
-			it->setBackground( QColor( 0, 255, 0, 20 ) );
-			break;
-		case pConsoleManager::stCompiling:
-			it->setIcon( QIcon( ":/icons/clock.png" ) );
-			it->setBackground( QColor( 0, 0, 255, 20 ) );
-			break;
-		case pConsoleManager::stGood:
-			it->setIcon( QIcon( ":/icons/warning.png" ) );
-			it->setBackground( QColor( 0, 255, 0, 90 ) );
-			break;
-		case pConsoleManager::stBad:
-			it->setIcon( QIcon( ":/icons/error.png" ) );
-			it->setBackground( QColor( 255, 0, 0, 90 ) );
-			break;
-		case pConsoleManager::stFinish:
-			it->setBackground( QColor( 65, 65, 65, 20 ) );
-			break;
-		default:
-			it->setIcon( QIcon() );
-			it->setBackground( QColor( 125, 125, 125, 20 ) );
-			break;
-	}
+	// backup selection
+	const QModelIndex selectedIndex = mBuildStep->lvBuildSteps->selectionModel()->selectedIndexes().value( 0 );
+	
+	// update steps
+	mStepModel->appendStep( step );
 
 	// restore selection/scroll
-	selItem = selItem ? selItem : it;
-	mBuildStep->lwBuildSteps->scrollToItem( selItem );
+	mBuildStep->lvBuildSteps->scrollTo( selectedIndex.isValid() ? selectedIndex : mStepModel->index( step ) );
+}
+
+void MessageBoxDocks::appendSteps( const pConsoleManagerStepList& steps )
+{
+	mStepModel->appendSteps( steps );
 }
 
 /*!
@@ -285,22 +201,49 @@ void MessageBoxDocks::showLog()
 }
 
 /*!
+	Show next warning on Build Steps dock
+*/
+void MessageBoxDocks::showNextWarning()
+{
+	const QModelIndex selectedIndex = mBuildStep->lvBuildSteps->selectionModel()->selectedIndexes().value( 0 );
+	const QModelIndex index = mStepModel->nextWarning( selectedIndex );
+	
+	if ( !index.isValid() )
+	{
+		return;
+	}
+	
+	// show it if need
+	if ( !mBuildStep->isVisible() )
+	{
+		mBuildStep->show();
+	}
+	
+	mBuildStep->lvBuildSteps->setCurrentIndex( index );
+	lvBuildSteps_activated( index );
+}
+
+/*!
 	Show next error on Build Steps dock
 */
 void MessageBoxDocks::showNextError()
 {
+	const QModelIndex selectedIndex = mBuildStep->lvBuildSteps->selectionModel()->selectedIndexes().value( 0 );
+	const QModelIndex index = mStepModel->nextError( selectedIndex );
+	
+	if ( !index.isValid() )
+	{
+		return;
+	}
+	
 	// show it if need
 	if ( !mBuildStep->isVisible() )
-		mBuildStep->show();
-	// find next step item
-	int i = mBuildStep->lwBuildSteps->currentRow () +1 ;
-	while ( i < mBuildStep->lwBuildSteps->count() && mBuildStep->lwBuildSteps->item( i )->data( Qt::UserRole +2 ).toString().isEmpty() )
-		i++;
-	if ( i < mBuildStep->lwBuildSteps->count() ) //finded item with setted file name
 	{
-		mBuildStep->lwBuildSteps->setCurrentRow( i );
-		lwBuildSteps_itemActivated( mBuildStep->lwBuildSteps->item( i ) );
+		mBuildStep->show();
 	}
+	
+	mBuildStep->lvBuildSteps->setCurrentIndex( index );
+	lvBuildSteps_activated( index );
 }
 
 /*!
@@ -310,10 +253,11 @@ void MessageBoxDocks::showNextError()
 	If there are more than one file, which possible are target file, (same name,
 	but different path) - user will asked, which file should be opened
 */
-void MessageBoxDocks::lwBuildSteps_itemActivated( QListWidgetItem* it )
+void MessageBoxDocks::lvBuildSteps_activated( const QModelIndex& index )
 {
 	// get filename
-	QString fn = it->data( Qt::UserRole +2 ).toString();
+	const pConsoleManagerStep itemStep = mStepModel->step( index );
+	QString fn = itemStep.roleValue( pConsoleManagerStep::FileNameRole ).toString();
 	qDebug() << "fn " << fn;
 
 	// cancel if no file
@@ -384,9 +328,10 @@ void MessageBoxDocks::lwBuildSteps_itemActivated( QListWidgetItem* it )
 
 	if ( QFile::exists( fn ) )
 	{
-		QString codec = project ? project->temporaryValue( "codec" ).toString() : pMonkeyStudio::defaultCodec();
-		qWarning() << "point" << it->data( Qt::UserRole +3 ).toPoint();
-		MonkeyCore::fileManager()->goToLine( fn, it->data( Qt::UserRole +3 ).toPoint(), codec );
+		const QString codec = project ? project->temporaryValue( "codec" ).toString() : pMonkeyStudio::defaultCodec();
+		const QPoint position = itemStep.roleValue( pConsoleManagerStep::PositionRole ).toPoint();
+		qWarning() << "point" << position;
+		MonkeyCore::fileManager()->goToLine( fn, position, codec );
 	}
 }
 
@@ -465,15 +410,17 @@ void MessageBoxDocks::commandFinished( const pCommand& c, int exitCode, QProcess
 
 	// appendOutput to console log
 	appendInBox( colourText( s, Qt::blue ), Qt::red );
+	
+	pConsoleManagerStep::Data data;
+	data[ pConsoleManagerStep::TypeRole ] = pConsoleManagerStep::Finish;
+	
 	// add finish step
-	if (exitCode == 0)
-		appendStep( pConsoleManager::Step( pConsoleManager::stFinish ) );
-	else
+	if (exitCode != 0)
 	{
-		pConsoleManager::Step st ( pConsoleManager::stFinish );
-		st.mText = tr("Process finished with exit code %1").arg(exitCode);
-		appendStep(st);
+		data[ Qt::DisplayRole ] = tr("Process finished with exit code %1").arg(exitCode);
 	}
+	
+	appendStep( pConsoleManagerStep( data ) );
 
 }
 
@@ -539,7 +486,7 @@ void MessageBoxDocks::commandStateChanged( const pCommand& c, QProcess::ProcessS
 		case QProcess::Starting:
 			ss = tr( "Starting" );
 			// clear all tabs
-			mBuildStep->lwBuildSteps->clear();
+			mStepModel->clear();
 			mOutput->tbOutput->clear();
 			mCommand->teLog->clear();
 			break;
