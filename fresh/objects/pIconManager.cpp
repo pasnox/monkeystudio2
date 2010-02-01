@@ -21,6 +21,7 @@
 #include <QDir>
 
 QIconCache pIconManager::mIconCache( 200 );
+FileNameCache pIconManager::mFileNameCache;
 
 QString findFile( QDir& dir, const QString& fileName )
 {
@@ -48,8 +49,19 @@ QString pIconManager::filePath( const QString& fileName, const QString& prefix )
 	QString path = prefix;
 	if ( path.isEmpty() )
 		path = QLatin1String( ":/" );
+	
+	const FileNamePair pair = qMakePair( fileName, path );
+	QString fn = mFileNameCache.value( pair );
+	
+	if ( !fn.isEmpty() )
+	{
+		return fn;
+	}
+	
 	QDir dir( path );
-	return findFile( dir, fileName );
+	fn = findFile( dir, fileName );
+	mFileNameCache[ pair ] = fn;
+	return fn;
 }
 
 QPixmap pIconManager::pixmap( const QString& fileName, const QString& prefix )
