@@ -3,9 +3,11 @@
 
 #include <QAbstractItemModel>
 
+#include <MonkeyExport.h>
+
 #include "pConsoleManagerStep.h"
 
-class pConsoleManagerStepModel : public QAbstractItemModel
+class Q_MONKEY_EXPORT pConsoleManagerStepModel : public QAbstractItemModel
 {
 	Q_OBJECT
 	

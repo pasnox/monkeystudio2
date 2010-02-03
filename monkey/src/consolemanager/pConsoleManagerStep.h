@@ -1,12 +1,14 @@
 #ifndef PCONSOLEMANAGERSTEP_H
 #define PCONSOLEMANAGERSTEP_H
 
+#include <MonkeyExport.h>
+
 #include <QString>
 #include <QPoint>
 #include <QList>
 #include <QVariant>
 
-class pConsoleManagerStep
+class Q_MONKEY_EXPORT pConsoleManagerStep
 {
 public:
 	enum Type
