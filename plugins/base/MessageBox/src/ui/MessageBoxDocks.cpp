@@ -34,6 +34,7 @@
 #include <UIXUPFindFiles.h>
 #include <pConsoleManagerStepModel.h>
 
+#include <QTimer>
 #include <QDebug>
 
 /*!
@@ -53,6 +54,8 @@ MessageBoxDocks::MessageBoxDocks( QObject* parent )
 	mCommand = new UICommand;
 	mStepModel = new pConsoleManagerStepModel( this );
 	mBuildStep->lvBuildSteps->setModel( mStepModel );
+	mBuildStepTimer = new QTimer( this );
+	mBuildStepToBottom = true;
 
 	// set defaultshortcuts
 	pActionsManager::setDefaultShortcut( mBuildStep->toggleViewAction(), QKeySequence( "F9" ) );
@@ -61,6 +64,7 @@ MessageBoxDocks::MessageBoxDocks( QObject* parent )
 
 	// connections
 	connect( mBuildStep->lvBuildSteps, SIGNAL( activated( const QModelIndex& ) ), this, SLOT( lvBuildSteps_activated( const QModelIndex& ) ) );
+	connect( mBuildStepTimer, SIGNAL( timeout() ), this, SLOT( buildStepTimer_timeout() ) );
 	connect( mOutput->cbRawCommand->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( cbRawCommand_returnPressed() ) );
 	connect( MonkeyCore::consoleManager(), SIGNAL( commandError( const pCommand&, QProcess::ProcessError ) ), this, SLOT( commandError( const pCommand&, QProcess::ProcessError ) ) );
 	connect( MonkeyCore::consoleManager(), SIGNAL( commandFinished( const pCommand&, int, QProcess::ExitStatus ) ), this, SLOT( commandFinished( const pCommand&, int, QProcess::ExitStatus ) ) );
@@ -155,15 +159,16 @@ void MessageBoxDocks::appendInBox( const QString& s, const QColor& c )
 */
 void MessageBoxDocks::appendStep( const pConsoleManagerStep& step )
 {
-	// backup selection
-	const QModelIndex selectedIndex = mBuildStep->lvBuildSteps->selectionModel()->selectedIndexes().value( 0 );
+	QScrollBar* sb = mBuildStep->lvBuildSteps->verticalScrollBar();
+	mBuildStepToBottom = sb->value() == sb->maximum();
 	
 	// update steps
-	mStepModel->appendStep( step );
-
-	// restore selection/scroll
-	mBuildStep->lvBuildSteps->scrollTo( selectedIndex.isValid() ? selectedIndex : mStepModel->index( step ) );
-	#warning this is causing the freeze
+	mStepModel->appendStep( step ); // append row to the model
+	
+	if ( mBuildStepToBottom )
+	{
+		mBuildStepTimer->start( 250 );
+	}
 }
 
 void MessageBoxDocks::appendSteps( const pConsoleManagerStepList& steps )
@@ -334,6 +339,12 @@ void MessageBoxDocks::lvBuildSteps_activated( const QModelIndex& index )
 		qWarning() << "point" << position;
 		MonkeyCore::fileManager()->goToLine( fn, position, codec );
 	}
+}
+
+void MessageBoxDocks::buildStepTimer_timeout()
+{
+	mBuildStepTimer->stop();
+	mBuildStep->lvBuildSteps->scrollToBottom();
 }
 
 /*!
