@@ -49,7 +49,6 @@
 #include <pConsoleManager.h>
 
 class pConsoleManagerStepModel;
-class QTimer;
 
 /*!
 	Implementation of Build Steps tab of Message box
@@ -123,8 +122,6 @@ protected:
 	UIOutput* mOutput;
 	UICommand* mCommand;
 	pConsoleManagerStepModel* mStepModel;
-	QTimer* mBuildStepTimer;
-	bool mBuildStepToBottom;
 
 public slots:
 	void appendOutput( const QString& );
@@ -140,7 +137,6 @@ public slots:
 
 protected slots:
 	void lvBuildSteps_activated( const QModelIndex& index );
-	void buildStepTimer_timeout();
 	void cbRawCommand_returnPressed();
 	void commandError( const pCommand& command, QProcess::ProcessError error );
 	void commandFinished( const pCommand& command, int exitCode, QProcess::ExitStatus exitStatus );
