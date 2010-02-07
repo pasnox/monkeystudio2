@@ -59,24 +59,22 @@ pConsoleManager::pConsoleManager( QObject* o )
 {
 	pActionsManager* am = MonkeyCore::actionsManager();
 	am->setPathPartTranslation( "Console Manager", tr( "Console Manager" ) );
+	
 #ifndef Q_OS_MAC
 	mStopAction = MonkeyCore::actionsManager()->newAction( "Console Manager", tr( "Pause" ), "aStopAction" );
 #else
 	mStopAction = MonkeyCore::actionsManager()->newAction( "Console Manager", tr( "Alt+End" ), "aStopAction" );
 #endif
 	mStopAction->setIcon( QIcon( ":/console/icons/console/stop.png" ) );
-	mStopAction->setText( tr( "Stop current command" ) );
-	mStopAction->setToolTip( tr( "Stop current command" ) );
-	mStopAction->setStatusTip( tr( "Stop current command" ) );
-
-	// set status tip for
-	mStopAction->setStatusTip( tr( "Stop the currently running command" ) );
+	mStopAction->setText( tr( "Stop the currenttly running command" ) );
+	mStopAction->setToolTip( mStopAction->text() );
+	mStopAction->setStatusTip( mStopAction->text() );
 	mStopAction->setEnabled( false );
+	
 	// mixe channels
 	setReadChannelMode( QProcess::MergedChannels );
+	
 	// connections
-
-	// :-/
 	connect( this, SIGNAL( error( QProcess::ProcessError ) ), this, SLOT( error( QProcess::ProcessError ) ) );
 
 	connect( this, SIGNAL( finished( int, QProcess::ExitStatus ) ), this, SLOT( finished( int, QProcess::ExitStatus ) ) );
@@ -108,7 +106,8 @@ pConsoleManager::~pConsoleManager()
 */
 void pConsoleManager::addParser( AbstractCommandParser* p )
 {
-	Q_ASSERT(p);
+	Q_ASSERT( p );
+	
 	if (mParsers.contains(p->name()))
 	{
 		qDebug() << QString("Parser '%1' already had been added").arg(p->name());
@@ -116,7 +115,8 @@ void pConsoleManager::addParser( AbstractCommandParser* p )
 	}
 	
 	mParsers[p->name()] = p;
-	connect( p, SIGNAL( newStepAvailable( const pConsoleManager::Step& ) ), this, SIGNAL( newStepAvailable( const pConsoleManager::Step& ) ) );
+	connect( p, SIGNAL( newStepAvailable( const pConsoleManagerStep& ) ), this, SIGNAL( newStepAvailable( const pConsoleManagerStep& ) ) );
+	connect( p, SIGNAL( newStepsAvailable( const pConsoleManagerStepList& ) ), this, SIGNAL( newStepsAvailable( const pConsoleManagerStepList& ) ) );
 }
 
 /*!
@@ -127,7 +127,8 @@ void pConsoleManager::removeParser( AbstractCommandParser* p )
 {
 	if ( p && mParsers.contains( p->name() ) )
 	{
-		disconnect( p, SIGNAL( newStepAvailable( const pConsoleManager::Step& ) ), this, SIGNAL( newStepAvailable( const pConsoleManager::Step& ) ) );
+		disconnect( p, SIGNAL( newStepAvailable( const pConsoleManagerStep& ) ), this, SIGNAL( newStepAvailable( const pConsoleManagerStep& ) ) );
+		disconnect( p, SIGNAL( newStepsAvailable( const pConsoleManagerStepList& ) ), this, SIGNAL( newStepsAvailable( const pConsoleManagerStepList& ) ) );
 		mParsers.remove( p->name() );
 	}
 }
@@ -233,6 +234,31 @@ pCommandList pConsoleManager::recursiveCommandList( const pCommandList& l, pComm
 }
 
 /*!
+	Return human readable string of a QProcess::ProcessError
+
+	\param error The error to get string from
+*/
+QString pConsoleManager::errorToString( QProcess::ProcessError error )
+{
+	switch ( error )
+	{
+		case QProcess::FailedToStart:
+			return tr( "The process failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program." );
+		case QProcess::Crashed:
+			return tr( "The process crashed some time after starting successfully." );
+		case QProcess::Timedout:
+			return tr( "The last waitFor...() function timed out. The state of QProcess is unchanged, and you can try calling waitFor...() again." );
+		case QProcess::WriteError:
+			return tr( "An error occurred when attempting to write to the process. For example, the process may not be running, or it may have closed its input channel." );
+		case QProcess::ReadError:
+			return tr( "An error occurred when attempting to read from the process. For example, the process may not be running." );
+		case QProcess::UnknownError:
+		default:
+			return tr( "An unknown error occurred. This is the default return value of error()." );
+	}
+}
+
+/*!
 	Handler of timer event
 
 	Exucutes next command, if there is available in the list, and no currently running commands
@@ -275,14 +301,16 @@ void pConsoleManager::error( QProcess::ProcessError e )
 */
 void pConsoleManager::finished( int i, QProcess::ExitStatus e )
 {
-	parseOutput (true);
+	const pCommand command = currentCommand();
+	// parse output
+	parseOutput( true );
 	// emit signal finished
-	emit commandFinished( currentCommand(), i, e );
+	emit commandFinished( command, i, e );
 	// remove command from list
-	removeCommand( currentCommand() );
+	removeCommand( command );
 	// disable stop action
 	mStopAction->setEnabled( false );
-		// clear buffer
+	// clear buffer
 	mBuffer.buffer().clear();
 	mStringBuffer.clear(); // For perfomance issues
 	mLinesInStringBuffer = 0;
@@ -296,12 +324,14 @@ void pConsoleManager::finished( int i, QProcess::ExitStatus e )
 void pConsoleManager::readyRead()
 {
 	// append data to buffer to parse
-	QByteArray d = readAll ();
-	mBuffer.buffer().append( d );
+	const QByteArray data = readAll();
+	mBuffer.buffer().append( data );
+	
 	// get current command
-	pCommand c = currentCommand();
+	const pCommand command = currentCommand();
+	
 	// try parse output
-	if (! c.isValid() )
+	if ( !command.isValid() )
 		return;
 	
 	/*Alrorithm is not ideal, need fix, if will be problems with it
@@ -309,10 +339,10 @@ void pConsoleManager::readyRead()
 		And, possible, it's not idealy quick.   hlamer
 		*/
 
-		parseOutput (false);
+	parseOutput( false );
 
 	// emit signal
-	emit commandReadyRead( c, d );
+	emit commandReadyRead( command, data );
 }
 
 /*!
@@ -483,42 +513,47 @@ void pConsoleManager::executeProcess()
 	\param commandFinished If command already are finished, make processing while
 	buffer will not be empty. If not finished - wait for further output.
 */
-void pConsoleManager::parseOutput (bool commandFinished)
+void pConsoleManager::parseOutput( bool commandFinished )
 {
 	bool finished;
+	
 	do
 	{
 		// Fill string buffer
-		while ( mBuffer.canReadLine() && mLinesInStringBuffer < MAX_LINES)
+		while ( mBuffer.canReadLine() && mLinesInStringBuffer < MAX_LINES )
 		{
 
-			mStringBuffer.append ( QString::fromLocal8Bit (mBuffer.readLine()));
+			mStringBuffer.append( QString::fromLocal8Bit( mBuffer.readLine() ) );
 			mLinesInStringBuffer ++;
 		}
 
-		if ( ! mLinesInStringBuffer )
+		if ( !mLinesInStringBuffer )
 			return;
 
 		finished = true;
 		int linesToRemove = 0;
+		
 		//try all parsers
-		foreach ( QString s, mCurrentParsers )
+		foreach ( const QString& parserName, mCurrentParsers )
 		{
-			AbstractCommandParser* p = mParsers.value( s );
-			if ( ! p )
+			AbstractCommandParser* parser = mParsers.value( parserName );
+			
+			if ( !parser )
 			{
-				qWarning() << "Invalid parser" << s;
+				qWarning() << "Invalid parser" << parserName;
 				continue; //for
 			}
 			
-			linesToRemove =  p->processParsing(&mStringBuffer);
-			if (linesToRemove)
+			linesToRemove =  parser->processParsing( &mStringBuffer );
+			
+			if ( linesToRemove )
 				break; //for
 		}
-		if (linesToRemove == 0 || commandFinished) //need to remove one
+		
+		if ( linesToRemove == 0 || commandFinished ) //need to remove one
 			linesToRemove = 1;
 
-		if ( ! linesToRemove )
+		if ( !linesToRemove )
 			continue; // do-while
 
 		finished = false; //else one iteration of do-while after it
@@ -526,11 +561,12 @@ void pConsoleManager::parseOutput (bool commandFinished)
 		//removing of lines
 		mLinesInStringBuffer -= linesToRemove;
 		int posEnd = 0;
-		while (linesToRemove --)
-			posEnd = mStringBuffer.indexOf ('\n', posEnd)+1;
-		mStringBuffer.remove (0, posEnd);
-
+		
+		while ( linesToRemove-- )
+			posEnd = mStringBuffer.indexOf( '\n', posEnd ) +1;
+			
+		mStringBuffer.remove( 0, posEnd );
 	}
-	while (!finished && mLinesInStringBuffer);
+	while ( !finished && mLinesInStringBuffer );
 }
 

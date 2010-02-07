@@ -51,9 +51,10 @@
 #endif
 
 //! Implementation for 'parser' MkS scripting interface command
-QString CommandParser::parserCommandImplementation( const QString& command, const QStringList& arguments, int* status, class MkSShellInterpreter* interpreter )
+QString CommandParser::parserCommandImplementation( const QString& command, const QStringList& arguments, int* status, class MkSShellInterpreter* interpreter, void* data )
 {
 	Q_UNUSED( interpreter );
+	Q_UNUSED( data );
 	CommandParser::Pattern pattern;
 	
 	if (9 != arguments.size())
@@ -74,17 +75,19 @@ QString CommandParser::parserCommandImplementation( const QString& command, cons
 		pattern.row = arguments[5];
 		
 		if (arguments[6] == "error")
-			pattern.Type = pConsoleManager::stError;
+			pattern.Type = pConsoleManagerStep::Error;
 		else if (arguments[6] == "warning")
-			pattern.Type = pConsoleManager::stWarning;
+			pattern.Type = pConsoleManagerStep::Warning;
 		else if (arguments[6] == "compiling")
-			pattern.Type = pConsoleManager::stCompiling;
+			pattern.Type = pConsoleManagerStep::Compiling;
 		else if (arguments[6] == "finish")
-			pattern.Type = pConsoleManager::stFinish;
+			pattern.Type = pConsoleManagerStep::Finish;
 		else if (arguments[6] == "good")
-			pattern.Type = pConsoleManager::stGood;
+			pattern.Type = pConsoleManagerStep::Good;
 		else if (arguments[6] == "bad")
-			pattern.Type = pConsoleManager::stBad;
+			pattern.Type = pConsoleManagerStep::Bad;
+		else if (arguments[6] == "invalid")
+			pattern.Type = pConsoleManagerStep::Invalid;
 		else
 		{
 			if ( status )
@@ -146,7 +149,7 @@ void CommandParser::installParserCommand()
 						"\tparser add <name> <regular expression> <file name> <column> <row> <pattern type> <pattern text> <full text>\n"
 						"\tparser remove <name> <regular expression>\n" );
 	
-	MkSShellInterpreter::instance()->addCommandImplementation( "parser", parserCommandImplementation, help );
+	MkSShellInterpreter::instance()->addCommandImplementation( "parser", parserCommandImplementation, help, 0 );
 }
 
 CommandParser::CommandParser(QObject* parent, const QString& name):
@@ -157,9 +160,11 @@ CommandParser::CommandParser(QObject* parent, const QString& name):
 
 void CommandParser::addPattern(const Pattern& pattern)
 {
-	foreach(Pattern p, mPatterns)
-		if (p.regExp.pattern() == pattern.regExp.pattern())
+	foreach(const Pattern& p, mPatterns) {
+		if (p.regExp.pattern() == pattern.regExp.pattern()) {
 			qWarning() << "Duplicating regular expression " << p.regExp << "for" << name();
+		}
+	}
 	
 	mPatterns.append(pattern);
 	
@@ -197,7 +202,7 @@ int CommandParser::processParsing(QString* buf)
 	QTime time1;
 	time1.start();
 #endif
-	foreach ( Pattern p, mPatterns)
+	foreach ( const Pattern& p, mPatterns)
 	{
 		int pos = p.regExp.indexIn(*buf);
 #if PARSERS_DEBUG
@@ -206,18 +211,25 @@ int CommandParser::processParsing(QString* buf)
 #endif
 		if (pos != -1)
 		{
-			pConsoleManager::Step m;
-			m.mFileName = replaceWithMatch(p.regExp,p.FileName);
-			m.mPosition = QPoint( replaceWithMatch(p.regExp,p.col).toInt(), replaceWithMatch(p.regExp,p.row).toInt()) -QPoint( 0, 1 );
-			m.mType = p.Type;
-			m.mText = replaceWithMatch(p.regExp,p.Text);
-			m.mFullText = replaceWithMatch(p.regExp,p.FullText);
+			pConsoleManagerStep::Data data;
+			data[ pConsoleManagerStep::TypeRole ] = p.Type;
+			data[ pConsoleManagerStep::FileNameRole ] = replaceWithMatch(p.regExp,p.FileName);
+			data[ pConsoleManagerStep::PositionRole ] = QPoint( replaceWithMatch(p.regExp,p.col).toInt(), replaceWithMatch(p.regExp,p.row).toInt()) -QPoint( 0, 1 );
+			data[ Qt::DisplayRole ] = replaceWithMatch(p.regExp,p.Text);
+			data[ Qt::ToolTipRole ] = replaceWithMatch(p.regExp,p.FullText);
+			
 			// emit signal
-			emit newStepAvailable( m );
+			emit newStepAvailable( pConsoleManagerStep( data ) );
+			
+#if PARSERS_DEBUG
 			qDebug() << "Emited new step";
+#endif
+			
 			int linesCount = p.regExp.cap().count ('\n');
+			
 			if (! p.regExp.cap().endsWith('\n'))
 				linesCount++;
+			
 #if PARSERS_DEBUG
 			qDebug () << "Capture :" << p.regExp.cap();
 			qDebug () << "CaptureS :" << p.regExp.capturedTexts ();
@@ -251,7 +263,7 @@ int CommandParser::processParsing(QString* buf)
 		Patterns will be replaced with according submatch of string
 	\return Resulting string
 */
-QString CommandParser::replaceWithMatch(QRegExp& rex, QString s)
+QString CommandParser::replaceWithMatch(const QRegExp& rex, QString s)
 {
 	int pos = 0; 
 	int i = 0;

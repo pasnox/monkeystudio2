@@ -29,11 +29,16 @@
 #include <QPixmapCache>
 #include <QCache>
 #include <QIcon>
+#include <QPair>
+#include <QMap>
 
 /*!
 	\details A typedef for icons caching
 */
 typedef QCache<QString, QIcon> QIconCache;
+
+typedef QPair<QString, QString> FileNamePair;
+typedef QMap<FileNamePair, QString> FileNameCache;
 
 /*!
 	\brief A cache class for icons and pixmaps
@@ -52,6 +57,7 @@ public:
 
 protected:
 	static QIconCache mIconCache;
+	static FileNameCache mFileNameCache;
 };
 
 #endif // PICONMANAGER_H

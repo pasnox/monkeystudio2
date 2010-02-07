@@ -45,8 +45,10 @@
 #include "ui_UIOutput.h"
 #include "ui_UICommand.h"
 
-#include <fresh.h>
+#include <pIconManager.h>
 #include <pConsoleManager.h>
+
+class pConsoleManagerStepModel;
 
 /*!
 	Implementation of Build Steps tab of Message box
@@ -57,10 +59,25 @@ public:
 	UIBuildStep( QWidget* parent = 0 )
 		: pDockWidget( parent )
 	{
+		setObjectName( metaObject()->className() );
 		setupUi( this );
-		lwBuildSteps->setAttribute( Qt::WA_MacShowFocusRect, false );
-		lwBuildSteps->setAttribute( Qt::WA_MacSmallSize );
+		lvBuildSteps->setAttribute( Qt::WA_MacShowFocusRect, false );
+		lvBuildSteps->setAttribute( Qt::WA_MacSmallSize );
+		aShowNextWarning = new QAction( pIconManager::icon( "warning.png", ":/icons" ), tr( "Next Warning..." ), this );
+		aShowNextWarning->setStatusTip( tr( "Show the next build step warning." ) );
+		aShowNextError = new QAction( pIconManager::icon( "error.png", ":/icons" ), tr( "Next Error..." ), this );
+		aShowNextError->setStatusTip( tr( "Show the next build step error." ) );
 	}
+	
+	inline QAction* nextWarningAction() const
+	{ return aShowNextWarning; }
+	
+	inline QAction* nextErrorAction() const
+	{ return aShowNextError; }
+
+protected:
+	QAction* aShowNextWarning;
+	QAction* aShowNextError;
 };
 
 /*!
@@ -72,6 +89,7 @@ public:
 	UIOutput( QWidget* parent = 0 )
 		: pDockWidget( parent )
 	{
+		setObjectName( metaObject()->className() );
 		setupUi( this );
 		lRawCommand->setAttribute( Qt::WA_MacShowFocusRect, false );
 		lRawCommand->setAttribute( Qt::WA_MacSmallSize );
@@ -91,6 +109,7 @@ public:
 	UICommand( QWidget* parent = 0 )
 		: pDockWidget( parent )
 	{
+		setObjectName( metaObject()->className() );
 		setupUi( this );
 		teLog->setAttribute( Qt::WA_MacShowFocusRect, false );
 		teLog->setAttribute( Qt::WA_MacSmallSize );
@@ -119,26 +138,29 @@ protected:
 	UIBuildStep* mBuildStep;
 	UIOutput* mOutput;
 	UICommand* mCommand;
+	pConsoleManagerStepModel* mStepModel;
 
 public slots:
 	void appendOutput( const QString& );
 	void appendLog( const QString& );
 	void appendInBox( const QString&, const QColor& = Qt::red );
-	void appendStep( const pConsoleManager::Step& );
+	void appendStep( const pConsoleManagerStep& step );
+	void appendSteps( const pConsoleManagerStepList& steps );
 	void showBuild();
 	void showOutput();
 	void showLog();
+	void showNextWarning();
 	void showNextError();
 
 protected slots:
-	void lwBuildSteps_itemActivated( QListWidgetItem* );
+	void lvBuildSteps_activated( const QModelIndex& index );
 	void cbRawCommand_returnPressed();
-	void commandError( const pCommand&, QProcess::ProcessError );
-	void commandFinished( const pCommand&, int, QProcess::ExitStatus );
-	void commandReadyRead( const pCommand&, const QByteArray& );
-	void commandStarted( const pCommand& );
-	void commandStateChanged( const pCommand&, QProcess::ProcessState );
-	void commandSkipped( const pCommand& );
+	void commandError( const pCommand& command, QProcess::ProcessError error );
+	void commandFinished( const pCommand& command, int exitCode, QProcess::ExitStatus exitStatus );
+	void commandReadyRead( const pCommand& command, const QByteArray& data );
+	void commandStarted( const pCommand& command );
+	void commandStateChanged( const pCommand& command, QProcess::ProcessState state );
+	void commandSkipped( const pCommand& command );
 };
 
 #endif // MESSAGEBOXDOCKS_H

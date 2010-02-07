@@ -37,9 +37,10 @@
 #define PCONSOLEMANAGER_H
 
 #include <MonkeyExport.h>
-#include <pEnvironmentVariablesManager.h>
 
 #include "pCommand.h"
+#include "pConsoleManagerStep.h"
+#include "EnvironmentVariablesManager.h"
 
 #include <QProcess>
 #include <QBuffer>
@@ -63,34 +64,10 @@ class Q_MONKEY_EXPORT pConsoleManager : public QProcess
 	friend class MonkeyCore;
 	
 public:
-	enum StepType 
-	{ 
-		stUnknown = -1, 
-		stError, 
-		stWarning, 
-		stCompiling, 
-		stFinish, 
-		stGood, 
-		stBad,
-		stSearchResult,
-		stResultForReplace
-	}; // , stState
-	
-	struct Step
-	{
-		Step() {}
-		Step( pConsoleManager::StepType t ) { mType = t; }
-		QString mFileName;
-		QPoint mPosition;
-		StepType mType;
-		QString mText;
-		QString mFullText;
-	};
-	
 	inline pCommand currentCommand() const { return mCommands.value( 0 ); }
 	inline QStringList parsersName() const { return mParsers.keys(); }
 	inline QAction* stopAction() const { return mStopAction; }
-	inline pEnvironmentVariablesManager* environmentVariablesManager() const { return &mEnvironmentVariablesManager; }
+	inline EnvironmentVariablesManager* environmentVariablesManager() const { return &mEnvironmentVariablesManager; }
 	
 	void addParser( AbstractCommandParser* );
 	void removeParser( AbstractCommandParser* );
@@ -102,6 +79,8 @@ public:
 	pCommand processCommand( pCommand );
 	pCommand getCommand( const pCommandList&, const QString& );
 	pCommandList recursiveCommandList( const pCommandList&, pCommand );
+	
+	static QString errorToString( QProcess::ProcessError error );
 
 protected:
 	int mTimerId;
@@ -113,7 +92,7 @@ protected:
 	QHash<QString, AbstractCommandParser*> mParsers;
 	QAction* mStopAction;
 	int mStopAttempt;
-	mutable pEnvironmentVariablesManager mEnvironmentVariablesManager;
+	mutable EnvironmentVariablesManager mEnvironmentVariablesManager;
 
 	pConsoleManager( QObject* = 0 );
 	~pConsoleManager();
@@ -122,7 +101,7 @@ protected:
 	/*
 	Parse output, that are in the mBuffer.   
 	*/
-	void parseOutput (bool commandFinished);
+	void parseOutput( bool commandFinished );
 
 public slots:
 	void sendRawCommand( const QString& );
@@ -149,8 +128,8 @@ signals:
 	void commandStarted( const pCommand& );
 	void commandStateChanged( const pCommand&, QProcess::ProcessState );
 	void commandSkipped( const pCommand& );
-	void newStepAvailable( const pConsoleManager::Step& );
-
+	void newStepAvailable( const pConsoleManagerStep& );
+	void newStepsAvailable( const pConsoleManagerStepList& );
 };
 
 #endif // PCONSOLEMANAGER_H

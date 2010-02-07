@@ -1,15 +1,15 @@
 #ifndef PENVIRONMENTVARIABLESMANAGER_H
 #define PENVIRONMENTVARIABLESMANAGER_H
 
-#include "pSettings.h"
 #include "pEnvironmentVariablesModel.h"
 
-class pEnvironmentVariablesManager : public pSettings
-{
-	Q_OBJECT
-	
+class pEnvironmentVariablesManager
+{	
 public:
-	pEnvironmentVariablesManager( QObject* parent = 0 );
+	virtual ~pEnvironmentVariablesManager();
+	
+	bool load();
+	bool save();
 	
 	pEnvironmentVariablesModel::Variables variables() const;
 	void setVariables( const pEnvironmentVariablesModel::Variables& variables );
@@ -22,6 +22,11 @@ public:
 
 protected:
 	static const QString mSettingsKey;
+	bool mInitialized;
+	mutable pEnvironmentVariablesModel::Variables mVariables;
+	
+	virtual bool writeVariables( const pEnvironmentVariablesModel::Variables& variables ) const;
+	virtual bool readVariables( pEnvironmentVariablesModel::Variables& variables ) const;
 };
 
 #endif // PENVIRONMENTVARIABLESMANAGER_H

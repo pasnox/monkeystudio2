@@ -36,6 +36,7 @@
 #include "../../coremanager/MonkeyCore.h"
 #include "../../settingsmanager/Settings.h"
 #include "../../consolemanager/pConsoleManager.h"
+#include "../../consolemanager/EnvironmentVariablesManager.h"
 
 #include <qscintilla.h>
 
@@ -468,7 +469,7 @@ void UISettings::saveSettings()
 
 	foreach ( const QString& type, suffixes.keys() )
 	{
-		MonkeyCore::fileManager()->set( type, suffixes[ type ] );
+		MonkeyCore::fileManager()->setCommand( type, suffixes[ type ] );
 	}
 
 	MonkeyCore::fileManager()->generateScript();
@@ -501,6 +502,7 @@ void UISettings::saveSettings()
 	
 	// environment variables editor
 	MonkeyCore::consoleManager()->environmentVariablesManager()->setVariables( eveVariables->variables() );
+	MonkeyCore::consoleManager()->environmentVariablesManager()->save();
 
 	// flush settings to disk
 	s->sync();

@@ -11,9 +11,10 @@
 const QString MkSShell_DirName = "mks_scripts";
 QPointer<MkSShellInterpreter> MkSShellInterpreter::mInstance = 0;
 
-QString MkSShellInterpreter::interpretHelp( const QString& command, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter )
+QString MkSShellInterpreter::interpretHelp( const QString& command, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter, void* data )
 {
 	Q_UNUSED( command );
+	Q_UNUSED( data );
 	
 	if ( arguments.isEmpty() ) // all available commands
 	{
@@ -49,10 +50,11 @@ QString MkSShellInterpreter::interpretHelp( const QString& command, const QStrin
 	return tr( "'help' command accepts only one parameter. %1 given" ).arg( arguments.count() );
 }
 
-QString MkSShellInterpreter::interpretEcho( const QString& command, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter )
+QString MkSShellInterpreter::interpretEcho( const QString& command, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter, void* data )
 {
 	Q_UNUSED( command );
 	Q_UNUSED( interpreter );
+	Q_UNUSED( data );
 	
 	if ( result )
 	{
@@ -82,8 +84,8 @@ MkSShellInterpreter* MkSShellInterpreter::instance( QObject* parent )
 MkSShellInterpreter::MkSShellInterpreter( QObject* parent )
 	: QObject( parent ), pConsoleCommand()
 {
-	addCommandImplementation( "help", interpretHelp, tr( "Type 'help' and name of command" ) );
-	addCommandImplementation( "echo", interpretEcho, tr( "Print back arguments" ) );
+	addCommandImplementation( "help", interpretHelp, tr( "Type 'help' and name of command" ), this );
+	addCommandImplementation( "echo", interpretEcho, tr( "Print back arguments" ), this );
 }
 
 bool MkSShellInterpreter::loadScript( const QString& fileName )
@@ -154,19 +156,21 @@ QString MkSShellInterpreter::interpret( const QString& command, int* result ) co
 	
 	MkSShellInterpreter* instance = const_cast<MkSShellInterpreter*>( this );
 	const QString cmd = parts.takeFirst();
-	const QString commandOutput = mCommandImplementations[ cmd ]( cmd, parts, result, instance );
+	void* data = mCommandImplementationsData.value( cmd );
+	const QString commandOutput = mCommandImplementations[ cmd ]( cmd, parts, result, instance, data );
 	
 	emit instance->commandExecuted( command, commandOutput, result ? *result : MkSShellInterpreter::NoResultVariable );
 	
 	return commandOutput;
 }
 
-void MkSShellInterpreter::addCommandImplementation( const QString& command, CommandImplementationPtr function, const QString& help )
+void MkSShellInterpreter::addCommandImplementation( const QString& command, CommandImplementationPtr function, const QString& help, void* data )
 {
 	Q_ASSERT( !mCommands.contains( command ) );
 	
 	mCommands << command;
 	mCommandImplementations[ command ] = function;
+	mCommandImplementationsData[ command ] = data;
 	
 	setCommandHelp( command, help );
 }

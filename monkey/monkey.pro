@@ -139,7 +139,10 @@ HEADERS	*= src/main.h \
 	src/xupmanager/core/XUPProjectItemHelper.h \
 	src/xupmanager/gui/VariablesEditor.h \
 	src/workspace/pOpenedFileExplorer.h \
-	src/workspace/pOpenedFileModel.h
+	src/workspace/pOpenedFileModel.h \
+	src/consolemanager/EnvironmentVariablesManager.h \
+	src/consolemanager/pConsoleManagerStep.h \
+	src/consolemanager/pConsoleManagerStepModel.h
 
 SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/maininterface/ui/UIAbout.cpp \
@@ -197,7 +200,10 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/workspace/pOpenedFileModel.cpp \
 	src/pluginsmanager/BuilderPlugin.cpp \
 	src/pluginsmanager/CLIToolPlugin.cpp \
-	src/pluginsmanager/InterpreterPlugin.cpp
+	src/pluginsmanager/InterpreterPlugin.cpp \
+	src/consolemanager/EnvironmentVariablesManager.cpp \
+	src/consolemanager/pConsoleManagerStep.cpp \
+	src/consolemanager/pConsoleManagerStepModel.cpp
 
 mac:SOURCES	*= src/toolsmanager/pDesktopApplications_mac.cpp
 else:unix:SOURCES	*= src/toolsmanager/pDesktopApplications_unix.cpp

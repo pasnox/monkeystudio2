@@ -35,6 +35,7 @@
 #define ABSTRACTCOMMANDPARSER_H
 
 #include "pConsoleManager.h"
+#include "pConsoleManagerStep.h"
 
 #include <QObject>
 
@@ -65,7 +66,8 @@ public :
 	virtual int processParsing(QString* text) = 0;
 
 signals:
-	void newStepAvailable( const pConsoleManager::Step& );
+	void newStepAvailable( const pConsoleManagerStep& );
+	void newStepsAvailable( const pConsoleManagerStepList& );
 };
 
 typedef QList<AbstractCommandParser*> AbstractCommandParserList;

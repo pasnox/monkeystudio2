@@ -1,62 +1,45 @@
 #include "pEnvironmentVariablesManager.h"
 
+#include "pSettings.h"
+
 #include <QProcess>
+#include <QCoreApplication>
 
 const QString pEnvironmentVariablesManager::mSettingsKey( "EnvironmentVariables" );
 
-pEnvironmentVariablesManager::pEnvironmentVariablesManager( QObject* parent )
-	: pSettings( parent, "EnvironmentVariables", "1.0.0" )
+pEnvironmentVariablesManager::~pEnvironmentVariablesManager()
 {
+}
+
+bool pEnvironmentVariablesManager::load()
+{
+	return readVariables( mVariables );
+}
+
+bool pEnvironmentVariablesManager::save()
+{
+	return writeVariables( mVariables );
 }
 
 pEnvironmentVariablesModel::Variables pEnvironmentVariablesManager::variables() const
 {
-	pEnvironmentVariablesManager* _this = const_cast<pEnvironmentVariablesManager*>( this );
-	pEnvironmentVariablesModel::Variables items;
-	const int count = _this->beginReadArray( mSettingsKey );
+	pEnvironmentVariablesModel::Variables variables = mVariables;
 	
-	for ( int i = 0; i < count; i++ )
+	if ( variables.isEmpty() )
 	{
-		_this->setArrayIndex( i );
-		
-		items[ value( "Name" ).toString() ] = pEnvironmentVariablesModel::Variable( value( "Name" ).toString(),
-																					value( "Value" ).toString(),
-																					value( "Enabled" ).toBool() );
-	}
-	
-	_this->endArray();
-	
-	if ( items.isEmpty() )
-	{
-		items = pEnvironmentVariablesModel::stringListToVariables( QProcess::systemEnvironment() );
+		variables = pEnvironmentVariablesModel::stringListToVariables( QProcess::systemEnvironment() );
 	}
 	else
 	{
-		mergeNewVariables( items );
+		mergeNewVariables( variables );
 	}
 	
-	return items;
+	return variables;
 }
 
 void pEnvironmentVariablesManager::setVariables( const pEnvironmentVariablesModel::Variables& variables )
 {
-	const pEnvironmentVariablesModel::Variables items = removeUnmodifiedVariables( variables );
-	
-	remove( mSettingsKey );
-	
-	beginWriteArray( mSettingsKey );
-	
-	for ( int i = 0; i < items.count(); i++ )
-	{
-		setArrayIndex( i );
-		const pEnvironmentVariablesModel::Variable& variable = (items.begin() +i).value();
-		
-		setValue( "Name", variable.name );
-		setValue( "Value", variable.value );
-		setValue( "Enabled", variable.enabled );
-	}
-	
-	endArray();
+	mVariables = removeUnmodifiedVariables( variables );
 }
 
 bool pEnvironmentVariablesManager::mergeNewVariables( pEnvironmentVariablesModel::Variables& variables ) const
@@ -117,4 +100,47 @@ pEnvironmentVariablesModel::Variables pEnvironmentVariablesManager::removeUnmodi
 QStringList pEnvironmentVariablesManager::variables( bool keepDisabled ) const
 {
 	return pEnvironmentVariablesModel::variablesToStringList( variables(), keepDisabled );
+}
+
+bool pEnvironmentVariablesManager::writeVariables( const pEnvironmentVariablesModel::Variables& variables ) const
+{
+	pSettings settings( qApp, "EnvironmentVariables", "1.0.0" );
+	
+	settings.remove( mSettingsKey );
+	
+	settings.beginWriteArray( mSettingsKey );
+	
+	for ( int i = 0; i < variables.count(); i++ )
+	{
+		settings.setArrayIndex( i );
+		const pEnvironmentVariablesModel::Variable& variable = (variables.begin() +i).value();
+		
+		settings.setValue( "Name", variable.name );
+		settings.setValue( "Value", variable.value );
+		settings.setValue( "Enabled", variable.enabled );
+	}
+	
+	settings.endArray();
+	
+	return true;
+}
+
+bool pEnvironmentVariablesManager::readVariables( pEnvironmentVariablesModel::Variables& variables ) const
+{
+	pSettings settings( qApp, "EnvironmentVariables", "1.0.0" );
+	
+	const int count = settings.beginReadArray( mSettingsKey );
+	
+	for ( int i = 0; i < count; i++ )
+	{
+		settings.setArrayIndex( i );
+		
+		variables[ settings.value( "Name" ).toString() ] =
+			pEnvironmentVariablesModel::Variable( settings.value( "Name" ).toString(),
+				settings.value( "Value" ).toString(), settings.value( "Enabled" ).toBool() );
+	}
+	
+	settings.endArray();
+	
+	return true;
 }

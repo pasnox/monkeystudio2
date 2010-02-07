@@ -37,6 +37,8 @@
 
 #include <BasePlugin.h>
 
+#include <QPointer>
+
 class MessageBoxDocks;
 
 /*!
@@ -49,16 +51,15 @@ class MessageBox : public BasePlugin
 	Q_OBJECT
 	Q_INTERFACES( BasePlugin )
 
-protected:	
-	void fillPluginInfos();
-	virtual bool install();
-	virtual bool uninstall();
 public:
-	MessageBox();
 	virtual QWidget* settingsWidget();
 
 protected:
-	MessageBoxDocks* mMessageBoxDocks;
+	QPointer<MessageBoxDocks> mMessageBoxDocks;
+	
+	void fillPluginInfos();
+	virtual bool install();
+	virtual bool uninstall();
 
 protected slots:
 	void onConsoleStarted();
