@@ -79,6 +79,8 @@ public:
 	pCommand processCommand( pCommand );
 	pCommand getCommand( const pCommandList&, const QString& );
 	pCommandList recursiveCommandList( const pCommandList&, pCommand );
+	
+	static QString errorToString( QProcess::ProcessError error );
 
 protected:
 	int mTimerId;

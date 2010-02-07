@@ -45,7 +45,7 @@
 #include "ui_UIOutput.h"
 #include "ui_UICommand.h"
 
-#include <fresh.h>
+#include <pIconManager.h>
 #include <pConsoleManager.h>
 
 class pConsoleManagerStepModel;
@@ -59,10 +59,25 @@ public:
 	UIBuildStep( QWidget* parent = 0 )
 		: pDockWidget( parent )
 	{
+		setObjectName( metaObject()->className() );
 		setupUi( this );
 		lvBuildSteps->setAttribute( Qt::WA_MacShowFocusRect, false );
 		lvBuildSteps->setAttribute( Qt::WA_MacSmallSize );
+		aShowNextWarning = new QAction( pIconManager::icon( "warning.png", ":/icons" ), tr( "Next Warning..." ), this );
+		aShowNextWarning->setStatusTip( tr( "Show the next build step warning." ) );
+		aShowNextError = new QAction( pIconManager::icon( "error.png", ":/icons" ), tr( "Next Error..." ), this );
+		aShowNextError->setStatusTip( tr( "Show the next build step error." ) );
 	}
+	
+	inline QAction* nextWarningAction() const
+	{ return aShowNextWarning; }
+	
+	inline QAction* nextErrorAction() const
+	{ return aShowNextError; }
+
+protected:
+	QAction* aShowNextWarning;
+	QAction* aShowNextError;
 };
 
 /*!
@@ -74,6 +89,7 @@ public:
 	UIOutput( QWidget* parent = 0 )
 		: pDockWidget( parent )
 	{
+		setObjectName( metaObject()->className() );
 		setupUi( this );
 		lRawCommand->setAttribute( Qt::WA_MacShowFocusRect, false );
 		lRawCommand->setAttribute( Qt::WA_MacSmallSize );
@@ -93,6 +109,7 @@ public:
 	UICommand( QWidget* parent = 0 )
 		: pDockWidget( parent )
 	{
+		setObjectName( metaObject()->className() );
 		setupUi( this );
 		teLog->setAttribute( Qt::WA_MacShowFocusRect, false );
 		teLog->setAttribute( Qt::WA_MacSmallSize );

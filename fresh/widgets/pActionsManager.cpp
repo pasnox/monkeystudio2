@@ -211,7 +211,10 @@ void pActionsManager::setActionsManager( QAction* action, pActionsManager* manag
 	Q_ASSERT( action );
 	
 	// reparent
-	action->setParent( qApp );
+	if ( !action->parent() )
+	{
+		action->setParent( qApp );
+	}
 	
 	// remove it from old manager if needed
 	pActionsManager* curManager = actionsManager( action );
@@ -243,7 +246,10 @@ void pActionsManager::setActionsManager( QAction* action, pActionsManager* manag
 		
 		Q_ASSERT( !action->objectName().isEmpty() );
 		
-		action->setParent( manager );
+		if ( action->parent() == qApp )
+		{
+			action->setParent( manager );
+		}
 		manager->mActions.append( action );
 		action->setProperty( QString::number( ActionsManager ).toLocal8Bit().constData(), QVariant::fromValue( manager ) );
 		

@@ -234,6 +234,31 @@ pCommandList pConsoleManager::recursiveCommandList( const pCommandList& l, pComm
 }
 
 /*!
+	Return human readable string of a QProcess::ProcessError
+
+	\param error The error to get string from
+*/
+QString pConsoleManager::errorToString( QProcess::ProcessError error )
+{
+	switch ( error )
+	{
+		case QProcess::FailedToStart:
+			return tr( "The process failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program." );
+		case QProcess::Crashed:
+			return tr( "The process crashed some time after starting successfully." );
+		case QProcess::Timedout:
+			return tr( "The last waitFor...() function timed out. The state of QProcess is unchanged, and you can try calling waitFor...() again." );
+		case QProcess::WriteError:
+			return tr( "An error occurred when attempting to write to the process. For example, the process may not be running, or it may have closed its input channel." );
+		case QProcess::ReadError:
+			return tr( "An error occurred when attempting to read from the process. For example, the process may not be running." );
+		case QProcess::UnknownError:
+		default:
+			return tr( "An unknown error occurred. This is the default return value of error()." );
+	}
+}
+
+/*!
 	Handler of timer event
 
 	Exucutes next command, if there is available in the list, and no currently running commands

@@ -36,6 +36,8 @@ public slots:
 
 protected:
 	mutable pConsoleManagerStepList mSteps;
+	uint mWarnings;
+	uint mErrors;
 };
 
 #endif // PCONSOLEMANAGERSTEPMODEL_H

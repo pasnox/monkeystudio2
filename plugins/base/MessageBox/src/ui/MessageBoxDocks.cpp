@@ -53,14 +53,25 @@ MessageBoxDocks::MessageBoxDocks( QObject* parent )
 	mCommand = new UICommand;
 	mStepModel = new pConsoleManagerStepModel( this );
 	mBuildStep->lvBuildSteps->setModel( mStepModel );
-
+	
+	QMenu* menu = MonkeyCore::menuBar()->menu( "mView" );
+	menu->addAction( mBuildStep->nextWarningAction() );
+	menu->addAction( mBuildStep->nextErrorAction() );
+	
 	// set defaultshortcuts
+	pActionsManager::setActionsManager( mBuildStep->nextWarningAction(), MonkeyCore::actionsManager() );
+	pActionsManager::setActionsManager( mBuildStep->nextErrorAction(), MonkeyCore::actionsManager() );
+	
 	pActionsManager::setDefaultShortcut( mBuildStep->toggleViewAction(), QKeySequence( "F9" ) );
+	pActionsManager::setDefaultShortcut( mBuildStep->nextWarningAction(), QKeySequence( "Ctrl+Shift++" ) );
+	pActionsManager::setDefaultShortcut( mBuildStep->nextErrorAction(), QKeySequence( "Ctrl+Alt++" ) );
 	pActionsManager::setDefaultShortcut( mOutput->toggleViewAction(), QKeySequence( "F10" ) );
 	pActionsManager::setDefaultShortcut( mCommand->toggleViewAction(), QKeySequence( "F11" ) );
-
+	
 	// connections
 	connect( mBuildStep->lvBuildSteps, SIGNAL( activated( const QModelIndex& ) ), this, SLOT( lvBuildSteps_activated( const QModelIndex& ) ) );
+	connect( mBuildStep->nextWarningAction(), SIGNAL( triggered() ), this, SLOT( showNextWarning() ) );
+	connect( mBuildStep->nextErrorAction(), SIGNAL( triggered() ), this, SLOT( showNextError() ) );
 	connect( mOutput->cbRawCommand->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( cbRawCommand_returnPressed() ) );
 	connect( MonkeyCore::consoleManager(), SIGNAL( commandError( const pCommand&, QProcess::ProcessError ) ), this, SLOT( commandError( const pCommand&, QProcess::ProcessError ) ) );
 	connect( MonkeyCore::consoleManager(), SIGNAL( commandFinished( const pCommand&, int, QProcess::ExitStatus ) ), this, SLOT( commandFinished( const pCommand&, int, QProcess::ExitStatus ) ) );
@@ -169,7 +180,16 @@ void MessageBoxDocks::appendStep( const pConsoleManagerStep& step )
 
 void MessageBoxDocks::appendSteps( const pConsoleManagerStepList& steps )
 {
-	mStepModel->appendSteps( steps );
+	QScrollBar* sb = mBuildStep->lvBuildSteps->verticalScrollBar();
+	const bool atBottom = sb->value() == sb->maximum();
+	
+	// update steps
+	mStepModel->appendSteps( steps ); // append rows to the model
+	
+	if ( atBottom )
+	{
+		mBuildStep->lvBuildSteps->scrollToBottom();
+	}
 }
 
 /*!
@@ -355,38 +375,23 @@ void MessageBoxDocks::cbRawCommand_returnPressed()
 	\param c Command, which are finished
 	\param e Error type
 */
-void MessageBoxDocks::commandError( const pCommand& c, QProcess::ProcessError e )
+void MessageBoxDocks::commandError( const pCommand& command, QProcess::ProcessError error )
 {
-	QString s( tr( "* Error            : '%1'<br />" ).arg( colourText( c.text() ) ) );
-	s.append( tr( "* Command          : %1<br />" ).arg( colourText( c.command() ) ) );
-	s.append( tr( "* Arguments        : %1<br />" ).arg( colourText( c.arguments() ) ) );
-	s.append( tr( "* Working Directory: %1<br />" ).arg( colourText( c.workingDirectory() ) ) );
-	s.append( tr( "* Error            : #%1<br />" ).arg( colourText( QString::number( e ) ) ) );
-	//
-	switch ( e )
-	{
-		case QProcess::FailedToStart:
-			s.append( colourText( tr( "The process failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program." ), Qt::darkGreen ) );
-			break;
-		case QProcess::Crashed:
-			s.append( colourText( tr( "The process crashed some time after starting successfully." ), Qt::darkGreen ) );
-			break;
-		case QProcess::Timedout:
-			s.append( colourText( tr( "The last waitFor...() function timed out. The state of QProcess is unchanged, and you can try calling waitFor...() again." ), Qt::darkGreen ) );
-			break;
-		case QProcess::WriteError:
-			s.append( colourText( tr( "An error occurred when attempting to write to the process. For example, the process may not be running, or it may have closed its input channel." ), Qt::darkGreen ) );
-			break;
-		case QProcess::ReadError:
-			s.append( colourText( tr( "An error occurred when attempting to read from the process. For example, the process may not be running." ), Qt::darkGreen ) );
-			break;
-		case QProcess::UnknownError:
-		default:
-			s.append( colourText( tr( "An unknown error occurred. This is the default return value of error()." ), Qt::darkGreen ) );
-			break;
-	}
+	QString s( tr( "* Error            : '%1'<br />" ).arg( colourText( command.text() ) ) );
+	s.append( tr( "* Command          : %1<br />" ).arg( colourText( command.command() ) ) );
+	s.append( tr( "* Arguments        : %1<br />" ).arg( colourText( command.arguments() ) ) );
+	s.append( tr( "* Working Directory: %1<br />" ).arg( colourText( command.workingDirectory() ) ) );
+	s.append( tr( "* Error            : #%1<br />" ).arg( colourText( QString::number( error ) ) ) );
+	s.append( colourText( pConsoleManager::errorToString( error ), Qt::darkGreen ) );
+
 	// appendOutput to console log
 	appendInBox( colourText( s, Qt::blue ), Qt::red );
+	
+	// append finish/error step
+	pConsoleManagerStep::Data data;
+	data[ pConsoleManagerStep::TypeRole ] = pConsoleManagerStep::Finish;
+	data[ Qt::DisplayRole ] = pConsoleManager::errorToString( error );
+	appendStep( pConsoleManagerStep( data ) );
 }
 
 /*!
@@ -413,6 +418,7 @@ void MessageBoxDocks::commandFinished( const pCommand& c, int exitCode, QProcess
 	// appendOutput to console log
 	appendInBox( colourText( s, Qt::blue ), Qt::red );
 	
+	// append finish step
 	pConsoleManagerStep::Data data;
 	data[ pConsoleManagerStep::TypeRole ] = pConsoleManagerStep::Finish;
 	
@@ -423,7 +429,6 @@ void MessageBoxDocks::commandFinished( const pCommand& c, int exitCode, QProcess
 	}
 	
 	appendStep( pConsoleManagerStep( data ) );
-
 }
 
 /*!
@@ -435,8 +440,10 @@ void MessageBoxDocks::commandFinished( const pCommand& c, int exitCode, QProcess
 void MessageBoxDocks::commandReadyRead( const pCommand&, const QByteArray& a )
 {
 	// we check if the scroll bar is at maximum
-	int p = mOutput->tbOutput->verticalScrollBar()->value();
-	bool b = p == mOutput->tbOutput->verticalScrollBar()->maximum();
+	QScrollBar* sb = mOutput->tbOutput->verticalScrollBar();
+	const int oldValue = sb->value();
+	bool atBottom = oldValue == sb->maximum();
+	
 	// appendOutput log
 	mOutput->tbOutput->moveCursor( QTextCursor::End );
 	/*
@@ -450,8 +457,9 @@ void MessageBoxDocks::commandReadyRead( const pCommand&, const QByteArray& a )
 	}
 	*/
 	mOutput->tbOutput->insertPlainText( QTextCodec::codecForLocale()->toUnicode( a ) );
-	// if scrollbar is at maximum, increase it, else restore last position
-	mOutput->tbOutput->verticalScrollBar()->setValue( b ? mOutput->tbOutput->verticalScrollBar()->maximum() : p );
+	
+	// restore position
+	sb->setValue( atBottom ? sb->maximum() : oldValue );
 }
 
 /*!

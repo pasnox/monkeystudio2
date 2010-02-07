@@ -5,6 +5,8 @@
 pConsoleManagerStepModel::pConsoleManagerStepModel( QObject* parent )
 	: QAbstractItemModel( parent )
 {
+	mWarnings = 0;
+	mErrors = 0;
 }
 
 pConsoleManagerStepModel::~pConsoleManagerStepModel()
@@ -79,7 +81,7 @@ QModelIndex pConsoleManagerStepModel::nextWarning( const QModelIndex& fromIndex 
 		
 		if ( step.type() == pConsoleManagerStep::Warning )
 		{
-			createIndex( i, 0, &step );
+			return createIndex( i, 0, &step );
 		}
 	}
 	
@@ -101,7 +103,7 @@ QModelIndex pConsoleManagerStepModel::nextError( const QModelIndex& fromIndex ) 
 		
 		if ( step.type() == pConsoleManagerStep::Error )
 		{
-			createIndex( i, 0, &step );
+			return createIndex( i, 0, &step );
 		}
 	}
 	
@@ -119,6 +121,8 @@ void pConsoleManagerStepModel::clear()
 	
 	beginRemoveRows( QModelIndex(), 0, count -1 );
 	mSteps.clear();
+	mWarnings = 0;
+	mErrors = 0;
 	endRemoveRows();
 }
 
@@ -127,7 +131,21 @@ void pConsoleManagerStepModel::appendStep( const pConsoleManagerStep& step )
 	// get last type
 	const pConsoleManagerStep::Type type = mSteps.isEmpty() ? pConsoleManagerStep::Unknown : mSteps.last().type();
 	const int count = rowCount();
+	
+	// update warnings/errors
+	switch ( step.type() )
+	{
+		case pConsoleManagerStep::Warning:
+			mWarnings++;
+			break;
+		case pConsoleManagerStep::Error:
+			mErrors++;
+			break;
+		default:
+			break;
+	}
 
+	// add step
 	switch ( type )
 	{
 		case pConsoleManagerStep::Compiling:
@@ -164,37 +182,17 @@ void pConsoleManagerStepModel::appendStep( const pConsoleManagerStep& step )
 		}
 	}
 	
-	// if step is finish, need calculate error, warning if needed
+	// if step is finish, need set error, warning text if needed
 	if ( step.type() == pConsoleManagerStep::Finish )
 	{
 		pConsoleManagerStep* _step = &mSteps.last();
 		
 		if ( step.roleValue( Qt::DisplayRole ).toString().isEmpty() )
 		{
-			// count error, warning
-			int e = 0, w = 0;
-			
-			for ( int i = 0; i < mSteps.count(); i++ )
-			{
-				const pConsoleManagerStep& tmpStep = mSteps[ i ];
-				
-				switch ( tmpStep.type() )
-				{
-					case pConsoleManagerStep::Error:
-						e++;
-						break;
-					case pConsoleManagerStep::Warning:
-						w++;
-						break;
-					default:
-						continue;
-				}
-			}
-			
-			_step->setRoleValue( pConsoleManagerStep::TypeRole, e ? pConsoleManagerStep::Bad : pConsoleManagerStep::Good );
-			_step->setRoleValue( Qt::DisplayRole, tr( "Command terminated, error(s): %1, warning(s): %2" ).arg( e ).arg( w ) );
+			_step->setRoleValue( pConsoleManagerStep::TypeRole, mErrors ? pConsoleManagerStep::Bad : pConsoleManagerStep::Good );
+			_step->setRoleValue( Qt::DisplayRole, tr( "Command terminated, error(s): %1, warning(s): %2" ).arg( mErrors ).arg( mWarnings ) );
 		}
-		else //own text present
+		else // own text present
 		{
 			_step->setRoleValue( pConsoleManagerStep::TypeRole, pConsoleManagerStep::Bad );
 		}
@@ -206,5 +204,9 @@ void pConsoleManagerStepModel::appendStep( const pConsoleManagerStep& step )
 
 void pConsoleManagerStepModel::appendSteps( const pConsoleManagerStepList& steps )
 {
-	Q_UNUSED( steps );
+	// do a hacky loop for now as this member is not yet used
+	foreach ( const pConsoleManagerStep& step, steps )
+	{
+		appendStep( step );
+	}
 }

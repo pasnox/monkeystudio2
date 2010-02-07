@@ -43,14 +43,6 @@
 #include <QIcon>
 #include <QTabWidget>
 
-/*!
-	Constructor of class
-*/
-MessageBox::MessageBox()
-{
-	mMessageBoxDocks = 0;
-}
-
 void MessageBox::fillPluginInfos()
 {
 	mPluginInfos.Caption = tr( "Message Box" );
@@ -81,8 +73,7 @@ bool MessageBox::install()
 	MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mMessageBoxDocks->mBuildStep, mMessageBoxDocks->mBuildStep->windowTitle(), mMessageBoxDocks->mBuildStep->windowIcon() );
 	MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mMessageBoxDocks->mOutput, mMessageBoxDocks->mOutput->windowTitle(), mMessageBoxDocks->mOutput->windowIcon() );
 	MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mMessageBoxDocks->mCommand, mMessageBoxDocks->mCommand->windowTitle(), mMessageBoxDocks->mCommand->windowIcon() );
-	// add actions to main window
-	connect( MonkeyCore::menuBar()->action( "mView/aShowNextError", tr( "Show Next Error" ), QIcon( ":/icons/goto.png" ), "Shift+F9" ), SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showNextError() ) );
+	// connections
 	connect( MonkeyCore::consoleManager(), SIGNAL( started() ), this, SLOT( onConsoleStarted() ) );
 	return true;
 }
@@ -97,13 +88,10 @@ bool MessageBox::install()
 */
 bool MessageBox::uninstall()
 {
-	// disconnect
+	// disconnections
 	disconnect( MonkeyCore::consoleManager(), SIGNAL( started() ), this, SLOT( onConsoleStarted() ) );
-	// delete actions
-	delete MonkeyCore::menuBar()->action( "mView/aShowNextError" );
 	// delete docks
 	delete mMessageBoxDocks;
-	mMessageBoxDocks = 0;
 	return true;
 }
 
