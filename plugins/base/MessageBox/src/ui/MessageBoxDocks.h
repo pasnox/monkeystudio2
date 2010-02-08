@@ -47,6 +47,7 @@
 
 #include <pIconManager.h>
 #include <pConsoleManager.h>
+#include <pDockWidgetTitleBar.h>
 
 class pConsoleManagerStepModel;
 
@@ -67,6 +68,10 @@ public:
 		aShowNextWarning->setStatusTip( tr( "Show the next build step warning." ) );
 		aShowNextError = new QAction( pIconManager::icon( "error.png", ":/icons" ), tr( "Next Error..." ), this );
 		aShowNextError->setStatusTip( tr( "Show the next build step error." ) );
+		
+		titleBar()->addAction( aShowNextWarning, 0 );
+		titleBar()->addAction( aShowNextError, 1 );
+		titleBar()->addSeparator( 2 );
 	}
 	
 	inline QAction* nextWarningAction() const
