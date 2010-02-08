@@ -67,14 +67,29 @@ void MessageBox::fillPluginInfos()
 */
 bool MessageBox::install()
 {
+	// create actions
+	pMenuBar* mb = MonkeyCore::menuBar();
+	QAction* warning;
+	QAction* error;
+
+	mb->beginGroup( "mView" );
+		warning = mb->action( "aShowNextWarning", tr( "Next Warning..." ), pIconManager::icon( "warning.png", ":/icons" ), tr( "Ctrl+Shift++" ), tr( "Show the next build step warning." ) );
+		error = mb->action( "aShowNextError", tr( "Next Error..." ), pIconManager::icon( "error.png", ":/icons" ), tr( "Ctrl+Alt++" ), tr( "Show the next build step error." ) );
+	mb->endGroup();
+	
 	// create docks
 	mMessageBoxDocks = new MessageBoxDocks( this );
+	
 	// add docks to main window
 	MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mMessageBoxDocks->mBuildStep, mMessageBoxDocks->mBuildStep->windowTitle(), mMessageBoxDocks->mBuildStep->windowIcon() );
 	MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mMessageBoxDocks->mOutput, mMessageBoxDocks->mOutput->windowTitle(), mMessageBoxDocks->mOutput->windowIcon() );
 	MonkeyCore::mainWindow()->dockToolBar( Qt::BottomToolBarArea )->addDock( mMessageBoxDocks->mCommand, mMessageBoxDocks->mCommand->windowTitle(), mMessageBoxDocks->mCommand->windowIcon() );
+	
 	// connections
+	connect( warning, SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showNextWarning() ) );
+	connect( error, SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showNextError() ) );
 	connect( MonkeyCore::consoleManager(), SIGNAL( started() ), this, SLOT( onConsoleStarted() ) );
+	
 	return true;
 }
 
@@ -88,10 +103,26 @@ bool MessageBox::install()
 */
 bool MessageBox::uninstall()
 {
+	// delete actions
+	pMenuBar* mb = MonkeyCore::menuBar();
+	QAction* action;
+
+	mb->beginGroup( "mView" );
+		action = mb->action( "aShowNextWarning" );
+		disconnect( action, SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showNextWarning() ) );
+		delete action;
+
+		action = mb->action( "aShowNextError" );
+		disconnect( action, SIGNAL( triggered() ), mMessageBoxDocks, SLOT( showNextError() ) );
+		delete action;
+	mb->endGroup();
+	
 	// disconnections
 	disconnect( MonkeyCore::consoleManager(), SIGNAL( started() ), this, SLOT( onConsoleStarted() ) );
+	
 	// delete docks
 	delete mMessageBoxDocks;
+	
 	return true;
 }
 
