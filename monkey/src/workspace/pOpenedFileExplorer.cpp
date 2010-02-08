@@ -49,7 +49,6 @@ pOpenedFileExplorer::pOpenedFileExplorer( pWorkspace* workspace )
 	mModel = new pOpenedFileModel( workspace );
 	aComboBox = new pOpenedFileAction( this, mModel );
 	setupUi( this );
-	setFocusProxy( tvFiles );
 	setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
 	tvFiles->setModel( mModel );
 	tvFiles->setAttribute( Qt::WA_MacShowFocusRect, false );
@@ -161,14 +160,19 @@ void pOpenedFileExplorer::selectedIndexChanged( const QModelIndex& index )
 {
 	pAbstractChild* document = mModel->document( index );
 	
-	if ( tvFiles->currentIndex() != index )
+	tvFiles->setCurrentIndex( index );
+	tvFiles->scrollTo( index );
+	
+	// backup/restore current focused widget as setting active mdi window will steal it
+	QWidget* focusWidget = window()->focusWidget();
+	
+	mWorkspace->setCurrentDocument( document );
+	
+	if ( focusWidget )
 	{
-		tvFiles->setCurrentIndex( index );
+		focusWidget->setFocus();
 	}
 	
-	tvFiles->scrollTo( index );
-	mWorkspace->setCurrentDocument( document );
-	setFocus(); // setting active mdi window steal the focus
 	emit currentIndexChanged( index );
 	emit currentIndexChanged( index.row() );
 }
