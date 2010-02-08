@@ -40,7 +40,7 @@ SearchWidget::SearchWidget( QWidget* parent )
 	mProgress->setAlignment( Qt::AlignCenter );
 	mProgress->setToolTip( tr( "Search in progress..." ) );
 	mProgress->setMaximumSize( QSize( 80, 16 ) );
-	MonkeyCore::mainWindow()->statusBar()->addPermanentWidget( mProgress );
+	MonkeyCore::mainWindow()->statusBar()->insertPermanentWidget( 0, mProgress );
 	mProgress->setVisible( false );
 
 	// threads
@@ -56,6 +56,12 @@ SearchWidget::SearchWidget( QWidget* parent )
 	tbMode->setMenu( MonkeyCore::menuBar()->menu( "mEdit/mSearchReplace" ) );
 	tbMode->setCursor( Qt::ArrowCursor );
 	tbMode->installEventFilter( this );
+	
+	// cd up action
+	tbCdUp = new QToolButton( cbPath->lineEdit() );
+	tbCdUp->setIcon( pIconManager::icon( "go-up.png" ) );
+	tbCdUp->setCursor( Qt::ArrowCursor );
+	tbCdUp->installEventFilter( this );
 
 	// options actions
 	QAction* action;
@@ -99,6 +105,20 @@ SearchWidget::SearchWidget( QWidget* parent )
 	vlMain->setSpacing( 0 );
 #endif
 
+	// mask tooltip
+	QStringList languages = pMonkeyStudio::availableLanguages();
+	
+	for ( int i = 0; i < languages.count(); i += 10 )
+	{
+		languages[ i ].prepend( "\n" );
+	}
+	
+	QString maskToolTip = tr( "Space separated list of wildcards, ie: *.h *.cpp file???.txt\n"
+		"You can use language name too so the search will only apply to the language suffixes.\n"
+		"Available languages: %1" ).arg( languages.join( ", " ) );
+	
+	cbMask->setToolTip( maskToolTip );
+
 	// codecs
 	QStringList codecs;
 	foreach ( const QString& codec, QTextCodec::availableCodecs() )
@@ -112,6 +132,7 @@ SearchWidget::SearchWidget( QWidget* parent )
 
 	// connections
 	connect( cbSearch->lineEdit(), SIGNAL( textEdited( const QString& ) ), this, SLOT( search_textChanged() ) );
+	connect( tbCdUp, SIGNAL( clicked() ), this, SLOT( cdUp_clicked() ) );
 	connect( mSearchThread, SIGNAL( started() ), this, SLOT( searchThread_stateChanged() ) );
 	connect( mSearchThread, SIGNAL( finished() ), this, SLOT( searchThread_stateChanged() ) );
 	connect( mSearchThread, SIGNAL( progressChanged( int, int ) ), this, SLOT( searchThread_progressChanged( int, int ) ) );
@@ -384,19 +405,20 @@ bool SearchWidget::eventFilter( QObject* object, QEvent* event )
 {
 	if ( event->type() == QEvent::Paint )
 	{
-		QLineEdit* lineEdit = cbSearch->lineEdit();
+		QToolButton* toolButton = qobject_cast<QToolButton*>( object );
+		QLineEdit* lineEdit = object == tbMode ? cbSearch->lineEdit() : cbPath->lineEdit();
 		lineEdit->setContentsMargins( lineEdit->height(), 0, 0, 0 );
 		
 		const int height = lineEdit->height();
 		const QRect availableRect( 0, 0, height, height );
 		
-		if ( tbMode->rect() != availableRect )
+		if ( toolButton->rect() != availableRect )
 		{
-			tbMode->setGeometry( availableRect );
+			toolButton->setGeometry( availableRect );
 		}
 		
-		QPainter painter( tbMode );
-		tbMode->icon().paint( &painter, availableRect );
+		QPainter painter( toolButton );
+		toolButton->icon().paint( &painter, availableRect );
 		
 		return true;
 	}
@@ -803,6 +825,20 @@ void SearchWidget::search_textChanged()
 	}
 }
 
+void SearchWidget::cdUp_clicked()
+{
+	QDir dir( cbPath->currentText() );
+	
+	if ( !dir.exists() )
+	{
+		return;
+	}
+	
+	dir.cdUp();
+	
+	cbPath->setEditText( dir.absolutePath() );
+}
+
 void SearchWidget::on_pbPrevious_clicked()
 {
 	updateComboBoxes();
@@ -895,20 +931,6 @@ void SearchWidget::on_pbReplaceChecked_clicked()
 void SearchWidget::on_pbReplaceCheckedStop_clicked()
 {
 	mReplaceThread->stop();
-}
-
-void SearchWidget::on_pbGoUp_clicked()
-{
-	QDir dir( cbPath->currentText() );
-	
-	if ( !dir.exists() )
-	{
-		return;
-	}
-	
-	dir.cdUp();
-	
-	cbPath->setEditText( dir.absolutePath() );
 }
 
 void SearchWidget::on_pbBrowse_clicked()

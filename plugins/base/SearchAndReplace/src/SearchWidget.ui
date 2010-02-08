@@ -76,7 +76,7 @@
             <string>&amp;Previous</string>
            </property>
            <property name="icon">
-            <iconset resource="../../../../monkey/src/resources/resources.qrc">
+            <iconset>
              <normaloff>:/edit/icons/edit/previous.png</normaloff>:/edit/icons/edit/previous.png</iconset>
            </property>
           </widget>
@@ -87,7 +87,7 @@
             <string>&amp;Next</string>
            </property>
            <property name="icon">
-            <iconset resource="../../../../monkey/src/resources/resources.qrc">
+            <iconset>
              <normaloff>:/edit/icons/edit/next.png</normaloff>:/edit/icons/edit/next.png</iconset>
            </property>
           </widget>
@@ -98,7 +98,7 @@
             <string>Searc&amp;h</string>
            </property>
            <property name="icon">
-            <iconset resource="../../../../monkey/src/resources/resources.qrc">
+            <iconset>
              <normaloff>:/edit/icons/edit/search.png</normaloff>:/edit/icons/edit/search.png</iconset>
            </property>
           </widget>
@@ -109,7 +109,7 @@
             <string>S&amp;top</string>
            </property>
            <property name="icon">
-            <iconset resource="../../../../monkey/src/resources/resources.qrc">
+            <iconset>
              <normaloff>:/console/icons/console/stop.png</normaloff>:/console/icons/console/stop.png</iconset>
            </property>
           </widget>
@@ -173,7 +173,7 @@
             <string>Rep&amp;lace</string>
            </property>
            <property name="icon">
-            <iconset resource="../../../../monkey/src/resources/resources.qrc">
+            <iconset>
              <normaloff>:/edit/icons/edit/replace.png</normaloff>:/edit/icons/edit/replace.png</iconset>
            </property>
           </widget>
@@ -184,7 +184,7 @@
             <string>Replace &amp;All</string>
            </property>
            <property name="icon">
-            <iconset resource="../../../../monkey/src/resources/resources.qrc">
+            <iconset>
              <normaloff>:/edit/icons/edit/replace.png</normaloff>:/edit/icons/edit/replace.png</iconset>
            </property>
           </widget>
@@ -195,7 +195,7 @@
             <string>Replace Chec&amp;ked</string>
            </property>
            <property name="icon">
-            <iconset resource="../../../../monkey/src/resources/resources.qrc">
+            <iconset>
              <normaloff>:/edit/icons/edit/replace.png</normaloff>:/edit/icons/edit/replace.png</iconset>
            </property>
           </widget>
@@ -206,7 +206,7 @@
             <string>S&amp;top</string>
            </property>
            <property name="icon">
-            <iconset resource="../../../../monkey/src/resources/resources.qrc">
+            <iconset>
              <normaloff>:/console/icons/console/stop.png</normaloff>:/console/icons/console/stop.png</iconset>
            </property>
           </widget>
@@ -265,20 +265,12 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QPushButton" name="pbGoUp">
-           <property name="icon">
-            <iconset resource="../../../../monkey/src/resources/resources.qrc">
-             <normaloff>:/listeditor/icons/listeditor/go-up.png</normaloff>:/listeditor/icons/listeditor/go-up.png</iconset>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="QPushButton" name="pbBrowse">
            <property name="text">
             <string>&amp;Browse</string>
            </property>
            <property name="icon">
-            <iconset resource="../../../../monkey/src/resources/resources.qrc">
+            <iconset>
              <normaloff>:/listeditor/icons/listeditor/folder.png</normaloff>:/listeditor/icons/listeditor/folder.png</iconset>
            </property>
           </widget>
@@ -382,10 +374,6 @@
          </item>
          <item>
           <widget class="QComboBox" name="cbMask">
-           <property name="toolTip">
-            <string>Space separated list of wildcards, ie: *.h *.cpp file???.txt
-You can use language name too so the search will only apply to the language suffixes, ie: c++ php</string>
-           </property>
            <property name="editable">
             <bool>true</bool>
            </property>
