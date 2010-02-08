@@ -54,24 +54,13 @@ MessageBoxDocks::MessageBoxDocks( QObject* parent )
 	mStepModel = new pConsoleManagerStepModel( this );
 	mBuildStep->lvBuildSteps->setModel( mStepModel );
 	
-	QMenu* menu = MonkeyCore::menuBar()->menu( "mView" );
-	menu->addAction( mBuildStep->nextWarningAction() );
-	menu->addAction( mBuildStep->nextErrorAction() );
-	
 	// set defaultshortcuts
-	pActionsManager::setActionsManager( mBuildStep->nextWarningAction(), MonkeyCore::actionsManager() );
-	pActionsManager::setActionsManager( mBuildStep->nextErrorAction(), MonkeyCore::actionsManager() );
-	
 	pActionsManager::setDefaultShortcut( mBuildStep->toggleViewAction(), QKeySequence( "F9" ) );
-	pActionsManager::setDefaultShortcut( mBuildStep->nextWarningAction(), QKeySequence( "Ctrl+Shift++" ) );
-	pActionsManager::setDefaultShortcut( mBuildStep->nextErrorAction(), QKeySequence( "Ctrl+Alt++" ) );
 	pActionsManager::setDefaultShortcut( mOutput->toggleViewAction(), QKeySequence( "F10" ) );
 	pActionsManager::setDefaultShortcut( mCommand->toggleViewAction(), QKeySequence( "F11" ) );
 	
 	// connections
 	connect( mBuildStep->lvBuildSteps, SIGNAL( activated( const QModelIndex& ) ), this, SLOT( lvBuildSteps_activated( const QModelIndex& ) ) );
-	connect( mBuildStep->nextWarningAction(), SIGNAL( triggered() ), this, SLOT( showNextWarning() ) );
-	connect( mBuildStep->nextErrorAction(), SIGNAL( triggered() ), this, SLOT( showNextError() ) );
 	connect( mOutput->cbRawCommand->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( cbRawCommand_returnPressed() ) );
 	connect( MonkeyCore::consoleManager(), SIGNAL( commandError( const pCommand&, QProcess::ProcessError ) ), this, SLOT( commandError( const pCommand&, QProcess::ProcessError ) ) );
 	connect( MonkeyCore::consoleManager(), SIGNAL( commandFinished( const pCommand&, int, QProcess::ExitStatus ) ), this, SLOT( commandFinished( const pCommand&, int, QProcess::ExitStatus ) ) );

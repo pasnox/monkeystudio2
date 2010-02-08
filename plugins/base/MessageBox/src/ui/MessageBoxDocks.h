@@ -47,6 +47,9 @@
 
 #include <pIconManager.h>
 #include <pConsoleManager.h>
+#include <pDockWidgetTitleBar.h>
+#include <MonkeyCore.h>
+#include <pMenuBar.h>
 
 class pConsoleManagerStepModel;
 
@@ -60,24 +63,15 @@ public:
 		: pDockWidget( parent )
 	{
 		setObjectName( metaObject()->className() );
+		
 		setupUi( this );
 		lvBuildSteps->setAttribute( Qt::WA_MacShowFocusRect, false );
 		lvBuildSteps->setAttribute( Qt::WA_MacSmallSize );
-		aShowNextWarning = new QAction( pIconManager::icon( "warning.png", ":/icons" ), tr( "Next Warning..." ), this );
-		aShowNextWarning->setStatusTip( tr( "Show the next build step warning." ) );
-		aShowNextError = new QAction( pIconManager::icon( "error.png", ":/icons" ), tr( "Next Error..." ), this );
-		aShowNextError->setStatusTip( tr( "Show the next build step error." ) );
+		
+		titleBar()->addAction( MonkeyCore::menuBar()->action( "mView/aShowNextWarning" ), 0 );
+		titleBar()->addAction( MonkeyCore::menuBar()->action( "mView/aShowNextError" ), 1 );
+		titleBar()->addSeparator( 2 );
 	}
-	
-	inline QAction* nextWarningAction() const
-	{ return aShowNextWarning; }
-	
-	inline QAction* nextErrorAction() const
-	{ return aShowNextError; }
-
-protected:
-	QAction* aShowNextWarning;
-	QAction* aShowNextError;
 };
 
 /*!

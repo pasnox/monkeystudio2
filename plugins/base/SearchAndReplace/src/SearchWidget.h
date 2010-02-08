@@ -51,6 +51,7 @@ protected:
 	ReplaceThread* mReplaceThread;
 	SearchResultsDock* mDock;
 	QToolButton* tbMode;
+	QToolButton* tbCdUp;
 	QProgressBar* mProgress;
 
 	virtual bool eventFilter( QObject* object, QEvent* event );
@@ -72,6 +73,7 @@ protected slots:
 	void replaceThread_openedFileHandled( const QString& fileName, const QString& content, const QString& codec );
 	void replaceThread_error( const QString& error );
 	void search_textChanged();
+	void cdUp_clicked();
 	void on_pbPrevious_clicked();
 	void on_pbNext_clicked();
 	void on_pbSearch_clicked();
@@ -80,7 +82,6 @@ protected slots:
 	void on_pbReplaceAll_clicked();
 	void on_pbReplaceChecked_clicked();
 	void on_pbReplaceCheckedStop_clicked();
-	void on_pbGoUp_clicked();
 	void on_pbBrowse_clicked();
 };
 
