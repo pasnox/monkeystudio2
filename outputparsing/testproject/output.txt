@@ -1,0 +1,10 @@
+src/SearchWidgetModel.h:6:35: error: AbstractSearchBackend.h: No such file or directory
+
+collect2: ld returned 1 exit status
+
+src/SearchWidgetModel.h:6: error: AbstractSearchBackend.h: No such file or directory
+
+Here is template error:
+
+src/views/LoadingWidget.cpp:3:2: error: invalid preprocessing directive #inlude
+
