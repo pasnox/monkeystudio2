@@ -1,7 +1,7 @@
 // The implementation of various Qt version independent classes used by the
 // rest of the port.
 //
-// Copyright (c) 2009 Riverbank Computing Limited <info@riverbankcomputing.com>
+// Copyright (c) 2010 Riverbank Computing Limited <info@riverbankcomputing.com>
 // 
 // This file is part of QScintilla.
 // 
@@ -130,6 +130,9 @@ SciListBox::SciListBox(QWidget *parent, ListBoxQt *lbx_)
     // reduce the risk of breaking something that works with earlier versions.
 #if QT_VERSION >= 0x040500
     setWindowFlags(Qt::ToolTip|Qt::WindowStaysOnTopHint);
+#else
+    setWindowFlags(Qt::Tool|Qt::FramelessWindowHint);
+#endif
     setAttribute(Qt::WA_StaticContents);
 
     setFocusProxy(parent);
@@ -190,30 +193,6 @@ void SciListBox::keyPressEvent(QKeyEvent *e)
     }
 }
 
-#else
-
-SciListBox::SciListBox(QWidget *parent, ListBoxQt *lbx_)
-    : QListBox(parent,0,Qt::WType_Popup|Qt::WStyle_Customize|Qt::WStyle_NoBorder|Qt::WStaticContents), lbx(lbx_)
-{
-    setFocusProxy(parent);
-
-    setFrameShape(StyledPanel);
-    setFrameShadow(Plain);
-
-    connect(this,SIGNAL(doubleClicked(QListBoxItem *)),
-        SLOT(handleSelection()));
-
-    connect(this,SIGNAL(highlighted(QListBoxItem *)),
-        SLOT(ensureCurrentVisible()));
-}
-
-
-int SciListBox::find(const QString &prefix)
-{
-    return index(findItem(prefix, Qt::CaseSensitive|Qt::BeginsWith));
-}
-
-#endif
 
 
 SciListBox::~SciListBox()
