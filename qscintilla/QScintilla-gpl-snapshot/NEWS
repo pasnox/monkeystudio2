@@ -1,3 +1,13 @@
+v2.4.2 20th January 2010
+  - Updated Spanish translations from Jaime Seuma.
+  - Fixed compilation problems with Qt v3 and Qt v4 prior to v4.5.
+
+v2.4.1 14th January 2010
+  - Added the QsciLexerSpice and QsciLexerVerilog classes.
+  - Significant performance improvements when handling long lines.
+  - The Python bindings include automatically generated docstrings by default.
+  - Added an API file for Python v3.
+
 v2.4 5th June 2009
   - Based on Scintilla v1.78.
   - Added the QsciLexerCustom, QsciStyle and QsciStyledText classes.

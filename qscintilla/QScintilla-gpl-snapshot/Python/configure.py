@@ -1,6 +1,6 @@
 # This script configures QScintilla for PyQt v3 and/or v4.
 #
-# Copyright (c) 2009 Riverbank Computing Limited <info@riverbankcomputing.com>
+# Copyright (c) 2010 Riverbank Computing Limited <info@riverbankcomputing.com>
 # 
 # This file is part of QScintilla.
 # 
@@ -68,7 +68,7 @@ QSCI_API_MAJOR = 5
 
 
 # Initialise the globals.
-sip_min_version = 0x040400
+sip_min_version = 0x040a00
 
 if sys.platform == "win32":
     qsci_define = "QSCINTILLA_DLL"
@@ -89,7 +89,7 @@ def create_optparser():
         setattr(parser.values, option.dest, os.path.abspath(value))
 
     p = optparse.OptionParser(usage="python %prog [options]",
-            version="2.4.1-snapshot-20091211")
+            version="2.4.2")
 
     p.add_option("-a", "--apidir", action="callback", default=None,
             type="string", metavar="DIR", dest="qscidir",
@@ -112,6 +112,8 @@ def create_optparser():
             metavar="DIR", dest="qsciincdir", callback=store_abspath_dir,
             help="the directory containing the QScintilla Qsci header file "
             "directory [default: %s]" % pyqt.qt_inc_dir)
+    p.add_option("--no-docstrings", action="store_true", default=False,
+            dest="no_docstrings", help="disable the generation of docstrings")
     p.add_option("-o", action="callback", default=None, type="string",
             metavar="DIR", dest="qscilibdir", callback=store_abspath_dir,
             help="the directory containing the QScintilla library [default: "
@@ -145,6 +147,11 @@ def inform_user():
     sipconfig.inform("The QScintilla API file will be installed in %s." % os.path.join(opts.qscidir, "api", "python"))
     sipconfig.inform("The QScintilla .sip files will be installed in %s." % opts.qscisipdir)
 
+    if opts.no_docstrings:
+        sipconfig.inform("The QScintilla module is being built without generated docstrings.")
+    else:
+        sipconfig.inform("The QScintilla module is being built with generated docstrings.")
+
 
 def check_qscintilla():
     """See if QScintilla can be found and what its version is.
@@ -160,8 +167,8 @@ def check_qscintilla():
             # Because we include the Python bindings with the C++ code we can
             # reasonably force the same version to be used and not bother about
             # versioning.
-            if sciversstr != "2.4.1-snapshot-20091211":
-                sipconfig.error("QScintilla %s is being used but the Python bindings 2.4.1-snapshot-20091211 are being built.  Please use matching versions." % sciversstr)
+            if sciversstr != "2.4.2":
+                sipconfig.error("QScintilla %s is being used but the Python bindings 2.4.2 are being built.  Please use matching versions." % sciversstr)
 
             sipconfig.inform("QScintilla %s is being used." % sciversstr)
         else:
@@ -206,6 +213,9 @@ def generate_code():
     argv = ['"' + pyqt.sip_bin + '"']
 
     argv.extend(sip_flags())
+
+    if not opts.no_docstrings:
+        argv.append("-o");
 
     if opts.concat:
         argv.append("-j")
