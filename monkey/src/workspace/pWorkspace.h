@@ -113,6 +113,7 @@ protected:
 	static QString DEFAULT_CONTEXT;
 	
 	bool eventFilter( QObject* object, QEvent* event );
+	void updateGuiState( pAbstractChild* document );
 
 protected slots:
 	void document_fileOpened();

@@ -180,6 +180,92 @@ bool pWorkspace::eventFilter( QObject* object, QEvent* event )
 	return QFrame::eventFilter( object, event );
 }
 
+void pWorkspace::updateGuiState( pAbstractChild* document )
+{
+	// fix fucking flickering due to window activation change on application gain / lost focus.
+	if ( !document && currentDocument() )
+	{
+		return;
+	}
+	
+	// get child
+	pEditor* editor = document ? document->editor() : 0;
+	bool hasDocument = document;
+	bool hasEditor = editor;
+	bool modified = hasDocument ? document->isModified() : false;
+	bool print = hasDocument ? document->isPrintAvailable() : false;
+	bool undo = hasDocument ? document->isUndoAvailable() : false;
+	bool redo = hasDocument ? document->isRedoAvailable() : false;
+	bool copy = hasDocument ? document->isCopyAvailable() : false;
+	bool paste = hasDocument ? document->isPasteAvailable() : false;
+	bool go = hasDocument ? document->isGoToAvailable() : false;
+	bool moreThanOneDocument = mMdiArea->subWindowList().count() > 1;
+	
+	// context toolbar
+	pMultiToolBar* mtb = MonkeyCore::multiToolBar();
+	
+	if ( document )
+	{
+		if ( !mtb->contexts().contains( document->context() ) )
+		{
+			QToolBar* tb = mtb->toolBar( document->context() );
+			
+			initMultiToolBar( tb );
+			document->initializeContext( tb );
+		}
+		
+		mtb->setCurrentContext( document->context() );
+	}
+	else
+	{
+		if ( !mtb->contexts().contains( DEFAULT_CONTEXT ) )
+		{
+			QToolBar* tb = mtb->toolBar( DEFAULT_CONTEXT );
+			
+			initMultiToolBar( tb );
+		}
+		
+		mtb->setCurrentContext( DEFAULT_CONTEXT );
+	}
+	
+	multitoolbar_notifyChanges();
+
+	// update file menu
+	MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" )->setEnabled( modified );
+	MonkeyCore::menuBar()->action( "mFile/mSave/aAll" )->setEnabled( hasDocument );
+	MonkeyCore::menuBar()->action( "mFile/mClose/aCurrent" )->setEnabled( hasDocument );
+	MonkeyCore::menuBar()->action( "mFile/mClose/aAll" )->setEnabled( hasDocument );
+	MonkeyCore::menuBar()->action( "mFile/aReload" )->setEnabled( hasDocument );
+	MonkeyCore::menuBar()->action( "mFile/aSaveAsBackup" )->setEnabled( hasDocument );
+	MonkeyCore::menuBar()->action( "mFile/aQuickPrint" )->setEnabled( print );
+	MonkeyCore::menuBar()->action( "mFile/aPrint" )->setEnabled( print );
+
+	// update edit menu
+	MonkeyCore::menuBar()->action( "mEdit/aUndo" )->setEnabled( undo );
+	MonkeyCore::menuBar()->action( "mEdit/aRedo" )->setEnabled( redo );
+	MonkeyCore::menuBar()->action( "mEdit/aCut" )->setEnabled( copy );
+	MonkeyCore::menuBar()->action( "mEdit/aCopy" )->setEnabled( copy );
+	MonkeyCore::menuBar()->action( "mEdit/aPaste" )->setEnabled( paste );
+	
+	MonkeyCore::menuBar()->action( "mEdit/aGoTo" )->setEnabled( go );
+	MonkeyCore::menuBar()->action( "mEdit/aExpandAbbreviation" )->setEnabled( hasDocument );
+	MonkeyCore::menuBar()->setMenuEnabled( MonkeyCore::menuBar()->menu( "mEdit/mAllCommands" ), hasEditor );
+	MonkeyCore::menuBar()->setMenuEnabled( MonkeyCore::menuBar()->menu( "mEdit/mBookmarks" ), hasEditor );
+
+	// update view menu
+	MonkeyCore::menuBar()->action( "mView/aNext" )->setEnabled( moreThanOneDocument );
+	MonkeyCore::menuBar()->action( "mView/aPrevious" )->setEnabled( moreThanOneDocument );
+
+	// update status bar
+	MonkeyCore::statusBar()->setModified( modified );
+	MonkeyCore::statusBar()->setEOLMode( editor ? editor->eolMode() : (QsciScintilla::EolMode)-1 );
+	MonkeyCore::statusBar()->setIndentMode( editor ? ( editor->indentationsUseTabs() ? 1 : 0 ) : -1 );
+	MonkeyCore::statusBar()->setCursorPosition( document ? document->cursorPosition() : QPoint( -1, -1 ) );
+	
+	// internal update
+	QDir::setCurrent( hasDocument ? document->path() : pMonkeyStudio::defaultProjectsDirectory() );
+}
+
 QString pWorkspace::defaultContext()
 {
 	return DEFAULT_CONTEXT;
@@ -437,7 +523,7 @@ pAbstractChild* pWorkspace::openFile( const QString& fileName, const QString& co
 	}
 	
 	// update gui state
-	mdiArea_subWindowActivated( document );
+	updateGuiState( document );
 
 	// return child instance
 	return document;
@@ -736,91 +822,12 @@ void pWorkspace::viewModes_triggered( QAction* action )
 	setDocumentMode( (pWorkspace::ViewMode)action->data().toInt() );
 }
 
-void pWorkspace::mdiArea_subWindowActivated( QMdiSubWindow* docu )
+void pWorkspace::mdiArea_subWindowActivated( QMdiSubWindow* _document )
 {
-	// fix fucking flickering due to window activation change on application gain / lost focus.
-	if ( !docu && currentDocument() )
-	{
-		return;
-	}
+	pAbstractChild* document = qobject_cast<pAbstractChild*>( _document );
 	
-	// get child
-	pAbstractChild* document = qobject_cast<pAbstractChild*>( docu );
-	pEditor* editor = document ? document->editor() : 0;
-	bool hasDocument = document;
-	bool hasEditor = editor;
-	bool modified = hasDocument ? document->isModified() : false;
-	bool print = hasDocument ? document->isPrintAvailable() : false;
-	bool undo = hasDocument ? document->isUndoAvailable() : false;
-	bool redo = hasDocument ? document->isRedoAvailable() : false;
-	bool copy = hasDocument ? document->isCopyAvailable() : false;
-	bool paste = hasDocument ? document->isPasteAvailable() : false;
-	bool go = hasDocument ? document->isGoToAvailable() : false;
-	bool moreThanOneDocument = mMdiArea->subWindowList().count() > 1;
-	
-	// context toolbar
-	pMultiToolBar* mtb = MonkeyCore::multiToolBar();
-	
-	if ( document )
-	{
-		if ( !mtb->contexts().contains( document->context() ) )
-		{
-			QToolBar* tb = mtb->toolBar( document->context() );
-			
-			initMultiToolBar( tb );
-			document->initializeContext( tb );
-		}
-		
-		mtb->setCurrentContext( document->context() );
-	}
-	else
-	{
-		if ( !mtb->contexts().contains( DEFAULT_CONTEXT ) )
-		{
-			QToolBar* tb = mtb->toolBar( DEFAULT_CONTEXT );
-			
-			initMultiToolBar( tb );
-		}
-		
-		mtb->setCurrentContext( DEFAULT_CONTEXT );
-	}
-	
-	multitoolbar_notifyChanges();
-
-	// update file menu
-	MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" )->setEnabled( modified );
-	MonkeyCore::menuBar()->action( "mFile/mSave/aAll" )->setEnabled( hasDocument );
-	MonkeyCore::menuBar()->action( "mFile/mClose/aCurrent" )->setEnabled( hasDocument );
-	MonkeyCore::menuBar()->action( "mFile/mClose/aAll" )->setEnabled( hasDocument );
-	MonkeyCore::menuBar()->action( "mFile/aReload" )->setEnabled( hasDocument );
-	MonkeyCore::menuBar()->action( "mFile/aSaveAsBackup" )->setEnabled( hasDocument );
-	MonkeyCore::menuBar()->action( "mFile/aQuickPrint" )->setEnabled( print );
-	MonkeyCore::menuBar()->action( "mFile/aPrint" )->setEnabled( print );
-
-	// update edit menu
-	MonkeyCore::menuBar()->action( "mEdit/aUndo" )->setEnabled( undo );
-	MonkeyCore::menuBar()->action( "mEdit/aRedo" )->setEnabled( redo );
-	MonkeyCore::menuBar()->action( "mEdit/aCut" )->setEnabled( copy );
-	MonkeyCore::menuBar()->action( "mEdit/aCopy" )->setEnabled( copy );
-	MonkeyCore::menuBar()->action( "mEdit/aPaste" )->setEnabled( paste );
-	
-	MonkeyCore::menuBar()->action( "mEdit/aGoTo" )->setEnabled( go );
-	MonkeyCore::menuBar()->action( "mEdit/aExpandAbbreviation" )->setEnabled( hasDocument );
-	MonkeyCore::menuBar()->setMenuEnabled( MonkeyCore::menuBar()->menu( "mEdit/mAllCommands" ), hasEditor );
-	MonkeyCore::menuBar()->setMenuEnabled( MonkeyCore::menuBar()->menu( "mEdit/mBookmarks" ), hasEditor );
-
-	// update view menu
-	MonkeyCore::menuBar()->action( "mView/aNext" )->setEnabled( moreThanOneDocument );
-	MonkeyCore::menuBar()->action( "mView/aPrevious" )->setEnabled( moreThanOneDocument );
-
-	// update status bar
-	MonkeyCore::statusBar()->setModified( modified );
-	MonkeyCore::statusBar()->setEOLMode( editor ? editor->eolMode() : (QsciScintilla::EolMode)-1 );
-	MonkeyCore::statusBar()->setIndentMode( editor ? ( editor->indentationsUseTabs() ? 1 : 0 ) : -1 );
-	MonkeyCore::statusBar()->setCursorPosition( document ? document->cursorPosition() : QPoint( -1, -1 ) );
-	
-	// internal update
-	QDir::setCurrent( hasDocument ? document->path() : pMonkeyStudio::defaultProjectsDirectory() );
+	// update gui state
+	updateGuiState( document );
 	
 	// emit file changed
 	emit currentDocumentChanged( document );

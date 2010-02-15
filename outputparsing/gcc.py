@@ -8,10 +8,10 @@ from string import Template
 file_name = r"[\w\d\./\\\-]+"
 number = "\d+"
 compiler = "(gcc|g\+\+|mingw32-gcc|mingw32-g\+\+)[\-\d\.]*" #on Mac version could be included, such as g++-4.0
-source_file = file_name + "\.c(pp)?"
+source_file = file_name + "\.[cpmh]{1,3}" # .cpp .c .h .m .mm
 
 ## Error
-regEx = Template("^($file_name):($number): (error:|undefined reference) [^\\n]+")
+regEx = Template("^($file_name):($number):[\d:]* (error:|undefined reference) [^\\n]+")
 error =parsing.Pattern(regEx.substitute(file_name = file_name, number = number),
 								   type = 'error',
 								   file = "%1",
@@ -53,6 +53,14 @@ error.test(	text,
 					type = 'error',
 					file = 'src/views/TreeView.cpp',
 					line = '20',
+					text = text[:-1],
+					hint = text[:-1])
+
+text = "src/SearchWidgetModel.h:6:35: error: AbstractSearchBackend.h: No such file or directory\n"
+error.test(	text,
+					type = 'error',
+					file = 'src/SearchWidgetModel.h',
+					line = '6',
 					text = text[:-1],
 					hint = text[:-1])
 
@@ -160,7 +168,7 @@ compiling.test(	text,
 
 
 # Cannot find library
-regEx = "^/usr/bin/ld: cannot find -l([\w]+)"
+regEx = "^%sld: cannot find -l([\w]+)" % file_name
 no_lib =parsing.Pattern(regEx,
 									type = 'error',
 									text = 'Cannot find library "%1"')
