@@ -2,6 +2,7 @@
 #include "pWorkspace.h"
 
 #include <MonkeyCore.h>
+#include <UIMain.h>
 #include <pIconManager.h>
 #include <pDockWidgetTitleBar.h>
 #include <pMenuBar.h>
@@ -9,6 +10,7 @@
 #include <QWidgetAction>
 #include <QComboBox>
 #include <QMenu>
+#include <QDebug>
 
 class pOpenedFileAction : public QWidgetAction
 {
@@ -21,24 +23,67 @@ public:
 		mOpenedFileExplorer = parent;
 		mModel = model;
 	}
+	
+	~pOpenedFileAction()
+	{
+		qDeleteAll( mCombos );
+	}
+	
+	void syncViewIndex( const QModelIndex& index )
+	{
+		foreach ( QComboBox* combo, mCombos )
+		{
+			const bool aSMLocked = combo->view()->selectionModel()->blockSignals( true );
+			const bool aLocked = combo->blockSignals( true );
+			combo->setCurrentIndex( index.row() );
+			combo->view()->selectionModel()->blockSignals( aSMLocked );
+			combo->blockSignals( aLocked );
+		}
+	}
 
 protected:
 	pOpenedFileExplorer* mOpenedFileExplorer;
 	QAbstractItemModel* mModel;
+	QHash<QWidget*,QComboBox*> mCombos;
 	
 	virtual QWidget* createWidget( QWidget* parent )
 	{
-		QComboBox* combo = new QComboBox( parent );
-		combo->setMaxVisibleItems( 50 );
+		QComboBox* combo = mCombos.value( parent );
+		
+		if ( combo )
+		{
+			Q_ASSERT( 0 );
+			return combo;
+		}
+		
+		combo = new QComboBox( parent );
+		combo->setMaxVisibleItems( 25 );
 		combo->setSizeAdjustPolicy( QComboBox::AdjustToContents );
 		combo->setAttribute( Qt::WA_MacSmallSize );
 		combo->setModel( mModel );
 		
-		connect( combo, SIGNAL( currentIndexChanged( int ) ), mOpenedFileExplorer, SLOT( setCurrentIndex( int ) ) );
-		connect( mOpenedFileExplorer, SIGNAL( currentIndexChanged( int ) ), combo, SLOT( setCurrentIndex( int ) ) );
+		connect( combo, SIGNAL( activated( int ) ), this, SLOT( comboBox_activated( int ) ) );
+		connect( combo, SIGNAL( destroyed( QObject* ) ), this, SLOT( object_destroyed( QObject* ) ) );
+		
+		mCombos[ parent ] = combo;
 		
 		return combo;
 	}
+
+protected slots:
+	void comboBox_activated( int row )
+	{
+		const QModelIndex& index = mModel->index( row, 0 );
+		emit currentIndexChanged( index );
+	}
+	
+	void object_destroyed( QObject* object )
+	{
+		mCombos.remove( ((QWidget*)object)->parentWidget() );
+	}
+
+signals:
+	void currentIndexChanged( const QModelIndex& index );
 };
 
 pOpenedFileExplorer::pOpenedFileExplorer( pWorkspace* workspace )
@@ -53,7 +98,6 @@ pOpenedFileExplorer::pOpenedFileExplorer( pWorkspace* workspace )
 	tvFiles->setModel( mModel );
 	tvFiles->setAttribute( Qt::WA_MacShowFocusRect, false );
 	tvFiles->setAttribute( Qt::WA_MacSmallSize );
-	
 	
 	// sort menu
 	mSortMenu = new QMenu( this );
@@ -95,6 +139,7 @@ pOpenedFileExplorer::pOpenedFileExplorer( pWorkspace* workspace )
 	connect( mModel, SIGNAL( documentMoved( pAbstractChild* ) ), this, SLOT( currentDocumentChanged( pAbstractChild* ) ) );
 	connect( mModel, SIGNAL( sortModeChanged( pOpenedFileModel::SortMode ) ), this, SLOT( sortModeChanged( pOpenedFileModel::SortMode ) ) );
 	connect( tvFiles->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ), this, SLOT( selectionModel_selectionChanged( const QItemSelection&, const QItemSelection& ) ) );
+	connect( aComboBox, SIGNAL( currentIndexChanged( const QModelIndex& ) ), this, SLOT( syncViewsIndex( const QModelIndex& ) ) );
 }
 
 pOpenedFileModel* pOpenedFileExplorer::model() const
@@ -117,13 +162,39 @@ void pOpenedFileExplorer::setSortMode( pOpenedFileModel::SortMode mode )
 	mModel->setSortMode( mode );
 }
 
-void pOpenedFileExplorer::setCurrentIndex( int row )
+void pOpenedFileExplorer::syncViewsIndex( const QModelIndex& index, bool syncOnly )
 {
-	const QModelIndex index = mModel->index( row, 0 );
-	selectedIndexChanged( index );
+	// sync action combobox
+	aComboBox->syncViewIndex( index );
+	
+	// sync listview
+	const bool vLocked = tvFiles->blockSignals( true );
+	tvFiles->setCurrentIndex( index );
+	tvFiles->blockSignals( vLocked );
+	
+	// scroll the view
+	tvFiles->scrollTo( index );
+	
+	if ( syncOnly )
+	{
+		return;
+	}
+	
+	// backup/restore current focused widget as setting active mdi window will steal it
+	QWidget* focusWidget = window()->focusWidget();
+	
+	// set current document
+	pAbstractChild* document = mModel->document( index );
+	mWorkspace->setCurrentDocument( document );
+	
+	// restore focus widget
+	if ( focusWidget )
+	{
+		focusWidget->setFocus();
+	}
 }
 
-void pOpenedFileExplorer::sortTriggered ( QAction* action )
+void pOpenedFileExplorer::sortTriggered( QAction* action )
 {
 	pOpenedFileModel::SortMode mode = (pOpenedFileModel::SortMode)action->data().toInt();
 	setSortMode( mode );
@@ -137,7 +208,7 @@ void pOpenedFileExplorer::documentChanged( pAbstractChild* document )
 void pOpenedFileExplorer::currentDocumentChanged( pAbstractChild* document )
 {
 	const QModelIndex index = mModel->index( document );
-	selectedIndexChanged( index );
+	syncViewsIndex( index, true );
 }
 
 void pOpenedFileExplorer::sortModeChanged( pOpenedFileModel::SortMode mode )
@@ -156,32 +227,11 @@ void pOpenedFileExplorer::sortModeChanged( pOpenedFileModel::SortMode mode )
 	}
 }
 
-void pOpenedFileExplorer::selectedIndexChanged( const QModelIndex& index )
-{
-	pAbstractChild* document = mModel->document( index );
-	
-	tvFiles->setCurrentIndex( index );
-	tvFiles->scrollTo( index );
-	
-	// backup/restore current focused widget as setting active mdi window will steal it
-	QWidget* focusWidget = window()->focusWidget();
-	
-	mWorkspace->setCurrentDocument( document );
-	
-	if ( focusWidget )
-	{
-		focusWidget->setFocus();
-	}
-	
-	emit currentIndexChanged( index );
-	emit currentIndexChanged( index.row() );
-}
-
 void pOpenedFileExplorer::selectionModel_selectionChanged( const QItemSelection& selected, const QItemSelection& deselected )
 {
 	Q_UNUSED( deselected );
 	const QModelIndex index = selected.indexes().value( 0 );
-	selectedIndexChanged( index );
+	syncViewsIndex( index, false );
 }
 
 void pOpenedFileExplorer::on_tvFiles_customContextMenuRequested( const QPoint& pos )

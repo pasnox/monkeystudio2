@@ -122,6 +122,7 @@ QVariant pOpenedFileModel::data( const QModelIndex& index, int role ) const
 	}
 	
 	pAbstractChild* document = this->document( index );
+	Q_ASSERT( document );
 	
 	switch ( role )
 	{
