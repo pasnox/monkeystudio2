@@ -8,3 +8,5 @@ Here is template error:
 
 src/views/LoadingWidget.cpp:3:2: error: invalid preprocessing directive #inlude
 
+output.txt:11:2: warning: #warning This is bad code!!!
+
