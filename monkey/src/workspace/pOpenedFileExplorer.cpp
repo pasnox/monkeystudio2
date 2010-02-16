@@ -52,7 +52,7 @@ protected:
 		
 		if ( combo )
 		{
-			Q_ASSERT( 0 );
+			//Q_ASSERT( 0 );
 			return combo;
 		}
 		
@@ -136,8 +136,8 @@ pOpenedFileExplorer::pOpenedFileExplorer( pWorkspace* workspace )
 	connect( group, SIGNAL( triggered ( QAction* ) ), this, SLOT( sortTriggered ( QAction* ) ) );
 	connect( workspace, SIGNAL( documentChanged( pAbstractChild* ) ), this, SLOT( documentChanged( pAbstractChild* ) ) );
 	connect( workspace, SIGNAL( currentDocumentChanged( pAbstractChild* ) ), this, SLOT( currentDocumentChanged( pAbstractChild* ) ) );
-	connect( mModel, SIGNAL( documentMoved( pAbstractChild* ) ), this, SLOT( currentDocumentChanged( pAbstractChild* ) ) );
 	connect( mModel, SIGNAL( sortModeChanged( pOpenedFileModel::SortMode ) ), this, SLOT( sortModeChanged( pOpenedFileModel::SortMode ) ) );
+	connect( mModel, SIGNAL( documentsSorted() ), this, SLOT( documentsSorted() ) );
 	connect( tvFiles->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ), this, SLOT( selectionModel_selectionChanged( const QItemSelection&, const QItemSelection& ) ) );
 	connect( aComboBox, SIGNAL( currentIndexChanged( const QModelIndex& ) ), this, SLOT( syncViewsIndex( const QModelIndex& ) ) );
 }
@@ -225,6 +225,12 @@ void pOpenedFileExplorer::sortModeChanged( pOpenedFileModel::SortMode mode )
 			return;
 		}
 	}
+}
+
+void pOpenedFileExplorer::documentsSorted()
+{
+	// scroll the view
+	tvFiles->scrollTo( tvFiles->selectionModel()->selectedIndexes().value( 0 ) );
 }
 
 void pOpenedFileExplorer::selectionModel_selectionChanged( const QItemSelection& selected, const QItemSelection& deselected )

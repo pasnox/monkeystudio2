@@ -59,19 +59,20 @@ protected:
 	QIcon mTransparentIcon;
 	QIcon mModifiedIcon;
 	
+	void rebuildMapping( const QList<pAbstractChild*>& oldList, const QList<pAbstractChild*>& newList );
 	void sortDocuments();
 	void insertDocument( pAbstractChild* document, int index );
 
 protected slots:
 	void sortDocuments_timeout();
+	void currentDocumentChanged( pAbstractChild* document );
 	void documentOpened( pAbstractChild* document );
 	void documentModifiedChanged( pAbstractChild* document, bool modified );
 	void documentClosed( pAbstractChild* document );
 
 signals:
-	void documentMoved( pAbstractChild* document );
-	void documentMoved( const QModelIndex& index );
 	void sortModeChanged( pOpenedFileModel::SortMode mode );
+	void documentsSorted();
 };
 
 #endif // POPENEDFILEMODEL_H
