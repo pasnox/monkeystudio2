@@ -1305,8 +1305,7 @@ void pWorkspace::editPrepareAPIs_triggered()
 // help menu
 void pWorkspace::helpAboutApplication_triggered()
 {
-	MonkeyCore::messageManager()->appendMessage( tr( "An error occur while opening this file: '%1'" ).arg( "toto.h" ) );
-	//UIAbout::instance( this )->exec();
+	UIAbout::instance( this )->exec();
 }
 
 void pWorkspace::helpAboutQt_triggered()
