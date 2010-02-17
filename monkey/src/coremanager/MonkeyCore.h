@@ -40,7 +40,7 @@ class UIMain;
 class pMenuBar;
 class pRecentsManager;
 class pActionsManager;
-class pToolsManager;
+//class pToolsManager;
 class XUPProjectManager;
 class pFileManager;
 class pWorkspace;
@@ -64,7 +64,6 @@ public:
 	static pMenuBar* menuBar();
 	static pRecentsManager* recentsManager();
 	static pActionsManager* actionsManager();
-	static pToolsManager* toolsManager();
 	static XUPProjectManager* projectsManager();
 	static pFileManager* fileManager();
 	static pWorkspace* workspace();

@@ -212,13 +212,6 @@ pRecentsManager* MonkeyCore::recentsManager()
 	return qobject_cast<pRecentsManager*>( mInstances[&pRecentsManager::staticMetaObject] );
 }
 
-pToolsManager* MonkeyCore::toolsManager()
-{
-	if ( !mInstances.contains( &pToolsManager::staticMetaObject ) )
-		mInstances[&pToolsManager::staticMetaObject] = new pToolsManager( qApp );
-	return qobject_cast<pToolsManager*>( mInstances[&pToolsManager::staticMetaObject] );
-}
-
 XUPProjectManager* MonkeyCore::projectsManager()
 {
 	if ( !mInstances.contains( &XUPProjectManager::staticMetaObject ) )

@@ -90,8 +90,6 @@ void UIMain::initGui()
 	initMenuBar();
 	// init recents manager
 	MonkeyCore::recentsManager();
-	// init tools manager
-	MonkeyCore::toolsManager();
 	// init toolbar
 	initToolBar();
 	// init message toolbar
