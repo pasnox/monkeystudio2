@@ -36,6 +36,7 @@ protected slots:
 	void documentChanged( pAbstractChild* document );
 	void currentDocumentChanged( pAbstractChild* document );
 	void sortModeChanged( pOpenedFileModel::SortMode mode );
+	void documentsSorted();
 	void selectionModel_selectionChanged( const QItemSelection& selected, const QItemSelection& deselected );
 	void on_tvFiles_customContextMenuRequested( const QPoint& pos );
 };

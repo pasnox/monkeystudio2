@@ -110,11 +110,17 @@ public:
 	
 	// return the filename of the document
 	QString fileName() const
-	{ return QFileInfo( windowFilePath() ).fileName(); }
+	{
+		const QString wfp = windowFilePath();
+		return wfp.isEmpty() ? QString::null : QFileInfo( wfp ).fileName();
+	}
 	
 	// return the absolute path of the document
 	QString path() const
-	{ return QFileInfo( windowFilePath() ).absolutePath(); }
+	{
+		const QString wfp = windowFilePath();
+		return wfp.isEmpty() ? QString::null : QFileInfo( wfp ).absolutePath();
+	}
 	
 	// return the current buffer of filename
 	virtual QString fileBuffer() const

@@ -70,6 +70,7 @@ pOpenedFileModel::pOpenedFileModel( pWorkspace* workspace )
 	mModifiedIcon = pIconManager::icon( "save.png" );
 	
 	connect( mSortDocumentsTimer, SIGNAL( timeout() ), this, SLOT( sortDocuments_timeout() ) );
+	connect( workspace, SIGNAL( currentDocumentChanged( pAbstractChild* ) ), this, SLOT( currentDocumentChanged( pAbstractChild* ) ) );
 	connect( workspace, SIGNAL( documentOpened( pAbstractChild* ) ), this, SLOT( documentOpened( pAbstractChild* ) ) );
 	connect( workspace, SIGNAL( documentModifiedChanged( pAbstractChild*, bool ) ), this, SLOT( documentModifiedChanged( pAbstractChild*, bool ) ) );
 	connect( workspace, SIGNAL( documentClosed( pAbstractChild* ) ), this, SLOT( documentClosed( pAbstractChild* ) ) );
@@ -122,7 +123,12 @@ QVariant pOpenedFileModel::data( const QModelIndex& index, int role ) const
 	}
 	
 	pAbstractChild* document = this->document( index );
-	Q_ASSERT( document );
+	
+	if ( !document )
+	{
+		qWarning() << index << mDocuments;
+		Q_ASSERT( document );
+	}
 	
 	switch ( role )
 	{
@@ -222,20 +228,20 @@ bool pOpenedFileModel::dropMimeData( const QMimeData* data, Qt::DropAction actio
 	}
 	
 	const int fromRow = data->data( mimeTypes().first() ).toInt();
-	const QPersistentModelIndex toIndex = index( row, column );
-	const QPersistentModelIndex fromIndex = index( fromRow, 0 );
 	
-	if ( fromIndex == toIndex || toIndex == index( fromRow +1, 0 ) )
+	if ( row >= mDocuments.count() )
 	{
-		return false;
+		row--;
+	}
+	else if ( fromRow < row )
+	{
+		row--;
 	}
 	
-	setSortMode( pOpenedFileModel::Custom );
-	pAbstractChild* document = this->document( fromIndex );
-	documentClosed( document );
-	insertDocument( document, toIndex.isValid() ? toIndex.row() : row -1 );
-	emit documentMoved( document );
-	emit documentMoved( index( document ) );
+	QList<pAbstractChild*> newDocuments = mDocuments;
+	
+	newDocuments.move( fromRow, row );
+	rebuildMapping( mDocuments, newDocuments );
 	return true;
 }
 
@@ -271,8 +277,8 @@ void pOpenedFileModel::setSortMode( pOpenedFileModel::SortMode mode )
 	if ( mSortMode != mode )
 	{
 		mSortMode = mode;
-		sortDocuments();
 		emit sortModeChanged( mSortMode );
+		sortDocuments();
 	}
 }
 
@@ -304,54 +310,27 @@ void pOpenedFileModel::insertDocument( pAbstractChild* document, int index )
 	sortDocuments();
 }
 
-void pOpenedFileModel::sortDocuments_timeout()
+
+void pOpenedFileModel::rebuildMapping( const QList<pAbstractChild*>& oldList, const QList<pAbstractChild*>& newList )
 {
-	mSortDocumentsTimer->stop();
-	
 	emit layoutAboutToBeChanged();
 	const QModelIndexList pOldIndexes = persistentIndexList();
 	QModelIndexList pIndexes;
 	QMap<int, pAbstractChild*> documentsMapping;
 	QMap<int, int> mapping;
 	
+	// build old mapping
 	for ( int i = 0; i < pOldIndexes.count(); i++ )
 	{
 		const QModelIndex& index = pOldIndexes.at( i );
 		const int row = index.row();
-		documentsMapping[ row ] = mDocuments.at( row );
+		documentsMapping[ row ] = oldList.at( row );
 		mapping[ row ] = row;
 	}
 	
-	switch ( mSortMode )
-	{
-		case pOpenedFileModel::OpeningOrder:
-		{
-			OpeningOrderSorter functor( mWorkspace->documents() );
-			qSort( mDocuments.begin(), mDocuments.end(), functor );
-			break;
-		}
-		case pOpenedFileModel::FileName:
-		{
-			FileNameSorter functor;
-			qSort( mDocuments.begin(), mDocuments.end(), functor );
-			break;
-		}
-		case pOpenedFileModel::URL:
-		{
-			URLSorter functor;
-			qSort( mDocuments.begin(), mDocuments.end(), functor );
-			break;
-		}
-		case pOpenedFileModel::Suffixes:
-		{
-			SuffixesSorter functor;
-			qSort( mDocuments.begin(), mDocuments.end(), functor );
-			break;
-		}
-		case pOpenedFileModel::Custom:
-			break;
-	}
+	mDocuments = newList;
 	
+	// build new mapping
 	for ( int i = 0; i < pOldIndexes.count(); i++ )
 	{
 		const QModelIndex& pIndex = pOldIndexes.at( i );
@@ -377,10 +356,67 @@ void pOpenedFileModel::sortDocuments_timeout()
 	emit layoutChanged();
 }
 
-void pOpenedFileModel::documentOpened( pAbstractChild* document )
+void pOpenedFileModel::sortDocuments_timeout()
 {
+	mSortDocumentsTimer->stop();
+	
+	QList<pAbstractChild*> newDocuments = mDocuments;
+	
+	switch ( mSortMode )
+	{
+		case pOpenedFileModel::OpeningOrder:
+		{
+			OpeningOrderSorter functor( mWorkspace->documents() );
+			qSort( newDocuments.begin(), newDocuments.end(), functor );
+			break;
+		}
+		case pOpenedFileModel::FileName:
+		{
+			FileNameSorter functor;
+			qSort( newDocuments.begin(), newDocuments.end(), functor );
+			break;
+		}
+		case pOpenedFileModel::URL:
+		{
+			URLSorter functor;
+			qSort( newDocuments.begin(), newDocuments.end(), functor );
+			break;
+		}
+		case pOpenedFileModel::Suffixes:
+		{
+			SuffixesSorter functor;
+			qSort( newDocuments.begin(), newDocuments.end(), functor );
+			break;
+		}
+		case pOpenedFileModel::Custom:
+			break;
+	}
+	
+	rebuildMapping( mDocuments, newDocuments );
+	emit documentsSorted();
+}
+
+void pOpenedFileModel::currentDocumentChanged( pAbstractChild* document )
+{
+	if ( !document || mDocuments.contains( document ) )
+	{
+		return;
+	}
+	
 	const int index = mDocuments.count();
 	insertDocument( document, index );
+}
+
+void pOpenedFileModel::documentOpened( pAbstractChild* document )
+{
+	if ( mDocuments.contains( document ) )
+	{
+		sortDocuments();
+	}
+	else
+	{
+		currentDocumentChanged( document );
+	}
 }
 
 void pOpenedFileModel::documentModifiedChanged( pAbstractChild* document, bool modified )
@@ -393,6 +429,12 @@ void pOpenedFileModel::documentModifiedChanged( pAbstractChild* document, bool m
 void pOpenedFileModel::documentClosed( pAbstractChild* document )
 {
 	const int index = mDocuments.indexOf( document );
+	
+	if ( index == -1 )
+	{
+		return;
+	}
+	
 	beginRemoveRows( QModelIndex(), index, index );
 	mDocuments.removeOne( document );
 	mDocumentsIcons.remove( document );

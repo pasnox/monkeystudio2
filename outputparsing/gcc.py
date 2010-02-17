@@ -179,6 +179,23 @@ no_lib.test('/usr/bin/ld: cannot find -lqscintilla2d\n',
 				 text = 'Cannot find library "qscintilla2d"',
 				 hint = '/usr/bin/ld: cannot find -lqscintilla2d')
 
+
+#   #warning blablabla...
+regEx = "^(%s):(\d+):\d+: warning: #warning ([^\\n]*)" % file_name
+preprocessor_warning = parsing.Pattern(regEx,
+									type = 'warning',
+									file = '%1',
+									line = '%2',
+									text = '%3')
+
+preprocessor_warning.setComment('#warning preprocessor dirrective')
+preprocessor_warning.test('test.c:4:2: warning: #warning This is bad code!!!\n',
+				 type = 'warning',
+				 text = 'This is bad code!!!',
+				 file = 'test.c',
+				 line = '4',
+				 hint = 'test.c:4:2: warning: #warning This is bad code!!!')
+
 print '# It is a machine generated file. Do not edit it manualy!\n'
 
 print error.generateMkSScript('GCC')
@@ -186,3 +203,4 @@ print warning.generateMkSScript('GCC')
 print compiling.generateMkSScript('GCC')
 print no_lib.generateMkSScript('GCC')
 print link_failed.generateMkSScript('GCC')
+print preprocessor_warning.generateMkSScript('GCC')
