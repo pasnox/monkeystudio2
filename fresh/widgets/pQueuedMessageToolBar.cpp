@@ -1,6 +1,7 @@
 #include "pQueuedMessageToolBar.h"
 
 #include <QAction>
+#include <QDebug>
 
 int pQueuedMessageToolBar::mDefaultTimeout = 5000;
 QPixmap* pQueuedMessageToolBar::mDefaultPixmap = 0;
@@ -124,12 +125,17 @@ void pQueuedMessageToolBar::removeMessage( int id )
 
 void pQueuedMessageToolBar::messageShown( const pQueuedMessage& message )
 {
-	Q_UNUSED( message );
-	
+#if QT_VERSION >= 0x040600
+#ifdef Q_CC_GNU
+#warning fucking Qt 4.6 bug, need to report it to trolltech.
+#endif
+	setStyleSheet( QString( "QToolBar { background-color: %1 }" ).arg( message.Background.color().name() ) );
+#else
 	setAutoFillBackground( true );
 	QPalette pal = mDefaultPalette;
 	pal.setBrush( backgroundRole(), message.Background );
 	setPalette( pal );
+#endif
 	
 	if ( !isVisible() )
 	{
@@ -139,8 +145,12 @@ void pQueuedMessageToolBar::messageShown( const pQueuedMessage& message )
 
 void pQueuedMessageToolBar::messageCleared()
 {
+#if QT_VERSION >= 0x040600
+	setStyleSheet( QString::null );
+#else
 	setAutoFillBackground( false );
 	setPalette( mDefaultPalette );
+#endif
 	
 	if ( isVisible() )
 	{
