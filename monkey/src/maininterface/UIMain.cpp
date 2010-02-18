@@ -32,7 +32,6 @@
 #include "../pMonkeyStudio.h"
 #include "../xupmanager/gui/XUPProjectManager.h"
 #include "../recentsmanager/pRecentsManager.h"
-#include "../toolsmanager/pToolsManager.h"
 #include "../consolemanager/pConsoleManager.h"
 #include "../workspace/pFileManager.h"
 #include "../pluginsmanager/PluginsManager.h"
@@ -253,15 +252,6 @@ void UIMain::initMenuBar()
 	mb->menu( "mDebugger" )->menuAction()->setVisible( false );
 	mb->menu( "mInterpreter", tr( "Interpreter" ) )->menuAction()->setEnabled( false );
 	mb->menu( "mInterpreter" )->menuAction()->setVisible( false );
-	mb->menu( "mTools", tr( "Tools" ) );
-	mb->beginGroup( "mTools" );
-		mb->action( "aEditUser", tr( "&Edit User Tools..." ), QIcon( ":/tools/icons/tools/edit.png" ), QString::null, tr( "Edit tools..." ) );
-		mb->action( "aEditDesktop", tr( "Edit &Desktop Tools..." ), QIcon( ":/tools/icons/tools/desktop.png" ), QString::null, tr( "Edit desktop tools..." ) );
-		mb->action( "aSeparator1" );
-		mb->menu( "mUserTools", tr( "&User Tools" ), QIcon( ":/tools/icons/tools/user.png" ) );
-		mb->menu( "mDesktopTools", tr( "Desktop &Tools" ), QIcon( ":/tools/icons/tools/desktop.png" ) );
-		mb->action( "aSeparator2" );
-	mb->endGroup();
 	mb->menu( "mPlugins", tr( "Plugins" ) );
 	mb->beginGroup( "mPlugins" );
 		mb->action( "aSeparator1" );
@@ -301,12 +291,9 @@ void UIMain::initToolBar()
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->menu( "mFile/mSession" )->menuAction() );
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->menu( "mProject/mRecents" )->menuAction() );
 	dockToolBar( Qt::TopToolBarArea )->addAction();
-	// settings, tools
+	// settings
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mEdit/aSettings" ) );
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mEdit/aShortcutsEditor" ) );
-	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mTools/aEditUser" ) );
-	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mTools/aEditDesktop" ) );
-	dockToolBar( Qt::TopToolBarArea )->addAction();
 	// file action
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mFile/aNew" ) );
 	dockToolBar( Qt::TopToolBarArea )->addAction( menuBar()->action( "mFile/aNewTextEditor" ) );
