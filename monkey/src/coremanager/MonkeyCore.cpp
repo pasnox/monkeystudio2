@@ -33,7 +33,6 @@
 #include "../pluginsmanager/PluginsManager.h"
 #include "../maininterface/UIMain.h"
 #include "../recentsmanager/pRecentsManager.h"
-#include "../toolsmanager/pToolsManager.h"
 #include "../xupmanager/gui/XUPProjectManager.h"
 #include "../workspace/pFileManager.h"
 #include "../workspace/pWorkspace.h"
@@ -132,13 +131,13 @@ void MonkeyCore::init()
 	showMessage( &splash, tr( "Initializing file manager..." ) );
 	fileManager();
 
-	// load mks scripts
-	showMessage( &splash, tr( "Executing scripts..." ) );
-	interpreter()->loadHomeScripts();
-
 	// init pluginsmanager
 	showMessage( &splash, tr( "Initializing Plugins..." ) );
 	pluginsManager()->loadsPlugins();
+	
+	// load mks scripts
+	showMessage( &splash, tr( "Executing scripts..." ) );
+	interpreter()->loadHomeScripts();
 
 	// restore window state
 	showMessage( &splash, tr( "Restoring Workspace..." ) );
