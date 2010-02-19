@@ -332,23 +332,40 @@ void pMenuBar::clearMenu( const QString& path )
 		
 		foreach ( QAction* action, mActionsManager->actions( fPath ) )
 		{
+		qWarning() << "deleting..." << action;
 			if ( action->associatedWidgets().isEmpty() )
 			{
+			qWarning() << "deleted";
 				delete action;
 			}
 		}
 	}
 }
 
-void pMenuBar::deleteMenu( const QString& path )
+void pMenuBar::deleteMenu( const QString& _path )
 {
-	const QString fPath = absoluteScope( path );
+	const QString fPath = absoluteScope( _path );
 	QMenu* mnu = mMenus.value( fPath );
 	
 	if ( mnu )
 	{
-		clearMenu( path );
-		delete mMenus.take( fPath );
+		QStringList paths;
+		
+		// get menu and sub menus
+		foreach ( const QString& path, mMenus.keys() ) {
+			if ( path.startsWith( fPath ) ) {
+				paths << path;
+			}
+		}
+		
+		// sort so sub menu are deleted before parent menu
+		qSort( paths.begin(), paths.end(), qGreater<QString>() );
+		
+		// delete menus
+		foreach ( const QString& path, paths ) {
+			clearMenu( path );
+			delete mMenus.take( path );
+		}
 	}
 }
 
