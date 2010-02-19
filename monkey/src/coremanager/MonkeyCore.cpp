@@ -130,14 +130,14 @@ void MonkeyCore::init()
 	// init file manager
 	showMessage( &splash, tr( "Initializing file manager..." ) );
 	fileManager();
-
-	// init pluginsmanager
-	showMessage( &splash, tr( "Initializing Plugins..." ) );
-	pluginsManager()->loadsPlugins();
 	
 	// load mks scripts
 	showMessage( &splash, tr( "Executing scripts..." ) );
 	interpreter()->loadHomeScripts();
+
+	// init pluginsmanager
+	showMessage( &splash, tr( "Initializing Plugins..." ) );
+	pluginsManager()->loadsPlugins();
 
 	// restore window state
 	showMessage( &splash, tr( "Restoring Workspace..." ) );

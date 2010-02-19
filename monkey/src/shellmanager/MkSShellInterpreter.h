@@ -35,6 +35,7 @@ public:
 	QString interpret( const QString& command, int* result ) const;
 	
 	void addCommandImplementation( const QString& command, CommandImplementationPtr function, const QString& help = QString::null, void* data = 0 );
+	void removeCommandImplementation( const QString& command );
 	void setCommandHelp( const QString& command, const QString& help );
 	
 protected:
