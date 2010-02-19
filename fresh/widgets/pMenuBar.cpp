@@ -332,10 +332,8 @@ void pMenuBar::clearMenu( const QString& path )
 		
 		foreach ( QAction* action, mActionsManager->actions( fPath ) )
 		{
-		qWarning() << "deleting..." << action;
 			if ( action->associatedWidgets().isEmpty() )
 			{
-			qWarning() << "deleted";
 				delete action;
 			}
 		}
