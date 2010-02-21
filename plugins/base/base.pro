@@ -9,4 +9,5 @@ SUBDIRS	= FileBrowser \
 	SearchAndReplace \
 	MkSShell \
 	UpdateChecker \
-	FileWatcher
+	FileWatcher \
+	Tools

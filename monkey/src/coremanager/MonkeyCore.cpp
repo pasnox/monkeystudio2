@@ -33,7 +33,6 @@
 #include "../pluginsmanager/PluginsManager.h"
 #include "../maininterface/UIMain.h"
 #include "../recentsmanager/pRecentsManager.h"
-#include "../toolsmanager/pToolsManager.h"
 #include "../xupmanager/gui/XUPProjectManager.h"
 #include "../workspace/pFileManager.h"
 #include "../workspace/pWorkspace.h"
@@ -131,7 +130,7 @@ void MonkeyCore::init()
 	// init file manager
 	showMessage( &splash, tr( "Initializing file manager..." ) );
 	fileManager();
-
+	
 	// load mks scripts
 	showMessage( &splash, tr( "Executing scripts..." ) );
 	interpreter()->loadHomeScripts();
@@ -210,13 +209,6 @@ pRecentsManager* MonkeyCore::recentsManager()
 	if ( !mInstances.contains( &pRecentsManager::staticMetaObject ) )
 		mInstances[&pRecentsManager::staticMetaObject] = new pRecentsManager( qApp );
 	return qobject_cast<pRecentsManager*>( mInstances[&pRecentsManager::staticMetaObject] );
-}
-
-pToolsManager* MonkeyCore::toolsManager()
-{
-	if ( !mInstances.contains( &pToolsManager::staticMetaObject ) )
-		mInstances[&pToolsManager::staticMetaObject] = new pToolsManager( qApp );
-	return qobject_cast<pToolsManager*>( mInstances[&pToolsManager::staticMetaObject] );
 }
 
 XUPProjectManager* MonkeyCore::projectsManager()

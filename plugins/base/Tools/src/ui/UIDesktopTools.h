@@ -1,14 +1,4 @@
 /****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Monkey Studio IDE
-** FileName  : UIDesktopTools.h
-** Date      : 2008-01-14T00:37:15
-** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
-**
 	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
 	This program is free software; you can redistribute it and/or modify
@@ -24,44 +14,45 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
 ****************************************************************************/
 #ifndef UIDesktopTools_H
 #define UIDesktopTools_H
 
-#include <fresh.h>
-
 #include "ui_UIDesktopTools.h"
-#include "../pDesktopApplications.h"
 
+class ToolsManager;
+class DesktopApplications;
+class DesktopFolder;
 class QTreeWidgetItem;
-class pDesktopFolder;
 
-class Q_MONKEY_EXPORT UIDesktopTools : public QDialog, public Ui::UIDesktopTools, public QSingleton<UIDesktopTools>
+class UIDesktopTools : public QDialog, public Ui::UIDesktopTools
 {
 	Q_OBJECT
-	friend class QSingleton<UIDesktopTools>;
 
-private:
-	UIDesktopTools( QWidget* = QApplication::activeWindow() );
+public:
+	UIDesktopTools( ToolsManager* manager, QWidget* parent = 0 );
 	~UIDesktopTools();
 
 protected:
-	pDesktopApplications mStartMenu;
+	ToolsManager* mToolsManager;
+	DesktopApplications* mStartMenu;
+	QSet<QString> mApplications;
+	bool mShown;
 
-	void showEvent( QShowEvent* );
-	void closeEvent( QCloseEvent* );
+	void showEvent( QShowEvent* event );
+	void closeEvent( QCloseEvent* event );
+	void applyFilters();
 
 protected slots:
-	void populateTree( QTreeWidgetItem* i, pDesktopFolder* f );
-	void populateList();
-	void on_leNameFilter_returnPressed();
-	void on_leCategoriesFilters_returnPressed();
+	void populateTree( QTreeWidgetItem* item, DesktopFolder* folder );
+	void scanApplications();
+	void on_leNameFilter_textChanged( const QString& text );
+	void on_leCategoriesFilters_textChanged( const QString& text );
 	void on_tbRight_clicked();
 	void on_tbLeft_clicked();
-	void on_pbUp_clicked();
-	void on_pbDown_clicked();
-	void accept();
+	void on_tbUp_clicked();
+	void on_tbDown_clicked();
+	virtual void accept();
 };
 
 #endif // UIDesktopTools_H

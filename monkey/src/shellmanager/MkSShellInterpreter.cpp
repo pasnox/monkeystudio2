@@ -174,6 +174,15 @@ void MkSShellInterpreter::addCommandImplementation( const QString& command, Comm
 	
 	setCommandHelp( command, help );
 }
+
+void MkSShellInterpreter::removeCommandImplementation( const QString& command )
+{
+	mCommands.removeOne( command );
+	mCommandImplementations.remove( command );
+	mCommandImplementationsData.remove( command );
+	mCommandHelps.remove( command );
+}
+
 void MkSShellInterpreter::setCommandHelp( const QString& command, const QString& help )
 {
 	mCommandHelps[ command ] = help;

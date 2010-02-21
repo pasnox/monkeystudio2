@@ -1,14 +1,4 @@
 /****************************************************************************
-**
-** 		Created using Monkey Studio v1.8.1.0
-** Authors    : Filipe AZEVEDO aka Nox P@sNox <pasnox@gmail.com>
-** Project   : Monkey Studio IDE
-** FileName  : UIToolsEdit.h
-** Date      : 2008-01-14T00:37:15
-** License   : GPL
-** Comment   : This header has been automatically generated, if you are the original author, or co-author, fill free to replace/append with your informations.
-** Home Page : http://www.monkeystudio.org
-**
 	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
 
 	This program is free software; you can redistribute it and/or modify
@@ -24,37 +14,34 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-**
 ****************************************************************************/
 #ifndef UITOOLSEDIT_H
 #define UITOOLSEDIT_H
 
-#include <fresh.h>
-
 #include "ui_UIToolsEdit.h"
 
-#include <QApplication>
+class ToolsManager;
 
-class Q_MONKEY_EXPORT UIToolsEdit : public QDialog, public Ui::UIToolsEdit, public QSingleton<UIToolsEdit>
+class UIToolsEdit : public QDialog, public Ui::UIToolsEdit
 {
 	Q_OBJECT
-	friend class QSingleton<UIToolsEdit>;
 
-private:
-	UIToolsEdit( QWidget* = QApplication::activeWindow() );
+public:
+	UIToolsEdit( ToolsManager* manager, QWidget* parent = 0 );
 
 protected:
-	void closeEvent( QCloseEvent* );
-	bool eventFilter( QObject*, QEvent* );
+	ToolsManager* mToolsManager;
+	
+	virtual void closeEvent( QCloseEvent* event );
+	virtual bool eventFilter( QObject* object, QEvent* event );
 	void updateGui( QListWidgetItem* item, bool makeCurrent = false );
 
 protected slots:
+	void on_aNew_triggered();
+	void on_aDelete_triggered();
+	void on_aUp_triggered();
+	void on_aDown_triggered();
 	void on_lwTools_itemSelectionChanged();
-	void on_pbNew_clicked();
-	void on_pbDelete_clicked();
-	void on_pbUp_clicked();
-	void on_pbDown_clicked();
-	void helpRequested();
 	void on_leCaption_editingFinished();
 	void on_tbFileIcon_clicked();
 	void on_leFilePath_editingFinished();
@@ -63,8 +50,8 @@ protected slots:
 	void on_leWorkingPath_editingFinished();
 	void on_tbWorkingPath_clicked();
 	void on_cbUseConsoleManager_clicked( bool toggled );
-	void accept();
-
+	void helpRequested();
+	virtual void accept();
 };
 
 #endif // UITOOLSEDIT_H
