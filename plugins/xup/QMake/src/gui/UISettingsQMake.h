@@ -2,7 +2,8 @@
 #define UISETTINGSQMAKE_H
 
 #include "ui_UISettingsQMake.h"
-#include "../QtVersionManager.h"
+
+class QtVersionManager;
 
 class UISettingsQMake : public QWidget, public Ui::UISettingsQMake
 {
@@ -12,7 +13,7 @@ public:
 	UISettingsQMake( QWidget* parent = 0 );
 
 protected:
-	QtVersionManager mQtManager;
+	QtVersionManager* mQtManager;
 
 protected slots:
 	void tbAdd_clicked();

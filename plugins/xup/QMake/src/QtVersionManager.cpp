@@ -1,5 +1,8 @@
 #include "QtVersionManager.h"
 
+#include <MonkeyCore.h>
+#include <MkSShellInterpreter.h>
+
 #include <QProcess>
 #include <QDir>
 #include <QDebug>
@@ -15,6 +18,12 @@ QtVersionManager::QtVersionManager( QObject* owner )
 	: pSettings( owner, "QtVersions", "1.0.0" )
 {
 	synchronizeVersions();
+	initializeInterpreterCommands( true );
+}
+
+QtVersionManager::~QtVersionManager()
+{
+	initializeInterpreterCommands( false );
 }
 
 QtVersionList QtVersionManager::versions() const
@@ -53,7 +62,7 @@ void QtVersionManager::setVersions( const QtVersionList& versions )
 		setValue( "Default", version.Default );
 		setValue( "QMakeSpec", version.QMakeSpec );
 		setValue( "QMakeParameters", version.QMakeParameters );
-		setValue( "HaveQt4Suffixe", version.HaveQt4Suffixe );
+		setValue( "HasQt4Suffixe", version.HasQt4Suffix );
 	}
 	
 	endArray();
@@ -319,7 +328,7 @@ QtVersionList QtVersionManager::getQtVersions( const QStringList& paths ) const
 		QtVersion sysQt;
 		QProcess process;
 		QString datas;
-		bool haveSuffixe = true;
+		bool hasSuffix = true;
 		QString prefix = path.isEmpty() ? QString::null : path +"/bin/";
 		
 		// trying with -qt4 suffix first
@@ -333,7 +342,7 @@ QtVersionList QtVersionManager::getQtVersions( const QStringList& paths ) const
 			process.start( QString( "\"%1qmake\" -v" ).arg( prefix ) );
 			process.waitForFinished();
 			datas = QString::fromLocal8Bit( process.readAll() ).trimmed();
-			haveSuffixe = false;
+			hasSuffix = false;
 		}
 		
 		// if matching output add version
@@ -347,7 +356,7 @@ QtVersionList QtVersionManager::getQtVersions( const QStringList& paths ) const
 			sysQt.Default = hasDefaultVersion ? false : true;
 			sysQt.QMakeSpec = QString::null;
 			sysQt.QMakeParameters = "\"$cp$\"";
-			sysQt.HaveQt4Suffixe = haveSuffixe;
+			sysQt.HasQt4Suffix = hasSuffix;
 			
 			if ( !hasDefaultVersion )
 			{
@@ -395,3 +404,67 @@ void QtVersionManager::synchronizeVersions()
 	// update qt versions
 	setVersions( items.values() );
 }
+
+void QtVersionManager::initializeInterpreterCommands( bool initialize )
+{
+	if ( initialize ) {
+		// register command
+		QString help = MkSShellInterpreter::tr(
+			"This command manage the Qt versions, usage:\n"
+			"\tqtversion xml [version]"
+		);
+		
+		MonkeyCore::interpreter()->addCommandImplementation( "qtversion", QtVersionManager::commandInterpreter, help, this );
+	}
+	else {
+		MonkeyCore::interpreter()->removeCommandImplementation( "qtversion" );
+	}
+}
+
+QString QtVersionManager::commandInterpreter( const QString& command, const QStringList& _arguments, int* result, MkSShellInterpreter* interpreter, void* data )
+{
+	Q_UNUSED( command );
+	Q_UNUSED( interpreter );
+	QtVersionManager* manager = static_cast<QtVersionManager*>( data );
+	QStringList arguments = _arguments;
+	const QStringList allowedOperations = QStringList( "xml" );
+	
+	if ( result ) {
+		*result = MkSShellInterpreter::NoError;
+	}
+	
+	if ( arguments.isEmpty() ) {
+		if ( result ) {
+			*result = MkSShellInterpreter::InvalidCommand;
+		}
+		
+		return MkSShellInterpreter::tr( "Operation not defined. Available operations are: %1." ).arg( allowedOperations.join( ", " ) );
+	}
+	
+	const QString operation = arguments.takeFirst();
+	
+	if ( !allowedOperations.contains( operation ) ) {
+		if ( result ) {
+			*result = MkSShellInterpreter::InvalidCommand;
+		}
+		
+		return MkSShellInterpreter::tr( "Unknown operation: '%1'." ).arg( operation );
+	}
+	
+	if ( operation == "xml" ) {
+		if ( arguments.count() != 1 ) {
+			if ( result ) {
+				*result = MkSShellInterpreter::InvalidCommand;
+			}
+			
+			return MkSShellInterpreter::tr( "'set' operation take 1 argument, %1 given." ).arg( arguments.count() );
+		}
+		
+		const QString version = arguments.at( 0 );
+		
+		return manager->version( version ).toXml();
+	}
+	
+	return QString::null;
+}
+

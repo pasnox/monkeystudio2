@@ -22,6 +22,8 @@
 
 #include <QPointer>
 
+class QtVersionManager;
+
 class QMake : public XUPPlugin
 {
 	Q_OBJECT
@@ -31,12 +33,16 @@ protected:
 	void fillPluginInfos();
 	virtual bool install();
 	virtual bool uninstall();
+	
 public:
 	virtual QWidget* settingsWidget();
 	virtual bool editProject( XUPProjectItem* project );
+	
+	static QtVersionManager* versionManager();
 
 protected:
 	QPointer<XUPProjectItem> mItem;
+	static QPointer<QtVersionManager> mQtVersionManager;
 };
 
 #endif // QMAKE_H

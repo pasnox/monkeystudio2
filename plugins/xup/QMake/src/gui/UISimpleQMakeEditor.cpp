@@ -1,5 +1,6 @@
 #include "UISimpleQMakeEditor.h"
 #include "XUPProjectItem.h"
+#include "../QMake.h"
 
 #include <MkSFileDialog.h>
 #include <pMonkeyStudio.h>
@@ -161,15 +162,15 @@ void UISimpleQMakeEditor::init( XUPProjectItem* project )
 	mConfigGui << "app_bundle" << "lib_bundle" << "embed_manifest_exe" << "embed_manifest_dll"
 		/*<< "designer"*/ << "plugin" << "shared" << "dll" << "static" << "staticlib";
 	
-	QtVersionManager mQtManager;
+	QtVersionManager* manager = QMake::versionManager();
 	lwQtVersion->clear();
 	lwQtModules->clear();
 	lwModules->clear();
 	
-	mQtVersion = mQtManager.version( mProject->projectSettingsValue( "QT_VERSION" ) );
+	mQtVersion = manager->version( mProject->projectSettingsValue( "QT_VERSION" ) );
 	
 	// qt versions
-	foreach ( const QtVersion& qv, mQtManager.versions() )
+	foreach ( const QtVersion& qv, manager->versions() )
 	{
 		QListWidgetItem* it = new QListWidgetItem( qv.Version, lwQtVersion );
 		it->setData( Qt::UserRole, QVariant::fromValue( qv ) );
@@ -182,14 +183,14 @@ void UISimpleQMakeEditor::init( XUPProjectItem* project )
 	}
 	
 	// qt modules
-	foreach ( const QtItem& mi, mQtManager.modules() )
+	foreach ( const QtItem& mi, manager->modules() )
 	{
 		QListWidgetItem* it = new QListWidgetItem( mi.Text, lwQtModules );
 		it->setData( Qt::UserRole, QVariant::fromValue( mi ) );
 	}
 	
 	// configuration
-	foreach ( const QtItem& ci, mQtManager.configurations() )
+	foreach ( const QtItem& ci, manager->configurations() )
 	{
 		if ( !mConfigGui.contains( ci.Value, Qt::CaseInsensitive ) )
 		{

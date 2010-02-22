@@ -91,7 +91,7 @@ QString EnvironmentVariablesManager::commandInterpreter( const QString& command,
 	
 	if ( result )
 	{
-		*result = 0;
+		*result = MkSShellInterpreter::NoError;
 	}
 	
 	if ( arguments.isEmpty() )
