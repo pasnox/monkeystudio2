@@ -27,7 +27,7 @@ const QFileInfoList getMacApplicationsFolders( QDir dir )
 		if ( file.isBundle() ) {
 			applications << file;
 		}
-		else if ( file.isDir() {
+		else if ( file.isDir() ) {
 			dir.cd( file.filePath() );
 			applications << getMacApplicationsFolders( dir );
 			dir.cdUp();
@@ -49,41 +49,40 @@ bool DesktopApplications::categoriesAvailable() const
 
 void DesktopApplications::scan()
 {
-	foreach ( const QString& path, startMenuPaths() ) {
-		foreach ( const QFileInfo& file, getMacApplicationsFolders( QDir( path ) ) ) {
+	foreach ( const QString& menuPath, startMenuPaths() ) {
+		foreach ( const QFileInfo& file, getMacApplicationsFolders( QDir( menuPath ) ) ) {
 			// get folder object
-			DesktopFolder* folder = &mStartMenu;
+			DesktopFolder* df = &mStartMenu;
 			// get relative path
-			const QString applicationPath = file.absolutePath().remove( path ).remove( 0, 1 );
+			const QString applicationPath = file.absolutePath().remove( menuPath ).remove( 0, 1 );
 			// get last folder object
-			QString s;
-			#warning renamme the s variable, dunno what it mean ...
+			QString path;
 			
 			foreach ( const QString& part, applicationPath.split( "/", QString::SkipEmptyParts ) ) {
-				s += part +"/";
+				path += part +"/";
 				
-				if ( folder->folders.contains( part ) ) {
-					folder = folder->folders[ part ];
+				if ( df->folders.contains( part ) ) {
+					df = &df->folders[ part ];
 				}
 				else {
-					folder->folders[ part ] = new DesktopFolder();
-					folder = folder->folders[ part ];
-					folder->path = path +"/" +s;
+					df->folders[ part ] = DesktopFolder( df );
+					df = &df->folders[ part ];
+					df->path = menuPath +"/" +path;
 					
-					if ( folder->path.endsWith( "/" ) ) {
-						folder->path.chop( 1 );
+					if ( df->path.endsWith( "/" ) ) {
+						df->path.chop( 1 );
 					}
 				}
 			}
 			
 			// add application
-			if ( !folder->applications.contains( file.absoluteFilePath() ) ) {
-				DesktopApplication* application = new DesktopApplication();
-				application->name = file.completeBaseName();
-				application->icon = QString();
-				application->genericName = QString();
-				application->comment = QString();
-				folder->applications[ file.absoluteFilePath() ] = application;
+			if ( !df->applications.contains( file.absoluteFilePath() ) ) {
+				DesktopApplication da = DesktopApplication( df );
+				da.name = file.completeBaseName();
+				da.icon = QString();
+				da.genericName = QString();
+				da.comment = QString();
+				df->applications[ file.absoluteFilePath() ] = da;
 			}
 		}
 	}
