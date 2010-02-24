@@ -218,7 +218,7 @@ void SearchThread::search( const QString& fileName, const QString& content ) con
 	static const QString eol( "\n" );
 	bool checkable = false;
 	QRegExp rx;
-
+	
 	{
 		QMutexLocker locker( const_cast<QMutex*>( &mMutex ) );
 
@@ -250,14 +250,21 @@ void SearchThread::search( const QString& fileName, const QString& content ) con
 	{
 		const int eolStart = content.lastIndexOf( eol, pos );
 		const int eolEnd = content.indexOf( eol, pos );
-		const QString capture = content.mid( eolStart +1, eolEnd -1 -eolStart ).simplified();
+		const QString capture = content.mid( eolStart + 1, eolEnd - eolStart - 1).simplified();
+		qDebug() << capture;
 		eolCount += content.mid( lastPos, pos -lastPos ).count( eol );
-		const int column = ( pos -eolStart ) -( eolStart != 0 ? 1 : 0 );
+		const int column = ( pos - eolStart ) - ( eolStart != 0 ? 1 : 0 );
+		qDebug() << "ok";
 		SearchResultsModel::Result* result = new SearchResultsModel::Result( fileName, capture );
+		qDebug() << "ok";
 		result->position = QPoint( column, eolCount );
 		result->offset = pos;
 		result->checkable = checkable;
 		result->checkState = checkable ? Qt::Checked : Qt::Unchecked;
+		
+		qDebug() << "ok";
+		
+		result->capturedTexts = rx.capturedTexts();
 
 		results << result;
 

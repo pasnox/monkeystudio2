@@ -121,15 +121,54 @@ void ReplaceThread::replace( const QString& fileName, QString content )
 		isOpenedFile = mProperties.openedFiles.contains( fileName );
 	}
 	
+	QRegExp rx("\\$\\d+");
+	
+	QStringList *replaceTextSplit = new QStringList(replaceText.split(rx));
+	
 	QTime tracker;
 	tracker.start();
+	
+	int pos = 0;
+	QStringList keywordList;
+
+	while ((pos = rx.indexIn(replaceText, pos)) != -1)
+	{
+		QString buf = rx.capturedTexts()[0];
+		qDebug() << buf;
+		buf.replace(QRegExp("\\$(\\d+)"), "\\1");
+		qDebug() << buf;
+		keywordList.append(buf);
+		pos += rx.matchedLength();
+	}
+	
+	qDebug() << "Keyword ok";
 	
 	// count from end to begin because we are replacing by offset in content
 	for ( int i = results.count() -1; i > -1; i-- )
 	{
 		SearchResultsModel::Result* result = results.at( i );
-		
-		content.replace( result->offset, searchLength, replaceText );
+
+		if(!replaceTextSplit->isEmpty())
+		{
+			replaceText = "";
+			
+			for(int i = 0; i < replaceTextSplit->size() - 1; i++)
+			{
+				qDebug() << "Add normal";
+				replaceText += replaceTextSplit->value(i);
+				qDebug() << "Add replacement of keyword : " << result->capturedTexts[keywordList[i].toInt()];
+				replaceText += result->capturedTexts[keywordList[i].toInt()];
+			}
+			
+			replaceText += replaceTextSplit->value(replaceTextSplit->size() - 1);
+			
+			content.remove(result->offset, result->capturedTexts[0].length());
+			content.insert(result->offset, replaceText);
+		}
+		else
+		{
+			content.replace( result->offset, result->capturedTexts[0].length(), replaceText );
+		}
 		
 		handledResults << result;
 		
@@ -159,6 +198,7 @@ void ReplaceThread::replace( const QString& fileName, QString content )
 			
 			if ( mExit )
 			{
+				delete replaceTextSplit;
 				return;
 			}
 			else if ( mReset )
@@ -167,6 +207,8 @@ void ReplaceThread::replace( const QString& fileName, QString content )
 			}
 		}
 	}
+	
+	delete replaceTextSplit;
 	
 	if ( !handledResults.isEmpty() )
 	{
