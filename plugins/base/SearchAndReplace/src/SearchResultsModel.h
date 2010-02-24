@@ -35,10 +35,11 @@ public:
 			return fileName == other.fileName &&
 				//capture == other.capture &&
 				position == other.position &&
-				offset == other.offset /*&&
-				checkable == other.checkable &&
+				offset == other.offset &&
+				/*checkable == other.checkable &&
 				checkState == other.checkState &&
-				enabled == other.enabled*/;
+				enabled == other.enabled*/
+				capturedTexts == other.capturedTexts;
 		}
 		
 		QString fileName;

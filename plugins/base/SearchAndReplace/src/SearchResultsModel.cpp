@@ -1,8 +1,6 @@
 #include "SearchResultsModel.h"
 #include "SearchThread.h"
 
-#include <QDebug>
-
 SearchResultsModel::SearchResultsModel( SearchThread* searchThread, QObject* parent )
 	: QAbstractItemModel( parent )
 {

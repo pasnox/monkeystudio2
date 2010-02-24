@@ -4,7 +4,6 @@
 #include <QMutexLocker>
 #include <QTextCodec>
 #include <QTime>
-#include <QDebug>
 
 int ReplaceThread::mMaxTime = 125;
 
@@ -123,7 +122,7 @@ void ReplaceThread::replace( const QString& fileName, QString content )
 	
 	QRegExp rx("\\$\\d+");
 	
-	QStringList *replaceTextSplit = new QStringList(replaceText.split(rx));
+	QStringList replaceTextSplit = QStringList(replaceText.split(rx));
 	
 	QTime tracker;
 	tracker.start();
@@ -134,33 +133,27 @@ void ReplaceThread::replace( const QString& fileName, QString content )
 	while ((pos = rx.indexIn(replaceText, pos)) != -1)
 	{
 		QString buf = rx.capturedTexts()[0];
-		qDebug() << buf;
 		buf.replace(QRegExp("\\$(\\d+)"), "\\1");
-		qDebug() << buf;
 		keywordList.append(buf);
 		pos += rx.matchedLength();
 	}
-	
-	qDebug() << "Keyword ok";
 	
 	// count from end to begin because we are replacing by offset in content
 	for ( int i = results.count() -1; i > -1; i-- )
 	{
 		SearchResultsModel::Result* result = results.at( i );
 
-		if(!replaceTextSplit->isEmpty())
+		if(!replaceTextSplit.isEmpty())
 		{
 			replaceText = "";
 			
-			for(int i = 0; i < replaceTextSplit->size() - 1; i++)
+			for(int i = 0; i < replaceTextSplit.size() - 1; i++)
 			{
-				qDebug() << "Add normal";
-				replaceText += replaceTextSplit->value(i);
-				qDebug() << "Add replacement of keyword : " << result->capturedTexts[keywordList[i].toInt()];
+				replaceText += replaceTextSplit.value(i);
 				replaceText += result->capturedTexts[keywordList[i].toInt()];
 			}
 			
-			replaceText += replaceTextSplit->value(replaceTextSplit->size() - 1);
+			replaceText += replaceTextSplit.value(replaceTextSplit.size() - 1);
 			
 			content.remove(result->offset, result->capturedTexts[0].length());
 			content.insert(result->offset, replaceText);
