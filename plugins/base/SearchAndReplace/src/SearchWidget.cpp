@@ -730,16 +730,19 @@ bool SearchWidget::replaceFile( bool all )
 	}
 
 	int count = 0;
-
+	
 	if ( all )
 	{
+		const bool isWrap = mProperties.options & SearchAndReplace::OptionWrap;
 		int x, y;
 
 		editor->getCursorPosition( &y, &x );
 
-		if ( mProperties.options & SearchAndReplace::OptionWrap )
+		if ( isWrap )
 		{
+			// don't need to give wrap parameter for search as we start at begin of document
 			editor->setCursorPosition( 0, 0 );
+			mProperties.options &= ~SearchAndReplace::OptionWrap;
 		}
 
 		while ( searchFile( true, false ) ) // search next
@@ -749,6 +752,12 @@ bool SearchWidget::replaceFile( bool all )
 		}
 
 		editor->setCursorPosition( y, x ); // restore cursor position
+		
+		// restore wrap property if needed
+		if ( isWrap )
+		{
+			mProperties.options |= SearchAndReplace::OptionWrap;
+		}
 	}
 	else
 	{

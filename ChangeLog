@@ -1,3 +1,3232 @@
+2010-02-22 21:25  pasnox
+
+	* [r3629]
+	  monkey/src/abbreviationsmanager/pAbbreviationsManager.cpp,
+	  monkey/src/consolemanager/EnvironmentVariablesManager.cpp,
+	  monkey/src/workspace/pFileManager.cpp,
+	  plugins/base/Tools/src/ToolsManager.cpp,
+	  plugins/base/Tools/src/ui/UIDesktopTools.cpp,
+	  plugins/xup/QMake/src/QMake.cpp, plugins/xup/QMake/src/QMake.h,
+	  plugins/xup/QMake/src/QMakeProjectItem.cpp,
+	  plugins/xup/QMake/src/QtVersionManager.cpp,
+	  plugins/xup/QMake/src/QtVersionManager.h,
+	  plugins/xup/QMake/src/gui/UISettingsQMake.cpp,
+	  plugins/xup/QMake/src/gui/UISettingsQMake.h,
+	  plugins/xup/QMake/src/gui/UISettingsQMake.ui,
+	  plugins/xup/QMake/src/gui/UISimpleQMakeEditor.cpp:
+	  
+	  Add support for QtVersion into the MkS Shell.
+	  Versions can be quered to get an xml representation of a qt
+	  version. This can be used into core / another plugins where the
+	  QtVersionManager class are not available.
+
+2010-02-22 07:27  pasnox
+
+	* [r3626] plugins/base/Tools/src/DesktopApplications_mac.cpp:
+	  
+	  Fix os x Desktop Folders.
+
+2010-02-21 20:07  pasnox
+
+	* [r3624] plugins/base/Tools, plugins/base/Tools/Tools.pro,
+	  plugins/base/Tools/src,
+	  plugins/base/Tools/src/DesktopApplications.cpp,
+	  plugins/base/Tools/src/DesktopApplications.h,
+	  plugins/base/Tools/src/DesktopApplications_mac.cpp,
+	  plugins/base/Tools/src/DesktopApplications_unix.cpp,
+	  plugins/base/Tools/src/DesktopApplications_win.cpp,
+	  plugins/base/Tools/src/Tools.cpp, plugins/base/Tools/src/Tools.h,
+	  plugins/base/Tools/src/ToolsManager.cpp,
+	  plugins/base/Tools/src/ToolsManager.h,
+	  plugins/base/Tools/src/resources,
+	  plugins/base/Tools/src/resources/Tools.png,
+	  plugins/base/Tools/src/resources/Tools.qrc,
+	  plugins/base/Tools/src/ui,
+	  plugins/base/Tools/src/ui/UIDesktopTools.cpp,
+	  plugins/base/Tools/src/ui/UIDesktopTools.h,
+	  plugins/base/Tools/src/ui/UIDesktopTools.ui,
+	  plugins/base/Tools/src/ui/UIToolsEdit.cpp,
+	  plugins/base/Tools/src/ui/UIToolsEdit.h,
+	  plugins/base/Tools/src/ui/UIToolsEdit.ui, plugins/base/base.pro:
+	  
+	  Introduce Tools plugin, which is the result of moving Tools
+	  related code from core to dedicated plugin.
+	  This allow to shrink the code of the core by removing non
+	  essentials code.
+	  Windows & Linux are working, os x need some fix / update for the
+	  desktop tools.
+
+2010-02-21 19:55  pasnox
+
+	* [r3623] qscintilla/QScintilla-gpl-snapshot/include/Scintilla.h:
+	  
+	  Fix a build error when crossbuilding for windows.
+
+2010-02-19 00:30  pasnox
+
+	* [r3622] fresh/widgets/pMenuBar.cpp:
+	  
+	  Fix a bug in pMenuBar::deleteMenu() which was not correctly
+	  remove/delete sub menus.
+
+2010-02-19 00:30  pasnox
+
+	* [r3621] fresh/widgets/pMenuBar.cpp:
+	  
+	  Fix a bug in pMenuBar::deleteMenu() which was not correctly
+	  remove/delete sub menus.
+
+2010-02-19 00:29  pasnox
+
+	* [r3620] monkey/src/coremanager/MonkeyCore.cpp,
+	  monkey/src/shellmanager/MkSShellInterpreter.cpp,
+	  monkey/src/shellmanager/MkSShellInterpreter.h:
+	  
+	  Add the possibility to remove command implementation in the mks
+	  interpreter.
+
+2010-02-18 23:27  pasnox
+
+	* [r3619] monkey/src/coremanager/MonkeyCore.cpp:
+	  
+	  Fix a build error.
+
+2010-02-18 00:04  pasnox
+
+	* [r3616] monkey/src/maininterface/UIMain.cpp:
+	  
+	  Add again settings action in toolbar. (regression of the last
+	  commit)
+
+2010-02-17 21:41  pasnox
+
+	* [r3615] monkey/monkey.pro, monkey/sdk/UIDesktopTools.h,
+	  monkey/sdk/UIToolsEdit.h, monkey/sdk/pDesktopApplications.h,
+	  monkey/sdk/pToolsManager.h,
+	  monkey/src/coremanager/MonkeyCore.cpp,
+	  monkey/src/coremanager/MonkeyCore.h,
+	  monkey/src/maininterface/UIMain.cpp, monkey/src/toolsmanager:
+	  
+	  Move Tools code to plugins
+
+2010-02-17 00:35  pasnox
+
+	* [r3613] monkey/src/workspace/pWorkspace.cpp:
+	  
+	  Add temporary fix for queued message toolbar that does not
+	  display correctly when using Qt >= 4.6.0
+
+2010-02-17 00:33  pasnox
+
+	* [r3612] fresh/widgets/pQueuedMessageToolBar.cpp,
+	  monkey/src/workspace/pWorkspace.cpp:
+	  
+	  Add temporary fix for queued message toolbar that does not
+	  display correctly when using Qt >= 4.6.0
+
+2010-02-16 23:49  pasnox
+
+	* [r3611] monkey/src/workspace/pAbstractChild.h,
+	  monkey/src/workspace/pOpenedFileExplorer.cpp,
+	  monkey/src/workspace/pOpenedFileExplorer.h,
+	  monkey/src/workspace/pOpenedFileModel.cpp,
+	  monkey/src/workspace/pOpenedFileModel.h:
+	  
+	  Fix a bug than can cause crash in the pOpenedFileModel class.
+	  Fix a bug that did not auto scroll to the current file index
+	  after sorted documents.
+	  Code cleanup and enhancement in the pOpenedFileModel class.
+	  Remove some warning cause by Qt 4.6.x in pAbstractChild class.
+
+2010-02-16 22:06  hlamer
+
+	* [r3610] outputparsing/gcc.py,
+	  outputparsing/testproject/output.txt:
+	  
+	  fixed bug 512287
+
+2010-02-15 23:39  pasnox
+
+	* [r3608] qscintilla/QScintilla-gpl-snapshot/ChangeLog,
+	  qscintilla/QScintilla-gpl-snapshot/NEWS,
+	  qscintilla/QScintilla-gpl-snapshot/Python/configure.py,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qsciabstractapis.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qsciapis.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscicommand.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscicommandset.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscidocument.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexer.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerbash.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerbatch.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexercmake.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexercpp.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexercsharp.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexercss.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexercustom.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerd.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerdiff.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerfortran.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerfortran77.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerhtml.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexeridl.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerjava.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerjavascript.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerlua.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexermakefile.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerpascal.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerperl.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerpostscript.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerpov.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerproperties.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerpython.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerruby.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerspice.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexersql.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexertcl.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexertex.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerverilog.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexervhdl.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerxml.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexeryaml.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscimacro.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscimod3.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscimod4.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscimodcommon.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qsciprinter.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qsciscintilla.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qsciscintillabase3.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qsciscintillabase4.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscistyle.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscistyledtext.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/ListBoxQt.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/ListBoxQt.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/PlatQt.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qsciabstractapis.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qsciapis.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscicommand.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscicommandset.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscidocument.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qsciglobal.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexer.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerbash.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerbatch.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexercmake.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexercpp.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexercsharp.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexercss.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexercustom.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerd.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerdiff.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerfortran.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerfortran77.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerhtml.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexeridl.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerjava.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerjavascript.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerlua.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexermakefile.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerpascal.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerperl.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerpostscript.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerpov.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerproperties.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerpython.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerruby.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerspice.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexersql.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexertcl.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexertex.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerverilog.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexervhdl.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerxml.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexeryaml.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscimacro.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qsciprinter.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qsciscintilla.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qsciscintillabase.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscistyle.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscistyledtext.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/SciClasses.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/SciClasses.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/ScintillaQt.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/ScintillaQt.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qsciabstractapis.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qsciapis.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscicommand.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscicommandset.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscidocument.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexer.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerbash.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerbatch.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexercmake.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexercpp.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexercsharp.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexercss.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexercustom.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerd.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerdiff.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerfortran.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerfortran77.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerhtml.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexeridl.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerjava.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerjavascript.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerlua.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexermakefile.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerpascal.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerperl.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerpostscript.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerpov.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerproperties.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerpython.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerruby.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerspice.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexersql.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexertcl.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexertex.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerverilog.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexervhdl.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerxml.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexeryaml.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscimacro.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscintilla.pro,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscintilla_cs.ts,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscintilla_de.ts,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscintilla_es.ts,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscintilla_fr.ts,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscintilla_pt_br.ts,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscintilla_ru.ts,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qsciprinter.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qsciscintilla.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qsciscintillabase.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscistyle.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscistyledtext.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/ListBoxQt.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/ListBoxQt.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/PlatQt.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qsciabstractapis.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qsciapis.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscicommand.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscicommandset.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscidocument.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qsciglobal.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexer.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerbash.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerbatch.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexercmake.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexercpp.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexercsharp.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexercss.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexercustom.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerd.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerdiff.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerfortran.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerfortran77.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerhtml.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexeridl.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerjava.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerjavascript.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerlua.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexermakefile.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerpascal.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerperl.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerpostscript.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerpov.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerproperties.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerpython.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerruby.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerspice.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexersql.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexertcl.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexertex.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerverilog.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexervhdl.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerxml.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexeryaml.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscimacro.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qsciprinter.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qsciscintilla.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qsciscintillabase.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscistyle.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscistyledtext.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/SciClasses.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/SciClasses.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/ScintillaQt.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/ScintillaQt.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qsciabstractapis.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qsciapis.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscicommand.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscicommandset.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscidocument.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexer.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerbash.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerbatch.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexercmake.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexercpp.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexercsharp.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexercss.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexercustom.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerd.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerdiff.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerfortran.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerfortran77.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerhtml.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexeridl.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerjava.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerjavascript.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerlua.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexermakefile.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerpascal.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerperl.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerpostscript.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerpov.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerproperties.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerpython.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerruby.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerspice.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexersql.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexertcl.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexertex.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerverilog.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexervhdl.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerxml.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexeryaml.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscimacro.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscintilla.pro,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscintilla_cs.ts,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscintilla_de.ts,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscintilla_es.ts,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscintilla_fr.ts,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscintilla_pt_br.ts,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscintilla_ru.ts,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qsciprinter.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qsciscintilla.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qsciscintillabase.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscistyle.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscistyledtext.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/annotated.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciAPIs-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciAPIs.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciAbstractAPIs-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciAbstractAPIs.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciCommand-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciCommand.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciCommandSet-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciCommandSet.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciDocument-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciDocument.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexer-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexer.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerBash-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerBash.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerBatch-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerBatch.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCMake-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCMake.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCPP-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCPP.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCSS-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCSS.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCSharp-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCSharp.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCustom-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCustom.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerD-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerD.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerDiff-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerDiff.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerFortran-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerFortran.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerFortran77-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerFortran77.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerHTML-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerHTML.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerIDL-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerIDL.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerJava-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerJava.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerJavaScript-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerJavaScript.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerLua-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerLua.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerMakefile-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerMakefile.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPOV-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPOV.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPascal-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPascal.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPerl-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPerl.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPostScript-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPostScript.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerProperties-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerProperties.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPython-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPython.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerRuby-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerRuby.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerSQL-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerSQL.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerSpice-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerSpice.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerTCL-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerTCL.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerTeX-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerTeX.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerVHDL-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerVHDL.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerVerilog-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerVerilog.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerXML-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerXML.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerYAML-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerYAML.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciMacro-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciMacro.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciPrinter-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciPrinter.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciScintilla-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciScintilla.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciScintillaBase-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciScintillaBase.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciStyle-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciStyle.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciStyledText-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciStyledText.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classes.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/dir_cb862073f28f31ab073cdb81655ab5e2.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/dir_ee970dc55ded28f3cf088959685a6ab7.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/dirs.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/doxygen.css,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x62.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x63.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x64.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x65.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x66.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x67.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x68.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x69.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x6a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x6b.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x6c.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x6d.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x6e.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x6f.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x70.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x71.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x72.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x73.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x74.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x75.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x76.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x77.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x78.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x7a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x7e.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_enum.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x62.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x63.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x64.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x65.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x66.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x67.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x68.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x69.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x6a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x6b.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x6c.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x6d.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x6e.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x6f.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x70.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x71.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x72.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x73.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x74.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x75.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x76.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x77.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x78.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x62.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x63.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x64.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x65.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x66.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x67.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x68.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x69.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x6b.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x6c.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x6d.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x70.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x71.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x72.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x73.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x74.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x75.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x76.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x77.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x7a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x7e.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/hierarchy.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/index.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/tabs.css,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/annotated.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciAPIs-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciAPIs.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciAbstractAPIs-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciAbstractAPIs.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciCommand-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciCommand.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciCommandSet-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciCommandSet.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciDocument-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciDocument.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexer-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexer.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerBash-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerBash.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerBatch-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerBatch.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCMake-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCMake.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCPP-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCPP.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCSS-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCSS.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCSharp-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCSharp.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCustom-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCustom.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerD-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerD.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerDiff-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerDiff.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerFortran-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerFortran.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerFortran77-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerFortran77.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerHTML-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerHTML.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerIDL-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerIDL.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerJava-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerJava.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerJavaScript-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerJavaScript.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerLua-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerLua.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerMakefile-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerMakefile.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPOV-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPOV.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPascal-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPascal.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPerl-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPerl.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPostScript-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPostScript.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerProperties-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerProperties.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPython-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPython.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerRuby-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerRuby.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerSQL-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerSQL.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerSpice-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerSpice.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerTCL-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerTCL.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerTeX-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerTeX.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerVHDL-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerVHDL.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerVerilog-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerVerilog.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerXML-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerXML.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerYAML-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerYAML.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciMacro-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciMacro.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciPrinter-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciPrinter.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciScintilla-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciScintilla.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciScintillaBase-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciScintillaBase.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciStyle-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciStyle.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciStyledText-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciStyledText.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classes.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/dir_8c570a21573c8a34f02ad16af33f26f5.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/dir_f2bfa0da14ade1666984a0b363f1bed0.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/dirs.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/doxygen.css,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x62.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x63.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x64.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x65.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x66.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x67.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x68.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x69.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x6a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x6b.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x6c.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x6d.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x6e.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x6f.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x70.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x71.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x72.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x73.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x74.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x75.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x76.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x77.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x78.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x7a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x7e.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_enum.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x62.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x63.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x64.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x65.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x66.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x67.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x68.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x69.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x6a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x6b.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x6c.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x6d.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x6e.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x6f.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x70.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x71.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x72.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x73.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x74.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x75.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x76.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x77.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x78.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x62.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x63.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x64.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x65.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x66.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x67.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x68.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x69.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x6b.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x6c.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x6d.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x70.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x71.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x72.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x73.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x74.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x75.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x76.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x77.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x7a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x7e.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/hierarchy.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/index.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/tabs.css,
+	  qscintilla/QScintilla-gpl-snapshot/include/Scintilla.h,
+	  qscintilla/QScintilla-gpl-snapshot/qsci/api/python/Python-3.1.api:
+	  
+	  Updated qscintilla to version 2.4.2
+
+2010-02-15 23:37  pasnox
+
+	* [r3607]
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/dir_6f90508cb43726e1f7c7ce20fc2bb9c4.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/dir_944256396c06c0295aa2eca7dcfea282.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/dir_d32dfe2bcddd0b2d894b9fb13d6bdd4d.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/dir_e1fde403bd8d563c20728c2ecfe630e7.html:
+	  
+	  
+
+2010-02-15 23:36  pasnox
+
+	* [r3606]
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/dir_0f7bcabfa9c2facf2d884c5a5290cec4.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/dir_5aa811b44be783c540f7a2125ce2b99b.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/dir_63b5f4d5e40d98e806b698e3f9cd374a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/dir_b37846fe0009b95cde3c826d6f6645e0.html:
+	  
+	  
+
+2010-02-15 23:03  pasnox
+
+	* [r3603] build.pro, monkey/src/workspace/pOpenedFileExplorer.cpp,
+	  monkey/src/workspace/pOpenedFileExplorer.h,
+	  monkey/src/workspace/pOpenedFileModel.cpp,
+	  monkey/src/workspace/pWorkspace.cpp,
+	  monkey/src/workspace/pWorkspace.h:
+	  
+	  Rework the opened files model view & combo action.
+	  Fix some possible crash.
+
+2010-02-15 22:56  pasnox
+
+	* [r3602] setups/windows/crossbuild-linux-45.sh,
+	  setups/windows/crossbuild-linux.sh:
+	  
+	  Rename windows crossbuild script.
+
+2010-02-15 22:55  pasnox
+
+	* [r3601] setups/windows/crossbuild-linux-45.sh:
+	  
+	  Update windows script to use Qt 4.6.1 by default.
+
+2010-02-12 15:14  hlamer
+
+	* [r3600] outputparsing/gcc.py, outputparsing/testproject,
+	  outputparsing/testproject/cat_output_txt.xup,
+	  outputparsing/testproject/output.txt:
+	  
+	  fixed bugs 510533 512709 507460 507463
+
+2010-02-08 19:40  pasnox
+
+	* [r3598] monkey/src/workspace/pOpenedFileExplorer.cpp:
+	  
+	  Fix a bug that cause the current editor having focus to not being
+	  restored correctly when hiding/showing the application.
+
+2010-02-08 18:38  pasnox
+
+	* [r3596] plugins/base/MessageBox/src/MessageBox.cpp,
+	  plugins/base/MessageBox/src/ui/MessageBoxDocks.cpp,
+	  plugins/base/MessageBox/src/ui/MessageBoxDocks.h:
+	  
+	  Cleanup MessageBox plugin code.
+
+2010-02-08 18:01  pasnox
+
+	* [r3595] plugins/base/SearchAndReplace/src/SearchWidget.cpp,
+	  plugins/base/SearchAndReplace/src/SearchWidget.h,
+	  plugins/base/SearchAndReplace/src/SearchWidget.ui:
+	  
+	  Rework a little the gui to make it take less space and not doing
+	  flickering.
+	  Update the search file mask by adding the available languages.
+
+2010-02-08 17:23  pasnox
+
+	* [r3594] plugins/base/MessageBox/src/ui/MessageBoxDocks.h:
+	  
+	  Add build steps actions into the build step dock title bar.
+
+2010-02-07 12:50  pasnox
+
+	* [r3592] fresh/widgets/pActionsManager.cpp,
+	  monkey/src/consolemanager/pConsoleManager.cpp,
+	  monkey/src/consolemanager/pConsoleManager.h,
+	  monkey/src/consolemanager/pConsoleManagerStepModel.cpp,
+	  monkey/src/consolemanager/pConsoleManagerStepModel.h,
+	  plugins/base/MessageBox/src/MessageBox.cpp,
+	  plugins/base/MessageBox/src/MessageBox.h,
+	  plugins/base/MessageBox/src/ui/MessageBoxDocks.cpp,
+	  plugins/base/MessageBox/src/ui/MessageBoxDocks.h:
+	  
+	  Add enhancements in the pConsoleManager and associated classes (
+	  MessageBox plugin )
+
+2010-02-03 21:46  pasnox
+
+	* [r3591] plugins/base/MessageBox/src/ui/MessageBoxDocks.cpp,
+	  plugins/base/MessageBox/src/ui/MessageBoxDocks.h:
+	  
+	  Remove QTimer dependency in the new buildstep manager as it's no
+	  longer needed and does not impact the performance.
+
+2010-02-03 15:01  pasnox
+
+	* [r3590] plugins/base/MessageBox/src/ui/MessageBoxDocks.cpp,
+	  plugins/base/MessageBox/src/ui/MessageBoxDocks.h,
+	  plugins/base/MessageBox/src/ui/UIBuildStep.ui:
+	  
+	  BuildSteps no longer freeze main thread when many steps
+	  (error/warning/building file etc) are added in a short lap of
+	  time !!!
+
+2010-02-03 10:33  pasnox
+
+	* [r3589] monkey/src/consolemanager/pConsoleManagerStep.h,
+	  monkey/src/consolemanager/pConsoleManagerStepModel.h:
+	  
+	  Add symbol export for new classes as it's needed for windows.
+
+2010-02-01 23:28  pasnox
+
+	* [r3588] plugins/base/MessageBox/src/ui/MessageBoxDocks.cpp:
+	  
+	  
+
+2010-02-01 23:28  pasnox
+
+	* [r3587] fresh/objects/pIconManager.cpp,
+	  fresh/objects/pIconManager.h:
+	  
+	  Add a filename caching as QResource browsing with a QDir is very
+	  time consuming in loops.
+	  This speed up much the pConsoleManagerStepModel rendering as icon
+	  are finded more quickly.
+
+2010-02-01 20:44  pasnox
+
+	* [r3586] fresh/widgets/pEnvironmentVariablesManager.cpp,
+	  fresh/widgets/pEnvironmentVariablesManager.h:
+	  
+	  Avoid warning about virtual destructor
+
+2010-02-01 20:24  pasnox
+
+	* [r3585] monkey/monkey.pro, monkey/sdk/CommandParser.h,
+	  monkey/sdk/EnvironmentVariablesManager.h,
+	  monkey/sdk/pConsoleManagerStep.h,
+	  monkey/sdk/pConsoleManagerStepModel.h,
+	  monkey/src/consolemanager/AbstractCommandParser.h,
+	  monkey/src/consolemanager/CommandParser.cpp,
+	  monkey/src/consolemanager/CommandParser.h,
+	  monkey/src/consolemanager/pConsoleManager.cpp,
+	  monkey/src/consolemanager/pConsoleManager.h,
+	  monkey/src/consolemanager/pConsoleManagerStep.cpp,
+	  monkey/src/consolemanager/pConsoleManagerStep.h,
+	  monkey/src/consolemanager/pConsoleManagerStepModel.cpp,
+	  monkey/src/consolemanager/pConsoleManagerStepModel.h,
+	  plugins/base/MessageBox/src/ui/MessageBoxDocks.cpp,
+	  plugins/base/MessageBox/src/ui/MessageBoxDocks.h,
+	  plugins/base/MessageBox/src/ui/UIBuildStep.ui:
+	  
+	  WIP in the rework of pConsoleManager.
+
+2010-01-25 08:39  hlamer
+
+	* [r3584] plugins/debugger/BeaverDebugger/BeaverDebugger.cpp:
+	  
+	  temporary fix
+
+2010-01-25 08:37  hlamer
+
+	* [r3583] plugins/debugger/BeaverDebugger/BeaverDebugger.cpp:
+	  
+	  temporary fix
+
+2010-01-17 16:28  pasnox
+
+	* [r3582] fresh/widgets/pEnvironmentVariablesManager.cpp,
+	  fresh/widgets/pEnvironmentVariablesManager.h, monkey/monkey.pro,
+	  monkey/src/abbreviationsmanager/pAbbreviationsManager.cpp,
+	  monkey/src/abbreviationsmanager/pAbbreviationsManager.h,
+	  monkey/src/consolemanager/CommandParser.cpp,
+	  monkey/src/consolemanager/CommandParser.h,
+	  monkey/src/consolemanager/EnvironmentVariablesManager.cpp,
+	  monkey/src/consolemanager/EnvironmentVariablesManager.h,
+	  monkey/src/consolemanager/pCommand.h,
+	  monkey/src/consolemanager/pConsoleManager.cpp,
+	  monkey/src/consolemanager/pConsoleManager.h,
+	  monkey/src/maininterface/ui/UISettings.cpp,
+	  monkey/src/shellmanager/MkSShellInterpreter.cpp,
+	  monkey/src/shellmanager/MkSShellInterpreter.h,
+	  monkey/src/workspace/pFileManager.cpp,
+	  monkey/src/workspace/pFileManager.h,
+	  plugins/builder/GNUMake/src/GNUMake.cpp:
+	  
+	  Rework a little the fucntion pointer signature of the
+	  MkSShellInterpreter so it can take a void* as last arguments
+	  similar to what is usually done with callbacks, so we ca
+	  nretreive the object pointer in the data.
+	  Update all relating code due to previous changes.
+	  Add a reimplementation of pEnvironmentVariablesManager inside mks
+	  as EnvironmentVariablesManager so it can load/save variables
+	  using the mks scripting interface (mks shell).
+	  MkS Environment Variables is now ok and working, please test it !
+
+2010-01-17 01:00  pasnox
+
+	* [r3580]
+	  plugins/base/SearchAndReplace/src/resources/clear-list.png:
+	  
+	  Add missing icon.
+
+2010-01-16 12:54  pasnox
+
+	* [r3578] plugins/base/SearchAndReplace/src/ReplaceThread.cpp,
+	  plugins/base/SearchAndReplace/src/SearchAndReplace.cpp,
+	  plugins/base/SearchAndReplace/src/SearchResultsDock.cpp,
+	  plugins/base/SearchAndReplace/src/SearchResultsModel.cpp,
+	  plugins/base/SearchAndReplace/src/SearchResultsModel.h,
+	  plugins/base/SearchAndReplace/src/SearchThread.cpp,
+	  plugins/base/SearchAndReplace/src/SearchWidget.cpp,
+	  plugins/base/SearchAndReplace/src/resources/SearchAndReplace.qrc:
+	  
+	  Add a clear() member in the searchresultsmodel.
+	  Add a clear results button in the search results dock title bar.
+	  Rework the code that manage the search mode button which was not
+	  very good with all styles.
+
+2010-01-16 01:18  pasnox
+
+	* [r3577] plugins/base/SearchAndReplace/src/SearchThread.cpp:
+	  
+	  Fix a small regression in showing the result capture in
+	  SearchResultsDock.
+
+2010-01-16 00:56  pasnox
+
+	* [r3576] plugins/base/SearchAndReplace/src/SearchResultsModel.cpp,
+	  plugins/base/SearchAndReplace/src/SearchThread.cpp,
+	  plugins/base/SearchAndReplace/src/SearchWidget.cpp:
+	  
+	  Fix performance issues when searching in directory containing
+	  many big files.
+
+2010-01-14 23:19  pasnox
+
+	* [r3575] fresh/widgets/pEnvironmentVariablesManager.cpp,
+	  fresh/widgets/pEnvironmentVariablesManager.h:
+	  
+	  Settings variables now only effectively write in file only
+	  modified / disabled variables.
+	  Reading variables now merge the system variables so the variables
+	  are always uptodate !
+
+2010-01-14 22:28  pasnox
+
+	* [r3574] plugins/base/SearchAndReplace/src/SearchResultsModel.cpp,
+	  plugins/base/SearchAndReplace/src/SearchWidget.cpp,
+	  plugins/base/SearchAndReplace/src/SearchWidget.h:
+	  
+	  The search results model does no longer show osffset in results
+	  gui.
+	  Fix performance issue in initializeProperties() by adding a bool
+	  that allow to skip non needed task when typing text.
+
+2010-01-13 23:12  pasnox
+
+	* [r3573] plugins/base/SearchAndReplace/src/ReplaceThread.cpp,
+	  plugins/base/SearchAndReplace/src/ReplaceThread.h,
+	  plugins/base/SearchAndReplace/src/SearchAndReplace.h,
+	  plugins/base/SearchAndReplace/src/SearchResultsDock.cpp,
+	  plugins/base/SearchAndReplace/src/SearchResultsDock.h,
+	  plugins/base/SearchAndReplace/src/SearchResultsModel.cpp,
+	  plugins/base/SearchAndReplace/src/SearchResultsModel.h,
+	  plugins/base/SearchAndReplace/src/SearchThread.cpp,
+	  plugins/base/SearchAndReplace/src/SearchThread.h,
+	  plugins/base/SearchAndReplace/src/SearchWidget.cpp,
+	  plugins/base/SearchAndReplace/src/SearchWidget.h:
+	  
+	  Search results dock is now only shown one time of receiving first
+	  results (so it can be hidden after pressing search and got first
+	  results).
+	  Add a search progress bar so user know search has not freeze.
+	  Add some check and message user on certain errors (null search
+	  text, no project while searching in project files).
+	  Add a button in the path widget that allow to cd up the current
+	  search path.
+
+2010-01-13 21:14  pasnox
+
+	* [r3572] plugins/base/SearchAndReplace/src/SearchThread.cpp:
+	  
+	  Fix a windows bug that cause lines number to be wrong when
+	  searching text causing entry activation to not show the correct
+	  line in the opened file.
+
+2010-01-13 19:55  pasnox
+
+	* [r3571] monkey/src/resources/icons/listeditor/go-up.png,
+	  monkey/src/resources/resources.qrc,
+	  plugins/base/SearchAndReplace/src/SearchWidget.cpp,
+	  plugins/base/SearchAndReplace/src/SearchWidget.h,
+	  plugins/base/SearchAndReplace/src/SearchWidget.ui,
+	  plugins/child/QtAssistant/src/QtAssistantChild.cpp,
+	  plugins/child/QtAssistant/src/QtAssistantChild.h,
+	  plugins/child/QtAssistant/src/QtAssistantViewer.cpp,
+	  plugins/child/QtDesigner/src/QtDesignerManager.cpp:
+	  
+	  Fix build errors due to includes changes.
+
+2010-01-13 18:35  pasnox
+
+	* [r3570] fresh/widgets/pEnvironmentVariablesModel.cpp:
+	  
+	  Set font strokeout when a variable is disabled.
+
+2010-01-13 10:09  hlamer
+
+	* [r3569] doc/parsing.doxygen:
+	  
+	  formating improved
+
+2010-01-13 09:44  hlamer
+
+	* [r3568] Doxyfile, doc/mainpage.doxygen, doc/parsing.doxygen,
+	  doc/parsing.txt:
+	  
+	  Parsing documentation compilable by doxygen. Need imporove
+	  formating
+
+2010-01-12 22:48  pasnox
+
+	* [r3567] fresh/fresh.pro, fresh/sdk/fresh.h,
+	  fresh/sdk/pEnvironmentVariableEditor.h,
+	  fresh/sdk/pEnvironmentVariablesEditor.h,
+	  fresh/sdk/pEnvironmentVariablesManager.h,
+	  fresh/sdk/pEnvironmentVariablesModel.h,
+	  fresh/widgets/pEnvironmentVariableEditor.cpp,
+	  fresh/widgets/pEnvironmentVariableEditor.h,
+	  fresh/widgets/pEnvironmentVariableEditor.ui,
+	  fresh/widgets/pEnvironmentVariablesEditor.cpp,
+	  fresh/widgets/pEnvironmentVariablesEditor.h,
+	  fresh/widgets/pEnvironmentVariablesEditor.ui,
+	  fresh/widgets/pEnvironmentVariablesManager.cpp,
+	  fresh/widgets/pEnvironmentVariablesManager.h,
+	  fresh/widgets/pEnvironmentVariablesModel.cpp,
+	  fresh/widgets/pEnvironmentVariablesModel.h,
+	  monkey/src/consolemanager/pConsoleManager.cpp,
+	  monkey/src/consolemanager/pConsoleManager.h,
+	  monkey/src/maininterface/ui/UISettings.cpp,
+	  monkey/src/maininterface/ui/UISettings.ui,
+	  monkey/src/toolsmanager/pDesktopApplications_unix.cpp,
+	  monkey/src/workspace/pAbstractChild.h,
+	  monkey/src/workspace/pOpenedFileExplorer.cpp,
+	  monkey/src/workspace/pOpenedFileModel.cpp,
+	  monkey/src/workspace/pWorkspace.h:
+	  
+	  Introduce pEnvironmentVariablesXXX suit, which allow
+	  customization of environment variables inside mks.
+	  Users can add/edit/remove variables using an editor and the
+	  variables are setted in the QProcess when starting a command
+	  inside mks (build, start program, tools etc).
+	  This does not modify environment variables of the operating
+	  system, only mks is impacted: enjoy !
+	  Add support for environment variables editor in UISettings and
+	  pConsoleManager now handle it.
+	  Small code refactoring.
+
+2010-01-12 20:13  pasnox
+
+	* [r3566] plugins/base/SearchAndReplace/src/SearchWidget.cpp:
+	  
+	  Set current file path / project path / path when triggering
+	  search/repalce in directory.
+	  Fix a bug in the completer that does show files when they should
+	  not.
+
+2010-01-11 20:33  pasnox
+
+	* [r3565] plugins/base/SearchAndReplace/src/SearchResultsModel.h,
+	  plugins/base/SearchAndReplace/src/SearchWidget.cpp,
+	  plugins/base/SearchAndReplace/src/SearchWidget.h:
+	  
+	  Draw custom button/icon for search popup menu modes in the search
+	  widget.
+
+2010-01-08 21:46  pasnox
+
+	* [r3564] plugins/base/SearchAndReplace/src/SearchWidget.cpp,
+	  plugins/base/SearchAndReplace/src/SearchWidget.h:
+	  
+	  Add mode choice button directly in the search combobox, at left.
+	  It will not disturb the user and take very small place, make
+	  pasnox happy :)
+
+2010-01-07 22:16  pasnox
+
+	* [r3563] plugins/base/SearchAndReplace/src/SearchWidget.cpp:
+	  
+	  Set project codec as search codec by default when triggering the
+	  "search in project files" action.
+
+2010-01-07 21:54  pasnox
+
+	* [r3562] plugins/base/SearchAndReplace/src/SearchAndReplace.cpp,
+	  plugins/base/SearchAndReplace/src/SearchWidget.cpp,
+	  plugins/base/SearchAndReplace/src/SearchWidget.ui:
+	  
+	  Make hlamer happy again by removing the options menu and add
+	  checkbox buttons in the search widget.
+
+2010-01-07 20:37  pasnox
+
+	* [r3561] plugins/base/SearchAndReplace/src/SearchAndReplace.cpp,
+	  plugins/base/SearchAndReplace/src/SearchAndReplace.h,
+	  plugins/base/SearchAndReplace/src/SearchWidget.cpp,
+	  plugins/base/SearchAndReplace/src/SearchWidget.h,
+	  plugins/base/SearchAndReplace/src/SearchWidget.ui,
+	  plugins/base/SearchAndReplace/src/resources/SearchAndReplace.qrc,
+	  plugins/base/SearchAndReplace/src/resources/search-replace-directory.png,
+	  plugins/base/SearchAndReplace/src/resources/search-replace-opened-files.png,
+	  plugins/base/SearchAndReplace/src/resources/search-replace-project-files.png:
+	  
+	  Remove Mode bouton / menu and repalce by actions in menu.
+	  Add the possibility to temporary store the search / replace /
+	  mask texts in their combobox.
+	  Add new icons.
+
+2010-01-07 18:43  pasnox
+
+	* [r3560] monkey/src/consolemanager/CommandParser.cpp:
+	  
+	  Fix a bug in the Step structure construction on parsing output.
+	  GCC generate line numbers starting a 1 while we deal with line
+	  starting at 0.
+
+2010-01-06 21:02  pasnox
+
+	* [r3559] plugins/base/SearchAndReplace/src/ReplaceThread.cpp,
+	  plugins/base/SearchAndReplace/src/SearchAndReplace.cpp,
+	  plugins/base/SearchAndReplace/src/SearchThread.cpp,
+	  plugins/base/SearchAndReplace/src/SearchWidget.cpp,
+	  plugins/base/SearchAndReplace/src/SearchWidget.h:
+	  
+	  Fix some bugs.
+	  Add check for binary file and skip them if needed.
+
+2010-01-05 21:45  hlamer
+
+	* [r3558] doc/parsing.txt:
+	  
+	  parsing documentation template
+
+2010-01-02 02:15  pasnox
+
+	* [r3556] plugins/base/SearchAndReplace/src/SearchAndReplace.cpp:
+	  
+	  Made search & replace plugin enabled by default on first start.
+
+2010-01-02 02:06  pasnox
+
+	* [r3554] plugins/base/MessageBox/src/ui/MessageBoxDocks.cpp,
+	  plugins/child/QtAssistant/src/QtAssistantChild.cpp,
+	  plugins/child/QtAssistant/src/QtAssistantChild.h,
+	  plugins/child/QtDesigner/src/QtDesignerChild.cpp,
+	  plugins/child/QtDesigner/src/QtDesignerChild.h:
+	  
+	  Fix some build error due to api changes.
+
+2010-01-02 00:20  pasnox
+
+	* [r3549] plugins/base/base.pro:
+	  
+	  Fix code due to plugin name changed.
+
+2010-01-02 00:19  pasnox
+
+	* [r3548] plugins/base/SearchAndReplace/SearchAndReplace.pro,
+	  plugins/base/SearchAndReplace/src/SearchAndReplace.cpp,
+	  plugins/base/SearchAndReplace/src/SearchAndReplace.h,
+	  plugins/base/SearchAndReplace/src/SearchResultsDock.cpp,
+	  plugins/base/SearchAndReplace/src/SearchResultsModel.cpp,
+	  plugins/base/SearchAndReplace/src/SearchThread.cpp,
+	  plugins/base/SearchAndReplace/src/SearchWidget.cpp,
+	  plugins/base/SearchAndReplace/src/SearchWidget.h,
+	  plugins/base/SearchAndReplace/src/SearchWidget.ui,
+	  plugins/base/SearchAndReplace/src/resources/SearchAndReplace.qrc:
+	  
+	  Fix code due to plugin name changed.
+
+2010-01-02 00:10  pasnox
+
+	* [r3547] plugins/base/SearchAndReplace/SearchAndReplace.pro,
+	  plugins/base/SearchAndReplace/SearchAndReplaceV2.pro,
+	  plugins/base/SearchAndReplace/src/SearchAndReplace.cpp,
+	  plugins/base/SearchAndReplace/src/SearchAndReplace.h,
+	  plugins/base/SearchAndReplace/src/SearchAndReplaceV2.cpp,
+	  plugins/base/SearchAndReplace/src/SearchAndReplaceV2.h,
+	  plugins/base/SearchAndReplace/src/resources/SearchAndReplace.png,
+	  plugins/base/SearchAndReplace/src/resources/SearchAndReplace.qrc,
+	  plugins/base/SearchAndReplace/src/resources/SearchAndReplaceV2.png,
+	  plugins/base/SearchAndReplace/src/resources/SearchAndReplaceV2.qrc:
+	  
+	  Rename new search & replace plugin.
+
+2010-01-02 00:08  pasnox
+
+	* [r3546] plugins/base/SearchAndReplace,
+	  plugins/base/SearchAndReplaceV2:
+	  
+	  Rename new search & replace plugin.
+
+2010-01-02 00:06  pasnox
+
+	* [r3545] plugins/base/SearchAndReplace:
+	  
+	  Move old Search & replace plugin to temporary and old codes.
+
+2010-01-01 19:33  pasnox
+
+	* [r3544] plugins/base/SearchAndReplaceV2/src/SearchWidget.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.h:
+	  
+	  Add support for incremental search in the new Search & Replace
+	  plugin.
+	  It is now 100% finished.
+
+2010-01-01 18:28  pasnox
+
+	* [r3543]
+	  plugins/base/SearchAndReplaceV2/src/SearchAndReplaceV2.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.cpp:
+	  
+	  Fill search text on search / repalce shortcut pressed.
+	  Add dirmodel completer in the path combobox.
+
+2009-12-31 18:09  pasnox
+
+	* [r3542] monkey/src/maininterface/UIMain.cpp,
+	  monkey/src/workspace/pWorkspace.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchAndReplaceV2.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchAndReplaceV2.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.ui:
+	  
+	  Add search & replace actions in the edit menu.
+	  Support for Search & Replace is now fully implemented and
+	  finished :)
+
+2009-12-31 17:24  pasnox
+
+	* [r3541] plugins/base/SearchAndReplaceV2/src/SearchWidget.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.h:
+	  
+	  Add support for replacing in current editor (current opepend file
+	  editor).
+	  All search & replace mode / options seem to be supported and
+	  working, need intensive test now :)
+
+2009-12-31 16:57  pasnox
+
+	* [r3540] plugins/base/SearchAndReplaceV2/src/ReplaceThread.cpp,
+	  plugins/base/SearchAndReplaceV2/src/ReplaceThread.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.h:
+	  
+	  Add support for opened files replacements when replacing
+	  externally.
+	  Add support for display errors.
+
+2009-12-31 14:04  pasnox
+
+	* [r3539] plugins/base/SearchAndReplaceV2/src/ReplaceThread.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchResultsModel.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchResultsModel.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.ui:
+	  
+	  Fix a critical bug that does not completly remove the searched
+	  word when replacing !.
+	  Fix some bugs.
+	  Cleanup some code.
+
+2009-12-30 23:55  pasnox
+
+	* [r3538]
+	  plugins/base/SearchAndReplaceV2/src/SearchResultsDock.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchResultsModel.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.ui:
+	  
+	  Fix a bug that cause clicked occurrence to only select 3
+	  characters of the searched text instead of the length of the
+	  searched text.
+	  Fix a crash when replacing all occurrences of a search & replace.
+
+2009-12-30 23:00  pasnox
+
+	* [r3537] plugins/base/SearchAndReplaceV2/src/ReplaceThread.cpp,
+	  plugins/base/SearchAndReplaceV2/src/ReplaceThread.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchAndReplaceV2.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchResultsDock.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchResultsDock.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchResultsModel.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchResultsModel.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchThread.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.ui:
+	  
+	  Rework the SearchResultsModel so it does no longer stock parent
+	  rows in the internal structures - they are now dynamically
+	  queried.
+	  Add primary support for ReplaceThread, seem working in all
+	  replace mode correctly (basic repalce is not yet implemented).
+	  Fix bugs.
+
+2009-12-30 14:27  pasnox
+
+	* [r3536] plugins/base/SearchAndReplaceV2/src/SearchThread.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchThread.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.ui:
+	  
+	  Fix a bug that cause search button pressed multiple times to not
+	  restart the search.
+	  Add the possibility to stop search/replace threads when they are
+	  running.
+
+2009-12-30 03:56  pasnox
+
+	* [r3535] monkey/src/workspace/pAbstractChild.h,
+	  monkey/src/workspace/pChild.cpp, monkey/src/workspace/pChild.h,
+	  monkey/src/workspace/pFileManager.cpp,
+	  monkey/src/workspace/pFileManager.h,
+	  monkey/src/workspace/pWorkspace.cpp,
+	  monkey/src/workspace/pWorkspace.h,
+	  plugins/base/ClassBrowser/src/ClassBrowser.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchResultsDock.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchResultsDock.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchResultsModel.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchResultsModel.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchThread.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.cpp,
+	  qCtagsSense/src/qCtagsSenseIndexer.cpp,
+	  qCtagsSense/src/qCtagsSenseUtils.cpp:
+	  
+	  Remove some cursor position hack in
+	  pAbstractChild/pChild/pWorkspace/pFileManager.
+	  Update goTo() api member so it no longer take a bool highlight,
+	  but a int for selection length that allow to set a selection for
+	  a goto.
+	  Fix qctags sense code that was using line numbers starting at 1
+	  instead of 0 based.
+	  WIP of the new Search & Replace plugin: all search mode are now
+	  fully working and results dock can be clicked to goto the
+	  associated file !
+
+2009-12-30 01:00  pasnox
+
+	* [r3534]
+	  plugins/base/SearchAndReplaceV2/src/SearchAndReplaceV2.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchAndReplaceV2.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchResultsDock.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchResultsDock.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchResultsModel.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchResultsModel.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchThread.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchThread.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.ui:
+	  
+	  Add support for item user checkable when in replacing mode.
+	  Model is no longer reset when adding new stuff in the search
+	  results model, so selected/expanded items will no longer be
+	  resetted when new stuff arrived ! enjoy.
+
+2009-12-28 16:25  pasnox
+
+	* [r3533] plugins/base/SearchAndReplaceV2/src/SearchResultsModel.h:
+	  
+	  REwork management of internal structures for model data, i don't
+	  know by how it increase, but it's definitively very very very
+	  best, no more freeze on search, even in big folders !
+
+2009-12-28 16:20  pasnox
+
+	* [r3532]
+	  plugins/base/SearchAndReplaceV2/src/SearchResultsModel.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchResultsModel.h:
+	  
+	  REwork management of internal structures for model data, i don't
+	  know by how it increase, but it's definitively very very very
+	  best, no more freeze on search, even in big folders !
+
+2009-12-28 15:03  pasnox
+
+	* [r3531] plugins/base/SearchAndReplaceV2/src/SearchThread.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.cpp:
+	  
+	  Clean code.
+	  Add time tracker for search engine.
+
+2009-12-28 14:45  pasnox
+
+	* [r3530]
+	  plugins/base/SearchAndReplaceV2/src/SearchResultsModel.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchResultsModel.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchThread.cpp:
+	  
+	  Now use pointers for model structure , this enhance copy of datas
+	  other thread / main gui.
+	  Fix a bug that cause a new search while a one already in progress
+	  to not stop the current one (so the new search is lost in space).
+
+2009-12-28 14:43  pasnox
+
+	* [r3529]
+	  plugins/base/SearchAndReplaceV2/src/SearchResultsDock.cpp:
+	  
+	  Fix view poor performance while scrolling.
+	  Enhance mac gui
+
+2009-12-28 14:42  pasnox
+
+	* [r3528] plugins/base/SearchAndReplaceV2/src/SearchWidget.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.ui:
+	  
+	  Enhance mac gui
+
+2009-12-28 14:03  pasnox
+
+	* [r3527] monkey/src/pMonkeyStudio.cpp, monkey/src/pMonkeyStudio.h:
+	  
+	  Add mac specific helpers.
+
+2009-12-28 08:34  hlamer
+
+	* [r3526] ctags/make_ctags_a_lib.patch,
+	  monkey/src/consolemanager/AbstractCommandParser.h:
+	  
+	  removed "parsing" branche, added patch for ctags
+
+2009-12-28 04:08  pasnox
+
+	* [r3525] plugins/base/SearchAndReplaceV2/SearchAndReplaceV2.pro,
+	  plugins/base/SearchAndReplaceV2/src/ReplaceThread.cpp,
+	  plugins/base/SearchAndReplaceV2/src/ReplaceThread.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchAndReplaceV2.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchAndReplaceV2.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchResultsDock.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchResultsDock.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchResultsModel.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchResultsModel.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchThread.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchThread.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.ui,
+	  plugins/base/SearchAndReplaceV2/src/resources/SearchAndReplaceV2.png:
+	  
+	  Introduce SearchModel and SearchDock classes.
+	  Search is now working in all modes.
+	  Performance is already very best than the old search plugin, but
+	  not yet totally freeze free ( it remain small freeze in big
+	  folder like /usr/include ) and when scrolling big search results
+	  list.
+
+2009-12-27 01:41  pasnox
+
+	* [r3524] plugins/base/SearchAndReplaceV2/src/SearchAndReplaceV2.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.h:
+	  
+	  Add search in file support in SearchAndReplaceV2 plugin.
+
+2009-12-27 00:49  pasnox
+
+	* [r3523] plugins/base/SearchAndReplaceV2/src/SearchWidget.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.ui:
+	  
+	  WIP of new SearchWidget gui, now all actions / options / widgets
+	  are available by keyboard shortcuts !
+
+2009-12-27 00:09  pasnox
+
+	* [r3522] plugins/base/base.pro:
+	  
+	  Update base.pro project file.
+
+2009-12-27 00:08  pasnox
+
+	* [r3521] monkey/src/consolemanager/CommandParser.cpp,
+	  monkey/src/consolemanager/CommandParser.h,
+	  monkey/src/shellmanager/MkSShellInterpreter.cpp,
+	  monkey/src/shellmanager/MkSShellInterpreter.h,
+	  plugins/xup/xup.pro:
+	  
+	  Fix some code.
+	  Enable again xup plugins.
+
+2009-12-26 23:30  pasnox
+
+	* [r3520] monkey/monkey.pro,
+	  monkey/src/pluginsmanager/CompilerPlugin.cpp,
+	  monkey/src/pluginsmanager/CompilerPlugin.h,
+	  plugins/builder/GNUMake/src/GNUMake.cpp:
+	  
+	  Fix code due to last branches/parsing import.
+
+2009-12-26 22:02  pasnox
+
+	* [r3519] datas/scripts/parser-gcc.mks,
+	  datas/scripts/parser-gnumake.mks, monkey/monkey.pro,
+	  monkey/sdk/CompilerPlugin.h, monkey/sdk/UICompilerSettings.h,
+	  monkey/src/consolemanager/CommandParser.cpp,
+	  monkey/src/consolemanager/CommandParser.h,
+	  monkey/src/consolemanager/pConsoleManager.cpp,
+	  monkey/src/consolemanager/pConsoleManager.h,
+	  monkey/src/pMonkeyStudio.cpp,
+	  monkey/src/pluginsmanager/BasePlugin.cpp,
+	  monkey/src/pluginsmanager/BasePlugin.h,
+	  monkey/src/pluginsmanager/PluginsManager.cpp,
+	  monkey/src/pluginsmanager/PluginsManager.h,
+	  monkey/src/pluginsmanager/PluginsMenu.cpp,
+	  monkey/src/pluginsmanager/ui/UICLIToolSettings.cpp,
+	  monkey/src/pluginsmanager/ui/UICompilerSettings.cpp,
+	  monkey/src/pluginsmanager/ui/UICompilerSettings.h,
+	  monkey/src/pluginsmanager/ui/UICompilerSettings.ui,
+	  monkey/src/shellmanager/MkSShellInterpreter.cpp,
+	  monkey/src/shellmanager/MkSShellInterpreter.h,
+	  monkey/src/workspace/pWorkspace.cpp,
+	  monkey/src/xupmanager/core/XUPProjectItem.cpp,
+	  monkey/src/xupmanager/core/XUPProjectItem.h,
+	  monkey/src/xupmanager/core/XUPProjectItemHelper.cpp,
+	  outputparsing/gcc.py, outputparsing/generate-parsers.sh,
+	  outputparsing/gnumake.py, outputparsing/parsing.py,
+	  plugins/base/AStyle/src/3rdparty/astyle/ASBeautifier.cpp,
+	  plugins/base/AStyle/src/3rdparty/astyle/compiler_defines.h,
+	  plugins/base/MessageBox/src/ui/MessageBoxDocks.cpp,
+	  plugins/builder/GNUMake/GNUMake.pro,
+	  plugins/builder/GNUMake/src/GNUMake.cpp,
+	  plugins/builder/GNUMake/src/GNUMakeParser.h,
+	  plugins/builder/GNUMake/src/GnuMakePatterns.h,
+	  plugins/compiler/GccParser/src/Parser.h,
+	  plugins/compiler/compiler.pro,
+	  plugins/interpreter/PHP/src/PHP.cpp,
+	  plugins/interpreter/Python/src/Python.cpp,
+	  plugins/xup/PHP-Qt/src/PHPQtProjectItem.cpp,
+	  plugins/xup/PyQt/src/PyQtProjectItem.cpp,
+	  plugins/xup/QMake/src/QMakeProjectItem.cpp,
+	  plugins/xup/QMake/src/QMakeProjectItem.h,
+	  plugins/xup/XUP/src/gui/UIXUPEditor.cpp, plugins/xup/xup.pro:
+	  
+	  Merged parsing branche 3518 to dev branche 3517
+
+2009-12-23 10:11  pasnox
+
+	* [r3517] plugins/xup/QMake/src/QtVersionManager.cpp:
+	  
+	  Remove dead entries if a new one is detected in the same path
+	  with a different version.
+
+2009-12-23 09:58  pasnox
+
+	* [r3516] monkey/src/workspace/pWorkspace.cpp,
+	  monkey/src/workspace/pWorkspace.h,
+	  plugins/base/SearchAndReplaceV2,
+	  plugins/base/SearchAndReplaceV2/SearchAndReplaceV2.pro,
+	  plugins/base/SearchAndReplaceV2/src,
+	  plugins/base/SearchAndReplaceV2/src/ReplaceThread.cpp,
+	  plugins/base/SearchAndReplaceV2/src/ReplaceThread.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchAndReplaceV2.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchAndReplaceV2.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchThread.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchThread.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.cpp,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.h,
+	  plugins/base/SearchAndReplaceV2/src/SearchWidget.ui,
+	  plugins/base/SearchAndReplaceV2/src/resources,
+	  plugins/base/SearchAndReplaceV2/src/resources/SearchAndReplaceV2.png,
+	  plugins/base/SearchAndReplaceV2/src/resources/SearchAndReplaceV2.qrc,
+	  plugins/base/base.pro, plugins/xup/QMake/src/QtVersionManager.h:
+	  
+	  Introduce SearchAndReplaceV2 base plugin.
+
+2009-12-22 22:31  pasnox
+
+	* [r3515] monkey/src/maininterface/UIMain.cpp,
+	  monkey/src/pluginsmanager/PluginsManager.cpp,
+	  monkey/src/pluginsmanager/PluginsManager.h,
+	  monkey/src/pluginsmanager/PluginsMenu.cpp,
+	  monkey/src/pluginsmanager/PluginsMenu.h:
+	  
+	  Rework PluginsMenu to be a menu actions handler instead of a menu
+	  so there is no longer sub menu in plugins menu.
+
+2009-12-21 21:32  pasnox
+
+	* [r3512] plugins/base/SearchAndReplace/src/SearchAndReplace.cpp:
+	  
+	  Fix a bug that cause replace in directory to ignore trailing line
+
+2009-12-21 17:41  pasnox
+
+	* [r3511] plugins/xup/QMake/src/gui/UISettingsQMake.cpp:
+	  
+	  Items entries of the Qt version <b>Version</b> field is now live
+	  updated on key press.
+
+2009-12-21 17:23  pasnox
+
+	* [r3510] plugins/xup/QMake/src/gui/UISettingsQMake.cpp,
+	  plugins/xup/QMake/src/gui/UISettingsQMake.ui:
+	  
+	  Add best help !
+
+2009-12-20 20:44  pasnox
+
+	* [r3509] qscintilla/sdk/qscintilla.h:
+	  
+	  Remove warning by adding empty line at end of file.
+
+2009-12-20 20:44  pasnox
+
+	* [r3508] plugins/xup/QMake/src/QMake.cpp,
+	  plugins/xup/QMake/src/QMake.h,
+	  plugins/xup/QMake/src/QtVersionManager.h,
+	  plugins/xup/QMake/src/gui/UISettingsQMake.cpp,
+	  plugins/xup/QMake/src/gui/UISettingsQMake.ui:
+	  
+	  Add completer to Qt Version path.
+	  Rework the gui.
+	  Add error when saving invalid Qt Versions.
+
+2009-12-20 12:10  pasnox
+
+	* [r3507] plugins/xup/QMake/src/gui/UISettingsQMake.ui:
+	  
+	  Rework the help for Qt Versions configuration.
+
+2009-12-20 11:12  pasnox
+
+	* [r3506] plugins/xup/QMake/src/QtVersionManager.cpp,
+	  plugins/xup/QMake/src/QtVersionManager.h:
+	  
+	  Reworked the QtVersionManager class which is responsable of
+	  founding installed Qt versions on the system.
+	  As it was working great for Linux/Mac/Windows while Qt bin path
+	  was in PATH variable, it does not very worked on windows when
+	  using pre compiled installed packages.
+	  It's now past as we now read the windows registry to found
+	  installed Qt OpenSource / Qt Commercial / Qt SDK installation and
+	  add all version found to the Qt Version dialog.
+	  User will now longer need to manually configure that (except when
+	  self building Qt, for which no windows registry installation key
+	  exists).
+
+2009-12-20 11:09  hlamer
+
+	* [r3505] ctags/ctags.pro:
+	  
+	  not needed ctags header removed
+
+2009-12-19 18:19  hlamer
+
+	* [r3503] ctags/ctags.pro, ctags/ctags/regex.c,
+	  ctags/ctags/regex.h:
+	  
+	  Finished ctags 5.8 integration. Works on Windows
+
+2009-12-19 12:21  pasnox
+
+	* [r3502] plugins/xup/QMake/src/QMakeProjectItem.cpp:
+	  
+	  Make the message that state no Qt version found persistent.
+
+2009-12-19 11:38  pasnox
+
+	* [r3501] plugins/base/ClassBrowser/src/ClassBrowser.cpp:
+	  
+	  Fix a bug that does not clear the model on last file closed,
+	  meaning the model is always populated and clicking an item my
+	  lead to crash.
+
+2009-12-18 15:06  hlamer
+
+	* [r3500] ctags/ctags.pro:
+	  
+	  added new parsers to the .pro
+
+2009-12-18 14:37  hlamer
+
+	* [r3499] ctags/ctags/INSTALL.oth, ctags/ctags/MAINTAINERS,
+	  ctags/ctags/Makefile.in, ctags/ctags/NEWS, ctags/ctags/README,
+	  ctags/ctags/acconfig.h, ctags/ctags/ant.c, ctags/ctags/asp.c,
+	  ctags/ctags/c.c, ctags/ctags/config.h.in, ctags/ctags/configure,
+	  ctags/ctags/configure.ac, ctags/ctags/configure.in,
+	  ctags/ctags/ctags.1, ctags/ctags/ctags.h, ctags/ctags/ctags.html,
+	  ctags/ctags/dosbatch.c, ctags/ctags/eiffel.c, ctags/ctags/flex.c,
+	  ctags/ctags/fortran.c, ctags/ctags/gnu_regex,
+	  ctags/ctags/gnu_regex/README.txt,
+	  ctags/ctags/gnu_regex/regcomp.c, ctags/ctags/gnu_regex/regex.c,
+	  ctags/ctags/gnu_regex/regex.h,
+	  ctags/ctags/gnu_regex/regex_internal.c,
+	  ctags/ctags/gnu_regex/regex_internal.h,
+	  ctags/ctags/gnu_regex/regexec.c, ctags/ctags/jscript.c,
+	  ctags/ctags/keyword.c, ctags/ctags/keyword.h, ctags/ctags/lisp.c,
+	  ctags/ctags/maintainer.mak, ctags/ctags/make.c,
+	  ctags/ctags/matlab.c, ctags/ctags/mk_bc5.mak,
+	  ctags/ctags/mk_ming.mak, ctags/ctags/mk_mingw.mak,
+	  ctags/ctags/mk_mvc.mak, ctags/ctags/ocaml.c,
+	  ctags/ctags/parsers.h, ctags/ctags/php.c, ctags/ctags/python.c,
+	  ctags/ctags/read.c, ctags/ctags/read.h, ctags/ctags/source.mak,
+	  ctags/ctags/sql.c, ctags/ctags/tex.c, ctags/ctags/vhdl.c,
+	  ctags/ctags/vstring.h:
+	  
+	  ctags version 5.8 integrated. Need to test on windows and mac
+
+2009-12-18 14:02  hlamer
+
+	* [r3498] ctags/ctags/c.c, ctags/ctags/entry.c,
+	  ctags/ctags/entry.h, ctags/ctags/read.c:
+	  
+	  finished minimizing our changes in ctags
+
+2009-12-17 22:50  pasnox
+
+	* [r3497] setups/windows/crossbuild-linux-45.sh:
+	  
+	  Fix crossbuild script.
+
+2009-12-17 22:32  pasnox
+
+	* [r3496] plugins/debugger/BeaverDebugger/BeaverDebugger.cpp:
+	  
+	  Fix build error when using a build of Qt not having rtti
+	  activated.
+
+2009-12-17 22:32  pasnox
+
+	* [r3495] setups/windows/crossbuild-linux-44.sh:
+	  
+	  Remove obsolete crossbuild script for Qt 4.4
+
+2009-12-17 22:22  pasnox
+
+	* [r3494] setups/windows/monkeystudio.iss:
+	  
+	  Fix windows setup script for cross build & package.
+
+2009-12-17 22:21  pasnox
+
+	* [r3493] qscintilla/QScintilla-gpl-snapshot/include/Scintilla.h:
+	  
+	  Fix a build error when crossbuilding from linux (include file was
+	  not having correct case sensitivity)
+
+2009-12-17 18:28  hlamer
+
+	* [r3492] ctags/ctags/exuberantCtags.c, ctags/ctags/parse.c,
+	  ctags/ctags/parse.h, ctags/ctags/read.c, ctags/ctags/read.h:
+	  
+	  working version
+
+2009-12-17 17:55  hlamer
+
+	* [r3491] ctags/ctags/get.h:
+	  
+	  working versin
+
+2009-12-17 17:50  hlamer
+
+	* [r3490] ctags/ctags/options.c, ctags/ctags/options.h:
+	  
+	  working version
+
+2009-12-17 17:34  hlamer
+
+	* [r3489] ctags/ctags/.indent.pro, ctags/ctags/options.c,
+	  ctags/ctags/options.h:
+	  
+	  working version
+
+2009-12-16 11:22  hlamer
+
+	* [r3488] ctags/ctags/COPYING, ctags/ctags/EXTENDING.html,
+	  ctags/ctags/FAQ, ctags/ctags/INSTALL, ctags/ctags/INSTALL.oth,
+	  ctags/ctags/MAINTAINERS, ctags/ctags/Makefile.in,
+	  ctags/ctags/NEWS, ctags/ctags/README, ctags/ctags/acconfig.h,
+	  ctags/ctags/argproc.c, ctags/ctags/args.c, ctags/ctags/args.h,
+	  ctags/ctags/config.h.in, ctags/ctags/configure,
+	  ctags/ctags/configure.in, ctags/ctags/ctags.1,
+	  ctags/ctags/ctags.h, ctags/ctags/ctags.html,
+	  ctags/ctags/ctags.spec, ctags/ctags/debug.c,
+	  ctags/ctags/descrip.mms, ctags/ctags/e_amiga.h,
+	  ctags/ctags/e_djgpp.h, ctags/ctags/e_mac.h,
+	  ctags/ctags/e_msoft.h, ctags/ctags/e_os2.h, ctags/ctags/e_qdos.h,
+	  ctags/ctags/e_riscos.h, ctags/ctags/e_vms.h, ctags/ctags/mac.c,
+	  ctags/ctags/magic.diff, ctags/ctags/main.c, ctags/ctags/main.h,
+	  ctags/ctags/maintainer.mak, ctags/ctags/mk_bc3.mak,
+	  ctags/ctags/mk_bc5.mak, ctags/ctags/mk_djg.mak,
+	  ctags/ctags/mk_manx.mak, ctags/ctags/mk_ming.mak,
+	  ctags/ctags/mk_mpw.mak, ctags/ctags/mk_mvc.mak,
+	  ctags/ctags/mk_os2.mak, ctags/ctags/mk_qdos.mak,
+	  ctags/ctags/mk_sas.mak, ctags/ctags/mkinstalldirs,
+	  ctags/ctags/parsers.h, ctags/ctags/qdos.c,
+	  ctags/ctags/readtags.c, ctags/ctags/readtags.h,
+	  ctags/ctags/sort.c, ctags/ctags/sort.h, ctags/ctags/source.mak:
+	  
+	  added files, missing in ctags
+
+2009-12-16 11:07  hlamer
+
+	* [r3487] ctags/ctags.pri, qCtagsSense/qCtagsSense.pro:
+	  
+	  moved defines for ctags to ctags.pri
+
+2009-12-15 22:35  hlamer
+
+	* [r3485] ctags/ctags.pro, ctags/ctags/general.h,
+	  ctags/ctags/get.h, ctags/ctags/options.c, ctags/sdk/ctags.h,
+	  qCtagsSense/qCtagsSense.pro, qCtagsSense/src/qCtagsSense.cpp:
+	  
+	  compilable and working version
+
+2009-12-15 16:30  hlamer
+
+	* [r3484] ctags/ctags.pro, ctags/ctags/entry.c, ctags/ctags/php.c:
+	  
+	  next stage of integration
+
+2009-12-15 15:45  hlamer
+
+	* [r3483] ctags/ctags/README.orig, ctags/ctags/debug.h,
+	  ctags/ctags/general.h, ctags/ctags/get.c, ctags/ctags/get.h,
+	  ctags/ctags/html.c, ctags/ctags/keyword.c, ctags/ctags/keyword.h,
+	  ctags/ctags/lregex.c, ctags/ctags/make.c, ctags/ctags/php.c,
+	  ctags/ctags/read.h, ctags/ctags/routines.c,
+	  ctags/ctags/routines.h, ctags/ctags/strlist.c,
+	  ctags/ctags/strlist.h, ctags/ctags/vim.c, ctags/ctags/vstring.c,
+	  ctags/ctags/vstring.h:
+	  
+	  merging with 5.7. partial result
+
+2009-12-14 22:10  pasnox
+
+	* [r3481] plugins/child/QtAssistant/src/QtAssistantChild.cpp,
+	  plugins/child/QtAssistant/src/QtAssistantChild.h,
+	  plugins/child/QtAssistant/src/QtAssistantDock.cpp,
+	  plugins/child/QtAssistant/src/QtAssistantDock.h,
+	  plugins/child/QtAssistant/src/QtAssistantViewer.cpp,
+	  plugins/child/QtAssistant/src/QtAssistantViewer.h:
+	  
+	  Remove executable bit on some files.
+
+2009-12-14 21:21  pasnox
+
+	* [r3479] monkey/src/maininterface/ui/UIAbout.cpp:
+	  
+	  Update oldest About infos.
+
+2009-12-14 19:40  pasnox
+
+	* [r3478] fresh/widgets/pDockToolBar.cpp,
+	  fresh/widgets/pDockToolBarManager.cpp,
+	  fresh/widgets/pQueuedMessageToolBar.cpp,
+	  monkey/src/maininterface/UIMain.cpp:
+	  
+	  pQueuedMessageToolBar make its toggleViewAction() disable & non
+	  visible: it's not to the user to control that !
+	  pDockToolBar make its toggleViewAction() disable & non visible:
+	  it's not to the user to control that !
+	  Update some actions texts.
+
+2009-12-14 19:27  minirop
+
+	* [r3477] plugins/xup/QMake/src/QMake2XUP.cpp:
+	  
+	  fixed bug #472324
+
+2009-12-14 18:40  pasnox
+
+	* [r3476] monkey/src/maininterface/ui/UISettings.cpp,
+	  monkey/src/maininterface/ui/UISettings.h:
+	  
+	  Fix a bug that cause the settings dialog to not activate a
+	  default auto completion mode after disabling the auto completion,
+	  and enable it again later.
+
+2009-12-13 23:26  pasnox
+
+	* [r3474] monkey/src/maininterface/ui/UISettings.cpp,
+	  monkey/src/maininterface/ui/UISettings.ui:
+	  
+	  Handle new qscintilla lexers.
+
+2009-12-13 23:20  pasnox
+
+	* [r3473] monkey/src/pMonkeyStudio.cpp:
+	  
+	  Handle new qscintilla lexers.
+
+2009-12-13 23:20  pasnox
+
+	* [r3472] qscintilla/sdk/qscintilla.h:
+	  
+	  Handle new qscintilla lexers.
+
+2009-12-13 22:51  pasnox
+
+	* [r3471]
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerspice.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerverilog.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerspice.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerverilog.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerspice.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerverilog.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscintilla_cs.qm,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscintilla_de.qm,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscintilla_es.qm,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscintilla_fr.qm,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscintilla_pt_br.qm,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscintilla_ru.qm,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerspice.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerverilog.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerspice.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerverilog.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscintilla_es.qm,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerSpice-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerSpice.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerVerilog-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerVerilog.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/dir_63b5f4d5e40d98e806b698e3f9cd374a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/dir_b37846fe0009b95cde3c826d6f6645e0.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/doxygen.png,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/tab_b.gif,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/tab_l.gif,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/tab_r.gif,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerSpice-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerSpice.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerVerilog-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerVerilog.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/dir_6f90508cb43726e1f7c7ce20fc2bb9c4.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/dir_e1fde403bd8d563c20728c2ecfe630e7.html:
+	  
+	  Update QScintilla to 2.4.1-snapshot-20091211
+
+2009-12-13 22:43  pasnox
+
+	* [r3470] setups/windows/monkeystudio.iss:
+	  
+	  Update version in the windows installer
+
+2009-12-13 22:41  pasnox
+
+	* [r3469] qscintilla/QScintilla-gpl-snapshot/ChangeLog,
+	  qscintilla/QScintilla-gpl-snapshot/OPENSOURCE-NOTICE.TXT,
+	  qscintilla/QScintilla-gpl-snapshot/Python/configure.py,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qsciabstractapis.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qsciapis.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscicommand.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscicommandset.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscidocument.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexer.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerbash.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerbatch.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexercmake.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexercpp.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexercsharp.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexercss.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexercustom.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerd.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerdiff.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerfortran.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerfortran77.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerhtml.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexeridl.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerjava.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerjavascript.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerlua.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexermakefile.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerpascal.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerperl.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerpostscript.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerpov.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerproperties.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerpython.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerruby.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexersql.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexertcl.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexertex.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexervhdl.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerxml.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexeryaml.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscimacro.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscimod3.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscimod4.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscimodcommon.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qsciprinter.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qsciscintilla.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qsciscintillabase3.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qsciscintillabase4.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscistyle.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscistyledtext.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/ListBoxQt.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/ListBoxQt.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/PlatQt.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qsciabstractapis.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qsciapis.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscicommand.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscicommandset.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscidocument.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qsciglobal.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexer.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerbash.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerbatch.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexercmake.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexercpp.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexercsharp.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexercss.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexercustom.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerd.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerdiff.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerfortran.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerfortran77.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerhtml.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexeridl.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerjava.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerjavascript.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerlua.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexermakefile.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerpascal.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerperl.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerpostscript.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerpov.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerproperties.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerpython.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerruby.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexersql.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexertcl.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexertex.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexervhdl.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerxml.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexeryaml.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscimacro.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qsciprinter.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qsciscintilla.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qsciscintillabase.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscistyle.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscistyledtext.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/SciClasses.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/SciClasses.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/ScintillaQt.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/ScintillaQt.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qsciabstractapis.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qsciapis.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscicommand.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscicommandset.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscidocument.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexer.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerbash.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerbatch.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexercmake.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexercpp.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexercsharp.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexercss.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexercustom.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerd.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerdiff.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerfortran.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerfortran77.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerhtml.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexeridl.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerjava.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerjavascript.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerlua.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexermakefile.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerpascal.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerperl.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerpostscript.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerpov.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerproperties.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerpython.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerruby.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexersql.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexertcl.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexertex.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexervhdl.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerxml.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexeryaml.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscimacro.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscintilla.pro,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscintilla_de.ts,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qsciprinter.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qsciscintilla.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qsciscintillabase.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscistyle.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscistyledtext.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/ListBoxQt.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/ListBoxQt.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/PlatQt.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qsciabstractapis.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qsciapis.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscicommand.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscicommandset.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscidocument.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qsciglobal.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexer.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerbash.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerbatch.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexercmake.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexercpp.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexercsharp.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexercss.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexercustom.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerd.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerdiff.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerfortran.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerfortran77.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerhtml.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexeridl.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerjava.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerjavascript.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerlua.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexermakefile.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerpascal.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerperl.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerpostscript.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerpov.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerproperties.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerpython.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerruby.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexersql.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexertcl.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexertex.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexervhdl.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerxml.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexeryaml.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscimacro.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qsciprinter.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qsciscintilla.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qsciscintillabase.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscistyle.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscistyledtext.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/SciClasses.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/SciClasses.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/ScintillaQt.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/ScintillaQt.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qsciabstractapis.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qsciapis.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscicommand.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscicommandset.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscidocument.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexer.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerbash.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerbatch.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexercmake.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexercpp.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexercsharp.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexercss.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexercustom.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerd.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerdiff.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerfortran.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerfortran77.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerhtml.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexeridl.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerjava.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerjavascript.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerlua.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexermakefile.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerpascal.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerperl.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerpostscript.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerpov.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerproperties.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerpython.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerruby.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexersql.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexertcl.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexertex.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexervhdl.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerxml.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexeryaml.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscimacro.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscintilla.pro,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscintilla_de.ts,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qsciprinter.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qsciscintilla.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qsciscintillabase.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscistyle.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscistyledtext.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/annotated.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciAPIs-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciAPIs.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciAbstractAPIs-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciAbstractAPIs.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciCommand-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciCommand.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciCommandSet-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciCommandSet.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciDocument-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciDocument.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexer-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexer.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerBash-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerBash.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerBatch-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerBatch.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCMake-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCMake.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCPP-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCPP.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCSS-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCSS.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCSharp-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCSharp.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCustom-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCustom.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerD-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerD.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerDiff-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerDiff.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerFortran-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerFortran.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerFortran77-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerFortran77.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerHTML-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerHTML.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerIDL-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerIDL.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerJava-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerJava.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerJavaScript-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerJavaScript.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerLua-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerLua.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerMakefile-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerMakefile.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPOV-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPOV.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPascal-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPascal.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPerl-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPerl.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPostScript-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPostScript.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerProperties-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerProperties.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPython-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPython.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerRuby-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerRuby.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerSQL-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerSQL.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerTCL-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerTCL.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerTeX-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerTeX.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerVHDL-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerVHDL.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerXML-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerXML.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerYAML-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerYAML.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciMacro-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciMacro.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciPrinter-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciPrinter.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciScintilla-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciScintilla.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciScintillaBase-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciScintillaBase.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciStyle-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciStyle.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciStyledText-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciStyledText.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/dirs.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/doxygen.css,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x62.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x63.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x64.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x65.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x66.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x67.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x68.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x69.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x6a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x6b.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x6c.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x6d.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x6e.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x6f.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x70.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x71.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x72.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x73.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x74.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x75.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x76.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x77.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x78.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x7a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x7e.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_enum.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x62.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x63.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x64.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x65.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x66.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x67.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x68.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x69.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x6a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x6b.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x6c.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x6d.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x6e.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x6f.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x70.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x71.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x72.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x73.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x74.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x75.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x76.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x77.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x78.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x62.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x63.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x64.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x65.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x66.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x67.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x68.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x69.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x6b.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x6c.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x6d.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x70.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x71.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x72.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x73.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x74.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x75.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x76.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x77.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x7a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x7e.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/hierarchy.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/index.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/tabs.css,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/annotated.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciAPIs-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciAPIs.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciAbstractAPIs-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciAbstractAPIs.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciCommand-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciCommand.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciCommandSet-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciCommandSet.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciDocument-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciDocument.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexer-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexer.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerBash-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerBash.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerBatch-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerBatch.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCMake-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCMake.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCPP-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCPP.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCSS-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCSS.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCSharp-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCSharp.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCustom-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCustom.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerD-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerD.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerDiff-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerDiff.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerFortran-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerFortran.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerFortran77-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerFortran77.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerHTML-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerHTML.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerIDL-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerIDL.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerJava-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerJava.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerJavaScript-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerJavaScript.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerLua-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerLua.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerMakefile-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerMakefile.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPOV-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPOV.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPascal-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPascal.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPerl-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPerl.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPostScript-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPostScript.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerProperties-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerProperties.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPython-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPython.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerRuby-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerRuby.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerSQL-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerSQL.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerTCL-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerTCL.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerTeX-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerTeX.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerVHDL-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerVHDL.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerXML-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerXML.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerYAML-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerYAML.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciMacro-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciMacro.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciPrinter-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciPrinter.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciScintilla-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciScintilla.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciScintillaBase-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciScintillaBase.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciStyle-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciStyle.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciStyledText-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciStyledText.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/dirs.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/doxygen.css,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x62.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x63.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x64.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x65.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x66.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x67.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x68.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x69.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x6a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x6b.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x6c.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x6d.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x6e.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x6f.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x70.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x71.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x72.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x73.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x74.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x75.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x76.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x77.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x78.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x7a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x7e.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_enum.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x62.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x63.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x64.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x65.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x66.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x67.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x68.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x69.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x6a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x6b.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x6c.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x6d.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x6e.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x6f.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x70.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x71.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x72.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x73.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x74.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x75.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x76.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x77.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x78.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x62.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x63.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x64.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x65.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x66.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x67.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x68.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x69.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x6b.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x6c.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x6d.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x70.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x71.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x72.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x73.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x74.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x75.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x76.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x77.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x7a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x7e.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/hierarchy.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/index.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/tabs.css:
+	  
+	  Update QScintilla to 2.4.1-snapshot-20091211
+
+2009-12-13 22:27  pasnox
+
+	* [r3468] monkey/src/pMonkeyStudio.cpp,
+	  qscintilla/sdk/qscintilla.h:
+	  
+	  Handle new qscintilla lexers.
+
+2009-12-13 17:50  pasnox
+
+	* [r3467]
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerspice.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerverilog.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerspice.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerverilog.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerspice.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerverilog.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerspice.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerverilog.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerspice.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerverilog.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerSpice-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerSpice.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerVerilog-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerVerilog.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/dir_63b5f4d5e40d98e806b698e3f9cd374a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/dir_b37846fe0009b95cde3c826d6f6645e0.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerSpice-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerSpice.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerVerilog-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerVerilog.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/dir_6f90508cb43726e1f7c7ce20fc2bb9c4.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/dir_e1fde403bd8d563c20728c2ecfe630e7.html:
+	  
+	  Update to Qscintilla 2.4
+
+2009-12-13 17:45  pasnox
+
+	* [r3466]
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classes.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/dir_0f7bcabfa9c2facf2d884c5a5290cec4.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/dir_5aa811b44be783c540f7a2125ce2b99b.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classes.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/dir_944256396c06c0295aa2eca7dcfea282.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/dir_d32dfe2bcddd0b2d894b9fb13d6bdd4d.html:
+	  
+	  Update to Qscintilla 2.4
+
+2009-12-13 17:44  pasnox
+
+	* [r3465] qscintilla/QScintilla-gpl-snapshot/ChangeLog,
+	  qscintilla/QScintilla-gpl-snapshot/NEWS,
+	  qscintilla/QScintilla-gpl-snapshot/Python/configure.py,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qsciabstractapis.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qsciapis.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscicommand.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscicommandset.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscidocument.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexer.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerbash.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerbatch.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexercmake.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexercpp.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexercsharp.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexercss.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexercustom.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerd.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerdiff.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerfortran.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerfortran77.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerhtml.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexeridl.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerjava.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerjavascript.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerlua.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexermakefile.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerpascal.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerperl.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerpostscript.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerpov.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerproperties.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerpython.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerruby.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerspice.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexersql.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexertcl.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexertex.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerverilog.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexervhdl.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexerxml.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscilexeryaml.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscimacro.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscimod3.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscimod4.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscimodcommon.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qsciprinter.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qsciscintilla.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qsciscintillabase3.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qsciscintillabase4.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscistyle.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Python/sip/qscistyledtext.sip,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/ListBoxQt.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/ListBoxQt.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/PlatQt.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qsciabstractapis.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qsciapis.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscicommand.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscicommandset.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscidocument.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qsciglobal.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexer.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerbash.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerbatch.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexercmake.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexercpp.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexercsharp.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexercss.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexercustom.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerd.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerdiff.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerfortran.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerfortran77.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerhtml.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexeridl.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerjava.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerjavascript.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerlua.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexermakefile.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerpascal.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerperl.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerpostscript.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerpov.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerproperties.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerpython.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerruby.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerspice.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexersql.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexertcl.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexertex.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerverilog.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexervhdl.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexerxml.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscilexeryaml.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscimacro.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qsciprinter.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qsciscintilla.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qsciscintillabase.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscistyle.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/Qsci/qscistyledtext.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/SciClasses.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/SciClasses.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/ScintillaQt.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/ScintillaQt.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qsciabstractapis.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qsciapis.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscicommand.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscicommandset.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscidocument.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexer.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerbash.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerbatch.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexercmake.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexercpp.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexercsharp.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexercss.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexercustom.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerd.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerdiff.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerfortran.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerfortran77.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerhtml.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexeridl.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerjava.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerjavascript.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerlua.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexermakefile.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerpascal.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerperl.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerpostscript.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerpov.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerproperties.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerpython.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerruby.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerspice.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexersql.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexertcl.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexertex.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerverilog.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexervhdl.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexerxml.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscilexeryaml.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscimacro.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscintilla.pro,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscintilla_de.ts,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qsciprinter.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qsciscintilla.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qsciscintillabase.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscistyle.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt3/qscistyledtext.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/ListBoxQt.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/ListBoxQt.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/PlatQt.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qsciabstractapis.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qsciapis.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscicommand.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscicommandset.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscidocument.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qsciglobal.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexer.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerbash.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerbatch.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexercmake.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexercpp.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexercsharp.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexercss.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexercustom.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerd.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerdiff.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerfortran.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerfortran77.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerhtml.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexeridl.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerjava.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerjavascript.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerlua.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexermakefile.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerpascal.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerperl.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerpostscript.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerpov.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerproperties.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerpython.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerruby.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerspice.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexersql.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexertcl.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexertex.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerverilog.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexervhdl.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexerxml.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscilexeryaml.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscimacro.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qsciprinter.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qsciscintilla.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qsciscintillabase.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscistyle.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/Qsci/qscistyledtext.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/SciClasses.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/SciClasses.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/ScintillaQt.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/ScintillaQt.h,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qsciabstractapis.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qsciapis.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscicommand.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscicommandset.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscidocument.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexer.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerbash.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerbatch.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexercmake.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexercpp.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexercsharp.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexercss.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexercustom.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerd.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerdiff.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerfortran.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerfortran77.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerhtml.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexeridl.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerjava.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerjavascript.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerlua.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexermakefile.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerpascal.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerperl.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerpostscript.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerpov.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerproperties.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerpython.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerruby.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerspice.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexersql.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexertcl.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexertex.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerverilog.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexervhdl.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexerxml.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscilexeryaml.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscimacro.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscintilla.pro,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscintilla_de.ts,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qsciprinter.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qsciscintilla.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qsciscintillabase.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscistyle.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/Qt4/qscistyledtext.cpp,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/annotated.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciAPIs-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciAPIs.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciAbstractAPIs-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciAbstractAPIs.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciCommand-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciCommand.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciCommandSet-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciCommandSet.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciDocument-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciDocument.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexer-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexer.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerBash-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerBash.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerBatch-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerBatch.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCMake-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCMake.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCPP-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCPP.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCSS-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCSS.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCSharp-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCSharp.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCustom-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerCustom.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerD-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerD.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerDiff-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerDiff.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerFortran-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerFortran.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerFortran77-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerFortran77.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerHTML-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerHTML.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerIDL-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerIDL.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerJava-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerJava.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerJavaScript-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerJavaScript.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerLua-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerLua.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerMakefile-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerMakefile.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPOV-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPOV.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPascal-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPascal.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPerl-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPerl.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPostScript-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPostScript.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerProperties-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerProperties.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPython-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerPython.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerRuby-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerRuby.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerSQL-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerSQL.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerSpice-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerSpice.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerTCL-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerTCL.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerTeX-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerTeX.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerVHDL-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerVHDL.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerVerilog-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerVerilog.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerXML-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerXML.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerYAML-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciLexerYAML.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciMacro-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciMacro.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciPrinter-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciPrinter.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciScintilla-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciScintilla.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciScintillaBase-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciScintillaBase.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciStyle-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciStyle.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciStyledText-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/classQsciStyledText.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/dir_63b5f4d5e40d98e806b698e3f9cd374a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/dir_b37846fe0009b95cde3c826d6f6645e0.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/dirs.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/doxygen.css,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x62.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x63.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x64.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x65.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x66.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x67.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x68.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x69.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x6a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x6b.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x6c.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x6d.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x6e.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x6f.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x70.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x71.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x72.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x73.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x74.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x75.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x76.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x77.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x78.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x7a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_0x7e.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_enum.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x62.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x63.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x64.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x65.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x66.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x67.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x68.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x69.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x6a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x6b.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x6c.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x6d.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x6e.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x6f.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x70.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x71.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x72.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x73.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x74.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x75.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x76.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x77.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_eval_0x78.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x62.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x63.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x64.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x65.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x66.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x67.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x68.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x69.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x6b.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x6c.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x6d.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x70.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x71.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x72.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x73.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x74.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x75.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x76.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x77.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x7a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/functions_func_0x7e.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/hierarchy.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/index.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt3/tabs.css,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/annotated.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciAPIs-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciAPIs.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciAbstractAPIs-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciAbstractAPIs.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciCommand-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciCommand.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciCommandSet-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciCommandSet.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciDocument-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciDocument.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexer-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexer.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerBash-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerBash.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerBatch-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerBatch.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCMake-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCMake.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCPP-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCPP.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCSS-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCSS.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCSharp-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCSharp.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCustom-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerCustom.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerD-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerD.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerDiff-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerDiff.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerFortran-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerFortran.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerFortran77-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerFortran77.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerHTML-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerHTML.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerIDL-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerIDL.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerJava-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerJava.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerJavaScript-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerJavaScript.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerLua-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerLua.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerMakefile-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerMakefile.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPOV-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPOV.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPascal-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPascal.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPerl-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPerl.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPostScript-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPostScript.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerProperties-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerProperties.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPython-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerPython.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerRuby-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerRuby.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerSQL-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerSQL.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerSpice-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerSpice.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerTCL-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerTCL.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerTeX-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerTeX.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerVHDL-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerVHDL.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerVerilog-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerVerilog.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerXML-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerXML.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerYAML-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciLexerYAML.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciMacro-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciMacro.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciPrinter-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciPrinter.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciScintilla-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciScintilla.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciScintillaBase-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciScintillaBase.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciStyle-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciStyle.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciStyledText-members.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/classQsciStyledText.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/dir_6f90508cb43726e1f7c7ce20fc2bb9c4.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/dir_e1fde403bd8d563c20728c2ecfe630e7.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/dirs.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/doxygen.css,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x62.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x63.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x64.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x65.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x66.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x67.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x68.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x69.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x6a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x6b.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x6c.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x6d.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x6e.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x6f.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x70.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x71.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x72.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x73.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x74.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x75.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x76.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x77.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x78.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x7a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_0x7e.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_enum.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x62.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x63.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x64.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x65.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x66.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x67.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x68.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x69.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x6a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x6b.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x6c.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x6d.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x6e.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x6f.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x70.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x71.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x72.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x73.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x74.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x75.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x76.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x77.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_eval_0x78.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x62.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x63.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x64.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x65.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x66.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x67.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x68.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x69.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x6b.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x6c.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x6d.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x70.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x71.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x72.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x73.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x74.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x75.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x76.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x77.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x7a.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/functions_func_0x7e.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/hierarchy.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/index.html,
+	  qscintilla/QScintilla-gpl-snapshot/doc/html-Qt4/tabs.css:
+	  
+	  Update to Qscintilla 2.4
+
+2009-12-13 12:13  pasnox
+
+	* [r3462] ChangeLog:
+	  
+	  Update the ChangeLog
+
+2009-12-13 09:57  pasnox
+
+	* [r3456] tools:
+	  
+	  Move tools folder as it's not needed to duplicate it.
+
 2009-12-13 09:38  pasnox
 
 	* [r3454] config.pri:

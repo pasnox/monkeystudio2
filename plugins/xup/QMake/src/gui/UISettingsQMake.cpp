@@ -1,4 +1,6 @@
 #include "UISettingsQMake.h"
+#include "../QMake.h"
+#include "../QtVersionManager.h"
 
 #include <pMonkeyStudio.h>
 
@@ -16,6 +18,8 @@ UISettingsQMake::UISettingsQMake( QWidget* parent )
 {
 	// set up dialog
 	setupUi( this );
+	
+	mQtManager = QMake::versionManager();
 	
 	// completer of paths
 #ifdef Q_CC_GNU
@@ -54,7 +58,7 @@ UISettingsQMake::UISettingsQMake( QWidget* parent )
 	connect( leQtVersionPath, SIGNAL( editingFinished() ), this, SLOT( qtVersionChanged() ) );
 	connect( cbQtVersionQMakeSpec->lineEdit(), SIGNAL( editingFinished() ), this, SLOT( qtVersionChanged() ) );
 	connect( leQtVersionQMakeParameters, SIGNAL( editingFinished() ), this, SLOT( qtVersionChanged() ) );
-	connect( cbQtVersionHaveSuffixe, SIGNAL( toggled( bool ) ), this, SLOT( qtVersionChanged() ) );
+	connect( cbQtVersionHasSuffix, SIGNAL( toggled( bool ) ), this, SLOT( qtVersionChanged() ) );
 }
 
 void UISettingsQMake::tbAdd_clicked()
@@ -192,7 +196,7 @@ void UISettingsQMake::lw_currentItemChanged( QListWidgetItem* c, QListWidgetItem
 			v.Path = leQtVersionPath->text();
 			v.QMakeSpec = cbQtVersionQMakeSpec->currentText();
 			v.QMakeParameters = leQtVersionQMakeParameters->text();
-			v.HaveQt4Suffixe = cbQtVersionHaveSuffixe->isChecked();
+			v.HasQt4Suffix = cbQtVersionHasSuffix->isChecked();
 			p->setData( Qt::UserRole, QVariant::fromValue( v ) );
 			p->setText( v.Version );
 		}
@@ -241,7 +245,7 @@ void UISettingsQMake::lw_currentItemChanged( QListWidgetItem* c, QListWidgetItem
 				cbQtVersionQMakeSpec->addItem( v.QMakeSpec );
 			cbQtVersionQMakeSpec->setCurrentIndex( cbQtVersionQMakeSpec->findText( v.QMakeSpec ) );
 			leQtVersionQMakeParameters->setText( v.QMakeParameters );
-			cbQtVersionHaveSuffixe->setChecked( v.HaveQt4Suffixe );
+			cbQtVersionHasSuffix->setChecked( v.HasQt4Suffix );
 			wQtVersion->setEnabled( true );
 		}
 		else if ( c->listWidget() == lwQtModules )
@@ -267,7 +271,7 @@ void UISettingsQMake::lw_currentItemChanged( QListWidgetItem* c, QListWidgetItem
 		leQtVersionVersion->clear();
 		leQtVersionPath->clear();
 		cbQtVersionQMakeSpec->clear();
-		cbQtVersionHaveSuffixe->setChecked( false );
+		cbQtVersionHasSuffix->setChecked( false );
 	}
 	else if ( sender() == lwQtModules )
 	{
@@ -288,7 +292,7 @@ void UISettingsQMake::lw_currentItemChanged( QListWidgetItem* c, QListWidgetItem
 void UISettingsQMake::loadSettings()
 {
 	// general
-	foreach ( const QtVersion& v, mQtManager.versions() )
+	foreach ( const QtVersion& v, mQtManager->versions() )
 	{
 		QListWidgetItem* it = new QListWidgetItem( v.Version, lwQtVersions );
 		it->setData( Qt::UserRole, QVariant::fromValue( v ) );
@@ -297,14 +301,14 @@ void UISettingsQMake::loadSettings()
 	}
 	
 	// qt modules
-	foreach ( QtItem i, mQtManager.modules() )
+	foreach ( QtItem i, mQtManager->modules() )
 	{
 		QListWidgetItem* it = new QListWidgetItem( i.Text, lwQtModules );
 		it->setData( Qt::UserRole, QVariant::fromValue( i ) );
 	}
 	
 	// configuration
-	foreach ( QtItem i, mQtManager.configurations() )
+	foreach ( QtItem i, mQtManager->configurations() )
 	{
 		QListWidgetItem* it = new QListWidgetItem( i.Text, lwQtConfigurations );
 		it->setData( Qt::UserRole, QVariant::fromValue( i ) );
@@ -383,7 +387,7 @@ void UISettingsQMake::on_dbbButtons_clicked( QAbstractButton* b )
 		versions << version;
 	}
 	
-	mQtManager.setVersions( versions );
+	mQtManager->setVersions( versions );
 	
 	// save modules
 	QtItemList modules;
@@ -393,7 +397,7 @@ void UISettingsQMake::on_dbbButtons_clicked( QAbstractButton* b )
 		modules << lwQtModules->item( i )->data( Qt::UserRole ).value<QtItem>();
 	}
 	
-	mQtManager.setModules( modules );
+	mQtManager->setModules( modules );
 	
 	// save configurations
 	QtItemList configurations;
@@ -403,5 +407,8 @@ void UISettingsQMake::on_dbbButtons_clicked( QAbstractButton* b )
 		configurations << lwQtConfigurations->item( i )->data( Qt::UserRole ).value<QtItem>();
 	}
 	
-	mQtManager.setConfigurations( configurations );
+	mQtManager->setConfigurations( configurations );
+	
+	// save content on disk
+	mQtManager->sync();
 }

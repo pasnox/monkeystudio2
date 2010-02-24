@@ -4,6 +4,7 @@
 #include <QAbstractItemModel>
 #include <QFileInfo>
 #include <QPoint>
+#include <QStringList>
 
 class SearchThread;
 
@@ -17,7 +18,7 @@ public:
 	{
 		Result( const QString& _fileName = QString::null, const QString& _capture = QString::null,
 			const QPoint& _position = QPoint(), int _offset = -1, bool _checkable = false,
-			Qt::CheckState _checkState = Qt::Unchecked, bool _enabled = true )
+			Qt::CheckState _checkState = Qt::Unchecked, bool _enabled = true, const QStringList& _capturedTexts = QStringList() )
 		{
 			fileName = _fileName;
 			capture = _capture;
@@ -26,6 +27,7 @@ public:
 			checkable = _checkable;
 			checkState = _checkState;
 			enabled = _enabled;
+			capturedTexts = _capturedTexts;
 		}
 		
 		bool operator==( const SearchResultsModel::Result& other ) const
@@ -33,10 +35,11 @@ public:
 			return fileName == other.fileName &&
 				//capture == other.capture &&
 				position == other.position &&
-				offset == other.offset /*&&
-				checkable == other.checkable &&
+				offset == other.offset &&
+				/*checkable == other.checkable &&
 				checkState == other.checkState &&
-				enabled == other.enabled*/;
+				enabled == other.enabled*/
+				capturedTexts == other.capturedTexts;
 		}
 		
 		QString fileName;
@@ -46,6 +49,7 @@ public:
 		bool checkable;
 		Qt::CheckState checkState;
 		bool enabled;
+		QStringList capturedTexts;
 	};
 	
 	typedef QList<SearchResultsModel::Result*> ResultList;

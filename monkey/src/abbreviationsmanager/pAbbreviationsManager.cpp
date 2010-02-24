@@ -70,7 +70,7 @@ QString pAbbreviationsManager::commandInterpreter( const QString& command, const
 	
 	if ( result )
 	{
-		*result = 0;
+		*result = MkSShellInterpreter::NoError;
 	}
 	
 	if ( arguments.isEmpty() )

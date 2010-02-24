@@ -209,10 +209,6 @@ void UIDesktopTools::scanApplications()
 	
 	// modified state
 	setWindowModified( false );
-	
-	// resize windows fucking this Windows XP style bug for progressbar width
-	//resize( 640, 480 );
-	#warning windows check me
 }
 
 void UIDesktopTools::on_leNameFilter_textChanged( const QString& /*text*/ )

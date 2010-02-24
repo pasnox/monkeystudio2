@@ -306,7 +306,7 @@ QString ToolsManager::commandInterpreter( const QString& command, const QStringL
 	const QStringList allowedOperations = QStringList( "set" ) << "unset" << "clear" << "update-menu" << "list";
 	
 	if ( result ) {
-		*result = 0;
+		*result = MkSShellInterpreter::NoError;
 	}
 	
 	if ( arguments.isEmpty() ) {

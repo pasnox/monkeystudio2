@@ -217,12 +217,13 @@ void SearchThread::search( const QString& fileName, const QString& content ) con
 {
 	static const QString eol( "\n" );
 	bool checkable = false;
+	bool isRE = false;
 	QRegExp rx;
-
+	
 	{
 		QMutexLocker locker( const_cast<QMutex*>( &mMutex ) );
 
-		const bool isRE = mProperties.options & SearchAndReplace::OptionRegularExpression;
+		isRE = mProperties.options & SearchAndReplace::OptionRegularExpression;
 		const bool isWw = mProperties.options & SearchAndReplace::OptionWholeWord;
 		const bool isCS = mProperties.options & SearchAndReplace::OptionCaseSensitive;
 		const Qt::CaseSensitivity sensitivity = isCS ? Qt::CaseSensitive : Qt::CaseInsensitive;
@@ -250,7 +251,7 @@ void SearchThread::search( const QString& fileName, const QString& content ) con
 	{
 		const int eolStart = content.lastIndexOf( eol, pos );
 		const int eolEnd = content.indexOf( eol, pos );
-		const QString capture = content.mid( eolStart +1, eolEnd -1 -eolStart ).simplified();
+		const QString capture = content.mid( eolStart + 1, eolEnd -1 -eolStart ).simplified();
 		eolCount += content.mid( lastPos, pos -lastPos ).count( eol );
 		const int column = ( pos -eolStart ) -( eolStart != 0 ? 1 : 0 );
 		SearchResultsModel::Result* result = new SearchResultsModel::Result( fileName, capture );
@@ -258,6 +259,7 @@ void SearchThread::search( const QString& fileName, const QString& content ) con
 		result->offset = pos;
 		result->checkable = checkable;
 		result->checkState = checkable ? Qt::Checked : Qt::Unchecked;
+		result->capturedTexts = isRE ? rx.capturedTexts() : QStringList();
 
 		results << result;
 

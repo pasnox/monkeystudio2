@@ -126,8 +126,9 @@ QVariant pOpenedFileModel::data( const QModelIndex& index, int role ) const
 	
 	if ( !document )
 	{
-		qWarning() << index << mDocuments;
+		qWarning() << Q_FUNC_INFO << index << mDocuments;
 		Q_ASSERT( document );
+		return QVariant();
 	}
 	
 	switch ( role )

@@ -16,6 +16,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 #include "QMake.h"
+#include "QtVersionManager.h"
 #include "QMakeProjectItem.h"
 #include "UISettingsQMake.h"
 #include "UISimpleQMakeEditor.h"
@@ -24,6 +25,8 @@
 #include <UIMain.h>
 
 #include <QDir>
+
+QPointer<QtVersionManager> QMake::mQtVersionManager = 0;
 
 void QMake::fillPluginInfos()
 {
@@ -39,6 +42,8 @@ void QMake::fillPluginInfos()
 
 bool QMake::install()
 {
+	// create qt version manager
+	mQtVersionManager = new QtVersionManager( this );
 	// register qmake item
 	mItem = new QMakeProjectItem;
 	mItem->registerProjectType();
@@ -50,6 +55,8 @@ bool QMake::uninstall()
 	// unregister qmake item, unregistering auto delete the item
 	mItem->unRegisterProjectType();
 	delete mItem;
+	// delete qt version manager
+	delete mQtVersionManager;
 	// return default value
 	return true;
 }
@@ -57,10 +64,14 @@ bool QMake::uninstall()
 QWidget* QMake::settingsWidget()
 { return new UISettingsQMake(); }
 
+QtVersionManager* QMake::versionManager()
+{
+	return mQtVersionManager;
+}
+
 bool QMake::editProject( XUPProjectItem* project )
 {
-	if ( !project )
-	{
+	if ( !project ) {
 		return false;
 	}
 	

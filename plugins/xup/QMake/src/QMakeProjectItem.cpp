@@ -1,6 +1,7 @@
 #include "QMakeProjectItem.h"
 #include "QMake2XUP.h"
-#include "../QtVersionManager.h"
+#include "QMake.h"
+#include "QtVersionManager.h"
 
 #include <XUPProjectItemInfos.h>
 #include <pMonkeyStudio.h>
@@ -253,13 +254,13 @@ QString QMakeProjectItem::getVariableContent( const QString& variableName )
 		}
 		
 		QString result;
-		QtVersionManager mQtManager;
-		QtVersion mQtVersion = mQtManager.version( projectSettingsValue( "QT_VERSION" ) );
+		QtVersionManager* manager = QMake::versionManager();
+		const QtVersion version = manager->version( projectSettingsValue( "QT_VERSION" ) );
 		
-		if ( mQtVersion.isValid() )
+		if ( version.isValid() )
 		{
 			QProcess query;
-			query.start( QString( "%1 -query %2" ).arg( mQtVersion.qmake() ).arg( name ) );
+			query.start( QString( "%1 -query %2" ).arg( version.qmake() ).arg( name ) );
 			query.waitForFinished();
 			QString result = QString::fromLocal8Bit( query.readAll() ).trimmed();
 			
@@ -493,12 +494,12 @@ BuilderPlugin* QMakeProjectItem::builder( const QString& plugin ) const
 	
 	if ( plug.isEmpty() )
 	{
-		QtVersionManager mQtManager;
-		QtVersion mQtVersion = mQtManager.version( projectSettingsValue( "QT_VERSION" ) );
+		QtVersionManager* manager = QMake::versionManager();
+		const QtVersion version = manager->version( projectSettingsValue( "QT_VERSION" ) );
 		
-		if ( mQtVersion.isValid() )
+		if ( version.isValid() )
 		{
-			if ( mQtVersion.QMakeSpec.contains( "msvc", Qt::CaseInsensitive ) )
+			if ( version.QMakeSpec.contains( "msvc", Qt::CaseInsensitive ) )
 			{
 				plug = "MSVCMake";
 			}
@@ -532,12 +533,12 @@ InterpreterPlugin* QMakeProjectItem::interpreter( const QString& plugin ) const
 	if ( plug.isEmpty() )
 	{
 		/*
-		QtVersionManager mQtManager;
-		QtVersion mQtVersion = mQtManager.version( projectSettingsValue( "QT_VERSION" ) );
+		QtVersionManager* manager = QMake::versionManager();
+		const QtVersion version = manager->version( projectSettingsValue( "QT_VERSION" ) );
 		
-		if ( mQtVersion.isValid() )
+		if ( version.isValid() )
 		{
-			if ( mQtVersion.QMakeSpec.contains( "msvc", Qt::CaseInsensitive ) )
+			if ( version.QMakeSpec.contains( "msvc", Qt::CaseInsensitive ) )
 			{
 				plug = "MSVC";
 			}
@@ -579,8 +580,8 @@ void QMakeProjectItem::installCommands()
 	const pCommand cmdBuild = cmd;
 	
 	// get qt version
-	QtVersionManager mQtManager;
-	QtVersion mQtVersion = mQtManager.version( projectSettingsValue( "QT_VERSION" ) );
+	QtVersionManager* manager = QMake::versionManager();
+	const QtVersion version = manager->version( projectSettingsValue( "QT_VERSION" ) );
 	
 	// evaluate some variables
 	QString s;
@@ -730,13 +731,13 @@ void QMakeProjectItem::installCommands()
 		}
 		
 		// add qt commands only if possible
-		if ( mQtVersion.isValid() )
+		if ( version.isValid() )
 		{
 			// qmake command
 			cmd = pCommand();
 			cmd.setText( tr( "QMake" ) );
-			cmd.setCommand( mQtVersion.qmake() );
-			cmd.setArguments( mQtVersion.qmakeParameters().append( " \"$cp$\"" ) );
+			cmd.setCommand( version.qmake() );
+			cmd.setArguments( version.qmakeParameters().append( " \"$cp$\"" ) );
 			cmd.setWorkingDirectory( "$cpp$" );
 			cmd.setUserData( QVariant::fromValue( &mCommands ) );
 			cmd.setProject( this );
@@ -746,7 +747,7 @@ void QMakeProjectItem::installCommands()
 			// lupdate command
 			cmd = pCommand();
 			cmd.setText( tr( "lupdate" ) );
-			cmd.setCommand( mQtVersion.lupdate() );
+			cmd.setCommand( version.lupdate() );
 			cmd.setArguments( "\"$cp$\"" );
 			cmd.setWorkingDirectory( "$cpp$" );
 			cmd.setUserData( QVariant::fromValue( &mCommands ) );
@@ -757,7 +758,7 @@ void QMakeProjectItem::installCommands()
 			// lrelease command
 			cmd = pCommand();
 			cmd.setText( tr( "lrelease" ) );
-			cmd.setCommand( mQtVersion.lrelease() );
+			cmd.setCommand( version.lrelease() );
 			cmd.setArguments( "\"$cp$\"" );
 			cmd.setWorkingDirectory( "$cpp$" );
 			cmd.setUserData( QVariant::fromValue( &mCommands ) );

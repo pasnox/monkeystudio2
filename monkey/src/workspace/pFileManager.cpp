@@ -84,7 +84,7 @@ QString pFileManager::commandInterpreter( const QString& command, const QStringL
 	
 	if ( result )
 	{
-		*result = 0;
+		*result = MkSShellInterpreter::NoError;
 	}
 	
 	if ( arguments.isEmpty() )
