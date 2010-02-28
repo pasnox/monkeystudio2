@@ -695,7 +695,6 @@ bool SearchWidget::searchFile( bool forward, bool incremental )
 	const bool isCS = mProperties.options & SearchAndReplace::OptionCaseSensitive;
 	const bool isWW = mProperties.options & SearchAndReplace::OptionWholeWord;
 	const bool isWrap = mProperties.options & SearchAndReplace::OptionWrap;
-	const QString text = isRE ? QRegExp::escape( mProperties.searchText ) : mProperties.searchText;
 	int x, y;
 
 	if ( forward && !incremental )
@@ -709,7 +708,7 @@ bool SearchWidget::searchFile( bool forward, bool incremental )
 	}
 
 	// search
-	const bool found = editor->findFirst( text, isRE, isCS, isWW, isWrap, forward, y, x );
+	const bool found = editor->findFirst( mProperties.searchText, isRE, isCS, isWW, isWrap, forward, y, x, true );
 
 	// change background acording to found or not
 	setState( SearchWidget::Search, found ? SearchWidget::Good : SearchWidget::Bad );
