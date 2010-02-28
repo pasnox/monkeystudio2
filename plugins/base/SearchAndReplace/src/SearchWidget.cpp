@@ -691,6 +691,11 @@ bool SearchWidget::searchFile( bool forward, bool incremental )
 	}
 
 	// get cursor position
+	const bool isRE = mProperties.options & SearchAndReplace::OptionRegularExpression;
+	const bool isCS = mProperties.options & SearchAndReplace::OptionCaseSensitive;
+	const bool isWW = mProperties.options & SearchAndReplace::OptionWholeWord;
+	const bool isWrap = mProperties.options & SearchAndReplace::OptionWrap;
+	const QString text = isRE ? QRegExp::escape( mProperties.searchText ) : mProperties.searchText;
 	int x, y;
 
 	if ( forward && !incremental )
@@ -704,7 +709,7 @@ bool SearchWidget::searchFile( bool forward, bool incremental )
 	}
 
 	// search
-	const bool found = editor->findFirst( mProperties.searchText, mProperties.options & SearchAndReplace::OptionRegularExpression, mProperties.options & SearchAndReplace::OptionCaseSensitive, mProperties.options & SearchAndReplace::OptionWholeWord, mProperties.options & SearchAndReplace::OptionWrap, forward, y, x );
+	const bool found = editor->findFirst( text, isRE, isCS, isWW, isWrap, forward, y, x );
 
 	// change background acording to found or not
 	setState( SearchWidget::Search, found ? SearchWidget::Good : SearchWidget::Bad );
