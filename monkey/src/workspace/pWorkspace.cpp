@@ -435,9 +435,9 @@ void pWorkspace::handleDocument( pAbstractChild* document )
 	
 	// add to workspace
 	document->installEventFilter( this );
+	mMdiArea->blockSignals( true );
 	mMdiArea->addSubWindow( document );
-	document->showMaximized();
-	mMdiArea->setActiveSubWindow( document );
+	mMdiArea->blockSignals( false );
 }
 
 void pWorkspace::unhandleDocument( pAbstractChild* document )
@@ -522,8 +522,11 @@ pAbstractChild* pWorkspace::openFile( const QString& fileName, const QString& co
 		return 0;
 	}
 	
+	document->showMaximized();
+	mMdiArea->setActiveSubWindow( document );
+	
 	// update gui state
-	updateGuiState( document );
+	//updateGuiState( document );
 
 	// return child instance
 	return document;
