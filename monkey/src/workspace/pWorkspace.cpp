@@ -461,12 +461,12 @@ void pWorkspace::unhandleDocument( pAbstractChild* document )
 	disconnect( document, SIGNAL( cursorPositionChanged( const QPoint& ) ), MonkeyCore::statusBar(), SLOT( setCursorPosition( const QPoint& ) ) );
 	disconnect( document, SIGNAL( modifiedChanged( bool ) ), MonkeyCore::statusBar(), SLOT( setModified( bool ) ) );
 	
-	// add to workspace
+	// remove from workspace
 	document->removeEventFilter( this );
 	mMdiArea->removeSubWindow( document );
 	document->hide();
 	
-	// maximize current winow if needed
+	// maximize current window if needed
 	if ( maximized )
 	{
 		pAbstractChild* doc = currentDocument();
