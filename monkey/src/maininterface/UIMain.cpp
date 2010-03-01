@@ -121,21 +121,28 @@ void UIMain::initGui()
 	initConnections();
 }
 
-void UIMain::closeEvent( QCloseEvent* e )
+void UIMain::closeEvent( QCloseEvent* event )
 {
 	// inform that we close mainwindow
 	emit aboutToClose();
+	
 	// save session if needed
 	if ( pMonkeyStudio::saveSessionOnClose() )
+	{
 		MonkeyCore::workspace()->fileSessionSave_triggered();
+	}
+	
 	// request close all documents
 	if ( !MonkeyCore::workspace()->closeAllDocuments() )
 	{
-		e->ignore();
+		event->ignore();
 		return;
 	}
+	
 	// force to close all projects
 	MonkeyCore::projectsManager()->action( XUPProjectManager::atCloseAll )->trigger();
+	
+	pMainWindow::closeEvent( event );
 }
 
 QMenu* UIMain::createPopupMenu()

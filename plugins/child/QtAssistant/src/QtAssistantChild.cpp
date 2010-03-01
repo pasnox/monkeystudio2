@@ -360,6 +360,7 @@ bool QtAssistantChild::openFile( const QString& fileName, const QString& codec )
 
 void QtAssistantChild::closeFile()
 {
+	setFilePath( QString::null );
 	emit fileClosed();
 }
 

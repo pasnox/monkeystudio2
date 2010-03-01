@@ -435,9 +435,9 @@ void pWorkspace::handleDocument( pAbstractChild* document )
 	
 	// add to workspace
 	document->installEventFilter( this );
+	mMdiArea->blockSignals( true );
 	mMdiArea->addSubWindow( document );
-	document->showMaximized();
-	mMdiArea->setActiveSubWindow( document );
+	mMdiArea->blockSignals( false );
 }
 
 void pWorkspace::unhandleDocument( pAbstractChild* document )
@@ -461,12 +461,12 @@ void pWorkspace::unhandleDocument( pAbstractChild* document )
 	disconnect( document, SIGNAL( cursorPositionChanged( const QPoint& ) ), MonkeyCore::statusBar(), SLOT( setCursorPosition( const QPoint& ) ) );
 	disconnect( document, SIGNAL( modifiedChanged( bool ) ), MonkeyCore::statusBar(), SLOT( setModified( bool ) ) );
 	
-	// add to workspace
+	// remove from workspace
 	document->removeEventFilter( this );
 	mMdiArea->removeSubWindow( document );
 	document->hide();
 	
-	// maximize current winow if needed
+	// maximize current window if needed
 	if ( maximized )
 	{
 		pAbstractChild* doc = currentDocument();
@@ -522,8 +522,11 @@ pAbstractChild* pWorkspace::openFile( const QString& fileName, const QString& co
 		return 0;
 	}
 	
+	document->showMaximized();
+	mMdiArea->setActiveSubWindow( document );
+	
 	// update gui state
-	updateGuiState( document );
+	//updateGuiState( document );
 
 	// return child instance
 	return document;

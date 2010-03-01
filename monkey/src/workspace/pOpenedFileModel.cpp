@@ -70,7 +70,6 @@ pOpenedFileModel::pOpenedFileModel( pWorkspace* workspace )
 	mModifiedIcon = pIconManager::icon( "save.png" );
 	
 	connect( mSortDocumentsTimer, SIGNAL( timeout() ), this, SLOT( sortDocuments_timeout() ) );
-	connect( workspace, SIGNAL( currentDocumentChanged( pAbstractChild* ) ), this, SLOT( currentDocumentChanged( pAbstractChild* ) ) );
 	connect( workspace, SIGNAL( documentOpened( pAbstractChild* ) ), this, SLOT( documentOpened( pAbstractChild* ) ) );
 	connect( workspace, SIGNAL( documentModifiedChanged( pAbstractChild*, bool ) ), this, SLOT( documentModifiedChanged( pAbstractChild*, bool ) ) );
 	connect( workspace, SIGNAL( documentClosed( pAbstractChild* ) ), this, SLOT( documentClosed( pAbstractChild* ) ) );
@@ -397,17 +396,6 @@ void pOpenedFileModel::sortDocuments_timeout()
 	emit documentsSorted();
 }
 
-void pOpenedFileModel::currentDocumentChanged( pAbstractChild* document )
-{
-	if ( !document || mDocuments.contains( document ) )
-	{
-		return;
-	}
-	
-	const int index = mDocuments.count();
-	insertDocument( document, index );
-}
-
 void pOpenedFileModel::documentOpened( pAbstractChild* document )
 {
 	if ( mDocuments.contains( document ) )
@@ -416,7 +404,13 @@ void pOpenedFileModel::documentOpened( pAbstractChild* document )
 	}
 	else
 	{
-		currentDocumentChanged( document );
+		if ( !document || mDocuments.contains( document ) )
+		{
+			return;
+		}
+		
+		const int index = mDocuments.count();
+		insertDocument( document, index );
 	}
 }
 

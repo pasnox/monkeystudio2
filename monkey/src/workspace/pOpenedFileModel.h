@@ -65,7 +65,6 @@ protected:
 
 protected slots:
 	void sortDocuments_timeout();
-	void currentDocumentChanged( pAbstractChild* document );
 	void documentOpened( pAbstractChild* document );
 	void documentModifiedChanged( pAbstractChild* document, bool modified );
 	void documentClosed( pAbstractChild* document );

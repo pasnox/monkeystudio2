@@ -23,7 +23,6 @@
 */
 #include <QApplication>
 #include <QMessageBox>
-#include <QPluginLoader>
 
 #include <main.h>
 #include <MonkeyCore.h>
@@ -63,18 +62,15 @@ int main( int argc, char** argv )
 		return 0;
 	}
 
-	// create static plugin instances - avoid QtDesigner/QtAssistant QThread parenting errors.
-	QPluginLoader::staticInstances();
-
 	// init monkey studio core
 	MonkeyCore::init();
 	// handle command line arguments
 	clm.process();
 	// execute application
-	int result = a.exec();
+	const int result = a.exec();
 	// some cleanup
 	MonkeyCore::pluginsManager()->clearPlugins();
 	delete MonkeyCore::settings();
-	// return app exit code
+	// exit code
 	return result;
 }

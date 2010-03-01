@@ -51,7 +51,7 @@ protected:
 	QAction* aAddNewPage;
 	QAction* aNextTab;
 	QAction* aPreviousTab;
-	QComboBox* cbUrl;
+	QPointer<QComboBox> cbUrl;
 	bool mFirstOpenUrl;
 
 	void find( QString ttf, bool forward, bool backward );
