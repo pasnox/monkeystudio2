@@ -312,20 +312,8 @@ void pDockFileBrowser::tv_doubleClicked( const QModelIndex& idx )
 */
 QString pDockFileBrowser::currentPath() const
 {
-	QModelIndex index = mTree->selectionModel()->selectedIndexes().value( 0 );
-	
-	if ( !index.isValid() )
-	{
-		index = mTree->rootIndex();
-	}
-	
+	QModelIndex index = mTree->rootIndex();
 	index = mFilteredModel->mapToSource( index );
-	
-	if ( !mDirsModel->isDir( index ) )
-	{
-		index = index.parent();
-	}
-	
 	return mDirsModel->filePath( index );
 }
 
@@ -343,6 +331,29 @@ void pDockFileBrowser::setCurrentPath( const QString& s )
 	// set lineedit path
 	mLineEdit->setText( mDirsModel->filePath( index ) );
 	mLineEdit->setToolTip( mLineEdit->text() );
+}
+
+/*!
+	Get current file path (selected item)
+	\return Current file path (selected item)
+*/
+QString pDockFileBrowser::currentFilePath() const
+{
+	QModelIndex index = mTree->selectionModel()->selectedIndexes().value( 0 );
+	index = mFilteredModel->mapToSource( index );
+	return mDirsModel->filePath( index );
+}
+
+/*!
+	Set current file path (selected item)
+	\param s New file path
+*/
+void pDockFileBrowser::setCurrentFilePath( const QString& s )
+{
+	// get index
+	QModelIndex index = mDirsModel->index( s );
+	index = mFilteredModel->mapFromSource( index );
+	mTree->setCurrentIndex( index );
 }
 
 /*!

@@ -152,6 +152,25 @@ void FileBrowser::setPath( const QString& path, bool updateDock )
 }
 
 /*!
+	Get current file path from the settings
+	\return Directory/File path
+*/
+QString FileBrowser::filePath() const
+{ return settingsValue( "FilePath" ).toString(); }
+
+/*!
+	Set current file path in the settings
+	\param path/file Current index
+	\param updateDock Update UI according with new path
+*/
+void FileBrowser::setFilePath( const QString& filePath, bool updateDock )
+{
+	setSettingsValue( "FilePath", filePath );
+	if ( updateDock && mDock )
+		mDock->setCurrentFilePath( filePath );
+}
+
+/*!
 	Read current path and filters from UI dock object and save it in the settings
 */
 void FileBrowser::saveSettings()
@@ -159,6 +178,7 @@ void FileBrowser::saveSettings()
 	if ( mDock )
 	{
 		setPath( mDock->currentPath() );
+		setFilePath( mDock->currentFilePath() );
 		setFilters( mDock->filters() );
 		setBookmarks( mDock->bookmarks() );
 	}
@@ -172,6 +192,7 @@ void FileBrowser::restoreSettings()
 	if ( mDock )
 	{
 		mDock->setCurrentPath( path() );
+		mDock->setCurrentFilePath( filePath() );
 		mDock->setFilters( filters() );
 		mDock->setBookmarks( bookmarks() );
 	}
