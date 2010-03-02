@@ -66,6 +66,9 @@ public:
 	
 	QString path() const;
 	void setPath( const QString& path, bool updateDock = false );
+	
+	QString filePath() const;
+	void setFilePath( const QString& filePath, bool updateDock = false );
 
 protected:
 	QPointer<pDockFileBrowser> mDock;

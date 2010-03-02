@@ -63,7 +63,6 @@ void QtAssistant::helpShown()
 		workspace->handleDocument( child );
 		emit child->fileOpened();
 		child->showMaximized();
-		workspace->setCurrentDocument( child );
 	}
 	
 	workspace->setCurrentDocument( child );

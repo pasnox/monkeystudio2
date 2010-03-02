@@ -95,6 +95,7 @@ public:
 	pDockFileBrowser( QWidget* = 0 );
 	
 	QString currentPath() const;
+	QString currentFilePath() const;
 	QStringList filters() const;
 	QStringList bookmarks() const;
 
@@ -108,6 +109,7 @@ protected:
 
 public slots:
 	void setCurrentPath( const QString& path );
+	void setCurrentFilePath( const QString& filePath );
 	void setFilters( const QStringList& filters );
 	void setBookmarks( const QStringList& bookmarks );
 	void updateBookmarks();
