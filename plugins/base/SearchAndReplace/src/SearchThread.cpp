@@ -56,7 +56,7 @@ QStringList SearchThread::getFiles( QDir fromDir, const QStringList& filters, bo
 {
 	QStringList files;
 
-	foreach ( const QFileInfo& file, fromDir.entryInfoList( QDir::AllEntries | QDir::NoDotAndDotDot, QDir::DirsFirst | QDir::Name ) )
+	foreach ( const QFileInfo& file, fromDir.entryInfoList( QDir::AllEntries | QDir::AllDirs | QDir::NoDotAndDotDot, QDir::DirsFirst | QDir::Name ) )
 	{
 		if ( file.isFile() && ( filters.isEmpty() || QDir::match( filters, file.fileName() ) ) )
 		{

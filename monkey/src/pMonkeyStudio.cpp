@@ -190,7 +190,7 @@ QStringList pMonkeyStudio::availableLanguages()
 QFileInfoList pMonkeyStudio::getFolders( QDir fromDir, const QStringList& filters, bool recursive )
 {
 	QFileInfoList files;
-	foreach ( QFileInfo file, fromDir.entryInfoList( QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name ) )
+	foreach ( QFileInfo file, fromDir.entryInfoList( QDir::Dirs | QDir::AllDirs | QDir::NoDotAndDotDot, QDir::Name ) )
 	{
 		if ( filters.isEmpty() || QDir::match( filters, file.fileName() ) )
 			files << file;
@@ -213,7 +213,7 @@ QFileInfoList pMonkeyStudio::getFolders( QDir fromDir, const QStringList& filter
 QFileInfoList pMonkeyStudio::getFiles( QDir fromDir, const QStringList& filters, bool recursive )
 {
 	QFileInfoList files;
-	foreach ( QFileInfo file, fromDir.entryInfoList( QDir::AllEntries | QDir::NoDotAndDotDot, QDir::DirsFirst | QDir::Name ) )
+	foreach ( QFileInfo file, fromDir.entryInfoList( QDir::AllEntries | QDir::AllDirs | QDir::NoDotAndDotDot, QDir::DirsFirst | QDir::Name ) )
 	{
 		if ( file.isFile() && ( filters.isEmpty() || QDir::match( filters, file.fileName() ) ) )
 			files << file;

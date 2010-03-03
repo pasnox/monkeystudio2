@@ -66,7 +66,7 @@ bool MkSQtDocInstaller::initHelpDB()
 		return false;
 
 	bool assistantInternalDocRegistered = false;
-	foreach ( QString ns, mHelpEngine->registeredDocumentations() )
+	foreach ( const QString& ns, mHelpEngine->registeredDocumentations() )
 	{
 		if ( ns.startsWith( QLatin1String( "com.trolltech.com.assistantinternal_" ) ) )
 		{
