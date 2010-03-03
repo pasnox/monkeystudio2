@@ -106,7 +106,6 @@ QString ReplaceThread::fileContent( const QString& fileName ) const
 void ReplaceThread::replace( const QString& fileName, QString content )
 {
 	QString replaceText;
-	int searchLength = 0;
 	QString codec;
 	SearchResultsModel::ResultList results;
 	bool isOpenedFile = false;
@@ -116,7 +115,6 @@ void ReplaceThread::replace( const QString& fileName, QString content )
 	{
 		QMutexLocker locker( &mMutex );
 		replaceText = mProperties.replaceText;
-		searchLength = mProperties.searchText.length();
 		codec = mProperties.codec;
 		results = mResults[ fileName ];
 		isOpenedFile = mProperties.openedFiles.contains( fileName );
@@ -148,7 +146,7 @@ void ReplaceThread::replace( const QString& fileName, QString content )
 	for ( int i = results.count() -1; i > -1; i-- )
 	{
 		SearchResultsModel::Result* result = results.at( i );
-		searchLength = isRE ? result->capturedTexts.first().length() : searchLength;
+		const int searchLength = result->length;
 
 		if ( isRE && !replaceTextSplit.isEmpty() )
 		{

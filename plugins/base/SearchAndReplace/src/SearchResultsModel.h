@@ -17,13 +17,14 @@ public:
 	struct Result
 	{
 		Result( const QString& _fileName = QString::null, const QString& _capture = QString::null,
-			const QPoint& _position = QPoint(), int _offset = -1, bool _checkable = false,
+			const QPoint& _position = QPoint(), int _offset = -1, int _length = 0, bool _checkable = false,
 			Qt::CheckState _checkState = Qt::Unchecked, bool _enabled = true, const QStringList& _capturedTexts = QStringList() )
 		{
 			fileName = _fileName;
 			capture = _capture;
 			position = _position;
 			offset = _offset;
+			length = _length;
 			checkable = _checkable;
 			checkState = _checkState;
 			enabled = _enabled;
@@ -36,6 +37,7 @@ public:
 				//capture == other.capture &&
 				position == other.position &&
 				offset == other.offset &&
+				length == other.length &&
 				/*checkable == other.checkable &&
 				checkState == other.checkState &&
 				enabled == other.enabled*/
@@ -46,6 +48,7 @@ public:
 		QString capture;
 		QPoint position;
 		int offset;
+		int length;
 		bool checkable;
 		Qt::CheckState checkState;
 		bool enabled;
