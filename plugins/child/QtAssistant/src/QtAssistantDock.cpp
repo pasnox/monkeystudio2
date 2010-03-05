@@ -198,7 +198,7 @@ QtAssistantDock::QtAssistantDock( QWidget* parent )
 	// init documentation
 	mDocInstaller = new MkSQtDocInstaller( mHelpEngine );
 	
-	QTimer::singleShot( 15, mDocInstaller, SLOT( checkDocumentation() ) );
+	QTimer::singleShot( 1000* 10, mDocInstaller, SLOT( checkDocumentation() ) );
 }
 
 QtAssistantDock::~QtAssistantDock()
