@@ -187,6 +187,14 @@ void UISettingsQMake::on_tbQtVersionQMakeSpec_clicked()
 
 void UISettingsQMake::lw_currentItemChanged( QListWidgetItem* c, QListWidgetItem* p )
 {
+	if ( c != p )
+	{
+		foreach ( QWidget* widget, findChildren<QWidget*>() )
+		{
+			widget->blockSignals( true );
+		}
+	}
+	
 	if ( p )
 	{
 		if ( p->listWidget() == lwQtVersions )
@@ -286,6 +294,14 @@ void UISettingsQMake::lw_currentItemChanged( QListWidgetItem* c, QListWidgetItem
 		leCaptionQtConfiguration->clear();
 		leValueQtConfiguration->clear();
 		pteHelpQtConfiguration->clear();
+	}
+	
+	if ( c != p )
+	{
+		foreach ( QWidget* widget, findChildren<QWidget*>() )
+		{
+			widget->blockSignals( false );
+		}
 	}
 }
 
