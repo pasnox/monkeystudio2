@@ -34,12 +34,13 @@ QVariant SearchResultsModel::data( const QModelIndex& index, int role ) const
 	{
 		case Qt::DisplayRole:
 		{
-			QString text = result->fileName;
+			QString text;
 
 			// index is a root parent
 			if ( mParentsList.value( index.row() ) == result )
 			{
 				const int count = rowCount( index );
+				text = mSearchDir.relativeFilePath( result->fileName );
 				text.append( QString( " (%1)" ).arg( count ) );
 			}
 			// index is a root parent child
@@ -358,6 +359,11 @@ void SearchResultsModel::thread_resultsAvailable( const QString& fileName, const
 	
 	SearchResultsModel::Result* result = mParents[ fileName ];
 	SearchAndReplace::Properties* properties = mSearchThread->properties();
+	
+	if ( mRowCount == 0 )
+	{
+		mSearchDir.setPath( properties->searchPath );
+	}
 
 	if ( !result )
 	{

@@ -5,6 +5,7 @@
 #include <QFileInfo>
 #include <QPoint>
 #include <QStringList>
+#include <QDir>
 
 class SearchThread;
 
@@ -81,6 +82,7 @@ public:
 
 protected:
 	int mRowCount;
+	QDir mSearchDir;
 	mutable QHash<QString, SearchResultsModel::Result*> mParents; // fileName, result
 	mutable SearchResultsModel::ResultList mParentsList; // ordered parents
 	mutable QList<SearchResultsModel::ResultList> mResults; // parents children
