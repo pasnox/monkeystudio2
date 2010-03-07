@@ -61,6 +61,7 @@ protected:
 	
 	void init();
 	QSize contentsSize() const;
+	virtual void paintEvent( QPaintEvent* event );
 
 protected slots:
 	void toggleViewAction_toggled( bool toggled );

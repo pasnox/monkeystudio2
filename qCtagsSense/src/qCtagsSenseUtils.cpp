@@ -634,7 +634,7 @@ QString qCtagsSenseUtils::entryToolTip( const qCtagsSenseEntry* entry )
 QFileInfoList qCtagsSenseUtils::getFiles( QDir fromDir, const QStringList& filters, bool recursive )
 {
 	QFileInfoList files;
-	foreach ( QFileInfo file, fromDir.entryInfoList( QDir::AllEntries | QDir::NoDotAndDotDot, QDir::DirsFirst | QDir::Name ) )
+	foreach ( QFileInfo file, fromDir.entryInfoList( QDir::AllEntries | QDir::AllDirs | QDir::NoDotAndDotDot, QDir::DirsFirst | QDir::Name ) )
 	{
 		if ( file.isFile() && ( filters.isEmpty() || QDir::match( filters, file.fileName() ) ) )
 			files << file;

@@ -20,6 +20,7 @@
 #include "pActionsManager.h"
 
 #include <QStyle>
+#include <QPainter>
 #include <QAction>
 #include <QTimer>
 #include <QApplication>
@@ -72,6 +73,30 @@ QSize pDockWidget::contentsSize() const
 #endif
 	contents -= frame;
 	return contents;
+}
+
+void pDockWidget::paintEvent( QPaintEvent* event )
+{
+	QDockWidget::paintEvent(  event );
+	
+	if ( isFloating() ) {
+		QRect rect = this->rect().adjusted( 0, 0, -1, -1 );
+		
+		if ( !isFloating() )
+		{
+			if ( features() & QDockWidget::DockWidgetVerticalTitleBar ) {
+				rect.adjust( mTitleBar->width(), 0, 0, 0 );
+			}
+			else {
+				rect.adjust( 0, mTitleBar->height(), 0, 0 );
+			}
+		}
+		
+		QPainter painter( this );
+		painter.setPen( QColor( 145, 142, 142 ) );
+		painter.setBrush( Qt::NoBrush );
+		painter.drawRect( rect );
+	}
 }
 
 void pDockWidget::toggleViewAction_toggled( bool toggled )

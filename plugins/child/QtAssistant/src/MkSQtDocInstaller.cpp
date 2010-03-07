@@ -47,7 +47,7 @@ QString MkSQtDocInstaller::collectionFileDirectory( bool createDir, const QStrin
 
 QString MkSQtDocInstaller::defaultHelpCollectionFileName()
 {
-	return collectionFileDirectory() +QDir::separator() +QString( "qthelpcollection_%1.qhc" ).arg( QT_VERSION_STR );
+	return collectionFileDirectory() +QDir::separator() +QString( "qthelpcollection_%1.qhc" ).arg( qVersion() );
 }
 
 bool MkSQtDocInstaller::checkDocumentation()
@@ -66,7 +66,7 @@ bool MkSQtDocInstaller::initHelpDB()
 		return false;
 
 	bool assistantInternalDocRegistered = false;
-	foreach ( QString ns, mHelpEngine->registeredDocumentations() )
+	foreach ( const QString& ns, mHelpEngine->registeredDocumentations() )
 	{
 		if ( ns.startsWith( QLatin1String( "com.trolltech.com.assistantinternal_" ) ) )
 		{
