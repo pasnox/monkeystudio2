@@ -113,15 +113,28 @@ void pDockWidgetTitleBar::transposeSize( QRect& rect )
 
 void pDockWidgetTitleBar::updateStandardIcons()
 {
+	const QSize size( 16, 16 );
+	QPixmap pixmap;
+	QRect rect( QPoint(), iconSize() );
+	
 	QTransform transform;
 	transform.rotate( 90 );
 	
-	QPixmap pixmap = style()->standardIcon( QStyle::SP_ToolBarHorizontalExtensionButton, 0, widgetForAction( aOrientation ) ).pixmap( iconSize() );
+	pixmap = style()->standardIcon( QStyle::SP_ToolBarHorizontalExtensionButton, 0, widgetForAction( aOrientation ) ).pixmap( size );
+	rect.moveCenter( pixmap.rect().center() );
+	pixmap = pixmap.copy( rect );
 	pixmap = pixmap.transformed( transform, Qt::SmoothTransformation );
-	
 	aOrientation->setIcon( pixmap );
-	aFloat->setIcon( style()->standardIcon( QStyle::SP_TitleBarNormalButton, 0, widgetForAction( aFloat ) ) );
-	aClose->setIcon( style()->standardIcon( QStyle::SP_TitleBarCloseButton, 0, widgetForAction( aClose ) ) );
+	
+	pixmap = style()->standardIcon( QStyle::SP_TitleBarNormalButton, 0, widgetForAction( aFloat ) ).pixmap( size );
+	rect.moveCenter( pixmap.rect().center() );
+	pixmap = pixmap.copy( rect );
+	aFloat->setIcon( pixmap );
+	
+	pixmap = style()->standardIcon( QStyle::SP_TitleBarCloseButton, 0, widgetForAction( aClose ) ).pixmap( size );
+	rect.moveCenter( pixmap.rect().center() );
+	pixmap = pixmap.copy( rect );
+	aClose->setIcon( pixmap );
 }
 
 bool pDockWidgetTitleBar::event( QEvent* event )
