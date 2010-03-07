@@ -15,30 +15,18 @@
 #include <pDockWidgetTitleBar.h>
 #include <pQueuedMessageToolBar.h>
 
-#include <QDebug>
 #include <QTextCodec>
 #include <QMenu>
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QFileSystemWatcher>
+#include <QDebug>
 
 XUPProjectManager::XUPProjectManager( QWidget* parent )
 	: pDockWidget( parent )
 {
 	setupUi( this );
-	cbProjects->setAttribute( Qt::WA_MacShowFocusRect, false );
-	cbProjects->setAttribute( Qt::WA_MacSmallSize );
-	tvNative->setAttribute( Qt::WA_MacShowFocusRect, false );
-	tvNative->setAttribute( Qt::WA_MacSmallSize );
-	tvFiltered->setAttribute( Qt::WA_MacShowFocusRect, false );
-	tvFiltered->setAttribute( Qt::WA_MacSmallSize );
-	
 	setActionsManager( MonkeyCore::actionsManager() );
-
-#ifdef QT_NO_DEBUG
-	wDebug->setVisible( false );
-	pteLog->setVisible( false );
-#endif
 	
 	// register generic xup project format
 	XUPProjectItem* pItem = new XUPProjectItem();
@@ -51,32 +39,16 @@ XUPProjectManager::XUPProjectManager( QWidget* parent )
 	titleBar()->addAction( action( atEdit ), 4 );
 	titleBar()->addAction( action( atAddFiles ), 5 );
 	titleBar()->addAction( action( atRemoveFiles ), 6 );
-	titleBar()->addAction( aDebug, 7 );
-	titleBar()->addSeparator( 8 );
+	titleBar()->addSeparator( 7 );
 	
 	mFilteredModel = new XUPFilteredProjectModel( tvFiltered );
 	tvFiltered->setModel( mFilteredModel );
 	
-	mDebugMenu = new QMenu( this );
-	aDebug->setMenu( mDebugMenu );
-	
-	mDebugMenu->addAction( "interpretValue" );
-	mDebugMenu->addAction( "interpretVariable" );
-	mDebugMenu->addAction( "project" );
-	mDebugMenu->addAction( "topLevelProject" );
-	mDebugMenu->addAction( "rootIncludeProject" );
-	mDebugMenu->addAction( "editAttribute" );
-	mDebugMenu->addAction( "removeItem" );
-	mDebugMenu->addAction( "addItem" );
-	mDebugMenu->addAction( "debugFilteredModel" );
-	mDebugMenu->addAction( "projectSettingsDebug" );
-	mDebugMenu->addAction( "saveProject" );
-	
-	connect( mDebugMenu, SIGNAL( triggered( QAction* ) ), this, SLOT( debugMenu_triggered( QAction* ) ) );
-	
 	connect( tvFiltered->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( tvFiltered_currentChanged( const QModelIndex&, const QModelIndex& ) ) );
 	connect( tvFiltered, SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SIGNAL( projectCustomContextMenuRequested( const QPoint& ) ) );
 	
+	pMonkeyStudio::showMacFocusRect( wCentral, false, true );
+	pMonkeyStudio::setMacSmallSize( wCentral, true, true );
 	setCurrentProject( 0, 0 );
 }
 
@@ -90,166 +62,6 @@ void XUPProjectManager::on_cbProjects_currentIndexChanged( int id )
 	XUPProjectModel* model = cbProjects->itemData( id ).value<XUPProjectModel*>();
 	XUPProjectItem* project = model ? model->mRootProject : 0;
 	setCurrentProject( project, currentProject() );
-}
-
-void XUPProjectManager::debugMenu_triggered( QAction* action )
-{
-	XUPItem* item = currentItem();
-	
-	if ( !item )
-		return;
-	
-	addError( "------------------" );
-	
-	QString attribute;
-	
-	switch ( item->type() )
-	{
-		case XUPItem::Project:
-			attribute = "name";
-			break;
-		case XUPItem::Comment:
-			attribute = "value";
-			break;
-		case XUPItem::EmptyLine:
-			attribute = "count";
-			break;
-		case XUPItem::Variable:
-			attribute = "name";
-			break;
-		case XUPItem::Value:
-			attribute = "content";
-			break;
-		case XUPItem::Function:
-			attribute = "parameters";
-			break;
-		case XUPItem::Scope:
-			attribute = "name";
-			break;
-		case XUPItem::DynamicFolder:
-			attribute = "name";
-			break;
-		case XUPItem::Folder:
-			attribute = "name";
-			break;
-		case XUPItem::File:
-			attribute = "content";
-			break;
-		case XUPItem::Path:
-			attribute = "content";
-			break;
-		case XUPItem::Unknow:
-			break;
-	}
-	
-	if ( action->text() == "interpretValue" )
-	{
-		if ( item->type() == XUPItem::Value )
-		{
-			addError( item->attribute( attribute ).prepend( "Interpret value '" ).append( "'" ) );
-			addError( item->cacheValue( attribute ) );
-		}
-	}
-	else if ( action->text() == "interpretVariable" )
-	{
-		if ( item->type() == XUPItem::Variable )
-		{
-			addError( item->attribute( attribute ).prepend( "Interpret variable '" ).append( "'" ) );
-			addError( item->project()->rootIncludeProject()->variableCache().value( item->attribute( attribute ) ) );
-		}
-	}
-	else if ( action->text() == "project" )
-	{
-		addError( item->project()->displayText().prepend( "Project: " ) );
-	}
-	else if ( action->text() == "topLevelProject" )
-	{
-		addError( item->project()->topLevelProject()->displayText().prepend( "Top level project: " ) );
-	}
-	else if ( action->text() == "rootIncludeProject" )
-	{
-		addError( item->project()->rootIncludeProject()->displayText().prepend( "Root include project: " ) );
-	}
-	else if ( action->text() == "editAttribute" )
-	{
-		bool ok;
-		QString value = QInputDialog::getText( this, "title", "label", QLineEdit::Normal, item->attribute( attribute ), &ok );
-		if ( ok && !value.isEmpty() )
-		{
-			item->setAttribute( attribute, value );
-		}
-	}
-	else if ( action->text() == "removeItem" )
-	{
-		XUPItem* parentItem = item->parent();
-		if ( parentItem )
-		{
-			parentItem->removeChild( item );
-		}
-	}
-	else if ( action->text() == "addItem" )
-	{
-		int row = qrand() % item->childCount();
-		XUPItem* child = item->addChild( XUPItem::File, row );
-		if ( child )
-		{
-			child->setAttribute( "content", QString( "my new item %1" ).arg( qrand() % 256 ) );
-		}
-	}
-	else if ( action->text() == "debugFilteredModel" )
-	{
-		mFilteredModel->debug( item->project() );
-	}
-	else if ( action->text() == "projectSettingsDebug" )
-	{
-		XUPProjectItem* project = item->project();
-		
-		project->setProjectSettingsValue( "EDITOR", "SimpleQMakeEditor" );
-		project->setProjectSettingsValue( "DEBUG_BINARY", "myappd" );
-		project->setProjectSettingsValue( "RELEASE_BINARY", "myapp" );
-		project->setProjectSettingsValue( "TEST", "merde" );
-		
-		project->addProjectSettingsValue( "TEST", "youpi" );
-		
-		QStringList values;
-		values << project->projectSettingsValue( "EDITOR" );
-		values << project->projectSettingsValue( "DEBUG_BINARY" );
-		values << project->projectSettingsValue( "RELEASE_BINARY" );
-		values << project->projectSettingsValue( "TEST" );
-		addError( values.join( " " ) );
-		
-		project->setProjectSettingsValue( "TEST", "okimichel" );
-		addError( project->projectSettingsValue( "TEST" ) );
-	}
-	else if ( action->text() == "saveProject" )
-	{
-		XUPProjectItem* project = item->project();
-		
-		if ( project )
-		{
-			addError( project->toString() );
-		}
-	}
-}
-
-void XUPProjectManager::on_pbFiltered_toggled( bool checked )
-{
-	pbNative->setChecked( !checked );
-	
-	if ( checked )
-	{
-		swPages->setCurrentIndex( 0 );
-	}
-}
-
-void XUPProjectManager::on_pbNative_toggled( bool checked )
-{
-	pbFiltered->setChecked( !checked );
-	
-	if ( checked )
-	{
-		swPages->setCurrentIndex( 1 );
-	}
 }
 
 void XUPProjectManager::tvFiltered_currentChanged( const QModelIndex& current, const QModelIndex& previous )
@@ -392,11 +204,6 @@ QAction* XUPProjectManager::action( XUPProjectManager::ActionType type )
 	return action;
 }
 
-void XUPProjectManager::addError( const QString& error )
-{
-	pteLog->appendPlainText( error );
-}
-
 void XUPProjectManager::newProject()
 {
 	UITemplatesWizard wizard( this );
@@ -440,11 +247,9 @@ bool XUPProjectManager::openProject( const QString& fileName, const QString& cod
 		{
 			// remove from recents
 			MonkeyCore::recentsManager()->removeRecentProject( fileName );
-			
 			// inform user about error
 			MonkeyCore::messageManager()->appendMessage( tr( "An error occur while opening project '%1': %2" ).arg( fileName ).arg( model->lastError() ) );
-			
-			pteLog->appendPlainText( model->lastError() );
+			// free
 			delete model;
 		}
 	}
@@ -566,16 +371,17 @@ void XUPProjectManager::editProject()
 				// need save topLevelProject ( for XUPProejctSettings scope  )
 				if ( !topLevelProject->save() )
 				{
-					addError( topLevelProject->lastError() );
+					MonkeyCore::messageManager()->appendMessage( tr( "An error occur while saving project '%1': %2" ).arg( topLevelProject->fileName() ).arg( topLevelProject->lastError() ) );
 				}
 			}
 			else
 			{
-				addError( project->lastError() );
+				MonkeyCore::messageManager()->appendMessage( tr( "An error occur while saving project '%1': %2" ).arg( project->fileName() ).arg( project->lastError() ) );
 			}
 			
 			// rebuild cache
 			project->rebuildCache();
+			topLevelProject->rebuildCache();
 			
 			// update menu actions
 			project->uninstallCommands();
@@ -705,11 +511,12 @@ void XUPProjectManager::addFilesToScope( XUPItem* scope, const QStringList& allF
 	
 	// rebuild cache
 	project->rebuildCache();
+	project->topLevelProject()->rebuildCache();
 	
 	// save project
 	if ( !project->save() )
 	{
-		addError( project->lastError() );
+		MonkeyCore::messageManager()->appendMessage( tr( "An error occur while saving project '%1': %2" ).arg( project->fileName() ).arg( project->lastError() ) );
 	}
 }
 
@@ -835,11 +642,12 @@ void XUPProjectManager::removeFiles()
 		
 		// rebuild cache
 		project->rebuildCache();
+		project->topLevelProject()->rebuildCache();
 		
 		// save project
 		if ( !project->save() )
 		{
-			addError( project->lastError() );
+			MonkeyCore::messageManager()->appendMessage( tr( "An error occur while saving project '%1': %2" ).arg( project->fileName() ).arg( project->lastError() ) );
 		}
 	}
 }
@@ -889,8 +697,6 @@ XUPProjectItemList XUPProjectManager::topLevelProjects() const
 void XUPProjectManager::setCurrentProjectModel( XUPProjectModel* model )
 {
 	mFilteredModel->setSourceModel( model );
-	tvNative->setModel( model );
-	
 	int id = cbProjects->findData( QVariant::fromValue<XUPProjectModel*>( model ) );
 	cbProjects->setCurrentIndex( id );
 }

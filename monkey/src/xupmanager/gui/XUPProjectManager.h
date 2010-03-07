@@ -32,12 +32,10 @@ public:
 protected:
 	QMap<XUPProjectManager::ActionType, QAction*> mActions;
 	XUPFilteredProjectModel* mFilteredModel;
-	QMenu* mDebugMenu;
 	
 	QString checkForBestAddOperator( const XUPItemList& variables ) const;
 
 public slots:
-	void addError( const QString& error );
 	bool openProject( const QString& fileName, const QString& codec );
 	void newProject();
 	bool openProject();
@@ -51,9 +49,6 @@ public slots:
 protected slots:
 	void setCurrentProjectModel( XUPProjectModel* model );
 	void on_cbProjects_currentIndexChanged( int id );
-	void debugMenu_triggered( QAction* action );
-	void on_pbFiltered_toggled( bool checked );
-	void on_pbNative_toggled( bool checked );
 	void tvFiltered_currentChanged( const QModelIndex& current, const QModelIndex& previous );
 	void on_tvFiltered_activated( const QModelIndex& index );
 	void on_tvFiltered_customContextMenuRequested( const QPoint& pos );
