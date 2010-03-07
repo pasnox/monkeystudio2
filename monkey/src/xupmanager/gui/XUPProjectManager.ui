@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>296</width>
-    <height>573</height>
+    <width>294</width>
+    <height>385</height>
    </rect>
   </property>
   <property name="allowedAreas">
@@ -17,61 +17,13 @@
    <string>Projects</string>
   </property>
   <widget class="QWidget" name="wCentral">
-   <layout class="QVBoxLayout" name="verticalLayout_3">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <property name="spacing">
      <number>3</number>
     </property>
     <property name="margin">
      <number>5</number>
     </property>
-    <item>
-     <widget class="QWidget" name="wDebug" native="true">
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <property name="margin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QPushButton" name="pbFiltered">
-         <property name="text">
-          <string>Filtered</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pbNative">
-         <property name="text">
-          <string>Native</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
-    </item>
     <item>
      <widget class="QComboBox" name="cbProjects"/>
     </item>
@@ -83,108 +35,18 @@
      </widget>
     </item>
     <item>
-     <widget class="QStackedWidget" name="swPages">
-      <widget class="QWidget" name="wFiltered">
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <property name="spacing">
-         <number>0</number>
-        </property>
-        <property name="margin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QTreeView" name="tvFiltered">
-          <property name="contextMenuPolicy">
-           <enum>Qt::CustomContextMenu</enum>
-          </property>
-          <property name="uniformRowHeights">
-           <bool>true</bool>
-          </property>
-          <property name="headerHidden">
-           <bool>true</bool>
-          </property>
-          <property name="expandsOnDoubleClick">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="wNative">
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <property name="spacing">
-         <number>0</number>
-        </property>
-        <property name="margin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QTreeView" name="tvNative">
-          <property name="uniformRowHeights">
-           <bool>true</bool>
-          </property>
-          <property name="headerHidden">
-           <bool>true</bool>
-          </property>
-          <property name="expandsOnDoubleClick">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPlainTextEdit" name="pteLog">
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>100</height>
-       </size>
+     <widget class="QTreeView" name="tvFiltered">
+      <property name="contextMenuPolicy">
+       <enum>Qt::CustomContextMenu</enum>
       </property>
-      <property name="palette">
-       <palette>
-        <active>
-         <colorrole role="Base">
-          <brush brushstyle="SolidPattern">
-           <color alpha="0">
-            <red>255</red>
-            <green>255</green>
-            <blue>255</blue>
-           </color>
-          </brush>
-         </colorrole>
-        </active>
-        <inactive>
-         <colorrole role="Base">
-          <brush brushstyle="SolidPattern">
-           <color alpha="0">
-            <red>255</red>
-            <green>255</green>
-            <blue>255</blue>
-           </color>
-          </brush>
-         </colorrole>
-        </inactive>
-        <disabled>
-         <colorrole role="Base">
-          <brush brushstyle="SolidPattern">
-           <color alpha="255">
-            <red>255</red>
-            <green>255</green>
-            <blue>255</blue>
-           </color>
-          </brush>
-         </colorrole>
-        </disabled>
-       </palette>
+      <property name="uniformRowHeights">
+       <bool>true</bool>
       </property>
-      <property name="frameShape">
-       <enum>QFrame::NoFrame</enum>
+      <property name="headerHidden">
+       <bool>true</bool>
       </property>
-      <property name="frameShadow">
-       <enum>QFrame::Plain</enum>
+      <property name="expandsOnDoubleClick">
+       <bool>false</bool>
       </property>
      </widget>
     </item>
@@ -192,7 +54,7 @@
   </widget>
   <action name="aDebug">
    <property name="icon">
-    <iconset>
+    <iconset resource="../../resources/resources.qrc">
      <normaloff>:/temp/icons/temp/kcmsystem.png</normaloff>:/temp/icons/temp/kcmsystem.png</iconset>
    </property>
    <property name="text">
@@ -205,7 +67,7 @@
    <class>pDockWidget</class>
    <extends>QDockWidget</extends>
    <header location="global">pDockWidget.h</header>
-   <container>0</container>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>
