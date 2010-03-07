@@ -1,213 +1,191 @@
+/****************************************************************************
+	Copyright (C) 2005 - 2008  Filipe AZEVEDO & The Monkey Studio Team
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+****************************************************************************/
 #include "pDockWidgetTitleBar.h"
 
-#include <QAction>
+#include <QHBoxLayout>
 #include <QWidgetAction>
-#include <QLayout>
-#include <QToolBar>
-#include <QFrame>
-#ifdef Q_WS_WIN
-#include <QWindowsXPStyle>
-#endif
-
+#include <QEvent>
+#include <QStylePainter>
+#include <QStyleOptionToolBar>
 #include <QDebug>
 
 pDockWidgetTitleBar::pDockWidgetTitleBar( pDockWidget* parent )
-	: QWidget( parent )
+	: QToolBar( parent )
 {
 	Q_ASSERT( parent );
-	
 	mDock = parent;
 	
-	mBox1 = new QBoxLayout( QBoxLayout::LeftToRight, this );
-	mBox1->setMargin( style()->pixelMetric( QStyle::PM_DockWidgetTitleMargin ) /2 );
-	mBox1->setSpacing( 0 );
+	// a fake spacer widget
+	QWidget* widget = new QWidget( this );
+	QHBoxLayout* hlayout = new QHBoxLayout( widget );
+	hlayout->setMargin( 0 );
+	hlayout->setSpacing( 0 );
+	hlayout->addStretch();
 	
-	mBox2 = new QBoxLayout( QBoxLayout::LeftToRight );
-	mBox2->setMargin( 0 );
-	mBox2->setSpacing( 0 );
+	// fake spacer item
+	mSpacer = new QWidgetAction( this );
+	mSpacer->setDefaultWidget( widget );
 	
-	mBox1->addStretch( 100 );
-	mBox1->addLayout( mBox2 );
+	setMovable( false );
+	setFloatable( false );
+	setIconSize( QSize( 12, 12 ) );
+	layout()->setSpacing( 0 );
+	layout()->setMargin( 2 );
 	
-	bOrientation = new pDockWidgetButton( this, pDockWidgetButton::Orientation );
-	bOrientation->setFixedSize( buttonSize() );
+	aOrientation = new QAction( this );
+	aFloat = new QAction( this );
+	aClose = new QAction( this );
 	
-	bFloat = new pDockWidgetButton( this, pDockWidgetButton::Float );
-	bFloat->setFixedSize( buttonSize() );
+	addAction( mSpacer );
+	addAction( aOrientation );
+	addAction( aFloat );
+	addAction( aClose );
 	
-	bClose = new pDockWidgetButton( this, pDockWidgetButton::Close );
-	bClose->setFixedSize( buttonSize() );
+	updateStandardIcons();
+	dockWidget_featuresChanged( mDock->features() );
 	
-	mBox2->addWidget( bOrientation, 0, Qt::AlignCenter );
-	mBox2->addWidget( bFloat, 0, Qt::AlignCenter );
-	mBox2->addWidget( bClose, 0, Qt::AlignCenter );
-	
-	featuresChanged( mDock->features() );
-	
-	connect( mDock, SIGNAL( featuresChanged( QDockWidget::DockWidgetFeatures ) ), this, SLOT( featuresChanged( QDockWidget::DockWidgetFeatures ) ) );
-	connect( bOrientation, SIGNAL( clicked() ), this, SLOT( bOrientation_clicked() ) );
-	connect( bFloat, SIGNAL( clicked() ), this, SLOT( bFloat_clicked() ) );
-	connect( bClose, SIGNAL( clicked() ), mDock, SLOT( close() ) );
-}
-
-pDockWidgetTitleBar::~pDockWidgetTitleBar()
-{
+	connect( mDock, SIGNAL( featuresChanged( QDockWidget::DockWidgetFeatures ) ), this, SLOT( dockWidget_featuresChanged( QDockWidget::DockWidgetFeatures ) ) );
+	connect( aOrientation, SIGNAL( triggered() ), this, SLOT( aOrientation_triggered() ) );
+	connect( aFloat, SIGNAL( triggered() ), this, SLOT( aFloat_triggered() ) );
+	connect( aClose, SIGNAL( triggered() ), mDock, SLOT( close() ) );
 }
 
 void pDockWidgetTitleBar::paintEvent( QPaintEvent* event )
 {
 	Q_UNUSED( event );
 	
-	QStylePainter p( this );
+	QStylePainter painter( this );
 	
 	// init style options
-	QStyleOptionDockWidgetV2 titleOpt;
+	QStyleOptionToolBar options;
 	
-	titleOpt.initFrom( mDock );
-	titleOpt.rect = rect();
-
-	if ( titleOpt.title.isEmpty() )
-	{
-		titleOpt.title = mDock->windowTitle();
-	}
+	options.initFrom( mDock );
+	options.rect = rect();
+	QRect textRect = rect().adjusted( 3, 0, 0, 0 );
+	QSize msh = minimumSizeHint();
 	
-	// paint dock title
-	QSize buttonsSizeHint = mBox2->sizeHint();
-	
+	// need to rotate if vertical state
 	if ( mDock->features() & QDockWidget::DockWidgetVerticalTitleBar )
 	{
-		p.rotate( -90 );
-		p.translate( QPoint( -rect().height(), 0 ) );
-		
-		QSize size = titleOpt.rect.size();
-		
-		size.transpose();
-		titleOpt.rect.setSize( size );
-		
-		buttonsSizeHint.transpose();
+		painter.rotate( -90 );
+		painter.translate( QPoint( -rect().height(), 0 ) );
+		transposeSize( options.rect );
+		transposeSize( textRect );
+		msh.transpose();
 	}
 	
-	if ( style()->objectName().toLower() != "windowsxp" )
+	// draw toolbar
+	painter.drawControl( QStyle::CE_ToolBar, options );
+	
+	// draw dock title
+	textRect.setWidth( qBound( 0, options.rect.width() -msh.width(), textRect.width() ) );
+	const QString text = painter.fontMetrics().elidedText( mDock->windowTitle(), Qt::ElideRight, textRect.width() );
+	painter.drawText( textRect, Qt::AlignLeft | Qt::AlignVCenter, text );
+	
+	// restore rotation
+	if ( mDock->features() & QDockWidget::DockWidgetVerticalTitleBar )
 	{
-		titleOpt.rect.setWidth( titleOpt.rect.width() -buttonsSizeHint.width() );
+		painter.rotate( 90 );
 	}
+}
 
-	p.drawControl( QStyle::CE_DockWidgetTitle, titleOpt );
+void pDockWidgetTitleBar::transposeSize( QRect& rect )
+{
+	QSize size = rect.size();
+	size.transpose();
+	rect.setSize( size );
+}
+
+void pDockWidgetTitleBar::updateStandardIcons()
+{
+	QTransform transform;
+	transform.rotate( 90 );
 	
+	QPixmap pixmap = style()->standardIcon( QStyle::SP_ToolBarHorizontalExtensionButton, 0, widgetForAction( aOrientation ) ).pixmap( iconSize() );
+	pixmap = pixmap.transformed( transform, Qt::SmoothTransformation );
+	
+	aOrientation->setIcon( pixmap );
+	aFloat->setIcon( style()->standardIcon( QStyle::SP_TitleBarNormalButton, 0, widgetForAction( aFloat ) ) );
+	aClose->setIcon( style()->standardIcon( QStyle::SP_TitleBarCloseButton, 0, widgetForAction( aClose ) ) );
+}
+
+bool pDockWidgetTitleBar::event( QEvent* event )
+{
+	if ( event->type() == QEvent::StyleChange ) {
+		updateStandardIcons();
+	}
+	
+	return QToolBar::event( event );
+}
+
+QSize pDockWidgetTitleBar::minimumSizeHint() const
+{
+	return QToolBar::sizeHint();
 }
 
 QSize pDockWidgetTitleBar::sizeHint() const
 {
-	ensurePolished();
-
-	int titleMargin = style()->pixelMetric( QStyle::PM_DockWidgetTitleMargin );
-
+	QSize size = QToolBar::sizeHint();
 	QFontMetrics fm( font() );
-	QSize titleSize = QSize( fm.width( mDock->windowTitle() ), fm.height() ) +QSize( titleMargin, titleMargin );
-	QSize buttonsSize = mBox2->sizeHint();
-	
-	if ( mDock->features() & QDockWidget::DockWidgetVerticalTitleBar )
-	{
-		buttonsSize.transpose();
+
+	if ( mDock->features() & QDockWidget::DockWidgetVerticalTitleBar ) {
+		size.rheight() += fm.width( mDock->windowTitle() );
 	}
-
-	int height = qMax( titleSize.height(), buttonsSize.height() );
-
-	height += titleMargin +( titleMargin /2 );
-	
-	QSize size = QSize( titleSize.width() +buttonsSize.width(), height );
-
-	if ( mDock->features() & QDockWidget::DockWidgetVerticalTitleBar )
-	{
-		size.transpose();
+	else {
+		size.rwidth() += fm.width( mDock->windowTitle() );
 	}
 
 	return size;
 }
 
-QSize pDockWidgetTitleBar::buttonSize() const
-{
-	int size = style()->pixelMetric( QStyle::PM_SmallIconSize );
-	size += style()->pixelMetric( QStyle::PM_DockWidgetTitleBarButtonMargin );
-	return QSize( size, size );
-}
-
-QSize pDockWidgetTitleBar::iconSize() const
-{
-	int size = style()->pixelMetric( QStyle::PM_SmallIconSize );
-	size -= style()->pixelMetric( QStyle::PM_DockWidgetTitleBarButtonMargin );
-	
-#ifdef Q_WS_WIN
-	if ( !qobject_cast<QWindowsXPStyle*>( style() ) )
-#elif defined Q_WS_MAC
-	if ( !qobject_cast<QMacStyle*>( style() ) )
-#endif
-	{
-		size -= style()->pixelMetric( QStyle::PM_DockWidgetTitleBarButtonMargin );
-	}
-
-	return QSize( size, size );
-}
-
 QWidget* pDockWidgetTitleBar::addAction( QAction* action, int index )
 {
-	Q_ASSERT( action );
-	
-	if ( index == -1 )
-	{
-		index = mBox2->count();
+	if ( index != -1 ) {
+		index++;
 	}
 	
-	if ( action->inherits( "QWidgetAction" ) )
-	{
-		QWidget* w = qobject_cast<QWidgetAction*>( action )->requestWidget( this );
-		
-		if ( w )
-		{
-			mBox2->insertWidget( index, w, 0, Qt::AlignCenter );
-			w->setVisible( true );
-		}
-		
-		return w;
+	if ( index >= 0 && index < actions().count() ) {
+		QToolBar::insertAction( actions().value( index ), action );
 	}
-	else
-	{
-		QToolButton* tb = new pDockWidgetButton( this );
-		tb->setFixedSize( buttonSize() );
-		tb->setIconSize( iconSize() );
-		tb->setDefaultAction( action );
-		
-		mBox2->insertWidget( index, tb, 0, Qt::AlignCenter );
-		
-		return tb;
+	else {
+		QToolBar::addAction( action );
 	}
+	
+	return widgetForAction( action );
 }
 
 void pDockWidgetTitleBar::addSeparator( int index )
 {
-	if ( index == -1 )
-	{
-		index = mBox2->count();
+	if ( index != -1 ) {
+		index++;
 	}
 	
-	QFrame* f = new QFrame( this );
-	f->setFixedSize( iconSize() );
-	
-	if ( mDock->features() & QDockWidget::DockWidgetVerticalTitleBar )
-	{
-		f->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+	if ( index >= 0 && index < actions().count() ) {
+		QToolBar::insertSeparator( actions().value( index ) );
 	}
-	else
-	{
-		f->setFrameStyle( QFrame::VLine | QFrame::Sunken );
+	else {
+		QToolBar::addSeparator();
 	}
-	
-	mBox2->insertWidget( index, f, 0, Qt::AlignCenter );
 }
 
-void pDockWidgetTitleBar::bOrientation_clicked()
+void pDockWidgetTitleBar::aOrientation_triggered()
 {
-	QDockWidget::DockWidgetFeatures features = mDock->features();
+	const QDockWidget::DockWidgetFeatures features = mDock->features();
 	
 	if ( features & QDockWidget::DockWidgetVerticalTitleBar )
 	{
@@ -219,51 +197,39 @@ void pDockWidgetTitleBar::bOrientation_clicked()
 	}
 }
 
-void pDockWidgetTitleBar::bFloat_clicked()
+void pDockWidgetTitleBar::aFloat_triggered()
 {
 	mDock->setFloating( !mDock->isFloating() );
 }
 
-void pDockWidgetTitleBar::featuresChanged( QDockWidget::DockWidgetFeatures features )
+void pDockWidgetTitleBar::dockWidget_featuresChanged( QDockWidget::DockWidgetFeatures features )
 {
-	if ( features & QDockWidget::DockWidgetVerticalTitleBar )
-	{
-		// vertical
-		mBox1->setDirection( QBoxLayout::BottomToTop );
-		mBox2->setDirection( QBoxLayout::BottomToTop );
-		
-		foreach ( QFrame* f, findChildren<QFrame*>() )
-		{
-			f->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+	aFloat->setVisible( features & QDockWidget::DockWidgetFloatable );
+	aClose->setVisible( features & QDockWidget::DockWidgetClosable );
+	
+	// update toolbar orientation
+	if ( features & QDockWidget::DockWidgetVerticalTitleBar ) {
+		if ( orientation() == Qt::Vertical ) {
+			return;
 		}
 		
-		bOrientation->setIcon( style()->standardIcon( QStyle::SP_ToolBarHorizontalExtensionButton ) );
-		bFloat->setVisible( features & QDockWidget::DockWidgetFloatable );
-		bClose->setVisible( features & QDockWidget::DockWidgetClosable );
+		setOrientation( Qt::Vertical );
 	}
-	else
-	{
-		// horizontal
-		mBox1->setDirection( QBoxLayout::LeftToRight );
-		mBox2->setDirection( QBoxLayout::LeftToRight );
-		
-		foreach ( QFrame* f, findChildren<QFrame*>() )
-		{
-			f->setFrameStyle( QFrame::VLine | QFrame::Sunken );
+	else {
+		if ( orientation() == Qt::Horizontal ) {
+			return;
 		}
 		
-		bOrientation->setIcon( style()->standardIcon( QStyle::SP_ToolBarVerticalExtensionButton ) );
-		bFloat->setVisible( features & QDockWidget::DockWidgetFloatable );
-		bClose->setVisible( features & QDockWidget::DockWidgetClosable );
+		setOrientation( Qt::Horizontal );
 	}
-}
-
-bool pDockWidgetTitleBar::orientationButtonVisible() const
-{
-	return bOrientation->isVisible();
-}
-
-void pDockWidgetTitleBar::setOrientationButtonVisible( bool visible )
-{
-	bOrientation->setVisible( visible );
+	
+	// re-order the actions
+	QList<QAction*> items;
+	
+	for ( int i = actions().count() -1; i > -1; i-- ) {
+		items << actions().at( i );
+	}
+	
+	clear();
+	addActions( items );
 }
