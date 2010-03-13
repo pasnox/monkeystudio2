@@ -123,50 +123,39 @@ void ReplaceThread::replace( const QString& fileName, QString content )
 
 	QTime tracker;
 	tracker.start();
-
-	static const QRegExp rx( "\\$\\d+" );
-	static const QRegExp rx2( "\\$(\\d+)" );
-	const QStringList replaceTextSplit = isRE ? QStringList( replaceText.split( rx, QString::SkipEmptyParts ) ) : QStringList();
-	QStringList keywordList;
-
-	if ( isRE )
-	{
-		int pos = 0;
-		
-		while ( ( pos = rx.indexIn( replaceText, pos ) ) != -1 )
-		{
-			QString buf = rx.capturedTexts().first();
-			buf.replace( rx2, "\\1" );
-			keywordList.append( buf );
-			pos += rx.matchedLength();
-		}
-	}
+	
+	static QRegExp rx( "\\$(\\d+)" );
+	rx.setMinimal( true );
 
 	// count from end to begin because we are replacing by offset in content
 	for ( int i = results.count() -1; i > -1; i-- )
 	{
 		SearchResultsModel::Result* result = results.at( i );
 		const int searchLength = result->length;
-
-		if ( isRE && !replaceTextSplit.isEmpty() )
-		{
-			replaceText.clear();
-
-			for ( int i = 0; i < replaceTextSplit.count() -1; i++ )
-			{
-				replaceText += replaceTextSplit.at( i );
-				replaceText += result->capturedTexts[ keywordList.at( i ).toInt() ];
+		const QStringList captures = result->capturedTexts;
+	
+		// compute replace text
+		if ( isRE && captures.count() > 1 ) {
+			int pos = 0;
+			
+			while ( ( pos = rx.indexIn( replaceText, pos ) ) != -1 ) {
+				const int id = rx.cap( 1 ).toInt();
+				
+				if ( id < 0 || id >= captures.count() ) {
+					pos += rx.matchedLength();
+					continue;
+				}
+				
+				// update replace text with partial occurrences
+				replaceText.replace( pos, rx.matchedLength(), captures.at( id ) );
+				
+				// next
+				pos += captures.at( id ).length();
 			}
-
-			replaceText += replaceTextSplit.last();
-
-			content.remove( result->offset, searchLength );
-			content.insert( result->offset, replaceText );
 		}
-		else
-		{
-			content.replace( result->offset, searchLength, replaceText );
-		}
+		
+		// replace text
+		content.replace( result->offset, searchLength, replaceText );
 
 		handledResults << result;
 
