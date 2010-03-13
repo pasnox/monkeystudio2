@@ -3,6 +3,7 @@
 #include <QMutexLocker>
 #include <QTextCodec>
 #include <QTime>
+#include <QTimer>
 #include <QDebug>
 
 int SearchThread::mMaxTime = 125;
@@ -19,6 +20,7 @@ SearchThread::SearchThread( QObject* parent )
 SearchThread::~SearchThread()
 {
 	stop();
+	QTimer::singleShot( 1000 *5, this, SLOT( terminate() ) ); // Fix a long app exit when executing a very long regexp.
 	wait();
 }
 
@@ -235,6 +237,7 @@ void SearchThread::search( const QString& fileName, const QString& content ) con
 			pattern.prepend( "\\b" ).append( "\\b" );
 		}
 
+		rx.setMinimal( true );
 		rx.setPattern( pattern );
 		rx.setCaseSensitivity( sensitivity );
 	}

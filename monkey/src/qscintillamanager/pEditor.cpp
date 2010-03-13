@@ -97,9 +97,100 @@ pEditor::pEditor( QWidget* p )
 	// Create shortcuts manager, if not created
 	qSciShortcutsManager::instance();
 }
+	
+bool pEditor::findFirst( const QString& expr, bool re, bool cs, bool wo, bool wrap, bool forward, int line, int index, bool show )
+{
+	mSearchState.inProgress = false;
 
-pEditor::~pEditor()
-{}
+	if ( expr.isEmpty() ) {
+		return false;
+	}
+
+	mSearchState.expr = expr;
+	mSearchState.wrap = wrap;
+	mSearchState.forward = forward;
+
+	mSearchState.flags = ( cs ? SCFIND_MATCHCASE : 0 ) | ( wo ? SCFIND_WHOLEWORD : 0 ) | ( re ? SCFIND_REGEXP : 0 );
+
+	if ( line < 0 || index < 0 ) {
+		mSearchState.startpos = SendScintilla( SCI_GETCURRENTPOS );
+	}
+	else {
+		mSearchState.startpos = positionFromLineIndex( line, index );
+	}
+
+	if ( forward ) {
+		mSearchState.endpos = SendScintilla( SCI_GETLENGTH );
+	}
+	else {
+		mSearchState.endpos = 0;
+	}
+
+	mSearchState.show = show;
+
+	return search();
+}
+
+bool pEditor::findNext()
+{
+	if ( !mSearchState.inProgress ) {
+		return false;
+	}
+
+	return search();
+}
+
+void pEditor::replace( const QString& replaceStr )
+{
+	if ( !mSearchState.inProgress ) {
+		return;
+	}
+
+	static QRegExp rxd( "\\$(\\d+)" );
+	rxd.setMinimal( true );
+	const bool isRE = mSearchState.flags & SCFIND_REGEXP;
+	QRegExp& rx = mSearchState.rx;
+	const QStringList captures = rx.capturedTexts();
+	QString text = replaceStr;
+	const long start = SendScintilla( SCI_GETSELECTIONSTART );
+
+	SendScintilla( SCI_TARGETFROMSELECTION );
+	
+	// remove selection
+	removeSelectedText();
+	
+	// compute replace text
+	if ( isRE && captures.count() > 1 ) {
+		int pos = 0;
+		
+		while ( ( pos = rxd.indexIn( text, pos ) ) != -1 ) {
+			const int id = rxd.cap( 1 ).toInt();
+			
+			if ( id < 0 || id >= captures.count() ) {
+				pos += rxd.matchedLength();
+				continue;
+			}
+			
+			// update replace text with partial occurrences
+			text.replace( pos, rxd.matchedLength(), captures.at( id ) );
+			
+			// next
+			pos += captures.at( id ).length();
+		}
+	}
+	
+	// insert replace text
+	const long len = text.length();
+	insert( text );
+
+	// Reset the selection.
+	SendScintilla( SCI_SETSELECTIONSTART, start );
+	SendScintilla( SCI_SETSELECTIONEND, start +len );
+
+	if ( mSearchState.forward ) {
+		mSearchState.startpos = start +len;
+	}
+}
 
 void pEditor::keyPressEvent( QKeyEvent* e )
 {
@@ -122,6 +213,98 @@ void pEditor::keyPressEvent( QKeyEvent* e )
 		return;
 	}
 	QsciScintilla::keyPressEvent( e );
+}
+
+bool pEditor::search()
+{
+	SendScintilla( SCI_SETSEARCHFLAGS, mSearchState.flags );
+
+	int pos = simpleSearch();
+
+	// See if it was found.  If not and wraparound is wanted, try again.
+	if ( pos == -1 && mSearchState.wrap ) {
+		if ( mSearchState.forward ) {
+			mSearchState.startpos = 0;
+			mSearchState.endpos = SendScintilla( SCI_GETLENGTH );
+		}
+		else {
+			mSearchState.startpos = SendScintilla( SCI_GETLENGTH );
+			mSearchState.endpos = 0;
+		}
+
+		pos = simpleSearch();
+	}
+
+	if ( pos == -1 ) {
+		mSearchState.inProgress = false;
+		return false;
+	}
+
+	// It was found.
+	long targstart = SendScintilla( SCI_GETTARGETSTART );
+	long targend = SendScintilla( SCI_GETTARGETEND );
+
+	// Ensure the text found is visible if required.
+	if ( mSearchState.show ) {
+		int startLine = SendScintilla( SCI_LINEFROMPOSITION, targstart );
+		int endLine = SendScintilla( SCI_LINEFROMPOSITION, targend );
+
+		for ( int i = startLine; i <= endLine; ++i ) {
+			SendScintilla( SCI_ENSUREVISIBLEENFORCEPOLICY, i );
+		}
+	}
+
+	// Now set the selection.
+	SendScintilla( SCI_SETSEL, targstart, targend );
+
+	// Finally adjust the start position so that we don't find the same one
+	// again.
+	if ( mSearchState.forward ) {
+		mSearchState.startpos = targend;
+	}
+	else if ( ( mSearchState.startpos = targstart -1 ) < 0 ) {
+		mSearchState.startpos = 0;
+	}
+
+	mSearchState.inProgress = true;
+	return true;
+}
+
+int pEditor::simpleSearch()
+{
+	if ( mSearchState.startpos == mSearchState.endpos ) {
+		return -1;
+	}
+
+	SendScintilla( SCI_SETTARGETSTART, mSearchState.startpos );
+	SendScintilla( SCI_SETTARGETEND, mSearchState.endpos );
+	
+	const bool isCS = mSearchState.flags & SCFIND_MATCHCASE;
+	const bool isWW = mSearchState.flags & SCFIND_WHOLEWORD;
+	const bool isRE = mSearchState.flags & SCFIND_REGEXP;
+	const int from = qMin( mSearchState.startpos, mSearchState.endpos );
+	const int to = qMax( mSearchState.startpos, mSearchState.endpos );
+	const QString text = this->text().mid( from, to -from );
+	QString pattern = isRE ? mSearchState.expr : QRegExp::escape( mSearchState.expr );
+	QRegExp& rx = mSearchState.rx;
+	
+	if ( isWW ) {
+		pattern.prepend( "\\b" ).append( "\\b" );
+	}
+	
+	rx.setMinimal( true );
+	rx.setPattern( pattern );
+	rx.setCaseSensitivity( isCS ? Qt::CaseSensitive : Qt::CaseInsensitive );
+	
+	int pos = mSearchState.forward ? rx.indexIn( text, from -from ) : rx.lastIndexIn( text, to -from );
+	
+	if ( pos != -1 ) {
+		pos += from;
+		SendScintilla( SCI_SETTARGETSTART, pos );
+		SendScintilla( SCI_SETTARGETEND, pos +rx.matchedLength() );
+	}
+	
+	return pos;
 }
 
 bool pEditor::lineNumbersMarginEnabled() const

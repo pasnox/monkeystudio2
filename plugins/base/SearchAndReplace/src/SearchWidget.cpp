@@ -695,16 +695,23 @@ bool SearchWidget::searchFile( bool forward, bool incremental )
 	const bool isCS = mProperties.options & SearchAndReplace::OptionCaseSensitive;
 	const bool isWW = mProperties.options & SearchAndReplace::OptionWholeWord;
 	const bool isWrap = mProperties.options & SearchAndReplace::OptionWrap;
-	int x, y;
-
-	if ( forward && !incremental )
-	{
-		editor->getCursorPosition( &y, &x );
+	int x, y, temp;
+	
+	if ( forward ) {
+		if ( incremental ) {
+			editor->getSelection( &y, &x, &temp, &temp );
+		}
+		else {
+			editor->getSelection( &temp, &temp, &y, &x );
+		}
 	}
-	else // incremental search, or search backward
-	{
-		int temp;
-		editor->getSelection( &y, &x, &temp, &temp );
+	else {
+		if ( incremental ) {
+			editor->getSelection( &temp, &temp, &y, &x );
+		}
+		else {
+			editor->getSelection( &y, &x, &temp, &temp );
+		}
 	}
 
 	// search
