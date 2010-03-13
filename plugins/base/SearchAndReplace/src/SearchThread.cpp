@@ -20,7 +20,6 @@ SearchThread::SearchThread( QObject* parent )
 SearchThread::~SearchThread()
 {
 	stop();
-	QTimer::singleShot( 1000 *5, this, SLOT( terminate() ) ); // Fix a long app exit when executing a very long regexp.
 	wait();
 }
 
