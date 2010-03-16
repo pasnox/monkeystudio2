@@ -120,10 +120,10 @@ void ReplaceThread::replace( const QString& fileName, QString content )
 		isOpenedFile = mProperties.openedFiles.contains( fileName );
 		isRE = mProperties.options & SearchAndReplace::OptionRegularExpression;
 	}
-
+/*
 	QTime tracker;
 	tracker.start();
-	
+*/
 	static QRegExp rx( "\\$(\\d+)" );
 	rx.setMinimal( true );
 
@@ -158,7 +158,7 @@ void ReplaceThread::replace( const QString& fileName, QString content )
 		content.replace( result->offset, searchLength, replaceText );
 
 		handledResults << result;
-
+/*
 		if ( tracker.elapsed() >= mMaxTime )
 		{
 			if ( !handledResults.isEmpty() )
@@ -179,7 +179,7 @@ void ReplaceThread::replace( const QString& fileName, QString content )
 			handledResults.clear();
 			tracker.restart();
 		}
-
+*/
 		{
 			QMutexLocker locker( &mMutex );
 

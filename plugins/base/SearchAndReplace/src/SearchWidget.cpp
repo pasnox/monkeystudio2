@@ -756,12 +756,15 @@ bool SearchWidget::replaceFile( bool all )
 			mProperties.options &= ~SearchAndReplace::OptionWrap;
 		}
 
+		editor->beginUndoAction();
+		
 		while ( searchFile( true, false ) ) // search next
 		{
 			editor->replace( mProperties.replaceText );
 			count++;
 		}
 
+		editor->endUndoAction();
 		editor->setCursorPosition( y, x ); // restore cursor position
 		
 		// restore wrap property if needed
@@ -779,7 +782,9 @@ bool SearchWidget::replaceFile( bool all )
 
 		if ( searchFile( true, false ) )
 		{
+			editor->beginUndoAction();
 			editor->replace( mProperties.replaceText );
+			editor->endUndoAction();
 			count++;
 			pbNext->click(); // move selection to next item
 		}
