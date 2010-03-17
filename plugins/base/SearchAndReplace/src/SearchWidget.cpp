@@ -224,12 +224,13 @@ void SearchWidget::setMode( SearchAndReplace::Mode mode )
 	const QString path = mProperties.project ? mProperties.project->path() : QDir::currentPath();
 	const QString searchPath = document ? QFileInfo( document->filePath() ).absolutePath() : path;
 	const QString searchText = editor ? editor->selectedText() : QString::null;
+	const bool wasVisible = isVisible();
 
 	setVisible( mode != SearchAndReplace::ModeNo );
 
 	if ( isVisible() )
 	{
-		if ( !searchText.isEmpty() )
+		if ( !wasVisible && !searchText.isEmpty() )
 		{
 			cbSearch->setEditText( searchText );
 		}
