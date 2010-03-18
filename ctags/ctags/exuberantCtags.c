@@ -3,21 +3,38 @@
 #include "read.h"
 #include "entry.h"
 
+#include <assert.h>
+
 extern parserDefinition** LanguageTable;
+static int mIsInitializedRefCount = 0;
 
 extern void initCtags()
 {
-	initializeParsing();
-	installLanguageMapDefaults();
+	if ( mIsInitializedRefCount == 0 ) {
+		initializeParsing();
+		installLanguageMapDefaults();
+	}
+	
+	mIsInitializedRefCount++;
 }
 
 extern void deInitCtags()
 {
-	freeParserResources();
+	mIsInitializedRefCount--;
+	
+	assert( mIsInitializedRefCount >= 0 );
+	
+	if ( mIsInitializedRefCount == 0 ) {
+		freeParserResources();
+	}
 }
 
 extern TagEntryListItem* createTagEntryListItem( const char* fileName, const char* langName )
 {
+	if ( !mIsInitializedRefCount ) {
+		return NULL;
+	}
+	
 	const parserDefinition* language;
 	langType lang; 
 	unsigned int passCount;
@@ -25,44 +42,36 @@ extern TagEntryListItem* createTagEntryListItem( const char* fileName, const cha
 
 	firstTagEntry = NULL; // generate new list
 	
-	if ( ( langName != NULL ) && ( strlen( langName ) != 0 ) )
-	{
+	if ( ( langName != NULL ) && ( strlen( langName ) != 0 ) ) {
 		lang = getNamedLanguage( langName );
 	}
-	else
-	{
+	else {
 		lang = getFileLanguage( fileName );
 	}
 	
-	if ( lang <= 0 )
-	{
+	if ( lang <= 0 ) {
 		//printf( "Will not parse %s\n",fileName );
 		return NULL;
 	}
 	
 	language = LanguageTable[ lang ];
 	
-	if ( language == NULL )
-	{
+	if ( language == NULL ) {
 		return NULL;
 	}
 	
-	if ( !fileOpen( fileName, lang ) )
-	{
+	if ( !fileOpen( fileName, lang ) ) {
 		return NULL;
 	}
 	
 	passCount = 0;
 	retried = FALSE;
 	
-	if ( language->parser != NULL )
-	{
+	if ( language->parser != NULL ) {
 		language->parser();
 	}
-	else if ( language->parser2 != NULL )
-	{
-		do
-		{
+	else if ( language->parser2 != NULL ) {
+		do {
 			retried = language->parser2( ++passCount );
 		} while ( retried );
 	}
@@ -72,8 +81,7 @@ extern TagEntryListItem* createTagEntryListItem( const char* fileName, const cha
 
 extern void freeTagEntryListItem( TagEntryListItem* item )
 {
-	while ( item != NULL )
-	{
+	while ( item != NULL ) {
 		TagEntryListItem* temp = 0;
 		tagEntryInfo* entry = &item->tag;
 		
@@ -124,14 +132,16 @@ extern void freeTagEntryListItem( TagEntryListItem* item )
 
 extern void setLanguageTypeKinds( const langType language, const char* kinds )
 {
+	if ( !mIsInitializedRefCount ) {
+		return;
+	}
+	
 	parserDefinition* parser = LanguageTable[ language ];
 	
-	if ( parser != NULL )
-	{
+	if ( parser != NULL ) {
 		unsigned int i;
 		
-		for ( i = 0; i < parser->kindCount; ++i )
-		{
+		for ( i = 0; i < parser->kindCount; ++i ) {
 			parser->kinds[ i ].enabled = strchr( kinds, parser->kinds[ i ].letter ) != NULL;
 		}
 	}
