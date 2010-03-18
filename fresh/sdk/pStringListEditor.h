@@ -1,1 +1,0 @@
-#include <../widgets/pStringListEditor.h>
