@@ -13,7 +13,9 @@ DESTDIR	= $${PACKAGE_BUILD_PATH}
 HEADERS	+= src/qCtagsSense.h \
 	src/qCtagsSenseExport.h \
 	src/qCtagsSenseUtils.h \
-	src/qCtagsSenseEntry.h
+	src/qCtagsSenseEntry.h \
+	src/qCtagsSenseProperties.h
 SOURCES	+= src/qCtagsSense.cpp \
 	src/qCtagsSenseUtils.cpp \
-	src/qCtagsSenseEntry.cpp
+	src/qCtagsSenseEntry.cpp \
+	src/qCtagsSenseProperties.cpp
