@@ -1,5 +1,4 @@
 #include "qCtagsSense.h"
-#include "qCtagsSenseUtils.h"
 
 #include <ctags.h>
 
