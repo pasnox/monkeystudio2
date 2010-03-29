@@ -10,12 +10,19 @@ CONFIG	*= staticlib
 DEFINES	*= QCTAGSSENSE_EXPORT_BUILD
 DESTDIR	= $${PACKAGE_BUILD_PATH}
 
-HEADERS	+= src/qCtagsSense.h \
+INCLUDEPATH	*= ../../dev/fresh/objects
+
+FORMS	= 
+
+HEADERS	= src/qCtagsSense.h \
 	src/qCtagsSenseExport.h \
-	src/qCtagsSenseUtils.h \
 	src/qCtagsSenseEntry.h \
-	src/qCtagsSenseProperties.h
-SOURCES	+= src/qCtagsSense.cpp \
-	src/qCtagsSenseUtils.cpp \
+	src/qCtagsSenseProperties.h \
+	../../dev/fresh/objects/pIconManager.h \
+	src/qCtagsSenseGlobals.h
+
+SOURCES	= src/qCtagsSense.cpp \
 	src/qCtagsSenseEntry.cpp \
-	src/qCtagsSenseProperties.cpp
+	src/qCtagsSenseProperties.cpp \
+	../../dev/fresh/objects/pIconManager.cpp \
+	src/qCtagsSenseGlobals.cpp

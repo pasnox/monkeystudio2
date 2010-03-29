@@ -6,6 +6,7 @@
 #include <assert.h>
 
 extern parserDefinition** LanguageTable;
+extern unsigned int LanguageCount;
 static int mIsInitializedRefCount = 0;
 
 extern void initCtags()
@@ -152,7 +153,45 @@ extern void setLanguageKinds( const char *const language, const char* kinds )
 	setLanguageTypeKinds( getNamedLanguage( language ), kinds );
 }
 
+extern const char* languageTypeKinds( const langType language )
+{
+	parserDefinition* parser = LanguageTable[ language ];
+	
+	if ( parser != NULL ) {
+		char _kinds[ parser->kindCount +1 ];
+		unsigned int i;
+		int j =  0;
+		
+		for ( i = 0; i < parser->kindCount; ++i ) {
+			if ( parser->kinds[ i ].enabled ) {
+				_kinds[ j++ ] = parser->kinds[ i ].letter;
+			}
+		}
+		
+		_kinds[ j ] = '\0';
+		
+		return strdup( _kinds );
+	}
+	
+	return NULL;
+}
+
+extern const char* languageKinds( const char* const language )
+{
+	return languageTypeKinds( getNamedLanguage( language ) );
+}
+
 extern const char* getFileNameLanguageName( const char* fileName )
 {
 	return getLanguageName( getFileLanguage( fileName ) );
+}
+
+extern int languageCount()
+{
+	return LanguageCount;
+}
+
+extern const parserDefinition* parser( const langType language )
+{
+	return LanguageTable[ language ];
 }

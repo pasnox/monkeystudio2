@@ -1,6 +1,8 @@
 #include <QApplication>
 #include <QWidget>
 
+#include <qCtagsSense.h>
+
 int main( int argc, char** argv )
 {
 	// create application
@@ -8,9 +10,11 @@ int main( int argc, char** argv )
 
 	// init application
 	app.setApplicationName( "qctagssense" );
-
+	
 	QWidget w;
 	w.show();
+	
+	qCtagsSense::Instance sense( &w );
 
 	// connection
 	QObject::connect( &app, SIGNAL( lastWindowClosed() ), &app, SLOT( quit() ) );

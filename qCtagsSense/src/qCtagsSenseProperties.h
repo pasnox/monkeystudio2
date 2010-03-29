@@ -2,18 +2,28 @@
 #define QCTAGSSENSEPROPERTIES_H
 
 #include "qCtagsSenseExport.h"
+#include "qCtagsSenseEntry.h"
 
-struct QCTAGSSENSE_EXPORT qCtagsSenseProperties
+#include <QSet>
+#include <QHash>
+
+namespace qCtagsSense
 {
-	qCtagsSenseProperties();
-	virtual ~qCtagsSenseProperties();
+
+struct QCTAGSSENSE_EXPORT Properties
+{
+	void initialize();
+	/*
+	typedef QSet<qCtagsSenseEntry::Kind> KindSet;
+	typedef QHash<qCtagsSenseEntry::Language, KindSet> LanguageKindSets;
+	typedef QSet<QString> StringSet;
+	typedef QHash<qCtagsSenseEntry::Language, StringSet> LanguageStringSets;
 	
-	/*** For dynamic memory management (can be removed if it isn't necessary) ***/
-	qCtagsSenseProperties( const qCtagsSenseProperties& other );
-	qCtagsSenseProperties& operator=( const qCtagsSenseProperties& other );
-	bool operator==( const qCtagsSenseProperties& other ) const;
-	bool operator!=( const qCtagsSenseProperties& other ) const;
-	/*** End of dynamic memory management ***/
+	qCtagsSenseProperties::LanguageKindSets mDefaultKinds;
+	qCtagsSenseProperties::LanguageStringSets mDefaultSuffixes;
+	*/
 };
+
+}; // namespace qCtagsSense
 
 #endif // QCTAGSSENSEPROPERTIES_H

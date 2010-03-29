@@ -11,21 +11,21 @@ PACKAGE_DESTDIR	= $${PACKAGE_PWD}/bin
 PACKAGE_BUILD_PATH	= $${PACKAGE_PWD}/build
 
 # build mode
-CONFIG	+= qt warn_on thread x11 windows debug
-QT	+= xml sql
+CONFIG	*= qt warn_on thread x11 windows debug
+QT	*= xml sql
 
 # Mac universal build from 10.3 to up to 10.5
 mac {
 	QMAKE_MACOSX_DEPLOYMENT_TARGET	= 10.3
 	QMAKE_MAC_SDK	= /Developer/SDKs/MacOSX10.4u.sdk
-	CONFIG	+= x86 ppc
+	CONFIG	*= x86 ppc
 }
 
 # define config mode paths
 CONFIG( debug, debug|release ) {
 	#Debug
 	message( Building in DEBUG for architecture $$QT_ARCH )
-	CONFIG	+= console
+	CONFIG	*= console
 	unix:PACKAGE_TARGET	= $$quote($$join(PACKAGE_TARGET,,,_debug))
 	else:PACKAGE_TARGET	= $$quote($$join(PACKAGE_TARGET,,,d))
 	unix:TARGET	= $$quote($$join(TARGET,,,_debug))

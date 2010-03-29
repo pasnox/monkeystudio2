@@ -3,14 +3,18 @@
 
 #include <ctags.h>
 
-qCtagsSense::qCtagsSense( QObject* parent )
+using namespace qCtagsSense;
+
+Instance::Instance( QObject* parent )
 	: QObject( parent )
 {
 	initCtags();
-	qCtagsSenseUtils::initialize();
+	qCtagsSense::initialize();
+	mProperties.initialize();
+	//setLanguageKinds( "C++", "cdefglmnpstuvx" );
 }
 
-qCtagsSense::~qCtagsSense()
+Instance::~Instance()
 {
 	deInitCtags();
 }
