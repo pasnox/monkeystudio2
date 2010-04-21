@@ -13,13 +13,16 @@ struct QtVersion
 	QtVersion() { Default = false; HasQt4Suffix = false; }
 	QtVersion( const QString& version, const QString& path, bool def, const QString& qmakeSpec, const QString& qmakeParams, bool haveSuffixe )
 	{ Version = version; Path = path; Default = def; QMakeSpec = qmakeSpec; QMakeParameters = qmakeParams; HasQt4Suffix = haveSuffixe; }
-	
+
+	quint32 key() const
+	{ return qHash( QString( "%1/%2/%3/%4" ).arg( Path ).arg( QMakeSpec ).arg( QMakeParameters ).arg( HasQt4Suffix ) ); }
+
 	bool isValid() const
 	{ return !Version.isEmpty() && !Path.isEmpty() && QFile::exists( Path ); }
-	
+
 	bool isSystem() const
 	{ return Version.startsWith( "Qt System", Qt::CaseInsensitive ); }
-	
+
 	QString qmake() const
 	{ return QString( "%1/bin/qmake%2" ).arg( Path ).arg( binarySuffixe() ); }
 	QString qmakeSpec() const
@@ -38,7 +41,7 @@ struct QtVersion
 	{ return QString( "%1/bin/linguist%2" ).arg( Path ).arg( binarySuffixe() ); }
 	QString binarySuffixe() const
 	{ return HasQt4Suffix ? QString( "-qt4" ) : QString::null; }
-	
+
 	QString toXml() const
 	{
 		QDomDocument document( "Qt Version Definition" );
@@ -49,14 +52,14 @@ struct QtVersion
 		QDomElement qmakeSpecElement = document.createElement( "QMakeSpec" );
 		QDomElement qmakeParametersElement = document.createElement( "QMakeParameters" );
 		QDomElement hasQt4SuffixElement = document.createElement( "HasQt4Suffix" );
-		
+
 		versionElement.setAttribute( "value", Version );
 		pathElement.setAttribute( "value", Path );
 		defaultElement.setAttribute( "value", Default );
 		qmakeSpecElement.setAttribute( "value", QMakeSpec );
 		qmakeParametersElement.setAttribute( "value", QMakeParameters );
 		hasQt4SuffixElement.setAttribute( "value", HasQt4Suffix );
-		
+
 		document.appendChild( rootElement );
 		rootElement.appendChild( versionElement );
 		rootElement.appendChild( pathElement );
@@ -64,20 +67,20 @@ struct QtVersion
 		rootElement.appendChild( qmakeSpecElement );
 		rootElement.appendChild( qmakeParametersElement );
 		rootElement.appendChild( hasQt4SuffixElement );
-		
+
 		return document.toString( 4 );
 	}
-	
+
 	bool operator==( const QtVersion& other ) const
 	{
 		return Version == other.Version && Path == other.Path
 			&& QMakeSpec == other.QMakeSpec && QMakeParameters == other.QMakeParameters
 			&& HasQt4Suffix == other.HasQt4Suffix;
 	}
-	
+
 	bool operator!=( const QtVersion& other ) const
 	{ return !operator==( other ); }
-	
+
 	QString Version;
 	QString Path;
 	bool Default;
@@ -91,10 +94,10 @@ struct QtItem
 	QtItem() {}
 	QtItem( const QString& t, const QString& v, const QString& s, const QString& h = QString::null )
 		: Text( t ), Value( v ), Variable( s ), Help( h ) {}
-	
+
 	bool operator==( const QtItem& o ) { return Text == o.Text && Value == o.Value && Variable == o.Variable && Help == o.Help; }
 	bool operator!=( const QtItem& o ) { return !operator==( o ); }
-	
+
 	QString Text;
 	QString Value;
 	QString Variable;
@@ -112,14 +115,14 @@ Q_DECLARE_METATYPE( QtItemList );
 class QtVersionManager : public pSettings
 {
 	Q_OBJECT
-	
+
 public:
 	QtVersionManager( QObject* owner = 0 );
 	~QtVersionManager();
-	
+
 	QtVersionList versions() const;
 	void setVersions( const QtVersionList& versions );
-	
+
 	QtVersion defaultVersion() const;
 	QtVersion version( const QString& versionString ) const;
 
@@ -138,11 +141,11 @@ protected:
 	static const QRegExp mQtVersionRegExp;
 	static const QRegExp mQtQMakeRegExp;
 	static const QRegExp mQtUninstallRegExp;
-	
+
 	QStringList possibleQtPaths() const;
 	QtVersionList getQtVersions( const QStringList& paths ) const;
 	void synchronizeVersions();
-	
+
 	// interpreter handling
 	void initializeInterpreterCommands( bool initialize );
 	static QString commandInterpreter( const QString& command, const QStringList& arguments, int* result, MkSShellInterpreter* interpreter, void* data );
