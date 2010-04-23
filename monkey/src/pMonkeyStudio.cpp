@@ -1766,15 +1766,23 @@ QFont pMonkeyStudio::marginsFont()
 void pMonkeyStudio::setEolMode( QsciScintilla::EolMode e )
 { MonkeyCore::settings()->setValue( settingsPath() +"/EolMode", e ); }
 
-QsciScintilla::EolMode pMonkeyStudio::eolMode()
+QsciScintilla::EolMode pMonkeyStudio::eolMode( pMonkeyStudio::OSVariant os )
 {
-#if defined( Q_WS_WIN )
-	int i = QsciScintilla::EolWindows;
-#elif defined( Q_WS_MAC )
-	int i = QsciScintilla::EolMac;
-#else
 	int i = QsciScintilla::EolUnix;
-#endif
+	
+	switch ( os )
+	{
+		case pMonkeyStudio::UnixOS:
+			i = QsciScintilla::EolUnix;
+			break;
+		case pMonkeyStudio::MacOS:
+			i = QsciScintilla::EolMac;
+			break;
+		case pMonkeyStudio::WindowsOS:
+			i = QsciScintilla::EolWindows;
+			break;
+	}
+	
 	return (QsciScintilla::EolMode)MonkeyCore::settings()->value( settingsPath() +"/EolMode", i ).toInt();
 }
 

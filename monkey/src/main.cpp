@@ -30,6 +30,8 @@
 #include <Settings.h>
 #include <CommandLineManager.h>
 
+//#include "properties/Properties.h"
+
 int main( int argc, char** argv )
 {
 	// check qt version
@@ -41,9 +43,15 @@ int main( int argc, char** argv )
 	a.setOrganizationDomain( PACKAGE_DOMAIN );
 	QObject::connect( &a, SIGNAL( lastWindowClosed() ), &a, SLOT( quit() ) );
 
+	// init pSettings
+	pSettings::setIniInformations();
+
 	// parse command line arguments
 	CommandLineManager clm;
 	clm.parse();
+
+	/*Properties p;
+	p.writeToFile( "properties.xml" );*/
 
 	const QStringList arguments = clm.arguments().keys();
 

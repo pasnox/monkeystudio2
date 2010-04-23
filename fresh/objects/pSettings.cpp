@@ -62,7 +62,7 @@ QString pSettings::programVersion()
 	\details Return a filePath for storing the ini file according to it's parameters
 	\param name The settings name
 	\param version The settings version
-	\return 
+	\return
 */
 QString pSettings::getIniFile( const QString& name, const QString& version )
 {

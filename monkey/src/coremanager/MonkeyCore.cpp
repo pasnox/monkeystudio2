@@ -65,7 +65,7 @@ void MonkeyCore::init()
 {
 	// create splashscreen
 	bool isXMas = false;
-	
+
 	switch ( QDate::currentDate().month() )
 	{
 		case 11:
@@ -85,9 +85,6 @@ void MonkeyCore::init()
 	ft.setBold( true );
 	splash.setFont( ft );
 	splash.show();
-
-	// init pSettings
-	pSettings::setIniInformations();
 
 	// restore application style
 	showMessage( &splash, tr( "Initializing Style..." ) );
@@ -130,7 +127,7 @@ void MonkeyCore::init()
 	// init file manager
 	showMessage( &splash, tr( "Initializing file manager..." ) );
 	fileManager();
-	
+
 	// load mks scripts
 	showMessage( &splash, tr( "Executing scripts..." ) );
 	interpreter()->loadHomeScripts();

@@ -36,7 +36,21 @@ class QTranslator;
 class pEditor;
 
 namespace pMonkeyStudio
-{	
+{
+	enum OSVariant
+	{
+		UnixOS, // not mac
+		MacOS,
+		WindowsOS,
+#if defined( Q_OS_WIN )
+		CurrentOS = WindowsOS
+#elif defined( Q_OS_MAC )
+		CurrentOS = MacOS
+#else
+		CurrentOS = UnixOS
+#endif
+	};
+	
 	Q_MONKEY_EXPORT void addTranslator( QTranslator* translator );
 	Q_MONKEY_EXPORT void loadTranslations();
 
@@ -225,7 +239,7 @@ namespace pMonkeyStudio
 	Q_MONKEY_EXPORT QFont marginsFont();
 	// Special Characters
 	Q_MONKEY_EXPORT void setEolMode( QsciScintilla::EolMode mode );
-	Q_MONKEY_EXPORT QsciScintilla::EolMode eolMode();
+	Q_MONKEY_EXPORT QsciScintilla::EolMode eolMode( pMonkeyStudio::OSVariant os = pMonkeyStudio::CurrentOS );
 	Q_MONKEY_EXPORT QString getEol( QsciScintilla::EolMode mode = pMonkeyStudio::eolMode() );
 	Q_MONKEY_EXPORT void setEolVisibility( bool visible );
 	Q_MONKEY_EXPORT bool eolVisibility();
