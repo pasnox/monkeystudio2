@@ -20,8 +20,7 @@ bool EnvironmentVariablesManager::writeVariables( const pEnvironmentVariablesMod
 	QFile file( fn );
 	QStringList buffer;
 	
-	if ( !file.open( QIODevice::WriteOnly ) )
-	{
+	if ( !file.open( QIODevice::WriteOnly ) ) {
 		qWarning() << QString( "Can't open file for generating environment variables script: %1" ).arg( file.errorString() ).toLocal8Bit().constData();
 		return false;
 	}
@@ -38,8 +37,7 @@ bool EnvironmentVariablesManager::writeVariables( const pEnvironmentVariablesMod
 	buffer << "# environment enable\tname\ttrue/false";
 	buffer << "# introduce new ones per name/state";
 	
-	foreach ( const QString& name, variables.keys() )
-	{
+	foreach ( const QString& name, variables.keys() ) {
 		buffer << QString( "# %1" ).arg( name );
 		buffer << QString( "environment set \"%1\" \"%2\"" )
 			.arg( name )
@@ -49,8 +47,7 @@ bool EnvironmentVariablesManager::writeVariables( const pEnvironmentVariablesMod
 			.arg( QVariant( variables[ name ].enabled ).toString() );
 	}
 	
-	if ( file.write( buffer.join( "\n" ).toUtf8() ) == -1 )
-	{
+	if ( file.write( buffer.join( "\n" ).toUtf8() ) == -1 ) {
 		qWarning() << QString( "Can't write generated environment variables script: %1" ).arg( file.errorString() ).toLocal8Bit().constData();
 	}
 	
@@ -68,8 +65,7 @@ bool EnvironmentVariablesManager::readVariables( pEnvironmentVariablesModel::Var
 void EnvironmentVariablesManager::initializeInterpreterCommands()
 {
 	// register command
-	QString help = MkSShellInterpreter::tr
-	(
+	QString help = MkSShellInterpreter::tr(
 		"This command manage the environment variables, usage:\n"
 		"\tenvironment set [name] [value]\n"
 		"\tenvironment unset [name]\n"
@@ -89,15 +85,12 @@ QString EnvironmentVariablesManager::commandInterpreter( const QString& command,
 	QStringList arguments = _arguments;
 	const QStringList allowedOperations = QStringList( "set" ) << "unset" << "clear" << "enable" << "list";
 	
-	if ( result )
-	{
+	if ( result ) {
 		*result = MkSShellInterpreter::NoError;
 	}
 	
-	if ( arguments.isEmpty() )
-	{
-		if ( result )
-		{
+	if ( arguments.isEmpty() ) {
+		if ( result ) {
 			*result = MkSShellInterpreter::InvalidCommand;
 		}
 		
@@ -106,22 +99,17 @@ QString EnvironmentVariablesManager::commandInterpreter( const QString& command,
 	
 	const QString operation = arguments.takeFirst();
 	
-	if ( !allowedOperations.contains( operation ) )
-	{
-		if ( result )
-		{
+	if ( !allowedOperations.contains( operation ) ) {
+		if ( result ) {
 			*result = MkSShellInterpreter::InvalidCommand;
 		}
 		
 		return MkSShellInterpreter::tr( "Unknown operation: '%1'." ).arg( operation );
 	}
 	
-	if ( operation == "set" )
-	{
-		if ( arguments.count() != 2 )
-		{
-			if ( result )
-			{
+	if ( operation == "set" ) {
+		if ( arguments.count() != 2 ) {
+			if ( result ) {
 				*result = MkSShellInterpreter::InvalidCommand;
 			}
 			
@@ -134,12 +122,9 @@ QString EnvironmentVariablesManager::commandInterpreter( const QString& command,
 		manager->setCommand( name, value );
 	}
 	
-	if ( operation == "unset" )
-	{
-		if ( arguments.count() != 1 )
-		{
-			if ( result )
-			{
+	if ( operation == "unset" ) {
+		if ( arguments.count() != 1 ) {
+			if ( result ) {
 				*result = MkSShellInterpreter::InvalidCommand;
 			}
 			
@@ -151,12 +136,9 @@ QString EnvironmentVariablesManager::commandInterpreter( const QString& command,
 		manager->unsetCommand( name );
 	}
 	
-	if ( operation == "clear" )
-	{
-		if ( arguments.count() != 0 )
-		{
-			if ( result )
-			{
+	if ( operation == "clear" ) {
+		if ( arguments.count() != 0 ) {
+			if ( result ) {
 				*result = MkSShellInterpreter::InvalidCommand;
 			}
 			
@@ -166,12 +148,9 @@ QString EnvironmentVariablesManager::commandInterpreter( const QString& command,
 		manager->clearCommand();
 	}
 	
-	if ( operation == "enable" )
-	{
-		if ( arguments.count() != 2 )
-		{
-			if ( result )
-			{
+	if ( operation == "enable" ) {
+		if ( arguments.count() != 2 ) {
+			if ( result ) {
 				*result = MkSShellInterpreter::InvalidCommand;
 			}
 			
@@ -184,12 +163,9 @@ QString EnvironmentVariablesManager::commandInterpreter( const QString& command,
 		manager->enableCommand( name, enabled );
 	}
 	
-	if ( operation == "list" )
-	{
-		if ( arguments.count() != 0 )
-		{
-			if ( result )
-			{
+	if ( operation == "list" ) {
+		if ( arguments.count() != 0 ) {
+			if ( result ) {
 				*result = MkSShellInterpreter::InvalidCommand;
 			}
 			
@@ -198,20 +174,17 @@ QString EnvironmentVariablesManager::commandInterpreter( const QString& command,
 		
 		QStringList output;
 		
-		foreach ( const pEnvironmentVariablesModel::Variable& variable, manager->variables() )
-		{
+		foreach ( const pEnvironmentVariablesModel::Variable& variable, manager->variables() ) {
 			output << QString( "%1(%2)=\"%3\"" )
 				.arg( variable.name )
 				.arg( QVariant( variable.enabled ).toString() )
 				.arg( variable.value );
 		}
 		
-		if ( !output.isEmpty() )
-		{
+		if ( !output.isEmpty() ) {
 			output.prepend( MkSShellInterpreter::tr( "Found environment variables:" ) );
 		}
-		else
-		{
+		else {
 			output << MkSShellInterpreter::tr( "No environment variables found." );
 		}
 		
@@ -225,6 +198,9 @@ QString EnvironmentVariablesManager::commandInterpreter( const QString& command,
 void EnvironmentVariablesManager::setCommand( const QString& name, const QString& value )
 {
 	pEnvironmentVariablesModel::Variables variables = this->variables();
+	if ( !variables.contains( name ) ) {
+		variables[ name ].name = name;
+	}
 	variables[ name ].value = value;
 	setVariables( variables );
 }
@@ -244,6 +220,8 @@ void EnvironmentVariablesManager::clearCommand()
 void EnvironmentVariablesManager::enableCommand( const QString& name, bool enabled )
 {
 	pEnvironmentVariablesModel::Variables variables = this->variables();
-	variables[ name ].enabled = enabled;
+	if ( variables.contains( name ) ) {
+		variables[ name ].enabled = enabled;
+	}
 	setVariables( variables );
 }

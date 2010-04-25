@@ -3,6 +3,7 @@
 #include <QMutexLocker>
 #include <QTextCodec>
 #include <QTime>
+#include <QTimer>
 #include <QDebug>
 
 int SearchThread::mMaxTime = 125;
@@ -235,6 +236,7 @@ void SearchThread::search( const QString& fileName, const QString& content ) con
 			pattern.prepend( "\\b" ).append( "\\b" );
 		}
 
+		rx.setMinimal( true );
 		rx.setPattern( pattern );
 		rx.setCaseSensitivity( sensitivity );
 	}

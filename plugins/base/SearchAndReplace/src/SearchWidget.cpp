@@ -224,12 +224,13 @@ void SearchWidget::setMode( SearchAndReplace::Mode mode )
 	const QString path = mProperties.project ? mProperties.project->path() : QDir::currentPath();
 	const QString searchPath = document ? QFileInfo( document->filePath() ).absolutePath() : path;
 	const QString searchText = editor ? editor->selectedText() : QString::null;
+	const bool wasVisible = isVisible();
 
 	setVisible( mode != SearchAndReplace::ModeNo );
 
 	if ( isVisible() )
 	{
-		if ( !searchText.isEmpty() )
+		if ( !wasVisible && !searchText.isEmpty() )
 		{
 			cbSearch->setEditText( searchText );
 		}
@@ -695,16 +696,23 @@ bool SearchWidget::searchFile( bool forward, bool incremental )
 	const bool isCS = mProperties.options & SearchAndReplace::OptionCaseSensitive;
 	const bool isWW = mProperties.options & SearchAndReplace::OptionWholeWord;
 	const bool isWrap = mProperties.options & SearchAndReplace::OptionWrap;
-	int x, y;
-
-	if ( forward && !incremental )
-	{
-		editor->getCursorPosition( &y, &x );
+	int x, y, temp;
+	
+	if ( forward ) {
+		if ( incremental ) {
+			editor->getSelection( &y, &x, &temp, &temp );
+		}
+		else {
+			editor->getSelection( &temp, &temp, &y, &x );
+		}
 	}
-	else // incremental search, or search backward
-	{
-		int temp;
-		editor->getSelection( &y, &x, &temp, &temp );
+	else {
+		if ( incremental ) {
+			editor->getSelection( &temp, &temp, &y, &x );
+		}
+		else {
+			editor->getSelection( &y, &x, &temp, &temp );
+		}
 	}
 
 	// search
@@ -749,12 +757,15 @@ bool SearchWidget::replaceFile( bool all )
 			mProperties.options &= ~SearchAndReplace::OptionWrap;
 		}
 
+		editor->beginUndoAction();
+		
 		while ( searchFile( true, false ) ) // search next
 		{
 			editor->replace( mProperties.replaceText );
 			count++;
 		}
 
+		editor->endUndoAction();
 		editor->setCursorPosition( y, x ); // restore cursor position
 		
 		// restore wrap property if needed
@@ -772,7 +783,9 @@ bool SearchWidget::replaceFile( bool all )
 
 		if ( searchFile( true, false ) )
 		{
+			editor->beginUndoAction();
 			editor->replace( mProperties.replaceText );
+			editor->endUndoAction();
 			count++;
 			pbNext->click(); // move selection to next item
 		}
