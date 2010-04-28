@@ -155,6 +155,13 @@ void QtDesignerChild::closeFile()
 	emit fileClosed();
 }
 
+void QtDesignerChild::reload()
+{
+	openFile( mHostWidget->formWindow()->fileName(), QString::null );
+	
+	emit fileReloaded();
+}
+
 QString QtDesignerChild::fileBuffer() const
 {
 	if ( mHostWidget->formWindow()->mainContainer() )

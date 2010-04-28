@@ -364,6 +364,11 @@ void QtAssistantChild::closeFile()
 	emit fileClosed();
 }
 
+void QtAssistantChild::reload()
+{
+	emit fileReloaded();
+}
+
 void QtAssistantChild::printFile()
 {
 	QtAssistantViewer* viewer = this->viewer();

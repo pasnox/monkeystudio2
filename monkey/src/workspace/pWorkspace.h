@@ -120,6 +120,7 @@ protected slots:
 	void document_contentChanged();
 	void document_modifiedChanged( bool modified );
 	void document_fileClosed();
+	void document_fileReloaded();
 
 	void contentChangedTimer_timeout();
 	void multitoolbar_notifyChanges();
@@ -179,6 +180,8 @@ signals:
 	void documentAboutToClose( pAbstractChild* document );
 	// a file has been closed
 	void documentClosed( pAbstractChild* document );
+	// a file has been reloaded
+	void documentReloaded( pAbstractChild* document );
 	// current file changed
 	void currentDocumentChanged( pAbstractChild* document );
 };
