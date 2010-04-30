@@ -68,6 +68,7 @@ protected slots:
 	void documentModifiedChanged( pAbstractChild* document, bool modified );
 	void documentAboutToClose( pAbstractChild* document );
 	void documentClosed( pAbstractChild* document );
+	void documentReloaded( pAbstractChild* document );
 	void currentDocumentChanged( pAbstractChild* document );
 };
 

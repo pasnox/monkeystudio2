@@ -69,6 +69,7 @@ public slots:
 	virtual void backupFileAs( const QString& fileName );
 	virtual bool openFile( const QString& fileName, const QString& codec );
 	virtual void closeFile();
+	virtual void reload();
 	virtual void printFile();
 	virtual void quickPrintFile();
 

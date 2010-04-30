@@ -456,8 +456,8 @@ void pEditor::clipboardDataChanged()
 
 bool pEditor::openFile( const QString& fileName, const QString& codec )
 {
-	if ( isModified() )
-		return false;
+	/*if ( isModified() )
+		return false;*/
 
 	QApplication::setOverrideCursor( Qt::WaitCursor );
 	

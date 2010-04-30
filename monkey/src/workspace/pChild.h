@@ -113,6 +113,9 @@ public:
 
 	// ask to close file
 	virtual void closeFile();
+	
+	// ask to reload the document
+	virtual void reload();
 
 	// ask to print this file
 	virtual void printFile();

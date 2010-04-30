@@ -198,6 +198,8 @@ public slots:
 	virtual bool openFile( const QString& fileName, const QString& codec ) = 0;
 	// ask to close file
 	virtual void closeFile() = 0;
+	// ask to reload the current file
+	virtual void reload() = 0;
 	// ask to print this file
 	virtual void printFile() = 0;
 	// ask to quick print this file
@@ -212,6 +214,8 @@ signals:
 	void fileOpened(); // ok
 	// emit when a file is closed
 	void fileClosed(); // ok
+	// emit when a file is reloaded
+	void fileReloaded();
 	// emit when the content changed
 	void contentChanged();
 	// emit when the child layout mode has changed

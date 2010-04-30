@@ -202,10 +202,10 @@ void pChild::backupFileAs( const QString& s )
 bool pChild::openFile( const QString& fileName, const QString& codec )
 {
 	// if already open file, cancel
-	if ( !filePath().isEmpty() )
+	/*if ( !filePath().isEmpty() )
 	{
 		return false;
-	}
+	}*/
 	
 	// set filename of the owned document
 	setFilePath( fileName );
@@ -233,6 +233,13 @@ void pChild::closeFile()
 	setFilePath( QString::null );
 
 	emit fileClosed();
+}
+
+void pChild::reload()
+{
+	openFile( mEditor->property( "fileName" ).toString(), mEditor->property( "codec" ).toString() );
+	
+	emit fileReloaded();
 }
 
 void pChild::printFile()

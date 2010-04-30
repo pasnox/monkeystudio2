@@ -421,6 +421,7 @@ void pWorkspace::handleDocument( pAbstractChild* document )
 	connect( document, SIGNAL( contentChanged() ), this, SLOT( document_contentChanged() ) );
 	connect( document, SIGNAL( modifiedChanged( bool ) ), this, SLOT( document_modifiedChanged( bool ) ) );
 	connect( document, SIGNAL( fileClosed() ), this, SLOT( document_fileClosed() ) );
+	connect( document, SIGNAL( fileReloaded() ), this, SLOT( document_fileReloaded() ) );
 	// update file menu
 	connect( document, SIGNAL( modifiedChanged( bool ) ), MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" ), SLOT( setEnabled( bool ) ) );
 	// update edit menu
@@ -449,6 +450,7 @@ void pWorkspace::unhandleDocument( pAbstractChild* document )
 	disconnect( document, SIGNAL( contentChanged() ), this, SLOT( document_contentChanged() ) );
 	disconnect( document, SIGNAL( modifiedChanged( bool ) ), this, SLOT( document_modifiedChanged( bool ) ) );
 	disconnect( document, SIGNAL( fileClosed() ), this, SLOT( document_fileClosed() ) );
+	disconnect( document, SIGNAL( fileReloaded() ), this, SLOT( document_fileReloaded() ) );
 	// update file menu
 	disconnect( document, SIGNAL( modifiedChanged( bool ) ), MonkeyCore::menuBar()->action( "mFile/mSave/aCurrent" ), SLOT( setEnabled( bool ) ) );
 	// update edit menu
@@ -805,6 +807,12 @@ void pWorkspace::document_fileClosed()
 	emit documentClosed( document );
 }
 
+void pWorkspace::document_fileReloaded()
+{
+	pAbstractChild* document = qobject_cast<pAbstractChild*>( sender() );
+	emit documentReloaded( document );
+}
+
 void pWorkspace::contentChangedTimer_timeout()
 {
 	mContentChangedTimer->stop();
@@ -1152,16 +1160,17 @@ void pWorkspace::fileReload_triggered()
 		
 		if ( document->isModified() )
 		{
-			//button = QMessageBox::question( this, tr( "Confirmation needed..." ), tr( "The file has been modified, reload anyway ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No );
+			button = QMessageBox::question( this, tr( "Confirmation needed..." ), tr( "The file has been modified, reload anyway ?" ), QMessageBox::Yes | QMessageBox::No, QMessageBox::No );
 		}
 		
 		if ( button == QMessageBox::Yes )
 		{
-			const QString fileName = document->filePath();
+			/*const QString fileName = document->filePath();
 			const QString codec = document->textCodec();
 			
 			closeDocument( document );
-			openFile( fileName, codec );
+			openFile( fileName, codec );*/
+			document->reload();
 		}
 	}
 }

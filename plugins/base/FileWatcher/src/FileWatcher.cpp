@@ -72,6 +72,7 @@ bool FileWatcher::install()
 	connect( fm, SIGNAL( documentModifiedChanged( pAbstractChild*, bool ) ), this, SLOT( documentModifiedChanged( pAbstractChild*, bool ) ) );
 	connect( fm, SIGNAL( documentAboutToClose( pAbstractChild* ) ), this, SLOT( documentAboutToClose( pAbstractChild* ) ) );
 	connect( fm, SIGNAL( documentClosed( pAbstractChild* ) ), this, SLOT( documentClosed( pAbstractChild* ) ) );
+	connect( fm, SIGNAL( documentReloaded( pAbstractChild* ) ), this, SLOT( documentReloaded( pAbstractChild* ) ) );
 	connect( fm, SIGNAL( currentDocumentChanged( pAbstractChild* ) ), this, SLOT( currentDocumentChanged( pAbstractChild* ) ) );
 	
 	return true;
@@ -93,6 +94,7 @@ bool FileWatcher::uninstall()
 	disconnect( fm, SIGNAL( documentModifiedChanged( pAbstractChild*, bool ) ), this, SLOT( documentModifiedChanged( pAbstractChild*, bool ) ) );
 	disconnect( fm, SIGNAL( documentAboutToClose( pAbstractChild* ) ), this, SLOT( documentAboutToClose( pAbstractChild* ) ) );
 	disconnect( fm, SIGNAL( documentClosed( pAbstractChild* ) ), this, SLOT( documentClosed( pAbstractChild* ) ) );
+	disconnect( fm, SIGNAL( documentReloaded( pAbstractChild* ) ), this, SLOT( documentReloaded( pAbstractChild* ) ) );
 	disconnect( fm, SIGNAL( currentDocumentChanged( pAbstractChild* ) ), this, SLOT( currentDocumentChanged( pAbstractChild* ) ) );
 	
 	mFileWatcher = 0;
@@ -166,7 +168,7 @@ void FileWatcher::fileChanged( const QString& path )
 		QString fileBuffer;
 		
 		QFile file( path );
-		file.open( QIODevice::ReadOnly ); // does not need to check as file is already open we can read it.
+		file.open( QIODevice::ReadOnly );
 		fileBuffer = document->codec()->toUnicode( file.readAll() );
 		file.close();
 		
@@ -206,6 +208,11 @@ void FileWatcher::documentAboutToClose( pAbstractChild* document )
 void FileWatcher::documentClosed( pAbstractChild* document )
 {
 	Q_UNUSED( document );
+}
+
+void FileWatcher::documentReloaded( pAbstractChild* document )
+{
+	documentOpened( document );
 }
 
 void FileWatcher::currentDocumentChanged( pAbstractChild* document )
