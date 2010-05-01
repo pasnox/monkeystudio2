@@ -91,22 +91,15 @@ void UIMain::initGui()
 	MonkeyCore::recentsManager();
 	// init toolbar
 	initToolBar();
+	// init workspace
+	setCentralWidget( MonkeyCore::workspace() );
 	// init message toolbar
 	pQueuedMessageToolBar* messageTb = MonkeyCore::messageManager();
 	messageTb->setObjectName( "pQueuedMessageToolBar" );
 	messageTb->setVisible( false );
-	messageTb->setWindowTitle( tr( "Message ToolBar" ) );
 	messageTb->setDefaultPixmap( pIconManager::pixmap( "messages_infos.png", ":/messages" ) );
-	messageTb->setAttribute( Qt::WA_MacSmallSize );
-	foreach ( QWidget* widget, messageTb->findChildren<QWidget*>() )
-	{
-		widget->setAttribute( Qt::WA_MacSmallSize );
-	}
-	addToolBarBreak();
-	addToolBar( messageTb );
-	addToolBarBreak();
-	// init workspace
-	setCentralWidget( MonkeyCore::workspace() );
+	pMonkeyStudio::setMacSmallSize( messageTb, true, true );
+	centralWidget()->layout()->setMenuBar( messageTb );
 	// init projects manager
 	dockToolBar( Qt::LeftToolBarArea )->addDock( MonkeyCore::projectsManager(), MonkeyCore::projectsManager()->windowTitle(), QIcon( ":/project/icons/project/project.png" ) );
 	// init opened files dock
