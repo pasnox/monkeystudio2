@@ -52,10 +52,10 @@ CONFIG( debug, debug|release ) {
 INCLUDEPATH	*= $${UI_DIR} # some qmake versions has bug and do not do it automatically
 
 # define some usefull values
-QMAKE_TARGET_COMPANY	= "Monkey Studio Team"
-QMAKE_TARGET_PRODUCT	= "Monkey Studio"
+QMAKE_TARGET_COMPANY	= "The MkS Team"
+QMAKE_TARGET_PRODUCT	= "Monkey Studio IDE"
 QMAKE_TARGET_DESCRIPTION	= "Crossplatform Integrated Development Environment"
-QMAKE_TARGET_COPYRIGHT	= "Copyright (C) 2005 - 2009 Filipe AZEVEDO"
+QMAKE_TARGET_COPYRIGHT	= "(C) 2005 - 2010 Filipe AZEVEDO & $$QMAKE_TARGET_COMPANY"
 PACKAGE_DOMAIN	= "monkeystudio.org"
 
 PACKAGE_VERSION	= 1.8.4.0b2

@@ -30,6 +30,7 @@
 #define PACKAGE_DOMAIN _PACKAGE_DOMAIN
 #define PACKAGE_COPYRIGHTS _PACKAGE_COPYRIGHTS
 #define PACKAGE_DOWNLOAD_FEED "http://code.google.com/feeds/p/monkeystudio/downloads/basic"
+#define PACKAGE_DONATION_LINK "http://sourceforge.net/project/project_donations.php?group_id=163493"
 
 #define PACKAGE_PREFIX _PACKAGE_PREFIX
 #define PACKAGE_PLUGINS _PACKAGE_PLUGINS

@@ -1317,7 +1317,8 @@ void pWorkspace::editPrepareAPIs_triggered()
 // help menu
 void pWorkspace::helpAboutApplication_triggered()
 {
-	UIAbout::instance( this )->exec();
+	UIAbout* dlg = new UIAbout( this );
+	dlg->open();
 }
 
 void pWorkspace::helpAboutQt_triggered()
