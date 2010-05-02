@@ -31,7 +31,7 @@
     <message>
         <location filename="../../monkey/src/pluginsmanager/BasePlugin.cpp" line="114"/>
         <source>Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Activé</translation>
     </message>
     <message>
         <location filename="../../monkey/src/pluginsmanager/BasePlugin.cpp" line="64"/>
@@ -70,63 +70,63 @@
     <message>
         <location filename="../../monkey/src/xupmanager/gui/CommandsEditor.ui" line="23"/>
         <source>Commands</source>
-        <translation type="unfinished"></translation>
+        <translation>Commandes</translation>
     </message>
     <message>
         <location filename="../../monkey/src/xupmanager/gui/CommandsEditor.ui" line="29"/>
         <source>Add</source>
-        <translation type="unfinished">Ajouter</translation>
+        <translation>Ajouter</translation>
     </message>
     <message>
         <location filename="../../monkey/src/xupmanager/gui/CommandsEditor.ui" line="40"/>
         <source>Remove</source>
-        <translation type="unfinished">Enlever</translation>
+        <translation>Enlever</translation>
     </message>
     <message>
         <location filename="../../monkey/src/xupmanager/gui/CommandsEditor.ui" line="51"/>
         <source>Up</source>
-        <translation type="unfinished">Monter</translation>
+        <translation>Monter</translation>
     </message>
     <message>
         <location filename="../../monkey/src/xupmanager/gui/CommandsEditor.ui" line="62"/>
         <source>Down</source>
-        <translation type="unfinished">Descendre</translation>
+        <translation>Descendre</translation>
     </message>
     <message>
         <location filename="../../monkey/src/xupmanager/gui/CommandsEditor.ui" line="105"/>
         <source>Editor</source>
-        <translation type="unfinished">Éditeur</translation>
+        <translation>Éditeur</translation>
     </message>
     <message>
         <location filename="../../monkey/src/xupmanager/gui/CommandsEditor.ui" line="122"/>
         <source>Text :</source>
-        <translation type="unfinished">Texte :</translation>
+        <translation>Texte :</translation>
     </message>
     <message>
         <location filename="../../monkey/src/xupmanager/gui/CommandsEditor.ui" line="138"/>
         <source>Command :</source>
-        <translation type="unfinished">Commande :</translation>
+        <translation>Commande :</translation>
     </message>
     <message>
         <location filename="../../monkey/src/xupmanager/gui/CommandsEditor.ui" line="148"/>
         <location filename="../../monkey/src/xupmanager/gui/CommandsEditor.ui" line="191"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../../monkey/src/xupmanager/gui/CommandsEditor.ui" line="165"/>
         <source>Arguments :</source>
-        <translation type="unfinished">Arguments :</translation>
+        <translation>Arguments :</translation>
     </message>
     <message>
         <location filename="../../monkey/src/xupmanager/gui/CommandsEditor.ui" line="181"/>
         <source>Working Directory :</source>
-        <translation type="unfinished">Répertoire de travail :</translation>
+        <translation>Répertoire de travail :</translation>
     </message>
     <message>
         <location filename="../../monkey/src/xupmanager/gui/CommandsEditor.ui" line="208"/>
         <source>Skip On Error</source>
-        <translation type="unfinished">Passer l&apos;erreur</translation>
+        <translation>Passer l&apos;erreur</translation>
     </message>
     <message>
         <location filename="../../monkey/src/xupmanager/gui/CommandsEditor.ui" line="232"/>
@@ -136,7 +136,7 @@
     <message>
         <location filename="../../monkey/src/xupmanager/gui/CommandsEditor.ui" line="261"/>
         <source>Try All</source>
-        <translation type="unfinished">Essayer tout</translation>
+        <translation>Essayer tout</translation>
     </message>
 </context>
 <context>
@@ -144,17 +144,17 @@
     <message>
         <location filename="../../monkey/src/shared/MkSFileDialog.cpp" line="106"/>
         <source>Choose project(s) to open</source>
-        <translation type="unfinished"></translation>
+        <translation>Choisissez le(s) projet(s) à ouvrir</translation>
     </message>
     <message>
         <location filename="../../monkey/src/shared/MkSFileDialog.cpp" line="136"/>
         <source>Choose file(s) to add to your project</source>
-        <translation type="unfinished"></translation>
+        <translation>Choisissez le(s) fichier(s) à ajouter à votre projet</translation>
     </message>
     <message>
         <location filename="../../monkey/src/shared/MkSFileDialog.cpp" line="168"/>
         <source>New File Name...</source>
-        <translation type="unfinished">Nom du nouveau fichier...</translation>
+        <translation>Nom du nouveau fichier...</translation>
     </message>
 </context>
 <context>
@@ -174,14 +174,14 @@
         <location filename="../../monkey/src/consolemanager/EnvironmentVariablesManager.cpp" line="97"/>
         <location filename="../../monkey/src/workspace/pFileManager.cpp" line="98"/>
         <source>Operation not defined. Available operations are: %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Oéeration inconnue. Les opérations disponible sont: %1.</translation>
     </message>
     <message>
         <location filename="../../monkey/src/abbreviationsmanager/pAbbreviationsManager.cpp" line="95"/>
         <location filename="../../monkey/src/consolemanager/EnvironmentVariablesManager.cpp" line="107"/>
         <location filename="../../monkey/src/workspace/pFileManager.cpp" line="110"/>
         <source>Unknown operation: &apos;%1&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Opération inconnue: &apos;%1&apos;.</translation>
     </message>
     <message>
         <location filename="../../monkey/src/abbreviationsmanager/pAbbreviationsManager.cpp" line="107"/>
@@ -202,7 +202,7 @@
     <message>
         <location filename="../../monkey/src/abbreviationsmanager/pAbbreviationsManager.cpp" line="154"/>
         <source>Macro not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Macro non trouvée.</translation>
     </message>
     <message>
         <location filename="../../monkey/src/abbreviationsmanager/pAbbreviationsManager.cpp" line="174"/>
@@ -212,12 +212,12 @@
     <message>
         <location filename="../../monkey/src/abbreviationsmanager/pAbbreviationsManager.cpp" line="190"/>
         <source>Found macros:</source>
-        <translation type="unfinished"></translation>
+        <translation>Macros trouvées:</translation>
     </message>
     <message>
         <location filename="../../monkey/src/abbreviationsmanager/pAbbreviationsManager.cpp" line="194"/>
         <source>No macros found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucune macro trouvée.</translation>
     </message>
     <message>
         <location filename="../../monkey/src/abbreviationsmanager/pAbbreviationsManager.cpp" line="209"/>
@@ -269,7 +269,7 @@
     <message>
         <location filename="../../monkey/src/shellmanager/MkSShellInterpreter.cpp" line="21"/>
         <source>Available commands:</source>
-        <translation type="unfinished"></translation>
+        <translation>Commandes disponible:</translation>
     </message>
     <message>
         <location filename="../../monkey/src/shellmanager/MkSShellInterpreter.cpp" line="50"/>
@@ -279,7 +279,7 @@
     <message>
         <location filename="../../monkey/src/shellmanager/MkSShellInterpreter.cpp" line="87"/>
         <source>Type &apos;help&apos; and name of command</source>
-        <translation type="unfinished"></translation>
+        <translation>Tapez &apos;help&apos; suivi du nom de la commande</translation>
     </message>
     <message>
         <location filename="../../monkey/src/shellmanager/MkSShellInterpreter.cpp" line="88"/>
@@ -289,17 +289,17 @@
     <message>
         <location filename="../../monkey/src/shellmanager/MkSShellInterpreter.cpp" line="128"/>
         <source>An error occur while loading script: &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Une erreur est survenue en chargeant le script: &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../../monkey/src/shellmanager/MkSShellInterpreter.cpp" line="140"/>
         <source>%1: No help available.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1: Aucune aide disponible.</translation>
     </message>
     <message>
         <location filename="../../monkey/src/shellmanager/MkSShellInterpreter.cpp" line="154"/>
         <source>Invalid command: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Commande invalide: %1</translation>
     </message>
     <message>
         <location filename="../../monkey/src/workspace/pFileManager.cpp" line="65"/>
@@ -348,17 +348,17 @@ The suffixes are a comma separated list of suffixes (ie: &quot;*.txt, *.doc&quot
     <message>
         <location filename="../../monkey/src/coremanager/MonkeyCore.cpp" line="144"/>
         <source>Initializing abbreviations manager...</source>
-        <translation type="unfinished"></translation>
+        <translation>Initialisation du gestionnaire d&apos;abbreviations...</translation>
     </message>
     <message>
         <location filename="../../monkey/src/coremanager/MonkeyCore.cpp" line="148"/>
         <source>Initializing file manager...</source>
-        <translation type="unfinished"></translation>
+        <translation>Initialisation du gestionnaire de fichier...</translation>
     </message>
     <message>
         <location filename="../../monkey/src/coremanager/MonkeyCore.cpp" line="152"/>
         <source>Executing scripts...</source>
-        <translation type="unfinished"></translation>
+        <translation>Execution des scripts...</translation>
     </message>
     <message>
         <location filename="../../monkey/src/coremanager/MonkeyCore.cpp" line="160"/>
@@ -373,7 +373,7 @@ The suffixes are a comma separated list of suffixes (ie: &quot;*.txt, *.doc&quot
     <message>
         <location filename="../../monkey/src/coremanager/MonkeyCore.cpp" line="176"/>
         <source>%1 v%2 (%3) Ready !</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 v%2 (%3) Pret !</translation>
     </message>
     <message>
         <location filename="../../monkey/src/coremanager/MonkeyCore.cpp" line="91"/>
@@ -383,17 +383,17 @@ The suffixes are a comma separated list of suffixes (ie: &quot;*.txt, *.doc&quot
     <message>
         <location filename="../../monkey/src/coremanager/MonkeyCore.cpp" line="101"/>
         <source>Initializing locales...</source>
-        <translation type="unfinished"></translation>
+        <translation>Initialisation des locales...</translation>
     </message>
     <message>
         <location filename="../../monkey/src/coremanager/MonkeyCore.cpp" line="111"/>
         <source>Initializing Translations...</source>
-        <translation type="unfinished"></translation>
+        <translation>Initialisation des traductions...</translation>
     </message>
     <message>
         <location filename="../../monkey/src/coremanager/MonkeyCore.cpp" line="132"/>
         <source>Initializing Shell...</source>
-        <translation type="unfinished"></translation>
+        <translation>Initialisation de la console...</translation>
     </message>
     <message>
         <location filename="../../monkey/src/coremanager/MonkeyCore.cpp" line="136"/>
@@ -408,7 +408,7 @@ The suffixes are a comma separated list of suffixes (ie: &quot;*.txt, *.doc&quot
     <message>
         <location filename="../../monkey/src/coremanager/MonkeyCore.cpp" line="128"/>
         <source>Initializing Actions Manager...</source>
-        <translation type="unfinished"></translation>
+        <translation>Initialisation du gestionnaire d&apos;actions...</translation>
     </message>
 </context>
 <context>
@@ -459,32 +459,32 @@ The suffixes are a comma separated list of suffixes (ie: &quot;*.txt, *.doc&quot
     <message>
         <location filename="../../monkey/src/pluginsmanager/PluginsMenu.cpp" line="34"/>
         <source>&amp;Manage using dialog...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Gérer à partir d&apos;une fenetre...</translation>
     </message>
     <message>
         <location filename="../../monkey/src/pluginsmanager/PluginsMenu.cpp" line="36"/>
         <source>Manage plugins using a dialog...</source>
-        <translation type="unfinished"></translation>
+        <translation>Configure les plugin en utilisant une fenetre...</translation>
     </message>
     <message>
         <location filename="../../monkey/src/pluginsmanager/PluginsMenu.cpp" line="65"/>
         <source>Configure...</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration...</translation>
     </message>
     <message>
         <location filename="../../monkey/src/pluginsmanager/PluginsMenu.cpp" line="72"/>
         <source>No auto enable</source>
-        <translation type="unfinished"></translation>
+        <translation>Désactiver l&apos;auto activation</translation>
     </message>
     <message>
         <location filename="../../monkey/src/pluginsmanager/PluginsMenu.cpp" line="78"/>
         <source>About...</source>
-        <translation type="unfinished"></translation>
+        <translation>A propos...</translation>
     </message>
     <message>
         <location filename="../../monkey/src/pluginsmanager/PluginsMenu.cpp" line="169"/>
         <source>Settings - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Propriétés - %1</translation>
     </message>
 </context>
 <context>
@@ -533,12 +533,12 @@ The suffixes are a comma separated list of suffixes (ie: &quot;*.txt, *.doc&quot
     <message>
         <location filename="../../monkey/src/maininterface/ui/UIAbout.cpp" line="87"/>
         <source>Belarus</source>
-        <translation type="unfinished">BeloRussie</translation>
+        <translation>BeloRussie</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UIAbout.cpp" line="89"/>
         <source>Qt Pro Parser, Some Features/Help</source>
-        <translation type="unfinished">Parseur Qt Pro, de l&apos;aide et des nouveautés</translation>
+        <translation>Parseur Qt Pro, de l&apos;aide et des nouveautés</translation>
     </message>
     <message>
         <location filename="../../monkey/src/pMonkeyStudio.cpp" line="198"/>
@@ -578,37 +578,37 @@ The suffixes are a comma separated list of suffixes (ie: &quot;*.txt, *.doc&quot
     <message>
         <location filename="../../monkey/src/maininterface/ui/UIAbout.cpp" line="87"/>
         <source>Principal Developer, Class Browser, Beloruss translator</source>
-        <translation type="unfinished"></translation>
+        <translation>Développeur Principal, Traducteur Belorusse</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UIAbout.cpp" line="88"/>
         <source>GNU Debugger Plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugin GNU Debuggeur</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UIAbout.cpp" line="93"/>
         <source>French Translator</source>
-        <translation type="unfinished"></translation>
+        <translation>Traducteur Français</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UIAbout.cpp" line="94"/>
         <source>Serbia</source>
-        <translation type="unfinished"></translation>
+        <translation>Serbie</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UIAbout.cpp" line="94"/>
         <source>SDK Script Generator</source>
-        <translation type="unfinished"></translation>
+        <translation>Script de générateur de SDK</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UIAbout.cpp" line="95"/>
         <source>Winter Splashscreen Designer</source>
-        <translation type="unfinished"></translation>
+        <translation>Créateur de l&apos;ecran de demarrage en mode hivers</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UIAbout.cpp" line="98"/>
         <source>%1 homepage</source>
-        <translation type="unfinished"></translation>
+        <translation>Page d&apos;accueil de %1</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UIAbout.cpp" line="99"/>
@@ -618,42 +618,42 @@ The suffixes are a comma separated list of suffixes (ie: &quot;*.txt, *.doc&quot
     <message>
         <location filename="../../monkey/src/maininterface/ui/UIAbout.cpp" line="100"/>
         <source>Forums</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UIAbout.cpp" line="101"/>
         <source>News feed</source>
-        <translation type="unfinished"></translation>
+        <translation>Fil RSS des News</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UIAbout.cpp" line="102"/>
         <source>MkS Team</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;équipe de MkS</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UIAbout.cpp" line="103"/>
         <source>Nokia&apos;s Qt homepage</source>
-        <translation type="unfinished"></translation>
+        <translation>Page d&apos;accueil de Nokia Qt</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UIAbout.cpp" line="104"/>
         <source>WebIssues</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UIAbout.cpp" line="105"/>
         <source>Our WebIssues Server (login/password: anonymous)</source>
-        <translation type="unfinished"></translation>
+        <translation>Notre serveur WebIssues (login/mot de passe: anonymous)</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UIAbout.cpp" line="108"/>
         <source>No donations for now, you can use this &lt;a href=&quot;%1&quot;&gt;link&lt;/a&gt; to make donation. Donations will help paying host/domain, and relatives things about the project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucune donation pour le moment. Vous pouvez utiliser ce &lt;a href=&quot;%1&quot;&gt;lien&lt;/a&gt; pour faire une donation. Les donations serviront à payer le nom de domaine et les frais d&apos;hebergement ainsi que divers choses necessaire au projet.</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/UIMain.cpp" line="385"/>
         <source>%1 v%2 (%3)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 v%2 (%3)</translation>
     </message>
 </context>
 <context>
@@ -661,7 +661,7 @@ The suffixes are a comma separated list of suffixes (ie: &quot;*.txt, *.doc&quot
     <message>
         <location filename="../../monkey/src/settingsmanager/Settings.cpp" line="250"/>
         <source>Can&apos;t copy script &apos;%1&apos;, %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de copier le script &apos;%1&apos;, %2</translation>
     </message>
 </context>
 <context>
@@ -669,27 +669,27 @@ The suffixes are a comma separated list of suffixes (ie: &quot;*.txt, *.doc&quot
     <message>
         <location filename="../../monkey/src/statusbar/StatusBar.cpp" line="14"/>
         <source>Cursor position</source>
-        <translation type="unfinished">Position du curseur</translation>
+        <translation>Position du curseurPosition du curseur</translation>
     </message>
     <message>
         <location filename="../../monkey/src/statusbar/StatusBar.cpp" line="17"/>
         <source>Modification state of file</source>
-        <translation type="unfinished">Modification de l&apos;état du fichier</translation>
+        <translation>Etat de modification du fichier</translation>
     </message>
     <message>
         <location filename="../../monkey/src/statusbar/StatusBar.cpp" line="20"/>
         <source>EOL mode</source>
-        <translation type="unfinished">Mode EOL</translation>
+        <translation>Mode des fins de ligne</translation>
     </message>
     <message>
         <location filename="../../monkey/src/statusbar/StatusBar.cpp" line="23"/>
         <source>Indentation mode</source>
-        <translation type="unfinished">Mode d&apos;indentation</translation>
+        <translation>Mode d&apos;indentation</translation>
     </message>
     <message>
         <location filename="../../monkey/src/statusbar/StatusBar.cpp" line="95"/>
         <source>Line: %1 Column: %2</source>
-        <translation type="unfinished">Ligne: %1 Colone: %2</translation>
+        <translation>Ligne: %1 Colone: %2</translation>
     </message>
 </context>
 <context>
@@ -702,7 +702,7 @@ The suffixes are a comma separated list of suffixes (ie: &quot;*.txt, *.doc&quot
     <message>
         <location filename="../../monkey/src/maininterface/ui/UIAbout.cpp" line="116"/>
         <source>Version %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UIAbout.ui" line="73"/>
@@ -721,7 +721,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../monkey/src/maininterface/ui/UIAbout.ui" line="185"/>
         <source>Teamates</source>
-        <translation type="unfinished"></translation>
+        <translation>Membres</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UIAbout.ui" line="305"/>
@@ -739,7 +739,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../monkey/src/abbreviationsmanager/ui/UIAddAbbreviation.ui" line="13"/>
         <source>Add Code Template</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter un modéle de code</translation>
     </message>
     <message>
         <location filename="../../monkey/src/abbreviationsmanager/ui/UIAddAbbreviation.ui" line="40"/>
@@ -754,7 +754,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../monkey/src/abbreviationsmanager/ui/UIAddAbbreviation.ui" line="60"/>
         <source>Template :</source>
-        <translation type="unfinished"></translation>
+        <translation>Modéle :</translation>
     </message>
     <message>
         <location filename="../../monkey/src/abbreviationsmanager/ui/UIAddAbbreviation.cpp" line="77"/>
@@ -764,7 +764,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../monkey/src/abbreviationsmanager/ui/UIAddAbbreviation.cpp" line="77"/>
         <source>This template already exists for this language.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ce modéle existe déjà pour ce language.</translation>
     </message>
 </context>
 <context>
@@ -924,47 +924,47 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../monkey/src/pluginsmanager/ui/UIInterpreterSettings.cpp" line="102"/>
         <source>Select an executable</source>
-        <translation type="unfinished">Sélectionner un exécutable</translation>
+        <translation>Sélectionner un exécutable</translation>
     </message>
     <message>
         <location filename="../../monkey/src/pluginsmanager/ui/UIInterpreterSettings.cpp" line="109"/>
         <source>Select a folder</source>
-        <translation type="unfinished">Choisissez un dossier</translation>
+        <translation>Choisissez un dossier</translation>
     </message>
     <message>
         <location filename="../../monkey/src/pluginsmanager/ui/UIInterpreterSettings.ui" line="13"/>
         <source>Interpreter Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Propriétés de l&apos;interpreteur</translation>
     </message>
     <message>
         <location filename="../../monkey/src/pluginsmanager/ui/UIInterpreterSettings.ui" line="31"/>
         <source>Build Command</source>
-        <translation type="unfinished">Commandes de construction</translation>
+        <translation>Commandes de construction</translation>
     </message>
     <message>
         <location filename="../../monkey/src/pluginsmanager/ui/UIInterpreterSettings.ui" line="63"/>
         <source>Text :</source>
-        <translation type="unfinished">Texte :</translation>
+        <translation>Texte :</translation>
     </message>
     <message>
         <location filename="../../monkey/src/pluginsmanager/ui/UIInterpreterSettings.ui" line="73"/>
         <source>Command :</source>
-        <translation type="unfinished">Commande :</translation>
+        <translation>Commande :</translation>
     </message>
     <message>
         <location filename="../../monkey/src/pluginsmanager/ui/UIInterpreterSettings.ui" line="91"/>
         <source>Arguments :</source>
-        <translation type="unfinished">Arguments :</translation>
+        <translation>Arguments :</translation>
     </message>
     <message>
         <location filename="../../monkey/src/pluginsmanager/ui/UIInterpreterSettings.ui" line="101"/>
         <source>Working Directory :</source>
-        <translation type="unfinished">Répertoire de travail :</translation>
+        <translation>Répertoire de travail :</translation>
     </message>
     <message>
         <location filename="../../monkey/src/pluginsmanager/ui/UIInterpreterSettings.ui" line="119"/>
         <source>Skip On Error</source>
-        <translation type="unfinished">Passer l&apos;erreur</translation>
+        <translation>Passer l&apos;erreur</translation>
     </message>
     <message>
         <location filename="../../monkey/src/pluginsmanager/ui/UIInterpreterSettings.ui" line="140"/>
@@ -974,7 +974,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../monkey/src/pluginsmanager/ui/UIInterpreterSettings.ui" line="157"/>
         <source>Try All</source>
-        <translation type="unfinished">Essayer tout</translation>
+        <translation>Essayer tout</translation>
     </message>
 </context>
 <context>
@@ -1126,12 +1126,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../monkey/src/maininterface/UIMain.cpp" line="187"/>
         <source>Reload</source>
-        <translation type="unfinished">Recharger</translation>
+        <translation>Recharger</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/UIMain.cpp" line="187"/>
         <source>Reload the current file asking user confirmation if needed</source>
-        <translation type="unfinished"></translation>
+        <translation>Recharge le fichier courant en demandant une confirmation à l&apos;utilisateur si besoin</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/UIMain.cpp" line="188"/>
@@ -1301,22 +1301,22 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../monkey/src/maininterface/UIMain.cpp" line="208"/>
         <source>&amp;Search &amp;&amp; Replace</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Recherche &amp;&amp; Remplacement</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/UIMain.cpp" line="209"/>
         <source>&amp;Search...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Recherche...</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/UIMain.cpp" line="209"/>
         <source>Search in the current file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Rechercher dans le fichier courant...</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/UIMain.cpp" line="279"/>
         <source>Use %1 style</source>
-        <translation type="unfinished"></translation>
+        <translation>Utiliser le style %1</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/UIMain.cpp" line="209"/>
@@ -1351,7 +1351,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../monkey/src/maininterface/UIMain.cpp" line="214"/>
         <source>Expand Abbreviation</source>
-        <translation type="unfinished"></translation>
+        <translation>Développer l&apos;abbreviation</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/UIMain.cpp" line="214"/>
@@ -1416,22 +1416,22 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../monkey/src/maininterface/UIMain.cpp" line="222"/>
         <source>Focus Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Donner le focus à l&apos;editeur</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/UIMain.cpp" line="222"/>
         <source>Ctrl+Return</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/UIMain.cpp" line="222"/>
         <source>Set the focus to the current document editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Met le focus l&apos;editeur du document courant</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/UIMain.cpp" line="253"/>
         <source>Interpreter</source>
-        <translation type="unfinished">Interpréteur</translation>
+        <translation>Interpréteur</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/UIMain.cpp" line="266"/>
@@ -1506,7 +1506,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../monkey/src/maininterface/UIMain.cpp" line="262"/>
         <source>&amp;Tile</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Titre</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/UIMain.cpp" line="262"/>
@@ -1670,7 +1670,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../monkey/src/pluginsmanager/ui/UIPluginsSettingsElement.cpp" line="60"/>
         <source>Settings - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Propriétés - %1</translation>
     </message>
 </context>
 <context>
@@ -1875,7 +1875,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="884"/>
         <source>No Auto Completion Context</source>
-        <translation type="unfinished">Pas de contexte d&apos;auto complétition</translation>
+        <translation>Pas de contexte d&apos;auto complétition</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="905"/>
@@ -2650,17 +2650,17 @@ You can quickly change it using the dock context menu.</source>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="489"/>
         <source>Default text codec</source>
-        <translation type="unfinished"></translation>
+        <translation>Codec texte par défaut</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="1878"/>
         <source>EOL Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode de fin de ligne</translation>
     </message>
     <message>
         <location filename="../../monkey/src/maininterface/ui/UISettings.ui" line="1911"/>
         <source>Autodetect EOL</source>
-        <translation type="unfinished"></translation>
+        <translation>Autodétécter les fins de ligne</translation>
     </message>
 </context>
 <context>
@@ -2668,7 +2668,7 @@ You can quickly change it using the dock context menu.</source>
     <message>
         <location filename="../../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="14"/>
         <source>Templates Wizard</source>
-        <translation type="unfinished"></translation>
+        <translation>Assistant des modéles</translation>
     </message>
     <message>
         <location filename="../../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="133"/>
@@ -2678,7 +2678,7 @@ You can quickly change it using the dock context menu.</source>
     <message>
         <location filename="../../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="146"/>
         <source>Choose the language in witch you want to pick templates</source>
-        <translation type="unfinished">Sélectionnez le langage dans lequel vous voulez</translation>
+        <translation>Sélectionnez le langage dans lequel vous voulez voir les modéles</translation>
     </message>
     <message>
         <location filename="../../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="176"/>
@@ -2688,7 +2688,7 @@ You can quickly change it using the dock context menu.</source>
     <message>
         <location filename="../../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="201"/>
         <source>Choose a template</source>
-        <translation type="unfinished"></translation>
+        <translation>Choisissez un modéle</translation>
     </message>
     <message>
         <location filename="../../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="220"/>
@@ -2704,7 +2704,7 @@ In non expert mode, only projects and scopes will be shown.</source>
     <message>
         <location filename="../../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="279"/>
         <source>Expert</source>
-        <translation type="unfinished"></translation>
+        <translation>Expert</translation>
     </message>
     <message>
         <location filename="../../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="313"/>
@@ -2770,17 +2770,17 @@ In non expert mode, only projects and scopes will be shown.</source>
     <message>
         <location filename="../../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="249"/>
         <source>Template...</source>
-        <translation type="unfinished"></translation>
+        <translation>Modéle...</translation>
     </message>
     <message>
         <location filename="../../monkey/src/templatesmanager/ui/UITemplatesWizard.cpp" line="249"/>
         <source>You need to select a template.</source>
-        <translation type="unfinished">Vous devez sélectionner un </translation>
+        <translation>Vous devez sélectionner un modéle.</translation>
     </message>
     <message>
         <location filename="../../monkey/src/templatesmanager/ui/UITemplatesWizard.ui" line="343"/>
         <source>Codec :</source>
-        <translation type="unfinished"></translation>
+        <translation>Codec :</translation>
     </message>
 </context>
 <context>
@@ -2821,17 +2821,17 @@ In non expert mode, only projects and scopes will be shown.</source>
     <message>
         <location filename="../../monkey/src/xupmanager/gui/UIXUPFindFiles.ui" line="13"/>
         <source>Choose a file to open</source>
-        <translation type="unfinished"></translation>
+        <translation>Choisissez un fichier à ouvrir</translation>
     </message>
     <message>
         <location filename="../../monkey/src/xupmanager/gui/UIXUPFindFiles.ui" line="19"/>
         <source>Here is the search result for finding file :</source>
-        <translation type="unfinished"></translation>
+        <translation>Voici la liste resultante pour la recherche du fichier :</translation>
     </message>
     <message>
         <location filename="../../monkey/src/xupmanager/gui/UIXUPFindFiles.ui" line="76"/>
         <source>Absolute File Path :</source>
-        <translation type="unfinished"></translation>
+        <translation>Chemin absolu du fichier :</translation>
     </message>
 </context>
 <context>
