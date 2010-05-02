@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="be">
+<TS version="2.0" language="be" sourcelanguage="en">
 <context>
     <name>BasePlugin</name>
     <message>
