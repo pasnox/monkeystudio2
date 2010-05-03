@@ -24,10 +24,12 @@
 #include <pQueuedMessageToolBar.h>
 #include <Settings.h>
 #include <MkSShellInterpreter.h>
+#include <pMenuBar.h>
 
 #include <QFileIconProvider>
 #include <QDesktopServices>
 #include <QImageReader>
+#include <QUrl>
 #include <QDebug>
 
 QFileIconProvider* ToolsManager::mIconProvider = 0;

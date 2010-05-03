@@ -30,6 +30,7 @@
 #include "UICtags2Api.h"
 
 #include <MonkeyCore.h>
+#include <pMenuBar.h>
 
 void Ctags2Api::fillPluginInfos()
 {

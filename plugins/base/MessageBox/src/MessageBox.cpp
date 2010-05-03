@@ -39,6 +39,7 @@
 #include <MonkeyCore.h>
 #include <UIMain.h>
 #include <pConsoleManager.h>
+#include <pDockToolBar.h>
 
 #include <QIcon>
 #include <QTabWidget>

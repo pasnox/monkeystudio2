@@ -35,6 +35,8 @@
 #include "FileBrowserSettings.h"
 #include "FileBrowser.h"
 
+#include <pStringListEditor.h>
+
 #include <QVBoxLayout>
 #include <QDialogButtonBox>
 #include <QPushButton>

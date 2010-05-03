@@ -29,6 +29,8 @@
 #include "BasePlugin.h"
 #include "main.h"
 
+#include <QCoreApplication>
+
 BasePlugin::BasePlugin()
 {
 	// auto fill minimum version required using compil time version

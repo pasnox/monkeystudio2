@@ -5,6 +5,7 @@
 
 #include <MonkeyCore.h>
 #include <UIMain.h>
+#include <pMenuBar.h>
 
 void RegExpEditor::fillPluginInfos()
 {
