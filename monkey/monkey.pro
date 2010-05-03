@@ -195,9 +195,10 @@ SOURCES	*= src/maininterface/ui/UITranslator.cpp \
 	src/consolemanager/pConsoleManagerStep.cpp \
 	src/consolemanager/pConsoleManagerStepModel.cpp
 
-TRANSLATIONS	*= ../datas/translations/monkey_french.ts \
-	../datas/translations/monkey_belarusian.ts \
-	../datas/translations/monkey_italian.ts \
-	../datas/translations/monkey_arabic.ts \
-	../datas/translations/monkey_spanish.ts \
-	../datas/translations/monkey_catalan.ts
+TRANSLATIONS	*= ../datas/translations/monkeystudio_fr.ts \
+	../datas/translations/monkeystudio_be.ts \
+	../datas/translations/monkeystudio_ru.ts \
+	../datas/translations/monkeystudio_it.ts \
+	../datas/translations/monkeystudio_ar.ts \
+	../datas/translations/monkeystudio_es.ts \
+	../datas/translations/monkeystudio_ca.ts

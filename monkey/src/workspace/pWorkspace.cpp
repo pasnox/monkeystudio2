@@ -1223,9 +1223,14 @@ void pWorkspace::editSettings_triggered()
 
 void pWorkspace::editTranslations_triggered()
 {
-	if ( UITranslator::instance( this )->exec() )
+	const QString locale = TranslationDialog::getLocale( MonkeyCore::translationsManager(), this );
+	
+	if ( !locale.isEmpty() )
 	{
-		pMonkeyStudio::loadTranslations();
+		MonkeyCore::settings()->setValue( "Translations/Locale", locale );
+		MonkeyCore::settings()->setValue( "Translations/Accepted", true );
+		MonkeyCore::translationsManager()->setCurrentLocale( locale );
+		MonkeyCore::translationsManager()->reloadTranslations();
 	}
 }
 
