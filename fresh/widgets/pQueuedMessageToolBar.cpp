@@ -3,7 +3,7 @@
 #include <QAction>
 #include <QDebug>
 
-int pQueuedMessageToolBar::mDefaultTimeout = 5000;
+int pQueuedMessageToolBar::mDefaultTimeout = 0;
 QPixmap* pQueuedMessageToolBar::mDefaultPixmap = 0;
 QBrush pQueuedMessageToolBar::mDefaultBackground = QBrush( QColor( 250, 230, 147 ) );
 QBrush pQueuedMessageToolBar::mDefaultForeground = QBrush();

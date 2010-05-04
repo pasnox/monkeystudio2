@@ -29,7 +29,7 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include <fresh.h>
+#include <pSettings.h>
 
 struct LexerStyle
 {

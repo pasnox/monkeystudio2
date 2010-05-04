@@ -25,6 +25,7 @@
 #include "ClassBrowser.h"
 
 #include <pIconManager.h>
+#include <pPathListEditor.h>
 
 #include <QBoxLayout>
 #include <QLabel>
@@ -32,6 +33,9 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QFileDialog>
+#include <QGroupBox>
+#include <QLineEdit>
+#include <QToolButton>
 
 /*!
 	Creates settings widget

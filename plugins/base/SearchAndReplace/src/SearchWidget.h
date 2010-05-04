@@ -11,6 +11,7 @@ class SearchThread;
 class ReplaceThread;
 class SearchResultsDock;
 class QProgressBar;
+class QToolButton;
 
 class SearchWidget : public QFrame, public Ui::SearchWidget
 {

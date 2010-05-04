@@ -32,7 +32,6 @@
 #include <QApplication>
 #include <QDir>
 
-class QTranslator;
 class pEditor;
 
 namespace pMonkeyStudio
@@ -50,9 +49,6 @@ namespace pMonkeyStudio
 		CurrentOS = UnixOS
 #endif
 	};
-	
-	Q_MONKEY_EXPORT void addTranslator( QTranslator* translator );
-	Q_MONKEY_EXPORT void loadTranslations();
 
 	Q_MONKEY_EXPORT bool isSameFile( const QString& left, const QString& right );
 

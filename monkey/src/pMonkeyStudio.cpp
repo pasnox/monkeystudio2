@@ -16,7 +16,6 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 #include "pMonkeyStudio.h"
-#include "maininterface/ui/UITranslator.h"
 #include "pluginsmanager/PluginsManager.h"
 #include "coremanager/MonkeyCore.h"
 #include "workspace/pFileManager.h"
@@ -30,73 +29,10 @@
 #include <QImageReader>
 #include <QFileDialog>
 #include <QFileInfo>
-#include <QLibraryInfo>
-#include <QTranslator>
 #include <QLocale>
 
-QList<QTranslator*> mTranslators;
 QHash<QString,QsciLexer*> mGlobalsLexers;
 QHash<QString,QsciAPIs*> mGlobalsAPIs;
-
-/*!
-	\details Add a translator to translators list
-	\param translator The translator to install
-*/
-void pMonkeyStudio::addTranslator( QTranslator* translator )
-{
-	qApp->installTranslator( translator );
-	if ( !mTranslators.contains( translator ) )
-		mTranslators << translator;
-}
-
-/*!
-	\details Loads all needed translations
-*/
-void pMonkeyStudio::loadTranslations()
-{
-	// clear all already installed translations
-	foreach ( QTranslator* t, mTranslators )
-		qApp->removeTranslator( t );
-	qDeleteAll( mTranslators );
-	mTranslators.clear();
-
-	// get user translation setted
-	QString mLanguage = MonkeyCore::settings()->value( "Translations/Language", "english" ).toString();
-	QLocale l( mLanguage );
-	// qt translation path
-	QString resourceDir = QLibraryInfo::location( QLibraryInfo::TranslationsPath );
-
-	// setting qt translation
-	QTranslator* qtTranslator = new QTranslator( qApp );
-	if ( qtTranslator->load( QString( "qt_" ) + l.name(), resourceDir ) )
-		addTranslator( qtTranslator );
-
-	// setting assistant translation
-	QTranslator* assistantTranslator = new QTranslator( qApp );
-	if ( assistantTranslator->load( QString( "assistant_" ) + l.name(), resourceDir ) )
-		addTranslator( assistantTranslator );
-
-	// setting designer translation
-	QTranslator* designerTranslator = new QTranslator( qApp );
-	if ( designerTranslator->load( QString( "designer_" ) + l.name(), resourceDir ) )
-		addTranslator( designerTranslator );
-
-	if ( mLanguage != "english" )
-	{
-		QTranslator* t = new QTranslator( qApp );
-		foreach ( const QString& path, MonkeyCore::settings()->storagePaths( Settings::SP_TRANSLATIONS ) )
-		{
-			QString fn = QString( "%1/monkey_%2" ).arg( path, mLanguage );
-			if ( QFileInfo( fn ).isRelative() )
-				fn.prepend( QString( "%1/" ).arg( QApplication::applicationDirPath() ) );
-			if ( t->load( fn ) )
-			{
-				addTranslator( t );
-				return;
-			}
-		}
-	}
-}
 
 /*!
 	\details Return true if files point to same file, usefull when files are symbolic link, or windows link

@@ -7,6 +7,8 @@
 #include <pAbstractChild.h>
 #include <UIMain.h>
 #include <pIconManager.h>
+#include <pDockToolBar.h>
+#include <pMenuBar.h>
 
 void SearchAndReplace::fillPluginInfos()
 {

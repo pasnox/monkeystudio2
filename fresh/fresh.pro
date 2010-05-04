@@ -13,8 +13,11 @@ DEPENDPATH	*= $${PWD}/objects $${PWD}/widgets
 # make library exportable
 DEFINES	*= MONKEY_CORE_BUILD
 
+RESOURCES	+= resources/fresh.qrc
+
 FORMS	+= widgets/pEnvironmentVariableEditor.ui \
-	widgets/pEnvironmentVariablesEditor.ui
+	widgets/pEnvironmentVariablesEditor.ui \
+	widgets/TranslationDialog.ui
 
 HEADERS	= objects/GetOpt.h \
 	objects/MonkeyExport.h \
@@ -57,7 +60,9 @@ HEADERS	= objects/GetOpt.h \
 	widgets/pEnvironmentVariableEditor.h \
 	widgets/pEnvironmentVariablesEditor.h \
 	widgets/pEnvironmentVariablesModel.h \
-	widgets/pEnvironmentVariablesManager.h
+	widgets/pEnvironmentVariablesManager.h \
+	objects/TranslationManager.h \
+	widgets/TranslationDialog.h
 
 SOURCES	= objects/GetOpt.cpp \
 	objects/pIconManager.cpp \
@@ -99,4 +104,6 @@ SOURCES	= objects/GetOpt.cpp \
 	widgets/pEnvironmentVariableEditor.cpp \
 	widgets/pEnvironmentVariablesEditor.cpp \
 	widgets/pEnvironmentVariablesModel.cpp \
-	widgets/pEnvironmentVariablesManager.cpp
+	widgets/pEnvironmentVariablesManager.cpp \
+	objects/TranslationManager.cpp \
+	widgets/TranslationDialog.cpp

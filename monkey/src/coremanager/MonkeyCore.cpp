@@ -47,6 +47,7 @@
 #include <pIconManager.h>
 #include <pMultiToolBar.h>
 #include <pQueuedMessageToolBar.h>
+#include <TranslationManager.h>
 
 #include <QSplashScreen>
 #include <QPixmap>
@@ -95,14 +96,33 @@ void MonkeyCore::init()
 	{
 		settings()->setDefaultSettings();
 	}
-
-	// init translation
-	showMessage( &splash, tr( "Initializing Translation..." ) );
+	
+	// initialize locales
+	showMessage( &splash, tr( "Initializing locales..." ) );
+	TranslationManager* translationManager = MonkeyCore::translationsManager();
+	translationManager->addTranslationsMask( "qt*.qm" );
+	translationManager->addTranslationsMask( "assistant*.qm" );
+	translationManager->addTranslationsMask( "designer*.qm" );
+	translationManager->addTranslationsMask( "monkeystudio*.qm" );
+	translationManager->addForbiddenTranslationsMask( "assistant_adp*.qm" );
+	translationManager->setTranslationsPath( settings()->storagePaths( Settings::SP_TRANSLATIONS ).first() );
+	
+	// init translations
+	showMessage( &splash, tr( "Initializing Translations..." ) );
 	if ( !settings()->value( "Translations/Accepted" ).toBool() )
 	{
-		UITranslator::instance()->exec();
+		const QString locale = TranslationDialog::getLocale( translationManager );
+		
+		if ( !locale.isEmpty() )
+		{
+			settings()->setValue( "Translations/Locale", locale );
+			settings()->setValue( "Translations/Accepted", true );
+			translationManager->setCurrentLocale( locale );
+			translationManager->reloadTranslations();
+		}
 	}
-	pMonkeyStudio::loadTranslations();
+	translationManager->setCurrentLocale( settings()->value( "Translations/Locale" ).toString() );
+	translationManager->reloadTranslations();
 
 	// init shortcuts editor
 	showMessage( &splash, tr( "Initializing Actions Manager..." ) );
@@ -269,4 +289,11 @@ pMultiToolBar* MonkeyCore::multiToolBar()
 	if ( !mInstances.contains( &pMultiToolBar::staticMetaObject ) )
 		mInstances[&pMultiToolBar::staticMetaObject] = new pMultiToolBar( mainWindow() );
 	return qobject_cast<pMultiToolBar*>( mInstances[&pMultiToolBar::staticMetaObject] );
+}
+
+TranslationManager* MonkeyCore::translationsManager()
+{
+	if ( !mInstances.contains( &TranslationManager::staticMetaObject ) )
+		mInstances[&TranslationManager::staticMetaObject] = new TranslationManager( QCoreApplication::instance() );
+	return qobject_cast<TranslationManager*>( mInstances[&TranslationManager::staticMetaObject] );
 }

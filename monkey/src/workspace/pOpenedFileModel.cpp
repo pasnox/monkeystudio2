@@ -65,7 +65,7 @@ pOpenedFileModel::pOpenedFileModel( pWorkspace* workspace )
 	mWorkspace = workspace;
 	mSortMode = pOpenedFileModel::OpeningOrder;
 	mSortDocumentsTimer = new QTimer( this );
-	mSortDocumentsTimeout = 250;
+	mSortDocumentsTimeout = 150;
 	mTransparentIcon = pIconManager::icon( "transparent.png" );
 	mModifiedIcon = pIconManager::icon( "save.png" );
 	
@@ -242,6 +242,12 @@ bool pOpenedFileModel::dropMimeData( const QMimeData* data, Qt::DropAction actio
 	
 	newDocuments.move( fromRow, row );
 	rebuildMapping( mDocuments, newDocuments );
+	
+	if ( mSortMode != pOpenedFileModel::Custom )
+	{
+		setSortMode( pOpenedFileModel::Custom );
+	}
+	
 	return true;
 }
 

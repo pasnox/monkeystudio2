@@ -3,6 +3,7 @@
 #include "../objects/QSingleton.h"
 #include "../objects/GetOpt.h"
 #include "../objects/pStylesActionGroup.h"
+#include "../objects/TranslationManager.h"
 
 #include "../widgets/pFilesListWidget.h"
 #include "../widgets/pTabBar.h"
@@ -34,3 +35,4 @@
 #include "../widgets/pEnvironmentVariablesEditor.h"
 #include "../widgets/pEnvironmentVariablesModel.h"
 #include "../widgets/pEnvironmentVariablesManager.h"
+#include "../widgets/TranslationDialog.h"

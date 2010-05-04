@@ -38,6 +38,7 @@
 
 #include <QtPlugin>
 #include <QPointer>
+#include <QAction>
 
 #ifdef __COVERAGESCANNER__
 #include <QCoreApplication>

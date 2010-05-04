@@ -27,128 +27,166 @@
 **
 ****************************************************************************/
 #include "UIAbout.h"
+#include "ui_UIAbout.h"
 #include "main.h"
 
 #include <pIconManager.h>
 
-#include <QFile>
-#include <QDesktopServices>
-#include <QTabBar>
 #include <QDate>
 
-const QString mInformations =
-"<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"font-size:medium;\">"
-"	<tr>"
-"		<td align=\"center\"><br /><img src=\":/application/icons/application/monkey2.png\" width=\"32\" height=\"32\"></td>"
-"		<td>%2 v%3 (%4)<br />%5<br />The Monkey Studio Team<br /><a href=\"http://%6\">Home page</a></td>"
-"	</tr>"
-"</table>";
-
-const QString mDatasMask =
-"<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"font-size:medium;\">"
-"	<tr>"
-"		<td>"
-"			<b>%1</b><br />"
-"			%2 %3"
-"			%4 (<a href=\"%5\">%6</a>)<br />"
-"		</td>"
-"	</tr>"
-"</table>";
-
-const QList<pDatas> mTeamates = QList<pDatas>()
-	<< pDatas( "Filipe Azevedo", "Nox P@sNox", QObject::tr( "France" ), "pasnox@gmail.com", QObject::tr( "Creator & Principal Developer" ) )
-	<< pDatas( "Kopats Andrei", "hlamer", QObject::tr( "Belarus" ), "hlamer@tut.by", QObject::tr( "Principal Developer, Class Browser, Beloruss translator" ) )
-	<< pDatas( "Yannick", "xiantia", QObject::tr( "France" ), "xiantia@gmail.com", QObject::tr( "GNU Debugger Plugin" ) )
-	<< pDatas( "Roper Alexander", "Minirop", QObject::tr( "France" ), "minirop@peyj.com", QObject::tr( "Qt Pro Parser, Some Features/Help" ) )
-	<< pDatas( "Mashin Evgeniy", "evgenM", QObject::tr( "Russia" ), "mashin.zhenya@gmail.com", QObject::tr( "Many shared code between our IDEs" ) )
-	<< pDatas( "Manuel Schmidt", "oversize", QObject::tr( "Germany" ), "manuel@schmidtman.de", QObject::tr( "Web Developer & Web Designer" ) )
-	<< pDatas( "Julien Decologne", "Judd", QObject::tr( "France" ), "judd@hotmail.com", QObject::tr( "Splashscreen & Icons Designer" ) )
-	<< pDatas( "Plano Marc", "Marc31", QObject::tr( "France" ), "marc31boss@gmail.com", QObject::tr( "French Translator" ) )
-	<< pDatas( "Lukic Djordje", "rumpl", QObject::tr( "Serbia" ), "rumplstiltzkin@gmail.com", QObject::tr( "SDK Script Generator" ) )
-	<< pDatas( QString::fromUtf8( "Aurélien MICHON" ), "aurelien", QObject::tr( "France" ), "aurelien.french@gmail.com", QObject::tr( "Winter Splashscreen Designer" ) );
-
-const QList<pDatas> mDonors = QList<pDatas>()
-	<< pDatas( "Filipe Azevedo", "Nox P@sNox", QObject::tr( "France" ), "pasnox@gmail.com", QObject::tr( "No donations for now, you can use this <a href=\"http://sourceforge.net/project/project_donations.php?group_id=163493\">link</a> to make donation. Donations will help paying host/domain, and relatives things about the project." ) );
-
-const QList<pDatas> mLinks = QList<pDatas>()
-	<< pDatas( "", "", QObject::tr( "Location" ), "http://qt.nokia.com", QObject::tr( "Nokia's Qt homepage." ) )
-	<< pDatas( "", "", QObject::tr( "Location" ), "http://webissues.mimec.org", QObject::tr( "Team collaboration across the Internet." ) )
-	<< pDatas( "", "", QObject::tr( "Location" ), "http://webissues.monkeystudio.org", QObject::tr( "Our webissues server (login: anonymous, password: anonymous)." ) )
-	<< pDatas( "", "", QObject::tr( "Location" ), "https://launchpad.net/monkeystudio", QObject::tr( "You can send bug/patch/ideas/what ever you want to our bug tracker." ) )
-	<< pDatas( "", "", QObject::tr( "Location" ), "http://monkeystudio.org/forum", QObject::tr( "Forums are at your disposition." ) )
-	<< pDatas( "", "", QObject::tr( "Location" ), "http://monkeystudio.org/rss.xml", QObject::tr( "Get the latest news using the rss feed." ) )
-	<< pDatas( "", "", QObject::tr( "Location" ), "http://monkeystudio.org/team", QObject::tr( "Meet the Monkeys (Team's members)." ) );
-
-UIAbout::UIAbout( QWidget* p )
-	: QDialog( p )
+struct pData
 {
-	setupUi( this );
-	setAttribute( Qt::WA_DeleteOnClose );
-
-	// window title
-	setWindowTitle( windowTitle().arg( PACKAGE_NAME ) );
-
-	// mouse cursor
-	twAbout->findChild<QTabBar*>()->setCursor( Qt::PointingHandCursor );
-
-	// change label color
-	QPalette lp( lInformations->palette() );
-	lp.setColor( lInformations->backgroundRole(), Qt::white );
-	lInformations->setPalette( lp );
-
-	// show informations table
-	lInformations->setTextInteractionFlags( Qt::TextBrowserInteraction | Qt::TextSelectableByKeyboard );
-	lInformations->setText( mInformations.arg( PACKAGE_NAME ).arg( PACKAGE_VERSION ).arg( PACKAGE_VERSION_STR ).arg( PACKAGE_COPYRIGHTS ).arg( PACKAGE_DOMAIN ) );
-
-	// logo
-	bool isXMas = false;
+	pData( const QString& _name, const QString& _nick, const QString& _country, const QString& _email, const QString& _comment )
+		: name( _name ), nick( _nick ), country( _country ), email( _email ), comment( _comment )
+	{
+	}
 	
-	switch ( QDate::currentDate().month() )
+	bool operator==( const pData& other ) const
 	{
-		case 11:
-		case 12:
-		case 1:
-			isXMas = true;
-			break;
+		return name == other.name
+			&& nick == other.nick
+			&& country == other.country
+			&& email == other.email
+			&& comment == other.comment;
+	}
+	
+	bool operator!=( const pData& other ) const
+	{
+		return !operator==( other );
 	}
 
-	if ( isXMas )
-	{
-		lLogo->setPixmap( pIconManager::pixmap( "splashscreen_christmas.png", ":/application" ) );
-	}
+	QString name;
+	QString nick;
+	QString country;
+	QString email;
+	QString comment;
+};
 
-	// team
-	foreach ( pDatas i, mTeamates )
-		tbTeam->append( mDatasMask.arg( i.Comment ).arg( i.Name +" -" ).arg( i.Login +"<br />" ).arg( i.Pays ).arg( QString( "mailto:" ).append( i.Email ) ).arg( i.Email ) );
-	tbTeam->moveCursor( QTextCursor::Start );
-
-	// license
-	QFile file( ":/licenses/texts/license.gpl" );
-	file.open( QFile::ReadOnly );
-	tbLicense->setPlainText( QString::fromUtf8( file.readAll() ) );
-	file.close();
-	tbLicense->moveCursor( QTextCursor::Start );
-
-	// donors
-	foreach ( pDatas i, mDonors )
-		tbDonations->append( mDatasMask.arg( i.Comment ).arg( i.Name +" -" ).arg( i.Login +"<br />" ).arg( i.Pays ).arg( QString( "mailto:" ).append( i.Email ) ).arg( i.Email ) );
-	tbDonations->moveCursor( QTextCursor::Start );
-
-	// links
-	foreach ( pDatas i, mLinks )
-		tbLinks->append( mDatasMask.arg( i.Comment ).arg( i.Name ).arg( i.Login ).arg( i.Pays ).arg( i.Email ).arg( i.Email ) );
-	tbLinks->moveCursor( QTextCursor::Start );
-
-	// connections
-	foreach ( QTextBrowser* b, twAbout->findChildren<QTextBrowser*>() )
-		connect( b, SIGNAL( anchorClicked( const QUrl& ) ), this, SLOT( anchorClicked( const QUrl& ) ) );
+UIAbout::UIAbout( QWidget* parent )
+	: QDialog( parent )
+{
+	const QString tabString = "&nbsp;&nbsp;&nbsp;";
+	
+	const QString teamatesMask =
+	"\t<tr>"
+	"\t\t<td>%1 aka %2 (%3)<br />" +tabString +"<a href=\"mailto:%4\">%4</a><br />" +tabString +"%5</td>"
+	"\t</tr>";
+	
+	const QString linksMask =
+	"\t<tr>"
+	"\t\t<td>%1<br />" +tabString +"<a href=\"%2\">%2</a></td>"
+	"\t</tr>";
+	
+	const QString donationsMask =
+	"\t<tr>"
+	"\t\t<td>%1 aka %2 (%3)<br />" +tabString +"<a href=\"mailto:%4\">%4</a><br />" +tabString +"%5</td>"
+	"\t</tr>";
+	
+	const QList<pData> teamates = QList<pData>()
+		<< pData( "Filipe Azevedo", "Nox P@sNox", QObject::tr( "France" ), "pasnox@gmail.com", QObject::tr( "Creator & Principal Developer" ) )
+		<< pData( "Kopats Andrei", "hlamer", QObject::tr( "Belarus" ), "hlamer@tut.by", QObject::tr( "Principal Developer, Class Browser, Beloruss translator" ) )
+		<< pData( "Yannick", "xiantia", QObject::tr( "France" ), "xiantia@gmail.com", QObject::tr( "GNU Debugger Plugin" ) )
+		<< pData( "Roper Alexander", "Minirop", QObject::tr( "France" ), "minirop@peyj.com", QObject::tr( "Qt Pro Parser, Some Features/Help" ) )
+		<< pData( "Mashin Evgeniy", "evgenM", QObject::tr( "Russia" ), "mashin.zhenya@gmail.com", QObject::tr( "Many shared code between our IDEs" ) )
+		<< pData( "Manuel Schmidt", "oversize", QObject::tr( "Germany" ), "manuel@schmidtman.de", QObject::tr( "Web Developer & Web Designer" ) )
+		<< pData( "Julien Decologne", "Judd", QObject::tr( "France" ), "judd@hotmail.com", QObject::tr( "Splashscreen & Icons Designer" ) )
+		<< pData( "Plano Marc", "Marc31", QObject::tr( "France" ), "marc31boss@gmail.com", QObject::tr( "French Translator" ) )
+		<< pData( "Lukic Djordje", "rumpl", QObject::tr( "Serbia" ), "rumplstiltzkin@gmail.com", QObject::tr( "SDK Script Generator" ) )
+		<< pData( QString::fromUtf8( "Aurélien MICHON" ), "aurelien", QObject::tr( "France" ), "aurelien.french@gmail.com", QObject::tr( "Winter Splashscreen Designer" ) );
+	
+	const QList<pData> links = QList<pData>()
+		<< pData( QString::null, QString::null, QString::null, QString( "http://%1" ).arg( PACKAGE_DOMAIN ), QObject::tr( "%1 homepage" ).arg( PACKAGE_NAME ) )
+		<< pData( QString::null, QString::null, QString::null, "https://launchpad.net/monkeystudio", QObject::tr( "Bug tracker" ) )
+		<< pData( QString::null, QString::null, QString::null, "http://monkeystudio.org/forum", QObject::tr( "Forums" ) )
+		<< pData( QString::null, QString::null, QString::null, "http://monkeystudio.org/rss.xml", QObject::tr( "News feed" ) )
+		<< pData( QString::null, QString::null, QString::null, "http://monkeystudio.org/team", QObject::tr( "MkS Team" ) )
+		<< pData( QString::null, QString::null, QString::null, "http://qt.nokia.com", QObject::tr( "Nokia's Qt homepage" ) )
+		<< pData( QString::null, QString::null, QString::null, "http://webissues.mimec.org", QObject::tr( "WebIssues" ) )
+		<< pData( QString::null, QString::null, QString::null, "http://webissues.monkeystudio.org", QObject::tr( "Our WebIssues Server (login/password: anonymous)" ) );
+	
+	const QList<pData> donations = QList<pData>()
+		<< pData( "Filipe Azevedo", "Nox P@sNox", QObject::tr( "France" ), "pasnox@gmail.com", QObject::tr( "No donations for now, you can use this <a href=\"%1\">link</a> to make donation. Donations will help paying host/domain, and relatives things about the project." ).arg( PACKAGE_DONATION_LINK ) );
+	
+	setAttribute( Qt::WA_DeleteOnClose );
+	setWindowTitle( tr( "About : %1" ).arg( PACKAGE_NAME ) );
+	
+	ui = new Ui::UIAbout;
+	ui->setupUi( this );
+	ui->lTitle->setText( PACKAGE_NAME );
+	ui->lVersion->setText( tr( "Version %1 (%2)" ).arg( PACKAGE_VERSION ).arg( PACKAGE_VERSION_STR ) );
+	ui->tbTeamates->setHtml( generateTeamatesTable( teamates, teamatesMask ) );
+	ui->tbLinks->setHtml( generateLinksTable( links, linksMask ) );
+	ui->tbDonations->setHtml( generateDonationsTable( donations, donationsMask ) );
+	ui->lCopyrights->setText( PACKAGE_COPYRIGHTS );
 }
 
-void UIAbout::anchorClicked( const QUrl& u )
+UIAbout::~UIAbout()
 {
-	QTextBrowser* b = qobject_cast<QTextBrowser*>( sender() );
-	if ( !b )
-		return;
-	b->setHtml( b->toHtml() );
-	QDesktopServices::openUrl( u );
+	delete ui;
+}
+
+QString UIAbout::makeTable( const QString& contents ) const
+{
+	QString table =
+	"<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">"
+	+contents +
+	"</table>";
+	return table;
+}
+
+QString UIAbout::generateTeamatesTable( const QList<pData>& data, const QString& mask ) const
+{
+	QString contents;
+	
+	foreach ( const pData& d, data ) {
+		contents += mask
+								.arg( d.name )
+								.arg( d.nick )
+								.arg( d.country )
+								.arg( d.email )
+								.arg( d.comment );
+		
+		if ( d != data.last() ) {
+			contents += "<tr><td></td></tr>";
+		}
+	}
+	
+	return makeTable( contents );
+}
+
+QString UIAbout::generateLinksTable( const QList<pData>& data, const QString& mask ) const
+{
+	QString contents;
+	
+	foreach ( const pData& d, data ) {
+		contents += mask
+								.arg( d.comment )
+								.arg( d.email );
+		
+		if ( d != data.last() ) {
+			contents += "<tr><td></td></tr>";
+		}
+	}
+	
+	return makeTable( contents );
+}
+
+QString UIAbout::generateDonationsTable( const QList<pData>& data, const QString& mask ) const
+{
+	QString contents;
+	
+	foreach ( const pData& d, data ) {
+		contents += mask
+								.arg( d.name )
+								.arg( d.nick )
+								.arg( d.country )
+								.arg( d.email )
+								.arg( d.comment );
+		
+		if ( d != data.last() ) {
+			contents += "<tr><td></td></tr>";
+		}
+	}
+	
+	return makeTable( contents );
 }

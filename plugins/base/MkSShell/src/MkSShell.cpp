@@ -1,8 +1,11 @@
 #include "MkSShell.h"
 
+#include <pDockWidget.h>
+#include <pDockToolBar.h>
 #include <MkSShellConsole.h>
 #include <MonkeyCore.h>
 #include <UIMain.h>
+#include <pActionsManager.h>
 
 class MkSShellDock : public pDockWidget
 {

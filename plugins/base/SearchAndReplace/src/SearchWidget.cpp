@@ -831,7 +831,7 @@ void SearchWidget::replaceThread_openedFileHandled( const QString& fileName, con
 
 void SearchWidget::replaceThread_error( const QString& error )
 {
-	MonkeyCore::messageManager()->appendMessage( error, 0 );
+	MonkeyCore::messageManager()->appendMessage( error );
 }
 
 void SearchWidget::search_textChanged()
@@ -887,13 +887,13 @@ void SearchWidget::on_pbSearch_clicked()
 	
 	if ( mProperties.searchText.isEmpty() )
 	{
-		MonkeyCore::messageManager()->appendMessage( tr( "You can't search for NULL text." ), 0 );
+		MonkeyCore::messageManager()->appendMessage( tr( "You can't search for NULL text." ) );
 		return;
 	}
 	
 	if ( mProperties.mode & SearchAndReplace::ModeFlagProjectFiles && !mProperties.project )
 	{
-		MonkeyCore::messageManager()->appendMessage( tr( "You can't search in project files because there is no opened projet." ), 0 );
+		MonkeyCore::messageManager()->appendMessage( tr( "You can't search in project files because there is no opened projet." ) );
 		return;
 	}
 	
@@ -931,7 +931,7 @@ void SearchWidget::on_pbReplaceChecked_clicked()
 	
 	if ( mProperties.mode & SearchAndReplace::ModeFlagProjectFiles && !mProperties.project )
 	{
-		MonkeyCore::messageManager()->appendMessage( tr( "You can't replace in project files because there is no opened projet." ), 0 );
+		MonkeyCore::messageManager()->appendMessage( tr( "You can't replace in project files because there is no opened projet." ) );
 		return;
 	}
 

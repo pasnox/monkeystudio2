@@ -6,6 +6,7 @@
 #include <MonkeyCore.h>
 #include <MkSShellInterpreter.h>
 #include <pQueuedMessageToolBar.h>
+#include <pMenuBar.h>
 
 #include <QFileInfo>
 
