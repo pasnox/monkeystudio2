@@ -29,6 +29,7 @@
 #include "Settings.h"
 #include "main.h"
 #include "../coremanager/MonkeyCore.h"
+#include "../pMonkeyStudio.h"
 
 #include <pQueuedMessageToolBar.h>
 
@@ -259,14 +260,10 @@ void Settings::setDefaultSettings()
 
 void Settings::setDefaultCppSyntaxHighlight()
 {
-#if defined Q_OS_MAC
-	const QString font = "Bitstream Vera Sans Mono, 11";
-#elif defined Q_OS_WIN
-	const QString font = "Courier New, 10";
-#else
-	const QString font = "Bitstream Vera Sans Mono, 9";
-#endif
-	// configure styles
+	const QFont font = pMonkeyStudio::defaultDocumentFont();
+	const QStringList parts = QStringList() << font.family() << QString::number( font.pointSize() );
+
+	// configure default styles
 	LexerStyleList styles;
 	styles << LexerStyle( 0, 0, false, "%1, 0, 0, 0", 16777215 );
 	styles << LexerStyle( 1, 10526880, false, "%1, 0, 0, 0", 16777215 );
@@ -285,17 +282,20 @@ void Settings::setDefaultCppSyntaxHighlight()
 	styles << LexerStyle( 17, 32896, false, "%1, 0, 0, 0", 16777215 );
 	styles << LexerStyle( 18, 8388608, false, "%1, 0, 0, 0", 16777215 );
 	styles << LexerStyle( 19, 0, false, "%1, 0, 0, 0", 16777215 );
+	
 	// write styles
 	beginGroup( "Scintilla/C++" );
+	
 	foreach ( const LexerStyle& style, styles )
 	{
 		beginGroup( QString( "style%1" ).arg( style.id ) );
 		setValue( "color", style.color );
 		setValue( "eolfill", style.eolfill );
-		setValue( "font", style.font.arg( font ).split( ',' ) );
+		setValue( "font", style.font.arg( parts.join( ", " ) ).split( ',' ) );
 		setValue( "paper", style.paper );
 		endGroup();
 	}
+	
 	setValue( "properties/foldatelse", QVariant( true ).toString() );
 	setValue( "properties/foldcomments", QVariant( true ).toString() );
 	setValue( "properties/foldcompact", QVariant( true ).toString() );
@@ -305,5 +305,6 @@ void Settings::setDefaultCppSyntaxHighlight()
 	setValue( "defaultpaper", 16777215 );
 	setValue( "defaultfont", QString( "Verdana, 10, 0, 0, 0" ).split( ',' ) );
 	setValue( "autoindentstyle", 1 );
+	
 	endGroup();
 }

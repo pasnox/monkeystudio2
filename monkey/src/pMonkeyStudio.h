@@ -142,6 +142,8 @@ namespace pMonkeyStudio
 	Q_MONKEY_EXPORT QColor defaultDocumentPen();
 	Q_MONKEY_EXPORT void setDefaultDocumentPaper( const QColor& defaultPaper );
 	Q_MONKEY_EXPORT QColor defaultDocumentPaper();
+	Q_MONKEY_EXPORT void setDefaultDocumentFont( const QFont& defaultFont );
+	Q_MONKEY_EXPORT QFont defaultDocumentFont();
 	// Auto Completion
 	Q_MONKEY_EXPORT void setAutoCompletionCaseSensitivity( bool caseSensitive );
 	Q_MONKEY_EXPORT bool autoCompletionCaseSensitivity();

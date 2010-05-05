@@ -231,6 +231,8 @@ void UISettings::loadSettings()
 	gbDefaultDocumentColours->setChecked( defaultDocumentColours() );
 	tbDefaultDocumentPen->setColor( defaultDocumentPen() );
 	tbDefaultDocumentPaper->setColor( defaultDocumentPaper() );
+	lDefaultDocumentFont->setFont( defaultDocumentFont() );
+	lDefaultDocumentFont->setToolTip( defaultDocumentFont().toString() );
 	//  Auto Completion
 	gbAutoCompletionEnabled->setChecked( autoCompletionSource() != QsciScintilla::AcsNone );
 	cbAutoCompletionCaseSensitivity->setChecked( autoCompletionCaseSensitivity() );
@@ -375,6 +377,7 @@ void UISettings::saveSettings()
 	setDefaultDocumentColours( gbDefaultDocumentColours->isChecked() );
 	setDefaultDocumentPen( tbDefaultDocumentPen->color() );
 	setDefaultDocumentPaper( tbDefaultDocumentPaper->color() );
+	setDefaultDocumentFont( lDefaultDocumentFont->font() );
 	//  Auto Completion
 	setAutoCompletionSource( QsciScintilla::AcsNone );
 	if ( gbAutoCompletionEnabled->isChecked() )
@@ -541,6 +544,20 @@ void UISettings::on_tbDefaultProjectsDirectory_clicked()
 	QString s = QFileDialog::getExistingDirectory( window(), tr( "Select default projects directory" ), leDefaultProjectsDirectory->text() );
 	if ( !s.isNull() )
 		leDefaultProjectsDirectory->setText( s );
+}
+
+void UISettings::on_pbDefaultDocumentFont_clicked()
+{
+	QFont font = lDefaultDocumentFont->font();
+	bool ok;
+	
+	font = QFontDialog::getFont( &ok, font, this, tr( "Choose the default document font" ), QFontDialog::DontUseNativeDialog );
+	
+	if ( ok )
+	{
+		lDefaultDocumentFont->setFont( font );
+		lDefaultDocumentFont->setToolTip( font.toString() );
+	}
 }
 
 void UISettings::on_gbAutoCompletionEnabled_clicked( bool checked )
