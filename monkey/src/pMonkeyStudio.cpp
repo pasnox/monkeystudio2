@@ -92,7 +92,7 @@ QStringList pMonkeyStudio::availableImageFormats()
 }
 
 /*!
-	\details Return a lsit of all know languages
+	\details Return a lsit of all know qscintilla languages
 */
 QStringList pMonkeyStudio::availableLanguages()
 {
@@ -834,7 +834,8 @@ void pMonkeyStudio::resetLexer( QsciLexer* lexer )
 	pSettings* settings = MonkeyCore::settings();
 	// remove lexer entry
 	settings->remove( QString( "%1/%2" ).arg( scintillaSettingsPath() ).arg( lexer->language() ) );
-	// set default styles
+	// set default styles & font
+	lexer->setDefaultFont( defaultDocumentFont() );
 	for ( int i = 0; i < 128; ++i )
 	{
 		if ( !lexer->description( i ).isEmpty() )
@@ -863,9 +864,9 @@ void pMonkeyStudio::applyProperties()
 	foreach ( QsciLexer* l, mGlobalsLexers.values() )
 	{
 		// refresh properties
-		l->setFont( defaultDocumentFont() );
 		l->readSettings( *ss, scintillaSettingsPath().toLocal8Bit().constData() );
 		// refresh default pen/paper if needed
+		l->setDefaultFont( defaultDocumentFont() );
 		if ( defaultDocumentColours() )
 		{
 			l->setDefaultColor( defaultDocumentPen() );

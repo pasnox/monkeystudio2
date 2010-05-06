@@ -57,6 +57,7 @@ private:
 	QHash<QString,QsciLexer*> mLexers;
 
 public slots:
+	void reject();
 	void accept();
 	void apply();
 
@@ -82,6 +83,7 @@ private slots:
 	void cbLexersHighlightingProperties_clicked( bool );
 	void on_cbLexersHighlightingIndentationWarning_currentIndexChanged( int );
 	void on_pbLexersHighlightingReset_clicked();
+	void on_pbLexersApplyDefaultFont_clicked();
 	void on_twAbbreviations_itemSelectionChanged();
 	void on_pbAbbreviationsAdd_clicked();
 	void on_pbAbbreviationsRemove_clicked();

@@ -920,6 +920,16 @@ void UISettings::on_pbLexersHighlightingReset_clicked()
 	}
 }
 
+void UISettings::on_pbLexersApplyDefaultFont_clicked()
+{
+	Settings* settings = MonkeyCore::settings();
+	const QFont font = lDefaultDocumentFont->font();
+	const QString language = cbLexersHighlightingLanguages->currentText();
+	
+	settings->setDefaultLexerProperties( font, false );
+	on_cbLexersHighlightingLanguages_currentIndexChanged( language );
+}
+
 void UISettings::on_twAbbreviations_itemSelectionChanged()
 {
 	// get item
@@ -945,6 +955,17 @@ void UISettings::on_teAbbreviationsCode_textChanged()
 	QTreeWidgetItem* it = twAbbreviations->selectedItems().value( 0 );
 	if ( it )
 		it->setData( 0, Qt::UserRole, teAbbreviationsCode->toPlainText() );
+}
+
+void UISettings::reject()
+{
+	Settings* settings = MonkeyCore::settings();
+	
+	foreach ( QsciLexer* lexer, mLexers ) {
+		lexer->readSettings( *settings, scintillaSettingsPath().toLocal8Bit().constData() );
+	}
+	
+	QDialog::reject();
 }
 
 void UISettings::accept()
