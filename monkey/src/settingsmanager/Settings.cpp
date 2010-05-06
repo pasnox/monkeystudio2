@@ -29,6 +29,7 @@
 #include "Settings.h"
 #include "main.h"
 #include "../coremanager/MonkeyCore.h"
+#include "../pMonkeyStudio.h"
 
 #include <pQueuedMessageToolBar.h>
 
@@ -38,12 +39,12 @@
 
 Settings::Settings( QObject* o )
 	: pSettings( o )
-{}
+{
+}
 
 QString Settings::storageToString( Settings::StoragePath type ) const
 {
-	switch ( type )
-	{
+	switch ( type ) {
 		case SP_PLUGINS:
 			return QString( "plugins" );
 			break;
@@ -68,34 +69,29 @@ QStringList Settings::storagePaths( Settings::StoragePath type ) const
 {
 	QStringList result = value( QString( "Paths/%1" ).arg( storageToString( type ) ) ).toStringList();
 
-	if ( !result.isEmpty() )
-	{
+	if ( !result.isEmpty() ) {
 		return result;
 	}
 
 	// Compatibility layer with old mks version (before 1.8.3.3)
 	Settings* settings = const_cast<Settings*>( this );
 
-	if ( type == SP_TEMPLATES && contains( "Templates/DefaultDirectories" ) )
-	{
+	if ( type == SP_TEMPLATES && contains( "Templates/DefaultDirectories" ) ) {
 		settings->setStoragePaths( type, value( "Templates/DefaultDirectories" ).toStringList() );
 		settings->remove( "Templates/DefaultDirectories" );
 	}
-	else if ( type == SP_TRANSLATIONS && contains( "Translations/Path" ) )
-	{
+	else if ( type == SP_TRANSLATIONS && contains( "Translations/Path" ) ) {
 		settings->setStoragePaths( type, value( "Translations/Path" ).toStringList() );
 		settings->remove( "Translations/Path" );
 	}
-	else if ( type == SP_PLUGINS && contains( "Plugins/Path" ) )
-	{
+	else if ( type == SP_PLUGINS && contains( "Plugins/Path" ) ) {
 		settings->setStoragePaths( type, value( "Plugins/Path" ).toStringList() );
 		settings->remove( "Plugins/Path" );
 	}
 
 	result = value( QString( "Paths/%1" ).arg( storageToString( type ) ) ).toStringList();
 
-	if ( !result.isEmpty() )
-	{
+	if ( !result.isEmpty() ) {
 		return result;
 	}
 
@@ -116,13 +112,11 @@ QStringList Settings::storagePaths( Settings::StoragePath type ) const
 	basePath = PACKAGE_DATAS;
 #endif
 
-	if ( !appIsInstalled )
-	{
+	if ( !appIsInstalled ) {
 		return storagePathsOutOfBox( type, appPath );
 	}
 
-	if ( type == Settings::SP_PLUGINS )
-	{
+	if ( type == Settings::SP_PLUGINS ) {
 #ifdef Q_OS_WIN
 		basePath = appPath;
 #elif defined Q_OS_MAC
@@ -155,8 +149,7 @@ QString Settings::homePath( Settings::StoragePath type ) const
 	const QString path = QFileInfo( fileName() ).absolutePath().append( QString( "/%1" ).arg( folder ) );
 	QDir dir( path );
 
-	if ( !dir.exists() && !dir.mkpath( path ) )
-	{
+	if ( !dir.exists() && !dir.mkpath( path ) ) {
 		return QString::null;
 	}
 
@@ -173,8 +166,7 @@ QStringList Settings::storagePathsOutOfBox( Settings::StoragePath type, const QS
 	basePath.append( "/../datas" );
 #endif
 
-	if ( type == Settings::SP_PLUGINS )
-	{
+	if ( type == Settings::SP_PLUGINS ) {
 #ifdef Q_OS_WIN
 		basePath = appPath;
 #elif defined Q_OS_MAC
@@ -206,20 +198,16 @@ void Settings::setDefaultSettings()
 	setStoragePaths( Settings::SP_SCRIPTS, scriptsPaths );
 
 	// apis
-	foreach ( const QString& path, apisPaths )
-	{
-		if ( QFile::exists( path +"/cmake.api" ) )
-		{
+	foreach ( const QString& path, apisPaths ) {
+		if ( QFile::exists( path +"/cmake.api" ) ) {
 			setValue( "SourceAPIs/CMake", QStringList( QDir::cleanPath( path +"/cmake.api" ) ) );
 		}
 
-		if ( QFile::exists( path +"/cs.api" ) )
-		{
+		if ( QFile::exists( path +"/cs.api" ) ) {
 			setValue( "SourceAPIs/C#", QStringList( QDir::cleanPath( path +"/cs.api" ) ) );
 		}
 
-		if ( QFile::exists( path +"/c.api" ) )
-		{
+		if ( QFile::exists( path +"/c.api" ) ) {
 			QStringList files;
 
 			files << QDir::cleanPath( path +"/c.api" );
@@ -233,20 +221,16 @@ void Settings::setDefaultSettings()
 	}
 
 	// copy scripts to user's home
-	foreach ( const QString& path, scriptsPaths )
-	{
+	foreach ( const QString& path, scriptsPaths ) {
 		QFileInfoList files = QDir( path ).entryInfoList( QStringList( "*.mks" ) );
 
-		foreach ( const QFileInfo& file, files )
-		{
+		foreach ( const QFileInfo& file, files ) {
 			const QString fn = QDir( scriptsPath ).absoluteFilePath( file.fileName() );
 
-			if ( !QFile::exists( fn ) )
-			{
+			if ( !QFile::exists( fn ) ) {
 				QFile f( file.absoluteFilePath() );
 
-				if ( !f.copy( fn ) )
-				{
+				if ( !f.copy( fn ) ) {
 					MonkeyCore::messageManager()->appendMessage( tr( "Can't copy script '%1', %2" ).arg( file.fileName() ).arg( f.errorString() ) );
 				}
 			}
@@ -254,19 +238,16 @@ void Settings::setDefaultSettings()
 	}
 
 	// syntax highlighter
+	setDefaultLexerProperties( pMonkeyStudio::defaultDocumentFont(), true );
 	setDefaultCppSyntaxHighlight();
 }
 
 void Settings::setDefaultCppSyntaxHighlight()
 {
-#if defined Q_OS_MAC
-	const QString font = "Bitstream Vera Sans Mono, 11";
-#elif defined Q_OS_WIN
-	const QString font = "Courier New, 10";
-#else
-	const QString font = "Bitstream Vera Sans Mono, 9";
-#endif
-	// configure styles
+	const QFont font = pMonkeyStudio::defaultDocumentFont();
+	const QStringList parts = QStringList() << font.family() << QString::number( font.pointSize() );
+
+	// configure default styles
 	LexerStyleList styles;
 	styles << LexerStyle( 0, 0, false, "%1, 0, 0, 0", 16777215 );
 	styles << LexerStyle( 1, 10526880, false, "%1, 0, 0, 0", 16777215 );
@@ -285,17 +266,20 @@ void Settings::setDefaultCppSyntaxHighlight()
 	styles << LexerStyle( 17, 32896, false, "%1, 0, 0, 0", 16777215 );
 	styles << LexerStyle( 18, 8388608, false, "%1, 0, 0, 0", 16777215 );
 	styles << LexerStyle( 19, 0, false, "%1, 0, 0, 0", 16777215 );
+	
 	// write styles
 	beginGroup( "Scintilla/C++" );
+	
 	foreach ( const LexerStyle& style, styles )
 	{
 		beginGroup( QString( "style%1" ).arg( style.id ) );
 		setValue( "color", style.color );
 		setValue( "eolfill", style.eolfill );
-		setValue( "font", style.font.arg( font ).split( ',' ) );
+		setValue( "font", style.font.arg( parts.join( ", " ) ).split( ',' ) );
 		setValue( "paper", style.paper );
 		endGroup();
 	}
+	
 	setValue( "properties/foldatelse", QVariant( true ).toString() );
 	setValue( "properties/foldcomments", QVariant( true ).toString() );
 	setValue( "properties/foldcompact", QVariant( true ).toString() );
@@ -305,5 +289,27 @@ void Settings::setDefaultCppSyntaxHighlight()
 	setValue( "defaultpaper", 16777215 );
 	setValue( "defaultfont", QString( "Verdana, 10, 0, 0, 0" ).split( ',' ) );
 	setValue( "autoindentstyle", 1 );
+	
 	endGroup();
+}
+
+void Settings::setDefaultLexerProperties( const QFont& defaultFont, bool write )
+{
+	foreach ( const QString& language, pMonkeyStudio::availableLanguages() ) {
+		QsciLexer* lexer = pMonkeyStudio::lexerForLanguage( language );
+		
+		for ( int i = 0; i < 128; i++ ) {
+			if ( !lexer->description( i ).isEmpty() ) {
+                QFont font = lexer->font( i );
+				
+				font.setFamily( defaultFont.family() );
+				font.setPointSize( defaultFont.pointSize() );
+				lexer->setFont( font, i );
+			}
+		}
+		
+		if ( write ) {
+			lexer->writeSettings( *this, pMonkeyStudio::scintillaSettingsPath().toLocal8Bit().constData() );
+		}
+	}
 }

@@ -231,6 +231,8 @@ void UISettings::loadSettings()
 	gbDefaultDocumentColours->setChecked( defaultDocumentColours() );
 	tbDefaultDocumentPen->setColor( defaultDocumentPen() );
 	tbDefaultDocumentPaper->setColor( defaultDocumentPaper() );
+	lDefaultDocumentFont->setFont( defaultDocumentFont() );
+	lDefaultDocumentFont->setToolTip( defaultDocumentFont().toString() );
 	//  Auto Completion
 	gbAutoCompletionEnabled->setChecked( autoCompletionSource() != QsciScintilla::AcsNone );
 	cbAutoCompletionCaseSensitivity->setChecked( autoCompletionCaseSensitivity() );
@@ -375,6 +377,7 @@ void UISettings::saveSettings()
 	setDefaultDocumentColours( gbDefaultDocumentColours->isChecked() );
 	setDefaultDocumentPen( tbDefaultDocumentPen->color() );
 	setDefaultDocumentPaper( tbDefaultDocumentPaper->color() );
+	setDefaultDocumentFont( lDefaultDocumentFont->font() );
 	//  Auto Completion
 	setAutoCompletionSource( QsciScintilla::AcsNone );
 	if ( gbAutoCompletionEnabled->isChecked() )
@@ -541,6 +544,20 @@ void UISettings::on_tbDefaultProjectsDirectory_clicked()
 	QString s = QFileDialog::getExistingDirectory( window(), tr( "Select default projects directory" ), leDefaultProjectsDirectory->text() );
 	if ( !s.isNull() )
 		leDefaultProjectsDirectory->setText( s );
+}
+
+void UISettings::on_pbDefaultDocumentFont_clicked()
+{
+	QFont font = lDefaultDocumentFont->font();
+	bool ok;
+	
+	font = QFontDialog::getFont( &ok, font, this, tr( "Choose the default document font" ), QFontDialog::DontUseNativeDialog );
+	
+	if ( ok )
+	{
+		lDefaultDocumentFont->setFont( font );
+		lDefaultDocumentFont->setToolTip( font.toString() );
+	}
 }
 
 void UISettings::on_gbAutoCompletionEnabled_clicked( bool checked )
@@ -903,6 +920,16 @@ void UISettings::on_pbLexersHighlightingReset_clicked()
 	}
 }
 
+void UISettings::on_pbLexersApplyDefaultFont_clicked()
+{
+	Settings* settings = MonkeyCore::settings();
+	const QFont font = lDefaultDocumentFont->font();
+	const QString language = cbLexersHighlightingLanguages->currentText();
+	
+	settings->setDefaultLexerProperties( font, false );
+	on_cbLexersHighlightingLanguages_currentIndexChanged( language );
+}
+
 void UISettings::on_twAbbreviations_itemSelectionChanged()
 {
 	// get item
@@ -928,6 +955,17 @@ void UISettings::on_teAbbreviationsCode_textChanged()
 	QTreeWidgetItem* it = twAbbreviations->selectedItems().value( 0 );
 	if ( it )
 		it->setData( 0, Qt::UserRole, teAbbreviationsCode->toPlainText() );
+}
+
+void UISettings::reject()
+{
+	Settings* settings = MonkeyCore::settings();
+	
+	foreach ( QsciLexer* lexer, mLexers ) {
+		lexer->readSettings( *settings, scintillaSettingsPath().toLocal8Bit().constData() );
+	}
+	
+	QDialog::reject();
 }
 
 void UISettings::accept()

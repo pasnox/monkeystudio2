@@ -92,7 +92,7 @@ QStringList pMonkeyStudio::availableImageFormats()
 }
 
 /*!
-	\details Return a lsit of all know languages
+	\details Return a lsit of all know qscintilla languages
 */
 QStringList pMonkeyStudio::availableLanguages()
 {
@@ -834,7 +834,8 @@ void pMonkeyStudio::resetLexer( QsciLexer* lexer )
 	pSettings* settings = MonkeyCore::settings();
 	// remove lexer entry
 	settings->remove( QString( "%1/%2" ).arg( scintillaSettingsPath() ).arg( lexer->language() ) );
-	// set default styles
+	// set default styles & font
+	lexer->setDefaultFont( defaultDocumentFont() );
 	for ( int i = 0; i < 128; ++i )
 	{
 		if ( !lexer->description( i ).isEmpty() )
@@ -865,6 +866,7 @@ void pMonkeyStudio::applyProperties()
 		// refresh properties
 		l->readSettings( *ss, scintillaSettingsPath().toLocal8Bit().constData() );
 		// refresh default pen/paper if needed
+		l->setDefaultFont( defaultDocumentFont() );
 		if ( defaultDocumentColours() )
 		{
 			l->setDefaultColor( defaultDocumentPen() );
@@ -893,6 +895,7 @@ void pMonkeyStudio::setEditorProperties( pEditor* editor )
 		editor->setColor( defaultDocumentPen() );
 		editor->setPaper( defaultDocumentPaper() );
 	}
+	editor->setFont( defaultDocumentFont() );
 	// Auto Completion
 	editor->setAutoCompletionCaseSensitivity( autoCompletionCaseSensitivity() );
 	editor->setAutoCompletionReplaceWord( autoCompletionReplaceWord() );
@@ -1281,6 +1284,34 @@ void pMonkeyStudio::setDefaultDocumentPaper( const QColor& color )
 */
 QColor pMonkeyStudio::defaultDocumentPaper()
 { return MonkeyCore::settings()->value( settingsPath() +"/DefaultDocumentPaper", QColor( Qt::white ) ).value<QColor>(); }
+
+/*!
+	\details Set the custom editor font
+	\param font The font to apply
+*/
+void pMonkeyStudio::setDefaultDocumentFont( const QFont& font )
+{ MonkeyCore::settings()->setValue( settingsPath() +"/DefaultDocumentFont", font ); }
+
+/*!
+	\details Return the custom editor font
+*/
+QFont pMonkeyStudio::defaultDocumentFont()
+{
+	QFont font;
+
+#if defined( Q_OS_WIN )
+	font = QFont( "Courier", 10 );
+#elif defined( Q_OS_MAC )
+	font = QFont( "Monaco", 11 );
+	#if defined( MAC_OS_X_VERSION_10_6 )
+		font = QFont( "Menlo", 11 );
+	#endif
+#else
+	font = QFont( "Monospace", 9 );
+#endif
+	
+	return MonkeyCore::settings()->value( settingsPath() +"/DefaultDocumentFont", font ).value<QFont>();
+}
 
 /*!
 	\details Set auto completion is case sensitive or not

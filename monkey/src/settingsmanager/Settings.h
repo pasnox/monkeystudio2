@@ -71,6 +71,7 @@ public:
 	
 	virtual void setDefaultSettings();
 	void setDefaultCppSyntaxHighlight();
+	void setDefaultLexerProperties( const QFont& font, bool write );
 
 protected:
 	QStringList storagePathsOutOfBox( Settings::StoragePath type, const QString& appPath ) const;
