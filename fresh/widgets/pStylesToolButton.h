@@ -15,8 +15,13 @@ class Q_MONKEY_EXPORT pStylesToolButton : public QToolButton
 public:
 	pStylesToolButton( const QString& textFormat = QLatin1String( "%1" ), QWidget* parent = 0 );
 	
+	QStringList availableStyles() const;
+	
 	QString systemStyle() const;
 	QAction* systemAction() const;
+	
+	QString applicationStyle() const;
+	QAction* applicationAction() const;
 	
 	bool isCheckableActions() const;
 	QString currentStyle() const;
