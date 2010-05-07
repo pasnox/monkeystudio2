@@ -30,10 +30,10 @@ RESOURCES	*= src/resources/resources.qrc
 DEFINES	*= MONKEY_CORE_BUILD
 
 LIBS	*= -L$${PACKAGE_BUILD_PATH}
-mac:*-g++:LIBS	*= -Wl,-all_load # import all symbols as the not used ones too
-else:*-g++:LIBS	*= -Wl,--whole-archive # import all symbols as the not used ones too
-mac:*-g++:LIBS	*= -dynamic
-else:unix:*-g++:LIBS	*= -rdynamic
+mac:*-g++*:LIBS	*= -Wl,-all_load # import all symbols as the not used ones too
+else:*-g++*:LIBS	*= -Wl,--whole-archive # import all symbols as the not used ones too
+mac:*-g++*:LIBS	*= -dynamic
+else:unix:*-g++*:LIBS	*= -rdynamic
 
 isEqual( SYSTEM_QSCINTILLA, 1 ):PRE_TARGETDEPS	*= ../qscintilla
 PRE_TARGETDEPS	*= ../fresh ../ctags ../qCtagsSense
@@ -47,17 +47,17 @@ CONFIG( debug, debug|release ) {
 		unix:	LIBS	*= -lqscintilla2 -lfresh_debug -lctags_debug -lqCtagsSense_debug
 		else:	LIBS	*= -lqscintilla2 -lfreshd -lctagsd -lqCtagsSensed
 	}
-	win32-*g++:LIBS	*= -Wl,--out-implib,$${PACKAGE_BUILD_PATH}/lib$${TARGET}.a
+	win32-*g++*:LIBS	*= -Wl,--out-implib,$${PACKAGE_BUILD_PATH}/lib$${TARGET}.a
 	win32-msvc*:LIBS	*= /IMPLIB:$${PACKAGE_BUILD_PATH}/$${TARGET}.lib -lshell32
 } else {
 	#Release
 	LIBS	*= -lqscintilla2 -lctags -lfresh -lqCtagsSense
-	win32-*g++:LIBS	*= -Wl,--out-implib,$${PACKAGE_BUILD_PATH}/lib$${TARGET}.a
+	win32-*g++*:LIBS	*= -Wl,--out-implib,$${PACKAGE_BUILD_PATH}/lib$${TARGET}.a
 	win32-msvc*:LIBS	*= /IMPLIB:$${PACKAGE_BUILD_PATH}/$${TARGET}.lib -lshell32
 }
 
-mac:*-g++:LIBS	*= -Wl,-noall_load # stop importing all symbols
-else:*-g++:LIBS	*= -Wl,--no-whole-archive # stop importing all symbols
+mac:*-g++*:LIBS	*= -Wl,-noall_load # stop importing all symbols
+else:*-g++*:LIBS	*= -Wl,--no-whole-archive # stop importing all symbols
 
 FORMS	*= src/maininterface/ui/UITranslator.ui \
 	src/maininterface/ui/UIAbout.ui \

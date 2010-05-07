@@ -29,10 +29,10 @@ mac:MONKEY_PLUGINS_DIR	= $${PACKAGE_DESTDIR}/$${PACKAGE_TARGET}.app/Contents/plu
 else:unix|win32:MONKEY_PLUGINS_DIR	= $${PACKAGE_DESTDIR}/plugins
 #DEFINES	= __COVERAGESCANNER__
 LIBS	= -L$${PACKAGE_BUILD_PATH}
-mac:*-g++:LIBS	*= -Wl,-undefined,dynamic_lookup
+mac:*-g++*:LIBS	*= -Wl,-undefined,dynamic_lookup
 
 # ubuntu hardy/debian fix
-QMAKE_LFLAGS	-= -Wl,--no-undefined
+unix:!mac:QMAKE_LFLAGS	-= -Wl,--no-undefined
 
 win32:QMAKE_LIBDIR	+= $${PACKAGE_DESTDIR}
 contains( DEFINES, __COVERAGESCANNER__ ) {
