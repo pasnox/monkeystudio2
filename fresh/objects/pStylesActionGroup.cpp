@@ -1,7 +1,8 @@
 #include "pStylesActionGroup.h"
 
 #include <QStyleFactory>
-#include <QSysInfo>
+#include <QStyle>
+#include <QApplication>
 
 pStylesActionGroup::pStylesActionGroup( const QString& textFormat, QObject* parent )
 	: QActionGroup( parent )
@@ -14,54 +15,56 @@ pStylesActionGroup::pStylesActionGroup( const QString& textFormat, QObject* pare
 	connect( this, SIGNAL( triggered( QAction* ) ), this, SLOT( actionTriggered( QAction* ) ) );
 }
 
+QStringList pStylesActionGroup::availableStyles()
+{
+	return QStyleFactory::keys();
+}
+
 QString pStylesActionGroup::systemStyle()
 {
-	QString style;
+	const QStringList styles = availableStyles();
+	
 #if defined( Q_OS_WIN )
-	switch ( QSysInfo::WindowsVersion )
-	{
-		case QSysInfo::WV_XP:
-		case QSysInfo::WV_2003:
-			style = "windowsxp";
-			break;
-		case QSysInfo::WV_VISTA:
-			style = "windowsvista";
-			break;
-		case QSysInfo::WV_32s:
-		case QSysInfo::WV_95:
-		case QSysInfo::WV_98:
-		case QSysInfo::WV_Me:
-		case QSysInfo::WV_NT:
-		case QSysInfo::WV_2000:
-		default:
-			style = "windows";
-			break;
+	const QStringList possibleStyles = QStringList()
+		<< "windowsvista"
+		<< "windowsxp"
+		<< "windows";
+	
+	for ( int i = possibleStyles.count() -1; i > -1; i-- ) {
+		if ( styles.contains( possibleStyles.at( i ), Qt::CaseInsensitive ) ) {
+			return possibleStyles.at( i );
+		}
 	}
 #elif defined( Q_OS_MAC )
-	style = "macintosh (aqua)";
+	return "macintosh (aqua)";
 #else
 	const QString desktop = qgetenv( "DESKTOP_SESSION" ).toLower();
 	const QString version = qgetenv( QString( "%1_SESSION_VERSION" ).arg( desktop.toUpper() ).toLocal8Bit() );
+	QString style;
 	
-	if ( desktop == "kde" && version == "4" )
-	{
+	if ( desktop == "kde" && version == "4" ) {
 		style = "oxygen";
 	}
-	else if ( desktop == "gnome" )
-	{
-#if QT_VERSION < 0x040500
-		style = "cleanlooks";
-#else
-		style = "gtk+";
-#endif
+	else if ( desktop == "gnome" ) {
+		style = styles.contains( "gtk+", Qt::CaseInsensitive ) ? "gtk+" :"cleanlooks";
 	}
-	else
-	{
-		style = "plastique";
+	
+	if ( styles.contains( style, Qt::CaseInsensitive ) ) {
+		return style;
 	}
 #endif
 	
-	return style;
+	return styles.value( 0 );
+}
+
+QString pStylesActionGroup::applicationStyle()
+{
+	return QApplication::style()->objectName();
+}
+
+QAction* pStylesActionGroup::applicationAction() const
+{
+	return mActions.value( applicationStyle() );
 }
 
 QAction* pStylesActionGroup::systemAction() const

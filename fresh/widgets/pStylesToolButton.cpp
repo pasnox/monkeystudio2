@@ -16,6 +16,11 @@ pStylesToolButton::pStylesToolButton( const QString& textFormat, QWidget* parent
 	connect( mActions, SIGNAL( styleSelected(const QString& ) ), this, SIGNAL( styleSelected(const QString& ) ) );
 }
 
+QStringList pStylesToolButton::availableStyles() const
+{
+	return mActions->availableStyles();
+}
+
 QString pStylesToolButton::systemStyle() const
 {
 	return mActions->systemStyle();
@@ -24,6 +29,16 @@ QString pStylesToolButton::systemStyle() const
 QAction* pStylesToolButton::systemAction() const
 {
 	return mActions->systemAction();
+}
+
+QString pStylesToolButton::applicationStyle() const
+{
+	return mActions->applicationStyle();
+}
+
+QAction* pStylesToolButton::applicationAction() const
+{
+	return mActions->applicationAction();
 }
 
 bool pStylesToolButton::isCheckableActions() const

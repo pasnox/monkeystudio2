@@ -13,8 +13,13 @@ class Q_MONKEY_EXPORT pStylesActionGroup : public QActionGroup
 public:
 	pStylesActionGroup( const QString& textFormat = QLatin1String( "%1" ), QObject* parent = 0 );
 	
+	static QStringList availableStyles();
+	
 	static QString systemStyle();
 	QAction* systemAction() const;
+	
+	static QString applicationStyle();
+	QAction* applicationAction() const;
 	
 	bool isCheckable() const;
 	QString currentStyle() const;
