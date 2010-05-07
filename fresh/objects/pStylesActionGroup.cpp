@@ -46,7 +46,7 @@ QString pStylesActionGroup::systemStyle()
 		style = "oxygen";
 	}
 	else if ( desktop == "gnome" ) {
-		style = styles.contains( "gtk+", Qt::CaseInsensitive ) ? "gtk+" :"cleanlooks";
+		style = styles.contains( "gtk+", Qt::CaseInsensitive ) ? "gtk+" : "cleanlooks";
 	}
 	
 	if ( styles.contains( style, Qt::CaseInsensitive ) ) {
