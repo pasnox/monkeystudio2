@@ -224,7 +224,6 @@ void UISettings::loadSettings()
 	cbAutoSyntaxCheck->setChecked( autoSyntaxCheck() );
 	cbConvertTabsUponOpen->setChecked( convertTabsUponOpen() );
 	cbCreateBackupUponOpen->setChecked( createBackupUponOpen() );
-	cbAutoEolConversion->setChecked( autoEolConversion() );
 	cbDefaultCodec->setCurrentIndex( cbDefaultCodec->findText( defaultCodec() ) );
 	tbSelectionBackground->setColor( selectionBackgroundColor() );
 	tbSelectionForeground->setColor( selectionForegroundColor() );
@@ -296,6 +295,7 @@ void UISettings::loadSettings()
 	bgEolMode->button( eolMode() )->setChecked( true );
 	cbEolVisibility->setChecked( eolVisibility() );
 	cbAutoDetectEol->setChecked( autoDetectEol() );
+	cbAutoEolConversion->setChecked( autoEolConversion() );
 	gbWhitespaceVisibilityEnabled->setChecked( whitespaceVisibility() != QsciScintilla::WsInvisible );
 	if ( bgWhitespaceVisibility->button( whitespaceVisibility() ) )
 		bgWhitespaceVisibility->button( whitespaceVisibility() )->setChecked( true );
@@ -369,8 +369,6 @@ void UISettings::saveSettings()
 	setAutoSyntaxCheck( cbAutoSyntaxCheck->isChecked() );
 	setConvertTabsUponOpen( cbConvertTabsUponOpen->isChecked() );
 	setCreateBackupUponOpen( cbCreateBackupUponOpen->isChecked() ) ;
-	setAutoEolConversion( cbAutoEolConversion->isChecked() );
-	setAutoDetectEol( cbAutoDetectEol->isChecked() );
 	setDefaultCodec( cbDefaultCodec->currentText() );
 	setSelectionBackgroundColor( tbSelectionBackground->color() );
 	setSelectionForegroundColor( tbSelectionForeground->color() );
@@ -441,6 +439,7 @@ void UISettings::saveSettings()
 	setEolMode( (QsciScintilla::EolMode)bgEolMode->checkedId() );
 	setEolVisibility( cbEolVisibility->isChecked() );
 	setAutoDetectEol( cbAutoDetectEol->isChecked() );
+	setAutoEolConversion( cbAutoEolConversion->isChecked() );
 	setWhitespaceVisibility( QsciScintilla::WsInvisible );
 	if ( gbWhitespaceVisibilityEnabled->isChecked() )
 		setWhitespaceVisibility( (QsciScintilla::WhitespaceVisibility)bgWhitespaceVisibility->checkedId() );

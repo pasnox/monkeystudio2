@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>670</width>
-    <height>767</height>
+    <width>668</width>
+    <height>765</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -470,13 +470,6 @@ You can quickly change it using the dock context menu.</string>
            <widget class="QCheckBox" name="cbCreateBackupUponOpen">
             <property name="text">
              <string>Create Backup File Upon Open</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="cbAutoEolConversion">
-            <property name="text">
-             <string>Automatic End of Line Conversion</string>
             </property>
            </widget>
           </item>
@@ -1986,31 +1979,42 @@ You can quickly change it using the dock context menu.</string>
           <property name="spacing">
            <number>3</number>
           </property>
-          <item row="0" column="0">
-           <widget class="QRadioButton" name="rbEolUnix">
-            <property name="text">
-             <string>Unix</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QRadioButton" name="rbEolMac">
-            <property name="text">
-             <string>Macintosh</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QRadioButton" name="rbEolWindows">
-            <property name="text">
-             <string>Windows/DOS</string>
-            </property>
-           </widget>
+          <item row="0" column="0" colspan="2">
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="QRadioButton" name="rbEolUnix">
+              <property name="text">
+               <string>Unix</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="rbEolMac">
+              <property name="text">
+               <string>Macintosh</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="rbEolWindows">
+              <property name="text">
+               <string>Windows/DOS</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item row="1" column="0">
            <widget class="QCheckBox" name="cbAutoDetectEol">
             <property name="text">
              <string>Autodetect EOL</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" rowspan="2">
+           <widget class="QCheckBox" name="cbAutoEolConversion">
+            <property name="text">
+             <string>Automatic End of Line Conversion</string>
             </property>
            </widget>
           </item>
