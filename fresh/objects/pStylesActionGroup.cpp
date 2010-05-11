@@ -23,38 +23,39 @@ QStringList pStylesActionGroup::availableStyles()
 QString pStylesActionGroup::systemStyle()
 {
 	const QStringList styles = availableStyles();
+	QString style;
 	
 #if defined( Q_OS_WIN )
 	const QStringList possibleStyles = QStringList()
-		<< "windowsvista"
-		<< "windowsxp"
-		<< "windows";
+		<< "WindowsVista"
+		<< "WindowsXP"
+		<< "Windows";
 	
 	for ( int i = possibleStyles.count() -1; i > -1; i-- ) {
 		if ( styles.contains( possibleStyles.at( i ), Qt::CaseInsensitive ) ) {
-			return possibleStyles.at( i );
+			style = possibleStyles.at( i );
+			break;
 		}
 	}
 #elif defined( Q_OS_MAC )
-	return "macintosh (aqua)";
+	style = "Macintosh (aqua)";
 #else
 	const QString desktop = qgetenv( "DESKTOP_SESSION" ).toLower();
 	const QString version = qgetenv( QString( "%1_SESSION_VERSION" ).arg( desktop.toUpper() ).toLocal8Bit() );
-	QString style;
 	
-	if ( desktop == "kde" && version == "4" ) {
-		style = "oxygen";
+	if ( desktop == "kde" /*&& version == "4"*/ ) {
+		style = "Oxygen";
 	}
-	else if ( desktop == "gnome" ) {
-		style = styles.contains( "gtk+", Qt::CaseInsensitive ) ? "gtk+" : "cleanlooks";
+	else if ( desktop == "gnome" || desktop == "xfce" ) {
+		style = styles.contains( "GTK+", Qt::CaseInsensitive ) ? "GTK+" : "Cleanlooks";
 	}
+#endif
 	
 	if ( styles.contains( style, Qt::CaseInsensitive ) ) {
 		return style;
 	}
-#endif
 	
-	return styles.value( 0 );
+	return applicationStyle();
 }
 
 QString pStylesActionGroup::applicationStyle()
@@ -64,23 +65,23 @@ QString pStylesActionGroup::applicationStyle()
 
 QAction* pStylesActionGroup::applicationAction() const
 {
-	return mActions.value( applicationStyle() );
+	return mActions.value( applicationStyle().toLower() );
 }
 
 QAction* pStylesActionGroup::systemAction() const
 {
-	return mActions.value( systemStyle() );
+	return mActions.value( systemStyle().toLower() );
 }
 
 void pStylesActionGroup::refreshActions()
 {
-	QString curStyle = currentStyle();
+	const QString curStyle = currentStyle().toLower();
 	
 	qDeleteAll( mActions.values() );
 	mActions.clear();
 	
 	// Add style actions
-	const QStringList styles = QStyleFactory::keys();
+	const QStringList styles = availableStyles();
 	const QStringList::const_iterator cend = styles.constEnd();
 	
 	// Make sure ObjectName  is unique in case toolbar solution is used.
@@ -91,13 +92,13 @@ void pStylesActionGroup::refreshActions()
 	{
 		QAction* a = new QAction( mTextFormat.arg( *it ), this );
 		QString objName = objNamePrefix;
-		objName += *it;
+		objName += ( *it ).toLower().replace( ' ', '_' );
 		//objName += objNamePostfix;
 		
 		a->setObjectName( objName );
 		a->setData( ( *it ).toLower() );
 		a->setCheckable( true );
-		a->setChecked( *it == curStyle );
+		a->setChecked( ( *it ).toLower() == curStyle );
 		
 		mActions[ ( *it ).toLower() ] = a;
 		
