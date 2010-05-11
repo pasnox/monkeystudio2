@@ -14,8 +14,8 @@ struct QtVersion
 	QtVersion( const QString& version, const QString& path, bool def, const QString& qmakeSpec, const QString& qmakeParams, bool haveSuffixe )
 	{ Version = version; Path = path; Default = def; QMakeSpec = qmakeSpec; QMakeParameters = qmakeParams; HasQt4Suffix = haveSuffixe; }
 
-	quint32 key() const
-	{ return qHash( QString( "%1/%2/%3/%4" ).arg( Path ).arg( QMakeSpec ).arg( QMakeParameters ).arg( HasQt4Suffix ) ); }
+	quint32 hash() const
+	{ return qHash( QString( "%1/%2" ).arg( Path ).arg( QMakeSpec )/*.arg( QMakeParameters ).arg( HasQt4Suffix )*/ ); }
 
 	bool isValid() const
 	{ return !Version.isEmpty() && !Path.isEmpty() && QFile::exists( Path ); }

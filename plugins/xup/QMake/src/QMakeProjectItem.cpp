@@ -737,7 +737,7 @@ void QMakeProjectItem::installCommands()
 			cmd = pCommand();
 			cmd.setText( tr( "QMake" ) );
 			cmd.setCommand( version.qmake() );
-			cmd.setArguments( version.qmakeParameters().append( " \"$cp$\"" ) );
+			cmd.setArguments( version.qmakeParameters() );
 			cmd.setWorkingDirectory( "$cpp$" );
 			cmd.setUserData( QVariant::fromValue( &mCommands ) );
 			cmd.setProject( this );
