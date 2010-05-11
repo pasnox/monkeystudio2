@@ -100,6 +100,7 @@ void MonkeyCore::init()
 	// initialize locales
 	showMessage( &splash, tr( "Initializing locales..." ) );
 	TranslationManager* translationManager = MonkeyCore::translationsManager();
+	translationManager->setFakeCLocaleEnabled( true );
 	translationManager->addTranslationsMask( "qt*.qm" );
 	translationManager->addTranslationsMask( "assistant*.qm" );
 	translationManager->addTranslationsMask( "designer*.qm" );
