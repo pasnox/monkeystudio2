@@ -11,6 +11,7 @@ TranslationManager::TranslationManager( QObject* parent )
 {
 	mCurrentLocale = systemLocale();
 	mSystemTranslationsPath = QLibraryInfo::location( QLibraryInfo::TranslationsPath );
+	mFakeCLocaleEnabled = false;
 }
 
 TranslationManager::~TranslationManager()
@@ -87,7 +88,13 @@ void TranslationManager::reloadTranslations()
 		QLocale locale;
 		
 		for ( int i = 1; i < count +1; i++ ) {
-			const QString part = fileName.section( '_', i );
+			QString part = fileName.section( '_', i );
+			
+			if ( part.toLower() == "iw" || part.toLower().endsWith( "_iw" ) )
+			{
+				part.replace( "iw", "he" );
+			}
+			
 			locale = QLocale( part );
 			
 			//qWarning() << fileName << part << locale.name() << mCurrentLocale.name();
@@ -120,6 +127,10 @@ void TranslationManager::reloadTranslations()
 				translations << cfp;
 			}
 		}
+	}
+	
+	if ( !mAvailableLocales.contains( QLocale::c().name() ) && mFakeCLocaleEnabled ) {
+		mAvailableLocales << QLocale::c().name();
 	}
 }
 
@@ -196,4 +207,14 @@ QString TranslationManager::systemTranslationsPath() const
 void TranslationManager::setSystemTranslationsPath( const QString& path )
 {
 	mSystemTranslationsPath = path;
+}
+
+void TranslationManager::setFakeCLocaleEnabled( bool enabled )
+{
+	mFakeCLocaleEnabled = enabled;
+}
+
+bool TranslationManager::isFakeCLocaleEnabled() const
+{
+	return mFakeCLocaleEnabled;
 }

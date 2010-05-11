@@ -62,6 +62,7 @@ QTreeWidgetItem* TranslationDialog::newItem( const QLocale& locale )
 	QTreeWidgetItem* item = new QTreeWidgetItem;
 	item->setIcon( 0, pIconManager::icon( QString( "%1.png" ).arg( countryCode.toLower() ), ":/country-flags" ) );
 	item->setText( 0, QString( "%1 (%2)" ).arg( language ).arg( country ) );
+	item->setToolTip( 0, locale.name() );
 	item->setData( 0, Qt::UserRole, locale.name() );
 	return item;
 }
@@ -94,7 +95,8 @@ void TranslationDialog::on_tbReload_clicked()
 	mRootItems.clear();
 	
 	// create new ones
-	foreach ( const QLocale& locale, mTranslationManager->availableQLocales() ) {
+	foreach ( const QLocale& _locale, mTranslationManager->availableQLocales() ) {
+		const QLocale locale = _locale.language() == QLocale::C ? QLocale( QLocale::English ) : _locale;
 		QTreeWidgetItem* rootItem = this->rootItem( QLocale( locale.language() ) );
 		
 		if ( rootItem->data( 0, Qt::UserRole ).toString() == locale.name() ) {
