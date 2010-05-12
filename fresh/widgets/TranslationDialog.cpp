@@ -3,6 +3,8 @@
 #include "TranslationManager.h"
 #include "pIconManager.h"
 
+#include <pPathListEditor.h>
+
 #include <QFileDialog>
 #include <QDebug>
 
@@ -43,13 +45,24 @@ QString TranslationDialog::getLocale( TranslationManager* translationManager, QW
 
 void TranslationDialog::on_tbLocate_clicked()
 {
-	const QString path = QFileDialog::getExistingDirectory( this, tr( "Choose a folder containg your application translations" ), mTranslationManager->translationsPath() );
+	QDialog dlg( this );
+	pPathListEditor editor( this, tr( "Choose folders containg your application translations" ), QApplication::applicationDirPath() );
+	QDialogButtonBox buttons( this );
+	QVBoxLayout vl( &dlg );
+	vl.addWidget( &editor );
+	vl.addWidget( &buttons );
 	
-	if ( path.isNull() ) {
+	buttons.setStandardButtons( QDialogButtonBox::Cancel | QDialogButtonBox::Ok );
+	editor.setValues( mTranslationManager->translationsPaths() );
+	
+	connect( &buttons, SIGNAL( rejected() ), &dlg, SLOT( reject() ) );
+	connect( &buttons, SIGNAL( accepted() ), &dlg, SLOT( accept() ) );
+	
+	if ( dlg.exec() == QDialog::Rejected ) {
 		return;
 	}
 	
-	mTranslationManager->setTranslationsPath( path );
+	mTranslationManager->setTranslationsPaths( editor.values() );
 	ui->tbReload->click();
 }
 

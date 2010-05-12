@@ -106,7 +106,7 @@ void MonkeyCore::init()
 	translationManager->addTranslationsMask( "designer*.qm" );
 	translationManager->addTranslationsMask( "monkeystudio*.qm" );
 	translationManager->addForbiddenTranslationsMask( "assistant_adp*.qm" );
-	translationManager->setTranslationsPath( settings()->storagePaths( Settings::SP_TRANSLATIONS ).first() );
+	translationManager->setTranslationsPaths( settings()->storagePaths( Settings::SP_TRANSLATIONS ) );
 	
 	// init translations
 	showMessage( &splash, tr( "Initializing Translations..." ) );
