@@ -44,6 +44,9 @@
 #include <QDateTime>
 #include <QTextCodec>
 #include <QRegExp>
+#include <QDebug>
+
+#define USE_QSCINTILLA_SEARCH_ENGINE 0
 
 bool pEditor::mPasteAvailableInit = false;
 bool pEditor::mPasteAvailable = false;
@@ -100,6 +103,9 @@ pEditor::pEditor( QWidget* p )
 	
 bool pEditor::findFirst( const QString& expr, bool re, bool cs, bool wo, bool wrap, bool forward, int line, int index, bool show )
 {
+#if USE_QSCINTILLA_SEARCH_ENGINE == 1
+	return QsciScintilla::findFirst( expr, re, cs, wo, wrap, forward, line, index, show );
+#else
 	mSearchState.inProgress = false;
 
 	if ( expr.isEmpty() ) {
@@ -129,19 +135,27 @@ bool pEditor::findFirst( const QString& expr, bool re, bool cs, bool wo, bool wr
 	mSearchState.show = show;
 
 	return search();
+#endif
 }
 
 bool pEditor::findNext()
 {
+#if USE_QSCINTILLA_SEARCH_ENGINE == 1
+	return QsciScintilla::findNext();
+#else
 	if ( !mSearchState.inProgress ) {
 		return false;
 	}
 
 	return search();
+#endif
 }
 
 void pEditor::replace( const QString& replaceStr )
 {
+#if USE_QSCINTILLA_SEARCH_ENGINE == 1
+	QsciScintilla::replace( replaceStr );
+#else
 	if ( !mSearchState.inProgress ) {
 		return;
 	}
@@ -180,7 +194,7 @@ void pEditor::replace( const QString& replaceStr )
 	}
 	
 	// insert replace text
-	const long len = text.length();
+	const long len = text.toUtf8().length(); // scintilla position are count from qbytearray data: ie: non ascii leter are 2 or more bits.
 	insert( text );
 
 	// Reset the selection.
@@ -190,6 +204,7 @@ void pEditor::replace( const QString& replaceStr )
 	if ( mSearchState.forward ) {
 		mSearchState.startpos = start +len;
 	}
+#endif
 }
 
 void pEditor::keyPressEvent( QKeyEvent* e )
@@ -284,7 +299,8 @@ int pEditor::simpleSearch()
 	const bool isRE = mSearchState.flags & SCFIND_REGEXP;
 	const int from = qMin( mSearchState.startpos, mSearchState.endpos );
 	const int to = qMax( mSearchState.startpos, mSearchState.endpos );
-	const QString text = this->text().mid( from, to -from );
+	const QByteArray data = this->text().toUtf8().mid( from, to -from ); // scintilla position are from qbytearray size, ie: non ascii letter are 2 or more bits.
+	const QString text = QString::fromUtf8( data );
 	QString pattern = isRE ? mSearchState.expr : QRegExp::escape( mSearchState.expr );
 	QRegExp& rx = mSearchState.rx;
 	
@@ -299,9 +315,10 @@ int pEditor::simpleSearch()
 	int pos = mSearchState.forward ? rx.indexIn( text, from -from ) : rx.lastIndexIn( text, to -from );
 	
 	if ( pos != -1 ) {
-		pos += from;
-		SendScintilla( SCI_SETTARGETSTART, pos );
-		SendScintilla( SCI_SETTARGETEND, pos +rx.matchedLength() );
+		const long start = from +text.left( pos ).toUtf8().length();
+		const long end = start +text.mid( pos, rx.matchedLength() ).toUtf8().length();
+		SendScintilla( SCI_SETTARGETSTART, start );
+		SendScintilla( SCI_SETTARGETEND, end );
 	}
 	
 	return pos;
