@@ -3,6 +3,8 @@
 #include "TranslationManager.h"
 #include "pIconManager.h"
 
+#include <pPathListEditor.h>
+
 #include <QFileDialog>
 #include <QDebug>
 
@@ -43,13 +45,24 @@ QString TranslationDialog::getLocale( TranslationManager* translationManager, QW
 
 void TranslationDialog::on_tbLocate_clicked()
 {
-	const QString path = QFileDialog::getExistingDirectory( this, tr( "Choose a folder containg your application translations" ), mTranslationManager->translationsPath() );
+	QDialog dlg( this );
+	pPathListEditor editor( this, tr( "Choose folders containg your application translations" ), QApplication::applicationDirPath() );
+	QDialogButtonBox buttons( this );
+	QVBoxLayout vl( &dlg );
+	vl.addWidget( &editor );
+	vl.addWidget( &buttons );
 	
-	if ( path.isNull() ) {
+	buttons.setStandardButtons( QDialogButtonBox::Cancel | QDialogButtonBox::Ok );
+	editor.setValues( mTranslationManager->translationsPaths() );
+	
+	connect( &buttons, SIGNAL( rejected() ), &dlg, SLOT( reject() ) );
+	connect( &buttons, SIGNAL( accepted() ), &dlg, SLOT( accept() ) );
+	
+	if ( dlg.exec() == QDialog::Rejected ) {
 		return;
 	}
 	
-	mTranslationManager->setTranslationsPath( path );
+	mTranslationManager->setTranslationsPaths( editor.values() );
 	ui->tbReload->click();
 }
 
@@ -62,6 +75,7 @@ QTreeWidgetItem* TranslationDialog::newItem( const QLocale& locale )
 	QTreeWidgetItem* item = new QTreeWidgetItem;
 	item->setIcon( 0, pIconManager::icon( QString( "%1.png" ).arg( countryCode.toLower() ), ":/country-flags" ) );
 	item->setText( 0, QString( "%1 (%2)" ).arg( language ).arg( country ) );
+	item->setToolTip( 0, locale.name() );
 	item->setData( 0, Qt::UserRole, locale.name() );
 	return item;
 }
@@ -94,7 +108,8 @@ void TranslationDialog::on_tbReload_clicked()
 	mRootItems.clear();
 	
 	// create new ones
-	foreach ( const QLocale& locale, mTranslationManager->availableQLocales() ) {
+	foreach ( const QLocale& _locale, mTranslationManager->availableQLocales() ) {
+		const QLocale locale = _locale.language() == QLocale::C ? QLocale( QLocale::English ) : _locale;
 		QTreeWidgetItem* rootItem = this->rootItem( QLocale( locale.language() ) );
 		
 		if ( rootItem->data( 0, Qt::UserRole ).toString() == locale.name() ) {

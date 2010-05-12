@@ -26,8 +26,9 @@ public:
 	QLocale systemLocale() const;
 	QStringList availableLocales() const;
 	QList<QLocale> availableQLocales() const;
-	QString translationsPath() const;
-	QString systemTranslationsPath() const;
+	QStringList translationsPaths() const;
+	QStringList systemTranslationsPaths() const;
+	bool isFakeCLocaleEnabled() const;
 
 public slots:
 	void reloadTranslations();
@@ -38,15 +39,17 @@ public slots:
 	void addForbiddenTranslationsMask( const QString& mask );
 	void removeForbiddenTranslationsMask( const QString& mask );
 	void setCurrentLocale( const QLocale& locale );
-	void setTranslationsPath( const QString& path );
-	void setSystemTranslationsPath( const QString& path );
+	void setTranslationsPaths( const QStringList& paths );
+	void setSystemTranslationsPaths( const QStringList& paths );
+	void setFakeCLocaleEnabled( bool enabled );
 	
 protected:
 	QLocale mCurrentLocale;
 	QSet<QString> mTranslationsMasks;
 	QSet<QString> mForbiddenTranslationsMasks;
-	QString mTranslationsPath;
-	QString mSystemTranslationsPath;
+	QStringList mTranslationsPaths;
+	QStringList mSystemTranslationsPaths;
+	bool mFakeCLocaleEnabled;
 	QSet<QString> mAvailableLocales;
 	QHash<QLocale, QTranslatorList> mTranslators;
 	

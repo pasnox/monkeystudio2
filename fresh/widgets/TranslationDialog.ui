@@ -45,7 +45,7 @@ You can click on buttons to locate/reload the translations.</string>
    <item row="1" column="1">
     <widget class="QToolButton" name="tbLocate">
      <property name="toolTip">
-      <string>Click here to change the application translations path</string>
+      <string>Click here to change the application translations paths</string>
      </property>
      <property name="icon">
       <iconset resource="../resources/fresh.qrc">

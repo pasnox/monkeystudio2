@@ -10,7 +10,8 @@ TranslationManager::TranslationManager( QObject* parent )
 	: QObject( parent )
 {
 	mCurrentLocale = systemLocale();
-	mSystemTranslationsPath = QLibraryInfo::location( QLibraryInfo::TranslationsPath );
+	mSystemTranslationsPaths << QLibraryInfo::location( QLibraryInfo::TranslationsPath );
+	mFakeCLocaleEnabled = false;
 }
 
 TranslationManager::~TranslationManager()
@@ -66,10 +67,13 @@ void TranslationManager::reloadTranslations()
 {
 	clearTranslators();
 	
-	const QList<QFileInfo> files = QList<QFileInfo>()
-		<<QDir( mTranslationsPath ).entryInfoList( mTranslationsMasks.toList() )
-		<< QDir( mSystemTranslationsPath ).entryInfoList( mTranslationsMasks.toList() );
+	const QStringList paths = QStringList() << mTranslationsPaths << mSystemTranslationsPaths;
+	QList<QFileInfo> files;
 	QSet<QString> translations;
+
+	foreach ( const QString& path, paths ) {
+		files << QDir( path ).entryInfoList( mTranslationsMasks.toList() );
+	}
 	
 	foreach ( const QFileInfo& file, files ) {
 		const QString cfp = file.canonicalFilePath();
@@ -87,7 +91,13 @@ void TranslationManager::reloadTranslations()
 		QLocale locale;
 		
 		for ( int i = 1; i < count +1; i++ ) {
-			const QString part = fileName.section( '_', i );
+			QString part = fileName.section( '_', i );
+			
+			if ( part.toLower() == "iw" || part.toLower().endsWith( "_iw" ) )
+			{
+				part.replace( "iw", "he" );
+			}
+			
 			locale = QLocale( part );
 			
 			//qWarning() << fileName << part << locale.name() << mCurrentLocale.name();
@@ -120,6 +130,10 @@ void TranslationManager::reloadTranslations()
 				translations << cfp;
 			}
 		}
+	}
+	
+	if ( !mAvailableLocales.contains( QLocale::c().name() ) && mFakeCLocaleEnabled ) {
+		mAvailableLocales << QLocale::c().name();
 	}
 }
 
@@ -178,22 +192,32 @@ void TranslationManager::setCurrentLocale( const QLocale& locale )
 	mCurrentLocale = locale;
 }
 
-QString TranslationManager::translationsPath() const
+QStringList TranslationManager::translationsPaths() const
 {
-	return mTranslationsPath;
+	return mTranslationsPaths;
 }
 
-void TranslationManager::setTranslationsPath( const QString& path )
+void TranslationManager::setTranslationsPaths( const QStringList& paths )
 {
-	mTranslationsPath = path;
+	mTranslationsPaths = paths;
 }
 
-QString TranslationManager::systemTranslationsPath() const
+QStringList TranslationManager::systemTranslationsPaths() const
 {
-	return mSystemTranslationsPath;
+	return mSystemTranslationsPaths;
 }
 
-void TranslationManager::setSystemTranslationsPath( const QString& path )
+void TranslationManager::setSystemTranslationsPaths( const QStringList& paths )
 {
-	mSystemTranslationsPath = path;
+	mSystemTranslationsPaths = paths;
+}
+
+void TranslationManager::setFakeCLocaleEnabled( bool enabled )
+{
+	mFakeCLocaleEnabled = enabled;
+}
+
+bool TranslationManager::isFakeCLocaleEnabled() const
+{
+	return mFakeCLocaleEnabled;
 }
