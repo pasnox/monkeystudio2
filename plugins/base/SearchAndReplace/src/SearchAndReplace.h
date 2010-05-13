@@ -45,6 +45,22 @@ public:
 
 	Q_DECLARE_FLAGS( Options, Option );
 	
+	struct Settings
+	{
+		Settings()
+		{
+			replaceSearchText = true;
+			onlyWhenNotVisible = false;
+			onlyWhenNotRegExp = true;
+			onlyWhenNotEmpty = true;
+		}
+		
+		bool replaceSearchText;
+		bool onlyWhenNotVisible;
+		bool onlyWhenNotRegExp;
+		bool onlyWhenNotEmpty;
+	};
+	
 	struct Properties
 	{
 		Properties()
@@ -64,7 +80,13 @@ public:
 		QMap<QString, QString> openedFiles; // filename, content
 		class XUPProjectItem* project;
 		QStringList sourcesFiles;
+		Settings settings;
 	};
+	
+	virtual QWidget* settingsWidget();
+	
+	SearchAndReplace::Settings settings() const;
+	void setSettings( const SearchAndReplace::Settings& settings );
 
 protected:
 	QPointer<SearchWidget> mWidget;

@@ -1,4 +1,5 @@
 #include "SearchWidget.h"
+#include "SearchAndReplace.h"
 #include "SearchThread.h"
 #include "ReplaceThread.h"
 #include "SearchResultsDock.h"
@@ -22,9 +23,12 @@
 #include <QStatusBar>
 #include <QProgressBar>
 
-SearchWidget::SearchWidget( QWidget* parent )
+SearchWidget::SearchWidget( SearchAndReplace* plugin, QWidget* parent )
 	: QFrame( parent )
 {
+	Q_ASSERT( plugin );
+	mPlugin = plugin;
+	
 	setupUi( this );
 	cbSearch->completer()->setCaseSensitivity( Qt::CaseSensitive );
 	cbReplace->completer()->setCaseSensitivity( Qt::CaseSensitive );
@@ -230,20 +234,29 @@ void SearchWidget::setMode( SearchAndReplace::Mode mode )
 
 	if ( isVisible() )
 	{
-		if ( !wasVisible && !searchText.isEmpty() )
+		if ( mProperties.settings.replaceSearchText )
 		{
-			cbSearch->setEditText( searchText );
+			const bool isRE = mProperties.options & SearchAndReplace::OptionRegularExpression;
+			const bool isEmpty = searchText.isEmpty();
+			const bool validateVisibility = !mProperties.settings.onlyWhenNotVisible || ( mProperties.settings.onlyWhenNotVisible && !wasVisible );
+			const bool validateRegExp = !mProperties.settings.onlyWhenNotRegExp || ( mProperties.settings.onlyWhenNotRegExp && !isRE );
+			const bool validateEmpty = !mProperties.settings.onlyWhenNotEmpty || ( mProperties.settings.onlyWhenNotEmpty && !isEmpty );
+			
+			if ( validateVisibility && validateRegExp && validateEmpty )
+			{
+				cbSearch->setEditText( searchText );
+			}
 		}
-		
-		cbSearch->lineEdit()->selectAll();
 
 		if ( mode & SearchAndReplace::ModeFlagSearch )
 		{
 			cbSearch->setFocus();
+			cbSearch->lineEdit()->selectAll();
 		}
 		else
 		{
 			cbReplace->setFocus();
+			cbReplace->lineEdit()->selectAll();
 		}
 		
 		if ( mode & SearchAndReplace::ModeFlagDirectory )
@@ -576,6 +589,7 @@ void SearchWidget::initializeProperties( bool currentDocumentOnly )
 	mProperties.openedFiles.clear();
 	mProperties.project = MonkeyCore::fileManager()->currentProject();
 	mProperties.sourcesFiles.clear();
+	mProperties.settings = mPlugin->settings();
 
 	// update masks
 	foreach ( const QString& part, cbMask->currentText().split( " ", QString::SkipEmptyParts ) )

@@ -1,4 +1,5 @@
 #include "SearchAndReplace.h"
+#include "SearchAndReplaceSettings.h"
 #include "SearchWidget.h"
 #include "SearchResultsDock.h"
 
@@ -10,6 +11,31 @@
 #include <pDockToolBar.h>
 #include <pMenuBar.h>
 
+QWidget* SearchAndReplace::settingsWidget()
+{
+	return new SearchAndReplaceSettings( this );
+}
+
+SearchAndReplace::Settings SearchAndReplace::settings() const
+{
+	SearchAndReplace::Settings settings;
+	
+	settings.replaceSearchText = settingsValue( "replaceSearchText", settings.replaceSearchText ).toBool();
+	settings.onlyWhenNotVisible = settingsValue( "onlyWhenNotVisible", settings.onlyWhenNotVisible ).toBool();
+	settings.onlyWhenNotRegExp = settingsValue( "onlyWhenNotRegExp", settings.onlyWhenNotRegExp ).toBool();
+	settings.onlyWhenNotEmpty = settingsValue( "onlyWhenNotEmpty", settings.onlyWhenNotEmpty ).toBool();
+	
+	return settings;
+}
+
+void SearchAndReplace::setSettings( const SearchAndReplace::Settings& settings )
+{
+	setSettingsValue( "replaceSearchText", settings.replaceSearchText );
+	setSettingsValue( "onlyWhenNotVisible", settings.onlyWhenNotVisible );
+	setSettingsValue( "onlyWhenNotRegExp", settings.onlyWhenNotRegExp );
+	setSettingsValue( "onlyWhenNotEmpty", settings.onlyWhenNotEmpty );
+}
+
 void SearchAndReplace::fillPluginInfos()
 {
 	mPluginInfos.Caption = tr( "SearchAndReplace" );
@@ -19,13 +45,13 @@ void SearchAndReplace::fillPluginInfos()
 	mPluginInfos.Name = PLUGIN_NAME;
 	mPluginInfos.Version = "1.0.0";
 	mPluginInfos.FirstStartEnabled = true;
-	mPluginInfos.HaveSettingsWidget = false;
+	mPluginInfos.HaveSettingsWidget = true;
 	mPluginInfos.Pixmap = pIconManager::pixmap( "SearchAndReplace.png", ":/icons" );
 }
 
 bool SearchAndReplace::install()
 {
-	mWidget = new SearchWidget;
+	mWidget = new SearchWidget( this );
 	MonkeyCore::workspace()->layout()->addWidget( mWidget );
 	mWidget->setVisible( false );
 
