@@ -55,6 +55,12 @@ bool pVersion::operator<( const pVersion& other ) const
 	if ( build < other.build )
 		return true;
 
+	if ( extra.isEmpty() && !other.extra.isEmpty() )
+		return false;
+	
+	if ( !extra.isEmpty() && other.extra.isEmpty() )
+		return true;
+	
 	return extra < other.extra; // not the best but afaik ;)
 }
 
@@ -74,6 +80,12 @@ bool pVersion::operator>( const pVersion& other ) const
 
 	if ( build > other.build )
 		return true;
+	
+	if ( extra.isEmpty() && !other.extra.isEmpty() )
+		return true;
+	
+	if ( !extra.isEmpty() && other.extra.isEmpty() )
+		return false;
 
 	return extra > other.extra; // not the best but afaik ;)
 }
