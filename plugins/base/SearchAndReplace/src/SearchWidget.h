@@ -7,6 +7,7 @@
 
 #include <QFile>
 
+class SearchAndReplace;
 class SearchThread;
 class ReplaceThread;
 class SearchResultsDock;
@@ -31,7 +32,7 @@ public:
 		Bad
 	};
 
-	SearchWidget( QWidget* parent = 0 );
+	SearchWidget( SearchAndReplace* plugin, QWidget* parent = 0 );
 	virtual ~SearchWidget();
 
 	SearchAndReplace::Mode mode() const;
@@ -45,6 +46,7 @@ public slots:
 	void setMode( SearchAndReplace::Mode mode );
 
 protected:
+	SearchAndReplace* mPlugin;
 	SearchAndReplace::Mode mMode;
 	QMap<SearchAndReplace::Option, QAction*> mOptionActions;
 	SearchAndReplace::Properties mProperties;
