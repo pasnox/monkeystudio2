@@ -2,14 +2,14 @@
 
 [CustomMessages]
 MKS_NAME=Monkey Studio IDE
-MKS_COPYRIGHTS=2005 - 2009 Azevedo Filipe & The Monkey Studio Team
+MKS_COPYRIGHTS=2005 - 2010 Azevedo Filipe & The Monkey Studio Team
 MKS_URL=http://monkeystudio.org
 MKS_FORUMS_URL=http://monkeystudio.org/forum
 
-#define MKS_VERSION "1.8.4.0b2"
-#define MKS_REVISION "3482"
+#define MKS_VERSION "1.8.4.0"
+#define MKS_REVISION "3727"
 #define MKS_SETUP_NAME "setup_mks_" +MKS_VERSION +"-svn" +MKS_REVISION +"-win32"
-#define QT_PATH "C:\Development\Qt\4.5.1"
+#define QT_PATH "C:\Development\Qt\4.6.1"
 
 [Setup]
 OutputDir=..
@@ -61,10 +61,10 @@ Source: ..\datas\translations\*.*; DestDir: {app}\translations; Flags: promptifo
 Source: ..\datas\templates\*.*; DestDir: {app}\templates; Flags: promptifolder recursesubdirs createallsubdirs
 Source: ..\datas\apis\*.*; DestDir: {app}\apis; Flags: promptifolder recursesubdirs createallsubdirs
 ; Qt related files
-Source: {#QT_PATH}\bin\*.dll; DestDir: {app}; Flags: confirmoverwrite promptifolder; Excludes: *d4.dll
+Source: {#QT_PATH}\bin\*.dll; DestDir: {app}; Flags: confirmoverwrite promptifolder; Excludes: *d4.dll libgcc_s_dw2-1.dll
 Source: {#QT_PATH}\doc\qch\*.qch; DestDir: {app}\qt\doc\qch; Flags: promptifolder recursesubdirs
 Source: {#QT_PATH}\plugins\*.dll; DestDir: {app}\qt\plugins; Flags: promptifolder recursesubdirs; Excludes: *d4.dll
-Source: {#QT_PATH}\translations\*.*; DestDir: {app}\qt\translations; Flags: promptifolder recursesubdirs; Excludes: *.pri README
+Source: {#QT_PATH}\translations\*.*; DestDir: {app}\qt\translations; Flags: promptifolder recursesubdirs; Excludes: *.pri *.pro README
 ; MinGW related files
 Source: D:\pasnox\Disk Wine\windows\system32\mingwm10.dll; DestDir: {app}; Flags: confirmoverwrite promptifolder
 
