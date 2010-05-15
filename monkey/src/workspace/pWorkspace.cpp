@@ -44,7 +44,6 @@
 #include "../recentsmanager/pRecentsManager.h"
 #include "pFileManager.h"
 #include "../maininterface/ui/UISettings.h"
-#include "../maininterface/ui/UITranslator.h"
 #include "UISaveFiles.h"
 #include "../maininterface/ui/UIAbout.h"
 #include "../templatesmanager/ui/UITemplatesWizard.h"
