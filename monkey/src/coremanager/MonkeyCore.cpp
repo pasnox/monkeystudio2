@@ -42,7 +42,6 @@
 #include "../abbreviationsmanager/pAbbreviationsManager.h"
 
 #include "../maininterface/ui/UISettings.h"
-#include "../maininterface/ui/UITranslator.h"
 
 #include <pIconManager.h>
 #include <pMultiToolBar.h>
