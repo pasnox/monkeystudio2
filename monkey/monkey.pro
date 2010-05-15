@@ -59,8 +59,7 @@ CONFIG( debug, debug|release ) {
 mac:*-g++*:LIBS	*= -Wl,-noall_load # stop importing all symbols
 else:*-g++*:LIBS	*= -Wl,--no-whole-archive # stop importing all symbols
 
-FORMS	*= src/maininterface/ui/UITranslator.ui \
-	src/maininterface/ui/UIAbout.ui \
+FORMS	*= src/maininterface/ui/UIAbout.ui \
 	src/maininterface/ui/UISettings.ui \
 	src/abbreviationsmanager/ui/UIAddAbbreviation.ui \
 	src/templatesmanager/ui/UITemplatesWizard.ui \
@@ -78,7 +77,6 @@ FORMS	*= src/maininterface/ui/UITranslator.ui \
 	src/workspace/pOpenedFileExplorer.ui
 
 HEADERS	*= src/main.h \
-	src/maininterface/ui/UITranslator.h \
 	src/maininterface/ui/UIAbout.h \
 	src/maininterface/ui/UISettings.h \
 	src/recentsmanager/pRecentsManager.h \
@@ -138,8 +136,7 @@ HEADERS	*= src/main.h \
 	src/consolemanager/pConsoleManagerStep.h \
 	src/consolemanager/pConsoleManagerStepModel.h
 
-SOURCES	*= src/maininterface/ui/UITranslator.cpp \
-	src/maininterface/ui/UIAbout.cpp \
+SOURCES	*= src/maininterface/ui/UIAbout.cpp \
 	src/maininterface/ui/UISettings.cpp \
 	src/recentsmanager/pRecentsManager.cpp \
 	src/qscintillamanager/pEditor.cpp \

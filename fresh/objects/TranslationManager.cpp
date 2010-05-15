@@ -68,10 +68,15 @@ void TranslationManager::reloadTranslations()
 	clearTranslators();
 	
 	const QStringList paths = QStringList() << mTranslationsPaths << mSystemTranslationsPaths;
+	const QString appDirPath = qApp->applicationDirPath();
 	QList<QFileInfo> files;
 	QSet<QString> translations;
 
-	foreach ( const QString& path, paths ) {
+	foreach ( QString path, paths ) {
+		if ( QDir::isRelativePath( path ) ) {
+			path = QString( "%1/%2" ).arg( appDirPath ).arg( path );
+		}
+		
 		files << QDir( path ).entryInfoList( mTranslationsMasks.toList() );
 	}
 	
