@@ -61,10 +61,10 @@ Source: ..\datas\translations\*.*; DestDir: {app}\translations; Flags: promptifo
 Source: ..\datas\templates\*.*; DestDir: {app}\templates; Flags: promptifolder recursesubdirs createallsubdirs
 Source: ..\datas\apis\*.*; DestDir: {app}\apis; Flags: promptifolder recursesubdirs createallsubdirs
 ; Qt related files
-Source: {#QT_PATH}\bin\*.dll; DestDir: {app}; Flags: confirmoverwrite promptifolder; Excludes: *d4.dll libgcc_s_dw2-1.dll
+Source: {#QT_PATH}\bin\*.dll; DestDir: {app}; Flags: confirmoverwrite promptifolder; Excludes: *d4.dll,libgcc_s_dw2-1.dll
 Source: {#QT_PATH}\doc\qch\*.qch; DestDir: {app}\qt\doc\qch; Flags: promptifolder recursesubdirs
 Source: {#QT_PATH}\plugins\*.dll; DestDir: {app}\qt\plugins; Flags: promptifolder recursesubdirs; Excludes: *d4.dll
-Source: {#QT_PATH}\translations\*.*; DestDir: {app}\qt\translations; Flags: promptifolder recursesubdirs; Excludes: *.pri *.pro README
+Source: {#QT_PATH}\translations\*.*; DestDir: {app}\qt\translations; Flags: promptifolder recursesubdirs; Excludes: *.pri,*.pro,README
 ; MinGW related files
 Source: D:\pasnox\Disk Wine\windows\system32\mingwm10.dll; DestDir: {app}; Flags: confirmoverwrite promptifolder
 
@@ -75,7 +75,7 @@ Name: {group}\Home Page; Filename: {app}\Home Page.url; WorkingDir: {app}
 Name: {group}\Forums; Filename: {app}\Forums.url; WorkingDir: {app}
 
 [INI]
-Filename: {app}\Home Page.url; Section: InternetShortcut; Key: URL; String: {cm:MKS_URL}; Flags: createkeyifdoesntexist uninsdeleteentry uninsdeletesectionifempty; Components:
+Filename: {app}\Home Page.url; Section: InternetShortcut; Key: URL; String: {cm:MKS_URL}; Flags: createkeyifdoesntexist uninsdeleteentry uninsdeletesectionifempty; Components: 
 Filename: {app}\Forums.url; Section: InternetShortcut; Key: URL; String: {cm:MKS_FORUMS_URL}; Flags: createkeyifdoesntexist uninsdeleteentry uninsdeletesectionifempty
 
 [UninstallDelete]
