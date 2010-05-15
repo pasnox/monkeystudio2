@@ -1,3 +1,889 @@
+2010-05-15 10:43  pasnox
+
+	* [r3723] ChangeLog:
+	  
+	  Update the change log.
+
+2010-05-15 10:30  pasnox
+
+	* [r3722] fresh/objects/TranslationManager.cpp, monkey/monkey.pro,
+	  monkey/sdk/UITranslator.h,
+	  monkey/src/commandlinemanager/CommandLineManager.cpp,
+	  monkey/src/maininterface/ui/UITranslator.cpp,
+	  monkey/src/maininterface/ui/UITranslator.h,
+	  monkey/src/maininterface/ui/UITranslator.ui:
+	  
+	  Fix relative translations path loading bug in TranslationManager
+	  class.
+	  Remove old translation dialog code.
+	  Update some code.
+
+2010-05-13 16:11  pasnox
+
+	* [r3720] fresh/objects/pVersion.cpp:
+	  
+	  Fix a bug that was causing version 1.8.4.0 to be inferior to
+	  1.8.4.0xx.
+
+2010-05-13 15:11  pasnox
+
+	* [r3719] build.pro, config.pri,
+	  plugins/base/SearchAndReplace/SearchAndReplace.pro,
+	  plugins/base/SearchAndReplace/src/SearchAndReplace.cpp,
+	  plugins/base/SearchAndReplace/src/SearchAndReplace.h,
+	  plugins/base/SearchAndReplace/src/SearchAndReplaceSettings.cpp,
+	  plugins/base/SearchAndReplace/src/SearchAndReplaceSettings.h,
+	  plugins/base/SearchAndReplace/src/SearchAndReplaceSettings.ui,
+	  plugins/base/SearchAndReplace/src/SearchWidget.cpp,
+	  plugins/base/SearchAndReplace/src/SearchWidget.h:
+	  
+	  Add settings widget for SearchAndReplace plugin.
+	  Thisallow to customize how is managed selected text when
+	  triggering a search & replace action like search, replace ...
+	  Some code update to handle that.
+	  This fix launchpad issue #539447
+	  Update default project qt version, and update application version
+	  to 1.8.4.0
+
+2010-05-12 21:58  pasnox
+
+	* [r3717] monkey/src/qscintillamanager/pEditor.cpp:
+	  
+	  Fix a bug that cause bad search/highlight/replace in document
+	  when document contains non ascii characters, Fixing launchpad bug
+	  #579147
+
+2010-05-12 12:47  pasnox
+
+	* [r3716] fresh/objects/TranslationManager.cpp,
+	  fresh/objects/TranslationManager.h,
+	  fresh/widgets/TranslationDialog.cpp,
+	  fresh/widgets/TranslationDialog.ui,
+	  monkey/src/coremanager/MonkeyCore.cpp:
+	  
+	  Add support for list a paths for system and application
+	  translations paths in TranslationManager class.
+	  Update related code due to previous changes.
+
+2010-05-11 22:42  pasnox
+
+	* [r3715] monkey/src/coremanager/MonkeyCore.cpp:
+	  
+	  Enable fake C locale.
+
+2010-05-11 22:38  pasnox
+
+	* [r3714] fresh/objects/TranslationManager.cpp,
+	  fresh/objects/TranslationManager.h,
+	  fresh/widgets/TranslationDialog.cpp:
+	  
+	  Add a work around for invalid qt translation 'qt_iw.ts/qm' which
+	  should be 'qt_he.ts/qm' (Fixed in Qt 4.6.3 & Up) that cause
+	  hebrew to be load for english & c locales.
+	  Add support for fake c locale for application that are natively
+	  translated in english.
+	  C locale is now printed english/united states in the translations
+	  dialog.
+
+2010-05-11 20:48  pasnox
+
+	* [r3712] fresh/objects/pStylesActionGroup.cpp:
+	  
+	  Fix critical launchpad bug #578805
+
+2010-05-11 17:59  pasnox
+
+	* [r3711] plugins/xup/QMake/src/QMakeProjectItem.cpp,
+	  plugins/xup/QMake/src/QtVersionManager.cpp,
+	  plugins/xup/QMake/src/QtVersionManager.h:
+	  
+	  Fix a bug that cause multiple insertion of same Qt version when
+	  editing a system qt version.
+	  Fix a bug that cause project name to be append to the qmake tool
+	  twice.
+
+2010-05-08 13:48  pasnox
+
+	* [r3708] config.pri:
+	  
+	  Fix a windows build error.
+
+2010-05-08 08:10  pasnox
+
+	* [r3707] monkey/src/maininterface/ui/UISettings.cpp,
+	  monkey/src/maininterface/ui/UISettings.ui:
+	  
+	  Fix launchpad whish #532459
+
+2010-05-07 12:40  pasnox
+
+	* [r3703] fresh/objects/pStylesActionGroup.cpp:
+	  
+	  Fix possible crash in pStylesActionGroup::systemStyle().
+	  Add support for pStylesActionGroup::applicationStyle() and
+	  pStylesActionGroup::applicationAction().
+
+2010-05-07 12:39  pasnox
+
+	* [r3702] fresh/objects/pStylesActionGroup.cpp,
+	  fresh/objects/pStylesActionGroup.h,
+	  fresh/widgets/pStylesToolButton.cpp,
+	  fresh/widgets/pStylesToolButton.h:
+	  
+	  Fix possible crash in pStylesActionGroup::systemStyle().
+	  Add support for pStylesActionGroup::applicationStyle() and
+	  pStylesActionGroup::applicationAction().
+
+2010-05-07 07:11  pasnox
+
+	* [r3699] monkey/monkey.pro, plugins/plugins.pri:
+	  
+	  Fix special mkspec undefined symbol when using specific g++ on
+	  mac & linux.
+
+2010-05-06 18:24  pasnox
+
+	* [r3697] monkey/src/maininterface/ui/UISettings.cpp,
+	  monkey/src/maininterface/ui/UISettings.h,
+	  monkey/src/maininterface/ui/UISettings.ui,
+	  monkey/src/pMonkeyStudio.cpp,
+	  monkey/src/settingsmanager/Settings.cpp,
+	  monkey/src/settingsmanager/Settings.h:
+	  
+	  Fix a bug that does not restore previous qscintilla lexers styles
+	  properties when changing styles properties in the preference
+	  dialog, then cancelling the dialog.
+	  Add support for default document font in preference dialog it's
+	  used by document with no lexer.
+	  Add support for first time run default lexer styles properties (
+	  font family and font point size ): Default font is a monospaced
+	  one.
+	  Add a new button in the lexer styles editor that allow to update
+	  all lexers's styles font family and font point size, without
+	  changing font styles ( bold, italic etc ).
+
+2010-05-05 23:17  pasnox
+
+	* [r3696] monkey/src/maininterface/ui/UISettings.cpp,
+	  monkey/src/maininterface/ui/UISettings.h,
+	  monkey/src/maininterface/ui/UISettings.ui,
+	  monkey/src/pMonkeyStudio.cpp, monkey/src/pMonkeyStudio.h,
+	  monkey/src/settingsmanager/Settings.cpp:
+	  
+	  Add support for default document font.
+	  This font is used for document with no lexer.
+	  C++ Lexer is initialized with this font too.
+	  More lexers may be initialized with the default font by user
+	  request.
+
+2010-05-03 19:40  pasnox
+
+	* [r3692] monkey/src/pluginsmanager/BasePlugin.cpp,
+	  monkey/src/pluginsmanager/BasePlugin.h,
+	  plugins/base/ClassBrowser/src/ClassBrowserSettings.cpp,
+	  plugins/base/Ctags2Api/src/Ctags2Api.cpp,
+	  plugins/base/FileBrowser/src/FileBrowserSettings.cpp,
+	  plugins/base/MessageBox/src/MessageBox.cpp,
+	  plugins/base/MkSShell/src/MkSShell.cpp,
+	  plugins/base/ProjectHeaders/src/ProjectHeaders.cpp,
+	  plugins/base/RegExpEditor/src/RegExpEditor.cpp,
+	  plugins/base/SearchAndReplace/src/SearchAndReplace.cpp,
+	  plugins/base/SearchAndReplace/src/SearchWidget.h,
+	  plugins/base/Tools/src/Tools.cpp,
+	  plugins/base/Tools/src/ToolsManager.cpp,
+	  plugins/base/UpdateChecker/src/UpdateChecker.cpp:
+	  
+	  Fix build error due to some include changes.
+
+2010-05-03 19:14  pasnox
+
+	* [r3691] fresh/fresh.pro, fresh/objects/TranslationManager.cpp,
+	  fresh/objects/TranslationManager.h, fresh/resources,
+	  fresh/resources/country-flags,
+	  fresh/resources/country-flags/ad.png,
+	  fresh/resources/country-flags/ae.png,
+	  fresh/resources/country-flags/af.png,
+	  fresh/resources/country-flags/ag.png,
+	  fresh/resources/country-flags/ai.png,
+	  fresh/resources/country-flags/al.png,
+	  fresh/resources/country-flags/am.png,
+	  fresh/resources/country-flags/an.png,
+	  fresh/resources/country-flags/ao.png,
+	  fresh/resources/country-flags/ar.png,
+	  fresh/resources/country-flags/as.png,
+	  fresh/resources/country-flags/at.png,
+	  fresh/resources/country-flags/au.png,
+	  fresh/resources/country-flags/aw.png,
+	  fresh/resources/country-flags/ax.png,
+	  fresh/resources/country-flags/az.png,
+	  fresh/resources/country-flags/ba.png,
+	  fresh/resources/country-flags/bb.png,
+	  fresh/resources/country-flags/bd.png,
+	  fresh/resources/country-flags/be.png,
+	  fresh/resources/country-flags/bf.png,
+	  fresh/resources/country-flags/bg.png,
+	  fresh/resources/country-flags/bh.png,
+	  fresh/resources/country-flags/bi.png,
+	  fresh/resources/country-flags/bj.png,
+	  fresh/resources/country-flags/bm.png,
+	  fresh/resources/country-flags/bn.png,
+	  fresh/resources/country-flags/bo.png,
+	  fresh/resources/country-flags/br.png,
+	  fresh/resources/country-flags/bs.png,
+	  fresh/resources/country-flags/bt.png,
+	  fresh/resources/country-flags/bv.png,
+	  fresh/resources/country-flags/bw.png,
+	  fresh/resources/country-flags/by.png,
+	  fresh/resources/country-flags/bz.png,
+	  fresh/resources/country-flags/ca.png,
+	  fresh/resources/country-flags/catalonia.png,
+	  fresh/resources/country-flags/cc.png,
+	  fresh/resources/country-flags/cd.png,
+	  fresh/resources/country-flags/cf.png,
+	  fresh/resources/country-flags/cg.png,
+	  fresh/resources/country-flags/ch.png,
+	  fresh/resources/country-flags/ci.png,
+	  fresh/resources/country-flags/ck.png,
+	  fresh/resources/country-flags/cl.png,
+	  fresh/resources/country-flags/cm.png,
+	  fresh/resources/country-flags/cn.png,
+	  fresh/resources/country-flags/co.png,
+	  fresh/resources/country-flags/cr.png,
+	  fresh/resources/country-flags/cs.png,
+	  fresh/resources/country-flags/cu.png,
+	  fresh/resources/country-flags/cv.png,
+	  fresh/resources/country-flags/cx.png,
+	  fresh/resources/country-flags/cy.png,
+	  fresh/resources/country-flags/cz.png,
+	  fresh/resources/country-flags/de.png,
+	  fresh/resources/country-flags/dj.png,
+	  fresh/resources/country-flags/dk.png,
+	  fresh/resources/country-flags/dm.png,
+	  fresh/resources/country-flags/do.png,
+	  fresh/resources/country-flags/dz.png,
+	  fresh/resources/country-flags/ec.png,
+	  fresh/resources/country-flags/ee.png,
+	  fresh/resources/country-flags/eg.png,
+	  fresh/resources/country-flags/eh.png,
+	  fresh/resources/country-flags/england.png,
+	  fresh/resources/country-flags/er.png,
+	  fresh/resources/country-flags/es.png,
+	  fresh/resources/country-flags/et.png,
+	  fresh/resources/country-flags/europeanunion.png,
+	  fresh/resources/country-flags/fam.png,
+	  fresh/resources/country-flags/fi.png,
+	  fresh/resources/country-flags/fj.png,
+	  fresh/resources/country-flags/fk.png,
+	  fresh/resources/country-flags/fm.png,
+	  fresh/resources/country-flags/fo.png,
+	  fresh/resources/country-flags/fr.png,
+	  fresh/resources/country-flags/ga.png,
+	  fresh/resources/country-flags/gb.png,
+	  fresh/resources/country-flags/gd.png,
+	  fresh/resources/country-flags/ge.png,
+	  fresh/resources/country-flags/gf.png,
+	  fresh/resources/country-flags/gh.png,
+	  fresh/resources/country-flags/gi.png,
+	  fresh/resources/country-flags/gl.png,
+	  fresh/resources/country-flags/gm.png,
+	  fresh/resources/country-flags/gn.png,
+	  fresh/resources/country-flags/gp.png,
+	  fresh/resources/country-flags/gq.png,
+	  fresh/resources/country-flags/gr.png,
+	  fresh/resources/country-flags/gs.png,
+	  fresh/resources/country-flags/gt.png,
+	  fresh/resources/country-flags/gu.png,
+	  fresh/resources/country-flags/gw.png,
+	  fresh/resources/country-flags/gy.png,
+	  fresh/resources/country-flags/hk.png,
+	  fresh/resources/country-flags/hm.png,
+	  fresh/resources/country-flags/hn.png,
+	  fresh/resources/country-flags/hr.png,
+	  fresh/resources/country-flags/ht.png,
+	  fresh/resources/country-flags/hu.png,
+	  fresh/resources/country-flags/id.png,
+	  fresh/resources/country-flags/ie.png,
+	  fresh/resources/country-flags/il.png,
+	  fresh/resources/country-flags/in.png,
+	  fresh/resources/country-flags/io.png,
+	  fresh/resources/country-flags/iq.png,
+	  fresh/resources/country-flags/ir.png,
+	  fresh/resources/country-flags/is.png,
+	  fresh/resources/country-flags/it.png,
+	  fresh/resources/country-flags/jm.png,
+	  fresh/resources/country-flags/jo.png,
+	  fresh/resources/country-flags/jp.png,
+	  fresh/resources/country-flags/ke.png,
+	  fresh/resources/country-flags/kg.png,
+	  fresh/resources/country-flags/kh.png,
+	  fresh/resources/country-flags/ki.png,
+	  fresh/resources/country-flags/km.png,
+	  fresh/resources/country-flags/kn.png,
+	  fresh/resources/country-flags/kp.png,
+	  fresh/resources/country-flags/kr.png,
+	  fresh/resources/country-flags/kw.png,
+	  fresh/resources/country-flags/ky.png,
+	  fresh/resources/country-flags/kz.png,
+	  fresh/resources/country-flags/la.png,
+	  fresh/resources/country-flags/lb.png,
+	  fresh/resources/country-flags/lc.png,
+	  fresh/resources/country-flags/li.png,
+	  fresh/resources/country-flags/lk.png,
+	  fresh/resources/country-flags/lr.png,
+	  fresh/resources/country-flags/ls.png,
+	  fresh/resources/country-flags/lt.png,
+	  fresh/resources/country-flags/lu.png,
+	  fresh/resources/country-flags/lv.png,
+	  fresh/resources/country-flags/ly.png,
+	  fresh/resources/country-flags/ma.png,
+	  fresh/resources/country-flags/mc.png,
+	  fresh/resources/country-flags/md.png,
+	  fresh/resources/country-flags/me.png,
+	  fresh/resources/country-flags/mg.png,
+	  fresh/resources/country-flags/mh.png,
+	  fresh/resources/country-flags/mk.png,
+	  fresh/resources/country-flags/ml.png,
+	  fresh/resources/country-flags/mm.png,
+	  fresh/resources/country-flags/mn.png,
+	  fresh/resources/country-flags/mo.png,
+	  fresh/resources/country-flags/mp.png,
+	  fresh/resources/country-flags/mq.png,
+	  fresh/resources/country-flags/mr.png,
+	  fresh/resources/country-flags/ms.png,
+	  fresh/resources/country-flags/mt.png,
+	  fresh/resources/country-flags/mu.png,
+	  fresh/resources/country-flags/mv.png,
+	  fresh/resources/country-flags/mw.png,
+	  fresh/resources/country-flags/mx.png,
+	  fresh/resources/country-flags/my.png,
+	  fresh/resources/country-flags/mz.png,
+	  fresh/resources/country-flags/na.png,
+	  fresh/resources/country-flags/nc.png,
+	  fresh/resources/country-flags/ne.png,
+	  fresh/resources/country-flags/nf.png,
+	  fresh/resources/country-flags/ng.png,
+	  fresh/resources/country-flags/ni.png,
+	  fresh/resources/country-flags/nl.png,
+	  fresh/resources/country-flags/no.png,
+	  fresh/resources/country-flags/np.png,
+	  fresh/resources/country-flags/nr.png,
+	  fresh/resources/country-flags/nu.png,
+	  fresh/resources/country-flags/nz.png,
+	  fresh/resources/country-flags/om.png,
+	  fresh/resources/country-flags/pa.png,
+	  fresh/resources/country-flags/pe.png,
+	  fresh/resources/country-flags/pf.png,
+	  fresh/resources/country-flags/pg.png,
+	  fresh/resources/country-flags/ph.png,
+	  fresh/resources/country-flags/pk.png,
+	  fresh/resources/country-flags/pl.png,
+	  fresh/resources/country-flags/pm.png,
+	  fresh/resources/country-flags/pn.png,
+	  fresh/resources/country-flags/pr.png,
+	  fresh/resources/country-flags/ps.png,
+	  fresh/resources/country-flags/pt.png,
+	  fresh/resources/country-flags/pw.png,
+	  fresh/resources/country-flags/py.png,
+	  fresh/resources/country-flags/qa.png,
+	  fresh/resources/country-flags/re.png,
+	  fresh/resources/country-flags/ro.png,
+	  fresh/resources/country-flags/rs.png,
+	  fresh/resources/country-flags/ru.png,
+	  fresh/resources/country-flags/rw.png,
+	  fresh/resources/country-flags/sa.png,
+	  fresh/resources/country-flags/sb.png,
+	  fresh/resources/country-flags/sc.png,
+	  fresh/resources/country-flags/scotland.png,
+	  fresh/resources/country-flags/sd.png,
+	  fresh/resources/country-flags/se.png,
+	  fresh/resources/country-flags/sg.png,
+	  fresh/resources/country-flags/sh.png,
+	  fresh/resources/country-flags/si.png,
+	  fresh/resources/country-flags/sj.png,
+	  fresh/resources/country-flags/sk.png,
+	  fresh/resources/country-flags/sl.png,
+	  fresh/resources/country-flags/sm.png,
+	  fresh/resources/country-flags/sn.png,
+	  fresh/resources/country-flags/so.png,
+	  fresh/resources/country-flags/sr.png,
+	  fresh/resources/country-flags/st.png,
+	  fresh/resources/country-flags/sv.png,
+	  fresh/resources/country-flags/sy.png,
+	  fresh/resources/country-flags/sz.png,
+	  fresh/resources/country-flags/tc.png,
+	  fresh/resources/country-flags/td.png,
+	  fresh/resources/country-flags/tf.png,
+	  fresh/resources/country-flags/tg.png,
+	  fresh/resources/country-flags/th.png,
+	  fresh/resources/country-flags/tj.png,
+	  fresh/resources/country-flags/tk.png,
+	  fresh/resources/country-flags/tl.png,
+	  fresh/resources/country-flags/tm.png,
+	  fresh/resources/country-flags/tn.png,
+	  fresh/resources/country-flags/to.png,
+	  fresh/resources/country-flags/tr.png,
+	  fresh/resources/country-flags/tt.png,
+	  fresh/resources/country-flags/tv.png,
+	  fresh/resources/country-flags/tw.png,
+	  fresh/resources/country-flags/tz.png,
+	  fresh/resources/country-flags/ua.png,
+	  fresh/resources/country-flags/ug.png,
+	  fresh/resources/country-flags/um.png,
+	  fresh/resources/country-flags/us.png,
+	  fresh/resources/country-flags/uy.png,
+	  fresh/resources/country-flags/uz.png,
+	  fresh/resources/country-flags/va.png,
+	  fresh/resources/country-flags/vc.png,
+	  fresh/resources/country-flags/ve.png,
+	  fresh/resources/country-flags/vg.png,
+	  fresh/resources/country-flags/vi.png,
+	  fresh/resources/country-flags/vn.png,
+	  fresh/resources/country-flags/vu.png,
+	  fresh/resources/country-flags/wales.png,
+	  fresh/resources/country-flags/wf.png,
+	  fresh/resources/country-flags/ws.png,
+	  fresh/resources/country-flags/ye.png,
+	  fresh/resources/country-flags/yt.png,
+	  fresh/resources/country-flags/za.png,
+	  fresh/resources/country-flags/zm.png,
+	  fresh/resources/country-flags/zw.png, fresh/resources/fresh.qrc,
+	  fresh/resources/icons, fresh/resources/icons/folder.png,
+	  fresh/resources/icons/translation.png,
+	  fresh/resources/icons/update.png, fresh/sdk/TranslationDialog.h,
+	  fresh/sdk/TranslationManager.h, fresh/sdk/fresh.h,
+	  fresh/widgets/TranslationDialog.cpp,
+	  fresh/widgets/TranslationDialog.h,
+	  fresh/widgets/TranslationDialog.ui, monkey/monkey.pro,
+	  monkey/src/coremanager/MonkeyCore.cpp,
+	  monkey/src/coremanager/MonkeyCore.h,
+	  monkey/src/pMonkeyStudio.cpp, monkey/src/pMonkeyStudio.h,
+	  monkey/src/settingsmanager/Settings.h,
+	  monkey/src/workspace/pWorkspace.cpp:
+	  
+	  Introduce TranslationManager & TranslationDialog classes that
+	  allow to manage translations in an application.
+	  Update MkS source code to take advantage of these classes.
+	  Addes many resources for country flags.
+
+2010-05-02 23:00  pasnox
+
+	* [r3690] datas/translations/monkeystudio_fr.qm,
+	  datas/translations/monkeystudio_fr.ts:
+	  
+	  Update french translation
+
+2010-05-02 21:43  pasnox
+
+	* [r3689] datas/translations/monkeystudio_ar.ts,
+	  datas/translations/monkeystudio_be.ts,
+	  datas/translations/monkeystudio_ca.ts,
+	  datas/translations/monkeystudio_es.ts,
+	  datas/translations/monkeystudio_fr.ts,
+	  datas/translations/monkeystudio_it.ts,
+	  datas/translations/monkeystudio_ru.ts:
+	  
+	  Fix translations files properties.
+
+2010-05-02 21:32  pasnox
+
+	* [r3688] datas/translations/monkey_ar.qm,
+	  datas/translations/monkey_ar.ts, datas/translations/monkey_be.qm,
+	  datas/translations/monkey_be.ts, datas/translations/monkey_ca.qm,
+	  datas/translations/monkey_ca.ts, datas/translations/monkey_es.qm,
+	  datas/translations/monkey_es.ts, datas/translations/monkey_fr.qm,
+	  datas/translations/monkey_fr.ts, datas/translations/monkey_it.qm,
+	  datas/translations/monkey_it.ts, datas/translations/monkey_ru.qm,
+	  datas/translations/monkey_ru.ts,
+	  datas/translations/monkeystudio_ar.qm,
+	  datas/translations/monkeystudio_ar.ts,
+	  datas/translations/monkeystudio_be.qm,
+	  datas/translations/monkeystudio_be.ts,
+	  datas/translations/monkeystudio_ca.qm,
+	  datas/translations/monkeystudio_ca.ts,
+	  datas/translations/monkeystudio_es.qm,
+	  datas/translations/monkeystudio_es.ts,
+	  datas/translations/monkeystudio_fr.qm,
+	  datas/translations/monkeystudio_fr.ts,
+	  datas/translations/monkeystudio_it.qm,
+	  datas/translations/monkeystudio_it.ts,
+	  datas/translations/monkeystudio_ru.qm,
+	  datas/translations/monkeystudio_ru.ts:
+	  
+	  Rename translations files.
+
+2010-05-02 21:23  pasnox
+
+	* [r3687] datas/translations/monkey_ar.qm,
+	  datas/translations/monkey_ar.ts, datas/translations/monkey_be.qm,
+	  datas/translations/monkey_be.ts, datas/translations/monkey_ca.qm,
+	  datas/translations/monkey_ca.ts, datas/translations/monkey_es.qm,
+	  datas/translations/monkey_es.ts, datas/translations/monkey_fr.qm,
+	  datas/translations/monkey_fr.ts, datas/translations/monkey_it.qm,
+	  datas/translations/monkey_it.ts, datas/translations/monkey_ru.qm,
+	  datas/translations/monkey_ru.ts:
+	  
+	  Add missing qm files.
+	  Clean absolete strings and update translations
+
+2010-05-02 21:13  pasnox
+
+	* [r3686] datas/translations/monkey_ar.ts,
+	  datas/translations/monkey_arabic.ts,
+	  datas/translations/monkey_be.qm, datas/translations/monkey_be.ts,
+	  datas/translations/monkey_belarusian.qm,
+	  datas/translations/monkey_belarusian.ts,
+	  datas/translations/monkey_ca.ts,
+	  datas/translations/monkey_catalan.ts,
+	  datas/translations/monkey_es.qm, datas/translations/monkey_es.ts,
+	  datas/translations/monkey_fr.qm, datas/translations/monkey_fr.ts,
+	  datas/translations/monkey_french.qm,
+	  datas/translations/monkey_french.ts,
+	  datas/translations/monkey_it.qm, datas/translations/monkey_it.ts,
+	  datas/translations/monkey_italian.qm,
+	  datas/translations/monkey_italian.ts,
+	  datas/translations/monkey_ru.qm, datas/translations/monkey_ru.ts,
+	  datas/translations/monkey_russian.qm,
+	  datas/translations/monkey_russian.ts,
+	  datas/translations/monkey_spanish.qm,
+	  datas/translations/monkey_spanish.ts:
+	  
+	  Rename translations files based on language iso code 639-1
+
+2010-05-02 01:54  pasnox
+
+	* [r3685] config.pri, monkey/src/main.cpp, monkey/src/main.h,
+	  monkey/src/maininterface/ui/UIAbout.cpp,
+	  monkey/src/maininterface/ui/UIAbout.h,
+	  monkey/src/maininterface/ui/UIAbout.ui,
+	  monkey/src/workspace/pWorkspace.cpp:
+	  
+	  Update some project infos.
+	  Reworked the About dialog.
+
+2010-05-01 23:31  pasnox
+
+	* [r3684] monkey/src/maininterface/UIMain.cpp:
+	  
+	  Move pQueuedMessageToolBar into main window central widget layout
+	  to avoid a mac os x bug cause of unified window and title bar.
+
+2010-05-01 20:24  pasnox
+
+	* [r3683] fresh/widgets/pQueuedMessageToolBar.cpp,
+	  plugins/base/SearchAndReplace/src/SearchWidget.cpp,
+	  plugins/xup/QMake/src/QMakeProjectItem.cpp:
+	  
+	  Change default time out to 0 for queued message, so all default
+	  message will be persistent (user will need to close them
+	  himself).
+	  This was needed as sometimes default message close too shortly
+	  and we can't read/understand error/problem.
+	  Update some code according to that change.
+
+2010-05-01 20:10  pasnox
+
+	* [r3682] monkey/src/workspace/pOpenedFileModel.cpp:
+	  
+	  Fix launchpad bug #555792
+
+2010-04-28 19:14  pasnox
+
+	* [r3680] monkey/src/qscintillamanager/pEditor.cpp,
+	  monkey/src/workspace/pAbstractChild.h,
+	  monkey/src/workspace/pChild.cpp, monkey/src/workspace/pChild.h,
+	  monkey/src/workspace/pFileManager.cpp,
+	  monkey/src/workspace/pFileManager.h,
+	  monkey/src/workspace/pWorkspace.cpp,
+	  monkey/src/workspace/pWorkspace.h,
+	  plugins/base/FileWatcher/src/FileWatcher.cpp,
+	  plugins/base/FileWatcher/src/FileWatcher.h,
+	  plugins/child/QtAssistant/src/QtAssistantChild.cpp,
+	  plugins/child/QtAssistant/src/QtAssistantChild.h,
+	  plugins/child/QtDesigner/src/QtDesignerChild.cpp,
+	  plugins/child/QtDesigner/src/QtDesignerChild.h:
+	  
+	  Rework the "Reload file" feature. It now does a true reload
+	  instead of closing / reopening the document.
+	  It's more quick and better.
+
+2010-04-25 19:04  pasnox
+
+	* [r3678]
+	  monkey/src/consolemanager/EnvironmentVariablesManager.cpp:
+	  
+	  Fix bugs that cause environment variables manually
+	  inserted/edited to be wrongly handled.
+
+2010-04-23 19:18  pasnox
+
+	* [r3677] fresh/objects/pSettings.cpp,
+	  fresh/sdk/pEnvironmentVariablesManager.h,
+	  monkey/src/coremanager/MonkeyCore.cpp, monkey/src/main.cpp,
+	  monkey/src/pMonkeyStudio.cpp, monkey/src/pMonkeyStudio.h:
+	  
+	  Fix settings file informations befre opening ( fix bug that
+	  create unnamed ini file and folder in home folder )
+
+2010-04-21 17:24  pasnox
+
+	* [r3676] plugins/xup/QMake/src/QtVersionManager.cpp,
+	  plugins/xup/QMake/src/QtVersionManager.h:
+	  
+	  Fix a critical bug that cause QtVersions to be wrongly
+	  managed/read/write in the ini file.
+
+2010-03-17 18:48  pasnox
+
+	* [r3666] plugins/base/SearchAndReplace/src/SearchWidget.cpp:
+	  
+	  Add a rule for not overwrite searched text.
+	  Now selected text in editor become the search text only if the
+	  search widget was not visible.
+
+2010-03-16 22:29  pasnox
+
+	* [r3665] plugins/base/SearchAndReplace/src/ReplaceThread.cpp,
+	  plugins/base/SearchAndReplace/src/SearchWidget.cpp:
+	  
+	  Search & Replace now use a pair of beginUndoAction() /
+	  endUndoAction() so replacements can be reverted using one ctrl+z
+	  (and redone with one ctrl+y).
+	  The replace thread now complete a file before emiting a signal (
+	  before it was using a max timer, but it's not really needed ) so
+	  the repalce for opened files can be reverted with one ctrl+z.
+
+2010-03-13 12:29  pasnox
+
+	* [r3662] plugins/base/SearchAndReplace/src/SearchThread.cpp:
+	  
+	  Remove a hack introduced to avoid long app quit when executing
+	  stupid regular expression: it was not helping.
+
+2010-03-13 11:59  pasnox
+
+	* [r3661] plugins/base/SearchAndReplace/src/ReplaceThread.cpp:
+	  
+	  Make the partial reg exp occurrence replace up to date with the
+	  pEditor::repalce() code to avoid code complexity.
+
+2010-03-13 11:26  pasnox
+
+	* [r3660] monkey/src/qscintillamanager/pEditor.cpp,
+	  monkey/src/qscintillamanager/pEditor.h,
+	  plugins/base/SearchAndReplace/src/SearchThread.cpp,
+	  plugins/base/SearchAndReplace/src/SearchWidget.cpp:
+	  
+	  Reimplement virtual QsciScintilla findFirst(), findNext() and
+	  replace() members to be able to use QRegExp based regular
+	  expression in the search / replace widget.
+	  The replace member is now able to replace partial occurrences
+	  based on the regular expression search:
+	  
+	  Search: (gg)::(~gg)
+	  Replace: $2::$1
+	  Result: ~gg::gg
+	  
+	  This mecanism was already available in the search in directory /
+	  opened files / project files etc, but not in standard search /
+	  repalce due to QsciScintilla being use Scintilla regular
+	  expression.
+	  
+	  Enjoy !
+
+2010-03-07 19:09  pasnox
+
+	* [r3658] monkey/src/xupmanager/gui/XUPProjectManager.cpp,
+	  monkey/src/xupmanager/gui/XUPProjectManager.h,
+	  monkey/src/xupmanager/gui/XUPProjectManager.ui:
+	  
+	  Remove debug code - no longer needed ;)
+
+2010-03-07 18:09  pasnox
+
+	* [r3656] fresh/widgets/pDockWidgetTitleBar.cpp:
+	  
+	  Fix a bug that cause standard icons to be displayed very small in
+	  some styles ( oxygen )
+
+2010-03-07 01:48  pasnox
+
+	* [r3655] fresh/widgets/pDockWidget.cpp,
+	  fresh/widgets/pDockWidget.h,
+	  fresh/widgets/pDockWidgetTitleBar.cpp,
+	  fresh/widgets/pDockWidgetTitleBar.h:
+	  
+	  Re-factored the pDockWidget & pDockWidgetTitleBar.
+	  Code is cleaner and better, and pDockWidgetTitleBar is now
+	  heriting QToolBar.
+	  This should looks better on differents styles.
+
+2010-03-05 23:49  pasnox
+
+	* [r3654] plugins/child/QtAssistant/src/MkSQtDocInstaller.cpp,
+	  plugins/child/QtAssistant/src/QtAssistantDock.cpp:
+	  
+	  Now use run time qVersion() member instead of compil time define
+	  to get the qt version number used to generate the help collection
+	  file name for generating Qt Assistant docs.
+	  Add more time between plugin installation and new documentation
+	  discovery search.
+
+2010-03-05 23:46  pasnox
+
+	* [r3653] plugins/base/SearchAndReplace/src/SearchResultsModel.cpp,
+	  plugins/base/SearchAndReplace/src/SearchResultsModel.h:
+	  
+	  When searching / replacing in directory / project files / opened
+	  files the parent item of results is now showing relative file
+	  path according to path search.
+	  This allow a best readibility by avoiding to see long file path
+	  in the result view.
+
+2010-03-05 23:42  pasnox
+
+	* [r3652] plugins/xup/QMake/src/gui/UISettingsQMake.cpp:
+	  
+	  Fix a bug that can bad values to be corrupted when changing
+	  current item when editing QMake plugin properties.
+
+2010-03-03 21:44  pasnox
+
+	* [r3650] plugins/base/SearchAndReplace/src/ReplaceThread.cpp,
+	  plugins/base/SearchAndReplace/src/SearchResultsDock.cpp,
+	  plugins/base/SearchAndReplace/src/SearchResultsModel.h,
+	  plugins/base/SearchAndReplace/src/SearchThread.cpp:
+	  
+	  Fix some bugs when repalcing / showing result when using regular
+	  expression.
+
+2010-03-03 18:57  pasnox
+
+	* [r3649] monkey/src/pMonkeyStudio.cpp,
+	  plugins/base/SearchAndReplace/src/SearchThread.cpp,
+	  plugins/child/QtAssistant/src/MkSQtDocInstaller.cpp,
+	  qCtagsSense/src/qCtagsSenseUtils.cpp:
+	  
+	  Fix an error on getting file/folder list according to name
+	  filter.
+
+2010-03-01 22:50  pasnox
+
+	* [r3645] plugins/base/FileBrowser/src/FileBrowser.cpp,
+	  plugins/base/FileBrowser/src/FileBrowser.h,
+	  plugins/base/FileBrowser/src/pDockFileBrowser.cpp,
+	  plugins/base/FileBrowser/src/pDockFileBrowser.h:
+	  
+	  Fix a bug that cause the restored root path to be wrong when
+	  having a selected file.
+	  Add support for save/restore of root path AND selected /current
+	  file.
+
+2010-03-01 22:24  pasnox
+
+	* [r3644] plugins/child/QtAssistant/src/QtAssistant.cpp,
+	  plugins/child/QtAssistant/src/QtAssistantDock.cpp:
+	  
+	  Delayed the QtAssistant documentation updater call so the app is
+	  show in less time.
+
+2010-03-01 22:08  pasnox
+
+	* [r3642] monkey/src/main.cpp, monkey/src/maininterface/UIMain.cpp,
+	  monkey/src/workspace/pOpenedFileModel.cpp,
+	  monkey/src/workspace/pOpenedFileModel.h,
+	  monkey/src/workspace/pWorkspace.cpp,
+	  plugins/child/QtAssistant/src/QtAssistant.cpp,
+	  plugins/child/QtAssistant/src/QtAssistantChild.cpp:
+	  
+	  Best used of signals.
+	  Fix potentials crash.
+	  Some code improvment.
+
+2010-03-01 18:04  pasnox
+
+	* [r3641] monkey/src/workspace/pWorkspace.cpp,
+	  plugins/child/QtAssistant/src/QtAssistantChild.h:
+	  
+	  Fix a crash due to dangling pointer when closing all documents (
+	  or quitting the application )
+
+2010-03-01 11:55  hlamer
+
+	* [r3640] datas/scripts/parser-gcc.mks:
+	  
+	  commited not commited
+
+2010-02-28 21:23  pasnox
+
+	* [r3639] plugins/base/SearchAndReplace/src/SearchWidget.cpp:
+	  
+	  Fix reg exp search / repalce when using standard search /
+	  replace.
+
+2010-02-28 13:19  pasnox
+
+	* [r3638] plugins/base/SearchAndReplace/src/SearchWidget.cpp:
+	  
+	  Fix a bug that cause search / replace using regexp no not work
+	  when using simple: Search in file, replace in file.
+
+2010-02-24 19:25  pasnox
+
+	* [r3635] monkey/src/workspace/pOpenedFileModel.cpp:
+	  
+	  Fix a potential crash.
+
+2010-02-24 19:24  pasnox
+
+	* [r3634] plugins/base/SearchAndReplace/src/ReplaceThread.cpp,
+	  plugins/base/SearchAndReplace/src/SearchThread.cpp,
+	  plugins/base/SearchAndReplace/src/SearchWidget.cpp:
+	  
+	  Really fix bug #527004
+	  Fix eol/indentation
+
+2010-02-24 16:58  pasnox
+
+	* [r3633] plugins/base/SearchAndReplace/src/ReplaceThread.cpp,
+	  plugins/base/SearchAndReplace/src/SearchResultsModel.cpp,
+	  plugins/base/SearchAndReplace/src/SearchResultsModel.h,
+	  plugins/base/SearchAndReplace/src/SearchThread.cpp,
+	  plugins/base/SearchAndReplace/src/SearchWidget.cpp:
+	  
+	  Fix bad eols.
+
+2010-02-24 14:33  abelgar
+
+	* [r3632] plugins/base/SearchAndReplace/src/ReplaceThread.cpp,
+	  plugins/base/SearchAndReplace/src/SearchResultsModel.cpp,
+	  plugins/base/SearchAndReplace/src/SearchResultsModel.h,
+	  plugins/base/SearchAndReplace/src/SearchThread.cpp,
+	  plugins/base/SearchAndReplace/src/SearchWidget.cpp:
+	  
+	  fix Bug #527004
+	  clean qDebug() and some little part of code
+	  fix == operand for SearchResultsModel::Result in
+	  SearchResultsModel.h
+
+2010-02-24 12:27  abelgar
+
+	* [r3631] plugins/base/SearchAndReplace/src/ReplaceThread.cpp,
+	  plugins/base/SearchAndReplace/src/SearchResultsModel.h,
+	  plugins/base/SearchAndReplace/src/SearchThread.cpp:
+	  
+	  Some bugs fix on Search and Replace with regexp.
+	  Now you will be able to search by regexp , but also replace with
+	  partial match of the regular expression
+	  by using $1, $2, ... shortcuts.
+	  Example : bol, bal, bul to bool, baal, buul in regexp S&R will be
+	  : search : b(\w)l replace : b$1$1l
+
+2010-02-23 17:42  pasnox
+
+	* [r3630] ChangeLog:
+	  
+	  Update the ChangeLog
+
 2010-02-22 21:25  pasnox
 
 	* [r3629]

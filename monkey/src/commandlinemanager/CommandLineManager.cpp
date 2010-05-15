@@ -23,35 +23,29 @@ void CommandLineManager::parse()
 	QStringList args = QCoreApplication::arguments();
 	args.removeFirst();
 	
-	for ( int i = 0; i < args.count(); i++ )
-	{
-		bool needNextArgument = false;
+	for ( int i = 0; i < args.count(); i++ ) {
 		const QString arg = args.at( i ).toLower();
+		bool needNextArgument = false;
 		
-		if ( arg == "-projects" || arg == "-files" )
-		{
+		if ( arg == "-projects" || arg == "-files" ) {
 			needNextArgument = true;
 		}
-		else
-		{
+		else {
 			mArguments[ arg ].clear();
 		}
 		
-		if ( needNextArgument )
-		{
-			if ( i == args.count() -1 )
-			{
+		if ( needNextArgument ) {
+			if ( i == args.count() -1 ) {
 				break;
 			}
 			
 			QString param;
-			while ( !( param = args.at( i +1 ).toLower() ).startsWith( "-" ) )
-			{
+			
+			while ( !( param = args.at( i +1 ).toLower() ).startsWith( "-" ) ) {
 				mArguments[ arg ] << param;
 				i++;
 				
-				if ( i == args.count() -1 )
-				{
+				if ( i == args.count() -1 ) {
 					break;
 				}
 			}
@@ -61,26 +55,20 @@ void CommandLineManager::parse()
 
 void CommandLineManager::process()
 {
-	foreach ( const QString& arg, mArguments.keys() )
-	{
-		if ( arg == "-h" || arg == "--help" )
-		{
+	foreach ( const QString& arg, mArguments.keys() ) {
+		if ( arg == "-h" || arg == "--help" ) {
 			showHelp();
 		}
-		else if ( arg == "-v" || arg == "--version" )
-		{
+		else if ( arg == "-v" || arg == "--version" ) {
 			showVersion();
 		}
-		else if ( arg == "-projects" )
-		{
+		else if ( arg == "-projects" ) {
 			openProjects( mArguments[ arg ] );
 		}
-		else if ( arg == "-files" )
-		{
+		else if ( arg == "-files" ) {
 			openFiles( mArguments[ arg ] );
 		}
-		else
-		{
+		else {
 			qWarning( "Unknow argument: %s (%s)", arg.toLocal8Bit().constData(), mArguments[ arg ].join( " " ).toLocal8Bit().constData() );
 		}
 	}
@@ -93,8 +81,7 @@ const QMap<QString, QStringList>& CommandLineManager::arguments() const
 
 void CommandLineManager::showVersion()
 {
-	if ( !mVersionShown )
-	{
+	if ( !mVersionShown ) {
 		mVersionShown = true;
 		qWarning( "%s version %s (%s)", PACKAGE_NAME, PACKAGE_VERSION, PACKAGE_VERSION_STR );
 		qWarning( "%s & The Monkey Studio Team", PACKAGE_COPYRIGHTS );
@@ -117,10 +104,8 @@ void CommandLineManager::openProjects( const QStringList& fileNames )
 {
 	QDir dir( QCoreApplication::applicationDirPath() );
 	
-	foreach ( QString fileName, fileNames )
-	{
-		if ( QFileInfo( fileName ).isRelative() )
-		{
+	foreach ( QString fileName, fileNames ) {
+		if ( QFileInfo( fileName ).isRelative() ) {
 			fileName = QDir::cleanPath( dir.absoluteFilePath( fileName ) );
 		}
 		
@@ -132,10 +117,8 @@ void CommandLineManager::openFiles( const QStringList& fileNames )
 {
 	QDir dir( QCoreApplication::applicationDirPath() );
 	
-	foreach ( QString fileName, fileNames )
-	{
-		if ( QFileInfo( fileName ).isRelative() )
-		{
+	foreach ( QString fileName, fileNames ) {
+		if ( QFileInfo( fileName ).isRelative() ) {
 			fileName = QDir::cleanPath( dir.absoluteFilePath( fileName ) );
 		}
 		
