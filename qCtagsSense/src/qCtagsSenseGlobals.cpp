@@ -58,7 +58,7 @@ YACC     *.y
 
 namespace qCtagsSense
 {
-	typedef QHash<int, QString> IntStringHash; // kind string, kind enum
+	typedef QHash<int, QString> IntStringHash;
 	
 	QHash<qCtagsSense::Language, QString> mLanguagesName;
 	QHash<qCtagsSense::Language, IntStringHash> mKindsName;
@@ -67,14 +67,14 @@ namespace qCtagsSense
 
 void qCtagsSense::initialize()
 {
-	for ( int i = 0 ;  i < languageCount() ;  ++i ) {
+	for ( int i = 0 ;  i < languageCount();  i++ ) {
 		const langType type = langType( i );
 		const parserDefinition* language = parser( type );
 		const qCtagsSense::Language lng = qCtagsSense::Language( type );
 		
 		mLanguagesName[ lng ] = language->name;
 		
-		for ( uint j = 0; j < language->kindCount; j++ ) {
+		for ( uint j = 0; j < language->kindCount;  j++ ) {
 			const sKindOption& kind = language->kinds[ j ];
 			mKindsName[ lng ][ kind.letter ] = kind.name;
 			mKindsDescription[ lng ][ kind.letter ] = kind.description;
