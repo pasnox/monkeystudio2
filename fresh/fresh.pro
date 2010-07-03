@@ -1,6 +1,7 @@
 # fresh lib project file
 
-include( fresh.pri )
+# include functions file
+include( ../functions.pri )
 
 # include config file
 include( ../config.pri )
@@ -8,7 +9,9 @@ include( ../config.pri )
 TEMPLATE	= lib
 CONFIG	*= staticlib
 DESTDIR	= $${PACKAGE_BUILD_PATH}
-DEPENDPATH	*= $${PWD}/objects $${PWD}/widgets
+FRESH_SOURCES_PATHS = $$getFolders( ./objects ./widgets )
+INCLUDEPATH	*= $$FRESH_SOURCES_PATHS
+DEPENDPATH	*= $$FRESH_SOURCES_PATHS
 
 # make library exportable
 DEFINES	*= MONKEY_CORE_BUILD
