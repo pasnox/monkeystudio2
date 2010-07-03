@@ -25,18 +25,18 @@
 #include <QMap>
 #include <QStringList>
 
-#include <ctags.h>
+#include <exuberantCtags.h>
 
 class qCtagsSenseSQL;
 
 class QCTAGSSENSE_EXPORT qCtagsSenseIndexer : public QThread
 {
 	Q_OBJECT
-	
+
 public:
 	qCtagsSenseIndexer( qCtagsSenseSQL* parent );
 	virtual ~qCtagsSenseIndexer();
-	
+
 	void clear();
 	QStringList filteredSuffixes() const;
 
@@ -45,7 +45,7 @@ public slots:
 	void addFilteredSuffix( const QString& suffix );
 	void setFilteredSuffixes( const QStringList& suffixes );
 	void setFilteredSuffix( const QString& suffix );
-	
+
 	void removeFile( const QString& fileName );
 	void indexFile( const QString& fileName );
 	void indexFiles( const QStringList& fileNames );
@@ -58,7 +58,7 @@ protected:
 	QList<QString> mWaitingDeletion; // fileNames
 	QMutex mMutex;
 	bool mStop;
-	
+
 	bool removeEntries( const QStringList& fileNames );
 	bool indexEntry( const QString& fileName );
 	bool indexEntries( const QMap<QString, QString>& entries );
@@ -68,7 +68,7 @@ protected:
 	TagEntryListItem* tagFileEntry( const QString& fileName, bool& ok );
 	QMap<QString, TagEntryListItem*> tagPathEntries( const QString& pathName, bool& ok );
 	QMap<QString, TagEntryListItem*> tagBuffersEntries( const QMap<QString, QString>& entries, bool& ok );
-	
+
 	virtual void run();
 
 signals:

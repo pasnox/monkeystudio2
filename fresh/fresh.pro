@@ -9,6 +9,7 @@ include( ../config.pri )
 TEMPLATE	= lib
 CONFIG	*= staticlib
 DESTDIR	= $${PACKAGE_BUILD_PATH}
+
 FRESH_SOURCES_PATHS = $$getFolders( ./objects ./widgets )
 INCLUDEPATH	*= $${FRESH_SOURCES_PATHS}
 DEPENDPATH	*= $${FRESH_SOURCES_PATHS}
@@ -16,13 +17,13 @@ DEPENDPATH	*= $${FRESH_SOURCES_PATHS}
 # make library exportable
 DEFINES	*= MONKEY_CORE_BUILD
 
-RESOURCES	+= resources/fresh.qrc
+RESOURCES	*= resources/fresh.qrc
 
-FORMS	+= widgets/pEnvironmentVariableEditor.ui \
+FORMS	*= widgets/pEnvironmentVariableEditor.ui \
 	widgets/pEnvironmentVariablesEditor.ui \
 	widgets/TranslationDialog.ui
 
-HEADERS	= objects/GetOpt.h \
+HEADERS	*= objects/GetOpt.h \
 	objects/MonkeyExport.h \
 	objects/pIconManager.h \
 	objects/pSettings.h \
@@ -67,7 +68,7 @@ HEADERS	= objects/GetOpt.h \
 	objects/TranslationManager.h \
 	widgets/TranslationDialog.h
 
-SOURCES	= objects/GetOpt.cpp \
+SOURCES	*= objects/GetOpt.cpp \
 	objects/pIconManager.cpp \
 	objects/pSettings.cpp \
 	objects/QSingleton.cpp \

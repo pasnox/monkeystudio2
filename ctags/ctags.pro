@@ -18,7 +18,7 @@ CTAGS_SOURCES_PATHS = $$getFolders( ./$${CTAGS_VERSION} )
 INCLUDEPATH	*= $${CTAGS_SOURCES_PATHS}
 DEPENDPATH	*= $${CTAGS_SOURCES_PATHS}
 
-HEADERS	=  $${CTAGS_VERSION}/debug.h \
+HEADERS	*=  $${CTAGS_VERSION}/debug.h \
 	$${CTAGS_VERSION}/entry.h \
 	$${CTAGS_VERSION}/general.h \
 	$${CTAGS_VERSION}/get.h \
@@ -35,7 +35,7 @@ HEADERS	=  $${CTAGS_VERSION}/debug.h \
 	$${CTAGS_VERSION}/ctags.h \
 	$${CTAGS_VERSION}/exuberantCtags.h
 
-SOURCES	= $${CTAGS_VERSION}/asm.c \
+SOURCES	*= $${CTAGS_VERSION}/asm.c \
 	$${CTAGS_VERSION}/asp.c \
 	$${CTAGS_VERSION}/awk.c \
 	$${CTAGS_VERSION}/basic.c \
