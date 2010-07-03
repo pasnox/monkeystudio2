@@ -1,29 +1,24 @@
 # Monkey Studio 2 Ctags library
 
-include( ctags.pri )
+# include functions file
+include( ../functions.pri )
 
 # include config file
 include( ../config.pri )
+
+# include shared ctags project file
+include( ctags_shared.pri )
 
 TEMPLATE	= lib
 CONFIG	*= staticlib
 CONFIG	-= qt
 DESTDIR	= $${PACKAGE_BUILD_PATH}
 
-DEFINES *= HAVE_REGCOMP 
-win32:DEFINES	*= WIN32 REGEX_MALLOC STDC_HEADERS=1
-unix:DEFINES	*= HAVE_STDLIB_H \
-							HAVE_FGETPOS \
-							HAVE_SYS_STAT_H \
-							HAVE_FCNTL_H \
-							HAVE_REGEX \
-							HAVE_UNISTD_H \
-							HAVE_STRSTR
+CTAGS_SOURCES_PATHS = $$getFolders( ./$${CTAGS_VERSION} )
+INCLUDEPATH	*= $${CTAGS_SOURCES_PATHS}
+DEPENDPATH	*= $${CTAGS_SOURCES_PATHS}
 
-win32:INCLUDEPATH	*= $$CTAGS_VERSION $$CTAGS_VERSION\gnu_regex
-
-HEADERS	=  \
-	$${CTAGS_VERSION}/debug.h \
+HEADERS	=  $${CTAGS_VERSION}/debug.h \
 	$${CTAGS_VERSION}/entry.h \
 	$${CTAGS_VERSION}/general.h \
 	$${CTAGS_VERSION}/get.h \
@@ -90,13 +85,12 @@ SOURCES	= $${CTAGS_VERSION}/asm.c \
 	$${CTAGS_VERSION}/dosbatch.c \
 	$${CTAGS_VERSION}/exuberantCtags.c
 
-win32:DEFINES *= __USE_GNU HAVE_STDBOOL_H
-win32:SOURCES	*= \
-		$${CTAGS_VERSION}/gnu_regex/regex.c \
+win32 {
+	HEADERS	*= $${CTAGS_VERSION}/gnu_regex/regex.h \
+		$${CTAGS_VERSION}/gnu_regex/regex_internal.h
+	
+	SOURCES	*= $${CTAGS_VERSION}/gnu_regex/regex.c \
 		$${CTAGS_VERSION}/gnu_regex/regcomp.c \
 		$${CTAGS_VERSION}/gnu_regex/regexec.c \
 		$${CTAGS_VERSION}/gnu_regex/regex_internal.c
-
-win32:HEADERS	*= \
-		$${CTAGS_VERSION}/gnu_regex/regex.h \
-		$${CTAGS_VERSION}/gnu_regex/regex_internal.h
+}

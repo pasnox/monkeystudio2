@@ -1,10 +1,7 @@
 # Monkey Studio 2 Ctags project include file
 
-# ctags version
-CTAGS_VERSION	= ctags
+# include shared ctags project file
+include( ctags_shared.pri )
 
 # include path
-INCLUDEPATH	*= $$PWD/sdk
-
-# For correctly include ctags headers
-unix:DEFINES *=HAVE_FGETPOS
+INCLUDEPATH	*= $$getFolders( $${PWD}/$${CTAGS_VERSION} )
