@@ -36,11 +36,12 @@
 #ifndef PDOCKFILEBROWSER_H
 #define PDOCKFILEBROWSER_H
 
-#include <fresh.h>
+#include <pDockWidget.h>
 
 #include <QModelIndex>
 #include <QSortFilterProxyModel>
 #include <QDir>
+#include <QMenu>
 
 class pTreeComboBox;
 class QLineEdit;

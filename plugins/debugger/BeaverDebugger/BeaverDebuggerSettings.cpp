@@ -42,6 +42,8 @@
 #include <QFileDialog>
 #include <QCompleter>
 #include <QDirModel>
+#include <QLineEdit>
+#include <QToolButton>
 
 /*!
 	Creates settings widget

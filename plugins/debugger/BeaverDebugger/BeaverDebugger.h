@@ -38,6 +38,7 @@
 
 #include <QPointer>
 #include <QProcess>
+#include <QLabel>
 
 class XUPProjectItem;
 

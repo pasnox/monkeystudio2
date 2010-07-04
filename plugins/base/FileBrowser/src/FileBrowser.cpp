@@ -38,10 +38,11 @@
 #include "pDockFileBrowser.h"
 #include "FileBrowserSettings.h"
 
-#include <fresh.h>
 #include <MonkeyCore.h>
 #include <UIMain.h>
 #include <pMonkeyStudio.h>
+#include <pDockToolBar.h>
+#include <pActionsManager.h>
 
 #include <QIcon>
 

@@ -28,6 +28,8 @@
 #include <qCtagsSense.h>
 #include <pMultiToolBar.h>
 #include <pAbstractChild.h>
+#include <pActionsManager.h>
+#include <pDockToolBar.h>
 
 #include <QDesktopServices>
 #include <QDebug>

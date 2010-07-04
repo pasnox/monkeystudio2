@@ -2,3 +2,10 @@
 
 # include path
 INCLUDEPATH	*= $$getFolders( $${PWD}/src, resources )
+
+# dependency
+PRE_TARGETDEPS	*= $${PWD}
+
+# library integration
+LIBS	*= -L$${PACKAGE_BUILD_PATH}
+win32:LIBS	*= -l$${PACKAGE_TARGET}

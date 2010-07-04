@@ -36,6 +36,7 @@
 #include <pWorkspace.h>
 #include <pAbstractChild.h>
 #include <pEditor.h>
+#include <pMenuBar.h>
 
 void pAStyle::fillPluginInfos()
 {
